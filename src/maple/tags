@@ -1,0 +1,2939 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.7	//
+ACCT	../include/struct.h	/^}      ACCT;$/;"	t	typeref:struct:__anon23
+ACTIVITY_EMPTY	menu.c	/^#define	ACTIVITY_EMPTY	/;"	d	file:
+ACTIVITY_HAVE	menu.c	/^#define	ACTIVITY_HAVE	/;"	d	file:
+ADMIN	../include/struct.h	/^}	ADMIN;$/;"	t	typeref:struct:__anon18
+ALIVE	../include/pip.h	/^#define ALIVE	/;"	d
+ALL	../include/bbsnet.h	/^#define ALL /;"	d
+ALOHA	../include/struct.h	/^}       ALOHA;$/;"	t	typeref:struct:__anon30
+ANSILINELEN	../include/struct.h	/^#define ANSILINELEN /;"	d
+ANY_PORT	../lib/dns_ident.c	/^#define ANY_PORT /;"	d	file:
+APRIL_FIRST	talk.c	/^#undef	APRIL_FIRST$/;"	d	file:
+ATTR_BLOCK_TOTAL	../include/attr.h	/^#define ATTR_BLOCK_TOTAL /;"	d
+ATTR_BLOCK_WIN	../include/attr.h	/^#define ATTR_BLOCK_WIN /;"	d
+ATTR_CROSS_KEY	../include/attr.h	/^#define	ATTR_CROSS_KEY	/;"	d
+ATTR_FIVE_TOTAL	../include/attr.h	/^#define ATTR_FIVE_TOTAL /;"	d
+ATTR_FIVE_WIN	../include/attr.h	/^#define ATTR_FIVE_WIN /;"	d
+ATTR_OTHELLO_TOTAL	../include/attr.h	/^#define ATTR_OTHELLO_TOTAL /;"	d
+ATTR_OTHELLO_WIN	../include/attr.h	/^#define ATTR_OTHELLO_WIN /;"	d
+ATTR_REG_KEY	../include/attr.h	/^#define	ATTR_REG_KEY	/;"	d
+ATTR_USER_KEY	../include/attr.h	/^#define	ATTR_USER_KEY	/;"	d
+AUTHOR_EXTRACTION	../include/config.h	/^#define	AUTHOR_EXTRACTION	/;"	d
+Activity	board.c	/^Activity()$/;"	f
+AskTag	xover.c	/^AskTag(msg)$/;"	f
+Atime	../lib/str_time.c	/^Atime(clock) \/* Thor.990125: °²¸ËARPANET®É¶¡®æ¦¡ *\/$/;"	f
+Att	../include/rpg.h	/^  char name[20]; int LV; int maxhp; int hp; int Att;$/;"	m	struct:mobattr
+BANMAIL	../include/struct.h	/^}	BANMAIL;$/;"	t	typeref:struct:__anon21
+BANMAIL_ACL	../include/global.h	/^#define	BANMAIL_ACL	/;"	d
+BANMAIL_EXPIRE	../include/config.h	/^#define	BANMAIL_EXPIRE	/;"	d
+BANMSG	../include/struct.h	/^}      BANMSG;$/;"	t	typeref:struct:__anon29
+BANMSG_MAX	../include/config.h	/^#define	BANMSG_MAX	/;"	d
+BBSGID	../include/config.h	/^#define BBSGID	/;"	d
+BBSHOME	../include/config.h	/^#define BBSHOME	/;"	d
+BBSIP	../include/config.h	/^#define	BBSIP	/;"	d
+BBSNAME	../include/config.h	/^#define BBSNAME	/;"	d
+BBSNET	../include/struct.h	/^}	BBSNET;  $/;"	t	typeref:struct:__anon60
+BBSNETMAX	../include/config.h	/^#define	BBSNETMAX	/;"	d
+BBSUID	../include/config.h	/^#define BBSUID	/;"	d
+BBS_MAP	../include/config.h	/^#  define BBS_MAP	/;"	d
+BBTP_PORT	../include/config.h	/^#define	BBTP_PORT	/;"	d
+BCACHE	../include/struct.h	/^} BCACHE;$/;"	t	typeref:struct:__anon37
+BFLAG	../include/struct.h	/^#define	BFLAG(/;"	d
+BFO_YANK	board.c	/^#define	BFO_YANK	/;"	d	file:
+BLK_SIZ	../include/config.h	/^#define	BLK_SIZ	/;"	d
+BLK_SIZ	../include/dao.h	/^#define BLK_SIZ /;"	d
+BLUE	../include/bbsnet.h	/^#define BLUE	/;"	d
+BM	../include/struct.h	/^  char BM[BMLEN + 1];		\/* BMs' uid, token '\/' *\/$/;"	m	struct:BoardHeader
+BMAX	../include/bbs.h	/^#define	BMAX(/;"	d
+BMIN	../include/bbs.h	/^#define	BMIN(/;"	d
+BMLEN	../include/struct.h	/^#define BMLEN /;"	d
+BMW	../include/struct.h	/^}      BMW;			\/* bbs message write *\/$/;"	t	typeref:struct:__anon31
+BMW_EXPIRE	../include/config.h	/^#define	BMW_EXPIRE	/;"	d
+BMW_FORMAT	talk.c	/^#define	BMW_FORMAT	/;"	d	file:
+BMW_FORMAT_BC	talk.c	/^#define BMW_FORMAT_BC	/;"	d	file:
+BMW_LOCAL_MAX	talk.c	/^#define	BMW_LOCAL_MAX	/;"	d	file:
+BMW_MAX	../include/config.h	/^#define	BMW_MAX	/;"	d
+BMW_MAX_SIZE	../include/config.h	/^#define BMW_MAX_SIZE	/;"	d
+BMW_MODE	../include/struct.h	/^#define	BMW_MODE	/;"	d
+BMW_PER_USER	../include/config.h	/^#define	BMW_PER_USER	/;"	d
+BMW_TIME	../include/config.h	/^#define BMW_TIME	/;"	d
+BN_DELETED	post.c	/^#define BN_DELETED	/;"	d	file:
+BN_DELETED	post.c	/^#undef	BN_DELETED$/;"	d	file:
+BN_JUNK	post.c	/^#define BN_JUNK	/;"	d	file:
+BN_JUNK	post.c	/^#undef	BN_JUNK$/;"	d	file:
+BOARDNAME	../include/config.h	/^#define BOARDNAME /;"	d
+BOOK_FILE	../include/bbsnet.h	/^#define BOOK_FILE /;"	d
+BRD	../include/struct.h	/^}           BRD;$/;"	t	typeref:struct:BoardHeader
+BRDSHM_KEY	../include/config.h	/^#define BRDSHM_KEY	/;"	d
+BRD_ABULLETIN	board.c	/^#define	BRD_ABULLETIN	/;"	d	file:
+BRD_ABULLETIN	menu.c	/^#define	BRD_ABULLETIN	/;"	d	file:
+BRD_ANNOUNCE	../include/global.h	/^#define	BRD_ANNOUNCE	/;"	d
+BRD_ANONYMOUS	../include/battr.h	/^#define BRD_ANONYMOUS /;"	d
+BRD_ANONYMOUS	../include/struct.h	/^#define	BRD_ANONYMOUS	/;"	d
+BRD_BANPOSTLOG	../include/global.h	/^#define	BRD_BANPOSTLOG	/;"	d
+BRD_BOTTOM	../include/battr.h	/^#define BRD_BOTTOM /;"	d
+BRD_BOTTOM	../include/struct.h	/^#define BRD_BOTTOM	/;"	d
+BRD_BULLETIN	../include/global.h	/^#define	BRD_BULLETIN	/;"	d
+BRD_CAMERA	../include/global.h	/^#define	BRD_CAMERA	/;"	d
+BRD_CHANGETITLE	../include/battr.h	/^#define BRD_CHANGETITLE /;"	d
+BRD_CHANGETITLE	../include/struct.h	/^#define	BRD_CHANGETITLE	/;"	d
+BRD_CHECKWATER	../include/battr.h	/^#define BRD_CHECKWATER /;"	d
+BRD_CHECKWATER	../include/struct.h	/^#define	BRD_CHECKWATER	/;"	d
+BRD_CROSSPOST	../include/global.h	/^#define	BRD_CROSSPOST	/;"	d
+BRD_DELETED	../include/global.h	/^#define	BRD_DELETED	/;"	d
+BRD_H_BIT	../include/modes.h	/^#define BRD_H_BIT	/;"	d
+BRD_JUNK	../include/global.h	/^#define	BRD_JUNK	/;"	d
+BRD_LOCALPOSTS	../include/global.h	/^#define BRD_LOCALPOSTS	/;"	d
+BRD_LOGEMAIL	../include/battr.h	/^#define BRD_LOGEMAIL /;"	d
+BRD_LOGEMAIL	../include/struct.h	/^#define BRD_LOGEMAIL	/;"	d
+BRD_MODIFIED	../include/global.h	/^#define	BRD_MODIFIED	/;"	d
+BRD_MODIFY	../include/battr.h	/^#define BRD_MODIFY /;"	d
+BRD_MODIFY	../include/struct.h	/^#define	BRD_MODIFY	/;"	d
+BRD_NEWS	../include/global.h	/^#define	BRD_NEWS	/;"	d
+BRD_NOBAN	../include/battr.h	/^#define BRD_NOBAN /;"	d
+BRD_NOBAN	../include/struct.h	/^#define BRD_NOBAN	/;"	d
+BRD_NOCNTCROSS	../include/battr.h	/^#define BRD_NOCNTCROSS /;"	d
+BRD_NOCNTCROSS	../include/struct.h	/^#define	BRD_NOCNTCROSS	/;"	d
+BRD_NOCOUNT	../include/battr.h	/^#define BRD_NOCOUNT /;"	d
+BRD_NOCOUNT	../include/struct.h	/^#define	BRD_NOCOUNT	/;"	d
+BRD_NOFORWARD	../include/battr.h	/^#define BRD_NOFORWARD /;"	d
+BRD_NOFORWARD	../include/struct.h	/^#define BRD_NOFORWARD /;"	d
+BRD_NOLOG	../include/battr.h	/^#define BRD_NOLOG /;"	d
+BRD_NOLOG	../include/struct.h	/^#define	BRD_NOLOG	/;"	d
+BRD_NOLOGREAD	../include/battr.h	/^#define BRD_NOLOGREAD /;"	d
+BRD_NOLOGREAD	../include/struct.h	/^#define	BRD_NOLOGREAD	/;"	d
+BRD_NOREPLY	../include/battr.h	/^#define BRD_NOREPLY /;"	d
+BRD_NOREPLY	../include/struct.h	/^#define	BRD_NOREPLY	/;"	d
+BRD_NOSTAT	../include/battr.h	/^#define BRD_NOSTAT /;"	d
+BRD_NOSTAT	../include/struct.h	/^#define	BRD_NOSTAT	/;"	d
+BRD_NOTOTAL	../include/battr.h	/^#define BRD_NOTOTAL /;"	d
+BRD_NOTOTAL	../include/struct.h	/^#define	BRD_NOTOTAL	/;"	d
+BRD_NOTRAN	../include/battr.h	/^#define BRD_NOTRAN /;"	d
+BRD_NOTRAN	../include/struct.h	/^#define	BRD_NOTRAN	/;"	d
+BRD_NOVOTE	../include/battr.h	/^#define BRD_NOVOTE /;"	d
+BRD_NOVOTE	../include/struct.h	/^#define	BRD_NOVOTE	/;"	d
+BRD_NOZAP	../include/battr.h	/^#define BRD_NOZAP /;"	d
+BRD_NOZAP	../include/struct.h	/^#define	BRD_NOZAP	/;"	d
+BRD_OBSERVE	../include/config.h	/^#define	BRD_OBSERVE	/;"	d
+BRD_ORDERSONGS	../include/global.h	/^#define BRD_ORDERSONGS	/;"	d
+BRD_PRH	../include/battr.h	/^#define BRD_PRH /;"	d
+BRD_PRH	../include/struct.h	/^#define	BRD_PRH	/;"	d
+BRD_REQUEST	../include/global.h	/^#define BRD_REQUEST	/;"	d
+BRD_R_BIT	../include/modes.h	/^#define BRD_R_BIT	/;"	d
+BRD_SBULLETIN	../include/global.h	/^#define	BRD_SBULLETIN	/;"	d
+BRD_SECRET	../include/global.h	/^#define	BRD_SECRET	/;"	d
+BRD_SPECIAL	../include/global.h	/^#define	BRD_SPECIAL	/;"	d
+BRD_SYSTEM	../include/global.h	/^#define	BRD_SYSTEM	/;"	d
+BRD_TRASHCAN	../include/global.h	/^#define BRD_TRASHCAN	/;"	d
+BRD_VIOLATELAW	../include/global.h	/^#define BRD_VIOLATELAW	/;"	d
+BRD_V_BIT	../include/modes.h	/^#define BRD_V_BIT	/;"	d
+BRD_W_BIT	../include/modes.h	/^#define BRD_W_BIT	/;"	d
+BRD_X_BIT	../include/modes.h	/^#define BRD_X_BIT	/;"	d
+BRD_Z_BIT	../include/modes.h	/^#define BRD_Z_BIT	/;"	d
+BRH	board.c	/^}                   BRH;$/;"	t	typeref:struct:BoardReadingHistory	file:
+BRH_EXPIRE	board.c	/^#define	BRH_EXPIRE	/;"	d	file:
+BRH_MASK	board.c	/^#define	BRH_MASK	/;"	d	file:
+BRH_MAX	board.c	/^#define BRH_MAX /;"	d	file:
+BRH_PAGE	board.c	/^#define BRH_PAGE	/;"	d	file:
+BRH_SIGN	board.c	/^#define	BRH_SIGN	/;"	d	file:
+BRH_WINDOW	board.c	/^#define	BRH_WINDOW	/;"	d	file:
+BSEM_ENTER	../include/config.h	/^#define BSEM_ENTER /;"	d
+BSEM_FLG	../include/config.h	/^#define	BSEM_FLG	/;"	d
+BSEM_KEY	../include/config.h	/^#define	BSEM_KEY	/;"	d
+BSEM_LEAVE	../include/config.h	/^#define BSEM_LEAVE /;"	d
+BSEM_RESET	../include/config.h	/^#define BSEM_RESET	/;"	d
+BSTAT	../include/struct.h	/^}	BSTAT;$/;"	t	typeref:struct:__anon68
+BSTATCOUNT	../include/struct.h	/^}	BSTATCOUNT;$/;"	t	typeref:struct:__anon69
+BSTAT_LAST	../include/struct.h	/^#define	BSTAT_LAST	/;"	d
+BSTAT_TOTAL	../include/struct.h	/^#define	BSTAT_TOTAL	/;"	d
+BTLEN	../include/struct.h	/^#define BTLEN /;"	d
+BanMail	banmail.c	/^BanMail()$/;"	f
+Ben_Perm	board.c	/^Ben_Perm(bhdr, ulevel)$/;"	f	file:
+BoardHeader	../include/struct.h	/^typedef struct BoardHeader$/;"	s
+BoardReadingHistory	board.c	/^typedef struct BoardReadingHistory$/;"	s	file:
+Boards	board.c	/^Boards()$/;"	f
+Btime	../lib/str_time.c	/^Btime(clock)$/;"	f
+CHANGE_SECOND	acct.c	/^#undef	CHANGE_SECOND$/;"	d	file:
+CHANGE_USERNO	acct.c	/^#undef	CHANGE_USERNO$/;"	d	file:
+CHATROOMNAME	../include/config.h	/^#define CHATROOMNAME	/;"	d
+CHAT_LOGIN_BOGUS	../include/config.h	/^#define CHAT_LOGIN_BOGUS /;"	d
+CHAT_LOGIN_EXISTS	../include/config.h	/^#define CHAT_LOGIN_EXISTS /;"	d
+CHAT_LOGIN_INVALID	../include/config.h	/^#define CHAT_LOGIN_INVALID /;"	d
+CHAT_LOGIN_OK	../include/config.h	/^#define CHAT_LOGIN_OK /;"	d
+CHAT_PORT	../include/config.h	/^#define CHAT_PORT	/;"	d
+CHAT_SECURE	../include/config.h	/^#define CHAT_SECURE	/;"	d
+CHECKSUM	../include/struct.h	/^}	CHECKSUM;$/;"	t	typeref:struct:__anon70
+CHECKSUMCOUNT	../include/struct.h	/^}	CHECKSUMCOUNT;$/;"	t	typeref:struct:__anon71
+CHECK_BAN	../include/global.h	/^#define CHECK_BAN	/;"	d
+CHECK_BM_TIME	../include/config.h	/^#define CHECK_BM_TIME	/;"	d
+CHECK_PERIOD	../include/config.h	/^#define	CHECK_PERIOD	/;"	d
+CHECK_QUOT	../include/config.h	/^#define	CHECK_QUOT	/;"	d
+CHECK_QUOT_MAX	../include/config.h	/^#define CHECK_QUOT_MAX	/;"	d
+CHK_MAIL_NOMSG	../include/struct.h	/^#define	CHK_MAIL_NOMSG	/;"	d
+CHK_MAIL_NORMAL	../include/struct.h	/^#define	CHK_MAIL_NORMAL	/;"	d
+CHK_MAIL_VALID	../include/struct.h	/^#define	CHK_MAIL_VALID	/;"	d
+CH_END	../include/struct.h	/^#define	CH_END	/;"	d
+CH_TTLEN	../include/struct.h	/^#define	CH_TTLEN	/;"	d
+CLASS	../include/struct.h	/^}   CLASS;$/;"	t	typeref:struct:__anon49
+CLASS_IMGFILE	../include/struct.h	/^#define CLASS_IMGFILE	/;"	d
+CLASS_INIFILE	../include/struct.h	/^#define CLASS_INIFILE /;"	d
+CLASS_TABLE	../include/struct.h	/^}   CLASS_TABLE;$/;"	t	typeref:struct:__anon52
+CLASS_TABLE2	../include/struct.h	/^}	CLASS_TABLE2;$/;"	t	typeref:struct:__anon62
+CLASS_TABLE_ALERT	../include/struct.h	/^}	CLASS_TABLE_ALERT;$/;"	t	typeref:struct:__anon64
+CLASS_TABLE_ALERT_ITEM	../include/struct.h	/^}	CLASS_TABLE_ALERT_ITEM;$/;"	t	typeref:struct:__anon63
+CLASS_TIME	../include/struct.h	/^}  CLASS_TIME;$/;"	t	typeref:struct:__anon51
+CLOCK	../include/struct.h	/^}  CLOCK;$/;"	t	typeref:struct:__anon50
+CLS	../include/bbsnet.h	/^#define	CLS	/;"	d
+CNA_MAX	../include/config.h	/^#define CNA_MAX /;"	d
+COL	../include/bbsnet.h	/^#define	COL	/;"	d
+COLOR_BAD	../include/config.h	/^#define         COLOR_BAD /;"	d
+COLOR_BOARDPAL	../include/config.h	/^#define		COLOR_BOARDPAL	/;"	d
+COLOR_BOTH	../include/config.h	/^#define         COLOR_BOTH /;"	d
+COLOR_CLOAK	../include/config.h	/^#define         COLOR_CLOAK /;"	d
+COLOR_HEADER	../include/config.h	/^#define COLOR_HEADER	/;"	d
+COLOR_OPAL	../include/config.h	/^#define         COLOR_OPAL /;"	d
+COLOR_PAL	../include/config.h	/^#define         COLOR_PAL /;"	d
+CONDITION_MAX	../include/config.h	/^#define	CONDITION_MAX	/;"	d
+CONTACT	../include/struct.h	/^}	CONTACT;$/;"	t	typeref:struct:__anon19
+COUNTER	../include/struct.h	/^}	COUNTER;$/;"	t	typeref:struct:__anon55
+COUNT_KEY	../include/config.h	/^#define COUNT_KEY	/;"	d
+CURSOR_FIRST	xover.c	/^#define CURSOR_FIRST	/;"	d	file:
+CURSOR_NEXT	xover.c	/^#define CURSOR_NEXT	/;"	d	file:
+CURSOR_PREV	xover.c	/^#define CURSOR_PREV	/;"	d	file:
+CYAN	../include/bbsnet.h	/^#define CYAN	/;"	d
+Chain	post.c	/^}      Chain;			\/* Thor: negative is end *\/$/;"	t	typeref:struct:__anon4	file:
+ChatAction	../include/struct.h	/^} ChatAction; $/;"	t	typeref:struct:__anon40
+Class	board.c	/^Class()$/;"	f
+ClassHeader	../include/struct.h	/^} ClassHeader;$/;"	t	typeref:struct:__anon34
+Ctime	../lib/str_time.c	/^Ctime(clock)$/;"	f
+Ctrl	../include/global.h	/^#define Ctrl(/;"	d
+DAO_MAP	../lib/f_map.c	/^#  define DAO_MAP /;"	d	file:
+DATA	../include/struct.h	/^} DATA;$/;"	t	typeref:struct:__anon61
+DATAFILE	../include/bbsnet.h	/^#define	DATAFILE	/;"	d
+DEFAULTSERVER	../include/config.h	/^#define	DEFAULTSERVER	/;"	d
+DEFAULT_BOARD	../include/global.h	/^#define	DEFAULT_BOARD	/;"	d
+DELIMITER	../include/bbsnet.h	/^#define DELIMITER	/;"	d
+DENY_DAYS	../include/struct.h	/^#define DENY_DAYS	/;"	d
+DENY_DAYS_1	../include/struct.h	/^#define	DENY_DAYS_1	/;"	d
+DENY_DAYS_2	../include/struct.h	/^#define	DENY_DAYS_2	/;"	d
+DENY_DAYS_3	../include/struct.h	/^#define	DENY_DAYS_3	/;"	d
+DENY_DAYS_4	../include/struct.h	/^#define	DENY_DAYS_4	/;"	d
+DENY_DAYS_5	../include/struct.h	/^#define DENY_DAYS_5	/;"	d
+DENY_MODE_ALL	../include/struct.h	/^#define	DENY_MODE_ALL	/;"	d
+DENY_MODE_GUEST	../include/struct.h	/^#define DENY_MODE_GUEST	/;"	d
+DENY_MODE_MAIL	../include/struct.h	/^#define	DENY_MODE_MAIL	/;"	d
+DENY_MODE_NICK	../include/struct.h	/^#define	DENY_MODE_NICK	/;"	d
+DENY_MODE_POST	../include/struct.h	/^#define	DENY_MODE_POST	/;"	d
+DENY_MODE_TALK	../include/struct.h	/^#define	DENY_MODE_TALK	/;"	d
+DENY_SEL	../include/struct.h	/^#define	DENY_SEL	/;"	d
+DENY_SEL_AD	../include/struct.h	/^#define	DENY_SEL_AD	/;"	d
+DENY_SEL_MAIL	../include/struct.h	/^#define	DENY_SEL_MAIL	/;"	d
+DENY_SEL_OK	../include/struct.h	/^#define	DENY_SEL_OK	/;"	d
+DENY_SEL_POST	../include/struct.h	/^#define	DENY_SEL_POST	/;"	d
+DENY_SEL_SELL	../include/struct.h	/^#define	DENY_SEL_SELL	/;"	d
+DENY_SEL_TALK	../include/struct.h	/^#define	DENY_SEL_TALK	/;"	d
+DL_ALLOC_MIN	../lib/dl_lib.c	/^#define DL_ALLOC_MIN	/;"	d	file:
+DL_func	../lib/dl_lib.c	/^DL_func(char *name, ...)$/;"	f
+DL_get	../lib/dl_lib.c	/^DL_get(name)$/;"	f
+DL_list	../lib/dl_lib.c	/^}DL_list;$/;"	t	typeref:struct:__anon72	file:
+DOECHO	../include/bbs.h	/^#define DOECHO	/;"	d
+Def	../include/rpg.h	/^  int Def; int MA; int MD; int EXP; int money;$/;"	m	struct:mobattr
+EDIT_ANONYMOUS	../include/modes.h	/^#define EDIT_ANONYMOUS /;"	d
+EDIT_BOTH	../include/modes.h	/^#define	EDIT_BOTH	/;"	d
+EDIT_LIST	../include/modes.h	/^#define	EDIT_LIST	/;"	d
+EDIT_MAIL	../include/modes.h	/^#define	EDIT_MAIL	/;"	d
+EDIT_OUTGO	../include/modes.h	/^#define	EDIT_OUTGO	/;"	d
+EMAIL	../include/struct.h	/^} EMAIL;$/;"	t	typeref:struct:__anon48
+EMAIL_JUSTIFY	../include/config.h	/^#define	EMAIL_JUSTIFY	/;"	d
+EMAIL_PAGE	../include/config.h	/^#undef	EMAIL_PAGE	/;"	d
+ERR_BID	../include/global.h	/^#define	ERR_BID	/;"	d
+ERR_LOGIN_NICKERROR	../include/xchat.h	/^#define ERR_LOGIN_NICKERROR /;"	d
+ERR_LOGIN_NICKINUSE	../include/xchat.h	/^#define ERR_LOGIN_NICKINUSE /;"	d
+ERR_LOGIN_NOSUCHUSER	../include/xchat.h	/^#define ERR_LOGIN_NOSUCHUSER /;"	d
+ERR_LOGIN_PASSERROR	../include/xchat.h	/^#define ERR_LOGIN_PASSERROR /;"	d
+ERR_LOGIN_USERONLINE	../include/xchat.h	/^#define ERR_LOGIN_USERONLINE /;"	d
+ERR_PASSWD	../include/global.h	/^#define	ERR_PASSWD	/;"	d
+ERR_UID	../include/global.h	/^#define	ERR_UID	/;"	d
+EVERY_BIFF	../include/config.h	/^#define EVERY_BIFF	/;"	d
+EVERY_Z	../include/config.h	/^#define EVERY_Z	/;"	d
+EXIT_CLIERROR	../include/config.h	/^#define EXIT_CLIERROR /;"	d
+EXIT_KICK	../include/config.h	/^#define EXIT_KICK /;"	d
+EXIT_LOGOUT	../include/config.h	/^#define EXIT_LOGOUT /;"	d
+EXIT_LOSTCONN	../include/config.h	/^#define EXIT_LOSTCONN /;"	d
+EXIT_TIMEDOUT	../include/config.h	/^#define EXIT_TIMEDOUT /;"	d
+EXP	../include/rpg.h	/^  int Def; int MA; int MD; int EXP; int money;$/;"	m	struct:mobattr
+EnumTagHdr	xover.c	/^EnumTagHdr(hdr, dir, locus)$/;"	f
+Etime	../lib/str_time.c	/^Etime(clock)$/;"	f
+Every_Z_BMW	xover.c	/^Every_Z_BMW()$/;"	f	file:
+Every_Z_Board	xover.c	/^Every_Z_Board()$/;"	f	file:
+Every_Z_Class	xover.c	/^Every_Z_Class()$/;"	f	file:
+Every_Z_Favorite	xover.c	/^Every_Z_Favorite()$/;"	f	file:
+Every_Z_Gem	xover.c	/^Every_Z_Gem()$/;"	f	file:
+Every_Z_MBox	xover.c	/^Every_Z_MBox()$/;"	f	file:
+Every_Z_Screen	popupmenu.c	/^Every_Z_Screen()$/;"	f
+Every_Z_Ulist	xover.c	/^Every_Z_Ulist()$/;"	f	file:
+Ext_POP3_Check	socket.c	/^Ext_POP3_Check(site, account, passwd)$/;"	f
+FCACHE	../include/struct.h	/^} FCACHE;$/;"	t	typeref:struct:__anon35
+FILE_DUE	../include/config.h	/^#define FILE_DUE /;"	d
+FILMSHM_KEY	../include/config.h	/^#define FILMSHM_KEY	/;"	d
+FILM_ADMIN	../include/struct.h	/^#define FILM_ADMIN	/;"	d
+FILM_ALOHA	../include/struct.h	/^#define FILM_ALOHA	/;"	d
+FILM_APPLY	../include/struct.h	/^#define	FILM_APPLY	/;"	d
+FILM_BANMAIL	../include/struct.h	/^#define FILM_BANMAIL	/;"	d
+FILM_BMW	../include/struct.h	/^#define FILM_BMW /;"	d
+FILM_BOARD	../include/struct.h	/^#define	FILM_BOARD	/;"	d
+FILM_CLASS	../include/struct.h	/^#define	FILM_CLASS	/;"	d
+FILM_CONTACT	../include/struct.h	/^#define FILM_CONTACT	/;"	d
+FILM_EDIT	../include/struct.h	/^#define	FILM_EDIT	/;"	d
+FILM_GEM	../include/struct.h	/^#define	FILM_GEM	/;"	d
+FILM_GOODBYE	../include/struct.h	/^#define	FILM_GOODBYE	/;"	d
+FILM_INCOME	../include/struct.h	/^#define FILM_INCOME	/;"	d
+FILM_MAIL	../include/struct.h	/^#define	FILM_MAIL	/;"	d
+FILM_MEMORANDUM	../include/struct.h	/^#define FILM_MEMORANDUM	/;"	d
+FILM_MIME	../include/struct.h	/^#define FILM_MIME	/;"	d
+FILM_MORE	../include/struct.h	/^#define	FILM_MORE	/;"	d
+FILM_MOVIE	../include/struct.h	/^#define	FILM_MOVIE	/;"	d
+FILM_PAL	../include/struct.h	/^#define	FILM_PAL	/;"	d
+FILM_POST	../include/struct.h	/^#define	FILM_POST	/;"	d
+FILM_ROW	../include/struct.h	/^#define FILM_ROW	/;"	d
+FILM_SIGNUP	../include/struct.h	/^#define FILM_SIGNUP	/;"	d
+FILM_SIZ	../include/struct.h	/^#define	FILM_SIZ	/;"	d
+FILM_SONG	../include/struct.h	/^#define FILM_SONG	/;"	d
+FILM_TRYOUT	../include/struct.h	/^#define	FILM_TRYOUT	/;"	d
+FILM_ULIST	../include/struct.h	/^#define	FILM_ULIST	/;"	d
+FILM_VOTE	../include/struct.h	/^#define	FILM_VOTE	/;"	d
+FILM_WELCOME	../include/struct.h	/^#define	FILM_WELCOME	/;"	d
+FNLEN	../include/struct.h	/^#define FNLEN /;"	d
+FN_ACCT	../include/global.h	/^#define	FN_ACCT	/;"	d
+FN_ALOHA	../include/global.h	/^#define	FN_ALOHA	/;"	d
+FN_ANONYMOUS_LOG	../include/global.h	/^#define FN_ANONYMOUS_LOG	/;"	d
+FN_BAK	edit.c	/^#define	FN_BAK	/;"	d	file:
+FN_BANMAIL_LOG	../include/global.h	/^#define FN_BANMAIL_LOG	/;"	d
+FN_BANMSG	../include/global.h	/^#define	FN_BANMSG	/;"	d
+FN_BBSMAILPOST_LOG	../include/global.h	/^#define FN_BBSMAILPOST_LOG	/;"	d
+FN_BBSNET_LOG	../include/global.h	/^#define	FN_BBSNET_LOG	/;"	d
+FN_BENZ	../include/global.h	/^#define FN_BENZ	/;"	d
+FN_BGUARD_LOG	../include/global.h	/^#define FN_BGUARD_LOG	/;"	d
+FN_BLACKSU_LOG	../include/global.h	/^#define FN_BLACKSU_LOG	/;"	d
+FN_BMLIST_LOG	../include/global.h	/^#define	FN_BMLIST_LOG	/;"	d
+FN_BMW	../include/global.h	/^#define FN_BMW	/;"	d
+FN_BRD	../include/global.h	/^#define FN_BRD	/;"	d
+FN_BRD_STAT	../include/global.h	/^#define	FN_BRD_STAT	/;"	d
+FN_BRD_STATCOUNT	../include/global.h	/^#define	FN_BRD_STATCOUNT	/;"	d
+FN_BRD_USIES	../include/global.h	/^#define	FN_BRD_USIES	/;"	d
+FN_BRH	../include/global.h	/^#define FN_BRH	/;"	d
+FN_BSMTP_LOG	../include/global.h	/^#define FN_BSMTP_LOG	/;"	d
+FN_CAMERA_LOG	../include/global.h	/^#define	FN_CAMERA_LOG	/;"	d
+FN_CHATDATA_LOG	../include/global.h	/^#define	FN_CHATDATA_LOG	/;"	d
+FN_CHAT_CONDITION_DB	../include/global.h	/^#define FN_CHAT_CONDITION_DB	/;"	d
+FN_CHAT_LOG	../include/global.h	/^#define	FN_CHAT_LOG	/;"	d
+FN_CHAT_PARTY2_DB	../include/global.h	/^#define	FN_CHAT_PARTY2_DB	/;"	d
+FN_CHAT_PARTY_DB	../include/global.h	/^#define FN_CHAT_PARTY_DB	/;"	d
+FN_CHAT_PERSON_DB	../include/global.h	/^#define	FN_CHAT_PERSON_DB	/;"	d
+FN_CHAT_SPEAK_DB	../include/global.h	/^#define FN_CHAT_SPEAK_DB	/;"	d
+FN_CHECKBM_LOG	../include/global.h	/^#define	FN_CHECKBM_LOG	/;"	d
+FN_CHECKMAIL_MAIL	../include/global.h	/^#define FN_CHECKMAIL_MAIL	/;"	d
+FN_CHICKEN	../include/global.h	/^#define	FN_CHICKEN	/;"	d
+FN_CLASSTABLE2	../include/global.h	/^#define FN_CLASSTABLE2	/;"	d
+FN_CLASSTABLE_DB	../include/global.h	/^#define	FN_CLASSTABLE_DB	/;"	d
+FN_CRIMINAL_LOG	../include/global.h	/^#define	FN_CRIMINAL_LOG	/;"	d
+FN_DIR	../include/global.h	/^#define FN_DIR	/;"	d
+FN_EMAIL	../include/global.h	/^#define	FN_EMAIL	/;"	d
+FN_EMAILADDR_LOG	../include/global.h	/^#define	FN_EMAILADDR_LOG	/;"	d
+FN_ERROR_CAMERA	../include/global.h	/^#define	FN_ERROR_CAMERA	/;"	d
+FN_ETC_ADMIN_DB	../include/global.h	/^#define FN_ETC_ADMIN_DB	/;"	d
+FN_ETC_ALLOW_ACL	../include/global.h	/^#define	FN_ETC_ALLOW_ACL	/;"	d
+FN_ETC_ANNOUNCE	../include/global.h	/^#define	FN_ETC_ANNOUNCE	/;"	d
+FN_ETC_APPROVED	../include/global.h	/^#define	FN_ETC_APPROVED	/;"	d
+FN_ETC_BADID	../include/global.h	/^#define	FN_ETC_BADID	/;"	d
+FN_ETC_BANIP_ACL	../include/global.h	/^#define	FN_ETC_BANIP_ACL	/;"	d
+FN_ETC_BANMAIL_ACL	../include/global.h	/^#define	FN_ETC_BANMAIL_ACL	/;"	d
+FN_ETC_BIRTHDAY	../include/global.h	/^#define	FN_ETC_BIRTHDAY	/;"	d
+FN_ETC_COUNTER	../include/global.h	/^#define	FN_ETC_COUNTER	/;"	d
+FN_ETC_EMAIL	../include/global.h	/^#define	FN_ETC_EMAIL	/;"	d
+FN_ETC_EMAILADDR_ACL	../include/global.h	/^#define	FN_ETC_EMAILADDR_ACL	/;"	d
+FN_ETC_EXPIRE_CONF	../include/global.h	/^#define	FN_ETC_EXPIRE_CONF	/;"	d
+FN_ETC_JUSTIFIED_BMTA	../include/global.h	/^#define	FN_ETC_JUSTIFIED_BMTA	/;"	d
+FN_ETC_JUSTIFIED_POP3	../include/global.h	/^#define	FN_ETC_JUSTIFIED_POP3	/;"	d
+FN_ETC_JUSTIFY	../include/global.h	/^#define	FN_ETC_JUSTIFY	/;"	d
+FN_ETC_LOVEPAPER	../include/global.h	/^#define	FN_ETC_LOVEPAPER	/;"	d
+FN_ETC_MAILER_ACL	../include/global.h	/^#define	FN_ETC_MAILER_ACL	/;"	d
+FN_ETC_MAILSERVICE	../include/global.h	/^#define	FN_ETC_MAILSERVICE	/;"	d
+FN_ETC_MAIL_OVER	../include/global.h	/^#define	FN_ETC_MAIL_OVER	/;"	d
+FN_ETC_MQUOTA	../include/global.h	/^#define	FN_ETC_MQUOTA	/;"	d
+FN_ETC_NEWUSER	../include/global.h	/^#define	FN_ETC_NEWUSER	/;"	d
+FN_ETC_NOTIFY	../include/global.h	/^#define	FN_ETC_NOTIFY	/;"	d
+FN_ETC_OBSERVE	../include/global.h	/^#define	FN_ETC_OBSERVE	/;"	d
+FN_ETC_REREG	../include/global.h	/^#define	FN_ETC_REREG	/;"	d
+FN_ETC_RFORM	../include/global.h	/^#define	FN_ETC_RFORM	/;"	d
+FN_ETC_SPAMER_ACL	../include/global.h	/^#define	FN_ETC_SPAMER_ACL	/;"	d
+FN_ETC_SYSOP	../include/global.h	/^#define	FN_ETC_SYSOP	/;"	d
+FN_ETC_UNTRUST_ACL	../include/global.h	/^#define	FN_ETC_UNTRUST_ACL	/;"	d
+FN_ETC_VALID	../include/global.h	/^#define	FN_ETC_VALID	/;"	d
+FN_ETC_VERSION	../include/global.h	/^#define	FN_ETC_VERSION	/;"	d
+FN_EXPIRED_LOG	../include/global.h	/^#define	FN_EXPIRED_LOG	/;"	d
+FN_EXPIRE_LOG	../include/global.h	/^#define FN_EXPIRE_LOG	/;"	d
+FN_FAVORITE	../include/global.h	/^#define FN_FAVORITE /;"	d
+FN_FAVORITE_IMG	../include/global.h	/^#define	FN_FAVORITE_IMG	/;"	d
+FN_FAVORITE_LOG	../include/global.h	/^#define	FN_FAVORITE_LOG	/;"	d
+FN_FIMAGE	talk.c	/^#define FN_FIMAGE	/;"	d	file:
+FN_FRIEND_BENZ	../include/global.h	/^#define FN_FRIEND_BENZ /;"	d
+FN_GAME_BBSNET	../include/global.h	/^#define	FN_GAME_BBSNET	/;"	d
+FN_GCHECK_LOG	../include/global.h	/^#define	FN_GCHECK_LOG	/;"	d
+FN_GEM	../include/global.h	/^#define FN_GEM	/;"	d
+FN_GEMD_LOG	../include/global.h	/^#define FN_GEMD_LOG	/;"	d
+FN_GINDEX_LOG	../include/global.h	/^#define	FN_GINDEX_LOG	/;"	d
+FN_HELP_LIST	../include/global.h	/^#define	FN_HELP_LIST	/;"	d
+FN_HOTBOARD	../include/global.h	/^#define	FN_HOTBOARD	/;"	d
+FN_INNBBS_LOG	../include/global.h	/^#define	FN_INNBBS_LOG	/;"	d
+FN_JUSTIFY	../include/global.h	/^#define	FN_JUSTIFY	/;"	d
+FN_LAZYBM_LOG	../include/global.h	/^#define	FN_LAZYBM_LOG	/;"	d
+FN_LOG	../include/global.h	/^#define	FN_LOG	/;"	d
+FN_LOGINS_BAD	../include/global.h	/^#define	FN_LOGINS_BAD	/;"	d
+FN_LOGIN_LOG	../include/global.h	/^#define	FN_LOGIN_LOG	/;"	d
+FN_LOGIN_LOG	../include/global.h	/^#define FN_LOGIN_LOG	/;"	d
+FN_MAILEXPIRE_LOG	../include/global.h	/^#define FN_MAILEXPIRE_LOG	/;"	d
+FN_MAILSERVICE_LOG	../include/global.h	/^#define	FN_MAILSERVICE_LOG	/;"	d
+FN_MAIL_LOG	../include/global.h	/^#define FN_MAIL_LOG	/;"	d
+FN_MANAGER_LOG	../include/global.h	/^#define	FN_MANAGER_LOG	/;"	d
+FN_MATCH_LOG	../include/global.h	/^#define	FN_MATCH_LOG	/;"	d
+FN_MATCH_MAIL	../include/global.h	/^#define	FN_MATCH_MAIL	/;"	d
+FN_MATCH_NEW	../include/global.h	/^#define	FN_MATCH_NEW	/;"	d
+FN_MINE_LOG	../include/global.h	/^#define FN_MINE_LOG	/;"	d
+FN_MODE_CUR	../include/global.h	/^#define FN_MODE_CUR /;"	d
+FN_MODE_LOG	../include/global.h	/^#define FN_MODE_LOG /;"	d
+FN_MODE_TMP	../include/global.h	/^#define FN_MODE_TMP /;"	d
+FN_NEWBOARD	../include/global.h	/^#define	FN_NEWBOARD	/;"	d
+FN_NEWBOARD_HELP	../include/global.h	/^#define FN_NEWBOARD_HELP	/;"	d
+FN_NEWS	../include/global.h	/^#define	FN_NEWS	/;"	d
+FN_NEWSEXPIRE_LOG	../include/global.h	/^#define	FN_NEWSEXPIRE_LOG	/;"	d
+FN_NEWS_CLASS	../include/global.h	/^#define	FN_NEWS_CLASS	/;"	d
+FN_NEWS_NEWS	../include/global.h	/^#define	FN_NEWS_NEWS	/;"	d
+FN_NOTE	../include/global.h	/^#define	FN_NOTE	/;"	d
+FN_NOTE_ALL	../include/global.h	/^#define FN_NOTE_ALL	/;"	d
+FN_NOTE_PAD	menu.c	/^#define	FN_NOTE_PAD	/;"	d	file:
+FN_NOTE_TMP	menu.c	/^#define	FN_NOTE_TMP	/;"	d	file:
+FN_PAL	../include/global.h	/^#define	FN_PAL	/;"	d
+FN_PAL_LOG	../include/global.h	/^#define	FN_PAL_LOG	/;"	d
+FN_PASS_LOG	../include/global.h	/^#define	FN_PASS_LOG	/;"	d
+FN_PIPMONEY_LOG	../include/global.h	/^#define FN_PIPMONEY_LOG	/;"	d
+FN_PIP_LOG	../include/global.h	/^#define FN_PIP_LOG	/;"	d
+FN_PLANS	../include/global.h	/^#define	FN_PLANS	/;"	d
+FN_PNOTE_ANS	../include/global.h	/^#define	FN_PNOTE_ANS	/;"	d
+FN_PNOTE_ANS_SAVE	../include/global.h	/^#define	FN_PNOTE_ANS_SAVE	/;"	d
+FN_PNOTE_DAT	../include/global.h	/^#define	FN_PNOTE_DAT	/;"	d
+FN_PNOTE_DAT_SAVE	../include/global.h	/^#define	FN_PNOTE_DAT_SAVE	/;"	d
+FN_PNOTE_HINT	../include/global.h	/^#define	FN_PNOTE_HINT	/;"	d
+FN_PNOTE_TMP	../include/global.h	/^#define	FN_PNOTE_TMP	/;"	d
+FN_POP3MAIL_LOG	../include/global.h	/^#define	FN_POP3MAIL_LOG	/;"	d
+FN_POP3_LOG	../include/global.h	/^#define FN_POP3_LOG	/;"	d
+FN_POSTEDIT_LOG	../include/global.h	/^#define	FN_POSTEDIT_LOG	/;"	d
+FN_POST_DB	../include/global.h	/^#define	FN_POST_DB	/;"	d
+FN_POST_LOG	../include/global.h	/^#define	FN_POST_LOG	/;"	d
+FN_PYDICT_LOG	../include/global.h	/^#define FN_PYDICT_LOG	/;"	d
+FN_REAPER_LOG	../include/global.h	/^#define	FN_REAPER_LOG	/;"	d
+FN_RECOMMEND_LOG	../include/global.h	/^#define	FN_RECOMMEND_LOG	/;"	d
+FN_RESET_LOG	../include/global.h	/^#define	FN_RESET_LOG	/;"	d
+FN_RFORM	../include/global.h	/^#define FN_RFORM	/;"	d
+FN_RFORM_LOG	../include/global.h	/^#define FN_RFORM_LOG	/;"	d
+FN_RFORM_R	../include/global.h	/^#define	FN_RFORM_R	/;"	d
+FN_SAMEEMAIL_LOG	../include/global.h	/^#define	FN_SAMEEMAIL_LOG	/;"	d
+FN_SCHEMA	../include/global.h	/^#define FN_SCHEMA	/;"	d
+FN_SECURITY	../include/global.h	/^#define FN_SECURITY /;"	d
+FN_SEVEN_LOG	../include/global.h	/^#define FN_SEVEN_LOG	/;"	d
+FN_SIGN	../include/global.h	/^#define	FN_SIGN	/;"	d
+FN_SONG_LOG	../include/global.h	/^#define	FN_SONG_LOG	/;"	d
+FN_SPAMPATH_LOG	../include/global.h	/^#define	FN_SPAMPATH_LOG	/;"	d
+FN_SPAM_LOG	../include/global.h	/^#define	FN_SPAM_LOG	/;"	d
+FN_STOPPERM_LOG	../include/global.h	/^#define	FN_STOPPERM_LOG	/;"	d
+FN_STOPPERM_MAIL	../include/global.h	/^#define FN_STOPPERM_MAIL	/;"	d
+FN_STOP_LOG	../include/global.h	/^#define FN_STOP_LOG	/;"	d
+FN_TALK_LOG	../include/global.h	/^#define FN_TALK_LOG	/;"	d
+FN_TOP_LOGIN	../include/webbbs.h	/^#define	FN_TOP_LOGIN	/;"	d
+FN_TOP_POST	../include/webbbs.h	/^#define	FN_TOP_POST	/;"	d
+FN_TOP_STAY	../include/webbbs.h	/^#define	FN_TOP_STAY	/;"	d
+FN_UCHAT_LOG	../include/global.h	/^#define	FN_UCHAT_LOG	/;"	d
+FN_UEEQUERY_LOG	../include/global.h	/^#define	FN_UEEQUERY_LOG	/;"	d
+FN_USERNO_LOG	../include/global.h	/^#define	FN_USERNO_LOG	/;"	d
+FN_USIES	../include/global.h	/^#define	FN_USIES	/;"	d
+FN_VAR_SYSHISTORY	../include/global.h	/^#define FN_VAR_SYSHISTORY	/;"	d
+FN_VERIFY_LOG	../include/global.h	/^#define	FN_VERIFY_LOG	/;"	d
+FN_VIOLATELAW_DB	../include/global.h	/^#define FN_VIOLATELAW_DB	/;"	d
+FN_VOTE	../include/global.h	/^#define	FN_VOTE	/;"	d
+FN_YZUSERVICE_LOG	../include/global.h	/^#define	FN_YZUSERVICE_LOG	/;"	d
+FORCE_BOARD	../include/config.h	/^#define	FORCE_BOARD	/;"	d
+FRIEND_FIRST	../include/config.h	/^#define	FRIEND_FIRST	/;"	d
+FW	../include/struct.h	/^}	FW;$/;"	t	typeref:struct:__anon22
+FWCACHE	../include/struct.h	/^} FWCACHE;$/;"	t	typeref:struct:__anon38
+FWOCACHE	../include/struct.h	/^} FWOCACHE;$/;"	t	typeref:struct:__anon39
+FWOSHM_KEY	../include/config.h	/^#define FWOSHM_KEY	/;"	d
+FWSHM_KEY	../include/config.h	/^#define FWSHM_KEY	/;"	d
+FW_ALL	../include/struct.h	/^#define	FW_ALL	/;"	d
+FW_CANCEL	../include/struct.h	/^#define	FW_CANCEL	/;"	d
+FW_ORIGIN	../include/struct.h	/^#define	FW_ORIGIN	/;"	d
+FW_OWNER	../include/struct.h	/^#define	FW_OWNER	/;"	d
+FW_PATH	../include/struct.h	/^#define	FW_PATH	/;"	d
+FW_TIME	../include/struct.h	/^#define	FW_TIME	/;"	d
+FW_TITLE	../include/struct.h	/^#define	FW_TITLE	/;"	d
+Favorite	board.c	/^Favorite()$/;"	f
+GCARRY	../include/bbs.h	/^#define GCARRY	/;"	d
+GEM_BOARD	../include/hdr.h	/^#define	GEM_BOARD	/;"	d
+GEM_COPY	gem.c	/^#define	GEM_COPY	/;"	d	file:
+GEM_CUT	gem.c	/^#define	GEM_CUT	/;"	d	file:
+GEM_EXTEND	../include/hdr.h	/^#define	GEM_EXTEND	/;"	d
+GEM_FILE	gem.c	/^#define	GEM_FILE	/;"	d	file:
+GEM_FOLDER	../include/hdr.h	/^#define	GEM_FOLDER	/;"	d
+GEM_FULLPATH	../include/hdr.h	/^#define	GEM_FULLPATH	/;"	d
+GEM_GOPHER	../include/hdr.h	/^#define	GEM_GOPHER	/;"	d
+GEM_HTTP	../include/hdr.h	/^#define	GEM_HTTP	/;"	d
+GEM_LOCK	../include/hdr.h	/^#define	GEM_LOCK	/;"	d
+GEM_MANAGER	../include/perm.h	/^#define	GEM_MANAGER	/;"	d
+GEM_QUIT	../include/perm.h	/^#define GEM_QUIT	/;"	d
+GEM_READ	gem.c	/^#define	GEM_READ	/;"	d	file:
+GEM_RECYCLE	../include/perm.h	/^#define	GEM_RECYCLE	/;"	d
+GEM_RESERVED	../include/hdr.h	/^#define	GEM_RESERVED	/;"	d
+GEM_RESTRICT	../include/hdr.h	/^#define	GEM_RESTRICT	/;"	d
+GEM_SYSOP	../include/perm.h	/^#define	GEM_SYSOP	/;"	d
+GEM_URLEN	../include/hdr.h	/^#define	GEM_URLEN	/;"	d
+GEM_USER	../include/perm.h	/^#define	GEM_USER	/;"	d
+GEM_VISIT	../include/perm.h	/^#define	GEM_VISIT	/;"	d
+GEM_WAY	gem.c	/^#define	GEM_WAY	/;"	d	file:
+GEM_WRITE	gem.c	/^#define	GEM_WRITE	/;"	d	file:
+GET_BRD	../include/bbs.h	/^#define	GET_BRD	/;"	d
+GET_LIST	../include/bbs.h	/^#define	GET_LIST	/;"	d
+GET_USER	../include/bbs.h	/^#define	GET_USER	/;"	d
+GKEY_MAP	../include/bbsctrl.h	/^}       GKEY_MAP;$/;"	t	typeref:struct:__anon10
+GM_DELETE	gem.c	/^#define	GM_DELETE	/;"	d	file:
+GM_WORKING	gem.c	/^#define	GM_WORKING	/;"	d	file:
+GOTOXY	../include/bbsnet.h	/^#define GOTOXY(/;"	d
+GREEN	../include/bbsnet.h	/^#define	GREEN	/;"	d
+GUESTNAME	../include/config.h	/^#define GUESTNAME	/;"	d
+GUEST_1	../include/config.h	/^#define GUEST_1 /;"	d
+GUEST_NAMES	../include/config.h	/^#define GUEST_NAMES	/;"	d
+Gem	menu.c	/^Gem()$/;"	f	file:
+GemAnchor	gem.c	/^static char GemFolder[80], GemAnchor[80], GemSailor[24];$/;"	v	file:
+GemBuffer	gem.c	/^static HDR *GemBuffer;$/;"	v	file:
+GemBufferNum	gem.c	/^static int GemBufferNum; \/* Thor.990414: ´£«e«Å§i, ¥Î©ógem_head *\/$/;"	v	file:
+GemBufferSiz	gem.c	/^static int GemBufferSiz; \/* , GemBufferNum; *\/ $/;"	v	file:
+GemFolder	gem.c	/^static char GemFolder[80], GemAnchor[80], GemSailor[24];$/;"	v	file:
+GemSailor	gem.c	/^static char GemFolder[80], GemAnchor[80], GemSailor[24];$/;"	v	file:
+Get_Socket	socket.c	/^Get_Socket(site, sock)  \/* site for hostname, sock for port & socket *\/$/;"	f
+HAS_PERM	../include/perm.h	/^#define HAS_PERM(/;"	d
+HAVE_ACTIVITY	board.c	/^#define	HAVE_ACTIVITY$/;"	d	file:
+HAVE_ACTIVITY	menu.c	/^#define HAVE_ACTIVITY$/;"	d	file:
+HAVE_ALOHA	../include/config.h	/^#define	HAVE_ALOHA /;"	d
+HAVE_ANONYMOUS	../include/config.h	/^#define HAVE_ANONYMOUS	/;"	d
+HAVE_BANMSG	../include/config.h	/^#define	HAVE_BANMSG	/;"	d
+HAVE_BBSNET	../include/config.h	/^#define	HAVE_BBSNET	/;"	d
+HAVE_BM_CHECK	../include/config.h	/^#define	HAVE_BM_CHECK	/;"	d
+HAVE_BOARD_PAL	../include/config.h	/^#define	HAVE_BOARD_PAL	/;"	d
+HAVE_BOARD_SEE	../include/config.h	/^#define HAVE_BOARD_SEE	/;"	d
+HAVE_BRDTITLE_CHANGE	../include/config.h	/^#define	HAVE_BRDTITLE_CHANGE	/;"	d
+HAVE_CHANGE_FROM	../include/config.h	/^#define HAVE_CHANGE_FROM /;"	d
+HAVE_CHANGE_SKIN	../include/config.h	/^#undef	HAVE_CHANGE_SKIN	/;"	d
+HAVE_CHK_MAILSIZE	../include/config.h	/^#define	HAVE_CHK_MAILSIZE	/;"	d
+HAVE_CLASSTABLE	../include/config.h	/^#define	HAVE_CLASSTABLE	/;"	d
+HAVE_CLASSTABLEALERT	../include/config.h	/^#define	HAVE_CLASSTABLEALERT	/;"	d
+HAVE_COLOR_VMSG	../include/config.h	/^#define HAVE_COLOR_VMSG	/;"	d
+HAVE_COUNT_BOARD	../include/config.h	/^#define	HAVE_COUNT_BOARD	/;"	d
+HAVE_CROSSPOSTLOG	../include/config.h	/^#define	HAVE_CROSSPOSTLOG	/;"	d
+HAVE_DECLARE	../include/config.h	/^#define	HAVE_DECLARE	/;"	d
+HAVE_DECORATE	../include/config.h	/^#define	HAVE_DECORATE /;"	d
+HAVE_DETECT_CROSSPOST	../include/config.h	/^#define	HAVE_DETECT_CROSSPOST	/;"	d
+HAVE_DETECT_VIOLAWATE	../include/config.h	/^#define	HAVE_DETECT_VIOLAWATE	/;"	d
+HAVE_DOWNLOAD	../include/config.h	/^#define	HAVE_DOWNLOAD	/;"	d
+HAVE_ETC_HOSTS	../include/config.h	/^#define HAVE_ETC_HOSTS /;"	d
+HAVE_FAVORITE	../include/config.h	/^#define	HAVE_FAVORITE	/;"	d
+HAVE_FORCE_BOARD	../include/config.h	/^#undef	HAVE_FORCE_BOARD	/;"	d
+HAVE_GAME_QKMJ	../include/config.h	/^#undef	HAVE_GAME_QKMJ	/;"	d
+HAVE_INFO	../include/config.h	/^#define	HAVE_INFO	/;"	d
+HAVE_INPUT_TOOLS	../include/config.h	/^#define	HAVE_INPUT_TOOLS	/;"	d
+HAVE_MAILGEM	../include/config.h	/^#define	HAVE_MAILGEM	/;"	d
+HAVE_MAILUNDELETE	../include/config.h	/^#define	HAVE_MAILUNDELETE	/;"	d
+HAVE_MAIL_FIX	../include/config.h	/^#define	HAVE_MAIL_FIX	/;"	d
+HAVE_MAXRESERVE	../include/config.h	/^#undef	HAVE_MAXRESERVE	/;"	d
+HAVE_MIME_TRANSFER	../include/config.h	/^#define HAVE_MIME_TRANSFER /;"	d
+HAVE_MMAP	../include/config.h	/^#define	HAVE_MMAP	/;"	d
+HAVE_MODERATED_BOARD	../include/config.h	/^#define	HAVE_MODERATED_BOARD	/;"	d
+HAVE_MULTI_CROSSPOST	../include/config.h	/^#define	HAVE_MULTI_CROSSPOST	/;"	d
+HAVE_OBSERVE_LIST	../include/config.h	/^#define	HAVE_OBSERVE_LIST	/;"	d
+HAVE_ORIGIN	../include/config.h	/^#define	HAVE_ORIGIN	/;"	d
+HAVE_PERM	../include/perm.h	/^#define HAVE_PERM(/;"	d
+HAVE_PERSON_DATA	../include/config.h	/^#define	HAVE_PERSON_DATA	/;"	d
+HAVE_PIP_FIGHT	../include/config.h	/^#undef	HAVE_PIP_FIGHT	/;"	d
+HAVE_PIP_FIGHT1	../include/config.h	/^#define	HAVE_PIP_FIGHT1$/;"	d
+HAVE_POST_BOTTOM	../include/config.h	/^#define HAVE_POST_BOTTOM	/;"	d
+HAVE_PROFESS	../include/config.h	/^#define	HAVE_PROFESS	/;"	d
+HAVE_RAND_INCOME	../include/config.h	/^#define	HAVE_RAND_INCOME	/;"	d
+HAVE_RECOMMEND	../include/config.h	/^#define	HAVE_RECOMMEND	/;"	d
+HAVE_REGISTER_FORM	../include/config.h	/^#define	HAVE_REGISTER_FORM	/;"	d
+HAVE_REPORT	../include/config.h	/^#undef	HAVE_REPORT	/;"	d
+HAVE_RESIST_WATER	../include/config.h	/^#define	HAVE_RESIST_WATER	/;"	d
+HAVE_SEM	../include/config.h	/^#define	HAVE_SEM	/;"	d
+HAVE_SHOWNUMMSG	../include/config.h	/^#define	HAVE_SHOWNUMMSG	/;"	d
+HAVE_SIGNED_MAIL	../include/config.h	/^#define HAVE_SIGNED_MAIL	/;"	d
+HAVE_SIMPLE_RFORM	../include/config.h	/^#undef	HAVE_SIMPLE_RFORM	/;"	d
+HAVE_SMTP_SERVER	../include/config.h	/^#define	HAVE_SMTP_SERVER	/;"	d
+HAVE_SONG	../include/config.h	/^#define	HAVE_SONG	/;"	d
+HAVE_SONG_TO_CAMERA	../include/config.h	/^#undef	HAVE_SONG_TO_CAMERA	/;"	d
+HAVE_STUDENT	../include/config.h	/^#define	HAVE_STUDENT	/;"	d
+HAVE_SYSOP_WATERLIST	../include/config.h	/^#define	HAVE_SYSOP_WATERLIST	/;"	d
+HAVE_TERMINATOR	../include/config.h	/^#define	HAVE_TERMINATOR	/;"	d
+HAVE_USER_MODIFY	../include/config.h	/^#define	HAVE_USER_MODIFY	/;"	d
+HAVE_WATER_LIST	../include/config.h	/^#define HAVE_WATER_LIST	/;"	d
+HAVE_WEBBBS	../include/config.h	/^#define	HAVE_WEBBBS	/;"	d
+HAVE_WRITE	../include/config.h	/^#define HAVE_WRITE	/;"	d
+HAVE_XYPOST	../include/config.h	/^#define HAVE_XYPOST	/;"	d
+HDR	../include/hdr.h	/^}          HDR;$/;"	t	typeref:struct:__anon13
+HDR_COPY	../include/hdr.h	/^#define	HDR_COPY	/;"	d
+HDR_LINK	../include/hdr.h	/^#define	HDR_LINK	/;"	d
+HDR_URL	../include/hdr.h	/^#define	HDR_URL	/;"	d
+HELP	../include/bbsnet.h	/^#define HELP /;"	d
+HIDEDN_SRC	../include/config.h	/^#define	HIDEDN_SRC	/;"	d
+HTTP_PORT	../include/news.h	/^#define HTTP_PORT /;"	d
+IDLEN	../include/struct.h	/^#define IDLEN	/;"	d
+IDLEN	../lib/f_path.c	/^#define IDLEN /;"	d	file:
+IDLE_TIMEOUT	../include/config.h	/^#define IDLE_TIMEOUT	/;"	d
+IM_REPLY	visio.c	/^#define	IM_REPLY	/;"	d	file:
+IM_TALK	visio.c	/^#define	IM_TALK	/;"	d	file:
+IM_TRAIL	visio.c	/^#define	IM_TRAIL	/;"	d	file:
+INADDR_FMT	../include/dns.h	/^#define	INADDR_FMT	/;"	d
+INADDR_NONE	../include/dns.h	/^#define	INADDR_NONE	/;"	d
+INADDR_NONE	gem.c	/^#define	INADDR_NONE	/;"	d	file:
+INFO_EMPTY	menu.c	/^#define INFO_EMPTY	/;"	d	file:
+INFO_HAVE	menu.c	/^#define	INFO_HAVE	/;"	d	file:
+INI	../include/bbsctrl.h	/^# define INI(/;"	d
+INI	../include/global.h	/^# define INI(/;"	d
+INI	../include/global.h	/^#undef	INI$/;"	d
+INI	../include/skin.h	/^# define INI(/;"	d
+INI	../include/skin.h	/^#undef	INI$/;"	d
+INI_CLASS	../include/news.h	/^#define	INI_CLASS	/;"	d
+INI_DEFAULT	../include/news.h	/^#define	INI_DEFAULT	/;"	d
+INI_GLOBAL	../include/news.h	/^#define	INI_GLOBAL	/;"	d
+INPUT_ACTIVE	visio.c	/^#define INPUT_ACTIVE	/;"	d	file:
+INPUT_IDLE	visio.c	/^#define INPUT_IDLE	/;"	d	file:
+I_OTHERDATA	../include/global.h	/^#define I_OTHERDATA	/;"	d
+I_TIMEOUT	../include/global.h	/^#define I_TIMEOUT	/;"	d
+Information	board.c	/^Information()$/;"	f
+JUSTIFY_PERIODICAL	../include/config.h	/^#define	JUSTIFY_PERIODICAL	/;"	d
+KEY_DEL	../include/global.h	/^#define KEY_DEL	/;"	d
+KEY_DOWN	../include/global.h	/^#define KEY_DOWN	/;"	d
+KEY_END	../include/global.h	/^#define KEY_END	/;"	d
+KEY_ENTER	../include/global.h	/^#define KEY_ENTER	/;"	d
+KEY_ESC	../include/global.h	/^#define KEY_ESC	/;"	d
+KEY_HOME	../include/global.h	/^#define KEY_HOME	/;"	d
+KEY_INS	../include/global.h	/^#define KEY_INS	/;"	d
+KEY_LEFT	../include/global.h	/^#define KEY_LEFT	/;"	d
+KEY_PGDN	../include/global.h	/^#define KEY_PGDN	/;"	d
+KEY_PGUP	../include/global.h	/^#define KEY_PGUP	/;"	d
+KEY_RIGHT	../include/global.h	/^#define KEY_RIGHT	/;"	d
+KEY_TAB	../include/global.h	/^#define KEY_TAB	/;"	d
+KEY_UP	../include/global.h	/^#define KEY_UP	/;"	d
+KeyFunc	../include/struct.h	/^}      KeyFunc;$/;"	t	typeref:struct:__anon42
+KeyMap	xover.c	/^}      KeyMap;$/;"	t	typeref:struct:__anon8	file:
+LCECHO	../include/bbs.h	/^#define LCECHO	/;"	d
+LEN_AUTHOR1	../include/global.h	/^#define	LEN_AUTHOR1	/;"	d
+LEN_AUTHOR2	../include/global.h	/^#define	LEN_AUTHOR2	/;"	d
+LINE_WORD	../include/news.h	/^#define LINE_WORD	/;"	d
+LINUX	talk.c	/^#undef LINUX$/;"	d	file:
+LIST	../include/struct.h	/^}       LIST;$/;"	t	typeref:struct:__anon53
+LIST_TITLE	../include/struct.h	/^}       LIST_TITLE;$/;"	t	typeref:struct:__anon54
+LOCK_EX	../include/bbs.h	/^#define LOCK_EX	/;"	d
+LOCK_UN	../include/bbs.h	/^#define LOCK_UN	/;"	d
+LOGFILE	../include/bbsnet.h	/^#define LOGFILE	/;"	d
+LOGINASNEW	../include/config.h	/^#define LOGINASNEW	/;"	d
+LOGINATTEMPTS	../include/config.h	/^#define LOGINATTEMPTS	/;"	d
+LOGIN_NOTIFY	../include/config.h	/^#define	LOGIN_NOTIFY /;"	d
+LOG_ADMIN	../include/config.h	/^#define	LOG_ADMIN	/;"	d
+LOG_BMW	../include/config.h	/^#define LOG_BMW /;"	d
+LOG_BRD_USIES	../include/config.h	/^#define	LOG_BRD_USIES	/;"	d
+LOG_CHAT	../include/config.h	/^#define	LOG_CHAT	/;"	d
+LOG_FILE	bbsd.c	/^#define	LOG_FILE	/;"	d	file:
+LOG_TALK	../include/config.h	/^#define	LOG_TALK	/;"	d
+LV	../include/rpg.h	/^  char name[20]; int LV; int maxhp; int hp; int Att;$/;"	m	struct:mobattr
+LVUP	../include/rpg.h	/^#define LVUP /;"	d
+LinkList	../include/struct.h	/^typedef struct LinkList$/;"	s
+LinkList	../include/struct.h	/^}        LinkList;$/;"	t	typeref:struct:LinkList
+MA	../include/rpg.h	/^  int Def; int MA; int MD; int EXP; int money;$/;"	m	struct:mobattr
+MAGENTA	../include/bbsnet.h	/^#define MAGENTA	/;"	d
+MAGIC	../lib/malloc-bsd.c	/^#define	MAGIC	/;"	d	file:
+MAIL_DELETE	../include/hdr.h	/^#define MAIL_DELETE	/;"	d
+MAIL_DUE	../include/config.h	/^#define MAIL_DUE /;"	d
+MAIL_HOLD	../include/hdr.h	/^#define	MAIL_HOLD	/;"	d
+MAIL_INCOME	../include/hdr.h	/^#define	MAIL_INCOME	/;"	d
+MAIL_MARKED	../include/hdr.h	/^#define MAIL_MARKED	/;"	d
+MAIL_MULTI	../include/hdr.h	/^#define	MAIL_MULTI	/;"	d
+MAIL_NOREPLY	../include/hdr.h	/^#define	MAIL_NOREPLY	/;"	d
+MAIL_QUEUE	../include/global.h	/^#define	MAIL_QUEUE	/;"	d
+MAIL_READ	../include/hdr.h	/^#define MAIL_READ	/;"	d
+MAIL_REALNAMES	../include/config.h	/^#undef	MAIL_REALNAMES	/;"	d
+MAIL_REPLIED	../include/hdr.h	/^#define MAIL_REPLIED	/;"	d
+MAIL_SIZE	../include/config.h	/^#define MAIL_SIZE	/;"	d
+MAIL_SIZE_NO	../include/config.h	/^#define MAIL_SIZE_NO	/;"	d
+MARK_DUE	../include/config.h	/^#define MARK_DUE /;"	d
+MARK_NEXT	xover.c	/^#define MARK_NEXT	/;"	d	file:
+MARK_PREV	xover.c	/^#define MARK_PREV	/;"	d	file:
+MATCH_END	visio.c	/^#define	MATCH_END	/;"	d	file:
+MAXACTIVE	../include/config.h	/^#define MAXACTIVE	/;"	d
+MAXBOARD	../include/config.h	/^#define MAXBOARD	/;"	d
+MAXFIREWALL	../include/config.h	/^#define MAXFIREWALL	/;"	d
+MAXGUEST	../include/config.h	/^#define	MAXGUEST	/;"	d
+MAXLASTCMD	../include/config.h	/^#define MAXLASTCMD	/;"	d
+MAXOBSERVELIST	../include/config.h	/^#define	MAXOBSERVELIST	/;"	d
+MAXOFILEWALL	../include/config.h	/^#define MAXOFILEWALL	/;"	d
+MAXPACKET	../include/dns.h	/^#define	MAXPACKET	/;"	d
+MAXPACKET	../include/dns.h	/^#define MAXPACKET /;"	d
+MAXPAGES	../include/config.h	/^#define	MAXPAGES	/;"	d
+MAXPORTS	bbsd.c	/^#define MAXPORTS /;"	d	file:
+MAXQUERYLINES	../include/config.h	/^#define MAXQUERYLINES	/;"	d
+MAXSIGLINES	../include/config.h	/^#define MAXSIGLINES	/;"	d
+MAX_ALOHA	../include/config.h	/^#define	MAX_ALOHA	/;"	d
+MAX_BBSMAIL	../include/config.h	/^#define	MAX_BBSMAIL	/;"	d
+MAX_BOOKS	../include/config.h	/^#define MAX_BOOKS	/;"	d
+MAX_CHECKSUM	../include/config.h	/^#define MAX_CHECKSUM	/;"	d
+MAX_CHOICES	../include/config.h	/^#define	MAX_CHOICES	/;"	d
+MAX_CONTACT	../include/config.h	/^#define MAX_CONTACT	/;"	d
+MAX_CROSS_POST	../include/config.h	/^#define MAX_CROSS_POST	/;"	d
+MAX_HOTBOARD	../include/config.h	/^#define	MAX_HOTBOARD	/;"	d
+MAX_LEVEL	xover.c	/^#define MAX_LEVEL	/;"	d	file:
+MAX_LIST	../include/config.h	/^#define	MAX_LIST	/;"	d
+MAX_MAIL_SIZE	../include/config.h	/^#define MAX_MAIL_SIZE	/;"	d
+MAX_MEMORANDUM	../include/config.h	/^#define MAX_MEMORANDUM	/;"	d
+MAX_MXLIST	../include/dns.h	/^#define MAX_MXLIST /;"	d
+MAX_MYBOOK	../include/bbsnet.h	/^#define MAX_MYBOOK /;"	d
+MAX_MYPAGE	../include/bbsnet.h	/^#define MAX_MYPAGE /;"	d
+MAX_NOVALIDMAIL	../include/config.h	/^#define	MAX_NOVALIDMAIL	/;"	d
+MAX_PAGE	../include/bbsnet.h	/^#define MAX_PAGE /;"	d
+MAX_REGIST	../include/config.h	/^#define	MAX_REGIST	/;"	d
+MAX_RESERVE	../include/config.h	/^#define	MAX_RESERVE	/;"	d
+MAX_USE	../include/bbsnet.h	/^#define MAX_USE /;"	d
+MAX_VALIDMAIL	../include/config.h	/^#define	MAX_VALIDMAIL	/;"	d
+MD	../include/rpg.h	/^  int Def; int MA; int MD; int EXP; int money;$/;"	m	struct:mobattr
+MEMORANDUM	../include/struct.h	/^}	MEMORANDUM;$/;"	t	typeref:struct:__anon20
+MENU	../include/struct.h	/^}      MENU;$/;"	t	typeref:struct:__anon67
+MENU_CHANG	menu.c	/^#define	MENU_CHANG	/;"	d	file:
+MENU_DRAW	menu.c	/^#define	MENU_DRAW	/;"	d	file:
+MENU_FILM	menu.c	/^#define	MENU_FILM	/;"	d	file:
+MENU_LOAD	menu.c	/^#define	MENU_LOAD	/;"	d	file:
+MENU_XPOS	menu.c	/^#define	MENU_XPOS	/;"	d	file:
+MENU_YPOS	menu.c	/^#define	MENU_YPOS	/;"	d	file:
+MF_SELF	xover.c	/^#define	MF_SELF	/;"	d	file:
+MF_SELF	xover.c	/^#undef	MF_SELF$/;"	d	file:
+MF_USER	xover.c	/^#define	MF_USER	/;"	d	file:
+MF_USER	xover.c	/^#undef	MF_USER$/;"	d	file:
+MIN_RECOMMEND	../include/config.h	/^#define	MIN_RECOMMEND	/;"	d
+MMM	../lib/xsort.c	/^#define	MMM	/;"	d	file:
+MODELOG	../include/struct.h	/^} MODELOG;$/;"	t	typeref:struct:__anon46
+MODE_STAT	../include/config.h	/^#undef	MODE_STAT /;"	d
+MORE_BUFSIZE	more.c	/^#define MORE_BUFSIZE	/;"	d	file:
+MORE_WINSIZE	more.c	/^#define	MORE_WINSIZE	/;"	d	file:
+MOVIE_LINES	../include/config.h	/^#define MOVIE_LINES	/;"	d
+MOVIE_MAX	../include/config.h	/^#define	MOVIE_MAX	/;"	d
+MOVIE_SIZE	../include/config.h	/^#define	MOVIE_SIZE	/;"	d
+MQ_JUSTIFY	../include/struct.h	/^#define	MQ_JUSTIFY	/;"	d
+MQ_MIME	../include/struct.h	/^#define MQ_MIME	/;"	d
+MQ_UUENCODE	../include/struct.h	/^#define	MQ_UUENCODE	/;"	d
+MSG_BID	../include/global.h	/^#define	MSG_BID	/;"	d
+MSG_BRDATTR	../include/global.h	/^#define	MSG_BRDATTR	/;"	d
+MSG_CANCEL	../include/global.h	/^#define	MSG_CANCEL	/;"	d
+MSG_CC	board.c	/^#define MSG_CC /;"	d	file:
+MSG_CC	mail.c	/^#define	MSG_CC /;"	d	file:
+MSG_CC	talk.c	/^#define MSG_CC /;"	d	file:
+MSG_CHATROOM	../include/xchat.h	/^#define MSG_CHATROOM /;"	d
+MSG_CHAT_ULIST	../include/global.h	/^#define	MSG_CHAT_ULIST	/;"	d
+MSG_CLOAKED	../include/xchat.h	/^#define	MSG_CLOAKED	/;"	d
+MSG_CLRSCR	../include/xchat.h	/^#define MSG_CLRSCR /;"	d
+MSG_DEL_CANCEL	../include/global.h	/^#define	MSG_DEL_CANCEL	/;"	d
+MSG_DEL_ERROR	../include/global.h	/^#define	MSG_DEL_ERROR	/;"	d
+MSG_DEL_NY	../include/global.h	/^#define	MSG_DEL_NY	/;"	d
+MSG_DEL_OK	../include/global.h	/^#define	MSG_DEL_OK	/;"	d
+MSG_GEM	../include/global.h	/^#define	MSG_GEM	/;"	d
+MSG_LOGINOK	../include/xchat.h	/^#define MSG_LOGINOK /;"	d
+MSG_MAILER	../include/global.h	/^#define	MSG_MAILER	/;"	d
+MSG_MESSAGE	../include/xchat.h	/^#define MSG_MESSAGE /;"	d
+MSG_MOTD	../include/xchat.h	/^#define MSG_MOTD /;"	d
+MSG_MOTDEND	../include/xchat.h	/^#define MSG_MOTDEND /;"	d
+MSG_MOTDSTART	../include/xchat.h	/^#define MSG_MOTDSTART /;"	d
+MSG_MYPRIVMSG	../include/xchat.h	/^#define MSG_MYPRIVMSG /;"	d
+MSG_NICK	../include/xchat.h	/^#define MSG_NICK /;"	d
+MSG_PARTYINFO	../include/xchat.h	/^#define MSG_PARTYINFO /;"	d
+MSG_PARTYLIST	../include/xchat.h	/^#define MSG_PARTYLIST /;"	d
+MSG_PARTYLISTEND	../include/xchat.h	/^#define MSG_PARTYLISTEND /;"	d
+MSG_PARTYLISTSTART	../include/xchat.h	/^#define MSG_PARTYLISTSTART /;"	d
+MSG_PASSWD	../include/global.h	/^#define	MSG_PASSWD	/;"	d
+MSG_POST	../include/global.h	/^#define	MSG_POST	/;"	d
+MSG_POSTPERM	../include/global.h	/^#define	MSG_POSTPERM	/;"	d
+MSG_PRIVMSG	../include/xchat.h	/^#define MSG_PRIVMSG /;"	d
+MSG_READPERM	../include/global.h	/^#define	MSG_READPERM	/;"	d
+MSG_ROOM	../include/xchat.h	/^#define MSG_ROOM /;"	d
+MSG_ROOMLIST	../include/xchat.h	/^#define MSG_ROOMLIST /;"	d
+MSG_ROOMLISTEND	../include/xchat.h	/^#define MSG_ROOMLISTEND /;"	d
+MSG_ROOMLISTSTART	../include/xchat.h	/^#define MSG_ROOMLISTSTART /;"	d
+MSG_ROOMNOTIFY	../include/xchat.h	/^#define MSG_ROOMNOTIFY /;"	d
+MSG_SEPERATOR	../include/global.h	/^#define	MSG_SEPERATOR	/;"	d
+MSG_SURE_NY	../include/global.h	/^#define	MSG_SURE_NY	/;"	d
+MSG_SURE_YN	../include/global.h	/^#define	MSG_SURE_YN	/;"	d
+MSG_TOPIC	../include/xchat.h	/^#define MSG_TOPIC /;"	d
+MSG_UID	../include/global.h	/^#define	MSG_UID	/;"	d
+MSG_UNCLOAK	../include/xchat.h	/^#define	MSG_UNCLOAK	/;"	d
+MSG_USERLIST	../include/xchat.h	/^#define MSG_USERLIST /;"	d
+MSG_USERLISTEND	../include/xchat.h	/^#define MSG_USERLISTEND /;"	d
+MSG_USERLISTSTART	../include/xchat.h	/^#define MSG_USERLISTSTART /;"	d
+MSG_USERNOTIFY	../include/xchat.h	/^#define MSG_USERNOTIFY /;"	d
+MSG_USERPERM	../include/global.h	/^#define	MSG_USERPERM	/;"	d
+MSG_USR_LEFT	../include/global.h	/^#define	MSG_USR_LEFT	/;"	d
+MSG_VERSION	../include/xchat.h	/^#define MSG_VERSION /;"	d
+MSG_XYPOST	post.c	/^#define	MSG_XYPOST	/;"	d	file:
+MSG_XY_NONE	post.c	/^#define	MSG_XY_NONE	/;"	d	file:
+MSG_ZONE_ADVANCE	xover.c	/^#define MSG_ZONE_ADVANCE /;"	d	file:
+MSG_ZONE_SWITCH	xover.c	/^#define	MSG_ZONE_SWITCH /;"	d	file:
+MSG_ZONE_SWITCH	xover.c	/^#define MSG_ZONE_SWITCH /;"	d	file:
+MUD	../include/struct.h	/^} MUD;$/;"	t	typeref:struct:__anon41
+MULTI_MAIL	../include/config.h	/^#define MULTI_MAIL	/;"	d
+MYHOSTNAME	../include/config.h	/^#define MYHOSTNAME	/;"	d
+MY_BOOK	../include/bbsnet.h	/^#define MY_BOOK /;"	d
+M_ADMIN	../include/modes.h	/^#define M_ADMIN	/;"	d
+M_BANMAIL	../include/modes.h	/^#define M_BANMAIL	/;"	d
+M_BBSNET	../include/modes.h	/^#define	M_BBSNET	/;"	d
+M_BBTP	../include/modes.h	/^#define	M_BBTP	/;"	d
+M_BMW	../include/modes.h	/^#define M_BMW /;"	d
+M_BMW_REPLY	../include/modes.h	/^#define M_BMW_REPLY /;"	d
+M_BOARD	../include/modes.h	/^#define M_BOARD	/;"	d
+M_CHAT	../include/modes.h	/^#define M_CHAT	/;"	d
+M_CHESS	../include/modes.h	/^#define M_CHESS	/;"	d
+M_CHICKEN	../include/modes.h	/^#define M_CHICKEN	/;"	d
+M_CLASS	../include/modes.h	/^#define M_CLASS	/;"	d
+M_GEM	../include/modes.h	/^#define M_GEM	/;"	d
+M_IDLE	../include/modes.h	/^#define M_IDLE	/;"	d
+M_LOGIN	../include/modes.h	/^#define M_LOGIN	/;"	d
+M_LUSERS	../include/modes.h	/^#define M_LUSERS	/;"	d
+M_MAIL	../include/modes.h	/^#define M_MAIL	/;"	d
+M_MAX	../include/modes.h	/^#define M_MAX /;"	d
+M_MIME	../include/modes.h	/^#define M_MIME	/;"	d
+M_MMENU	../include/modes.h	/^#define M_MMENU	/;"	d
+M_OMENU	../include/modes.h	/^#define M_OMENU	/;"	d
+M_PAGE	../include/modes.h	/^#define M_PAGE	/;"	d
+M_PAL	../include/modes.h	/^#define M_PAL	/;"	d
+M_POST	../include/modes.h	/^#define M_POST	/;"	d
+M_PROFESS	../include/modes.h	/^#define M_PROFESS /;"	d
+M_QUERY	../include/modes.h	/^#define M_QUERY	/;"	d
+M_READA	../include/modes.h	/^#define M_READA	/;"	d
+M_RMAIL	../include/modes.h	/^#define M_RMAIL	/;"	d
+M_SMAIL	../include/modes.h	/^#define M_SMAIL	/;"	d
+M_SMENU	../include/modes.h	/^#define M_SMENU	/;"	d
+M_SYSTEM	../include/modes.h	/^#define M_SYSTEM	/;"	d
+M_TALK	../include/modes.h	/^#define M_TALK	/;"	d
+M_TMENU	../include/modes.h	/^#define M_TMENU	/;"	d
+M_TRQST	../include/modes.h	/^#define M_TRQST	/;"	d
+M_UFILES	../include/modes.h	/^#define M_UFILES	/;"	d
+M_UMENU	../include/modes.h	/^#define M_UMENU	/;"	d
+M_VOTE	../include/modes.h	/^#define M_VOTE	/;"	d
+M_WEB	../include/modes.h	/^#define	M_WEB	/;"	d
+M_XFILES	../include/modes.h	/^#define M_XFILES	/;"	d
+M_XMENU	../include/modes.h	/^#define M_XMENU	/;"	d
+M_XMODE	../include/modes.h	/^#define M_XMODE	/;"	d
+MailQueue	../include/struct.h	/^}      MailQueue;$/;"	t	typeref:struct:__anon27
+Meta	../include/global.h	/^#define Meta(/;"	d
+ModeTypeTable	../include/modes.h	/^static char *ModeTypeTable[] =$/;"	v
+NA	../include/bbs.h	/^#define	NA	/;"	d
+NAME	../include/bbsnet.h	/^#define NAME	/;"	d
+NBRD	../include/struct.h	/^}       NBRD;$/;"	t	typeref:struct:NewBoardHeader
+NBRD_CANCEL	../include/struct.h	/^#define NBRD_CANCEL	/;"	d
+NBRD_CLOSE	../include/struct.h	/^#define NBRD_CLOSE	/;"	d
+NBRD_DAYS	../include/config.h	/^#define NBRD_DAYS	/;"	d
+NBRD_ING	../include/struct.h	/^#define NBRD_ING	/;"	d
+NBRD_MASK	../include/struct.h	/^#define NBRD_MASK	/;"	d
+NBRD_MAX	../include/config.h	/^#define NBRD_MAX	/;"	d
+NBRD_MAX_CANCEL	../include/config.h	/^#define NBRD_MAX_CANCEL	/;"	d
+NBRD_NBRD	../include/struct.h	/^#define NBRD_NBRD	/;"	d
+NBRD_OK	../include/struct.h	/^#define NBRD_OK	/;"	d
+NBRD_OPEN	../include/struct.h	/^#define NBRD_OPEN	/;"	d
+NBRD_OTHER	../include/struct.h	/^#define	NBRD_OTHER	/;"	d
+NBRD_REJECT	../include/struct.h	/^#define NBRD_REJECT	/;"	d
+NBRD_START	../include/struct.h	/^#define NBRD_START	/;"	d
+NBRD_STOP	../include/struct.h	/^#define NBRD_STOP	/;"	d
+NBUCKETS	../lib/malloc-bsd.c	/^#define	NBUCKETS	/;"	d	file:
+NET_WINSIZE	more.c	/^#define	NET_WINSIZE	/;"	d	file:
+NEWS	../include/news.h	/^}	NEWS;$/;"	t	typeref:struct:__anon15
+NEWS_ACLFILE	../include/global.h	/^#define NEWS_ACLFILE /;"	d
+NEWS_ETC_ROOT	../include/news.h	/^#define	NEWS_ETC_ROOT	/;"	d
+NEWS_ROOT	../include/news.h	/^#define	NEWS_ROOT	/;"	d
+NEWS_SETUP_FILE	../include/news.h	/^#define	NEWS_SETUP_FILE	/;"	d
+NEWS_TMP_FILE	../include/news.h	/^#define	NEWS_TMP_FILE	/;"	d
+NEWUSER_LIMIT	../include/config.h	/^#undef	NEWUSER_LIMIT	/;"	d
+NICKNAME	../include/config.h	/^#define NICKNAME	/;"	d
+NOECHO	../include/bbs.h	/^#define NOECHO	/;"	d
+NORMAL	../include/bbsnet.h	/^#define	NORMAL	/;"	d
+NOTE_DUE	menu.c	/^#define	NOTE_DUE	/;"	d	file:
+NOTE_MAX	menu.c	/^#define	NOTE_MAX	/;"	d	file:
+NO_RELOAD	../include/modes.h	/^{STRIP_ALL, ONLY_COLOR, NO_RELOAD};$/;"	e	enum:__anon14
+NULL	../include/dao.h	/^#define	NULL	/;"	d
+NULL	../lib/str_str.c	/^#define	NULL	/;"	d	file:
+NUMATTRS	../include/battr.h	/^#define NUMATTRS /;"	d
+NUMPERMS	../include/perm.h	/^#define	NUMPERMS	/;"	d
+NewBoardHeader	../include/struct.h	/^typedef struct NewBoardHeader$/;"	s
+Now	../lib/str_time.c	/^Now()$/;"	f
+OBSERVE	../include/struct.h	/^}	OBSERVE;$/;"	t	typeref:struct:__anon65
+OBSERVE_KEY	../include/config.h	/^#define	OBSERVE_KEY	/;"	d
+OCACHE	../include/struct.h	/^} OCACHE;$/;"	t	typeref:struct:__anon66
+ONLY_COLOR	../include/modes.h	/^{STRIP_ALL, ONLY_COLOR, NO_RELOAD};$/;"	e	enum:__anon14
+OPT_OPERATOR	../include/global.h	/^#define	OPT_OPERATOR	/;"	d
+OTHERSTAT_EDITING	../include/modes.h	/^#define OTHERSTAT_EDITING /;"	d
+OverView	../include/struct.h	/^typedef struct OverView$/;"	s
+PAGE	../include/news.h	/^#define	PAGE	/;"	d
+PAGEBUCKET	../lib/malloc-bsd.c	/^#define PAGEBUCKET	/;"	d	file:
+PAGESZ	../lib/malloc-bsd.c	/^#define	PAGESZ	/;"	d	file:
+PAL	../include/struct.h	/^}      PAL;$/;"	t	typeref:struct:__anon28
+PAL_ALMR	../include/config.h	/^#define PAL_ALMR	/;"	d
+PAL_BAD	../include/struct.h	/^#define	PAL_BAD	/;"	d
+PAL_MAX	../include/config.h	/^#define PAL_MAX	/;"	d
+PAL_SHIP	talk.c	/^}  PAL_SHIP;$/;"	t	typeref:struct:__anon5	file:
+PARA	../include/news.h	/^#define PARA /;"	d
+PARSER	../include/news.h	/^typedef	struct PARSER$/;"	s
+PARSER	../include/news.h	/^}	PARSER;$/;"	t	typeref:struct:PARSER
+PARTY_MAX	../include/config.h	/^#define	PARTY_MAX	/;"	d
+PASSLEN	../include/struct.h	/^#define PASSLEN /;"	d
+PASSLEN	../lib/str_passwd.c	/^#define	PASSLEN /;"	d	file:
+PERM_10	../include/perm.h	/^#define	PERM_10	/;"	d
+PERM_11	../include/perm.h	/^#define	PERM_11	/;"	d
+PERM_12	../include/perm.h	/^#define	PERM_12	/;"	d
+PERM_13	../include/perm.h	/^#define	PERM_13	/;"	d
+PERM_14	../include/perm.h	/^#define	PERM_14	/;"	d
+PERM_15	../include/perm.h	/^#define	PERM_15	/;"	d
+PERM_16	../include/perm.h	/^#define	PERM_16	/;"	d
+PERM_9	../include/perm.h	/^#define	PERM_9	/;"	d
+PERM_ACCOUNTS	../include/perm.h	/^#define PERM_ACCOUNTS	/;"	d
+PERM_ADMIN	../include/perm.h	/^#define PERM_ADMIN	/;"	d
+PERM_ALLBOARD	../include/perm.h	/^#define PERM_ALLBOARD	/;"	d
+PERM_BASIC	../include/perm.h	/^#define	PERM_BASIC	/;"	d
+PERM_BM	../include/perm.h	/^#define PERM_BM	/;"	d
+PERM_BOARD	../include/perm.h	/^#define	PERM_BOARD	/;"	d
+PERM_CHAT	../include/perm.h	/^#define PERM_CHAT	/;"	d
+PERM_CHATROOM	../include/perm.h	/^#define PERM_CHATROOM	/;"	d
+PERM_CLOAK	../include/perm.h	/^#define PERM_CLOAK	/;"	d
+PERM_CRIMINAL	../include/perm.h	/^#define PERM_CRIMINAL	/;"	d
+PERM_DEFAULT	../include/perm.h	/^#define PERM_DEFAULT /;"	d
+PERM_DENYCHAT	../include/perm.h	/^#define	PERM_DENYCHAT	/;"	d
+PERM_DENYLOGIN	../include/perm.h	/^#define	PERM_DENYLOGIN	/;"	d
+PERM_DENYMAIL	../include/perm.h	/^#define	PERM_DENYMAIL	/;"	d
+PERM_DENYNICK	../include/perm.h	/^#define	PERM_DENYNICK	/;"	d
+PERM_DENYPOST	../include/perm.h	/^#define PERM_DENYPOST	/;"	d
+PERM_DENYSTOP	../include/perm.h	/^#define	PERM_DENYSTOP	/;"	d
+PERM_DENYTALK	../include/perm.h	/^#define	PERM_DENYTALK	/;"	d
+PERM_FORWARD	../include/perm.h	/^#define PERM_FORWARD	/;"	d
+PERM_GEM	../include/perm.h	/^#define PERM_GEM	/;"	d
+PERM_INTERNET	../include/perm.h	/^#define PERM_INTERNET	/;"	d
+PERM_KTV	../include/perm.h	/^#define PERM_KTV	/;"	d
+PERM_LOGINCLOAK	../include/perm.h	/^#define PERM_LOGINCLOAK	/;"	d
+PERM_MANAGE	../include/perm.h	/^#define PERM_MANAGE	/;"	d
+PERM_MBOX	../include/perm.h	/^#define PERM_MBOX	/;"	d
+PERM_MENU	menu.c	/^#define	PERM_MENU	/;"	d	file:
+PERM_PAGE	../include/perm.h	/^#define	PERM_PAGE	/;"	d
+PERM_POST	../include/perm.h	/^#define PERM_POST	/;"	d
+PERM_PURGE	../include/perm.h	/^#define	PERM_PURGE	/;"	d
+PERM_READMAIL	../include/perm.h	/^#define PERM_READMAIL	/;"	d
+PERM_SEEBLEVELS	../include/perm.h	/^#define PERM_SEEBLEVELS	/;"	d
+PERM_SEECLOAK	../include/perm.h	/^#define PERM_SEECLOAK	/;"	d
+PERM_SEEULEVELS	../include/perm.h	/^#define PERM_SEEULEVELS	/;"	d
+PERM_SYSOP	../include/perm.h	/^#define PERM_SYSOP	/;"	d
+PERM_SYSOPX	../include/perm.h	/^#define PERM_SYSOPX	/;"	d
+PERM_VALID	../include/perm.h	/^#define	PERM_VALID /;"	d
+PERM_XEMPT	../include/perm.h	/^#define PERM_XEMPT /;"	d
+PICKUP	talk.c	/^}	PICKUP;$/;"	t	typeref:struct:__anon7	file:
+PICKUP_WAYS	talk.c	/^#define	PICKUP_WAYS	/;"	d	file:
+PICKUP_WAYS	talk.c	/^#define PICKUP_WAYS	/;"	d	file:
+PID_FILE	bbsd.c	/^#define	PID_FILE	/;"	d	file:
+PIPUTMP	../include/struct.h	/^}	PIPUTMP;$/;"	t	typeref:struct:__anon33
+PIP_BADMAN	../include/pip.h	/^#define PIP_BADMAN /;"	d
+PIP_MAX	../include/config.h	/^#define	PIP_MAX	/;"	d
+PKEY_MAP	../include/bbsctrl.h	/^}	PKEY_MAP;$/;"	t	typeref:struct:__anon9
+POP3_Check	socket.c	/^POP3_Check(site, account, passwd)$/;"	f
+POPUP_DO_INSTANT	../include/popup.h	/^#define	POPUP_DO_INSTANT	/;"	d
+POPUP_FUN	../include/popup.h	/^#define POPUP_FUN	/;"	d
+POPUP_MASK	../include/popup.h	/^#define	POPUP_MASK	/;"	d
+POPUP_MENU	../include/popup.h	/^#define POPUP_MENU	/;"	d
+POPUP_MENUTITLE	../include/popup.h	/^#define	POPUP_MENUTITLE	/;"	d
+POPUP_QUIT	../include/popup.h	/^#define POPUP_QUIT	/;"	d
+POPUP_SO	../include/popup.h	/^#define POPUP_SO	/;"	d
+POPUP_XO	../include/popup.h	/^#define POPUP_XO	/;"	d
+POST_BOTTOM	../include/hdr.h	/^#define POST_BOTTOM	/;"	d
+POST_CANCEL	../include/hdr.h	/^#define POST_CANCEL	/;"	d
+POST_COMPLETE	../include/hdr.h	/^#define POST_COMPLETE	/;"	d
+POST_CURMODIFY	../include/hdr.h	/^#define POST_CURMODIFY	/;"	d
+POST_DELETE	../include/hdr.h	/^#define POST_DELETE	/;"	d
+POST_EMAIL	../include/hdr.h	/^#define	POST_EMAIL	/;"	d
+POST_EXPIRE	../include/hdr.h	/^#define	POST_EXPIRE	/;"	d
+POST_GEM	../include/hdr.h	/^#define POST_GEM	/;"	d
+POST_INCOME	../include/hdr.h	/^#define	POST_INCOME	/;"	d
+POST_LOCK	../include/hdr.h	/^#define POST_LOCK	/;"	d
+POST_MARKED	../include/hdr.h	/^#define POST_MARKED	/;"	d
+POST_MDELETE	../include/hdr.h	/^#define POST_MDELETE	/;"	d
+POST_MODIFY	../include/hdr.h	/^#define POST_MODIFY	/;"	d
+POST_OUTGO	../include/hdr.h	/^#define	POST_OUTGO	/;"	d
+POST_READ	../include/hdr.h	/^#define POST_READ	/;"	d
+POST_REALNAMES	../include/config.h	/^#undef	POST_REALNAMES	/;"	d
+POST_RECOMMEND	../include/hdr.h	/^#define POST_RECOMMEND	/;"	d
+POST_RESTRICT	../include/hdr.h	/^#define	POST_RESTRICT	/;"	d
+POST_STOP_PERM	../include/struct.h	/^#define POST_STOP_PERM /;"	d
+PRIVATE_KEY	../include/global.h	/^#define PRIVATE_KEY	/;"	d
+PRIVATE_KEY_PERIOD	../include/config.h	/^#define PRIVATE_KEY_PERIOD	/;"	d
+PROFESS_IMGFILE	../include/struct.h	/^#define PROFESS_IMGFILE	/;"	d
+PROFESS_INIFILE	../include/struct.h	/^#define PROFESS_INIFILE	/;"	d
+PROXY_EXPIRE	gem.c	/^#define	PROXY_EXPIRE	/;"	d	file:
+PROXY_HOME	gem.c	/^#define PROXY_HOME /;"	d	file:
+Pad	menu.c	/^}      Pad;$/;"	t	typeref:struct:__anon3	file:
+Profess	board.c	/^Profess()$/;"	f
+QLEN	bbsd.c	/^#define	QLEN	/;"	d	file:
+QUERY_REALNAMES	../include/config.h	/^#undef	QUERY_REALNAMES	/;"	d
+QUIT	../include/modes.h	/^#define QUIT	/;"	d
+QUOTE_CHAR	edit.c	/^#define	QUOTE_CHAR	/;"	d	file:
+REALINFO	../include/config.h	/^#define REALINFO$/;"	d
+REALLOC_SRCHLEN	../lib/malloc-bsd.c	/^#define REALLOC_SRCHLEN /;"	d	file:
+REAPER_TIME	../include/struct.h	/^}	REAPER_TIME;$/;"	t	typeref:struct:__anon57
+RECOMMAND_TIME	../include/config.h	/^#define	RECOMMAND_TIME	/;"	d
+REC_SIZ	../include/dao.h	/^#define REC_SIZ /;"	d
+RED	../include/bbsnet.h	/^#define RED	/;"	d
+REG_FAULT	../include/attr.h	/^#define	REG_FAULT	/;"	d
+REG_OK	../include/attr.h	/^#define	REG_OK	/;"	d
+REG_OPEN	../include/attr.h	/^#define	REG_OPEN	/;"	d
+REG_REQUEST	../include/attr.h	/^#define	REG_REQUEST	/;"	d
+REG_SENT	../include/attr.h	/^#define	REG_SENT	/;"	d
+RELATE_FIRST	xover.c	/^#define RELATE_FIRST	/;"	d	file:
+RELATE_NEXT	xover.c	/^#define RELATE_NEXT	/;"	d	file:
+RELATE_PREV	xover.c	/^#define RELATE_PREV	/;"	d	file:
+RFC931_PORT	../lib/dns_ident.c	/^#define RFC931_PORT /;"	d	file:
+RFC931_TIMEOUT	../lib/dns_ident.c	/^#define RFC931_TIMEOUT /;"	d	file:
+RFORM	../include/struct.h	/^}      RFORM;$/;"	t	typeref:struct:__anon25
+RFORM_R	../include/struct.h	/^}	RFORM_R;$/;"	t	typeref:struct:__anon26
+RLIMIT_RSS	bbsd.c	/^#define RLIMIT_RSS /;"	d	file:
+ROW	../include/bbsnet.h	/^#define	ROW	/;"	d
+RS_BOARD	xover.c	/^#define	RS_BOARD	/;"	d	file:
+RS_BOARD	xover.c	/^#undef	RS_BOARD$/;"	d	file:
+RS_CURRENT	xover.c	/^#define RS_CURRENT /;"	d	file:
+RS_FIRST	xover.c	/^#define RS_FIRST /;"	d	file:
+RS_FORWARD	xover.c	/^#define RS_FORWARD /;"	d	file:
+RS_MARKED	xover.c	/^#define RS_MARKED /;"	d	file:
+RS_RELATED	xover.c	/^#define RS_RELATED /;"	d	file:
+RS_SEQUENT	xover.c	/^#define RS_SEQUENT	/;"	d	file:
+RS_THREAD	xover.c	/^#define RS_THREAD	/;"	d	file:
+RS_TITLE	xover.c	/^#define RS_TITLE /;"	d	file:
+RS_UNREAD	xover.c	/^#define RS_UNREAD /;"	d	file:
+SAME_EMAIL	../include/struct.h	/^} SAME_EMAIL;$/;"	t	typeref:struct:__anon47
+SCHEMA	../include/struct.h	/^}      SCHEMA;$/;"	t	typeref:struct:__anon24
+SCR_WIDTH	edit.c	/^#define	SCR_WIDTH	/;"	d	file:
+SERVER_USAGE	bbsd.c	/^#undef	SERVER_USAGE$/;"	d	file:
+SHM_KEY	../include/bbsnet.h	/^#define SHM_KEY	/;"	d
+SHOW_USER_IN_TEXT	../include/config.h	/^#define SHOW_USER_IN_TEXT /;"	d
+SKIN	../include/modes.h	/^#define	SKIN	/;"	d
+SL_ANSICODE	../include/struct.h	/^#define SL_ANSICODE	/;"	d
+SL_MODIFIED	../include/struct.h	/^#define SL_MODIFIED	/;"	d
+SL_STANDOUT	../include/struct.h	/^#define SL_STANDOUT	/;"	d
+SMTP_SERVER	../include/config.h	/^#define	SMTP_SERVER	/;"	d
+SPACE	../include/bbsnet.h	/^#define SPACE	/;"	d
+SPEAK_MAX	../include/config.h	/^#define	SPEAK_MAX	/;"	d
+STANDEND	visio.c	/^#define	STANDEND	/;"	d	file:
+STANDOUT	visio.c	/^#define	STANDOUT	/;"	d	file:
+STAT_BOARD	../include/modes.h	/^#define	STAT_BOARD	/;"	d
+STAT_DIRTY	../include/modes.h	/^#define	STAT_DIRTY	/;"	d
+STAT_LOCK	../include/modes.h	/^#define	STAT_LOCK	/;"	d
+STAT_MODERATED	../include/modes.h	/^#define	STAT_MODERATED	/;"	d
+STAT_POST	../include/modes.h	/^#define	STAT_POST	/;"	d
+STAT_STARTED	../include/modes.h	/^#define	STAT_STARTED	/;"	d
+STAT_VISIT	../include/modes.h	/^#define	STAT_VISIT	/;"	d
+STR4	../include/proto.h	/^#define	STR4(/;"	d
+STRICT_FQDN_EMAIL	../lib/not_addr.c	/^#define	STRICT_FQDN_EMAIL$/;"	d	file:
+STRING	../include/struct.h	/^typedef char const *STRING;$/;"	t
+STRIP_ALL	../include/modes.h	/^{STRIP_ALL, ONLY_COLOR, NO_RELOAD};$/;"	e	enum:__anon14
+STRLEN	../include/struct.h	/^#define STRLEN /;"	d
+STR_ANSICODE	more.c	/^#define	STR_ANSICODE	/;"	d	file:
+STR_AUTHOR1	../include/global.h	/^#define	STR_AUTHOR1	/;"	d
+STR_AUTHOR2	../include/global.h	/^#define	STR_AUTHOR2	/;"	d
+STR_CURSOR	../include/global.h	/^#define STR_CURSOR	/;"	d
+STR_GUEST	../include/global.h	/^#define	STR_GUEST	/;"	d
+STR_LINE	../include/global.h	/^#define STR_LINE	/;"	d
+STR_PAT	../lib/str_pat.c	/^#define	STR_PAT(/;"	d	file:
+STR_PERM	acct.c	/^#define STR_PERM /;"	d	file:
+STR_POST1	../include/global.h	/^#define	STR_POST1	/;"	d
+STR_POST2	../include/global.h	/^#define	STR_POST2	/;"	d
+STR_REPLY	../include/global.h	/^#define	STR_REPLY	/;"	d
+STR_SPACE	../include/global.h	/^#define	STR_SPACE	/;"	d
+STR_UNCUR	../include/global.h	/^#define STR_UNCUR	/;"	d
+STUDENT_EMPTY	menu.c	/^#define	STUDENT_EMPTY	/;"	d	file:
+STUDENT_HAVE	menu.c	/^#define STUDENT_HAVE	/;"	d	file:
+SWAPINIT	../lib/xsort.c	/^#define SWAPINIT(/;"	d	file:
+SYSOPNAME	../include/config.h	/^#define SYSOPNAME	/;"	d
+SYSOPNICK	../include/config.h	/^#define SYSOPNICK	/;"	d
+Select	board.c	/^Select()$/;"	f
+SplayNode	../include/splay.h	/^typedef struct SplayNode$/;"	s
+SplayNode	../include/splay.h	/^}         SplayNode;$/;"	t	typeref:struct:SplayNode
+Student	board.c	/^Student()$/;"	f
+TABLE	bbsd.c	/^}       TABLE;$/;"	t	typeref:struct:__anon1	file:
+TAB_STOP	edit.c	/^#define	TAB_STOP	/;"	d	file:
+TAB_WIDTH	edit.c	/^#define	TAB_WIDTH	/;"	d	file:
+TAG_INSERT	../include/modes.h	/^#define	TAG_INSERT	/;"	d
+TAG_MAX	../include/config.h	/^#define	TAG_MAX	/;"	d
+TAG_NIN	../include/modes.h	/^#define	TAG_NIN	/;"	d
+TAG_TOGGLE	../include/modes.h	/^#define	TAG_TOGGLE	/;"	d
+TAG_VALID	../include/config.h	/^#define TAG_VALID /;"	d
+TELNET	../include/bbsnet.h	/^#define TELNET /;"	d
+TEST	../lib/xsort.c	/^#undef	TEST$/;"	d	file:
+THREAD_NEXT	xover.c	/^#define THREAD_NEXT	/;"	d	file:
+THREAD_PREV	xover.c	/^#define THREAD_PREV	/;"	d	file:
+TITLE	../include/bbsctrl.h	/^#define	TITLE	/;"	d
+TOPLOGINS	../include/struct.h	/^#define TOPLOGINS /;"	d
+TOPNUM	../include/struct.h	/^#define TOPNUM /;"	d
+TOPNUM_HALF	../include/struct.h	/^#define TOPNUM_HALF /;"	d
+TOPPOSTS	../include/struct.h	/^#define TOPPOSTS /;"	d
+TOTAL	../include/bbsnet.h	/^#define	TOTAL	/;"	d
+TRACE	../include/proto.h	/^#define	TRACE	/;"	d
+TRACE	../lib/dl_lib.c	/^#define TRACE /;"	d	file:
+TRANUFO	../include/config.h	/^#undef	TRANUFO$/;"	d
+TRAP_ESC	visio.c	/^#undef	TRAP_ESC$/;"	d	file:
+TREAT	../include/config.h	/^#undef	TREAT$/;"	d
+TR_BRD	../include/bbsctrl.h	/^#define	TR_BRD	/;"	d
+TR_GEM	../include/bbsctrl.h	/^#define	TR_GEM	/;"	d
+TR_USR	../include/bbsctrl.h	/^#define	TR_USR	/;"	d
+TTLEN	../include/struct.h	/^#define TTLEN /;"	d
+TagItem	../include/struct.h	/^}      TagItem;$/;"	t	typeref:struct:__anon44
+TagList	xover.c	/^TagItem TagList[TAG_MAX];	\/* ascending list *\/$/;"	v
+TagNum	xover.c	/^int TagNum;			\/* tag's number *\/$/;"	v
+Tagger	xover.c	/^Tagger(chrono, recno, op)$/;"	f
+UCACHE	../include/struct.h	/^} UCACHE;$/;"	t	typeref:struct:__anon36
+UFO2_ACL	../include/struct.h	/^#define	UFO2_ACL	/;"	d
+UFO2_BNOTE	../include/struct.h	/^#define UFO2_BNOTE	/;"	d
+UFO2_BRDNEW	../include/struct.h	/^#define	UFO2_BRDNEW	/;"	d
+UFO2_CIRCLE	../include/struct.h	/^#define	UFO2_CIRCLE	/;"	d
+UFO2_COLOR	../include/struct.h	/^#define	UFO2_COLOR	/;"	d
+UFO2_DEF_ANONY	../include/struct.h	/^#define	UFO2_DEF_ANONY	/;"	d
+UFO2_DEF_LEAVE	../include/struct.h	/^#define	UFO2_DEF_LEAVE	/;"	d
+UFO2_FLAGS	acct.c	/^static char *UFO2_FLAGS[] =$/;"	v	file:
+UFO2_MIME	../include/struct.h	/^#define UFO2_MIME	/;"	d
+UFO2_MOTD	../include/struct.h	/^#define	UFO2_MOTD	/;"	d
+UFO2_MOVIE	../include/struct.h	/^#define	UFO2_MOVIE	/;"	d
+UFO2_NTLOG	../include/struct.h	/^#define UFO2_NTLOG	/;"	d
+UFO2_NWLOG	../include/struct.h	/^#define	UFO2_NWLOG	/;"	d
+UFO2_ORIGUI	../include/struct.h	/^#define	UFO2_ORIGUI	/;"	d
+UFO2_PAL	../include/struct.h	/^#define UFO2_PAL	/;"	d
+UFO2_PRH	../include/struct.h	/^#define UFO2_PRH	/;"	d
+UFO2_REALNAME	../include/struct.h	/^#define UFO2_REALNAME	/;"	d
+UFO2_SHIP	../include/struct.h	/^#define UFO2_SHIP	/;"	d
+UFO2_SHOWUSER	../include/struct.h	/^#define UFO2_SHOWUSER	/;"	d
+UFO2_SIGN	../include/struct.h	/^#define UFO2_SIGN	/;"	d
+UFO2_VEDIT	../include/struct.h	/^#define UFO2_VEDIT	/;"	d
+UFO_BIFF	../include/struct.h	/^#define	UFO_BIFF	/;"	d
+UFO_BIFFN	../include/struct.h	/^#define	UFO_BIFFN	/;"	d
+UFO_BROADCAST	../include/struct.h	/^#define	UFO_BROADCAST	/;"	d
+UFO_CLASSTABLE	../include/struct.h	/^#define	UFO_CLASSTABLE	/;"	d
+UFO_CLOAK	../include/struct.h	/^#define UFO_CLOAK	/;"	d
+UFO_FCACHE	../include/struct.h	/^#define	UFO_FCACHE	/;"	d
+UFO_FLAGS	acct.c	/^static char *UFO_FLAGS[] =$/;"	v	file:
+UFO_FORWARD	../include/struct.h	/^#define	UFO_FORWARD	/;"	d
+UFO_HIDEDN	../include/struct.h	/^#define UFO_HIDEDN	/;"	d
+UFO_MAXMSG	../include/struct.h	/^#define	UFO_MAXMSG	/;"	d
+UFO_MESSAGE	../include/struct.h	/^#define UFO_MESSAGE	/;"	d
+UFO_MPAGER	../include/struct.h	/^#define	UFO_MPAGER	/;"	d
+UFO_MQUOTA	../include/struct.h	/^#define	UFO_MQUOTA	/;"	d
+UFO_NET	../include/struct.h	/^#define	UFO_NET /;"	d
+UFO_PAGER	../include/struct.h	/^#define UFO_PAGER	/;"	d
+UFO_PAGER1	../include/struct.h	/^#define UFO_PAGER1	/;"	d
+UFO_QUIET	../include/struct.h	/^#define	UFO_QUIET	/;"	d
+UFO_REJECT	../include/struct.h	/^#define	UFO_REJECT	/;"	d
+UFO_SOCKET	../include/struct.h	/^#define	UFO_SOCKET	/;"	d
+UFO_SPARE	../include/struct.h	/^#define	UFO_SPARE	/;"	d
+UFO_UTMP_MASK	../include/struct.h	/^#define UFO_UTMP_MASK	/;"	d
+UFO_WEB	../include/struct.h	/^#define	UFO_WEB	/;"	d
+UMODELOG	../include/struct.h	/^} UMODELOG;$/;"	t	typeref:struct:__anon45
+URL_MAX_LEN	gem.c	/^#define	URL_MAX_LEN	/;"	d	file:
+USER_ATTR	../include/struct.h	/^}	USER_ATTR;$/;"	t	typeref:struct:__anon58
+USER_ATTR_SUPPORT	../include/struct.h	/^#define	USER_ATTR_SUPPORT	/;"	d
+UTIL_OPEN	../include/bbsctrl.h	/^#define	UTIL_OPEN	/;"	d
+UTMP	../include/struct.h	/^struct UTMP$/;"	s
+UTMP	../include/struct.h	/^typedef struct UTMP UTMP;$/;"	t	typeref:struct:UTMP
+UTMPSHM_KEY	../include/config.h	/^#define UTMPSHM_KEY	/;"	d
+VALID_PERIOD	../include/config.h	/^#define	VALID_PERIOD	/;"	d
+VAR	../include/bbsctrl.h	/^# define VAR	/;"	d
+VAR	../include/bbsctrl.h	/^# define VAR$/;"	d
+VAR	../include/global.h	/^# define VAR	/;"	d
+VAR	../include/global.h	/^# define VAR$/;"	d
+VAR	../include/global.h	/^#undef	VAR$/;"	d
+VAR	../include/skin.h	/^# define VAR	/;"	d
+VAR	../include/skin.h	/^# define VAR$/;"	d
+VAR	../include/skin.h	/^#undef	VAR$/;"	d
+VCH	../include/struct.h	/^}           VCH;$/;"	t	typeref:struct:VoteControlHeader
+VCHS	../include/struct.h	/^}           VCHS;$/;"	t	typeref:struct:VoteStudents
+VE_ANSI	edit.c	/^#define	VE_ANSI	/;"	d	file:
+VE_BIFF	edit.c	/^#define VE_BIFF	/;"	d	file:
+VE_BIFFN	edit.c	/^#define VE_BIFFN	/;"	d	file:
+VE_FOOTER	edit.c	/^#define	VE_FOOTER	/;"	d	file:
+VE_INPUTOOL	edit.c	/^#define	VE_INPUTOOL	/;"	d	file:
+VE_INSERT	edit.c	/^#define	VE_INSERT	/;"	d	file:
+VE_REDRAW	edit.c	/^#define	VE_REDRAW	/;"	d	file:
+VE_WIDTH	edit.c	/^#define	VE_WIDTH	/;"	d	file:
+VI_MAX	visio.c	/^#define VI_MAX /;"	d	file:
+VO_MAX	visio.c	/^#define VO_MAX /;"	d	file:
+VoteControlHeader	../include/struct.h	/^typedef struct VoteControlHeader$/;"	s
+VoteStudents	../include/struct.h	/^typedef struct VoteStudents$/;"	s
+WELCOME	../include/bbsnet.h	/^#define WELCOME /;"	d
+WHITE	../include/bbsnet.h	/^#define WHITE	/;"	d
+XCHAT_VERSION_MAJOR	../include/xchat.h	/^#define XCHAT_VERSION_MAJOR /;"	d
+XCHAT_VERSION_MINOR	../include/xchat.h	/^#define XCHAT_VERSION_MINOR /;"	d
+XEASY	../include/modes.h	/^#define XEASY	/;"	d
+XO	../include/struct.h	/^}        XO;$/;"	t	typeref:struct:OverView
+XO_BODY	../include/modes.h	/^#define XO_BODY	/;"	d
+XO_DL	../include/modes.h	/^#define XO_DL	/;"	d
+XO_FOOT	../include/modes.h	/^#define XO_FOOT	/;"	d
+XO_HEAD	../include/modes.h	/^#define XO_HEAD	/;"	d
+XO_INIT	../include/modes.h	/^#define XO_INIT	/;"	d
+XO_LAST	../include/modes.h	/^#define XO_LAST	/;"	d
+XO_LOAD	../include/modes.h	/^#define XO_LOAD	/;"	d
+XO_MODE	../include/modes.h	/^#define	XO_MODE	/;"	d
+XO_MOVE	../include/modes.h	/^#define	XO_MOVE	/;"	d
+XO_NECK	../include/modes.h	/^#define XO_NECK	/;"	d
+XO_NONE	../include/modes.h	/^#define XO_NONE	/;"	d
+XO_QUIT	../include/modes.h	/^#define	XO_QUIT	/;"	d
+XO_RSIZ	../include/modes.h	/^#define	XO_RSIZ	/;"	d
+XO_STACK	xover.c	/^#define XO_STACK	/;"	d	file:
+XO_TAIL	../include/modes.h	/^#define	XO_TAIL	/;"	d
+XO_TALL	../include/modes.h	/^#define	XO_TALL	/;"	d
+XO_WRAP	../include/modes.h	/^#define	XO_WRAP	/;"	d
+XO_ZONE	../include/modes.h	/^#define	XO_ZONE	/;"	d
+XZ	../include/struct.h	/^} XZ;$/;"	t	typeref:struct:__anon43
+XZ_BACK	../include/modes.h	/^#define	XZ_BACK	/;"	d
+XZ_BANMAIL	../include/modes.h	/^#define XZ_BANMAIL	/;"	d
+XZ_BMW	../include/modes.h	/^#define XZ_BMW /;"	d
+XZ_BOARD	../include/modes.h	/^#define	XZ_BOARD	/;"	d
+XZ_CLASS	../include/modes.h	/^#define	XZ_CLASS	/;"	d
+XZ_GEM	../include/modes.h	/^#define XZ_GEM	/;"	d
+XZ_MAILGEM	../include/modes.h	/^#define	XZ_MAILGEM	/;"	d
+XZ_MBOX	../include/modes.h	/^#define	XZ_MBOX	/;"	d
+XZ_OTHER	../include/modes.h	/^#define XZ_OTHER	/;"	d
+XZ_PAL	../include/modes.h	/^#define	XZ_PAL	/;"	d
+XZ_POST	../include/modes.h	/^#define	XZ_POST	/;"	d
+XZ_ULIST	../include/modes.h	/^#define	XZ_ULIST	/;"	d
+XZ_VOTE	../include/modes.h	/^#define	XZ_VOTE	/;"	d
+XZ_XPOST	../include/modes.h	/^#define XZ_XPOST /;"	d
+XoAuthor	board.c	/^XoAuthor(xo)$/;"	f	file:
+XoBM	talk.c	/^XoBM(xo)$/;"	f
+XoClass	board.c	/^XoClass(chn)$/;"	f	file:
+XoGem	gem.c	/^XoGem(folder, title, level)$/;"	f
+XoMbox	menu.c	/^XoMbox()$/;"	f	file:
+XoPost	board.c	/^XoPost(bno)$/;"	f
+XoUlist	menu.c	/^XoUlist()$/;"	f	file:
+XoXpost	post.c	/^XoXpost(xo)			\/* Thor: call from post_cb *\/$/;"	f	file:
+YEA	../include/bbs.h	/^#define	YEA	/;"	d
+YELLOW	../include/bbsnet.h	/^#define	YELLOW	/;"	d
+YELLOW_BLUE	../include/bbsnet.h	/^#define	YELLOW_BLUE	/;"	d
+YZUMAIL	../include/config.h	/^#define YZUMAIL /;"	d
+YZUMAIL84	../include/config.h	/^#define YZUMAIL84	/;"	d
+YZUMAIL85	../include/config.h	/^#define	YZUMAIL85	/;"	d
+YZUMAIL86	../include/config.h	/^#define	YZUMAIL86	/;"	d
+YZUMAIL87	../include/config.h	/^#define YZUMAIL87	/;"	d
+YZUMAIL88	../include/config.h	/^#define YZUMAIL88	/;"	d
+YZUMAIL89	../include/config.h	/^#define	YZUMAIL89	/;"	d
+YZUMAIL90	../include/config.h	/^#define	YZUMAIL90	/;"	d
+YZUMAIL91	../include/config.h	/^#define YZUMAIL91	/;"	d
+YZU_MAIL	../include/struct.h	/^}	YZU_MAIL;$/;"	t	typeref:struct:__anon59
+_ADMIN_C_	acct.c	/^#define	_ADMIN_C_$/;"	d	file:
+_ATTR_H_	../include/attr.h	/^#define _ATTR_H_ /;"	d
+_BATTR_H_	../include/battr.h	/^#define _BATTR_H_$/;"	d
+_BBSCTRL_H_	../include/bbsctrl.h	/^#define	_BBSCTRL_H_$/;"	d
+_BBS_H_	../include/bbs.h	/^#define	_BBS_H_$/;"	d
+_CONFIG_H_	../include/config.h	/^#define	_CONFIG_H_$/;"	d
+_DAO_H_	../include/dao.h	/^#define	_DAO_H_$/;"	d
+_DNS_H_	../include/dns.h	/^#define _DNS_H_$/;"	d
+_GLOBAL_H_	../include/global.h	/^#define	_GLOBAL_H_$/;"	d
+_HDR_H_	../include/hdr.h	/^#define	_HDR_H_$/;"	d
+_MAIN_C_	bbsd.c	/^#define	_MAIN_C_$/;"	d	file:
+_MODES_C_	banmail.c	/^#undef	_MODES_C_$/;"	d	file:
+_MODES_C_	talk.c	/^#define	_MODES_C_$/;"	d	file:
+_MODES_H_	../include/modes.h	/^#define _MODES_H_$/;"	d
+_MSG_OK_	post.c	/^#define	_MSG_OK_	/;"	d	file:
+_NEWS_H_	../include/news.h	/^#define	_NEWS_H_$/;"	d
+_PERM_H_	../include/perm.h	/^#define	_PERM_H_$/;"	d
+_PIPSTRUCT_H_	../include/pipstruct.h	/^#define _PIPSTRUCT_H_$/;"	d
+_PIP_H_	../include/pip.h	/^#define	_PIP_H_$/;"	d
+_POPUP_H_	../include/popup.h	/^#define _POPUP_H_$/;"	d
+_PROTO_H_	../include/proto.h	/^#define	_PROTO_H_$/;"	d
+_SKIN_H_	../include/skin.h	/^#define	_SKIN_H_$/;"	d
+_SPLAY_H_	../include/splay.h	/^#define _SPLAY_H_$/;"	d
+_STRUCT_H_	../include/struct.h	/^#define _STRUCT_H_$/;"	d
+_XCHAT_H_	../include/xchat.h	/^#define _XCHAT_H_$/;"	d
+a_e	../include/news.h	/^  char a_e[128];$/;"	m	struct:PARSER
+a_s	../include/news.h	/^  char a_s[128];$/;"	m	struct:PARSER
+a_show	../include/news.h	/^  char a_show[128];$/;"	m	struct:PARSER
+a_unshow	../include/news.h	/^  char a_unshow[128];$/;"	m	struct:PARSER
+abort_bbs	bbsd.c	/^abort_bbs()$/;"	f
+acct_apply	bbsd.c	/^acct_apply()$/;"	f	file:
+acct_get	acct.c	/^acct_get(msg, acct)$/;"	f
+acct_load	acct.c	/^acct_load(acct, userid)$/;"	f
+acct_save	acct.c	/^acct_save(acct)$/;"	f
+acct_setup	acct.c	/^acct_setup(u, adm)$/;"	f
+acct_show	acct.c	/^acct_show(u, adm)$/;"	f
+acct_su	acct.c	/^acct_su(u) $/;"	f	file:
+acct_userno	acct.c	/^acct_userno(userid)$/;"	f
+acl_addr	../lib/acl_addr.c	/^acl_addr(acl, addr)$/;"	f
+acl_has	../lib/acl_has.c	/^acl_has(acl, user, host)$/;"	f
+add_deny	acct.c	/^add_deny(u,adm,cross)$/;"	f
+add_io	visio.c	/^add_io(fd, timeout)$/;"	f
+addr	../include/dns.h	/^  unsigned long addr;$/;"	m	union:__anon11
+address	../include/struct.h	/^  char address[60];		\/* user address *\/$/;"	m	struct:__anon23
+address	../include/struct.h	/^  char address[60];$/;"	m	struct:__anon25
+addtoman	../include/pip.h	/^  int addtoman;		\/*³Ì¤jªº¼W¥[¶q*\/$/;"	m	struct:royalset
+affect	../include/pip.h	/^ int affect;		\/*·P    ¨ü*\/$/;"	m	struct:chicken
+age	../include/pipstruct.h	/^  usint age;			  \/* ¦~ÄÖ	  4 bytes *\/$/;"	m	struct:rpgrec
+agent	../include/struct.h	/^  char agent[IDLEN + 1];$/;"	m	struct:__anon25
+agree	../include/struct.h	/^  usint	agree;$/;"	m	struct:NewBoardHeader
+allow_addr	acct.c	/^allow_addr(addr)$/;"	f	file:
+aloha	talk.c	/^aloha()$/;"	f
+aloha_sync	talk.c	/^aloha_sync(void)$/;"	f
+ans_request	acct.c	/^ans_request()$/;"	f	file:
+ansi2n	edit.c	/^ansi2n(ansix, line)$/;"	f	file:
+ap_semid	cache.c	/^static int ap_semid;$/;"	v	file:
+ap_start	../include/global.h	/^VAR time_t ap_start;$/;"	v
+apath	../include/news.h	/^  char apath[128];$/;"	m	struct:__anon15
+archiv32	../lib/archiv32.c	/^archiv32(chrono, fname)$/;"	f
+archiv32m	../lib/archiv32m.c	/^archiv32m(chrono, fname)$/;"	f
+armor	../include/pipstruct.h	/^  uschar armor;			  \/* ¨¾¨ã	  1 bytes *\/$/;"	m	struct:rpgrec
+array	../include/bbsnet.h	/^*array,*shm_array,*my_array;$/;"	v	typeref:struct:data
+array_size	../include/bbsnet.h	/^         myarray_size,array_size;$/;"	v
+art	../include/pip.h	/^ int art;		\/*ÃÀ³N¯à¤O*\/$/;"	m	struct:chicken
+ask_board	visio.c	/^ask_board(board, perm, msg)$/;"	f
+assist	../include/struct.h	/^  usint	assist;$/;"	m	struct:NewBoardHeader
+attach_err	cache.c	/^attach_err(shmkey, name)$/;"	f	file:
+attach_shm	cache.c	/^attach_shm(shmkey, shmsize)$/;"	f	file:
+attack	../include/pip.h	/^  int attack;		\/*§ðÀ»*\/$/;"	m	struct:playrule
+attack	../include/pip.h	/^  int attack;		\/*§ðÀ»*\/$/;"	m	struct:weapon
+attack	../include/pip.h	/^ int attack;		\/*§ð À» ¤O*\/$/;"	m	struct:chicken
+attack	../include/pip.h	/^ int attack;            \/*§ð À» ¤O*\/$/;"	m	struct:__anon16
+attack	../include/struct.h	/^        int attack;     \/*§ðÀ»*\/$/;"	m	struct:__anon32
+attr_get	../lib/attr_lib.c	/^attr_get(userid, key, value)$/;"	f
+attr_put	../lib/attr_lib.c	/^attr_put(userid, key, value)$/;"	f
+attr_step	../lib/attr_lib.c	/^attr_step(userid, key, dflt, step)$/;"	f
+avgload	../include/struct.h	/^  int avgload;$/;"	m	struct:__anon36
+b_lines	../include/bbs.h	/^#define	b_lines	/;"	d
+badmanlist	../include/pip.h	/^struct playrule *badmanlist;$/;"	v	typeref:struct:playrule
+badmanlist	../include/pip.h	/^struct playrule badmanlist[] = {$/;"	v	typeref:struct:playrule
+ban_addr	acct.c	/^ban_addr(addr)$/;"	f
+banmail_add	banmail.c	/^banmail_add(xo)$/;"	f	file:
+banmail_body	banmail.c	/^banmail_body(xo)$/;"	f	file:
+banmail_cb	banmail.c	/^KeyFunc banmail_cb[] =$/;"	v
+banmail_change	banmail.c	/^banmail_change(xo)$/;"	f	file:
+banmail_delete	banmail.c	/^banmail_delete(xo)$/;"	f	file:
+banmail_edit	banmail.c	/^banmail_edit(banmail,echo)$/;"	f	file:
+banmail_head	banmail.c	/^banmail_head(xo)$/;"	f	file:
+banmail_help	banmail.c	/^banmail_help(xo)$/;"	f	file:
+banmail_init	banmail.c	/^banmail_init(xo)$/;"	f	file:
+banmail_item	banmail.c	/^banmail_item(num, ban)$/;"	f	file:
+banmail_load	banmail.c	/^banmail_load(xo)$/;"	f	file:
+banmail_sync	banmail.c	/^banmail_sync(xo)$/;"	f	file:
+banmsg_add	talk.c	/^banmsg_add(xo)$/;"	f	file:
+banmsg_body	talk.c	/^banmsg_body(xo)$/;"	f	file:
+banmsg_cache	talk.c	/^banmsg_cache()$/;"	f
+banmsg_cb	talk.c	/^KeyFunc banmsg_cb[] =$/;"	v
+banmsg_change	talk.c	/^banmsg_change(xo)$/;"	f	file:
+banmsg_delete	talk.c	/^banmsg_delete(xo)$/;"	f	file:
+banmsg_edit	talk.c	/^banmsg_edit(banmsg, echo)$/;"	f	file:
+banmsg_head	talk.c	/^banmsg_head(xo)$/;"	f	file:
+banmsg_help	talk.c	/^banmsg_help(xo)$/;"	f	file:
+banmsg_init	talk.c	/^banmsg_init(xo)$/;"	f	file:
+banmsg_item	talk.c	/^banmsg_item(num, banmsg)$/;"	f	file:
+banmsg_load	talk.c	/^banmsg_load(xo)$/;"	f	file:
+banmsg_mail	talk.c	/^banmsg_mail(xo)$/;"	f	file:
+banmsg_max	../include/struct.h	/^  int   banmsg_max;		\/* banmsg max *\/$/;"	m	struct:UTMP
+banmsg_query	talk.c	/^banmsg_query(xo)$/;"	f	file:
+banmsg_sort	talk.c	/^banmsg_sort(xo)$/;"	f	file:
+banmsg_spool	../include/struct.h	/^  int   banmsg_spool[BANMSG_MAX];	\/* banmsg spool *\/$/;"	m	struct:UTMP
+banmsg_sync	talk.c	/^banmsg_sync(fpath)$/;"	f
+base64_code	../lib/str_decode.c	/^base64_code(x)$/;"	f	file:
+battr	../include/struct.h	/^  usint battr;			\/* ¬ÝªOÄÝ©Ê *\/$/;"	m	struct:BoardHeader
+battrs	../include/battr.h	/^char *battrs[NUMATTRS] = $/;"	v
+bbs_book	../include/bbsnet.h	/^     cursor_x, cursor_y, flag = 0,buf_string[80],bbs_book[80],$/;"	v
+bbsmode	../include/global.h	/^VAR usint bbsmode;		\/* bbs operating mode, see modes.h *\/$/;"	v
+bbsothermode	../include/global.h	/^VAR int bbsothermode;$/;"	v
+bbstate	../include/global.h	/^VAR int bbstate;		\/* bbs operatine state *\/$/;"	v
+bbtime	../include/pip.h	/^ time_t bbtime;$/;"	m	struct:chicken
+bcache	../include/struct.h	/^  BRD bcache[MAXBOARD];$/;"	m	struct:__anon37
+bcount	board.c	/^  int bcount;                                      \/* Thor.980902:¨S¥Î¨ì? *\/$/;"	m	struct:BoardReadingHistory	file:
+belief	../include/pip.h	/^ int belief;		\/*«H    ¥õ*\/$/;"	m	struct:chicken
+bell	visio.c	/^bell()$/;"	f
+belong	bbsd.c	/^belong(flist, key)$/;"	f	file:
+bfriend_num	talk.c	/^static int friend_num,ofriend_num,pfriend_num,bfriend_num;\/* visor.991103: °O¿ý¥Ø«e¯¸¤W¦n¤Í¼Æ *\/$/;"	v	file:
+bgen	../include/struct.h	/^  int bgen;			\/* generation *\/$/;"	m	struct:UTMP
+bighp	../include/pip.h	/^ int bighp;             \/*¤j ¸É ¤Y*\/$/;"	m	struct:chicken
+birth	../include/pip.h	/^ char birth[21];	\/*¥Í    ¤é*\/$/;"	m	struct:chicken
+bitmsg	acct.c	/^bitmsg(msg, str, level)$/;"	f
+bitset	acct.c	/^bitset(pbits, count, maxon, msg, perms)$/;"	f
+blast	../include/struct.h	/^  time_t blast;			\/* ³Ì«á¤@½g post ªº®É¶¡ *\/$/;"	m	struct:BoardHeader
+blog	bbsd.c	/^blog(mode, msg)$/;"	f
+blood	../include/struct.h	/^  int blood;$/;"	m	struct:__anon58
+bm_belong	talk.c	/^bm_belong(board)$/;"	f
+bm_image	talk.c	/^bm_image()$/;"	f	file:
+bm_list	acct.c	/^bm_list(userid)			\/* Åã¥Ü userid ¬O­þ¨ÇªOªºªO¥D *\/$/;"	f	file:
+bm_setup	acct.c	/^bm_setup(u,adm)$/;"	f
+bmode	talk.c	/^bmode(up, simple)$/;"	f
+bmw_body	talk.c	/^bmw_body(xo)$/;"	f	file:
+bmw_cb	talk.c	/^KeyFunc bmw_cb[] =$/;"	v
+bmw_delete	talk.c	/^bmw_delete(xo)$/;"	f	file:
+bmw_edit	talk.c	/^bmw_edit(up, hint, bmw, cc)$/;"	f	file:
+bmw_head	talk.c	/^bmw_head(xo)$/;"	f	file:
+bmw_help	talk.c	/^bmw_help(xo)$/;"	f	file:
+bmw_init	talk.c	/^bmw_init(xo)$/;"	f	file:
+bmw_item	talk.c	/^bmw_item(num, bmw)$/;"	f	file:
+bmw_load	talk.c	/^bmw_load(xo)$/;"	f	file:
+bmw_locus	talk.c	/^static int bmw_locus;$/;"	v	file:
+bmw_lslot	talk.c	/^static BMW bmw_lslot[BMW_LOCAL_MAX];$/;"	v	file:
+bmw_mail	talk.c	/^bmw_mail(xo)$/;"	f	file:
+bmw_mode	talk.c	/^bmw_mode(xo)$/;"	f	file:
+bmw_modetype	talk.c	/^static int bmw_modetype;$/;"	v	file:
+bmw_query	talk.c	/^bmw_query(xo)$/;"	f	file:
+bmw_reply	talk.c	/^bmw_reply()$/;"	f
+bmw_rqst	talk.c	/^bmw_rqst()$/;"	f
+bmw_save	talk.c	/^bmw_save()$/;"	f
+bmw_send	talk.c	/^bmw_send(callee, bmw)$/;"	f	file:
+bmw_write	talk.c	/^bmw_write(xo)$/;"	f	file:
+board_main	board.c	/^board_main()$/;"	f
+board_pal	../include/struct.h	/^  int   board_pal;$/;"	m	struct:UTMP
+board_pals	talk.c	/^static int board_pals;$/;"	v	file:
+board_xo	board.c	/^static XO board_xo;$/;"	v	file:
+boardmode	board.c	/^int boardmode=0;$/;"	v
+body	../include/rpg.h	/^char *body[5] = {"ÀY³¡","¨­Åé","¤U­±","¸y³¡","»L³¡"};$/;"	v
+bodyA	../include/pip.h	/^ int bodyA;$/;"	m	struct:chicken
+bodyB	../include/pip.h	/^ int bodyB;$/;"	m	struct:chicken
+bodyC	../include/pip.h	/^ int bodyC;$/;"	m	struct:chicken
+bodyD	../include/pip.h	/^ int bodyD;$/;"	m	struct:chicken
+bodyE	../include/pip.h	/^ int bodyE;$/;"	m	struct:chicken
+bodylist	../include/pip.h	/^struct weapon bodylist[] = {$/;"	v	typeref:struct:weapon
+book	../include/pip.h	/^ int book;		\/*®Ñ    ¥»*\/$/;"	m	struct:chicken
+boy	../include/pip.h	/^  char *boy;		\/*¨k¥Íµ²§½ªºÂ¾·~*\/$/;"	m	struct:newendingset
+bpost	../include/struct.h	/^  int bpost;			\/* ¦@¦³´X½g post *\/$/;"	m	struct:BoardHeader
+brave	../include/pip.h	/^ int brave;		\/*«i    ´±*\/$/;"	m	struct:chicken
+brd2gem	gem.c	/^brd2gem(brd, gem)$/;"	f
+brd_bits	board.c	/^char brd_bits[MAXBOARD];$/;"	v
+brd_bno	cache.c	/^brd_bno(bname)$/;"	f
+brd_edit	acct.c	/^brd_edit(bno)$/;"	f
+brd_fpath	../lib/f_path.c	/^brd_fpath(fpath, board, fname)$/;"	f
+brd_list	board.c	/^brd_list(reciper)$/;"	f
+brd_usies	board.c	/^brd_usies(void)$/;"	f
+brd_visit	board.c	/^time_t brd_visit[MAXBOARD];	\/* ³ÌªñÂsÄý®É¶¡ *\/$/;"	v
+brdname	../include/struct.h	/^  char brdname[IDLEN + 1];	\/* board ID *\/$/;"	m	struct:BoardHeader
+brdname	../include/struct.h	/^  char brdname[IDLEN + 1];$/;"	m	struct:NewBoardHeader
+brh_add	board.c	/^brh_add(prev, chrono, next)$/;"	f
+brh_alloc	board.c	/^brh_alloc(tail, size)$/;"	f	file:
+brh_base	board.c	/^static int *brh_base;		\/* allocated memory *\/$/;"	v	file:
+brh_expire	board.c	/^static time_t brh_expire;$/;"	v	file:
+brh_get	board.c	/^brh_get(bstamp, bhno)$/;"	f
+brh_load	board.c	/^brh_load()$/;"	f
+brh_put	board.c	/^brh_put()$/;"	f	file:
+brh_save	board.c	/^brh_save()$/;"	f
+brh_size	board.c	/^static int brh_size;		\/* allocated memory size *\/$/;"	v	file:
+brh_tail	board.c	/^static int *brh_tail;		\/* allocated memory *\/$/;"	v	file:
+brh_unread	board.c	/^brh_unread(chrono)$/;"	f
+brh_visit	board.c	/^brh_visit(mode)$/;"	f
+bshm	cache.c	/^BCACHE *bshm;$/;"	v
+bshm_init	cache.c	/^bshm_init()$/;"	f
+bsmtp	mail.c	/^bsmtp(fpath, title, rcpt, method)$/;"	f
+bsmtp_file	mail.c	/^bsmtp_file(fpath, title, rcpt)$/;"	f
+bstamp	../include/struct.h	/^  time_t bstamp;		\/* «Ø¥ß¬ÝªOªº®É¶¡, unique *\/$/;"	m	struct:BoardHeader
+bstamp	../include/struct.h	/^  time_t bstamp;		\/* ¬ÝªO¿ëÃÑ¥N½X *\/  \/* Thor:¬° key *\/$/;"	m	struct:VoteControlHeader
+bstamp	board.c	/^  time_t bstamp;		\/* «Ø¥ß¬ÝªOªº®É¶¡, unique *\/ \/* Thor.brh_tail*\/$/;"	m	struct:BoardReadingHistory	file:
+bstamp2bno	board.c	/^bstamp2bno(stamp)$/;"	f
+btime	../include/struct.h	/^  time_t btime;			\/* .DIR ªº st_mtime *\/$/;"	m	struct:BoardHeader
+btime	../include/struct.h	/^  time_t btime;$/;"	m	struct:NewBoardHeader
+btime	../include/struct.h	/^  time_t btime;$/;"	m	struct:__anon31
+btime_update	post.c	/^btime_update(bno)$/;"	f
+buf	../include/dns.h	/^  u_char buf[MAXPACKET];$/;"	m	union:__anon12
+buf	../include/struct.h	/^  char buf[3][80];$/;"	m	struct:__anon56
+buf_string	../include/bbsnet.h	/^     cursor_x, cursor_y, flag = 0,buf_string[80],bbs_book[80],$/;"	v
+bvisit	board.c	/^  time_t bvisit;		\/* ¤W¦¸¾\\Åª®É¶¡ *\/ \/* Thor.980902:¨S¥Î¨ì? *\/$/;"	m	struct:BoardReadingHistory	file:
+bvote	../include/struct.h	/^  uschar bvote;			\/* ¦@¦³´X¶µ§ë²¼Á|¦æ¤¤ *\/$/;"	m	struct:BoardHeader
+c	../include/dns.h	/^  unsigned char *c;$/;"	v
+caller	../include/struct.h	/^  UTMP *caller;			\/* who call-in me ? *\/$/;"	m	struct:__anon31
+can_banmsg	talk.c	/^can_banmsg(up)$/;"	f	file:
+can_message	talk.c	/^can_message(up)$/;"	f	file:
+can_override	talk.c	/^can_override(up)$/;"	f	file:
+can_see	talk.c	/^can_see(up)$/;"	f	file:
+cancel_post	post.c	/^cancel_post(hdr)$/;"	f
+career	../include/struct.h	/^  char career[50];$/;"	m	struct:__anon25
+cb	../include/struct.h	/^  KeyFunc *cb;$/;"	m	struct:__anon43
+cdate	../include/struct.h	/^  char cdate[9];		\/* µ²§ô¤é´Á *\/ \/* Thor.990329: ¥u¨ÑÅã¥Ü, y2k *\/$/;"	m	struct:VoteControlHeader
+ch	../include/xchat.h	/^     int ch;$/;"	v
+chain_cmp	post.c	/^chain_cmp(a, b)$/;"	f	file:
+change	../include/pip.h	/^   int change;		\/*§ïÅÜ¶q*\/$/;"	m	struct:goodsofpip
+change_stamp	post.c	/^change_stamp(folder, hdr)$/;"	f	file:
+character	../include/pip.h	/^ int character;		\/*®ð ½è «×*\/ $/;"	m	struct:chicken
+charm	../include/pip.h	/^ int charm;		\/*¾y	¤O*\/$/;"	m	struct:chicken
+chat	../include/struct.h	/^        char chat[10][150]; \/*²á¤Ñ¤º®e*\/$/;"	m	struct:__anon32
+chat_condition	../include/struct.h	/^  ChatAction chat_condition[CONDITION_MAX+1];$/;"	m	struct:__anon41
+chat_party	../include/struct.h	/^  ChatAction chat_party[PARTY_MAX+1];$/;"	m	struct:__anon41
+chat_party2	../include/struct.h	/^  ChatAction chat_party2[PARTY_MAX+1];$/;"	m	struct:__anon41
+chat_person	../include/struct.h	/^  ChatAction chat_person[CONDITION_MAX+1];$/;"	m	struct:__anon41
+chat_speak	../include/struct.h	/^  ChatAction chat_speak[SPEAK_MAX+1];$/;"	m	struct:__anon41
+chatcount	../include/struct.h	/^        int chatcount;$/;"	m	struct:__anon32
+check	../include/struct.h	/^  char check;			\/* ¾Ç¥Í§ë²¼¨t²Î *\/$/;"	m	struct:VoteControlHeader
+check_admin	acct.c	/^check_admin(name)$/;"	f
+check_idno	acct.c	/^check_idno(id)$/;"	f	file:
+check_info	menu.c	/^check_info(char *input)$/;"	f
+check_new	board.c	/^check_new(brd)$/;"	f
+check_personal_note	talk.c	/^check_personal_note(newflag,userid)$/;"	f
+check_yzuemail	acct.c	/^check_yzuemail(email)$/;"	f
+checknum	../include/struct.h	/^   int checknum;$/;"	m	struct:__anon71
+checkqt	../include/global.h	/^VAR int checkqt;$/;"	v
+checksum	../include/struct.h	/^   CHECKSUM checksum[5];$/;"	m	struct:__anon71
+checksum_add	post.c	/^checksum_add(title)$/;"	f	file:
+checksum_find	post.c	/^checksum_find(fpath,check,state)$/;"	f
+checksum_put	post.c	/^checksum_put(sum,check)$/;"	f	file:
+chicken	../include/pip.h	/^struct chicken {$/;"	s
+chicken	../include/pip.h	/^typedef struct chicken chicken;$/;"	t	typeref:struct:chicken
+chickenmode	../include/pip.h	/^ int chickenmode;	\/*´X ¥N Âû*\/$/;"	m	struct:chicken
+chinese	../include/struct.h	/^  char chinese[7];                \/* ¤¤¤åÂ½Ä¶ *\/$/;"	m	struct:__anon40
+chkpasswd	../lib/str_passwd.c	/^chkpasswd(passwd, test)$/;"	f
+chno	../include/struct.h	/^  short chno[0];$/;"	m	struct:__anon34
+chno_cmp	favorite.c	/^chno_cmp(i, j)$/;"	f	file:
+chrono	../include/hdr.h	/^  time_t chrono;		\/* timestamp *\/$/;"	m	struct:__anon13
+chrono	../include/struct.h	/^  time_t chrono;		\/* §ë²¼¶}¿ì®É¶¡ *\/  \/* Thor:¬° key *\/$/;"	m	struct:VoteControlHeader
+chrono	../include/struct.h	/^  time_t chrono;$/;"	m	struct:__anon44
+chrono	../include/struct.h	/^  time_t chrono;$/;"	m	struct:__anon68
+chrono	post.c	/^  time_t chrono;$/;"	m	struct:__anon4	file:
+chrono32	../lib/chrono32.c	/^chrono32(str)$/;"	f
+chx	favorite.c	/^static ClassHeader *chx[2];$/;"	v	file:
+ck_state	talk.c	/^ck_state(in1,in2,up,mode)$/;"	f	file:
+cksum	post.c	/^CHECKSUMCOUNT cksum;$/;"	v
+classA	../include/pip.h	/^ int classA;$/;"	m	struct:chicken
+classB	../include/pip.h	/^ int classB;$/;"	m	struct:chicken
+classC	../include/pip.h	/^ int classC;$/;"	m	struct:chicken
+classD	../include/pip.h	/^ int classD;$/;"	m	struct:chicken
+classE	../include/pip.h	/^ int classE;$/;"	m	struct:chicken
+classF	../include/pip.h	/^ int classF;$/;"	m	struct:chicken
+classG	../include/pip.h	/^ int classG;$/;"	m	struct:chicken
+classH	../include/pip.h	/^ int classH; $/;"	m	struct:chicken
+classI	../include/pip.h	/^ int classI;$/;"	m	struct:chicken
+classJ	../include/pip.h	/^ int classJ;$/;"	m	struct:chicken
+classK	../include/pip.h	/^ int classK;$/;"	m	struct:chicken
+classL	../include/pip.h	/^ int classL;$/;"	m	struct:chicken
+classM	../include/pip.h	/^ int classM;$/;"	m	struct:chicken
+classN	../include/pip.h	/^ int classN;$/;"	m	struct:chicken
+classO	../include/pip.h	/^ int classO;$/;"	m	struct:chicken
+class_add	board.c	/^class_add(xo)$/;"	f	file:
+class_body	board.c	/^class_body(xo)$/;"	f	file:
+class_browse	board.c	/^class_browse(xo)$/;"	f	file:
+class_cb	board.c	/^static KeyFunc class_cb[] =$/;"	v	file:
+class_check	board.c	/^class_check(chn)$/;"	f	file:
+class_del	board.c	/^class_del(xo)$/;"	f	file:
+class_edit	board.c	/^class_edit(xo)$/;"	f	file:
+class_find_same	board.c	/^class_find_same(src)$/;"	f	file:
+class_flag	board.c	/^static int class_flag;$/;"	v	file:
+class_head	board.c	/^class_head(xo)$/;"	f	file:
+class_help	board.c	/^class_help(xo)$/;"	f	file:
+class_img	board.c	/^static char *class_img;$/;"	v	file:
+class_init	board.c	/^class_init(xo)			\/* re-init *\/$/;"	f	file:
+class_len	../include/news.h	/^  int class_len;$/;"	m	struct:__anon15
+class_load	board.c	/^class_load(xo)$/;"	f	file:
+class_mov	board.c	/^class_mov(xo)$/;"	f	file:
+class_neck	board.c	/^class_neck(xo)$/;"	f	file:
+class_newmode	board.c	/^class_newmode(xo)$/;"	f	file:
+class_search	board.c	/^class_search(xo)$/;"	f	file:
+class_switch	board.c	/^class_switch(xo)$/;"	f	file:
+class_yank	board.c	/^class_yank(xo)$/;"	f	file:
+class_zap	board.c	/^class_zap(xo)$/;"	f	file:
+classtable_free	cache.c	/^classtable_free(void)$/;"	f
+classtable_main	cache.c	/^classtable_main(void)$/;"	f
+clear	visio.c	/^clear()$/;"	f
+clearange	visio.c	/^clearange(from,to)$/;"	f
+clrtobot	visio.c	/^clrtobot()$/;"	f
+clrtoeol	visio.c	/^clrtoeol()$/;"	f
+clrtohol	visio.c	/^clrtohol()$/;"	f
+cmbox	mail.c	/^}      cmbox;$/;"	v	typeref:struct:__anon2	file:
+cmpban	cache.c	/^cmpban(ban)$/;"	f	file:
+cmpchrono	post.c	/^cmpchrono(hdr)$/;"	f
+cmpclasstable	cache.c	/^cmpclasstable(ptr)$/;"	f
+color	../include/struct.h	/^  char color;$/;"	m	struct:BoardHeader
+comebackPos	post.c	/^static int comebackPos;$/;"	v	file:
+compareint	../lib/splay.c	/^compareint(void *a, void *b)$/;"	f
+con	../include/pipstruct.h	/^  ushort con;			  \/* Åé½è	  2 bytes *\/$/;"	m	struct:rpgrec
+condensation	../include/struct.h	/^  char condensation[9];$/;"	m	struct:__anon62
+condensation	../include/struct.h	/^  char condensation[9];$/;"	m	struct:__anon63
+cookie	../include/pip.h	/^ int cookie;		\/*¹s    ­¹*\/$/;"	m	struct:chicken
+cookskill	../include/pip.h	/^ int cookskill;		\/*²i    ¶¹*\/$/;"	m	struct:chicken
+copyship	talk.c	/^copyship(ship,userno)$/;"	f	file:
+cost	../include/pip.h	/^  int cost;		\/*¶R»ù*\/$/;"	m	struct:weapon
+count	../include/struct.h	/^  int count;$/;"	m	struct:__anon34
+count	../include/struct.h	/^  int count[30];$/;"	m	struct:__anon46
+count	../include/struct.h	/^  usint count;			\/* number of active session *\/$/;"	m	struct:__anon36
+count_age	menu.c	/^count_age()$/;"	f	file:
+count_birth	menu.c	/^count_birth()$/;"	f	file:
+count_init	cache.c	/^count_init()$/;"	f
+count_len	menu.c	/^int count_len(data)$/;"	f	file:
+count_len	popupmenu.c	/^count_len(data)$/;"	f	file:
+count_load	cache.c	/^count_load()$/;"	f
+count_star	menu.c	/^count_star()$/;"	f	file:
+count_update	cache.c	/^count_update()$/;"	f
+counter	../include/bbsnet.h	/^unsigned int current = 1, counter = 1, last_current=1,w, y, z,$/;"	v
+cur_col	visio.c	/^int cur_row, cur_col;$/;"	v
+cur_day_max_login	../include/struct.h	/^  int cur_day_max_login;$/;"	m	struct:__anon55
+cur_hour_max_login	../include/struct.h	/^  int cur_hour_max_login;$/;"	m	struct:__anon55
+cur_pos	visio.c	/^int cur_pos;			\/* current position with ANSI codes *\/$/;"	v
+cur_row	visio.c	/^int cur_row, cur_col;$/;"	v
+cur_slp	visio.c	/^static screenline *cur_slp;	\/* current screen line pointer *\/$/;"	v	file:
+curcol	talk.c	/^  int curcol, curln;$/;"	m	struct:__anon6	file:
+curcount	cache.c	/^COUNTER *curcount;$/;"	v
+curfw	cache.c	/^BANMAIL *curfw;$/;"	v
+curln	talk.c	/^  int curcol, curln;$/;"	m	struct:__anon6	file:
+currBM	../include/global.h	/^VAR char currBM[BMLEN + 7];	\/* BM of currently selected board *\/$/;"	v
+currboard	../include/global.h	/^VAR char currboard[IDLEN + 2];	\/* name of currently selected board *\/$/;"	v
+currchrono	../include/global.h	/^VAR time_t currchrono;		\/* current file timestamp @ bbs.c mail.c *\/$/;"	v
+curredit	../include/global.h	/^VAR int curredit;$/;"	v
+current	../include/bbsnet.h	/^unsigned int current = 1, counter = 1, last_current=1,w, y, z,$/;"	v
+currpid	../include/global.h	/^VAR pid_t currpid;		\/* current process ID *\/$/;"	v
+currtitle	../include/global.h	/^VAR char currtitle[80];$/;"	v
+cursor_restore	visio.c	/^cursor_restore()$/;"	f
+cursor_save	visio.c	/^cursor_save()$/;"	f
+cursor_x	../include/bbsnet.h	/^     cursor_x, cursor_y, flag = 0,buf_string[80],bbs_book[80],$/;"	v
+cursor_y	../include/bbsnet.h	/^     cursor_x, cursor_y, flag = 0,buf_string[80],bbs_book[80],$/;"	v
+cuser	../include/global.h	/^VAR ACCT cuser;			\/* current user structure *\/$/;"	v
+cutmp	../include/global.h	/^VAR UTMP *cutmp;$/;"	v
+d	../include/dns.h	/^  unsigned char d[4];$/;"	m	union:__anon11
+dashd	../include/proto.h	/^#define	dashd(/;"	d
+dashf	../include/proto.h	/^#define	dashf(/;"	d
+data	../include/bbsnet.h	/^struct data$/;"	s
+data	../include/splay.h	/^  void *data;$/;"	m	struct:SplayNode
+data	../include/struct.h	/^  char	  data[48];$/;"	m	struct:__anon21
+data	../include/struct.h	/^  char    data[48];$/;"	m	struct:__anon22
+data	../include/struct.h	/^  char data[0];$/;"	m	struct:LinkList
+data	../include/struct.h	/^  uschar data[ANSILINELEN];$/;"	m	struct:screenline
+data	edit.c	/^  uschar data[ANSILINELEN];$/;"	m	struct:textline	file:
+dataE	../include/pip.h	/^ int dataE;$/;"	m	struct:chicken
+date	../include/hdr.h	/^  char date[9];			\/* [96\/12\/01] *\/$/;"	m	struct:__anon13
+date	../include/struct.h	/^  char date[8];$/;"	m	struct:__anon20
+date	../include/struct.h	/^  char date[9];			\/* ¶}©l¤é´Á *\/ \/* Thor: match HDRªºdate*\/$/;"	m	struct:VoteControlHeader
+date	../include/struct.h	/^  char date[9];$/;"	m	struct:NewBoardHeader
+date	../include/struct.h	/^  time_t date;$/;"	m	struct:__anon56
+datemsg	../lib/str_time.c	/^static char datemsg[40];$/;"	v	file:
+day	../include/pip.h	/^ int day; 		\/*¥Í¤é  ¤é*\/$/;"	m	struct:chicken
+day	../include/struct.h	/^  BSTAT day;$/;"	m	struct:__anon69
+day	../include/struct.h	/^  int day;$/;"	m	struct:__anon58
+day	menu.c	/^day()$/;"	f	file:
+day_max_login	../include/struct.h	/^  int day_max_login;$/;"	m	struct:__anon55
+death	../include/pip.h	/^  int death;		\/*¦º¬¡*\/$/;"	m	struct:playrule
+death	../include/pip.h	/^ int death;             \/*1:  ¦º¤` 2:©ß±ó 3:µ²§½*\/$/;"	m	struct:chicken
+def	../include/news.h	/^  PARSER *def;$/;"	m	struct:__anon15
+del_flag	../include/bbsnet.h	/^     mode,shm_flag=0,del_flag=0,view_flag=1,max_use;   $/;"	v
+delete_char	edit.c	/^delete_char(cur, col)$/;"	f	file:
+delete_line	edit.c	/^delete_line(line)$/;"	f	file:
+deny	../include/struct.h	/^  time_t deny;			\/* user violatelaw time *\/$/;"	m	struct:__anon23
+deny	../include/struct.h	/^  time_t deny;$/;"	m	struct:__anon48
+deny_add_email	acct.c	/^deny_add_email(he)$/;"	f	file:
+deny_forward	xover.c	/^deny_forward()$/;"	f	file:
+deny_log_email	acct.c	/^deny_log_email(mail,deny)$/;"	f
+des	../include/bbsctrl.h	/^  char *des;$/;"	m	struct:__anon10
+des	../include/bbsctrl.h	/^  char *des;$/;"	m	struct:__anon9
+desc	../include/struct.h	/^  char *desc;$/;"	m	struct:__anon67
+dex	../include/pipstruct.h	/^  ushort dex;			  \/* ±Ó±¶	  2 bytes *\/$/;"	m	struct:rpgrec
+dir	../include/struct.h	/^  char dir[0];			\/* data path *\/$/;"	m	struct:OverView
+dir	mail.c	/^  char dir[32];$/;"	m	struct:__anon2	file:
+dl_head	../lib/dl_lib.c	/^int dl_size, dl_head; $/;"	v
+dl_pool	../lib/dl_lib.c	/^DL_list  *dl_pool;$/;"	v
+dl_size	../lib/dl_lib.c	/^int dl_size, dl_head; $/;"	v
+dns_addr	../lib/dns_addr.c	/^dns_addr(name)$/;"	f
+dns_ident	../lib/dns_ident.c	/^dns_ident(sock, from, rhost, ruser)$/;"	f
+dns_init	../lib/dns.c	/^dns_init()$/;"	f
+dns_mx	../lib/dns_smtp.c	/^dns_mx(domain, mxlist)$/;"	f	file:
+dns_name	../lib/dns_name.c	/^dns_name(addr, name)$/;"	f
+dns_open	../lib/dns_open.c	/^dns_open(host, port)$/;"	f
+dns_query	../lib/dns.c	/^dns_query(name, qtype, ans)$/;"	f
+dns_smtp	../lib/dns_smtp.c	/^dns_smtp(host)$/;"	f
+do_cmd	popupmenu.c	/^do_cmd(MENU *mptr,XO *xo,int x,int y)$/;"	f	file:
+do_menu	popupmenu.c	/^do_menu(pmenu,xo,x,y)$/;"	f	file:
+do_post	post.c	/^do_post(title)$/;"	f	file:
+do_query	talk.c	/^do_query(acct, paling)$/;"	f	file:
+do_reply	post.c	/^do_reply(hdr)$/;"	f	file:
+doc	../include/news.h	/^  char doc[128];$/;"	m	struct:__anon15
+docls	visio.c	/^static int docls;$/;"	v	file:
+domain	../include/bbsnet.h	/^  char domain[32];$/;"	m	struct:data
+draw_ans_item	popupmenu.c	/^draw_ans_item(desc,mode,x,y,hotkey)$/;"	f	file:
+draw_item	popupmenu.c	/^draw_item(char *desc,int mode,int x,int y)$/;"	f	file:
+draw_menu	popupmenu.c	/^draw_menu(MENU *pmenu[20],int num,char *title,int x,int y,int cur)$/;"	f	file:
+draw_menu_des	popupmenu.c	/^draw_menu_des(char *desc[],char *title,int x,int y,int cur)$/;"	f	file:
+earthmagiclist	../include/pip.h	/^struct magicset earthmagiclist[] = {$/;"	v	typeref:struct:magicset
+easy	../include/rpg.h	/^{easy,medium,hard}; $/;"	e	enum:__anon17
+eatC	../include/pip.h	/^ int eatC;$/;"	m	struct:chicken
+eatD	../include/pip.h	/^ int eatD;$/;"	m	struct:chicken
+eatE	../include/pip.h	/^ int eatE;$/;"	m	struct:chicken
+eline	talk.c	/^  int sline, eline;$/;"	m	struct:__anon6	file:
+email	../include/struct.h	/^  char email[56];$/;"	m	struct:__anon48
+email	../include/struct.h	/^  char email[60];		\/* user email *\/$/;"	m	struct:__anon23
+email	../include/struct.h	/^  char email[60];$/;"	m	struct:__anon19
+email	../include/struct.h	/^  char email[60];$/;"	m	struct:__anon47
+emod	../include/struct.h	/^  uschar emod;			\/* end of modified data *\/$/;"	m	struct:screenline
+end	../include/struct.h	/^  CLOCK end[13]; $/;"	m	struct:__anon51
+end	../include/struct.h	/^  char end;$/;"	m	struct:VoteStudents
+end	../include/struct.h	/^  int end;$/;"	m	struct:__anon57
+endmodeall_purpose	../include/pip.h	/^struct newendingset endmodeall_purpose[] = {$/;"	v	typeref:struct:newendingset
+endmodeart	../include/pip.h	/^struct newendingset endmodeart[] = {$/;"	v	typeref:struct:newendingset
+endmodeblack	../include/pip.h	/^struct newendingset endmodeblack[] = {$/;"	v	typeref:struct:newendingset
+endmodecombat	../include/pip.h	/^struct newendingset endmodecombat[] = {$/;"	v	typeref:struct:newendingset
+endmodefamily	../include/pip.h	/^struct newendingset endmodefamily[] = {$/;"	v	typeref:struct:newendingset
+endmodemagic	../include/pip.h	/^struct newendingset endmodemagic[] = {$/;"	v	typeref:struct:newendingset
+endmodesocial	../include/pip.h	/^struct newendingset endmodesocial[] = {$/;"	v	typeref:struct:newendingset
+eso	../include/struct.h	/^  uschar eso;			\/* end of standout data *\/$/;"	m	struct:screenline
+etchics	../include/pip.h	/^ int etchics;		\/*¹D    ¼w*\/$/;"	m	struct:chicken
+etime	../include/struct.h	/^  time_t etime;$/;"	m	struct:NewBoardHeader
+every_B	xover.c	/^every_B()$/;"	f
+every_U	xover.c	/^every_U()$/;"	f
+every_Z	xover.c	/^every_Z()$/;"	f
+every_Z_Orig	xover.c	/^every_Z_Orig()$/;"	f	file:
+exp	../include/pip.h	/^ int exp;               \/*¸g Åç ­È*\/$/;"	m	struct:chicken
+expire	../include/hdr.h	/^  unsigned int expire;          \/* ¦Û°Ê§R°£ *\/$/;"	m	struct:__anon13
+expireday	../include/struct.h	/^  usint expireday;		\/* Expire old Post *\/$/;"	m	struct:BoardHeader
+expiremax	../include/struct.h	/^  usint expiremax;		\/* Expire Max Post *\/$/;"	m	struct:BoardHeader
+expiremin	../include/struct.h	/^  usint expiremin;		\/* Expire Min Post *\/$/;"	m	struct:BoardHeader
+f_cat	../lib/f_cat.c	/^f_cat(fpath, msg)$/;"	f
+f_cp	../lib/f_cp.c	/^f_cp(src, dst, mode)$/;"	f
+f_exlock	../lib/f_lock.c	/^f_exlock(fd)$/;"	f
+f_img	../lib/f_img.c	/^f_img(fpath, fsize)$/;"	f
+f_ln	../lib/f_ln.c	/^f_ln(src, dst)$/;"	f
+f_map	../lib/f_map.c	/^f_map(fpath, fsize)$/;"	f
+f_mode	../lib/f_mode.c	/^f_mode(fpath)$/;"	f
+f_mv	../lib/f_mv.c	/^f_mv(src, dst)$/;"	f
+f_new	../lib/f_new.c	/^f_new(fold, fnew)$/;"	f
+f_open	../lib/f_open.c	/^f_open(fpath)$/;"	f
+f_rm	../lib/f_rm.c	/^f_rm(fpath)$/;"	f
+f_suck	../lib/f_suck.c	/^f_suck(fp, fpath)$/;"	f
+f_unlock	../lib/f_lock.c	/^f_unlock(fd)$/;"	f
+fallinlove	../include/pip.h	/^ int fallinlove;	\/*ÅÊ·R«ü¼Æ*\/$/;"	m	struct:chicken
+family	../include/pip.h	/^ int family;		\/*®a¨Æµû»ù*\/$/;"	m	struct:chicken
+family	../include/pipstruct.h	/^  char family[20];		  \/* ®a±Ú	 20 bytes *\/$/;"	m	struct:rpgrec
+favorite_img	board.c	/^static char *favorite_img;$/;"	v	file:
+favorite_main	favorite.c	/^favorite_main()$/;"	f
+favorite_parse	favorite.c	/^favorite_parse(key)$/;"	f	file:
+favorite_sort	favorite.c	/^favorite_sort()$/;"	f	file:
+fd	../include/bbsnet.h	/^int fd;$/;"	v
+fd1	../include/bbsnet.h	/^FILE *fd1,*fd2;$/;"	v
+fd2	../include/bbsnet.h	/^FILE *fd1,*fd2;$/;"	v
+fightC	../include/pip.h	/^ int fightC;$/;"	m	struct:chicken
+fightD	../include/pip.h	/^ int fightD;$/;"	m	struct:chicken
+fightE	../include/pip.h	/^ int fightE;$/;"	m	struct:chicken
+filepath	../include/struct.h	/^  char filepath[77];$/;"	m	struct:__anon27
+film	../include/struct.h	/^  char film[MOVIE_SIZE];$/;"	m	struct:__anon35
+film_out	cache.c	/^film_out(tag, row)$/;"	f
+find_same_email	acct.c	/^find_same_email(mail,mode)    \/* mode : 1.find 2.add 3.del *\/$/;"	f
+findbucket	../lib/malloc-bsd.c	/^findbucket(freep, srchlen)$/;"	f	file:
+firemagiclist	../include/pip.h	/^struct magicset firemagiclist[] = {$/;"	v	typeref:struct:magicset
+first	../include/struct.h	/^  char first[4];$/;"	m	struct:VoteStudents
+first	post.c	/^  int first;$/;"	m	struct:__anon4	file:
+firstlogin	../include/struct.h	/^  time_t firstlogin;		\/* user first login time *\/$/;"	m	struct:__anon23
+fl	../lib/f_lock.c	/^static struct flock fl = {$/;"	v	typeref:struct:flock	file:
+flag	../include/bbsnet.h	/^     cursor_x, cursor_y, flag = 0,buf_string[80],bbs_book[80],$/;"	v
+flag	../include/struct.h	/^  usint  flag;			\/* user flag *\/$/;"	m	struct:UTMP
+food	../include/pip.h	/^ int food;		\/*­¹    ª«*\/$/;"	m	struct:chicken
+footer	menu.c	/^static char footer[160];$/;"	v	file:
+footlist	../include/pip.h	/^struct weapon footlist[] = {$/;"	v	typeref:struct:weapon
+force_board	board.c	/^force_board (void)$/;"	f
+fptr	../include/pip.h	/^	int (*fptr) ();$/;"	m	struct:pipcommands
+free	../lib/malloc-bsd.c	/^free(cp)$/;"	f
+friend_num	talk.c	/^static int friend_num,ofriend_num,pfriend_num,bfriend_num;\/* visor.991103: °O¿ý¥Ø«e¯¸¤W¦n¤Í¼Æ *\/$/;"	v	file:
+from	../include/struct.h	/^  char  from[30];		\/* remote host *\/$/;"	m	struct:UTMP
+fromhost	../include/global.h	/^VAR char fromhost[48];$/;"	v
+fshm	cache.c	/^FCACHE *fshm;$/;"	v
+fshm_init	cache.c	/^fshm_init()$/;"	f
+ftype	../include/struct.h	/^  char ftype;$/;"	m	struct:__anon28
+func	../include/struct.h	/^  int (*func) ();$/;"	m	struct:__anon42
+func	../include/struct.h	/^  void *func;$/;"	m	struct:__anon67
+fwcache	../include/struct.h	/^  BANMAIL fwcache[MAXFIREWALL];$/;"	m	struct:__anon38
+fwocache	../include/struct.h	/^  FW fwocache[MAXOFILEWALL];$/;"	m	struct:__anon39
+fwshm	cache.c	/^FWCACHE *fwshm;$/;"	v
+fwshm_init	cache.c	/^fwshm_init()$/;"	f
+fwshm_load	cache.c	/^fwshm_load()$/;"	f
+gbuf_malloc	gem.c	/^gbuf_malloc(num)$/;"	f	file:
+gem_add	gem.c	/^gem_add(xo)$/;"	f	file:
+gem_anchor	gem.c	/^gem_anchor(xo)$/;"	f	file:
+gem_body	gem.c	/^gem_body(xo)$/;"	f	file:
+gem_browse	gem.c	/^gem_browse(xo)$/;"	f	file:
+gem_buffer	gem.c	/^gem_buffer(dir, ghdr)$/;"	f	file:
+gem_cb	gem.c	/^static KeyFunc gem_cb[] =$/;"	v	file:
+gem_check	gem.c	/^gem_check(xo, fpath, op)$/;"	f	file:
+gem_copy	gem.c	/^gem_copy(xo)$/;"	f	file:
+gem_cross	gem.c	/^gem_cross(xo)$/;"	f	file:
+gem_delete	gem.c	/^gem_delete(xo)$/;"	f	file:
+gem_edit	gem.c	/^gem_edit(xo)$/;"	f	file:
+gem_extend	gem.c	/^gem_extend(xo, num)$/;"	f	file:
+gem_fpath	../lib/f_path.c	/^gem_fpath(fpath, board, fname)$/;"	f
+gem_gather	gem.c	/^gem_gather(xo)$/;"	f
+gem_head	gem.c	/^gem_head(xo)$/;"	f	file:
+gem_help	gem.c	/^gem_help(xo)$/;"	f	file:
+gem_init	gem.c	/^gem_init(xo)$/;"	f	file:
+gem_item	gem.c	/^gem_item(num, ghdr)$/;"	f	file:
+gem_load	gem.c	/^gem_load(xo)$/;"	f	file:
+gem_lock	gem.c	/^gem_lock(xo)$/;"	f	file:
+gem_log	gem.c	/^gem_log(folder, action, hdr)$/;"	f	file:
+gem_main	gem.c	/^gem_main()$/;"	f
+gem_mark	gem.c	/^gem_mark(xo)$/;"	f	file:
+gem_move	gem.c	/^gem_move(xo)$/;"	f	file:
+gem_paste	gem.c	/^gem_paste(xo)$/;"	f	file:
+gem_recycle	gem.c	/^gem_recycle(xo)$/;"	f	file:
+gem_state	gem.c	/^gem_state(xo)$/;"	f	file:
+gem_store	gem.c	/^gem_store()$/;"	f	file:
+gem_tag	gem.c	/^gem_tag(xo)$/;"	f	file:
+gem_title	gem.c	/^gem_title(xo)$/;"	f	file:
+gem_toggle	gem.c	/^gem_toggle(xo)$/;"	f	file:
+gem_way	gem.c	/^static int gem_way;$/;"	v	file:
+genpasswd	../lib/str_passwd.c	/^genpasswd(pw)$/;"	f
+get_color	popupmenu.c	/^get_color(char *s,int len,int *fc,int *bc,int *bbc)$/;"	f	file:
+getdtablesize	../include/bbs.h	/^#define getdtablesize(/;"	d
+getfield	acct.c	/^getfield(line, len, buf, desc, hint)$/;"	f	file:
+getloadavg	bbsd.c	/^getloadavg(cpu_load,mode)$/;"	f
+getsubject	post.c	/^getsubject(row, reply)$/;"	f
+getyx	visio.c	/^getyx(y, x)$/;"	f
+ginseng	../include/pip.h	/^ int ginseng;		\/*¤d¦~¤Hçx*\/$/;"	m	struct:chicken
+girl	../include/pip.h	/^  char *girl;		\/*¤k¥Íµ²§½ªºÂ¾·~*\/ $/;"	m	struct:newendingset
+gmap	../include/bbsctrl.h	/^GKEY_MAP gmap[] = {$/;"	v
+go_field	gem.c	/^go_field(str)$/;"	f	file:
+goodbye	menu.c	/^goodbye()$/;"	f	file:
+goodbye1	menu.c	/^goodbye1()$/;"	f	file:
+goodsofpip	../include/pip.h	/^struct goodsofpip$/;"	s
+goodsofpip	../include/pip.h	/^typedef struct goodsofpip goodsofpip;$/;"	t	typeref:struct:goodsofpip
+grad	../include/struct.h	/^  char *grad;$/;"	m	struct:__anon59
+grad	../include/struct.h	/^  char grad[3]; $/;"	m	struct:VoteStudents
+grade	../include/pip.h	/^  int grade;		\/*µû¤À*\/$/;"	m	struct:newendingset
+handle	../lib/dl_lib.c	/^  void *handle;$/;"	m	struct:__anon72	file:
+happy	../include/pip.h	/^ int happy;		\/*§Ö ¼Ö «×*\/$/;"	m	struct:chicken
+hard	../include/rpg.h	/^{easy,medium,hard}; $/;"	e	enum:__anon17
+has_error	../include/bbsnet.h	/^char max_page, page = 1, last_page=1,has_error = 0, $/;"	v
+hash32	../lib/hash32.c	/^hash32(str)$/;"	f
+hdr	../include/dns.h	/^  HEADER hdr;$/;"	m	union:__anon12
+hdr_fpath	../lib/hdr_fpath.c	/^hdr_fpath(fpath, folder, hdr)$/;"	f
+hdr_outs	mail.c	/^hdr_outs(hdr, cc)		\/* print HDR's subject *\/$/;"	f
+hdr_prune	../lib/hdr_prune.c	/^hdr_prune(fpath, nhead, ntail)$/;"	f
+hdr_prune	xover.c	/^hdr_prune(folder, nhead, ntail, post)$/;"	f
+hdr_reply	mail.c	/^hdr_reply(row, hdr)$/;"	f
+hdr_stamp	../lib/hdr_stamp.c	/^hdr_stamp(folder, token, hdr, fpath)$/;"	f
+headlist	../include/pip.h	/^struct weapon headlist[] = {$/;"	v	typeref:struct:weapon
+health	../include/rpg.h	/^char *health[5]={"[1;36m²@¾vµL¶Ë[m","[1;32mµy¦³¨ü¶Ë[m","[1;33m¦³ÂI¸~¤F[m","[1;35mº¡¨­¶Ë¤f[m","[1;31m©a©a¤@®§[m"};$/;"	v
+help	../include/bbsctrl.h	/^  int (*help)();$/;"	m	struct:__anon9
+herfyear	../include/struct.h	/^  BSTAT herfyear;$/;"	m	struct:__anon69
+hexp	../include/pip.h	/^ int hexp;		\/*¾Ô°«µû»ù*\/$/;"	m	struct:chicken
+history	menu.c	/^history()$/;"	f	file:
+holdon_fd	visio.c	/^int holdon_fd;			\/* Thor.0727: ¸õ¥Xchat&talk¼È¦svio_fd¥Î *\/$/;"	v
+homework	../include/pip.h	/^ int homework;		\/*±½¦a¬~¦ç*\/$/;"	m	struct:chicken
+host	../include/struct.h	/^  char host[26];$/;"	m	struct:__anon60
+hour	../include/struct.h	/^  BSTAT hour;$/;"	m	struct:__anon69
+hour	../include/struct.h	/^  int hour;$/;"	m	struct:__anon50
+hour_max_login	../include/struct.h	/^  int hour_max_login;$/;"	m	struct:__anon55
+hp	../include/pip.h	/^  int hp;		\/*±þ¶Ë¥Í©R¤O*\/$/;"	m	struct:magicset
+hp	../include/pip.h	/^  int hp;		\/*Åé¤O*\/$/;"	m	struct:playrule
+hp	../include/pip.h	/^ int hp;		\/*Åé    ¤O*\/$/;"	m	struct:chicken
+hp	../include/pipstruct.h	/^  int hp;			  \/* Åé¤O	  4 bytes *\/$/;"	m	struct:rpgrec
+hp	../include/rpg.h	/^  char name[20]; int LV; int maxhp; int hp; int Att;$/;"	m	struct:mobattr
+hp	../include/struct.h	/^        int hp;         \/*Åé¤O*\/$/;"	m	struct:__anon32
+hpmode	../include/pip.h	/^  int hpmode;		\/*0:´î¤Ö 1:¼W¥[ 2:³Ì¤j­È*\/$/;"	m	struct:magicset
+href	../include/news.h	/^  char href[128];$/;"	m	struct:__anon15
+hskill	../include/pip.h	/^ int hskill;		\/*¾Ô°«§Þ³N*\/$/;"	m	struct:chicken
+hskill	../include/pip.h	/^ int hskill;            \/*¾Ô°«§Þ³N*\/$/;"	m	struct:__anon16
+i	../lib/splay.c	/^  int i;$/;"	m	struct:__anon74	file:
+iac_count	visio.c	/^iac_count(current)$/;"	f	file:
+icemagiclist	../include/pip.h	/^struct magicset icemagiclist[] = {$/;"	v	typeref:struct:magicset
+ident	../include/struct.h	/^  char ident[108];		\/* user remote host ident *\/$/;"	m	struct:__anon23
+ident	../include/struct.h	/^  char ident[90];$/;"	m	struct:__anon55
+idle_time	../include/struct.h	/^  time_t idle_time;		\/* active time for last event *\/$/;"	m	struct:UTMP
+idno	../include/struct.h	/^  char idno[11];$/;"	m	struct:__anon25
+igetch	visio.c	/^igetch()$/;"	f
+in_addr	../include/struct.h	/^  u_long in_addr;		\/* Internet address *\/$/;"	m	struct:UTMP
+index	../include/news.h	/^  char index[32];$/;"	m	struct:__anon15
+init	../include/bbsctrl.h	/^  void (*init)();$/;"	m	struct:__anon9
+int_cmp	../lib/xsort.c	/^int_cmp(a, b)$/;"	f	file:
+int_cmp	cache.c	/^int_cmp(a, b)$/;"	f	file:
+int_cmp	talk.c	/^int_cmp(a, b)$/;"	f	file:
+intnode	../lib/splay.c	/^}      intnode;$/;"	t	typeref:struct:__anon74	file:
+ip	../include/bbsnet.h	/^  char ip[16];$/;"	m	struct:data
+ip	../include/struct.h	/^  char ip[16];$/;"	m	struct:__anon60
+ip_addr	../include/dns.h	/^}     ip_addr;$/;"	t	typeref:union:__anon11
+is_alnum	../lib/is_alnum.c	/^is_alnum(ch)$/;"	f
+is_alpha	../lib/is_alpha.c	/^is_alpha(ch)$/;"	f
+is_bad	talk.c	/^is_bad(userno)$/;"	f	file:
+is_badid	bbsd.c	/^is_badid(userid)$/;"	f	file:
+is_banmsg	talk.c	/^is_banmsg(userno)$/;"	f
+is_big5	popupmenu.c	/^is_big5(char *src,int pos,int mode)$/;"	f	file:
+is_bm	board.c	/^is_bm(list)$/;"	f	file:
+is_boardpal	talk.c	/^is_boardpal(up)$/;"	f
+is_bottompost	../lib/rec_bot.c	/^is_bottompost(hdr)$/;"	f	file:
+is_fname	../lib/is_fname.c	/^is_fname(str)$/;"	f
+is_fpath	../lib/is_fpath.c	/^is_fpath(path)$/;"	f
+is_pal	talk.c	/^is_pal(userno)$/;"	f
+is_quoted	edit.c	/^is_quoted(str)$/;"	f	file:
+isprint2	../include/global.h	/^#define	isprint2(/;"	d
+isreturn	../lib/str_decode.c	/^isreturn(c)$/;"	f	file:
+isspace	../lib/str_decode.c	/^isspace(c)$/;"	f	file:
+item	../include/struct.h	/^  CLASS_TABLE_ALERT_ITEM item[78];$/;"	m	struct:__anon64
+item_lenth	menu.c	/^int item_lenth[20]={0};$/;"	v
+join_up	edit.c	/^join_up(line)$/;"	f	file:
+justify	../include/struct.h	/^  char justify[60];		\/* FROM of replied justify mail *\/$/;"	m	struct:__anon23
+kar	../include/pipstruct.h	/^  ushort kar;			  \/* ¹B®ð	  2 bytes *\/$/;"	m	struct:rpgrec
+keeplog	acct.c	/^keeplog(fnlog, board, title, mode)$/;"	f
+key	../include/bbsctrl.h	/^  char key;$/;"	m	struct:__anon10
+key	../include/bbsctrl.h	/^  char key;$/;"	m	struct:__anon9
+key	../include/struct.h	/^  int key;			\/* key *\/$/;"	m	struct:OverView
+key	../include/struct.h	/^  int key;$/;"	m	struct:__anon42
+key	xover.c	/^  int key;			\/* key stroke *\/$/;"	m	struct:__anon8	file:
+key1	../include/pip.h	/^	int key1 ;$/;"	m	struct:pipcommands
+key2	../include/pip.h	/^	int key2 ;$/;"	m	struct:pipcommands
+keymap	xover.c	/^static KeyMap keymap[] =$/;"	v	file:
+l_art	../include/news.h	/^  char l_art[128];$/;"	m	struct:PARSER
+l_end	../include/news.h	/^  char l_end[128];$/;"	m	struct:PARSER
+l_hrefe	../include/news.h	/^  char l_hrefe[128];$/;"	m	struct:PARSER
+l_hrefs	../include/news.h	/^  char l_hrefs[128];$/;"	m	struct:PARSER
+l_new	../include/news.h	/^  char l_new[128];$/;"	m	struct:PARSER
+l_show	../include/news.h	/^  char l_show[128];$/;"	m	struct:PARSER
+l_start	../include/news.h	/^  char l_start[128];$/;"	m	struct:PARSER
+l_te	../include/news.h	/^  char l_te[128];$/;"	m	struct:PARSER
+l_ts	../include/news.h	/^  char l_ts[128];$/;"	m	struct:PARSER
+l_unshow	../include/news.h	/^  char l_unshow[128];$/;"	m	struct:PARSER
+last	../include/struct.h	/^  char last[4];$/;"	m	struct:VoteStudents
+last	post.c	/^  int last;$/;"	m	struct:__anon4	file:
+last_current	../include/bbsnet.h	/^unsigned int current = 1, counter = 1, last_current=1,w, y, z,$/;"	v
+last_page	../include/bbsnet.h	/^char max_page, page = 1, last_page=1,has_error = 0, $/;"	v
+lastcmd	visio.c	/^char lastcmd[MAXLASTCMD][80];$/;"	v
+lasthost	../include/struct.h	/^  char lasthost[32];		\/* user last login remote host *\/$/;"	m	struct:__anon23
+lastlogin	../include/struct.h	/^  time_t lastlogin;		\/* user last login time *\/$/;"	m	struct:__anon23
+lazy_delete	post.c	/^lazy_delete(hdr)$/;"	f	file:
+lday	../include/struct.h	/^  BSTAT lday[24];$/;"	m	struct:__anon69
+learnA	../include/pip.h	/^ int learnA;$/;"	m	struct:chicken
+learnB	../include/pip.h	/^ int learnB;$/;"	m	struct:chicken
+learnC	../include/pip.h	/^ int learnC;$/;"	m	struct:chicken
+learnD	../include/pip.h	/^ int learnD;$/;"	m	struct:chicken
+learnE	../include/pip.h	/^ int learnE;$/;"	m	struct:chicken
+leaving	../include/struct.h	/^        int leaving;    \/*Â÷¶}*\/$/;"	m	struct:__anon32
+left	../include/splay.h	/^  struct SplayNode *left;$/;"	m	struct:SplayNode	typeref:struct:SplayNode::SplayNode
+len	../include/struct.h	/^  uschar len;			\/* current length of line *\/$/;"	m	struct:screenline
+len	edit.c	/^  int len;$/;"	m	struct:textline	file:
+level	../include/pip.h	/^ int level;             \/*µ¥    ¯Å*\/$/;"	m	struct:chicken
+level	../include/pipstruct.h	/^  ushort level;			  \/* µ¥¯Å	  2 bytes *\/  $/;"	m	struct:rpgrec
+level	../include/struct.h	/^  usint level;$/;"	m	struct:__anon67
+levelup	../include/pip.h	/^}       levelup;$/;"	t	typeref:struct:__anon16
+lhandlist	../include/pip.h	/^struct weapon lhandlist[] = {$/;"	v	typeref:struct:weapon
+lhour	../include/struct.h	/^  BSTAT lhour[24];$/;"	m	struct:__anon69
+liveagain	../include/pip.h	/^ int liveagain;		\/*´_¬¡¦¸¼Æ*\/$/;"	m	struct:chicken
+ll_add	mail.c	/^ll_add(name)$/;"	f
+ll_del	mail.c	/^ll_del(name)$/;"	f
+ll_has	mail.c	/^ll_has(name)$/;"	f
+ll_head	mail.c	/^LinkList *ll_head;		\/* head of link list *\/$/;"	v
+ll_new	mail.c	/^ll_new()$/;"	f
+ll_out	mail.c	/^ll_out(row, column, msg)$/;"	f
+ll_tail	mail.c	/^static LinkList *ll_tail;	\/* tail of link list *\/$/;"	v	file:
+lmonth	../include/struct.h	/^  BSTAT lmonth[24];$/;"	m	struct:__anon69
+log_anonymous	post.c	/^log_anonymous(fname)$/;"	f
+log_modes	bbsd.c	/^log_modes()$/;"	f
+logattempt	bbsd.c	/^logattempt(type)$/;"	f	file:
+loginNotify	talk.c	/^loginNotify()$/;"	f
+login_abort	bbsd.c	/^login_abort(msg)$/;"	f	file:
+logitfile	acct.c	/^logitfile(file, key, msg)$/;"	f
+logtime	../include/struct.h	/^  time_t logtime;$/;"	m	struct:__anon45
+logtime	../include/struct.h	/^  time_t logtime;$/;"	m	struct:__anon46
+losee	../include/pip.h	/^ int losee;$/;"	m	struct:chicken
+lost	../include/struct.h	/^  int lost;$/;"	m	struct:__anon49
+love	../include/pip.h	/^ int love;		\/*·R    ¤ß*\/ $/;"	m	struct:chicken
+lover	../include/pip.h	/^ int lover;		\/*·R¤H*\/$/;"	m	struct:chicken
+lvup	../include/rpg.h	/^int lvup[5][7]={{0,3,2,1,3,2,2},$/;"	v
+lweek	../include/struct.h	/^  BSTAT lweek[24];$/;"	m	struct:__anon69
+m_biff	mail.c	/^m_biff(userno)$/;"	f
+m_bmset	acct.c	/^m_bmset()$/;"	f
+m_internet	mail.c	/^m_internet()$/;"	f
+m_newbrd	acct.c	/^m_newbrd()$/;"	f
+m_query	mail.c	/^m_query(userid)$/;"	f
+m_quota	mail.c	/^m_quota()$/;"	f
+m_register	acct.c	/^m_register()$/;"	f
+m_send	mail.c	/^m_send()$/;"	f
+m_setbrd	acct.c	/^m_setbrd(brd)$/;"	f	file:
+m_total_size	mail.c	/^m_total_size()$/;"	f
+m_trace	acct.c	/^m_trace()$/;"	f
+m_user	acct.c	/^m_user()$/;"	f
+m_verify	mail.c	/^m_verify()$/;"	f
+m_zip	mail.c	/^m_zip()$/;"	f
+magicmode	../include/pip.h	/^ int magicmode;		\/*Å]ªk«¬ºA*\/$/;"	m	struct:chicken
+magicset	../include/pip.h	/^struct magicset$/;"	s
+magicset	../include/pip.h	/^typedef struct magicset magicset;$/;"	t	typeref:struct:magicset
+mail_external	mail.c	/^mail_external(addr)$/;"	f
+mail_hold	mail.c	/^mail_hold(fpath, rcpt)$/;"	f	file:
+mail_list	mail.c	/^mail_list()$/;"	f
+mail_reply	mail.c	/^mail_reply(hdr)$/;"	f
+mail_send	mail.c	/^mail_send(rcpt, title)$/;"	f
+mail_stat	mail.c	/^mail_stat(mode)$/;"	f
+mail_sysop	mail.c	/^mail_sysop()$/;"	f
+mail_xo	mail.c	/^  XO mail_xo;$/;"	m	struct:__anon2	file:
+mailtime	../include/struct.h	/^  time_t mailtime;		\/* ±H«H®É¶¡ *\/$/;"	m	struct:__anon27
+main	../include/bbsctrl.h	/^  int (*main)();$/;"	m	struct:__anon10
+main	../include/bbsctrl.h	/^  int (*main)();$/;"	m	struct:__anon9
+main	../lib/splay.c	/^main(int argc, char *argv[])$/;"	f
+main	../lib/str_pat.c	/^main()$/;"	f
+main	../lib/xsort.c	/^main()$/;"	f
+main	bbsd.c	/^main(argc, argv)$/;"	f
+main_signals	bbsd.c	/^main_signals()$/;"	f	file:
+main_term	bbsd.c	/^main_term()$/;"	f	file:
+major	../include/struct.h	/^  char major[2];$/;"	m	struct:VoteStudents
+mak_dirs	../lib/mak_dirs.c	/^mak_dirs(fpath)$/;"	f
+mak_fpath	../lib/f_path.c	/^mak_fpath(str, key, name)$/;"	f	file:
+malloc	../lib/malloc-bsd.c	/^malloc(nbytes)$/;"	f
+malloc_error	../lib/malloc-bsd.c	/^#define	malloc_error(/;"	d	file:
+malloc_init	../lib/malloc-bsd.c	/^static int malloc_init;		\/* sbrk(0) to align page *\/$/;"	v	file:
+manners	../include/pip.h	/^ int manners;		\/*Â§    »ö*\/$/;"	m	struct:chicken
+map	../include/pip.h	/^  int map;		\/*¹ÏÀÉ*\/$/;"	m	struct:magicset
+map	../include/pip.h	/^  int map;		\/*¹ÏÀÉ*\/$/;"	m	struct:playrule
+map	../include/pip.h	/^  int map;		\/*¹ÏÀÉ*\/$/;"	m	struct:weapon
+map	xover.c	/^  int map;			\/* the mapped threading op-code *\/$/;"	m	struct:__anon8	file:
+match_getch	visio.c	/^match_getch()$/;"	f	file:
+match_title	visio.c	/^match_title()$/;"	f	file:
+mateid	../include/struct.h	/^  char  mateid[IDLEN + 1];	\/* partner's ID *\/$/;"	m	struct:UTMP
+max	../include/struct.h	/^  int max;			\/* max *\/$/;"	m	struct:OverView
+max_page	../include/bbsnet.h	/^char max_page, page = 1, last_page=1,has_error = 0, $/;"	v
+max_regist	../include/struct.h	/^  int max_regist;$/;"	m	struct:__anon55
+max_regist_old	../include/struct.h	/^  int max_regist_old;$/;"	m	struct:__anon55
+max_use	../include/bbsnet.h	/^     mode,shm_flag=0,del_flag=0,view_flag=1,max_use;   $/;"	v
+maxblt	../include/struct.h	/^  int maxblt;			\/* ¨C¤H¥i§ë´X²¼ *\/$/;"	m	struct:VoteControlHeader
+maxhp	../include/pip.h	/^  int maxhp; 		\/*MAXHP*\/$/;"	m	struct:playrule
+maxhp	../include/pip.h	/^ int maxhp;             \/*³Ì¤jÅé¤O*\/$/;"	m	struct:__anon16
+maxhp	../include/pip.h	/^ int maxhp;             \/*³Ì¤jÅé¤O*\/$/;"	m	struct:chicken
+maxhp	../include/rpg.h	/^  char name[20]; int LV; int maxhp; int hp; int Att;$/;"	m	struct:mobattr
+maxhp	../include/struct.h	/^        int maxhp;      \/*Åé¤O¤W­­*\/$/;"	m	struct:__anon32
+maxmp	../include/pip.h	/^  int maxmp;		\/*MAXMP*\/$/;"	m	struct:playrule
+maxmp	../include/pip.h	/^ int maxmp;             \/*³Ì¤jªk¤O*\/$/;"	m	struct:__anon16
+maxmp	../include/pip.h	/^ int maxmp;             \/*³Ì¤jªk¤O*\/$/;"	m	struct:chicken
+maxmp	../include/struct.h	/^        int maxmp;      \/*ªk¤O¤W­­*\/$/;"	m	struct:__anon32
+maxtoman	../include/pip.h	/^  int maxtoman;		\/*®w¦s¶q*\/$/;"	m	struct:royalset
+mbase	../include/struct.h	/^  BMW *mbase;			\/* sequential pointer for BMW *\/$/;"	m	struct:__anon36
+mbox_attr	mail.c	/^mbox_attr(type)$/;"	f	file:
+mbox_body	mail.c	/^mbox_body(xo)$/;"	f	file:
+mbox_browse	mail.c	/^mbox_browse(xo)$/;"	f	file:
+mbox_cb	mail.c	/^static KeyFunc mbox_cb[] =$/;"	v	file:
+mbox_check	mail.c	/^mbox_check()$/;"	f
+mbox_clean	mail.c	/^mbox_clean(xo)$/;"	f	file:
+mbox_delete	mail.c	/^mbox_delete(xo)$/;"	f	file:
+mbox_edit	mail.c	/^mbox_edit(xo)$/;"	f	file:
+mbox_forward	mail.c	/^mbox_forward(xo)$/;"	f	file:
+mbox_gem	mail.c	/^mbox_gem(xo)$/;"	f	file:
+mbox_head	mail.c	/^mbox_head(xo)$/;"	f	file:
+mbox_help	mail.c	/^mbox_help(xo)$/;"	f	file:
+mbox_init	mail.c	/^mbox_init(xo)$/;"	f	file:
+mbox_item	mail.c	/^mbox_item(pos, hdr)$/;"	f	file:
+mbox_load	mail.c	/^mbox_load(xo)$/;"	f	file:
+mbox_main	mail.c	/^mbox_main()$/;"	f
+mbox_mark	mail.c	/^mbox_mark(xo)$/;"	f	file:
+mbox_other	mail.c	/^mbox_other(xo)$/;"	f	file:
+mbox_reply	mail.c	/^mbox_reply(xo)$/;"	f	file:
+mbox_send	mail.c	/^mbox_send(xo)$/;"	f
+mbox_size	mail.c	/^mbox_size(xo)$/;"	f	file:
+mbox_stat	mail.c	/^mbox_stat(xo)$/;"	f	file:
+mbox_sysop	mail.c	/^mbox_sysop(xo)$/;"	f	file:
+mbox_tag	mail.c	/^mbox_tag(xo)$/;"	f	file:
+mbox_title	mail.c	/^mbox_title(xo)$/;"	f	file:
+mbox_undelete	mail.c	/^mbox_undelete(xo)$/;"	f	file:
+med3	../lib/xsort.c	/^med3(a, b, c, cmp)$/;"	f	file:
+medicine	../include/pip.h	/^ int medicine;          \/*ÆF    ªÛ*\/$/;"	m	struct:chicken
+medium	../include/rpg.h	/^{easy,medium,hard}; $/;"	e	enum:__anon17
+menu	menu.c	/^menu()$/;"	f
+menu_admin	menu.c	/^static MENU menu_admin[] =$/;"	v	file:
+menu_admin	menu.c	/^static MENU menu_admin[];$/;"	v	file:
+menu_boardadm	menu.c	/^static MENU menu_boardadm[] =$/;"	v	file:
+menu_everyz	xover.c	/^static MENU menu_everyz[] =$/;"	v	file:
+menu_game	menu.c	/^static MENU menu_game[] =$/;"	v	file:
+menu_load	menu.c	/^static MENU menu_load[] =$/;"	v	file:
+menu_mail	menu.c	/^static MENU menu_mail[] =$/;"	v	file:
+menu_main	menu.c	/^static MENU menu_main[] =$/;"	v	file:
+menu_main	menu.c	/^static MENU menu_main[];$/;"	v	file:
+menu_reset	menu.c	/^static MENU menu_reset[] =$/;"	v	file:
+menu_service	menu.c	/^static MENU menu_service[] =$/;"	v	file:
+menu_service	menu.c	/^static MENU menu_service[];$/;"	v	file:
+menu_song	menu.c	/^static MENU menu_song[] =$/;"	v	file:
+menu_talk	menu.c	/^static MENU menu_talk[] =$/;"	v	file:
+menu_tool	menu.c	/^static MENU menu_tool[] =$/;"	v	file:
+menu_treat	menu.c	/^static MENU menu_treat[] =$/;"	v	file:
+menu_user	menu.c	/^static MENU menu_user[] =$/;"	v	file:
+menu_xyz	menu.c	/^static MENU menu_xyz[] =$/;"	v	file:
+menu_yzu	menu.c	/^static MENU menu_yzu[] =$/;"	v	file:
+method	../include/struct.h	/^  char method;$/;"	m	struct:__anon27
+mexp	../include/pip.h	/^ int mexp;		\/*Å]ªkµû»ù*\/$/;"	m	struct:chicken
+mgets	more.c	/^mgets(fd)$/;"	f
+min	../include/struct.h	/^  int min;$/;"	m	struct:__anon50
+min	../lib/xsort.c	/^#define min(/;"	d	file:
+mm_getcharset	../lib/str_decode.c	/^mm_getcharset(str, charset, size)$/;"	f
+mm_getencode	../lib/str_decode.c	/^mm_getencode(str, code)$/;"	f
+mmdecode	../lib/str_decode.c	/^int mmdecode(src, encode, dst)$/;"	f
+mmdecode2	../lib/str_decode.c	/^int mmdecode2(src, encode, dst)$/;"	f
+mob	../include/pip.h	/^int mob[22][2];$/;"	v
+mobattr	../include/rpg.h	/^struct mobattr$/;"	s
+mobattr	../include/rpg.h	/^typedef struct mobattr mobattr;$/;"	t	typeref:struct:mobattr
+mode	../include/bbsnet.h	/^     mode,shm_flag=0,del_flag=0,view_flag=1,max_use;   $/;"	v
+mode	../include/struct.h	/^        int mode;       \/*´X¥NÂû*\/$/;"	m	struct:__anon32
+mode	../include/struct.h	/^  int 	  mode;$/;"	m	struct:__anon21
+mode	../include/struct.h	/^  int     mode;  time_t  time;$/;"	m	struct:__anon22
+mode	../include/struct.h	/^  int mode;$/;"	m	struct:__anon39
+mode	../include/struct.h	/^  int mode;$/;"	m	struct:__anon43
+mode	../include/struct.h	/^  int mode;$/;"	m	struct:__anon52
+mode	../include/struct.h	/^  int mode;$/;"	m	struct:__anon56
+mode	../include/struct.h	/^  int mode;$/;"	m	struct:__anon58
+mode	../include/struct.h	/^  int mode;$/;"	m	struct:__anon66
+mode	../include/struct.h	/^  uschar mode;			\/* status of line, as far as update *\/$/;"	m	struct:screenline
+mode	../include/struct.h	/^  usint  mode;			\/* bbsmode *\/$/;"	m	struct:UTMP
+mode	../include/struct.h	/^  usint mode;$/;"	m	struct:NewBoardHeader
+mode_lastchange	cache.c	/^time_t mode_lastchange; $/;"	v
+modelog	cache.c	/^UMODELOG modelog; $/;"	v
+modes	../include/bbsnet.h	/^struct termios modes, savemodes, tempmodes;$/;"	v	typeref:struct:termios
+money	../include/pip.h	/^   int money;		\/*ª÷¿ú*\/$/;"	m	struct:goodsofpip
+money	../include/pip.h	/^  int money;		\/*°]Ä_*\/$/;"	m	struct:playrule
+money	../include/pip.h	/^ int money;		\/*ª÷    ¿ú*\/$/;"	m	struct:chicken
+money	../include/rpg.h	/^  int Def; int MA; int MD; int EXP; int money;$/;"	m	struct:mobattr
+month	../include/pip.h	/^ int month;		\/*¥Í¤é  ¤ë*\/$/;"	m	struct:chicken
+month	../include/struct.h	/^  BSTAT month;$/;"	m	struct:__anon69
+month	../include/struct.h	/^  int month;$/;"	m	struct:__anon58
+month	menu.c	/^month()$/;"	f	file:
+more	more.c	/^more(fpath, footer)$/;"	f
+more_base	more.c	/^static int more_base, more_size, more_head;$/;"	v	file:
+more_goto	more.c	/^more_goto(fd, off)$/;"	f	file:
+more_head	more.c	/^static int more_base, more_size, more_head;$/;"	v	file:
+more_line	more.c	/^more_line(fd, buf)$/;"	f	file:
+more_pool	more.c	/^static uschar more_pool[MORE_BUFSIZE];$/;"	v	file:
+more_size	more.c	/^static int more_base, more_size, more_head;$/;"	v	file:
+move	visio.c	/^move(y, x)$/;"	f
+move_post	post.c	/^move_post(hdr, board, by_bm)	\/* ±N hdr ±q currboard ·h¨ì board *\/$/;"	f
+movie	menu.c	/^movie()$/;"	f
+mp	../include/pip.h	/^  int mp;		\/*ªk¤O*\/$/;"	m	struct:playrule
+mp	../include/pip.h	/^ int mp;		\/*ªk    ¤O*\/$/;"	m	struct:chicken
+mp	../include/pipstruct.h	/^  int mp;			  \/* ªk¤O	  4 bytes *\/$/;"	m	struct:rpgrec
+mp	../include/struct.h	/^        int mp;         \/*ªk¤O*\/$/;"	m	struct:__anon32
+mpool	../include/struct.h	/^  BMW mpool[BMW_MAX];$/;"	m	struct:__anon36
+mread	more.c	/^mread(fd, len)$/;"	f
+mresist	../include/pip.h	/^ int mresist;		\/*§ÜÅ]¯à¤O*\/$/;"	m	struct:chicken
+mresist	../include/struct.h	/^        int mresist;    \/*Å]ªk¨¾¿m*\/$/;"	m	struct:__anon32
+msg	../include/struct.h	/^        char msg[150];  \/*°T®§¤º®e*\/$/;"	m	struct:__anon32
+msg	../include/struct.h	/^  char msg[71];			\/* ¼ö°T *\/$/;"	m	struct:__anon31
+msg	../include/struct.h	/^  char msg[80];$/;"	m	struct:__anon26
+msg	menu.c	/^  char msg[356];$/;"	m	struct:__anon3	file:
+msg_pickup_way	talk.c	/^static char *msg_pickup_way[PICKUP_WAYS] =$/;"	v	file:
+msgbuy	../include/pip.h	/^   char *msgbuy;	\/*¥\\¥Î*\/$/;"	m	struct:goodsofpip
+msgcount	../include/struct.h	/^        int msgcount;   \/*°T®§­Ó¼Æ*\/$/;"	m	struct:__anon32
+msguse	../include/pip.h	/^   char *msguse;	\/*»¡©ú*\/$/;"	m	struct:goodsofpip
+mskill	../include/pip.h	/^ int mskill;		\/*Å]ªk§Þ³N*\/$/;"	m	struct:chicken
+mskill	../include/pip.h	/^ int mskill;            \/*Å]ªk§Þ³N*\/$/;"	m	struct:__anon16
+mslot	../include/struct.h	/^  BMW   *mslot[BMW_PER_USER];$/;"	m	struct:UTMP
+multi_reply	mail.c	/^#define multi_reply(/;"	d	file:
+multi_reply	mail.c	/^multi_reply(mhdr)$/;"	f	file:
+multi_send	mail.c	/^multi_send(title)$/;"	f	file:
+my_array	../include/bbsnet.h	/^*array,*shm_array,*my_array;$/;"	v	typeref:struct:data
+my_query	talk.c	/^my_query(userid, paling)$/;"	f
+my_send	mail.c	/^my_send(rcpt)$/;"	f
+myarray_size	../include/bbsnet.h	/^         myarray_size,array_size;$/;"	v
+myports	bbsd.c	/^static int myports[MAXPORTS] = {23, 3456, 3001 \/* , 3002, 3003 *\/ };$/;"	v	file:
+n2ansi	edit.c	/^n2ansi(nx, line)$/;"	f	file:
+n_bans	../include/struct.h	/^  usint n_bans;			\/* ¬ÝªOÀÉ«H²Ö­p times\/hour *\/$/;"	m	struct:BoardHeader
+n_bans	../include/struct.h	/^  usint n_bans;			\/* ¬ÝªOÀÉ«H²Ö­p times\/hour *\/$/;"	m	struct:__anon68
+n_news	../include/struct.h	/^  usint n_news;			\/* ¬ÝªOÂà«H²Ö­p times\/hour *\/$/;"	m	struct:BoardHeader
+n_news	../include/struct.h	/^  usint n_news;			\/* ¬ÝªOÂà«H²Ö­p times\/hour *\/$/;"	m	struct:__anon68
+n_posts	../include/struct.h	/^  usint n_posts;		\/* ¬ÝªOµoªí²Ö­p times\/hour *\/$/;"	m	struct:BoardHeader
+n_posts	../include/struct.h	/^  usint n_posts;		\/* ¬ÝªOµoªí²Ö­p times\/hour *\/$/;"	m	struct:__anon68
+n_reads	../include/struct.h	/^  usint n_reads;		\/* ¬ÝªO¾\\Åª²Ö­p times\/hour *\/$/;"	m	struct:BoardHeader
+n_reads	../include/struct.h	/^  usint n_reads;		\/* ¬ÝªO¾\\Åª²Ö­p times\/hour *\/$/;"	m	struct:__anon68
+name	../include/bbsnet.h	/^  char name[NAME + 2];$/;"	m	struct:data
+name	../include/news.h	/^  char name[32];$/;"	m	struct:PARSER
+name	../include/news.h	/^  char name[32];$/;"	m	struct:__anon15
+name	../include/pip.h	/^   char *name;		\/*¦W¦r*\/$/;"	m	struct:goodsofpip
+name	../include/pip.h	/^  char *name;           \/*¤ý¦Úªº¦W¦r*\/ $/;"	m	struct:royalset
+name	../include/pip.h	/^  char *name;           \/*¦W¦r*\/  $/;"	m	struct:weapon
+name	../include/pip.h	/^  char *name;           \/*Å]ªkªº¦W¦r*\/ $/;"	m	struct:magicset
+name	../include/pip.h	/^  char name[20];           \/*¦W¦r*\/  $/;"	m	struct:playrule
+name	../include/pip.h	/^ char name[20];		\/*©m    ¦W*\/$/;"	m	struct:chicken
+name	../include/rpg.h	/^  char name[20]; int LV; int maxhp; int hp; int Att;$/;"	m	struct:mobattr
+name	../include/struct.h	/^        char name[20];$/;"	m	struct:__anon32
+name	../include/struct.h	/^  char    name[IDLEN+1];$/;"	m	struct:__anon22
+name	../include/struct.h	/^  char name[20];$/;"	m	struct:__anon60
+name	../include/struct.h	/^  char name[30];$/;"	m	struct:__anon62
+name	../include/struct.h	/^  char name[9];$/;"	m	struct:__anon49
+name	../include/struct.h	/^  char name[IDLEN+1];$/;"	m	struct:__anon18
+name	../include/struct.h	/^  char name[IDLEN+1];$/;"	m	struct:__anon19
+needmaxhp	../include/pip.h	/^  int needmaxhp;	\/*»Ý­nhp*\/$/;"	m	struct:weapon
+needmaxmp	../include/pip.h	/^  int needmaxmp;	\/*»Ý­nmp*\/$/;"	m	struct:weapon
+needmode	../include/pip.h	/^  int needmode;		\/*»Ý­nªºmode*\/ \/*0:¤£»Ý­n 1:Â§»ö 2:½Í¦R*\/$/;"	m	struct:royalset
+needmp	../include/pip.h	/^  int needmp;		\/*»Ý­nªºªk¤O*\/$/;"	m	struct:magicset
+needspeed	../include/pip.h	/^  int needspeed;	\/*»Ý­nªºspeed*\/$/;"	m	struct:weapon
+needvalue	../include/pip.h	/^  int needvalue;	\/*»Ý­nªºvalue*\/$/;"	m	struct:royalset
+new	bbsd.c	/^  usint new;$/;"	m	struct:__anon1	file:
+newendingset	../include/pip.h	/^struct newendingset$/;"	s
+newendingset	../include/pip.h	/^typedef struct newendingset newendingset;$/;"	t	typeref:struct:newendingset
+next	../include/news.h	/^  struct PARSER *next;$/;"	m	struct:PARSER	typeref:struct:PARSER::PARSER
+next	../include/struct.h	/^  struct LinkList *next;$/;"	m	struct:LinkList	typeref:struct:LinkList::LinkList
+next	edit.c	/^  struct textline *next;$/;"	m	struct:textline	typeref:struct:textline::textline	file:
+nextf	../lib/malloc-bsd.c	/^static union overhead *nextf[NBUCKETS];$/;"	v	typeref:union:overhead	file:
+niamod	../include/struct.h	/^  char *niamod;			\/* reverse domain *\/$/;"	m	struct:__anon27
+nick	../include/hdr.h	/^  char nick[50];		\/* ¼ÊºÙ *\/$/;"	m	struct:__anon13
+nick	../include/pipstruct.h	/^  char nick[20];		  \/* «Ê¸¹	 20 bytes *\/$/;"	m	struct:rpgrec
+nodone	../include/pip.h	/^ int nodone;		\/*1:  ¥¼°µ*\/$/;"	m	struct:chicken
+nodone	../include/struct.h	/^        int nodone;     \/*§¹¦¨*\/$/;"	m	struct:__anon32
+not_addr	../lib/not_addr.c	/^not_addr(addr)$/;"	f
+notedata	../include/struct.h	/^}	notedata;$/;"	t	typeref:struct:__anon56
+now	../include/bbsnet.h	/^time_t now;$/;"	v
+num	../include/bbsnet.h	/^  unsigned int num;$/;"	m	struct:data
+num	../include/pip.h	/^   int num;		\/*½s¸¹*\/$/;"	m	struct:goodsofpip
+num	../include/pip.h	/^  char *num;		\/*¥N½X*\/$/;"	m	struct:royalset
+num	../include/struct.h	/^  int num;$/;"	m	struct:__anon47
+num	../include/struct.h	/^  int num;$/;"	m	struct:__anon61
+num_msg	../include/struct.h	/^  int   num_msg;		\/* receive messages *\/$/;"	m	struct:UTMP
+number	../include/struct.h	/^  int number; $/;"	m	struct:__anon38
+number	../include/struct.h	/^  int number;$/;"	m	struct:__anon37
+numemail	../include/struct.h	/^  int numemail;			\/* ±Hµo Inetrnet E-mail ¦¸¼Æ *\/$/;"	m	struct:__anon23
+numlogins	../include/struct.h	/^  int numlogins;		\/* user login times *\/$/;"	m	struct:__anon23
+numposts	../include/struct.h	/^  int numposts;			\/* user post times *\/$/;"	m	struct:__anon23
+nxt	../include/struct.h	/^  struct OverView *nxt;		\/* next *\/$/;"	m	struct:OverView	typeref:struct:OverView::OverView
+o_ansi	visio.c	/^#define	o_ansi(/;"	d	file:
+o_clear	visio.c	/^#define o_clear(/;"	d	file:
+o_cleol	visio.c	/^#define o_cleol(/;"	d	file:
+o_standdown	visio.c	/^#define o_standdown(/;"	d	file:
+o_standup	visio.c	/^#define o_standup(/;"	d	file:
+obj_id	../include/struct.h	/^  char obj_id[7];$/;"	m	struct:__anon49
+object	../include/pipstruct.h	/^  usint object;			  \/* ª«¥ó	  4 bytes *\/$/;"	m	struct:rpgrec
+observeshm_find	cache.c	/^observeshm_find(userno)$/;"	f
+observeshm_init	cache.c	/^observeshm_init()$/;"	f
+observeshm_load	cache.c	/^observeshm_load()$/;"	f
+ochar	visio.c	/^ochar(ch)$/;"	f	file:
+offense	../include/pip.h	/^ int offense;		\/*¸o    Ä^*\/$/;"	m	struct:chicken
+offset	../include/struct.h	/^  usint offset;			\/* offset for last active UTMP *\/$/;"	m	struct:__anon36
+oflush	visio.c	/^oflush()$/;"	f	file:
+ofriend_num	talk.c	/^static int friend_num,ofriend_num,pfriend_num,bfriend_num;\/* visor.991103: °O¿ý¥Ø«e¯¸¤W¦n¤Í¼Æ *\/$/;"	v	file:
+old	bbsd.c	/^  usint old;$/;"	m	struct:__anon1	file:
+old_col	visio.c	/^static int old_col, old_row, old_roll;$/;"	v	file:
+old_pos	visio.c	/^static int old_pos; \/* Thor.990401: ¦h¦s¤@­Ó *\/$/;"	v	file:
+old_roll	visio.c	/^static int old_col, old_row, old_roll;$/;"	v	file:
+old_row	visio.c	/^static int old_col, old_row, old_roll;$/;"	v	file:
+oldlen	../include/struct.h	/^  uschar oldlen;		\/* previous line length *\/$/;"	m	struct:screenline
+open	../include/bbsctrl.h	/^  int open;$/;"	m	struct:__anon10
+open	../include/bbsctrl.h	/^  int open;$/;"	m	struct:__anon9
+opts	../include/bbsctrl.h	/^  int (*opts)();$/;"	m	struct:__anon9
+oshm	cache.c	/^OCACHE *oshm;$/;"	v
+other	../include/struct.h	/^  char other[30];$/;"	m	struct:__anon62
+out_rle	cache.c	/^out_rle(str,film)$/;"	f	file:
+outc	visio.c	/^outc(ch)$/;"	f
+outgo_post	post.c	/^outgo_post(hdr, board)$/;"	f
+output	visio.c	/^output(str, len)$/;"	f	file:
+outs	../include/bbsctrl.h	/^  void (*outs)();$/;"	m	struct:__anon9
+outs	visio.c	/^outs(str)$/;"	f
+outx	../include/config.h	/^#define outx	/;"	d
+outx	visio.c	/^outx(str)$/;"	f
+outz	visio.c	/^outz(msg)$/;"	f
+ov_index	../lib/malloc-bsd.c	/^#define	ov_index	/;"	d	file:
+ov_magic	../lib/malloc-bsd.c	/^#define	ov_magic	/;"	d	file:
+ov_next	../lib/malloc-bsd.c	/^  union overhead *ov_next;	\/* when free *\/$/;"	m	union:overhead	typeref:union:overhead::overhead	file:
+overhead	../lib/malloc-bsd.c	/^union overhead$/;"	u	file:
+ovu	../lib/malloc-bsd.c	/^  }      ovu;$/;"	m	union:overhead	typeref:struct:overhead::__anon73	file:
+ovu_index	../lib/malloc-bsd.c	/^    u_char ovu_index;		\/* bucket # *\/$/;"	m	struct:overhead::__anon73	file:
+ovu_magic	../lib/malloc-bsd.c	/^    u_char ovu_magic;		\/* magic number *\/$/;"	m	struct:overhead::__anon73	file:
+owner	../include/hdr.h	/^  char owner[60];		\/* §@ªÌ (E-mail address) *\/$/;"	m	struct:__anon13
+owner	../include/struct.h	/^  char owner[129];		\/* Á|¿ì¤H *\/$/;"	m	struct:VoteControlHeader
+owner	../include/struct.h	/^  char owner[IDLEN +1];$/;"	m	struct:NewBoardHeader
+p	talk.c	/^  void (*p)();$/;"	v
+p_lines	visio.c	/^#define	p_lines	/;"	d	file:
+pad	../include/pipstruct.h	/^  char pad[164];$/;"	m	struct:rpgrec
+pad_draw	menu.c	/^pad_draw()$/;"	f	file:
+pad_view	menu.c	/^pad_view()$/;"	f
+page	../include/bbsnet.h	/^char max_page, page = 1, last_page=1,has_error = 0, $/;"	v
+page_requestor	talk.c	/^static char page_requestor[40];$/;"	v	file:
+pal_add	talk.c	/^pal_add(xo)$/;"	f	file:
+pal_body	talk.c	/^pal_body(xo)$/;"	f	file:
+pal_cache	talk.c	/^pal_cache()$/;"	f
+pal_cb	talk.c	/^KeyFunc pal_cb[] =$/;"	v
+pal_change	talk.c	/^pal_change(xo)$/;"	f	file:
+pal_count	talk.c	/^static int pal_count;$/;"	v	file:
+pal_delete	talk.c	/^pal_delete(xo)$/;"	f	file:
+pal_edit	talk.c	/^pal_edit(pal, echo)$/;"	f	file:
+pal_head	talk.c	/^pal_head(xo)$/;"	f	file:
+pal_help	talk.c	/^pal_help(xo)$/;"	f	file:
+pal_init	talk.c	/^pal_init(xo)$/;"	f	file:
+pal_item	talk.c	/^pal_item(num, pal)$/;"	f	file:
+pal_list	talk.c	/^pal_list(reciper)$/;"	f
+pal_load	talk.c	/^pal_load(xo)$/;"	f	file:
+pal_mail	talk.c	/^pal_mail(xo)$/;"	f	file:
+pal_max	../include/struct.h	/^  int   pal_max;		\/* friends max *\/$/;"	m	struct:UTMP
+pal_no	talk.c	/^  int pal_no;$/;"	m	struct:__anon5	file:
+pal_pool	talk.c	/^static int *pal_pool;$/;"	v	file:
+pal_query	talk.c	/^pal_query(xo)$/;"	f	file:
+pal_search	talk.c	/^pal_search(xo, step)$/;"	f	file:
+pal_search_backward	talk.c	/^pal_search_backward(xo)$/;"	f	file:
+pal_search_forward	talk.c	/^pal_search_forward(xo)$/;"	f	file:
+pal_ship	talk.c	/^static PAL_SHIP *pal_ship;$/;"	v	file:
+pal_sort	talk.c	/^pal_sort(xo)$/;"	f	file:
+pal_spool	../include/struct.h	/^  int   pal_spool[PAL_MAX];	\/* friends spool *\/$/;"	m	struct:UTMP
+pal_sync	talk.c	/^pal_sync(fpath)$/;"	f
+parser	../include/news.h	/^  PARSER *parser;$/;"	m	struct:__anon15
+part1_msg	../include/struct.h	/^  char part1_msg[60];              \/* ¤¶µü *\/$/;"	m	struct:__anon40
+part2_msg	../include/struct.h	/^  char part2_msg[60];              \/* °Ê§@ *\/  $/;"	m	struct:__anon40
+passbuf	bbsd.c	/^char passbuf[9];$/;"	v
+passwd	../include/struct.h	/^  char passwd[PASSLEN];		\/* user password crypt by DES *\/$/;"	m	struct:__anon23
+path	../include/news.h	/^  char path[128];$/;"	m	struct:__anon15
+path	../lib/dl_lib.c	/^  char *path;$/;"	m	struct:__anon72	file:
+pcopy	popupmenu.c	/^static void pcopy(char *buf,char *patten,int len)$/;"	f	file:
+perm_log	acct.c	/^perm_log(u, oldl)$/;"	f	file:
+perm_tbl	../include/perm.h	/^static char *perm_tbl[] = {$/;"	v
+pfriend_num	talk.c	/^static int friend_num,ofriend_num,pfriend_num,bfriend_num;\/* visor.991103: °O¿ý¥Ø«e¯¸¤W¦n¤Í¼Æ *\/$/;"	v	file:
+phone	../include/struct.h	/^  char phone[20];$/;"	m	struct:__anon25
+pic1	../include/pip.h	/^   int pic1;$/;"	m	struct:goodsofpip
+pic2	../include/pip.h	/^   int pic2;$/;"	m	struct:goodsofpip
+pickup_way	talk.c	/^static int pickup_way=1;$/;"	v	file:
+pid	../include/struct.h	/^	int pid;$/;"	m	struct:__anon32
+pid	../include/struct.h	/^  pid_t pid;			\/* process ID *\/$/;"	m	struct:UTMP
+pid_find	cache.c	/^pid_find(pid)$/;"	f
+pip	../include/struct.h	/^  PIPUTMP pip[PIP_MAX];$/;"	m	struct:__anon36
+pip	../include/struct.h	/^  pipdata *pip;$/;"	m	struct:UTMP
+pip1	../include/struct.h	/^	pipdata pip1;$/;"	m	struct:__anon33
+pip2	../include/struct.h	/^	pipdata pip2;$/;"	m	struct:__anon33
+pipcommands	../include/pip.h	/^struct pipcommands$/;"	s
+pipcommands	../include/pip.h	/^typedef struct pipcommands pipcommands;$/;"	t	typeref:struct:pipcommands
+pipdata	../include/struct.h	/^}       pipdata; $/;"	t	typeref:struct:__anon32
+pipfoodlist	../include/pip.h	/^struct goodsofpip pipfoodlist[] = {$/;"	v	typeref:struct:goodsofpip
+pipmedicinelist	../include/pip.h	/^struct goodsofpip pipmedicinelist[] = {$/;"	v	typeref:struct:goodsofpip
+pipmode	../include/struct.h	/^        int pipmode;    \/*ª¬ºA*\/$/;"	m	struct:__anon32
+pipotherlist	../include/pip.h	/^struct goodsofpip pipotherlist[] = {$/;"	v	typeref:struct:goodsofpip
+playrule	../include/pip.h	/^struct playrule$/;"	s
+playrule	../include/pip.h	/^typedef struct playrule playrule;$/;"	t	typeref:struct:playrule
+playtool	../include/pip.h	/^ int playtool; 		\/*ª±    ¨ã*\/$/;"	m	struct:chicken
+pmap	../include/bbsctrl.h	/^PKEY_MAP pmap[] = {$/;"	v
+pmsg	popupmenu.c	/^int pmsg(char *msg)$/;"	f
+popmax	menu.c	/^popmax()$/;"	f	file:
+popupmenu	popupmenu.c	/^popupmenu(MENU pmenu[],XO *xo,int x,int y)$/;"	f
+popupmenu_ans	popupmenu.c	/^popupmenu_ans(char *desc[],char *title,int x,int y)$/;"	f
+port	../include/bbsnet.h	/^  char port[6];$/;"	m	struct:data
+port	../include/news.h	/^  int port;$/;"	m	struct:__anon15
+port	../include/struct.h	/^  char port[6];$/;"	m	struct:__anon60
+pos	../include/struct.h	/^  int pos;			\/* current position *\/$/;"	m	struct:OverView
+post_add	post.c	/^post_add(xo)$/;"	f	file:
+post_attr	post.c	/^post_attr(fhdr)$/;"	f	file:
+post_ban_mail	post.c	/^post_ban_mail(xo)$/;"	f
+post_body	post.c	/^post_body(xo)$/;"	f	file:
+post_bottom	post.c	/^post_bottom(xo)$/;"	f	file:
+post_brdtitle	post.c	/^post_brdtitle(xo)$/;"	f	file:
+post_browse	post.c	/^post_browse(xo)$/;"	f	file:
+post_cb	post.c	/^KeyFunc post_cb[] =$/;"	v
+post_complete	post.c	/^post_complete(xo)$/;"	f	file:
+post_cross	post.c	/^post_cross(xo)$/;"	f
+post_cross_terminator	post.c	/^post_cross_terminator(xo)	\/* Thor.0521: ²×·¥¤å³¹¤jªk *\/$/;"	f	file:
+post_delete	post.c	/^post_delete(xo)$/;"	f	file:
+post_edit	post.c	/^post_edit(xo)$/;"	f
+post_expire	post.c	/^post_expire(xo)$/;"	f	file:
+post_gem	post.c	/^post_gem(xo)$/;"	f
+post_head	post.c	/^post_head(xo)$/;"	f	file:
+post_help	post.c	/^post_help(xo)$/;"	f	file:
+post_history	post.c	/^post_history(xo, hdr)          \/* ±N hdr ³o½g¥[¤J brh *\/$/;"	f
+post_init	post.c	/^post_init(xo)$/;"	f	file:
+post_item	post.c	/^post_item(num, hdr)$/;"	f	file:
+post_load	post.c	/^post_load(xo)$/;"	f	file:
+post_lock	post.c	/^post_lock(xo)$/;"	f	file:
+post_mail	banmail.c	/^post_mail()$/;"	f
+post_mark	post.c	/^post_mark(xo)$/;"	f	file:
+post_memo	post.c	/^post_memo(xo)$/;"	f	file:
+post_memo_edit	post.c	/^post_memo_edit(xo)$/;"	f	file:
+post_modetype	../include/struct.h	/^   int post_modetype;$/;"	m	struct:__anon71
+post_post	post.c	/^post_post(xo)$/;"	f	file:
+post_recommend	post.c	/^post_recommend(xo)$/;"	f
+post_recommend_cleanid	post.c	/^post_recommend_cleanid(fname, userid)$/;"	f	file:
+post_recommend_options	post.c	/^post_recommend_options(xo)$/;"	f	file:
+post_reply	post.c	/^post_reply(xo)$/;"	f	file:
+post_spam	post.c	/^post_spam(xo)$/;"	f	file:
+post_state	post.c	/^post_state(xo)$/;"	f	file:
+post_switch	post.c	/^post_switch(xo)$/;"	f	file:
+post_tag	post.c	/^post_tag(xo)$/;"	f
+post_title	post.c	/^post_title(xo)$/;"	f
+post_undelete	post.c	/^post_undelete(xo)$/;"	f	file:
+post_unexpire	post.c	/^post_unexpire(xo)$/;"	f	file:
+post_visit	post.c	/^post_visit(xo)$/;"	f	file:
+post_xcross	post.c	/^post_xcross(xo)$/;"	f	file:
+postlevel	../include/struct.h	/^  usint postlevel;		\/* µoªí¤å³¹ªºÅv­­ *\/$/;"	m	struct:BoardHeader
+prev	edit.c	/^  struct textline *prev;$/;"	m	struct:textline	typeref:struct:textline::textline	file:
+printint	../lib/splay.c	/^printint(void *a)$/;"	f
+prints	visio.c	/^prints(char *fmt, ...)$/;"	f
+profess_img	board.c	/^static char *profess_img;$/;"	v	file:
+proxy	../include/news.h	/^  char proxy[32];$/;"	m	struct:__anon15
+proxyport	../include/news.h	/^  int proxyport;$/;"	m	struct:__anon15
+pseudo_handler	../lib/dns_ident.c	/^pseudo_handler()        \/* Thor.991215: for timeout *\/$/;"	f	file:
+pwbuf	../lib/str_passwd.c	/^static char pwbuf[PASSLEN];$/;"	v	file:
+qp_code	../lib/str_decode.c	/^qp_code(x)$/;"	f	file:
+querybuf	../include/dns.h	/^}     querybuf;			\/* response of DNS query *\/$/;"	t	typeref:union:__anon12
+quote_check	edit.c	/^quote_check()$/;"	f	file:
+quote_file	../include/global.h	/^VAR char quote_file[80];$/;"	v
+quote_line	edit.c	/^quote_line(str, qlimit)$/;"	f	file:
+quote_nick	../include/global.h	/^VAR char quote_nick[80];$/;"	v
+quote_user	../include/global.h	/^VAR char quote_user[80];$/;"	v
+race	../include/pipstruct.h	/^  uschar race;			  \/* ºØ±Ú	  1 bytes *\/$/;"	m	struct:rpgrec
+radix32	../lib/radix32.c	/^char radix32[32] = {$/;"	v
+rcpt	../include/struct.h	/^  char rcpt[60];$/;"	m	struct:__anon27
+readlevel	../include/struct.h	/^  usint readlevel;		\/* ¾\\Åª¤å³¹ªºÅv­­ *\/$/;"	m	struct:BoardHeader
+realloc	../lib/malloc-bsd.c	/^realloc(cp, nbytes)$/;"	f
+realname	../include/struct.h	/^  char  realname[20];$/;"	m	struct:UTMP
+realname	../include/struct.h	/^  char realname[20];		\/* user realname *\/$/;"	m	struct:__anon23
+realname	../include/struct.h	/^  char realname[20];$/;"	m	struct:__anon25
+reaper	bbsd.c	/^reaper()$/;"	f	file:
+rec_add	../lib/rec_add.c	/^rec_add(fpath, data, size)$/;"	f
+rec_bot	../lib/rec_bot.c	/^rec_bot(fpath, data, size)      \/* amaki.040715: ´O¤J¦¡¼gÀÉ *\/$/;"	f
+rec_del	../lib/rec_del.c	/^rec_del(data, size, pos, fchk, fdel)$/;"	f
+rec_get	../lib/rec_get.c	/^rec_get(fpath, data, size, pos)$/;"	f
+rec_ins	../lib/rec_ins.c	/^rec_ins(fpath, data, size, pos, num)$/;"	f
+rec_loc	../lib/rec_loc.c	/^rec_loc(data, size, fchk)$/;"	f
+rec_mov	../lib/rec_mov.c	/^rec_mov(data, size, from, to)$/;"	f
+rec_num	../lib/rec_num.c	/^rec_num(fpath, size)$/;"	f
+rec_put	../lib/rec_put.c	/^rec_put(fpath, data, size, pos)$/;"	f
+recno	../include/struct.h	/^  int recno;$/;"	m	struct:__anon44
+recommend	../include/hdr.h	/^  char recommend;		\/* ±ÀÂË¤å³¹ *\/$/;"	m	struct:__anon13
+record_recommend	post.c	/^record_recommend(const int chrono, const char * const text)$/;"	f
+recver	../include/struct.h	/^  int recver;			\/* called userno *\/$/;"	m	struct:__anon31
+refresh	visio.c	/^refresh()$/;"	f
+rel_move	visio.c	/^rel_move(new_col, new_row)$/;"	f	file:
+relation	../include/pip.h	/^ int relation;		\/*¨â¤HÃö«Y*\/$/;"	m	struct:chicken
+remove_perm	board.c	/^remove_perm()$/;"	f
+reply	../include/struct.h	/^  char reply[61];$/;"	m	struct:__anon25
+report	acct.c	/^report(s)$/;"	f
+request	../include/struct.h	/^  int request;			\/* ÂIºq¨t²Î *\/$/;"	m	struct:__anon23
+reserve	../include/hdr.h	/^  char reserve[11];		\/* «O¯d *\/$/;"	m	struct:__anon13
+reserve	../include/struct.h	/^  char	reserve[64];$/;"	m	struct:NewBoardHeader
+reserve	../include/struct.h	/^  char  reserve[100];		\/* «O¯d¥¼¥Î *\/$/;"	m	struct:BoardHeader
+reserve	../include/struct.h	/^  char reserve[232];$/;"	m	struct:__anon58
+reserve	../include/struct.h	/^  char reserve[28];		\/* «O¯d *\/$/;"	m	struct:__anon68
+reserve	../include/struct.h	/^  char reserve[44];$/;"	m	struct:__anon65
+reset_utmp	talk.c	/^reset_utmp()$/;"	f	file:
+resetbrd	menu.c	/^resetbrd()$/;"	f	file:
+resist	../include/pip.h	/^  int resist;		\/*¨¾Å@*\/$/;"	m	struct:playrule
+resist	../include/pip.h	/^  int resist;		\/*¨¾Å@*\/$/;"	m	struct:weapon
+resist	../include/pip.h	/^ int resist;		\/*¨¾ ¿m ¤O*\/$/;"	m	struct:chicken
+resist	../include/pip.h	/^ int resist;            \/*¨¾ ¿m ¤O*\/$/;"	m	struct:__anon16
+resist	../include/struct.h	/^        int resist;     \/*¨¾¿m*\/$/;"	m	struct:__anon32
+resistmore	../include/struct.h	/^        int resistmore; \/*¨¾¿m«¬ºA*\/$/;"	m	struct:__anon32
+restore_foot	visio.c	/^restore_foot(slp)$/;"	f
+resultmanlist	../include/pip.h	/^struct playrule resultmanlist[] = {$/;"	v	typeref:struct:playrule
+rhandlist	../include/pip.h	/^struct weapon rhandlist[] = {$/;"	v	typeref:struct:weapon
+right	../include/splay.h	/^  struct SplayNode *right;$/;"	m	struct:SplayNode	typeref:struct:SplayNode::SplayNode
+rm_dir	../lib/f_rm.c	/^rm_dir(fpath)$/;"	f	file:
+rname	../include/rpg.h	/^char *rname[7] = $/;"	v
+roll	visio.c	/^static int roll;$/;"	v	file:
+room	../include/struct.h	/^  char room[20];$/;"	m	struct:__anon62
+room	../include/struct.h	/^  char room[20];$/;"	m	struct:__anon63
+royalA	../include/pip.h	/^ int royalA;		\/*from¦u½Ã*\/$/;"	m	struct:chicken
+royalB	../include/pip.h	/^ int royalB;		\/*fromªñ½Ã*\/$/;"	m	struct:chicken
+royalC	../include/pip.h	/^ int royalC;		\/*from±N­x*\/$/;"	m	struct:chicken
+royalD	../include/pip.h	/^ int royalD;		\/*from¤j¦Ú*\/$/;"	m	struct:chicken
+royalE	../include/pip.h	/^ int royalE;		\/*from²½¥q*\/ 		$/;"	m	struct:chicken
+royalF	../include/pip.h	/^ int royalF;		\/*fromÃd¦m*\/$/;"	m	struct:chicken
+royalG	../include/pip.h	/^ int royalG;		\/*from¤ý¦m*\/$/;"	m	struct:chicken
+royalH	../include/pip.h	/^ int royalH;  		\/*from°ê¤ý*\/$/;"	m	struct:chicken
+royalI	../include/pip.h	/^ int royalI;		\/*from¤p¤¡*\/$/;"	m	struct:chicken
+royalJ	../include/pip.h	/^ int royalJ;		\/*from¤ý¤l*\/$/;"	m	struct:chicken
+royallist	../include/pip.h	/^struct royalset royallist[] = {$/;"	v	typeref:struct:royalset
+royalset	../include/pip.h	/^struct royalset$/;"	s
+royalset	../include/pip.h	/^typedef struct royalset royalset;$/;"	t	typeref:struct:royalset
+rpgrec	../include/pipstruct.h	/^struct rpgrec$/;"	s
+rpgrec	../include/pipstruct.h	/^typedef struct rpgrec rpgrec;$/;"	t	typeref:struct:rpgrec
+rscroll	visio.c	/^rscroll()$/;"	f
+rtime	../include/struct.h	/^  time_t rtime;$/;"	m	struct:__anon25
+rusername	bbsd.c	/^\/* static *\/ char rusername[40];$/;"	v
+s_menu	../include/skin.h	/^VAR void (*s_menu)();$/;"	v
+samehour_max_login	../include/struct.h	/^  int samehour_max_login;$/;"	m	struct:__anon55
+samehour_max_login_old	../include/struct.h	/^  int samehour_max_login_old;$/;"	m	struct:__anon55
+samehour_max_time	../include/struct.h	/^  time_t samehour_max_time;$/;"	m	struct:__anon55
+satisfy	../include/pip.h	/^ int satisfy;		\/*º¡ ·N «×*\/$/;"	m	struct:chicken
+save_foot	visio.c	/^save_foot(slp)$/;"	f
+savemodes	../include/bbsnet.h	/^struct termios modes, savemodes, tempmodes;$/;"	v	typeref:struct:
+scan_register_form	acct.c	/^scan_register_form(fd)$/;"	f	file:
+screenline	../include/struct.h	/^typedef struct screenline$/;"	s
+screenline	../include/struct.h	/^}          screenline;$/;"	t	typeref:struct:screenline
+scroll	visio.c	/^scroll()$/;"	f
+scrollcnt	visio.c	/^static int scrollcnt, tc_col, tc_row;$/;"	v	file:
+seeA	../include/pip.h	/^ int seeA;$/;"	m	struct:chicken
+seeB	../include/pip.h	/^ int seeB;$/;"	m	struct:chicken
+seeC	../include/pip.h	/^ int seeC;$/;"	m	struct:chicken
+seeD	../include/pip.h	/^ int seeD;$/;"	m	struct:chicken
+seeE	../include/pip.h	/^ int seeE;$/;"	m	struct:chicken
+seek_log	post.c	/^seek_log(title,state)$/;"	f
+seek_log_email	acct.c	/^seek_log_email(mail,mode)$/;"	f	file:
+seeroyalJ	../include/pip.h	/^ int seeroyalJ;		\/*¬O§_¤w¸g¬Ý¹L¤ý¤l¤F*\/$/;"	m	struct:chicken
+select_mode	acct.c	/^select_mode(adm)$/;"	f	file:
+select_title	edit.c	/^select_title(title)$/;"	f	file:
+sell	../include/pip.h	/^  int sell;		\/*½æ»ù*\/$/;"	m	struct:weapon
+sem_init	cache.c	/^sem_init()$/;"	f
+sem_lock	cache.c	/^sem_lock(op)$/;"	f	file:
+send_request	acct.c	/^send_request()$/;"	f	file:
+sender	../include/struct.h	/^  char sender[IDLEN + 1];$/;"	m	struct:__anon27
+sender	../include/struct.h	/^  int sender;			\/* calling userno *\/$/;"	m	struct:__anon31
+server	../include/news.h	/^  char server[32];$/;"	m	struct:__anon15
+server	../include/struct.h	/^  char *server;$/;"	m	struct:__anon59
+servo_usage	bbsd.c	/^servo_usage()$/;"	f	file:
+setdirpath	../lib/str_fpath.c	/^setdirpath(fpath, direct, fname)$/;"	f
+setperm	acct.c	/^setperm(level)$/;"	f	file:
+sex	../include/pip.h	/^ int sex;		\/*©Ê    §O 1:¡ñ   2:¡ð  *\/$/;"	m	struct:chicken
+sex	../include/struct.h	/^  int sex;$/;"	m	struct:__anon58
+ship	../include/struct.h	/^  char ship[46];$/;"	m	struct:__anon28
+ship	../include/struct.h	/^  char ship[46];$/;"	m	struct:__anon29
+ship	talk.c	/^  char ship[46];$/;"	m	struct:__anon5	file:
+shit	../include/pip.h	/^ int shit;		\/*²M ¼ä «×*\/ $/;"	m	struct:chicken
+shm_array	../include/bbsnet.h	/^*array,*shm_array,*my_array;$/;"	v	typeref:struct:data
+shm_flag	../include/bbsnet.h	/^     mode,shm_flag=0,del_flag=0,view_flag=1,max_use;   $/;"	v
+shm_key	../include/bbsnet.h	/^unsigned int shm_key;$/;"	v
+shm_new	../lib/shm.c	/^shm_new(shmkey, shmsize)$/;"	f
+shmid	../include/bbsnet.h	/^int shmid;$/;"	v
+shmseg	../include/bbsnet.h	/^struct shmid_ds shmseg;$/;"	v	typeref:struct:shmid_ds
+shot	../include/struct.h	/^  int shot[MOVIE_MAX]; \/* Thor.980805: ¥i¯àÁÙ­n¦A¥[1,¦]¦X²z½d³ò¬°0..MOVIE_MAX *\/$/;"	m	struct:__anon35
+showplans	talk.c	/^showplans(userid)$/;"	f	file:
+sick	../include/pip.h	/^ int sick;		\/*¯f    ®ð*\/$/;"	m	struct:chicken
+signature	../include/struct.h	/^  uschar signature;		\/* user signature number *\/$/;"	m	struct:__anon23
+site	../include/news.h	/^  char site[32];$/;"	m	struct:__anon15
+site_fake	gem.c	/^site_fake(s)$/;"	f	file:
+sk_windtop_init	menu.c	/^sk_windtop_init()$/;"	f	file:
+skill	../include/pipstruct.h	/^  usint skill;			  \/* §Þ¯à	  4 bytes *\/$/;"	m	struct:rpgrec
+skin_main	menu.c	/^MENU skin_main[] =$/;"	v
+sl	popupmenu.c	/^static screenline sl[24];$/;"	v	file:
+sline	talk.c	/^  int sline, eline;$/;"	m	struct:__anon6	file:
+smod	../include/struct.h	/^  uschar smod;			\/* start of modified data *\/$/;"	m	struct:screenline
+snowgrass	../include/pip.h	/^ int snowgrass;		\/*¤Ñ¤s³·½¬*\/$/;"	m	struct:chicken
+social	../include/pip.h	/^ int social;		\/*ªÀ¥æµû»ù*\/$/;"	m	struct:chicken
+sockport	../include/struct.h	/^  int   sockport;		\/* socket port for talk *\/$/;"	m	struct:UTMP
+special	../include/pip.h	/^  char special[5];	\/*¯S§O*\/  \/*1:©È¤õ 2:©È¦B *\/$/;"	m	struct:playrule
+special	../include/pip.h	/^  int special;		\/*¯S§O*\/$/;"	m	struct:weapon
+specialmagic	../include/pip.h	/^ int specialmagic;	\/*¯S®íÅ]ªk*\/$/;"	m	struct:chicken
+specialmagiclist	../include/pip.h	/^struct magicset specialmagiclist[] = {$/;"	v	typeref:struct:magicset
+speech	../include/pip.h	/^ int speech;		\/*½Í	¦R*\/$/;"	m	struct:chicken
+speed	../include/pip.h	/^  int speed;		\/*³t«×*\/$/;"	m	struct:playrule
+speed	../include/pip.h	/^  int speed;		\/*³t«×*\/$/;"	m	struct:weapon
+speed	../include/pip.h	/^ int speed;		\/*³t    «×*\/$/;"	m	struct:chicken
+speed	../include/pip.h	/^ int speed;             \/*³t    «×*\/$/;"	m	struct:__anon16
+speed	../include/struct.h	/^        int speed;      \/*³t«×*\/$/;"	m	struct:__anon32
+splay_free	../lib/splay.c	/^splay_free(SplayNode * top, void (*data_free) (void *))$/;"	f
+splay_in	../lib/splay.c	/^splay_in(top, data, compare)$/;"	f
+splay_out	../lib/splay.c	/^splay_out(SplayNode * top, void (*data_out) ())$/;"	f
+sso	../include/struct.h	/^  uschar sso;			\/* start of standout data *\/$/;"	m	struct:screenline
+stamp	../include/hdr.h	/^  time_t stamp;			\/* ¥¼Åª¼Ð°O *\/$/;"	m	struct:__anon13
+standoutput	visio.c	/^standoutput(slp, ds, de)$/;"	f	file:
+start	../include/struct.h	/^  CLOCK start[13];$/;"	m	struct:__anon51
+start	../include/struct.h	/^  int start;$/;"	m	struct:__anon57
+start_daemon	bbsd.c	/^start_daemon(port)$/;"	f	file:
+stat_data	../include/bbsnet.h	/^struct stat stat_data;$/;"	v	typeref:struct:stat
+stateA	../include/pip.h	/^ int stateA;$/;"	m	struct:chicken
+stateB	../include/pip.h	/^ int stateB;$/;"	m	struct:chicken
+stateC	../include/pip.h	/^ int stateC;$/;"	m	struct:chicken
+stateD	../include/pip.h	/^ int stateD;$/;"	m	struct:chicken
+stateE	../include/pip.h	/^ int stateE;$/;"	m	struct:chicken
+staytime	../include/struct.h	/^  time_t staytime;		\/* user total stay time *\/$/;"	m	struct:__anon23
+str	../include/pipstruct.h	/^  ushort str;			  \/* ¤O¶q	  2 bytes *\/$/;"	m	struct:rpgrec
+str	../include/xchat.h	/^     char **str;$/;"	v
+str_add	../lib/str_add.c	/^str_add(dst, src)$/;"	f
+str_ansi	../lib/str_ansi.c	/^str_ansi(dst, str, max)         \/* strip ANSI code *\/$/;"	f
+str_cat	../lib/str_cat.c	/^str_cat(dst, s1, s2)$/;"	f
+str_cmp	../lib/str_cmp.c	/^str_cmp(s1, s2)$/;"	f
+str_decode	../lib/str_decode.c	/^str_decode(str)$/;"	f
+str_dup	../lib/str_dup.c	/^str_dup(src, pad)$/;"	f
+str_folder	../lib/str_folder.c	/^str_folder(fpath, folder, fname)$/;"	f
+str_from	../lib/str_from.c	/^str_from(from, addr, nick)$/;"	f
+str_has	../lib/str_has.c	/^str_has(list, tag)$/;"	f
+str_hash	../lib/str_hash.c	/^str_hash(str, seed)$/;"	f
+str_hash2	../lib/str_hash2.c	/^str_hash2(str, seed)$/;"	f
+str_len	../lib/str_len.c	/^str_len(str)$/;"	f
+str_lower	../lib/str_lower.c	/^str_lower(dst, src)$/;"	f
+str_ncmp	../lib/str_ncmp.c	/^str_ncmp(s1, s2, n)$/;"	f
+str_ncpy	../lib/str_ncpy.c	/^str_ncpy(dst, src, n)$/;"	f
+str_ndup	../lib/str_ndup.c	/^str_ndup(src, len)$/;"	f
+str_pat	../lib/str_pat.c	/^str_pat(str, pat)$/;"	f
+str_rev	../lib/str_rev.c	/^str_rev(dst, src)$/;"	f
+str_rle	../lib/str_rle.c	/^str_rle(str)			\/* run-length encoding *\/$/;"	f
+str_stamp	../lib/str_stamp.c	/^str_stamp(str, chrono)$/;"	f
+str_str	../lib/str_str.c	/^str_str(str, tag) $/;"	f
+str_tail	../lib/str_tail.c	/^str_tail(str)$/;"	f
+str_trim	../lib/str_trim.c	/^str_trim(buf)			\/* remove trailing space *\/$/;"	f
+str_ttl	../lib/str_ttl.c	/^str_ttl(title)$/;"	f
+str_xor	../lib/str_xor.c	/^str_xor(dst, src)$/;"	f
+su_setup	acct.c	/^su_setup(u)$/;"	f
+subject	../include/struct.h	/^  char subject[TTLEN + 1];$/;"	m	struct:__anon27
+subject	post.c	/^  char *subject;$/;"	m	struct:__anon4	file:
+subrace	../include/pipstruct.h	/^  uschar subrace;		  \/* °Æ·~	  1 bytes *\/$/;"	m	struct:rpgrec
+sum	../include/struct.h	/^   int sum;$/;"	m	struct:__anon70
+supervisor	../include/global.h	/^VAR int supervisor;$/;"	v
+swap	../lib/xsort.c	/^#define swap(/;"	d	file:
+swapcode	../lib/xsort.c	/^#define swapcode(/;"	d	file:
+swapfunc	../lib/xsort.c	/^swapfunc(a, b, n, swaptype)$/;"	f	file:
+sysload	../include/struct.h	/^  double sysload[3];$/;"	m	struct:__anon36
+system_result	menu.c	/^system_result()$/;"	f	file:
+t_banmsg	talk.c	/^t_banmsg()$/;"	f
+t_bmw	talk.c	/^t_bmw()$/;"	f
+t_cloak	talk.c	/^t_cloak(xo)$/;"	f
+t_columns	visio.c	/^#define	t_columns	/;"	d	file:
+t_lines	visio.c	/^#define	t_lines	/;"	d	file:
+t_loginNotify	talk.c	/^t_loginNotify()$/;"	f
+t_message	talk.c	/^t_message()$/;"	f
+t_pager	talk.c	/^t_pager()$/;"	f
+t_pal	talk.c	/^t_pal()$/;"	f
+t_query	talk.c	/^t_query()$/;"	f
+t_recall	talk.c	/^t_recall()$/;"	f
+table	../include/struct.h	/^  CLASS table[6][13];$/;"	m	struct:__anon52
+table	bbsd.c	/^TABLE table[] = {$/;"	v
+tag_char	mail.c	/^tag_char(chrono)$/;"	f
+talk_char	talk.c	/^talk_char(twin, ch)$/;"	f	file:
+talk_hangup	talk.c	/^talk_hangup(sock)$/;"	f	file:
+talk_main	talk.c	/^talk_main()$/;"	f
+talk_nextline	talk.c	/^talk_nextline(twin)$/;"	f	file:
+talk_page	talk.c	/^talk_page(up)$/;"	f	file:
+talk_reason	talk.c	/^static char *talk_reason[] =$/;"	v	file:
+talk_rqst	talk.c	/^talk_rqst()$/;"	f
+talk_save	talk.c	/^talk_save()$/;"	f
+talk_speak	talk.c	/^talk_speak(fd)$/;"	f	file:
+talk_string	talk.c	/^talk_string(twin, str)$/;"	f	file:
+talk_win	talk.c	/^}      talk_win;$/;"	t	typeref:struct:__anon6	file:
+talker	../include/struct.h	/^  UTMP  *talker;		\/* who talk-to me ? *\/$/;"	m	struct:UTMP
+tbf_ask	edit.c	/^tbf_ask()$/;"	f
+tbf_erase	edit.c	/^tbf_erase()$/;"	f	file:
+tbf_open	edit.c	/^tbf_open()$/;"	f
+tbf_read	edit.c	/^tbf_read()$/;"	f	file:
+tbf_write	edit.c	/^tbf_write()$/;"	f	file:
+tc_col	visio.c	/^static int scrollcnt, tc_col, tc_row;$/;"	v	file:
+tc_row	visio.c	/^static int scrollcnt, tc_col, tc_row;$/;"	v	file:
+tcheck	../include/struct.h	/^  time_t tcheck;		\/* time to check mbox\/pal *\/$/;"	m	struct:__anon23
+teacher	../include/struct.h	/^  char teacher[11];$/;"	m	struct:__anon62
+teacher	../include/struct.h	/^  char teacher[9];$/;"	m	struct:__anon49
+telnet_flush	visio.c	/^# define telnet_flush(/;"	d	file:
+telnet_flush	visio.c	/^telnet_flush(data, size)$/;"	f	file:
+telnet_init	bbsd.c	/^telnet_init()$/;"	f	file:
+tempmodes	../include/bbsnet.h	/^struct termios modes, savemodes, tempmodes;$/;"	v	typeref:struct:
+textline	edit.c	/^typedef struct textline$/;"	s	file:
+textline	edit.c	/^}        textline;$/;"	t	typeref:struct:textline	file:
+thingA	../include/pip.h	/^ int thingA;		$/;"	m	struct:chicken
+thingB	../include/pip.h	/^ int thingB;		$/;"	m	struct:chicken
+thingC	../include/pip.h	/^ int thingC;$/;"	m	struct:chicken
+thingD	../include/pip.h	/^ int thingD;$/;"	m	struct:chicken
+thingE	../include/pip.h	/^ int thingE; $/;"	m	struct:chicken
+threemonth	../include/struct.h	/^  BSTAT threemonth;$/;"	m	struct:__anon69
+thundermagiclist	../include/pip.h	/^struct magicset thundermagiclist[] = {$/;"	v	typeref:struct:magicset
+time	../include/struct.h	/^  CLASS_TIME time;$/;"	m	struct:__anon52
+time	../include/struct.h	/^  char time[8];$/;"	m	struct:__anon20
+time	../include/struct.h	/^  int     mode;  time_t  time;$/;"	m	struct:__anon22
+time	../include/struct.h	/^  time_t  time;$/;"	m	struct:__anon21
+timeout	../lib/dns_ident.c	/^static const int timeout = 6;   \/* ­Y 6 ¬í«á³s½u¥¼§¹¦¨¡A«h©ñ±ó *\/$/;"	v	file:
+times	../include/bbsnet.h	/^  unsigned int times;$/;"	m	struct:data
+times	../include/struct.h	/^  int times;$/;"	m	struct:__anon48
+tired	../include/pip.h	/^  int tired;		\/*¯h³Ò«×§ïÅÜ*\/$/;"	m	struct:magicset
+tired	../include/pip.h	/^ int tired;		\/*¯h ³Ò «×*\/$/;"	m	struct:chicken
+tiredmode	../include/pip.h	/^  int tiredmode;        \/*0:´î¤Ö 1:¼W¥[ 2:³Ì¤p­È*\/$/;"	m	struct:magicset
+title	../include/hdr.h	/^  char title[73];		\/* ¥DÃD (TTLEN + 1) *\/$/;"	m	struct:__anon13
+title	../include/struct.h	/^  char title[49];$/;"	m	struct:NewBoardHeader
+title	../include/struct.h	/^  char title[64];$/;"	m	struct:__anon65
+title	../include/struct.h	/^  char title[BTLEN + 1];$/;"	m	struct:BoardHeader
+title	../include/struct.h	/^  char title[CH_TTLEN];$/;"	m	struct:__anon34
+title	../include/struct.h	/^  char title[MAX_LIST][41];$/;"	m	struct:__anon54
+title	../include/struct.h	/^  char title[TTLEN + 1];	\/* §ë²¼¥DÃD *\/$/;"	m	struct:VoteControlHeader
+tm_buf1	../include/bbsnet.h	/^struct tm *tm_buf1, *tm_buf2;$/;"	v	typeref:struct:tm
+tm_buf2	../include/bbsnet.h	/^struct tm *tm_buf1, *tm_buf2;$/;"	v	typeref:struct:
+tm_buf3	../include/bbsnet.h	/^struct tm *tm_buf3;$/;"	v	typeref:struct:tm
+tmpA	../include/pip.h	/^ int tmpA;$/;"	m	struct:chicken
+tmpB	../include/pip.h	/^ int tmpB;$/;"	m	struct:chicken
+tmpC	../include/pip.h	/^ int tmpC;$/;"	m	struct:chicken
+tmpD	../include/pip.h	/^ int tmpD;$/;"	m	struct:chicken
+tmpE	../include/pip.h	/^ int tmpE;$/;"	m	struct:chicken
+tn_addr	bbsd.c	/^static u_long tn_addr;$/;"	v	file:
+tn_login	bbsd.c	/^tn_login()$/;"	f	file:
+tn_main	bbsd.c	/^tn_main()$/;"	f	file:
+tn_signals	bbsd.c	/^tn_signals()$/;"	f	file:
+today	menu.c	/^today()$/;"	f	file:
+toman	../include/pip.h	/^ int toman;		\/*«Ý¤H±µª«*\/ $/;"	m	struct:chicken
+top	../include/struct.h	/^  int top;			\/* top *\/$/;"	m	struct:OverView
+total	../include/struct.h	/^   int total;$/;"	m	struct:__anon70
+total	../include/struct.h	/^  int total;$/;"	m	struct:__anon66
+total	../include/struct.h	/^  usint total;$/;"	m	struct:NewBoardHeader
+total_num	../include/global.h	/^int total_num;			\/* ­«³] ¯¸¤W¤H¼Æ*\/$/;"	v
+tpad	menu.c	/^  time_t tpad;$/;"	m	struct:__anon3	file:
+treat	bbsd.c	/^int treat=0;$/;"	v
+treatmagiclist	../include/pip.h	/^struct magicset treatmagiclist[] = {$/;"	v	typeref:struct:magicset
+tvalid	../include/struct.h	/^  time_t tvalid;		\/* ³q¹L»{ÃÒ¡B§ó§ï mail address ªº®É¶¡ *\/$/;"	m	struct:__anon23
+twoweek	../include/struct.h	/^  BSTAT twoweek;$/;"	m	struct:__anon69
+type	../include/struct.h	/^  char  type[16];		\/* ²Î­p«¬ºA *\/$/;"	m	struct:__anon68
+type	talk.c	/^	int type;$/;"	m	struct:__anon7	file:
+u_addr	acct.c	/^u_addr()$/;"	f
+u_exit	bbsd.c	/^u_exit(mode)$/;"	f
+u_info	acct.c	/^u_info()$/;"	f
+u_lock	acct.c	/^u_lock()$/;"	f
+u_register	acct.c	/^u_register()$/;"	f
+u_setup	acct.c	/^u_setup()$/;"	f
+u_xfile	acct.c	/^u_xfile()$/;"	f
+ue_setup	acct.c	/^ue_setup()$/;"	f
+ufo	../include/struct.h	/^  usint  ufo;			\/* the same as userec.ufo *\/$/;"	m	struct:UTMP
+ufo	../include/struct.h	/^  usint ufo;			\/* user basic flags *\/$/;"	m	struct:__anon23
+ufo2	../include/struct.h	/^  usint ufo2;			\/* ©µ¦ùªº­Ó¤H³]©w *\/$/;"	m	struct:__anon23
+ulist_april1	talk.c	/^ulist_april1(xo)$/;"	f	file:
+ulist_body	talk.c	/^ulist_body(xo)$/;"	f	file:
+ulist_broadcast	talk.c	/^ulist_broadcast(xo)$/;"	f	file:
+ulist_cb	talk.c	/^KeyFunc ulist_cb[] =$/;"	v
+ulist_changeship	talk.c	/^ulist_changeship(xo)$/;"	f	file:
+ulist_cmp	talk.c	/^static int (*ulist_cmp[]) () =$/;"	v	file:
+ulist_cmp_board	talk.c	/^ulist_cmp_board(i,j)$/;"	f	file:
+ulist_cmp_host	talk.c	/^ulist_cmp_host(i, j)$/;"	f	file:
+ulist_cmp_idle	talk.c	/^ulist_cmp_idle(i, j)$/;"	f	file:
+ulist_cmp_mode	talk.c	/^ulist_cmp_mode(i, j)$/;"	f	file:
+ulist_cmp_nick	talk.c	/^ulist_cmp_nick(i, j)$/;"	f	file:
+ulist_cmp_userid	talk.c	/^ulist_cmp_userid(i, j)$/;"	f	file:
+ulist_del	talk.c	/^ulist_del(xo)$/;"	f	file:
+ulist_edit	talk.c	/^ulist_edit(xo)			\/* Thor: ¥i½u¤W¬d¬Ý¤Î­×§ï¨Ï¥ÎªÌ *\/$/;"	f	file:
+ulist_fromchange	talk.c	/^ulist_fromchange(xo)$/;"	f	file:
+ulist_head	talk.c	/^ulist_head(xo)$/;"	f	file:
+ulist_help	talk.c	/^ulist_help(xo)$/;"	f	file:
+ulist_init	talk.c	/^ulist_init(xo)$/;"	f	file:
+ulist_kick	talk.c	/^ulist_kick(xo)$/;"	f	file:
+ulist_mail	talk.c	/^ulist_mail(xo)$/;"	f	file:
+ulist_makebad	talk.c	/^ulist_makebad(xo)$/;"	f	file:
+ulist_makepal	talk.c	/^ulist_makepal(xo)$/;"	f	file:
+ulist_message	talk.c	/^ulist_message(xo)$/;"	f	file:
+ulist_mp	talk.c	/^ulist_mp(xo)$/;"	f	file:
+ulist_neck	talk.c	/^ulist_neck(xo)$/;"	f	file:
+ulist_nickchange	talk.c	/^ulist_nickchange(xo)$/;"	f	file:
+ulist_pager	talk.c	/^ulist_pager(xo)$/;"	f	file:
+ulist_pal	talk.c	/^ulist_pal(xo)$/;"	f	file:
+ulist_pool	talk.c	/^static PICKUP ulist_pool[MAXACTIVE];$/;"	v	file:
+ulist_query	talk.c	/^ulist_query(xo)$/;"	f	file:
+ulist_readmail	talk.c	/^ulist_readmail(xo)$/;"	f	file:
+ulist_realname	talk.c	/^ulist_realname(xo)$/;"	f	file:
+ulist_recall	talk.c	/^ulist_recall(xo)$/;"	f	file:
+ulist_search	talk.c	/^ulist_search(xo, step)$/;"	f	file:
+ulist_search_backward	talk.c	/^ulist_search_backward(xo)$/;"	f	file:
+ulist_search_forward	talk.c	/^ulist_search_forward(xo)$/;"	f	file:
+ulist_ship	talk.c	/^ulist_ship(xo)$/;"	f	file:
+ulist_state	talk.c	/^ulist_state(xo)$/;"	f	file:
+ulist_su	talk.c	/^ulist_su(xo)$/;"	f	file:
+ulist_talk	talk.c	/^ulist_talk(xo)$/;"	f	file:
+ulist_test	talk.c	/^ulist_test(xo)$/;"	f	file:
+ulist_toggle	talk.c	/^ulist_toggle(xo)$/;"	f	file:
+ulist_write	talk.c	/^ulist_write(xo)$/;"	f	file:
+ulist_xo	talk.c	/^static XO ulist_xo;$/;"	v	file:
+umode	../include/struct.h	/^  int umode;$/;"	m	struct:__anon67
+uniq_userno	bbsd.c	/^uniq_userno(fd)$/;"	f	file:
+uptime	../include/struct.h	/^  time_t uptime;$/;"	m	struct:__anon24
+uptime	../include/struct.h	/^  time_t uptime;$/;"	m	struct:__anon37
+url_edit	gem.c	/^url_edit(folder, hdr)$/;"	f	file:
+url_encode	../lib/url_encode.c	/^url_encode(dst, src)$/;"	f
+url_fpath	gem.c	/^url_fpath(fpath, folder, hdr)$/;"	f
+url_open	gem.c	/^url_open(site, path, port)$/;"	f	file:
+url_parse	gem.c	/^url_parse(folder, hdr, site, path)$/;"	f	file:
+url_stamp	gem.c	/^url_stamp(folder, hdr, utype, host, path, port, chrono)$/;"	f	file:
+usage	../include/struct.h	/^  int     usage;$/;"	m	struct:__anon21
+usage	../include/struct.h	/^  int     usage;$/;"	m	struct:__anon22
+uschar	../include/struct.h	/^typedef unsigned char uschar;	\/* length = 1 *\/$/;"	t
+used	../include/struct.h	/^  usint used;$/;"	m	struct:__anon63
+used_time	../include/struct.h	/^  time_t used_time[30];$/;"	m	struct:__anon45
+used_time	../include/struct.h	/^  time_t used_time[30];$/;"	m	struct:__anon46
+usercount	../include/struct.h	/^  int usercount;$/;"	m	struct:__anon46
+userid	../include/pipstruct.h	/^  char userid[IDLEN+1];		  \/* User ID     13 bytes *\/$/;"	m	struct:rpgrec
+userid	../include/struct.h	/^  char  userid[IDLEN + 1];	\/* user's ID *\/$/;"	m	struct:UTMP
+userid	../include/struct.h	/^  char userid[16];$/;"	m	struct:__anon65
+userid	../include/struct.h	/^  char userid[IDLEN + 1];	\/* userid *\/$/;"	m	struct:__anon23
+userid	../include/struct.h	/^  char userid[IDLEN + 1];$/;"	m	struct:__anon25
+userid	../include/struct.h	/^  char userid[IDLEN + 1];$/;"	m	struct:__anon26
+userid	../include/struct.h	/^  char userid[IDLEN + 1];$/;"	m	struct:__anon28
+userid	../include/struct.h	/^  char userid[IDLEN + 1];$/;"	m	struct:__anon29
+userid	../include/struct.h	/^  char userid[IDLEN + 1];$/;"	m	struct:__anon31
+userid	../include/struct.h	/^  char userid[IDLEN + 1];$/;"	m	struct:__anon56
+userid	../include/struct.h	/^  char userid[IDLEN + 1];$/;"	m	struct:__anon61
+userid	../include/struct.h	/^  char userid[IDLEN+1];$/;"	m	struct:__anon30
+userid	../include/struct.h	/^  char userid[IDLEN+1];$/;"	m	struct:__anon53
+userid	../include/struct.h	/^  char userid[IDLEN];$/;"	m	struct:__anon24
+userlevel	../include/struct.h	/^  usint userlevel;		\/* user perm *\/$/;"	m	struct:__anon23
+userlevel	../include/struct.h	/^  usint userlevel;$/;"	m	struct:UTMP
+username	../include/struct.h	/^  char  username[24];$/;"	m	struct:UTMP
+username	../include/struct.h	/^  char username[19];$/;"	m	struct:__anon56
+username	../include/struct.h	/^  char username[24];		\/* user nickname *\/$/;"	m	struct:__anon23
+username	../include/struct.h	/^  char username[24];$/;"	m	struct:__anon27
+username	../include/struct.h	/^  char username[24];$/;"	m	struct:__anon61
+userno	../include/struct.h	/^  int userno;			\/* unique positive code *\/$/;"	m	struct:__anon23
+userno	../include/struct.h	/^  int userno;			\/* user number in .PASSWDS *\/$/;"	m	struct:UTMP
+userno	../include/struct.h	/^  int userno;$/;"	m	struct:__anon25
+userno	../include/struct.h	/^  int userno;$/;"	m	struct:__anon26
+userno	../include/struct.h	/^  int userno;$/;"	m	struct:__anon28
+userno	../include/struct.h	/^  int userno;$/;"	m	struct:__anon29
+userno	../include/struct.h	/^  int userno;$/;"	m	struct:__anon30
+userno	../include/struct.h	/^  usint userno;$/;"	m	struct:__anon64
+userno	../include/struct.h	/^  usint userno;$/;"	m	struct:__anon65
+userno	../include/struct.h	/^  usint userno[MAXOBSERVELIST];$/;"	m	struct:__anon66
+ushm	cache.c	/^UCACHE *ushm;$/;"	v
+ushm_init	cache.c	/^ushm_init()$/;"	f
+usint	../include/struct.h	/^typedef unsigned int usint;	\/* length = 4 *\/$/;"	t
+usleep	../include/bbs.h	/^#define usleep(/;"	d
+uslot	../include/struct.h	/^  UTMP uslot[MAXACTIVE];	\/* UTMP slots *\/$/;"	m	struct:__anon36
+usr_fpath	../lib/f_path.c	/^usr_fpath(fpath, user, fname)$/;"	f
+utmp	talk.c	/^	UTMP *utmp;$/;"	m	struct:__anon7	file:
+utmp_count	cache.c	/^utmp_count(userno, show)$/;"	f
+utmp_find	cache.c	/^utmp_find(userno)$/;"	f
+utmp_free	cache.c	/^utmp_free()$/;"	f
+utmp_mode	cache.c	/^utmp_mode(mode)$/;"	f
+utmp_new	cache.c	/^utmp_new(up)$/;"	f
+utmp_setup	bbsd.c	/^utmp_setup(mode)$/;"	f	file:
+valid	../include/struct.h	/^  int  valid;$/;"	m	struct:__anon62
+valid_brdname	acct.c	/^valid_brdname(brd)$/;"	f	file:
+vans	visio.c	/^vans(prompt)$/;"	f
+vbuf	visio.c	/^static screenline vbuf[t_lines];$/;"	v	file:
+vclose	../include/struct.h	/^  time_t vclose;		\/* §ë²¼µ²§ô®É¶¡ *\/$/;"	m	struct:VoteControlHeader
+ve_abort	edit.c	/^#define	ve_abort(/;"	d	file:
+ve_abort	edit.c	/^ve_abort(i)$/;"	f	file:
+ve_alloc	edit.c	/^ve_alloc()$/;"	f	file:
+ve_ansi	edit.c	/^ve_ansi()$/;"	f	file:
+ve_backup	edit.c	/^ve_backup()$/;"	f
+ve_char	edit.c	/^ve_char(ch)$/;"	f	file:
+ve_col	edit.c	/^static int ve_col;$/;"	v	file:
+ve_filer	edit.c	/^ve_filer(fpath, ve_op)$/;"	f	file:
+ve_forward	edit.c	/^ve_forward(n)$/;"	f	file:
+ve_header	edit.c	/^ve_header(fp)$/;"	f
+ve_join	edit.c	/^ve_join(line)$/;"	f	file:
+ve_line	edit.c	/^ve_line(this, str)$/;"	f	file:
+ve_lno	edit.c	/^static int ve_lno;		\/* current line number *\/$/;"	v	file:
+ve_load	edit.c	/^ve_load(this, fd)$/;"	f	file:
+ve_mode	edit.c	/^static int ve_mode;		\/* operation mode *\/$/;"	v	file:
+ve_outs	edit.c	/^ve_outs(text)$/;"	f	file:
+ve_pageup	edit.c	/^ve_pageup()$/;"	f	file:
+ve_position	edit.c	/^ve_position(cur, top)$/;"	f	file:
+ve_quote	edit.c	/^ve_quote(this)$/;"	f	file:
+ve_recover	edit.c	/^ve_recover()$/;"	f
+ve_row	edit.c	/^static int ve_row;		\/* cursor position *\/$/;"	v	file:
+ve_select_sign	edit.c	/^ve_select_sign(fp)$/;"	f	file:
+ve_show_sign	edit.c	/^ve_show_sign(fpath)$/;"	f	file:
+ve_split	edit.c	/^ve_split(line, pos)$/;"	f	file:
+ve_strim	edit.c	/^ve_strim(s)$/;"	f	file:
+ve_string	edit.c	/^ve_string(str)$/;"	f
+ve_subject	edit.c	/^ve_subject(row, topic, dft)$/;"	f
+ve_title	../include/global.h	/^VAR char ve_title[80];$/;"	v
+vecswap	../lib/xsort.c	/^#define vecswap(/;"	d	file:
+vedit	edit.c	/^vedit(fpath, ve_op)$/;"	f
+verb	../include/struct.h	/^  char verb[9];                   \/* °Êµü *\/$/;"	m	struct:__anon40
+version	menu.c	/^version()$/;"	f	file:
+vget	visio.c	/^vget(line, col, prompt, data, max, echo)$/;"	f
+vget_match	visio.c	/^vget_match(prefix, len, op)$/;"	f	file:
+vi_head	visio.c	/^static int vi_head;$/;"	v	file:
+vi_pool	visio.c	/^static uschar vi_pool[VI_MAX];$/;"	v	file:
+vi_size	visio.c	/^static int vi_size;$/;"	v	file:
+view_flag	../include/bbsnet.h	/^     mode,shm_flag=0,del_flag=0,view_flag=1,max_use;   $/;"	v
+view_login_log	menu.c	/^view_login_log()$/;"	f	file:
+vio_fd	visio.c	/^int vio_fd;			\/* Thor.0725: ¬°¥H«á¦btalk & chat ¶i ^z §@·Ç³Æ *\/$/;"	v
+vio_to	visio.c	/^static struct timeval vio_to = {60, 0};$/;"	v	typeref:struct:timeval	file:
+vitem_t	../include/struct.h	/^typedef char vitem_t[32];	\/* §ë²¼¿ï¶µ *\/$/;"	t
+vkey	visio.c	/^vkey()$/;"	f
+vmail	../include/struct.h	/^  char vmail[60];		\/* ³q¹L»{ÃÒ¤§ email *\/$/;"	m	struct:__anon23
+vmsg	visio.c	/^vmsg(msg)$/;"	f
+vo_pool	visio.c	/^static uschar vo_pool[VO_MAX];$/;"	v	file:
+vo_size	visio.c	/^static int vo_size;$/;"	v	file:
+vpercent	../include/struct.h	/^  char vpercent;		\/* ¬O§_Åã¥Ü¦Ê¤À¤ñ¨Ò *\/$/;"	m	struct:VoteControlHeader
+vs_bar	visio.c	/^vs_bar(title)$/;"	f
+vs_head	menu.c	/^vs_head(title, mid)$/;"	f
+vs_line	popupmenu.c	/^vs_line(char *msg,int x,int y)$/;"	f	file:
+vs_line	visio.c	/^vs_line(msg)$/;"	f	file:
+vs_redraw	visio.c	/^vs_redraw()$/;"	f	file:
+vs_restore	visio.c	/^vs_restore(slp)$/;"	f
+vs_save	visio.c	/^vs_save(slp)$/;"	f
+vsort	../include/struct.h	/^  char vsort;			\/* ¶}²¼µ²ªG¬O§_±Æ§Ç *\/$/;"	m	struct:VoteControlHeader
+vtime	../include/struct.h	/^  time_t vtime;			\/* validate time *\/$/;"	m	struct:__anon23
+vx_cur	edit.c	/^static textline *vx_cur;	\/* current line *\/$/;"	v	file:
+vx_ini	edit.c	/^static textline *vx_ini;	\/* first line *\/$/;"	v	file:
+vx_top	edit.c	/^static textline *vx_top;	\/* top line in current window *\/$/;"	v	file:
+w	../include/bbsnet.h	/^unsigned int current = 1, counter = 1, last_current=1,w, y, z,$/;"	v
+wantend	../include/pip.h	/^ int wantend;		\/*20·³µ²§½*\/$/;"	m	struct:chicken
+weapon	../include/pip.h	/^struct weapon$/;"	s
+weapon	../include/pip.h	/^typedef struct weapon weapon;$/;"	t	typeref:struct:weapon
+weapon	../include/pipstruct.h	/^  uschar weapon;		  \/* ªZ¾¹	  1 bytes *\/$/;"	m	struct:rpgrec
+weaponA	../include/pip.h	/^ int weaponA;$/;"	m	struct:chicken
+weaponB	../include/pip.h	/^ int weaponB;$/;"	m	struct:chicken
+weaponC	../include/pip.h	/^ int weaponC;$/;"	m	struct:chicken
+weaponD	../include/pip.h	/^ int weaponD;$/;"	m	struct:chicken
+weaponE	../include/pip.h	/^ int weaponE;$/;"	m	struct:chicken
+weaponbody	../include/pip.h	/^ int weaponbody;	\/*¨­ÅéªZ¾¹*\/$/;"	m	struct:chicken
+weaponfoot	../include/pip.h	/^ int weaponfoot;	\/*¸}ªºªZ¾¹*\/ $/;"	m	struct:chicken
+weaponhead	../include/pip.h	/^ int weaponhead;	\/*ÀY³¡ªZ¾¹*\/$/;"	m	struct:chicken
+weaponlhand	../include/pip.h	/^ int weaponlhand;	\/*¥ª¤âªZ¾¹*\/$/;"	m	struct:chicken
+weaponrhand	../include/pip.h	/^ int weaponrhand;	\/*¥k¤âªZ¾¹*\/$/;"	m	struct:chicken
+week	../include/struct.h	/^  BSTAT week;$/;"	m	struct:__anon69
+week	menu.c	/^week()$/;"	f	file:
+weight	../include/pip.h	/^ int weight;            \/*Åé    ­«*\/$/;"	m	struct:chicken
+welcome	menu.c	/^welcome()$/;"	f	file:
+width	../include/struct.h	/^  uschar width;			\/* padding length of ANSI codes *\/$/;"	m	struct:screenline
+windmagiclist	../include/pip.h	/^struct magicset windmagiclist[] = {$/;"	v	typeref:struct:magicset
+winn	../include/pip.h	/^ int winn;		$/;"	m	struct:chicken
+wis	../include/pipstruct.h	/^  ushort wis;			  \/* ´¼¼z	  2 bytes *\/$/;"	m	struct:rpgrec
+wisdom	../include/pip.h	/^ int wisdom;		\/*´¼    ¼z*\/$/;"	m	struct:chicken
+words1	../include/pip.h	/^  char *words1;$/;"	m	struct:royalset
+words2	../include/pip.h	/^  char *words2;$/;"	m	struct:royalset
+work	../include/struct.h	/^  char work[50];$/;"	m	struct:__anon20
+workA	../include/pip.h	/^ int workA; \/*®a¨Æ*\/$/;"	m	struct:chicken
+workB	../include/pip.h	/^ int workB; \/*«O©i*\/$/;"	m	struct:chicken
+workC	../include/pip.h	/^ int workC; \/*®È©±*\/$/;"	m	struct:chicken
+workD	../include/pip.h	/^ int workD; \/*¹A³õ*\/$/;"	m	struct:chicken
+workE	../include/pip.h	/^ int workE; \/*À\\ÆU*\/$/;"	m	struct:chicken
+workF	../include/pip.h	/^ int workF; \/*±Ð°ó*\/$/;"	m	struct:chicken
+workG	../include/pip.h	/^ int workG; \/*¦aÅu*\/$/;"	m	struct:chicken
+workH	../include/pip.h	/^ int workH; \/*¥ï¤ì*\/$/;"	m	struct:chicken
+workI	../include/pip.h	/^ int workI; \/*¬ü¾v*\/$/;"	m	struct:chicken
+workJ	../include/pip.h	/^ int workJ; \/*Ây¤H*\/$/;"	m	struct:chicken
+workK	../include/pip.h	/^ int workK; \/*¤u¦a*\/$/;"	m	struct:chicken
+workL	../include/pip.h	/^ int workL; \/*¦u¹Ó*\/$/;"	m	struct:chicken
+workM	../include/pip.h	/^ int workM; \/*®a±Ð*\/$/;"	m	struct:chicken
+workN	../include/pip.h	/^ int workN; \/*°s®a*\/$/;"	m	struct:chicken
+workO	../include/pip.h	/^ int workO; \/*°s©±*\/$/;"	m	struct:chicken
+workP	../include/pip.h	/^ int workP; \/*©]*\/$/;"	m	struct:chicken
+workQ	../include/pip.h	/^ int workQ;$/;"	m	struct:chicken
+workR	../include/pip.h	/^ int workR;$/;"	m	struct:chicken
+workS	../include/pip.h	/^ int workS;$/;"	m	struct:chicken
+workT	../include/pip.h	/^ int workT;$/;"	m	struct:chicken
+workU	../include/pip.h	/^ int workU;$/;"	m	struct:chicken
+workV	../include/pip.h	/^ int workV;$/;"	m	struct:chicken
+workW	../include/pip.h	/^ int workW;$/;"	m	struct:chicken
+workX	../include/pip.h	/^ int workX;$/;"	m	struct:chicken
+workY	../include/pip.h	/^ int workY;$/;"	m	struct:chicken
+workZ	../include/pip.h	/^ int workZ;$/;"	m	struct:chicken
+wrist	../include/pip.h	/^ int wrist;		\/*µÃ    ¤O*\/$/;"	m	struct:chicken
+wrist	../include/pip.h	/^ int wrist;             \/*µÃ    ¤O*\/$/;"	m	struct:__anon16
+x	../include/struct.h	/^  int  x;$/;"	m	struct:__anon62
+x_file	acct.c	/^x_file(mode, xlist, flist)$/;"	f
+x_sysload	menu.c	/^x_sysload()$/;"	f	file:
+xbrd	board.c	/^BRD *xbrd;$/;"	v
+xbrd	visio.c	/^static BRD *xbrd;$/;"	v	file:
+xid	../include/hdr.h	/^  int xid;			\/* reserved «O¯d*\/$/;"	m	struct:__anon13
+xlog	post.c	/^#define xlog(/;"	d	file:
+xmode	../include/hdr.h	/^  int xmode;$/;"	m	struct:__anon13
+xname	../include/hdr.h	/^  char xname[32];		\/* ÀÉ®×¦WºÙ *\/$/;"	m	struct:__anon13
+xname	../include/struct.h	/^  char xname[17];		\/* ¥DÀÉ¦W *\/ \/* Thor: match HDRªºxname *\/$/;"	m	struct:VoteControlHeader
+xname	../include/struct.h	/^  char xname[32];$/;"	m	struct:NewBoardHeader
+xo	../include/struct.h	/^  XO *xo;$/;"	m	struct:__anon43
+xo_copy	xover.c	/^xo_copy(xo)$/;"	f	file:
+xo_delete	xover.c	/^xo_delete(xo)$/;"	f
+xo_forward	xover.c	/^xo_forward(xo)$/;"	f	file:
+xo_fpath	xover.c	/^xo_fpath(fpath, dir, hdr)$/;"	f
+xo_get	xover.c	/^xo_get(path)$/;"	f
+xo_getch	xover.c	/^xo_getch(xo, ch)$/;"	f
+xo_jump	xover.c	/^xo_jump(pos)			\/* ²¾°Ê´å¼Ð¨ì number ©Ò¦bªº¯S©w¦ì¸m *\/$/;"	f	file:
+xo_keymap	xover.c	/^xo_keymap(key)$/;"	f	file:
+xo_load	xover.c	/^xo_load(xo, recsiz)$/;"	f
+xo_new	xover.c	/^xo_new(path)$/;"	f
+xo_pool	xover.c	/^char xo_pool[XO_TALL * XO_RSIZ];$/;"	v
+xo_prune	xover.c	/^xo_prune(xo)$/;"	f	file:
+xo_root	xover.c	/^static XO *xo_root;		\/* root of overview list *\/$/;"	v	file:
+xo_stack_level	xover.c	/^static int xo_stack_level;$/;"	v	file:
+xo_tag	xover.c	/^xo_tag(xo, op)$/;"	f	file:
+xo_thread	xover.c	/^xo_thread(xo, op)$/;"	f	file:
+xo_uquery	xover.c	/^xo_uquery(xo)$/;"	f
+xo_user_level	xover.c	/^static int xo_user_level;$/;"	v	file:
+xo_usetup	xover.c	/^xo_usetup(xo)$/;"	f
+xover	xover.c	/^xover(cmd)$/;"	f
+xpost_browse	post.c	/^xpost_browse(xo)$/;"	f	file:
+xpost_cb	post.c	/^KeyFunc xpost_cb[] =$/;"	v
+xpost_head	post.c	/^xpost_head(xo)$/;"	f	file:
+xpost_help	post.c	/^xpost_help(xo)$/;"	f	file:
+xpost_init	post.c	/^xpost_init(xo)$/;"	f	file:
+xpost_load	post.c	/^xpost_load(xo)$/;"	f	file:
+xsort	../lib/xsort.c	/^xsort(a, n, es, cmp)$/;"	f
+xwrite	../lib/xwrite.c	/^xwrite(fd, data, size)$/;"	f
+xypostI	post.c	/^static int *xypostI;$/;"	v	file:
+xypostKeyword	post.c	/^static char xypostKeyword[30];$/;"	v	file:
+xypost_pick	post.c	/^xypost_pick(xo)$/;"	f	file:
+xyz	../include/struct.h	/^  char *xyz;			\/* staff *\/$/;"	m	struct:OverView
+xz	xover.c	/^XZ xz[] =$/;"	v
+y	../include/bbsnet.h	/^unsigned int current = 1, counter = 1, last_current=1,w, y, z,$/;"	v
+y	../include/struct.h	/^  int  y;$/;"	m	struct:__anon62
+year	../include/pip.h	/^ int year;		\/*¥Í¤é  ¦~*\/$/;"	m	struct:chicken
+year	../include/struct.h	/^  BSTAT year;$/;"	m	struct:__anon69
+year	../include/struct.h	/^  int year;$/;"	m	struct:__anon58
+year	menu.c	/^year()$/;"	f	file:
+yesterday	menu.c	/^yesterday()$/;"	f	file:
+z	../include/bbsnet.h	/^unsigned int current = 1, counter = 1, last_current=1,w, y, z,$/;"	v
+zkey	visio.c	/^zkey()				\/* press any key or timeout *\/$/;"	f	file:
+zmsg	visio.c	/^zmsg(msg)			\/* easy message *\/$/;"	f

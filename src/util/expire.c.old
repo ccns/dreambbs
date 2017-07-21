@@ -1,0 +1,526 @@
+/*-------------------------------------------------------*/
+/* util/expire.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/*-------------------------------------------------------*/
+/* target : 自動砍信工具程式				 */
+/* create : 95/03/29				 	 */
+/* update : 97/03/29				 	 */
+/*-------------------------------------------------------*/
+/* syntax : expire [day] [max] [min] [board]	 	 */
+/* NOTICE : give board to sync				 */
+/*-------------------------------------------------------*/
+
+/* Thor.981027: 加上 board時, 可sync 某一board */
+
+#include <strings.h>
+
+#include "bbs.h"
+
+#define	DEF_DAYS	9999
+#define	DEF_MAXP	5000
+#define	DEF_MINP	3000
+
+#define	EXPIRE_CONF	FN_ETC_EXPIRE_CONF
+#define	EXPIRE_LOG	FN_EXPIRE_LOG
+
+typedef struct
+{
+  char bname[16];		/* board ID */
+  int days;			/* expired days */
+  int maxp;			/* max post */
+  int minp;			/* min post */
+}      life;
+
+
+#if 0
+
+/* ----------------------------------------------------- */
+/* exclusively create file [*.n]			 */
+/* ----------------------------------------------------- */
+
+
+static FILE *
+x_open(fold, fnew)
+  char *fold;
+  char *fnew;
+{
+  int fd, try;
+  extern int errno;
+
+  try = 0;
+  sprintf(fnew, "%s.n", fold);
+
+  for (;;)
+  {
+    fd = open(fnew, O_WRONLY | O_CREAT | O_EXCL, 0600);
+
+    if (fd >= 0)
+      return fdopen(fd, "w");
+
+    if (errno != EEXIST)
+      break;
+
+    if (!try++)
+    {
+      struct stat st;
+
+      if (stat(fnew, &st) < 0)
+	break;
+      if (st.st_mtime < time(NULL) - 20 * 60)	/* 假設 20 分鐘內應該處理完 */
+	unlink(fnew);
+    }
+    else
+    {
+      if (try > 24)		/* 等待 120 秒鐘 */
+	break;
+      sleep(5);
+    }
+  }
+  return NULL;
+}
+
+
+/* ----------------------------------------------------- */
+/* chrono ==> file name (32-based)			 */
+/* 0123456789ABCDEFGHIJKLMNOPQRSTUV			 */
+/* ----------------------------------------------------- */
+
+
+static char radix32[32] = {
+  '0', '1', '2', '3', '4', '5', '6', '7',
+  '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+  'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+  'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+};
+
+
+static void
+archiv32(chrono, fname)
+  register time_t chrono;	/* 32 bits */
+  register char *fname;		/* 7 chars */
+{
+  register char *str;
+
+  str = fname + 7;
+  *str = '\0';
+  for (;;)
+  {
+    *(--str) = radix32[chrono & 31];
+    if (str == fname)
+      return;
+    chrono >>= 5;
+  }
+}
+
+
+static time_t
+chrono32(str)
+  register char *str;		/* 0123456 */
+{
+  register time_t chrono;
+  register int ch;
+
+  chrono = 0;
+  while (ch = *str++)
+  {
+    ch -= '0';
+    if (ch >= 10)
+      ch -= 'A' - '0' - 10;
+    chrono = (chrono << 5) + ch;
+  }
+  return chrono;
+}
+
+
+#endif
+
+
+/* ----------------------------------------------------- */
+/* synchronize folder & files				 */
+/* ----------------------------------------------------- */
+
+
+typedef struct
+{
+  time_t chrono;
+  char prefix;
+  char exotic;
+} SyncData;
+
+
+static SyncData *sync_pool;
+static int sync_size, sync_head;
+
+
+#define	SYNC_DB_SIZE	2048
+
+
+static int
+sync_cmp(s1, s2)
+  SyncData *s1, *s2;
+{
+  return s1->chrono - s2->chrono;
+}
+
+
+static void
+sync_init(fname, uptime)
+  char *fname;
+  time_t uptime;
+{
+  int ch, prefix;
+  time_t chrono;
+  char *str, fpath[80];
+  struct dirent *de;
+  DIR *dirp;
+
+  SyncData *xpool;
+  int xsize, xhead;
+
+  if (xpool = sync_pool)
+  {
+    xsize = sync_size;
+  }
+  else
+  {
+    xpool = (SyncData *) malloc(SYNC_DB_SIZE * sizeof(SyncData));
+    xsize = SYNC_DB_SIZE;
+  }
+
+  xhead = 0;
+
+  ch = strlen(fname);
+  memcpy(fpath, fname, ch);
+  fname = fpath + ch;
+  *fname++ = '/';
+  fname[1] = '\0';
+
+  ch = '0';
+  for (;;)
+  {
+    *fname = ch++;
+
+    if (dirp = opendir(fpath))
+    {
+      while (de = readdir(dirp))
+      {
+	str = de->d_name;
+	prefix = *str++;
+	if (prefix == '.')
+	  continue;
+
+	chrono = chrono32(str);
+
+	if (chrono > uptime)
+	  continue;
+
+	if (xhead >= xsize)
+	{
+	  xsize += (xsize >> 1);
+	  xpool = (SyncData *) realloc(xpool, xsize * sizeof(SyncData));
+	}
+
+	xpool[xhead].chrono = chrono;
+	xpool[xhead].prefix = prefix;
+	xpool[xhead].exotic = 1;
+	xhead++;
+      }
+
+      closedir(dirp);
+    }
+
+    if (ch == 'W')
+      break;
+
+    if (ch == '9' + 1)
+      ch = 'A';
+  }
+
+  if (xhead > 1)
+    qsort(xpool, xhead, sizeof(SyncData), sync_cmp);
+
+  sync_pool = xpool;
+  sync_size = xsize;
+  sync_head = xhead;
+}
+
+
+static void
+sync_check(flog, fname)
+  FILE *flog;
+  char *fname;
+{
+  char *str, fpath[80];
+  SyncData *xpool, *xtail;
+  time_t cc;
+
+  if ((cc = sync_head) <= 0)
+    return;
+
+  xpool = sync_pool;
+  xtail = xpool + cc;
+
+  sprintf(fpath, "%s/ /", fname);
+  str = strchr(fpath, ' ');
+  fname = str + 3;
+
+  do
+  {
+    if (xtail->exotic)
+    {
+      cc = xtail->chrono;
+      fname[-1] = xtail->prefix;
+      *str = radix32[cc & 31];
+      archiv32(cc, fname);
+      unlink(fpath);
+
+      fprintf(flog, "-\t%s\n", fpath);
+    }
+  } while (--xtail >= xpool);
+}
+
+
+static void
+expire(flog, brd, sync)
+  FILE *flog;
+  life *brd;
+  int sync;
+{
+  HDR hdr;
+  struct stat st;
+  char fpath[128], fnew[128], index[128], *fname, *bname, *str;
+  int done, keep, total, xmode;
+  FILE *fpr, *fpw;
+
+  int days, maxp, minp;
+  int duetime;
+
+  SyncData *xpool=NULL, *xsync;
+  int xhead=0;
+  time_t uptime = 0;
+
+  days = brd->days;
+  maxp = brd->maxp;
+  minp = brd->minp;
+  bname = brd->bname;
+
+  fprintf(flog, "%s\n", bname);
+
+  if (sync)
+  {
+    uptime = time(0) - 10 * 60;		/* 太新的不 sync */
+    sync_init(bname, uptime);
+    xpool = sync_pool;
+    xhead = sync_head;
+    if (xhead <= 0)
+      sync = 0;
+
+    else
+      fprintf(flog, "\t%d files to sync\n\n", xhead);
+  }
+
+  sprintf(index, "%s/.DIR", bname);
+  if (!(fpr = fopen(index, "r")))
+  {
+    fprintf(flog, "\tError open file: %s\n", index);
+    return;
+  }
+
+  fpw = f_new(index, fnew);
+  if (!fpw)
+  {
+    fprintf(flog, "\tExclusive lock: %s\n", fnew);
+    fclose(fpr);
+    return;
+  }
+
+  strcpy(fpath, index);
+  str = (char *) strrchr(fpath, '.');
+  fname = str + 1;
+  *fname++ = '/';
+
+  done = 1;
+  duetime = time(NULL) - days * 24 * 60 * 60;
+
+  fstat(fileno(fpr), &st);
+  total = st.st_size / sizeof(hdr);
+
+  while (fread(&hdr, sizeof(hdr), 1, fpr) == 1)
+  {
+    xmode = hdr.xmode;
+    if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE))
+      keep = 0;
+    else if (xmode & (POST_MARKED | POST_LOCK) || total <= minp)
+      keep = 1;
+    else if (hdr.chrono < duetime || total > maxp)
+      keep = 0;
+    else
+      keep = 1;
+
+    if (sync && (hdr.chrono < uptime))
+    {
+      if (xsync = (SyncData *) bsearch(&hdr.chrono,
+	xpool, xhead, sizeof(SyncData), sync_cmp))
+      {
+	xsync->exotic = 0;
+      }
+      else
+      {
+	if (keep)
+          keep = 0;
+      }
+    }
+
+    if (keep)
+    {
+      if (fwrite(&hdr, sizeof(hdr), 1, fpw) != 1)
+      {
+	fprintf(flog, "\tError in write DIR.n: %s\n", hdr.xname);
+	done = 0;
+        sync = 0; /* Thor.990127: 沒作成, 就別砍了吧 */
+	break;
+      }
+    }
+    else
+    {
+      *str = hdr.xname[7];
+      strcpy(fname, hdr.xname);
+      unlink(fpath);
+      fprintf(flog, "\t%s\n", fname);
+      total--;
+    }
+  }
+  fclose(fpr);
+  fclose(fpw);
+
+  if (done)
+  {
+    sprintf(fpath, "%s.o", index);
+    if (!rename(index, fpath))
+    {
+      if (rename(fnew, index))
+        rename(fpath, index);		/* 換回來 */
+    }
+  }
+  unlink(fnew);
+
+  if (sync)
+    sync_check(flog, bname);
+}
+
+
+int
+main(argc, argv)
+  int argc;
+  char *argv[];
+{
+  FILE *fp;
+  int number, count;
+  life db, table[MAXBOARD], *key;
+  struct dirent *de;
+  DIR *dirp;
+  char *ptr, *bname, buf[256];
+
+  db.days = ((argc > 1) && (number = atoi(argv[1])) > 0) ? number : DEF_DAYS;
+  db.maxp = ((argc > 2) && (number = atoi(argv[2])) > 0) ? number : DEF_MAXP;
+  db.minp = ((argc > 3) && (number = atoi(argv[3])) > 0) ? number : DEF_MINP;
+
+  /* --------------------------------------------------- */
+  /* load expire.ctl					 */
+  /* --------------------------------------------------- */
+
+  setgid(BBSGID);
+  setuid(BBSUID);
+  chdir(BBSHOME);
+
+  count = 0;
+  if (fp = fopen(EXPIRE_CONF, "r"))
+  {
+    while (fgets(buf, sizeof(buf), fp) && buf[0])
+    {
+      if (buf[0] < '0')
+	continue;
+
+      bname = (char *) strtok(buf, " \t\r\n");
+      if (bname && *bname)
+      {
+	ptr = (char *) strtok(NULL, " \t\r\n");
+	if (ptr && (number = atoi(ptr)) > 0)
+	{
+	  key = &(table[count++]);
+	  strcpy(key->bname, bname);
+	  key->days = number;
+	  key->maxp = db.maxp;
+	  key->minp = db.minp;
+
+	  ptr = (char *) strtok(NULL, " \t\r\n");
+	  if (ptr && (number = atoi(ptr)) > 0)
+	  {
+	    key->maxp = number;
+
+	    ptr = (char *) strtok(NULL, " \t\r\n");
+	    if (ptr && (number = atoi(ptr)) > 0)
+	    {
+	      key->minp = number;
+	    }
+	  }
+	}
+      }
+    }
+    fclose(fp);
+  }
+
+  if (count > 1)
+  {
+    qsort(table, count, sizeof(life), (int (*)())strcasecmp);
+  }
+
+  /* --------------------------------------------------- */
+  /* visit all boards					 */
+  /* --------------------------------------------------- */
+
+  fp = fopen(EXPIRE_LOG, "w");
+
+  if (chdir("brd") || !(dirp = opendir(".")))
+  {
+/*    fprintf(fp, ":Err: unable to visit boards %s\n");*/
+    fprintf(fp, ":Err: unable to visit boards \n"); /* statue.000713 */
+    fclose(fp);
+    exit(-1);
+  }
+
+  number = time(0) / 86400;
+
+  while (de = readdir(dirp))
+  {
+    ptr = de->d_name;
+    /* Thor.981027: 加上 board時, 可sync 某一board. 加得很醜, 有空再改 */
+    if(argc > 4)
+    {
+      if(str_cmp(argv[4],ptr))
+        continue;
+      else
+        number=0;
+    }
+
+    if (ptr[0] > ' ' && ptr[0] != '.')
+    {
+      if (count)
+      {
+	key = (life *) bsearch(ptr, table, count, sizeof(life), (int (*)())strcasecmp);
+	if (!key)
+	  key = &db;
+      }
+      else
+      {
+	key = &db;
+      }
+      strcpy(key->bname, ptr);
+      expire(fp, key, !(number & 31));	/* 每隔 32 天 sync 一次 */
+      ++number;
+    }
+  }
+  closedir(dirp);
+
+  fclose(fp);
+  exit(0);
+}

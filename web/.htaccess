@@ -1,0 +1,48 @@
+#擋掉百度
+
+SetEnvIfNoCase User-Agent "^Baidu" bad_bot
+SetEnvIfNoCase User-Agent "^sogou" bad_bot
+SetEnvIfNoCase User-Agent "^Bloghoo" bad_bot
+SetEnvIfNoCase User-Agent "^Scooter" bad_bot
+Deny from env=bad_bot
+
+SetEnvIfNoCase ^User-Agent$ .*(aesop_com_spiderman|alexibot|backweb|bandit|batchftp|bigfoot) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(black.?hole|blackwidow|blowfish|botalot|buddy|builtbottough|bullseye) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(cheesebot|cherrypicker|chinaclaw|collector|copier|copyrightcheck) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(cosmos|crescent|curl|custo|da|diibot|disco|dittospyder|dragonfly) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(drip|easydl|ebingbong|ecatch|eirgrabber|emailcollector|emailsiphon) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(emailwolf|erocrawler|exabot|eyenetie|filehound|flashget|flunky) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(frontpage|getright|getweb|go.?zilla|go-ahead-got-it|gotit|grabnet) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(grafula|harvest|hloader|hmview|httplib|httrack|humanlinks|ilsebot) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(infonavirobot|infotekies|intelliseek|interget|iria|jennybot|jetcar) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(joc|justview|jyxobot|kenjin|keyword|larbin|leechftp|lexibot|lftp|libweb) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(likse|linkscan|linkwalker|lnspiderguy|lwp|magnet|mag-net|markwatch) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(mata.?hari|memo|microsoft.?url|midown.?tool|miixpc|mirror|missigua) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(mister.?pix|moget|mozilla.?newt|nameprotect|navroad|backdoorbot|nearsite) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(net.?vampire|netants|netcraft|netmechanic|netspider|nextgensearchbot) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(attach|nicerspro|nimblecrawler|npbot|octopus|offline.?explorer) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(offline.?navigator|openfind|outfoxbot|pagegrabber|papa|pavuk) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(pcbrowser|php.?version.?tracker|pockey|propowerbot|prowebwalker) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(psbot|pump|queryn|recorder|realdownload|reaper|reget|true_robot) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(repomonkey|rma|internetseer|sitesnagger|siphon|slysearch|smartdownload) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(snake|snapbot|snoopy|sogou|spacebison|spankbot|spanner|sqworm|superbot) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(superhttp|surfbot|asterias|suzuran|szukacz|takeout|teleport) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(telesoft|the.?intraformant|thenomad|tighttwatbot|titan|urldispatcher) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(turingos|turnitinbot|urly.?warning|vacuum|vci|voideye|whacker) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(widow|wisenutbot|wwwoffle|xaldon|xenu|zeus|zyborg|anonymouse) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*web(zip|emaile|enhancer|fetch|go.?is|auto|bandit|clip|copier|master|reaper|sauger|site.?quester|whack) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(craftbot|download|extract|stripper|sucker|ninja|clshttp|webspider|leacher|collector|grabber|webpictures) HTTP_SAFE_BADBOT
+SetEnvIfNoCase ^User-Agent$ .*(libwww-perl|aesop_com_spiderman) HTTP_SAFE_BADBOT
+Deny from env=HTTP_SAFE_BADBOT
+
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+	RewriteBase /
+	RewriteRule ^(JS|style)/.*$ - [PT]
+	RewriteRule ^([a-zA-Z0-9_\-.]+).xml$ /RSS.php?brd=$1 [L]
+	RewriteRule ^([a-zA-Z0-9_\-.]+)/([a-zA-Z0-9_\-.]+)$ /cover.php?brd=$1&pid=$2 [L]
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-l
+	RewriteRule ^(.*) / [R=301]
+</IfModule>

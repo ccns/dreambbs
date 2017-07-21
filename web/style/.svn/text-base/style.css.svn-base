@@ -1,0 +1,34 @@
+html{background-color:#000000;overflow-y:scroll}
+body{text-align:center}
+pre{display:inline;font-family:AR PL UMING TW,"細明體",Courier,monospace;font-size:24px;line-height:24px;white-space:pre-wrap;word-wrap:break-word;background-color:#000000;color:#C0C0C0;width:100%;*white-space: pre}
+div#pbody{width:970px;margin:0 auto;text-align:left}
+.dcw{width:12px;overflow:hidden;position:absolute;color:inherit;background-color:inherit}
+.bg40{background-color:#000000}
+.bg41{background-color:#800000}
+.bg42{background-color:#008000}
+.bg43{background-color:#808000}
+.bg44{background-color:#000080}
+.bg45{background-color:#800080}
+.bg46{background-color:#008080}
+.bg47{background-color:#C0C0C0}
+.fg30{color:#000000}
+.fg31{color:#800000}
+.fg32{color:#008000}
+.fg33{color:#808000}
+.fg34{color:#000080}
+.fg35{color:#800080}
+.fg36{color:#008080}
+.fg37{color:#C0C0C0}
+.fgl30{color:#808080}
+.fgl31{color:#FF0000}
+.fgl32{color:#00FF00}
+.fgl33{color:#FFFF00}
+.fgl34{color:#0000FF}
+.fgl35{color:#FF00FF}
+.fgl36{color:#00FFFF}
+.fgl37{color:#FFFFFF}
+A:link{text-decoration:underline;color:inherit}
+A:visited{text-decoration:underline;color:inherit}
+A:active{text-decoration:underline;color:inherit}
+A:hover{text-decoration:underline;color:red}
+.reset{background-color:#FFFFFF;color:#000000}

@@ -1,0 +1,135 @@
+Atime	str_time.c	/^Atime(clock) \/* Thor.990125: 假裝ARPANET時間格式 /
+BFLAG	../include/struct.h	/^#define	BFLAG(n)	(1 << n)\/* 32 bit-wise flag *\/$/
+BMAX	../include/bbs.h	/^#define	BMAX(a,b)	((a>b)?a:b)$/
+BMIN	../include/bbs.h	/^#define	BMIN(a,b)	((a<b)?a:b)$/
+Btime	str_time.c	/^Btime(clock)$/
+Ctime	str_time.c	/^Ctime(clock)$/
+Ctrl	../include/global.h	/^#define Ctrl(c)		( c & 037 )$/
+DL_func	dl_lib.c	/^DL_func(char *name, ...)$/
+DL_get	dl_lib.c	/^DL_get(name)$/
+Etime	str_time.c	/^Etime(clock)$/
+GOTOXY	../include/bbsnet.h	/^#define GOTOXY( y, x )	printf( "\\x1b[%d;%df", x, /
+HAS_PERM	../include/perm.h	/^#define HAS_PERM(x)	((x)?cuser.userlevel&(x):1)$/
+HAVE_PERM	../include/perm.h	/^#define HAVE_PERM(x)	(cuser.userlevel&(x))$/
+INI	../include/bbsctrl.h	/^# define INI(x)		= x$/
+Isspace	../include/xchat.h	/^Isspace (ch)$/
+Meta	../include/global.h	/^#define Meta(c)		( c + 0x0200 )$/
+Msplay	splay.c	/^main(int argc, char *argv[])$/
+Mstr_decode	str_decode.c	/^main()$/
+Mstr_pat	str_pat.c	/^main()$/
+Mstr_xor	str_xor.c	/^main()$/
+Mxsort	xsort.c	/^main()$/
+Now	str_time.c	/^Now()$/
+STR4	../include/proto.h	/^#define	STR4(x)		((x[0] << 24) + (x[1] << 16) + (x/
+STR_PAT	str_pat.c	/^#define	STR_PAT(x, y)	printf("<%s, %s> : %d\\n", x/
+SWAPINIT	xsort.c	/^#define SWAPINIT(a, es) \\$/
+acl_addr	acl_addr.c	/^acl_addr(acl, addr)$/
+acl_has	acl_has.c	/^acl_has(acl, user, host)$/
+archiv32	archiv32.c	/^archiv32(chrono, fname)$/
+archiv32m	archiv32m.c	/^archiv32m(chrono, fname)$/
+attr_get	attr_lib.c	/^attr_get(userid, key, value)$/
+attr_put	attr_lib.c	/^attr_put(userid, key, value)$/
+attr_step	attr_lib.c	/^attr_step(userid, key, dflt, step)$/
+base64_code	str_decode.c	/^base64_code(x)$/
+brd_fpath	f_path.c	/^brd_fpath(fpath, board, fname)$/
+chkpasswd	str_passwd.c	/^chkpasswd(passwd, test)$/
+chrono32	chrono32.c	/^chrono32(str)$/
+compareint	splay.c	/^compareint(void *a, void *b)$/
+dashd	../include/proto.h	/^#define	dashd(fpath)	S_ISDIR(f_mode(fpath))$/
+dashf	../include/proto.h	/^#define	dashf(fpath)	S_ISREG(f_mode(fpath))$/
+dns_addr	dns_addr.c	/^dns_addr(name)$/
+dns_ident	dns_ident.c	/^dns_ident(sock, from, rhost, ruser)$/
+dns_init	dns.c	/^dns_init()$/
+dns_mx	dns_smtp.c	/^dns_mx(domain, mxlist)$/
+dns_name	dns_name.c	/^dns_name(addr, name)$/
+dns_open	dns_open.c	/^dns_open(host, port)$/
+dns_query	dns.c	/^dns_query(name, qtype, ans)$/
+dns_smtp	dns_smtp.c	/^dns_smtp(host)$/
+f_cat	f_cat.c	/^f_cat(fpath, msg)$/
+f_cp	f_cp.c	/^f_cp(src, dst, mode)$/
+f_exlock	f_lock.c	/^f_exlock(fd)$/
+f_img	f_img.c	/^f_img(fpath, fsize)$/
+f_ln	f_ln.c	/^f_ln(src, dst)$/
+f_map	f_map.c	/^f_map(fpath, fsize)$/
+f_mode	f_mode.c	/^f_mode(fpath)$/
+f_mv	f_mv.c	/^f_mv(src, dst)$/
+f_new	f_new.c	/^f_new(fold, fnew)$/
+f_open	f_open.c	/^f_open(fpath)$/
+f_rm	f_rm.c	/^f_rm(fpath)$/
+f_suck	f_suck.c	/^f_suck(fp, fpath)$/
+f_unlock	f_lock.c	/^f_unlock(fd)$/
+gem_fpath	f_path.c	/^gem_fpath(fpath, board, fname)$/
+genpasswd	str_passwd.c	/^genpasswd(pw)$/
+getdtablesize	../include/bbs.h	/^#define getdtablesize()         (64)$/
+getshort	../include/dns.h	/^getshort(c)$/
+hash32	hash32.c	/^hash32(str)$/
+hdr_fpath	hdr_fpath.c	/^hdr_fpath(fpath, folder, hdr)$/
+hdr_stamp	hdr_stamp.c	/^hdr_stamp(folder, token, hdr, fpath)$/
+int_cmp	xsort.c	/^int_cmp(a, b)$/
+is_alnum	is_alnum.c	/^is_alnum(ch)$/
+is_alpha	is_alpha.c	/^is_alpha(ch)$/
+is_fname	is_fname.c	/^is_fname(str)$/
+is_fpath	is_fpath.c	/^is_fpath(path)$/
+isprint2	../include/global.h	/^#define	isprint2(c)	((c >= ' ')) \/* ((c & 0x80 ||/
+isreturn	str_decode.c	/^isreturn(c)$/
+isspace	str_decode.c	/^isspace(c)$/
+mak_dirs	mak_dirs.c	/^mak_dirs(fpath)$/
+mak_fpath	f_path.c	/^mak_fpath(str, key, name)$/
+med3	xsort.c	/^med3(a, b, c, cmp)$/
+min	xsort.c	/^#define min(a, b)	(a) < (b) ? a : b$/
+mm_getcharset	str_decode.c	/^mm_getcharset(str, charset, size)$/
+mm_getencode	str_decode.c	/^mm_getencode(str, code)$/
+mmdecode	str_decode.c	/^int mmdecode(src, encode, dst)$/
+mmdecode2	str_decode.c	/^int mmdecode2(src, encode, dst)$/
+nextword	../include/xchat.h	/^nextword (str)$/
+not_addr	not_addr.c	/^not_addr(addr)$/
+printint	splay.c	/^printint(void *a)$/
+pseudo_handler	dns_ident.c	/^pseudo_handler()        \/* Thor.991215: for timeo/
+qp_code	str_decode.c	/^qp_code(x)$/
+rec_add	rec_add.c	/^rec_add(fpath, data, size)$/
+rec_del	rec_del.c	/^rec_del(data, size, pos, fchk, fdel)$/
+rec_get	rec_get.c	/^rec_get(fpath, data, size, pos)$/
+rec_ins	rec_ins.c	/^rec_ins(fpath, data, size, pos, num)$/
+rec_loc	rec_loc.c	/^rec_loc(data, size, fchk)$/
+rec_mov	rec_mov.c	/^rec_mov(data, size, from, to)$/
+rec_num	rec_num.c	/^rec_num(fpath, size)$/
+rec_put	rec_put.c	/^rec_put(fpath, data, size, pos)$/
+rm_dir	f_rm.c	/^rm_dir(fpath)$/
+setdirpath	str_fpath.c	/^setdirpath(fpath, direct, fname)$/
+shm_new	shm.c	/^shm_new(shmkey, shmsize)$/
+splay_free	splay.c	/^splay_free(SplayNode * top, void (*data_free) (voi/
+splay_in	splay.c	/^splay_in(top, data, compare)$/
+splay_out	splay.c	/^splay_out(SplayNode * top, void (*data_out) ())$/
+str_add	str_add.c	/^str_add(dst, src)$/
+str_cat	str_cat.c	/^str_cat(dst, s1, s2)$/
+str_cmp	str_cmp.c	/^str_cmp(s1, s2)$/
+str_decode	str_decode.c	/^str_decode(str)$/
+str_dup	str_dup.c	/^str_dup(src, pad)$/
+str_folder	str_folder.c	/^str_folder(fpath, folder, fname)$/
+str_from	str_from.c	/^str_from(from, addr, nick)$/
+str_has	str_has.c	/^str_has(list, tag)$/
+str_hash	str_hash.c	/^str_hash(str, seed)$/
+str_hash2	str_hash2.c	/^str_hash2(str, seed)$/
+str_len	str_len.c	/^str_len(str)$/
+str_lower	str_lower.c	/^str_lower(dst, src)$/
+str_ncmp	str_ncmp.c	/^str_ncmp(s1, s2, n)$/
+str_ncpy	str_ncpy.c	/^str_ncpy(dst, src, n)$/
+str_ndup	str_ndup.c	/^str_ndup(src, len)$/
+str_pat	str_pat.c	/^str_pat(str, pat)$/
+str_rev	str_rev.c	/^str_rev(dst, src)$/
+str_rle	str_rle.c	/^str_rle(str)			\/* run-length encoding *\/$/
+str_stamp	str_stamp.c	/^str_stamp(str, chrono)$/
+str_str	str_str.c	/^str_str(str, tag) $/
+str_tail	str_tail.c	/^str_tail(str)$/
+str_trim	str_trim.c	/^str_trim(buf)			\/* remove trailing space *\/$/
+str_ttl	str_ttl.c	/^str_ttl(title)$/
+str_xor	str_xor.c	/^str_xor(dst, src)$/
+swap	xsort.c	/^#define swap(a, b)					\\$/
+swapcode	xsort.c	/^#define swapcode(TYPE, parmi, parmj, n) { 		\\$/
+swapfunc	xsort.c	/^swapfunc(a, b, n, swaptype)$/
+url_encode	url_encode.c	/^url_encode(dst, src)$/
+usleep	../include/bbs.h	/^#define usleep(usec)            {               \\/
+usr_fpath	f_path.c	/^usr_fpath(fpath, user, fname)$/
+vecswap	xsort.c	/^#define vecswap(a, b, n) 	if ((n) > 0) swapfunc(a,/
+xsort	xsort.c	/^xsort(a, n, es, cmp)$/
+xwrite	xwrite.c	/^xwrite(fd, data, size)$/

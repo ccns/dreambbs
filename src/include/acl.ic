@@ -1,0 +1,258 @@
+/*-------------------------------------------------------*/
+/* lib/acl.ic		( NTHU CS MapleBBS Ver 3.00 )	 */
+/*-------------------------------------------------------*/
+/* target : included C file for Access Control List	 */
+/* create : 96/11/20					 */
+/* update : 96/12/15					 */
+/*-------------------------------------------------------*/
+
+
+/* ----------------------------------------------------- */
+/* ACL config file format				 */
+/* ----------------------------------------------------- */
+/* user:	majordomo@	bad@cs.nthu.edu.tw	 */
+/* host:	cs.nthu.edu.tw	140.114.77.1		 */
+/* subnet:	.nthu.edu.tw	140.114.77.		 */
+/* ----------------------------------------------------- */
+
+
+#include <stdio.h>
+
+
+typedef struct ACL_t
+{
+  struct ACL_t *nacl;
+  int locus;
+  unsigned char filter[0];
+}     ACL_t;
+
+
+static ACL_t *acl_root;
+
+
+static int
+str_cpy(dst, src, n)
+  unsigned char *dst;
+  unsigned char *src;
+  int n;
+{
+  int cc, len;
+
+  len = 0;
+  for (;;)
+  {
+    cc = *src;
+    if (cc >= 'A' && cc <= 'Z')
+      cc += 0x20;
+    *dst = cc;
+    if ((len > n) || (!cc))	/* lkchu.990511: 避免 overflow */
+      break;
+    src++;
+    dst++;
+    len++;
+  }
+  return len;
+}
+
+#ifndef USE_RESET
+static void
+acl_reset()
+{
+  ACL_t *ax, *nacl;
+
+  if ((ax = acl_root))
+  {
+    do
+    {
+      nacl = ax->nacl;
+      free(ax);
+    } while ((ax = nacl));
+
+    acl_root = NULL;
+  }
+}
+#endif
+
+static void
+acl_add(filter)
+  unsigned char *filter;
+{
+  int at, cc, len;
+  char *str;
+  ACL_t *ax;
+
+  str = (char *)filter;
+  at = len = 0;
+  for (;;)
+  {
+    cc = *str;
+    if (cc == '\n' || cc == ' ' || cc == '#' || cc == '\t' || cc == '\r')
+    {
+      *str = '\0';
+      break;
+    }
+    if (!cc)
+      break;
+
+    str++;
+    len++;
+    if (cc == '@')
+      at = -len;
+  }
+
+  if (len <= 0)
+    return;
+
+  ax = (ACL_t *) malloc(sizeof(ACL_t) + len + 1);
+
+  ax->nacl = acl_root;
+  acl_root = ax;
+  ax->locus = at ? at : len;
+
+  str = (char *)ax->filter;
+  do
+  {
+    cc = *filter++;
+    if (cc >= 'A' && cc <= 'Z')
+      cc += 0x20;
+  } while ((*str++ = cc));
+}
+
+
+static void
+acl_load(fpath)
+  char *fpath;
+{
+  FILE *fp;
+  char buf[256];
+
+  if ((fp = fopen(fpath, "r")))
+  {
+    fpath = buf;
+    while (fgets(fpath, sizeof(buf), fp))
+    {
+      if (!*fpath)
+	break;
+
+      if (*fpath == '#')
+	continue;
+
+      acl_add(fpath);
+    }
+    fclose(fp);
+  }
+}
+
+
+#if 0
+static void
+acl_save(fpath)
+  char *fpath;
+{
+  FILE *fp;
+  ACL_t *ax;
+
+  if ((ax = acl_root) && (fp = fopen(fpath, "w")))
+  {
+    do
+    {
+      fprintf("%s\n", ax->filter);
+    } while (ax = ax->nacl);
+    fclose(fp);
+  }
+}
+#endif
+
+
+static int
+acl_match(rhost, ruser)
+  unsigned char *rhost;
+  unsigned char *ruser;
+{
+  ACL_t *ax;
+  unsigned char *filter, xhost[128], xuser[80];
+  int lhost, luser, locus, len;
+
+  if (!(ax = acl_root))
+    return 0;
+
+  /* lkchu.990511: rhost 和 ruser 都沒有先檢查長度就 copy, 
+                   很可能發生 segmentation fault */
+  lhost = str_cpy(xhost, rhost, sizeof(xhost));
+  luser = str_cpy(xuser, ruser, sizeof(xuser));
+  rhost = xhost;
+  ruser = xuser;
+
+  do
+  {
+    filter = ax->filter;
+    locus = ax->locus;
+
+    /* match remote user name */
+
+    if (locus < 0)
+    {
+      len = -1 - locus;
+      
+      if(filter[len - 1] != '*' || memcmp(ruser, filter, len-1))
+      {
+        if ((len != luser) || memcmp(ruser, filter, luser))
+	  continue;
+      }
+
+      filter -= locus;
+      if (*filter == '\0')	/* majordomo@ */
+	return 1;
+      locus = strlen((char *)filter);
+    }
+
+    /* match remote host name */
+
+    if (locus == lhost)
+    {
+      if (!strcmp((char *)filter, (char *)rhost))
+	return 1;
+    }
+    else if (locus < lhost)
+    {
+      if (*filter == '.')
+      {
+	if (!strcmp((char *)filter, (char *)(rhost + lhost - locus)))
+	  return 1;
+      }
+      else if (filter[locus - 1] == '.')
+      {
+	if (!memcmp(filter, rhost, locus))
+	  return 1;
+      }
+    }
+  } while ((ax = ax->nacl));
+
+  return 0;
+}
+
+
+#ifdef	TEST
+#define	ACL_TEST(x, y)	printf("%s@%s ==> %d\n", y, x, acl_match(x, y))
+
+main()
+{
+
+#if 0
+  acl_add("root@cs.nthu.edu.tw");
+  acl_add("ee.nthu.edu.tw");
+  acl_add(".hinet.net");
+  acl_add("140.111.1.");
+
+  ACL_TEST("CS.nthu.edu.tw", "www");
+  ACL_TEST("ee.nthu.edu.tw", "guest.bbs");
+  ACL_TEST("mail.hinet.net", "spam");
+  ACL_TEST("140.111.1.2", "fake");
+
+  acl_load("mail.acl");
+#endif
+
+  acl_add("im60533@mail1.mt.touc.edu.tw");
+  ACL_TEST("mail1.mt.touc.edu.tw", "im60533");
+}
+#endif				/* TEST */
