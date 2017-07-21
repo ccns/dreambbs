@@ -1,0 +1,155 @@
+<?
+/****************************************************
+
+          BBS Code Color Convert To Html
+
+ ****************************************************
+ 作者：renn999.bbs <AT> bbs.ccns.ncku.edu.tw
+       cache.bbs   <AT> bbs.ee.ncku.edu.tw 
+ 
+ 運行需求: PHP 5.3 以上
+           Apache(需修改設定 User Group 皆需修改成bbs)
+ 附加說明：部份的function請參閱
+           uaocode.php big5uao to UTF-8 及部份function
+           ANSIcolorcover.php ansi色彩轉換
+ ****************************************************/
+ob_start();
+$time = microtime(true);
+include('config.php');
+include('ANSIcolorcover.php');
+include('db.php');
+//引入big5uao To UTF-8外加雙色字偵測的function php
+$bbs_path='/home/bbs/brd/';
+//引入bbs path
+
+$brd=$_GET['brd'];
+if($brd==""){
+  exit('LOSS_BROAD_NAME');
+}elseif(!preg_match("/^[a-zA-Z0-9.\-_]+$/",$brd)){
+  exit("THIS_IS_NOT_A_VIALD_BROAD");
+}elseif(!is_dir($bbs_path.$brd)){
+  exit('NO_SUCH_BROAD_NAME');
+}
+//先行過濾抓到的東西 避免使用者亂來
+
+$filename = '/home/bbs/.BRD';
+$handle = fopen ( $filename, 'rb' );
+$brd_num = filesize($filename)/256;
+for($i=0;$i<$brd_num;$i++){
+  fseek($handle, $i*256);
+  $brd_list  = fread($handle,108);
+  $brd_id    = stripnull(substr($brd_list,0,12));
+  if($brd==$brd_id){
+    if(ord($brd_list['107']) & 128){
+      exit('THIS_BRD_IS_NOT_PUBLIC');
+    }
+	$have_brd=true;
+    break;
+  }
+  unset($brd_id,$brd_list);
+}
+if(!$have_brd)
+  exit('NO_SUCH_BROAD_NAME');
+unset($filename,$handle,$brd_num,$brd_id,$brd_list);
+//確定看板屬性 如果為隱版則跳出
+
+$pid=strtoupper($_GET['pid']);
+if($pid==""){
+  exit('LOSS_POST_ID');
+}elseif(!preg_match("/^[A-Z0-9]+$/",$pid)){
+  exit("THIS_IS_NOT_A_VIALD_POST_ID");
+}elseif(!is_file($bbs_path.$brd.'/'.substr($pid,-1).'/'.$pid)){
+  exit('NO_SUCH_POST_ID');
+}
+//同樣先過濾部份字元
+
+$filename = $bbs_path.$brd.'/.DIR';
+$handle = fopen ( $filename, 'rb' );
+$pos_num = filesize($filename)/256;
+$post_title='';
+for($i=0;$i<$pos_num;$i++){
+  fseek($handle, $i*256+4);//跳過timestamp
+  $post_list  = fread($handle,252);
+  $post_id    = substr($post_list,8,8);
+  if($pid==$post_id){
+    if((ord($post_list['2']) & 48) or (ord($post_list['0']) & 128)){
+      exit('THIS_POST_HAS_BEEN_DELETED_OR_LOCKED');
+    }
+    $post_title = b2u(stripnull(substr($post_list,-73)));
+    break;
+  }
+  unset($post_id,$post_list);
+}
+if(!$post_title){
+  exit('THIS_POST_HAS_BEEN_DELETED_OR_LOCKED');
+}
+unset($filename,$handle,$pos_num,$post_id,$post_list);
+//先掃過.DIR確認文章是否為 d文 or L文
+
+$hit = hit_count();
+header("Content-type: text/html; charset=utf-8");
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <meta HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8" /> 
+    <meta name="title" content="<?=SITE_NAME?>bbs <?=$brd?>版 - <?echo htmlspecialchars($post_title['str']);?>" />
+    <meta name="robots" content="noindex,nofollow" />
+    <link type="text/css" href="http://<?=WEBSITE_DOMAIN?>/style/style.css"  rel="stylesheet" />
+    <title><?=SITE_NAME?>bbs <?=$brd?>版 - <?=$post_title['str']?></title>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://<?=WEBSITE_DOMAIN?>/JS/jquery.lazyload.mini.js"></script>
+    <script type="text/javascript" src="http://<?=WEBSITE_DOMAIN?>/JS/blink.js"></script>
+    <script type="text/javascript" src="http://<?=WEBSITE_DOMAIN?>/JS/screen_width.js"></script>
+    <script type="text/javascript" src="http://<?=WEBSITE_DOMAIN?>/JS/ansi.js"></script>
+    <script type="text/javascript">
+    $(function() {
+      $("img").lazyload({
+        placeholder : "../../click2open.gif",
+        effect : "fadeIn"
+      });
+    });
+    </script>
+  </head>
+  <body>
+    <div id='pbody'>
+      <div style="font-weight: bold; text-align: right; width: 100%; font-size: 0.8em;padding:20px 0px;">
+      <button style="float:left" id="removeANSI">純文字模式</button>
+      <button style="float:left" id="ANSIcolor">預設格式化內容</button>
+      <span style="float:left;font-size:20px"class='fg37'>點擊次數：<?=$hit?></span>
+        <a href='#' onclick="javascript: void(window.open('http://www.plurk.com/?qualifier=shares&amp;status=' .concat(encodeURIComponent('http://<?php echo WEBSITE_DOMAIN,'/',$brd,'/',$pid; ?>')) .concat(' ') .concat('(') .concat(encodeURIComponent('<?=SITE_NAME?>bbs <?php echo addslashes(htmlspecialchars($brd));?>版 - <?php echo addslashes(htmlspecialchars($post_title['str']));?>')) .concat(')')));" style="background-color: rgb(255, 102, 0);color:#FFFFFF;padding:5px;">推到Plurk</a>
+        <a href='#' onclick="javascript: void(window.open('http://www.facebook.com/share.php?u='.concat(encodeURIComponent('http://<?php echo WEBSITE_DOMAIN,'/',$brd,'/',$pid; ?>'))));" style="background-color: rgb(0, 102, 255);color:#FFFFFF;padding:5px;">推到Facebook</a>
+        <a href='#' onclick="javascript: void(window.open('http://twitter.com/home/?status='.concat(encodeURIComponent('<?=SITE_NAME?>bbs <?php echo addslashes(htmlspecialchars($brd));?>版 - <?php echo addslashes(htmlspecialchars($post_title['str']));?>')) .concat(' ') .concat(encodeURIComponent('http://<?php echo WEBSITE_DOMAIN,'/',$brd,'/',$pid; ?>'))));" style="background-color: rgb(51, 204, 255);color:#FFFFFF;padding:5px;">推到Twitter</a>
+		</div>
+      <pre><?php
+$filename = $bbs_path.$brd.'/'.substr($pid,-1).'/'.$pid;
+//$filename='abc.123';//debug
+$handle = fopen ( $filename, 'rb' );
+$post='';
+
+while($inside = fgets($handle)){
+  
+  $inside=str_replace(array("\r","\n"),'',$inside);
+  $inside=preg_replace(array('/^(\\xa1\\xb0 .*)$/','/^(> .*)$/'),array("\x1b\x5b32m$1\x1b\x5bm","\x1b\x5b36m$1\x1b\x5bm"),$inside,1);
+  $inside=htmlspecialchars($inside);
+  $inside=preg_replace_callback('!(?:https?|ftps?|telnet):/{2}[\w\.\\x1b\\[\;]{2,}[/\w\:\-\.\?\&\=\#\%\\x1b\\[\;\~\,]*!i','preg_callback_url', $inside);
+  $post .= ANSI($inside);
+  unset($inside);
+}
+fclose($handle);
+$post = preg_replace_callback("/(?:作者|發信人): (.*)\n(?:標 {0,2}題): (.*)\n(?:時間|發信站): (.*)\n/",'header_call_back',$post,1);
+echo $post;
+unset($post);
+?>
+</pre><small>
+<span class="fg37">powered by renn999&lt;AT&gt;bbs.ccns.cc DreamLand BBS 2010 共耗時 <?php echo microtime(true) - $time;?>s</span>
+</small>
+    </div>
+<!--[if lte IE 6]>
+	<script src="http://letskillie6.googlecode.com/svn/trunk/letskillie6.pack.js"></script>
+		<![endif]-->
+  </body>
+</html>
+<?php
+ob_end_flush();
+?>

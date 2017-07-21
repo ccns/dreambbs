@@ -1,0 +1,285 @@
+#define	HASH_TABLE_SIZE		256
+#define	HASH_TABLE_SEED		101
+
+
+typedef struct HashEntry
+{
+  struct HashEntry *next;
+  unsigned int hv;		/* hashing value */
+  time_t uptime;
+  unsigned int visit;		/* reference counts */
+  unsigned int score;
+  void *xyz;			/* other stuff */
+  char key[0];
+}         HashEntry;
+
+
+typedef struct
+{
+  int mask;
+  int keylen;			/* 0 : string */
+  int tale;
+  int leak;
+  int (*comp) (const void *k1, const void *k2, int len);
+  int (*hash) (const void *key, int len);
+  HashEntry *bucket[0];
+}      HashTable;
+
+
+extern int hash32(), str_cmp(), memcmp();
+
+
+int
+he_hash(key, len)
+  const unsigned char *key;
+  int len;			/* 0 : string */
+{
+  unsigned int seed, shft;
+
+  seed = HASH_TABLE_SEED;
+  shft = 0;
+
+  if (len > 0)
+  {
+    while (len-- > 0)
+    {
+      seed += (*key++) << shft;
+      shft = (shft + 1) & 7;
+    }
+  }
+  else
+  {
+    while ((len = *key))
+    {
+      key++;
+      seed += len << shft;
+      shft = (shft + 1) & 7;
+    }
+  }
+
+  return seed;
+}
+
+
+static HashTable *
+ht_new(size, keylen)
+  int size;			/* 2's power */
+  int keylen;			/* 0 : key is string */
+{
+  HashTable *ht;
+  int he_len;
+
+  if (size <= 0)
+    size = HASH_TABLE_SIZE;
+
+  he_len = size * sizeof(HashEntry *);
+  if ((ht = (HashTable *) malloc(sizeof(HashTable) + he_len)))
+  {
+    ht->mask = size - 1;
+    ht->keylen = keylen;
+    ht->tale = 0;
+    ht->leak = 0;
+    if (keylen)
+    {
+      ht->hash = he_hash;
+      ht->comp = (void *) memcmp;
+    }
+    else
+    {
+      ht->hash = (void *) hash32;
+      ht->comp = (void *) str_cmp;
+    }
+
+    memset(ht->bucket, 0, he_len);
+  }
+  return ht;
+}
+
+
+#if 0
+void
+ht_free(ht)
+  HashTable *ht;
+{
+  int i, len;
+  HashEntry *node, *next;
+
+  len = ht->keylen;
+  for (i = ht->mask; i >= 0; i--)
+  {
+    node = ht->bucket[i];
+    while (node)
+    {
+      next = node->next;
+      if (len > 0)
+	free(node->xyz);
+      free(node);
+      node = next;
+    }
+  }
+
+  free(ht);
+}
+
+
+void
+ht_apply(ht, func)
+  HashTable *ht;
+  int (*func) (const HashEntry * he);
+{
+  int i, len;
+  HashEntry *he, **hp;
+
+  len = ht->len;
+  for (i = ht->mask; i >= 0; i--)
+  {
+    hp = &(ht->bucket[i]);
+    while (he = *hp)
+    {
+      if (func(he) < 0)		/* unlink this entry */
+      {
+	*hp = he->next;
+	if (len > 0)
+	  free(he->xyz);
+	free(he);
+	ht->tale--;
+      }
+      else
+      {
+	hp = &(he->next);
+      }
+    }
+  }
+}
+
+
+HashEntry *
+ht_look(ht, key)
+  HashTable *ht;
+  const void *key;
+{
+  int len;
+  unsigned int hv;
+  HashEntry *he;
+  int (*comp) ();
+
+  len = ht->keylen;
+  comp = ht->comp;
+  hv = ht->hash(key, len);
+  he = ht->bucket[hv & (ht->mask)];
+  while (he)
+  {
+    if (hv == he->hv && !comp(key, he->key, len))
+      break;
+    he = he->next;
+  }
+  return he;
+}
+#endif
+
+
+static HashEntry *
+ht_add(ht, key)
+  HashTable *ht;
+  const void *key;
+{
+  HashEntry *he, **hp;
+  int len;
+  unsigned int hv;
+  int (*comp) ();
+
+  len = ht->keylen;
+  comp = ht->comp;
+  hv = ht->hash(key, len);
+  hp = &(ht->bucket[hv & (ht->mask)]);
+
+  for (;;)
+  {
+    he = *hp;
+    if (he == NULL)
+    {
+      if (len == 0)
+	len = strlen(key) + 1;
+      if ((he = (HashEntry *) malloc(sizeof(HashEntry) + len)))
+      {
+	*hp = he;
+	he->hv = hv;
+	he->next = NULL;
+	he->visit = 0;
+	he->score = 0;
+	he->xyz = 0;
+	memcpy(he->key, key, len);
+	ht->tale++;
+	ht->leak++;
+      }
+      break;
+    }
+
+    if (hv == he->hv && !comp(key, he->key, len))
+      break;
+
+    hp = &(he->next);
+  }
+
+  he->visit++;
+  return he;
+}
+
+
+static void
+ht_expire(ht, expire)
+  HashTable *ht;
+  time_t expire;
+{
+  int i, delta, tale, score;
+  HashEntry *he, **hp;
+
+  tale = ht->tale;
+  delta = 2 + (ht->leak >> 4) + (tale >> 6);
+  ht->leak = 0;
+
+  for (i = ht->mask; i >= 0; i--)
+  {
+    hp = &(ht->bucket[i]);
+    while ((he = *hp))
+    {
+      if (he->uptime < expire)
+      {
+	score = he->score - delta;
+	if (score <= 0 && he->visit <= 0)	/* unlink this entry */
+	{
+	  *hp = he->next;
+	  free(he);
+	  tale--;
+	  continue;
+	}
+
+	if (score < 0)
+	  score = 0;
+	he->score -= score;
+      }
+
+      hp = &(he->next);
+    }
+  }
+
+  ht->tale = tale;
+}
+
+
+#if 0
+/* string table */
+
+
+/* he->xyz is reference count / uptime ... and so on */
+
+
+HashTable *st;
+
+
+st = ht_new(0, 0);
+
+st_init()
+{
+}
+#endif

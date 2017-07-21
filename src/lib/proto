@@ -1,0 +1,88 @@
+/* str_cat.c */
+void str_cat(char *dst, char *s1, char *s2);
+/* str_cmp.c */
+int str_cmp(char *s1, char *s2);
+/* str_decode.c */
+void str_decode(unsigned char *str);
+/* str_dup.c */
+char *str_dup(char *src, int pad);
+/* str_folder.c */
+void str_folder(char *fpath, char *folder, char *fname);
+/* str_fpath.c */
+void setdirpath(char *fpath, char *direct, char *fname);
+/* str_from.c */
+int str_from(char *from, char *addr, char *nick);
+/* str_hash.c */
+int str_hash(char *str, int seed);
+/* str_lower.c */
+void str_lower(char *dst, char *src);
+/* str_ncmp.c */
+int str_ncmp(char *s1, char *s2, int n);
+/* str_ncpy.c */
+void str_ncpy(char *dst, char *src, int n);
+/* str_passwd.c */
+char *genpasswd(char *pw);
+int chkpasswd(char *passwd, char *test);
+/* str_pat.c */
+int str_pat(const char *str, const char *pat);
+/* str_rle.c */
+int str_rle(unsigned char *str);
+/* str_stamp.c */
+void str_stamp(char *str, time_t *chrono);
+/* str_str.c */
+char *str_str(char *str, char *tag);
+/* str_tail.c */
+char *str_tail(char *str);
+/* str_time.c */
+char *Now(void);
+char *Ctime(time_t *clock);
+char *Etime(time_t *clock);
+/* str_trim.c */
+void str_trim(char *buf);
+/* str_ttl.c */
+char *str_ttl(char *title);
+/* archiv32.c */
+void archiv32(time_t chrono, char *fname);
+/* chrono32.c */
+time_t chrono32(char *str);
+/* hash32.c */
+int hash32(unsigned char *str);
+/* radix32.c */
+/* Link.c */
+int Link(char *src, char *dst);
+/* Prune.c */
+int Prune(char *fpath);
+/* Rename.c */
+int Rename(char *src, char *dst);
+/* Write.c */
+int Write(int fd, char *data, int size);
+/* f_cat.c */
+void f_cat(char *fpath, char *msg);
+/* f_copy.c */
+int f_copy(char *src, char *dst, int mode);
+/* f_map.c */
+char *f_map(char *fpath, int *fsize);
+/* f_mode.c */
+int f_mode(char *fpath);
+/* f_new.c */
+struct _iobuf *f_new(char *fold, char *fnew);
+/* f_path.c */
+void brd_fpath(char *fpath, char *board, char *fname);
+void gem_fpath(char *fpath, char *board, char *fname);
+void usr_fpath(char *fpath, char *user, char *fname);
+/* f_suck.c */
+void f_suck(struct _iobuf *fp, char *fpath);
+/* rec_add.c */
+int rec_add(char *fpath, void *data, int size);
+/* rec_cnt.c */
+int rec_cnt(char *fpath, int size);
+/* rec_del.c */
+int rec_del(char *data, int size, int pos, int (*fchk)(), int (*fdel)());
+/* rec_get.c */
+int rec_get(char *fpath, void *data, int size, int pos);
+/* rec_ins.c */
+int rec_ins(char *fpath, void *data, int size, int pos, int num);
+/* rec_mov.c */
+int rec_mov(char *data, int size, int from, int to);
+/* rec_put.c */
+int rec_put(char *fpath, void *data, int size, int pos);
