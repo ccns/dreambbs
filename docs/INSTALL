@@ -82,14 +82,15 @@ $ cd /home/bbs; git clone https://github.com/pwtsai/dreamlandbbs;cd dreamlandbbs
 
 進去 dreamlandbbs 目錄
 
-會看到除了 README.md 和 .gitignore 以外
+會看到除了 README.md 、 .gitignore 、 sample 、 docs 以外
 
-裡面有分二個部分:
-src web
+裡面主要分成二個部分:
+
+src 和 web
 
 src 裡面的東西是我們主要要編譯安裝的 BBS 主程式原始碼
 
-web 部分則是現行該版本BBS採用的網頁前端相關檔案 (此部分安裝暫不記錄@@)
+web 部分則是現行該版本BBS採用的網頁前端相關檔案 (此部分安裝暫不記錄)
 
 
 4. git 版控環境初始化設定:
