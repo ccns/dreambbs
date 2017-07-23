@@ -1,0 +1,16 @@
+# This is a sample of newsfeeds.bbs
+# Space between these block must has at least 1 TAB key !!
+
+#
+# The following is for -- news.yzu --.
+#
+# newsgroups                    board            	news server
+#------------------------------ ----------------------- ------------
+yzu.bbs.windtop			WindTop			news.yzu
+
+#
+# The following is for -- other news.server  OR  BBS to BBS --.
+#
+# newsgroups                    board           	news server
+#------------------------------ ----------------------- ------------
+nthu.cs.bbs.plan		MaplePlan		news.nthu
