@@ -78,10 +78,10 @@ bbs:x:994:bbs
 
 == 以下用 bbs 的權限即可!! ==
 
-$ cd /home/bbs; git clone https://github.com/pwtsai/dreamlandbbs
-$ cd dreamlandbbs
+$ cd /home/bbs; git clone https://github.com/pwtsai/dreamlandbbs;cd dreamlandbbs
 
 進去 dreamlandbbs 目錄
+
 會看到除了 README.md 和 .gitignore 以外
 
 裡面有分二個部分:
@@ -123,7 +123,7 @@ $ vim -c 'set fencs=big5' -c 'e!' src/include/config.h
 
 若發現有不合之處, 請成功執行程式後, 再自行調整修改:
 
-$ cp -r sample/bbs/* ~/;cp sample/bbs/.* ~/
+$ cp -r sample/bbs/* ~/;cp sample/bbs/.BRD ~/
 
 接著就開始編譯囉!
 
@@ -131,7 +131,6 @@ $ cd src/; make clean linux install; cd ../
 
 目前測試是在 CentOS 32bit 環境下 (Debian GNU/Linux下還沒編譯成功)
 如果相關變數都有定義到的會應該就是可以順利編譯完成
-
 
 然後記得系統執行正常排程:
 $ crontab sample/crontab
