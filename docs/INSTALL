@@ -50,7 +50,7 @@ bbs:x:9999:994:BBS Administrator:/home/bbs:/bin/bash
 
 # vim /etc/group
 
-在該檔最後一行加上: (雖然不知為何手冊說在 Linux 下, GID 要改成 999, 但照做)
+在該檔最後一行加上:
 
 > -----
 
@@ -117,17 +117,20 @@ $ cp sample/config.h src/include/
 $ vim -c 'set fencs=big5' -c 'e!' src/include/config.h
 
 
-設定完之後, 先不要急著make, 而是先將bbs裡相關的結構配置好
+設定完之後, 先不要急著make, 而是先自行檢視 BBS 家目錄下全部的目錄結構, 確認已完整配置
 
-目前 sample/bbs 的範例目錄
 
-還是套用 WindTopBBS-3.02-20040420-SNAP 的架構來修改
+若您的 BBS 家目錄( /home/bbs )下沒有任何 source code 以外的資料, 
+或是尚未熟悉本版本 BBS 運作必要的目錄結構, 可參考本版本目前在 sample/bbs 下的範例目錄
+
+此範例目錄是套用 WindTopBBS-3.02-20040420-SNAP 的架構來修改的
 ( 參考連結: http://ftp.isu.edu.tw/pub/Unix/BBS/WindTop/WindTopBBS-3.02-20040420-SNAP.tgz )
 
 若發現仍有不合之處, 請成功執行程式後, 再自行調整修改.
 
 
-執行以下指令可使範例目錄架構直接安裝到 BBS 家目錄 (/home/bbs) 下:
+
+執行以下指令可使範例目錄架構直接安裝到 BBS 家目錄 下:
 
 $ cp -r sample/bbs/* ~/;cp sample/bbs/.BRD ~/
 
@@ -229,8 +232,7 @@ su -c bbs '/home/bbs/bin/bbsd 3456'  # 大於3000的備用port可這樣設定
 
 之後直接重新啟動:
 
-# service firewalld stop
-# service firewalld start
+# service firewalld restart 
 
 即可完成相關防火牆設定
 
