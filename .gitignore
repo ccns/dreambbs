@@ -32,6 +32,10 @@
 *.dSYM/
 *.su
 
+# config for any BBS sites
+
+src/include/config.h
+
 # other current binary files
 
 src/bgopherd/gemd
