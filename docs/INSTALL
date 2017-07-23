@@ -8,7 +8,7 @@
 
 CentOS 5 ~ 7 32-bit 下應該都可以裝起來 ( 7 要裝 Alt-Arch 版本 )
 
-Debian GNU/Linux 下目前還沒有編譯成功@@ , 還在嘗試orz
+Debian GNU/Linux 32 bit 下目前還沒有編譯成功@@ , 還在嘗試orz
 
 
 大致快速安裝步驟：
@@ -116,20 +116,27 @@ $ cp sample/config.h src/include/
 
 $ vim -c 'set fencs=big5' -c 'e!' src/include/config.h
 
+
 設定完之後, 先不要急著make, 而是先將bbs裡相關的結構配置好
 
 目前 sample/bbs 的範例目錄
-還是套用 WindTopBBS-3.02-20040420-SNAP 的架構
 
-若發現有不合之處, 請成功執行程式後, 再自行調整修改:
+還是套用 WindTopBBS-3.02-20040420-SNAP 的架構來修改
+( 參考連結: http://ftp.isu.edu.tw/pub/Unix/BBS/WindTop/WindTopBBS-3.02-20040420-SNAP.tgz )
+
+若發現仍有不合之處, 請成功執行程式後, 再自行調整修改.
+
+
+執行以下指令可使範例目錄架構直接安裝到 BBS 家目錄 (/home/bbs) 下:
 
 $ cp -r sample/bbs/* ~/;cp sample/bbs/.BRD ~/
+
 
 接著就開始編譯囉!
 
 $ cd src/; make clean linux install; cd ../
 
-目前測試是在 CentOS 32bit 環境下 (Debian GNU/Linux下還沒編譯成功)
+目前測試是在 CentOS 32bit 環境下 (Debian GNU/Linux 32bit 下還沒編譯成功)
 如果相關變數都有定義到的會應該就是可以順利編譯完成
 
 然後記得系統執行正常排程:
@@ -147,7 +154,7 @@ $ /home/bbs/bin/account
 $ /home/bbs/bin/acpro
 $ /home/bbs/bin/makefw
 
-或是自行拿 sample/sh 裡面的 start.sh 這個 shell script 去執行也可以
+或是自行拿 sample/bbs/sh 裡面的 start.sh 這個 shell script 去執行也可以
 
 之後要提供 port 23 的 telnet 連線的話, 請用 root 權限執行:
 
@@ -157,9 +164,9 @@ $ /home/bbs/bin/makefw
 
 $ /home/bbs/bin/bbsd 3456
 
-之後開機自動執行的部分, 可以參考 sample/sh/start.sh 的內容
+之後開機自動執行的部分, 可以參考 sample/bbs/sh/start.sh 的內容
 
-自己建立 /etc/rc.loacl 檔案寫進去:
+或自己建立 /etc/rc.local 檔案寫進去:
 
 > -----
 
