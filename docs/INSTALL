@@ -50,7 +50,7 @@ bbs:x:9999:994:BBS Administrator:/home/bbs:/bin/bash
 
 # vim /etc/group
 
-在該檔最後一行加上: (雖然不知為何手冊說在 Linux 下, GID 要改成 999, 但照做)
+在該檔最後一行加上:
 
 > -----
 
