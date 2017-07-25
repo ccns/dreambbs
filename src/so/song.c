@@ -324,7 +324,7 @@ XO *xo;
 	else
 		flag = 0;
 
-	if (vans("確定點歌嗎 [Y/n]：") != 'y' )
+	if (vans("確定點歌嗎 [y/N]：") != 'y' )
 		return XO_HEAD;
 
 	strcpy(xboard, BRD_ORDERSONGS);
