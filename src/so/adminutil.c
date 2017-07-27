@@ -846,12 +846,12 @@ m_xhlp()
 		"點歌系統",
 		"完全聊天手冊",
 		"投票箱",
-		NULL
+		"最愛提示畫面"
 	};
 
 	static char *path[] =
 	{
-        "gem/@/@AD",
+		"gem/@/@AD",
 		"gem/@/@apply",
 		"gem/@/@error-camera",
 		"gem/@/@income",
@@ -875,7 +875,8 @@ m_xhlp()
 		"gem/@/@signup.hlp",
 		"gem/@/@song.hlp",
 		"gem/@/@ulist.hlp",
-		"gem/@/@vote.hlp"
+		"gem/@/@vote.hlp",
+		"gem/@/@myfav.hlp"
 	};
 
 	x_file(M_XFILES, desc, path);
