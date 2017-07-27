@@ -582,7 +582,7 @@ static int
 myfavorite_help(xo)
   XO *xo;
 {
-//  film_out(FILM_FAVORITE, -1);
+  film_out(FILM_FAVORITE, -1);
   return myfavorite_head(xo);
 }
 

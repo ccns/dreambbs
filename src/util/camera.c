@@ -43,7 +43,9 @@ static char *list[] = {
 	"memorandum.hlp",
 	"aloha.hlp",
 	"signup.hlp",
-	NULL
+//	NULL
+	"myfav.hlp",    /* r2.20170727: test add back my favorite*/
+        NULL
 };
 
 
