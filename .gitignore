@@ -102,3 +102,4 @@ src/util/transacct
 src/util/userno
 src/util/utmp-dump
 src/util/webx
+web/config.php
