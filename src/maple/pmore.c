@@ -2884,7 +2884,7 @@ pmore_QuickRawModePref()
                 "\\", 1, "色彩顯示方式:", -1,
                 "1.預設格式化內容\t2.原始ANSI控制碼\t3.純文字");
 
-        switch(pmsg2("請調整設定 (1-3 可直接選定，\\可切換) 或其它任意鍵結束。"))
+        switch(vmsg("請調整設定 (1-3 可直接選定，\\可切換) 或其它任意鍵結束。"))
         {
             case '\\':
                 bpref.rawmode = (bpref.rawmode+1) % MFDISP_RAW_MODES;
