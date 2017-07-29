@@ -274,7 +274,7 @@ myfavorite_load(xo)
 {
   myfavorite_main();
   xo_load(xo, sizeof(HDR));
-  return myfavorite_body(xo);
+  return myfavorite_head(xo);
 }
 
 
