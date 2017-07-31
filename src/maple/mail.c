@@ -1141,7 +1141,8 @@ m_zip()			/* itoc.010228: 打包資料 */
       return XEASY;
     }
 
-    if ((ans == '3' && !(bbstate & STAT_BOARD)) || (ans == '4' && !(bbstate & STAT_BOARD)))
+    if ((ans == '3' && !(bbstate & STAT_BOARD)) || (ans == '4' && !(bbstate & STAT_BOARD))) 
+                             /*r2: STAT_BOARD ==> STAT_BM , Solving a PERM bug violately, need to be checked*/
     {
       vmsg("只有板主才能打包看板文章及看板精華區");
       return XEASY;
