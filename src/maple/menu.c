@@ -1088,10 +1088,10 @@ static MENU menu_game[] =
   {"bin/pip.so:p_pipple",PERM_VALID,- M_XMODE,
   "Pip        " NICKNAME "¾Ô°«Âû"},
 
+/*
   {"bin/km.so:main_km", PERM_VALID, - M_XMODE,
   "Km         ¤Õ©ú´Ñ"},
 
-/*
   {"bin/puzzle.so:NumPad",PERM_SYSOP,- M_XMODE,
   "NumPad     ´¼¼z«÷½L"},
 */
