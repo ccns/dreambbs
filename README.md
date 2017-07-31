@@ -1,5 +1,5 @@
-# dreamland-bbs
-This repository is the ***current code*** of dreamland-bbs ( telnet://ccns.cc ) at NCKU.
+# Dreamland-BBS (夢之大地電子布告欄系統)
+This repository is the ***current code*** of [dreamland-bbs](http://bbs.ccns.cc) ( telnet://ccns.cc ) at NCKU.
 
 ![](https://i.imgur.com/c0mC6eX.png)
 
@@ -27,6 +27,6 @@ This repository is the ***current code*** of dreamland-bbs ( telnet://ccns.cc ) 
     + **text2html**: To transform from plain text to HTML format. (replaced by `web/`)
     + **util**     : other utility programs for this BBS.
 
-* **web**    - Dreamland BBS Web Frontend
+* **web**    - [Dreamland BBS Web Frontend](http://bbs.ccns.cc)
 
 
