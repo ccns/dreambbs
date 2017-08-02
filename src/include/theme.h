@@ -62,8 +62,12 @@
 #define NECKBOARD "[¡ö]¥D¿ï³æ [¡÷]¾\\Åª [¡ô¡õ]¿ï¾Ü [c]½g¼Æ [y]¸ü¤J [/]·j´M [s]¬ÝªO [h]»¡©ú\n\
 [30;47m  %-7s¬Ý  ªO            %-33s¤H®ð ªO    ¥D     [m"
 
+//#define NECKGEM1 "\
+//[¡ö]Â÷¶} [¡÷]ÂsÄý [f]¼Ò¦¡ [C]¼È¦s [F]Âà±H [Z]¤U¸ü [h]»¡©ú   "
+
 #define NECKGEM1 "\
-[¡ö]Â÷¶} [¡÷]ÂsÄý [f]¼Ò¦¡ [C]¼È¦s [F]Âà±H [Z]¤U¸ü [h]»¡©ú   "
+[¡ö]Â÷¶} [¡÷]ÂsÄý [f]¼Ò¦¡ [C]¼È¦s [h]»¡©ú   " 
+/*r2.20170802: disable some tips in case of confusion*/
 
 #define NECKGEM2 "\033[44m\
   ½s¸¹     ¥D              ÃD                            [½s      ¿ï] [¤é  ´Á]\033[m"

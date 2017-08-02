@@ -78,7 +78,7 @@ bbs:x:994:bbs
 
 == 以下用 bbs 的權限即可!! ==
 
-$ cd /home/bbs; git clone https://github.com/pwtsai/dreamlandbbs;cd dreamlandbbs
+$ cd /home/bbs; git clone https://github.com/ccns/dreamlandbbs ;cd dreamlandbbs
 
 進去 dreamlandbbs 目錄
 
