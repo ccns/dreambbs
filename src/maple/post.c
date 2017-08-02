@@ -4141,6 +4141,7 @@ KeyFunc post_cb[] =
 
 #ifdef	HAVE_RECOMMEND
 	{'X', post_recommend},
+        {'%', post_recommend},           /* r2.20170802: 與 itoc 版熱鍵通用 */
 	//  {'o', post_recommend_options},
 	{'o' | XO_DL, (int (*)())"bin/cleanrecommend.so:clean"},
 	{Ctrl('S'), post_resetscore},         /* cache.090416: 推文設定 */
