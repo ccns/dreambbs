@@ -1580,6 +1580,9 @@ post_browse(xo)
 			case 'X':
 				post_recommend(xo);
 				break;
+			case '%':
+				post_recommend(xo);
+				break;
 #endif
 		}
 		break;
