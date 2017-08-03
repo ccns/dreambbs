@@ -4263,8 +4263,13 @@ ulist_kick(xo)
       sprintf(buf, "%s (%s)", up->userid, up->username);
 
       if ((kill(pid, SIGTERM) == -1) && (errno == ESRCH))
-        memset(up,0,sizeof(UTMP));
-
+      /*  memset(up,0,sizeof(UTMP)); */
+      {
+        up->pid = up -> userno = 0;
+        ushm->count--;            /*r2.20170803: try to fix counting error*/
+      }
+      else
+        sleep(3);               /* 被踢的人這時候正在自我了斷 */
       blog("KICK ", buf);
       return ulist_init(xo);
     }

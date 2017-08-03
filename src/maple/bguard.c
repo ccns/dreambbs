@@ -290,7 +290,10 @@ ushm_guard()
 	{
 	  errno = 0;
 	  if ((kill(pid, SIGTERM) < 0) && (errno == ESRCH))
+          {
 	    uentp->pid = uentp->userno = 0;
+            ushm->count--;        /*r2.20170803: try to fix some bugs about counting ...*/
+          }
 	}
 	else
 	{
@@ -310,7 +313,9 @@ ushm_guard()
 
 	if ((kill(pid, sig) < 0) && (errno == ESRCH))
 	{
+          /* memset(uentp, 0, sizeof(UTMP)); */
 	  uentp->pid = uentp->userno = 0;
+          ushm->count--;    /*r2.20170803: try to fix some bugs about counting ...*/
 	}
 	else
 	{
