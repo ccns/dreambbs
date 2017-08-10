@@ -17,12 +17,14 @@ STRIP   = /usr/bin/strip
 SRC =	acct.c bbsd.c board.c cache.c edit.c\
 	gem.c mail.c menu.c more.c post.c banmail.c\
 	talk.c visio.c xover.c favorite.c socket.c popupmenu.c\
-	pmore.c window.c myfavorite.c\
+	window.c myfavorite.c\
+	# If you defined M3_USE_PMORE , add "pmore.c" on the start of last line
 
 OBJ =	acct.o bbsd.o board.o cache.o edit.o\
 	gem.o mail.o menu.o more.o post.o banmail.o\
 	talk.o visio.o xover.o favorite.o socket.o popupmenu.o\
-    pmore.o window.o myfavorite.o\
+        window.o myfavorite.o\
+	# If you defined M3_USE_PMORE , add "pmore.o" on the start of last line
 
 EXE =	bbsd bguard xchatd
 

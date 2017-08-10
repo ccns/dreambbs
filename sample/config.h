@@ -53,7 +53,8 @@
 
 #define Modules                 /* 顯示模組資訊 */
 #define MultiRecommend          /* 顯示多重推文 */
-#define M3_USE_PMORE            /* pmore 2007 */
+#undef M3_USE_PMORE             /* piaip's more 2007+ */
+                                /* If you open this definition, remember to correct src/maple/Makefile */
 #define GRAYOUT                 /* 淡入淡出特效系統 */
 
 /* ----------------------------------------------------- */
