@@ -17,103 +17,103 @@ enum
 /* user 操作狀態與模式					 */
 /* ----------------------------------------------------- */
 
-#define M_IDLE		0
-#define M_MMENU		1	/* menu mode */
-#define M_ADMIN		2
-#define M_MAIL		3
-#define M_TMENU		4
-#define M_UMENU		5
-#define M_SMENU		6
-#define M_XMENU		7
+#define M_IDLE          0
+#define M_MMENU         1   /* menu mode */
+#define M_ADMIN         2
+#define M_MAIL          3
+#define M_TMENU         4
+#define M_UMENU         5
+#define M_SMENU         6
+#define M_XMENU         7
 #define M_PROFESS       8
-#define M_CLASS		9
+#define M_CLASS         9
 
-#define M_LOGIN		10	/* main menu */
+#define M_LOGIN         10  /* main menu */
 
-#define M_GEM		11	/* announce */
+#define M_GEM           11  /* announce */
 
-#define M_BOARD		12
-#define M_READA		13
+#define M_BOARD	        12
+#define M_READA	        13
 
-#define M_XFILES	14
-#define M_UFILES	15	/* user menu */
+#define M_XFILES        14
+#define M_UFILES        15  /* user menu */
 
-#define M_RMAIL		16	/* mail menu */
+#define M_RMAIL         16  /* mail menu */
 
-#define M_PAL		17
-#define M_LUSERS	18
+#define M_PAL           17
+#define M_LUSERS        18
 
-#define	M_BBTP		19
-#define	M_WEB		20
+#define	M_BBTP          19
+#define	M_WEB           20
 
-#define M_POST		21	/* -> active mode : 不能接受 talk request */
-#define M_SMAIL		22      /* Thor.981020: 目前為 M_BBTP與 M_CHAT間不talk*/
-#define M_TRQST		23
-#define M_TALK		24
-#define M_CHAT		25
+#define M_POST          21  /* -> active mode : 不能接受 talk request */
+#define M_SMAIL         22  /* Thor.981020: 目前為 M_BBTP與 M_CHAT間不talk*/
+#define M_TRQST         23
+#define M_TALK          24
+#define M_CHAT          25
 
-#define M_PAGE		26
-#define M_QUERY		27	/* <- mated mode : 可接對象 */
+#define M_PAGE          26
+#define M_QUERY         27  /* <- mated mode : 可接對象 */
 
-#define M_VOTE		28
+#define M_VOTE          28
 
-#define M_SYSTEM	29
+#define M_SYSTEM        29
 #define M_BMW_REPLY     30      /* lkchu.981201: 熱訊回應 */
 #define M_BMW           31      /* lkchu.981230: 熱訊回顧*/
-#define M_BANMAIL	32	/* visor: 擋信列表 */
-#define M_OMENU		33
-#define M_CHESS		M_CHAT
+#define M_BANMAIL       32      /* visor: 擋信列表 */
+#define M_OMENU         33
+#define M_CHESS         M_CHAT
 
-#define M_MIME		34	/* statue: mime 解碼 */
-#define M_CHICKEN	35
-#define M_XMODE		36
+#define M_MIME          34      /* statue: mime 解碼 */
+#define M_CHICKEN       35
+#define M_XMODE	        36
 #define M_MYFAVORITE    37
 
 #define M_MAX           M_XMODE
-#define	M_BBSNET	0
+#define	M_BBSNET        0
 
 
 #ifdef	_MODES_C_
 static char *ModeTypeTable[] =
 {
-  "發呆",			/* M_IDLE */
-  "主選單",			/* M_MMENU */
-  "系統維護",			/* M_ADMIN */
-  "郵件選單",			/* M_MAIL */
-  "交談選單",			/* M_TMENU */
-  "使用者選單",			/* M_UMENU */
-  "系統資訊",			/* M_SMENU */
-  "網路連線選單",		/* M_XMENU */
-  "專業看板",			/* M_PROFESS */
-  "分類看板",			/* M_CLASS */
-  "上站途中",			/* M_LOGIN */
-  "公佈欄",			/* M_GEM */
-  "看板列表",			/* M_BOARD */
-  "閱\讀文章",			/* M_READA */
-  "編系統檔案",			/* M_XFILES */
-  "編個人檔案",			/* M_UFILES */
-  "讀信",			/* M_RMAIL */
-  "結交朋友",			/* M_PAL */
-  "使用者名單",			/* M_LUSERS */
-  "[BBTP]",			/* M_BBTP */
-  "[WEB]",			/* M_WEB */
-  "發表文章",			/* M_POST */
-  "寫信",			/* M_SMAIL */
-  "待機",			/* M_TRQST */
-  "交談",			/* M_TALK */
-  "聊天室",			/* M_CHAT */
-  "呼叫",			/* M_PAGE */
-  "查詢",			/* M_QUERY */
-  "投票中",			/* M_VOTE */
-  "系統管理",			/* M_SYSTEM */
-  "熱訊回應",                   /* M_BMW_REPLY *//*熱訊回應*/
-  "察看訊息",                   /* M_BMW *//*察看訊息*/
-  "擋信列表",			/* M_BANMAIL */
-  "其他選單",                   /* M_OMENU */
-  "MIME讀信",			/* M_MIME */
-  "養雞場",			/* M_CHICKEN */
-  "其他"			/* M_XMODE */
-  "我的最愛"			/* MyFavorate */
+  "發呆",           /* M_IDLE */
+  "主選單",         /* M_MMENU */
+  "系統維護",       /* M_ADMIN */
+  "郵件選單",       /* M_MAIL */
+  "交談選單",       /* M_TMENU */
+  "使用者選單",     /* M_UMENU */
+  "系統資訊",       /* M_SMENU */
+  "網路連線選單",   /* M_XMENU */
+  "專業看板",       /* M_PROFESS */
+  "分類看板",       /* M_CLASS */
+  "上站途中",       /* M_LOGIN */
+  "公佈欄",         /* M_GEM */
+  "看板列表",       /* M_BOARD */
+  "閱\讀文章",      /* M_READA */
+  "編系統檔案",     /* M_XFILES */
+  "編個人檔案",     /* M_UFILES */
+  "讀信",           /* M_RMAIL */
+  "結交朋友",       /* M_PAL */
+  "使用者名單",     /* M_LUSERS */
+  "[BBTP]",         /* M_BBTP */
+  "[WEB]",          /* M_WEB */
+  "發表文章",       /* M_POST */
+  "寫信",           /* M_SMAIL */
+  "待機",           /* M_TRQST */
+  "交談",           /* M_TALK */
+  "聊天室",         /* M_CHAT */
+  "呼叫",           /* M_PAGE */
+  "查詢",           /* M_QUERY */
+  "投票中",         /* M_VOTE */
+  "系統管理",       /* M_SYSTEM */
+  "熱訊回應",       /* M_BMW_REPLY *//*熱訊回應*/
+  "察看訊息",       /* M_BMW *//*察看訊息*/
+  "擋信列表",       /* M_BANMAIL */
+  "其他選單",       /* M_OMENU */
+  "MIME讀信",       /* M_MIME */
+  "養雞場",         /* M_CHICKEN */
+  "其他",           /* M_XMODE */
+  "我的最愛"        /* MyFavorate */
 };
 
 
