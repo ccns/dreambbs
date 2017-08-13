@@ -24,7 +24,6 @@ This repository is the ***current code*** of [dreamland-bbs](http://bbs.ccns.cc)
     + **lib**      : Static Libraries of this BBS program
     + **maple**    : main BBS program is here.
     + **so**       : Shared Object Libraries of this BBS program
-    + **text2html**: To transform from plain text to HTML format. (replaced by `web/`)
     + **util**     : other utility programs for this BBS.
 
 * **web**    - [Dreamland BBS Web Frontend](http://bbs.ccns.cc)
