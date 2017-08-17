@@ -1,6 +1,8 @@
 # Dreamland-BBS (夢之大地電子布告欄系統)
 This repository is the ***current code*** of [dreamland-bbs](http://bbs.ccns.cc) ( telnet://ccns.cc ) at NCKU.
 
+Dreamland BBS source code is cache@ccns modified from [Wind's Top BBS version](http://windtop.yzu.edu.tw/)
+
 ![](https://i.imgur.com/c0mC6eX.png)
 
 * **docs**   - Some information about :
@@ -15,17 +17,21 @@ This repository is the ***current code*** of [dreamland-bbs](http://bbs.ccns.cc)
     + **bbs**          : If you don't have any BBS data before, you can copy this into your BBS Home(`/home/bbs`) .<br>
                      (related reference: `doc/INSTALL`)
 
-* **src**    - Dreamland BBS source code (cache@ccns modified from [Wind's Top BBS version](http://windtop.yzu.edu.tw/))
-    + **bgopherd** : BBS gopher daemon. (deprecated)
-    + **bmtad**    : Mail Transport Agent for BBS. (some features not works until now)
-    + **bpop3d**   : Simple POP3 server for BBS user.
-    + **include**  : some definition datas and headers for compiling.
-    + **innbbsd**  : Cross BBS sites posting. (deprecated)
-    + **lib**      : Static Libraries of this BBS program
-    + **maple**    : main BBS program is here.
-    + **so**       : Shared Object Libraries of this BBS program
-    + **util**     : other utility programs for this BBS.
++ **bgopherd** : BBS gopher daemon. (deprecated)
 
-* **web**    - [Dreamland BBS Web Frontend](http://bbs.ccns.cc)
++ **bmtad**    : Mail Transport Agent for BBS. (some features not works until now)
 
++ **bpop3d**   : Simple POP3 server for BBS user.
+
++ **include**  : some definition datas and headers for compiling.
+
++ **innbbsd**  : Cross BBS sites posting. (deprecated)
+
++ **lib**      : Static Libraries of this BBS program
+
++ **maple**    : main BBS program is here.
+
++ **so**       : Shared Object Libraries of this BBS program
+
++ **util**     : other utility programs for this BBS.
 
