@@ -18,17 +18,17 @@ Dreamland BBS source code is cache@ccns modified from [Wind's Top BBS version](h
     + **config.h**     : ***Important Configuration file*** before Compiling for this BBS version.
     + **crontab**      : Some regular job for OS to let BBS works continually.
     + **bbs**          : If you don't have any BBS data before, you can copy this into your BBS Home(`/home/bbs`) .<br>
-                     (related reference: `docs/INSTALL`)
+                     (related reference: `docs/INSTALL.md`)
 
-+ **bgopherd** : BBS gopher daemon. (deprecated)
++ **bgopherd** : BBS gopher daemon. *(deprecated)*
 
-+ **bmtad**    : Mail Transport Agent for BBS. (some features not works until now)
++ **bmtad**    : Mail Transport Agent for BBS. *(some features not works until now)*
 
 + **bpop3d**   : Simple POP3 server for BBS user.
 
 + **include**  : some definition datas and headers for compiling.
 
-+ **innbbsd**  : Cross BBS sites posting. (deprecated)
++ **innbbsd**  : Cross BBS sites posting. *(deprecated)*
 
 + **lib**      : Static Libraries of this BBS program
 

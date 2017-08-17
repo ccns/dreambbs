@@ -102,4 +102,3 @@ util/transacct
 util/userno
 util/utmp-dump
 util/webx
-config.php
