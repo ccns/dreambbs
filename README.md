@@ -1,9 +1,12 @@
 # Dreamland-BBS (夢之大地電子布告欄系統)
+
 This repository is the ***current code*** of [dreamland-bbs](http://bbs.ccns.cc) ( telnet://ccns.cc ) at NCKU.
 
 Dreamland BBS source code is cache@ccns modified from [Wind's Top BBS version](http://windtop.yzu.edu.tw/)
 
 ![](https://i.imgur.com/c0mC6eX.png)
+
+## Directory Structure
 
 * **docs**   - Some information about :
     + **INSTALL**        : ***How to install*** this BBS version.
@@ -15,7 +18,7 @@ Dreamland BBS source code is cache@ccns modified from [Wind's Top BBS version](h
     + **config.h**     : ***Important Configuration file*** before Compiling for this BBS version.
     + **crontab**      : Some regular job for OS to let BBS works continually.
     + **bbs**          : If you don't have any BBS data before, you can copy this into your BBS Home(`/home/bbs`) .<br>
-                     (related reference: `doc/INSTALL`)
+                     (related reference: `docs/INSTALL`)
 
 + **bgopherd** : BBS gopher daemon. (deprecated)
 
