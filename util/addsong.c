@@ -3,10 +3,10 @@
 /*-------------------------------------------------------*/
 /* author : visor.bbs@bbs.yzu.edu.tw                     */
 /* target : 每個星期增加點歌次數                         */
-/* create : 20000/07/03                                  */
+/* create : 2000/07/03                                  */
 /* update :                                              */
 /*-------------------------------------------------------*/
-/* syntax : addsong [prem] [times]                       */
+/* syntax : addsong [perm] [times]                       */
 /* NOTICE : add users' request times                     */
 /*-------------------------------------------------------*/
 #include "bbs.h"
