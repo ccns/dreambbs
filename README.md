@@ -9,9 +9,9 @@ Dreamland BBS source code is cache@ccns modified from [Wind's Top BBS version](h
 ## Directory Structure
 
 * **docs**   - Some information about :
-    + **INSTALL**        : ***How to install*** this BBS version.
+    + **INSTALL.md**     : ***How to install*** this BBS version.
     + **ANCESTOR**       : This past history about this BBS version
-    + **src-ChangeLog**  : Some changes in this BBS version before Initial Commit.
+    + **CHANGELOG**      : Some changes in this BBS version before Initial Commit.
     + **old**            : Some old information about [Wind's Top BBS verion](http://windtop.yzu.edu.tw) (ancestor of DreamBBS).
 
 * **sample** - Sample codes for:
