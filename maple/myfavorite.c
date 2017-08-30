@@ -185,7 +185,7 @@ myfavorite_item(num, myfavorite)
         str2 = "\033[1;31m HOT\033[m ";
       else if (bno > 49)
         str2 = "\033[1;37m HOT\033[m ";
-      else if (bno > 2) /* r2.170810: let somebody know which board is still "alive" :P */
+      else if (bno > 1) /* r2.170810: let somebody know which board is still "alive" :P */
         sprintf(str2, "  %2d ", bno);
       else
         str2 = "     ";
