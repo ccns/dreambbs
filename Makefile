@@ -27,7 +27,6 @@ all:
 
 sun:
 	@cd lib; make
-	@cd bgopherd; make sun
 	@cd bmtad; make sun
 	@cd bpop3d; make sun
 	@cd innbbsd; make sun
@@ -37,7 +36,6 @@ sun:
 
 linux:
 	@cd lib; make
-	@cd bgopherd; make linux
 	@cd bmtad; make linux
 	@cd bpop3d; make linux
 	@cd innbbsd; make linux
@@ -47,7 +45,6 @@ linux:
 
 solaris:
 	@cd lib; make
-	@cd bgopherd; make solaris
 	@cd bmtad; make solaris
 	@cd bpop3d; make solaris
 	@cd innbbsd; make solaris
@@ -57,7 +54,6 @@ solaris:
 
 sol-x86:
 	@cd lib; make
-	@cd bgopherd; make sol-x86
 	@cd bmtad; make sol-x86
 	@cd bpop3d; make sol-x86
 	@cd innbbsd; make sol-x86
@@ -67,7 +63,6 @@ sol-x86:
 
 freebsd:
 	@cd lib; make
-	@cd bgopherd; make freebsd
 	@cd bmtad; make freebsd
 	@cd bpop3d; make freebsd
 	@cd innbbsd; make freebsd
@@ -77,7 +72,6 @@ freebsd:
 
 bsd:
 	@cd lib; make
-	@cd bgopherd; make bsd
 	@cd bmtad; make bsd
 	@cd bpop3d; make bsd
 	@cd innbbsd; make bsd
@@ -86,7 +80,6 @@ bsd:
 	@cd util; make bsd
 
 install:
-	@cd bgopherd; make install
 	@cd bmtad; make install
 	@cd bpop3d; make install
 	@cd innbbsd; make install
@@ -96,7 +89,6 @@ install:
 
 clean:
 	@cd lib; make clean
-	@cd bgopherd; make clean
 	@cd bmtad; make clean
 	@cd bpop3d; make clean
 	@cd innbbsd; make clean
