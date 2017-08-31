@@ -14,6 +14,7 @@ This page will collect some info of how to use & how to install DreamLand-BBS-sy
   + **Cron Tasks**: 建立與調整 BBS 所在作業系統的定期工作
 
 ### Other Feature:
+  + **Easy Reader**: 好讀版安裝
 
 ### **FAQ**: 安裝常見問題
 
