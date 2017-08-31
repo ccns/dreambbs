@@ -5,7 +5,7 @@ This page will collect some info of how to use & how to install DreamLand-BBS-sy
 ## Installation Guide (程式安裝手冊)
 
 ### Install and Backup
-  + [**How to Install**](https://github.com/ccns/dreamlandbbs/wiki/INSTALL): PttBBS 初步架站手冊
+  + [**How to Install**](https://github.com/ccns/dreamlandbbs/wiki/INSTALL): 初步架站手冊
   + **How To Move Your Site**: BBS資料搬家步驟
   + **Directory Structure**: BBS 目錄與程式規劃
 
