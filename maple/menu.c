@@ -362,7 +362,7 @@ vs_head(title, mid)
   int color = 44; //090911.cache: 太花了固定一種顏色 
 #endif
 #if 1
-  char *newyear[6]={"夢之大地祝大家新年快樂        ",
+  char *newyear[6]={ BOARDNAME "祝大家新年快樂        ",
                     "                              ",
                     "Dreambbs/NCKU.CCNS            ",
                     "Since 1995                    ",
@@ -569,7 +569,7 @@ static MENU menu_load[] =
   "Dmesg      系統訊息"},
 
   {"bin/adminutil.so:df", PERM_SYSOP, - M_XMODE,
-  "Storage    磁碟系統"},
+  "FileSys    磁碟系統"},
 
   {x_sysload, PERM_ADMIN, M_SYSTEM,
   "Load       系統負載"},
@@ -584,7 +584,7 @@ static MENU menu_boardadm[] =
   "NewBoard   開闢新看板"},
 
   {a_editbrd, PERM_BOARD, M_SYSTEM,
-  "SetBoard   設定看板"},
+  "ConfigBrd  設定看板"},
 
   {m_bmset, PERM_BOARD, M_SYSTEM,
   "BMset      設定版主權限"},
@@ -593,10 +593,10 @@ static MENU menu_boardadm[] =
   "FireWall   擋信列表"},
 
   {"bin/adminutil.so:bm_check",PERM_BOARD|PERM_SYSOP, - M_XMODE,
-  "Manage     版主確任"},
+  "Manage     板主確認"},
 
   {"bin/adminutil.so:m_expire", PERM_BOARD|PERM_SYSOP, - M_XMODE,
-  "Clean      清除看板刪除文章"},
+  "DExpire    清除看板刪除文章"},
 
   {"bin/adminutil.so:mail_to_bm", PERM_SYSOP, - M_XMODE,
   "ToBM       寄信給板主"},
@@ -645,7 +645,7 @@ static MENU menu_settingadm[] =
 {
 
   {"bin/adminutil.so:m_xfile", PERM_SYSOP, - M_XFILES,
-  "XFile      編輯系統檔案"},
+  "File       編輯系統檔案"},
   
   {"bin/adminutil.so:m_xhlp", PERM_SYSOP, - M_XFILES,
   "Hlp        編輯說明檔案"},
@@ -660,7 +660,7 @@ static MENU menu_settingadm[] =
   "Violate    處罰名單"},
   
   {"bin/adminutil.so:special_search",PERM_SYSOP, - M_XMODE,
-  "Special    特殊搜尋"},
+  "XSpecial   特殊搜尋"},
 
   {"bin/adminutil.so:update_all",PERM_SYSOP, - M_XMODE,
   "Database   系統資料庫更新"},  
@@ -768,7 +768,7 @@ static MENU menu_mail[] =
   "Read       閱\讀信件"},
 
   {m_send, PERM_INTERNET, M_SMAIL,
-  "Send       站內寄信"},
+  "MailSend   站內寄信"},
 
 #ifdef MULTI_MAIL  /* Thor.981009: 防止愛情幸運信 */
   {mail_list, PERM_INTERNET, M_SMAIL,
@@ -879,7 +879,7 @@ static MENU menu_information[] =
 {
 
   {popmax, 0 , M_READA,
-  "Users      上站次數排行榜"},
+  "Login      上站次數排行榜"},
 
   {today, 0, M_READA,
   "Today      今日上線人次統計"},
@@ -910,7 +910,7 @@ static MENU menu_information[] =
   "6Star      使用者星座統計"},
 #endif
 */
-  menu_xyz, PERM_MENU + 'U', M_MMENU,
+  menu_xyz, PERM_MENU + 'L', M_MMENU,
   "統計資料"
 };
 
@@ -918,13 +918,13 @@ static MENU menu_information[] =
 static MENU menu_xyz[] =
 {
   menu_information, 0, M_XMENU,
-  "Dream      夢之大地排行榜",
+  "Tops       " NICKNAME "排行榜",
 
   {version,0,M_READA,
   "Version    源碼發展資訊"},
 
   {"bin/xyz.so:x_siteinfo", 0, - M_READA,
-  "Source     系統程式資訊"},
+  "Xinfo      系統程式資訊"},
 
   {pad_view, 0, M_READA,
   "Note       觀看心情留言板"},
@@ -935,7 +935,7 @@ static MENU menu_xyz[] =
   {history, 0, M_READA,
   "History    本站歷史軌跡"},
 
-  {menu_main, PERM_MENU + 'D', M_SMENU,
+  {menu_main, PERM_MENU + 'T', M_SMENU,
   "系統資訊"}
 };
 
@@ -961,7 +961,7 @@ static MENU menu_reg[] =
 #endif
 
   {u_setup, PERM_VALID, M_UFILES,
-  "Setup      設定操作模式"},
+  "Mode       設定操作模式"},
 
   {ue_setup, 0, M_UFILES,
   "Favorite   個人喜好設定"},
@@ -980,7 +980,7 @@ static MENU menu_reg[] =
 static MENU menu_user[] =
 {
   menu_reg, 0, M_XMENU,
-  "Setting    註冊及設定個人資訊",
+  "Configure  註冊及設定個人資訊",
 
   {u_lock, PERM_BASIC, M_XMODE,
   "Lock       鎖定螢幕"},
@@ -1008,7 +1008,7 @@ static MENU menu_user[] =
   {view_login_log, PERM_BASIC, M_READA,
   "ViewLog    檢視上站紀錄"},
 
-  {menu_service, PERM_MENU + 'S', M_UMENU,
+  {menu_service, PERM_MENU + 'C', M_UMENU,
   "個人設定"}
 };
 
@@ -1076,10 +1076,10 @@ static MENU menu_game[] =
   {"bin/bj.so:BlackJack",PERM_VALID, - M_XMODE,
   "BlackJack  " NICKNAME "黑傑克"},
 
-  {"bin/guessnum.so:fightNum", 0, - M_XMODE,
+  {"bin/guessnum.so:fightNum", PERM_VALID, - M_XMODE,
   "FightNum   數字大決戰"},
 
-  {"bin/guessnum.so:guessNum", 0, - M_XMODE,
+  {"bin/guessnum.so:guessNum", PERM_VALID, - M_XMODE,
   "GuessNum   傻瓜猜數字"},
 
   {"bin/mine.so:Mine",PERM_VALID, - M_XMODE,
@@ -1137,14 +1137,14 @@ static MENU menu_special[] =
   "Bank       　銀行"},
 
   {"bin/shop.so:shop_main", PERM_VALID, - M_XMODE,
-  "Shop       　商店"},
+  "Pay        　商店"},
 
 #ifdef HAVE_SONG
   {menu_song, PERM_VALID, M_XMENU,
   "Request      點歌系統"},
 #endif
 
-  {resetbrd, PERM_BASIC, M_XMODE,
+  {resetbrd, PERM_ADMIN, M_XMODE,
   "CameraReset  版面重設"},
 
   {menu_service, PERM_MENU + 'N', M_UMENU,
@@ -1191,9 +1191,9 @@ static MENU menu_service[] =
   "User      【 個人工具區 】"},
 
   {menu_special, PERM_VALID, M_XMENU,
-  "Cache     【 加值服務區 】"},
+  "Bonus     【 加值服務區 】"},
 
-  {menu_game, PERM_BASIC, M_XMENU,
+  {menu_game, PERM_VALID, M_XMENU,
   "Game      【 遊戲體驗區 】"},
 
 #ifdef	HAVE_INFO
@@ -1217,19 +1217,19 @@ static MENU menu_service[] =
   "Cosign    【 連署申請區 】"},
 
   {"bin/vote.so:SystemVote" , PERM_POST, - M_XMODE,
-  "SystemVote【 系統投票區 】"},
+  "Vote      【 系統投票區 】"},
 
   {system_result, 0, M_READA,
-  "Voteresult【系統投票結果】"},
+  "Result    【系統投票結果】"},
 
 /*
 #ifdef HAVE_SONG
   {menu_song, PERM_VALID, M_XMENU,
-  "Song      【 點歌系統區 】"},
+  "Song      【  點歌系統區  】"},
 #endif
 */
-  {menu_main, PERM_MENU + 'G', M_UMENU,
-  "夢大服務"}
+  {menu_main, PERM_MENU + 'U', M_UMENU,
+   NICKNAME "服務"}
 };
 
 /* ----------------------------------------------------- */
@@ -1283,7 +1283,7 @@ static MENU menu_main[] =
 #endif
 
 #ifdef	HAVE_FAVORITE
-  {MyFavorite,PERM_VALID,M_CLASS,
+  {MyFavorite, PERM_BASIC, M_CLASS,
   "Favorite  【 \033[1;32m我的最愛區\033[m 】"},
 #endif
 
@@ -1299,7 +1299,7 @@ static MENU menu_main[] =
   "Talk      【 休閒聊天區 】"},
 
   {menu_service, PERM_BASIC, M_XMENU,
-  "Dream     【 夢大服務區 】"},
+  "Plugin    【 " NICKNAME "服務區 】"},
 
   /* lkchu.990428: 不要都塞在個人工具區 */
   {menu_xyz, 0, M_SMENU,
@@ -1311,7 +1311,7 @@ static MENU menu_main[] =
 #endif
 
   {goodbye, 0, M_XMODE,
-  "Goodbye   【再別" NICKNAME "】"},
+  "Goodbye   【再別" BOARDNAME "】"},
 
   {NULL, PERM_MENU + 'B', M_MMENU,
   "主功\能表"}
@@ -1337,7 +1337,7 @@ goodbye1()
   outs("※ 偵測到您的電腦試圖攻擊伺服器 ※\n");
   bell();
   vkey();
-  outs("※ 哈哈  騙你的啦  ^O^ ，夢之大地祝您愚人節快樂 ※\n");
+  outs("※ 哈哈  騙你的啦  ^O^ ，" BOARDNAME "祝您愚人節快樂 ※\n");
   bell();
   vkey();
   return 12345;
