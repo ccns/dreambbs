@@ -2,8 +2,6 @@
 
 這篇文件說明快速安裝的方法,
 
-其他最新安裝相關說明亦可參考: https://github.com/ccns/dreamlandbbs/wiki 內容
-
 首先感謝眾前輩們無私分享這些 source code 以及不少參考文件 ( 包括 Maple-itoc 版本的相關教學資料 )
 
 這邊僅依據目前可以測試成功的部分做個記錄
