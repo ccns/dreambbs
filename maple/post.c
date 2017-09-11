@@ -368,22 +368,22 @@ do_post(title)
 	}
 
 	/* cache.090519: 板主自訂看板發文權限 */
-	/* cache.090928: 看板唯讀 */
+	/* cache.090928: 看板唯讀, r2.170912: 調整敘述 */
 
 	if (brd->battr & BRD_NOREPLY)
 	{
 		if (!HAS_PERM(PERM_ADMIN)) 
 		{
-			vmsg("對不起，本看板目前禁止發表文章");
+			vmsg("對不起，本看板目前禁止發表文章。");
 			return XO_FOOT;
 		}
 		else 
-			vmsg("請注意，本看板目前是唯讀狀態");       
+			vmsg("請注意，本看板目前是唯讀狀態。");       
 	}
 
 	if (!(bbstate & STAT_POST))
 	{
-		vmsg("對不起，本看板是唯讀的");
+		vmsg("對不起，您的權限不足。");
 		return XO_FOOT;
 	}
 	else if (brd->battr & BRD_THRESHOLD)
