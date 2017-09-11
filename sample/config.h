@@ -17,17 +17,17 @@
 /* ------------------------------------------------------*/
 
 #define BOARDNAME       "夢之大地"                  /* 中文站名 */
-#define NICKNAME	"夢之大地"                  /* 中文簡稱 */
+#define NICKNAME        "夢大"                  /* 中文簡稱 */
 #define OWNER	        "NCKU.CCNS"                 /* 學校簡稱 */
-#define MYHOSTNAME	"ccns.cc"                   /* 網路位址 */
+#define MYHOSTNAME      "ccns.cc"                   /* 網路位址 */
 #define BBSVERSION      "Rev.Beta 3"                /* 版本編號 */
 #define SYSOPNICK       "夢之精靈"                  /* SYSOP 暱稱 */
-#define BBSHOME		"/home/bbs"                 /* BBS 的家 */
+#define BBSHOME	        "/home/bbs"                 /* BBS 的家 */
 #define BBSUID	        9999
 #define BBSGID          999
 #define TAG_VALID       "[DreamBBS]To "             /* 身分認證函token */
-#define	HIDEDN_SRC	"bbs.ccns.ncku.edu.tw"      /* 隱藏來源位置 */
-#define BBSNAME		"DreamBBS"                  /* 英文站名 */
+#define	HIDEDN_SRC      "bbs.ccns.ncku.edu.tw"      /* 隱藏來源位置 */
+#define BBSNAME	        "DreamBBS"                  /* 英文站名 */
 #define	BBSIP           "140.116.249.140"           /* bbs 的 ip */
 
 /* r2:  可自行定義 ORIGIN_TAG，客製化站簽               */
@@ -183,7 +183,7 @@
 
 #define HAVE_STUDENT            /* 使用學生公告區 */
 
-#define HAVE_ACTIVITY		/* gaod:活動公告區 */
+#define HAVE_ACTIVITY           /* gaod:活動公告區 */
 #ifdef HAVE_ACTIVITY
 #define BRD_ABULLETIN   "activity"
 #endif
