@@ -378,8 +378,10 @@ myfavorite_add(xo)
   HDR hdr;
 
   if(!HAS_PERM(PERM_VALID))
-    return XO_NONE;
-
+    { 
+    vmsg("尚未通過認證，無法新增我的最愛！");
+    return XO_QUIT;
+    }
   memset(&hdr,0,sizeof(HDR));
   ans = vans("新增 (B)看板捷徑 (F)資料夾 (G)精華區捷徑 (L)分隔線 (Q)離開 [Q]");
   
@@ -656,6 +658,7 @@ KeyFunc myfavorite_cb[] =
   XO_BODY, myfavorite_body,
 
   Ctrl('P'), myfavorite_add,
+  'a', myfavorite_add,
   'r', myfavorite_browse,
   's', myfavorite_switch,
   'c', myfavorite_newmode,
