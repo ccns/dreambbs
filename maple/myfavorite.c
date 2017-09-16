@@ -250,12 +250,9 @@ myfavorite_head(xo)
   XO *xo;
 {
   vs_head("§Úªº³Ì·R", str_site);
-  prints("[¡ö]¥D¿ï³æ [¡÷]¾\\Åª [^P]·s¼W [d]§R°£ [c]½g¼Æ [/]·j´M [s]¬ÝªO [h]»¡©ú\n"
+  prints("[¡ö]¥D¿ï³æ [¡÷]¾\\Åª [a]·s¼W [d]§R°£ [c]½g¼Æ [/]·j´M [s]¬ÝªO [h]»¡©ú\n"
     "\033[44m  %-7s¬Ý  ªO            %-33s¤H®ð ªO    ¥D     \033[m",
     cuser.ufo2 & UFO2_BRDNEW ? "Á`¼Æ" : "½s¸¹", "¤¤   ¤å   ±Ô   ­z");
-  //outs("[¡ö]Â÷¶} [¡÷]¶i¤J [^P]·s¼W [d]§R°£ [c]¤Á´« [d]§R°£ [h]»¡©ú\n[37;44m  ");
-  //outs(cuser.ufo2 & UFO2_BRDNEW ? "Á`¼Æ" : "½s¸¹");
-  //outs("   ¬Ý  ªO       ¤¤   ¤å   ±Ô   ­z                     §ë²¼ ªO    ¥D     [m");
   return myfavorite_body(xo);
 }
 
