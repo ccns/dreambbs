@@ -1768,7 +1768,7 @@ xover(cmd)
     /* 基本的游標移動 routines				 */
     /* ------------------------------------------------- */
 
-    else if (cmd == KEY_LEFT /*|| cmd == 'q'*/)
+    else if (cmd == KEY_LEFT || cmd == 'e')
     {
       /* cmd = XO_LAST; *//* try to load the last XO in future */
       if(zone == XZ_MBOX)
