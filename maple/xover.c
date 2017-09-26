@@ -1804,11 +1804,11 @@ xover(cmd)
     {
       continue;
     }
-    else if (cmd == KEY_UP /*|| cmd == 'p' || cmd == 'k'*/)
+    else if (cmd == KEY_UP || cmd == 'p' || cmd == 'k')
     {
       cmd = pos - 1 + XO_MOVE + XO_WRAP;
     }
-    else if (cmd == KEY_DOWN /*|| cmd == 'n' || cmd == 'j'*/)
+    else if (cmd == KEY_DOWN || cmd == 'n' || cmd == 'j')
     {
       cmd = pos + 1 + XO_MOVE + XO_WRAP;
     }
