@@ -17,7 +17,7 @@
 /* ------------------------------------------------------*/
 
 #define BOARDNAME       "夢之大地"                  /* 中文站名 */
-#define NICKNAME        "夢大"                  /* 中文簡稱 */
+#define NICKNAME        "夢大"                      /* 中文簡稱 */
 #define OWNER	        "NCKU.CCNS"                 /* 學校簡稱 */
 #define MYHOSTNAME      "ccns.cc"                   /* 網路位址 */
 #define BBSVERSION      "Rev.Beta 3"                /* 版本編號 */
@@ -29,6 +29,8 @@
 #define	HIDEDN_SRC      "bbs.ccns.ncku.edu.tw"      /* 隱藏來源位置 */
 #define BBSNAME	        "DreamBBS"                  /* 英文站名 */
 #define	BBSIP           "140.116.249.140"           /* bbs 的 ip */
+
+#define URL_PREFIX      "https://bbs.ccns.cc"       /* r2.20170926: 自行客製化ccns好讀版網址 */
 
 /* r2:  可自行定義 ORIGIN_TAG，客製化站簽               */
 

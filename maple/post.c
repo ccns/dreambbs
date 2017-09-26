@@ -2089,6 +2089,10 @@ post_lock(xo)
 	return XO_NONE;
 }
 
+#ifndef URL_PREFIX
+#define URL_PREFIX    "https://bbs.ccns.cc"
+#endif
+
 /*cache.080520: 新版觀看文章屬性*/ 
 	static int
 post_state(xo)
@@ -2120,7 +2124,7 @@ post_state(xo)
 		outs("\033[1;32m");
 		outs(ghdr->xname);
 		outs("\033[m");      
-        outs("\n \033[1;37m★\033[m 好讀連結: http://bbs.ccns.cc/");
+        outs("\n \033[1;37m★\033[m 好讀連結: " URL_PREFIX "/");
 		outs(buf);
 		outs("/");
 		outs(ghdr->xname);
@@ -2172,7 +2176,7 @@ post_state(xo)
   		  outs("\033[1;32m");
 		  outs(ghdr->xname);
 		  outs("\033[m");
-		  outs("\n \033[1;37m★\033[m 好讀連結: http://bbs.ccns.cc/");
+		  outs("\n \033[1;37m★\033[m 好讀連結: " URL_PREFIX "/");
 		  outs(buf);
 		  outs("/");
 		  outs(ghdr->xname);
@@ -3504,7 +3508,7 @@ post_showBRD_setting(xo)
 			(brd->battr & BRD_NOTRAN) ? "站內" : "\033[1;33m轉信\033[m");
 
     if(brd->battr & BRD_RSS)
-	  prints("    RSS 功\能 - http://bbs.ccns.cc/%s.xml ", brd->brdname);
+	  prints("    RSS 功\能 - " URL_PREFIX "/%s.xml ", brd->brdname);
     else
       prints("    RSS 功\能 - 關閉");
 
