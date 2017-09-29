@@ -1578,8 +1578,6 @@ post_browse(xo)
 
 #ifdef HAVE_RECOMMEND
 			case 'X':
-				post_recommend(xo);
-				break;
 			case '%':
 				post_recommend(xo);
 				break;
