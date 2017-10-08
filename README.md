@@ -1,6 +1,6 @@
 # Dreamland-BBS (夢之大地電子布告欄系統)
 
-This repository is the ***current code*** of [dreamland-bbs](http://bbs.ccns.cc) ( telnet://ccns.cc ) at NCKU.
+This repository is the ***current code*** of [dreamland-bbs](http://bbs.ccns.cc) ( telnet://ccns.cc ) at NCKU. (under re-construction)
 
 Dreamland BBS source code is cache@ccns modified from [Wind's Top BBS version](http://windtop.yzu.edu.tw/)
 
