@@ -1,0 +1,1854 @@
+
+©¹«áª©¥»­×§ï°O¿ý¤è¦¡¦p¤U:
+
+¡Cµ{¦¡½X±Æª©¾ã²z¡B·L½Õ »P ¬ÛÃö¤å¥ó¡B½d¨ÒÀÉ­×¥¿: 
+  ¶È¥Î git ª©±±°O¿ý¬ÛÃö commit , ¨ÃºÉ³t¤W¶Ç¦Ü github¡C
+
+¡C­«¤jµ{¦¡½X­×§ï¥H¤Î¦UºØ bug ­×¥¿ (·|¼vÅT¨ì¨Ï¥ÎªÌ¾Þ§@µ¥±¡ªp)¡G 
+  ·|µo§G¤½§i¦b ¹Ú¤§¤j¦a ( telnet://ccns.cc ) Dream_commit ¬ÝªO
+
+¦b github ªº Initial commit «e¨ä¥L­×§ï°O¿ý, 
+¥ç½Ð°Ñ¦Ò¹Ú¤§¤j¦a ( telnet://ccns.cc ) Dream_commit ¬ÝªO.
+
+¥H¤U¬°¸ÓªO¬ÛÃö­×§ï¬ö¿ý:
+
+> ----------------------------------------------------------------------------
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r1
+®É¶¡: Tue Nov 24 11:04:12 2009
+
+
+Time:      2009/11/24
+Revision:  1
+Type:      Bug fix (thanks to wenen)
+
+Log:
+
+Refined the brh_unread() funcion.
+Now we can see [1;31m¡¹[m at unread-board.
+
+You may have to change your setting:
+(D)ream -> (U)ser -> (S)etting -> (F)avorite -> 2 ¡½ ·s¤å³¹
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r2
+®É¶¡: Tue Nov 24 16:44:54 2009
+
+
+Time:      2009/11/24
+Revision:  2
+Type:      Bug fix (thanks to float)
+
+Log:
+
+Moderated board function is changed, we use readlevel to control our brdtype.
+BRD_V_BIT is removed now.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r3
+®É¶¡: Tue Nov 24 18:11:46 2009
+
+
+Time:      2009/11/24
+Revision:  3
+Type:      Bug fix (thanks to iwhiori)
+
+Log:
+
+BM_menu->½s¿èµo¤å¤½§i's return value is incorrect.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r4
+®É¶¡: Tue Nov 24 18:12:54 2009
+
+
+Time:      2009/11/24
+Revision:  4
+Type:      New function (thanks to damntree)
+
+Log:
+
+post_write() is back!
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r5
+®É¶¡: Tue Nov 24 18:14:52 2009
+
+
+Time:      2009/11/24
+Revision:  5
+Type:      Bug fix (thanks to birdhackor)
+
+Log:
+
+Fixed the post_verb.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r6
+®É¶¡: Tue Nov 24 18:16:21 2009
+
+
+Time:      2009/11/24
+Revision:  6
+Type:      Bug fix (thanks to tooya)
+
+Log:
+
+Regfile is fixed, now is available : )
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r7
+®É¶¡: Tue Nov 24 18:54:45 2009
+
+
+Time:      2009/11/24
+Revision:  7
+Type:      Bug fix
+
+Log:
+
+Fixed multi-login and guest-max messages.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r8
+®É¶¡: Tue Nov 24 19:34:30 2009
+
+
+Time:      2009/11/24
+Revision:  8
+Type:      Bug fix
+
+Log:
+
+There are some problems in post_expire.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r9
+®É¶¡: Wed Nov 25 09:49:31 2009
+
+
+Time:      2009/11/25
+Revision:  9
+Type:      Adjusting (thanks to howj)
+
+Log:
+
+Moved ([1;36mT[m)alk¡i ¥ð¶¢²á¤Ñ°Ï ¡j to main menu.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r10
+®É¶¡: Wed Nov 25 10:34:48 2009
+
+
+Time:      2009/11/25
+Revision:  10
+Type:      Adjusting (thanks to thusnoy)
+
+Log:
+
+Modified ([1;36mR[m)ead ¾\Åª«H¥ó as default.
+Removed  ([1;36mM[m)ail¡i «H¥ó¤u¨ã°Ï ¡jfrom guest's menulist.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r11
+®É¶¡: Wed Nov 25 10:45:32 2009
+
+
+Time:      2009/11/25
+Revision:  11
+Type:      Bug fix (thanks to bestia)
+
+Log:
+
+([1;36mC[m)osign¡i ³s¸p¥Ó½Ð°Ï ¡j now is available.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r12
+®É¶¡: Wed Nov 25 11:40:35 2009
+
+
+Time:      2009/11/25
+Revision:  12
+Type:      Bug fix (thanks to NomedEmag & DavidWei)
+
+Log:
+
+Fixed the problem of MODIFY_TAG when using cleanrecommend.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r13
+®É¶¡: Wed Nov 25 11:57:25 2009
+
+
+Time:      2009/11/25
+Revision:  13
+Type:      Future work
+
+Log:
+
+- visio: [experimental] expand output buffer size.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r14
+®É¶¡: Wed Nov 25 12:15:24 2009
+
+
+Time:      2009/11/25
+Revision:  14
+Type:      Bug fix (thanks to Ftmj)
+
+Log:
+
+- post: lazy_delete is work on POST_BOTTOM.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r15
+®É¶¡: Wed Nov 25 12:32:53 2009
+
+
+Time:      2009/11/25
+Revision:  15
+Type:      Bug fix (thanks to LODAM)
+
+Log:
+
+- myfavorite: 'h' is removed.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r16
+®É¶¡: Wed Nov 25 21:17:59 2009
+
+
+Time:      2009/11/25
+Revision:  16
+Type:      Bug fix
+
+Log:
+
+- visio: Fixed login timeout message.
+         ID key-in function will auto-matched for SYSOPs.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r17
+®É¶¡: Wed Nov 25 21:24:46 2009
+
+
+Time:      2009/11/25
+Revision:  17
+Type:      New function
+
+Log:
+
+- post.c: add "¬ÝªO¾\Åª°O¿ý" to BM menu
+- board.c: add brd_isoes_BMlog function
+- expire.c: auto ulink log every week
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r18
+®É¶¡: Wed Nov 25 22:21:16 2009
+
+
+Time:      2009/11/25
+Revision:  18
+Type:      New function
+
+Log:
+
+- post.c: (1) add xpost record
+          (2) sorry, BRD_MODIFY now is fixed
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r19
+®É¶¡: Wed Nov 25 23:40:27 2009
+
+
+Time:      2009/11/25
+Revision:  19
+Type:      New function
+
+Log:
+
+- board.c: add class_yank2 function, you can press 'i' at board list to switch
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r20
+®É¶¡: Wed Nov 25 23:43:50 2009
+
+
+Time:      2009/11/25
+Revision:  20
+Type:      Bug fix (thanks to setsuna)
+
+Log:
+
+- board.c: §Y®É¼öªù¬ÝªO/ now is available
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r21
+®É¶¡: Wed Nov 25 23:46:05 2009
+
+
+Time:      2009/11/25
+Revision:  21
+Type:      New function
+
+Log:
+
+- post.c: BM can set post_battr_threshold with ¦H¤å¼Æ¥Ø
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r22
+®É¶¡: Wed Nov 25 23:52:48 2009
+
+
+Time:      2009/11/25
+Revision:  22
+Type:      Bug fix
+
+Log:
+
+- post.c: ¸m©³¤å§R°£¤è¦¡
+
+          1. ¥ý¨ú®ø±¼«e­±ªº [1;36mm[m
+          2. ¬d¥X¸Ó½g¤å³¹ªº¬ÝªO½s¸¹(¥H¤U­±ªº¨Ò¤l¨Ó»¡¸m©³¤å¬O²Ä 6747 ½g)
+             > 6746     11/25 aaaaa       ¡» 123
+                 [1;33m¡¹ [1;36mm[m   11/21 bbbbb       ¡º 456
+          3. ª½±µ¥Î¤jD(6747~6747)©Î¤pd§R°£(·|Åã¥Ü§R°£°T®§)
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r23
+®É¶¡: Sun Dec  6 19:07:51 2009
+
+
+Time:      2009/12/06
+Revision:  23
+Type:      Bug fix
+
+Log:
+
+- account.c: sorry, there is a critical fault when execution time. (every Sat.)
+             delete useless code & refine
+- log/: mkdir for logger to work.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r24
+®É¶¡: Sun Dec  6 19:24:00 2009
+
+
+Time:      2009/12/06
+Revision:  24
+Type:      Bug fix
+
+Log:
+
+- checkmail.c: modified account-limit to 60000
+- reaper.c: critical error ; (
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r25
+®É¶¡: Sun Dec  6 21:23:19 2009
+
+
+Time:      2009/12/06
+Revision:  25
+Type:      Bug fix/New function (thanks to girlpan and kimijacky)
+
+Log:
+
+- post.c: unlimited post-modify
+          only BM can reject post
+          now BM can press 'Ctrl + N' to delete any post without any commit
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r26
+®É¶¡: Tue Dec  8 21:51:52 2009
+
+
+Time:      2009/12/08
+Revision:  26
+Type:      New function/Future work
+
+Log:
+
+- src/innbbsd: patch all innbbsd from Maple-itoc
+- innd/: clean up
+
+- postfix is working now, thanks to gaod  : )
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r27
+®É¶¡: Wed Dec  9 12:37:37 2009
+
+
+Time:      2009/12/09
+Revision:  27
+Type:      New function/Bug fix
+
+Log:
+
+- mail.c: initial work
+- bbsmail.c: initial work
+- menu.c: now we can use ([1;36mA[m)utoFor ¯¸¤º«H¦Û°ÊÂà±H[m to forward bbsmail
+- struct.h: add flag "UFO2_DEF_LOCALMAIL"
+- bbsmail.c: initial work
+- acct.c: for nospam, you can turn on "¡¼ ¥u¦¬¯¸¤º«H"
+- post.c: refine layout
+
+special thanks to spearsea, you are my godness!
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r28
+®É¶¡: Fri Dec 18 00:33:04 2009
+
+
+Time:      2009/12/18
+Revision:  28
+Type:      New Function
+
+Log:
+
+- gem.c: add GEM_LMANAGER flag
+         we can modify fold title with "[" + "ID" to add a lite-manager
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r29
+®É¶¡: Fri Dec 18 10:09:25 2009
+
+
+Time:      2009/12/18
+Revision:  29
+Type:      Bug fix
+
+Log:
+
+- post: add timer to refresh brh when post/recommend/edit
+- board: refine unread determination
+- myfavorite: refine unread determination
+
+You may have to logout and change your setting
+(D)ream -> (U)ser -> (S)etting -> (F)avorite
+
+¡½ ·s¤å³¹ will show [1;31m¡¹[m when new post/recommend is created
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r30
+®É¶¡: Fri Dec 18 10:42:38 2009
+
+
+Time:      2009/12/18
+Revision:  30
+Type:      New Function
+
+Log:
+
+- brdmail: (testing) now we can send a mail-post to brd
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r31
+®É¶¡: Tue Dec 22 01:41:44 2009
+
+
+Time:      2009/12/22
+Revision:  31
+Type:      Bug fix (thanks to KeithYeh)
+
+Log:
+
+- board: refine code
+- myfavorite: refine code
+- acct: refine code
+
+You may have to logout and change your setting
+(D)ream -> (U)ser -> (S)etting -> (F)avorite
+
+now we use ¡½ ·s±À¤å as our control flag
+
+¡½ ·s±À¤å => new ( post or recommend ) => show [1;31m¡¹[m
+¡¼ ·s±À¤å => new post                  => show [1;31m¡¹[m
+
+BTW, Traditional 'more' adds separator as a newline.
+     This is [1;33mbuggy[m, however we can support this by using wrapping
+     feature like "¶Ç²Î¤À¹j½u¥[ªÅ¦æ", you can press 'o' to enable it
+
+ [1;31m\[m ¦â±mÅã¥Ü¤è¦¡:         [1;36m*¹w³]®æ¦¡¤Æ¤º®e[30m |[m ­ì©lANSI±±¨î½X[1;30m |[m ¯Â¤å¦r
+ [1;31mw[m Â_¦æ¤è¦¡:              ª½±µºI¦æ[1;30m |[36m*¦Û°ÊÂ_¦æ[m
+ [1;31mm[m Â_¦æ²Å¸¹:              ¤£Åã¥Ü[1;30m |[36m*Åã¥Ü[m
+ [1;31ml[m ¤å³¹¼ÐÀY¤À¹j½u:        µL[1;30m |[m ³æ¦æ[1;30m |[m [1;33m*¶Ç²Î¤À¹j½u¥[ªÅ¦æ[m
+ [1;31mt[m ¶Ç²Îª¬ºA¦C»PÂ_¦æ¤è¦¡: [1;36m*°±¥Î[30m |[m ±Ò¥Î                                           [m
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r32
+®É¶¡: Thu Dec 24 01:50:57 2009
+
+
+Time:      2009/12/24
+Revision:  32
+Type:      Bug fix (thanks to girlpan)
+
+Log:
+
+- post: post owners can use post_title now
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r33
+®É¶¡: Fri Jan 29 22:57:41 2010
+
+
+Time:      2010/01/29
+Revision:  33
+Type:      New function/Bug fix (thanks to KeithYeh)
+
+Log:
+
+- acct: add brd@ to ban_addr
+- perm: add flag PERM_SP
+- board: fix "¥¼©w¸q°Q½×°Ï" (only simple work)
+- checkmail: auto mail log to Dream_log.brd
+- menu: add "­««Ø«H½c¯Á¤Þ"
+- mail: add m_setmboxdir()
+- brdmail: refine[m
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r34
+®É¶¡: Thu May  6 12:39:34 2010
+
+
+Time:      2010/05/06
+Revision:  34
+Type:      System Performance
+
+Log:
+
+- bbsd: tn_login will be closed when loading is overhead.
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r35
+®É¶¡: Sat May 29 00:30:40 2010
+
+
+Time:      2010/05/29
+Revision:  35
+Type:      Bug fix (thanks to KeithYeh and girlpan)
+
+Log:
+
+- board.c - only system admin have powerful access authority for secret boards
+- post.c - refine code (postscore and unlock)
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r36
+®É¶¡: Sat May 29 17:12:42 2010
+
+
+Time:      2010/05/29
+Revision:  36
+Type:      Bug fix (thanks to samkokoro)
+
+Log:
+
+- post.c - refine code
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r37
+®É¶¡: Mon Jun  7 23:26:45 2010
+
+
+Time:      2010/06/07
+Revision:  37
+Type:      Bug fix (thanks to BenHe and joiedevivre)
+
+Log:
+
+- post.c - fix wrong msg and board information
+           battr &  BRD_MODIFY: "§@ªÌ­×¤å" => "¡¹ ¸T¤î§@ªÌ­×¤å"
+           battr & ~BRD_MODIFY: "§@ªÌ­×¤å" => "¡¹ ¤¹³\§@ªÌ­×¤å"
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r38
+®É¶¡: Sat Jun 12 22:24:54 2010
+
+
+Time:      2010/06/12
+Revision:  38
+Type:      Hardware upgrade/Software update/System performance
+
+Log:
+
+- Hardware Env. -
+
+CPU   AMD AthlonII X4-630
+MB    Gigabyte 880GM-UD2H
+RAM   A-DATA DDR3-1333 2G * 2
+HDD   WD VelociRaptor 1500HLFS * 3
+      (1/3 has some problems, [1;33mneed to be replaced ASAP[m)
+PSU   Be quiet E6-400W DELUXE
+CASE  CoolerMaster 690
+NIC   Realtek - 8111D
+      Intel Pro 1000MT (82540EM)
+
+- Software Env. -
+
+OS    CentOS 5.5 with Linux Kernel 2.6.18-194.3.1.el5PAE
+      gcc 4.1.2 20080704 (Red Hat 4.1.2-48)
+BBS   WindtopBBS-current 2009 cache-modified
+
+A server with well-tuned networks can perform better connection quality.
+
+TCP tuning can adjust the network congestion avoidance parameters of TCP
+connections over high-bandwidth, high-latency networks.
+
+- TCP tuning: sysctl -
+
+net.ipv4.tcp_syncookies = 1
+net.core.wmem_max = 12582912
+net.core.rmem_max = 12582912
+net.ipv4.tcp_rmem = 10240 87380 12582912
+net.ipv4.tcp_wmem = 10240 87380 12582912
+net.core.netdev_max_backlog = 5000
+
+- TCP tuning: ethtool -
+
+Ring parameters for eth1:
+Current hardware settings:
+RX:             1024
+TX:             1024
+
+- bbsd.c - tn_login will be closed when loading is overhead.
+           (load in 1 min > 20)
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r39
+®É¶¡: Tue Jun 15 16:00:21 2010
+
+
+Time:      2010/06/15
+Revision:  39
+Type:      Bug fix
+
+Log:
+
+There was a critical problem about login to main menu ; (
+
+- bbsd.c - comment classtable_free() and classtable_main() in tn_login
+- config.h - #undef HAVE_COUNT_BOARD
+             #undef MODE_STAT
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r40
+®É¶¡: Thu Jun 17 20:53:20 2010
+
+
+Time:      2010/06/17
+Revision:  40
+Type:      New function/System performance
+
+Log:
+
+- reaper.c - enlarge buffer and modify remove setting
+
+  #define DAY_NEWUSR      180    /* µn¤J¦¸¼Æ¤p©ó¤Q¦¸, 180¤Ñ¤º¥¼¤W¯¸ */
+  #define DAY_FORFUN      730    /* ¥¼»{ÃÒ, ¨â¦~¤º¥¼¤W¯¸ */
+  #define DAY_OCCUPY      1825   /* ¤w»{ÃÒ, ¤­¦~¤º¥¼¤W¯¸ */
+
+  removed account will be reserved for several weeks...
+
+- acct.c - initial work for SYSOPs log
+
+- account.c - initial work for SYSOPs log
+
+- Board usies log will be removed in every Monday morning.[m
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (cache) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r41
+®É¶¡: Fri Jun 18 13:01:15 2010
+
+
+Time:      2010/06/18
+Revision:  41
+Type:      New function
+
+Log:
+
+- reaper.c - new policy about define value, lazyBM is setting to 30 days
+             define EADDR_GROUPING 5 - system will check multi-IDs now
+
+- account.c - refine code and clean useless logger
+
+- acct.c - when SYSOPs access any user data, this action will be logged now
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r42
+®É¶¡: Fri Jun 18 16:35:20 2010
+
+
+Time:      2010/06/18
+Revision:  42
+Type:      New function
+
+Log:
+
+- acct.c - refine logger, add BMset, Newboard, acct_show and acct_edit
+
+- menu.c - add ([1;36m0[m)Admin    ¡i ¨t²ÎºûÅ@°Ï ¡j[m
+                   ([1;36mB[m)oardadm   ¬ÝªOÁ`ºÞ¥\¯à[m
+                       ([1;36mS[m)etBoard   ³]©w¬ÝªO[m
+
+- maple.p - refine code
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r43
+®É¶¡: Fri Jun 18 20:38:21 2010
+
+
+Time:      2010/06/18
+Revision:  43
+Type:      Bug fix
+
+Log:
+
+- acct.c - refine log file path
+
+- observe.c - for some bad guys, SYSOPs can trace his post history
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r44
+®É¶¡: Fri Jun 18 22:10:54 2010
+
+
+Time:      2010/06/18
+Revision:  44
+Type:      New function
+
+Log:
+
+- bank.c - add money_back(), it can get your old money back (before 2009.12)
+           [1;33mnew money = (old money + old bank)/2[m
+
+Caution: this function will be available on [1;32m2010/06/18 ~ 2010/06/24[m
+         if you find a way to get service free, just enjoy it ^^~
+
+- menu.c - add ([1;36mD[m)ream     ¡i ¹Ú¤jªA°È°Ï ¡j[m
+                   ([1;36mC[m)ache     ¡i ¥[­ÈªA°È°Ï ¡j[m
+                       ([1;36mM[m)yMoney    ¡@¶×¤JÂÂ¹Ú¹ô[m
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r45
+®É¶¡: Fri Jun 18 22:14:44 2010
+
+
+Time:      2010/06/18
+Revision:  45
+Type:      New function/Bug fix
+
+Log:
+
+- bank.c - it's working now...
+
+- shop.c - add ¼È®ÉÁô¨­³N, ¥Ã¤[Áô¨­³N, ÁôÂÃ¬G¶m, ¯¸ªøÅv­­
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r46
+®É¶¡: Fri Jun 18 22:18:57 2010
+
+
+Time:      2010/06/18
+Revision:  46
+Type:      New function
+
+Log:
+
+- song.c - it's working now...
+
+- menu.c - re-open ([1;36mR[m)equest      ÂIºq¨t²Î[m
+                       ([1;36mR[m)equest       ÂIºqºq¥»
+                       ([1;36mO[m)rderSongs    ÂIºq¬ö¿ý
+                       ([1;36mS[m)ubmit        §ë½Z±M°Ï                               [m
+
+Caution: request point [1;31mWON'T[m be added in current version, use carefully...[m
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r47
+®É¶¡: Sun Jun 20 11:26:17 2010
+
+
+Time:      2010/06/20
+Revision:  47
+Type:      Bug fix (thanks to lceCream)
+
+Log:
+
+- bank.c - fix Remittance function, add logger for money flow
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r48
+®É¶¡: Sun Jun 20 11:57:35 2010
+
+
+Time:      2010/06/20
+Revision:  48
+Type:      Bug fix
+
+Log:
+
+- song.c - refine code, add logger for anonymous orders
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r49
+®É¶¡: Sun Jun 20 13:08:33 2010
+
+
+Time:      2010/06/20
+Revision:  49
+Type:      New function/Bug fix
+
+Log:
+
+- bank.c - refine code
+
+- bj.c - ¹Ú¹ô is added to this game, good luck !
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r50
+®É¶¡: Sun Jun 20 15:55:58 2010
+
+
+Time:      2010/06/20
+Revision:  50
+Type:      Bug fix
+
+Log:
+
+- post.c - there is a bug about MODIFY_TAG at post_edit()
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r51
+®É¶¡: Sun Jun 20 16:55:50 2010
+
+
+Time:      2010/06/20
+Revision:  51
+Type:      New function
+
+Log:
+
+- acct.c - refine addmoney(), addpoint1() and addpoint2()
+
+- edit.c - add words_check() and keysnum
+
+- post.c - add spendtime, user will get [1;33mpaid[m when sending a post
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r52
+®É¶¡: Sun Jun 20 20:28:08 2010
+
+
+Time:      2010/06/20
+Revision:  52
+Type:      Bug fix
+
+Log:
+
+- shop.c - hidefrom_temp() will cause system error, we've closed it...
+
+- post.c - refine code
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r53
+®É¶¡: Tue Jun 22 21:51:46 2010
+
+
+Time:      2010/06/22
+Revision:  53
+Type:      New function
+
+Log:
+
+- bank.c - initial work
+
+- shop.c - initial work
+
+
+Caution: "¶×¤JÂÂ¹Ú¹ô" this function will be closed at 6/24 0:00
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r54
+®É¶¡: Wed Jul 21 17:12:44 2010
+
+
+Time:      2010/07/21
+Revision:  54
+Type:      Bug fix
+
+Log:
+
+- acct.c - since delete board will cause system terminated and data lost,
+           [1;33;44m¡i ¬ÝªO³]©w ¡j[m (D)§R°£[m now is fixed.
+
+Caution: Please DO NOT try to delete ºëµØ°Ï¯Á¤Þ and ºëµØ°Ï²§°Ê, f_rm is buggy.
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r55
+®É¶¡: Mon Jul 26 21:41:10 2010
+
+
+Time:      2010/07/26
+Revision:  55
+Type:      Bug fix
+
+Log:
+
+- acct.c - refine code, SYSOPs must give reason for modification.
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r56
+®É¶¡: Mon Jul 26 22:34:58 2010
+
+
+Time:      2010/07/26
+Revision:  56
+Type:      Bug fix/New function
+
+Log:
+
+- config.h - #define ANTI_PHONETIC /* ¶}±ÒÀË¬dª`­µ¤å¥\¯à */
+
+- battr.h - initial work -> add BRD_NOPHONETIC (ª`­µ¤å­­¨î)
+
+- post.c - fix background grayout problem in post_memo_edit()
+           post paid rule is changed now...
+
+- edit.c - add ANTI_PHONETIC words_check()
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r57
+®É¶¡: Tue Jul 27 10:41:14 2010
+
+
+Time:      2010/07/27
+Revision:  57
+Type:      New function
+
+Log:
+
+- post.c - BM can modify BRD_NOPHONETIC flag now...
+
+           [1;37;44m> (C)lose   ¬ÝªOµoªí³]©w        [m
+             ¡·¬ÝªO³]©w 1)ÃöªO°ßÅª 2)§@ªÌ­×¤å 3)Âà¿ý¤å³¹ 4)¸Tª`­µ¤å [Q]
+               ½T©w­nÅÜ§óª`­µ¤å­­¨î³]©w¡H[y/N][m
+
+           refine BRD information...
+
+           [1;37;44m ¬ÝªO³]©w¤Î¸ê°T¬d¸ß¡G[m ¸Tª`­µ¤å - Ãö³¬/[1;33m¶}±Ò[m
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r58
+®É¶¡: Sun Aug  1 11:21:49 2010
+
+
+Time:      2010/08/01
+Revision:  58
+Type:      Bug fix
+
+Log:
+
+- post.c - refine numpost calculation rule...
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r59
+®É¶¡: Sun Aug  8 06:26:55 2010
+
+
+Time:      2010/08/08
+Revision:  59
+Type:      Bug fix
+
+Log:
+
+- post.c - refine postscore()
+
+- cleanrecommend.c - fix some buggy code...
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r60
+®É¶¡: Sun Aug  8 06:31:30 2010
+
+
+Time:      2010/08/08
+Revision:  60
+Type:      Bug fix
+
+Log:
+
+- post.c - remove useless code...
+
+- cleanrecommend.c - Since there's still a lot of problems, BM must be very
+                     carefully to use this function.
+                     Hope we can fix it ASAP.
+
+
+--
+
+Happy Father's Day   :)
+[m
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r61
+®É¶¡: Thu Aug 12 16:01:11 2010
+
+
+Time:      2010/08/12
+Revision:  61
+Type:      Bug fix(thanks to shurman and BenHe)
+
+Log:
+
+- theme.h - change MODIFY_TAG
+
+- cleanrecommend.c - refine code
+
+telnet://ccns.cc this URL is available since 2010/08/10
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r62
+®É¶¡: Fri Aug 13 06:38:39 2010
+
+
+Time:      2010/08/13
+Revision:  62
+Type:      Bug fix
+
+Log:
+
+- cleanrecommend.c - refine code, remove useless code
+
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r63
+®É¶¡: Fri Aug 27 09:43:31 2010
+
+
+Time:      2010/08/27
+Revision:  63
+Type:      New function
+
+Log:
+
+- post.c - Add Easy-Reader (ºô­¶ÀËµø²£¥Í¾¹)
+
+NOTE:
+
+Easy-Reader is [1;31mNOT[m a Web-BBS (see ptt or disp )
+This is an engine which can let you read article with a web browser.
+
+Posy_query is also modified in order to check POST_LOCK and POST_CURMODIFY flag.
+For safety, no permission to read this article, no AID or Eeay-Reader link.
+
+Eeay-Reader link is now available (Press 'q'):[m
+
+[1;33;44m [37m¤å³¹¥N½X¤Î¸ê°T¬d¸ß¡G                                                         [m
+
+ [1;37m¡¹[m ¤å³¹¥N½X: #[1;32mA15UBESE [m   [m
+ [1;37m¡¹[m ¦nÅª³sµ²: http://bbs.ccns.cc/Newbie/A15UBESE [m
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: linklist (Áåµ²¦ê¦C) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r64
+®É¶¡: Thu Sep 16 20:02:44 2010
+
+
+Time:      2010/09/16
+Revision:  64
+Type:      Bug fix
+
+Log:
+
+- myfavorite.c  change statebrd when go into gem by myfavorite
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r65
+®É¶¡: Fri Sep 17 20:45:31 2010
+
+
+Time:      2010/09/17
+Revision:  65
+Type:      New function
+
+Log:
+
+post.c - Add RSS feed (¬ÝªO RSS µo§G¥\¯à)
+
+         [1;37;44m> (C)lose   ¬ÝªOµoªí³]©w        [m
+             5)RSS¥\¯à
+                 ½T©w­nÅÜ§ó¬ÝªORSS³]©w¡H[y/N]
+
+         Press 'i', RSS URL will be like http://bbs.ccns.cc/BRD_NAME.xml
+
+Example: In iGoogle, add URL http://bbs.ccns.cc/Dream_commit.xml ,
+         you can get new posts on this board through your RSS reader.
+
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r66
+®É¶¡: Sat Oct 30 23:01:10 2010
+
+
+Time:      2010/10/30
+Revision:  66
+Type:      Bug fix
+
+Log:
+
+- post.c - refine Easy-Reader (ºô­¶ÀËµø²£¥Í¾¹)
+
+NOTE:
+
+"Easy-Reader" (Code Name: Railgun System)
+
+This patch is public on telnet://cpu.twbbs.org now.
+
+[34;47m §@ªÌ [37;44m cache (Å]ªk¶Æ¼b¶W¹qºÏ¯¥)                                   [34;47m ¬ÝªO [37;44m itoc [40m
+[34;47m ¼ÐÃD [37;44m [¥\¯à] ¤å³¹¦nÅª(web)¤Î RSS feed ¥\¯à                                   [40m
+[34;47m ®É¶¡ [37;44m 2010/10/29 Fri 12:04:40                                                [40m  [m
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r67
+®É¶¡: Mon Nov 22 08:55:40 2010
+
+
+Time:      2010/11/22
+Revision:  67
+Type:      Bug fix
+
+Log:
+
+- myfavorite.c - add brd->bvote tag
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r68
+®É¶¡: Mon Nov 22 08:58:40 2010
+
+
+Time:      2010/11/22
+Revision:  68
+Type:      New function
+
+Log:
+
+- vote.c - new vote system, including gamble function (under testing)
+
+           support "gamble mode" <<< ¬O§_¬°½ä½L(Y/N)¡H[N]
+
+[36m¡i§ë²¼½c¾Þ§@»¡©ú¡j[37m
+
+[36m¡i°ò¥»«ü¥O¡j[37m
+    (v)     °Ñ¥[§ë²¼
+    (R)     Æ[¬Ý¤w¶}²¼µ²ªG
+
+[36m¡iªO¥D«ü¥O¡j[37m
+    (^P)    Á|¦æ§ë²¼
+    (E)     ­×§ï§ë²¼³]©w
+    (^Q)    ¬d¸ß/§ï´Á/¤¤¤î§ë²¼                                                  [m
+    (V)     ªO¥D¹wÄý¥Ø«e§ë²¼/½ä½Lµ²ªG
+    (b)     ¥ß§Y¶}²¼
+
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r69
+®É¶¡: Mon Nov 22 09:07:57 2010
+
+
+Time:      2010/11/22
+Revision:  69
+Type:      New function/Bug fix
+
+Log:
+
+- struct.h - initial work
+
+- global.h - initial work
+
+- bank.c - remove "¶×´Ú¥\¯à" and add "¤ä²¼§I´«¨t²Î"
+
+- menu.c - add MSG [5;41;1m ¦¬¨ì·s¤ä²¼¤F! [m
+
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r70
+®É¶¡: Mon Nov 22 09:09:56 2010
+
+
+Time:      2010/11/22
+Revision:  70
+Type:      Bug fix
+
+Log:
+
+- account.c - refine draw_vote()
+
+- bbsd.c - refine u_exit()
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r71
+®É¶¡: Sun Apr  7 21:01:57 2013
+
+
+Time:      2013/04/07
+Revision:  71
+Type:      New Feature
+
+Log:
+
+- post.c -
+- acct.c -
+
+
+NOTE:
+
+    ¬°¤FºÊ±±¥ÆÀÝ¦¨¨a¤S¤£Â_¶i¤ÆªºÅ]°­²×µ²ªÌ¨« telnet ¨ó©w¨Ó¼´¸ê®Æ
+    ±N¶i¦æªì¨Bªºªº¾÷¾¹¤H¦æ¬°¸ê°T»`¶°
+
+    ¹Ú¤j¸T¤î¥H¥ô¦ó§Î¦¡ªº¾÷¾¹¤H(bot)¶i¦æ¸ê®Æ¦¬¶°ªº¦æ¬°¡A
+    ¨Ï¥ÎªÌ³£¦³¿ï¾Ü¤£·Q­n³Q¯Á¤Þ©M½Æ»s¸ê®ÆªºÅv§Q¡A¤£µoÁn¨Ã¤£¥NªíÀq³\³o¼Ëªº¦æ¬°
+    ¹Ú¤jÁöµM¤W½u¤H¼Æ¦b­ä¹s¡A¦ýµ´¤£¤¹³\µL´c·Nªº±q¤¤Àò¨ú°Ó·~¤Î­Ó¤H§Q¯q
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r72
+®É¶¡: Mon Apr  8 08:51:37 2013
+
+
+Time:      2013/04/08
+Revision:  72
+Type:      Bug fix
+
+Log:
+
+- Easy Reader
+
+NOTE:
+
+  Thanks to renn999 for his anti-bot policy
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r73
+®É¶¡: Wed Apr  8 20:25:40 2013
+
+
+Time:      2013/04/08
+Revision:  73
+Type:      Feature Change
+
+Log:
+
+- post.c
+
+NOTE:
+
+  Remove Advanced Search
+
+
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r74
+®É¶¡: Tue Oct  1 21:37:21 2013
+
+
+Time:      2013/10/01
+Revision:  74
+Type:      Bug Fix
+
+Log:
+
+- post.c
+
+NOTE:
+
+  Check account's authority before change post title
+
+  = =|| sb. committed my code...
+
+
+  Original:
+
+    /* 100620.cache: §@ªÌ¥i¥H§ï¼ÐÃD */
+    //if(strcmp(mhdr.owner, cuser.userid))
+    //  {
+    //    if (!(bbstate & STAT_BOARD))
+    //        return XO_NONE;  /* 0911105.cache: ¥H¨¾¸U¤@ */
+    //  }
+
+    [1;33m//if (!(bbstate & STAT_BOARD))    [1;32m= =||[m
+      [1;33m//return XO_NONE;[m
+
+
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r75
+®É¶¡: Fri Jan 13 17:13:34 2017
+
+
+Time:      2017/1/13
+Revision:  75
+Type:      Bug Fix
+
+Log:
+
+- board.c
+
+NOTE:
+
+fix the class_hot problem
+
+(C)lass     ¡i ¤À²Õ°Q½×°Ï ¡j --> ¥¼©w¸q¸s²Õ
+
+why not we just disable it?  ¢E_¢E
+
+
+  Modification:
+
+   img = class_img;
+   chx = (short *) img + (CH_END - chn);
+   str = img + *chx;
+
+   // "HOT/" ¦WºÙ¥i¦Û©w¡A­Y§ï¦W¤]­n¶¶«K§ï«á­±ªºªø«× 4
+[1;36m//   if (!strncmp(str, "HOT/", 4))
+//   {
+//     class_hot = 1;
+//     chn = CH_END;
+//   }[m
+
+    if (XoClass(chn) == XO_NONE)
+      return XO_NONE;
+
+[1;36m//    if (class_hot)
+//#      class_hot = 0;      /* Â÷¶} HOT Class ¦A²M°£ class_hot ¼Ð°O */[m
+
+  }
+  else
+  {
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (ªü¦R) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r76
+®É¶¡: Wed Jul 26 02:07:34 2017
+
+
+Time:      2017/7/26
+Revision:  76
+Type:      correct details for interface
+
+Log:
+
+- so/song.c
+
+- maple/myfavorite.c
+
+NOTE:
+
+1. When system asking you whether ordering a song to camera :
+
+origin:
+[m½T©wÂIºq¶Ü [Y/n]¡G[30;47m   [m
+
+corrected:
+[m½T©wÂIºq¶Ü [y/N]¡G[30;47m   [m
+
+(default option is always NOT)
+
+
+2. There is a bug not fixed in help command yet,
+   so this revision temporary removed that tip in the interface.
+
+origin:
+> ------------
+
+[m[1;44m¡i§Úªº³Ì·R¡j                       [33m¹Ú¤§¤j¦a[37m                      ¬ÝªO¡mSYSOP¡n[m
+[¡ö]¥D¿ï³æ [¡÷]¾\Åª [¡ô¡õ]¿ï¾Ü [c]½g¼Æ [/]·j´M [s]¬ÝªO [h]»¡©ú
+[44m  ½s¸¹   ¬Ý  ªO            ¤¤   ¤å   ±Ô   ­z                ¤H®ð ªO    ¥D     [m
+
+> ------------
+
+corrected:
+> ------------
+
+[m[1;44m¡i§Úªº³Ì·R¡j                       [33m¹Ú¤§¤j¦a[37m                      ¬ÝªO¡mSYSOP¡n[m
+[¡ö]¥D¿ï³æ [¡÷]¾\Åª [¡ô¡õ]¿ï¾Ü [c]½g¼Æ [/]·j´M [s]¬ÝªO
+[44m  ½s¸¹   ¬Ý  ªO            ¤¤   ¤å   ±Ô   ­z                ¤H®ð ªO    ¥D     [m
+
+> ------------
+
+  hope one day it will be fixed... orz
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (ªü¦R) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r77
+®É¶¡: Thu Jul 27 16:24:14 2017
+
+
+Time:      2017/7/27
+Revision:  77
+Type:      Bug fix
+
+Log:
+
+- maple/myfavorite.c
+- so/adminutil.c
+- util/camera.c
+...etc.
+
+add back:
+
+game/
+
+NOTE:
+
+[m1. add back help tips for ([1;36mF[m)avorite §Úªº³Ì·R
+
+For solving :
+
+#A17JPAI8 (Newbie)
+http://bbs.ccns.cc/Newbie/A17JPAI8
+
+#A169S2SD (SYSOP)
+http://bbs.ccns.cc/SYSOP/A169S2SD
+
+#A15SME1C (SYSOP)
+http://bbs.ccns.cc/SYSOP/A15SME1C
+
+...etc.
+
+and add back [1;35m[h][m +
+[1;33msome simple instruction[m of how to add my favorite:
+
+[m[1;44m¡i§Úªº³Ì·R¡j                       [33m¹Ú¤§¤j¦a[37m                      ¬ÝªO¡mSYSOP¡n[m
+[¡ö]¥D¿ï³æ [¡÷]¾\Åª [1;33m[^P]·s¼W [d]§R°£[m [c]½g¼Æ [/]·j´M [s]¬ÝªO [1;35m[h]»¡©ú[m
+[44m  Á`¼Æ   ¬Ý  ªO            ¤¤   ¤å   ±Ô   ­z                ¤H®ð ªO    ¥D     [m
+
+2.
+
+correct myfav switching problem (detail)
+
+If there's any bug, please report to  [m[1;44m¬ÝªO¡mDLbbs-Change¡n[m ,
+
+thanks! :)
+[m
+3.
+
+correct game SegFault Problem.
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r78
+®É¶¡: Sat Jul 29 17:06:55 2017
+
+
+Time:      2017/7/29
+Revision:  78
+Type:      Feature Change
+
+Log:
+
+maple/pmore.c (piaip's more)
+
+Note:
+
+test another pmore LIGHT-ON layout feature (Not show on the center)
+
+now you can press " [1;33m\[m " to test it out. :)
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r79
+®É¶¡: Sun Jul 30 05:42:00 2017
+
+
+Time:      2017/7/30
+Revision:  79
+Type:      New feature
+
+Log:
+
+Easy Reader:
+- cover.php
+- index.php
+- uaocode.php
+
+NOTE:
+
+- https (SSL/TLS) supported.
+  thanks to cache providing this idea.:)
+
+You can test these links :
+http://bbs.ccns.cc/SYSOP/A16JTFSQ
+https://bbs.ccns.cc/SYSOP/A16JTFSQ
+
+If it doen't work or even web neither,
+please report to [m[1;44m¬ÝªO¡mDLbbs-Change¡n[m
+thanks! :)
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r80
+®É¶¡: Wed Aug  2 13:05:13 2017
+
+
+Time:      2017/8/2
+Revision:  80
+Type:      New feature
+
+Log:
+
+- maple/post.c
+
+NOTE:
+
+Simple testing for also using "[1;33m%[m" this key to score the post.
+(for maple3-itoc feature)
+
+Now you can use "[1;33mX[m/[1;33m%[m" to score the post.
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¯¸¤º: Dream_commit
+¼ÐÃD: DreamBBS commit r81
+®É¶¡: Wed Aug  2 18:11:17 2017
+
+
+Time:      2017/8/2
+Revision:  81
+Type:      New feature
+
+Log:
+
+- maple/menu.c
+
+NOTE:
+
+Simple testing for also using "[1;33ms[m" this key to select board in main menu.
+(for features of most BBS)
+
+Ctrl+S to select board in main menu still works.
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r82
+®É¶¡: Fri Aug  4 06:32:03 2017
+
+
+Time:      2017/8/4
+Revision:  82
+Type:      Bug Fix
+
+Log:
+
+- maple/bguard.c
+- maple/talk.c
+
+NOTE:
+
+Try to fix counting ( [m[30;47m ¥Ø«e¯¸¤W¦³[31m  52[30m ¤H[m ) error,
+
+and reboot the system this morning.
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r83
+®É¶¡: Thu Aug 10 02:58:10 2017
+
+
+Time:      2017/8/10
+Revision:  83
+Type:      New feature
+
+Log:
+
+- maple/pmore.c
+
+NOTE:
+
+Upgrade [1;32mpiaip's more[m from 2007 to 2007+
+
+You can checked it from these details:
+
+
+1. push '[1;33m\[m' when you're reading articles:
+
+[m[30;47m piaip's more: pmore 2007+ §Ö³t³]©w - ¦â±m(ANSI½X)Åã¥Ü¼Ò¦¡                   [m
+ [1;31m\[m ¦â±mÅã¥Ü¤è¦¡:         [1;31m1[36m*¹w³]®æ¦¡¤Æ¤º®e[30m |[31m2[m ­ì©lANSI±±¨î½X[1;30m |[31m3[m ¯Â¤å¦r
+[34;46m ¡¹ ½Ð½Õ¾ã³]©w (1-3 ¥iª½±µ¿ï©w¡A\¥i¤Á´«) ©Î¨ä¥¦¥ô·NÁäµ²§ô¡C[31;47m [½Ð«ö¥ô·NÁäÄ~Äò] [m
+
+
+2. push '[1;33mo[m' when you're reading articles:
+
+[m[30;47m piaip's more: pmore 2007+ ³]©w¿ï¶µ                                          [m
+
+ [1;31m\[m ¦â±mÅã¥Ü¤è¦¡:         [1;36m*¹w³]®æ¦¡¤Æ¤º®e[30m |[m ­ì©lANSI±±¨î½X[1;30m |[m ¯Â¤å¦r
+ [1;31mw[m Â_¦æ¤è¦¡:              ª½±µºI¦æ[1;30m |[36m*¦Û°ÊÂ_¦æ[m
+ [1;31mm[m Â_¦æ²Å¸¹:              ¤£Åã¥Ü[1;30m |[36m*Åã¥Ü[m
+ [1;31ml[m ¤å³¹¼ÐÀY¤À¹j½u:       [1;36m*µL[30m |[m ³æ¦æ[1;30m |[m ¶Ç²Î¤À¹j½u¥[ªÅ¦æ
+ [1;31mt[m ¶Ç²Îª¬ºA¦C»PÂ_¦æ¤è¦¡: [1;36m*°±¥Î[30m |[m ±Ò¥Î
+
+[34;46m ¡¹ ½Ð½Õ¾ã³]©w©Î¨ä¥¦¥ô·NÁäµ²§ô¡C                          [31;47m [½Ð«ö¥ô·NÁäÄ~Äò] [m[m
+
+
+Notice:
+
+[1;33mTry to drop changing article when we press "PgDown/PgUp"[m
+
+You can try another way ("Space/Backspace") to replace it
+
+If you don't like it, let us know on [m[1;44m¬ÝªO¡mDLbbs-Change¡n[m , thanks! :)
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r84
+®É¶¡: Fri Aug 18 02:39:52 2017
+
+
+Time:      2017/8/18
+Revision:  84
+Type:      Bug Fix
+
+Log:
+
+- Crontab:
+    ($BBSHOME)/bin/addsong
+
+NOTE:
+
+Try to add credit of ordersong automatically again. :)
+
+¸Õ¦æ­×¥¿¨Ã«ì´_ÂIºq¦¸¼Æ¨C©P¦Û°Ê¼W¥[¤§¾÷¨î
+[m
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r85
+®É¶¡: Tue Sep 12 06:36:05 2017
+
+
+Time:      2017/9/12
+Revision:  85
+Type:      Refine Code & Setting
+
+Log:
+
+- maple/menu.c
+- maple/post.c
+
+NOTE:
+
+improve menu interface:
+
+½Õ¾ã¿ï¶µ­^¤å¦r¥À¶}ÀY, ºÉ¥i¯à¤£»P s ©Î e ­«½Æ
+
+¸Õ¦æ¥¼»{ÃÒ¨Ï¥ÎªÌ¤´¥i¶i¤J§Úªº³Ì·R°Ï
+[m
+¸Õ¦æ½Õ¾ã¥¼»{ÃÒ¨Ï¥ÎªÌµLªkµo¤å¤§¨t²Î´£¥Ü
+
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r86
+®É¶¡: Sat Sep 16 08:48:14 2017
+
+Time:      2017/9/16
+Revision:  86
+Type:      Fix
+
+Log:
+
+- maple/myfavorite.c
+
+NOTE:
+
+- let PERM_BASIC enter myfav.
+- fix some security bugs for myfavorite.
+- let 'a' can also add a new item in "My Favorite"
+  (compatible for Maple2.x, especially telnet://ptt.cc )[m
+
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r87
+®É¶¡: Tue Sep 26 12:49:33 2017
+
+Time:      2017/9/26
+Revision:  87
+Type:      Fix
+
+Log:
+
+- maple/xover.c
+
+NOTE:
+
+- recovering vim feature
+
+´Nºâ¤è¦VÁäÃa±¼(?), ÂsÄý¦Cªí´å¼Ð²¾°Ê®É, ÁÙ¬O¥i¥H¶¶§Q¥Î¨ä¥L«ü¥O¥N´À
+
+
+¡° ¬ÛÃö«ü¥O:
+
+    ¡ô: k ©Î p
+
+    ¡õ: j ©Î n
+
+    Â÷¶}¦Cªí: e
