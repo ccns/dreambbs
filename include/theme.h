@@ -73,7 +73,7 @@
   編號     主              題                            [編      選] [日  期]\033[m"
 
 #define NECKPOST "\
-[←]離開 [→]閱\讀 [^P]發表 [b]備忘錄 [d]刪除 [V]投票 [TAB]精華區 [h]elp\n\
+[←]離開 [→]閱\讀 [^P]發表 [b]備忘錄 [d]刪除 [V]投票 [TAB]精華區 [h]說明\n\
 \033[30;47m  編號    日 期  作  者       文  章  標  題                                  \033[m"
 
 #define NECKMAIL "\
@@ -128,7 +128,7 @@ COLOR1 " 轉信設定 " COLOR2 " (↑/↓)上下 (PgUp/PgDn)上下頁 (Home/End)首尾 (←)(q
 
 #endif  // ORIGIN_TAG
 
-#define MODIFY_TAG "\033[1;32m※ Modify: \033[;1m<%s> \033[31;1m%s"
+#define MODIFY_TAG "\033[1;32m※ Modify: \033[;1m<%s> \033[31;1m%s \033[m"
 
 #define ANONYMOUS_TAG "--\n\033[1;32m※ Origin: \033[33m%s \033[37m<%s> \033[m\n\033[1;31m◆ From: \033[36m%s\033[m\n"
 
