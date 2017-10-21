@@ -128,7 +128,7 @@ COLOR1 " 轉信設定 " COLOR2 " (↑/↓)上下 (PgUp/PgDn)上下頁 (Home/End)首尾 (←)(q
 
 #endif  // ORIGIN_TAG
 
-#define MODIFY_TAG "\033[1;32m※ Modify: \033[;1m<%s> \033[31;1m%s \033[m"
+#define MODIFY_TAG "\033[1;32m※ Modify: \033[33m<%s> \033[m%s"
 
 #define ANONYMOUS_TAG "--\n\033[1;32m※ Origin: \033[33m%s \033[37m<%s> \033[m\n\033[1;31m◆ From: \033[36m%s\033[m\n"
 
