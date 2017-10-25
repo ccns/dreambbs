@@ -67,7 +67,7 @@ int Favorite(void);
 void board_main(void);
 int Boards(void);
 int brd_list(int reciper);
-inline int Ben_Perm(BRD *, usint);
+extern inline int Ben_Perm(BRD *, usint);
 
 /* cache.c */
 
