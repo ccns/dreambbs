@@ -11,7 +11,7 @@
 
 CentOS 5 ~ 7 32-bit 下應該都可以裝起來 ( 7 要裝 Alt-Arch 版本 )
 
-Debian GNU/Linux 32 bit 下目前還沒有編譯成功@@ , 還在嘗試中
+Debian GNU/Linux 32 bit 近期已編譯成功 , 仍在測試相關性能中
 
 
 ## 1. 安裝作業系統及相關環境:
