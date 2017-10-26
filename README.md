@@ -4,6 +4,10 @@ This repository is the ***current code*** of [dreamland-bbs](http://bbs.ccns.cc)
 
 Dreamland BBS source code is cache@ccns modified from [Wind's Top BBS version](http://windtop.yzu.edu.tw/)
 
+Copyright information for this repo, please view document in `docs/`. 
+
+LICENSE for **piaip's more** module, please view `maple/pmore.c` instead.
+
 ![](https://i.imgur.com/c0mC6eX.png)
 
 ## Directory Structure

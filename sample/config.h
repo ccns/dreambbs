@@ -55,10 +55,9 @@
 
 #define Modules                 /* 顯示模組資訊 */
 #define MultiRecommend          /* 顯示多重推文 */
-#undef M3_USE_PMORE             /* piaip's more 2007+ */
-                                /* To use this module, you have to accept the LICENCE in src/maple/pmore.c
-                                 * and define it, or you have to MANUALLY correct src/maple/Makefile 
-                                 * for successful compiling and using traditional "more.c"*/
+
+#define M3_USE_PMORE            /* piaip's more 2007+ */
+
 #define GRAYOUT                 /* 淡入淡出特效系統 */
 
 /* ----------------------------------------------------- */
