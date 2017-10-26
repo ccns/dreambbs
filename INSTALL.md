@@ -35,7 +35,7 @@ Debian GNU/Linux 32 bit 近期已編譯成功 , 仍在測試相關性能中
 
 若使用 Linux , 可於進入編輯器後, 在最後一行加上:
 
-    bbs:x:9999:994:BBS Administrator:/home/bbs:/bin/bash
+    bbs:x:9999:999:BBS Administrator:/home/bbs:/bin/bash
 
 *(為求保險起見盡量跟 /etc/passwd 裡列出其他使用者的格式一樣)*
 
@@ -50,7 +50,7 @@ Debian GNU/Linux 32 bit 近期已編譯成功 , 仍在測試相關性能中
 
 在該檔最後一行加上:
 
-    bbs:x:994:bbs
+    bbs:x:999:bbs
 
 *(為求保險起見跟 `/etc/group` 裡列出其他使用者的格式一樣)*
 
@@ -87,22 +87,6 @@ Debian GNU/Linux 32 bit 近期已編譯成功 , 仍在測試相關性能中
 
     $ vim -c 'set fencs=big5' -c 'e!' src/include/config.h   ## 採用 lantw44.bbs<at>ptt.cc 的建議, 使vim猜編碼只有 Big5 這種選擇
 
-另注意本專案有使用採用 **BSD 授權條款**的 piaip's more 閱讀程式 (在 src/maple/pmore)
-
-若您同意該授權提及之相關使用方式，請務必將 `include/config.h` 中的相關定義：
-
-    #undef M3_USE_PMORE
-
-修正為
-
-    #define M3_USE_PMORE
-
-若您不同意該授權或不需使用該套件，請自行至 `maple/Makefile` 依照相關提示修改設定，
-
-或改以下列指令切換到 `Makefile` 檔案中, 沒有編譯 pmore 套件的 branch (目前為 `more.170818` )後，以便繼續安裝：
-
-    $ git checkout more.170818
-
 ## 5. 確認 BBS 目錄架構配置
 
 設定完之後, 先不要急著執行編譯指令, 而是先檢視 BBS 家目錄下全部的目錄結構, 確認已完整配置
@@ -126,7 +110,7 @@ Debian GNU/Linux 32 bit 近期已編譯成功 , 仍在測試相關性能中
 
     $ make clean linux install
 
-目前測試是在 CentOS 32bit 環境下 (Debian GNU/Linux 32bit 下還沒編譯成功)
+目前測試是在 CentOS 32bit 環境下
 如果相關變數都有定義到的會應該就是可以順利編譯完成
 
 ## 7. 系統環境調校與設定
