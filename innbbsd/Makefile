@@ -35,7 +35,7 @@ sun:
 	@$(MAKE) CC=gcc CFLAGS="-O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-s -L../lib -ldao" $(EXE)
 
 linux:
-	@$(MAKE) CC=gcc CFLAGS="-O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-s -L../lib -ldao" $(EXE)
+	@$(MAKE) CC=gcc CFLAGS="-m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -s -L../lib -ldao" $(EXE)
 
 solaris:
 	@$(MAKE) CC=gcc CFLAGS="-DSOLARIS -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-s -L../lib -ldao -lsocket -lnsl -L/usr/ucblib -lucb" $(EXE)

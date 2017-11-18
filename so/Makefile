@@ -35,7 +35,7 @@ ETC =	Makefile $(HDR)
 .c.o:   ;   $(CC) $(MAKEFLAG) $(CFLAGS) -c $*.c
 .c.x:   ;   $(CPROTO) -o $*.x $*.c
 .c.ln:  ;   lint -abhi $*.c
-.o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao
+.o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao -melf_i386
 
 
 all: 
@@ -51,7 +51,7 @@ sun:
 	@$(MAKE) CC=gcc CPROTO="cproto -E\"gcc -pipe -E\" -I../include" CFLAGS="-O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-s -L../lib -ldao" $(EXE)
 
 linux:
-	@$(MAKE) CC=gcc CPROTO="cproto -E\"gcc -pipe -E\" -I../include" CFLAGS="-DLINUX -DREDHAT -DREDHAT7 -O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-s -L../lib -ldao -lcrypt -lresolv -ldl -rdynamic" $(EXE)
+	@$(MAKE) CC=gcc CPROTO="cproto -E\"gcc -pipe -E\" -I../include" CFLAGS="-m32 -DLINUX -DREDHAT -DREDHAT7 -O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-m32 -s -L../lib -ldao -lcrypt -lresolv -ldl -rdynamic" $(EXE)
 
 solaris:
 	@$(MAKE) CC=gcc CPROTO="cproto -E\"gcc -pipe -E\" -I../include" CFLAGS="-DSOLARIS -DSYSV -DREMAP_LSEEK -O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-s -L../lib -ldao -ltermcap -lsocket -lnsl -lresolv -lelf -ldl" $(EXE)
