@@ -30,8 +30,7 @@ LICENSE for **piaip's more** module, please view `maple/pmore.c` instead.
 
 + **include**  : some definition datas and headers for compiling.
 
-+ **innbbsd**  : Cross BBS sites posting. *(deprecated)*
-
++ **innbbsd**  : Cross BBS sites posting. 
 + **lib**      : Static Libraries of this BBS program
 
 + **maple**    : main BBS program is here.
