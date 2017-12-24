@@ -120,21 +120,6 @@ Nickname[m)             [1;36m®É¼Æ[m\n-----------------------------\
   printf("\n");
 }
 
-#ifdef	HAVE_WEBBBS
-void
-web_write_data(file,data)
-  char *file;
-  DATA *data;
-{
-  int fd;
-  if((fd = open(file,O_WRONLY | O_CREAT | O_TRUNC, 0600))>=0)
-  {
-    write(fd,data,sizeof(DATA)*TOPNUM);
-    close(fd);
-  }
-}
-#endif
-
 int
 main()
 {
@@ -204,10 +189,5 @@ main()
   write_data("\033[33;1m===========\033[44m    ¤W¯¸¦¸¼Æ±Æ¦æº]    \033[40m============\033[m", &toplogins,0);
   write_data("\033[33;1m===========\033[44m    Äé¤ô¦¸¼Æ±Æ¦æº]    \033[40m============\033[m", &topposts,0);
   write_data("\033[33;1m===========\033[44m    ±¾¯¸®É¼Æ±Æ¦æº]    \033[40m============\033[m", &topstay,1);
-#ifdef	HAVE_WEBBBS
-  web_write_data(FN_TOP_LOGIN,&toplogins);
-  web_write_data(FN_TOP_POST,&topposts);
-  web_write_data(FN_TOP_STAY,&topstay);
-#endif  
   return 0;
 }

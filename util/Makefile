@@ -1,9 +1,9 @@
 # ------------------------------------------------------- #
-#  util/Makefile	( NTHU CS MapleBBS Ver 2.36 )	  #
+#  util/Makefile	( NTHU CS MapleBBS Ver 3.x ) 	  #
 # ------------------------------------------------------- #
 #  target : Makefile for 寄信、統計、備份、系統維護工具	  #
-#  create : 95/03/29				 	  #
-#  update : 95/12/15				 	  #
+#  create :   /  /  				 	  #
+#  update :   /  /  				 	  #
 # ------------------------------------------------------- #
 
 #CC	= gcc
@@ -20,12 +20,12 @@
 .c.o:   ;   $(CC) $(MAKEFLAG) $(CFLAGS) -g -c $*.c
 
 TOOL	= account acl-sort camera expire gem-check gem-index makeUSR \
-	  hdr-dump poststat reaper webx countstar rmbadmail restorebrd \
+	  hdr-dump poststat reaper countstar rmbadmail restorebrd \
 	  mailpost bbsmail topusr acpro addsong userno template restoregem \
 	  checkemail match mailexpire countbirth countage utmp-dump \
 	  stopperm mailtoall clean_acl backupusr backupbrd makefw backupgem \
 	  resetvmail 2nd_expire counter restoreusr makeusrno outgo redir \
-	  flowlog news news_expire classtable_alert bmw-dump tranBRD \
+	  classtable_alert bmw-dump tranBRD \
 	  brdstat dump-brdstat base64encode msgall transacct showACCT showBRD backup
 	  #getstar \
 	  #brdcheck brdmail 
@@ -57,13 +57,7 @@ freebsd:
 bsd:
 	@$(MAKE) CC=gcc CFLAGS="-O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-s -L../lib -ldao" $(TOOL)
 
-flowlog2: flowlog2.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
 msgall: msgall.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-flowlog: flowlog.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 makeUSR: makeUSR.o
@@ -102,9 +96,6 @@ makeusrno: makeusrno.o
 backupgem: backupgem.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
-news_expire: news_expire.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
 getstar: getstar.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
@@ -139,9 +130,6 @@ base64encode: base64encode.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 bmw-dump: bmw-dump.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-news: news.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 backupbrd: backupbrd.o
@@ -223,12 +211,6 @@ reaper: reaper.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 reaper-vacation: reaper-vacation.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-webc: webc.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-webx: webx.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 topusr: topusr.o

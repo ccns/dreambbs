@@ -116,8 +116,6 @@
 
 #define HAVE_DETECT_ZHANGBA            /* 偵測張爸文 */
 
-#define	HAVE_WEBBBS                    /* only for WindTop */
-
 #undef	HAVE_PIP_FIGHT                 /* 小雞對戰 */ /* 尚未完工 很多 bug */
 #define	HAVE_PIP_FIGHT1
 

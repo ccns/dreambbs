@@ -586,7 +586,6 @@ HAVE_SYSOP_WATERLIST	../include/config.h	/^#define	HAVE_SYSOP_WATERLIST	/;"	d
 HAVE_TERMINATOR	../include/config.h	/^#define	HAVE_TERMINATOR	/;"	d
 HAVE_USER_MODIFY	../include/config.h	/^#define	HAVE_USER_MODIFY	/;"	d
 HAVE_WATER_LIST	../include/config.h	/^#define HAVE_WATER_LIST	/;"	d
-HAVE_WEBBBS	../include/config.h	/^#define	HAVE_WEBBBS	/;"	d
 HAVE_WRITE	../include/config.h	/^#define HAVE_WRITE	/;"	d
 HAVE_XYPOST	../include/config.h	/^#define HAVE_XYPOST	/;"	d
 HDR	../include/hdr.h	/^}          HDR;$/;"	t	typeref:struct:__anon13

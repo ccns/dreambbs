@@ -102,10 +102,6 @@
 #include "battr.h"		/* board attribution */
 #include "theme.h"		/* custom theme */
 
-#ifdef	HAVE_WEBBBS
-#include "webbbs.h"		/* only for WindTop Web BBS */
-#endif
-
 #endif
 
 #endif				/* _BBS_H_ */
