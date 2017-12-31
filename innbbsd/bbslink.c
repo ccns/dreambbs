@@ -139,7 +139,8 @@ Gtime(now)
 {
   static char datemsg[40];
 
-  strftime(datemsg,sizeof(datemsg),"%d %b %Y %H:%M:%S GMT",localtime(&now));
+//  strftime(datemsg,sizeof(datemsg),"%d %b %Y %H:%M:%S GMT",localtime(&now));
+  strftime(datemsg, sizeof(datemsg), "%d %b %Y %X GMT", gmtime(&now));
   return datemsg;
 }
 
