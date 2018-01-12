@@ -797,7 +797,7 @@ mf_gunzip(const char *fn GCC_UNUSED, int fd)
     // TODO since most files were not gzipped, maybe we can
     // move type checking to "after mmap attached"
     if (read(fd, magic, sizeof(magic)) != sizeof(magic) ||
-        memcmp(gzip_magic, magic, sizeof(magic) != 0)) {
+        memcmp(gzip_magic, magic, sizeof(magic)) != 0) {
         // XXX since we only use 'mmap' in pmore, no need to rewind fd
         return fd;
     }
@@ -2458,12 +2458,13 @@ _pmore2(
                     outs(ANSI_RESET ANSI_COLOR(1;33;44));
                     w -= strlen(s); outs(s);
 
-                    while (w-- > 0) outc(' '); outs(ANSI_RESET ANSI_CLRTOEND);
+                    while (w-- > 0) 
+                        outc(' '); 
+
+                    outs(ANSI_RESET ANSI_CLRTOEND);
                     w = tolower(vkey());
 
-                    if (     w != 'n' &&
-                            w != KEY_UP && w != KEY_LEFT &&
-                            w != 'q')
+                    if (w != 'n' && w != KEY_UP && w != KEY_LEFT && w != 'q')
                     {
                         RESET_MOVIE();
                         mfmovie.mode = MFDISP_MOVIE_PLAYING;
