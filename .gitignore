@@ -40,7 +40,6 @@ include/config.h
 
 bgopherd/gemd
 bmtad/bmtad
-bpop3d/bpop3d
 innbbsd/bbslink
 innbbsd/innbbsd
 maple/bbsd
@@ -100,4 +99,3 @@ util/tranBRD
 util/transacct
 util/userno
 util/utmp-dump
-util/webx

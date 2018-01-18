@@ -1120,7 +1120,6 @@ main()
     /* 由於 FN_POP3_LOG 一直處於開檔狀態, 是故先將此 pop3d 關閉
        檔案自然就會寫入, 此時 log 才會有檔案 by statue */
     sprintf(title, "[記錄] %sPOP3D紀錄", date);
-    system("kill `ps -auxwww | grep bpop3d | awk '{print $2}'`");
     keeplog(FN_POP3_LOG, BRD_SECRET, title, 2);
 
     sprintf(title, "[記錄] %s重複 E-mail 認證紀錄", date);

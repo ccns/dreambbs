@@ -26,11 +26,10 @@ LICENSE for **piaip's more** module, please view `maple/pmore.c` instead.
 
 + **bmtad**    : Mail Transport Agent for BBS. *(some features not works until now)*
 
-+ **bpop3d**   : Simple POP3 server for BBS user.
-
 + **include**  : some definition datas and headers for compiling.
 
 + **innbbsd**  : Cross BBS sites posting. 
+
 + **lib**      : Static Libraries of this BBS program
 
 + **maple**    : main BBS program is here.
