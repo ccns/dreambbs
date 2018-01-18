@@ -916,7 +916,6 @@ int select;
 		break;
 	case 3:
 		system("kill -9 `cat run/bmta.pid`;\
-			   kill -9 `cat run/bguard.pid`;\
 			   kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`;\
 			   kill -9 `ps -auxwww | grep bbslink | awk '{print $2}'`;\
 			   kill -9 `ps -auxwww | grep bbsnnrp | awk '{print $2}'`");
@@ -938,7 +937,6 @@ int select;
 		if (ntime.tm_hour != 0 && ntime.tm_hour != 1)
 		{
 			system("kill -9 `cat run/bmta.pid`;\
-				   kill -9 `cat run/bguard.pid`;\
 				   bin/camera;\
 				   bin/account;\
 				   bin/acpro;\

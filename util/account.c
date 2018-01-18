@@ -1271,7 +1271,6 @@ main()
     {
       gzip(FN_MAIL_LOG, "mailog", ymd);	/* 所有 [信件] 記錄 */
       gzip(FN_BSMTP_LOG, "bsmtp", ymd);	/* 所有 [寄信] 記錄 */
-      gzip(FN_BGUARD_LOG, "bguard", ymd);	/* 所有 [load] 記錄 */
       gzip(FN_GEMD_LOG, "gemd", ymd);	/* 所有 [    ] 記錄 */
       gzip(FN_INNBBS_LOG, "innbbs", ymd);	/* 所有 [轉信] 記錄 */
       system("bin/ctlinnbbsd reload");

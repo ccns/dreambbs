@@ -146,7 +146,6 @@
 #define FN_ANONYMOUS_LOG	"run/anonymous.log"	/* 匿名板紀錄 */
 #endif
 #define FN_BANMAIL_LOG	"run/banmail.log"	/* 擋信紀錄 */
-#define FN_BGUARD_LOG	"run/bguard.log"	/* 所有 [load] 記錄 */
 #define FN_BLACKSU_LOG	"run/blacksu.log"	/* 超級站務使用紀錄 */
 #define FN_BSMTP_LOG	"run/bsmtp.log"		/* 所有 [寄信] 記錄 */
 #ifdef LOG_BRD_USIES

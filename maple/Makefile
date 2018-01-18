@@ -26,7 +26,7 @@ OBJ =	acct.o bbsd.o board.o cache.o edit.o\
 	pmore.o window.o myfavorite.o\
 	# If you prefer not to define M3_USE_PMORE , remove "pmore.o" on the start of last line
 
-EXE =	bbsd bguard xchatd
+EXE =	bbsd xchatd
 
 
 CPROTO  = `which cproto` -E"gcc -pipe -E" -I../include -I/usr/local/include
@@ -63,9 +63,6 @@ bsd:
 	@$(MAKE) CC=gcc CFLAGS="-DBSD44 -O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-s -L../lib -ldao" $(EXE)
 
 xchatd:	xchatd.o
-	$(CC) -o $@ $? $(LDFLAGS)
-
-bguard: bguard.o
 	$(CC) -o $@ $? $(LDFLAGS)
 
 bbsd: $(OBJ)
