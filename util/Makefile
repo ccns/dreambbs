@@ -24,7 +24,7 @@ TOOL	= account acl-sort camera expire gem-check gem-index makeUSR \
 	  mailpost bbsmail topusr acpro addsong userno template restoregem \
 	  checkemail match mailexpire countbirth countage utmp-dump \
 	  stopperm mailtoall clean_acl backupusr backupbrd makefw backupgem \
-	  resetvmail 2nd_expire counter restoreusr makeusrno outgo redir \
+	  resetvmail counter restoreusr makeusrno outgo redir \
 	  classtable_alert bmw-dump tranBRD \
 	  brdstat dump-brdstat base64encode msgall transacct showACCT showBRD backup
 	  #getstar \
