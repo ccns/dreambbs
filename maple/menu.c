@@ -1019,54 +1019,6 @@ static MENU menu_user[] =
 
 static MENU menu_service[];
 
-/*
-static MENU menu_tool[] =
-{
-
-  {"bin/bbcall.so:main_bbcall", PERM_INTERNET, - M_XMODE,
-  "BBcall     腳趾頭ㄎㄡ鼻孔"},
-
-  {"bin/pydict.so:main_pydict", PERM_INTERNET, - M_XMODE,
-  "PyDict     PyDict 英漢漢英字典"},
-
-  {"bin/dictd.so:main_dictd", PERM_INTERNET, - M_XMODE,
-  "Dictd      Dictd 中英日字典"},
-
-   {"bin/dreye.so:main_dreye", PERM_INTERNET, - M_XMODE,
-  "DrEye      Dr.Eye 英漢漢英字典"},
-
-  {"bin/railway.so:main_railway", PERM_INTERNET, - M_XMODE,
-  "Railway    台鐵火車時刻表查詢"},
-
-
-  {"bin/news_viewer.so:main_news",PERM_VALID, - M_XMODE,
-  "NewsReader 新聞閱\讀工具"},
-
-  {"bin/ueequery.so:x_ueequery", 0, - M_XMODE,
-  "Ueequery   聯考准考證姓名查榜"},
-
-  {"bin/ueequery2.so:x_ueequery2", 0, - M_XMODE,
-  "ClassUee   聯考學校科系查榜"},
-
-  {"bin/icq.so:main_icq", PERM_VALID, - M_XMODE,
-  "ICQMsg     ICQ簡訊傳送"},
-
-  {"bin/star.so:main_star", 0, - M_XMODE,
-  "Horoscope  星座運勢分析"},
-
-#ifdef	HAVE_PERSON_DATA
-  {"bin/fortune.so:main_fortune", PERM_VALID, - M_XMODE,
-  "Lucky      運勢預測系統"},
-#endif
-
-
-  {menu_service, PERM_MENU + 'D', M_UMENU,
-  "超值工具"}
-
-};
-
-*/
-
 /* ----------------------------------------------------- */
 /* game menu					         */
 /* ----------------------------------------------------- */
@@ -1088,19 +1040,6 @@ static MENU menu_game[] =
   {"bin/pip.so:p_pipple",PERM_VALID,- M_XMODE,
   "Pip        " NICKNAME "戰鬥雞"},
 
-/*
-  {"bin/km.so:main_km", PERM_VALID, - M_XMODE,
-  "Km         孔明棋"},
-
-  {"bin/puzzle.so:NumPad",PERM_SYSOP,- M_XMODE,
-  "NumPad     智慧拼盤"},
-*/
-
-#ifdef  HAVE_GAME_QKMJ
-  {"bin/qkmj.so:main_qkmj", PERM_VALID, - M_XMODE,
-  "Qkmj       中國的國粹"},
-#endif
-
   {menu_service, PERM_MENU + 'F', M_UMENU,
   "遊戲休閒"}
 
@@ -1112,23 +1051,6 @@ static MENU menu_game[] =
 
 static MENU menu_special[] =
 {
-/*
-  {"bin/grade.so:main_grade",PERM_BASIC, - M_XMODE,
-  "Grade        成績查詢系統"},
-
-  {"bin/graduate.so:main_gpoint",PERM_BASIC, - M_XMODE,
-  "CheckGrade   畢業學分檢查"},
-
-  {"bin/sec_hand.so:sec_hand", PERM_VALID , - M_XMODE,
-  "SecondHand   校內二手市場"},
-*/
-  {"bin/netwhois.so:x_whois", PERM_VALID , - M_XMODE,
-  "Netwhois     IPDN查詢"},
-
-#ifdef	HAVE_BBSNET
-  {"bin/bbsnet.so:Bbsnet", PERM_SYSOP, - M_XMODE,
-  "Jump         光波傳送"},
-#endif
 
   {"bin/personal.so:personal_apply",PERM_VALID, - M_XMODE,
   "PBApply      申請個人看板"}, 
@@ -1147,7 +1069,7 @@ static MENU menu_special[] =
   {resetbrd, PERM_ADMIN, M_XMODE,
   "CameraReset  版面重設"},
 
-  {menu_service, PERM_MENU + 'N', M_UMENU,
+  {menu_service, PERM_MENU + 'R', M_UMENU,
   "加值服務"}
 };
 
@@ -1184,8 +1106,8 @@ static MENU menu_service[] =
 
 /* 090923.cache: 反正裡面都註解掉了 */
 /*
-  {menu_tool, PERM_BASIC, M_XMENU,
-  "Tool      【 超值工具區 】"},
+*  {menu_tool, PERM_BASIC, M_XMENU,
+*  "Tool      【 超值工具區 】"},
 */
   {menu_user, 0, M_UMENU,
   "User      【 個人工具區 】"},

@@ -16,14 +16,12 @@ STRIP   = /usr/bin/strip
 
 HDR = 	bbs.h config.h global.h modes.h perm.h struct.h
 
-SO =	chat.so vote.so xyz.so bwboard.so guessnum.so bbcall.so railway.so puzzle.so\
-	emailpage.so chess.so admin.so chatmenu.so contact.so mailgem.so\
+SO =	chat.so vote.so xyz.so guessnum.so \
+	admin.so chatmenu.so  mailgem.so\
 	memorandum.so aloha.so newboard.so violate.so song.so same_mail.so\
-	classtable.so lovepaper.so showvote.so sec_hand.so list.so km.so\
-	pnote.so passwd.so pop3mail.so imap4mail.so adminutil.so ascii.so\
-	ueequery.so fortune.so ueequery2.so mine.so bbsnet.so bj.so pydict.so\
-	dreye.so news_viewer.so icq.so star.so dictd.so classtable2.so \
-	observe.so pip.so grade.so qkmj.so brdstat.so netwhois.so personal.so \
+	showvote.so list.so mine.so bj.so \
+	pnote.so passwd.so adminutil.so ascii.so\
+	classtable2.so observe.so pip.so brdstat.so personal.so \
 	cleanrecommend.so shop.so bank.so innbbs.so \
 
 EXE =	so

@@ -181,7 +181,6 @@
 #define FN_PIPMONEY_LOG	"run/pipmoney.log"	/* 寵物雞財務狀況 */
 #define FN_MINE_LOG	"run/mine.log"		/* 踩地雷 */
 #define FN_POP3_LOG	"run/pop3.log"		/* 所有 [POP3] 紀錄 */
-#define	FN_POP3MAIL_LOG	"run/pop3mail.log"	/* 收取外部 POP3 郵件服務 */
 #define	FN_POST_LOG	"run/post.log"		/* 文章篇數統計 */
 #define	FN_POST_DB	"run/post.db"		/* 文章篇數統計資料庫 */
 #define	FN_POSTEDIT_LOG	"run/postedit.log"	/* 修改文章紀錄 */

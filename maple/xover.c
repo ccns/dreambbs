@@ -2129,9 +2129,6 @@ static MENU menu_everyz[] =
   {Every_Z_Screen, 0, POPUP_FUN,
   "Screen   螢幕擷取"},
 
-  {"bin/dictd.so:xover_dict", 0 , POPUP_SO,
-  "Dict     中英日字典"},
-
   {NULL, 0, POPUP_QUIT,
   "Quit     離開"},
 
