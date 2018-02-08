@@ -187,7 +187,7 @@ bk_gem()
 static void
 bk_system_src()
 {
-  char system_folders[5][9] = {"bin","etc","innd","newboard","src"};
+  char system_folders[5][9] = {"bin","etc","innd","newboard","dreambbs"};
   char path[64],cmd[256];
   int i;
   
