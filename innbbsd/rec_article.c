@@ -161,10 +161,9 @@ bbspost_add(board, addr, nick)
   {
     fprintf(fp, "發信人: %.50s 看板: %s\n", FROM, board);
     fprintf(fp, "標  題: %.70s\n", SUBJECT);
-    if (SITE)
-      fprintf(fp, "發信站: %.27s (%.40s)\n\n", SITE, DATE);
-    else
-      fprintf(fp, "發信站: %.40s\n\n", DATE);
+    fprintf(fp, "發信站: %.27s (%.40s)\n", SITE, DATE);
+    fprintf(fp, "轉信站: %.70s\n", PATH);
+    fprintf(fp, "\n");
 
     /* chuan: header 跟 body 要空行隔開 */
 
@@ -466,6 +465,7 @@ receive_article()
   char myaddr[128], mynick[128], mysubject[128], myfrom[128], mydate[80];
   char poolx[256];
   char *group;
+  char mypath[128], *pathptr;
   int firstboard = 1;
 
   /* try to split newsgroups into separate group */
@@ -487,6 +487,15 @@ receive_article()
       str_decode(poolx);
       str_ansi(myfrom, poolx, 128);	/* 雖然 bbspost_add() 發信人所需的長度只需要 50，但是 str_from() 需要長一些 */
       FROM = myfrom;
+
+      str_ncpy(poolx, PATH, 255);
+      str_decode(poolx);
+      str_ansi(mypath, poolx, 128);
+      /* itoc.030115.註解: PATH 如果有 .edu.tw 就截掉 */
+      for (pathptr = mypath; pathptr = strstr(pathptr, ".edu.tw");)
+        strcpy(pathptr, pathptr + 7);
+      mypath[70] = '\0';
+      PATH = mypath;
 
       /* itoc.030218.註解: 處理「發信站」中的時間 */
       parse_date();

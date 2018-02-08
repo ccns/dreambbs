@@ -276,8 +276,8 @@ outs_header(str, header_len)	/* 印出檔頭 */
   char *str;
   int header_len;
 {
-  static char header1[LINE_HEADER][LEN_AUTHOR1] = {"作者",   "標題",   "時間"};
-  static char header2[LINE_HEADER][LEN_AUTHOR2] = {"發信人", "標  題", "發信站"};
+  static char header1[LINE_HEADER][LEN_AUTHOR1] = {"作者",   "標題",   "時間", "路徑"};
+  static char header2[LINE_HEADER][LEN_AUTHOR2] = {"發信人", "標  題", "發信站", "轉信站"};
   int i;
   char *ptr, *word;
 
@@ -319,7 +319,6 @@ outs_header(str, header_len)	/* 印出檔頭 */
   /* 如果不是檔頭，就當一般文字印出 */
   outs_line(str);
 }
-
 
 static inline void
 outs_footer(buf, lino, fsize)
