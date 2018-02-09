@@ -503,7 +503,7 @@ send_outgoing(node, sover)
   /*fprintf(SERVERwfp, "Subject: %s\r\n", sover->title);*/ 
   output_rfc2047_qp(SERVERwfp, "Subject: ", sover->title, sover->charset, "\r\n");
   fprintf(SERVERwfp, "Date: %s\r\n", sover->date);
-  fprintf(SERVERwfp, "Organization: %s\r\n", *sover->charset == 'b' ? BBSNAME : BBSNAME);	/* itoc.040425: 若不是 big5 就用英文站名 */
+  fprintf(SERVERwfp, "Organization: %s\r\n", *sover->charset == 'b' ? BOARDNAME : BBSNAME);	/* itoc.040425: 若不是 big5 就用英文站名 */
   fprintf(SERVERwfp, "Message-ID: <%s>\r\n", msgid);
   fprintf(SERVERwfp, "Mime-Version: 1.0\r\n");
   fprintf(SERVERwfp, "Content-Type: text/plain; charset=\"%s\"\r\n", sover->charset);
