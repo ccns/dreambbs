@@ -494,7 +494,7 @@ receive_article()
       /* itoc.030115.註解: PATH 如果有 .edu.tw 就截掉 */
       for (pathptr = mypath; pathptr = strstr(pathptr, ".edu.tw");)
         strcpy(pathptr, pathptr + 7);
-	  sprintf(mypath, "%s!%.*s", MYBBSID, (int)(sizeof(mypath) - strlen(MYBBSID) - 2), PATH);
+      sprintf(mypath, "%s!%.*s", MYBBSID, (int)(sizeof(mypath) - strlen(MYBBSID) - 2), PATH);
       mypath[70] = '\0';
       PATH = mypath;
 
