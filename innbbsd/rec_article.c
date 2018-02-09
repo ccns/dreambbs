@@ -491,10 +491,10 @@ receive_article()
       str_ncpy(poolx, PATH, 255);
       str_decode(poolx);
       str_ansi(mypath, poolx, 128);
+      sprintf(mypath, "%s!%.*s", MYBBSID, (int)(sizeof(mypath) - strlen(MYBBSID) - 2), PATH);
       /* itoc.030115.註解: PATH 如果有 .edu.tw 就截掉 */
       for (pathptr = mypath; pathptr = strstr(pathptr, ".edu.tw");)
         strcpy(pathptr, pathptr + 7);
-      sprintf(mypath, "%s!%.*s", MYBBSID, (int)(sizeof(mypath) - strlen(MYBBSID) - 2), PATH);
       mypath[70] = '\0';
       PATH = mypath;
 
