@@ -11,7 +11,7 @@
 # sun linux solaris sol-x86 freebsd bsd cygwin
 
 # 需要 compile 的目錄
-# lib bmtad innbbsd maple so util
+# lib innbbsd maple so util
 
 
 all:
@@ -27,7 +27,6 @@ all:
 
 sun:
 	@cd lib; make
-	@cd bmtad; make sun
 	@cd innbbsd; make sun
 	@cd maple; make sun
 	@cd so; make sun
@@ -35,7 +34,6 @@ sun:
 
 linux:
 	@cd lib; make
-	@cd bmtad; make linux
 	@cd innbbsd; make linux
 	@cd maple; make linux
 	@cd so; make linux
@@ -43,7 +41,6 @@ linux:
 
 solaris:
 	@cd lib; make
-	@cd bmtad; make solaris
 	@cd innbbsd; make solaris
 	@cd maple; make solaris
 	@cd so; make solaris
@@ -51,7 +48,6 @@ solaris:
 
 sol-x86:
 	@cd lib; make
-	@cd bmtad; make sol-x86
 	@cd innbbsd; make sol-x86
 	@cd maple; make sol-x86
 	@cd so; make sol-x86
@@ -59,7 +55,6 @@ sol-x86:
 
 freebsd:
 	@cd lib; make
-	@cd bmtad; make freebsd
 	@cd innbbsd; make freebsd
 	@cd maple; make freebsd
 	@cd so; make freebsd
@@ -67,14 +62,12 @@ freebsd:
 
 bsd:
 	@cd lib; make
-	@cd bmtad; make bsd
 	@cd innbbsd; make bsd
 	@cd maple; make bsd
 	@cd so; make bsd
 	@cd util; make bsd
 
 install:
-	@cd bmtad; make install
 	@cd innbbsd; make install
 	@cd maple; make install
 	@cd so; make install
@@ -82,7 +75,6 @@ install:
 
 clean:
 	@cd lib; make clean
-	@cd bmtad; make clean
 	@cd innbbsd; make clean
 	@cd maple; make clean
 	@cd so; make clean
