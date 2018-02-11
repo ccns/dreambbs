@@ -24,8 +24,6 @@ LICENSE for **piaip's more** module, please view `maple/pmore.c` instead.
     + **bbs**          : If you don't have any BBS data before, you can copy this into your BBS Home(`/home/bbs`) .<br>
                      (related reference: `docs/INSTALL.md`)
 
-+ **bmtad**    : Mail Transport Agent for BBS. *(some features not works until now)*
-
 + **include**  : some definition datas and headers for compiling.
 
 + **innbbsd**  : Cross BBS sites posting. 
