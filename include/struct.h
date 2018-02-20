@@ -1152,12 +1152,17 @@ typedef struct
 
 typedef struct
 {
-	  time_t tissue;                /* µo¤ä²¼®?¶¡ */
+	  time_t tissue;                /* */
 	    int money;
 		  int gold;
 		    char reason[20];
 }      PAYCHECK;
 
-
+typedef struct
+{
+  unsigned short int connect_port;
+  unsigned short int __reserved;
+  unsigned long int source_addr;
+} proxy_connection_info_t;
 
 #endif				/* _STRUCT_H_ */
