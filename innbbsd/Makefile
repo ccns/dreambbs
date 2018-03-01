@@ -23,34 +23,14 @@ EXE	= $(INNBBSD)
 
 all: 
 	@echo "Please enter 'make sys-type', "
-	@echo " make sun     : for Sun-OS 4.x and maybe some BSD systems, cc or gcc" 
 	@echo " make linux   : for Linux"
-	@echo " make solaris : for Sun-OS 5.x gcc" 
-	@echo " make sol-x86 : for Solaris 7 x86"
 	@echo " make freebsd : for BSD 4.4 systems" 
-	@echo " make bsd     : for BSD systems, cc or gcc, if not in the above lists" 
-	@echo " make cygwin  : for Microsoft Windows and Cygwin gcc"
-
-sun:
-	@$(MAKE) CC=gcc CFLAGS="-O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-s -L../lib -ldao" $(EXE)
 
 linux:
-	@$(MAKE) CC=gcc CFLAGS="-m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -s -L../lib -ldao" $(EXE)
-
-solaris:
-	@$(MAKE) CC=gcc CFLAGS="-DSOLARIS -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-s -L../lib -ldao -lsocket -lnsl -L/usr/ucblib -lucb" $(EXE)
-
-sol-x86:
-	@$(MAKE) CC=gcc CFLAGS="-DSOLARIS -O2 -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-s -L../lib -ldao -lsocket -lnsl" $(EXE)
+	@$(MAKE) CC=gcc CFLAGS="-g -m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -L../lib -ldao" $(EXE)
 
 freebsd:
-	@$(MAKE) CC=gcc CFLAGS="-O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-s -L../lib -ldao" $(EXE)
-
-bsd:
-	@$(MAKE) CC=gcc CFLAGS="-O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-s -L../lib -ldao" $(EXE)
-
-cygwin:
-	@$(MAKE) CC=gcc CFLAGS="-DCYGWIN -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-s -L../lib -ldao -lcygipc" $(EXE)
+	@$(MAKE) CC=gcc CFLAGS="-g -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-L../lib -ldao" $(EXE)
 
 
 

@@ -32,30 +32,14 @@ TOOL	= account acl-sort camera expire gem-check gem-index makeUSR \
 
 all: 
 	@echo "Please enter 'make sys-type', "
-	@echo " make sun     : for Sun-OS 4.x and maybe some BSD systems, cc or gcc" 
 	@echo " make linux   : for Linux"
-	@echo " make solaris : for Sun-OS 5.x gcc" 
-	@echo " make sol-x86 : for Solaris 7 x86"
 	@echo " make freebsd : for BSD 4.4 systems" 
-	@echo " make bsd     : for BSD systems, cc or gcc, if not in the above lists" 
-
-sun:
-	@$(MAKE) CC=gcc CFLAGS="-O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-s -L../lib -ldao" $(TOOL)
 
 linux:
-	@$(MAKE) CC=gcc CFLAGS="-m32 -DLINUX -DREDHAT -DREDHAT7 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -s -L../lib -ldao -lcrypt -lresolv" $(TOOL)
-
-solaris:
-	@$(MAKE) CC=gcc CFLAGS="-DSOLARIS -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-s -L../lib -ldao -lsocket -lresolv -lnsl -L/usr/ucblib -lucb" $(TOOL)
-
-sol-x86:
-	@$(MAKE) CC=gcc CFLAGS="-DSOLARIS -O2 -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-s -L../lib -ldao -lsocket -lresolv -lnsl" $(TOOL)
+	@$(MAKE) CC=gcc CFLAGS="-g -m32 -DLINUX -DREDHAT -DREDHAT7 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -L../lib -ldao -lcrypt -lresolv" $(TOOL)
 
 freebsd:
-	@$(MAKE) CC=gcc MAKEFLAG=$(MAKEFLAG) CFLAGS="-O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-s -L../lib -ldao -lcrypt" $(TOOL)
-
-bsd:
-	@$(MAKE) CC=gcc CFLAGS="-O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-s -L../lib -ldao" $(TOOL)
+	@$(MAKE) CC=gcc MAKEFLAG=$(MAKEFLAG) CFLAGS="-g -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-L../lib -ldao -lcrypt" $(TOOL)
 
 msgall: msgall.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)

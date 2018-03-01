@@ -8,7 +8,7 @@
 
 
 # 支援的 OS-type
-# sun linux solaris sol-x86 freebsd bsd cygwin
+# linux freebsd
 
 # 需要 compile 的目錄
 # lib innbbsd maple so util
@@ -16,21 +16,8 @@
 
 all:
 	@echo "Please enter 'make sys-type', "
-	@echo " make sun     : for Sun-OS 4.x and maybe some BSD systems, cc or gcc"
 	@echo " make linux   : for Linux"
-	@echo " make solaris : for Sun-OS 5.x gcc"
-	@echo " make sol-x86 : for Solaris 7 x86"
 	@echo " make freebsd : for BSD 4.4 systems"
-	@echo " make bsd     : for BSD systems, cc or gcc, if not in the above lists"
-	@echo " make cygwin  : for Microsoft Windows and Cygwin gcc"
-
-
-sun:
-	@cd lib; make
-	@cd innbbsd; make sun
-	@cd maple; make sun
-	@cd so; make sun
-	@cd util; make sun
 
 linux:
 	@cd lib; make
@@ -39,33 +26,12 @@ linux:
 	@cd so; make linux
 	@cd util; make linux
 
-solaris:
-	@cd lib; make
-	@cd innbbsd; make solaris
-	@cd maple; make solaris
-	@cd so; make solaris
-	@cd util; make solaris
-
-sol-x86:
-	@cd lib; make
-	@cd innbbsd; make sol-x86
-	@cd maple; make sol-x86
-	@cd so; make sol-x86
-	@cd util; make sol-x86
-
 freebsd:
 	@cd lib; make
 	@cd innbbsd; make freebsd
 	@cd maple; make freebsd
 	@cd so; make freebsd
 	@cd util; make freebsd
-
-bsd:
-	@cd lib; make
-	@cd innbbsd; make bsd
-	@cd maple; make bsd
-	@cd so; make bsd
-	@cd util; make bsd
 
 install:
 	@cd innbbsd; make install
