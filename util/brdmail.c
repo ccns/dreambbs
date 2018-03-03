@@ -12,7 +12,7 @@
 #include <sysexits.h>
 
 //#define	ANTI_HTMLMAIL		/* itoc.021014: พื html_mail */
-#define	ANTI_NOTMYCHARSETMAIL	/* itoc.030513: พื not-mycharset mail */
+//#define	ANTI_NOTMYCHARSETMAIL	/* itoc.030513: พื not-mycharset mail */
 
 #define         LOG_FILE        FN_BBSMAILPOST_LOG
 
