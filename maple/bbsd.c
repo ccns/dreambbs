@@ -1314,7 +1314,7 @@ start_daemon(port)
 
   setrlimit(RLIMIT_RSS, &rl);
 
-  rl.rlim_cur = rl.rlim_max = 0;
+  rl.rlim_cur = rl.rlim_max = RLIM_INFINITY;
   setrlimit(RLIMIT_CORE, &rl);
 
   rl.rlim_cur = rl.rlim_max = 60 * 20;
