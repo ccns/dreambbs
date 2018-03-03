@@ -14,14 +14,14 @@
 #define	ANTI_HTMLMAIL		/* itoc.021014: พื html_mail */
 #define	ANTI_NOTMYCHARSETMAIL	/* itoc.030513: พื not-mycharset mail */
 
+#define         LOG_FILE        FN_BBSMAILPOST_LOG
 
 static void
 mailog(msg)
   char *msg;
 {
   FILE *fp;
-/*
-  if (fp = fopen(BMTA_LOGFILE, "a"))
+  if (fp = fopen(LOG_FILE, "a"))
   {
     time_t now;
     struct tm *p;
@@ -34,7 +34,6 @@ mailog(msg)
       msg);
     fclose(fp);
   }
-*/
 }
 
 
@@ -95,11 +94,13 @@ mail2brd(brd)
 
   brdname = brd->brdname;
 
-  if (strstr(brdname, "ream_lo"))
-    ;
-  else
-    return 0;
-
+/*
+ *
+ * if (strstr(brdname, "ream_lo"))
+ *   ;
+ * else
+ *   return 0;
+ */
 
   brd_fpath(folder, brdname, NULL);
   if (!dashd(folder))
@@ -191,13 +192,13 @@ start:
       {
 	char charset[32];
 	mm_getcharset(str, charset, sizeof(charset));
-/*	if (str_cmp(charset, MYCHARSET) && str_cmp(charset, "us-ascii"))
+	if (str_cmp(charset, "big5") && str_cmp(charset, "us-ascii"))
 	{
 	  sprintf(buf, "ANTI-NONMYCHARSET [%d] %s => %s", getppid(), sender, brdname);
 	  mailog(buf);
 	  return EX_NOUSER;
 	}
-*/
+
       }
 #endif
     }

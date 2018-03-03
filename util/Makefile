@@ -26,7 +26,9 @@ TOOL	= account acl-sort camera expire gem-check gem-index makeUSR \
 	  stopperm mailtoall clean_acl backupusr backupbrd makefw backupgem \
 	  resetvmail counter restoreusr makeusrno outgo redir \
 	  classtable_alert bmw-dump tranBRD \
-	  brdstat dump-brdstat base64encode msgall transacct showACCT showBRD backup
+	  brdstat dump-brdstat base64encode \
+	  msgall transacct showACCT showBRD \
+	  backup brdmail
 	  #getstar \
 	  #brdcheck brdmail 
 
@@ -236,8 +238,8 @@ transacct: transacct.o
 backup: backup.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
-#brdmail: brdmail.o
-#	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
+brdmail: brdmail.o
+	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 #brdcheck: brdcheck.o
 #	        $(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
