@@ -4163,6 +4163,7 @@ KeyFunc post_cb[] =
 
 #ifdef XZ_XPOST
 	{'/', XoXpost},			/* Thor: for XoXpost */
+	{'~', XoXpost},			/* Thor: for XoXpost */
 #endif
 
 #ifdef HAVE_POST_BOTTOM
