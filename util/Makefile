@@ -23,7 +23,7 @@ TOOL	= account acl-sort camera expire gem-check gem-index makeUSR \
 	  hdr-dump poststat reaper countstar rmbadmail restorebrd \
 	  mailpost bbsmail topusr acpro addsong userno template restoregem \
 	  checkemail match mailexpire countbirth countage utmp-dump \
-	  stopperm mailtoall clean_acl backupusr backupbrd makefw backupgem \
+	  stopperm mailtoall clean_acl makefw \
 	  resetvmail counter restoreusr makeusrno outgo redir \
 	  classtable_alert bmw-dump tranBRD \
 	  brdstat dump-brdstat base64encode \
@@ -79,9 +79,6 @@ countage: countage.o
 makeusrno: makeusrno.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
-backupgem: backupgem.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
 getstar: getstar.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
@@ -118,9 +115,6 @@ base64encode: base64encode.o
 bmw-dump: bmw-dump.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
-backupbrd: backupbrd.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
 stopperm: stopperm.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
@@ -134,9 +128,6 @@ match: match.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 resetvmail: resetvmail.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-backupusr: backupusr.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 account: account.o
