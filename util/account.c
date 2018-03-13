@@ -77,16 +77,7 @@ keeplog(fnlog, board, title, mode)
   strcpy(hdr.title, title);
   strcpy(hdr.owner, "SYSOP");
   strcpy(hdr.nick, SYSOPNICK);
-#if 0
-  fd = open(folder, O_WRONLY | O_CREAT | O_APPEND, 0600);
-  if (fd < 0)
-  {
-    unlink(fpath);
-    return;
-  }
-  write(fd, &hdr, sizeof(HDR));
-  close(fd);
-#endif
+
   rec_bot(folder, &hdr, sizeof(HDR));
 }
 
@@ -184,11 +175,6 @@ bshm_init()
 
     time(uptime);
     fprintf(stderr, "[account]\tCACHE\treload bcache\r\n");
-
-#if 0
-    blog("CACHE", "reload bcache");
-#endif
-
     return;
   }
 }
@@ -693,48 +679,7 @@ class_image()
     rename(CLASS_RUNFILE, CLASS_IMGFILE);
   }
 
-
-
 }
-
-#if 0
-static void
-profess_image()
-{
-  int i;
-  FILE *fp;
-  short len, pos[CH_MAX];
-  ClassHeader *chp;
-
-  class_sort();
-  class_parse(PROFESS_INIFILE);
-
-  if (chn < 2)  /* lkchu.990106: 尚沒有分類 */
-    return;
-
-  len = sizeof(short) * (chn + 1);
-
-  for (i = 0; i < chn; i++)
-  {
-    pos[i] = len;
-    len += CH_TTLEN + chx[i]->count * sizeof(short);
-  }
-  pos[i++] = len;
-  if (fp = fopen(PROFESS_RUNFILE, "w"))
-  {
-     fwrite(pos, sizeof(short), i, fp);
-     for (i = 0; i < chn; i++)
-     {
-     chp = chx[i];
-     fwrite(chp->title, 1, CH_TTLEN + chp->count * sizeof(short), fp);
-     free(chp);
-     }
-     fclose(fp);
-     rename(PROFESS_RUNFILE, PROFESS_IMGFILE);
-   }
-}
-#endif
-
 
 
 /* ----------------------------------------------------- */
@@ -783,59 +728,8 @@ gtar(source, target, stamp, prune)
   if (prune)
   {
     f_rm(source);
-#if 0
-    sprintf(buf, "/bin/rm -fr %s", source);
-    system(buf);
-    mkdir(source, 0755);
-#endif
   }
 }
-
-
-#if 0
-static void
-gem_backup()
-{
-  int op;
-  DIR *dirp;
-  struct dirent *de;
-  char *fname, buf[80], tgz[80];
-
-  if (chdir("gem"))
-    return;
-
-  op = (time(0) / 86400);
-  if (!(op & 7))
-  {
-    system("`which tar` cfz /usr/data/gem/gem.tgz .??? ?");
-  }
-
-  if (chdir("brd"))
-    return;
-
-  if (dirp = opendir("."))
-  {
-    while (de = readdir(dirp))
-    {
-      fname = de->d_name;
-      if (*fname == '.' || *fname <= ' ')
-	continue;
-
-      if ((++op) & 15)
-	continue;
-
-      /* Thor.980328: gem放一份就好, 不然 /usr那顆HD放不下 */
-      sprintf(buf, "/usr/data/gem/%s.tz0", fname);
-      sprintf(tgz, "/usr/data/gem/%s.tgz", fname);
-      rename(tgz, buf);
-      sprintf(buf, "`which gtar` cfz %s %s", tgz, fname);
-      system(buf);
-    }
-    closedir(dirp);
-  }
-}
-#endif
-
 
 static void
 error(fpath)
@@ -845,38 +739,6 @@ error(fpath)
   exit(1);
 }
 
-
-#if 0
-static void
-out_clean()
-{
-  struct stat st;
-  struct dirent *de;
-  DIR *dirp;
-  time_t due;
-  char *fname;
-
-  if (chdir("/home/bbs/out"))
-    return;
-
-  dirp = opendir(".");
-  if (!dirp)
-    return;
-
-  due = time(0) - 3 * 24 * 60 * 60;
-
-  while (de = readdir(dirp))
-  {
-    fname = de->d_name;
-    if ((*fname != '.') && !stat(fname, &st) && (st.st_mtime < due))
-    {
-      unlink(fname);
-    }
-  }
-
-  closedir(dirp);
-}
-#endif
 
 int
 main()
@@ -889,9 +751,8 @@ main()
   static char run_file[] = "run/usies";
   static char tmp_file[] = "run/tmp";
   static char log_file[] = "run/usies=";
-#if 0
-  static char brd_file[] = FN_BRD_USIES;
-#endif
+//  static char brd_file[] = FN_BRD_USIES;
+  
   char buf[256], ymd[16];
   FILE *fp, *fpw;
 
@@ -1048,8 +909,6 @@ main()
 
       /* 以下是目前沒有在使用的紀錄 */
 
-#if 0
-
 //    sprintf(title, "[記錄] %s使用次數統計", date);
 //    system("bin/spss.sh");
 //    keeplog("run/spss.log", NULL, title, 2);
@@ -1063,12 +922,6 @@ main()
 //    sprintf(title, "[記錄] %s修改文章紀錄", date);
 //    keeplog(FN_POSTEDIT_LOG, BRD_SECRET, title, 2);
 
-//    sprintf(title, "[記錄] %s大學聯考查榜紀錄", date);
-//    keeplog(FN_UEEQUERY_LOG, BRD_SECRET, title, 2);
-
-//    sprintf(title, "[記錄] %s電子線上字典紀錄", date);
-//    keeplog(FN_PYDICT_LOG, BRD_SECRET, title, 2);
-
 //    sprintf(title, "[記錄] %sbbsmail mailpost紀錄", date);
 //    keeplog(FN_BBSMAILPOST_LOG, BRD_SECRET, title, 2);
 
@@ -1076,10 +929,9 @@ main()
 //    keeplog(FN_BANMAIL_LOG, NULL, title, 2);
 //    gzip(FN_BANMAIL_LOG,"banmail/banmail",ymd);  /* 擋信紀錄 */
 
-/*
-    sprintf(title, "[記錄] %s寄信紀錄", date);
-    keeplog(FN_MAIL_LOG, BRD_SECRET, title, 2);
-*/
+//    sprintf(title, "[記錄] %s寄信紀錄", date);
+//    keeplog(FN_MAIL_LOG, BRD_SECRET, title, 2);
+
 //    sprintf(title, "[記錄] %s轉信紀錄", date);
 //    keeplog(FN_INNBBS_LOG, BRD_SECRET, title, 2);
 //    gzip(FN_INNBBS_LOG,"innbbsd/innbbsd",ymd);  /* 轉信紀錄 */
@@ -1099,7 +951,6 @@ main()
 //    sprintf(title, "%sE-Mail over max connection 統計", date);
 //    keeplog("run/over.log", NULL, title, 2);
 
-#endif
 
     /* 以下是秘密紀錄 */ 
     sprintf(title, "[記錄] %s文章觀看紀錄", date);
@@ -1239,11 +1090,9 @@ main()
 
     gzip(FN_CHATDATA_LOG".old","chat/chat",ymd);
 
-#if 0
-#ifdef  LOG_BRD_USIES
-    gzip(brd_file, FN_BRD_USIES, ymd);   /* lkchu.981201: 備份看版閱讀記錄 */
-#endif
-#endif
+//#ifdef  LOG_BRD_USIES
+//    gzip(brd_file, FN_BRD_USIES, ymd);   /* lkchu.981201: 備份看版閱讀記錄 */
+//#endif
 
   }
   else if (ntime.tm_hour == 1)
@@ -1254,45 +1103,13 @@ main()
     system("bin/userno");
     keeplog(FN_USERNO_LOG, BRD_SECRET, title, 2);
     gzip(FN_USERNO_LOG, "userno/userno", ymd);        /* 所有 [使用者編號紀錄] 記錄 */
-
-
-/* 全部丟到 Secret 看板做查閱 by statue */
     gzip(FN_MAIL_LOG, "mail/mail", ymd);	/* 所有 [寄信] 記錄 */
-#if 0
-    gzip(FN_INNBBS_LOG, "innbbs", ymd);  /* 所有 [轉信] 記錄 */
-    gzip(FN_PIPMONEY_LOG, "chicken", ymd);  /* 所有 [小雞] 記錄 */
-    gzip(FN_SONG_LOG, "ordersongs", ymd);  /* 所有 [點歌] 記錄 */
-    gzip(FN_POP3_LOG, "pop3", ymd);	/* 所有 [POP3] 紀錄 */
-#endif
 
-#if 0
-    if (ntime.tm_mday == 1)
-    {
-      gzip(FN_MAIL_LOG, "mailog", ymd);	/* 所有 [信件] 記錄 */
-      gzip(FN_BSMTP_LOG, "bsmtp", ymd);	/* 所有 [寄信] 記錄 */
-      gzip(FN_GEMD_LOG, "gemd", ymd);	/* 所有 [    ] 記錄 */
-      gzip(FN_INNBBS_LOG, "innbbs", ymd);	/* 所有 [轉信] 記錄 */
-      system("bin/ctlinnbbsd reload");
-      gzip(FN_RFORM_LOG, "rform", ymd);	/* 所有 [註冊] 記錄 */
-    }
-#endif
 
     if (ntime.tm_wday == 6)
     {
-#if 0
-      gzip(FN_LOGIN_LOG, "login", ymd);	/* 所有 [登錄] 記錄 */
-      gzip("run/mode.cur", "mode", ymd);
-      gzip("run/post.all", "post", ymd);
-#endif
 //於091205註解
 //      gtar("usr/@", "reaper/reaper", ymd, 1);
-
-      /* Thor.981221: 註解: 下面兩行請依各人需求改為程式的家, 以備分程式,
-                            不用備份程式的就 comment out吧 */
-#if 0
-      gtar("/usr/bbssrc/maple", "maple", ymd, 0);
-      gtar("/usr/bbssrc/util", "util", ymd, 0);
-#endif
     }
   }
 
