@@ -183,7 +183,7 @@ bshm_init()
     /* 等所有 boards 資料更新後再設定 uptime */
 
     time(uptime);
-    fprintf(stderr, "[account]\tCACHE\treload bcache");
+    fprintf(stderr, "[account]\tCACHE\treload bcache\r\n");
 
 #if 0
     blog("CACHE", "reload bcache");
