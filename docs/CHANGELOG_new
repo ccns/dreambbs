@@ -1852,3 +1852,103 @@ NOTE:
     ¡õ: j ©Î n
 
     Â÷¶}¦Cªí: e
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r88
+®É¶¡: Sun Oct 22 00:52:49 2017
+
+Time:      2017/10/22
+Revision:  88
+Type:      Fix
+
+Log:
+
+- include/theme.h
+
+NOTE:
+
+- modify MODIFY_TAG style
+
+for fixing escape code not reset (*[m) problem
+
+Origin:
+
+[1;32m¡° Modify: [37m<140.116.101.37> [31mFri Oct 20 04:01:22 2017
+
+*[1;32m¡° Modify: *[37m<140.116.101.37> *[31mFri Oct 20 04:01:22 2017[m
+
+New:
+
+[m[1;32m¡° Modify: [33m<140.116.101.37> [mSun Oct 22 00:41:59 2017
+
+*[m*[1;32m¡° Modify: *[33m<140.116.101.37> *[mSun Oct 22 00:41:59 2017
+
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r89
+®É¶¡: Sun Dec 31 18:42:43 2017
+
+Time:      2017/12/31
+Revision:  89
+Type:      Fix
+
+Log:
+
+- innbbsd/bbslink.c
+
+NOTE:
+
+1. Âà«H´_¬¡´ú¸Õ¤¤
+
+2. ­×¥¿Âà«H®É°Ï°ÝÃD
+
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r90
+®É¶¡: Fri Feb  9 08:15:06 2018
+
+Time:      2017/2/9
+Revision:  90
+Type:      Fix
+
+Log:
+
+- innbbsd/rec_article.c
+- maple/more.c
+- include/config.h
+
+NOTE:
+
+1. Âà«H¤å³¹¥[¤JÂà«H¸ô®|(PATH)
+
+2. ¦¹¥\¯à¤´¦b´ú¸ÕÆ[¹î¤¤
+
+> -------------------------------------------------------------------------- <
+
+§@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
+¼ÐÃD: DreamBBS commit r91
+®É¶¡: Sat Mar  3 20:25:51 2018
+
+Time:      2017/3/3
+Revision:  91
+Type:      Bug Fixing
+
+Log:
+
+- util/bbsmail.c
+- util/brdmail.c
+
+NOTE:
+
+1. ­×´_¦¬¯¸¥~«H¥\¯à
+
+2. ´ú¸Õ¡u±H«H¨ì¬ÝªO¡v¥\¯à
+
+¤´¦b´ú¸Õ¶¥¬q¡A¤´¤£«OÃÒ·|«ùÄò¶}±Ò¦¹ªA°È
+
