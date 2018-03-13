@@ -1035,7 +1035,7 @@ m_zip()
         sprintf(cmd,"tar -C usr/%c -zcf - %s | base64 > %s",*buf,user,fpath);
       #else
         #ifdef __FreeBSD__
-          sprintf(cmd,"tar -C usr/%c -zcf - %s | b64encode %s > %s",*buf,user,fpath,fpath);
+          sprintf(cmd,"tar -C usr/%c -zcf - %s | b64encode -r %s > %s",*buf,user,fpath,fpath);
         #else
           sprintf(cmd,"tar -C usr/%c -zcf - %s | bin/base64encode > %s",*buf,user,fpath);
         #endif
