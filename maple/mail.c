@@ -1030,8 +1030,12 @@ m_zip()
                     
       sprintf(user,"%s/.DIR %s/@/",buf,buf);
       sprintf(fpath,"tmp/%s.b64",cuser.userid);
-
-      sprintf(cmd,"tar -C usr/%c -zcf - %s | bin/base64encode > %s",*buf,user,fpath);
+   
+      #ifdef __linux__
+        sprintf(cmd,"tar -C usr/%c -zcf - %s | base64 > %s",*buf,user,fpath);
+      #else
+        sprintf(cmd,"tar -C usr/%c -zcf - %s | bin/base64encode > %s",*buf,user,fpath);
+      #endif
       system(cmd);
   
       sprintf(title,"¡i%s¡j%s ­Ó¤H«H½c", BOARDNAME, cuser.userid);
