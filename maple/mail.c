@@ -1065,7 +1065,14 @@ do_forward(title, mode)
   char *userid;
   char addr[64], fpath[64], cmd[256];
 
+  if(strstr(cuser.email,".bbs@"MYHOSTNAME))
+  { 
+     vmsg("使用註冊單認證通過的使用者無法打包！");
+     return;
+  }
+
   strcpy(addr, cuser.email);
+
 /*
  *  if (!vget(b_lines, 0, "請輸入轉寄地址：", addr, 60, GCARRY))
  *    return;
@@ -1078,6 +1085,7 @@ do_forward(title, mode)
  *
  *  sprintf(fpath, "確定寄給 [%s] 嗎(Y/N)？[N] ", addr);
  */
+
   sprintf(fpath, "確定寄給 [%s] 嗎(Y/N)？[N] ",cuser.email);
   if (vans(fpath) != 'y')
     return;
@@ -1156,6 +1164,12 @@ m_zip()			/* itoc.010228: 打包資料 */
     if (currbno < 0)
     {
       vmsg("請先進入您要打包的看板，再來此打包");
+      return XEASY;
+    }
+
+    if(!(strstr(currboard,"P_")))
+    { 
+      pmsg2("非個人板暫不提供打包服務,特殊個人專板若需打包請洽站務");
       return XEASY;
     }
 
