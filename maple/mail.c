@@ -1105,7 +1105,18 @@ do_forward(title, mode)
       gem_fpath(fpath, currboard, NULL);
     }
 
-    sprintf(cmd, "tar -zcv -f - %s | bin/base64encode > tmp/%s.tgz", fpath, userid, userid);
+//   sprintf(cmd, "tar -zcv -f - %s | bin/base64encode > tmp/%s.tgz", fpath, userid);
+//   r2.20180316: try system default util to excute base64 encoding
+     #ifdef __linux__
+       sprintf(cmd, "tar -zcf - %s | base64 > tmp/%s.tgz", fpath, userid);
+     #else
+       #ifdef __FreeBSD__
+         sprintf(cmd, "tar -zcf - %s | b64encode -r %s > tmp/%s.tgz", fpath, userid, userid);
+       #else
+         sprintf(cmd, "tar -zcf - %s | bin/base64encode > tmp/%s.tgz", fpath, userid);
+       #endif
+     #endif
+
     system(cmd);
 
     sprintf(fpath, "tmp/%s.tgz", userid);
