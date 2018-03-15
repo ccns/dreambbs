@@ -1096,15 +1096,11 @@ do_forward(title, mode)
       strcat(fpath, " ");
       strcat(fpath, cmd);
     }
-    else if (mode == '2')	/* 個人精華區 */
-    {
-      usr_fpath(fpath, userid, "gem");
-    }
-    else if (mode == '3')	/* 看板文章 */
+    else if (mode == '2')	/* 看板文章 */
     {
       brd_fpath(fpath, currboard, NULL);
     }
-    else /* if (mode == '4') */	/* 看板精華區 */
+    else /* if (mode == '3') */	/* 看板精華區 */
     {
       gem_fpath(fpath, currboard, NULL);
     }
@@ -1134,14 +1130,14 @@ m_zip()			/* itoc.010228: 打包資料 */
   int ans;
   char *name, *item, buf[80];
 
-  ans = vans("打包資料 1)個人信件 3)看板文章 4)看板精華區 到註冊信箱 [Q] ");
+  ans = vans("打包資料 1)個人信件 2)看板文章 3)看板精華區 到註冊信箱 [Q] ");
 
-  if (ans == '1' || ans == '2')
+  if (ans == '1')
   {
     name = cuser.userid;
-    item = (ans == '1') ? "個人信件" : "個人精華區";
+    item = "個人信件";
   }
-  else if (ans == '3' || ans == '4')
+  else if (ans == '2' || ans == '3')
   {
     /* itoc.註解: 限定只能打包目前閱讀的看板，不能閱讀秘密看板的人就不能打包該板/精華區 */
     /* itoc.020612: 為了防止 POST_RESTRICT/GEM_RESTRICT 的文章外流，非板主就不能打包 */
@@ -1152,7 +1148,7 @@ m_zip()			/* itoc.010228: 打包資料 */
       return XEASY;
     }
 
-    if ((ans == '3' && !(bbstate & STAT_BOARD)) || (ans == '4' && !(bbstate & STAT_BOARD))) 
+    if ((ans == '2' && !(bbstate & STAT_BOARD)) || (ans == '3' && !(bbstate & STAT_BOARD))) 
 				   /* tmp not STAT_BM */
     {
       vmsg("只有板主才能打包看板文章及看板精華區");
@@ -1160,7 +1156,7 @@ m_zip()			/* itoc.010228: 打包資料 */
     }
 
     name = currboard;
-    item = (ans == '3') ? "看板文章" : "看板精華區";
+    item = (ans == '2') ? "看板文章" : "看板精華區";
   }
   else
   {
