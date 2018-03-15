@@ -58,6 +58,10 @@ gem_fpath(fpath, board, fname)
   *fpath++ = 'g';
   *fpath++ = 'e';
   *fpath++ = 'm';
+  *fpath++ = '/';
+  *fpath++ = 'b';
+  *fpath++ = 'r';
+  *fpath++ = 'd';
   mak_fpath(fpath, board, fname);
 }
 
