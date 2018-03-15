@@ -1,0 +1,61 @@
+From 9038f4ca07456157c515fa1731355db7df3efd7c Mon Sep 17 00:00:00 2001
+From: holishing <holishingtest@gmail.com>
+Date: Mon, 1 Jan 2018 03:58:53 +0800
+Subject: [PATCH 01/31] try 2 bugs again
+
+---
+ maple/board.c | 14 +++++++-------
+ maple/xover.c |  8 ++++----
+ 2 files changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/maple/board.c b/maple/board.c
+index dab9146..3e42519 100644
+--- a/maple/board.c
++++ b/maple/board.c
+@@ -1584,17 +1584,17 @@ class_browse(xo)
+    str = img + *chx;
+ 
+    // "HOT/" 名稱可自定，若改名也要順便改後面的長度 4
+-//   if (!strncmp(str, "HOT/", 4))
+-//   {
+-//     class_hot = 1;
+-//     chn = CH_END;
+-//   }
++   if (!strncmp(str, "HOT/", 4))
++   {
++     class_hot = 1;
++     chn = CH_END;
++   }
+ 
+     if (XoClass(chn) == XO_NONE)
+       return XO_NONE;
+       
+-//    if (class_hot)
+-//#      class_hot = 0;      /* 離開 HOT Class 再清除 class_hot 標記 */
++    if (class_hot)
++      class_hot = 0;      /* 離開 HOT Class 再清除 class_hot 標記 */
+       
+   }
+   else
+diff --git a/maple/xover.c b/maple/xover.c
+index 2d8a7ca..e710678 100644
+--- a/maple/xover.c
++++ b/maple/xover.c
+@@ -1860,10 +1860,10 @@ xover(cmd)
+ 	{
+ 	  cmd = xo_copy(xo);
+ 	}
+-//	else if (cmd == 'F')
+-//	{
+-//	  cmd = xo_forward(xo);
+-//	}
++	else if (cmd == 'F')
++	{
++	  cmd = xo_forward(xo);
++	}
+ #if 0
+ 	else if (cmd == 'Z')
+ 	{
+-- 
+1.8.3.1
+

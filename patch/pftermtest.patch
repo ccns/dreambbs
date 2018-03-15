@@ -1,0 +1,790 @@
+From 23101716b7efbb1e9617c63e3ac38f0bfd6b9730 Mon Sep 17 00:00:00 2001
+From: holishing <holishingtest@gmail.com>
+Date: Fri, 9 Feb 2018 09:56:02 +0800
+Subject: [PATCH] Trying pfterm (cannot complete compile yet)
+
+---
+ include/global.h |  20 ++++++-
+ include/struct.h |  10 +++-
+ include/theme.h  |   8 +++
+ maple/Makefile   |   8 +--
+ maple/maple.p    |  99 ++++++++++++++++++++++++++++-----
+ maple/talk.c     |  29 +++++++++-
+ maple/visio.c    | 164 +++++++++++++++++++++++++++++++++++++++++++++++++++----
+ maple/window.c   |  45 ++++++++++++++-
+ so/chat.c        |  27 +++++++++
+ 9 files changed, 375 insertions(+), 35 deletions(-)
+
+diff --git a/include/global.h b/include/global.h
+index 1eba1c6..c24840d 100644
+--- a/include/global.h
++++ b/include/global.h
+@@ -297,9 +297,23 @@
+ /* 參數設定                                              */
+ /* ----------------------------------------------------- */
+                                                                                 
+-#define GRAYOUT_DARK    0
+-#define GRAYOUT_BOLD    1
+-#define GRAYOUT_NORMAL  2
++#ifdef M3_USE_PFTERM
++/* ----------------------------------------------------- */
++/* Grayout Levels                                        */
++/* ----------------------------------------------------- */
++  #define GRAYOUT_COLORBOLD      (-2)
++  #define GRAYOUT_BOLD           (-1)
++  #define GRAYOUT_DARK           (0)
++  #define GRAYOUT_NORM           (1)
++  #define GRAYOUT_COLORNORM      (+2)
++
++#else
++                                                                               
++  #define GRAYOUT_DARK    0
++  #define GRAYOUT_BOLD    1
++  #define GRAYOUT_NORMAL  2
++
++#endif
+ 
+ /* ----------------------------------------------------- */
+ /* 訊息字串：獨立出來，以利支援各種語言			 */
+diff --git a/include/struct.h b/include/struct.h
+index 0370f68..4abb189 100644
+--- a/include/struct.h
++++ b/include/struct.h
+@@ -1158,6 +1158,14 @@ typedef struct
+ 		    char reason[20];
+ }      PAYCHECK;
+ 
+-
++/* ----------------------------------------------------- */
++/* M3_USE_PFTERM                                         */
++/* ----------------------------------------------------- */
++ 
++typedef struct {
++	int row, col;
++	int y, x;
++	void *raw_memory;
++} 	screen_backup_t;
+ 
+ #endif				/* _STRUCT_H_ */
+diff --git a/include/theme.h b/include/theme.h
+index 040e209..0e52d79 100644
+--- a/include/theme.h
++++ b/include/theme.h
+@@ -137,4 +137,12 @@ COLOR1 " 
+ /* 其他訊息字串						 */
+ /* ----------------------------------------------------- */
+ 
++
++//for M3_USE_PFTERM
++#define FILEDFG            (0)
++#define FILEDBG            (7)
++
++#define VMSG_NULL \
++" \033[0;37;44m▏ 請按任意鍵繼續 .....           \033[0;47;34m▉\033[m "
++
+ #endif				/* _THEME_H_ */
+diff --git a/maple/Makefile b/maple/Makefile
+index 8c5c0de..d9408d3 100644
+--- a/maple/Makefile
++++ b/maple/Makefile
+@@ -17,14 +17,14 @@ STRIP   = /usr/bin/strip
+ SRC =	acct.c bbsd.c board.c cache.c edit.c\
+ 	gem.c mail.c menu.c more.c post.c banmail.c\
+ 	talk.c visio.c xover.c favorite.c socket.c popupmenu.c\
+-	pmore.c window.c myfavorite.c\
+-	# If you prefer not to define M3_USE_PMORE , remove "pmore.c" on the start of last line
++	pfterm.c pmore.c window.c myfavorite.c\
++	# If you prefer not to define M3_USE_PMORE/M3_USE_PFTERM , remove "pmore.c"/"pfterm.c" on the start of last line
+ 
+ OBJ =	acct.o bbsd.o board.o cache.o edit.o\
+ 	gem.o mail.o menu.o more.o post.o banmail.o\
+ 	talk.o visio.o xover.o favorite.o socket.o popupmenu.o\
+-	pmore.o window.o myfavorite.o\
+-	# If you prefer not to define M3_USE_PMORE , remove "pmore.o" on the start of last line
++	pfterm.c pmore.o window.o myfavorite.o\
++	# If you prefer not to define M3_USE_PMORE/M3_USE_PFTERM , remove "pmore.o"/"pfterm.o" on the start of last line
+ 
+ EXE =	bbsd xchatd
+ 
+diff --git a/maple/maple.p b/maple/maple.p
+index ed387f0..f007344 100644
+--- a/maple/maple.p
++++ b/maple/maple.p
+@@ -225,29 +225,31 @@ int t_banmsg(void);
+ /* visio.c */
+ 
+ void bell(void);
+-void move(int y, int x);
++// void move(int y, int x);       /*pfterm*/
+ void getyx(int *y, int *x);
+-void refresh(void);
+-void clear(void);
++// void refresh(void);            /*pfterm*/
++// void clear(void);              /*pfterm*/
+ void clearange(int from, int to);
+ void clrtohol(void);
+-void clrtoeol(void);
+-void clrtobot(void);
+-void outc(int ch);
+-void outs(uschar *str);
++// void clrtoeol(void);           /*pfterm*/
++// void clrtobot(void);           /*pfterm*/
++// void outc(int ch);             /*pfterm*/
++// void outs(uschar *str);        /*pfterm*/
++void outl(int line, uschar *msg); /*pfterm*/
+ void outx(uschar *str);
+ void outplan(uschar *str);
+ void outz(uschar *msg);
+ void outf(uschar *str);
+ void prints(char *fmt, ...);
+-void scroll(void);
+-void rscroll(void);
++// void scroll(void);             /*pfterm*/
++// void rscroll(void);            /*pfterm*/
++void outr(uschar *str);           /*pfterm*/
+ void cursor_save(void);
+ void cursor_restore(void);
+-void save_foot(screenline *slp);
+-void restore_foot(screenline *slp);
+-int vs_save(screenline *slp);
+-void vs_restore(screenline *slp);
++// void save_foot(screenline *slp); /*pfterm*/
++// void restore_foot(screenline *slp); /*pfterm*/
++// int vs_save(screenline *slp); /*pfterm*/
++// void vs_restore(screenline *slp); /*pfterm*/
+ int vmsg(char *msg);
+ void zmsg(char *msg);
+ void vs_bar(char *title);
+@@ -257,7 +259,7 @@ BRD *ask_board(char *board, int perm, char *msg);
+ int vget(int line, int col, uschar *prompt, uschar *data, int max, int echo);
+ int vans(char *prompt);
+ int vkey(void);
+-void grayout(int type);
++// void grayout(int type);  /*pfterm*/
+ 
+ /* xover.c */
+ 
+@@ -308,3 +310,72 @@ int Every_Z_Screen(void);
+ 
+ int popupmenu_ans2(char *desc[], char *title, int x, int y);
+ int pmsg2(char *msg);
++
++
++/* ---------------------------- */
++
++
++/* M3_USE_PFTERM */
++/* I/O base */
++void oflush();
++void ochar(int ch);
++
++/* pfterm.c */
++// initialization
++void    initscr     (void);
++int     resizeterm  (int rows, int cols);
++int     endwin      (void);
++
++// cursor
++void    getyx       (int *y, int *x);
++void    getmaxyx    (int *y, int *x);
++void    move        (int y, int x);
++
++// clear
++void    clear       (void); // clrscr + move(0,0)
++void    clrtoeol    (void); // end of line
++void    clrtobot    (void);
++
++// clear (non-ncurses)
++void    clrtoln     (int ln); // clear down to ln ( excluding ln, as [y,ln) )
++
++void    clrcurln    (void); // whole line
++void    clrtobeg    (void); // begin of line
++void    clrtohome   (void);
++void    clrscr      (void); // clear and keep cursor untouched
++void    clrregion   (int r1, int r2); // clear [r1,r2], bi-directional.
++
++// window control
++void    newwin      (int nlines, int ncols, int y, int x);
++
++// flushing
++void    refresh     (void); // optimized refresh
++void    doupdate    (void); // optimized refresh, ignore input queue
++void    redrawwin   (void); // invalidate whole screen
++int     typeahead   (int fd);// prevent refresh if input queue is not empty
++
++// scrolling
++void    scroll      (void);     // scroll up
++void    rscroll     (void);     // scroll down
++void    scrl        (int rows);
++// output (ncurses flavor)
++void    addch       (unsigned char c);  // equivalent to outc()
++void    addstr      (const char *s);    // equivalent to outs()
++void    addnstr     (const char *s, int n);
++
++// output (non-ncurses)
++void    outc        (unsigned char c);
++void    outs        (const char *s);
++
++// grayout advanced control
++// void    grayout     (int y, int end, int level, int type);
++
++#define _FTDTYPE
++typedef unsigned char ftchar;   // primitive character type
++typedef unsigned char ftattr;   // primitive attribute type
++
++// attributes
++ftattr  attrget     (void);
++void    attrset     (ftattr attr);
++void    attrsetfg   (ftattr attr);
++void attrsetbg   (ftattr attr);
+diff --git a/maple/talk.c b/maple/talk.c
+index 9123fcb..8efbdb8 100644
+--- a/maple/talk.c
++++ b/maple/talk.c
+@@ -3066,21 +3066,30 @@ talk_speak(fd)
+     /* Thor.0725: talk中, ctrl-z */
+     if (ch == Ctrl('Z'))
+     {
++#ifdef M3_USE_PFTERM
++      screen_backup_t old_screen;
++#else
+       screenline sl[b_lines + 1];
+-      char buf[IDLEN + 1];
++#endif
++	  char buf[IDLEN + 1];
+       /* Thor.0731: 暫存 mateid, 因為有可能query別人時會用掉mateid */
+       strcpy(buf, cutmp->mateid);
+ 
+       /* Thor.0727: 暫存 vio_fd */
+       holdon_fd = vio_fd;
+       vio_fd = 0;
++#ifdef M3_USE_PFTERM
++      scr_dump(&old_screen);
++      every_Z();
++      scr_restore(&old_screen);
++#else
+       vs_save(sl);
+       every_Z();
+       vs_restore(sl);
++#endif
+       /* Thor.0727: 還原 vio_fd */
+       vio_fd = holdon_fd;
+       holdon_fd = 0;
+-
+       /* Thor.0731: 還原 mateid, 因為有可能query別人時會用掉mateid */
+       strcpy(cutmp->mateid, buf);
+       continue;
+@@ -4871,7 +4880,13 @@ talk_rqst()
+   int mode, sock, ans, len, port;
+   char buf[80];
+   struct sockaddr_in sin;
++
++#ifdef M3_USE_PFTERM
++  screen_backup_t old_screen;
++#else
+   screenline sl[b_lines + 1];
++#endif
++
+ #if     defined(__OpenBSD__)
+   struct hostent *h;
+ #endif
+@@ -4893,7 +4908,11 @@ talk_rqst()
+ #endif
+     utmp_mode(M_TRQST);
+ 
++#ifdef M3_USE_PFTERM
++  scr_dump(&old_screen);
++#else
+   vs_save(sl);
++#endif
+ 
+   clear();
+   sprintf(page_requestor, "%s (%s)", up->userid, up->username);
+@@ -5038,7 +5057,13 @@ over_for:
+   if (ans == 'y' && up->mode != M_CHICKEN) /* mat.991011: 防止Talk拒絕時，產生聊天記錄的record */
+     talk_save();          /* lkchu.981201: talk 記錄處理 */
+ #endif
++
++#ifdef M3_USE_PFTERM
++  scr_restore(&old_screen);
++#else
+   vs_restore(sl);
++#endif  
++
+   utmp_mode(mode);
+ }
+ 
+diff --git a/maple/visio.c b/maple/visio.c
+index c0a16a4..259375d 100644
+--- a/maple/visio.c
++++ b/maple/visio.c
+@@ -23,10 +23,15 @@
+ #define	t_lines		24
+ #define	p_lines		18
+ 
+-
++#ifdef M3_USE_PFTERM
++#define STANDOUT        attrsetbg(FILEDBG); attrsetfg(FILEDFG);
++// filed color   (defined in theme.h)
++#define STANDEND        attrsetbg(0); attrsetfg(7);
++// default color (\033[37;40m)
++#else
+ int cur_row, cur_col;
+ int cur_pos;			/* current position with ANSI codes */
+-
++#endif
+ 
+ /* ----------------------------------------------------- */
+ /* output routines					 */
+@@ -60,8 +65,11 @@ telnet_flush(data, size)
+ # define telnet_flush(data, size)	send(0, data, size, 0)
+ #endif
+ 
+-
++#ifdef M3_USE_PFTERM
++void
++#else
+ static void
++#endif
+ oflush()
+ {
+   int size;
+@@ -73,7 +81,7 @@ oflush()
+   }
+ }
+ 
+-
++#ifndef M3_USE_PFTERM
+ static void
+ output(str, len)
+   uschar *str;
+@@ -107,9 +115,13 @@ output(str, len)
+   }
+   vo_size = size;
+ }
++#endif  //ifndef M3_USE_PFTERM
+ 
+-
++#ifdef M3_USE_PFTERM
++void
++#else
+ static void
++#endif
+ ochar(ch)
+   int ch;
+ {
+@@ -141,6 +153,7 @@ bell()
+ /* virtual screen					 */
+ /* ----------------------------------------------------- */
+ 
++#ifndef M3_USE_PFTERM
+ 
+ #define	o_ansi(x)	output(x, sizeof(x)-1)
+ 
+@@ -443,7 +456,14 @@ standend()
+ }
+ #endif
+ 
++#endif  // ifndef M3_USE_PFTERM
+ 
++#ifdef M3_USE_PFTERM
++vs_redraw()
++{
++  redrawwin(); refresh(); return;
++}
++#else
+ static void
+ vs_redraw()
+ {
+@@ -843,7 +863,7 @@ outs(str)
+     str++;
+   }
+ }
+-
++#endif // ifdef M3_USE_PFTERM
+ 
+ /* ----------------------------------------------------- */
+ /* eXtended output: 秀出 user 的 name 和 nick		 */
+@@ -1012,6 +1032,7 @@ outz(msg)
+   }
+ }
+ 
++#ifdef M3_USE_PFTERM
+ void
+ outf(str)
+   uschar *str;
+@@ -1020,6 +1041,57 @@ outf(str)
+   prints("%*s\033[m", d_cols, "");
+ }
+ 
++void outl (int line, uschar *msg)   /* line output */
++{
++	  move (line, 0);
++	    clrtoeol();
++
++
++		  if (msg != NULL)
++			       outs(msg);
++}
++
++#define ANSI_COLOR_CODE            "[m;0123456789"
++#define ANSI_COLOR_END     "m"
++void outr (uschar *str)
++/* restricted output (strip the ansiscreen contolling code only) */
++{
++   uschar ch, buf[256], *p = NULL;
++   int ansi = 0;
++
++   while (ch = *str++)
++    {
++       if (ch == KEY_ESC)
++       {
++          ansi = 1;
++          p = buf;
++          *p++ = ch;
++       }
++       else if (ansi)
++       {
++           if (p)
++              *p++ = ch;
++
++           if (!strchr(ANSI_COLOR_CODE, ch))
++           {              ansi = 0;
++              buf[0] = '\0';
++              p = NULL;
++           }
++           else if (strchr(ANSI_COLOR_END, ch))
++           {
++               *p++ = '\0';
++               ansi = 0;
++               p = NULL;
++               outs(buf);
++
++           }
++       }
++       else
++          outc(ch);
++    }
++}
++#endif
++
+ void
+ prints(char *fmt, ...)
+ {
+@@ -1035,7 +1107,9 @@ prints(char *fmt, ...)
+     outc(cc);
+ }
+ 
+-
++#ifdef M3_USE_PFTERM
++static int save_y, save_x;
++#else
+ void
+ scroll()
+ {
+@@ -1056,11 +1130,23 @@ rscroll()
+   move(0, 0);
+   clrtoeol();
+ }
+-
++#endif
+ 
+ /* ----------------------------------------------------- */
+ 
++#ifdef M3_USE_PFTERM
++void
++cursor_save()
++{
++  getyx(&save_y, &save_x);
++}
+ 
++void
++cursor_restore()
++{
++  move(save_y, save_x);
++}
++#else
+ static int old_col, old_row, old_roll;
+ static int old_pos; /* Thor.990401: 多存一個 */
+ 
+@@ -1152,6 +1238,30 @@ vs_restore(slp)
+   vs_redraw();
+ }
+ 
++#endif  // M3_USE_PFTERM
++
++#ifdef M3_USE_PFTERM
++vmsg(msg)
++	char *msg;                   /* length <= 54 */
++{
++  static int old_b_cols = 23;
++  static char foot[512] = VMSG_NULL;
++
++  move(b_lines, 0);
++  clrtoeol();
++  if (msg)
++    { 
++    prints(COLOR1 " ◆ %-55s " COLOR2 " [請按任意鍵繼續] \033[m", msg);
++    }
++  else
++	{
++	 move(b_lines, 0);
++     outs(VMSG_NULL);
++     move(b_lines, 0);
++    }
++    return vkey();
++}
++#else
+ 
+ int
+ vmsg(msg)
+@@ -1178,7 +1288,7 @@ vmsg(msg)
+   }
+   return vkey();
+ }
+-
++#endif     // ifdef M3_USE_PFTERM
+ 
+ static inline void
+ zkey()				/* press any key or timeout */
+@@ -1825,8 +1935,12 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+ 
+   STANDOUT;
+ 
++#ifdef M3_USE_PFTERM
++  getyx (&x, &y);
++#else
+   y = cur_row;
+   x = cur_col;
++#endif  
+ 
+   if (echo & GCARRY)
+   {
+@@ -1866,6 +1980,9 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+       {
+ 	ch = len;
+ 	len = vget_match(data, len, echo | MATCH_END);
++#ifdef M3_USE_PFTERM
++    STANDOUT;
++#endif
+ 	if (len > ch)
+ 	{
+ 	  move(y, x);
+@@ -1875,6 +1992,9 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+ 	{
+ 	  data[0] = '\0';
+ 	}
++#ifdef M3_USE_PFTERM
++    STANDEND;
++#endif
+       }
+       break;
+     }
+@@ -1884,13 +2004,19 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+       if (ch == ' ' && (echo & (GET_USER | GET_BRD | GET_LIST)))
+       {
+ 	ch = vget_match(data, len, echo);
++#ifdef M3_USE_PFTERM
++    STANDOUT;
++#endif
+ 	if (ch > len)
+ 	{
+ 	  move(y, x);
+ 	  outs(data);
+ 	  col = len = ch;
+ 	}
+-	continue;
++#ifdef M3_USE_PFTERM
++    STANDEND;
++#endif
++		continue;
+       }
+ 
+       if (len >= max)
+@@ -1904,6 +2030,10 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+       i = col;
+       move(y, x + col);
+ 
++#ifdef M3_USE_PFTERM
++    STANDOUT;
++#endif
++
+       for (;;)
+       {
+ 	outc(echo ? ch : '*');
+@@ -1914,6 +2044,9 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+ 	i++;
+ 	ch = next;
+       }
++#ifdef M3_USE_PFTERM
++      STANDEND;
++#endif
+       col++;
+       len++;
+       continue;
+@@ -1931,6 +2064,10 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+     if (!echo && ch != Ctrl('H'))
+       continue;
+ 
++#ifdef M3_USE_PFTERM
++    STANDOUT;
++#endif
++
+     switch (ch)
+     {
+     case Ctrl('D'):
+@@ -2034,6 +2171,9 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+       }
+       break;
+     }
++#ifdef M3_USE_PFTERM
++    STANDEND;
++#endif
+   }
+ 
+   if (len > 2 && echo)
+@@ -2049,6 +2189,10 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+   if ((echo & LCECHO) && (ch >= 'A' && ch <= 'Z'))
+     data[0] = (ch += 32);
+ 
++#ifdef M3_USE_PFTERM
++    STANDEND;
++#endif
++
+   return ch;
+ }
+ 
+diff --git a/maple/window.c b/maple/window.c
+index 7c1a5d2..ecb1030 100644
+--- a/maple/window.c
++++ b/maple/window.c
+@@ -12,6 +12,26 @@
+ 
+ #include "bbs.h"
+ 
++#ifdef M3_USE_PFTERM
++/* ----------------------------------------------------- */
++/* M3_USE_PFTERM                                         */
++/* ----------------------------------------------------- */
++
++static void
++draw_line(x, y, msg)
++  int x, y;
++  uschar *msg;
++{
++  /* hrs.090928: 讓 terminal 去處理 */
++  move(x, y);
++  outstr(msg);
++  return;
++}
++
++static screen_backup_t old_screen;
++
++#else
++
+ static screenline slt[T_LINES];
+ static int x_roll;
+ 
+@@ -207,6 +227,8 @@ draw_line(x, y, msg)	/* 
+   outs(str_ransi);
+ }
+ 
++#endif //M3_USE_PFTERM
++
+ /* ----------------------------------------------------- */
+ /* 選項繪製						 */
+ /* ----------------------------------------------------- */
+@@ -313,7 +335,12 @@ popupmenu_ans2(char *desc[],char *title,int x,int y)
+   int cur, old_cur, max, ch;
+   char hotkey;
+ 
++#ifdef M3_USE_PFTERM
++  scr_dump(&old_screen);
++  grayout(0, b_lines, GRAYOUT_DARK);
++#else
+   x_roll = vs_save(slt);
++#endif
+ 
+   hotkey = desc[0][0];
+ 
+@@ -331,7 +358,11 @@ popupmenu_ans2(char *desc[],char *title,int x,int y)
+     case KEY_LEFT:
+     case KEY_RIGHT:
+     case '\n':
+-      vs_restore(slt);
++#ifdef M3_USE_PFTERM
++      scr_restore(&old_screen);
++#else
++	  vs_restore(slt);
++#endif
+       ch = (ch == KEY_LEFT) ? desc[0][1] : desc[cur][0];
+       if (ch >= 'A' && ch <= 'Z')
+ 	ch |= 0x20;		/* 回傳小寫 */
+@@ -381,7 +412,15 @@ pmsg2(char *msg)
+   int len, x, y, i;
+   char buf[80];
+ 
++#ifdef M3_USE_PFTERM
++  if (!msg)
++  return vmsg(NULL);
++
++  scr_dump(&old_screen);
++  grayout(0, b_lines, GRAYOUT_DARK);
++#else
+   x_roll = vs_save(slt);
++#endif
+ 
+   len = strlen(msg);
+   if (len < 16)		/* 取 msg title 其中較長者為 len */
+@@ -418,6 +457,10 @@ pmsg2(char *msg)
+   move(b_lines, 0);
+ 
+   x = vkey();
++#ifdef M3_USE_PFTERM
++  scr_restore(&old_screen);
++#else
+   vs_restore(slt);
++#endif  
+   return x;
+ }
+diff --git a/so/chat.c b/so/chat.c
+index 243655f..ef03510 100644
+--- a/so/chat.c
++++ b/so/chat.c
+@@ -837,6 +837,33 @@ t_chat()
+ 		}
+ 
+ #ifdef EVERY_Z
++
++#ifdef M3_USE_PFTERM
++    if (ch == Ctrl('Z'))
++    {
++      char buf[IDLEN + 1];
++      screen_backup_t old_screen;
++
++      strcpy(buf, cutmp->mateid);
++
++//      vio_save();
++      /* Thor.0727: 暫存 vio_fd */
++	  holdon_fd = vio_fd;
++	  vio_fd = 0;
++      
++      scr_dump(&old_screen);
++      every_Z();
++      scr_restore(&old_screen);
++
++//	  vio_restore();
++      /* Thor.0727: 還原 vio_fd */
++      vio_fd = holdon_fd;
++      holdon_fd = 0;
++
++      strcpy(cutmp->mateid, buf);
++      continue;
++    }
++#else
+ 		/* Thor: Chat 中按 ctrl-z */
+ 		if (ch == Ctrl('Z'))
+ 		{
+-- 
+1.8.3.1
+

@@ -1,0 +1,25 @@
+From 61f650a28dbc479a6ae86e97afc5a9ba7d7af95e Mon Sep 17 00:00:00 2001
+From: holishing <holishingtest@gmail.com>
+Date: Mon, 31 Jul 2017 20:31:53 +0800
+Subject: [PATCH 02/10] Solving a PERM bug violately
+
+---
+ src/maple/mail.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/maple/mail.c b/src/maple/mail.c
+index a43af43..e2c262b 100755
+--- a/src/maple/mail.c
++++ b/src/maple/mail.c
+@@ -1141,7 +1141,7 @@ m_zip()			/* itoc.010228: 
+       return XEASY;
+     }
+ 
+-    if ((ans == '3' && !(bbstate & STAT_BM)) || (ans == '4' && !(bbstate & STAT_BOARD)))
++    if ((ans == '3' && !(bbstate & STAT_BOARD)) || (ans == '4' && !(bbstate & STAT_BOARD)))
+     {
+       vmsg("只有板主才能打包看板文章及看板精華區");
+       return XEASY;
+-- 
+1.8.3.1
+

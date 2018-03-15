@@ -1,0 +1,194 @@
+From 22e4fa5e8cfbf647805cdbf35f6eee3a6c06161a Mon Sep 17 00:00:00 2001
+From: holishing <holishingtest@gmail.com>
+Date: Mon, 19 Feb 2018 04:13:43 -0500
+Subject: [PATCH] Testing websocket proxy for Maple3 reference for:
+ MapleCirc/Auroral@b26d1c2                MapleCirc/ws_proxy@c3a8e9b
+
+---
+ include/struct.h |  9 +++++--
+ maple/bbsd.c     | 81 ++++++++++++++++++++++++++++++++++++++++++--------------
+ 2 files changed, 68 insertions(+), 22 deletions(-)
+
+diff --git a/include/struct.h b/include/struct.h
+index 0370f68..c1b3737 100644
+--- a/include/struct.h
++++ b/include/struct.h
+@@ -1152,12 +1152,17 @@ typedef struct
+ 
+ typedef struct
+ {
+-	  time_t tissue;                /* 繕o瞻瓣簡翹簧?繞癒 */
++	  time_t tissue;                /* */
+ 	    int money;
+ 		  int gold;
+ 		    char reason[20];
+ }      PAYCHECK;
+ 
+-
++typedef struct
++{
++  unsigned short int connect_port;
++  unsigned short int __reserved;
++  unsigned long int source_addr;
++} proxy_connection_info_t;
+ 
+ #endif				/* _STRUCT_H_ */
+diff --git a/maple/bbsd.c b/maple/bbsd.c
+index a23f0d5..2040144 100644
+--- a/maple/bbsd.c
++++ b/maple/bbsd.c
+@@ -44,6 +44,8 @@ extern CHECKSUMCOUNT cksum;
+ /* static int mport; */ /* Thor.990325: 不需要了:P */
+ static u_long tn_addr;
+ 
++/* Davy.171001: Connection sockaddr infos (used by proxy mode) */
++struct sockaddr_in connection_sin;
+ 
+ #ifdef CHAT_SECURE
+ char passbuf[9];
+@@ -1277,6 +1279,7 @@ telnet_init()
+ static void
+ start_daemon(port)
+   int port; /* Thor.981206: 取 0 代表 *沒有參數* , -1 代表 -i (inetd) */
++  /* Davy@Eod.tw.171001: 取 -2 代表 -p (proxy mode) */
+ {
+   int n;
+   struct linger ld;
+@@ -1284,6 +1287,7 @@ start_daemon(port)
+   struct rlimit rl;
+   char buf[80], data[80];
+   time_t val;
++  proxy_connection_info_t proxy_connection_info;
+ 
+   /*
+    * More idiot speed-hacking --- the first time conversion makes the C
+@@ -1336,6 +1340,22 @@ start_daemon(port)
+   close(1);
+   close(2);
+ 
++  if (port == -2) /* Davy.171001: proxy mode */
++  {
++    /* Give up root privileges: no way back from here */
++    setgid(BBSGID);
++    setuid(BBSUID);
++    n = sizeof(proxy_connection_info);
++    recv(0, &proxy_connection_info, n, 0); /* Read remote infos */
++    connection_sin.sin_family = AF_INET;
++    connection_sin.sin_port = proxy_connection_info.connect_port;
++    connection_sin.sin_addr.s_addr = proxy_connection_info.source_addr;
++    port = ntohs(connection_sin.sin_port);
++	
++    return;
++  }
++
++
+   if(port == -1) /* Thor.981206: inetd -i */
+   {
+     /* Give up root privileges: no way back from here	 */
+@@ -1518,7 +1538,7 @@ main(argc, argv)
+   int csock;			/* socket for Master and Child */
+   int *totaluser;
+   int value;
+-  struct sockaddr_in sin;
++  int proxy_mode;
+ 
+   /* --------------------------------------------------- */
+   /* setup standalone daemon				 */
+@@ -1526,7 +1546,14 @@ main(argc, argv)
+ 
+   /* Thor.990325: usage, bbsd, or bbsd -i, or bbsd 1234 */
+   /* Thor.981206: 取 0 代表 *沒有參數*, -1 代表 -i */
+-  start_daemon(argc > 1 ? strcmp("-i",argv[1]) ? atoi(argv[1]) : -1 : 0);
++  /* Davy.171001: bbsd -p 代表 proxy 模式，不會另外 accept 連線，使用 -2 */
++    value = argc > 1 ? \
++    strcmp("-i", argv[1]) ? \
++      strcmp("-p", argv[1]) ? atoi(argv[1]) : \
++        -2 : \
++      -1 : \
++    0;
++  start_daemon(value);
+ 
+   main_signals();
+       
+@@ -1552,22 +1579,33 @@ main(argc, argv)
+   totaluser = (int *) &ushm->count;
+   /* avgload = &ushm->avgload; */
+ 
+-  for (;;)
+-  {
+-    value = 1;
+-    if (select(1, (fd_set *) & value, NULL, NULL, NULL) < 0)
+-      continue;
++  proxy_mode = argc > 1 && !strcmp("-p", argv[1]); /* 0: no, 1: yes, 2: stop loop */
+ 
+-    value = sizeof(sin);
+-    csock = accept(0, (struct sockaddr *) &sin, (socklen_t *) &value);
+-    if (csock < 0)
++  for (; proxy_mode < 2;)
++  {
++    if (proxy_mode)
+     {
+-      reaper();
+-      continue;
++      proxy_mode = 2; /* We are not going to run twice loop. */
++      csock = 0;
++    }
++    else /* normal mode */
++    {
++      value = 1;
++      if (select(1, (fd_set *) & value, NULL, NULL, NULL) < 0)
++        continue;
++
++      value = sizeof(connection_sin);
++      csock = accept(0, (struct sockaddr *) &connection_sin, &value);
++      if (csock < 0)
++      {
++        reaper();
++        continue;
++      }
+     }
+ 
+     time(&ap_start);
+-    argc = *totaluser; 
++      ;
++	  argc = *totaluser; 
+     if (argc >= MAXACTIVE - 5 /* || *avgload > THRESHOLD */ )
+     {
+       sprintf(currtitle,
+@@ -1577,15 +1615,18 @@ main(argc, argv)
+       continue;
+     }
+ 
+-    if (fork())
+-    {
++    if (!proxy_mode)
++     {
++      if (fork())
++      {
++        close(csock);
++        continue;
++      }
++
++      dup2(csock, 0);
+       close(csock);
+-      continue;
+     }
+ 
+-    dup2(csock, 0);
+-    close(csock);
+-
+ #if 0
+     /* Thor.990121: 免得反查時讓人久等 */
+ 
+@@ -1601,7 +1642,7 @@ main(argc, argv)
+ 
+     /* rfc931(&sin, fromhost, rusername); */
+ 
+-    tn_addr = sin.sin_addr.s_addr;
++    tn_addr = connection_sin.sin_addr.s_addr;
+     /* Thor.990325: 修改dns_ident定義, 來自哪if連那 */
+     /* dns_ident(mport, &sin, fromhost, rusername); */
+ 
+-- 
+1.8.3.1
+

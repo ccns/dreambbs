@@ -1,0 +1,155 @@
+From 612b3245120ac0e4d08c387ed626cc22b5c5a858 Mon Sep 17 00:00:00 2001
+From: holishing <holishingtest@gmail.com>
+Date: Mon, 31 Jul 2017 19:48:57 +0800
+Subject: [PATCH 01/10] testing itoc's patch: mail backup
+
+---
+ src/maple/mail.c | 125 +++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 125 insertions(+)
+
+diff --git a/src/maple/mail.c b/src/maple/mail.c
+index 96e5070..a43af43 100755
+--- a/src/maple/mail.c
++++ b/src/maple/mail.c
+@@ -1006,6 +1006,8 @@ m_quota()
+ }
+ 
+ #ifdef	HAVE_DOWNLOAD
++
++/*
+ int
+ m_zip()
+ {
+@@ -1040,6 +1042,129 @@ m_zip()
+   }
+   return 0;
+ }
++*/
++/* ----------------------------------------------------- */
++/* Zip mbox & board gem					 */
++/* ----------------------------------------------------- */
++
++
++static void
++do_forward(title, mode)
++  char *title;
++  int mode;
++{
++  int rc;
++  char *userid;
++  char addr[64], fpath[64], cmd[256];
++
++  strcpy(addr, cuser.email);
++
++  if (!vget(b_lines, 0, "請輸入轉寄地址：", addr, 60, GCARRY))
++    return;
++
++  if (not_addr(addr))
++  {
++    zmsg("不合格的 E-mail address");
++    return;
++  }
++
++  sprintf(fpath, "確定寄給 [%s] 嗎(Y/N)？[N] ", addr);
++  if (vans(fpath) != 'y')
++    return;
++
++  userid = strchr(addr, '@') + 1;
++  if (dns_smtp(userid) >= 0)	 /* itoc.註解: 雖然 bsmtp() 也會做，但是這邊先做，以免壓縮完才知道是無效的工作站地址 */
++  {
++    userid = cuser.userid;
++
++    if (mode == '1')		/* 個人信件 */
++    {
++      /* usr_fpath(fpath, userid, "@"); */
++      /* 因為 .DIR 不在 @/ 裡，要一起打包 */
++      usr_fpath(cmd, userid, fn_dir);
++      usr_fpath(fpath, userid, "@");
++      strcat(fpath, " ");
++      strcat(fpath, cmd);
++    }
++    else if (mode == '2')	/* 個人精華區 */
++    {
++      usr_fpath(fpath, userid, "gem");
++    }
++    else if (mode == '3')	/* 看板文章 */
++    {
++      brd_fpath(fpath, currboard, NULL);
++    }
++    else /* if (mode == '4') */	/* 看板精華區 */
++    {
++      gem_fpath(fpath, currboard, NULL);
++    }
++
++    sprintf(cmd, "tar -zcv -f - %s | uuencode -m %s.tgz > tmp/%s.tgz", fpath, userid, userid);
++    system(cmd);
++
++    sprintf(fpath, "tmp/%s.tgz", userid);
++    rc = bsmtp(fpath, title, addr, 0x02);
++    unlink(fpath);
++
++    if (rc >= 0)
++    {
++      vmsg("信已寄出");
++      return;
++    }
++  }
++
++  vmsg("信件無法寄達");
++}
++
++
++int
++m_zip()			/* itoc.010228: 打包資料 */
++{
++  int ans;
++  char *name, *item, buf[80];
++
++  ans = vans("打包資料 1)個人信件 2)個人精華區 3)看板文章 4)看板精華區 [Q] ");
++
++  if (ans == '1' || ans == '2')
++  {
++    name = cuser.userid;
++    item = (ans == '1') ? "個人信件" : "個人精華區";
++  }
++  else if (ans == '3' || ans == '4')
++  {
++    /* itoc.註解: 限定只能打包目前閱讀的看板，不能閱讀秘密看板的人就不能打包該板/精華區 */
++    /* itoc.020612: 為了防止 POST_RESTRICT/GEM_RESTRICT 的文章外流，非板主就不能打包 */
++
++    if (currbno < 0)
++    {
++      vmsg("請先進入您要打包的看板，再來此打包");
++      return XEASY;
++    }
++
++    if ((ans == '3' && !(bbstate & STAT_BM)) || (ans == '4' && !(bbstate & STAT_BOARD)))
++    {
++      vmsg("只有板主才能打包看板文章及看板精華區");
++      return XEASY;
++    }
++
++    name = currboard;
++    item = (ans == '3') ? "看板文章" : "看板精華區";
++  }
++  else
++  {
++    return XEASY;
++  }
++
++  sprintf(buf, "確定要打包 %s %s嗎(Y/N)？[N] ", name, item);
++  if (vans(buf) == 'y')
++  {
++    sprintf(buf, "【" BBSNAME "】%s %s", name, item);
++    do_forward(buf, ans);
++  }
++
++  return XEASY;
++}
++
+ #endif
+ 
+ int
+-- 
+1.8.3.1
+
