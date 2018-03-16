@@ -1065,9 +1065,9 @@ do_forward(title, mode)
   char *userid;
   char addr[64], fpath[64], cmd[256];
 
-  if(strstr(cuser.email,".bbs@"MYHOSTNAME))
+  if(strstr(cuser.email,".bbs@"))
   { 
-     vmsg("使用註冊單認證通過的使用者無法打包！");
+     pmsg2("使用 BBS 信箱作為認證信箱/使用註冊單認證者無法打包！");
      return;
   }
 
