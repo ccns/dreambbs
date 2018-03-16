@@ -1007,50 +1007,6 @@ m_quota()
 
 #ifdef	HAVE_DOWNLOAD
 
-/*
-int
-m_zip()
-{
-  char cmd[512],fpath[128],user[128],title[256];
-  char buf[IDLEN+1];
-
-  if(strstr(cuser.email,".bbs@"MYHOSTNAME))
-  { 
-     vmsg("使用註冊單認證通過的使用者無法打包！");
-  }
-  else
-  {
-    sprintf(cmd,"是否要打包個人信箱到 %s：[N/y]",cuser.email);
-    if(vans(cmd) == 'y')
-    {
-      str_lower(buf,cuser.userid);
-      move(b_lines, 0);
-      clrtoeol();
-        
-      prints("★ 檔案壓縮中 \033[5m...\033[m");
-      refresh();
-                    
-      sprintf(user,"%s/.DIR %s/@/",buf,buf);
-      sprintf(fpath,"tmp/%s.b64",cuser.userid);
-   
-      #ifdef __linux__
-        sprintf(cmd,"tar -C usr/%c -zcf - %s | base64 > %s",*buf,user,fpath);
-      #else
-        #ifdef __FreeBSD__
-          sprintf(cmd,"tar -C usr/%c -zcf - %s | b64encode -r %s > %s",*buf,user,fpath,fpath);
-        #else
-          sprintf(cmd,"tar -C usr/%c -zcf - %s | bin/base64encode > %s",*buf,user,fpath);
-        #endif
-      #endif
-      system(cmd);
-  
-      sprintf(title,"【%s】%s 個人信箱", BOARDNAME, cuser.userid);
-      bsmtp_file(fpath,title,cuser.email);
-    }
-  }
-  return 0;
-}
-*/
 /* ----------------------------------------------------- */
 /* Zip mbox & board gem					 */
 /* ----------------------------------------------------- */
