@@ -1006,48 +1006,189 @@ m_quota()
 }
 
 #ifdef	HAVE_DOWNLOAD
-int
-m_zip()
-{
-  char cmd[512],fpath[128],user[128],title[256];
-  char buf[IDLEN+1];
 
-  if(strstr(cuser.email,".bbs@"MYHOSTNAME))
+
+#define    PACKLOG     "log/mzip.log"
+
+static void
+packlog(packmsg)
+  char *packmsg;
+{
+  FILE *fp;
+
+  if ((fp = fopen(PACKLOG, "a")))
+  {
+    time_t now;
+    struct tm *p;
+
+    time(&now);
+    p = localtime(&now);
+    fprintf(fp, "%02d/%02d %02d:%02d:%02d <mzip> %s\n",
+      p->tm_mon + 1, p->tm_mday,
+      p->tm_hour, p->tm_min, p->tm_sec,
+      packmsg);
+    fclose(fp);
+  }
+}
+
+/* ----------------------------------------------------- */
+/* Zip mbox & board gem					 */
+/* ----------------------------------------------------- */
+
+
+static void
+do_forward(title, mode)
+  char *title;
+  int mode;
+{
+  int rc;
+  char *userid;
+  char addr[64], fpath[64], cmd[256];
+
+  if(strstr(cuser.email,".bbs@"))
   { 
-     vmsg("使用註冊單認證通過的使用者無法打包！");
+     pmsg2("使用 BBS 信箱作為認證信箱/使用註冊單認證者無法打包！");
+     return;
+  }
+
+  strcpy(addr, cuser.email);
+
+/*
+ *  if (!vget(b_lines, 0, "請輸入轉寄地址：", addr, 60, GCARRY))
+ *    return;
+ *
+ *  if (not_addr(addr))
+ *  {
+ *    zmsg("不合格的 E-mail address");
+ *    return;
+ *  }
+ *
+ *  sprintf(fpath, "確定寄給 [%s] 嗎(Y/N)？[N] ", addr);
+ */
+
+  sprintf(fpath, "確定寄給 [%s] 嗎(Y/N)？[N] ",cuser.email);
+  if (vans(fpath) != 'y')
+    return;
+
+  userid = strchr(addr, '@') + 1;
+  if (dns_smtp(userid) >= 0)	 /* itoc.註解: 雖然 bsmtp_file() 也會做，但是這邊先做，以免壓縮完才知道是無效的工作站地址 */
+  {
+    userid = cuser.userid;
+
+    if (mode == '1')		/* 個人信件 */
+    {
+      /* usr_fpath(fpath, userid, "@"); */
+      /* 因為 .DIR 不在 @/ 裡，要一起打包 */
+      usr_fpath(cmd, userid, fn_dir);
+      usr_fpath(fpath, userid, "@");
+      strcat(fpath, " ");
+      strcat(fpath, cmd);
+    }
+    else if (mode == '2')	/* 看板文章 */
+    {
+      brd_fpath(fpath, currboard, NULL);
+    }
+    else /* if (mode == '3') */	/* 看板精華區 */
+    {
+      gem_fpath(fpath, currboard, NULL);
+    }
+
+//   sprintf(cmd, "tar -zcv -f - %s | bin/base64encode > tmp/%s.tgz", fpath, userid);
+//   r2.20180316: try system default util to excute base64 encoding
+     #ifdef __linux__
+       sprintf(cmd, "tar -zcf - %s | base64 > tmp/%s.tgz", fpath, userid);
+     #else
+       #ifdef __FreeBSD__
+         sprintf(cmd, "tar -zcf - %s | b64encode -r %s > tmp/%s.tgz", fpath, userid, userid);
+       #else
+         sprintf(cmd, "tar -zcf - %s | bin/base64encode > tmp/%s.tgz", fpath, userid);
+       #endif
+     #endif
+
+    system(cmd);
+
+    sprintf(fpath, "tmp/%s.tgz", userid);
+//    rc = bsmtp(fpath, title, addr, 0x02);
+    rc = bsmtp_file(fpath, title, addr);
+    unlink(fpath);
+
+    if (rc >= 0)
+    {
+      char sentmsg[256];
+
+      if (mode == '1')
+      {
+        sprintf(sentmsg, "user: %s , mailbox , sent to: %s", userid, addr);
+      }
+      else
+      {
+        sprintf(sentmsg, "user: %s , board: %s , sent to: %s", userid, currboard, addr);
+      }
+      packlog(sentmsg);
+      vmsg("信已寄出");
+      return;
+    }
+  }
+
+  vmsg("信件無法寄達");
+}
+
+
+int
+m_zip()			/* itoc.010228: 打包資料 */
+{
+  int ans;
+  char *name, *item, buf[80];
+
+  ans = vans("打包資料 1)個人信件 2)看板文章 3)看板精華區 到註冊信箱 [Q] ");
+
+  if (ans == '1')
+  {
+    name = cuser.userid;
+    item = "個人信件";
+  }
+  else if (ans == '2' || ans == '3')
+  {
+    /* itoc.註解: 限定只能打包目前閱讀的看板，不能閱讀秘密看板的人就不能打包該板/精華區 */
+    /* itoc.020612: 為了防止 POST_RESTRICT/GEM_RESTRICT 的文章外流，非板主就不能打包 */
+
+    if (currbno < 0)
+    {
+      vmsg("請先進入您要打包的看板，再來此打包");
+      return XEASY;
+    }
+
+    if(!(strstr(currboard,"P_")))
+    { 
+      pmsg2("非個人板暫不提供打包服務,特殊個人專板若需打包請洽站務");
+      return XEASY;
+    }
+
+    if ((ans == '2' && !(bbstate & STAT_BOARD)) || (ans == '3' && !(bbstate & STAT_BOARD))) 
+				   /* tmp not STAT_BM */
+    {
+      vmsg("只有板主才能打包看板文章及看板精華區");
+      return XEASY;
+    }
+
+    name = currboard;
+    item = (ans == '2') ? "看板文章" : "看板精華區";
   }
   else
   {
-    sprintf(cmd,"是否要打包個人信箱到 %s：[N/y]",cuser.email);
-    if(vans(cmd) == 'y')
-    {
-      str_lower(buf,cuser.userid);
-      move(b_lines, 0);
-      clrtoeol();
-        
-      prints("★ 檔案壓縮中 \033[5m...\033[m");
-      refresh();
-                    
-      sprintf(user,"%s/.DIR %s/@/",buf,buf);
-      sprintf(fpath,"tmp/%s.b64",cuser.userid);
-   
-      #ifdef __linux__
-        sprintf(cmd,"tar -C usr/%c -zcf - %s | base64 > %s",*buf,user,fpath);
-      #else
-        #ifdef __FreeBSD__
-          sprintf(cmd,"tar -C usr/%c -zcf - %s | b64encode -r %s > %s",*buf,user,fpath,fpath);
-        #else
-          sprintf(cmd,"tar -C usr/%c -zcf - %s | bin/base64encode > %s",*buf,user,fpath);
-        #endif
-      #endif
-      system(cmd);
-  
-      sprintf(title,"【%s】%s 個人信箱", BOARDNAME, cuser.userid);
-      bsmtp_file(fpath,title,cuser.email);
-    }
+    return XEASY;
   }
-  return 0;
+
+  sprintf(buf, "確定要打包 %s %s嗎(Y/N)？[N] ", name, item);
+  if (vans(buf) == 'y')
+  {
+    sprintf(buf, "【" BBSNAME "】%s %s", name, item);
+    do_forward(buf, ans);
+  }
+
+  return XEASY;
 }
+
 #endif
 
 int
