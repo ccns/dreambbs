@@ -793,7 +793,7 @@ static MENU menu_mail[] =
 */
 #ifdef HAVE_DOWNLOAD
   {m_zip, PERM_VALID, M_XMODE,
-  "Zip        打包下載到註冊信箱"},
+  "Zip        打包下載個人資料"},
 #endif
 /* 
 #ifdef HAVE_SIGNED_MAIL
