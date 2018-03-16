@@ -1007,6 +1007,30 @@ m_quota()
 
 #ifdef	HAVE_DOWNLOAD
 
+
+#define    PACKLOG     "log/mzip.log"
+
+static void
+packlog(packmsg)
+  char *packmsg;
+{
+  FILE *fp;
+
+  if ((fp = fopen(PACKLOG, "a")))
+  {
+    time_t now;
+    struct tm *p;
+
+    time(&now);
+    p = localtime(&now);
+    fprintf(fp, "%02d/%02d %02d:%02d:%02d <mzip> %s\n",
+      p->tm_mon + 1, p->tm_mday,
+      p->tm_hour, p->tm_min, p->tm_sec,
+      packmsg);
+    fclose(fp);
+  }
+}
+
 /* ----------------------------------------------------- */
 /* Zip mbox & board gem					 */
 /* ----------------------------------------------------- */
@@ -1090,6 +1114,17 @@ do_forward(title, mode)
 
     if (rc >= 0)
     {
+      char sentmsg[256];
+
+      if (mode == '1')
+      {
+        sprintf(sentmsg, "user: %s , mailbox , sent to: %s", userid, addr);
+      }
+      else
+      {
+        sprintf(sentmsg, "user: %s , board: %s , sent to: %s", userid, currboard, addr);
+      }
+      packlog(sentmsg);
       vmsg("«H¤w±H¥X");
       return;
     }
