@@ -1047,7 +1047,7 @@ do_forward(title, mode)
 
   if(strstr(cuser.email,".bbs@"))
   { 
-     pmsg2("使用 BBS 信箱作為認證信箱/使用註冊單認證者無法打包！");
+     vmsg("使用 BBS 信箱作為認證信箱/使用註冊單認證者無法打包！");
      return;
   }
 
@@ -1158,16 +1158,16 @@ m_zip()			/* itoc.010228: 打包資料 */
       return XEASY;
     }
 
-    if(!(strstr(currboard,"P_")))
-    { 
-      pmsg2("非個人板暫不提供打包服務,特殊個人專板若需打包請洽站務");
-      return XEASY;
-    }
-
     if ((ans == '2' && !(bbstate & STAT_BOARD)) || (ans == '3' && !(bbstate & STAT_BOARD))) 
 				   /* tmp not STAT_BM */
     {
       vmsg("只有板主才能打包看板文章及看板精華區");
+      return XEASY;
+    }
+
+    if(!(strstr(currboard,"P_")))
+    { 
+      vmsg("非個人板暫不提供打包服務,特殊個人專板若需打包請洽站務");
       return XEASY;
     }
 
