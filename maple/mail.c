@@ -1182,7 +1182,7 @@ m_zip()			/* itoc.010228: 打包資料 */
   sprintf(buf, "確定要打包 %s %s嗎(Y/N)？[N] ", name, item);
   if (vans(buf) == 'y')
   {
-    sprintf(buf, "【" BBSNAME "】%s %s", name, item);
+    sprintf(buf, "【" BOARDNAME "】%s %s", name, item);
     do_forward(buf, ans);
   }
 
