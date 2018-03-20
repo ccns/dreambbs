@@ -1008,7 +1008,7 @@ m_quota()
 #ifdef	HAVE_DOWNLOAD
 
 
-#define    PACKLOG     "log/mzip.log"
+#define    PACKLOG     "run/mzip.log"
 
 static void
 packlog(packmsg)
