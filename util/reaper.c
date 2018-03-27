@@ -26,11 +26,12 @@
 #include <string.h>
 #include <fcntl.h>
 
-#if (defined(SOLARIS) || defined(LINUX))
-#include <sys/param.h>
+#ifdef __linux__
+    #include <sys/param.h>
 #else
-#include <machine/param.h>
-#endif
+    #include <machine/param.h>
+#endif // #ifdef __linux__
+
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>

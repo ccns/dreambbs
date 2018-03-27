@@ -26,21 +26,17 @@
 #include <sys/file.h>
 #include <sys/wait.h>
 
-#ifdef AIX
-#include <time.h>
+#ifdef __linux__ 
+    #include <time.h>
 #else
-#ifndef LINUX
-#include <sys/time.h>
-#else
-#include <time.h>
-#endif
-#endif
+    #include <sys/time.h>
+#endif // #ifdef __linux__
 
 
-#ifdef	LINUX
-#include <sgtty.h>
+#ifdef __linux__
+    #include <sgtty.h>
 #else
-#include <termios.h>
+    #include <termios.h>
 #endif
 
 #ifdef  SYSV

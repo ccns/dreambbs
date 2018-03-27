@@ -20,19 +20,8 @@ INNBBSD	= innbbsd bbslink
 
 EXE	= $(INNBBSD)
 
-
 all: 
-	@echo "Please enter 'make sys-type', "
-	@echo " make linux   : for Linux"
-	@echo " make freebsd : for BSD 4.4 systems" 
-
-linux:
 	@$(MAKE) CC=gcc CFLAGS="-g -m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -L../lib -ldao" $(EXE)
-
-freebsd:
-	@$(MAKE) CC=gcc CFLAGS="-g -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-L../lib -ldao" $(EXE)
-
-
 
 bbslink: $(LNKOBJS)
 	$(CC) -o bbslink $(LNKOBJS) $(OPT) $(LDFLAGS)

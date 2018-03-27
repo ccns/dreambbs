@@ -6,7 +6,6 @@
 #  update :   /  /                                        #
 # ------------------------------------------------------- #
 
-
 # ¤ä´©ªº OS-type
 # linux freebsd
 
@@ -15,23 +14,11 @@
 
 
 all:
-	@echo "Please enter 'make sys-type', "
-	@echo " make linux   : for Linux"
-	@echo " make freebsd : for BSD 4.4 systems"
-
-linux:
 	@cd lib; make
-	@cd innbbsd; make linux
-	@cd maple; make linux
-	@cd so; make linux
-	@cd util; make linux
-
-freebsd:
-	@cd lib; make
-	@cd innbbsd; make freebsd
-	@cd maple; make freebsd
-	@cd so; make freebsd
-	@cd util; make freebsd
+	@cd innbbsd; make all
+	@cd maple; make all
+	@cd so; make all
+	@cd util; make all
 
 install:
 	@cd innbbsd; make install

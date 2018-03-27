@@ -33,15 +33,7 @@ TOOL	= account acl-sort camera expire gem-check gem-index makeUSR \
 	  #brdcheck brdmail 
 
 all: 
-	@echo "Please enter 'make sys-type', "
-	@echo " make linux   : for Linux"
-	@echo " make freebsd : for BSD 4.4 systems" 
-
-linux:
-	@$(MAKE) CC=gcc CFLAGS="-g -m32 -DLINUX -DREDHAT -DREDHAT7 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -L../lib -ldao -lcrypt -lresolv" $(TOOL)
-
-freebsd:
-	@$(MAKE) CC=gcc MAKEFLAG=$(MAKEFLAG) CFLAGS="-g -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-L../lib -ldao -lcrypt" $(TOOL)
+	@$(MAKE) CC=gcc CFLAGS="-g -m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -L../lib -ldao -lcrypt -lresolv" $(TOOL)
 
 msgall: msgall.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)

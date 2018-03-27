@@ -544,7 +544,7 @@ XO *xo;
 
 	more(fpath, NULL);
 	sprintf(flocks, "%s.lock", fpath);
-#ifdef LINUX
+#ifdef __linux__
 	lock = open(flocks, O_WRONLY | O_CREAT | O_APPEND | O_NONBLOCK, 0600);
 #else
 	lock = open(flocks, O_WRONLY | O_CREAT | O_APPEND | O_EXLOCK | O_NONBLOCK, 0600);
@@ -555,7 +555,7 @@ XO *xo;
 		return XO_HEAD;
 	}
 
-#ifdef LINUX
+#ifdef __linux__
 	flock(lock, LOCK_EX);
 #endif
 
@@ -658,7 +658,7 @@ XO *xo;
 			vmsg("加入連署失敗!!");
 	}
 
-#ifdef LINUX
+#ifdef __linux__
 	flock(lock, LOCK_UN);
 #endif
 

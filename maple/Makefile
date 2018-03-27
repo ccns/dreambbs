@@ -36,15 +36,7 @@ CPROTO  = `which cproto` -E"gcc -pipe -E" -I../include -I/usr/local/include
 .c.o:	;	$(CC) $(CFLAGS) -c $*.c
 
 all: 
-	@echo "Please enter 'make sys-type', "
-	@echo " make linux   : for Linux"
-	@echo " make freebsd : for BSD 4.4 systems"
-
-linux:
-	@$(MAKE) CC=gcc CPROTO="cproto -E\"gcc -pipe -E\" -I../include" CFLAGS="-g -m32 -DLINUX -O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-m32 -L../lib -ldao -lcrypt -lresolv -ldl -rdynamic" $(EXE)
-
-freebsd:
-	@$(MAKE) CC=gcc CFLAGS="-g -DBSD44 -Os -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-L../lib -ldao -lcrypt -export-dynamic" $(EXE)
+	@$(MAKE) CC=gcc CPROTO="cproto -E\"gcc -pipe -E\" -I../include" CFLAGS="-g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-m32 -L../lib -ldao -lcrypt -lresolv -ldl -rdynamic" $(EXE)
 
 xchatd:	xchatd.o
 	$(CC) -o $@ $? $(LDFLAGS)
