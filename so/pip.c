@@ -6415,7 +6415,7 @@ pip_money()
 	char buf[100], ans[10];
 
 	int money = -1;
-	if (!d.name[0] || d.death) return;
+	if (!d.name[0] || d.death) return 0;
 	clrchyiuan(6, 18);
 	/*  move(12,0);
 	  clrtobot();*/
@@ -6424,7 +6424,7 @@ pip_money()
 	while (money < 0 || money > cuser.request)
 	{
 		getdata(10, 0, "要換多少次? ", ans, 10, LCECHO, 0);
-		if (!ans[0]) return;
+		if (!ans[0]) return 0;
 		money = atol(ans);
 	}
 	sprintf(buf, "是否要轉換 %d 次 為 %d 雞金? [y/N]: ", money, money*1000);
@@ -7297,7 +7297,7 @@ pip_meet_vs_man()
 		else
 			vmsg("沒發生任何事！");
 	}
-	return;
+	return 0;
 }
 
 void
