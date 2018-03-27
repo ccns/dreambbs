@@ -8,9 +8,9 @@
 # ------------------------------------------------------ #
 
 
-CC	= gcc
+CC	= clang
 RANLIB	= ranlib
-CPROTO	= `which cproto` -E"gcc -pipe -E" -I../include
+CPROTO	= `which cproto` -E"clang -pipe -E" -I../include
 CFLAGS	= -O2 -pipe -fomit-frame-pointer -Wunused -I../include -m32
 
 

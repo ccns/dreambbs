@@ -6,9 +6,9 @@
 #  update :   /  /  				 	  #
 # ------------------------------------------------------- #
 
-#CC	= gcc
+#CC	= clang
 #CFLAGS	= -O2 -pipe -I../include -fomit-frame-pointer -Wunused
-#LDFLAGS = -s -lresolv -lsocket -L../lib -ldao
+#LDFLAGS = -s -lsocket -L../lib -ldao
 #LDFLAGS = -s -L../lib -ldao
 
 # For Linux
@@ -33,7 +33,7 @@ TOOL	= account acl-sort camera expire gem-check gem-index makeUSR \
 	  #brdcheck brdmail 
 
 all: 
-	@$(MAKE) CC=gcc CFLAGS="-g -m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -L../lib -ldao -lcrypt -lresolv" $(TOOL)
+	@$(MAKE) CC=clang CFLAGS="-g -m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -L../lib -ldao -lcrypt" $(TOOL)
 
 msgall: msgall.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)

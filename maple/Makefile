@@ -29,14 +29,14 @@ OBJ =	acct.o bbsd.o board.o cache.o edit.o\
 EXE =	bbsd xchatd
 
 
-CPROTO  = `which cproto` -E"gcc -pipe -E" -I../include -I/usr/local/include
+CPROTO  = `which cproto` -E"clang -pipe -E" -I../include -I/usr/local/include
 
 .SUFFIXES: .o .c
 
 .c.o:	;	$(CC) $(CFLAGS) -c $*.c
 
 all: 
-	@$(MAKE) CC=gcc CPROTO="cproto -E\"gcc -pipe -E\" -I../include" CFLAGS="-g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-m32 -L../lib -ldao -lcrypt -lresolv -ldl -rdynamic" $(EXE)
+	@$(MAKE) CC=clang CPROTO="cproto -E\"clang -pipe -E\" -I../include" CFLAGS="-g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-m32 -L../lib -ldao -lcrypt -rdynamic" $(EXE)
 
 xchatd:	xchatd.o
 	$(CC) -o $@ $? $(LDFLAGS)

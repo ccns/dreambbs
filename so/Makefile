@@ -33,11 +33,11 @@ ETC =	Makefile $(HDR)
 .c.o:   ;   $(CC) $(MAKEFLAG) $(CFLAGS) -c $*.c
 .c.x:   ;   $(CPROTO) -o $*.x $*.c
 .c.ln:  ;   lint -abhi $*.c
-.o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao -melf_i386
+.o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
 
 
 all: 
-	@$(MAKE) CC=gcc CPROTO="cproto -E\"gcc -pipe -E\" -I../include" CFLAGS="-g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-m32 -L../lib -ldao -lcrypt -lresolv -ldl -rdynamic" $(EXE)
+	@$(MAKE) CC=clang CPROTO="cproto -E\"clang -pipe -E\" -I../include" CFLAGS="-g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-m32 -L../lib -ldao -lcrypt -ldl -rdynamic" $(EXE)
 
 so: $(SO)
 

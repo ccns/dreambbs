@@ -21,7 +21,7 @@ INNBBSD	= innbbsd bbslink
 EXE	= $(INNBBSD)
 
 all: 
-	@$(MAKE) CC=gcc CFLAGS="-g -m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -L../lib -ldao" $(EXE)
+	@$(MAKE) CC=clang CFLAGS="-g -m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -L../lib -ldao" $(EXE)
 
 bbslink: $(LNKOBJS)
 	$(CC) -o bbslink $(LNKOBJS) $(OPT) $(LDFLAGS)
