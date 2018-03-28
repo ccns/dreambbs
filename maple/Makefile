@@ -1,17 +1,18 @@
 # ------------------------------------------------------ #
-#  Makefile	( NTHU CS MapleBBS Ver 2.36 )		 #
+#  maple/Makefile  ( NTHU CS MapleBBS Ver 3.x )          #
 # ------------------------------------------------------ #
-#  author : opus.bbs@bbs.cs.nthu.edu.tw		 	 #
-#  target : Makefile for MapleBBS main programs		 #
-#  create : 95/03/29				 	 #
-#  update : 95/12/15					 #
+#  author : opus.bbs@bbs.cs.nthu.edu.tw                  #
+#  target : Makefile for MapleBBS main programs          #
+#  create : 95/03/29                                     #
+#  update : 18/03/28                                     #
 # ------------------------------------------------------ #
-
 
 STRIP   = /usr/bin/strip
 
+UNAME	:= $(shell uname)
+
 # ------------------------------------------------------ #
-# 下列的 make rules 不需修改				 #
+# 下列的 make rules 不需修改                             #
 # ------------------------------------------------------ #
 
 SRC =	acct.c bbsd.c board.c cache.c edit.c\
@@ -28,15 +29,24 @@ OBJ =	acct.o bbsd.o board.o cache.o edit.o\
 
 EXE =	bbsd xchatd
 
+CC	=	clang 
 
-CPROTO  = `which cproto` -E"clang -pipe -E" -I../include -I/usr/local/include
+CPROTO  = cproto -E\"clang -pipe -E\" -I../include -I/usr/local/include
+
+CFLAGS	= -g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include
+
+LDFLAGS	= -m32 -L../lib -ldao -lcrypt -rdynamic 
+
+ifeq ($(UNAME),Linux)
+LDFLAGS	+= -lresolv -ldl
+endif
 
 .SUFFIXES: .o .c
 
 .c.o:	;	$(CC) $(CFLAGS) -c $*.c
 
 all: 
-	@$(MAKE) CC=clang CPROTO="cproto -E\"clang -pipe -E\" -I../include" CFLAGS="-g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-m32 -L../lib -ldao -lcrypt -rdynamic" $(EXE)
+	@$(MAKE) CC=$(CC) CPROTO="$(CPROTO)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
 
 xchatd:	xchatd.o
 	$(CC) -o $@ $? $(LDFLAGS)

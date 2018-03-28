@@ -1,20 +1,16 @@
 # ------------------------------------------------------- #
-#  src/Makefile	( NTHU CS MapleBBS Ver 3.10 )	          #
+#  Makefile  ( NTHU CS MapleBBS Ver 3.x )                 #
 # ------------------------------------------------------- #
-#  target : Makefile for ALL				  #
+#  target : Makefile for ALL                              #
 #  create : 00/02/12                                      #
-#  update :   /  /                                        #
+#  update : 18/03/28                                      #
 # ------------------------------------------------------- #
-
-# 支援的 OS-type
-# linux freebsd
 
 # 需要 compile 的目錄
 # lib innbbsd maple so util
 
-
 all:
-	@cd lib; make
+	@cd lib; make all
 	@cd innbbsd; make all
 	@cd maple; make all
 	@cd so; make all

@@ -1,18 +1,14 @@
 # ------------------------------------------------------ #
-#  Makefile	( NTHU CS MapleBBS Ver 2.36 )		 #
+#  so/Makefile ( NTHU CS MapleBBS Ver 3.x )              #
 # ------------------------------------------------------ #
-#  author : opus.bbs@bbs.cs.nthu.edu.tw		 	 #
-#  target : Makefile for MapleBBS main programs		 #
-#  create : 95/03/29				 	 #
-#  update : 95/12/15					 #
+#  author : opus.bbs@bbs.cs.nthu.edu.tw                  #
+#  target : Makefile for MapleBBS main programs	         #
+#  create : 95/03/29                                     #
+#  update : 18/03/28                                     #
 # ------------------------------------------------------ #
 
-CFLAGS  = -O2 -o
 STRIP   = /usr/bin/strip
-
-# ------------------------------------------------------ #
-# 下列的 make rules 不需修改				 #
-# ------------------------------------------------------ #
+UNAME	:= $(shell uname)
 
 HDR = 	bbs.h config.h global.h modes.h perm.h struct.h
 
@@ -24,20 +20,41 @@ SO =	chat.so vote.so xyz.so guessnum.so \
 	classtable2.so observe.so pip.so brdstat.so personal.so \
 	cleanrecommend.so shop.so bank.so innbbs.so contact.so 
 
-EXE =	so
+CC	= clang
 
-ETC =	Makefile $(HDR)
+CPROTO	= cproto -E\"clang -pipe -E\" -I../include
+
+CFLAGS	= -g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include
+
+LDFLAGS	= -m32 -L../lib -ldao -lcrypt 
+
+ifeq ($(UNAME),FreeBSD)
+LDFLAGS	+= -export-dynamic
+endif
+
+ifeq ($(UNAME),Linux)
+LDFLAGS += -rdynamic -lresolv -ldl
+endif
+
+EXE = so
+
+ETC = Makefile $(HDR)
+
 
 .SUFFIXES: .o .c .ln .x .so
 
 .c.o:   ;   $(CC) $(MAKEFLAG) $(CFLAGS) -c $*.c
 .c.x:   ;   $(CPROTO) -o $*.x $*.c
 .c.ln:  ;   lint -abhi $*.c
-.o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
 
+ifeq ($(UNAME),FreeBSD)
+.o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
+else
+.o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao -melf_i386
+endif
 
 all: 
-	@$(MAKE) CC=clang CPROTO="cproto -E\"clang -pipe -E\" -I../include" CFLAGS="-g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include" LDFLAGS="-m32 -L../lib -ldao -lcrypt -ldl -rdynamic" $(EXE)
+	@$(MAKE) CC=$(CC) CPROTO="$(CPROTO)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
 
 so: $(SO)
 

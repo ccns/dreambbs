@@ -7,7 +7,6 @@
 #  author : skhuang                                      #
 # ------------------------------------------------------ #
 
-
 # ------------------------------------------------------ #
 # 下列的 make rules 不需修改				 #
 # ------------------------------------------------------ #
@@ -16,12 +15,16 @@ INNOBJS	= channel.o bbslib.o convcode.o inntobbs.o rec_article.o nocem.o history
 
 LNKOBJS	= bbslink.o bbslib.o convcode.o inntobbs.o rec_article.o nocem.o history.o
 
-INNBBSD	= innbbsd bbslink
+EXE	= innbbsd bbslink
 
-EXE	= $(INNBBSD)
+CC	= clang
+
+CFLAGS	= -g -m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused
+
+LDFLAGS	= -m32 -L../lib -ldao
 
 all: 
-	@$(MAKE) CC=clang CFLAGS="-g -m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -L../lib -ldao" $(EXE)
+	@$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
 
 bbslink: $(LNKOBJS)
 	$(CC) -o bbslink $(LNKOBJS) $(OPT) $(LDFLAGS)
@@ -30,7 +33,7 @@ innbbsd: $(INNOBJS)
 	$(CC) -o innbbsd $(INNOBJS) $(OPT) $(LDFLAGS)
 
 
-install: $(INNBBSD)
+install: $(EXE)
 	install -m 0700 $? $(HOME)/innd
 
 update:

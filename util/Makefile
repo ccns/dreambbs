@@ -1,25 +1,26 @@
 # ------------------------------------------------------- #
-#  util/Makefile	( NTHU CS MapleBBS Ver 3.x ) 	  #
+#  util/Makefile    ( NTHU CS MapleBBS Ver 3.x )          #
 # ------------------------------------------------------- #
 #  target : Makefile for 寄信、統計、備份、系統維護工具	  #
-#  create :   /  /  				 	  #
-#  update :   /  /  				 	  #
+#  create :   /  /                                        #
+#  update : 18/03/28                                      #
 # ------------------------------------------------------- #
 
-#CC	= clang
-#CFLAGS	= -O2 -pipe -I../include -fomit-frame-pointer -Wunused
-#LDFLAGS = -s -lsocket -L../lib -ldao
-#LDFLAGS = -s -L../lib -ldao
+UNAME	:= $(shell uname)
 
-# For Linux
-# CFLAGS	= -O2 -pipe -fomit-frame-pointer -I../include -DLINUX
-#CFLAGS	= -O2 -s -pipe -I../include -fomit-frame-pointer -fforce-mem -funroll-loops -fstrict-prototype -Wunused
+CC	= clang
+CFLAGS	= -g -m32 -O2 -I../include -fomit-frame-pointer -Wunused
+LDFLAGS	= -m32 -L../lib -ldao  
+
+ifeq ($(UNAME),Linux)
+LDFLAGS	+= -lresolv -lcrypt
+endif
 
 .SUFFIXES: .o .c
 
 .c.o:   ;   $(CC) $(MAKEFLAG) $(CFLAGS) -g -c $*.c
 
-TOOL	= account acl-sort camera expire gem-check gem-index makeUSR \
+EXE	= account acl-sort camera expire gem-check gem-index makeUSR \
 	  hdr-dump poststat reaper countstar rmbadmail restorebrd \
 	  mailpost bbsmail topusr acpro addsong userno template restoregem \
 	  checkemail match mailexpire countbirth countage utmp-dump \
@@ -29,11 +30,9 @@ TOOL	= account acl-sort camera expire gem-check gem-index makeUSR \
 	  brdstat dump-brdstat base64encode \
 	  msgall transacct showACCT showBRD \
 	  backup brdmail
-	  #getstar \
-	  #brdcheck brdmail 
 
 all: 
-	@$(MAKE) CC=clang CFLAGS="-g -m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused" LDFLAGS="-m32 -L../lib -ldao -lcrypt" $(TOOL)
+	@$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
 
 msgall: msgall.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
@@ -167,9 +166,6 @@ gem-index: gem-index.o
 hdr-dump: hdr-dump.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
-#ifsigned: ifsigned.o
-#	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
 mailpost: mailpost.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
@@ -224,14 +220,11 @@ backup: backup.o
 brdmail: brdmail.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
-#brdcheck: brdcheck.o
-#	        $(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-install: $(TOOL)
+install: $(EXE)
 	install -m 0700 $? $(HOME)/bin/
 
 clean:
-	rm -fr $(TOOL) *.o *.bak *.BAK *.log *~ DEADJOE
+	rm -fr $(EXE) *.o *.bak *.BAK *.log *~ DEADJOE
 
 clear:
 	rm -fr *.bak *.BAK *.log *~ DEADJOE

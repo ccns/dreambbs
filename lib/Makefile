@@ -1,21 +1,19 @@
 # ------------------------------------------------------ #
-#  lib/Makefile		( NTHU CS MapleBBS Ver 3.00 )	 #
+#  lib/Makefile  ( NTHU CS MapleBBS Ver 3.00 )           #
 # ------------------------------------------------------ #
-#  author : opus.bbs@bbs.cs.nthu.edu.tw		 	 #
-#  target : Makefile for MapleBBS library routines	 #
-#  create : 95/03/29				 	 #
-#  update : 95/12/15					 #
+#  author : opus.bbs@bbs.cs.nthu.edu.tw	                 #
+#  target : Makefile for MapleBBS library routines       #
+#  create : 95/03/29                                     #
+#  update : 95/12/15                                     #
 # ------------------------------------------------------ #
-
 
 CC	= clang
 RANLIB	= ranlib
-CPROTO	= `which cproto` -E"clang -pipe -E" -I../include
-CFLAGS	= -O2 -pipe -fomit-frame-pointer -Wunused -I../include -m32
-
+CPROTO	= $(which cproto) -E\"clang -pipe -E\" -I../include
+CFLAGS	= -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include 
 
 # ------------------------------------------------------ #
-# 下列的 make rules 不需修改				 #
+# 下列的 make rules 不需修改                             #
 # ------------------------------------------------------ #
 
 HDR =	dao.h dao.p
