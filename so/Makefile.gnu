@@ -7,8 +7,9 @@
 #  update : 18/03/28                                     #
 # ------------------------------------------------------ #
 
-STRIP   = /usr/bin/strip
-UNAME	!= uname
+MAKE    +=  -f Makefile.gnu
+
+UNAME	:= $(shell uname)
 
 HDR = 	bbs.h config.h global.h modes.h perm.h struct.h
 
@@ -28,13 +29,13 @@ CFLAGS	= -g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include
 
 LDFLAGS	= -m32 -L../lib -ldao -lcrypt 
 
-.if $(UNAME) == "FreeBSD"
+ifeq ($(UNAME),FreeBSD)
 LDFLAGS	+= -export-dynamic
-.endif
+endif
 
-.if $(UNAME) == "Linux"
+ifeq ($(UNAME),Linux)
 LDFLAGS += -rdynamic -lresolv -ldl
-.endif
+endif
 
 EXE = so
 
@@ -47,11 +48,11 @@ ETC = Makefile $(HDR)
 .c.x:   ;   $(CPROTO) -o $*.x $*.c
 .c.ln:  ;   lint -abhi $*.c
 
-.if $(UNAME) == "FreeBSD"
+ifeq ($(UNAME),FreeBSD)
 .o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
-.else
+else
 .o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao -melf_i386
-.endif
+endif
 
 all: 
 	@$(MAKE) CC=$(CC) CPROTO="$(CPROTO)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)

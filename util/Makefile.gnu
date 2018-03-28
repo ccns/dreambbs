@@ -6,15 +6,17 @@
 #  update : 18/03/28                                      #
 # ------------------------------------------------------- #
 
-UNAME	!= uname
+MAKE	+=	-f Makefile.gnu
+
+UNAME	:= $(shell uname)
 
 CC	= clang
 CFLAGS	= -g -m32 -O2 -I../include -fomit-frame-pointer -Wunused
 LDFLAGS	= -m32 -L../lib -ldao -lcrypt
 
-.if $(UNAME) == "Linux"
+ifeq ($(UNAME),Linux)
 LDFLAGS	+= -lresolv
-.endif
+endif
 
 .SUFFIXES: .o .c
 

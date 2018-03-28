@@ -7,9 +7,9 @@
 #  update : 18/03/28                                     #
 # ------------------------------------------------------ #
 
-STRIP   = /usr/bin/strip
+MAKE	+=	-f Makefile.gnu
 
-UNAME	!= uname
+UNAME	:= $(shell uname)
 
 # ------------------------------------------------------ #
 # 下列的 make rules 不需修改                             #
@@ -29,7 +29,7 @@ OBJ =	acct.o bbsd.o board.o cache.o edit.o\
 
 EXE =	bbsd xchatd
 
-CC	=	clang 
+CC	=	clang
 
 CPROTO  = cproto -E\"clang -pipe -E\" -I../include -I/usr/local/include
 
@@ -37,9 +37,9 @@ CFLAGS	= -g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include
 
 LDFLAGS	= -m32 -L../lib -ldao -lcrypt -rdynamic 
 
-.if ${UNAME} == "Linux"
+ifeq ($(UNAME),Linux)
 LDFLAGS	+= -lresolv -ldl
-.endif
+endif
 
 .SUFFIXES: .o .c
 

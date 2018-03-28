@@ -9,6 +9,8 @@
 # 需要 compile 的目錄
 # lib innbbsd maple so util
 
+MAKE	+=	-f Makefile.gnu
+
 all:
 	@cd lib; $(MAKE) all
 	@cd innbbsd; $(MAKE) all
