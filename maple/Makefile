@@ -7,8 +7,6 @@
 #  update : 18/03/28                                     #
 # ------------------------------------------------------ #
 
-STRIP   = /usr/bin/strip
-
 UNAME	!= uname
 
 # ------------------------------------------------------ #
@@ -35,10 +33,14 @@ CPROTO  = cproto -E\"clang -pipe -E\" -I../include -I/usr/local/include
 
 CFLAGS	= -g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include
 
-LDFLAGS	= -m32 -L../lib -ldao -lcrypt -rdynamic 
+LDFLAGS	= -m32 -L../lib -ldao -lcrypt  
 
-.if ${UNAME} == "Linux"
-LDFLAGS	+= -lresolv -ldl
+.if $(UNAME) == "Linux"
+LDFLAGS	+= -lresolv -ldl -rdynamic
+.endif
+
+.if $(UNAME) == "FreeBSD"
+LDFLAGS += -Wl,-export-dynamic
 .endif
 
 .SUFFIXES: .o .c

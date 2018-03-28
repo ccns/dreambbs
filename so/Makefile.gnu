@@ -61,9 +61,9 @@ ETC = Makefile $(HDR)
 .c.ln:  ;   lint -abhi $*.c
 
 ifeq ($(UNAME),FreeBSD)
-.o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
+.o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
 else
-.o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao -melf_i386
+.o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386
 endif
 
 all: 

@@ -7,7 +7,6 @@
 #  update : 18/03/28                                     #
 # ------------------------------------------------------ #
 
-STRIP   = /usr/bin/strip
 UNAME	!= uname
 
 HDR = 	bbs.h config.h global.h modes.h perm.h struct.h
@@ -29,7 +28,7 @@ CFLAGS	= -g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include
 LDFLAGS	= -m32 -L../lib -ldao -lcrypt 
 
 .if $(UNAME) == "FreeBSD"
-LDFLAGS	+= -export-dynamic
+LDFLAGS	+= -Wl,-export-dynamic
 .endif
 
 .if $(UNAME) == "Linux"
@@ -48,9 +47,9 @@ ETC = Makefile $(HDR)
 .c.ln:  ;   lint -abhi $*.c
 
 .if $(UNAME) == "FreeBSD"
-.o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
+.o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
 .else
-.o.so:	;   ld -s -G $*.o -o $*.so -L../lib -ldao -melf_i386
+.o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386
 .endif
 
 all: 
