@@ -7,21 +7,21 @@
 #  update : 18/03/28                                     #
 # ------------------------------------------------------ #
 
-MAKE    +=  -f Makefile.gnu
+MAKE	+=  -f Makefile.gnu
 
 UNAME	:= $(shell uname)
 
 ARCHI	:= $(shell uname -m)
 
-HDR = 	bbs.h config.h global.h modes.h perm.h struct.h
+HDR	= bbs.h config.h global.h modes.h perm.h struct.h
 
-SO =	chat.so vote.so xyz.so guessnum.so \
-	admin.so chatmenu.so  mailgem.so\
-	memorandum.so aloha.so newboard.so violate.so song.so same_mail.so\
-	showvote.so list.so mine.so bj.so \
-	pnote.so passwd.so adminutil.so ascii.so\
-	classtable2.so observe.so pip.so brdstat.so personal.so \
-	cleanrecommend.so shop.so bank.so innbbs.so contact.so 
+SO	= chat.so vote.so xyz.so guessnum.so \
+	  admin.so chatmenu.so  mailgem.so\
+	  memorandum.so aloha.so newboard.so violate.so song.so same_mail.so\
+	  showvote.so list.so mine.so bj.so \
+	  pnote.so passwd.so adminutil.so ascii.so\
+	  classtable2.so observe.so pip.so brdstat.so personal.so \
+	  cleanrecommend.so shop.so bank.so innbbs.so contact.so 
 
 CC	= clang
 
@@ -42,7 +42,7 @@ endif
 endif
 
 ifeq ($(UNAME),Linux)
-LDFLAGS += -rdynamic -lresolv -ldl
+LDFLAGS	+= -rdynamic -lresolv -ldl
 else
 ifeq ($(UNAME),FreeBSD)
 LDFLAGS	+= -Wl,-export-dynamic
@@ -56,14 +56,14 @@ ETC = Makefile $(HDR)
 
 .SUFFIXES: .o .c .ln .x .so
 
-.c.o:   ;   $(CC) $(MAKEFLAG) $(CFLAGS) -c $*.c
-.c.x:   ;   $(CPROTO) -o $*.x $*.c
-.c.ln:  ;   lint -abhi $*.c
+.c.o:	; $(CC) $(MAKEFLAG) $(CFLAGS) -c $*.c
+.c.x:	; $(CPROTO) -o $*.x $*.c
+.c.ln:	; lint -abhi $*.c
 
 ifeq ($(UNAME),FreeBSD)
-.o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
+.o.so:	; ld -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
 else
-.o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386
+.o.so:	; ld -G $*.o -o $*.so -L../lib -ldao -melf_i386
 endif
 
 all: 

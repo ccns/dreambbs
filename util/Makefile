@@ -18,7 +18,7 @@ LDFLAGS	+= -lresolv
 
 .SUFFIXES: .o .c
 
-.c.o:   ;   $(CC) $(MAKEFLAG) $(CFLAGS) -g -c $*.c
+.c.o:	; $(CC) $(MAKEFLAG) $(CFLAGS) -g -c $*.c
 
 EXE	= account acl-sort camera expire gem-check gem-index makeUSR \
 	  hdr-dump poststat reaper countstar rmbadmail restorebrd \

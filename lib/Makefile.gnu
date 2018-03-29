@@ -26,9 +26,9 @@ endif
 # 下列的 make rules 不需修改                             #
 # ------------------------------------------------------ #
 
-HDR =	dao.h dao.p
+HDR	= dao.h dao.p
 
-SRC =	\
+SRC	\
 	is_alnum.c is_alpha.c is_fname.c is_fpath.c not_addr.c \
 	\
 	dns.c dns_addr.c dns_name.c dns_smtp.c dns_ident.c dns_open.c \
@@ -85,7 +85,7 @@ OBJ =	\
 	acl_addr.o acl_has.o xsort.o xwrite.o dl_lib.o attr_lib.o rfc2047.o
 
 
-.c.o:   ;   $(CC) $(CFLAGS) -c $*.c
+.c.o:	; $(CC) $(CFLAGS) -c $*.c
 
 
 all:	libdao.a
