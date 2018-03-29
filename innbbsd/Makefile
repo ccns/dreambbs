@@ -7,6 +7,8 @@
 #  author : skhuang                                      #
 # ------------------------------------------------------ #
 
+ARCHI	!= uname -m
+
 # ------------------------------------------------------ #
 # 下列的 make rules 不需修改				 #
 # ------------------------------------------------------ #
@@ -19,9 +21,14 @@ EXE	= innbbsd bbslink
 
 CC	= clang
 
-CFLAGS	= -g -m32 -O2 -pipe -I../include -fomit-frame-pointer -Wunused
+CFLAGS	= -g -O2 -pipe -I../include -fomit-frame-pointer -Wunused
 
-LDFLAGS	= -m32 -L../lib -ldao
+LDFLAGS	= -L../lib -ldao
+
+.if $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
+CFLAGS	+= -m32
+LDFLAGS	+= -m32
+.endif
 
 all: 
 	@$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
@@ -32,7 +39,6 @@ bbslink: $(LNKOBJS)
 innbbsd: $(INNOBJS)
 	$(CC) -o innbbsd $(INNOBJS) $(OPT) $(LDFLAGS)
 
-
 install: $(EXE)
 	install -m 0700 $? $(HOME)/innd
 
@@ -40,4 +46,5 @@ update:
 	-csh -c "kill `tail -1 $(HOME)/run/innbbsd.pid | awk '{print $$1}'`";exit 0
 
 clean:
-	rm -f $(EXE) *.exe *.o *~
+	rm -f $(EXE) *.o *~
+

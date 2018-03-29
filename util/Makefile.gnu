@@ -10,9 +10,21 @@ MAKE	+=	-f Makefile.gnu
 
 UNAME	:= $(shell uname)
 
+ARCHI	:= $(shell uname -m)
+
 CC	= clang
-CFLAGS	= -g -m32 -O2 -I../include -fomit-frame-pointer -Wunused
-LDFLAGS	= -m32 -L../lib -ldao -lcrypt
+CFLAGS	= -g -O2 -I../include -fomit-frame-pointer -Wunused
+LDFLAGS	= -L../lib -ldao -lcrypt
+
+ifeq ($(ARCHI),x86_64) 
+CFLAGS	+= -m32
+LDFLAGS	+= -m32
+else
+ifeq ($(ARCHI),amd64)
+CFLAGS	+= -m32
+LDFLAGS	+= -m32
+endif
+endif
 
 ifeq ($(UNAME),Linux)
 LDFLAGS	+= -lresolv

@@ -11,6 +11,8 @@ MAKE	+=	-f Makefile.gnu
 
 UNAME	:= $(shell uname)
 
+ARCHI	:= $(shell uname -m)
+
 # ------------------------------------------------------ #
 # 下列的 make rules 不需修改                             #
 # ------------------------------------------------------ #
@@ -33,12 +35,26 @@ CC	=	clang
 
 CPROTO  = cproto -E\"clang -pipe -E\" -I../include -I/usr/local/include
 
-CFLAGS	= -g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include
+CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wunused -I../include
 
-LDFLAGS	= -m32 -L../lib -ldao -lcrypt -rdynamic 
+LDFLAGS	= -L../lib -ldao -lcrypt 
+
+ifeq ($(ARCHI),x86_64) 
+CFLAGS	+= -m32
+LDFLAGS	+= -m32
+else
+ifeq ($(ARCHI),amd64)
+CFLAGS	+= -m32
+LDFLAGS	+= -m32
+endif
+endif
 
 ifeq ($(UNAME),Linux)
-LDFLAGS	+= -lresolv -ldl
+LDFLAGS	+= -lresolv -ldl -rdynamic 
+else
+ifeq ($(UNAME),FreeBSD)
+LDFLAGS += -Wl,-export-dynamic
+endif
 endif
 
 .SUFFIXES: .o .c

@@ -7,10 +7,16 @@
 #  update : 95/12/15                                     #
 # ------------------------------------------------------ #
 
+ARCHI	!= uname -m
+
 CC	= clang
 RANLIB	= ranlib
 CPROTO	= $(which cproto) -E\"clang -pipe -E\" -I../include
-CFLAGS	= -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include 
+CFLAGS	= -O2 -pipe -fomit-frame-pointer -Wunused -I../include 
+
+.if  $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
+CFLAGS	+= -m32
+.endif
 
 # ------------------------------------------------------ #
 # 下列的 make rules 不需修改                             #

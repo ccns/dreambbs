@@ -11,6 +11,8 @@ MAKE    +=  -f Makefile.gnu
 
 UNAME	:= $(shell uname)
 
+ARCHI	:= $(shell uname -m)
+
 HDR = 	bbs.h config.h global.h modes.h perm.h struct.h
 
 SO =	chat.so vote.so xyz.so guessnum.so \
@@ -25,16 +27,26 @@ CC	= clang
 
 CPROTO	= cproto -E\"clang -pipe -E\" -I../include
 
-CFLAGS	= -g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include
+CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wunused -I../include
 
-LDFLAGS	= -m32 -L../lib -ldao -lcrypt 
+LDFLAGS	= -L../lib -ldao -lcrypt 
 
-ifeq ($(UNAME),FreeBSD)
-LDFLAGS	+= -export-dynamic
+ifeq ($(ARCHI),x86_64) 
+CFLAGS	+= -m32
+LDFLAGS	+= -m32
+else
+ifeq ($(ARCHI),amd64)
+CFLAGS	+= -m32
+LDFLAGS	+= -m32
+endif
 endif
 
 ifeq ($(UNAME),Linux)
 LDFLAGS += -rdynamic -lresolv -ldl
+else
+ifeq ($(UNAME),FreeBSD)
+LDFLAGS	+= -Wl,-export-dynamic
+endif
 endif
 
 EXE = so
