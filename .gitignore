@@ -31,5 +31,4 @@
 *.su
 
 # config for any BBS sites
-include/config.h
-
+/dreambbs.conf

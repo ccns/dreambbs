@@ -9,21 +9,30 @@
 
 UNAME	!= uname
 
-# ------------------------------------------------------ #
-# 下列的 make rules 不需修改                             #
-# ------------------------------------------------------ #
+SRCROOT	= ..
+
+# rules ref: PttBBS: mbbsd/Makefile
+BBSCONF		:= $(SRCROOT)/dreambbs.conf
+DEF_PATTERN	:= ^[ \t]*\#[ \t]*define[ \t]*
+DEF_CMD		:= grep -Ew "${DEF_PATTERN}"
+DEF_YES		:= && echo "YES" || echo ""
+USE_PMORE	!= sh -c '${DEF_CMD}"M3_USE_PMORE" ${BBSCONF} ${DEF_YES}'
+#USE_PFTERM	!= sh -c '${DEF_CMD}"M3_USE_PFTERM" ${BBSCONF} ${DEF_YES}'
 
 SRC 	= acct.c bbsd.c board.c cache.c edit.c \
 	  gem.c mail.c menu.c more.c post.c banmail.c \
 	  talk.c visio.c xover.c favorite.c socket.c popupmenu.c \
-	  pmore.c window.c myfavorite.c
-	  # If you prefer not to define M3_USE_PMORE , remove "pmore.c" on the start of last line
+	  window.c myfavorite.c
 
 OBJ	= acct.o bbsd.o board.o cache.o edit.o \
 	  gem.o mail.o menu.o more.o post.o banmail.o \
 	  talk.o visio.o xover.o favorite.o socket.o popupmenu.o \
-	  pmore.o window.o myfavorite.o 
-	# If you prefer not to define M3_USE_PMORE , remove "pmore.o" on the start of last line
+	  window.o myfavorite.o 
+
+.if $(USE_PMORE)
+SRC	+= pmore.c 
+OBJ	+= pmore.o
+.endif
 
 EXE	= bbsd xchatd
 
@@ -68,3 +77,6 @@ clean:
 tags:	$(SRC) ../include/*.h ../lib/*.c
 	exctags $(SRC) ../include/*.h ../lib/*.c
 
+test:
+	$(USE_PMORE)
+	@echo $(SRC)

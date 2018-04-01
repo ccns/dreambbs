@@ -25,6 +25,8 @@
 #include <sys/stat.h>
 #include <sys/file.h>
 #include <sys/wait.h>
+#include <sys/ipc.h>
+#include <sys/shm.h>
 
 #ifdef __linux__ 
     #include <time.h>

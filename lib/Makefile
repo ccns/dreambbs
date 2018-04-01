@@ -50,7 +50,7 @@ SRC	= \
 	  \
 	  splay.c \
 	  \
-	  acl_addr.c acl_has.c xsort.c xwrite.c dl_lib.c attr_lib.c rfc2047.c
+	  acl_addr.c acl_has.c xsort.c xwrite.c dl_lib.c attr_lib.c rfc2047.c keeplog.c
 
 OBJ	= \
 	  is_alnum.o is_alpha.o is_fname.o is_fpath.o not_addr.o \
@@ -78,7 +78,7 @@ OBJ	= \
 	  \
 	  splay.o \
 	  \
-	  acl_addr.o acl_has.o xsort.o xwrite.o dl_lib.o attr_lib.o rfc2047.o
+	  acl_addr.o acl_has.o xsort.o xwrite.o dl_lib.o attr_lib.o rfc2047.o keeplog.o
 
 
 .c.o:   ;   $(CC) $(CFLAGS) -c $*.c
