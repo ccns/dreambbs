@@ -7,7 +7,9 @@
 #  update : 95/12/15                                     #
 # ------------------------------------------------------ #
 
-ARCHI := $(shell uname -m)
+MAKE	+= -f Makefile.gnu
+
+ARCHI	:= $(shell uname -m)
 
 CC	= clang
 RANLIB	= ranlib
@@ -28,7 +30,7 @@ endif
 
 HDR	= dao.h dao.p
 
-SRC	\
+SRC	=\
 	is_alnum.c is_alpha.c is_fname.c is_fpath.c not_addr.c \
 	\
 	dns.c dns_addr.c dns_name.c dns_smtp.c dns_ident.c dns_open.c \
@@ -54,7 +56,7 @@ SRC	\
 	\
 	splay.c \
 	\
-	acl_addr.c acl_has.c xsort.c xwrite.c dl_lib.c attr_lib.c rfc2047.c
+	acl_addr.c acl_has.c xsort.c xwrite.c dl_lib.c attr_lib.c rfc2047.c keeplog.c
 
 OBJ =	\
 	is_alnum.o is_alpha.o is_fname.o is_fpath.o not_addr.o \
@@ -82,7 +84,7 @@ OBJ =	\
 	\
 	splay.o \
 	\
-	acl_addr.o acl_has.o xsort.o xwrite.o dl_lib.o attr_lib.o rfc2047.o
+	acl_addr.o acl_has.o xsort.o xwrite.o dl_lib.o attr_lib.o rfc2047.o keeplog.o
 
 
 .c.o:	; $(CC) $(CFLAGS) -c $*.c

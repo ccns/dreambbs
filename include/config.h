@@ -52,7 +52,7 @@
 #define BBSGID          999
 #endif
 
-#ifndef TAF_VALID
+#ifndef TAG_VALID
 #define TAG_VALID       "[DreamBBS]To "             /* 身分認證函token */
 #endif
 
@@ -156,7 +156,7 @@
 /* 組態規劃						 */
 /* ------------------------------------------------------*/
 
-#ifndef
+#ifndef CLASS_HOT
 #define CLASS_HOT (5)                  /* 熱門看板臨界值 */
 #endif
 
