@@ -277,7 +277,7 @@
  #undef PMORE_HAVE_VKEY
  #undef PMORE_IGNORE_UNKNOWN_NAVKEYS
  #undef PMORE_AUTOEXIT_FIRSTPAGE
- #undef PMORE_AUTONEXT_ON_PAGEFLIP  /*r2.170810: try differnt style for easy to read*/
+ #define PMORE_AUTONEXT_ON_PAGEFLIP  /*r2.170810: try differnt style for easy to read*/
  #define PMORE_AUTONEXT_ON_RIGHTKEY
  #ifndef  SHOW_USER_IN_TEXT
  # undef  PMORE_EXPAND_ESC_STAR
@@ -1672,7 +1672,9 @@ mf_display()
                         (!strncmp((char*)line_head, "¡°", 2) ||
                          !strncmp((char*)line_head, "==>", 3)))
                 {
-                    outs(ANSI_COLOR(0;32));
+                    //outs(ANSI_COLOR(0;32));
+                    outs(ANSI_COLOR(1;36));      //r2.20180401: recover Maple3 more style
+
                     flResetColor = 1;
                 }
             }
