@@ -68,4 +68,4 @@ install: $(EXE)
 	install -m 0700 $(SO) $(HOME)/bin
 
 clean: /tmp
-	rm -fr $(SO) *~ *.o #DEADJOE
+	rm -fr $(SO) *~ *.o

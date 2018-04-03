@@ -11,5 +11,5 @@
 all: 
 
 clean:
-	rm -f *~ DEADJOE
+	rm -f *~
 

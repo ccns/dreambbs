@@ -79,7 +79,7 @@ install: $(EXE)
 	install -m 0700 $? $(HOME)/bin
 
 clean:
-	rm -rf $(OBJ) $(EXE) $(LNFILES)  *~ *.o *.so DEADJOE
+	rm -rf $(OBJ) $(EXE) $(LNFILES)  *~ *.o *.so
 
 tags:	$(SRC) ../include/*.h ../lib/*.c
 	exctags $(SRC) ../include/*.h ../lib/*.c

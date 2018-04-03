@@ -77,7 +77,7 @@ libdao.a: $(OBJ)
 
 
 clean:
-	rm -fr $(GARBAGE) $(OBJ) libdao.a *.bak *.BAK *~ DEADJOE
+	rm -fr $(GARBAGE) $(OBJ) libdao.a *.bak *.BAK *~
 
 
 tags:

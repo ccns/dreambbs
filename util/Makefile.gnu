@@ -238,7 +238,7 @@ install: $(EXE)
 	install -m 0700 $? $(HOME)/bin/
 
 clean:
-	rm -fr $(EXE) *.o *.bak *.BAK *.log *~ #DEADJOE
+	rm -fr $(EXE) *.o *.bak *.BAK *.log *~
 
 #clear:
-#	rm -fr *.bak *.BAK *.log *~ DEADJOE
+#	rm -fr *.bak *.BAK *.log *~
