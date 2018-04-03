@@ -7,6 +7,8 @@
 #  update : 18/03/28                                     #
 # ------------------------------------------------------ #
 
+ARCHI	!= uname -m
+
 UNAME	!= uname
 
 HDR	= bbs.h config.h global.h modes.h perm.h struct.h
