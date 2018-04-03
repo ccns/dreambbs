@@ -1221,7 +1221,7 @@ static MENU menu_main[] =
   "Talk      【 休閒聊天區 】"},
 
   {menu_service, PERM_BASIC, M_XMENU,
-  "Plugin    【 " NICKNAME "服務區 】"},
+  "DService  【 " NICKNAME "服務區 】"},
 
   /* lkchu.990428: 不要都塞在個人工具區 */
   {menu_xyz, 0, M_SMENU,
