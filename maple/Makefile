@@ -7,6 +7,8 @@
 #  update : 18/03/28                                     #
 # ------------------------------------------------------ #
 
+ARCHI	!= uname -m
+
 UNAME	!= uname
 
 SRCROOT	= ..
@@ -40,9 +42,14 @@ CC	= clang
 
 CPROTO	= cproto -E\"clang -pipe -E\" -I../include -I/usr/local/include
 
-CFLAGS	= -g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include
+CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wunused -I../include
 
-LDFLAGS	= -m32 -L../lib -ldao -lcrypt  
+LDFLAGS	= -L../lib -ldao -lcrypt  
+
+.if  $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
+CFLAGS	+= -m32
+LDFLAGS	+= -m32
+.endif
 
 .if $(UNAME) == "Linux"
 LDFLAGS	+= -lresolv -ldl -rdynamic
@@ -77,6 +84,3 @@ clean:
 tags:	$(SRC) ../include/*.h ../lib/*.c
 	exctags $(SRC) ../include/*.h ../lib/*.c
 
-test:
-	$(USE_PMORE)
-	@echo $(SRC)

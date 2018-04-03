@@ -81,7 +81,7 @@ OBJ	= \
 	  acl_addr.o acl_has.o xsort.o xwrite.o dl_lib.o attr_lib.o rfc2047.o keeplog.o
 
 
-.c.o:   ;   $(CC) $(CFLAGS) -c $*.c
+.c.o:   ;$(CC) $(CFLAGS) -c $*.c
 
 
 all:	libdao.a

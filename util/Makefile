@@ -6,11 +6,18 @@
 #  update : 18/03/28                                      #
 # ------------------------------------------------------- #
 
+ARCHI	!= uname -m
+
 UNAME	!= uname
 
 CC	= clang
-CFLAGS	= -g -m32 -O2 -I../include -fomit-frame-pointer -Wunused
-LDFLAGS	= -m32 -L../lib -ldao -lcrypt
+CFLAGS	= -g -O2 -I../include -fomit-frame-pointer -Wunused
+LDFLAGS	= -L../lib -ldao -lcrypt
+
+.if  $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
+CFLAGS	+= -m32
+LDFLAGS	+= -m32
+.endif
 
 .if $(UNAME) == "Linux"
 LDFLAGS	+= -lresolv
@@ -89,9 +96,6 @@ mailexpire: mailexpire.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 outgo: outgo.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-2nd_expire: 2nd_expire.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 restoreusr: restoreusr.o
