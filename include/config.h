@@ -73,17 +73,6 @@
 #define URL_PREFIX    "https://bbs.ccns.cc"
 #endif
 
-
-/* r2:  可自行定義 ORIGIN_TAG，客製化站簽               */
-
-//#define ORIGIN_TAG \
-//"--\n" \
-//"\033[1;44;32m  ◢\033[0;32;44m◣   \033[1;37m︵︵     \033[30m█▔◣ █▔█ █▔▔ █▔█ █▆▉ █   █▔█ █◣█ █▔\033[31m● \033[m\n" \
-//"\033[1;32;44m◢\033[42m◤\033[0;44;32m█◣\033[1m◢\033[0;32;44m◣ \033[1;37m︵︵ \033[0;37;44m█  █ █▁◤ █▁▁ █▁█ ▉▉▉ █   █▁█ █◥█ █  █ \033[m\n" \
-//"\033[1;36;42m夢之大地 逼逼ㄟ四 \033[37m█▁◤ █  █ █▁▁ █  █ ▉▉▉ █▁ █  █ █  █ █▁◤ \033[m\n" \
-//"\033[1;32m※ Origin:\033[33m <bbs.ccns.ncku.edu.tw>  \033[31m◆ From:\033[36m %-34.34s \033[m\n"
-
-
 /* ----------------------------------------------------- */
 /* Modules & Plug-in                       by cache      */
 /* ------------------------------------------------------*/
@@ -142,11 +131,10 @@
 #endif
 
 /* ----------------------------------------------------- */
-/* 將成功大學或自己主機的 mail server 預先 define                  */
+/* 將自己主機的 mail server 預先 define                  */
 /* ----------------------------------------------------- */
 
 #ifndef DEFAULTSERVER
-//#define	DEFAULTSERVER   "mail.ncku.edu.tw"
 #define	DEFAULTSERVER   "127.0.0.1"
 #endif
 
@@ -167,7 +155,7 @@
 #define HAVE_DETECT_ZHANGBA            /* 偵測張爸文 */
 
 #undef	HAVE_PIP_FIGHT                 /* 小雞對戰 */ /* 尚未完工 很多 bug */
-//#define	HAVE_PIP_FIGHT1
+#undef	HAVE_PIP_FIGHT1
 
 #define	EMAIL_JUSTIFY                  /* 發出 InterNet Email 身份認證信函 */
 
@@ -361,7 +349,7 @@
 #define	FORCE_BOARD             BRD_ANNOUNCE  /* statue.000725 */
 #endif
 
-#define	HAVE_BBSNET             /* 提供 BBSNET */
+#undef	HAVE_BBSNET             /* 提供 BBSNET */
 
 #define HAVE_COLOR_VMSG	        /* 彩色的VMSG */
 
