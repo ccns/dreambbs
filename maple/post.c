@@ -2087,10 +2087,6 @@ post_lock(xo)
 	return XO_NONE;
 }
 
-#ifndef URL_PREFIX
-#define URL_PREFIX    "https://bbs.ccns.cc"
-#endif
-
 /*cache.080520: 新版觀看文章屬性*/ 
 	static int
 post_state(xo)

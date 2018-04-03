@@ -7,10 +7,113 @@
 ¡C­«¤jµ{¦¡½X­×§ï¥H¤Î¦UºØ bug ­×¥¿ (·|¼vÅT¨ì¨Ï¥ÎªÌ¾Þ§@µ¥±¡ªp)¡G 
   ·|µo§G¤½§i¦b ¹Ú¤§¤j¦a ( telnet://ccns.cc ) Dream_commit ¬ÝªO
 
-¦b github ªº Initial commit «e¨ä¥L­×§ï°O¿ý, 
-¥ç½Ð°Ñ¦Ò¹Ú¤§¤j¦a ( telnet://ccns.cc ) Dream_commit ¬ÝªO.
+¥H¤U¬°­·¤§¶ð(Wind's Top BBS)­ì©lª©¥»¬ÛÃö­×§ï°O¿ý¡G
 
-¥H¤U¬°¸ÓªO¬ÛÃö­×§ï¬ö¿ý:
+> ----------------------------------------------------------------------------
+
+¡C2009/07/02 gaod	­«·s¾ã²zµ{¦¡½X¡A¬Û®e©ó gcc4.x
+
+¡C2004/08/10 visor	·s¼WÂà«H¹q¤lÃ±³¹
+	­×§ïÀÉ®×	innbbsd/bbslink.c
+
+¡C2004/04/20 visor	­×§ï maple/favorite.c favorite_main() ³y¦¨Â_½uªº°ÝÃD
+	­×§ïÀÉ®×	maple/favorite.c  
+
+¡C2004/04/20 visor	­×§ï maple/cache.c observeshm_load() ³y¦¨Â_½uªº°ÝÃD
+	­×§ïÀÉ®×	maple/cache.c  
+
+¡C2004/03/13 visor	­×§ï so/pydict.c  so/dictd.c ¦w¥þ©Ê°ÝÃD
+	­×§ïÀÉ®×	so/pydict.c  so/dictd.c
+
+¡C2004/01/12 visor	­×§ï expire.c ¬å¿ù¤å³¹ bug
+	­×§ïÀÉ®×	util/expire.c
+
+¡C2003/08/29 visor	­×§ï gem-check »~¬å¤å³¹ªº°ÝÃD 
+	­×§ïÀÉ®×	util/gem-check.c 
+
+¡C2003/08/18 visor	­×§ï bmtad ¦¬ QP Encode ¤å³¹ªº°ÝÃD 
+	­×§ïÀÉ®×	bmtad/bmtad.c lib/str_decode.c
+
+¡C2003/08/17 visor	·s¼W ¬ÝªO¸ê°T²Î­p 
+	­×§ïÀÉ®×	maple/board.c maple/post.c innbbsd/receive_article.c include/struct.h 
+	·s¼WÀÉ®×	util/brdstat.c so/brdstat.c
+
+¡C2003/08/13 verit	·s¼W ³B»@¦W³æ¥[¤W·j´M 
+	­×§ïÀÉ®×	so/violate.c
+
+¡C2002/06/13 visor      ·s¼W ´`Àô¾\Åª 
+	­×§ïÀÉ®×	maple/acct.c maple/xover.c
+
+¡C2002/06/13 visor      Ãö³¬ ¤pÂû¹ï¾Ô 
+	­×§ïÀÉ®×	so/pip.c maple/talk.c
+
+¡C2002/06/13 visor      ·s¼W ±ÀÂË¤å³¹ 
+	­×§ïÀÉ®×	maple/post.c
+
+¡C2002/06/13 visor      ·s¼W ¤Õ©ú´Ñ 
+	·s¼WÀÉ®×	so/km.c
+
+¡C2002/06/12 visor      ­×§ï ¨Ï¥ÎªÌ¦W³æ¸ê®Æµ²ºc 
+	­×§ïÀÉ®×	maple/talk.c
+
+¡C2002/06/03 visor	­×§ï ³s¸p¨t²Î 
+	­×§ïÀÉ®×	so/newboard.c
+
+¡C2002/05/10 visor	·s¼W ±N­·¤§¶ð¥]¸Ë¦¨ Ports  
+
+¡C2002/04/11 visor	­×§ï ¨Ï¥ÎªÌ­×§ï¥\¯à 
+	­×§ïÀÉ®×	maple/post.c maple/acct.c include/hdr.h include/struct.h 
+			include/config.h include/global.h
+
+¡C2002/03/30 visor	·s¼W ¨t²ÎÆ[¹î¦W³æ 
+	maple/bbsd.c maple/cache.c maple/menu.c include/struct.h 
+	·s¼WÀÉ®×	so/observe.c
+
+¡C2002/03/21 visor	­×§ï ·s»D¾\Åª¨t²Î(§ì¨ú¸ô®|°ÝÃD) 
+	­×§ïÀÉ®×	util/news.c
+
+¡C2002/03/11 visor	·s¼W ½Òªí³ø®É¨t²Î 
+	·s¼WÀÉ®×	util/classtable_alert.c maple/cache.c maple/bbsd.c
+
+¡C2002/03/08 visor	­×§ï ·s»D¾\Åª¨t²Î(Ãþ§O¤W­­) 
+	­×§ïÀÉ®×	so/news_viewer.c
+
+¡C2002/03/08 visor	­×§ï ·s»D¾\Åª¨t²Î(¨Ï¥Î proxy) 
+	­×§ïÀÉ®×	util/news.c
+
+¡C2002/03/07 visor	­×§ï ¶Ç°T(¦¬°TªÌ¤U¯¸ªº°ÝÃD) 
+	­×§ïÀÉ®×	maple/talk.c
+
+¡C2002/03/06 visor	·s¼W ¦n¤Í¦W³æ·j´M¥\¯à 
+	­×§ïÀÉ®×	maple/talk.c
+
+¡C2002/03/05 visor	­×§ï ¦n¤Í¤W¯¸³qª¾(¤£¶Ç°Tµ¹Ãa¤H) 
+	­×§ïÀÉ®×	maple/talk.c
+
+¡C2002/03/05 visor	­×§ï ¨t²Îºô¤Í¨ó´M(¤£¶Ç°Tµ¹Ãa¤H) 
+	­×§ïÀÉ®×	maple/talk.c
+
+¡C2002/02/10 visor	·s¼W ©Ú¦¬°T®§¦Cªí 
+	­×§ïÀÉ®×	maple/talk.c
+
+¡C2002/01/31 visor	·s¼W ·sª©¥\½Òªí 
+	·s¼WÀÉ®×	so/table2.c
+
+¡C2001/11/21 visor	·s¼W ¦ê±µ¤å³¹¼Ò¦¡·j´M¯¸¤º¤å³¹ 
+	­×§ïÀÉ®×	maple/post.c
+
+¡C2001/07/31 visor	­×§ï ¨Ï¥ÎªÌ³ß¦n³]©w(ÂX¥R¦¨64bit) 
+	­×§ïÀÉ®×	maple/acct.c
+
+¡C2001/07/17 visor	·s¼W ·s»D¾\Åª¨t²Î 
+	·s¼WÀÉ®×	so/news_viewer.c util/news.c
+
+¡C2001/01/01 visor	·s¼W ChangeLog  
+	·s¼WÀÉ®×	ChangeLog
+
+> ----------------------------------------------------------------------------
+
+¥H¤U¬°¹Ú¤§¤j¦a ( telnet://ccns.cc ) Dream_commit ¬ÝªO¬ÛÃö­×§ï°O¿ý¡G
 
 > ----------------------------------------------------------------------------
 
@@ -464,7 +567,7 @@ Log:
 
 - gem.c: add GEM_LMANAGER flag
          we can modify fold title with "[" + "ID" to add a lite-manager
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (cache) ¯¸¤º: Dream_commit
@@ -551,7 +654,7 @@ Type:      Bug fix (thanks to girlpan)
 Log:
 
 - post: post owners can use post_title now
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (cache) ¯¸¤º: Dream_commit
@@ -587,7 +690,7 @@ Type:      System Performance
 Log:
 
 - bbsd: tn_login will be closed when loading is overhead.
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (cache) ¯¸¤º: Dream_commit
@@ -635,7 +738,7 @@ Log:
 - post.c - fix wrong msg and board information
            battr &  BRD_MODIFY: "§@ªÌ­×¤å" => "¡¹ ¸T¤î§@ªÌ­×¤å"
            battr & ~BRD_MODIFY: "§@ªÌ­×¤å" => "¡¹ ¤¹³\§@ªÌ­×¤å"
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (cache) ¯¸¤º: Dream_commit
@@ -756,7 +859,7 @@ Log:
 - account.c - refine code and clean useless logger
 
 - acct.c - when SYSOPs access any user data, this action will be logged now
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -777,7 +880,7 @@ Log:
                        ([1;36mS[m)etBoard   ³]©w¬ÝªO[m
 
 - maple.p - refine code
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -794,7 +897,7 @@ Log:
 - acct.c - refine log file path
 
 - observe.c - for some bad guys, SYSOPs can trace his post history
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -817,7 +920,7 @@ Caution: this function will be available on [1;32m2010/06/18 ~ 2010/06/24[m
 - menu.c - add ([1;36mD[m)ream     ¡i ¹Ú¤jªA°È°Ï ¡j[m
                    ([1;36mC[m)ache     ¡i ¥[­ÈªA°È°Ï ¡j[m
                        ([1;36mM[m)yMoney    ¡@¶×¤JÂÂ¹Ú¹ô[m
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -871,7 +974,7 @@ Type:      Bug fix (thanks to lceCream)
 Log:
 
 - bank.c - fix Remittance function, add logger for money flow
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -886,7 +989,7 @@ Type:      Bug fix
 Log:
 
 - song.c - refine code, add logger for anonymous orders
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -918,7 +1021,7 @@ Type:      Bug fix
 Log:
 
 - post.c - there is a bug about MODIFY_TAG at post_edit()
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -954,7 +1057,7 @@ Log:
 - shop.c - hidefrom_temp() will cause system error, we've closed it...
 
 - post.c - refine code
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -974,7 +1077,7 @@ Log:
 
 
 Caution: "¶×¤JÂÂ¹Ú¹ô" this function will be closed at 6/24 0:00
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -992,7 +1095,7 @@ Log:
            [1;33;44m¡i ¬ÝªO³]©w ¡j[m (D)§R°£[m now is fixed.
 
 Caution: Please DO NOT try to delete ºëµØ°Ï¯Á¤Þ and ºëµØ°Ï²§°Ê, f_rm is buggy.
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1007,7 +1110,7 @@ Type:      Bug fix
 Log:
 
 - acct.c - refine code, SYSOPs must give reason for modification.
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1029,7 +1132,7 @@ Log:
            post paid rule is changed now...
 
 - edit.c - add ANTI_PHONETIC words_check()
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1052,7 +1155,7 @@ Log:
            refine BRD information...
 
            [1;37;44m ¬ÝªO³]©w¤Î¸ê°T¬d¸ß¡G[m ¸Tª`­µ¤å - Ãö³¬/[1;33m¶}±Ò[m
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1067,7 +1170,7 @@ Type:      Bug fix
 Log:
 
 - post.c - refine numpost calculation rule...
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1108,7 +1211,7 @@ Log:
 --
 
 Happy Father's Day   :)
-[m
+
 
 > -------------------------------------------------------------------------- <
 
@@ -1128,7 +1231,7 @@ Log:
 - cleanrecommend.c - refine code
 
 telnet://ccns.cc this URL is available since 2010/08/10
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1144,7 +1247,7 @@ Log:
 
 - cleanrecommend.c - refine code, remove useless code
 
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1189,7 +1292,7 @@ Type:      Bug fix
 Log:
 
 - myfavorite.c  change statebrd when go into gem by myfavorite
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1214,7 +1317,7 @@ post.c - Add RSS feed (¬ÝªO RSS µo§G¥\¯à)
 Example: In iGoogle, add URL http://bbs.ccns.cc/Dream_commit.xml ,
          you can get new posts on this board through your RSS reader.
 
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1239,7 +1342,7 @@ This patch is public on telnet://cpu.twbbs.org now.
 [34;47m §@ªÌ [37;44m cache (Å]ªk¶Æ¼b¶W¹qºÏ¯¥)                                   [34;47m ¬ÝªO [37;44m itoc [40m
 [34;47m ¼ÐÃD [37;44m [¥\¯à] ¤å³¹¦nÅª(web)¤Î RSS feed ¥\¯à                                   [40m
 [34;47m ®É¶¡ [37;44m 2010/10/29 Fri 12:04:40                                                [40m  [m
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1254,7 +1357,7 @@ Type:      Bug fix
 Log:
 
 - myfavorite.c - add brd->bvote tag
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1285,7 +1388,7 @@ Log:
     (V)     ªO¥D¹wÄý¥Ø«e§ë²¼/½ä½Lµ²ªG
     (b)     ¥ß§Y¶}²¼
 
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1307,7 +1410,7 @@ Log:
 
 - menu.c - add MSG [5;41;1m ¦¬¨ì·s¤ä²¼¤F! [m
 
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1324,7 +1427,13 @@ Log:
 - account.c - refine draw_vote()
 
 - bbsd.c - refine u_exit()
-[m
+
+
+> -------------------------------------------------------------------------- <
+
+¡C2012/04/25 float ­×§ï¦Ê¦~ÂÎµLªk¥Ó½Ð­ÓªO°ÝÃD
+	­×§ïÀÉ®×	so/personal.c
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1369,7 +1478,7 @@ Log:
 NOTE:
 
   Thanks to renn999 for his anti-bot policy
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1426,7 +1535,7 @@ NOTE:
       [1;33m//return XO_NONE;[m
 
 
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: cache (¹Ú¤§¤j«Ò) ¯¸¤º: Dream_commit
@@ -1496,10 +1605,10 @@ NOTE:
 1. When system asking you whether ordering a song to camera :
 
 origin:
-[m½T©wÂIºq¶Ü [Y/n]¡G[30;47m   [m
+½T©wÂIºq¶Ü [Y/n]¡G[30;47m   [m
 
 corrected:
-[m½T©wÂIºq¶Ü [y/N]¡G[30;47m   [m
+½T©wÂIºq¶Ü [y/N]¡G[30;47m   [m
 
 (default option is always NOT)
 
@@ -1510,7 +1619,7 @@ corrected:
 origin:
 > ------------
 
-[m[1;44m¡i§Úªº³Ì·R¡j                       [33m¹Ú¤§¤j¦a[37m                      ¬ÝªO¡mSYSOP¡n[m
+[1;44m¡i§Úªº³Ì·R¡j                       [33m¹Ú¤§¤j¦a[37m                      ¬ÝªO¡mSYSOP¡n[m
 [¡ö]¥D¿ï³æ [¡÷]¾\Åª [¡ô¡õ]¿ï¾Ü [c]½g¼Æ [/]·j´M [s]¬ÝªO [h]»¡©ú
 [44m  ½s¸¹   ¬Ý  ªO            ¤¤   ¤å   ±Ô   ­z                ¤H®ð ªO    ¥D     [m
 
@@ -1519,7 +1628,7 @@ origin:
 corrected:
 > ------------
 
-[m[1;44m¡i§Úªº³Ì·R¡j                       [33m¹Ú¤§¤j¦a[37m                      ¬ÝªO¡mSYSOP¡n[m
+[1;44m¡i§Úªº³Ì·R¡j                       [33m¹Ú¤§¤j¦a[37m                      ¬ÝªO¡mSYSOP¡n[m
 [¡ö]¥D¿ï³æ [¡÷]¾\Åª [¡ô¡õ]¿ï¾Ü [c]½g¼Æ [/]·j´M [s]¬ÝªO
 [44m  ½s¸¹   ¬Ý  ªO            ¤¤   ¤å   ±Ô   ­z                ¤H®ð ªO    ¥D     [m
 
@@ -1551,7 +1660,7 @@ game/
 
 NOTE:
 
-[m1. add back help tips for ([1;36mF[m)avorite §Úªº³Ì·R
+1. add back help tips for ([1;36mF[m)avorite §Úªº³Ì·R
 
 For solving :
 
@@ -1569,7 +1678,7 @@ http://bbs.ccns.cc/SYSOP/A15SME1C
 and add back [1;35m[h][m +
 [1;33msome simple instruction[m of how to add my favorite:
 
-[m[1;44m¡i§Úªº³Ì·R¡j                       [33m¹Ú¤§¤j¦a[37m                      ¬ÝªO¡mSYSOP¡n[m
+[1;44m¡i§Úªº³Ì·R¡j                       [33m¹Ú¤§¤j¦a[37m                      ¬ÝªO¡mSYSOP¡n[m
 [¡ö]¥D¿ï³æ [¡÷]¾\Åª [1;33m[^P]·s¼W [d]§R°£[m [c]½g¼Æ [/]·j´M [s]¬ÝªO [1;35m[h]»¡©ú[m
 [44m  Á`¼Æ   ¬Ý  ªO            ¤¤   ¤å   ±Ô   ­z                ¤H®ð ªO    ¥D     [m
 
@@ -1580,7 +1689,7 @@ correct myfav switching problem (detail)
 If there's any bug, please report to  [m[1;44m¬ÝªO¡mDLbbs-Change¡n[m ,
 
 thanks! :)
-[m
+
 3.
 
 correct game SegFault Problem.
@@ -1605,7 +1714,7 @@ Note:
 test another pmore LIGHT-ON layout feature (Not show on the center)
 
 now you can press " [1;33m\[m " to test it out. :)
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: r2 (d2) ¯¸¤º: Dream_commit
@@ -1658,7 +1767,7 @@ Simple testing for also using "[1;33m%[m" this key to score the post.
 (for maple3-itoc feature)
 
 Now you can use "[1;33mX[m/[1;33m%[m" to score the post.
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: r2 (d2) ¯¸¤º: Dream_commit
@@ -1680,7 +1789,7 @@ Simple testing for also using "[1;33ms[m" this key to select board in main men
 (for features of most BBS)
 
 Ctrl+S to select board in main menu still works.
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
@@ -1702,7 +1811,7 @@ NOTE:
 Try to fix counting ( [m[30;47m ¥Ø«e¯¸¤W¦³[31m  52[30m ¤H[m ) error,
 
 and reboot the system this morning.
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
@@ -1727,14 +1836,14 @@ You can checked it from these details:
 
 1. push '[1;33m\[m' when you're reading articles:
 
-[m[30;47m piaip's more: pmore 2007+ §Ö³t³]©w - ¦â±m(ANSI½X)Åã¥Ü¼Ò¦¡                   [m
+[30;47m piaip's more: pmore 2007+ §Ö³t³]©w - ¦â±m(ANSI½X)Åã¥Ü¼Ò¦¡                   [m
  [1;31m\[m ¦â±mÅã¥Ü¤è¦¡:         [1;31m1[36m*¹w³]®æ¦¡¤Æ¤º®e[30m |[31m2[m ­ì©lANSI±±¨î½X[1;30m |[31m3[m ¯Â¤å¦r
 [34;46m ¡¹ ½Ð½Õ¾ã³]©w (1-3 ¥iª½±µ¿ï©w¡A\¥i¤Á´«) ©Î¨ä¥¦¥ô·NÁäµ²§ô¡C[31;47m [½Ð«ö¥ô·NÁäÄ~Äò] [m
 
 
 2. push '[1;33mo[m' when you're reading articles:
 
-[m[30;47m piaip's more: pmore 2007+ ³]©w¿ï¶µ                                          [m
+[30;47m piaip's more: pmore 2007+ ³]©w¿ï¶µ                                          [m
 
  [1;31m\[m ¦â±mÅã¥Ü¤è¦¡:         [1;36m*¹w³]®æ¦¡¤Æ¤º®e[30m |[m ­ì©lANSI±±¨î½X[1;30m |[m ¯Â¤å¦r
  [1;31mw[m Â_¦æ¤è¦¡:              ª½±µºI¦æ[1;30m |[36m*¦Û°ÊÂ_¦æ[m
@@ -1774,7 +1883,7 @@ NOTE:
 Try to add credit of ordersong automatically again. :)
 
 ¸Õ¦æ­×¥¿¨Ã«ì´_ÂIºq¦¸¼Æ¨C©P¦Û°Ê¼W¥[¤§¾÷¨î
-[m
+
 > -------------------------------------------------------------------------- <
 
 §@ªÌ: r2 (d2) ¬ÝªO: Dream_commit
@@ -1798,7 +1907,7 @@ improve menu interface:
 ½Õ¾ã¿ï¶µ­^¤å¦r¥À¶}ÀY, ºÉ¥i¯à¤£»P s ©Î e ­«½Æ
 
 ¸Õ¦æ¥¼»{ÃÒ¨Ï¥ÎªÌ¤´¥i¶i¤J§Úªº³Ì·R°Ï
-[m
+
 ¸Õ¦æ½Õ¾ã¥¼»{ÃÒ¨Ï¥ÎªÌµLªkµo¤å¤§¨t²Î´£¥Ü
 
 
@@ -1881,7 +1990,7 @@ Origin:
 
 New:
 
-[m[1;32m¡° Modify: [33m<140.116.101.37> [mSun Oct 22 00:41:59 2017
+[1;32m¡° Modify: [33m<140.116.101.37> [mSun Oct 22 00:41:59 2017
 
 *[m*[1;32m¡° Modify: *[33m<140.116.101.37> *[mSun Oct 22 00:41:59 2017
 
@@ -1913,7 +2022,7 @@ NOTE:
 ¼ÐÃD: DreamBBS commit r90
 ®É¶¡: Fri Feb  9 08:15:06 2018
 
-Time:      2017/2/9
+Time:      2018/2/9
 Revision:  90
 Type:      Fix
 
@@ -1935,7 +2044,7 @@ NOTE:
 ¼ÐÃD: DreamBBS commit r91
 ®É¶¡: Sat Mar  3 20:25:51 2018
 
-Time:      2017/3/3
+Time:      2018/3/3
 Revision:  91
 Type:      Bug Fixing
 
@@ -1951,4 +2060,17 @@ NOTE:
 2. ´ú¸Õ¡u±H«H¨ì¬ÝªO¡v¥\¯à
 
 ¤´¦b´ú¸Õ¶¥¬q¡A¤´¤£«OÃÒ·|«ùÄò¶}±Ò¦¹ªA°È
+
+> -------------------------------------------------------------------------- <
+
+ªñ´Á­«¤j§ó·s
+
+* ·s¼W¥´¥]¨ì«H½c¥\¯à (2018/3/15)
+
+* ´ú¸Õ¨Ï¥Î NetBSD make + llvm clang ½sÄ¶ (2018/4)
+
+* ¤ÀÂ÷³]©wÀÉ dreambbs.conf (2018/4)
+
+* ¹Á¸Õ¤ÀÂ÷ keeplog ¨ç¦¡ (2018/4)
+
 

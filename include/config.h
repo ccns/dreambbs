@@ -9,6 +9,8 @@
 #ifndef	_CONFIG_H_
 #define	_CONFIG_H_
 
+#include "../dreambbs.conf"
+
 #undef	TREAT
 #undef	TRANUFO
 
@@ -16,30 +18,60 @@
 /* 定義 BBS 站名位址					 */
 /* ------------------------------------------------------*/
 
+#ifndef BOARDNAME
 #define BOARDNAME       "夢之大地"                  /* 中文站名 */
+#endif
+
+#ifndef NICKNAME
 #define NICKNAME        "夢大"                      /* 中文簡稱 */
+#endif
+
+#ifndef OWNER
 #define OWNER	        "NCKU.CCNS"                 /* 學校簡稱 */
+#endif
+
+#ifndef MYHOSTNAME
 #define MYHOSTNAME      "ccns.cc"                   /* 網路位址 */
+#endif
+
 #define BBSVERSION      "Rev.Beta 3"                /* 版本編號 */
+
+#ifndef SYSOPNICK
 #define SYSOPNICK       "夢之精靈"                  /* SYSOP 暱稱 */
+#endif
+
+#ifndef BBSHONE
 #define BBSHOME	        "/home/bbs"                 /* BBS 的家 */
+#endif
+
+#ifndef BBSUID
 #define BBSUID	        9999
+#endif
+
+#ifndef BBSGID
 #define BBSGID          999
+#endif
+
+#ifndef TAG_VALID
 #define TAG_VALID       "[DreamBBS]To "             /* 身分認證函token */
+#endif
+
+#ifndef HIDEDN_SRC
 #define	HIDEDN_SRC      "bbs.ccns.ncku.edu.tw"      /* 隱藏來源位置 */
+#endif
+
+#ifndef BBSNAME
 #define BBSNAME	        "DreamBBS"                  /* 英文站名 */
+#endif
+
+#ifndef BBSIP
 #define	BBSIP           "140.116.249.140"           /* bbs 的 ip */
+#endif
 
-#define URL_PREFIX      "https://bbs.ccns.cc"       /* r2.20170926: 自行客製化ccns好讀版網址 */
-
-/* r2:  可自行定義 ORIGIN_TAG，客製化站簽               */
-
-#define ORIGIN_TAG \
-"--\n" \
-"\033[1;44;32m  ◢\033[0;32;44m◣   \033[1;37m︵︵     \033[30m█▔◣ █▔█ █▔▔ █▔█ █▆▉ █   █▔█ █◣█ █▔\033[31m● \033[m\n" \
-"\033[1;32;44m◢\033[42m◤\033[0;44;32m█◣\033[1m◢\033[0;32;44m◣ \033[1;37m︵︵ \033[0;37;44m█  █ █▁◤ █▁▁ █▁█ ▉▉▉ █   █▁█ █◥█ █  █ \033[m\n" \
-"\033[1;36;42m夢之大地 逼逼ㄟ四 \033[37m█▁◤ █  █ █▁▁ █  █ ▉▉▉ █▁ █  █ █  █ █▁◤ \033[m\n" \
-"\033[1;32m※ Origin:\033[33m <bbs.ccns.ncku.edu.tw>  \033[31m◆ From:\033[36m %-34.34s \033[m\n"
+/* r2.20170926: 自行客製化ccns好讀版網址 */
+#ifndef URL_PREFIX
+#define URL_PREFIX    "https://bbs.ccns.cc"
+#endif
 
 /* ----------------------------------------------------- */
 /* Modules & Plug-in                       by cache      */
@@ -55,8 +87,6 @@
 
 #define Modules                 /* 顯示模組資訊 */
 #define MultiRecommend          /* 顯示多重推文 */
-
-#define M3_USE_PMORE            /* piaip's more 2007+ */
 
 #define GRAYOUT                 /* 淡入淡出特效系統 */
 
@@ -88,19 +118,25 @@
 /* guest的名字                             by Jerics     */
 /* ------------------------------------------------------*/
 
+#ifndef MASGUEST
 #define	MAXGUEST	(16)		/* 最多有幾個 guest？ */
+#endif
 
 #define GUESTNAME       (1)             /* guest名稱的數量 */
 #define GUEST_NAMES     GUEST_1
-#define GUEST_1         "夢之大地訪客"
+#define GUEST_1         BOARDNAME"訪客"
 
+#ifndef CHATROOMNAME
 #define CHATROOMNAME    "夢言夢語"
+#endif
 
 /* ----------------------------------------------------- */
-/* 將成功大學的 mail server 預先 define                  */
+/* 將自己主機的 mail server 預先 define                  */
 /* ----------------------------------------------------- */
 
-#define	DEFAULTSERVER   "mail.ncku.edu.tw"
+#ifndef DEFAULTSERVER
+#define	DEFAULTSERVER   "127.0.0.1"
+#endif
 
 #define NCKUMAIL        "mail.ncku.edu.tw"
 
@@ -108,7 +144,9 @@
 /* 組態規劃						 */
 /* ------------------------------------------------------*/
 
-#define CLASS_HOT (10)                 /* 熱門看板臨界值 */
+#ifndef CLASS_HOT
+#define CLASS_HOT (5)                  /* 熱門看板臨界值 */
+#endif
 
 #undef CAN_POSTFIX                     /* po文前選擇文章類別 */
 
@@ -117,7 +155,7 @@
 #define HAVE_DETECT_ZHANGBA            /* 偵測張爸文 */
 
 #undef	HAVE_PIP_FIGHT                 /* 小雞對戰 */ /* 尚未完工 很多 bug */
-#define	HAVE_PIP_FIGHT1
+#undef	HAVE_PIP_FIGHT1
 
 #define	EMAIL_JUSTIFY                  /* 發出 InterNet Email 身份認證信函 */
 
@@ -131,9 +169,11 @@
 
 #define	HAVE_RECOMMEND                 /* 推薦文章 */
 
+//#ifdef __FreeBSD__
 #define	HAVE_MMAP               /* 採用 mmap(): memory mapped I/O */
 				/* 在 SunOS、FreeBSD 上可以加速 30 倍 */
 				/* Linux 的 mmap() 有問題，請暫時不要用 */
+//endif //#ifdef __FreeBSD__
 
 #ifdef	HAVE_MMAP
 #include <sys/mman.h>
@@ -309,7 +349,7 @@
 #define	FORCE_BOARD             BRD_ANNOUNCE  /* statue.000725 */
 #endif
 
-#define	HAVE_BBSNET             /* 提供 BBSNET */
+#undef	HAVE_BBSNET             /* 提供 BBSNET */
 
 #define HAVE_COLOR_VMSG	        /* 彩色的VMSG */
 

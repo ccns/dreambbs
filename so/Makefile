@@ -7,6 +7,8 @@
 #  update : 18/03/28                                     #
 # ------------------------------------------------------ #
 
+ARCHI	!= uname -m
+
 UNAME	!= uname
 
 HDR	= bbs.h config.h global.h modes.h perm.h struct.h
@@ -23,9 +25,14 @@ CC	= clang
 
 CPROTO	= cproto -E\"clang -pipe -E\" -I../include
 
-CFLAGS	= -g -m32 -O2 -pipe -fomit-frame-pointer -Wunused -I../include
+CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wunused -I../include
 
-LDFLAGS	= -m32 -L../lib -ldao -lcrypt 
+LDFLAGS	= -L../lib -ldao -lcrypt 
+
+.if  $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
+CFLAGS	+= -m32
+LDFLAGS	+= -m32
+.endif
 
 .if $(UNAME) == "FreeBSD"
 LDFLAGS	+= -Wl,-export-dynamic
@@ -61,4 +68,4 @@ install: $(EXE)
 	install -m 0700 $(SO) $(HOME)/bin
 
 clean: /tmp
-	rm -fr $(SO) *~ *.o DEADJOE
+	rm -fr $(SO) *~ *.o
