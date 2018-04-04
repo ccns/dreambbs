@@ -11,7 +11,7 @@ ARCHI	!= uname -m
 UNAME	!= uname
 
 CC	= clang
-CFLAGS	= -g -O2 -I../include -fomit-frame-pointer -Wunused
+CFLAGS	= -g -O2 -I../include -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding
 LDFLAGS	= -L../lib -ldao -lcrypt
 
 .if  $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"

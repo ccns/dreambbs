@@ -13,7 +13,7 @@ UNAME	:= $(shell uname)
 ARCHI	:= $(shell uname -m)
 
 CC	= clang
-CFLAGS	= -g -O2 -I../include -fomit-frame-pointer -Wunused
+CFLAGS	= -g -O2 -I../include -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding
 LDFLAGS	= -L../lib -ldao -lcrypt
 
 ifeq ($(ARCHI),x86_64) 

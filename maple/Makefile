@@ -42,7 +42,7 @@ CC	= clang
 
 CPROTO	= cproto -E\"clang -pipe -E\" -I../include -I/usr/local/include
 
-CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wunused -I../include
+CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding -I../include
 
 LDFLAGS	= -L../lib -ldao -lcrypt  
 

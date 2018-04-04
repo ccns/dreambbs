@@ -12,7 +12,7 @@ ARCHI	!= uname -m
 CC	= clang
 RANLIB	= ranlib
 CPROTO	= $(which cproto) -E\"clang -pipe -E\" -I../include
-CFLAGS	= -O2 -pipe -fomit-frame-pointer -Wunused -I../include 
+CFLAGS	= -O2 -pipe -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding -I../include
 
 .if  $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
 CFLAGS	+= -m32

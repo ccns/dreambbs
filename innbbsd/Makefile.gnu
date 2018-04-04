@@ -23,7 +23,7 @@ EXE	= innbbsd bbslink
 
 CC	= clang
 
-CFLAGS	= -g -O2 -pipe -I../include -fomit-frame-pointer -Wunused
+CFLAGS	= -g -O2 -pipe -I../include -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding
 
 LDFLAGS	= -L../lib -ldao
 
