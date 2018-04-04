@@ -2162,19 +2162,6 @@ Student()
 }
 #endif
 
-#ifdef	HAVE_ACTIVITY
-int
-Activity()
-{
-  int chn;
-  chn = brd_bno(BRD_ABULLETIN);
-  XoPost(chn);
-  xover(XZ_POST);
-  time(&brd_visit[chn]);
-  return 0;
-}
-#endif
-
 #ifdef	HAVE_PROFESS
 int
 Profess()
@@ -2216,7 +2203,6 @@ board_main()
   char fpath[128];
 #endif
 //  brh_load();
-
 
 #ifdef	HAVE_RECOMMEND
   recommand_time = time(0);

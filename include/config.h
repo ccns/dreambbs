@@ -220,16 +220,11 @@
 
 #undef	HAVE_PROFESS            /* 使用專業討論區 */
 
-#define HAVE_STUDENT            /* 使用學生公告區 */
-
-#define HAVE_ACTIVITY           /* gaod:活動公告區 */
-#ifdef HAVE_ACTIVITY
-#define BRD_ABULLETIN   "activity"
-#endif
+//#define HAVE_STUDENT            /* 使用學生公告區 */
 
 #define	HAVE_USER_MODIFY        /* 使用者修改文章 */
 
-#define	HAVE_INFO               /* 使用校方公告區 */
+//#define HAVE_INFO               /* 使用校方公告區 */
 
 #define	HAVE_SHOWNUMMSG         /* 顯示水球個數 */
 

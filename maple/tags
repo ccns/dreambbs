@@ -524,8 +524,6 @@ GemFolder	gem.c	/^static char GemFolder[80], GemAnchor[80], GemSailor[24];$/;"	v
 GemSailor	gem.c	/^static char GemFolder[80], GemAnchor[80], GemSailor[24];$/;"	v	file:
 Get_Socket	socket.c	/^Get_Socket(site, sock)  \/* site for hostname, sock for port & socket *\/$/;"	f
 HAS_PERM	../include/perm.h	/^#define HAS_PERM(/;"	d
-HAVE_ACTIVITY	board.c	/^#define	HAVE_ACTIVITY$/;"	d	file:
-HAVE_ACTIVITY	menu.c	/^#define HAVE_ACTIVITY$/;"	d	file:
 HAVE_ALOHA	../include/config.h	/^#define	HAVE_ALOHA /;"	d
 HAVE_ANONYMOUS	../include/config.h	/^#define HAVE_ANONYMOUS	/;"	d
 HAVE_BANMSG	../include/config.h	/^#define	HAVE_BANMSG	/;"	d

@@ -25,11 +25,6 @@ extern time_t brd_visit[MAXBOARD];
 #define STUDENT_HAVE	"1Student  【 \033[41;33;1m快進來看看\033[m 】"
 #endif
 
-#ifdef	HAVE_ACTIVITY
-#define	ACTIVITY_EMPTY	"2Activity 【 \033[1;36m活動公告區\033[m 】"
-#define	ACTIVITY_HAVE	"2Activity 【 \033[41;33;1m快進來看看\033[m 】"
-#endif
-
 static int
 system_result()
 {
@@ -853,11 +848,9 @@ static MENU menu_talk[] =
   {t_query, 0, M_QUERY,
   "Query      查詢網友"},
 
-#if 0
-  /* Thor.990220: 改採外掛 */
+  /* Thor.990220: chatroom client 改採外掛 */
   {"bin/chat.so:t_chat", PERM_CHAT, - M_CHAT,
-  "Chat       " NICKNAME CHATROOMNAME},
-#endif
+  "ChatRoom   " NICKNAME CHATROOMNAME},
 
   {t_recall, PERM_BASIC, M_XMODE,
   "Write      回顧前幾次熱訊"},
@@ -1128,11 +1121,6 @@ static MENU menu_service[] =
   STUDENT_EMPTY},
 #endif
 
-#ifdef	HAVE_ACTIVITY
-  {Activity, 0, M_BOARD,
-  ACTIVITY_EMPTY},
-#endif
-
 /* 091007.cache: 拉人灌票沒意義... */
   
   {"bin/newboard.so:XoNewBoard", PERM_VALID, - M_XMODE,
@@ -1303,7 +1291,7 @@ int count_len(data)
 char *
 check_info(char *input)
 {
-#if defined(HAVE_INFO) || defined(HAVE_STUDENT) || defined(HAVE_ACTIVITY)
+#if defined(HAVE_INFO) || defined(HAVE_STUDENT)
   BRD *brd;
 #endif  
   char *name = NULL;
@@ -1332,18 +1320,7 @@ check_info(char *input)
      }
   }
 #endif
-#ifdef	HAVE_ACTIVITY
-  if(!strcmp(input,ACTIVITY_EMPTY))
-  {
-    brd = bshm->bcache + brd_bno(BRD_ABULLETIN);
-    if(brd)
-    {
-      check_new(brd);
-      if(brd->blast > brd_visit[brd_bno(BRD_ABULLETIN)])
-        name = ACTIVITY_HAVE;
-    }
-  }
-#endif
+
   return name;
 }
 

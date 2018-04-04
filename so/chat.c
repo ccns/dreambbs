@@ -577,7 +577,7 @@ t_chat()
 	for (;;)
 	{
 		move(b_lines - 1, 0);
-		outs("若不進入聊天室，則暱稱請使用 * ");
+		outs("若不進入聊天室，則暱稱請使用 \x1b[1;33;45m * \x1b[0m \n");
 		ch = vget(b_lines, 0, "請輸入聊天代號：", chatid, 9, DOECHO);
 		if (ch == '/')
 			continue;
