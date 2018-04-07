@@ -2044,7 +2044,7 @@ every_Z_Orig()
 static int
 Every_Z_Favorite()
 {
-  Favorite();
+  MyFavorite();
   return 0;
 }
 
