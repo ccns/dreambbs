@@ -3,9 +3,9 @@
 #include <fcntl.h>
 
 static struct flock fl = {
-  l_whence: SEEK_SET,
-  l_start: 0,
-  l_len: 0,
+  .l_whence = SEEK_SET,
+  .l_start = 0,
+  .l_len = 0,
 };
 
 int
