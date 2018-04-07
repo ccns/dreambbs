@@ -297,7 +297,7 @@ main(argc, argv)
     if (!(dirp = opendir(".")))
       continue;
 
-    while (de = readdir(dirp))
+    while ( ( de = readdir(dirp) ) )
     {
       OLD old;
       int fd;

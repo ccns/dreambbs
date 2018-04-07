@@ -36,7 +36,7 @@ EXE	= account acl-sort camera expire gem-check gem-index makeUSR \
 	  classtable_alert bmw-dump tranBRD \
 	  brdstat dump-brdstat base64encode \
 	  msgall transacct showACCT showBRD \
-	  backup brdmail
+	  backup brdmail addpost
 
 all: 
 	@$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
@@ -222,6 +222,9 @@ backup: backup.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 brdmail: brdmail.o
+	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
+
+addpost: addpost.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 install: $(EXE)

@@ -21,7 +21,7 @@ mailog(msg)
   char *msg;
 {
   FILE *fp;
-  if (fp = fopen(LOG_FILE, "a"))
+  if ( ( fp = fopen(LOG_FILE, "a") ) )
   {
     time_t now;
     struct tm *p;
@@ -126,7 +126,7 @@ start:
       if (*str == '\0')
 	return EX_NOUSER;
 
-      if (ptr = strchr(str, '\n'))
+      if ( ( ptr = strchr(str, '\n') ) )
 	*ptr = '\0';
 
       str_from(str, owner, nick);
@@ -137,7 +137,7 @@ start:
 
       /* itoc.040804: 擋信黑白名單 */
       str_lower(buf, owner);	/* 保持原 email 的大小寫 */
-      if (ptr = (char *) strchr(buf, '@'))
+      if ( ( ptr = (char *) strchr(buf, '@') ) )
       {
 	*ptr++ = '\0';
 
