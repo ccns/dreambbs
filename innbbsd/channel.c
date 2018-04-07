@@ -453,7 +453,7 @@ channelreader(client)
       }
       else if ((dp->mode == 0 || dp->mode == 1) && (client->mode != dp->mode))	/* 檢查 data/command mode 是否滿足要求 */
       {
-	fprintf(out, "%d %s error\r\n", dp->name, dp->errorcode);
+	fprintf(out, "%d %s error\r\n", dp->errorcode, dp->name);
 	fflush(out);
       }
       else		/* 通過以上三道檢查 */
