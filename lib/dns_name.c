@@ -8,8 +8,6 @@
 
 
 #include "bbs.h"        /* lkchu.981201: ¬O§_¦³ define HAVE_ETC_HOSTS */
-#include "dns.h"
-
 
 /* ----------------------------------------------------- */
 /* get host name by IP address				 */

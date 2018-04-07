@@ -1863,7 +1863,7 @@ is_pal	talk.c	/^is_pal(userno)$/;"	f
 is_quoted	edit.c	/^is_quoted(str)$/;"	f	file:
 isprint2	../include/global.h	/^#define	isprint2(/;"	d
 isreturn	../lib/str_decode.c	/^isreturn(c)$/;"	f	file:
-isspace	../lib/str_decode.c	/^isspace(c)$/;"	f	file:
+is_space	../lib/str_decode.c	/^isspace(c)$/;"	f	file:
 item	../include/struct.h	/^  CLASS_TABLE_ALERT_ITEM item[78];$/;"	m	struct:__anon64
 item_lenth	menu.c	/^int item_lenth[20]={0};$/;"	v
 join_up	edit.c	/^join_up(line)$/;"	f	file:

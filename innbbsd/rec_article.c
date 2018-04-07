@@ -19,6 +19,7 @@
 #include "innbbsconf.h"
 #include "bbslib.h"
 #include "inntobbs.h"
+#include "nocem.h"
 #include <time.h>
 #include <sys/time.h>
 

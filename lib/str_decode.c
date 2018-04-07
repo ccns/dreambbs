@@ -6,9 +6,8 @@
 /* update : 97/03/29				 	 */
 /*-------------------------------------------------------*/
 
-
 #include <string.h>
-
+#include "dao.h"
 
 /* ----------------------------------------------------- */
 /* QP code : "0123456789ABCDEF"				 */
@@ -67,7 +66,7 @@ isreturn(c)
 
 
 static inline int 
-isspace(c)
+is_space(c)
   unsigned char c;
 {
   return c == ' ' || c == '\t' || isreturn(c);
@@ -83,7 +82,7 @@ mm_getencode(str, code)
   if (str)
   {
     /* skip leading space */
-    while (isspace(*str))
+    while (is_space(*str))
       str++;
 
     if (!str_ncmp(str, "quoted-printable", 16))
@@ -326,7 +325,7 @@ str_decode(str)
     if (*src != '=')
     {				/* Thor: not coded */
       unsigned char *tmp = src;
-      while (adj && *tmp && isspace(*tmp))
+      while (adj && *tmp && is_space(*tmp))
 	tmp++;
       if (adj && *tmp == '=')
       {				/* Thor: jump over space */

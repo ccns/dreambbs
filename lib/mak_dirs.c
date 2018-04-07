@@ -2,9 +2,8 @@
 /* make directory hierarchy [0-9A-V] : 32-way interleave */
 /* ----------------------------------------------------- */
 
-
 #include <sys/stat.h>
-
+#include <unistd.h>
 
 void
 mak_dirs(fpath)

@@ -3,7 +3,7 @@
 /* ----------------------------------------------------- */
 
 #include <string.h>
-#include <dao.h>
+#include "dao.h"
 
 static void
 mak_fpath(str, key, name)

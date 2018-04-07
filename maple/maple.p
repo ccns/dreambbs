@@ -1,7 +1,7 @@
 /* acct.c */
 
 void logitfile(char *file, char *key, char *msg);
-void keeplog(char *fnlog, char *board, char *title, int mode);
+/* void keeplog(char *fnlog, char *board, char *title, int mode); */
 int acct_load(ACCT *acct, char *userid);
 void acct_save(ACCT *acct);
 int acct_userno(char *userid);
@@ -37,6 +37,9 @@ void addpoint1(int addend, char *userid);
 void addpoint2(int addend, char *userid);
 int u_verify(void);
 int a_editbrd(void);
+#ifdef TEST_COSIGN
+int valid_brdname(char *brd);
+#endif
 
 /* bbsd.c */
 

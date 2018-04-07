@@ -22,12 +22,17 @@ extern spamrule_t *SPAMRULE;
 extern int initial_bbs();
 extern void bbslog(char *fmt, ...);
 
+/* convcode.c */
+extern void b52gb(char *str);
+extern void gb2b5(char *str);
+
 /* rec_article.c */
 extern void init_bshm();
 extern int cancel_article();
 extern int receive_article();
 #ifdef _NoCeM_
 extern int receive_nocem();
+extern int read_ncmperm();
 #endif
 
 #endif	/* _BBSLIB_H_ */

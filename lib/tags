@@ -72,7 +72,7 @@ is_fname	is_fname.c	/^is_fname(str)$/
 is_fpath	is_fpath.c	/^is_fpath(path)$/
 isprint2	../include/global.h	/^#define	isprint2(c)	((c >= ' ')) \/* ((c & 0x80 ||/
 isreturn	str_decode.c	/^isreturn(c)$/
-isspace	str_decode.c	/^isspace(c)$/
+is_space	str_decode.c	/^isspace(c)$/
 mak_dirs	mak_dirs.c	/^mak_dirs(fpath)$/
 mak_fpath	f_path.c	/^mak_fpath(str, key, name)$/
 med3	xsort.c	/^med3(a, b, c, cmp)$/

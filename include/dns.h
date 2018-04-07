@@ -59,6 +59,7 @@ typedef union
   u_char buf[MAXPACKET];
 }     querybuf;			/* response of DNS query */
 
+#include "../lib/dns.p"
 
 static inline unsigned short
 getshort(c)

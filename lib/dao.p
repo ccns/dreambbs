@@ -15,11 +15,13 @@ unsigned long dns_addr(char *name);
 /* dns_name.c */
 int dns_name(unsigned char *addr, char *name);
 /* dns_smtp.c */
+void dns_mx(char *domain, char *mxlist);
 int dns_smtp(char *host);
 /* dns_ident.c */
 void dns_ident(int sock, struct sockaddr_in *from, char *rhost, char *ruser);
 /* dns_open.c */
 int dns_open(char *host, int port);
+unsigned long dns_a(char *host);
 /* str_add.c */
 char *str_add(char *dst, char *src);
 /* str_cat.c */

@@ -1,5 +1,6 @@
 #include <fcntl.h>
 #include <unistd.h>
+#include "dao.h"
 
 int
 rec_add(fpath, data, size)
