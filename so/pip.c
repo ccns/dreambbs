@@ -4296,7 +4296,7 @@ int pip_see_doctor()	/*看醫生*/
 	}
 	else if (d.money < savemoney)
 	{
-		sprintf(buf, "你的病要花 %d 元喔....你不夠錢啦...", savemoney);
+		sprintf(buf, "你的病要花 %ld 元喔....你不夠錢啦...", savemoney);
 		vmsg(buf);
 	}
 	else if (d.sick > 0 && d.money >= savemoney)

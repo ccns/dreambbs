@@ -572,7 +572,7 @@ tn_login()
 
   /* sprintf(currtitle, "%s@%s", rusername, fromhost); */
   /* Thor.990415: 紀錄ip, 怕正查不到 */
-  sprintf(currtitle, "%s@%s ip:%08x", rusername, fromhost,(int) tn_addr);
+  sprintf(currtitle, "%s@%s ip:%08lx", rusername, fromhost,(int) tn_addr);
   
   
 /* by visor */
@@ -1463,16 +1463,16 @@ servo_usage()
       "system time: %.6f\n"
       "maximum resident set size: %lu P\n"
       "integral resident set size: %lu\n"
-      "page faults not requiring physical I/O: %d\n"
-      "page faults requiring physical I/O: %d\n"
-      "swaps: %d\n"
-      "block input operations: %d\n"
-      "block output operations: %d\n"
-      "messages sent: %d\n"
-      "messages received: %d\n"
-      "signals received: %d\n"
-      "voluntary context switches: %d\n"
-      "involuntary context switches: %d\n\n",
+      "page faults not requiring physical I/O: %ld\n"
+      "page faults requiring physical I/O: %ld\n"
+      "swaps: %ld\n"
+      "block input operations: %ld\n"
+      "block output operations: %ld\n"
+      "messages sent: %ld\n"
+      "messages received: %ld\n"
+      "signals received: %ld\n"
+      "voluntary context switches: %ld\n"
+      "involuntary context switches: %ld\n\n",
 
       getpid(), ap_start,
       (double) ru.ru_utime.tv_sec + (double) ru.ru_utime.tv_usec / 1000000.0,
