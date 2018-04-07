@@ -1096,7 +1096,7 @@ static KeyMap keymap[] =
 
   /* end of keymap */
 
-  {(char) NULL, -1}
+  {0, -1}
 };
 
 
