@@ -2104,8 +2104,10 @@ extern int Every_Z_Screen();
 static MENU menu_everyz[] =
 {
 #ifdef HAVE_FAVORITE
+#ifdef TEST_Z_FAV
   {Every_Z_Favorite, PERM_VALID, POPUP_FUN,
   "Favorite 我的最愛"},
+#endif
 #endif
 
   {Every_Z_Gem, 0, POPUP_FUN,
