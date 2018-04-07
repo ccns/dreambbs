@@ -355,6 +355,8 @@ readNCMbody(line)
 
   if (search_newsfeeds_bygroup(group))
     strcpy(SPAMMID[num_spammid++], SPAMMID_NOW);
+
+  return 0;
 }
 
 

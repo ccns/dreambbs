@@ -212,7 +212,7 @@ draw_line(x, y, msg)	/* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
 /* ----------------------------------------------------- */
 
 
-static int
+static void
 draw_item(x, y, desc, hotkey, mode)
   int x, y;
   char *desc;

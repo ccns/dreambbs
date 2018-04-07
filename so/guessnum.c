@@ -257,12 +257,12 @@ foolme:
 
 int guessNum()
 {
-	mainNum(0);
-	return 0;
+	return mainNum(0);
+//	return 0;
 }
 
 int fightNum()
 {
-	mainNum(1);
-	return 0;
+	return mainNum(1);
+//	return 0;
 }
