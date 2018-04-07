@@ -125,9 +125,9 @@ main()
 {
   char c;
 
-  memset(&toplogins, 0, sizeof(toplogins));
-  memset(&topposts, 0, sizeof(topposts));
-  memset(&topstay, 0, sizeof(topstay));
+  memset(toplogins, 0, sizeof(toplogins));
+  memset(topposts, 0, sizeof(topposts));
+  memset(topstay, 0, sizeof(topstay));
 
   for (c = 'a'; c <= 'z'; c++)
   {
@@ -157,21 +157,21 @@ main()
       read(fd, &cuser, sizeof(cuser));
       close(fd);
 
-      if ((p = findmin(&toplogins))->num < cuser.numlogins)
+      if ((p = findmin(toplogins))->num < cuser.numlogins)
       {
 	strncpy(p->userid, cuser.userid, IDLEN);
 	strncpy(p->username, cuser.username, 24);
 	p->num = cuser.numlogins;
       }
 
-      if ((p = findmin(&topposts))->num < cuser.numposts)
+      if ((p = findmin(topposts))->num < cuser.numposts)
       {
 	strncpy(p->userid, cuser.userid, IDLEN);
 	strncpy(p->username, cuser.username, 24);
 	p->num = cuser.numposts;
       }
 
-      if ((p = findmin(&topstay))->num < (cuser.staytime/3600))
+      if ((p = findmin(topstay))->num < (cuser.staytime/3600))
       {
         strncpy(p->userid, cuser.userid, IDLEN);
         strncpy(p->username, cuser.username, 24);
@@ -186,8 +186,8 @@ main()
 
   chdir(BBSHOME);
 
-  write_data("\033[33;1m===========\033[44m    Ω计逼︽篯    \033[40m============\033[m", &toplogins,0);
-  write_data("\033[33;1m===========\033[44m    拈Ω计逼︽篯    \033[40m============\033[m", &topposts,0);
-  write_data("\033[33;1m===========\033[44m    本计逼︽篯    \033[40m============\033[m", &topstay,1);
+  write_data("\033[33;1m===========\033[44m    Ω计逼︽篯    \033[40m============\033[m", toplogins,0);
+  write_data("\033[33;1m===========\033[44m    拈Ω计逼︽篯    \033[40m============\033[m", topposts,0);
+  write_data("\033[33;1m===========\033[44m    本计逼︽篯    \033[40m============\033[m", topstay,1);
   return 0;
 }

@@ -158,7 +158,7 @@ draw_vote(bdh, fpath, vch)
   items = 0;
   if ((fp = fopen(fpath, "r")))
   {
-    while (fread(&choice[items].vitem, sizeof(vitem_t), 1, fp) == 1)
+    while (fread(choice[items].vitem, sizeof(vitem_t), 1, fp) == 1)
     {
       choice[items].count = 0;
       items++;
@@ -248,10 +248,10 @@ draw_vote(bdh, fpath, vch)
       ticket = choice[num].count;
       if (fd)
 	fprintf(fp, "\t%-42s%3d ²¼ (%4.1f%%)\n",
-	(char *)&choice[num].vitem, ticket, 100.0 * ticket / fd);
+	(char *)choice[num].vitem, ticket, 100.0 * ticket / fd);
 	else
 	fprintf(fp, "\t%-42s%3d ²¼\n",
-	(char *)&choice[num].vitem, ticket);
+	(char *)choice[num].vitem, ticket);
     }
 
     /* other opinions */
