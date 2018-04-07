@@ -639,7 +639,7 @@ ansi_puts(fp, buf, mode)
     fprintf(fp, "\033[3%cm", state = mode);
   if (buf[0])
   {
-    fprintf(fp, buf);
+    fprintf(fp, "%s", buf);
     buf[0] = 0;
   }
 }

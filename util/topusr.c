@@ -75,7 +75,7 @@ write_data(title, data,mode)
   char *color;
 
   sprintf(buf, "[1;32m%%%ds[m\n\n", 80);
-  printf(buf, title);
+  printf(buf, "%s", title);
   if(mode == 0)
   {
     puts("[1;31m¦W¦¸[m  [1;33mID[m ([1;34mNickname[m)  \
