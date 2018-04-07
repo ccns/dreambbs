@@ -92,7 +92,7 @@ dns_smtp(host)
   for (;;)
   { /* Thor.980820: 註解: 萬一host格式為 xxx:yyy:zzz, 則先試 xxx,不行再試 yyy */
     ptr = str;
-    while (sock = *ptr)
+    while ( ( sock = *ptr ) )
     {
       if (sock == ':')
       {

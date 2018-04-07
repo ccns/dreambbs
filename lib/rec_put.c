@@ -93,7 +93,7 @@ rec_put2(fpath, data, size, pos, fchk)
     lseek(fd, off, SEEK_SET);
     while (read(fd, fpath, size) == size)
     {
-      if (pos = (*fchk) (fpath))
+      if ( ( pos = (*fchk) (fpath) ) )
 	break;
 
       off += size;

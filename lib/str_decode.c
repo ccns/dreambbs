@@ -126,7 +126,7 @@ mm_getcharset(str, charset, size)
   end = dst + size - 1;	/* 保留空間給 '\0' */
   delim = '\0';
 
-  while (ch = *src++)
+  while ( (ch = *src++) )
   {
     if (ch == delim)
       break;
@@ -255,7 +255,7 @@ mmdecode(src, encode, dst)	/* 解 Header 的 mmdecode */
   {
   case 'q':			/* Thor: quoted-printable */
 
-    while (ch = *src)		/* Thor: 0 是 delimiter */
+    while ( (ch = *src) )		/* Thor: 0 是 delimiter */
     {
       if (ch == '=')
       {
@@ -285,7 +285,7 @@ mmdecode(src, encode, dst)	/* 解 Header 的 mmdecode */
     pattern = 0;
     bits = 0;
 
-    while (ch = *src)		/* Thor: 0 是 delimiter */
+    while ( (ch = *src) )		/* Thor: 0 是 delimiter */
     {
       int x;
 

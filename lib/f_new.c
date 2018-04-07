@@ -8,6 +8,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <unistd.h>
+#include <time.h>
 #include "dao.h"
 
 FILE *

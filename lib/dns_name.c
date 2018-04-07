@@ -34,7 +34,7 @@ dns_name(addr, name)
 #ifdef	HAVE_ETC_HOSTS
   /* lkchu: reference to etc/hosts */
 
-  if (fp = fopen("etc/hosts", "r"))
+  if ( ( fp = fopen("etc/hosts", "r") ) )
   {
     while (fgets(abuf, sizeof(abuf), fp))
     {

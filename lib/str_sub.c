@@ -13,7 +13,7 @@ str_sub(str, tag)
 
   cc = *tag++;
  
-  while (c1 = *str)
+  while ( (c1 = *str) )
   {
     if (in_chi)
     {
