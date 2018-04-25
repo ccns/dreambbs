@@ -1780,7 +1780,7 @@ print_user_counts(cuser)
   number = (cuser->clitype) ? MSG_MOTD : MSG_MESSAGE;
 
   sprintf(buf,
-    "¡ó Åwªï¥úÁ{¡i" NICKNAME CHATROOMNAME "¡j¡A¥Ø«e¶}¤F [1;31m%d[m ¶¡¥]´[", roomc);
+    "¡ó Åwªï¥úÁ{¡i" NICKNAME CHATROOMNAME "¡j¡A«ö [1;33m/h[m Åã¥Ü»¡©ú¡A¥Ø«e¶}¤F [1;31m%d[m ¶¡¥]´[", roomc);
   send_to_user(cuser, buf, 0, number);
 
   sprintf(buf, "¡ó ¦@¦³ [1;36m%d[m ¤H¨ÓÂ\\Àsªù°}", userc);
