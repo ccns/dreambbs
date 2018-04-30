@@ -8,7 +8,7 @@
 
 MAKE	+= -f Makefile.gnu
 
-UNAME	:= $(shell uname)
+OPSYS	:= $(shell uname -o)
 
 ARCHI	:= $(shell uname -m)
 
@@ -26,7 +26,7 @@ LDFLAGS	+= -m32
 endif
 endif
 
-ifeq ($(UNAME),Linux)
+ifeq ($(OPSYS),Linux)
 LDFLAGS	+= -lresolv
 endif
 

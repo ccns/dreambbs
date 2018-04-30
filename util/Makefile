@@ -8,7 +8,7 @@
 
 ARCHI	!= uname -m
 
-UNAME	!= uname
+OPSYS	!= uname -o
 
 CC	= clang
 CFLAGS	= -g -O2 -I../include -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding
@@ -19,7 +19,7 @@ CFLAGS	+= -m32
 LDFLAGS	+= -m32
 .endif
 
-.if $(UNAME) == "Linux"
+.if $(OPSYS) == "GNU/Linux"
 LDFLAGS	+= -lresolv
 .endif
 

@@ -1284,7 +1284,9 @@ start_daemon(port)
   int n;
   struct linger ld;
   struct sockaddr_in sin;
+#ifdef RLIMIT
   struct rlimit rl;
+#endif
   char buf[80], data[80];
   time_t val;
   proxy_connection_info_t proxy_connection_info;
@@ -1299,6 +1301,7 @@ start_daemon(port)
   time(&val);
   strftime(buf, 80, "%d/%b/%Y %H:%M:%S", localtime(&val));
 
+#ifdef RLIMIT
   /* --------------------------------------------------- */
   /* adjust resource : 16 mega is enough		 */
   /* --------------------------------------------------- */
@@ -1319,6 +1322,8 @@ start_daemon(port)
 
   rl.rlim_cur = rl.rlim_max = 60 * 20;
   setrlimit(RLIMIT_CPU, &rl);
+
+#endif //RLIMIT
 
   /* --------------------------------------------------- */
   /* speed-hacking DNS resolve				 */

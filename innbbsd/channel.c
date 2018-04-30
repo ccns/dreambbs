@@ -800,6 +800,7 @@ inndchannel()
 
 #include <sys/resource.h>
 
+#ifdef RLIMIT
 static int
 getdtablesize()
 {
@@ -809,6 +810,7 @@ getdtablesize()
     return limit.rlim_cur;
   return -1;
 }
+#endif //RLIMIT
 #endif
 
 

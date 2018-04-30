@@ -9,7 +9,7 @@
 
 MAKE	+=  -f Makefile.gnu
 
-UNAME	:= $(shell uname)
+OPSYS	:= $(shell uname -o)
 
 ARCHI	:= $(shell uname -m)
 
@@ -41,10 +41,10 @@ LDFLAGS	+= -m32
 endif
 endif
 
-ifeq ($(UNAME),Linux)
+ifeq ($(OPSYS),Linux)
 LDFLAGS	+= -rdynamic -lresolv -ldl
 else
-ifeq ($(UNAME),FreeBSD)
+ifeq ($(OPSYS),FreeBSD)
 LDFLAGS	+= -Wl,-export-dynamic
 endif
 endif
@@ -60,7 +60,7 @@ ETC = Makefile $(HDR)
 .c.x:	; $(CPROTO) -o $*.x $*.c
 .c.ln:	; lint -abhi $*.c
 
-ifeq ($(UNAME),FreeBSD)
+ifeq ($(OPSYS),FreeBSD)
 .o.so:	; ld -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
 else
 .o.so:	; ld -G $*.o -o $*.so -L../lib -ldao -melf_i386

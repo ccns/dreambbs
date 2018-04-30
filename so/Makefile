@@ -9,7 +9,7 @@
 
 ARCHI	!= uname -m
 
-UNAME	!= uname
+OPSYS	!= uname -o
 
 HDR	= bbs.h config.h global.h modes.h perm.h struct.h
 
@@ -34,11 +34,11 @@ CFLAGS	+= -m32
 LDFLAGS	+= -m32
 .endif
 
-.if $(UNAME) == "FreeBSD"
+.if $(OPSYS) == "FreeBSD"
 LDFLAGS	+= -Wl,-export-dynamic
 .endif
 
-.if $(UNAME) == "Linux"
+.if $(OPSYS) == "GNU/Linux"
 LDFLAGS	+= -rdynamic -lresolv -ldl
 .endif
 
@@ -53,7 +53,7 @@ ETC	= Makefile $(HDR)
 .c.x:	;   $(CPROTO) -o $*.x $*.c
 .c.ln:	;   lint -abhi $*.c
 
-.if $(UNAME) == "FreeBSD"
+.if $(OPSYS) == "FreeBSD"
 .o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
 .else
 .o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386

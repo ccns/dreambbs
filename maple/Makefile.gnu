@@ -9,7 +9,7 @@
 
 MAKE	+= -f Makefile.gnu
 
-UNAME	:= $(shell uname)
+OPSYS	:= $(shell uname -o)
 
 ARCHI	:= $(shell uname -m)
 
@@ -49,10 +49,10 @@ LDFLAGS	+= -m32
 endif
 endif
 
-ifeq ($(UNAME),Linux)
+ifeq ($(OPSYS),Linux)
 LDFLAGS	+= -lresolv -ldl -rdynamic 
 else
-ifeq ($(UNAME),FreeBSD)
+ifeq ($(OPSYS),FreeBSD)
 LDFLAGS	+= -Wl,-export-dynamic
 endif
 endif

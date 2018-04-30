@@ -2991,7 +2991,9 @@ servo_daemon(inetd)
   char buf[80];
   struct sockaddr_in sin;
   struct linger ld;
+#ifdef RLIMIT
   struct rlimit limit;
+#endif //RLIMIT
 
   /*
    * More idiot speed-hacking --- the first time conversion makes the C
@@ -3014,6 +3016,7 @@ servo_daemon(inetd)
   gethostbyname(buf);
 #endif
 
+#ifdef RLIMIT
   /* --------------------------------------------------- */
   /* adjust the resource limit                           */
   /* --------------------------------------------------- */
@@ -3039,6 +3042,8 @@ servo_daemon(inetd)
   limit.rlim_cur = limit.rlim_max = 60 * 20;
   setrlimit(RLIMIT_CPU, &limit);
 #endif
+
+#endif //RLIMIT
 
   /* --------------------------------------------------- */
   /* detach daemon process                               */

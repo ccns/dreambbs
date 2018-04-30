@@ -339,7 +339,9 @@
 #define	SMTP_SERVER             {"mail.ncku.edu.tw",NULL}
 #endif
 
-#define	HAVE_FORCE_BOARD        /* 強迫 user login 時候讀取某公告看板: */	
+//#define	HAVE_FORCE_BOARD        /* 強迫 user login 時候讀取某公告看板: */
+                                        /* r2.20180430: please define it on your own if needed */
+
 #ifdef	HAVE_FORCE_BOARD
 #define	FORCE_BOARD             BRD_ANNOUNCE  /* statue.000725 */
 #endif
@@ -354,6 +356,10 @@
 /* ----------------------------------------------------- */
 /* 其他系統上限參數					 */
 /* ----------------------------------------------------- */
+
+#ifndef __CYGWIN__
+#define RLIMIT                  /* r2.20180430: Cygwin does not accept rlimit related functions */
+#endif
 
 #ifdef  HAVE_PIP_FIGHT1
 #define	PIP_MAX	        (16)

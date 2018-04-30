@@ -9,7 +9,7 @@
 
 ARCHI	!= uname -m
 
-UNAME	!= uname
+OPSYS	!= uname -o
 
 SRCROOT	= ..
 
@@ -51,11 +51,11 @@ CFLAGS	+= -m32
 LDFLAGS	+= -m32
 .endif
 
-.if $(UNAME) == "Linux"
+.if $(OPSYS) == "GNU/Linux"
 LDFLAGS	+= -lresolv -ldl -rdynamic
 .endif
 
-.if $(UNAME) == "FreeBSD"
+.if $(OPSYS) == "FreeBSD"
 LDFLAGS	+= -Wl,-export-dynamic
 .endif
 
