@@ -9,10 +9,7 @@
 
 ## 0. 作業系統環境：
 
-CentOS 5 ~ 7 32-bit 下應該都可以裝起來 ( 7 要裝 Alt-Arch 版本 )
-
-Debian GNU/Linux 32 bit 近期已編譯成功 , 仍在測試相關性能中
-
+本程式試用可以安裝的環境：FreeBSD 11.1-RELEASE , GNU/Linux , Cygwin in Windows 10
 
 ## 1. 安裝作業系統及相關環境:
 
