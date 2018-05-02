@@ -17,7 +17,7 @@ all:
 	@cd lib; $(MAKE) all
 	@cd innbbsd; $(MAKE) all
 	@cd maple; $(MAKE) all
-ifeq ($(OPSYS),Cygwin)
+ifneq ($(OPSYS),Cygwin)
 	@cd so; $(MAKE) all
 endif
 	@cd util; $(MAKE) all
@@ -25,7 +25,7 @@ endif
 install:
 	@cd innbbsd; $(MAKE) install
 	@cd maple; $(MAKE) install
-ifeq ($(OPSYS),Cygwin)
+ifneq ($(OPSYS),Cygwin)
 	@cd so; $(MAKE) install
 endif
 	@cd util; $(MAKE) install
