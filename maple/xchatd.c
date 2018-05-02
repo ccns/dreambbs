@@ -1779,15 +1779,14 @@ print_user_counts(cuser)
 
   number = (cuser->clitype) ? MSG_MOTD : MSG_MESSAGE;
 
-  sprintf(buf,
-    "¡ó Åwªï¥úÁ{¡i" NICKNAME CHATROOMNAME "¡j¡A«ö [1;33m/h[m Åã¥Ü»¡©ú¡A¥Ø«e¶}¤F [1;31m%d[m ¶¡¥]´[", roomc);
+  sprintf(buf, "¡ó Åwªï¥úÁ{¡i" NICKNAME CHATROOMNAME "¡j¡A«ö [1;33m/h[m Åã¥Ü»¡©ú¡A«ö \x1b[1;33m/b\x1b[m Â÷¶}");
   send_to_user(cuser, buf, 0, number);
 
-  sprintf(buf, "¡ó ¦@¦³ [1;36m%d[m ¤H¨ÓÂ\\Àsªù°}", userc);
+  sprintf(buf, "¡ó ¥Ø«e¶}¤F \x1b[1;31m%d\x1b[m ¶¡¥]´[¡A¦@¦³ [1;36m%d[m ¤H¨ÓÂ\\Àsªù°}", roomc, userc);
   if (suserc)
-    sprintf(buf + strlen(buf), " [%d ¤H¦b¯µ±K" CHATROOMNAME "]", suserc);
-
+    sprintf(buf + strlen(buf), " [ %d ¤H¦b¯µ±K¥]´[]", suserc);
   send_to_user(cuser, buf, 0, number);
+
 //  load_mud_like();
 }
 
