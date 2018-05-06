@@ -3453,6 +3453,7 @@ main(argc, argv)
 
       for (FBI = &mainuser; (cu = *FBI);)
       {
+#ifdef CHATROOM_KICK_TIMEOUT_USER 
 	if (cu->uptime < tcheck)
 	{
 	  cuser_free(cu);
@@ -3464,6 +3465,7 @@ main(argc, argv)
 	}
 	else
 	{
+#endif
 	  nfds++;
 	  sock = cu->sock;
 	  FD_SET(sock, &mainfset);
@@ -3471,7 +3473,9 @@ main(argc, argv)
 	    maxfds = sock;
 
 	  FBI = &(cu->unext);
+#ifdef CHATROOM_KICK_TIMEOUT_USER 
 	}
+#endif
       }
 
       totaluser = nfds;
