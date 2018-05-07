@@ -15,7 +15,7 @@
 
 作業系統部分前面提過了, 套件部分則建議先裝好 
 
-`git` `make` `gcc` 等程式 （ `openssh-server` `nano` `vim` `xinetd` 可自行選擇是否安裝 )
+`git` `make` `gcc` 等程式 （`bmake` `openssh-server` `nano` `vim` `xinetd` 可自行選擇是否安裝 )
 
 ## 2. 建立 BBS 帳號:
 
