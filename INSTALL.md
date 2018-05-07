@@ -15,8 +15,7 @@
 
 作業系統部分前面提過了, 套件部分則建議先裝好 
 
-`openssh-server` `nano` `vim` `make` `gcc` `git` `xinetd` 等程式
-
+`git` `make` `gcc` 等程式 （ `openssh-server` `nano` `vim` `xinetd` 可自行選擇是否安裝 )
 
 ## 2. 建立 BBS 帳號:
 
@@ -75,20 +74,20 @@
 
 ## 4. 設定編譯相關檔案
 
-接著將範例裡的設定檔 `sample/config.h` 複製到 `include/` 目錄裡後,
+接著將範例裡的設定檔 `sample/dreambbs.conf` 複製到原始碼第一層主目錄裡後,
 準備開始設定與編譯:
 
-    $ cp sample/config.h include/
+    $ cp sample/dreambbs.conf ./
 
 接著編輯 `include/config.h` 檔案:
 
-    $ vim -c 'set fencs=big5' -c 'e!' src/include/config.h   ## 採用 lantw44.bbs<at>ptt.cc 的建議, 使vim猜編碼只有 Big5 這種選擇
+    $ vim -c 'set fenc=big5 enc=big5 tenc=utf8' -c 'e!' dreambbs.conf
 
 ## 5. 確認 BBS 目錄架構配置
 
 設定完之後, 先不要急著執行編譯指令, 而是先檢視 BBS 家目錄下全部的目錄結構, 確認已完整配置
 
-若您的 BBS 家目錄( `/home/bbs` )下沒有任何 source code ( `dreamlandbbs/` ) 以外的資料, 
+若您的 BBS 家目錄( `/home/bbs` )下沒有任何 source code ( `dreambbs/` ) 以外的資料, 
 
 或是尚未熟悉本版本 BBS 運作必要的目錄結構, 可參考本版本目前在 sample/bbs 下的範例目錄
 
@@ -99,16 +98,19 @@
 
 執行以下指令可使範例目錄架構直接安裝到 BBS 家目錄 下:
 
-    $ cp -r sample/bbs/* ~/;cp sample/bbs/.BRD ~/
+    $ cp -r sample/bbs /home/ # 若家目錄名稱不是 /home/bbs, 請自行調整修改
 
 ## 6. 編譯 BBS 執行檔
 
 接著就開始編譯囉!
 
-    $ make clean linux install
+    $ make -f Makefile.gnu all install clean
 
-目前測試是在 CentOS 32bit 環境下
-如果相關變數都有定義到的會應該就是可以順利編譯完成
+若您的作業系統有安裝 bmake 套件，則建議執行以下指令編譯：
+
+    $ bmake all install clean
+
+如果相關變數都有定義到，應該可以順利編譯完成
 
 ## 7. 系統環境調校與設定
 
@@ -116,8 +118,7 @@
 
     $ crontab sample/crontab
 
-(裡面的設定調整還有很多還沒整理,
- 建議自行檢視裡面的設定是否符合需求, 以及自己調整裡面一些程式的執行路徑)
+(建議自行檢視裡面的設定是否符合需求, 以及自己調整裡面一些程式的執行路徑)
 
 至於在設定bbs執行環境的部分
 
