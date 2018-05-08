@@ -709,7 +709,7 @@ tn_login()
 	    break;		/* stale entry in utmp file */
 	  }
 
-	  if (vans("偵測到多重登入，您想刪除其他重複的 login (Y/N)嗎？[N] ") == 'y')
+	  if (vans("偵測到多重登入，您想刪除其他重複的 login (Y/N)嗎？[Y] ") != 'n')
 	  {
 	    kill(pid, SIGTERM);
 	    blog("MULTI", cuser.username);
