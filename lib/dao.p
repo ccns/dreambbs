@@ -15,13 +15,11 @@ unsigned long dns_addr(char *name);
 /* dns_name.c */
 int dns_name(unsigned char *addr, char *name);
 /* dns_smtp.c */
-void dns_mx(char *domain, char *mxlist);
 int dns_smtp(char *host);
 /* dns_ident.c */
 void dns_ident(int sock, struct sockaddr_in *from, char *rhost, char *ruser);
 /* dns_open.c */
 int dns_open(char *host, int port);
-unsigned long dns_a(char *host);
 /* str_add.c */
 char *str_add(char *dst, char *src);
 /* str_cat.c */
@@ -32,7 +30,6 @@ int str_cmp(char *s1, char *s2);
 char *mm_getencode(unsigned char *str, char *code);
 void mm_getcharset(const char *str, char *charset, int size);
 int mmdecode(unsigned char *src, int encode, unsigned char *dst);
-int mmdecode2(unsigned char *src, int encode, unsigned char *dst);
 void str_decode(unsigned char *str);
 /* str_dup.c */
 char *str_dup(char *src, int pad);
@@ -89,6 +86,18 @@ void str_xor(unsigned char *dst, unsigned char *src);
 void url_encode(unsigned char *dst, unsigned char *src);
 /* str_ansi.c */
 void str_ansi(char *dst, char *str, int max);
+/* str_lcpy.c */
+size_t strlcpy(char *dst, const char *src, size_t siz);
+/* str_lcat.c */
+size_t strlcat(char *dst, const char *src, size_t siz);
+/* str_sub.c */
+char *str_sub(char *str, char *tag);
+/* str_lowest.c */
+void str_lowest(char *dst, char *src);
+/* strlcat.c */
+size_t strlcat(char *dst, const char *src, size_t siz);
+/* strlcpy.c */
+size_t strlcpy(char *dst, const char *src, size_t siz);
 /* archiv32.c */
 void archiv32(time_t chrono, char *fname);
 /* archiv32m.c */
@@ -145,8 +154,13 @@ int rec_ins(char *fpath, void *data, int size, int pos, int num);
 int rec_mov(char *data, int size, int from, int to);
 /* rec_put.c */
 int rec_put(char *fpath, void *data, int size, int pos);
+int rec_put2(char *fpath, void *data, int size, int pos, int (*fchk)(void));
 /* rec_bot.c */
 int rec_bot(char *fpath, void *data, int size);
+/* rec_ref.c */
+int rec_ref(char *fpath, void *data, int size, int pos, int (*fchk)(void), void (*fref)(void));
+/* rec_sync.c */
+int rec_sync(char *fpath, int size, int (*fsync)(void), int (*fchk)(void));
 /* hdr_fpath.c */
 void hdr_fpath(char *fpath, char *folder, HDR *hdr);
 /* hdr_stamp.c */
@@ -170,7 +184,7 @@ int DL_func(char *name, ...);
 int attr_get(char *userid, int key, void *value);
 int attr_put(char *userid, int key, void *value);
 int attr_step(char *userid, int key, int dflt, int step);
-/* str_lcat.c */
-size_t strlcat(char *, const char *, size_t);
-/* str_lcpy.c */
-size_t strlcpy(char *, const char *, size_t);
+/* rfc2047.c */
+void output_rfc2047_qp(FILE *fp, char *prefix, char *str, char *charset, char *suffix);
+/* keeplog.c */
+void keeplog(char *fnlog, char *board, char *title, int mode);

@@ -11,7 +11,7 @@ ARCHI	!= uname -m
 
 CC	= clang
 RANLIB	= ranlib
-CPROTO	= $(which cproto) -E\"clang -pipe -E\" -I../include
+CPROTO	= cproto -E"clang -pipe -E" -I../include
 CFLAGS	= -O2 -pipe -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding -I../include
 
 .if  $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
@@ -69,6 +69,9 @@ all:	libdao.a
 
 dao.p:	$(SRC)
 	$(CPROTO) $> | sed '/querybuf/d' > dao.p
+
+dns.p:	$(SRC)
+	$(CPROTO) $> | sed '/querybuf/d' > dns.p
 
 
 libdao.a: $(OBJ)

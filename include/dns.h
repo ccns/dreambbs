@@ -19,6 +19,7 @@
 #include <arpa/inet.h>
 #include <arpa/nameser.h>
 #include <resolv.h>
+#include "hdr.h"
 
 #ifndef INADDR_NONE
 #define	INADDR_NONE	0xffffffff
