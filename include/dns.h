@@ -20,6 +20,7 @@
 #include <arpa/nameser.h>
 #include <resolv.h>
 #include "hdr.h"
+#include "dao.h"
 
 #ifndef INADDR_NONE
 #define	INADDR_NONE	0xffffffff
@@ -60,8 +61,6 @@ typedef union
   u_char buf[MAXPACKET];
 }     querybuf;			/* response of DNS query */
 
-#include "../lib/dns.p"
-
 static inline unsigned short
 getshort(c)
   unsigned char *c;
@@ -72,5 +71,17 @@ getshort(c)
   return (u << 8) + c[1];
 }
 
+/* dns.c */
+void dns_init(void);
+/* dns_addr.c */
+unsigned long dns_addr(char *name);
+/* dns_name.c */
+int dns_name(unsigned char *addr, char *name);
+/* dns_smtp.c */
+int dns_smtp(char *host);
+/* dns_ident.c */
+void dns_ident(int sock, struct sockaddr_in *from, char *rhost, char *ruser);
+/* dns_open.c */
+int dns_open(char *host, int port);
 
 #endif	/* _DNS_H_ */

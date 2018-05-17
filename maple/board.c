@@ -410,7 +410,7 @@ remove_perm()
 }
 #endif
 
-inline int
+extern inline int
 Ben_Perm(bhdr, ulevel)
   BRD *bhdr;
   usint ulevel;

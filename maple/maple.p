@@ -1,7 +1,9 @@
 /* acct.c */
-
 void logitfile(char *file, char *key, char *msg);
-/* void keeplog(char *fnlog, char *board, char *title, int mode); */
+void addmoney(int addend, char *userid);
+void addpoint1(int addend, char *userid);
+void addpoint2(int addend, char *userid);
+void keeplog(char *fnlog, char *board, char *title, int mode);
 int acct_load(ACCT *acct, char *userid);
 void acct_save(ACCT *acct);
 int acct_userno(char *userid);
@@ -29,26 +31,13 @@ int u_lock(void);
 int u_xfile(void);
 int m_newbrd(void);
 void brd_edit(int bno);
-int check_idno(char *s);
-int u_register(void);
-int m_register(void);
-void addmoney(int addend, char *userid);
-void addpoint1(int addend, char *userid);
-void addpoint2(int addend, char *userid);
-int u_verify(void);
 int a_editbrd(void);
-#ifdef TEST_COSIGN
-int valid_brdname(char *brd);
-#endif
-
+int u_verify(void);
 /* bbsd.c */
-
 void blog(char *mode, char *msg);
 void u_exit(char *mode);
 void abort_bbs(void);
-
 /* board.c */
-
 void brh_get(time_t bstamp, int bhno);
 int brh_unread(time_t chrono);
 void brh_visit(int mode);
@@ -57,23 +46,15 @@ void remove_perm(void);
 int bstamp2bno(time_t stamp);
 void brh_load(void);
 void brh_save(void);
-void brd_usies(void);
 void XoPost(int bno);
 int Select(void);
 int Class(void);
 void check_new(BRD *brd);
-int Information(void);
-int Student(void);
-int Activity(void);
-int Profess(void);
 int Favorite(void);
 void board_main(void);
 int Boards(void);
 int brd_list(int reciper);
-extern inline int Ben_Perm(BRD *, usint);
-
 /* cache.c */
-
 void sem_init(void);
 void ushm_init(void);
 void utmp_mode(int mode);
@@ -98,9 +79,7 @@ void fwshm_init(void);
 void fshm_init(void);
 int film_out(int tag, int row);
 UTMP *utmp_check(char *userid);
-
 /* edit.c */
-
 void ve_string(uschar *str);
 char *tbf_ask(void);
 FILE *tbf_open(void);
@@ -109,17 +88,13 @@ void ve_recover(void);
 void ve_header(FILE *fp);
 int ve_subject(int row, char *topic, char *dft);
 int vedit(char *fpath, int ve_op);
-
 /* gem.c */
-
 int url_fpath(char *fpath, char *folder, HDR *hdr);
 void brd2gem(BRD *brd, HDR *gem);
 int gem_gather(XO *xo);
 void XoGem(char *folder, char *title, int level);
 void gem_main(void);
-
 /* mail.c */
-
 void ll_new(void);
 void ll_add(char *name);
 int ll_del(char *name);
@@ -134,6 +109,8 @@ usint m_quota(void);
 int m_zip(void);
 int m_query(char *userid);
 void m_biff(int userno);
+int m_setforward(void);
+int m_setmboxdir(void);
 int hdr_reply(int row, HDR *hdr);
 int mail_external(char *addr);
 int mail_send(char *rcpt, char *title);
@@ -148,24 +125,17 @@ int mbox_send(XO *xo);
 int mail_stat(int mode);
 int mbox_check(void);
 void mbox_main(void);
-int m_setforward(void);
-
 /* menu.c */
-
 int pad_view(void);
 void vs_head(char *title, char *mid);
 void movie(void);
 char *check_info(char *input);
 void menu(void);
-
 /* more.c */
-
 char *mgets(int fd);
 void *mread(int fd, int len);
 int more(char *fpath, char *footer);
-
 /* post.c */
-
 int cmpchrono(HDR *hdr);
 int checksum_find(char *fpath, int check, int state);
 void btime_update(int bno);
@@ -176,23 +146,24 @@ void log_anonymous(char *fname);
 int seek_log(char *title, int state);
 int getsubject(int row, int reply);
 int post_cross(XO *xo);
-void post_history(XO *xo, HDR *hdr);
+void post_history(XO *xo, HDR *fhdr);
 int post_gem(XO *xo);
 int post_tag(XO *xo);
 int post_edit(XO *xo);
+void header_replace(XO *xo, HDR *hdr);
 int post_title(XO *xo);
 int post_ban_mail(XO *xo);
 void record_recommend(const int chrono, const char *const text);
+int post_resetscore(XO *xo);
 int post_recommend(XO *xo);
-
+int post_manage(XO *xo);
+int post_write(XO *xo);
 /* banmail.c */
-
 int BanMail(void);
 void post_mail(void);
-
 /* talk.c */
-
 char *bmode(UTMP *up, int simple);
+int can_message(UTMP *up);
 int is_boardpal(UTMP *up);
 int is_pal(int userno);
 int is_banmsg(int userno);
@@ -204,8 +175,8 @@ int t_bmw(void);
 int bm_belong(char *board);
 int XoBM(XO *xo);
 void my_query(char *userid, int paling);
-//void bmw_reply(void);
-void bmw_reply(int);
+void bmw_edit(UTMP *up, char *hint, BMW *bmw, int cc);
+void bmw_reply(int replymode);
 int pal_list(int reciper);
 void aloha(void);
 int t_loginNotify(void);
@@ -224,9 +195,7 @@ int check_personal_note(int newflag, char *userid);
 void banmsg_cache(void);
 void banmsg_sync(char *fpath);
 int t_banmsg(void);
-
 /* visio.c */
-
 void bell(void);
 void move(int y, int x);
 void getyx(int *y, int *x);
@@ -238,8 +207,8 @@ void clrtoeol(void);
 void clrtobot(void);
 void outc(int ch);
 void outs(uschar *str);
+int expand_esc_star_visio(char *buf, const char *src, int szbuf);
 void outx(uschar *str);
-void outplan(uschar *str);
 void outz(uschar *msg);
 void outf(uschar *str);
 void prints(char *fmt, ...);
@@ -254,16 +223,14 @@ void vs_restore(screenline *slp);
 int vmsg(char *msg);
 void zmsg(char *msg);
 void vs_bar(char *title);
+void grayout(int type);
 void add_io(int fd, int timeout);
 int igetch(void);
 BRD *ask_board(char *board, int perm, char *msg);
 int vget(int line, int col, uschar *prompt, uschar *data, int max, int echo);
 int vans(char *prompt);
 int vkey(void);
-void grayout(int type);
-
 /* xover.c */
-
 XO *xo_new(char *path);
 XO *xo_get(char *path);
 void xo_load(XO *xo, int recsiz);
@@ -273,8 +240,8 @@ int xo_delete(XO *xo);
 int Tagger(time_t chrono, int recno, int op);
 void EnumTagHdr(HDR *hdr, char *dir, int locus);
 int AskTag(char *msg);
-int xo_uquery(XO *xo);
 int xo_uquery_lite(XO *xo);
+int xo_uquery(XO *xo);
 int xo_usetup(XO *xo);
 int xo_getch(XO *xo, int ch);
 void xover(int cmd);
@@ -283,31 +250,24 @@ void every_U(void);
 void every_B(void);
 void every_S(void);
 int xo_cursor(int ch, int pagemax, int num, int *pageno, int *cur, int *redraw);
-
 /* favorite.c */
-
 void favorite_main(void);
-
-/* myfavorite.c */
-
-void myfavorite_main(void); 
-int  MyFavorite(void);
-int class_add(XO *xo);
-
 /* socket.c */
-
 int Get_Socket(char *site, int *sock);
 int POP3_Check(char *site, char *account, char *passwd);
 int Ext_POP3_Check(char *site, char *account, char *passwd);
-
 /* popupmenu.c */
-
 int popupmenu_ans(char *desc[], char *title, int x, int y);
 void popupmenu(MENU pmenu[], XO *xo, int x, int y);
 int pmsg(char *msg);
 int Every_Z_Screen(void);
-
 /* window.c */
-
 int popupmenu_ans2(char *desc[], char *title, int x, int y);
 int pmsg2(char *msg);
+/* myfavorite.c */
+void brd2myfavorite(BRD *brd, HDR *gem);
+int MyFavorite(void);
+int myfavorite_find_chn(char *brdname);
+void myfavorite_parse(char *fpath);
+void myfavorite_main(void);
+int class_add(XO *xo);

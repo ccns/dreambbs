@@ -40,7 +40,7 @@ EXE	= bbsd xchatd
 
 CC	= clang 
 
-CPROTO	= cproto -E\"clang -pipe -E\" -I../include -I/usr/local/include
+CPROTO	= cproto -E"clang -pipe -E" -I../include -I/usr/local/include
 
 CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding -I../include
 
@@ -64,7 +64,7 @@ LDFLAGS	+= -Wl,-export-dynamic
 .c.o:	; $(CC) $(CFLAGS) -c $*.c
 
 all: 
-	@$(MAKE) CC=$(CC) CPROTO="$(CPROTO)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
+	@$(MAKE) CC=$(CC) CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
 
 xchatd:	xchatd.o
 	$(CC) -o $@ $? $(LDFLAGS)
