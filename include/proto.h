@@ -24,7 +24,6 @@ char *genpasswd();
 /* ----------------------------------------------------- */
 
 /* acct.c */
-void logitfile(char *file, char *key, char *msg);
 void addmoney(int addend, char *userid);
 void addpoint1(int addend, char *userid);
 void addpoint2(int addend, char *userid);
@@ -59,15 +58,9 @@ void brd_edit(int bno);
 int a_editbrd(void);
 int u_verify(void);
 /* bbsd.c */
-void blog(char *mode, char *msg);
 void u_exit(char *mode);
 void abort_bbs(void);
 /* board.c */
-
-extern inline int
-Ben_Perm(bhdr, ulevel)
-
-
 void brh_get(time_t bstamp, int bhno);
 int brh_unread(time_t chrono);
 void brh_visit(int mode);
@@ -125,7 +118,6 @@ int gem_gather(XO *xo);
 void XoGem(char *folder, char *title, int level);
 void gem_main(void);
 /* mail.c */
-void ll_new(void);
 void ll_add(char *name);
 int ll_del(char *name);
 int ll_has(char *name);
@@ -162,7 +154,6 @@ void movie(void);
 char *check_info(char *input);
 void menu(void);
 /* more.c */
-char *mgets(int fd);
 void *mread(int fd, int len);
 int more(char *fpath, char *footer);
 /* post.c */
@@ -193,7 +184,7 @@ int BanMail(void);
 void post_mail(void);
 /* talk.c */
 char *bmode(UTMP *up, int simple);
-int can_message(UTMP *up);
+//int can_message(UTMP *up);  /* r2.20180518: to be checked or fixed */
 int is_boardpal(UTMP *up);
 int is_pal(int userno);
 int is_banmsg(int userno);
@@ -261,7 +252,6 @@ int vget(int line, int col, uschar *prompt, uschar *data, int max, int echo);
 int vans(char *prompt);
 int vkey(void);
 /* xover.c */
-XO *xo_new(char *path);
 XO *xo_get(char *path);
 void xo_load(XO *xo, int recsiz);
 void xo_fpath(char *fpath, char *dir, HDR *hdr);
@@ -283,7 +273,6 @@ int xo_cursor(int ch, int pagemax, int num, int *pageno, int *cur, int *redraw);
 /* favorite.c */
 void favorite_main(void);
 /* socket.c */
-int Get_Socket(char *site, int *sock);
 int POP3_Check(char *site, char *account, char *passwd);
 int Ext_POP3_Check(char *site, char *account, char *passwd);
 /* popupmenu.c */
@@ -295,7 +284,6 @@ int Every_Z_Screen(void);
 int popupmenu_ans2(char *desc[], char *title, int x, int y);
 int pmsg2(char *msg);
 /* myfavorite.c */
-void brd2myfavorite(BRD *brd, HDR *gem);
 int MyFavorite(void);
 int myfavorite_find_chn(char *brdname);
 void myfavorite_parse(char *fpath);

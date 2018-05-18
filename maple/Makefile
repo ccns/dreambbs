@@ -40,7 +40,7 @@ EXE	= bbsd xchatd
 
 CC	= clang 
 
-CPROTO	= cproto -E"clang -pipe -E" -I../include -I/usr/local/include
+CPROTO	= cproto -E"clang -pipe -E" -I../include
 
 CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding -I../include
 
@@ -73,7 +73,7 @@ bbsd: $(OBJ)
 	$(CC) $(MAKEFLAG) -o $@ $(OBJ) $(LDFLAGS) $(LIBS)
 
 maple.p: $(SRC)
-	$(CPROTO) $> | sed '/ main(/d' > maple.p
+	$(CPROTO) -o $@ $?
 
 install: $(EXE)
 	install -m 0700 $? $(HOME)/bin

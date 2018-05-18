@@ -40,7 +40,7 @@
 #define SYSOPNICK       "夢之精靈"                  /* SYSOP 暱稱 */
 #endif
 
-#ifndef BBSHONE
+#ifndef BBSHOME
 #define BBSHOME	        "/home/bbs"                 /* BBS 的家 */
 #endif
 
