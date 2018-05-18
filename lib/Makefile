@@ -9,10 +9,12 @@
 
 ARCHI	!= uname -m
 
+SRCROOT	= ..
+
 CC	= clang
 RANLIB	= ranlib
-CPROTO	= cproto -E"clang -pipe -E" -I../include
-CFLAGS	= -O2 -pipe -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding -I../include
+CPROTO	= cproto -E"clang -pipe -E" -I$(SRCROOT)/include
+CFLAGS	= -O2 -pipe -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding -I$(SRCROOT)/include
 
 .if  $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
 CFLAGS	+= -m32
@@ -80,8 +82,8 @@ libdao.a: $(OBJ)
 
 
 clean:
-	rm -fr $(GARBAGE) $(OBJ) libdao.a *.bak *.BAK *~
+	rm -fr $(GARBAGE) $(OBJ) *.a *.bak *.BAK *~ *.p tags
 
 
 tags:
-	ctags $(SRC) ../include/*.h
+	ctags $(SRC) $(SRCROOT)/include/*.h

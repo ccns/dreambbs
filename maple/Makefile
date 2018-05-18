@@ -40,9 +40,9 @@ EXE	= bbsd xchatd
 
 CC	= clang 
 
-CPROTO	= cproto -E"clang -pipe -E" -I../include
+CPROTO	= cproto -E"clang -pipe -E" -I$(SRCROOT)/include
 
-CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding -I../include
+CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding -I$(SRCROOT)/include
 
 LDFLAGS	= -L../lib -ldao -lcrypt  
 
@@ -79,8 +79,8 @@ install: $(EXE)
 	install -m 0700 $? $(HOME)/bin
 
 clean:
-	rm -rf $(OBJ) $(EXE) $(LNFILES)  *~ *.o *.so
+	rm -rf $(OBJ) $(EXE) $(LNFILES)  *~ *.o *.so *.p tags
 
 tags:	$(SRC) ../include/*.h ../lib/*.c
-	exctags $(SRC) ../include/*.h ../lib/*.c
+	exctags $(SRC) $(SRCROOT)/include/*.h $(SRCROOT)/lib/*.c
 
