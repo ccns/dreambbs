@@ -73,6 +73,7 @@ getshort(c)
 
 /* dns.c */
 void dns_init(void);
+int dns_query(char *name, int qtype, querybuf *ans);
 /* dns_addr.c */
 unsigned long dns_addr(char *name);
 /* dns_name.c */

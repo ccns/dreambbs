@@ -20,8 +20,7 @@ extern BCACHE *bshm;
 #define STR_PERM      "bctpjm#x--------PTCMSNL*B#KGACBS"
 
 /* log admin command by statue@WindTop */
-void
-logitfile(file, key, msg)
+void logitfile(file, key, msg)
   char *file;
   char *key;
   char *msg;

@@ -24,6 +24,7 @@ char *genpasswd();
 /* ----------------------------------------------------- */
 
 /* acct.c */
+void logitfile(char *file, char *key, char *msg);
 void addmoney(int addend, char *userid);
 void addpoint1(int addend, char *userid);
 void addpoint2(int addend, char *userid);
@@ -65,6 +66,7 @@ void brh_get(time_t bstamp, int bhno);
 int brh_unread(time_t chrono);
 void brh_visit(int mode);
 void brh_add(time_t prev, time_t chrono, time_t next);
+int Ben_Perm(BRD *bhdr, usint ulevel);
 void remove_perm(void);
 int bstamp2bno(time_t stamp);
 void brh_load(void);
@@ -154,6 +156,7 @@ void movie(void);
 char *check_info(char *input);
 void menu(void);
 /* more.c */
+char *mgets(int fd);
 void *mread(int fd, int len);
 int more(char *fpath, char *footer);
 /* post.c */
