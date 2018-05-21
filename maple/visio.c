@@ -156,7 +156,8 @@ static int scrollcnt, tc_col, tc_row;
 
 
 static screenline vbuf[t_lines];
-static screenline *cur_slp;	/* current screen line pointer */
+//static 
+screenline *cur_slp;	/* current screen line pointer */
 
 
 void
