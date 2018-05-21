@@ -41,7 +41,7 @@ chat_topic()
 		   (frec ? " ¿ý­µ«Ç " : CHATROOMNAME), chatroom, chatopic);
 }
 
-#if 0
+#ifdef M3_CHAT_SCROLL_MODE
 static void
 printchatline(msg)
 char *msg;
