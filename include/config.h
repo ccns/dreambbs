@@ -512,15 +512,37 @@
 /* ╰参把计						 */
 /* ----------------------------------------------------- */
 
-#define BRDSHM_KEY	(2997)
-#define UTMPSHM_KEY	(1998)
-#define FILMSHM_KEY	(2999)
-#define FWSHM_KEY	(3999)
-#define FWOSHM_KEY	(5000)
-#define COUNT_KEY	(4000)
+#ifndef BRDSHM_KEY
+#define BRDSHM_KEY	(2997) 
+#endif
+
+#ifndef UTMPSHM_KEY
+#define UTMPSHM_KEY	(1998) 
+#endif
+
+#ifndef FILMSHM_KEY
+#define FILMSHM_KEY	(2999) 
+#endif
+
+#ifndef FWSHM_KEY
+#define FWSHM_KEY	(3999) 
+#endif
+
+#ifndef FWOSHM_KEY
+#define FWOSHM_KEY	(5000) 
+#endif
+
+#ifndef COUNT_KEY
+#define COUNT_KEY	(4000) 
+#endif
+
 
 #ifdef	HAVE_OBSERVE_LIST               /* ╰参芠诡虫 */
-#define	OBSERVE_KEY	(6000)
+
+#ifndef OBSERVE_KEY
+#define	OBSERVE_KEY	(6000) 
+#endif
+
 #endif
 
 #define	SPEAK_MAX	(50)
