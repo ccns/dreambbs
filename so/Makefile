@@ -35,7 +35,7 @@ EXE	= so
 .endif
 
 all: 
-	@$(MAKE) CC=$(CC) CPROTO="$(CPROTO)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
+	@$(MAKE) CC=$(CC) CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
 
 so: $(SO)
 
