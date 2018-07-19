@@ -7,22 +7,8 @@
 #  update : 95/12/15                                     #
 # ------------------------------------------------------ #
 
-ARCHI	!= uname -m
-
 SRCROOT	= ..
-
-CC	= clang
-RANLIB	= ranlib
-CPROTO	= cproto -E"clang -pipe -E" -I$(SRCROOT)/include
-CFLAGS	= -O2 -pipe -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding -I$(SRCROOT)/include
-
-.if  $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
-CFLAGS	+= -m32
-.endif
-
-# ------------------------------------------------------ #
-# 下列的 make rules 不需修改                             #
-# ------------------------------------------------------ #
+.include "$(SRCROOT)/dreambbs.mk"
 
 HDR 	= dao.h dao.p
 
@@ -80,10 +66,8 @@ libdao.a: $(OBJ)
 	ar rv $@ $?
 	$(RANLIB) $@
 
-
 clean:
 	rm -fr $(GARBAGE) $(OBJ) *.a *.bak *.BAK *~ *.p tags
-
 
 tags:
 	ctags $(SRC) $(SRCROOT)/include/*.h

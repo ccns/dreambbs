@@ -7,28 +7,14 @@
 #  author : skhuang                                      #
 # ------------------------------------------------------ #
 
-ARCHI	!= uname -m
-
-# ------------------------------------------------------ #
-# 下列的 make rules 不需修改				 #
-# ------------------------------------------------------ #
+SRCROOT	= ..
+.include "$(SRCROOT)/dreambbs.mk"
 
 INNOBJS	= channel.o bbslib.o convcode.o inntobbs.o rec_article.o nocem.o history.o
 
 LNKOBJS	= bbslink.o bbslib.o convcode.o inntobbs.o rec_article.o nocem.o history.o
 
 EXE	= innbbsd bbslink
-
-CC	= clang
-
-CFLAGS	= -g -O2 -pipe -I../include -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding
-
-LDFLAGS	= -L../lib -ldao
-
-.if $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
-CFLAGS	+= -m32
-LDFLAGS	+= -m32
-.endif
 
 all: 
 	@$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)

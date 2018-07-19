@@ -6,22 +6,8 @@
 #  update : 18/03/28                                      #
 # ------------------------------------------------------- #
 
-ARCHI	!= uname -m
-
-OPSYS	!= uname -o
-
-CC	= clang
-CFLAGS	= -g -O2 -I../include -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding
-LDFLAGS	= -L../lib -ldao -lcrypt
-
-.if  $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
-CFLAGS	+= -m32
-LDFLAGS	+= -m32
-.endif
-
-.if $(OPSYS) == "GNU/Linux"
-LDFLAGS	+= -lresolv
-.endif
+SRCROOT	= ..
+.include "$(SRCROOT)/dreambbs.mk"
 
 .SUFFIXES: .o .c
 

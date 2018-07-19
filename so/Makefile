@@ -7,9 +7,8 @@
 #  update : 18/03/28                                     #
 # ------------------------------------------------------ #
 
-ARCHI	!= uname -m
-
-OPSYS	!= uname -o
+SRCROOT	= ..
+.include "$(SRCROOT)/dreambbs.mk"
 
 HDR	= bbs.h config.h global.h modes.h perm.h struct.h
 
@@ -21,31 +20,7 @@ SO	= chat.so vote.so xyz.so guessnum.so \
 	  classtable2.so observe.so pip.so brdstat.so personal.so \
 	  cleanrecommend.so shop.so bank.so innbbs.so contact.so 
 
-CC	= clang
-
-CPROTO	= cproto -E\"clang -pipe -E\" -I../include
-
-CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding -I../include
-
-LDFLAGS	= -L../lib -ldao -lcrypt 
-
-.if  $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
-CFLAGS	+= -m32
-LDFLAGS	+= -m32
-.endif
-
-.if $(OPSYS) == "FreeBSD"
-LDFLAGS	+= -Wl,-export-dynamic
-.endif
-
-.if $(OPSYS) == "GNU/Linux"
-LDFLAGS	+= -rdynamic -lresolv -ldl
-.endif
-
 EXE	= so
-
-ETC	= Makefile $(HDR)
-
 
 .SUFFIXES: .o .c .ln .x .so
 
