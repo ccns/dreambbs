@@ -848,7 +848,7 @@ main()
   if (ntime.tm_hour == 0)
   {
 
-  sprintf(date, "[%2d 月 %2d 日] ", ptime.tm_mon + 1, ptime.tm_mday);
+  sprintf(date, "[ %02d 月 %02d 日] ", ptime.tm_mon + 1, ptime.tm_mday);
 
       /* 以下是目前沒有在使用的紀錄 */
 
