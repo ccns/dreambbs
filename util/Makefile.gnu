@@ -26,7 +26,7 @@ LDFLAGS	+= -m32
 endif
 endif
 
-ifeq ($(OPSYS),Linux)
+ifeq ($(OPSYS),GNU/Linux)
 LDFLAGS	+= -lresolv
 endif
 
