@@ -9,7 +9,7 @@
 
 ## 0. 作業系統環境：
 
-本程式試用可以安裝的環境：FreeBSD 11.1-RELEASE , GNU/Linux , Cygwin in Windows 10
+本程式試用可以安裝的環境：FreeBSD 11.1-RELEASE , GNU/Linux , Cygwin in Windows 7/10
 
 ## 1. 安裝作業系統及相關環境:
 
@@ -68,7 +68,7 @@
 
 == 以下用 bbs 的權限即可!! ==
 
-    $ cd /home/bbs; git clone https://github.com/ccns/dreamlandbbs
+    $ cd /home/bbs; git clone https://github.com/ccns/dreambbs
 
 接著進去 dreamlandbbs 主目錄
 
@@ -189,7 +189,7 @@ su -c bbs '/home/bbs/bin/bbsd 3456'  # 大於3000的備用port可這樣設定
 理論上之後外面就可以連進來自己啟動的 BBS 程式了。
 
 
-但要注意 CentOS 作業系統內是否有 `firewalld` `iptables` 等防火牆設定擋住連線
+但要注意 CentOS 7.x 作業系統內是否有 `firewalld` `iptables` 等防火牆設定擋住連線
 
 若有請自己參閱相關資料進行設定。
 
