@@ -19,9 +19,9 @@
     + something significant bug fixes or detail changed, port this commits back to `testing` version.
 
 ## other plan
-    + v1.0:
-        - features:
-        - fixes:
-        - changed:
-    + v2.0:
-    + v3.0:
++ v1.0:
+    - features:
+    - fixes:
+    - changed:
++ v2.0:
++ v3.0:
