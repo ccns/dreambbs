@@ -9,7 +9,7 @@
     + `current`: test, test, and test new feature, or something significant attempts.
 
 * preparing version name about `testing`:
-    + `v0.95-BETA4`: aka. `REV-BETA4`, for naming style is becoming different.
+    + `v0.95`: aka. `REV-BETA4`, for naming style is becoming different.
 
 * preparing version name about `current`:
     + `v1.0-CURRENT`: developing for preparing version 1.0.
