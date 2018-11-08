@@ -9,11 +9,11 @@
     + `current`: test, test, and test new feature, or something significant attempts.
 
 * preparing version name about `testing`:
-    + `0.95-BETA4`: aka. `REV-BETA4`, for naming style is becoming different.
+    + `v0.95-BETA4`: aka. `REV-BETA4`, for naming style is becoming different.
 
 * preparing version name about `current`:
-    + `1.0-CURRENT`: developing for preparing version 1.0.
-    + `x.0-CURRENT`: developing for preparing version x.0.
+    + `v1.0-CURRENT`: developing for preparing version 1.0.
+    + `vX.0-CURRENT`: developing for preparing version X.0.
 
 * backports:
     + something significant bug fixes or detail changed, port this commits back to `testing` version.
