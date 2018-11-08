@@ -34,7 +34,7 @@
 #define MYHOSTNAME      "ccns.cc"                   /* 網路位址 */
 #endif
 
-#define BBSVERSION      "Rev.Beta 3"                /* 版本編號 */
+#define BBSVERSION      "v1.0-CURRENT"                /* 版本編號 */
 
 #ifndef SYSOPNICK
 #define SYSOPNICK       "夢之精靈"                  /* SYSOP 暱稱 */
