@@ -18,4 +18,8 @@ This page will collect some info of how to use & how to install DreamLand-BBS-sy
 
 ### **FAQ**: 安裝常見問題
 
+## Other plan 其他測試計劃
+
+  + **Version Management** 版本規劃
+
 ### **To Do List**: 待撰條目
