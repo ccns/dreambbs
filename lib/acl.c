@@ -26,9 +26,10 @@
 
 
 int
-acl_addr(acl, addr)
+acl_addr(
   char *acl;		/* file name of access control list */
   char *addr;
+  )
 {
   int i, cc, luser, lhost;
   FILE *fp;
@@ -126,11 +127,6 @@ acl_addr(acl, addr)
 /* update : 98/03/29					 */
 /*-------------------------------------------------------*/
 
-
-#include <stdio.h>
-#include <string.h>
-#include "dao.h"
-
 /* ----------------------------------------------------- */
 /* ACL config file format				 */
 /* ----------------------------------------------------- */
@@ -147,10 +143,11 @@ acl_addr(acl, addr)
 
 
 int
-acl_has(acl, user, host)
+acl_has(
   char *acl;			/* file name of access control list */
   char *user;			/* lower-case string */
   char *host;			/* lower-case string */
+  )
 {
   int i, cc, luser, lhost;
   FILE *fp;
