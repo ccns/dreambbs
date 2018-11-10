@@ -1,3 +1,36 @@
+int
+is_alnum(ch)
+  int ch;
+{
+  return ((ch >= '0' && ch <= '9') ||
+    (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
+}
+int
+is_alpha(ch)
+  int ch;
+{
+  return ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
+}
+#include <string.h>
+#include "dao.h"
+
+int
+is_fname(str)
+  char *str;
+{
+  int ch;
+
+  ch = *str;
+  if (ch == '/')
+    return 0;
+
+  do
+  {
+    if (!is_alnum(ch) && !strchr("-._/+@", ch))
+      return 0;
+  } while ((ch = *++str));
+  return 1;
+}
 /* ----------------------------------------------------- */
 /* transform to real path & security check		 */
 /* ----------------------------------------------------- */
@@ -67,4 +100,37 @@ is_fpath(path)
     target++;
     source++;
   }
+}
+#include "dao.h"
+
+#define STRICT_FQDN_EMAIL
+
+int
+not_addr(addr)
+  char *addr;
+{
+  int ch, mode;
+
+  mode = -1;
+
+  while ((ch = *addr))
+  {
+    if (ch == '@')
+    {
+      if (++mode)
+	break;
+    }
+
+#ifdef	STRICT_FQDN_EMAIL
+    else if ((ch != '.') && (ch != '-') && (ch != '_') && !is_alnum(ch))
+#else
+    else if (!is_alnum(ch) && !strchr(".-_[]%!:", ch))
+#endif
+
+      return 1;
+
+    addr++;
+  }
+
+  return mode;
 }
