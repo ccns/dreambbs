@@ -1,6 +1,15 @@
-char *
-str_add(dst, src)
+#include <stdio.h>
+#include <time.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <string.h>
+#include "dao.h"
+
+char*
+str_add(
   char *dst, *src;
+  )
 {
   while ((*dst = *src))
   {
@@ -9,12 +18,12 @@ str_add(dst, src)
   }
   return dst;
 }
-#include "dao.h"
 
 void
-str_ansi(dst, str, max)         /* strip ANSI code */
+str_ansi(         /* strip ANSI code */
   char *dst, *str;
   int max;
+  )
 {
   int ch, ansi;
   char *tail;
@@ -45,10 +54,11 @@ str_ansi(dst, str, max)         /* strip ANSI code */
 }
 
 void
-str_cat(dst, s1, s2)
+str_cat(
   char *dst;
   char *s1;
   char *s2;
+  )
 {
   while ((*dst = *s1))
   {
@@ -60,8 +70,9 @@ str_cat(dst, s1, s2)
     ;
 }
 int
-str_cmp(s1, s2)
+str_cmp(
   char *s1, *s2;
+  )
 {
   int c1, c2, diff;
 
@@ -78,6 +89,7 @@ str_cmp(s1, s2)
   } while (c1);
   return 0;
 }
+
 /*-------------------------------------------------------*/
 /* lib/str_decode.c	( NTHU CS MapleBBS Ver 3.00 )	 */
 /*-------------------------------------------------------*/
@@ -86,17 +98,15 @@ str_cmp(s1, s2)
 /* update : 97/03/29				 	 */
 /*-------------------------------------------------------*/
 
-#include <string.h>
-#include "dao.h"
-
 /* ----------------------------------------------------- */
 /* QP code : "0123456789ABCDEF"				 */
 /* ----------------------------------------------------- */
 
 
 static int
-qp_code(x)
+qp_code(
   register int x;
+  )
 {
   if (x >= '0' && x <= '9')
     return x - '0';
@@ -115,8 +125,9 @@ qp_code(x)
 
 
 static int
-base64_code(x)
+base64_code(
   register int x;
+  )
 {
   if (x >= 'A' && x <= 'Z')
     return x - 'A';
@@ -138,26 +149,29 @@ base64_code(x)
 
 
 static inline int
-isreturn(c)
+isreturn(
   unsigned char c;
+  )
 {
   return c == '\r' || c == '\n';
 }
 
 
 static inline int 
-is_space(c)
+is_space(
   unsigned char c;
+  )
 {
   return c == ' ' || c == '\t' || isreturn(c);
 }
 
 
 /* 取Content-Transfer-Encode 的第一個字元, 依照標準只可能是 q,b,7,8 這四個 */
-char *
-mm_getencode(str, code)
+char*
+mm_getencode(
   unsigned char *str;
   char *code;
+  )
 {
   if (str)
   {
@@ -184,10 +198,11 @@ mm_getencode(str, code)
 
 /* 取 charset */
 void
-mm_getcharset(str, charset, size)
+mm_getcharset(
   const char *str;
   char *charset;
   int size;		/* charset size */
+  )
 {
   char *src, *dst, *end;
   char delim;
@@ -244,11 +259,13 @@ mm_getcharset(str, charset, size)
    所以在此 mmdecode 分二隻寫
 */
 
+/* 解 Header 的 mmdecode */
 static int
-mmdecode_header(src, encode, dst)	/* 解 Header 的 mmdecode */
+mmdecode_header(
   unsigned char *src;		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
   unsigned char encode;		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
   unsigned char *dst;
+  )
 {
   unsigned char *t;
   int pattern, bits;
@@ -319,10 +336,11 @@ mmdecode_header(src, encode, dst)	/* 解 Header 的 mmdecode */
 
 
 int
-mmdecode(src, encode, dst)	/* 解 Header 的 mmdecode */
+mmdecode(	/* 解 Header 的 mmdecode */
   unsigned char *src;		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
   unsigned char encode;		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
   unsigned char *dst;
+  )
 {
   unsigned char *t;
   int pattern, bits;
@@ -389,8 +407,9 @@ mmdecode(src, encode, dst)	/* 解 Header 的 mmdecode */
 
 
 void
-str_decode(str)
+str_decode(
   unsigned char *str;
+  )
 {
   int adj;
   unsigned char *src, *dst;
@@ -463,13 +482,13 @@ main()
   puts(buf);
 }
 #endif
-#include <string.h>
-#include <stdlib.h>
 
-char *
-str_dup(src, pad)
+
+char*
+str_dup(
   char *src;
   int pad;
+  )
 {
   char *dst;
 
@@ -477,13 +496,13 @@ str_dup(src, pad)
   strcpy(dst, src);
   return dst;
 }
-#include <string.h>
 
 void
-str_folder(fpath, folder, fname)
+str_folder(
   char *fpath;
   char *folder;
   char *fname;
+  )
 {
   int ch;
   char *token = NULL;
@@ -498,11 +517,11 @@ str_folder(fpath, folder, fname)
     token -= 2;
   strcpy(token, fname);
 }
-#include <string.h>
 
 void
-setdirpath(fpath, direct, fname)
+setdirpath(
   char *fpath, *direct, *fname;
+  )
 {
   int ch;
   char *target = NULL;
@@ -528,13 +547,10 @@ setdirpath(fpath, direct, fname)
 /* 6. "nick" <user@domain>				 */
 /* ----------------------------------------------------  */
 
-
-#include "dao.h"
-#include <string.h>
-
 int
-str_from(from, addr, nick)
+str_from(
   char *from, *addr, *nick;
+  )
 {
   char *str, *ptr, *langle;
   int cc;
@@ -609,13 +625,12 @@ str_from(from, addr, nick)
   strcpy(addr, from);
   return 0;
 }
-#include <string.h>
-#include "dao.h"
 
 int
-str_has(list, tag)
+str_has(
   char *list;
   char *tag;
+  )
 {
   int cc, len;
 
@@ -638,9 +653,10 @@ str_has(list, tag)
     }
 }
 int
-str_hash2(str, seed)
+str_hash2(
   char *str;
   int seed;
+  )
 {
   int cc;
 
@@ -650,10 +666,12 @@ str_hash2(str, seed)
   }
   return (seed & 0x7fffffff);
 }
+
 int
-str_hash(str, seed)
+str_hash(
   char *str;
   int seed;
+  )
 {
   int cc;
 
@@ -663,10 +681,6 @@ str_hash(str, seed)
   }
   return (seed & 0x7fffffff);
 }
-#include <sys/types.h>
-#include <string.h>
-
-size_t  strlcat(char *, const char *, size_t);
 
 size_t
 strlcat(char *dst, const char *src, size_t siz)
@@ -696,10 +710,6 @@ strlcat(char *dst, const char *src, size_t siz)
 
   return(dlen + (s - src));
 }
-#include <sys/types.h>
-#include <string.h>
-
-size_t  strlcpy(char *, const char *, size_t);
 
 size_t
 strlcpy(char *dst, const char *src, size_t siz)
@@ -729,9 +739,11 @@ strlcpy(char *dst, const char *src, size_t siz)
 
   return(s - src - 1);        /* count does not include NUL */
 }
+
 int
-str_len(str)
+str_len(
   char *str;
+  )
 {
   int cc, len;
 
@@ -743,9 +755,11 @@ str_len(str)
 
   return len;
 }
+
 void
-str_lower(dst, src)
+str_lower(
   char *dst, *src;
+  )
 {
   int ch;
 
@@ -757,9 +771,11 @@ str_lower(dst, src)
     *dst++ = ch;
   } while (ch);
 }
+
 void
-str_lowest(dst, src)
+str_lowest(
   char *dst, *src;
+  )
 {
   int ch;
   int in_chi = 0;	/* 1: 前一碼是中文字 */
@@ -774,10 +790,12 @@ str_lowest(dst, src)
     *dst++ = ch;
   } while (ch);
 }
+
 int
-str_ncmp(s1, s2, n)
+str_ncmp(
   char *s1, *s2;
   int n;
+  )
 {
   int c1, c2;
 
@@ -800,17 +818,17 @@ str_ncmp(s1, s2, n)
 
   return 0;
 }
+
 /*
  * str_ncpy() - similar to strncpy(3) but terminates string always with '\0'
  * if n != 0, and doesn't do padding
  */
-
-
 void
-str_ncpy(dst, src, n)
+str_ncpy(
   char *dst;
   char *src;
   int n;
+  )
 {
   char *end;
 
@@ -822,9 +840,8 @@ str_ncpy(dst, src, n)
     *dst++ = n;
   } while (n);
 }
-#include <stdlib.h>
 
-char *
+char*
 str_ndup(src, len)
   char *src;
   int len;
@@ -856,10 +873,6 @@ str_ndup(src, len)
 
   return dst;
 }
-#include <string.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include "dao.h"
 
 #ifndef	PASSLEN
 #define	PASSLEN 14
@@ -870,14 +883,13 @@ str_ndup(src, len)
 /* password encryption					 */
 /* ----------------------------------------------------- */
 
-
 char *crypt();
 static char pwbuf[PASSLEN];
 
-
 char *
-genpasswd(pw)
+genpasswd(
   char *pw;
+  )
 {
   char saltc[2];
   int i, c;
@@ -905,8 +917,9 @@ genpasswd(pw)
 
 /* Thor.990214: 註解: 合密碼時, 傳回0 */
 int
-chkpasswd(passwd, test)
+chkpasswd(
   char *passwd, *test;
+  )
 {
   char *pw;
   
@@ -918,13 +931,13 @@ chkpasswd(passwd, test)
 /* str_pat : wild card string pattern match support ? * \ */
 
 
-#include "dao.h"
 
 
 int
-str_pat(str, pat)
+str_pat(
   const char *str;
   const char *pat;
+  )
 {
   const char *xstr = NULL, *xpat;
   int cs, cp;
@@ -991,10 +1004,8 @@ str_pat(str, pat)
   return 1;
 }
 
-
-#ifdef	TEST
+#if 0
 #define	STR_PAT(x, y)	printf("<%s, %s> : %d\n", x, y, str_pat(x, y))
-
 
 main()
 {
@@ -1009,10 +1020,10 @@ main()
 #endif	/* TEST */
 /* reverse the string */
 
-
-char *
-str_rev(dst, src)
+char*
+str_rev(
   char *dst, *src;
+  )
 {
   int cc;
 
@@ -1025,9 +1036,11 @@ str_rev(dst, src)
   }
   return dst;
 }
-	int
-str_rle(str)			/* run-length encoding */
+
+int
+str_rle(			/* run-length encoding */
 	unsigned char *str;
+        )
 {
 	unsigned char *src, *dst;
 	int cc, rl;
@@ -1054,6 +1067,7 @@ str_rle(str)			/* run-length encoding */
 	*dst = '\0';
 	return dst - str;
 }
+
 /* ------------------------------------------ */
 /* mail / post 時，依據時間建立檔案，加上郵戳 */
 /* ------------------------------------------ */
@@ -1061,15 +1075,11 @@ str_rle(str)			/* run-length encoding */
 /* Output: fpath = full path;		      */
 /* ------------------------------------------ */
 
-
-#include <time.h>
-#include <stdlib.h>
-#include <stdio.h>
-
 void
-str_stamp(str, chrono)
+str_stamp(
   char *str;
   time_t *chrono;
+  )
 {
   struct tm *ptime;
 
@@ -1078,15 +1088,16 @@ str_stamp(str, chrono)
   sprintf(str, "%02d/%02d/%02d",
     ptime->tm_year % 100, ptime->tm_mon + 1, ptime->tm_mday);
 }
+
 #ifndef	NULL
 #define	NULL	(char *) 0
 #endif
 
-
 char * 
-str_str(str, tag) 
+str_str( 
   char *str; 
   char *tag;                  /* non-empty lower case pattern */ 
+  )
 { 
   int cc, c1, c2;
   char *p1, *p2;
@@ -1187,13 +1198,13 @@ str_str(str, tag)
   return (int) strstr(buf, tag);
 }
 #endif
-#include "dao.h"
 
 
 char * 
-str_sub(str, tag) 
+str_sub(
   char *str; 
   char *tag;		/* non-empty lowest case pattern */ 
+  )
 { 
   int cc, c1, c2;
   char *p1, *p2;
@@ -1242,9 +1253,11 @@ str_sub(str, tag)
 
   return NULL;
 }
+
 char *
-str_tail(str)
+str_tail(
   char *str;
+  )
 {
   while (*str)
   {
@@ -1252,17 +1265,15 @@ str_tail(str)
   }
   return str;
 }
-#include <stdio.h>
-#include <time.h>
 
 
 /* static char datemsg[32]; */
 static char datemsg[40];
 
-
 char *
-Btime(clock)
+Btime(
   time_t *clock;
+  )
 {
   struct tm *t = localtime(clock);
 
@@ -1277,8 +1288,9 @@ Btime(clock)
 
 
 char *
-Ctime(clock)
+Ctime(
   time_t *clock;
+  )
 {
   struct tm *t = localtime(clock);
   static char week[] = "日一二三四五六";
@@ -1289,18 +1301,19 @@ Ctime(clock)
   return (datemsg);
 }
 
-
 char *
-Etime(clock)
+Etime(
   time_t *clock;
+  )
 {
   strftime(datemsg, 22, "%D %T %a", localtime(clock));
   return (datemsg);
 }
 
 char *
-Atime(clock) /* Thor.990125: 假裝ARPANET時間格式 */
+Atime( /* Thor.990125: 假裝ARPANET時間格式 */
   time_t *clock;
+  )
 {
   /* ARPANET format: Thu, 11 Feb 1999 06:00:37 +0800 (CST) */
   /* strftime(datemsg, 40, "%a, %d %b %Y %T %Z", localtime(clock)); */
@@ -1310,16 +1323,18 @@ Atime(clock) /* Thor.990125: 假裝ARPANET時間格式 */
 }
 
 char *
-Now()
+Now(void)
 {
   time_t now;
 
   time(&now);
   return Btime(&now);
 }
+
 void
-str_trim(buf)			/* remove trailing space */
+str_trim(			/* remove trailing space */
   char *buf;
+  )
 {
   char *p = buf;
 
@@ -1333,9 +1348,11 @@ str_trim(buf)			/* remove trailing space */
       break;
   }
 }
+
 char *
-str_ttl(title)
+str_ttl(
   char *title;
+  )
 {
   if (title[0] == 'R' && title[1] == 'e' && title[2] == ':')
   {
@@ -1346,6 +1363,7 @@ str_ttl(title)
 
   return title;
 }
+
 /*-------------------------------------------------------*/ 
 /* lib/str_xor.c     ( NTHU CS MapleBBS Ver 3.10 )   	 */ 
 /*-------------------------------------------------------*/ 
@@ -1357,12 +1375,12 @@ str_ttl(title)
  
 //unsigned char *
 void
-str_xor(dst, src)
+str_xor(
   unsigned char *dst; /* Thor.990409: 任意長度任意binary seq, 至少要 src那麼長*/
   unsigned char *src; /* Thor.990409: 任意長度str, 不含 \0 */
                       /* Thor: 結果是將src xor到dst上, 若有0結果, 則不變 ,
 			       所以dst長度必大於等於 src(以字串而言) */
-            
+  )
 {
   register int cc;
   for(; *src; src++, dst++)
@@ -1371,7 +1389,6 @@ str_xor(dst, src)
       *dst = cc;
   } 
 } 
-
 
 #if 0
 #include<stdio.h>
