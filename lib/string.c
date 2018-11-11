@@ -1356,3 +1356,17 @@ strlcpy(char* dst, const char* src, size_t siz)
         return(s - src - 1);        /* count does not include NUL */
 }
 
+int
+hash32(
+  unsigned char *str
+)
+{
+  int xo, cc;
+
+  xo = 1048583;			/* a big prime number */
+  while ((cc = *str++))
+  {
+    xo = (xo << 5) - xo + cc;	/* 31 * xo + cc */
+  }
+  return (xo & 0x7fffffff);
+}

@@ -1,10 +1,11 @@
 #include <unistd.h>
 
 int
-xwrite(fd, data, size)
-  int fd;
-  char *data;
-  int size;
+xwrite(
+  int fd,
+  char *data,
+  int size
+)
 {
   int cc;
 

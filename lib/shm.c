@@ -5,9 +5,11 @@
 #include <stdlib.h>
 #include <string.h>
 
-void *
-shm_new(shmkey, shmsize)
-  int shmkey, shmsize;
+void*
+shm_new(
+  int shmkey, 
+  int shmsize
+)
 {
   void *shmptr;
   int shmid;

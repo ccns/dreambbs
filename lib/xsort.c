@@ -1,13 +1,10 @@
 #include <sys/types.h>
 #include <stdlib.h>
 
-
 #define min(a, b)	(a) < (b) ? a : b
 #undef	TEST
 
-
 /* Qsort routine from Bentley & McIlroy's "Engineering a Sort Function". */
-
 
 #define swapcode(TYPE, parmi, parmj, n) { 		\
 	long i = (n) / sizeof (TYPE); 			\
@@ -20,23 +17,23 @@
         } while (--i > 0);				\
 }
 
-
 #define SWAPINIT(a, es) \
 	swaptype = (((char *)a - (char *)0) % sizeof(long) || \
 	es % sizeof(long)) ? 2 : (es == sizeof(long)? 0 : 1);
 
-
 static inline void
-swapfunc(a, b, n, swaptype)
-  char *a, *b;
-  int n, swaptype;
+swapfunc(
+  char* a,
+  char* b,
+  int n, 
+  int swaptype
+)
 {
   if (swaptype <= 1)
     swapcode(long, a, b, n)
   else
     swapcode(char, a, b, n)
 }
-
 
 #define swap(a, b)					\
 	if (swaptype == 0) {				\
@@ -49,23 +46,25 @@ swapfunc(a, b, n, swaptype)
 
 #define vecswap(a, b, n) 	if ((n) > 0) swapfunc(a, b, n, swaptype)
 
-
-static inline char *
-med3(a, b, c, cmp)
-  char *a, *b, *c;
-  int (*cmp) ();
+static inline char*
+med3(
+  char* a, 
+  char* b,
+  char* c,
+  int (*cmp) ()
+)
 {
   return cmp(a, b) < 0 ?
     (cmp(b, c) < 0 ? b : (cmp(a, c) < 0 ? c : a))
     : (cmp(b, c) > 0 ? b : (cmp(a, c) < 0 ? a : c));
 }
 
-
 void
-xsort(a, n, es, cmp)
-  void *a;
-  size_t n, es;
-  int (*cmp) ();
+xsort(
+  void *a,
+  size_t n, es,
+  int (*cmp) ()
+)
 {
   char *pa, *pb, *pc, *pd, *pl, *pm, *pn;
   int d, r, swaptype, swap_cnt;
@@ -162,14 +161,14 @@ loop:
 }
 
 
-#ifdef	TEST
-
+#if 0
 #define	MMM	(0x40000)
 
 static int
-int_cmp(a, b)
-  int *a;
-  int *b;
+int_cmp(
+  int *a,
+  int *b
+)
 {
   return *a - *b;
 }
@@ -195,4 +194,5 @@ main()
 
   xsort(y, MMM, sizeof(int), int_cmp);
 }
-#endif
+#endif  /* TEST */
+

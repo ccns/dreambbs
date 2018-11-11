@@ -7,36 +7,21 @@
 /* author : PaulLiu.bbs@bbs.cis.nctu.edu.tw		 */
 /*-------------------------------------------------------*/
 
-
 #include <stdio.h>
-
-
-#if 0	/* itoc.030411: 沒有經 RFC 2047 encode */
-void
-output_str(fp, prefix, str, charset, suffix)
-  FILE *fp;
-  char *prefix;
-  char *str;
-  char *charset;
-  char *suffix;
-{
-  fprintf(fp, "%s%s%s", prefix, str, suffix);
-}
-#endif
 
 
 /*-------------------------------------------------------*/
 /* RFC2047 QP encode					 */
 /*-------------------------------------------------------*/
 
-
 void
-output_rfc2047_qp(fp, prefix, str, charset, suffix)
-  FILE *fp;
-  char *prefix;
-  char *str;
-  char *charset;
-  char *suffix;
+output_rfc2047_qp(
+  FILE* fp,
+  char* prefix,
+  char* str,
+  char* charset,
+  char* suffix
+)
 {
   int i, ch;
   int blank = 1;	/* 1:全由空白組成 */
@@ -84,110 +69,3 @@ output_rfc2047_qp(fp, prefix, str, charset, suffix)
   fputs(suffix, fp);
 }
 
-
-#if 0
-
-/* output_rfc2047_qp() 可以全部換成 output_rfc2047_base64()，如果想換 encode 的話 */
-
-/*-------------------------------------------------------*/
-/* RFC2047 base64 encode				 */
-/*-------------------------------------------------------*/
-
-
-static int 
-output_rfc2047_prefix(fp, str)
-  FILE *fp;
-  const unsigned char *str;
-{
-  int i, lastspace;
-
-  /* output prefix US_ASCII printable characters */
-  lastspace = -1;
-
-  /* step 1: find the last space */
-  for (i = 0; str[i] != '\0' && str[i] != '=' && str[i] != '?'
-    && str[i] != '_' && str[i] > '\x1f' && str[i] < '\x7f'; i++)
-  {
-    if (str[i] == ' ')
-      lastspace = i;
-  }
-  if (str[i] == '\0')		/* if non special char then outout directly */
-  {
-    fprintf(fp, "%s", str);
-    return i;
-  }
-
-  /* step 2: output the prefix with last space */
-  for (i = 0; i <= lastspace; i++)
-    fprintf(fp, "%c", str[i]);
-  return i;
-}
-
-
-static void 
-output_rfc2047_base64_3to4(a, b, c, oa, ob, oc, od)
-  unsigned char a, b, c;
-  char *oa, *ob, *oc, *od;
-{
-  static char tbl[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-  int i;
-
-  *oa = '=';
-  *ob = '=';
-  *oc = '=';
-  *od = '=';
-
-  i = (int)((a >> 2) & '\x3f');
-  *oa = tbl[i];
-  i = (int)((a << 4) & '\x30') | (int)((b >> 4) & '\x0f');
-  *ob = tbl[i];
-  if (b == '\0')
-    return;
-  i = (int)((b << 2) & '\x3c') | (int)((c >> 6) & '\x03');
-  *oc = tbl[i];
-  if (c == '\0')
-    return;
-  i = (int)(c & '\x3f');
-  *od = tbl[i];
-}
-
-
-void 
-output_rfc2047_base64(fp, prefix, str, charset, suffix)
-  FILE *fp;
-  char *prefix;
-  const unsigned char *str;
-  const unsigned char *charset;
-  char *suffix;
-{
-  int i, j;
-  char a[3], oa[5];
-
-  fputs(prefix, fp);
-
-  /* output prefix US_ASCII printable characters */
-  i = output_rfc2047_prefix(fp, str);
-  if (str[i] == '\0')
-    return;
-
-  /* start encoding */
-  fprintf(fp, "=?%s?B?", charset);
-  for (; str[i] != '\0';)
-  {
-    memset(a, 0, sizeof(a));
-    for (j = 0; j < 3; j++)
-    {
-      a[j] = str[i];
-      if (str[i] != '\0')
-	i++;
-    }
-    output_rfc2047_base64_3to4(a[0], a[1], a[2],
-      &(oa[0]), &(oa[1]), &(oa[2]), &(oa[3]));
-    oa[4] = '\0';
-    fprintf(fp, "%s", oa);
-  }
-  fprintf(fp, "?=");
-
-  fputs(suffix, fp);  
-}
-#endif

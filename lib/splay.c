@@ -7,17 +7,16 @@
 /* update : 97/03/29				 	 */
 /*-------------------------------------------------------*/
 
-
 #include <stdio.h>
 #include <stdlib.h>
 #include "splay.h"
 
-
-SplayNode *
-splay_in(top, data, compare)
-  SplayNode *top;
-  void *data;
-  int (*compare)();
+SplayNode*
+splay_in(
+  SplayNode *top,
+  void *data,
+  int (*compare)()
+)
 {
   int splay_cmp;
   SplayNode *node, *l, *r, *x, N;
@@ -115,8 +114,7 @@ splay_in(top, data, compare)
 }
 
 
-#ifdef	TEST
-
+#if 0
 void
 splay_free(SplayNode * top, void (*data_free) (void *))
 {
@@ -183,5 +181,4 @@ main(int argc, char *argv[])
   splay_out(top, printint);
   return 0;
 }
-
 #endif				/* TEST */

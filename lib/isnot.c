@@ -1,13 +1,18 @@
+#include "dao.h"
+
 int
-is_alnum(ch)
-  int ch;
+is_alnum(
+  int ch
+)
 {
   return ((ch >= '0' && ch <= '9') ||
     (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
 }
+
 int
-is_alpha(ch)
-  int ch;
+is_alpha(
+  int ch
+)
 {
   return ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
 }
@@ -15,8 +20,9 @@ is_alpha(ch)
 #include "dao.h"
 
 int
-is_fname(str)
-  char *str;
+is_fname(
+  char* str
+)
 {
   int ch;
 
@@ -31,14 +37,15 @@ is_fname(str)
   } while ((ch = *++str));
   return 1;
 }
+
 /* ----------------------------------------------------- */
 /* transform to real path & security check		 */
 /* ----------------------------------------------------- */
 
-
 int
-is_fpath(path)
-  char *path;
+is_fpath(
+  char *path
+)
 {
   int ch, level;
   char *source, *target;
@@ -101,13 +108,13 @@ is_fpath(path)
     source++;
   }
 }
-#include "dao.h"
 
 #define STRICT_FQDN_EMAIL
 
 int
-not_addr(addr)
-  char *addr;
+not_addr(
+  char *addr
+)
 {
   int ch, mode;
 
