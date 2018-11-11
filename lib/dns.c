@@ -31,12 +31,12 @@ dns_query(
 {
   querybuf buf;
 
-  qtype = res_mkquery(QUERY, name, C_IN, qtype, (u_char *) NULL, 0, NULL,
-    (u_char *) &buf, sizeof(buf));
+  qtype = res_mkquery(QUERY, name, C_IN, qtype, (unsigned char *) NULL, 0, NULL,
+    (unsigned char *) &buf, sizeof(buf));
 
   if (qtype >= 0)
   {
-    qtype = res_send((u_char *) &buf, qtype, (u_char *) ans, sizeof(querybuf));
+    qtype = res_send((unsigned char *) &buf, qtype, (unsigned char *) ans, sizeof(querybuf));
 
     /* avoid problems after truncation in tcp packets */
 
@@ -64,7 +64,7 @@ dns_addr(
 )
 {
   ip_addr addr;
-  u_char *cp, *eom;
+  unsigned char *cp, *eom;
   int cc, n, type, ancount, qdcount;
   querybuf ans;
   char hostbuf[MAXDNAME];
@@ -101,8 +101,8 @@ dns_addr(
 
   /* find first satisfactory answer */
 
-  cp = (u_char *) & ans + sizeof(HEADER);
-  eom = (u_char *) & ans + n;
+  cp = (unsigned char *) & ans + sizeof(HEADER);
+  eom = (unsigned char *) & ans + n;
 
   for (qdcount = ntohs(ans.hdr.qdcount); qdcount--; cp += n + QFIXEDSZ)
   {
@@ -113,7 +113,7 @@ dns_addr(
   ancount = ntohs(ans.hdr.ancount);
   while (--ancount >= 0 && cp < eom)
   {
-    if ((n = dn_expand((u_char *) &ans, eom, cp, hostbuf, MAXDNAME)) < 0)
+    if ((n = dn_expand((unsigned char *) &ans, eom, cp, hostbuf, MAXDNAME)) < 0)
       return INADDR_NONE;
 
     cp += n;
@@ -329,7 +329,7 @@ dns_name(
   char qbuf[MAXDNAME];
   char hostbuf[MAXDNAME];
   int n, type, ancount, qdcount;
-  u_char *cp, *eom;
+  unsigned char *cp, *eom;
 #ifdef  HAVE_ETC_HOSTS
   char abuf[256];
   FILE *fp;
@@ -368,8 +368,8 @@ dns_name(
 
   /* find first satisfactory answer */
 
-  cp = (u_char *) & ans + sizeof(HEADER);
-  eom = (u_char *) & ans + n;
+  cp = (unsigned char *) & ans + sizeof(HEADER);
+  eom = (unsigned char *) & ans + n;
 
   for (qdcount = ntohs(ans.hdr.qdcount); qdcount--; cp += n + QFIXEDSZ)
   {
@@ -379,7 +379,7 @@ dns_name(
 
   for (ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom; cp += n)
   {
-    if ((n = dn_expand((u_char *) &ans, eom, cp, hostbuf, MAXDNAME)) < 0)
+    if ((n = dn_expand((unsigned char *) &ans, eom, cp, hostbuf, MAXDNAME)) < 0)
       return n;
 
     cp += n;
@@ -389,7 +389,7 @@ dns_name(
 
     if (type == T_PTR)
     {
-      if ((n = dn_expand((u_char *) &ans, eom, cp, hostbuf, MAXDNAME)) >= 0)
+      if ((n = dn_expand((unsigned char *) &ans, eom, cp, hostbuf, MAXDNAME)) >= 0)
       {
 	strcpy(name, hostbuf);
 	return 0;
@@ -458,8 +458,8 @@ dns_open(
 
   /* find first satisfactory answer */
 
-  cp = (u_char *) & ans + sizeof(HEADER);
-  eom = (u_char *) & ans + n;
+  cp = (unsigned char *) & ans + sizeof(HEADER);
+  eom = (unsigned char *) & ans + n;
 
   for (qdcount = ntohs(ans.hdr.qdcount); qdcount--; cp += n + QFIXEDSZ)
   {
@@ -471,7 +471,7 @@ dns_open(
 
   while (--ancount >= 0 && cp < eom)
   {
-    if ((n = dn_expand((u_char *) &ans, eom, cp, buf, MAXDNAME)) < 0)
+    if ((n = dn_expand((unsigned char *) &ans, eom, cp, buf, MAXDNAME)) < 0)
       return -1;
 
     cp += n;
@@ -542,8 +542,8 @@ dns_mx(
 
   /* find first satisfactory answer */
 
-  cp = (u_char *) & ans + sizeof(HEADER);
-  eom = (u_char *) & ans + n;
+  cp = (unsigned char *) & ans + sizeof(HEADER);
+  eom = (unsigned char *) & ans + n;
 
   for (qdcount = ntohs(ans.hdr.qdcount); qdcount--; cp += n + QFIXEDSZ)
   {
@@ -556,7 +556,7 @@ dns_mx(
 
   while (--ancount >= 0 && cp < eom)
   {
-    if ((n = dn_expand((u_char *) &ans, eom, cp, mxlist, MAXDNAME)) < 0)
+    if ((n = dn_expand((unsigned char *) &ans, eom, cp, mxlist, MAXDNAME)) < 0)
       break;
 
     cp += n;
@@ -569,7 +569,7 @@ dns_mx(
     {
       /* pref = getshort(cp); */
       *mxlist = '\0';
-      if ((dn_expand((u_char *) &ans, eom, cp + 2, mxlist, MAXDNAME)) < 0)
+      if ((dn_expand((unsigned char *) &ans, eom, cp + 2, mxlist, MAXDNAME)) < 0)
 	break;
 
       if (!*mxlist)

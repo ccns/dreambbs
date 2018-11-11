@@ -456,7 +456,7 @@ struct UTMP
   usint  mode;			/* bbsmode */
   usint  ufo;			/* the same as userec.ufo */
   usint  flag;			/* user flag */
-  u_long in_addr;		/* Internet address */
+  unsigned long in_addr;		/* Internet address */
   int   sockport;		/* socket port for talk */
   UTMP  *talker;		/* who talk-to me ? */
 

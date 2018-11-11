@@ -58,7 +58,7 @@ typedef union
 typedef union
 {
   HEADER hdr;
-  u_char buf[MAXPACKET];
+  unsigned char buf[MAXPACKET];
 }     querybuf;			/* response of DNS query */
 
 static inline unsigned short
