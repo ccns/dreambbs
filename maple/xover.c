@@ -1860,10 +1860,10 @@ xover(cmd)
 	{
 	  cmd = xo_copy(xo);
 	}
-//	else if (cmd == 'F')
-//	{
-//	  cmd = xo_forward(xo);
-//	}
+	else if (cmd == 'F')
+	{
+	  cmd = xo_forward(xo);
+	}
 #if 0
 	else if (cmd == 'Z')
 	{
