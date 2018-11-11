@@ -16,7 +16,7 @@ typedef struct
 {
   char *path;
   void *handle;
-}DL_list;
+} DL_list;
 
 DL_list  *dl_pool;
 int dl_size, dl_head; 
@@ -28,10 +28,11 @@ extern void blog(char *, char *);
 #define TRACE blog
 #endif 
 
-void *
-DL_get(name)
-  char *name;
+void*
+DL_get(
+  char *name
   /* format: "Xmodule_path:Xname" */
+)
 {
   char buf[512], *t;
   DL_list *p, *tail;

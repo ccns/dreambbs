@@ -6,7 +6,6 @@
 /* update : 98/03/29					 */
 /*-------------------------------------------------------*/
 
-
 #include <stdio.h>
 #include <string.h>
 #include "dao.h"
@@ -27,9 +26,9 @@
 
 int
 acl_addr(
-  char *acl;		/* file name of access control list */
-  char *addr;
-  )
+  char *acl,		/* file name of access control list */
+  char *addr
+)
 {
   int i, cc, luser, lhost;
   FILE *fp;
@@ -144,10 +143,10 @@ acl_addr(
 
 int
 acl_has(
-  char *acl;			/* file name of access control list */
-  char *user;			/* lower-case string */
-  char *host;			/* lower-case string */
-  )
+  char *acl,			/* file name of access control list */
+  char *user,			/* lower-case string */
+  char *host			/* lower-case string */
+)
 {
   int i, cc, luser, lhost;
   FILE *fp;

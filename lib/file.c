@@ -1,12 +1,22 @@
-#include <stdio.h>
+#include "dao.h"
+#include <dirent.h>
+#include <errno.h>
 #include <fcntl.h>
-#include <string.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/mman.h>
+#include <sys/stat.h>
+#include <time.h>
+
+static int rm_dir();
 
 void
-f_cat(fpath, msg)
-  char *fpath;
-  char *msg;
+f_cat(
+  char* fpath,
+  char* msg
+)
 {
   int fd;
 
@@ -16,14 +26,13 @@ f_cat(fpath, msg)
     close(fd);
   }
 }
-#include "dao.h"
-#include <fcntl.h>
-#include <unistd.h>
 
 int
-f_cp(src, dst, mode)
-  char *src, *dst;
-  int mode;			/* O_EXCL / O_APPEND / O_TRUNC */
+f_cp(
+  char* src,
+  char* dst,
+  int mode			/* O_EXCL / O_APPEND / O_TRUNC */
+)
 {
   int fsrc, fdst, ret;
 
@@ -50,16 +59,13 @@ f_cp(src, dst, mode)
   }
   return ret;
 }
-#include "dao.h"
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <stdlib.h>
-#include <unistd.h>
 
-char *
-f_img(fpath, fsize)
-  char *fpath;
-  int *fsize;
+
+char*
+f_img(
+  char* fpath,
+  int *fsize
+)
 {
   int fd, size;
   struct stat st;
@@ -70,7 +76,7 @@ f_img(fpath, fsize)
   fpath = NULL;
 
   if (!fstat(fd, &st) && S_ISREG(st.st_mode) && (size = st.st_size) > 0
-    && (fpath = (char *) malloc(size)))
+    && (fpath = (char* ) malloc(size)))
   {
     *fsize = size;
     if (read(fd, fpath, size) != size)
@@ -83,19 +89,16 @@ f_img(fpath, fsize)
   close(fd);
   return fpath;
 }
+
 /* ----------------------------------------------------- */
 /* f_ln() : link() cross partition / disk		 */
 /* ----------------------------------------------------- */
 
-
-#include <fcntl.h>
-#include <errno.h>
-#include <unistd.h>
-#include "dao.h"
-
 int
-f_ln(src, dst)
-  char *src, *dst;
+f_ln(
+  char* src,
+  char* dst
+)
 {
   int ret;
 
@@ -106,9 +109,6 @@ f_ln(src, dst)
   }
   return ret;
 }
-#include "dao.h"
-#include <unistd.h>
-#include <fcntl.h>
 
 static struct flock fl = {
   .l_whence = SEEK_SET,
@@ -117,8 +117,9 @@ static struct flock fl = {
 };
 
 int
-f_exlock(fd)
-  int fd;
+f_exlock(
+  int fd
+)
 {
 #if 0
   return flock(fd, LOCK_EX); 
@@ -130,8 +131,9 @@ f_exlock(fd)
 }
 
 int
-f_unlock(fd)
-  int fd;
+f_unlock(
+  int fd
+)
 {
 #if 0
   return flock(fd, LOCK_UN); 
@@ -141,47 +143,41 @@ f_unlock(fd)
   return fcntl(fd, F_SETLKW /*F_SETLK*/, &fl);
 }
 
-#include "dao.h"
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/mman.h>
-#include <unistd.h>
-
 #ifdef MAP_FILE         /* 44BSD defines this & requires it to mmap files */
 #  define DAO_MAP       (MAP_SHARED | MAP_FILE)
 #else
 #  define DAO_MAP       (MAP_SHARED)
 #endif
 
-
-char *
-f_map(fpath, fsize)
-  char *fpath;
-  int *fsize;
+char* 
+f_map(
+  char* fpath,
+  int *fsize
+)
 {
   int fd, size;
   struct stat st;
 
   if ((fd = open(fpath, O_RDONLY)) < 0)
-    return (char *) -1;
+    return (char* ) -1;
 
   if (fstat(fd, &st) || !S_ISREG(st.st_mode) || (size = st.st_size) <= 0)
   {
     close(fd);
-    return (char *) -1;
+    return (char* ) -1;
   }
 
-  fpath = (char *) mmap(NULL, size, PROT_READ, DAO_MAP, fd, 0);
+  fpath = (char* ) mmap(NULL, size, PROT_READ, DAO_MAP, fd, 0);
   close(fd);
   *fsize = size;
   return fpath;
 }
-#include <sys/stat.h>
 
 
 int
-f_mode(fpath)
-  char *fpath;
+f_mode(
+  char* fpath
+)
 {
   struct stat st;
 
@@ -190,13 +186,12 @@ f_mode(fpath)
 
   return st.st_mode;
 }
-#include <fcntl.h>
-#include <unistd.h>
-#include "dao.h"
 
 int
-f_mv(src, dst)
-  char *src, *dst;
+f_mv(
+  char* src,
+  char* dst
+)
 {
   int ret;
 
@@ -212,19 +207,11 @@ f_mv(src, dst)
 /* exclusively create file [*.n]			 */
 /* ----------------------------------------------------- */
 
-
-#include <stdio.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <errno.h>
-#include <unistd.h>
-#include <time.h>
-#include "dao.h"
-
-FILE *
-f_new(fold, fnew)
-  char *fold;
-  char *fnew;
+FILE* 
+f_new(
+  char* fold,
+  char* fnew
+)
 {
   int fd, try;
   extern int errno;
@@ -260,14 +247,11 @@ f_new(fold, fnew)
   }
   return NULL;
 }
-#include "dao.h"
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <unistd.h>
 
 int
-f_open(fpath)
-  char *fpath;
+f_open(
+  char* fpath
+)
 {
   int fd;
   struct stat st;
@@ -288,14 +272,12 @@ f_open(fpath)
 /* file structure : set file path for boards/user home	 */
 /* ----------------------------------------------------- */
 
-#include <string.h>
-#include "dao.h"
-
 static void
-mak_fpath(str, key, name)
-  char *str;
-  char *key;
-  char *name;
+mak_fpath(
+  char* str,
+  char* key,
+  char* name
+)
 {
   int cc;
 
@@ -323,10 +305,11 @@ mak_fpath(str, key, name)
 
 
 void
-brd_fpath(fpath, board, fname)
-  char *fpath;
-  char *board;
-  char *fname;
+brd_fpath(
+  char* fpath,
+  char* board,
+  char* fname
+)
 {
   *fpath++ = 'b';
   *fpath++ = 'r';
@@ -336,10 +319,11 @@ brd_fpath(fpath, board, fname)
 
 
 void
-gem_fpath(fpath, board, fname)
-  char *fpath;
-  char *board;
-  char *fname;
+gem_fpath(
+  char* fpath,
+  char* board,
+  char* fname
+)
 {
   *fpath++ = 'g';
   *fpath++ = 'e';
@@ -353,10 +337,11 @@ gem_fpath(fpath, board, fname)
 
 
 void
-usr_fpath(fpath, user, fname)
-  char *fpath;
-  char *user;
-  char *fname;
+usr_fpath(
+  char* fpath,
+  char* user,
+  char* fname
+)
 {
 #if 0
   char buf[16];
@@ -382,18 +367,12 @@ usr_fpath(fpath, user, fname)
   *fpath++ = *buf;
   mak_fpath(fpath, buf, fname);
 }
-#include "dao.h"
-#include <sys/stat.h>
-#include <dirent.h>
-#include <string.h>
-#include <unistd.h>
-
-static int rm_dir();
 
 
 int
-f_rm(fpath)
-  char *fpath;
+f_rm(
+  char* fpath
+)
 {
   struct stat st;
 
@@ -406,10 +385,10 @@ f_rm(fpath)
   return rm_dir(fpath);
 }
 
-
 static int
-rm_dir(fpath)
-  char *fpath;
+rm_dir(
+  char* fpath
+)
 {
   struct stat st;
   DIR *dirp;
@@ -447,14 +426,12 @@ rm_dir(fpath)
   *--fname = '\0';
   return rmdir(buf);
 }
-#include "dao.h"
-#include <fcntl.h>
-#include <unistd.h>
 
 void
-f_suck(fp, fpath)
-  FILE *fp;
-  char *fpath;
+f_suck(
+  FILE* fp,
+  char* fpath
+)
 {
   int fd;
 

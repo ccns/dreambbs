@@ -8,8 +8,9 @@
 
 char*
 str_add(
-  char *dst, *src;
-  )
+  char* dst, 
+  char* src
+)
 {
   while ((*dst = *src))
   {
@@ -21,12 +22,13 @@ str_add(
 
 void
 str_ansi(         /* strip ANSI code */
-  char *dst, *str;
-  int max;
+  char* dst, 
+  char* str,
+  int max
   )
 {
   int ch, ansi;
-  char *tail;
+  char* tail;
 
   for (ansi = 0, tail = dst + max - 1; (ch = *str); str++)
   {
@@ -55,10 +57,10 @@ str_ansi(         /* strip ANSI code */
 
 void
 str_cat(
-  char *dst;
-  char *s1;
-  char *s2;
-  )
+  char* dst,
+  char* s1,
+  char* s2
+)
 {
   while ((*dst = *s1))
   {
@@ -71,8 +73,9 @@ str_cat(
 }
 int
 str_cmp(
-  char *s1, *s2;
-  )
+  char* s1, 
+  char* s2
+)
 {
   int c1, c2, diff;
 
@@ -105,8 +108,8 @@ str_cmp(
 
 static int
 qp_code(
-  register int x;
-  )
+  register int x
+)
 {
   if (x >= '0' && x <= '9')
     return x - '0';
@@ -126,8 +129,8 @@ qp_code(
 
 static int
 base64_code(
-  register int x;
-  )
+  register int x
+)
 {
   if (x >= 'A' && x <= 'Z')
     return x - 'A';
@@ -150,8 +153,8 @@ base64_code(
 
 static inline int
 isreturn(
-  unsigned char c;
-  )
+  unsigned char c
+)
 {
   return c == '\r' || c == '\n';
 }
@@ -159,8 +162,8 @@ isreturn(
 
 static inline int 
 is_space(
-  unsigned char c;
-  )
+  unsigned char c
+)
 {
   return c == ' ' || c == '\t' || isreturn(c);
 }
@@ -169,9 +172,9 @@ is_space(
 /* 取Content-Transfer-Encode 的第一個字元, 依照標準只可能是 q,b,7,8 這四個 */
 char*
 mm_getencode(
-  unsigned char *str;
-  char *code;
-  )
+  unsigned char* str,
+  char* code
+)
 {
   if (str)
   {
@@ -199,12 +202,12 @@ mm_getencode(
 /* 取 charset */
 void
 mm_getcharset(
-  const char *str;
-  char *charset;
-  int size;		/* charset size */
-  )
+  const char* str,
+  char* charset,
+  int size		/* charset size */
+)
 {
-  char *src, *dst, *end;
+  char* src, *dst, *end;
   char delim;
   int ch;
 
@@ -213,7 +216,7 @@ mm_getcharset(
   if (!str)
     return;
 
-  if (!(src = (char *) strstr(str, "charset=")))
+  if (!(src = (char* ) strstr(str, "charset=")))
     return;
 
   src += 8;
@@ -262,12 +265,12 @@ mm_getcharset(
 /* 解 Header 的 mmdecode */
 static int
 mmdecode_header(
-  unsigned char *src;		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
-  unsigned char encode;		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
-  unsigned char *dst;
-  )
+  unsigned char* src,		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
+  unsigned char encode,		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
+  unsigned char* dst
+)
 {
-  unsigned char *t;
+  unsigned char* t;
   int pattern, bits;
   int ch;
 
@@ -337,12 +340,12 @@ mmdecode_header(
 
 int
 mmdecode(	/* 解 Header 的 mmdecode */
-  unsigned char *src;		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
-  unsigned char encode;		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
-  unsigned char *dst;
-  )
+  unsigned char* src,		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
+  unsigned char encode,		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
+  unsigned char* dst
+)
 {
-  unsigned char *t;
+  unsigned char* t;
   int pattern, bits;
   int ch;
 
@@ -408,11 +411,11 @@ mmdecode(	/* 解 Header 的 mmdecode */
 
 void
 str_decode(
-  unsigned char *str;
-  )
+  unsigned char* str
+)
 {
   int adj;
-  unsigned char *src, *dst;
+  unsigned char* src, *dst;
   unsigned char buf[512];
 
   src = str;
@@ -423,7 +426,7 @@ str_decode(
   {
     if (*src != '=')
     {				/* Thor: not coded */
-      unsigned char *tmp = src;
+      unsigned char* tmp = src;
       while (adj && *tmp && is_space(*tmp))
 	tmp++;
       if (adj && *tmp == '=')
@@ -436,7 +439,7 @@ str_decode(
     }
     else			/* Thor: *src == '=' */
     {
-      unsigned char *tmp = src + 1;
+      unsigned char* tmp = src + 1;
       if (*tmp == '?')		/* Thor: =? coded */
       {
 	/* "=?%s?Q?" for QP, "=?%s?B?" for BASE64 */
@@ -486,26 +489,26 @@ main()
 
 char*
 str_dup(
-  char *src;
-  int pad;
-  )
+  char* src,
+  int pad
+)
 {
-  char *dst;
+  char* dst;
 
-  dst = (char *) malloc(strlen(src) + pad);
+  dst = (char* ) malloc(strlen(src) + pad);
   strcpy(dst, src);
   return dst;
 }
 
 void
 str_folder(
-  char *fpath;
-  char *folder;
-  char *fname;
-  )
+  char* fpath,
+  char* folder,
+  char* fname
+)
 {
   int ch;
-  char *token = NULL;
+  char* token = NULL;
 
   while ((ch = *folder++))
   {
@@ -520,11 +523,13 @@ str_folder(
 
 void
 setdirpath(
-  char *fpath, *direct, *fname;
-  )
+  char* fpath, 
+  char* direct, 
+  char* fname
+)
 {
   int ch;
-  char *target = NULL;
+  char* target = NULL;
 
   while ((ch = *direct))
   {
@@ -549,10 +554,12 @@ setdirpath(
 
 int
 str_from(
-  char *from, *addr, *nick;
-  )
+  char* from, 
+  char* addr, 
+  char* nick
+)
 {
-  char *str, *ptr, *langle;
+  char* str, *ptr, *langle;
   int cc;
 
   *nick = 0;
@@ -595,7 +602,7 @@ str_from(
       }
       ptr[1] = '\0';
       strcpy(nick, from);
-      str_decode((unsigned char *)nick);
+      str_decode((unsigned char* )nick);
     }
 
     from = langle + 1;
@@ -610,14 +617,14 @@ str_from(
 	str--;
       *str = 0;
 
-      if ((ptr = (char *) strchr(from, '(')))
+      if ((ptr = (char* ) strchr(from, '(')))
       {
 	ptr[-1] = 0;
 	if (*++ptr == '"')
 	  ptr++;
 
 	strcpy(nick, ptr);
-	str_decode((unsigned char *)nick);
+	str_decode((unsigned char* )nick);
       }
     }
   }
@@ -628,9 +635,9 @@ str_from(
 
 int
 str_has(
-  char *list;
-  char *tag;
-  )
+  char* list,
+  char* tag
+)
 {
   int cc, len;
 
@@ -654,9 +661,9 @@ str_has(
 }
 int
 str_hash2(
-  char *str;
-  int seed;
-  )
+  char* str,
+  int seed
+)
 {
   int cc;
 
@@ -669,9 +676,9 @@ str_hash2(
 
 int
 str_hash(
-  char *str;
-  int seed;
-  )
+  char* str,
+  int seed
+)
 {
   int cc;
 
@@ -682,68 +689,10 @@ str_hash(
   return (seed & 0x7fffffff);
 }
 
-size_t
-strlcat(char *dst, const char *src, size_t siz)
-{
-  char *d = dst;
-  const char *s = src;
-  size_t n = siz;
-  size_t dlen;
-
-  while (n-- != 0 && *d != '\0')
-    d++;
-  dlen = d - dst;
-  n = siz - dlen;
-
-  if (n == 0)
-    return(dlen + strlen(s));
-  while (*s != '\0') 
-  {
-    if (n != 1) 
-    {
-      *d++ = *s;
-      n--;
-    }
-    s++;
-  }
-  *d = '\0';
-
-  return(dlen + (s - src));
-}
-
-size_t
-strlcpy(char *dst, const char *src, size_t siz)
-{
-  char *d = dst;
-  const char *s = src;
-  size_t n = siz;
-
-  /* Copy as many bytes as will fit */
-  if (n != 0 && --n != 0) 
-  {
-    do 
-    {
-      if ((*d++ = *s++) == 0)
-        break;
-    } while (--n != 0);
-  }
-
-  /* Not enough room in dst, add NUL and traverse rest of src */
-  if (n == 0) 
-  {
-    if (siz != 0)
-      *d = '\0';                /* NUL-terminate dst */
-    while (*s++)
-      ;
-  }
-
-  return(s - src - 1);        /* count does not include NUL */
-}
-
 int
 str_len(
-  char *str;
-  )
+  char* str
+)
 {
   int cc, len;
 
@@ -758,8 +707,9 @@ str_len(
 
 void
 str_lower(
-  char *dst, *src;
-  )
+  char* dst, 
+  char* src
+)
 {
   int ch;
 
@@ -774,8 +724,9 @@ str_lower(
 
 void
 str_lowest(
-  char *dst, *src;
-  )
+  char* dst,
+  char* src
+)
 {
   int ch;
   int in_chi = 0;	/* 1: 前一碼是中文字 */
@@ -793,9 +744,10 @@ str_lowest(
 
 int
 str_ncmp(
-  char *s1, *s2;
-  int n;
-  )
+  char* s1, 
+  char* s2,
+  int n
+)
 {
   int c1, c2;
 
@@ -825,12 +777,12 @@ str_ncmp(
  */
 void
 str_ncpy(
-  char *dst;
-  char *src;
-  int n;
-  )
+  char* dst,
+  char* src,
+  int n
+)
 {
-  char *end;
+  char* end;
 
   end = dst + n - 1;
 
@@ -842,11 +794,12 @@ str_ncpy(
 }
 
 char*
-str_ndup(src, len)
-  char *src;
-  int len;
+str_ndup(
+  char* src,
+  int len
+)
 {
-  char *dst, *str, *end;
+  char* dst, *str, *end;
 
   str = src;
   end = src + len;
@@ -859,7 +812,7 @@ str_ndup(src, len)
     }
   } while (str < end);
 
-  dst = (char *) malloc(end - src);
+  dst = (char* ) malloc(end - src);
 
   for (str = dst; (*str = *src); src++)
   {
@@ -883,13 +836,13 @@ str_ndup(src, len)
 /* password encryption					 */
 /* ----------------------------------------------------- */
 
-char *crypt();
+char* crypt();
 static char pwbuf[PASSLEN];
 
-char *
+char* 
 genpasswd(
-  char *pw;
-  )
+  char* pw
+)
 {
   char saltc[2];
   int i, c;
@@ -918,10 +871,11 @@ genpasswd(
 /* Thor.990214: 註解: 合密碼時, 傳回0 */
 int
 chkpasswd(
-  char *passwd, *test;
-  )
+  char* passwd,
+  char* test
+)
 {
-  char *pw;
+  char* pw;
   
   /* if(!*passwd) return -1 */ /* Thor.990416: 怕有時passwd是空的 */
   str_ncpy(pwbuf, test, PASSLEN);
@@ -935,11 +889,11 @@ chkpasswd(
 
 int
 str_pat(
-  const char *str;
-  const char *pat;
-  )
+  const char* str,
+  const char* pat
+)
 {
-  const char *xstr = NULL, *xpat;
+  const char* xstr = NULL, *xpat;
   int cs, cp;
 
   xpat = NULL;
@@ -1022,8 +976,9 @@ main()
 
 char*
 str_rev(
-  char *dst, *src;
-  )
+  char* dst,
+  char* src
+)
 {
   int cc;
 
@@ -1039,10 +994,10 @@ str_rev(
 
 int
 str_rle(			/* run-length encoding */
-	unsigned char *str;
-        )
+	unsigned char* str
+)
 {
-	unsigned char *src, *dst;
+	unsigned char* src, *dst;
 	int cc, rl;
 
 	dst = src = str;
@@ -1077,9 +1032,9 @@ str_rle(			/* run-length encoding */
 
 void
 str_stamp(
-  char *str;
-  time_t *chrono;
-  )
+  char* str,
+  time_t *chrono
+)
 {
   struct tm *ptime;
 
@@ -1090,17 +1045,17 @@ str_stamp(
 }
 
 #ifndef	NULL
-#define	NULL	(char *) 0
+#define	NULL	(char* ) 0
 #endif
 
-char * 
+char*  
 str_str( 
-  char *str; 
-  char *tag;                  /* non-empty lower case pattern */ 
-  )
+  char* str, 
+  char* tag                  /* non-empty lower case pattern */ 
+)
 { 
   int cc, c1, c2;
-  char *p1, *p2;
+  char* p1, *p2;
 
   cc = *tag++;
  
@@ -1133,81 +1088,14 @@ str_str(
   return NULL;
 }
 
-
-#if 0
-int
-str_str(str, tag)
-  char *str, *tag;		/* tag : lower-case string */
-{
-  int ch, key, chk;
-  char *s, *t;
-
-  key = *tag++;
-  if (!key)
-    return 0;
-
-  while (ch = *str)
-  {
-    str++;
-    if (ch >= 'A' && ch <= 'Z')
-      ch |= 0x20;
-    if (ch == key)
-    {
-      s = str;
-      t = tag;
-      str = NULL;
-      for (;;)
-      {
-	chk = *t;
-	if (!chk)
-	  return 1;
-
-	ch = *s;
-	if (ch >= 'A' && ch <= 'Z')
-	  ch |= 0x20;
-
-	if (ch != chk)
-	  break;
-
-	if (str == NULL)
-	{
-	  if (ch == key)
-	    str = s;
-	}
-
-	s++;
-	t++;
-      }
-      if (str == NULL)
-	str = s;
-    }
-  }
-  return 0;
-}
-#endif
-
-
-#if 0
-int
-str_str(str, tag)
-  char *str, *tag;		/* tag : lower-case string */
-{
-  char buf[STRLEN];
-
-  str_lower(buf, str);
-  return (int) strstr(buf, tag);
-}
-#endif
-
-
-char * 
+char*  
 str_sub(
-  char *str; 
-  char *tag;		/* non-empty lowest case pattern */ 
-  )
+  char* str, 
+  char* tag		/* non-empty lowest case pattern */ 
+)
 { 
   int cc, c1, c2;
-  char *p1, *p2;
+  char* p1, *p2;
   int in_chi = 0;	/* 1: 前一碼是中文字 */
   int in_chii;		/* 1: 前一碼是中文字 */
 
@@ -1254,10 +1142,10 @@ str_sub(
   return NULL;
 }
 
-char *
+char* 
 str_tail(
-  char *str;
-  )
+  char* str
+)
 {
   while (*str)
   {
@@ -1270,10 +1158,10 @@ str_tail(
 /* static char datemsg[32]; */
 static char datemsg[40];
 
-char *
+char* 
 Btime(
-  time_t *clock;
-  )
+  time_t *clock
+)
 {
   struct tm *t = localtime(clock);
 
@@ -1287,10 +1175,10 @@ Btime(
 }
 
 
-char *
+char* 
 Ctime(
-  time_t *clock;
-  )
+  time_t *clock
+)
 {
   struct tm *t = localtime(clock);
   static char week[] = "日一二三四五六";
@@ -1301,19 +1189,19 @@ Ctime(
   return (datemsg);
 }
 
-char *
+char* 
 Etime(
-  time_t *clock;
-  )
+  time_t *clock
+)
 {
   strftime(datemsg, 22, "%D %T %a", localtime(clock));
   return (datemsg);
 }
 
-char *
+char* 
 Atime( /* Thor.990125: 假裝ARPANET時間格式 */
-  time_t *clock;
-  )
+  time_t *clock
+)
 {
   /* ARPANET format: Thu, 11 Feb 1999 06:00:37 +0800 (CST) */
   /* strftime(datemsg, 40, "%a, %d %b %Y %T %Z", localtime(clock)); */
@@ -1322,7 +1210,7 @@ Atime( /* Thor.990125: 假裝ARPANET時間格式 */
   return (datemsg);
 }
 
-char *
+char* 
 Now(void)
 {
   time_t now;
@@ -1333,10 +1221,10 @@ Now(void)
 
 void
 str_trim(			/* remove trailing space */
-  char *buf;
-  )
+  char* buf
+)
 {
-  char *p = buf;
+  char* p = buf;
 
   while (*p)
     p++;
@@ -1349,10 +1237,10 @@ str_trim(			/* remove trailing space */
   }
 }
 
-char *
+char* 
 str_ttl(
-  char *title;
-  )
+  char* title
+)
 {
   if (title[0] == 'R' && title[1] == 'e' && title[2] == ':')
   {
@@ -1373,14 +1261,14 @@ str_ttl(
 /* update :   /  /                                       */ 
 /*-------------------------------------------------------*/ 
  
-//unsigned char *
+//unsigned char* 
 void
 str_xor(
-  unsigned char *dst; /* Thor.990409: 任意長度任意binary seq, 至少要 src那麼長*/
-  unsigned char *src; /* Thor.990409: 任意長度str, 不含 \0 */
+  unsigned char* dst, /* Thor.990409: 任意長度任意binary seq, 至少要 src那麼長*/
+  unsigned char* src  /* Thor.990409: 任意長度str, 不含 \0 */
                       /* Thor: 結果是將src xor到dst上, 若有0結果, 則不變 ,
 			       所以dst長度必大於等於 src(以字串而言) */
-  )
+)
 {
   register int cc;
   for(; *src; src++, dst++)
@@ -1391,19 +1279,15 @@ str_xor(
 } 
 
 #if 0
-#include<stdio.h>
 main()
 {
   char t[]="Hello";
   printf(str_xor(t,"he3"));
 }
 #endif
+
 /* strlcat based on OpenBSDs strlcat */
-#include <sys/types.h>
-#include <string.h>
-                                                                                
-size_t  strlcat(char *, const char *, size_t);
-                                                                                
+
 /*
  * Appends src to string dst of size siz (unlike strncat, siz is the
  * full size of dst, not space left).  At most siz-1 characters
@@ -1412,19 +1296,19 @@ size_t  strlcat(char *, const char *, size_t);
  * If retval >= siz, truncation occurred.
  */
 size_t
-strlcat(char *dst, const char *src, size_t siz)
+strlcat(char* dst, const char* src, size_t siz)
 {
-        char *d = dst;
-        const char *s = src;
+        char* d = dst;
+        const char* s = src;
         size_t n = siz;
         size_t dlen;
-                                                                                
+
         /* Find the end of dst and adjust bytes left but don't go past end */
         while (n-- != 0 && *d != '\0')
                 d++;
         dlen = d - dst;
         n = siz - dlen;
-                                                                                
+
         if (n == 0)
                 return(dlen + strlen(s));
         while (*s != '\0') {
@@ -1435,27 +1319,24 @@ strlcat(char *dst, const char *src, size_t siz)
                 s++;
         }
         *d = '\0';
-                                                                                
+
         return(dlen + (s - src));        /* count does not include NUL */
 }
+
 /* strlcpy based on OpenBSDs strlcpy */
-#include <stdio.h>
-#include <sys/types.h>
-                                                                                
-size_t strlcpy(char *, const char *, size_t);
-                                                                                
 /*
  * Copy src to string dst of size siz.  At most siz-1 characters
  * will be copied.  Always NUL terminates (unless siz == 0).
  * Returns strlen(src); if retval >= siz, truncation occurred.
  */
+
 size_t
-strlcpy(char *dst, const char *src, size_t siz)
+strlcpy(char* dst, const char* src, size_t siz)
 {
-        char *d = dst;
-        const char *s = src;
+        char* d = dst;
+        const char* s = src;
         size_t n = siz;
-                                                                                
+
         /* Copy as many bytes as will fit */
         if (n != 0 && --n != 0) {
                 do {
@@ -1463,7 +1344,7 @@ strlcpy(char *dst, const char *src, size_t siz)
                                 break;
                 } while (--n != 0);
         }
-                                                                                
+
         /* Not enough room in dst, add NUL and traverse rest of src */
         if (n == 0) {
                 if (siz != 0)
@@ -1471,6 +1352,7 @@ strlcpy(char *dst, const char *src, size_t siz)
                 while (*s++)
                         ;
         }
-                                                                                
+
         return(s - src - 1);        /* count does not include NUL */
 }
+

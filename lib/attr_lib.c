@@ -33,10 +33,11 @@
 
 /* return value if exist, else no change (it can set to default value) */
 int
-attr_get(userid, key, value)
-  char *userid;
-  int key;
-  void *value;
+attr_get(
+  char *userid,
+  int key,
+  void *value
+)
 {
   char fpath[64];
   int k;
@@ -63,10 +64,11 @@ attr_get(userid, key, value)
 
 /* set value if exist, else append new entry */
 int
-attr_put(userid, key, value)
-  char *userid;
-  int key;
-  void *value;
+attr_put(
+  char *userid,
+  int key,
+  void *value
+)
 {
   char fpath[64];
   int k,fd;
@@ -117,11 +119,12 @@ close_file:
 /* no attr(-2) if set no default */
 /* file fail or err key(-3) */
 int
-attr_step(userid, key, dflt, step)
-  char *userid;
-  int key;
-  int dflt;
-  int step;
+attr_step(
+  char *userid,
+  int key,
+  int dflt,
+  int step
+)
 {
   char fpath[64];
   int fd,ret;

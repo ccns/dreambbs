@@ -6,12 +6,14 @@
 /* update : 96/12/15					 */
 /*-------------------------------------------------------*/
 
-
 #include "dns.h"
-
+#include "bbs.h"        /* lkchu.981201: 是否有 define HAVE_ETC_HOSTS */
+#include <signal.h>
+#include <unistd.h>
+#include <string.h>
 
 void
-dns_init()
+dns_init(void)
 {
   res_init();
   /* _res.retrans = 5; */ /* DNS query timeout */
@@ -21,10 +23,11 @@ dns_init()
 
 
 int
-dns_query(name, qtype, ans)
-  char *name;			/* domain name */
-  int qtype;			/* type of query */
-  querybuf *ans;		/* buffer to put answer */
+dns_query(
+  char *name,			/* domain name */
+  int qtype,			/* type of query */
+  querybuf *ans 		/* buffer to put answer */
+)
 {
   querybuf buf;
 
@@ -51,18 +54,14 @@ dns_query(name, qtype, ans)
 /* update : 96/12/15					 */
 /*-------------------------------------------------------*/
 
-
-#include "dns.h"
-
-
 /* ----------------------------------------------------- */
 /* get IP address by host name				 */
 /* ----------------------------------------------------- */
 
-
 unsigned long
-dns_addr(name)
-  char *name;
+dns_addr(
+  char *name
+)
 {
   ip_addr addr;
   u_char *cp, *eom;
@@ -136,6 +135,7 @@ dns_addr(name)
   }
   return INADDR_NONE;
 }
+
 /*-------------------------------------------------------*/
 /* lib/dns_ident.c      ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
@@ -144,17 +144,9 @@ dns_addr(name)
 /* update : 96/12/15                                     */
 /*-------------------------------------------------------*/
 
-
-#include "dns.h"
-
-#include <unistd.h>     /* Thor.991215: for timeout */
-#include <signal.h>
-#include <string.h>
-
 /* ----------------------------------------------------- */
 /* get remote host  / user name                          */
 /* ----------------------------------------------------- */
-
 
 /*
  * dns_ident() speaks a common subset of the RFC 931, AUTH, TAP, IDENT and
@@ -162,7 +154,6 @@ dns_addr(name)
  * remote host to look up the owner of a connection. The information should
  * not be used for authentication purposes.
  */
-
 
 #define RFC931_PORT     113     /* Semi-well-known port */
 #define ANY_PORT        0       /* Any old port will do */
@@ -180,16 +171,16 @@ pseudo_handler()        /* Thor.991215: for timeout */
 }
 #endif
 
-
 /* Thor.990325: 為了讓反查時能確定查出，來自哪個interface就從那連回，以防反查不到 */
 
 void
-dns_ident(sock, from, rhost, ruser)
-  int sock;  /* Thor.990330: 負數保留給, 用getsock無法抓出正確port的時候.
+dns_ident(
+  int sock,  /* Thor.990330: 負數保留給, 用getsock無法抓出正確port的時候.
                              代表 Port, 不過不太可能用到 */
-  struct sockaddr_in *from;
-  char *rhost;
-  char *ruser;
+  struct sockaddr_in *from,
+  char *rhost,
+  char *ruser
+)
 {
   struct sockaddr_in rmt_sin;
   struct sockaddr_in our_sin;
@@ -324,18 +315,15 @@ dns_ident(sock, from, rhost, ruser)
 /* update : 96/12/15					 */
 /*-------------------------------------------------------*/
 
-
-#include "bbs.h"        /* lkchu.981201: 是否有 define HAVE_ETC_HOSTS */
-
 /* ----------------------------------------------------- */
 /* get host name by IP address				 */
 /* ----------------------------------------------------- */
 
-
 int
-dns_name(addr, name)
-  unsigned char *addr;
-  char *name;
+dns_name(
+  unsigned char *addr,
+  char *name
+)
 {
   querybuf ans;
   char qbuf[MAXDNAME];
@@ -427,15 +415,11 @@ dns_name(addr, name)
 /* update : 96/12/15					 */
 /*-------------------------------------------------------*/
 
-
-#include "dns.h"
-#include <unistd.h>
-#include <string.h>
-
 int
-dns_open(host, port)
-  char *host;
-  int port;
+dns_open(
+  char *host,
+  int port
+)
 {
   querybuf ans;
   int n, ancount, qdcount;
@@ -538,14 +522,11 @@ ip:
 /* update : 96/12/15					 */
 /*-------------------------------------------------------*/
 
-
-#include "dns.h"
-
-
 static inline void
-dns_mx(domain, mxlist)
-  char *domain;
-  char *mxlist;
+dns_mx(
+  char *domain,
+  char *mxlist
+)
 {
   querybuf ans;
   int n, ancount, qdcount;
@@ -611,8 +592,9 @@ dns_mx(domain, mxlist)
 
 
 int
-dns_smtp(host)
-  char *host;
+dns_smtp(
+  char *host
+)
 {
   int sock;
   char *str, *ptr, mxlist[MAX_MXLIST];

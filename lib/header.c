@@ -1,11 +1,17 @@
 #include "dao.h"
+#include "modes.h"
 #include <string.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <time.h>
+#include <unistd.h>
 
 void
-hdr_fpath(fpath, folder, hdr)
-  char *fpath;
-  char *folder;
-  HDR *hdr;
+hdr_fpath(
+  char *fpath,
+  char *folder,
+  HDR *hdr
+)
 {
   char *str = NULL;
   int cc, chrono;
@@ -50,14 +56,12 @@ hdr_fpath(fpath, folder, hdr)
 /* *.o - old file				 */
 /* ----------------------------------------------------- */
 
-
-#include "dao.h"
-
-
 int
-hdr_prune(fpath, nhead, ntail)
-  char *fpath;
-  int nhead, ntail;
+hdr_prune(
+  char *fpath,
+  int nhead, 
+  int ntail
+)
 {
   HDR hdr;
   char fnew[80], fold[80];
@@ -125,6 +129,7 @@ hdr_prune(fpath, nhead, ntail)
 
   return 0;
 }
+
 /* ----------------------------------------------------- */
 /* hdr_stamp - create unique HDR based on timestamp	 */
 /* ----------------------------------------------------- */
@@ -134,97 +139,13 @@ hdr_prune(fpath, nhead, ntail)
 /* return : open() fd (not close yet) or link() result	 */
 /* ----------------------------------------------------- */
 
-
-#include "dao.h"
-#include <fcntl.h>
-#include <errno.h>
-#include <string.h>
-#include <time.h>
-
-#if 0
 int
-hdr_stamp(folder, token, hdr, fpath)
-  char *folder;
-  int token;
-  HDR *hdr;
-  char *fpath;
-{
-  char *fname, *family = NULL;
-  int rc;
-  char *flink, buf[128];
-
-  flink = NULL;
-  if (token & HDR_LINK)
-  {
-    flink = fpath;
-    fpath = buf;
-  }
-
-  fname = fpath;
-  while (rc = *folder++)
-  {
-    *fname++ = rc;
-    if (rc == '/')
-      family = fname;
-  }
-  if (*family != '.')
-  {
-    fname = family;
-    family -= 2;
-  }
-  else
-  {
-    fname = family + 1;
-    *fname++ = '/';
-  }
-
-  if (token &= 0xdf)		/* ÅÜ¤j¼g */
-  {
-    *fname++ = token;
-  }
-  else
-  {
-    *fname = *family = '@';
-    family = ++fname;
-  }
-
-  token = time(0);
-
-  for (;;)
-  {
-    *family = radix32[token & 31];
-    archiv32(token, fname);
-
-    if (flink)
-      rc = f_ln(flink, fpath);
-    else
-      rc = open(fpath, O_WRONLY | O_CREAT | O_EXCL, 0600);
-
-    if (rc >= 0)
-    {
-      memset(hdr, 0, sizeof(HDR));
-      hdr->chrono = token;
-      str_stamp(hdr->date, &hdr->chrono);
-      strcpy(hdr->xname, --fname);
-      break;
-    }
-
-    if (errno != EEXIST)
-      break;
-
-    token++;
-  }
-
-  return rc;
-}
-#endif
-
-int
-hdr_stamp(folder, token, hdr, fpath)
-  char *folder;
-  int token;
-  HDR *hdr;
-  char *fpath;
+hdr_stamp(
+  char *folder,
+  int token,
+  HDR *hdr,
+  char *fpath
+)
 {
   char *fname, *family = NULL;
   int rc, chrono;

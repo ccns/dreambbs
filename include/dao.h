@@ -48,7 +48,7 @@ int str_cmp(char *s1, char *s2);
 /* str_decode.c */
 char *mm_getencode(unsigned char *str, char *code);
 void mm_getcharset(const char *str, char *charset, int size);
-int mmdecode(unsigned char *src, int encode, unsigned char *dst);
+int mmdecode(unsigned char *src, unsigned char encode, unsigned char *dst);
 void str_decode(unsigned char *str);
 /* str_dup.c */
 char *str_dup(char *src, int pad);
