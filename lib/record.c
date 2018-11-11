@@ -1,12 +1,17 @@
-#include <fcntl.h>
-#include <unistd.h>
 #include "dao.h"
+#include <fcntl.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/file.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 int
-rec_add(fpath, data, size)
-  char *fpath;
-  void *data;
-  int size;
+rec_add(
+  char* fpath,
+  void* data,
+  int size
+)
 {
   int fd;
 
@@ -20,29 +25,25 @@ rec_add(fpath, data, size)
 
   return 0;
 }
-#include "dao.h"
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/file.h>
-#include <sys/stat.h>
-#include <stdlib.h>
 
 static int
-is_bottompost(hdr)
-  HDR *hdr;
+is_bottompost(
+  HDR *hdr
+)
 {
   return (hdr->xmode & POST_BOTTOM);
 }
 
 
 int
-rec_bot(fpath, data, size)      /* amaki.040715: 嵌入式寫檔 */
-  char *fpath;
-  void *data;
-  int size;
+rec_bot(      /* amaki.040715: 嵌入式寫檔 */
+  char* fpath,
+  void* data,
+  int size
+)
 {
   int fd, fsize, count;
-  void *pool = NULL, *set;
+  void* pool = NULL, *set;
   char set_pool[REC_SIZ];
   struct stat st;
 
@@ -56,7 +57,7 @@ rec_bot(fpath, data, size)      /* amaki.040715: 嵌入式寫檔 */
   fstat(fd, &st);
 
   count = 0;
-  set = (void *) set_pool;
+  set = (void* ) set_pool;
 
   if ((fsize = st.st_size))
   {
@@ -68,7 +69,7 @@ rec_bot(fpath, data, size)      /* amaki.040715: 嵌入式寫檔 */
       {
         if (count)
         {
-          pool = (void *) malloc(count * size);
+          pool = (void* ) malloc(count * size);
 
           read(fd, pool, count * size);
           lseek(fd, -size * count, SEEK_CUR);
@@ -78,7 +79,7 @@ rec_bot(fpath, data, size)      /* amaki.040715: 嵌入式寫檔 */
       else if (fsize <= 0)      /* amaki.040715: 全部都是置底的東西 */
       {
         count++;
-        pool = (void *) malloc(count * size);
+        pool = (void* ) malloc(count * size);
 
         lseek(fd, -size, SEEK_CUR);
         read(fd, pool, count * size);
@@ -107,20 +108,14 @@ rec_bot(fpath, data, size)      /* amaki.040715: 嵌入式寫檔 */
   return 0;
 }
 
-#include "dao.h"
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/file.h>
-#include <sys/stat.h>
-#include <stdlib.h>
-
 int
-rec_del(data, size, pos, fchk, fdel)
-  char *data;
-  int size;
-  int pos;
-  int (*fchk) ();
-  int (*fdel) ();
+rec_del(
+  char* data,
+  int size,
+  int pos,
+  int (*fchk) (),
+  int (*fdel) ()
+)
 {
   int fd;
   off_t off, len;
@@ -181,7 +176,7 @@ rec_del(data, size, pos, fchk, fdel)
       /* really delete it */
 
       len -= (off + size);
-      data = (char *) malloc(len);
+      data = (char* ) malloc(len);
       read(fd, data, len);
     }
     else
@@ -209,15 +204,13 @@ rec_del(data, size, pos, fchk, fdel)
 
   return 0;
 }
-#include <fcntl.h>
-#include <unistd.h>
-
 
 int
-rec_get(fpath, data, size, pos)
-  char *fpath;
-  void *data;
-  int size, pos;
+rec_get(
+  char* fpath,
+  void* data,
+  int size, pos
+)
 {
   int fd;
   int ret;
@@ -235,21 +228,16 @@ rec_get(fpath, data, size, pos)
   }
   return ret;
 }
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/file.h>
-#include <sys/stat.h>
-#include "dao.h"
+
 
 int
-rec_ins(fpath, data, size, pos, num)
-  char *fpath;
-  void *data;
-  int size;
-  int pos;
-  int num;
+rec_ins(
+  char* fpath,
+  void* data,
+  int size,
+  int pos,
+  int num
+)
 {
   int fd;
   off_t off, len;
@@ -274,7 +262,7 @@ rec_ins(fpath, data, size, pos, num)
   len -= off;
   if (len > 0)
   {
-    fpath = (char *) malloc(pos = len + size);
+    fpath = (char* ) malloc(pos = len + size);
     memcpy(fpath, data, size);
     read(fd, fpath + size, len);
     lseek(fd, off, SEEK_SET);
@@ -296,18 +284,13 @@ rec_ins(fpath, data, size, pos, num)
   return 0;
 }
 
-#include "dao.h"
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/file.h>
-#include <sys/stat.h>
-
 
 int
-rec_loc(data, size, fchk)
-  char *data;
-  int size;
-  int (*fchk) ();
+rec_loc(
+  char* data,
+  int size,
+  int (*fchk) ()
+)
 {
   int fd,pos,tmp;
   off_t off;
@@ -342,24 +325,18 @@ rec_loc(data, size, fchk)
 
   return tmp ? pos : -1;
 }
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/file.h>
-#include <sys/stat.h>
-#include <stdlib.h>
-#include <string.h>
-#include "dao.h"
 
 int
-rec_mov(data, size, from, to)
-  char *data;
-  int size;
-  int from;
-  int to;
+rec_mov(
+  char* data,
+  int size,
+  int from,
+  int to
+)
 {
   int fd, backward;
   off_t off, len;
-  char *pool;
+  char* pool;
   struct stat st;
 
   if ((fd = open(data, O_RDWR)) < 0)
@@ -391,7 +368,7 @@ rec_mov(data, size, from, to)
   lseek(fd, off, SEEK_SET);
 
   len = (to - from + 1) * size;
-  pool = data = (char *) malloc(len + size);
+  pool = data = (char* ) malloc(len + size);
 
   if (backward)
     data += size;
@@ -419,13 +396,13 @@ rec_mov(data, size, from, to)
 
   return 0;
 }
-#include <sys/stat.h>
 
 
 int
-rec_num(fpath, size)
-  char *fpath;
-  int size;
+rec_num(
+  char* fpath,
+  int size
+)
 {
   struct stat st;
 
@@ -433,17 +410,14 @@ rec_num(fpath, size)
     return 0;
   return (st.st_size / size);
 }
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/file.h>
-#include <sys/stat.h>
-#include "dao.h"
 
 int
-rec_put(fpath, data, size, pos)
-  char *fpath;
-  void *data;
-  int size, pos;
+rec_put(
+  char* fpath,
+  void* data,
+  int size, 
+  int pos
+)
 {
   int fd;
 
@@ -467,11 +441,13 @@ rec_put(fpath, data, size, pos)
 }
 
 int
-rec_put2(fpath, data, size, pos, fchk)
-  char *fpath;
-  void *data;
-  int size, pos;
-  int (*fchk)();
+rec_put2(
+  char* fpath,
+  void* data,
+  int size, 
+  int pos,
+  int (*fchk)()
+)
 {
   int fd;
   off_t off, len;
@@ -551,20 +527,15 @@ rec_put2(fpath, data, size, pos, fchk)
 
   return 0;
 }
-#include "dao.h"
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/file.h>
-#include <sys/stat.h>
-
 
 int
-rec_ref(fpath, data, size, pos, fchk, fref)
-  char *fpath;
-  void *data;
-  int size, pos;
-  int (*fchk)();
-  void (*fref)();
+rec_ref(
+  char* fpath,
+  void* data,
+  int size, pos,
+  int (*fchk)(),
+  void (*fref)()
+)
 {
   int fd;
   off_t off, len;
@@ -639,20 +610,14 @@ rec_ref(fpath, data, size, pos, fchk, fref)
 
   return 0;
 }
-#include "dao.h"
-#include <stdlib.h>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/stat.h>
-
 
 int
-rec_sync(fpath, size, fsync, fchk)
-  char *fpath;
-  int size;
-  int (*fsync) ();
-  int (*fchk) ();
+rec_sync(
+  char* fpath,
+  int size,
+  int (*fsync) (),
+  int (*fchk) ()
+)
 {
   int fd, fsize;
   struct stat st;
@@ -664,16 +629,17 @@ rec_sync(fpath, size, fsync, fchk)
 
   if (!fstat(fd, &st) && (fsize = st.st_size) > 0)
   {
-    char *base;
+    char* base;
 
-    base = (char *) malloc(fsize);
+    base = (char* ) malloc(fsize);
     fsize = read(fd, base, fsize);
 
     if (fsize >= size)
     {
       if (fchk)		/* 檢查是否有不正確的資料 */
       {
-	char *head, *tail;
+	char* head;
+        char* tail;
 
 	head = base;
 	tail = base + fsize;
@@ -713,3 +679,4 @@ rec_sync(fpath, size, fsync, fchk)
 
   return fsize;
 }
+
