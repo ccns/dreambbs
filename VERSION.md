@@ -10,6 +10,7 @@
 
 * preparing version name about `testing`:
     + `v0.95`: aka. `REV-BETA4`, for naming style is becoming different.
+    + `v0.95.1`: aka. `REV-BETA4.1`, detail fixes based on v0.95'
 
 * preparing version name about `current`:
     + `v1.0-CURRENT`: developing for preparing version 1.0.
