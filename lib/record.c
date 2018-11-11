@@ -209,7 +209,8 @@ int
 rec_get(
   char* fpath,
   void* data,
-  int size, pos
+  int size, 
+  int pos
 )
 {
   int fd;
@@ -444,7 +445,7 @@ int
 rec_put2(
   char* fpath,
   void* data,
-  int size, 
+  int size,
   int pos,
   int (*fchk)()
 )
@@ -532,7 +533,8 @@ int
 rec_ref(
   char* fpath,
   void* data,
-  int size, pos,
+  int size,
+  int pos,
   int (*fchk)(),
   void (*fref)()
 )

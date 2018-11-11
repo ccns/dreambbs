@@ -25,7 +25,7 @@ static inline void
 swapfunc(
   char* a,
   char* b,
-  int n, 
+  int n,
   int swaptype
 )
 {
@@ -62,7 +62,8 @@ med3(
 void
 xsort(
   void *a,
-  size_t n, es,
+  size_t n,
+  size_t es,
   int (*cmp) ()
 )
 {
