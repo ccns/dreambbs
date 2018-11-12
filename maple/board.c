@@ -64,9 +64,9 @@ static time_t brh_expire;
 
 
 static int *
-brh_alloc(
-  int *tail,
-  int size)
+brh_alloc(tail, size)
+  int *tail;
+  int size;
 {
   int *base, n;
 
@@ -92,7 +92,7 @@ brh_alloc(
 
 
 static void
-brh_put(void)
+brh_put()
 {
   int *list;
 
@@ -136,9 +136,9 @@ brh_put(void)
 
 
 void
-brh_get(
-  time_t bstamp,		/* board stamp */
-  int bhno)
+brh_get(bstamp, bhno)
+  time_t bstamp;		/* board stamp */
+  int bhno;
 {
   int *head, *tail;
   int size, bcnt, item;
@@ -204,8 +204,8 @@ brh_get(
 
 
 int
-brh_unread(
-  time_t chrono)
+brh_unread(chrono)
+  time_t chrono;
 {
   int *head, *tail, item;
 
@@ -235,8 +235,8 @@ brh_unread(
 
 
 void
-brh_visit(
-  int mode)			/* 0 : visit, 1: un-visit */
+brh_visit(mode)
+  int mode;			/* 0 : visit, 1: un-visit */
 {
   int *list;
 
@@ -255,8 +255,8 @@ brh_visit(
 
 
 void
-brh_add(
-  time_t prev, time_t chrono, time_t next)
+brh_add(prev, chrono, next)
+  time_t prev, chrono, next;
 {
   int *base, *head, *tail, item, final, begin;
 
@@ -376,8 +376,8 @@ force_board (void)
 
 
 static inline int
-is_bm(
-  char *list)			/* ªO¥D¡GBM list */
+is_bm(list)
+  char *list;			/* ªO¥D¡GBM list */
 {
   int cc, len;
   char *userid;
@@ -402,7 +402,7 @@ is_bm(
 
 #if	defined(HAVE_RESIST_WATER) || defined(HAVE_DETECT_CROSSPOST)
 void
-remove_perm(void)
+remove_perm()
 {
   int i;
   for(i=0;i<(sizeof(brd_bits)/sizeof(int));i++)
@@ -411,11 +411,11 @@ remove_perm(void)
 #endif
 
 int
-Ben_Perm(
-  BRD *bhdr,
-  usint ulevel)
+Ben_Perm(bhdr, ulevel)
+  BRD *bhdr;
+  unsigned int ulevel;
 {
-  usint readlevel, postlevel, bits;
+  unsigned int readlevel, postlevel, bits;
   char *blist, *bname;
 
   bname = bhdr->brdname;
@@ -425,7 +425,7 @@ Ben_Perm(
   if (!str_cmp(bname, DEFAULT_BOARD))
   {
 #ifdef  HAVE_MODERATED_BOARD	
-    extern int bm_belong(char *board);
+    extern int bm_belong();
 #ifdef  HAVE_WATER_LIST
 #ifdef	HAVE_SYSOP_WATERLIST
 	if(bm_belong(bname) == BRD_R_BIT)
@@ -460,7 +460,7 @@ Ben_Perm(
   {
     bits = 0;
 
-    extern int bm_belong(char *board);
+    extern int bm_belong();
     bits = bm_belong(bname);  /* Thor.980813: ¹ï¯µ±K¬Ýª©¦Ó¨¥, ¬O­«·s§PÂ_ªº */
     
       if (readlevel & PERM_SYSOP)
@@ -503,8 +503,8 @@ Ben_Perm(
 
 
 int
-bstamp2bno(
-  time_t stamp)
+bstamp2bno(stamp)
+  time_t stamp;
 {
   BRD *brd;
   int bno, max;
@@ -524,10 +524,10 @@ bstamp2bno(
 
 
 void
-brh_load(void)
+brh_load()
 {
   BRD *brdp, *bend;
-  usint ulevel;
+  unsigned int ulevel;
   int n, cbno;
   char *bits;
 
@@ -693,7 +693,7 @@ brh_load(void)
 
 
 void
-brh_save(void)
+brh_save()
 {
   int *base, *head, *tail, bhno, size;
   BRD *bhdr, *bend;
@@ -774,7 +774,7 @@ brd_usies(void)
 #endif
 
 static void
-brd_usies_BMlog(void)
+brd_usies_BMlog()
 {
   char fpath[64], buf[256];
 
@@ -788,8 +788,8 @@ brd_usies_BMlog(void)
 int ok=1;
 
 void
-XoPost(
-  int bno)
+XoPost(bno)
+  int bno;
 {
   XO *xo;
   BRD *brd;
@@ -887,9 +887,9 @@ XoPost(
 
 /* cache.090503: §Y®É¼öªù¬ÝªO */
 static int
-mantime_cmp(
-  short *a,
-  short *b)
+mantime_cmp(a, b)
+  short *a;
+  short *b;
 {
   /* ¥Ñ¦h±Æ¨ì¤Ö */
   return bshm->mantime[*b] - bshm->mantime[*a];
@@ -904,8 +904,8 @@ static int class_flag;
 
 
 static int
-class_check(
-  int chn)
+class_check(chn)
+  int chn;
 {
   short *cbase, *chead, *ctail;
   int pos, max, val, zap;
@@ -997,8 +997,8 @@ class_check(
 }
 
 static int
-class_load(
-  XO *xo)
+class_load(xo)
+  XO *xo;
 {
   short *cbase, *chead, *ctail;
   int chn;			/* ClassHeader number */
@@ -1104,8 +1104,8 @@ class_load(
 
 
 static int
-XoClass(
-  int chn)
+XoClass(chn)
+  int chn;
 {
   XO xo, *xt;
 
@@ -1138,8 +1138,8 @@ XoClass(
 
 
 void
-bcheck(
-  BRD *brd)
+bcheck(brd)
+  BRD *brd;
 {
   char folder[64];
   struct stat st;
@@ -1182,8 +1182,8 @@ bcheck(
 
 
 static int
-class_body(
-  XO *xo)
+class_body(xo)
+  XO *xo;
 {
   char *img, *bits, buf[16], buf2[20], brdtype, *str2;
   short *chp;
@@ -1374,7 +1374,7 @@ class_body(
         str2 = "     ";
 //ª`·N¦³¤T®æªÅ¥Õ, ¦]¬° HOT ¬O¤T­Ó char ¬G§ó§ï±Æª©
 //	  prints("\033[%d;4%d;37m%6d%s%s%c%-13s\033[%sm%-4s %s%-33.32s%s%s%.13s",mode,mode?cuser.barcolor:0, num, str, mode ? "\033[37m" : "\033[m",
-//	  brdtype,brd->brdname, buf, brd->class, mode ? "\033[37m" : "\033[m", brd->title,brd->bvote ? "[1;33m  §ë " : str2, mode ? "\033[37m" : "\033[m", brd->BM);
+//	  brdtype,brd->brdname, buf, brd->class, mode ? "\033[37m" : "\033[m", brd->title,brd->bvote ? "\x1b[1;33m  §ë " : str2, mode ? "\033[37m" : "\033[m", brd->BM);
 
         sprintf(buf,"%d;3%d",brd->color/10,brd->color%10);
 //	prints("%6d%s%c%-13s\033[%sm%-4s \033[m%-36s%c %.13s", num, str,
@@ -1407,8 +1407,8 @@ class_body(
 
 
 static int
-class_neck(
-  XO *xo)
+class_neck(xo)
+  XO *xo;
 {
   move(1, 0);
   prints(NECKBOARD, class_flag & UFO2_BRDNEW ? "Á`¼Æ" : "½s¸¹", "¤¤   ¤å   ±Ô   ­z");
@@ -1418,8 +1418,8 @@ class_neck(
 
 
 static int
-class_head(
-  XO *xo)
+class_head(xo)
+  XO *xo;
 {
   vs_head("¬ÝªO¦Cªí", str_site);
   return class_neck(xo);
@@ -1427,8 +1427,8 @@ class_head(
 
 
 static int
-class_init(			/* re-init */
-  XO *xo)
+class_init(xo)			/* re-init */
+  XO *xo;
 {
   class_load(xo);
   return class_head(xo);
@@ -1436,8 +1436,8 @@ class_init(			/* re-init */
 
 
 static int
-class_newmode(
-  XO *xo)
+class_newmode(xo)
+  XO *xo;
 {
   cuser.ufo2 ^= UFO2_BRDNEW;  /* Thor.980805: ¯S§Oª`·N utmp.ufoªº¦P¨B°ÝÃD */
   class_flag ^= UFO2_BRDNEW;
@@ -1446,8 +1446,8 @@ class_newmode(
 
 
 static int
-class_help(
-  XO *xo)
+class_help(xo)
+  XO *xo;
 {
   film_out(FILM_CLASS, -1);
   return class_head(xo);
@@ -1455,8 +1455,8 @@ class_help(
 
 
 static int
-class_search(
-  XO *xo)
+class_search(xo)
+  XO *xo;
 {
   int num, pos, max;
   char *ptr;
@@ -1497,8 +1497,8 @@ class_search(
 
 /* cache.091125: ¥u¦C¥X¨ã¦³¾\ÅªÅv­­ªº¯µ±K/¦n¤Í¬ÝªO */
 static int
-class_yank2(
-  XO *xo)
+class_yank2(xo)
+  XO *xo;
 {
   if (xo->key >= 0)
     return XO_NONE;
@@ -1508,8 +1508,8 @@ class_yank2(
 }
 
 static int
-class_yank(
-  XO *xo)
+class_yank(xo)
+  XO *xo;
 {
   class_flag ^= BFO_YANK;
   return class_init(xo);
@@ -1517,8 +1517,8 @@ class_yank(
 
 
 static int
-class_zap(
-  XO *xo)
+class_zap(xo)
+  XO *xo;
 {
   BRD *brd;
   short *chp;
@@ -1543,8 +1543,8 @@ class_zap(
 
 
 static int
-class_edit(
-  XO *xo)
+class_edit(xo)
+  XO *xo;
 {
   /* if (HAS_PERM(PERM_ALLBOARD)) */
   /* Thor.990119: ¥u¦³¯¸ªø¥i¥H­×§ï */
@@ -1566,8 +1566,8 @@ class_edit(
 
 
 static int
-class_browse(
-  XO *xo)
+class_browse(xo)
+  XO *xo;
 {
   short *chp;
   int chn;
@@ -1612,7 +1612,7 @@ class_browse(
 
 
 int
-Select(void)
+Select()
 {
   int bno;
   BRD *brd;
@@ -1638,8 +1638,8 @@ Select(void)
 
 
 static int
-class_switch(
-  XO *xo)
+class_switch(xo)
+  XO *xo;
 {
   Select();
   return class_head(xo);
@@ -1654,8 +1654,8 @@ class_switch(
 
 
 static int
-XoAuthor(
-  XO *xo)
+XoAuthor(xo)
+  XO *xo;
 {
   int chn, len, max, tag;
   short *chp, *chead, *ctail;
@@ -1791,8 +1791,8 @@ XoAuthor(
 
 #ifdef  HAVE_FAVORITE
 static int
-class_find_same(
-  HDR *src)
+class_find_same(src)
+  HDR *src;
 {
   char fpath[128];
   int fd,i;
@@ -1818,8 +1818,8 @@ class_find_same(
 
 #if 0
 static int
-class_add(
-  XO *xo)
+class_add(xo)
+  XO *xo;
 {
   short *chp;
   BRD *brd;
@@ -1860,8 +1860,8 @@ class_add(
 #endif
 
 static int
-class_add2(          /* gaod: §Úªº³Ì·R¤¤ª½±µ·s¼W·s¬ÝªO */
-  XO *xo)
+class_add2(xo)          /* gaod: §Úªº³Ì·R¤¤ª½±µ·s¼W·s¬ÝªO */
+  XO *xo;
 {
   short *chp;
   BRD *brd;
@@ -1909,8 +1909,8 @@ class_add2(          /* gaod: §Úªº³Ì·R¤¤ª½±µ·s¼W·s¬ÝªO */
 }
 
 static int
-class_del(
-  XO *xo)
+class_del(xo)
+  XO *xo;
 {
   short *chp;
   BRD *brd;
@@ -1950,8 +1950,8 @@ class_del(
 }
 
 static int
-class_mov(
-  XO *xo)
+class_mov(xo)
+  XO *xo;
 {
   short *chp;
   BRD *brd;
@@ -2014,8 +2014,8 @@ class_mov(
 #ifdef  HAVE_COUNT_BOARD
 #if 0
 static int
-class_stat(
-  XO *xo)
+class_stat(xo)
+  XO *xo;
 {
   BRD *brd;
   short *chp;
@@ -2038,8 +2038,8 @@ class_stat(
 #endif
 
 static int
-class_visit(
-  XO *xo)
+class_visit(xo)
+  XO *xo;
 {
   short *chp;
   int chn;
@@ -2095,7 +2095,7 @@ static KeyFunc class_cb[] =
 
 
 int
-Class(void)
+Class()
 {
   boardmode = 0;
   if (!class_img || XoClass(CH_END-1) == XO_NONE)
@@ -2107,8 +2107,8 @@ Class(void)
 }
 
 void 
-check_new(
-  BRD *brd)
+check_new(brd)
+  BRD *brd;
 {
           int fd, fsize;
           char folder[64];
@@ -2138,7 +2138,7 @@ check_new(
 
 #ifdef	HAVE_INFO
 int 
-Information(void)
+Information()
 {
   int chn;
   chn = brd_bno(BRD_BULLETIN);
@@ -2151,7 +2151,7 @@ Information(void)
 
 #ifdef	HAVE_STUDENT
 int 
-Student(void)
+Student()
 {
   int chn;
   chn = brd_bno(BRD_SBULLETIN);
@@ -2164,7 +2164,7 @@ Student(void)
 
 #ifdef	HAVE_PROFESS
 int
-Profess(void)
+Profess()
 {
   boardmode = 1;
   if (!profess_img || XoClass(CH_END-1) == XO_NONE)
@@ -2178,7 +2178,7 @@ Profess(void)
 
 #ifdef  HAVE_FAVORITE 
 int
-Favorite(void)
+Favorite()
 {
   boardmode = 2;
   if (!favorite_img || XoClass(CH_END-1) == XO_NONE)
@@ -2191,7 +2191,7 @@ Favorite(void)
 #endif
 
 void
-board_main(void)
+board_main()
 {
   int fsize;
 #ifdef	HAVE_PROFESS  
@@ -2261,7 +2261,7 @@ board_main(void)
 
 
 int
-Boards(void)
+Boards()
 {
   /* class_xo = &board_xo; *//* Thor: ¤w¦³ default, ¤£»Ý§@¦¹ */
   boardmode = -1;
@@ -2273,8 +2273,8 @@ Boards(void)
 #define MSG_CC "\033[32m[¬ÝªO¸s²Õ¦W³æ]\033[m\n"
 
 int
-brd_list(
-  int reciper)
+brd_list(reciper)
+  int reciper;
 {
   LIST list;
   int userno, fd ,select;

@@ -391,7 +391,7 @@ mail2usr(
       f_suck(fp,"gem/@/@accept");
     else
     {
-      fprintf(fp,"[1;33m°h¥ó²z¥Ñ: %s[m\n\n",msg);
+      fprintf(fp,"\x1b[1;33m°h¥ó²z¥Ñ: %s\x1b[m\n\n",msg);
       f_suck(fp,"gem/@/@deny");
     }
     

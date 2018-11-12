@@ -88,7 +88,7 @@ show_fasttime(void)
 	for (i = 0;i < 4;i++)
 	{
 		fscanf(fp, "%s%d", buf, &fasttime[i]);
-		prints("[1;31m%s  [1;32m%s %d[m\n", buf1[i], buf, fasttime[i]);
+		prints("\x1b[1;31m%s  \x1b[1;32m%s %d\x1b[m\n", buf1[i], buf, fasttime[i]);
 	}
 	vmsg(NULL);
 	fclose(fp);
@@ -149,8 +149,8 @@ int countNeighbor(int y, int x, int bitmask)
 	return sum;
 };
 
-char *symTag = "[1;40;31m£Z[m";
-char *symWrong = "[1;41;37m¢Æ[m";
+char *symTag = "\x1b[1;40;31m£Z\x1b[m";
+char *symWrong = "\x1b[1;41;37m¢Æ\x1b[m";
 char *symBlank = "¡½";
 char *strMines[] = {"¡@", "¢°", "¢±", "¢²", "¢³", "¢´",
 					"¢µ", "¢¶", "¢·", NULL
@@ -200,7 +200,7 @@ void drawMapLine(int y, int flShow)
 	for (x = 1; x <= MAP_X; x++)
 	{
 
-		if (x == currx && y == curry) outs("[44;31m");
+		if (x == currx && y == curry) outs("\x1b[44;31m");
 
 		if (MineMap[y][x] & TILE_TAGGED)
 		{
@@ -214,7 +214,7 @@ void drawMapLine(int y, int flShow)
 			outs(symTag);
 		else outs(symBlank);
 
-		if (x == currx && y == curry) outs("[m");
+		if (x == currx && y == curry) outs("\x1b[m");
 	};
 	clrtoeol();
 
@@ -238,7 +238,7 @@ static int flLoseMine = 0;
 static void loseMine(void)
 {
 	drawMap(1);
-	game_log(1, "[31;1m¦b %.01f ¬í®É½ò¨ì¦a¹p°Õ!!!", difftime(time(0), init_time));
+	game_log(1, "\x1b[31;1m¦b %.01f ¬í®É½ò¨ì¦a¹p°Õ!!!", difftime(time(0), init_time));
 	vmsg("§A¿é¤F");
 	flLoseMine = 1;
 };
@@ -427,9 +427,9 @@ start:
 			move(b_lines - 1, 0);
 			clrtoeol();
 			ti = (int) difftime(time(0), init_time);
-			outs("[1;37;44m§AÄ¹¤F!  ");
-			prints("©Òªá®É¶¡: %d ¬í[m\n", ti);
-			game_log(1, "[32;1m¦b %s ªá¤F %d ¬í²M°£¦a¹p!!!", buf, ti);
+			outs("\x1b[1;37;44m§AÄ¹¤F!  ");
+			prints("©Òªá®É¶¡: %d ¬í\x1b[m\n", ti);
+			game_log(1, "\x1b[32;1m¦b %s ªá¤F %d ¬í²M°£¦a¹p!!!", buf, ti);
 			if (ti < fasttime[atoi(ans)-1]) change_fasttime(atoi(ans) - 1, ti);
 			vmsg(NULL);
 		};

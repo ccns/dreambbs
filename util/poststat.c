@@ -254,7 +254,7 @@ poststat(
   {
     int max, cnt;
 
-    fprintf(fp, "\t\t[1;34m-----[37m=====[41m ¥»%s¤j¼öªù¸ÜÃD [40m=====[34m-----[0m\n\n", mytitle[mytype]);
+    fprintf(fp, "\t\t\x1b[1;34m-----\x1b[37m=====\x1b[41m ¥»%s¤j¼öªù¸ÜÃD \x1b[40m=====\x1b[34m-----\x1b[0m\n\n", mytitle[mytype]);
 
     max = mytop[mytype];
     p = buf + 4;
@@ -265,8 +265,8 @@ poststat(
 //      buf[20] = (char) NULL;
       buf[20] = '\0';
       fprintf(fp,
-	"[1;31m%3d. [33m¬ÝªO : [32m%-16s[35m¡m %s¡n[36m%4d ½g[33m%16s\n"
-	"     [33m¼ÐÃD : [0;44;37m%-60.60s[40m\n"
+	"\x1b[1;31m%3d. \x1b[33m¬ÝªO : \x1b[32m%-16s\x1b[35m¡m %s¡n\x1b[36m%4d ½g\x1b[33m%16s\n"
+	"     \x1b[33m¼ÐÃD : \x1b[0;44;37m%-60.60s\x1b[40m\n"
 	,++cnt, tp->board, p, tp->number, tp->author, tp->title);
     }
     fclose(fp);

@@ -194,7 +194,7 @@ void pip_new_game(void)
 		clear();
 		vs_head(NICKNAME PIPNAME, BoardName);
 		move(4, 6);
-		prints("Åwªï¨Ó¨ì [1;5;33m" NICKNAME "¥Íª«¬ì§Ş¬ã¨s°|[0m");
+		prints("Åwªï¨Ó¨ì \x1b[1;5;33m" NICKNAME "¥Íª«¬ì§Ş¬ã¨s°|\x1b[0m");
 		move(6, 6);
 		prints("¸g§Ú­Ì½Õ¬dÅã¥Ü  ¥ı«e§A¦³¾i¹L¤pÂû³á  ¥i¬O³Q§A¾i¦º¤F...");
 		move(8, 6);
@@ -330,7 +330,7 @@ void pip_new_game(void)
 		d.workU = d.workV = d.workW = d.workX = d.workY = d.workZ = 0;
 		/*¾iÂû°O¿ı*/
 		now = time(0);
-		sprintf(buf, "[1;36m%s %-11s¾i¤F¤@°¦¥s [%s] ªº %s ¤pÂû [0m\n", Cdate(&now), cuser.userid, d.name, pipsex[d.sex]);
+		sprintf(buf, "\x1b[1;36m%s %-11s¾i¤F¤@°¦¥s [%s] ªº %s ¤pÂû \x1b[0m\n", Cdate(&now), cuser.userid, d.name, pipsex[d.sex]);
 		pip_log_record(buf);
 	}
 	pip_write_file();
@@ -354,7 +354,7 @@ int mode)
 		vs_head("¹q¤l¾i¤pÂû", BoardName);
 		show_die_pic(2);
 		move(14, 20);
-		prints("¥i¼¦ªº¤pÂû[1;31m%s[m", msg);
+		prints("¥i¼¦ªº¤pÂû\x1b[1;31m%s\x1b[m", msg);
 		vmsg(NICKNAME "«s±¥¤¤....");
 	}
 	else if (mode == 2)
@@ -369,7 +369,7 @@ int mode)
 	}
 
 	now = time(0);
-	sprintf(genbuf, "[1;31m%s %-11sªº¤pÂû [%s] %s[m\n", Cdate(&now), cuser.userid, d.name, msg);
+	sprintf(genbuf, "\x1b[1;31m%s %-11sªº¤pÂû [%s] %s\x1b[m\n", Cdate(&now), cuser.userid, d.name, msg);
 	pip_log_record(genbuf);
 	pip_write_file();
 }
@@ -446,28 +446,28 @@ int cal)
 char *menuname[8][2] =
 {
 	{"             ",
-		"[1;44;37m ¿ï³æ [46m[1]°ò¥» [2]³}µó [3]­×¦æ [4]ª±¼Ö [5]¥´¤u [6]¯S®í [7]¨t²Î [Q]Â÷¶}          [m"},
+		"\x1b[1;44;37m ¿ï³æ \x1b[46m[1]°ò¥» [2]³}µó [3]­×¦æ [4]ª±¼Ö [5]¥´¤u [6]¯S®í [7]¨t²Î [Q]Â÷¶}          \x1b[m"},
 
 	{"             ",
-	 "[1;44;37m  °ò¥»¿ï³æ  [46m[1]Áı­¹ [2]²M¼ä [3]¥ğ®§ [4]¿Ë¿Ë [5]´«¿ú         [Q]¸õ¥X¡G          [m"},
+	 "\x1b[1;44;37m  °ò¥»¿ï³æ  \x1b[46m[1]Áı­¹ [2]²M¼ä [3]¥ğ®§ [4]¿Ë¿Ë [5]´«¿ú         [Q]¸õ¥X¡G          \x1b[m"},
 
-	{"[1;44;37m ³}µó [46m¡i¤é±`¥Î«~¡j[1]«K§Q°Ó©± [2]" NICKNAME "ÃÄ¾Q [3]©]¸Ì®Ñ§½                        [m",
-	 "[1;44;37m ¿ï³æ [46m¡iªZ¾¹¦Ê³f¡j[A]ÀY³¡¸Ë³Æ [B]¥k¤â¸Ë³Æ [C]¥ª¤â¸Ë³Æ [D]¨­Åé¸Ë³Æ [E]¸}³¡¸Ë³Æ  [m"},
+	{"\x1b[1;44;37m ³}µó \x1b[46m¡i¤é±`¥Î«~¡j[1]«K§Q°Ó©± [2]" NICKNAME "ÃÄ¾Q [3]©]¸Ì®Ñ§½                        \x1b[m",
+	 "\x1b[1;44;37m ¿ï³æ \x1b[46m¡iªZ¾¹¦Ê³f¡j[A]ÀY³¡¸Ë³Æ [B]¥k¤â¸Ë³Æ [C]¥ª¤â¸Ë³Æ [D]¨­Åé¸Ë³Æ [E]¸}³¡¸Ë³Æ  \x1b[m"},
 
-	{"[1;44;37m ­×¦æ [46m[A]¬ì¾Ç(%d) [B]¸Öµü(%d) [C]¯«¾Ç(%d) [D]­x¾Ç(%d) [E]¼C³N(%d)                   [m",
-	 "[1;44;37m ¿ï³æ [46m[F]®æ°«(%d) [G]Å]ªk(%d) [H]Â§»ö(%d) [I]Ã¸µe(%d) [J]»RÁĞ(%d) [Q]¸õ¥X¡G         [m"},
-
-	{"   ",
-	 "[1;44;37m  ª±¼Ö¿ï³æ  [46m[1]´²¨B [2]¹B°Ê [3]¬ù·| [4]²q®± [5]®È¹C [6]­¥¥~ [7]°Ûºq [Q]¸õ¥X¡G  [m"},
-
-	{"[1;44;37m ¥´¤u [46m[A]®a¨Æ [B]«O©i [C]®ÈÀ] [D]¹A³õ [E]À\\ÆU [F]±Ğ°ó [G]¦aÅu [H]¥ï¤ì          [m",
-	 "[1;44;37m ¿ï³æ [46m[I]¬ü¾v [J]Ây¤H [K]¤u¦a [L]¦u¹Ó [M]®a±Ğ [N]°s®a [O]°s©± [P]©]Á`·| [Q]¸õ¥X[m"},
-
-	{"[1;44;37m ¯S®í [46m[1]" NICKNAME "Âå°| [2]´Aµn®p [3]¾Ô°«­×¦æ [4]«ô³XªB¤Í [5]" NICKNAME "                [m",
-	 "[1;44;37m ¿ï³æ [46m                                                                  [Q]¸õ¥X[m"},
+	{"\x1b[1;44;37m ­×¦æ \x1b[46m[A]¬ì¾Ç(%d) [B]¸Öµü(%d) [C]¯«¾Ç(%d) [D]­x¾Ç(%d) [E]¼C³N(%d)                   \x1b[m",
+	 "\x1b[1;44;37m ¿ï³æ \x1b[46m[F]®æ°«(%d) [G]Å]ªk(%d) [H]Â§»ö(%d) [I]Ã¸µe(%d) [J]»RÁĞ(%d) [Q]¸õ¥X¡G         \x1b[m"},
 
 	{"   ",
-	 "[1;44;37m  ¨t²Î¿ï³æ  [46m[1]¸Ô²Ó¸ê®Æ [2]¤pÂû¦Û¥Ñ [3]¯S§OªA°È [4]Àx¦s¶i«× [5]Åª¨ú¶i«× [Q]¸õ¥X[m"}
+	 "\x1b[1;44;37m  ª±¼Ö¿ï³æ  \x1b[46m[1]´²¨B [2]¹B°Ê [3]¬ù·| [4]²q®± [5]®È¹C [6]­¥¥~ [7]°Ûºq [Q]¸õ¥X¡G  \x1b[m"},
+
+	{"\x1b[1;44;37m ¥´¤u \x1b[46m[A]®a¨Æ [B]«O©i [C]®ÈÀ] [D]¹A³õ [E]À\\ÆU [F]±Ğ°ó [G]¦aÅu [H]¥ï¤ì          \x1b[m",
+	 "\x1b[1;44;37m ¿ï³æ \x1b[46m[I]¬ü¾v [J]Ây¤H [K]¤u¦a [L]¦u¹Ó [M]®a±Ğ [N]°s®a [O]°s©± [P]©]Á`·| [Q]¸õ¥X\x1b[m"},
+
+	{"\x1b[1;44;37m ¯S®í \x1b[46m[1]" NICKNAME "Âå°| [2]´Aµn®p [3]¾Ô°«­×¦æ [4]«ô³XªB¤Í [5]" NICKNAME "                \x1b[m",
+	 "\x1b[1;44;37m ¿ï³æ \x1b[46m                                                                  [Q]¸õ¥X\x1b[m"},
+
+	{"   ",
+	 "\x1b[1;44;37m  ¨t²Î¿ï³æ  \x1b[46m[1]¸Ô²Ó¸ê®Æ [2]¤pÂû¦Û¥Ñ [3]¯S§OªA°È [4]Àx¦s¶i«× [5]Åª¨ú¶i«× [Q]¸õ¥X\x1b[m"}
 };
 
 /*¥D¿ï³æ*/
@@ -828,7 +828,7 @@ int mode)
 
 		/*°O¿ı¶}©l*/
 		now = time(0);
-		sprintf(genbuf, "[1;37m%s %-11sªº¤pÂû [%s] º¡ %d ·³¤F [m\n", Cdate(&now), cuser.userid, d.name, m + 1);
+		sprintf(genbuf, "\x1b[1;37m%s %-11sªº¤pÂû [%s] º¡ %d ·³¤F \x1b[m\n", Cdate(&now), cuser.userid, d.name, m + 1);
 		pip_log_record(genbuf);
 		/*°O¿ı²×¤î*/
 		clear();
@@ -887,11 +887,11 @@ int mode)
 	/*vs_head("¹q¤l¾i¤pÂû", BoardName);*/
 	move(0, 0);
 	if (d.sex == 1)
-		sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã [%s¥NÂû] [32m¡ñ [37m%-15s                                  [m", d.chickenmode ? "¤G" : "¤@", d.name);
+		sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã [%s¥NÂû] \x1b[32m¡ñ \x1b[37m%-15s                                  \x1b[m", d.chickenmode ? "¤G" : "¤@", d.name);
 	else if (d.sex == 2)
-		sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã [%s¥NÂû] [33m¡ğ [37m%-15s                                  [m", d.chickenmode ? "¤G" : "¤@", d.name);
+		sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã [%s¥NÂû] \x1b[33m¡ğ \x1b[37m%-15s                                  \x1b[m", d.chickenmode ? "¤G" : "¤@", d.name);
 	else
-		sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã [%s¥NÂû] [34m¡H [37m%-15s                                  [m", d.chickenmode ? "¤G" : "¤@", d.name);
+		sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã [%s¥NÂû] \x1b[34m¡H \x1b[37m%-15s                                  \x1b[m", d.chickenmode ? "¤G" : "¤@", d.name);
 	prints(buf);
 
 	move(1, 0);
@@ -903,7 +903,7 @@ int mode)
 		color1 = 37;
 	sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
 	sprintf(buf
-			, " [1;32m[ª¬  ºA][37m %-5s     [32m[¥Í  ¤é][37m %-9s [32m[¦~  ÄÖ][37m %-5d     [32m[ª÷  ¿ú][%dm %-8d [m"
+			, " \x1b[1;32m[ª¬  ºA]\x1b[37m %-5s     \x1b[32m[¥Í  ¤é]\x1b[37m %-9s \x1b[32m[¦~  ÄÖ]\x1b[37m %-5d     \x1b[32m[ª÷  ¿ú]\x1b[%dm %-8d \x1b[m"
 			, yo[age], inbuf1, tm, color1, d.money);
 	prints(buf);
 
@@ -932,7 +932,7 @@ int mode)
 		color3 = 37;
 
 	sprintf(buf
-			, " [1;32m[¥Í  ©R][%dm %-10d[32m[ªk  ¤O][%dm %-10d[32m[Åé  ­«][37m %-5d     [32m[¯h  ³Ò][%dm %-4d[0m "
+			, " \x1b[1;32m[¥Í  ©R]\x1b[%dm %-10d\x1b[32m[ªk  ¤O]\x1b[%dm %-10d\x1b[32m[Åé  ­«]\x1b[37m %-5d     \x1b[32m[¯h  ³Ò]\x1b[%dm %-4d\x1b[0m "
 			, color1, d.hp, color2, d.mp, d.weight, color3, d.tired);
 	prints(buf);
 
@@ -962,7 +962,7 @@ int mode)
 	else
 		color4 = 37;
 	sprintf(buf
-			, " [1;32m[©R MAX][37m %-10d[32m[ªk MAX][37m %-10d[32m[Å¼¡ş¯f][%dm %-4d[37m/[%dm%-4d [32m[§Ö¡şº¡][%dm %-4d[37m/[%dm%-4d[m"
+			, " \x1b[1;32m[©R MAX]\x1b[37m %-10d\x1b[32m[ªk MAX]\x1b[37m %-10d\x1b[32m[Å¼¡ş¯f]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[§Ö¡şº¡]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m"
 			, d.maxhp, d.maxmp, color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
 	prints(buf);
 	if (mode == 0)  /*¥D­nµe­±*/
@@ -971,13 +971,13 @@ int mode)
 		anynum = rand() % 4;
 		move(4, 0);
 		if (anynum == 0)
-			sprintf(buf, " [1;35m[¯¸ªø¤ê]:[31m¬õ¦â[36mªí¥Ü¦MÀI  [33m¶À¦â[36mªí¥ÜÄµ§i  [37m¥Õ¦â[36mªí¥Ü¦w¥ş[0m");
+			sprintf(buf, " \x1b[1;35m[¯¸ªø¤ê]:\x1b[31m¬õ¦â\x1b[36mªí¥Ü¦MÀI  \x1b[33m¶À¦â\x1b[36mªí¥ÜÄµ§i  \x1b[37m¥Õ¦â\x1b[36mªí¥Ü¦w¥ş\x1b[0m");
 		else if (anynum == 1)
-			sprintf(buf, " [1;35m[¯¸ªø¤ê]:[37m­n¦h¦hª`·N¤pÂûªº¯h³Ò«×©M¯f®ğ  ¥H§K²Ö¦º¯f¦º[0m");
+			sprintf(buf, " \x1b[1;35m[¯¸ªø¤ê]:\x1b[37m­n¦h¦hª`·N¤pÂûªº¯h³Ò«×©M¯f®ğ  ¥H§K²Ö¦º¯f¦º\x1b[0m");
 		else if (anynum == 2)
-			sprintf(buf, " [1;35m[¯¸ªø¤ê]:[37mÀH®Éª`·N¤pÂûªº¥Í©R¼Æ­È­ò![0m");
+			sprintf(buf, " \x1b[1;35m[¯¸ªø¤ê]:\x1b[37mÀH®Éª`·N¤pÂûªº¥Í©R¼Æ­È­ò!\x1b[0m");
 		else if (anynum == 3)
-			sprintf(buf, " [1;35m[¯¸ªø¤ê]:[37m§Ö§Ö¼Ö¼Öªº¤pÂû¤~¬O©¯ºÖªº¤pÂû.....[0m");
+			sprintf(buf, " \x1b[1;35m[¯¸ªø¤ê]:\x1b[37m§Ö§Ö¼Ö¼Öªº¤pÂû¤~¬O©¯ºÖªº¤pÂû.....\x1b[0m");
 		prints(buf);
 	}
 	else if (mode == 1)/*Áı­¹*/
@@ -1008,7 +1008,7 @@ int mode)
 		else
 			color4 = 37;
 		sprintf(buf
-				, " [1;36m[­¹ª«][%dm%-7d[36m[¹s­¹][%dm%-7d[36m[¸É¤Y][%dm%-7d[36m[ÆFªÛ][%dm%-7d[36m[¤H°Ñ][37m%-7d[36m[³·½¬][37m%-7d[0m"
+				, " \x1b[1;36m[­¹ª«]\x1b[%dm%-7d\x1b[36m[¹s­¹]\x1b[%dm%-7d\x1b[36m[¸É¤Y]\x1b[%dm%-7d\x1b[36m[ÆFªÛ]\x1b[%dm%-7d\x1b[36m[¤H°Ñ]\x1b[37m%-7d\x1b[36m[³·½¬]\x1b[37m%-7d\x1b[0m"
 				, color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
 		prints(buf);
 
@@ -1017,7 +1017,7 @@ int mode)
 	{
 		move(4, 0);
 		sprintf(buf
-				, " [1;36m[·R¤ß][37m%-5d[36m[´¼¼z][37m%-5d[36m[®ğ½è][37m%-5d[36m[ÃÀ³N][37m%-5d[36m[¹D¼w][37m%-5d[36m[«i´±][37m%-5d[36m[®a¨Æ][37m%-5d[0m"
+				, " \x1b[1;36m[·R¤ß]\x1b[37m%-5d\x1b[36m[´¼¼z]\x1b[37m%-5d\x1b[36m[®ğ½è]\x1b[37m%-5d\x1b[36m[ÃÀ³N]\x1b[37m%-5d\x1b[36m[¹D¼w]\x1b[37m%-5d\x1b[36m[«i´±]\x1b[37m%-5d\x1b[36m[®a¨Æ]\x1b[37m%-5d\x1b[0m"
 				, d.love, d.wisdom, d.character, d.art, d.etchics, d.brave, d.homework);
 		prints(buf);
 
@@ -1026,13 +1026,13 @@ int mode)
 	{
 		move(4, 0);
 		sprintf(buf
-				, " [1;36m[´¼¼z][37m%-5d[36m[®ğ½è][37m%-5d[36m[ÃÀ³N][37m%-5d[36m[«i´±][37m%-5d[36m[§ğÀ»][37m%-5d[36m[¨¾¿m][37m%-5d[36m[³t«×][37m%-5d[0m"
+				, " \x1b[1;36m[´¼¼z]\x1b[37m%-5d\x1b[36m[®ğ½è]\x1b[37m%-5d\x1b[36m[ÃÀ³N]\x1b[37m%-5d\x1b[36m[«i´±]\x1b[37m%-5d\x1b[36m[§ğÀ»]\x1b[37m%-5d\x1b[36m[¨¾¿m]\x1b[37m%-5d\x1b[36m[³t«×]\x1b[37m%-5d\x1b[0m"
 				, d.wisdom, d.character, d.art, d.brave, d.attack, d.resist, d.speed);
 		prints(buf);
 
 	}
 	move(5, 0);
-	prints("[1;%dm¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m", color);
+	prints("\x1b[1;%dm¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m", color);
 	move(6, 0);
 	switch (age)
 	{
@@ -1084,9 +1084,9 @@ int mode)
 
 
 	move(18, 0);
-	prints("[1;%dm¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m", color);
+	prints("\x1b[1;%dm¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m", color);
 	move(19, 0);
-	prints(" [1;34m¢w[37;44m  ª¬ ºA  [0;1;34m¢w[0m");
+	prints(" \x1b[1;34m¢w\x1b[37;44m  ª¬ ºA  \x1b[0;1;34m¢w\x1b[0m");
 	move(20, 0);
 	prints(" ");
 	if (d.shit == 0)
@@ -1094,17 +1094,17 @@ int mode)
 	if (d.shit > 40 && d.shit < 60)
 		prints("¦³ÂI¯ä¯ä  ");
 	if (d.shit >= 60 && d.shit < 80)
-		prints("[1;33m«Ü¯ä¤F»¡[m  ");
+		prints("\x1b[1;33m«Ü¯ä¤F»¡\x1b[m  ");
 	if (d.shit >= 80 && d.shit < 100)
 	{
-		prints("[1;35m§Ö¯ä¦º¤F[m  ");
+		prints("\x1b[1;35m§Ö¯ä¦º¤F\x1b[m  ");
 		d.sick += 4;
 		d.character -= (rand() % 3 + 3);
 	}
 	if (d.shit >= 100)
 	{
 		d.death = 1;
-		pipdie("[1;31m«z¡ã¯ä¦º¤F[m  ", 1);
+		pipdie("\x1b[1;31m«z¡ã¯ä¦º¤F\x1b[m  ", 1);
 		return -1;
 	}
 
@@ -1115,46 +1115,46 @@ int mode)
 	if (pc == 0)
 	{
 		d.death = 1;
-		pipdie("[1;31m¶ã¡ã¾j¦º¤F[m  ", 1);
+		pipdie("\x1b[1;31m¶ã¡ã¾j¦º¤F\x1b[m  ", 1);
 		return -1;
 	}
 	if (pc < 20)
 	{
-		prints("[1;35m§Ö¾j©ü¤F[m  ");
+		prints("\x1b[1;35m§Ö¾j©ü¤F\x1b[m  ");
 		d.sick += 3;
 		d.happy -= 5;
 		d.satisfy -= 3;
 	}
 	if (pc < 40 && pc >= 20)
-		prints("[1;33m·Q¦YªF¦è[m  ");
+		prints("\x1b[1;33m·Q¦YªF¦è\x1b[m  ");
 	if (pc <= 100 && pc >= 90)
 		prints("¨{¤l¹¡¹¡  ");
 	if (pc < 110 && pc > 100)
-		prints("[1;33m¼µ¼µªº»¡[m  ");
+		prints("\x1b[1;33m¼µ¼µªº»¡\x1b[m  ");
 
 	pc = d.tired;
 	if (pc < 20)
 		prints("ºë¯««Ü¦n  ");
 	if (pc < 80 && pc >= 60)
-		prints("[1;33m¦³ÂI¤p²Ö[m  ");
+		prints("\x1b[1;33m¦³ÂI¤p²Ö\x1b[m  ");
 	if (pc < 100 && pc >= 80)
 	{
-		prints("[1;35m¯uªº«Ü²Ö[m  ");
+		prints("\x1b[1;35m¯uªº«Ü²Ö\x1b[m  ");
 		d.sick += 5;
 	}
 	if (pc >= 100)
 	{
 		d.death = 1;
-		pipdie("[1;31m£«¡ã²Ö¦º¤F[m  ", 1);
+		pipdie("\x1b[1;31m£«¡ã²Ö¦º¤F\x1b[m  ", 1);
 		return -1;
 	}
 
 	pc = 60 + 10 * tm;
 	if (d.weight < (pc + 30) && d.weight >= (pc + 10))
-		prints("[1;33m¦³ÂI¤p­D[m  ");
+		prints("\x1b[1;33m¦³ÂI¤p­D\x1b[m  ");
 	if (d.weight < (pc + 50) && d.weight >= (pc + 30))
 	{
-		prints("[1;35m¤Ó­D¤F°Õ[m  ");
+		prints("\x1b[1;35m¤Ó­D¤F°Õ\x1b[m  ");
 		d.sick += 3;
 		if (d.speed >= 2)
 			d.speed -= 2;
@@ -1165,52 +1165,52 @@ int mode)
 	if (d.weight > (pc + 50))
 	{
 		d.death = 1;
-		pipdie("[1;31m¶ã¡ãªÎ¦º¤F[m  ", 1);
+		pipdie("\x1b[1;31m¶ã¡ãªÎ¦º¤F\x1b[m  ", 1);
 		return -1;
 	}
 
 	if (d.weight < (pc - 50))
 	{
 		d.death = 1;
-		pipdie("[1;31m:~~ ½G¦º¤F[m  ", 1);
+		pipdie("\x1b[1;31m:~~ ½G¦º¤F\x1b[m  ", 1);
 		return -1;
 	}
 	if (d.weight > (pc - 30) && d.weight <= (pc - 10))
-		prints("[1;33m¦³ÂI¤p½G[m  ");
+		prints("\x1b[1;33m¦³ÂI¤p½G\x1b[m  ");
 	if (d.weight > (pc - 50) && d.weight <= (pc - 30))
-		prints("[1;35m¤Ó½G¤F³á[m ");
+		prints("\x1b[1;35m¤Ó½G¤F³á\x1b[m ");
 
 	if (d.sick < 75 && d.sick >= 50)
 	{
-		prints("[1;33m¥Í¯f¤F°Õ[m  ");
+		prints("\x1b[1;33m¥Í¯f¤F°Õ\x1b[m  ");
 		count_tired(1, 8, "Y", 100, 1);
 	}
 	if (d.sick < 100 && d.sick >= 75)
 	{
-		prints("[1;35m¥¿¯f­«¤¤[m  ");
+		prints("\x1b[1;35m¥¿¯f­«¤¤\x1b[m  ");
 		d.sick += 5;
 		count_tired(1, 15, "Y", 100, 1);
 	}
 	if (d.sick >= 100)
 	{
 		d.death = 1;
-		pipdie("[1;31m¯f¦º¤F°Õ :~~[m  ", 1);
+		pipdie("\x1b[1;31m¯f¦º¤F°Õ :~~\x1b[m  ", 1);
 		return -1;
 	}
 
 	pc = d.happy;
 	if (pc < 20)
-		prints("[1;35m«Ü¤£§Ö¼Ö[m  ");
+		prints("\x1b[1;35m«Ü¤£§Ö¼Ö\x1b[m  ");
 	if (pc < 40 && pc >= 20)
-		prints("[1;33m¤£¤Ó§Ö¼Ö[m  ");
+		prints("\x1b[1;33m¤£¤Ó§Ö¼Ö\x1b[m  ");
 	if (pc < 95 && pc >= 80)
 		prints("§Ö¼Ö°Õ..  ");
 	if (pc <= 100 && pc >= 95)
 		prints("«Ü§Ö¼Ö..  ");
 
 	pc = d.satisfy;
-	if (pc < 20) prints("[1;35m«Ü¤£º¡¨¬..[m  ");
-	if (pc < 40 && pc >= 20) prints("[1;33m¤£¤Óº¡¨¬[m  ");
+	if (pc < 20) prints("\x1b[1;35m«Ü¤£º¡¨¬..\x1b[m  ");
+	if (pc < 40 && pc >= 20) prints("\x1b[1;33m¤£¤Óº¡¨¬\x1b[m  ");
 	if (pc < 95 && pc >= 80) prints("º¡¨¬°Õ..  ");
 	if (pc <= 100 && pc >= 95) prints("«Üº¡¨¬..  ");
 
@@ -1385,7 +1385,7 @@ int pip_basic_feed(void)     /* Áı­¹*/
 		move(b_lines, 0);
 		clrtoeol();
 		move(b_lines, 0);
-		prints("[1;44;37m  ¶¼­¹¿ï³æ  [46m[1]¦Y¶º [2]¹s­¹ [3]¸É¤Y [4]ÆFªÛ [5]¤Hçx [6]³·½¬ [Q]¸õ¥X¡G         [m");
+		prints("\x1b[1;44;37m  ¶¼­¹¿ï³æ  \x1b[46m[1]¦Y¶º [2]¹s­¹ [3]¸É¤Y [4]ÆFªÛ [5]¤Hçx [6]³·½¬ [Q]¸õ¥X¡G         \x1b[m");
 		pip_time_change(now);
 		pipkey = vkey();
 		pip_time_change(now);
@@ -1780,7 +1780,7 @@ pip_live_again(void)
 	vs_head("¤pÂû´_¬¡¤â³N¤¤", BoardName);
 
 	now = time(0);
-	sprintf(genbuf, "[1;33m%s %-11sªº¤pÂû [%s¤G¥N] ´_¬¡¤F¡I[m\n", Cdate(&now), cuser.userid, d.name);
+	sprintf(genbuf, "\x1b[1;33m%s %-11sªº¤pÂû [%s¤G¥N] ´_¬¡¤F¡I\x1b[m\n", Cdate(&now), cuser.userid, d.name);
 	pip_log_record(genbuf);
 
 	/*¨­Åé¤Wªº³]©w*/
@@ -2095,18 +2095,18 @@ int oldnum[])
 	{
 		clrchyiuan(6, 18);
 		move(6, 0);
-		sprintf(inbuf, "[1;31m  ¢w[41;37m ½s¸¹ [0;1;31m¢w[41;37m °Ó      «~ [0;1;31m¢w¢w[41;37m ®Ä            ¯à [0;1;31m¢w¢w[41;37m »ù     ®æ [0;1;31m¢w[37;41m ¾Ö¦³¼Æ¶q [0;1;31m¢w[0m  ");
+		sprintf(inbuf, "\x1b[1;31m  ¢w\x1b[41;37m ½s¸¹ \x1b[0;1;31m¢w\x1b[41;37m °Ó      «~ \x1b[0;1;31m¢w¢w\x1b[41;37m ®Ä            ¯à \x1b[0;1;31m¢w¢w\x1b[41;37m »ù     ®æ \x1b[0;1;31m¢w\x1b[37;41m ¾Ö¦³¼Æ¶q \x1b[0;1;31m¢w\x1b[0m  ");
 		prints(inbuf);
 		for (i = 1;i <= oldnum[0];i++)
 		{
 			move(7 + i, 0);
-			sprintf(inbuf, "     [1;35m[[37m%2d[35m]     [36m%-10s      [37m%-14s        [1;33m%-10d   [1;32m%-9d    [0m",
+			sprintf(inbuf, "     \x1b[1;35m[\x1b[37m%2d\x1b[35m]     \x1b[36m%-10s      \x1b[37m%-14s        \x1b[1;33m%-10d   \x1b[1;32m%-9d    \x1b[0m",
 					p[i].num, p[i].name, p[i].msgbuy, p[i].money, oldnum[i]);
 			prints(inbuf);
 		}
 		clrchyiuan(19, 24);
 		move(b_lines, 0);
-		sprintf(inbuf, "[1;44;37m  %8s¿ï³æ  [46m  [B]¶R¤Jª««~  [S]½æ¥Xª««~  [Q]¸õ¥X¡G                         [m", shopname[mode]);
+		sprintf(inbuf, "\x1b[1;44;37m  %8s¿ï³æ  \x1b[46m  [B]¶R¤Jª««~  [S]½æ¥Xª««~  [Q]¸õ¥X¡G                         \x1b[m", shopname[mode]);
 		prints(inbuf);
 		pipkey = vkey();
 		switch (pipkey)
@@ -2272,14 +2272,14 @@ struct weapon *p)
 		vs_head(menutitle[type], BoardName);
 		show_weapon_pic(0);
 		/*   move(10,2);
-		   sprintf(buf,"[1;37m²{¤µ¯à¤O:Åé¤OMax:[36m%-5d[37m  ªk¤OMax:[36m%-5d[37m  §ğÀ»:[36m%-5d[37m  ¨¾¿m:[36m%-5d[37m  ³t«×:[36m%-5d [m",
+		   sprintf(buf,"\x1b[1;37m²{¤µ¯à¤O:Åé¤OMax:\x1b[36m%-5d\x1b[37m  ªk¤OMax:\x1b[36m%-5d\x1b[37m  §ğÀ»:\x1b[36m%-5d\x1b[37m  ¨¾¿m:\x1b[36m%-5d\x1b[37m  ³t«×:\x1b[36m%-5d \x1b[m",
 		           d.maxhp,d.maxmp,d.attack,d.resist,d.speed);
 		   prints(buf);*/
 		move(11, 2);
-		sprintf(buf, "[1;37;41m [NO]  [¾¹¨ã¦W]  [Åé¤O]  [ªk¤O]  [³t«×]  [§ğÀ»]  [¨¾¿m]  [³t«×]  [°â  »ù] [m");
+		sprintf(buf, "\x1b[1;37;41m [NO]  [¾¹¨ã¦W]  [Åé¤O]  [ªk¤O]  [³t«×]  [§ğÀ»]  [¨¾¿m]  [³t«×]  [°â  »ù] \x1b[m");
 		prints(buf);
 		move(12, 2);
-		sprintf(buf, " [1;31m¢w¢w[37m¥Õ¦â ¥i¥HÁÊ¶R[31m¢w¢w[32mºñ¦â ¾Ö¦³¸Ë³Æ[31m¢w¢w[33m¶À¦â ¿ú¿ú¤£°÷[31m¢w¢w[35mµµ¦â ¯à¤O¤£¨¬[31m¢w¢w[m");
+		sprintf(buf, " \x1b[1;31m¢w¢w\x1b[37m¥Õ¦â ¥i¥HÁÊ¶R\x1b[31m¢w¢w\x1b[32mºñ¦â ¾Ö¦³¸Ë³Æ\x1b[31m¢w¢w\x1b[33m¶À¦â ¿ú¿ú¤£°÷\x1b[31m¢w¢w\x1b[35mµµ¦â ¯à¤O¤£¨¬\x1b[31m¢w¢w\x1b[m");
 		prints(buf);
 
 		n = 0;
@@ -2289,14 +2289,14 @@ struct weapon *p)
 			if (variance != 0 && variance == (n))/*¥»¨­¦³ªº*/
 			{
 				sprintf(buf,
-						"[1;32m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d[m",
+						"\x1b[1;32m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
 						n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
 						p[n].attack, p[n].resist, p[n].speed, p[n].cost);
 			}
 			else if (d.maxhp < p[n].needmaxhp || d.maxmp < p[n].needmaxmp || d.speed < p[n].needspeed)/*¯à¤O¤£¨¬*/
 			{
 				sprintf(buf,
-						"[1;35m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d[m",
+						"\x1b[1;35m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
 						n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
 						p[n].attack, p[n].resist, p[n].speed, p[n].cost);
 			}
@@ -2304,14 +2304,14 @@ struct weapon *p)
 			else if (d.money < p[n].cost) /*¿ú¤£°÷ªº*/
 			{
 				sprintf(buf,
-						"[1;33m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d[m",
+						"\x1b[1;33m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
 						n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
 						p[n].attack, p[n].resist, p[n].speed, p[n].cost);
 			}
 			else
 			{
 				sprintf(buf,
-						"[1;37m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d[m",
+						"\x1b[1;37m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
 						n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
 						p[n].attack, p[n].resist, p[n].speed, p[n].cost);
 			}
@@ -2319,7 +2319,7 @@ struct weapon *p)
 			n++;
 		}
 		move(b_lines, 0);
-		sprintf(buf, "[1;44;37m  ªZ¾¹ÁÊ¶R¿ï³æ  [46m  [B]ÁÊ¶RªZ¾¹  [S]½æ±¼¸Ë³Æ  [W]­Ó¤H¸ê®Æ  [Q]¸õ¥X¡G            [m");
+		sprintf(buf, "\x1b[1;44;37m  ªZ¾¹ÁÊ¶R¿ï³æ  \x1b[46m  [B]ÁÊ¶RªZ¾¹  [S]½æ±¼¸Ë³Æ  [W]­Ó¤H¸ê®Æ  [Q]¸õ¥X¡G            \x1b[m");
 		prints(buf);
 		now = time(0);
 		pip_time_change(now);
@@ -3560,19 +3560,19 @@ int pip_play_outing(void)	/*­¥¹C*/
 		{
 			lucky = 0;
 			clear();
-			sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã %-10s                                                  [0m", d.name);
+			sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã %-10s                                                  \x1b[0m", d.name);
 			show_play_pic(0);
 			move(17, 10);
-			prints("[1;36m¿Ë·Rªº [1;33m%s ¡ã[0m", d.name);
+			prints("\x1b[1;36m¿Ë·Rªº \x1b[1;33m%s ¡ã\x1b[0m", d.name);
 			move(18, 10);
-			prints("[1;37m¬İ¨ì§A³o¼Ë§V¤Oªº°ö¾i¦Û¤vªº¯à¤O  Åı§Ú¤ß¤¤¤Q¤Àªº°ª¿³³á..[m");
+			prints("\x1b[1;37m¬İ¨ì§A³o¼Ë§V¤Oªº°ö¾i¦Û¤vªº¯à¤O  Åı§Ú¤ß¤¤¤Q¤Àªº°ª¿³³á..\x1b[m");
 			move(19, 10);
-			prints("[1;36m¤p¤Ñ¨Ï§Ú¨M©wµ¹§A¼ú½à¹ªÀy¹ªÀy  °½°½¦aÀ°§U§A¤@¤U....^_^[0m");
+			prints("\x1b[1;36m¤p¤Ñ¨Ï§Ú¨M©wµ¹§A¼ú½à¹ªÀy¹ªÀy  °½°½¦aÀ°§U§A¤@¤U....^_^\x1b[0m");
 			move(20, 10);
 			lucky = rand() % 7;
 			if (lucky == 6)
 			{
-				prints("[1;33m§Ú±NÀ°§Aªº¦U¶µ¯à¤O¥ş³¡´£¤É¦Ê¤À¤§¤­³á......[0m");
+				prints("\x1b[1;33m§Ú±NÀ°§Aªº¦U¶µ¯à¤O¥ş³¡´£¤É¦Ê¤À¤§¤­³á......\x1b[0m");
 				d.maxhp = d.maxhp * 105 / 100;
 				d.hp = d.maxhp;
 				d.maxmp = d.maxmp * 105 / 100;
@@ -3590,7 +3590,7 @@ int pip_play_outing(void)	/*­¥¹C*/
 
 			else if (lucky <= 5 && lucky >= 4)
 			{
-				prints("[1;33m§Ú±NÀ°§Aªº¾Ô°«¯à¤O¥ş³¡´£¤É¦Ê¤À¤§¤Q³á.......[0m");
+				prints("\x1b[1;33m§Ú±NÀ°§Aªº¾Ô°«¯à¤O¥ş³¡´£¤É¦Ê¤À¤§¤Q³á.......\x1b[0m");
 				d.attack = d.attack * 110 / 100;
 				d.resist = d.resist * 110 / 100;
 				d.speed = d.speed * 110 / 100;
@@ -3599,7 +3599,7 @@ int pip_play_outing(void)	/*­¥¹C*/
 
 			else if (lucky <= 3 && lucky >= 2)
 			{
-				prints("[1;33m§Ú±NÀ°§AªºÅ]ªk¯à¤O©M¥Í©R¤O¥ş³¡´£¤É¦Ê¤À¤§¤Q³á.......[0m");
+				prints("\x1b[1;33m§Ú±NÀ°§AªºÅ]ªk¯à¤O©M¥Í©R¤O¥ş³¡´£¤É¦Ê¤À¤§¤Q³á.......\x1b[0m");
 				d.maxhp = d.maxhp * 110 / 100;
 				d.hp = d.maxhp;
 				d.maxmp = d.maxmp * 110 / 100;
@@ -3607,7 +3607,7 @@ int pip_play_outing(void)	/*­¥¹C*/
 			}
 			else if (lucky <= 1 && lucky >= 0)
 			{
-				prints("[1;33m§Ú±NÀ°§Aªº·P¨ü¯à¤O¥ş³¡´£¤É¦Ê¤À¤§¤G¤Q³á....[0m");
+				prints("\x1b[1;33m§Ú±NÀ°§Aªº·P¨ü¯à¤O¥ş³¡´£¤É¦Ê¤À¤§¤G¤Q³á....\x1b[0m");
 				d.character = d.character * 110 / 100;
 				d.love = d.love * 110 / 100;
 				d.wisdom = d.wisdom * 110 / 100;
@@ -3684,7 +3684,7 @@ int pip_play_guess(void)   /* ²q®±µ{¦¡ */
 		move(b_lines, 0);
 		clrtoeol();
 		move(b_lines, 0);
-		prints("[1;44;37m  ²q®±¿ï³æ  [46m[1]§Ú¥X°Å¤M [2]§Ú¥X¥ÛÀY [3]§Ú¥X¥¬°Õ [4]²q®±°O¿ı [Q]¸õ¥X¡G         [m");
+		prints("\x1b[1;44;37m  ²q®±¿ï³æ  \x1b[46m[1]§Ú¥X°Å¤M [2]§Ú¥X¥ÛÀY [3]§Ú¥X¥¬°Õ [4]²q®±°O¿ı [Q]¸õ¥X¡G         \x1b[m");
 		move(b_lines - 1, 0);
 		clrtoeol();
 		pipkey = vkey();
@@ -3788,9 +3788,9 @@ void situ(void)
 {
 	clrchyiuan(19, 21);
 	move(19, 0);
-	prints("§A:[44m %d³Ó %d­t[m                     \n", d.winn, d.losee);
+	prints("§A:\x1b[44m %d³Ó %d­t\x1b[m                     \n", d.winn, d.losee);
 	move(20, 0);
-	prints("Âû:[44m %d³Ó %d­t[m                     \n", d.losee, d.winn);
+	prints("Âû:\x1b[44m %d³Ó %d­t\x1b[m                     \n", d.losee, d.winn);
 
 	if (d.winn >= d.losee)
 	{
@@ -4489,10 +4489,10 @@ struct royalset *p)
 		clear();
 		show_palace_pic(0);
 		move(13, 4);
-		sprintf(buf, "[1;31m¢z¢w¢w¢w¢w¢w¢w¢t[37;41m ¨Ó¨ìÁ`¥q¥O³¡¤F  ½Ğ¿ï¾Ü§A±ı«ô³Xªº¹ï¶H [0;1;31m¢u¢w¢w¢w¢w¢w¢w¢{[0m");
+		sprintf(buf, "\x1b[1;31m¢z¢w¢w¢w¢w¢w¢w¢t\x1b[37;41m ¨Ó¨ìÁ`¥q¥O³¡¤F  ½Ğ¿ï¾Ü§A±ı«ô³Xªº¹ï¶H \x1b[0;1;31m¢u¢w¢w¢w¢w¢w¢w¢{\x1b[0m");
 		prints(buf);
 		move(14, 4);
-		sprintf(buf, "[1;31m¢x                                                                  ¢x[0m");
+		sprintf(buf, "\x1b[1;31m¢x                                                                  ¢x\x1b[0m");
 		prints(buf);
 
 		for (n = 0;n < 5;n++)
@@ -4510,18 +4510,18 @@ struct royalset *p)
 				sprintf(inbuf2, "%-10s%3d", needmode[p[b].needmode], p[b].needvalue);
 			}
 			if ((d.seeroyalJ == 1 && n == 4) || (n != 4))
-				sprintf(buf, "[1;31m¢x [36m([37m%s[36m) [33m%-10s  [37m%-14s     [36m([37m%s[36m) [33m%-10s  [37m%-14s[31m¢x[0m",
+				sprintf(buf, "\x1b[1;31m¢x \x1b[36m(\x1b[37m%s\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s     \x1b[36m(\x1b[37m%s\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s\x1b[31m¢x\x1b[0m",
 						p[a].num, p[a].name, inbuf1, p[b].num, p[b].name, inbuf2);
 			else
-				sprintf(buf, "[1;31m¢x [36m([37m%s[36m) [33m%-10s  [37m%-14s                                   [31m¢x[0m",
+				sprintf(buf, "\x1b[1;31m¢x \x1b[36m(\x1b[37m%s\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s                                   \x1b[31m¢x\x1b[0m",
 						p[a].num, p[a].name, inbuf1);
 			prints(buf);
 		}
 		move(20, 4);
-		sprintf(buf, "[1;31m¢x                                                                  ¢x[0m");
+		sprintf(buf, "\x1b[1;31m¢x                                                                  ¢x\x1b[0m");
 		prints(buf);
 		move(21, 4);
-		sprintf(buf, "[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[0m");
+		sprintf(buf, "\x1b[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[0m");
 		prints(buf);
 
 
@@ -4542,13 +4542,13 @@ struct royalset *p)
 		move(b_lines - 1, 0);
 		clrtoeol();
 		move(b_lines - 1, 0);
-		prints("[1;33m [¥Í©R¤O] %d/%d  [¯h³Ò«×] %d [0m", d.hp, d.maxhp, d.tired);
+		prints("\x1b[1;33m [¥Í©R¤O] %d/%d  [¯h³Ò«×] %d \x1b[0m", d.hp, d.maxhp, d.tired);
 
 		move(b_lines, 0);
 		clrtoeol();
 		move(b_lines, 0);
 		prints(
-			"[1;37;46m  °Ñ¨£¿ï³æ  [44m [¦r¥À]¿ï¾Ü±ı«ô³Xªº¤Hª«  [Q]Â÷¶}" NICKNAME "Á`¥q¥O³¡¡G                  [0m");
+			"\x1b[1;37;46m  °Ñ¨£¿ï³æ  \x1b[44m [¦r¥À]¿ï¾Ü±ı«ô³Xªº¤Hª«  [Q]Â÷¶}" NICKNAME "Á`¥q¥O³¡¡G                  \x1b[0m");
 		pipkey = vkey();
 		choice = pipkey - 64;
 		if (choice < 1 || choice > 10)
@@ -4562,12 +4562,12 @@ struct royalset *p)
 			if (d.tired >= 100)
 			{
 				d.death = 1;
-				pipdie("[1;31m²Ö¦º¤F...[m  ", 1);
+				pipdie("\x1b[1;31m²Ö¦º¤F...\x1b[m  ", 1);
 			}
 			if (d.hp < 0)
 			{
 				d.death = 1;
-				pipdie("[1;31m¾j¦º¤F...[m  ", 1);
+				pipdie("\x1b[1;31m¾j¦º¤F...\x1b[m  ", 1);
 			}
 			if (d.death == 1)
 			{
@@ -4743,7 +4743,7 @@ int first)
 	while (gameover == 0 && (opponent->pip == NULL || opponent->pip->leaving == 0))
 	{
 		move(b_lines, 0);
-		prints("[1;46m ¹ï¤èÁÙ¦b·Ç³Æ¤¤                                                        [m");
+		prints("\x1b[1;46m ¹ï¤èÁÙ¦b·Ç³Æ¤¤                                                        \x1b[m");
 		ch = vkey();
 	}
 	if (currutmp->pip->mode != opponent->pip->mode)
@@ -4757,7 +4757,7 @@ int first)
 	for (i = 0;i < 10;i++)
 		currutmp->pip->chat[i][0] = '\0';
 	/*¶}©lªº°T®§*/
-	sprintf(mymsg[0], "[1;37m%s ©M %s ªº¾Ô°«¶}©l¤F..[m",
+	sprintf(mymsg[0], "\x1b[1;37m%s ©M %s ªº¾Ô°«¶}©l¤F..\x1b[m",
 			opponent->pip->name, currutmp->pip->name);
 	strcpy(currutmp->pip->msg, mymsg[0]);
 	currutmp->pip->msgcount = 0;
@@ -4774,23 +4774,23 @@ int first)
 		if (opponent->pip->nodone != 1)
 			strcpy(mymsg[currutmp->pip->msgcount%8], currutmp->pip->msg);
 		move(0, 0);
-		prints("[1;34mùùùâ[44;37m ¦Û¤v¸ê®Æ [0;1;34mùàùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù[m\n");
-		prints("[1m   [33m©m  ¦W:[37m%-20s                                              [31m  [m\n",
+		prints("\x1b[1;34mùùùâ\x1b[44;37m ¦Û¤v¸ê®Æ \x1b[0;1;34mùàùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù\x1b[m\n");
+		prints("\x1b[1m   \x1b[33m©m  ¦W:\x1b[37m%-20s                                              \x1b[31m  \x1b[m\n",
 			   d.name);
 		sprintf(buf1, "%d/%d", d.hp, d.maxhp);
 		sprintf(buf2, "%d/%d", d.mp, d.maxmp);
-		prints("[1m   [33mÅé  ¤O:[37m%-24s       [33mªk  ¤O:[37m%-24s[33m[m\n",
+		prints("\x1b[1m   \x1b[33mÅé  ¤O:\x1b[37m%-24s       \x1b[33mªk  ¤O:\x1b[37m%-24s\x1b[33m\x1b[m\n",
 			   buf1, buf2);
-		prints("[1m   [33m§ğ  À»:[37m%-12d[33m¨¾  ¿m:[37m%-12d[33m³t  «×:[37m%-12d[33m§Ü  Å]:[37m%-9d  [m\n",
+		prints("\x1b[1m   \x1b[33m§ğ  À»:\x1b[37m%-12d\x1b[33m¨¾  ¿m:\x1b[37m%-12d\x1b[33m³t  «×:\x1b[37m%-12d\x1b[33m§Ü  Å]:\x1b[37m%-9d  \x1b[m\n",
 			   d.attack, d.resist, d.speed, d.mresist);
-		prints("[1m   [33m¾Ô°«§Ş:[37m%-12d[33mÅ]ªk§Ş:[37m%-12d[33mÅ]µû»ù:[37m%-12d[33mªZµû»ù:[37m%-9d  [m\n",
+		prints("\x1b[1m   \x1b[33m¾Ô°«§Ş:\x1b[37m%-12d\x1b[33mÅ]ªk§Ş:\x1b[37m%-12d\x1b[33mÅ]µû»ù:\x1b[37m%-12d\x1b[33mªZµû»ù:\x1b[37m%-9d  \x1b[m\n",
 			   d.hskill, d.mskill, d.mexp, d.hexp);
-		prints("[1m   [33m­¹  ª«:[37m%-12d[33m¸É  ¤Y:[37m%-12d[33m¹s  ­¹:[37m%-12d[33mÆF  ªÛ:[37m%-9d  [m\n",
+		prints("\x1b[1m   \x1b[33m­¹  ª«:\x1b[37m%-12d\x1b[33m¸É  ¤Y:\x1b[37m%-12d\x1b[33m¹s  ­¹:\x1b[37m%-12d\x1b[33mÆF  ªÛ:\x1b[37m%-9d  \x1b[m\n",
 			   d.food, d.bighp, d.cookie, d.medicine);
-		prints("[1m   [33m¤H  çx:[37m%-12d[33m³·  ½¬:[37m%-12d[33m¯h  ³Ò:[37m%-15d               [m\n",
+		prints("\x1b[1m   \x1b[33m¤H  çx:\x1b[37m%-12d\x1b[33m³·  ½¬:\x1b[37m%-12d\x1b[33m¯h  ³Ò:\x1b[37m%-15d               \x1b[m\n",
 			   d.ginseng, d.snowgrass, d.tired);
 		move(7, 0);
-		prints("[1;34mùùùâ[44;37m ¾Ô°«°T®§ [0;1;34mùàùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù[m\n");
+		prints("\x1b[1;34mùùùâ\x1b[44;37m ¾Ô°«°T®§ \x1b[0;1;34mùàùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù\x1b[m\n");
 		for (i = 0;i < 8;i++)
 		{
 			move(8 + i, 1);
@@ -4807,7 +4807,7 @@ int first)
 			}
 		}
 		move(16, 0);
-		prints("[1;34mùùùâ[44;37m ½Í¸Ü°T®§ [0;1;34mùàùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù[m\n");
+		prints("\x1b[1;34mùùùâ\x1b[44;37m ½Í¸Ü°T®§ \x1b[0;1;34mùàùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù\x1b[m\n");
 		for (i = 0;i < 2;i++)
 		{
 			move(17 + i, 0);
@@ -4823,23 +4823,23 @@ int first)
 			}
 		}
 		move(19, 0);
-		prints("[1;34mùùùâ[1;37;44m ¹ï¤â¸ê®Æ [0;1;34mùàùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù[m\n");
-		prints("[1m   [33m©m  ¦W:[37m%-20s                                                [m\n",
+		prints("\x1b[1;34mùùùâ\x1b[1;37;44m ¹ï¤â¸ê®Æ \x1b[0;1;34mùàùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù\x1b[m\n");
+		prints("\x1b[1m   \x1b[33m©m  ¦W:\x1b[37m%-20s                                                \x1b[m\n",
 			   opponent->pip->name);
 		sprintf(buf1, "%d/%d", opponent->pip->hp, opponent->pip->maxhp);
 		sprintf(buf2, "%d/%d", opponent->pip->mp, opponent->pip->maxmp);
-		prints("[1m   [33mÅé  ¤O:[37m%-24s       [33mªk  ¤O:[37m%-24s[m\n",
+		prints("\x1b[1m   \x1b[33mÅé  ¤O:\x1b[37m%-24s       \x1b[33mªk  ¤O:\x1b[37m%-24s\x1b[m\n",
 			   buf1, buf2);
-		prints("[1;34mùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù[m\n");
+		prints("\x1b[1;34mùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù\x1b[m\n");
 		if (opponent->pip->nodone == 1)
 		{
 			notyou = 1;
-			prints("[1;37;44m  ¹ï¤è¥X©Û¤¤¡A½Ğµy«İ¤@·|.....                                [T/^T]CHAT/¦^ÅU  [m");
+			prints("\x1b[1;37;44m  ¹ï¤è¥X©Û¤¤¡A½Ğµy«İ¤@·|.....                                [T/^T]CHAT/¦^ÅU  \x1b[m");
 		}
 		else
 		{
 			notyou = 0;
-			prints("[1;44;37m  ¾Ô°«©R¥O  [46m [1]´¶³q [2]¥ş¤O [3]Å]ªk [4]¨¾¿m [5]¸É¥R [6]°k©R [T/^T]CHAT/¦^ÅU  [m");
+			prints("\x1b[1;44;37m  ¾Ô°«©R¥O  \x1b[46m [1]´¶³q [2]¥ş¤O [3]Å]ªk [4]¨¾¿m [5]¸É¥R [6]°k©R [T/^T]CHAT/¦^ÅU  \x1b[m");
 		}
 
 		while ((ch = vkey()) == I_TIMEOUT)
@@ -4862,7 +4862,7 @@ int first)
 			len = getdata(b_lines, 0, "·Q»¡: ", buf, 60, 1, 0);
 			if (len && buf[0] != ' ')
 			{
-				sprintf(msg, "[1;46;33m¡¹%s[37;45m %s [m", cuser.userid, buf);
+				sprintf(msg, "\x1b[1;46;33m¡¹%s\x1b[37;45m %s \x1b[m", cuser.userid, buf);
 				strcpy(opponent->pip->chat[currutmp->pip->chatcount%10], msg);
 				strcpy(currutmp->pip->chat[currutmp->pip->chatcount%10], msg);
 				opponent->pip->chatcount++;
@@ -4875,7 +4875,7 @@ int first)
 			add_io(fd, 30);
 			clrchyiuan(7, 19);
 			move(7, 0);
-			prints("[1;31mùùùâ[41;37m ¦^ÅU½Í¸Ü [0;1;31mùàùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù[m\n");
+			prints("\x1b[1;31mùùùâ\x1b[41;37m ¦^ÅU½Í¸Ü \x1b[0;1;31mùàùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù\x1b[m\n");
 			for (i = 0;i < 10;i++)
 			{
 				move(8 + i, 0);
@@ -4891,7 +4891,7 @@ int first)
 				}
 			}
 			move(18, 0);
-			prints("[1;31mùùùâ[41;37m ¨ì¦¹¬°¤î [0;1;31mùàùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù[m");
+			prints("\x1b[1;31mùùùâ\x1b[41;37m ¨ì¦¹¬°¤î \x1b[0;1;31mùàùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùùù\x1b[m");
 			vmsg("¦^ÅU¤§«eªº½Í¸Ü ¥u¦³10³q");
 			add_io(fd, 1);
 		}
@@ -4905,7 +4905,7 @@ int first)
 				if (rand() % 9 == 0)
 				{
 					vmsg("³ºµM¨S¥´¤¤..:~~~");
-					sprintf(buf, "[1;33m%s [37m¹ï [33m%s[37m ¬I®i´¶³q§ğÀ»¡A¦ı¬O¨S¦³¥´¤¤...",
+					sprintf(buf, "\x1b[1;33m%s \x1b[37m¹ï \x1b[33m%s\x1b[37m ¬I®i´¶³q§ğÀ»¡A¦ı¬O¨S¦³¥´¤¤...",
 							d.name, opponent->pip->name);
 				}
 				else
@@ -4920,7 +4920,7 @@ int first)
 					d.hskill += rand() % 2 + 1;
 					sprintf(buf, "´¶³q§ğÀ»,¹ï¤èÅé¤O´î§C%d", dinjure);
 					vmsg(buf);
-					sprintf(buf, "[1;33m%s [37m¬I®i¤F´¶³q§ğÀ»,[33m%s [37mªºÅé¤O´î§C [31m%d [37mÂI[m"
+					sprintf(buf, "\x1b[1;33m%s \x1b[37m¬I®i¤F´¶³q§ğÀ»,\x1b[33m%s \x1b[37mªºÅé¤O´î§C \x1b[31m%d \x1b[37mÂI\x1b[m"
 							, d.name, opponent->pip->name, dinjure);
 				}
 				opponent->pip->resistmore = 0;
@@ -4937,7 +4937,7 @@ int first)
 				if (rand() % 11 == 0)
 				{
 					vmsg("³ºµM¨S¥´¤¤..:~~~");
-					sprintf(buf, "[1;33m%s [37m¹ï [33m%s[37m ¬I®i¥ş¤O§ğÀ»¡A¦ı¬O¨S¦³¥´¤¤...",
+					sprintf(buf, "\x1b[1;33m%s \x1b[37m¹ï \x1b[33m%s\x1b[37m ¬I®i¥ş¤O§ğÀ»¡A¦ı¬O¨S¦³¥´¤¤...",
 							d.name, opponent->pip->name);
 				}
 				else
@@ -4955,7 +4955,7 @@ int first)
 						d.hskill += rand() % 2 + 2;
 						sprintf(buf, "¥ş¤O§ğÀ»,¹ï¤èÅé¤O´î§C%d", dinjure);
 						vmsg(buf);
-						sprintf(buf, "[1;33m%s [37m¬I®i¤F¥ş¤O§ğÀ»,[33m%s [37mªºÅé¤O´î§C [31m%d [37mÂI[m"
+						sprintf(buf, "\x1b[1;33m%s \x1b[37m¬I®i¤F¥ş¤O§ğÀ»,\x1b[33m%s \x1b[37mªºÅé¤O´î§C \x1b[31m%d \x1b[37mÂI\x1b[m"
 								, d.name, opponent->pip->name, dinjure);
 					}
 					else
@@ -4991,14 +4991,14 @@ int first)
 						oldhp = d.hp - oldhp;
 						sprintf(buf, "ªvÀø«á,Åé¤O´£°ª%d ¯h³Ò­°§C%d", oldhp, oldtired);
 						vmsg(buf);
-						sprintf(buf, "[1;33m%s [37m¨Ï¥ÎÅ]ªkªvÀø¤§«á,Åé¤O´£°ª [36m%d [37mÂI¡A¯h³Ò­°§C [36m%d [37mÂI[m", d.name, oldhp, oldtired);
+						sprintf(buf, "\x1b[1;33m%s \x1b[37m¨Ï¥ÎÅ]ªkªvÀø¤§«á,Åé¤O´£°ª \x1b[36m%d \x1b[37mÂI¡A¯h³Ò­°§C \x1b[36m%d \x1b[37mÂI\x1b[m", d.name, oldhp, oldtired);
 					}
 					else
 					{
 						if (rand() % 15 == 0)
 						{
 							vmsg("³ºµM¨S¥´¤¤..:~~~");
-							sprintf(buf, "[1;33m%s [37m¹ï [33m%s[37m ¬I®iÅ]ªk§ğÀ»¡A¦ı¬O¨S¦³¥´¤¤...",
+							sprintf(buf, "\x1b[1;33m%s \x1b[37m¹ï \x1b[33m%s\x1b[37m ¬I®iÅ]ªk§ğÀ»¡A¦ı¬O¨S¦³¥´¤¤...",
 									d.name, opponent->pip->name);
 						}
 						else
@@ -5017,7 +5017,7 @@ int first)
 							d.mskill += rand() % 2 + 2;
 							sprintf(buf, "Å]ªk§ğÀ»,¹ï¤èÅé¤O´î§C%d", dinjure);
 							vmsg(buf);
-							sprintf(buf, "[1;33m%s [37m¬I®i¤FÅ]ªk§ğÀ»,[33m%s [37mªºÅé¤O´î§C [31m%d [37mÂI[m"
+							sprintf(buf, "\x1b[1;33m%s \x1b[37m¬I®i¤FÅ]ªk§ğÀ»,\x1b[33m%s \x1b[37mªºÅé¤O´î§C \x1b[31m%d \x1b[37mÂI\x1b[m"
 									, d.name, opponent->pip->name, dinjure);
 						}
 					}
@@ -5038,7 +5038,7 @@ int first)
 			case '4':
 				currutmp->pip->resistmore = 1;
 				vmsg("¤pÂû¥[±j¨¾¿m°Õ....");
-				sprintf(buf, "[1;33m%s [37m¥[±j¨¾¿m¡A·Ç³Æ¥ş¤O©è¾× [33m%s [37mªº¤U¤@©Û[m",
+				sprintf(buf, "\x1b[1;33m%s \x1b[37m¥[±j¨¾¿m¡A·Ç³Æ¥ş¤O©è¾× \x1b[33m%s \x1b[37mªº¤U¤@©Û\x1b[m",
 						d.name, opponent->pip->name);
 				opponent->pip->msgcount++;
 				currutmp->pip->msgcount++;
@@ -5053,7 +5053,7 @@ int first)
 				add_io(fd, 1);
 				if (d.nodone != 1)
 				{
-					sprintf(buf, "[1;33m%s [37m¸É¥R¤F¨­¤Wªº¯à¶q¡AÅé¤O©Îªk¤O¦³ÅãµÛªº´£¤É[m", d.name);
+					sprintf(buf, "\x1b[1;33m%s \x1b[37m¸É¥R¤F¨­¤Wªº¯à¶q¡AÅé¤O©Îªk¤O¦³ÅãµÛªº´£¤É\x1b[m", d.name);
 					opponent->pip->msgcount++;
 					currutmp->pip->msgcount++;
 					strcpy(opponent->pip->msg, buf);
@@ -5072,23 +5072,23 @@ int first)
 				if (rand() % 20 >= 18 || (rand() % 20 > 13 && d.speed <= opponent->pip->speed))
 				{
 					vmsg("·Q°k¶]¡A«o¥¢±Ñ¤F...");
-					sprintf(buf, "[1;33m%s [37m·Q¥ı°k¶]¦A»¡...¦ı«o¥¢±Ñ¤F...[m", d.name);
+					sprintf(buf, "\x1b[1;33m%s \x1b[37m·Q¥ı°k¶]¦A»¡...¦ı«o¥¢±Ñ¤F...\x1b[m", d.name);
 					strcpy(opponent->pip->msg, buf);
 					strcpy(mymsg[currutmp->pip->msgcount%8], buf);
 				}
 				else
 				{
-					sprintf(buf, "[1;33m%s [37m¦ÛÄ±¥´¤£¹L¹ï¤è¡A©Ò¥H¨M©w¥ı°k¶]¦A»¡...[m", d.name);
+					sprintf(buf, "\x1b[1;33m%s \x1b[37m¦ÛÄ±¥´¤£¹L¹ï¤è¡A©Ò¥H¨M©w¥ı°k¶]¦A»¡...\x1b[m", d.name);
 					strcpy(opponent->pip->msg, buf);
 					strcpy(mymsg[currutmp->pip->msgcount%8], buf);
 					currutmp->pip->pipmode = 3;
 					clear();
 					vs_head("¹q¤l¾i¤pÂû", BoardName);
 					move(10, 0);
-					prints("            [1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m\n");
-					prints("            [1;31m¢x  [37m¹ê¤O¤£±jªº¤pÂû [33m%-10s                 [31m¢x[m\n", d.name);
-					prints("            [1;31m¢x  [37m¦b»P¹ï¤â [32m%-10s [37m¾Ô°««á¸¨¶]°Õ          [31m¢x[m\n", opponent->pip->name);
-					prints("            [1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m\n");
+					prints("            \x1b[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m\n");
+					prints("            \x1b[1;31m¢x  \x1b[37m¹ê¤O¤£±jªº¤pÂû \x1b[33m%-10s                 \x1b[31m¢x\x1b[m\n", d.name);
+					prints("            \x1b[1;31m¢x  \x1b[37m¦b»P¹ï¤â \x1b[32m%-10s \x1b[37m¾Ô°««á¸¨¶]°Õ          \x1b[31m¢x\x1b[m\n", opponent->pip->name);
+					prints("            \x1b[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m\n");
 					currutmp->pip->leaving = 0;
 					add_io(fd, 60);
 					vmsg("¤T¤Q¤»­p ¨«¬°¤Wµ¦...");
@@ -5110,10 +5110,10 @@ int first)
 			clear();
 			vs_head("¹q¤l¾i¤pÂû", BoardName);
 			move(10, 0);
-			prints("            [1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m\n");
-			prints("            [1;31m¢x  [37m­^«iªº¤pÂû [33m%-10s                     [31m¢x[m\n", d.name);
-			prints("            [1;31m¢x  [37m¥´±Ñ¤F¹ï¤è¤pÂû [32m%-10s                 [31m¢x[m\n", opponent->pip->name);
-			prints("            [1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m");
+			prints("            \x1b[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m\n");
+			prints("            \x1b[1;31m¢x  \x1b[37m­^«iªº¤pÂû \x1b[33m%-10s                     \x1b[31m¢x\x1b[m\n", d.name);
+			prints("            \x1b[1;31m¢x  \x1b[37m¥´±Ñ¤F¹ï¤è¤pÂû \x1b[32m%-10s                 \x1b[31m¢x\x1b[m\n", opponent->pip->name);
+			prints("            \x1b[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m");
 			currutmp->pip->leaving = 0;
 			add_io(fd, 60);
 			if (opponent->pip->hp <= 0)
@@ -5126,11 +5126,11 @@ int first)
 			clear();
 			vs_head("¹q¤l¾i¤pÂû", BoardName);
 			move(10, 0);
-			prints("            [1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m\n");
-			prints("            [1;31m¢x  [37m¥i¼¦ªº¤pÂû [33m%-10s                     [31m¢x[m\n", d.name);
-			prints("            [1;31m¢x  [37m¦b»P [32m%-10s [37mªº¾Ô°«¤¤¡A                [31m¢x[m\n", opponent->pip->name);
-			prints("            [1;31m¢x  [37m¤£©¯¦a¥´¿é¤F¡A°OªÌ²{³õ¯S§O³ø¾É.........   [31m¢x[m\n");
-			prints("            [1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m\n");
+			prints("            \x1b[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m\n");
+			prints("            \x1b[1;31m¢x  \x1b[37m¥i¼¦ªº¤pÂû \x1b[33m%-10s                     \x1b[31m¢x\x1b[m\n", d.name);
+			prints("            \x1b[1;31m¢x  \x1b[37m¦b»P \x1b[32m%-10s \x1b[37mªº¾Ô°«¤¤¡A                \x1b[31m¢x\x1b[m\n", opponent->pip->name);
+			prints("            \x1b[1;31m¢x  \x1b[37m¤£©¯¦a¥´¿é¤F¡A°OªÌ²{³õ¯S§O³ø¾É.........   \x1b[31m¢x\x1b[m\n");
+			prints("            \x1b[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m\n");
 			currutmp->pip->leaving = 0;
 			add_io(fd, 60);
 			vmsg("¤pÂû¥´¿é¤F....");
@@ -5173,45 +5173,45 @@ pip_ending_screen(void)
 	clear();
 	pip_ending_decide(endbuf1, endbuf2, endbuf3, &endmode, &endgrade);
 	move(1, 9);
-	prints("[1;33mùİùùùùùùùßùİùùùùùûùßùİùùùùùùùûùİùùùùùùùßùİùùùùùûùßùúùùùùùùùû[0m");
+	prints("\x1b[1;33mùİùùùùùùùßùİùùùùùûùßùİùùùùùùùûùİùùùùùùùßùİùùùùùûùßùúùùùùùùùû\x1b[0m");
 	move(2, 9);
-	prints("[1;37mùø      ùøùø    ùøùøùø      ùøùø      ùøùø    ùøùøùø      ùø[0m");
+	prints("\x1b[1;37mùø      ùøùø    ùøùøùø      ùøùø      ùøùø    ùøùøùø      ùø\x1b[0m");
 	move(3, 9);
-	prints("[0;37mùø    ùùùâùø    ùøùøùø  ùúùûùøùãùùùßùİùåùø    ùøùøùø  ùİùùùß[0m");
+	prints("\x1b[0;37mùø    ùùùâùø    ùøùøùø  ùúùûùøùãùùùßùİùåùø    ùøùøùø  ùİùùùß\x1b[0m");
 	move(4, 9);
-	prints("[0;37mùø    ùùùâùø  ùø  ùøùø  ùüùıùøùİùùùåùãùßùø  ùø  ùøùø  ùüùıùø[0m");
+	prints("\x1b[0;37mùø    ùùùâùø  ùø  ùøùø  ùüùıùøùİùùùåùãùßùø  ùø  ùøùø  ùüùıùø\x1b[0m");
 	move(5, 9);
-	prints("[1;37mùø      ùøùø  ùø  ùøùø      ùøùø      ùøùø  ùø  ùøùø      ùø[0m");
+	prints("\x1b[1;37mùø      ùøùø  ùø  ùøùø      ùøùø      ùøùø  ùø  ùøùø      ùø\x1b[0m");
 	move(6, 9);
-	prints("[1;35mùãùùùùùùùåùãùùùüùùùåùãùùùùùùùıùãùùùùùùùåùãùùùüùùùåùüùùùùùùùı[0m");
+	prints("\x1b[1;35mùãùùùùùùùåùãùùùüùùùåùãùùùùùùùıùãùùùùùùùåùãùùùüùùùåùüùùùùùùùı\x1b[0m");
 	move(7, 8);
-	prints("[1;31m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w[41;37m " NICKNAME PIPNAME "µ²§½³ø§i [0;1;31m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w[0m");
+	prints("\x1b[1;31m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w\x1b[41;37m " NICKNAME PIPNAME "µ²§½³ø§i \x1b[0;1;31m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w\x1b[0m");
 	move(9, 10);
-	prints("[1;36m³o­Ó®É¶¡¤£ª¾¤£Ä±¦aÁÙ¬O¨ìÁ{¤F...[0m");
+	prints("\x1b[1;36m³o­Ó®É¶¡¤£ª¾¤£Ä±¦aÁÙ¬O¨ìÁ{¤F...\x1b[0m");
 	move(11, 10);
-	prints("[1;37m[33m%s[37m ±oÂ÷¶}§Aªº·Å·xÃh©ê¡A¦Û¤v¤@°¦Âû¦b¥~­±¨D¥Í¦s¤F.....[0m", d.name);
+	prints("\x1b[1;37m\x1b[33m%s\x1b[37m ±oÂ÷¶}§Aªº·Å·xÃh©ê¡A¦Û¤v¤@°¦Âû¦b¥~­±¨D¥Í¦s¤F.....\x1b[0m", d.name);
 	move(13, 10);
-	prints("[1;36m¦b§A·ÓÅU±Ğ¾É¥Lªº³o¬q®É¥ú¡AÅı¥L±µÄ²¤F«Ü¦h»â°ì¡A°ö¾i¤F«Ü¦hªº¯à¤O....[0m");
+	prints("\x1b[1;36m¦b§A·ÓÅU±Ğ¾É¥Lªº³o¬q®É¥ú¡AÅı¥L±µÄ²¤F«Ü¦h»â°ì¡A°ö¾i¤F«Ü¦hªº¯à¤O....\x1b[0m");
 	move(15, 10);
-	prints("[1;37m¦]¬°³o¨Ç¡AÅı¤pÂû [33m%s[37m ¤§«áªº¥Í¬¡¡AÅÜ±o§ó¦hªö¦h«º¤F........[0m", d.name);
+	prints("\x1b[1;37m¦]¬°³o¨Ç¡AÅı¤pÂû \x1b[33m%s\x1b[37m ¤§«áªº¥Í¬¡¡AÅÜ±o§ó¦hªö¦h«º¤F........\x1b[0m", d.name);
 	move(17, 10);
-	prints("[1;36m¹ï©ó§AªºÃö¤ß¡A§Aªº¥I¥X¡A§A©Ò¦³ªº·R......[0m");
+	prints("\x1b[1;36m¹ï©ó§AªºÃö¤ß¡A§Aªº¥I¥X¡A§A©Ò¦³ªº·R......\x1b[0m");
 	move(19, 10);
-	prints("[1;37m[33m%s[37m ·|¥Ã»·³£»Ê°O¦b¤ßªº....[0m", d.name);
+	prints("\x1b[1;37m\x1b[33m%s\x1b[37m ·|¥Ã»·³£»Ê°O¦b¤ßªº....\x1b[0m", d.name);
 	vmsg("±µ¤U¨Ó¬İ¥¼¨Óµo®i");
 	clrchyiuan(7, 19);
 	move(7, 8);
-	prints("[1;34m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w[44;37m " NICKNAME PIPNAME "¥¼¨Óµo®i [0;1;34m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w[0m");
+	prints("\x1b[1;34m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w\x1b[44;37m " NICKNAME PIPNAME "¥¼¨Óµo®i \x1b[0;1;34m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w\x1b[0m");
 	move(9, 10);
-	prints("[1;36m³z¹L¤ô´¹²y¡AÅı§Ú­Ì¤@°_¨Ó¬İ [33m%s[36m ªº¥¼¨Óµo®i§a.....[0m", d.name);
+	prints("\x1b[1;36m³z¹L¤ô´¹²y¡AÅı§Ú­Ì¤@°_¨Ó¬İ \x1b[33m%s\x1b[36m ªº¥¼¨Óµo®i§a.....\x1b[0m", d.name);
 	move(11, 10);
-	prints("[1;37m¤pÂû [33m%s[37m «á¨Ó%s....[0m", d.name, endbuf1);
+	prints("\x1b[1;37m¤pÂû \x1b[33m%s\x1b[37m «á¨Ó%s....\x1b[0m", d.name, endbuf1);
 	move(13, 10);
-	prints("[1;36m¦]¬°¥Lªº¤§«eªº§V¤O¡A¨Ï±o¥L¦b³o¤@¤è­±%s....[0m", endbuf2);
+	prints("\x1b[1;36m¦]¬°¥Lªº¤§«eªº§V¤O¡A¨Ï±o¥L¦b³o¤@¤è­±%s....\x1b[0m", endbuf2);
 	move(15, 10);
-	prints("[1;37m¦Ü©ó¤pÂûªº±B«Ãª¬ªp¡A¥L«á¨Ó%s¡A±B«Ãºâ¬O«Ü¬üº¡.....[0m", endbuf3);
+	prints("\x1b[1;37m¦Ü©ó¤pÂûªº±B«Ãª¬ªp¡A¥L«á¨Ó%s¡A±B«Ãºâ¬O«Ü¬üº¡.....\x1b[0m", endbuf3);
 	move(17, 10);
-	prints("[1;36m¶â..³o¬O¤@­Ó¤£¿ùªºµ²§½­ò..........[0m");
+	prints("\x1b[1;36m¶â..³o¬O¤@­Ó¤£¿ùªºµ²§½­ò..........\x1b[0m");
 	vmsg("§Ú·Q  §A¤@©w«Ü·P°Ê§a.....");
 	show_ending_pic(0);
 	vmsg("¬İ¤@¬İ¤À¼ÆÅo");
@@ -5227,19 +5227,19 @@ pip_ending_screen(void)
 	vmsg("Åwªï¦A¨Ó¬D¾Ô....");
 	/*°O¿ı¶}©l*/
 	now = time(0);
-	sprintf(buf, "[1;35m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w[0m\n");
+	sprintf(buf, "\x1b[1;35m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w\x1b[0m\n");
 	pip_log_record(buf);
-	sprintf(buf, "[1;37m¦b [33m%s [37mªº®É­Ô¡A[36m%s [37mªº¤pÂû [32m%s[37m ¥X²{¤Fµ²§½[0m\n", Cdate(&now), cuser.userid, d.name);
+	sprintf(buf, "\x1b[1;37m¦b \x1b[33m%s \x1b[37mªº®É­Ô¡A\x1b[36m%s \x1b[37mªº¤pÂû \x1b[32m%s\x1b[37m ¥X²{¤Fµ²§½\x1b[0m\n", Cdate(&now), cuser.userid, d.name);
 	pip_log_record(buf);
-	sprintf(buf, "[1;37m¤pÂû [32m%s [37m§V¤O¥[±j¦Û¤v¡A«á¨Ó%s[0m\n[1;37m¦]¬°¤§«eªº§V¤O¡A¨Ï±o¦b³o¤@¤è­±%s[0m\n", d.name, endbuf1, endbuf2);
+	sprintf(buf, "\x1b[1;37m¤pÂû \x1b[32m%s \x1b[37m§V¤O¥[±j¦Û¤v¡A«á¨Ó%s\x1b[0m\n\x1b[1;37m¦]¬°¤§«eªº§V¤O¡A¨Ï±o¦b³o¤@¤è­±%s\x1b[0m\n", d.name, endbuf1, endbuf2);
 	pip_log_record(buf);
-	sprintf(buf, "[1;37m¦Ü©ó±B«Ãª¬ªp¡A¥L«á¨Ó%s¡A±B«Ãºâ¬O«Ü¬üº¡.....[0m\n\n[1;37m¤pÂû [32n%s[37m ªºÁ`¿n¤À¡× [33m%d[0m\n", endbuf3, d.name, endgrade);
+	sprintf(buf, "\x1b[1;37m¦Ü©ó±B«Ãª¬ªp¡A¥L«á¨Ó%s¡A±B«Ãºâ¬O«Ü¬üº¡.....\x1b[0m\n\n\x1b[1;37m¤pÂû \x1b[32n%s\x1b[37m ªºÁ`¿n¤À¡× \x1b[33m%d\x1b[0m\n", endbuf3, d.name, endgrade);
 	pip_log_record(buf);
-	sprintf(buf, "[1;35m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w[0m\n");
+	sprintf(buf, "\x1b[1;35m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w\x1b[0m\n");
 	pip_log_record(buf);
 	/*°O¿ı²×¤î*/
 	d.death = 3;
-	pipdie("[1;31m¹CÀ¸µ²§ôÅo...[m  ", 3);
+	pipdie("\x1b[1;31m¹CÀ¸µ²§ôÅo...\x1b[m  ", 3);
 	return 0;
 }
 
@@ -6339,11 +6339,11 @@ int endgrade)
 	clrchyiuan(1, 23);
 	gradeall = gradebasic + endgrade;
 	move(8, 17);
-	prints("[1;36m·PÁÂ±zª±§¹¾ã­Ó" NICKNAME "¤pÂûªº¹CÀ¸.....[0m");
+	prints("\x1b[1;36m·PÁÂ±zª±§¹¾ã­Ó" NICKNAME "¤pÂûªº¹CÀ¸.....\x1b[0m");
 	move(10, 17);
-	prints("[1;37m¸g¹L¨t²Î­pºâªºµ²ªG¡G[0m");
+	prints("\x1b[1;37m¸g¹L¨t²Î­pºâªºµ²ªG¡G\x1b[0m");
 	move(12, 17);
-	prints("[1;36m±zªº¤pÂû [37m%s [36mÁ`±o¤À¡× [1;5;33m%d [0m", d.name, gradeall);
+	prints("\x1b[1;36m±zªº¤pÂû \x1b[37m%s \x1b[36mÁ`±o¤À¡× \x1b[1;5;33m%d \x1b[0m", d.name, gradeall);
 	return gradeall;
 }
 
@@ -6365,11 +6365,11 @@ int pip_divine(void) /*¥e¤R®v¨Ó³X*/
 	money = 300 * (tm + 1);
 	clrchyiuan(6, 18);
 	move(10, 14);
-	prints("[1;33;5m¥n¥n¥n...[0;1;37m¬ğµM¶Ç¨Ó°}°}ªººVªùÁn.........[0m");
+	prints("\x1b[1;33;5m¥n¥n¥n...\x1b[0;1;37m¬ğµM¶Ç¨Ó°}°}ªººVªùÁn.........\x1b[0m");
 	vmsg("¥hÁ@Á@¬O½Ö§a......");
 	clrchyiuan(6, 18);
 	move(10, 14);
-	prints("[1;37;46m    ­ì¨Ó¬O¶³¹C¥|®üªº¥e¤R®v¨Ó³X¤F.......    [0m");
+	prints("\x1b[1;37;46m    ­ì¨Ó¬O¶³¹C¥|®üªº¥e¤R®v¨Ó³X¤F.......    \x1b[0m");
 	vmsg("¶}ªùÅı¥L¶i¨Ó§a....");
 	if (d.money >= money)
 	{
@@ -6380,19 +6380,19 @@ int pip_divine(void) /*¥e¤R®v¨Ó³X*/
 		{
 			pip_ending_decide(endbuf1, endbuf2, endbuf3, &endmode, &endgrade);
 			if (randvalue == 0)
-				sprintf(buf, "[1;37m  §Aªº¤pÂû%s¥H«á¥i¯àªº¨­¥÷¬O%s  [m", d.name, endmodemagic[2+rand()%5].girl);
+				sprintf(buf, "\x1b[1;37m  §Aªº¤pÂû%s¥H«á¥i¯àªº¨­¥÷¬O%s  \x1b[m", d.name, endmodemagic[2+rand()%5].girl);
 			else if (randvalue == 1)
-				sprintf(buf, "[1;37m  §Aªº¤pÂû%s¥H«á¥i¯àªº¨­¥÷¬O%s  [m", d.name, endmodecombat[2+rand()%6].girl);
+				sprintf(buf, "\x1b[1;37m  §Aªº¤pÂû%s¥H«á¥i¯àªº¨­¥÷¬O%s  \x1b[m", d.name, endmodecombat[2+rand()%6].girl);
 			else if (randvalue == 2)
-				sprintf(buf, "[1;37m  §Aªº¤pÂû%s¥H«á¥i¯àªº¨­¥÷¬O%s  [m", d.name, endmodeall_purpose[6+rand()%15].girl);
+				sprintf(buf, "\x1b[1;37m  §Aªº¤pÂû%s¥H«á¥i¯àªº¨­¥÷¬O%s  \x1b[m", d.name, endmodeall_purpose[6+rand()%15].girl);
 			else if (randvalue == 3)
-				sprintf(buf, "[1;37m  §Aªº¤pÂû%s¥H«á¥i¯àªº¨­¥÷¬O%s  [m", d.name, endmodeart[2+rand()%6].girl);
+				sprintf(buf, "\x1b[1;37m  §Aªº¤pÂû%s¥H«á¥i¯àªº¨­¥÷¬O%s  \x1b[m", d.name, endmodeart[2+rand()%6].girl);
 			else if (randvalue == 4)
-				sprintf(buf, "[1;37m  §Aªº¤pÂû%s¥H«á¥i¯àªº¨­¥÷¬O%s  [m", d.name, endbuf1);
+				sprintf(buf, "\x1b[1;37m  §Aªº¤pÂû%s¥H«á¥i¯àªº¨­¥÷¬O%s  \x1b[m", d.name, endbuf1);
 			d.money -= money;
 			clrchyiuan(6, 18);
 			move(10, 14);
-			prints("[1;33m¦b§Ú¥e¤Rµ²ªG¬İ¨Ó....[m");
+			prints("\x1b[1;33m¦b§Ú¥e¤Rµ²ªG¬İ¨Ó....\x1b[m");
 			move(12, 14);
 			prints(buf);
 			vmsg("ÁÂÁÂ´fÅU¡A¦³½t¦A¨£­±¤F.(¤£·Ç¤£¯à©Ç§Ú³á)");
@@ -6623,7 +6623,7 @@ char *genbuf)
 
 		if (death1 == 0)
 		{
-			prints("[1;32mName¡G%-10s[m  ¥Í¤é¡G%2d¦~%2d¤ë%2d¤é   ¦~ÄÖ¡G%2d·³  ª¬ºA¡G%s  ¿ú¿ú¡G%d\n"
+			prints("\x1b[1;32mName¡G%-10s\x1b[m  ¥Í¤é¡G%2d¦~%2d¤ë%2d¤é   ¦~ÄÖ¡G%2d·³  ª¬ºA¡G%s  ¿ú¿ú¡G%d\n"
 				   "¥Í©R¡G%3d/%-3d  §Ö¼Ö¡G%-4d  º¡·N¡G%-4d  ®ğ½è¡G%-4d  ´¼¼z¡G%-4d  Åé­«¡G%-4d\n"
 				   "¤j¸É¤Y¡G%-4d   ­¹ª«¡G%-4d  ¹s­¹¡G%-4d  ¯h³Ò¡G%-4d  Å¼Å¼¡G%-4d  ¯f®ğ¡G%-4d\n",
 				   name1, year1 - 11, month1, day1, age, yo[age1], money1,
@@ -6682,20 +6682,20 @@ char *genbuf)
 			if (shit1 == 0) prints("«Ü°®²b..");
 			if (shit1 > 40 && shit1 < 60) prints("¯ä¯äªº..");
 			if (shit1 >= 60 && shit1 < 80) prints("¦n¯ä³á..");
-			if (shit1 >= 80 && shit1 < 100) prints("[1;34m§Ö¯ä¦º¤F..[m");
-			if (shit1 >= 100) {prints("[1;31m¯ä¦º¤F..[m"); return -1;}
+			if (shit1 >= 80 && shit1 < 100) prints("\x1b[1;34m§Ö¯ä¦º¤F..\x1b[m");
+			if (shit1 >= 100) {prints("\x1b[1;31m¯ä¦º¤F..\x1b[m"); return -1;}
 
 			pc1 = hp1 * 100 / maxhp1;
 			if (pc1 == 0) {prints("¾j¦º¤F.."); return -1;}
-			if (pc1 < 20) prints("[1;35m¥ş¨­µL¤O¤¤.§Ö¾j¦º¤F.[m");
+			if (pc1 < 20) prints("\x1b[1;35m¥ş¨­µL¤O¤¤.§Ö¾j¦º¤F.\x1b[m");
 			if (pc1 < 40 && pc1 >= 20) prints("Åé¤O¤£¤Ó°÷..·Q¦YÂIªF¦è..");
 			if (pc1 < 100 && pc1 >= 80) prints("¶â¡ã¨{¤l¹¡¹¡¦³Åé¤O..");
-			if (pc1 >= 100) prints("[1;34m§Ö¼µ¦º¤F..[m");
+			if (pc1 >= 100) prints("\x1b[1;34m§Ö¼µ¦º¤F..\x1b[m");
 
 			pc1 = tired1;
 			if (pc1 < 20) prints("ºë¯«§İ§İ¤¤..");
-			if (pc1 < 80 && pc1 >= 60) prints("[1;34m¦³ÂI¤p²Ö..[m");
-			if (pc1 < 100 && pc1 >= 80) {prints("[1;31m¦n²Ö³á¡A§Ö¤£¦æ¤F..[m"); }
+			if (pc1 < 80 && pc1 >= 60) prints("\x1b[1;34m¦³ÂI¤p²Ö..\x1b[m");
+			if (pc1 < 100 && pc1 >= 80) {prints("\x1b[1;31m¦n²Ö³á¡A§Ö¤£¦æ¤F..\x1b[m"); }
 			if (pc1 >= 100) {prints("²Ö¦º¤F..."); return -1;}
 
 			pc1 = 60 + 10 * age;
@@ -6707,18 +6707,18 @@ char *genbuf)
 			if (weight1 > (pc1 - 30) && weight1 <= (pc1 - 10)) prints("¦³ÂI¤p½G..");
 			if (weight1 > (pc1 - 50) && weight1 <= (pc1 - 30)) prints("¤Ó½G¤F..");
 
-			if (sick1 < 75 && sick1 >= 50) prints("[1;34m¥Í¯f¤F..[m");
-			if (sick1 < 100 && sick1 >= 75) {prints("[1;31m¯f­«!!..[m"); }
+			if (sick1 < 75 && sick1 >= 50) prints("\x1b[1;34m¥Í¯f¤F..\x1b[m");
+			if (sick1 < 100 && sick1 >= 75) {prints("\x1b[1;31m¯f­«!!..\x1b[m"); }
 			if (sick1 >= 100) {prints("¯f¦º¤F.!."); return -1;}
 
 			pc1 = happy1;
-			if (pc1 < 20) prints("[1;31m«Ü¤£§Ö¼Ö..[m");
+			if (pc1 < 20) prints("\x1b[1;31m«Ü¤£§Ö¼Ö..\x1b[m");
 			if (pc1 < 40 && pc1 >= 20) prints("¤£§Ö¼Ö..");
 			if (pc1 < 95 && pc1 >= 80) prints("§Ö¼Ö..");
 			if (pc1 <= 100 && pc1 >= 95) prints("«Ü§Ö¼Ö..");
 
 			pc1 = satisfy1;
-			if (pc1 < 40) prints("[31;1m¤£º¡¨¬..[m");
+			if (pc1 < 40) prints("\x1b[31;1m¤£º¡¨¬..\x1b[m");
 			if (pc1 < 95 && pc1 >= 80) prints("º¡¨¬..");
 			if (pc1 <= 100 && pc1 >= 95) prints("«Üº¡¨¬..");
 		}
@@ -6828,7 +6828,7 @@ pip_system_freepip(void)
 	sprintf(buf, "%s ³Q¬½¤ßªº %s ¥á±¼¤F~", d.name, cuser.userid);
 	vmsg(buf);
 	d.death = 2;
-	pipdie("[1;31m³Q¬½¤ß¥á±ó:~~[0m", 2);
+	pipdie("\x1b[1;31m³Q¬½¤ß¥á±ó:~~\x1b[0m", 2);
 	return 0;
 }
 
@@ -6845,7 +6845,7 @@ pip_system_service(void)
 	move(b_lines, 0);
 	clrtoeol();
 	move(b_lines, 0);
-	prints("[1;44m  ªA°È¶µ¥Ø  [46m[1]©R¦W¤j®v [2]ÅÜ©Ê¤â³N [3]µ²§½³]§½                                [0m");
+	prints("\x1b[1;44m  ªA°È¶µ¥Ø  \x1b[46m[1]©R¦W¤j®v [2]ÅÜ©Ê¤â³N [3]µ²§½³]§½                                \x1b[0m");
 	pipkey = vkey();
 
 	switch (pipkey)
@@ -6865,7 +6865,7 @@ pip_system_service(void)
 			strcpy(d.name, buf);
 			/*§ï¦W°O¿ı*/
 			now = time(0);
-			sprintf(buf, "[1;37m%s %-11s§â¤pÂû [%s] §ï¦W¦¨ [%s] [0m\n", Cdate(&now), cuser.userid, oldname, d.name);
+			sprintf(buf, "\x1b[1;37m%s %-11s§â¤pÂû [%s] §ï¦W¦¨ [%s] \x1b[0m\n", Cdate(&now), cuser.userid, oldname, d.name);
 			pip_log_record(buf);
 			vmsg("¶â¶â  ´«¤@­Ó·sªº¦W¦r³á...");
 		}
@@ -6879,25 +6879,25 @@ pip_system_service(void)
 		{
 			oldchoice = 2; /*¤½-->¥À*/
 			move(b_lines - 1, 0);
-			prints("[1;33m±N¤pÂû¥Ñ[32m¡ñ[33mÅÜ©Ê¦¨[35m¡ğ[33mªº¶Ü¡H [37m[y/N][0m");
+			prints("\x1b[1;33m±N¤pÂû¥Ñ\x1b[32m¡ñ\x1b[33mÅÜ©Ê¦¨\x1b[35m¡ğ\x1b[33mªº¶Ü¡H \x1b[37m[y/N]\x1b[0m");
 		}
 		else
 		{
 			oldchoice = 1; /*¥À-->¤½*/
 			move(b_lines - 1, 0);
-			prints("[1;33m±N¤pÂû¥Ñ[35m¡ğ[33mÅÜ©Ê¦¨[35m¡ñ[33mªº¶Ü¡H [37m[y/N][0m");
+			prints("\x1b[1;33m±N¤pÂû¥Ñ\x1b[35m¡ğ\x1b[33mÅÜ©Ê¦¨\x1b[35m¡ñ\x1b[33mªº¶Ü¡H \x1b[37m[y/N]\x1b[0m");
 		}
 		move(b_lines, 0);
-		prints("[1;44m  ªA°È¶µ¥Ø  [46m[1]©R¦W¤j®v [2]ÅÜ©Ê¤â³N [3]µ²§½³]§½                                [0m");
+		prints("\x1b[1;44m  ªA°È¶µ¥Ø  \x1b[46m[1]©R¦W¤j®v [2]ÅÜ©Ê¤â³N [3]µ²§½³]§½                                \x1b[0m");
 		pipkey = vkey();
 		if (pipkey == 'Y' || pipkey == 'y')
 		{
 			/*§ï¦W°O¿ı*/
 			now = time(0);
 			if (d.sex == 1)
-				sprintf(buf, "[1;37m%s %-11s§â¤pÂû [%s] ¥Ñ¡ñÅÜ©Ê¦¨¡ğ¤F[0m\n", Cdate(&now), cuser.userid, d.name);
+				sprintf(buf, "\x1b[1;37m%s %-11s§â¤pÂû [%s] ¥Ñ¡ñÅÜ©Ê¦¨¡ğ¤F\x1b[0m\n", Cdate(&now), cuser.userid, d.name);
 			else
-				sprintf(buf, "[1;37m%s %-11s§â¤pÂû [%s] ¥Ñ¡ğÅÜ©Ê¦¨¡ñ¤F[0m\n", Cdate(&now), cuser.userid, d.name);
+				sprintf(buf, "\x1b[1;37m%s %-11s§â¤pÂû [%s] ¥Ñ¡ğÅÜ©Ê¦¨¡ñ¤F\x1b[0m\n", Cdate(&now), cuser.userid, d.name);
 			pip_log_record(buf);
 			vmsg("ÅÜ©Ê¤â³N§¹²¦...");
 			d.sex = oldchoice;
@@ -6913,18 +6913,18 @@ pip_system_service(void)
 		{
 			oldchoice += 3; /*¨S¦³-->¦³*/
 			move(b_lines - 1, 0);
-			prints("[1;33m±N¤pÂû¹CÀ¸§ï¦¨[32m[¦³20·³µ²§½][33m? [37m[y/N][0m");
+			prints("\x1b[1;33m±N¤pÂû¹CÀ¸§ï¦¨\x1b[32m[¦³20·³µ²§½]\x1b[33m? \x1b[37m[y/N]\x1b[0m");
 			sprintf(buf, "¤pÂû¹CÀ¸³]©w¦¨[¦³20·³µ²§½]..");
 		}
 		else
 		{
 			oldchoice -= 3; /*¦³-->¨S¦³*/
 			move(b_lines - 1, 0);
-			prints("[1;33m±N¤pÂû¹CÀ¸§ï¦¨[32m[¨S¦³20·³µ²§½][33m? [37m[y/N][0m");
+			prints("\x1b[1;33m±N¤pÂû¹CÀ¸§ï¦¨\x1b[32m[¨S¦³20·³µ²§½]\x1b[33m? \x1b[37m[y/N]\x1b[0m");
 			sprintf(buf, "¤pÂû¹CÀ¸³]©w¦¨[¨S¦³20·³µ²§½]..");
 		}
 		move(b_lines, 0);
-		prints("[1;44m  ªA°È¶µ¥Ø  [46m[1]©R¦W¤j®v [2]ÅÜ©Ê¤â³N [3]µ²§½³]§½                                [0m");
+		prints("\x1b[1;44m  ªA°È¶µ¥Ø  \x1b[46m[1]©R¦W¤j®v [2]ÅÜ©Ê¤â³N [3]µ²§½³]§½                                \x1b[0m");
 		pipkey = vkey();
 		if (pipkey == 'Y' || pipkey == 'y')
 		{
@@ -7008,10 +7008,10 @@ char *userid)
 
 	clear();
 	move(1, 0);
-	prints("       [1;33mùİùùùùùùùûùúùùùùùùùûùİùùùùùùùßùúùùùùùùùû[m\n");
-	prints("       [0;37mùøùúùû  ùøùø ùù   ùøùãùßùİùùùåùø ùù   ùø[m\n");
-	prints("       [1;37mùøùüùı  ùøùøùİùß  ùø  ùøùø    ùøùİùß  ùø[m\n");
-	prints("       [1;34mùãùùùùùùùıùãùåùãùùùå  ùãùå    ùãùåùãùùùå[32m......................[m");
+	prints("       \x1b[1;33mùİùùùùùùùûùúùùùùùùùûùİùùùùùùùßùúùùùùùùùû\x1b[m\n");
+	prints("       \x1b[0;37mùøùúùû  ùøùø ùù   ùøùãùßùİùùùåùø ùù   ùø\x1b[m\n");
+	prints("       \x1b[1;37mùøùüùı  ùøùøùİùß  ùø  ùøùø    ùøùİùß  ùø\x1b[m\n");
+	prints("       \x1b[1;34mùãùùùùùùùıùãùåùãùùùå  ùãùå    ùãùåùãùùùå\x1b[32m......................\x1b[m");
 	do
 	{
 		clrchyiuan(5, 23);
@@ -7020,11 +7020,11 @@ char *userid)
 		case 1:
 			move(5, 0);
 			sprintf(buf,
-					"[1;31m ¢~¢t[41;37m °ò¥»¸ê®Æ [0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢¡[m\n");
+					"\x1b[1;31m ¢~¢t\x1b[41;37m °ò¥»¸ê®Æ \x1b[0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢¡\x1b[m\n");
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ì©m    ¦W :[37m %-10s [33m¡Ì¥Í    ¤é :[37m %02d/%02d/%02d   [33m¡Ì¦~    ¬ö :[37m %-2d         [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ì©m    ¦W :\x1b[37m %-10s \x1b[33m¡Ì¥Í    ¤é :\x1b[37m %02d/%02d/%02d   \x1b[33m¡Ì¦~    ¬ö :\x1b[37m %-2d         \x1b[31m¢x\x1b[m\n",
 					chicken.name, (chicken.year) % 100, chicken.month, chicken.day, tm);
 			prints(buf);
 
@@ -7032,151 +7032,151 @@ char *userid)
 			sprintf(inbuf2, "%d%s/%d%s", chicken.mp > 1000 ? chicken.mp / 1000 : chicken.mp, chicken.mp > 1000 ? "K" : "", chicken.maxmp > 1000 ? chicken.maxmp / 1000 : chicken.maxmp, chicken.maxmp > 1000 ? "K" : "");
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡ÌÅé    ­« :[37m %-5d(¦Ì§J)[33m¡ÌÅé    ¤O :[37m %-11s[33m¡Ìªk    ¤O :[37m %-11s[31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡ÌÅé    ­« :\x1b[37m %-5d(¦Ì§J)\x1b[33m¡ÌÅé    ¤O :\x1b[37m %-11s\x1b[33m¡Ìªk    ¤O :\x1b[37m %-11s\x1b[31m¢x\x1b[m\n",
 					chicken.weight, inbuf1, inbuf2);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ì¯h    ³Ò :[37m %-3d        [33m¡Ì¯f    ®ğ :[37m %-3d        [33m¡ÌÅ¼    Å¼ :[37m %-3d        [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ì¯h    ³Ò :\x1b[37m %-3d        \x1b[33m¡Ì¯f    ®ğ :\x1b[37m %-3d        \x1b[33m¡ÌÅ¼    Å¼ :\x1b[37m %-3d        \x1b[31m¢x\x1b[m\n",
 					chicken.tired, chicken.sick, chicken.shit);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡ÌµÃ    ¤O :[37m %-7d    [33m¡Ì¿Ë¤lÃö«Y :[37m %-7d    [33m¡Ìª÷    ¿ú :[37m %-11d[31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡ÌµÃ    ¤O :\x1b[37m %-7d    \x1b[33m¡Ì¿Ë¤lÃö«Y :\x1b[37m %-7d    \x1b[33m¡Ìª÷    ¿ú :\x1b[37m %-11d\x1b[31m¢x\x1b[m\n",
 					chicken.wrist, chicken.relation, chicken.money);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢u¢t[41;37m ¯à¤O¸ê®Æ [0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢t[m\n");
+					"\x1b[1;31m ¢u¢t\x1b[41;37m ¯à¤O¸ê®Æ \x1b[0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢t\x1b[m\n");
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ì®ğ    ½è :[37m %-10d [33m¡Ì´¼    ¤O :[37m %-10d [33m¡Ì·R    ¤ß :[37m %-10d [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ì®ğ    ½è :\x1b[37m %-10d \x1b[33m¡Ì´¼    ¤O :\x1b[37m %-10d \x1b[33m¡Ì·R    ¤ß :\x1b[37m %-10d \x1b[31m¢x\x1b[m\n",
 					chicken.character, chicken.wisdom, chicken.love);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡ÌÃÀ    ³N :[37m %-10d [33m¡Ì¹D    ¼w :[37m %-10d [33m¡Ì®a    ¨Æ :[37m %-10d [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡ÌÃÀ    ³N :\x1b[37m %-10d \x1b[33m¡Ì¹D    ¼w :\x1b[37m %-10d \x1b[33m¡Ì®a    ¨Æ :\x1b[37m %-10d \x1b[31m¢x\x1b[m\n",
 					chicken.art, chicken.etchics, chicken.homework);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡ÌÂ§    »ö :[37m %-10d [33m¡ÌÀ³    ¹ï :[37m %-10d [33m¡Ì²i    ¶¹ :[37m %-10d [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡ÌÂ§    »ö :\x1b[37m %-10d \x1b[33m¡ÌÀ³    ¹ï :\x1b[37m %-10d \x1b[33m¡Ì²i    ¶¹ :\x1b[37m %-10d \x1b[31m¢x\x1b[m\n",
 					chicken.manners, chicken.speech, chicken.cookskill);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢u¢t[41;37m ª¬ºA¸ê®Æ [0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢t[m\n");
+					"\x1b[1;31m ¢u¢t\x1b[41;37m ª¬ºA¸ê®Æ \x1b[0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢t\x1b[m\n");
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ì§Ö    ¼Ö :[37m %-10d [33m¡Ìº¡    ·N :[37m %-10d [33m¡Ì¤H    »Ú :[37m %-10d [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ì§Ö    ¼Ö :\x1b[37m %-10d \x1b[33m¡Ìº¡    ·N :\x1b[37m %-10d \x1b[33m¡Ì¤H    »Ú :\x1b[37m %-10d \x1b[31m¢x\x1b[m\n",
 					chicken.happy, chicken.satisfy, chicken.toman);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ì¾y    ¤O :[37m %-10d [33m¡Ì«i    ´± :[37m %-10d [33m¡Ì«H    ¥õ :[37m %-10d [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ì¾y    ¤O :\x1b[37m %-10d \x1b[33m¡Ì«i    ´± :\x1b[37m %-10d \x1b[33m¡Ì«H    ¥õ :\x1b[37m %-10d \x1b[31m¢x\x1b[m\n",
 					chicken.charm, chicken.brave, chicken.belief);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ì¸o    Ä^ :[37m %-10d [33m¡Ì·P    ¨ü :[37m %-10d [33m            [37m            [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ì¸o    Ä^ :\x1b[37m %-10d \x1b[33m¡Ì·P    ¨ü :\x1b[37m %-10d \x1b[33m            \x1b[37m            \x1b[31m¢x\x1b[m\n",
 					chicken.offense, chicken.affect);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢u¢t[41;37m µû»ù¸ê®Æ [0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢t[m\n");
+					"\x1b[1;31m ¢u¢t\x1b[41;37m µû»ù¸ê®Æ \x1b[0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢t\x1b[m\n");
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡ÌªÀ¥æµû»ù :[37m %-10d [33m¡Ì¾Ô°«µû»ù :[37m %-10d [33m¡ÌÅ]ªkµû»ù :[37m %-10d [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡ÌªÀ¥æµû»ù :\x1b[37m %-10d \x1b[33m¡Ì¾Ô°«µû»ù :\x1b[37m %-10d \x1b[33m¡ÌÅ]ªkµû»ù :\x1b[37m %-10d \x1b[31m¢x\x1b[m\n",
 					chicken.social, chicken.hexp, chicken.mexp);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ì®a¨Æµû»ù :[37m %-10d                                                 [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ì®a¨Æµû»ù :\x1b[37m %-10d                                                 \x1b[31m¢x\x1b[m\n",
 					chicken.family);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢¢¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢£[m\n");
+					"\x1b[1;31m ¢¢¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢£\x1b[m\n");
 			prints(buf);
 
 			move(b_lines - 1, 0);
 			sprintf(buf,
-					"                                                              [1;36m²Ä¤@­¶[37m/[36m¦@¤G­¶[m\n");
+					"                                                              \x1b[1;36m²Ä¤@­¶\x1b[37m/\x1b[36m¦@¤G­¶\x1b[m\n");
 			prints(buf);
 			break;
 
 		case 2:
 			move(5, 0);
 			sprintf(buf,
-					"[1;31m ¢~¢t[41;37m ª««~¸ê®Æ [0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢¡[m\n");
+					"\x1b[1;31m ¢~¢t\x1b[41;37m ª««~¸ê®Æ \x1b[0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢¡\x1b[m\n");
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ì­¹    ª« :[37m %-10d [33m¡Ì¹s    ­¹ :[37m %-10d [33m¡Ì¤j ¸É ¤Y :[37m %-10d [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ì­¹    ª« :\x1b[37m %-10d \x1b[33m¡Ì¹s    ­¹ :\x1b[37m %-10d \x1b[33m¡Ì¤j ¸É ¤Y :\x1b[37m %-10d \x1b[31m¢x\x1b[m\n",
 					chicken.food, chicken.cookie, chicken.bighp);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡ÌÆF    ªÛ :[37m %-10d [33m¡Ì®Ñ    ¥» :[37m %-10d [33m¡Ìª±    ¨ã :[37m %-10d [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡ÌÆF    ªÛ :\x1b[37m %-10d \x1b[33m¡Ì®Ñ    ¥» :\x1b[37m %-10d \x1b[33m¡Ìª±    ¨ã :\x1b[37m %-10d \x1b[31m¢x\x1b[m\n",
 					chicken.medicine, chicken.book, chicken.playtool);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢u¢t[41;37m ¹CÀ¸¸ê®Æ [0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢t[m\n");
+					"\x1b[1;31m ¢u¢t\x1b[41;37m ¹CÀ¸¸ê®Æ \x1b[0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢t\x1b[m\n");
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ì²q ®± Ä¹ :[37m %-10d [33m¡Ì²q ®± ¿é :[37m %-10d                         [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ì²q ®± Ä¹ :\x1b[37m %-10d \x1b[33m¡Ì²q ®± ¿é :\x1b[37m %-10d                         \x1b[31m¢x\x1b[m\n",
 					chicken.winn, chicken.losee);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢u¢t[41;37m ªZ¤O¸ê®Æ [0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢t[m\n");
+					"\x1b[1;31m ¢u¢t\x1b[41;37m ªZ¤O¸ê®Æ \x1b[0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢t\x1b[m\n");
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ì§ğ À» ¤O :[37m %-10d [33m¡Ì¨¾ ¿m ¤O :[37m %-10d [33m¡Ì³t «× ­È :[37m %-10d [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ì§ğ À» ¤O :\x1b[37m %-10d \x1b[33m¡Ì¨¾ ¿m ¤O :\x1b[37m %-10d \x1b[33m¡Ì³t «× ­È :\x1b[37m %-10d \x1b[31m¢x\x1b[m\n",
 					chicken.attack, chicken.resist, chicken.speed);
 			prints(buf);
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ì§ÜÅ]¯à¤O :[37m %-10d [33m¡Ì¾Ô°«§Ş³N :[37m %-10d [33m¡ÌÅ]ªk§Ş³N :[37m %-10d [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ì§ÜÅ]¯à¤O :\x1b[37m %-10d \x1b[33m¡Ì¾Ô°«§Ş³N :\x1b[37m %-10d \x1b[33m¡ÌÅ]ªk§Ş³N :\x1b[37m %-10d \x1b[31m¢x\x1b[m\n",
 					chicken.mresist, chicken.hskill, chicken.mskill);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡ÌÀY³¡¸Ë³Æ :[37m %-10s [33m¡Ì¥k¤â¸Ë³Æ :[37m %-10s [33m¡Ì¥ª¤â¸Ë³Æ :[37m %-10s [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡ÌÀY³¡¸Ë³Æ :\x1b[37m %-10s \x1b[33m¡Ì¥k¤â¸Ë³Æ :\x1b[37m %-10s \x1b[33m¡Ì¥ª¤â¸Ë³Æ :\x1b[37m %-10s \x1b[31m¢x\x1b[m\n",
 					weaponhead[chicken.weaponhead], weaponrhand[chicken.weaponrhand], weaponlhand[chicken.weaponlhand]);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ì¨­Åé¸Ë³Æ :[37m %-10s [33m¡Ì¸}³¡¸Ë³Æ :[37m %-10s [33m            [37m            [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ì¨­Åé¸Ë³Æ :\x1b[37m %-10s \x1b[33m¡Ì¸}³¡¸Ë³Æ :\x1b[37m %-10s \x1b[33m            \x1b[37m            \x1b[31m¢x\x1b[m\n",
 					weaponbody[chicken.weaponbody], weaponfoot[chicken.weaponfoot]);
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢u¢t[41;37m µ¥¯Å¸ê®Æ [0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢t[m\n");
+					"\x1b[1;31m ¢u¢t\x1b[41;37m µ¥¯Å¸ê®Æ \x1b[0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢t\x1b[m\n");
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢x[33m¡Ìµ¥    ¯Å :[37m %-10d [33m¡Ì¸g Åç ­È :[37m %-10d [33m¡Ì¤U¦¸¤É¯Å :[37m %-10d [31m¢x[m\n",
+					"\x1b[1;31m ¢x\x1b[33m¡Ìµ¥    ¯Å :\x1b[37m %-10d \x1b[33m¡Ì¸g Åç ­È :\x1b[37m %-10d \x1b[33m¡Ì¤U¦¸¤É¯Å :\x1b[37m %-10d \x1b[31m¢x\x1b[m\n",
 					chicken.level, chicken.exp, twice(d.level, 10000, 100));
 			prints(buf);
 
 			sprintf(buf,
-					"[1;31m ¢¢¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢£[m\n");
+					"\x1b[1;31m ¢¢¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢£\x1b[m\n");
 			prints(buf);
 
 			move(b_lines - 1, 0);
 			sprintf(buf,
-					"                                                              [1;36m²Ä¤G­¶[37m/[36m¦@¤G­¶[m\n");
+					"                                                              \x1b[1;36m²Ä¤G­¶\x1b[37m/\x1b[36m¦@¤G­¶\x1b[m\n");
 			prints(buf);
 			break;
 		}
 		move(b_lines, 0);
-		sprintf(buf, "[1;44;37m  ¸ê®Æ¿ï³æ  [46m  [¡ô/PAGE UP]©¹¤W¤@­¶ [¡õ/PAGE DOWN]©¹¤U¤@­¶ [Q]Â÷¶}:            [m");
+		sprintf(buf, "\x1b[1;44;37m  ¸ê®Æ¿ï³æ  \x1b[46m  [¡ô/PAGE UP]©¹¤W¤@­¶ [¡õ/PAGE DOWN]©¹¤U¤@­¶ [Q]Â÷¶}:            \x1b[m");
 		prints(buf);
 		pipkey = vkey();
 		switch (pipkey)
@@ -7267,7 +7267,7 @@ pip_meet_vs_man(void)
 	while (d.hp > 0)
 	{
 		move(b_lines, 0);
-		outs("[1;44;37m ¤è¦V [46m[R]¦^®a [F]Áı­¹ (E/W/S/N)ªF¦è«n¥_                                        \033[m");
+		outs("\x1b[1;44;37m ¤è¦V \x1b[46m[R]¦^®a [F]Áı­¹ (E/W/S/N)ªF¦è«n¥_                                        \033[m");
 		ans = vkey();
 		if (ans == 'r' || ans == 'R')
 			return 0;
@@ -7418,17 +7418,17 @@ int mode)
 		/*vs_head("¹q¤l¾i¤pÂû", BoardName);*/
 		move(0, 0);
 		if (d.sex == 1)
-			sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã [32m¡ñ [37m%-10s                                                [0m", d.name);
+			sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã \x1b[32m¡ñ \x1b[37m%-10s                                                \x1b[0m", d.name);
 		else if (d.sex == 2)
-			sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã [33m¡ğ [37m%-10s                                                [0m", d.name);
+			sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã \x1b[33m¡ğ \x1b[37m%-10s                                                \x1b[0m", d.name);
 		else
-			sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã [34m¡H [37m%-10s                                                [0m", d.name);
+			sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã \x1b[34m¡H \x1b[37m%-10s                                                \x1b[0m", d.name);
 		prints(buf);
 		move(6, 0);
 		if (mode == 1)
 			show_badman_pic(m.map/*n*/);
 		move(1, 0);
-		sprintf(buf, "[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m");
+		sprintf(buf, "\x1b[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m");
 		prints(buf);
 		move(2, 0);
 		/* lucky®³¨Ó·ícolor¥Î*/
@@ -7441,39 +7441,39 @@ int mode)
 		sprintf(inbuf1, "%d%s/%d%s", d.hp > 1000 ? d.hp / 1000 : d.hp, d.hp > 1000 ? "K" : "", d.maxhp > 1000 ? d.maxhp / 1000 : d.maxhp, d.maxhp > 1000 ? "K" : "");
 		sprintf(inbuf2, "%d%s/%d%s", d.mp > 1000 ? d.mp / 1000 : d.mp, d.mp > 1000 ? "K" : "", d.maxmp > 1000 ? d.maxmp / 1000 : d.maxmp, d.maxmp > 1000 ? "K" : "");
 
-		sprintf(buf, "[1;31m¢x[33m¥Í  ©R:[37m%-12s[33mªk  ¤O:[37m%-12s[33m¯h  ³Ò:[%dm%-12d[33mª÷  ¿ú:[37m%-10d[31m¢x[m",
+		sprintf(buf, "\x1b[1;31m¢x\x1b[33m¥Í  ©R:\x1b[37m%-12s\x1b[33mªk  ¤O:\x1b[37m%-12s\x1b[33m¯h  ³Ò:\x1b[%dm%-12d\x1b[33mª÷  ¿ú:\x1b[37m%-10d\x1b[31m¢x\x1b[m",
 				inbuf1, inbuf2, lucky, d.tired, d.money);
 		prints(buf);
 		move(3, 0);
-		sprintf(buf, "[1;31m¢x[33m§ğ  À»:[37m%-10d  [33m¨¾  ¿m:[37m%-10d  [33m³t  «×:[37m%-10d  [33m¸g  Åç:[37m%-10d[31m¢x[m",
+		sprintf(buf, "\x1b[1;31m¢x\x1b[33m§ğ  À»:\x1b[37m%-10d  \x1b[33m¨¾  ¿m:\x1b[37m%-10d  \x1b[33m³t  «×:\x1b[37m%-10d  \x1b[33m¸g  Åç:\x1b[37m%-10d\x1b[31m¢x\x1b[m",
 				d.attack, d.resist, d.speed, d.exp);
 		prints(buf);
 		move(4, 0);
-		sprintf(buf, "[1;31m¢x[33m­¹  ª«:[37m%-5d       [33m¤j¸É¤Y:[37m%-5d       [33m¹s  ­¹:[37m%-5d       [33mÆF  ªÛ:[37m%-5d     [31m¢x[m",
+		sprintf(buf, "\x1b[1;31m¢x\x1b[33m­¹  ª«:\x1b[37m%-5d       \x1b[33m¤j¸É¤Y:\x1b[37m%-5d       \x1b[33m¹s  ­¹:\x1b[37m%-5d       \x1b[33mÆF  ªÛ:\x1b[37m%-5d     \x1b[31m¢x\x1b[m",
 				d.food, d.bighp, d.cookie, d.medicine);
 		prints(buf);
 		move(5, 0);
-		sprintf(buf, "[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m");
+		sprintf(buf, "\x1b[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m");
 		prints(buf);
 		move(19, 0);
-		sprintf(buf, "[1;34m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m");
+		sprintf(buf, "\x1b[1;34m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m");
 		prints(buf);
 		move(20, 0);
 		sprintf(inbuf1, "%d%s/%d%s", m.hp > 1000 ? m.hp / 1000 : m.hp, m.hp > 1000 ? "K" : "", m.maxhp > 1000 ? m.maxhp / 1000 : m.maxhp, m.maxhp > 1000 ? "K" : "");
 		sprintf(inbuf2, "%d%s/%d%s", m.mp > 1000 ? m.mp / 1000 : m.mp, m.mp > 1000 ? "K" : "", m.maxmp > 1000 ? m.maxmp / 1000 : m.maxmp, m.maxmp > 1000 ? "K" : "");
 
-		sprintf(buf, "[1;34m¢x[32m©m  ¦W:[37m%-10s  [32m¥Í  ©R:[37m%-11s [32mªk  ¤O:[37m%-11s                  [34m¢x[m",
+		sprintf(buf, "\x1b[1;34m¢x\x1b[32m©m  ¦W:\x1b[37m%-10s  \x1b[32m¥Í  ©R:\x1b[37m%-11s \x1b[32mªk  ¤O:\x1b[37m%-11s                  \x1b[34m¢x\x1b[m",
 				p[n].name, inbuf1, inbuf2);
 		prints(buf);
 		move(21, 0);
-		sprintf(buf, "[1;34m¢x[32m§ğ  À»:[37m%-6d      [32m¨¾  ¿m:[37m%-6d      [32m³t  «×:[37m%-6d      [32mª÷  ¿ú:[37m%-6d    [34m¢x[m",
+		sprintf(buf, "\x1b[1;34m¢x\x1b[32m§ğ  À»:\x1b[37m%-6d      \x1b[32m¨¾  ¿m:\x1b[37m%-6d      \x1b[32m³t  «×:\x1b[37m%-6d      \x1b[32mª÷  ¿ú:\x1b[37m%-6d    \x1b[34m¢x\x1b[m",
 				m.attack, m.resist, m.speed, m.money);
 		prints(buf);
 		move(22, 0);
-		sprintf(buf, "[1;34m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m");
+		sprintf(buf, "\x1b[1;34m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m");
 		prints(buf);
 		move(b_lines, 0);
-		sprintf(buf, "[1;44;37m  ¾Ô°«©R¥O  [46m  [1]´¶³q  [2]¥ş¤O  [3]Å]ªk  [4]¨¾¿m  [5]¸É¥R  [6]°k©R         [m");
+		sprintf(buf, "\x1b[1;44;37m  ¾Ô°«©R¥O  \x1b[46m  [1]´¶³q  [2]¥ş¤O  [3]Å]ªk  [4]¨¾¿m  [5]¸É¥R  [6]°k©R         \x1b[m");
 		prints(buf);
 
 		if (m.death == 0 && d.death == 0)
@@ -7642,14 +7642,14 @@ int mode)
 				clear();
 				vs_head("¹q¤l¾i¤pÂû", BoardName);
 				move(10, 0);
-				prints("            [1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m\n");
-				prints("            [1;31m¢x  [37m¹ê¤O¤£±jªº¤pÂû [33m%-10s                 [31m¢x[m\n", d.name);
-				prints("            [1;31m¢x  [37m¦b»P¹ï¤â [32m%-10s [37m¾Ô°««á¸¨¶]°Õ          [31m¢x[m\n", p[n].name);
+				prints("            \x1b[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m\n");
+				prints("            \x1b[1;31m¢x  \x1b[37m¹ê¤O¤£±jªº¤pÂû \x1b[33m%-10s                 \x1b[31m¢x\x1b[m\n", d.name);
+				prints("            \x1b[1;31m¢x  \x1b[37m¦b»P¹ï¤â \x1b[32m%-10s \x1b[37m¾Ô°««á¸¨¶]°Õ          \x1b[31m¢x\x1b[m\n", p[n].name);
 				sprintf(inbuf1, "%d/%d", d.hexp - oldhexp, d.mexp - oldmexp);
-				prints("            [1;31m¢x  [37mµû»ù¼W¥[¤F [36m%-5s [37mÂI  §Ş³N¼W¥[¤F [36m%-2d/%-2d [37mÂI  [31m¢x[m\n", inbuf1, d.hskill - oldhskill, d.mskill - oldmskill);
-				sprintf(inbuf1, "%d [37m¤¸", oldmoney - d.money);
-				prints("            [1;31m¢x  [37m«i´±­°§C¤F [36m%-5d [37mÂI  ª÷¿ú´î¤Ö¤F [36m%-13s  [31m¢x[m\n", oldbrave - d.brave, inbuf1);
-				prints("            [1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m");
+				prints("            \x1b[1;31m¢x  \x1b[37mµû»ù¼W¥[¤F \x1b[36m%-5s \x1b[37mÂI  §Ş³N¼W¥[¤F \x1b[36m%-2d/%-2d \x1b[37mÂI  \x1b[31m¢x\x1b[m\n", inbuf1, d.hskill - oldhskill, d.mskill - oldmskill);
+				sprintf(inbuf1, "%d \x1b[37m¤¸", oldmoney - d.money);
+				prints("            \x1b[1;31m¢x  \x1b[37m«i´±­°§C¤F \x1b[36m%-5d \x1b[37mÂI  ª÷¿ú´î¤Ö¤F \x1b[36m%-13s  \x1b[31m¢x\x1b[m\n", oldbrave - d.brave, inbuf1);
+				prints("            \x1b[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m");
 				vmsg("¤T¤Q¤»­p ¨«¬°¤Wµ¦...");
 				winorlose = 0;
 				break;
@@ -7658,14 +7658,14 @@ int mode)
 		clear();
 		move(0, 0);
 		if (d.sex == 1)
-			sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã [32m¡ñ [37m%-10s                                                  [0m", d.name);
+			sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã \x1b[32m¡ñ \x1b[37m%-10s                                                  \x1b[0m", d.name);
 		else if (d.sex == 2)
-			sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã [33m¡ğ [37m%-10s                                                  [0m", d.name);
+			sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã \x1b[33m¡ğ \x1b[37m%-10s                                                  \x1b[0m", d.name);
 		else
-			sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã [34m¡H [37m%-10s                                                  [0m", d.name);
+			sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã \x1b[34m¡H \x1b[37m%-10s                                                  \x1b[0m", d.name);
 		prints(buf);
 		move(1, 0);
-		sprintf(buf, "[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m");
+		sprintf(buf, "\x1b[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m");
 		prints(buf);
 		move(2, 0);
 		/* lucky®³¨Ó·ícolor¥Î*/
@@ -7679,42 +7679,42 @@ int mode)
 		sprintf(inbuf1, "%d%s/%d%s", d.hp > 1000 ? d.hp / 1000 : d.hp, d.hp > 1000 ? "K" : "", d.maxhp > 1000 ? d.maxhp / 1000 : d.maxhp, d.maxhp > 1000 ? "K" : "");
 		sprintf(inbuf2, "%d%s/%d%s", d.mp > 1000 ? d.mp / 1000 : d.mp, d.mp > 1000 ? "K" : "", d.maxmp > 1000 ? d.maxmp / 1000 : d.maxmp, d.maxmp > 1000 ? "K" : "");
 
-		sprintf(buf, "[1;31m¢x[33m¥Í  ©R:[37m%-12s[33mªk  ¤O:[37m%-12s[33m¯h  ³Ò:[%dm%-12d[33mª÷  ¿ú:[37m%-10d[31m¢x[m",
+		sprintf(buf, "\x1b[1;31m¢x\x1b[33m¥Í  ©R:\x1b[37m%-12s\x1b[33mªk  ¤O:\x1b[37m%-12s\x1b[33m¯h  ³Ò:\x1b[%dm%-12d\x1b[33mª÷  ¿ú:\x1b[37m%-10d\x1b[31m¢x\x1b[m",
 				inbuf1, inbuf2, lucky, d.tired, d.money);
 		prints(buf);
 
 		move(3, 0);
-		sprintf(buf, "[1;31m¢x[33m§ğ  À»:[37m%-10d  [33m¨¾  ¿m:[37m%-10d  [33m³t  «×:[37m%-10d  [33m¸g  Åç:[37m%-10d[31m¢x[m",
+		sprintf(buf, "\x1b[1;31m¢x\x1b[33m§ğ  À»:\x1b[37m%-10d  \x1b[33m¨¾  ¿m:\x1b[37m%-10d  \x1b[33m³t  «×:\x1b[37m%-10d  \x1b[33m¸g  Åç:\x1b[37m%-10d\x1b[31m¢x\x1b[m",
 				d.attack, d.resist, d.speed, d.exp);
 		prints(buf);
 		move(4, 0);
-		sprintf(buf, "[1;31m¢x[33m­¹  ª«:[37m%-5d       [33m¤j¸É¤Y:[37m%-5d       [33m¹s  ­¹:[37m%-5d       [33mÆF  ªÛ:[37m%-5d     [31m¢x[m",
+		sprintf(buf, "\x1b[1;31m¢x\x1b[33m­¹  ª«:\x1b[37m%-5d       \x1b[33m¤j¸É¤Y:\x1b[37m%-5d       \x1b[33m¹s  ­¹:\x1b[37m%-5d       \x1b[33mÆF  ªÛ:\x1b[37m%-5d     \x1b[31m¢x\x1b[m",
 				d.food, d.bighp, d.cookie, d.medicine);
 		prints(buf);
 		move(5, 0);
-		sprintf(buf, "[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m");
+		sprintf(buf, "\x1b[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m");
 		prints(buf);
 		move(6, 0);
 		if (mode == 1)
 			show_badman_pic(m.map/*n*/);
 		move(19, 0);
-		sprintf(buf, "[1;34m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m");
+		sprintf(buf, "\x1b[1;34m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m");
 		prints(buf);
 		move(20, 0);
 		sprintf(inbuf1, "%d/%d", m.hp, m.maxhp);
 		sprintf(inbuf2, "%d/%d", m.mp, m.maxmp);
-		sprintf(buf, "[1;34m¢x[32m©m  ¦W:[37m%-10s  [32m¥Í  ©R:[37m%-11s [32mªk  ¤O:[37m%-11s                  [34m¢x[m",
+		sprintf(buf, "\x1b[1;34m¢x\x1b[32m©m  ¦W:\x1b[37m%-10s  \x1b[32m¥Í  ©R:\x1b[37m%-11s \x1b[32mªk  ¤O:\x1b[37m%-11s                  \x1b[34m¢x\x1b[m",
 				p[n].name, inbuf1, inbuf2);
 		prints(buf);
 		move(21, 0);
-		sprintf(buf, "[1;34m¢x[32m§ğ  À»:[37m%-6d      [32m¨¾  ¿m:[37m%-6d      [32m³t  «×:[37m%-6d      [32mª÷  ¿ú:[37m%-6d    [34m¢x[m",
+		sprintf(buf, "\x1b[1;34m¢x\x1b[32m§ğ  À»:\x1b[37m%-6d      \x1b[32m¨¾  ¿m:\x1b[37m%-6d      \x1b[32m³t  «×:\x1b[37m%-6d      \x1b[32mª÷  ¿ú:\x1b[37m%-6d    \x1b[34m¢x\x1b[m",
 				m.attack, m.resist, m.speed, m.money);
 		prints(buf);
 		move(22, 0);
-		sprintf(buf, "[1;34m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m");
+		sprintf(buf, "\x1b[1;34m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m");
 		prints(buf);
 		move(b_lines, 0);
-		sprintf(buf, "[1;41;37m  [37m§ğÀ»©R¥O  [47m  [31m[1][30m´¶³q  [31m[2][30m¥ş¤O  [31m[3][30mÅ]ªk  [31m[4][30m¨¾¿m  [31m[5][30m°k©R                     [m");
+		sprintf(buf, "\x1b[1;41;37m  \x1b[37m§ğÀ»©R¥O  \x1b[47m  \x1b[31m[1]\x1b[30m´¶³q  \x1b[31m[2]\x1b[30m¥ş¤O  \x1b[31m[3]\x1b[30mÅ]ªk  \x1b[31m[4]\x1b[30m¨¾¿m  \x1b[31m[5]\x1b[30m°k©R                     \x1b[m");
 		prints(buf);
 
 		if ((m.hp > 0) && (pipkey != '6') && (pipkey == '1' || pipkey == '2' || pipkey == '3' || pipkey == '4' || pipkey == '5') && (d.death == 0) && (d.nodone == 0))
@@ -7874,23 +7874,23 @@ int mode)
 			if (mode == 1)
 			{
 				move(10, 0);
-				prints("            [1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m\n");
-				prints("            [1;31m¢x  [37m­^«iªº¤pÂû [33m%-10s                     [31m¢x[m\n", d.name);
-				prints("            [1;31m¢x  [37m¥´±Ñ¤F¨¸´cªº©Çª« [32m%-10s               [31m¢x[m\n", p[n].name);
+				prints("            \x1b[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m\n");
+				prints("            \x1b[1;31m¢x  \x1b[37m­^«iªº¤pÂû \x1b[33m%-10s                     \x1b[31m¢x\x1b[m\n", d.name);
+				prints("            \x1b[1;31m¢x  \x1b[37m¥´±Ñ¤F¨¸´cªº©Çª« \x1b[32m%-10s               \x1b[31m¢x\x1b[m\n", p[n].name);
 			}
 			else
 			{
 				move(10, 0);
-				prints("            [1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m\n");
-				prints("            [1;31m¢x  [37mªZ³N¤j·|ªº¤pÂû [33m%-10s                 [31m¢x[m\n", d.name);
-				prints("            [1;31m¢x  [37m¥´±Ñ¤F±j«lªº¹ï¤â [32m%-10s               [31m¢x[m\n", p[n].name);
+				prints("            \x1b[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m\n");
+				prints("            \x1b[1;31m¢x  \x1b[37mªZ³N¤j·|ªº¤pÂû \x1b[33m%-10s                 \x1b[31m¢x\x1b[m\n", d.name);
+				prints("            \x1b[1;31m¢x  \x1b[37m¥´±Ñ¤F±j«lªº¹ï¤â \x1b[32m%-10s               \x1b[31m¢x\x1b[m\n", p[n].name);
 			}
 			sprintf(inbuf1, "%d/%d", d.hexp - oldhexp, d.mexp - oldmexp);
-			prints("            [1;31m¢x  [37mµû»ù´£¤É¤F %-5s ÂI  §Ş³N¼W¥[¤F %-2d/%-2d ÂI  [31m¢x[m\n", inbuf1, d.hskill - oldhskill, d.mskill - oldmskill);
+			prints("            \x1b[1;31m¢x  \x1b[37mµû»ù´£¤É¤F %-5s ÂI  §Ş³N¼W¥[¤F %-2d/%-2d ÂI  \x1b[31m¢x\x1b[m\n", inbuf1, d.hskill - oldhskill, d.mskill - oldmskill);
 			sprintf(inbuf1, "%d ¤¸", d.money - oldmoney);
-			prints("            [1;31m¢x  [37m«i´±´£¤É¤F %-5d ÂI  ª÷¿ú¼W¥[¤F %-9s [31m¢x[m\n", d.brave - oldbrave, inbuf1);
-			prints("            [1;31m¢x  [37m¸gÅç­È¼W¥[¤F %-6d ÂI  ¤É¯Å©|»İ %-6d ÂI[31m¢x[m\n", oldexp, twice(d.level, 10000, 100) - d.exp);
-			prints("            [1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m\n");
+			prints("            \x1b[1;31m¢x  \x1b[37m«i´±´£¤É¤F %-5d ÂI  ª÷¿ú¼W¥[¤F %-9s \x1b[31m¢x\x1b[m\n", d.brave - oldbrave, inbuf1);
+			prints("            \x1b[1;31m¢x  \x1b[37m¸gÅç­È¼W¥[¤F %-6d ÂI  ¤É¯Å©|»İ %-6d ÂI\x1b[31m¢x\x1b[m\n", oldexp, twice(d.level, 10000, 100) - d.exp);
+			prints("            \x1b[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m\n");
 
 			if (m.hp <= 0)
 				vmsg("¹ï¤è¦º±¼Åo..©Ò¥H§AÄ¹Åo..");
@@ -7903,24 +7903,24 @@ int mode)
 			clear();
 			vs_head("¹q¤l¾i¤pÂû", BoardName);
 			move(10, 0);
-			prints("            [1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m\n");
-			prints("            [1;31m¢x  [37m¥i¼¦ªº¤pÂû [33m%-10s                     [31m¢x[m\n", d.name);
-			prints("            [1;31m¢x  [37m¦b»P [32m%-10s [37mªº¾Ô°«¤¤¡A                [31m¢x[m\n", p[n].name);
-			prints("            [1;31m¢x  [37m¤£©¯¦a°}¤`¤F¡A¦b¦¹¯S§OÀq«s..........      [31m¢x[m\n");
-			prints("            [1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m\n");
+			prints("            \x1b[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m\n");
+			prints("            \x1b[1;31m¢x  \x1b[37m¥i¼¦ªº¤pÂû \x1b[33m%-10s                     \x1b[31m¢x\x1b[m\n", d.name);
+			prints("            \x1b[1;31m¢x  \x1b[37m¦b»P \x1b[32m%-10s \x1b[37mªº¾Ô°«¤¤¡A                \x1b[31m¢x\x1b[m\n", p[n].name);
+			prints("            \x1b[1;31m¢x  \x1b[37m¤£©¯¦a°}¤`¤F¡A¦b¦¹¯S§OÀq«s..........      \x1b[31m¢x\x1b[m\n");
+			prints("            \x1b[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m\n");
 			vmsg("¤pÂû°}¤`¤F....");
-			pipdie("[1;31m¾Ô°«¤¤³Q¥´¦º¤F...[m  ", 1);
+			pipdie("\x1b[1;31m¾Ô°«¤¤³Q¥´¦º¤F...\x1b[m  ", 1);
 		}
 		else if (d.death == 1 && mode == 2)
 		{
 			clear();
 			vs_head("¹q¤l¾i¤pÂû", BoardName);
 			move(10, 0);
-			prints("            [1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\n[m");
-			prints("            [1;31m¢x  [37m¥i¼¦ªº¤pÂû [33m%-10s                     [31m¢x[m\n", d.name);
-			prints("            [1;31m¢x  [37m¦b»P [32m%-10s [37mªº¾Ô°«¤¤¡A                [31m¢x[m\n", p[n].name);
-			prints("            [1;31m¢x  [37m¤£©¯¦a¥´¿é¤F¡A°OªÌ²{³õ¯S§O³ø¾É.........   [31m¢x[m\n");
-			prints("            [1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m\n");
+			prints("            \x1b[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\n\x1b[m");
+			prints("            \x1b[1;31m¢x  \x1b[37m¥i¼¦ªº¤pÂû \x1b[33m%-10s                     \x1b[31m¢x\x1b[m\n", d.name);
+			prints("            \x1b[1;31m¢x  \x1b[37m¦b»P \x1b[32m%-10s \x1b[37mªº¾Ô°«¤¤¡A                \x1b[31m¢x\x1b[m\n", p[n].name);
+			prints("            \x1b[1;31m¢x  \x1b[37m¤£©¯¦a¥´¿é¤F¡A°OªÌ²{³õ¯S§O³ø¾É.........   \x1b[31m¢x\x1b[m\n");
+			prints("            \x1b[1;31m¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m\n");
 			vmsg("¤pÂû¥´¿é¤F....");
 		}
 	}
@@ -7968,12 +7968,12 @@ UTMP *opt)
 		if (mode)
 		{
 			sprintf(buf,
-					"[1;44;37m  Å]ªk¿ï³æ  [46m  [1]ªvÀø [2]¹p¨t [3]¦B¨t [4]¤õ¨t [5]¤g¨t [6]­·¨t [7]¯S®í [Q]©ñ±ó: [m");
+					"\x1b[1;44;37m  Å]ªk¿ï³æ  \x1b[46m  [1]ªvÀø [2]¹p¨t [3]¦B¨t [4]¤õ¨t [5]¤g¨t [6]­·¨t [7]¯S®í [Q]©ñ±ó: \x1b[m");
 		}
 		else
 		{
 			sprintf(buf,
-					"[1;44;37m  Å]ªk¿ï³æ  [46m  [1]ªvÀø [2]¹p¨t [3]¦B¨t [4]¤õ¨t [5]¤g¨t [6]­·¨t [Q]©ñ±ó: [m");
+					"\x1b[1;44;37m  Å]ªk¿ï³æ  \x1b[46m  [1]ªvÀø [2]¹p¨t [3]¦B¨t [4]¤õ¨t [5]¤g¨t [6]­·¨t [Q]©ñ±ó: \x1b[m");
 		}
 		move(b_lines, 0);
 		prints(buf);
@@ -8052,7 +8052,7 @@ struct magicset *p)
 
 	clrchyiuan(6, 18);
 	move(7, 0);
-	sprintf(buf, "[1;31m¢t[37;41m   ¥i¥Î[%s]¤@Äıªí   [0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w[m", p[0].name);
+	sprintf(buf, "\x1b[1;31m¢t\x1b[37;41m   ¥i¥Î[%s]¤@Äıªí   \x1b[0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w\x1b[m", p[0].name);
 	prints(buf);
 	while ((s = p[n].name) && (p[n].needmp <= d.mp))
 	{
@@ -8060,19 +8060,19 @@ struct magicset *p)
 		if (p[n].hpmode == 1)
 		{
 			sprintf(buf,
-					"[1;37m[[36m%d[37m] [33m%-12s  [37m»İ­nªk¤O: [32m%-6d  [37m«ì´_Åé¤O: [32m%-6d [37m«ì´_¯h³Ò: [32m%-6d[m   ", n, p[n].name, p[n].needmp, p[n].hp, p[n].tired);
+					"\x1b[1;37m[\x1b[36m%d\x1b[37m] \x1b[33m%-12s  \x1b[37m»İ­nªk¤O: \x1b[32m%-6d  \x1b[37m«ì´_Åé¤O: \x1b[32m%-6d \x1b[37m«ì´_¯h³Ò: \x1b[32m%-6d\x1b[m   ", n, p[n].name, p[n].needmp, p[n].hp, p[n].tired);
 			prints(buf);
 		}
 		else if (p[n].hpmode == 2)
 		{
 			sprintf(buf,
-					"[1;37m[[36m%d[37m] [33m%-12s  [37m»İ­nªk¤O: [32m%-6d  [37m«ì´_Åé¤O¨ì[35m³Ì¤j­È[37m «ì´_¯h³Ò¨ì[35m³Ì¤p­È[m  ", n, p[n].name, p[n].needmp);
+					"\x1b[1;37m[\x1b[36m%d\x1b[37m] \x1b[33m%-12s  \x1b[37m»İ­nªk¤O: \x1b[32m%-6d  \x1b[37m«ì´_Åé¤O¨ì\x1b[35m³Ì¤j­È\x1b[37m «ì´_¯h³Ò¨ì\x1b[35m³Ì¤p­È\x1b[m  ", n, p[n].name, p[n].needmp);
 			prints(buf);
 		}
 		else if (p[n].hpmode == 0)
 		{
 			sprintf(buf,
-					"[1;37m[[36m%d[37m] [33m%-12s  [37m»İ­nªk¤O: [32m%-6d [m             ", n, p[n].name, p[n].needmp);
+					"\x1b[1;37m[\x1b[36m%d\x1b[37m] \x1b[33m%-12s  \x1b[37m»İ­nªk¤O: \x1b[32m%-6d \x1b[m             ", n, p[n].name, p[n].needmp);
 			prints(buf);
 		}
 		n++;
@@ -8153,7 +8153,7 @@ UTMP *opt)
 
 	clrchyiuan(6, 18);
 	move(7, 0);
-	sprintf(buf, "[1;31m¢t[37;41m   ¥i¥Î[%s]¤@Äıªí   [0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w[m", s->name);
+	sprintf(buf, "\x1b[1;31m¢t\x1b[37;41m   ¥i¥Î[%s]¤@Äıªí   \x1b[0;1;31m¢u¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w\x1b[m", s->name);
 	prints(buf);
 	s++;
 	while (s->name)
@@ -8162,7 +8162,7 @@ UTMP *opt)
 		if ((d.specialmagic & s->map) && (s->needmp <= d.mp))
 		{
 			sprintf(buf,
-					"[1;37m[[36m%d[37m] [33m%-12s  [37m»İ­nªk¤O: [32m%-6d [m             ", n, s->name, s->needmp);
+					"\x1b[1;37m[\x1b[36m%d\x1b[37m] \x1b[33m%-12s  \x1b[37m»İ­nªk¤O: \x1b[32m%-6d \x1b[m             ", n, s->name, s->needmp);
 			prints(buf);
 			mg[n] = cur;
 			n++;
@@ -8262,7 +8262,7 @@ pip_marriage_offer(void)
 			d.wantend = 5;
 		vmsg("§Ú·Q¹ï¤è¬O¤@­Ó«Ü¦nªº¦ñ«Q..");
 		now = time(0);
-		sprintf(buf, "[1;37m%s %-11sªº¤pÂû [%s] ±µ¨ü¤F %s ªº¨D±B[0m\n", Cdate(&now), cuser.userid, d.name, name[who][d.sex-1]);
+		sprintf(buf, "\x1b[1;37m%s %-11sªº¤pÂû [%s] ±µ¨ü¤F %s ªº¨D±B\x1b[0m\n", Cdate(&now), cuser.userid, d.name, name[who][d.sex-1]);
 		pip_log_record(buf);
 	}
 	else
@@ -8288,7 +8288,7 @@ int pip_results_show(void)  /*¦¬Ã¬©u*/
 
 	clear();
 	move(10, 14);
-	prints("[1;33m¥m©N¥m©N¡ã ¨¯­Wªº¶l®tÀ°§Ú­Ì°e«H¨Ó¤F³á...[0m");
+	prints("\x1b[1;33m¥m©N¥m©N¡ã ¨¯­Wªº¶l®tÀ°§Ú­Ì°e«H¨Ó¤F³á...\x1b[0m");
 	vmsg("¶â  §â«H¥´¶}¬İ¬İ§a...");
 	clear();
 	show_resultshow_pic(0);
@@ -8507,15 +8507,15 @@ int winorlost, int mode, int a, int b, int c)
 	}
 	clear();
 	move(6, 13);
-	prints("[1;37m¡ã¡ã¡ã [32m¥»©¡ %s µ²ªG´¦¾å [37m¡ã¡ã¡ã[0m", gamename[mode]);
+	prints("\x1b[1;37m¡ã¡ã¡ã \x1b[32m¥»©¡ %s µ²ªG´¦¾å \x1b[37m¡ã¡ã¡ã\x1b[0m", gamename[mode]);
 	move(8, 15);
-	prints("[1;41m «a­x [0;1m¡ã [1;33m%-10s[36m  ¼úª÷ %d[0m", name1, resultmoney[3]);
+	prints("\x1b[1;41m «a­x \x1b[0;1m¡ã \x1b[1;33m%-10s\x1b[36m  ¼úª÷ %d\x1b[0m", name1, resultmoney[3]);
 	move(10, 15);
-	prints("[1;41m ¨È­x [0;1m¡ã [1;33m%-10s[36m  ¼úª÷ %d[0m", name2, resultmoney[2]);
+	prints("\x1b[1;41m ¨È­x \x1b[0;1m¡ã \x1b[1;33m%-10s\x1b[36m  ¼úª÷ %d\x1b[0m", name2, resultmoney[2]);
 	move(12, 15);
-	prints("[1;41m ©u­x [0;1m¡ã [1;33m%-10s[36m  ¼úª÷ %d[0m", name3, resultmoney[1]);
+	prints("\x1b[1;41m ©u­x \x1b[0;1m¡ã \x1b[1;33m%-10s\x1b[36m  ¼úª÷ %d\x1b[0m", name3, resultmoney[1]);
 	move(14, 15);
-	prints("[1;41m ³Ì«á [0;1m¡ã [1;33m%-10s[36m [0m", name4);
+	prints("\x1b[1;41m ³Ì«á \x1b[0;1m¡ã \x1b[1;33m%-10s\x1b[36m \x1b[0m", name4);
 	sprintf(buf, "¤µ¦~ªº%sµ²§ôÅo «á¦~¦A¨Ó§a..", gamename[mode]);
 	d.money += resultmoney[winorlost];
 	vmsg(buf);
@@ -8684,11 +8684,11 @@ int mode)
 	clear();
 	move(0, 0);
 	if (d.sex == 1)
-		sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã [32m¡ñ [37m%-15s                                           [0m", d.name);
+		sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã \x1b[32m¡ñ \x1b[37m%-15s                                           \x1b[0m", d.name);
 	else if (d.sex == 2)
-		sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã [33m¡ğ [37m%-15s                                           [0m", d.name);
+		sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã \x1b[33m¡ğ \x1b[37m%-15s                                           \x1b[0m", d.name);
 	else
-		sprintf(buf, "[1;41m  " NICKNAME PIPNAME " ¡ã [34m¡H [37m%-15s                                           [0m", d.name);
+		sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ¡ã \x1b[34m¡H \x1b[37m%-15s                                           \x1b[0m", d.name);
 	prints(buf);
 
 	move(1, 0);
@@ -8700,7 +8700,7 @@ int mode)
 		color1 = 37;
 	sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
 	sprintf(buf
-			, " [1;32m[ª¬  ºA][37m %-5s     [32m[¥Í  ¤é][37m %-9s [32m[¦~  ÄÖ][37m %-5d     [32m[ª÷  ¿ú][%dm %-8d [m"
+			, " \x1b[1;32m[ª¬  ºA]\x1b[37m %-5s     \x1b[32m[¥Í  ¤é]\x1b[37m %-9s \x1b[32m[¦~  ÄÖ]\x1b[37m %-5d     \x1b[32m[ª÷  ¿ú]\x1b[%dm %-8d \x1b[m"
 			, yo[age], inbuf1, m, color1, d.money);
 	prints(buf);
 
@@ -8731,7 +8731,7 @@ int mode)
 	sprintf(inbuf1, "%d/%d", d.hp, d.maxhp);
 	sprintf(inbuf2, "%d/%d", d.mp, d.maxmp);
 	sprintf(buf
-			, " [1;32m[¥Í  ©R][%dm %-10s[32m[ªk  ¤O][%dm %-10s[32m[Åé  ­«][37m %-5d     [32m[¯h  ³Ò][%dm %-4d[0m "
+			, " \x1b[1;32m[¥Í  ©R]\x1b[%dm %-10s\x1b[32m[ªk  ¤O]\x1b[%dm %-10s\x1b[32m[Åé  ­«]\x1b[37m %-5d     \x1b[32m[¯h  ³Ò]\x1b[%dm %-4d\x1b[0m "
 			, color1, inbuf1, color2, inbuf2, d.weight, color3, d.tired);
 	prints(buf);
 
@@ -8761,7 +8761,7 @@ int mode)
 	else
 		color4 = 37;
 	sprintf(buf
-			, " [1;32m[Å¼  Å¼][%dm %-4d      [32m[¯f  ®ğ][%dm %-4d      [32m[§Ö¼Ö«×][%dm %-4d      [32m[º¡·N«×][%dm %-4d[0m"
+			, " \x1b[1;32m[Å¼  Å¼]\x1b[%dm %-4d      \x1b[32m[¯f  ®ğ]\x1b[%dm %-4d      \x1b[32m[§Ö¼Ö«×]\x1b[%dm %-4d      \x1b[32m[º¡·N«×]\x1b[%dm %-4d\x1b[0m"
 			, color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
 	prints(buf);
 	if (mode == 1)/*Áı­¹*/
@@ -8792,13 +8792,13 @@ int mode)
 		else
 			color4 = 37;
 		sprintf(buf
-				, " [1;36m[­¹ª«][%dm%-7d[36m[¹s­¹][%dm%-7d[36m[¸É¤Y][%dm%-7d[36m[ÆFªÛ][%dm%-7d[36m[¤H°Ñ][37m%-7d[36m[³·½¬][37m%-7d[0m"
+				, " \x1b[1;36m[­¹ª«]\x1b[%dm%-7d\x1b[36m[¹s­¹]\x1b[%dm%-7d\x1b[36m[¸É¤Y]\x1b[%dm%-7d\x1b[36m[ÆFªÛ]\x1b[%dm%-7d\x1b[36m[¤H°Ñ]\x1b[37m%-7d\x1b[36m[³·½¬]\x1b[37m%-7d\x1b[0m"
 				, color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
 		prints(buf);
 
 	}
 	move(5, 0);
-	prints("[1;%dm¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{[m", color);
+	prints("\x1b[1;%dm¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m", color);
 	move(6, 0);
 	switch (age)
 	{
@@ -8850,9 +8850,9 @@ int mode)
 
 
 	move(18, 0);
-	prints("[1;%dm¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m", color);
+	prints("\x1b[1;%dm¢|¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m", color);
 	move(19, 0);
-	prints(" [1;34m¢w[37;44m  ª¬ ºA  [0;1;34m¢w[0m");
+	prints(" \x1b[1;34m¢w\x1b[37;44m  ª¬ ºA  \x1b[0;1;34m¢w\x1b[0m");
 	move(20, 0);
 	prints(" ¾Ô°«¤¤.............\n");
 
@@ -8881,7 +8881,7 @@ static int pip_fight_feed(void)     /* Áı­¹*/
 		move(b_lines, 0);
 		clrtoeol();
 		move(b_lines, 0);
-		prints("[1;44;37m  ¶¼­¹¿ï³æ  [46m[1]¦Y¶º [2]¹s­¹ [3]¸É¤Y [4]ÆFªÛ [5]¤Hçx [6]³·½¬ [Q]¸õ¥X¡G         [m");
+		prints("\x1b[1;44;37m  ¶¼­¹¿ï³æ  \x1b[46m[1]¦Y¶º [2]¹s­¹ [3]¸É¤Y [4]ÆFªÛ [5]¤Hçx [6]³·½¬ [Q]¸õ¥X¡G         \x1b[m");
 		pipkey = vkey();
 
 		switch (pipkey)

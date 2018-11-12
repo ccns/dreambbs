@@ -1006,7 +1006,7 @@ chat_topic(
 
   if (!CLOAK(cu))
   {
-    sprintf(buf, "¡» %s ±N¸ÜÃD§ï¬° [1;32m%s[m", cu->chatid, topic);
+    sprintf(buf, "¡» %s ±N¸ÜÃD§ï¬° \x1b[1;32m%s\x1b[m", cu->chatid, topic);
     send_to_room(room, buf, 0, MSG_MESSAGE);
   }
 }
@@ -1051,7 +1051,7 @@ chat_nick(
 
   if (!CLOAK(cu))
   {
-    sprintf(buf, "¡° %s ±N²á¤Ñ¥N¸¹§ï¬° [1;33m%s[m", str, chatid);
+    sprintf(buf, "¡° %s ±N²á¤Ñ¥N¸¹§ï¬° \x1b[1;33m%s\x1b[m", str, chatid);
     send_to_room(cu->room, buf, cu->userno, MSG_MESSAGE);
   }
 
@@ -1091,7 +1091,7 @@ chat_list_rooms(
   if (mode)
     send_to_user(cuser, "", 0, MSG_ROOMLISTSTART);
   else
-    send_to_user(cuser, "[7m  ²á¤Ñ«Ç¦WºÙ  ¢x¤H¼Æ¢x¸ÜÃD        [m", 0,
+    send_to_user(cuser, "\x1b[7m  ²á¤Ñ«Ç¦WºÙ  ¢x¤H¼Æ¢x¸ÜÃD        \x1b[m", 0,
       MSG_MESSAGE);
 
   room = cuser->room;
@@ -1147,7 +1147,7 @@ chat_do_user_list(
   if (mode)
     send_to_user(cu, "", 0, MSG_USERLISTSTART);
   else
-    send_to_user(cu, "[7m ²á¤Ñ¥N¸¹¢x¨Ï¥ÎªÌ¥N¸¹  ¢x" CHATROOMNAME " [m", 0,
+    send_to_user(cu, "\x1b[7m ²á¤Ñ¥N¸¹¢x¨Ï¥ÎªÌ¥N¸¹  ¢x" CHATROOMNAME " \x1b[m", 0,
       MSG_MESSAGE);
 
   myroom = cu->room;
@@ -1290,7 +1290,7 @@ chat_map_chatids(
   myroom = cu->room;
 
   send_to_user(cu,
-    "[7m ²á¤Ñ¥N¸¹ ¨Ï¥ÎªÌ¥N¸¹  ¢x ²á¤Ñ¥N¸¹ ¨Ï¥ÎªÌ¥N¸¹  ¢x ²á¤Ñ¥N¸¹ ¨Ï¥ÎªÌ¥N¸¹ [m", 0, MSG_MESSAGE);
+    "\x1b[7m ²á¤Ñ¥N¸¹ ¨Ï¥ÎªÌ¥N¸¹  ¢x ²á¤Ñ¥N¸¹ ¨Ï¥ÎªÌ¥N¸¹  ¢x ²á¤Ñ¥N¸¹ ¨Ï¥ÎªÌ¥N¸¹ \x1b[m", 0, MSG_MESSAGE);
 
   for (c = 0, user = mainuser; user; user = user->unext)
   {
@@ -1535,7 +1535,7 @@ chat_private(
   else if (*msg)
   {
     userno = cu->userno;
-    sprintf(buf, "[1m*%s*[m ", cu->chatid);
+    sprintf(buf, "\x1b[1m*%s*\x1b[m ", cu->chatid);
     msg[79] = 0;		/* Thor:¨¾¤î¤Óªø */
     strncat(buf, msg, 80);
     send_to_user(xuser, buf, userno, MSG_MESSAGE);
@@ -1628,7 +1628,7 @@ arrive_room(
     send_to_user(cuser, buf, 0, MSG_MESSAGE);
   }
 
-  sprintf(buf, "¡° [32;1m%s[m ¶i¤J [33;1m[%s][m ¥]´[",
+  sprintf(buf, "¡° \x1b[32;1m%s\x1b[m ¶i¤J \x1b[33;1m[%s]\x1b[m ¥]´[",
     cuser->chatid, rname);
 
   if (!CLOAK(cuser))
@@ -1779,10 +1779,10 @@ print_user_counts(
 
   number = (cuser->clitype) ? MSG_MOTD : MSG_MESSAGE;
 
-  sprintf(buf, "¡ó Åwªï¥úÁ{¡i" NICKNAME CHATROOMNAME "¡j¡A«ö [1;33m/h[m Åã¥Ü»¡©ú¡A«ö \x1b[1;33m/b\x1b[m Â÷¶}");
+  sprintf(buf, "¡ó Åwªï¥úÁ{¡i" NICKNAME CHATROOMNAME "¡j¡A«ö \x1b[1;33m/h\x1b[m Åã¥Ü»¡©ú¡A«ö \x1b[1;33m/b\x1b[m Â÷¶}");
   send_to_user(cuser, buf, 0, number);
 
-  sprintf(buf, "¡ó ¥Ø«e¶}¤F \x1b[1;31m%d\x1b[m ¶¡¥]´[¡A¦@¦³ [1;36m%d[m ¤H¨ÓÂ\\Àsªù°}", roomc, userc);
+  sprintf(buf, "¡ó ¥Ø«e¶}¤F \x1b[1;31m%d\x1b[m ¶¡¥]´[¡A¦@¦³ \x1b[1;36m%d\x1b[m ¤H¨ÓÂ\\Àsªù°}", roomc, userc);
   if (suserc)
     sprintf(buf + strlen(buf), " [ %d ¤H¦b¯µ±K¥]´[]", suserc);
   send_to_user(cuser, buf, 0, number);
@@ -2002,7 +2002,7 @@ chat_act(
   {
     char buf[256];
 
-    sprintf(buf, "%s [36m%s[m", cu->chatid, msg);
+    sprintf(buf, "%s \x1b[36m%s\x1b[m", cu->chatid, msg);
     send_to_room(cu->room, buf, cu->userno, MSG_MESSAGE);
   }
 }
@@ -2344,7 +2344,7 @@ chat_broadcast(
     return;
   }
 
-  sprintf(buf, "[1m¡° " BOARDNAME CHATROOMNAME "¼s¼½¤¤ [%s].....[m",
+  sprintf(buf, "\x1b[1m¡° " BOARDNAME CHATROOMNAME "¼s¼½¤¤ [%s].....\x1b[m",
     cu->chatid);
   send_to_room(ROOM_ALL, buf, 0, MSG_MESSAGE);
   sprintf(buf, "¡» %s", msg);
@@ -2419,7 +2419,7 @@ party_action(
 	  party = xuser->chatid;
 	}
       }
-      sprintf(buf, "[1;32m%s [31m%s[33m %s [31m%s[m",
+      sprintf(buf, "\x1b[1;32m%s \x1b[31m%s\x1b[33m %s \x1b[31m%s\x1b[m",
 	cu->chatid, cap->part1_msg, party, cap->part2_msg);
       send_to_room(cu->room, buf, cu->userno, MSG_MESSAGE);
       return 0;			/* Thor: cu->room ¬O§_¬° NULL? */
@@ -2448,7 +2448,7 @@ speak_action(
   {
     if (str_equal(verb, cmd))
     {
-      sprintf(buf, "[1;32m%s [31m%s¡G[33m %s[m",
+      sprintf(buf, "\x1b[1;32m%s \x1b[31m%s¡G\x1b[33m %s\x1b[m",
 	cu->chatid, cap->part1_msg, msg);
       send_to_room(cu->room, buf, cu->userno, MSG_MESSAGE);
       return 0;
@@ -2476,7 +2476,7 @@ condition_action(
   {
     if (str_equal(verb, cmd))
     {
-      sprintf(buf, "[1;32m%s [31m%s[m",
+      sprintf(buf, "\x1b[1;32m%s \x1b[31m%s\x1b[m",
 	cu->chatid, cap->part1_msg);
       send_to_room(cu->room, buf, cu->userno, MSG_MESSAGE);
       return 0;
@@ -2500,7 +2500,7 @@ person_action(
     {
       if(!*(cap->part2_msg))
       {
-        sprintf(buf, "[1;32m%s [31m%s[m",
+        sprintf(buf, "\x1b[1;32m%s \x1b[31m%s\x1b[m",
           cu->chatid, cap->part1_msg);
       }
       else
@@ -2542,7 +2542,7 @@ person_action(
             party = xuser->chatid;
           }
         }
-        sprintf(buf, "[1;32m%s [31m%s[33m %s [31m%s[m",
+        sprintf(buf, "\x1b[1;32m%s \x1b[31m%s\x1b[33m %s \x1b[31m%s\x1b[m",
           cu->chatid, cap->part1_msg, party, cap->part2_msg);    
       }
       send_to_room(cu->room, buf, cu->userno, MSG_MESSAGE);
@@ -2560,11 +2560,11 @@ person_action(
 
 static char *dscrb[] =
 {
-  "[1;37m¡i Verb + Nick¡G   °Êµü + ¹ï¤è¦W¦r ¡j[36m  ¨Ò¡G//kick piggy[m",
-  "[1;37m¡i Verb + Message¡G°Êµü + ­n»¡ªº¸Ü ¡j[36m  ¨Ò¡G//sing ¤Ñ¤Ñ¤ÑÂÅ[m",
-  "[1;37m¡i Verb¡G°Êµü ¡j   ¡ô¡õ¡GÂÂ¸Ü­«´£[m", 
-  "[1;37m¡i Verb + Nick¡G   °Êµü + ¹ï¤è¦W¦r ¡j[36m  ¨Ò¡G//kick piggy[m",
-  "[1;37m¡i Verb¡G°Êµü ¡j   ¡ô¡õ¡G­Ó¤HÃþ°Êµü[m",
+  "\x1b[1;37m¡i Verb + Nick¡G   °Êµü + ¹ï¤è¦W¦r ¡j\x1b[36m  ¨Ò¡G//kick piggy\x1b[m",
+  "\x1b[1;37m¡i Verb + Message¡G°Êµü + ­n»¡ªº¸Ü ¡j\x1b[36m  ¨Ò¡G//sing ¤Ñ¤Ñ¤ÑÂÅ\x1b[m",
+  "\x1b[1;37m¡i Verb¡G°Êµü ¡j   ¡ô¡õ¡GÂÂ¸Ü­«´£\x1b[m", 
+  "\x1b[1;37m¡i Verb + Nick¡G   °Êµü + ¹ï¤è¦W¦r ¡j\x1b[36m  ¨Ò¡G//kick piggy\x1b[m",
+  "\x1b[1;37m¡i Verb¡G°Êµü ¡j   ¡ô¡õ¡G­Ó¤HÃþ°Êµü\x1b[m",
   NULL
 };
 

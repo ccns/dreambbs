@@ -37,7 +37,7 @@ static void
 chat_topic(void)
 {
 	move(0, 0);
-	prints("[1;37;46m %s¡G%-12s[45m ¸ÜÃD¡G%-48s[m",
+	prints("\x1b[1;37;46m %s¡G%-12s\x1b[45m ¸ÜÃD¡G%-48s\x1b[m",
 		   (frec ? " ¿ý­µ«Ç " : CHATROOMNAME), chatroom, chatopic);
 }
 
