@@ -12,7 +12,7 @@
 
 #ifdef  HAVE_COUNT_BOARD
 
-extern void outs(uschar *str);
+extern void outs(unsigned char *str);
 
 extern XZ xz[];
 extern BCACHE *bshm;

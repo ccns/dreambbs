@@ -13,7 +13,7 @@ typedef struct textline
   struct textline *prev;
   struct textline *next;
   int len;
-  uschar data[ANSILINELEN];
+  unsigned char data[ANSILINELEN];
 }        textline;
 
 
@@ -224,7 +224,7 @@ ansi2n(ansix, line)
   int ansix;
   textline *line;
 {
-  uschar *data, *tmp;
+  unsigned char *data, *tmp;
   int ch;
 
   data = tmp = line->data;
@@ -260,7 +260,7 @@ n2ansi(nx, line)
   int nx;
   textline *line;
 {
-  uschar *tmp, *nxp;
+  unsigned char *tmp, *nxp;
   int ansix;
   int ch;
 
@@ -341,7 +341,7 @@ ve_split(line, pos)
   if (len >= 0)
   {
     textline *p, *n;
-    uschar *ptr;
+    unsigned char *ptr;
 
     line->len = pos;
     p = ve_alloc();
@@ -386,7 +386,7 @@ ve_join(line)
   textline *line;
 {
   textline *n;
-  uschar *data, *s;
+  unsigned char *data, *s;
   int sum, len;
 
   if (!(n = line->next))
@@ -464,7 +464,7 @@ ve_char(ch)
 {
   textline *p;
   int col, len, mode;
-  uschar *data;
+  unsigned char *data;
 
   p = vx_cur;
   len = p->len;
@@ -515,7 +515,7 @@ ve_char(ch)
     ve_split(p, VE_WIDTH - 3);
 
 #if 0
-    uschar *str = data + len;
+    unsigned char *str = data + len;
 
     while (*--str == ' ')
     {
@@ -558,7 +558,7 @@ delete_char(cur, col)
   textline *cur;
   int col;
 {
-  uschar *dst, *src;
+  unsigned char *dst, *src;
 
   cur->len--;
   dst = cur->data + col;
@@ -574,7 +574,7 @@ delete_char(cur, col)
 
 void
 ve_string(str)
-  uschar *str;
+  unsigned char *str;
 {
   int ch;
 
@@ -660,10 +660,10 @@ ve_ansi()
 static textline *
 ve_line(this, str)
   textline *this;
-  uschar *str;
+  unsigned char *str;
 {
   int cc, len;
-  uschar *data;
+  unsigned char *data;
   textline *line;
 
   do
@@ -765,7 +765,7 @@ ve_load(this, fd)
   textline *this;
   int fd;
 {
-  uschar *str;
+  unsigned char *str;
   textline *next;
 
   next = this->next;
@@ -806,7 +806,7 @@ tbf_write()
 {
   FILE *fp;
   textline *p;
-  uschar *data;
+  unsigned char *data;
 
   if ((fp = tbf_open()))
   {
@@ -948,7 +948,7 @@ static int
 words_check()
 {
   textline *p; 
-  uschar *str, *pend;
+  unsigned char *str, *pend;
   int phonetic;		/* 注音文數目 */
 
   wordsnum = phonetic = 0;
@@ -1581,10 +1581,10 @@ ve_filer(fpath, ve_op)
 
 static void
 ve_outs(text)
-  uschar *text;
+  unsigned char *text;
 {
   int ch;
-  uschar *tail;
+  unsigned char *tail;
 
   tail = text + SCR_WIDTH - 1;
   while ((ch = *text))

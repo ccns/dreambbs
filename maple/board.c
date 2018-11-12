@@ -413,9 +413,9 @@ remove_perm()
 int
 Ben_Perm(bhdr, ulevel)
   BRD *bhdr;
-  usint ulevel;
+  unsigned int ulevel;
 {
-  usint readlevel, postlevel, bits;
+  unsigned int readlevel, postlevel, bits;
   char *blist, *bname;
 
   bname = bhdr->brdname;
@@ -527,7 +527,7 @@ void
 brh_load()
 {
   BRD *brdp, *bend;
-  usint ulevel;
+  unsigned int ulevel;
   int n, cbno;
   char *bits;
 

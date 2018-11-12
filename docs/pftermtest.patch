@@ -126,22 +126,22 @@ index ed387f0..f007344 100644
 -void clrtoeol(void);
 -void clrtobot(void);
 -void outc(int ch);
--void outs(uschar *str);
+-void outs(unsigned char *str);
 +// void clrtoeol(void);           /*pfterm*/
 +// void clrtobot(void);           /*pfterm*/
 +// void outc(int ch);             /*pfterm*/
-+// void outs(uschar *str);        /*pfterm*/
-+void outl(int line, uschar *msg); /*pfterm*/
- void outx(uschar *str);
- void outplan(uschar *str);
- void outz(uschar *msg);
- void outf(uschar *str);
++// void outs(unsigned char *str);        /*pfterm*/
++void outl(int line, unsigned char *msg); /*pfterm*/
+ void outx(unsigned char *str);
+ void outplan(unsigned char *str);
+ void outz(unsigned char *msg);
+ void outf(unsigned char *str);
  void prints(char *fmt, ...);
 -void scroll(void);
 -void rscroll(void);
 +// void scroll(void);             /*pfterm*/
 +// void rscroll(void);            /*pfterm*/
-+void outr(uschar *str);           /*pfterm*/
++void outr(unsigned char *str);           /*pfterm*/
  void cursor_save(void);
  void cursor_restore(void);
 -void save_foot(screenline *slp);
@@ -156,7 +156,7 @@ index ed387f0..f007344 100644
  void zmsg(char *msg);
  void vs_bar(char *title);
 @@ -257,7 +259,7 @@ BRD *ask_board(char *board, int perm, char *msg);
- int vget(int line, int col, uschar *prompt, uschar *data, int max, int echo);
+ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max, int echo);
  int vans(char *prompt);
  int vkey(void);
 -void grayout(int type);
@@ -357,7 +357,7 @@ index c0a16a4..259375d 100644
 +#ifndef M3_USE_PFTERM
  static void
  output(str, len)
-   uschar *str;
+   unsigned char *str;
 @@ -107,9 +115,13 @@ output(str, len)
    }
    vo_size = size;
@@ -412,12 +412,12 @@ index c0a16a4..259375d 100644
 +#ifdef M3_USE_PFTERM
  void
  outf(str)
-   uschar *str;
+   unsigned char *str;
 @@ -1020,6 +1041,57 @@ outf(str)
    prints("%*s\033[m", d_cols, "");
  }
  
-+void outl (int line, uschar *msg)   /* line output */
++void outl (int line, unsigned char *msg)   /* line output */
 +{
 +	  move (line, 0);
 +	    clrtoeol();
@@ -429,10 +429,10 @@ index c0a16a4..259375d 100644
 +
 +#define ANSI_COLOR_CODE            "[m;0123456789"
 +#define ANSI_COLOR_END     "m"
-+void outr (uschar *str)
++void outr (unsigned char *str)
 +/* restricted output (strip the ansiscreen contolling code only) */
 +{
-+   uschar ch, buf[256], *p = NULL;
++   unsigned char ch, buf[256], *p = NULL;
 +   int ansi = 0;
 +
 +   while (ch = *str++)
@@ -547,7 +547,7 @@ index c0a16a4..259375d 100644
  
  static inline void
  zkey()				/* press any key or timeout */
-@@ -1825,8 +1935,12 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+@@ -1825,8 +1935,12 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo)
  
    STANDOUT;
  
@@ -560,7 +560,7 @@ index c0a16a4..259375d 100644
  
    if (echo & GCARRY)
    {
-@@ -1866,6 +1980,9 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+@@ -1866,6 +1980,9 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo)
        {
  	ch = len;
  	len = vget_match(data, len, echo | MATCH_END);
@@ -570,7 +570,7 @@ index c0a16a4..259375d 100644
  	if (len > ch)
  	{
  	  move(y, x);
-@@ -1875,6 +1992,9 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+@@ -1875,6 +1992,9 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo)
  	{
  	  data[0] = '\0';
  	}
@@ -580,7 +580,7 @@ index c0a16a4..259375d 100644
        }
        break;
      }
-@@ -1884,13 +2004,19 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+@@ -1884,13 +2004,19 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo)
        if (ch == ' ' && (echo & (GET_USER | GET_BRD | GET_LIST)))
        {
  	ch = vget_match(data, len, echo);
@@ -601,7 +601,7 @@ index c0a16a4..259375d 100644
        }
  
        if (len >= max)
-@@ -1904,6 +2030,10 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+@@ -1904,6 +2030,10 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo)
        i = col;
        move(y, x + col);
  
@@ -612,7 +612,7 @@ index c0a16a4..259375d 100644
        for (;;)
        {
  	outc(echo ? ch : '*');
-@@ -1914,6 +2044,9 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+@@ -1914,6 +2044,9 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo)
  	i++;
  	ch = next;
        }
@@ -622,7 +622,7 @@ index c0a16a4..259375d 100644
        col++;
        len++;
        continue;
-@@ -1931,6 +2064,10 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+@@ -1931,6 +2064,10 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo)
      if (!echo && ch != Ctrl('H'))
        continue;
  
@@ -633,7 +633,7 @@ index c0a16a4..259375d 100644
      switch (ch)
      {
      case Ctrl('D'):
-@@ -2034,6 +2171,9 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+@@ -2034,6 +2171,9 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo)
        }
        break;
      }
@@ -643,7 +643,7 @@ index c0a16a4..259375d 100644
    }
  
    if (len > 2 && echo)
-@@ -2049,6 +2189,10 @@ int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+@@ -2049,6 +2189,10 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo)
    if ((echo & LCECHO) && (ch >= 'A' && ch <= 'Z'))
      data[0] = (ch += 32);
  
@@ -670,7 +670,7 @@ index 7c1a5d2..ecb1030 100644
 +static void
 +draw_line(x, y, msg)
 +  int x, y;
-+  uschar *msg;
++  unsigned char *msg;
 +{
 +  /* hrs.090928: 讓 terminal 去處理 */
 +  move(x, y);

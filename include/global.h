@@ -373,7 +373,7 @@ ______________________________________________________________________________"
 /* GLOBAL VARIABLE					 */
 /* ----------------------------------------------------- */
 VAR pid_t currpid;		/* current process ID */
-VAR usint bbsmode;		/* bbs operating mode, see modes.h */
+VAR unsigned int bbsmode;		/* bbs operating mode, see modes.h */
 VAR int bbstate;		/* bbs operatine state */
 VAR int bbsothermode;
 VAR int supervisor;
@@ -399,7 +399,7 @@ VAR char currboard[IDLEN + 2];	/* name of currently selected board */
 VAR char currBM[BMLEN + 7];	/* BM of currently selected board */
 VAR int  currbno	INI(-1);
 VAR char str_ransi[4] 	INI("\033[m");
-VAR usint currbattr;            /* currently selected board battr */
+VAR unsigned int currbattr;            /* currently selected board battr */
 VAR char ipv4addr[15]; /* MAX_LEN: strlen(aaa.bbb.ccc.ddd) => 15 */
 
 VAR int  chk_mailstat	INI(0);

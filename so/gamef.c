@@ -27,7 +27,7 @@ void
 pressanykey(char *fmt, ...)
 {
 	va_list args;
-	uschar buf[512], *ptr;
+	unsigned char buf[512], *ptr;
 	int cc, ch;
 
 	va_start(args, fmt);
@@ -51,7 +51,7 @@ void
 game_log(int file, char *fmt, ...)
 {
 	va_list args;
-	uschar buf[200], ff[40];
+	unsigned char buf[200], ff[40];
 	time_t now;
 	FILE *fs;
 

@@ -395,7 +395,7 @@ reaper(fpath, lowid)
   char *lowid;
 {
   int fd, login;
-  usint ulevel;
+  unsigned int ulevel;
   time_t life;
   char buf[512], data[40];
   char bmlist[256];

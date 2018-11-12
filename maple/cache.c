@@ -204,7 +204,7 @@ utmp_new(up)
   {
     if (!uentp->pid && !uentp->userno )
     {
-      usint offset;
+      unsigned int offset;
 
       offset = (void *) uentp - (void *) xshm->uslot;
       memcpy(uentp, up, sizeof(UTMP));
@@ -754,12 +754,12 @@ fshm_init()
 
 static inline void
 out_rle(str,film)
-  uschar *str;
+  unsigned char *str;
   int film;
 {
 #ifdef SHOW_USER_IN_TEXT
-  uschar *t_name = cuser.userid;
-  uschar *t_nick = cuser.username;
+  unsigned char *t_name = cuser.userid;
+  unsigned char *t_nick = cuser.username;
 #endif
   int x,y/*,count=0*/;
   int cc, rl;

@@ -55,7 +55,7 @@ is_big5(char *src,int pos,int mode)
 static int 
 do_cmd(MENU *mptr,XO *xo,int x,int y)
 {
-   usint mode;
+   unsigned int mode;
    void *p;
    int (*func) ();
 

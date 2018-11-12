@@ -635,7 +635,7 @@ rcpt_local(addr)
 static inline int
 deny_forward()
 {
-  usint level;
+  unsigned int level;
 
   /* Thor.980602: 想將所有動態權限的改變統一放至login處, 感覺比較不雜 
                   同時 deny_mail希望能單獨作為 BAN mail的作用
@@ -670,7 +670,7 @@ xo_forward(xo)
   char fpath[128], folder[80], *dir, *title, *userid , ckforward[80];
   HDR *hdr, xhdr;
   int tag, locus, userno, cc , check;
-  usint method;			/* 是否 uuencode */
+  unsigned int method;			/* 是否 uuencode */
   ACCT acct;
 
   if (deny_forward())

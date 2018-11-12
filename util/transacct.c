@@ -34,13 +34,13 @@ typedef struct
   int userno;			/* unique positive code */
   char userid[IDLEN + 1];	/* userid */
   char passwd[PASSLEN];		/* user password crypt by DES */
-  uschar signature;		/* user signature number */
+  unsigned char signature;		/* user signature number */
   char realname[20];		/* user realname */
   char username[24];		/* user nickname */
-  usint userlevel;		/* user perm */
+  unsigned int userlevel;		/* user perm */
   int numlogins;		/* user login times */
   int numposts;			/* user post times */
-  usint ufo;			/* user basic flags */
+  unsigned int ufo;			/* user basic flags */
   time_t firstlogin;		/* user first login time */
   time_t lastlogin;		/* user last login time */
   time_t staytime;		/* user total stay time */
@@ -55,7 +55,7 @@ typedef struct
   time_t deny;			/* user violatelaw time */
   int request;			/* 翴簈╰参 */
   int money;             /* 冠刽 */
-  usint ufo2;			/* ┑砞﹚ */
+  unsigned int ufo2;			/* ┑砞﹚ */
   char ident[96];		/* user remote host ident */
   int point1;           /* 纔▆縩だ */
   int point2;           /* ゅ */
@@ -73,13 +73,13 @@ typedef struct
   int userno;			/* unique positive code */
   char userid[IDLEN + 1];	/* userid */
   char passwd[PASSLEN];		/* user password crypt by DES */
-  uschar signature;		/* user signature number */
+  unsigned char signature;		/* user signature number */
   char realname[20];		/* user realname */
   char username[24];		/* user nickname */
-  usint userlevel;		/* user perm */
+  unsigned int userlevel;		/* user perm */
   int numlogins;		/* user login times */
   int numposts;			/* user post times */
-  usint ufo;			/* user basic flags */
+  unsigned int ufo;			/* user basic flags */
   time_t firstlogin;		/* user first login time */
   time_t lastlogin;		/* user last login time */
   time_t staytime;		/* user total stay time */
@@ -94,7 +94,7 @@ typedef struct
   time_t deny;			/* user violatelaw time */
   int extrambox;		/* 獺絚 (程 50 ) */
   int extrasize;		/* 獺絚甧秖 (程 1000K) */
-  usint ufo2;			/* ┑砞﹚ */
+  unsigned int ufo2;			/* ┑砞﹚ */
   char ident[103];		/* user remote host ident */
   char barcolor;		/* 次肅︹ */
   time_t vtime;			/* validate time */
@@ -144,11 +144,11 @@ typedef struct
 #define UFO2_REALNAME	   BFLAG(28)	   /* visor.991030: 痷龟﹎ */ 
 
 
-static usint
+static unsigned int
 trans_ufo2(oldufo2)
-  usint oldufo2;
+  unsigned int oldufo2;
 {
-  usint ufo;
+  unsigned int ufo;
 
   ufo = 0;
 

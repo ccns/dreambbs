@@ -382,9 +382,9 @@ bitmsg(msg, str, level)
 }
 
 
-usint
+unsigned int
 bitset(pbits, count, maxon, msg, perms)
-  usint pbits;
+  unsigned int pbits;
   int count;			/* 共有幾個選項 */
   int maxon;			/* 最多可以 enable 幾項 */
   char *msg;
@@ -442,9 +442,9 @@ bitset(pbits, count, maxon, msg, perms)
 }
 
 
-static usint
+static unsigned int
 setperm(level)
-  usint level;
+  unsigned int level;
 {
   if (cuser.userlevel & PERM_SYSOP)
     return bitset(level, NUMPERMS, NUMPERMS, MSG_USERPERM, perm_tbl);
@@ -547,7 +547,7 @@ perm_log(u, oldl)
   int oldl;
 {
   int i;
-  usint level;
+  unsigned int level;
   char buf[128];
 
   for(i = 0, level = 1; i < NUMPERMS; i++, level <<= 1)
@@ -573,7 +573,7 @@ acct_show(u, adm)
 {
   time_t now;
   int diff;
-  usint ulevel;
+  unsigned int ulevel;
   char *uid, buf[80];
 
   clrtobot();
@@ -1567,7 +1567,7 @@ u_addr()
   HDR fhdr;
   FILE *fout;
   int vtime;
-  usint tmp_perm;
+  unsigned int tmp_perm;
   int popreturn;
   
   msg = NULL;

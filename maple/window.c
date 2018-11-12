@@ -23,10 +23,10 @@ static int x_roll;
 static void
 draw_line(x, y, msg)	/* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
   int x, y;
-  uschar *msg;
+  unsigned char *msg;
 {
-  uschar *str, *ptr;
-  uschar data[ANSILINELEN];
+  unsigned char *str, *ptr;
+  unsigned char data[ANSILINELEN];
   char color[4];
   int ch, i;
   int len;

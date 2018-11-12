@@ -20,7 +20,7 @@
 
 static int more_width;	/* more screen 的寬度 */
 
-static uschar more_pool[MORE_BUFSIZE];
+static unsigned char more_pool[MORE_BUFSIZE];
 static int more_base;		/* more_pool[more_base ~ more_base+more_size] 有值 */
 static int more_size;
 
@@ -130,9 +130,9 @@ mread(fd, len)
 #define	STR_ANSICODE	"[0123456789;"
 
 
-static uschar *fimage;		/* file image begin */
-static uschar *fend;		/* file image end */
-static uschar *foff;		/* 目前讀到哪裡 */
+static unsigned char *fimage;		/* file image begin */
+static unsigned char *fend;		/* file image end */
+static unsigned char *foff;		/* 目前讀到哪裡 */
 
 
 static int
@@ -413,7 +413,7 @@ more(fpath, footer)
   char buf[ANSILINELEN];
   int i;
 
-  uschar *headend;		/* 檔頭結束 */
+  unsigned char *headend;		/* 檔頭結束 */
 
   int shift;			/* 還需要往下移動幾列 */
   int lino;			/* 目前 line number */
@@ -657,9 +657,9 @@ re_key:
     else if (key == 'h')
     {
       screenline slt[T_LINES];
-      uschar *tmp_fimage;
-      uschar *tmp_fend;
-      uschar *tmp_foff;
+      unsigned char *tmp_fimage;
+      unsigned char *tmp_fend;
+      unsigned char *tmp_foff;
       off_t tmp_block[MAXBLOCK];
 */
       /* itoc.060420: xo_help() 會進入第二次 more()，所以要把所有 static 宣告的都記錄下來 */

@@ -351,7 +351,7 @@ vs_head(title, mid)
 {
   char buf[40], ttl[60];
   int spc;
-  usint ufo;
+  unsigned int ufo;
 #ifdef  COLOR_HEADER
 /*  int color = (time(0) % 7) + 41;        lkchu.981201: random color */
   int color = 44; //090911.cache: 太花了固定一種顏色 
@@ -1333,7 +1333,7 @@ void
 menu()
 {
   MENU *menu, *mptr, *table[17];
-  usint level, mode;
+  unsigned int level, mode;
   int cc=0, cx=0 , refilm=0;	/* current / previous cursor position */
   int max=0, mmx;			/* current / previous menu max */
   int cmd=0, depth,count;

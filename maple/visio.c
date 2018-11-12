@@ -33,7 +33,7 @@ int cur_pos;			/* current position with ANSI codes */
 /* ----------------------------------------------------- */
 
 
-static uschar vo_pool[VO_MAX];
+static unsigned char vo_pool[VO_MAX];
 static int vo_size;
 
 
@@ -76,11 +76,11 @@ oflush()
 
 static void
 output(str, len)
-  uschar *str;
+  unsigned char *str;
   int len;
 {
   int size, ch;
-  uschar *data;
+  unsigned char *data;
 
   size = vo_size;
   data = vo_pool;
@@ -113,7 +113,7 @@ static void
 ochar(ch)
   int ch;
 {
-  uschar *data;
+  unsigned char *data;
   int size;
 
   data = vo_pool;
@@ -187,7 +187,7 @@ move(y, x)
   if (x && (cslp->mode & SL_ANSICODE))
   {
     int ch, ansi;
-    uschar *str;
+    unsigned char *str;
 
     ansi = 0;
     y = x;
@@ -244,7 +244,7 @@ ansi_move(y, x)
   {
     int ch, ansi;
     int len;
-    uschar *str;
+    unsigned char *str;
 
     ansi = 0;
     y = x;
@@ -301,7 +301,7 @@ ansicol(slp, len)
   screenline *slp;
   int len;
 {
-  uschar *str;
+  unsigned char *str;
   int ch, ansi, col;
 
   if (!len || !(slp->mode & SL_ANSICODE))
@@ -385,7 +385,7 @@ standoutput(slp, ds, de)
   screenline *slp;
   int ds, de;
 {
-  uschar *data;
+  unsigned char *data;
   int sso, eso;
 
   data = slp->data;
@@ -556,7 +556,7 @@ refresh()
 #if 0				/* 0501 */
 	if (mode & SL_ANSICODE)
 	{
-	  uschar *data;
+	  unsigned char *data;
 
 	  data = slp->data;
 	  mode = 0;
@@ -695,7 +695,7 @@ outc(ch)
   int ch;
 {
   screenline *slp;
-  uschar *data;
+  unsigned char *data;
   int i, cx, pos;
 
   static char ansibuf[16] = "\033";
@@ -834,7 +834,7 @@ new_line:
 
 void
 outs(str)
-  uschar *str;
+  unsigned char *str;
 {
   int ch;
 
@@ -895,11 +895,11 @@ expand_esc_star_visio(char *buf, const char *src, int szbuf)
 #ifdef SHOW_USER_IN_TEXT
 void
 outx(str)
-  uschar *str;
+  unsigned char *str;
 {
 /*
-  uschar *t_name = cuser.userid;
-  uschar *t_nick = cuser.username;
+  unsigned char *t_name = cuser.userid;
+  unsigned char *t_nick = cuser.username;
 */
 
   time_t now;
@@ -999,7 +999,7 @@ outx(str)
 
 void
 outz(msg)
-  uschar *msg;
+  unsigned char *msg;
 //  const char *msg;
 {
   int ch;
@@ -1015,7 +1015,7 @@ outz(msg)
 
 void
 outf(str)
-  uschar *str;
+  unsigned char *str;
 {
   outz(str);
   prints("%*s\033[m", d_cols, "");
@@ -1025,7 +1025,7 @@ void
 prints(char *fmt, ...)
 {
   va_list args;
-  uschar buf[512],*str;
+  unsigned char buf[512],*str;
 //  char buf[512], *str;
   int cc;
 
@@ -1321,7 +1321,7 @@ grayout(int type)
 /* ----------------------------------------------------- */
 
 
-static uschar vi_pool[VI_MAX];
+static unsigned char vi_pool[VI_MAX];
 static int vi_size;
 static int vi_head;
 
@@ -1349,7 +1349,7 @@ add_io(fd, timeout)
 
 static inline int
 iac_count(current)
-  uschar *current;
+  unsigned char *current;
 {
   switch (*(current + 1))
   {
@@ -1361,7 +1361,7 @@ iac_count(current)
 
   case SB:			/* loop forever looking for the SE */
     {
-      uschar *look = current + 2;
+      unsigned char *look = current + 2;
 
       for (;;)
       {
@@ -1391,7 +1391,7 @@ igetch()
   static int idle = 0;
 
   int cc, fd=0, nfds, rset;
-  uschar *data;
+  unsigned char *data;
 
   data = vi_pool;
   nfds = 0;
@@ -1624,7 +1624,7 @@ vget_match(prefix, len, op)
 
   if (op & GET_BRD)
   {
-    usint perm;
+    unsigned int perm;
     char *bits;
     BRD *head, *tail;
 
@@ -1808,7 +1808,7 @@ vget_match(prefix, len, op)
 char lastcmd[MAXLASTCMD][80];
 
 
-int vget(int line,int col,uschar *prompt,uschar *data,int max,int echo)
+int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo)
 {
   int ch, len;
   int x, y;

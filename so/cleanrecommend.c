@@ -263,7 +263,7 @@ clean(xo)
   struct stat st;
   int total, fd;
   BRD *brd;
-  usint battr;
+  unsigned int battr;
 
   counter = 0;
   pushstart = 0;

@@ -96,8 +96,8 @@ log_modes(void)
 #ifdef	TRANUFO
 typedef struct
 {
-  usint old;
-  usint new;
+  unsigned int old;
+  unsigned int new;
 }       TABLE;
 
 TABLE table[] = {
@@ -537,8 +537,8 @@ utmp_setup(
   /* Thor.980921: str_ncpy 含 0 */
 
   /* cache.20130407 保存使用者登入IP位置(IPv4) */
-  uschar *addr;
-  addr = (uschar *) &tn_addr;
+  unsigned char *addr;
+  addr = (unsigned char *) &tn_addr;
   sprintf(ipv4addr, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
 
   /* Thor: 告訴User已經滿了放不下... */
@@ -562,7 +562,7 @@ static void
 tn_login(void)
 {
   int fd, attempts;
-  usint level, ufo;
+  unsigned int level, ufo;
   time_t start,check_deny;
   char fpath[80], uid[IDLEN + 1];
 
@@ -674,7 +674,7 @@ tn_login(void)
 	if ((level & PERM_ADMIN) && (cuser.ufo2 & UFO2_ACL))
 	{
 	  char buf[40]; /* check ip */
-	  uschar *addr = (uschar*) &tn_addr;
+	  unsigned char *addr = (unsigned char*) &tn_addr;
 	  sprintf(buf, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
 	  usr_fpath(fpath, cuser.userid, "acl");
 	  str_lower(rusername, rusername);      /* lkchu.981201: 換小寫 */
@@ -1082,7 +1082,7 @@ tn_main(void)
 {
   double load[3];
   char buf[128], buf2[40];
-  uschar *addr = (uschar*) &tn_addr;
+  unsigned char *addr = (unsigned char*) &tn_addr;
 
 #if 0
 /*  愚人節專用*/
@@ -1652,8 +1652,8 @@ int main(int argc, char *argv[])
 
 #ifdef NOIDENT
     /* cache.090728: 連線不反查,增加速度 */
-    uschar *addr;
-    addr = (uschar *) &tn_addr;
+    unsigned char *addr;
+    addr = (unsigned char *) &tn_addr;
     sprintf(fromhost, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
 #else
     //TODO: 從自訂清單中比對DN 

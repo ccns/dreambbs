@@ -37,8 +37,6 @@
 
 
 typedef char const *STRING;
-typedef unsigned char uschar;	/* length = 1 */
-typedef unsigned int usint;	/* length = 4 */
 typedef struct UTMP UTMP;
 
 /* ban email 轉信用 */
@@ -96,13 +94,13 @@ typedef struct
   int userno;			/* unique positive code */
   char userid[IDLEN + 1];	/* userid */
   char passwd[PASSLEN];		/* user password crypt by DES */
-  uschar signature;		/* user signature number */
+  unsigned char signature;		/* user signature number */
   char realname[20];		/* user realname */
   char username[24];		/* user nickname */
-  usint userlevel;		/* user perm */
+  unsigned int userlevel;		/* user perm */
   int numlogins;		/* user login times */
   int numposts;			/* user post times */
-  usint ufo;			/* user basic flags */
+  unsigned int ufo;			/* user basic flags */
   time_t firstlogin;		/* user first login time */
   time_t lastlogin;		/* user last login time */
   time_t staytime;		/* user total stay time */
@@ -117,7 +115,7 @@ typedef struct
   time_t deny;			/* user violatelaw time */
   int request;			/* 點歌系統 */
   int money;             /* 夢幣 */
-  usint ufo2;			/* 延伸的個人設定 */
+  unsigned int ufo2;			/* 延伸的個人設定 */
   char ident[96];		/* user remote host ident */
   int point1;           /* 優良積分 */
   int point2;           /* 劣文 */
@@ -327,7 +325,7 @@ typedef struct
 {
 	  char userid[IDLEN + 1];
 	    char numvotes;             
-		  usint choice;
+		  unsigned int choice;
 }      VLOG;
 
 
@@ -453,9 +451,9 @@ struct UTMP
   int userno;			/* user number in .PASSWDS */
 
   time_t idle_time;		/* active time for last event */
-  usint  mode;			/* bbsmode */
-  usint  ufo;			/* the same as userec.ufo */
-  usint  flag;			/* user flag */
+  unsigned int  mode;			/* bbsmode */
+  unsigned int  ufo;			/* the same as userec.ufo */
+  unsigned int  flag;			/* user flag */
   unsigned long in_addr;		/* Internet address */
   int   sockport;		/* socket port for talk */
   UTMP  *talker;		/* who talk-to me ? */
@@ -466,7 +464,7 @@ struct UTMP
   char  mateid[IDLEN + 1];	/* partner's ID */
   char  username[24];
   char  realname[20];
-  usint userlevel;
+  unsigned int userlevel;
   char  from[30];		/* remote host */
 #ifdef	HAVE_SHOWNUMMSG  
   int   num_msg;		/* receive messages */
@@ -511,22 +509,22 @@ typedef struct BoardHeader
   char class[5];
   char BM[BMLEN + 1];		/* BMs' uid, token '/' */
 
-  uschar bvote;			/* 共有幾項投票舉行中 */
+  unsigned char bvote;			/* 共有幾項投票舉行中 */
 
   time_t bstamp;		/* 建立看板的時間, unique */
-  usint readlevel;		/* 閱讀文章的權限 */
-  usint postlevel;		/* 發表文章的權限 */
-  usint battr;			/* 看板屬性 */
+  unsigned int readlevel;		/* 閱讀文章的權限 */
+  unsigned int postlevel;		/* 發表文章的權限 */
+  unsigned int battr;			/* 看板屬性 */
   time_t btime;			/* .DIR 的 st_mtime */
   int bpost;			/* 共有幾篇 post */
   time_t blast;			/* 最後一篇 post 的時間 */
-  usint expiremax;		/* Expire Max Post */
-  usint expiremin;		/* Expire Min Post */
-  usint expireday;		/* Expire old Post */
-  usint n_reads;		/* 看板閱讀累計 times/hour */
-  usint n_posts;		/* 看板發表累計 times/hour */
-  usint n_news;			/* 看板轉信累計 times/hour */
-  usint n_bans;			/* 看板檔信累計 times/hour */
+  unsigned int expiremax;		/* Expire Max Post */
+  unsigned int expiremin;		/* Expire Min Post */
+  unsigned int expireday;		/* Expire old Post */
+  unsigned int n_reads;		/* 看板閱讀累計 times/hour */
+  unsigned int n_posts;		/* 看板發表累計 times/hour */
+  unsigned int n_news;			/* 看板轉信累計 times/hour */
+  unsigned int n_bans;			/* 看板檔信累計 times/hour */
   char  reserve[100];		/* 保留未用 */
 }           BRD;
 
@@ -541,10 +539,10 @@ typedef struct NewBoardHeader
   char xname[32];
   char owner[IDLEN +1];
   char date[9];
-  usint mode;
-  usint total;
-  usint	agree;
-  usint	assist;
+  unsigned int mode;
+  unsigned int total;
+  unsigned int	agree;
+  unsigned int	assist;
   char	reserve[64];
 }       NBRD;
 
@@ -632,8 +630,8 @@ typedef struct
 typedef struct
 {
   UTMP uslot[MAXACTIVE];	/* UTMP slots */
-  usint count;			/* number of active session */
-  usint offset;			/* offset for last active UTMP */
+  unsigned int count;			/* number of active session */
+  unsigned int offset;			/* offset for last active UTMP */
 
   double sysload[3];
   int avgload;
@@ -705,15 +703,15 @@ typedef struct
 
 typedef struct screenline
 {
-  uschar oldlen;		/* previous line length */
-  uschar len;			/* current length of line */
-  uschar width;			/* padding length of ANSI codes */
-  uschar mode;			/* status of line, as far as update */
-  uschar smod;			/* start of modified data */
-  uschar emod;			/* end of modified data */
-  uschar sso;			/* start of standout data */
-  uschar eso;			/* end of standout data */
-  uschar data[ANSILINELEN];
+  unsigned char oldlen;		/* previous line length */
+  unsigned char len;			/* current length of line */
+  unsigned char width;			/* padding length of ANSI codes */
+  unsigned char mode;			/* status of line, as far as update */
+  unsigned char smod;			/* start of modified data */
+  unsigned char emod;			/* end of modified data */
+  unsigned char sso;			/* start of standout data */
+  unsigned char eso;			/* end of standout data */
+  unsigned char data[ANSILINELEN];
 }          screenline;
 
 
@@ -962,13 +960,13 @@ typedef struct
 {
   char condensation[9];
   char room[20];
-  usint used;
+  unsigned int used;
 }	CLASS_TABLE_ALERT_ITEM;
 
 typedef struct
 {
   CLASS_TABLE_ALERT_ITEM item[78];
-  usint userno;
+  unsigned int userno;
 }	CLASS_TABLE_ALERT;
 
 #endif
@@ -978,14 +976,14 @@ typedef struct
 typedef struct
 {
   char userid[16];
-  usint userno;
+  unsigned int userno;
   char title[64];
   char reserve[44];
 }	OBSERVE;
 
 typedef struct
 {
-  usint userno[MAXOBSERVELIST];
+  unsigned int userno[MAXOBSERVELIST];
   int total;
   int mode;
 } OCACHE;
@@ -1006,7 +1004,7 @@ typedef struct
 {
   void *func;
   /* int (*func) (); */
-  usint level;
+  unsigned int level;
   int umode;
   char *desc;
 }      MENU;
@@ -1019,10 +1017,10 @@ typedef struct
 {
   time_t chrono;
   char  type[16];		/* 統計型態 */
-  usint n_reads;		/* 看板閱讀累計 times/hour */
-  usint n_posts;		/* 看板發表累計 times/hour */
-  usint n_news;			/* 看板轉信累計 times/hour */
-  usint n_bans;			/* 看板檔信累計 times/hour */
+  unsigned int n_reads;		/* 看板閱讀累計 times/hour */
+  unsigned int n_posts;		/* 看板發表累計 times/hour */
+  unsigned int n_news;			/* 看板轉信累計 times/hour */
+  unsigned int n_bans;			/* 看板檔信累計 times/hour */
   char reserve[28];		/* 保留 */
 }	BSTAT;
 
@@ -1066,7 +1064,7 @@ typedef struct PersonalBoard
   char email[60];
   char brdname[IDLEN + 1];
   char brdtitle[BTLEN + 1];
-  usint state;
+  unsigned int state;
 }	PB;
 
 #define PB_APPLY	0x01	/* 申請中 */
@@ -1098,7 +1096,7 @@ typedef struct
 char name[13];	/* 該站的 short-name */
 char host[83];	/* 該站的 host */
 int port;		/* 該站的 port */
-usint xmode;		/* 該站的 xmode */
+unsigned int xmode;		/* 該站的 xmode */
 char blank[20];	/* 保留 */
 int feedfd;		/* bbslink.c 使用 */
 }nodelist_t;
@@ -1113,7 +1111,7 @@ char path[13];	/* 該群組所對轉的站台 */
 char newsgroup[83];	/* 該群組的名稱 */
 char board[IDLEN + 1];/* 該群組所對應的看板 */
 char charset[11];	/* 該群組的字集 */
-usint xmode;		/* 該群組的 xmode */
+unsigned int xmode;		/* 該群組的 xmode */
 int high;		/* 目前抓到該群組的哪一篇 */
 }newsfeeds_t;
 
@@ -1139,7 +1137,7 @@ typedef struct
 typedef struct
 {
   char detail[80];	/* 該規則的 內容 */
-  usint xmode;		/* 該規則的 xmode */
+  unsigned int xmode;		/* 該規則的 xmode */
   char board[IDLEN + 1];/* 該規則適用的看板 */
   char path[13];	/* 該規則適用的站台 */
   char blank[18];	/* 保留 */

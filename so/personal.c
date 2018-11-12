@@ -210,7 +210,7 @@ personal_apply()
 }
 
 static char
-personal_attr(usint state)
+personal_attr(unsigned int state)
 {
   if(state & PB_APPLY)
     return 'A';

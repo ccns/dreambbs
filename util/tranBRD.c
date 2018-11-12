@@ -25,12 +25,12 @@ typedef struct BoardHeaderOld
   char class[5];
   char BM[BMLEN + 1];           /* BMs' uid, token '/' */
 
-  uschar bvote;                 /* 共有幾項投票舉行中 */
+  unsigned char bvote;                 /* 共有幾項投票舉行中 */
 
   time_t bstamp;                /* 建立看板的時間, unique */
-  usint readlevel;              /* 閱讀文章的權限 */
-  usint postlevel;              /* 發表文章的權限 */
-  usint battr;                  /* 看板屬性 */
+  unsigned int readlevel;              /* 閱讀文章的權限 */
+  unsigned int postlevel;              /* 發表文章的權限 */
+  unsigned int battr;                  /* 看板屬性 */
   time_t btime;                 /* .DIR 的 st_mtime */
   int bpost;                    /* 共有幾篇 post */
   time_t blast;                 /* 最後一篇 post 的時間 */

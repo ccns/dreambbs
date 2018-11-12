@@ -17,23 +17,23 @@
 struct rpgrec
 {
   char userid[IDLEN+1];		  /* User ID     13 bytes */
-  usint age;			  /* 年齡	  4 bytes */
-  uschar race;			  /* 種族	  1 bytes */
-  uschar subrace;		  /* 副業	  1 bytes */
+  unsigned int age;			  /* 年齡	  4 bytes */
+  unsigned char race;			  /* 種族	  1 bytes */
+  unsigned char subrace;		  /* 副業	  1 bytes */
   ushort level;			  /* 等級	  2 bytes */  
   char family[20];		  /* 家族	 20 bytes */
   char nick[20];		  /* 封號	 20 bytes */
   int hp;			  /* 體力	  4 bytes */
   int mp;			  /* 法力	  4 bytes */
-  usint skill;			  /* 技能	  4 bytes */
+  unsigned int skill;			  /* 技能	  4 bytes */
   ushort str;			  /* 力量	  2 bytes */
   ushort dex;			  /* 敏捷	  2 bytes */
   ushort wis;			  /* 智慧	  2 bytes */
   ushort con;			  /* 體質	  2 bytes */
   ushort kar;			  /* 運氣	  2 bytes */
-  uschar weapon;		  /* 武器	  1 bytes */
-  uschar armor;			  /* 防具	  1 bytes */
-  usint object;			  /* 物件	  4 bytes */
+  unsigned char weapon;		  /* 武器	  1 bytes */
+  unsigned char armor;			  /* 防具	  1 bytes */
+  unsigned int object;			  /* 物件	  4 bytes */
   char pad[164];
 };
 typedef struct rpgrec rpgrec;
@@ -74,14 +74,14 @@ struct user_info
   int sockaddr;                 /* ... */
   int destuid;                  /* talk uses this to identify who called */
   struct user_info* destuip;
-  uschar active;                /* When allocated this field is true */
-  uschar invisible;             /* Used by cloaking function in Xyz menu */
-  uschar sockactive;            /* Used to coordinate talk requests */
-  usint userlevel;
-  uschar mode;                  /* UL/DL, Talk Mode, Chat Mode, ... */
-  uschar pager;                 /* pager toggle, YEA, or NA */
-  uschar in_chat;               /* for in_chat commands   */
-  uschar sig;                   /* signal type */
+  unsigned char active;                /* When allocated this field is true */
+  unsigned char invisible;             /* Used by cloaking function in Xyz menu */
+  unsigned char sockactive;            /* Used to coordinate talk requests */
+  unsigned int userlevel;
+  unsigned char mode;                  /* UL/DL, Talk Mode, Chat Mode, ... */
+  unsigned char pager;                 /* pager toggle, YEA, or NA */
+  unsigned char in_chat;               /* for in_chat commands   */
+  unsigned char sig;                   /* signal type */
   char userid[IDLEN + 1];
   char chatid[11];              /* chat id, if in chat mode */
   char realname[20];
@@ -90,11 +90,11 @@ struct user_info
   int from_alias;
   char birth;                   /* 是否是生日 Ptt*/
   char tty[11];                 /* tty port */
-  uschar msgcount;
+  unsigned char msgcount;
   time_t uptime;
   time_t lastact;             /* 上次使用者動的時間 */
-  usint brc_id;
-  uschar lockmode;
+  unsigned int brc_id;
+  unsigned char lockmode;
   pipdata pip;
   int turn;
   char feeling[4];		/* 心情 */

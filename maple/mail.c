@@ -888,10 +888,10 @@ m_total_size()
 }
 
 
-usint
+unsigned int
 m_quota()
 {
-  usint ufo;
+  unsigned int ufo;
   int fd, count, fsize, limit, xmode;
   time_t mail_due, mark_due;
   struct stat st;
@@ -1260,7 +1260,7 @@ static int
 m_count()
 {
   int quota;
-  usint ulevel;
+  unsigned int ulevel;
   struct stat st;
 
   ulevel = cuser.userlevel;
@@ -2033,7 +2033,7 @@ hdr_outs(hdr, cc)		/* print HDR's subject */
 {
   static char *type[4] =
   {"Re", "¡º", "\033[1;33m=>", "\033[1;32m¡»"};
-  uschar *title, *mark;
+  unsigned char *title, *mark;
   int ch, len;
   UTMP *online;
 

@@ -83,7 +83,7 @@ bbs_biff(userid)
   char *userid;
 {
   UTMP *utmp, *uceil;
-  usint offset;
+  unsigned int offset;
 
   offset = ushm->offset;
   if (offset > (MAXACTIVE - 1) * sizeof(UTMP))	/* Thor.980805: 不然call不到 */

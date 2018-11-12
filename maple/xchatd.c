@@ -370,8 +370,8 @@ valid_chatid(id)
 
 static int
 str_match(s1, s2)
-  uschar *s1;		/* lower-case (sub)string */
-  uschar *s2;
+  unsigned char *s1;		/* lower-case (sub)string */
+  unsigned char *s2;
 {
   int c1, c2;
 

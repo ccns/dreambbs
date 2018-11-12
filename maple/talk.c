@@ -1818,7 +1818,7 @@ bmw_edit(up, hint, bmw, cc)
   BMW *bmw;
   int cc;
 {
-  uschar *str;
+  unsigned char *str;
   screenline sl[2];
 
   if (up)
@@ -2976,7 +2976,7 @@ talk_char(twin, ch)
 static void
 talk_string(twin, str)
   talk_win *twin;
-  uschar *str;
+  unsigned char *str;
 {
   int ch;
 
@@ -2993,7 +2993,7 @@ talk_speak(fd)
   int fd;
 {
   talk_win mywin, itswin;
-  uschar data[80];
+  unsigned char data[80];
   char buf[80];
   int i, ch;
 #ifdef  LOG_TALK

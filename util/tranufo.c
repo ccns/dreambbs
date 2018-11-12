@@ -13,8 +13,8 @@
 
 typedef	struct
 {
-  usint old;
-  usint new;
+  unsigned int old;
+  unsigned int new;
 }	TABLE;
 
 TABLE table[] = {
