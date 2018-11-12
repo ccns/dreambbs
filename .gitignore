@@ -48,6 +48,7 @@ util/bbsmail
 util/bmw-dump
 util/brdmail
 util/brdstat
+util/brdcheck
 util/camera
 util/checkemail
 util/classtable_alert
