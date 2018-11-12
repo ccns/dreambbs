@@ -1,9 +1,0 @@
-#! /bin/csh -f
-# ACC -- Abort Control Character ^M ^Z
-
-set FF="$*"
-set T=/tmp/ACC$$
-foreach F ($FF)
-    tr -d '\015\032' < $F | unexpand -a >! $T
-    mv $T $F
-end

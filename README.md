@@ -12,6 +12,10 @@ Copyright information for this repo, please view document in `COPYRIGHT`.
 
 LICENSE for **piaip's more** module, please view `maple/pmore.c` instead.
 
+## Build New BBS
+
+* Please pull [dreambbs_snap](https://github.com/holishing/dreambbs_snap) repository to add the essential files.
+
 ## Directory Structure
 
 * **CHANGELOG**      : Some changes in this BBS version before Initial Commit.
@@ -22,12 +26,6 @@ LICENSE for **piaip's more** module, please view `maple/pmore.c` instead.
     + **INSTALL.md**     : ***How to install*** this BBS version.
     + **ANCESTOR**       : This past history about this BBS version
     + **old**            : Some old information about [Wind's Top BBS verion](http://windtop.yzu.edu.tw) (ancestor of DreamBBS).
-
-* **sample** - Sample codes for:
-    + **dreambbs.conf** : ***Important Configuration file*** before Compiling for this BBS version.
-    + **crontab**       : Some regular job for OS to let BBS works continually.
-    + **bbs**           : If you don't have any BBS data before, you can copy this into your BBS Home(`/home/bbs`) .<br>
-                     (related reference: `docs/INSTALL.md`)
 
 + **include**  : Some definition datas and headers for compiling.
 
