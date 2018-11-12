@@ -834,7 +834,6 @@ new_line:
 
 void
 outs(
-  uschar *str
   unsigned char *str)
 {
   int ch;

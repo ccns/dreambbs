@@ -754,7 +754,7 @@ fshm_init(void)
 
 static inline void
 out_rle(
-  unsigned char *str;
+  unsigned char *str,
   int film)
 {
 #ifdef SHOW_USER_IN_TEXT

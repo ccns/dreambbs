@@ -77,7 +77,7 @@ int rec_put2(char *fpath, void *data, int size, int pos, int (*fchk)(void));
 int rec_ref(char *fpath, void *data, int size, int pos, int (*fchk)(void), void (*fref)(void));
 int rec_sync(char *fpath, int size, int (*fsync)(void), int (*fchk)(void));
 /* splay.c */
-SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(void));
+SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(void *x, void *y));
 /* xsort.c */
 void xsort(void *a, size_t n, size_t es, int (*cmp)(void));
 /* attr_lib.c */
