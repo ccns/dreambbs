@@ -18,15 +18,15 @@ extern char brd_bits[MAXBOARD];
 extern int ok;
 
 static void XoFavorite(char *folder,char *title,int level);
-static int myfavorite_add();
+static int myfavorite_add(XO *xo);
 static char currdir[64];
 
 time_t brd_visit[MAXBOARD];	/* 最近瀏覽時間 */
 
 void
-brd2myfavorite(brd, gem)
-  BRD *brd;
-  HDR *gem;
+brd2myfavorite(
+  BRD *brd,
+  HDR *gem)
 {
   memset(gem, 0, sizeof(HDR));
   time(&gem->chrono);
@@ -36,9 +36,9 @@ brd2myfavorite(brd, gem)
 }
 
 static void
-myfavorite_item(num, myfavorite)
-  int num;
-  HDR *myfavorite;
+myfavorite_item(
+  int num,
+  HDR *myfavorite)
 {
   if(myfavorite->xmode & GEM_BOARD)
   {
@@ -216,8 +216,8 @@ myfavorite_item(num, myfavorite)
 }
 
 static int
-myfavorite_body(xo)
-  XO *xo;
+myfavorite_body(
+  XO *xo)
 {
   HDR *myfavorite;
   int num, max, tail;
@@ -246,8 +246,8 @@ myfavorite_body(xo)
 
 
 static int
-myfavorite_head(xo)
-  XO *xo;
+myfavorite_head(
+  XO *xo)
 {
   vs_head("我的最愛", str_site);
   prints("[←]主選單 [→]閱\讀 [a]新增 [d]刪除 [c]篇數 [/]搜尋 [s]看板 [h]說明\n"
@@ -257,8 +257,8 @@ myfavorite_head(xo)
 }
 
 static int
-myfavorite_newmode(xo)
-  XO *xo;
+myfavorite_newmode(
+  XO *xo)
 {
   cuser.ufo2 ^= UFO2_BRDNEW;  /* Thor.980805: 特別注意 utmp.ufo的同步問題 */
   return myfavorite_head(xo);
@@ -266,8 +266,8 @@ myfavorite_newmode(xo)
 
 
 static int
-myfavorite_load(xo)
-  XO *xo;
+myfavorite_load(
+  XO *xo)
 {
   myfavorite_main();
   xo_load(xo, sizeof(HDR));
@@ -276,24 +276,24 @@ myfavorite_load(xo)
 
 
 static int
-myfavorite_init(xo)
-  XO *xo;
+myfavorite_init(
+  XO *xo)
 {
   xo_load(xo, sizeof(HDR));
   return myfavorite_head(xo);
 }
 
 static int
-myfavorite_switch(xo)
-  XO *xo;
+myfavorite_switch(
+  XO *xo)
 {
   Select();
   return myfavorite_load(xo);
 }
 
 static int
-myfavorite_browse(xo)
-  XO *xo;
+myfavorite_browse(
+  XO *xo)
 {
   HDR *ghdr;
   int xmode,op=0,chn;
@@ -347,9 +347,9 @@ myfavorite_browse(xo)
 }
 
 static int
-myfavorite_find_same(brd,dir)
-  BRD *brd;
-  char *dir;
+myfavorite_find_same(
+  BRD *brd,
+  char *dir)
 {
   int max,i;
   HDR hdr;
@@ -366,8 +366,8 @@ myfavorite_find_same(brd,dir)
 }
 
 static int
-myfavorite_add(xo)
-  XO *xo;
+myfavorite_add(
+  XO *xo)
 {
   char ans;
   char buf[20];
@@ -451,8 +451,8 @@ myfavorite_add(xo)
 }
 
 static void
-remove_dir(fpath)
-  char *fpath;
+remove_dir(
+  char *fpath)
 {
   HDR hdr;
   int max,i;
@@ -473,8 +473,8 @@ remove_dir(fpath)
 }
 
 static int
-myfavorite_delete(xo)
-  XO *xo;
+myfavorite_delete(
+  XO *xo)
 {
   if(!HAS_PERM(PERM_VALID))
     return XO_NONE;
@@ -505,8 +505,8 @@ myfavorite_delete(xo)
 }
 
 static int
-myfavorite_mov(xo)
-  XO *xo;
+myfavorite_mov(
+  XO *xo)
 {
   HDR *ghdr;
   char buf[80];
@@ -541,8 +541,8 @@ myfavorite_mov(xo)
 }
 
 static int
-myfavorite_edit(xo)
-  XO *xo;
+myfavorite_edit(
+  XO *xo)
 {
   HDR *hdr;
   
@@ -577,16 +577,16 @@ myfavorite_edit(xo)
 
 
 static int
-myfavorite_help(xo)
-  XO *xo;
+myfavorite_help(
+  XO *xo)
 {
   film_out(FILM_FAVORITE, -1);
   return myfavorite_head(xo);
 }
 
 static int
-myfavorite_search(xo)
-  XO *xo;
+myfavorite_search(
+  XO *xo)
 {
   int num, pos, max;
   char *ptr;
@@ -667,10 +667,10 @@ KeyFunc myfavorite_cb[] =
 };
 
 static void
-XoFavorite(folder, title, level)
-  char *folder;
-  char *title;
-  int level;
+XoFavorite(
+  char *folder,
+  char *title,
+  int level)
 {
   XO *xo, *last;
   char old[64];
@@ -697,7 +697,7 @@ XoFavorite(folder, title, level)
 
 
 int
-MyFavorite()
+MyFavorite(void)
 {
   char fpath[64];
 
@@ -711,8 +711,8 @@ MyFavorite()
 }
 
 int 
-myfavorite_find_chn(brdname)
-  char *brdname;
+myfavorite_find_chn(
+  char *brdname)
 {
   BRD *bp;
   int max,i;
@@ -749,8 +749,8 @@ myfavorite_find_chn(brdname)
 }
 
 void
-myfavorite_parse(fpath)
-  char *fpath;
+myfavorite_parse(
+  char *fpath)
 {
   int i,max;
   char buf[20];
@@ -779,7 +779,7 @@ myfavorite_parse(fpath)
 
 
 void
-myfavorite_main()
+myfavorite_main(void)
 {
   int i,max;
   char fpath[80];
@@ -814,8 +814,8 @@ myfavorite_main()
 }
 
 int
-class_add(xo)
-  XO *xo;
+class_add(
+  XO *xo)
 {
   HDR hdr;
   char fpath[64];

@@ -27,9 +27,9 @@ extern int errno;
 static BCACHE *bshm;
 
 static void
-attach_err(shmkey, name)
-  int shmkey;
-  char *name;
+attach_err(
+  int shmkey,
+  char *name)
 {
   fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
   exit(1);
@@ -37,8 +37,8 @@ attach_err(shmkey, name)
 
 
 static void *
-attach_shm(shmkey, shmsize)
-  register int shmkey, shmsize;
+attach_shm(
+  register int shmkey, register int shmsize)
 {
   register void *shmptr;
   register int shmid;
@@ -68,7 +68,7 @@ attach_shm(shmkey, shmsize)
 
 /* static */
 void
-bshm_init()
+bshm_init(void)
 {
   register BCACHE *xshm;
   register time_t *uptime;
@@ -131,10 +131,10 @@ TchoiceCompare(struct Tchoice * i, struct Tchoice * j)
 
 
 static int
-draw_vote(bdh, fpath, vch)
-  BRD *bdh;			/* Thor: 傳入 BRD, 可查 battr */
-  char *fpath;
-  VCH *vch;
+draw_vote(
+  BRD *bdh,			/* Thor: 傳入 BRD, 可查 battr */
+  char *fpath,
+  VCH *vch)
 {
   FILE *fp;
   char *bid, *fname, buf[80], bpath[80];
@@ -286,8 +286,8 @@ draw_vote(bdh, fpath, vch)
 
 
 static int
-draw_board(brd)
-  BRD *brd;
+draw_board(
+  BRD *brd)
 {
   int bvote, fd, fsize, alive;
   VCH *vch, *head, *tail;
@@ -383,7 +383,7 @@ draw_board(brd)
 
 
 static void
-closepolls()
+closepolls(void)
 {
   BRD *bcache, *head, *tail;
   int state;
@@ -437,8 +437,8 @@ static BRD *bhead, *btail;
 
 
 static int
-class_parse(key)
-  char *key;
+class_parse(
+  char *key)
 {
   char *str, *ptr, fpath[80];
   ClassHeader *chp;
@@ -539,15 +539,15 @@ class_parse(key)
 
 
 static int
-chno_cmp(i, j)
-  short *i, *j;
+chno_cmp(
+  short *i, short *j)
 {
   return strcasecmp(bhead[*i].brdname, bhead[*j].brdname);
 }
 
 
 static void
-class_sort()
+class_sort(void)
 {
   ClassHeader *chp;
   int i, j, max;
@@ -578,7 +578,7 @@ class_sort()
 
 
 static void
-class_image()
+class_image(void)
 {
   int i;
   FILE *fp;
@@ -622,9 +622,9 @@ class_image()
 
 
 static void
-ansi_puts(fp, buf, mode)
-  FILE *fp;
-  char buf[], mode;
+ansi_puts(
+  FILE *fp,
+  char buf[], char mode)
 {
   static char state = '0';
 
@@ -639,8 +639,8 @@ ansi_puts(fp, buf, mode)
 
 
 static void
-gzip(source, target, stamp)
-  char *source, *target, *stamp;
+gzip(
+  char *source, char *target, char *stamp)
 {
   char buf[128];
 
@@ -652,9 +652,9 @@ gzip(source, target, stamp)
 
 
 static void
-gtar(source, target, stamp, prune)
-  char *source, *target, *stamp;
-  int prune;
+gtar(
+  char *source, char *target, char *stamp,
+  int prune)
 {
   char buf[128];
 
@@ -668,8 +668,8 @@ gtar(source, target, stamp, prune)
 }
 
 static void
-error(fpath)
-  char *fpath;
+error(
+  char *fpath)
 {
   printf("can not open [%s]\n", fpath);
   exit(1);
@@ -677,7 +677,7 @@ error(fpath)
 
 
 int
-main()
+main(void)
 {
   int fact, hour, max, item, total, i, j, over;
   char date[16];
@@ -1075,11 +1075,11 @@ main()
 }
 
 void
-keeplog(fnlog, board, title, mode)
-  char *fnlog;
-  char *board;
-  char *title;
-  int mode;		/* 0:load 1: rename  2:unlink 3:mark*/
+keeplog(
+  char *fnlog,
+  char *board,
+  char *title,
+  int mode)		/* 0:load 1: rename  2:unlink 3:mark*/
 {
   HDR hdr;
   char folder[128], fpath[128];

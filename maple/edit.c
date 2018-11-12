@@ -55,8 +55,8 @@ static int ve_mode;		/* operation mode */
 
 #ifdef	DEBUG_VEDIT
 static void
-ve_abort(i)
-  int i;
+ve_abort(
+  int i)
 {
   char msg[40];
 
@@ -71,9 +71,9 @@ ve_abort(i)
 
 
 static void
-ve_position(cur, top)
-  textline *cur;
-  textline *top;
+ve_position(
+  textline *cur,
+  textline *top)
 {
   int row;
 
@@ -94,7 +94,7 @@ ve_position(cur, top)
 
 
 static inline void
-ve_pageup()
+ve_pageup(void)
 {
   textline *cur, *top, *tmp;
   int lno, n;
@@ -123,8 +123,8 @@ ve_pageup()
 
 
 static inline void
-ve_forward(n)
-  int n;
+ve_forward(
+  int n)
 {
   textline *cur, *top, *tmp;
   int lno;
@@ -154,7 +154,7 @@ ve_forward(n)
 
 #if 0
 static void
-ve_goto()
+ve_goto(void)
 {
   int lno;
   char buf[8];
@@ -185,8 +185,8 @@ ve_goto()
 
 
 static inline char *
-ve_strim(s)
-  char *s;
+ve_strim(
+  char *s)
 {
   while (*s == ' ')
     s++;
@@ -195,7 +195,7 @@ ve_strim(s)
 
 
 static textline *
-ve_alloc()
+ve_alloc(void)
 {
   textline *p;
 
@@ -220,9 +220,9 @@ ve_alloc()
 
 
 static int
-ansi2n(ansix, line)
-  int ansix;
-  textline *line;
+ansi2n(
+  int ansix,
+  textline *line)
 {
   unsigned char *data, *tmp;
   int ch;
@@ -256,9 +256,9 @@ ansi2n(ansix, line)
 
 
 static int
-n2ansi(nx, line)
-  int nx;
-  textline *line;
+n2ansi(
+  int nx,
+  textline *line)
 {
   unsigned char *tmp, *nxp;
   int ansix;
@@ -301,8 +301,8 @@ n2ansi(nx, line)
 
 
 static void
-delete_line(line)
-  textline *line;
+delete_line(
+  textline *line)
 {
   textline *p = line->prev;
   textline *n = line->next;
@@ -332,9 +332,9 @@ delete_line(line)
 
 
 static void
-ve_split(line, pos)
-  textline *line;
-  int pos;
+ve_split(
+  textline *line,
+  int pos)
 {
   int len = line->len - pos;
 
@@ -382,8 +382,8 @@ ve_split(line, pos)
 
 
 static int
-ve_join(line)
-  textline *line;
+ve_join(
+  textline *line)
 {
   textline *n;
   unsigned char *data, *s;
@@ -438,8 +438,8 @@ ve_join(line)
 
 
 static void
-join_up(line)
-  textline *line;
+join_up(
+  textline *line)
 {
   while (!ve_join(line))
   {
@@ -459,8 +459,8 @@ join_up(line)
 
 
 static void
-ve_char(ch)
-  int ch;
+ve_char(
+  int ch)
 {
   textline *p;
   int col, len, mode;
@@ -554,9 +554,9 @@ ve_char(ch)
 
 
 static void
-delete_char(cur, col)
-  textline *cur;
-  int col;
+delete_char(
+  textline *cur,
+  int col)
 {
   unsigned char *dst, *src;
 
@@ -607,7 +607,7 @@ ve_string(str)
 
 
 static void
-ve_ansi()
+ve_ansi(void)
 {
   int fg, bg, mode;
   char ans[4], buf[16], *apos, *color, *tmp;
@@ -721,7 +721,7 @@ ve_line(this, str)
 
 
 char *
-tbf_ask()
+tbf_ask(void)
 {
   static char fn_tbf[] = "buf.1";
   int ch;
@@ -735,7 +735,7 @@ tbf_ask()
 
 
 FILE *
-tbf_open()
+tbf_open(void)
 {
   int ans;
   char fpath[64], op[4];
@@ -761,9 +761,9 @@ tbf_open()
 
 
 static textline *
-ve_load(this, fd)
-  textline *this;
-  int fd;
+ve_load(
+  textline *this,
+  int fd)
 {
   unsigned char *str;
   textline *next;
@@ -785,7 +785,7 @@ ve_load(this, fd)
 
 
 static inline void
-tbf_read()
+tbf_read(void)
 {
   int fd;
   char fpath[80];
@@ -802,7 +802,7 @@ tbf_read()
 
 
 static inline void
-tbf_write()
+tbf_write(void)
 {
   FILE *fp;
   textline *p;
@@ -823,7 +823,7 @@ tbf_write()
 
 
 static inline void
-tbf_erase()
+tbf_erase(void)
 {
   char fpath[80];
 
@@ -838,7 +838,7 @@ tbf_erase()
 
 
 void
-ve_backup()
+ve_backup(void)
 {
   textline *p, *n;
 
@@ -864,7 +864,7 @@ ve_backup()
 
 
 void
-ve_recover()
+ve_recover(void)
 {
   char fpbak[80], fpath[80];
 
@@ -890,8 +890,8 @@ ve_recover()
 
 
 static int
-is_quoted(str)
-  char *str;			/* "--\n", "-- \n", "--", "-- " */
+is_quoted(
+  char *str)			/* "--\n", "-- \n", "--", "-- " */
 {
   if (*str == '-')
   {
@@ -910,9 +910,9 @@ is_quoted(str)
 
 
 static inline int
-quote_line(str, qlimit)
-  char *str;
-  int qlimit;			/* 允許幾層引言？ */
+quote_line(
+  char *str,
+  int qlimit)			/* 允許幾層引言？ */
 {
   int qlevel = 0;
   int ch;
@@ -945,7 +945,7 @@ int keysnum;
 
 #ifdef ANTI_PHONETIC
 static int
-words_check()
+words_check(void)
 {
   textline *p; 
   unsigned char *str, *pend;
@@ -982,7 +982,7 @@ words_check()
 #else
 
 static void
-words_check()
+words_check(void)
 {
   textline *p; 
   char *str;
@@ -1001,8 +1001,8 @@ words_check()
 #endif
 
 static void
-ve_quote(this)
-  textline *this;
+ve_quote(
+  textline *this)
 {
   int fd, op;
   FILE *fp;
@@ -1147,7 +1147,7 @@ OUT_ve_quote:
 
 
 static int
-quote_check()
+quote_check(void)
 {
   textline *p;
   char *str;
@@ -1197,8 +1197,8 @@ quote_check()
 
 
 void
-ve_header(fp)
-  FILE *fp;
+ve_header(
+  FILE *fp)
 {
   time_t now;
   char *title;
@@ -1287,8 +1287,8 @@ ve_header(fp)
 }
 
 static void
-ve_show_sign(fpath)
-  char *fpath;
+ve_show_sign(
+  char *fpath)
 {
   char buf[256];
   int i,j;
@@ -1314,8 +1314,8 @@ ve_show_sign(fpath)
 }
 
 static void
-ve_select_sign(fp)
-  FILE *fp;
+ve_select_sign(
+  FILE *fp)
 {
   FILE *fd;
   char msg[] = "選擇簽名檔 (1/2/3, 0=不加)[0]：";
@@ -1374,9 +1374,9 @@ ve_select_sign(fp)
 
 
 static int
-ve_filer(fpath, ve_op)
-  char *fpath;
-  int ve_op; /* Thor.981020: 1 有header, 0 無header */
+ve_filer(
+  char *fpath,
+  int ve_op) /* Thor.981020: 1 有header, 0 無header */
 {
   int ans = 0;
   FILE *fp=NULL;
@@ -1614,8 +1614,8 @@ ve_outs(text)
 }
 
 static int
-select_title(title)
-  char *title;
+select_title(
+  char *title)
 {
   char *objs[] = {"[公告]","[新聞]","[閒聊]","[文件]","[問題]","[測試]"};
   int select; 
@@ -1632,10 +1632,10 @@ select_title(title)
 }
 
 int
-ve_subject(row, topic, dft)
-  int row;
-  char *topic;
-  char *dft;
+ve_subject(
+  int row,
+  char *topic,
+  char *dft)
 {
   char *title;
   int select=0;
@@ -1670,13 +1670,13 @@ ve_subject(row, topic, dft)
 
 
 int
-vedit(fpath, ve_op)
-  char *fpath;
-  int ve_op;	/* 0: 純粹編輯檔案 1: quote/header 2: quote */
+vedit(
+  char *fpath,
+  int ve_op)	/* 0: 純粹編輯檔案 1: quote/header 2: quote */
 {
   textline *vln, *tmp;
   int cc, col, mode, margin, pos;
-  static void (*input_tool)();
+  static void (*input_tool)(void);
 
   /* --------------------------------------------------- */
   /* 初始設定：載入檔案、引用文章、設定編輯模式		 */

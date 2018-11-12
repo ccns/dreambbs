@@ -213,11 +213,11 @@ draw_line(x, y, msg)	/* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
 
 
 static void
-draw_item(x, y, desc, hotkey, mode)
-  int x, y;
-  char *desc;
-  char hotkey;
-  int mode;		/* 0:清除光棒  1:畫上光棒 */
+draw_item(
+  int x, int y,
+  char *desc,
+  char hotkey,
+  int mode)		/* 0:清除光棒  1:畫上光棒 */
 {
   char buf[128];
 
@@ -231,12 +231,12 @@ draw_item(x, y, desc, hotkey, mode)
 
 
 static int	/* 回傳總共有幾個選項 */
-draw_menu(x, y, title, desc, hotkey, cur)
-  int x, y;
-  char *title;
-  char *desc[];
-  char hotkey;
-  int *cur;	/* 回傳預設值所在位置 */
+draw_menu(
+  int x, int y,
+  char *title,
+  char *desc[],
+  char hotkey,
+  int *cur)	/* 回傳預設值所在位置 */
 {
   int i, meet;
   char buf[128];
@@ -271,9 +271,9 @@ draw_menu(x, y, title, desc, hotkey, cur)
 
 
 static int			/* -1:找不到 >=0:第幾個選項 */
-find_cur(ch, max, desc)		/* 找 ch 這個按鍵是第幾個選項 */
-  int ch, max;
-  char *desc[];
+find_cur(		/* 找 ch 這個按鍵是第幾個選項 */
+  int ch, int max,
+  char *desc[])
 {
   int i, cc;
 

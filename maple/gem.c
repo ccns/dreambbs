@@ -8,9 +8,9 @@
 
 #include "bbs.h"
 
-extern int xo_uquery();
-extern int xo_usetup();
-extern int cmpchrono();
+extern int xo_uquery(XO *xo);
+extern int xo_usetup(XO *xo);
+extern int cmpchrono(HDR *hdr);
 
 
 extern XZ xz[];
@@ -43,14 +43,14 @@ static int gem_way;
 
 static int GemBufferNum; /* Thor.990414: 提前宣告, 用於gem_head */
 
-static int gem_add();
-static int gem_paste();
-static int gem_anchor();
-static int gem_recycle();
+static int gem_add(XO *xo);
+static int gem_paste(XO *xo);
+static int gem_anchor(XO *xo);
+static int gem_recycle(XO *xo);
 
 static int
-gem_manage(title)
-  char* title;
+gem_manage(
+  char* title)
 {
   int ch,len;
   char buf[100];
@@ -85,9 +85,9 @@ gem_manage(title)
 }
 
 static void
-gem_item(num, ghdr)
-  int num;
-  HDR *ghdr;
+gem_item(
+  int num,
+  HDR *ghdr)
 {
   int xmode, gtype;
   char fpath[64];
@@ -128,8 +128,8 @@ gem_item(num, ghdr)
 
 
 static int
-gem_body(xo)
-  XO *xo;
+gem_body(
+  XO *xo)
 {
   HDR *ghdr;
   int num, max, tail;
@@ -182,8 +182,8 @@ gem_body(xo)
 
 
 static int
-gem_head(xo)
-  XO *xo;
+gem_head(
+  XO *xo)
 {
   char buf[20];
 
@@ -207,8 +207,8 @@ gem_head(xo)
 
 
 static int
-gem_toggle(xo)
-  XO *xo;
+gem_toggle(
+  XO *xo)
 {
   gem_way = (gem_way + 1) % GEM_WAY;
   if(!HAS_PERM(PERM_SYSOP) && (gem_way ==1))
@@ -218,8 +218,8 @@ gem_toggle(xo)
 
 
 static int
-gem_init(xo)
-  XO *xo;
+gem_init(
+  XO *xo)
 {
   xo_load(xo, sizeof(HDR));
   return gem_head(xo);
@@ -227,8 +227,8 @@ gem_init(xo)
 
 
 static int
-gem_load(xo)
-  XO *xo;
+gem_load(
+  XO *xo)
 {
   xo_load(xo, sizeof(HDR));
   return gem_body(xo);
@@ -246,11 +246,11 @@ gem_load(xo)
 
 
 static void
-url_parse(folder, hdr, site, path)
-  char *folder;
-  HDR *hdr;
-  char *site;
-  char *path;
+url_parse(
+  char *folder,
+  HDR *hdr,
+  char *site,
+  char *path)
 {
   char *str;
   int cc;
@@ -291,14 +291,14 @@ url_parse(folder, hdr, site, path)
 
 
 static int
-url_stamp(folder, hdr, utype, host, path, port, chrono)
-  char *folder;
-  HDR *hdr;
-  int utype;
-  char *host;
-  char *path;
-  int port;
-  int chrono;
+url_stamp(
+  char *folder,
+  HDR *hdr,
+  int utype,
+  char *host,
+  char *path,
+  int port,
+  int chrono)
 {
   int ch;
   char *head, *tail;
@@ -394,9 +394,9 @@ url_stamp(folder, hdr, utype, host, path, port, chrono)
 
 
 int
-net_open(site, port)
-  char *site;
-  int port;
+net_open(
+  char *site,
+  int port)
 {
   struct sockaddr_in sin;
   int sock, cc;
@@ -421,10 +421,10 @@ net_open(site, port)
 
 
 static int
-url_open(site, path, port)
-  char *site;
-  char *path;
-  int port;
+url_open(
+  char *site,
+  char *path,
+  int port)
 {
   int sock;
   /* Thor.980707: 有時 site會有ip出現, 要在 dns_open內處理or外處理? */
@@ -448,8 +448,8 @@ url_open(site, path, port)
 
 
 static char *
-go_field(str)
-  char *str;
+go_field(
+  char *str)
 {
   int cc;
 
@@ -471,10 +471,10 @@ go_field(str)
 
 
 int
-url_fpath(fpath, folder, hdr)
-  char *fpath;
-  char *folder;
-  HDR *hdr;
+url_fpath(
+  char *fpath,
+  char *folder,
+  HDR *hdr)
 {
   int fd, gtype;
   time_t now;
@@ -627,10 +627,10 @@ url_fpath(fpath, folder, hdr)
 
 
 static HDR *
-gem_check(xo, fpath, op)
-  XO *xo;
-  char *fpath;
-  int op;
+gem_check(
+  XO *xo,
+  char *fpath,
+  int op)
 {
   HDR *ghdr;
   int gtype, level;
@@ -685,8 +685,8 @@ gem_check(xo, fpath, op)
 
 /* Thor.981218: 防止惡意作亂 */
 static inline int 
-site_fake(s)
-  char *s;
+site_fake(
+  char *s)
 {
   if (*s=='.') return -1;
   while(*s)
@@ -699,9 +699,9 @@ site_fake(s)
 }
 
 static int
-url_edit(folder, hdr)
-  char *folder;
-  HDR *hdr;
+url_edit(
+  char *folder,
+  HDR *hdr)
 {
   char site[64], path[128], port[5];
   int chrono, mode, num;
@@ -761,9 +761,9 @@ url_edit(folder, hdr)
 
 
 void
-brd2gem(brd, gem)
-  BRD *brd;
-  HDR *gem;
+brd2gem(
+  BRD *brd,
+  HDR *gem)
 {
   memset(gem, 0, sizeof(HDR));
   time(&gem->chrono);
@@ -774,10 +774,10 @@ brd2gem(brd, gem)
 
 
 static void
-gem_log(folder, action, hdr)
-  char *folder;
-  char *action;
-  HDR *hdr;
+gem_log(
+  char *folder,
+  char *action,
+  HDR *hdr)
 {
   char fpath[80], buf[256];
 
@@ -792,8 +792,8 @@ gem_log(folder, action, hdr)
 
 
 static int
-gem_add(xo)
-  XO *xo;
+gem_add(
+  XO *xo)
 {
   int gtype, level, fd, ans;
   char title[80], fpath[80], *dir;
@@ -930,8 +930,8 @@ gem_add(xo)
 
 
 static int
-gem_edit(xo)
-  XO *xo;
+gem_edit(
+  XO *xo)
 {
   char fpath[80];
   HDR *hdr;
@@ -953,8 +953,8 @@ gem_edit(xo)
 
 
 static int
-gem_title(xo)
-  XO *xo;
+gem_title(
+  XO *xo)
 {
   HDR *ghdr, xhdr;
   int num;
@@ -999,8 +999,8 @@ gem_title(xo)
 
 
 static int
-gem_lock(xo)
-  XO *xo;
+gem_lock(
+  XO *xo)
 {
   HDR *ghdr;
   int num;
@@ -1024,8 +1024,8 @@ gem_lock(xo)
 
 
 static int
-gem_mark(xo)
-  XO *xo;
+gem_mark(
+  XO *xo)
 {
   HDR *ghdr;
   int num;
@@ -1046,8 +1046,8 @@ gem_mark(xo)
 
 
 static int
-gem_state(xo)
-  XO *xo;
+gem_state(
+  XO *xo)
 {
   HDR *ghdr;
   char *dir, fpath[80], site[64], path[512], *str;
@@ -1131,8 +1131,8 @@ gem_state(xo)
 
 
 static int
-gem_browse(xo)
-  XO *xo;
+gem_browse(
+  XO *xo)
 {
   HDR *ghdr;
   int op, xmode;
@@ -1214,8 +1214,8 @@ static int GemBufferSiz; /* , GemBufferNum; */
 
 
 static HDR *
-gbuf_malloc(num)
-  int num;
+gbuf_malloc(
+  int num)
 {
   HDR *gbuf;
 
@@ -1240,9 +1240,9 @@ gbuf_malloc(num)
 
 
 static void
-gem_buffer(dir, ghdr)
-  char *dir;
-  HDR *ghdr;			/* NULL 代表放入 TagList, 否則將傳入的放入 */
+gem_buffer(
+  char *dir,
+  HDR *ghdr)			/* NULL 代表放入 TagList, 否則將傳入的放入 */
 {
   int num, locus;
   HDR *gbuf;
@@ -1278,7 +1278,7 @@ gem_buffer(dir, ghdr)
 
 
 static inline void
-gem_store()
+gem_store(void)
 {
   int num;
   char *folder;
@@ -1295,8 +1295,8 @@ gem_store()
 
 
 static int
-gem_delete(xo)
-  XO *xo;
+gem_delete(
+  XO *xo)
 {
   HDR *ghdr;
   char *dir, buf[80];
@@ -1380,8 +1380,8 @@ gem_delete(xo)
 
 
 static int
-gem_copy(xo)
-  XO *xo;
+gem_copy(
+  XO *xo)
 {
   HDR *ghdr;
   int tag;
@@ -1404,9 +1404,9 @@ gem_copy(xo)
 
 
 static inline int
-gem_extend(xo, num)
-  XO *xo;
-  int num;
+gem_extend(
+  XO *xo,
+  int num)
 {
   char *dir, fpath[80], gpath[80];
   FILE *fp;
@@ -1438,8 +1438,8 @@ gem_extend(xo, num)
 
 
 static int
-gem_paste(xo)
-  XO *xo;
+gem_paste(
+  XO *xo)
 {
   int num, ans;
   char *dir, srcDir[80], dstDir[80];
@@ -1492,8 +1492,8 @@ gem_paste(xo)
 
 
 static int
-gem_move(xo)
-  XO *xo;
+gem_move(
+  XO *xo)
 {
   HDR *ghdr;
   char *dir, buf[80];
@@ -1536,8 +1536,8 @@ gem_move(xo)
 
 
 static int
-gem_recycle(xo)
-  XO *xo;
+gem_recycle(
+  XO *xo)
 {
   int level;
   char fpath[64];
@@ -1576,8 +1576,8 @@ gem_recycle(xo)
 
 
 static int
-gem_anchor(xo)
-  XO *xo;
+gem_anchor(
+  XO *xo)
 {
   int ans;
   char *folder;
@@ -1618,8 +1618,8 @@ gem_anchor(xo)
 
 
 int
-gem_gather(xo)
-  XO *xo;
+gem_gather(
+  XO *xo)
 {
   HDR *hdr, *gbuf, ghdr, xhdr;
   int tag, locus, rc, xmode, anchor,mode;
@@ -1783,8 +1783,8 @@ gem_gather(xo)
 
 
 static int
-gem_tag(xo)
-  XO *xo;
+gem_tag(
+  XO *xo)
 {
   HDR *ghdr;
   int pos, tag;
@@ -1801,16 +1801,16 @@ gem_tag(xo)
 
 
 static int
-gem_help(xo)
-  XO *xo;
+gem_help(
+  XO *xo)
 {
   film_out(FILM_GEM, -1);
   return gem_head(xo);
 }
 
 static int
-gem_cross(xo)
-  XO *xo;
+gem_cross(
+  XO *xo)
 {
   char xboard[20], fpath[80], xfolder[80], xtitle[80], buf[80], *dir;
   HDR *hdr, xpost,*ghdr;
@@ -1967,10 +1967,10 @@ static KeyFunc gem_cb[] =
 
 
 void
-XoGem(folder, title, level)
-  char *folder;
-  char *title;
-  int level;
+XoGem(
+  char *folder,
+  char *title,
+  int level)
 {
   XO *xo, *last;
 
@@ -1990,7 +1990,7 @@ XoGem(folder, title, level)
 
 
 void
-gem_main()
+gem_main(void)
 {
   XO *xo;
 
