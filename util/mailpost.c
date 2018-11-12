@@ -17,11 +17,7 @@
 #include	<fcntl.h>
 #include	<time.h>
 #include	<signal.h>
-
-
 #include	"bbs.h"
-#include	"decode.ic"
-
 
 extern char *crypt();
 
@@ -36,20 +32,164 @@ extern char *crypt();
 
 static int mymode = JUNK;
 
-
 static ACCT myacct;
 static char myfrom[128], mysub[128], myname[128], mypasswd[128], myboard[128], mytitle[128];
 
+/////////////////////// to be moved to common library //////////////////////////
+
+static int
+rec_append(
+  char *fpath,
+  void *data,
+  int size
+)
+{
+  register int fd;
+
+  if ((fd = open(fpath, O_WRONLY | O_CREAT | O_APPEND, 0600)) < 0)
+    return -1;
+
+  write(fd, data, size);
+  close(fd);
+
+  return 0;
+}
+
+static void
+strip_ansi(
+  char* buf,
+  char* str
+)
+{
+  register int ch, ansi;
+
+  for (ansi = 0; (ch = *str); str++)
+  {
+    if (ch == '\n')
+    {
+      break;
+    }
+    else if (ch == 27)
+    {
+      ansi = 1;
+    }
+    else if (ansi)
+    {
+      if (!strchr("[01234567;", ch))
+       ansi = 0;
+    }
+    else
+    {
+      *buf++ = ch;
+    }
+  }
+  *buf = '\0';
+}
+
+static int
+ci_strcmp(
+  register char* s1,
+  register char* s2
+)
+{
+  register int c1, c2, diff;
+
+  do
+  {
+    c1 = *s1++;
+    c2 = *s2++;
+    if (c1 >= 'A' && c1 <= 'Z')
+      c1 |= 32;
+    if (c2 >= 'A' && c2 <= 'Z')
+      c2 |= 32;
+    if ((diff = c1 - c2))
+      return (diff);
+  } while (c1);
+  return 0;
+}
+
+static void
+str_strip(     /* remove trailing space */
+  char *str
+)
+{
+  int ch;
+
+       do
+       {
+         ch = *(--str);
+       } while (ch == ' ' || ch == '\t');
+  str[1] = '\0';
+}
+
+static void
+str_cut(
+  char *dst,
+  char *src
+)
+{
+  int cc;
+
+  for (;;)
+  {
+    cc = *src++;
+    if (!cc)
+    {
+      *dst = '\0';
+      return;
+    }
+
+    if (cc == ' ')
+    {
+      while (*src == ' ')
+       src++;
+
+      while ((cc = *src++))
+      {
+       if (cc == ' ' || cc == '\n' || cc == '\r')
+         break;
+       *dst++ = cc;
+      }
+
+      *dst = '\0';
+      return;
+    }
+  }
+}
+
+static int
+acct_fetch(
+  char *userid
+)
+{
+  int fd;
+  char fpath[80], buf[80];
+
+  str_lower(buf, userid);
+  sprintf(fpath, "usr/%c/%s/.ACCT", *buf, buf);
+  fd = open(fpath, O_RDWR, 0600);
+  if (fd >= 0)
+  {
+    if (read(fd, &myacct, sizeof(ACCT)) != sizeof(ACCT))
+    {
+      close(fd);
+      fd = -1;
+    }
+  }
+  return fd;
+}
+
+///////////////////////////////////////////////////////////////////////////////
 
 /* ----------------------------------------------------- */
 /* .BOARDS shared memory (cache.c)			 */
 /* ----------------------------------------------------- */
 
-
 static int
-brd_fetch(bname, brd)
-  char *bname;
-  BRD *brd;
+brd_fetch(
+  char* bname,
+  BRD* brd
+)
 {
   FILE *fp;
 
@@ -70,59 +210,22 @@ brd_fetch(bname, brd)
   return -1;
 }
 
-
-#if 0
-int
-haspostperm(bname)
-  char *bname;
-{
-  register int i;
-
-  if (currmode & MODE_DIGEST)
-    return 0;
-
-  if (!ci_strcmp(bname, DEFAULT_BOARD))
-    return 1;
-
-  if (!HAS_PERM(PERM_POST))
-    return 0;
-
-  if (!(i = getbnum(bname)))
-    return 0;
-
-  i = bcache[i - 1].level;
-
-  /* 秘密看板特別處理 */
-
-  if ((i & 0xffff) == PERM_SYSOP)
-  {
-    currmode |= MODE_SECRET;
-    return 1;
-  }
-
-  return (HAS_PERM(i & ~PERM_POSTMASK));
-}
-#endif
-
-
 /* ----------------------------------------------------- */
 /* buffered I/O for stdin				 */
 /* ----------------------------------------------------- */
 
-
 #define POOL_SIZE	4096
 #define LINE_SIZE	512
-
 
 static char pool[POOL_SIZE];
 static char mybuf[LINE_SIZE];
 static int pool_size = POOL_SIZE;
 static int pool_ptr = POOL_SIZE;
 
-
 static int
-readline(buf)
-  char *buf;
+readline(
+  char *buf
+)
 {
   register int ch;
   register int len, bytes;
@@ -157,15 +260,15 @@ readline(buf)
   return bytes;
 }
 
-
 /* ----------------------------------------------------- */
 /* record run/mailog for management			 */
 /* ----------------------------------------------------- */
 
-
 static void
-mailog(mode, msg)
-  char *mode, *msg;
+mailog(
+  char* mode,
+  char* msg
+)
 {
   FILE *fp;
 
@@ -183,342 +286,11 @@ mailog(mode, msg)
   }
 }
 
-
-/* ----------------------------------------------------- */
-/* string subroutines					 */
-/* ----------------------------------------------------- */
-
-
-/* static */
-void
-str_lower(t, s)
-  char *t, *s;
-{
-  register int ch;
-
-  do
-  {
-    ch = *s++;
-    *t++ = (ch >= 'A' && ch <= 'Z') ? ch | 32 : ch;
-  } while (ch);
-}
-
-
-static void
-str_cut(dst, src)
-  char *dst;
-  char *src;
-{
-  int cc;
-
-  for (;;)
-  {
-    cc = *src++;
-    if (!cc)
-    {
-      *dst = '\0';
-      return;
-    }
-
-    if (cc == ' ')
-    {
-      while (*src == ' ')
-	src++;
-
-      while ((cc = *src++))
-      {
-	if (cc == ' ' || cc == '\n' || cc == '\r')
-	  break;
-	*dst++ = cc;
-      }
-
-      *dst = '\0';
-      return;
-    }
-  }
-}
-
-
 static int
-ci_strcmp(s1, s2)
-  register char *s1, *s2;
-{
-  register int c1, c2, diff;
-
-  do
-  {
-    c1 = *s1++;
-    c2 = *s2++;
-    if (c1 >= 'A' && c1 <= 'Z')
-      c1 |= 32;
-    if (c2 >= 'A' && c2 <= 'Z')
-      c2 |= 32;
-    if ((diff = c1 - c2))
-      return (diff);
-  } while (c1);
-  return 0;
-}
-
-
-static void
-strip_ansi(buf, str)
-  char *buf, *str;
-{
-  register int ch, ansi;
-
-  for (ansi = 0; (ch = *str); str++)
-  {
-    if (ch == '\n')
-    {
-      break;
-    }
-    else if (ch == 27)
-    {
-      ansi = 1;
-    }
-    else if (ansi)
-    {
-      if (!strchr("[01234567;", ch))
-	ansi = 0;
-    }
-    else
-    {
-      *buf++ = ch;
-    }
-  }
-  *buf = '\0';
-}
-
-
-static int
-valid_ident(ident)
-  char *ident;
-{
-  static char *invalid[] = {"bbs@", "@bbs", "unknown@", "root@", "gopher@",
-  "guest@", "@ppp", "@slip", NULL};
-  char buf[128], *str;
-  int i;
-
-  str_lower(buf, ident);
-  for (i = 0; (str = invalid[i]); i++)
-  {
-    if (strstr(buf, str))
-      return 0;
-  }
-  return 1;
-}
-
-
-static void
-str_strip(str)      /* remove trailing space */
-  char *str;
-{
-  int ch;
-
-	do
-	{
-	  ch = *(--str);
-	} while (ch == ' ' || ch == '\t');
-  str[1] = '\0';
-}
-
-
-/* ------------------------------------------------------- */
-/* 記錄驗證資料：user 有可能正在線上，所以寫入檔案以保周全 */
-/* ------------------------------------------------------- */
-
-
-static int
-acct_fetch(userid)
-  char *userid;
-{
-  int fd;
-  char fpath[80], buf[80];
-
-  str_lower(buf, userid);
-  sprintf(fpath, "usr/%c/%s/.ACCT", *buf, buf);
-  fd = open(fpath, O_RDWR, 0600);
-  if (fd >= 0)
-  {
-    if (read(fd, &myacct, sizeof(ACCT)) != sizeof(ACCT))
-    {
-      close(fd);
-      fd = -1;
-    }
-  }
-  return fd;
-}
-
-
-static int
-rec_append(fpath, data, size)
-  char *fpath;
-  void *data;
-  int size;
-{
-  register int fd;
-
-  if ((fd = open(fpath, O_WRONLY | O_CREAT | O_APPEND, 0600)) < 0)
-    return -1;
-
-  write(fd, data, size);
-  close(fd);
-
-  return 0;
-}
-
-
-/* ----------------------------------------------------- */
-/* chrono ==> file name (32-based)			 */
-/* 0123456789ABCDEFGHIJKLMNOPQRSTUV			 */
-/* ----------------------------------------------------- */
-
-#if 0
-static char radix32[32] = {
-  '0', '1', '2', '3', '4', '5', '6', '7',
-  '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
-  'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-  'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
-};
-#endif
-
-/* static */
-void
-archiv32(chrono, fname)
-  register time_t chrono;	/* 32 bits */
-  register char *fname;		/* 7 chars */
-{
-  register char *str;
-
-  str = fname + 7;
-  *str = '\0';
-  for (;;)
-  {
-    *(--str) = radix32[chrono & 31];
-    if (str == fname)
-      return;
-    chrono >>= 5;
-  }
-}
-
-
-/* static */
-time_t
-chrono32(str)
-  register char *str;		/* 0123456 */
-{
-  register time_t chrono;
-  register int ch;
-
-  chrono = 0;
-  while ((ch = *str++))
-  {
-    ch -= '0';
-    if (ch >= 10)
-      ch -= 'A' - '0' - 10;
-    chrono = (chrono << 5) + ch;
-  }
-  return chrono;
-}
-
-
-/* static */
-int
-hash32(str)
-  unsigned char *str;
-{
-  int xo, cc;
-
-  xo = 1048583;			/* a big prime number */
-  while ((cc = *str++))
-  {
-    xo = (xo << 5) - xo + cc;	/* 31 * xo + cc */
-  }
-  return (xo & 0x7fffffff);
-}
-
-
-/* static */
-int
-str_hash(str, seed)
-  char *str;
-  int seed;
-{
-  int cc;
-
-  while ((cc = *str++))
-  {
-    seed = (seed << 5) - seed + cc;     /* 31 * seed + cc */
-  }
-  return (seed & 0x7fffffff);
-}
-
-
-/* ------------------------------------------ */
-/* mail / post 時，依據時間建立檔案，加上郵戳 */
-/* ------------------------------------------ */
-/* Input: fpath = directory;		      */
-/* Output: fpath = full path;		      */
-/* ------------------------------------------ */
-
-
-/* static */
-void
-str_stamp(str, chrono)
-  char *str;
-  time_t *chrono;
-{
-  register struct tm *ptime;
-
-  ptime = localtime(chrono);
-  /* Thor.990329: y2k */
-  sprintf(str, "%02d/%02d/%02d",
-    ptime->tm_year % 100, ptime->tm_mon + 1, ptime->tm_mday);
-}
-
-
-/* ----------------------------------------------------- */
-/* Link() : link() cross partition / disk		 */
-/* ----------------------------------------------------- */
-
-
-static int
-f_copy(src, dst, mode)
-  char *src, *dst;
-  int mode;
-{
-  int fsrc, fdst, ret;
-
-  ret = -1;
-
-  if ((fsrc = open(src, O_RDONLY)) >= 0)
-  {
-    if ((fdst = open(dst, O_WRONLY | O_CREAT | mode, 0600)) >= 0)
-    {
-      char pool[BLK_SIZ];
-
-      src = pool;
-      for (;;)
-      {
-	ret = read(fsrc, src, BLK_SIZ);
-	if (ret <= 0)
-	  break;
-	ret = write(fdst, src, ret);
-	if (ret < 0)
-	  break;
-      }
-
-      close(fdst);
-    }
-    close(fsrc);
-  }
-  return ret;
-}
-
-
-static int
-Link(src, dst)
-  char *src, *dst;
+Link(
+  char* src,
+  char* dst
+)
 {
   int ret;
 
@@ -530,97 +302,8 @@ Link(src, dst)
   return ret;
 }
 
-
-/* ----------------------------------------------------- */
-/* hdr_stamp - create unique HDR based on timestamp	 */
-/* ----------------------------------------------------- */
-/* fpath - directory					 */
-/* token - A / F / 0					 */
-/* ----------------------------------------------------- */
-/* return : open() fd (not close yet) or link() result	 */
-/* ----------------------------------------------------- */
-
-
-/* static */
-int
-hdr_stamp(folder, token, hdr, fpath)
-  register char *folder;
-  register int token;
-  register HDR *hdr;
-  register char *fpath;
-{
-  register char *fname, *family=NULL;
-  register int rc;
-  char *flink, buf[128];
-
-  flink = NULL;
-  if (token & HDR_LINK)
-  {
-    flink = fpath;
-    fpath = buf;
-  }
-
-  fname = fpath;
-  while ((rc = *folder++))
-  {
-    *fname++ = rc;
-    if (rc == '/')
-      family = fname;
-  }
-  if (*family != '.')
-  {
-    fname = family;
-    family -= 2;
-  }
-  else
-  {
-    fname = family + 1;
-    *fname++ = '/';
-  }
-  
-  if (token &= 0xdf)		/* 變大寫 */
-  {
-    *fname++ = token;
-  }
-  else
-  {
-    *fname = *family = '@';
-    family = ++fname;
-  }
-
-  token = time(NULL);
-
-  for (;;)
-  {
-    *family = radix32[token & 31];
-    archiv32(token, fname);
-
-    if (flink)
-      rc = Link(flink, fpath);
-    else
-      rc = open(fpath, O_WRONLY | O_CREAT | O_EXCL, 0600);
-
-    if (rc >= 0)
-    {
-      memset(hdr, 0, sizeof(HDR));
-      hdr->chrono = token;
-      str_stamp(hdr->date, &hdr->chrono);
-      strcpy(hdr->xname, --fname);
-      break;
-    }
-
-    if (errno != EEXIST)
-      break;
-
-    token++;
-  }
-
-  return rc;
-}
-
-
 static void
-justify_user()
+justify_user(void)
 {
   char buf[128];
   HDR mhdr;
@@ -661,10 +344,29 @@ justify_user()
   myacct.userlevel |= PERM_VALID;
 }
 
+static int
+valid_ident(
+  char *ident
+)
+{
+  static char *invalid[] = {"bbs@", "@bbs", "unknown@", "root@", "gopher@",
+  "guest@", "@ppp", "@slip", NULL};
+  char buf[128], *str;
+  int i;
+
+  str_lower(buf, ident);
+  for (i = 0; (str = invalid[i]); i++)
+  {
+    if (strstr(buf, str))
+      return 0;
+  }
+  return 1;
+}
 
 static void
-verify_user(magic)
-  char *magic;
+verify_user(
+  char *magic
+)
 {
   char *ptr, *next, buf[80];
   int fh;
@@ -688,56 +390,6 @@ verify_user(magic)
       puts(buf);
       return;
     }
-
-#if 0
-    if (next = (char *) strchr(ptr, ':'))	/* old */
-    {
-  ushort checksum, userno;
-
-      *next++ = '\0';
-      userno = atoi(ptr) - MAGIC_KEY;
-      if (userno != myacct.userno)
-      {
-	close(fh);
-	printf("BBS user <%s> mismatch\n", magic);
-	return;
-      }
-
-      if (ptr = (char *) strchr(next, ')'))
-      {
-	*ptr = '\0';
-	checksum = atoi(next);
-
-#ifdef	CHECK_RETURN_ADDRESS
-	ptr = myfrom;		/* return address maybe != target address */
-#else
-	ptr = myacct.email;
-#endif
-
-	while (ch = *ptr)
-	{
-	  ptr++;
-	  if (ch <= ' ')
-	    break;
-	  if (ch >= 'A' && ch <= 'Z')
-	    ch |= 0x20;
-	  userno = (userno << 1) ^ ch;
-	}
-	if (userno == checksum)
-	{
-	  str_lower(myname, magic);
-	  justify_user();
-	  lseek(fh, (off_t) 0, SEEK_SET);
-	  write(fh, &myacct, sizeof(ACCT));
-	  sprintf(mybuf, "[%s]%s", myacct.userid, myfrom);
-	  mailog("verify", mybuf);
-	  done = 1;
-	}
-      }
-
-    }
-    else	/* new */
-#endif
 
     {
 /* printf("V2: %s\n", ptr); */
@@ -789,7 +441,7 @@ verify_user(magic)
 
 
 static int
-post_article()
+post_article(void)
 {
   int fd;
   FILE *fp;
@@ -873,9 +525,8 @@ post_article()
 /* E-mail post to gem					 */
 /* ----------------------------------------------------- */
 
-
 static int
-digest_article()
+digest_article(void)
 {
   /* return post_article();*/	/* quick & dirty */
   /* Thor.0606: post 到 精華區資源回收筒 */
@@ -969,7 +620,7 @@ digest_article()
 
 
 static int
-mailpost()
+mailpost(void)
 {
   int fh, dirty;
   char *ip, *ptr, *token, *key, buf[80];
