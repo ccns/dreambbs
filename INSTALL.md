@@ -68,7 +68,7 @@
 
 == 以下用 bbs 的權限即可!! ==
 
-    $ cd /home/bbs; git clone https://github.com/ccns/dreambbs; git checkout v0.95.2
+    $ cd /home/bbs; git clone https://github.com/ccns/dreambbs; cd dreambbs; git checkout v0.95.2
 
 接著進去 dreambbs 主目錄
 
