@@ -332,8 +332,8 @@ pal_cache(void)
 
 static pickup ulist_pool[MAXACTIVE];
 static int friend_num,ofriend_num,pfriend_num,bfriend_num;
-static int ulist_head();
-static int ulist_init();
+static int ulist_head(XO *xo);
+static int ulist_init(XO *xo);
 
 
 static char *msg_pickup_way[PICKUP_WAYS] =

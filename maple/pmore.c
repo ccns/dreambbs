@@ -750,10 +750,10 @@ unsigned char *
 void mf_float2tv(float f, struct timeval *ptv);
 
 MFPROTO int mf_movieWaitKey(struct timeval *ptv, int dorefresh);
-MFPROTO int mf_movieNextFrame();
-MFPROTO int mf_movieSyncFrame();
+MFPROTO int mf_movieNextFrame(void);
+MFPROTO int mf_movieSyncFrame(void);
 MFPROTO int mf_moviePromptPlaying(int type);
-MFPROTO unsigned char *mf_movieNextLine();
+MFPROTO unsigned char *mf_movieNextLine(unsigned char *frame);
 MFFPROTO int mf_movieMaskedInput(int c);
 
 #define MOVIE_MIN_FRAMECLK (0.1f)
@@ -774,8 +774,8 @@ MFFPROTO int mf_movieMaskedInput(int c);
 // --------------------------------------------- </Optional Modules>
 
 // used by mf_attach
-MFPROTO void mf_parseHeaders();
-MFPROTO void mf_freeHeaders();
+MFPROTO void mf_parseHeaders(void);
+MFPROTO void mf_freeHeaders(void);
 MFPROTO void mf_determinemaxdisps(int, int);
 
 #ifdef PMORE_GUNZIP_CMD
@@ -842,9 +842,9 @@ mf_gunzip(const char *fn GCC_UNUSED, int fd)
  * mmap basic operations
  */
 
-MFPROTO void mf_detach();
-MFPROTO void mf_detach_nounmap();
-MFPROTO int mf_postattach();
+MFPROTO void mf_detach(void);
+MFPROTO void mf_detach_nounmap(void);
+MFPROTO int mf_postattach(void);
 
 MFPROTO int
 mf_attach_file(void *fnptr)

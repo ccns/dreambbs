@@ -185,7 +185,7 @@ XO *xo)
 {
 	int pos, cur;
 	CONTACT *contact;
-	static int (*pop3)();
+	static int (*pop3)(char *email);
 
 	pos = xo->pos;
 	cur = pos - xo->top;

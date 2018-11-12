@@ -23,7 +23,7 @@ typedef struct
 }  PAL_SHIP;
 
 #ifdef  HAVE_PIP_FIGHT
-  void (*p)();
+  void (*p)(void);
 #endif
 
 

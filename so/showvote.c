@@ -12,7 +12,7 @@
 
 extern XZ xz[];
 
-static int show_add();
+static int show_add(XO *xo);
 typedef struct
 {
 	char email[60];

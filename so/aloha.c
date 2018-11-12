@@ -11,8 +11,8 @@
 
 #include "bbs.h"
 
-static int aloha_add();
-static int aloha_loadpal();
+static int aloha_add(XO *xo);
+static int aloha_loadpal(XO *xo);
 extern XZ xz[];
 
 /* ----------------------------------------------------- */

@@ -18,7 +18,7 @@ extern XZ xz[];
 /* ----------------------------------------------------- */
 
 
-static int observe_add();
+static int observe_add(XO *xo);
 
 
 static void

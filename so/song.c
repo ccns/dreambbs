@@ -9,7 +9,7 @@ extern XZ xz[];
 extern char xo_pool[];
 
 static void XoSong(char *folder, char *title, int level);
-static int song_order();
+static int song_order(XO *xo);
 
 #define GEM_READ        1       /* readable */
 #define GEM_WRITE       2       /* writable */

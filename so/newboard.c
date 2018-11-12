@@ -15,9 +15,9 @@ extern XZ xz[];
 
 extern char xo_pool[];
 
-static int nbrd_add();
-static int nbrd_body();
-static int nbrd_head();
+static int nbrd_add(XO *xo);
+static int nbrd_body(XO *xo);
+static int nbrd_head(XO *xo);
 
 extern BCACHE *bshm;
 

@@ -12,7 +12,7 @@
 
 extern XZ xz[];
 
-static int admin_add();
+static int admin_add(XO *xo);
 
 
 static void

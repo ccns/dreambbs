@@ -19,7 +19,7 @@
 #include	<signal.h>
 #include	"bbs.h"
 
-extern char *crypt();
+extern char *crypt(const char *key, const char *salt);
 
 
 //#define	LOG_FILE	"run/mailog"

@@ -12,7 +12,7 @@
 
 extern XZ xz[];
 
-static int viol_add();
+static int viol_add(XO *xo);
 
 
 static void
