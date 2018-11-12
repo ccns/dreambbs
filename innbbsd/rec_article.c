@@ -32,7 +32,7 @@ static BCACHE *bshm;
 
 
 void
-init_bshm()
+init_bshm(void)
 {
   /* itoc.030727: 在開啟 bbsd 之前，應該就要執行過 account，
      所以 bshm 應該已設定好 */
@@ -64,7 +64,7 @@ zone      :=  "UT" / "GMT" / "EST" / "EDT" / "CST" / "CDT" / "MST" / "MDT" / "PS
 static time_t datevalue;
 
 static void
-parse_date()		/* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
+parse_date(void)		/* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
 {
   static char months[12][4] = {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"};
   int i;
@@ -126,8 +126,8 @@ parse_date()		/* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
 
 
 static void
-update_btime(brdname)
-  char *brdname;
+update_btime(
+  char *brdname)
 {
   BRD *brdp, *bend;
 
@@ -145,8 +145,8 @@ update_btime(brdname)
 
 
 static void
-bbspost_add(board, addr, nick)
-  char *board, *addr, *nick;
+bbspost_add(
+  char *board, char *addr, char *nick)
 {
   int cc;
   char *str;
@@ -210,9 +210,9 @@ bbspost_add(board, addr, nick)
 
 #ifdef _KEEP_CANCEL_
 static inline void
-move_post(hdr, board, filename)
-  HDR *hdr;
-  char *board, *filename;
+move_post(
+  HDR *hdr,
+  char *board, char *filename)
 {
   HDR post;
   char folder[64];
@@ -233,10 +233,10 @@ move_post(hdr, board, filename)
 
 
 static void
-bbspost_cancel(board, chrono, fpath)
-  char *board;
-  time_t chrono;
-  char *fpath;
+bbspost_cancel(
+  char *board,
+  time_t chrono,
+  char *fpath)
 {
   HDR hdr;
   struct stat st;
@@ -325,8 +325,8 @@ bbspost_cancel(board, chrono, fpath)
 
 
 int			/* 0:cancel success  -1:cancel fail */
-cancel_article(msgid)
-  char *msgid;
+cancel_article(
+  char *msgid)
 {
   int fd;
   char fpath[64], cancelfrom[128], buffer[128];
@@ -389,8 +389,8 @@ cancel_article(msgid)
 
 
 static int		/* 1: 符合擋信規則 */
-is_spam(board, addr, nick)
-  char *board, *addr, *nick;
+is_spam(
+  char *board, char *addr, char *nick)
 {
   spamrule_t *spam;
   int i, xmode;
@@ -446,8 +446,8 @@ is_spam(board, addr, nick)
 static 
 #endif
 newsfeeds_t *
-search_newsfeeds_bygroup(newsgroup)
-  char *newsgroup;
+search_newsfeeds_bygroup(
+  char *newsgroup)
 {
   newsfeeds_t nf, *find;
 
@@ -460,7 +460,7 @@ search_newsfeeds_bygroup(newsgroup)
 
 
 int				/* 0:success  -1:fail */
-receive_article()
+receive_article(void)
 {
   newsfeeds_t *nf;
   char myaddr[128], mynick[128], mysubject[128], myfrom[128], mydate[80];

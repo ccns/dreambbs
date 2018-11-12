@@ -23,8 +23,8 @@ time_t now;
 int mon, mday;
 
 static void
-log_backup(msg)
-  char *msg;
+log_backup(
+  char *msg)
 {
   time_t now;
   FILE *fp;
@@ -41,8 +41,8 @@ log_backup(msg)
 }
 
 static void
-proceed(fpath)
-  char *fpath;
+proceed(
+  char *fpath)
 {
   DIR *dirp;
   struct dirent *de;
@@ -69,8 +69,8 @@ proceed(fpath)
 }
 
 static void
-bk_usr(day)
-  int day;
+bk_usr(
+  int day)
 {
   char start[4] = {'a','e','l','s'}, end[4] = {'d','k','r','z'};
   char buf[256], fpath[256], *fname;
@@ -105,8 +105,8 @@ bk_usr(day)
 
 
 static void
-bk_brd(day)
-  int day;
+bk_brd(
+  int day)
 {
   struct dirent *de;
   DIR *dirp;
@@ -152,7 +152,7 @@ bk_brd(day)
 }
 
 static void
-bk_gem()
+bk_gem(void)
 {
   struct dirent *de;
   DIR *dirp;
@@ -185,7 +185,7 @@ bk_gem()
 }
 
 static void
-bk_system_src()
+bk_system_src(void)
 {
   char system_folders[5][9] = {"bin","etc","innd","newboard","dreambbs"};
   char path[64],cmd[256];
@@ -238,9 +238,9 @@ bk_system_src()
 
 
 int 
-main(argc, argv)
-  int argc;
-  char *argv[];       
+main(
+  int argc,
+  char *argv[])
 {
   int day;
 

@@ -26,7 +26,7 @@ static FILE *fmail;
 #define	stop_line	(b_lines - 2)
 
 
-extern char *bmode();
+extern char *bmode(UTMP *up, int simple);
 
 #ifdef EVERY_Z
 extern int vio_fd, holdon_fd;
@@ -34,7 +34,7 @@ extern int vio_fd, holdon_fd;
 
 
 static void
-chat_topic()
+chat_topic(void)
 {
 	move(0, 0);
 	prints("\x1b[1;37;46m %s：%-12s\x1b[45m 話題：%-48s\x1b[m",
@@ -43,8 +43,8 @@ chat_topic()
 
 #ifdef M3_CHAT_SCROLL_MODE
 static void
-printchatline(msg)
-char *msg;
+printchatline(
+char *msg)
 {
 	int line;
 
@@ -68,8 +68,8 @@ char *msg;
 }
 #else
 static void
-printchatline(msg)
-  char *msg;
+printchatline(
+  char *msg)
 {
   int line;
   extern screenline *cur_slp;
@@ -110,7 +110,7 @@ printchatline(msg)
 #endif
 
 static void
-chat_record()
+chat_record(void)
 {
 	FILE *fp;
 	time_t now;
@@ -168,8 +168,8 @@ chat_record()
 
 #ifdef	LOG_CHAT
 static void
-chat_recordtomail(mode)
-int mode;
+chat_recordtomail(
+int mode)
 {
 	time_t now;
 	char buf[80];
@@ -229,7 +229,7 @@ int mode;
 
 
 static void
-chat_clear()
+chat_clear(void)
 {
 	int line;
 
@@ -246,8 +246,8 @@ chat_clear()
 
 
 static void
-print_chatid(chatid)
-char *chatid;
+print_chatid(
+char *chatid)
 {
 	move(b_lines - 1, 0);
 	outs(chatid);
@@ -256,9 +256,9 @@ char *chatid;
 
 
 static inline int
-chat_send(fd, buf)
-int fd;
-char *buf;
+chat_send(
+int fd,
+char *buf)
 {
 	int len;
 
@@ -268,9 +268,9 @@ char *buf;
 
 
 static inline int
-chat_recv(fd, chatid)
-int fd;
-char *chatid;
+chat_recv(
+int fd,
+char *chatid)
 {
 	static char buf[512];
 	static int bufstart = 0;
@@ -355,8 +355,8 @@ char *chatid;
 
 #if 0
 static void
-chat_pager(arg)
-char *arg;
+chat_pager(
+char *arg)
 {
 	cuser.ufo ^= UFO_PAGER;
 	cutmp->ufo ^= UFO_PAGER;
@@ -371,8 +371,8 @@ char *arg;
 #if 0
 /* Thor.0727: 和 /flag 衝key */
 static void
-chat_write(arg)
-char *arg;
+chat_write(
+char *arg)
 {
 	int uno;
 	UTMP *up;
@@ -436,8 +436,8 @@ char *arg;
 
 
 static int
-printuserent(uentp)
-user_info *uentp;
+printuserent(
+user_info *uentp)
 {
 	static char uline[80];
 	static int cnt;
@@ -471,7 +471,7 @@ user_info *uentp;
 
 
 static void
-chat_users()
+chat_users(void)
 {
 	/* 因為人數動輒上百，意義不大 */
 	printchatline("");
@@ -489,7 +489,7 @@ chat_users()
 struct chat_command
 {
 	char *cmdname;		/* Char-room command length */
-	void (*cmdfunc)();		/* Pointer to function */
+	void (*cmdfunc)(char *buf);		/* Pointer to function */
 };
 
 
@@ -510,9 +510,9 @@ struct chat_command chat_cmdtbl[] =
 
 
 static inline int
-chat_cmd_match(buf, str)
-char *buf;
-char *str;
+chat_cmd_match(
+char *buf,
+char *str)
 {
 	int c1, c2;
 
@@ -538,9 +538,9 @@ char *str;
 
 
 static inline int
-chat_cmd(fd, buf)
-int fd;
-char *buf;
+chat_cmd(
+int fd,
+char *buf)
 {
 	struct chat_command *cmd;
 	char *key;
@@ -563,7 +563,7 @@ extern char lastcmd[MAXLASTCMD][80];
 
 
 int
-t_chat()
+t_chat(void)
 {
 	int ch, cfd, cmdpos, cmdcol;
 	char *ptr = NULL, buf[80], chatid[9];

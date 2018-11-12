@@ -86,7 +86,7 @@ int
 DL_func(char *name, ...)
 {
   va_list args;
-  int (*f)(), ret;
+  int (*f)(va_list), ret;
 
   va_start(args,name);
 

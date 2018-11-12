@@ -6,9 +6,9 @@ static int total;
 static FILE *flog;
 
 static void
-reaper(fpath, lowid)
-char *fpath;
-char *lowid;
+reaper(
+char *fpath,
+char *lowid)
 {
 	int fd;
 
@@ -35,8 +35,8 @@ char *lowid;
 }
 
 static void
-traverse(fpath)
-char *fpath;
+traverse(
+char *fpath)
 {
 	DIR *dirp;
 	struct dirent *de;
@@ -62,8 +62,8 @@ char *fpath;
 }
 
 int
-same_mail(mail)
-char *mail;
+same_mail(
+char *mail)
 {
 	int ch;
 	char *fname, fpath[256];

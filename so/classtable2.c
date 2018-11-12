@@ -97,7 +97,7 @@ int show_table(void)
 	return 0;
 }
 
-int load_table()
+int load_table(void)
 {
 	int i;
 	int fd;
@@ -205,7 +205,7 @@ int edit_classtable(int x, int y)
 
 
 
-int init_classtable()
+int init_classtable(void)
 {
 	show_table();
 	load_table();

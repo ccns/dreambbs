@@ -19,7 +19,7 @@ extern UCACHE *ushm;
 /* cache.081017:系統資訊 */
 
 int
-x_siteinfo()
+x_siteinfo(void)
 {
     double load[3];
     getloadavg(load, 3);

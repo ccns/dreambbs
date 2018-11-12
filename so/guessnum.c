@@ -25,13 +25,13 @@ static int numNum;
 static char *numSet;
 
 #if 1
-void _init()
+void _init(void)
 {
 	hisList = (His *)malloc(sizeof(His)); /* pseudo */
 	numSet = (char *)malloc(10 * 9 * 8 * 7 * sizeof(char));
 }
 
-void _fini()
+void _fini(void)
 {
 	free(hisList);
 	free(numSet);
@@ -255,13 +255,13 @@ foolme:
 	return 0;
 }
 
-int guessNum()
+int guessNum(void)
 {
 	return mainNum(0);
 //	return 0;
 }
 
-int fightNum()
+int fightNum(void)
 {
 	return mainNum(1);
 //	return 0;

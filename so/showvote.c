@@ -12,23 +12,23 @@
 
 extern XZ xz[];
 
-static int show_add();
+static int show_add(XO *xo);
 typedef struct
 {
 	char email[60];
 } LOG;
 
 static void
-show_item(num, show)
-int num;
-LOG *show;
+show_item(
+int num,
+LOG *show)
 {
 	prints("%6d     %s\n", num, show->email);
 }
 
 static int
-show_body(xo)
-XO *xo;
+show_body(
+XO *xo)
 {
 	LOG *show;
 	int num, max, tail;
@@ -60,8 +60,8 @@ XO *xo;
 
 
 static int
-show_head(xo)
-XO *xo;
+show_head(
+XO *xo)
 {
 	vs_head("已投票名單", str_site);
 	outs("\
@@ -72,8 +72,8 @@ XO *xo;
 
 
 static int
-show_load(xo)
-XO *xo;
+show_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(LOG));
 	return show_body(xo);
@@ -81,8 +81,8 @@ XO *xo;
 
 
 static int
-show_init(xo)
-XO *xo;
+show_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(LOG));
 	return show_head(xo);
@@ -90,9 +90,9 @@ XO *xo;
 
 
 static int
-show_edit(show, echo)
-LOG *show;
-int echo;
+show_edit(
+LOG *show,
+int echo)
 {
 	if (echo == DOECHO)
 		memset(show, 0, sizeof(LOG));
@@ -104,8 +104,8 @@ int echo;
 
 
 static int
-show_add(xo)
-XO *xo;
+show_add(
+XO *xo)
 {
 	LOG show;
 
@@ -119,8 +119,8 @@ XO *xo;
 }
 
 static int
-show_delete(xo)
-XO *xo;
+show_delete(
+XO *xo)
 {
 
 	if (vans(msg_del_ny) == 'y')
@@ -135,8 +135,8 @@ XO *xo;
 
 
 static int
-show_change(xo)
-XO *xo;
+show_change(
+XO *xo)
 {
 	LOG *show, mate;
 	int pos, cur;
@@ -158,8 +158,8 @@ XO *xo;
 }
 
 static int
-show_help(xo)
-XO *xo;
+show_help(
+XO *xo)
 {
 	return XO_NONE;
 }
@@ -182,8 +182,8 @@ KeyFunc show_cb[] =
 
 
 int
-Showvote(xo)
-XO *xo;
+Showvote(
+XO *xo)
 {
 	VCH *vch;
 	char fpath[128], *fname;

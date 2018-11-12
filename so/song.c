@@ -9,7 +9,7 @@ extern XZ xz[];
 extern char xo_pool[];
 
 static void XoSong(char *folder, char *title, int level);
-static int song_order();
+static int song_order(XO *xo);
 
 #define GEM_READ        1       /* readable */
 #define GEM_WRITE       2       /* writable */
@@ -21,8 +21,8 @@ static int song_order();
 #define SONG_END	"<~End~>"
 
 static void
-log_song(msg)
-char *msg;
+log_song(
+char *msg)
 {
 	char buf[512];
 	time_t now = time(0);
@@ -33,10 +33,10 @@ char *msg;
 
 
 static int
-song_swap(str, src, des)
-char *str;
-char *src;
-char *des;
+song_swap(
+char *str,
+char *src,
+char *des)
 {
 	char *ptr, *tmp;
 	char buf[300];
@@ -55,9 +55,9 @@ char *des;
 
 
 static HDR *
-song_check(xo, fpath)
-XO *xo;
-char *fpath;
+song_check(
+XO *xo,
+char *fpath)
 {
 	HDR *ghdr;
 	int gtype, level;
@@ -97,9 +97,9 @@ char *fpath;
 }
 
 static HDR *
-song_get(xo, fpath)
-XO *xo;
-char *fpath;
+song_get(
+XO *xo,
+char *fpath)
 {
 	HDR *ghdr;
 	int gtype, level;
@@ -132,9 +132,9 @@ char *fpath;
 }
 
 static void
-song_item(num, ghdr)
-int num;
-HDR *ghdr;
+song_item(
+int num,
+HDR *ghdr)
 {
 	int xmode, gtype;
 
@@ -156,8 +156,8 @@ HDR *ghdr;
 
 
 static int
-song_body(xo)
-XO *xo;
+song_body(
+XO *xo)
 {
 	HDR *ghdr;
 	int num, max, tail;
@@ -189,8 +189,8 @@ XO *xo;
 
 
 static int
-song_head(xo)
-XO *xo;
+song_head(
+XO *xo)
 {
 
 	vs_head("ºëµØ¤å³¹", xo->xyz);
@@ -204,8 +204,8 @@ XO *xo;
 
 
 static int
-song_init(xo)
-XO *xo;
+song_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(HDR));
 	return song_head(xo);
@@ -213,8 +213,8 @@ XO *xo;
 
 
 static int
-song_load(xo)
-XO *xo;
+song_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(HDR));
 	return song_body(xo);
@@ -227,8 +227,8 @@ XO *xo;
 
 
 static int
-song_browse(xo)
-XO *xo;
+song_browse(
+XO *xo)
 {
 	HDR *ghdr;
 	int xmode, op = 0;
@@ -287,8 +287,8 @@ XO *xo;
 
 #if 1
 static int
-song_order(xo)
-XO *xo;
+song_order(
+XO *xo)
 {
 	char xboard[20], fpath[80], xfolder[80], xtitle[80], *dir, buf[128];
 	char tmp[256], idwho[20], want_say[32];
@@ -394,8 +394,8 @@ XO *xo;
 #endif
 
 static int
-song_query(xo)
-XO *xo;
+song_query(
+XO *xo)
 {
 	char buf[80];
 
@@ -405,8 +405,8 @@ XO *xo;
 }
 
 static int
-song_send(xo)
-XO *xo;
+song_send(
+XO *xo)
 {
 	char fpath[128], folder[128], *dir, title[80], buf[128], want_say[32], date[9];
 	char tmp[300];
@@ -491,8 +491,8 @@ XO *xo;
 }
 
 static int
-song_edit(xo)
-XO *xo;
+song_edit(
+XO *xo)
 {
 	char fpath[80];
 	HDR *hdr;
@@ -513,8 +513,8 @@ XO *xo;
 }
 
 static int
-song_title(xo)
-XO *xo;
+song_title(
+XO *xo)
 {
 	HDR *ghdr, xhdr;
 	int num;
@@ -550,8 +550,8 @@ XO *xo;
 }
 
 static int
-song_help(xo)
-XO *xo;
+song_help(
+XO *xo)
 {
 	film_out(FILM_SONG, -1);
 	return song_head(xo);
@@ -575,10 +575,10 @@ static KeyFunc song_cb[] =
 
 
 static void
-XoSong(folder, title, level)
-char *folder;
-char *title;
-int level;
+XoSong(
+char *folder,
+char *title,
+int level)
 {
 	XO *xo, *last;
 	char *str;

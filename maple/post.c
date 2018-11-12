@@ -19,11 +19,11 @@ extern XZ xz[];
 extern LinkList *ll_head;
 #endif
 
-extern int cmpchrono();
-extern int xo_delete();
-extern int xo_uquery_lite();
-extern int xo_usetup();
-/*extern int xo_fpath();*/          /* lkchu.981201 */
+extern int cmpchrono(HDR *hdr);
+extern int xo_delete(XO *xo);
+extern int xo_uquery_lite(XO *xo);
+extern int xo_usetup(XO *xo);
+/*extern int xo_fpath(char *fpath, char *dir, HDR *hdr);*/          /* lkchu.981201 */
 
 #ifdef  HAVE_DETECT_CROSSPOST
 CHECKSUMCOUNT cksum;
@@ -43,8 +43,8 @@ static char zhangba_patterns[ZHANGBA_PATTERNS][25] = {
 	"台大"};
 
 	static int
-zhangba_detect(fpath)
-	char *fpath;
+zhangba_detect(
+	char *fpath)
 {
 	char checked[ZHANGBA_PATTERNS+1];
 	FILE *fp;
@@ -76,17 +76,17 @@ extern char rusername[];
 static char delete_reason[30] = {};
 
 	int
-cmpchrono(hdr)
-	HDR *hdr;
+cmpchrono(
+	HDR *hdr)
 {
 	return hdr->chrono == currchrono;
 }
 
 
 	static void
-change_stamp(folder, hdr)
-	char *folder;
-	HDR *hdr;
+change_stamp(
+	char *folder,
+	HDR *hdr)
 {
 	hdr->stamp = time(0);
 }
@@ -98,8 +98,8 @@ change_stamp(folder, hdr)
 
 #ifdef  HAVE_DETECT_CROSSPOST
 	static int
-checksum_add(title)
-	char *title;
+checksum_add(
+	char *title)
 {
 	int sum=0,i,end;
 	int *ptr;
@@ -113,9 +113,9 @@ checksum_add(title)
 }
 
 	static int
-checksum_put(sum,check)
-	int sum;
-	int check;
+checksum_put(
+	int sum,
+	int check)
 {
 	int i;
 	for(i=0;i<5;i++)
@@ -145,10 +145,10 @@ checksum_put(sum,check)
 }
 
 	int
-checksum_find(fpath,check,state)
-	char *fpath;
-	int check;
-	int state;
+checksum_find(
+	char *fpath,
+	int check,
+	int state)
 {
 	char buf[256];
 	FILE *fp;
@@ -191,17 +191,17 @@ checksum_find(fpath,check,state)
 /* ----------------------------------------------------- */
 
 	void
-btime_update(bno)
-	int bno;
+btime_update(
+	int bno)
 {
 	if (bno >= 0)
 		(bshm->bcache + bno)->btime = -1;   /* 讓 class_item() 更新用 */
 }
 
 	void
-outgo_post(hdr, board)
-	HDR *hdr;
-	char *board;
+outgo_post(
+	HDR *hdr,
+	char *board)
 {
 	bntp_t bntp;	
 
@@ -243,8 +243,8 @@ outgo_post(hdr, board)
 
 
 	void
-cancel_post(hdr)
-	HDR *hdr;
+cancel_post(
+	HDR *hdr)
 {
 	if ((hdr->xmode & POST_OUTGO) &&	/* 外轉信件 */
 			(hdr->chrono > ap_start - 7 * 86400))	/* 7 天之內有效 */
@@ -257,10 +257,10 @@ cancel_post(hdr)
 /*static inline void*/
 
 	void
-move_post(hdr, board, by_bm)	/* 將 hdr 從 currboard 搬到 board */
-	HDR *hdr;
-	char *board;
-	int by_bm;
+move_post(	/* 將 hdr 從 currboard 搬到 board */
+	HDR *hdr,
+	char *board,
+	int by_bm)
 {
 	HDR post;
 	char folder[80], fpath[80];
@@ -297,8 +297,8 @@ move_post(hdr, board, by_bm)	/* 將 hdr 從 currboard 搬到 board */
 /* Thor.980727: lkchu patch: log anonymous post */
 /* Thor.980909: gc patch: log anonymous post filename */
 	void
-log_anonymous(fname)
-	char *fname;
+log_anonymous(
+	char *fname)
 {
 	char buf[512];
 	time_t now = time(0);
@@ -310,9 +310,9 @@ log_anonymous(fname)
 
 #ifdef	HAVE_DETECT_VIOLAWATE
 	int
-seek_log(title,state)
-	char *title;
-	int state;
+seek_log(
+	char *title,
+	int state)
 {
 	BANMAIL *head,*tail;
 	if(state & BRD_NOLOG)
@@ -333,8 +333,8 @@ seek_log(title,state)
 #endif
 
 	static int
-do_post(title)
-	char *title;
+do_post(
+	char *title)
 {
 	/* Thor.1105: 進入前需設好 curredit */
 	HDR post;
@@ -666,8 +666,8 @@ do_post(title)
 
 
 	static int
-do_reply(hdr)
-	HDR *hdr;
+do_reply(
+	HDR *hdr)
 {
 	char *msg;
 
@@ -725,8 +725,8 @@ do_reply(hdr)
 
 
 	static int
-post_reply(xo)
-	XO *xo;
+post_reply(
+	XO *xo)
 {
 	if (bbstate & STAT_POST)
 	{
@@ -750,35 +750,35 @@ post_reply(xo)
 /* ----------------------------------------------------- */
 
 #ifdef HAVE_MODERATED_BOARD
-extern int XoBM();
+extern int XoBM(XO *xo);
 #endif
 
 
 /* ----------------------------------------------------- */
 
 
-static int post_add();
-static int post_body();
-static int post_head();		/* Thor: 因為 XoBM 要用 */
+static int post_add(XO *xo);
+static int post_body(XO *xo);
+static int post_head(XO *xo);		/* Thor: 因為 XoBM 要用 */
 
 
 #ifdef XZ_XPOST
-static int XoXpost();		/* Thor: for XoXpost */
+static int XoXpost(XO *xo);		/* Thor: for XoXpost */
 #endif
 
 
 	static int
-post_init(xo)
-	XO *xo;
+post_init(
+	XO *xo)
 {
 	xo_load(xo, sizeof(HDR));
 	return post_head(xo);
 }
 
 	static int		/* cat@20050628 search record in .DIR file */
-seek_rec(xo,hdr)
-	XO *xo;
-	HDR *hdr;
+seek_rec(
+	XO *xo,
+	HDR *hdr)
 {
 	int fd,total,pos;
 	struct stat st;
@@ -815,8 +815,8 @@ seek_rec(xo,hdr)
 }
 
 	static int
-post_load(xo)
-	XO *xo;
+post_load(
+	XO *xo)
 {
 	xo_load(xo, sizeof(HDR));
 	return post_body(xo);
@@ -824,8 +824,8 @@ post_load(xo)
 
 
 	static int
-post_attr(fhdr)
-	HDR *fhdr;
+post_attr(
+	HDR *fhdr)
 {
 	int mode, attr;
 
@@ -863,9 +863,9 @@ post_attr(fhdr)
 }
 
 	static void
-post_item(num, hdr)
-	int num;
-	HDR *hdr;
+post_item(
+	int num,
+	HDR *hdr)
 {
 #ifdef HAVE_RECOMMEND
 
@@ -927,8 +927,8 @@ post_item(num, hdr)
 }
 
 	static int
-post_body(xo)
-	XO *xo;
+post_body(
+	XO *xo)
 {
 	HDR *fhdr;
 	int num, max, tail;
@@ -966,8 +966,8 @@ post_body(xo)
 
 
 	static int			/* Thor: 因為 XoBM 要用 */
-post_head(xo)
-	XO *xo;
+post_head(
+	XO *xo)
 {
 	vs_head(currBM, xo->xyz);
 	outs(NECKPOST);
@@ -976,8 +976,8 @@ post_head(xo)
 
 
 	static int
-post_visit(xo)
-	XO *xo;
+post_visit(
+	XO *xo)
 {
 	int ans, row, max;
 	HDR *fhdr;
@@ -1006,9 +1006,9 @@ post_visit(xo)
 
 
 	int
-getsubject(row, reply)
-	int row;
-	int reply;
+getsubject(
+	int row,
+	int reply)
 {
 	char *title;
 
@@ -1039,8 +1039,8 @@ getsubject(row, reply)
 
 
 	static int
-post_add(xo)
-	XO *xo;
+post_add(
+	XO *xo)
 {
 	int cmd;
 
@@ -1051,8 +1051,8 @@ post_add(xo)
 
 
 	int
-post_cross(xo)
-	XO *xo;
+post_cross(
+	XO *xo)
 {
 	char xboard[20], fpath[80], xfolder[80], xtitle[80], buf[80], *dir;
 	HDR *hdr, xpost, xhdr;
@@ -1287,8 +1287,8 @@ post_cross(xo)
 
 #ifdef HAVE_MULTI_CROSSPOST
 	static int
-post_xcross(xo)
-	XO *xo;
+post_xcross(
+	XO *xo)
 {
 	char *xboard, fpath[80], xfolder[80], buf[80], *dir;
 	HDR *hdr, xpost, xhdr ;
@@ -1373,9 +1373,9 @@ post_xcross(xo)
 /* ----------------------------------------------------- */
 
 void
-post_history(xo, fhdr)
-  XO *xo;
-  HDR *fhdr;
+post_history(
+  XO *xo,
+  HDR *fhdr)
 {
   int prev, chrono, next, pos, top, push=0;
   char *dir;
@@ -1434,9 +1434,9 @@ post_history(xo, fhdr)
 
 #if 0
 	void
-post_history(xo, hdr)          /* 將 hdr 這篇加入 brh */
-	XO *xo;
-	HDR *hdr;
+post_history(          /* 將 hdr 這篇加入 brh */
+	XO *xo,
+	HDR *hdr)
 {
 	int fd;
 	time_t prev, chrono, next, this;
@@ -1478,8 +1478,8 @@ post_history(xo, hdr)          /* 將 hdr 這篇加入 brh */
 #endif
 
 	static int
-post_browse(xo)
-	XO *xo;
+post_browse(
+	XO *xo)
 {
 	HDR *hdr;
 	int cmd, xmode, pos;
@@ -1596,8 +1596,8 @@ post_browse(xo)
 
 
 	int
-post_gem(xo)
-	XO *xo;
+post_gem(
+	XO *xo)
 {
 	char fpath[32];
 
@@ -1618,8 +1618,8 @@ post_gem(xo)
 
 
 	static int
-post_memo(xo)
-	XO *xo;
+post_memo(
+	XO *xo)
 {
 	char fpath[64];
 
@@ -1635,8 +1635,8 @@ post_memo(xo)
 }
 
 	static int
-post_post(xo)
-	XO *xo;
+post_post(
+	XO *xo)
 {
 	int mode;
 	char fpath[64];
@@ -1670,8 +1670,8 @@ post_post(xo)
 }
 
 	static int
-post_memo_edit(xo)
-	XO *xo;
+post_memo_edit(
+	XO *xo)
 {
 	int mode;
 	char fpath[64];
@@ -1706,8 +1706,8 @@ post_memo_edit(xo)
 
 
 	static int
-post_switch(xo)
-	XO *xo;
+post_switch(
+	XO *xo)
 {
 	int bno;
 	BRD *brd;
@@ -1735,8 +1735,8 @@ post_switch(xo)
 
 
 	int
-post_tag(xo)
-	XO *xo;
+post_tag(
+	XO *xo)
 {
 	HDR *hdr;
 	int tag, pos, cur;
@@ -1770,8 +1770,8 @@ post_tag(xo)
 
 
 	static int
-post_mark(xo)
-	XO *xo;
+post_mark(
+	XO *xo)
 {
 	if (bbstate & STAT_BOARD)
 	{
@@ -1797,8 +1797,8 @@ post_mark(xo)
 }
 
 	static int
-lazy_delete(hdr)
-	HDR *hdr;
+lazy_delete(
+	HDR *hdr)
 {
 	if(!strcmp(hdr->owner,cuser.userid))
 	{
@@ -1820,8 +1820,8 @@ lazy_delete(hdr)
 }
 
 	static int
-post_delete(xo)
-	XO *xo;
+post_delete(
+	XO *xo)
 {
 	int pos, cur, by_BM;
 	HDR *fhdr, phdr;
@@ -1967,8 +1967,8 @@ post_delete(xo)
 }
 
 static int
-post_clean_delete(xo)
-  XO *xo;
+post_clean_delete(
+  XO *xo)
 {
   int pos, cur, by_BM;
   HDR *hdr;
@@ -1999,8 +1999,8 @@ post_clean_delete(xo)
 
 #ifdef HAVE_POST_BOTTOM
 	static int
-post_bottom(xo)
-	XO *xo;
+post_bottom(
+	XO *xo)
 {
 	if (bbstate & STAT_BOARD)
 	{
@@ -2036,8 +2036,8 @@ post_bottom(xo)
 #endif
 
 	static int
-post_complete(xo)
-	XO *xo;
+post_complete(
+	XO *xo)
 {
 	if (HAS_PERM(PERM_SYSOP|PERM_BOARD))
 	{
@@ -2057,8 +2057,8 @@ post_complete(xo)
 }
 
 	static int
-post_lock(xo)
-	XO *xo;
+post_lock(
+	XO *xo)
 {
 	HDR *hdr;
 	int pos, cur;
@@ -2089,8 +2089,8 @@ post_lock(xo)
 
 /*cache.080520: 新版觀看文章屬性*/ 
 	static int
-post_state(xo)
-	XO *xo;
+post_state(
+	XO *xo)
 {
 	HDR *ghdr;
 	char fpath[64], *dir, buf[32];
@@ -2188,8 +2188,8 @@ post_state(xo)
 
 #if 0 
 	static int
-post_state(xo)
-	XO *xo;
+post_state(
+	XO *xo)
 {
 	HDR *hdr;
 	char *dir, fpath[80];
@@ -2225,8 +2225,8 @@ post_state(xo)
 #endif
 
 	static int
-post_undelete(xo)
-	XO *xo;
+post_undelete(
+	XO *xo)
 {
 	int pos, cur, i, len;
 	HDR *fhdr;
@@ -2298,8 +2298,8 @@ post_undelete(xo)
 }
 
 	static int
-post_expire(xo)
-	XO *xo;
+post_expire(
+	XO *xo)
 {
 	int pos, cur;
 	HDR *fhdr;
@@ -2339,8 +2339,8 @@ post_expire(xo)
 }
 
 	static int
-post_unexpire(xo)
-	XO *xo;
+post_unexpire(
+	XO *xo)
 {
 	int pos, cur;
 	HDR *fhdr;
@@ -2376,8 +2376,8 @@ post_unexpire(xo)
 /* ----------------------------------------------------- */
 
 int
-post_edit(xo)
-  XO *xo;
+post_edit(
+  XO *xo)
 {
   HDR *hdr;
   char fpath[80];
@@ -2753,9 +2753,9 @@ int post_edit(XO *xo)
 #endif
 
 void
-header_replace(xo, hdr)		/* 0911105.cache: 修改文章標題順便修改內文的標題 */
-  XO *xo;
-  HDR *hdr;
+header_replace(		/* 0911105.cache: 修改文章標題順便修改內文的標題 */
+  XO *xo,
+  HDR *hdr)
 {
   FILE *fpr, *fpw;
   char srcfile[64], tmpfile[64], buf[ANSILINELEN];
@@ -2795,8 +2795,8 @@ header_replace(xo, hdr)		/* 0911105.cache: 修改文章標題順便修改內文的標題 */
 }
 
 	int
-post_title(xo)
-	XO *xo;
+post_title(
+	XO *xo)
 {
 	HDR *fhdr, mhdr;
 	int pos, cur;
@@ -2843,8 +2843,8 @@ post_title(xo)
 
 #ifdef HAVE_TERMINATOR
 	static int
-post_cross_terminator(xo)	/* Thor.0521: 終極文章大法 */
-	XO *xo;
+post_cross_terminator(	/* Thor.0521: 終極文章大法 */
+	XO *xo)
 {
 	char *title, buf[128],other[128];
 	int mode;
@@ -3009,8 +3009,8 @@ contWhileOuter:
 #endif
 
 	int
-post_ban_mail(xo)
-	XO *xo;
+post_ban_mail(
+	XO *xo)
 {
 
 	if ((bbstate & STAT_BOARD)||HAS_PERM(PERM_ALLBOARD))
@@ -3024,8 +3024,8 @@ post_ban_mail(xo)
 
 #ifdef	HAVE_BRDTITLE_CHANGE
 	static int
-post_brdtitle(xo)
-	XO *xo;
+post_brdtitle(
+	XO *xo)
 {
 	int bno;
 	BRD *oldbrd, newbrd;
@@ -3074,9 +3074,9 @@ record_recommend(const int chrono, const char * const text)
 
 /*
    void
-   post_recommend_log(mode,hdr)
-   int mode;     
-   HDR *hdr;
+   post_recommend_log(
+   int mode,
+   HDR *hdr)
    {
    time_t now;
    char c_time[25],buf[300];
@@ -3091,8 +3091,8 @@ record_recommend(const int chrono, const char * const text)
  */
 
 	int
-post_resetscore(xo)
-	XO *xo;
+post_resetscore(
+	XO *xo)
 {
 	if ((bbstate & STAT_BOARD) || HAS_PERM(PERM_BOARD))
 	{
@@ -3181,8 +3181,8 @@ post_resetscore(xo)
 
 
 	int
-post_recommend(xo)
-	XO *xo;
+post_recommend(
+	XO *xo)
 {
 	HDR *hdr;
 	int pos, cur, addscore, eof, point=0;
@@ -3476,8 +3476,8 @@ post_recommend(xo)
 
 /* cache.081122: 看板資訊顯示 */
 	static int
-post_showBRD_setting(xo)
-	XO *xo;
+post_showBRD_setting(
+	XO *xo)
 {
 	char *str;
 	BRD *brd;
@@ -3550,8 +3550,8 @@ post_showBRD_setting(xo)
 
 /* magicallove.081207: 切換是否為好友板 */
 	static int
-post_FriendSet(xo)
-	XO *xo;
+post_FriendSet(
+	XO *xo)
 {
 	if (!(bbstate & STAT_BOARD))
 		return XO_NONE;
@@ -3586,8 +3586,8 @@ post_FriendSet(xo)
 /* cache.090412: 切換可否推文 */
 /* cache.090928 看板互斥屬性 */
 	static int
-post_battr_score(xo)
-	XO *xo;
+post_battr_score(
+	XO *xo)
 {
 	//判斷是否為板主 
 	if (!(bbstate & STAT_BOARD))
@@ -3698,8 +3698,8 @@ post_battr_score(xo)
 /* cache.090928: 看板唯讀,作者修文,轉文設定 */
 /* cache.090928: 看板互斥屬性 */
 	static int
-post_rule(xo)
-	XO *xo;
+post_rule(
+	XO *xo)
 {
 	//判斷是否為板主 
 	if (!(bbstate & STAT_BOARD))
@@ -3806,8 +3806,8 @@ post_rule(xo)
 }
 
 	static int
-post_battr_threshold(xo)
-	XO *xo;
+post_battr_threshold(
+	XO *xo)
 {
 	int ans, echo, num;
 	BRD *oldbrd, newbrd;
@@ -3890,8 +3890,8 @@ post_battr_threshold(xo)
 }
 
 static int
-post_usies_BMlog(xo)
-  XO *xo;
+post_usies_BMlog(
+  XO *xo)
 {
   char fpath[64];
 
@@ -3909,8 +3909,8 @@ post_usies_BMlog(xo)
 }
 
 	int
-post_manage(xo)
-	XO *xo;
+post_manage(
+	XO *xo)
 {
 	char re;
 
@@ -3986,8 +3986,8 @@ post_manage(xo)
 }
 
 	static int
-post_aid(xo)
-	XO *xo;
+post_aid(
+	XO *xo)
 {
 	char *tag, *query, aid[9];
 	int currpos, pos, max, match = 0;
@@ -4033,8 +4033,8 @@ post_aid(xo)
 }
 
 int
-post_write(xo)                  /* 丟線上作者熱訊 */
-  XO *xo;
+post_write(                  /* 丟線上作者熱訊 */
+  XO *xo)
 {
   if (HAS_PERM(PERM_PAGE))
   {
@@ -4058,8 +4058,8 @@ post_write(xo)                  /* 丟線上作者熱訊 */
 }
 
 	static int
-post_help(xo)
-	XO *xo;
+post_help(
+	XO *xo)
 {
 	film_out(FILM_BOARD, -1);
 	return post_head(xo);
@@ -4067,8 +4067,8 @@ post_help(xo)
 
 
 	static int
-post_spam(xo)
-	XO *xo;
+post_spam(
+	XO *xo)
 {
 	HDR *hdr;
 	char *dir, fpath[80];
@@ -4144,12 +4144,12 @@ KeyFunc post_cb[] =
 	{'X', post_recommend},
         {'%', post_recommend},           /* r2.20170802: 與 itoc 版熱鍵通用 */
 	//  {'o', post_recommend_options},
-	{'o' | XO_DL, (int (*)())"bin/cleanrecommend.so:clean"},
+	{'o' | XO_DL, (int (*)(XO *xo))"bin/cleanrecommend.so:clean"},
 	{Ctrl('S'), post_resetscore},         /* cache.090416: 推文設定 */
 #endif
 
-	{'R' | XO_DL, (int (*)())"bin/vote.so:vote_result"},
-	{'V' | XO_DL, (int (*)())"bin/vote.so:XoVote"},
+	{'R' | XO_DL, (int (*)(XO *xo))"bin/vote.so:vote_result"},
+	{'V' | XO_DL, (int (*)(XO *xo))"bin/vote.so:XoVote"},
 
 	{'b', post_memo},
 
@@ -4223,9 +4223,9 @@ typedef struct
 
 
 	static int
-chain_cmp(a, b)
-	Chain *a;
-	Chain *b;
+chain_cmp(
+	Chain *a,
+	Chain *b)
 {
 	return a->chrono - b->chrono;
 }
@@ -4247,8 +4247,8 @@ static char xypostKeyword[30];
 
 
 	static int
-XoXpost(xo)			/* Thor: call from post_cb */
-	XO *xo;
+XoXpost(			/* Thor: call from post_cb */
+	XO *xo)
 {
 	int *plist, *xlist, fsize, max, locus, sum, i, m, n;
 	Chain *chain;
@@ -4471,8 +4471,8 @@ XoXpost(xo)			/* Thor: call from post_cb */
 #if 0
 /* Thor.980911: 共用 post_body() 即可*/
 	static int
-xpost_body(xo)
-	XO *xo;
+xpost_body(
+	XO *xo)
 {
 	HDR *fhdr;
 	int num, max, tail;
@@ -4505,8 +4505,8 @@ xpost_body(xo)
 #endif
 
 	static int
-xpost_head(xo)
-	XO *xo;
+xpost_head(
+	XO *xo)
 {
 	vs_head("主題串列" /* currBM */ , xo->xyz);
 	outs(MSG_XYPOST);
@@ -4522,8 +4522,8 @@ xpost_head(xo)
 
 
 	static void
-xypost_pick(xo)
-	XO *xo;
+xypost_pick(
+	XO *xo)
 {
 	int *xyp, fsize, pos, max, top;
 	HDR *fimage, *hdr;
@@ -4555,8 +4555,8 @@ xypost_pick(xo)
 
 
 	static int
-xpost_init(xo)
-	XO *xo;
+xpost_init(
+	XO *xo)
 {
 	/* load into pool */
 
@@ -4567,8 +4567,8 @@ xpost_init(xo)
 
 
 	static int
-xpost_load(xo)
-	XO *xo;
+xpost_load(
+	XO *xo)
 {
 	/* load into pool */
 
@@ -4580,8 +4580,8 @@ xpost_load(xo)
 
 
 	static int
-xpost_help(xo)
-	XO *xo;
+xpost_help(
+	XO *xo)
 {
 	film_out(FILM_BOARD, -1);
 	return xpost_head(xo);
@@ -4592,8 +4592,8 @@ xpost_help(xo)
 
 
 	static int
-xpost_browse(xo)
-	XO *xo;
+xpost_browse(
+	XO *xo)
 {
 	HDR *hdr;
 	int cmd, chrono, xmode;

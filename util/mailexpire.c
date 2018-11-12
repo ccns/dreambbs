@@ -17,8 +17,8 @@ FILE *flog;
 
 
 static void
-expire(userid)
-  char *userid;
+expire(
+  char *userid)
 {
   HDR hdr;
   char fpath[128], fnew[128], index[128], *fname;
@@ -90,8 +90,8 @@ expire(userid)
 }
 
 static void
-traverse(fpath)
-  char *fpath;
+traverse(
+  char *fpath)
 {
   DIR *dirp;
   struct dirent *de;
@@ -119,9 +119,9 @@ traverse(fpath)
 
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   char fpath[128],*fname,ch;
 

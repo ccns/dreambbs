@@ -499,8 +499,8 @@ logattempt(
 /* 登錄 BBS 程式					 */
 /* ----------------------------------------------------- */
 
-extern void talk_rqst();
-extern void bmw_rqst();
+extern void talk_rqst(void);
+extern void bmw_rqst(void);
 
 static void
 utmp_setup(
@@ -869,7 +869,7 @@ tn_login(void)
 #ifdef	HAVE_MAILGEM
       if(cuser.userlevel & PERM_MBOX)
       {
-        int (*p)();
+        int (*p)(int level, char *fpath);
         char fpath[128];
         usr_fpath(fpath,cuser.userid,"gem");
       
@@ -976,7 +976,7 @@ tn_login(void)
 #ifdef LOGIN_NOTIFY
     if (!(ufo & UFO_CLOAK))     /* lkchu.981201: 自己隱身就不用 notify */
     {
-      void loginNotify();
+      void loginNotify(void);
       loginNotify();
     }
     else
@@ -990,7 +990,7 @@ tn_login(void)
 #ifdef HAVE_ALOHA 
     if (!(ufo & UFO_CLOAK))     /* lkchu.981201: 自己隱身就不用 notify */
     {
-      void aloha();
+      void aloha(void);
       aloha();
     }
 

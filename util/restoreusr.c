@@ -10,9 +10,9 @@
 #include "bbs.h"
 
 static void
-reaper(fpath, lowid)
-  char *fpath;
-  char *lowid;
+reaper(
+  char *fpath,
+  char *lowid)
 {
   char buf[256];
   sprintf(buf,"tar zxvf /var/tape/usr/%c/%s -C /home/bbs/usr/%c",*lowid,lowid,*lowid);
@@ -20,8 +20,8 @@ reaper(fpath, lowid)
 }
 
 static void
-traverse(fpath)
-  char *fpath;
+traverse(
+  char *fpath)
 {
   DIR *dirp;
   struct dirent *de;

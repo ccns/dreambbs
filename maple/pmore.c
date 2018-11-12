@@ -750,10 +750,10 @@ unsigned char *
 void mf_float2tv(float f, struct timeval *ptv);
 
 MFPROTO int mf_movieWaitKey(struct timeval *ptv, int dorefresh);
-MFPROTO int mf_movieNextFrame();
-MFPROTO int mf_movieSyncFrame();
+MFPROTO int mf_movieNextFrame(void);
+MFPROTO int mf_movieSyncFrame(void);
 MFPROTO int mf_moviePromptPlaying(int type);
-MFPROTO unsigned char *mf_movieNextLine();
+MFPROTO unsigned char *mf_movieNextLine(unsigned char *frame);
 MFFPROTO int mf_movieMaskedInput(int c);
 
 #define MOVIE_MIN_FRAMECLK (0.1f)
@@ -774,8 +774,8 @@ MFFPROTO int mf_movieMaskedInput(int c);
 // --------------------------------------------- </Optional Modules>
 
 // used by mf_attach
-MFPROTO void mf_parseHeaders();
-MFPROTO void mf_freeHeaders();
+MFPROTO void mf_parseHeaders(void);
+MFPROTO void mf_freeHeaders(void);
 MFPROTO void mf_determinemaxdisps(int, int);
 
 #ifdef PMORE_GUNZIP_CMD
@@ -842,9 +842,9 @@ mf_gunzip(const char *fn GCC_UNUSED, int fd)
  * mmap basic operations
  */
 
-MFPROTO void mf_detach();
-MFPROTO void mf_detach_nounmap();
-MFPROTO int mf_postattach();
+MFPROTO void mf_detach(void);
+MFPROTO void mf_detach_nounmap(void);
+MFPROTO int mf_postattach(void);
 
 MFPROTO int
 mf_attach_file(void *fnptr)
@@ -903,7 +903,7 @@ mf_attach_buffer(void *buf)
 }
 
 MFPROTO int
-mf_postattach()
+mf_postattach(void)
 {
     mf.end = mf.start + mf.len;
     mf.disps = mf.dispe = mf.start;
@@ -928,7 +928,7 @@ mf_postattach()
 }
 
 MFPROTO void
-mf_detach()
+mf_detach(void)
 {
     mf_freeHeaders();
     if (mf.start) {
@@ -938,7 +938,7 @@ mf_detach()
 }
 
 MFPROTO void
-mf_detach_nounmap()
+mf_detach_nounmap(void)
 {
     mf_freeHeaders();
     if (mf.start)
@@ -949,7 +949,7 @@ mf_detach_nounmap()
  * lineno calculation, and moving
  */
 MFFPROTO void
-mf_sync_lineno()
+mf_sync_lineno(void)
 {
     unsigned char *p;
 
@@ -1066,7 +1066,7 @@ mf_forward(int lines)
 }
 
 MFFPROTO int
-mf_goTop()
+mf_goTop(void)
 {
     if (mf.disps == mf.start && mf.xpos > 0)
         mf.xpos = 0;
@@ -1076,7 +1076,7 @@ mf_goTop()
 }
 
 MFFPROTO int
-mf_goBottom()
+mf_goBottom(void)
 {
     mf.disps = mf.maxdisps;
     mf_sync_lineno();
@@ -1093,13 +1093,13 @@ mf_goto(int lineno)
 }
 
 MFFPROTO int
-mf_viewedNone()
+mf_viewedNone(void)
 {
     return (mf.disps <= mf.start);
 }
 
 MFFPROTO int
-mf_viewedAll()
+mf_viewedAll(void)
 {
     return (mf.dispe >= mf.end);
 }
@@ -1215,7 +1215,7 @@ pmore_str_chomp(unsigned char *p)
  */
 
 MFPROTO void
-mf_freeHeaders()
+mf_freeHeaders(void)
 {
     if (fh.lines > 0) {
         int i;
@@ -1229,7 +1229,7 @@ mf_freeHeaders()
 }
 
 MFPROTO void
-mf_parseHeaders()
+mf_parseHeaders(void)
 {
     /* file format:
      * AUTHOR: author BOARD: blah <- headers[0], floats[0], floats[1]
@@ -1338,7 +1338,7 @@ mf_parseHeaders()
  * mf_display utility macros
  */
 MFFPROTO void
-MFDISP_SKIPCURLINE()
+MFDISP_SKIPCURLINE(void)
 {
     while (mf.dispe < mf.end && *mf.dispe != '\n')
         mf.dispe++;
@@ -1392,7 +1392,7 @@ static char *override_attr = NULL;
  */
 
 MFPROTO void
-mf_display()
+mf_display(void)
 {
     int lines = 0, col = 0, currline = 0, wrapping = 0;
     int startline, endline;
@@ -2252,8 +2252,8 @@ mf_display_footer(
 /*
  * sub-system prototype
  */
-MFPROTO void pmore_Preference();
-MFPROTO void pmore_QuickRawModePref();
+MFPROTO void pmore_Preference(void);
+MFPROTO void pmore_QuickRawModePref(void);
 
 #ifdef PMORE_USE_INTERNAL_HELP
 MFPROTO void pmore_Help(void *ctx, int (*help_handler)(int y, void *ctx));
@@ -2263,7 +2263,7 @@ MFPROTO void pmore_Help(void *ctx, int (*help_handler)(int y, void *ctx));
  * pmore utility macros
  */
 MFFPROTO void
-PMORE_UINAV_FORWARDPAGE()
+PMORE_UINAV_FORWARDPAGE(void)
 {
     /* Usually, a forward is just mf_forward(MFNAV_PAGE);
      * but because of wrapped lines...
@@ -2283,7 +2283,7 @@ PMORE_UINAV_FORWARDPAGE()
 }
 
 MFFPROTO void
-PMORE_UINAV_FORWARDLINE()
+PMORE_UINAV_FORWARDLINE(void)
 {
     if (mf_viewedAll())
         return;
@@ -3014,7 +3014,7 @@ pmore_PromptBar(const char *caption, int shadow)
 }
 
 MFPROTO void
-pmore_QuickRawModePref()
+pmore_QuickRawModePref(void)
 {
     int ystart = b_lines -2;
 
@@ -3064,7 +3064,7 @@ pmore_QuickRawModePref()
 }
 
 MFPROTO void
-pmore_Preference()
+pmore_Preference(void)
 {
     int ystart = b_lines - 9;
     // TODO even better pref navigation, like arrow keys
@@ -3673,7 +3673,7 @@ mf_movieGotoFrame(int fno, int relative)
 
 // warning: getting current frame number is SLOW.
 MFPROTO int
-mf_movieCurrentFrameNo()
+mf_movieCurrentFrameNo(void)
 {
     int no = 0;
     unsigned char *p = mf.disps;
@@ -4088,7 +4088,7 @@ mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
  * If no (user breaks), return 0
  */
 MFPROTO int
-mf_movieSyncFrame()
+mf_movieSyncFrame(void)
 {
     if (mfmovie.pause)
     {
@@ -4337,7 +4337,7 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
 }
 
 MFPROTO int
-mf_movieNextFrame()
+mf_movieNextFrame(void)
 {
     while (1)
     {

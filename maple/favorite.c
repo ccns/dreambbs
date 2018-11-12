@@ -21,8 +21,8 @@ extern char brd_bits[];
 static ClassHeader *chx[2];
 
 static int
-favorite_parse(key)
-  char *key;
+favorite_parse(
+  char *key)
 {
   char *str,fpath[128];
   ClassHeader *chp;
@@ -167,8 +167,8 @@ favorite_parse(key)
 }
 
 static int
-chno_cmp(i, j)
-  short *i, *j;
+chno_cmp(
+  short *i, short *j)
 {
   BRD *bhead;
   bhead = bshm->bcache;
@@ -177,7 +177,7 @@ chno_cmp(i, j)
 
 
 static void
-favorite_sort()
+favorite_sort(void)
 {
   ClassHeader *chp;
   int i, j, max;
@@ -209,7 +209,7 @@ favorite_sort()
 
 
 void
-favorite_main()
+favorite_main(void)
 {
   int chn,i;
   ClassHeader *chp;

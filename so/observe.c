@@ -18,20 +18,20 @@ extern XZ xz[];
 /* ----------------------------------------------------- */
 
 
-static int observe_add();
+static int observe_add(XO *xo);
 
 
 static void
-observe_item(num, observe)
-int num;
-OBSERVE *observe;
+observe_item(
+int num,
+OBSERVE *observe)
 {
 	prints("%6d %-13.13s %-55.55s\n", num, observe->userid, observe->title);
 }
 
 static int
-observe_body(xo)
-XO *xo;
+observe_body(
+XO *xo)
 {
 	OBSERVE *observe;
 	int num, max, tail;
@@ -63,8 +63,8 @@ XO *xo;
 
 
 static int
-observe_head(xo)
-XO *xo;
+observe_head(
+XO *xo)
 {
 	vs_head("觀察名單列表", str_site);
 	outs("\
@@ -75,8 +75,8 @@ XO *xo;
 
 
 static int
-observe_load(xo)
-XO *xo;
+observe_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(OBSERVE));
 	return observe_body(xo);
@@ -84,16 +84,16 @@ XO *xo;
 
 
 static int
-observe_init(xo)
-XO *xo;
+observe_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(OBSERVE));
 	return observe_head(xo);
 }
 
 static int
-observe_sync(xo)
-XO *xo;
+observe_sync(
+XO *xo)
 {
 	char *fpath;
 	int fd, size = 0, total, userno;
@@ -153,9 +153,9 @@ XO *xo;
 
 
 static int
-observe_edit(observe, echo)
-OBSERVE *observe;
-int echo;
+observe_edit(
+OBSERVE *observe,
+int echo)
 {
 	ACCT acct;
 	int userno;
@@ -184,8 +184,8 @@ int echo;
 
 
 static int
-observe_add(xo)
-XO *xo;
+observe_add(
+XO *xo)
 {
 	if (xo->max >= MAXOBSERVELIST)
 	{
@@ -207,8 +207,8 @@ XO *xo;
 }
 
 static int
-observe_delete(xo)
-XO *xo;
+observe_delete(
+XO *xo)
 {
 
 	if (vans(msg_del_ny) == 'y')
@@ -223,8 +223,8 @@ XO *xo;
 
 
 static int
-observe_change(xo)
-XO *xo;
+observe_change(
+XO *xo)
 {
 	OBSERVE *observe, mate;
 	int pos, cur;
@@ -247,8 +247,8 @@ XO *xo;
 }
 
 static int
-observe_help(xo)
-XO *xo;
+observe_help(
+XO *xo)
 {
 //  film_out(FILM_OBSERVE, -1);
 	return observe_head(xo);
@@ -273,7 +273,7 @@ KeyFunc observe_cb[] =
 
 
 int
-Observe_list()
+Observe_list(void)
 {
 	XO *xo;
 	char fpath[64];

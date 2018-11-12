@@ -214,7 +214,6 @@ f_new(
 )
 {
   int fd, try;
-  extern int errno;
 
   try = 0;
   str_cat(fnew, fold, ".n");

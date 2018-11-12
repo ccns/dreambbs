@@ -11,11 +11,11 @@
 #include "bbs.h"
 
 extern XZ xz[];
-static int memorandum_add();
+static int memorandum_add(XO *xo);
 #if 0
 char *
-get_date(clock)
-time_t *clock;
+get_date(
+time_t *clock)
 {
 	static char foo[24];
 	static char myweek[] = "天一二三四五六";
@@ -28,7 +28,7 @@ time_t *clock;
 }
 
 time_t
-get_sch_time()
+get_sch_time(void)
 {
 	char *t_max = "19392959";
 	char ch, buf[8];
@@ -79,16 +79,16 @@ get_sch_time()
 #endif
 
 static void
-memorandum_item(num, memorandum)
-int num;
-MEMORANDUM *memorandum;
+memorandum_item(
+int num,
+MEMORANDUM *memorandum)
 {
 	prints("%6d  %-8s  %-8s  %-50s\n", num, memorandum->date, memorandum->time, memorandum->work);
 }
 
 static int
-memorandum_body(xo)
-XO *xo;
+memorandum_body(
+XO *xo)
 {
 	MEMORANDUM *memorandum;
 	int num, max, tail;
@@ -120,8 +120,8 @@ XO *xo;
 
 
 static int
-memorandum_head(xo)
-XO *xo;
+memorandum_head(
+XO *xo)
 {
 	vs_head("聯絡名單", str_site);
 	outs("\
@@ -132,8 +132,8 @@ XO *xo;
 
 
 static int
-memorandum_load(xo)
-XO *xo;
+memorandum_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(MEMORANDUM));
 	return memorandum_body(xo);
@@ -141,8 +141,8 @@ XO *xo;
 
 
 static int
-memorandum_init(xo)
-XO *xo;
+memorandum_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(MEMORANDUM));
 	return memorandum_head(xo);
@@ -150,9 +150,9 @@ XO *xo;
 
 
 static int
-memorandum_edit(memorandum, echo)
-MEMORANDUM *memorandum;
-int echo;
+memorandum_edit(
+MEMORANDUM *memorandum,
+int echo)
 {
 	if (echo == DOECHO)
 		memset(memorandum, 0, sizeof(MEMORANDUM));
@@ -166,8 +166,8 @@ int echo;
 
 
 static int
-memorandum_add(xo)
-XO *xo;
+memorandum_add(
+XO *xo)
 {
 	MEMORANDUM memorandum;
 	if (xo->max >= MAX_MEMORANDUM)
@@ -182,8 +182,8 @@ XO *xo;
 }
 
 static int
-memorandum_delete(xo)
-XO *xo;
+memorandum_delete(
+XO *xo)
 {
 
 	if (vans(msg_del_ny) == 'y')
@@ -198,8 +198,8 @@ XO *xo;
 
 
 static int
-memorandum_change(xo)
-XO *xo;
+memorandum_change(
+XO *xo)
 {
 	MEMORANDUM *memorandum, mate;
 	int pos, cur;
@@ -221,8 +221,8 @@ XO *xo;
 }
 
 static int
-memorandum_help(xo)
-XO *xo;
+memorandum_help(
+XO *xo)
 {
 	film_out(FILM_MEMORANDUM, -1);
 	return memorandum_head(xo);
@@ -244,7 +244,7 @@ KeyFunc memorandum_cb[] =
 };
 
 int
-Memorandum()
+Memorandum(void)
 {
 	XO *xo;
 	char fpath[80];

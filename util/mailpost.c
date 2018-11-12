@@ -19,7 +19,7 @@
 #include	<signal.h>
 #include	"bbs.h"
 
-extern char *crypt();
+extern char *crypt(const char *key, const char *salt);
 
 
 //#define	LOG_FILE	"run/mailog"
@@ -837,8 +837,8 @@ mailpost(void)
 
 
 static void
-sig_catch(sig)
-  int sig;
+sig_catch(
+  int sig)
 {
   char buf[40];
 
@@ -848,7 +848,7 @@ sig_catch(sig)
 }
 
 int
-main()
+main(void)
 {
   setgid(BBSGID);
   setuid(BBSUID);

@@ -25,7 +25,7 @@ extern XZ xz[];
 extern char radix32[32];
 
 
-static int vote_add();
+static int vote_add(XO *xo);
 struct Tchoice
 {
 	int count;
@@ -45,9 +45,9 @@ TchoiceCompare(struct Tchoice * i, struct Tchoice * j)
 
 
 static int
-vote_seek(fpath, mail)
-char *fpath;
-char *mail;
+vote_seek(
+char *fpath,
+char *mail)
 {
 	LOG email;
 	int pos = 0, fd;
@@ -75,8 +75,8 @@ char *mail;
 
 
 int
-vote_result(xo)
-XO *xo;
+vote_result(
+XO *xo)
 {
 	char fpath[80];
 
@@ -93,9 +93,9 @@ XO *xo;
 
 
 static void
-vote_item(num, vch)
-int num;
-VCH *vch;
+vote_item(
+int num,
+VCH *vch)
 {
 	prints("%6d %-9.8s%-12s %-48.48s\n",
 		   num, vch->cdate, vch->owner, vch->title);
@@ -103,8 +103,8 @@ VCH *vch;
 
 
 static int
-vote_body(xo)
-XO *xo;
+vote_body(
+XO *xo)
 {
 	VCH *vch;
 	int num, max, tail;
@@ -143,8 +143,8 @@ XO *xo;
 
 
 static int
-vote_head(xo)
-XO *xo;
+vote_head(
+XO *xo)
 {
 	vs_head(currBM, "§ë²¼©Ò");
 	outs(NECKVOTE);
@@ -153,8 +153,8 @@ XO *xo;
 
 
 static int
-vote_init(xo)
-XO *xo;
+vote_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(VCH));
 	return vote_head(xo);
@@ -162,8 +162,8 @@ XO *xo;
 
 
 static int
-vote_load(xo)
-XO *xo;
+vote_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(VCH));
 	return vote_body(xo);
@@ -171,8 +171,8 @@ XO *xo;
 
 
 static void
-vch_edit(vch)
-VCH *vch;
+vch_edit(
+VCH *vch)
 {
 	int num;
 	char buf[4];
@@ -196,8 +196,8 @@ VCH *vch;
 }
 
 static void
-show_stud(path)
-char *path;
+show_stud(
+char *path)
 {
 	VCHS stud;
 	int pos = 0, fd;
@@ -221,9 +221,9 @@ char *path;
 }
 
 static int
-check_stud(account, path)
-char *account;
-char *path;
+check_stud(
+char *account,
+char *path)
 {
 	VCHS stud, buf;
 	int pos = 0, fd;
@@ -271,8 +271,8 @@ char *path;
 
 
 static int
-vlist_student(path)
-char *path;
+vlist_student(
+char *path)
 {
 	VCHS stud[MAX_BOOKS], tmp;
 	int item, i, fd;
@@ -390,8 +390,8 @@ char *path;
 
 
 static int
-vlist_edit(vlist)
-vitem_t vlist[];
+vlist_edit(
+vitem_t vlist[])
 {
 	int item;
 	char buf[80];
@@ -421,8 +421,8 @@ vitem_t vlist[];
 
 
 static int
-vote_add(xo)
-XO *xo;
+vote_add(
+XO *xo)
 {
 	VCH vch;
 	int fd, item, check = 0;
@@ -524,8 +524,8 @@ XO *xo;
 
 
 static int
-vote_edit(xo)
-XO *xo;
+vote_edit(
+XO *xo)
 {
 	int pos, check = 0;
 	VCH *vch, vxx;
@@ -628,8 +628,8 @@ XO *xo;
 }
 
 static int
-vote_browse(xo)
-XO *xo;
+vote_browse(
+XO *xo)
 {
 	VCH *vch;
 	FILE *fp;
@@ -761,8 +761,8 @@ XO *xo;
 
 
 static int
-vote_query(xo)
-XO *xo;
+vote_query(
+XO *xo)
 {
 	char *dir, *fname, fpath[80], buf[80];
 	VCH *vch;
@@ -824,8 +824,8 @@ XO *xo;
 
 
 static int
-check_mail(account)
-char *account;
+check_mail(
+char *account)
 {
 	//char validemail[3][20] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw", "nckualumni.org.tw"};
 	char addr[20], buf[30] , line[80], server[60], *ptr;
@@ -865,8 +865,8 @@ char *account;
 }
 /*
 static int
-check_mail(mail)
-char *mail;
+check_mail(
+char *mail)
 {
 	char addr[20], buf[30] , line[80], server[60], *ptr;
 	int sock = 110;
@@ -907,8 +907,8 @@ char *mail;
 
 
 static int
-vote_join(xo)
-XO *xo;
+vote_join(
+XO *xo)
 {
 	VCH *vch;
 	int count, choice, fd, fv;
@@ -1090,8 +1090,8 @@ XO *xo;
 
 
 static int
-vote_help(xo)
-XO *xo;
+vote_help(
+XO *xo)
 {
 	film_out(FILM_VOTE, -1);
 	return vote_head(xo);
@@ -1109,7 +1109,7 @@ static KeyFunc vote_cb[] =
 	{'v', vote_join},
 	{'R', vote_result},
 	{'m', vote_browse},
-	{'S' | XO_DL, (int (*)())"bin/showvote.so:Showvote"},
+	{'S' | XO_DL, (int (*)(XO))"bin/showvote.so:Showvote"},
 	{'E', vote_edit},
 	{Ctrl('P'), vote_add},
 	{Ctrl('Q'), vote_query},
@@ -1119,8 +1119,8 @@ static KeyFunc vote_cb[] =
 
 
 int
-XoVote(xo)
-XO *xo;
+XoVote(
+XO *xo)
 {
 	char fpath[32];
 
@@ -1145,7 +1145,7 @@ XO *xo;
 }
 
 int
-SystemVote()
+SystemVote(void)
 {
 	char fpath[80];
 	XO *xo;
@@ -1171,7 +1171,7 @@ SystemVote()
 
 #if 0
 void
-vote_sync()
+vote_sync(void)
 {
 	int fd, size;
 	struct stat st;

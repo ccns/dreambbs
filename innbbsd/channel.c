@@ -28,7 +28,7 @@
 /* my recv						 */
 /* ----------------------------------------------------- */
 
-
+typedef struct ClientType ClientType;
 typedef struct
 {
   char *name;
@@ -38,7 +38,7 @@ typedef struct
   int mode;		/* 0:要command-mode才能跑  1:要data-mode才能跑  2:沒有限制 */
   int errorcode;
   int normalcode;
-  void (*main) ();
+  void (*main) (ClientType *client);
 }	daemoncmd_t;
 
 
@@ -59,7 +59,7 @@ typedef struct
 }	buffer_t;
 
 
-typedef struct
+struct ClientType
 {
   char nodename[13];
   char hostname[128];		/* client hostname */
@@ -71,7 +71,7 @@ typedef struct
   int fd;
   buffer_t in;
   buffer_t out;
-}	ClientType;
+};
 
 
 #if 0	/* itoc.030109.註解: my_recv 的流程 */
@@ -82,8 +82,8 @@ typedef struct
 
 
 static void
-my_recv(client)
-  ClientType *client;
+my_recv(
+  ClientType *client)
 {
   FILE *fout;
   int rel;
@@ -142,8 +142,8 @@ static daemoncmd_t cmds[];
 
 
 static daemoncmd_t *
-searchcmd(cmd)
-  char *cmd;
+searchcmd(
+  char *cmd)
 {
   daemoncmd_t *p;
   char *name;
@@ -162,8 +162,8 @@ searchcmd(cmd)
 
 
 static int 
-argify(line, argvp)
-  char *line, ***argvp;
+argify(
+  char *line, char ***argvp)
 {
   static char *argvbuffer[MAX_ARG + 2];
   char **argv = argvbuffer;
@@ -196,8 +196,8 @@ static fd_set rfd;		/* read fd_set */
 
 
 static void
-reapchild(s)
-  int s;
+reapchild(
+  int s)
 {
   int state;
   while (waitpid(-1, &state, WNOHANG | WUNTRACED) > 0)
@@ -208,15 +208,15 @@ reapchild(s)
 
 
 static void
-dokill(s)
-  int s;
+dokill(
+  int s)
 {
   kill(0, SIGKILL);
 }
 
 
 static int				/* -1:失敗 */
-initinetserver()
+initinetserver(void)
 {
   struct sockaddr_in sin;	/* Internet endpoint address */
   int fd, value;
@@ -259,13 +259,12 @@ initinetserver()
 
 
 static int
-tryaccept(s)
-  int s;
+tryaccept(
+  int s)
 {
   int ns;
   int fromlen = sizeof(struct sockaddr_in);
   struct sockaddr sockaddr;	/* Internet endpoint address */
-  extern int errno;
 
   do
   {
@@ -277,10 +276,10 @@ tryaccept(s)
 
 
 static void
-channelcreate(client, sock, nodename, hostname)
-  ClientType *client;
-  int sock;
-  char *nodename, *hostname;
+channelcreate(
+  ClientType *client,
+  int sock,
+  char *nodename, char *hostname)
 {
   buffer_t *in, *out;
 
@@ -312,8 +311,8 @@ channelcreate(client, sock, nodename, hostname)
 
 
 static void
-channeldestroy(client)
-  ClientType *client;
+channeldestroy(
+  ClientType *client)
 {
   FD_CLR(client->fd, &rfd);
   fclose(client->Argv.in);
@@ -335,8 +334,8 @@ channeldestroy(client)
 
 
 static int
-channelreader(client)
-  ClientType *client;
+channelreader(
+  ClientType *client)
 {
   int len, used;
   char *data, *head;
@@ -458,7 +457,7 @@ channelreader(client)
       }
       else		/* 通過以上三道檢查 */
       {
-	void (*Main) ();
+	void (*Main) (ClientType *client);
 
 	if (Main = dp->main)
 	  (*Main) (client);
@@ -507,8 +506,8 @@ static int inetdstart = 0;
 
 
 static void
-CMDhelp(client)
-  ClientType *client;
+CMDhelp(
+  ClientType *client)
 {
   argv_t *argv = &client->Argv;
   daemoncmd_t *p = argv->dc;
@@ -525,8 +524,8 @@ CMDhelp(client)
 
 
 static void
-CMDihave(client)
-  ClientType *client;
+CMDihave(
+  ClientType *client)
 {
   argv_t *argv = &client->Argv;
   daemoncmd_t *p = argv->dc;
@@ -551,8 +550,8 @@ CMDihave(client)
 
 
 static void
-CMDstat(client)
-  ClientType *client;
+CMDstat(
+  ClientType *client)
 {
   argv_t *argv = &client->Argv;
   daemoncmd_t *p = argv->dc;
@@ -575,8 +574,8 @@ CMDstat(client)
 
 
 static void
-CMDquit(client)
-  ClientType *client;
+CMDquit(
+  ClientType *client)
 {
   argv_t *argv = &client->Argv;
   daemoncmd_t *p = argv->dc;
@@ -607,8 +606,8 @@ static daemoncmd_t cmds[] =
 
 
 static char *	/* 傳回是由哪一個站台餵信進來的 */
-search_nodelist_byhost(hostname)
-  char *hostname;
+search_nodelist_byhost(
+  char *hostname)
 {
   nodelist_t *find;
   struct hostent *he;
@@ -634,8 +633,8 @@ search_nodelist_byhost(hostname)
 
 
 static time_t
-filetime(fpath)		/* 傳回 fpath 的檔案時間 */
-  char *fpath;
+filetime(		/* 傳回 fpath 的檔案時間 */
+  char *fpath)
 {
   struct stat st;
 
@@ -646,7 +645,7 @@ filetime(fpath)		/* 傳回 fpath 的檔案時間 */
 
 
 static void
-inndchannel()
+inndchannel(void)
 {
   int i, fd, sock;
   char *nodename, hostname[128];
@@ -802,7 +801,7 @@ inndchannel()
 
 #ifdef RLIMIT
 static int
-getdtablesize()
+getdtablesize(void)
 {
   struct rlimit limit;
 
@@ -815,7 +814,7 @@ getdtablesize()
 
 
 static void
-standaloneinit()
+standaloneinit(void)
 {
   int ndescriptors, s;
   FILE *fp;
@@ -839,8 +838,8 @@ standaloneinit()
 
 
 static void
-usage(argv)
-  char *argv;
+usage(
+  char *argv)
 {
   printf("Usage: %s [options]\n", argv);
   printf("       -i        以 inetd wait option 啟動\n");
@@ -848,9 +847,9 @@ usage(argv)
 
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   int c;
   struct sockaddr_in sin;

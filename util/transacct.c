@@ -145,8 +145,8 @@ typedef struct
 
 
 static unsigned int
-trans_ufo2(oldufo2)
-  unsigned int oldufo2;
+trans_ufo2(
+  unsigned int oldufo2)
 {
   unsigned int ufo;
 
@@ -218,9 +218,9 @@ trans_ufo2(oldufo2)
 
 
 static void
-trans_acct(old, new)
-  OLD *old;
-  NEW *new;
+trans_acct(
+  OLD *old,
+  NEW *new)
 {
   memset(new, 0, sizeof(NEW));
 
@@ -271,9 +271,9 @@ typedef struct
 }	MONEY;
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   NEW new;
   MONEY oldwealth;

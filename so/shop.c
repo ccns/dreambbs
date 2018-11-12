@@ -12,7 +12,7 @@
 
 #include "bbs.h"
 
-int cloak_temp()
+int cloak_temp(void)
 {
   time_t now;
   char c_time[25],c_buf[128];
@@ -68,7 +68,7 @@ int cloak_temp()
     
 }
 
-int hidefrom_temp()
+int hidefrom_temp(void)
 {
   time_t now;
   char c_time[25],c_buf[128];
@@ -131,12 +131,12 @@ int hidefrom_temp()
     
 }
 
-int sysop()
+int sysop(void)
 {
     pmsg2("是誰說你可以當站長的！");
 }
 
-int shop_main()
+int shop_main(void)
 {
   char buf[5];
   int money;

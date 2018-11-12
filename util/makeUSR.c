@@ -23,9 +23,9 @@ MAP map[100000];
 int total;
 
 static void
-reaper(fpath, lowid)
-  char *fpath;
-  char *lowid;
+reaper(
+  char *fpath,
+  char *lowid)
 {
   int fd;
 
@@ -52,8 +52,8 @@ reaper(fpath, lowid)
 }
 
 static void
-traverse(fpath)
-  char *fpath;
+traverse(
+  char *fpath)
 {
   DIR *dirp;
   struct dirent *de;
@@ -97,7 +97,7 @@ main(void)
   {
     fname[0] = ch;
     fname[1] = '\0';
-    traverse(fpath,mode);
+    traverse(fpath);
   }
   for (ch = '0'; ch <= '9'; ch++)
   {

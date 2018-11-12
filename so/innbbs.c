@@ -20,9 +20,9 @@ extern BCACHE *bshm;
 
 
 static void
-nl_item(num, nl)
-  int num;
-  nodelist_t *nl;
+nl_item(
+  int num,
+  nodelist_t *nl)
 {
   prints("%6d %-13s%-*.*s %s(%d)\n", num, 
     nl->name, d_cols + 45, d_cols + 45, nl->host, nl->xmode & INN_USEIHAVE ? "IHAVE" : "POST", nl->port);
@@ -30,8 +30,8 @@ nl_item(num, nl)
 
 
 static void
-nl_query(nl)
-  nodelist_t *nl;
+nl_query(
+  nodelist_t *nl)
 {
   move(3, 0);
   clrtobot();
@@ -42,10 +42,10 @@ nl_query(nl)
 
 
 static int	/* 1:成功 0:失敗 */
-nl_add(fpath, old, pos)
-  char *fpath;
-  nodelist_t *old;
-  int pos;
+nl_add(
+  char *fpath,
+  nodelist_t *old,
+  int pos)
 {
   nodelist_t nl;
   int ch, port;
@@ -101,8 +101,8 @@ nl_add(fpath, old, pos)
 
 
 static int
-nl_cmp(a, b)
-  nodelist_t *a, *b;
+nl_cmp(
+  nodelist_t *a, nodelist_t *b)
 {
   /* 依 name 排序 */
   return str_cmp(a->name, b->name);
@@ -110,9 +110,9 @@ nl_cmp(a, b)
 
 
 static int
-nl_search(nl, key)
-  nodelist_t *nl;
-  char *key;
+nl_search(
+  nodelist_t *nl,
+  char *key)
 {
   return (int) (str_str(nl->name, key) || str_str(nl->host, key));
 }
@@ -124,9 +124,9 @@ nl_search(nl, key)
 
 
 static void
-nf_item(num, nf)
-  int num;
-  newsfeeds_t *nf;
+nf_item(
+  int num,
+  newsfeeds_t *nf)
 {
   int bno;
   BRD *brd;
@@ -156,8 +156,8 @@ nf_item(num, nf)
 
 
 static void
-nf_query(nf)
-  newsfeeds_t *nf;
+nf_query(
+  newsfeeds_t *nf)
 {
   nodelist_t nl;
   int fd;
@@ -211,10 +211,10 @@ nf_query(nf)
 
 
 static int	/* 1:成功 0:失敗 */
-nf_add(fpath, old, pos)
-  char *fpath;
-  newsfeeds_t *old;
-  int pos;
+nf_add(
+  char *fpath,
+  newsfeeds_t *old,
+  int pos)
 {
   newsfeeds_t nf;
   int high;
@@ -265,8 +265,8 @@ nf_add(fpath, old, pos)
 
 
 static int
-nf_cmp(a, b)
-  newsfeeds_t *a, *b;
+nf_cmp(
+  newsfeeds_t *a, newsfeeds_t *b)
 {
   /* path/newsgroup 交叉比對 */
   int k = str_cmp(a->path, b->path);
@@ -275,9 +275,9 @@ nf_cmp(a, b)
 
 
 static int
-nf_search(nf, key)
-  newsfeeds_t *nf;
-  char *key;
+nf_search(
+  newsfeeds_t *nf,
+  char *key)
 {
   return (int) (str_str(nf->newsgroup, key) || str_str(nf->board, key));
 }
@@ -289,9 +289,9 @@ nf_search(nf, key)
 
 
 static void
-ncm_item(num, ncm)
-  int num;
-  ncmperm_t *ncm;
+ncm_item(
+  int num,
+  ncmperm_t *ncm)
 {
   prints("%6d %-*.*s%-23.23s %s\n", num, 
     d_cols + 44, d_cols + 44, ncm->issuer, ncm->type, ncm->perm ? "○" : "╳");
@@ -299,8 +299,8 @@ ncm_item(num, ncm)
 
 
 static void
-ncm_query(ncm)
-  ncmperm_t *ncm;
+ncm_query(
+  ncmperm_t *ncm)
 {
   move(3, 0);
   clrtobot();
@@ -311,10 +311,10 @@ ncm_query(ncm)
 
 
 static int	/* 1:成功 0:失敗 */
-ncm_add(fpath, old, pos)
-  char *fpath;
-  ncmperm_t *old;
-  int pos; 
+ncm_add(
+  char *fpath,
+  ncmperm_t *old,
+  int pos)
 {
   ncmperm_t ncm;
 
@@ -339,8 +339,8 @@ ncm_add(fpath, old, pos)
 
 
 static int
-ncm_cmp(a, b)
-  ncmperm_t *a, *b;
+ncm_cmp(
+  ncmperm_t *a, ncmperm_t *b)
 {
   /* issuer/type 交叉比對 */
   int k = str_cmp(a->issuer, b->issuer);
@@ -349,9 +349,9 @@ ncm_cmp(a, b)
 
 
 static int
-ncm_search(ncm, key)
-  ncmperm_t *ncm;
-  char *key;
+ncm_search(
+  ncmperm_t *ncm,
+  char *key)
 {
   return (int) (str_str(ncm->issuer, key) || str_str(ncm->type, key));
 }
@@ -363,8 +363,8 @@ ncm_search(ncm, key)
 
 
 static char *
-spam_compare(xmode)
-  int xmode;
+spam_compare(
+  int xmode)
 {
   if (xmode & INN_SPAMADDR)
     return "作者";
@@ -387,9 +387,9 @@ spam_compare(xmode)
 
 
 static void
-spam_item(num, spam)
-  int num;
-  spamrule_t *spam;
+spam_item(
+  int num,
+  spamrule_t *spam)
 {
   char *path, *board;
 
@@ -402,8 +402,8 @@ spam_item(num, spam)
 
 
 static void
-spam_query(spam)
-  spamrule_t *spam;
+spam_query(
+  spamrule_t *spam)
 {
   char *path, *board;
 
@@ -419,10 +419,10 @@ spam_query(spam)
 
 
 static int	/* 1:成功 0:失敗 */
-spam_add(fpath, old, pos)
-  char *fpath;
-  spamrule_t *old;
-  int pos; 
+spam_add(
+  char *fpath,
+  spamrule_t *old,
+  int pos)
 {
   spamrule_t spam;
 
@@ -477,8 +477,8 @@ spam_add(fpath, old, pos)
 
 
 static int
-spam_cmp(a, b)
-  spamrule_t *a, *b;
+spam_cmp(
+  spamrule_t *a, spamrule_t *b)
 {
   /* path/board/xmode/detail 交叉比對 */
   int i = strcmp(a->path, b->path);
@@ -489,9 +489,9 @@ spam_cmp(a, b)
 
 
 static int
-spam_search(spam, key)
-  spamrule_t *spam;
-  char *key;
+spam_search(
+  spamrule_t *spam,
+  char *key)
 {
   return (int) (str_str(spam->detail, key));
 }
@@ -503,7 +503,7 @@ spam_search(spam, key)
 
 
 int
-a_innbbs()
+a_innbbs(void)
 {
   int num, pageno, pagemax, redraw, reload;
   int ch, cur, i, dirty;
@@ -512,8 +512,8 @@ a_innbbs()
   int recsiz;
   char *fpath;
   char buf[40];
-  void (*item_func)(), (*query_func)();
-  int (*add_func)(), (*sync_func)(), (*search_func)();
+  void (*item_func)(int num, void *obj), (*query_func)(void *obj);
+  int (*add_func)(char *fpath, void *old, int pos), (*sync_func)(void *a, void *b), (*search_func)(void *obj, char *key);
 
   vs_bar("轉信設定");
   more("etc/innbbs.hlp", (char *) -1);

@@ -81,16 +81,16 @@
 
 
 static int
-Isspace (ch)
-     int ch;
+Isspace (
+     int ch)
 {
    return (ch == ' ' || ch == '\t' || ch == 10 || ch == 13);
 }
 
 
 static char *
-nextword (str)
-     char **str;
+nextword (
+     char **str)
 {
    char *head, *tail;
    int ch;

@@ -37,8 +37,8 @@ static XO *xo_root;		/* root of overview list */
 
 
 XO *
-xo_new(path)
-  char *path;
+xo_new(
+  char *path)
 {
   XO *xo;
   int len;
@@ -54,8 +54,8 @@ xo_new(path)
 
 
 XO *
-xo_get(path)
-  char *path;
+xo_get(
+  char *path)
 {
   XO *xo;
 
@@ -77,8 +77,8 @@ xo_get(path)
 
 #if 0
 void
-xo_free(xo)
-  XO *xo;
+xo_free(
+  XO *xo)
 {
   char *ptr;
 
@@ -98,9 +98,9 @@ char xo_pool[XO_TALL * XO_RSIZ];
 
 
 void
-xo_load(xo, recsiz)
-  XO *xo;
-  int recsiz;
+xo_load(
+  XO *xo,
+  int recsiz)
 {
   int fd, max;
 
@@ -141,10 +141,10 @@ xo_load(xo, recsiz)
 
 /* static */
 void
-xo_fpath(fpath, dir, hdr)
-  char *fpath;
-  char *dir;
-  HDR *hdr;
+xo_fpath(
+  char *fpath,
+  char *dir,
+  HDR *hdr)
 {
   if (hdr->xmode & HDR_URL)
     url_fpath(fpath, dir, hdr);
@@ -164,10 +164,10 @@ xo_fpath(fpath, dir, hdr)
 
 
 int
-hdr_prune(folder, nhead, ntail, post)
-  char *folder;
-  int nhead, ntail;
-  int post;
+hdr_prune(
+  char *folder,
+  int nhead, int ntail,
+  int post)
 {
   int count, fdr, fsize, xmode, cancel, dmode;
   HDR *hdr;
@@ -276,8 +276,8 @@ hdr_prune(folder, nhead, ntail, post)
 
 
 int
-xo_delete(xo)
-  XO *xo;
+xo_delete(
+  XO *xo)
 {
   char buf[8];
   int head, tail;
@@ -329,10 +329,10 @@ TagItem TagList[TAG_MAX];	/* ascending list */
 
 
 int
-Tagger(chrono, recno, op)
-  time_t chrono;
-  int recno;
-  int op;			/* op : TAG_NIN / TOGGLE / INSERT */
+Tagger(
+  time_t chrono,
+  int recno,
+  int op)			/* op : TAG_NIN / TOGGLE / INSERT */
 /* ----------------------------------------------------- */
 /* return 0 : not found	/ full				 */
 /* 1 : add						 */
@@ -401,18 +401,18 @@ Tagger(chrono, recno, op)
 
 
 void
-EnumTagHdr(hdr, dir, locus)
-  HDR *hdr;
-  char *dir;
-  int locus;
+EnumTagHdr(
+  HDR *hdr,
+  char *dir,
+  int locus)
 {
   rec_get(dir, hdr, sizeof(HDR), TagList[locus].recno);
 }
 
 
 int
-AskTag(msg)
-  char *msg;
+AskTag(
+  char *msg)
 /* ----------------------------------------------------- */
 /* return value :					 */
 /* -1	: 取消						 */
@@ -445,9 +445,9 @@ AskTag(msg)
 
 
 static int
-xo_tag(xo, op)
-  XO *xo;
-  int op;
+xo_tag(
+  XO *xo,
+  int op)
 {
   int fsize, count;
   char *token, *fimage;
@@ -490,8 +490,8 @@ xo_tag(xo, op)
 
 
 static int
-xo_prune(xo)
-  XO *xo;
+xo_prune(
+  XO *xo)
 {
   int num;
   char buf[80];
@@ -532,8 +532,8 @@ extern BCACHE *bshm;    /* lkchu.981229 */
 
 
 static int
-xo_copy(xo)
-  XO *xo;
+xo_copy(
+  XO *xo)
 {
   char fpath[128], *dir;
   HDR *hdr, xhdr;
@@ -607,8 +607,8 @@ xo_copy(xo)
 #if 0
 /* Thor.981027: 由 mail.c中的 mail_external取代 */
 static inline int
-rcpt_local(addr)
-  char *addr;
+rcpt_local(
+  char *addr)
 {
   char *str;
   int cc;
@@ -633,7 +633,7 @@ rcpt_local(addr)
 
 #if 1
 static inline int
-deny_forward()
+deny_forward(void)
 {
   unsigned int level;
 
@@ -663,8 +663,8 @@ deny_forward()
 #endif
 
 static int
-xo_forward(xo)
-  XO *xo;
+xo_forward(
+  XO *xo)
 {
   static char rcpt[64];
   char fpath[128], folder[80], *dir, *title, *userid , ckforward[80];
@@ -845,8 +845,8 @@ xo_forward(xo)
 
 #if 0
 static void
-z_download(fpath)
-  char *fpath;
+z_download(
+  char *fpath)
 {
   static int num = 0;		/* 流水號 */
   int pid, status;
@@ -875,8 +875,8 @@ z_download(fpath)
 
 
 static int
-xo_zmodem(xo)
-  XO *xo;
+xo_zmodem(
+  XO *xo)
 {
   char fpath[128], *dir;
   HDR *hdr, xhdr;
@@ -927,8 +927,8 @@ xo_zmodem(xo)
 
 /* 090929.cache: 簡易版 */
 int
-xo_uquery_lite(xo)
-  XO *xo;
+xo_uquery_lite(
+  XO *xo)
 {
   HDR *hdr;
   char *userid;
@@ -963,8 +963,8 @@ xo_uquery_lite(xo)
 }
 
 int
-xo_uquery(xo)
-  XO *xo;
+xo_uquery(
+  XO *xo)
 {
   HDR *hdr;
   char *userid;
@@ -988,8 +988,8 @@ xo_uquery(xo)
 
 
 int
-xo_usetup(xo)
-  XO *xo;
+xo_usetup(
+  XO *xo)
 {
   HDR *hdr;
   char *userid;
@@ -1101,8 +1101,8 @@ static KeyMap keymap[] =
 
 
 static int
-xo_keymap(key)
-  int key;
+xo_keymap(
+  int key)
 {
   KeyMap *km;
   int ch;
@@ -1119,9 +1119,9 @@ xo_keymap(key)
 
 
 static int
-xo_thread(xo, op)
-  XO *xo;
-  int op;
+xo_thread(
+  XO *xo,
+  int op)
 {
   static char s_author[16], s_title[32], s_unread[2]="0";
   char buf[80];
@@ -1411,9 +1411,9 @@ xo_thread(xo, op)
 /* Thor.990204: 為考慮more 傳回值, 以便看一半可以用 []... 
                 ch 為先前more()中所按的key */   
 int
-xo_getch(xo, ch)
-  XO *xo;
-  int ch;
+xo_getch(
+  XO *xo,
+  int ch)
 {
   int op;
 
@@ -1441,8 +1441,8 @@ xo_getch(xo, ch)
 
 
 static int
-xo_jump(pos)			/* 移動游標到 number 所在的特定位置 */
-  int pos;
+xo_jump(			/* 移動游標到 number 所在的特定位置 */
+  int pos)
 {
   char buf[6];
 
@@ -1495,8 +1495,8 @@ XZ xz[] =
 
 
 void
-xover(cmd)
-  int cmd;
+xover(
+  int cmd)
 {
   int pos;
   int num=0;
@@ -1900,7 +1900,7 @@ xover(cmd)
 #ifdef	HAVE_MAILGEM	
 	else if(cmd == 'G' && HAS_PERM(PERM_MBOX))
 	{
-	  static int (*mgp)();
+	  static int (*mgp)(XO *xo);
 	  if(!mgp)
 	  {
 	    mgp = DL_get("bin/mailgem.so:mailgem_gather");
@@ -1967,7 +1967,7 @@ xover(cmd)
 
 #ifdef	EVERY_Z
 static void
-every_Z_Orig()
+every_Z_Orig(void)
 {
   int cmd;
   char select;
@@ -2042,28 +2042,28 @@ every_Z_Orig()
 
 
 static int
-Every_Z_Favorite()
+Every_Z_Favorite(void)
 {
   MyFavorite();
   return 0;
 }
 
 static int
-Every_Z_Gem()
+Every_Z_Gem(void)
 {
   xover(XZ_GEM);
   return 0;
 }
 
 static int
-Every_Z_Ulist()
+Every_Z_Ulist(void)
 {
   xover(XZ_ULIST);
   return 0;
 }
 
 static int
-Every_Z_Board()
+Every_Z_Board(void)
 {
   if (xz[XZ_POST - XO_ZONE].xo)
   {
@@ -2076,14 +2076,14 @@ Every_Z_Board()
 }
 
 static int
-Every_Z_Class()
+Every_Z_Class(void)
 {
   xover(XZ_CLASS);
   return 0;
 }
 
 static int
-Every_Z_MBox()
+Every_Z_MBox(void)
 {
   if (HAS_PERM(PERM_BASIC) && !HAS_PERM(PERM_DENYMAIL))
     xover(XZ_MBOX);
@@ -2093,13 +2093,13 @@ Every_Z_MBox()
 }
 
 static int
-Every_Z_BMW()
+Every_Z_BMW(void)
 {
   xover(XZ_BMW);
   return 0;
 }
 
-extern int Every_Z_Screen();
+extern int Every_Z_Screen(void);
 
 static MENU menu_everyz[] =
 {
@@ -2139,7 +2139,7 @@ static MENU menu_everyz[] =
 };
 
 void
-every_Z()
+every_Z(void)
 {
   int tmpmode,savemode;
   screenline sl[b_lines + 1];
@@ -2202,7 +2202,7 @@ every_Z()
 
 
 void
-every_U()
+every_U(void)
 {
   int cmd, tmpmode;
   screenline sl[b_lines + 1];
@@ -2244,7 +2244,7 @@ every_U()
 }
 
 void
-every_B()
+every_B(void)
 {
   screenline sl[b_lines + 1];
   int tmpmode,stat;
@@ -2263,7 +2263,7 @@ every_B()
 }
 
 void
-every_S()
+every_S(void)
 {
   int tmpmode;
   screenline sl[b_lines + 1];
@@ -2284,9 +2284,9 @@ every_S()
 /* 傳入: ch, pagemax, num, pageno, cur, redraw */
 /* 傳出: ch, pageno, cur, redraw */
 int
-xo_cursor(ch, pagemax, num, pageno, cur, redraw)
-  int ch, pagemax, num;
-  int *pageno, *cur, *redraw;
+xo_cursor(
+  int ch, int pagemax, int num,
+  int *pageno, int *cur, int *redraw)
 {
   switch (ch)
   {

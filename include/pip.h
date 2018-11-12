@@ -240,7 +240,7 @@ typedef struct chicken chicken;
 /*--------------------------------------------------------------------------*/
 struct pipcommands
 {
-	int (*fptr) ();
+	int (*fptr) (void);
 	int key1 ;
 	int key2 ;
 };

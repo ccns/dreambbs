@@ -23,7 +23,7 @@ typedef struct
 }  PAL_SHIP;
 
 #ifdef  HAVE_PIP_FIGHT
-  void (*p)();
+  void (*p)(void);
 #endif
 
 
@@ -60,10 +60,10 @@ typedef struct
 }	PICKUP;
 
 
-void my_query();
+void my_query(char *userid, int paling);
 
 static void
-reset_utmp()
+reset_utmp(void)
 {
   cutmp->pid = currpid;
   cutmp->userno = cuser.userno;
@@ -110,9 +110,9 @@ static MESSAGE *MessageTable[] =
 #endif
 
 char *
-bmode(up, simple)
-  UTMP *up;
-  int simple;
+bmode(
+  UTMP *up,
+  int simple)
 {
   static char modestr[32];
 #ifdef	HAVE_SHOWNUMMSG
@@ -171,9 +171,9 @@ bmode(up, simple)
 
 #if 0
 static int
-pal_belong(userid, uno)
-  char *userid;
-  int uno;
+pal_belong(
+  char *userid,
+  int uno)
 {
   PAL *head, *tail;
   char *fimage = NULL, fpath[64];
@@ -207,9 +207,9 @@ pal_belong(userid, uno)
 #endif
 
 static void
-copyship(ship,userno)
-  char *ship;
-  int userno;
+copyship(
+  char *ship,
+  int userno)
 {
   PAL_SHIP *shead;
   shead = pal_ship;
@@ -235,8 +235,8 @@ copyship(ship,userno)
 }
 
 static int
-can_see(up)
-  UTMP *up;
+can_see(
+  UTMP *up)
 {
   int count, *cache, datum, mid;
 
@@ -281,8 +281,8 @@ can_see(up)
 }
 
 static int
-is_bad(userno)
-  int userno;
+is_bad(
+  int userno)
 {
   int count, *cache, datum, mid;
 
@@ -309,8 +309,8 @@ is_bad(userno)
 
 #ifdef	HAVE_BANMSG
 static int
-can_banmsg(up)
-  UTMP *up;
+can_banmsg(
+  UTMP *up)
 {
   int count, *cache, datum, mid;
 
@@ -339,8 +339,8 @@ can_banmsg(up)
 
 
 /*static */int
-can_message(up)
-  UTMP *up;
+can_message(
+  UTMP *up)
 {
   int self, ufo, can;
 
@@ -375,8 +375,8 @@ can_message(up)
 
 
 static int
-can_override(up)
-  UTMP *up;
+can_override(
+  UTMP *up)
 {
   int self, ufo, can;
 
@@ -411,16 +411,16 @@ can_override(up)
 
 #ifdef	HAVE_BOARD_PAL
 int
-is_boardpal(up)
-  UTMP *up;
+is_boardpal(
+  UTMP *up)
 {
   return cutmp->board_pal == up->board_pal;
 }
 #endif
 
 int
-is_pal(userno)
-  int userno;
+is_pal(
+  int userno)
 {
   int count, *cache, datum, mid;
 
@@ -447,8 +447,8 @@ is_pal(userno)
 
 #ifdef	HAVE_BANMSG
 int
-is_banmsg(userno)
-  int userno;
+is_banmsg(
+  int userno)
 {
   int count, *cache, datum, mid;
 
@@ -475,16 +475,16 @@ is_banmsg(userno)
 #endif
 
 static int
-int_cmp(a, b)
-  int *a;
-  int *b;
+int_cmp(
+  int *a,
+  int *b)
 {
   return *a - *b;
 }
 
 
 void
-pal_cache()
+pal_cache(void)
 {
   int count, fsize, ufo ,fd;
   int *plist, *cache;
@@ -654,8 +654,8 @@ aloha_sync(void)
       
 
 void
-pal_sync(fpath)
-  char *fpath;
+pal_sync(
+  char *fpath)
 {
   int fd, size=0;
   struct stat st;
@@ -729,13 +729,13 @@ pal_sync(fpath)
 /* ----------------------------------------------------- */
 
 
-static int pal_add();
+static int pal_add(XO *xo);
 
 
 static void
-pal_item(num, pal)
-  int num;
-  PAL *pal;
+pal_item(
+  int num,
+  PAL *pal)
 {
   prints("%6d %-3s%-14s%s\n", num, pal->ftype & PAL_BAD ? "Ｘ" : "",
     pal->userid, pal->ship);
@@ -743,8 +743,8 @@ pal_item(num, pal)
 
 
 static int
-pal_body(xo)
-  XO *xo;
+pal_body(
+  XO *xo)
 {
   PAL *pal;
   int num, max, tail;
@@ -775,8 +775,8 @@ pal_body(xo)
 
 
 static int
-pal_head(xo)
-  XO *xo;
+pal_head(
+  XO *xo)
 {
   vs_head("好友名單", str_site);
   outs("\
@@ -787,8 +787,8 @@ pal_head(xo)
 
 
 static int
-pal_load(xo)
-  XO *xo;
+pal_load(
+  XO *xo)
 {
   xo_load(xo, sizeof(PAL));
   return pal_body(xo);
@@ -796,8 +796,8 @@ pal_load(xo)
 
 
 static int
-pal_init(xo)
-  XO *xo;
+pal_init(
+  XO *xo)
 {
   xo_load(xo, sizeof(PAL));
   return pal_head(xo);
@@ -805,9 +805,9 @@ pal_init(xo)
 
 
 static void
-pal_edit(pal, echo)
-  PAL *pal;
-  int echo;
+pal_edit(
+  PAL *pal,
+  int echo)
 {
   if (echo == DOECHO)
     memset(pal, 0, sizeof(PAL));
@@ -817,9 +817,9 @@ pal_edit(pal, echo)
 
 
 static int
-pal_search(xo, step)
-  XO *xo;
-  int step;
+pal_search(
+  XO *xo,
+  int step)
 {
   int num, pos, max;
   static char buf[IDLEN + 1];
@@ -867,23 +867,23 @@ pal_search(xo, step)
 }
 
 static int
-pal_search_forward(xo)
-  XO *xo;
+pal_search_forward(
+  XO *xo)
 {
   return pal_search(xo, 1); /* step = +1 */
 }
 
 static int
-pal_search_backward(xo)
-  XO *xo;
+pal_search_backward(
+  XO *xo)
 {
   return pal_search(xo, -1); /* step = -1 */
 }
 
 
 static int
-pal_add(xo)
-  XO *xo;
+pal_add(
+  XO *xo)
 {
   ACCT acct;
   int userno;
@@ -950,8 +950,8 @@ pal_add(xo)
 
 
 static int
-pal_delete(xo)
-  XO *xo;
+pal_delete(
+  XO *xo)
 {
   if (vans(msg_del_ny) == 'y')
   {
@@ -986,8 +986,8 @@ pal_delete(xo)
 
 
 static int
-pal_change(xo)
-  XO *xo;
+pal_change(
+  XO *xo)
 {
   PAL *pal, mate;
   int pos, cur;
@@ -1039,8 +1039,8 @@ pal_change(xo)
 
 
 static int
-pal_mail(xo)
-  XO *xo;
+pal_mail(
+  XO *xo)
 {
   PAL *pal;
   char *userid;
@@ -1058,8 +1058,8 @@ pal_mail(xo)
 
 
 static int
-pal_sort(xo)
-  XO *xo;
+pal_sort(
+  XO *xo)
 {
   pal_sync(xo->dir);
   return pal_load(xo);
@@ -1067,8 +1067,8 @@ pal_sort(xo)
 
 
 static int
-pal_query(xo)
-  XO *xo;
+pal_query(
+  XO *xo)
 {
   PAL *pal;
 
@@ -1083,8 +1083,8 @@ pal_query(xo)
 
 
 static int
-pal_help(xo)
-  XO *xo;
+pal_help(
+  XO *xo)
 {
   film_out(FILM_PAL, -1);
   return pal_head(xo);
@@ -1115,7 +1115,7 @@ KeyFunc pal_cb[] =
 
 
 int
-t_pal()
+t_pal(void)
 {
   XO *xo;
   char fpath[64];
@@ -1132,7 +1132,7 @@ t_pal()
 
 #if 0
 int
-t_pal()
+t_pal(void)
 {
   XO *xo;
 
@@ -1156,13 +1156,13 @@ t_pal()
 /* ----------------------------------------------------- */
 
 
-/*static */void bmw_edit();
+/*static */void bmw_edit(UTMP *up, char *hint, BMW *bmw, int cc);
 
 
 static void
-bmw_item(num, bmw)
-  int num;
-  BMW *bmw;
+bmw_item(
+  int num,
+  BMW *bmw)
 {
   struct tm *ptime = localtime(&bmw->btime);
 
@@ -1210,8 +1210,8 @@ bmw_item(num, bmw)
 
 
 static int
-bmw_body(xo)
-  XO *xo;
+bmw_body(
+  XO *xo)
 {
   BMW *bmw;
   int num, max, tail;
@@ -1241,8 +1241,8 @@ bmw_body(xo)
 
 
 static int
-bmw_head(xo)
-  XO *xo;
+bmw_head(
+  XO *xo)
 {
   vs_head("察看訊息", str_site);
   if(bmw_modetype & BMW_MODE)
@@ -1262,8 +1262,8 @@ bmw_head(xo)
 
 
 static int
-bmw_load(xo)
-  XO *xo;
+bmw_load(
+  XO *xo)
 {
   xo_load(xo, sizeof(BMW));
   return bmw_body(xo);
@@ -1271,8 +1271,8 @@ bmw_load(xo)
 
 
 static int
-bmw_init(xo)
-  XO *xo;
+bmw_init(
+  XO *xo)
 {
   xo_load(xo, sizeof(BMW));
   return bmw_head(xo);
@@ -1280,8 +1280,8 @@ bmw_init(xo)
 
 
 static int
-bmw_delete(xo)
-  XO *xo;
+bmw_delete(
+  XO *xo)
 {
   if (vans(msg_del_ny) == 'y')
     if (!rec_del(xo->dir, sizeof(BMW), xo->pos, NULL, NULL))
@@ -1292,8 +1292,8 @@ bmw_delete(xo)
 
 
 static int
-bmw_mail(xo)
-  XO *xo;
+bmw_mail(
+  XO *xo)
 {
   BMW *bmw;
   char *userid;
@@ -1311,8 +1311,8 @@ bmw_mail(xo)
 
 
 static int
-bmw_query(xo)
-  XO *xo;
+bmw_query(
+  XO *xo)
 {
   BMW *bmw;
 
@@ -1327,8 +1327,8 @@ bmw_query(xo)
 
 
 static int
-bmw_write(xo)
-  XO *xo;
+bmw_write(
+  XO *xo)
 {
   if (HAS_PERM(PERM_PAGE))
   {
@@ -1375,8 +1375,8 @@ bmw_write(xo)
 }
 
 static int
-bmw_mode(xo)
-  XO *xo;
+bmw_mode(
+  XO *xo)
 {
   bmw_modetype ^= BMW_MODE;
   return bmw_init(xo);
@@ -1384,8 +1384,8 @@ bmw_mode(xo)
 
 
 static int
-bmw_help(xo)
-  XO *xo;
+bmw_help(
+  XO *xo)
 {
   film_out(FILM_BMW, -1);
   return bmw_head(xo);
@@ -1411,7 +1411,7 @@ KeyFunc bmw_cb[] =
 
 
 int
-t_bmw()
+t_bmw(void)
 {
   xover(XZ_BMW);
   return 0;
@@ -1428,7 +1428,7 @@ t_bmw()
 
 
 static void
-bm_image()
+bm_image(void)
 {
   int fd;
   char fpath[80];
@@ -1486,8 +1486,8 @@ bm_image()
 
 
 int
-bm_belong(board)
-  char *board;
+bm_belong(
+  char *board)
 {
   int fsize, count, result,wcount;
   char fpath[80];
@@ -1556,8 +1556,8 @@ bm_belong(board)
 
 
 int
-XoBM(xo)
-  XO *xo;
+XoBM(
+  XO *xo)
 {
   if ((bbstate & STAT_BOARD) /*&& (bbstate & STAT_MODERATED)*/)
     /* && (cbhdr.readlevel == PERM_SYSOP)) */
@@ -1592,8 +1592,8 @@ XoBM(xo)
 
 
 static void
-showplans(userid)
-  char *userid;
+showplans(
+  char *userid)
 {
   int i;
   FILE *fp;
@@ -1621,9 +1621,9 @@ showplans(userid)
 
 
 static void
-do_query(acct, paling)
-  ACCT *acct;
-  int paling;			/* 是否正在設定好友名單 */
+do_query(
+  ACCT *acct,
+  int paling)			/* 是否正在設定好友名單 */
 {
   UTMP *up;
   int userno,mail, rich;
@@ -1718,9 +1718,9 @@ do_query(acct, paling)
 
 
 void
-my_query(userid, paling)
-  char *userid;
-  int paling;			/* 是否正在設定好友名單 */
+my_query(
+  char *userid,
+  int paling)			/* 是否正在設定好友名單 */
 {
   ACCT acct;
 
@@ -1752,9 +1752,9 @@ static BMW bmw_lslot[BMW_LOCAL_MAX],bmw_sentlot[BMW_LOCAL_MAX];
 static int bmw_locus;
 
 static int
-bmw_send(callee, bmw)
-  UTMP *callee;
-  BMW *bmw;
+bmw_send(
+  UTMP *callee,
+  BMW *bmw)
 {
   BMW *mpool, *mhead, *mtail, **mslot;
   int i;
@@ -1812,11 +1812,11 @@ bmw_send(callee, bmw)
 
 
 /*static */void
-bmw_edit(up, hint, bmw, cc)
-  UTMP *up;
-  char *hint;
-  BMW *bmw;
-  int cc;
+bmw_edit(
+  UTMP *up,
+  char *hint,
+  BMW *bmw,
+  int cc)
 {
   unsigned char *str;
   screenline sl[2];
@@ -1897,7 +1897,7 @@ bmw_edit(up, hint, bmw, cc)
 #if 0
 /* lkchu.981201: 選擇線上使用者傳訊息 */
 static int
-bmw_choose()
+bmw_choose(void)
 {
   UTMP *up, *ubase, *uceil;
   int self, seecloak;
@@ -2211,7 +2211,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 
 #if 0
 void
-bmw_reply()
+bmw_reply(void)
 {
   int userno, max, pos, cc, mode;
   UTMP *up, *uhead;
@@ -2389,8 +2389,8 @@ bmw_reply()
 
 
 int
-pal_list(reciper)
-  int reciper;
+pal_list(
+  int reciper)
 {
   LIST list;
   int userno, fd;
@@ -2494,7 +2494,7 @@ pal_list(reciper)
 
 #ifdef HAVE_ALOHA
 void
-aloha()
+aloha(void)
 {
   UTMP *up, *ubase, *uceil;
   int fd;
@@ -2559,7 +2559,7 @@ extern LinkList *ll_head;
 
 
 int
-t_loginNotify()
+t_loginNotify(void)
 {
   LinkList *wp;
   BMW bmw;
@@ -2595,7 +2595,7 @@ t_loginNotify()
 
 
 void
-loginNotify()
+loginNotify(void)
 {
   UTMP *up, *ubase, *uceil;
   int fd;
@@ -2669,7 +2669,7 @@ loginNotify()
 
 /* lkchu: 熱訊回顧新介面 */
 int
-t_recall()
+t_recall(void)
 {
   xover(XZ_BMW);
   return 0;
@@ -2678,7 +2678,7 @@ t_recall()
 
 #ifdef LOG_TALK
 void
-talk_save()
+talk_save(void)
 {
   char fpath[64];
   struct stat st;
@@ -2739,7 +2739,7 @@ talk_save()
 
 #ifdef LOG_BMW
 void
-bmw_save()
+bmw_save(void)
 {
   int fd,check_max;
   char ans;
@@ -2824,7 +2824,7 @@ bmw_save()
 
 
 void
-bmw_rqst()
+bmw_rqst(void)
 {
   int i, j, userno, locus;
   BMW bmw[BMW_PER_USER], *mptr, **mslot;
@@ -2908,8 +2908,8 @@ bmw_rqst()
 
 
 static void
-talk_nextline(twin)
-  talk_win *twin;
+talk_nextline(
+  talk_win *twin)
 {
   int curln;
 
@@ -2929,9 +2929,9 @@ talk_nextline(twin)
 
 
 static void
-talk_char(twin, ch)
-  talk_win *twin;
-  int ch;
+talk_char(
+  talk_win *twin,
+  int ch)
 {
   int col, ln;
 
@@ -2974,9 +2974,9 @@ talk_char(twin, ch)
 
 
 static void
-talk_string(twin, str)
-  talk_win *twin;
-  unsigned char *str;
+talk_string(
+  talk_win *twin,
+  unsigned char *str)
 {
   int ch;
 
@@ -2989,8 +2989,8 @@ talk_string(twin, str)
 
 
 static void
-talk_speak(fd)
-  int fd;
+talk_speak(
+  int fd)
 {
   talk_win mywin, itswin;
   unsigned char data[80];
@@ -3245,7 +3245,7 @@ talk_speak(fd)
 
 #if 0
 static int
-xsocket()
+xsocket(void)
 {
   int sock, val;
 
@@ -3262,8 +3262,8 @@ xsocket()
 
 
 static void
-talk_hangup(sock)
-  int sock;
+talk_hangup(
+  int sock)
 {
   cutmp->sockport = 0;
   add_io(0, 60);
@@ -3290,8 +3290,8 @@ static char *talk_reason[] =
 
 
 static int
-talk_page(up)
-  UTMP *up;
+talk_page(
+  UTMP *up)
 {
   int sock, msgsock;
   struct sockaddr_in sin;
@@ -3513,8 +3513,8 @@ static PICKUP ulist_pool[MAXACTIVE];
 #ifdef	FRIEND_FIRST
 static int friend_num,ofriend_num,pfriend_num,bfriend_num;/* visor.991103: 記錄目前站上好友數 */
 #endif
-static int ulist_head();
-static int ulist_init();
+static int ulist_head(XO *xo);
+static int ulist_init(XO *xo);
 static XO ulist_xo;
 
 
@@ -3532,11 +3532,11 @@ static char *msg_pickup_way[PICKUP_WAYS] =
 };
 
 static char 
-ck_state(in1,in2,up,mode)
-  int in1;
-  int in2;
-  UTMP *up;
-  int mode;
+ck_state(
+  int in1,
+  int in2,
+  UTMP *up,
+  int mode)
 {
 	if (up->ufo & in2)
 	  return '#';
@@ -3554,8 +3554,8 @@ ck_state(in1,in2,up,mode)
 
 
 static int
-ulist_body(xo)
-  XO *xo;
+ulist_body(
+  XO *xo)
 {
   PICKUP *pp;
   UTMP *up;
@@ -3668,8 +3668,8 @@ ulist_body(xo)
 
 
 static int
-ulist_cmp_userid(i, j)
-  PICKUP *i, *j;
+ulist_cmp_userid(
+  PICKUP *i, PICKUP *j)
 {
   if(i->type == j->type)
 	return str_cmp(i->utmp->userid, j->utmp->userid);
@@ -3678,43 +3678,43 @@ ulist_cmp_userid(i, j)
 }
 
 static int
-ulist_cmp_host(i, j)
-  PICKUP *i, *j;
+ulist_cmp_host(
+  PICKUP *i, PICKUP *j)
 {
   return str_cmp(i->utmp->from, j->utmp->from);
 }
 
 static int
-ulist_cmp_idle(i, j)
-  PICKUP *i, *j;
+ulist_cmp_idle(
+  PICKUP *i, PICKUP *j)
 {
   return i->utmp->idle_time - j->utmp->idle_time;
 }
 
 static int
-ulist_cmp_mode(i, j)
-  PICKUP *i, *j;
+ulist_cmp_mode(
+  PICKUP *i, PICKUP *j)
 {
   return i->utmp->mode - j->utmp->mode;
 }
 
 static int
-ulist_cmp_nick(i, j)
-  PICKUP *i, *j;
+ulist_cmp_nick(
+  PICKUP *i, PICKUP *j)
 {
   return str_cmp(i->utmp->username, j->utmp->username);
 }
 
 #ifdef	HAVE_BOARD_PAL
 static int
-ulist_cmp_board(i,j)
-  PICKUP *i, *j;
+ulist_cmp_board(
+  PICKUP *i, PICKUP *j)
 {
   return i->utmp->board_pal - j->utmp->board_pal;
 }
 #endif
 
-static int (*ulist_cmp[]) () =
+static int (*ulist_cmp[]) (PICKUP *i, PICKUP *j) =
 {
   ulist_cmp_userid,
   ulist_cmp_host,
@@ -3728,8 +3728,8 @@ static int (*ulist_cmp[]) () =
 
 
 static int
-ulist_init(xo)
-  XO *xo;
+ulist_init(
+  XO *xo)
 {
   UTMP *up, *uceil;
   PICKUP *pp;
@@ -3856,8 +3856,8 @@ ulist_init(xo)
 
 
 static int
-ulist_neck(xo)
-  XO *xo;
+ulist_neck(
+  XO *xo)
 {
   move(1, 0);
 #ifdef HAVE_BOARD_PAL
@@ -3879,8 +3879,8 @@ ulist_neck(xo)
 
 
 static int
-ulist_head(xo)
-  XO *xo;
+ulist_head(
+  XO *xo)
 {
   vs_head((cuser.ufo2 & UFO2_PAL)?"好友列表":"網友列表", str_site);
   return ulist_neck(xo);
@@ -3888,8 +3888,8 @@ ulist_head(xo)
 
 
 static int
-ulist_toggle(xo)
-  XO *xo;
+ulist_toggle(
+  XO *xo)
 {
   int ans, max;
   ans = pickup_way + 1;
@@ -3904,8 +3904,8 @@ ulist_toggle(xo)
 
 
 static int
-ulist_pal(xo)
-  XO *xo;
+ulist_pal(
+  XO *xo)
 {
   cuser.ufo2 ^= UFO2_PAL;
   /* Thor.980805: 注意 ufo 同步問題 */
@@ -3914,9 +3914,9 @@ ulist_pal(xo)
 
 
 static int
-ulist_search(xo, step)
-  XO *xo;
-  int step;
+ulist_search(
+  XO *xo,
+  int step)
 {
   int num, pos, max;
   PICKUP *pp;
@@ -3959,15 +3959,15 @@ ulist_search(xo, step)
 }
 
 static int
-ulist_search_forward(xo)
-  XO *xo;
+ulist_search_forward(
+  XO *xo)
 {
   return ulist_search(xo, 1); /* step = +1 */
 }
 
 static int
-ulist_search_backward(xo)
-  XO *xo;
+ulist_search_backward(
+  XO *xo)
 {
   return ulist_search(xo, -1); /* step = -1 */
 }
@@ -3975,8 +3975,8 @@ ulist_search_backward(xo)
 
 
 static int
-ulist_makepal(xo)
-  XO *xo;
+ulist_makepal(
+  XO *xo)
 {
   if (cuser.userlevel)
   {
@@ -4015,8 +4015,8 @@ ulist_makepal(xo)
 }
 
 static int
-ulist_makebad(xo)
-  XO *xo;
+ulist_makebad(
+  XO *xo)
 {
   if (cuser.userlevel)
   {
@@ -4054,8 +4054,8 @@ ulist_makebad(xo)
 
 
 static int
-ulist_mail(xo)
-  XO *xo;
+ulist_mail(
+  XO *xo)
 {
   char userid[IDLEN + 1];
 
@@ -4078,8 +4078,8 @@ ulist_mail(xo)
 
 
 static int
-ulist_query(xo)
-  XO *xo;
+ulist_query(
+  XO *xo)
 {
   move(1, 0);
   clrtobot();
@@ -4090,8 +4090,8 @@ ulist_query(xo)
 
 
 static int
-ulist_broadcast(xo)
-  XO *xo;
+ulist_broadcast(
+  XO *xo)
 {
   int num;
   PICKUP *pp;
@@ -4144,8 +4144,8 @@ ulist_broadcast(xo)
 
 
 static int
-ulist_talk(xo)
-  XO *xo;
+ulist_talk(
+  XO *xo)
 {
   if (HAS_PERM(PERM_PAGE))
   {
@@ -4160,8 +4160,8 @@ ulist_talk(xo)
 
 
 static int
-ulist_write(xo)
-  XO *xo;
+ulist_write(
+  XO *xo)
 {
   if (HAS_PERM(PERM_PAGE))
   {
@@ -4197,8 +4197,8 @@ ulist_write(xo)
 
 
 static int
-ulist_edit(xo)			/* Thor: 可線上查看及修改使用者 */
-  XO *xo;
+ulist_edit(			/* Thor: 可線上查看及修改使用者 */
+  XO *xo)
 {
   ACCT acct;
 
@@ -4213,8 +4213,8 @@ ulist_edit(xo)			/* Thor: 可線上查看及修改使用者 */
 
 /* BLACK SU */
 static int
-ulist_su(xo)
-  XO *xo;
+ulist_su(
+  XO *xo)
 {
   XO *tmp;
   ACCT acct;
@@ -4243,8 +4243,8 @@ ulist_su(xo)
 /* BLACK SU */
 
 static int
-ulist_kick(xo)
-  XO *xo;
+ulist_kick(
+  XO *xo)
 {
   ACCT u;
   acct_load(&u, ulist_pool[xo->pos].utmp->userid);
@@ -4287,8 +4287,8 @@ ulist_kick(xo)
 
 #ifdef	HAVE_CHANGE_FROM
 static int
-ulist_fromchange(xo)
-  XO *xo;
+ulist_fromchange(
+  XO *xo)
 {
   char *str, buf[34];
   
@@ -4311,8 +4311,8 @@ ulist_fromchange(xo)
 
 
 static int
-ulist_nickchange(xo)
-  XO *xo;
+ulist_nickchange(
+  XO *xo)
 {
   char *str, buf[24];
 
@@ -4334,8 +4334,8 @@ ulist_nickchange(xo)
 
 
 static int
-ulist_help(xo)
-  XO *xo;
+ulist_help(
+  XO *xo)
 {
   film_out(FILM_ULIST, -1);
   return ulist_init(xo);
@@ -4344,8 +4344,8 @@ ulist_help(xo)
 
 #if 0
 static int
-ulist_exotic(xo)
-  XO *xo;
+ulist_exotic(
+  XO *xo)
 {
   UTMP *uhead, *utail, *uceil;
   char buf[80];
@@ -4365,8 +4365,8 @@ ulist_exotic(xo)
 #endif
 
 static int
-ulist_pager(xo)
-  XO *xo;
+ulist_pager(
+  XO *xo)
 {
   if (!HAS_PERM(PERM_PAGE))
       return XO_NONE;
@@ -4391,8 +4391,8 @@ ulist_pager(xo)
 }
 
 static int
-ulist_message(xo)
-  XO *xo;
+ulist_message(
+  XO *xo)
 {
 
   if (!HAS_PERM(PERM_PAGE))
@@ -4418,16 +4418,16 @@ ulist_message(xo)
 }
 
 static int
-ulist_recall(xo)
-  XO *xo;
+ulist_recall(
+  XO *xo)
 {
   t_recall();
   return ulist_init(xo);
 }
 
 static int
-ulist_realname(xo)
-  XO *xo;
+ulist_realname(
+  XO *xo)
 {
   if(HAS_PERM(PERM_SYSOP))
   {
@@ -4438,8 +4438,8 @@ ulist_realname(xo)
 }
 
 static int
-ulist_ship(xo)
-  XO *xo;
+ulist_ship(
+  XO *xo)
 {
   cuser.ufo2 ^= UFO2_SHIP;
 //  cutmp->ufo ^= UFO_SHIP;
@@ -4447,8 +4447,8 @@ ulist_ship(xo)
 }
 
 static int
-ulist_mp(xo)
-  XO *xo;
+ulist_mp(
+  XO *xo)
 {
   int tmp;
   
@@ -4459,8 +4459,8 @@ ulist_mp(xo)
 }
 
 static int
-ulist_readmail(xo)
-  XO *xo;
+ulist_readmail(
+  XO *xo)
 {
   if(cuser.userlevel)
   {
@@ -4475,8 +4475,8 @@ ulist_readmail(xo)
 }
 
 static int
-ulist_del(xo)
-  XO *xo;
+ulist_del(
+  XO *xo)
 {
   UTMP *up;
   char ans;
@@ -4515,8 +4515,8 @@ ulist_del(xo)
 }
 
 static int
-ulist_changeship(xo)
-  XO *xo;
+ulist_changeship(
+  XO *xo)
 {
   UTMP *up;
   int userno;
@@ -4563,8 +4563,8 @@ ulist_changeship(xo)
 
 #if 1
 static int
-ulist_test(xo)
-  XO *xo;
+ulist_test(
+  XO *xo)
 {
   int fd;
   char buf[128];
@@ -4579,8 +4579,8 @@ ulist_test(xo)
 }
 
 static int
-ulist_state(xo)
-  XO *xo;
+ulist_state(
+  XO *xo)
 {
   char buf[128];
   if(!HAS_PERM(PERM_SYSOP))
@@ -4593,8 +4593,8 @@ ulist_state(xo)
 
 #ifdef	APRIL_FIRST
 static int
-ulist_april1(xo)
-  XO *xo;
+ulist_april1(
+  XO *xo)
 {
   char buf[256];
   more("gem/brd/Admin/J/A106LL7J",NULL);
@@ -4671,7 +4671,7 @@ KeyFunc ulist_cb[] =
 /* ----------------------------------------------------- */
 
 int
-t_message()
+t_message(void)
 {
    if((cuser.ufo & UFO_QUIET) && (cuser.ufo & UFO_MESSAGE))
    {
@@ -4695,7 +4695,7 @@ t_message()
 
 
 int
-t_pager()
+t_pager(void)
 {
   /* cuser.ufo = (cutmp->ufo ^= UFO_PAGER); */
    if((cuser.ufo & UFO_PAGER) && (cuser.ufo & UFO_PAGER1))
@@ -4719,8 +4719,8 @@ t_pager()
 }
 
 int
-t_cloak(xo)
-  XO *xo;
+t_cloak(
+  XO *xo)
 {
   if(HAS_PERM(PERM_CLOAK))
   {
@@ -4734,7 +4734,7 @@ t_cloak(xo)
 
 
 int
-t_query()
+t_query(void)
 {
   ACCT acct;
 
@@ -4752,7 +4752,7 @@ t_query()
 
 #if 0
 static int
-talk_choose()
+talk_choose(void)
 {
   UTMP *up, *ubase, *uceil;
   int self, seecloak;
@@ -4786,7 +4786,7 @@ talk_choose()
 
 
 int
-t_talk()
+t_talk(void)
 {
   int tuid, unum, ucount;
   UTMP *up;
@@ -4865,7 +4865,7 @@ t_talk()
 
 
 void
-talk_rqst()
+talk_rqst(void)
 {
   UTMP *up;
   int mode, sock, ans, len, port;
@@ -5044,7 +5044,7 @@ over_for:
 
 
 void
-talk_main()
+talk_main(void)
 {
   char fpath[64];
   
@@ -5060,9 +5060,9 @@ talk_main()
 }
 
 int
-check_personal_note(newflag,userid)
-  int newflag;
-  char *userid;
+check_personal_note(
+  int newflag,
+  char *userid)
 {
  char fpath[256];
  int  fd,total = 0;
@@ -5093,7 +5093,7 @@ check_personal_note(newflag,userid)
 
 #ifdef	HAVE_BANMSG
 void
-banmsg_cache()
+banmsg_cache(void)
 {
   int count, fsize, fd;
   int *plist, *cache;
@@ -5149,8 +5149,8 @@ banmsg_cache()
 
 
 void
-banmsg_sync(fpath)
-  char *fpath;
+banmsg_sync(
+  char *fpath)
 {
   int fd, size=0;
   struct stat st;
@@ -5220,21 +5220,21 @@ banmsg_sync(fpath)
 /* ----------------------------------------------------- */
 
 
-static int banmsg_add();
+static int banmsg_add(XO *xo);
 
 
 static void
-banmsg_item(num, banmsg)
-  int num;
-  BANMSG *banmsg;
+banmsg_item(
+  int num,
+  BANMSG *banmsg)
 {
   prints("%6d    %-14s%s\n", num, banmsg->userid, banmsg->ship);
 }
 
 
 static int
-banmsg_body(xo)
-  XO *xo;
+banmsg_body(
+  XO *xo)
 {
   BANMSG *banmsg;
   int num, max, tail;
@@ -5265,8 +5265,8 @@ banmsg_body(xo)
 
 
 static int
-banmsg_head(xo)
-  XO *xo;
+banmsg_head(
+  XO *xo)
 {
   vs_head("拒收名單", str_site);
   outs("\
@@ -5277,8 +5277,8 @@ banmsg_head(xo)
 
 
 static int
-banmsg_load(xo)
-  XO *xo;
+banmsg_load(
+  XO *xo)
 {
   xo_load(xo, sizeof(BANMSG));
   return banmsg_body(xo);
@@ -5286,8 +5286,8 @@ banmsg_load(xo)
 
 
 static int
-banmsg_init(xo)
-  XO *xo;
+banmsg_init(
+  XO *xo)
 {
   xo_load(xo, sizeof(BANMSG));
   return banmsg_head(xo);
@@ -5295,9 +5295,9 @@ banmsg_init(xo)
 
 
 static void
-banmsg_edit(banmsg, echo)
-  BANMSG *banmsg;
-  int echo;
+banmsg_edit(
+  BANMSG *banmsg,
+  int echo)
 {
   if (echo == DOECHO)
     memset(banmsg, 0, sizeof(BANMSG));
@@ -5306,8 +5306,8 @@ banmsg_edit(banmsg, echo)
 
 
 static int
-banmsg_add(xo)
-  XO *xo;
+banmsg_add(
+  XO *xo)
 {
   ACCT acct;
   int userno;
@@ -5352,8 +5352,8 @@ banmsg_add(xo)
 
 
 static int
-banmsg_delete(xo)
-  XO *xo;
+banmsg_delete(
+  XO *xo)
 {
   if (vans(msg_del_ny) == 'y')
   {
@@ -5370,8 +5370,8 @@ banmsg_delete(xo)
 
 
 static int
-banmsg_change(xo)
-  XO *xo;
+banmsg_change(
+  XO *xo)
 {
   BANMSG *banmsg, mate;
   int pos, cur;
@@ -5394,8 +5394,8 @@ banmsg_change(xo)
 
 
 static int
-banmsg_mail(xo)
-  XO *xo;
+banmsg_mail(
+  XO *xo)
 {
   BANMSG *banmsg;
   char *userid;
@@ -5413,8 +5413,8 @@ banmsg_mail(xo)
 
 
 static int
-banmsg_sort(xo)
-  XO *xo;
+banmsg_sort(
+  XO *xo)
 {
   banmsg_sync(xo->dir);
   return banmsg_load(xo);
@@ -5422,8 +5422,8 @@ banmsg_sort(xo)
 
 
 static int
-banmsg_query(xo)
-  XO *xo;
+banmsg_query(
+  XO *xo)
 {
   BANMSG *banmsg;
 
@@ -5436,8 +5436,8 @@ banmsg_query(xo)
 
 
 static int
-banmsg_help(xo)
-  XO *xo;
+banmsg_help(
+  XO *xo)
 {
 //  film_out(FILM_BANMSG, -1);
   return banmsg_head(xo);
@@ -5462,7 +5462,7 @@ KeyFunc banmsg_cb[] =
 
 
 int
-t_banmsg()
+t_banmsg(void)
 {
   XO *xo;
   char fpath[64];

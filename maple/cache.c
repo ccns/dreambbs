@@ -24,9 +24,9 @@ time_t mode_lastchange;
 extern int item_lenth[20];
 
 static void
-attach_err(shmkey, name)
-  int shmkey;
-  char *name;
+attach_err(
+  int shmkey,
+  char *name)
 {
   char buf[80];
 
@@ -37,8 +37,8 @@ attach_err(shmkey, name)
 
 
 static void *
-attach_shm(shmkey, shmsize)
-  int shmkey, shmsize;
+attach_shm(
+  int shmkey, int shmsize)
 {
   void *shmptr;
   int shmid;
@@ -78,7 +78,7 @@ static int ap_semid;
 
 
 void
-sem_init()
+sem_init(void)
 {
   int semid;
 
@@ -104,8 +104,8 @@ sem_init()
 }
 
 static void
-sem_lock(op)
-  int op;			/* op is BSEM_ENTER or BSEM_LEAVE */
+sem_lock(
+  int op)			/* op is BSEM_ENTER or BSEM_LEAVE */
 {
   struct sembuf sops;
 
@@ -127,7 +127,7 @@ UCACHE *ushm;
 
 
 void
-ushm_init()
+ushm_init(void)
 {
   UCACHE *xshm;
 
@@ -144,8 +144,8 @@ ushm_init()
 
 
 void
-utmp_mode(mode)
-  int mode;
+utmp_mode(
+  int mode)
 {
   if (bbsmode != mode)
   {
@@ -167,8 +167,8 @@ utmp_mode(mode)
 
 
 int
-utmp_new(up)
-  UTMP *up;
+utmp_new(
+  UTMP *up)
 {
   UCACHE *xshm;
   UTMP *uentp, *utail;
@@ -232,7 +232,7 @@ utmp_new(up)
 
 
 void
-utmp_free()
+utmp_free(void)
 {
   UTMP *uentp;
 
@@ -255,8 +255,8 @@ utmp_free()
 
 
 UTMP *
-utmp_find(userno)
-  int userno;
+utmp_find(
+  int userno)
 {
   UTMP *uentp, *uceil;
 
@@ -272,8 +272,8 @@ utmp_find(userno)
 }
 
 UTMP *
-pid_find(pid)
-  int pid;
+pid_find(
+  int pid)
 {
   UTMP *uentp, *uceil;
 
@@ -291,8 +291,8 @@ pid_find(pid)
 
 #if 0
 int
-apply_ulist(fptr)
-  int (*fptr) ();
+apply_ulist(
+  int (*fptr) (user_info *uentp))
 {
   UTMP *uentp;
   int i, state;
@@ -309,9 +309,9 @@ apply_ulist(fptr)
 
 
 UTMP *
-utmp_search(userno, order)
-  int userno;
-  int order;			/* 第幾個 */
+utmp_search(
+  int userno,
+  int order)			/* 第幾個 */
 {
   UTMP *uentp, *uceil;
 
@@ -331,9 +331,9 @@ utmp_search(userno, order)
 
 
 int
-utmp_count(userno, show)
-  int userno;
-  int show;
+utmp_count(
+  int userno,
+  int show)
 {
   UTMP *uentp, *uceil;
   int count;
@@ -359,8 +359,8 @@ utmp_count(userno, show)
 #if 1
 #ifdef	HAVE_CLASSTABLEALERT
 int
-cmpclasstable(ptr)
-  CLASS_TABLE_ALERT *ptr;
+cmpclasstable(
+  CLASS_TABLE_ALERT *ptr)
 {
   return ptr->userno == cuser.userno;
 }
@@ -427,7 +427,7 @@ BCACHE *bshm;
 
 #if 0
 void
-bsync()
+bsync(void)
 {
   rec_put(FN_BRD, bshm->bcache, sizeof(BRD) * bshm->number, 0);
 }
@@ -435,7 +435,7 @@ bsync()
 
 
 void
-bshm_init()
+bshm_init(void)
 {
   BCACHE *xshm;
   time_t *uptime;
@@ -485,8 +485,8 @@ bshm_init()
 
 #if 0
 int
-apply_boards(func)
-  int (*func) ();
+apply_boards(
+  int (*func) (BRD *bhdr))
 {
   extern char brd_bits[];
   BRD *bhdr;
@@ -506,8 +506,8 @@ apply_boards(func)
 
 
 int
-brd_bno(bname)
-  char *bname;
+brd_bno(
+  char *bname)
 {
   BRD *brdp, *bend;
   int bno;
@@ -530,8 +530,8 @@ brd_bno(bname)
 
 #if 0
 BRD *
-getbrd(bname)
-  char *bname;
+getbrd(
+  char *bname)
 {
   BRD *bhdr, *tail;
 
@@ -553,17 +553,17 @@ getbrd(bname)
 OCACHE *oshm;
 
 static int
-int_cmp(a, b)
-  int *a;
-  int *b;
+int_cmp(
+  int *a,
+  int *b)
 {
   return *a - *b;
 }
 
 
 int
-observeshm_find(userno)
-  int userno;
+observeshm_find(
+  int userno)
 {
   int count, *cache, datum, mid;
 
@@ -590,7 +590,7 @@ observeshm_find(userno)
 
 
 void
-observeshm_load()
+observeshm_load(void)
 {
   OBSERVE *head,*tail;
   int size;
@@ -619,7 +619,7 @@ observeshm_load()
 }
 
 void
-observeshm_init()
+observeshm_init(void)
 {
     oshm = attach_shm(OBSERVE_KEY, sizeof(OCACHE));
 	observeshm_load();
@@ -632,7 +632,7 @@ observeshm_init()
 COUNTER *curcount;
 
 void
-count_update()
+count_update(void)
 {
   if((ushm->count) > (curcount->samehour_max_login))
   {
@@ -644,7 +644,7 @@ count_update()
 }
 
 void
-count_load()
+count_load(void)
 {
   COUNTER *head;
   int fw,size;
@@ -663,7 +663,7 @@ count_load()
 }
 
 void
-count_init()
+count_init(void)
 {
   if (curcount == NULL)
   {
@@ -680,14 +680,14 @@ FWCACHE *fwshm;
 BANMAIL *curfw;
 
 static int
-cmpban(ban)
-  BANMAIL *ban;
+cmpban(
+  BANMAIL *ban)
 {
   return !strcmp(ban->data,curfw->data);
 }
 
 void
-fwshm_load()
+fwshm_load(void)
 {
   BANMAIL *head,data;
   int fw,size,pos;
@@ -726,7 +726,7 @@ fwshm_load()
 }
 
 void
-fwshm_init()
+fwshm_init(void)
 {
   if (fwshm == NULL)
   {
@@ -745,7 +745,7 @@ static FCACHE *fshm;
 
 
 void
-fshm_init()
+fshm_init(void)
 {
   if (fshm == NULL)
     fshm = attach_shm(FILMSHM_KEY, sizeof(FCACHE));
@@ -753,9 +753,9 @@ fshm_init()
 
 
 static inline void
-out_rle(str,film)
-  unsigned char *str;
-  int film;
+out_rle(
+  unsigned char *str,
+  int film)
 {
 #ifdef SHOW_USER_IN_TEXT
   unsigned char *t_name = cuser.userid;
@@ -822,9 +822,9 @@ out_rle(str,film)
 
 
 int
-film_out(tag, row)
-  int tag;
-  int row;			/* -1 : help */
+film_out(
+  int tag,
+  int row)			/* -1 : help */
 {
   int fmax, len, *shot;
   char *film, buf[FILM_SIZ];
@@ -885,8 +885,8 @@ film_out(tag, row)
 }
 
 UTMP *
-utmp_check(userid)        /* 檢查使用者是否在站上 */
-  char *userid;
+utmp_check(        /* 檢查使用者是否在站上 */
+  char *userid)
 {
   UTMP *uentp, *uceil;
 

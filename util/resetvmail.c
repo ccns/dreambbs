@@ -11,8 +11,8 @@
 
 
 void
-acct_save(acct)
-  ACCT *acct;
+acct_save(
+  ACCT *acct)
 {
   int fd;
   char fpath[80];
@@ -28,9 +28,9 @@ acct_save(acct)
 
 
 static void
-reaper(fpath, lowid)
-  char *fpath;
-  char *lowid;
+reaper(
+  char *fpath,
+  char *lowid)
 {
   int fd;
 
@@ -74,8 +74,8 @@ reaper(fpath, lowid)
 }
 
 static void
-traverse(fpath)
-  char *fpath;
+traverse(
+  char *fpath)
 {
   DIR *dirp;
   struct dirent *de;

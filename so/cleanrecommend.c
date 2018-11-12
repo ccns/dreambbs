@@ -31,9 +31,9 @@ int counter;
 char title[80],name[10];
 
 static int
-cleanrecommend_log(rmsg,mode)
-  RMSG *rmsg;
-  int mode;	/* 0:partial 1:all */
+cleanrecommend_log(
+  RMSG *rmsg,
+  int mode)	/* 0:partial 1:all */
 {
   FILE *fp;
   time_t now;
@@ -54,9 +54,9 @@ cleanrecommend_log(rmsg,mode)
 }
 
 static void
-cleanrecommend_item(num, cleanrecommend)
-  int num;
-  RMSG *cleanrecommend;
+cleanrecommend_item(
+  int num,
+  RMSG *cleanrecommend)
 {
     
     char tmp[10],*pn;
@@ -81,8 +81,8 @@ cleanrecommend_item(num, cleanrecommend)
 }
 
 static int
-cleanrecommend_body(xo)
-  XO *xo;
+cleanrecommend_body(
+  XO *xo)
 {
   RMSG *cleanrecommend;
   int num, max, tail;
@@ -119,8 +119,8 @@ cleanrecommend_body(xo)
 
 
 static int
-cleanrecommend_head(xo)
-  XO *xo;
+cleanrecommend_head(
+  XO *xo)
 {
   vs_head("推薦留言清單", str_site);
   outs("\
@@ -131,8 +131,8 @@ cleanrecommend_head(xo)
 
 
 static int
-cleanrecommend_load(xo)
-  XO *xo;
+cleanrecommend_load(
+  XO *xo)
 {
   xo_load(xo, sizeof(RMSG));
   return cleanrecommend_body(xo);
@@ -140,8 +140,8 @@ cleanrecommend_load(xo)
 
 
 static int
-cleanrecommend_init(xo)
-  XO *xo;
+cleanrecommend_init(
+  XO *xo)
 {
   xo_load(xo, sizeof(RMSG));
   return cleanrecommend_head(xo);
@@ -149,9 +149,9 @@ cleanrecommend_init(xo)
 
 
 static int
-cleanrecommend_edit(cleanrecommend,echo)
-  RMSG *cleanrecommend;
-  int echo;
+cleanrecommend_edit(
+  RMSG *cleanrecommend,
+  int echo)
 {
   if(echo == DOECHO)
     memset(cleanrecommend, 0, sizeof(RMSG));
@@ -166,8 +166,8 @@ cleanrecommend_edit(cleanrecommend,echo)
 
 
 static int
-cleanrecommend_delete(xo)
-  XO *xo;
+cleanrecommend_delete(
+  XO *xo)
 {
 
   if (vans(msg_del_ny) == 'y')
@@ -189,8 +189,8 @@ cleanrecommend_delete(xo)
 }
 
 static int
-cleanrecommend_change(xo)
-  XO *xo;
+cleanrecommend_change(
+  XO *xo)
 {
   RMSG *cleanrecommend, mate;
   int pos, cur;
@@ -215,8 +215,8 @@ cleanrecommend_change(xo)
 }
 
 static int
-cleanrecommend_cleanall(xo)
-  XO *xo;
+cleanrecommend_cleanall(
+  XO *xo)
 {
   if(vans("確定要刪除所有的留言嗎？[y/N]") == 'y')
   {
@@ -228,8 +228,8 @@ cleanrecommend_cleanall(xo)
 }
 
 static int
-cleanrecommend_help(xo)
-  XO *xo;
+cleanrecommend_help(
+  XO *xo)
 {
 //  film_out(FILM_RMSG, -1);
   return cleanrecommend_head(xo);
@@ -250,8 +250,8 @@ KeyFunc cleanrecommend_cb[] =
 };
 
 int
-clean(xo)
-  XO *xo;
+clean(
+  XO *xo)
 {
   XO *xoo;
   HDR *hdr,phdr;

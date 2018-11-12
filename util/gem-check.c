@@ -61,16 +61,16 @@ static int sync_size, sync_head;
 
 
 static int
-sync_cmp(s1, s2)
-  SyncData *s1, *s2;
+sync_cmp(
+  SyncData *s1, SyncData *s2)
 {
   return s1->chrono - s2->chrono;
 }
 
 
 static void
-sync_init(fname)
-  char *fname;
+sync_init(
+  char *fname)
 {
   int ch, prefix;
   time_t chrono;
@@ -159,8 +159,8 @@ sync_init(fname)
 
 
 static void
-sync_check(fgem)
-  char *fgem;
+sync_check(
+  char *fgem)
 {
   int fback, aback, expire;
   char *str, *fname, fpath[128], fnew[128];
@@ -338,8 +338,8 @@ sync_check(fgem)
 
 
 static void
-check_log(fpath)
-  char *fpath;
+check_log(
+  char *fpath)
 {
   FILE *fpr, *fpw;
   struct stat st;
@@ -394,9 +394,9 @@ check_log(fpath)
 
 
 static int
-gcheck(level, fpath)
-  int level;
-  char *fpath;
+gcheck(
+  int level,
+  char *fpath)
 {
   int count, xmode, xhead;
   char *fname, *ptr=NULL, buf[256];
@@ -513,8 +513,8 @@ gcheck(level, fpath)
 
 
 static void
-proxy_check(fpath)
-  char *fpath;
+proxy_check(
+  char *fpath)
 {
   char *fname, *str;
   int cc, prefix;
@@ -561,9 +561,9 @@ proxy_check(fpath)
 
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   DIR *dirp;
   struct dirent *de;

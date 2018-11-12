@@ -8,15 +8,15 @@
 
 #include "bbs.h"
 
-extern int xo_delete();
-extern int xo_uquery();
-extern int xo_usetup();
-extern int post_cross();
+extern int xo_delete(XO *xo);
+extern int xo_uquery(XO *xo);
+extern int xo_usetup(XO *xo);
+extern int post_cross(XO *xo);
 extern XZ xz[];
 
 extern int TagNum;
 extern UCACHE *ushm;
-//static int m_count();
+//static int m_count(void);
 
 
 /* ----------------------------------------------------- */
@@ -33,7 +33,7 @@ extern BCACHE *bshm;
 
 
 void
-ll_new()
+ll_new(void)
 {
   LinkList *list, *next;
 
@@ -51,8 +51,8 @@ ll_new()
 
 
 void
-ll_add(name)
-  char *name;
+ll_add(
+  char *name)
 {
   LinkList *node;
   int len;
@@ -71,8 +71,8 @@ ll_add(name)
 
 
 int
-ll_del(name)
-  char *name;
+ll_del(
+  char *name)
 {
   LinkList *list, *prev, *next;
 
@@ -100,8 +100,8 @@ ll_del(name)
 
 
 int
-ll_has(name)
-  char *name;
+ll_has(
+  char *name)
 {
   LinkList *list;
 
@@ -115,9 +115,9 @@ ll_has(name)
 
 
 void
-ll_out(row, column, msg)
-  int row, column;
-  char *msg;
+ll_out(
+  int row, int column,
+  char *msg)
 {
   LinkList *list;
   int cur_rownum,ch,crow;
@@ -167,11 +167,11 @@ ll_out(row, column, msg)
 /* ----------------------------------------------------- */
 
 
-int mail_send();
+int mail_send(char *rcpt, char *title);
 
 
 int
-m_internet()
+m_internet(void)
 {
   char rcpt[60];
 
@@ -240,9 +240,9 @@ m_internet()
 
 #ifdef	BATCH_SMTP
 int
-bsmtp(fpath, title, rcpt, method)
-  char *fpath, *title, *rcpt;
-  int method;
+bsmtp(
+  char *fpath, char *title, char *rcpt,
+  int method)
 {
   char buf[80];
   time_t chrono;
@@ -293,9 +293,9 @@ bsmtp(fpath, title, rcpt, method)
 
 
 int
-bsmtp(fpath, title, rcpt, method)
-  char *fpath, *title, *rcpt;
-  int method;
+bsmtp(
+  char *fpath, char *title, char *rcpt,
+  int method)
 {
   int sock;
   time_t chrono, stamp;
@@ -536,8 +536,8 @@ smtp_log:
 
 #ifdef HAVE_DOWNLOAD
 int
-bsmtp_file(fpath, title, rcpt)
-  char *fpath, *title, *rcpt;
+bsmtp_file(
+  char *fpath, char *title, char *rcpt)
 {
   int sock;
   time_t chrono, stamp;
@@ -734,7 +734,7 @@ smtp_file_log:
 #ifdef HAVE_SIGNED_MAIL
 /* Thor.990413: 提供驗證功能 */
 int
-m_verify()
+m_verify(void)
 {
   extern char rusername[]; /* Thor: 記錄 RFC931, 怕guest verify */
   time_t chrono; 
@@ -827,7 +827,7 @@ static struct
 }      cmbox;
 
 int
-m_total_size()
+m_total_size(void)
 {
   int fd, fsize,total;
   struct stat st;
@@ -889,7 +889,7 @@ m_total_size()
 
 
 unsigned int
-m_quota()
+m_quota(void)
 {
   unsigned int ufo;
   int fd, count, fsize, limit, xmode;
@@ -1011,8 +1011,8 @@ m_quota()
 #define    PACKLOG     "run/mzip.log"
 
 static void
-packlog(packmsg)
-  char *packmsg;
+packlog(
+  char *packmsg)
 {
   FILE *fp;
 
@@ -1037,9 +1037,9 @@ packlog(packmsg)
 
 
 static void
-do_forward(title, mode)
-  char *title;
-  int mode;
+do_forward(
+  char *title,
+  int mode)
 {
   int rc;
   char *userid;
@@ -1135,7 +1135,7 @@ do_forward(title, mode)
 
 
 int
-m_zip()			/* itoc.010228: 打包資料 */
+m_zip(void)			/* itoc.010228: 打包資料 */
 {
   int ans;
   char *name, *item, buf[80];
@@ -1192,8 +1192,8 @@ m_zip()			/* itoc.010228: 打包資料 */
 #endif
 
 int
-m_query(userid)
-  char *userid;
+m_query(
+  char *userid)
 {
   int fd, ans, fsize;
   HDR *head, *tail;
@@ -1235,8 +1235,8 @@ m_query(userid)
 
 
 void
-m_biff(userno)
-  int userno;
+m_biff(
+  int userno)
 {
   UTMP *utmp, *uceil;
 
@@ -1257,7 +1257,7 @@ m_biff(userno)
 
 #if 0
 static int
-m_count()
+m_count(void)
 {
   int quota;
   unsigned int ulevel;
@@ -1291,9 +1291,9 @@ m_count()
 #endif
 
 static void
-mail_hold(fpath, rcpt)
-  char *fpath;
-  char *rcpt;
+mail_hold(
+  char *fpath,
+  char *rcpt)
 {
   char *title, *folder, buf[256];
   HDR mhdr;
@@ -1320,7 +1320,7 @@ mail_hold(fpath, rcpt)
 
 /* cache.091209: 自動轉寄 */ 
 int
-m_setforward()
+m_setforward(void)
 {
   char fpath[64], ip[50];
   FILE *fp;
@@ -1357,7 +1357,7 @@ m_setforward()
 
 /* cache.100129: 重建信箱索引 */ 
 int
-m_setmboxdir()
+m_setmboxdir(void)
 {
 
   char upath[128], fpath1[128], fpath2[128], fpath3[128], id[5];
@@ -1399,9 +1399,9 @@ m_setmboxdir()
 
 
 int
-hdr_reply(row, hdr)
-  int row;
-  HDR *hdr;
+hdr_reply(
+  int row,
+  HDR *hdr)
 {
   char *title, *str;
 
@@ -1419,8 +1419,8 @@ hdr_reply(row, hdr)
 
 
 /* static inline */ int
-mail_external(addr)
-  char *addr;
+mail_external(
+  char *addr)
 {
   char *str;
 
@@ -1443,8 +1443,8 @@ mail_external(addr)
 /* cache.091209: 自動轉寄信件*/ 
 /* cuser.userid 將「標題 title、檔案在 fpath」的信件寄給 userid 的外部信箱 */
 static void
-forward_mail(fpath, userid, title)
-  char *fpath, *userid, *title;
+forward_mail(
+  char *fpath, char *userid, char *title)
 {
   FILE *fp;
   char ip[80];
@@ -1461,8 +1461,8 @@ forward_mail(fpath, userid, title)
 }
 
 int
-mail_send(rcpt, title)
-  char *rcpt, *title;
+mail_send(
+  char *rcpt, char *title)
 {
   HDR mhdr;
   char fpath[80], folder[80],ckforward[80];
@@ -1578,8 +1578,8 @@ mail_send(rcpt, title)
 
 
 void
-mail_reply(hdr)
-  HDR *hdr;
+mail_reply(
+  HDR *hdr)
 {
   int xmode, prefix;
   char *msg, buf[80];
@@ -1657,8 +1657,8 @@ mail_reply(hdr)
 
 
 void
-my_send(rcpt)
-  char *rcpt;
+my_send(
+  char *rcpt)
 {
   int result;
   char *msg;
@@ -1706,7 +1706,7 @@ my_send(rcpt)
 
 
 int
-m_send()
+m_send(void)
 {
   if(cuser.userlevel & PERM_DENYMAIL)
     vmsg("您的信箱被鎖了！");
@@ -1722,7 +1722,7 @@ m_send()
 
 
 int
-mail_sysop()
+mail_sysop(void)
 {
   int fd;
   if(bbsothermode & OTHERSTAT_EDITING)
@@ -1797,8 +1797,8 @@ mail_sysop()
 #else  /* Thor.981009: 防止愛情幸運信 */
 
 static int
-multi_send(title)
-  char *title;
+multi_send(
+  char *title)
 {
   FILE *fp;
   HDR mhdr;
@@ -1965,8 +1965,8 @@ multi_send(title)
 
 
 static void
-multi_reply(mhdr)
-  HDR *mhdr;
+multi_reply(
+  HDR *mhdr)
 {
   if(!HAS_PERM(PERM_INTERNET))
     return ;
@@ -1978,7 +1978,7 @@ multi_reply(mhdr)
 
 
 int
-mail_list()
+mail_list(void)
 {
 
   if(mail_stat(CHK_MAIL_NOMSG))
@@ -2005,8 +2005,8 @@ mail_list()
 
 
 static inline int
-mbox_attr(type)
-  int type;
+mbox_attr(
+  int type)
 {
   if (type & MAIL_DELETE)
     return 'D';
@@ -2019,17 +2019,17 @@ mbox_attr(type)
 
 
 int
-tag_char(chrono)
-  int chrono;
+tag_char(
+  int chrono)
 {
   return TagNum && !Tagger(chrono, 0, TAG_NIN) ? '*' : ' ';
 }
 
 
 void
-hdr_outs(hdr, cc)		/* print HDR's subject */
-  HDR *hdr;
-  int cc;
+hdr_outs(		/* print HDR's subject */
+  HDR *hdr,
+  int cc)
 {
   static char *type[4] =
   {"Re", "◇", "\033[1;33m=>", "\033[1;32m◆"};
@@ -2192,9 +2192,9 @@ hdr_outs(hdr, cc)		/* print HDR's subject */
 
 
 static inline void
-mbox_item(pos, hdr)
-  int pos;			/* sequence number */
-  HDR *hdr;
+mbox_item(
+  int pos,			/* sequence number */
+  HDR *hdr)
 {
 
 #if 0				/* Thor.0508: 變色看看 */
@@ -2211,8 +2211,8 @@ mbox_item(pos, hdr)
 
 
 static int
-mbox_body(xo)
-  XO *xo;
+mbox_body(
+  XO *xo)
 {
   HDR *mhdr;
   int num, max, tail;
@@ -2243,8 +2243,8 @@ mbox_body(xo)
 
 
 static int
-mbox_head(xo)
-  XO *xo;
+mbox_head(
+  XO *xo)
 {
   vs_head("\0郵件選單", str_site);
 
@@ -2255,8 +2255,8 @@ mbox_head(xo)
 
 
 static int
-mbox_load(xo)
-  XO *xo;
+mbox_load(
+  XO *xo)
 {
   xo_load(xo, sizeof(HDR));
   return mbox_body(xo);
@@ -2264,8 +2264,8 @@ mbox_load(xo)
 
 
 static int
-mbox_init(xo)
-  XO *xo;
+mbox_init(
+  XO *xo)
 {
   xo_load(xo, sizeof(HDR));
   return mbox_head(xo);
@@ -2273,8 +2273,8 @@ mbox_init(xo)
 
 
 static int
-mbox_delete(xo)
-  XO *xo;
+mbox_delete(
+  XO *xo)
 {
   int pos, xmode;
   HDR *hdr;
@@ -2314,8 +2314,8 @@ mbox_delete(xo)
 }
 
 static int
-mbox_forward(xo)
-  XO *xo;
+mbox_forward(
+  XO *xo)
 {
   ACCT muser;
   int pos;
@@ -2370,8 +2370,8 @@ mbox_forward(xo)
 
 
 static int
-mbox_browse(xo)
-  XO *xo;
+mbox_browse(
+  XO *xo)
 {
   HDR *mhdr,hdr;
   int pos, xmode, nmode,mode;
@@ -2459,8 +2459,8 @@ mbox_browse(xo)
 }
 
 static int
-mbox_reply(xo)
-  XO *xo;
+mbox_reply(
+  XO *xo)
 {
   int pos, xmode;
   HDR *mhdr,hdr;
@@ -2500,8 +2500,8 @@ mbox_reply(xo)
 
 
 static int
-mbox_mark(xo)
-  XO *xo;
+mbox_mark(
+  XO *xo)
 {
   HDR *mhdr;
   int cur, pos;
@@ -2517,8 +2517,8 @@ mbox_mark(xo)
 
 
 static int
-mbox_tag(xo)
-  XO *xo;
+mbox_tag(
+  XO *xo)
 {
   HDR *hdr;
   int tag, pos, cur;
@@ -2539,8 +2539,8 @@ mbox_tag(xo)
 
 
 int
-mbox_send(xo)
-  XO *xo;
+mbox_send(
+  XO *xo)
 {
   m_send();
   return mbox_head(xo);
@@ -2548,8 +2548,8 @@ mbox_send(xo)
 
 /*by visor*/
 static int
-mbox_sysop(xo)
-  XO *xo;
+mbox_sysop(
+  XO *xo)
 {
   if (/*(xo == (XO *) & cmbox) &&*/ (cuser.userlevel & PERM_SYSOP))
   {
@@ -2567,8 +2567,8 @@ mbox_sysop(xo)
 }
 
 static int
-mbox_other(xo)
-  XO *xo;
+mbox_other(
+  XO *xo)
 {
  
   ACCT acct;
@@ -2601,16 +2601,16 @@ mbox_other(xo)
 }
 
 static int
-mbox_help(xo)
-  XO *xo;
+mbox_help(
+  XO *xo)
 {
   film_out(FILM_MAIL, -1);
   return mbox_head(xo);
 }
 
 int
-mail_stat(mode)
-  int mode;
+mail_stat(
+  int mode)
 {
   int limit_e,total_e;
   int limit_k,total_k;
@@ -2642,16 +2642,16 @@ mail_stat(mode)
 }
 
 static int
-mbox_stat(xo)
-  XO *xo;
+mbox_stat(
+  XO *xo)
 {
   mail_stat(CHK_MAIL_NORMAL);
   return XO_HEAD;
 }
 
 static int
-mbox_edit(xo)
-  XO *xo;
+mbox_edit(
+  XO *xo)
 {
   HDR *hdr;
   char fpath[128];
@@ -2672,8 +2672,8 @@ mbox_edit(xo)
 }
 
 static int
-mbox_size(xo)
-  XO *xo;
+mbox_size(
+  XO *xo)
 {
   HDR *hdr;
   char *dir, fpath[80],buf[128];
@@ -2711,8 +2711,8 @@ mbox_size(xo)
 
 #ifdef  HAVE_MAIL_FIX
 static int
-mbox_title(xo)
-  XO *xo;
+mbox_title(
+  XO *xo)
 {
   HDR *hdr,mhdr;
      
@@ -2745,8 +2745,8 @@ mbox_title(xo)
 #ifdef HAVE_MAILUNDELETE
 
 static int
-mbox_undelete(xo)
-  XO *xo;
+mbox_undelete(
+  XO *xo)
 {
   HDR *hdr;
 
@@ -2760,8 +2760,8 @@ mbox_undelete(xo)
 }
 
 static int
-mbox_clean(xo)
-  XO *xo;
+mbox_clean(
+  XO *xo)
 {
   if(vans("\033[1;5;41;33m警告：\033[m清除之後不能救回。確定要清除嗎？(y/N)") == 'y')
   {
@@ -2772,7 +2772,7 @@ mbox_clean(xo)
 }
 
 int
-mbox_check()
+mbox_check(void)
 {
   HDR hdr;
   int fd,total;
@@ -2795,10 +2795,10 @@ mbox_check()
 
 #ifdef	HAVE_MAILGEM
 static int
-mbox_gem(xo)
-  XO *xo;
+mbox_gem(
+  XO *xo)
 {
-  static void (*mgp)();
+  static void (*mgp)(void);
   if(!HAS_PERM(PERM_MBOX))
     return XO_NONE;
   if(!mgp)
@@ -2857,7 +2857,7 @@ static KeyFunc mbox_cb[] =
 
 
 void
-mbox_main()
+mbox_main(void)
 {
   cmbox.mail_xo.pos = XO_TAIL;
   usr_fpath(cmbox.dir, cuser.userid, fn_dir);

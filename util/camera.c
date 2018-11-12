@@ -58,8 +58,8 @@ static int tail;
 
 
 	static void
-mirror(fpath)
-	char *fpath;
+mirror(
+	char *fpath)
 {
 	int fd, size;
 	char *ptr;
@@ -90,8 +90,8 @@ mirror(fpath)
 
 
 	static int
-play(data)
-	char *data;
+play(
+	char *data)
 {
 	int line, ch;
 	char *head;
@@ -143,9 +143,9 @@ play(data)
 }
 
 	int
-main(argc,argv)
-	int argc;      /* Thor.980804: 弄把计 */
-	char *argv[];
+main(
+	int argc,      /* Thor.980804: 弄把计 */
+	char *argv[])
 {
 	int i, fd, size;
 #ifdef      HAVE_SONG_TO_CAMERA

@@ -1,6 +1,6 @@
 void
-clrchyiuan(i, j)
-int i, j;
+clrchyiuan(
+int i, int j)
 {
 	while (i <= j)
 	{
@@ -30,15 +30,15 @@ show_file(char *filename, int y, int lines, int mode)
 }
 
 void
-usercomplete(msg, buf)
-char *msg, *buf;
+usercomplete(
+char *msg, char *buf)
 {
 	vget(1, 0, msg, buf, IDLEN + 1, GET_USER);
 }
 
 char *
-Cdate(chrono)
-time_t *chrono;
+Cdate(
+time_t *chrono)
 {
 	struct tm *ptime;
 

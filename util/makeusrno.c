@@ -26,16 +26,16 @@ int total;
 void pal_sync(char *fpath);
 
 static int
-int_cmp(a, b)
-  int *a;
-  int *b;
+int_cmp(
+  int *a,
+  int *b)
 {
   return *a - *b;
 }
 
 static void
-bimage(brd)
-  char *brd;
+bimage(
+  char *brd)
 {
   int fd;
   char fpath[128];
@@ -102,7 +102,7 @@ bimage(brd)
 }
 
 void
-resetbrd()
+resetbrd(void)
 {
   struct dirent *de;
   DIR *dirp;
@@ -127,8 +127,8 @@ resetbrd()
 }
 
 static int
-finduserno(userid)
-  char *userid;
+finduserno(
+  char *userid)
 {
   int i;
   for(i=1;i<=total;i++)
@@ -140,9 +140,9 @@ finduserno(userid)
 }
 
 void
-bmw_sync(userid,userno)
-  char *userid;
-  int userno;
+bmw_sync(
+  char *userid,
+  int userno)
 {
   int fd;
   char fpath[128];
@@ -183,8 +183,8 @@ bmw_sync(userid,userno)
 }
 
 void
-pal_sync(fpath)
-  char *fpath;
+pal_sync(
+  char *fpath)
 {
   int fd, size=0;
   struct stat st;
@@ -241,9 +241,9 @@ pal_sync(fpath)
 }
 
 static void
-reaper(fpath, lowid)
-  char *fpath;
-  char *lowid;
+reaper(
+  char *fpath,
+  char *lowid)
 {
   int fd;
 
@@ -275,9 +275,9 @@ reaper(fpath, lowid)
 }
 
 static void
-optimize(fpath, lowid)
-  char *fpath;
-  char *lowid;
+optimize(
+  char *fpath,
+  char *lowid)
 {
 
   char buf[256];
@@ -295,9 +295,9 @@ optimize(fpath, lowid)
 
 
 static void
-traverse(fpath,mode)
-  char *fpath;
-  int mode;
+traverse(
+  char *fpath,
+  int mode)
 {
   DIR *dirp;
   struct dirent *de;

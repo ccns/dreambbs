@@ -34,28 +34,28 @@ levelup ml[2];
 
 #include "pipfun.c"
 
-int pip_money();
+int pip_money(void);
 static void pip_load_mob(char *fpath);
 static void pip_load_mobset(char *fpath);
-static void pip_check_levelup();
-static void pip_check_level();
+static void pip_check_levelup(void);
+static void pip_check_level(void);
 static void pip_load_levelup(char *fpath);
-static int twice();
-static int pip_magic_menu();
-static int pip_magic_doing_menu();
+static int twice(int x, int max, int min);
+static int pip_magic_menu(int mode, UTMP *opt);
+static int pip_magic_doing_menu(struct magicset *p);
 void pip_read_file(char *userid);
-void pip_write_file();
+void pip_write_file(void);
 void show_system_pic(int i);
-void pip_new_game();
-int pip_main_menu();
-int pip_live_again();
+void pip_new_game(void);
+int pip_main_menu(void);
+int pip_live_again(void);
 void show_basic_pic(int i);
 int pip_log_record(char *msg);
 void show_die_pic(int i);
 int pip_mainmenu(int mode);
 int pip_time_change(time_t cnow);
-int pip_ending_screen();
-int pip_marriage_offer();
+int pip_ending_screen(void);
+int pip_marriage_offer(void);
 void show_usual_pic(int i);
 void show_feed_pic(int i);
 int pip_buy_goods_new(int mode, struct goodsofpip *p, int oldnum[]);
@@ -63,31 +63,31 @@ int pip_weapon_doing_menu(int variance, int type, struct weapon *p);
 int pip_vs_man(int n, struct playrule *p, int mode);
 int pip_results_show_ending(int winorlost, int mode, int a, int b, int c);
 void pip_fight_bad(int n);
-void tie();
-void win();
-void situ();
-void lose();
+void tie(void);
+void win(void);
+void situ(void);
+void lose(void);
 int pip_practice_function(int classnum, int classgrade, int pic1, int pic2, int *change1, int *change2, int *change3, int *change4, int *change5);
 int pip_ending_decide(char *eendbuf1, char *eendbuf2, char *eendbuf3, int *endmode, int *endgrade);
 int pip_game_over(int endgrade);
 int pip_practice_gradeup(int classnum, int classgrade, int data);
 
 /*系統選單*/
-int pip_data_list(), pip_system_freepip(), pip_system_service();
-int pip_write_backup(), pip_read_backup();
-int pip_divine(), pip_results_show();
+int pip_data_list(char *userid), pip_system_freepip(void), pip_system_service(void);
+int pip_write_backup(void), pip_read_backup(void);
+int pip_divine(void), pip_results_show(void);
 
 #ifdef	HAVE_PIP_FIGHT
-static int pip_magic_fight_menu();
-static int get_hurt();
-static int pip_fight_feed();
+static int pip_magic_fight_menu(void);
+static int get_hurt(void);
+static int pip_fight_feed(void);
 
 #endif
-/*int pip_request();*/
+/*int pip_request(void);*/
 
 static void
-logit(money)
-int money;
+logit(
+int money)
 {
 	char buf[100];
 	time_t now;
@@ -102,15 +102,15 @@ int money;
 }
 
 char *
-get_path(id, file)
-char *id, *file;
+get_path(
+char *id, char *file)
 {
 	usr_fpath(pippath, id, file);
 	return pippath;
 }
 
 /*遊戲主程式*/
-int p_pipple()
+int p_pipple(void)
 {
 	FILE *fs;
 	int pipkey;
@@ -181,7 +181,7 @@ dsyan_time(const time_t *t)
 }
 
 /*新遊戲的設定*/
-void pip_new_game()
+void pip_new_game(void)
 {
 	char buf[256];
 	time_t now;
@@ -338,9 +338,9 @@ void pip_new_game()
 
 /*小雞死亡函式*/
 void
-pipdie(msg, mode)
-char *msg;
-int mode;
+pipdie(
+char *msg,
+int mode)
 {
 	char genbuf[200];
 	time_t now;
@@ -377,11 +377,11 @@ int mode;
 
 /*pro:機率 base:底數 mode:類型 mul:加權100=1 cal:加減*/
 void
-count_tired(prob, base, mode, mul, cal)
-int prob, base;
-char *mode;
-int mul;
-int cal;
+count_tired(
+int prob, int base,
+char *mode,
+int mul,
+int cal)
 {
 	int tiredvary = 0;
 	int tm;
@@ -471,8 +471,8 @@ char *menuname[8][2] =
 };
 
 /*主選單*/
-int pip_basic_menu(), pip_store_menu(), pip_practice_menu();
-int pip_play_menu(), pip_job_menu(), pip_special_menu(), pip_system_menu();
+int pip_basic_menu(void), pip_store_menu(void), pip_practice_menu(void);
+int pip_play_menu(void), pip_job_menu(void), pip_special_menu(void), pip_system_menu(void);
 
 static struct pipcommands pipmainlist[] =
 {
@@ -487,7 +487,7 @@ static struct pipcommands pipmainlist[] =
 };
 
 /*基本選單*/
-int pip_basic_feed(), pip_basic_takeshower(), pip_basic_takerest(), pip_basic_kiss();
+int pip_basic_feed(void), pip_basic_takeshower(void), pip_basic_takerest(void), pip_basic_kiss(void);
 static struct pipcommands pipbasiclist[] =
 {
 	{pip_basic_feed,		'1',	'1'},
@@ -500,9 +500,9 @@ static struct pipcommands pipbasiclist[] =
 };
 
 /*商店選單*/
-int pip_store_food(), pip_store_medicine(), pip_store_other();
-int pip_store_weapon_head(), pip_store_weapon_rhand(), pip_store_weapon_lhand();
-int pip_store_weapon_body(), pip_store_weapon_foot();
+int pip_store_food(void), pip_store_medicine(void), pip_store_other(void);
+int pip_store_weapon_head(void), pip_store_weapon_rhand(void), pip_store_weapon_lhand(void);
+int pip_store_weapon_body(void), pip_store_weapon_foot(void);
 
 static struct pipcommands pipstorelist[] =
 {
@@ -518,10 +518,10 @@ static struct pipcommands pipstorelist[] =
 };
 
 /*修行選單*/
-int pip_practice_classA(), pip_practice_classB(), pip_practice_classC();
-int pip_practice_classD(), pip_practice_classE(), pip_practice_classF();
-int pip_practice_classG(), pip_practice_classH(), pip_practice_classI();
-int pip_practice_classJ();
+int pip_practice_classA(void), pip_practice_classB(void), pip_practice_classC(void);
+int pip_practice_classD(void), pip_practice_classE(void), pip_practice_classF(void);
+int pip_practice_classG(void), pip_practice_classH(void), pip_practice_classI(void);
+int pip_practice_classJ(void);
 
 static struct pipcommands pippracticelist[] =
 {
@@ -539,8 +539,8 @@ static struct pipcommands pippracticelist[] =
 };
 
 /*玩樂選單*/
-int pip_play_stroll(), pip_play_sport(), pip_play_date(), pip_play_guess();
-int pip_play_outing(), pip_play_kite(), pip_play_KTV();
+int pip_play_stroll(void), pip_play_sport(void), pip_play_date(void), pip_play_guess(void);
+int pip_play_outing(void), pip_play_kite(void), pip_play_KTV(void);
 
 static struct pipcommands pipplaylist[] =
 {
@@ -555,10 +555,10 @@ static struct pipcommands pipplaylist[] =
 };
 
 /*打工選單*/
-int pip_job_workA(), pip_job_workB(), pip_job_workC(), pip_job_workD();
-int pip_job_workE(), pip_job_workF(), pip_job_workG(), pip_job_workH();
-int pip_job_workI(), pip_job_workJ(), pip_job_workK(), pip_job_workL();
-int pip_job_workM(), pip_job_workN(), pip_job_workO(), pip_job_workP();
+int pip_job_workA(void), pip_job_workB(void), pip_job_workC(void), pip_job_workD(void);
+int pip_job_workE(void), pip_job_workF(void), pip_job_workG(void), pip_job_workH(void);
+int pip_job_workI(void), pip_job_workJ(void), pip_job_workK(void), pip_job_workL(void);
+int pip_job_workM(void), pip_job_workN(void), pip_job_workO(void), pip_job_workP(void);
 static struct pipcommands pipjoblist[] =
 {
 	{pip_job_workA,		'a',	'A'},
@@ -581,8 +581,8 @@ static struct pipcommands pipjoblist[] =
 };
 
 /*特殊選單*/
-int pip_see_doctor(), pip_change_weight(), pip_meet_vs_man(), pip_query(), pip_go_palace();
-int pip_vs_fight();
+int pip_see_doctor(void), pip_change_weight(void), pip_meet_vs_man(void), pip_query(void), pip_go_palace(void);
+int pip_vs_fight(void);
 static struct pipcommands pipspeciallist[] =
 {
 	{pip_see_doctor,		'1',	'1'},
@@ -612,9 +612,9 @@ static struct pipcommands pipsystemlist[] =
 
 /*類似menu.c的功能*/
 int
-pip_do_menu(menunum, menumode, cmdtable)
-int menunum, menumode;
-struct pipcommands cmdtable[];
+pip_do_menu(
+int menunum, int menumode,
+struct pipcommands cmdtable[])
 {
 	time_t now;
 	int key1, key2;
@@ -705,7 +705,7 @@ struct pipcommands cmdtable[];
 /* 基本選單:餵食 清潔 親親 休息                                              */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-int pip_main_menu()
+int pip_main_menu(void)
 {
 	pip_do_menu(0, 0, pipmainlist);
 	return 0;
@@ -715,7 +715,7 @@ int pip_main_menu()
 /* 基本選單:餵食 清潔 親親 休息                                              */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-int pip_basic_menu()
+int pip_basic_menu(void)
 {
 	pip_do_menu(1, 0, pipbasiclist);
 	return 0;
@@ -725,7 +725,7 @@ int pip_basic_menu()
 /* 商店選單:食物 零食 大補丸 玩具 書本                                       */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-int pip_store_menu()
+int pip_store_menu(void)
 {
 	pip_do_menu(2, 1, pipstorelist);
 	return 0;
@@ -735,7 +735,7 @@ int pip_store_menu()
 /* 修行選單:念書 練武 修行                                                   */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-int pip_practice_menu()
+int pip_practice_menu(void)
 {
 	pip_do_menu(3, 3, pippracticelist);
 	return 0;
@@ -746,7 +746,7 @@ int pip_practice_menu()
 /* 玩樂選單:散步 旅遊 運動 約會 猜拳                                         */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-int pip_play_menu()
+int pip_play_menu(void)
 {
 	pip_do_menu(4, 0, pipplaylist);
 	return 0;
@@ -756,7 +756,7 @@ int pip_play_menu()
 /* 打工選單:家事 苦工 家教 地攤                                              */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-int pip_job_menu()
+int pip_job_menu(void)
 {
 	pip_do_menu(5, 2, pipjoblist);
 	return 0;
@@ -766,7 +766,7 @@ int pip_job_menu()
 /* 特殊選單:看病 減肥 戰鬥 拜訪 朝見                                         */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-int pip_special_menu()
+int pip_special_menu(void)
 {
 	pip_do_menu(6, 0, pipspeciallist);
 	return 0;
@@ -776,7 +776,7 @@ int pip_special_menu()
 /* 系統選單:個人資料  小雞放生  特別服務                                     */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
-int pip_system_menu()
+int pip_system_menu(void)
 {
 	pip_do_menu(7, 0, pipsystemlist);
 	return 0;
@@ -784,8 +784,8 @@ int pip_system_menu()
 
 
 int
-pip_mainmenu(mode)
-int mode;
+pip_mainmenu(
+int mode)
 {
 	char genbuf[200];
 	char inbuf1[20];
@@ -1222,8 +1222,8 @@ int mode;
 
 /*固定時間作的事 */
 int
-pip_time_change(cnow)
-time_t cnow;
+pip_time_change(
+time_t cnow)
 {
 	int stime = 60;
 	int stired = 2;
@@ -1295,7 +1295,7 @@ time_t cnow;
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-int pip_basic_takeshower() /*洗澡*/
+int pip_basic_takeshower(void) /*洗澡*/
 {
 	int lucky;
 	d.shit -= 20;
@@ -1321,7 +1321,7 @@ int pip_basic_takeshower() /*洗澡*/
 	return 0;
 }
 
-int pip_basic_takerest() /*休息*/
+int pip_basic_takerest(void) /*休息*/
 {
 	count_tired(5, 20, "Y", 100, 0);
 	if (d.hp > d.maxhp)
@@ -1335,7 +1335,7 @@ int pip_basic_takerest() /*休息*/
 	return 0;
 }
 
-int pip_basic_kiss()/*親親*/
+int pip_basic_kiss(void)/*親親*/
 {
 	if (rand() % 2 > 0)
 	{
@@ -1363,7 +1363,7 @@ int pip_basic_kiss()/*親親*/
 	return 0;
 }
 
-int pip_basic_feed()     /* 餵食*/
+int pip_basic_feed(void)     /* 餵食*/
 {
 	time_t now;
 	char buf[256];
@@ -1522,7 +1522,7 @@ int pip_basic_feed()     /* 餵食*/
 }
 
 /*遊戲寫資料入檔案*/
-void pip_write_file()
+void pip_write_file(void)
 {
 	FILE *ff;
 	char buf[200];
@@ -1624,8 +1624,8 @@ void pip_read_file(char *userid)
 
 /*記錄到pip.log檔*/
 int
-pip_log_record(msg)
-char *msg;
+pip_log_record(
+char *msg)
 {
 	FILE *fs;
 
@@ -1636,7 +1636,7 @@ char *msg;
 
 /*小雞進度儲存*/
 int
-pip_write_backup()
+pip_write_backup(void)
 {
 	char *files[4] = {"沒有", "進度一", "進度二", "進度三"};
 	char buf[200], buf1[200];
@@ -1692,7 +1692,7 @@ pip_write_backup()
 }
 
 int
-pip_read_backup()
+pip_read_backup(void)
 {
 	char buf[200], buf1[200], buf2[200];
 	char *files[4] = {"沒有", "進度一", "進度二", "進度三"};
@@ -1768,7 +1768,7 @@ pip_read_backup()
 
 
 int
-pip_live_again()
+pip_live_again(void)
 {
 	char genbuf[80];
 	time_t now;
@@ -2011,7 +2011,7 @@ show_resultshow_pic(int i)	/*收穫季*/
 /* 函式庫                                                                    */
 /*---------------------------------------------------------------------------*/
 
-int pip_store_food()
+int pip_store_food(void)
 {
 	int num[3];
 	num[0] = 2;
@@ -2023,7 +2023,7 @@ int pip_store_food()
 	return 0;
 }
 
-int pip_store_medicine()
+int pip_store_medicine(void)
 {
 	int num[5];
 	num[0] = 4;
@@ -2039,7 +2039,7 @@ int pip_store_medicine()
 	return 0;
 }
 
-int pip_store_other()
+int pip_store_other(void)
 {
 	int num[3];
 	num[0] = 2;
@@ -2051,27 +2051,27 @@ int pip_store_other()
 	return 0;
 }
 
-int pip_store_weapon_head()	/*頭部武器*/
+int pip_store_weapon_head(void)	/*頭部武器*/
 {
 	d.weaponhead = pip_weapon_doing_menu(d.weaponhead, 0, headlist);
 	return 0;
 }
-int pip_store_weapon_rhand()	/*右手武器*/
+int pip_store_weapon_rhand(void)	/*右手武器*/
 {
 	d.weaponrhand = pip_weapon_doing_menu(d.weaponrhand, 1, rhandlist);
 	return 0;
 }
-int pip_store_weapon_lhand()    /*左手武器*/
+int pip_store_weapon_lhand(void)    /*左手武器*/
 {
 	d.weaponlhand = pip_weapon_doing_menu(d.weaponlhand, 2, lhandlist);
 	return 0;
 }
-int pip_store_weapon_body()	/*身體武器*/
+int pip_store_weapon_body(void)	/*身體武器*/
 {
 	d.weaponbody = pip_weapon_doing_menu(d.weaponbody, 3, bodylist);
 	return 0;
 }
-int pip_store_weapon_foot()     /*足部武器*/
+int pip_store_weapon_foot(void)     /*足部武器*/
 {
 	d.weaponfoot = pip_weapon_doing_menu(d.weaponfoot, 4, footlist);
 	return 0;
@@ -2079,10 +2079,10 @@ int pip_store_weapon_foot()     /*足部武器*/
 
 
 int
-pip_buy_goods_new(mode, p, oldnum)
-int mode;
-int oldnum[];
-struct goodsofpip *p;
+pip_buy_goods_new(
+int mode,
+struct goodsofpip *p,
+int oldnum[])
 {
 	char *shopname[4] = {"店名", "便利商店", NICKNAME "藥鋪", "夜裡書局"};
 	char inbuf[256];
@@ -2250,10 +2250,10 @@ struct goodsofpip *p;
 }
 
 int
-pip_weapon_doing_menu(variance, type, p)             /* 武器購買畫面 */
-int variance;
-int type;
-struct weapon *p;
+pip_weapon_doing_menu(             /* 武器購買畫面 */
+int variance,
+int type,
+struct weapon *p)
 {
 	time_t now;
 	register int n = 0;
@@ -2434,7 +2434,7 @@ struct weapon *p;
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-int pip_job_workA()
+int pip_job_workA(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │家庭管理│待人接物 + N , 掃地洗衣 + N , 烹飪技巧 + N  │*/
@@ -2498,7 +2498,7 @@ int pip_job_workA()
 	return 0;
 }
 
-int pip_job_workB()
+int pip_job_workB(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │育幼院  │母性 + N , 感受 + 1 , 魅力 - 1 , 疲勞 + 3   │*/
@@ -2555,7 +2555,7 @@ int pip_job_workB()
 	return 0;
 }
 
-int pip_job_workC()
+int pip_job_workC(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │旅館    │掃地洗衣 + N , 戰鬥技術 - N , 疲勞 + 2      │*/
@@ -2619,7 +2619,7 @@ int pip_job_workC()
 	return 0;
 }
 
-int pip_job_workD()
+int pip_job_workD(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │農場    │體力 + 1 , 腕力 + 1 , 氣質 - 1 , 疲勞 + 3   │*/
@@ -2667,7 +2667,7 @@ int pip_job_workD()
 	return 0;
 }
 
-int pip_job_workE()
+int pip_job_workE(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │餐廳    │料理 + N , 戰鬥技術 - N , 疲勞 + 2          │*/
@@ -2735,7 +2735,7 @@ int pip_job_workE()
 	return 0;
 }
 
-int pip_job_workF()
+int pip_job_workF(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │教堂    │信仰 + 2 , 道德 + 1 , 罪孽 - 2 , 疲勞 + 1   │*/
@@ -2780,7 +2780,7 @@ int pip_job_workF()
 	return 0;
 }
 
-int pip_job_workG()
+int pip_job_workG(void)
 {
 	/* ├────┼──────────────────────┤*/
 	/* │地攤    │體力 + 2 , 魅力 + 1 , 疲勞 + 3 ,談吐 +1     │*/
@@ -2807,7 +2807,7 @@ int pip_job_workG()
 	return 0;
 }
 
-int pip_job_workH()
+int pip_job_workH(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │伐木場  │腕力 + 2 , 氣質 - 2 , 疲勞 + 4              │*/
@@ -2860,7 +2860,7 @@ int pip_job_workH()
 	return 0;
 }
 
-int pip_job_workI()
+int pip_job_workI(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │美容院  │感受 + 1 , 腕力 - 1 , 疲勞 + 3              │*/
@@ -2913,7 +2913,7 @@ int pip_job_workI()
 	return 0;
 }
 
-int pip_job_workJ()
+int pip_job_workJ(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │狩獵區  │體力 + 1 , 氣質 - 1 , 母性 - 1 , 疲勞 + 3   │*/
@@ -2986,7 +2986,7 @@ int pip_job_workJ()
 	return 0;
 }
 
-int pip_job_workK()
+int pip_job_workK(void)
 {
 	/* ├────┼──────────────────────┤*/
 	/* │工地    │體力 + 2 , 魅力 - 1 , 疲勞 + 3              │*/
@@ -3046,7 +3046,7 @@ int pip_job_workK()
 	return 0;
 }
 
-int pip_job_workL()
+int pip_job_workL(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │墓園    │抗魔能力 + N , 感受 + 1 , 魅力 - 1          │*/
@@ -3113,7 +3113,7 @@ int pip_job_workL()
 	return 0;
 }
 
-int pip_job_workM()
+int pip_job_workM(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │家庭教師│道德 + 1 , 母性 + N , 魅力 - 1 , 疲勞 + 7   │*/
@@ -3144,7 +3144,7 @@ int pip_job_workM()
 	return 0;
 }
 
-int pip_job_workN()
+int pip_job_workN(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │酒店    │烹飪技巧 + N , 談話技巧 + N , 智力 - 2      │*/
@@ -3208,7 +3208,7 @@ int pip_job_workN()
 	return 0;
 }
 
-int pip_job_workO()
+int pip_job_workO(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │酒家    │魅力 + 2 , 罪孽 + 2 , 道德 - 3 , 信仰 - 3   │*/
@@ -3279,7 +3279,7 @@ int pip_job_workO()
 	return 0;
 }
 
-int pip_job_workP()
+int pip_job_workP(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │大夜總會│魅力 + 3 , 罪孽 + 1 , 氣質 - 2 , 智力 - 1   │*/
@@ -3355,7 +3355,7 @@ int pip_job_workP()
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-int pip_play_stroll()	/*散步*/
+int pip_play_stroll(void)	/*散步*/
 {
 	int lucky;
 	count_tired(3, 3, "Y", 100, 0);
@@ -3459,7 +3459,7 @@ int pip_play_stroll()	/*散步*/
 	return 0;
 }
 
-int pip_play_sport()	/*運動*/
+int pip_play_sport(void)	/*運動*/
 {
 	count_tired(3, 8, "Y", 100, 1);
 	d.weight -= (rand() % 3 + 2);
@@ -3476,7 +3476,7 @@ int pip_play_sport()	/*運動*/
 	return 0;
 }
 
-int pip_play_date()	/*約會*/
+int pip_play_date(void)	/*約會*/
 {
 	if (d.money < 150)
 	{
@@ -3497,7 +3497,7 @@ int pip_play_date()	/*約會*/
 	}
 	return 0;
 }
-int pip_play_outing()	/*郊遊*/
+int pip_play_outing(void)	/*郊遊*/
 {
 	int lucky;
 	char buf[256];
@@ -3621,7 +3621,7 @@ int pip_play_outing()	/*郊遊*/
 	return 0;
 }
 
-int pip_play_kite()	/*風箏*/
+int pip_play_kite(void)	/*風箏*/
 {
 	count_tired(4, 4, "Y", 100, 0);
 	d.weight += (rand() % 2 + 2);
@@ -3638,7 +3638,7 @@ int pip_play_kite()	/*風箏*/
 	return 0;
 }
 
-int pip_play_KTV()	/*KTV*/
+int pip_play_KTV(void)	/*KTV*/
 {
 	if (d.money < 250)
 	{
@@ -3662,7 +3662,7 @@ int pip_play_KTV()	/*KTV*/
 	return 0;
 }
 
-int pip_play_guess()   /* 猜拳程式 */
+int pip_play_guess(void)   /* 猜拳程式 */
 {
 	int com;
 	int pipkey;
@@ -3750,7 +3750,7 @@ int pip_play_guess()   /* 猜拳程式 */
 
 }
 
-void win()
+void win(void)
 {
 	d.winn++;
 	d.hp -= rand() % 2 + 3;
@@ -3761,7 +3761,7 @@ void win()
 	return;
 }
 
-void tie()
+void tie(void)
 {
 	d.hp -= rand() % 2 + 3;
 	d.happy += rand() % 3 + 5;
@@ -3772,7 +3772,7 @@ void tie()
 	return;
 }
 
-void lose()
+void lose(void)
 {
 	d.losee++;
 	d.happy += rand() % 3 + 5;
@@ -3784,7 +3784,7 @@ void lose()
 	return;
 }
 
-void situ()
+void situ(void)
 {
 	clrchyiuan(19, 21);
 	move(19, 0);
@@ -3864,7 +3864,7 @@ char *classword[11][5] =
 /* 函式庫                                                                    */
 /*---------------------------------------------------------------------------*/
 
-int pip_practice_classA()
+int pip_practice_classA(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │自然科學│智力 + 1~ 4 , 信仰 - 0~0 , 抗魔能力 - 0~0   │*/
@@ -3901,7 +3901,7 @@ int pip_practice_classA()
 	return 0;
 }
 
-int pip_practice_classB()
+int pip_practice_classB(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │詩詞    │感受 + 1~1 , 智力 + 0~1 , 藝術修養 + 0~1    │*/
@@ -3943,7 +3943,7 @@ int pip_practice_classB()
 	return 0;
 }
 
-int pip_practice_classC()
+int pip_practice_classC(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │神學    │智力 + 1~1 , 信仰 + 1~2 , 抗魔能力 + 0~1    │*/
@@ -3978,7 +3978,7 @@ int pip_practice_classC()
 	return 0;
 }
 
-int pip_practice_classD()
+int pip_practice_classD(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │軍學    │智力 + 1~2 , 戰鬥技術 + 0~1 , 感受 - 0~1    │*/
@@ -4014,7 +4014,7 @@ int pip_practice_classD()
 	return 0;
 }
 
-int pip_practice_classE()
+int pip_practice_classE(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │劍術    │戰鬥技術 + 0~1 , 攻擊能力 + 1~1             │*/
@@ -4050,7 +4050,7 @@ int pip_practice_classE()
 	return 0;
 }
 
-int pip_practice_classF()
+int pip_practice_classF(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │格鬥術  │戰鬥技術 + 1~1 , 防禦能力 + 0~0             │*/
@@ -4086,7 +4086,7 @@ int pip_practice_classF()
 	return 0;
 }
 
-int pip_practice_classG()
+int pip_practice_classG(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │魔法    │魔法技術 + 1~1 , 魔法能力 + 0~2             │*/
@@ -4122,7 +4122,7 @@ int pip_practice_classG()
 	return 0;
 }
 
-int pip_practice_classH()
+int pip_practice_classH(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │禮儀    │禮儀表現 + 1~1 , 氣質 + 1~1                 │*/
@@ -4150,7 +4150,7 @@ int pip_practice_classH()
 	return 0;
 }
 
-int pip_practice_classI()
+int pip_practice_classI(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │繪畫    │藝術修養 + 1~1 , 感受 + 0~1                 │*/
@@ -4177,7 +4177,7 @@ int pip_practice_classI()
 	return 0;
 }
 
-int pip_practice_classJ()
+int pip_practice_classJ(void)
 {
 	/*  ├────┼──────────────────────┤*/
 	/*  │舞蹈    │藝術修養 + 0~1 , 魅力 + 0~1 , 體力 + 1~1    │*/
@@ -4214,9 +4214,9 @@ int pip_practice_classJ()
 
 /*傳入:課號 等級 生命 快樂 滿足 髒髒 傳回:變數12345 return:body*/
 int
-pip_practice_function(classnum, classgrade, pic1, pic2, change1, change2, change3, change4, change5)
-int classnum, classgrade, pic1, pic2;
-int *change1, *change2, *change3, *change4, *change5;
+pip_practice_function(
+int classnum, int classgrade, int pic1, int pic2,
+int *change1, int *change2, int *change3, int *change4, int *change5)
 {
 	int  a, b, body, health;
 	char inbuf[256], ans[5];
@@ -4260,8 +4260,8 @@ int *change1, *change2, *change3, *change4, *change5;
 	return body;
 }
 
-int pip_practice_gradeup(classnum, classgrade, data)
-int classnum, classgrade, data;
+int pip_practice_gradeup(
+int classnum, int classgrade, int data)
 {
 	char inbuf[256];
 
@@ -4280,7 +4280,7 @@ int classnum, classgrade, data;
 /*---------------------------------------------------------------------------*/
 
 
-int pip_see_doctor()	/*看醫生*/
+int pip_see_doctor(void)	/*看醫生*/
 {
 	char buf[256];
 	long savemoney;
@@ -4314,7 +4314,7 @@ int pip_see_doctor()	/*看醫生*/
 }
 
 /*減肥*/
-int pip_change_weight()
+int pip_change_weight(void)
 {
 	char genbuf[5];
 	char inbuf[256];
@@ -4461,15 +4461,15 @@ int pip_change_weight()
 /*參見*/
 
 int
-pip_go_palace()
+pip_go_palace(void)
 {
 	pip_go_palace_screen(royallist);
 	return 0;
 }
 
 int
-pip_go_palace_screen(p)
-struct royalset *p;
+pip_go_palace_screen(
+struct royalset *p)
 {
 	int n;
 	int a;
@@ -4677,7 +4677,7 @@ struct royalset *p;
 /*--------------------------------------------------------------------------*/
 #ifdef	HAVE_PIP_FIGHT
 static int
-pip_set_currutmp()
+pip_set_currutmp(void)
 {
 	currutmp->pip->hp = d.hp;
 	currutmp->pip->mp = d.mp;
@@ -4690,16 +4690,16 @@ pip_set_currutmp()
 }
 
 static int
-pip_get_currutmp()
+pip_get_currutmp(void)
 {
 	d.hp = currutmp->pip->hp;
 	d.mp = currutmp->pip->mp;
 }
 
 int
-pip_vf_fight(fd, first)
-int fd;
-int first;
+pip_vf_fight(
+int fd,
+int first)
 {
 	pipdata temp;
 	struct chicken chickentemp;
@@ -5161,7 +5161,7 @@ int first;
 /*--------------------------------------------------------------------------*/
 
 int /*結局畫面*/
-pip_ending_screen()
+pip_ending_screen(void)
 {
 	time_t now;
 	char buf[256];
@@ -5244,9 +5244,9 @@ pip_ending_screen()
 }
 
 int
-pip_ending_decide(endbuf1, endbuf2, endbuf3, endmode, endgrade)
-char *endbuf1, *endbuf2, *endbuf3;
-int *endmode, *endgrade;
+pip_ending_decide(
+char *endbuf1, char *endbuf2, char *endbuf3,
+int *endmode, int *endgrade)
 {
 	char *name[8][2] = {{"男的", "女的"},
 		{"嫁給王子", "娶了公主"},
@@ -5329,8 +5329,8 @@ int *endmode, *endgrade;
 /*結局判斷*/
 /*1:暗黑 2:藝術 3:萬能 4:戰士 5:魔法 6:社交 7:家事*/
 int
-pip_future_decide(modeall_purpose)
-int *modeall_purpose;
+pip_future_decide(
+int *modeall_purpose)
 {
 	int endmode;
 	/*暗黑*/
@@ -5381,7 +5381,7 @@ int *modeall_purpose;
 }
 /*結婚的判斷*/
 int
-pip_marry_decide()
+pip_marry_decide(void)
 {
 	int grade;
 	if (d.lover != 0)
@@ -5413,9 +5413,9 @@ pip_marry_decide()
 
 
 int
-pip_endingblack(buf, m, n, grade) /*暗黑*/
-char *buf;
-int *m, *n, *grade;
+pip_endingblack( /*暗黑*/
+char *buf,
+int *m, int *n, int *grade)
 {
 	if (d.offense >= 500 && d.mexp >= 500) /*魔王*/
 	{
@@ -5500,9 +5500,9 @@ int *m, *n, *grade;
 
 
 int
-pip_endingsocial(buf, m, n, grade) /*社交*/
-char *buf;
-int *m, *n, *grade;
+pip_endingsocial( /*社交*/
+char *buf,
+int *m, int *n, int *grade)
 {
 	int class;
 	if (d.social > 600) class = 1;
@@ -5619,9 +5619,9 @@ int *m, *n, *grade;
 }
 
 int
-pip_endingmagic(buf, m, n, grade) /*魔法*/
-char *buf;
-int *m, *n, *grade;
+pip_endingmagic( /*魔法*/
+char *buf,
+int *m, int *n, int *grade)
 {
 	int class;
 	if (d.mexp > 800) class = 1;
@@ -5742,9 +5742,9 @@ int *m, *n, *grade;
 }
 
 int
-pip_endingcombat(buf, m, n, grade) /*戰鬥*/
-char *buf;
-int *m, *n, *grade;
+pip_endingcombat( /*戰鬥*/
+char *buf,
+int *m, int *n, int *grade)
 {
 	int class;
 	if (d.hexp > 1500) class = 1;
@@ -5875,9 +5875,9 @@ int *m, *n, *grade;
 
 
 int
-pip_endingfamily(buf, m, n, grade) /*家事*/
-char *buf;
-int *m, *n, *grade;
+pip_endingfamily( /*家事*/
+char *buf,
+int *m, int *n, int *grade)
 {
 	*m = 1;
 	if (d.charm >= 200)
@@ -5897,10 +5897,10 @@ int *m, *n, *grade;
 
 
 int
-pip_endingall_purpose(buf, m, n, grade, mode) /*萬能*/
-char *buf;
-int *m, *n, *grade;
-int mode;
+pip_endingall_purpose( /*萬能*/
+char *buf,
+int *m, int *n, int *grade,
+int mode)
 {
 	int data;
 	int class;
@@ -6187,9 +6187,9 @@ int mode;
 }
 
 int
-pip_endingart(buf, m, n, grade) /*藝術*/
-char *buf;
-int *m, *n, *grade;
+pip_endingart( /*藝術*/
+char *buf,
+int *m, int *n, int *grade)
 {
 	if (d.speech >= 100)
 	{
@@ -6240,8 +6240,8 @@ int *m, *n, *grade;
 }
 
 int
-pip_max_worktime(num)
-int *num;
+pip_max_worktime(
+int *num)
 {
 	int data = 20;
 	if (d.workA > data)
@@ -6329,8 +6329,8 @@ int *num;
 	return data;
 }
 
-int pip_game_over(endgrade)
-int endgrade;
+int pip_game_over(
+int endgrade)
 {
 	long gradebasic;
 	long gradeall;
@@ -6347,7 +6347,7 @@ int endgrade;
 	return gradeall;
 }
 
-int pip_divine() /*占卜師來訪*/
+int pip_divine(void) /*占卜師來訪*/
 {
 	char buf[256];
 	char ans[4];
@@ -6410,7 +6410,7 @@ int pip_divine() /*占卜師來訪*/
 }
 
 int
-pip_money()
+pip_money(void)
 {
 	char buf[100], ans[10];
 
@@ -6451,7 +6451,7 @@ pip_money()
 /* 將雞金換成點歌次數 by statue */
 #if 0
 int
-pip_request()
+pip_request(void)
 {
 	char buf[100], ans[10];
 
@@ -6498,7 +6498,7 @@ pip_request()
 }
 #endif
 
-int pip_query()  /*拜訪小雞*/
+int pip_query(void)  /*拜訪小雞*/
 {
 	int id;
 	char genbuf[STRLEN];
@@ -6523,8 +6523,8 @@ int pip_query()  /*拜訪小雞*/
 }
 
 int
-pip_read(genbuf)
-char *genbuf;
+pip_read(
+char *genbuf)
 {
 	FILE *fs;
 	char buf[200];
@@ -6818,7 +6818,7 @@ char weaponfoot[8][12] =
 };
 
 int
-pip_system_freepip()
+pip_system_freepip(void)
 {
 	char buf[256];
 	move(b_lines - 1, 0);
@@ -6834,7 +6834,7 @@ pip_system_freepip()
 
 
 int
-pip_system_service()
+pip_system_service(void)
 {
 	int pipkey;
 	int oldchoice;
@@ -6948,8 +6948,8 @@ pip_data_list_va(va_list pvar)
 
 
 int
-pip_data_list(userid)  /*看小雞個人詳細資料*/
-char *userid;
+pip_data_list(  /*看小雞個人詳細資料*/
+char *userid)
 {
 	char buf[256];
 	char inbuf1[20];
@@ -7217,8 +7217,8 @@ char *userid;
   34~45:12
 */
 int
-get_man(class, mob, plus)
-int class, mob, plus;
+get_man(
+int class, int mob, int plus)
 {
 	int lucky, man;
 	lucky = rand() % (class * 5);
@@ -7238,7 +7238,7 @@ int class, mob, plus;
 }
 
 int
-pip_meet_vs_man()
+pip_meet_vs_man(void)
 {
 	int class;
 	int man, lucky;
@@ -7301,8 +7301,8 @@ pip_meet_vs_man()
 }
 
 void
-pip_fight_bad(n)
-int n;
+pip_fight_bad(
+int n)
 {
 	pip_fight_main(n, badmanlist, 1);
 	return;
@@ -7310,10 +7310,10 @@ int n;
 
 
 int
-pip_fight_main(n, list, mode)
-int n;
-struct playrule list[];
-int mode;
+pip_fight_main(
+int n,
+struct playrule list[],
+int mode)
 {
 	pip_vs_man(n, list, mode);
 	return 0;
@@ -7324,10 +7324,10 @@ int mode;
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 int
-pip_vs_man(n, p, mode)
-int n;
-struct playrule *p;
-int mode;
+pip_vs_man(
+int n,
+struct playrule *p,
+int mode)
 {
 	/* p[n].name hp mp speed attack resist money special map */
 	struct playrule m;
@@ -7936,7 +7936,7 @@ int mode;
 /*---------------------------------------------------------------------------*/
 #ifdef HAVE_PIP_FIGHT
 static int
-get_hurt(hurt, mexp)
+get_hurt(int hurt, int mexp)
 {
 	int dinjure;
 	if (mexp > 14000)
@@ -7952,9 +7952,9 @@ get_hurt(hurt, mexp)
 
 /*進入使用魔法選單*/
 static int
-pip_magic_menu(mode, opt)  /*戰鬥中法術的應用*/
-int mode;
-UTMP *opt;
+pip_magic_menu(  /*戰鬥中法術的應用*/
+int mode,
+UTMP *opt)
 {
 	char buf[256];
 	int injure;		/*傷害力*/
@@ -8038,8 +8038,8 @@ UTMP *opt;
 
 /*魔法視窗*/
 static int
-pip_magic_doing_menu(p)   /*魔法畫面*/
-struct magicset *p;
+pip_magic_doing_menu(   /*魔法畫面*/
+struct magicset *p)
 {
 	register int n = 1;
 	register char *s;
@@ -8137,9 +8137,9 @@ struct magicset *p;
 
 #ifdef	HAVE_PIP_FIGHT
 static int
-pip_magic_fight_menu(p, opt)  /*魔法畫面*/
-struct magicset *p;
-UTMP *opt;
+pip_magic_fight_menu(  /*魔法畫面*/
+struct magicset *p,
+UTMP *opt)
 {
 	int n = 1, cur = 1, mg[16];
 	char buf[256];
@@ -8215,7 +8215,7 @@ UTMP *opt;
 
 /*求婚*/
 int
-pip_marriage_offer()
+pip_marriage_offer(void)
 {
 	time_t now;
 	char buf[256];
@@ -8278,7 +8278,7 @@ pip_marriage_offer()
 	return 0;
 }
 
-int pip_results_show()  /*收穫季*/
+int pip_results_show(void)  /*收穫季*/
 {
 	char *showname[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
 	char buf[256];
@@ -8469,8 +8469,8 @@ int pip_results_show()  /*收穫季*/
 	return 0;
 }
 
-int pip_results_show_ending(winorlost, mode, a, b, c)
-int winorlost, mode, a, b, c;
+int pip_results_show_ending(
+int winorlost, int mode, int a, int b, int c)
 {
 	char *gamename[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
 	int resultmoney[4] = {0, 3000, 5000, 8000};
@@ -8526,8 +8526,8 @@ int winorlost, mode, a, b, c;
 /* 二代雞函式特區                                                            */
 /*---------------------------------------------------------------------------*/
 static int
-twice(x, max, min)
-int x, max, min;
+twice(
+int x, int max, int min)
 {
 	float a, b;
 	int y;
@@ -8538,8 +8538,8 @@ int x, max, min;
 }
 
 static void
-pip_load_mob(fpath)
-char *fpath;
+pip_load_mob(
+char *fpath)
 {
 	FILE *fp;
 	int max, i;
@@ -8563,8 +8563,8 @@ char *fpath;
 }
 
 static void
-pip_load_mobset(fpath)
-char *fpath;
+pip_load_mobset(
+char *fpath)
 {
 	FILE *fp;
 	int i;
@@ -8579,14 +8579,14 @@ char *fpath;
 }
 
 static void
-levelswap(cur, num)
-int *cur, num;
+levelswap(
+int *cur, int num)
 {
 	if (*cur > num) *cur = num;
 }
 
 static void
-pip_check_levelup()
+pip_check_levelup(void)
 {
 	int lv;
 	if (d.chickenmode == 1)
@@ -8604,7 +8604,7 @@ pip_check_levelup()
 }
 
 static void
-pip_check_level()
+pip_check_level(void)
 {
 	if (d.exp >= twice(d.level, 10000000, 100))
 	{
@@ -8616,8 +8616,8 @@ pip_check_level()
 }
 
 static void
-pip_load_levelup(fpath)
-char *fpath;
+pip_load_levelup(
+char *fpath)
 {
 	FILE *fp;
 	int i, temp;
@@ -8637,8 +8637,8 @@ char *fpath;
 
 #ifdef HAVE_PIP_FIGHT
 static void
-pip_fight_menu(mode)
-int mode;
+pip_fight_menu(
+int mode)
 {
 	char inbuf1[20];
 	char inbuf2[20];
@@ -8859,7 +8859,7 @@ int mode;
 }
 #endif
 #ifdef	HAVE_PIP_FIGHT
-static int pip_fight_feed()     /* 餵食*/
+static int pip_fight_feed(void)     /* 餵食*/
 {
 	time_t now;
 	char buf[256];

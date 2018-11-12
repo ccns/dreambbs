@@ -36,7 +36,7 @@ int print_card(int card, int x, int y)
 
 
 int
-BlackJack()
+BlackJack(void)
 {
 	char buf[20];
 	int    num[52] = {11, 11, 11, 11, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6,

@@ -16,8 +16,8 @@ char map[MAX_AC][256];
 int total;
 
 static int
-check_in(email)
-  char *email;
+check_in(
+  char *email)
 {
   int i;
   for(i=0;i<MAX_AC;i++)
@@ -27,9 +27,9 @@ check_in(email)
 }
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   FILE *fp,*fd;
   char buf[256],tmp[256],*ptr;

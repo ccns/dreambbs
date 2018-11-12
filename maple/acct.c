@@ -988,7 +988,7 @@ acct_setup(
   USER_ATTR attr;
 #endif
 
-  int (*sm)();
+  int (*sm)(char *mail);
   
   int i, num,tmp,mode;
   FILE *flog;

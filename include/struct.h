@@ -742,7 +742,7 @@ typedef struct OverView
 typedef struct
 {
   int key;
-  int (*func) ();
+  int (*func) (XO *xo);
 }      KeyFunc;
 
 

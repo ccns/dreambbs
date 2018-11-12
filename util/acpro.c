@@ -17,13 +17,12 @@
 #include <sys/shm.h>
 #include "bbs.h"
 
-extern int errno;
 static BCACHE *bshm;
 
 static void
-attach_err(shmkey, name)
-  int shmkey;
-  char *name;
+attach_err(
+  int shmkey,
+  char *name)
 {
   fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
   exit(1);
@@ -31,8 +30,8 @@ attach_err(shmkey, name)
 
 
 static void *
-attach_shm(shmkey, shmsize)
-  register int shmkey, shmsize;
+attach_shm(
+  register int shmkey, register int shmsize)
 {
   register void *shmptr;
   register int shmid;
@@ -60,7 +59,7 @@ attach_shm(shmkey, shmsize)
 }
 
 void
-bshm_init()
+bshm_init(void)
 {
   register BCACHE *xshm;
   register time_t *uptime;
@@ -124,8 +123,8 @@ static BRD *bhead, *btail;
 
 
 static int
-class_parse(key)
-  char *key;
+class_parse(
+  char *key)
 {
   char *str, *ptr, fpath[80];
   ClassHeader *chp;
@@ -226,15 +225,15 @@ class_parse(key)
 
 
 static int
-chno_cmp(i, j)
-  short *i, *j;
+chno_cmp(
+  short *i, short *j)
 {
   return strcasecmp(bhead[*i].brdname, bhead[*j].brdname);
 }
 
 
 static void
-class_sort()
+class_sort(void)
 {
   ClassHeader *chp;
   int i, j, max;
@@ -265,7 +264,7 @@ class_sort()
 
 
 static void
-profess_image()
+profess_image(void)
 {
   int i;
   FILE *fp;
@@ -301,7 +300,7 @@ profess_image()
 }
 
 int
-main()
+main(void)
 {
   chdir(BBSHOME);
   umask(077);

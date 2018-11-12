@@ -27,8 +27,8 @@ static CLASS_TABLE_ALERT *cache;
 static int cache_size;
 
 static void *
-attach_shm(shmkey, shmsize)
-  int shmkey, shmsize;
+attach_shm(
+  int shmkey, int shmsize)
 {
   void *shmptr;
   int shmid;
@@ -41,8 +41,8 @@ attach_shm(shmkey, shmsize)
 }
 
 static CLASS_TABLE_ALERT *
-bfind(userno)
-  int userno;
+bfind(
+  int userno)
 {
   int count;
   CLASS_TABLE_ALERT *tmpcache,*datum;
@@ -60,9 +60,9 @@ bfind(userno)
 }
 
 int
-bsend(callee, bmw)
-  UTMP *callee;
-  BMW *bmw;
+bsend(
+  UTMP *callee,
+  BMW *bmw)
 {
   BMW *mpool, *mhead, *mtail, **mslot;
   int i;
@@ -116,9 +116,9 @@ bsend(callee, bmw)
 
 
 void
-bedit(up, bmw)
-  UTMP *up;
-  BMW *bmw;
+bedit(
+  UTMP *up,
+  BMW *bmw)
 {
 
   bmw->recver = up->userno;	/* 先記下 userno 作為 check */
@@ -186,15 +186,15 @@ init(void)
 }
 /*
 static int
-int1_cmp(i, j)
-  CLASS_TABLE_ALERT **i, **j;
+int1_cmp(
+  CLASS_TABLE_ALERT **i, CLASS_TABLE_ALERT **j)
 {
   return (*i)->userno - (*j)->userno;
 }
 */
 UTMP *
-utmp_find(userno)
-  int userno;
+utmp_find(
+  int userno)
 {
   UTMP *uentp, *uceil;
 
@@ -211,8 +211,8 @@ utmp_find(userno)
 
 
 void
-bcache(fpath)
-  char *fpath;
+bcache(
+  char *fpath)
 {
   int fd, size=0;
   struct stat st;
@@ -279,9 +279,9 @@ bcache(fpath)
 }
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   char fpath[128];
  

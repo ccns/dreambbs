@@ -22,7 +22,7 @@ typedef struct
 
 
 void 
-HISmaint()			/* 維護 history 檔，將過早的 history 刪除 */
+HISmaint(void)			/* 維護 history 檔，將過早的 history 刪除 */
 {
   int i, fd, total;
   char fpath[64];
@@ -72,10 +72,10 @@ HISmaint()			/* 維護 history 檔，將過早的 history 刪除 */
 
 
 void 
-HISadd(msgid, board, xname)	/* 將 (msgid, path, xname) 此配對記錄在 history 中 */
-  char *msgid;
-  char *board;
-  char *xname;
+HISadd(	/* 將 (msgid, path, xname) 此配對記錄在 history 中 */
+  char *msgid,
+  char *board,
+  char *xname)
 {
   HIS his;
   char fpath[64];
@@ -95,10 +95,10 @@ HISadd(msgid, board, xname)	/* 將 (msgid, path, xname) 此配對記錄在 history 中 *
 
 
 int				/* 1:在history中 0:不在history中 */
-HISfetch(msgid, board, xname)	/* 查詢 history 中，msgid 發表去了哪裡 */
-  char *msgid;
-  char *board;			/* 傳出在 history 中的記錄的看板及檔名 */
-  char *xname;
+HISfetch(	/* 查詢 history 中，msgid 發表去了哪裡 */
+  char *msgid,
+  char *board,			/* 傳出在 history 中的記錄的看板及檔名 */
+  char *xname)
 {
   HIS his;
   char fpath[64];

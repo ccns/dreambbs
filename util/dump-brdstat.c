@@ -37,9 +37,6 @@
 #define	HOUR		(1)		
 
 
-extern int errno;
-
-
 /* ----------------------------------------------------- */
 /* 開票：shm 部份須與 cache.c 相容			 */
 /* ----------------------------------------------------- */
@@ -49,9 +46,9 @@ static BCACHE *bshm;
 
 
 static void
-attach_err(shmkey, name)
-  int shmkey;
-  char *name;
+attach_err(
+  int shmkey,
+  char *name)
 {
   fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
   exit(1);
@@ -59,8 +56,8 @@ attach_err(shmkey, name)
 
 
 static void *
-attach_shm(shmkey, shmsize)
-  register int shmkey, shmsize;
+attach_shm(
+  register int shmkey, register int shmsize)
 {
   register void *shmptr;
   register int shmid;
@@ -90,7 +87,7 @@ attach_shm(shmkey, shmsize)
 
 /* static */
 void
-bshm_init()
+bshm_init(void)
 {
   register BCACHE *xshm;
 
@@ -110,9 +107,9 @@ bshm_init()
 
 
 static void
-count_board(brd,now)
-  BRD *brd;
-  time_t now;
+count_board(
+  BRD *brd,
+  time_t now)
 {
   BSTATCOUNT bcount;
   char fpath[128];
@@ -130,7 +127,7 @@ count_board(brd,now)
 
 
 int
-main()
+main(void)
 {
   BRD *bcache, *head, *tail;
   
@@ -161,7 +158,7 @@ main()
 }
 #else
 
-int main()
+int main(void)
 {
   return 0;
 }

@@ -39,11 +39,11 @@ static FILE *flog;
 
 
 static void
-gindex(level, toc, fpath, fndx)
-  int level;
-  char *toc;
-  char *fpath;
-  FILE *fndx;
+gindex(
+  int level,
+  char *toc,
+  char *fpath,
+  FILE *fndx)
 {
   int count, xmode;
   char *fname, *ptr=NULL, buf[128];
@@ -71,7 +71,7 @@ gindex(level, toc, fpath, fndx)
 #if 0
 [ 解決空精華區不會自動產生 index & log 的問題]
 
-gindex()
+int gindex(void)
 
   fgem = fopen(fpath, "r");
   if (!fgem)
@@ -214,9 +214,9 @@ gindex()
 
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   DIR *dirp;
   struct dirent *de;

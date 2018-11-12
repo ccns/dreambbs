@@ -40,15 +40,13 @@
 HDR		hotboard[MAX_HOTBOARD];
 int		hotcount;
 
-extern int errno;
-
 
 void
-keeplog(fnlog, board, title, mode)
-  char *fnlog;
-  char *board;
-  char *title;
-  int mode;		/* 0:load 1: rename  2:unlink 3:mark*/
+keeplog(
+  char *fnlog,
+  char *board,
+  char *title,
+  int mode)		/* 0:load 1: rename  2:unlink 3:mark*/
 {
   HDR hdr;
   char folder[128], fpath[128];
@@ -106,9 +104,9 @@ static BCACHE *bshm;
 
 
 static void
-attach_err(shmkey, name)
-  int shmkey;
-  char *name;
+attach_err(
+  int shmkey,
+  char *name)
 {
   fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
   exit(1);
@@ -116,8 +114,8 @@ attach_err(shmkey, name)
 
 
 static void *
-attach_shm(shmkey, shmsize)
-  register int shmkey, shmsize;
+attach_shm(
+  register int shmkey, register int shmsize)
 {
   register void *shmptr;
   register int shmid;
@@ -147,7 +145,7 @@ attach_shm(shmkey, shmsize)
 
 /* static */
 void
-bshm_init()
+bshm_init(void)
 {
   register BCACHE *xshm;
 
@@ -166,9 +164,9 @@ bshm_init()
 /* ----------------------------------------------------- */
 
 static void
-add_log(des,src)
-  BSTAT *des;
-  BSTAT *src;
+add_log(
+  BSTAT *des,
+  BSTAT *src)
 {
   des->n_reads += src->n_reads;
   des->n_posts += src->n_posts;
@@ -177,7 +175,7 @@ add_log(des,src)
 }
 
 static void
-save_hot()
+save_hot(void)
 {
 	int i,fd;
 	for(i=0;i<hotcount;i++)
@@ -189,8 +187,8 @@ save_hot()
 }
 
 static void
-count_hot(brd)
-  BRD *brd;
+count_hot(
+  BRD *brd)
 {
 	int i;
 	for(i=0;i<hotcount;i++)
@@ -214,9 +212,9 @@ count_hot(brd)
 }
 
 static void
-count_board(brd,now)
-  BRD *brd;
-  time_t now;
+count_board(
+  BRD *brd,
+  time_t now)
 {
   struct tm ntime, *xtime;
   BSTATCOUNT bcount;
@@ -356,7 +354,7 @@ count_board(brd,now)
 
 
 int
-main()
+main(void)
 {
   BRD *bcache, *head, *tail;
   BSTAT bstat;
@@ -423,7 +421,7 @@ main()
 }
 #else
 
-int main()
+int main(void)
 {
   return 0;
 }

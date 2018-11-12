@@ -10,7 +10,7 @@ typedef struct SplayNode
 }         SplayNode;
 
 
-SplayNode *splay_in(SplayNode *top, void *data, int (*compare)());
+SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(void *x, void *y));
 
 
 #endif /* _SPLAY_H_ */

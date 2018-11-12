@@ -12,13 +12,13 @@
 
 extern XZ xz[];
 
-static int viol_add();
+static int viol_add(XO *xo);
 
 
 static void
-viol_item(num, viol)
-int num;
-EMAIL *viol;
+viol_item(
+int num,
+EMAIL *viol)
 {
 	char buf[5];
 	int now;
@@ -32,8 +32,8 @@ EMAIL *viol;
 }
 
 static int
-viol_body(xo)
-XO *xo;
+viol_body(
+XO *xo)
 {
 	EMAIL *viol;
 	int num, max, tail;
@@ -65,8 +65,8 @@ XO *xo;
 
 
 static int
-viol_head(xo)
-XO *xo;
+viol_head(
+XO *xo)
 {
 	vs_head("¼È®É¸T¤î¦W³æ", str_site);
 	outs("\
@@ -77,8 +77,8 @@ XO *xo;
 
 
 static int
-viol_load(xo)
-XO *xo;
+viol_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(EMAIL));
 	return viol_body(xo);
@@ -86,8 +86,8 @@ XO *xo;
 
 
 static int
-viol_init(xo)
-XO *xo;
+viol_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(EMAIL));
 	return viol_head(xo);
@@ -95,9 +95,9 @@ XO *xo;
 
 
 static int
-viol_edit(viol, echo)
-EMAIL *viol;
-int echo;
+viol_edit(
+EMAIL *viol,
+int echo)
 {
 	if (echo == DOECHO)
 		memset(viol, 0, sizeof(EMAIL));
@@ -109,8 +109,8 @@ int echo;
 
 
 static int
-viol_add(xo)
-XO *xo;
+viol_add(
+XO *xo)
 {
 	EMAIL viol;
 
@@ -124,8 +124,8 @@ XO *xo;
 }
 
 static int
-viol_delete(xo)
-XO *xo;
+viol_delete(
+XO *xo)
 {
 
 	if (vans(msg_del_ny) == 'y')
@@ -140,8 +140,8 @@ XO *xo;
 
 
 static int
-viol_change(xo)
-XO *xo;
+viol_change(
+XO *xo)
 {
 	EMAIL *viol, mate;
 	int pos, cur;
@@ -163,8 +163,8 @@ XO *xo;
 }
 
 static int
-viol_find(xo)
-XO *xo;
+viol_find(
+XO *xo)
 {
 	EMAIL viol;
 	int pos, fd;
@@ -200,8 +200,8 @@ XO *xo;
 
 
 static int
-viol_help(xo)
-XO *xo;
+viol_help(
+XO *xo)
 {
 	/*film_out(FILM_EMAIL, -1);*/
 	return viol_head(xo);
@@ -226,7 +226,7 @@ KeyFunc viol_cb[] =
 
 
 int
-Violate()
+Violate(void)
 {
 	XO *xo;
 	char fpath[64];
