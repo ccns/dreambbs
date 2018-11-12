@@ -31,7 +31,7 @@
 
 若使用 Linux , 可於進入編輯器後, 在最後一行加上:
 
-    bbs:x:9999:999:BBS Administrator:/home/bbs:/bin/bash
+    bbs:x:9999:9999:BBS Administrator:/home/bbs:/bin/bash
 
 *(為求保險起見盡量跟 /etc/passwd 裡列出其他使用者的格式一樣)*
 
@@ -46,7 +46,7 @@
 
 在該檔最後一行加上:
 
-    bbs:x:999:bbs
+    bbs:x:9999:bbs
 
 *(為求保險起見跟 `/etc/group` 裡列出其他使用者的格式一樣)*
 
@@ -68,9 +68,9 @@
 
 == 以下用 bbs 的權限即可!! ==
 
-    $ cd /home/bbs; git clone https://github.com/ccns/dreambbs
+    $ cd /home/bbs; git clone https://github.com/ccns/dreambbs; git checkout v0.95.2
 
-接著進去 dreamlandbbs 主目錄
+接著進去 dreambbs 主目錄
 
 ## 4. 設定編譯相關檔案
 
