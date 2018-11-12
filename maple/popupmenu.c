@@ -57,7 +57,8 @@ do_cmd(MENU *mptr,XO *xo,int x,int y)
 {
    unsigned int mode;
    void *p;
-   int (*func) ();
+   int (*func) (void);
+   int (*func_unary) (XO *xo);
 
    if(mptr->umode < 0)
    {
@@ -83,8 +84,8 @@ do_cmd(MENU *mptr,XO *xo,int x,int y)
         vs_restore(sl);
         return do_menu((MENU *)mptr->func,xo,x,y);
       case POPUP_XO :
-        func = mptr->func;
-        mode = (*func) (xo);
+        func_unary = mptr->func;
+        mode = (*func_unary) (xo);
         return -1;
       case POPUP_FUN :
         func = mptr->func;
