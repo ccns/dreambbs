@@ -1,4 +1,4 @@
-# Welcome to the dreamlandbbs wiki!
+# Welcome to the DreamBBS wiki!
 
 This page will collect some info of how to use & how to install DreamLand-BBS-system. :)
 
