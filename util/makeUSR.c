@@ -97,7 +97,7 @@ main(void)
   {
     fname[0] = ch;
     fname[1] = '\0';
-    traverse(fpath,mode);
+    traverse(fpath);
   }
   for (ch = '0'; ch <= '9'; ch++)
   {
