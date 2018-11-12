@@ -109,19 +109,19 @@ main(argc, argv)
   {
     if(count->max_regist > count->max_regist_old)
     {
-      fprintf(fp,"¡¹ ¡i%s¡j[1;32mÁ`µù¥U¤H¼Æ[m´£¤É¨ì [31;1m%d[m ¤H\n",ymd,count->max_regist);
+      fprintf(fp,"¡¹ ¡i%s¡j\x1b[1;32mÁ`µù¥U¤H¼Æ\x1b[m´£¤É¨ì \x1b[31;1m%d\x1b[m ¤H\n",ymd,count->max_regist);
       count->max_regist_old = count->max_regist;
     }
 
     if(count->samehour_max_login > count->samehour_max_login_old)
     {
-      fprintf(fp,"¡· ¡i%s %02d:%02d¡j[32m¦P®É¦b¯¸¤º¤H¼Æ[m­º¦¸¹F¨ì [1;36m%d[m ¤H¦¸\n",ymd,ptime.tm_hour,ptime.tm_min,count->samehour_max_login);
+      fprintf(fp,"¡· ¡i%s %02d:%02d¡j\x1b[32m¦P®É¦b¯¸¤º¤H¼Æ\x1b[m­º¦¸¹F¨ì \x1b[1;36m%d\x1b[m ¤H¦¸\n",ymd,ptime.tm_hour,ptime.tm_min,count->samehour_max_login);
       count->samehour_max_login_old = count->samehour_max_login;
     }
 
     if(count->cur_hour_max_login > count->hour_max_login)
     {
-      fprintf(fp,"¡º ¡i%s %02d¡j[1;32m³æ¤@¤p®É¤W½u¤H¦¸[m­º¦¸¹F¨ì [1;35m%d[m ¤H¦¸\n",ymd,ntime.tm_hour,count->cur_hour_max_login);
+      fprintf(fp,"¡º ¡i%s %02d¡j\x1b[1;32m³æ¤@¤p®É¤W½u¤H¦¸\x1b[m­º¦¸¹F¨ì \x1b[1;35m%d\x1b[m ¤H¦¸\n",ymd,ntime.tm_hour,count->cur_hour_max_login);
       count->hour_max_login = count->cur_hour_max_login;
     }
     count->cur_hour_max_login = 0;
@@ -130,7 +130,7 @@ main(argc, argv)
     {
       if(count->cur_day_max_login > count->day_max_login)
       {
-        fprintf(fp,"¡» ¡i%s¡j[1;32m³æ¤é¤W½u¤H¦¸[m­º¦¸¹F¨ì [1;33m%d[m ¤H¦¸\n",ymd,count->cur_day_max_login);
+        fprintf(fp,"¡» ¡i%s¡j\x1b[1;32m³æ¤é¤W½u¤H¦¸\x1b[m­º¦¸¹F¨ì \x1b[1;33m%d\x1b[m ¤H¦¸\n",ymd,count->cur_day_max_login);
         count->day_max_login = count->cur_day_max_login;
       }
       count->cur_day_max_login = 0;

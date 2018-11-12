@@ -1992,7 +1992,7 @@ static void bmw_display(int max,int pos)
     {
       sent = 1;
       bmw = bmw_sentlot[j];
-      sprintf(buf, "  [1;32mTo %-12s\033[m: \033[32m%-57s\033[m", bmw.userid, bmw.msg);
+      sprintf(buf, "  \x1b[1;32mTo %-12s\033[m: \033[32m%-57s\033[m", bmw.userid, bmw.msg);
       outs(buf);
       break;
     }

@@ -20,10 +20,11 @@ extern BCACHE *bshm;
 #define STR_PERM      "bctpjm#x--------PTCMSNL*B#KGACBS"
 
 /* log admin command by statue@WindTop */
-void logitfile(file, key, msg)
-  char *file;
-  char *key;
-  char *msg;
+void logitfile(
+  char *file,
+  char *key,
+  char *msg
+)
 {
   time_t now;
   struct tm *p;
@@ -42,9 +43,10 @@ void logitfile(file, key, msg)
 /* ----------------------------------------------------- */
 
 void
-addmoney(addend, userid)
-  int addend;
-  char *userid;
+addmoney(
+  int addend,
+  char *userid
+)
 {
   ACCT acct;
   if(acct_load(&acct, userid) >= 0)
@@ -61,9 +63,10 @@ addmoney(addend, userid)
 }
 
 void
-addpoint1(addend, userid)
-  int addend;
-  char *userid;
+addpoint1(
+  int addend,
+  char *userid
+)
 {
   ACCT acct;
   if(acct_load(&acct, userid) >= 0)
@@ -76,9 +79,10 @@ addpoint1(addend, userid)
 }
 
 void
-addpoint2(addend, userid)
-  int addend;
-  char *userid;
+addpoint2(
+  int addend,
+  char *userid
+)
 {
   ACCT acct;
   if(acct_load(&acct, userid) >= 0)
@@ -95,11 +99,12 @@ addpoint2(addend, userid)
 /* ----------------------------------------------------- */
 
 void
-keeplog(fnlog, board, title, mode)
-  char *fnlog;
-  char *board;
-  char *title;
-  int mode;		/* 0:load 1:rename 2:unlink 3:mark */
+keeplog(
+  char *fnlog,
+  char *board,
+  char *title,
+  int mode		/* 0:load 1:rename 2:unlink 3:mark */
+)
 {
   HDR hdr;
   char folder[128], fpath[128];
@@ -149,9 +154,10 @@ keeplog(fnlog, board, title, mode)
 
 
 int
-acct_load(acct, userid)
-  ACCT *acct;
-  char *userid;
+acct_load(
+  ACCT *acct,
+  char *userid
+)
 {
   int fd;
 
@@ -166,10 +172,10 @@ acct_load(acct, userid)
   return fd;
 }
 
-
 void
-acct_save(acct)
-  ACCT *acct;
+acct_save(
+  ACCT *acct
+)
 {
   int fd;
   char fpath[80];
@@ -185,8 +191,9 @@ acct_save(acct)
 
 
 int
-acct_userno(userid)
-  char *userid;
+acct_userno(
+  char *userid
+)
 {
   int fd;
   int userno;
@@ -213,11 +220,11 @@ acct_userno(userid)
 /* ow.: ¶Ç¦^¸Ó userid ¤§ userno				 */
 /* ----------------------------------------------------- */
 
-
 int
-acct_get(msg, acct)
-  char *msg;
-  ACCT *acct;
+acct_get(
+  char *msg,
+  ACCT *acct
+)
 {
   if (!vget(1, 0, msg, acct->userid, IDLEN + 1, GET_USER))
     return 0;
@@ -235,10 +242,11 @@ acct_get(msg, acct)
 /* ----------------------------------------------------- */
 
 void
-x_file(mode, xlist, flist)
-  int mode;			/* M_XFILES / M_UFILES */
-  char *xlist[];		/* description list */
-  char *flist[];		/* filename list */
+x_file(
+  int mode,			/* M_XFILES / M_UFILES */
+  char *xlist[],		/* description list */
+  char *flist[]		/* filename list */
+)
 {
   int n, i;
   char *fpath, *desc;
@@ -328,8 +336,9 @@ x_file(mode, xlist, flist)
 }
 
 int
-check_admin(name)
-  char *name;
+check_admin(
+  char *name
+)
 {
   ADMIN admin;
   int pos=0,fd;
@@ -364,9 +373,11 @@ check_admin(name)
 /* ----------------------------------------------------- */
 
 void
-bitmsg(msg, str, level)
-  char *msg, *str;
-  int level;
+bitmsg(
+  char* msg, 
+  char* str,
+  int level
+)
 {
   int cc;
 
@@ -383,12 +394,13 @@ bitmsg(msg, str, level)
 
 
 unsigned int
-bitset(pbits, count, maxon, msg, perms)
-  unsigned int pbits;
-  int count;			/* ¦@¦³´X­Ó¿ï¶µ */
-  int maxon;			/* ³Ì¦h¥i¥H enable ´X¶µ */
-  char *msg;
-  char *perms[];
+bitset(
+  unsigned int pbits,
+  int count,			/* ¦@¦³´X­Ó¿ï¶µ */
+  int maxon,			/* ³Ì¦h¥i¥H enable ´X¶µ */
+  char *msg,
+  char *perms[]
+)
 {
   int i, j, on;
 
@@ -443,8 +455,9 @@ bitset(pbits, count, maxon, msg, perms)
 
 
 static unsigned int
-setperm(level)
-  unsigned int level;
+setperm(
+  unsigned int level
+)
 {
   if (cuser.userlevel & PERM_SYSOP)
     return bitset(level, NUMPERMS, NUMPERMS, MSG_USERPERM, perm_tbl);
@@ -464,8 +477,9 @@ setperm(level)
 
 /* BLACK SU */
 static void
-acct_su(u) 
-  ACCT *u;
+acct_su(
+  ACCT *u
+)
 {
   XO *xo;
   char path[80],id[20];
@@ -495,8 +509,9 @@ acct_su(u)
 /* BLACK SU */
 
 static void
-bm_list(userid)			/* Åã¥Ü userid ¬O­þ¨ÇªOªºªO¥D */
-  char *userid;
+bm_list(			/* Åã¥Ü userid ¬O­þ¨ÇªOªºªO¥D */
+  char *userid
+)
 {
   int len, ch;
   BRD *bhdr, *tail;
@@ -542,9 +557,10 @@ bm_list(userid)			/* Åã¥Ü userid ¬O­þ¨ÇªOªºªO¥D */
 #ifdef LOG_ADMIN
 /* Thor.990405: log permission modify */
 static void
-perm_log(u, oldl)
-  ACCT *u;
-  int oldl;
+perm_log(
+  ACCT *u,
+  int oldl
+)
 {
   int i;
   unsigned int level;
@@ -567,9 +583,10 @@ perm_log(u, oldl)
 #endif
 
 void
-acct_show(u, adm)
-  ACCT *u;
-  int adm;			/* 1: admin 2: reg-form */
+acct_show(
+  ACCT *u,
+  int adm			/* 1: admin 2: reg-form */
+)
 {
   time_t now;
   int diff;
@@ -669,9 +686,10 @@ acct_show(u, adm)
 }
 
 void 
-bm_setup(u,adm)
-  ACCT *u;
-  int adm;
+bm_setup(
+  ACCT *u,
+  int adm
+)
 { 
 
   acct_show(u, adm);
@@ -709,9 +727,10 @@ bm_setup(u,adm)
 
 
 static int
-seek_log_email(mail,mode)
-  char *mail;
-  int mode;
+seek_log_email(
+  char *mail,
+  int mode
+)
 {
   EMAIL email;
   int pos=0,fd;
@@ -738,9 +757,10 @@ seek_log_email(mail,mode)
 }
 
 void
-deny_log_email(mail,deny)
-  char *mail;
-  time_t deny;
+deny_log_email(
+  char *mail,
+  time_t deny
+)
 {
   EMAIL email;
   int pos;
@@ -763,8 +783,9 @@ deny_log_email(mail,deny)
 }
 
 static void
-deny_add_email(he)
-  ACCT *he;
+deny_add_email(
+  ACCT *he
+)
 {
   char buf[128];
   time_t now;
@@ -782,8 +803,9 @@ deny_add_email(he)
 }
 
 static int
-select_mode(adm)
-  int adm;
+select_mode(
+  int adm
+)
 {
   int select,days=0,mode=0;
   if(!adm)
@@ -837,10 +859,11 @@ select_mode(adm)
 }
 
 int
-add_deny(u,adm,cross)
-  ACCT *u;
-  int adm;
-  int cross;
+add_deny(
+  ACCT *u,
+  int adm,
+  int cross
+)
 {
   FILE *fp;
   char buf[80];
@@ -954,9 +977,10 @@ add_deny(u,adm,cross)
 
 
 void
-acct_setup(u, adm)
-  ACCT *u;
-  int adm;
+acct_setup(
+  ACCT *u,
+  int adm
+)
 {
   ACCT x;
 
@@ -1367,7 +1391,7 @@ set_perm:
 
 
 int
-u_info()
+u_info(void)
 {
   char *str, username[24]; /* Thor.980727:lkchu patch: username[20] -> 24 */
 
@@ -1383,7 +1407,7 @@ u_info()
 
 
 int
-m_user()
+m_user(void)
 {
   int ans;
   ACCT acct;
@@ -1397,7 +1421,7 @@ m_user()
 }
 
 int 
-m_bmset()
+m_bmset(void)
 {
   int ans;
   ACCT acct;
@@ -1416,8 +1440,9 @@ m_bmset()
 
 
 int
-ban_addr(addr)
-  char *addr;
+ban_addr(
+  char *addr
+)
 {
   int i;
   char *host, *str;
@@ -1453,8 +1478,9 @@ ban_addr(addr)
 
 #ifdef HAVE_WRITE
 static int
-allow_addr(addr)
-  char *addr;
+allow_addr(
+  char *addr
+)
 {
   int i;
   char *host;
@@ -1470,8 +1496,9 @@ allow_addr(addr)
 #endif
 
 void    /* gaod:´«·s:p */
-check_nckuemail(email)
-  char *email;
+check_nckuemail(
+  char *email
+)
 {
   char *ptr;
   ptr = strstr(email, DEFAULTSERVER);
@@ -1484,9 +1511,10 @@ check_nckuemail(email)
 
 /* §ä´M¬O§_¦³µù¥U¤T­Ó¥H¤W¤§ Email */
 int
-find_same_email(mail,mode)    /* mode : 1.find 2.add 3.del */
-  char *mail;
-  int mode;
+find_same_email(    /* mode : 1.find 2.add 3.del */
+  char *mail,
+  int mode
+)
 {
   int pos=0,fd;
   char *fpath;
@@ -1558,10 +1586,8 @@ find_same_email(mail,mode)    /* mode : 1.find 2.add 3.del */
   return 0;
 }
 
-
-
 int
-u_addr()
+u_addr(void)
 {
   char *msg, addr[60], buf[30], agent[128],temp[60];
   HDR fhdr;
@@ -1839,8 +1865,9 @@ static char *UFO2_FLAGS[] =
 
 
 void
-su_setup(u)
-  ACCT *u;
+su_setup(
+  ACCT *u
+)
 {
   int ufo, nflag, len;
   char fpath[80];
@@ -1876,7 +1903,7 @@ su_setup(u)
 }
 
 int
-u_setup()
+u_setup(void)
 {
   int ufo, nflag, len;
   char fpath[80];
@@ -1921,7 +1948,7 @@ u_setup()
 }
 
 int
-ue_setup()
+ue_setup(void)
 {
   int ufo2, nflag, len;
 
@@ -1949,7 +1976,7 @@ ue_setup()
 }
 
 int
-u_lock()
+u_lock(void)
 {
   char buf[PASSLEN];
   char swapmateid[IDLEN + 1]="\0";
@@ -2028,7 +2055,7 @@ u_lock()
 }
 
 int
-u_xfile()
+u_xfile(void)
 {
   int i;
 
@@ -2066,8 +2093,9 @@ u_xfile()
 
 
 static int
-valid_brdname(brd)
-  char *brd;
+valid_brdname(
+  char *brd
+)
 {
   int ch;
 
@@ -2082,10 +2110,10 @@ valid_brdname(brd)
   return 1;
 }
 
-
 static int
-m_setbrd(brd)
-  BRD *brd;
+m_setbrd(
+  BRD *brd
+)
 {
   int i;
   char *data, buf[16], old_brdname[IDLEN + 1];
@@ -2246,7 +2274,7 @@ m_setbrd(brd)
 
 
 int
-m_newbrd()
+m_newbrd(void)
 {
   BRD newboard;
   int bno;
@@ -2299,8 +2327,9 @@ m_newbrd()
 }
 
 void
-brd_edit(bno)
-  int bno;
+brd_edit(
+  int bno
+)
 {
   BRD *bhdr, newbh;
   char buf[80];
@@ -2385,7 +2414,7 @@ brd_edit(bno)
 }
 
 int
-a_editbrd()		/* cache.100618: ­×§ï¬ÝªO¿ï¶µ */
+a_editbrd(void)		/* cache.100618: ­×§ï¬ÝªO¿ï¶µ */
 {
   int bno;
   BRD *brd;
@@ -2411,44 +2440,18 @@ a_editbrd()		/* cache.100618: ­×§ï¬ÝªO¿ï¶µ */
 
 
 static void
-getfield(line, len, buf, desc, hint)
-  int line, len;
-  char *hint, *desc, *buf;
+getfield(
+  int line, 
+  int len,
+  char* hint,
+  char* desc,
+  char* buf
+)
 {
   move(line, 0);
   prints("%s:%s\n", desc, hint);
   vget(line + 1,0, "         ", buf, len, GCARRY);
 }
-
-#if 0		//gaod:......
-static int
-check_idno(id)
-  char *id;
-{
-  int ident[] = { 10,11,12,13,14,15,16,17,34,18,19,20,21,22,35,23,24,25,
-                  26,27,28,29,32,30,31,33};
-  int checksum,i;
-  char buf[11],ptr;
-  
-  str_lower(buf,id);
-  ptr = *buf - 'a';
-  if(ptr < 0 || ptr > 25)
-    return 0;
-  checksum = (int)(ident[ptr]/10) + 9 * (int)(ident[ptr]%10);
-  for(i = 1;i<=8;i++)
-  {
-    ptr = buf[i] - '0';
-    if(ptr < 0 || ptr > 9 )
-      return 0;
-    checksum += ptr * (9-i);
-  }
-  ptr = buf[9] - '0';
-  if(ptr < 0 || ptr > 9 )                                                     
-    return 0;
-  checksum += ptr;
-  return checksum % 10 ? 0 : 1;
-}
-#endif
 
 int
 check_idno(char *s)
@@ -2476,7 +2479,7 @@ check_idno(char *s)
 
 #ifndef	HAVE_SIMPLE_RFORM
 static void
-send_request()
+send_request(void)
 {
   RFORM_R form;
   int check;
@@ -2498,7 +2501,7 @@ send_request()
 #endif
 
 int
-u_register()
+u_register(void)
 {
   FILE *fn;
   int ans;
@@ -2610,8 +2613,9 @@ u_register()
 
 
 static int
-scan_register_form(fd)
-  int fd;
+scan_register_form(
+  int fd
+)
 {
   static char logfile[] = FN_RFORM_LOG;
   static char *reason[] = {"¿é¤J¯u¹ê©m¦W", "¸Ô¹ê¶ñ¼g¥Ó½Ðªí",
@@ -2759,7 +2763,7 @@ scan_register_form(fd)
 
 #ifndef	HAVE_SIMPLE_RFORM
 static int
-ans_request()
+ans_request(void)
 {
   int num,fd;
   RFORM_R form;
@@ -2863,7 +2867,7 @@ ans_request()
 #endif
 
 int
-m_register()
+m_register(void)
 {
   int num;
 #ifndef	HAVE_SIMPLE_RFORM  
@@ -2903,7 +2907,7 @@ m_register()
       if( vans("¬O§_¨Ï¥Î­×¥¿¥\\¯à¡H") == 'y' )
       {
         clear();
-        prints("\n\n[1;33m½Ð½T©w¨S¦³¨ä¥L¯¸°È¦b¼f®Ö, §_«h±N³y¦¨[1;31;5m¨Ï¥ÎªÌ¸ê®ÆÄY­«¿ù»~![m\n\n\n");
+        prints("\n\n\x1b[1;33m½Ð½T©w¨S¦³¨ä¥L¯¸°È¦b¼f®Ö, §_«h±N³y¦¨\x1b[1;31;5m¨Ï¥ÎªÌ¸ê®ÆÄY­«¿ù»~!\x1b[m\n\n\n");
         if(vans("½T©wµL¨ä¥L¯¸°È¼f®Ö¤¤¡H") == 'y')
         {
           system("/bin/cat run/"FN_RFORM".tmp >> run/"FN_RFORM";/bin/rm -f ~bbs/run/"FN_RFORM".tmp");
@@ -2942,8 +2946,9 @@ m_register()
 
 #ifdef	HAVE_REPORT
 void
-report(s)
-  char *s;
+report(
+  char *s
+)
 {
   static int disable = NA;
   int fd;
@@ -2980,7 +2985,7 @@ report(s)
 
 
 int
-m_trace()
+m_trace(void)
 {
   struct stat bstatb, ostatb, cstatb;
   int btflag, otflag, ctflag, done = 0;
@@ -3078,7 +3083,7 @@ m_trace()
 #endif				/* HAVE_REPORT */
 
 int
-u_verify()
+u_verify(void)
 {
   char keyfile[80], buf[80],/* buf2[80],*/ inbuf[8], *key;
   FILE *fp;

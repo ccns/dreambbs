@@ -74,20 +74,20 @@ write_data(title, data,mode)
   int i;
   char *color;
 
-  sprintf(buf, "[1;32m%%%ds[m\n\n", 80);
+  sprintf(buf, "\x1b[1;32m%%%ds\x1b[m\n\n", 80);
   printf(buf, "%s", title);
   if(mode == 0)
   {
-    puts("[1;31m¦W¦¸[m  [1;33mID[m ([1;34mNickname[m)  \
-           [1;36m¦¸¼Æ[m    [1;31m¦W¦¸[m  [1;33mID[m ([1;34m\
-Nickname[m)             [1;36m¦¸¼Æ[m\n-----------------------------\
+    puts("\x1b[1;31m¦W¦¸\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34mNickname\x1b[m)  \
+           \x1b[1;36m¦¸¼Æ\x1b[m    \x1b[1;31m¦W¦¸\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34m\
+Nickname\x1b[m)             \x1b[1;36m¦¸¼Æ\x1b[m\n-----------------------------\
 -------    ------------------------------------");
   }
   else
   {
-    puts("[1;31m¦W¦¸[m  [1;33mID[m ([1;34mNickname[m)  \
-           [1;36m®É¼Æ[m    [1;31m¦W¦¸[m  [1;33mID[m ([1;34m\
-Nickname[m)             [1;36m®É¼Æ[m\n-----------------------------\
+    puts("\x1b[1;31m¦W¦¸\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34mNickname\x1b[m)  \
+           \x1b[1;36m®É¼Æ\x1b[m    \x1b[1;31m¦W¦¸\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34m\
+Nickname\x1b[m)             \x1b[1;36m®É¼Æ\x1b[m\n-----------------------------\
 -------    ------------------------------------");
   }
 

@@ -1374,7 +1374,7 @@ class_body(xo)
         str2 = "     ";
 //ª`·N¦³¤T®æªÅ¥Õ, ¦]¬° HOT ¬O¤T­Ó char ¬G§ó§ï±Æª©
 //	  prints("\033[%d;4%d;37m%6d%s%s%c%-13s\033[%sm%-4s %s%-33.32s%s%s%.13s",mode,mode?cuser.barcolor:0, num, str, mode ? "\033[37m" : "\033[m",
-//	  brdtype,brd->brdname, buf, brd->class, mode ? "\033[37m" : "\033[m", brd->title,brd->bvote ? "[1;33m  §ë " : str2, mode ? "\033[37m" : "\033[m", brd->BM);
+//	  brdtype,brd->brdname, buf, brd->class, mode ? "\033[37m" : "\033[m", brd->title,brd->bvote ? "\x1b[1;33m  §ë " : str2, mode ? "\033[37m" : "\033[m", brd->BM);
 
         sprintf(buf,"%d;3%d",brd->color/10,brd->color%10);
 //	prints("%6d%s%c%-13s\033[%sm%-4s \033[m%-36s%c %.13s", num, str,

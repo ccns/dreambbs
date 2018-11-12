@@ -1105,7 +1105,7 @@ post_cross(xo)
 		return XO_FOOT;
 
 	if (ask_board(xboard, BRD_W_BIT,
-				"\n\n[1;33m½Ð¬D¿ï¾A·íªº¬ÝªO¡A¬Û¦P¤å³¹¤Á¤Å¶W¹L­­¨î¼Æ¥Ø¡C[m\n\n")
+				"\n\n\x1b[1;33m½Ð¬D¿ï¾A·íªº¬ÝªO¡A¬Û¦P¤å³¹¤Á¤Å¶W¹L­­¨î¼Æ¥Ø¡C\x1b[m\n\n")
 			&& (*xboard || xo->dir[0] == 'u'))	/* «H½c¤¤¥i¥HÂà¶K¦Ücurrboard */
 	{
 		if (*xboard == 0)
@@ -1265,7 +1265,7 @@ post_cross(xo)
           ptime = localtime(&now);
           sprintf(tgt, "Âà¿ý¦Ü %s ¬ÝªO", xboard);
           xfp = fopen(fpath, "a");
- 	      sprintf(add, "[1;33m¡÷ %12s¡G[36m%-54.54s [m%5.5s\n",cuser.userid,tgt,Btime(&hdr->pushtime)+3);
+ 	      sprintf(add, "\x1b[1;33m¡÷ %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,tgt,Btime(&hdr->pushtime)+3);
  	      fprintf(xfp, "%s", add);
           fclose(xfp);
         }
@@ -2482,14 +2482,14 @@ post_edit(xo)
     fputs("--\n",xfp);
     while (fgets(str, 256, fp))
     {
-//      if(!strncmp(str,"[1;33m¡÷",9))
+//      if(!strncmp(str,"\x1b[1;33m¡÷",9))
 //  modified by cat@20090422
-      if((!strncmp(str,"[1;33m",7) || !strncmp(str,"[1;31m", 7)) && strrchr(str,'/') > str)
+      if((!strncmp(str,"\x1b[1;33m",7) || !strncmp(str,"\x1b[1;31m", 7)) && strrchr(str,'/') > str)
       {
         temp = 1;
         break;
       }
-      else if((!strncmp(str,"[m[1;33m",10) || !strncmp(str,"[m[1;31m", 7)) && strrchr(str,'/') > str)
+      else if((!strncmp(str,"\x1b[m\x1b[1;33m",10) || !strncmp(str,"\x1b[m\x1b[1;31m", 7)) && strrchr(str,'/') > str)
       {
         temp = 1;
         break;
@@ -3402,23 +3402,23 @@ post_recommend(xo)
 			if(brd->battr & BRD_PUSHSNEER)
 			{
 				if(addscore == 1)
-					sprintf(add,"[1;33m¡÷ %12s¡G[36m%-54.54s [m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+					sprintf(add,"\x1b[1;33m¡÷ %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
 				else if (addscore == -1)
-					sprintf(add,"[1;31m¼N[m [1;33m%12s¡G[36m%-54.54s [m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+					sprintf(add,"\x1b[1;31m¼N\x1b[m \x1b[1;33m%12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
 			    else
-			        sprintf(add,"[m[1;33m   %12s¡G[36m%-54.54s [m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);        
+			        sprintf(add,"\x1b[m\x1b[1;33m   %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);        
 			}
 			else if(brd->battr & BRD_PUSHDEFINE)
 			{
 				if(addscore == 1)
-					sprintf(add,"[1;33m%02.2s %12s¡G[36m%-54.54s [m%5.5s\n",verb,cuser.userid,msg,Btime(&hdr->pushtime)+3);
+					sprintf(add,"\x1b[1;33m%02.2s %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n",verb,cuser.userid,msg,Btime(&hdr->pushtime)+3);
 				else if (addscore == -1)
-					sprintf(add,"[1;31m%02.2s[m [1;33m%12s¡G[36m%-54.54s [m%5.5s\n",verb,cuser.userid,msg,Btime(&hdr->pushtime)+3);
+					sprintf(add,"\x1b[1;31m%02.2s\x1b[m \x1b[1;33m%12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n",verb,cuser.userid,msg,Btime(&hdr->pushtime)+3);
 				else
-					sprintf(add,"[1;33m¡÷[m [1;33m%12s¡G[36m%-54.54s [m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);        
+					sprintf(add,"\x1b[1;33m¡÷\x1b[m \x1b[1;33m%12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);        
 			}      
 			else      
-				sprintf(add,"[1;33m¡÷ %12s¡G[36m%-54.54s [m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+				sprintf(add,"\x1b[1;33m¡÷ %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
 			/*
 			   if(dashf(fpath))
 			   f_cat(fpath,add);
