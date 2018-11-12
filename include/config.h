@@ -34,6 +34,7 @@
 #define MYHOSTNAME      "ccns.cc"                   /* 網路位址 */
 #endif
 
+#define BBSVERNAME      "DreamBBS"                    /* 版本名稱 */
 #define BBSVERSION      "v1.0-CURRENT"                /* 版本編號 */
 
 #ifndef SYSOPNICK
@@ -49,7 +50,7 @@
 #endif
 
 #ifndef BBSGID
-#define BBSGID          999
+#define BBSGID          9999
 #endif
 
 #ifndef TAG_VALID

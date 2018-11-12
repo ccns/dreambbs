@@ -28,7 +28,7 @@ x_siteinfo()
 
     move(1, 0);
     prints("站    名： %s - %s\n", MYHOSTNAME, BBSIP);
-    prints("程式版本： %s [%s]\033[m\n", BBSNAME, BBSVERSION);
+    prints("程式版本： %s [%s]\033[m\n", BBSVERNAME, BBSVERSION);
     prints("站上人數： %d/%d\n", ushm->count, MAXACTIVE);
     prints("系統負載： %.2f %.2f %.2f [%s]\n"
 	    , load[0], load[1], load[2], load[0] > 10 ? "\033[1;41;37m過高\033[m" : load[0] > 5 ? 
