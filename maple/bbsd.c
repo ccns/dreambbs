@@ -1164,7 +1164,7 @@ tn_main()
   currbno = -1;
   
   //getloadavg(load,3);
-  prints( MYHOSTNAME " ⊙ " OWNER " ⊙ " BBSIP " [" BBSNAME " " BBSVERSION "]\n\
+  prints( MYHOSTNAME " ⊙ " OWNER " ⊙ " BBSIP " [" BBSVERNAME " " BBSVERSION "]\n\
 歡迎光臨【\033[1;33;46m %s \033[m】。系統負載：%.2f %.2f %.2f - [%s] 線上人數 [%d/%d]",
     str_site, load[0],load[1],load[2],load[0]>16?"\033[1;37;41m過高\033[m":load[0]>8?"\033[1;37;42m偏高\033[m":"\033[1;37;44m正常\033[m", ushm->count, MAXACTIVE);
 
