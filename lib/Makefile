@@ -29,10 +29,6 @@ all:	libdao.a
 dao.p:	$(SRC)
 	$(CPROTO) $> | sed '/querybuf/d' > dao.p
 
-dns.p:	$(SRC)
-	$(CPROTO) $> | sed '/querybuf/d' > dns.p
-
-
 libdao.a: $(OBJ)
 	ar rv $@ $?
 	$(RANLIB) $@
