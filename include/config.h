@@ -549,8 +549,6 @@
 #define	CONDITION_MAX	(100)
 #define	PARTY_MAX	(150)
 
-
-
 #define	BSEM_KEY	2000            /* semaphore key */
 #define	BSEM_FLG	0600            /* semaphore mode */
 #define BSEM_ENTER      -1              /* enter semaphore */

@@ -1,14 +1,11 @@
 #ifndef	_HDR_H_
 #define	_HDR_H_
 
-
 #include <sys/types.h>
-
 
 /* ----------------------------------------------------- */
 /* DIR of post / mail struct : 256 bytes		 */
 /* ----------------------------------------------------- */
-
 
 typedef struct
 {
@@ -35,17 +32,12 @@ typedef struct
   char title[73];		/* 主題 (TTLEN + 1) */
 }          HDR;
 
-
-/* gopher url 字串：xname + owner + nick + date */
-
-#define	GEM_URLEN	(32 + 80 + 50 + 9 - 1)
-
+/* gopher url <A6>r<A6><EA><A1>Gxname + owner + nick + date */
+#define        GEM_URLEN       (32 + 80 + 50 + 9 - 1)
 
 /* ----------------------------------------------------- */
 /* post.xmode 的定義					 */
 /* ----------------------------------------------------- */
-
-
 
 #define POST_READ	       0x000000001	/* already read */
 #define POST_MARKED	       0x000000002	/* marked */
