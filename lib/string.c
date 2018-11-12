@@ -71,6 +71,7 @@ str_cat(
   while ((*dst++ = *s2++))
     ;
 }
+
 int
 str_cmp(
   char* s1, 

@@ -20,7 +20,7 @@ EXE	= account acl-sort camera expire gem-check gem-index makeUSR \
 	  stopperm mailtoall clean_acl makefw \
 	  resetvmail counter restoreusr makeusrno outgo redir \
 	  classtable_alert bmw-dump tranBRD \
-	  brdstat dump-brdstat base64encode \
+	  brdstat brdcheck dump-brdstat base64encode \
 	  msgall transacct showACCT showBRD \
 	  backup brdmail addpost
 
@@ -55,6 +55,9 @@ restoregem: restoregem.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 brdstat: brdstat.o
+	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
+
+brdcheck: brdcheck.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 countage: countage.o
