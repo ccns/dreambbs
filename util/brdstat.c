@@ -40,8 +40,6 @@
 HDR		hotboard[MAX_HOTBOARD];
 int		hotcount;
 
-extern int errno;
-
 
 void
 keeplog(

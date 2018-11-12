@@ -529,8 +529,6 @@ reaper(
 
       while (rename(fpath, buf))
       {
-        extern int errno;
-
         fprintf(flog, "rename %s ==> %s : %d\n", fpath, buf, errno);
         sprintf(buf, "usr/@/%s.%d", lowid, (int)++life);
       }

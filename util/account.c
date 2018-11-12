@@ -18,7 +18,6 @@
 
 static char fn_today[] = "gem/@/@-act";	/* さらΩ参璸 */
 static char fn_yesday[] = "gem/@/@=act";	/* 琎らΩ参璸 */
-extern int errno;
 
 /* ----------------------------------------------------- */
 /* 秨布shm 场斗籔 cache.c 甧			 */

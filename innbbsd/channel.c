@@ -265,7 +265,6 @@ tryaccept(
   int ns;
   int fromlen = sizeof(struct sockaddr_in);
   struct sockaddr sockaddr;	/* Internet endpoint address */
-  extern int errno;
 
   do
   {

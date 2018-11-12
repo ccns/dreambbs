@@ -17,7 +17,6 @@
 #include <sys/shm.h>
 #include "bbs.h"
 
-extern int errno;
 static BCACHE *bshm;
 
 static void
