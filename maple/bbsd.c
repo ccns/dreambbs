@@ -7,8 +7,6 @@
 /* update : 96/10/10				 	 */
 /*-------------------------------------------------------*/
 
-
-
 #define	_MAIN_C_
 
 #include "bbs.h"
@@ -66,8 +64,10 @@ extern time_t mode_lastchange;
 /* ----------------------------------------------------- */
 
 void
-blog(mode, msg)
-  char *mode, *msg;
+blog(
+  char *mode, 
+  char *msg
+)
 {
   char buf[512], data[256];
   time_t now;
@@ -86,7 +86,7 @@ blog(mode, msg)
 
 #ifdef MODE_STAT
 void
-log_modes()
+log_modes(void)
 {
   time(&modelog.logtime);
   rec_add(FN_MODE_CUR, &modelog, sizeof(UMODELOG));
@@ -121,10 +121,10 @@ TABLE table[] = {
 
 #endif
 
-
 void
-u_exit(mode)
-  char *mode;
+u_exit(
+  char *mode
+)
 {
   int fd, delta;
   ACCT tuser;
@@ -220,7 +220,7 @@ u_exit(mode)
 
 
 void
-abort_bbs()
+abort_bbs(void)
 {
   if (bbstate)
     u_exit("AXXED");
@@ -230,8 +230,9 @@ abort_bbs()
 
 
 static void
-login_abort(msg)
-  char *msg;
+login_abort(
+  char *msg
+)
 {
   outs(msg);
   refresh();
@@ -250,9 +251,10 @@ login_abort(msg)
 
 
 static int
-belong(flist, key)
-  char *flist;
-  char *key;
+belong(
+  char *flist,
+  char *key
+)
 {
   int fd, rc;
 
@@ -279,8 +281,9 @@ belong(flist, key)
 
 
 static int
-is_badid(userid)
-  char *userid;
+is_badid(
+  char *userid
+)
 {
   int ch;
   char *str;
@@ -305,8 +308,9 @@ is_badid(userid)
 
 
 static int
-uniq_userno(fd)
-  int fd;
+uniq_userno(
+  int fd
+)
 {
   char buf[4096];
   int userno, size;
@@ -335,7 +339,7 @@ uniq_userno(fd)
 
 
 static void
-acct_apply()
+acct_apply(void)
 {
   SCHEMA slot;
   char buf[80];
@@ -450,13 +454,13 @@ acct_apply()
 
 #endif /* LOGINASNEW */
 
-
 /* ----------------------------------------------------- */
 /* bad login						 */
 /* ----------------------------------------------------- */
 static void
-logattempt(type)
-  int type;			/* '-' login failure   ' ' success */
+logattempt(
+  int type			/* '-' login failure   ' ' success */
+)
 {
   char buf[128], fpath[80];
 
@@ -495,14 +499,13 @@ logattempt(type)
 /* 祅魁 BBS 祘Α					 */
 /* ----------------------------------------------------- */
 
-
 extern void talk_rqst();
 extern void bmw_rqst();
 
-
 static void
-utmp_setup(mode)
-  int mode;
+utmp_setup(
+  int mode
+)
 {
   UTMP utmp;
   char *guestname[GUESTNAME]={GUEST_NAMES};
@@ -555,9 +558,8 @@ utmp_setup(mode)
 /* user login						 */
 /* ----------------------------------------------------- */
 
-
 static void
-tn_login()
+tn_login(void)
 {
   int fd, attempts;
   usint level, ufo;
@@ -1042,7 +1044,7 @@ tn_login()
 
 
 static void
-tn_signals()
+tn_signals(void)
 {
   struct sigaction act;
 
@@ -1076,7 +1078,7 @@ tn_signals()
 
 
 static inline void
-tn_main()
+tn_main(void)
 {
   double load[3];
   char buf[128], buf2[40];
@@ -1227,9 +1229,8 @@ tn_main()
 /* FSA (finite state automata) for telnet protocol	 */
 /* ----------------------------------------------------- */
 
-
 static void
-telnet_init()
+telnet_init(void)
 {
   static char svr[] = {
     IAC, DO, TELOPT_TTYPE,
@@ -1277,9 +1278,10 @@ telnet_init()
 
 
 static void
-start_daemon(port)
-  int port; /* Thor.981206:  0  *⊿Τ把计* , -1  -i (inetd) */
+start_daemon(
+  int port /* Thor.981206:  0  *⊿Τ把计* , -1  -i (inetd) */
   /* Davy@Eod.tw.171001:  -2  -p (proxy mode) */
+)
 {
   int n;
   struct linger ld;
@@ -1446,7 +1448,7 @@ start_daemon(port)
 
 
 static inline void
-reaper()
+reaper(void)
 {
   while (waitpid(-1, NULL, WNOHANG | WUNTRACED) > 0);
 }
@@ -1454,7 +1456,7 @@ reaper()
 
 #ifdef	SERVER_USAGE
 static void
-servo_usage()
+servo_usage(void)
 {
   struct rusage ru;
   FILE *fp;
@@ -1502,7 +1504,7 @@ servo_usage()
 
 
 static void
-main_term()
+main_term(void)
 {
 #ifdef	SERVER_USAGE
   servo_usage();
@@ -1512,7 +1514,7 @@ main_term()
 
 
 static inline void
-main_signals()
+main_signals(void)
 {
   struct sigaction act;
 
@@ -1535,10 +1537,7 @@ main_signals()
 }
 
 
-int
-main(argc, argv)
-  int argc;
-  char *argv[];
+int main(int argc, char *argv[])
 {
   int csock;			/* socket for Master and Child */
   int *totaluser;
