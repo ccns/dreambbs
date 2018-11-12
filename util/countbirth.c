@@ -155,24 +155,24 @@ main(void)
     fp1=fopen(OUTFILE,"w");
 
     fprintf(fp1,"\n                      "
-"[1;37m¡¹[35m¡¹[34m¡¹[33m¡¹[32m¡¹[31m¡¹[45;33m ¹Ø¬P¤jÆ[ "
-"[31;40m¡¹[32m¡¹[33m¡¹[34m¡¹[35m¡¹[37m¡¹[m \n\n");
+"\x1b[1;37m¡¹\x1b[35m¡¹\x1b[34m¡¹\x1b[33m¡¹\x1b[32m¡¹\x1b[31m¡¹\x1b[45;33m ¹Ø¬P¤jÆ[ "
+"\x1b[31;40m¡¹\x1b[32m¡¹\x1b[33m¡¹\x1b[34m¡¹\x1b[35m¡¹\x1b[37m¡¹\x1b[m \n\n");
     if(day>0)
     {
-      fprintf(fp1,"[33m¡i[1;45m¥»¤é¹Ø¬P[40;33m¡j[m \n");
+      fprintf(fp1,"\x1b[33m¡i\x1b[1;45m¥»¤é¹Ø¬P\x1b[40;33m¡j\x1b[m \n");
       for (i=0;i<day;i++)
       {
-        fprintf(fp1,"   [33m[%2d/%-2d] %-14s[0m %-24s login:%-5d post:%-5d\n",
+        fprintf(fp1,"   \x1b[33m[%2d/%-2d] %-14s\x1b[0m %-24s login:%-5d post:%-5d\n",
            ptime->tm_mon+1,ptime->tm_mday,today[i],today_name[i],a[i],b[i]);
       }
       fprintf(fp1,"\n");
     }
     if(wee>0)
     {
-      fprintf(fp1,"[33m¡i[1;45m«e«á¨â¤Ñ¤º¹Ø¬P[40;33m¡j[m \n");
+      fprintf(fp1,"\x1b[33m¡i\x1b[1;45m«e«á¨â¤Ñ¤º¹Ø¬P\x1b[40;33m¡j\x1b[m \n");
       for (i=0;i<wee;i++)
       {
-        fprintf(fp1,"   [%2d/%-2d] [36m%-14s[m"
+        fprintf(fp1,"   [%2d/%-2d] \x1b[36m%-14s\x1b[m"
                ,ptime->tm_mon+1,week_day[i],week[i]);
         if(!((i+1)%3)) 
           fprintf(fp1,"\n");
@@ -186,7 +186,7 @@ main(void)
 
 #ifdef HAVE_MONTH
 
-    fprintf(fp1,"\n[33m¡i[1;45m¥»¤ë¹Ø¬P[40;33m¡j[m \n");
+    fprintf(fp1,"\n\x1b[33m¡i\x1b[1;45m¥»¤ë¹Ø¬P\x1b[40;33m¡j\x1b[m \n");
     for (i=0;i<mon;i++)
     {
       fprintf(fp1,"   [%2d/%-2d] %-14s",ptime->tm_mon+1,month_day[i],month[i]);

@@ -125,7 +125,7 @@ cleanrecommend_head(xo)
   vs_head("±ÀÂË¯d¨¥²M³æ", str_site);
   outs("\
   [¡ö]Â÷¶} c)­×§ï[¯¸ªø±M¥Î] d)§R°£ D)²M°£¥þ³¡ s)­«¾ã [h]elp\n\
-\033[44m½s¸¹ ±À      ¨Ï¥ÎªÌ ¯d¨¥                                                  ¤é ´Á[m");
+\033[44m½s¸¹ ±À      ¨Ï¥ÎªÌ ¯d¨¥                                                  ¤é ´Á\x1b[m");
   return cleanrecommend_body(xo);
 }
 
@@ -349,7 +349,7 @@ clean(xo)
               rmsg.pn = !strncmp(buf, "\033[1;33", 6);
 
             rec_add(recommenddb,&rmsg,sizeof(RMSG));
-//          if(!strncmp(buf,"[1;33m¡÷",9))
+//          if(!strncmp(buf,"\x1b[1;33m¡÷",9))
 //          {
 /*
             for(i=0;i<12;i++)
@@ -383,12 +383,12 @@ clean(xo)
     if(rmsg.pn == POSITIVE)
     {
       counter++;
-      sprintf(buf,"[1;33m%2s %12s¡G[36m%-54.54s [m%5.5s\n",rmsg.verb,rmsg.userid,rmsg.msg,rmsg.rtime);
+      sprintf(buf,"\x1b[1;33m%2s %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n",rmsg.verb,rmsg.userid,rmsg.msg,rmsg.rtime);
     }
     else if(rmsg.pn == NEGATIVE)
     {
       counter--;
-      sprintf(buf,"[1;31m%2s \033[33m%12s¡G[36m%-54.54s [m%5.5s\n",rmsg.verb,rmsg.userid,rmsg.msg,rmsg.rtime);
+      sprintf(buf,"\x1b[1;31m%2s \033[33m%12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n",rmsg.verb,rmsg.userid,rmsg.msg,rmsg.rtime);
     }
     else
     {

@@ -66,7 +66,7 @@ game_log(int file, char *fmt, ...)
 	}
 	fs = fopen(ff, "a+");
 	now = time(0);
-	fprintf(fs, "[1;33m%s [32m%s [36m%s[m\n", Cdate(&now), cuser.userid, buf);
+	fprintf(fs, "\x1b[1;33m%s \x1b[32m%s \x1b[36m%s\x1b[m\n", Cdate(&now), cuser.userid, buf);
 	fclose(fs);
 }
 

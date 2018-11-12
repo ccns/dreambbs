@@ -10,7 +10,7 @@ void show_money(int m)
 {
 	move(19, 0);
 	clrtoeol();
-	prints("[1;37;44m§A²{¦³²{ª÷: [36m%-18d[37m©ãª`ª÷ÃB: [36m%-20d[m",
+	prints("\x1b[1;37;44m§A²{¦³²{ª÷: \x1b[36m%-18d\x1b[37m©ãª`ª÷ÃB: \x1b[36m%-20d\x1b[m",
 		   cuser_money, m);
 }
 
@@ -78,7 +78,7 @@ BlackJack()
 		cuser_money = cuser_money - money;
 		clear();
 		move(2, 0);prints("(«ö y ÄòµP, n ¤£ÄòµP, d double)");
-		move(0, 0);clrtoeol();prints("±zÁÙ¦³ [1;44;33m%d[m ª÷¹ô", cuser_money);
+		move(0, 0);clrtoeol();prints("±zÁÙ¦³ \x1b[1;44;33m%d\x1b[m ª÷¹ô", cuser_money);
 
 //­«¼gµoµPºtºâªk  by jerics
 		for (i = 0;i < 52;i++)
@@ -143,24 +143,24 @@ BlackJack()
 
 			if ((guest_card[0] >= 24 && guest_card[0] <= 27) && (guest_card[1] >= 24 && guest_card[1] <= 27) && (guest_card[2] >= 24 && guest_card[2] <= 27))
 			{
-				move(18, 3);prints("[1;41;33m     ¢¶¢¶¢¶     [m");
-				move(3, 0);prints("[1;41;33m¢¶¢¶¢¶ !!! ±o¼úª÷ %d ¤õ¨®¹ô[m", money*seven);
+				move(18, 3);prints("\x1b[1;41;33m     ¢¶¢¶¢¶     \x1b[m");
+				move(3, 0);prints("\x1b[1;41;33m¢¶¢¶¢¶ !!! ±o¼úª÷ %d ¤õ¨®¹ô\x1b[m", money*seven);
 				cuser_money += (money * seven);
 //      inmoney(money*seven);
-				game_log(2, "¤¤¤F [1;33m%d[m ª÷¹ôªº [1;31m  ¢¶¢¶¢¶   [m"
+				game_log(2, "¤¤¤F \x1b[1;33m%d\x1b[m ª÷¹ôªº \x1b[1;31m  ¢¶¢¶¢¶   \x1b[m"
 						 , money*seven);
-				pressanykey("±zÁÙ¦³ [1;44;33m%d[m ª÷¹ô", cuser_money);
+				pressanykey("±zÁÙ¦³ \x1b[1;44;33m%d\x1b[m ª÷¹ô", cuser_money);
 				flag = 1;m = 0;
 			}
 
 			if ((guest_card[0] == 40 && guest_card[1] == 0) || (guest_card[0] == 0 && guest_card[1] == 40))
 			{
-				move(18, 3);prints("[1;41;33m ¶W¯Å¥¿²Î BLACK JACK  [m");
-				move(3, 0);prints("[1;41;33m¶W¯Å¥¿²Î BLACK JACK !!! ±o¼úª÷ %d ª÷¹ô[m", money*super_jack);
+				move(18, 3);prints("\x1b[1;41;33m ¶W¯Å¥¿²Î BLACK JACK  \x1b[m");
+				move(3, 0);prints("\x1b[1;41;33m¶W¯Å¥¿²Î BLACK JACK !!! ±o¼úª÷ %d ª÷¹ô\x1b[m", money*super_jack);
 				cuser_money += (money * super_jack);
-				game_log(2, "¤¤¤F [1;33m%d[m ª÷¹ôªº [1;41;33m ¥¿²Î ¢Ï¢Ø [m"
+				game_log(2, "¤¤¤F \x1b[1;33m%d\x1b[m ª÷¹ôªº \x1b[1;41;33m ¥¿²Î ¢Ï¢Ø \x1b[m"
 						 , money*super_jack);
-				pressanykey("±zÁÙ¦³ [1;44;33m%d[m ª÷¹ô", cuser_money);
+				pressanykey("±zÁÙ¦³ \x1b[1;44;33m%d\x1b[m ª÷¹ô", cuser_money);
 				flag = 1;m = 0;
 			}
 
@@ -168,28 +168,28 @@ BlackJack()
 
 			if ((tmp == 1) || ((guest_card[1] <= 3 && guest_card[1] >= 0) && (guest_card[0] <= 43 && guest_card[0] >= 40)))
 			{
-				move(18, 3);prints("[1;41;33m SUPER BLACK JACK  [m");
-				move(3, 0);prints("[1;41;33mSUPER BLACK JACK !!! ±o¼úª÷ %d ª÷¹ô[m", money*aj);
+				move(18, 3);prints("\x1b[1;41;33m SUPER BLACK JACK  \x1b[m");
+				move(3, 0);prints("\x1b[1;41;33mSUPER BLACK JACK !!! ±o¼úª÷ %d ª÷¹ô\x1b[m", money*aj);
 				cuser_money += (money * aj);
 //      inmoney(money*aj);
-				game_log(2, "¤¤¤F [1;33m%d[m ¤¸ªº [1;44;33m Super¢Ï¢Ø [m", money*aj);
-				pressanykey("±zÁÙ¦³ [1;44;33m%d[m ª÷¹ô", cuser_money);
+				game_log(2, "¤¤¤F \x1b[1;33m%d\x1b[m ¤¸ªº \x1b[1;44;33m Super¢Ï¢Ø \x1b[m", money*aj);
+				pressanykey("±zÁÙ¦³ \x1b[1;44;33m%d\x1b[m ª÷¹ô", cuser_money);
 				flag = 1;m = 0;
 			}
 
 			if (guest_point == 21 && guest_count == 1)
 			{
-				move(18, 3);prints("[1;41;33m  BLACK JACK  [m");
-				move(3, 0);prints("[1;41;33mBLACK JACK !!![44m ±o¼úª÷ %d ª÷¹ô[m", money*win_jack);
+				move(18, 3);prints("\x1b[1;41;33m  BLACK JACK  \x1b[m");
+				move(3, 0);prints("\x1b[1;41;33mBLACK JACK !!!\x1b[44m ±o¼úª÷ %d ª÷¹ô\x1b[m", money*win_jack);
 				cuser_money += (money * win_jack);
 //      inmoney(money*win_jack);
-				move(0, 0);clrtoeol();//prints("±zÁÙ¦³ [1;44;33m%d[m ª÷¹ô",cuser.money);
+				move(0, 0);clrtoeol();//prints("±zÁÙ¦³ \x1b[1;44;33m%d\x1b[m ª÷¹ô",cuser.money);
 				if (money*win_jack >= 500000)
 				{
-					game_log(2, "¤¤¤F [1;33m%d[m ª÷¹ôªº [1;47;30m BlackJack [m", money*win_jack);
+					game_log(2, "¤¤¤F \x1b[1;33m%d\x1b[m ª÷¹ôªº \x1b[1;47;30m BlackJack \x1b[m", money*win_jack);
 				}
 
-				pressanykey("±zÁÙ¦³ [1;44;33m%d[m ª÷¹ô", cuser_money);
+				pressanykey("±zÁÙ¦³ \x1b[1;44;33m%d\x1b[m ª÷¹ô", cuser_money);
 				flag = 1;m = 0;
 			}                        /* «e¨â±i´N 21 ÂI */
 
@@ -197,8 +197,8 @@ BlackJack()
 			{
 				if (A_count > 0){guest_point -= 10;A_count--;};
 			}
-			move(12, 0); clrtoeol();prints("[1;32mÂI¼Æ: [33m%d[m", host_point);
-			move(14, 0); clrtoeol();prints("[1;32mÂI¼Æ: [33m%d[m", guest_point);
+			move(12, 0); clrtoeol();prints("\x1b[1;32mÂI¼Æ: \x1b[33m%d\x1b[m", host_point);
+			move(14, 0); clrtoeol();prints("\x1b[1;32mÂI¼Æ: \x1b[33m%d\x1b[m", guest_point);
 			if (guest_point > 21)
 			{
 				pressanykey("  Ãz±¼°Õ~~~  ");
@@ -207,12 +207,12 @@ BlackJack()
 
 			if ((guest_count == 5) && (flag == 0))
 			{
-				move(18, 3);prints("[1;41;33m            ¹L¤»Ãö            [m");
-				move(3, 0);prints("[1;41;33m¹L¤»Ãö !!! ±o¼úª÷ %d ª÷¹ô[m", money*six);
+				move(18, 3);prints("\x1b[1;41;33m            ¹L¤»Ãö            \x1b[m");
+				move(3, 0);prints("\x1b[1;41;33m¹L¤»Ãö !!! ±o¼úª÷ %d ª÷¹ô\x1b[m", money*six);
 				cuser_money += (money * six);
 //      inmoney(money*six);
 //      inexp(ba*5);
-				game_log(2, "¤¤¤F [1;33m%d[m ¤¸ªº [1;44;33m  ¹L¤»Ãö   [m", money*six);
+				game_log(2, "¤¤¤F \x1b[1;33m%d\x1b[m ¤¸ªº \x1b[1;44;33m  ¹L¤»Ãö   \x1b[m", money*six);
 				pressanykey("±zÁÙ¦³ %d ª÷¹ô", cuser_money);
 				flag = 1;m = 0;
 //      return 0;
@@ -238,7 +238,7 @@ BlackJack()
 					money *= 2;
 				}
 				else ch = 'n';
-				move(0, 0);clrtoeol();prints("±zÁÙ¦³ [1;44;33m%d[m ª÷¹ô", cuser_money);
+				move(0, 0);clrtoeol();prints("±zÁÙ¦³ \x1b[1;44;33m%d\x1b[m ª÷¹ô", cuser_money);
 			}                                      /* double */
 
 			if (ch == 'd' && guest_count > 2)ch = 'n';
@@ -265,15 +265,15 @@ BlackJack()
 				{
 					if (AA_count > 0){host_point -= 10;AA_count--;};
 				}
-				move(12, 0); clrtoeol();prints("[1;32mÂI¼Æ: [33m%d[m", host_point);
-				move(14, 0); clrtoeol();prints("[1;32mÂI¼Æ: [33m%d[m", guest_point);
+				move(12, 0); clrtoeol();prints("\x1b[1;32mÂI¼Æ: \x1b[33m%d\x1b[m", host_point);
+				move(14, 0); clrtoeol();prints("\x1b[1;32mÂI¼Æ: \x1b[33m%d\x1b[m", guest_point);
 				if (host_point > 21)
 				{
-					move(14, 0); clrtoeol(); prints("[1;32mÂI¼Æ: [33m%d [1;41;33m WINNER [m", guest_point);
+					move(14, 0); clrtoeol(); prints("\x1b[1;32mÂI¼Æ: \x1b[33m%d \x1b[1;41;33m WINNER \x1b[m", guest_point);
 					cuser_money += (money * win);
 //      inmoney(money*win);
-					move(0, 0);clrtoeol();prints("±zÁÙ¦³ [1;44;33m%d[m ª÷¹ô", cuser_money);
-					pressanykey("[1;44;33m§AÄ¹¤F~~~~ ±o¼úª÷ %d ª÷¹ô[m", money*win);
+					move(0, 0);clrtoeol();prints("±zÁÙ¦³ \x1b[1;44;33m%d\x1b[m ª÷¹ô", cuser_money);
+					pressanykey("\x1b[1;44;33m§AÄ¹¤F~~~~ ±o¼úª÷ %d ª÷¹ô\x1b[m", money*win);
 					flag = 1;
 				}
 				host_count++;

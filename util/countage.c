@@ -22,7 +22,7 @@ fouts(fp, buf, mode)
   static char state = '0';
 
   if (state != mode)
-    fprintf(fp, "[3%cm", state = mode);
+    fprintf(fp, "\x1b[3%cm", state = mode);
   if (buf[0])
   {
     fprintf(fp, buf);
@@ -114,7 +114,7 @@ main(void)
     return 0;
   }
   
-  fprintf(fp, "\t\t\t [1;33;45m ­·¤§¶נ ¦~ÄÖ²Î­p [%02d/%02d/%02d] [m\n\n",
+  fprintf(fp, "\t\t\t \x1b[1;33;45m ­·¤§¶נ ¦~ÄÖ²Î­p [%02d/%02d/%02d] \x1b[m\n\n",
      (ptime->tm_year)%100,ptime->tm_mon+1,ptime->tm_mday);
   for (i = MAX_LINE + 1; i > 0; i--)
   {
@@ -142,9 +142,9 @@ main(void)
     fprintf(fp, "\n");
   }
 
-  fprintf(fp, "  [1;35mשזשששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששט \n"
-    "   [1;32m10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33\n"
-    "\t%s    [36m¦³®Ä²Î­p¤H¦¸¡G[37m%-9d[36m¥­§¡¦~ÄÖ¡G[37m%d[40;0m\n"
+  fprintf(fp, "  \x1b[1;35mשזשששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששט \n"
+    "   \x1b[1;32m10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33\n"
+    "\t%s    \x1b[36m¦³®Ä²Î­p¤H¦¸¡G\x1b[37m%-9d\x1b[36m¥­§¡¦~ÄÖ¡G\x1b[37m%d\x1b[40;0m\n"
     , ten ? "\033[36m³ז¦ל¡G\033[37m10 ¤H" : "\t",act[24],(int) totalyear / (act[24] ? act[24] : 1));
   fclose(fp);
   return 0;

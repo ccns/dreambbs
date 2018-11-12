@@ -88,20 +88,20 @@ rebuild_pnote_ansi(int newflag)
 		if (total > MAX_PNOTE)
 			total = MAX_PNOTE;
 	}
-	fputs("\t\t\t[1;32m ¡¹ [37mµª ¿ý ¾÷ ¤¤ ªº ¯d ¨¥[32m¡¹ \n\n", fp);
+	fputs("\t\t\t\x1b[1;32m ¡¹ \x1b[37mµª ¿ý ¾÷ ¤¤ ªº ¯d ¨¥\x1b[32m¡¹ \n\n", fp);
 
 	while (total)
 	{
 		if (total--)
 			read(fd, (char *) &myitem, sizeof(myitem));
-		sprintf(buf, "[1;33m¡¼ùù [32m%s[37m(%s)",
+		sprintf(buf, "\x1b[1;33m¡¼ùù \x1b[32m%s\x1b[37m(%s)",
 				myitem.userid, myitem.username);
 		len = strlen(buf);
-		strcat(buf, " [33m" + (len & 1));
+		strcat(buf, " \x1b[33m" + (len & 1));
 
 		for (i = len >> 1; i < 36; i++)
 			strcat(buf, "ùù");
-		sprintf(buf2, "ùù[32m %.14s [33mùù¡¼[m\n",
+		sprintf(buf2, "ùù\x1b[32m %.14s \x1b[33mùù¡¼\x1b[m\n",
 				Cdate(&(myitem.date)));
 		strcat(buf, buf2);
 		fputs(buf, fp);
@@ -127,7 +127,7 @@ do_pnote(char *userid)
 
 	clrtobot();
 	move(13, 0);
-	prints("[1;33m¤f²¦¡ã¡ã¡ã¡I[m");
+	prints("\x1b[1;33m¤f²¦¡ã¡ã¡ã¡I\x1b[m");
 	memset(&myitem, 0, sizeof(notedata));
 	do
 	{
@@ -180,18 +180,18 @@ do_pnote(char *userid)
 			total = MAX_PNOTE;
 	}
 
-	fputs("\t\t\t[1;32m ¡¹ [37m±z ªº µª ¿ý ¾÷ !!! [32m¡¹ \n\n", fp);
+	fputs("\t\t\t\x1b[1;32m ¡¹ \x1b[37m±z ªº µª ¿ý ¾÷ !!! \x1b[32m¡¹ \n\n", fp);
 	collect = 1;
 	while (total)
 	{
-		sprintf(buf, "[1;33m¡¼ùù [32m%s[37m(%s)",
+		sprintf(buf, "\x1b[1;33m¡¼ùù \x1b[32m%s\x1b[37m(%s)",
 				myitem.userid, myitem.username);
 		len = strlen(buf);
-		strcat(buf, " [33m" + (len & 1));
+		strcat(buf, " \x1b[33m" + (len & 1));
 
 		for (i = len >> 1; i < 36; i++)
 			strcat(buf, "ùù");
-		sprintf(buf2, "ùù[32m %.14s [33mùù¡¼[m\n",
+		sprintf(buf2, "ùù\x1b[32m %.14s \x1b[33mùù¡¼\x1b[m\n",
 				Cdate(&(myitem.date)));
 		strcat(buf, buf2);
 		fputs(buf, fp);
@@ -218,11 +218,11 @@ show_pnote(notedata *pitem)
 
 	clrchyiuan(2, 6);
 	move(2, 0);
-	sprintf(str, "[1;36m¢z¢w¢w¢w [37m%s(%s)¦b [33m%s[37m ¯dªº¸Ü [m", pitem->userid, pitem->username,
+	sprintf(str, "\x1b[1;36m¢z¢w¢w¢w \x1b[37m%s(%s)¦b \x1b[33m%s\x1b[37m ¯dªº¸Ü \x1b[m", pitem->userid, pitem->username,
 			Cdate(&(pitem->date)));
 	prints(str);
-	prints("\n[1;37m  %s\n  %s\n  %s\n[0m", pitem->buf[0], pitem->buf[1], pitem->buf[2], "");
-	prints("                 [1;36m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}[m\n");
+	prints("\n\x1b[1;37m  %s\n  %s\n  %s\n\x1b[0m", pitem->buf[0], pitem->buf[1], pitem->buf[2], "");
+	prints("                 \x1b[1;36m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m\n");
 	pitem->mode = 1;
 }
 
@@ -277,13 +277,13 @@ char *uid;
 	usr_fpath(genbuf, uid, fn_pnote_hint);
 	if ((hintfile = fopen(genbuf, "r")))
 	{
-		prints("[1;34m¡´¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¡´[m\n", uid);
+		prints("\x1b[1;34m¡´¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¡´\x1b[m\n", uid);
 		i = 0;
 		while (i++ < MAXHINTLINES && fgets(genbuf, 256, hintfile))
 		{
 			outs(genbuf);
 		}
-		prints("[1;34m¡´¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¡´[m\n", uid);
+		prints("\x1b[1;34m¡´¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¡´\x1b[m\n", uid);
 		fclose(hintfile);
 	}
 	else
@@ -378,7 +378,7 @@ Pnote(int newflag)
 	{
 		move(1, 0);
 		clrtobot();
-		prints("[1;36mµª¿ý¾÷¸Ìªº[37m%2d/%2d[36m³q%s¯d¨¥[0m\n", offset, num, newflag ? "·sªº" : "");
+		prints("\x1b[1;36mµª¿ý¾÷¸Ìªº\x1b[37m%2d/%2d\x1b[36m³q%s¯d¨¥\x1b[0m\n", offset, num, newflag ? "·sªº" : "");
 
 		show_pnote(&item_array[offset - 1]);
 		sprintf(prompt, "(N/P)©¹«e/«á (A)¥þ³¡ (R)¦^¹q %s(X)§R°£¥þ³¡ (E)Â÷¶}:", newflag ? "(S)«O¯d " : "(D)§R°£ ");
@@ -473,7 +473,7 @@ Pnote(int newflag)
 			mymail.savemode = 'H';        /* hold-mail flag */
 			mymail.filemode = FILE_READ;
 			strcpy(mymail.owner, "[³Æ.§Ñ.¿ý]");
-			strcpy(mymail.title, "¯d¨¥[37;41m°O¿ý[m");
+			strcpy(mymail.title, "¯d¨¥\x1b[37;41m°O¿ý\x1b[m");
 			sethomedir(title, cuser.userid);
 			rec_add(title, &mymail, sizeof(mymail));
 			f_mv(fpath, buf);

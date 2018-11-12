@@ -176,17 +176,17 @@ main(void)
 
   for(i = 0;i < 12;i++)
   {
-    fprintf(fp," [1;37m%s®y [0;36m", name[i]);
+    fprintf(fp," \x1b[1;37m%s®y \x1b[0;36m", name[i]);
     for(j = 0; j < act[i]/item; j++)
     {
       fprintf(fp,"%2s",blk[9]);
     }
     /* ¬°¤F­è¦n¤@­¶ */
     if (i != 11)
-      fprintf(fp,"%2s [1;37m%d[m\n\n",blk[(act[i] % item) * 10 / item],
+      fprintf(fp,"%2s \x1b[1;37m%d\x1b[m\n\n",blk[(act[i] % item) * 10 / item],
             act[i]);
     else
-      fprintf(fp,"%2s [1;37m%d[m\n",blk[(act[i] % item) * 10 / item],
+      fprintf(fp,"%2s \x1b[1;37m%d\x1b[m\n",blk[(act[i] % item) * 10 / item],
             act[i]);
   }
   fclose(fp);

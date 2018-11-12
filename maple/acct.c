@@ -2903,7 +2903,7 @@ m_register()
       if( vans("¬O§_¨Ï¥Î­×¥¿¥\\¯à¡H") == 'y' )
       {
         clear();
-        prints("\n\n[1;33m½Ð½T©w¨S¦³¨ä¥L¯¸°È¦b¼f®Ö, §_«h±N³y¦¨[1;31;5m¨Ï¥ÎªÌ¸ê®ÆÄY­«¿ù»~![m\n\n\n");
+        prints("\n\n\x1b[1;33m½Ð½T©w¨S¦³¨ä¥L¯¸°È¦b¼f®Ö, §_«h±N³y¦¨\x1b[1;31;5m¨Ï¥ÎªÌ¸ê®ÆÄY­«¿ù»~!\x1b[m\n\n\n");
         if(vans("½T©wµL¨ä¥L¯¸°È¼f®Ö¤¤¡H") == 'y')
         {
           system("/bin/cat run/"FN_RFORM".tmp >> run/"FN_RFORM";/bin/rm -f ~bbs/run/"FN_RFORM".tmp");
