@@ -2,7 +2,7 @@
 
 * why do this: for fun.
 
-* Previous Version Name: `Rev.Beta 3`
+* Previous Version Name: (WindTop 3.10) `Rev.Beta 3`
 
 * Next Plan Version Name:
     + `testing`: simplify it, try to make it more stable than `master` version, easier to install, deploy it on different platform or containers.
