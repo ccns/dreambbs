@@ -28,6 +28,7 @@
 /* my recv						 */
 /* ----------------------------------------------------- */
 
+typedef struct ClientType ClientType;
 typedef struct
 {
   char *name;
@@ -37,7 +38,7 @@ typedef struct
   int mode;		/* 0:要command-mode才能跑  1:要data-mode才能跑  2:沒有限制 */
   int errorcode;
   int normalcode;
-  void (*main) (int argc, char *argv[]);
+  void (*main) (ClientType *client);
 }	daemoncmd_t;
 
 
@@ -58,7 +59,7 @@ typedef struct
 }	buffer_t;
 
 
-typedef struct
+struct ClientType
 {
   char nodename[13];
   char hostname[128];		/* client hostname */
@@ -70,7 +71,7 @@ typedef struct
   int fd;
   buffer_t in;
   buffer_t out;
-}	ClientType;
+};
 
 
 #if 0	/* itoc.030109.註解: my_recv 的流程 */
