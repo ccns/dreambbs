@@ -12,20 +12,20 @@
 
 extern XZ xz[];
 
-static int contact_add();
+static int contact_add(XO *xo);
 void contact_send(CONTACT *contact);
 
 static void
-contact_item(num, contact)
-int num;
-CONTACT *contact;
+contact_item(
+int num,
+CONTACT *contact)
 {
 	prints("%6d     %-13s      %-48s\n", num, contact->name, contact->email);
 }
 
 static int
-contact_body(xo)
-XO *xo;
+contact_body(
+XO *xo)
 {
 	CONTACT *contact;
 	int num, max, tail;
@@ -57,8 +57,8 @@ XO *xo;
 
 
 static int
-contact_head(xo)
-XO *xo;
+contact_head(
+XO *xo)
 {
 	vs_head("Ápµ¸¦W³æ", str_site);
 	outs("\
@@ -69,8 +69,8 @@ XO *xo;
 
 
 static int
-contact_load(xo)
-XO *xo;
+contact_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(CONTACT));
 	return contact_body(xo);
@@ -78,8 +78,8 @@ XO *xo;
 
 
 static int
-contact_init(xo)
-XO *xo;
+contact_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(CONTACT));
 	return contact_head(xo);
@@ -87,9 +87,9 @@ XO *xo;
 
 
 static int
-contact_edit(contact, echo)
-CONTACT *contact;
-int echo;
+contact_edit(
+CONTACT *contact,
+int echo)
 {
 	if (echo == DOECHO)
 		memset(contact, 0, sizeof(CONTACT));
@@ -102,8 +102,8 @@ int echo;
 
 
 static int
-contact_add(xo)
-XO *xo;
+contact_add(
+XO *xo)
 {
 	CONTACT contact;
 	if (xo->max >= MAX_CONTACT)
@@ -118,8 +118,8 @@ XO *xo;
 }
 
 static int
-contact_delete(xo)
-XO *xo;
+contact_delete(
+XO *xo)
 {
 
 	if (vans(msg_del_ny) == 'y')
@@ -134,8 +134,8 @@ XO *xo;
 
 
 static int
-contact_change(xo)
-XO *xo;
+contact_change(
+XO *xo)
 {
 	CONTACT *contact, mate;
 	int pos, cur;
@@ -157,8 +157,8 @@ XO *xo;
 }
 
 static int
-contact_help(xo)
-XO *xo;
+contact_help(
+XO *xo)
 {
 	film_out(FILM_CONTACT, -1);
 	return contact_head(xo);
@@ -166,8 +166,8 @@ XO *xo;
 
 
 static int
-contact_mail(xo)
-XO *xo;
+contact_mail(
+XO *xo)
 {
 	int pos, cur;
 	CONTACT *contact;
@@ -180,8 +180,8 @@ XO *xo;
 }
 
 static int
-contact_pop3(xo)
-XO *xo;
+contact_pop3(
+XO *xo)
 {
 	int pos, cur;
 	CONTACT *contact;
@@ -204,8 +204,8 @@ XO *xo;
 }
 
 void
-contact_send(contact)
-CONTACT *contact;
+contact_send(
+CONTACT *contact)
 {
 	if (bbsothermode & OTHERSTAT_EDITING)
 	{
@@ -261,7 +261,7 @@ KeyFunc contact_cb[] =
 };
 
 int
-Contact()
+Contact(void)
 {
 	XO *xo;
 	char fpath[80];

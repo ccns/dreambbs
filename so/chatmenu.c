@@ -18,9 +18,9 @@ static int mode = 0;
 static int kind = 0;
 
 static void
-chat_item(num, chat)
-int num;
-ChatAction *chat;
+chat_item(
+int num,
+ChatAction *chat)
 {
 	if (!mode)
 		prints("%6d %-9s %-6s %-54.54s\n", num, chat->verb, chat->chinese, chat->part1_msg);
@@ -29,8 +29,8 @@ ChatAction *chat;
 }
 
 static int
-chat_body(xo)
-XO *xo;
+chat_body(
+XO *xo)
 {
 	ChatAction *chat;
 	int num, max, tail;
@@ -62,8 +62,8 @@ XO *xo;
 
 
 static int
-chat_head(xo)
-XO *xo;
+chat_head(
+XO *xo)
 {
 	char *title = NULL;
 	switch (kind)
@@ -99,8 +99,8 @@ XO *xo;
 
 
 static int
-chat_load(xo)
-XO *xo;
+chat_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(ChatAction));
 	return chat_body(xo);
@@ -108,8 +108,8 @@ XO *xo;
 
 
 static int
-chat_init(xo)
-XO *xo;
+chat_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(ChatAction));
 	return chat_head(xo);
@@ -117,9 +117,9 @@ XO *xo;
 
 
 static int
-chat_edit(chat, echo)
-ChatAction *chat;
-int echo;
+chat_edit(
+ChatAction *chat,
+int echo)
 {
 	if (echo == DOECHO)
 		memset(chat, 0, sizeof(ChatAction));
@@ -136,8 +136,8 @@ int echo;
 
 
 static int
-chat_add(xo)
-XO *xo;
+chat_add(
+XO *xo)
 {
 	ChatAction chat;
 
@@ -151,8 +151,8 @@ XO *xo;
 }
 
 static int
-chat_delete(xo)
-XO *xo;
+chat_delete(
+XO *xo)
 {
 
 	if (vans(msg_del_ny) == 'y')
@@ -167,8 +167,8 @@ XO *xo;
 
 
 static int
-chat_change(xo)
-XO *xo;
+chat_change(
+XO *xo)
 {
 	ChatAction *chat, mate;
 	int pos, cur;
@@ -190,23 +190,23 @@ XO *xo;
 }
 
 static int
-chat_help(xo)
-XO *xo;
+chat_help(
+XO *xo)
 {
 	return XO_NONE;
 }
 
 static int
-chat_mode(xo)
-XO *xo;
+chat_mode(
+XO *xo)
 {
 	mode ^= 1;
 	return chat_head(xo);
 }
 
 static int
-chat_kind(xo)
-XO *xo;
+chat_kind(
+XO *xo)
 {
 	char fpath[80];
 
@@ -236,8 +236,8 @@ XO *xo;
 }
 
 static int
-chat_move(xo)
-XO *xo;
+chat_move(
+XO *xo)
 {
 	ChatAction *ghdr;
 	char *dir, buf[80];
@@ -270,8 +270,8 @@ XO *xo;
 }
 
 static int
-chat_sync(xo)
-XO *xo;
+chat_sync(
+XO *xo)
 {
 	int fd, size;
 	struct stat st;
@@ -318,7 +318,7 @@ KeyFunc chat_cb[] =
 
 
 int
-Chatmenu()
+Chatmenu(void)
 {
 	char fpath[64];
 	XO *xx;

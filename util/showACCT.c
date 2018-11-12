@@ -19,8 +19,8 @@
 #define GUESS_LEN       3               /* 只測三碼(含)以下的密碼組合 (最多是 PSWDLEN) */
 
 static inline void
-showpasswd(passwd)
-  char *passwd;
+showpasswd(
+  char *passwd)
 {
   int i;
   char guess[PSWDLEN + 1];
@@ -61,9 +61,9 @@ showpasswd(passwd)
 
 #if 0
 static char *
-_bitmsg(str, level)
-  char *str;
-  int level;
+_bitmsg(
+  char *str,
+  int level)
 {
   int cc;
   int num;
@@ -84,8 +84,8 @@ _bitmsg(str, level)
 #endif
 
 static inline void
-showACCT(acct)
-  ACCT *acct;
+showACCT(
+  ACCT *acct)
 {
   char /*msg1[40], msg2[40],*/ msg3[40], msg4[40], msg5[40], msg6[40];
 
@@ -121,9 +121,9 @@ showACCT(acct)
 
 
 int
-main(argc, argv)
-  int argc;
-  char **argv;
+main(
+  int argc,
+  char **argv)
 {
   int i;
 

@@ -15,8 +15,8 @@
 COUNTER *count;
 
 static void *
-attach_shm(shmkey, shmsize)
-  register int shmkey, shmsize;
+attach_shm(
+  register int shmkey, register int shmsize)
 {
   register void *shmptr;
   register int shmid;
@@ -40,9 +40,9 @@ attach_shm(shmkey, shmsize)
 }
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   int fd;
   time_t now;

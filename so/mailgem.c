@@ -27,16 +27,16 @@ static int mailgem_way;
 
 static int MailGemBufferNum;
 
-static int mailgem_add();
-static int mailgem_paste();
-static int mailgem_anchor();
-static int mailgem_recycle();
-static void XoMailGem();
+static int mailgem_add(XO *xo);
+static int mailgem_paste(XO *xo);
+static int mailgem_anchor(XO *xo);
+static int mailgem_recycle(XO *xo);
+static void XoMailGem(char *folder, char *title);
 
 static void
-mailgem_item(num, ghdr)
-int num;
-HDR *ghdr;
+mailgem_item(
+int num,
+HDR *ghdr)
 {
 	int xmode, gtype;
 
@@ -55,8 +55,8 @@ HDR *ghdr;
 
 
 static int
-mailgem_body(xo)
-XO *xo;
+mailgem_body(
+XO *xo)
 {
 	HDR *ghdr;
 	int num, max, tail;
@@ -102,8 +102,8 @@ XO *xo;
 
 
 static int
-mailgem_head(xo)
-XO *xo;
+mailgem_head(
+XO *xo)
 {
 	char buf[20];
 
@@ -122,8 +122,8 @@ XO *xo;
 
 
 static int
-mailgem_toggle(xo)
-XO *xo;
+mailgem_toggle(
+XO *xo)
 {
 	mailgem_way = (mailgem_way + 1) % GEM_WAY;
 	return mailgem_body(xo);
@@ -131,8 +131,8 @@ XO *xo;
 
 
 static int
-mailgem_init(xo)
-XO *xo;
+mailgem_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(HDR));
 	return mailgem_head(xo);
@@ -140,8 +140,8 @@ XO *xo;
 
 
 static int
-mailgem_load(xo)
-XO *xo;
+mailgem_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(HDR));
 	return mailgem_body(xo);
@@ -154,9 +154,9 @@ XO *xo;
 
 
 static HDR *
-mailgem_check(xo, fpath)
-XO *xo;
-char *fpath;
+mailgem_check(
+XO *xo,
+char *fpath)
 {
 	HDR *ghdr;
 	int gtype, level;
@@ -181,8 +181,8 @@ char *fpath;
 /* ----------------------------------------------------- */
 
 static int
-mailgem_add(xo)
-XO *xo;
+mailgem_add(
+XO *xo)
 {
 	int gtype, level, fd, ans;
 	char title[80], fpath[80], *dir;
@@ -255,8 +255,8 @@ XO *xo;
 
 
 static int
-mailgem_edit(xo)
-XO *xo;
+mailgem_edit(
+XO *xo)
 {
 	char fpath[80];
 	HDR *hdr;
@@ -275,8 +275,8 @@ XO *xo;
 
 
 static int
-mailgem_title(xo)
-XO *xo;
+mailgem_title(
+XO *xo)
 {
 	HDR *ghdr, xhdr;
 	int num;
@@ -306,8 +306,8 @@ XO *xo;
 }
 
 static int
-mailgem_state(xo)
-XO *xo;
+mailgem_state(
+XO *xo)
 {
 	HDR *ghdr;
 	char *dir, fpath[80];
@@ -345,8 +345,8 @@ XO *xo;
 
 
 static int
-mailgem_browse(xo)
-XO *xo;
+mailgem_browse(
+XO *xo)
 {
 	HDR *ghdr;
 	int xmode;
@@ -400,8 +400,8 @@ static int MailGemBufferSiz; /* , MailGemBufferNum; */
 
 
 static HDR *
-mbuf_malloc(num)
-int num;
+mbuf_malloc(
+int num)
 {
 	HDR *gbuf;
 
@@ -426,9 +426,9 @@ int num;
 
 
 static void
-mailgem_buffer(dir, ghdr)
-char *dir;
-HDR *ghdr;			/* NULL 代表放入 TagList, 否則將傳入的放入 */
+mailgem_buffer(
+char *dir,
+HDR *ghdr)			/* NULL 代表放入 TagList, 否則將傳入的放入 */
 {
 	int num, locus;
 	HDR *gbuf;
@@ -464,8 +464,8 @@ HDR *ghdr;			/* NULL 代表放入 TagList, 否則將傳入的放入 */
 }
 
 static int
-mailgem_delete(xo)
-XO *xo;
+mailgem_delete(
+XO *xo)
 {
 	HDR *ghdr;
 	char *dir, buf[80];
@@ -539,8 +539,8 @@ XO *xo;
 
 
 static int
-mailgem_copy(xo)
-XO *xo;
+mailgem_copy(
+XO *xo)
 {
 	HDR *ghdr;
 	int tag;
@@ -562,9 +562,9 @@ XO *xo;
 
 
 static inline int
-mailgem_extend(xo, num)
-XO *xo;
-int num;
+mailgem_extend(
+XO *xo,
+int num)
 {
 	char *dir, fpath[80], gpath[80];
 	FILE *fp;
@@ -596,8 +596,8 @@ int num;
 
 
 static int
-mailgem_paste(xo)
-XO *xo;
+mailgem_paste(
+XO *xo)
 {
 	int num, ans;
 	char *dir;
@@ -636,8 +636,8 @@ XO *xo;
 
 
 static int
-mailgem_move(xo)
-XO *xo;
+mailgem_move(
+XO *xo)
 {
 	HDR *ghdr;
 	char *dir, buf[80];
@@ -675,8 +675,8 @@ XO *xo;
 
 
 static int
-mailgem_anchor(xo)
-XO *xo;
+mailgem_anchor(
+XO *xo)
 {
 	int ans;
 	char *folder;
@@ -715,8 +715,8 @@ XO *xo;
 
 
 int
-mailgem_gather(xo)
-XO *xo;
+mailgem_gather(
+XO *xo)
 {
 	HDR *hdr, *gbuf, ghdr, xhdr;
 	int tag, locus, rc, xmode, anchor;
@@ -836,8 +836,8 @@ XO *xo;
 
 
 static int
-mailgem_tag(xo)
-XO *xo;
+mailgem_tag(
+XO *xo)
 {
 	HDR *ghdr;
 	int pos, tag, cur;
@@ -857,8 +857,8 @@ XO *xo;
 
 
 static int
-mailgem_help(xo)
-XO *xo;
+mailgem_help(
+XO *xo)
 {
 	/*  film_out(FILM_GEM, -1);*/
 	vmsg("尚未編輯使用說明");
@@ -866,8 +866,8 @@ XO *xo;
 }
 
 static int
-mailgem_cross(xo)
-XO *xo;
+mailgem_cross(
+XO *xo)
 {
 	char xboard[20], fpath[80], xfolder[80], xtitle[80], buf[80], *dir;
 	HDR *hdr, xpost, *ghdr;
@@ -971,8 +971,8 @@ XO *xo;
 }
 
 static int
-mailgem_recycle(xo)
-XO *xo;
+mailgem_recycle(
+XO *xo)
 {
 	char fpath[128];
 	usr_fpath(fpath, cuser.userid, "gem/.GEM");
@@ -1011,9 +1011,9 @@ static KeyFunc mailgem_cb[] =
 
 
 static void
-XoMailGem(folder, title)
-char *folder;
-char *title;
+XoMailGem(
+char *folder,
+char *title)
 {
 	XO *xo, *last;
 
@@ -1033,7 +1033,7 @@ char *title;
 
 
 void
-mailgem_main()
+mailgem_main(void)
 {
 	XO *xo;
 	char fpath[128];
@@ -1087,16 +1087,16 @@ static int sync_size, sync_head;
 
 
 static int
-sync_cmp(s1, s2)
-SyncData *s1, *s2;
+sync_cmp(
+SyncData *s1, SyncData *s2)
 {
 	return s1->chrono - s2->chrono;
 }
 
 
 static void
-sync_init(fname)
-char *fname;
+sync_init(
+char *fname)
 {
 	int ch, prefix;
 	time_t chrono;
@@ -1183,8 +1183,8 @@ char *fname;
 
 
 static void
-sync_check(fgem)
-char *fgem;
+sync_check(
+char *fgem)
 {
 	int expire;
 	char *str, *fname, fpath[128], fnew[128];
@@ -1335,9 +1335,9 @@ char *fgem;
 
 
 int
-gcheck(level, fpath)
-int level;
-char *fpath;
+gcheck(
+int level,
+char *fpath)
 {
 	int count, xmode, xhead;
 	char *fname, *ptr = NULL, buf[80];

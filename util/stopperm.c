@@ -16,9 +16,9 @@ static int total;
 static FILE *flog;
 
 static void
-reaper(fpath, lowid)
-  char *fpath;
-  char *lowid;
+reaper(
+  char *fpath,
+  char *lowid)
 {
   int fd;
 
@@ -45,8 +45,8 @@ reaper(fpath, lowid)
 }
 
 static void
-traverse(fpath)
-  char *fpath;
+traverse(
+  char *fpath)
 {
   DIR *dirp;
   struct dirent *de;
@@ -72,9 +72,9 @@ traverse(fpath)
 }
 
 static int 
-same_mail2(mail,file)
-  char *mail;
-  char *file;
+same_mail2(
+  char *mail,
+  char *file)
 {
   int ch;
   char *fname, fpath[256];
@@ -113,11 +113,11 @@ same_mail2(mail,file)
 }
 
 void
-keeplog(fnlog, board, title, mode)
-  char *fnlog;
-  char *board;
-  char *title;
-  int mode;		/* 0:load 1:rename 2:unlink 3:mark */
+keeplog(
+  char *fnlog,
+  char *board,
+  char *title,
+  int mode)		/* 0:load 1:rename 2:unlink 3:mark */
 {
   HDR hdr;
   char folder[128], fpath[128];
@@ -156,9 +156,9 @@ keeplog(fnlog, board, title, mode)
 
 
 int
-acct_load(acct, userid)
-  ACCT *acct;
-  char *userid;
+acct_load(
+  ACCT *acct,
+  char *userid)
 {
   int fd;
 
@@ -174,8 +174,8 @@ acct_load(acct, userid)
 
 
 void
-acct_save(acct)
-  ACCT *acct;
+acct_save(
+  ACCT *acct)
 {
   int fd;
   char fpath[80];
@@ -191,8 +191,8 @@ acct_save(acct)
 
 
 int
-seek_log_email(mail)
-  char *mail;
+seek_log_email(
+  char *mail)
 {
   EMAIL email;
   int pos=0,fd;
@@ -220,9 +220,9 @@ seek_log_email(mail)
 }
 
 void
-deny_log_email(mail,deny)
-  char *mail;
-  time_t deny;
+deny_log_email(
+  char *mail,
+  time_t deny)
 {
   EMAIL email;
   int pos;
@@ -245,9 +245,9 @@ deny_log_email(mail,deny)
 }
 
 static void
-deny_add_email(he,exer)
-  ACCT *he;
-  char *exer;
+deny_add_email(
+  ACCT *he,
+  char *exer)
 {
   char buf[128];
   time_t now;
@@ -265,11 +265,11 @@ deny_add_email(he,exer)
 }
 
 static int
-add_deny_exer(u,adm,cross,exer)
-  ACCT *u;
-  int adm;
-  int cross;
-  char *exer;
+add_deny_exer(
+  ACCT *u,
+  int adm,
+  int cross,
+  char *exer)
 {
   FILE *fp;
   char buf[80];
@@ -373,12 +373,12 @@ add_deny_exer(u,adm,cross,exer)
 
 
 static void
-setup(id,email,mode,exer,file)
-  char *id;
-  char *email;
-  int mode;
-  char *exer;
-  char *file;
+setup(
+  char *id,
+  char *email,
+  int mode,
+  char *exer,
+  char *file)
 {
   ACCT x,*u;
   int i, num;
@@ -420,9 +420,9 @@ setup(id,email,mode,exer,file)
 
 
 int 
-main(argc, argv)
-  int argc;
-  char *argv[];  
+main(
+  int argc,
+  char *argv[])
 {
   char buf[256];
   if(argc > 5 )

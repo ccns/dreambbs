@@ -25,8 +25,8 @@ static int funo;
 int total;
 
 static int
-check_in(email)
-  char *email;
+check_in(
+  char *email)
 {
   int i;
   for(i=0;i<MAX_AC;i++)
@@ -40,9 +40,9 @@ check_in(email)
 
 
 static void
-reaper(fpath, lowid)
-  char *fpath;
-  char *lowid;
+reaper(
+  char *fpath,
+  char *lowid)
 {
   int fd;
 
@@ -73,8 +73,8 @@ reaper(fpath, lowid)
 }
 
 static void
-traverse(fpath)
-  char *fpath;
+traverse(
+  char *fpath)
 {
   DIR *dirp;
   struct dirent *de;
@@ -100,9 +100,9 @@ traverse(fpath)
 }
 
 int
-main(argc, argv)                                                                
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   int ch;
   char *fname, fpath[256],bpath[256];

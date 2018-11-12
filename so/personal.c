@@ -17,9 +17,9 @@ static int mode = 0;	/* 0:email 1:brdtitle */
 char msg[60];
 
 static int
-personal_log(personal,admin)
-  PB *personal;
-  int admin;		/* 0:申請  1:開板  2:拒絕 */
+personal_log(
+  PB *personal,
+  int admin)		/* 0:申請  1:開板  2:拒絕 */
 {
   FILE *fp;
   time_t now;
@@ -43,9 +43,9 @@ personal_log(personal,admin)
 }
 
 static int
-belong(flist, key)
-  char *flist;
-  char *key;
+belong(
+  char *flist,
+  char *key)
 {
   int fd, rc;
 
@@ -72,8 +72,8 @@ belong(flist, key)
 
 
 static int
-is_badid(userid)
-  char *userid;
+is_badid(
+  char *userid)
 {
   int ch;
   char *str;
@@ -98,7 +98,7 @@ is_badid(userid)
 
 
 int
-personal_apply()
+personal_apply(void)
 {
   char validemail[2][20] = {"ccmail.ncku.edu.tw","mail.ncku.edu.tw"};
   int i,num;
@@ -220,9 +220,9 @@ personal_attr(unsigned int state)
 }
 
 static void
-personal_item(num, personal)
-  int num;
-  PB *personal;
+personal_item(
+  int num,
+  PB *personal)
 {
   if(!mode)
     prints("%6d %c %-12s %-12s %-40s\n", num, personal_attr(personal->state) ,personal->userid,personal->brdname,personal->email);
@@ -231,8 +231,8 @@ personal_item(num, personal)
 }
 
 static int
-personal_body(xo)
-  XO *xo;
+personal_body(
+  XO *xo)
 {
   PB *personal;
   int num, max, tail;
@@ -261,8 +261,8 @@ personal_body(xo)
 
 
 static int
-personal_head(xo)
-  XO *xo;
+personal_head(
+  XO *xo)
 {
   vs_head("個人板清單", str_site);
   outs("\
@@ -277,8 +277,8 @@ personal_head(xo)
 
 
 static int
-personal_load(xo)
-  XO *xo;
+personal_load(
+  XO *xo)
 {
   xo_load(xo, sizeof(PB));
   return personal_body(xo);
@@ -286,8 +286,8 @@ personal_load(xo)
 
 
 static int
-personal_init(xo)
-  XO *xo;
+personal_init(
+  XO *xo)
 {
   xo_load(xo, sizeof(PB));
   return personal_head(xo);
@@ -295,9 +295,9 @@ personal_init(xo)
 
 
 static int
-personal_edit(personal,echo)
-  PB *personal;
-  int echo;
+personal_edit(
+  PB *personal,
+  int echo)
 {
   if(echo == DOECHO)
     memset(personal, 0, sizeof(PB));
@@ -312,8 +312,8 @@ personal_edit(personal,echo)
 
 
 static int
-personal_delete(xo)
-  XO *xo;
+personal_delete(
+  XO *xo)
 {
 
   if (vans(msg_del_ny) == 'y')
@@ -328,8 +328,8 @@ personal_delete(xo)
 
 
 static int
-personal_change(xo)
-  XO *xo;
+personal_change(
+  XO *xo)
 {
   PB *personal, mate;
   int pos, cur;
@@ -351,8 +351,8 @@ personal_change(xo)
 }
 
 static int
-personal_switch(xo)
-  XO *xo;
+personal_switch(
+  XO *xo)
 {
   mode++;
   mode %= 2;
@@ -360,9 +360,9 @@ personal_switch(xo)
 }
 
 static int
-mail2usr(personal,admin)
-  PB *personal;
-  int admin;		/* 0:open 1:deny */
+mail2usr(
+  PB *personal,
+  int admin)		/* 0:open 1:deny */
 {
   HDR hdr;
   time_t now;
@@ -403,9 +403,9 @@ mail2usr(personal,admin)
 }
 
 int
-sort_compare(p1, p2)
-  const void *p1;
-  const void *p2;
+sort_compare(
+  const void *p1,
+  const void *p2)
 {
   HDR *a1, *a2;
 
@@ -416,8 +416,8 @@ sort_compare(p1, p2)
 }
 
 static int
-personal_sort(gem)
-  char *gem;
+personal_sort(
+  char *gem)
 {
   HDR *sort;
   int max,fd,total;
@@ -452,8 +452,8 @@ personal_sort(gem)
 }
 
 static int
-personal_open(xo)
-  XO *xo;
+personal_open(
+  XO *xo)
 {
   PB *personal;
   int cur,pos, index;
@@ -553,8 +553,8 @@ personal_open(xo)
 }
 
 static int
-personal_deny(xo)
-  XO *xo;
+personal_deny(
+  XO *xo)
 {
   PB *personal;
   int pos,cur;
@@ -585,8 +585,8 @@ personal_deny(xo)
 }
 
 static int
-personal_help(xo)
-  XO *xo;
+personal_help(
+  XO *xo)
 {
 //  film_out(FILM_PB, -1);
   return personal_head(xo);
@@ -609,7 +609,7 @@ KeyFunc personal_cb[] =
 };
 
 int
-personal_admin()
+personal_admin(void)
 {
   XO *xo;
   utmp_mode(M_OMENU);

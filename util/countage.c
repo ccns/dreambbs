@@ -15,9 +15,9 @@
 #define OUTFILE     BBSHOME"/gem/@/@-yearsold"
 
 void
-fouts(fp, buf, mode)
-  FILE *fp;
-  char buf[], mode;
+fouts(
+  FILE *fp,
+  char buf[], char mode)
 {
   static char state = '0';
 

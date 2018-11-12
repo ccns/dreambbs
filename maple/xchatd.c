@@ -94,7 +94,7 @@ typedef struct ChatCmd ChatCmd;
 
 MUD muddata;
 MUD *mud;
-void mudshm_init();
+void mudshm_init(void);
 
 
 struct ChatUser
@@ -143,7 +143,7 @@ struct UserList
 struct ChatCmd
 {
   char *cmdstr;
-  void (*cmdfunc) ();
+  void (*cmdfunc) (ChatUser *cu, char *msg);
   int exact;
 };
 
@@ -183,9 +183,9 @@ static FILE *ftalk;
 #define str_time(t) Btime(t)
 
 static void
-logtalk(key, msg)
-  char *key;
-  char *msg;
+logtalk(
+  char *key,
+  char *msg)
 {
   time_t now;
   struct tm *p;
@@ -199,9 +199,9 @@ logtalk(key, msg)
 
 
 static void
-logit(key, msg)
-  char *key;
-  char *msg;
+logit(
+  char *key,
+  char *msg)
 {
   time_t now;
   struct tm *p;
@@ -215,7 +215,7 @@ logit(key, msg)
 
 
 static inline void
-log_init()
+log_init(void)
 {
   FILE *fp;
 
@@ -242,8 +242,8 @@ static char chatbuf[256];	/* general purpose buffer */
 
 
 static void
-debug_list(list)
-  UserList *list;
+debug_list(
+  UserList *list)
 {
   char buf[80];
   int i = 0;
@@ -265,7 +265,7 @@ debug_list(list)
 
 
 static void
-debug_user()
+debug_user(void)
 {
   ChatUser *user;
   int i;
@@ -283,7 +283,7 @@ debug_user()
 
 
 static void
-debug_room()
+debug_room(void)
 {
   ChatRoom *room;
   int i;
@@ -304,8 +304,8 @@ debug_room()
 
 
 static void
-log_user(cu)
-  ChatUser *cu;
+log_user(
+  ChatUser *cu)
 {
   static int log_num;
 
@@ -335,8 +335,8 @@ log_user(cu)
 
 
 static int
-valid_chatid(id)
-  char *id;
+valid_chatid(
+  char *id)
 {
   int ch, len;
 
@@ -369,9 +369,9 @@ valid_chatid(id)
 
 
 static int
-str_match(s1, s2)
-  unsigned char *s1;		/* lower-case (sub)string */
-  unsigned char *s2;
+str_match(
+  unsigned char *s1,		/* lower-case (sub)string */
+  unsigned char *s2)
 {
   int c1, c2;
 
@@ -401,8 +401,8 @@ str_match(s1, s2)
 
 
 static ChatUser *
-cuser_by_userid(userid)
-  char *userid;
+cuser_by_userid(
+  char *userid)
 {
   ChatUser *cu;
   char buf[80]; /* Thor.980727: 一次最長才80 */
@@ -420,8 +420,8 @@ cuser_by_userid(userid)
 
 
 static ChatUser *
-cuser_by_chatid(chatid)
-  char *chatid;
+cuser_by_chatid(
+  char *chatid)
 {
   ChatUser *cu;
   char buf[80]; /* Thor.980727: 一次最長才80 */
@@ -440,8 +440,8 @@ cuser_by_chatid(chatid)
 
 
 static ChatUser *
-fuzzy_cuser_by_chatid(chatid)
-  char *chatid;
+fuzzy_cuser_by_chatid(
+  char *chatid)
 {
   ChatUser *cu, *xuser;
   int mode;
@@ -472,8 +472,8 @@ fuzzy_cuser_by_chatid(chatid)
 
 
 static ChatRoom *
-croom_by_roomid(roomid)
-  char *roomid;
+croom_by_roomid(
+  char *roomid)
 {
   ChatRoom *room;
   char buf[80]; /* Thor.980727: 一次最長才80 */
@@ -495,8 +495,8 @@ croom_by_roomid(roomid)
 
 
 static void
-list_free(list)
-  UserList **list;
+list_free(
+  UserList **list)
 {
   UserList *user, *next;
 
@@ -509,9 +509,9 @@ list_free(list)
 
 
 static void
-list_add(list, user)
-  UserList **list;
-  ChatUser *user;
+list_add(
+  UserList **list,
+  ChatUser *user)
 {
   UserList *node;
   char *userid;
@@ -529,9 +529,9 @@ list_add(list, user)
 
 
 static int
-list_delete(list, userid)
-  UserList **list;
-  char *userid;
+list_delete(
+  UserList **list,
+  char *userid)
 {
   UserList *node;
   char buf[80]; /* Thor.980727: 輸入一次最長才 80 */
@@ -554,9 +554,9 @@ list_delete(list, userid)
 
 
 static int
-list_belong(list, userno)
-  UserList *list;
-  int userno;
+list_belong(
+  UserList *list,
+  int userno)
 {
   while (list)
   {
@@ -573,10 +573,10 @@ list_belong(list, userno)
 /* ------------------------------------------------------ */
 
 static int
-str_swap(str,src,des)
-  char *str;
-  char *src;
-  char *des;
+str_swap(
+  char *str,
+  char *src,
+  char *des)
 {
   char *ptr,*tmp;
   char buf[600];
@@ -594,10 +594,10 @@ str_swap(str,src,des)
 }
 
 static void
-do_send(nfds, wset, msg)
-  int nfds;
-  fd_set *wset;
-  char *msg;
+do_send(
+  int nfds,
+  fd_set *wset,
+  char *msg)
 {
   int len, sr;
 
@@ -627,11 +627,11 @@ do_send(nfds, wset, msg)
 
 
 static void
-send_to_room(room, msg, userno, number)
-  ChatRoom *room;
-  char *msg;
-  int userno;
-  int number;
+send_to_room(
+  ChatRoom *room,
+  char *msg,
+  int userno,
+  int number)
 {
   ChatUser *cu;
   fd_set wset;
@@ -683,11 +683,11 @@ send_to_room(room, msg, userno, number)
 
 
 static void
-send_to_user(user, msg, userno, number)
-  ChatUser *user;
-  char *msg;
-  int userno;
-  int number;
+send_to_user(
+  ChatUser *user,
+  char *msg,
+  int userno,
+  int number)
 {
   int sock;
 
@@ -727,8 +727,8 @@ send_to_user(user, msg, userno, number)
 
 
 static void
-room_changed(room)
-  ChatRoom *room;
+room_changed(
+  ChatRoom *room)
 {
   if (room)
   {
@@ -742,8 +742,8 @@ room_changed(room)
 
 
 static void
-user_changed(cu)
-  ChatUser *cu;
+user_changed(
+  ChatUser *cu)
 {
   if (cu)
   {
@@ -760,10 +760,10 @@ user_changed(cu)
 
 
 static void
-exit_room(user, mode, msg)
-  ChatUser *user;
-  int mode;
-  char *msg;
+exit_room(
+  ChatUser *user,
+  int mode,
+  char *msg)
 {
   ChatRoom *room;
   char buf[128];
@@ -852,9 +852,9 @@ exit_room(user, mode, msg)
 /* Thor.990211: 統一用 dao library */
 /* static */
 int
-acct_load(acct, userid)
-  ACCT *acct;
-  char *userid;
+acct_load(
+  ACCT *acct,
+  char *userid)
 {
   int fd;
 
@@ -872,9 +872,9 @@ acct_load(acct, userid)
 /* Thor.990211: 統一用 dao library */
 
 static void
-chat_query(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_query(
+  ChatUser *cu,
+  char *msg)
 {
   FILE *fp;
   ACCT acct;
@@ -917,9 +917,9 @@ chat_query(cu, msg)
 
 
 static void
-chat_clear(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_clear(
+  ChatUser *cu,
+  char *msg)
 {
   if (cu->clitype)
     send_to_user(cu, "", 0, MSG_CLRSCR);
@@ -929,9 +929,9 @@ chat_clear(cu, msg)
 
 
 static void
-chat_date(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_date(
+  ChatUser *cu,
+  char *msg)
 {
   time_t thetime;
   char buf[128];
@@ -943,9 +943,9 @@ chat_date(cu, msg)
 
 
 static void
-chat_mud(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_mud(
+  ChatUser *cu,
+  char *msg)
 {
   ChatRoom *room;
 
@@ -961,9 +961,9 @@ chat_mud(cu, msg)
 }
 
 static void
-chat_topic(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_topic(
+  ChatUser *cu,
+  char *msg)
 {
   ChatRoom *room;
   char *topic, buf[128];
@@ -1013,9 +1013,9 @@ chat_topic(cu, msg)
 
 
 static void
-chat_version(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_version(
+  ChatUser *cu,
+  char *msg)
 {
   char buf[80];
 
@@ -1025,9 +1025,9 @@ chat_version(cu, msg)
 
 
 static void
-chat_nick(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_nick(
+  ChatUser *cu,
+  char *msg)
 {
   char *chatid, *str, buf[128];
   ChatUser *xuser;
@@ -1072,9 +1072,9 @@ chat_nick(cu, msg)
 
 
 static void
-chat_list_rooms(cuser, msg)
-  ChatUser *cuser;
-  char *msg;
+chat_list_rooms(
+  ChatUser *cuser,
+  char *msg)
 {
   ChatRoom *cr, *room;
   char buf[128],from[128];
@@ -1128,10 +1128,10 @@ chat_list_rooms(cuser, msg)
 
 
 static void
-chat_do_user_list(cu, msg, theroom)
-  ChatUser *cu;
-  char *msg;
-  ChatRoom *theroom;
+chat_do_user_list(
+  ChatUser *cu,
+  char *msg,
+  ChatRoom *theroom)
 {
   ChatRoom *myroom, *room;
   ChatUser *user;
@@ -1227,9 +1227,9 @@ chat_do_user_list(cu, msg, theroom)
 
 
 static void
-chat_list_by_room(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_list_by_room(
+  ChatUser *cu,
+  char *msg)
 {
   ChatRoom *whichroom;
   char *roomstr, buf[128];
@@ -1259,18 +1259,18 @@ chat_list_by_room(cu, msg)
 
 
 static void
-chat_list_users(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_list_users(
+  ChatUser *cu,
+  char *msg)
 {
   chat_do_user_list(cu, msg, ROOM_ALL);
 }
 
 
 static void
-chat_chatroom(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_chatroom(
+  ChatUser *cu,
+  char *msg)
 {
   if (common_client_command)
     send_to_user(cu, NICKNAME CHATROOMNAME, 0, MSG_CHATROOM);
@@ -1278,9 +1278,9 @@ chat_chatroom(cu, msg)
 
 
 static void
-chat_map_chatids(cu, whichroom)
-  ChatUser *cu;			/* Thor: 還沒有作不同間的 */
-  ChatRoom *whichroom;
+chat_map_chatids(
+  ChatUser *cu,			/* Thor: 還沒有作不同間的 */
+  ChatRoom *whichroom)
 {
   int c;
   ChatRoom *myroom, *room;
@@ -1328,18 +1328,18 @@ chat_map_chatids(cu, whichroom)
 
 
 static void
-chat_map_chatids_thisroom(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_map_chatids_thisroom(
+  ChatUser *cu,
+  char *msg)
 {
   chat_map_chatids(cu, cu->room);
 }
 
 
 static void
-chat_setroom(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_setroom(
+  ChatUser *cu,
+  char *msg)
 {
   char *modestr;
   ChatRoom *room;
@@ -1483,9 +1483,9 @@ static char *room_msg[] =
 
 
 static void
-chat_help(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_help(
+  ChatUser *cu,
+  char *msg)
 {
   char **table, *str, buf[128];
 
@@ -1508,9 +1508,9 @@ chat_help(cu, msg)
 
 
 static void
-chat_private(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_private(
+  ChatUser *cu,
+  char *msg)
 {
   ChatUser *xuser;
   int userno;
@@ -1571,9 +1571,9 @@ chat_private(cu, msg)
 
 
 static void
-chat_cloak(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_cloak(
+  ChatUser *cu,
+  char *msg)
 {
   if (CHATSYSOP(cu))
   {
@@ -1594,9 +1594,9 @@ chat_cloak(cu, msg)
 
 
 static void
-arrive_room(cuser, room)
-  ChatUser *cuser;
-  ChatRoom *room;
+arrive_room(
+  ChatUser *cuser,
+  ChatRoom *room)
 {
   char *rname, buf[256];
 
@@ -1639,10 +1639,10 @@ arrive_room(cuser, room)
 
 
 static int
-enter_room(cuser, rname, msg)
-  ChatUser *cuser;
-  char *rname;
-  char *msg;
+enter_room(
+  ChatUser *cuser,
+  char *rname,
+  char *msg)
 {
   ChatRoom *room;
   int create;
@@ -1727,8 +1727,8 @@ enter_room(cuser, rname, msg)
 
 
 static void
-cuser_free(cuser)
-  ChatUser *cuser;
+cuser_free(
+  ChatUser *cuser)
 {
   int sock;
 
@@ -1751,8 +1751,8 @@ cuser_free(cuser)
 
 
 static void
-print_user_counts(cuser)
-  ChatUser *cuser;
+print_user_counts(
+  ChatUser *cuser)
 {
   ChatRoom *room;
   int num, userc, suserc, roomc, number;
@@ -1792,9 +1792,9 @@ print_user_counts(cuser)
 
 
 static int
-login_user(cu, msg)
-  ChatUser *cu;
-  char *msg;
+login_user(
+  ChatUser *cu,
+  char *msg)
 {
   int utent;
 
@@ -1994,9 +1994,9 @@ login_user(cu, msg)
 
 
 static void
-chat_act(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_act(
+  ChatUser *cu,
+  char *msg)
 {
   if (*msg)
   {
@@ -2009,9 +2009,9 @@ chat_act(cu, msg)
 
 
 static void
-chat_ignore(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_ignore(
+  ChatUser *cu,
+  char *msg)
 {
   char *str, buf[256];
 
@@ -2091,9 +2091,9 @@ chat_ignore(cu, msg)
 
 
 static void
-chat_unignore(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_unignore(
+  ChatUser *cu,
+  char *msg)
 {
   char *ignoree, *str, buf[80];
 
@@ -2114,9 +2114,9 @@ chat_unignore(cu, msg)
 
 
 static void
-chat_join(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_join(
+  ChatUser *cu,
+  char *msg)
 {
   if (RESTRICTED(cu))
   {
@@ -2135,9 +2135,9 @@ chat_join(cu, msg)
 
 
 static void
-chat_kick(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_kick(
+  ChatUser *cu,
+  char *msg)
 {
   char *twit, buf[80];
   ChatUser *xuser;
@@ -2189,9 +2189,9 @@ chat_kick(cu, msg)
 }
 
 static void
-chat_makeop(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_makeop(
+  ChatUser *cu,
+  char *msg)
 {
   char *newop, buf[80];
   ChatUser *xuser;
@@ -2274,9 +2274,9 @@ chat_makeop(cu, msg)
 
 
 static void
-chat_invite(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_invite(
+  ChatUser *cu,
+  char *msg)
 {
   char *invitee, buf[80];
   ChatUser *xuser;
@@ -2326,9 +2326,9 @@ chat_invite(cu, msg)
 
 
 static void
-chat_broadcast(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_broadcast(
+  ChatUser *cu,
+  char *msg)
 {
   char buf[80];
 
@@ -2353,9 +2353,9 @@ chat_broadcast(cu, msg)
 
 
 static void
-chat_bye(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_bye(
+  ChatUser *cu,
+  char *msg)
 {
   exit_room(cu, EXIT_LOGOUT, msg);
   cu->uptime = 0;
@@ -2371,11 +2371,11 @@ ChatAction *party_data;
 ChatAction *party_data2;
 
 static int
-party_action(cu, cmd, party,mode)
-  ChatUser *cu;
-  char *cmd;
-  char *party;
-  int mode;
+party_action(
+  ChatUser *cu,
+  char *cmd,
+  char *party,
+  int mode)
 {
   ChatAction *cap;
   char *verb, buf[256];
@@ -2436,10 +2436,10 @@ party_action(cu, cmd, party,mode)
 ChatAction *speak_data;
 
 static int
-speak_action(cu, cmd, msg)
-  ChatUser *cu;
-  char *cmd;
-  char *msg;
+speak_action(
+  ChatUser *cu,
+  char *cmd,
+  char *msg)
 {
   ChatAction *cap;
   char *verb, buf[256];
@@ -2465,9 +2465,9 @@ speak_action(cu, cmd, msg)
 ChatAction *condition_data,*person_data;
 
 static int
-condition_action(cu, cmd)
-  ChatUser *cu;
-  char *cmd;
+condition_action(
+  ChatUser *cu,
+  char *cmd)
 {
   ChatAction *cap;
   char *verb, buf[256];
@@ -2486,10 +2486,10 @@ condition_action(cu, cmd)
 }
 
 static int
-person_action(cu, cmd,party)
-  ChatUser *cu;
-  char *cmd;
-  char *party;
+person_action(
+  ChatUser *cu,
+  char *cmd,
+  char *party)
 {
   ChatAction *cap;
   char *verb, buf[256];
@@ -2580,9 +2580,9 @@ static ChatAction *catbl(int in)
 }
 
 static void
-chat_partyinfo(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_partyinfo(
+  ChatUser *cu,
+  char *msg)
 {
   if (common_client_command)
   {
@@ -2592,9 +2592,9 @@ chat_partyinfo(cu, msg)
 
 
 static void
-chat_party(cu, msg)
-  ChatUser *cu;
-  char *msg;
+chat_party(
+  ChatUser *cu,
+  char *msg)
 {
   int kind, i;
   ChatAction *cap;
@@ -2630,9 +2630,9 @@ chat_party(cu, msg)
 
 
 static void
-view_action_verb(cu, cmd)	/* Thor.0726: 新加動詞分類顯示 */
-  ChatUser *cu;
-  int cmd;
+view_action_verb(	/* Thor.0726: 新加動詞分類顯示 */
+  ChatUser *cu,
+  int cmd)
 {
   int i;
   char *p, *q, *data, *expn, buf[256];
@@ -2745,8 +2745,8 @@ static ChatCmd chatcmdlist[] =
 
 
 static int
-command_execute(cu)
-  ChatUser *cu;
+command_execute(
+  ChatUser *cu)
 {
   char *cmd, *msg, buf[128];
   /* Thor.981108: lkchu patch: chatid + msg 只用 80 bytes 不夠, 改為 128 */
@@ -2888,8 +2888,8 @@ command_execute(cu)
 
 
 static int
-cuser_serve(cu)
-  ChatUser *cu;
+cuser_serve(
+  ChatUser *cu)
 {
   int ch, len, isize;
   char *str, *cmd, buf[256];
@@ -2983,8 +2983,8 @@ cuser_serve(cu)
 static int
 /* start_daemon(mode) 
   int mode; */
-servo_daemon(inetd)
-  int inetd;
+servo_daemon(
+  int inetd)
 {
   int fd, value;
   char buf[80];
@@ -3105,7 +3105,7 @@ servo_daemon(inetd)
 
 #ifdef	SERVER_USAGE
 static void
-server_usage()
+server_usage(void)
 {
   struct rusage ru;
 
@@ -3151,15 +3151,15 @@ server_usage()
 
 
 static void
-reaper()
+reaper(void)
 {
   while (waitpid(-1, NULL, WNOHANG | WUNTRACED) > 0);
 }
 
 
 static void
-sig_trap(sig)
-  int sig;
+sig_trap(
+  int sig)
 {
   char buf[80];
 
@@ -3171,7 +3171,7 @@ sig_trap(sig)
 
 
 static void
-sig_over()
+sig_over(void)
 {
   int fd;
 
@@ -3184,7 +3184,7 @@ sig_over()
 }
 
 static void
-sig_log()
+sig_log(void)
 {
   char buf[128];
 
@@ -3210,7 +3210,7 @@ sig_log()
 
 
 static void
-main_signals()
+main_signals(void)
 {
   struct sigaction act;
 
@@ -3253,8 +3253,8 @@ main_signals()
 
 /*
 static void *
-attach_shm(shmkey, shmsize)
-  int shmkey, shmsize;
+attach_shm(
+  int shmkey, int shmsize)
 {
   void *shmptr;
   int shmid;   
@@ -3280,7 +3280,7 @@ attach_shm(shmkey, shmsize)
 
 /*
 void
-load_mud_like()
+load_mud_like(void)
 {
   if (mud == NULL)
   {
@@ -3292,7 +3292,7 @@ load_mud_like()
 */
 
 void
-mudshm_init()
+mudshm_init(void)
 {
   ChatAction *head;
   int fw,size;   
@@ -3375,9 +3375,9 @@ mudshm_init()
 
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   int sock, nfds, maxfds=0, servo_sno;
   ChatUser *cu,/* *userpool,*/ **FBI;

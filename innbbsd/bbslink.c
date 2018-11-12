@@ -63,8 +63,8 @@ static char *DefaultProcSite = NULL;	/* !=NULL: 只處理某特定站台 */
 
 
 static nodelist_t *
-search_nodelist_bynode(name)
-  char *name;
+search_nodelist_bynode(
+  char *name)
 {
   nodelist_t nl;
 
@@ -74,8 +74,8 @@ search_nodelist_bynode(name)
 
 
 static newsfeeds_t *
-search_newsfeeds_byboard(board)
-  char *board;
+search_newsfeeds_byboard(
+  char *board)
 {
   newsfeeds_t nf;
 
@@ -99,9 +99,9 @@ typedef struct
 
 
 static void
-queuefeed(node, sover)
-  nodelist_t *node;
-  soverview_t *sover;
+queuefeed(
+  nodelist_t *node,
+  soverview_t *sover)
 {
   int fd;
 
@@ -134,8 +134,8 @@ queuefeed(node, sover)
 
 
 static char *
-Gtime(now)
-  time_t now;
+Gtime(
+  time_t now)
 {
   static char datemsg[40];
 
@@ -146,8 +146,8 @@ Gtime(now)
 
 
 static void
-deal_sover(bntp)
-  bntp_t *bntp;
+deal_sover(
+  bntp_t *bntp)
 {
   newsfeeds_t *nf;
   nodelist_t *nl;
@@ -199,7 +199,7 @@ deal_sover(bntp)
 
 
 static void
-deal_bntp()
+deal_bntp(void)
 {
   char *OUTING = "innd/.outing";		/* 處理時暫存的檔 */
   int fd, i;
@@ -242,9 +242,9 @@ deal_bntp()
 
 
 static int
-inetclient(server, port)
-  char *server;
-  int port;
+inetclient(
+  char *server,
+  int port)
 {
   struct hostent *host;		/* host information entry */
   struct sockaddr_in sin;	/* Internet endpoint address */
@@ -304,8 +304,8 @@ tcpcommand(char *fmt, ...)
 
 
 static int			/* 200~202:成功 0:失敗 */
-open_connect(node)		/* 連去這個站 */
-  nodelist_t *node;
+open_connect(		/* 連去這個站 */
+  nodelist_t *node)
 {
   char *host = node->host;
   int port = node->port;
@@ -351,7 +351,7 @@ open_connect(node)		/* 連去這個站 */
 
 
 static void
-close_connect()		/* 結束連去這個站 */
+close_connect(void)		/* 結束連去這個站 */
 {
   int status;
 
@@ -379,8 +379,8 @@ close_connect()		/* 結束連去這個站 */
 
 
 static int			/* -1:失敗 */
-sover_post(sover)
-  soverview_t *sover;
+sover_post(
+  soverview_t *sover)
 {
   if (sover->control[0])	/* 送出 cancel message */
   {
@@ -446,8 +446,8 @@ sover_post(sover)
 
 
 static void
-fail_post(msgid)
-  char *msgid;
+fail_post(
+  char *msgid)
 {
   bbslog("<bbslink> :Warn: %s <%s>\n", SERVERbuffer, msgid);
   DEBUG(("│→:Warn: %s <%s>\n", SERVERbuffer, msgid));
@@ -455,9 +455,9 @@ fail_post(msgid)
 
 
 static void
-send_outgoing(node, sover)
-  nodelist_t *node;
-  soverview_t *sover;
+send_outgoing(
+  nodelist_t *node,
+  soverview_t *sover)
 {
   int cc, status;
   char *msgid, *str;
@@ -555,9 +555,9 @@ send_outgoing(node, sover)
 
 
 static int		/* 1:成功 0:失敗 */
-NNRPgroup(newsgroup, low, high)	/* 切換 group，並傳回 low-number 及 high-number */
-  char *newsgroup;
-  int *low, *high;
+NNRPgroup(	/* 切換 group，並傳回 low-number 及 high-number */
+  char *newsgroup,
+  int *low, int *high)
 {
   int i;
   char *ptr;
@@ -591,8 +591,8 @@ NNRPgroup(newsgroup, low, high)	/* 切換 group，並傳回 low-number 及 high-number 
 static char *tempfile = "innd/bbslinktmp";
 
 static int			/* 1:成功 0:失敗 */
-NNRParticle(artno)		/* 取回第 artno 篇的全文 */
-  int artno;
+NNRParticle(		/* 取回第 artno 篇的全文 */
+  int artno)
 {
   FILE *fp;
   char *ptr;
@@ -630,7 +630,7 @@ NNRParticle(artno)		/* 取回第 artno 篇的全文 */
 
 
 static void
-my_post()
+my_post(void)
 {
   int rel, size;
   char *ptr, *data;
@@ -697,16 +697,16 @@ my_post()
 
 
 static int
-nf_samegroup(nf)
-  newsfeeds_t *nf;
+nf_samegroup(
+  newsfeeds_t *nf)
 {
   return !strcmp(nf->newsgroup, GROUP) && !strcmp(nf->path, NODENAME);
 }
 
 
 static void
-changehigh(hdd, ram)
-  newsfeeds_t *hdd, *ram;
+changehigh(
+  newsfeeds_t *hdd, newsfeeds_t *ram)
 {
   if (ram->high >= 0)
   {
@@ -721,10 +721,10 @@ changehigh(hdd, ram)
 
 
 static void
-updaterc(nf, pos, high)
-  newsfeeds_t *nf;
-  int pos;			/* 於 newsfeeds.bbs 裡面的位置 */
-  int high;			/* >=0:目前抓到哪一篇 <0:error */
+updaterc(
+  newsfeeds_t *nf,
+  int pos,			/* 於 newsfeeds.bbs 裡面的位置 */
+  int high)			/* >=0:目前抓到哪一篇 <0:error */
 {
   nf->high = high;
   GROUP = nf->newsgroup;
@@ -738,8 +738,8 @@ updaterc(nf, pos, high)
 
 
 static void
-readnews(node)
-  nodelist_t *node;
+readnews(
+  nodelist_t *node)
 {
   int i, low, high, artcount, artno;
   char *name, *newsgroup;
@@ -821,14 +821,14 @@ readnews(node)
 static char *lockfile = "innd/bbslinking";
 
 static void
-bbslink_un_lock()
+bbslink_un_lock(void)
 {
   unlink(lockfile);
 }
 
 
 static int
-bbslink_get_lock()
+bbslink_get_lock(void)
 {
   int fd;
   char buf[10];
@@ -872,8 +872,8 @@ bbslink_get_lock()
 
 
 static void
-visit_site(node)
-  nodelist_t *node;
+visit_site(
+  nodelist_t *node)
 {
   int status, response, fd, num;
   char linkfile[64];
@@ -946,7 +946,7 @@ visit_site(node)
 
 
 static void
-bbslink()
+bbslink(void)
 {
   int i;
   nodelist_t *node;
@@ -978,8 +978,8 @@ bbslink()
 
 
 static void
-usage(argv)
-  char *argv;
+usage(
+  char *argv)
 {
   printf("Usage: %s [options]\n", argv);
   printf("       -c  將 high-number 與伺服器上同步(不取信)\n");
@@ -991,9 +991,9 @@ usage(argv)
 
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   int c, errflag = 0;
 

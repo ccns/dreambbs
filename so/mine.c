@@ -45,14 +45,14 @@ static char MineMap[ MAP_MAXY+2 ][ MAP_MAXX+2 ];
 extern int cur_col;
 int fasttime[4];
 
-void clrtokol()
+void clrtokol(void)
 {
 	int n;
 	for (n = cur_col;n < 17;n++)
 		outc(' ');
 }
 
-void initMap()
+void initMap(void)
 {
 	int x, y, i;
 	for (y = 0; y < MAP_Y + 2; y++)
@@ -78,7 +78,7 @@ void initMap()
 };
 
 int
-show_fasttime()
+show_fasttime(void)
 {
 	int i;
 	FILE *fp;
@@ -96,7 +96,7 @@ show_fasttime()
 }
 
 int
-load_fasttime()
+load_fasttime(void)
 {
 	int i;
 	char buf[40];
@@ -160,7 +160,7 @@ enum {  MAP_START_X = 16 };             // Must be > Prompts
 
 static time_t init_time = 0;
 
-void drawInfo()
+void drawInfo(void)
 {
 	move(b_lines - 1, 0);
 	clrtoeol();
@@ -168,7 +168,7 @@ void drawInfo()
 		   difftime(time(0), init_time) , TotalMines - TaggedMines);
 };
 
-void drawPrompt()
+void drawPrompt(void)
 {
 	int i;
 	for (i = 1;i <= 20;i++)
@@ -235,7 +235,7 @@ void drawMap(int flShow)
 
 static int flLoseMine = 0;
 
-static void loseMine()
+static void loseMine(void)
 {
 	drawMap(1);
 	game_log(1, "[31;1m¦b %.01f ¬í®É½ò¨ì¦a¹p°Õ!!!", difftime(time(0), init_time));
@@ -283,7 +283,7 @@ void TraceMap(int y, int x)
 	};
 };
 
-void playMine()
+void playMine(void)
 {
 	int ch ;
 	currx = MAP_X / 2 + 1, curry = MAP_Y / 2 + 1;
@@ -368,7 +368,7 @@ void playMine()
 	}
 };
 
-int Mine()
+int Mine(void)
 {
 	int x, y, ti;
 	char ans[5], buf[10];

@@ -61,16 +61,16 @@ char *SUBJECT, *FROM, *DATE, *PATH, *GROUP, *MSGID, *POSTHOST, *SITE, *CONTROL;
 
 
 static int 
-header_cmp(a, b)
-  header_t *a, *b;
+header_cmp(
+  header_t *a, header_t *b)
 {
   return str_cmp(a->name, b->name);
 }
 
 
 static int 
-header_value(inputheader)
-  char *inputheader;
+header_value(
+  char *inputheader)
 {
   header_t key, *findkey;
   static int already_init = 0;
@@ -91,9 +91,9 @@ header_value(inputheader)
 
 
 static int
-is_loopback(path, token, len)
-  char *path, *token;
-  int len;
+is_loopback(
+  char *path, char *token,
+  int len)
 {
   int cc;
 
@@ -122,8 +122,8 @@ is_loopback(path, token, len)
 
 
 int 			/* 1:成功 0:PATH包括自己 -1:檔頭不完整 */
-readlines(data)		/* 讀入檔頭和內文 */
-  char *data;
+readlines(		/* 讀入檔頭和內文 */
+  char *data)
 {
   int i;
   char *front, *ptr, *hptr;

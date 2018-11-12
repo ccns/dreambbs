@@ -97,8 +97,8 @@ do_cmd(MENU *mptr,XO *xo,int x,int y)
 
 /* verit . 計算扣掉色碼的實際長度 */
 static int 
-count_len(data)
-  char *data;
+count_len(
+  char *data)
 {
   int len;
   char *ptr,*tmp;
@@ -287,11 +287,11 @@ draw_menu(MENU *pmenu[20],int num,char *title,int x,int y,int cur)
 }
 
 static int 
-do_menu(pmenu,xo,x,y)
-  MENU pmenu[];
-  XO *xo;
-  int x;
-  int y;
+do_menu(
+  MENU pmenu[],
+  XO *xo,
+  int x,
+  int y)
 {
    int cur,old_cur,num,tmp;
    char c;
@@ -400,12 +400,12 @@ do_menu(pmenu,xo,x,y)
 
 /* mode 代表加背景的顏色 */
 static void
-draw_ans_item(desc,mode,x,y,hotkey)
-  char *desc;
-  int mode;
-  int x;
-  int y;
-  char hotkey;
+draw_ans_item(
+  char *desc,
+  int mode,
+  int x,
+  int y,
+  char hotkey)
 {
    char buf[128];
 
@@ -590,7 +590,7 @@ int pmsg(char *msg)
 
 /* verit. 030211 抓取螢幕畫面到暫存檔 */
 int
-Every_Z_Screen()
+Every_Z_Screen(void)
 {
   FILE *fp;
   int i;

@@ -17,7 +17,7 @@
 #endif
 
 
-VAR void (*s_menu)();
+VAR void (*s_menu)(void);
 VAR int skin INI(1);
 
 #undef	VAR

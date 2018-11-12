@@ -6,7 +6,7 @@
 #include <string.h>
 #include <time.h>
 #include "bbs.h"
-int main()
+int main(void)
 {
   int fd, n;
   SCHEMA *usr;

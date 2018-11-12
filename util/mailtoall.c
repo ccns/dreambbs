@@ -24,8 +24,8 @@ typedef struct
 
 
 static void *
-attach_shm(shmkey, shmsize)
-  register int shmkey, shmsize;
+attach_shm(
+  register int shmkey, register int shmsize)
 {
   register void *shmptr;
   register int shmid;   
@@ -77,9 +77,9 @@ send_to_all(char *title,char *fpath,char *bm)
 }
 
 static int
-to_bm(fpath,title)
-  char *fpath;
-  char *title;
+to_bm(
+  char *fpath,
+  char *title)
 {
     BRD *bhdr, *head, *tail;
     char *ptr,*bm;
@@ -136,10 +136,10 @@ to_bm(fpath,title)
 }
 
 static void
-traverse(fpath,path,title)
-  char *fpath;
-  char *path;
-  char *title;
+traverse(
+  char *fpath,
+  char *path,
+  char *title)
 {
   DIR *dirp;
   struct dirent *de;
@@ -172,9 +172,9 @@ traverse(fpath,path,title)
 
 
 static int
-open_mail(path,title)
-  char *path;
-  char *title;
+open_mail(
+  char *path,
+  char *title)
 {
   int ch;
   char *fname, fpath[256];
@@ -194,9 +194,9 @@ open_mail(path,title)
 /* mailtoall mode title fpath */
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];  
+main(
+  int argc,
+  char *argv[])
 {
   int mode;
   

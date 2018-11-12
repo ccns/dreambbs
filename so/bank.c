@@ -12,11 +12,11 @@
 
 #include "bbs.h"
 /*
-void log_bank(mode, a, b, who)
-  int mode; 
-  int a;
-  int b;
-  char *who;
+void log_bank(
+  int mode, 
+  int a,
+  int b,
+  char *who)
 {
   time_t now;
   char c_time[25], c_buf[100]={};
@@ -42,7 +42,7 @@ void log_bank(mode, a, b, who)
 }
 */
 
-int point1_money()
+int point1_money(void)
 {
    int num;
    char buf[10];
@@ -107,7 +107,7 @@ int point1_money()
 
 
 int
-TransferAccount()
+TransferAccount(void)
 {
   ACCT acct, selfacct;
   char buf[128];
@@ -326,7 +326,7 @@ money_back(void)
 }
 
 
-int bank_main()
+int bank_main(void)
 {
   char buf[2];
   int money;

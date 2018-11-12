@@ -39,9 +39,9 @@ static int vo_size;
 
 #ifdef	VERBOSE
 static void
-telnet_flush(data, size)
-  char *data;
-  int size;
+telnet_flush(
+  char *data,
+  int size)
 {
   int oset;
 
@@ -62,7 +62,7 @@ telnet_flush(data, size)
 
 
 static void
-oflush()
+oflush(void)
 {
   int size;
 
@@ -75,9 +75,9 @@ oflush()
 
 
 static void
-output(str, len)
-  unsigned char *str;
-  int len;
+output(
+  unsigned char *str,
+  int len)
 {
   int size, ch;
   unsigned char *data;
@@ -110,8 +110,8 @@ output(str, len)
 
 
 static void
-ochar(ch)
-  int ch;
+ochar(
+  int ch)
 {
   unsigned char *data;
   int size;
@@ -129,7 +129,7 @@ ochar(ch)
 
 
 void
-bell()
+bell(void)
 {
   static char sound[1] = {Ctrl('G')};
 
@@ -161,9 +161,9 @@ screenline *cur_slp;	/* current screen line pointer */
 
 
 void
-move(y, x)
-  int y;
-  int x;
+move(
+  int y,
+  int x)
 {
   screenline *cslp;
 
@@ -222,9 +222,9 @@ move(y, x)
 #if 0
 /* verit : 030212 , 扣掉 ansi code */
 void
-ansi_move(y, x)
-  int y;
-  int x;
+ansi_move(
+  int y,
+  int x)
 {
   screenline *cslp;
 
@@ -282,8 +282,8 @@ ansi_move(y, x)
 #endif
 
 void
-getyx(y, x)
-  int *y, *x;
+getyx(
+  int *y, int *x)
 {
   *y = cur_row;
   *x = cur_col;
@@ -297,9 +297,9 @@ getyx(y, x)
 
 #if 0
 static int
-ansicol(slp, len)
-  screenline *slp;
-  int len;
+ansicol(
+  screenline *slp,
+  int len)
 {
   unsigned char *str;
   int ch, ansi, col;
@@ -331,8 +331,8 @@ ansicol(slp, len)
 
 
 static void
-rel_move(new_col, new_row)
-  int new_col, new_row;
+rel_move(
+  int new_col, int new_row)
 {
   int was_col, was_row;
   char buf[16];
@@ -381,9 +381,9 @@ rel_move(new_col, new_row)
 
 
 static void
-standoutput(slp, ds, de)
-  screenline *slp;
-  int ds, de;
+standoutput(
+  screenline *slp,
+  int ds, int de)
 {
   unsigned char *data;
   int sso, eso;
@@ -421,7 +421,7 @@ static int standing;
 
 
 static void
-standout()
+standout(void)
 {
   if (!standing)
   {
@@ -433,7 +433,7 @@ standout()
 
 
 static void
-standend()
+standend(void)
 {
   if (standing)
   {
@@ -446,7 +446,7 @@ standend()
 
 
 static void
-vs_redraw()
+vs_redraw(void)
 {
   screenline *slp;
   int i, j, len, mode, width;
@@ -484,7 +484,7 @@ vs_redraw()
 
 
 void
-refresh()
+refresh(void)
 {
   screenline *slp;
   int i, j, len, mode, width, smod, emod;
@@ -601,7 +601,7 @@ refresh()
 
 
 void
-clear()
+clear(void)
 {
   int i;
   screenline *slp;
@@ -616,8 +616,8 @@ clear()
 }
 
 void
-clearange(from,to)
-  int from,to;
+clearange(
+  int from, int to)
 {
   int i;
   screenline *slp;
@@ -633,7 +633,7 @@ clearange(from,to)
 }
 
 void
-clrtohol()
+clrtohol(void)
 {
   int n;
   for(n=cur_col;n<36;n++) /* 36是我的動態看板起始位置, 自己調整 */
@@ -641,7 +641,7 @@ clrtohol()
 }
 
 void
-clrtoeol()
+clrtoeol(void)
 {
   screenline *slp = cur_slp;
   int len;
@@ -662,7 +662,7 @@ clrtoeol()
 
 
 void
-clrtobot()
+clrtobot(void)
 {
   screenline *slp;
   int i, j;
@@ -691,8 +691,8 @@ clrtobot()
 }
 
 void
-outc(ch)
-  int ch;
+outc(
+  int ch)
 {
   screenline *slp;
   unsigned char *data;
@@ -833,8 +833,9 @@ new_line:
 
 
 void
-outs(str)
-  unsigned char *str;
+outs(
+  uschar *str
+  unsigned char *str)
 {
   int ch;
 
@@ -894,8 +895,8 @@ expand_esc_star_visio(char *buf, const char *src, int szbuf)
 
 #ifdef SHOW_USER_IN_TEXT
 void
-outx(str)
-  unsigned char *str;
+outx(
+  unsigned char *str)
 {
 /*
   unsigned char *t_name = cuser.userid;
@@ -998,9 +999,9 @@ outx(str)
 
 
 void
-outz(msg)
-  unsigned char *msg;
-//  const char *msg;
+outz(
+  unsigned char *msg)
+//  const char *msg)
 {
   int ch;
 
@@ -1014,8 +1015,8 @@ outz(msg)
 }
 
 void
-outf(str)
-  unsigned char *str;
+outf(
+  unsigned char *str)
 {
   outz(str);
   prints("%*s\033[m", d_cols, "");
@@ -1038,7 +1039,7 @@ prints(char *fmt, ...)
 
 
 void
-scroll()
+scroll(void)
 {
   scrollcnt++;
   if (++roll >= t_lines)
@@ -1049,7 +1050,7 @@ scroll()
 
 
 void
-rscroll()
+rscroll(void)
 {
   scrollcnt--;
   if (--roll < 0)
@@ -1069,7 +1070,7 @@ static int old_pos; /* Thor.990401: 多存一個 */
 /* static void */
 void				/* Thor.1028: 為了讓 talk.c
 				 * 有人呼叫時會show字 */
-cursor_save()
+cursor_save(void)
 {
   old_col = cur_col;
   old_row = cur_row;
@@ -1081,7 +1082,7 @@ cursor_save()
 /* static void */
 void				/* Thor.1028: 為了讓 talk.c
 				 * 有人呼叫時會show字 */
-cursor_restore()
+cursor_restore(void)
 {
   move(old_row, old_col);
   
@@ -1090,8 +1091,8 @@ cursor_restore()
 
 
 void
-save_foot(slp)
-  screenline *slp;
+save_foot(
+  screenline *slp)
 {
 #if 0
   cursor_save();
@@ -1112,8 +1113,8 @@ save_foot(slp)
 
 
 void
-restore_foot(slp)
-  screenline *slp;
+restore_foot(
+  screenline *slp)
 {
   move(b_lines - 1, 0);
   memcpy(cur_slp, slp, sizeof(screenline) * 2);
@@ -1127,8 +1128,8 @@ restore_foot(slp)
 
 
 int
-vs_save(slp)
-  screenline *slp;
+vs_save(
+  screenline *slp)
 {
 #if 0
   cursor_save();
@@ -1141,8 +1142,8 @@ vs_save(slp)
 
 
 void
-vs_restore(slp)
-  screenline *slp;
+vs_restore(
+  screenline *slp)
 {
   memcpy(vbuf, slp, sizeof(screenline) * t_lines);
 #if 0
@@ -1155,8 +1156,8 @@ vs_restore(slp)
 
 
 int
-vmsg(msg)
-  char *msg;			/* length < 54 */
+vmsg(
+  char *msg)			/* length < 54 */
 {
   
   if (msg)
@@ -1182,7 +1183,7 @@ vmsg(msg)
 
 
 static inline void
-zkey()				/* press any key or timeout */
+zkey(void)				/* press any key or timeout */
 {
   /* static */ struct timeval tv = {1, 100};  
   /* Thor.980806: man page 假設 timeval struct是會改變的 */
@@ -1202,8 +1203,8 @@ zkey()				/* press any key or timeout */
 
 
 void
-zmsg(msg)			/* easy message */
-  char *msg;
+zmsg(			/* easy message */
+  char *msg)
 {
 #if 0
   move(b_lines, 0);
@@ -1218,8 +1219,8 @@ zmsg(msg)			/* easy message */
 
 
 void
-vs_bar(title)
-  char *title;
+vs_bar(
+  char *title)
 {
   clear();
   prints("\033[1;33;44m【 %s 】\033[m\n", title);
@@ -1228,8 +1229,8 @@ vs_bar(title)
 
 #if 0
 void
-cursor_show(row, column)
-  int row, column;
+cursor_show(
+  int row, int column)
 {
   move(row, column);
   outs(STR_CURSOR);
@@ -1238,8 +1239,8 @@ cursor_show(row, column)
 
 
 void
-cursor_clear(row, column)
-  int row, column;
+cursor_clear(
+  int row, int column)
 {
   move(row, column);
   outs(STR_UNCUR);
@@ -1247,8 +1248,8 @@ cursor_clear(row, column)
 
 
 int
-cursor_key(row, column)
-  int row, column;
+cursor_key(
+  int row, int column)
 {
   int ch;
 
@@ -1262,8 +1263,8 @@ cursor_key(row, column)
 
 
 static void
-vs_line(msg)
-  char *msg;
+vs_line(
+  char *msg)
 {
   int head, tail;
 
@@ -1338,9 +1339,9 @@ static struct timeval vio_to = {60, 0};
 
 
 void
-add_io(fd, timeout)
-  int fd;
-  int timeout;
+add_io(
+  int fd,
+  int timeout)
 {
   vio_fd = fd;
   vio_to.tv_sec = timeout;
@@ -1348,8 +1349,8 @@ add_io(fd, timeout)
 
 
 static inline int
-iac_count(current)
-  unsigned char *current;
+iac_count(
+  unsigned char *current)
 {
   switch (*(current + 1))
   {
@@ -1380,7 +1381,7 @@ iac_count(current)
 
 
 int
-igetch()
+igetch(void)
 {
 
 #define	IM_TRAIL	0x01
@@ -1554,7 +1555,7 @@ igetch()
                       要嘛就維持原狀, 不秀出可能的值了 */
 
 static void
-match_title()
+match_title(void)
 {
   move(2, 0);
   clrtobot();
@@ -1563,7 +1564,7 @@ match_title()
 
 
 static int
-match_getch()
+match_getch(void)
 {
   int ch;
 
@@ -1587,10 +1588,10 @@ static BRD *xbrd;
 
 
 BRD *
-ask_board(board, perm, msg)
-  char *board;
-  int perm;
-  char *msg;
+ask_board(
+  char *board,
+  int perm,
+  char *msg)
 {
   if (msg)
   {
@@ -1611,10 +1612,10 @@ ask_board(board, perm, msg)
 
 
 static int
-vget_match(prefix, len, op)
-  char *prefix;
-  int len;
-  int op;
+vget_match(
+  char *prefix,
+  int len,
+  int op)
 {
   char *data, *hit=NULL;
   int row, col, match;
@@ -2056,8 +2057,8 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int 
 
 
 int
-vans(prompt)
-  char *prompt;
+vans(
+  char *prompt)
 {
   char ans[3];
 
@@ -2069,7 +2070,7 @@ vans(prompt)
 
 #ifdef	TRAP_ESC
 int
-vkey()
+vkey(void)
 {
   int mode;
   int ch, last;
@@ -2119,7 +2120,7 @@ vkey()
 #else				/* TRAP_ESC */
 
 int
-vkey()
+vkey(void)
 {
   int mode;
   int ch, last;

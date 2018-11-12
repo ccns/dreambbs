@@ -6,7 +6,7 @@
 #include <string.h>
 #include "bbs.h"
 
-int main()
+int main(void)
 {
 #if 0
   char c;

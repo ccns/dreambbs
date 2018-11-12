@@ -38,8 +38,8 @@ static int more_size;
 
 
 char *
-mgets(fd)
-  int fd;
+mgets(
+  int fd)
 {
   char *pool, *base, *head, *tail;
   int ch;
@@ -91,8 +91,8 @@ mgets(fd)
 
 
 void *
-mread(fd, len)
-  int fd, len;
+mread(
+  int fd, int len)
 {
   char *pool;
   int base, size;
@@ -136,8 +136,8 @@ static unsigned char *foff;		/* 目前讀到哪裡 */
 
 
 static int
-more_line(buf)
-  char *buf;
+more_line(
+  char *buf)
 {
   int ch, len, bytes, in_ansi, in_chi;
 
@@ -207,8 +207,8 @@ more_line(buf)
 
 
 static void
-outs_line(str)			/* 印出一般內容 */
-  char *str;
+outs_line(			/* 印出一般內容 */
+  char *str)
 {
   int ch1, ch2, ansi;
 
@@ -272,9 +272,9 @@ outs_line(str)			/* 印出一般內容 */
 
 
 static void
-outs_header(str, header_len)	/* 印出檔頭 */
-  char *str;
-  int header_len;
+outs_header(	/* 印出檔頭 */
+  char *str,
+  int header_len)
 {
   static char header1[LINE_HEADER][LEN_AUTHOR1] = {"作者",   "標題",   "時間", "路徑"};
   static char header2[LINE_HEADER][LEN_AUTHOR2] = {"發信人", "標  題", "發信站", "轉信站"};
@@ -321,10 +321,10 @@ outs_header(str, header_len)	/* 印出檔頭 */
 }
 
 static inline void
-outs_footer(buf, lino, fsize)
-  char *buf;
-  int lino;
-  int fsize;
+outs_footer(
+  char *buf,
+  int lino,
+  int fsize)
 {
   int i;
 
@@ -349,7 +349,7 @@ outs_footer(buf, lino, fsize)
 static int slideshow;		/* !=0: 播放 movie 的速度 */
 
 static int
-more_slideshow()
+more_slideshow(void)
 {
   int ch;
 
@@ -406,9 +406,9 @@ more_slideshow()
                         0 為全數show完
                        >0 為未全show，中斷所按的key */
 int
-more(fpath, footer)
-  char *fpath;
-  char *footer;
+more(
+  char *fpath,
+  char *footer)
 {
   char buf[ANSILINELEN];
   int i;

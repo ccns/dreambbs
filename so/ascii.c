@@ -10,7 +10,7 @@
 #include "bbs.h"
 
 void
-input_tools()
+input_tools(void)
 {
 	char msg1[] = {"1.括符方塊  2.線條箭頭  3.數字標點？(N:下一頁)[Q]"};
 	char msg2[] = {"4.圖案數字  5.希臘字母  6.注音符號？(P:上一頁)[Q]"};

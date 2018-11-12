@@ -45,9 +45,9 @@ static char errmsg[512] = "nothing";
 
 
 ncmperm_t *
-search_issuer(issuer, type)
-  char *issuer;
-  char *type;		/* 若 type == NULL 表示只比對 issuer */
+search_issuer(
+  char *issuer,
+  char *type)		/* 若 type == NULL 表示只比對 issuer */
 {
   ncmperm_t *find;
   int i;
@@ -64,8 +64,8 @@ search_issuer(issuer, type)
 
 
 static void
-NCMupdate(issuer, type)
-  char *issuer, *type;
+NCMupdate(
+  char *issuer, char *type)
 {
   ncmperm_t ncm;
 
@@ -85,9 +85,9 @@ NCMupdate(issuer, type)
 
 #ifdef PGP
 static int
-run_pgp(cmd, in, out)
-  char *cmd;
-  FILE **in, **out;
+run_pgp(
+  char *cmd,
+  FILE **in, **out)
 {
   int pin[2], pout[2], child_pid;
   char fpath[64];
@@ -126,8 +126,8 @@ run_pgp(cmd, in, out)
 
 
 static int
-verify_buffer(buf, passphrase)
-  char *buf, *passphrase;
+verify_buffer(
+  char *buf, char *passphrase)
 {
   FILE *pgpin, *pgpout;
   char tmpbuf[1024] = " ";
@@ -177,7 +177,7 @@ verify_buffer(buf, passphrase)
 
 
 static int	/* return 0 success, otherwise fail */
-NCMverify()
+NCMverify(void)
 {
   char passphrase[80] = "Haha, I am Leeym..";
   return verify_buffer(BODY, passphrase);
@@ -192,9 +192,9 @@ NCMverify()
 
 #ifdef GPG
 static int
-run_gpg(cmd, in, out)
-  char *cmd;
-  FILE **in, **out;
+run_gpg(
+  char *cmd,
+  FILE **in, FILE **out)
 {
   int pin[2], pout[2], child_pid;
   char fpath[64];
@@ -233,8 +233,8 @@ run_gpg(cmd, in, out)
 
 
 static int
-verify_buffer(buf)
-  char *buf;
+verify_buffer(
+  char *buf)
 {
   FILE *pgpin, *pgpout;
   char tmpbuf[1024] = " ";
@@ -283,7 +283,7 @@ verify_buffer(buf)
 
 
 static int
-NCMverify()
+NCMverify(void)
 {
   return verify_buffer(BODY);
 }
@@ -296,8 +296,8 @@ NCMverify()
 
 
 static int
-readNCMheader(line)
-  char *line;
+readNCMheader(
+  char *line)
 {
   if (!str_ncmp(line, "Version", strlen("Version")))
   {
@@ -332,8 +332,8 @@ readNCMheader(line)
 
 
 static int
-readNCMbody(line)
-  char *line;
+readNCMbody(
+  char *line)
 {
   char buf[LINELEN], *group;
 
@@ -361,7 +361,7 @@ readNCMbody(line)
 
 
 static int	/* return 0 success, otherwise fail */
-NCMparse()
+NCMparse(void)
 {
   char *fptr, *ptr;
   int type = TEXT;
@@ -447,11 +447,11 @@ NCMparse()
 }
 
 
-extern int cancel_article();
+extern int cancel_article(char *msgid);
 
 
 static void
-NCMcancel()
+NCMcancel(void)
 {
   int i;
 
@@ -466,7 +466,7 @@ NCMcancel()
 
 
 static void
-initial_nocem()
+initial_nocem(void)
 {
   memset(SPAMMID[0], 0, strlen(SPAMMID[0]) * num_spammid);
   num_spammid = 0;
@@ -475,7 +475,7 @@ initial_nocem()
 
 
 int			/* 0:success  -1:fail */
-receive_nocem()
+receive_nocem(void)
 {
   int cc;
 

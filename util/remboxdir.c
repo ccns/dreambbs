@@ -28,8 +28,8 @@ static FNAME *n_pool;
 static int n_size, n_head;
 
 	int
-pool_add(fname)
-	FNAME fname;
+pool_add(
+	FNAME fname)
 {
 	char *p;
 
@@ -75,8 +75,8 @@ static char radix32[32] = {
 
 
 	HDR *
-article_parse(fp)
-	FILE *fp;
+article_parse(
+	FILE *fp)
 {
 	static HDR hdr;
 	char buf[256], *ptr, *ptr2, *ptr3;
@@ -172,8 +172,8 @@ article_parse(fp)
 }
 
 	static int
-fname_cmp(s1, s2)
-	char *s1, *s2;
+fname_cmp(
+	char *s1, char *s2)
 {
 	return strcmp(s1 + 1, s2 + 1);
 }

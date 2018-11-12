@@ -22,7 +22,7 @@ typedef struct
 
 
 static int
-use_io()
+use_io(void)
 {
 	int mode;
 	mode = vans("使用外部程序嗎？ [Y/n] ");
@@ -44,7 +44,7 @@ check_in_memory(char *bm, char *id)
 
 /* 清除特定看板版面文章 cancel */
 int
-m_expire()
+m_expire(void)
 {
 	BRD *brd;
 	char bname[16];
@@ -182,10 +182,10 @@ mail_to_bm(void)
 }
 
 static void
-traverse(fpath, path, title)
-char *fpath;
-char *path;
-char *title;
+traverse(
+char *fpath,
+char *path,
+char *title)
 {
 	DIR *dirp;
 	struct dirent *de;
@@ -218,9 +218,9 @@ char *title;
 
 
 static int
-open_mail(path, title)
-char *path;
-char *title;
+open_mail(
+char *path,
+char *title)
 {
 	int ch;
 	char *fname, fpath[256];
@@ -238,7 +238,7 @@ char *title;
 }
 
 int
-mail_to_all()
+mail_to_all(void)
 {
 	char *title;
 	char fpath[256];
@@ -281,9 +281,9 @@ mail_to_all()
 }
 
 static int
-is_bms(list, userid)
-char *list;                   /* 板主：BM list */
-char *userid;
+is_bms(
+char *list,                   /* 板主：BM list */
+char *userid)
 {
 	int cc, len;
 
@@ -307,8 +307,8 @@ char *userid;
 }
 
 static inline int
-is_bm(list)
-char *list;                   /* 板主：BM list */
+is_bm(
+char *list)                   /* 板主：BM list */
 {
 	int cc, len;
 	char *userid;
@@ -334,7 +334,7 @@ char *list;                   /* 板主：BM list */
 
 
 int
-bm_check()
+bm_check(void)
 {
 	BRD *bhdr, *head, *tail;
 	BM *bm, *ptr;
@@ -492,9 +492,9 @@ bm_check()
 }
 
 static int
-find_bm(fpath, id)
-char *fpath;
-char *id;
+find_bm(
+char *fpath,
+char *id)
 {
 	BM bm;
 	int fd;
@@ -523,7 +523,7 @@ char *id;
 }
 
 int
-user_check_bm()
+user_check_bm(void)
 {
 	char buf[128], temp[3];
 	int ans, i;
@@ -584,7 +584,7 @@ user_check_bm()
 }
 
 static void
-search()
+search(void)
 {
 	FILE *fp;
 	char buf[256], input[60];
@@ -630,7 +630,7 @@ search()
 }
 
 static void
-update_match()
+update_match(void)
 {
 	char fpath[128];
 	sprintf(fpath, "bin/match \"%s\" &", cuser.userid);
@@ -641,7 +641,7 @@ update_match()
 }
 
 static void
-update_email()
+update_email(void)
 {
 	char fpath[128];
 	sprintf(fpath, "bin/checkemail \"%s\" &", cuser.userid);
@@ -652,7 +652,7 @@ update_email()
 }
 
 static void
-update_spamer_acl()
+update_spamer_acl(void)
 {
 	if (access(FN_ETC_SPAMER_ACL".new", 0))
 	{
@@ -664,7 +664,7 @@ update_spamer_acl()
 }
 
 static void
-update_untrust_acl()
+update_untrust_acl(void)
 {
 	if (access(FN_ETC_UNTRUST_ACL".new", 0))
 	{
@@ -676,7 +676,7 @@ update_untrust_acl()
 }
 
 int
-update_all()
+update_all(void)
 {
 	int ans;
 	ans = vans("更新項目： 1)特殊搜尋 2)註冊信箱個數 3)SPAM名單 4)不信任名單 0)結束 [0]");
@@ -700,7 +700,7 @@ update_all()
 
 
 int
-special_search()
+special_search(void)
 {
 	int ans;
 	move(22, 0);
@@ -720,7 +720,7 @@ special_search()
 }
 
 int
-m_xfile()
+m_xfile(void)
 {
 	static char *desc[] =
 	{
@@ -784,7 +784,7 @@ m_xfile()
 }
 
 int
-psaux()
+psaux(void)
 {
 	system("ps -aux > tmp/psaux");
 	more("tmp/psaux", NULL);
@@ -792,7 +792,7 @@ psaux()
 }
 
 int
-df()
+df(void)
 {
 	system("df -i > tmp/df");
 	more("tmp/df", NULL);
@@ -800,7 +800,7 @@ df()
 }
 
 int
-dmesg()
+dmesg(void)
 {
 	system("dmesg > tmp/dmesg");
 	more("tmp/dmesg", NULL);
@@ -808,7 +808,7 @@ dmesg()
 }
 
 int
-top()
+top(void)
 {
 	system("top > tmp/top");
 	more("tmp/top", NULL);
@@ -817,7 +817,7 @@ top()
 
 
 int
-m_xhlp()
+m_xhlp(void)
 {
 	static char *desc[] =
 	{
@@ -885,8 +885,8 @@ m_xhlp()
 
 /* pcbug.990620: 懶得login...:p */
 static void
-m_resetsys(select)
-int select;
+m_resetsys(
+int select)
 {
 	time_t now;
 	struct tm ntime, *xtime ;
@@ -957,49 +957,49 @@ int select;
 }
 
 int
-reset1()
+reset1(void)
 {
 	m_resetsys(1);
 	return 0;
 }
 
 int
-reset2()
+reset2(void)
 {
 	m_resetsys(2);
 	return 0;
 }
 
 int
-reset3()
+reset3(void)
 {
 	m_resetsys(3);
 	return 0;
 }
 
 int
-reset4()
+reset4(void)
 {
 	m_resetsys(4);
 	return 0;
 }
 
 int
-reset5()
+reset5(void)
 {
 	m_resetsys(5);
 	return 0;
 }
 
 int
-reset6()
+reset6(void)
 {
 	m_resetsys(6);
 	return 0;
 }
 
 int
-reset7()
+reset7(void)
 {
 	m_resetsys(7);
 	return 0;

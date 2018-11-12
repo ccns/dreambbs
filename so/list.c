@@ -20,16 +20,16 @@ static int mode;
 
 
 static void
-list_item(num, list)
-int num;
-LIST *list;
+list_item(
+int num,
+LIST *list)
 {
 	prints("%6d     %s\n", num, list->userid);
 }
 
 static int
-list_body(xo)
-XO *xo;
+list_body(
+XO *xo)
 {
 	LIST *list;
 	int num, max, tail;
@@ -60,9 +60,9 @@ XO *xo;
 }
 
 static void
-get_title(title, item)
-char *title;
-int item;
+get_title(
+char *title,
+int item)
 {
 	LIST_TITLE list;
 	int fd;
@@ -80,8 +80,8 @@ int item;
 
 
 static int
-list_head(xo)
-XO *xo;
+list_head(
+XO *xo)
 {
 	char buf[64], mid[41];
 	sprintf(buf, "¸s²Õ¦W³æ.%d ", ways);
@@ -103,17 +103,17 @@ XO *xo;
 
 
 static int
-list_load(xo)
-XO *xo;
+list_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(LIST));
 	return list_body(xo);
 }
 
 static int
-have_it(acct, dir)
-ACCT *acct;
-char *dir;
+have_it(
+ACCT *acct,
+char *dir)
 {
 	LIST clist;
 	int pos = 0, fd;
@@ -143,8 +143,8 @@ char *dir;
 
 
 static int
-list_init(xo)
-XO *xo;
+list_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(LIST));
 	return list_head(xo);
@@ -152,8 +152,8 @@ XO *xo;
 
 
 static int
-list_add(xo)
-XO *xo;
+list_add(
+XO *xo)
 {
 	LIST list;
 	ACCT acct;
@@ -201,8 +201,8 @@ XO *xo;
 }
 
 static int
-list_mode(xo)
-XO *xo;
+list_mode(
+XO *xo)
 {
 	char fpath[128];
 	char buf[32];
@@ -216,8 +216,8 @@ XO *xo;
 }
 
 static int
-list_search(xo)
-XO *xo;
+list_search(
+XO *xo)
 {
     LIST list;
     int max,cur;
@@ -249,8 +249,8 @@ return XO_NONE;
 }
 
 static int
-list_delete(xo)
-XO *xo;
+list_delete(
+XO *xo)
 {
 
 	if (vans(msg_del_ny) == 'y')
@@ -264,8 +264,8 @@ XO *xo;
 }
 
 static int
-list_title(xo)
-XO *xo;
+list_title(
+XO *xo)
 {
 	LIST_TITLE list;
 	int fd;
@@ -292,8 +292,8 @@ XO *xo;
 }
 
 static int
-list_help(xo)
-XO *xo;
+list_help(
+XO *xo)
 {
 	/*film_out(FILM_LIST, -1);*/
 	more(FN_HELP_LIST, NULL);
@@ -302,8 +302,8 @@ XO *xo;
 
 #ifdef HAVE_MULTI_CROSSPOST
 static int
-list_board(xo)
-XO *xo;
+list_board(
+XO *xo)
 {
 	char buf[32], fpath[128];
 	if (!HAS_PERM(PERM_ALLBOARD))
@@ -321,8 +321,8 @@ XO *xo;
 #endif
 
 static int
-list_browse(xo)
-XO *xo;
+list_browse(
+XO *xo)
 {
 	return XO_NONE;
 }
@@ -351,7 +351,7 @@ KeyFunc list_cb[] =
 
 
 int
-List()
+List(void)
 {
 	XO *xo;
 	char fpath[128], msg[100];

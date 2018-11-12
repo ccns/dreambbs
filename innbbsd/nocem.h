@@ -32,10 +32,10 @@ extern ncmperm_t *NCMPERM;
 extern int NCMCOUNT;
 
 /* receive_article.c */
-extern newsfeeds_t *search_newsfeeds_bygroup();
+extern newsfeeds_t *search_newsfeeds_bygroup(char *newsgroup);
 
 /* nocem.c */
-extern ncmperm_t *search_issuer();
-extern int receive_nocem();
+extern ncmperm_t *search_issuer(char *issuer, char *type);
+extern int receive_nocem(void);
 
 #endif	/* _NOCEM_H_ */

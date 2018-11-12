@@ -25,7 +25,7 @@ static unsigned char *GtoB = NULL;
 
 
 static void
-conv_init()
+conv_init(void)
 {
   int fd, size, BGsize, GBsize;
   struct stat st;
@@ -60,8 +60,8 @@ conv_init()
 
 
 static void
-b2g(src, dst)
-  unsigned char *src, *dst;
+b2g(
+  unsigned char *src, unsigned char *dst)
 {
   int i;
 
@@ -88,8 +88,8 @@ b2g(src, dst)
 
 
 static void
-g2b(src, dst)
-  unsigned char *src, *dst;
+g2b(
+  unsigned char *src, unsigned char *dst)
 {
   int i;
 
@@ -116,10 +116,10 @@ g2b(src, dst)
 
 
 static char *
-hzconvert(src, dst, dbcvrt)
-  char *src;			/* source char buffer pointer */
-  char *dst;			/* destination char buffer pointer */
-  void (*dbcvrt) ();		/* º~¦r 2-byte conversion funcntion */
+hzconvert(
+  char *src,			/* source char buffer pointer */
+  char *dst,			/* destination char buffer pointer */
+  void (*dbcvrt) (unsigned char *src, unsigned char *dst))		/* º~¦r 2-byte conversion funcntion */
 {
   int len;
   char *end, *p;
@@ -151,16 +151,16 @@ hzconvert(src, dst, dbcvrt)
 
 
 void
-b52gb(str)
-  char *str;
+b52gb(
+  char *str)
 {
   hzconvert(str, str, b2g);
 }
 
 
 void
-gb2b5(str)
-  char *str;
+gb2b5(
+  char *str)
 {
   hzconvert(str, str, g2b);
 }

@@ -11,8 +11,8 @@
 char Bdate[20];
 
 char *
-Cdate(chrono)
-time_t *chrono;
+Cdate(
+time_t *chrono)
 {
 	struct tm *ptime;
 

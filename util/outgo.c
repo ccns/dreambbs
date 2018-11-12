@@ -12,9 +12,9 @@
 #include "bbs.h"
 
 void
-outgo_post(hdr, board)
-  HDR *hdr;
-  char *board;
+outgo_post(
+  HDR *hdr,
+  char *board)
 {
 
   bntp_t bntp;
@@ -39,9 +39,9 @@ outgo_post(hdr, board)
 }
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   char fpath[128];
   int start,end,fd;

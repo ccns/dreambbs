@@ -16,16 +16,16 @@ static int admin_add();
 
 
 static void
-admin_item(num, admin)
-int num;
-ADMIN *admin;
+admin_item(
+int num,
+ADMIN *admin)
 {
 	prints("%6d     %s\n", num, admin->name);
 }
 
 static int
-admin_body(xo)
-XO *xo;
+admin_body(
+XO *xo)
 {
 	ADMIN *admin;
 	int num, max, tail;
@@ -57,8 +57,8 @@ XO *xo;
 
 
 static int
-admin_head(xo)
-XO *xo;
+admin_head(
+XO *xo)
 {
 	vs_head("¶W¯Å¯¸°È", str_site);
 	outs("\
@@ -69,8 +69,8 @@ XO *xo;
 
 
 static int
-admin_load(xo)
-XO *xo;
+admin_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(ADMIN));
 	return admin_body(xo);
@@ -78,8 +78,8 @@ XO *xo;
 
 
 static int
-admin_init(xo)
-XO *xo;
+admin_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(ADMIN));
 	return admin_head(xo);
@@ -87,9 +87,9 @@ XO *xo;
 
 
 static int
-admin_edit(admin, echo)
-ADMIN *admin;
-int echo;
+admin_edit(
+ADMIN *admin,
+int echo)
 {
 	if (echo == DOECHO)
 		memset(admin, 0, sizeof(ADMIN));
@@ -101,8 +101,8 @@ int echo;
 
 
 static int
-admin_add(xo)
-XO *xo;
+admin_add(
+XO *xo)
 {
 	ADMIN admin;
 
@@ -116,8 +116,8 @@ XO *xo;
 }
 
 static int
-admin_delete(xo)
-XO *xo;
+admin_delete(
+XO *xo)
 {
 
 	if (vans(msg_del_ny) == 'y')
@@ -132,8 +132,8 @@ XO *xo;
 
 
 static int
-admin_change(xo)
-XO *xo;
+admin_change(
+XO *xo)
 {
 	ADMIN *admin, mate;
 	int pos, cur;
@@ -155,8 +155,8 @@ XO *xo;
 }
 
 static int
-admin_help(xo)
-XO *xo;
+admin_help(
+XO *xo)
 {
 	film_out(FILM_ADMIN, -1);
 	return admin_head(xo);
@@ -180,7 +180,7 @@ KeyFunc admin_cb[] =
 
 
 int
-Admin()
+Admin(void)
 {
 	XO *xo;
 	char fpath[64];

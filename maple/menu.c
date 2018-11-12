@@ -8,7 +8,7 @@
 
 #include "bbs.h"
 
-extern int t_aloha();
+extern int t_aloha(void);
 extern BCACHE *bshm;
 extern UCACHE *ushm;
 int item_lenth[20]={0};
@@ -26,7 +26,7 @@ extern time_t brd_visit[MAXBOARD];
 #endif
 
 static int
-system_result()
+system_result(void)
 {
   char fpath[128];
   sprintf(fpath,"brd/%s/@/@vote",brd_sysop);
@@ -36,7 +36,7 @@ system_result()
 
 
 static int
-view_login_log()
+view_login_log(void)
 {
   char fpath[128];
   usr_fpath(fpath,cuser.userid,FN_LOG);
@@ -46,21 +46,21 @@ view_login_log()
 
 
 static int
-history()
+history(void)
 {
   more(FN_ETC_COUNTER, 0);
   return 0;
 }
 
 static int
-version()
+version(void)
 {
   more(FN_ETC_VERSION, 0);
   return 0;
 }
 
 static int
-today()
+today(void)
 {
   more("gem/@/@-act", 0);
   return 0;
@@ -68,21 +68,21 @@ today()
 
 #ifdef	HAVE_PERSON_DATA
 static int
-count_birth()
+count_birth(void)
 {
   more("gem/@/@-birth", 0);
   return 0;
 }
 
 static int
-count_age()
+count_age(void)
 {
   more("gem/@/@-yearsold", 0);
   return 0;
 }
 
 static int
-count_star()
+count_star(void)
 {
   more("gem/@/@-star", 0);
   return 0;
@@ -90,63 +90,63 @@ count_star()
 #endif
 
 static int
-popmax()
+popmax(void)
 {
   more("gem/@/@pop", 0);
   return 0;
 }
 
 static int
-yesterday()
+yesterday(void)
 {
   more("gem/@/@=act", 0);
   return 0;
 }
 
 static int 
-day()
+day(void)
 {
   more("gem/@/@-day", 0);
   return 0;
 }
 
 static int
-week()
+week(void)
 {
   more("gem/@/@-week", 0);
   return 0;
 }
 
 static int
-month()
+month(void)
 {
   more("gem/@/@-month", 0);
   return 0;
 }
 
 static int
-year()
+year(void)
 {
   more("gem/@/@-year", 0);
   return 0;
 }
 
 static int
-welcome()
+welcome(void)
 {
   film_out(FILM_WELCOME, -1);
   return 0;
 }
 
 static int
-resetbrd()
+resetbrd(void)
 {
   board_main();
   return 0;
 }
 
 static int
-x_sysload()
+x_sysload(void)
 {
   double load[3];
   char buf[80];
@@ -178,7 +178,7 @@ typedef struct
 
 
 int
-pad_view()
+pad_view(void)
 {
   int fd, count;
   Pad *pad;
@@ -222,7 +222,7 @@ pad_view()
 
 
 static void
-pad_draw()
+pad_draw(void)
 {
   int i, cc, fdr,len;
   FILE *fpw;
@@ -288,7 +288,7 @@ pad_draw()
 
 
 static int
-goodbye()
+goodbye(void)
 {
   char ans;
   bmw_save();
@@ -346,8 +346,8 @@ goodbye()
 
 
 void
-vs_head(title, mid)
-  char *title, *mid;
+vs_head(
+  char *title, char *mid)
 {
   char buf[40], ttl[60];
   int spc;
@@ -475,7 +475,7 @@ static char footer[160];
 
 
 void
-movie()
+movie(void)
 {
   static int orig_flag = -1;
   static time_t uptime = -1;
@@ -742,7 +742,7 @@ static MENU menu_admin[] =
 
 
 static int
-XoMbox()
+XoMbox(void)
 {
   if (HAS_PERM(PERM_DENYMAIL))
      vmsg("您的信箱被鎖了！");
@@ -752,9 +752,9 @@ XoMbox()
 }
 
 #ifdef HAVE_SIGNED_MAIL
-int m_verify();
+int m_verify(void);
 #endif
-int m_setmboxdir();
+int m_setmboxdir(void);
 
 
 static MENU menu_mail[] =
@@ -817,7 +817,7 @@ static MENU menu_mail[] =
 /* ----------------------------------------------------- */
 
 static int
-XoUlist()
+XoUlist(void)
 {
   xover(XZ_ULIST);
   return 0;
@@ -1152,7 +1152,7 @@ static MENU menu_service[] =
 
 #ifdef	HAVE_CHANGE_SKIN	
 static int
-sk_windtop_init()
+sk_windtop_init(void)
 {
   s_menu = menu_windtop;
   skin = 1;
@@ -1171,7 +1171,7 @@ MENU skin_main[] =
 #endif
 
 static int
-Gem()
+Gem(void)
 {
   XoGem("gem/.DIR", "", ((HAS_PERM(PERM_SYSOP|PERM_BOARD|PERM_GEM)) ? GEM_SYSOP : GEM_USER));
   return 0;
@@ -1233,7 +1233,7 @@ static MENU menu_main[] =
 
 #ifdef	TREAT
 static int
-goodbye1()
+goodbye1(void)
 {
   switch (vans("G)再別" NICKNAME " Q)取消？[Q] "))
   {
@@ -1270,8 +1270,8 @@ static MENU menu_treat[] =
 #endif
 
 static
-int count_len(data)
-  char *data;
+int count_len(
+  char *data)
 {
   int len;
   char *ptr,*tmp;
@@ -1330,7 +1330,7 @@ check_info(char *input)
 
 
 void
-menu()
+menu(void)
 {
   MENU *menu, *mptr, *table[17];
   unsigned int level, mode;
@@ -1485,7 +1485,7 @@ menu()
       }
 
       {
-	int (*func) ();
+	int (*func) (void);
 
 	func = mptr->func;
 	mode = (*func) ();

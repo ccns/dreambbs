@@ -31,15 +31,15 @@ nodelist_t *NODELIST = NULL;
 
 
 int
-nl_bynamecmp(a, b)
-  nodelist_t *a, *b;
+nl_bynamecmp(
+  nodelist_t *a, nodelist_t *b)
 {
   return str_cmp(a->name, b->name);
 }
 
 
 static int		/* 0:success  -1:fail */
-read_nodelist()
+read_nodelist(void)
 {
   int fd, size;
   struct stat st;
@@ -80,23 +80,23 @@ newsfeeds_t *NEWSFEEDS_G = NULL;
 
 
 int
-nf_byboardcmp(a, b)
-  newsfeeds_t *a, *b;
+nf_byboardcmp(
+  newsfeeds_t *a, newsfeeds_t *b)
 {
   return str_cmp(a->board, b->board);
 }
 
 
 int
-nf_bygroupcmp(a, b)
-  newsfeeds_t *a, *b;
+nf_bygroupcmp(
+  newsfeeds_t *a, newsfeeds_t *b)
 {
   return str_cmp(a->newsgroup, b->newsgroup);
 }
 
 
 static int		/* 0:success  -1:fail */
-read_newsfeeds()
+read_newsfeeds(void)
 {
   int fd, size;
   struct stat st;
@@ -147,7 +147,7 @@ int NCMCOUNT = 0;
 
 
 int			/* 0:success  -1:fail */
-read_ncmperm()
+read_ncmperm(void)
 {
   int fd, size;
   struct stat st;
@@ -182,7 +182,7 @@ int SPAMCOUNT = 0;
 
 
 static int		/* 0:success  -1:fail */
-read_spamrule()
+read_spamrule(void)
 {
   int fd, size;
   struct stat st;
@@ -221,7 +221,7 @@ read_spamrule()
 
 
 int			/* 1:success  0:failure */
-initial_bbs()
+initial_bbs(void)
 {
   chdir(BBSHOME);		/* chdir to bbs_home first */
 

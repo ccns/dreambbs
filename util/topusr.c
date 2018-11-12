@@ -21,9 +21,9 @@
 DATA toplogins[TOPNUM], topposts[TOPNUM], topstay[TOPNUM];
 
 int
-sort_compare(p1, p2)
-  const void *p1;
-  const void *p2;
+sort_compare(
+  const void *p1,
+  const void *p2)
 {
   DATA *a1, *a2;
 
@@ -34,8 +34,8 @@ sort_compare(p1, p2)
 }
 
 DATA *
-findmin(src)
-  DATA *src;
+findmin(
+  DATA *src)
 {
   int i;
   DATA *p;
@@ -48,10 +48,10 @@ findmin(src)
 }
 
 void
-merge_id_nick(dst, userid, nick)
-  char *dst;
-  char *userid;
-  char *nick;
+merge_id_nick(
+  char *dst,
+  char *userid,
+  char *nick)
 {
   if (*userid)
   {
@@ -65,10 +65,10 @@ merge_id_nick(dst, userid, nick)
 }
 
 void
-write_data(title, data,mode)
-  char *title;
-  DATA *data;
-  int mode;
+write_data(
+  char *title,
+  DATA *data,
+  int mode)
 {
   char buf[256];
   int i;
@@ -121,7 +121,7 @@ Nickname[m)             [1;36m®É¼Æ[m\n-----------------------------\
 }
 
 int
-main()
+main(void)
 {
   char c;
 

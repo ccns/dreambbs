@@ -12,8 +12,8 @@
 static UCACHE *ushm;
 
 static void *
-attach_shm(shmkey, shmsize)
-  int shmkey, shmsize;
+attach_shm(
+  int shmkey, int shmsize)
 {
   void *shmptr;
   int shmid;
@@ -27,9 +27,9 @@ attach_shm(shmkey, shmsize)
 
 
 int
-bsend(callee, bmw)
-  UTMP *callee;
-  BMW *bmw;
+bsend(
+  UTMP *callee,
+  BMW *bmw)
 {
   BMW *mpool, *mhead, *mtail, **mslot;
   int i;
@@ -75,9 +75,9 @@ bsend(callee, bmw)
 
 
 void
-bedit(up, bmw)
-  UTMP *up;
-  BMW *bmw;
+bedit(
+  UTMP *up,
+  BMW *bmw)
 {
   bmw->recver = up->userno;	/* 先記下 userno 作為 check */
 
@@ -89,9 +89,9 @@ bedit(up, bmw)
 }
 
 int
-main(argc, argv)
-  int argc;
-  char **argv;
+main(
+  int argc,
+  char **argv)
 {
   UTMP *up, *uceil;
   BMW bmw;

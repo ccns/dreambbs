@@ -18,13 +18,13 @@ extern XZ xz[];
 /* ----------------------------------------------------- */
 
 
-static int banmail_add();
+static int banmail_add(XO *xo);
 
 
 static void
-banmail_item(num, ban)
-  int num;
-  BANMAIL *ban;
+banmail_item(
+  int num,
+  BANMAIL *ban)
 {
   time_t now;
   char modes[7];
@@ -37,8 +37,8 @@ banmail_item(num, ban)
 }
 
 static int
-banmail_body(xo)
-  XO *xo;
+banmail_body(
+  XO *xo)
 {
   BANMAIL *banmail = NULL;
   int num, max, tail;
@@ -70,8 +70,8 @@ banmail_body(xo)
 
 
 static int
-banmail_head(xo)
-  XO *xo;
+banmail_head(
+  XO *xo)
 {
   vs_head("¾×«H¦Cªí", str_site);
   outs("\
@@ -82,8 +82,8 @@ banmail_head(xo)
 
 
 static int
-banmail_load(xo)
-  XO *xo;
+banmail_load(
+  XO *xo)
 {
   xo_load(xo, sizeof(BANMAIL));
   return banmail_body(xo);
@@ -91,16 +91,16 @@ banmail_load(xo)
 
 
 static int
-banmail_init(xo)
-  XO *xo;
+banmail_init(
+  XO *xo)
 {
   xo_load(xo, sizeof(BANMAIL));
   return banmail_head(xo);
 }
 
 static int
-banmail_sync(xo)
-  XO *xo;
+banmail_sync(
+  XO *xo)
 {
   char *fpath;
   int fd, size=0;
@@ -145,9 +145,9 @@ banmail_sync(xo)
 
 
 static int
-banmail_edit(banmail,echo)
-  BANMAIL *banmail;
-  int echo;
+banmail_edit(
+  BANMAIL *banmail,
+  int echo)
 {
   int change = 0;
   char modes[8],buf[64];
@@ -181,8 +181,8 @@ banmail_edit(banmail,echo)
 
 
 static int
-banmail_add(xo)
-  XO *xo;
+banmail_add(
+  XO *xo)
 {
     BANMAIL banmail;
 
@@ -197,8 +197,8 @@ banmail_add(xo)
 }
 
 static int
-banmail_delete(xo)
-  XO *xo;
+banmail_delete(
+  XO *xo)
 {
 
   if (vans(msg_del_ny) == 'y')
@@ -213,8 +213,8 @@ banmail_delete(xo)
 
 
 static int
-banmail_change(xo)
-  XO *xo;
+banmail_change(
+  XO *xo)
 {
   BANMAIL *banmail, mate;
   int pos, cur;
@@ -237,8 +237,8 @@ banmail_change(xo)
 }
 
 static int
-banmail_help(xo)
-  XO *xo;
+banmail_help(
+  XO *xo)
 {
   film_out(FILM_BANMAIL, -1);
   return banmail_head(xo);
@@ -263,7 +263,7 @@ KeyFunc banmail_cb[] =
 
 
 int
-BanMail()
+BanMail(void)
 {
   XO *xo;
   char fpath[64];
@@ -277,7 +277,7 @@ BanMail()
 }
 
 void
-post_mail()
+post_mail(void)
 {
    XO *xx;
    char fpath[64];

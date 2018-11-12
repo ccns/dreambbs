@@ -54,17 +54,17 @@ static int sync_size, sync_head;
 
 
 static int
-sync_cmp(s1, s2)
-  SyncData *s1, *s2;
+sync_cmp(
+  SyncData *s1, SyncData *s2)
 {
   return s1->chrono - s2->chrono;
 }
 
 
 static void
-sync_init(fname, uptime)
-  char *fname;
-  time_t uptime;
+sync_init(
+  char *fname,
+  time_t uptime)
 {
   int ch, prefix;
   time_t chrono;
@@ -144,9 +144,9 @@ sync_init(fname, uptime)
 
 
 static void
-sync_check(flog, fname)
-  FILE *flog;
-  char *fname;
+sync_check(
+  FILE *flog,
+  char *fname)
 {
   char *str, fpath[80];
   SyncData *xpool, *xtail;
@@ -179,10 +179,10 @@ sync_check(flog, fname)
 
 
 static void
-expire(flog, brd, sync)
-  FILE *flog;
-  life *brd;
-  int sync;
+expire(
+  FILE *flog,
+  life *brd,
+  int sync)
 {
   HDR hdr;
   struct stat st;
@@ -327,9 +327,9 @@ expire(flog, brd, sync)
 
 
 static int
-brdbno(bname,count)
-  char *bname;
-  int count;
+brdbno(
+  char *bname,
+  int count)
 {
   BRD *brdp, *bend;
   int bno;
@@ -350,9 +350,9 @@ brdbno(bname,count)
 }
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   FILE *fp;
   int number, count;

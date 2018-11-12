@@ -1,9 +1,9 @@
 #include "bbs.h"
 
 int
-Get_Socket(site, sock)  /* site for hostname, sock for port & socket */
-  char *site;
-  int *sock;
+Get_Socket(  /* site for hostname, sock for port & socket */
+  char *site,
+  int *sock)
 {
   struct sockaddr_in sin;
   struct hostent *host;
@@ -54,8 +54,8 @@ Get_Socket(site, sock)  /* site for hostname, sock for port & socket */
 
 
 int
-POP3_Check(site, account, passwd)
-  char *site, *account, *passwd;
+POP3_Check(
+  char *site, char *account, char *passwd)
 {
   FILE *fsock = NULL;
   int sock=110,old_sock = 0;
@@ -126,8 +126,8 @@ POP3_Check(site, account, passwd)
 
 
 int
-Ext_POP3_Check(site, account, passwd)
-  char *site, *account, *passwd;
+Ext_POP3_Check(
+  char *site, char *account, char *passwd)
 {
   FILE *fsock = NULL;
   int sock=110,step=1;

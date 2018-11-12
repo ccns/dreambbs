@@ -51,7 +51,7 @@ med3(
   char* a, 
   char* b,
   char* c,
-  int (*cmp) ()
+  int (*cmp) (void *a, void *b)
 )
 {
   return cmp(a, b) < 0 ?
@@ -64,7 +64,7 @@ xsort(
   void *a,
   size_t n,
   size_t es,
-  int (*cmp) ()
+  int (*cmp) (void *a, void *b)
 )
 {
   char *pa, *pb, *pc, *pd, *pl, *pm, *pn;
@@ -175,7 +175,7 @@ int_cmp(
 }
 
 
-main()
+int main(void)
 {
   int *x, *y, *z, n;
 

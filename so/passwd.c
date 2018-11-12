@@ -1,7 +1,7 @@
 #include "bbs.h"
 
 int
-new_passwd()
+new_passwd(void)
 {
 	ACCT acct;
 	FILE *fp;

@@ -20,16 +20,16 @@ extern XZ xz[];
 /* ----------------------------------------------------- */
 
 int
-cmpbmw(benz)
-BMW *benz;
+cmpbmw(
+BMW *benz)
 {
 	return benz->recver == cuser.userno;
 }
 
 static int
-aloha_find(fpath, aloha)
-char *fpath;
-ALOHA *aloha;
+aloha_find(
+char *fpath,
+ALOHA *aloha)
 {
 	ALOHA new;
 	int pos = 0, fd;
@@ -56,16 +56,16 @@ ALOHA *aloha;
 }
 
 static void
-aloha_item(num, aloha)
-int num;
-ALOHA *aloha;
+aloha_item(
+int num,
+ALOHA *aloha)
 {
 	prints("%6d     %s\n", num, aloha->userid);
 }
 
 static int
-aloha_body(xo)
-XO *xo;
+aloha_body(
+XO *xo)
 {
 	ALOHA *aloha;
 	int num, max, tail;
@@ -102,8 +102,8 @@ XO *xo;
 
 
 static int
-aloha_head(xo)
-XO *xo;
+aloha_head(
+XO *xo)
 {
 	vs_head("上站通知名單", str_site);
 	outs("\
@@ -114,8 +114,8 @@ XO *xo;
 
 
 static int
-aloha_load(xo)
-XO *xo;
+aloha_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(ALOHA));
 	return aloha_body(xo);
@@ -123,16 +123,16 @@ XO *xo;
 
 
 static int
-aloha_init(xo)
-XO *xo;
+aloha_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(ALOHA));
 	return aloha_head(xo);
 }
 
 static int
-aloha_loadpal(xo)
-XO *xo;
+aloha_loadpal(
+XO *xo)
 {
 	int pos, i, max;
 	char fpath[64], path[64];
@@ -169,8 +169,8 @@ XO *xo;
 }
 
 static int
-aloha_add(xo)
-XO *xo;
+aloha_add(
+XO *xo)
 {
 	char path[64];
 	BMW bmw;
@@ -206,8 +206,8 @@ XO *xo;
 }
 
 static int
-aloha_rangedel(xo)
-XO *xo;
+aloha_rangedel(
+XO *xo)
 {
 	char buf[8];
 	int head, tail, fd;
@@ -262,8 +262,8 @@ XO *xo;
 }
 
 static int
-aloha_delete(xo)
-XO *xo;
+aloha_delete(
+XO *xo)
 {
 	if (vans(msg_del_ny) == 'y')
 	{
@@ -281,8 +281,8 @@ XO *xo;
 }
 
 static int
-aloha_help(xo)
-XO *xo;
+aloha_help(
+XO *xo)
 {
 	film_out(FILM_ALOHA, -1);
 	return aloha_head(xo);
@@ -310,7 +310,7 @@ KeyFunc aloha_cb[] =
 
 
 int
-t_aloha()
+t_aloha(void)
 {
 	XO *xo;
 	char fpath[64];

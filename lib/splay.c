@@ -15,7 +15,7 @@ SplayNode*
 splay_in(
   SplayNode *top,
   void *data,
-  int (*compare)()
+  int (*compare)(void *lhs, void *rhs)
 )
 {
   int splay_cmp;

@@ -37,8 +37,8 @@ typedef struct
 
 
 static char
-nbrd_attr(nbrd)
-NBRD *nbrd;
+nbrd_attr(
+NBRD *nbrd)
 {
 	if (nbrd->mode & (NBRD_REJECT | NBRD_STOP))
 		return 'R';
@@ -55,10 +55,10 @@ NBRD *nbrd;
 }
 
 static int
-nbrd_stamp(folder, nbrd, fpath)
-char *folder;
-NBRD *nbrd;
-char *fpath;
+nbrd_stamp(
+char *folder,
+NBRD *nbrd,
+char *fpath)
 {
 	char *fname, *family = NULL;
 	int rc;
@@ -87,10 +87,10 @@ char *fpath;
 }
 
 static void
-nbrd_fpath(fpath, folder, nbrd)
-char *fpath;
-char *folder;
-NBRD *nbrd;
+nbrd_fpath(
+char *fpath,
+char *folder,
+NBRD *nbrd)
 {
 	char *str = NULL;
 	int cc;
@@ -105,8 +105,8 @@ NBRD *nbrd;
 }
 
 static int
-nbrd_init(xo)
-XO *xo;
+nbrd_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(NBRD));
 	return nbrd_head(xo);
@@ -114,8 +114,8 @@ XO *xo;
 
 
 static int
-nbrd_load(xo)
-XO *xo;
+nbrd_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(NBRD));
 	return nbrd_body(xo);
@@ -123,9 +123,9 @@ XO *xo;
 
 
 static void
-nbrd_item(num, nbrd)
-int num;
-NBRD *nbrd;
+nbrd_item(
+int num,
+NBRD *nbrd)
 {
 	if (nbrd->mode & NBRD_NBRD)
 		prints("%6d %c %-5s %-13s %-13s:%-22.22s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, nbrd->brdname, nbrd->title);
@@ -137,8 +137,8 @@ NBRD *nbrd;
 
 
 static int
-nbrd_body(xo)
-XO *xo;
+nbrd_body(
+XO *xo)
 {
 	NBRD *nbrd;
 	int num, max, tail;
@@ -177,8 +177,8 @@ XO *xo;
 
 
 static int
-nbrd_head(xo)
-XO *xo;
+nbrd_head(
+XO *xo)
 {
 	clear();
 	vs_head("³s¸p¨t²Î", NULL);
@@ -189,10 +189,10 @@ XO *xo;
 }
 
 static int
-nbrd_find(xo, ptr, mode)
-XO *xo;
-char *ptr;
-int mode;
+nbrd_find(
+XO *xo,
+char *ptr,
+int mode)
 {
 	int pos = 0, fd;
 	NBRD nbrd;
@@ -218,8 +218,8 @@ int mode;
 
 
 static int
-nbrd_add(xo)
-XO *xo;
+nbrd_add(
+XO *xo)
 {
 	int fd, mode, days = 0, numbers = 0;
 	char *dir, fpath[80], buf[IDLEN +1];
@@ -435,9 +435,9 @@ XO *xo;
 }
 
 static int
-nbrd_seek(fpath, mail)
-char *fpath;
-char *mail;
+nbrd_seek(
+char *fpath,
+char *mail)
 {
 	LOG email;
 	int pos = 0, fd;
@@ -464,8 +464,8 @@ char *mail;
 }
 
 static int
-nbrd_join(xo)
-XO *xo;
+nbrd_join(
+XO *xo)
 {
 	NBRD *nbrd;
 	int fd, fv, lock;
@@ -670,8 +670,8 @@ XO *xo;
 }
 
 static int
-nbrd_start(xo)
-XO *xo;
+nbrd_start(
+XO *xo)
 {
 	NBRD *nbrd;
 	char fpath[80], buf[128], tmp[10];
@@ -708,8 +708,8 @@ XO *xo;
 }
 
 static int
-nbrd_reject(xo)
-XO *xo;
+nbrd_reject(
+XO *xo)
 {
 	NBRD *nbrd;
 	char path[128], fpath[128];
@@ -756,8 +756,8 @@ XO *xo;
 }
 
 static int
-nbrd_close(xo)
-XO *xo;
+nbrd_close(
+XO *xo)
 {
 	NBRD *nbrd;
 
@@ -780,8 +780,8 @@ XO *xo;
 }
 
 static int
-nbrd_open(xo)
-XO *xo;
+nbrd_open(
+XO *xo)
 {
 	NBRD *nbrd;
 
@@ -804,8 +804,8 @@ XO *xo;
 
 #ifdef	TEST_COSIGN
 static int
-nbrd_zero(xo)
-XO *xo;
+nbrd_zero(
+XO *xo)
 {
 	NBRD *nbrd;
 
@@ -820,8 +820,8 @@ XO *xo;
 #endif
 
 static int
-nbrd_browse(xo)
-XO *xo;
+nbrd_browse(
+XO *xo)
 {
 	NBRD *nbrd;
 	char fpath[80];
@@ -833,8 +833,8 @@ XO *xo;
 }
 
 static int
-nbrd_delete(xo)
-XO *xo;
+nbrd_delete(
+XO *xo)
 {
 	NBRD *nbrd;
 	char fpath[80];
@@ -855,8 +855,8 @@ XO *xo;
 }
 
 static int
-nbrd_cross(xo)
-XO *xo;
+nbrd_cross(
+XO *xo)
 {
 	char xboard[20], fpath[80], xfolder[80], buf[80];
 	HDR xpost;
@@ -909,8 +909,8 @@ XO *xo;
 }
 
 static int
-nbrd_help(xo)
-XO *xo;
+nbrd_help(
+XO *xo)
 {
 	film_out(FILM_SIGNUP, -1);
 	return nbrd_head(xo);

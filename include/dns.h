@@ -56,8 +56,8 @@ typedef union
 }     querybuf;			/* response of DNS query */
 
 static inline unsigned short
-getshort(c)
-  unsigned char *c;
+getshort(
+  unsigned char *c)
 {
   unsigned short u;
 

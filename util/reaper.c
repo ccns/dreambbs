@@ -113,8 +113,8 @@ BCACHE *bshm;
 
 #ifdef DEBUG
 static void
-logit(msg)
-  char *msg;
+logit(
+  char *msg)
 {
   FILE *fp;
   fp = fopen("reaper.debug.log","a+");
@@ -125,8 +125,8 @@ logit(msg)
 
 
 static void *
-attach_shm(shmkey, shmsize)
-  register int shmkey, shmsize;
+attach_shm(
+  register int shmkey, register int shmsize)
 {
   register void *shmptr;
   register int shmid;
@@ -140,8 +140,8 @@ attach_shm(shmkey, shmsize)
 }
 
 static void
-userno_free(uno)
-  int uno;
+userno_free(
+  int uno)
 {
   off_t off;
   int fd;
@@ -170,9 +170,9 @@ userno_free(uno)
 
 
 static void
-levelmsg(str, level)
-  char *str;
-  int level;
+levelmsg(
+  char *str,
+  int level)
 {
   static char perm[] = "bctpjm#x--------PTCMSNL*B#KGACBS";
   int len = 32;
@@ -190,9 +190,9 @@ levelmsg(str, level)
 
 
 static void
-datemsg(str, chrono)
-  char *str;
-  time_t *chrono;
+datemsg(
+  char *str,
+  time_t *chrono)
 {
   struct tm *t;
 
@@ -231,9 +231,9 @@ static int *plist;
 static int numC;
    
 static void
-eaddr_group(userno, eaddr)
-  int userno;
-  char *eaddr;
+eaddr_group(
+  int userno,
+  char *eaddr)
 {
   int left, right, mid, i;
   int hash = str_hash(eaddr,0);
@@ -277,7 +277,7 @@ eaddr_group(userno, eaddr)
 }
 
 static void
-report_eaddr_group()
+report_eaddr_group(void)
 {
   int i, j, cnt;
   off_t off;
@@ -341,9 +341,9 @@ report_eaddr_group()
 #endif
 
 static int
-bm_list(userid,msg)                 /* 顯示 userid 是哪些板的板主 */
-  char *userid;
-  char *msg;
+bm_list(                 /* 顯示 userid 是哪些板的板主 */
+  char *userid,
+  char *msg)
 {
   int len, ch;
   BRD *bhdr, *tail;
@@ -390,9 +390,9 @@ bm_list(userid,msg)                 /* 顯示 userid 是哪些板的板主 */
 }
 
 static void
-reaper(fpath, lowid)
-  char *fpath;
-  char *lowid;
+reaper(
+  char *fpath,
+  char *lowid)
 {
   int fd, login;
   unsigned int ulevel;
@@ -554,8 +554,8 @@ reaper(fpath, lowid)
 
 
 static void
-traverse(fpath)
-  char *fpath;
+traverse(
+  char *fpath)
 {
   DIR *dirp;
   struct dirent *de;
@@ -585,7 +585,7 @@ traverse(fpath)
 }
 
 static int
-check_vacation()
+check_vacation(void)
 {
   struct tm ptime,*xtime;
   int now,i;
@@ -603,7 +603,7 @@ check_vacation()
 }
 
 int
-main()
+main(void)
 {
   int ch;
   time_t start, end;

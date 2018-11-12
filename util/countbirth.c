@@ -30,9 +30,9 @@
 #define	MAX_TODAY	(50)
 
 static int
-mail2usr(userid,fpath)
-  char *userid;
-  char *fpath;
+mail2usr(
+  char *userid,
+  char *fpath)
 {
   HDR mhdr;
   time_t now;

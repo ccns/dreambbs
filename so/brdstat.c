@@ -18,17 +18,17 @@ extern XZ xz[];
 extern BCACHE *bshm;
 
 static void
-bstat_item(num, bstat)
-int num;
-BSTAT *bstat;
+bstat_item(
+int num,
+BSTAT *bstat)
 {
 	prints("%6d   %-8.8s    %6d    %6d    %6d    %6d\n", num,
 		   bstat->type, bstat->n_reads, bstat->n_posts, bstat->n_news, bstat->n_bans);
 }
 
 static int
-bstat_body(xo)
-XO *xo;
+bstat_body(
+XO *xo)
 {
 	BSTAT *bstat;
 	int num, max, tail;
@@ -59,8 +59,8 @@ XO *xo;
 
 
 static int
-bstat_head(xo)
-XO *xo;
+bstat_head(
+XO *xo)
 {
 	BRD *brd;
 	int chn;
@@ -79,8 +79,8 @@ XO *xo;
 
 
 static int
-bstat_load(xo)
-XO *xo;
+bstat_load(
+XO *xo)
 {
 	xo_load(xo, sizeof(BSTAT));
 	return bstat_body(xo);
@@ -88,8 +88,8 @@ XO *xo;
 
 
 static int
-bstat_init(xo)
-XO *xo;
+bstat_init(
+XO *xo)
 {
 	xo_load(xo, sizeof(BSTAT));
 	return bstat_head(xo);
@@ -97,8 +97,8 @@ XO *xo;
 
 
 static int
-bstat_stat(xo)
-XO *xo;
+bstat_stat(
+XO *xo)
 {
 	BRD *brd;
 	int chn;
@@ -116,8 +116,8 @@ XO *xo;
 }
 
 static int
-bstat_clear(xo)
-XO *xo;
+bstat_clear(
+XO *xo)
 {
 	BRD *brd;
 	int chn;
@@ -144,8 +144,8 @@ XO *xo;
 }
 
 static int
-bstat_help(xo)
-XO *xo;
+bstat_help(
+XO *xo)
 {
 	//film_out(FILM_BSTAT, -1);
 	return bstat_head(xo);
@@ -167,8 +167,8 @@ KeyFunc bstat_cb[] =
 
 
 int
-main_bstat(xo)
-XO *xo;
+main_bstat(
+XO *xo)
 {
 	XO *xx;
 	char fpath[64];

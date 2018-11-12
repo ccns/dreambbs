@@ -28,8 +28,8 @@ int t_lines = b_lines + 1;
 extern UCACHE *ushm;
 
 static void
-m_biffn(userno)
-int userno;
+m_biffn(
+int userno)
 {
 	UTMP *utmp, *uceil;
 
@@ -267,8 +267,8 @@ del_pnote(notedata *pitem, int newflag)
  *                                          - add by wisely -   */
 
 static void
-show_pnote_hint(uid)
-char *uid;
+show_pnote_hint(
+char *uid)
 {
 	FILE *hintfile;
 	int i;
@@ -296,7 +296,7 @@ char *uid;
  *                                      - add by wisely         */
 
 static int
-p_edithint()
+p_edithint(void)
 {
 	char genbuf[200];
 
@@ -529,7 +529,7 @@ Pnote(int newflag)
  *                          - add by wisely 5/5/98 -    */
 
 static int
-p_call()
+p_call(void)
 {
 	char genbuf[200];
 
@@ -551,7 +551,7 @@ p_call()
  * 就可以使用囉.
  */
 static int
-p_read()
+p_read(void)
 {
 	char ans[4];
 	char prompt[STRLEN];
@@ -571,7 +571,7 @@ p_read()
 }
 
 int
-main_note()
+main_note(void)
 {
 	char ans;
 	ans = vans("個人答錄機：R)閱\讀留言 C)錄製留言 E)更改問候語 Q)離開 [Q]：");

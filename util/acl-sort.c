@@ -25,9 +25,9 @@ typedef struct
 
 
 static int
-at_cmp(x, y)
-  AclText *x;
-  AclText *y;
+at_cmp(
+  AclText *x,
+  AclText *y)
 {
   char *tail1, *tail2;
   int c1, c2, diff;
@@ -56,8 +56,8 @@ at_cmp(x, y)
 
 
 static void
-at_out(top)
-  SplayNode *top;
+at_out(
+  SplayNode *top)
 {
   AclText *at;
 
@@ -74,8 +74,8 @@ at_out(top)
 
 
 static void
-acl_sort(fpath)
-  char *fpath;
+acl_sort(
+  char *fpath)
 {
   FILE *fp;
   int len, domain;
@@ -117,9 +117,9 @@ acl_sort(fpath)
 }
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   if (argc != 2)
   {

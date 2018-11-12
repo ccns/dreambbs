@@ -14,9 +14,9 @@ static char *userid;
 static char *username;
 
 static void
-out_post(hdr, board)
-  HDR *hdr;
-  char *board;
+out_post(
+  HDR *hdr,
+  char *board)
 {
   bntp_t bntp;
 
@@ -31,10 +31,10 @@ out_post(hdr, board)
 
 
 static void
-add_post(brdname, fpath, title)           /* 發文到看板 */
-  char *brdname;        /* 欲 post 的看板 */
-  char *fpath;          /* 檔案路徑 */
-  char *title;          /* 文章標題 */
+add_post(           /* 發文到看板 */
+  char *brdname,        /* 欲 post 的看板 */
+  char *fpath,          /* 檔案路徑 */
+  char *title)          /* 文章標題 */
 {
   HDR hdr;
   char folder[64];
@@ -52,9 +52,9 @@ add_post(brdname, fpath, title)           /* 發文到看板 */
 
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   char *fpath, *brdname, *title, *fname;
   FILE *fp;

@@ -46,9 +46,9 @@ typedef struct
 }      life;
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   int inf, count, outf, num, number;
   life table[MAXBOARD], *key;
@@ -107,7 +107,7 @@ main(argc, argv)
 
   if (count > 1)
   {
-    qsort(table, count, sizeof(life), (int (*)())strcasecmp);
+    qsort(table, count, sizeof(life), (int (*)(const void *a, const void *b))strcasecmp);
   }
 
 
@@ -132,7 +132,7 @@ main(argc, argv)
     memset(&brd,0,sizeof(BRD));
     memcpy(&brd,&old,sizeof(BRDOLD));
 
-    key = (life *) bsearch(brd.brdname, table, count, sizeof(life), (int (*)())strcasecmp);
+    key = (life *) bsearch(brd.brdname, table, count, sizeof(life), (int (*)(const void *a, const void *b))strcasecmp);
     if(key)
     {
       brd.expiremax = key->maxp;

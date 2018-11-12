@@ -23,8 +23,8 @@ typedef UTMP *pickup;
 
 
 static void *
-attach_shm(shmkey, shmsize)
-  int shmkey, shmsize;
+attach_shm(
+  int shmkey, int shmsize)
 {
   void *shmptr;
   int shmid;
@@ -46,9 +46,9 @@ attach_shm(shmkey, shmsize)
 static int pickup_way;
 
 char *
-bmode(up, simple)
-  UTMP *up;
-  int simple;
+bmode(
+  UTMP *up,
+  int simple)
 {
   static char modestr[32];
   int mode;
@@ -87,8 +87,8 @@ bmode(up, simple)
 
 
 static int
-can_see(up)
-  UTMP *up;
+can_see(
+  UTMP *up)
 {
   int count, *cache, datum, mid;
 
@@ -133,8 +133,8 @@ can_see(up)
 }
 
 static int
-is_bad(userno)
-  int userno;
+is_bad(
+  int userno)
 {
   int count, *cache, datum, mid;
 
@@ -160,8 +160,8 @@ is_bad(userno)
 }
 
 static int
-can_message(up)
-  UTMP *up;
+can_message(
+  UTMP *up)
 {
   int self, ufo, can;
 
@@ -188,8 +188,8 @@ can_message(up)
 
 
 static int
-can_override(up)
-  UTMP *up;
+can_override(
+  UTMP *up)
 {
   int self, ufo, can;
 
@@ -221,8 +221,8 @@ can_override(up)
 
 
 int
-is_pal(userno)
-  int userno;
+is_pal(
+  int userno)
 {
   int count, *cache, datum, mid;
 
@@ -249,16 +249,16 @@ is_pal(userno)
 
 
 static int
-int_cmp(a, b)
-  int *a;
-  int *b;
+int_cmp(
+  int *a,
+  int *b)
 {
   return *a - *b;
 }
 
 
 void
-pal_cache()
+pal_cache(void)
 {
   int count, fsize, ufo ;
   int *plist, *cache;
@@ -347,11 +347,11 @@ static char *msg_pickup_way[PICKUP_WAYS] =
 };
 
 static char 
-ck_state(in1,in2,up,mode)
-  int in1;
-  int in2;
-  UTMP *up;
-  int mode;
+ck_state(
+  int in1,
+  int in2,
+  UTMP *up,
+  int mode)
 {
 	if (up->ufo & in2)
 	  return '#';
@@ -369,8 +369,8 @@ ck_state(in1,in2,up,mode)
 
 
 static int
-ulist_body(xo)
-  XO *xo;
+ulist_body(
+  XO *xo)
 {
   pickup *pp;
   UTMP *up;
@@ -437,42 +437,42 @@ ulist_body(xo)
 
 
 static int
-ulist_cmp_userid(i, j)
-  UTMP **i, **j;
+ulist_cmp_userid(
+  UTMP **i, UTMP **j)
 {
   return str_cmp((*i)->userid, (*j)->userid);
 }
 
 
 static int
-ulist_cmp_host(i, j)
-  UTMP **i, **j;
+ulist_cmp_host(
+  UTMP **i, UTMP **j)
 {
   return str_cmp((*i)->from, (*j)->from);
 }
 
 static int
-ulist_cmp_idle(i, j)
-  UTMP **i, **j;
+ulist_cmp_idle(
+  UTMP **i, UTMP **j)
 {
   return (*i)->idle_time - (*j)->idle_time;
 }
 
 static int
-ulist_cmp_mode(i, j)
-  UTMP **i, **j;
+ulist_cmp_mode(
+  UTMP **i, UTMP **j)
 {
   return (*i)->mode - (*j)->mode;
 }
 
 static int
-ulist_cmp_nick(i, j)
-  UTMP **i, **j;
+ulist_cmp_nick(
+  UTMP **i, UTMP **j)
 {
   return str_cmp((*i)->username, (*j)->username);
 }
 
-static int (*ulist_cmp[]) () =
+static int (*ulist_cmp[]) (UTMP **i, UTMP **j) =
 {
   ulist_cmp_userid,
   ulist_cmp_host,
@@ -483,8 +483,8 @@ static int (*ulist_cmp[]) () =
 
 
 static int
-ulist_init(xo)
-  XO *xo;
+ulist_init(
+  XO *xo)
 {
   UTMP *up, *uceil;
   pickup *pp;
@@ -556,8 +556,8 @@ ulist_init(xo)
 
 
 static int
-ulist_neck(xo)
-  XO *xo;
+ulist_neck(
+  XO *xo)
 {
   printf("  排列方式：[\033[1m%s\033[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\033[m\n"
     "\033[30;47m No.  代號         %-22s%-13s   PM %-14s閒置 \033[m\n",
@@ -568,14 +568,14 @@ ulist_neck(xo)
 
 
 static int
-ulist_head(xo)
-  XO *xo;
+ulist_head(
+  XO *xo)
 {
   return ulist_neck(xo);
 }
 
 static void
-reset_utmp()
+reset_utmp(void)
 {
   cutmp->userno = cuser.userno;
   cutmp->ufo = cuser.ufo;
@@ -586,9 +586,9 @@ reset_utmp()
 
 
 int
-main(argc, argv)
-  int argc;
-  char *argv[];
+main(
+  int argc,
+  char *argv[])
 {
   XO xo;
   char fpath[128];
