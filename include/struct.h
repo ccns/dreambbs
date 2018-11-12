@@ -1156,11 +1156,4 @@ typedef struct
 		    char reason[20];
 }      PAYCHECK;
 
-typedef struct
-{
-  unsigned short int connect_port;
-  unsigned short int __reserved;
-  unsigned long int source_addr;
-} proxy_connection_info_t;
-
 #endif				/* _STRUCT_H_ */
