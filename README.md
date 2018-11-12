@@ -14,7 +14,7 @@ LICENSE for **piaip's more** module, please view `maple/pmore.c` instead.
 
 ## Build New BBS
 
-* Please pull [dreambbs_snap](https://github.com/holishing/dreambbs_snap) repository to add the essential files.
+* Please pull [dreambbs_snap](https://github.com/ccns/dreambbs_snap) repository to add the essential files.
 
 ## Directory Structure
 
