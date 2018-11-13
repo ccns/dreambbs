@@ -112,7 +112,7 @@ XO *xo)
 	sprintf(buf, "(剪貼版 %d 篇)\n", MailGemBufferNum);
 
 //	outs("[←]離開 [→]瀏覽 [f]模式 [C]暫存 [F]轉寄 [Z]下載 [h]說明   ");
-	outs("[←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明   "); /*r2.20170802: diable "Z" option
+	outs("[←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明   "); /*r2.20170802: disable "Z" option
                                                                         in case of confusion*/
 	outs(buf);
 	outs("\033[44m\

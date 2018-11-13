@@ -351,7 +351,7 @@ valid_chatid(
 }
 
 
-/* Case Independent strcmp : 1 ==> euqal */
+/* Case Independent strcmp : 1 ==> equal */
 
 
 /* Thor.990211: 統一使用dao library */
@@ -364,7 +364,7 @@ valid_chatid(
 /* ----------------------------------------------------- */
 /* 0 : equal            ("foo", "foo")                   */
 /* -1 : mismatch        ("abc", "xyz")                   */
-/* ow : similar         ("goo", "good")                  */
+/* o.w. : similar       ("goo", "good")                  */
 /* ----------------------------------------------------- */
 
 

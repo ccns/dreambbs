@@ -4203,7 +4203,7 @@ KeyFunc post_cb[] =
   Thor.980911: 考慮提供刪除指令, 方便版主
   -------------------------------------------------------------------------*/
 #if 0
-extern XO *xpost_xo;		/* Thor: dynamic programmin for variable dir
+extern XO *xpost_xo;		/* Thor: dynamic programming for variable dir
 							 * name */
 extern XO *ypost_xo;
 #endif

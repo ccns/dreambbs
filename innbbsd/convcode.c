@@ -119,7 +119,7 @@ static char *
 hzconvert(
   char *src,			/* source char buffer pointer */
   char *dst,			/* destination char buffer pointer */
-  void (*dbcvrt) (unsigned char *src, unsigned char *dst))		/* º~¦r 2-byte conversion funcntion */
+  void (*dbcvrt) (unsigned char *src, unsigned char *dst))		/* º~¦r 2-byte conversion function */
 {
   int len;
   char *end, *p;

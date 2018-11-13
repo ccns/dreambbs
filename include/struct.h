@@ -727,7 +727,7 @@ typedef struct
 /* Screen Line buffer modes */
 
 
-#define SL_MODIFIED	(1)	/* if line has been modifed, screen output */
+#define SL_MODIFIED	(1)	/* if line has been modified, screen output */
 #define SL_STANDOUT	(2)	/* if this line contains standout code */
 #define SL_ANSICODE	(4)	/* if this line contains ANSI code */
 

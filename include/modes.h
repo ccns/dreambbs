@@ -113,7 +113,7 @@ static char *ModeTypeTable[] =
   "MIME讀信",       /* M_MIME */
   "養雞場",         /* M_CHICKEN */
   "其他",           /* M_XMODE */
-  "我的最愛"        /* MyFavorate */
+  "我的最愛"        /* MyFavorite */
 };
 
 

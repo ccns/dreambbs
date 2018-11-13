@@ -1573,7 +1573,7 @@ XoBM(
     xz[XZ_PAL - XO_ZONE].xo = xt = xo_new(fpath);
     xover(XZ_PAL);		/* Thor: 進xover前, pal_xo 一定要 ready */
 
-    /* build userno image to speed up, maybe upgreade to shm */
+    /* build userno image to speed up, maybe upgrade to shm */
 
     bm_image();
 
@@ -1743,7 +1743,7 @@ my_query(
 #define	BMW_FORMAT	"\033[1;33;46m★%s \033[37;45m %s \033[m"
 #define BMW_FORMAT_BC	"\033[1;37;45m★%s \033[1;33;46m %s \033[m"
 /* patch by visor : BMW_LOCAL_MAX >= BMW_PER_USER 
-   以免進入無線迴圈                               */
+   以免進入無限迴圈                               */
 #define	BMW_LOCAL_MAX	10	
 
 

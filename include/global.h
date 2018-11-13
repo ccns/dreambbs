@@ -142,7 +142,7 @@
 #define	FN_CHATDATA_LOG		"run/chatdata.log"
 #define FN_VAR_SYSHISTORY	"run/var/counter"	/* 歷史紀錄 */
 #ifdef  HAVE_ANONYMOUS
-/* Thor.980727:lkchu patch: anonymouse post log */
+/* Thor.980727:lkchu patch: anonymous post log */
 #define FN_ANONYMOUS_LOG	"run/anonymous.log"	/* 匿名板紀錄 */
 #endif
 #define FN_BANMAIL_LOG	"run/banmail.log"	/* 擋信紀錄 */
@@ -169,7 +169,7 @@
 #ifdef  HAVE_RECOMMEND
 #define	FN_RECOMMEND_LOG	"run/recommend.log"	/* 推薦文章 */
 #endif
-						/* MailSevice 使用紀錄 */
+						/* MailService 使用紀錄 */
 #define	FN_MANAGER_LOG	"run/manager.log"	/* 站務列表 */
 #define	FN_BMLIST_LOG	"run/bmlist.log"	/* 板主列表 */
 #define	FN_MATCH_LOG	"run/match.log"		/* 特殊搜尋 */
@@ -374,7 +374,7 @@ ______________________________________________________________________________"
 /* ----------------------------------------------------- */
 VAR pid_t currpid;		/* current process ID */
 VAR unsigned int bbsmode;		/* bbs operating mode, see modes.h */
-VAR int bbstate;		/* bbs operatine state */
+VAR int bbstate;		/* bbs operating state */
 VAR int bbsothermode;
 VAR int supervisor;
 VAR UTMP *cutmp;

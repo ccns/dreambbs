@@ -41,7 +41,7 @@ typedef struct
 
 #define POST_READ	       0x000000001	/* already read */
 #define POST_MARKED	       0x000000002	/* marked */
-#define POST_GEM	       0x000000004	/* gemed */
+#define POST_GEM	       0x000000004	/* gemmed */
 #define POST_CANCEL	       0x000000040	/* canceled */
 #define POST_DELETE	       0x000000080	/* deleted */
 #define	POST_INCOME	       0x000000100	/* 轉信進來的 */

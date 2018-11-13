@@ -470,7 +470,7 @@ channelreader(
     }
   }
 
-  /* Thor.980825: gc patch: 如果已經執行過 CMDquit, 下面的動作都不用做了(client destroied) :) */
+  /* Thor.980825: gc patch: 如果已經執行過 CMDquit, 下面的動作都不用做了(client destroyed) :) */
   /* if (client->mode == 0) */
   if (client->mode == 0 && client->in.data != NULL)
   {
@@ -650,7 +650,7 @@ inndchannel(void)
   int i, fd, sock;
   char *nodename, hostname[128];
   time_t uptime1;		/* time to maintain history */
-  time_t uptime2;		/* time in initail_bbs */
+  time_t uptime2;		/* time in initial_bbs */
   time_t now;
   struct tm *ptime;
   struct timeval to;
@@ -677,7 +677,7 @@ inndchannel(void)
   FD_SET(sock, &rfd);
 
   /* --------------------------------------------------- */
-  /* initail history maintain time			 */
+  /* initial history maintain time			 */
   /* --------------------------------------------------- */
 
   time(&uptime1);  
@@ -685,7 +685,7 @@ inndchannel(void)
   i = (HIS_MAINT_HOUR - ptime->tm_hour) * 3600 + (HIS_MAINT_MIN - ptime->tm_min) * 60;
   uptime1 += i;
 
-  uptime2 = 0;		/* force to initail_bbs in the first time */
+  uptime2 = 0;		/* force to initial_bbs in the first time */
 
   /* --------------------------------------------------- */
   /* initial channel					 */

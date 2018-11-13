@@ -209,7 +209,7 @@ deal_bntp(void)
   if (rename("innd/out.bntp", OUTING))	/* 沒有新文章 */
     return;
 
-  /* initail 各 node 的 feedfd */
+  /* initial 各 node 的 feedfd */
   for (i = 0; i < NLCOUNT; i++)
   {
     node = NODELIST + i;

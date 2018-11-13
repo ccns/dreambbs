@@ -217,7 +217,7 @@ acct_userno(
 /* return value :					 */
 /* 0 : 使用直接按 enter ==> cancel			 */
 /* -1 : bad user id					 */
-/* ow.: 傳回該 userid 之 userno				 */
+/* o.w.: 傳回該 userid 之 userno				 */
 /* ----------------------------------------------------- */
 
 int
