@@ -15,9 +15,7 @@
 /* ----------------------------------------------------- */
 
 /* OS */
-
 char *genpasswd(char *pw);
-
 
 /* ----------------------------------------------------- */
 /* prototypes						 */
@@ -59,6 +57,7 @@ void brd_edit(int bno);
 int a_editbrd(void);
 int u_verify(void);
 /* bbsd.c */
+void blog(char *mode, char *msg);
 void u_exit(char *mode);
 void abort_bbs(void);
 /* board.c */
@@ -66,8 +65,8 @@ void brh_get(time_t bstamp, int bhno);
 int brh_unread(time_t chrono);
 void brh_visit(int mode);
 void brh_add(time_t prev, time_t chrono, time_t next);
-int Ben_Perm(BRD *bhdr, unsigned int ulevel);
 void remove_perm(void);
+int Ben_Perm(BRD *bhdr, unsigned int ulevel);
 int bstamp2bno(time_t stamp);
 void brh_load(void);
 void brh_save(void);
@@ -120,6 +119,7 @@ int gem_gather(XO *xo);
 void XoGem(char *folder, char *title, int level);
 void gem_main(void);
 /* mail.c */
+void ll_new(void);
 void ll_add(char *name);
 int ll_del(char *name);
 int ll_has(char *name);
@@ -187,7 +187,7 @@ int BanMail(void);
 void post_mail(void);
 /* talk.c */
 char *bmode(UTMP *up, int simple);
-//int can_message(UTMP *up);  /* r2.20180518: to be checked or fixed */
+int can_message(UTMP *up);
 int is_boardpal(UTMP *up);
 int is_pal(int userno);
 int is_banmsg(int userno);
@@ -230,7 +230,7 @@ void clrtohol(void);
 void clrtoeol(void);
 void clrtobot(void);
 void outc(int ch);
-void outs(unsigned char *str);
+void outs(const char *str);
 int expand_esc_star_visio(char *buf, const char *src, int szbuf);
 void outx(unsigned char *str);
 void outz(unsigned char *msg);
@@ -251,10 +251,11 @@ void grayout(int type);
 void add_io(int fd, int timeout);
 int igetch(void);
 BRD *ask_board(char *board, int perm, char *msg);
-int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max, int echo);
+int vget(int line, int col, const char *prompt, const char *data, int max, int echo);
 int vans(char *prompt);
 int vkey(void);
 /* xover.c */
+XO *xo_new(char *path);
 XO *xo_get(char *path);
 void xo_load(XO *xo, int recsiz);
 void xo_fpath(char *fpath, char *dir, HDR *hdr);
@@ -276,6 +277,7 @@ int xo_cursor(int ch, int pagemax, int num, int *pageno, int *cur, int *redraw);
 /* favorite.c */
 void favorite_main(void);
 /* socket.c */
+int Get_Socket(char *site, int *sock);
 int POP3_Check(char *site, char *account, char *passwd);
 int Ext_POP3_Check(char *site, char *account, char *passwd);
 /* popupmenu.c */
@@ -287,12 +289,12 @@ int Every_Z_Screen(void);
 int popupmenu_ans2(char *desc[], char *title, int x, int y);
 int pmsg2(char *msg);
 /* myfavorite.c */
+void brd2myfavorite(BRD *brd, HDR *gem);
 int MyFavorite(void);
 int myfavorite_find_chn(char *brdname);
 void myfavorite_parse(char *fpath);
 void myfavorite_main(void);
 int class_add(XO *xo);
-
 
 /* ----------------------------------------------------- */
 /* macros						 */
