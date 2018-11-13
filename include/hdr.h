@@ -32,7 +32,7 @@ typedef struct
   char title[73];		/* ¥DÃD (TTLEN + 1) */
 }          HDR;
 
-/* gopher url <A6>r<A6><EA><A1>Gxname + owner + nick + date */
+/* gopher url ¦r¦ê¡Gxname + owner + nick + date */
 #define        GEM_URLEN       (32 + 80 + 50 + 9 - 1)
 
 /* ----------------------------------------------------- */

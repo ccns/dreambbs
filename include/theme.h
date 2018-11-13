@@ -111,7 +111,7 @@ COLOR1 " 瀏覽 P.%d (%d%%) " COLOR2 " (h)說明 [PgUp][PgDn][0][$]移動 (/n)搜尋 (C)
 COLOR1 " 轉信設定 " COLOR2 " (↑/↓)上下 (PgUp/PgDn)上下頁 (Home/End)首尾 (←)(q)離開           "
 
 #define FEETER_VOTEALL  \
-	COLOR1 " 禮禱簡翹瞻瞻瞻? " COLOR2 " (癒繫/癒繭)瞻W瞻U (PgUp/PgDn)瞻W瞻U簫繞 (Home/End)簫繙禮? (癒繩)禮禱簡翹 (癒繹)(q)?繩繞}  "
+	COLOR1 " 投票中心 " COLOR2 " (↑/↓)上下 (PgUp/PgDn)上下頁 (Home/End)首尾 (→)投票 (←)(q)離開  "
 
 /* ----------------------------------------------------- */
 /* 站簽：站台來源簽名                                    */

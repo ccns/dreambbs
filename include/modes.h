@@ -238,10 +238,10 @@ static char *ModeTypeTable[] =
 
 //cache,20101119
 
-#define PALTYPE_PAL     0               /* ÂªBÂ¤?Â¦WÂ³Ã¦ */
-#define PALTYPE_LIST    1               /* Â¸sÂ²?Â¦WÂ³Ã¦ */
-#define PALTYPE_BPAL    2               /* ÂªOÂ¤?Â¦WÂ³Ã¦ */
-#define PALTYPE_VOTE    3               /* Â­Â­Â¨Ã®Â§Ã«Â²Â¼Â¦WÂ³Ã¦ */
+#define PALTYPE_PAL     0               /* ªB¤Í¦W³æ */
+#define PALTYPE_LIST    1               /* ¸s²Õ¦W³æ */
+#define PALTYPE_BPAL    2               /* ªO¤Í¦W³æ */
+#define PALTYPE_VOTE    3               /* ­­¨î§ë²¼¦W³æ */
 
 
 
