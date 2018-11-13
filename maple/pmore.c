@@ -2,7 +2,7 @@
 /* this version of pmore.c is modified by cache
  * cache.bbs@bbs.ee.ncku.edu.tw
  *
- * It sohuld be OK to compile by gcc4.3 for M3-itoc BBS and M3-WindTop DreamBBS
+ * It should be OK to compile by gcc4.3 for M3-itoc BBS and M3-WindTop DreamBBS
  *
  * Rev log
  *
@@ -24,7 +24,7 @@
  * pmore: piaip's more, a new replacement for traditional pager
  *
  * piaip's new implementation of pager(more) with mmap,
- * designed for unlimilited length(lines).
+ * designed for unlimited length(lines).
  *
  * "pmore" is "piaip's more", NOT "PTT's more"!!!
  * pmore is designed for general maple-family BBS systems, not
@@ -82,7 +82,7 @@
  *  - Wrap long lines [done]
  *  - Left-right wide navigation [done]
  *  - DBCS friendly wrap [done]
- *  - Reenrtance for main procedure [done]
+ *  - Reentrance for main procedure [done]
  *  - Support PTT_PRINTS [done]
  *  - ASCII Art movie support [done]
  *  - ASCII Art movie navigation keys [pending]
@@ -106,8 +106,8 @@
  *  - Reject waterball (instant message) when playing movie
  *  - Support Anti-anti-idle (ex, PCMan sends up-down)
  *  - Deal or disable Ctrl-U (invokes userlist then waiting one more key)
- *  - Virtual Contatenate [pending]
- *  - Drop ANSI between DBCS words if outputing UTF8 [drop, done by term]
+ *  - Virtual Concatenate [pending]
+ *  - Drop ANSI between DBCS words if outputting UTF8 [drop, done by term]
  */
 
 // --------------------------------------------------------------- <FEATURES>
@@ -277,7 +277,7 @@
  #undef PMORE_HAVE_VKEY
  #undef PMORE_IGNORE_UNKNOWN_NAVKEYS
  #undef PMORE_AUTOEXIT_FIRSTPAGE
- #define PMORE_AUTONEXT_ON_PAGEFLIP  /*r2.170810: try differnt style for easy to read*/
+ #define PMORE_AUTONEXT_ON_PAGEFLIP  /*r2.170810: try different style for easy to read*/
  #define PMORE_AUTONEXT_ON_RIGHTKEY
  #ifndef  SHOW_USER_IN_TEXT
  # undef  PMORE_EXPAND_ESC_STAR
@@ -356,7 +356,7 @@
  *    - Because pmore is designed to work with very large files, it's costly to
  *      calculate the total line numbers (and not necessary).  But if we don't
  *      know about how many lines left can we display then when navigating by
- *      pages may result in a page with single line conent (if you set display
+ *      pages may result in a page with single line content (if you set display
  *      starting pointer to the real last line).
  *    - To overcome this issue, maxdisps is introduced. It tries to go backward
  *      one page from end of file (this operation is lighter than visiting
@@ -445,7 +445,7 @@ static int debug = 0;
 #endif
 
 /* Again, if you have a BBS system which optimized out* without recognizing
- * ANSI escapes, scrolling with ANSI text may result in melformed text (because
+ * ANSI escapes, scrolling with ANSI text may result in malformed text (because
  * ANSI escapes were "optimized" ). So here we provide a method to overcome
  * with this situation. However your should increase your I/O buffer to prevent
  * flickers.
@@ -1955,7 +1955,7 @@ mf_display(void)
                                     char ansicmd[16];
                                     sprintf(ansicmd, ANSI_MOVETO(%d,%d),
                                             lines+1, col-1+1);
-                                    /* to preven ANSI ESCAPE being tranlated as
+                                    /* to prevent ANSI ESCAPE being translated as
                                      * DBCS trailing byte. */
                                     outc(' ');
                                     /* move back one column */
@@ -2099,7 +2099,7 @@ mf_display_footer(
     }
 #endif
 
-    // determine pges
+    // determine pages
     if (mf.maxlinenoS >= 0)
     {
         allpages =
@@ -2267,7 +2267,7 @@ PMORE_UINAV_FORWARDPAGE(void)
 {
     /* Usually, a forward is just mf_forward(MFNAV_PAGE);
      * but because of wrapped lines...
-     * This function is used when user tries to nagivate
+     * This function is used when user tries to navigate
      * with page request.
      * If you want to a real page forward, don't use this.
      * That's why we have this special function.
@@ -2632,7 +2632,7 @@ _pmore2(
             case KEY_END:
                 mf_goBottom();
 #ifdef PMORE_ACCURATE_WRAPEND
-                /* allright. in design of pmore,
+                /* all right. in design of pmore,
                  * it's possible that when user navigates to file end,
                  * a wrapped line made nav not 100%.
                  */
