@@ -703,7 +703,7 @@ bm_setup(
     pmsg2("板主異動不加入日誌");      
   else
   {
-    char tmp[80], why[80];
+    char tmp[80], why[80], buf[80];
     pmsg2("板主異動已加入站長日誌");
     if (!vget(b_lines, 0, "請輸入異動理由：", why,40, DOECHO))
     {   
@@ -1107,7 +1107,7 @@ acct_setup(
         case 'o':
           {
             char command[256];
-            mode = select_mode('\0');
+            mode = select_mode(NULL);
             sprintf(command,"bin/stopperm %s %s %d %s %d &",u->userid,u->vmail,mode,cuser.userid,(int)time(0));
             system(command);
           }
@@ -2420,7 +2420,7 @@ a_editbrd(void)		/* cache.100618: 修改看板選項 */
   BRD *brd;
   char bname[IDLEN + 1];
 
-  if ( ( brd = ask_board(bname, BRD_R_BIT, NULL) ) )
+  if (brd = ask_board(bname, BRD_R_BIT, NULL))
   {
     bno = brd - bshm->bcache;
     brd_edit(bno);
