@@ -2490,7 +2490,7 @@ u_register(void)
   for(ans = 0 ; ans <= 1;ans++)
   {
     char msg[128];
-    sprintf(msg,"%s你願意遵守此規定嗎 ? [N]",ans ? "請在詳細看一遍 , ":"");
+    sprintf(msg,"%s你願意遵守此規定嗎 ? [N]",ans ? "請再詳細看一遍 , ":"");
     if(vans(msg) != 'y')
       return 0;
     bell();

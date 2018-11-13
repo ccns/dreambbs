@@ -314,12 +314,12 @@ log_user(
     if (log_num > 100 && log_num < 150)
     {
       sprintf(chatbuf, "%d: %p <%d>", log_num, cu, gline);
-      logit("travese user ", chatbuf);
+      logit("traverse user ", chatbuf);
     }
     else if (log_num == 100)
     {
       sprintf(chatbuf, "BOOM !! at line %d", gline);
-      logit("travese user ", chatbuf);
+      logit("traverse user ", chatbuf);
     }
     log_num++;
   }

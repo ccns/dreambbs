@@ -51,7 +51,7 @@ m_expire(void)
 	char buf[80];
 
 	move(22, 0);
-	outs("清除特定看板 cancal 之文章。");
+	outs("清除特定看板 cancel 之文章。");
 	if ((brd = ask_board(bname, BRD_R_BIT, NULL)))
 	{
 		sprintf(buf, "bin/expire 999 20000 20000 \"%s\" &", brd->brdname);

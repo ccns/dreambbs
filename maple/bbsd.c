@@ -220,7 +220,7 @@ void
 abort_bbs(void)
 {
   if (bbstate)
-    u_exit("AXXED");
+    u_exit("AXED");
   
   exit(0);
 }
