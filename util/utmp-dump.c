@@ -8,7 +8,6 @@
 
 #define	_MODES_C_
 
-
 #include "bbs.h"
 #include <sys/shm.h>
 
@@ -19,8 +18,8 @@ static int pal_count;
 static int *pal_pool;
 static UCACHE *ushm;
 static int can_see(UTMP *up);
+static int can_message(UTMP *up);
 typedef UTMP *pickup;
-
 
 static void *
 attach_shm(

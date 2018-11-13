@@ -682,3 +682,21 @@ rec_sync(
   return fsize;
 }
 
+int
+rec_append(
+  char *fpath,
+  void *data,
+  int size
+)
+{
+  register int fd;
+
+  if ((fd = open(fpath, O_WRONLY | O_CREAT | O_APPEND, 0600)) < 0)
+    return -1;
+
+  write(fd, data, size);
+  close(fd);
+
+  return 0;
+}
+

@@ -25,7 +25,7 @@ str_ansi(         /* strip ANSI code */
   char* dst, 
   char* str,
   int max
-  )
+)
 {
   int ch, ansi;
   char* tail;
@@ -94,6 +94,41 @@ str_cmp(
   return 0;
 }
 
+void
+str_cut(
+  char *dst,
+  char *src
+)
+{
+  int cc;
+
+  for (;;)
+  {
+    cc = *src++;
+    if (!cc)
+    {
+      *dst = '\0';
+      return;
+    }
+
+    if (cc == ' ')
+    {
+      while (*src == ' ')
+       src++;
+
+      while ((cc = *src++))
+      {
+       if (cc == ' ' || cc == '\n' || cc == '\r')
+         break;
+       *dst++ = cc;
+      }
+
+      *dst = '\0';
+      return;
+    }
+  }
+}
+
 /*-------------------------------------------------------*/
 /* lib/str_decode.c	( NTHU CS MapleBBS Ver 3.00 )	 */
 /*-------------------------------------------------------*/
@@ -107,7 +142,7 @@ str_cmp(
 /* ----------------------------------------------------- */
 
 
-static int
+int
 qp_code(
   register int x
 )
@@ -128,7 +163,7 @@ qp_code(
 /* ------------------------------------------------------------------ */
 
 
-static int
+int
 base64_code(
   register int x
 )
@@ -770,6 +805,20 @@ str_ncmp(
   }
 
   return 0;
+}
+
+void
+str_strip(     /* remove trailing space */
+  char *str
+)
+{
+  int ch;
+
+       do
+       {
+         ch = *(--str);
+       } while (ch == ' ' || ch == '\t');
+  str[1] = '\0';
 }
 
 /*

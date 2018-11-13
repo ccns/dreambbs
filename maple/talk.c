@@ -39,7 +39,6 @@ extern XZ xz[];
 static PAL_SHIP *pal_ship;
 static int can_see(UTMP *up);
 
-
 #ifdef EVERY_Z
 extern int vio_fd;		/* Thor.0725: 為talk,chat可用^z作準備 */
 extern int holdon_fd;
@@ -338,7 +337,7 @@ can_banmsg(
 #endif
 
 
-/*static */int
+int
 can_message(
   UTMP *up)
 {

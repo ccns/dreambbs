@@ -76,10 +76,11 @@ int rec_put(char *fpath, void *data, int size, int pos);
 int rec_put2(char *fpath, void *data, int size, int pos, int (*fchk)(void));
 int rec_ref(char *fpath, void *data, int size, int pos, int (*fchk)(void), void (*fref)(void));
 int rec_sync(char *fpath, int size, int (*fsync)(void), int (*fchk)(void));
+int rec_append(char *fpath, void *data, int size);
 /* splay.c */
-SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(void *x, void *y));
+SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(void *lhs, void *rhs));
 /* xsort.c */
-void xsort(void *a, size_t n, size_t es, int (*cmp)(void));
+void xsort(void *a, size_t n, size_t es, int (*cmp)(void *a, void *b));
 /* attr_lib.c */
 int attr_get(char *userid, int key, void *value);
 int attr_put(char *userid, int key, void *value);
@@ -101,6 +102,9 @@ char *str_add(char *dst, char *src);
 void str_ansi(char *dst, char *str, int max);
 void str_cat(char *dst, char *s1, char *s2);
 int str_cmp(char *s1, char *s2);
+void str_cut(char *dst, char *src);
+int qp_code(register int x);
+int base64_code(register int x);
 char *mm_getencode(unsigned char *str, char *code);
 void mm_getcharset(const char *str, char *charset, int size);
 int mmdecode(unsigned char *src, unsigned char encode, unsigned char *dst);
@@ -116,6 +120,7 @@ int str_len(char *str);
 void str_lower(char *dst, char *src);
 void str_lowest(char *dst, char *src);
 int str_ncmp(char *s1, char *s2, int n);
+void str_strip(char *str);
 void str_ncpy(char *dst, char *src, int n);
 char *str_ndup(char *src, int len);
 char *genpasswd(char *pw);

@@ -187,7 +187,6 @@ int BanMail(void);
 void post_mail(void);
 /* talk.c */
 char *bmode(UTMP *up, int simple);
-int can_message(UTMP *up);
 int is_boardpal(UTMP *up);
 int is_pal(int userno);
 int is_banmsg(int userno);

@@ -10,17 +10,9 @@
 /* notice : brdshm (board shared memory) synchronize     */
 /*-------------------------------------------------------*/
 
-
-#include	<stdio.h>
-#include	<ctype.h>
-#include	<sys/file.h>
-#include	<fcntl.h>
-#include	<time.h>
-#include	<signal.h>
 #include	"bbs.h"
 
 extern char *crypt(const char *key, const char *salt);
-
 
 //#define	LOG_FILE	"run/mailog"
 #define		LOG_FILE	FN_BBSMAILPOST_LOG
@@ -34,128 +26,6 @@ static int mymode = JUNK;
 
 static ACCT myacct;
 static char myfrom[128], mysub[128], myname[128], mypasswd[128], myboard[128], mytitle[128];
-
-/////////////////////// to be moved to common library //////////////////////////
-
-static int
-rec_append(
-  char *fpath,
-  void *data,
-  int size
-)
-{
-  register int fd;
-
-  if ((fd = open(fpath, O_WRONLY | O_CREAT | O_APPEND, 0600)) < 0)
-    return -1;
-
-  write(fd, data, size);
-  close(fd);
-
-  return 0;
-}
-
-static void
-strip_ansi(
-  char* buf,
-  char* str
-)
-{
-  register int ch, ansi;
-
-  for (ansi = 0; (ch = *str); str++)
-  {
-    if (ch == '\n')
-    {
-      break;
-    }
-    else if (ch == 27)
-    {
-      ansi = 1;
-    }
-    else if (ansi)
-    {
-      if (!strchr("[01234567;", ch))
-       ansi = 0;
-    }
-    else
-    {
-      *buf++ = ch;
-    }
-  }
-  *buf = '\0';
-}
-
-static int
-ci_strcmp(
-  register char* s1,
-  register char* s2
-)
-{
-  register int c1, c2, diff;
-
-  do
-  {
-    c1 = *s1++;
-    c2 = *s2++;
-    if (c1 >= 'A' && c1 <= 'Z')
-      c1 |= 32;
-    if (c2 >= 'A' && c2 <= 'Z')
-      c2 |= 32;
-    if ((diff = c1 - c2))
-      return (diff);
-  } while (c1);
-  return 0;
-}
-
-static void
-str_strip(     /* remove trailing space */
-  char *str
-)
-{
-  int ch;
-
-       do
-       {
-         ch = *(--str);
-       } while (ch == ' ' || ch == '\t');
-  str[1] = '\0';
-}
-
-static void
-str_cut(
-  char *dst,
-  char *src
-)
-{
-  int cc;
-
-  for (;;)
-  {
-    cc = *src++;
-    if (!cc)
-    {
-      *dst = '\0';
-      return;
-    }
-
-    if (cc == ' ')
-    {
-      while (*src == ' ')
-       src++;
-
-      while ((cc = *src++))
-      {
-       if (cc == ' ' || cc == '\n' || cc == '\r')
-         break;
-       *dst++ = cc;
-      }
-
-      *dst = '\0';
-      return;
-    }
-  }
-}
 
 static int
 acct_fetch(
@@ -178,8 +48,6 @@ acct_fetch(
   }
   return fd;
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 /* ----------------------------------------------------- */
 /* .BOARDS shared memory (cache.c)			 */
@@ -661,27 +529,27 @@ mailpost(void)
 	} while (fh == ' ' || fh == '\t');
       }
 
-      if (!ci_strcmp(key, "name"))
+      if (!str_cmp(key, "name"))
       {
 	strcpy(myname, token);
       }
-      else if (!ci_strcmp(key, "passwd") || !ci_strcmp(key, "password") || !ci_strcmp(key, "passward"))
+      else if (!str_cmp(key, "passwd") || !str_cmp(key, "password") || !str_cmp(key, "passward"))
       {
 	strcpy(mypasswd, token);
       }
-      else if (!ci_strcmp(key, "board"))
+      else if (!str_cmp(key, "board"))
       {
 	strcpy(myboard, token);
       }
-      else if (!ci_strcmp(key, "title") || !ci_strcmp(key, "subject"))
+      else if (!str_cmp(key, "title") || !str_cmp(key, "subject"))
       {
-	strip_ansi(mytitle, token);
+	str_ansi(mytitle, token, sizeof(mytitle));
       }
-      else if (!ci_strcmp(key, "digest"))
+      else if (!str_cmp(key, "digest"))
       {
 	mymode = DIGEST;
       }
-      else if (!ci_strcmp(key, "local"))
+      else if (!str_cmp(key, "local"))
       {
 	mymode = LOCAL_SAVE;
       }
@@ -730,7 +598,7 @@ mailpost(void)
 
       if ((ptr = strchr(token = mybuf + 9, '\n')))
 	*ptr = '\0';
-      strip_ansi(mysub, token);
+      str_ansi(mysub, token, sizeof(mytitle));
     }
 
     if ((++dirty > 70) || !readline(mybuf))
