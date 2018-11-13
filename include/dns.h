@@ -9,6 +9,8 @@
 /* update : 96/12/15					 */
 /*-------------------------------------------------------*/
 
+#define _DEFAULT_SOURCE 1
+
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/socket.h>
