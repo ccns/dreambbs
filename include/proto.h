@@ -251,7 +251,7 @@ void grayout(int type);
 void add_io(int fd, int timeout);
 int igetch(void);
 BRD *ask_board(char *board, int perm, char *msg);
-int vget(int line, int col, const char *prompt, const char *data, int max, int echo);
+int vget(int line, int col, char *prompt, char *data, int max, int echo);
 int vans(char *prompt);
 int vkey(void);
 /* xover.c */

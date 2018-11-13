@@ -1803,7 +1803,7 @@ vget_match(
 char lastcmd[MAXLASTCMD][80];
 
 
-int vget(int line,int col, const char *prompt, const char *data,int max,int echo)
+int vget(int line,int col, char* prompt, char* data,int max,int echo)
 {
   int ch, len;
   int x, y;
