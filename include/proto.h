@@ -229,7 +229,7 @@ void clrtohol(void);
 void clrtoeol(void);
 void clrtobot(void);
 void outc(int ch);
-void outs(const char *str);
+void outs(unsigned char *str);
 int expand_esc_star_visio(char *buf, const char *src, int szbuf);
 void outx(unsigned char *str);
 void outz(unsigned char *msg);
@@ -250,7 +250,7 @@ void grayout(int type);
 void add_io(int fd, int timeout);
 int igetch(void);
 BRD *ask_board(char *board, int perm, char *msg);
-int vget(int line, int col, char *prompt, char *data, int max, int echo);
+int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo);
 int vans(char *prompt);
 int vkey(void);
 /* xover.c */
