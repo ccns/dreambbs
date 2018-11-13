@@ -831,20 +831,15 @@ new_line:
     slp->width = cx;
 }
 
-
 void
-outs(
-  unsigned char *str)
+outs(const char *str)
 {
-  int ch;
-
-  while ((ch = *str))
-  {
-    outc(ch);
-    str++;
-  }
+    if (!str)
+    return;
+    while (*str) {
+    outc(*str++);
+    }
 }
-
 
 /* ----------------------------------------------------- */
 /* eXtended output: ¨q¥X user ªº name ©M nick		 */
@@ -1808,7 +1803,7 @@ vget_match(
 char lastcmd[MAXLASTCMD][80];
 
 
-int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo)
+int vget(int line,int col, const char *prompt, const char *data,int max,int echo)
 {
   int ch, len;
   int x, y;
