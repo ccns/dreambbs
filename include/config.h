@@ -35,7 +35,7 @@
 #endif
 
 #define BBSVERNAME      "DreamBBS"                    /* 版本名稱 */
-#define BBSVERSION      "v1.0-CURRENT"                /* 版本編號 */
+#define BBSVERSION      "Version 0.96-RC1"            /* 版本編號 */
 
 #ifndef SYSOPNICK
 #define SYSOPNICK       "夢之精靈"                  /* SYSOP 暱稱 */
