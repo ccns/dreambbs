@@ -334,13 +334,13 @@ gem_add(
     return XO_NONE;
 
   gtype = vans(level == GEM_SYSOP ?
-    "新增 A)rticle B)oard C)lass D)ata F)older G)opher P)aste Q)uit [Q] " :
+    "新增 A)rticle B)oard C)lass D)ata F)older P)aste Q)uit [Q] " :
     "新增 (A)文章 (F)卷宗 (P)貼複 (Q)取消？[Q] ");
 
   if (gtype == 'p')
     return gem_paste(xo);
 
-  if (gtype != 'a' && gtype != 'f' && gtype != 'g' &&
+  if (gtype != 'a' && gtype != 'f' &&
     (level != GEM_SYSOP || (gtype != 'b' && gtype != 'c' && gtype != 'd')))
     return XO_FOOT;
 
