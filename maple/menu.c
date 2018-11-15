@@ -11,7 +11,7 @@
 extern int t_aloha(void);
 extern BCACHE *bshm;
 extern UCACHE *ushm;
-int item_lenth[20]={0};
+int item_length[20]={0};
 
 extern time_t brd_visit[MAXBOARD];
 
@@ -1341,7 +1341,7 @@ menu(void)
       mode = 0;
       count = 0;
       while(count<20) 
-	item_lenth[count++] = 0;
+	item_length[count++] = 0;
       do
       {                
 	move(MENU_YPOS + mode, MENU_XPOS + 2);
@@ -1351,7 +1351,7 @@ menu(void)
 	  str = check_info(mptr->desc);
           sprintf(item,"\033[m(\033[1;36m%c\033[m)%s",*str,str+1);
           outs(item);
-          item_lenth[mode]=(cuser.ufo2 & UFO2_COLOR) ? strlen(item)-count_len(str)-2 : 0;
+          item_length[mode]=(cuser.ufo2 & UFO2_COLOR) ? strlen(item)-count_len(str)-2 : 0;
 	  /*outs("(\033[1;36m");
 	  outc(*str++);
 	  outs("\033[m)");

@@ -89,7 +89,7 @@
 #define	FN_ETC_JUSTIFIED_BMTA	"etc/justified.bmta"	/* BMTA 通過身分認證 */
 #define	FN_ETC_JUSTIFY		"etc/justify"		/* 身分認證的方法 */
 #define	FN_ETC_LOVEPAPER	"etc/lovepaper"		/* 情書產生器資料庫 */
-#define	FN_ETC_SPAMER_ACL	"etc/spamer.acl"	/* 站外 SPAM 名單 */
+#define	FN_ETC_SPAMMER_ACL	"etc/spamer.acl"	/* 站外 SPAM 名單 */
 #define	FN_ETC_MAIL_OVER	"etc/mail.over"		/* 信件超出上限 */
 #define	FN_ETC_MAILSERVICE	"etc/mailservice"	/* 電子郵件服務 */
 #define	FN_MATCH_MAIL		"etc/match.mail"	/* 告知特殊搜尋更新完畢 */
@@ -331,7 +331,7 @@
 #define STR_GUEST	"guest"
 #define STR_NEW		"new"
 
-#define	MSG_SEPERATOR	"\
+#define	MSG_SEPARATOR	"\
 ───────────────────────────────────────"
 #define MSG_BLINE	"\
 ______________________________________________________________________________"
@@ -408,7 +408,7 @@ VAR int  chk_mailstat	INI(0);
 VAR char *fn_dir	INI(FN_DIR);
 
 /* message */
-VAR char *msg_seperator	INI(MSG_SEPERATOR);
+VAR char *msg_separator	INI(MSG_SEPARATOR);
 
 VAR char *msg_cancel	INI(MSG_CANCEL);
 
@@ -431,7 +431,7 @@ VAR char *str_host	INI(MYHOSTNAME);
 VAR char *str_site	INI(BOARDNAME);
 
 #ifdef	HAVE_RECOMMEND
-VAR int recommand_time	INI(0);
+VAR int recommend_time	INI(0);
 #endif
 
 #if 0

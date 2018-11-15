@@ -57,8 +57,8 @@
 #define TAG_VALID       "[DreamBBS]To "             /* 身分認證函token */
 #endif
 
-#ifndef HIDEDN_SRC
-#define	HIDEDN_SRC      "bbs.ccns.ncku.edu.tw"      /* 隱藏來源位置 */
+#ifndef HIDDEN_SRC
+#define	HIDDEN_SRC      "bbs.ccns.ncku.edu.tw"      /* 隱藏來源位置 */
 #endif
 
 #ifndef BBSNAME
@@ -191,7 +191,7 @@
 
 #define	HAVE_DETECT_CROSSPOST	/* cross-post 自動偵測 *//* 2010/3/24 暫時停用 by float*/
 
-#define	HAVE_DETECT_VIOLAWATE	/* 違法紀錄 */
+#define	HAVE_DETECT_VIOLATELAW	/* 違法紀錄 */
 
 #define	HAVE_RESIST_WATER	/* 防灌水功能 */   
 
@@ -364,7 +364,7 @@
 #endif
 
 #ifdef	HAVE_RECOMMEND
-#define	RECOMMAND_TIME  (30)    /* 推文時間 */
+#define	RECOMMEND_TIME  (30)    /* 推文時間 */
 #endif
 
 #define LOGINATTEMPTS   (3)     /* 最大進站失誤次數 */

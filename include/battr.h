@@ -63,7 +63,7 @@ char *battrs[NUMATTRS] =
       "不可轉寄轉貼文章",
       "自動附加e-mail",
       "不擋信",
-#ifdef  HAVE_DETECT_VIOLAWATE
+#ifdef  HAVE_DETECT_VIOLATELAW
       "不紀錄站內違法",
 #else
       "不紀錄站內違法(系統功\能未開啟)",

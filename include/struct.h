@@ -179,7 +179,7 @@ typedef struct
 //#define	UFO_SIGN	BFLAG(15)	/* 簽名檔 */
 //#define	UFO_SHOWUSER	BFLAG(16)	/* 顯示 ID 和 暱稱 */
 
-#define UFO_HIDEDN	BFLAG(18)	/* 隱藏來源 */
+#define UFO_HIDDEN	BFLAG(18)	/* 隱藏來源 */
 #define UFO_CLOAK	BFLAG(19)	/* true if cloak was ON */
 //#define	UFO_ACL		BFLAG(20)	/* true if ACL was ON */
 #define	UFO_NET    BFLAG(21)	/* visor.991030: 網路程式 */ 
@@ -346,7 +346,7 @@ typedef struct
   char subject[TTLEN + 1];
   char rcpt[60];
   char filepath[77];
-  char *niamod;			/* reverse domain */
+  char *revdomain;			/* reverse domain */
 }      MailQueue;
 
 
@@ -1047,7 +1047,7 @@ typedef struct
   BSTAT twoweek;
   BSTAT month;
   BSTAT threemonth;
-  BSTAT herfyear;
+  BSTAT halfyear;
   BSTAT year;
   BSTAT lhour[24];
   BSTAT lday[24];

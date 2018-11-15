@@ -309,7 +309,7 @@ log_anonymous(
 }
 #endif
 
-#ifdef	HAVE_DETECT_VIOLAWATE
+#ifdef	HAVE_DETECT_VIOLATELAW
 	int
 seek_log(
 	char *title,
@@ -347,7 +347,7 @@ do_post(
 	bno = brd_bno(currboard);
 	brd = bshm->bcache + bno;
 
-#ifdef	HAVE_DETECT_VIOLAWATE
+#ifdef	HAVE_DETECT_VIOLATELAW
 	int banpost;
 #endif
 #ifdef  HAVE_DETECT_CROSSPOST
@@ -480,7 +480,7 @@ do_post(
 		hdr_stamp(folder, HDR_LINK | 'A', &post, fpath);
 	} while(strlen(post.date) != 8);
 
-#ifdef	HAVE_DETECT_VIOLAWATE
+#ifdef	HAVE_DETECT_VIOLATELAW
 	banpost = seek_log(ve_title,bbstate);
 #endif
 #ifdef	HAVE_DETECT_CROSSPOST
@@ -554,7 +554,7 @@ do_post(
 	}
 #endif
 
-#ifdef	HAVE_DETECT_VIOLAWATE   
+#ifdef	HAVE_DETECT_VIOLATELAW   
 	if(banpost)
 	{
 		move_post(&post, BRD_BANPOSTLOG, -1);
@@ -576,7 +576,7 @@ do_post(
 		/* Thor.990111: 已由 edit.c 中統一check */
 		brh_add( post.chrono, post.chrono,  post.chrono);
 		//post_history(xz[XZ_POST - XO_ZONE].xo, &post);
-#ifdef	HAVE_DETECT_VIOLAWATE
+#ifdef	HAVE_DETECT_VIOLATELAW
 		if (mode && !banpost)
 #else
 			if (mode)
@@ -1247,7 +1247,7 @@ post_cross(
 #endif
 
 				rec_bot(xfolder, &xpost, sizeof(xpost));
-#ifdef	HAVE_DETECT_VIOLAWATE        
+#ifdef	HAVE_DETECT_VIOLATELAW        
 				if (rc == 's' && (!(battr & BRD_NOTRAN)) && (!(seek_log(xpost.title,battr))))
 #else
 					if (rc == 's' && !(battr & BRD_NOTRAN))

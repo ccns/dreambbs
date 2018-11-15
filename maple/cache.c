@@ -21,7 +21,7 @@
 UMODELOG modelog; 
 time_t mode_lastchange; 
 #endif
-extern int item_lenth[20];
+extern int item_length[20];
 
 static void
 attach_err(
@@ -765,8 +765,8 @@ out_rle(
   int cc, rl;
 
   if(film)
-    move(1,0/*item_lenth[count++]*/);
-    //move(3,36+item_lenth[count++]);
+    move(1,0/*item_length[count++]*/);
+    //move(3,36+item_length[count++]);
   while ((cc = *str))
   {
     str++;
@@ -783,7 +783,7 @@ out_rle(
           getyx(&y,&x);    
           outs("\033[m\0");
           clrtoeol();
-          move(y + 1, 0/*item_lenth[count++]*/);
+          move(y + 1, 0/*item_length[count++]*/);
         }
         else
           outc(cc);
@@ -811,13 +811,13 @@ out_rle(
       getyx(&y,&x);
       outs("\033[m\0");
       clrtoeol();
-      move(y + 1, 0/*item_lenth[count++]*/);
+      move(y + 1, 0/*item_length[count++]*/);
       
     }
     else
       outc(cc);
   }
-/*  while(count>=0) item_lenth[count--]=0;*/
+/*  while(count>=0) item_length[count--]=0;*/
 }
 
 

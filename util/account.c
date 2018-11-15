@@ -17,7 +17,7 @@
 #define	ADJUST_M	10	/* adjust back 10 minutes */
 
 static char fn_today[] = "gem/@/@-act";	/* さらΩ参璸 */
-static char fn_yesday[] = "gem/@/@=act";	/* 琎らΩ参璸 */
+static char fn_yesterday[] = "gem/@/@=act";	/* 琎らΩ参璸 */
 
 /* ----------------------------------------------------- */
 /* 秨布shm 场斗籔 cache.c 甧			 */
@@ -997,7 +997,7 @@ main(void)
     sprintf(title, "[癘魁] %sセら荐杠肈", date);
     keeplog("gem/@/@-day", NULL, title, 0);
 
-    if ((fp = fopen(fn_yesday, "w")))
+    if ((fp = fopen(fn_yesterday, "w")))
     {
       f_suck(fp, fn_today);
       fclose(fp);

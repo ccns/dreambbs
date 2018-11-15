@@ -1560,7 +1560,7 @@ ve_filer(
       if(ve_op)
       {
 	fprintf(fp, ORIGIN_TAG,
-	  /*str_site, MYHOSTNAME,*/ ((cuser.ufo & UFO_HIDEDN)&&(str_cmp(cuser.userid,"guest"))) ? HIDEDN_SRC : fromhost);
+	  /*str_site, MYHOSTNAME,*/ ((cuser.ufo & UFO_HIDDEN)&&(str_cmp(cuser.userid,"guest"))) ? HIDDEN_SRC : fromhost);
 	
 	if((bbstate & BRD_LOGEMAIL) && !(bbsmode == M_SMAIL))
 	  fprintf(fp, EMAIL_TAG, cuser.email);

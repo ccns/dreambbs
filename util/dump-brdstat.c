@@ -28,7 +28,7 @@
 #define	ADJUST_M	10	/* adjust back 10 minutes */
 
 #define	YEAR_HOUR	(365 * 24)
-#define HERFYEAR_HOUR	(180 * 24)
+#define HALFYEAR_HOUR	(180 * 24)
 #define	THREEMONTH_HOUR	(90 * 24)
 #define	MONTH_HOUR	(30 * 24)
 #define	TWOWEEK_HOUR	(14 * 24)

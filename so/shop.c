@@ -93,7 +93,7 @@ int hidefrom_temp(void)
     return 0;
   }
 
-  if(cutmp->ufo & UFO_HIDEDN)
+  if(cutmp->ufo & UFO_HIDDEN)
   {
     pmsg2("您已經隱藏故鄉了！");
     return 0;
@@ -119,8 +119,8 @@ int hidefrom_temp(void)
   acct.money -= 4194304;  
   acct_save(&acct);
     
-  cuser.ufo ^= UFO_HIDEDN;
-  cutmp->ufo ^= UFO_HIDEDN;
+  cuser.ufo ^= UFO_HIDDEN;
+  cutmp->ufo ^= UFO_HIDDEN;
   
   acct_save(&cuser);
   pmsg2("故鄉已隱藏");

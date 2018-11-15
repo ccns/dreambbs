@@ -1388,7 +1388,7 @@ ban_addr(
 
   host = (char *) strchr(foo, '@');
   *host = '\0';
-  /* i = acl_has(FN_ETC_SPAMER_ACL, foo, host + 1); */
+  /* i = acl_has(FN_ETC_SPAMMER_ACL, foo, host + 1); */
   /* Thor.981223: 將bbsreg拒絕部分分開 */
   i = acl_has(FN_ETC_UNTRUST_ACL, foo, host + 1);
   /* *host = '@'; */
@@ -1734,7 +1734,7 @@ static char *UFO_FLAGS[] =
      "【保留】",
      "【保留】",
      "【保留】",
-     /* HIDEDN */ "隱藏來源",
+     /* HIDDEN */ "隱藏來源",
 
      /* CLOAK */  "隱身術",
      "【保留】"
@@ -2562,7 +2562,7 @@ scan_register_form(
     prints("真實姓名: %s    身分證號碼: %s(%s)\n", rform.realname,rform.idno,check_idno(rform.idno) ? "正確":"錯誤");
     prints("服務單位: %s\n", rform.career);
     prints("目前住址: %s\n", rform.address);
-    prints("連絡電話: %s\n%s\n", rform.phone, msg_seperator);
+    prints("連絡電話: %s\n%s\n", rform.phone, msg_separator);
     clrtobot();
 
     if ((acct_load(&muser, userid) < 0) || (muser.userno != rform.userno))
@@ -2706,7 +2706,7 @@ ans_request(void)
     {
       move(2,0);
       prints("申請代號: %s\n", form.userid);
-      prints("申請理由: %s\n%s\n", form.msg, msg_seperator);
+      prints("申請理由: %s\n%s\n", form.msg, msg_separator);
       clrtobot(); 
       if ((acct_load(&muser, form.userid) < 0) || (muser.userno != form.userno))
       {
