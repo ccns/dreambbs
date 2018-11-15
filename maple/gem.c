@@ -73,7 +73,7 @@ gem_manage(
         if ((ch == 0) || (ch == '/') || (ch == ']'))
           return 1;
       }
-      while (ch = *list++)
+      while ( (ch = *list++) )
       {
         if (ch == '/')
           break;
@@ -654,7 +654,7 @@ gem_browse(
           op = GEM_SYSOP;
 	else if ((op >= 0) && (brd_bits[op] & BRD_X_BIT))
 	  op = GEM_MANAGER;
-    else if (ptr = strrchr(ghdr->title, '['))
+    else if ( ( ptr = strrchr(ghdr->title, '[') ) )
       op = GEM_MANAGER;
 	else
 	  op = GEM_USER;

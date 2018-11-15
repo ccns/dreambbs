@@ -332,7 +332,7 @@ bsmtp(
     sprintf(title, TAG_VALID"%s(%s) [VALID]", cuser.userid, buf);
 
     usr_fpath(keyfile, cuser.userid, FN_REGKEY);
-    if (fp = fopen(keyfile, "w"))
+    if ( ( fp = fopen(keyfile, "w") ) )
     {
       fprintf(fp, "%s\n", buf);
       fclose(fp);
@@ -1341,7 +1341,7 @@ m_setforward(void)
   if (ip[0] && !not_addr(ip) &&
     vans("確定開啟信件轉寄功\能(Y/N)？[N] ") == 'y')
   {
-    if (fp = fopen(fpath, "w"))
+    if ( ( fp = fopen(fpath, "w") ) )
     {
       fprintf(fp, "%s", ip);
       fclose(fp);
@@ -1450,7 +1450,7 @@ forward_mail(
   char ip[80];
                                                                                 
   usr_fpath(ip, userid, FN_FORWARD);
-  if (fp = fopen(ip, "r"))
+  if ( ( fp = fopen(ip, "r") ) )
   {
     fscanf(fp, "%s", ip);
     fclose(fp);

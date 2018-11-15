@@ -600,7 +600,7 @@ tn_login(void)
      FILE *fp;  
      char buf[128];  
      move(18, 0);
-     if(fp = fopen("gem/@/@AD","r"))  
+     if( ( fp = fopen("gem/@/@AD","r") ) )  
        {  
          while(fgets(buf,sizeof(buf),fp))
          outs(buf);

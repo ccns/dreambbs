@@ -2420,7 +2420,7 @@ a_editbrd(void)		/* cache.100618: 修改看板選項 */
   BRD *brd;
   char bname[IDLEN + 1];
 
-  if (brd = ask_board(bname, BRD_R_BIT, NULL))
+  if ( ( brd = ask_board(bname, BRD_R_BIT, NULL) ) )
   {
     bno = brd - bshm->bcache;
     brd_edit(bno);
