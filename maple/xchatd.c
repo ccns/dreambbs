@@ -1963,7 +1963,6 @@ login_user(
 
   /* Xshadow: 取得 client 的來源 */
 
-  dns_name(cu->rhost, cu->ibuf);
   str_ncpy(cu->rhost, cu->ibuf, sizeof(cu->rhost));
 #if 0
   hp = gethostbyaddr(cu->rhost, sizeof(struct in_addr), AF_INET);
@@ -3004,16 +3003,6 @@ servo_daemon(
   time((time_t *) &value);
   gmtime((time_t *) &value);
   strftime(buf, 80, "%d/%b/%Y:%H:%M:%S", localtime((time_t *) &value));
-
-  /* --------------------------------------------------- */
-  /* speed-hacking DNS resolve                           */
-  /* --------------------------------------------------- */
-
-  dns_init();
-#if 0
-  gethostname(buf, sizeof(buf));
-  gethostbyname(buf);
-#endif
 
 #ifdef RLIMIT
   /* --------------------------------------------------- */

@@ -1328,12 +1328,6 @@ start_daemon(
 #endif //RLIMIT
 
   /* --------------------------------------------------- */
-  /* speed-hacking DNS resolve				 */
-  /* --------------------------------------------------- */
-
-  dns_init();
-
-  /* --------------------------------------------------- */
   /* change directory to bbshome       			 */
   /* --------------------------------------------------- */
 
@@ -1647,18 +1641,11 @@ int main(int argc, char *argv[])
     /* rfc931(&sin, fromhost, rusername); */
 
     tn_addr = connection_sin.sin_addr.s_addr;
-    /* Thor.990325: 修改dns_ident定義, 來自哪if連那 */
-    /* dns_ident(mport, &sin, fromhost, rusername); */
 
-#ifdef NOIDENT
     /* cache.090728: 連線不反查,增加速度 */
     unsigned char *addr;
     addr = (unsigned char *) &tn_addr;
     sprintf(fromhost, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
-#else
-    //TODO: 從自訂清單中比對DN 
-    dns_ident(0, &sin, fromhost, rusername);
-#endif
 
     telnet_init(); 
      

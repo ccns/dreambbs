@@ -11,8 +11,8 @@
 
 void
 url_encode(
-  unsigned char *dst, /* Thor.990331: 要 src的三倍空間 */
-  unsigned char *src
+  char *dst, /* Thor.990331: 要 src的三倍空間 */
+  const char *src
 )
 {
   for(; *src; src++)
