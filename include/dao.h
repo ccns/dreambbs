@@ -56,7 +56,7 @@ int not_addr(char *addr);
 /* shm.c */
 void *shm_new(int shmkey, int shmsize);
 /* url_encode.c */
-void url_encode(unsigned char *dst, unsigned char *src);
+void url_encode(char *dst, const char *src);
 /* archiv32.c */
 void archiv32(time_t chrono, char *fname);
 void archiv32m(time_t chrono, char *fname);
@@ -85,6 +85,9 @@ void xsort(void *a, size_t n, size_t es, int (*cmp)(void *a, void *b));
 int attr_get(char *userid, int key, void *value);
 int attr_put(char *userid, int key, void *value);
 int attr_step(char *userid, int key, int dflt, int step);
+/* header.c */
+void hdr_fpath(char *fpath, char *folder, HDR *hdr);
+int hdr_stamp(char *folder, int token, HDR *hdr, char *fpath);
 /* dns.c */
 void dns_init(void);
 unsigned long dns_addr(char *name);
@@ -92,9 +95,6 @@ void dns_ident(int sock, struct sockaddr_in *from, char *rhost, char *ruser);
 int dns_name(unsigned char *addr, char *name);
 int dns_open(char *host, int port);
 int dns_smtp(char *host);
-/* header.c */
-void hdr_fpath(char *fpath, char *folder, HDR *hdr);
-int hdr_stamp(char *folder, int token, HDR *hdr, char *fpath);
 /* rfc2047.c */
 void output_rfc2047_qp(FILE *fp, char *prefix, char *str, char *charset, char *suffix);
 /* string.c */
@@ -105,10 +105,10 @@ int str_cmp(char *s1, char *s2);
 void str_cut(char *dst, char *src);
 int qp_code(register int x);
 int base64_code(register int x);
-char *mm_getencode(unsigned char *str, char *code);
+char *mm_getencode(char *str, char *code);
 void mm_getcharset(const char *str, char *charset, int size);
-int mmdecode(unsigned char *src, unsigned char encode, unsigned char *dst);
-void str_decode(unsigned char *str);
+int mmdecode(char *src, char encode, char *dst);
+void str_decode(char *str);
 char *str_dup(char *src, int pad);
 void str_folder(char *fpath, char *folder, char *fname);
 void setdirpath(char *fpath, char *direct, char *fname);
@@ -127,7 +127,7 @@ char *genpasswd(char *pw);
 int chkpasswd(char *passwd, char *test);
 int str_pat(const char *str, const char *pat);
 char *str_rev(char *dst, char *src);
-int str_rle(unsigned char *str);
+int str_rle(char *str);
 void str_stamp(char *str, time_t *chrono);
 char *str_str(char *str, char *tag);
 char *str_sub(char *str, char *tag);
@@ -139,10 +139,10 @@ char *Atime(time_t *clock);
 char *Now(void);
 void str_trim(char *buf);
 char *str_ttl(char *title);
-void str_xor(unsigned char *dst, unsigned char *src);
+void str_xor(char *dst, const char *src);
 size_t strlcat(char *dst, const char *src, size_t siz);
 size_t strlcpy(char *dst, const char *src, size_t siz);
-int hash32(unsigned char *str);
+int hash32(const char *str);
 /* xwrite.c */
 int xwrite(int fd, char *data, int size);
 
