@@ -66,29 +66,6 @@ today(void)
   return 0;
 }
 
-#ifdef	HAVE_PERSON_DATA
-static int
-count_birth(void)
-{
-  more("gem/@/@-birth", 0);
-  return 0;
-}
-
-static int
-count_age(void)
-{
-  more("gem/@/@-yearsold", 0);
-  return 0;
-}
-
-static int
-count_star(void)
-{
-  more("gem/@/@-star", 0);
-  return 0;
-}
-#endif
-
 static int
 popmax(void)
 {
@@ -895,18 +872,7 @@ static MENU menu_information[] =
 
   {year, 0, M_READA,
   "3Year      セκ荐杠肈"},
-/*
-#ifdef  HAVE_PERSON_DATA
-  {count_birth, 0, M_READA,
-  "4Birthday  セる关琍参璸"},
 
-  {count_age, 0, M_READA,
-  "5YearsOld  ㄏノ闹参璸"},
-
-  {count_star, 0, M_READA,
-  "6Star      ㄏノ琍畒参璸"},
-#endif
-*/
   menu_xyz, PERM_MENU + 'L', M_MMENU,
   "参璸戈"
 };

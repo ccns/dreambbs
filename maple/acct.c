@@ -984,10 +984,6 @@ acct_setup(
 {
   ACCT x;
 
-#ifdef	HAVE_PERSON_DATA  
-  USER_ATTR attr;
-#endif
-
   int (*sm)(char *mail);
   
   int i, num,tmp,mode;
@@ -1197,77 +1193,6 @@ acct_setup(
     vget(i, 0, "居住地址：", str, sizeof(x.address), GCARRY);
   } while (str_len(str) < 8);
 
-#ifdef	HAVE_PERSON_DATA  
-  if(!adm)
-  {
-    int tmp,date[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
-    int echo;
-    
-    memset(&attr,0,sizeof(USER_ATTR));
-    if(attr_get(cuser.userid,ATTR_USER_KEY,&attr)>=0)
-      echo = GCARRY;
-    else
-      echo = DOECHO;
-      
-    {
-      i++;
-      sprintf(buf, "%d", attr.year);
-      vget(i, 0, "出生年(西元)：", buf, 5, echo);
-      tmp = atoi(buf);
-      if(tmp >=1900 && tmp <= 2038)
-        attr.year = tmp;
-      else
-        attr.year = 0;
-
-      i++;
-      sprintf(buf, "%d", attr.month);
-      vget(i, 0, "出生月：", buf, 3, echo);
-      tmp = atoi(buf);
-      if(tmp >=1 && tmp <= 12)
-        attr.month = tmp;
-      else
-        attr.month = 0;
-        
-      i++;
-      sprintf(buf, "%d", attr.day);
-      vget(i, 0, "出生日：", buf, 3, echo);
-      tmp = atoi(buf);
-      if(tmp >=1 && tmp <= date[attr.month-1])
-        attr.day = tmp; 
-      else
-        attr.day = 0;
-        
-      i++;
-      sprintf(buf, "%d", attr.sex);
-      vget(i, 0, "性別：1)男 2)女 0)沒有性別：", buf, 2, echo);
-      tmp = atoi(buf);
-      if(tmp >=0 && tmp <= 2)
-        attr.sex = tmp;
-      else
-        attr.sex = 0;
-      
-      i++;
-      sprintf(buf, "%d", attr.blood);
-      vget(i, 0, "血型：1)O 2)A 3)B 4)AB 0)不確定：", buf, 2, echo);
-      tmp = atoi(buf);
-      if(tmp >=0 && tmp <= 4)
-        attr.blood = tmp;      
-      else
-        attr.blood = 0;
-      
-      i++;
-      strcpy(buf,(attr.mode&USER_ATTR_SUPPORT) ? "y" : "n");
-      vget(i, 0, "是否提供讓人查詢生日性別等資料 [y/N]：", buf, 2, echo);
-      if(*buf =='y')
-        attr.mode |= USER_ATTR_SUPPORT;
-      else
-        attr.mode &= ~USER_ATTR_SUPPORT;
-      
-    }
-    
-  }
-#endif
-  
   if (adm)
   {
     i++;  
@@ -1380,10 +1305,6 @@ set_perm:
     if (acct_load(u, x.userid) >= 0)
       x.userlevel = u->userlevel;
   }
-#ifdef	HAVE_PERSON_DATA  
-  if(!adm)
-    attr_put(cuser.userid,ATTR_USER_KEY,&attr);
-#endif
 
   memcpy(u, &x, sizeof(x));
   acct_save(u);

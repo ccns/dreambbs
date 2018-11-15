@@ -14,9 +14,9 @@ SRCROOT	= ..
 .c.o:	; $(CC) $(MAKEFLAG) $(CFLAGS) -g -c $*.c
 
 EXE	= account acl-sort camera expire gem-check gem-index makeUSR \
-	  hdr-dump poststat reaper countstar rmbadmail restorebrd \
+	  hdr-dump poststat reaper rmbadmail restorebrd \
 	  mailpost bbsmail topusr acpro addsong userno template restoregem \
-	  checkemail match mailexpire countbirth countage utmp-dump \
+	  checkemail match mailexpire utmp-dump \
 	  stopperm mailtoall clean_acl makefw \
 	  resetvmail counter restoreusr makeusrno outgo redir \
 	  classtable_alert bmw-dump tranBRD \
@@ -42,9 +42,6 @@ clean_acl: clean_acl.o
 rmbadmail: rmbadmail.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
-countstar: countstar.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
 classtable_alert: classtable_alert.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
@@ -58,9 +55,6 @@ brdstat: brdstat.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 brdcheck: brdcheck.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-countage: countage.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 makeusrno: makeusrno.o
@@ -183,9 +177,6 @@ transusr: transusr.o
 transman: transman.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
-birth: birth.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
 yearsold: yearsold.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
@@ -193,9 +184,6 @@ star: star.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 test: test.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-countbirth: countbirth.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 showACCT: showACCT.o
