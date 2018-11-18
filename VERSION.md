@@ -14,12 +14,15 @@
         - `v0.95.1`: aka. `REV-BETA4.1`, detail fixes based on v0.95
         - `v0.95.2`: aka. `REV-BETA4.2`, detail fixes based on v0.95.1
         - `v0.95.3`: aka. `REV-BETA4.3`, plan to be the final release of `v0.95-testing`.
+        - It is going to be End-Of-Life after `v0.97` released.
 
     + `v0.96`: no `REV-BETA` prefix, just `DreamBBS Version 0.96`
         - features in plan: 
           * sorted common library and refined structure.
           * split out sample file to another repository.
           * other detail changes from Current version.
+        - `v0.96.1`:
+        - It is going to be End-Of-Life after `v0.98` released.
 
 * preparing version name about `current`:
     + `v1.0-CURRENT`: developing for preparing version 1.0.
@@ -30,8 +33,8 @@
 
 ## other plan
 + v1.0:
-    - features:
-    - fixes:
-    - changed:
+    - features (from Rev.Beta 3):
+    - fixes (from Rev.Beta 3):
+    - changed (from Rev.Beta 3):
 + v2.0:
 + v3.0:
