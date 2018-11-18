@@ -898,22 +898,6 @@ typedef struct
 /* 生日年齡星座統計 中運用的資料結構                     */
 /* ----------------------------------------------------- */
 
-#ifdef	HAVE_PERSON_DATA
-#define	USER_ATTR_SUPPORT	0x00000001
-
-
-typedef struct
-{
-  int year;
-  int month;
-  int day;
-  int sex;
-  int blood;
-  int mode;
-  char reserve[232];
-}	USER_ATTR;
-#endif
-
 typedef	struct
 {
   char *grad;

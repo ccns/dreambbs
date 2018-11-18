@@ -189,7 +189,7 @@ base64_code(
 
 static inline int
 isreturn(
-  unsigned char c
+  const char c
 )
 {
   return c == '\r' || c == '\n';
@@ -198,7 +198,7 @@ isreturn(
 
 static inline int 
 is_space(
-  unsigned char c
+  const char c
 )
 {
   return c == ' ' || c == '\t' || isreturn(c);
@@ -208,7 +208,7 @@ is_space(
 /* 取Content-Transfer-Encode 的第一個字元, 依照標準只可能是 q,b,7,8 這四個 */
 char*
 mm_getencode(
-  unsigned char* str,
+  char* str,
   char* code
 )
 {
@@ -301,12 +301,12 @@ mm_getcharset(
 /* 解 Header 的 mmdecode */
 static int
 mmdecode_header(
-  unsigned char* src,		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
-  unsigned char encode,		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
-  unsigned char* dst
+  char* src,		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
+  char encode,		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
+  char* dst
 )
 {
-  unsigned char* t;
+  char* t;
   int pattern, bits;
   int ch;
 
@@ -376,12 +376,12 @@ mmdecode_header(
 
 int
 mmdecode(	/* 解 Header 的 mmdecode */
-  unsigned char* src,		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
-  unsigned char encode,		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
-  unsigned char* dst
+  char* src,		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
+  char encode,		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
+  char* dst
 )
 {
-  unsigned char* t;
+  char* t;
   int pattern, bits;
   int ch;
 
@@ -447,12 +447,12 @@ mmdecode(	/* 解 Header 的 mmdecode */
 
 void
 str_decode(
-  unsigned char* str
+  char* str
 )
 {
   int adj;
-  unsigned char* src, *dst;
-  unsigned char buf[512];
+  char* src, *dst;
+  char buf[512];
 
   src = str;
   dst = buf;
@@ -462,7 +462,7 @@ str_decode(
   {
     if (*src != '=')
     {				/* Thor: not coded */
-      unsigned char* tmp = src;
+      char* tmp = src;
       while (adj && *tmp && is_space(*tmp))
 	tmp++;
       if (adj && *tmp == '=')
@@ -475,7 +475,7 @@ str_decode(
     }
     else			/* Thor: *src == '=' */
     {
-      unsigned char* tmp = src + 1;
+      char* tmp = src + 1;
       if (*tmp == '?')		/* Thor: =? coded */
       {
 	/* "=?%s?Q?" for QP, "=?%s?B?" for BASE64 */
@@ -638,7 +638,7 @@ str_from(
       }
       ptr[1] = '\0';
       strcpy(nick, from);
-      str_decode((unsigned char* )nick);
+      str_decode(nick);
     }
 
     from = langle + 1;
@@ -660,7 +660,7 @@ str_from(
 	  ptr++;
 
 	strcpy(nick, ptr);
-	str_decode((unsigned char* )nick);
+	str_decode(nick);
       }
     }
   }
@@ -1044,10 +1044,11 @@ str_rev(
 
 int
 str_rle(			/* run-length encoding */
-	unsigned char* str
+	char* str
 )
 {
-	unsigned char* src, *dst;
+	char* src;
+        char* dst;
 	int cc, rl;
 
 	dst = src = str;
@@ -1311,11 +1312,11 @@ str_ttl(
 /* update :   /  /                                       */ 
 /*-------------------------------------------------------*/ 
  
-//unsigned char* 
+//const char* 
 void
 str_xor(
-  unsigned char* dst, /* Thor.990409: 任意長度任意binary seq, 至少要 src那麼長*/
-  unsigned char* src  /* Thor.990409: 任意長度str, 不含 \0 */
+  char* dst, /* Thor.990409: 任意長度任意binary seq, 至少要 src那麼長*/
+  const char* src  /* Thor.990409: 任意長度str, 不含 \0 */
                       /* Thor: 結果是將src xor到dst上, 若有0結果, 則不變 ,
 			       所以dst長度必大於等於 src(以字串而言) */
 )
@@ -1408,7 +1409,7 @@ strlcpy(char* dst, const char* src, size_t siz)
 
 int
 hash32(
-  unsigned char *str
+  const char *str
 )
 {
   int xo, cc;

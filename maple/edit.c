@@ -1446,7 +1446,7 @@ ve_filer(
     break;
 
   case 'x':
-   if ((bbsmode == M_POST))   /* 板主發文 */
+   if (bbsmode == M_POST)   /* 板主發文 */
      curredit |= EDIT_RESTRICT;
    break;
 

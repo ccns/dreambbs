@@ -275,8 +275,6 @@
 
 #undef  HAVE_BOARD_SEE          /* PERM_ALLBOARD 可以看到全部看板 */
 
-#define	HAVE_PERSON_DATA        /* 提供生日等其他資料 */
-
 #define	HAVE_TERMINATOR         /* 終結文章大法 --- 拂花落楓斬 */
 
 #define HAVE_XYPOST             /* 文章串接模式 */
