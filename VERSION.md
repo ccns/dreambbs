@@ -28,7 +28,7 @@
     + `v1.0-CURRENT`: developing for preparing version 1.0.
     + `vX.0-CURRENT`: developing for preparing version X.0.
 
-* backports:
+* backports for `testing`:
     + something significant bug fixes or detail changed, port this commits back to `testing` version.
 
 ## other plan
