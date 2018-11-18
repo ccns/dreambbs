@@ -34,8 +34,8 @@
 #define MYHOSTNAME      "ccns.cc"                   /* 網路位址 */
 #endif
 
-#define BBSVERNAME      "DreamBBS"                    /* 版本名稱 */
-#define BBSVERSION      "Version 0.96-RC1"            /* 版本編號 */
+#define BBSVERNAME      "DreamBBS"                  /* 版本名稱 */
+#define BBSVERSION      "Version 0.96"              /* 版本編號 */
 
 #ifndef SYSOPNICK
 #define SYSOPNICK       "夢之精靈"                  /* SYSOP 暱稱 */
