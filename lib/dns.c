@@ -6,8 +6,6 @@
 /* update : 96/12/15					 */
 /*-------------------------------------------------------*/
 
-#define _XOPEN_SOURCE
-
 #include "dns.h"
 #include "bbs.h"        /* lkchu.981201: ¬O§_¦³ define HAVE_ETC_HOSTS */
 #include <signal.h>
