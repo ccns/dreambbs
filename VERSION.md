@@ -1,6 +1,6 @@
 # Version Managemant and Other Plan
 
-* why do this: for fun.
+* **Why do this: for fun.**
 
 * Previous Version Name: (`WindTop 3.10`) `Rev.Beta 3`
 
