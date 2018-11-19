@@ -32,6 +32,17 @@
     + something significant bug fixes or detail changed, port this commits back to `testing` version.
 
 ## other plan
+
+### ToDo
+* variable size test
+* vtuikit port test
+* pfterm port test
+* logind port test
+  - wsproxy port test
+* bbslua port test
+* Static Web Page Recovering
+
+### Version Number
 + v1.0:
     - features (from Rev.Beta 3):
     - fixes (from Rev.Beta 3):
