@@ -749,10 +749,7 @@ static MENU menu_mail[] =
 
   {"bin/contact.so:Contact", PERM_INTERNET, - M_XMODE,
   "Contact    聯絡名單"},
-#if 0
-  {m_internet, PERM_INTERNET, M_SMAIL,
-  "Internet   寄信到 Internet"},
-#endif
+
   {m_setforward, PERM_INTERNET, M_SMAIL,
   "AutoFor    站內信自動轉寄"},
 
