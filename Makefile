@@ -9,7 +9,7 @@
 OPSYS	!= uname -o
 
 # 需要 compile 的目錄
-# lib innbbsd maple so util
+# lib innbbsd maple so util test
 
 all:
 	@cd lib; $(MAKE) all
@@ -19,6 +19,7 @@ all:
 	@cd so; $(MAKE) all
 .endif
 	@cd util; $(MAKE) all
+	@cd test; $(MAKE) all test
 
 install:
 	@cd innbbsd; $(MAKE) install
@@ -34,3 +35,4 @@ clean:
 	@cd maple; $(MAKE) clean
 	@cd so; $(MAKE) clean
 	@cd util; $(MAKE) clean
+	@cd test; $(MAKE) clean

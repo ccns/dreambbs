@@ -507,22 +507,6 @@ str_decode(
   strcpy(str, buf);
 }
 
-
-#if 0
-int
-main()
-{
-  char buf[1024] = "=?Big5?B?pl7C0CA6IFtNYXBsZUJCU11UbyB5dW5sdW5nKDE4SzRGTE0pIFtWQUxJ?=\n\t=?Big5?B?RF0=?=";
-
-  str_decode(buf);
-  puts(buf);
-
-  buf[mmdecode("=A7=DA=A4@=AA=BD=B8I=A4=A3=A8=EC=A7=DA=BE=C7=AA=F8", 'q', buf)] = '\0';
-  puts(buf);
-}
-#endif
-
-
 char*
 str_dup(
   char* src,
@@ -934,9 +918,6 @@ chkpasswd(
 }
 /* str_pat : wild card string pattern match support ? * \ */
 
-
-
-
 int
 str_pat(
   const char* str,
@@ -1008,20 +989,7 @@ str_pat(
   return 1;
 }
 
-#if 0
-#define	STR_PAT(x, y)	printf("<%s, %s> : %d\n", x, y, str_pat(x, y))
 
-main()
-{
-  STR_PAT("a", "a*");
-  STR_PAT("abc", "a*");
-  STR_PAT("abc", "a*c");
-  STR_PAT("abc", "a?c");
-  STR_PAT("level", "l*l");
-  STR_PAT("level", "l*e*l");
-  STR_PAT("lelelelel", "l*l*l*l");
-}
-#endif	/* TEST */
 /* reverse the string */
 
 char*
@@ -1328,14 +1296,6 @@ str_xor(
       *dst = cc;
   } 
 } 
-
-#if 0
-main()
-{
-  char t[]="Hello";
-  printf(str_xor(t,"he3"));
-}
-#endif
 
 /* strlcat based on OpenBSDs strlcat */
 
