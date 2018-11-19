@@ -756,10 +756,6 @@ static MENU menu_mail[] =
   {m_setmboxdir, PERM_INTERNET, M_SMAIL,
   "Fixdir     重建信箱索引"},
 
-/*  
-  {"bin/lovepaper.so:lovepaper", PERM_INTERNET, - M_XMODE,
-  "LovePager  \033[1;31m情書產生器\033[m"},
-*/
 #ifdef HAVE_DOWNLOAD
   {m_zip, PERM_VALID, M_XMODE,
   "Zip        打包下載個人資料"},
@@ -772,15 +768,7 @@ static MENU menu_mail[] =
 */ 
   {mail_sysop, PERM_BASIC, M_SMAIL,
   "Yes Sir!   寄信給站長"},
-/* 
-#ifdef HAVE_MIME_TRANSFER
-  {"bin/imap4mail.so:Imap4mail", PERM_INTERNET, - M_XMODE,
-  "Mail       IMAP4郵件系統服務"},
-#endif
-
-  {"bin/pop3mail.so:Pop3mail", PERM_SYSOP, -M_XMODE,
-  "Pop3       POP3 郵件系統服務"},
-*/ 
+ 
   {menu_main, PERM_MENU + 'R', M_MMENU,	/* itoc.020829: 怕 guest 沒選項 */
   "電子郵件"}
 };
@@ -950,16 +938,7 @@ static MENU menu_user[] =
 
   {"bin/pnote.so:main_note", PERM_VALID, - M_XMODE,
   "PNote      個人答錄機"},
-/*
-  {"bin/adminutil.so:user_check_bm", PERM_BM, - M_XMODE,
-  "CheckBM    版主確認"},
 
-#ifdef	HAVE_CLASSTABLEALERT
-  {"bin/classtable.so:ClassTable",PERM_VALID,-M_XMODE,
-  "Table      個人功\課表"},
-#endif
-
-*/
 #ifdef	HAVE_CLASSTABLEALERT
   {"bin/classtable2.so:main_classtable",PERM_VALID,-M_XMODE,
   "2Table     新版個人功\課表"},
@@ -1038,6 +1017,7 @@ static MENU menu_special[] =
 /* ----------------------------------------------------- */
 /* song menu                                             */
 /* ----------------------------------------------------- */
+
 #ifdef HAVE_SONG
 static MENU menu_song[] =
 {
@@ -1064,11 +1044,6 @@ static MENU menu_song[] =
 static MENU menu_service[] =
 {
 
-/* 090923.cache: 反正裡面都註解掉了 */
-/*
-*  {menu_tool, PERM_BASIC, M_XMENU,
-*  "Tool      【 超值工具區 】"},
-*/
   {menu_user, 0, M_UMENU,
   "User      【 個人工具區 】"},
 
