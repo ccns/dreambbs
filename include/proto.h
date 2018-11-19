@@ -124,7 +124,6 @@ void ll_add(char *name);
 int ll_del(char *name);
 int ll_has(char *name);
 void ll_out(int row, int column, char *msg);
-int m_internet(void);
 int bsmtp(char *fpath, char *title, char *rcpt, int method);
 int bsmtp_file(char *fpath, char *title, char *rcpt);
 int m_verify(void);
