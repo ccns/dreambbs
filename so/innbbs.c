@@ -513,7 +513,7 @@ a_innbbs(void)
   char *fpath;
   char buf[40];
   void (*item_func)(int num, void *obj), (*query_func)(void *obj);
-  int (*add_func)(char *fpath, void *old, int pos), (*sync_func)(void *a, void *b), (*search_func)(void *obj, char *key);
+  int (*add_func)(char *fpath, void *old, int pos), (*sync_func)(void *lhs, void *rhs), (*search_func)(void *obj, char *key);
 
   vs_bar("轉信設定");
   more("etc/innbbs.hlp", (char *) -1);
