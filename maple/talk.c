@@ -38,6 +38,7 @@ extern UCACHE *ushm;
 extern XZ xz[];
 static PAL_SHIP *pal_ship;
 static int can_see(UTMP *up);
+static int can_banmsg(UTMP *up);
 
 #ifdef EVERY_Z
 extern int vio_fd;		/* Thor.0725: 為talk,chat可用^z作準備 */
