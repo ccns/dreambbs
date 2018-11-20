@@ -119,7 +119,7 @@
 /* guest的名字                             by Jerics     */
 /* ------------------------------------------------------*/
 
-#ifndef MASGUEST
+#ifndef MAXGUEST
 #define	MAXGUEST	(16)		/* 最多有幾個 guest？ */
 #endif
 
