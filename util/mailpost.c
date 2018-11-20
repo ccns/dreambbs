@@ -165,7 +165,7 @@ Link(
   if ((ret = link(src, dst)))
   {
     if (errno != EEXIST)
-      ret = f_copy(src, dst, O_EXCL);
+      ret = f_cp(src, dst, O_EXCL);
   }
   return ret;
 }
