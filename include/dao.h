@@ -80,7 +80,7 @@ int rec_append(char *fpath, void *data, int size);
 /* splay.c */
 SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(void *lhs, void *rhs));
 /* xsort.c */
-void xsort(void *a, size_t n, size_t es, int (*cmp)(void *a, void *b));
+void xsort(void *a, size_t n, size_t es, int (*cmp)(void *lhs, void *rhs));
 /* attr_lib.c */
 int attr_get(char *userid, int key, void *value);
 int attr_put(char *userid, int key, void *value);
