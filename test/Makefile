@@ -16,7 +16,7 @@ SRCROOT	= ..
 
 .c.o:	; $(CC) $(MAKEFLAG) $(CFLAGS) -g -c $*.c
 
-EXE	= lib_str_decode lib_str_pat lib_str_xor lib_xsort lib_splay
+EXE	= lib_str_decode lib_str_pat lib_str_xor lib_xsort lib_splay testsize 
 
 all: 
 	@$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
@@ -36,8 +36,11 @@ lib_xsort: lib_xsort.o
 lib_splay: lib_splay.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
+testsize: testsize.o
+	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
+
 test: 
-	@echo -e "\n"; for i in $(EXE); do ./$$i && echo -e "\x1b[1;32m$$i test ok!\x1b[m\n" || echo "\x1b[1;31m$(EXE) test failed!\n"; done
+	@echo -e "\n"; for i in $(EXE); do ./$$i && echo -e "\x1b[1;32m$$i test done!\x1b[m\n" || echo "\x1b[1;31m$(EXE) test failed!\n"; done
 
 clean:
 	rm -fr $(EXE) *.o *.bak *.BAK *.log *~
