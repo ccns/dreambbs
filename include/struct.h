@@ -561,6 +561,37 @@ typedef struct NewBoardHeader
 #define NBRD_MASK	(NBRD_NBRD|NBRD_CANCEL|NBRD_OTHER)
 
 /* ----------------------------------------------------- */
+/* 看板閱讀記錄 .BRH (Board Reading History)		 */
+/* ----------------------------------------------------- */
+
+typedef struct BoardReadingHistory
+{
+  time_t bstamp;		/* 建立看板的時間, unique */ /* Thor.brh_tail*/
+  time_t bvisit;		/* 上次閱讀時間 */ /* Thor.980902:沒用到? */
+                       /* Thor.980904:未讀時放上次讀的時間, 正讀時放 bhno */
+  int bcount;                                      /* Thor.980902:沒用到? */
+                                                   /* Thor.980902:給自己看的 */
+  /* --------------------------------------------------- */
+  /* time_t {final, begin} / {final | BRH_SIGN}		 */
+  /* --------------------------------------------------- */
+                           /* Thor.980904:註解: BRH_SIGN代表final begin 相同 */
+                           /* Thor.980904:註解: 由大到小排列,存放已讀interval */
+} BRH;
+
+
+#define	BRH_EXPIRE	180          /* Thor.980902:註解:保留多少天 */
+#define BRH_MAX      	200          /* Thor.980902:註解:每版最多有幾個標籤 */
+#define BRH_PAGE	2048         /* Thor.980902:註解:每次多配量, 用不到了 */
+#define	BRH_MASK	0x7fffffff   /* Thor.980902:註解:最大量為2038年1月中*/
+#define	BRH_SIGN	0x80000000   /* Thor.980902:註解:zap及壓final專用 */
+#define	BRH_WINDOW	(sizeof(BRH) + sizeof(time_t) * BRH_MAX * 2)
+
+static int *brh_base;		/* allocated memory */
+static int *brh_tail;		/* allocated memory */
+static int brh_size;		/* allocated memory size */
+static time_t brh_expire;
+
+/* ----------------------------------------------------- */
 /* Class image						 */
 /* ----------------------------------------------------- */
 

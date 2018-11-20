@@ -12,6 +12,7 @@ int main(void)
 
     //print out bbs struct size
     printf("sizeof(BRD): %zu\n",sizeof(BRD));
+    printf("sizeof(BRH): %zu\n",sizeof(BRH));
     printf("sizeof(HDR): %zu\n",sizeof(HDR));
     printf("sizeof(CLASS): %zu\n",sizeof(CLASS));
     printf("sizeof(ACCT): %zu\n",sizeof(ACCT));
