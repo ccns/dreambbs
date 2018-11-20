@@ -40,7 +40,7 @@ testsize: testsize.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 test: 
-	@echo -e "\n"; for i in $(EXE); do ./$$i && echo -e "\x1b[1;32m$$i test done!\x1b[m\n" || echo "\x1b[1;31m$(EXE) test failed!\n"; done
+	@echo -e "\n"; for i in $(EXE); do ./$$i && echo -e "\x1b[1;32m$$i test done!\x1b[m\n" || echo "\x1b[1;31m$$i test failed!\n"; done
 
 clean:
 	rm -fr $(EXE) *.o *.bak *.BAK *.log *~
