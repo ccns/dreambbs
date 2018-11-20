@@ -427,7 +427,7 @@ typedef struct
         int resist;     /*防禦*/
         int speed;      /*速度*/
         int mresist;    /*魔法防禦*/
-        int resistmore; /*防禦型態*/
+        int resistmode; /*防禦型態*/
         int nodone;     /*完成*/
         int leaving;    /*離開*/
         int pipmode;    /*狀態*/
