@@ -13,15 +13,16 @@ OPSYS	!= uname -o
 
 all:
 	@cd lib; $(MAKE) all
-	@cd test; $(MAKE) all test
 	@cd maple; $(MAKE) all
 	@cd util; $(MAKE) all
 	@cd innbbsd; $(MAKE) all
 .if $(OPSYS) != "Cygwin"
 	@cd so; $(MAKE) all
 .endif
+	@cd test; $(MAKE) all
 
 install:
+	@cd test; $(MAKE) test
 	@cd maple; $(MAKE) install
 	@cd innbbsd; $(MAKE) install
 	@cd util; $(MAKE) install
