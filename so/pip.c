@@ -50,10 +50,11 @@ void pip_new_game(void);
 int pip_main_menu(void);
 int pip_live_again(void);
 void show_basic_pic(int i);
-int pip_log_record(char *msg);
+void pip_log_record(char *msg);
 void show_die_pic(int i);
 int pip_mainmenu(int mode);
-int pip_time_change(time_t cnow);
+void pip_time_change(time_t cnow);
+int pip_go_palace_screen(struct royalset *p);
 int pip_ending_screen(void);
 int pip_marriage_offer(void);
 void show_usual_pic(int i);
@@ -71,6 +72,7 @@ int pip_practice_function(int classnum, int classgrade, int pic1, int pic2, int 
 int pip_ending_decide(char *eendbuf1, char *eendbuf2, char *eendbuf3, int *endmode, int *endgrade);
 int pip_game_over(int endgrade);
 int pip_practice_gradeup(int classnum, int classgrade, int data);
+int pip_read(char *genbuf);
 
 /*系統選單*/
 int pip_data_list(char *userid), pip_system_freepip(void), pip_system_service(void);
@@ -1219,7 +1221,7 @@ int mode)
 }
 
 /*固定時間作的事 */
-int
+void
 pip_time_change(
 time_t cnow)
 {
@@ -1621,7 +1623,7 @@ void pip_read_file(char *userid)
 }
 
 /*記錄到pip.log檔*/
-int
+void
 pip_log_record(
 char *msg)
 {
@@ -5148,6 +5150,19 @@ int first)
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
+int pip_future_decide(int *modeall_purpose);
+int pip_marry_decide(void);
+
+int pip_endingblack(char *buf, int *m, int *n, int *grade);
+int pip_endingsocial(char *buf, int *m, int *n, int *grade);
+int pip_endingmagic(char *buf, int *m, int *n, int *grade);
+int pip_endingcombat(char *buf, int *m, int *n, int *grade);
+int pip_endingfamily(char *buf, int *m, int *n, int *grade);
+int pip_endingall_purpose(char *buf, int *m, int *n, int *grade, int mode);
+int pip_endingart(char *buf, int *m, int *n, int *grade);
+
+int pip_max_worktime(int *num);
+
 /*--------------------------------------------------------------------------*/
 /*  結局參數設定                                                            */
 /*--------------------------------------------------------------------------*/
@@ -7142,6 +7157,8 @@ char *userid)
 /* 戰鬥特區                                                                  */
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
+
+int pip_fight_main(int n, struct playrule list[], int mode);
 
 /*---------------------------------------------------------------------------*/
 /* 戰鬥人物決定函式                                                          */

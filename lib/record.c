@@ -113,8 +113,8 @@ rec_del(
   char* data,
   int size,
   int pos,
-  int (*fchk) (),
-  int (*fdel) ()
+  int (*fchk) (void *obj),
+  int (*fdel) (void *obj)
 )
 {
   int fd;
@@ -290,7 +290,7 @@ int
 rec_loc(
   char* data,
   int size,
-  int (*fchk) ()
+  int (*fchk) (void *obj)
 )
 {
   int fd,pos,tmp;
@@ -447,7 +447,7 @@ rec_put2(
   void* data,
   int size,
   int pos,
-  int (*fchk)()
+  int (*fchk)(void *obj)
 )
 {
   int fd;
@@ -535,8 +535,8 @@ rec_ref(
   void* data,
   int size,
   int pos,
-  int (*fchk)(),
-  void (*fref)()
+  int (*fchk)(void *obj),
+  void (*fref)(void *obj, void *ref)
 )
 {
   int fd;
@@ -617,8 +617,8 @@ int
 rec_sync(
   char* fpath,
   int size,
-  int (*fsync) (),
-  int (*fchk) ()
+  int (*fsync) (void *lhs, void *rhs),
+  int (*fchk) (void *obj)
 )
 {
   int fd, fsize;

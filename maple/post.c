@@ -19,6 +19,7 @@ extern XZ xz[];
 extern LinkList *ll_head;
 #endif
 
+extern int can_message(UTMP *up);
 extern int cmpchrono(HDR *hdr);
 extern int xo_delete(XO *xo);
 extern int xo_uquery_lite(XO *xo);

@@ -66,21 +66,21 @@ int DL_func(char *name, ...);
 /* record.c */
 int rec_add(char *fpath, void *data, int size);
 int rec_bot(char *fpath, void *data, int size);
-int rec_del(char *data, int size, int pos, int (*fchk)(void), int (*fdel)(void));
+int rec_del(char *data, int size, int pos, int (*fchk)(void *obj), int (*fdel)(void *obj));
 int rec_get(char *fpath, void *data, int size, int pos);
 int rec_ins(char *fpath, void *data, int size, int pos, int num);
-int rec_loc(char *data, int size, int (*fchk)(void));
+int rec_loc(char *data, int size, int (*fchk)(void *obj));
 int rec_mov(char *data, int size, int from, int to);
 int rec_num(char *fpath, int size);
 int rec_put(char *fpath, void *data, int size, int pos);
-int rec_put2(char *fpath, void *data, int size, int pos, int (*fchk)(void));
-int rec_ref(char *fpath, void *data, int size, int pos, int (*fchk)(void), void (*fref)(void));
-int rec_sync(char *fpath, int size, int (*fsync)(void), int (*fchk)(void));
+int rec_put2(char *fpath, void *data, int size, int pos, int (*fchk)(void *obj));
+int rec_ref(char *fpath, void *data, int size, int pos, int (*fchk)(void *obj), void (*fref)(void *obj, void *ref));
+int rec_sync(char *fpath, int size, int (*fsync)(void *lhs, void *rhs), int (*fchk)(void *obj));
 int rec_append(char *fpath, void *data, int size);
 /* splay.c */
 SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(void *lhs, void *rhs));
 /* xsort.c */
-void xsort(void *a, size_t n, size_t es, int (*cmp)(void *a, void *b));
+void xsort(void *a, size_t n, size_t es, int (*cmp)(void *lhs, void *rhs));
 /* attr_lib.c */
 int attr_get(char *userid, int key, void *value);
 int attr_put(char *userid, int key, void *value);
