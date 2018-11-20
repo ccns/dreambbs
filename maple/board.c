@@ -28,7 +28,6 @@ static XO board_xo;
 BRD *xbrd;
 int boardmode=0;
 
-
 /* ----------------------------------------------------- */
 /* 看板閱讀記錄 .BRH (Board Reading History)		 */
 /* ----------------------------------------------------- */
@@ -46,7 +45,7 @@ typedef struct BoardReadingHistory
   /* --------------------------------------------------- */
                            /* Thor.980904:註解: BRH_SIGN代表final begin 相同 */
                            /* Thor.980904:註解: 由大到小排列,存放已讀interval */
-}                   BRH;
+} BRH;
 
 
 #define	BRH_EXPIRE	180          /* Thor.980902:註解:保留多少天 */
@@ -64,9 +63,9 @@ static time_t brh_expire;
 
 
 static int *
-brh_alloc(tail, size)
-  int *tail;
-  int size;
+brh_alloc(
+  int *tail,
+  int size)
 {
   int *base, n;
 
@@ -92,7 +91,7 @@ brh_alloc(tail, size)
 
 
 static void
-brh_put()
+brh_put(void)
 {
   int *list;
 
@@ -136,9 +135,9 @@ brh_put()
 
 
 void
-brh_get(bstamp, bhno)
-  time_t bstamp;		/* board stamp */
-  int bhno;
+brh_get(
+  time_t bstamp,		/* board stamp */
+  int bhno)
 {
   int *head, *tail;
   int size, bcnt, item;
@@ -204,8 +203,8 @@ brh_get(bstamp, bhno)
 
 
 int
-brh_unread(chrono)
-  time_t chrono;
+brh_unread(
+  time_t chrono)
 {
   int *head, *tail, item;
 
@@ -235,8 +234,8 @@ brh_unread(chrono)
 
 
 void
-brh_visit(mode)
-  int mode;			/* 0 : visit, 1: un-visit */
+brh_visit(
+  int mode)			/* 0 : visit, 1: un-visit */
 {
   int *list;
 
@@ -253,10 +252,8 @@ brh_visit(mode)
   *++list = mode;
 }
 
-
 void
-brh_add(prev, chrono, next)
-  time_t prev, chrono, next;
+brh_add(time_t prev, time_t chrono, time_t next)
 {
   int *base, *head, *tail, item, final, begin;
 
@@ -376,8 +373,8 @@ force_board (void)
 
 
 static inline int
-is_bm(list)
-  char *list;			/* 板主：BM list */
+is_bm(
+  char *list)			/* 板主：BM list */
 {
   int cc, len;
   char *userid;
@@ -402,7 +399,7 @@ is_bm(list)
 
 #if	defined(HAVE_RESIST_WATER) || defined(HAVE_DETECT_CROSSPOST)
 void
-remove_perm()
+remove_perm(void)
 {
   int i;
   for(i=0;i<(sizeof(brd_bits)/sizeof(int));i++)
@@ -411,9 +408,9 @@ remove_perm()
 #endif
 
 int
-Ben_Perm(bhdr, ulevel)
-  BRD *bhdr;
-  unsigned int ulevel;
+Ben_Perm(
+  BRD *bhdr,
+  unsigned int ulevel)
 {
   unsigned int readlevel, postlevel, bits;
   char *blist, *bname;
@@ -501,10 +498,9 @@ Ben_Perm(bhdr, ulevel)
 /* 載入 currboard 進行若干設定				 */
 /* ----------------------------------------------------- */
 
-
 int
-bstamp2bno(stamp)
-  time_t stamp;
+bstamp2bno(
+  time_t stamp)
 {
   BRD *brd;
   int bno, max;
@@ -522,9 +518,8 @@ bstamp2bno(stamp)
   }
 }
 
-
 void
-brh_load()
+brh_load(void)
 {
   BRD *brdp, *bend;
   unsigned int ulevel;
@@ -691,9 +686,8 @@ brh_load()
 #endif
 }
 
-
 void
-brh_save()
+brh_save(void)
 {
   int *base, *head, *tail, bhno, size;
   BRD *bhdr, *bend;
@@ -758,7 +752,6 @@ brh_save()
   }
 }
 
-
 /*-------------------------------------------------------*/
 
 #ifdef LOG_BRD_USIES
@@ -774,7 +767,7 @@ brd_usies(void)
 #endif
 
 static void
-brd_usies_BMlog()
+brd_usies_BMlog(void)
 {
   char fpath[64], buf[256];
 
@@ -784,12 +777,11 @@ brd_usies_BMlog()
 }
 
 /* 081206.cache: 好友板修正 */
-
 int ok=1;
 
 void
-XoPost(bno)
-  int bno;
+XoPost(
+  int bno)
 {
   XO *xo;
   BRD *brd;
@@ -887,9 +879,9 @@ XoPost(bno)
 
 /* cache.090503: 即時熱門看板 */
 static int
-mantime_cmp(a, b)
-  short *a;
-  short *b;
+mantime_cmp(
+  short *a,
+  short *b)
 {
   /* 由多排到少 */
   return bshm->mantime[*b] - bshm->mantime[*a];
@@ -899,13 +891,11 @@ static int class_hot = 0;
 static int class_flag2 = 0;  /* 1:列出好友/秘密板，且自己又有閱讀權限的 */
 static int class_flag;
 
-
 #define	BFO_YANK	0x01
 
-
 static int
-class_check(chn)
-  int chn;
+class_check(
+  int chn)
 {
   short *cbase, *chead, *ctail;
   int pos, max, val, zap;
@@ -997,8 +987,8 @@ class_check(chn)
 }
 
 static int
-class_load(xo)
-  XO *xo;
+class_load(
+  XO *xo)
 {
   short *cbase, *chead, *ctail;
   int chn;			/* ClassHeader number */
@@ -1102,10 +1092,9 @@ class_load(xo)
   return max;
 }
 
-
 static int
-XoClass(chn)
-  int chn;
+XoClass(
+  int chn)
 {
   XO xo, *xt;
 
@@ -1130,60 +1119,9 @@ XoClass(chn)
   return XO_BODY;
 }
 
-
-#if 0
-/* ----------------------------------------------------- */
-/* 檢查 BRD 共有幾篇 post，及最後一篇 post 的時間	 */
-/* ----------------------------------------------------- */
-
-
-void
-bcheck(brd)
-  BRD *brd;
-{
-  char folder[64];
-  struct stat st;
-  int fd, size;
-
-  brd_fpath(folder, brd->brdname, fn_dir);
-
-#if 1
-  if (!stat(folder, &st))
-  {
-    brd->bpost = st.st_size / sizeof(HDR);
-    brd->blast = st.st_mtime;
-  }
-#else
-  fd = open(folder, O_RDONLY);
-  if (fd < 0)
-    return;
-
-  fstat(fd, &st);
-
-  if (st.st_mtime > brd->btime)
-  {
-    brd->btime = time(0) + 45;	/* 45 秒鐘內不重複檢查 */
-    if ((size = st.st_size) >= sizeof(HDR))
-    {
-      brd->bpost = size / sizeof(HDR);
-      lseek(fd, size - sizeof(HDR), SEEK_SET);
-      read(fd, &brd->blast, sizeof(time_t));
-    }
-    else
-    {
-      brd->blast = brd->bpost = 0;
-    }
-  }
-
-  close(fd);
-#endif
-}
-#endif
-
-
 static int
-class_body(xo)
-  XO *xo;
+class_body(
+  XO *xo)
 {
   char *img, *bits, buf[16], buf2[20], brdtype, *str2;
   short *chp;
@@ -1405,10 +1343,9 @@ class_body(xo)
   return XO_NONE;
 }
 
-
 static int
-class_neck(xo)
-  XO *xo;
+class_neck(
+  XO *xo)
 {
   move(1, 0);
   prints(NECKBOARD, class_flag & UFO2_BRDNEW ? "總數" : "編號", "中   文   敘   述");
@@ -1416,38 +1353,34 @@ class_neck(xo)
   return class_body(xo);
 }
 
-
 static int
-class_head(xo)
-  XO *xo;
+class_head(
+  XO *xo)
 {
   vs_head("看板列表", str_site);
   return class_neck(xo);
 }
 
-
 static int
-class_init(xo)			/* re-init */
-  XO *xo;
+class_init(			/* re-init */
+  XO *xo)
 {
   class_load(xo);
   return class_head(xo);
 }
 
-
 static int
-class_newmode(xo)
-  XO *xo;
+class_newmode(
+  XO *xo)
 {
   cuser.ufo2 ^= UFO2_BRDNEW;  /* Thor.980805: 特別注意 utmp.ufo的同步問題 */
   class_flag ^= UFO2_BRDNEW;
   return class_neck(xo);
 }
 
-
 static int
-class_help(xo)
-  XO *xo;
+class_help(
+  XO *xo)
 {
   film_out(FILM_CLASS, -1);
   return class_head(xo);
@@ -1455,8 +1388,8 @@ class_help(xo)
 
 
 static int
-class_search(xo)
-  XO *xo;
+class_search(
+  XO *xo)
 {
   int num, pos, max;
   char *ptr;
@@ -1497,8 +1430,8 @@ class_search(xo)
 
 /* cache.091125: 只列出具有閱讀權限的秘密/好友看板 */
 static int
-class_yank2(xo)
-  XO *xo;
+class_yank2(
+  XO *xo)
 {
   if (xo->key >= 0)
     return XO_NONE;
@@ -1508,17 +1441,16 @@ class_yank2(xo)
 }
 
 static int
-class_yank(xo)
-  XO *xo;
+class_yank(
+  XO *xo)
 {
   class_flag ^= BFO_YANK;
   return class_init(xo);
 }
 
-
 static int
-class_zap(xo)
-  XO *xo;
+class_zap(
+  XO *xo)
 {
   BRD *brd;
   short *chp;
@@ -1543,8 +1475,8 @@ class_zap(xo)
 
 
 static int
-class_edit(xo)
-  XO *xo;
+class_edit(
+  XO *xo)
 {
   /* if (HAS_PERM(PERM_ALLBOARD)) */
   /* Thor.990119: 只有站長可以修改 */
@@ -1564,10 +1496,9 @@ class_edit(xo)
   return XO_NONE;
 }
 
-
 static int
-class_browse(xo)
-  XO *xo;
+class_browse(
+  XO *xo)
 {
   short *chp;
   int chn;
@@ -1610,9 +1541,8 @@ class_browse(xo)
   return class_head(xo);	/* Thor.0701: 無法清少一點, 因為 XoPost */
 }
 
-
 int
-Select()
+Select(void)
 {
   int bno;
   BRD *brd;
@@ -1636,26 +1566,22 @@ Select()
   return 0;
 }
 
-
 static int
-class_switch(xo)
-  XO *xo;
+class_switch(
+  XO *xo)
 {
   Select();
   return class_head(xo);
 }
 
-
 #ifdef AUTHOR_EXTRACTION
 /* Thor.0818: 想改成以目前的看版列表或分類來找, 不要找全部 */
 
-
 /* opus.1127 : 計畫重寫, 可 extract author/title */
 
-
 static int
-XoAuthor(xo)
-  XO *xo;
+XoAuthor(
+  XO *xo)
 {
   int chn, len, max, tag;
   short *chp, *chead, *ctail;
@@ -1791,8 +1717,8 @@ XoAuthor(xo)
 
 #ifdef  HAVE_FAVORITE
 static int
-class_find_same(src)
-  HDR *src;
+class_find_same(
+  HDR *src)
 {
   char fpath[128];
   int fd,i;
@@ -1860,8 +1786,8 @@ class_add(xo)
 #endif
 
 static int
-class_add2(xo)          /* gaod: 我的最愛中直接新增新看板 */
-  XO *xo;
+class_add2(          /* gaod: 我的最愛中直接新增新看板 */
+  XO *xo)
 {
   short *chp;
   BRD *brd;
@@ -1909,8 +1835,8 @@ class_add2(xo)          /* gaod: 我的最愛中直接新增新看板 */
 }
 
 static int
-class_del(xo)
-  XO *xo;
+class_del(
+  XO *xo)
 {
   short *chp;
   BRD *brd;
@@ -1950,8 +1876,8 @@ class_del(xo)
 }
 
 static int
-class_mov(xo)
-  XO *xo;
+class_mov(
+  XO *xo)
 {
   short *chp;
   BRD *brd;
@@ -2010,7 +1936,6 @@ class_mov(xo)
    
 #endif
 
-
 #ifdef  HAVE_COUNT_BOARD
 #if 0
 static int
@@ -2038,8 +1963,8 @@ class_stat(xo)
 #endif
 
 static int
-class_visit(xo)
-  XO *xo;
+class_visit(
+  XO *xo)
 {
   short *chp;
   int chn;
@@ -2093,9 +2018,8 @@ static KeyFunc class_cb[] =
   {'h', class_help}
 };
 
-
 int
-Class()
+Class(void)
 {
   boardmode = 0;
   if (!class_img || XoClass(CH_END-1) == XO_NONE)
@@ -2107,8 +2031,8 @@ Class()
 }
 
 void 
-check_new(brd)
-  BRD *brd;
+check_new(
+  BRD *brd)
 {
           int fd, fsize;
           char folder[64];
@@ -2138,7 +2062,7 @@ check_new(brd)
 
 #ifdef	HAVE_INFO
 int 
-Information()
+Information(void)
 {
   int chn;
   chn = brd_bno(BRD_BULLETIN);
@@ -2151,7 +2075,7 @@ Information()
 
 #ifdef	HAVE_STUDENT
 int 
-Student()
+Student(void)
 {
   int chn;
   chn = brd_bno(BRD_SBULLETIN);
@@ -2164,7 +2088,7 @@ Student()
 
 #ifdef	HAVE_PROFESS
 int
-Profess()
+Profess(void)
 {
   boardmode = 1;
   if (!profess_img || XoClass(CH_END-1) == XO_NONE)
@@ -2178,7 +2102,7 @@ Profess()
 
 #ifdef  HAVE_FAVORITE 
 int
-Favorite()
+Favorite(void)
 {
   boardmode = 2;
   if (!favorite_img || XoClass(CH_END-1) == XO_NONE)
@@ -2191,7 +2115,7 @@ Favorite()
 #endif
 
 void
-board_main()
+board_main(void)
 {
   int fsize;
 #ifdef	HAVE_PROFESS  
@@ -2259,9 +2183,8 @@ board_main()
   xz[XZ_CLASS - XO_ZONE].cb = class_cb;		/* Thor: default class_xo */
 }
 
-
 int
-Boards()
+Boards(void)
 {
   /* class_xo = &board_xo; *//* Thor: 已有 default, 不需作此 */
   boardmode = -1;
@@ -2273,8 +2196,8 @@ Boards()
 #define MSG_CC "\033[32m[看板群組名單]\033[m\n"
 
 int
-brd_list(reciper)
-  int reciper;
+brd_list(
+  int reciper)
 {
   LIST list;
   int userno, fd ,select;
