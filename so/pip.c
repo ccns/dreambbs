@@ -6508,7 +6508,7 @@ int pip_query(void)  /*拜訪小雞*/
 	if (genbuf[0])
 	{
 		move(2, 0);
-		if (id = acct_userno(genbuf))
+		if ( ( id = acct_userno(genbuf) ) )
 		{
 			pip_read(genbuf);
 			vmsg("觀摩一下別人的小雞...:p");
@@ -6561,7 +6561,7 @@ char *genbuf)
 	usr_fpath(buf, genbuf, "chicken");
 	/*  currutmp->destuid = genbuf;*/
 
-	if (fs = fopen(buf, "r"))
+	if ( ( fs = fopen(buf, "r") ) )
 	{
 		fgets(buf, 80, fs);
 		age = ((time_t) atol(buf)) / 60 / 30;
@@ -6965,7 +6965,7 @@ char *userid)
 	/*  else
 	    usr_fpath(buf,userid,"chicken");*/
 
-	if (fs = fopen(buf, "r"))
+	if ( ( fs = fopen(buf, "r") ) )
 	{
 		fgets(buf, 80, fs);
 		chicken.bbtime = (time_t) atol(buf);
@@ -8547,7 +8547,7 @@ char *fpath)
 	playrule *p;
 	if (badmanlist)
 		free(badmanlist);
-	if (fp = fopen(fpath, "r"))
+	if ( ( fp = fopen(fpath, "r") ) )
 	{
 		fscanf(fp, "%d%s", &max, buf);
 		p = badmanlist = (playrule *)malloc((max + 1) * sizeof(playrule));
@@ -8568,7 +8568,7 @@ char *fpath)
 {
 	FILE *fp;
 	int i;
-	if (fp = fopen(fpath, "r"))
+	if ( ( fp = fopen(fpath, "r") ) )
 	{
 		for (i = 0;i <= 21;i++)
 		{
@@ -8622,7 +8622,7 @@ char *fpath)
 	FILE *fp;
 	int i, temp;
 	char buf[128];
-	if (fp = fopen(fpath, "r"))
+	if ( ( fp = fopen(fpath, "r") ) )
 	{
 		fscanf(fp, "%s", buf);
 		for (i = 0;i <= 1;i++)
