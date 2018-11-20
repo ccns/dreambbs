@@ -83,7 +83,6 @@ static int get_hurt(void);
 static int pip_fight_feed(void);
 
 #endif
-/*int pip_request(void);*/
 
 static void
 logit(
@@ -495,7 +494,6 @@ static struct pipcommands pipbasiclist[] =
 	{pip_basic_takerest,	'3',	'3'},
 	{pip_basic_kiss,		'4',	'4'},
 	{pip_money,		'5',	'5'},
-	/*{pip_request,		'6',	'6'},*/
 	{NULL,			'\0',	'\0'}
 };
 
@@ -3101,13 +3099,7 @@ int pip_job_workL(void)
 		workmoney = 80 + (d.affect + d.brave) / 70;
 		vmsg("我也不方便說啥了..請再加油..");
 	}
-#if 0
-	if (rand() % 10 == 5)
-	{
-		vmsg("真是倒楣  竟遇到死神魔..");
-		pip_fight_bad(12);
-	}
-#endif
+
 	d.money += workmoney * LEARN_ELVEL;
 	d.workL += 1;
 	return 0;
@@ -6447,56 +6439,6 @@ pip_money(void)
 	vmsg(buf);
 	return 0;
 }
-
-/* 將雞金換成點歌次數 by statue */
-#if 0
-int
-pip_request(void)
-{
-	char buf[100], ans[10];
-
-	int money = -1;
-	if (!d.name[0] || d.death) return;
-	clrchyiuan(6, 18);
-	/*  move(12,0);
-	  clrtobot();*/
-	prints("你身上有 %d 次點歌次數,雞金 %d 元\n", cuser.request, d.money);
-
-	if (d.money <= 5000)
-	{
-		sprintf(buf, "雞金必須大於 5000 才可轉換......");
-		vmsg(buf);
-		return 0;
-	}
-
-	outs("\n五千雞金換一次唷!!\n");
-	while (money < 0 || (money)*5000 > d.money - START_MONEY)
-	{
-		getdata(10, 0, "要換多少次? ", ans, 10, LCECHO, 0);
-		if (!ans[0]) return;
-		money = atol(ans);
-	}
-	sprintf(buf, "是否要轉換 %d 雞金 為 %d 次? [y/N]: ", money*5000, money);
-	getdata(11, 0, buf, ans, 3, LCECHO, 0);
-	if (ans[0] == 'y' || ans[0] == 'Y')
-	{
-		ACCT acct;
-		acct_load(&acct, cuser.userid);
-		/*    demoney(money);*/
-		d.money -= (money * 5000);
-		cuser.request += money;
-		acct.request = cuser.request;
-		acct_save(&acct);
-		pip_write_file();
-		sprintf(buf, "你身上有 %d 次點歌次數,雞金 %d 元", cuser.request, d.money);
-	}
-	else
-		sprintf(buf, "取消.....");
-
-	vmsg(buf);
-	return 0;
-}
-#endif
 
 int pip_query(void)  /*拜訪小雞*/
 {
