@@ -50,10 +50,10 @@ void pip_new_game(void);
 int pip_main_menu(void);
 int pip_live_again(void);
 void show_basic_pic(int i);
-int pip_log_record(char *msg);
+void pip_log_record(char *msg);
 void show_die_pic(int i);
 int pip_mainmenu(int mode);
-int pip_time_change(time_t cnow);
+void pip_time_change(time_t cnow);
 int pip_ending_screen(void);
 int pip_marriage_offer(void);
 void show_usual_pic(int i);
@@ -1219,7 +1219,7 @@ int mode)
 }
 
 /*固定時間作的事 */
-int
+void
 pip_time_change(
 time_t cnow)
 {
@@ -1621,7 +1621,7 @@ void pip_read_file(char *userid)
 }
 
 /*記錄到pip.log檔*/
-int
+void
 pip_log_record(
 char *msg)
 {
