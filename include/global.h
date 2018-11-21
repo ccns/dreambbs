@@ -89,7 +89,7 @@
 #define	FN_ETC_JUSTIFIED_BMTA	"etc/justified.bmta"	/* BMTA 通過身分認證 */
 #define	FN_ETC_JUSTIFY		"etc/justify"		/* 身分認證的方法 */
 #define	FN_ETC_LOVEPAPER	"etc/lovepaper"		/* 情書產生器資料庫 */
-#define	FN_ETC_SPAMER_ACL	"etc/spamer.acl"	/* 站外 SPAM 名單 */
+#define	FN_ETC_SPAMMER_ACL	"etc/spamer.acl"	/* 站外 SPAM 名單 */
 #define	FN_ETC_MAIL_OVER	"etc/mail.over"		/* 信件超出上限 */
 #define	FN_ETC_MAILSERVICE	"etc/mailservice"	/* 電子郵件服務 */
 #define	FN_MATCH_MAIL		"etc/match.mail"	/* 告知特殊搜尋更新完畢 */
@@ -142,7 +142,7 @@
 #define	FN_CHATDATA_LOG		"run/chatdata.log"
 #define FN_VAR_SYSHISTORY	"run/var/counter"	/* 歷史紀錄 */
 #ifdef  HAVE_ANONYMOUS
-/* Thor.980727:lkchu patch: anonymouse post log */
+/* Thor.980727:lkchu patch: anonymous post log */
 #define FN_ANONYMOUS_LOG	"run/anonymous.log"	/* 匿名板紀錄 */
 #endif
 #define FN_BANMAIL_LOG	"run/banmail.log"	/* 擋信紀錄 */
@@ -169,7 +169,7 @@
 #ifdef  HAVE_RECOMMEND
 #define	FN_RECOMMEND_LOG	"run/recommend.log"	/* 推薦文章 */
 #endif
-						/* MailSevice 使用紀錄 */
+						/* MailService 使用紀錄 */
 #define	FN_MANAGER_LOG	"run/manager.log"	/* 站務列表 */
 #define	FN_BMLIST_LOG	"run/bmlist.log"	/* 板主列表 */
 #define	FN_MATCH_LOG	"run/match.log"		/* 特殊搜尋 */
@@ -331,7 +331,7 @@
 #define STR_GUEST	"guest"
 #define STR_NEW		"new"
 
-#define	MSG_SEPERATOR	"\
+#define	MSG_SEPARATOR	"\
 ───────────────────────────────────────"
 #define MSG_BLINE	"\
 ______________________________________________________________________________"
@@ -374,7 +374,7 @@ ______________________________________________________________________________"
 /* ----------------------------------------------------- */
 VAR pid_t currpid;		/* current process ID */
 VAR unsigned int bbsmode;		/* bbs operating mode, see modes.h */
-VAR int bbstate;		/* bbs operatine state */
+VAR int bbstate;		/* bbs operating state */
 VAR int bbsothermode;
 VAR int supervisor;
 VAR UTMP *cutmp;
@@ -408,7 +408,7 @@ VAR int  chk_mailstat	INI(0);
 VAR char *fn_dir	INI(FN_DIR);
 
 /* message */
-VAR char *msg_seperator	INI(MSG_SEPERATOR);
+VAR char *msg_separator	INI(MSG_SEPARATOR);
 
 VAR char *msg_cancel	INI(MSG_CANCEL);
 
@@ -431,7 +431,7 @@ VAR char *str_host	INI(MYHOSTNAME);
 VAR char *str_site	INI(BOARDNAME);
 
 #ifdef	HAVE_RECOMMEND
-VAR int recommand_time	INI(0);
+VAR int recommend_time	INI(0);
 #endif
 
 #if 0

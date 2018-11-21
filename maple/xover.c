@@ -2418,7 +2418,7 @@ xo_cursor(
 	*cur = pos % XO_TALL;
       }
 
-      *redraw = 1;	/* 就算沒有換頁，也要重繪 feeter */
+      *redraw = 1;	/* 就算沒有換頁，也要重繪 footer */
     }
   }
 

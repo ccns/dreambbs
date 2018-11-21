@@ -545,7 +545,7 @@ more(
 	move(b_lines, 0);
 	clrtoeol();
 
-	/* 剩下 b_lines+shift 列是 rscroll，offsect 去正確位置；這裡的 i 是總共要 shift 的列數 */
+	/* 剩下 b_lines+shift 列是 rscroll，offset 去正確位置；這裡的 i 是總共要 shift 的列數 */
 	for (i += b_lines; i > 0; i--)
 	  more_line(buf);
       }

@@ -123,7 +123,7 @@ chat_record(void)
 
 	if ((fp = frec))
 	{
-		fprintf(fp, "%s\n結束：%s\n", msg_seperator, Ctime(&now));
+		fprintf(fp, "%s\n結束：%s\n", msg_separator, Ctime(&now));
 		fclose(fp);
 		frec = NULL;
 		printchatline("◆ 錄音完畢！");
@@ -153,7 +153,7 @@ chat_record(void)
 		{
 			fprintf(fp, "主題: %s\n包廂: %s\n錄音: %s (%s)\n開始: %s\n%s\n",
 					chatopic, chatroom, cuser.userid, cuser.username,
-					Ctime(&now), msg_seperator);
+					Ctime(&now), msg_separator);
 			printchatline("◆ 開始錄音囉！");
 			frec = fp;
 		}
@@ -185,7 +185,7 @@ int mode)
 	{
 		if (fmail)
 		{
-			fprintf(fmail, "%s\n結束：%s\n", msg_seperator, Ctime(&now));
+			fprintf(fmail, "%s\n結束：%s\n", msg_separator, Ctime(&now));
 			fclose(fmail);
 			fmail = NULL;
 			holdon_fd = vio_fd;
@@ -217,7 +217,7 @@ int mode)
 		if (fmail)
 		{
 			fprintf(fmail, "聊天室錄音: %s (%s)\n開始: %s\n%s\n",
-					cuser.userid, cuser.username, Ctime(&now), msg_seperator);
+					cuser.userid, cuser.username, Ctime(&now), msg_separator);
 		}
 		else
 		{
@@ -711,9 +711,9 @@ t_chat(void)
 
 	clear();
 	move(1, 0);
-	outs(msg_seperator);
+	outs(msg_separator);
 	move(stop_line, 0);
-	outs(msg_seperator);
+	outs(msg_separator);
 	print_chatid(chatid);
 	memset(ptr = buf, 0, sizeof(buf));
 	chatline = 2;

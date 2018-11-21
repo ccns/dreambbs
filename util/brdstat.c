@@ -28,7 +28,7 @@
 #define	ADJUST_M	10	/* adjust back 10 minutes */
 
 #define	YEAR_HOUR	(365 * 24)
-#define HERFYEAR_HOUR	(180 * 24)
+#define HALFYEAR_HOUR	(180 * 24)
 #define	THREEMONTH_HOUR	(90 * 24)
 #define	MONTH_HOUR	(30 * 24)
 #define	TWOWEEK_HOUR	(14 * 24)
@@ -232,7 +232,7 @@ count_board(
   int twoweek;
   int month;
   int threemonth;
-  int herfyear;
+  int halfyear;
   int year;
   
 
@@ -264,7 +264,7 @@ count_board(
   twoweek = (count > TWOWEEK_HOUR) ? (count - TWOWEEK_HOUR + 1) : 1;
   month = (count > MONTH_HOUR) ? (count - MONTH_HOUR + 1) : 1;
   threemonth = (count > THREEMONTH_HOUR) ? (count - THREEMONTH_HOUR + 1) : 1;
-  herfyear = (count > HERFYEAR_HOUR) ? (count - HERFYEAR_HOUR + 1) : 1;
+  halfyear = (count > HALFYEAR_HOUR) ? (count - HALFYEAR_HOUR + 1) : 1;
   year = (count > YEAR_HOUR) ? (count - YEAR_HOUR + 1) : 1;
     
   pos = 1;
@@ -288,8 +288,8 @@ count_board(
       add_log(&(bcount.month),head);
     if(threemonth <= pos)
       add_log(&(bcount.threemonth),head);
-    if(herfyear <= pos)
-      add_log(&(bcount.herfyear),head);
+    if(halfyear <= pos)
+      add_log(&(bcount.halfyear),head);
     if(year <= pos)
       add_log(&(bcount.year),head);
     pos++;
@@ -301,7 +301,7 @@ count_board(
   strcpy(bcount.twoweek.type,"近兩週");
   strcpy(bcount.month.type,"近一月");
   strcpy(bcount.threemonth.type,"近三月");
-  strcpy(bcount.herfyear.type,"近半年");
+  strcpy(bcount.halfyear.type,"近半年");
   strcpy(bcount.year.type,"近一年");
 
   bcount.hour.chrono = now;
@@ -310,7 +310,7 @@ count_board(
   bcount.twoweek.chrono = now;
   bcount.month.chrono = now;
   bcount.threemonth.chrono = now;
-  bcount.herfyear.chrono = now;
+  bcount.halfyear.chrono = now;
   bcount.year.chrono = now;
   
   memcpy(tmp,&(bcount.lhour[1]),sizeof(BSTAT) * 23);

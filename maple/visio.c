@@ -1465,7 +1465,7 @@ igetch(void)
       }
 
 	  cc = bbsmode;
-#ifdef KICK_IDLE_TIMTOUT
+#ifdef KICK_IDLE_TIMEOUT
 	  if (idle > (cc ? IDLE_TIMEOUT : 4))
 	  {
 	    clear();
@@ -1478,7 +1478,7 @@ igetch(void)
             outz("\033[41;5;1;37m警告！你已經閒置過久，系統將在三分後將你踢除！\033[m");
             refresh();
 	  }
-#endif // KICK_IDLE_TIMTOUT   
+#endif // KICK_IDLE_TIMEOUT   
 	  if (cc)
 	  {
 	    cutmp->idle_time = idle;

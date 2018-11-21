@@ -109,7 +109,7 @@ struct chicken {
  int love;		/*愛    心*/ 
  int wisdom;		/*智    慧*/
  int art;		/*藝術能力*/
- int etchics;		/*道    德*/
+ int ethics;		/*道    德*/
  int brave;		/*勇    敢*/
  int homework;		/*掃地洗衣*/
  int charm;		/*魅	力*/

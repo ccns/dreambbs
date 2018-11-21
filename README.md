@@ -25,9 +25,9 @@ LICENSE for **piaip's more** module, please view `maple/pmore.c` instead.
 * **docs**   - Some information about :
     + **INSTALL.md**     : ***How to install*** this BBS version.
     + **ANCESTOR**       : This past history about this BBS version
-    + **old**            : Some old information about [Wind's Top BBS verion](http://windtop.yzu.edu.tw) (ancestor of DreamBBS).
+    + **old**            : Some old information about [Wind's Top BBS version](http://windtop.yzu.edu.tw) (ancestor of DreamBBS).
 
-+ **include**  : Some definition datas and headers for compiling.
++ **include**  : Some definition data and headers for compiling.
 
 + **innbbsd**  : Internet News Daemon or Usenet Newsgroup Client for Eagle BBS Series (patched for Maple 3.x Series by itoc) 
 

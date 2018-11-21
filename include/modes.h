@@ -113,7 +113,7 @@ static char *ModeTypeTable[] =
   "MIME讀信",       /* M_MIME */
   "養雞場",         /* M_CHICKEN */
   "其他",           /* M_XMODE */
-  "我的最愛"        /* MyFavorate */
+  "我的最愛"        /* MyFavorite */
 };
 
 
@@ -238,10 +238,10 @@ static char *ModeTypeTable[] =
 
 //cache,20101119
 
-#define PALTYPE_PAL     0               /* 穠B瞻?礎W糧疆 */
-#define PALTYPE_LIST    1               /* 繡s簡?礎W糧疆 */
-#define PALTYPE_BPAL    2               /* 穠O瞻?礎W糧疆 */
-#define PALTYPE_VOTE    3               /* 簫簫穡簾禮禱簡翹礎W糧疆 */
+#define PALTYPE_PAL     0               /* 朋友名單 */
+#define PALTYPE_LIST    1               /* 群組名單 */
+#define PALTYPE_BPAL    2               /* 板友名單 */
+#define PALTYPE_VOTE    3               /* 限制投票名單 */
 
 
 

@@ -243,7 +243,7 @@ abort_game:
 			prints("第 \033[1;37m%d\033[m 次, 我猜 \033[1;33m%d%d%d%d\033[m, 你說 \033[1;36m%dA%dB\033[m", hisNum, myGuess[0], myGuess[1], myGuess[2], myGuess[3], youA, youB);
 	}
 foolme:
-	/* there is no posibility, show "you fool me" */
+	/* there is no possibility, show "you fool me" */
 	vmsg("你騙我! 不跟你玩了 ~~~>_<~~~");
 #if 1
 	{

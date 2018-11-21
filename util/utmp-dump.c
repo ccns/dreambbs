@@ -425,8 +425,8 @@ ulist_body(
 	  color, up->userid,
 	  (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username, 
 	  colortmp > 0 ? "\033[m" : "",
-	  (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDEDN)&&!HAS_PERM(PERM_SYSOP)) ? 
-	  HIDEDN_SRC : up->from , diff,diffmsg,
+	  (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ? 
+	  HIDDEN_SRC : up->from , diff,diffmsg,
 	  bmode(up, 0), buf);
       }
   }

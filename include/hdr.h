@@ -32,7 +32,7 @@ typedef struct
   char title[73];		/* 主題 (TTLEN + 1) */
 }          HDR;
 
-/* gopher url <A6>r<A6><EA><A1>Gxname + owner + nick + date */
+/* gopher url 字串：xname + owner + nick + date */
 #define        GEM_URLEN       (32 + 80 + 50 + 9 - 1)
 
 /* ----------------------------------------------------- */
@@ -41,7 +41,7 @@ typedef struct
 
 #define POST_READ	       0x000000001	/* already read */
 #define POST_MARKED	       0x000000002	/* marked */
-#define POST_GEM	       0x000000004	/* gemed */
+#define POST_GEM	       0x000000004	/* gemmed */
 #define POST_CANCEL	       0x000000040	/* canceled */
 #define POST_DELETE	       0x000000080	/* deleted */
 #define	POST_INCOME	       0x000000100	/* 轉信進來的 */

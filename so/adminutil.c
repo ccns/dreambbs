@@ -51,7 +51,7 @@ m_expire(void)
 	char buf[80];
 
 	move(22, 0);
-	outs("清除特定看板 cancal 之文章。");
+	outs("清除特定看板 cancel 之文章。");
 	if ((brd = ask_board(bname, BRD_R_BIT, NULL)))
 	{
 		sprintf(buf, "bin/expire 999 20000 20000 \"%s\" &", brd->brdname);
@@ -652,12 +652,12 @@ update_email(void)
 }
 
 static void
-update_spamer_acl(void)
+update_spammer_acl(void)
 {
-	if (access(FN_ETC_SPAMER_ACL".new", 0))
+	if (access(FN_ETC_SPAMMER_ACL".new", 0))
 	{
-		system("bin/clean_acl " FN_ETC_SPAMER_ACL " " FN_ETC_SPAMER_ACL".new");
-		rename(FN_ETC_SPAMER_ACL".new", FN_ETC_SPAMER_ACL);
+		system("bin/clean_acl " FN_ETC_SPAMMER_ACL " " FN_ETC_SPAMMER_ACL".new");
+		rename(FN_ETC_SPAMMER_ACL".new", FN_ETC_SPAMMER_ACL);
 	}
 	else
 		vmsg("正在工作中");
@@ -689,7 +689,7 @@ update_all(void)
 		update_email();
 		break;
 	case '3':
-		update_spamer_acl();
+		update_spammer_acl();
 		break;
 	case '4':
 		update_untrust_acl();
@@ -760,7 +760,7 @@ m_xfile(void)
 		FN_ETC_JUSTIFY,
 		FN_ETC_VALID,
 		FN_ETC_EXPIRE_CONF,
-		FN_ETC_SPAMER_ACL,
+		FN_ETC_SPAMMER_ACL,
 		FN_ETC_ALLOW_ACL,
 		FN_ETC_BANIP_ACL,
 		FN_ETC_UNTRUST_ACL,

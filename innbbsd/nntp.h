@@ -1,7 +1,7 @@
 /*  $Revision: 1.1.1.1 $
 **
 **  Here be a set of NNTP response codes as defined in RFC977 and elsewhere.
-**  The reponse codes are three digits, RFI, defined like this:
+**  The response codes are three digits, RFI, defined like this:
 **	R, Response:
 **		1xx	Informative message
 **		2xx	Command ok

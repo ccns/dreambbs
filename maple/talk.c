@@ -1107,7 +1107,7 @@ KeyFunc pal_cb[] =
   {'/', pal_search_forward},
   {'?', pal_search_backward},
 #if 0
-  {'w' | XO_DL, (int (*)())"bin/bbcall.so:pal_bbc"},
+  {'w' | XO_DL, (int (*)(XO *xo))"bin/bbcall.so:pal_bbc"},
 #endif
 
   {'h', pal_help}
@@ -1573,7 +1573,7 @@ XoBM(
     xz[XZ_PAL - XO_ZONE].xo = xt = xo_new(fpath);
     xover(XZ_PAL);		/* Thor: 進xover前, pal_xo 一定要 ready */
 
-    /* build userno image to speed up, maybe upgreade to shm */
+    /* build userno image to speed up, maybe upgrade to shm */
 
     bm_image();
 
@@ -1639,8 +1639,8 @@ do_query(
     acct->userlevel & PERM_VALID ? "已" : "未");
 
   prints(" 上次(\033[1;33m%s\033[m)來自(%s)\n", 
-  Ctime(&acct->lastlogin), ((acct->ufo & UFO_HIDEDN)&&!HAS_PERM(PERM_SYSOP)) ? 
-  HIDEDN_SRC : acct->lasthost);
+  Ctime(&acct->lastlogin), ((acct->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ? 
+  HIDDEN_SRC : acct->lasthost);
 
 #if defined(REALINFO) && defined(QUERY_REALNAMES)
   if (HAS_PERM(PERM_BASIC))
@@ -1743,7 +1743,7 @@ my_query(
 #define	BMW_FORMAT	"\033[1;33;46m★%s \033[37;45m %s \033[m"
 #define BMW_FORMAT_BC	"\033[1;37;45m★%s \033[1;33;46m %s \033[m"
 /* patch by visor : BMW_LOCAL_MAX >= BMW_PER_USER 
-   以免進入無線迴圈                               */
+   以免進入無限迴圈                               */
 #define	BMW_LOCAL_MAX	10	
 
 
@@ -3650,8 +3650,8 @@ ulist_body(
 	  color, up->userid,
 	  (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username , 
 	  colortmp > 0 ? "\033[m" : "",
-	  (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDEDN)&&!HAS_PERM(PERM_SYSOP)) ? 
-	  HIDEDN_SRC : up->from , diff,diffmsg,
+	  (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ? 
+	  HIDDEN_SRC : up->from , diff,diffmsg,
 	  bmode(up, 0), buf);
       }
       else

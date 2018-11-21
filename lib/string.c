@@ -494,7 +494,7 @@ str_decode(
 	      tmp++;
 	    src = tmp;		/* Thor: decode over */
 	    dst += i;
-	    adj = 1;		/* Thor: adjcent */
+	    adj = 1;		/* Thor: adjacent */
 	  }
 	}
       }

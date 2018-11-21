@@ -220,7 +220,7 @@ void
 abort_bbs(void)
 {
   if (bbstate)
-    u_exit("AXXED");
+    u_exit("AXED");
   
   exit(0);
 }
@@ -729,7 +729,7 @@ tn_login(void)
       logattempt(' ');
       cuser.userlevel = level = 0; 
       /* Thor.981207: 怕人亂玩, 強制寫回cuser.userlevel */
-      ufo = UFO_PAGER | UFO_QUIET | UFO_MESSAGE | UFO_PAGER1 |UFO_HIDEDN;
+      ufo = UFO_PAGER | UFO_QUIET | UFO_MESSAGE | UFO_PAGER1 |UFO_HIDDEN;
       cuser.ufo = ufo;
       cuser.ufo2 = UFO2_COLOR | UFO2_BNOTE | UFO2_MOVIE;
       if (utmp_count(cuser.userno, 0) > MAXGUEST)
@@ -836,7 +836,7 @@ tn_login(void)
       else if(!(level & PERM_DENYSTOP) && cuser.deny > check_deny) cuser.deny = check_deny;
       
       if (!(level & PERM_CLOAK))
-        ufo &= ~(UFO_CLOAK|UFO_HIDEDN);
+        ufo &= ~(UFO_CLOAK|UFO_HIDDEN);
 
       if (level & PERM_DENYPOST)
 	level &= ~PERM_POST;

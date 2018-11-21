@@ -2095,7 +2095,7 @@ board_main(void)
 //  brh_load();
 
 #ifdef	HAVE_RECOMMEND
-  recommand_time = time(0);
+  recommend_time = time(0);
 #endif
 
   /* 如果沒有 .BRD 時，或大小為零時，將 run/class.img 移除

@@ -470,7 +470,7 @@ bsmtp_file(
   int sock;
   time_t chrono, stamp;
   FILE *fp, *fr, *fw;
-  char *str, buf[512], from[80], msgid[80],boundry[256];
+  char *str, buf[512], from[80], msgid[80],boundary[256];
   char fname[256];
   struct tm ntime, *xtime;
             
@@ -515,7 +515,7 @@ bsmtp_file(
   {
     archiv32(chrono, msgid);
     
-    sprintf(boundry,"----=_NextPart_%s",msgid);
+    sprintf(boundary,"----=_NextPart_%s",msgid);
 
     move(b_lines, 0);
     clrtoeol();
@@ -584,15 +584,15 @@ bsmtp_file(
       str_site);
       
     fprintf(fw,"MIME-Version: 1.0\r\nContent-Type: multipart/mixed;\r\n"
-    		"\tboundary=\"%s\"\r\n\r\n",boundry);
+    		"\tboundary=\"%s\"\r\n\r\n",boundary);
     		
     fprintf(fw,"This is a multi-part message in MIME format.\r\n");
     fprintf(fw,"--%s\r\nContent-Type: text/plain;\r\n\tcharset=\"big5\"\r\n"
-    	       "Content-Transfer-Encoding: 8bit\r\n\r\n附件名稱：%s\r\n",boundry,fname);
+    	       "Content-Transfer-Encoding: 8bit\r\n\r\n附件名稱：%s\r\n",boundary,fname);
 
     fprintf(fw,"--%s\r\nContent-Type: application/x-compressed;\r\n\tname=\"%s\"\r\n"
     	       "Content-Transfer-Encoding: base64\r\nContent-Disposition: attachment;\r\n"
-    	       "\tfilename=\"%s\"\r\n\r\n",boundry,fname,fname);
+    	       "\tfilename=\"%s\"\r\n\r\n",boundary,fname,fname);
 
     /* ------------------------------------------------- */
     /* begin of mail body				 */
@@ -616,7 +616,7 @@ bsmtp_file(
       }
       fclose(fp);
     }
-    fprintf(fw,"--%s--\r\n",boundry);
+    fprintf(fw,"--%s--\r\n",boundary);
 
     fputs("\r\n.\r\n", fw);
     fflush(fw);
@@ -1694,7 +1694,7 @@ mail_sysop(void)
 
     move(11, 0);
     clrtobot();
-    prints("%16s   %-18s權責劃分\n%s\n", "編號", "站長 ID", msg_seperator);
+    prints("%16s   %-18s權責劃分\n%s\n", "編號", "站長 ID", msg_separator);
 
     for (i = 0; i < j; i++)
     {

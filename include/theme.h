@@ -29,8 +29,8 @@
 
 #define ANSIRESET	"\033[m"	    /* 終止顏色 */
 
-#define COLOR1		"\033[34;46m"	/* footer/feeter 的前段顏色 */
-#define COLOR2		"\033[31;47m"	/* footer/feeter 的後段顏色 */
+#define COLOR1		"\033[34;46m"	/* footer 的前段顏色 */
+#define COLOR2		"\033[31;47m"	/* footer 的後段顏色 */
 #define COLOR3		"\033[30;47m"	/* neck 的顏色 */
 #define COLOR4		"\033[1;44m"	/* 光棒 的顏色 */
 #define COLOR5		"\033[34;47m"	/* more 檔頭的標題顏色 */
@@ -96,7 +96,7 @@
 
 
 /* ----------------------------------------------------- */
-/* 訊息字串：xo_foot() 時的 feeter 都抓出來定義在這      */
+/* 訊息字串：xo_foot() 時的 footer 都抓出來定義在這      */
 /* ----------------------------------------------------- */
 
 
@@ -107,11 +107,11 @@ COLOR1 " 文章選讀 " COLOR2 " (ry)回應 (=\\[]<>-+;'`)主題 (|?QA)搜尋標題作者 (kj)
 COLOR1 " 瀏覽 P.%d (%d%%) " COLOR2 " (h)說明 [PgUp][PgDn][0][$]移動 (/n)搜尋 (C)暫存 (←q)結束 "
 
 
-#define FEETER_INNBBS	\
+#define FOOTER_INNBBS	\
 COLOR1 " 轉信設定 " COLOR2 " (↑/↓)上下 (PgUp/PgDn)上下頁 (Home/End)首尾 (←)(q)離開           "
 
-#define FEETER_VOTEALL  \
-	COLOR1 " 禮禱簡翹瞻瞻瞻? " COLOR2 " (癒繫/癒繭)瞻W瞻U (PgUp/PgDn)瞻W瞻U簫繞 (Home/End)簫繙禮? (癒繩)禮禱簡翹 (癒繹)(q)?繩繞}  "
+#define FOOTER_VOTEALL  \
+	COLOR1 " 投票中心 " COLOR2 " (↑/↓)上下 (PgUp/PgDn)上下頁 (Home/End)首尾 (→)投票 (←)(q)離開  "
 
 /* ----------------------------------------------------- */
 /* 站簽：站台來源簽名                                    */

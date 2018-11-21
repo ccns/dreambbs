@@ -314,12 +314,12 @@ log_user(
     if (log_num > 100 && log_num < 150)
     {
       sprintf(chatbuf, "%d: %p <%d>", log_num, cu, gline);
-      logit("travese user ", chatbuf);
+      logit("traverse user ", chatbuf);
     }
     else if (log_num == 100)
     {
       sprintf(chatbuf, "BOOM !! at line %d", gline);
-      logit("travese user ", chatbuf);
+      logit("traverse user ", chatbuf);
     }
     log_num++;
   }
@@ -351,7 +351,7 @@ valid_chatid(
 }
 
 
-/* Case Independent strcmp : 1 ==> euqal */
+/* Case Independent strcmp : 1 ==> equal */
 
 
 /* Thor.990211: 統一使用dao library */
@@ -364,7 +364,7 @@ valid_chatid(
 /* ----------------------------------------------------- */
 /* 0 : equal            ("foo", "foo")                   */
 /* -1 : mismatch        ("abc", "xyz")                   */
-/* ow : similar         ("goo", "good")                  */
+/* o.w. : similar       ("goo", "good")                  */
 /* ----------------------------------------------------- */
 
 

@@ -10,7 +10,7 @@
 #define	START_HAPPY	(20)
 #define START_SATISFY	(20)
 
-#define LEARN_ELVEL	((d.happy+d.satisfy)/100)
+#define LEARN_LEVEL	((d.happy+d.satisfy)/100)
 
 #include "bbs.h"
 #include "pipstruct.h"
@@ -289,7 +289,7 @@ void pip_new_game(void)
 		d.weaponA = d.weaponB = d.weaponC = d.weaponD = d.weaponE = 0;
 
 		/*能力參數*/
-		d.toman = d.character = d.love = d.wisdom = d.art = d.etchics = 0;
+		d.toman = d.character = d.love = d.wisdom = d.art = d.ethics = 0;
 		d.brave = d.homework = d.charm = d.manners = d.speech = d.cookskill = 0;
 		d.learnA = d.learnB = d.learnC = d.learnD = d.learnE = 0;
 
@@ -1018,7 +1018,7 @@ int mode)
 		move(4, 0);
 		sprintf(buf
 				, " \x1b[1;36m[愛心]\x1b[37m%-5d\x1b[36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[道德]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[家事]\x1b[37m%-5d\x1b[0m"
-				, d.love, d.wisdom, d.character, d.art, d.etchics, d.brave, d.homework);
+				, d.love, d.wisdom, d.character, d.art, d.ethics, d.brave, d.homework);
 		prints(buf);
 
 	}
@@ -1554,7 +1554,7 @@ void pip_write_file(void)
 				d.social, d.family, d.hexp, d.mexp, d.tmpA, d.tmpB, d.tmpC, d.tmpD, d.tmpE,
 				d.mp, d.maxmp, d.attack, d.resist, d.speed, d.hskill, d.mskill, d.mresist, d.magicmode, d.specialmagic, d.fightC, d.fightD, d.fightE,
 				d.weaponhead, d.weaponrhand, d.weaponlhand, d.weaponbody, d.weaponfoot, d.weaponA, d.weaponB, d.weaponC, d.weaponD, d.weaponE,
-				d.toman, d.character, d.love, d.wisdom, d.art, d.etchics, d.brave, d.homework, d.charm, d.manners, d.speech, d.cookskill, d.learnA, d.learnB, d.learnC, d.learnD, d.learnE,
+				d.toman, d.character, d.love, d.wisdom, d.art, d.ethics, d.brave, d.homework, d.charm, d.manners, d.speech, d.cookskill, d.learnA, d.learnB, d.learnC, d.learnD, d.learnE,
 				d.happy, d.satisfy, d.fallinlove, d.belief, d.offense, d.affect, d.stateA, d.stateB, d.stateC, d.stateD, d.stateE,
 				d.food, d.medicine, d.bighp, d.cookie, d.ginseng, d.snowgrass, d.eatC, d.eatD, d.eatE,
 				d.book, d.playtool, d.money, d.thingA, d.thingB, d.thingC, d.thingD, d.thingE,
@@ -1594,7 +1594,7 @@ void pip_read_file(char *userid)
 			   &(d.social), &(d.family), &(d.hexp), &(d.mexp), &(d.tmpA), &(d.tmpB), &(d.tmpC), &(d.tmpD), &(d.tmpE),
 			   &(d.mp), &(d.maxmp), &(d.attack), &(d.resist), &(d.speed), &(d.hskill), &(d.mskill), &(d.mresist), &(d.magicmode), &(d.specialmagic), &(d.fightC), &(d.fightD), &(d.fightE),
 			   &(d.weaponhead), &(d.weaponrhand), &(d.weaponlhand), &(d.weaponbody), &(d.weaponfoot), &(d.weaponA), &(d.weaponB), &(d.weaponC), &(d.weaponD), &(d.weaponE),
-			   &(d.toman), &(d.character), &(d.love), &(d.wisdom), &(d.art), &(d.etchics), &(d.brave), &(d.homework), &(d.charm), &(d.manners), &(d.speech), &(d.cookskill), &(d.learnA), &(d.learnB), &(d.learnC), &(d.learnD), &(d.learnE),
+			   &(d.toman), &(d.character), &(d.love), &(d.wisdom), &(d.art), &(d.ethics), &(d.brave), &(d.homework), &(d.charm), &(d.manners), &(d.speech), &(d.cookskill), &(d.learnA), &(d.learnB), &(d.learnC), &(d.learnD), &(d.learnE),
 			   &(d.happy), &(d.satisfy), &(d.fallinlove), &(d.belief), &(d.offense), &(d.affect), &(d.stateA), &(d.stateB), &(d.stateC), &(d.stateD), &(d.stateE),
 			   &(d.food), &(d.medicine), &(d.bighp), &(d.cookie), &(d.ginseng), &(d.snowgrass), &(d.eatC), &(d.eatD), &(d.eatE),
 			   &(d.book), &(d.playtool), &(d.money), &(d.thingA), &(d.thingB), &(d.thingC), &(d.thingD), &(d.thingE),
@@ -2446,8 +2446,8 @@ int pip_job_workA(void)
 	long workmoney;
 
 	workmoney = 0;
-	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_ELVEL;
-	d.maxhp += rand() % 2 * LEARN_ELVEL;
+	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+	d.maxhp += rand() % 2 * LEARN_LEVEL;
 	d.shit += rand() % 3 + 5;
 	count_tired(3, 7, "Y", 100, 1);
 	d.hp -= (rand() % 2 + 4);
@@ -2493,7 +2493,7 @@ int pip_job_workA(void)
 		workmoney = 20 + (d.cookskill * 2 + d.homework + d.family) / 60;
 		vmsg("家事很糟糕喔..這樣不行啦..");
 	}
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workA += 1;
 	return 0;
 }
@@ -2509,8 +2509,8 @@ int pip_job_workB(void)
 	long workmoney;
 
 	workmoney = 0;
-	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_ELVEL;
-	d.maxhp += (rand() % 2 + 1) * LEARN_ELVEL;
+	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+	d.maxhp += (rand() % 2 + 1) * LEARN_LEVEL;
 	d.shit += rand() % 3 + 5;
 	d.affect += rand() % 3 + 4;
 
@@ -2550,7 +2550,7 @@ int pip_job_workB(void)
 		workmoney = 80 + (d.love + d.toman) / 50;
 		vmsg("很糟糕喔..你罩不住小朋友耶...");
 	}
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workB += 1;
 	return 0;
 }
@@ -2566,8 +2566,8 @@ int pip_job_workC(void)
 	long workmoney;
 
 	workmoney = 0;
-	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_ELVEL;
-	d.maxhp += (rand() % 2 + 2) * LEARN_ELVEL;
+	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+	d.maxhp += (rand() % 2 + 2) * LEARN_LEVEL;
 	d.shit += rand() % 3 + 5;
 	count_tired(5, 12, "Y", 100, 1);
 	d.hp -= (rand() % 4 + 8);
@@ -2614,7 +2614,7 @@ int pip_job_workC(void)
 		workmoney = 100 + (d.cookskill * 2 + d.homework * 2) / 50;
 		vmsg("這個很糟糕喔..你這樣不行啦..");
 	}
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workC += 1;
 	return 0;
 }
@@ -2630,8 +2630,8 @@ int pip_job_workD(void)
 	long workmoney;
 
 	workmoney = 0;
-	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_ELVEL;
-	d.maxhp += (rand() % 3 + 2) * LEARN_ELVEL;
+	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+	d.maxhp += (rand() % 3 + 2) * LEARN_LEVEL;
 	d.wrist += rand() % 2 + 2;
 	d.shit += rand() % 5 + 10;
 	count_tired(5, 15, "Y", 100, 1);
@@ -2662,7 +2662,7 @@ int pip_job_workD(void)
 		workmoney = 120 + (d.wrist * 2 + d.hp * 2) / 80;
 		vmsg("你不太適合農場的工作  -_-...");
 	}
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workD += 1;
 	return 0;
 }
@@ -2678,8 +2678,8 @@ int pip_job_workE(void)
 	long workmoney;
 
 	workmoney = 0;
-	class = (d.cookskill - d.tired) * LEARN_ELVEL;
-	d.maxhp += (rand() % 2 + 1) * LEARN_ELVEL;
+	class = (d.cookskill - d.tired) * LEARN_LEVEL;
+	d.maxhp += (rand() % 2 + 1) * LEARN_LEVEL;
 	d.shit += rand() % 4 + 12;
 	count_tired(5, 9, "Y", 100, 1);
 	d.hp -= (rand() % 4 + 8);
@@ -2730,7 +2730,7 @@ int pip_job_workE(void)
 		workmoney = 100 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
 		vmsg("你的廚藝待加強喔...");
 	}
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workE += 1;
 	return 0;
 }
@@ -2744,11 +2744,11 @@ int pip_job_workF(void)
 	long workmoney;
 
 	workmoney = 0;
-	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_ELVEL;
+	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
 	count_tired(5, 7, "Y", 100, 1);
-	d.love += (rand() % 3 + 4) * LEARN_ELVEL;
-	d.belief += (rand() % 4 + 7) * LEARN_ELVEL;
-	d.etchics += (rand() % 3 + 7) * LEARN_ELVEL;
+	d.love += (rand() % 3 + 4) * LEARN_LEVEL;
+	d.belief += (rand() % 4 + 7) * LEARN_LEVEL;
+	d.ethics += (rand() % 3 + 7) * LEARN_LEVEL;
 	d.shit += rand() % 3 + 3;
 	d.hp -= rand() % 3 + 5;
 	d.offense -= rand() % 4 + 7;
@@ -2757,25 +2757,25 @@ int pip_job_workF(void)
 	show_job_pic(61);
 	if (class >= 75)
 	{
-		workmoney = 100 + (d.belief + d.etchics - d.offense) / 20;
+		workmoney = 100 + (d.belief + d.ethics - d.offense) / 20;
 		vmsg("錢很少 但看你這麼認真 給你多一點...");
 	}
 	else if (class < 75 && class >= 50)
 	{
-		workmoney = 75 + (d.belief + d.etchics - d.offense) / 20;
+		workmoney = 75 + (d.belief + d.ethics - d.offense) / 20;
 		vmsg("謝謝你的熱心幫忙..:)");
 	}
 	else if (class < 50 && class >= 25)
 	{
-		workmoney = 50 + (d.belief + d.etchics - d.offense) / 20;
+		workmoney = 50 + (d.belief + d.ethics - d.offense) / 20;
 		vmsg("你真的很有愛心啦..不過有點小累的樣子...");
 	}
 	else if (class < 25)
 	{
-		workmoney = 25 + (d.belief + d.etchics - d.offense) / 20;
+		workmoney = 25 + (d.belief + d.ethics - d.offense) / 20;
 		vmsg("來奉獻不錯..但也不能打混ㄚ....:(");
 	}
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workF += 1;
 	return 0;
 }
@@ -2791,18 +2791,18 @@ int pip_job_workG(void)
 	workmoney = 200 + (d.charm * 3 + d.speech * 2 + d.toman) / 50;
 	count_tired(3, 12, "Y", 100, 1);
 	d.shit += rand() % 3 + 8;
-	d.speed += (rand() % 2) * LEARN_ELVEL;
+	d.speed += (rand() % 2) * LEARN_LEVEL;
 	d.weight -= rand() % 2;
 	d.happy -= (rand() % 3 + 7);
 	d.satisfy -= rand() % 3 + 5;
 	d.hp -= (rand() % 6 + 6);
-	d.charm += (rand() % 2 + 3) * LEARN_ELVEL;
-	d.speech += (rand() % 2 + 3) * LEARN_ELVEL;
-	d.toman += (rand() % 2 + 3) * LEARN_ELVEL;
+	d.charm += (rand() % 2 + 3) * LEARN_LEVEL;
+	d.speech += (rand() % 2 + 3) * LEARN_LEVEL;
+	d.toman += (rand() % 2 + 3) * LEARN_LEVEL;
 	move(4, 0);
 	show_job_pic(71);
 	vmsg("擺\地攤要躲警察啦..:p");
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workG += 1;
 	return 0;
 }
@@ -2823,10 +2823,10 @@ int pip_job_workH(void)
 		return 0;
 	}
 	workmoney = 0;
-	class = (d.wrist - d.tired) * LEARN_ELVEL;
-	d.maxhp += (rand() % 2 + 3) * LEARN_ELVEL;
+	class = (d.wrist - d.tired) * LEARN_LEVEL;
+	d.maxhp += (rand() % 2 + 3) * LEARN_LEVEL;
 	d.shit += rand() % 7 + 15;
-	d.wrist += (rand() % 3 + 4) * LEARN_ELVEL;
+	d.wrist += (rand() % 3 + 4) * LEARN_LEVEL;
 	count_tired(5, 15, "Y", 100, 1);
 	d.hp -= (rand() % 4 + 10);
 	d.happy -= (rand() % 3 + 4);
@@ -2855,7 +2855,7 @@ int pip_job_workH(void)
 		workmoney = 200 + d.wrist / 20 + d.maxhp / 80;
 		vmsg("待加強喔..鍛鍊再來吧....");
 	}
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workH += 1;
 	return 0;
 }
@@ -2876,9 +2876,9 @@ int pip_job_workI(void)
 		return 0;
 	}
 	workmoney = 0;
-	class = (d.art - d.tired) * LEARN_ELVEL;
-	d.maxhp += (rand() % 2) * LEARN_ELVEL;
-	d.affect += (rand() % 2 + 3) * LEARN_ELVEL;
+	class = (d.art - d.tired) * LEARN_LEVEL;
+	d.maxhp += (rand() % 2) * LEARN_LEVEL;
+	d.affect += (rand() % 2 + 3) * LEARN_LEVEL;
 	count_tired(3, 11, "Y", 100, 1);
 	d.shit += rand() % 4 + 8;
 	d.hp -= (rand() % 4 + 10);
@@ -2908,7 +2908,7 @@ int pip_job_workI(void)
 		workmoney = 250 + d.art / 10 + d.affect / 20;
 		vmsg("待加強喔..以後再來吧....");
 	}
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workI += 1;
 	return 0;
 }
@@ -2933,13 +2933,13 @@ int pip_job_workJ(void)
 		return 0;
 	}
 	workmoney = 0;
-	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_ELVEL;
-	class1 = (d.wisdom - d.tired) * LEARN_ELVEL;
+	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+	class1 = (d.wisdom - d.tired) * LEARN_LEVEL;
 	count_tired(5, 15, "Y", 100, 1);
 	d.shit += rand() % 4 + 13;
 	d.weight -= (rand() % 2 + 1);
-	d.maxhp += (rand() % 2 + 3) * LEARN_ELVEL;
-	d.speed += (rand() % 2 + 3) * LEARN_ELVEL;
+	d.maxhp += (rand() % 2 + 3) * LEARN_LEVEL;
+	d.speed += (rand() % 2 + 3) * LEARN_LEVEL;
 	d.hp -= (rand() % 6 + 8);
 	d.character -= rand() % 3 + 4;
 	d.happy -= rand() % 5 + 8;
@@ -2981,7 +2981,7 @@ int pip_job_workJ(void)
 		workmoney = 190 + d.hskill / 20;
 		vmsg("要多多鍛鍊和增進智慧啦....");
 	}
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workJ += 1;
 	return 0;
 }
@@ -3001,12 +3001,12 @@ int pip_job_workK(void)
 		return 0;
 	}
 	workmoney = 0;
-	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_ELVEL;
+	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
 	count_tired(5, 15, "Y", 100, 1);
 	d.shit += rand() % 4 + 16;
 	d.weight -= (rand() % 2 + 2);
-	d.maxhp += (rand() % 2 + 1) * LEARN_ELVEL;
-	d.speed += (rand() % 2 + 2) * LEARN_ELVEL;
+	d.maxhp += (rand() % 2 + 1) * LEARN_LEVEL;
+	d.speed += (rand() % 2 + 2) * LEARN_LEVEL;
 	d.hp -= (rand() % 6 + 10);
 	d.charm -= rand() % 3 + 6;
 	d.happy -= (rand() % 5 + 10);
@@ -3041,7 +3041,7 @@ int pip_job_workK(void)
 		vmsg("下次體力好一點..疲勞度低一點再來....");
 	}
 
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workK += 1;
 	return 0;
 }
@@ -3063,12 +3063,12 @@ int pip_job_workL(void)
 		return 0;
 	}
 	workmoney = 0;
-	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_ELVEL;
-	class1 = (d.belief - d.tired) * LEARN_ELVEL;
+	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+	class1 = (d.belief - d.tired) * LEARN_LEVEL;
 	d.shit += rand() % 5 + 8;
-	d.maxmp += (rand() % 2) * LEARN_ELVEL;
-	d.affect += (rand() % 2 + 2) * LEARN_ELVEL;
-	d.brave += (rand() % 2 + 2) * LEARN_ELVEL;
+	d.maxmp += (rand() % 2) * LEARN_LEVEL;
+	d.affect += (rand() % 2 + 2) * LEARN_LEVEL;
+	d.brave += (rand() % 2 + 2) * LEARN_LEVEL;
 	count_tired(5, 12, "Y", 100, 1);
 	d.hp -= (rand() % 3 + 7);
 	d.happy -= (rand() % 4 + 6);
@@ -3102,7 +3102,7 @@ int pip_job_workL(void)
 		vmsg("我也不方便說啥了..請再加油..");
 	}
 
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workL += 1;
 	return 0;
 }
@@ -3121,16 +3121,16 @@ int pip_job_workM(void)
 		return 0;
 	}
 	workmoney = 0;
-	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_ELVEL;
+	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
 	workmoney = 50 + d.wisdom / 20 + d.character / 20;
 	count_tired(5, 10, "Y", 100, 1);
 	d.shit += rand() % 3 + 8;
-	d.character += (rand() % 2) * LEARN_ELVEL;
-	d.wisdom += (rand() % 2) * LEARN_ELVEL;
+	d.character += (rand() % 2) * LEARN_LEVEL;
+	d.wisdom += (rand() % 2) * LEARN_LEVEL;
 	d.happy -= (rand() % 3 + 6);
 	d.satisfy -= rand() % 3 + 5;
 	d.hp -= (rand() % 3 + 8);
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	move(4, 0);
 	show_job_pic(131);
 	vmsg("家教輕鬆 當然錢就少一點囉");
@@ -3157,8 +3157,8 @@ int pip_job_workN(void)
 		return 0;
 	}
 	workmoney = 0;
-	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_ELVEL;
-	class1 = (d.charm - d.tired) * LEARN_ELVEL;
+	class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+	class1 = (d.charm - d.tired) * LEARN_LEVEL;
 	d.shit += rand() % 5 + 5;
 	count_tired(5, 14, "Y", 100, 1);
 	d.hp -= (rand() % 3 + 5);
@@ -3197,7 +3197,7 @@ int pip_job_workN(void)
 		workmoney = 200 + (d.charm) / 5;
 		vmsg("你的媚力不夠啦..請加油....");
 	}
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	d.workN += 1;
 	return 0;
 }
@@ -3219,19 +3219,19 @@ int pip_job_workO(void)
 		return 0;
 	}
 	workmoney = 0;
-	class = (d.charm - d.tired) * LEARN_ELVEL;
+	class = (d.charm - d.tired) * LEARN_LEVEL;
 	d.shit += rand() % 5 + 14;
-	d.charm += (rand() % 3 + 8) * LEARN_ELVEL;
-	d.offense += (rand() % 3 + 8) * LEARN_ELVEL;
+	d.charm += (rand() % 3 + 8) * LEARN_LEVEL;
+	d.offense += (rand() % 3 + 8) * LEARN_LEVEL;
 	count_tired(5, 22, "Y", 100, 1);
 	d.hp -= (rand() % 3 + 8);
 	d.social -= rand() % 6 + 12;
 	d.happy -= (rand() % 4 + 8);
 	d.satisfy -= rand() % 3 + 8;
-	d.etchics -= rand() % 6 + 10;
+	d.ethics -= rand() % 6 + 10;
 	d.belief -= rand() % 6 + 10;
-	if (d.etchics < 0)
-		d.etchics = 0;
+	if (d.ethics < 0)
+		d.ethics = 0;
 	if (d.belief < 0)
 		d.belief = 0;
 
@@ -3264,7 +3264,7 @@ int pip_job_workO(void)
 		workmoney = 300 + (d.charm) / 5;
 		vmsg("唉..你的媚力不夠啦....");
 	}
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	if (d.relation < 0)
 		d.relation = 0;
 	if (d.toman < 0)
@@ -3292,11 +3292,11 @@ int pip_job_workP(void)
 		return 0;
 	}
 	workmoney = 0;
-	class = (d.charm - d.tired) * LEARN_ELVEL;
-	class1 = (d.art - d.tired) * LEARN_ELVEL;
+	class = (d.charm - d.tired) * LEARN_LEVEL;
+	class1 = (d.art - d.tired) * LEARN_LEVEL;
 	d.shit += rand() % 5 + 7;
-	d.charm += (rand() % 3 + 8) * LEARN_ELVEL;
-	d.offense += (rand() % 3 + 8) * LEARN_ELVEL;
+	d.charm += (rand() % 3 + 8) * LEARN_LEVEL;
+	d.offense += (rand() % 3 + 8) * LEARN_LEVEL;
 	count_tired(5, 22, "Y", 100, 1);
 	d.hp -= (rand() % 3 + 8);
 	d.social -= rand() % 6 + 12;
@@ -3337,7 +3337,7 @@ int pip_job_workP(void)
 		workmoney = 400 + (d.charm) / 5;
 		vmsg("唉..你不行啦....");
 	}
-	d.money += workmoney * LEARN_ELVEL;
+	d.money += workmoney * LEARN_LEVEL;
 	if (d.toman < 0)
 		d.toman = 0;
 	d.workP += 1;
@@ -3877,7 +3877,7 @@ int pip_practice_classA(void)
 
 	body = pip_practice_function(1, class, 11, 12, &change1, &change2, &change3, &change4, &change5);
 	if (body == 0) return 0;
-	d.wisdom += change4 * LEARN_ELVEL;
+	d.wisdom += change4 * LEARN_LEVEL;
 	if (body == 1)
 	{
 		d.belief -= rand() % (2 + class * 2);
@@ -3918,18 +3918,18 @@ int pip_practice_classB(void)
 
 	body = pip_practice_function(2, class, 21, 21, &change1, &change2, &change3, &change4, &change5);
 	if (body == 0) return 0;
-	d.affect += change3 * LEARN_ELVEL;
+	d.affect += change3 * LEARN_LEVEL;
 	if (body == 1)
 	{
-		d.wisdom += rand() % (class + 3) * LEARN_ELVEL;
-		d.character += rand() % (class + 3) * LEARN_ELVEL;
-		d.art += rand() % (class + 3) * LEARN_ELVEL;
+		d.wisdom += rand() % (class + 3) * LEARN_LEVEL;
+		d.character += rand() % (class + 3) * LEARN_LEVEL;
+		d.art += rand() % (class + 3) * LEARN_LEVEL;
 	}
 	else
 	{
-		d.wisdom += rand() % (class + 2) * LEARN_ELVEL;
-		d.character += rand() % (class + 2) * LEARN_ELVEL;
-		d.art += rand() % (class + 2) * LEARN_ELVEL;
+		d.wisdom += rand() % (class + 2) * LEARN_LEVEL;
+		d.character += rand() % (class + 2) * LEARN_LEVEL;
+		d.art += rand() % (class + 2) * LEARN_LEVEL;
 	}
 	body = (d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400 + 1;
 	pip_practice_gradeup(2, class, body);
@@ -3956,15 +3956,15 @@ int pip_practice_classC(void)
 
 	body = pip_practice_function(3, class, 31, 31, &change1, &change2, &change3, &change4, &change5);
 	if (body == 0) return 0;
-	d.wisdom += change2 * LEARN_ELVEL;
-	d.belief += change3 * LEARN_ELVEL;
+	d.wisdom += change2 * LEARN_LEVEL;
+	d.belief += change3 * LEARN_LEVEL;
 	if (body == 1)
 	{
-		d.mresist += rand() % 5 * LEARN_ELVEL;
+		d.mresist += rand() % 5 * LEARN_LEVEL;
 	}
 	else
 	{
-		d.mresist += rand() % 3 * LEARN_ELVEL;
+		d.mresist += rand() % 3 * LEARN_LEVEL;
 	}
 	body = (d.belief * 2 + d.wisdom) / 400 + 1;
 	pip_practice_gradeup(3, class, body);
@@ -3990,15 +3990,15 @@ int pip_practice_classD(void)
 	if (class > 5) class = 5;
 	body = pip_practice_function(4, class, 41, 41, &change1, &change2, &change3, &change4, &change5);
 	if (body == 0) return 0;
-	d.wisdom += change2 * LEARN_ELVEL;
+	d.wisdom += change2 * LEARN_LEVEL;
 	if (body == 1)
 	{
-		d.hskill += (rand() % 3 + 4) * LEARN_ELVEL;
+		d.hskill += (rand() % 3 + 4) * LEARN_LEVEL;
 		d.affect -= rand() % 3 + 6;
 	}
 	else
 	{
-		d.hskill += (rand() % 3 + 2) * LEARN_ELVEL;
+		d.hskill += (rand() % 3 + 2) * LEARN_LEVEL;
 		d.affect -= rand() % 3 + 6;
 	}
 	body = (d.hskill * 2 + d.wisdom) / 400 + 1;
@@ -4027,16 +4027,16 @@ int pip_practice_classE(void)
 
 	body = pip_practice_function(5, class, 51, 51, &change1, &change2, &change3, &change4, &change5);
 	if (body == 0) return 0;
-	d.speed += (rand() % 3 + 2) * LEARN_ELVEL;
-	d.hexp += (rand() % 2 + 2) * LEARN_ELVEL;
-	d.attack += change4 * LEARN_ELVEL;
+	d.speed += (rand() % 3 + 2) * LEARN_LEVEL;
+	d.hexp += (rand() % 2 + 2) * LEARN_LEVEL;
+	d.attack += change4 * LEARN_LEVEL;
 	if (body == 1)
 	{
-		d.hskill += (rand() % 3 + 5) * LEARN_ELVEL;
+		d.hskill += (rand() % 3 + 5) * LEARN_LEVEL;
 	}
 	else
 	{
-		d.hskill += (rand() % 3 + 3) * LEARN_ELVEL;
+		d.hskill += (rand() % 3 + 3) * LEARN_LEVEL;
 	}
 	body = (d.hskill + d.attack) / 400 + 1;
 	pip_practice_gradeup(5, class, body);
@@ -4063,16 +4063,16 @@ int pip_practice_classF(void)
 
 	body = pip_practice_function(6, class, 61, 61, &change1, &change2, &change3, &change4, &change5);
 	if (body == 0) return 0;
-	d.hexp += (rand() % 2 + 2) * LEARN_ELVEL;
-	d.speed += (rand() % 3 + 2) * LEARN_ELVEL;
-	d.resist += change2 * LEARN_ELVEL;
+	d.hexp += (rand() % 2 + 2) * LEARN_LEVEL;
+	d.speed += (rand() % 3 + 2) * LEARN_LEVEL;
+	d.resist += change2 * LEARN_LEVEL;
 	if (body == 1)
 	{
-		d.hskill += (rand() % 3 + 5) * LEARN_ELVEL;
+		d.hskill += (rand() % 3 + 5) * LEARN_LEVEL;
 	}
 	else
 	{
-		d.hskill += (rand() % 3 + 3) * LEARN_ELVEL;
+		d.hskill += (rand() % 3 + 3) * LEARN_LEVEL;
 	}
 	body = (d.hskill + d.resist) / 400 + 1;
 	pip_practice_gradeup(6, class, body);
@@ -4099,15 +4099,15 @@ int pip_practice_classG(void)
 
 	body = pip_practice_function(7, class, 71, 72, &change1, &change2, &change3, &change4, &change5);
 	if (body == 0) return 0;
-	d.maxmp += change3 * LEARN_ELVEL;
-	d.mexp += (rand() % 2 + 2) * LEARN_ELVEL;
+	d.maxmp += change3 * LEARN_LEVEL;
+	d.mexp += (rand() % 2 + 2) * LEARN_LEVEL;
 	if (body == 1)
 	{
-		d.mskill += (rand() % 3 + 7) * LEARN_ELVEL;
+		d.mskill += (rand() % 3 + 7) * LEARN_LEVEL;
 	}
 	else
 	{
-		d.mskill += (rand() % 3 + 4) * LEARN_ELVEL;
+		d.mskill += (rand() % 3 + 4) * LEARN_LEVEL;
 	}
 
 	body = (d.mskill + d.maxmp) / 400 + 1;
@@ -4135,9 +4135,9 @@ int pip_practice_classH(void)
 
 	body = pip_practice_function(8, class, 0, 0, &change1, &change2, &change3, &change4, &change5);
 	if (body == 0) return 0;
-	d.social += (rand() % 2 + 2) * LEARN_ELVEL;
-	d.manners += (change1 + rand() % 2) * LEARN_ELVEL;
-	d.character += (change1 + rand() % 2) * LEARN_ELVEL;
+	d.social += (rand() % 2 + 2) * LEARN_LEVEL;
+	d.manners += (change1 + rand() % 2) * LEARN_LEVEL;
+	d.character += (change1 + rand() % 2) * LEARN_LEVEL;
 	body = (d.character + d.manners) / 400 + 1;
 	pip_practice_gradeup(8, class, body);
 	d.classH += 1;
@@ -4163,8 +4163,8 @@ int pip_practice_classI(void)
 
 	body = pip_practice_function(9, class, 91, 91, &change1, &change2, &change3, &change4, &change5);
 	if (body == 0) return 0;
-	d.art += change4 * LEARN_ELVEL;
-	d.affect += change2 * LEARN_ELVEL;
+	d.art += change4 * LEARN_LEVEL;
+	d.affect += change2 * LEARN_LEVEL;
 	body = (d.affect + d.art) / 400 + 1;
 	pip_practice_gradeup(9, class, body);
 	d.classI += 1;
@@ -4190,15 +4190,15 @@ int pip_practice_classJ(void)
 
 	body = pip_practice_function(10, class, 0, 0, &change1, &change2, &change3, &change4, &change5);
 	if (body == 0) return 0;
-	d.art += change2 * LEARN_ELVEL;
-	d.maxhp += (rand() % 3 + 2) * LEARN_ELVEL;
+	d.art += change2 * LEARN_LEVEL;
+	d.maxhp += (rand() % 3 + 2) * LEARN_LEVEL;
 	if (body == 1)
 	{
-		d.charm += rand() % (4 + class) * LEARN_ELVEL;
+		d.charm += rand() % (4 + class) * LEARN_LEVEL;
 	}
 	else if (body == 2)
 	{
-		d.charm += rand() % (2 + class) * LEARN_ELVEL;
+		d.charm += rand() % (2 + class) * LEARN_LEVEL;
 	}
 	body = (d.art * 2 + d.charm) / 400 + 1;
 	pip_practice_gradeup(10, class, body);
@@ -4904,7 +4904,7 @@ int first)
 				}
 				else
 				{
-					if (opponent->pip->resistmore == 0)
+					if (opponent->pip->resistmode == 0)
 						dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - opponent->pip->resist / 12 + rand() % 20 - opponent->pip->speed / 30 + d.speed / 30);
 					else
 						dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - opponent->pip->resist / 6 + rand() % 20 - opponent->pip->speed / 10 + d.speed / 30);
@@ -4917,7 +4917,7 @@ int first)
 					sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了普通攻擊,\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
 							, d.name, opponent->pip->name, dinjure);
 				}
-				opponent->pip->resistmore = 0;
+				opponent->pip->resistmode = 0;
 				opponent->pip->msgcount++;
 				currutmp->pip->msgcount++;
 				strcpy(opponent->pip->msg, buf);
@@ -4936,7 +4936,7 @@ int first)
 				}
 				else
 				{
-					if (opponent->pip->resistmore == 0)
+					if (opponent->pip->resistmode == 0)
 						dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - opponent->pip->resist / 12 + rand() % 30 - opponent->pip->speed / 50 + d.speed / 30);
 					else
 						dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - opponent->pip->resist / 6 + rand() % 30 - opponent->pip->speed / 30 + d.speed / 30);
@@ -4958,7 +4958,7 @@ int first)
 						vmsg("你的HP小於5啦..不行啦...");
 					}
 				}
-				opponent->pip->resistmore = 0;
+				opponent->pip->resistmode = 0;
 				opponent->pip->msgcount++;
 				currutmp->pip->msgcount++;
 				strcpy(opponent->pip->msg, buf);
@@ -5030,7 +5030,7 @@ int first)
 				break;
 
 			case '4':
-				currutmp->pip->resistmore = 1;
+				currutmp->pip->resistmode = 1;
 				vmsg("小雞加強防禦啦....");
 				sprintf(buf, "\x1b[1;33m%s \x1b[37m加強防禦，準備全力抵擋 \x1b[33m%s \x1b[37m的下一招\x1b[m",
 						d.name, opponent->pip->name);
@@ -5341,7 +5341,7 @@ int *modeall_purpose)
 {
 	int endmode;
 	/*暗黑*/
-	if ((d.etchics == 0 && d.offense >= 100) || (d.etchics > 0 && d.etchics < 50 && d.offense >= 250))
+	if ((d.ethics == 0 && d.offense >= 100) || (d.ethics > 0 && d.ethics < 50 && d.offense >= 250))
 		endmode = 1;
 	/*藝術*/
 	else if (d.art > d.hexp && d.art > d.mexp && d.art > d.hskill && d.art > d.mskill &&
@@ -5640,17 +5640,17 @@ int *m, int *n, int *grade)
 	switch (class)
 	{
 	case 1:
-		if (d.affect > d.wisdom && d.affect > d.belief && d.etchics > 100)
+		if (d.affect > d.wisdom && d.affect > d.belief && d.ethics > 100)
 		{
 			*m = 1;
-			if (d.etchics >= 800)
+			if (d.ethics >= 800)
 				*n = 1;
-			else if (d.etchics < 800 && d.etchics >= 400)
+			else if (d.ethics < 800 && d.ethics >= 400)
 				*n = 2;
 			else
 				*n = 3;
 		}
-		else if (d.etchics < 50)
+		else if (d.ethics < 50)
 		{
 			*m = 4;
 			if (d.hp >= 400)
@@ -5673,7 +5673,7 @@ int *m, int *n, int *grade)
 		break;
 
 	case 2:
-		if (d.etchics >= 50)
+		if (d.ethics >= 50)
 		{
 			*m = 3;
 			if (d.wisdom >= 500)
@@ -5762,17 +5762,17 @@ int *m, int *n, int *grade)
 	switch (class)
 	{
 	case 1:
-		if (d.affect > d.wisdom && d.affect > d.belief && d.etchics > 100)
+		if (d.affect > d.wisdom && d.affect > d.belief && d.ethics > 100)
 		{
 			*m = 1;
-			if (d.etchics >= 800)
+			if (d.ethics >= 800)
 				*n = 1;
-			else if (d.etchics < 800 && d.etchics >= 400)
+			else if (d.ethics < 800 && d.ethics >= 400)
 				*n = 2;
 			else
 				*n = 3;
 		}
-		else if (d.etchics < 50)
+		else if (d.ethics < 50)
 		{
 
 		}
@@ -5789,17 +5789,17 @@ int *m, int *n, int *grade)
 		break;
 
 	case 2:
-		if (d.character >= 300 && d.etchics > 50)
+		if (d.character >= 300 && d.ethics > 50)
 		{
 			*m = 3;
-			if (d.etchics >= 300 && d.charm >= 300)
+			if (d.ethics >= 300 && d.charm >= 300)
 				*n = 1;
-			else if (d.etchics < 300 && d.charm < 300 && d.etchics >= 250 && d.charm >= 250)
+			else if (d.ethics < 300 && d.charm < 300 && d.ethics >= 250 && d.charm >= 250)
 				*n = 2;
 			else
 				*n = 3;
 		}
-		else if (d.character < 300 && d.etchics > 50)
+		else if (d.character < 300 && d.ethics > 50)
 		{
 			*m = 4;
 			if (d.speech >= 200)
@@ -5822,17 +5822,17 @@ int *m, int *n, int *grade)
 		break;
 
 	case 3:
-		if (d.character >= 400 && d.etchics > 50)
+		if (d.character >= 400 && d.ethics > 50)
 		{
 			*m = 5;
-			if (d.etchics >= 300)
+			if (d.ethics >= 300)
 				*n = 1;
-			else if (d.etchics < 300 && d.etchics >= 150)
+			else if (d.ethics < 300 && d.ethics >= 150)
 				*n = 2;
 			else
 				*n = 3;
 		}
-		else if (d.character < 400 && d.etchics > 50)
+		else if (d.character < 400 && d.ethics > 50)
 		{
 			*m = 4;
 			if (d.speech >= 200)
@@ -5855,7 +5855,7 @@ int *m, int *n, int *grade)
 		break;
 
 	case 4:
-		if (d.etchics >= 50)
+		if (d.ethics >= 50)
 		{
 			*m = 6;
 		}
@@ -5934,9 +5934,9 @@ int mode)
 		if (d.character >= 1000)
 		{
 			*m = 1;
-			if (d.etchics >= 900)
+			if (d.ethics >= 900)
 				*n = 1;
-			else if (d.etchics < 900 && d.etchics >= 600)
+			else if (d.ethics < 900 && d.ethics >= 600)
 				*n = 2;
 			else
 				*n = 3;
@@ -5944,9 +5944,9 @@ int mode)
 		else
 		{
 			*m = 2;
-			if (d.etchics >= 650)
+			if (d.ethics >= 650)
 				*n = 1;
-			else if (d.etchics < 650 && d.etchics >= 400)
+			else if (d.ethics < 650 && d.ethics >= 400)
 				*n = 2;
 			else
 				*n = 3;
@@ -5954,17 +5954,17 @@ int mode)
 		break;
 
 	case 2:
-		if (d.belief > d.etchics && d.belief > d.wisdom)
+		if (d.belief > d.ethics && d.belief > d.wisdom)
 		{
 			*m = 3;
-			if (d.etchics >= 500)
+			if (d.ethics >= 500)
 				*n = 1;
-			else if (d.etchics < 500 && d.etchics >= 250)
+			else if (d.ethics < 500 && d.ethics >= 250)
 				*n = 2;
 			else
 				*n = 3;
 		}
-		else if (d.etchics > d.belief && d.etchics > d.wisdom)
+		else if (d.ethics > d.belief && d.ethics > d.wisdom)
 		{
 			*m = 4;
 			if (d.wisdom >= 800)
@@ -5987,7 +5987,7 @@ int mode)
 		break;
 
 	case 3:
-		if (d.belief > d.etchics && d.belief > d.wisdom)
+		if (d.belief > d.ethics && d.belief > d.wisdom)
 		{
 			*m = 6;
 			if (d.belief >= 400)
@@ -5997,7 +5997,7 @@ int mode)
 			else
 				*n = 3;
 		}
-		else if (d.etchics > d.belief && d.etchics > d.wisdom)
+		else if (d.ethics > d.belief && d.ethics > d.wisdom)
 		{
 			*m = 7;
 			if (d.wisdom >= 700)
@@ -6046,8 +6046,8 @@ int mode)
 				else *n = 3;
 				break;
 			case 6:
-				if ((d.belief + d.etchics) > 600) *n = 1;
-				else if ((d.belief + d.etchics) > 200) *n = 2;
+				if ((d.belief + d.ethics) > 600) *n = 1;
+				else if ((d.belief + d.ethics) > 200) *n = 2;
 				else *n = 3;
 				break;
 			case 7:
@@ -6097,9 +6097,9 @@ int mode)
 		else
 		{
 			*m = 9;
-			if (d.etchics > 400)
+			if (d.ethics > 400)
 				*n = 1;
-			else if (d.etchics > 200)
+			else if (d.ethics > 200)
 				*n = 2;
 			else
 				*n = 3;
@@ -6130,8 +6130,8 @@ int mode)
 				else *n = 3;
 				break;
 			case 6:
-				if ((d.belief + d.etchics) > 600) *n = 1;
-				else if ((d.belief + d.etchics) > 200) *n = 2;
+				if ((d.belief + d.ethics) > 600) *n = 1;
+				else if ((d.belief + d.ethics) > 200) *n = 2;
 				else *n = 3;
 				break;
 			case 7:
@@ -6342,7 +6342,7 @@ int endgrade)
 	long gradebasic;
 	long gradeall;
 
-	gradebasic = (d.maxhp + d.wrist + d.wisdom + d.character + d.charm + d.etchics + d.belief + d.affect) / 10 - d.offense;
+	gradebasic = (d.maxhp + d.wrist + d.wisdom + d.character + d.charm + d.ethics + d.belief + d.affect) / 10 - d.offense;
 	clrchyiuan(1, 23);
 	gradeall = gradebasic + endgrade;
 	move(8, 17);
@@ -6497,7 +6497,7 @@ char *genbuf)
 	int social1, family1, hexp1, mexp1, tmpA1, tmpB1, tmpC1, tmpD1, tmpE1;
 	int mp1, maxmp1, attack1, resist1, speed1, hskill1, mskill1, mresist1, magicmode1, specialmagic1, fightC1, fightD1, fightE1;
 	int weaponhead1, weaponrhand1, weaponlhand1, weaponbody1, weaponfoot1, weaponA1, weaponB1, weaponC1, weaponD1, weaponE1;
-	int toman1, character1, love1, wisdom1, art1, etchics1, brave1, homework1, charm1, manners1, speech1, cookskill1, learnA1, learnB1, learnC1, learnD1, learnE1;
+	int toman1, character1, love1, wisdom1, art1, ethics1, brave1, homework1, charm1, manners1, speech1, cookskill1, learnA1, learnB1, learnC1, learnD1, learnE1;
 	int happy1, satisfy1, fallinlove1, belief1, offense1, affect1, stateA1, stateB1, stateC1, stateD1, stateE1;
 	int food1, medicine1, bighp1, cookie1, ginseng1, snowgrass1, eatC1, eatD1, eatE1;
 	int book1, playtool1, money1, thingA1, thingB1, thingC1, thingD1, thingE1;
@@ -6555,7 +6555,7 @@ char *genbuf)
 			   &(social1), &(family1), &(hexp1), &(mexp1), &(tmpA1), &(tmpB1), &(tmpC1), &(tmpD1), &(tmpE1),
 			   &(mp1), &(maxmp1), &(attack1), &(resist1), &(speed1), &(hskill1), &(mskill1), &(mresist1), &(magicmode1), &(specialmagic1), &(fightC1), &(fightD1), &(fightE1),
 			   &(weaponhead1), &(weaponrhand1), &(weaponlhand1), &(weaponbody1), &(weaponfoot1), &(weaponA1), &(weaponB1), &(weaponC1), &(weaponD1), &(weaponE1),
-			   &(toman1), &(character1), &(love1), &(wisdom1), &(art1), &(etchics1), &(brave1), &(homework1), &(charm1), &(manners1), &(speech1), &(cookskill1), &(learnA1), &(learnB1), &(learnC1), &(learnD1), &(learnE1),
+			   &(toman1), &(character1), &(love1), &(wisdom1), &(art1), &(ethics1), &(brave1), &(homework1), &(charm1), &(manners1), &(speech1), &(cookskill1), &(learnA1), &(learnB1), &(learnC1), &(learnD1), &(learnE1),
 			   &(happy1), &(satisfy1), &(fallinlove1), &(belief1), &(offense1), &(affect1), &(stateA1), &(stateB1), &(stateC1), &(stateD1), &(stateE1),
 			   &(food1), &(medicine1), &(bighp1), &(cookie1), &(ginseng1), &(snowgrass1), &(eatC1), &(eatD1), &(eatE1),
 			   &(book1), &(playtool1), &(money1), &(thingA1), &(thingB1), &(thingC1), &(thingD1), &(thingE1),
@@ -6934,7 +6934,7 @@ char *userid)
 			   &(chicken.social), &(chicken.family), &(chicken.hexp), &(chicken.mexp), &(chicken.tmpA), &(chicken.tmpB), &(chicken.tmpC), &(chicken.tmpD), &(chicken.tmpE),
 			   &(chicken.mp), &(chicken.maxmp), &(chicken.attack), &(chicken.resist), &(chicken.speed), &(chicken.hskill), &(chicken.mskill), &(chicken.mresist), &(chicken.magicmode), &(chicken.specialmagic), &(chicken.fightC), &(chicken.fightD), &(chicken.fightE),
 			   &(chicken.weaponhead), &(chicken.weaponrhand), &(chicken.weaponlhand), &(chicken.weaponbody), &(chicken.weaponfoot), &(chicken.weaponA), &(chicken.weaponB), &(chicken.weaponC), &(chicken.weaponD), &(chicken.weaponE),
-			   &(chicken.toman), &(chicken.character), &(chicken.love), &(chicken.wisdom), &(chicken.art), &(chicken.etchics), &(chicken.brave), &(chicken.homework), &(chicken.charm), &(chicken.manners), &(chicken.speech), &(chicken.cookskill), &(chicken.learnA), &(chicken.learnB), &(chicken.learnC), &(chicken.learnD), &(chicken.learnE),
+			   &(chicken.toman), &(chicken.character), &(chicken.love), &(chicken.wisdom), &(chicken.art), &(chicken.ethics), &(chicken.brave), &(chicken.homework), &(chicken.charm), &(chicken.manners), &(chicken.speech), &(chicken.cookskill), &(chicken.learnA), &(chicken.learnB), &(chicken.learnC), &(chicken.learnD), &(chicken.learnE),
 			   &(chicken.happy), &(chicken.satisfy), &(chicken.fallinlove), &(chicken.belief), &(chicken.offense), &(chicken.affect), &(chicken.stateA), &(chicken.stateB), &(chicken.stateC), &(chicken.stateD), &(chicken.stateE),
 			   &(chicken.food), &(chicken.medicine), &(chicken.bighp), &(chicken.cookie), &(chicken.ginseng), &(chicken.snowgrass), &(chicken.eatC), &(chicken.eatD), &(chicken.eatE),
 			   &(chicken.book), &(chicken.playtool), &(chicken.money), &(chicken.thingA), &(chicken.thingB), &(chicken.thingC), &(chicken.thingD), &(chicken.thingE),
@@ -7014,7 +7014,7 @@ char *userid)
 
 			sprintf(buf,
 					"\x1b[1;31m │\x1b[33m﹟藝    術 :\x1b[37m %-10d \x1b[33m﹟道    德 :\x1b[37m %-10d \x1b[33m﹟家    事 :\x1b[37m %-10d \x1b[31m│\x1b[m\n",
-					chicken.art, chicken.etchics, chicken.homework);
+					chicken.art, chicken.ethics, chicken.homework);
 			prints(buf);
 
 			sprintf(buf,
@@ -7298,14 +7298,14 @@ int mode)
 	int lucky;
 	int dinjure = 0;		/*小雞傷害力*/
 	int minjure = 0;		/*對方傷害力*/
-	int dresistmore = 0;	/*小雞加強防禦*/
-	int mresistmore = 0;	/*對方加強防禦*/
+	int dresistmode = 0;	/*小雞加強防禦*/
+	int mresistmode = 0;	/*對方加強防禦*/
 	int oldhexp;		/*未戰鬥前格鬥經驗*/
 	int oldmexp;		/*未戰鬥前魔法經驗*/
 	int oldbrave;		/*未戰鬥前勇敢*/
 	int oldhskill;		/*未戰鬥前戰鬥技術*/
 	int oldmskill;		/*未戰鬥前魔法技術*/
-	int oldetchics;	/*未戰鬥前道德*/
+	int oldethics;	/*未戰鬥前道德*/
 	int oldmoney;		/*未戰鬥前金錢*/
 	int oldtired;
 	int oldhp;
@@ -7318,7 +7318,7 @@ int mode)
 	oldbrave = d.brave;
 	oldhskill = d.hskill;
 	oldmskill = d.mskill;
-	oldetchics = d.etchics;
+	oldethics = d.ethics;
 	oldmoney = d.money;
 	if (mode == 1)
 	{
@@ -7437,7 +7437,7 @@ int mode)
 
 		if (m.death == 0 && d.death == 0)
 		{
-			dresistmore = 0;
+			dresistmode = 0;
 			d.nodone = 0;
 			pipkey = vkey();
 			switch (pipkey)
@@ -7449,7 +7449,7 @@ int mode)
 				}
 				else
 				{
-					if (mresistmore == 0)
+					if (mresistmode == 0)
 						dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - m.resist / 8 + rand() % 12 + 2 - m.speed / 30 + d.speed / 30);
 					else
 						dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - m.resist / 6 + rand() % 12 + 2 - m.speed / 30 + d.speed / 30);
@@ -7472,7 +7472,7 @@ int mode)
 				}
 				else
 				{
-					if (mresistmore == 0)
+					if (mresistmode == 0)
 						dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - m.resist / 12 + rand() % 12 + 6 - m.speed / 50 + d.speed / 30);
 					else
 						dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - m.resist / 8 + rand() % 12 + 6 - m.speed / 40 + d.speed / 30);
@@ -7579,7 +7579,7 @@ int mode)
 				}
 				break;
 			case '4':
-				dresistmore = 1;
+				dresistmode = 1;
 				d.tired += rand() % (n + 1) / 20 + 1;
 				vmsg("小雞加強防禦啦....");
 				break;
@@ -7678,7 +7678,7 @@ int mode)
 
 		if ((m.hp > 0) && (pipkey != '6') && (pipkey == '1' || pipkey == '2' || pipkey == '3' || pipkey == '4' || pipkey == '5') && (d.death == 0) && (d.nodone == 0))
 		{
-			mresistmore = 0;
+			mresistmode = 0;
 			lucky = rand() % 100;
 			if (lucky >= 0 && lucky <= 50)
 				mankey = 1;
@@ -7697,7 +7697,7 @@ int mode)
 				}
 				else
 				{
-					if (dresistmore == 0)
+					if (dresistmode == 0)
 						minjure = (m.attack / 9 - d.resist / 12 + rand() % 15 + 4 - d.speed / 30 + m.speed / 30 - d.hskill / 200 - d.hexp / 200);
 					else
 						minjure = (m.attack / 9 - d.resist / 8 + rand() % 12 + 4 - d.speed / 50 + m.speed / 20 - d.hskill / 200 - d.hexp / 200);
@@ -7719,7 +7719,7 @@ int mode)
 				{
 					if (m.hp > 5)
 					{
-						if (dresistmore == 0)
+						if (dresistmode == 0)
 							minjure = (m.attack / 5 - d.resist / 12 + rand() % 12 + 6 - d.speed / 30 + m.speed / 30 - d.hskill / 200 - d.hexp / 200);
 						else
 							minjure = (m.attack / 5 - d.resist / 8 + rand() % 12 + 6 - d.speed / 30 + m.speed / 30 - d.hskill / 200 - d.hexp / 200);
@@ -7733,7 +7733,7 @@ int mode)
 					}
 					else
 					{
-						if (dresistmore == 0)
+						if (dresistmode == 0)
 							minjure = (m.attack / 9 - d.resist / 12 + rand() % 12 + 4 - d.speed / 30 + m.speed / 25 - d.hexp / 200 - d.hskill / 200);
 						else
 							minjure = (m.attack / 9 - d.resist / 8 + rand() % 12 + 3 - d.speed / 30 + m.speed / 25 - d.hexp / 200 - d.hskill / 200);
@@ -7808,7 +7808,7 @@ int mode)
 				}
 				else
 				{
-					mresistmore = 1;
+					mresistmode = 1;
 					vmsg("對方加強防禦....");
 				}
 				break;
