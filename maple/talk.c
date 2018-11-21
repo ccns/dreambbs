@@ -1107,7 +1107,7 @@ KeyFunc pal_cb[] =
   {'/', pal_search_forward},
   {'?', pal_search_backward},
 #if 0
-  {'w' | XO_DL, (int (*)())"bin/bbcall.so:pal_bbc"},
+  {'w' | XO_DL, (int (*)(XO *xo))"bin/bbcall.so:pal_bbc"},
 #endif
 
   {'h', pal_help}
