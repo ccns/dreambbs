@@ -210,5 +210,3 @@ install: $(EXE)
 clean:
 	rm -fr $(EXE) *.o *.bak *.BAK *.log *~
 
-clear:
-	rm -fr *.bak *.BAK *.log *~
