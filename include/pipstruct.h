@@ -20,17 +20,17 @@ struct rpgrec
   unsigned int age;			  /* 年齡	  4 bytes */
   unsigned char race;			  /* 種族	  1 bytes */
   unsigned char subrace;		  /* 副業	  1 bytes */
-  ushort level;			  /* 等級	  2 bytes */  
+  unsigned short level;			  /* 等級	  2 bytes */  
   char family[20];		  /* 家族	 20 bytes */
   char nick[20];		  /* 封號	 20 bytes */
   int hp;			  /* 體力	  4 bytes */
   int mp;			  /* 法力	  4 bytes */
   unsigned int skill;			  /* 技能	  4 bytes */
-  ushort str;			  /* 力量	  2 bytes */
-  ushort dex;			  /* 敏捷	  2 bytes */
-  ushort wis;			  /* 智慧	  2 bytes */
-  ushort con;			  /* 體質	  2 bytes */
-  ushort kar;			  /* 運氣	  2 bytes */
+  unsigned short str;			  /* 力量	  2 bytes */
+  unsigned short dex;			  /* 敏捷	  2 bytes */
+  unsigned short wis;			  /* 智慧	  2 bytes */
+  unsigned short con;			  /* 體質	  2 bytes */
+  unsigned short kar;			  /* 運氣	  2 bytes */
   unsigned char weapon;		  /* 武器	  1 bytes */
   unsigned char armor;			  /* 防具	  1 bytes */
   unsigned int object;			  /* 物件	  4 bytes */

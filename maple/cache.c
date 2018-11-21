@@ -86,7 +86,7 @@ sem_init(void)
   {
     int val;
     struct semid_ds *buf;
-    ushort *array;
+    unsigned short *array;
   }     arg =
   {
     1
