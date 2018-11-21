@@ -1583,9 +1583,19 @@ class_browse(xo)
    chx = (short *) img + (CH_END - chn);
    str = img + *chx;
 
+   // "HOT/" 名稱可自定，若改名也要順便改後面的長度 4
+   if (!strncmp(str, "HOT/", 4))
+   {
+     class_hot = 1;
+     chn = CH_END;
+   }
+
     if (XoClass(chn) == XO_NONE)
       return XO_NONE;
       
+    if (class_hot)
+      class_hot = 0;      /* 離開 HOT Class 再清除 class_hot 標記 */
+
   }
   else
   {
