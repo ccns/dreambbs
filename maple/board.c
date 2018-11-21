@@ -1078,7 +1078,7 @@ class_load(xo)
       // 即時熱門看板臨界值自定
       if (class_hot)
       {
-        if (bshm->mantime[chn] < CLASS_HOT) /* 只列出人氣超過 CLASS_HOT 的看板 */
+        if ( ( bshm->mantime[chn] < CLASS_HOT ) && ( strcmp(brd[chn].brdname, "SYSOP") ) ) /* 只列出人氣超過 CLASS_HOT 的看板 */
           continue;
         bnum++;
       }
@@ -1092,7 +1092,7 @@ class_load(xo)
     *cbase++ = chn;
   } while (chead < ctail);
 
-  if (bnum > 0)
+  if (class_hot && bnum > 0)
     qsort(cbase - bnum, bnum, sizeof(short), mantime_cmp);
 
   xo->max = max;
