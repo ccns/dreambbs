@@ -1162,13 +1162,12 @@ typedef struct
 /* PAYCHECK : 32 bytes                            */
 /* ----------------------------------------------------- */
 
-
 typedef struct
 {
-	  time_t tissue;                /* */
-	    int money;
-		  int gold;
-		    char reason[20];
-}      PAYCHECK;
+        time_t tissue;
+        int money;
+        int gold;
+        char reason[20];
+} PAYCHECK;
 
 #endif				/* _STRUCT_H_ */
