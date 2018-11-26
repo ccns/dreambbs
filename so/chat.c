@@ -878,10 +878,34 @@ t_chat(void)
 		}
 
 #ifdef EVERY_Z
+#ifdef M3_USE_PFTERM
 		/* Thor: Chat 中按 ctrl-z */
 		if (ch == Ctrl('Z'))
 		{
+			char buf[IDLEN + 1];
+			screen_backup_t old_screen;
+			scr_dump(&old_screen);
 
+			/* Thor.0731: 暫存 mateid, 因為出去時可能會用掉 mateid(like query) */
+			strcpy(buf, cutmp->mateid);
+
+			/* Thor.0727: 暫存 vio_fd */
+			holdon_fd = vio_fd;
+			vio_fd = 0;
+			every_Z();
+			/* Thor.0727: 還原 vio_fd */
+			vio_fd = holdon_fd;
+			holdon_fd = 0;
+
+			/* Thor.0731: 還原 mateid, 因為出去時可能會用掉 mateid(like query) */
+			strcpy(cutmp->mateid, buf);
+			scr_restore(&old_screen);
+			continue;
+		}
+#else
+		/* Thor: Chat 中按 ctrl-z */
+		if (ch == Ctrl('Z'))
+		{
 			char buf[IDLEN + 1];
 			screenline scr[b_lines + 1];
 			vs_save(scr);
@@ -902,7 +926,9 @@ t_chat(void)
 			vs_restore(scr);
 			continue;
 		}
-#endif
+#endif //M3_USE_PFTERM
+#endif //EVERY_Z
+
 		if (ch == Ctrl('U'))
 		{
 			char buf[IDLEN + 1];

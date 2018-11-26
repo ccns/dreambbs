@@ -1165,4 +1165,14 @@ typedef struct
         char reason[20];
 } PAYCHECK;
 
+/* ----------------------------------------------------- */
+/* M3_USE_PFTERM                                         */
+/* ----------------------------------------------------- */
+
+typedef struct {
+  int row, col;
+  int y, x;
+  void *raw_memory;
+} screen_backup_t;
+
 #endif				/* _STRUCT_H_ */

@@ -23,10 +23,15 @@
 #define	t_lines		24
 #define	p_lines		18
 
-
+#ifdef M3_USE_PFTERM
+// filed color   (defined in theme.h)
+#define STANDOUT        attrsetbg(FILEDBG); attrsetfg(FILEDFG);
+// default color (\033[37;40m)
+#define STANDEND        attrsetbg(0); attrsetfg(7);
+#else
 int cur_row, cur_col;
 int cur_pos;			/* current position with ANSI codes */
-
+#endif
 
 /* ----------------------------------------------------- */
 /* output routines					 */
@@ -61,7 +66,11 @@ telnet_flush(
 #endif
 
 
+#ifdef M3_USE_PFTERM
+void
+#else
 static void
+#endif
 oflush(void)
 {
   int size;
@@ -73,7 +82,7 @@ oflush(void)
   }
 }
 
-
+#ifndef M3_USE_PFTERM
 static void
 output(
   unsigned char *str,
@@ -107,9 +116,13 @@ output(
   }
   vo_size = size;
 }
+#endif
 
-
+#ifdef M3_USE_PFTERM
+void
+#else
 static void
+#endif
 ochar(
   int ch)
 {
@@ -141,7 +154,7 @@ bell(void)
 /* virtual screen					 */
 /* ----------------------------------------------------- */
 
-
+#ifndef M3_USE_PFTERM
 #define	o_ansi(x)	output(x, sizeof(x)-1)
 
 #define o_clear()	o_ansi("\033[;H\033[2J")
@@ -444,7 +457,14 @@ standend(void)
 }
 #endif
 
+#endif   // #ifdef M3_USE_PFTERM
 
+#ifdef M3_USE_PFTERM
+void vs_redraw(void)
+{
+  redrawwin(); refresh(); return;
+}
+#else
 static void
 vs_redraw(void)
 {
@@ -845,6 +865,7 @@ outs(
   }
 }
 
+#endif // #ifdef M3_USE_PFTERM
 
 /* ----------------------------------------------------- */
 /* eXtended output: 秀出 user 的 name 和 nick		 */
@@ -1021,6 +1042,62 @@ outf(
   prints("%*s\033[m", d_cols, "");
 }
 
+#ifdef M3_USE_PFTERM
+
+void outl (int line, unsigned char *msg)   /* line output */
+{
+  move (line, 0);
+  clrtoeol();
+
+
+  if (msg != NULL)
+     outs(msg);
+}
+
+#define ANSI_COLOR_CODE            "[m;0123456789"
+#define ANSI_COLOR_END     "m"
+
+void outr (unsigned char *str)
+/* restricted output (strip the ansiscreen contolling code only) */
+{
+   unsigned char ch, buf[256], *p = NULL;
+   int ansi = 0;
+
+   while (ch = *str++)
+    {
+       if (ch == KEY_ESC)
+       {
+          ansi = 1;
+          p = buf;
+          *p++ = ch;
+       }
+       else if (ansi)
+       {
+           if (p)
+              *p++ = ch;
+
+           if (!strchr(ANSI_COLOR_CODE, ch))
+           {
+              ansi = 0;
+              buf[0] = '\0';
+              p = NULL;
+           }
+           else if (strchr(ANSI_COLOR_END, ch))
+           {
+               *p++ = '\0';
+               ansi = 0;
+               p = NULL;
+               outs(buf);
+
+           }
+       }
+       else
+          outc(ch);
+    }
+}
+
+#endif //M3_USE_PFTERM
+
 void
 prints(char *fmt, ...)
 {
@@ -1036,7 +1113,9 @@ prints(char *fmt, ...)
     outc(cc);
 }
 
-
+#ifdef M3_USE_PFTERM
+static int save_y, save_x;
+#else
 void
 scroll(void)
 {
@@ -1047,7 +1126,6 @@ scroll(void)
   clrtoeol();
 }
 
-
 void
 rscroll(void)
 {
@@ -1057,11 +1135,23 @@ rscroll(void)
   move(0, 0);
   clrtoeol();
 }
-
+#endif //M3_USE_PFTERM
 
 /* ----------------------------------------------------- */
 
+#ifdef M3_USE_PFTERM
+void
+cursor_save()
+{
+  getyx(&save_y, &save_x);
+}
 
+void
+cursor_restore()
+{
+  move(save_y, save_x);
+}
+#else
 static int old_col, old_row, old_roll;
 static int old_pos; /* Thor.990401: 多存一個 */
 
@@ -1153,7 +1243,32 @@ vs_restore(
   vs_redraw();
 }
 
+#endif  // M3_USE_PFTERM
 
+#ifdef M3_USE_PFTERM
+#define VMSG_NULL "\033[1;37;45m                              ● 請按任意鍵繼續 ●                           \033[m" 
+
+vmsg(msg)
+char *msg;                   /* length <= 54 */
+{
+  static int old_b_cols = 23;
+  static char foot[512] = VMSG_NULL;
+
+  move(b_lines, 0);
+  clrtoeol();
+  if (msg)
+    {
+    prints(COLOR1 " ◆ %-55s " COLOR2 " [請按任意鍵繼續] \033[m", msg);
+    }
+  else
+    {
+      move(b_lines, 0);
+      outs(VMSG_NULL);
+      move(b_lines, 0);
+     }
+  return vkey();
+}
+#else
 int
 vmsg(
   char *msg)			/* length < 54 */
@@ -1180,6 +1295,7 @@ vmsg(
   return vkey();
 }
 
+#endif // ifdef M3_USE_PFTERM
 
 static inline void
 zkey(void)				/* press any key or timeout */
@@ -1289,6 +1405,7 @@ vs_line(
   outc('\n');
 }
 
+#ifndef M3_USE_PFTERM
 /* 090127.cache 淡入淡出特效 */
 void
 grayout(int type)
@@ -1315,11 +1432,11 @@ grayout(int type)
   }
   vs_restore(newslp);
 }
+#endif //#ifndef M3_USE_PFTERM
 
 /* ----------------------------------------------------- */
 /* input routines					 */
 /* ----------------------------------------------------- */
-
 
 static unsigned char vi_pool[VI_MAX];
 static int vi_size;
@@ -1827,8 +1944,12 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int 
 
   STANDOUT;
 
+#ifdef M3_USE_PFTERM
+  getyx (&x, &y);
+#else
   y = cur_row;
   x = cur_col;
+#endif
 
   if (echo & GCARRY)
   {
@@ -1868,6 +1989,9 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int 
       {
 	ch = len;
 	len = vget_match(data, len, echo | MATCH_END);
+#ifdef M3_USE_PFTERM
+        STANDOUT;
+#endif
 	if (len > ch)
 	{
 	  move(y, x);
@@ -1877,6 +2001,9 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int 
 	{
 	  data[0] = '\0';
 	}
+#ifdef M3_USE_PFTERM
+    STANDEND;
+#endif
       }
       break;
     }
@@ -1886,12 +2013,18 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int 
       if (ch == ' ' && (echo & (GET_USER | GET_BRD | GET_LIST)))
       {
 	ch = vget_match(data, len, echo);
+#ifdef M3_USE_PFTERM
+        STANDOUT;
+#endif
 	if (ch > len)
 	{
 	  move(y, x);
 	  outs(data);
 	  col = len = ch;
 	}
+#ifdef M3_USE_PFTERM
+        STANDEND;
+#endif
 	continue;
       }
 
@@ -1905,6 +2038,9 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int 
       prompt = &data[col];
       i = col;
       move(y, x + col);
+#ifdef M3_USE_PFTERM
+      STANDOUT;
+#endif
 
       for (;;)
       {
@@ -1916,6 +2052,9 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int 
 	i++;
 	ch = next;
       }
+#ifdef M3_USE_PFTERM
+      STANDEND;
+#endif
       col++;
       len++;
       continue;
@@ -1933,6 +2072,9 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int 
     if (!echo && ch != Ctrl('H'))
       continue;
 
+#ifdef M3_USE_PFTERM
+    STANDOUT;
+#endif
     switch (ch)
     {
     case Ctrl('D'):
@@ -2036,6 +2178,9 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int 
       }
       break;
     }
+#ifdef M3_USE_PFTERM
+    STANDEND;
+#endif
   }
 
   if (len > 2 && echo)
@@ -2050,6 +2195,10 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int 
   ch = data[0];
   if ((echo & LCECHO) && (ch >= 'A' && ch <= 'Z'))
     data[0] = (ch += 32);
+
+#ifdef M3_USE_PFTERM
+    STANDEND;
+#endif
 
   return ch;
 }

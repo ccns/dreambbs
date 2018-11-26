@@ -1293,6 +1293,10 @@ term_init()
   char buf[64], *rcv;
   struct timeval to;
 
+#ifdef M3_USE_PFTERM
+  initscr();
+#endif
+
   memset(buf, 0, sizeof(buf));
 
   /* 問對方 (telnet client) 有沒有支援不同的螢幕寬高 */
@@ -1348,6 +1352,10 @@ term_init()
     b_lines = 23;
     b_cols = 79;
   }
+
+#ifdef M3_USE_PFTERM
+  resizeterm(b_lines + 1, b_cols + 1) ;
+#endif
 
   d_cols = b_cols - 79;
 }

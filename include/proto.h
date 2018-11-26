@@ -217,41 +217,97 @@ int check_personal_note(int newflag, char *userid);
 void banmsg_cache(void);
 void banmsg_sync(char *fpath);
 int t_banmsg(void);
+
+
 /* visio.c */
 void bell(void);
+#ifdef M3_USE_PFTERM
+void outl(int line, unsigned char *msg);
+void outr(unsigned char *str);
+#else
 void move(int y, int x);
-void getyx(int *y, int *x);
 void refresh(void);
 void clear(void);
-void clearange(int from, int to);
-void clrtohol(void);
 void clrtoeol(void);
 void clrtobot(void);
 void outc(int ch);
 void outs(unsigned char *str);
+void scroll(void);
+void rscroll(void);
+void save_foot(screenline *slp);
+void restore_foot(screenline *slp);
+int vs_save(screenline *slp);
+void vs_restore(screenline *slp);
+#endif
+
+void getyx(int *y, int *x);
+void clearange(int from, int to);
+void clrtohol(void);
 int expand_esc_star_visio(char *buf, const char *src, int szbuf);
 void outx(unsigned char *str);
 void outz(unsigned char *msg);
 void outf(unsigned char *str);
 void prints(char *fmt, ...);
-void scroll(void);
-void rscroll(void);
 void cursor_save(void);
 void cursor_restore(void);
-void save_foot(screenline *slp);
-void restore_foot(screenline *slp);
-int vs_save(screenline *slp);
-void vs_restore(screenline *slp);
 int vmsg(char *msg);
 void zmsg(char *msg);
 void vs_bar(char *title);
+#ifndef M3_USE_PFTERM
 void grayout(int type);
+#endif
 void add_io(int fd, int timeout);
 int igetch(void);
 BRD *ask_board(char *board, int perm, char *msg);
 int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo);
 int vans(char *prompt);
 int vkey(void);
+
+////////////////////////
+/* pfterm.c */
+
+/* screen/pfterm (ncurses-like) */
+void initscr    (void);
+int  resizeterm (int rows, int cols);
+void getyx  (int *py, int *px);
+void move   (int y, int x);
+void clear  (void);
+void clrtoeol   (void);
+void clrtobot   (void);
+void clrtoln    (int ln);
+void newwin (int nlines, int ncols, int y, int x);
+void refresh    (void);
+void doupdate   (void);
+int  typeahead  (int fd);
+void redrawwin  (void);
+void scroll (void);
+void rscroll    (void);
+int  instr  (char *str);
+int  innstr (char *str, int n);
+void scr_dump   (screen_backup_t *buf);
+void scr_restore(const screen_backup_t *buf);
+// non-curses
+void outc(unsigned char ch);
+void outs(const char *s);
+void outns(const char *str, int n);
+void outstr(const char *str); // prepare and print a complete non-ANSI string.
+int  inansistr(char *str, int n);
+void move_ansi(int y, int x);
+void getyx_ansi(int *py, int *px);
+void region_scroll_up(int top, int bottom);
+
+#ifndef USE_PFTERM
+# define SOLVE_ANSI_CACHE() {}
+#else  // !USE_PFTERM
+# define SOLVE_ANSI_CACHE() { outs(" \b"); }
+#endif // !USE_PFTERM
+
+#define HAVE_GRAYOUT
+void grayout(int start, int end, int level);
+
+///////////////////
+
+
 /* xover.c */
 XO *xo_new(char *path);
 XO *xo_get(char *path);

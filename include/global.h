@@ -297,9 +297,22 @@
 /* 參數設定                                              */
 /* ----------------------------------------------------- */
 
-#define GRAYOUT_DARK    0
-#define GRAYOUT_BOLD    1
-#define GRAYOUT_NORMAL  2
+/* ----------------------------------------------------- */
+/* Register Form Log                                     */
+/* ----------------------------------------------------- */
+#define RFORM_PASS             (0)
+#define RFORM_NOPASS           (1)
+#define RFORM_DEL              (2)
+#define RFORM_CANCELREG        (3)
+
+/* ----------------------------------------------------- */
+/* Grayout Levels                                        */
+/* ----------------------------------------------------- */
+#define GRAYOUT_COLORBOLD      (-2)
+#define GRAYOUT_BOLD           (-1)
+#define GRAYOUT_DARK           (0)
+#define GRAYOUT_NORM           (1)
+#define GRAYOUT_COLORNORM      (+2)
 
 /* ----------------------------------------------------- */
 /* 訊息字串：獨立出來，以利支援各種語言			 */

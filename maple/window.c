@@ -12,6 +12,26 @@
 
 #include "bbs.h"
 
+#ifdef M3_USE_PFTERM
+/* ----------------------------------------------------- */
+/* M3_USE_PFTERM                                         */
+/* ----------------------------------------------------- */
+
+static void
+draw_line(x, y, msg)
+  int x, y;
+  unsigned char *msg;
+{
+  /* hrs.090928: 讓 terminal 去處理 */
+  move(x, y);
+  outstr(msg);
+  return;
+}
+
+static screen_backup_t old_screen;
+
+#else
+
 static screenline slt[T_LINES];
 static int x_roll;
 
@@ -206,6 +226,7 @@ draw_line(x, y, msg)	/* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
   outs(str);
   outs(str_ransi);
 }
+#endif //M3_USE_PFTERM
 
 /* ----------------------------------------------------- */
 /* 選項繪製						 */
@@ -313,7 +334,12 @@ popupmenu_ans2(char *desc[],char *title,int x,int y)
   int cur, old_cur, max, ch;
   char hotkey;
 
+#ifdef M3_USE_PFTERM
+  scr_dump(&old_screen);
+  grayout(0, b_lines, GRAYOUT_DARK);
+#else
   x_roll = vs_save(slt);
+#endif
 
   hotkey = desc[0][0];
 
@@ -331,7 +357,11 @@ popupmenu_ans2(char *desc[],char *title,int x,int y)
     case KEY_LEFT:
     case KEY_RIGHT:
     case '\n':
+#ifdef M3_USE_PFTERM
+      scr_restore(&old_screen);
+#else
       vs_restore(slt);
+#endif
       ch = (ch == KEY_LEFT) ? desc[0][1] : desc[cur][0];
       if (ch >= 'A' && ch <= 'Z')
 	ch |= 0x20;		/* 回傳小寫 */
@@ -381,7 +411,15 @@ pmsg2(char *msg)
   int len, x, y, i;
   char buf[80];
 
+#ifdef M3_USE_PFTERM
+  if (!msg)
+  return vmsg(NULL);
+
+  scr_dump(&old_screen);
+  grayout(0, b_lines, GRAYOUT_DARK);
+#else
   x_roll = vs_save(slt);
+#endif
 
   len = strlen(msg);
   if (len < 16)		/* 取 msg title 其中較長者為 len */
@@ -418,6 +456,10 @@ pmsg2(char *msg)
   move(b_lines, 0);
 
   x = vkey();
+#ifdef M3_USE_PFTERM
+  scr_restore(&old_screen);
+#else
   vs_restore(slt);
+#endif
   return x;
 }

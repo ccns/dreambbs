@@ -136,4 +136,8 @@ COLOR1 " 轉信設定 " COLOR2 " (↑/↓)上下 (PgUp/PgDn)上下頁 (Home/End)首尾 (←)(q
 /* 其他訊息字串						 */
 /* ----------------------------------------------------- */
 
+//for M3_USE_PFTERM
+#define FILEDFG            (0)
+#define FILEDBG            (7)
+
 #endif				/* _THEME_H_ */

@@ -18,11 +18,16 @@ SRC 	= acct.c bbsd.c board.c cache.c edit.c \
 OBJ	= acct.o bbsd.o board.o cache.o edit.o \
 	  gem.o mail.o menu.o more.o post.o banmail.o \
 	  talk.o visio.o xover.o favorite.o socket.o popupmenu.o \
-	  window.o myfavorite.o 
+	  window.o myfavorite.o
 
 .if $(USE_PMORE)
 SRC	+= pmore.c 
 OBJ	+= pmore.o
+.endif
+
+.if $(USE_PFTERM)
+SRC	+= pfterm.c
+OBJ	+= pfterm.o
 .endif
 
 EXE	= bbsd xchatd

@@ -3024,7 +3024,11 @@ pmore_QuickRawModePref(void)
 * #endif // HAVE_GRAYOUT
 */
 #ifdef GRAYOUT
+#ifndef M3_USE_PFTERM
     grayout(GRAYOUT_DARK); /*r2.170810: GRAY For M3 First (ref. from cache)*/
+#else
+    grayout(0, ystart-1, GRAYOUT_DARK);
+#endif //#ifndef M3_USE_PFTERM
 #endif // GRAYOUT
 
     while (1)
@@ -3075,7 +3079,11 @@ pmore_Preference(void)
 * #endif // HAVE_GRAYOUT
 */
 #ifdef GRAYOUT
+#ifndef M3_USE_PFTERM
     grayout(GRAYOUT_DARK);     /*r2.170810: GRAY For M3 First (ref. from cache)*/
+#else
+    grayout(0, ystart-1, GRAYOUT_DARK);
+#endif //#ifndef M3_USE_PFTERM
 #endif  // GRAYOUT
 
     // workaround some poor terms: their clrtobot() refresh is buggy.
