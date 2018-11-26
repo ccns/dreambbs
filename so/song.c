@@ -470,7 +470,7 @@ XO *xo)
 		fputs(tmp, xfp);
 	}
 	now = time(0);
-	sprintf(buf, "\033[1;33m%s\033[m 想對 \033[1;33m%s\033[m 說 %s\n\033[30m%s\033[m\n", cuser.userid, acct.userid , want_say, ctime(&now));	
+	sprintf(buf, "\033[1;33m%s\033[m 想對 \033[1;33m%s\033[m 說 %s\n\033[30m%s\033[m\n", cuser.userid, acct.userid , want_say, ctime(&now));
 	//sprintf(buf, "%s\n", ctime(&now));
 	fputs(buf, xfp);
 	fclose(fp);

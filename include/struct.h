@@ -59,7 +59,7 @@ typedef struct
   char work[50];
 }	MEMORANDUM;
 
-typedef struct 
+typedef struct
 {
   char	  data[48];
   int 	  mode;
@@ -182,12 +182,12 @@ typedef struct
 #define UFO_HIDDEN	BFLAG(18)	/* 隱藏來源 */
 #define UFO_CLOAK	BFLAG(19)	/* true if cloak was ON */
 //#define	UFO_ACL		BFLAG(20)	/* true if ACL was ON */
-#define	UFO_NET    BFLAG(21)	/* visor.991030: 網路程式 */ 
+#define	UFO_NET    BFLAG(21)	/* visor.991030: 網路程式 */
 #define	UFO_WEB		BFLAG(22)	/* visor.020325: WEB */
 #define	UFO_MPAGER	BFLAG(10)	/* lkchu.990428: 電子郵件傳呼 */
 //#define	UFO_NWLOG	BFLAG(11)	/* lkchu.990510: 不存對話紀錄 */
 //#define	UFO_NTLOG	BFLAG(12)	/* lkchu.990510: 不存聊天紀錄 */
-#define UFO_MESSAGE	BFLAG(23)	/* visor.991030: 訊息全關 */	
+#define UFO_MESSAGE	BFLAG(23)	/* visor.991030: 訊息全關 */
 #define UFO_PAGER1	BFLAG(26)	/* visor.991030: 呼叫器全關 */
 
 
@@ -209,7 +209,7 @@ typedef struct
 #define	UFO_FCACHE	BFLAG(30)	/* 有好友 */
 #define	UFO_MQUOTA	BFLAG(31)	/* 信箱中有待清理之信件 */
 
-#define UFO_UTMP_MASK	(UFO_BIFF|UFO_BIFFN)	
+#define UFO_UTMP_MASK	(UFO_BIFF|UFO_BIFFN)
 /* Thor.980805: 定義ufo中以utmp->ufo為本尊的flag, 解決與cuser.ufo不同步的問題 */
 
 /* ----------------------------------------------------- */
@@ -244,7 +244,7 @@ typedef struct
 #define UFO2_DEF_LOCALMAIL	BFLAG(19)	/* 只收站內信 */
 
 #define	UFO2_ACL	BFLAG(24)	/* true if ACL was ON */
-#define UFO2_REALNAME	BFLAG(28)	/* visor.991030: 真實姓名 */ 
+#define UFO2_REALNAME	BFLAG(28)	/* visor.991030: 真實姓名 */
 
 
 #include "hdr.h"
@@ -263,7 +263,7 @@ typedef struct VoteControlHeader
 
 	char xname[32];               /* 主檔名 */            /* Thor: match HDR 的 xname */
 	char date[9];                 /* 開始日期 */          /* Thor: match HDR 的 date */
-	char cdate[9];                /* 結束日期 */          /* Thor: 只供顯示，不做比較 */  
+	char cdate[9];                /* 結束日期 */          /* Thor: 只供顯示，不做比較 */
 	char owner[IDLEN + 1];        /* 舉辦人 */
 	char title[TTLEN + 1];        /* 投票主題 */
 	char vgamble;                 /* 是否為賭盤        '$':賭盤  ' ':一般投票 */
@@ -302,7 +302,7 @@ typedef struct VoteControlHeader
 typedef struct VoteStudents
 {
 /*  元智的學號格式 (s) 99 9 999
-  char grad[3]; 
+  char grad[3];
   char major[2];
   char first[4];
   char last[4];
@@ -324,7 +324,7 @@ typedef char vitem_t[32];	/* 投票選項 */
 typedef struct
 {
 	  char userid[IDLEN + 1];
-	    char numvotes;             
+	    char numvotes;
 		  unsigned int choice;
 }      VLOG;
 
@@ -436,7 +436,7 @@ typedef struct
         int chatcount;
         char msg[150];  /*訊息內容*/
         char chat[10][150]; /*聊天內容*/
-}       pipdata; 
+}       pipdata;
 
 typedef struct
 {
@@ -466,7 +466,7 @@ struct UTMP
   char  realname[20];
   unsigned int userlevel;
   char  from[30];		/* remote host */
-#ifdef	HAVE_SHOWNUMMSG  
+#ifdef	HAVE_SHOWNUMMSG
   int   num_msg;		/* receive messages */
 #endif
   int   pal_max;		/* friends max */
@@ -498,7 +498,7 @@ typedef struct
   int age;
   int numlogins;
   int numposts;
-  int point2;  
+  int point2;
 }    THRESHOLD;
 
 typedef struct BoardHeader
@@ -679,7 +679,7 @@ typedef struct
 typedef struct
 {
   BRD bcache[MAXBOARD];
-  int mantime[MAXBOARD];           /* 各板目前正有多少人在閱讀 */  
+  int mantime[MAXBOARD];           /* 各板目前正有多少人在閱讀 */
   int number;
   time_t uptime;
 } BCACHE;
@@ -687,7 +687,7 @@ typedef struct
 typedef struct
 {
   BANMAIL fwcache[MAXFIREWALL];
-  int number; 
+  int number;
 } FWCACHE;
 
 typedef struct
@@ -702,8 +702,8 @@ typedef struct
   char verb[9];                   /* 動詞 */
   char chinese[7];                /* 中文翻譯 */
   char part1_msg[60];              /* 介詞 */
-  char part2_msg[60];              /* 動作 */  
-} ChatAction; 
+  char part2_msg[60];              /* 動作 */
+} ChatAction;
 
 
 typedef struct
@@ -812,7 +812,7 @@ typedef struct
 /* ----------------------------------------------------- */
 /* acct.c 中運用的資料結構        	                 */
 /* ----------------------------------------------------- */
-#define	DENY_SEL_TALK	0x00000001		
+#define	DENY_SEL_TALK	0x00000001
 #define	DENY_SEL_POST	0x00000002
 #define	DENY_SEL_MAIL	0x00000004
 #define	DENY_SEL_AD	0x00000008
@@ -835,7 +835,7 @@ typedef struct
 #define	DENY_MODE_ALL	(DENY_MODE_TALK|DENY_MODE_MAIL|DENY_MODE_POST|DENY_MODE_NICK)
 
 
-typedef struct 
+typedef struct
 {
   char email[60];
   int num;
@@ -870,7 +870,7 @@ typedef struct
 typedef struct
 {
   CLOCK start[13];
-  CLOCK end[13]; 
+  CLOCK end[13];
 }  CLASS_TIME;
 
 typedef struct
@@ -941,7 +941,7 @@ typedef struct
   char host[26];
   char ip[16];
   char port[6];
-}	BBSNET;  
+}	BBSNET;
 
 
 #define TOPLOGINS       (0)

@@ -34,11 +34,11 @@
 #include "proto.h"		/* prototype of functions */
 #include "skin.h"		/* skin definition */
 #include "attr.h"		/* Thor.990311: dynamic attribute database */
-#include "popup.h"		/* popup menu define */ 
+#include "popup.h"		/* popup menu define */
 #include "battr.h"		/* board attribution */
 #include "theme.h"		/* custom theme */
 
-#ifdef __linux__ 
+#ifdef __linux__
     #include <time.h>
 #else
     #include <sys/time.h>

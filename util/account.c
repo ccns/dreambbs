@@ -687,7 +687,7 @@ main(void)
   static char tmp_file[] = "run/tmp";
   static char log_file[] = "run/usies=";
 //  static char brd_file[] = FN_BRD_USIES;
-  
+
   char buf[256], ymd[16];
   FILE *fp, *fpw;
 
@@ -887,12 +887,12 @@ main(void)
 //    keeplog("run/over.log", NULL, title, 2);
 
 
-    /* 以下是秘密紀錄 */ 
+    /* 以下是秘密紀錄 */
     sprintf(title, "[記錄] %s文章觀看紀錄", date);
     keeplog(FN_BROWSE_LOG, BRD_SECRET, title, 3);
 
     sprintf(title, "[記錄] %s匿名板紀錄", date);
-    keeplog(FN_ANONYMOUS_LOG, BRD_SECRET, title, 3);    
+    keeplog(FN_ANONYMOUS_LOG, BRD_SECRET, title, 3);
 
     /*  由於一直處於開檔狀態, 是故不 log by statue
         修改 SIG_USR1 可將 log dump 出來 by visor */
@@ -970,7 +970,7 @@ main(void)
     keeplog(FN_BBSNET_LOG, BRD_SECRET, title, 2);
 #endif
 
-    /* 以下是公開紀錄 */ 
+    /* 以下是公開紀錄 */
 
     //sprintf(date, "[%2d 月 %2d 日] ", ptime.tm_mon + 1, ptime.tm_mday);
     sprintf(title, "[記錄] %s文章篇數統計", date);
@@ -990,7 +990,7 @@ main(void)
 
     sprintf(title, "[記錄] %s本日砍帳號紀錄", date);
     keeplog(FN_REAPER_LOG, NULL, title, 2);
-    
+
     sprintf(title, "[記錄] %s偷懶板主紀錄", date);
     keeplog(FN_LAZYBM_LOG, NULL, title, 2);
 

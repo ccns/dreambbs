@@ -10,7 +10,7 @@ int main(void)
 {
 #if 0
   char c;
-  
+
   for (c = 'a'; c <= 'z'; c++)
   {
 #endif
@@ -38,14 +38,14 @@ int main(void)
 strcpy(buf, "/home/bbs/usr/p/pcbug/benz");
       if ((fd = open(buf, O_RDWR)) < 0)
 /*        continue; */exit(1);
-      
+
       while(read(fd, &bmw, sizeof(bmw)))
       {
         printf("ID:%-13s sender:%-4d recver:%-4d msg:%s\n"
                , bmw.userid, bmw.sender, bmw.recver, bmw.msg);
       };
-        
-      
+
+
 
 #if 0
     }

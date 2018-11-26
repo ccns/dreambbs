@@ -209,7 +209,7 @@ int
 rec_get(
   char* fpath,
   void* data,
-  int size, 
+  int size,
   int pos
 )
 {
@@ -416,7 +416,7 @@ int
 rec_put(
   char* fpath,
   void* data,
-  int size, 
+  int size,
   int pos
 )
 {

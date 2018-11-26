@@ -95,15 +95,15 @@ main(
 {
   UTMP *up, *uceil;
   BMW bmw;
- 
+
   chdir(BBSHOME);
   if(argc < 2)
   {
 	printf("Usage: msgall <msg>\n");
 	exit(0);
   }
- 
-  ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE)); 
+
+  ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
   strcpy(bmw.msg,argv[1]);
 
   up = ushm->uslot;

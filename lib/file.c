@@ -122,7 +122,7 @@ f_exlock(
 )
 {
 #if 0
-  return flock(fd, LOCK_EX); 
+  return flock(fd, LOCK_EX);
 #endif
   /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
   fl.l_type = F_WRLCK;
@@ -136,7 +136,7 @@ f_unlock(
 )
 {
 #if 0
-  return flock(fd, LOCK_UN); 
+  return flock(fd, LOCK_UN);
 #endif
   /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
   fl.l_type = F_UNLCK;
@@ -149,7 +149,7 @@ f_unlock(
 #  define DAO_MAP       (MAP_SHARED)
 #endif
 
-char* 
+char*
 f_map(
   char* fpath,
   int *fsize
@@ -207,7 +207,7 @@ f_mv(
 /* exclusively create file [*.n]			 */
 /* ----------------------------------------------------- */
 
-FILE* 
+FILE*
 f_new(
   char* fold,
   char* fnew
@@ -358,11 +358,11 @@ usr_fpath(
 #if 0
   str_lower(buf, user);		/* lower case */
 #endif
-  /* Thor.981027: 防止 buffer overflow, 雖然 SunOS 4.1.x上無此情況, 
+  /* Thor.981027: 防止 buffer overflow, 雖然 SunOS 4.1.x上無此情況,
                   以後再想好的改法 */
   str_ncpy(buf, user, sizeof(buf));
   str_lower(buf, buf);
-    
+
   *fpath++ = *buf;
   mak_fpath(fpath, buf, fname);
 }

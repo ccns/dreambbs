@@ -14,7 +14,7 @@
 #undef	FAKE_IO
 
 typedef struct
-{ 
+{
   char userid[IDLEN+1];
 }	MAP;
 MAP map[100000];
@@ -78,7 +78,7 @@ traverse(
   closedir(dirp);
 }
 
-int 
+int
 main(void)
 {
   int ch, mode = 0;
@@ -105,11 +105,11 @@ main(void)
     fname[1] = '\0';
     traverse(fpath);
   }
-#ifndef FAKE_IO  
+#ifndef FAKE_IO
   {
     SCHEMA slot;
     int fd,num;
-    
+
     fd = open(".USR.new", O_CREAT | O_TRUNC | O_WRONLY, 0600);
     for(num = 1; num <= total; num++)
     {
@@ -120,7 +120,7 @@ main(void)
     }
     close(fd);
   }
-#endif  
-  
+#endif
+
   return 0;
 }

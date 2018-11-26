@@ -56,7 +56,7 @@ zhangba_detect(
 	{
 		while(fgets(buf,sizeof(buf),fp))
 			for(i=0 ;  i < ZHANGBA_PATTERNS ; i++)
-				if(strstr(buf, zhangba_patterns[i]) && (checked[i] != '1')) 
+				if(strstr(buf, zhangba_patterns[i]) && (checked[i] != '1'))
 				{
 					checked[i] = '1';
 					num++;
@@ -105,7 +105,7 @@ checksum_add(
 	int sum=0,i,end;
 	int *ptr;
 	ptr = (int *)title;
-	end = strlen(title)/4;  
+	end = strlen(title)/4;
 	for(i=0;i<end;i++)
 	{
 		sum += *ptr++;
@@ -157,7 +157,7 @@ checksum_find(
 
 	int sum,i,count=0;
 
-	if((state & BRD_NOCNTCROSS) || HAS_PERM(PERM_ADMIN) || 
+	if((state & BRD_NOCNTCROSS) || HAS_PERM(PERM_ADMIN) ||
 			(cksum.post_modetype & POST_STOP_PERM))
 		return 0;
 
@@ -179,7 +179,7 @@ checksum_find(
 				}
 			}
 			else
-				break;  
+				break;
 		}
 	}
 	fclose(fp);
@@ -204,7 +204,7 @@ outgo_post(
 	HDR *hdr,
 	char *board)
 {
-	bntp_t bntp;	
+	bntp_t bntp;
 
 	memset(&bntp,0,sizeof(bntp_t));
 
@@ -225,7 +225,7 @@ outgo_post(
 	rec_add("innd/out.bntp",&bntp,sizeof(bntp_t));
 	/*
 	char *fpath, buf[256];
-	
+
 	if (board)
 	{
 		fpath = "innd/out.bntp";
@@ -320,7 +320,7 @@ seek_log(
 		return 0;
 
 
-	head = fwshm->fwcache;  
+	head = fwshm->fwcache;
 	tail = head + fwshm->number;
 
 	while(fwshm->number && head<tail)
@@ -373,13 +373,13 @@ do_post(
 
 	if (brd->battr & BRD_NOREPLY)
 	{
-		if (!HAS_PERM(PERM_ADMIN)) 
+		if (!HAS_PERM(PERM_ADMIN))
 		{
 			vmsg("對不起，本看板目前禁止發表文章。");
 			return XO_FOOT;
 		}
-		else 
-			vmsg("請注意，本看板目前是唯讀狀態。");       
+		else
+			vmsg("請注意，本看板目前是唯讀狀態。");
 	}
 
 	if (!(bbstate & STAT_POST))
@@ -419,7 +419,7 @@ do_post(
 				sprintf(msg, "劣文 %d 篇(含)以下，方可在此看板發表文章", th.point2);
 				vmsg(msg);
 				return XO_FOOT;
-			}			
+			}
 		}
 	}
 
@@ -458,7 +458,7 @@ do_post(
 	utmp_mode(M_POST);
 	fpath[0] = 0;
     time(&spendtime);
-    
+
 	if (vedit(fpath, YEA) < 0)
 	{
 		unlink(fpath);
@@ -527,7 +527,7 @@ do_post(
 	post.modifytimes = 0;
 	post.pushtime = 0;
 	post.recommend = 0;
-	strcpy(post.lastrecommend,cuser.userid);  
+	strcpy(post.lastrecommend,cuser.userid);
 
 #ifdef  HAVE_DETECT_CROSSPOST
 	if(crosspost)
@@ -554,18 +554,18 @@ do_post(
 	}
 #endif
 
-#ifdef	HAVE_DETECT_VIOLATELAW   
+#ifdef	HAVE_DETECT_VIOLATELAW
 	if(banpost)
 	{
 		move_post(&post, BRD_BANPOSTLOG, -1);
-	} 
+	}
 #endif
 
-#ifdef	HAVE_OBSERVE_LIST  
+#ifdef	HAVE_OBSERVE_LIST
 	if(observeshm_find(cuser.userno))
 	{
 		move_post(&post, BRD_OBSERVE, -1);
-	} 
+	}
 #endif
 
 	move_post(&post,BRD_LOCALPOSTS,-3);
@@ -580,7 +580,7 @@ do_post(
 		if (mode && !banpost)
 #else
 			if (mode)
-#endif    
+#endif
 				outgo_post(&post, currboard);
 
 		clear();
@@ -602,7 +602,7 @@ do_post(
 		    pmsg2(buf);
 		    brd->blast = time(0);
 		  }
-		  else 
+		  else
           {
             mode = BMIN(keysnum, spendtime) / 10;	/* 每十字/秒 一元 */
 			sprintf(buf, "這是您的第 %d 篇文章，獲得 %d 夢幣。", ++cuser.numposts, mode);
@@ -642,7 +642,7 @@ do_post(
 	unlink(fpath);
 
 	//vmsg(NULL);
-#ifdef  HAVE_DETECT_CROSSPOST  
+#ifdef  HAVE_DETECT_CROSSPOST
 	if(crosspost)
 		remove_perm();
 #endif
@@ -676,7 +676,7 @@ do_reply(
 	if((bbstate & BRD_NOREPLY) && !HAS_PERM(PERM_SYSOP))
 		msg = "▲ 回應至 (M)作者信箱 (Q)取消？[Q] ";
 	else
-		msg = "▲ 回應至 (F)看板 (M)作者信箱 (B)二者皆是 (Q)取消？[F] "; 
+		msg = "▲ 回應至 (F)看板 (M)作者信箱 (B)二者皆是 (Q)取消？[F] ";
 
 
 	switch (vans(msg))
@@ -845,9 +845,9 @@ post_attr(
 		return (brh_unread(BMAX(fhdr->chrono, fhdr->stamp)) ? 0 : 0x20 ) | 'E';
 
 	if (mode & POST_LOCK)
-		return 'L';  
+		return 'L';
 
-	if(mode & POST_COMPLETE)                                                    
+	if(mode & POST_COMPLETE)
 		return (brh_unread(BMAX(fhdr->chrono, fhdr->stamp)) ? 0 : 0x20 ) | 'S';
 
     attr = brh_unread(BMAX(fhdr->chrono, fhdr->stamp)) ? 0 : 0x20;
@@ -940,7 +940,7 @@ post_body(
 		if (bbstate & STAT_POST)
 		{
 			if (vans("要新增資料嗎？(Y/N) [N] ") == 'y')
-				return post_add(xo);	
+				return post_add(xo);
 		}
 		else
 		{
@@ -1059,10 +1059,10 @@ post_cross(
 	HDR *hdr, xpost, xhdr;
 	int method, rc, tag, locus, battr;
 	FILE *xfp;
-#ifdef  HAVE_DETECT_CROSSPOST        
+#ifdef  HAVE_DETECT_CROSSPOST
 	HDR bhdr;
 #endif
-#ifdef	HAVE_CROSSPOSTLOG        
+#ifdef	HAVE_CROSSPOSTLOG
 	char cbuf[128];
 	HDR chdr;
 #endif
@@ -1145,7 +1145,7 @@ post_cross(
 		locus = 0;
 		dir = xo->dir;
 
-		battr = (bshm->bcache + brd_bno(xboard))->battr; 
+		battr = (bshm->bcache + brd_bno(xboard))->battr;
 
 		do	/* lkchu.981201: 整批轉貼 */
 		{
@@ -1220,7 +1220,7 @@ post_cross(
 				if (rc == 's' && (!(battr & BRD_NOTRAN)))
 					xpost.xmode = POST_OUTGO;
 
-#ifdef  HAVE_DETECT_CROSSPOST        
+#ifdef  HAVE_DETECT_CROSSPOST
 				memcpy(&bhdr,hdr,sizeof(HDR));
 				strcpy(bhdr.owner,cuser.userid);
 				if(checksum_find(fpath,0,battr))
@@ -1235,7 +1235,7 @@ post_cross(
 					board_main();
 				}
 #endif
-#ifdef	HAVE_CROSSPOSTLOG        
+#ifdef	HAVE_CROSSPOSTLOG
 				if (hdr->xname[0] != '@')
 				{
 					memcpy(&chdr,hdr,sizeof(HDR));
@@ -1247,7 +1247,7 @@ post_cross(
 #endif
 
 				rec_bot(xfolder, &xpost, sizeof(xpost));
-#ifdef	HAVE_DETECT_VIOLATELAW        
+#ifdef	HAVE_DETECT_VIOLATELAW
 				if (rc == 's' && (!(battr & BRD_NOTRAN)) && (!(seek_log(xpost.title,battr))))
 #else
 					if (rc == 's' && !(battr & BRD_NOTRAN))
@@ -1261,7 +1261,7 @@ post_cross(
           time_t now;
           struct tm *ptime;
           char add[180], tgt[30];
-          
+
           time(&now);
           ptime = localtime(&now);
           sprintf(tgt, "轉錄至 %s 看板", xboard);
@@ -1394,18 +1394,18 @@ post_history(
 
   chrono = fhdr->chrono;
   push = fhdr->pushtime;
-  
-  
+
+
   if(brh_unread(push))
     brh_add(push,push,push);
-  
+
   if(!brh_unread(chrono))
     //if( !brh_unread(push))
       return;
 
   if (--pos >= top)
   {
-    prev = fhdr[-1].chrono;   
+    prev = fhdr[-1].chrono;
   }
   else
   {
@@ -1443,10 +1443,10 @@ post_history(          /* 將 hdr 這篇加入 brh */
 	time_t prev, chrono, next, this;
 	HDR buf;
 
- 
+
 	if (hdr->xmode & POST_BOTTOM)     /* 置底文不加入閱讀記錄 */
 		return;
- 
+
 	chrono = BMAX(hdr->chrono, hdr->stamp);
 
 	if (!brh_unread(chrono))      /* 如果已在 brh 中，就無需動作 */
@@ -1533,7 +1533,7 @@ post_browse(
 
 		hdr_fpath(fpath, dir, hdr);
 
-		/* Thor.990204: 為考慮more 傳回值 */   
+		/* Thor.990204: 為考慮more 傳回值 */
 		//    if((key = more(fpath, MSG_POST)) == -1)
 		//      break;
 
@@ -1625,7 +1625,7 @@ post_memo(
 	char fpath[64];
 
 	brd_fpath(fpath, currboard, FN_NOTE);
-	/* Thor.990204: 為考慮more 傳回值 */   
+	/* Thor.990204: 為考慮more 傳回值 */
 	if (more(fpath, NULL) == -1)
 	{
 		vmsg("本看板尚無「備忘錄」");
@@ -1888,9 +1888,9 @@ post_delete(
 		{
 			lazy_delete(fhdr); /* Thor.980911: 註解: 修改 xo_pool */
 			move(3 + cur, 0);
-			post_item(++pos, fhdr); 
+			post_item(++pos, fhdr);
 			return XO_FOOT;
-        } 
+        }
 
 		if(by_BM/* && (bbstate & BRD_NOTRAN) && !(fhdr->xmode & POST_BOTTOM)*/)
 			vget(b_lines,0,"請輸入刪除理由：",delete_reason,29,DOECHO);
@@ -1906,10 +1906,10 @@ post_delete(
 				if(vans("是否退回文章？[y/N]") == 'y')
 				{
 				    if(vans("是否給予劣文？[y/N]") == 'y')
-				    { 
+				    {
 					  addpoint2(1, fhdr->owner);
 					  pmsg2("劣退完畢！");
-                    } 
+                    }
 
 					FILE *fp;
 					time_t now = time(0);
@@ -1952,13 +1952,13 @@ post_delete(
 					cuser.numposts--;
 				sprintf(buf, "%s，您的文章減為 %d 篇", MSG_DEL_OK, cuser.numposts);
 				vmsg(buf);
-#ifdef  HAVE_DETECT_CROSSPOST	
+#ifdef  HAVE_DETECT_CROSSPOST
 				checksum_find(fpath,1,bbstate);
 #endif
 			}
 			lazy_delete(fhdr); /* Thor.980911: 註解: 修改 xo_pool */
 			move(3 + cur, 0);
-			post_item(++pos, fhdr); 
+			post_item(++pos, fhdr);
 		}
 	}
 	return XO_FOOT;
@@ -2011,9 +2011,9 @@ post_bottom(
 		hdr = (HDR *) xo_pool + (xo->pos - xo->top);
 
 		//if ((hdr->xmode & POST_BOTTOM) && !HAVE_PERM(PERM_SYSOP)) /* 已置底就不能再置底 */
-		//	return post_delete(xo); 
-        
-		//TODO: 多樣化置底功能 
+		//	return post_delete(xo);
+
+		//TODO: 多樣化置底功能
 
 		hdr_fpath(fpath, xo->dir, hdr);
 		hdr_stamp(xo->dir, HDR_LINK | 'A', &post, fpath);
@@ -2088,7 +2088,7 @@ post_lock(
 	return XO_NONE;
 }
 
-/*cache.080520: 新版觀看文章屬性*/ 
+/*cache.080520: 新版觀看文章屬性*/
 	static int
 post_state(
 	XO *xo)
@@ -2111,14 +2111,14 @@ post_state(
 		move(b_lines - 10, 0);
 		clrtobot();
 
-		prints("\033[1;34m"MSG_BLINE"\033[m");  
+		prints("\033[1;34m"MSG_BLINE"\033[m");
 		prints("\n\033[1;33;44m \033[37m文章代碼及資訊查詢： %*s \033[m", 55,"");
 		outs("\n\n \033[1;37m★\033[m 文章索引: ");
 		outs(dir);
 		outs("\n \033[1;37m★\033[m 文章代碼: #");
 		outs("\033[1;32m");
 		outs(ghdr->xname);
-		outs("\033[m");      
+		outs("\033[m");
         outs("\n \033[1;37m★\033[m 好讀連結: " URL_PREFIX "/");
 		outs(buf);
 		outs("/");
@@ -2133,11 +2133,11 @@ post_state(
                         k=1;
         else if (ghdr->chrono < ghdr->stamp )
                         k=2;
-        else if (ghdr->chrono = ghdr->stamp)  
+        else if (ghdr->chrono = ghdr->stamp)
              k=3;
         else
             k=4;
-             
+
         if (ghdr->stamp = ghdr->pushtime)
            l=1;
         else
@@ -2151,13 +2151,13 @@ post_state(
 	{
 		vmsg("您的權限不足");
 		return XO_HEAD;
-	}                                                                
+	}
 	else
 	{
 		move(b_lines - 8, 0);
 		clrtobot();
 
-		prints("\033[1;34m"MSG_BLINE"\033[m");  
+		prints("\033[1;34m"MSG_BLINE"\033[m");
 		prints("\n\033[1;33;44m \033[37m文章代碼及資訊查詢： %*s \033[m", 55,"");
 		if(ghdr->xmode & (POST_EXPIRE | POST_MDELETE | POST_DELETE | POST_CANCEL | POST_LOCK | POST_CURMODIFY))
 		{
@@ -2180,14 +2180,14 @@ post_state(
 		if (!stat(fpath, &st))
 			prints("\n \033[1;37m★\033[m 最後存取: %s\n \033[1;37m★\033[m 檔案大小: \033[1;32m%d\033[m bytes", Ctime(&st.st_mtime), st.st_size);
 
-	}  
+	}
 
 	vmsg(NULL);
 
 	return XO_HEAD;
 }
 
-#if 0 
+#if 0
 	static int
 post_state(
 	XO *xo)
@@ -2251,14 +2251,14 @@ post_undelete(
 		return XO_NONE;
 
 
-	fp = fopen(fpath,"r");  
+	fp = fopen(fpath,"r");
 	if(fp)
 	{
 		fgets(buf, 256, fp);
 		fgets(buf, 256, fp);
 		buf[strlen(buf)-1] = 0;
 		ptr = strchr(buf, ':');
-		ptr = ptr ? ptr+2:buf;    
+		ptr = ptr ? ptr+2:buf;
 		strncpy(fhdr->title,ptr,60);
 		if(!HAS_PERM(PERM_SYSOP))
 		{
@@ -2282,12 +2282,12 @@ post_undelete(
 			   cuser.numposts++;
 			   sprintf(buf, "復原刪除，您的文章增為 %d 篇", cuser.numposts);
 			   vmsg(buf);*/  /* 20000724 visor: 有文章篇數的 bug */
-#ifdef  HAVE_DETECT_CROSSPOST      
-			checksum_find(fpath,0,bbstate);    
+#ifdef  HAVE_DETECT_CROSSPOST
+			checksum_find(fpath,0,bbstate);
 #endif
 		}
-#endif    
-	}    
+#endif
+	}
 	fhdr->xmode &= (~(POST_MDELETE | POST_DELETE | POST_CANCEL));
 	if (!rec_put(xo->dir, fhdr, sizeof(HDR), pos))
 	{
@@ -2326,7 +2326,7 @@ post_expire(
 
 	hdr_fpath(fpath,xo->dir,fhdr);
 	if (fhdr->xmode & POST_EXPIRE)
-	  fhdr->xmode &= ~POST_EXPIRE;	
+	  fhdr->xmode &= ~POST_EXPIRE;
 	else
 	  fhdr->xmode |= POST_EXPIRE;
 	fhdr->expire = time(0) + 86400 * 7;
@@ -2391,7 +2391,7 @@ post_edit(
   int fd;
   time_t now;
   FILE *fp,*xfp;
-	
+
   bno = brd_bno(currboard);
   brd = bshm->bcache + bno;
 
@@ -2436,27 +2436,27 @@ post_edit(
     hdr->xmode |= POST_CURMODIFY;
     hdr->xid = cutmp->pid;
     rec_put(xo->dir, hdr, sizeof(HDR), pos);
-     
+
     if(strcmp(brd->brdname,"test"))
     {
       HDR phdr;
-    
+
       brd_fpath(mfolder, BRD_MODIFIED, FN_DIR);
       fd = hdr_stamp(mfolder, 'A', &phdr, mfpath);
       fp = fdopen(fd, "w");
       f_suck(fp, fpath);
       fclose(fp);
       close(fd);
-      
+
       strcpy(phdr.owner,hdr->owner);
       strcpy(phdr.nick,hdr->nick);
       strcpy(phdr.title,hdr->title);
 
       rec_add(mfolder, &phdr, sizeof(HDR));
     }
-     
+
     strcpy(ve_title,hdr->title);
-		
+
     fp = fopen(fpath,"r");
 
     sprintf(buf,"tmp/%s.header",cuser.userid);
@@ -2471,7 +2471,7 @@ post_edit(
     sprintf(buf,"tmp/%s.edit",cuser.userid);
     xfp = fopen(buf,"w");
     while (fgets(str, 256, fp))
-    {     	
+    {
       if (!strcmp(str,"--\n"))
         break;
       fputs(str,xfp);
@@ -2503,14 +2503,14 @@ post_edit(
     xfp = fopen(buf,"w");
     if(temp)
       fputs(str,xfp);
- 
+
     while (fgets(str, 256, fp) && *str != '\n')
       fputs(str,xfp);
 
     fclose(xfp);
     fclose(fp);
 
-        
+
     sprintf(buf,"tmp/%s.edit",cuser.userid);
 
     if((temp = vedit(buf, NA)) < 0)
@@ -2519,7 +2519,7 @@ post_edit(
       unlink(buf);
       sprintf(buf,"tmp/%s.edit",cuser.userid);
       unlink(buf);
-      sprintf(buf,"tmp/%s.footer",cuser.userid);      
+      sprintf(buf,"tmp/%s.footer",cuser.userid);
       unlink(buf);
       sprintf(buf,"tmp/%s.recommend",cuser.userid);
       unlink(buf);
@@ -2527,7 +2527,7 @@ post_edit(
     else
     {
       char tmp[128];
-      
+
       fp = fopen(fpath,"w");
       sprintf(buf,"tmp/%s.header",cuser.userid);
       f_suck(fp, buf);
@@ -2574,7 +2574,7 @@ post_edit(
   {
     vmsg("本板不能修改文章!!");
   }
-  else 
+  else
   {
 	/* cache.090922: 檢查機制 */
 	if (hdr->modifytimes < 0)
@@ -2652,11 +2652,11 @@ int post_edit(XO *xo)
 			fp = fopen(fpath,"r");
 
 			sprintf(buf,"tmp/%s.header",cuser.userid);
-			xfp = fopen(buf,"w");	
+			xfp = fopen(buf,"w");
 
 			while (fgets(str, 256, fp) && *str != '\n')
 			{
-				fputs(str,xfp);	
+				fputs(str,xfp);
 			}
 			fputs("\n",xfp);
 			fclose(xfp);
@@ -2760,7 +2760,7 @@ header_replace(		/* 0911105.cache: 修改文章標題順便修改內文的標題 */
 {
   FILE *fpr, *fpw;
   char srcfile[64], tmpfile[64], buf[ANSILINELEN];
-  
+
   hdr_fpath(srcfile, xo->dir, hdr);
   strcpy(tmpfile, "tmp/");
   strcat(tmpfile, hdr->xname);
@@ -2819,12 +2819,12 @@ post_title(
 
 	vget(b_lines, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
 
-    if (HAS_PERM(PERM_ALLBOARD))  /* 0911105.cache: 非看板總管只能改標題 */ 
-    { 
+    if (HAS_PERM(PERM_ALLBOARD))  /* 0911105.cache: 非看板總管只能改標題 */
+    {
 	  vget(b_lines, 0, "作者：", mhdr.owner, 74 /* sizeof(mhdr.owner)*/, GCARRY);
 	  /* Thor.980727:lkchu patch: sizeof(mhdr.owner) = 80會超過一行 */
 	  vget(b_lines, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
-    } 
+    }
 
 	if (vans(msg_sure_ny) == 'y' &&
 			memcmp(fhdr, &mhdr, sizeof(HDR)))
@@ -2834,7 +2834,7 @@ post_title(
 		move(3 + cur, 0);
 		post_item(++pos, fhdr);
 
-        /* 0911105.cache: 順便改內文標題 */ 
+        /* 0911105.cache: 順便改內文標題 */
         header_replace(xo, fhdr);
 
 	}
@@ -2903,18 +2903,18 @@ post_cross_terminator(	/* Thor.0521: 終極文章大法 */
 			char fnew[80], fold[80];
 			HDR *hdr;
 
-			if(!str_cmp(head->brdname,BRD_LOCALPOSTS))  /* LocalPosts 版不砍 */ 
-				continue;         
+			if(!str_cmp(head->brdname,BRD_LOCALPOSTS))  /* LocalPosts 版不砍 */
+				continue;
 
-			if(!str_cmp(head->brdname,brd_sysop))  /* SYSOP 版不砍 */ 
-				continue;         
+			if(!str_cmp(head->brdname,brd_sysop))  /* SYSOP 版不砍 */
+				continue;
 
-			if(!str_cmp(head->brdname,BRD_CAMERA))  /* ActiveInfo 版不砍 */ 
-				continue;         
+			if(!str_cmp(head->brdname,BRD_CAMERA))  /* ActiveInfo 版不砍 */
+				continue;
 
 #ifdef	HAVE_CROSSPOSTLOG
-			if(!str_cmp(head->brdname,BRD_CROSSPOST))  /* CostPost 版不砍 */ 
-				continue;         
+			if(!str_cmp(head->brdname,BRD_CROSSPOST))  /* CostPost 版不砍 */
+				continue;
 #endif
 
 			/* Thor.0616:更改currboard,以cancel post */
@@ -2947,13 +2947,13 @@ post_cross_terminator(	/* Thor.0521: 終極文章大法 */
 					continue;*/
 
 				if(mode==1)
-					check_mode = strcmp(title, str_ttl(hdr->owner));  
+					check_mode = strcmp(title, str_ttl(hdr->owner));
 				else if(mode==2)
 					check_mode = !((int)strstr(hdr->owner,title)|(int)strstr(hdr->title,title));
-				else      
+				else
 					check_mode = strcmp(title, str_ttl(hdr->title));
 
-				if ((xmode & (POST_MARKED | POST_CANCEL | POST_DELETE | POST_MDELETE | 
+				if ((xmode & (POST_MARKED | POST_CANCEL | POST_DELETE | POST_MDELETE |
 								POST_LOCK)) || check_mode )
 				{
 #if 0
@@ -2973,7 +2973,7 @@ post_cross_terminator(	/* Thor.0521: 終極文章大法 */
 
 					cancel_post(hdr);
 					hdr->xmode |= POST_MDELETE;
-					sprintf(hdr->title, "<< 本文章經 %s 做系統功\能刪除 >>", cuser.userid);             
+					sprintf(hdr->title, "<< 本文章經 %s 做系統功\能刪除 >>", cuser.userid);
 					/*hdr_fpath(fold, fpath, hdr);
 					  unlink(fold);*/
 				}
@@ -2985,7 +2985,7 @@ post_cross_terminator(	/* Thor.0521: 終極文章大法 */
 					close(fdr);
 					goto contWhileOuter;
 				}
-				fsize++;	
+				fsize++;
 			}
 			close(fdr);
 			fclose(fpw);
@@ -3118,7 +3118,7 @@ post_resetscore(
 		//	return XO_FOOT;
 		//}
 		//else
-		//{                                                                               
+		//{
 			switch (vans("◎評分設定 1)自訂 2)清除 [Q] "))
 			{
 				case '1':
@@ -3126,28 +3126,28 @@ post_resetscore(
 					if(!HAS_PERM(PERM_SYSOP))
 					{
 						pmsg2("目前禁止自訂推文數");
-						return XO_FOOT;         
+						return XO_FOOT;
 					}
 
 					if (!vget(b_lines, 0, "請輸入數字：", ans, 3, DOECHO))
 						return XO_FOOT;
 
 					if((brd->battr & BRD_PUSHSNEER) || (brd->battr & BRD_PUSHDEFINE))
-						pm = vans("請選擇正負 1)正 2)負 [Q] ");      
+						pm = vans("請選擇正負 1)正 2)負 [Q] ");
 					else
 						pm = '1';
 
 					if (pm =='1')
 					{
-						recommend = atoi(ans);           
+						recommend = atoi(ans);
 					}
 					else if (pm == '2')
 					{
 						recommend = atoi(ans);
-						recommend = -recommend;  
+						recommend = -recommend;
 					}
 					else
-						return XO_FOOT;      
+						return XO_FOOT;
 
 					if (recommend > 99 || recommend < -99)
 						return XO_FOOT;
@@ -3169,16 +3169,16 @@ post_resetscore(
 			outc(post_attr(hdr));
 
 			return XO_LOAD;
-		//} 
+		//}
 
 
 	}
 	else
 	{
-		vmsg("您的權限不足！");      
-		return XO_FOOT;   
+		vmsg("您的權限不足！");
+		return XO_FOOT;
 	}
-} 
+}
 
 
 	int
@@ -3219,7 +3219,7 @@ post_recommend(
 			}
 		}
 
-		//更新資料操硬碟 
+		//更新資料操硬碟
 		pos = seek_rec(xo,hdr);
 
 		if(pos < 0)
@@ -3253,7 +3253,7 @@ post_recommend(
 		{
 			//addscore = 0;
 			//switch(ans = vans("◎ 評論 1)推文 2)噓文 3)留言 ？[Q] "))
-			//考量夢大已經習慣推文是箭頭符號 
+			//考量夢大已經習慣推文是箭頭符號
 			switch(ans = vans("◎ 評論 1)推文 2)噓文 ？[Q] "))
 			{
 				case '1':
@@ -3299,7 +3299,7 @@ post_recommend(
 					if (eof<2)
 					{
 						zmsg("動詞須為一個中文字元或者兩個英文字元");
-						return XO_FOOT;            
+						return XO_FOOT;
 					}
 					getans = vget(b_lines,0,"推文：",msg,53,DOECHO);
 					addscore = 1;
@@ -3321,7 +3321,7 @@ post_recommend(
 					getans = 0;
 					break;
 			}
-		}    
+		}
 		else
 			getans = vget(b_lines,0,"推文：",msg,53,DOECHO);
 
@@ -3331,7 +3331,7 @@ post_recommend(
 		else
 			ans = 'n';
 
-		//更新資料操硬碟 
+		//更新資料操硬碟
 		pos = seek_rec(xo,hdr);
 		hdr->xmode &= ~POST_RECOMMEND_ING;
 		hdr->xid = 0;
@@ -3339,18 +3339,18 @@ post_recommend(
 		if(pos < 0)
 			return XO_NONE;
 
-		//優劣文 
+		//優劣文
 		if ( (brd->battr & (BRD_PUSHTIME | BRD_PUSHDISCON)) && (brd->battr & BRD_VALUE) )
 		{
 			if      (/*(hdr->recommend == 49) || */(hdr->recommend == 99))
-			{   
+			{
 				if (addscore > 0)
 					point = 1;
 				else
 					point = -1;
 			}
 			else if (/*(hdr->recommend == -49) || */(hdr->recommend == -99))
-			{   
+			{
 				if (addscore > 0)
 					point = 1;
 				else
@@ -3366,14 +3366,14 @@ post_recommend(
 
 			hdr->pushtime = time(0);
 
-			//在 item 有判斷可以加快一點點 
-			//考量到舊版文章相容問題, 等到舊文章清除後要更改判斷 
+			//在 item 有判斷可以加快一點點
+			//考量到舊版文章相容問題, 等到舊文章清除後要更改判斷
 			if (!(hdr->xmode & POST_RECOMMEND))
 				hdr->xmode |= POST_RECOMMEND;
 
 			if(brd->battr & BRD_PUSHSNEER || brd->battr & BRD_PUSHDEFINE)
-			{ 
-				if(hdr->recommend < 125 && hdr->recommend > -125) 
+			{
+				if(hdr->recommend < 125 && hdr->recommend > -125)
 				{
 					if(addscore == 1)
 						hdr->recommend += 1;
@@ -3385,12 +3385,12 @@ post_recommend(
 					/*
 					   hdr->recommend +=addscore ;
 					 */
-				}       
+				}
 			}
-			else //無噓文相容性 
+			else //無噓文相容性
 			{
-				if(hdr->recommend < 99) 
-					hdr->recommend++;     
+				if(hdr->recommend < 99)
+					hdr->recommend++;
 			}
 
 			strcpy(hdr->lastrecommend,cuser.userid);
@@ -3407,7 +3407,7 @@ post_recommend(
 				else if (addscore == -1)
 					sprintf(add,"\x1b[1;31m噓\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
 			    else
-			        sprintf(add,"\x1b[m\x1b[1;33m   %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);        
+			        sprintf(add,"\x1b[m\x1b[1;33m   %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
 			}
 			else if(brd->battr & BRD_PUSHDEFINE)
 			{
@@ -3416,14 +3416,14 @@ post_recommend(
 				else if (addscore == -1)
 					sprintf(add,"\x1b[1;31m%02.2s\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",verb,cuser.userid,msg,Btime(&hdr->pushtime)+3);
 				else
-					sprintf(add,"\x1b[1;33m→\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);        
-			}      
-			else      
+					sprintf(add,"\x1b[1;33m→\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+			}
+			else
 				sprintf(add,"\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
 			/*
 			   if(dashf(fpath))
 			   f_cat(fpath,add);
-			 */        
+			 */
 			if((fd = open(fpath,O_WRONLY | O_APPEND)) >= 0)
 			{
 				f_exlock(fd);
@@ -3438,14 +3438,14 @@ post_recommend(
 			if(brd->battr & BRD_PUSHTIME)
 				next = time(NULL) + NEXTPUSHTIME;  /* 定義在theme.h */
 
-			//change_stamp(xo->dir, hdr);      
+			//change_stamp(xo->dir, hdr);
 			brh_add( hdr->pushtime, hdr->pushtime,  hdr->pushtime);
 
 			/* 091009.cache: 優良積分 */
 			if( point!=0 )
-			{           
+			{
 				addpoint1(point, hdr->owner);
-				pmsg2("評論完成！(作者優文更動)");       
+				pmsg2("評論完成！(作者優文更動)");
 			}
 			else
 				zmsg("評論完成！");
@@ -3454,13 +3454,13 @@ post_recommend(
 			if (!HAVE_PERM(PERM_SYSOP))
 				record_recommend(hdr->chrono, msg);
 
-			//      post_recommend_log(1,hdr);    
+			//      post_recommend_log(1,hdr);
 			//      brd->btime = time(0);[A
             //btime_update(currbno);
             brd->blast = hdr->pushtime;
 			return XO_INIT;
 			//move(3 + cur, 0);
-			//post_item(pos+1, hdr);  
+			//post_item(pos+1, hdr);
 
 		}
 		else
@@ -3525,12 +3525,12 @@ post_showBRD_setting(
 
 	prints("\n 推文功\能 - %s    噓文功\能 - %s",
 			(brd->battr & BRD_PRH) ? "關閉" : "\033[1;33m開啟\033[m",
-			(brd->battr & BRD_PUSHSNEER || brd->battr & BRD_PUSHDEFINE) ? "\033[1;33m開啟\033[m" : "關閉");  
+			(brd->battr & BRD_PUSHSNEER || brd->battr & BRD_PUSHDEFINE) ? "\033[1;33m開啟\033[m" : "關閉");
 
 	prints("\n 推文限制 - %s    自訂動詞 - %s",
 			(brd->battr & BRD_PUSHDISCON) ? "\033[1;36mＩＤ\033[m" : (brd->battr & BRD_PUSHTIME) ?
 			"\033[1;36m時間\033[m" : "沒有",
-			(brd->battr & BRD_PUSHDEFINE) ? "\033[1;33m開啟\033[m" : "關閉");   
+			(brd->battr & BRD_PUSHDEFINE) ? "\033[1;33m開啟\033[m" : "關閉");
 
 	prints("\n 文章類別 - %s    禁注音文 - %s",
 			(brd->battr & BRD_POSTFIX) ? "\033[1;33m開啟\033[m" : "關閉",
@@ -3542,7 +3542,7 @@ post_showBRD_setting(
 	if ((bbstate & STAT_BOARD) || HAS_PERM(PERM_BOARD))
 		prints("\n\n您目前 \033[1;33m擁有\033[m 此看板的管理權限");
 	else
-		prints("\n\n您目前 沒有 此看板的管理權限");   
+		prints("\n\n您目前 沒有 此看板的管理權限");
 
 	vmsg(NULL);
 
@@ -3556,7 +3556,7 @@ post_FriendSet(
 {
 	if (!(bbstate & STAT_BOARD))
 		return XO_NONE;
-	//判斷結束 
+	//判斷結束
 
 	BRD *oldbrd, newbrd;
 	int bno;
@@ -3566,9 +3566,9 @@ post_FriendSet(
 	memcpy(&newbrd, oldbrd, sizeof(BRD));
 
 	if(vans("確定要變更看板權限？[y/N] ") != 'y')
-		return XO_HEAD;  
+		return XO_HEAD;
 
-	//更改旗標 
+	//更改旗標
 	if(newbrd.readlevel & PERM_SYSOP){
 		newbrd.readlevel = 0;
 		vmsg("目前為公開看板");
@@ -3590,10 +3590,10 @@ post_FriendSet(
 post_battr_score(
 	XO *xo)
 {
-	//判斷是否為板主 
+	//判斷是否為板主
 	if (!(bbstate & STAT_BOARD))
 		return XO_NONE;
-	//判斷結束 
+	//判斷結束
 
 	BRD *oldbrd, newbrd;
 	int bno;
@@ -3606,8 +3606,8 @@ post_battr_score(
 	{
 		case '1':
 			if(vans("確定要變更推文設定？[y/N] ") != 'y')
-				return XO_HEAD;  
-			//更改旗標 
+				return XO_HEAD;
+			//更改旗標
 			if(newbrd.battr & BRD_PRH){
 				newbrd.battr &= ~BRD_PRH;
 				vmsg("允許\推文");
@@ -3615,9 +3615,9 @@ post_battr_score(
 			else{
 				newbrd.battr |= BRD_PRH;
 				newbrd.battr &= ~BRD_PUSHDISCON;
-				newbrd.battr &= ~BRD_PUSHTIME;  
-				newbrd.battr &= ~BRD_PUSHSNEER;  
-				newbrd.battr &= ~BRD_PUSHDEFINE;          
+				newbrd.battr &= ~BRD_PUSHTIME;
+				newbrd.battr &= ~BRD_PUSHSNEER;
+				newbrd.battr &= ~BRD_PUSHDEFINE;
 				vmsg("禁止推文");
 			}
 			memcpy(oldbrd, &newbrd, sizeof(BRD));
@@ -3626,15 +3626,15 @@ post_battr_score(
 
 		case '2':
 			if(vans("確定要變更噓文模式？[y/N] ") != 'y')
-				return XO_HEAD;  
-			//更改旗標 
+				return XO_HEAD;
+			//更改旗標
 			if(newbrd.battr & BRD_PUSHSNEER){
 				newbrd.battr &= ~BRD_PUSHSNEER;
 				vmsg("關閉噓文模式");
 			}
 			else{
 				newbrd.battr |= BRD_PUSHSNEER;
-				newbrd.battr &= ~BRD_PUSHDEFINE;         
+				newbrd.battr &= ~BRD_PUSHDEFINE;
 				vmsg("開啟噓文模式");
 			}
 			memcpy(oldbrd, &newbrd, sizeof(BRD));
@@ -3643,15 +3643,15 @@ post_battr_score(
 
 		case '3':
 			if(vans("確定要變更自訂推文動詞模式？[y/N] ") != 'y')
-				return XO_HEAD;  
-			//更改旗標 
+				return XO_HEAD;
+			//更改旗標
 			if(newbrd.battr & BRD_PUSHDEFINE){
 				newbrd.battr &= ~BRD_PUSHDEFINE;
 				vmsg("關閉自訂推文動詞");
 			}
 			else{
 				newbrd.battr |= BRD_PUSHDEFINE;
-				newbrd.battr &= ~BRD_PUSHSNEER;         
+				newbrd.battr &= ~BRD_PUSHSNEER;
 				vmsg("開啟自訂推文動詞");
 			}
 			memcpy(oldbrd, &newbrd, sizeof(BRD));
@@ -3660,8 +3660,8 @@ post_battr_score(
 
 		case '4':
 			if(vans("確定要變更ID連推限制？[y/N] ") != 'y')
-				return XO_HEAD;  
-			//更改旗標 
+				return XO_HEAD;
+			//更改旗標
 			if(newbrd.battr & BRD_PUSHDISCON){
 				newbrd.battr &= ~BRD_PUSHDISCON;
 				vmsg("同ID允許\連推");
@@ -3676,8 +3676,8 @@ post_battr_score(
 
 		case '5':
 			if(vans("確定要變更時間連推限制？[y/N] ") != 'y')
-				return XO_HEAD;  
-			//更改旗標 
+				return XO_HEAD;
+			//更改旗標
 			if(newbrd.battr & BRD_PUSHTIME){
 				newbrd.battr &= ~BRD_PUSHTIME;
 				vmsg("允許\快速連推");
@@ -3691,7 +3691,7 @@ post_battr_score(
 			return XO_HEAD;
 
 		default:
-			return XO_HEAD;          
+			return XO_HEAD;
 	}
 }
 
@@ -3702,10 +3702,10 @@ post_battr_score(
 post_rule(
 	XO *xo)
 {
-	//判斷是否為板主 
+	//判斷是否為板主
 	if (!(bbstate & STAT_BOARD))
 		return XO_NONE;
-	//判斷結束 
+	//判斷結束
 
 	BRD *oldbrd, newbrd;
 	int bno;
@@ -3718,8 +3718,8 @@ post_rule(
 	{
 		case '1':
 			if(vans("確定要變更看板唯讀設定？[y/N] ") != 'y')
-				return XO_HEAD;  
-			//更改旗標 
+				return XO_HEAD;
+			//更改旗標
 			if(newbrd.battr & BRD_NOREPLY){
 				newbrd.battr &= ~BRD_NOREPLY;
 				vmsg("取消唯讀");
@@ -3728,9 +3728,9 @@ post_rule(
 				newbrd.battr |= BRD_NOREPLY;
 				newbrd.battr |= BRD_PRH;
 				newbrd.battr &= ~BRD_PUSHDISCON;
-				newbrd.battr &= ~BRD_PUSHTIME;  
-				newbrd.battr &= ~BRD_PUSHSNEER;  
-				newbrd.battr &= ~BRD_PUSHDEFINE;          
+				newbrd.battr &= ~BRD_PUSHTIME;
+				newbrd.battr &= ~BRD_PUSHSNEER;
+				newbrd.battr &= ~BRD_PUSHDEFINE;
 				vmsg("看板唯讀 - 禁止發文回文及推文");
 			}
 			memcpy(oldbrd, &newbrd, sizeof(BRD));
@@ -3739,8 +3739,8 @@ post_rule(
 
 		case '2':
 			if(vans("確定要變更作者修文設定？[y/N] ") != 'y')
-				return XO_HEAD;  
-			//更改旗標 
+				return XO_HEAD;
+			//更改旗標
 			if(newbrd.battr & BRD_MODIFY){
 				newbrd.battr &= ~BRD_MODIFY;
 				vmsg("允許\作者修文");
@@ -3755,8 +3755,8 @@ post_rule(
 
 		case '3':
 			if(vans("確定要變更轉錄文章設定？[y/N] ") != 'y')
-				return XO_HEAD;  
-			//更改旗標 
+				return XO_HEAD;
+			//更改旗標
 			if(newbrd.battr & BRD_NOFORWARD){
 				newbrd.battr &= ~BRD_NOFORWARD;
 				vmsg("允許\轉錄文章");
@@ -3802,7 +3802,7 @@ post_rule(
 			return XO_HEAD;
 
 		default:
-			return XO_HEAD;          
+			return XO_HEAD;
 	}
 }
 
@@ -3915,14 +3915,14 @@ post_manage(
 {
 	char re;
 
-	char *menu[] = 
+	char *menu[] =
 	{
 		"BQ",
 		"Title   修改看板主題",
 		"Memo    編輯進板畫面",
 		"Post    編輯發文公告",
 		"Banmail 看板檔信設定",
-		"Close   看板發表設定",      
+		"Close   看板發表設定",
 #  ifdef HAVE_RECOMMEND
 		"Score   看板推文設定",
 #  endif
@@ -3981,7 +3981,7 @@ post_manage(
             return post_usies_BMlog(xo);
 
 		case 'q':
-			return XO_HEAD;  
+			return XO_HEAD;
 	}
 	return XO_HEAD;
 }
@@ -4100,7 +4100,7 @@ KeyFunc post_cb[] =
 	{XO_HEAD, post_head},
 	{XO_BODY, post_body},
 
-	{'B', post_manage},  
+	{'B', post_manage},
 	{'r', post_browse},
 	{'s', post_switch},
 	{KEY_TAB, post_gem},
@@ -4110,12 +4110,12 @@ KeyFunc post_cb[] =
 	{'d', post_delete},
 	{'v', post_visit},
 	{'q', post_state},
-	{'S', post_complete}, //板主處理標記 
+	{'S', post_complete}, //板主處理標記
 	{'w', post_write},
 	{Ctrl('W'), post_spam},
 	{'e', post_expire},
 	{'U', post_unexpire},
-	{'#', post_aid},              /* cache.090612: 以文章代碼(AID)快速尋文 */  
+	{'#', post_aid},              /* cache.090612: 以文章代碼(AID)快速尋文 */
 	{'i', post_showBRD_setting},  /* cache.081122:看板資訊顯示 */
 	{Ctrl('P'), post_add},
 	{Ctrl('N'), post_clean_delete},
@@ -4356,7 +4356,7 @@ XoXpost(			/* Thor: call from post_cb */
 		else
 		{
 			if(strchr(head->owner,'.'))
-				continue;    	
+				continue;
 		}
 
 		sum++;
@@ -4634,11 +4634,11 @@ xpost_browse(
 
 		hdr_fpath(fpath, dir, hdr);
 
-		/* Thor.990204: 為考慮more 傳回值 */   
+		/* Thor.990204: 為考慮more 傳回值 */
 		//    if ((key = more(fpath, MSG_POST)) == -1)
 		//      break;
 
-		comebackPos = hdr->xid; 
+		comebackPos = hdr->xid;
 		/* Thor.980911: 從串接模式回來時要回到看過的那篇文章位置 */
 
 		cmd = XO_HEAD;
@@ -4674,13 +4674,13 @@ xpost_browse(
 		if ((key = more(fpath, FOOTER_POST)) < 0)
 			break;
 
-		/* Thor.990204: 為考慮more 傳回值 */   
+		/* Thor.990204: 為考慮more 傳回值 */
 		if(!key)
 			key = vkey();
 
 		switch (key)
 		{
-			case Ctrl('U'):                                                             
+			case Ctrl('U'):
 				every_U();
 				continue;
 			case Ctrl('B'):
@@ -4728,13 +4728,13 @@ xpost_browse(
 				}
 				break;
 
-			case 'm': 
-				if ((bbstate & STAT_BOARD) && !(xmode & POST_MARKED)) 
-				{ 
-					hdr->xmode = xmode | POST_MARKED; 
-					rec_put(dir, hdr, sizeof(HDR), hdr->xid); 
-				} 
-				break; 
+			case 'm':
+				if ((bbstate & STAT_BOARD) && !(xmode & POST_MARKED))
+				{
+					hdr->xmode = xmode | POST_MARKED;
+					rec_put(dir, hdr, sizeof(HDR), hdr->xid);
+				}
+				break;
 
 #ifdef HAVE_RECOMMEND
 			case 'p':

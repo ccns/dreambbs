@@ -17,9 +17,9 @@
 #endif
 
 
-#ifdef MODE_STAT 
-UMODELOG modelog; 
-time_t mode_lastchange; 
+#ifdef MODE_STAT
+UMODELOG modelog;
+time_t mode_lastchange;
 #endif
 extern int item_length[20];
 
@@ -183,13 +183,13 @@ utmp_new(
 
   xshm = ushm;
 
-#ifdef	HAVE_MAXRESERVE  
+#ifdef	HAVE_MAXRESERVE
   if(HAS_PERM(PERM_ADMIN))
   {
-#endif  
+#endif
   	uentp = xshm->uslot;
   	utail = uentp + MAXACTIVE;
-#ifdef	HAVE_MAXRESERVE  
+#ifdef	HAVE_MAXRESERVE
   }
   else
   {
@@ -365,7 +365,7 @@ cmpclasstable(
   return ptr->userno == cuser.userno;
 }
 
-void  
+void
 classtable_free(void)
 {
   int pos;
@@ -373,7 +373,7 @@ classtable_free(void)
     rec_del(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), pos, (void *)cmpclasstable, NULL);
 }
 
-void 
+void
 classtable_main(void)
 {
   int fd, size=0;
@@ -707,17 +707,17 @@ fwshm_load(void)
       rec_put(FN_ETC_BANMAIL_ACL, &data, sizeof(BANMAIL), pos);
     }
     head++;
-  }  
-  
-  head = fwshm->fwcache;  
+  }
+
+  head = fwshm->fwcache;
   fw = open(FN_ETC_BANMAIL_ACL,O_RDONLY);
   fstat(fw, &st);
-  
+
   if(!fstat(fw, &st) && (size = st.st_size) > 0)
   {
     if(size > MAXFIREWALL * sizeof(BANMAIL))
       size = MAXFIREWALL * sizeof(BANMAIL);
-      
+
     if (size)
       read(fw, head, size);
     fwshm->number = size / sizeof(BANMAIL);
@@ -778,16 +778,16 @@ out_rle(
 
       while (--rl >= 0)
       {
-        if(cc=='\n' && film) 
+        if(cc=='\n' && film)
         {
-          getyx(&y,&x);    
+          getyx(&y,&x);
           outs("\033[m\0");
           clrtoeol();
           move(y + 1, 0/*item_length[count++]*/);
         }
         else
           outc(cc);
-          
+
       }
       continue;
 
@@ -812,7 +812,7 @@ out_rle(
       outs("\033[m\0");
       clrtoeol();
       move(y + 1, 0/*item_length[count++]*/);
-      
+
     }
     else
       outc(cc);
@@ -828,7 +828,7 @@ film_out(
 {
   int fmax, len, *shot;
   char *film, buf[FILM_SIZ];
-  
+
   if (row <= 0)
     clear();
   else
@@ -844,14 +844,14 @@ film_out(
     if (++len > 10)
       return FILM_MOVIE;
   }
-  
+
   if (tag >= FILM_MOVIE)	/* random select */
   {
     tag += (time(0) & 7);	/* 7 steps forward */
     if (tag >= fmax)
       tag = FILM_MOVIE;
   }    /* Thor.980804: 可能是故意的吧? 第一張 random select前八個其中一個 */
-  
+
   if (tag)
   {
     len = shot[tag];
@@ -862,13 +862,13 @@ film_out(
   {
     len = shot[1];
   }
-  
+
   if (len >= FILM_SIZ - 10)
     return tag;
 
   memcpy(buf, film, len);
   buf[len] = '\0';
-  
+
   if (tag > FILM_MOVIE)          /* FILM_MOVIE */
   {
     out_rle(buf,1);
@@ -876,7 +876,7 @@ film_out(
   else
   {
     out_rle(buf,0);
-  }  
+  }
 
   if (row < 0)			/* help screen */
     vmsg(NULL);

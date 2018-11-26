@@ -242,7 +242,7 @@ char *path)
 	strncpy(buf3, account + 3, 2);
 	strncpy(buf4, account + 5, 4);
 	buf1[2] = buf2[1] = buf3[2] = buf4[4] = '\0';
-	
+
 	fd = open(path, O_RDONLY);
 	while (fd)
 	{
@@ -294,7 +294,7 @@ char *path)
 			stud[item].admis[0] = '\0';
 			stud[item].first[0] = '\0';
 			stud[item].last[0] = '\0';
-			
+
 			sprintf(buf, "%2d%s", item, ")院系：");
 			if (vget(item + 3, 0, buf, stud[item].inst, sizeof(tmp.inst), GCARRY))
 			{
@@ -303,7 +303,7 @@ char *path)
 					vmsg("學號格式錯誤！");
 					vget(item + 3, 0, buf, stud[item].inst, sizeof(tmp.inst), GCARRY);
 				}
-				
+
 				sprintf(buf, "%s", "部：");
 				for (;;)
 				{
@@ -314,7 +314,7 @@ char *path)
 					else
 						break;
 				}
-					
+
 				sprintf(buf, "%s", "入學年度：");
 				for (;;)
 				{
@@ -347,9 +347,9 @@ char *path)
 					else
 						break;
 				}
-					
+
 				stud[item].end = '\n';
-			}	
+			}
 			/*
 			stud[item].grad[0] = '\0';
 			stud[item].major[0] = '\0';
@@ -368,7 +368,7 @@ char *path)
 				if (!vget(item + 3, 33, buf, stud[item].last, sizeof(tmp.last), GCARRY))
 					strcpy(stud[item].last, stud[item].first);
 				stud[item].end = '\n';
-			}	
+			}
 			*/
 			else
 				break;
@@ -839,14 +839,14 @@ char *account)
 		strcpy(server, ptr + 1);
 	else
 		return 0;
-	
+
 	strncpy(year, account + 3, 2);
-	
+
 	if( atoi(year) <= 97 )// Ecchi.100331: 98年以前入學的信箱，帳號部分尾端都要消去一碼
 		strncpy(addr, account, 8);
 	else
 		strcpy(addr, account);
-	
+
 	sprintf(line, "請輸入 %s 工作站帳號的密碼：", server);
 
 	if (!Get_Socket(server, &sock))

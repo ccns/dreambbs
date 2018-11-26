@@ -50,7 +50,7 @@ reaper(
   close(fd);
   if(acct.userlevel & PERM_VALID)
   {
-    
+
     if ((ptr = strstr(acct.email,"cloud.yzu.edu.tw")));
     else if ((ptr = strstr(acct.email,"mozart.yzu.edu.tw")));
     else if ((ptr = strstr(acct.email,"wind.yzu.edu.tw")));
@@ -68,7 +68,7 @@ reaper(
       strcpy(acct.vmail,acct.email);*/
     }
   }
-  
+
   acct_save(&acct);
 
 }
@@ -120,6 +120,6 @@ main(void)
     fname[0] = ch;
     fname[1] = '\0';
     traverse(fpath);
-  }  
+  }
   return 0;
 }

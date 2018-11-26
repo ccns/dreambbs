@@ -21,7 +21,7 @@
 #include "bbs.h"
 
 
-#define FNAME_DB_SIZE  2048 
+#define FNAME_DB_SIZE  2048
 
 typedef char FNAME[9];
 static FNAME *n_pool;

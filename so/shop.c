@@ -16,7 +16,7 @@ int cloak_temp(void)
 {
   time_t now;
   char c_time[25],c_buf[128];
-  
+
   now = time(0);
   strncpy(c_time, ctime(&now), 24);
   c_time[24] = '\0';
@@ -36,10 +36,10 @@ int cloak_temp(void)
   }
 
      if(acct_load(&acct, cuser.userid) >= 0)
-       money = acct.money;    
+       money = acct.money;
      else
        {
-         pmsg2("查無您的帳戶資訊..."); 
+         pmsg2("查無您的帳戶資訊...");
          return 0;
        }
 
@@ -53,26 +53,26 @@ int cloak_temp(void)
   if(vans("確定購買嗎？ [y/N]") != 'y')
     return 0;
 
-  acct.money -= 65536;  
+  acct.money -= 65536;
   acct_save(&acct);
 
   cuser.ufo ^= UFO_CLOAK;
   cutmp->ufo ^= UFO_CLOAK;
-  
+
 //  acct_save(&cuser);
   pmsg2("要現身請重新上站");
   sprintf(c_buf,"%s %s 購買 隱身 權限\n",c_time,cuser.userid);
   f_cat(FN_SHOP,c_buf);
-  
+
   return 0;
-    
+
 }
 
 int hidefrom_temp(void)
 {
   time_t now;
   char c_time[25],c_buf[128];
-  
+
   now = time(0);
   strncpy(c_time, ctime(&now), 24);
   c_time[24] = '\0';
@@ -100,10 +100,10 @@ int hidefrom_temp(void)
   }
 
      if(acct_load(&acct, cuser.userid) >= 0)
-       money = acct.money;    
+       money = acct.money;
      else
        {
-         pmsg2("查無您的帳戶資訊..."); 
+         pmsg2("查無您的帳戶資訊...");
          return 0;
        }
 
@@ -116,19 +116,19 @@ int hidefrom_temp(void)
   if(vans("確定購買嗎？ [y/N]") != 'y')
     return 0;
 
-  acct.money -= 4194304;  
+  acct.money -= 4194304;
   acct_save(&acct);
-    
+
   cuser.ufo ^= UFO_HIDDEN;
   cutmp->ufo ^= UFO_HIDDEN;
-  
+
   acct_save(&cuser);
   pmsg2("故鄉已隱藏");
   sprintf(c_buf,"%s %s 購買 隱藏故鄉 權限\n",c_time,cuser.userid);
   f_cat(FN_SHOP,c_buf);
-  
+
   return 0;
-    
+
 }
 
 int sysop(void)
@@ -144,14 +144,14 @@ int shop_main(void)
   ACCT acct;
   if(acct_load(&acct, cuser.userid) >= 0)
     {
-      money = acct.money;     
+      money = acct.money;
     }
   else
     {
-      pmsg2("查無您的帳戶資訊..."); 
+      pmsg2("查無您的帳戶資訊...");
       return 0;
     }
-  
+
   clear();
 
   move(0,0);
@@ -165,7 +165,7 @@ int shop_main(void)
             (2) 購買永久隱身術   (需要夢幣  1048576 元/次)\n\n\
             (3) 購買隱藏故鄉     (需要夢幣  4194304 元/次)\n\n\
             (4) 購買站長權限\033[1;31m HOT\033[m (需要夢幣 10000000 元)\n");
- 
+
   if(!vget(b_lines, 0, "請選擇您要的服務： [Q] 離開 ",buf,2,DOECHO))
     return 0;
 
@@ -174,11 +174,11 @@ int shop_main(void)
   else if(*buf == '2')
     pmsg2("此功\能尚未開放");
   else if(*buf == '3')
-    pmsg2("Sorry, we've closed this function...");  
+    pmsg2("Sorry, we've closed this function...");
     //hidefrom_temp();
   else if(*buf == '4')
     sysop();
   else
-    pmsg2("謝謝光臨");   
+    pmsg2("謝謝光臨");
   return 0;
 }

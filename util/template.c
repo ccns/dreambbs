@@ -103,6 +103,6 @@ main(void)
     fname[0] = ch;
     fname[1] = '\0';
     traverse(fpath);
-  }  
+  }
   return 0;
 }

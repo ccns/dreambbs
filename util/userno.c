@@ -12,7 +12,7 @@
 #include "bbs.h"
 
 typedef struct
-{ 
+{
   int userno;
   char userid[IDLEN+1];
 }	MAP;
@@ -79,7 +79,7 @@ traverse(
   closedir(dirp);
 }
 
-int 
+int
 main(void)
 {
   int ch;
@@ -123,7 +123,7 @@ main(void)
           fprintf(flog, "userno %d is the same ~~\n",map[i-1].userno);
      }
      if(k==0)
-       fprintf(flog, "userno %d is empty!\n", i);    
+       fprintf(flog, "userno %d is empty!\n", i);
   }
   return 0;
 }

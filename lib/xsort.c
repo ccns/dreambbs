@@ -48,7 +48,7 @@ swapfunc(
 
 static inline char*
 med3(
-  char* a, 
+  char* a,
   char* b,
   char* c,
   int (*cmp) (void *lhs, void *rhs)

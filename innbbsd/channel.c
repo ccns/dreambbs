@@ -161,7 +161,7 @@ searchcmd(
 #define MAX_ARG_SIZE	1024
 
 
-static int 
+static int
 argify(
   char *line, char ***argvp)
 {
@@ -442,7 +442,7 @@ channelreader(
     argv->argc = argify(data, &argv->argv);
     argv->dc = dp = searchcmd(argv->argv[0]);
     out = argv->out;
-    
+
     if (dp)
     {
       if ((argv->argc < dp->minargc) || (argv->argc > dp->maxargc))		/* 檢查 argc 是否滿足要求 */
@@ -680,7 +680,7 @@ inndchannel(void)
   /* initial history maintain time			 */
   /* --------------------------------------------------- */
 
-  time(&uptime1);  
+  time(&uptime1);
   ptime = localtime(&uptime1);
   i = (HIS_MAINT_HOUR - ptime->tm_hour) * 3600 + (HIS_MAINT_MIN - ptime->tm_min) * 60;
   uptime1 += i;

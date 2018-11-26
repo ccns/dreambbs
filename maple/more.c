@@ -291,13 +291,13 @@ outs_header(	/* 印出檔頭 */
     if ((ptr = strstr(word, str_post1)) || (ptr = strstr(word, str_post2)))
     {
       ptr[-1] = ptr[4] = '\0';
-      prints(COLOR5 " %s " COLOR6 "%-*.*s" COLOR5 " %s " COLOR6 "%-13s\033[m", 
+      prints(COLOR5 " %s " COLOR6 "%-*.*s" COLOR5 " %s " COLOR6 "%-13s\033[m",
 	header1[0], d_cols + 53, d_cols + 53, word, ptr, ptr + 5);
     }
     else
     {
       /* 少看板這欄 */
-      prints(COLOR5 " %s " COLOR6 "%-*.*s\033[m", 
+      prints(COLOR5 " %s " COLOR6 "%-*.*s\033[m",
 	header1[0], d_cols + 72, d_cols + 72, word);
     }
     return;
@@ -310,7 +310,7 @@ outs_header(	/* 印出檔頭 */
     {
       /* 其他檔頭都只有一欄 */
       word = str + header_len;
-      prints(COLOR5 " %s " COLOR6 "%-*.*s\033[m", 
+      prints(COLOR5 " %s " COLOR6 "%-*.*s\033[m",
 	header1[i], d_cols + 72, d_cols + 72, word);
       return;
     }
@@ -365,7 +365,7 @@ more_slideshow(void)
 
       ch = KEY_PGDN;
     }
-  }  
+  }
   else
   {
     struct timeval tv[9] =
@@ -446,7 +446,7 @@ more(
     /* 讀出檔案第一列，來判斷站內信還是站外信 */
     if (i == 0)
     {
-      header_len = 
+      header_len =
         !memcmp(buf, str_author1, LEN_AUTHOR1) ? LEN_AUTHOR1 :	/* 「作者:」表站內文章 */
         !memcmp(buf, str_author2, LEN_AUTHOR2) ? LEN_AUTHOR2 : 	/* 「發信人:」表轉信文章 */
         0;							/* 沒有檔頭 */
@@ -782,7 +782,7 @@ re_key:
 	for (i = lino - b_lines - i; i > 0; i--)
 	  more_line(buf);
 
-	for (i = shift; i < 0; i++) 
+	for (i = shift; i < 0; i++)
 	{
 	  rscroll();
 	  move(0, 0);
@@ -817,7 +817,7 @@ re_key:
 
   free(fimage);
 
-#endif // M3_USE_PMORE 
+#endif // M3_USE_PMORE
 
   if (!cmd)	/* 檔案正常秀完，要處理 footer */
   {
@@ -838,9 +838,9 @@ re_key:
       {
 	FILE *fp;
 
-	if (fp = tbf_open()) 
+	if (fp = tbf_open())
 	{
-	  f_suck(fp, fpath); 
+	  f_suck(fp, fpath);
 	  fclose(fp);
 	}
       }

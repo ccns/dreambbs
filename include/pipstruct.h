@@ -20,7 +20,7 @@ struct rpgrec
   unsigned int age;			  /* 年齡	  4 bytes */
   unsigned char race;			  /* 種族	  1 bytes */
   unsigned char subrace;		  /* 副業	  1 bytes */
-  unsigned short level;			  /* 等級	  2 bytes */  
+  unsigned short level;			  /* 等級	  2 bytes */
   char family[20];		  /* 家族	 20 bytes */
   char nick[20];		  /* 封號	 20 bytes */
   int hp;			  /* 體力	  4 bytes */

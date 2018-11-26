@@ -270,15 +270,15 @@ profess_image(void)
   FILE *fp;
   short len, pos[CH_MAX];
   ClassHeader *chp;
-        
+
   class_sort();
   class_parse(PROFESS_INIFILE);
-  
+
   if (chn < 2)  /* lkchu.990106: 尚沒有分類 */
     return;
-        
+
   len = sizeof(short) * (chn + 1);
-          
+
   for (i = 0; i < chn; i++)
   {
     pos[i] = len;

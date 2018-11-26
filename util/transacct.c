@@ -12,7 +12,7 @@
 
 #if 0
 
-請先備份所有資料, 並檢查是否新舊資料結構是正確的 
+請先備份所有資料, 並檢查是否新舊資料結構是正確的
 
 #endif
 
@@ -141,7 +141,7 @@ typedef struct
 #define	UFO2_DEF_ANONY	   BFLAG(16)	   /* 預設不匿名 */
 #define	UFO2_DEF_LEAVE	   BFLAG(17)	   /* 預設不離站 */
 #define	UFO2_ACL	       BFLAG(24)	   /* true if ACL was ON */
-#define UFO2_REALNAME	   BFLAG(28)	   /* visor.991030: 真實姓名 */ 
+#define UFO2_REALNAME	   BFLAG(28)	   /* visor.991030: 真實姓名 */
 
 
 static unsigned int
@@ -193,15 +193,15 @@ trans_ufo2(
 
   if (oldufo2 & OLDUFO2_CIRCLE)
     ufo |= UFO2_CIRCLE;
-    
+
   if (oldufo2 & OLDUFO2_ORIGUI)
-    ufo |= UFO2_ORIGUI;    
+    ufo |= UFO2_ORIGUI;
 
   if (oldufo2 & OLDUFO2_DEF_ANONY)
-    ufo |= UFO2_DEF_ANONY;   
+    ufo |= UFO2_DEF_ANONY;
 
 //  if (oldufo2 & OLDUFO2_DEF_LEAVE)
-//    ufo |= UFO2_DEF_LEAVE;   
+//    ufo |= UFO2_DEF_LEAVE;
 
   if (oldufo2 & OLDUFO2_ACL)
     ufo |= UFO2_ACL;
@@ -256,11 +256,11 @@ trans_acct(
   str_ncpy(new->ident, old->ident, sizeof(new->ident));
 
   new->request = (int)m3;
-  new->money  = (int)m1;  
+  new->money  = (int)m1;
 
   new->point1 =0;           /* 優良積分 */
   new->point2 =0;           /* 劣文 */
-  
+
 }
 
 typedef struct
@@ -310,22 +310,22 @@ main(
       if ((argc == 2) && str_cmp(str, argv[1]))
 	continue;
 
-//讀取MONEY 
-      sprintf(buf, "%s/" FN_MONEY, str);  //.MONEY似乎定義成FN_MONEY 
+//讀取MONEY
+      sprintf(buf, "%s/" FN_MONEY, str);  //.MONEY似乎定義成FN_MONEY
       if ((fd = open(buf, O_RDONLY)) < 0)
 	continue;
 
       read(fd, &oldwealth, sizeof(MONEY));
       close(fd);
-//先不執行砍掉的動作      unlink(buf2); 
+//先不執行砍掉的動作      unlink(buf2);
 
     m1 = oldwealth.money;
     m2 = oldwealth.save;
     m3 = oldwealth.request;
 
-    m1 = ((m1+m2)/100000);  //請自行修改 
+    m1 = ((m1+m2)/100000);  //請自行修改
 
-    if (m1 >= INT_MAX )	
+    if (m1 >= INT_MAX )
        m1 = INT_MAX;
 
       sprintf(buf, "%s/" FN_ACCT, str);

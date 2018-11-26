@@ -121,7 +121,7 @@ ll_out(
 {
   LinkList *list;
   int cur_rownum,ch,crow;
-  
+
 
   move(row, column);
   clrtobot();
@@ -148,7 +148,7 @@ ll_out(
         {
           move(row+2, 0);
           clrtobot();
-          cur_rownum = row+1;          
+          cur_rownum = row+1;
         }
       }
     }
@@ -301,7 +301,7 @@ bsmtp(
 
     move(b_lines, 0);
     clrtoeol();
-    
+
     if(method)
     {
       prints("★ 寄信給 %s \033[5m...\033[m", rcpt);
@@ -370,8 +370,8 @@ bsmtp(
     fprintf(fw, "From: %s\r\nTo: %s\r\nSubject: %s\r\nX-Sender: %s (%s)\r\n"
       "Date: %s\r\nMessage-Id: <%s@%s>\r\n"
       "X-Disclaimer: [%s] 對本信內容恕不負責\r\n\r\n",
-      from, rcpt, title, cuser.userid, cuser.username, 
-      Atime(&stamp), msgid, str_host, 
+      from, rcpt, title, cuser.userid, cuser.username,
+      Atime(&stamp), msgid, str_host,
       str_site);
 
     if (method & MQ_JUSTIFY)	/* 身分認證信函 */
@@ -412,7 +412,7 @@ bsmtp(
       sign.val.hash2 = str_hash2(buf, sign.val.hash);
       str_xor(sign.str, prikey);
       /* Thor.990413: 不加()的話, 時間尾空白會被吃掉(驗證時) */
-      fprintf(fw,"\033[1;32m※ X-Info: \033[33m%s\033[m\r\n\033[1;32m※ X-Sign: \033[36m%s%s \033[37m(%s)\033[m\r\n", 
+      fprintf(fw,"\033[1;32m※ X-Info: \033[33m%s\033[m\r\n\033[1;32m※ X-Sign: \033[36m%s%s \033[37m(%s)\033[m\r\n",
                   buf, msgid, genpasswd(sign.str), Btime(&stamp));
     }
 #endif
@@ -449,7 +449,7 @@ smtp_log:
   /* --------------------------------------------------- */
 
   sprintf(buf, "%s%-13s%c> %s %s %s\n\t%s\n\t%s\n", Btime(&stamp), cuser.userid,
-    ((method == MQ_JUSTIFY) ? '=' : '-'), rcpt, msgid, 
+    ((method == MQ_JUSTIFY) ? '=' : '-'), rcpt, msgid,
 #ifdef HAVE_SIGNED_MAIL
       *prikey ? genpasswd(sign.str): "NoPriKey",
 #else
@@ -473,14 +473,14 @@ bsmtp_file(
   char *str, buf[512], from[80], msgid[80],boundary[256];
   char fname[256];
   struct tm ntime, *xtime;
-            
-  
+
+
 
   cuser.numemail++;		/* 記錄使用者共寄出幾封 Internet E-mail */
   chrono = time(&stamp);
   xtime = localtime(&chrono);
   ntime = *xtime;
-  
+
   sprintf(fname,"mail_%04d%02d%02d.tgz",ntime.tm_year + 1900, ntime.tm_mon + 1, ntime.tm_mday);
 
   /* --------------------------------------------------- */
@@ -514,12 +514,12 @@ bsmtp_file(
   if (sock >= 0)
   {
     archiv32(chrono, msgid);
-    
+
     sprintf(boundary,"----=_NextPart_%s",msgid);
 
     move(b_lines, 0);
     clrtoeol();
-    
+
     prints("★ 寄信給 %s \033[5m...\033[m", rcpt);
     refresh();
 
@@ -579,13 +579,13 @@ bsmtp_file(
     fprintf(fw, "From: %s\r\nTo: %s\r\nSubject: %s\r\nX-Sender: %s (%s)\r\n"
       "Date: %s\r\nMessage-Id: <%s@%s>\r\n"
       "X-Disclaimer: [%s] 對本信內容恕不負責\r\n",
-      from, rcpt, title, cuser.userid, cuser.username, 
-      Atime(&stamp), msgid, str_host, 
+      from, rcpt, title, cuser.userid, cuser.username,
+      Atime(&stamp), msgid, str_host,
       str_site);
-      
+
     fprintf(fw,"MIME-Version: 1.0\r\nContent-Type: multipart/mixed;\r\n"
     		"\tboundary=\"%s\"\r\n\r\n",boundary);
-    		
+
     fprintf(fw,"This is a multi-part message in MIME format.\r\n");
     fprintf(fw,"--%s\r\nContent-Type: text/plain;\r\n\tcharset=\"big5\"\r\n"
     	       "Content-Transfer-Encoding: 8bit\r\n\r\n附件名稱：%s\r\n",boundary,fname);
@@ -665,7 +665,7 @@ int
 m_verify(void)
 {
   extern char rusername[]; /* Thor: 記錄 RFC931, 怕guest verify */
-  time_t chrono; 
+  time_t chrono;
   char info[79], *p;
   char sign[79], *q;
   char buf[160];
@@ -686,9 +686,9 @@ m_verify(void)
     return XEASY;
   }
 
-  move(13, 0); 
+  move(13, 0);
   clrtobot();
-  move(15, 0); 
+  move(15, 0);
   outs("請依序輸入信末兩行 X-Info X-Sign 以進行驗證");
 
   if(!vget(17, 0, ":", info, sizeof info, DOECHO) ||
@@ -706,14 +706,14 @@ m_verify(void)
     q += 11;
   while(*q == ' ') q++;
 
-  if(strlen(q) < 7 + 13) 
+  if(strlen(q) < 7 + 13)
   {
     vmsg("電子簽章有誤");
     return 0;
   }
-      
+
   str_ncpy(s.str + 1, q, 8);  /* Thor: 暫借一下 s.str */
-  chrono = chrono32(s.str); /* prefix 1 char */ 
+  chrono = chrono32(s.str); /* prefix 1 char */
 
   q += 7; /* real sign */
   q[PASSLEN-1] = 0; /* 補尾0 */
@@ -724,8 +724,8 @@ m_verify(void)
 
   sprintf(buf,"(%s)", Btime(&chrono));
 
-  if(chkpasswd(q, s.str) || strcmp(q + PASSLEN, buf)) 
-  { 
+  if(chkpasswd(q, s.str) || strcmp(q + PASSLEN, buf))
+  {
     /* Thor.990413: log usage */
     sprintf(buf,"%s@%s - XInfo:%s", rusername, fromhost, p);
     blog("VRFY",buf);
@@ -773,7 +773,7 @@ m_total_size(void)
   if (!fstat(fd, &st) && (fsize = st.st_size) >= sizeof(HDR) &&
     (base = (char *) malloc(fsize)))
   {
-   
+
     f_exlock(fd);
 
     if ((fsize = read(fd, base, fsize)) >= sizeof(HDR))
@@ -782,7 +782,7 @@ m_total_size(void)
       tail = (HDR *) (base + fsize);
 
       do
-      { 
+      {
         if(head->xid > 0)
         {
           total += head->xid;
@@ -798,7 +798,7 @@ m_total_size(void)
       } while (++head < tail);
 
     }
-    
+
     if(changed == 1)
     {
       lseek(fd, (off_t) 0, SEEK_SET);
@@ -880,7 +880,7 @@ m_quota(void)
 #endif
 	if (!(xmode & MAIL_READ))
 	  ufo |= UFO_BIFF;
-	  
+
 #if 0
 	if ((count > limit) ||
 	  (head->chrono <= (xmode & MAIL_MARKED ? mark_due : mail_due)))
@@ -906,7 +906,7 @@ m_quota(void)
 	write(fd, base, fsize);
 	ftruncate(fd, fsize);
       }
-      
+
 #else
       ufo &= ~UFO_MQUOTA;
       if (fsize > 0)
@@ -916,7 +916,7 @@ m_quota(void)
         ftruncate(fd, fsize);
       }
 #endif
-      
+
     }
 
     /* flock(fd, LOCK_UN); */
@@ -974,7 +974,7 @@ do_forward(
   char addr[64], fpath[64], cmd[256];
 
   if(strstr(cuser.email,".bbs@"))
-  { 
+  {
      vmsg("使用 BBS 信箱作為認證信箱/使用註冊單認證者無法打包！");
      return;
   }
@@ -1086,7 +1086,7 @@ m_zip(void)			/* itoc.010228: 打包資料 */
       return XEASY;
     }
 
-    if ((ans == '2' && !(bbstate & STAT_BOARD)) || (ans == '3' && !(bbstate & STAT_BOARD))) 
+    if ((ans == '2' && !(bbstate & STAT_BOARD)) || (ans == '3' && !(bbstate & STAT_BOARD)))
 				   /* tmp not STAT_BM */
     {
       vmsg("只有板主才能打包看板文章及看板精華區");
@@ -1094,7 +1094,7 @@ m_zip(void)			/* itoc.010228: 打包資料 */
     }
 
     if(!(strstr(currboard,"P_")))
-    { 
+    {
       vmsg("非個人板暫不提供打包服務,特殊個人專板若需打包請洽站務");
       return XEASY;
     }
@@ -1246,13 +1246,13 @@ mail_hold(
   rec_add(folder, &mhdr, sizeof(HDR));
 }
 
-/* cache.091209: 自動轉寄 */ 
+/* cache.091209: 自動轉寄 */
 int
 m_setforward(void)
 {
   char fpath[64], ip[50];
   FILE *fp;
-                                                                                
+
   usr_fpath(fpath, cuser.userid, FN_FORWARD);
   if (fp = fopen(fpath, "r"))
   {
@@ -1263,9 +1263,9 @@ m_setforward(void)
   {
     ip[0] = '\0';
   }
-                                                                                
+
   vget(b_lines - 1, 0, "請輸入信件自動轉寄的 E-mail：", ip, 50, GCARRY);
-                                                                                
+
   if (ip[0] && !not_addr(ip) &&
     vans("確定開啟信件轉寄功\能(Y/N)？[N] ") == 'y')
   {
@@ -1277,13 +1277,13 @@ m_setforward(void)
       return 0;
     }
   }
-                                                                                
+
   unlink(fpath);
   pmsg2("取消自動轉寄或無效 E-mail");
   return 0;
 }
 
-/* cache.100129: 重建信箱索引 */ 
+/* cache.100129: 重建信箱索引 */
 int
 m_setmboxdir(void)
 {
@@ -1295,11 +1295,11 @@ m_setmboxdir(void)
 
 
   if (vans("確定重建索引(Y/N)？[N] ") == 'y')
-  {  
+  {
 
     vget(b_lines - 1, 0, "請輸入帳號的第一個英文字母(小寫)：", id, 5, GCARRY);
 
-    usr_fpath(upath, cuser.userid, NULL); 
+    usr_fpath(upath, cuser.userid, NULL);
 
     sprintf(fpath1, "/home/bbs/usr/%s/%s", id, cuser.userid);
 
@@ -1308,14 +1308,14 @@ m_setmboxdir(void)
     sprintf(fpath3, "mv .DIR.@ .DIR");
 
     chdir(fpath1);
-	system(fpath2);	
+	system(fpath2);
 	system(fpath3);
     chdir("/home/bbs");
 
 	pmsg2("重建完成");
     return 0;
   }
-  
+
   pmsg2("取消重建信箱索引");
   return 0;
 
@@ -1368,7 +1368,7 @@ mail_external(
   return 0;
 }
 
-/* cache.091209: 自動轉寄信件*/ 
+/* cache.091209: 自動轉寄信件*/
 /* cuser.userid 將「標題 title、檔案在 fpath」的信件寄給 userid 的外部信箱 */
 static void
 forward_mail(
@@ -1376,13 +1376,13 @@ forward_mail(
 {
   FILE *fp;
   char ip[80];
-                                                                                
+
   usr_fpath(ip, userid, FN_FORWARD);
   if ( ( fp = fopen(ip, "r") ) )
   {
     fscanf(fp, "%s", ip);
     fclose(fp);
-                                                                                
+
     if (ip[0])
       bsmtp(fpath, title, ip, 0);
   }
@@ -1396,9 +1396,9 @@ mail_send(
   char fpath[80], folder[80],ckforward[80];
   int rc, userno=0;
   ACCT acct;
-  
+
   int internet_mail;
-  
+
   if (!(internet_mail = mail_external(rcpt)))
   {
     if ((userno = acct_userno(rcpt)) <= 0)
@@ -1455,10 +1455,10 @@ mail_send(
       strcpy(mhdr.nick, cuser.username);	/* :chuan: 加入 nick */
       strcpy(mhdr.title, ve_title);
       rc = rec_add(folder, &mhdr, sizeof(mhdr));
-      forward_mail(fpath, rcpt, ve_title);      
+      forward_mail(fpath, rcpt, ve_title);
     }
     else
-    {  
+    {
       if(acct_load(&acct, rcpt) >= 0)
       {
         if (!title)
@@ -1491,11 +1491,11 @@ mail_send(
   /* --------------------------------------------------- */
   /* E-Mail 網路傳呼  by lkchu@dragon2.net               */
   /* --------------------------------------------------- */
-              
+
   if ((acct_load(&acct, rcpt) >= 0) && (acct.ufo & UFO_MPAGER))
   {
     char *p;
-    
+
     if ((p = str_str(acct.address, "bbc")) != NULL)  /* 找 BBC 描述 */
       DL_func("bin/emailpage.so:vaEMailPager", p + 3, cuser.userid, ve_title);
   }
@@ -1518,7 +1518,7 @@ mail_reply(
     return;
   }
 
-  
+
   if(!(HAS_PERM(PERM_INTERNET)))
     return ;
 
@@ -1870,7 +1870,7 @@ multi_send(
 	strcpy(mhdr.title, title);
 	mhdr.xmode = MAIL_MULTI;
 	rec_add(buf, &mhdr, sizeof(HDR));
-    forward_mail(fpath, userid, title);	
+    forward_mail(fpath, userid, title);
 	m_biff(cacct.userno);
       } while ((wp = wp->next));
 
@@ -2034,7 +2034,7 @@ hdr_outs(		/* print HDR's subject */
 
   mark = title + cc;
   cc = ' ';
-  
+
   if(hdr->xmode & POST_LOCK && !HAS_PERM(PERM_SYSOP))
   {
     outs(" 此文章已加密鎖定！\033[m");
@@ -2146,7 +2146,7 @@ mbox_body(
   int num, max, tail;
 
   max = xo->max;
-  
+
   if (max <= 0)
   {
     vmsg("您沒有來信");
@@ -2229,7 +2229,7 @@ mbox_delete(
     {
       return mbox_load(xo);
     }
-#else    
+#else
     if (!rec_del(dir, sizeof(HDR), pos, cmpchrono, NULL))
     {
       hdr_fpath(fpath, dir, hdr);
@@ -2408,7 +2408,7 @@ mbox_reply(
   pos = xo->pos;
   mhdr = (HDR *) xo_pool + pos - xo->top;
   memcpy(&hdr,mhdr,sizeof(HDR));
-  mhdr = &hdr;    
+  mhdr = &hdr;
 
   xmode = mhdr->xmode;
   if (xmode & MAIL_NOREPLY)
@@ -2498,10 +2498,10 @@ static int
 mbox_other(
   XO *xo)
 {
- 
+
   ACCT acct;
-  char path[80];  
-  
+  char path[80];
+
   if(!supervisor)
      return XO_NONE;
 
@@ -2509,21 +2509,21 @@ mbox_other(
   {
     XO *xx;
 
-    //str_lower(id, acct.userid);  
+    //str_lower(id, acct.userid);
     //sprintf(path,"usr/%c/%s/.DIR",*id,id);
-  
+
     usr_fpath(path, acct.userid, fn_dir);
     usr_fpath(cmbox.dir, acct.userid, fn_dir);
-  
+
     xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new(path);
     xover(XZ_MBOX);
     free(xx);
-    
+
     usr_fpath(cmbox.dir, cuser.userid, fn_dir);
 
     xz[XZ_MBOX - XO_ZONE].xo = xo;
     mbox_init(xo);
- 
+
  }
   return XO_HEAD;
 }
@@ -2543,7 +2543,7 @@ mail_stat(
   int limit_e,total_e;
   int limit_k,total_k;
   char buf[128];
-  
+
       limit_e = cuser.userlevel;
       if (limit_e & (PERM_SYSOP | PERM_MBOX))
         limit_e = MAX_BBSMAIL;
@@ -2551,14 +2551,14 @@ mail_stat(
         limit_e = MAX_VALIDMAIL;
       else
         limit_e = limit_e & PERM_VALID ? MAX_VALIDMAIL : MAX_NOVALIDMAIL;
-  
+
       limit_k = cuser.userlevel;
       if (limit_k & (PERM_SYSOP | PERM_MBOX))
         limit_k = MAX_MAIL_SIZE;
       else if (mode & CHK_MAIL_VALID)
         limit_k = MAIL_SIZE;
       else
-        limit_k = limit_k & PERM_VALID ? MAIL_SIZE : MAIL_SIZE_NO;  
+        limit_k = limit_k & PERM_VALID ? MAIL_SIZE : MAIL_SIZE_NO;
 
   usr_fpath(buf, cuser.userid, fn_dir);
   total_e = rec_num(buf, sizeof(HDR));
@@ -2593,7 +2593,7 @@ mbox_edit(
   hdr_fpath(fpath, xo->dir, hdr);
   if (cuser.userlevel & PERM_SYSOP)
   {
-    vedit(fpath, NA); 
+    vedit(fpath, NA);
     return mbox_head(xo);
   }
   return XO_NONE;
@@ -2643,7 +2643,7 @@ mbox_title(
   XO *xo)
 {
   HDR *hdr,mhdr;
-     
+
   if(!supervisor)
     return XO_NONE;
 
@@ -2761,12 +2761,12 @@ static KeyFunc mbox_cb[] =
   {'m', mbox_mark},
 #ifdef	HAVE_MAILGEM
   {'z', mbox_gem},
-#endif  
+#endif
   {'R', mbox_reply},
   {'y', mbox_reply},
   {'c', mbox_stat},
 #ifdef HAVE_MAILUNDELETE
-  {'U', mbox_clean}, 
+  {'U', mbox_clean},
   {'u', mbox_undelete},
 #endif
 

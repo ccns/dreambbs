@@ -19,7 +19,7 @@ static int do_menu(MENU pmenu[],XO *xo,int x,int y);
 /*            0  代表不是中文字              */
 /* ----------------------------------------- */
 
-static int 
+static int
 is_big5(char *src,int pos,int mode)
 {
     int wstate=0;
@@ -42,7 +42,7 @@ is_big5(char *src,int pos,int mode)
        wstate = (*str<0)?((wstate==1)?0:1):0;
        word++;
     }
-    
+
     if(wstate)
       return -1;
 
@@ -52,7 +52,7 @@ is_big5(char *src,int pos,int mode)
       return 0;
 }
 
-static int 
+static int
 do_cmd(MENU *mptr,XO *xo,int x,int y)
 {
    unsigned int mode;
@@ -63,7 +63,7 @@ do_cmd(MENU *mptr,XO *xo,int x,int y)
    if(mptr->umode < 0)
    {
       p = DL_get(mptr->func);
-      if(!p) 
+      if(!p)
         return 0;
       mptr->func = p;
       mptr->umode = - (mptr->umode);
@@ -92,12 +92,12 @@ do_cmd(MENU *mptr,XO *xo,int x,int y)
         mode = (*func) ();
         return -1;
    }
-   
+
    return -1;
 }
 
 /* verit . 計算扣掉色碼的實際長度 */
-static int 
+static int
 count_len(
   char *data)
 {
@@ -126,10 +126,10 @@ get_color(char *s,int len,int *fc,int *bc,int *bbc)
    char buf[32],*p,*e;
    int color;
    int state = 0,reset=0,exit = 0;
-   
+
    memset(buf,0,sizeof(buf));
    strncpy(buf,s+2,len-1);
-   
+
    for( p = e = &buf[0] ; exit == 0 ; ++p)
    {
        if(*p == ';' || *p == 'm')
@@ -137,9 +137,9 @@ get_color(char *s,int len,int *fc,int *bc,int *bbc)
          if(*p == 'm')
             exit = 1;
          *p = 0;
-         
+
          color = atoi(e);
-         
+
          if(color == 0)
          {
             *bbc = 0;
@@ -163,7 +163,7 @@ get_color(char *s,int len,int *fc,int *bc,int *bbc)
          e = p+1;
        }
    }
-   
+
    if(reset == 1)
    {
      if(!(state & 0x4))
@@ -173,14 +173,14 @@ get_color(char *s,int len,int *fc,int *bc,int *bbc)
      if(!(state & 0x1))
        *bbc = 0;
    }
-   
+
    if(state == 0)
    {
      *bc = 40;
      *fc = 37;
      *bbc = 0;
    }
-   
+
 }
 
 static void
@@ -189,12 +189,12 @@ vs_line(char *msg,int x,int y)
    char buf[512],color[16],*str,*tmp,*cstr;
    int len = count_len(msg);
    int word,slen,fc=37,bc=40,bbc=0;
-   
+
    memset(buf,0,sizeof(buf));
-   
+
    sl[x].data[sl[x].len] = '\0';
    str = tmp = sl[x].data;
-   
+
    for(word=0;word<y && *str;++str)
    {
       if(*str == KEY_ESC)
@@ -206,20 +206,20 @@ vs_line(char *msg,int x,int y)
       }
       word++;
    }
-   
+
    strncpy(buf,sl[x].data, str - tmp);
-   
+
    while(word++<y)
      strcat(buf," ");
-   
+
    slen = strlen(buf)-1;
-   
+
    /* verit . 假如這為中文字元的前半碼就清掉 */
    if(is_big5(buf,slen,0)>0)
      buf[slen] = ' ';
-     
+
    strcat(buf,msg);
-   
+
    if(*str)
    {
       for(word=0;word<len && *str;++str)
@@ -233,7 +233,7 @@ vs_line(char *msg,int x,int y)
         }
         word++;
       }
-      
+
       if(*str)
       {
         /* verit . 解決後面顏色補色 */
@@ -250,7 +250,7 @@ vs_line(char *msg,int x,int y)
 
    move(x,0);
    outs(buf);
-   
+
 }
 
 /* mode 代表加背景的顏色 */
@@ -265,15 +265,15 @@ draw_item(char *desc,int mode,int x,int y)
 }
 
 
-static int 
+static int
 draw_menu(MENU *pmenu[20],int num,char *title,int x,int y,int cur)
 {
    char buf[128];
    int i;
    char t[128];
-   
+
    sprintf(t,"【%s】",title);
-   
+
    sprintf(buf," \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\033[m   ");
    vs_line(buf,x-2,y);
    sprintf(buf," \033[0;37;44m▏\033[1m%-31s \033[0;47;34m▉\033[m   ",t);
@@ -287,7 +287,7 @@ draw_menu(MENU *pmenu[20],int num,char *title,int x,int y,int cur)
    return 0;
 }
 
-static int 
+static int
 do_menu(
   MENU pmenu[],
   XO *xo,
@@ -300,31 +300,31 @@ do_menu(
    char *title;
    MENU *table_title;
 
-   memset(table ,0 ,sizeof(table));   
+   memset(table ,0 ,sizeof(table));
    /* verit. menu 權限檢查 */
    for( tmp=0,num=-1 ; pmenu[tmp].umode != POPUP_MENUTITLE ; tmp++ )
    {
      if(pmenu[tmp].level == 0 || pmenu[tmp].level & cuser.userlevel)
        table[++num] = &pmenu[tmp];
-       
+
    }
-   
+
    /* verit. 更新動態 */
    if(pmenu[tmp].func)
    {
      strcpy(cutmp->mateid,pmenu[tmp].func);
      utmp_mode(M_IDLE);
    }
-   
+
    title = pmenu[tmp].desc;
    table_title = &pmenu[tmp];
 
-   /* verit . 假如沒有任何選項就 return */   
+   /* verit . 假如沒有任何選項就 return */
    if(num < 0)
      return 1;
-     
-   cur = old_cur = 0;  
-     
+
+   cur = old_cur = 0;
+
    /* 跳到預設選項 */
    for( tmp=0; tmp<= num ; tmp++ )
    {
@@ -334,8 +334,8 @@ do_menu(
         break;
       }
    }
-     
-     
+
+
    draw_menu(table,num+1,title,x,y,cur);
 
    while(1)  /* verit . user 選擇 */
@@ -394,7 +394,7 @@ do_menu(
         draw_item(table[cur]->desc,1,x+cur,y);
       }
    }
-   
+
    return 0;
 }
 
@@ -416,14 +416,14 @@ draw_ans_item(
 }
 
 
-static int 
+static int
 draw_menu_des(char *desc[],char *title,int x,int y,int cur)
 {
    int num;
    char buf[128];
    char hotkey;
    hotkey = desc[0][0];
-   
+
    sprintf(buf," \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\033[m   ");
    vs_line(buf,x-2,y);
    sprintf(buf," \033[0;37;44m▏%-31s \033[0;47;34m▉\033[m   ",title);
@@ -449,7 +449,7 @@ popupmenu_ans(char *desc[],char *title,int x,int y)
    char t[64];
    char hotkey;
    hotkey = desc[0][0];
-      
+
    vs_save(sl);
    sprintf(t,"【%s】",title);
    num = draw_menu_des(desc,t,x,y,0);
@@ -509,7 +509,7 @@ popupmenu_ans(char *desc[],char *title,int x,int y)
 void
 popupmenu(MENU pmenu[],XO *xo,int x,int y)
 {
-   
+
    vs_save(sl);
    do_menu(pmenu,xo,x,y);
    vs_restore(sl);
@@ -518,10 +518,10 @@ popupmenu(MENU pmenu[],XO *xo,int x,int y)
 static void pcopy(char *buf,char *patten,int len)
 {
   int i,size;
-  
+
   *buf = '\0';
   size = strlen(patten);
-  
+
   for(i=1;i<=len;i++)
   {
     strcpy(buf,patten);
@@ -534,13 +534,13 @@ int pmsg(char *msg)
    char buf[ANSILINELEN];
    char patten[ANSILINELEN];
    int len,plen,cc;
-   
+
    if(cuser.ufo2 & UFO2_ORIGUI)
      return vmsg(msg);
-   
+
 
    vs_save(sl);
-   
+
    len = (msg ? strlen(msg) : 0 );
    if(len > 30)
    {
@@ -548,7 +548,7 @@ int pmsg(char *msg)
    }
    else
      plen = 0;
-   
+
    if(len > 0)
    {
      pcopy(patten,"ˍ",plen);

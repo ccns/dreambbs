@@ -8,7 +8,7 @@
 /* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw		 */
 /*-------------------------------------------------------*/
 
-/* 90929.cache: 第二種圖形選單 */ 
+/* 90929.cache: 第二種圖形選單 */
 
 #include "bbs.h"
 
@@ -45,7 +45,7 @@ draw_line(x, y, msg)	/* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
   memset(data, 0, sizeof(data));
   strncpy(data, slt[i].data, slt[i].len);
   str = data;
-  
+
   move(x, 0);
   clrtoeol();
 

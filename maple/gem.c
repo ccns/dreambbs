@@ -55,10 +55,10 @@ gem_manage(
   int ch,len;
   char buf[100];
   char *list;
-  
+
   strcpy(buf,title);
- 
-  len = strlen(cuser.userid); 
+
+  len = strlen(cuser.userid);
   if((list = strrchr(buf,'[')) == NULL)
     return 0;
 
@@ -109,7 +109,7 @@ gem_item(
   if (!(bbstate & STAT_BOARD)&&!HAS_PERM(PERM_ADMIN|PERM_GEM)&&(xmode & GEM_RESTRICT))
     prints("\033[1;33m資料保密！\033[m\n");
   else if(!HAS_PERM(PERM_SYSOP) && (xmode & GEM_LOCK))
-    prints("\033[1;33m資料保密！\033[m\n"); 
+    prints("\033[1;33m資料保密！\033[m\n");
   else
   {
     if(xmode & GEM_BOARD)
@@ -191,7 +191,7 @@ gem_head(
   }
   else
   {
-    buf[0] = '\n'; 
+    buf[0] = '\n';
     buf[1] = '\0';
   }
 
@@ -262,7 +262,7 @@ gem_check(
 
   if ((gtype & GEM_RESTRICT) && (level <= GEM_USER) && !gem_manage(ghdr->title))
     return NULL;
-    
+
   if ((gtype & GEM_LOCK) && (!HAS_PERM(PERM_SYSOP)))
     return NULL;
 
@@ -402,7 +402,7 @@ gem_add(
           {
             vmsg("你還有檔案還沒編完哦！");
             return XO_FOOT;
-          }	
+          }
 	  else if (vedit(fpath, NA))
 	  {
 	    unlink(fpath);
@@ -458,7 +458,7 @@ gem_edit(
   {
     vmsg("你還有檔案還沒編完哦！");
     return XO_FOOT;
-  }  
+  }
 
   if (!(hdr = gem_check(xo, fpath, GEM_WRITE | GEM_FILE)))
     return XO_NONE;
@@ -564,16 +564,16 @@ gem_state(
   struct stat st;
   int bno;
 
-  /* Thor.990107: Ernie patch: 
+  /* Thor.990107: Ernie patch:
     gem.c gem_browse() 在進入 路)的 folder 時一律 op = GEM_VISIT
     使得板主只能在 gopher 最外層觀看檔案屬性及 update proxy，進入 gopher
     便失效。
 
     解決辦法: 進 gem_state() 時多判斷是否為該板板主，有更好的方式請指正 :)
   */
-  if (!(bbstate & STAT_BOARD) && xo->key <= GEM_USER && !(HAS_PERM(PERM_SYSOP))) 
+  if (!(bbstate & STAT_BOARD) && xo->key <= GEM_USER && !(HAS_PERM(PERM_SYSOP)))
     return XO_NONE;
-    
+
 
   if(!(ghdr = gem_check(xo, fpath, GEM_READ)))
     return XO_NONE;
@@ -675,7 +675,7 @@ gem_browse(
 
     /* browse article */
 
-    /* Thor.990204: 為考慮more 傳回值 */   
+    /* Thor.990204: 為考慮more 傳回值 */
     if ((xmode = more(fpath, MSG_GEM)) == -2)
       return XO_INIT;
     if(xmode == -1)
@@ -700,7 +700,7 @@ gem_browse(
 
 static char GemFolder[80], GemAnchor[80], GemSailor[24];
 static HDR *GemBuffer;
-static int GemBufferSiz; /* , GemBufferNum; */ 
+static int GemBufferSiz; /* , GemBufferNum; */
                          /* Thor.990414: 提前宣告給gem_head用 */
 
 
@@ -1078,7 +1078,7 @@ gem_anchor(
 
   /* Thor.981020: 規定資源回收筒不得定錨, 另, 拔錨後, g則會丟入回收筒 */
   if (xo->key < GEM_LMANAGER)  /* Thor.981020: 只要版主以上即可使用anchor */
-    return XO_NONE; 
+    return XO_NONE;
   /* Thor.981020: 不開放一般user使用是為了防止版主試出另一個小bug:P */
 
   ans = vans("精華區 A)定錨 D)拔錨 J)就位 Q)取消 [J] ");
@@ -1155,8 +1155,8 @@ gem_gather(
     EnumTagHdr(hdr, dir, 0);
   }
   else
-    hdr = (HDR *) xo_pool + xo->pos - xo->top; 
- 
+    hdr = (HDR *) xo_pool + xo->pos - xo->top;
+
   if(hdr->xmode & POST_DELETE)
     return XO_FOOT;
 
@@ -1198,7 +1198,7 @@ gem_gather(
     }
 
     xmode = hdr->xmode;
-    
+
     /* Thor.981018: 特別注意, anchor 沒法收錄 folder, 因程式不好寫(跨區copy),
                     此時同區的folder可以用copy & paste,
                     不同區就只好一篇篇收錄 */
@@ -1224,7 +1224,7 @@ gem_gather(
           ptr = strchr(tmp,'.');
           if(ptr)
             *ptr = '\0';
-          ptr = strchr(tmp,'@'); 
+          ptr = strchr(tmp,'@');
           if(ptr)
             *ptr = '\0';
 		  strncpy(ghdr.title, hdr->title,sizeof(ghdr.title) - IDLEN - 4);
@@ -1283,9 +1283,9 @@ gem_tag(
   if ((ghdr = gem_check(xo, NULL, GEM_READ)) && (tag = Tagger(ghdr->chrono, pos = xo->pos, TAG_TOGGLE)))
   {
     move(3 + pos - xo->top, 7);
-    outc(tag > 0 ? '*' : ' '); 
+    outc(tag > 0 ? '*' : ' ');
   }
-   
+
   /* return XO_NONE; */
   return xo->pos + 1 + XO_MOVE; /* lkchu.981201: 跳至下一項 */
 }
@@ -1307,7 +1307,7 @@ gem_cross(
   HDR *hdr, xpost,*ghdr;
 #ifdef  HAVE_DETECT_CROSSPOST
   HDR bpost;
-#endif  
+#endif
   int method=1, rc, tag, locus, battr;
   FILE *xfp;
 
@@ -1328,8 +1328,8 @@ gem_cross(
 
     hdr = tag ? &xpost : (HDR *) xo_pool + (xo->pos - xo->top);
 
-          
-    if (!tag)   
+
+    if (!tag)
     {
       if(!(hdr->xmode & GEM_FOLDER) && !((hdr->xmode & (GEM_RESTRICT|GEM_RESERVED)) && (xo->key < GEM_MANAGER))
          && !((hdr->xmode & GEM_LOCK) && !HAS_PERM(PERM_SYSOP)))
@@ -1339,19 +1339,19 @@ gem_cross(
           return XO_HEAD;
       }
       else
-        return XO_HEAD;          
+        return XO_HEAD;
     }
-    
+
     rc = vget(2, 0, "(S)存檔 (Q)取消？[Q] ", buf, 3, LCECHO);
     if (*buf != 's' && *buf != 'S')
       return XO_HEAD;
-      
+
     locus = 0;
     dir = xo->dir;
 
-    battr = (bshm->bcache + brd_bno(xboard))->battr; 
+    battr = (bshm->bcache + brd_bno(xboard))->battr;
 
-    do	
+    do
     {
       if (tag)
       {
@@ -1362,7 +1362,7 @@ gem_cross(
       if (!(hdr->xmode & GEM_FOLDER) && !((hdr->xmode & (GEM_RESTRICT|GEM_RESERVED)) && (xo->key < GEM_MANAGER))
            && !((hdr->xmode & GEM_LOCK) && !HAS_PERM(PERM_SYSOP)))
       {
-        xo_fpath(fpath, dir, hdr);     
+        xo_fpath(fpath, dir, hdr);
         brd_fpath(xfolder, xboard, fn_dir);
 
   	method = hdr_stamp(xfolder, 'A', &xpost, buf);
@@ -1385,7 +1385,7 @@ gem_cross(
 
     	strcpy(xpost.owner, cuser.userid);
         strcpy(xpost.nick, cuser.username);
-        
+
 
         strcpy(xpost.title, xtitle);
 
@@ -1402,20 +1402,20 @@ gem_cross(
           cuser.userlevel &= ~PERM_POST;
 
           move_post(&bpost,BRD_VIOLATELAW,-2);
-          
+
           board_main();
-        }        
+        }
 #endif
       }
     } while (locus < tag);
-       
+
     if ( battr & BRD_NOCOUNT)
     {
       outs("轉錄完成，文章不列入紀錄，敬請包涵。");
     }
     else
     {
-      cuser.numposts += (tag == 0) ? 1 : tag; 
+      cuser.numposts += (tag == 0) ? 1 : tag;
       vmsg("轉錄完成");
     }
   }

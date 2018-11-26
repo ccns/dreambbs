@@ -117,10 +117,10 @@ main(
     }
     for (ch = '0'; ch <= '9'; ch++)
     {
-      fname[0] = ch;  
+      fname[0] = ch;
       fname[1] = '\0';
       traverse(fpath);
     }
-  }  
+  }
   return 0;
 }

@@ -56,7 +56,7 @@ main(
   BRDOLD old;
   BRD brd;
   FILE *fp;
-  
+
   setgid(BBSGID);
   setuid(BBSUID);
   chdir(BBSHOME);
@@ -139,7 +139,7 @@ main(
       brd.expiremin = key->minp;
       brd.expireday = key->days;
     }
-    
+
     printf("%04d %-13s %-5s %-40s %-20s %5d %5d %5d\n", num, brd.brdname, brd.class, brd.title, brd.BM, brd.expiremax, brd.expiremin, brd.expireday);
 
     write(outf,&brd,sizeof(BRD));

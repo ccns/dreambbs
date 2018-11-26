@@ -34,7 +34,7 @@
 #define	TWOWEEK_HOUR	(14 * 24)
 #define	WEEK_HOUR	(7 * 24)
 #define	DAY_HOUR	(1 * 24)
-#define	HOUR		(1)		
+#define	HOUR		(1)
 
 
 /* ----------------------------------------------------- */
@@ -115,9 +115,9 @@ count_board(
   char fpath[128];
 
   memset(&bcount,0,sizeof(BSTATCOUNT));
-  
+
   brd_fpath(fpath,brd->brdname,FN_BRD_STATCOUNT);
-  
+
   rec_get(fpath,&bcount,sizeof(BSTATCOUNT),0);
   printf("%-15s%10d %10d %10d %10d\n",brd->brdname,
   	bcount.threemonth.n_reads,bcount.threemonth.n_posts,
@@ -130,7 +130,7 @@ int
 main(void)
 {
   BRD *bcache, *head, *tail;
-  
+
   chdir(BBSHOME);
   umask(077);
 

@@ -7,7 +7,7 @@
 
 void*
 shm_new(
-  int shmkey, 
+  int shmkey,
   int shmsize
 )
 {

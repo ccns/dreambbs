@@ -141,7 +141,7 @@ init(void)
   time_t now;
   struct tm *p;
 
-  
+
   up = ushm->uslot;
   uceil = (void *) up + ushm->offset;
 
@@ -284,21 +284,21 @@ main(
   char *argv[])
 {
   char fpath[128];
- 
+
   chdir(BBSHOME);
 
-  ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE)); 
+  ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
 
   if(!ushm)
   {
     exit(1);
   }
- 
-  
+
+
   sprintf(fpath,"%s.new",FN_CLASSTABLE_DB);
   f_mv(FN_CLASSTABLE_DB, fpath);
   bcache(fpath);
- 
+
 
   init();
 

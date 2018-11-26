@@ -174,7 +174,7 @@ acl_has(
 
     *str = '\0'; /* Thor.980825: 註解: 將結束處填0, 免生枝節 */
     str_lower(filter, filter);  /* lkchu.981201: lower-case string */
-    
+
     if (addr)			/* match user name */
     {
       if ((luser != addr - filter) || memcmp(user, filter, luser))

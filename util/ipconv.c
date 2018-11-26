@@ -4,10 +4,10 @@ void main(int argc,char **argv)
 {
   FILE *fp;
   unsigned int a;
-  
+
   if(argc !=2)
     return;
-  
+
   fp = fopen(argv[1],"r");
   if(fp)
   {

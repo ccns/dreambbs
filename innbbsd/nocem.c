@@ -14,7 +14,7 @@
   receive_nocem() → NCMparse() 把 notice parse 出來 → NCMverify() 驗證是不是真的
   → NCMcancel() 再送回 rec_article.c 的 cancel_article() 處理
 #endif
-                          
+
 
 #include "innbbsconf.h"
 
@@ -55,7 +55,7 @@ search_issuer(
   for (i = 0; i < NCMCOUNT; i++)
   {
     find = NCMPERM + i;
-    if (strstr(issuer, find->issuer) && 
+    if (strstr(issuer, find->issuer) &&
       (!type || !strcmp(find->type, "*") || !str_cmp(find->type, type)))
       return find;
   }

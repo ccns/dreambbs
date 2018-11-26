@@ -32,11 +32,11 @@ favorite_parse(
   FILE *fp,*fw;
   short *reserve;
   HDR *nop,*zap;
-  
+
   sprintf(fpath,"%s.new",key);
   /* build classes */
   bhead = bshm->bcache;
-  btail = bhead + bshm->number;  
+  btail = bhead + bshm->number;
   if ((fw = fopen(fpath,"w")) == NULL)
     return CH_END;
 
@@ -53,11 +53,11 @@ favorite_parse(
     }
 
     chx[1] = chp = (ClassHeader *) malloc(sizeof(ClassHeader) + count * sizeof(short));
-    
+
     nop = (HDR *)malloc(count * sizeof(HDR));
     zap = (HDR *)malloc(count * sizeof(HDR));
     reserve = (short *)malloc(count * sizeof(short));
-    
+
     memset(chp->title, 0, CH_TTLEN);
     memset(reserve, 0, count * sizeof(short));
     memset(zap, 0, count * sizeof(HDR));
@@ -84,7 +84,7 @@ favorite_parse(
 	  i++;
 	  if (!strcasecmp(str, bp->brdname))
   	      break;
-	  
+
 
 	  if (++bp >= btail)
 	  {
@@ -127,14 +127,14 @@ favorite_parse(
         check = 1;
         continue;
       }
-        
+
       chp->chno[count++] = i;
       fwrite(&hdr, sizeof(HDR), 1, fw);
-      
+
     }
     memcpy(&(chp->chno[count]),reserve,count3 * sizeof(short));
     count+=count3;
-    
+
     fclose(fp);
     fwrite(zap, sizeof(HDR), count3, fw);
     fwrite(nop, sizeof(HDR), count2, fw);
@@ -143,7 +143,7 @@ favorite_parse(
     free(reserve);
     free(zap);
     free(nop);
-    
+
     if(check)
     {
       unlink(key);
@@ -154,7 +154,7 @@ favorite_parse(
       unlink(fpath);
     }
     chp->count = count;
-    
+
     if(count > 0)
       return 1;
   }
@@ -205,7 +205,7 @@ favorite_sort(void)
   memset(chp->title, 0, CH_TTLEN);
   strcpy(chp->title, "Boards");
   chx[0] = chp;
-} 
+}
 
 
 void
@@ -216,29 +216,29 @@ favorite_main(void)
   FILE *fp;
   short len, pos[3];
   char fpath[128];
-        
+
   usr_fpath(fpath,cuser.userid,FN_FAVORITE);
   favorite_sort();
   chn = favorite_parse(fpath);
-  
+
   usr_fpath(fpath,cuser.userid,FN_FAVORITE_IMG);
   unlink(fpath);
   if (chn < 1)  /* visor.990106: 尚沒有我的最愛 */
     return;
 
-  len = sizeof(short) * 3; 
+  len = sizeof(short) * 3;
   for (i = 0; i <= 1 ; i++)
   {
     pos[i] = len;
     len += CH_TTLEN + chx[i]->count * sizeof(short);
   }
   pos[i] = len;
-          
+
   if ((fp = fopen(fpath, "w")))
   {
      fwrite(pos, sizeof(short), 3, fp);
      for (i = 0; i <= 1; i++)
-     { 
+     {
        chp = chx[i];
        fwrite(chp->title, 1, CH_TTLEN, fp);
        fwrite(chp->chno, 1, chp->count * sizeof(short), fp);

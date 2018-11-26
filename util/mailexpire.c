@@ -137,14 +137,14 @@ main(
 
   strcpy(fname = fpath, "usr/@");
   fname = (char *) strchr(fname, '@');
-  
+
   if(argc > 1)
   {
     expire(argv[1]);
   }
   else
   {
- 
+
     for (ch = 'a'; ch <= 'z'; ch++)
     {
       fname[0] = ch;

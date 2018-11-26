@@ -15,7 +15,7 @@
 
 typedef struct
 {
-  char email[60]; 
+  char email[60];
   int num;
 }	MAP;
 MAP map[MAX_AC];
@@ -63,7 +63,7 @@ reaper(
   {
     str_lower(buf, acct.email);
     if(!check_in(buf))
-    {  
+    {
       strcpy(map[total].email,buf);
       map[total].num = 1;
       total++;
@@ -107,7 +107,7 @@ main(
   int ch;
   char *fname, fpath[256],bpath[256];
   int i,fd;
-  
+
   fd = open(FN_ETC_EMAILADDR_ACL".new", O_WRONLY | O_CREAT | O_TRUNC, 0600);
 
   memset(map,0,MAX_AC * sizeof(MAP));
@@ -133,8 +133,8 @@ main(
     traverse(fpath);
   }
   close(funo);
-  
-    
+
+
   printf("total user %d\n",total);
   for(i=0;i<total;i++)
   {
@@ -143,8 +143,8 @@ main(
   }
   close(fd);
   sprintf(bpath, FN_ETC_EMAILADDR_ACL);
-  rename(FN_ETC_EMAILADDR_ACL".new",bpath); 
-  if(argc > 1) 
+  rename(FN_ETC_EMAILADDR_ACL".new",bpath);
+  if(argc > 1)
   {
     sprintf(fpath,"mail %s.bbs@"MYHOSTNAME" < " FN_CHECKMAIL_MAIL,argv[1]);
     system("mail SYSOP.bbs@" MYHOSTNAME " < " FN_CHECKMAIL_MAIL);

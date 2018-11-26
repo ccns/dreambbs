@@ -126,16 +126,16 @@ int gindex(void)
 
 #ifdef COLOR_INDEX
     /* Thor.980307: 加上顏色試試是否比較易找 */
-    if (xmode & GEM_FOLDER) 
+    if (xmode & GEM_FOLDER)
     {
-      fprintf(fndx, "%s\033[1;37;%dm%s\033[m\n", 
+      fprintf(fndx, "%s\033[1;37;%dm%s\033[m\n",
           buf, 41 + (level % 6) , hdr.title);
     }
     else
       fprintf(fndx, "%s%s\n", buf, hdr.title);
 #else
 
-    if (xmode & GEM_FOLDER) 
+    if (xmode & GEM_FOLDER)
       fprintf(fndx, "*%s%s\n", buf+1, hdr.title);
     else
       fprintf(fndx, "%*d. %s\n", 4 * level + 3, count, hdr.title);

@@ -52,12 +52,12 @@ main(
 
   count = 0;
 
-          
-  while (read(inf, &bmw, sizeof(BMW)) == sizeof(BMW)) 
+
+  while (read(inf, &bmw, sizeof(BMW)) == sizeof(BMW))
   {
      struct tm *ptime = localtime(&bmw.btime);
      count++;
-     printf("%s%s(%02d:%02d)¡G%s\033[m\n", 
+     printf("%s%s(%02d:%02d)¡G%s\033[m\n",
             bmw.sender == acct.userno ? "¡¸" : "\033[32m¡¹",
             bmw.userid, ptime->tm_hour, ptime->tm_min, bmw.msg);
   }

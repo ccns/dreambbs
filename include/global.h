@@ -164,7 +164,7 @@
 #define FN_MAIL_LOG	"run/mail.log"		/* 所有 [信件] 記錄 */
 #define FN_BBSMAILPOST_LOG	"run/bbsmailpost.log"
                                                 /* bbsmail mailpost 紀錄 */
-#define	FN_MAILSERVICE_LOG	"run/mailservice.log"	
+#define	FN_MAILSERVICE_LOG	"run/mailservice.log"
 
 #ifdef  HAVE_RECOMMEND
 #define	FN_RECOMMEND_LOG	"run/recommend.log"	/* 推薦文章 */
@@ -192,7 +192,7 @@
 #define	FN_SPAMPATH_LOG	"run/spampath.log"	/* junk 板 spam 分析 path */
 #define	FN_CLASSTABLE_DB	"run/class_alert.db"	/* 課表時刻通知 */
 #define	FN_SAMEEMAIL_LOG	"tmp/sameemail.log"
-#define	FN_EMAILADDR_LOG	"run/emailaddr.log"	/* 超過認證信箱上限 */	
+#define	FN_EMAILADDR_LOG	"run/emailaddr.log"	/* 超過認證信箱上限 */
                                                 /* 註冊信箱使用次數統計 */
 
 #ifdef LOG_TALK
@@ -209,7 +209,7 @@
 #define FN_SECURITY     "run/secure.log" 	/* lkchu.981201: 系統安全記錄 */
 #endif
 #define	FN_VERIFY_LOG	"run/verify.log" 	/* 認證記錄 */
-#define	FN_CRIMINAL_LOG	"run/criminal.log"	/* 停權名單 */	
+#define	FN_CRIMINAL_LOG	"run/criminal.log"	/* 停權名單 */
 #define	FN_UEEQUERY_LOG	"run/ueequery.log"	/* 聯考查榜紀錄 */
 #define	FN_RFORM_R	"run/rform_r.db"	/* 註冊單申請資料庫 */
 
@@ -220,7 +220,7 @@
 
 /* ----------------------------------------------------- */
 /* 其他的檔名設定                                     	 */
-/* ----------------------------------------------------- */ 
+/* ----------------------------------------------------- */
 #define	FN_ERROR_CAMERA	"gem/@/@error-camera"	/* 錯誤的動態看版 */
 #define	FN_HOTBOARD		"gem/@/@HotBoard"		/* 熱門看板 */
 
@@ -296,7 +296,7 @@
 /* ----------------------------------------------------- */
 /* 參數設定                                              */
 /* ----------------------------------------------------- */
-                                                                                
+
 #define GRAYOUT_DARK    0
 #define GRAYOUT_BOLD    1
 #define GRAYOUT_NORMAL  2

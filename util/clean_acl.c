@@ -33,7 +33,7 @@ main(
 {
   FILE *fp,*fd;
   char buf[256],tmp[256],*ptr;
-  
+
   if(argc > 2)
   {
     fp = fopen(argv[1],"r");
@@ -47,7 +47,7 @@ main(
           if(strstr(buf,".epaper.com.tw"))
             continue;
           if(strstr(buf,MYHOSTNAME))
-            continue;  
+            continue;
           strcpy(tmp,buf);
           ptr = (char *)strchr(buf,'#');
           if(ptr)
@@ -61,7 +61,7 @@ main(
         fclose(fd);
       }
       fclose(fp);
-    } 
+    }
   }
   return 0;
 }

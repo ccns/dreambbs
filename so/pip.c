@@ -222,7 +222,7 @@ void pip_new_game(void)
 		vs_head(NICKNAME PIPNAME, BoardName);
 		/*小雞命名*/
 		getdata(2, 0, "幫小雞取個好聽的名字吧(請不要有空格): ", buf, 11, DOECHO, 0);
-		if (!buf[0]) 
+		if (!buf[0])
 			return;
 		strcpy(d.name, buf);
 		/*1:公 2:母 */

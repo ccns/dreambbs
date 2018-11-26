@@ -333,7 +333,7 @@ dns_name(
 #ifdef  HAVE_ETC_HOSTS
   char abuf[256];
   FILE *fp;
-#endif     
+#endif
 
   sprintf(name, INADDR_FMT, addr[0], addr[1], addr[2], addr[3]);
 
@@ -440,17 +440,17 @@ dns_open(
         buf[n] *= 10;
         buf[n] += *cp++ - '0';
       }
-      if (!*cp) 
+      if (!*cp)
         break;
     }
-    if (n==3) 
+    if (n==3)
     {
       cp = buf;
       goto ip;
     }
   }
-  /* Thor.980707: 隨便寫寫，要講究完全match再說:p */ 
-#endif 
+  /* Thor.980707: 隨便寫寫，要講究完全match再說:p */
+#endif
 
   n = dns_query(host, T_A, &ans);
   if (n < 0)

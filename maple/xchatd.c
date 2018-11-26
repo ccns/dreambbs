@@ -949,13 +949,13 @@ chat_mud(
 {
   ChatRoom *room;
 
-  room = cu->room;  
+  room = cu->room;
 
   if (!ROOMOP(cu))
   {
     return;
   }
-  mudshm_init();  
+  mudshm_init();
   send_to_room(room,  "※ 更新" CHATROOMNAME "動態詞", 0, MSG_MESSAGE);
 
 }
@@ -975,7 +975,7 @@ chat_topic(
     send_to_user(cu, msg_not_op, 0, MSG_MESSAGE);
     return;
   }
-  
+
   if(strstr(msg,"\\033"))
   {
     send_to_user(cu, "※ 不合格的話題", 0, MSG_MESSAGE);
@@ -1159,7 +1159,7 @@ chat_do_user_list(
     if (!cu->userno)
       continue;
      */ /* Thor.980717: 既然 cu 都空了那還進來幹麼? */
-    if (!user->userno) 
+    if (!user->userno)
       continue;
 
     room = user->room;
@@ -1179,7 +1179,7 @@ chat_do_user_list(
     /* Thor.980717:上述logic有誤 */
 
     /* Thor.980717: viewer check */
-    if ((myroom != room) && (RESTRICTED(cu) || 
+    if ((myroom != room) && (RESTRICTED(cu) ||
                              (room && SECRET(room) && !CHATSYSOP(cu))))
       continue;
 
@@ -1419,7 +1419,7 @@ chat_setroom(
     modestr++;
   }
 
-  /* Thor.980602: 不准 Main room 鎖起 or 秘密, 這成何體統? 
+  /* Thor.980602: 不准 Main room 鎖起 or 秘密, 這成何體統?
                   離開的就進不來, 要看也看不到?
                   想要踢人也踢不進 main room, 不會很奇怪嗎? */
   if(str_equal(MAIN_NAME, room->name))
@@ -1579,7 +1579,7 @@ chat_cloak(
   {
     char buf[128];
     ChatRoom *room;
-    
+
 
     cu->uflag ^= PERM_CLOAK;
     room = cu->room;
@@ -1909,7 +1909,7 @@ login_user(
 
 #ifndef STAND_ALONE
   /* Thor.980629: 暫時借用 invalid_chatid 濾除 沒有PERM_CHAT的人 */
-               
+
   if (!valid_chatid(chatid) || !(level & PERM_CHAT) || (level & PERM_DENYCHAT))
   { /* Thor.981012: 徹底一些, 連 denychat也BAN掉, 免得 client作怪 */
 
@@ -2155,7 +2155,7 @@ chat_kick(
   {                       /* Thor.980604: 用 userid也嘛通 */
     xuser = cuser_by_userid(twit);
   }
-               
+
   if (xuser == NULL)
   {
     sprintf(buf, msg_no_such_id, twit);
@@ -2183,7 +2183,7 @@ chat_kick(
   if (room == &mainroom)
     xuser->uptime = 0;		/* logout_user(xuser); */
   else
-    enter_room(xuser, MAIN_NAME, (char *) NULL);  
+    enter_room(xuser, MAIN_NAME, (char *) NULL);
     /* Thor.980602: 其實踢就踢,不要show出xxx離開了的訊息比較好 */
 }
 
@@ -2214,7 +2214,7 @@ chat_makeop(
                              : "※ " SYSOPNICK " 將 %s 的 Op 權力收回", cu->chatid);
       send_to_room(room, buf, 0, MSG_MESSAGE);
     }
-    
+
     return;
   }
 
@@ -2233,7 +2233,7 @@ chat_makeop(
     xuser = cuser_by_userid(newop);
   }
 #endif
-               
+
 
   if (xuser == NULL)
   {
@@ -2297,7 +2297,7 @@ chat_invite(
     xuser = cuser_by_userid(invitee);
   }
 #endif
-               
+
   if (xuser == NULL)
   {
     sprintf(buf, msg_no_such_id, invitee);
@@ -2504,7 +2504,7 @@ person_action(
       }
       else
       {
-    
+
         if (*party == '\0')
         {
           party = "大家";
@@ -2518,7 +2518,7 @@ person_action(
           {
             xuser = cuser_by_userid(party);
           }
- 
+
           if (xuser == NULL)
           {
             sprintf(buf, msg_no_such_id, party);
@@ -2542,7 +2542,7 @@ person_action(
           }
         }
         sprintf(buf, "\x1b[1;32m%s \x1b[31m%s\x1b[33m %s \x1b[31m%s\x1b[m",
-          cu->chatid, cap->part1_msg, party, cap->part2_msg);    
+          cu->chatid, cap->part1_msg, party, cap->part2_msg);
       }
       send_to_room(cu->room, buf, cu->userno, MSG_MESSAGE);
       return 1;
@@ -2561,7 +2561,7 @@ static char *dscrb[] =
 {
   "\x1b[1;37m【 Verb + Nick：   動詞 + 對方名字 】\x1b[36m  例：//kick piggy\x1b[m",
   "\x1b[1;37m【 Verb + Message：動詞 + 要說的話 】\x1b[36m  例：//sing 天天天藍\x1b[m",
-  "\x1b[1;37m【 Verb：動詞 】   ↑↓：舊話重提\x1b[m", 
+  "\x1b[1;37m【 Verb：動詞 】   ↑↓：舊話重提\x1b[m",
   "\x1b[1;37m【 Verb + Nick：   動詞 + 對方名字 】\x1b[36m  例：//kick piggy\x1b[m",
   "\x1b[1;37m【 Verb：動詞 】   ↑↓：個人類動詞\x1b[m",
   NULL
@@ -2980,7 +2980,7 @@ cuser_serve(
 
 
 static int
-/* start_daemon(mode) 
+/* start_daemon(mode)
   int mode; */
 servo_daemon(
   int inetd)
@@ -3019,7 +3019,7 @@ servo_daemon(
 #ifdef SOLARIS
 #define RLIMIT_RSS RLIMIT_AS
   /* Thor.981206: port for solaris 2.6 */
-#endif  
+#endif
 
   setrlimit(RLIMIT_RSS, &limit);
 
@@ -3207,7 +3207,7 @@ main_signals(void)
   /* Thor.981206: 統一 POSIX 標準用法  */
 
   /* act.sa_mask = 0; */ /* Thor.981105: 標準用法 */
-  sigemptyset(&act.sa_mask);      
+  sigemptyset(&act.sa_mask);
   act.sa_flags = 0;
 
   act.sa_handler = sig_trap;
@@ -3246,7 +3246,7 @@ attach_shm(
   int shmkey, int shmsize)
 {
   void *shmptr;
-  int shmid;   
+  int shmid;
 
   shmid = shmget(shmkey, shmsize, 0);
   if (shmid < 0)
@@ -3257,7 +3257,7 @@ attach_shm(
   {
     shmsize = 0;
   }
-   
+
   shmptr = (void *) shmat(shmid, NULL, 0);
 
   if (shmsize)
@@ -3284,7 +3284,7 @@ void
 mudshm_init(void)
 {
   ChatAction *head;
-  int fw,size;   
+  int fw,size;
   struct stat st;
 
 
@@ -3293,11 +3293,11 @@ mudshm_init(void)
   head = party_data = mud->chat_party;
   fw = open(FN_CHAT_PARTY_DB,O_RDONLY);
   fstat(fw, &st);
-  
+
   if(!fstat(fw, &st) && (size = st.st_size) > 0)
   {
     if(size > PARTY_MAX * sizeof(ChatAction))
-      size = PARTY_MAX * sizeof(ChatAction); 
+      size = PARTY_MAX * sizeof(ChatAction);
     memset(head,0,PARTY_MAX * sizeof(ChatAction));
     if (size)
       read(fw, head, size);
@@ -3316,12 +3316,12 @@ mudshm_init(void)
     if (size)
       read(fw, head, size);
   }
-  close(fw);  
+  close(fw);
 
   head = speak_data = mud->chat_speak;
   fw = open(FN_CHAT_SPEAK_DB,O_RDONLY);
   fstat(fw, &st);
-  
+
   if(!fstat(fw, &st) && (size = st.st_size) > 0)
   {
     if(size > SPEAK_MAX * sizeof(ChatAction))
@@ -3335,7 +3335,7 @@ mudshm_init(void)
   head = condition_data = mud->chat_condition;
   fw = open(FN_CHAT_CONDITION_DB,O_RDONLY);
   fstat(fw, &st);
-  
+
   if(!fstat(fw, &st) && (size = st.st_size) > 0)
   {
     if(size > CONDITION_MAX * sizeof(ChatAction))
@@ -3396,10 +3396,10 @@ main(
         "\t-h  help\n",
         argv[0]);
       exit(0);
-    }       
+    }
   }
 
-  servo_daemon(sock); 
+  servo_daemon(sock);
   /* start_daemon(argc); */
 
   setgid(BBSGID);
@@ -3442,7 +3442,7 @@ main(
 
       for (FBI = &mainuser; (cu = *FBI);)
       {
-#ifdef CHATROOM_KICK_TIMEOUT_USER 
+#ifdef CHATROOM_KICK_TIMEOUT_USER
 	if (cu->uptime < tcheck)
 	{
 	  cuser_free(cu);
@@ -3462,7 +3462,7 @@ main(
 	    maxfds = sock;
 
 	  FBI = &(cu->unext);
-#ifdef CHATROOM_KICK_TIMEOUT_USER 
+#ifdef CHATROOM_KICK_TIMEOUT_USER
 	}
 #endif
       }
@@ -3481,7 +3481,7 @@ main(
     rset = mainfset;
     xset = mainfset;
 
-    /* Thor.981206: for future reservation bug */   
+    /* Thor.981206: for future reservation bug */
     tv_tmp = tv;
     nfds = select(maxfds, &rset, NULL, &xset, &tv_tmp);
 
@@ -3591,7 +3591,7 @@ main(
 
 	value = sizeof(sin);
 	sock = accept(0, (struct sockaddr *) &sin, (socklen_t *) &value);
-	
+
 	if (sock > 0)
 	{
 	  if ((cu = userpool))

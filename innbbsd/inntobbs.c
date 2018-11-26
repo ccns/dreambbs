@@ -39,7 +39,7 @@ enum HeaderValue	/* 所有有用到的 header */
 
 
 /* 只對這些檔頭有興趣 */
-static header_t headertable[LASTHEADER] = 
+static header_t headertable[LASTHEADER] =
 {
   "Subject",			SUBJECT_H,
   "From",			FROM_H,
@@ -60,7 +60,7 @@ char *BODY;
 char *SUBJECT, *FROM, *DATE, *PATH, *GROUP, *MSGID, *POSTHOST, *SITE, *CONTROL;
 
 
-static int 
+static int
 header_cmp(
   header_t *a, header_t *b)
 {
@@ -68,7 +68,7 @@ header_cmp(
 }
 
 
-static int 
+static int
 header_value(
   char *inputheader)
 {
@@ -174,7 +174,7 @@ readlines(		/* 讀入檔頭和內文 */
 	while (ptr[1] == ' ' || ptr[1] == '\t')
 	{
           /* while (*++ptr == ' ') ; */
-          do 
+          do
           {
             ++ptr;
           } while (*ptr == ' ' || *ptr == '\t');

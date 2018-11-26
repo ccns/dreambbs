@@ -156,7 +156,7 @@ static int scrollcnt, tc_col, tc_row;
 
 
 static screenline vbuf[t_lines];
-//static 
+//static
 screenline *cur_slp;	/* current screen line pointer */
 
 
@@ -884,7 +884,7 @@ expand_esc_star_visio(char *buf, const char *src, int szbuf)
             return 2;
         case 't':   // current time
             strlcpy(buf, Now(), szbuf);
-            return 1;   
+            return 1;
     }
 
     // unknown characters, return from star.
@@ -925,7 +925,7 @@ outx(
             str++;
             str++;
             str++;
-            break;                                                                  
+            break;
           case 'n':       /* **n 顯示暱稱 */
             outs(cuser.username);
             str++;
@@ -940,18 +940,18 @@ outx(
             str++;
             str++;
             str++;
-            break;                                                                              
+            break;
           default:
             str++;
-            break;  
+            break;
         }
       }
       else
       {
-        str--;     
+        str--;
       }
       str--;
-      str--;  
+      str--;
       str--;
       ch = *str;
       outc(ch);
@@ -966,9 +966,9 @@ outx(
 /*
   while ((ch = *str))
   {
-        
-        
-        
+
+
+
     switch (ch)
     {
     case 1:
@@ -987,8 +987,8 @@ outx(
     outc(ch);
     str++;
   }
-*/  
-  
+*/
+
 }
 #endif
 
@@ -1084,7 +1084,7 @@ void				/* Thor.1028: 為了讓 talk.c
 cursor_restore(void)
 {
   move(old_row, old_col);
-  
+
   cur_pos = old_pos; /* Thor.990401: 多還原一個 */
 }
 
@@ -1158,7 +1158,7 @@ int
 vmsg(
   char *msg)			/* length < 54 */
 {
-  
+
   if (msg)
   {
     move(b_lines, 0);
@@ -1171,11 +1171,11 @@ vmsg(
     move(b_lines, 0);
     clrtoeol();
     color =time(0)%6+31;
-#ifdef HAVE_COLOR_VMSG 
+#ifdef HAVE_COLOR_VMSG
     prints("\033[1;%dm                                             ▏▎▍▌▋▊▉ \033[1;37m請按任意鍵繼續 \033[1;%dm▉\033[m ",color,color);
-#else    
-    outs("\033[1;37;45m                              ● 請按任意鍵繼續 ●                           \033[m");    
-#endif    
+#else
+    outs("\033[1;37;45m                              ● 請按任意鍵繼續 ●                           \033[m");
+#endif
   }
   return vkey();
 }
@@ -1184,9 +1184,9 @@ vmsg(
 static inline void
 zkey(void)				/* press any key or timeout */
 {
-  /* static */ struct timeval tv = {1, 100};  
+  /* static */ struct timeval tv = {1, 100};
   /* Thor.980806: man page 假設 timeval struct是會改變的 */
-                                                 
+
   int rset;
 
   rset = 1;
@@ -1298,7 +1298,7 @@ grayout(int type)
   char *prefix[3] = { "\033[1;30m", "\033[1;37m", "\033[0;37m" };
   char buf[ANSILINELEN];
   register int i;
-                                                                                
+
   vs_save(slp);
   memcpy(newslp, slp, sizeof(newslp));
 
@@ -1439,7 +1439,7 @@ igetch(void)
 #ifdef	HAVE_SHOWNUMMSG
             if(cutmp)
 	      cutmp->num_msg = 0;
-#endif	      	    
+#endif
 	    break;
 	  }
 	  if ((cc == 0) || (errno != EINTR))
@@ -1478,7 +1478,7 @@ igetch(void)
             outz("\033[41;5;1;37m警告！你已經閒置過久，系統將在三分後將你踢除！\033[m");
             refresh();
 	  }
-#endif // KICK_IDLE_TIMEOUT   
+#endif // KICK_IDLE_TIMEOUT
 	  if (cc)
 	  {
 	    cutmp->idle_time = idle;
@@ -1522,7 +1522,7 @@ igetch(void)
       continue;
     }
 
-    if ((cc == Ctrl('R')) && (bbstate & STAT_STARTED) && !(bbstate & STAT_LOCK) 
+    if ((cc == Ctrl('R')) && (bbstate & STAT_STARTED) && !(bbstate & STAT_LOCK)
          && !(imode & IM_REPLY))		/* lkchu.990513: 鎖定時不可回訊 */
     {
       /*
@@ -1550,7 +1550,7 @@ igetch(void)
 
 
 #define	MATCH_END	0x8000
-/* Thor.990204: 註解: 代表MATCH完結, 要嘛就補足, 
+/* Thor.990204: 註解: 代表MATCH完結, 要嘛就補足,
                       要嘛就維持原狀, 不秀出可能的值了 */
 
 static void
@@ -1686,7 +1686,7 @@ vget_match(
     struct dirent *de;
     DIR *dirp;
     int cc;
-    int cd;    
+    int cd;
     char fpath[16];
 
     /* Thor.981203: USER name至少打一字, 用"<="會比較好嗎? */
@@ -1718,7 +1718,7 @@ vget_match(
       data = de->d_name;
       if (*data <= ' ' || *data == '.')
         continue;
- 
+
  //     if (str_ncmp(prefix, data, len))
       if (len && str_ncmp(prefix, data, len))
   	    continue;
@@ -1742,7 +1742,7 @@ vget_match(
          {
            cc = 'z';     /* 離開 for 迴圈 */
     	   break;
-         }	    
+         }
 	  row = 3;
 	}
       }
@@ -1863,7 +1863,7 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int 
     if (ch == '\n')
     {
       data[len] = '\0';
-      if ((echo & (GET_BRD | GET_LIST)) && len > 0) 
+      if ((echo & (GET_BRD | GET_LIST)) && len > 0)
       /* Thor.990204:要求輸入任一字才代表自動 match, 否則算cancel */
       {
 	ch = len;

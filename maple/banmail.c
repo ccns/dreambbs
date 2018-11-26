@@ -157,7 +157,7 @@ banmail_edit(
 
   sprintf(modes,"%c%c%c%c%c%c",(banmail->mode&FW_OWNER)?'1':'0',(banmail->mode&FW_TITLE)?'1':'0',
           (banmail->mode&FW_TIME)?'1':'0',(banmail->mode&FW_PATH)?'1':'0',
-          (banmail->mode&FW_ORIGIN)?'1':'0',(banmail->mode&FW_CANCEL)?'1':'0');  
+          (banmail->mode&FW_ORIGIN)?'1':'0',(banmail->mode&FW_CANCEL)?'1':'0');
 
   if(vget(b_lines, 0, "¾×«H¦Cªí¡G", banmail->data, sizeof(banmail->data), echo))
     change++;
@@ -172,8 +172,8 @@ banmail_edit(
     banmail->mode|=(modes[5]!='0')?FW_CANCEL:0;
     change++;
   }
-  
-  if(change)  
+
+  if(change)
     return 1;
   else
     return 0;
@@ -218,7 +218,7 @@ banmail_change(
 {
   BANMAIL *banmail, mate;
   int pos, cur;
-  
+
   pos = xo->pos;
   cur = pos - xo->top;
   banmail = (BANMAIL *) xo_pool + cur;

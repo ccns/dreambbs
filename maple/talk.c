@@ -120,10 +120,10 @@ bmode(
 #endif
   int mode;
   char *word;
-  
+
   if(!up)
     return "不在站上";
-    
+
 #ifdef	HAVE_SHOWNUMMSG
   if(up->num_msg > 9)
   {
@@ -135,8 +135,8 @@ bmode(
     sprintf(modestr,"收到%s封訊息",nums[up->num_msg-1]);
     return (modestr);
   }
-#endif  
-  
+#endif
+
   mode = up->mode;
   if(mode == M_IDLE)
   {
@@ -155,7 +155,7 @@ bmode(
 
   if ((mode != M_QUERY && !HAS_PERM(PERM_SEECLOAK) && (up->ufo & UFO_CLOAK))||(can_see(up)==2 && !HAS_PERM(PERM_SYSOP)))
     return (word); /* Thor.980805: 註解: 隱身的人不會被知道跟誰talk */
-  
+
   sprintf(modestr, "%s %s", word, up->mateid);
   return (modestr);
 }
@@ -228,7 +228,7 @@ copyship(
         return;
       }
       shead++;
-    } 
+    }
   }
   return;
 
@@ -357,8 +357,8 @@ can_message(
 
 #ifdef	HAVE_BANMSG
   if(can_banmsg(up))		/* 拒收訊息 */
-    return NA;  
-#endif  
+    return NA;
+#endif
 
   if ( ufo & (UFO_MESSAGE))	/* 遠離塵囂 */
     return NA;
@@ -384,7 +384,7 @@ can_override(
     return NA;
 
   ufo = up->ufo;
-    
+
   if(ufo & (UFO_REJECT|UFO_NET))
     return NA;
 
@@ -550,7 +550,7 @@ pal_cache(void)
       {
 	cache = NULL;
       }
-      
+
     }
   }
 
@@ -567,11 +567,11 @@ pal_cache(void)
     free(pal_ship);
     pal_ship = NULL;
   }
-  
-  
+
+
   if(ship_total)
   {
-     shead = pal_ship = (PAL_SHIP *)malloc((ship_total+1)*sizeof(PAL_SHIP));  
+     shead = pal_ship = (PAL_SHIP *)malloc((ship_total+1)*sizeof(PAL_SHIP));
      phead = (PAL *) fimage;
      ptail = (PAL *) (fimage + fsize);
      if(pal_ship)
@@ -585,20 +585,20 @@ pal_cache(void)
            shead->pal_no = phead->userno;
            shead++;
          }
-       } while (++phead < ptail);  
+       } while (++phead < ptail);
      }
      else
        pal_ship = NULL;
   }
   else
     pal_ship = NULL;
-  
+
   if(fimage) free(fimage);
   cuser.ufo = ufo;
 }
 
 /* 2003.01.01 verit : 重整 上站通知名單 */
-void 
+void
 aloha_sync(void)
 {
   char fpath[128];
@@ -651,7 +651,7 @@ aloha_sync(void)
   if (size <= 0)
     unlink(fpath);
 }
-      
+
 
 void
 pal_sync(
@@ -838,29 +838,29 @@ pal_search(
 
     str_lower(bufl, buf);
     buflen = strlen(bufl);
-    
+
     pos = num = xo->pos;
     max = xo->max;
     do
     {
       pos += step;
-      if (pos < 0) 
+      if (pos < 0)
         pos = max - 1;
       else if (pos >= max)
 	    pos = 0;
-   
+
       if (str_str((phead + pos)->userid, bufl) || str_str((phead + pos)->ship, bufl))
       {
 		move(b_lines, 0);
 		clrtoeol();
-	    if(fimage) 
+	    if(fimage)
 		  free(fimage);
 		return pos + XO_MOVE;
       }
 
     } while (pos != num);
   }
-  if(fimage) 
+  if(fimage)
     free(fimage);
 
   return XO_FOOT;
@@ -994,7 +994,7 @@ pal_change(
 #if 0
   char old_ftype, fpath[64];
 #endif
-  
+
   pos = xo->pos;
   cur = pos - xo->top;
   pal = (PAL *) xo_pool + cur;
@@ -1003,7 +1003,7 @@ pal_change(
   old_ftype = pal->ftype;
   usr_fpath(fpath, pal->userid, FN_FRIEND_BENZ);
 #endif
-    
+
   mate = *pal;
   pal_edit(pal, GCARRY);
   if (memcmp(pal, &mate, sizeof(PAL)))
@@ -1016,7 +1016,7 @@ pal_change(
 #if 0
   if (xo->dir[0] == 'b')	/* lkchu.981201: moderator board */
     return XO_FOOT;
-  
+
   if ( !(old_ftype & PAL_BAD) && (pal->ftype & PAL_BAD) )
       /* lkchu.981201: 原本是好友, 改成損友要 rec_del */
   {
@@ -1031,7 +1031,7 @@ pal_change(
     bmw.recver = cuser.userno;
     strcpy(bmw.userid, cuser.userid);
     rec_add(fpath, &bmw, sizeof(BMW));
-  }  
+  }
 #endif
 
   return XO_FOOT;
@@ -1173,7 +1173,7 @@ bmw_item(
       /* lkchu.990206: 好友廣撥 */
       if (!(*bmw->userid))
         strcpy(bmw->userid, "眾家好友");
-      
+
       prints("%5d %02d:%02d %-13s☆%-50.50s\n", num, ptime->tm_hour, ptime->tm_min,
         bmw->userid, bmw->msg);
     }
@@ -1204,7 +1204,7 @@ bmw_item(
       else
         prints("%5d \033[32m%-13s★%-57.57s\033[m\n", num,
           bmw->userid, bmw->msg);
-    }  
+    }
   }
 }
 
@@ -1340,7 +1340,7 @@ bmw_write(
     {
       up = benz->caller;
     }
-    
+
     if ((up || (up = utmp_find(benz->sender))) && can_message(up))
         /* lkchu.990104: 讓以前的 bmw 也可以回 */
     {
@@ -1363,13 +1363,13 @@ bmw_write(
         bmw_edit(up, buf, &bmw, 0);
       }
     }
-#ifdef	HAVE_BANMSG    
+#ifdef	HAVE_BANMSG
     else if(up && !(up->ufo & UFO_MESSAGE) && can_banmsg(up))
     {
       vmsg("對方不想聽到您的聲音!!");
       return XO_INIT;
     }
-#endif    
+#endif
   }
   return XO_NONE;
 }
@@ -1398,14 +1398,14 @@ KeyFunc bmw_cb[] =
   {XO_LOAD, bmw_load},
   {XO_HEAD, bmw_head},
   {XO_BODY, bmw_body},
-  
+
   {'d', bmw_delete},
   {'m', bmw_mail},
   {'w', bmw_write},
   {'q', bmw_query},
   {Ctrl('Q'), bmw_query},
   {'s', bmw_init},
-  {KEY_TAB, bmw_mode}, 
+  {KEY_TAB, bmw_mode},
   {'h', bmw_help}
 };
 
@@ -1448,7 +1448,7 @@ bm_image(void)
       {
 	int *userno,*ubase;
 	int c = count;
-	
+
 	ubase = userno = (int *)malloc(count*sizeof(int));
 
 	up = pal;
@@ -1458,7 +1458,7 @@ bm_image(void)
 	  *userno++ = (up->ftype == PAL_BAD) ? -(up->userno) : up->userno;
 #else
 	  *userno++ = up->userno;
-#endif	  
+#endif
 	  up++;
 	} while (--c);
 
@@ -1638,8 +1638,8 @@ do_query(
     userid, (HAS_PERM(PERM_SYSOPX) || !(acct->userlevel & PERM_DENYNICK)) ? acct->username : GUEST_1, acct->numlogins, acct->numposts,
     acct->userlevel & PERM_VALID ? "已" : "未");
 
-  prints(" 上次(\033[1;33m%s\033[m)來自(%s)\n", 
-  Ctime(&acct->lastlogin), ((acct->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ? 
+  prints(" 上次(\033[1;33m%s\033[m)來自(%s)\n",
+  Ctime(&acct->lastlogin), ((acct->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
   HIDDEN_SRC : acct->lasthost);
 
 #if defined(REALINFO) && defined(QUERY_REALNAMES)
@@ -1649,9 +1649,9 @@ do_query(
 #endif
     if (HAS_PERM(PERM_SYSOP))
       prints(" 真實姓名: %s", acct->realname);
-    
+
   /* 假設上次 login 已過 6 小時，便不在站上，減少 utmp_find */
-  
+
   outs(" [動態] ");
   /*  up = (acct->lastlogin < time(0) - 6 * 3600) ? NULL : utmp_find(userno);  */
   up = utmp_find(userno);
@@ -1659,7 +1659,7 @@ do_query(
   outs((!up || (up && ((!HAS_PERM(PERM_SEECLOAK) && (up->ufo & UFO_CLOAK)) || (can_see(up)==2)) && !HAS_PERM(PERM_SYSOP))) ? "不在站上":bmode(up, 1));
   outs("\033[m");
   /* Thor.981108: 為滿足 cigar 徹底隱身的要求, 不過用 finger還是可以看到:p */
-  
+
 #if 0
   /* Query 時可同時看其友誼描述或惡行 */
 
@@ -1682,34 +1682,34 @@ do_query(
   else if(acct->money >=  10000000)
     rich=5;
   else if(acct->money >=   1000000)
-    rich=4;    
+    rich=4;
   else if(acct->money >=    100000)
     rich=3;
   else if(acct->money >=     10000)
-    rich=2; 
+    rich=2;
   else if(acct->money >=      1000)
-    rich=1; 
+    rich=1;
   else
     rich=0;
 
-  if (acct->point1 > 10) 
+  if (acct->point1 > 10)
     prints(" [優良積分] \033[1;32m%d\033[m [劣文] %d [經濟] %s", acct->point1, acct->point2, fortune[rich]);
-  else if (acct->point2 > 1) 
+  else if (acct->point2 > 1)
     prints(" [優良積分] %d [劣文] \033[1;31m%d\033[m [經濟] %s", acct->point1, acct->point2, fortune[rich]);
   else
     prints(" [優良積分] %d [劣文] %d [經濟] %s", acct->point1, acct->point2, fortune[rich]);
 
-  if (paling == 2) 
+  if (paling == 2)
     ;
   else
   {
     /* deny nick can't have plans. statue.2001.02.11 */
-    if(HAS_PERM(PERM_SYSOPX)) 
+    if(HAS_PERM(PERM_SYSOPX))
       showplans(userid);
     else if(!(acct->userlevel & PERM_DENYNICK) && (acct->userlevel & PERM_VALID))
       showplans(userid);
-  }   
-  
+  }
+
   vmsg(NULL);
 
   move(b_lines, 0);
@@ -1742,9 +1742,9 @@ my_query(
 
 #define	BMW_FORMAT	"\033[1;33;46m★%s \033[37;45m %s \033[m"
 #define BMW_FORMAT_BC	"\033[1;37;45m★%s \033[1;33;46m %s \033[m"
-/* patch by visor : BMW_LOCAL_MAX >= BMW_PER_USER 
+/* patch by visor : BMW_LOCAL_MAX >= BMW_PER_USER
    以免進入無限迴圈                               */
-#define	BMW_LOCAL_MAX	10	
+#define	BMW_LOCAL_MAX	10
 
 
 static BMW bmw_lslot[BMW_LOCAL_MAX],bmw_sentlot[BMW_LOCAL_MAX];
@@ -1801,7 +1801,7 @@ bmw_send(
 
   *mhead = *bmw;
   ushm->mbase = mslot[i] = mhead;
-  /* Thor.981206: 需注意, 若ushm mapping不同, 
+  /* Thor.981206: 需注意, 若ushm mapping不同,
                   則不同隻 bbsd 互call會core dump,
                   除非這也用offset, 不過除了 -i, 應該是非必要 */
 
@@ -1828,9 +1828,9 @@ bmw_edit(
     save_foot(sl);
 
   str = bmw->msg;
-  
+
   memset(str,0,sizeof(bmw->msg));
-  
+
   str[0] = cc;
   str[1] = '\0';
 
@@ -1854,18 +1854,18 @@ bmw_edit(
       {
 	vmsg(MSG_USR_LEFT);
         if (!cc)
-          restore_foot(sl);	
+          restore_foot(sl);
 	return;
       }
     }
 
     /* lkchu.981230: 利用 xover 整合 bmw */
     if (up)
-      strcpy(bmw->userid, up->userid);	
+      strcpy(bmw->userid, up->userid);
 				/* lkchu.990103: 若是自己送出的 bmw, 存對方的 userid */
     else
       *bmw->userid = '\0';	/* lkchu.990206: 好友廣撥設為 NULL */
-      
+
     time(&bmw->btime);
     usr_fpath(fpath, userid, FN_BMW);
     rec_add(fpath, bmw, sizeof(BMW));
@@ -1880,7 +1880,7 @@ bmw_edit(
 
 #ifndef BMW_TIME
       fprintf(fp, "☆%s：%s\n", up ? up->userid : "眾家好友", str);
-#else  
+#else
       /* Thor.980821: 熱訊記錄加上時間 */
       fprintf(fp, "☆%s%s：%s\n", up ? up->userid : "眾家好友", bmw_timemsg(),  str);
 #endif
@@ -1921,8 +1921,8 @@ bmw_choose(void)
     vmsg(err_uid);
     return 0;
   }
-#endif  
-  
+#endif
+
   up = ubase;
   do
   {
@@ -1936,10 +1936,10 @@ bmw_choose(void)
        sprintf(buf, "★[%s]", up->userid);
        bmw_edit(up, buf, &bmw, 0);
      }
-     
+
      return 0;
-    
-    }    
+
+    }
   } while (++up <= uceil);
 
   return 0;
@@ -1959,20 +1959,20 @@ static void bmw_display(int max,int pos)
   i++;
   move(i,0);
   prints(" \033[1;36m╓──────╢\033[43;37m              夢大超炫水球回顧              \033[40;36m╟──────╖\033[m");
-  
+
   i++;
   for (max=0;max<8 ;max++)
-  {    
+  {
     bmw = bmw_lslot[max];
     if (max == pos)
       bmw2 = bmw;
-        
+
 
     if(max == pos)
       sprintf(color,"1;45");
     else
       sprintf(color,"0");
-      
+
     if (strstr(bmw.msg,"★廣播"))
       sprintf(buf, "   \033[1;45;37m[%-12s]\033[%sm %-58s\033[m", bmw.userid,color,(bmw.msg+8));
     else
@@ -1981,7 +1981,7 @@ static void bmw_display(int max,int pos)
     outs(buf);
     i++;
   }
-  
+
   move(i, 0);
   outs(" \033[1;36m├────────────────────────────────────┤\033[m\n");
   sent = 0;
@@ -1997,11 +1997,11 @@ static void bmw_display(int max,int pos)
       break;
     }
   }
-  if (!sent) 
+  if (!sent)
     prints("  \033[32m尚未傳訊給 %s\033[m",bmw2.userid);
   move(i+2, 0);
   prints(" \033[1;36m╙──────╢\033[43;37m 操作 (←、Enter)離開 (↑↓)選擇 (其他)回訊 \033[40;36m╟──────╜\033[m ");
-  
+
 }
 
 
@@ -2026,7 +2026,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 
   if (cuser.ufo2 & UFO2_REPLY || replymode)
     vs_save(slt);         /* 記錄 bmd_display 之前的 screen */
-        
+
   mode = bbsmode;               /* lkchu.981201: save current mode */
   utmp_mode(M_BMW_REPLY);
 
@@ -2054,7 +2054,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
       bmw = bmw_lslot[pos];
       if (cuser.ufo2 & UFO2_REPLY || replymode)
         bmw_display(max, pos);
-      else 
+      else
       {
         if (strstr(bmw.msg,"★廣播"))
           sprintf(buf, BMW_FORMAT_BC, bmw.userid, (bmw.msg)+8);
@@ -2070,7 +2070,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
     if (cc == '\n')	/* lkchu.981201: 按 Enter 選擇線上 user */
     {
       screenline slp[b_lines + 1];
-      
+
       vs_save(slp);
       bmw_choose();
       memcpy(&slp[b_lines - 1], &sl, sizeof(screenline) * 2);
@@ -2141,10 +2141,10 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
       userno = bmw.sender; /* Thor.980805: 防止系統協尋回扣 */
       if(!userno)
       {
-        vmsg("系統訊息無法回扣"); 
+        vmsg("系統訊息無法回扣");
 //        vmsg("您並不是對方的好友，無法回扣上站通知");
 				/* lkchu.981201: 好友可回扣 */
-                                          
+
         break;
       }
       if(bmw.caller->ufo & UFO_REJECT)
@@ -2154,7 +2154,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
       }
 
       up = bmw.caller;
-#if 1    
+#if 1
       if ((up < uhead) || (up > uhead + MAXACTIVE /*ushm->offset*/))
 				/* lkchu.981201: comparison of distinct pointer types */
       {
@@ -2192,7 +2192,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
       /* bmw_edit(up, "★回應：", &bmw, cc); */
       /* Thor.981214: 為使回扣不致弄混 */
       sprintf(buf,"★[%s]", up->userid);
-      bmw_edit(up, buf, &bmw, cc); 
+      bmw_edit(up, buf, &bmw, cc);
       break;
     }
   }
@@ -2229,7 +2229,7 @@ bmw_reply(void)
     restore_foot(sl); /* Thor.981222: 想清掉message */
     return;
   }
-  
+
   mode = bbsmode;               /* lkchu.981201: save current mode */
   utmp_mode(M_BMW_REPLY);
 
@@ -2263,7 +2263,7 @@ bmw_reply(void)
     if (cc == '\n')	/* lkchu.981201: 按 Enter 選擇線上 user */
     {
       screenline slp[b_lines + 1];
-      
+
       vs_save(slp);
       bmw_choose();
       memcpy(&slp[b_lines - 1], &sl, sizeof(screenline) * 2);
@@ -2319,10 +2319,10 @@ bmw_reply(void)
       userno = bmw.sender; /* Thor.980805: 防止系統協尋回扣 */
       if(!userno)
       {
-        vmsg("系統訊息無法回扣"); 
+        vmsg("系統訊息無法回扣");
 /*        vmsg("您並不是對方的好友，無法回扣上站通知");*/
 				/* lkchu.981201: 好友可回扣 */
-                                          
+
         break;
       }
       if(bmw.caller->ufo & UFO_REJECT)
@@ -2332,7 +2332,7 @@ bmw_reply(void)
       }
 
       up = bmw.caller;
-#if 1    
+#if 1
       if ((up < uhead) || (up > uhead + MAXACTIVE /*ushm->offset*/))
 				/* lkchu.981201: comparison of distinct pointer types */
       {
@@ -2370,7 +2370,7 @@ bmw_reply(void)
       /* bmw_edit(up, "★回應：", &bmw, cc); */
       /* Thor.981214: 為使回扣不致弄混 */
       sprintf(buf,"★[%s]", up->userid);
-      bmw_edit(up, buf, &bmw, cc); 
+      bmw_edit(up, buf, &bmw, cc);
       break;
     }
   }
@@ -2426,7 +2426,7 @@ pal_list(
           break;
         }
       }
-    
+
       break;
     case 'a':
       while (acct_get("請輸入代號(只按 ENTER 結束新增): ", &acct) > 0)
@@ -2502,7 +2502,7 @@ aloha(void)
   BMW *bmw, benz;
   int userno;
   struct stat st;
-  
+
   /* lkchu.981201: 好友通知 */
 
   usr_fpath(fpath, cuser.userid, FN_FRIEND_BENZ);
@@ -2530,7 +2530,7 @@ aloha(void)
       userno = bmw->recver;
       /* up = bmw->caller; */
       up = utmp_find(userno);	/* lkchu.981201: frienz 中的 utmp 無效 */
-      
+
       if (up >= ubase && up <= uceil &&
 	up->userno == userno && !(cuser.ufo & UFO_CLOAK) && can_message(up))
                                  /* Thor.980804: 隱身上站不通知, 站長特權 */
@@ -2635,9 +2635,9 @@ loginNotify(void)
       if (up >= ubase && up <= uceil &&
 	up->userno == userno && !(cuser.ufo & UFO_CLOAK) && userno != cuser.userno  && can_see(up) !=2)
                                  /* Thor.980804: 隱身上站不通知, 站長特權 */
-#if 0  
+#if 0
         /* Thor.980805: 不會回扣了, 單向 call-in */
-        && is_pal(userno) && 
+        && is_pal(userno) &&
         userno != cuser.userno && !(cuser.ufo & UFO_QUIET))
         /* Thor.980707: 不尋自己 */ /* Thor.980804: 遠離塵囂時不通知,以防回扣 */
 #endif
@@ -2645,7 +2645,7 @@ loginNotify(void)
 /*        benz.sender = is_pal(userno) ? cuser.userno : 0; */
                       /* lkchu.980806: 好友才可以 reply */
         if(!is_bad(userno) || (up->userlevel & PERM_SYSOP))
-        {              
+        {
 	  benz.sender = 0;
 	  benz.recver = userno;
 	  bmw_send(up, &benz);
@@ -2682,7 +2682,7 @@ talk_save(void)
 {
   char fpath[64];
   struct stat st;
-  
+
   usr_fpath(fpath, cuser.userid, FN_TALK_LOG);
   stat(fpath, &st);
 
@@ -2690,15 +2690,15 @@ talk_save(void)
   {
     char buf[64];
     HDR fhdr;
-    
+
     usr_fpath(buf, cuser.userid, fn_dir);
     hdr_stamp(buf, HDR_LINK, &fhdr, fpath);
     strcpy(fhdr.title, "[備 忘 錄] 聊天紀錄");
     strcpy(fhdr.owner, cuser.userid);
     fhdr.xmode = MAIL_READ | MAIL_NOREPLY;
-    rec_add(buf, &fhdr, sizeof(fhdr)); 
+    rec_add(buf, &fhdr, sizeof(fhdr));
 
-  } 
+  }
   unlink(fpath);
   return;
 
@@ -2707,29 +2707,29 @@ talk_save(void)
   /* lkchu.981201: 放進私人信箱內/清除/保留 */
   if (dashf(fpath))
   {
-    
+
     switch (vans("本次聊天紀錄處理 (M)備忘錄 (C)清除？[M] "))
     {
     case 'c':
       unlink(fpath);
       break;
-      
+
     default:
       {
         char buf[64];
         HDR fhdr;
-        
+
         usr_fpath(buf, cuser.userid, fn_dir);
         hdr_stamp(buf, HDR_LINK, &fhdr, fpath);
         strcpy(fhdr.title, "[備 忘 錄] 聊天紀錄");
         strcpy(fhdr.owner, cuser.userid);
         fhdr.xmode = MAIL_READ | MAIL_NOREPLY;
-        rec_add(buf, &fhdr, sizeof(fhdr)); 
+        rec_add(buf, &fhdr, sizeof(fhdr));
 
         unlink(fpath);
       }
       break;
-    }      
+    }
   }
 #endif
 
@@ -2745,8 +2745,8 @@ bmw_save(void)
   char ans;
   char fpath[64],buf[128];
   struct stat st;
-    
-  
+
+
   usr_fpath(fpath, cuser.userid, FN_BMW);
   fd = f_open(fpath);	/* lkchu.990428: 若 size 為 0 會被 unlink 掉 */
   if (fd >= 0)
@@ -2780,30 +2780,30 @@ bmw_save(void)
     case 'r':
       close(fd);
       break;
-      
+
     case 'm':
       {
         FILE *fout;
         char buf[80], folder[80];
         HDR fhdr;
-        
+
         usr_fpath(folder, cuser.userid, fn_dir);
         if ((fout = fdopen(hdr_stamp(folder, 0, &fhdr, buf), "w")))
-        {        
+        {
           BMW bmw;
-          
-          while (read(fd, &bmw, sizeof(BMW)) == sizeof(BMW)) 
+
+          while (read(fd, &bmw, sizeof(BMW)) == sizeof(BMW))
           {
             struct tm *ptime = localtime(&bmw.btime);
-            
-            fprintf(fout, "%s%s(%02d:%02d)：%s\033[m\n", 
+
+            fprintf(fout, "%s%s(%02d:%02d)：%s\033[m\n",
               bmw.sender == cuser.userno ? "☆" : "\033[32m★",
               bmw.userid, ptime->tm_hour, ptime->tm_min, bmw.msg);
           }
           fclose(fout);
         }
         close(fd);
-        
+
         fhdr.xmode = MAIL_READ | MAIL_NOREPLY;
 	strcpy(fhdr.title, "[備 忘 錄] 熱訊紀錄");
 	strcpy(fhdr.owner, cuser.userid);
@@ -2812,11 +2812,11 @@ bmw_save(void)
         unlink(fpath);
       }
       break;
-      
+
     default:
       close(fd);
       break;
-    }      
+    }
   }
 
 }
@@ -2869,8 +2869,8 @@ bmw_rqst(void)
 
       /* lkchu.981230: 利用 xover 整合 bmw */
       usr_fpath(buf, cuser.userid, FN_BMW);
-      rec_add(buf, &bmw[i], sizeof(BMW)); 
-                  
+      rec_add(buf, &bmw[i], sizeof(BMW));
+
       bmw_lslot[locus++] = *mptr;
     } while (++i < j);
 
@@ -2883,20 +2883,20 @@ bmw_rqst(void)
       else
          sprintf(buf, BMW_FORMAT, mptr->userid, mptr->msg);
 
-      /* Thor.980827: 為了防止列印一半(more)時熱訊而後列印超過範圍踢人, 
+      /* Thor.980827: 為了防止列印一半(more)時熱訊而後列印超過範圍踢人,
                       故存下游標位置 */
-      cursor_save(); 
+      cursor_save();
 
       outz(buf);
-      /* Thor.980827: 為了防止列印一半(more)時熱訊而後列印超過範圍踢人, 
+      /* Thor.980827: 為了防止列印一半(more)時熱訊而後列印超過範圍踢人,
                       故還原游標位置 */
       cursor_restore();
 
       refresh();
       bell();
-#ifdef	HAVE_SHOWNUMMSG      
+#ifdef	HAVE_SHOWNUMMSG
       cutmp->num_msg++;
-#endif      
+#endif
     }
   }
 }
@@ -2999,10 +2999,10 @@ talk_speak(
 #ifdef  LOG_TALK
   char mywords[80], itswords[80], itsuserid[40];
   FILE *fp;
-    
+
   /* lkchu: make sure that's empty */
   mywords[0] = itswords[0] = '\0';
-  
+
   strcpy(itsuserid, page_requestor);
   strtok(itsuserid, " (");
 #endif
@@ -3140,7 +3140,7 @@ talk_speak(
         case Ctrl('H'):	/* lkchu.981201: backspace */
           itswords[str_len(itswords) - 1] = '\0';
           break;
-          
+
         default:
 	  if (str_len(itswords) < sizeof(itswords))
   	  {
@@ -3195,11 +3195,11 @@ talk_speak(
   	  mywords[0] = '\0';
         }
         break;
-      
+
       case Ctrl('H'):
         mywords[str_len(mywords) - 1] = '\0';
         break;
-      
+
       default:
         if (str_len(mywords) < sizeof(mywords))
 	{
@@ -3216,19 +3216,19 @@ talk_speak(
 
       talk_char(&mywin, ch);
 
-#ifdef EVERY_BIFF 
-      /* Thor.980805: 有人在旁邊按enter才需要check biff */ 
+#ifdef EVERY_BIFF
+      /* Thor.980805: 有人在旁邊按enter才需要check biff */
       if(ch=='\n')
       {
-        static int old_biff,old_biffn; 
-        int biff = cutmp->ufo & UFO_BIFF; 
-        if (biff && !old_biff) 
-          talk_string(&mywin, "◆ 噹! 郵差衝進來了!\n"); 
+        static int old_biff,old_biffn;
+        int biff = cutmp->ufo & UFO_BIFF;
+        if (biff && !old_biff)
+          talk_string(&mywin, "◆ 噹! 郵差衝進來了!\n");
         old_biff = biff;
-        biff = cutmp->ufo & UFO_BIFFN;                                       
+        biff = cutmp->ufo & UFO_BIFFN;
         if (biff && !old_biffn)
           talk_string(&mywin, "◆ 噹! 您有神秘留言!\n");
-        old_biffn = biff; 
+        old_biffn = biff;
       }
 #endif
     }
@@ -3367,11 +3367,11 @@ talk_page(
 #if     defined(__OpenBSD__)                    /* lkchu */
 
   if (!(h = gethostbyname(MYHOSTNAME)))
-    return -1;  
+    return -1;
   memset(&sin, 0, sizeof(sin));
   sin.sin_family = AF_INET;
   sin.sin_port = 0;
-  memcpy(&sin.sin_addr, h->h_addr, h->h_length);                
+  memcpy(&sin.sin_addr, h->h_addr, h->h_length);
 
 #else
 
@@ -3421,7 +3421,7 @@ talk_page(
       outs("再");
       bell();
 
-      if (kill(pid, SIGUSR1)) 
+      if (kill(pid, SIGUSR1))
       /* Thor.990201:註解:其實這的kill,也只是看看對方是不是還在線上而已:p
                           重發signal其實似乎 talk_rqst不會再被叫 */
       {
@@ -3448,10 +3448,10 @@ talk_page(
      * starlight, 但在 starlight 回應前卻馬上離開, 換 page backspace,
      * backspace尚未回應前, 如果 starlight 回應了, starlight 就會被 accept,
      * 而不是 backspace.
-     * 
+     *
      * 此時在螢幕中央, 看到的 page_requestor會是 backspace, 可是事實上,
      * talk的對象是 starlight, 造成雞同鴨講!
-     * 
+     *
      * 暫時不予修正, 以作為花心者的懲罰:P
      */
 
@@ -3526,12 +3526,12 @@ static char *msg_pickup_way[PICKUP_WAYS] =
   "動態",
   "暱稱",
   "閒置"
-#ifdef	HAVE_BOARD_PAL  
+#ifdef	HAVE_BOARD_PAL
   ,"板友"
 #endif
 };
 
-static char 
+static char
 ck_state(
   int in1,
   int in2,
@@ -3549,7 +3549,7 @@ ck_state(
 	}
 	else
 	  return ' ';
-}	
+}
 
 
 
@@ -3565,10 +3565,10 @@ ulist_body(
 
 #ifdef HAVE_BOARD_PAL
   int isbpal;
-  
+
   isbpal = (cutmp->board_pal != -1);
 #endif
-   
+
   max = xo->max;
   if (max <= 0)
   {
@@ -3588,40 +3588,40 @@ ulist_body(
     {
       up = pp->utmp;
 
-#if 0      
+#if 0
       if(supervisor)
       {
         sprintf(ship,"%s,%d,%d",up->userid,pp->type,up->userno);
         vmsg(ship);
       }
 #endif
-	  
+
       if ((userno = up->userno) && (up->userid[0]) && !((up->ufo & UFO_CLOAK) && !HAS_PERM(PERM_SEECLOAK) && (up->userno != cuser.userno)) )
       {
 	if ((diff = up->idle_time))
 	  sprintf(buf, "%2d", diff);
 	else
 	  buf[0] = '\0';
-	
+
 	paltmp = (pp->type == 1 || pp->type == 2);
 	fcolor = (userno == self) ? 3 : paltmp;
 
-#ifdef	HAVE_BOARD_PAL	
-	if(isbpal && is_boardpal(up) && userno != self) 
+#ifdef	HAVE_BOARD_PAL
+	if(isbpal && is_boardpal(up) && userno != self)
 	  fcolor = 6;
 #else
-	if(userno != self) 
+	if(userno != self)
 	  fcolor = 6;
 #endif
 
         colortmp = (pp->type == 1 || pp->type == 3);
 
-	if(paltmp && colortmp == 1) 
+	if(paltmp && colortmp == 1)
 	  fcolor = 3;
-        else if (!paltmp && colortmp == 1) 
+        else if (!paltmp && colortmp == 1)
           fcolor = 4;
-	
-        if (is_bad(userno)) 
+
+        if (is_bad(userno))
           fcolor = 2;
 
         if(cuser.ufo2 & UFO2_SHIP)
@@ -3629,7 +3629,7 @@ ulist_body(
           strcpy(ship," ");
           copyship(ship,userno);
         }
-        
+
 	ufo = up->ufo;
 
 
@@ -3638,19 +3638,19 @@ ulist_body(
 
         colortmp = 1;
 
-        if(ufo & UFO_CLOAK) 
+        if(ufo & UFO_CLOAK)
           fcolor = 5;
         else if(fcolor == 0)
-          colortmp = 0;  
+          colortmp = 0;
 
         strcpy(color,wcolor[fcolor]);
 
 	prints("%5d%c%s%-13s%-22.21s%s%-16.15s%c%c %-16.16s%s",
 	  cnt,(up->ufo & UFO_WEB)?'*':' ',
 	  color, up->userid,
-	  (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username , 
+	  (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username ,
 	  colortmp > 0 ? "\033[m" : "",
-	  (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ? 
+	  (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
 	  HIDDEN_SRC : up->from , diff,diffmsg,
 	  bmode(up, 0), buf);
       }
@@ -3721,7 +3721,7 @@ static int (*ulist_cmp[]) (PICKUP *i, PICKUP *j) =
   ulist_cmp_mode,
   ulist_cmp_nick,
   ulist_cmp_idle
-#ifdef	HAVE_BOARD_PAL  
+#ifdef	HAVE_BOARD_PAL
   ,ulist_cmp_board
 #endif
 };
@@ -3743,7 +3743,7 @@ ulist_init(
 
   self = cuser.userno;
   filter = cuser.ufo2 & UFO2_PAL;
-  
+
   if(cutmp->pid <= 0 || cutmp->userno <= 0)
     reset_utmp();
 
@@ -3768,21 +3768,21 @@ ulist_init(
     if (userno <= 0 || (up->pid <= 0 && !HAS_PERM(PERM_SYSOP|PERM_SEECLOAK)))
       continue;
     if (!seecloak && (up->ufo & UFO_CLOAK))
-      continue;      
+      continue;
     tmp = can_see(up);
-    if(is_bad(userno)) 
+    if(is_bad(userno))
     {
       bfriend_num++;
       bad = 1;
     }
     else
       bad = 0;
-      
+
     if (((seecloak || !(up->ufo & UFO_CLOAK)) && (tmp != 2)) || HAS_PERM(PERM_SYSOP|PERM_SEECLOAK) || up->userno == cuser.userno)
     {
 #ifdef HAVE_BOARD_PAL
-      if(isbpal && is_boardpal(up)) 
-        board_pals++;     
+      if(isbpal && is_boardpal(up))
+        board_pals++;
 #endif
       ispal = is_pal(userno);
 
@@ -3823,7 +3823,7 @@ ulist_init(
     if (userno <= 0)
       continue;
     if ((userno == self) || ((seecloak || !(up->ufo & UFO_CLOAK))&&(can_see(up)!=2 || HAS_PERM(PERM_SYSOP)) && (!filter || is_pal(userno))))
-    {    
+    {
       *pp++ = up;
     }
   } while (++up <= uceil);
@@ -3840,16 +3840,16 @@ ulist_init(
      xsort(ulist_pool, max, sizeof(PICKUP), ulist_cmp[pickup_way - 1]);
   }
   total_num = max;
-  
+
 /* cache.101023: shm爆炸造成人數亂掉後的自動修正 */
 #ifdef AUTO_FIX_INFO
   ushm->count = total_num;
-  
+
   extern BCACHE *bshm;
   if ((fd = brd_bno(currboard)) >= 0)
     bshm->mantime[fd] =   board_pals;       /* 最後看的那個板人數更新 */
-#endif  
-  
+#endif
+
   return ulist_head(xo);
 }
 
@@ -3894,7 +3894,7 @@ ulist_toggle(
   int ans, max;
   ans = pickup_way + 1;
   ans %= PICKUP_WAYS;
-  
+
   pickup_way = ans;
   max = xo->max;
   if (max <= 1)
@@ -3929,7 +3929,7 @@ ulist_search(
 
     str_lower(bufl, buf);
     buflen = strlen(bufl); /* Thor: 必定大於0 */
-    
+
     pos = num = xo->pos;
     max = xo->max;
     pp = ulist_pool;
@@ -3943,7 +3943,7 @@ ulist_search(
 
       /* Thor.990124: id 則從頭 match */
       /* if (str_ncmp(pp[pos]->userid, bufl, buflen)==0 */
-      
+
       if (str_str(pp[pos].utmp->userid, bufl) /* lkchu.990127: 找部份 id 好像比較好用 :p */
        || str_str(pp[pos].utmp->username, bufl)) /* Thor.990124: 可以找 部分 nickname */
       {
@@ -3987,7 +3987,7 @@ ulist_makepal(
     userno = up->userno;
     if (userno > 0 && !is_pal(userno) && !is_bad(userno)   /* 尚未列入好友名單 */
          && (userno != cuser.userno))	/* lkchu.981217: 自己不可為好友 */
-					
+
     {
       PAL pal;
       char buf[80];
@@ -4027,7 +4027,7 @@ ulist_makebad(
     userno = up->userno;
     if (userno > 0 && !is_pal(userno) && !is_bad(userno)  /* 尚未列入好友名單 */
          && (userno != cuser.userno))	/* lkchu.981217: 自己不可為好友 */
-					
+
     {
       PAL pal;
       char buf[80];
@@ -4184,12 +4184,12 @@ ulist_write(
       sprintf(buf, "★[%s]", up->userid);
       bmw_edit(up, buf, &bmw, 0);
     }
-#ifdef	HAVE_BANMSG    
+#ifdef	HAVE_BANMSG
     else if(!(up->ufo & UFO_MESSAGE) && can_banmsg(up))
     {
       vmsg("對方不想聽到您的聲音!!");
     }
-#endif    
+#endif
     return XO_INIT;
   }
   return XO_NONE;
@@ -4218,7 +4218,7 @@ ulist_su(
 {
   XO *tmp;
   ACCT acct;
-  char path[80];  
+  char path[80];
   int level,ufo;
   ufo = cuser.ufo;
   level = cuser.userlevel;
@@ -4229,7 +4229,7 @@ ulist_su(
   memcpy(&cuser,&acct,sizeof(ACCT));
   cuser.userlevel = level;
   cuser.ufo = ufo;
-  usr_fpath(path,acct.userid,".DIR");  
+  usr_fpath(path,acct.userid,".DIR");
   tmp = xz[XZ_MBOX - XO_ZONE].xo;
   xz[XZ_MBOX - XO_ZONE].xo =  xo_new(path);
   free(tmp);
@@ -4237,7 +4237,7 @@ ulist_su(
   tmp = xz[XZ_BMW - XO_ZONE].xo;
   xz[XZ_BMW - XO_ZONE].xo =  xo_new(path);
   free(tmp);
-  pal_cache();  
+  pal_cache();
   return ulist_init(xo);
 }
 /* BLACK SU */
@@ -4291,10 +4291,10 @@ ulist_fromchange(
   XO *xo)
 {
   char *str, buf[34];
-  
+
   if (!HAS_PERM(PERM_ADMIN))
     return XO_NONE;
-  
+
   strcpy(buf, str = cutmp->from);
   vget(b_lines, 0, "請輸入新的故鄉：", buf, sizeof(cutmp->from), GCARRY);
   if (strcmp(buf, str))
@@ -4382,7 +4382,7 @@ ulist_pager(
    cuser.ufo ^= UFO_PAGER1;
    cutmp->ufo ^= UFO_PAGER1;
    }
-   else 
+   else
    {
    cuser.ufo ^= UFO_PAGER;
    cutmp->ufo ^= UFO_PAGER;
@@ -4409,7 +4409,7 @@ ulist_message(
    cuser.ufo ^= UFO_MESSAGE;
    cutmp->ufo ^= UFO_MESSAGE;
    }
-   else 
+   else
    {
    cuser.ufo ^= UFO_QUIET;
    cutmp->ufo ^= UFO_QUIET;
@@ -4433,7 +4433,7 @@ ulist_realname(
   {
      cuser.ufo2 ^= UFO2_REALNAME;
 //     cutmp->ufo ^= UFO_REALNAME;
-  } 
+  }
   return ulist_init(xo);
 }
 
@@ -4451,7 +4451,7 @@ ulist_mp(
   XO *xo)
 {
   int tmp;
-  
+
   if(!HAS_PERM(PERM_VALID))
     return XO_NONE;
   tmp = t_pal();
@@ -4466,7 +4466,7 @@ ulist_readmail(
   {
     if (HAS_PERM(PERM_DENYMAIL))
       vmsg("您的信箱被鎖了！");
-    else 
+    else
       xover(XZ_MBOX);
     return ulist_init(xo);
   }
@@ -4487,7 +4487,7 @@ ulist_del(
 
   ans = vans("是否刪除(y/N)：");
   if (ans == 'y' || ans == 'Y')
-  { 
+  {
     up = ulist_pool[xo->pos].utmp;
     userno = up->userno;
 
@@ -4500,7 +4500,7 @@ ulist_del(
           if(pal->userno!=userno)
             tmp = tmp + 1;
           else
-          { 
+          {
             rec_del(fpath,sizeof(PAL),tmp,NULL,NULL);
             break;
           }
@@ -4648,7 +4648,7 @@ KeyFunc ulist_cb[] =
 #ifdef HAVE_CHANGE_FROM
   {Ctrl('F'), ulist_fromchange},
 #endif
-  
+
 #if 0
   {'/', ulist_search},
 #endif
@@ -4685,7 +4685,7 @@ t_message(void)
    cuser.ufo ^= UFO_MESSAGE;
    cutmp->ufo ^= UFO_MESSAGE;
    }
-   else 
+   else
    {
    cuser.ufo ^= UFO_QUIET;
    cutmp->ufo ^= UFO_QUIET;
@@ -4710,7 +4710,7 @@ t_pager(void)
    cuser.ufo ^= UFO_PAGER1;
    cutmp->ufo ^= UFO_PAGER1;
    }
-   else 
+   else
    {
    cuser.ufo ^= UFO_PAGER;
    cutmp->ufo ^= UFO_PAGER;
@@ -4995,7 +4995,7 @@ over_for:
   sin.sin_family = AF_INET;
   sin.sin_port = port;
   memcpy(&sin.sin_addr, h->h_addr, h->h_length);
-                
+
 #else
 
   sin.sin_family = AF_INET;
@@ -5047,12 +5047,12 @@ void
 talk_main(void)
 {
   char fpath[64];
-  
+
   xz[XZ_ULIST - XO_ZONE].xo = &ulist_xo;
   xz[XZ_ULIST - XO_ZONE].cb = ulist_cb;
 
   xz[XZ_PAL - XO_ZONE].cb = pal_cb;
-  
+
   /* lkchu.981230: 利用 xover 整合 bmw */
   usr_fpath(fpath, cuser.userid, FN_BMW);
   xz[XZ_BMW - XO_ZONE].xo = xo_new(fpath);
@@ -5142,8 +5142,8 @@ banmsg_cache(void)
   }
 
   up->banmsg_max = count;
-  
-  if(fimage) 
+
+  if(fimage)
     free(fimage);
 }
 
@@ -5375,7 +5375,7 @@ banmsg_change(
 {
   BANMSG *banmsg, mate;
   int pos, cur;
-  
+
   pos = xo->pos;
   cur = pos - xo->top;
   banmsg = (BANMSG *) xo_pool + cur;

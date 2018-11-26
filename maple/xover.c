@@ -202,7 +202,7 @@ hdr_prune(
       if(!post)
       {
         if ((fwrite(hdr, sizeof(HDR), 1, fpw) != 1))
-        {  
+        {
           close(fdr);
           fclose(fpw);
 	  unlink(fnew);
@@ -218,7 +218,7 @@ hdr_prune(
 	cancel_post(hdr);
       if(!post)
       {
-      
+
         hdr_fpath(fold, folder, hdr);
         unlink(fold);
       }
@@ -511,7 +511,7 @@ xo_prune(
 #ifdef  HAVE_MAILUNDELETE
   else if(bbsmode == M_RMAIL)
     hdr_prune(xo->dir, 0, 0 , 2);
-#endif    
+#endif
   else
     hdr_prune(xo->dir, 0, 0 , 0);
 
@@ -549,7 +549,7 @@ xo_copy(
     {
       outz("★ 此板文章不可轉貼");
       return XO_NONE;
-    } 
+    }
   }
 
   tag = AskTag("拷貝到暫存檔");
@@ -585,7 +585,7 @@ xo_copy(
 
     if ((hdr->xmode & (GEM_LOCK)) && !HAS_PERM(PERM_SYSOP))
       continue;
-    
+
 
     if (!(hdr->xmode & GEM_FOLDER))	/* 查 hdr 是否 plain text */
     {
@@ -634,7 +634,7 @@ deny_forward(void)
 {
   unsigned int level;
 
-  /* Thor.980602: 想將所有動態權限的改變統一放至login處, 感覺比較不雜 
+  /* Thor.980602: 想將所有動態權限的改變統一放至login處, 感覺比較不雜
                   同時 deny_mail希望能單獨作為 BAN mail的作用
                   並統一將 PERM_CHAT, PERM_PAGE, PERM_POST
                   等 自動變更的權限, 統一管理, 與手動變更權限分別 */
@@ -682,7 +682,7 @@ xo_forward(
     {
       outz("★ 此板文章不可轉貼");
       return XO_NONE;
-    } 
+    }
   }
 
 /*
@@ -729,13 +729,13 @@ xo_forward(
         sprintf(fpath, "查無此人：%s", rcpt);
         zmsg(fpath);
         return XO_FOOT;
-      }    
-    } 
+      }
+    }
     else if (!str_cmp(rcpt, userid))
     {
       /* userno = cuser.userno; */ /* Thor.981027: 寄精選集給自己不通知自己 */
       method = MF_SELF;
-      
+
       if(mail_stat(CHK_MAIL_NOMSG))
       {
         vmsg("你的信箱容量超過上限，無法使用本功\能！");
@@ -743,8 +743,8 @@ xo_forward(
         return XO_FOOT;
       }
       else
-       chk_mailstat = 0;      
-      
+       chk_mailstat = 0;
+
     }
     else
     {
@@ -789,7 +789,7 @@ xo_forward(
 
     if((hdr->xmode & (POST_LOCK|GEM_RESTRICT|GEM_RESERVED)) && !(HAS_PERM(PERM_ALLBOARD) || (bbstate & STAT_BOARD)))
       continue;
-    
+
     if((hdr->xmode & GEM_LOCK) && !HAS_PERM(PERM_SYSOP))
       continue;
 
@@ -943,7 +943,7 @@ xo_uquery_lite(
   move(b_lines - 8, 0);
   clrtobot();  /* 避免畫面殘留 */
 
-  prints("\033[1;34m"MSG_BLINE"\033[m");    
+  prints("\033[1;34m"MSG_BLINE"\033[m");
   prints("\n\033[1;33;44m \033[37m文章作者及資訊查詢： %*s \033[m\n", 55,"");
   prints("\n");
 //  clrtobot();
@@ -954,7 +954,7 @@ xo_uquery_lite(
   move(b_lines - 1, 0);
   clrtobot();  /* 避免畫面殘留 */
   prints("\n");
-          
+
   /* xo->pos = cpos; */
   return XO_HEAD;
 }
@@ -1170,7 +1170,7 @@ xo_thread(
     if (!vget(b_lines, 0, "向前找尋 0)首篇未讀 1)末篇已讀 ", s_unread, sizeof(s_unread), GCARRY))
       return XO_FOOT; /* Thor.980911: 找到時, 則沒清XO_FOOT, 再看看怎麼改 */
 
-    if (*s_unread == '0') 
+    if (*s_unread == '0')
       op |= RS_FIRST;  /* Thor.980909: 向前找尋首篇未讀 */
 
     near = xo->dir[0];
@@ -1405,8 +1405,8 @@ xo_thread(
 }
 
 
-/* Thor.990204: 為考慮more 傳回值, 以便看一半可以用 []... 
-                ch 為先前more()中所按的key */   
+/* Thor.990204: 為考慮more 傳回值, 以便看一半可以用 []...
+                ch 為先前more()中所按的key */
 int
 xo_getch(
   XO *xo,
@@ -1502,8 +1502,8 @@ xover(
   XO *xo=NULL;
   KeyFunc *xcmd=NULL;
   KeyFunc *cb;
-  
-   
+
+
 #if 1
   /* Thor.0613: 輔助訊息 */
   static int msg = 0;
@@ -1617,7 +1617,7 @@ xover(
         if (pos == num)
         {
           void *p = DL_get((char *) cb->func);
-          if(p) 
+          if(p)
           {
             cb->func = p;
             pos = cb->key = cmd;
@@ -1634,7 +1634,7 @@ xover(
 	  cmd = (*(cb->func)) (xo);
 
 	  if (cmd == XO_QUIT)
-	  {  
+	  {
 	    xo_user_level--;
 	    return;
 	  }
@@ -1671,7 +1671,7 @@ xover(
     } /* Thor.990220:註解: end of while(cmd!=XO_NONE) */
 
 
-    utmp_mode(sysmode); 
+    utmp_mode(sysmode);
     /* Thor.990220:註解:用來回復 event handle routine 回來後的模式 */
 
     pos = xo->pos;
@@ -1686,7 +1686,7 @@ xover(
     }
 
     cmd = vkey();
-    
+
     /* ------------------------------------------------- */
     /* switch Zone					 */
     /* ------------------------------------------------- */
@@ -1702,8 +1702,8 @@ xover(
       cmd = XO_INIT;
       continue;
     }
-    
-    
+
+
     if (cmd == Ctrl('Z'))
     {
       every_Z();
@@ -1770,7 +1770,7 @@ xover(
       /* cmd = XO_LAST; *//* try to load the last XO in future */
       if(zone == XZ_MBOX)
       {
-        
+
 #ifdef HAVE_MAILUNDELETE
         int deltotal;
         char fpath[256];
@@ -1784,7 +1784,7 @@ xover(
             hdr_prune(fpath, 0, 0 , 3);
           }
         }
-#endif        
+#endif
         if(mail_stat(CHK_MAIL_VALID))
         {
           vmsg("你的信箱容量超過上限，請整理！");
@@ -1830,7 +1830,7 @@ xover(
     {
       cmd = xo_jump(cmd);
     }
-    else 
+    else
     {
       /* ----------------------------------------------- */
       /* keyboard mapping				 */
@@ -1839,7 +1839,7 @@ xover(
       if (cmd == KEY_RIGHT || cmd == '\n')
       {
 	if(zone == XZ_ULIST)
-	  cmd = 'q'; //使用者名單會 Q 
+	  cmd = 'q'; //使用者名單會 Q
 	else
 	  cmd = 'r';
       }
@@ -1894,7 +1894,7 @@ xover(
                           站長會無法收錄文章 */
 	  cmd = gem_gather(xo);		/* 收錄文章到精華區 */
 	}
-#ifdef	HAVE_MAILGEM	
+#ifdef	HAVE_MAILGEM
 	else if(cmd == 'G' && HAS_PERM(PERM_MBOX))
 	{
 	  static int (*mgp)(XO *xo);
@@ -1904,7 +1904,7 @@ xover(
 	    if(mgp)
 	      cmd = (*mgp)(xo);
 	    else
-	      vmsg("動態連結失敗，請聯絡系統管理員！");        
+	      vmsg("動態連結失敗，請聯絡系統管理員！");
 	  }
 	  else
             cmd = (*mgp)(xo);
@@ -1969,15 +1969,15 @@ every_Z_Orig(void)
   int cmd;
   char select;
   screenline sl[b_lines + 1];
-  
+
 
   save_foot(sl);
   cmd = 0;
 
   outz(MSG_ZONE_SWITCH);
   select = vkey();
-  
-#ifdef	HAVE_FAVORITE  
+
+#ifdef	HAVE_FAVORITE
   if(select == 'p')
   {
     outz(MSG_ZONE_ADVANCE);
@@ -1985,16 +1985,16 @@ every_Z_Orig(void)
     if(select != 'w' && select != 'u')
       select = ' ';
   }
-#endif  
-  
+#endif
+
   switch(select)
   {
-#ifdef  HAVE_FAVORITE  
+#ifdef  HAVE_FAVORITE
     case 'f':
       restore_foot(sl);
       Favorite();
       break;
-#endif      
+#endif
     case 'a':
       cmd = XZ_GEM;
       break;
@@ -2157,8 +2157,8 @@ every_Z(void)
  }
 #endif
 
-  
-  
+
+
   memcpy(&xy,&(xz[XZ_OTHER - XO_ZONE]),sizeof(XZ));
 
   tmpbno = currbno;
@@ -2188,11 +2188,11 @@ every_Z(void)
 
   vs_restore(sl);
   utmp_mode(tmpmode);
-  
+
   xo_stack_level--;
   boardmode = savemode;
 
-}  
+}
 
 
 #endif
@@ -2219,10 +2219,10 @@ every_U(void)
 #endif
 
    extern int pickup_way;
-   int tmpway = pickup_way;                                                             
+   int tmpway = pickup_way;
    if (bbsmode == M_READA)  /* guessi.061218: 進入看板後 ^U 預設排列 */
      pickup_way = 1;
-  
+
   memcpy(&xy,&(xz[XZ_OTHER - XO_ZONE]),sizeof(XZ));
 
   cmd = XZ_ULIST;
@@ -2249,7 +2249,7 @@ every_B(void)
   stat = bbstate;
   tmpmode = bbsmode;
   vs_save(sl);
- 
+
   u_lock();
 
   vs_restore(sl);

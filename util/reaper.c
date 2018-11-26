@@ -51,7 +51,7 @@
 #define DAY_LAZYBM	30
 #endif
 
-#ifdef EADDR_GROUPING                         	
+#ifdef EADDR_GROUPING
 /* Thor.980930: 3個以上account同一email即注意 */
 #define EMAIL_REG_LIMIT 	3
 #endif
@@ -101,7 +101,7 @@ static int funo;
 static int max_uno;
 static SCHEMA schema;
 
-REAPER_TIME reaper_time[] = 
+REAPER_TIME reaper_time[] =
 {
   {701,1002},{117,229},{0,0}
 };
@@ -216,7 +216,7 @@ datemsg(
       資料結構: chain: int hash, int link_userno
                 plist: int next_userno
 
-      暫時預估email addr總數不超過100000, 
+      暫時預估email addr總數不超過100000,
       暫時預估user總數不超過 100000
 
 */
@@ -229,7 +229,7 @@ typedef struct {
 static Chain *chain;
 static int *plist;
 static int numC;
-   
+
 static void
 eaddr_group(
   int userno,
@@ -311,7 +311,7 @@ report_eaddr_group(void)
         {
   	  ACCT acct;
           char buf[512];
-          if (s.userid[0]<=' ') 
+          if (s.userid[0]<=' ')
           {
             fprintf(faddr,"==> %d) has been reapered\n", j);
 	    continue;
@@ -323,7 +323,7 @@ report_eaddr_group(void)
             fprintf(faddr,"==> %d)%-13s can't open\n", j, s.userid);
 	    continue;
           }
-          if (read(fd, &acct, sizeof(acct)) != sizeof(acct)) 
+          if (read(fd, &acct, sizeof(acct)) != sizeof(acct))
           {
             fprintf(faddr,"==> %d)%-13s can't read\n", j, s.userid);
             continue;
@@ -350,7 +350,7 @@ bm_list(                 /* 顯示 userid 是哪些板的板主 */
   char *list;
 
   int num;
-  
+
   num = 0;
 
   len = strlen(userid);
@@ -454,7 +454,7 @@ reaper(
         num = bm_list(acct.userid,bmlist);
         fprintf(fbml, "%5d) %-13s%s %-6d %-2d %s\n", fd, acct.userid, buf, login, num, bmlist);
         bms++;
-#if 0        
+#if 0
         if(*bmlist == '\0')
         {
           char fl[256];
@@ -474,8 +474,8 @@ reaper(
           if(fd >= 0)
             close(fd);
         }
-#endif        
-        
+#endif
+
       }
 #ifdef CHECK_LAZYBM
       if(life < due_lazybm)
@@ -493,7 +493,7 @@ reaper(
         fprintf(fcri, "%5d) %-13s%s[%s] %d\n", fd, acct.userid, buf, data, login);
         criminal++;
     }
-    
+
     if (login <= 3 && life < due_newusr)
       life = 0;
 
@@ -544,7 +544,7 @@ reaper(
       usr_fpath(fph,acct.userid,"gem");
       f_rm(fph);
     }
-#endif    
+#endif
   }
 
   visit++;
@@ -587,7 +587,7 @@ check_vacation(void)
 {
   struct tm ptime,*xtime;
   int now,i;
-  
+
   now = time(NULL);
   xtime = localtime((time_t *)&now);
   ptime = *xtime;
@@ -607,17 +607,17 @@ main(void)
   time_t start, end;
   struct stat st;
   char *fname, fpath[256];
-  
-  
+
+
   setuid(BBSUID);
   setgid(BBSGID);
   chdir(BBSHOME);
 
   bshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
-      
+
   if(bshm->uptime < 0)
     bshm = NULL;
-            
+
   vacation = check_vacation();
   flog = fopen(FN_REAPER_LOG, "w");
   if (flog == NULL)
@@ -639,7 +639,7 @@ main(void)
   fmah = fopen(FN_MATCH_LOG, "w");
   if (fmah == NULL)
     exit(1);
-    
+
 #ifdef CHECK_LAZYBM
   fbm = fopen(FN_LAZYBM_LOG, "w");
   if (fbm == NULL)
@@ -678,7 +678,7 @@ main(void)
 #ifdef EADDR_GROUPING
   chain = (Chain *) malloc(max_uno * sizeof(Chain));
   plist = (int *) malloc((max_uno + 1) * sizeof(int));
-  if (!chain || !plist) 
+  if (!chain || !plist)
   {
     fprintf(faddr,"out of memory....\n");
     exit(1);
@@ -721,7 +721,7 @@ main(void)
   fclose(fcri);
   fprintf(fbml, "\n目前擔任夢之大地的板主人數: %d\n\n",bms);
   fclose(fbml);
-  
+
   fclose(fmah);
 
   time(&end);

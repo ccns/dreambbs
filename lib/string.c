@@ -8,7 +8,7 @@
 
 char*
 str_add(
-  char* dst, 
+  char* dst,
   char* src
 )
 {
@@ -22,7 +22,7 @@ str_add(
 
 void
 str_ansi(         /* strip ANSI code */
-  char* dst, 
+  char* dst,
   char* str,
   int max
 )
@@ -74,7 +74,7 @@ str_cat(
 
 int
 str_cmp(
-  char* s1, 
+  char* s1,
   char* s2
 )
 {
@@ -196,7 +196,7 @@ isreturn(
 }
 
 
-static inline int 
+static inline int
 is_space(
   const char c
 )
@@ -292,7 +292,7 @@ mm_getcharset(
 /* ----------------------------------------------------- */
 
 
-/* PaulLiu.030410: 
+/* PaulLiu.030410:
    RFC 2047 (Header) QP 部分，裡面規定 '_' 表示 ' ' (US_ASCII的空白)
    而 RFC 2045 (Body) QP 部分，'_' 還是 '_'，沒有特殊用途
    所以在此 mmdecode 分二隻寫
@@ -543,8 +543,8 @@ str_folder(
 
 void
 setdirpath(
-  char* fpath, 
-  char* direct, 
+  char* fpath,
+  char* direct,
   char* fname
 )
 {
@@ -574,8 +574,8 @@ setdirpath(
 
 int
 str_from(
-  char* from, 
-  char* addr, 
+  char* from,
+  char* addr,
   char* nick
 )
 {
@@ -727,7 +727,7 @@ str_len(
 
 void
 str_lower(
-  char* dst, 
+  char* dst,
   char* src
 )
 {
@@ -764,7 +764,7 @@ str_lowest(
 
 int
 str_ncmp(
-  char* s1, 
+  char* s1,
   char* s2,
   int n
 )
@@ -873,7 +873,7 @@ str_ndup(
 char* crypt();
 static char pwbuf[PASSLEN];
 
-char* 
+char*
 genpasswd(
   char* pw
 )
@@ -910,7 +910,7 @@ chkpasswd(
 )
 {
   char* pw;
-  
+
   /* if(!*passwd) return -1 */ /* Thor.990416: 怕有時passwd是空的 */
   str_ncpy(pwbuf, test, PASSLEN);
   pw = crypt(pwbuf, passwd);
@@ -1067,17 +1067,17 @@ str_stamp(
 #define	NULL	(char* ) 0
 #endif
 
-char*  
-str_str( 
-  char* str, 
-  char* tag                  /* non-empty lower case pattern */ 
+char*
+str_str(
+  char* str,
+  char* tag                  /* non-empty lower case pattern */
 )
-{ 
+{
   int cc, c1, c2;
   char* p1, *p2;
 
   cc = *tag++;
- 
+
   while ((c1 = *str))
   {
     if (c1 >= 'A' && c1 <= 'Z')
@@ -1093,33 +1093,33 @@ str_str(
         c2 = *p2;
         if (!c2)
           return str;
- 
+
         p2++;
         c1 = *++p1;
         if (c1 >= 'A' && c1 <= 'Z')
           c1 |= 0x20;
       } while (c1 == c2);
     }
- 
+
     str++;
   }
 
   return NULL;
 }
 
-char*  
+char*
 str_sub(
-  char* str, 
-  char* tag		/* non-empty lowest case pattern */ 
+  char* str,
+  char* tag		/* non-empty lowest case pattern */
 )
-{ 
+{
   int cc, c1, c2;
   char* p1, *p2;
   int in_chi = 0;	/* 1: 前一碼是中文字 */
   int in_chii;		/* 1: 前一碼是中文字 */
 
   cc = *tag++;
- 
+
   while ( (c1 = *str) )
   {
     if (in_chi)
@@ -1144,7 +1144,7 @@ str_sub(
 	  c2 = *p2;
  	  if (!c2)
 	    return str;
- 
+
 	  p2++;
 	  c1 = *++p1;
 	  if (in_chii || c1 & 0x80)
@@ -1154,14 +1154,14 @@ str_sub(
 	} while (c1 == c2);
       }
     }
- 
+
     str++;
   }
 
   return NULL;
 }
 
-char* 
+char*
 str_tail(
   char* str
 )
@@ -1177,7 +1177,7 @@ str_tail(
 /* static char datemsg[32]; */
 static char datemsg[40];
 
-char* 
+char*
 Btime(
   time_t *clock
 )
@@ -1194,7 +1194,7 @@ Btime(
 }
 
 
-char* 
+char*
 Ctime(
   time_t *clock
 )
@@ -1208,7 +1208,7 @@ Ctime(
   return (datemsg);
 }
 
-char* 
+char*
 Etime(
   time_t *clock
 )
@@ -1217,7 +1217,7 @@ Etime(
   return (datemsg);
 }
 
-char* 
+char*
 Atime( /* Thor.990125: 假裝ARPANET時間格式 */
   time_t *clock
 )
@@ -1229,7 +1229,7 @@ Atime( /* Thor.990125: 假裝ARPANET時間格式 */
   return (datemsg);
 }
 
-char* 
+char*
 Now(void)
 {
   time_t now;
@@ -1256,7 +1256,7 @@ str_trim(			/* remove trailing space */
   }
 }
 
-char* 
+char*
 str_ttl(
   char* title
 )
@@ -1271,16 +1271,16 @@ str_ttl(
   return title;
 }
 
-/*-------------------------------------------------------*/ 
-/* lib/str_xor.c     ( NTHU CS MapleBBS Ver 3.10 )   	 */ 
-/*-------------------------------------------------------*/ 
+/*-------------------------------------------------------*/
+/* lib/str_xor.c     ( NTHU CS MapleBBS Ver 3.10 )   	 */
+/*-------------------------------------------------------*/
 /* author : thor.bbs@bbs.cs.nthu.edu.tw			 */
-/* target : included C for str xor-ing (signed mail)	 */ 
-/* create : 99/03/30                                     */ 
-/* update :   /  /                                       */ 
-/*-------------------------------------------------------*/ 
- 
-//const char* 
+/* target : included C for str xor-ing (signed mail)	 */
+/* create : 99/03/30                                     */
+/* update :   /  /                                       */
+/*-------------------------------------------------------*/
+
+//const char*
 void
 str_xor(
   char* dst, /* Thor.990409: 任意長度任意binary seq, 至少要 src那麼長*/
@@ -1291,11 +1291,11 @@ str_xor(
 {
   register int cc;
   for(; *src; src++, dst++)
-  { 
+  {
     if ((cc = *src ^ *dst))
       *dst = cc;
-  } 
-} 
+  }
+}
 
 /* strlcat based on OpenBSDs strlcat */
 

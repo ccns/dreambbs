@@ -35,9 +35,9 @@ log_backup(
 
   fp = fopen("run/backup.log_backup","a+");
   fprintf(fp,"%24.24s %s\n",ctime(&now),msg);
-  
+
   fclose(fp);
-  
+
 }
 
 static void
@@ -75,7 +75,7 @@ bk_usr(
   char start[4] = {'a','e','l','s'}, end[4] = {'d','k','r','z'};
   char buf[256], fpath[256], *fname;
   char ch;
-  
+
   chdir(BBSHOME);
 
   sprintf(buf,"usr %c-%c backup start", start[day], end[day]);
@@ -113,11 +113,11 @@ bk_brd(
   char *ptr, cmd[256];
 
   //chdir(BBSHOME);
-  
+
   if(day != 4 && day != 5)
     return;
 
-  
+
   if (chdir(BBSHOME "/brd") || !(dirp = opendir(".")))
     return;
 
@@ -126,9 +126,9 @@ bk_brd(
 
   sprintf(cmd, "%s/brd/brd%02d%02d", bk_path, mon, mday);
   mkdir(cmd, 0700);
-  
+
   chdir(BBSHOME "/brd");
-  
+
   while ( ( de = readdir(dirp) ) )
   {
     ptr = de->d_name;
@@ -159,7 +159,7 @@ bk_gem(void)
   char *ptr, cmd[256];
 
   //chdir(BBSHOME);
-  
+
   if (chdir(BBSHOME "/gem/brd") || !(dirp = opendir(".")))
     return;
 
@@ -167,9 +167,9 @@ bk_gem(void)
 
   sprintf(cmd, "%s/gem/gem%02d%02d", bk_path, mon, mday);
   mkdir(cmd, 0700);
-  
+
   chdir(BBSHOME "/gem/brd");
-   
+
   while ( ( de = readdir(dirp) ) )
   {
     ptr = de->d_name;
@@ -190,17 +190,17 @@ bk_system_src(void)
   char system_folders[5][9] = {"bin","etc","innd","newboard","dreambbs"};
   char path[64],cmd[256];
   int i;
-  
+
   chdir(BBSHOME);
-  
+
   log_backup("system backup start");
 
   sprintf(path,"%s/system/system%02d%02d",bk_path, mon, mday);
   mkdir(path, 0755);
-  
+
   sprintf(cmd,"gzip -c .USR > %s/USR.gz", path);
   system(cmd);
-  
+
   sprintf(cmd,"gzip -c .BRD > %s/BRD.gz", path);
   system(cmd);
 
@@ -209,7 +209,7 @@ bk_system_src(void)
     sprintf(cmd,"tar zcf %s/%s.tgz %s", path, system_folders[i], system_folders[i]);
     system(cmd);
   }
-  
+
   sprintf(cmd,"touch %s/gem.tar", path);
   system(cmd);
   sprintf(cmd,"tar rvf %s/gem.tar gem/.DIR", path);
@@ -228,16 +228,16 @@ bk_system_src(void)
   }
   sprintf(cmd,"tar rvf %s/gem.tar gem/@",path);
   system(cmd);
-  
+
   sprintf(cmd,"gzip -9 %s/gem.tar",path);
   system(cmd);
 
   log_backup("system backup complete");
-  
+
 }
 
 
-int 
+int
 main(
   int argc,
   char *argv[])
@@ -247,7 +247,7 @@ main(
   setgid(BBSGID);
   setuid(BBSUID);
   chdir(BBSHOME);
-  
+
   time(&now);
   t = localtime(&now);
 
@@ -260,13 +260,13 @@ main(
     printf("Something error!\n");
     return 0;
   }
-  
+
 
   bk_path = "/var/backup";
 
   mon = t->tm_mon+1;
   mday = t->tm_mday;
-  
+
   bk_system_src();
   if(day >= 0 && day <= 3)
     bk_usr(day);

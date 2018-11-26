@@ -420,7 +420,7 @@ static int debug = 0;
 #define ANSI_RESET      ESC_STR "[m"
 #define ANSI_COLOR(x)   ESC_STR "[" #x "m"
 //#define ANSI_CLRTOEND   ESC_STR "[K" /* cache.080920 (by hpo14's fix): M3 is not support [K, it might be dangerous */
-#define ANSI_CLRTOEND   "" 
+#define ANSI_CLRTOEND   ""
 #define ANSI_MOVETO(y,x) ESC_STR "[" #y ";" #x "H"
 #define ANSI_REVERSE	ANSI_COLOR(7)
 
@@ -2460,8 +2460,8 @@ _pmore2(
                     outs(ANSI_RESET ANSI_COLOR(1;33;44));
                     w -= strlen(s); outs(s);
 
-                    while (w-- > 0) 
-                        outc(' '); 
+                    while (w-- > 0)
+                        outc(' ');
 
                     outs(ANSI_RESET ANSI_CLRTOEND);
                     w = tolower(vkey());

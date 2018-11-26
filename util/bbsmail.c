@@ -136,7 +136,7 @@ mail2bbs(
   /* 091209.cache: 限收站內信 */
   if(acct_load(&acct, userid) >= 0)
     {
-       if (acct.ufo2 & UFO2_DEF_LOCALMAIL)	
+       if (acct.ufo2 & UFO2_DEF_LOCALMAIL)
        {
            sprintf(buf, "BBS user <%s> no income mail", userid);
            mailog(buf);
@@ -237,21 +237,21 @@ mail2bbs(
     else if (!memcmp(buf, "Subject: ", 9))
     {
       str_ansi(title, buf + 9, sizeof(title));
-      /* str_decode(title); */ 
-      /* LHD.051106: 若可能經 RFC 2047 QP encode 則有可能多行 subject */ 
-      if (strstr(buf + 9, "=?")) 
-      { 
-        while (fgets(buf, sizeof(buf), stdin)) 
-        { 
-          if (buf[0] == ' ' || buf[0] == '\t')  /* 第二行以後會以空白或 TAB 開頭 */ 
-            str_ansi(title + strlen(title), strstr(buf, "=?"), sizeof(title)); 
-          else 
-          { 
+      /* str_decode(title); */
+      /* LHD.051106: 若可能經 RFC 2047 QP encode 則有可能多行 subject */
+      if (strstr(buf + 9, "=?"))
+      {
+        while (fgets(buf, sizeof(buf), stdin))
+        {
+          if (buf[0] == ' ' || buf[0] == '\t')  /* 第二行以後會以空白或 TAB 開頭 */
+            str_ansi(title + strlen(title), strstr(buf, "=?"), sizeof(title));
+          else
+          {
             str_decode(title);
-            goto start; 
-          } 
-        } 
-      } 
+            goto start;
+          }
+        }
+      }
     }
 
     else if (!memcmp(buf, "Content-Type: ", 14))
@@ -331,7 +331,7 @@ mail2bbs(
 //  my_biff(userid);
 
   /* Thor.980827: 加上 parent process id，以便抓垃圾信 */
-  sprintf(buf, "[%d] %s => %s", getppid(), sender, userid); 
+  sprintf(buf, "[%d] %s => %s", getppid(), sender, userid);
   mailog(buf);
 
   return 0;

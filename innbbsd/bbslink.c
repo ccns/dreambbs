@@ -193,7 +193,7 @@ deal_sover(
   str_ncpy(sover.date, Gtime(mtime), sizeof(sover.date));
   str_ncpy(sover.group, nf->newsgroup, sizeof(sover.group));
   str_ncpy(sover.charset, nf->charset, sizeof(sover.charset));
- 
+
   queuefeed(nl, &sover);
 }
 
@@ -495,12 +495,12 @@ send_outgoing(
       return;
     }
   }
-  
+
   /* 寫入文章的檔頭 */
   fprintf(SERVERwfp, "Path: %s\r\n", MYBBSID);
   fprintf(SERVERwfp, "From: %s\r\n", sover->from);
   fprintf(SERVERwfp, "Newsgroups: %s\r\n", sover->group);
-  /*fprintf(SERVERwfp, "Subject: %s\r\n", sover->title);*/ 
+  /*fprintf(SERVERwfp, "Subject: %s\r\n", sover->title);*/
   output_rfc2047_qp(SERVERwfp, "Subject: ", sover->title, sover->charset, "\r\n");
   fprintf(SERVERwfp, "Date: %s\r\n", sover->date);
   fprintf(SERVERwfp, "Organization: %s\r\n", *sover->charset == 'b' ? BOARDNAME : BBSNAME);	/* itoc.040425: 若不是 big5 就用英文站名 */
@@ -522,20 +522,20 @@ send_outgoing(
     }
     else if (cc == '.')
     {
-      /* If the text contained a period as the first character of the text 
+      /* If the text contained a period as the first character of the text
          line in the original, that first period is doubled. */
       if (str == BODY || str[-1] == '\n')
         fputc('.', SERVERwfp);
     }
-      
+
     fputc(cc, SERVERwfp);
-	
+
   }
 
- 
+
   /* IHAVE/POST 結束 */
   status = tcpcommand(".");
-  
+
   if (node->xmode & INN_USEIHAVE)
   {
     if (status != NNTP_TOOKIT_VAL)

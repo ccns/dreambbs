@@ -55,7 +55,7 @@ expire(
   char buf[256];
   int fd;
   BANMAIL head;
-  
+
   sprintf(buf,"%s/%s",brd,BANMAIL_ACL);
   fd = open(buf,O_RDONLY);
   if(fd>=0 && total < (MAXOFILEWALL-1))
@@ -78,7 +78,7 @@ expire(
     memset(&(fwoshm->fwocache[total]),0,sizeof(FW));
   }
 }
- 
+
 static void
 rewrite(void)
 {
@@ -87,9 +87,9 @@ rewrite(void)
   char fpath[128];
   int pos;
   time_t now;
-  
+
   now = time(0);
-  
+
   head = fwoshm->fwocache;
   while(head->name[0])
   {
@@ -120,14 +120,14 @@ main(
   struct dirent *de;
   DIR *dirp;
   char *ptr;
-  
+
 
   setgid(BBSGID);
   setuid(BBSUID);
   chdir(BBSHOME);
 
   fwoshm = attach_shm(FWOSHM_KEY,sizeof(FWOCACHE));
-  
+
   rewrite();
 
   if (chdir("brd") || !(dirp = opendir(".")))
@@ -145,7 +145,7 @@ main(
   printf("usage : %d (%d)\n",total,MAXOFILEWALL);
   if(total >= MAXOFILEWALL)
     printf("out of memory!");
-  
+
 
   exit(0);
 }

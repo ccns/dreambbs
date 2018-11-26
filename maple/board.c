@@ -320,7 +320,7 @@ force_board (void)
   brh_get(brd->bstamp, bno);
 
 //  while (brd->blast > brd_visit[bno]) {
-  while (brh_unread(brd->blast)) { 
+  while (brh_unread(brd->blast)) {
     vmsg("有新公告!! 請先閱\讀完新公告後再離開..");
     XoPost(bno);
     xover(XZ_POST);
@@ -387,7 +387,7 @@ Ben_Perm(
 
   if (!str_cmp(bname, DEFAULT_BOARD))
   {
-#ifdef  HAVE_MODERATED_BOARD	
+#ifdef  HAVE_MODERATED_BOARD
     extern int bm_belong();
 #ifdef  HAVE_WATER_LIST
 #ifdef	HAVE_SYSOP_WATERLIST
@@ -413,7 +413,7 @@ Ben_Perm(
       if (!postlevel || (postlevel & ulevel))
         bits |= BRD_W_BIT;
     }
-    
+
   }
 
   /* (moderated) 祕密看板：核對看板之好友名單 */
@@ -425,20 +425,20 @@ Ben_Perm(
 
     extern int bm_belong();
     bits = bm_belong(bname);  /* Thor.980813: 對秘密看版而言, 是重新判斷的 */
-    
+
       if (readlevel & PERM_SYSOP)
       {
         if (readlevel & PERM_BOARD)
           ;
         else
-          bits |= BRD_F_BIT; 
+          bits |= BRD_F_BIT;
       }
-      
+
   }
 #ifdef HAVE_WATER_LIST
   else if(bm_belong(bname) == BRD_R_BIT)
       bits &= ~BRD_W_BIT;
-  
+
 #endif
 #endif
 
@@ -449,9 +449,9 @@ Ben_Perm(
   if ((ulevel & PERM_BM) && blist[0] > ' ' && is_bm(blist))
     return (BRD_R_BIT | BRD_W_BIT | BRD_X_BIT);
 
-#ifndef HAVE_BOARD_SEE    
+#ifndef HAVE_BOARD_SEE
   if (ulevel & PERM_ALLBOARD)
-    bits |= (BRD_W_BIT | BRD_X_BIT);  
+    bits |= (BRD_W_BIT | BRD_X_BIT);
 #endif
   if (!str_cmp(cuser.userid, ELDER))
     bits = BRD_R_BIT | BRD_W_BIT | BRD_X_BIT;
@@ -538,8 +538,8 @@ brh_load(void)
   /* --------------------------------------------------- */
 
   /* brh_size = n = ((size + BRH_WINDOW) & -BRH_PAGE) + BRH_PAGE; */
-  
-  
+
+
   brh_size = n = size + BRH_WINDOW;
   brh_base = base = (int *) malloc(n);
 
@@ -588,7 +588,7 @@ brh_load(void)
 
       if (bhno >= 0 && (bits[bhno] & BRD_R_BIT))
       {
-      
+
 	bits[bhno] |= BRD_H_BIT;/* 已有閱讀記錄 */
 	bstp[bhno] = head[1];	/* 上次閱讀時間 */
 	cbno = bhno;
@@ -602,7 +602,7 @@ brh_load(void)
 #endif
 
 	  list += n;   /* Thor.980904: 註解: 最後一個tag */
-	  
+
 	  if(list > tail)
 	    break;
 
@@ -643,7 +643,7 @@ brh_load(void)
   /* --------------------------------------------------- */
 
   strcpy(currboard, "尚未選定");
-#ifdef HAVE_BOARD_PAL  
+#ifdef HAVE_BOARD_PAL
   cutmp->board_pal = brd_bno(currboard);
 #endif
 #ifdef	HAVE_RESIST_WATER
@@ -659,7 +659,7 @@ brh_save(void)
   BRD *bhdr, *bend;
   char *bits;
 
-  /* Thor.980830: lkchu patch:  還沒 load 就不用 save */ 
+  /* Thor.980830: lkchu patch:  還沒 load 就不用 save */
   if(!(base = brh_base))
     return;
 
@@ -760,10 +760,10 @@ XoPost(
   {
     if (LastBno >= 0)
       {
-        if (bshm->mantime[LastBno] > 0 )//防止人氣變成負數 
+        if (bshm->mantime[LastBno] > 0 )//防止人氣變成負數
           bshm->mantime[LastBno]--; /* 退出上一個板 */
         else
-          bshm->mantime[LastBno] = 0;//負數的話歸零 
+          bshm->mantime[LastBno] = 0;//負數的話歸零
       }
 
     bshm->mantime[bno]++;       /* 進入新的板 */
@@ -835,7 +835,7 @@ XoPost(
 #endif
   ok=1;
   }
-  
+
 }
 
 
@@ -865,31 +865,31 @@ class_check(
 {
   short *cbase, *chead, *ctail;
   int pos, max, val, zap;
-  int bnum = 0; 
+  int bnum = 0;
   BRD *brd;
   char *bits;
 
   if (!class_img)
-    return 0;          
+    return 0;
 
   chn = CH_END - chn;
   switch(boardmode)
   {
     case 0:
-      cbase = (short *) class_img; 
+      cbase = (short *) class_img;
       break;
-#ifdef	HAVE_PROFESS      
+#ifdef	HAVE_PROFESS
     case 1:
       cbase = (short *) profess_img;
       break;
-#endif      
-#ifdef  HAVE_FAVORITE      
+#endif
+#ifdef  HAVE_FAVORITE
     case 2:
       cbase = (short *) favorite_img;
       break;
-#endif     
+#endif
     default:
-      cbase = (short *) class_img; 
+      cbase = (short *) class_img;
   }
 
   chead = cbase + chn;
@@ -902,11 +902,11 @@ class_check(
 
   max = 0;
   brd = bshm->bcache;
-  bits = brd_bits;   
+  bits = brd_bits;
   zap = (class_flag & BFO_YANK) ? 0 : BRD_Z_BIT;
 
   do
-  { 
+  {
     chn = *chead++;
     if (chn >= 0)
     {
@@ -914,7 +914,7 @@ class_check(
 /* cache.081207: 處理哪些 board 要 print */
 /* thanks to gaod */
 /* cache.090503: 即時熱門看板 */
-/* cache.091225: 列出所有有閱讀權限的看板 */ 
+/* cache.091225: 列出所有有閱讀權限的看板 */
 
     if (brd[chn].readlevel != PERM_CHATROOM)
     {
@@ -932,7 +932,7 @@ class_check(
           continue;
       }
     }
-    
+
       // 即時熱門看板臨界值自定
       if (class_hot)
       {
@@ -970,11 +970,11 @@ class_load(
     case 0:
       cbase = (short *) class_img;
       break;
-#ifdef	HAVE_PROFESS      
+#ifdef	HAVE_PROFESS
     case 1:
       cbase = (short *) profess_img;
       break;
-#endif      
+#endif
 #ifdef  HAVE_FAVORITE
     case 2:
       cbase = (short *) favorite_img;
@@ -1014,7 +1014,7 @@ class_load(
 /* cache.081207: 處理哪些 board 要 print */
 /* thanks to gaod */
 /* cache.090503: 即時熱門看板 */
-/* cache.091225: 列出所有有閱讀權限的看板 */ 
+/* cache.091225: 列出所有有閱讀權限的看板 */
     if (brd[chn].readlevel != PERM_CHATROOM)
     {
       if (class_flag2 &&
@@ -1022,7 +1022,7 @@ class_load(
         (brd[chn].readlevel != PERM_BOARD &&
         brd[chn].readlevel != PERM_SYSOP )))
           continue;
-          
+
       if ((val & BRD_F_BIT) && !(val & zap))
         ;
       else
@@ -1064,7 +1064,7 @@ XoClass(
 {
   XO xo, *xt;
 
-  /* Thor.980727: 解決 XO xo的不確定性, 
+  /* Thor.980727: 解決 XO xo的不確定性,
                   class_load內部會 initial xo.max, 其他不確定 */
   xo.pos = xo.top = 0;
 
@@ -1100,12 +1100,12 @@ class_body(
     case 0:
       img = class_img;
       break;
-#ifdef	HAVE_PROFESS      
+#ifdef	HAVE_PROFESS
     case 1:
       img = profess_img;
       break;
-#endif      
-#ifdef  HAVE_FAVORITE       
+#endif
+#ifdef  HAVE_FAVORITE
     case 2:
       img = favorite_img;
       break;
@@ -1121,8 +1121,8 @@ class_body(
   max = xo->max;
   if (max <= 0)
     return XO_QUIT;
-  
-  
+
+
   cnt = xo->top;
   chp = (short *) xo->xyz + cnt;
   n = 3;
@@ -1177,7 +1177,7 @@ class_body(
 	    close(fd);
 	  }
 
-	  num = cnt;                       
+	  num = cnt;
 	}
 	else
 	{
@@ -1213,10 +1213,10 @@ class_body(
 	    close(fd);
 	  }
 
-	  num = brd->bpost;   
+	  num = brd->bpost;
 	}
 
-    str = brd->blast > brd_visit[chn] ? "\033[1;31m★\033[m" : "☆";  
+    str = brd->blast > brd_visit[chn] ? "\033[1;31m★\033[m" : "☆";
 
 	char tmp[BTLEN + 1];
 
@@ -1232,18 +1232,18 @@ class_body(
         brdtype = '-';
 #ifdef HAVE_MODERATED_BOARD
       else if(brd->readlevel & PERM_BOARD)
-        brdtype = '.';     
+        brdtype = '.';
       else if(brd->readlevel & PERM_SYSOP)
         brdtype = ')';
 #endif
       else
         brdtype = ' ';
- 
+
 /* 處理 人氣 */ /* cache.20090416: 仿ptt變色*/
       bno = brd - bshm->bcache;
       bno = bshm->mantime[bno];
       if (brd->bvote)
-        str2 = "\033[1;33m  投\033[m ";      
+        str2 = "\033[1;33m  投\033[m ";
       else if (bno > 999)
         str2 = "\033[1;32m  夯\033[m ";
       else if (bno > 799)
@@ -1285,13 +1285,13 @@ class_body(
 //	prints("%6d%s%c%-13s\033[%sm%-4s \033[m%s%c %.13s", num, str,
 
 	  prints("%6d%s%c%-13s\033[%sm%-4s \033[m%-32s %s", num, str, brdtype, brd->brdname, buf, brd->class, tmp, str2);
-    
+
         strcpy(tmp, brd->BM);
         if (tmp[13] & 0x80)
           tmp[12] = '\0';
         else
           tmp[13] = '\0';
-	  
+
 	prints("%-13s", tmp);
 
       }
@@ -1489,10 +1489,10 @@ class_browse(
 
     if (XoClass(chn) == XO_NONE)
       return XO_NONE;
-      
+
     if (class_hot)
       class_hot = 0;      /* 離開 HOT Class 再清除 class_hot 標記 */
-      
+
   }
   else
   {
@@ -1554,7 +1554,7 @@ XoAuthor(
   BRD *brd;
   char author[IDLEN + 1];
   XO xo_a, *xoTmp;
-#ifndef HAVE_MMAP  
+#ifndef HAVE_MMAP
   XO *xo_t;
 #endif
   if (!HAS_PERM(PERM_VALID))
@@ -1583,7 +1583,7 @@ XoAuthor(
 #ifdef HAVE_MMAP
       int fsize;
       char *fimage;
-#endif       
+#endif
       char folder[80];
       HDR *head, *tail;
 
@@ -1689,7 +1689,7 @@ class_find_same(
   char fpath[128];
   int fd,i;
   HDR hdr;
-  
+
   i = 0;
   usr_fpath(fpath,cuser.userid,FN_FAVORITE);
   if ((fd = open(fpath,O_RDONLY)))
@@ -1719,7 +1719,7 @@ class_add(xo)
   int chn,fasize;
   char fpath[128];
   if(boardmode == 2 || !HAS_PERM(PERM_VALID))
-    return XO_NONE;    
+    return XO_NONE;
 
   usr_fpath(fpath,cuser.userid,FN_FAVORITE);
   chp = (short *) xo->xyz + xo->pos;
@@ -1727,7 +1727,7 @@ class_add(xo)
   if(chn < 0)
   {
     return XO_NONE;
-  }  
+  }
   brd = bshm->bcache + chn;
   memset(&hdr,0,sizeof(HDR));
   brd2gem(brd,&hdr);
@@ -1826,7 +1826,7 @@ class_del(
     if(favorite_img)
       free(favorite_img);
     favorite_img = f_img(fpath,&fasize);
-    
+
     logitfile(FN_FAVORITE_LOG,"< DEL >",hdr.xname);
     vmsg("已成功\從我的最愛移除！");
     if(!favorite_img)
@@ -1899,7 +1899,7 @@ class_mov(
 
   return class_init(xo);
 }
-   
+
 #endif
 
 #ifdef  HAVE_COUNT_BOARD
@@ -1962,7 +1962,7 @@ static KeyFunc class_cb[] =
   {'s', class_switch},
 
   {'y', class_yank},
-  {'i', class_yank2}, //列出所有有閱讀權限的秘密/好有看板 
+  {'i', class_yank2}, //列出所有有閱讀權限的秘密/好有看板
   {'z', class_zap},
   {'E', class_edit},
   {'v', class_visit},
@@ -1996,7 +1996,7 @@ Class(void)
   return 0;
 }
 
-void 
+void
 check_new(
   BRD *brd)
 {
@@ -2027,7 +2027,7 @@ check_new(
 }
 
 #ifdef	HAVE_INFO
-int 
+int
 Information(void)
 {
   int chn;
@@ -2040,7 +2040,7 @@ Information(void)
 #endif
 
 #ifdef	HAVE_STUDENT
-int 
+int
 Student(void)
 {
   int chn;
@@ -2066,7 +2066,7 @@ Profess(void)
 }
 #endif
 
-#ifdef  HAVE_FAVORITE 
+#ifdef  HAVE_FAVORITE
 int
 Favorite(void)
 {
@@ -2084,9 +2084,9 @@ void
 board_main(void)
 {
   int fsize;
-#ifdef	HAVE_PROFESS  
+#ifdef	HAVE_PROFESS
   int psize;
-#endif  
+#endif
   struct stat st;
 #ifdef  HAVE_FAVORITE
   int fasize;
@@ -2115,17 +2115,17 @@ board_main(void)
     favorite_img = f_img(fpath,&fasize);
   }
 #endif
-  
+
   if (class_img == NULL)
   {
     blog("CACHE", CLASS_IMGFILE);
   }
-#ifdef	HAVE_PROFESS  
-  if (profess_img == NULL)                                                        
+#ifdef	HAVE_PROFESS
+  if (profess_img == NULL)
   {
     blog("CACHE", PROFESS_IMGFILE);
   }
-#endif  
+#endif
 
   if (!cuser.userlevel)		/* guest yank all boards */
   {
@@ -2244,7 +2244,7 @@ brd_list(
         {
           name = brd.brdname;
           if (!ll_has(name) && (
-              (select == 'b') || 
+              (select == 'b') ||
               (select == 'g' && (str_str(brd.brdname, buf) || str_str(brd.title, buf)))||
               (select == 'c' && str_str(brd.class, buf))))
           {

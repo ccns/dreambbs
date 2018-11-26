@@ -299,7 +299,7 @@ verify_user(
     }
 	close(fh);
   }
-  
+
   if (!done)
   {
     sprintf(buf, "Invalid [%s] %s", buf2, myfrom);
@@ -499,7 +499,7 @@ mailpost(void)
   if (!readline(mybuf))
     return 0;
 
-  if (strncasecmp(mybuf, "From ", 5)) 
+  if (strncasecmp(mybuf, "From ", 5))
     return post_article();	/* junk */
 
   dirty = *myfrom = *mysub = *myname = *mypasswd = *myboard = *mytitle = 0;

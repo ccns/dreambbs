@@ -52,7 +52,7 @@
 
 #define NUMATTRS        30
 
-char *battrs[NUMATTRS] = 
+char *battrs[NUMATTRS] =
 {
       "不可 Zap",
       "不轉信",
@@ -99,12 +99,12 @@ char *battrs[NUMATTRS] =
       "不可同ID連推",
       "不可快速連推",
       "可以推噓文",
-      "可以自訂推文動詞",                   
+      "可以自訂推文動詞",
 #else
       "不可同ID連推(系統功\能未開啟)",
       "不可快速連推(系統功\能未開啟)",
       "可以推噓文(系統功\能未開啟)",
-      "可以自訂推文動詞(系統功\能未開啟)",  
+      "可以自訂推文動詞(系統功\能未開啟)",
 #endif
 #ifdef HAVE_COUNT_BOARD
       "不紀錄看板資訊統計",
@@ -119,11 +119,11 @@ char *battrs[NUMATTRS] =
 #endif
       "優良點數看板",
       "未使用",
-#ifdef ANTI_PHONETIC 
+#ifdef ANTI_PHONETIC
       "禁止注音文",
 #else
       "禁止注音文(系統功\能未開啟)",
-#endif      
+#endif
       "發文限制看板",
       "板主可自訂發文類別",
       "RSS看板"

@@ -37,11 +37,11 @@ cleanrecommend_log(
 {
   FILE *fp;
   time_t now;
-  
+
   if(fp = fopen(FN_RECOMMEND_LOG,"a+"))
   {
     time(&now);
-    
+
     fprintf(fp,"%24.24s %s ¬å %s ªO %s(%s) ",ctime(&now),cuser.userid,currboard,title,name);
     if(!mode)
       fprintf(fp,"¤¤ %s ªº¯d¨¥ %s\n",rmsg->userid,rmsg->msg);
@@ -58,25 +58,25 @@ cleanrecommend_item(
   int num,
   RMSG *cleanrecommend)
 {
-    
+
     char tmp[10],*pn;
-    
+
     pn = tmp;
-    
+
     if(cleanrecommend->pn == POSITIVE)
     {
       pn = "\033[1;33m+";
       prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num,pn,cleanrecommend->verb,cleanrecommend->userid,cleanrecommend->msg,cleanrecommend->rtime);
-    }      
+    }
     else if(cleanrecommend->pn == NEGATIVE)
     {
       pn = "\033[1;31m-";
-      prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num,pn,cleanrecommend->verb,cleanrecommend->userid,cleanrecommend->msg,cleanrecommend->rtime);      
+      prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num,pn,cleanrecommend->verb,cleanrecommend->userid,cleanrecommend->msg,cleanrecommend->rtime);
     }
     else
     {
       pn = "   ";
-      prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num,pn,cleanrecommend->verb,cleanrecommend->userid,cleanrecommend->msg,cleanrecommend->rtime);      
+      prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num,pn,cleanrecommend->verb,cleanrecommend->userid,cleanrecommend->msg,cleanrecommend->rtime);
     }
 }
 
@@ -102,10 +102,10 @@ cleanrecommend_body(
 /*
   if((counter = max) > 127)
     counter = 127;
-    
+
   if(counter < -127)
     counter = -127;
-*/    
+*/
   if (max > tail)
     max = tail;
 
@@ -113,7 +113,7 @@ cleanrecommend_body(
   {
     cleanrecommend_item(++num, cleanrecommend++);
   } while (num < max);
-      
+
   return XO_NONE;
 }
 
@@ -174,11 +174,11 @@ cleanrecommend_delete(
   {
     RMSG *rmsg;
     int pos, cur;
-    
+
     pos = xo->pos;
     cur = pos - xo->top;
     rmsg = (RMSG *) xo_pool + cur;
-    
+
     if (!rec_del(xo->dir, sizeof(RMSG), xo->pos, NULL, NULL))
     {
       cleanrecommend_log(rmsg,0);
@@ -194,10 +194,10 @@ cleanrecommend_change(
 {
   RMSG *cleanrecommend, mate;
   int pos, cur;
-  
+
   if(!HAS_PERM(PERM_BOARD))
     return XO_NONE;
-  
+
   pos = xo->pos;
   cur = pos - xo->top;
   cleanrecommend = (RMSG *) xo_pool + cur;
@@ -257,7 +257,7 @@ clean(
   HDR *hdr,phdr;
   int pos, cur;
   char fpath[128],buf[256],tmp[128],recommenddb[128],*c2;
-  FILE *fp;  
+  FILE *fp;
   RMSG rmsg;
   int i,chrono,pushstart;
   struct stat st;
@@ -277,11 +277,11 @@ clean(
 
     if(!hdr->recommend || hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
       return XO_NONE;
-      
+
     chrono = hdr->chrono;
     strcpy(title,hdr->title);
     strcpy(name,hdr->xname);
-      
+
     hdr_fpath(fpath,xo->dir,hdr);
     sprintf(recommenddb,"tmp/%s.recommenddb",cuser.userid);
     sprintf(tmp,"tmp/%s.clean",cuser.userid);
@@ -293,7 +293,7 @@ clean(
 
     if(fp = fopen(fpath,"r"))
     {
-            
+
 /*
       if(brd->battr & BRD_PUSHSNEER)
       {
@@ -319,7 +319,7 @@ clean(
           memset(&rmsg, 0, sizeof(RMSG));
           if(!strncmp(buf,"\033[1;32m¡°",9))
             pushstart = 1;
-          
+
           if(pushstart)
           {
             if(!strncmp(buf,"\033[1;32m¡°",9))
@@ -329,20 +329,20 @@ clean(
             }
             c2 = strrchr(buf,'\n') - 5;
             strncpy(rmsg.rtime, c2, 5);
-            
+
             c2 -= 58;
             strncpy(rmsg.msg, c2, 54);
-            
+
             c2 -= 19;
             strncpy(rmsg.userid, c2, 12);
-            
+
             c2 = strchr(buf, 'm');
             strncpy(rmsg.verb, c2+1, 2);
-            
+
             if((battr & BRD_PUSHDEFINE) && !strncmp(rmsg.verb,"¡÷",2) )
               rmsg.pn = COMMENT;
             else if(!strncmp(rmsg.verb,"\033[m\033[1;33",2))
-		      rmsg.pn = COMMENT;			
+		      rmsg.pn = COMMENT;
             /*else if(strncmp(buf, "\033[1;33¡÷", 8))
 		      rmsg.pn = POSITIVE;*/
 			else
@@ -364,7 +364,7 @@ clean(
             rec_add(recommenddb,&rmsg,sizeof(RMSG));
 */
 //          }
-            
+
           }
           else
             f_cat(tmp,buf);
@@ -376,7 +376,7 @@ clean(
   xz[XZ_OTHER - XO_ZONE].cb = cleanrecommend_cb;
   xover(XZ_OTHER);
   free(xoo);
-  
+
   for(i=0;i<rec_num(recommenddb,sizeof(RMSG));i++)
   {
     rec_get(recommenddb,&rmsg,sizeof(RMSG),i);
@@ -396,7 +396,7 @@ clean(
     }
     f_cat(tmp,buf);
   }
-  
+
   if(dashf(tmp))
   {
     sprintf(buf,"mv %s %s",tmp,fpath);
@@ -405,12 +405,12 @@ clean(
 
   if((fd = open(xo->dir, O_RDWR, 0600)) == -1)
     return XO_NONE;
-  
+
   fstat(fd, &st);
   total = st.st_size / sizeof(HDR);
   if(pos > total)
-    pos = total;  
-  
+    pos = total;
+
   f_exlock(fd);
   while(pos >= -1)
   {
@@ -420,7 +420,7 @@ clean(
       break;
   }
 
-  if(++pos >= 0)  
+  if(++pos >= 0)
   {
     phdr.recommend = counter;
     phdr.xmode &= ~POST_RECOMMEND;

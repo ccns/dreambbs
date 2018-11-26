@@ -24,11 +24,11 @@ personal_log(
   FILE *fp;
   time_t now;
   char tag[3][5] = {"申請","開板","拒絕"};
-  
+
   if(fp = fopen(FN_PERSONAL_LOG,"a+"))
   {
     time(&now);
-    
+
     fprintf(fp,"%24.24s ",ctime(&now));
     fprintf(fp,"%s ",(admin) ? cuser.userid : personal->userid);
     fprintf(fp,"%s ",tag[admin]);
@@ -107,28 +107,28 @@ personal_apply(void)
   struct tm *t;
   time_t now;
   int thisyear,enteryear;
-  
+
   now = time(0);
   t = localtime(&now);
-  
-  
-  
+
+
+
   if(cuser.numposts < 20 || cuser.numlogins < 500)
   {
     vmsg("資格不符無法申請個人板");
     return 0;
   }
-  
+
   c = strchr(cuser.email,'@');
   if(c == NULL || (strcmp(c+1,validemail[0]) && strcmp(c+1,validemail[1])))
   {
     vmsg("您的 E-mail 不合格!");
     return 0;
   }
-  
+
   thisyear = t->tm_year - 11;
   enteryear = (cuser.email[3]-'0') * 10 + (cuser.email[4]-'0');
-  
+
   //百年蟲 ecchi float 2012/4/25
   if( (thisyear - enteryear)%100 > 5)
   {
@@ -140,9 +140,9 @@ personal_apply(void)
   for(i=0;i<num;i++)
   {
     rec_get(FN_ETC_PERSONAL,&pb,sizeof(PB),i);
-    
+
     c = strchr(pb.email,'@');
-    
+
     if(!strcmp(cuser.userid,pb.userid) || !strncmp(cuser.email,pb.email,c-pb.email))
     {
       if(pb.state & PB_OPEN)
@@ -152,14 +152,14 @@ personal_apply(void)
       return 0;
     }
   }
-  
+
   /* 資格審核通過 */
-  
+
   memset(&pb,0,sizeof(PB));
-  
+
   clear();
   vs_head("個人板申請單",str_site);
-  
+
   move(2,0);
   prints("申請人：   %s\n",cuser.userid);
   prints("E-mail：   %s\n",cuser.email);
@@ -167,14 +167,14 @@ personal_apply(void)
   prints("文章數：   %d",cuser.numposts);
 
   num = DOECHO;
-    
+
   while(1)
   {
     while(1)
     {
       if(!vget(7,0,"看板英文名稱： ",brdname, IDLEN - 1, num))
         return 0;
-      
+
       if(is_badid(brdname))
         vmsg("無法接受這個板名，請使用英文字母，並且不要包含空格");
       else
@@ -186,27 +186,27 @@ personal_apply(void)
           break;
       }
     }
-  
+
     while(1)
       if(vget(8,0,"看板中文名稱： ",pb.brdtitle, BTLEN + 1, num))
         break;
-    
+
     if(vans("確定資料都正確嗎？[y/N]") == 'y')
       break;
     else
       num = GCARRY;
   }
-  
+
   strcpy(pb.userid,cuser.userid);
   strcpy(pb.email,cuser.email);
   pb.state = PB_APPLY;
-  
+
   rec_add(FN_ETC_PERSONAL,&pb,sizeof(PB));
   personal_log(&pb,0);
-  
+
   vmsg("申請書填寫完成，請等待站務審核");
   return 0;
-  
+
 }
 
 static char
@@ -214,7 +214,7 @@ personal_attr(unsigned int state)
 {
   if(state & PB_APPLY)
     return 'A';
-    
+
   if(state & PB_OPEN)
     return 'O';
 }
@@ -268,9 +268,9 @@ personal_head(
   outs("\
   [←]離開 c)修改 d)刪除 s)重整 TAB)中文版名/E-mail O)開板 D)退件 [h]elp\n\
 \033[44m  編號   申請人       看板名稱     ");
-  if(!mode) 
+  if(!mode)
     outs("E-mail                                  \033[m");
-  else 
+  else
     outs("中文版名                                \033[m");
   return personal_body(xo);
 }
@@ -333,7 +333,7 @@ personal_change(
 {
   PB *personal, mate;
   int pos, cur;
-  
+
   pos = xo->pos;
   cur = pos - xo->top;
   personal = (PB *) xo_pool + cur;
@@ -369,18 +369,18 @@ mail2usr(
   char folder[50],fpath[128];
   char title[2][30] = {"您的個人板通過申請囉！","您的個人板申請書被退回！"};
   FILE *fp;
-  
+
   now = time(0);
-  
+
   memset(&hdr,0,sizeof(hdr));
 
   usr_fpath(folder, personal->userid, fn_dir);
-  hdr_stamp(folder, 0 , &hdr, fpath);  
+  hdr_stamp(folder, 0 , &hdr, fpath);
   strcpy(hdr.owner,"SYSOP");
   strcpy(hdr.nick, SYSOPNICK);
   strcpy(hdr.title,title[admin]);
   rec_add(folder, &hdr, sizeof(HDR));
-  
+
   if(fp = fopen(fpath,"w"))
   {
     fprintf(fp,"作者: SYSOP (%s)\n標題: %s\n時間: %s\n",SYSOPNICK,title[admin],ctime(&now));
@@ -394,12 +394,12 @@ mail2usr(
       fprintf(fp,"\x1b[1;33m退件理由: %s\x1b[m\n\n",msg);
       f_suck(fp,"gem/@/@deny");
     }
-    
+
     fclose(fp);
   }
   return 0;
-  
-  
+
+
 }
 
 int
@@ -422,33 +422,33 @@ personal_sort(
   HDR *sort;
   int max,fd,total;
   struct stat st;
-  
+
   if ((fd = open(gem, O_RDWR, 0600)) < 0)
     return 0;
-  
+
   if (fstat(fd, &st) || (total = st.st_size) <= 0)
   {
     close(fd);
     return 0;
   }
   f_exlock(fd);
-  
+
   sort = (HDR *) malloc(total);
   read(fd,sort,total);
-  
+
   max = total / sizeof(HDR);
-  
+
   qsort(sort,max,sizeof(HDR),sort_compare);
-  
+
   lseek(fd, (off_t) 0, SEEK_SET);
   write(fd,sort,total);
   f_unlock(fd);
   close(fd);
   free(sort);
-  
+
   return 0;
-  
-  
+
+
 }
 
 static int
@@ -463,31 +463,31 @@ personal_open(
   int bno;
   ACCT acct;
   char gem[5][20] = {"gem/@/@Person_A_E","gem/@/@Person_F_J","gem/@/@Person_K_O","gem/@/@Person_P_T","gem/@/@Person_U_Z"};
-  
+
   pos = xo->pos;
   cur = pos - xo->top;
-  personal = (PB *) xo_pool + cur; 
-  
+  personal = (PB *) xo_pool + cur;
+
   if(personal->state & PB_OPEN)
     return XO_NONE;
-  
+
   if(brd_bno(personal->brdname) >= 0)
   {
     vmsg("板名雷同");
     return XO_NONE;
   }
-  
+
   if ( bshm->number >= MAXBOARD)
   {
     vmsg("超過系統所能容納看版個數，請調整系統參數");
     return XO_NONE;
   }
-  
+
   if(vans("確定要開設此看板嗎？[y/N]") != 'y')
     return XO_NONE;
 
   memset(&newboard,0,sizeof(newboard));
-  
+
   strcpy(newboard.brdname,personal->brdname);
   sprintf(newboard.title,"○ %s",personal->brdtitle);
   newboard.color = 7;
@@ -503,13 +503,13 @@ personal_open(
   if ((bno = brd_bno("")) >= 0)
   {
     rec_put(FN_BRD, &newboard, sizeof(newboard), bno);
-  }  
+  }
   else if(rec_add(FN_BRD, &newboard, sizeof(newboard)) < 0)
   {
     vmsg("無法建立新板");
     return XO_NONE;
   }
-                
+
   sprintf(fpath, "gem/brd/%s", newboard.brdname);
   mak_dirs(fpath);
   mak_dirs(fpath + 4);
@@ -528,7 +528,7 @@ personal_open(
   if((index = (tolower(newboard.brdname[2]) - 'a') / 5) == 5)
     index--;
   rec_add(gem[index], &hdr, sizeof(HDR));
-  
+
   personal_sort(gem[index]);
 
   personal->state = PB_OPEN;
@@ -536,7 +536,7 @@ personal_open(
   rec_put(xo->dir, personal, sizeof(PB), pos);
   move(3 + cur, 0);
   personal_item(++pos, personal);
-  
+
   mail2usr(personal,0);
   if(acct_load(&acct, personal->userid) >= 0)
     if(!(acct.userlevel & PERM_BM))
@@ -548,7 +548,7 @@ personal_open(
   personal_log(personal,1);
 
   vmsg("新板成立");
-  
+
   return XO_FOOT;
 }
 
@@ -568,7 +568,7 @@ personal_deny(
 
   if(!vget(b_lines,0,"拒絕開板理由: ",msg,sizeof(msg),DOECHO))
     return XO_NONE;
-  
+
   if(vans("確定拒絕此申請嗎？[y/N]") != 'y')
     return XO_NONE;
 

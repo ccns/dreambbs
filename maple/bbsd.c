@@ -35,7 +35,7 @@ extern UCACHE *ushm;
 #ifdef  HAVE_DETECT_CROSSPOST
 extern CHECKSUMCOUNT cksum;
 #endif
-  
+
 /* Thor.990113: exports for anonymous log */
 /* static */ char rusername[40];
 
@@ -62,7 +62,7 @@ extern time_t mode_lastchange;
 
 void
 blog(
-  char *mode, 
+  char *mode,
   char *msg
 )
 {
@@ -138,10 +138,10 @@ u_exit(
     ve_backup();		/* 編輯器自動備份 */
     brh_save();			/* 儲存閱讀記錄檔 */
 
-#ifdef  HAVE_DETECT_CROSSPOST    
+#ifdef  HAVE_DETECT_CROSSPOST
     attr_put(cuser.userid,ATTR_CROSS_KEY,&cksum);	/* 儲存 CrossPost 紀錄 */
 #endif
-    
+
   }
 
   /* Thor.980405: 離站時必定刪除熱訊 */
@@ -169,14 +169,14 @@ u_exit(
       {
 	     cuser.numlogins++;
       }
-#ifdef HAVE_SONG	
+#ifdef HAVE_SONG
       cuser.request = tuser.request;
       if(cuser.request>500)
         cuser.request = 500;
       else if (cuser.request<=0)
         cuser.request = 0;
 #endif
-      cuser.money = tuser.money;   
+      cuser.money = tuser.money;
       cuser.userlevel = tuser.userlevel;
       cuser.tvalid = tuser.tvalid;
       cuser.vtime = tuser.vtime;
@@ -187,7 +187,7 @@ u_exit(
         cuser.numposts = tuser.numposts;
       if(tuser.staytime > cuser.staytime)
         cuser.staytime = tuser.staytime;
-      
+
       strcpy(cuser.justify, tuser.justify);
       strcpy(cuser.vmail, tuser.vmail);
 #ifdef	TRANUFO
@@ -221,7 +221,7 @@ abort_bbs(void)
 {
   if (bbstate)
     u_exit("AXED");
-  
+
   exit(0);
 }
 
@@ -406,7 +406,7 @@ acct_apply(void)
   cuser.point1 = 0;
   cuser.point2 = 0;
   cuser.money = 0;
- 
+
   cuser.userlevel = PERM_DEFAULT;
   cuser.ufo2 = UFO2_COLOR | UFO2_MOVIE | UFO2_BNOTE;
   /* Thor.980805: 註解, 預設旗標ufo */
@@ -475,7 +475,7 @@ logattempt(
 #endif
 
 //  str_stamp(fpath, &ap_start);
-//  sprintf(buf, "%s %cBBS\t%s\n", fpath, type, currtitle); 
+//  sprintf(buf, "%s %cBBS\t%s\n", fpath, type, currtitle);
   /* Thor.990415: currtitle已內含ip */
   /* sprintf(buf, "%s %cBBS\t%s ip:%08x\n", fpath, type, currtitle,tn_addr); */
   /* Thor.980803: 追蹤 ip address */
@@ -506,7 +506,7 @@ utmp_setup(
 {
   UTMP utmp;
   char *guestname[GUESTNAME]={GUEST_NAMES};
-  
+
   cutmp = NULL; /* Thor.980805: pal_cache中會 check cutmp  */
   /*pal_cache();*/  /* by visor */
   /* cutmp = NULL; */
@@ -520,11 +520,11 @@ utmp_setup(
   utmp.userlevel = cuser.userlevel;
 #ifdef	HAVE_SHOWNUMMSG
   utmp.num_msg = 0;
-#endif 
+#endif
 #ifdef HAVE_BOARD_PAL
   utmp.board_pal = -1;
 #endif
-  
+
   strcpy(utmp.userid, cuser.userid);
   srand(time(0));
   strcpy(utmp.username, ((!str_cmp(cuser.userid, "guest")||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
@@ -547,7 +547,7 @@ utmp_setup(
   pal_cache();
 #ifdef	HAVE_BANMSG
   banmsg_cache();
-#endif  
+#endif
 }
 
 
@@ -572,8 +572,8 @@ tn_login(void)
   /* sprintf(currtitle, "%s@%s", rusername, fromhost); */
   /* Thor.990415: 紀錄ip, 怕正查不到 */
   sprintf(currtitle, "%s@%s ip:%08lx", rusername, fromhost,(int) tn_addr);
-  
-  
+
+
 /* by visor */
 #if 0
   move(20,0);
@@ -581,8 +581,8 @@ tn_login(void)
   vkey();
   sleep(10);
   exit(0);
-#endif    
-/* by visor */ 
+#endif
+/* by visor */
 
   /* 081119.cache: 正常顯示進站畫面 */
   move(b_lines, 0);
@@ -594,17 +594,17 @@ tn_login(void)
 #ifdef loginAD
 
      /*090823.cache: 進站廣告*/
-     FILE *fp;  
-     char buf[128];  
+     FILE *fp;
+     char buf[128];
      move(18, 0);
-     if( ( fp = fopen("gem/@/@AD","r") ) )  
-       {  
+     if( ( fp = fopen("gem/@/@AD","r") ) )
+       {
          while(fgets(buf,sizeof(buf),fp))
          outs(buf);
          fclose(fp);
-       }  
+       }
 
-#endif 
+#endif
 
   attempts = 0;
   for (;;)
@@ -666,7 +666,7 @@ tn_login(void)
         /* lkchu.981201: 每次上站都要 'c' 頗麻煩 :p */
           (UFO_BIFF | UFO_BIFFN | UFO_SOCKET | UFO_NET) :
           (UFO_BIFF | UFO_BIFFN | UFO_SOCKET | UFO_NET | UFO_CLOAK));
-                            
+
 
 	if ((level & PERM_ADMIN) && (cuser.ufo2 & UFO2_ACL))
 	{
@@ -717,7 +717,7 @@ tn_login(void)
 
 	  if (utmp_count(cuser.userno, 0) > 2)
       {
-        pmsg2("您已經達到多重登入上限");	    
+        pmsg2("您已經達到多重登入上限");
         login_abort("\n");
       }
 	}
@@ -727,7 +727,7 @@ tn_login(void)
     else
     {				/* guest */
       logattempt(' ');
-      cuser.userlevel = level = 0; 
+      cuser.userlevel = level = 0;
       /* Thor.981207: 怕人亂玩, 強制寫回cuser.userlevel */
       ufo = UFO_PAGER | UFO_QUIET | UFO_MESSAGE | UFO_PAGER1 |UFO_HIDDEN;
       cuser.ufo = ufo;
@@ -735,9 +735,9 @@ tn_login(void)
       if (utmp_count(cuser.userno, 0) > MAXGUEST)
       {
         pmsg2("目前在線上的guest過多");
-        login_abort("\n");      
+        login_abort("\n");
       }
-      break; 
+      break;
     }
   }
 
@@ -770,7 +770,7 @@ tn_login(void)
 
   film_out(FILM_WELCOME, 0);
 
-        
+
 #ifdef MODE_STAT
   memset(&modelog, 0, sizeof(UMODELOG));
   mode_lastchange = ap_start;
@@ -809,7 +809,7 @@ tn_login(void)
     if (!(level & PERM_SYSOP))
     {
 #ifdef NEWUSER_LIMIT
-      /* Thor.980825: lkchu patch: 既然有 NEWUSER_LIMIT, 還是加一下好了, 
+      /* Thor.980825: lkchu patch: 既然有 NEWUSER_LIMIT, 還是加一下好了,
                                    否則一直回答 FAQ 挺累的. :) */
       if (start - cuser.firstlogin < 3 * 86400)
       {
@@ -823,7 +823,7 @@ tn_login(void)
       {
         level &= ~(PERM_CHAT | PERM_PAGE | PERM_POST);
       }
-      
+
       if(level & (PERM_DENYPOST | PERM_DENYTALK | PERM_DENYCHAT | PERM_DENYMAIL | PERM_DENYNICK))
       {
         if(cuser.deny < check_deny && !(level & PERM_DENYSTOP))
@@ -834,7 +834,7 @@ tn_login(void)
         }
       }
       else if(!(level & PERM_DENYSTOP) && cuser.deny > check_deny) cuser.deny = check_deny;
-      
+
       if (!(level & PERM_CLOAK))
         ufo &= ~(UFO_CLOAK|UFO_HIDDEN);
 
@@ -869,7 +869,7 @@ tn_login(void)
         int (*p)(int level, char *fpath);
         char fpath[128];
         usr_fpath(fpath,cuser.userid,"gem");
-      
+
         p = DL_get("bin/mailgem.so:gcheck");
         if(p)
           (*p)(0,fpath);
@@ -880,13 +880,13 @@ tn_login(void)
       aloha_sync();
 #ifdef	HAVE_BANMSG
       banmsg_sync(NULL);	/* 拒收訊息 */
-#endif      
+#endif
       ufo |= m_quota(); /* Thor.980804: 註解, 資料整理稽核有包含 BIFF check */
       cuser.ufo = ufo;
       cuser.tcheck = start;
     }
     else
-    { 
+    {
       if(m_query(cuser.userid)>0)
         ufo |= UFO_BIFF;
     }
@@ -950,7 +950,7 @@ tn_login(void)
 #endif
 
 #ifdef NEWUSER_LIMIT
-      /* Thor.980825: lkchu patch: 既然有 NEWUSER_LIMIT, 還是加一下好了, 
+      /* Thor.980825: lkchu patch: 既然有 NEWUSER_LIMIT, 還是加一下好了,
                                    否則一直回答 FAQ 挺累的. :) */
       if (start - cuser.firstlogin < 3 * 86400)
       {
@@ -984,7 +984,7 @@ tn_login(void)
     }
 #endif
 
-#ifdef HAVE_ALOHA 
+#ifdef HAVE_ALOHA
     if (!(ufo & UFO_CLOAK))     /* lkchu.981201: 自己隱身就不用 notify */
     {
       void aloha(void);
@@ -1021,7 +1021,7 @@ tn_login(void)
      more("gem/brd/Admin/J/A106LL7J",NULL);
      bell();
      sleep(1);
-     bell();     
+     bell();
   }
 #endif
 
@@ -1094,11 +1094,11 @@ tn_main(void)
 //    more("etc/@/virus",(char *)-1);
 //    bell();
 //    vkey();
-    more("etc/@/disconnect",(char *)-1);    
+    more("etc/@/disconnect",(char *)-1);
     bell();
-    vkey();    
+    vkey();
     bell();
-    vkey();    
+    vkey();
     bell();
     vkey();
     more("etc/@/systembusy",(char *)-1);
@@ -1108,25 +1108,25 @@ tn_main(void)
     vkey();
     bell();
     vkey();
-    more("etc/@/sorry",(char *)-1);    
+    more("etc/@/sorry",(char *)-1);
     bell();
-    vkey();      
-  } 
+    vkey();
+  }
 #endif
 
-  sprintf(buf2, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);  
+  sprintf(buf2, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
   str_lower(buf,fromhost);
-  
+
   if(acl_has(FN_ETC_BANIP_ACL, "", buf) > 0
      || acl_has(FN_ETC_BANIP_ACL, "", buf2) > 0)
     exit(0);
 
   /* 將 login 的部分清空 */
-  add_io(0, 0); 
-  while(igetch() != I_TIMEOUT); 
+  add_io(0, 0);
+  while(igetch() != I_TIMEOUT);
   add_io(0, 60);
-  
-  
+
+
   clear();
 /*cache.080510: --維修用,開站時要記得設定這段變成註解--*/
 /*cache.080714: power user 可以輸入busy開啟login畫面測試*/
@@ -1152,7 +1152,7 @@ tn_main(void)
 
   //負載過高禁止login
   if(load[0]>20)
-  { 
+  {
 	prints("\n對不起...\n\n由於目前負載過高, 請稍後再來...");
 	//pcman會自動重連時間設太短會變成 DOS 很可怕 :P
 	sleep(3);
@@ -1161,14 +1161,14 @@ tn_main(void)
 
   //避免看板人氣負數
   currbno = -1;
-  
+
   //getloadavg(load,3);
   prints( MYHOSTNAME " ⊙ " OWNER " ⊙ " BBSIP " [" BBSVERNAME " " BBSVERSION "]\n\
 歡迎光臨【\033[1;33;46m %s \033[m】。系統負載：%.2f %.2f %.2f - [%s] 線上人數 [%d/%d]",
     str_site, load[0],load[1],load[2],load[0]>16?"\033[1;37;41m過高\033[m":load[0]>8?"\033[1;37;42m偏高\033[m":"\033[1;37;44m正常\033[m", ushm->count, MAXACTIVE);
 
   film_out(FILM_INCOME , 2);
-  
+
   total_num = ushm->count+1;
   currpid = getpid();
   cutmp = NULL;
@@ -1180,10 +1180,10 @@ tn_main(void)
   /* cache.090823 防止人數錯誤爆炸 */
   if (ushm->count < 0)
     ushm->count = 0;
-    
+
   /*tn_signals(); */
   brh_load();
-#ifdef	HAVE_FAVORITE  
+#ifdef	HAVE_FAVORITE
   if(HAS_PERM(PERM_VALID))
     favorite_main();
 #endif
@@ -1191,20 +1191,20 @@ tn_main(void)
 #ifdef  HAVE_DETECT_CROSSPOST
   if(attr_get(cuser.userid,ATTR_CROSS_KEY,&cksum)<0)
   	memset(&cksum,0,sizeof(CHECKSUMCOUNT));
-#endif  
+#endif
 
-  board_main();  
+  board_main();
 
   gem_main();
-        
+
   talk_main();
 
-#ifdef	HAVE_FORCE_BOARD 
+#ifdef	HAVE_FORCE_BOARD
   force_board();  /* CdChen.990417: 強制閱讀公告板 */
 #endif
 
   count_update();
-  time(&ap_start);  
+  time(&ap_start);
 #ifdef	HAVE_CHK_MAILSIZE
  if(!HAS_PERM(PERM_DENYMAIL) && HAS_PERM(PERM_BASIC))
  {
@@ -1491,7 +1491,7 @@ main_signals(void)
   struct sigaction act;
 
   /* act.sa_mask = 0; */ /* Thor.981105: 標準用法 */
-  sigemptyset(&act.sa_mask);      
+  sigemptyset(&act.sa_mask);
   act.sa_flags = 0;
 
   act.sa_handler = reaper;
@@ -1525,12 +1525,12 @@ int main(int argc, char *argv[])
   start_daemon(argc > 1 ? strcmp("-i",argv[1]) ? atoi(argv[1]) : -1 : 0);
 
   main_signals();
-      
+
   /* --------------------------------------------------- */
   /* attach shared memory & semaphore			 */
   /* --------------------------------------------------- */
 #ifdef	HAVE_SEM
-  sem_init(); 
+  sem_init();
 #endif
   ushm_init();
   bshm_init();
@@ -1562,7 +1562,7 @@ int main(int argc, char *argv[])
     }
 
     time(&ap_start);
-    argc = *totaluser; 
+    argc = *totaluser;
     if (argc >= MAXACTIVE - 5 /* || *avgload > THRESHOLD */ )
     {
       sprintf(currtitle,
@@ -1584,7 +1584,7 @@ int main(int argc, char *argv[])
 #if 0
     /* Thor.990121: 免得反查時讓人久等 */
 
-    telnet_init(); 
+    telnet_init();
 
     sprintf(currtitle, "正進入%s...\n", str_site);
     send(0, currtitle, strlen(currtitle), 0);
@@ -1605,8 +1605,8 @@ int main(int argc, char *argv[])
     addr = (unsigned char *) &tn_addr;
     sprintf(fromhost, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
 
-    telnet_init(); 
-     
+    telnet_init();
+
     tn_main();
   }
 }

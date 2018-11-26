@@ -99,7 +99,7 @@ play(
 	if (number >= MOVIE_MAX -1)
 		return 1;
 
-	/* str_rle(data); */  
+	/* str_rle(data); */
 	/* Thor.980804: 等算完最後再來壓縮, 不然壓縮碼也被視作換行或行數不夠了 */
 
 	head = data;
@@ -152,12 +152,12 @@ main(
 	int j,k;
 #endif
 	char *ptr,*str, *fname, fpath[80], buf[FILM_SIZ + 1];
-#ifdef	HAVE_RAND_INCOME  
+#ifdef	HAVE_RAND_INCOME
 	char fincome[128];
 	int pos;
 	time_t now;
 	struct stat st;
-	struct tm *xtime ,ptime;  
+	struct tm *xtime ,ptime;
 #endif
 	FCACHE *fshm;
 	FILE *fp;
@@ -186,14 +186,14 @@ main(
 		{
 			now = time(NULL);
 			xtime = localtime(&now);
-			ptime = *xtime;      
+			ptime = *xtime;
 			sprintf(fincome,"gem/brd/%s/@/@income",BRD_CAMERA);
 			fd = open(fincome,O_RDONLY);
 			if((fd>=0) && !fstat(fd, &st) && (size = st.st_size) > 0)
 			{
 				size /= sizeof(HDR);
 				pos = ((rand() / size) + ptime.tm_mon + ptime.tm_mday + ptime.tm_year + rand()) % size;
-				if(pos < 0) 
+				if(pos < 0)
 					pos += size;
 				lseek(fd, (off_t) (sizeof(HDR) * pos), SEEK_SET);
 				read(fd, &hdr, sizeof(HDR));
@@ -208,7 +208,7 @@ main(
 				close(fd);
 		}
 		else
-#endif    
+#endif
 			mirror(fpath);
 	}
 
@@ -232,7 +232,7 @@ main(
 			while (fread(&hdr, sizeof hdr, 1, fp) == 1)
 			{
 				/* Thor.981110: 限制級則不放入movie中 */
-				if(hdr.xmode & (GEM_RESTRICT|GEM_LOCK))   
+				if(hdr.xmode & (GEM_RESTRICT|GEM_LOCK))
 					continue;
 
 				*str = hdr.xname[7];
@@ -256,7 +256,7 @@ main(
 						for(k=0;k<=3 && ptr;k++)
 						{
 							ptr = strchr(ptr,'\n');
-							if(ptr) 
+							if(ptr)
 								ptr++;
 						}
 						if(!ptr)
@@ -283,14 +283,14 @@ main(
 				if (size > 0)
 				{
 					buf[size] = '\0';
-					play(buf);  
+					play(buf);
 				}
 			}
 			else
 			{ /* 針對當沒有 @error-camera 時的處理 */
 				strcpy(buf,"動態看版錯誤\n請聯絡系統管理員\n");
 				play(buf);
-			}    
+			}
 		}
 #ifdef	    HAVE_SONG_TO_CAMERA
 		sprintf(fpath, "brd/%s/.DIR",BRD_ORDERSONGS);
@@ -303,7 +303,7 @@ main(
 	/* --------------------------------------------------- */
 
 	fshm = (FCACHE *) shm_new(FILMSHM_KEY, sizeof(FCACHE));
-	memcpy(fshm, &image, sizeof(image.shot) + tail); 
+	memcpy(fshm, &image, sizeof(image.shot) + tail);
 	/* Thor.980805: 再加上 shot的部分 */
 	image.shot[0] = fshm->shot[0] = i;	/* 總共有幾片 ? */
 

@@ -34,7 +34,7 @@
 #define	TWOWEEK_HOUR	(14 * 24)
 #define	WEEK_HOUR	(7 * 24)
 #define	DAY_HOUR	(1 * 24)
-#define	HOUR		(1)		
+#define	HOUR		(1)
 
 
 HDR		hotboard[MAX_HOTBOARD];
@@ -183,7 +183,7 @@ save_hot(void)
 	fd = open(FN_HOTBOARD,O_WRONLY);
 	write(fd,hotboard,sizeof(HDR)*hotcount);
 	close(fd);
-	
+
 }
 
 static void
@@ -225,7 +225,7 @@ count_board(
   struct stat st;
 
   int pos;
-  
+
   int hour;
   int day;
   int week;
@@ -234,20 +234,20 @@ count_board(
   int threemonth;
   int halfyear;
   int year;
-  
+
 
 
   xtime = localtime(&now);
   ntime = *xtime;
   memset(&bcount,0,sizeof(BSTATCOUNT));
-  
+
   brd_fpath(fpath,brd->brdname,FN_BRD_STATCOUNT);
   brd_fpath(flog,brd->brdname,FN_BRD_STAT);
-  
+
   fd = open(flog,O_RDONLY);
   if(fd < 0)
     return;
-    
+
   if(fstat(fd,&st) || (count = st.st_size / sizeof(BSTAT)) <= 0)
   {
     close(fd);
@@ -257,7 +257,7 @@ count_board(
   size = read(fd,base,sizeof(BSTAT) * count);
   count = size / sizeof(BSTAT);
   tail = head + count;
-  
+
   hour = count;
   day = (count > DAY_HOUR) ? (count - DAY_HOUR + 1) : 1;
   week = (count > WEEK_HOUR) ? (count - WEEK_HOUR + 1) : 1;
@@ -266,14 +266,14 @@ count_board(
   threemonth = (count > THREEMONTH_HOUR) ? (count - THREEMONTH_HOUR + 1) : 1;
   halfyear = (count > HALFYEAR_HOUR) ? (count - HALFYEAR_HOUR + 1) : 1;
   year = (count > YEAR_HOUR) ? (count - YEAR_HOUR + 1) : 1;
-    
+
   pos = 1;
-  
+
   rec_get(fpath,&bcount,sizeof(BSTATCOUNT),0);
 
 
   memset(&bcount,0,sizeof(BSTAT) * 8);
-  
+
   do
   {
     if(hour <= pos)
@@ -312,11 +312,11 @@ count_board(
   bcount.threemonth.chrono = now;
   bcount.halfyear.chrono = now;
   bcount.year.chrono = now;
-  
+
   memcpy(tmp,&(bcount.lhour[1]),sizeof(BSTAT) * 23);
   memcpy(bcount.lhour,tmp,sizeof(BSTAT) * 23);
   memcpy(&(bcount.lhour[23]),&(bcount.hour),sizeof(BSTAT));
-  
+
   if(ntime.tm_hour == 0)
   {
     memcpy(tmp,&(bcount.lday[1]),sizeof(BSTAT) * 23);
@@ -345,9 +345,9 @@ count_board(
     ftruncate(fd,size);
 
   }
-  
-  rec_put(fpath,&bcount,sizeof(BSTATCOUNT),0); 
-  
+
+  rec_put(fpath,&bcount,sizeof(BSTATCOUNT),0);
+
   free(base);
   close(fd);
 }
@@ -358,9 +358,9 @@ main(void)
 {
   BRD *bcache, *head, *tail;
   BSTAT bstat;
-  
+
   char fpath[128];
-  
+
   time_t now;
   struct tm ntime, *xtime;
 
@@ -407,10 +407,10 @@ main(void)
         head->n_news = 0;
         head->n_bans = 0;
         strcpy(bstat.type,"¨C¤p®É");
-        
+
         brd_fpath(fpath,head->brdname,FN_BRD_STAT);
         rec_add(fpath,&bstat,sizeof(BSTAT));
-        
+
         count_board(head,now);
 //      }
     }

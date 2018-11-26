@@ -21,12 +21,12 @@ base64_encode(FILE *in,FILE *out)
   char dest[73];
   unsigned char c1,c2,c3;
   int n;
-  
+
   dst = dest;
-  
+
   while((n=fread(base,1,sizeof(base),in)))
   {
-    
+
     c1 = base[0];
     c2 = base[1];
     c3 = base[2];
@@ -76,9 +76,9 @@ main(
   	stdin = fopen(argv[1],"r");
   }
   if(stdin)
-     base64_encode(stdin,stdout); 
+     base64_encode(stdin,stdout);
   else
-     fprintf(stdout,"error open file\n");	  
+     fprintf(stdout,"error open file\n");
 
   return 0;
 }

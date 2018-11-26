@@ -367,7 +367,7 @@ main(
   db.days = ((argc > 1) && (number = atoi(argv[1])) > 0) ? number : DEF_DAYS;
   db.maxp = ((argc > 2) && (number = atoi(argv[2])) > 0) ? number : DEF_MAXP;
   db.minp = ((argc > 3) && (number = atoi(argv[3])) > 0) ? number : DEF_MINP;
-  
+
   memset(&key,0,sizeof(key));
 
   /* --------------------------------------------------- */
@@ -384,9 +384,9 @@ main(
     fprintf(stderr,"Error open .BRD file\n");
     exit(1);
   }
-  
+
   count = read(fd,table,sizeof(BRD)*MAXBOARD);
-  count/=sizeof(BRD); 
+  count/=sizeof(BRD);
   close(fd);
 
   /* --------------------------------------------------- */

@@ -15,7 +15,7 @@ BCACHE *bshm;
 
 
 
-typedef struct 
+typedef struct
 {
   char id[IDLEN+1];
   char brd[IDLEN+1];
@@ -28,7 +28,7 @@ attach_shm(
   register int shmkey, register int shmsize)
 {
   register void *shmptr;
-  register int shmid;   
+  register int shmid;
 
   shmid = shmget(shmkey, shmsize, 0);
   if (shmid < 0)
@@ -36,17 +36,17 @@ attach_shm(
     shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
   }
   else
-  {   
+  {
     shmsize = 0;
   }
-   
+
   shmptr = (void *) shmat(shmid, NULL, 0);
 
   if (shmsize)
     memset(shmptr, 0, shmsize);
 
   return shmptr;
-}                                              
+}
 
 static int
 check_in_memory(char *bm,char *id)
@@ -86,7 +86,7 @@ to_bm(
 
     bm = (char *)malloc(MAXBOARD*(IDLEN+1)*3);
     memset(bm,0,MAXBOARD*(IDLEN+1)*3);
-    ptr = bm;    
+    ptr = bm;
 
     head = bhdr = bshm->bcache;
     tail = bhdr + bshm->number;
@@ -127,9 +127,9 @@ to_bm(
            break;
        }
     } while (++head < tail);
- 
+
     send_to_all(title,fpath,bm);
-    
+
     unlink(fpath);
     free(bm);
     return 0;
@@ -199,10 +199,10 @@ main(
   char *argv[])
 {
   int mode;
-  
+
   bshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
 
-  if(argc>3) 
+  if(argc>3)
   {
     mode = atoi(argv[1]);
     switch(mode)
@@ -214,9 +214,9 @@ main(
         to_bm(argv[2],argv[3]);
         break;
     }
-    
+
   }
-  unlink(argv[2]);  
+  unlink(argv[2]);
 
   return 0;
 }

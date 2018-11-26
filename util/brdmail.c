@@ -250,7 +250,7 @@ start:
   brd->btime = -1;
 
   /* Thor.0827: 加上 parent process id，以便抓垃圾信 */
-  sprintf(buf, "[%d] %s => %s", getppid(), sender, brdname); 
+  sprintf(buf, "[%d] %s => %s", getppid(), sender, brdname);
   mailog(buf);
 
   return 0;

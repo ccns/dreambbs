@@ -947,7 +947,7 @@ int keysnum;
 static int
 words_check(void)
 {
-  textline *p; 
+  textline *p;
   unsigned char *str, *pend;
   int phonetic;		/* 注音文數目 */
 
@@ -984,7 +984,7 @@ words_check(void)
 static void
 words_check(void)
 {
-  textline *p; 
+  textline *p;
   char *str;
 
   wordsnum = 0;
@@ -1037,7 +1037,7 @@ ve_quote(
 	    sprintf(buf + 128, " (%s)", quote_nick);
 	  else
 	    buf[128] = '\0';
-	  
+
 	  sprintf(str, "※ 引述《%s%s》之銘言：", quote_user, buf + 128);
 
 	  this = ve_line(this, str);
@@ -1090,7 +1090,7 @@ ve_quote(
 #ifdef HAVE_ANONYMOUS
   /* Thor.980909: gc patch: 匿名模式不問簽名檔 */
   if(curredit & EDIT_ANONYMOUS || cuser.ufo2 & UFO2_SIGN)
-    goto OUT_ve_quote; 
+    goto OUT_ve_quote;
 #endif
 
   msg[27] = op = cuser.signature + '0';
@@ -1172,7 +1172,7 @@ quote_check(void)
 	post_line++;
     }
   }
-  
+
 #ifdef	HAVE_RESIST_WATER
   if((post_line <= CHECK_QUOT) && (bbstate & BRD_CHECKWATER))
     checkqt++;
@@ -1218,7 +1218,7 @@ ve_header(
 #endif
   }
   else
-  {   
+  {
 
     /* Thor.980613: 如果在轉錄文章, 呼叫 ve_header, 由於不是在被轉的版, 因此屬性不對,
                      有可能使秘密版出現 , BRD_ANONYMOUS 亦同*/
@@ -1255,7 +1255,7 @@ ve_header(
       postlog.number = 1;
 
             /* Thor.980613: 既然前面有check, 為何要再check呢? */
-      if (!(bbstate & BRD_NOSTAT))   
+      if (!(bbstate & BRD_NOSTAT))
 	rec_add(FN_POST_DB, &postlog, sizeof(postlog));
     }
 
@@ -1299,7 +1299,7 @@ ve_show_sign(
   {
     for(j=1;j<=3;j++)
     {
-      prints("\033[36m【簽名檔.%d】\033[m\n",j); 
+      prints("\033[36m【簽名檔.%d】\033[m\n",j);
       for (i=0;i<MAXSIGLINES;i++)
       {
         if(fgets(buf, 256, fp))
@@ -1310,7 +1310,7 @@ ve_show_sign(
     }
     fclose(fp);
   }
-                                    
+
 }
 
 static void
@@ -1332,8 +1332,8 @@ ve_select_sign(
       cuser.signature = ans - '0';
       op = ans;
     }
-  }  
-     
+  }
+
   if (op != '0')
   {
     usr_fpath(buf, cuser.userid, FN_SIGN);
@@ -1341,12 +1341,12 @@ ve_select_sign(
     if (fd)
     {
       int i;
-      
+
       op = (op - '1') * MAXSIGLINES;
       for(i=0;i<op;i++)
         fgets(buf, 256, fd);
       fprintf(fp,"--");
-      
+
       len = 0;
       used = 0;
       for (i=0;i<MAXSIGLINES;i++)
@@ -1369,7 +1369,7 @@ ve_select_sign(
         fprintf(fp,"\n");
       fclose(fd);
     }
-  }  
+  }
 }
 
 
@@ -1394,7 +1394,7 @@ ve_filer(
 #endif
 
 
-#ifdef	HAVE_INPUT_TOOLS  
+#ifdef	HAVE_INPUT_TOOLS
   if (bbsmode != M_POST)
     msg = "[S]存檔 (A)放棄 (T)改標題 (E)繼續 (I)符號 (R/W/D)讀寫刪暫存檔？";
   else if (curredit & EDIT_OUTGO)
@@ -1407,7 +1407,7 @@ ve_filer(
   else if (curredit & EDIT_OUTGO)
     msg = "[S]存檔 (L)站內 (A)放棄 (T)改標題 (E)繼續 (R/W/D)讀寫刪暫存檔？";
   else
-    msg = "[L]站內 (S)存檔 (A)放棄 (T)改標題 (E)繼續 (R/W/D)讀寫刪暫存檔？"; 
+    msg = "[L]站內 (S)存檔 (A)放棄 (T)改標題 (E)繼續 (R/W/D)讀寫刪暫存檔？";
 #endif
 
 /* cache.091023: 這邊註解掉就可以強制使用圖形選單 */
@@ -1421,12 +1421,12 @@ ve_filer(
       re = popupmenu_ans2(menu2,"存檔選項",4,20);
     else
       re = popupmenu_ans2(menu3,"存檔選項",4,20);
-    
-//  }  
+
+//  }
 
   switch (re)
   {
-#ifdef	HAVE_INPUT_TOOLS  
+#ifdef	HAVE_INPUT_TOOLS
   case 'i':
     return VE_INPUTOOL;
 #endif
@@ -1470,9 +1470,9 @@ ve_filer(
     if (!vget(b_lines, 0, "標題：", ve_title, TTLEN, GCARRY))
       strcpy(ve_title, buf);
     return VE_FOOTER;
-    
+
   default:
-    return VE_FOOTER;          
+    return VE_FOOTER;
   }
 
   if (!ans)
@@ -1498,11 +1498,11 @@ ve_filer(
       ve_abort(5);
       abort_bbs();
     }
-    
+
 #ifndef ANTI_PHONETIC
     words_check();	/* itoc.010408: 算文章字數 */
 #endif
-    
+
     if (ve_op == 1)
       ve_header(fp);
   }
@@ -1520,7 +1520,7 @@ ve_filer(
 	if (v || msg[0])
 	{
 	  str_trim(msg);
-	  
+
 	  if(v || (bbsmode != M_POST))
   	    fprintf(fp, "%s\n", msg);
   	  else
@@ -1539,20 +1539,20 @@ ve_filer(
   {
     if ((bbsmode == M_POST) || (bbsmode & M_SMAIL))
     {
-    
+
       if(!(curredit & EDIT_ANONYMOUS) && (cuser.ufo2 & UFO2_SIGN) && ve_op)
       {
         ve_select_sign(fp);
       }
-  
+
 #ifdef	HAVE_ORIGIN
 
 #ifdef 	HAVE_ANONYMOUS
       /* Thor.980909: anonymous post mode */
-      if ((bbstate & BRD_ANONYMOUS) && (curredit & EDIT_ANONYMOUS) 
+      if ((bbstate & BRD_ANONYMOUS) && (curredit & EDIT_ANONYMOUS)
            && (bbsmode != M_SMAIL))
               /* lkchu.981201: M_SMAIL 時不須要暱名 */
-	  fprintf(fp, ANONYMOUS_TAG, 
+	  fprintf(fp, ANONYMOUS_TAG,
   	    str_site, MYHOSTNAME, "暱名天使的家");
       else
 #endif
@@ -1561,7 +1561,7 @@ ve_filer(
       {
 	fprintf(fp, ORIGIN_TAG,
 	  /*str_site, MYHOSTNAME,*/ ((cuser.ufo & UFO_HIDDEN)&&(str_cmp(cuser.userid,"guest"))) ? HIDDEN_SRC : fromhost);
-	
+
 	if((bbstate & BRD_LOGEMAIL) && !(bbsmode == M_SMAIL))
 	  fprintf(fp, EMAIL_TAG, cuser.email);
       }
@@ -1618,9 +1618,9 @@ select_title(
   char *title)
 {
   char *objs[] = {"[公告]","[新聞]","[閒聊]","[文件]","[問題]","[測試]"};
-  int select; 
+  int select;
   outs("\n\n1.【公告】2.【新聞】3.【閒聊】4.【文件】5.【問題】6.【測試】7.【其他】\n");
-  select = vans("請選擇文章類別或按 Enter 跳過：") - '1';   
+  select = vans("請選擇文章類別或按 Enter 跳過：") - '1';
   if(select >=0 && select <=5)
   {
     sprintf(title,"%s",objs[select]);
@@ -1628,7 +1628,7 @@ select_title(
   }
   else
     *title = '\0';
-  return 0;  
+  return 0;
 }
 
 int
@@ -1655,11 +1655,11 @@ ve_subject(
       strcpy(title, dft);
     else
 #else
-     *title = '\0';    
+     *title = '\0';
      //select = select_title(title);
-#endif      
+#endif
   }
-  return vget(row, 0, "標題：", select ? title+6:title, select ? 
+  return vget(row, 0, "標題：", select ? title+6:title, select ?
             TTLEN - 5 : TTLEN + 1, GCARRY);
 }
 
@@ -1688,7 +1688,7 @@ vedit(
     return -1;
   }
   bbsothermode |= OTHERSTAT_EDITING;
-  
+
   tmp = vln = ve_alloc();
 
   if (*fpath)
@@ -1834,7 +1834,7 @@ ve_key:
     if (isprint2(cc))
     {
       ve_char(cc);
-      keysnum++;      
+      keysnum++;
     }
     else
     {
@@ -1972,7 +1972,7 @@ ve_key:
 	vx_cur = tmp;
 	break;
 
-      
+
       case KEY_DOWN:
       case Ctrl('N'):
 
@@ -2038,7 +2038,7 @@ ve_key:
           else
           {
             (*input_tool)();
-          }	
+          }
           break;
         }
 #endif
@@ -2122,12 +2122,12 @@ ve_key:
         every_U();
 	/*ve_char(27);*/
 	break;
-	
+
       case KEY_ESC:
-              
+
         ve_char(27);
         break;
-	
+
 
 #ifdef SHOW_USER_IN_TEXT
       case Ctrl('Q'):
@@ -2149,14 +2149,14 @@ ve_key:
 */
 
 /* cache.090922: 控制碼 */
-  char *menu[] = 
+  char *menu[] =
   {
     "IQ",
     "Id     userＩＤ(**s)",
     "Nick   user暱稱(**n)",
-//    "Login  登入次數(**l)", 
-//    "Post   PO文次數(**p)",     
-    "Time   現在時間(**t)",    
+//    "Login  登入次數(**l)",
+//    "Post   PO文次數(**p)",
+    "Time   現在時間(**t)",
     "Quit   離開選單     ",
     NULL
   };
@@ -2170,30 +2170,30 @@ ve_key:
         break;
       case 'n':
       ve_char(KEY_ESC);
-      ve_char('*');      
+      ve_char('*');
       ve_char('n');
         break;
 /*      case 'l':
       ve_char(KEY_ESC);
-      ve_char('*');      
+      ve_char('*');
       ve_char('l');
         break;
       case 'p':
       ve_char(KEY_ESC);
-      ve_char('*');      
+      ve_char('*');
       ve_char('p');
-        break;                
+        break;
 */      case 't':
       ve_char(KEY_ESC);
-      ve_char('*');   
+      ve_char('*');
       ve_char('t');
-        break;       
+        break;
       default :
         break;
       }
     }
     break;
-                                                                                
+
 #endif
 
       default:

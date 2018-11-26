@@ -80,7 +80,7 @@ yesterday(void)
   return 0;
 }
 
-static int 
+static int
 day(void)
 {
   more("gem/@/@-day", 0);
@@ -226,13 +226,13 @@ pad_draw(void)
   sprintf(str, "\033[1;37;46mΥ\033[34;47m %s \033[33m(%s)", cuser.userid, cuser.username);
   len = strlen(str);
   strcat(str, " \033[30;46m" + (len & 1));
-  
+
   for (i = len >> 1; i < 41; i++)
-    strcat(str,"▄");    
+    strcat(str,"▄");
   sprintf(str2, "\033[34;47m %.14s \033[37;46mΥ\033[m\n%-70.70s\n%-70.70s\n%-70.70s\n",
     Etime(&(pad.tpad)), buf[0], buf[1], buf[2]);
   strcat(str, str2);
- 
+
   f_cat(FN_NOTE_ALL, str);
 
   if (!(fpw = fopen(FN_NOTE_TMP, "w")))
@@ -276,12 +276,12 @@ goodbye(void)
   }
   else
     ans = vans("G)再別" NICKNAME " M)報告站長 N)留言板 Q)取消？[Q] ");
-    
+
   switch (ans)
   {
   case 'g':
   case 'y':
-    break;    
+    break;
 
   case 'm':
     mail_sysop();
@@ -302,7 +302,7 @@ goodbye(void)
 #ifdef  LOG_BMW
   /*bmw_save();*/                   /* lkchu.981201: 熱訊記錄處理 */
 #endif
-  
+
   clear();
   prints("       \033[1;31m ●       \033[1;36m ┌─┐┌─┐┌─┐┌─╮ ┌─╮┌╮┐┌─┐\n"
   "      \033[1;31m●\033[1;37m○\033[1;33m●\033[1;37m═══\033[1;36m│  ┬│  ││  ││  │ │ ═ └  ┘│═╡\033[1;37m════\n"
@@ -331,7 +331,7 @@ vs_head(
   unsigned int ufo;
 #ifdef  COLOR_HEADER
 /*  int color = (time(0) % 7) + 41;        lkchu.981201: random color */
-  int color = 44; //090911.cache: 太花了固定一種顏色 
+  int color = 44; //090911.cache: 太花了固定一種顏色
 #endif
 #if 1
   char *newyear[6]={ BOARDNAME "祝大家新年快樂        ",
@@ -369,12 +369,12 @@ vs_head(
   {
     if (ufo & UFO_BIFF)
     {
-      mid = NEWMAILMSG; // 你有新情書 
+      mid = NEWMAILMSG; // 你有新情書
       spc = 15;
     }
-    else if (ufo & UFO_BIFFN) 
+    else if (ufo & UFO_BIFFN)
     {
-      mid = NEWPASSMSG; // 你有新留言 
+      mid = NEWPASSMSG; // 你有新留言
       spc = 15;
     }
 #if 1
@@ -397,12 +397,12 @@ vs_head(
         sec = now % 60;
         sprintf(ttl,"距 2006 年還剩 %02d 時 %02d 分 %02d 秒",hour,min,sec);
         spc = strlen(ttl);
-        mid = ttl;  
+        mid = ttl;
         mid[spc] = '\0';
       }
 
     }
-#endif    
+#endif
 #if 0
     else if(aprilfirst)
     {
@@ -422,13 +422,13 @@ vs_head(
   }
 
   spc = 67 - strlen(title) - spc - strlen(currboard);
-  
+
   if(spc < 0)
   {
     mid[strlen(mid)+spc]= '\0';
     spc = 0;
   }
-  
+
   ufo = 1 - (spc & 1);
   memset(buf, ' ', spc >>= 1);
   buf[spc] = '\0';
@@ -473,7 +473,7 @@ movie(void)
 
     tag = film_out(tag, 2);
   }
-  
+
 
   /* Thor: 同時 顯示 呼叫器 好友上站 隱身 */
 
@@ -575,7 +575,7 @@ static MENU menu_boardadm[] =
 
   {"bin/adminutil.so:mail_to_all", PERM_SYSOP, - M_XMODE,
   "Alluser    系統通告"},
-  
+
     "bin/personal.so:personal_admin", PERM_BOARD|PERM_SYSOP, - M_XMODE,
   "Personal   個人板審核",
 
@@ -608,7 +608,7 @@ static MENU menu_accadm[] =
   {"bin/observe.so:Observe_list", PERM_SYSOP|PERM_BOARD, - M_XMODE,
   "2Observe   系統觀察名單"},
 #endif
- 
+
   {menu_admin, PERM_MENU + 'U', M_XMENU,
   "註冊總管"}
 };
@@ -618,7 +618,7 @@ static MENU menu_settingadm[] =
 
   {"bin/adminutil.so:m_xfile", PERM_SYSOP, - M_XFILES,
   "File       編輯系統檔案"},
-  
+
   {"bin/adminutil.so:m_xhlp", PERM_SYSOP, - M_XFILES,
   "Hlp        編輯說明檔案"},
 
@@ -630,13 +630,13 @@ static MENU menu_settingadm[] =
 
   {"bin/violate.so:Violate",PERM_SYSOP,- M_XMODE,
   "Violate    處罰名單"},
-  
+
   {"bin/adminutil.so:special_search",PERM_SYSOP, - M_XMODE,
   "XSpecial   特殊搜尋"},
 
   {"bin/adminutil.so:update_all",PERM_SYSOP, - M_XMODE,
-  "Database   系統資料庫更新"},  
-  
+  "Database   系統資料庫更新"},
+
   {menu_admin, PERM_MENU + 'X', M_XMENU,
   "系統資料"}
 };
@@ -760,15 +760,15 @@ static MENU menu_mail[] =
   {m_zip, PERM_VALID, M_XMODE,
   "Zip        打包下載個人資料"},
 #endif
-/* 
+/*
 #ifdef HAVE_SIGNED_MAIL
   {m_verify, PERM_VALID, M_XMODE,
   "Verify     驗證信件電子簽章"},
 #endif
-*/ 
+*/
   {mail_sysop, PERM_BASIC, M_SMAIL,
   "Yes Sir!   寄信給站長"},
- 
+
   {menu_main, PERM_MENU + 'R', M_MMENU,	/* itoc.020829: 怕 guest 沒選項 */
   "電子郵件"}
 };
@@ -834,7 +834,7 @@ static MENU menu_talk[] =
 /* System menu						 */
 /* ----------------------------------------------------- */
 
-static MENU menu_information[] = 
+static MENU menu_information[] =
 {
 
   {popmax, 0 , M_READA,
@@ -891,7 +891,7 @@ static MENU menu_xyz[] =
 /* User menu                                             */
 /* ----------------------------------------------------- */
 
-static MENU menu_reg[] = 
+static MENU menu_reg[] =
 {
 
   {u_info, PERM_BASIC, M_XMODE,
@@ -992,7 +992,7 @@ static MENU menu_special[] =
 {
 
   {"bin/personal.so:personal_apply",PERM_VALID, - M_XMODE,
-  "PBApply      申請個人看板"}, 
+  "PBApply      申請個人看板"},
 
   {"bin/bank.so:bank_main", PERM_VALID, - M_XMODE,
   "Bank       　銀行"},
@@ -1058,13 +1058,13 @@ static MENU menu_service[] =
   INFO_EMPTY},
 #endif
 
-#ifdef	HAVE_STUDENT  
+#ifdef	HAVE_STUDENT
   {Student, 0, M_BOARD,
   STUDENT_EMPTY},
 #endif
 
 /* 091007.cache: 拉人灌票沒意義... */
-  
+
   {"bin/newboard.so:XoNewBoard", PERM_VALID, - M_XMODE,
   "Cosign    【 連署申請區 】"},
 
@@ -1088,7 +1088,7 @@ static MENU menu_service[] =
 /* main menu						 */
 /* ----------------------------------------------------- */
 
-#ifdef	HAVE_CHANGE_SKIN	
+#ifdef	HAVE_CHANGE_SKIN
 static int
 sk_windtop_init(void)
 {
@@ -1157,7 +1157,7 @@ static MENU menu_main[] =
   {menu_xyz, 0, M_SMENU,
   "Xyz       【 系統資訊區 】"},
 
-#ifdef	HAVE_CHANGE_SKIN  
+#ifdef	HAVE_CHANGE_SKIN
   {skin_main, PERM_SYSOP,M_XMENU,
   "2Skin     【 選擇介面區 】"},
 #endif
@@ -1178,7 +1178,7 @@ goodbye1(void)
   case 'g':
   case 'y':
     return 12345;
-    break;    
+    break;
 
   case 'q':
   default:
@@ -1235,10 +1235,10 @@ check_info(char *input)
 {
 #if defined(HAVE_INFO) || defined(HAVE_STUDENT)
   BRD *brd;
-#endif  
+#endif
   char *name = NULL;
   name = input;
-#ifdef	HAVE_INFO  
+#ifdef	HAVE_INFO
   if(!strcmp(input,INFO_EMPTY))
   {
      brd = bshm->bcache + brd_bno(BRD_BULLETIN);
@@ -1249,7 +1249,7 @@ check_info(char *input)
          name = INFO_HAVE;
      }
   }
-#endif  
+#endif
 #ifdef	HAVE_STUDENT
   if(!strcmp(input,STUDENT_EMPTY))
   {
@@ -1284,11 +1284,11 @@ menu(void)
   menu = menu_main;
 #endif
   depth = mmx = 0;
-  
+
   for (;;)
   {
     level = cuser.userlevel;
-	
+
     if (mode & MENU_LOAD)
     {
       for (max = -1;; menu++)
@@ -1328,7 +1328,7 @@ menu(void)
         cmd = cc ^ PERM_MENU;	/* default command */
       utmp_mode(menu->umode);
     }
-    
+
     if (mode & MENU_DRAW)
     {
       if (mode & MENU_FILM)
@@ -1340,10 +1340,10 @@ menu(void)
       //prints("\n\033[30;47m     選項         選項說明                         動態看板                   \033[m\n");
       mode = 0;
       count = 0;
-      while(count<20) 
+      while(count<20)
 	item_length[count++] = 0;
       do
-      {                
+      {
 	move(MENU_YPOS + mode, MENU_XPOS + 2);
 	if (mode <= max)
 	{
@@ -1362,14 +1362,14 @@ menu(void)
       if(refilm)
       {
         movie();
-        cx = -1;      
+        cx = -1;
         refilm = 0;
       }
 
       mmx = max;
       mode = 0;
     }
-	
+
     switch (cmd)
     {
     case KEY_PGUP:
@@ -1379,11 +1379,11 @@ menu(void)
     case KEY_PGDN:
       cc = (cc == max) ? 0 : max;
     break;
-     
+
     case KEY_DOWN:
       if (++cc <= max)
 	break;
-      
+
     case KEY_HOME:
       cc = 0;
       break;
@@ -1475,7 +1475,7 @@ menu(void)
       every_Z();		/* Thor: ctrl-Z everywhere */
       goto menu_key;
 #endif
-    case Ctrl('U'): 
+    case Ctrl('U'):
       every_U();
       break;
     case Ctrl('B'):
@@ -1483,7 +1483,7 @@ menu(void)
       break;
     case Ctrl('S'):
       every_S();
-      break;    
+      break;
     case 's':
       every_S();
       break;
@@ -1517,7 +1517,7 @@ menu(void)
 	}
       }
     }
-    
+
     if (cc != cx)
     {
       if (cx >= 0)

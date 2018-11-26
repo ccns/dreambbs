@@ -52,10 +52,10 @@ bmode(
   static char modestr[32];
   int mode;
   char *word;
-  
+
   if(!up)
     return "不在站上";
-  
+
   mode = up->mode;
   if(mode == M_IDLE)
   {
@@ -73,8 +73,8 @@ bmode(
     return (word);
 
   if ((mode != M_QUERY && !HAS_PERM(PERM_SEECLOAK) && (up->ufo & UFO_CLOAK))||(can_see(up)==2 && !HAS_PERM(PERM_SYSOP)))
-    return (word); 
-  
+    return (word);
+
   sprintf(modestr, "%s %s", word, up->mateid);
   return (modestr);
 }
@@ -311,14 +311,14 @@ pal_cache(void)
       {
 	cache = NULL;
       }
-      
+
     }
   }
 
   pal_pool = cache;
   up->pal_max = pal_count = count;
-  
-  if(fimage) 
+
+  if(fimage)
     free(fimage);
   cuser.ufo = ufo;
 }
@@ -345,7 +345,7 @@ static char *msg_pickup_way[PICKUP_WAYS] =
   "閒置"
 };
 
-static char 
+static char
 ck_state(
   int in1,
   int in2,
@@ -363,7 +363,7 @@ ck_state(
 	}
 	else
 	  return ' ';
-}	
+}
 
 
 
@@ -377,7 +377,7 @@ ulist_body(
   char buf[8],color[20],ship[80],*wcolor[7] = {"\033[m",COLOR_PAL,COLOR_BAD,COLOR_BOTH,COLOR_OPAL,COLOR_CLOAK,COLOR_BOARDPAL};
 
 //  pal = cuser.ufo;
-   
+
   max = xo->max;
   if (max <= 0)
   {
@@ -399,13 +399,13 @@ ulist_body(
 	  sprintf(buf, "%2d", diff);
 	else
 	  buf[0] = '\0';
-	
+
 	fcolor = (userno == self) ? 3 : is_pal(userno);
 
         colortmp = can_see(up);
 	if(is_pal(userno) && colortmp == 1) fcolor = 3;
         else if (!is_pal(userno) && colortmp == 1) fcolor = 4;
-	
+
         if (is_bad(userno)) fcolor = 2;
 
 	ufo = up->ufo;
@@ -417,15 +417,15 @@ ulist_body(
         colortmp = 1;
         if(ufo & UFO_CLOAK) fcolor = 5;
         else if(fcolor == 0)
-          colortmp = 0;  
+          colortmp = 0;
         strcpy(color,wcolor[fcolor]);
 
 	printf("%5d %s%-13s%-22.21s%s%-16.15s%c%c %-16.16s%s\n",
 	  cnt,
 	  color, up->userid,
-	  (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username, 
+	  (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
 	  colortmp > 0 ? "\033[m" : "",
-	  (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ? 
+	  (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
 	  HIDDEN_SRC : up->from , diff,diffmsg,
 	  bmode(up, 0), buf);
       }
@@ -493,7 +493,7 @@ ulist_init(
 
   self = cuser.userno;
   filter = cuser.ufo2 & UFO2_PAL;
-  
+
   seecloak = HAS_PERM(PERM_SEECLOAK);
 
   up = ushm->uslot;
@@ -507,7 +507,7 @@ ulist_init(
     if (userno <= 0 || (up->pid <= 0 && !HAS_PERM(PERM_SYSOP|PERM_SEECLOAK)))
       continue;
     if (!seecloak && (up->ufo & UFO_CLOAK))
-      continue;      
+      continue;
     tmp = can_see(up);
     if(is_bad(userno)) bfriend_num++;
     if (((seecloak || !(up->ufo & UFO_CLOAK)) && (tmp != 2)) || HAS_PERM(PERM_SYSOP|PERM_SEECLOAK) || up->userno == cuser.userno)
@@ -592,10 +592,10 @@ main(
   XO xo;
   char fpath[128];
   int fd;
- 
+
    chdir(BBSHOME);
- 
-  ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE)); 
+
+  ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
   cutmp = &utmp;
   usr_fpath(fpath,argv[1],".ACCT");
   fd = open(fpath,O_RDONLY);

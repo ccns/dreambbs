@@ -52,7 +52,7 @@ addmoney(
   if(acct_load(&acct, userid) >= 0)
     {
        double temp = (acct.money + addend); /* 避免溢位 */
-       if (temp < INT_MAX )	
+       if (temp < INT_MAX )
          acct.money += addend;
        else
          {
@@ -72,7 +72,7 @@ addpoint1(
   if(acct_load(&acct, userid) >= 0)
     {
        double temp = (acct.point1 + addend); /* 避免溢位 */
-       if (temp < INT_MAX )	
+       if (temp < INT_MAX )
          acct.point1 += addend;
        acct_save(&acct);
     }
@@ -88,7 +88,7 @@ addpoint2(
   if(acct_load(&acct, userid) >= 0)
     {
        double temp = (acct.point2 + addend); /* 避免溢位 */
-       if (temp < INT_MAX )	
+       if (temp < INT_MAX )
          acct.point2 += addend;
        acct_save(&acct);
     }
@@ -257,7 +257,7 @@ x_file(
   {
     clearange(3,20);
   }
-  
+
   while ((desc = xlist[n]))
   {
     n++;
@@ -275,13 +275,13 @@ x_file(
       move(n + 2, 2);
     else
       move(n + 2 -20, 2 + 44);
-    
+
     prints("(\033[1;36m%2d\033[m) %s", n, desc);
 
 
     if(n<21)
       clrtohol();
-    
+
     if (mode == M_XFILES)
     {
       if(n<21)
@@ -291,7 +291,7 @@ x_file(
       outs(flist[n - 1] + 4); /* statue.000703: 註解: +4 去掉目錄 */
       clrtoeol();
     }
-    
+
   }
   }
   for(;n<20;n++)
@@ -345,7 +345,7 @@ check_admin(
 
   if (!str_cmp(cuser.userid, ELDER))
     return 1;
-    
+
   fd = open(FN_ETC_ADMIN_DB, O_RDONLY);
   while(fd)
   {
@@ -358,7 +358,7 @@ check_admin(
           return 1;
         }
         pos++;
-      }    
+      }
       else
       {
         close(fd);
@@ -374,7 +374,7 @@ check_admin(
 
 void
 bitmsg(
-  char* msg, 
+  char* msg,
   char* str,
   int level
 )
@@ -484,12 +484,12 @@ acct_su(
   XO *xo;
   char path[80],id[20];
   int level,ufo;
-  
+
   if(!supervisor)
   {
     vmsg("◎ 你不是超級站務！");
     return;
-  }  
+  }
   ufo = cuser.ufo;
   level = cuser.userlevel;
   memcpy(&cuser,u,sizeof(ACCT));
@@ -570,11 +570,11 @@ perm_log(
   {
     if ((u->userlevel & level) != (oldl & level))
     {
-      sprintf(buf, "%s %s %s (%s) by %s\n", u->userid,  
+      sprintf(buf, "%s %s %s (%s) by %s\n", u->userid,
                        (u->userlevel & level) ? "■" : "□",
                        perm_tbl[i], Now(), cuser.userid);
       if (!str_cmp(cuser.userid, ELDER))
-        pmsg2("板主異動不加入日誌");      
+        pmsg2("板主異動不加入日誌");
       else
         f_cat(FN_SECURITY, buf);
     }
@@ -618,7 +618,7 @@ acct_show(
     u->numlogins, diff / 60, diff % 60);
 
   prints("文章數目：%d 篇", u->numposts);
-  
+
   prints(" (優良積分:%d/劣文:%d/夢幣:%d)\n", u->point1, u->point2, u->money);
 
   usr_fpath(buf, uid, fn_dir);
@@ -685,35 +685,35 @@ acct_show(
 #endif
 }
 
-void 
+void
 bm_setup(
   ACCT *u,
   int adm
 )
-{ 
+{
 
   acct_show(u, adm);
-  
+
   if ((u->userlevel & PERM_SYSOP) && !(cuser.userlevel & PERM_SYSOP)  )
   {
     outs("此帳號為本站的站長，無法更改權限！");
     return;
   }
   if (!str_cmp(cuser.userid, ELDER))
-    pmsg2("板主異動不加入日誌");      
+    pmsg2("板主異動不加入日誌");
   else
   {
     char tmp[80], why[80], buf[80];
     pmsg2("板主異動已加入站長日誌");
     if (!vget(b_lines, 0, "請輸入異動理由：", why,40, DOECHO))
-    {   
+    {
       sprintf(why, "未輸入理由，禁止異動");
       pmsg2("請輸入異動理由");
       return;
-    } 
+    }
     sprintf(tmp, "\n\n%s %-12s 對使用者 %-12s 執行板主異動\n理由: ", Now(), cuser.userid, u->userid);
     f_cat(FN_BLACKSU_LOG, tmp);
-    f_cat(FN_BLACKSU_LOG, why);  
+    f_cat(FN_BLACKSU_LOG, why);
   }
   adm = vans("設定版主權限 Y)確定 N)取消 Q)離開 [Q] ");
   if (adm == 'y' || adm == 'Y')
@@ -751,7 +751,7 @@ seek_log_email(
       {
         close(fd);
         break;
-      }  
+      }
   }
   return -1;
 }
@@ -779,7 +779,7 @@ deny_log_email(
     strcpy(email.email,mail);
     email.deny = deny;
     rec_add(FN_VIOLATELAW_DB, &email, sizeof(EMAIL));
-  } 
+  }
 }
 
 static void
@@ -792,7 +792,7 @@ deny_add_email(
   struct tm *p;
 
   time(&now);
-  
+
   p = localtime(&now);
   str_lower(he->vmail, he->vmail);
   sprintf(buf, "%s # %02d/%02d/%02d %02d:%02d %s (%s)\n",
@@ -818,7 +818,7 @@ select_mode(
       days = vans("處罰期限 1)一星期 2)兩星期 3)三星期 4)一個月 5)永久 [1] ") - '0';
       mode = vans("處罰方式 1)禁止 talk 2)鎖信箱 3)禁止 post 4)暱稱 5)全部 6)同 guest [3] ") - '0';
     }
-    
+
     if(vans("你確定嗎 [y/N] ") != 'y')
       return 0;
 
@@ -853,8 +853,8 @@ select_mode(
     case 5: adm |= DENY_MODE_ALL;  break;
     case 6: adm |= DENY_MODE_GUEST;break;
     }
-    
-  }  
+
+  }
   return adm;
 }
 
@@ -871,12 +871,12 @@ add_deny(
   time_t now;
   int check_time;
   char *cselect=NULL,*cdays=NULL,*cmode=NULL;
-  
+
   memcpy(&x, u, sizeof(ACCT));
   time(&now);
   check_time = (x.deny > now) ? 1 : 0;
 
-  
+
   fp = fopen(FN_STOP_LOG,"w");
   if(!adm)
   {
@@ -897,7 +897,7 @@ add_deny(
     x.deny = now;
     memcpy(u, &x, sizeof(x));
     acct_save(u);
-    return adm;  
+    return adm;
   }
   if(adm & DENY_SEL)
   {
@@ -924,7 +924,7 @@ add_deny(
     {
       x.userlevel |= (PERM_DENYTALK|PERM_DENYCHAT);
       cmode = " Talk ";
-    }    
+    }
     else if(adm & DENY_MODE_MAIL)
     {
       x.userlevel |= (PERM_DENYMAIL);
@@ -934,7 +934,7 @@ add_deny(
     {
       x.userlevel |= (PERM_DENYNICK);
       cmode = "更改暱稱";
-    }        
+    }
     fprintf(fp,"%s權限",cmode);
   }
   if(adm & DENY_MODE_GUEST)
@@ -960,11 +960,11 @@ add_deny(
     else
       fprintf(fp,"期間: %s%s，期限一過自動復權。\n\n",check_time ? "上次處罰到期日累加":"從今天起",cdays);
   }
-  fprintf(fp,"\033[1;32m※ Origin: \033[1;33m%s \033[1;37m<%s>\n\033[1;31m◆ From: \033[1;36m%s\033[m\n",BOARDNAME,MYHOSTNAME,MYHOSTNAME); 
+  fprintf(fp,"\033[1;32m※ Origin: \033[1;33m%s \033[1;37m<%s>\n\033[1;31m◆ From: \033[1;36m%s\033[m\n",BOARDNAME,MYHOSTNAME,MYHOSTNAME);
 
   fclose(fp);
   sprintf(buf, "[%s處罰] %s %s",cross ? "連坐":"", u->userid,cselect);
-  keeplog(FN_STOP_LOG, BRD_VIOLATELAW, buf, 3);    
+  keeplog(FN_STOP_LOG, BRD_VIOLATELAW, buf, 3);
   usr_fpath(buf,x.userid,FN_STOPPERM_LOG);
   fp = fopen(buf,"a+");
   f_suck(fp,FN_STOP_LOG);
@@ -985,19 +985,19 @@ acct_setup(
   ACCT x;
 
   int (*sm)(char *mail);
-  
+
   int i, num,tmp,mode;
   FILE *flog;
   char *str, buf[80], pass[PASSLEN];
   char id[13];
-  tmp = 0; 
+  tmp = 0;
 
-  acct_show(u, adm);  
+  acct_show(u, adm);
 
   memcpy(&x, u, sizeof(ACCT));
   sm = NULL;
 
-  if (((u->userlevel & PERM_SYSOP) && strcmp(cuser.userid,u->userid)) && !check_admin(cuser.userid))         
+  if (((u->userlevel & PERM_SYSOP) && strcmp(cuser.userid,u->userid)) && !check_admin(cuser.userid))
   {
     outs("此帳號為本站的站長，無法更改！");
     return;
@@ -1008,51 +1008,51 @@ acct_setup(
     if(supervisor)
     {
       if (!str_cmp(cuser.userid, ELDER))
-        pmsg2("查詢動作不加入日誌");      
+        pmsg2("查詢動作不加入日誌");
       else
       {
         char tmp[80], why[80];
         pmsg2("查詢動作已加入站長日誌");
         if (!vget(b_lines, 0, "請輸入理由：", why, 40,DOECHO))
-        { 
+        {
           sprintf(why, "未輸入理由，禁止查詢");
           pmsg2("請輸入查詢理由");
           return;
-        } 
+        }
         sprintf(tmp, "\n\n%s %-12s 對使用者 %-12s 執行查詢動作\n理由: ", Now(), cuser.userid, u->userid);
         f_cat(FN_BLACKSU_LOG, tmp);
-        f_cat(FN_BLACKSU_LOG, why);      
+        f_cat(FN_BLACKSU_LOG, why);
       }
-      adm = vans("設定 1)資料 2)權限 3)連坐處罰 4)單人處罰 5)基本權限 6)旗標 7)SU Q)取消 [Q] ");      
+      adm = vans("設定 1)資料 2)權限 3)連坐處罰 4)單人處罰 5)基本權限 6)旗標 7)SU Q)取消 [Q] ");
     }
     else
     {
       if (!str_cmp(cuser.userid, ELDER))
-        pmsg2("查詢動作不加入日誌");      
+        pmsg2("查詢動作不加入日誌");
       else
       {
         char tmp[80], why[80];
         pmsg2("查詢動作已加入站長日誌");
         if (!vget(b_lines, 0, "請輸入查詢理由：", why,40,DOECHO))
-        { 
+        {
           sprintf(why, "未輸入理由，禁止查詢");
           pmsg2("請輸入查詢理由");
           return;
-        } 
+        }
         sprintf(tmp, "\n\n%s %-12s 對使用者 %-12s 執行查詢動作\n理由: ", Now(), cuser.userid, u->userid);
         f_cat(FN_BLACKSU_LOG, tmp);
-        f_cat(FN_BLACKSU_LOG, why);      
+        f_cat(FN_BLACKSU_LOG, why);
       }
-      adm = vans("設定 1)資料 2)權限 3)連坐處罰 4)單人處罰 5)基本權限 6)旗標 Q)取消 [Q] ");      
+      adm = vans("設定 1)資料 2)權限 3)連坐處罰 4)單人處罰 5)基本權限 6)旗標 Q)取消 [Q] ");
     }
     if (adm == '6')
-    { 
+    {
        su_setup(u);
        acct_save(u);
     }
 /* BLACK SU */
     if (adm == '7' && supervisor)
-       acct_su(u);   
+       acct_su(u);
 /* BLACK SU */
     if (adm == '4')
     {
@@ -1076,11 +1076,11 @@ acct_setup(
           }
           else
             break;
-          
+
           flog = fopen(FN_SAMEEMAIL_LOG, "r");
           tmp = 0;
           if (flog == NULL) return;
-          
+
           for(i=1;i<=num;i++)
           {
             fscanf(flog,"%13s",buf);
@@ -1088,15 +1088,15 @@ acct_setup(
             if(u != NULL)
             {
               if(strcmp(u->userid,id))
-                tmp = add_deny(u,tmp,1);      
-              else 
+                tmp = add_deny(u,tmp,1);
+              else
                 tmp = add_deny(u,tmp,0);
             }
             if(!tmp)
               break;
           }
-      
-          if(tmp & DENY_MODE_ALL)     
+
+          if(tmp & DENY_MODE_ALL)
               deny_log_email(u->vmail,(u->userlevel & PERM_DENYSTOP) ? -1 : u->deny);
           fclose(flog);
           break;
@@ -1108,7 +1108,7 @@ acct_setup(
             system(command);
           }
           break;
-        } 
+        }
     }
     if (adm == '5')
     {
@@ -1195,15 +1195,15 @@ acct_setup(
 
   if (adm)
   {
-    i++;  
+    i++;
     str = x.email;
-        
-    vget(i, 0, "E-mail 信箱：", str, sizeof(x.email), GCARRY);  
- 
+
+    vget(i, 0, "E-mail 信箱：", str, sizeof(x.email), GCARRY);
+
     vget(++i, 0, "認證資料：", x.justify, 44, GCARRY);
     if(strlen(x.justify) > 4)
     {
-      vget(++i, 0, "增加有效期限(y/N)：", buf , 2,DOECHO); 
+      vget(++i, 0, "增加有效期限(y/N)：", buf , 2,DOECHO);
       if (buf[0] == 'y' || buf[0] == 'Y')
       {
           time(&x.tvalid);
@@ -1259,7 +1259,7 @@ acct_setup(
     vget(++i, 0, "認證地址：", x.vmail, 44, GCARRY);
     vget(++i, 0, "上站地點：", x.lasthost, 30, GCARRY);
     vget(++i, 0, "RFC 931 ：", x.ident, 44, GCARRY);
-                
+
     if (vans("設定權限(Y/N)?[N] ") == 'y')
     {
 set_perm:
@@ -1341,7 +1341,7 @@ m_user(void)
   return 0;
 }
 
-int 
+int
 m_bmset(void)
 {
   int ans;
@@ -1405,7 +1405,7 @@ allow_addr(
 {
   int i;
   char *host;
-  char foo[64]; 
+  char foo[64];
 
   str_lower(foo, addr);
 
@@ -1440,10 +1440,10 @@ find_same_email(    /* mode : 1.find 2.add 3.del */
   int pos=0,fd;
   char *fpath;
   SAME_EMAIL email;
-  
-  
+
+
   fpath = FN_ETC_EMAILADDR_ACL;
-  
+
   if(mode >= 1 && mode <= 3)
   {
     fd = open(fpath,O_RDONLY);
@@ -1456,7 +1456,7 @@ find_same_email(    /* mode : 1.find 2.add 3.del */
           if(!strcmp(mail,email.email))
             break;
           pos++;
-        }   
+        }
         else
         {
           pos = -1;
@@ -1466,11 +1466,11 @@ find_same_email(    /* mode : 1.find 2.add 3.del */
     if(fd)
       close(fd);
   }
-  
-  
+
+
   if(mode == 1)
   {
-    if(pos>=0) 
+    if(pos>=0)
       return email.num;
     else
       return 0;
@@ -1499,7 +1499,7 @@ find_same_email(    /* mode : 1.find 2.add 3.del */
       rec_del(fpath,sizeof(SAME_EMAIL),pos,NULL,NULL);
     }
     else
-    {   
+    {
       email.num--;
       rec_put(fpath,&email,sizeof(SAME_EMAIL),pos);
     }
@@ -1516,7 +1516,7 @@ u_addr(void)
   int vtime;
   unsigned int tmp_perm;
   int popreturn;
-  
+
   msg = NULL;
   more(FN_ETC_EMAIL, (char *)-1);
   strcpy(temp,cuser.email);
@@ -1524,7 +1524,7 @@ u_addr(void)
 		     /* lkchu.981201 */
   if (vget(b_lines - 1, 0, "E-Mail 地址：", addr, sizeof(cuser.email), DOECHO))
   {
-#ifndef	HAVE_SIMPLE_RFORM  
+#ifndef	HAVE_SIMPLE_RFORM
     vtime = REG_REQUEST;
 #endif
     str_lower(addr, addr);
@@ -1533,7 +1533,7 @@ u_addr(void)
       msg = "不合格的 E-mail address";
       pmsg(msg);
       return 0;
-    }    
+    }
     else if (ban_addr(addr))
     {
       msg = "禁止註冊的 E-mail address";
@@ -1543,7 +1543,7 @@ u_addr(void)
 #ifdef HAVE_WRITE
     else if (!allow_addr(addr))
     {
-#ifndef	HAVE_SIMPLE_RFORM    
+#ifndef	HAVE_SIMPLE_RFORM
       attr_put(cuser.userid,ATTR_REG_KEY,&vtime);
 #endif
       msg = "尚未申請通過的 E-mail 主機";
@@ -1553,7 +1553,7 @@ u_addr(void)
 #endif
     else if (strcmp(temp,addr) && (seek_log_email(addr,1) != -1))
     {
-      msg = "暫時禁止註冊的 E-mail address";                                          
+      msg = "暫時禁止註冊的 E-mail address";
       pmsg(msg);
       return 0;
     }
@@ -1564,7 +1564,7 @@ u_addr(void)
       pmsg(msg);
       return 0;
     }
-    
+
     /* pcbug.990522: pop3認證. */
     vget(b_lines -2, 0, "是否使用 POP3 認證?[Y]", buf, 2, LCECHO);
 
@@ -1599,7 +1599,7 @@ u_addr(void)
 
           if(!(popreturn = POP3_Check(ptr+1, title, buf)))
           {
-            logitfile(FN_VERIFY_LOG, "-POP3 Verify OK -", addr); 
+            logitfile(FN_VERIFY_LOG, "-POP3 Verify OK -", addr);
             cuser.userlevel |= (PERM_VALID | PERM_POST | PERM_PAGE | PERM_CHAT);
             if (cuser.userlevel & PERM_DENYPOST)
               cuser.userlevel &= ~PERM_POST;
@@ -1626,7 +1626,7 @@ u_addr(void)
             }
             usr_fpath(buf, cuser.userid, fn_dir);
             hdr_stamp(buf, HDR_LINK, &fhdr, FN_ETC_JUSTIFIED_POP3 );
-            strcpy(fhdr.title, "[註冊成功\] 您已經通過身分認證了！"); 
+            strcpy(fhdr.title, "[註冊成功\] 您已經通過身分認證了！");
             strcpy(fhdr.owner,"SYSOP");
             rec_add(buf, &fhdr, sizeof(fhdr));
             board_main();
@@ -1685,7 +1685,7 @@ u_addr(void)
         cuser.vtime = vtime;
         strcpy(cuser.email, addr);
         acct_save(&cuser);
-        board_main();                      
+        board_main();
         gem_main();
         talk_main();
       }
@@ -1773,7 +1773,7 @@ static char *UFO2_FLAGS[] =
 	/* RESERVE */	"【保留】",
 	/* RESERVE */	"【保留】",
 	/* RESERVE */	"【保留】",
-	/* RESERVE */	"【保留】",	
+	/* RESERVE */	"【保留】",
 	/* ACL */	"ACL",
 	/* RESERVE */	"【保留】",
 	/* RESERVE */	"【保留】",
@@ -1781,7 +1781,7 @@ static char *UFO2_FLAGS[] =
 	/* REALNAME */	"真實姓名",
 	/* RESERVE */	"【保留】",
 	/* RESERVE */	"【保留】",
-	/* REALNAME */	"【保留】"  
+	/* REALNAME */	"【保留】"
 };
 
 
@@ -1835,7 +1835,7 @@ u_setup(void)
   if (!nflag)
     len = 5;
   else if (nflag & (PERM_SYSOP|PERM_BOARD|PERM_ACCOUNTS|PERM_CHATROOM))
-    len = 21;  
+    len = 21;
   /* Thor.980910: 需注意有PERM_ADMIN除了可用acl, 還順便也可以用隱身術了:P */
   else if (nflag & PERM_CLOAK)
     len = 20;
@@ -1849,7 +1849,7 @@ u_setup(void)
     /* Thor.980805: 解決 ufo BIFF的同步問題 */
     nflag = (nflag & ~UFO_UTMP_MASK) | (cutmp->ufo & UFO_UTMP_MASK);
 
-    cutmp->ufo = cuser.ufo = nflag; 
+    cutmp->ufo = cuser.ufo = nflag;
     /* Thor.980805: 要特別注意 cuser.ufo和cutmp->ufo的UFO_BIFF的同步問題,再改 */
 
 //    showansi = nflag & UFO_COLOR;
@@ -1864,7 +1864,7 @@ u_setup(void)
   }
   else
     unlink(fpath);
-  
+
   return 0;
 }
 
@@ -1881,7 +1881,7 @@ ue_setup(void)
   else if (nflag & (PERM_SYSOP|PERM_ACCOUNTS))
     len = 32;
   else if (nflag & PERM_ADMIN)
-    len = 28;  
+    len = 28;
   else
     len = 24;
 
@@ -2048,11 +2048,11 @@ m_setbrd(
     char tmp[80], why[80];
     pmsg2("修改動作已加入站長日誌");
     if (!vget(b_lines, 0, "請輸入修改理由：", why,40, DOECHO))
-    { 
+    {
       sprintf(why, "未輸入理由，禁止修改");
       pmsg2("請輸入修改理由");
       return 0;
-    } 
+    }
     sprintf(tmp, "\n\n%s %-12s 對看板 %-12s 執行修改動作\n理由: ", Now(), cuser.userid, brd->brdname);
     f_cat(FN_BLACKSU_LOG, tmp);
     f_cat(FN_BLACKSU_LOG, why);
@@ -2177,9 +2177,9 @@ m_setbrd(
   /* cache.090928 看板互斥屬性 - 不可推文時清除所有推文模式和限制 */
   if(brd->battr & BRD_PRH) {
     brd->battr &= ~BRD_PUSHDISCON;
-    brd->battr &= ~BRD_PUSHTIME;  
-    brd->battr &= ~BRD_PUSHSNEER;  
-    brd->battr &= ~BRD_PUSHDEFINE;                   
+    brd->battr &= ~BRD_PUSHTIME;
+    brd->battr &= ~BRD_PUSHSNEER;
+    brd->battr &= ~BRD_PUSHDEFINE;
   }
 
   if(brd->battr & BRD_NOBAN)
@@ -2271,7 +2271,7 @@ brd_edit(
   {
   case 'v':
     bhdr->postlevel |= PERM_VALID;
-    rec_put(FN_BRD, bhdr, sizeof(BRD), bno);    
+    rec_put(FN_BRD, bhdr, sizeof(BRD), bno);
     vmsg("設定完畢");
     break;
   case 'd':
@@ -2362,7 +2362,7 @@ a_editbrd(void)		/* cache.100618: 修改看板選項 */
 
 static void
 getfield(
-  int line, 
+  int line,
   int len,
   char* hint,
   char* desc,
@@ -2404,9 +2404,9 @@ send_request(void)
 {
   RFORM_R form;
   int check;
-  
+
   check = REG_SENT;
-  
+
   strcpy(form.userid,cuser.userid);
   form.userno = cuser.userno;
   if(!vget(b_lines,0,"請輸入原因 :",form.msg,80,DOECHO))
@@ -2428,8 +2428,8 @@ u_register(void)
   int ans;
   RFORM rform;
 #ifndef	HAVE_SIMPLE_RFORM
-  int formstate=0; 
-  
+  int formstate=0;
+
   if(attr_get(cuser.userid,ATTR_REG_KEY,&formstate)>=0)
   {
     if(!(formstate))
@@ -2688,10 +2688,10 @@ ans_request(void)
 {
   int num,fd;
   RFORM_R form;
-  ACCT muser;  
+  ACCT muser;
   char fpath[128],op,buf[128];
   sprintf(fpath,"%s.tmp",FN_RFORM_R);
-  
+
   rename(FN_RFORM_R,fpath);
   num = rec_num(fpath, sizeof(RFORM_R));
   if (num <= 0)
@@ -2707,7 +2707,7 @@ ans_request(void)
       move(2,0);
       prints("申請代號: %s\n", form.userid);
       prints("申請理由: %s\n%s\n", form.msg, msg_separator);
-      clrtobot(); 
+      clrtobot();
       if ((acct_load(&muser, form.userid) < 0) || (muser.userno != form.userno))
       {
         vmsg("查無此人");
@@ -2782,8 +2782,8 @@ ans_request(void)
     close(fd);
     unlink(fpath);
   }
-  
-  return 0; 
+
+  return 0;
 }
 #endif
 
@@ -2791,14 +2791,14 @@ int
 m_register(void)
 {
   int num;
-#ifndef	HAVE_SIMPLE_RFORM  
+#ifndef	HAVE_SIMPLE_RFORM
   int num2;
   char msg[128];
 #endif
   char buf[80];
-  
+
   num = rec_num(FN_RFORM, sizeof(RFORM));
-#ifndef	HAVE_SIMPLE_RFORM  
+#ifndef	HAVE_SIMPLE_RFORM
   num2 = rec_num(FN_RFORM_R, sizeof(RFORM_R));
   sprintf(msg,"審核 : 1)註冊單< %d 筆> 2)註冊單請求< %d 筆> [1]",num,num2);
 #endif

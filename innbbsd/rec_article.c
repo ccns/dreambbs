@@ -51,12 +51,12 @@ init_bshm(void)
 
 #if 0	/* itoc.030303.註解: RFC 822 的 DATE 欄位；RFC 1123 將 year 改成 4-DIGIT */
 
-date-time := [ wday "," ] date time ; dd mm yy, hh:mm:ss zzz 
-wday      :=  "Mon" / "Tue" / "Wed" / "Thu" / "Fri" / "Sat" / "Sun" 
+date-time := [ wday "," ] date time ; dd mm yy, hh:mm:ss zzz
+wday      :=  "Mon" / "Tue" / "Wed" / "Thu" / "Fri" / "Sat" / "Sun"
 date      :=  1*2DIGIT month 4DIGIT ; mday month year
-month     :=  "Jan" / "Feb" / "Mar" / "Apr" / "May" / "Jun" / "Jul" / "Aug" / "Sep" / "Oct" / "Nov" / "Dec" 
-time      :=  hour zone ; ANSI and Military 
-hour      :=  2DIGIT ":" 2DIGIT [":" 2DIGIT] ; 00:00:00 - 23:59:59 
+month     :=  "Jan" / "Feb" / "Mar" / "Apr" / "May" / "Jun" / "Jul" / "Aug" / "Sep" / "Oct" / "Nov" / "Dec"
+time      :=  hour zone ; ANSI and Military
+hour      :=  2DIGIT ":" 2DIGIT [":" 2DIGIT] ; 00:00:00 - 23:59:59
 zone      :=  "UT" / "GMT" / "EST" / "EDT" / "CST" / "CDT" / "MST" / "MDT" / "PST" / "PDT" / 1ALPHA / ( ("+" / "-") 4DIGIT )
 
 #endif
@@ -443,7 +443,7 @@ is_spam(
 
 
 #ifndef _NoCeM_
-static 
+static
 #endif
 newsfeeds_t *
 search_newsfeeds_bygroup(
@@ -477,7 +477,7 @@ receive_article(void)
 
     if (firstboard)	/* opus: 第一個板才需要處理 */
     {
-      /* Thor.980825: gc patch: lib/str_decode 只能接受 decode 完 strlen < 256 */ 
+      /* Thor.980825: gc patch: lib/str_decode 只能接受 decode 完 strlen < 256 */
 
       str_ncpy(poolx, SUBJECT, 255);
       str_decode(poolx);

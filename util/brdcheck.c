@@ -7,7 +7,7 @@
 /* update :                                              */
 /*-------------------------------------------------------*/
 
-//請先備份所有資料, 並檢查是否新DIR.o結構是否存在 
+//請先備份所有資料, 並檢查是否新DIR.o結構是否存在
 
 #include "bbs.h"
 
@@ -52,9 +52,9 @@ main(
       sprintf(buf, "%s/" ".DIR", str);
       if ((fd = open(buf, O_RDONLY)) < 0)
       {
-      printf("brd/%s is missing, cp DIR.o\n", buf);              
+      printf("brd/%s is missing, cp DIR.o\n", buf);
       //sprintf(buf2, "cp %s/.DIR.o %s/.DIR", str, str);
-      //system(buf2);      
+      //system(buf2);
       }
       else
 	    continue;

@@ -93,14 +93,14 @@ POP3_Check(
         fflush(fsock);
         fgets(buf, 512, fsock);
         break;
-      
+
       case 4:		/* Verify Password */
         fprintf(fsock, "pass %s\r\n", passwd);
-        fflush(fsock); 
+        fflush(fsock);
         fgets(buf, 512, fsock);
         sock = -1;
         break;
-      
+
       case 0:		/* Successful Verification */
       case 5:		/* Quit */
         fprintf(fsock, "quit\r\n");
@@ -109,7 +109,7 @@ POP3_Check(
           close(old_sock);
         return sock;
     }
-  
+
     if(strncmp(buf, "+OK", 3) || strstr(buf, ".bbs"))
     {
       prints("遠端系統傳回錯誤訊息如下：(如不明白訊息意思，請將訊息告知站長)\n");
@@ -146,7 +146,7 @@ Ext_POP3_Check(
   {
     if(!(fsock = fdopen(sock, "r+")))
     {
-      close(sock);  
+      close(sock);
       return 1;
     }
     step = 1;
@@ -172,7 +172,7 @@ Ext_POP3_Check(
                           pmsg("不受信任的 POP3 主機，請使用 Email 回信認證！");
                           step = 8;
                           logitfile("tmp/visor.log", site, "stat 1");
-                          break;                       
+                          break;
                      }
 	             step = 2;
                    }
@@ -182,7 +182,7 @@ Ext_POP3_Check(
 		      step = 9;
 	              break;
 		   }
-   
+
                    FD_ZERO(&rd);
                    FD_SET(sock, &rd);
 	           nfds = select(nfds+1, &rd, NULL, NULL, &to);
@@ -206,7 +206,7 @@ Ext_POP3_Check(
 			  logitfile("tmp/visor.log", site, "stat 2");
 			  break;
                    }
-   
+
                    FD_ZERO(&rd);
                    FD_SET(sock, &rd);
 	           nfds = select(nfds+1, &rd, NULL, NULL, &to);
@@ -230,7 +230,7 @@ Ext_POP3_Check(
 			  logitfile("tmp/visor.log", site, "stat 3");
 			  break;
                    }
-   
+
                    FD_ZERO(&rd);
                    FD_SET(sock, &rd);
 	           nfds = select(nfds+1, &rd, NULL, NULL, &to);
@@ -260,7 +260,7 @@ Ext_POP3_Check(
  			   logitfile("tmp/visor.log", site, "stat 4");
 			   break;
 		    }
-   
+
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
 	            nfds = select(nfds+1, &rd, NULL, NULL, &to);
@@ -315,7 +315,7 @@ Ext_POP3_Check(
 			  logitfile("tmp/visor.log", site, "stat 6");
 			  break;
                    }
-   
+
                    FD_ZERO(&rd);
                    FD_SET(sock, &rd);
 	           nfds = select(nfds+1, &rd, NULL, NULL, &to);
@@ -339,7 +339,7 @@ Ext_POP3_Check(
 			  logitfile("tmp/visor.log", site, "stat 7");
 			  break;
                    }
-   
+
                    FD_ZERO(&rd);
                    FD_SET(sock, &rd);
 	           nfds = select(nfds+1, &rd, NULL, NULL, &to);

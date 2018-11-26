@@ -21,7 +21,7 @@
 #include "bbs.h"
 
 
-#define FNAME_DB_SIZE  2048 
+#define FNAME_DB_SIZE  2048
 
 typedef char FNAME[9];
 static FNAME *n_pool;
@@ -225,10 +225,10 @@ int main(int argc,char *argv[])
 	{
 
 		/* generate .DIR.@ */
-		
+
  	    usr_fpath(upath, cuser.userid, ".DIR.@");
- 	    usr_fpath(upath2, cuser.userid, NULL);   
-		
+ 	    usr_fpath(upath2, cuser.userid, NULL);
+
 		if ((fh = fopen(upath, "wb")))
 		{
 			for (ch = 0; ch < n_head; ch++)

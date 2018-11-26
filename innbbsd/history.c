@@ -21,7 +21,7 @@ typedef struct
 }	HIS;
 
 
-void 
+void
 HISmaint(void)			/* 維護 history 檔，將過早的 history 刪除 */
 {
   int i, fd, total;
@@ -71,7 +71,7 @@ HISmaint(void)			/* 維護 history 檔，將過早的 history 刪除 */
 }
 
 
-void 
+void
 HISadd(	/* 將 (msgid, path, xname) 此配對記錄在 history 中 */
   char *msgid,
   char *board,

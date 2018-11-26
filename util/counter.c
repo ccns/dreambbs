@@ -49,7 +49,7 @@ main(
   struct tm ntime, *xtime ,ptime;
   FILE *fp;
   char ymd[80],flag;
-  
+
   if(argc > 1)
   {
     if(*argv[1] == 'r')  flag = 1;
@@ -62,18 +62,18 @@ main(
   now = time(NULL);
   xtime = localtime(&now);
   ntime = *xtime;
-  
+
   sprintf(ymd, "%02d/%02d/%02d",
     ntime.tm_year % 100, ntime.tm_mon + 1, ntime.tm_mday);
-    
-  fp = fopen("etc/counter","a+");  
+
+  fp = fopen("etc/counter","a+");
 
   count = attach_shm(COUNT_KEY, sizeof(COUNTER));
-  
+
   now = count->samehour_max_time;
   xtime = localtime(&now);
   ptime = *xtime;
-    
+
   if (flag == 1)
   {
     printf("\nhour_max_login = %d \n",count->hour_max_login);

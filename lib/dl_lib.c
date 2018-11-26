@@ -19,14 +19,14 @@ typedef struct
 } DL_list;
 
 DL_list  *dl_pool;
-int dl_size, dl_head; 
+int dl_size, dl_head;
 
 #define DL_ALLOC_MIN	5
 
 #if 1
 extern void blog(char *, char *);
 #define TRACE blog
-#endif 
+#endif
 
 void*
 DL_get(
@@ -42,15 +42,15 @@ DL_get(
     return NULL;
 
   *t++ = 0;
-  
-  if(!dl_pool) 
+
+  if(!dl_pool)
   {
     /* Initialize DL entries */
     dl_size = DL_ALLOC_MIN;
     /* dl_head = 0 */
     dl_pool = (DL_list *)malloc(dl_size * sizeof(DL_list));
   }
-  
+
   p = dl_pool;
   tail = p + dl_head;
   while(p < tail)
@@ -75,14 +75,14 @@ DL_get(
 #endif
     dl_head ++;
   }
-  
+
   if(!p->handle)
     return NULL;
-    
+
   return dlsym(p->handle,t);
 }
 
-int 
+int
 DL_func(char *name, ...)
 {
   va_list args;

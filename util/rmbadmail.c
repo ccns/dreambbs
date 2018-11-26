@@ -27,11 +27,11 @@ reaper(
   HDR *head, *tail = NULL, *base;
   struct stat st;
   time_t now;
-  
+
   now = time(0) - 60;
-  
+
   printf("> processing account %-20s ",lowid);
-  
+
   sprintf(buf,"%s/.DIR",fpath);
   if((fd = open(buf,O_RDONLY)) >= 0)
   {
@@ -65,7 +65,7 @@ reaper(
   }
   ptr = strchr(folder,'@') + 1 ;
   *ptr++ = '/';
-  
+
   while ((de = readdir(dirp)))
   {
     check = 0;
@@ -86,7 +86,7 @@ reaper(
       if(!check)
       {
         strcpy(ptr,fname);
-        if(!(!stat(folder,&st) && (st.st_atime > now))) 
+        if(!(!stat(folder,&st) && (st.st_atime > now)))
         {
           u_size += st.st_size;
           ulink++;
@@ -121,7 +121,7 @@ expire(
   HDR *head, *tail = NULL, *base;
   struct stat st;
   time_t now;
-  
+
   now = time(0) - 60;
 
   printf("> processing board %-20s ",lowid);
@@ -200,7 +200,7 @@ expire(
           }
         }
       }
-      closedir(dirp);                                                             
+      closedir(dirp);
     }
     if((*str)++ == '9')
       *str = 'A';
@@ -265,7 +265,7 @@ main(
     else
     {
       strcpy(fname = fpath, "usr/@");
-      fname = (char *) strchr(fname, '@');    
+      fname = (char *) strchr(fname, '@');
       for (ch = 'a'; ch <= 'z'; ch++)
       {
         fname[0] = ch;
@@ -295,12 +295,12 @@ main(
     {
       strcpy(fpath, "brd");
       traverse(fpath,2);
-    }  
+    }
   }
   else
   {
     printf("syntax : rmbadmail [-a|-b] [account|board]\n");
-  }  
+  }
   printf("total unlink  %10d  unlink  size : %10d\n",ulink,u_size);
   printf("total reserve %10d  reserve size : %10d\n",reserve,r_size);
   return 0;

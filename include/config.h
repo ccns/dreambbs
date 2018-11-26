@@ -82,7 +82,7 @@
 
 #undef  AUTO_FIX_INFO           /* 開啟使用者列表同時檢查上站/板友資訊 (除非有問題否則請勿開啟) */
 
-#define loginAD                 /* 進站觀看廣告 */ 
+#define loginAD                 /* 進站觀看廣告 */
 #define NOIDENT                 /* 進站不反查,加快連線速度 */
 #define ANTI_PHONETIC           /* 開啟檢查注音文功能 */
 
@@ -102,7 +102,7 @@
 #ifndef	MAXACTIVE
 #define MAXACTIVE	(4096)		/* 最多同時上站人數 (ex.1400)*/
 					/* 若要超過 1024 請修改 kernel */
-					/* options         SHMMAXPGS=? */ 
+					/* options         SHMMAXPGS=? */
 #endif
 
 #define MAXFIREWALL	(300)		/* 全域擋信列表上限 */
@@ -193,7 +193,7 @@
 
 #define	HAVE_DETECT_VIOLATELAW	/* 違法紀錄 */
 
-#define	HAVE_RESIST_WATER	/* 防灌水功能 */   
+#define	HAVE_RESIST_WATER	/* 防灌水功能 */
 
 #define	HAVE_CLASSTABLE		/* 個人功課表 */
 
@@ -205,7 +205,7 @@
 
 #define	HAVE_SEM                /* 使用 Semaphores */
 
-#define	HAVE_DOWNLOAD           /* 打包回家 */ 
+#define	HAVE_DOWNLOAD           /* 打包回家 */
 
 #define	HAVE_MULTI_CROSSPOST    /* 群組轉貼 */
 
@@ -249,7 +249,7 @@
 #ifdef	HAVE_WATER_LIST
 #define	HAVE_SYSOP_WATERLIST    /* SYSOP 水桶名單 */
 #endif
-#endif	
+#endif
 
 #undef	HAVE_GAME_QKMJ          /* 提供 QKMJ 遊戲 */
 
@@ -455,7 +455,7 @@
 #ifdef	HAVE_RESIST_WATER
 #define	CHECK_QUOT	(3)               /* 文章灌水最小行數 */
 
-#define CHECK_QUOT_MAX	(3)               /* 文章灌水連續篇數 */	
+#define CHECK_QUOT_MAX	(3)               /* 文章灌水連續篇數 */
 #endif
 
 #define	BANMAIL_EXPIRE	(30)              /* 擋信列表更新 (天) */
@@ -512,34 +512,34 @@
 /* ----------------------------------------------------- */
 
 #ifndef BRDSHM_KEY
-#define BRDSHM_KEY	(2997) 
+#define BRDSHM_KEY	(2997)
 #endif
 
 #ifndef UTMPSHM_KEY
-#define UTMPSHM_KEY	(1998) 
+#define UTMPSHM_KEY	(1998)
 #endif
 
 #ifndef FILMSHM_KEY
-#define FILMSHM_KEY	(2999) 
+#define FILMSHM_KEY	(2999)
 #endif
 
 #ifndef FWSHM_KEY
-#define FWSHM_KEY	(3999) 
+#define FWSHM_KEY	(3999)
 #endif
 
 #ifndef FWOSHM_KEY
-#define FWOSHM_KEY	(5000) 
+#define FWOSHM_KEY	(5000)
 #endif
 
 #ifndef COUNT_KEY
-#define COUNT_KEY	(4000) 
+#define COUNT_KEY	(4000)
 #endif
 
 
 #ifdef	HAVE_OBSERVE_LIST               /* 系統觀察名單 */
 
 #ifndef OBSERVE_KEY
-#define	OBSERVE_KEY	(6000) 
+#define	OBSERVE_KEY	(6000)
 #endif
 
 #endif

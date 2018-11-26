@@ -27,7 +27,7 @@ outgo_post(
   strcpy(bntp.title,hdr->title);
   rec_add("innd/out.bntp",&bntp,sizeof(bntp_t));
 
-  /*	
+  /*
   char *fpath, buf[256];
 
   fpath = "innd/out.bntp";
@@ -47,7 +47,7 @@ main(
   int start,end,fd;
   char *board;
   HDR hdr;
-  
+
   if(argc > 3)
   {
     board = argv[1];
