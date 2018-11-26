@@ -47,7 +47,7 @@
 
 #define MSG_CHATROOM    110
 #define MSG_TOPIC       113
-#define MSG_ROOM        116                                                                                        
+#define MSG_ROOM        116
 #define MSG_NICK        118
 #define MSG_CLRSCR      120
 
@@ -96,7 +96,7 @@ nextword (
    int ch;
 
    head = *str;
-   for (;;) {		
+   for (;;) {
 
       ch = *head;
       if (!ch) {

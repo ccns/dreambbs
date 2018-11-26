@@ -62,7 +62,7 @@
 
 
 /* This is the default permission granted to all new accounts. */
-#define PERM_DEFAULT 	(PERM_BASIC) 
+#define PERM_DEFAULT 	(PERM_BASIC)
 
 #define PERM_ADMIN	(PERM_BOARD | PERM_ACCOUNTS | PERM_SYSOP | PERM_CHATROOM | PERM_KTV)
 #define PERM_ALLBOARD	(PERM_SYSOP | PERM_BOARD)

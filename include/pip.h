@@ -49,21 +49,21 @@ struct chicken {
  int level;             /*等    級*/
  int exp;               /*經 驗 值*/
  int dataE;
-  
+
  /*---身體的參數---*/ //12
  int hp;		/*體    力*/
  int maxhp;             /*最大體力*/
  int weight;            /*體    重*/
  int tired;		/*疲 勞 度*/
  int sick;		/*病    氣*/
- int shit;		/*清 潔 度*/ 
+ int shit;		/*清 潔 度*/
  int wrist;		/*腕    力*/
  int bodyA;
  int bodyB;
  int bodyC;
  int bodyD;
  int bodyE;
- 
+
  /*---評價的參數---*/ //9
  int social;		/*社交評價*/
  int family;		/*家事評價*/
@@ -74,7 +74,7 @@ struct chicken {
  int tmpC;
  int tmpD;
  int tmpE;
- 
+
  /*---戰鬥用參數---*/ //13
  int mp;		/*法    力*/
  int maxmp;             /*最大法力*/
@@ -89,24 +89,24 @@ struct chicken {
  int fightC;
  int fightD;
  int fightE;
- 
+
 
  /*---武器的參數---*/ //10
  int weaponhead;	/*頭部武器*/
  int weaponrhand;	/*右手武器*/
  int weaponlhand;	/*左手武器*/
  int weaponbody;	/*身體武器*/
- int weaponfoot;	/*腳的武器*/ 
+ int weaponfoot;	/*腳的武器*/
  int weaponA;
  int weaponB;
  int weaponC;
  int weaponD;
  int weaponE;
- 
+
  /*---各能力參數---*/ //17
- int toman;		/*待人接物*/ 
- int character;		/*氣 質 度*/ 
- int love;		/*愛    心*/ 
+ int toman;		/*待人接物*/
+ int character;		/*氣 質 度*/
+ int love;		/*愛    心*/
  int wisdom;		/*智    慧*/
  int art;		/*藝術能力*/
  int etchics;		/*道    德*/
@@ -121,8 +121,8 @@ struct chicken {
  int learnC;
  int learnD;
  int learnE;
- 
- 
+
+
  /*---各狀態數值---*/ //11
  int happy;		/*快 樂 度*/
  int satisfy;		/*滿 意 度*/
@@ -135,7 +135,7 @@ struct chicken {
  int stateC;
  int stateD;
  int stateE;
- 
+
  /*---吃的東西啦---*/ //9
  int food;		/*食    物*/
  int medicine;          /*靈    芝*/
@@ -146,27 +146,27 @@ struct chicken {
  int eatC;
  int eatD;
  int eatE;
- 
+
  /*---擁有的東西---*/ //8
  int book;		/*書    本*/
  int playtool; 		/*玩    具*/
  int money;		/*金    錢*/
- int thingA;		
- int thingB;		
+ int thingA;
+ int thingB;
  int thingC;
  int thingD;
- int thingE; 
- 
+ int thingE;
+
  /*---猜拳的參數---*/ //2
- int winn;		
+ int winn;
  int losee;
- 
+
  /*---參見王臣--*/ //16
  int royalA;		/*from守衛*/
  int royalB;		/*from近衛*/
  int royalC;		/*from將軍*/
  int royalD;		/*from大臣*/
- int royalE;		/*from祭司*/ 		
+ int royalE;		/*from祭司*/
  int royalF;		/*from寵妃*/
  int royalG;		/*from王妃*/
  int royalH;  		/*from國王*/
@@ -183,8 +183,8 @@ struct chicken {
  int wantend;		/*20歲結局*/
  /*1:不要且未婚 2:不要且已婚  3:不要且當第三者 4:要且未婚  5:要且已婚 6:要且當第三者*/
  int lover;		/*愛人*/
- /*0:沒有 1:魔王 2:龍族 3:A 4:B 5:C 6:D 7:E */ 
- 
+ /*0:沒有 1:魔王 2:龍族 3:A 4:B 5:C 6:D 7:E */
+
  /*-------工作次數--------*/
  int workA; /*家事*/
  int workB; /*保姆*/
@@ -212,7 +212,7 @@ struct chicken {
  int workX;
  int workY;
  int workZ;
- 
+
  /*-------上課次數--------*/
  int classA;
  int classB;
@@ -221,7 +221,7 @@ struct chicken {
  int classE;
  int classF;
  int classG;
- int classH; 
+ int classH;
  int classI;
  int classJ;
  int classK;
@@ -229,7 +229,7 @@ struct chicken {
  int classM;
  int classN;
  int classO;
- 
+
  /*---小雞的時間---*/ //1
  time_t bbtime;
 };
@@ -251,7 +251,7 @@ typedef struct pipcommands pipcommands;
 /*--------------------------------------------------------------------------*/
 struct playrule
 {
-  char name[20];           /*名字*/  
+  char name[20];           /*名字*/
   int hp;		/*體力*/
   int maxhp; 		/*MAXHP*/
   int mp;		/*法力*/
@@ -273,16 +273,16 @@ typedef struct playrule playrule;
 /* 以下類推                    */
 /* 雷系 冰系 火系 土系 風系 */
 /*struct playrule goodmanlist[] = {
-}*/ 
+}*/
 
-#define PIP_BADMAN       (3)            /* 怪物整體個數  */   
+#define PIP_BADMAN       (3)            /* 怪物整體個數  */
 
 /*--------------------------------------------------------------------------*/
 /*  魔法參數設定                                                            */
 /*--------------------------------------------------------------------------*/
 struct magicset
 {
-  char *name;           /*魔法的名字*/ 
+  char *name;           /*魔法的名字*/
   int needmp;		/*需要的法力*/
   int hpmode;		/*0:減少 1:增加 2:最大值*/
   int hp;		/*殺傷生命力*/
@@ -299,7 +299,7 @@ typedef struct magicset magicset;
 struct royalset
 {
   char *num;		/*代碼*/
-  char *name;           /*王臣的名字*/ 
+  char *name;           /*王臣的名字*/
   int needmode;		/*需要的mode*/ /*0:不需要 1:禮儀 2:談吐*/
   int needvalue;	/*需要的value*/
   int addtoman;		/*最大的增加量*/
@@ -325,7 +325,7 @@ struct goodsofpip
 };
 typedef struct goodsofpip goodsofpip;
 
-struct goodsofpip pipfoodlist[] = 
+struct goodsofpip pipfoodlist[] =
 {
 	{0,"物品名",	"說明buy",	"說明feed",			0,	0,	0,0},
 	{1,"好吃的食物",	"體力恢復50",	"每吃一次食物會恢復體力50喔!",	50,	50,	1,1},
@@ -333,7 +333,7 @@ struct goodsofpip pipfoodlist[] =
 	{0,NULL,NULL,NULL,0,0,0,0}
 };
 
-struct goodsofpip pipmedicinelist[] = 
+struct goodsofpip pipmedicinelist[] =
 {
 	{0,"物品名",	"說明buy",	"說明feed",			0,	0,	0,0},
 	{1,"好用大補丸",	"體力恢復600",	"恢復大量流失體力的良方",	500,	600,	4,4},
@@ -355,7 +355,7 @@ struct goodsofpip pipotherlist[] = {
 /*--------------------------------------------------------------------------*/
 struct weapon
 {
-  char *name;           /*名字*/  
+  char *name;           /*名字*/
   int needmaxhp;	/*需要hp*/
   int needmaxmp;	/*需要mp*/
   int needspeed;	/*需要的speed*/
@@ -371,27 +371,27 @@ struct weapon
 typedef struct weapon weapon;
 
 /*名字,需hp,需mp,需speed,攻擊,防護,速度,買價,賣價,特別,圖檔*/
-struct weapon headlist[] = 
+struct weapon headlist[] =
 {
 	{"不買裝備",  0,  0,  0,  0,  0,  0,     0,     0,0,0},
-	{"塑膠帽子",  0,  0,  0,  0,  5,  0,   500,   300,0,0},	
+	{"塑膠帽子",  0,  0,  0,  0,  5,  0,   500,   300,0,0},
 	{"牛皮小帽",  0,  0,  0,  0, 10,  0,  3500,  1000,0,0},
 	{"㊣安全帽", 60,  0,  0,  0, 20,  0,  5000,  3500,0,0},
 	{"鋼鐵頭盔",150, 50,  0,  0, 30,  0, 10000,  6000,0,0},
-	{"魔法髮箍",100,150,  0,  0, 25,  0, 50000, 10000,0,0}, 
+	{"魔法髮箍",100,150,  0,  0, 25,  0, 50000, 10000,0,0},
 	{"黃金聖盔",300,300,300,  0,100,  0,300000,100000,0,0},
 	{NULL,        0,  0,  0,  0,  0,  0,   0,   0,0,0}
 };
 
 /*名字,需hp,需mp,需speed,攻擊,防護,速度,買價,賣價,特別,圖檔*/
-struct weapon rhandlist[] = 
+struct weapon rhandlist[] =
 {
 	{"不買裝備",  0,  0,  0,  0,  0,  0,     0,     0,0,0},
-	{"大木棒",    0,  0,  0,  5,  0,  0,  1000,   700,0,0},	
+	{"大木棒",    0,  0,  0,  5,  0,  0,  1000,   700,0,0},
 	{"金屬扳手",  0,  0,  0, 10,  0,  0,  2500,  1000,0,0},
 	{"青銅劍",   50,  0,  0, 20,  0,  0,  6000,  4000,0,0},
 	{"晴雷劍",   80,  0,  0, 30,  0,  0, 10000,  8000,0,0},
-	{"蟬翼刀",  100, 20,  0, 40,  0,  0, 15000, 10000,0,0}, 
+	{"蟬翼刀",  100, 20,  0, 40,  0,  0, 15000, 10000,0,0},
 	{"忘情劍",  100, 40,  0, 35, 20,  0, 15000, 10000,0,0},
 	{"獅頭寶刀",150,  0,  0, 60,  0,  0, 35000, 20000,0,0},
 	{"屠龍刀",  200,  0,  0,100,  0,  0, 50000, 25000,0,0},
@@ -400,10 +400,10 @@ struct weapon rhandlist[] =
 };
 
 /*名字,需hp,需mp,需speed,攻擊,防護,速度,買價,賣價,特別,圖檔*/
-struct weapon lhandlist[] = 
+struct weapon lhandlist[] =
 {
 	{"不買裝備",  0,  0,  0,  0,  0,  0,     0,     0,0,0},
-	{"大木棒",    0,  0,  0,  5,  0,  0,  1000,   700,0,0},	
+	{"大木棒",    0,  0,  0,  5,  0,  0,  1000,   700,0,0},
 	{"金屬扳手",  0,  0,  0, 10,  0,  0,  1500,  1000,0,0},
 	{"木盾",	     0,  0,  0,  0, 10,  0,  2000,  1500,0,0},
 	{"不鏽鋼盾", 60,  0,  0,  0, 25,  0,  5000,  3000,0,0},
@@ -414,24 +414,24 @@ struct weapon lhandlist[] =
 };
 
 /*名字,需hp,需mp,需speed,攻擊,防護,速度,買價,賣價,特別,圖檔*/
-struct weapon bodylist[] = 
+struct weapon bodylist[] =
 {
 	{"不買裝備",  0,  0,  0,  0,  0,  0,     0,     0,0,0},
-	{"塑膠冑甲", 40,  0,  0,  0,  5,  0,  1000,   700,0,0},	
+	{"塑膠冑甲", 40,  0,  0,  0,  5,  0,  1000,   700,0,0},
 	{"特級皮甲", 50,  0,  0,  0, 10,  0,  2500,  1000,0,0},
 	{"鋼鐵盔甲", 80,  0,  0,  0, 25,  0,  5000,  3500,0,0},
 	{"魔法披風", 80, 40,  0,  0, 20, 20, 15500, 10000,0,0},
-	{"白金盔甲",100, 30,  0,  0, 40, 20, 30000, 20000,0,0}, 
+	{"白金盔甲",100, 30,  0,  0, 40, 20, 30000, 20000,0,0},
 	{"黃金聖衣",300,300,300, 30,100,  0,150000,100000,0,0},
 	{NULL,        0,  0,  0,  0,  0,  0,     0,   0,0,0}
 };
 
 /*名字,需hp,需mp,需speed,攻擊,防護,速度,買價,賣價,特別,圖檔*/
-struct weapon footlist[] = 
+struct weapon footlist[] =
 {
 	{"不買裝備",  0,  0,  0,  0,  0,  0,     0,     0,0,0},
 	{"塑膠拖鞋",  0,  0,  0,  0,  0, 10,   800,   500,0,0},
-	{"東洋木屐",  0,  0,  0, 15,  0, 10,  1000,   700,0,0}, 	
+	{"東洋木屐",  0,  0,  0, 15,  0, 10,  1000,   700,0,0},
 	{"特級雨鞋",  0,  0,  0,  0, 10, 10,  1500,  1000,0,0},
 	{"NIKE運動鞋",70, 0,  0,  0, 10, 40,  8000,  5000,0,0},
 	{"鱷魚皮靴", 80, 20,  0, 10, 25, 20, 12000,  8000,0,0},
@@ -440,7 +440,7 @@ struct weapon footlist[] =
 	{NULL,        0,  0,  0,  0,  0,  0,    0,   0,0,0}
 };
 
-struct royalset royallist[] = 
+struct royalset royallist[] =
 {
 	{"T",	"拜訪對象",	  0,	0,	 0,	  0,NULL,NULL},
 	{"A",	"皇城騎兵連",	  1,	10,	15,    	100,"你真好，來陪我聊天..","守衛星空的安全是很辛苦的.."},
@@ -543,7 +543,7 @@ NULL,		  0,0,	 0,0,	 0,	 0,	  0,	  0,	NULL,	0,0
 };
 #endif
 
-struct magicset treatmagiclist[] = 
+struct magicset treatmagiclist[] =
 {
 	{"治療法術",	0,	0,	0,	0,	0,	0},
 	{"氣療術",	5,	1,	20,	0,	10,	0},
@@ -552,9 +552,9 @@ struct magicset treatmagiclist[] =
 	{"五氣朝元",    100,    1,      1000,   0,      80,     0},
 	{"白虎",        200,    2,      0,      2,      0,      0},
 	{NULL,		0,	0,	0,	0,	0,	0}
-};                            
-     
-struct magicset thundermagiclist[] = 
+};
+
+struct magicset thundermagiclist[] =
 {
 	{"雷系法術",	0,	0,	0,	0,	0,	0},
 	{"雷咒",	10,	0,	20,	1,	5,	0},
@@ -567,7 +567,7 @@ struct magicset thundermagiclist[] =
 	{NULL,		0,	0,	0,	0,	0,	0}
 };
 
-struct magicset icemagiclist[] = 
+struct magicset icemagiclist[] =
 {
 	{"冰系法術",	0,	0,	0,	0,	0,	0},
 	{"冰咒",	10,	0,	20,	1,	5,	0},
@@ -580,7 +580,7 @@ struct magicset icemagiclist[] =
 	{NULL,		0,	0,	0,	0,	0,	0}
 };
 
-struct magicset firemagiclist[] = 
+struct magicset firemagiclist[] =
 {
 	{"炎系法術",	0,	0,	0,	0,	0,	0},
 	{"火術",		5,	0,	10,	1,	5,	0},
@@ -595,7 +595,7 @@ struct magicset firemagiclist[] =
 	{NULL,		0,	0,	0,	0,	0,	0}
 };
 
-struct magicset earthmagiclist[] = 
+struct magicset earthmagiclist[] =
 {
 	{"土系法術",	0,	0,	0,	0,	0,	0},
 	{"土咒",	10,	0,	20,	1,	5,	0},
@@ -608,7 +608,7 @@ struct magicset earthmagiclist[] =
 	{NULL,		0,	0,	0,	0,	0,	0}
 };
 
-struct magicset windmagiclist[] = 
+struct magicset windmagiclist[] =
 {
 	{"風系法術",	0,	0,	0,	0,	0,	0},
 	{"風咒",	10,	0,	20,	1,	5,	0},
@@ -621,19 +621,19 @@ struct magicset windmagiclist[] =
 	{NULL,		0,	0,	0,	0,	0,	0}
 };
 
-struct magicset specialmagiclist[] = 
+struct magicset specialmagiclist[] =
 {
 	{"特殊法術",	0,	0,	0,	0,	0,	0x00000000},
 	{"爆靈地獄",	2000,	0,	80,	1,	20,	0x00000001},
 	{"地獄業火",	1000,	0,	50,	1,	20,	0x00000002},
 	{"融合",		5000,	0,	200,	1,	20,	0x00000004},
 	{"炎魔焦熱地獄",	3000,	0,	90,	1,	20,	0x00000008},
-	{"七鍵守護神",	4000,	0,	100,	1,	20,	0x00000010},		
+	{"七鍵守護神",	4000,	0,	100,	1,	20,	0x00000010},
 	{NULL,           0,   0,   0,   0,   0,   0}
 };
 
 /*名字        體力MAX法力MAX  攻擊   防護     速度    財寶   特別   圖檔*/
-struct playrule resultmanlist[] = 
+struct playrule resultmanlist[] =
 {
 	{"茱麗葉塔",	 60,0,	20,0,	20,	20,	 20,	150, "11101",	0,0},
 	{"菲歐利娜",	 60,0,	20,0,	30,	30,	 30,	200, "01111",	0,0},
@@ -646,14 +646,14 @@ struct playrule resultmanlist[] =
 
 struct newendingset
 {
-  char *girl;		/*女生結局的職業*/ 
+  char *girl;		/*女生結局的職業*/
   char *boy;		/*男生結局的職業*/
   int grade;		/*評分*/
 };
 typedef struct newendingset newendingset;
 
 /*萬能*/
-struct newendingset endmodeall_purpose[] = 
+struct newendingset endmodeall_purpose[] =
 {
 	{"女性職業",		"男生職業",		0},
 	{"成為這個國家新女王",	"成為這個國家新國王",	500},
@@ -700,7 +700,7 @@ struct newendingset endmodeall_purpose[] =
 };
 
 /*戰鬥*/
-struct newendingset endmodecombat[] = 
+struct newendingset endmodecombat[] =
 {
 	{"女性職業",			"男生職業",			0},
 	{"被封為勇者 戰士型",  		"被封為勇者 戰士型",		420},
@@ -715,7 +715,7 @@ struct newendingset endmodecombat[] =
 };
 
 /*魔法*/
-struct newendingset endmodemagic[] = 
+struct newendingset endmodemagic[] =
 {
 	{"女性職業",	     	"男生職業",		0},
 	{"被封為勇者 魔法型",	"被封為勇者 魔法型",	420},
@@ -730,7 +730,7 @@ struct newendingset endmodemagic[] =
 };
 
 /*社交*/
-struct newendingset endmodesocial[] = 
+struct newendingset endmodesocial[] =
 {
 	{"女性職業",     	"男生職業",		0},
 	{"成為國王的寵妃",	"成為女王的駙馬爺",	170},
@@ -744,7 +744,7 @@ struct newendingset endmodesocial[] =
 };
 
 /*藝術*/
-struct newendingset endmodeart[] = 
+struct newendingset endmodeart[] =
 {
 	{"女性職業",		"男生職業",	0},
 	{"成為了小丑",		"成為了小丑",	100},
@@ -755,7 +755,7 @@ struct newendingset endmodeart[] =
 };
 
 /*暗黑*/
-struct newendingset endmodeblack[] = 
+struct newendingset endmodeblack[] =
 {
 	{"女性職業",     	"男生職業",		0},
 	{"變成了魔王",		"變成了魔王",		-1000},
@@ -769,7 +769,7 @@ struct newendingset endmodeblack[] =
 };
 
 /*家事*/
-struct newendingset endmodefamily[] = 
+struct newendingset endmodefamily[] =
 {
 	{"女性職業",     	"男生職業",		0},
 	{"正在新娘修行",		"正在新郎修行",		50},
