@@ -23,8 +23,6 @@ char Bdate[128];
 #define getdata(x1,x2,x3,x4,x5,x6,x7)  vget(x1,x2,x3,x4,x5,DOECHO)
 #define setuserfile(x1,x2)  usr_fpath(x1,cuser.userid,x2)
 
-int t_lines = b_lines + 1;
-
 extern UCACHE *ushm;
 
 static void
@@ -382,7 +380,7 @@ Pnote(int newflag)
 
 		show_pnote(&item_array[offset - 1]);
 		sprintf(prompt, "(N/P)往前/後 (A)全部 (R)回電 %s(X)刪除全部 (E)離開:", newflag ? "(S)保留 " : "(D)刪除 ");
-		getdata(t_lines - 2, 0, prompt, ans, 2, DOECHO, 0);
+		getdata(b_lines - 1, 0, prompt, ans, 2, DOECHO, 0);
 
 		if (ans[0] == 'r' || ans[0] == 'R')
 		{
@@ -428,13 +426,13 @@ Pnote(int newflag)
 			setuserfile(fpath, fn_note_dat_save);
 			if ((num1 = get_pnote(item_array, 0)) >= MAX_PNOTE)
 			{
-				move(t_lines - 3, 0);
+				move(b_lines - 2, 0);
 				vmsg("答錄機已經錄到底囉，沒辦法保存了，記得快整理整理喔...");
 				break;
 			}
 			else if ((num1 = get_pnote(item_array, 0)) >= MAX_PNOTE - 3)
 			{
-				move(t_lines - 3, 0);
+				move(b_lines - 2, 0);
 				vmsg("答錄機快滿了, 記得清理清理喔...");
 			}
 			// shakalaca patch [原本顯示的內容都變成第一篇]

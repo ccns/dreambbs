@@ -1270,9 +1270,91 @@ telnet_init(void)
 
 
 /* ----------------------------------------------------- */
-/* stand-alone daemon					 */
+/* 支援超過 24 列的畫面                                  */
 /* ----------------------------------------------------- */
 
+static void
+term_init()
+{
+/* fuse.030518: 註解 */
+//  server問：你會改變行列數嗎？(TN_NAWS, Negotiate About Window Size)
+//  client答：Yes, I do. (TNCH_DO)
+//
+//  那麼在連線時，當TERM變化行列數時就會發出：
+//  TNCH_IAC + TNCH_SB + TN_NAWS + 行數列數 + TNCH_IAC + TNCH_SE;
+
+  /* ask client to report it's term size */
+  static char svr[] =       /* server */
+  {
+    IAC, DO, TELOPT_NAWS
+  };
+
+  int rset;
+  char buf[64], *rcv;
+  struct timeval to;
+
+  memset(buf, 0, sizeof(buf));
+
+  /* 問對方 (telnet client) 有沒有支援不同的螢幕寬高 */
+  send(0, svr, 3, 0);
+
+  rset = 1;
+  to.tv_sec = 1;
+  to.tv_usec = 1;
+  if (select(1, (fd_set *) & rset, NULL, NULL, &to) > 0)
+    recv(0, buf, sizeof(buf), 0);
+
+  rcv = NULL;
+  if ((unsigned char) buf[0] == IAC && buf[2] == TELOPT_NAWS)
+  {
+    /* gslin: Unix 的 telnet 對有無加 port 參數的行為不太一樣 */
+    if ((unsigned char) buf[1] == SB)
+    {
+      rcv = buf + 3;
+    }
+    else if ((unsigned char) buf[1] == WILL)
+    {
+      if ((unsigned char) buf[3] != IAC)
+      {
+    rset = 1;
+    to.tv_sec = 1;
+    to.tv_usec = 1;
+    if (select(1, (fd_set *) & rset, NULL, NULL, &to) > 0)
+      recv(0, buf + 3, sizeof(buf) - 3, 0);
+      }
+      if ((unsigned char) buf[3] == IAC && (unsigned char) buf[4] == SB && buf[5] == TELOPT_NAWS)
+    rcv = buf + 6;
+    }
+  }
+
+  if (rcv)
+  {
+    b_lines = ntohs(* (short *) (rcv + 2)) - 1;
+    b_cols = ntohs(* (short *) rcv) - 1;
+
+    /* b_lines 至少要 23，最多不能超過 T_LINES - 1 */
+    if (b_lines >= T_LINES)
+      b_lines = T_LINES - 1;
+    else if (b_lines < 23)
+      b_lines = 23;
+    /* b_cols 至少要 79，最多不能超過 T_COLS - 1 */
+    if (b_cols >= T_COLS)
+      b_cols = T_COLS - 1;
+    else if (b_cols < 79)
+      b_cols = 79;
+  }
+  else
+  {
+    b_lines = 23;
+    b_cols = 79;
+  }
+
+  d_cols = b_cols - 79;
+}
+
+/* ----------------------------------------------------- */
+/* stand-alone daemon					 */
+/* ----------------------------------------------------- */
 
 static void
 start_daemon(
@@ -1606,7 +1688,7 @@ int main(int argc, char *argv[])
     sprintf(fromhost, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
 
     telnet_init();
-
+    term_init();
     tn_main();
   }
 }

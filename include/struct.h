@@ -10,6 +10,7 @@
 #ifndef _STRUCT_H_
 #define _STRUCT_H_
 
+/* screen control */
 
 #define STRLEN   80		/* Length of most string data */
 #define BTLEN    42		/* Length of board title */
@@ -19,14 +20,12 @@
 #define IDLEN	 12		/* Length of board / user id */
 #define PASSLEN  14		/* Length of encrypted passwd field */
 #define BCLEN    4       /* Length of board class */
+#define ANSILINELEN 500 /* Maximum Screen width in chars，不能超過 1023 */
 
 #define T_LINES		50	/* maximum total lines */
 #define T_COLS		120	/* maximum total columns，要比 ANSILINELEN 小 */
 #define TAB_STOP	4	/* 按 TAB 換成幾格空白 (要是 2 的次方) */
 #define TAB_WIDTH	(TAB_STOP - 1)
-
-#define b_cols   79
-#define d_cols   (b_cols - 79)
 
 #define	SCR_WIDTH	80
 /* #define	VE_WIDTH	(ANSILINELEN - 1) */
@@ -719,10 +718,6 @@ typedef struct
 /* ----------------------------------------------------- */
 /* screen.c 中運用的資料結構				 */
 /* ----------------------------------------------------- */
-
-
-#define ANSILINELEN (255)	/* Maximum Screen width in chars */
-
 
 /* Screen Line buffer modes */
 

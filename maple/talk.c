@@ -2084,7 +2084,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 #else
     if (cc == '\n')
     {
-      if (cuser.ufo2 & UFO2_REPLY || replymode)
+      if (cuser.ufo2 & UFO2_REPLY || replymode) 
         vs_restore(slt);      /* 還原 bmw_display 之前的 screen */
       else
         restore_foot(sl);

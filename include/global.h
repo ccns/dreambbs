@@ -385,6 +385,11 @@ VAR time_t ap_start;
 VAR ACCT cuser;			/* current user structure */
 VAR time_t currchrono;		/* current file timestamp @ bbs.c mail.c */
 
+VAR int b_lines;        /* bottom line */
+VAR int t_lines;
+VAR int b_cols;         /* bottom columns */
+VAR int d_cols;         /* difference columns from standard */
+
 VAR char fromhost[48];
 
 VAR char quote_file[80];
