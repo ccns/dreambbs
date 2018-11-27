@@ -1,6 +1,6 @@
 ## Common BSD make rules for DreamBBS Project
 
-ARCHI	!= uname -m
+ARCHI	!= getconf LONG_BIT
 
 OPSYS	!= uname -o
 
@@ -22,7 +22,7 @@ CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wunused -Wno-invalid-source-encoding
 
 LDFLAGS	= -L../lib -ldao -lcrypt  
 
-.if  $(ARCHI)=="x86_64" || $(ARCHI)=="amd64"
+.if $(ARCHI)=="64"
 CFLAGS	+= -m32
 LDFLAGS	+= -m32
 .endif
