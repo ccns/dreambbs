@@ -33,7 +33,7 @@
           * ...
 
 * preparing version name about `current`:
-    + `v1.0-CURRENT`: developing for preparing version 1.0.
+    + `v1.0-CURRENT`: developing for preparing version 1.0, codename `slime`.
     + `vX.0-CURRENT`: developing for preparing version X.0.
 
 * backports for `testing`:
