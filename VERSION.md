@@ -32,6 +32,8 @@
           * refine layout: removing trailing whitespaces.
           * ...
 
+    + `v0.98`: Version 0.98, codename `rimuru` (not released yet)
+
 * preparing version name about `current`:
     + `v1.0-CURRENT`: developing for preparing version 1.0, codename `slime`.
     + `vX.0-CURRENT`: developing for preparing version X.0.
