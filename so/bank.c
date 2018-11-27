@@ -56,8 +56,12 @@ int point1_money(void)
          pmsg2("查無您的帳戶資訊...");
          return 0;
        }
-
+   
+#ifdef M3_USE_PFTERM
+   clrregion(0, 22);
+#else
    clearange(0, 22);
+#endif
    vs_bar("夢幣轉換");
 
    move(2,0);
@@ -119,8 +123,12 @@ TransferAccount(void)
   char str[128];
   int selfmoney, pay;
   double temp;
-
+    
+#ifdef M3_USE_PFTERM
+  clrregion(0, 22);
+#else
   clearange(0, 22);
+#endif
   vs_bar("匯款");
 
   move (9, 8);
@@ -135,8 +143,12 @@ TransferAccount(void)
     return 0;
   }
   strcpy(userid,acct.userid);
-
+      
+#ifdef M3_USE_PFTERM
+  clrregion(1,21);
+#else
   clearange(1,21);
+#endif
   move(3,0);
 
      if(acct_load(&selfacct, cuser.userid) >= 0)

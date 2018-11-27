@@ -8,7 +8,11 @@
 
 #include "bbs.h"
 
+#ifdef M3_USE_PFTERM
+screen_backup_t old_screen;
+#else
 static screenline sl[24];
+#endif
 
 static int do_menu(MENU pmenu[],XO *xo,int x,int y);
 
@@ -81,7 +85,11 @@ do_cmd(MENU *mptr,XO *xo,int x,int y)
         return -1;
       case POPUP_MENU :
 //        sprintf(t,"【%s】",mptr->desc);
+#ifdef M3_USE_PFTERM
+        scr_restore(&old_screen); // restore foot
+#else
         vs_restore(sl);
+#endif
         return do_menu((MENU *)mptr->func,xo,x,y);
       case POPUP_XO :
         func_unary = mptr->func;
@@ -183,6 +191,7 @@ get_color(char *s,int len,int *fc,int *bc,int *bbc)
 
 }
 
+#ifndef M3_USE_PFTERM
 static void
 vs_line(char *msg,int x,int y)
 {
@@ -252,6 +261,35 @@ vs_line(char *msg,int x,int y)
    outs(buf);
 
 }
+#else
+static void
+vs_line(msg)
+  char *msg;
+{
+  int head, tail;
+
+  if (msg)
+    head = (strlen(msg) + 1) >> 1;
+  else
+    head = 0;
+
+  tail = head;
+
+  while (head++ < 38)
+    outc('-');
+
+  if (tail)
+  {
+    outc(' ');
+    outs(msg);
+    outc(' ');
+  }
+
+  while (tail++ < 38)
+    outc('-');
+  outc('\n');
+}
+#endif //not M3_USE_PFTERM
 
 /* mode 代表加背景的顏色 */
 static void
@@ -365,7 +403,11 @@ do_menu(
                 return 1;
             if(do_cmd(table[cur],xo,x,y)<0)
                 return -1;
+#ifdef M3_USE_PFTERM
+            scr_restore(&old_screen); // restore foot
+#else
             vs_restore(sl);
+#endif
             draw_menu(table,num+1,title,x,y,cur);
             break;
         default:
@@ -380,7 +422,11 @@ do_menu(
                         return 1;
                      if(do_cmd(table[cur],xo,x,y)<0)
                         return -1;
+#ifdef M3_USE_PFTERM
+                     scr_restore(&old_screen); // restore foot
+#else
                      vs_restore(sl);
+#endif
                      draw_menu(table,num+1,title,x,y,cur);
                    }
                    break;
@@ -449,8 +495,12 @@ popupmenu_ans(char *desc[],char *title,int x,int y)
    char t[64];
    char hotkey;
    hotkey = desc[0][0];
-
+      
+#ifdef M3_USE_PFTERM
+   scr_dump(&old_screen);
+#else
    vs_save(sl);
+#endif
    sprintf(t,"【%s】",title);
    num = draw_menu_des(desc,t,x,y,0);
    cur = old_cur = 0;
@@ -468,7 +518,11 @@ popupmenu_ans(char *desc[],char *title,int x,int y)
       switch(c)
       {
          case KEY_LEFT:
+#ifdef M3_USE_PFTERM
+            scr_restore(&old_screen); // restore foot
+#else
             vs_restore(sl);
+#endif
             return (desc[0][1] | 0x20);
          case KEY_UP:
             cur = (cur==0)?num:cur-1;
@@ -484,7 +538,11 @@ popupmenu_ans(char *desc[],char *title,int x,int y)
             break;
          case KEY_RIGHT:
          case '\n':
+#ifdef M3_USE_PFTERM
+            scr_restore(&old_screen); // restore foot
+#else
             vs_restore(sl);
+#endif
             return (desc[cur+1][0] | 0x20) ;
         default:
             for(tmp=0 ; tmp<=num ; tmp++)
@@ -509,10 +567,17 @@ popupmenu_ans(char *desc[],char *title,int x,int y)
 void
 popupmenu(MENU pmenu[],XO *xo,int x,int y)
 {
-
+#ifdef M3_USE_PFTERM
+   scr_dump(&old_screen);
+#else
    vs_save(sl);
+#endif
    do_menu(pmenu,xo,x,y);
+#ifdef M3_USE_PFTERM
+   scr_restore(&old_screen); // restore foot
+#else
    vs_restore(sl);
+#endif
 }
 
 static void pcopy(char *buf,char *patten,int len)
@@ -537,10 +602,13 @@ int pmsg(char *msg)
 
    if(cuser.ufo2 & UFO2_ORIGUI)
      return vmsg(msg);
-
-
+   
+#ifdef M3_USE_PFTERM
+   scr_dump(&old_screen);
+#else
    vs_save(sl);
-
+#endif
+   
    len = (msg ? strlen(msg) : 0 );
    if(len > 30)
    {
@@ -584,11 +652,15 @@ int pmsg(char *msg)
    }
 
    cc = vkey();
+#ifdef M3_USE_PFTERM
+   scr_restore(&old_screen); // restore foot
+#else
    vs_restore(sl);
+#endif
    return cc;
 }
 
-
+#ifndef M3_USE_PFTERM
 /* verit. 030211 抓取螢幕畫面到暫存檔 */
 int
 Every_Z_Screen(void)
@@ -612,4 +684,5 @@ Every_Z_Screen(void)
   fclose(fp);
   return 1;
 }
+#endif
 

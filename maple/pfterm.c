@@ -3,7 +3,6 @@
 //////////////////////////////////////////////////////////////////////////
 #ifdef _PFTERM_TEST_MAIN
 
-#define USE_PFTERM
 #define EXP_PFTERM
 #define DBCSAWARE
 #define FT_DBCS_NOINTRESC 1
@@ -20,6 +19,8 @@
 #define HAVE_GRAYOUT
 #include "bbs.h"
 
+#define M3_USE_PFTERM
+
 #ifndef FT_DBCS_NOINTRESC
 # ifdef  UF_DBCS_NOINTRESC
 #  define FT_DBCS_NOINTRESC (cuser.uflag & UF_DBCS_NOINTRESC)
@@ -27,6 +28,10 @@
 #  define FT_DBCS_NOINTRESC (0)
 # endif
 #endif
+
+#ifdef M3_USE_PFTERM
+#include <assert.h>
+#endif //M3_USE_PFTERM
 
 #endif
 
@@ -154,7 +159,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 // Experimental now
-#if defined(EXP_PFTERM) || defined(USE_PFTERM)
+#if defined(EXP_PFTERM) || defined(M3_USE_PFTERM)
 
 //////////////////////////////////////////////////////////////////////////
 // pfterm Configurations
@@ -2395,7 +2400,7 @@ region_scroll_up(int top, int bottom)
 int
 fterm_typeahead(void)
 {
-#ifdef _PFTERM_TEST_MAIN
+#if defined (_PFTERM_TEST_MAIN) || !defined (PMORE_HAVE_VKEY)
     return 0;
 #else
     return vkey_is_typeahead();
@@ -2543,6 +2548,6 @@ int main(int argc, char* argv[])
 }
 #endif // _PFTERM_TEST_MAIN
 
-#endif // defined(EXP_PFTERM) || defined(USE_PFTERM)
+#endif // defined(EXP_PFTERM) || defined(M3_USE_PFTERM)
 
 // vim:ts=4:sw=4:expandtab

@@ -1376,7 +1376,6 @@ cursor_key(
 }
 #endif
 
-
 static void
 vs_line(
   char *msg)

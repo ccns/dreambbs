@@ -1357,7 +1357,7 @@ menu(void)
 	  outs("\033[m)");
 	  outs(str);*/
 	}
-	clrtohol();
+	clrtoeol();
       } while (++mode <= mmx);
       if(refilm)
       {

@@ -255,7 +255,12 @@ x_file(
   n = 0;
   if(mode == M_XFILES)
   {
+#ifdef M3_USE_PFTERM
+    clrregion(3,20);
+#else
     clearange(3,20);
+#endif
+
   }
 
   while ((desc = xlist[n]))
@@ -280,8 +285,8 @@ x_file(
 
 
     if(n<21)
-      clrtohol();
-
+      clrtoeol();
+    
     if (mode == M_XFILES)
     {
       if(n<21)
@@ -300,7 +305,7 @@ x_file(
     if(mode == M_XFILES)
       clrtoeol();
     else
-      clrtohol();
+      clrtoeol();
   }
 
   vget(b_lines, 0, "請選擇檔案編號，或按 [0] 取消：", buf, 3, DOECHO);
