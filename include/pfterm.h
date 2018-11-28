@@ -73,42 +73,4 @@ void    standend    (void);
 // grayout advanced control
 void    grayout     (int y, int end, int level);
 
-////// flat-term internal processor
-//
-//int     fterm_typeahead (void);         // raw input  adapter
-//void    fterm_rawc      (int c);        // raw output adapter
-//void    fterm_rawnewline(void);         // raw output adapter
-//void    fterm_rawflush  (void);         // raw output adapter
-//void    fterm_raws      (const char *s);
-//void    fterm_rawnc     (int c, int n);
-//void    fterm_rawnum    (int arg);
-//void    fterm_rawcmd    (int arg, int defval, char c);
-//void    fterm_rawcmd2   (int arg1, int arg2, int defval, char c);
-//void    fterm_rawattr   (ftattr attr);  // optimized changing attribute
-//void    fterm_rawclear  (void);
-//void    fterm_rawclreol (void);
-//void    fterm_rawhome   (void);
-//void    fterm_rawscroll (int dy);
-//void    fterm_rawcursor (void);
-//void    fterm_rawmove   (int y, int x);
-//void    fterm_rawmove_opt(int y, int x);
-//void    fterm_rawmove_rel(int dy, int dx);
-//
-//int     fterm_chattr    (char *s, ftattr oa, ftattr na); // size(s) > FTATTR_MINCMD
-//void    fterm_exec      (void);             // execute ft.cmd
-//void    fterm_flippage  (void);
-//void    fterm_dupe2bk   (void);
-//void    fterm_markdirty (void);             // mark as dirty
-//int     fterm_strdlen   (const char *s);    // length of string for display
-//int     fterm_prepare_str(int len);
-//
-//// DBCS supporting
-//int     fterm_DBCS_Big5(unsigned char c1, unsigned char c2);
-
-//////////////////////////////////////////////////////////////////////////
-// Flat Terminal Implementation
-//////////////////////////////////////////////////////////////////////////
-
-//#define fterm_markdirty() { ft.dirty = 1; }
-
 #endif // __PFTERM_H__
