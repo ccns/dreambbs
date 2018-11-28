@@ -18,11 +18,6 @@
 #define INPUT_ACTIVE	0
 #define INPUT_IDLE	1
 
-
-#define	t_columns	80
-#define	t_lines		24
-#define	p_lines		18
-
 #ifdef M3_USE_PFTERM
 // filed color   (defined in theme.h)
 #define STANDOUT        attrsetbg(FILEDBG); attrsetfg(FILEDFG);
