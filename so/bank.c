@@ -56,7 +56,7 @@ int point1_money(void)
          pmsg2("查無您的帳戶資訊...");
          return 0;
        }
-   
+
 #ifdef M3_USE_PFTERM
    clrregion(0, 22);
 #else
@@ -123,7 +123,7 @@ TransferAccount(void)
   char str[128];
   int selfmoney, pay;
   double temp;
-    
+
 #ifdef M3_USE_PFTERM
   clrregion(0, 22);
 #else
@@ -143,7 +143,7 @@ TransferAccount(void)
     return 0;
   }
   strcpy(userid,acct.userid);
-      
+
 #ifdef M3_USE_PFTERM
   clrregion(1,21);
 #else

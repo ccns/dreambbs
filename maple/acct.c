@@ -286,7 +286,7 @@ x_file(
 
     if(n<21)
       clrtoeol();
-    
+
     if (mode == M_XFILES)
     {
       if(n<21)

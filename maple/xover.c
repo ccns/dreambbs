@@ -2177,7 +2177,7 @@ every_Z(void)
      chk_mailstat = 0;
  }
 #endif
-  
+
   memcpy(&xy,&(xz[XZ_OTHER - XO_ZONE]),sizeof(XZ));
 
   tmpbno = currbno;
@@ -2303,7 +2303,7 @@ every_B(void)
 #else
   vs_save(sl);
 #endif
- 
+
   u_lock();
 
 #ifdef M3_USE_PFTERM

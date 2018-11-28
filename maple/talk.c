@@ -1519,7 +1519,7 @@ do_query(
   outs((!up || (up && ((!HAS_PERM(PERM_SEECLOAK) && (up->ufo & UFO_CLOAK)) || (can_see(up)==2)) && !HAS_PERM(PERM_SYSOP))) ? "不在站上":bmode(up, 1));
   outs("\033[m");
   /* Thor.981108: 為滿足 cigar 徹底隱身的要求, 不過用 finger還是可以看到:p */
-  
+
   mail = m_query(userid);
   if(mail)
     prints(" [信箱] \033[1;31m有 %d 封新情書\033[m\n",mail);
@@ -1837,7 +1837,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 #else
     vs_save(slt);         /* 記錄 bmd_display 之前的 screen */
 #endif
-        
+
   mode = bbsmode;               /* lkchu.981201: save current mode */
   utmp_mode(M_BMW_REPLY);
 
@@ -1875,7 +1875,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 
     if (cc == '\n')
     {
-      if (cuser.ufo2 & UFO2_REPLY || replymode) 
+      if (cuser.ufo2 & UFO2_REPLY || replymode)
 #ifdef M3_USE_PFTERM
         scr_restore(&old_screen);
 #else
@@ -4190,6 +4190,7 @@ KeyFunc ulist_cb[] =
 #ifdef HAVE_CHANGE_FROM
   {Ctrl('F'), ulist_fromchange},
 #endif
+
   /* Thor.990125: 可前後搜尋, id or nickname */
   {'/', ulist_search_forward},
   {'?', ulist_search_backward},

@@ -1246,7 +1246,7 @@ vs_restore(
 #endif  // M3_USE_PFTERM
 
 #ifdef M3_USE_PFTERM
-#define VMSG_NULL "\033[1;37;45m                              ● 請按任意鍵繼續 ●                           \033[m" 
+#define VMSG_NULL "\033[1;37;45m                              ● 請按任意鍵繼續 ●                           \033[m"
 
 vmsg(msg)
 char *msg;                   /* length <= 54 */

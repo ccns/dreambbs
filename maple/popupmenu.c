@@ -495,7 +495,7 @@ popupmenu_ans(char *desc[],char *title,int x,int y)
    char t[64];
    char hotkey;
    hotkey = desc[0][0];
-      
+
 #ifdef M3_USE_PFTERM
    scr_dump(&old_screen);
 #else
@@ -602,13 +602,13 @@ int pmsg(char *msg)
 
    if(cuser.ufo2 & UFO2_ORIGUI)
      return vmsg(msg);
-   
+
 #ifdef M3_USE_PFTERM
    scr_dump(&old_screen);
 #else
    vs_save(sl);
 #endif
-   
+
    len = (msg ? strlen(msg) : 0 );
    if(len > 30)
    {
