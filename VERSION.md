@@ -13,7 +13,8 @@
     + `v0.95`: aka. `REV-BETA4`, for naming style is becoming different.
         - `v0.95.1`: aka. `REV-BETA4.1`, detail fixes based on `v0.95`
         - `v0.95.2`: aka. `REV-BETA4.2`, detail fixes based on `v0.95.1`
-        - `v0.95.3`: aka. `REV-BETA4.3`, plan to be the final release of `v0.95-testing`.
+        - `v0.95.3`: aka. `REV-BETA4.3`, detail fixes based on `v0.95.1`
+        - `v0.95.4`: aka. `REV-BETA4.4`, plan to be the final release of `v0.95-testing`.
         - It is going to be End-Of-Life after `v0.97.0` released.
 
     + `v0.96`: no `REV-BETA` prefix, just `DreamBBS Version 0.96` ( **latest** )
@@ -22,7 +23,7 @@
           * split out sample file to another repository.
           * other detail changes from Current version.
         - `v0.96.1`: detail fixes based on `v0.96`
-        - `v0.96.2`: if there is some details need to be fixed, they will be applied in this version.
+        - `v0.96.2`: detail fixes based on `v0.96.1`
         - It is going to be End-Of-Life after `v0.98.0` released.
 
     + `v0.97`: Version 0.97, codename `stratosphere` (not released yet)
