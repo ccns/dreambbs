@@ -51,6 +51,9 @@ x_siteinfo(void)
 #ifdef M3_USE_PMORE
     prints("\033[1;32m  online \033[1;30m  pmore (piaip's more) 2007 w/Movie\033[m\n");
 #endif
+#ifdef M3_USE_PFTERM
+    prints("\033[1;32m  online \033[1;30m  pfterm (piaip's flat terminal, Perfect Term)\033[m\n");
+#endif
 #ifdef GRAYOUT
     prints("\033[1;32m  online \033[1;30m  Grayout Advanced Control 淡入淡出特效系統\033[m\n");
 #else
