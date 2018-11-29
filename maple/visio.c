@@ -1257,8 +1257,16 @@ char *msg;                   /* length <= 54 */
     }
   else
     {
+#ifdef HAVE_COLOR_VMSG
+      int color;
+#endif
       move(b_lines, 0);
+#ifdef HAVE_COLOR_VMSG
+      color =time(0)%6+31;
+      prints("\033[1;%dm                                             ▏▎▍▌▋▊▉ \033[1;37m請按任意鍵繼續 \033[1;%dm▉\033[m ",color,color);
+#else
       outs(VMSG_NULL);
+#endif
       move(b_lines, 0);
      }
   return vkey();
@@ -1277,11 +1285,13 @@ vmsg(
   }
   else
   {
+#ifdef HAVE_COLOR_VMSG
     int color;
+#endif
     move(b_lines, 0);
     clrtoeol();
-    color =time(0)%6+31;
 #ifdef HAVE_COLOR_VMSG
+    color =time(0)%6+31;
     prints("\033[1;%dm                                             ▏▎▍▌▋▊▉ \033[1;37m請按任意鍵繼續 \033[1;%dm▉\033[m ",color,color);
 #else
     outs("\033[1;37;45m                              ● 請按任意鍵繼續 ●                           \033[m");
