@@ -34,6 +34,9 @@
           * ...
 
     + `v0.98`: Version 0.98, codename `rimuru` (not released yet)
+        - features in plan:
+          * port `pfterm` in this release version
+          * ...
 
 * preparing version name about `current`:
     + `v1.0-CURRENT`: developing for preparing version 1.0, plan to be LTS version.
