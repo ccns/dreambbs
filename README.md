@@ -10,7 +10,7 @@ The Campus Computer & Network Society ( [CCNS](https://ccns.github.io) ) of NCKU
 
 Copyright information for this repo, please view document in `COPYRIGHT`. 
 
-LICENSE for **piaip's more** module, please view `maple/pmore.c` instead.
+LICENSE for **piaip's more**, **piaip's flat terminal system** module, please view `maple/pmore.c`, `maple/pfterm.c` instead.
 
 ## Build New BBS
 
