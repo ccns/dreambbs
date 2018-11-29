@@ -22,7 +22,7 @@
           * split out sample file to another repository.
           * other detail changes from Current version.
         - `v0.96.1`: detail fixes based on `v0.96`
-        - `v0.96.2`: if there is some details need to be fixed, they will be applied in this version. ( **not yet** )
+        - `v0.96.2`: if there is some details need to be fixed, they will be applied in this version.
         - It is going to be End-Of-Life after `v0.98.0` released.
 
     + `v0.97`: Version 0.97, codename `stratosphere` (not released yet)
