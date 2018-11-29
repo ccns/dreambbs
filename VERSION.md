@@ -35,7 +35,7 @@
     + `v0.98`: Version 0.98, codename `rimuru` (not released yet)
 
 * preparing version name about `current`:
-    + `v1.0-CURRENT`: developing for preparing version 1.0, codename `slime`.
+    + `v1.0-CURRENT`: developing for preparing version 1.0, plan to be LTS version.
     + `vX.0-CURRENT`: developing for preparing version X.0.
 
 * backports for `testing`:
@@ -44,9 +44,9 @@
 ## other plan
 
 ### ToDo
-* variable size test
+* ~variable size test~
 * vtuikit port test
-* pfterm port test
+* ~pfterm port test~
 * logind port test
   - wsproxy port test
 * bbslua port test
