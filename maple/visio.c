@@ -1949,7 +1949,7 @@ int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int 
   STANDOUT;
 
 #ifdef M3_USE_PFTERM
-  getyx (&x, &y);
+  getyx (&y, &x);
 #else
   y = cur_row;
   x = cur_col;
