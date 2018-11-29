@@ -28,11 +28,13 @@ EXE	= so
 .c.x:	;   $(CPROTO) -o $*.x $*.c
 .c.ln:	;   lint -abhi $*.c
 
-.if $(OPSYS) == "FreeBSD"
+.if    $(ARCHI)=="64"
+.if      $(OPSYS) == "FreeBSD"
 .o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
 .else
 .o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386
-.endif
+.endif   #OPSYS
+.endif #ARCHI
 
 all: 
 	@$(MAKE) CC=$(CC) CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
