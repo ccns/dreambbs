@@ -356,14 +356,6 @@ vs_head(
 /*  int color = (time(0) % 7) + 41;        lkchu.981201: random color */
   int color = 44; //090911.cache: 太花了固定一種顏色 
 #endif
-#if 1
-  char *newyear[6]={ BOARDNAME "祝大家新年快樂        ",
-                    "                              ",
-                    "Dreambbs/NCKU.CCNS            ",
-                    "Since 1995                    ",
-                    "                              ",
-                    "WindTop-cache modified (C)2010"};
-#endif
 
   if (mid == NULL)
   {
@@ -400,41 +392,6 @@ vs_head(
       mid = NEWPASSMSG; // 你有新留言 
       spc = 15;
     }
-#if 1
-	/* 2005 : 1104508800 */
-    else if(time(0) < 1136044800)
-    {
-      time_t now,hour,min,sec;
-      now = 1136044800 - time(0);
-      if(now <= 0)
-      {
-        strcpy(ttl,newyear[time(0)%6]);
-        spc = strlen(ttl);
-        mid = ttl;
-        mid[spc] = '\0';
-      }
-      else
-      {
-        hour = now/3600;
-        min = now/60 - hour*60;
-        sec = now % 60;
-        sprintf(ttl,"距 2006 年還剩 %02d 時 %02d 分 %02d 秒",hour,min,sec);
-        spc = strlen(ttl);
-        mid = ttl;  
-        mid[spc] = '\0';
-      }
-
-    }
-#endif    
-#if 0
-    else if(aprilfirst)
-    {
-        sprintf(ttl,"據統計，目前有 %d 個鄉民受騙",ushm->avgload);
-        spc = strlen(ttl);
-        mid = ttl;
-        mid[spc] = '\0';
-    }
-#endif
     else if (spc > (65 - strlen(title)-strlen(currboard)))
     {
       spc = (65 - strlen(title)-strlen(currboard));

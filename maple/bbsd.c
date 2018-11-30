@@ -586,7 +586,7 @@ tn_login(void)
 
   /* 081119.cache: 正常顯示進站畫面 */
   move(b_lines, 0);
-  prints("\033[m參觀用帳號：\033[1;32mguest\033[m  申請新帳號：\033[1;31mnew\033[m  無法建立連線時，請改用 port 3456 上站");
+  prints("\033[m參觀用帳號：\033[1;32mguest\033[m  申請新帳號：\033[1;31mnew\033[m");
 
   /*move(b_lines, 0);
   outs("※ 無法連線時，請利用 port 3456 上站");*/
@@ -1081,40 +1081,7 @@ tn_main(void)
   char buf[128], buf2[40];
   unsigned char *addr = (unsigned char*) &tn_addr;
 
-#if 0
-/*  愚人節專用*/
-  time_t test;
-  test = time(0);
-  if(test >= 1017590400 && test <= 1017676800)
-  {
-    clear();
-    more("etc/@/repair",(char *)-1);
-    bell();
-    vkey();
-//    more("etc/@/virus",(char *)-1);
-//    bell();
-//    vkey();
-    more("etc/@/disconnect",(char *)-1);    
-    bell();
-    vkey();    
-    bell();
-    vkey();    
-    bell();
-    vkey();
-    more("etc/@/systembusy",(char *)-1);
-    bell();
-    vkey();
-    bell();
-    vkey();
-    bell();
-    vkey();
-    more("etc/@/sorry",(char *)-1);    
-    bell();
-    vkey();      
-  } 
-#endif
-
-  sprintf(buf2, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);  
+  sprintf(buf2, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
   str_lower(buf,fromhost);
   
   if(acl_has(FN_ETC_BANIP_ACL, "", buf) > 0
