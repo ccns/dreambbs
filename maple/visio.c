@@ -18,6 +18,10 @@
 #define INPUT_ACTIVE	0
 #define INPUT_IDLE	1
 
+#define t_lines    (b_lines + 1)
+#define p_lines    (b_lines - 5)
+#define t_columns  (b_cols  + 1)
+
 #ifdef M3_USE_PFTERM
 // filed color   (defined in theme.h)
 #define STANDOUT        attrsetbg(FILEDBG); attrsetfg(FILEDFG);
@@ -163,7 +167,7 @@ static int roll;
 static int scrollcnt, tc_col, tc_row;
 
 
-static screenline vbuf[t_lines];
+static screenline vbuf[100];  //r2: maximum totel lines (t_lines)
 //static
 screenline *cur_slp;	/* current screen line pointer */
 
