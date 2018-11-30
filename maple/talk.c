@@ -722,9 +722,9 @@ pal_head(
   XO *xo)
 {
   vs_head("好友名單", str_site);
-  outs("\
-  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [/?]搜尋 [q]查詢 [h]elp\n\
-\033[30;47m  編號    代 號         友       誼                                           \033[m");
+  outs(
+"  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [/?]搜尋 [q]查詢 [h]elp\n"
+"\033[30;47m  編號    代 號         友       誼                                           \033[m");
   return pal_body(xo);
 }
 
@@ -1107,15 +1107,15 @@ bmw_head(
   vs_head("察看訊息", str_site);
   if(bmw_modetype & BMW_MODE)
   {
-    outs("\
-  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n\
-\033[30;47m 編號 代 號        內       容                                                \033[m");
+    outs(
+"  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n"
+"\033[30;47m 編號 代 號        內       容                                                \033[m");
   }
   else
   {
-    outs("\
-  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n\
-\033[30;47m 編號 時 間 代 號        內       容                                          \033[m");
+    outs(
+"  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n"
+"\033[30;47m 編號 時 間 代 號        內       容                                          \033[m");
   }
   return bmw_body(xo);
 }
@@ -4711,9 +4711,9 @@ banmsg_head(
   XO *xo)
 {
   vs_head("拒收名單", str_site);
-  outs("\
-  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [q]查詢 [h]elp\n\
-\033[30;47m  編號    代 號         描       述                                           \033[m");
+  outs(
+"  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [q]查詢 [h]elp\n"
+"\033[30;47m  編號    代 號         描       述                                           \033[m");
   return banmsg_body(xo);
 }
 

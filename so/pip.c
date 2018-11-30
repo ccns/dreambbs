@@ -1533,22 +1533,22 @@ void pip_write_file(void)
 	{
 		fprintf(ff, "%lu\n", d.bbtime);
 		fprintf(ff,
-				"%d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %s %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d \n\
-				%d %d %d %d %d %d %d %d %d %d %d %d %d %d",
+				"%d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %s %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d \n"
+				"%d %d %d %d %d %d %d %d %d %d %d %d %d %d",
 				d.year, d.month, d.day, d.sex, d.death, d.nodone, d.relation, d.liveagain, d.chickenmode, d.level, d.exp, d.dataE,
 				d.hp, d.maxhp, d.weight, d.tired, d.sick, d.shit, d.wrist, d.bodyA, d.bodyB, d.bodyC, d.bodyD, d.bodyE,
 				d.social, d.family, d.hexp, d.mexp, d.tmpA, d.tmpB, d.tmpC, d.tmpD, d.tmpE,

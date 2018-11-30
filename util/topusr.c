@@ -78,17 +78,17 @@ write_data(
   printf(buf, "%s", title);
   if(mode == 0)
   {
-    puts("\x1b[1;31mΩ\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34mNickname\x1b[m)  \
-           \x1b[1;36mΩ计\x1b[m    \x1b[1;31mΩ\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34m\
-Nickname\x1b[m)             \x1b[1;36mΩ计\x1b[m\n-----------------------------\
--------    ------------------------------------");
+    puts("\x1b[1;31mΩ\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34mNickname\x1b[m)  "
+"           \x1b[1;36mΩ计\x1b[m    \x1b[1;31mΩ\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34m"
+"Nickname\x1b[m)             \x1b[1;36mΩ计\x1b[m\n-----------------------------"
+"-------    ------------------------------------");
   }
   else
   {
-    puts("\x1b[1;31mΩ\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34mNickname\x1b[m)  \
-           \x1b[1;36m计\x1b[m    \x1b[1;31mΩ\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34m\
-Nickname\x1b[m)             \x1b[1;36m计\x1b[m\n-----------------------------\
--------    ------------------------------------");
+    puts("\x1b[1;31mΩ\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34mNickname\x1b[m)  "
+"           \x1b[1;36m计\x1b[m    \x1b[1;31mΩ\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34m"
+"Nickname\x1b[m)             \x1b[1;36m计\x1b[m\n-----------------------------"
+"-------    ------------------------------------");
   }
 
   for (i = 0; i < TOPNUM_HALF; i++)

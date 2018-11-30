@@ -115,8 +115,8 @@ XO *xo)
 	outs("[←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明   "); /*r2.20170802: disable "Z" option
                                                                         in case of confusion*/
 	outs(buf);
-	outs("\033[44m\
-		 編號     主              題                            [編      選] [日  期]\033[m");
+	outs("\033[44m"
+		" 編號     主              題                            [編      選] [日  期]\033[m");
 	return mailgem_body(xo);
 }
 

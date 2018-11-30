@@ -74,9 +74,9 @@ banmail_head(
   XO *xo)
 {
   vs_head("擋信列表", str_site);
-  outs("\
-  [←]離開 ^P)新增 c)修改 d)刪除 S)重整 [h]elp\n\
-\033[30;47m  編號  使用率 更新期 模  式  擋  信  內  容                                  \033[m");
+  outs(
+"  [←]離開 ^P)新增 c)修改 d)刪除 S)重整 [h]elp\n"
+"\033[30;47m  編號  使用率 更新期 模  式  擋  信  內  容                                  \033[m");
   return banmail_body(xo);
 }
 

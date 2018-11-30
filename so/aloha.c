@@ -106,9 +106,9 @@ aloha_head(
 XO *xo)
 {
 	vs_head("上站通知名單", str_site);
-	outs("\
-		 [←]離開 a)新增 d)刪除 s)重整 f)引入好友名單 [h]elp\n\
-		 \033[34;47m  編號     上 站 通 知 名 單                                                  \033[m");
+	outs(
+		" [←]離開 a)新增 d)刪除 s)重整 f)引入好友名單 [h]elp\n"
+		" \033[34;47m  編號     上 站 通 知 名 單                                                  \033[m");
 	return aloha_body(xo);
 }
 

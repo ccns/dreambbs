@@ -1130,8 +1130,8 @@ tn_main(void)
   currbno = -1;
 
   //getloadavg(load,3);
-  prints( MYHOSTNAME " ◇ " OWNER " ◇ " BBSIP " [" BBSVERNAME " " BBSVERSION "]\n\
-舧羬\033[1;33;46m %s \033[m╰参璽更%.2f %.2f %.2f - [%s] 絬计 [%d/%d]",
+  prints( MYHOSTNAME " ◇ " OWNER " ◇ " BBSIP " [" BBSVERNAME " " BBSVERSION "]\n"
+"舧羬\033[1;33;46m %s \033[m╰参璽更%.2f %.2f %.2f - [%s] 絬计 [%d/%d]",
     str_site, load[0],load[1],load[2],load[0]>16?"\033[1;37;41m筁蔼\033[m":load[0]>8?"\033[1;37;42m熬蔼\033[m":"\033[1;37;44mタ盽\033[m", ushm->count, MAXACTIVE);
 
   film_out(FILM_INCOME , 2);

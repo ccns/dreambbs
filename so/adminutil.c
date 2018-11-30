@@ -915,10 +915,10 @@ int select)
 		}
 		break;
 	case 3:
-		system("kill -9 `cat run/bmta.pid`;\
-			   kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`;\
-			   kill -9 `ps -auxwww | grep bbslink | awk '{print $2}'`;\
-			   kill -9 `ps -auxwww | grep bbsnnrp | awk '{print $2}'`");
+		system("kill -9 `cat run/bmta.pid`; "
+			   "kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`; "
+			   "kill -9 `ps -auxwww | grep bbslink | awk '{print $2}'`; "
+			   "kill -9 `ps -auxwww | grep bbsnnrp | awk '{print $2}'`");
 		logitfile(FN_RESET_LOG, "< 轉信收信 >", NULL);
 		break;
 	case 4:
@@ -936,14 +936,14 @@ int select)
 	case 7:
 		if (ntime.tm_hour != 0 && ntime.tm_hour != 1)
 		{
-			system("kill -9 `cat run/bmta.pid`;\
-				   bin/camera;\
-				   bin/account;\
-				   bin/acpro;\
-				   kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`;\
-				   kill -9 `ps -auxwww | grep bbslink | awk '{print $2}'`;\
-				   kill -9 `ps -auxwww | grep bbsnnrp | awk '{print $2}'`;\
-				   kill -9 `ps -auxwww | grep xchatd  | awk '{print $2}'`");
+			system("kill -9 `cat run/bmta.pid`; "
+				   "bin/camera; "
+				   "bin/account; "
+				   "bin/acpro; "
+				   "kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`; "
+				   "kill -9 `ps -auxwww | grep bbslink | awk '{print $2}'`; "
+				   "kill -9 `ps -auxwww | grep bbsnnrp | awk '{print $2}'`; "
+				   "kill -9 `ps -auxwww | grep xchatd  | awk '{print $2}'`");
 			board_main();
 			logitfile(FN_RESET_LOG, "< 全部系統 >", NULL);
 		}

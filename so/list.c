@@ -90,14 +90,14 @@ XO *xo)
 	vs_head(buf, mid);
 #ifdef HAVE_MULTI_CROSSPOST
 	if (mode)
-		outs("\
-			 [←]離開 a)新增 d)刪除 s)重整 TAB)切換名單 T)更改群組名稱 /)搜尋\n\
-			 \033[30;47m  編號     看板名稱                                                           \033[m");
+		outs(
+			" [←]離開 a)新增 d)刪除 s)重整 TAB)切換名單 T)更改群組名稱 /)搜尋\n"
+			" \033[30;47m  編號     看板名稱                                                           \033[m");
 	else
 #endif
-		outs("\
-			 [←]離開 a)新增 d)刪除 s)重整 TAB)切換名單 T)更改群組名稱 /)搜尋\n\
-			 \033[30;47m  編號     使用者 ID                                                          \033[m");
+		outs(
+			" [←]離開 a)新增 d)刪除 s)重整 TAB)切換名單 T)更改群組名稱 /)搜尋\n"
+			" \033[30;47m  編號     使用者 ID                                                          \033[m");
 	return list_body(xo);
 }
 

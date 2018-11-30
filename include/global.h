@@ -333,8 +333,8 @@
 #define	STR_REPLY	"Re: "
 #define	STR_FORWARD	"Fw: "
 
-#define STR_LINE	"\n\
-> -------------------------------------------------------------------------- <\n\n"
+#define STR_LINE	"\n" \
+"> -------------------------------------------------------------------------- <\n\n"
 #define	LEN_AUTHOR1	(sizeof(STR_AUTHOR1) - 1)
 #define	LEN_AUTHOR2	(sizeof(STR_AUTHOR2) - 1)
 
@@ -344,12 +344,12 @@
 #define STR_GUEST	"guest"
 #define STR_NEW		"new"
 
-#define	MSG_SEPARATOR	"\
-───────────────────────────────────────"
-#define MSG_BLINE	"\
-______________________________________________________________________________"
-#define MSG_ULINE	"\
-￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣"
+#define	MSG_SEPARATOR	\
+"───────────────────────────────────────"
+#define MSG_BLINE	\
+"______________________________________________________________________________"
+#define MSG_ULINE	\
+"￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣"
 #define	MSG_CANCEL	"取消"
 #define	MSG_USR_LEFT	"對方已經離去"
 

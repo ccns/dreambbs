@@ -64,9 +64,9 @@ show_head(
 XO *xo)
 {
 	vs_head("已投票名單", str_site);
-	outs("\
-		 [←]離開 ^P)新增 c)修改 d)刪除 s)重整 [h]elp\n\
-		 \033[30;47m  編號     已投票的 Email                                                     \033[m");
+	outs(
+		" [←]離開 ^P)新增 c)修改 d)刪除 s)重整 [h]elp\n"
+		" \033[30;47m  編號     已投票的 Email                                                     \033[m");
 	return show_body(xo);
 }
 
