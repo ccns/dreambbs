@@ -503,7 +503,7 @@ typedef struct
                         //  Just trying to notify you that it's
                         //  NOT REAL MAX LINENO NOR FILELENGTH!!!
                         //  You may consider "S" of "Start" (disps).
-    void (*detachHandler)();
+    void (*detachHandler)(void);
 } MmappedFile;
 
 MmappedFile mf = {

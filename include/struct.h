@@ -1013,7 +1013,7 @@ typedef struct PostRecommendHistory
 typedef struct
 {
     void *func;
-    /* int (*func) (); */
+    /* int (*func) (void); */
     unsigned int level;
     int umode;
     char *desc;

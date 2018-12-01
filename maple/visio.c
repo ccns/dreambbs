@@ -1140,13 +1140,13 @@ rscroll(void)
 
 #ifdef M3_USE_PFTERM
 void
-cursor_save()
+cursor_save(void)
 {
     getyx(&save_y, &save_x);
 }
 
 void
-cursor_restore()
+cursor_restore(void)
 {
     move(save_y, save_x);
 }

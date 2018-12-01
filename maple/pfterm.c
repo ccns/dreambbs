@@ -1107,7 +1107,7 @@ scrl(int rows)
 }
 
 void
-scroll()
+scroll(void)
 {
     // scroll up
     int y;
@@ -1143,7 +1143,7 @@ scroll()
 }
 
 void
-rscroll()
+rscroll(void)
 {
     // scroll down
     int y;

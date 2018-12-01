@@ -1241,7 +1241,7 @@ telnet_init(void)
 /* ----------------------------------------------------- */
 
 static void
-term_init()
+term_init(void)
 {
 /* fuse.030518: 註解 */
 //  server問：你會改變行列數嗎？(TN_NAWS, Negotiate About Window Size)

@@ -19,7 +19,7 @@ splay_free(SplayNode * top, void (*data_free) (void *))
 }
 
 void
-splay_out(SplayNode * top, void (*data_out) ())
+splay_out(SplayNode * top, void (*data_out) (void *))
 {
     if (top == NULL)
         return;
