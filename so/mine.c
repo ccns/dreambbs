@@ -61,7 +61,7 @@ void initMap(void)
             MineMap[y][x] = TILE_BLANK;
             if (y == 0 || x == 0 || y == MAP_Y + 1 || x == MAP_X + 1)
                 MineMap[y][x] |= TILE_EXPAND;
-        };
+        }
 
     for (i = 0; i < TotalMines;)
     {
@@ -73,9 +73,9 @@ void initMap(void)
         {
             MineMap[y][x] = TILE_MINE;
             i++;
-        };
-    };
-};
+        }
+    }
+}
 
 int
 show_fasttime(void)
@@ -147,7 +147,7 @@ int countNeighbor(int y, int x, int bitmask)
     if (MineMap[y+1][x  ] & bitmask) ++sum;
     if (MineMap[y+1][x-1] & bitmask) ++sum;
     return sum;
-};
+}
 
 char *symTag = "\x1b[1;40;31mΨ\x1b[m";
 char *symWrong = "\x1b[1;41;37m〤\x1b[m";
@@ -166,7 +166,7 @@ void drawInfo(void)
     clrtoeol();
     prints("所花時間: %.0lf 秒, 剩下 %d 個地雷未標記.\n",
            difftime(time(0), init_time) , TotalMines - TaggedMines);
-};
+}
 
 void drawPrompt(void)
 {
@@ -189,7 +189,7 @@ void drawPrompt(void)
     outs("掃雷       ｔ");clrtokol();
     move(9, 0);
     outs("離開    Esc / q");clrtokol();
-};
+}
 
 void drawMapLine(int y, int flShow)
 {
@@ -215,11 +215,11 @@ void drawMapLine(int y, int flShow)
         else outs(symBlank);
 
         if (x == currx && y == curry) outs("\x1b[m");
-    };
+    }
     clrtoeol();
 
     move(curry + 1, currx*2 + MAP_START_X - 1);
-};
+}
 
 void drawMap(int flShow)
 {
@@ -230,8 +230,8 @@ void drawMap(int flShow)
     for (y = 1; y < MAP_Y + 1; y++)
     {
         drawMapLine(y, flShow);
-    };
-};
+    }
+}
 
 static int flLoseMine = 0;
 
@@ -241,7 +241,7 @@ static void loseMine(void)
     game_log(1, "\x1b[31;1m在 %.01f 秒時踩到地雷啦!!!", difftime(time(0), init_time));
     vmsg("你輸了");
     flLoseMine = 1;
-};
+}
 
 void ExpandMap(int y, int x, int flTrace)
 {
@@ -249,10 +249,10 @@ void ExpandMap(int y, int x, int flTrace)
     {
         if (MineMap[y][x] & TILE_TAGGED || MineMap[y][x] & TILE_EXPAND) return;
         if ((MineMap[y][x] & TILE_MINE) && (!(MineMap[y][x] & TILE_TAGGED)))
-            { loseMine(); return; };
+            { loseMine(); return; }
         MineMap[y][x] |= TILE_EXPAND;
         drawMapLine(y, 0);
-    };
+    }
     if (flTrace || countNeighbor(y, x, TILE_MINE) == 0)
     {
         if (flTrace || (MineMap [y-1][x  ] & TILE_EXPAND) == 0)
@@ -271,8 +271,8 @@ void ExpandMap(int y, int x, int flTrace)
             ExpandMap(y - 1, x + 1, 0);
         if (flTrace || (MineMap [y+1][x+1] & TILE_EXPAND) == 0)
             ExpandMap(y + 1, x + 1, 0);
-    };
-};
+    }
+}
 
 void TraceMap(int y, int x)
 {
@@ -280,8 +280,8 @@ void TraceMap(int y, int x)
     if (countNeighbor(y, x, TILE_MINE) == countNeighbor(y, x, TILE_TAGGED))
     {
         ExpandMap(y, x, 1);
-    };
-};
+    }
+}
 
 void playMine(void)
 {
@@ -306,14 +306,14 @@ void playMine(void)
             {
                 drawMapLine(curry--, 0);
                 drawMapLine(curry, 0);
-            };
+            }
             break;
 
         case KEY_DOWN:
             if (curry < MAP_Y)
             {
                 drawMapLine(curry++, 0);
-            };
+            }
             break;
 
         case KEY_LEFT:
@@ -355,7 +355,7 @@ void playMine(void)
             {
                 TaggedMines++;
                 MineMap[curry][currx] ^= TILE_EXPAND;
-            };
+            }
 
             MineMap[curry][currx] ^= TILE_TAGGED;
             if (TaggedMines == TotalMines) return;
@@ -363,10 +363,10 @@ void playMine(void)
 
         default:
             break;
-        };
+        }
         drawMapLine(curry, 0);
     }
-};
+}
 
 int Mine(void)
 {
@@ -406,7 +406,7 @@ start:
         break;
     default:
         return 0;
-    };
+    }
     if (atoi(ans) == 5) goto start;
     load_fasttime();
     TotalMines += (MAP_X / 10) * (MAP_Y);
@@ -432,8 +432,8 @@ start:
             game_log(1, "\x1b[32;1m在 %s 花了 %d 秒清除地雷!!!", buf, ti);
             if (ti < fasttime[atoi(ans)-1]) change_fasttime(atoi(ans) - 1, ti);
             vmsg(NULL);
-        };
-    };
+        }
+    }
     goto start;
-};
+}
 

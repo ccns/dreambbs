@@ -43,7 +43,7 @@ strcpy(buf, "/home/bbs/usr/p/pcbug/benz");
             {
                 printf("ID:%-13s sender:%-4d recver:%-4d msg:%s\n"
                        , bmw.userid, bmw.sender, bmw.recver, bmw.msg);
-            };
+            }
 
 
 
