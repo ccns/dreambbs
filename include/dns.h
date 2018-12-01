@@ -39,7 +39,7 @@ typedef union
  * nameserver answers containing very many resource records. The resolver may
  * switch to tcp and retry if it detects udp packet overflow. Also note that
  * the resolver routines res_query and res_search return the size of the
- * un*truncated answer in case the supplied answer buffer it not big enough
+ * untruncated answer in case the supplied answer buffer it not big enough
  * to accommodate the entire answer.
  */
 
