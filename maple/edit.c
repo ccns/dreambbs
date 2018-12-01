@@ -1551,9 +1551,9 @@ ve_filer(
             /* Thor.980909: anonymous post mode */
             if ((bbstate & BRD_ANONYMOUS) && (curredit & EDIT_ANONYMOUS)
                 && (bbsmode != M_SMAIL))
-                    /* lkchu.981201: M_SMAIL 時不須要暱名 */
+                    /* lkchu.981201: M_SMAIL 時不須要匿名 */
                 fprintf(fp, ANONYMOUS_TAG,
-                    str_site, MYHOSTNAME, "暱名天使的家");
+                    str_site, MYHOSTNAME, "匿名天使的家");
             else
 #endif
 

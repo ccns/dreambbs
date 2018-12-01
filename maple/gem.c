@@ -577,7 +577,7 @@ gem_state(
 
     if(!(ghdr = gem_check(xo, fpath, GEM_READ)))
         return XO_NONE;
-    /* Thor.980216: 注意! 有可能傳回 NULL導至踢人 */
+    /* Thor.980216: 注意! 有可能傳回 NULL導致踢人 */
 
     if(!(HAS_PERM(PERM_ALLBOARD)))
     {

@@ -447,10 +447,10 @@ do_post(
     {
         if(cuser.ufo2 & UFO2_DEF_ANONY)
         {
-            if(vans("你(妳)想要暱名嗎(Y/N)?[N]") == 'y')
+            if(vans("你(妳)想要匿名嗎(Y/N)?[N]") == 'y')
                 curredit |= EDIT_ANONYMOUS;
         }
-        else if(vans("你(妳)想要暱名嗎(Y/N)?[Y]") != 'n')
+        else if(vans("你(妳)想要匿名嗎(Y/N)?[Y]") != 'n')
             curredit |= EDIT_ANONYMOUS;
     }
 #endif
