@@ -29,7 +29,7 @@ check_in(
     char *email)
 {
     int i;
-    for (i=0;i<MAX_AC;i++)
+    for (i=0; i<MAX_AC; i++)
         if (!strcmp(map[i].email, email))
         {
             map[i].num++;
@@ -136,7 +136,7 @@ main(
 
 
     printf("total user %d\n", total);
-    for (i=0;i<total;i++)
+    for (i=0; i<total; i++)
     {
         write(fd, &map[i], sizeof(MAP));
         printf("%-60s# %d\n", map[i].email, map[i].num);

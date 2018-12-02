@@ -144,7 +144,7 @@ XO *xo)
     if (chat_edit(&chat, DOECHO))
     {
         rec_add(xo->dir, &chat, sizeof(ChatAction));
-        xo->pos = XO_TAIL ;
+        xo->pos = XO_TAIL;
         xo_load(xo, sizeof(ChatAction));
     }
     return chat_head(xo);

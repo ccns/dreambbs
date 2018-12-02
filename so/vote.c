@@ -382,7 +382,7 @@ char *path)
         return 0;
     if ((fd = open(path, O_WRONLY | O_CREAT | O_TRUNC, 0600)) < 0)
         return 0;
-    for (i = 0;i < item;i++)
+    for (i = 0; i < item; i++)
         write(fd, &stud[i], sizeof(VCHS));
     close(fd);
     return item;

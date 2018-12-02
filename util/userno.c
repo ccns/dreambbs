@@ -112,10 +112,10 @@ main(void)
     close(funo);
     total--;
     fprintf(flog, "total user %d\n", total);
-    for (i=1;i<=total;i++)
+    for (i=1; i<=total; i++)
     {
         k = 0;
-        for (j=0;j<total;j++)
+        for (j=0; j<total; j++)
         {
             if (map[j].userno == i)
                 k=1;

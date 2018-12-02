@@ -227,7 +227,7 @@ favorite_main(void)
         return;
 
     len = sizeof(short) * 3;
-    for (i = 0; i <= 1 ; i++)
+    for (i = 0; i <= 1; i++)
     {
         pos[i] = len;
         len += CH_TTLEN + chx[i]->count * sizeof(short);

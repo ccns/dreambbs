@@ -412,7 +412,7 @@ Pnote(int newflag)
         }
         else if ((ans[0] == 'd' || ans[0] == 'D') && !newflag)
         {
-            for (i = offset - 1;i < num;i++)
+            for (i = offset - 1; i < num; i++)
                 memcpy(&item_array[i], &item_array[i+1], sizeof(notedata));
 
             num--;
@@ -444,7 +444,7 @@ Pnote(int newflag)
 
                 fclose(fp);
             }
-            for (i = offset - 1;i < num;i++)
+            for (i = offset - 1; i < num; i++)
                 memcpy(&item_array[i], &item_array[i+1], sizeof(notedata));
 
             num--;

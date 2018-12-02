@@ -356,7 +356,7 @@ myfavorite_find_same(
 
     max = rec_num(dir, sizeof(HDR));
 
-    for (i=0;i<max;i++)
+    for (i=0; i<max; i++)
     {
         rec_get(dir, &hdr, sizeof(HDR), i);
         if (!strcmp(hdr.xname, brd->brdname) && hdr.xmode & GEM_BOARD)
@@ -459,7 +459,7 @@ remove_dir(
     char buf[20], path[80];
 
     max = rec_num(fpath, sizeof(HDR));
-    for (i=0;i<max;i++)
+    for (i=0; i<max; i++)
     {
         rec_get(fpath, &hdr, sizeof(HDR), i);
         if (hdr.xmode & GEM_FOLDER)
@@ -721,7 +721,7 @@ myfavorite_find_chn(
     bp = bshm->bcache;
     max = bshm->number;
 
-    for (i=0;i<max;i++, bp++)
+    for (i=0; i<max; i++, bp++)
     {
         if (!strcmp(bp->brdname, brdname))
         {
@@ -761,7 +761,7 @@ myfavorite_parse(
     usr_fpath(fpath, cuser.userid, buf);
     max = rec_num(fpath, sizeof(HDR));
 
-    for (i=0;i<max;i++)
+    for (i=0; i<max; i++)
     {
         rec_get(fpath, &hdr, sizeof(HDR), i);
         if (hdr.xmode & GEM_BOARD)
@@ -798,7 +798,7 @@ myfavorite_main(void)
     usr_fpath(fpath, cuser.userid, FN_MYFAVORITE);
     max = rec_num(fpath, sizeof(HDR));
 
-    for (i=0;i<max;i++)
+    for (i=0; i<max; i++)
     {
         rec_get(fpath, &hdr, sizeof(HDR), i);
         if (hdr.xmode & GEM_BOARD)

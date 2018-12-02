@@ -30,7 +30,7 @@ output_rfc2047_qp(
     fputs(prefix, fp);
 
     /* 如果字串開頭有 US_ASCII printable characters，可先行輸出，這樣比較好看，也比較相容 */
-    for ( i = 0 ; (ch = str[i]) ; i++)
+    for ( i = 0; (ch = str[i]); i++)
     {
         if (ch != '=' && ch != '?' && ch != '_' && ch > '\x1f' && ch < '\x7f')
         {
@@ -51,7 +51,7 @@ output_rfc2047_qp(
     {
         /* 開始 encode */
         fprintf(fp, "=?%s?Q?", charset);	/* 指定字集 */
-        for (; (ch = str[i]) ; i++)
+        for (; (ch = str[i]); i++)
         {
             /* 如果是 non-printable 字元就要轉碼 */
             /* 範圍: '\x20' ~ '\x7e' 為 printable, 其中 =, ?, _, 空白, 為特殊符號也要轉碼 */

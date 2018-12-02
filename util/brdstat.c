@@ -178,7 +178,7 @@ static void
 save_hot(void)
 {
     int i, fd;
-    for (i=0;i<hotcount;i++)
+    for (i=0; i<hotcount; i++)
         hotboard[i].xid = 0;
     fd = open(FN_HOTBOARD, O_WRONLY);
     write(fd, hotboard, sizeof(HDR)*hotcount);
@@ -191,7 +191,7 @@ count_hot(
     BRD *brd)
 {
     int i;
-    for (i=0;i<hotcount;i++)
+    for (i=0; i<hotcount; i++)
     {
         if (brd->n_reads >= hotboard[i].xid)
             break;

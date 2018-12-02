@@ -137,7 +137,7 @@ personal_apply(void)
     }
 
     num = rec_num(FN_ETC_PERSONAL, sizeof(PB));
-    for (i=0;i<num;i++)
+    for (i=0; i<num; i++)
     {
         rec_get(FN_ETC_PERSONAL, &pb, sizeof(PB), i);
 

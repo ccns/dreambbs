@@ -52,7 +52,7 @@ static int
 check_in_memory(char *bm, char *id)
 {
     char *i;
-    for (i=bm;strlen(i);i=i+IDLEN+1)
+    for (i=bm; strlen(i); i=i+IDLEN+1)
     if (!strcmp(i, id))
         return 0;
     return 1;
@@ -65,7 +65,7 @@ send_to_all(char *title, char *fpath, char *bm)
     char buf[128], *ptr;
     HDR mhdr;
 
-    for (ptr=bm;strlen(ptr);ptr=ptr+IDLEN+1)
+    for (ptr=bm; strlen(ptr); ptr=ptr+IDLEN+1)
     {
         usr_fpath(buf, ptr, ".DIR");
         hdr_stamp(buf, HDR_LINK, &mhdr, fpath);

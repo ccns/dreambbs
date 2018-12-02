@@ -131,7 +131,7 @@ finduserno(
     char *userid)
 {
     int i;
-    for (i=1;i<=total;i++)
+    for (i=1; i<=total; i++)
     {
         if (!strcmp(map[i].userid, userid))
             return i;
@@ -340,7 +340,7 @@ main(void)
     strcpy(fname = fpath, "usr/@");
     fname = (char *) strchr(fname, '@');
 
-    for (mode = 1 ; mode <= 2 ; mode++)
+    for (mode = 1; mode <= 2; mode++)
     {
         for (ch = 'a'; ch <= 'z'; ch++)
         {

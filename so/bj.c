@@ -77,17 +77,17 @@ BlackJack(void)
         while ((money < 1) || (money > 250000));
         cuser_money = cuser_money - money;
         clear();
-        move(2, 0);prints("(按 y 續牌，n 不續牌，d double)");
-        move(0, 0);clrtoeol();prints("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
+        move(2, 0); prints("(按 y 續牌，n 不續牌，d double)");
+        move(0, 0); clrtoeol(); prints("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
 
 //重寫發牌演算法  by jerics
-        for (i = 0;i < 52;i++)
+        for (i = 0; i < 52; i++)
             cardlist[i] = i;
-        for (i = 0;i < 52;i++)
+        for (i = 0; i < 52; i++)
             SWAP(cardlist[i], cardlist[rand()%52]);
 
 #if 0
-        for (i = 0;i <= 51;i++)
+        for (i = 0; i <= 51; i++)
         {
             m = 0;
             do
@@ -143,78 +143,78 @@ BlackJack(void)
 
             if ((guest_card[0] >= 24 && guest_card[0] <= 27) && (guest_card[1] >= 24 && guest_card[1] <= 27) && (guest_card[2] >= 24 && guest_card[2] <= 27))
             {
-                move(18, 3);prints("\x1b[1;41;33m     ７７７     \x1b[m");
-                move(3, 0);prints("\x1b[1;41;33m７７７ !!! 得獎金 %d 火車幣\x1b[m", money*seven);
+                move(18, 3); prints("\x1b[1;41;33m     ７７７     \x1b[m");
+                move(3, 0); prints("\x1b[1;41;33m７７７ !!! 得獎金 %d 火車幣\x1b[m", money*seven);
                 cuser_money += (money * seven);
 //              inmoney(money*seven);
                 game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;31m  ７７７   \x1b[m"
                         , money*seven);
                 pressanykey("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
-                flag = 1;m = 0;
+                flag = 1; m = 0;
             }
 
             if ((guest_card[0] == 40 && guest_card[1] == 0) || (guest_card[0] == 0 && guest_card[1] == 40))
             {
-                move(18, 3);prints("\x1b[1;41;33m 超級正統 BLACK JACK  \x1b[m");
-                move(3, 0);prints("\x1b[1;41;33m超級正統 BLACK JACK !!! 得獎金 %d 金幣\x1b[m", money*super_jack);
+                move(18, 3); prints("\x1b[1;41;33m 超級正統 BLACK JACK  \x1b[m");
+                move(3, 0); prints("\x1b[1;41;33m超級正統 BLACK JACK !!! 得獎金 %d 金幣\x1b[m", money*super_jack);
                 cuser_money += (money * super_jack);
                 game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;41;33m 正統 ＡＪ \x1b[m"
                         , money*super_jack);
                 pressanykey("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
-                flag = 1;m = 0;
+                flag = 1; m = 0;
             }
 
             if ((guest_card[0] <= 3 && guest_card[0] >= 0) && (guest_card[1] <= 43 && guest_card[1] >= 40))tmp = 1;
 
             if ((tmp == 1) || ((guest_card[1] <= 3 && guest_card[1] >= 0) && (guest_card[0] <= 43 && guest_card[0] >= 40)))
             {
-                move(18, 3);prints("\x1b[1;41;33m SUPER BLACK JACK  \x1b[m");
-                move(3, 0);prints("\x1b[1;41;33mSUPER BLACK JACK !!! 得獎金 %d 金幣\x1b[m", money*aj);
+                move(18, 3); prints("\x1b[1;41;33m SUPER BLACK JACK  \x1b[m");
+                move(3, 0); prints("\x1b[1;41;33mSUPER BLACK JACK !!! 得獎金 %d 金幣\x1b[m", money*aj);
                 cuser_money += (money * aj);
 //              inmoney(money*aj);
                 game_log(2, "中了 \x1b[1;33m%d\x1b[m 元的 \x1b[1;44;33m SuperＡＪ \x1b[m", money*aj);
                 pressanykey("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
-                flag = 1;m = 0;
+                flag = 1; m = 0;
             }
 
             if (guest_point == 21 && guest_count == 1)
             {
-                move(18, 3);prints("\x1b[1;41;33m  BLACK JACK  \x1b[m");
-                move(3, 0);prints("\x1b[1;41;33mBLACK JACK !!!\x1b[44m 得獎金 %d 金幣\x1b[m", money*win_jack);
+                move(18, 3); prints("\x1b[1;41;33m  BLACK JACK  \x1b[m");
+                move(3, 0); prints("\x1b[1;41;33mBLACK JACK !!!\x1b[44m 得獎金 %d 金幣\x1b[m", money*win_jack);
                 cuser_money += (money * win_jack);
 //              inmoney(money*win_jack);
-                move(0, 0);clrtoeol();//prints("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser.money);
+                move(0, 0); clrtoeol();//prints("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser.money);
                 if (money*win_jack >= 500000)
                 {
                     game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;47;30m BlackJack \x1b[m", money*win_jack);
                 }
 
                 pressanykey("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
-                flag = 1;m = 0;
+                flag = 1; m = 0;
             }                        /* 前兩張就 21 點 */
 
             if (guest_point > 21)
             {
-                if (A_count > 0){guest_point -= 10;A_count--;};
+                if (A_count > 0){guest_point -= 10; A_count--;};
             }
-            move(12, 0); clrtoeol();prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", host_point);
-            move(14, 0); clrtoeol();prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", guest_point);
+            move(12, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", host_point);
+            move(14, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", guest_point);
             if (guest_point > 21)
             {
                 pressanykey("  爆掉啦~~~  ");
-                flag = 1;m = 0;
+                flag = 1; m = 0;
             }
 
             if ((guest_count == 5) && (flag == 0))
             {
-                move(18, 3);prints("\x1b[1;41;33m            過六關            \x1b[m");
-                move(3, 0);prints("\x1b[1;41;33m過六關 !!! 得獎金 %d 金幣\x1b[m", money*six);
+                move(18, 3); prints("\x1b[1;41;33m            過六關            \x1b[m");
+                move(3, 0); prints("\x1b[1;41;33m過六關 !!! 得獎金 %d 金幣\x1b[m", money*six);
                 cuser_money += (money * six);
 //              inmoney(money*six);
 //              inexp(ba*5);
                 game_log(2, "中了 \x1b[1;33m%d\x1b[m 元的 \x1b[1;44;33m  過六關   \x1b[m", money*six);
                 pressanykey("您還有 %d 金幣", cuser_money);
-                flag = 1;m = 0;
+                flag = 1; m = 0;
 //              return 0;
             }
 
@@ -238,7 +238,7 @@ BlackJack(void)
                     money *= 2;
                 }
                 else ch = 'n';
-                move(0, 0);clrtoeol();prints("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
+                move(0, 0); clrtoeol(); prints("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
             }                                      /* double */
 
             if (ch == 'd' && guest_count > 2)ch = 'n';
@@ -263,16 +263,16 @@ BlackJack(void)
                 }
                 if (host_point > 21)
                 {
-                    if (AA_count > 0){host_point -= 10;AA_count--;};
+                    if (AA_count > 0){host_point -= 10; AA_count--;};
                 }
-                move(12, 0); clrtoeol();prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", host_point);
-                move(14, 0); clrtoeol();prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", guest_point);
+                move(12, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", host_point);
+                move(14, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", guest_point);
                 if (host_point > 21)
                 {
                     move(14, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d \x1b[1;41;33m WINNER \x1b[m", guest_point);
                     cuser_money += (money * win);
 //                  inmoney(money*win);
-                    move(0, 0);clrtoeol();prints("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
+                    move(0, 0); clrtoeol(); prints("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
                     pressanykey("\x1b[1;44;33m你贏了~~~~ 得獎金 %d 金幣\x1b[m", money*win);
                     flag = 1;
                 }

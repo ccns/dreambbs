@@ -220,7 +220,7 @@ main(
     sprintf(fpath, "gem/brd/%s/@/@note", BRD_CAMERA);
 
 #ifdef      HAVE_SONG_TO_CAMERA
-    for (j=0;j<=1;j++)
+    for (j=0; j<=1; j++)
     {
 #endif
         if ((fp = fopen(fpath, "r")))
@@ -253,7 +253,7 @@ main(
 #ifdef	HAVE_SONG_TO_CAMERA
                     if (j == 1 /*&& !strncmp(buf, str_author1, strlen(str_author1))*/)
                     {
-                        for (k=0;k<=3 && ptr;k++)
+                        for (k=0; k<=3 && ptr; k++)
                         {
                             ptr = strchr(ptr, '\n');
                             if (ptr)

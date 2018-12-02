@@ -25,7 +25,7 @@
 #ifdef M3_USE_PFTERM
 // filed color   (defined in theme.h)
 #define STANDOUT   (void) ( attrsetbg(FILEDBG), attrsetfg(FILEDFG) )
-// default color (\033[37;40m)
+// default color (\033[37; 40m)
 #define STANDEND   (void) ( attrsetbg(0), attrsetfg(7) )
 #else
 int cur_row, cur_col;
@@ -655,7 +655,7 @@ void
 clrtohol(void)
 {
     int n;
-    for (n=cur_col;n<36;n++) /* 36是我的動態看板起始位置, 自己調整 */
+    for (n=cur_col; n<36; n++) /* 36是我的動態看板起始位置, 自己調整 */
         outc(' ');
 }
 

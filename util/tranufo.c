@@ -75,7 +75,7 @@ reaper(
     }
     close(fd);
     acct.ufo2 = 0;
-    for (ptr = table;ptr->old;ptr++)
+    for (ptr = table; ptr->old; ptr++)
     {
         if (acct.ufo & ptr->old)
             acct.ufo2 |= ptr->new;

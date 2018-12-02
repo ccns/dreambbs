@@ -112,7 +112,7 @@ XO *xo)
     if (show_edit(&show, DOECHO))
     {
         rec_add(xo->dir, &show, sizeof(LOG));
-        xo->pos = XO_TAIL ;
+        xo->pos = XO_TAIL;
         xo_load(xo, sizeof(LOG));
     }
     return show_head(xo);

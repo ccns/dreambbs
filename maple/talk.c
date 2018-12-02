@@ -1756,7 +1756,7 @@ static void bmw_display(int max, int pos)
     prints(" \033[1;36m╓──────╢\033[43;37m              夢大超炫水球回顧              \033[40;36m╟──────╖\033[m");
 
     i++;
-    for (max=0;max<8 ;max++)
+    for (max=0; max<8; max++)
     {
         bmw = bmw_lslot[max];
         if (max == pos)

@@ -29,7 +29,7 @@ install: $(EXE)
 	install -m 0700 $? $(HOME)/innd
 
 update:
-	-csh -c "kill `tail -1 $(HOME)/run/innbbsd.pid | awk '{print $$1}'`";exit 0
+	-csh -c "kill `tail -1 $(HOME)/run/innbbsd.pid | awk '{print $$1}'`"; exit 0
 
 clean:
 	rm -f $(EXE) *.o *~

@@ -193,23 +193,23 @@
 
 // Colors
 #define PMORE_COLOR_HEADER1 \
-    ANSI_COLOR(47;34)
+    ANSI_COLOR(47; 34)
 #define PMORE_COLOR_HEADER2 \
-    ANSI_COLOR(44;37)
+    ANSI_COLOR(44; 37)
 #define PMORE_COLOR_FOOTER1_VIEWALL \
-    ANSI_COLOR(37;44)
+    ANSI_COLOR(37; 44)
 #define PMORE_COLOR_FOOTER1_VIEWNONE \
-    ANSI_COLOR(33;45)
+    ANSI_COLOR(33; 45)
 #define PMORE_COLOR_FOOTER1 \
-    ANSI_COLOR(34;46)
+    ANSI_COLOR(34; 46)
 #define PMORE_COLOR_FOOTER2 \
-    ANSI_COLOR(1;30;47)
+    ANSI_COLOR(1; 30; 47)
 #define PMORE_COLOR_FOOTER3_KEY \
     ANSI_COLOR(31)
 #define PMORE_COLOR_FOOTER3_TEXT \
     ANSI_COLOR(30)
 #define PMORE_COLOR_FOOTER3 \
-    ANSI_COLOR(0;47)
+    ANSI_COLOR(0; 47)
 
 // Preference
 // header separator default style
@@ -555,9 +555,9 @@ enum MF_DISP_CONST {
 #define MFDISP_DIRTY() (void) ( mf.oldlineno = -1 )
 
 /* Indicators */
-#define MFDISP_TRUNC_INDICATOR  ANSI_COLOR(0;1;37) ">" ANSI_RESET
-#define MFDISP_WRAP_INDICATOR   ANSI_COLOR(0;1;37) "\\" ANSI_RESET
-#define MFDISP_WNAV_INDICATOR   ANSI_COLOR(0;1;37) "<" ANSI_RESET
+#define MFDISP_TRUNC_INDICATOR  ANSI_COLOR(0; 1; 37) ">" ANSI_RESET
+#define MFDISP_WRAP_INDICATOR   ANSI_COLOR(0; 1; 37) "\\" ANSI_RESET
+#define MFDISP_WNAV_INDICATOR   ANSI_COLOR(0; 1; 37) "<" ANSI_RESET
 // --------------------------- </Main Navigation>
 
 // --------------------------- <Aux. Structures>
@@ -623,19 +623,19 @@ enum MFSEARCH_DIRECTION {
     fh.lines = -1 )
 
 // Artwork
-#define OPTATTR_NORMAL        ANSI_COLOR(0;34;47)
-#define OPTATTR_NORMAL_KEY    ANSI_COLOR(0;31;47)
-#define OPTATTR_SELECTED      ANSI_COLOR(0;1;37;46)
-#define OPTATTR_SELECTED_KEY  ANSI_COLOR(0;31;46)
-#define OPTATTR_BAR           ANSI_COLOR(0;1;30;47)
+#define OPTATTR_NORMAL        ANSI_COLOR(0; 34; 47)
+#define OPTATTR_NORMAL_KEY    ANSI_COLOR(0; 31; 47)
+#define OPTATTR_SELECTED      ANSI_COLOR(0; 1; 37; 46)
+#define OPTATTR_SELECTED_KEY  ANSI_COLOR(0; 31; 46)
+#define OPTATTR_BAR           ANSI_COLOR(0; 1; 30; 47)
 #define PREFATTR_NORMAL       ANSI_COLOR(0)
-#define PREFATTR_NORMAL_KEY   ANSI_COLOR(0;1;31)
-#define PREFATTR_SELECTED     ANSI_COLOR(0;1;36)
-#define PREFATTR_SELECTED_KEY ANSI_COLOR(0;1;31)
-#define PREFATTR_BAR          ANSI_COLOR(0;1;30)
+#define PREFATTR_NORMAL_KEY   ANSI_COLOR(0; 1; 31)
+#define PREFATTR_SELECTED     ANSI_COLOR(0; 1; 36)
+#define PREFATTR_SELECTED_KEY ANSI_COLOR(0; 1; 31)
+#define PREFATTR_BAR          ANSI_COLOR(0; 1; 30)
 #define PMHLPATTR_NORMAL      ANSI_COLOR(0)
-#define PMHLPATTR_NORMAL_KEY  ANSI_COLOR(0;1;36)
-#define PMHLPATTR_HEADER      ANSI_COLOR(0;1;32)
+#define PMHLPATTR_NORMAL_KEY  ANSI_COLOR(0; 1; 36)
+#define PMHLPATTR_HEADER      ANSI_COLOR(0; 1; 32)
 
 // Prompt Bar Shadow
 #define PMORE_SHADOW_ABOVE      (1)
@@ -1571,7 +1571,7 @@ mf_display(void)
             /* case 1, header separator line */
             if (bpref.separator & MFDISP_SEP_LINE)
             {
-                outs(ANSI_COLOR(0;36));
+                outs(ANSI_COLOR(0; 36));
                 for (col = 0; col < headerw; col+=2)
                 {
                     // prints("%02d", col);
@@ -1666,14 +1666,14 @@ mf_display(void)
                         (*line_head == ':' || *line_head == '>') &&
                         *(line_head + 1) == ' ')
                 {
-                    outs(ANSI_COLOR(0;36));
+                    outs(ANSI_COLOR(0; 36));
                     flResetColor = 1;
                 } else if (dist > 2 &&
                         (!strncmp((char*)line_head, "¡°", 2) ||
                          !strncmp((char*)line_head, "==>", 3)))
                 {
-                    //outs(ANSI_COLOR(0;32));
-                    outs(ANSI_COLOR(1;36));      //r2.20180401: recover Maple3 more style
+                    //outs(ANSI_COLOR(0; 32));
+                    outs(ANSI_COLOR(1; 36));      //r2.20180401: recover Maple3 more style
 
                     flResetColor = 1;
                 }
@@ -1723,7 +1723,7 @@ mf_display(void)
                                 if (!MOVIE_IS_PLAYING())
 #endif // PMORE_USE_ASCII_MOVIE
                                 {
-                                    override_attr = ANSI_COLOR(1;37;41);
+                                    override_attr = ANSI_COLOR(1; 37; 41);
                                     override_msg = PMORE_MSG_WARN_MOVECMD;
                                 }
 #endif // PMORE_RESTRICT_ANSI_MOVEMENT
@@ -1775,7 +1775,7 @@ mf_display(void)
                         char esbuf[4]= "";
 
                         // the max expanded size of esc_star.
-                        char buf[64] = "" ;
+                        char buf[64] = "";
                         char *pbuf = buf;
 
                         memcpy(buf, mf.dispe, 3);  // ^[*s
@@ -1792,7 +1792,7 @@ mf_display(void)
 
                             if (expand_esc_star(buf, esbuf, sizeof(buf)) > 1)
                             {
-//                                override_attr = ANSI_COLOR(1;37;41);
+//                                override_attr = ANSI_COLOR(1; 37; 41);
 //                                override_msg  = PMORE_MSG_WARN_FAKEUSERINFO;  /*r2.170810: keep the traditional trick XD */
                             }
                         }
@@ -2110,7 +2110,7 @@ mf_display_footer(
             nowpage = allpages;
         /*
             nowpage =
-            (int)((mf.lineno + mf.dispedlines-2) / MFNAV_PAGE)+1 ;
+            (int)((mf.lineno + mf.dispedlines-2) / MFNAV_PAGE)+1;
            */
     }
     /* why -2 and -1?
@@ -2457,7 +2457,7 @@ _pmore2(
                     int w = t_columns-1;
                     const char *s = PMORE_MSG_MOVIE_DETECTED;
 
-                    outs(ANSI_RESET ANSI_COLOR(1;33;44));
+                    outs(ANSI_RESET ANSI_COLOR(1; 33; 44));
                     w -= strlen(s); outs(s);
 
                     while (w-- > 0)
@@ -2990,8 +2990,8 @@ pmore_PromptBar(const char *caption, int shadow)
 
     if (shadow & PMORE_SHADOW_ABOVE)
     {
-        outs(ANSI_COLOR(0;1;30));
-        for (i = 0; i+2 < t_columns ; i+=2)
+        outs(ANSI_COLOR(0; 1; 30));
+        for (i = 0; i+2 < t_columns; i+=2)
             outs("¢b");
         outs(ANSI_RESET "\n");
     }
@@ -3006,8 +3006,8 @@ pmore_PromptBar(const char *caption, int shadow)
 
     if (shadow & PMORE_SHADOW_BELOW)
     {
-        outs(ANSI_COLOR(0;1;30));
-        for (i = 0; i+2 < t_columns ; i+=2)
+        outs(ANSI_COLOR(0; 1; 30));
+        for (i = 0; i+2 < t_columns; i+=2)
             outs("¢v");
         outs(ANSI_RESET "\n");
     }
@@ -3386,13 +3386,13 @@ mf_moviePromptPlaying(int type)
     move(type ? b_lines-1 : b_lines, 0); // clrtoeol?
 
     if (type) {
-        outs(ANSI_RESET ANSI_COLOR(1;34;47));
+        outs(ANSI_RESET ANSI_COLOR(1; 34; 47));
         s = PMORE_MSG_MOVIE_INTERACTION_WAITSEL;
     } else if (mfmovie.interactive) {
-        outs(ANSI_RESET ANSI_COLOR(1;34;47));
+        outs(ANSI_RESET ANSI_COLOR(1; 34; 47));
         s = PMORE_MSG_MOVIE_INTERACTION_PLAYING;
     } else {
-        outs(ANSI_RESET ANSI_COLOR(1;30;47));
+        outs(ANSI_RESET ANSI_COLOR(1; 30; 47));
     }
 
     w -= strlen(s); outs(s);
@@ -4231,7 +4231,7 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
             unsigned char *pe = p;
             unsigned int igs = 0;
 
-            for (pe = p ; pe < end && *pe &&
+            for (pe = p; pe < end && *pe &&
                     *pe > ' ' && *pe < 0x80
                     ; pe ++)
                 if (*pe == ', ') igs++;
@@ -4241,7 +4241,7 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
                 // make random
                 igs = random() % (igs+1);
 
-                for (pe = p ; igs > 0 && pe < end && *pe &&
+                for (pe = p; igs > 0 && pe < end && *pe &&
                         *pe > ' ' && *pe < 0x80
                         ; pe ++)
                     if (*pe == ', ') igs--;

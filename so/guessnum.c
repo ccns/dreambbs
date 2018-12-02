@@ -43,9 +43,9 @@ static void AB(Num p, Num q, int *A, int *B)
     /* compare p and q, return ?A?B */
     int i, j;
     *A = *B = 0;
-    for (i = 0;i < 4;i++)
+    for (i = 0; i < 4; i++)
     {
-        for (j = 0;j < 4;j++)
+        for (j = 0; j < 4; j++)
         {
             if (p[i] == q[j])
             {
@@ -90,7 +90,7 @@ static void ord2Num(int o, Num p)
 static int matchHis(Num n)
 {
     int i, A, B;
-    for (i = 0;i < hisNum;i++)
+    for (i = 0; i < hisNum; i++)
     {
         AB(n, hisList[i].n, &A, &B);
         if (A != hisList[i].A || B != hisList[i].B)
@@ -142,7 +142,7 @@ int mainNum(int fighting /* Thor.990317: 對戰模式 */)
             /* Thor.990317: 為簡化, 不作checking */
             if (!tmp[0]) goto abort_game;
 
-            for (i = 0;i < 4;i++)
+            for (i = 0; i < 4; i++)
                 yourGuess[i] = tmp[i] - '0';
             AB(myNumber, yourGuess, &myA, &myB);
             move(b_lines - 2, 0);

@@ -278,7 +278,7 @@ bsmtp(
     {
         int i;
         char *alias[] = SMTP_SERVER;
-        for ( i=0 ; (str = alias[i]) ; i++)
+        for ( i=0; (str = alias[i]); i++)
         {
             sock = dns_open(str, 25);
             if (sock >= 0)
@@ -494,7 +494,7 @@ bsmtp_file(
     {
         int i;
         char *alias[] = SMTP_SERVER;
-        for ( i=0 ; (str = alias[i]) ; i++)
+        for ( i=0; (str = alias[i]); i++)
         {
             sock = dns_open(str, 25);
             if (sock >= 0)
@@ -1232,7 +1232,7 @@ mail_hold(
     folder = cmbox.dir;
     hdr_stamp(folder, HDR_LINK, &mhdr, fpath);
 
-    mhdr.xmode = MAIL_READ | MAIL_HOLD /* | MAIL_NOREPLY */ ;
+    mhdr.xmode = MAIL_READ | MAIL_HOLD /* | MAIL_NOREPLY */;
     strcpy(mhdr.owner, "[備 忘 錄]");
     strcpy(mhdr.nick, cuser.username);
     title = ve_title;
@@ -1520,7 +1520,7 @@ mail_reply(
 
 
     if (!(HAS_PERM(PERM_INTERNET)))
-        return ;
+        return;
 
 //  if ((hdr->xmode & MAIL_NOREPLY) || m_count())
 //      return;
@@ -1594,7 +1594,7 @@ my_send(
     if (bbsothermode & OTHERSTAT_EDITING)
     {
         vmsg("你還有檔案還沒編完哦！");
-        return ;
+        return;
     }
 
 
@@ -1897,7 +1897,7 @@ multi_reply(
     HDR *mhdr)
 {
     if (!HAS_PERM(PERM_INTERNET))
-        return ;
+        return;
     strcpy(quote_user, mhdr->owner);
     strcpy(quote_nick, mhdr->nick);
     if (!multi_send(mhdr->title))

@@ -1297,10 +1297,10 @@ ve_show_sign(
     clear();
     if (fp)
     {
-        for (j=1;j<=3;j++)
+        for (j=1; j<=3; j++)
         {
             prints("\033[36m¡iÃ±¦WÀÉ.%d¡j\033[m\n", j);
-            for (i=0;i<MAXSIGLINES;i++)
+            for (i=0; i<MAXSIGLINES; i++)
             {
                 if (fgets(buf, 256, fp))
                     prints("%s", buf);
@@ -1343,13 +1343,13 @@ ve_select_sign(
             int i;
 
             op = (op - '1') * MAXSIGLINES;
-            for (i=0;i<op;i++)
+            for (i=0; i<op; i++)
                 fgets(buf, 256, fd);
             fprintf(fp, "--");
 
             len = 0;
             used = 0;
-            for (i=0;i<MAXSIGLINES;i++)
+            for (i=0; i<MAXSIGLINES; i++)
             {
                 if (fgets(buf, 256, fd))
                 {

@@ -204,7 +204,7 @@ bk_system_src(void)
     sprintf(cmd, "gzip -c .BRD > %s/BRD.gz", path);
     system(cmd);
 
-    for (i=0;i<5;i++)
+    for (i=0; i<5; i++)
     {
         sprintf(cmd, "tar zcf %s/%s.tgz %s", path, system_folders[i], system_folders[i]);
         system(cmd);
@@ -216,12 +216,12 @@ bk_system_src(void)
     system(cmd);
     sprintf(cmd, "tar rvf %s/gem.tar gem/.GEM", path);
     system(cmd);
-    for (i = '0' ; i <= '9' ; i++)
+    for (i = '0'; i <= '9'; i++)
     {
         sprintf(cmd, "tar rvf %s/gem.tar gem/%c", path, i);
         system(cmd);
     }
-    for (i = 'A' ; i <= 'V' ; i++)
+    for (i = 'A'; i <= 'V'; i++)
     {
         sprintf(cmd, "tar rvf %s/gem.tar gem/%c", path, i);
         system(cmd);

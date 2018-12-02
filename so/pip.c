@@ -2097,7 +2097,7 @@ int oldnum[])
         move(6, 0);
         sprintf(inbuf, "\x1b[1;31m  ¢w\x1b[41;37m ½s¸¹ \x1b[0;1;31m¢w\x1b[41;37m °׃      «~ \x1b[0;1;31m¢w¢w\x1b[41;37m ®ִ            ¯א \x1b[0;1;31m¢w¢w\x1b[41;37m »ש     ®ז \x1b[0;1;31m¢w\x1b[37;41m ¾ײ¦³¼ֶ¶q \x1b[0;1;31m¢w\x1b[0m  ");
         prints(inbuf);
-        for (i = 1;i <= oldnum[0];i++)
+        for (i = 1; i <= oldnum[0]; i++)
         {
             move(7 + i, 0);
             sprintf(inbuf, "     \x1b[1;35m[\x1b[37m%2d\x1b[35m]     \x1b[36m%-10s      \x1b[37m%-14s        \x1b[1;33m%-10d   \x1b[1;32m%-9d    \x1b[0m",
@@ -4489,7 +4489,7 @@ struct royalset *p)
         sprintf(buf, "\x1b[1;31m¢x                                                                  ¢x\x1b[0m");
         prints(buf);
 
-        for (n = 0;n < 5;n++)
+        for (n = 0; n < 5; n++)
         {
             a = 2 * n + 1;
             b = 2 * n + 2;
@@ -4746,9 +4746,9 @@ int first)
         add_io(0, 60);
         return 0;
     }
-    for (i = 0;i < 8;i++)
+    for (i = 0; i < 8; i++)
         mymsg[i][0] = '\0';
-    for (i = 0;i < 10;i++)
+    for (i = 0; i < 10; i++)
         currutmp->pip->chat[i][0] = '\0';
     /*¶}©l×÷°T®§*/
     sprintf(mymsg[0], "\x1b[1;37m%s ©M %s ×÷¾װ°«¶}©l₪F..\x1b[m",
@@ -4785,7 +4785,7 @@ int first)
                d.ginseng, d.snowgrass, d.tired);
         move(7, 0);
         prints("\x1b[1;34mשששג\x1b[44;37m ¾װ°«°T®§ \x1b[0;1;34mשאשששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששש\x1b[m\n");
-        for (i = 0;i < 8;i++)
+        for (i = 0; i < 8; i++)
         {
             move(8 + i, 1);
 
@@ -4802,7 +4802,7 @@ int first)
         }
         move(16, 0);
         prints("\x1b[1;34mשששג\x1b[44;37m ½ֽ¸Ü°T®§ \x1b[0;1;34mשאשששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששש\x1b[m\n");
-        for (i = 0;i < 2;i++)
+        for (i = 0; i < 2; i++)
         {
             move(17 + i, 0);
             if (currutmp->pip->chatcount < 3)
@@ -4870,7 +4870,7 @@ int first)
             clrchyiuan(7, 19);
             move(7, 0);
             prints("\x1b[1;31mשששג\x1b[41;37m ¦^ֵU½ֽ¸Ü \x1b[0;1;31mשאשששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששש\x1b[m\n");
-            for (i = 0;i < 10;i++)
+            for (i = 0; i < 10; i++)
             {
                 move(8 + i, 0);
                 if (currutmp->pip->chatcount < 10)
@@ -8270,7 +8270,7 @@ int pip_results_show(void)  /*¦¬ֳ¬©u*/
     case 'A':
     case 'a':
         vmsg("₪µ¦~¦@¦³¥|₪H°ֱֹׁ¡ד²{¦b₪סֱֹ¶}©l");
-        for (i = 0;i < 3;i++)
+        for (i = 0; i < 3; i++)
         {
             a = 0;
             b[i][1] = 0;
@@ -8511,7 +8511,7 @@ char *fpath)
         fscanf(fp, "%d%s", &max, buf);
         p = badmanlist = (playrule *)malloc((max + 1) * sizeof(playrule));
         memset(badmanlist, 0, (max + 1)*sizeof(playrule));
-        for (i = 0;i < max;i++)
+        for (i = 0; i < max; i++)
         {
             fscanf(fp, "%s%d%d%d%d%d%d%s%d", p[i].name, &p[i].hp, &p[i].mp, &p[i].attack,
                    &p[i].resist, &p[i].speed, &p[i].money, p[i].special, &p[i].map);
@@ -8529,7 +8529,7 @@ char *fpath)
     int i;
     if ( ( fp = fopen(fpath, "r") ) )
     {
-        for (i = 0;i <= 21;i++)
+        for (i = 0; i <= 21; i++)
         {
             fscanf(fp, "%d%d", &mob[i][0], &mob[i][1]);
         }
@@ -8584,7 +8584,7 @@ char *fpath)
     if ( ( fp = fopen(fpath, "r") ) )
     {
         fscanf(fp, "%s", buf);
-        for (i = 0;i <= 1;i++)
+        for (i = 0; i <= 1; i++)
         {
             fscanf(fp, "%d%d%d%d%d%d%d%d%d", &temp, &ml[i].maxhp, &ml[i].wrist,
                    &ml[i].maxmp, &ml[i].attack, &ml[i].resist, &ml[i].speed,

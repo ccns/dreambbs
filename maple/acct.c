@@ -299,7 +299,7 @@ x_file(
 
         }
     }
-    for (;n<20;n++)
+    for (; n<20; n++)
     {
         move(n + 3, 2);
         if (mode == M_XFILES)
@@ -856,7 +856,7 @@ select_mode(
         case 3: adm |= DENY_MODE_POST; break;
         case 4: adm |= DENY_MODE_NICK; break;
         case 5: adm |= DENY_MODE_ALL;  break;
-        case 6: adm |= DENY_MODE_GUEST;break;
+        case 6: adm |= DENY_MODE_GUEST; break;
         }
 
     }
@@ -954,11 +954,11 @@ add_deny(
     if ((adm & DENY_DAYS) && !(adm & DENY_MODE_GUEST))
     {
         x.deny = ((now > x.deny) ? now : x.deny);
-        if (adm & DENY_DAYS_1) { cdays = "一星期";x.deny += 86400 * 7;}
-        else if (adm & DENY_DAYS_2) { cdays = "兩星期";x.deny += 86400 * 14;}
-        else if (adm & DENY_DAYS_3) { cdays = "三星期";x.deny += 86400 * 21;}
-        else if (adm & DENY_DAYS_4) { cdays = "一個月";x.deny += 86400 * 31;}
-        else if (adm & DENY_DAYS_5) { cdays = "";x.deny += 86400 * 31;x.userlevel |= PERM_DENYSTOP;}
+        if (adm & DENY_DAYS_1) { cdays = "一星期"; x.deny += 86400 * 7;}
+        else if (adm & DENY_DAYS_2) { cdays = "兩星期"; x.deny += 86400 * 14;}
+        else if (adm & DENY_DAYS_3) { cdays = "三星期"; x.deny += 86400 * 21;}
+        else if (adm & DENY_DAYS_4) { cdays = "一個月"; x.deny += 86400 * 31;}
+        else if (adm & DENY_DAYS_5) { cdays = ""; x.deny += 86400 * 31; x.userlevel |= PERM_DENYSTOP;}
         fprintf(fp, "%s。\n", cdays);
         if (adm & DENY_DAYS_5)
             fprintf(fp, "期間: 永不復權。\n\n");
@@ -1086,7 +1086,7 @@ acct_setup(
                     tmp = 0;
                     if (flog == NULL) return;
 
-                    for (i=1;i<=num;i++)
+                    for (i=1; i<=num; i++)
                     {
                         fscanf(flog, "%13s", buf);
                         acct_load(u, buf);
@@ -2492,7 +2492,7 @@ u_register(void)
 
     clear();
     more(FN_ETC_RFORM, (char *)-1);
-    for (ans = 0 ; ans <= 1;ans++)
+    for (ans = 0; ans <= 1; ans++)
     {
         char msg[128];
         sprintf(msg, "%s你願意遵守此規定嗎 ? [N]", ans ? "請再詳細看一遍，":"");

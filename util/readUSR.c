@@ -25,7 +25,7 @@ int main(void)
     read(fd, usr, st.st_size);
     close(fd);
     printf("\nst.st_size=%d\n", st.st_size);
-    for (n=0;n < (st.st_size/sizeof(SCHEMA)) ; n++)
+    for (n=0; n < (st.st_size/sizeof(SCHEMA)); n++)
     {
         tm_t = localtime(&usr[n].uptime);
         strncpy(userid, usr[n].userid, IDLEN);

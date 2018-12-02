@@ -812,7 +812,7 @@ exit_room(
 
         sprintf(buf, "- %s", user->userid);
         send_to_room(room, buf, 0, MSG_USERNOTIFY);
-/*      room->occupants += CLOAK(user) ? 1 : 0 ;*/
+/*      room->occupants += CLOAK(user) ? 1 : 0;*/
         room_changed(room);
     }
     else if (room != &mainroom)
@@ -1583,7 +1583,7 @@ chat_cloak(
 
         cu->uflag ^= PERM_CLOAK;
         room = cu->room;
-        room->occupants += CLOAK(cu) ? -1 : 1 ;
+        room->occupants += CLOAK(cu) ? -1 : 1;
         sprintf(buf, "¡» %s", CLOAK(cu) ? MSG_CLOAKED : MSG_UNCLOAK);
         send_to_user(cu, buf, 0, MSG_MESSAGE);
     }
@@ -2378,7 +2378,7 @@ party_action(
 {
     ChatAction *cap;
     char *verb, buf[256];
-    for (cap = mode ? party_data : party_data2 ; strlen(verb = cap->verb); cap++)
+    for (cap = mode ? party_data : party_data2; strlen(verb = cap->verb); cap++)
     {
         if (str_equal(verb, cmd))
         {

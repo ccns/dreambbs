@@ -592,7 +592,7 @@ check_vacation(void)
     xtime = localtime((time_t *)&now);
     ptime = *xtime;
     now = (ptime.tm_mon+1)*100 + ptime.tm_mday;
-    for (i=0;reaper_time[i].start;i++)
+    for (i=0; reaper_time[i].start; i++)
     {
         if (now < reaper_time[i].end && now >= reaper_time[i].start)
             return 1;

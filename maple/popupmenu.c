@@ -30,7 +30,7 @@ is_big5(char *src, int pos, int mode)
     int word=0;
     char *str;
 
-    for (str = src;word<pos;str++)
+    for (str = src; word<pos; str++)
     {
         if (mode)
         {
@@ -39,7 +39,7 @@ is_big5(char *src, int pos, int mode)
                 str = strchr(str, 'm');
                 if (!str)
                     return -1;
-                continue ;
+                continue;
             }
         }
 
@@ -119,7 +119,7 @@ count_len(
         ptr = strstr(ptr, "\033");
         if (ptr)
         {
-            for (tmp=ptr;*tmp!='m';tmp++);
+            for (tmp=ptr;*tmp!='m'; tmp++);
             len -= (tmp-ptr+1);
             ptr = tmp+1;
         }
@@ -138,7 +138,7 @@ get_color(char *s, int len, int *fc, int *bc, int *bbc)
     memset(buf, 0, sizeof(buf));
     strncpy(buf, s+2, len-1);
 
-    for ( p = e = &buf[0] ; exit == 0 ; ++p)
+    for ( p = e = &buf[0]; exit == 0; ++p)
     {
         if (*p == ';' || *p == 'm')
         {
@@ -204,7 +204,7 @@ vs_line(char *msg, int x, int y)
     sl[x].data[sl[x].len] = '\0';
     str = tmp = sl[x].data;
 
-    for (word=0;word<y && *str;++str)
+    for (word=0; word<y && *str;++str)
     {
         if (*str == KEY_ESC)
         {
@@ -231,7 +231,7 @@ vs_line(char *msg, int x, int y)
 
     if (*str)
     {
-        for (word=0;word<len && *str;++str)
+        for (word=0; word<len && *str;++str)
         {
             if (*str == KEY_ESC)
             {
@@ -316,7 +316,7 @@ draw_menu(MENU *pmenu[20], int num, char *title, int x, int y, int cur)
     vs_line(buf, x-2, y);
     sprintf(buf, " \033[0;37;44m▏\033[1m%-31s \033[0;47;34m▉\033[m   ", t);
     vs_line(buf, x-1, y);
-    for (i=0;i<num;++i, ++x)
+    for (i=0; i<num;++i, ++x)
     {
         draw_item(pmenu[i]->desc, (i==cur)?1:0, x, y);
     }
@@ -340,7 +340,7 @@ do_menu(
 
     memset(table, 0, sizeof(table));
     /* verit. menu 權限檢查 */
-    for ( tmp=0, num=-1 ; pmenu[tmp].umode != POPUP_MENUTITLE ; tmp++ )
+    for ( tmp=0, num=-1; pmenu[tmp].umode != POPUP_MENUTITLE; tmp++ )
     {
         if (pmenu[tmp].level == 0 || pmenu[tmp].level & cuser.userlevel)
             table[++num] = &pmenu[tmp];
@@ -364,7 +364,7 @@ do_menu(
     cur = old_cur = 0;
 
     /* 跳到預設選項 */
-    for ( tmp=0; tmp<= num ; tmp++ )
+    for ( tmp=0; tmp<= num; tmp++ )
     {
         if ((table[tmp]->desc[0] | 0x20) == ((table_title->level & POPUP_MASK) | 0x20))
         {
@@ -411,7 +411,7 @@ do_menu(
                     draw_menu(table, num+1, title, x, y, cur);
                 break;
             default:
-                for (tmp=0 ; tmp<=num ; tmp++)
+                for (tmp=0; tmp<=num; tmp++)
                 {
                     if ( (c | 0x20) == (table[tmp]->desc[0] | 0x20 ))
                     {
@@ -474,7 +474,7 @@ draw_menu_des(char *desc[], char *title, int x, int y, int cur)
     vs_line(buf, x-2, y);
     sprintf(buf, " \033[0;37;44m▏%-31s \033[0;47;34m▉\033[m   ", title);
     vs_line(buf, x-1, y);
-    for (num=1;desc[num];num++)
+    for (num=1; desc[num]; num++)
         draw_ans_item(desc[num], (num==cur)?1:0, x++, y, hotkey);
     sprintf(buf, " \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\033[40;30;1m▉\033[m ");
     vs_line(buf, x, y);
@@ -504,7 +504,7 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
     sprintf(t, "【%s】", title);
     num = draw_menu_des(desc, t, x, y, 0);
     cur = old_cur = 0;
-    for (tmp=0;tmp<num;tmp++)
+    for (tmp=0; tmp<num; tmp++)
     {
         if (desc[tmp+1][0] == hotkey)
             cur = old_cur = tmp;
@@ -543,9 +543,9 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
 #else
                 vs_restore(sl);
 #endif
-                return (desc[cur+1][0] | 0x20) ;
+                return (desc[cur+1][0] | 0x20);
             default:
-                for (tmp=0 ; tmp<=num ; tmp++)
+                for (tmp=0; tmp<=num; tmp++)
                 {
                     if ( (c | 0x20) == (desc[tmp+1][0] | 0x20 ))
                     {
@@ -587,7 +587,7 @@ static void pcopy(char *buf, char *patten, int len)
     *buf = '\0';
     size = strlen(patten);
 
-    for (i=1;i<=len;i++)
+    for (i=1; i<=len; i++)
     {
         strcpy(buf, patten);
         buf += size;
@@ -675,7 +675,7 @@ Every_Z_Screen(void)
         vmsg("檔案開啟錯誤 !!");
         return 0;
     }
-    for (i=0;i<24;++i)
+    for (i=0; i<24;++i)
     {
         memset(buf, 0, sizeof(buf));
         strncpy(buf, sl[i].data, sl[i].len);

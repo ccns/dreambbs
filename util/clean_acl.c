@@ -20,7 +20,7 @@ check_in(
     char *email)
 {
     int i;
-    for (i=0;i<MAX_AC;i++)
+    for (i=0; i<MAX_AC; i++)
         if (!strcmp(map[i], email))
             return 1;
     return 0;

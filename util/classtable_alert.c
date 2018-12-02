@@ -49,7 +49,7 @@ bfind(
 
     if ((tmpcache = cache))
     {
-        for (count = 0; count < cache_size;count++)
+        for (count = 0; count < cache_size; count++)
         {
             datum = tmpcache + count;
             if (userno == datum->userno)

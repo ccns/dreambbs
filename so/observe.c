@@ -119,7 +119,7 @@ XO *xo)
 
             size = (char *) ptail - (char *) pbase;
             total = size / sizeof(OBSERVE);
-            for (;phead < ptail;phead++)
+            for (; phead < ptail; phead++)
             {
                 userno = acct_userno(phead->userid);
                 if (userno)
@@ -199,7 +199,7 @@ XO *xo)
         if (observe_edit(&observe, DOECHO))
         {
             rec_add(xo->dir, &observe, sizeof(OBSERVE));
-            xo->pos = XO_TAIL ;
+            xo->pos = XO_TAIL;
             xo_load(xo, sizeof(OBSERVE));
         }
     }

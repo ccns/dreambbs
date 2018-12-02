@@ -194,7 +194,7 @@ u_exit(
             {
                 TABLE *ptr;
                 cuser.ufo2 = 0;
-                for (ptr = table;ptr->old;ptr++)
+                for (ptr = table; ptr->old; ptr++)
                 {
                     if (cuser.ufo & ptr->old)
                         cuser.ufo2 |= ptr->new;
@@ -1321,7 +1321,7 @@ term_init(void)
     }
 
 #ifdef M3_USE_PFTERM
-    resizeterm(b_lines + 1, b_cols + 1) ;
+    resizeterm(b_lines + 1, b_cols + 1);
 #endif
 
     d_cols = b_cols - 79;

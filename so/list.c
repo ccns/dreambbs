@@ -194,7 +194,7 @@ XO *xo)
     {
         strcpy(list.userid, mode ? brd->brdname : acct.userid);
         rec_add(xo->dir, &list, sizeof(LIST));
-        xo->pos = XO_TAIL ;
+        xo->pos = XO_TAIL;
         xo_load(xo, sizeof(LIST));
     }
     return list_head(xo);
@@ -372,7 +372,7 @@ List(void)
     move(11, 0);
     clrtobot();
     prints("\n      %4s   %-18s\n%s\n", "½s¸¹", "¸s²Õ¦WºÙ", msg_separator);
-    for (i = 1;i <= MAX_LIST;i++)
+    for (i = 1; i <= MAX_LIST; i++)
     {
         get_title(msg, i - 1);
         prints("      %4d   %s..\n", i, msg);

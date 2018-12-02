@@ -173,7 +173,7 @@ readlines(		/* 讀入檔頭和內文 */
                 /* Thor.990110: 有的是用 \t 代表還有 */
                 while (ptr[1] == ' ' || ptr[1] == '\t')
                 {
-                    /* while (*++ptr == ' ') ; */
+                    /* while (*++ptr == ' '); */
                     do
                     {
                         ++ptr;

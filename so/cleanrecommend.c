@@ -352,13 +352,13 @@ clean(
 //                      if (!strncmp(buf, "\x1b[1;33m¡÷", 9))
 //                      {
 /*
-                            for (i=0;i<12;i++)
+                            for (i=0; i<12; i++)
                                 rmsg.userid[i] = buf[i+10];
                             rmsg.userid[12] = '\0';
-                            for (i=0;i<54;i++)
+                            for (i=0; i<54; i++)
                                 rmsg.msg[i] = buf[i+29];
                             rmsg.msg[54] = '\0';
-                            for (i=0;i<5;i++)
+                            for (i=0; i<5; i++)
                                 rmsg.rtime[i] = buf[i+87];
                             rmsg.rtime[5] = '\0';
                             rec_add(recommenddb, &rmsg, sizeof(RMSG));
@@ -377,7 +377,7 @@ clean(
     xover(XZ_OTHER);
     free(xoo);
 
-    for (i=0;i<rec_num(recommenddb, sizeof(RMSG));i++)
+    for (i=0; i<rec_num(recommenddb, sizeof(RMSG)); i++)
     {
         rec_get(recommenddb, &rmsg, sizeof(RMSG), i);
         if (rmsg.pn == POSITIVE)

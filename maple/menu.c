@@ -1181,7 +1181,7 @@ int count_len(
         ptr = strstr(ptr, "\033");
         if (ptr)
         {
-            for (tmp=ptr;*tmp!='m';tmp++);
+            for (tmp=ptr;*tmp!='m'; tmp++);
             len -= (tmp-ptr+1);
             ptr = tmp+1;
         }

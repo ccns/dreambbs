@@ -35,7 +35,7 @@ showpasswd(
         guess[0]++;
 
         /* ¶i¦ì */
-        for (i = 0; i < GUESS_LEN ;i++)
+        for (i = 0; i < GUESS_LEN; i++)
         {
             if (guess[i] < 0x7f)
                 break;

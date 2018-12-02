@@ -417,7 +417,7 @@ sover_post(
         *ptr = '\0';
 
         /* 跳過文章的前幾行檔頭不要 */
-        for (str = BODY_BUF;;str = ptr + 1)
+        for (str = BODY_BUF;; str = ptr + 1)
         {
             ptr = strchr(str, '\n');
             if (!ptr)			/* 找到文章最後了還找不到空行，那麼整個檔案都當做內文 */

@@ -117,7 +117,7 @@ XO *xo)
     if (viol_edit(&viol, DOECHO))
     {
         rec_add(xo->dir, &viol, sizeof(EMAIL));
-        xo->pos = XO_TAIL ;
+        xo->pos = XO_TAIL;
         xo_load(xo, sizeof(EMAIL));
     }
     return viol_head(xo);

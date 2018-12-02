@@ -63,7 +63,7 @@ reaper(
             free(base);
         return;
     }
-    ptr = strchr(folder, '@') + 1 ;
+    ptr = strchr(folder, '@') + 1;
     *ptr++ = '/';
 
     while ((de = readdir(dirp)))
@@ -74,7 +74,7 @@ reaper(
         {
             if (base)
             {
-                for (head = base;head < tail;head++)
+                for (head = base; head < tail; head++)
                 {
                     if (!strcmp(head->xname, fname))
                     {
@@ -151,7 +151,7 @@ expire(
     printf("total article : %d\n", size);
     sprintf(folder, "%s/@", fpath);
 
-    str = strchr(folder, '@') ;
+    str = strchr(folder, '@');
     *str = '0';
 
     while (1)
@@ -169,7 +169,7 @@ expire(
                 {
                     if (base)
                     {
-                        for (head = base;head < tail;head++)
+                        for (head = base; head < tail; head++)
                         {
                             if (!strcmp(head->xname, fname))
                             {

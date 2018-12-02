@@ -241,8 +241,8 @@ typedef struct chicken chicken;
 struct pipcommands
 {
     int (*fptr) (void);
-    int key1 ;
-    int key2 ;
+    int key1;
+    int key2;
 };
 typedef struct pipcommands pipcommands;
 

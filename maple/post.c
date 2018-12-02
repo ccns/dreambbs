@@ -55,7 +55,7 @@ zhangba_detect(
     if ((fp = fopen(fpath, "r")))
     {
         while (fgets(buf, sizeof(buf), fp))
-            for (i=0 ;  i < ZHANGBA_PATTERNS ; i++)
+            for (i=0;  i < ZHANGBA_PATTERNS; i++)
                 if (strstr(buf, zhangba_patterns[i]) && (checked[i] != '1'))
                 {
                     checked[i] = '1';
@@ -106,7 +106,7 @@ checksum_add(
     int *ptr;
     ptr = (int *)title;
     end = strlen(title)/4;
-    for (i=0;i<end;i++)
+    for (i=0; i<end; i++)
     {
         sum += *ptr++;
     }
@@ -119,7 +119,7 @@ checksum_put(
     int check)
 {
     int i;
-    for (i=0;i<5;i++)
+    for (i=0; i<5; i++)
     {
         if (cksum.checksum[i].sum == sum)
         {
@@ -165,7 +165,7 @@ checksum_find(
     fp = fopen(fpath, "r");
     if (fp)
     {
-        for (i=0;count <= MAX_CHECKSUM;i++)
+        for (i=0; count <= MAX_CHECKSUM; i++)
         {
             if (fgets(buf, 256, fp))
             {
@@ -1292,7 +1292,7 @@ post_xcross(
     XO *xo)
 {
     char *xboard, fpath[80], xfolder[80], buf[80], *dir;
-    HDR *hdr, xpost, xhdr ;
+    HDR *hdr, xpost, xhdr;
     int tag, locus, listing, do_expire;
     LinkList *wp;
 
@@ -2021,7 +2021,7 @@ post_bottom(
         if (hdr->xmode & POST_BOTTOM) /* 已經被置底的不能再置底 */
           return XO_NONE;
         else
-          post.xmode = POST_MARKED | POST_BOTTOM ;  /* 自動加 mark */
+          post.xmode = POST_MARKED | POST_BOTTOM;  /* 自動加 mark */
 
         strcpy(post.owner, hdr->owner);
         strcpy(post.nick, hdr->nick);
@@ -2271,9 +2271,9 @@ post_undelete(
 
         /* verit 2003.10.16 避免救文章時, 出現彩色標題 */
         len = strlen(fhdr->title);
-        for ( i=0 ; i<len ; ++i )
+        for ( i=0; i<len; ++i )
             if ( fhdr->title[i] == '\033' )
-                fhdr->title[i] = '*' ;
+                fhdr->title[i] = '*';
 
         fclose(fp);
 #if 0
@@ -3385,7 +3385,7 @@ post_recommend(
                     /* 090923.cache: 如果發生 race condition, 上面加分的註解掉改用這段*/
                     /* 直接把 .DIR 中的 score 更新，不管 XO 裡面的 score 是記錄多少 */
                     /*
-                        hdr->recommend +=addscore ;
+                        hdr->recommend +=addscore;
                      */
                 }
             }

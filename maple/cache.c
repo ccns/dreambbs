@@ -397,7 +397,7 @@ classtable_main(void)
 
         pbase = (CLASS_TABLE2 *) malloc(size);
         size = read(fd, pbase, size);
-        for (i=0;i<78;i++)
+        for (i=0; i<78; i++)
         {
             if (pbase[i].valid)
             {
@@ -606,7 +606,7 @@ observeshm_load(void)
         {
             head = (OBSERVE *) fimage;
             tail = (OBSERVE *) (fimage + size);
-            for (;head<tail;head++)
+            for (; head<tail; head++)
             {
                 oshm->userno[oshm->total++] = head->userno;
             }

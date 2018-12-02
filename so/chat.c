@@ -639,7 +639,7 @@ t_chat(void)
         else
         {
             /* Thor.980911: chatid中不可以空白, 防止 parse錯誤 */
-            for (ch = 0;ch < 8;ch++)
+            for (ch = 0; ch < 8; ch++)
             {
                 if (chatid[ch] == ' ')
                     break;

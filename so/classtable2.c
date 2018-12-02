@@ -31,17 +31,17 @@ void show_icon_classtable(int x, int y, int mode)
     y--;
     if (mode == 1)
     {
-        move(x + 3, 6 + y*12);outc('[');move(x + 3, 15 + y*12);outc(']');
+        move(x + 3, 6 + y*12); outc('['); move(x + 3, 15 + y*12); outc(']');
     }
     else
     {
-        move(x + 3, 6 + y*12);outc(' ');move(x + 3, 15 + y*12);outc(' ');
+        move(x + 3, 6 + y*12); outc(' '); move(x + 3, 15 + y*12); outc(' ');
     }
 
-    move(19, 20);prints("                                ");
-    move(20, 20);prints("           ");
-    move(21, 20);prints("                                ");
-    move(20, 55);prints("                    ");
+    move(19, 20); prints("                                ");
+    move(20, 20); prints("           ");
+    move(21, 20); prints("                                ");
+    move(20, 55); prints("                    ");
 
     if (tmp_table[p].valid == 1)
     {
@@ -55,7 +55,7 @@ void show_icon_classtable(int x, int y, int mode)
         prints("%-s", tmp_table[p].other);
     }
     move(b_lines, 78);
-    return ;
+    return;
 }
 
 void help_classtable(void)
@@ -76,7 +76,7 @@ int show_table(void)
     prints("│　│  星期一  │  星期二  │  星期三  │  星期四　│　星期五　│　星期六　│");
     move(x++, y);
     prints("├─┼─────┼─────┼─────┼─────┼─────┼─────┤");
-    for (i = 1;i < 14;i++)
+    for (i = 1; i < 14; i++)
     {
         move(x++, y);
         prints("│%2d│          │          │          │          │          │          │", i);
@@ -112,7 +112,7 @@ int load_table(void)
         memset(tmp_table, 0, sizeof(CLASS_TABLE2)*78);
     }
 
-    for (i = 0;i < 78;i++)
+    for (i = 0; i < 78; i++)
     {
         if (tmp_table[i].valid == 1)
         {

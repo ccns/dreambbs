@@ -259,7 +259,7 @@ int_cmp(
 void
 pal_cache(void)
 {
-    int count, fsize, ufo ;
+    int count, fsize, ufo;
     int *plist, *cache;
     PAL *phead, *ptail;
     char *fimage, fpath[64];
@@ -525,11 +525,11 @@ ulist_init(
                 nf[nf_num++] = up;
         }
     } while (++up <= uceil);
-    for (i=0;i<pfriend_num;i++)
+    for (i=0; i<pfriend_num; i++)
         *pp++ = pf[i];
-    for (i=0;i<ofriend_num;i++)
+    for (i=0; i<ofriend_num; i++)
         *pp++ = of[i];
-    for (i=0;i<nf_num;i++)
+    for (i=0; i<nf_num; i++)
         *pp++ = nf[i];
 
     xo->max = max = pp - ulist_pool;;

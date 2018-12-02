@@ -144,7 +144,7 @@ XO *xo)
     if (vans("要引入好友名單嗎(Y/N)？[N] ") == 'y')
     {
         usr_fpath(fpath, cuser.userid, FN_PAL);
-        for (i = 0; max < MAX_ALOHA ;i++)
+        for (i = 0; max < MAX_ALOHA; i++)
         {
             if (rec_get(fpath, &pal, sizeof(PAL), i) >= 0)
             {

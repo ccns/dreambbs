@@ -39,7 +39,7 @@ get_sch_time(void)
     clrtobot();
     outs("請輸入時間(24小時制)：  月  日  時  分");
 
-    for (i = 0;i < 8;i++)
+    for (i = 0; i < 8; i++)
     {
         move(23, 23 + i / 2*4 + i % 2);
         ch = egetch();

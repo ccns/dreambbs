@@ -368,7 +368,7 @@ void
 remove_perm(void)
 {
     int i;
-    for (i=0;i<(sizeof(brd_bits)/sizeof(int));i++)
+    for (i=0; i<(sizeof(brd_bits)/sizeof(int)); i++)
         brd_bits[i] &= ~BRD_W_BIT;
 }
 #endif

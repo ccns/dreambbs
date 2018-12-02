@@ -343,11 +343,11 @@ add_deny_exer(
     }
     if ((adm & DENY_DAYS) && !(adm & DENY_MODE_GUEST))
     {
-        if (adm & DENY_DAYS_1) { cdays = "一星期";x.deny = now + 86400 * 7;}
-        else if (adm & DENY_DAYS_2) { cdays = "兩星期";x.deny = now + 86400 * 14;}
-        else if (adm & DENY_DAYS_3) { cdays = "參星期";x.deny = now + 86400 * 21;}
-        else if (adm & DENY_DAYS_4) { cdays = "一個月";x.deny = now + 86400 * 31;}
-        else if (adm & DENY_DAYS_5) { cdays = "";x.deny = now + 86400 * 31;x.userlevel |= PERM_DENYSTOP;}
+        if (adm & DENY_DAYS_1) { cdays = "一星期"; x.deny = now + 86400 * 7;}
+        else if (adm & DENY_DAYS_2) { cdays = "兩星期"; x.deny = now + 86400 * 14;}
+        else if (adm & DENY_DAYS_3) { cdays = "參星期"; x.deny = now + 86400 * 21;}
+        else if (adm & DENY_DAYS_4) { cdays = "一個月"; x.deny = now + 86400 * 31;}
+        else if (adm & DENY_DAYS_5) { cdays = ""; x.deny = now + 86400 * 31; x.userlevel |= PERM_DENYSTOP;}
         fprintf(fp, "%s\n", cdays);
         if (adm & DENY_DAYS_5)
             fprintf(fp, "期間: 永不復權。\n\n");
@@ -396,7 +396,7 @@ setup(
     if (!flog)
         return;
 
-    for (i=1;i<=num;i++)
+    for (i=1; i<=num; i++)
     {
         fscanf(flog, "%13s", buf);
         acct_load(u, buf);
