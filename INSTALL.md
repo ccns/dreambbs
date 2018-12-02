@@ -103,9 +103,6 @@
 ## 6. 編譯 BBS 執行檔
 
 接著就開始編譯囉!
-
-    $ make -f Makefile.gnu all install clean
-
 若您的作業系統有安裝 bmake 套件，則建議執行以下指令編譯：
 
     $ bmake all install clean
