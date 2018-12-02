@@ -20,6 +20,5 @@ This page will collect some info of how to use & how to install DreamLand-BBS-sy
 
 ## Other plan 其他測試計劃
 
-  + **[Version Management](VERSION)**: 版本規劃
+  + **[To Do and Version Management](VERSION)**: 版本規劃
 
-### **To Do List**: 待撰條目
