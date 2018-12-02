@@ -1458,7 +1458,7 @@ int pip_basic_feed(void)     /* 餵食*/
             move(4, 0);
             show_feed_pic(4);
             d.nodone = 0;
-            vmsg("補丸..超極棒的唷...");
+            vmsg("補丸..超級棒的唷...");
             break;
 
         case '4':
@@ -1493,7 +1493,7 @@ int pip_basic_feed(void)     /* 餵食*/
             move(4, 0);
             show_feed_pic(1);
             d.nodone = 0;
-            vmsg("千年人蔘..超極棒的唷...");
+            vmsg("千年人蔘..超級棒的唷...");
             break;
 
         case '6':
@@ -1511,7 +1511,7 @@ int pip_basic_feed(void)     /* 餵食*/
             move(4, 0);
             show_feed_pic(1);
             d.nodone = 0;
-            vmsg("天山雪蓮..超極棒的唷...");
+            vmsg("天山雪蓮..超級棒的唷...");
             break;
 
         }
@@ -1830,7 +1830,7 @@ pip_live_again(void)
     vmsg("小雞器官重建中！");
     vmsg("小雞體質恢復中！");
     vmsg("小雞能力調整中！");
-    vmsg("恭禧您，你的小雞又復活囉！");
+    vmsg("恭喜您，你的小雞又復活囉！");
     pip_write_file();
     return 0;
 }
@@ -2371,7 +2371,7 @@ struct weapon *p)
                     getdata(b_lines - 1, 1, shortbuf, ans, 2, DOECHO, 0);
                     if (ans[0] == 'y' || ans[0] == 'Y')
                     {
-                        sprintf(shortbuf, "小雞已經裝配上 %s 了", p[choice].name);
+                        sprintf(shortbuf, "小雞已經裝備上 %s 了", p[choice].name);
                         vmsg(shortbuf);
                         d.attack += (p[choice].attack - p[variance].attack);
                         d.resist += (p[choice].resist - p[variance].resist);
@@ -3195,7 +3195,7 @@ int pip_job_workN(void)
         d.cookskill += rand() % 2 + 2;
         d.speech += rand() % 2 + 2;
         workmoney = 200 + (d.charm) / 5;
-        vmsg("你的媚力不夠啦..請加油....");
+        vmsg("你的魅力不夠啦..請加油....");
     }
     d.money += workmoney * LEARN_LEVEL;
     d.workN += 1;
@@ -3262,7 +3262,7 @@ int pip_job_workO(void)
         d.relation -= rand() % 5 + 1;
         d.toman -= rand() % 5 + 1;
         workmoney = 300 + (d.charm) / 5;
-        vmsg("唉..你的媚力不夠啦....");
+        vmsg("唉..你的魅力不夠啦....");
     }
     d.money += workmoney * LEARN_LEVEL;
     if (d.relation < 0)
@@ -4357,7 +4357,7 @@ int pip_change_weight(void)
             }
             else if (d.money > (weightmp*30))
             {
-                sprintf(inbuf, "增加%d公斤，總共需花費了%d元，確定嗎? [y/N]: ", weightmp, weightmp*30);
+                sprintf(inbuf, "增加%d公斤，總共需花費%d元，確定嗎? [y/N]: ", weightmp, weightmp*30);
                 getdata(b_lines - 1, 1, inbuf, genbuf, 2, 1, 0);
                 if (genbuf[0] == 'Y' || genbuf[0] == 'y')
                 {
@@ -4422,7 +4422,7 @@ int pip_change_weight(void)
             }
             else if (d.money > (weightmp*30))
             {
-                sprintf(inbuf, "減少%d公斤，總共需花費了%d元，確定嗎? [y/N]: ", weightmp, weightmp*30);
+                sprintf(inbuf, "減少%d公斤，總共需花費%d元，確定嗎? [y/N]: ", weightmp, weightmp*30);
                 getdata(b_lines - 1, 1, inbuf, genbuf, 2, 1, 0);
                 if (genbuf[0] == 'Y' || genbuf[0] == 'y')
                 {
@@ -4521,7 +4521,7 @@ struct royalset *p)
 
         if (d.death == 1 || d.death == 2 || d.death == 3)
             return 0;
-        /*將各人務已經給與的數值叫回來*/
+        /*將各人物已經給與的數值叫回來*/
         save[1] = d.royalA;          /*from守衛*/
         save[2] = d.royalB;          /*from近衛*/
         save[3] = d.royalC;		/*from將軍*/
@@ -4641,7 +4641,7 @@ struct royalset *p)
                 else
                 {
                     if (rand() % 2 > 0)
-                        sprintf(buf, "我不和妳這樣的雞談話....");
+                        sprintf(buf, "我不和你這樣的雞談話....");
                     else
                         sprintf(buf, "你這隻沒教養的雞，再去學學禮儀吧....");
 
@@ -6650,7 +6650,7 @@ char *genbuf)
             if (pc1 >= 100) prints("\x1b[1;34m快撐死了..\x1b[m");
 
             pc1 = tired1;
-            if (pc1 < 20) prints("精神抖抖中..");
+            if (pc1 < 20) prints("精神抖擻中..");
             if (pc1 < 80 && pc1 >= 60) prints("\x1b[1;34m有點小累..\x1b[m");
             if (pc1 < 100 && pc1 >= 80) {prints("\x1b[1;31m好累喔，快不行了..\x1b[m"); }
             if (pc1 >= 100) {prints("累死了..."); return -1;}
@@ -7794,7 +7794,7 @@ int mode)
                         d.hp -= minjure;
                         if (m.mp < 0) m.mp = 0;
                         d.mresist += rand() % 2 + 1;
-                        sprintf(buf, "對方招換了%s,你受傷了%d點", inbuf1, minjure);
+                        sprintf(buf, "對方召喚了%s,你受傷了%d點", inbuf1, minjure);
                         vmsg(buf);
                     }
                     else
@@ -8911,7 +8911,7 @@ static int pip_fight_feed(void)     /* 餵食*/
             move(4, 0);
             show_feed_pic(4);
             d.nodone = 0;
-            vmsg("補丸..超極棒的唷...");
+            vmsg("補丸..超級棒的唷...");
             break;
 
         case '4':
@@ -8946,7 +8946,7 @@ static int pip_fight_feed(void)     /* 餵食*/
             move(4, 0);
             show_feed_pic(1);
             d.nodone = 0;
-            vmsg("千年人蔘..超極棒的唷...");
+            vmsg("千年人蔘..超級棒的唷...");
             break;
 
         case '6':
@@ -8964,7 +8964,7 @@ static int pip_fight_feed(void)     /* 餵食*/
             move(4, 0);
             show_feed_pic(1);
             d.nodone = 0;
-            vmsg("天山雪蓮..超極棒的唷...");
+            vmsg("天山雪蓮..超級棒的唷...");
             break;
 case 'Q': case 'q': case KEY_LEFT:
             pipkey = '7';
