@@ -26,7 +26,7 @@
         - `v0.96.2`: detail fixes based on `v0.96.1`
         - It is going to be End-Of-Life after `v0.98.0` released.
 
-    + `v0.97`: Version 0.97, codename `stratosphere` (not released yet)
+    + `v0.97`: Version 0.97, codename `stratosphere` (not released yet) ( **pre-release** )
         - `v0.97-RCx`~`v0.97.0`: pre-release
         - features in plan:
           * add simple code test utilities
