@@ -155,7 +155,7 @@ init(void)
 //      printf("%-13.13s  %6.6d  %6.6d\n",up->userid,up->userno,up->pid);
         if ((ptr=bfind(up->userno)))
         {
-            //strcpy(bmw.msg,"癟代刚,ぃ獽叫ǎ教");
+            //strcpy(bmw.msg,"癟代刚ぃ獽叫ǎ教");
 
             time(&now);
             p = localtime(&now);

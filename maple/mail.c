@@ -1095,7 +1095,7 @@ m_zip(void)			/* itoc.010228: 打包資料 */
 
         if (!(strstr(currboard,"P_")))
         {
-            vmsg("非個人板暫不提供打包服務,特殊個人專板若需打包請洽站務");
+            vmsg("非個人板暫不提供打包服務，特殊個人專板若需打包請洽站務");
             return XEASY;
         }
 
@@ -1436,7 +1436,7 @@ mail_send(
             break;
 
         default:
-            outs("Y\n請稍候, 信件傳遞中...\n");
+            outs("Y\n請稍候，信件傳遞中...\n");
             refresh();
             rc = bsmtp(fpath, title, rcpt, 0);
             if (rc < 0)

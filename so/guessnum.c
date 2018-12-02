@@ -238,9 +238,9 @@ abort_game:
 
         move(2 + hisNum, 0);
         if (fighting) /* Thor.990317: 對戰模式 */
-            prints("第 \033[1;37m%d\033[m 次, 你猜 \033[1;36m%d%d%d%d\033[m, 我說 \033[1;33m%dA%dB\033[m; 我猜 \033[1;33m%d%d%d%d\033[m, 你說 \033[1;36m%dA%dB\033[m", hisNum, yourGuess[0], yourGuess[1], yourGuess[2], yourGuess[3], myA, myB, myGuess[0], myGuess[1], myGuess[2], myGuess[3], youA, youB);
+            prints("第 \033[1;37m%d\033[m 次，你猜 \033[1;36m%d%d%d%d\033[m，我說 \033[1;33m%dA%dB\033[m；我猜 \033[1;33m%d%d%d%d\033[m，你說 \033[1;36m%dA%dB\033[m", hisNum, yourGuess[0], yourGuess[1], yourGuess[2], yourGuess[3], myA, myB, myGuess[0], myGuess[1], myGuess[2], myGuess[3], youA, youB);
         else
-            prints("第 \033[1;37m%d\033[m 次, 我猜 \033[1;33m%d%d%d%d\033[m, 你說 \033[1;36m%dA%dB\033[m", hisNum, myGuess[0], myGuess[1], myGuess[2], myGuess[3], youA, youB);
+            prints("第 \033[1;37m%d\033[m 次，我猜 \033[1;33m%d%d%d%d\033[m，你說 \033[1;36m%dA%dB\033[m", hisNum, myGuess[0], myGuess[1], myGuess[2], myGuess[3], youA, youB);
     }
 foolme:
     /* there is no possibility, show "you fool me" */

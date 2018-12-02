@@ -2220,7 +2220,7 @@ t_loginNotify(void)
             rec_add(fpath, &bmw, sizeof(BMW));
         } while ((wp = wp->next));
 
-        vmsg("協尋設定完成, 朋友上站時" SYSOPNICK "會通知您,請勿重覆設定!");
+        vmsg("協尋設定完成，朋友上站時" SYSOPNICK "會通知您，請勿重覆設定!");
 
         /* Thor.1030 : 若不是朋友就不通知啦...... 以免callin 不對稱 */
     }

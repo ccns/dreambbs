@@ -80,7 +80,7 @@ POP3_Check(
         switch(sock)
         {
             case 1:		/* Open Socket Fail */
-                prints("\n傳回錯誤值 [1], 請重試幾次看看\n");
+                prints("\n傳回錯誤值 [1]，請重試幾次看看\n");
                 refresh();
                 return sock;
 

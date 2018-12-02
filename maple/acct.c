@@ -1638,14 +1638,14 @@ u_addr(void)
                         gem_main();
                         talk_main();
                         cutmp->ufo |= UFO_BIFF;
-                        msg = "身份確認成功\, 立刻提昇權限";
+                        msg = "身份確認成功，立刻提昇權限";
                         break;
                     }
                     else
                     {
                         logitfile(FN_VERIFY_LOG, "-POP3 Verify ERR-", addr);
                         if (popreturn != 8)
-                            vget(17, 0, "身份確認失敗, 是否重新確認 (Y/N) ? [Y]", buf, 3, LCECHO);
+                            vget(17, 0, "身份確認失敗，是否重新確認 (Y/N) ? [Y]", buf, 3, LCECHO);
 
                         if (buf[0] == 'n' || buf[0] == 'N' || popreturn == 8)
                         {
@@ -1657,7 +1657,7 @@ u_addr(void)
                             gem_main();
                             talk_main();
 
-                            msg = "身分確認失敗, 權限移除....";
+                            msg = "身分確認失敗，權限移除....";
                             break;
                         }
                     }
@@ -1665,7 +1665,7 @@ u_addr(void)
             }
             else
             {
-                prints("POP3: 不支援, 身份確認\033[1;36m使用認證信函\033[m"
+                prints("POP3: 不支援，身份確認\033[1;36m使用認證信函\033[m"
                                 "\n\n\033[1;36;5m系統送信中...\033[m");
                 refresh();
                 sleep(1);
@@ -1988,7 +1988,7 @@ u_xfile(void)
     static char *desc[] = {
         "上站地點設定檔",
         "名片檔",
-        "簽名檔 (每個 6 行, 共 3 個)",
+        "簽名檔 (每個 6 行，共 3 個)",
         "暫存檔.1",
         "暫存檔.2",
         "暫存檔.3",
@@ -2450,7 +2450,7 @@ u_register(void)
         }
         else if (formstate == REG_SENT)
         {
-            vmsg("已經請求過了 , 請耐心等待 !");
+            vmsg("已經請求過了，請耐心等待 !");
             return 0;
         }
         else if (formstate == REG_FAULT)
@@ -2495,7 +2495,7 @@ u_register(void)
     for (ans = 0 ; ans <= 1;ans++)
     {
         char msg[128];
-        sprintf(msg,"%s你願意遵守此規定嗎 ? [N]",ans ? "請再詳細看一遍 , ":"");
+        sprintf(msg,"%s你願意遵守此規定嗎 ? [N]",ans ? "請再詳細看一遍，":"");
         if (vans(msg) != 'y')
             return 0;
         bell();
@@ -2833,11 +2833,11 @@ m_register(void)
             if ( vans("是否使用修正功\能？") == 'y' )
             {
                 clear();
-                prints("\n\n\x1b[1;33m請確定沒有其他站務在審核, 否則將造成\x1b[1;31;5m使用者資料嚴重錯誤!\x1b[m\n\n\n");
+                prints("\n\n\x1b[1;33m請確定沒有其他站務在審核，否則將造成\x1b[1;31;5m使用者資料嚴重錯誤!\x1b[m\n\n\n");
                 if (vans("確定無其他站務審核中？") == 'y')
                 {
                     system("/bin/cat run/"FN_RFORM".tmp >> run/"FN_RFORM";/bin/rm -f ~bbs/run/"FN_RFORM".tmp");
-                    vmsg("修正完畢, 下次請小心審核! 按任意鍵重新開始.");
+                    vmsg("修正完畢，下次請小心審核! 按任意鍵重新開始.");
                 }
             }
         }
@@ -3031,7 +3031,7 @@ u_verify(void)
     if (!(fp = fopen(keyfile, "r")))
     {
         fclose(fp);
-        zmsg("開啟檔案有問題, 請通知站長");
+        zmsg("開啟檔案有問題，請通知站長");
         return XEASY;
     }
     while (fgets(buf, 80, fp))
@@ -3072,7 +3072,7 @@ u_verify(void)
             gem_main();
             talk_main();
             cutmp->ufo |= UFO_BIFF;
-            vmsg("身份確認成功\, 立刻提昇權限");
+            vmsg("身份確認成功，立刻提昇權限");
         }
     }
 

@@ -164,7 +164,7 @@ void drawInfo(void)
 {
     move(b_lines - 1, 0);
     clrtoeol();
-    prints("所花時間: %.0lf 秒, 剩下 %d 個地雷未標記.\n",
+    prints("所花時間: %.0lf 秒，剩下 %d 個地雷未標記.\n",
            difftime(time(0), init_time) , TotalMines - TaggedMines);
 }
 

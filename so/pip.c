@@ -2240,7 +2240,7 @@ int oldnum[])
             break;
         case 'Q':
         case 'q':
-            sprintf(inbuf, "金錢交易共 %d 元,離開 %s ", oldmoney - d.money, shopname[mode]);
+            sprintf(inbuf, "金錢交易共 %d 元，離開 %s ", oldmoney - d.money, shopname[mode]);
             vmsg(inbuf);
             break;
         }
@@ -2819,7 +2819,7 @@ int pip_job_workH(void)
 
     if ((d.bbtime / 60 / 30) < 1) /*一歲才行*/
     {
-        vmsg("小雞太小了,一歲以後再來吧...");
+        vmsg("小雞太小了，一歲以後再來吧...");
         return 0;
     }
     workmoney = 0;
@@ -2872,7 +2872,7 @@ int pip_job_workI(void)
 
     if ((d.bbtime / 60 / 30) < 1) /*一歲才行*/
     {
-        vmsg("小雞太小了,一歲以後再來吧...");
+        vmsg("小雞太小了，一歲以後再來吧...");
         return 0;
     }
     workmoney = 0;
@@ -2929,7 +2929,7 @@ int pip_job_workJ(void)
     /*兩歲以上才行*/
     if ((d.bbtime / 60 / 30) < 2)
     {
-        vmsg("小雞太小了,兩歲以後再來吧...");
+        vmsg("小雞太小了，兩歲以後再來吧...");
         return 0;
     }
     workmoney = 0;
@@ -2997,7 +2997,7 @@ int pip_job_workK(void)
     /*兩歲以上才行*/
     if ((d.bbtime / 60 / 30) < 2)
     {
-        vmsg("小雞太小了,兩歲以後再來吧...");
+        vmsg("小雞太小了，兩歲以後再來吧...");
         return 0;
     }
     workmoney = 0;
@@ -3059,7 +3059,7 @@ int pip_job_workL(void)
     /*三歲才行*/
     if ((d.bbtime / 60 / 30) < 3)
     {
-        vmsg("小雞現在還太小了,三歲以後再來吧...");
+        vmsg("小雞現在還太小了，三歲以後再來吧...");
         return 0;
     }
     workmoney = 0;
@@ -3117,7 +3117,7 @@ int pip_job_workM(void)
 
     if ((d.bbtime / 60 / 30) < 4)
     {
-        vmsg("小雞太小了,四歲以後再來吧...");
+        vmsg("小雞太小了，四歲以後再來吧...");
         return 0;
     }
     workmoney = 0;
@@ -3153,7 +3153,7 @@ int pip_job_workN(void)
 
     if ((d.bbtime / 60 / 30) < 5)
     {
-        vmsg("小雞太小了,五歲以後再來吧...");
+        vmsg("小雞太小了，五歲以後再來吧...");
         return 0;
     }
     workmoney = 0;
@@ -3215,7 +3215,7 @@ int pip_job_workO(void)
 
     if ((d.bbtime / 60 / 30) < 4)
     {
-        vmsg("小雞太小了,四歲以後再來吧...");
+        vmsg("小雞太小了，四歲以後再來吧...");
         return 0;
     }
     workmoney = 0;
@@ -3288,7 +3288,7 @@ int pip_job_workP(void)
 
     if ((d.bbtime / 60 / 30) < 6)
     {
-        vmsg("小雞太小了,六歲以後再來吧...");
+        vmsg("小雞太小了，六歲以後再來吧...");
         return 0;
     }
     workmoney = 0;
@@ -4220,7 +4220,7 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
     smoney = classgrade * classmoney[classnum][0] + classmoney[classnum][1];
     move(b_lines - 2, 0);
     clrtoeol();
-    sprintf(inbuf, "[%8s%4s課程]要花 $%d ,確定要嗎??[y/N]: ", classword[classnum][0], classrank[classgrade], smoney);
+    sprintf(inbuf, "[%8s%4s課程]要花 $%d，確定要嗎??[y/N]: ", classword[classnum][0], classrank[classgrade], smoney);
     getdata(b_lines - 2, 1, inbuf, ans, 2, DOECHO, 0);
     if (ans[0] != 'y' && ans[0] != 'Y')  return 0;
     if (d.money < smoney)
@@ -4912,9 +4912,9 @@ int first)
                     opponent->pip->hp -= dinjure;
                     d.hexp += rand() % 2 + 2;
                     d.hskill += rand() % 2 + 1;
-                    sprintf(buf, "普通攻擊,對方體力減低%d", dinjure);
+                    sprintf(buf, "普通攻擊，對方體力減低%d", dinjure);
                     vmsg(buf);
-                    sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了普通攻擊,\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
+                    sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了普通攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
                             , d.name, opponent->pip->name, dinjure);
                 }
                 opponent->pip->resistmode = 0;
@@ -4947,9 +4947,9 @@ int first)
                         d.hp -= 5;
                         d.hexp += rand() % 3 + 3;
                         d.hskill += rand() % 2 + 2;
-                        sprintf(buf, "全力攻擊,對方體力減低%d", dinjure);
+                        sprintf(buf, "全力攻擊，對方體力減低%d", dinjure);
                         vmsg(buf);
-                        sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了全力攻擊,\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
+                        sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了全力攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
                                 , d.name, opponent->pip->name, dinjure);
                     }
                     else
@@ -4983,9 +4983,9 @@ int first)
                     {
                         oldtired = oldtired - d.tired;
                         oldhp = d.hp - oldhp;
-                        sprintf(buf, "治療後,體力提高%d 疲勞降低%d", oldhp, oldtired);
+                        sprintf(buf, "治療後，體力提高%d，疲勞降低%d", oldhp, oldtired);
                         vmsg(buf);
-                        sprintf(buf, "\x1b[1;33m%s \x1b[37m使用魔法治療之後,體力提高 \x1b[36m%d \x1b[37m點，疲勞降低 \x1b[36m%d \x1b[37m點\x1b[m", d.name, oldhp, oldtired);
+                        sprintf(buf, "\x1b[1;33m%s \x1b[37m使用魔法治療之後，體力提高 \x1b[36m%d \x1b[37m點，疲勞降低 \x1b[36m%d \x1b[37m點\x1b[m", d.name, oldhp, oldtired);
                     }
                     else
                     {
@@ -5009,9 +5009,9 @@ int first)
 
                             opponent->pip->hp -= dinjure;
                             d.mskill += rand() % 2 + 2;
-                            sprintf(buf, "魔法攻擊,對方體力減低%d", dinjure);
+                            sprintf(buf, "魔法攻擊，對方體力減低%d", dinjure);
                             vmsg(buf);
-                            sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了魔法攻擊,\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
+                            sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了魔法攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
                                     , d.name, opponent->pip->name, dinjure);
                         }
                     }
@@ -5227,7 +5227,7 @@ pip_ending_screen(void)
       inexp(endgrade*ba);*/
     sprintf(buf, "/bin/rm %s", get_path(cuser.userid, "chicken"));
     system(buf);
-    sprintf(buf, "得到 %d 元,%d 點經驗值", endgrade*10*ba, endgrade*10);
+    sprintf(buf, "得到 %d 元，%d 點經驗值", endgrade*10*ba, endgrade*10);
     vmsg(buf);
     vmsg("下一頁是小雞資料  趕快copy下來做紀念");
     pip_data_list(cuser.userid);
@@ -6426,7 +6426,7 @@ pip_money(void)
     clrchyiuan(6, 18);
     /* move(12,0);
       clrtobot();*/
-    prints("你身上有 %d 次點歌次數,雞金 %d 元\n", cuser.request, d.money);
+    prints("你身上有 %d 次點歌次數，雞金 %d 元\n", cuser.request, d.money);
     outs("\n一次換一千雞金唷!!\n");
     while (money < 0 || money > cuser.request)
     {
@@ -6446,7 +6446,7 @@ pip_money(void)
         acct.request = cuser.request;
         acct_save(&acct);
         pip_write_file();
-        sprintf(buf, "你身上有 %d 次點歌次數,雞金 %d 元", cuser.request, d.money);
+        sprintf(buf, "你身上有 %d 次點歌次數，雞金 %d 元", cuser.request, d.money);
     }
     else
         sprintf(buf, "取消.....");
@@ -7458,7 +7458,7 @@ int mode)
                     m.hp -= dinjure;
                     d.hexp += rand() % 2 + 2;
                     d.hskill += rand() % 2 + 1;
-                    sprintf(buf, "普通攻擊,對方生命力減低%d", dinjure);
+                    sprintf(buf, "普通攻擊，對方生命力減低%d", dinjure);
                     vmsg(buf);
                 }
                 d.tired += rand() % (n + 1) / 15 + 2;
@@ -7485,7 +7485,7 @@ int mode)
                         d.hexp += rand() % 3 + 3;
                         d.hskill += rand() % 2 + 2;
                         d.tired += rand() % (n + 1) / 10 + 3;
-                        sprintf(buf, "全力攻擊,對方生命力減低%d", dinjure);
+                        sprintf(buf, "全力攻擊，對方生命力減低%d", dinjure);
                         vmsg(buf);
                     }
                     else
@@ -7509,7 +7509,7 @@ int mode)
                     {
                         oldtired = oldtired - d.tired;
                         oldhp = d.hp - oldhp;
-                        sprintf(buf, "治療後,生命力提高%d 疲勞降低%d", oldhp, oldtired);
+                        sprintf(buf, "治療後，生命力提高%d，疲勞降低%d", oldhp, oldtired);
                         vmsg(buf);
                     }
                     else
@@ -7572,7 +7572,7 @@ int mode)
                             m.hp -= dinjure;
                             /*d.mexp+=rand()%2+2;*/
                             d.mskill += rand() % 2 + 2;
-                            sprintf(buf, "魔法攻擊,對方生命力減低%d", dinjure);
+                            sprintf(buf, "魔法攻擊，對方生命力減低%d", dinjure);
                             vmsg(buf);
                         }
                     }
@@ -7705,7 +7705,7 @@ int mode)
                         minjure = 8;
                     d.hp -= minjure;
                     d.tired += rand() % 3 + 2;
-                    sprintf(buf, "對方普通攻擊,生命力減低%d", minjure);
+                    sprintf(buf, "對方普通攻擊，生命力減低%d", minjure);
                     vmsg(buf);
                 }
                 break;
@@ -7727,7 +7727,7 @@ int mode)
                             minjure = 20;
                         d.hp -= minjure;
                         m.hp -= 5;
-                        sprintf(buf, "對方全力攻擊, 生命力減低%d", minjure);
+                        sprintf(buf, "對方全力攻擊，生命力減低%d", minjure);
                         d.tired += rand() % 4 + 4;
                         vmsg(buf);
                     }
@@ -7741,7 +7741,7 @@ int mode)
                             minjure = 4;
                         d.hp -= minjure;
                         d.tired += rand() % 3 + 2;
-                        sprintf(buf, "對方普通攻擊,生命力減低%d", minjure);
+                        sprintf(buf, "對方普通攻擊，生命力減低%d", minjure);
                         vmsg(buf);
                     }
                 }
@@ -7794,7 +7794,7 @@ int mode)
                         d.hp -= minjure;
                         if (m.mp < 0) m.mp = 0;
                         d.mresist += rand() % 2 + 1;
-                        sprintf(buf, "對方召喚了%s,你受傷了%d點", inbuf1, minjure);
+                        sprintf(buf, "對方召喚了%s，你受傷了%d點", inbuf1, minjure);
                         vmsg(buf);
                     }
                     else

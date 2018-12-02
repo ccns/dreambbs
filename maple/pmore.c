@@ -156,9 +156,9 @@
 #define PMORE_MSG_HELP_PAUSE \
     "請按任意鍵離開此說明畫面"
 //#define PMORE_MSG_WARN_FAKEUSERINFO \
-//    " ▲此頁內容會依閱\讀者不同,原文未必有您的資料 "  /*r2.170810: keep the traditional trick XD */
+//    " ▲此頁內容會依閱\讀者不同，原文未必有您的資料 "  /*r2.170810: keep the traditional trick XD */
 #define PMORE_MSG_WARN_MOVECMD \
-    " ▲此頁內容含移位碼,可能會顯示偽造的系統訊息 "
+    " ▲此頁內容含移位碼，可能會顯示偽造的系統訊息 "
 #define PMORE_MSG_SEARCH_KEYWORD \
     "[搜尋]關鍵字:"
 #define PMORE_MSG_SEARCH_LETTERCASE \
@@ -177,13 +177,13 @@
 #define PMORE_MSG_MOVIE_DETECTED \
     " ★ 這份文件是可播放的文字動畫，要開始播放嗎？ [Y/n]"
 #define PMORE_MSG_MOVIE_PLAYOLD_GETTIME \
-    "這可能是傳統動畫檔, 若要直接播放請輸入速度(秒): "
+    "這可能是傳統動畫檔，若要直接播放請輸入速度(秒): "
 #define PMORE_MSG_MOVIE_PLAYOLD_AS24L \
-    "傳統動畫是以 24 行為單位設計的, 要模擬 24 行嗎? (否則會用現在的行數)[Yn] "
+    "傳統動畫是以 24 行為單位設計的，要模擬 24 行嗎? (否則會用現在的行數)[Yn] "
 #define PMORE_MSG_MOVIE_PAUSE \
     " >>> 暫停播放動畫，請按任意鍵繼續或 q 中斷。 <<<"
 #define PMORE_MSG_MOVIE_PLAYING \
-    " >>> 動畫播放中... 可按 q, Ctrl-C 或其它任意鍵停止";
+    " >>> 動畫播放中... 可按 q、Ctrl-C 或其它任意鍵停止";
 #define PMORE_MSG_MOVIE_INTERACTION_PLAYING \
     " >>> 互動式動畫播放中... 可按 q 或 Ctrl-C 停止";
 #define PMORE_MSG_MOVIE_INTERACTION_WAITSEL \
@@ -2178,7 +2178,7 @@ mf_display_footer(
         if (mf.xpos > 0)
         {
             snprintf(buf, sizeof(buf),
-                    " 顯示範圍: %d~%d 欄位, %02d~%02d 行",
+                    " 顯示範圍: %d~%d 欄位，%02d~%02d 行",
                     (int)mf.xpos+1,
                     (int)(mf.xpos + t_columns-(mf.trunclines ? 2 : 1)),
                     (int)(mf.lineno + 1),

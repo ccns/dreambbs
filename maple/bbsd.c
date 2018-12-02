@@ -383,7 +383,7 @@ acct_apply(void)
         if (!strcmp(buf, buf + 10))
             break;
 
-        vmsg("密碼輸入錯誤, 請重新輸入密碼");
+        vmsg("密碼輸入錯誤，請重新輸入密碼");
     }
 
     str_ncpy(cuser.passwd, genpasswd(buf), PASSLEN);
@@ -628,7 +628,7 @@ tn_login(void)
             /* cuser.ufo = UFO_COLOR | UFO_MOVIE | UFO_BNOTE; */
             break;
 #else
-            outs("\n本系統目前暫停線上註冊, 請用 guest 進入");
+            outs("\n本系統目前暫停線上註冊，請用 guest 進入");
             continue;
 #endif
         }
@@ -1120,7 +1120,7 @@ tn_main(void)
     //負載過高禁止login
     if (load[0]>20)
     {
-        prints("\n對不起...\n\n由於目前負載過高, 請稍後再來...");
+        prints("\n對不起...\n\n由於目前負載過高，請稍後再來...");
         //pcman會自動重連時間設太短會變成 DOS 很可怕 :P
         sleep(3);
         login_abort("\n");

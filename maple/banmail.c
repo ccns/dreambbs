@@ -161,7 +161,7 @@ banmail_edit(
 
     if (vget(b_lines, 0, "擋信列表：", banmail->data, sizeof(banmail->data), echo))
         change++;
-    sprintf(buf,"擋信模式：(作者,標題,時間,路徑,來源,連線砍信)[%s]",modes);
+    sprintf(buf,"擋信模式：(作者、標題、時間、路徑、來源、連線砍信)[%s]",modes);
     if (vget(b_lines,0,buf,modes,8,GCARRY))
     {
         banmail->mode=(modes[0]!='0')?FW_OWNER:0;

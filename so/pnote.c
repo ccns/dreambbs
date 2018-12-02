@@ -433,7 +433,7 @@ Pnote(int newflag)
             else if ((num1 = get_pnote(item_array, 0)) >= MAX_PNOTE - 3)
             {
                 move(b_lines - 2, 0);
-                vmsg("答錄機快滿了, 記得清理清理喔...");
+                vmsg("答錄機快滿了，記得清理清理喔...");
             }
             // shakalaca patch [原本顯示的內容都變成第一篇]
             get_pnote(item_array, 1);

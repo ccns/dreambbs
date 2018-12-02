@@ -21,7 +21,7 @@ new_passwd(void)
             {
                 if (not_addr(acct.email))
                 {
-                    vmsg("此 ID 填寫之 E-mail 不正確, 無法寄出.");
+                    vmsg("此 ID 填寫之 E-mail 不正確，無法寄出.");
                     break;
                 }
 

@@ -77,7 +77,7 @@ BlackJack(void)
         while ((money < 1) || (money > 250000));
         cuser_money = cuser_money - money;
         clear();
-        move(2, 0);prints("(按 y 續牌, n 不續牌, d double)");
+        move(2, 0);prints("(按 y 續牌，n 不續牌，d double)");
         move(0, 0);clrtoeol();prints("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
 
 //重寫發牌演算法  by jerics

@@ -780,7 +780,7 @@ XO *xo)
 
     fname = strrchr(fpath, '@');
     *fname = 'V';
-    sprintf(buf, "Τ %d 把щ布, A)э戳 B) C)矗玡秨布 Q>uit ", /* Thor:┤粇穦 */
+    sprintf(buf, "Τ %d 把щ布A)э戳 B) C)矗玡秨布 Q>uit ", /* Thor:┤粇穦 */
             rec_num(fpath, sizeof(int)));
     cc = vans(buf);
 
