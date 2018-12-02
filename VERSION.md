@@ -38,7 +38,8 @@
           * ...
 
 * preparing version name about `current`:
-    + `v1.0-CURRENT`: developing for preparing version 1.0, plan to be LTS version.
+    + `v1.0-CURRENT`: developing for preparing version 1.0.
+    + `v2.0-CURRENT`: developing for preparing version 2.0.
     + `vX.0-CURRENT`: developing for preparing version X.0.
 
 * backports for `testing`:
@@ -49,14 +50,15 @@
 ### ToDo
 * ~variable size test~
 * vtuikit port test
-* ~pfterm port test~
+* pfterm port test (**testing**)
 * logind port test
   - wsproxy port test
 * bbslua port test
 * Static Web Page Recovering
 
 ### Version Number
-+ v1.0:
++ v1.0, plan to be an LTS version:
+    - release version: `v1.0.x` ~ `v1.y.x` (2<y<10)
     - features (from Rev.Beta 3):
     - fixes (from Rev.Beta 3):
     - changed (from Rev.Beta 3):
