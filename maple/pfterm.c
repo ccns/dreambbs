@@ -572,7 +572,7 @@ resizeterm(int rows, int cols)
     }
 
     // clear new exposed buffer after resized
-    // because we will redawwin(), so need to change front buffer only.
+    // because we will redrawwin(), so need to change front buffer only.
     for (i = ft.rows; i < rows; i++)
     {
         memset(FTCMAP[i], FTCHAR_ERASE,
@@ -1307,7 +1307,7 @@ outc(unsigned char c)
     else if (c == '\r' || c == '\n')
     {
         // new line: cursor movement, and do not print anything
-        // XXX old screen.c also calls clrtoeol() for newlins.
+        // XXX old screen.c also calls clrtoeol() for newlines.
         clrtoeol();
         ft.x = 0;
         ft.y ++;
@@ -1994,7 +1994,7 @@ fterm_rawclreol(void)
 {
 #ifdef FTCONF_CLEAR_SETATTR
     // ftattr oattr = ft.rattr;
-    // XXX If we skip with "backround only" here, future updating
+    // XXX If we skip with "background only" here, future updating
     // may get wrong attributes. Or not? (consider DBCS...)
     // if (FTATTR_GETBG(oattr) != FTATTR_GETBG(FTATTR_ERASE))
     fterm_rawattr(FTATTR_ERASE);
