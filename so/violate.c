@@ -70,8 +70,8 @@ XO *xo)
 {
     vs_head("暫時禁止名單", str_site);
     outs(
-        " [←]離開 ^P)新增 c)修改 d)刪除 f)搜尋 [h]elp\n"
-        " \033[30;47m  編號 次數 時間 禁止註冊 Email                                               \033[m");
+        "  [←]離開 ^P)新增 c)修改 d)刪除 f)搜尋 [h]elp\n"
+        "\033[30;47m  編號 次數 時間 禁止註冊 Email                                              \033[m");
     return viol_body(xo);
 }
 

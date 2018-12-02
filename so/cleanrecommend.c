@@ -125,7 +125,7 @@ cleanrecommend_head(
     vs_head("推薦留言清單", str_site);
     outs(
 "  [←]離開 c)修改[站長專用] d)刪除 D)清除全部 s)重整 [h]elp\n"
-"\033[44m編號 推      使用者 留言                                                  日 期\x1b[m");
+"\033[44m  編號 推      使用者 留言                                                日 期\x1b[m");
     return cleanrecommend_body(xo);
 }
 

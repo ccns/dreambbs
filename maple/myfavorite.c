@@ -250,7 +250,7 @@ myfavorite_head(
     XO *xo)
 {
     vs_head("我的最愛", str_site);
-    prints("[←]主選單 [→]閱\讀 [a]新增 [d]刪除 [c]篇數 [/]搜尋 [s]看板 [h]說明\n"
+    prints("  [←]主選單 [→]閱\讀 [a]新增 [d]刪除 [c]篇數 [/]搜尋 [s]看板 [h]說明\n"
         "\033[44m  %-7s看  板            %-33s人氣 板    主     \033[m",
         cuser.ufo2 & UFO2_BRDNEW ? "總數" : "編號", "中   文   敘   述");
     return myfavorite_body(xo);
