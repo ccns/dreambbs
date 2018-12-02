@@ -10,7 +10,7 @@ This page will collect some info of how to use & how to install DreamLand-BBS-sy
   + **Directory Structure**: BBS 目錄與程式規劃
 
 ### Configuring
-  + **config.h**: 調整編譯設定檔 / 重新編譯程式
+  + **dreambbs.conf**: 調整編譯設定檔 / 重新編譯程式
   + **Cron Tasks**: 建立與調整 BBS 所在作業系統的定期工作
 
 ### Other Feature:
