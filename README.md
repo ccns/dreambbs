@@ -18,24 +18,17 @@ LICENSE for **piaip's more** module, please view `maple/pmore.c` instead.
 
 ## Directory Structure
 
-* **CHANGELOG**      : Some changes in this BBS version before Initial Commit.
-
-* **COPYRIGHT**      : Something historical claim about copyright of this BBS version.
-
-* **docs**   - Some information about :
-    + **INSTALL.md**     : ***How to install*** this BBS version.
-    + **ANCESTOR**       : This past history about this BBS version
-    + **old**            : Some old information about [Wind's Top BBS version](http://windtop.yzu.edu.tw) (ancestor of DreamBBS).
-
 + **include**  : Some definition data and headers for compiling.
 
-+ **innbbsd**  : Internet News Daemon or Usenet Newsgroup Client for Eagle BBS Series (patched for Maple 3.x Series by itoc) 
++ **innbbsd**  : [Internet News Daemon or Usenet Newsgroup](https://en.wikipedia.org/wiki/Usenet) Client for Eagle BBS Series (patched for Maple 3.x Series by itoc) 
 
-+ **lib**      : Static Libraries of this BBS program
++ **lib**      : Common Libraries of this BBS program
 
-+ **maple**    : Main BBS program is here.
++ **maple**    : Main BBS program is **here**.
 
 + **so**       : Dynamic Shared Object of this BBS program
 
-+ **util**     : Utility programs for this BBS.
++ **util**     : Tool programs for this BBS.
+
++ **test**     : Internal Test Tools for BBS functions or structures.
 
