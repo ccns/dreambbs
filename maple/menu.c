@@ -464,10 +464,10 @@ movie(void)
   /* Thor.980913: 註解: 最常見呼叫 movie()的時機是每次更新 film, 在 60秒以上,
                         故不需針對 xx:yy 來特別作一字串儲存以加速 */
 
-  sprintf(footer, "\033[0;34;46m%s%d:%02d] \033[30;47m 目前站上有\033[31m%4d\033[30m 人, 我是 \033[31m%-12s\033[30m [呼叫/訊息]\033[31m%s\033[m",
+  sprintf(footer, "\033[0;34;46m%s%d:%02d] \033[30;47m 目前站上有\033[31m%4d\033[30m 人, 我是 \033[31m%-12s\033[30m [呼叫/訊息]\033[31m%s",
     datemsg, ufo / 60, ufo % 60,
     /*ushm->count*/total_num, cuser.userid, flagmsg);
-  outz(footer);
+  outf(footer);
 }
 
 
@@ -1417,7 +1417,7 @@ menu(void)
       {
 #if 1
         /* Thor.980826: 用 outz 就不用 move + clrtoeol了 */
-	outz(footer);
+	outf(footer);
 #endif
 
 	mode = 0;
