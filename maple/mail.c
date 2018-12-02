@@ -2174,7 +2174,7 @@ static int
 mbox_head(
   XO *xo)
 {
-  vs_head("\0郵件選單", str_site);
+  vs_head("郵件選單", str_site);
 
   outs(NECKMAIL);
 

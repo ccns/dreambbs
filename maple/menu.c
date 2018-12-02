@@ -321,13 +321,13 @@ goodbye(void)
 /* help & menu processing				 */
 /* ----------------------------------------------------- */
 
-
 void
 vs_head(
   char *title, char *mid)
 {
-  char buf[40], ttl[60];
-  int spc;
+  char buf[(T_COLS - 1) - 79 + 69 + 1];     /* d_cols 最大可能是 (T_COLS - 1) */
+  char ttl[(T_COLS - 1) - 79 + 69 + 1];
+  int spc, len;
   unsigned int ufo;
 #ifdef  COLOR_HEADER
 /*  int color = (time(0) % 7) + 41;        lkchu.981201: random color */
@@ -348,6 +348,7 @@ vs_head(
   spc = strlen(mid);
   ufo = cutmp->ufo;
 
+
   if (!*title)
   {
     title++;
@@ -359,6 +360,7 @@ vs_head(
   }
   else
   {
+    len = d_cols + 65 - strlen(title) - strlen(currboard); /* len: 中間還剩下多長的空間 */
     if (ufo & UFO_BIFF)
     {
       mid = NEWMAILMSG; // 你有新情書
@@ -369,16 +371,17 @@ vs_head(
       mid = NEWPASSMSG; // 你有新留言
       spc = 15;
     }
-    else if (spc > (65 - strlen(title)-strlen(currboard)))
+    else if ( spc > len )
     {
-      spc = (65 - strlen(title)-strlen(currboard));
+      spc = len;
       memcpy(ttl, mid, spc);
       mid = ttl;
       mid[spc] = '\0';
     }
   }
 
-  spc = 67 - strlen(title) - spc - strlen(currboard);
+  spc = 2 + len - spc; /* 擺完 mid 以後，中間還有 spc 格空間，在 mid 左右各放 spc/2 長的空白 */
+  len = 1 - spc & 1;
 
   if(spc < 0)
   {
@@ -392,10 +395,10 @@ vs_head(
 
 #ifdef	COLOR_HEADER
   prints("\033[1;%2d;37m【%s】%s\033[33m%s\033[1;%2d;37m%s\033[37m看板《%s》\033[m\n",
-    color, title, buf,mid , color, buf + ufo, currboard);
+    color, title, buf, mid , color, buf + ufo + len, currboard);
 #else
   prints("\033[1;46;37m【%s】%s\033[33m%s\033[46m%s\033[37m看板《%s》\033[m\n",
-    title, buf, mid, buf + ufo, currboard);
+    title, buf, mid, buf + ufo + len, currboard);
 #endif
 }
 
