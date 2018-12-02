@@ -51,6 +51,7 @@
 * ~variable size test~
 * vtuikit port test
 * pfterm port test (**testing**)
+    - screen resizing feature
 * logind port test
   - wsproxy port test
 * bbslua port test
