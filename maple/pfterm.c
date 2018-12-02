@@ -450,7 +450,7 @@ int     fterm_DBCS_Big5(unsigned char c1, unsigned char c2);
 // Flat Terminal Implementation
 //////////////////////////////////////////////////////////////////////////
 
-#define fterm_markdirty() { ft.dirty = 1; }
+#define fterm_markdirty() (void) ( ft.dirty = 1 )
 
 // initialization
 

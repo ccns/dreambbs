@@ -1,6 +1,6 @@
 #include "bbs.h"
 #include "gamef.c"
-#define SWAP(x,y) {int temp=x;x=y;y=temp;}
+#define SWAP(x,y) do {int temp=(x);(x)=(y);(y)=temp;} while (0)
 
 /* ¶Â³Ç§J¹CÀ¸ */
 

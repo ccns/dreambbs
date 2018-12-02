@@ -1,12 +1,12 @@
 #include <sys/types.h>
 #include <stdlib.h>
 
-#define min(a, b)	(a) < (b) ? a : b
+#define min(a, b)	((a) < (b) ? (a) : (b))
 #undef	TEST
 
 /* Qsort routine from Bentley & McIlroy's "Engineering a Sort Function". */
 
-#define swapcode(TYPE, parmi, parmj, n) { 		\
+#define swapcode(TYPE, parmi, parmj, n) do { 		\
     long i = (n) / sizeof (TYPE); 			\
     register TYPE *pi = (TYPE *) (parmi); 		\
     register TYPE *pj = (TYPE *) (parmj); 		\
@@ -15,11 +15,11 @@
         *pi++ = *pj;				\
         *pj++ = t;				\
     } while (--i > 0);				\
-}
+} while (0)
 
-#define SWAPINIT(a, es) \
-    swaptype = (((char *)a - (char *)0) % sizeof(long) || \
-    es % sizeof(long)) ? 2 : (es == sizeof(long)? 0 : 1);
+#define SWAPINIT(a, es) (void) \
+    (swaptype = (((char *)(a) - (char *)0) % sizeof(long) || \
+    (es) % sizeof(long)) ? 2 : ((es) == sizeof(long)? 0 : 1))
 
 static inline void
 swapfunc(
@@ -30,21 +30,21 @@ swapfunc(
 )
 {
     if (swaptype <= 1)
-        swapcode(long, a, b, n)
+        swapcode(long, a, b, n);
     else
-        swapcode(char, a, b, n)
+        swapcode(char, a, b, n);
 }
 
-#define swap(a, b)					\
+#define swap(a, b) do {					\
     if (swaptype == 0) {				\
         long t = *(long *)(a);			\
         *(long *)(a) = *(long *)(b);		\
         *(long *)(b) = t;			\
     } else						\
-        swapfunc(a, b, es, swaptype)
+        swapfunc(a, b, es, swaptype);	\
+} while (0)
 
-
-#define vecswap(a, b, n) 	if ((n) > 0) swapfunc(a, b, n, swaptype)
+#define vecswap(a, b, n) 	(void) (((n) > 0) && (swapfunc(a, b, n, swaptype), 0))
 
 static inline char*
 med3(

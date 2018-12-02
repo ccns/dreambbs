@@ -60,12 +60,12 @@
 
 #define getdtablesize()         (64)
 
-#define usleep(usec)            {               \
+#define usleep(usec)         do {               \
     struct timeval t;                           \
-    t.tv_sec = usec / 1000000;                  \
-    t.tv_usec = usec % 1000000;                 \
+    t.tv_sec = (usec) / 1000000;                \
+    t.tv_usec = (usec) % 1000000;               \
     select( 0, NULL, NULL, NULL, &t);           \
-}
+} while (0)
 
 #endif  /* SYSV */
 

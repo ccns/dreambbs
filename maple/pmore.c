@@ -552,7 +552,7 @@ enum MF_DISP_CONST {
 };
 
 #define MFDISP_PAGE (t_lines-1) // the real number of lines to be shown.
-#define MFDISP_DIRTY() { mf.oldlineno = -1; }
+#define MFDISP_DIRTY() (void) ( mf.oldlineno = -1 )
 
 /* Indicators */
 #define MFDISP_TRUNC_INDICATOR  ANSI_COLOR(0;1;37) ">" ANSI_RESET
@@ -617,10 +617,10 @@ enum MFSEARCH_DIRECTION {
 };
 
 // Reset structures
-#define RESETMF() { memset(&mf, 0, sizeof(mf)); \
-    mf.lastpagelines = mf.maxlinenoS = mf.oldlineno = -1; }
-#define RESETFH() { memset(&fh, 0, sizeof(fh)); \
-    fh.lines = -1; }
+#define RESETMF() (void) ( memset(&mf, 0, sizeof(mf)), \
+    mf.lastpagelines = mf.maxlinenoS = mf.oldlineno = -1 )
+#define RESETFH() (void) ( memset(&fh, 0, sizeof(fh)), \
+    fh.lines = -1 )
 
 // Artwork
 #define OPTATTR_NORMAL        ANSI_COLOR(0;34;47)
@@ -715,30 +715,30 @@ typedef struct {
 
 MF_Movie mfmovie;
 
-#define STOP_MOVIE() {  \
-    mfmovie.options = NULL; \
-    mfmovie.pause    = 0; \
-    if (mfmovie.mode == MFDISP_MOVIE_PLAYING) \
-        mfmovie.mode =  MFDISP_MOVIE_YES; \
-    if (mfmovie.mode == MFDISP_MOVIE_PLAYING_OLD) \
-        mfmovie.mode =  MFDISP_MOVIE_NO; \
-    mf_determinemaxdisps(MFNAV_PAGE, 0); \
-    mf_forward(0); \
-}
+#define STOP_MOVIE() (void) (  \
+    mfmovie.options = NULL, \
+    mfmovie.pause    = 0, \
+    (mfmovie.mode == MFDISP_MOVIE_PLAYING) && \
+        (mfmovie.mode =  MFDISP_MOVIE_YES), \
+    (mfmovie.mode == MFDISP_MOVIE_PLAYING_OLD) && \
+        (mfmovie.mode =  MFDISP_MOVIE_NO), \
+    mf_determinemaxdisps(MFNAV_PAGE, 0), \
+    mf_forward(0) \
+)
 
-#define RESET_MOVIE() { \
-    mfmovie.mode = MFDISP_MOVIE_UNKNOWN; \
-    mfmovie.options = NULL; \
-    mfmovie.optkeys = NULL; \
-    mfmovie.intr_src= NULL; \
-    mfmovie.intr_dest_frame = 0; \
-    mfmovie.compat24 = 1; \
-    mfmovie.pause    = 0; \
-    mfmovie.interactive     = 0; \
-    mfmovie.synctime.tv_sec = mfmovie.synctime.tv_usec = 0; \
-    mfmovie.frameclk.tv_sec = 1; mfmovie.frameclk.tv_usec = 0; \
-    mfmovie.lastframe = NULL; \
-}
+#define RESET_MOVIE() (void) ( \
+    mfmovie.mode = MFDISP_MOVIE_UNKNOWN, \
+    mfmovie.options = NULL, \
+    mfmovie.optkeys = NULL, \
+    mfmovie.intr_src= NULL, \
+    mfmovie.intr_dest_frame = 0, \
+    mfmovie.compat24 = 1, \
+    mfmovie.pause    = 0, \
+    mfmovie.interactive     = 0, \
+    mfmovie.synctime.tv_sec = mfmovie.synctime.tv_usec = 0, \
+    mfmovie.frameclk.tv_sec = 1, mfmovie.frameclk.tv_usec = 0, \
+    mfmovie.lastframe = NULL \
+)
 
 #define MOVIE_IS_PLAYING() \
     ((mfmovie.mode == MFDISP_MOVIE_PLAYING) || \
@@ -1374,18 +1374,18 @@ MFDISP_DBCS_HEADERWIDTH(int originalw)
 //    return (originalw >> 1) << 1;
 }
 
-#define MFDISP_FORCEUPDATE2TOP() { startline = 0; }
-#define MFDISP_FORCEUPDATE2BOT() { endline   = MFDISP_PAGE - 1; }
-#define MFDISP_FORCEDIRTY2BOT() \
-    if (optimized == MFDISP_OPT_OPTIMIZED) { \
-        optimized = MFDISP_OPT_FORCEDIRTY; \
-        MFDISP_FORCEUPDATE2BOT(); \
-    }
+#define MFDISP_FORCEUPDATE2TOP() (void) ( startline = 0 )
+#define MFDISP_FORCEUPDATE2BOT() (void) ( endline   = MFDISP_PAGE - 1 )
+#define MFDISP_FORCEDIRTY2BOT() (void) ( \
+    (optimized == MFDISP_OPT_OPTIMIZED) && ( \
+        optimized = MFDISP_OPT_FORCEDIRTY, \
+        MFDISP_FORCEUPDATE2BOT(), 0 \
+    ))
 
 static char *override_msg = NULL;
 static char *override_attr = NULL;
 
-#define RESET_OVERRIDE_MSG() { override_attr = override_msg = NULL; }
+#define RESET_OVERRIDE_MSG() (void) ( override_attr = override_msg = NULL )
 
 /*
  * display mf content from disps for MFDISP_PAGE
@@ -2290,7 +2290,7 @@ PMORE_UINAV_FORWARDLINE(void)
     mf_forward(1);
 }
 
-#define REENTRANT_RESTORE() { mf = bkmf; fh = bkfh; }
+#define REENTRANT_RESTORE() (void) ( mf = bkmf, fh = bkfh )
 
 /*
  * piaip's more, a replacement for old more
@@ -4145,9 +4145,10 @@ mf_movieSyncFrame(void)
     }
 }
 
-#define MOVIECMD_SKIP_ALL(p,end) \
+#define MOVIECMD_SKIP_ALL(p,end) do { \
     while (p < end && *p && *p != '\n') \
     { p++; } \
+} while (0)
 
 MFPROTO unsigned char *
 mf_movieProcessCommand(unsigned char *p, unsigned char *end)

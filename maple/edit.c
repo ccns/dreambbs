@@ -66,7 +66,7 @@ ve_abort(
 
 #else
 
-#define	ve_abort(n)	;
+#define	ve_abort(n)	(void) 0
 #endif
 
 

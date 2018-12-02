@@ -24,9 +24,9 @@
 
 #ifdef M3_USE_PFTERM
 // filed color   (defined in theme.h)
-#define STANDOUT        attrsetbg(FILEDBG); attrsetfg(FILEDFG);
+#define STANDOUT   (void) ( attrsetbg(FILEDBG), attrsetfg(FILEDFG) )
 // default color (\033[37;40m)
-#define STANDEND        attrsetbg(0); attrsetfg(7);
+#define STANDEND   (void) ( attrsetbg(0), attrsetfg(7) )
 #else
 int cur_row, cur_col;
 int cur_pos;			/* current position with ANSI codes */
