@@ -31,10 +31,9 @@
         - features in plan:
           * add simple code test utilities
           * refine layout: removing trailing whitespaces.
-          * ...
-
     + `v0.98`: Version 0.98, codename `rimuru` (not released yet)
         - features in plan:
+          * applying resizing term feature
           * port `pfterm` in this release version
           * ...
 
