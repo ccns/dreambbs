@@ -345,7 +345,7 @@
  *    time to key-in and for filelength).
  *  - Basically this file should only export one function, "pmore".
  *    Using any other functions here may be dangerous because they are not
- *    coded for external reentrance rightnow.
+ *    coded for external reentrance right now.
  *  - mf_* are operation functions to work with file buffer.
  *    Usually these function assumes "mf" can be accessed.
  *  - pmore_* are utility functions
