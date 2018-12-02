@@ -34,7 +34,7 @@ main(
         printf("error open acct file %s\n",fpath);
         exit(1);
     }
-    if(read(inf, &acct, sizeof(ACCT)) != sizeof(ACCT))
+    if (read(inf, &acct, sizeof(ACCT)) != sizeof(ACCT))
     {
         close(inf);
         printf("error open acct file\n");

@@ -809,7 +809,7 @@ readnews(
         updaterc(nf, i, artno);
 
         DEBUG(("│└<readnews> 結束 %s，一共取回 %d 篇新文章\n", newsgroup, artcount));
-    }			/* end for() */
+    }			/* end for () */
 }
 
 

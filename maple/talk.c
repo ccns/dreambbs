@@ -102,16 +102,16 @@ bmode(
     int mode;
     char *word;
 
-    if(!up)
+    if (!up)
         return "不在站上";
 
 #ifdef	HAVE_SHOWNUMMSG
-    if(up->num_msg > 9)
+    if (up->num_msg > 9)
     {
         strcpy(modestr,"被灌爆了");
         return (modestr);
     }
-    else if(up->num_msg > 0)
+    else if (up->num_msg > 0)
     {
         sprintf(modestr,"收到%s封訊息",nums[up->num_msg-1]);
         return (modestr);
@@ -119,7 +119,7 @@ bmode(
 #endif
 
     mode = up->mode;
-    if(mode == M_IDLE)
+    if (mode == M_IDLE)
     {
         word = up->mateid;
     }
@@ -156,16 +156,16 @@ copyship(
 {
     PAL_SHIP *shead;
     shead = pal_ship;
-    if(userno == cuser.userno)
+    if (userno == cuser.userno)
     {
         strcpy(ship,"那就是我");
                 return;
     }
     if (shead)
     {
-        while(shead->pal_no)
+        while (shead->pal_no)
         {
-            if(shead->pal_no == userno)
+            if (shead->pal_no == userno)
             {
                 strcpy(ship,shead->ship);
                 return;
@@ -292,14 +292,14 @@ can_message(
 
     ufo = up->ufo;
 
-//  if(ufo & UFO_REJECT)
+//  if (ufo & UFO_REJECT)
 //      return NA;
 
     if (HAS_PERM(PERM_SYSOP | PERM_ACCOUNTS|PERM_CHATROOM))	/* 站長、帳號 */
         return YEA;
 
 #ifdef	HAVE_BANMSG
-    if(can_banmsg(up))		/* 拒收訊息 */
+    if (can_banmsg(up))		/* 拒收訊息 */
         return NA;
 #endif
 
@@ -328,7 +328,7 @@ can_override(
 
     ufo = up->ufo;
 
-    if(ufo & (UFO_REJECT|UFO_NET))
+    if (ufo & (UFO_REJECT|UFO_NET))
         return NA;
 
     if (HAS_PERM(PERM_SYSOP | PERM_ACCOUNTS|PERM_CHATROOM))	/* 站長、帳號 */
@@ -448,7 +448,7 @@ pal_cache(void)
     fsize = 0;
     usr_fpath(fpath, cuser.userid, FN_PAL);
     fimage = f_img(fpath, &fsize);
-    if((fsize > (PAL_MAX * sizeof(PAL))) && (fd = open(fpath,O_RDWR)))
+    if ((fsize > (PAL_MAX * sizeof(PAL))) && (fd = open(fpath,O_RDWR)))
     {
         ftruncate(fd, PAL_MAX * sizeof(PAL));
         close(fd);
@@ -505,24 +505,24 @@ pal_cache(void)
         /* Thor.980805: 解決 cutmp.ufo和 cuser.ufo的同步問題 */
         cutmp->ufo = ufo & (~UFO_REJECT);
     }
-    if(pal_ship)
+    if (pal_ship)
     {
         free(pal_ship);
         pal_ship = NULL;
     }
 
 
-    if(ship_total)
+    if (ship_total)
     {
         shead = pal_ship = (PAL_SHIP *)malloc((ship_total+1)*sizeof(PAL_SHIP));
         phead = (PAL *) fimage;
         ptail = (PAL *) (fimage + fsize);
-        if(pal_ship)
+        if (pal_ship)
         {
             memset(pal_ship,0,(ship_total+1)*sizeof(PAL_SHIP));
             do
             {
-                if(strlen(phead->ship)>0)
+                if (strlen(phead->ship)>0)
                 {
                     strcpy(shead->ship,phead->ship);
                     shead->pal_no = phead->userno;
@@ -536,7 +536,7 @@ pal_cache(void)
     else
         pal_ship = NULL;
 
-    if(fimage) free(fimage);
+    if (fimage) free(fimage);
     cuser.ufo = ufo;
 }
 
@@ -796,14 +796,14 @@ pal_search(
             {
                 move(b_lines, 0);
                 clrtoeol();
-                if(fimage)
+                if (fimage)
                     free(fimage);
                 return pos + XO_MOVE;
             }
 
         } while (pos != num);
     }
-    if(fimage)
+    if (fimage)
         free(fimage);
 
     return XO_FOOT;
@@ -961,7 +961,7 @@ pal_query(
     move(1, 0);
     clrtobot();
     /* move(2, 0); *//* Thor.0810: 可以不加嗎? */
-    /* if(*pal->userid) *//* Thor.0806:偶爾好玩一下, 應該沒差 */
+    /* if (*pal->userid) *//* Thor.0806:偶爾好玩一下, 應該沒差 */
     my_query(pal->userid, 1);
     return pal_head(xo);
 }
@@ -1026,7 +1026,7 @@ bmw_item(
 {
     struct tm *ptime = localtime(&bmw->btime);
 
-    if(!(bmw_modetype & BMW_MODE))
+    if (!(bmw_modetype & BMW_MODE))
     {
         if (bmw->sender == cuser.userno)
         {
@@ -1039,7 +1039,7 @@ bmw_item(
         }
         else
         {
-            if(strstr(bmw->msg,"★廣播"))
+            if (strstr(bmw->msg,"★廣播"))
                 prints("%5d \033[36;1m%02d:%02d %-13s★%-50.50s\033[m\n", num, ptime->tm_hour, ptime->tm_min,
                     bmw->userid, (bmw->msg)+8);
             else
@@ -1058,7 +1058,7 @@ bmw_item(
         }
         else
         {
-            if(strstr(bmw->msg,"★廣播"))
+            if (strstr(bmw->msg,"★廣播"))
                 prints("%5d \033[36;1m%-13s★%-57.57s\033[m\n", num,
                     bmw->userid, (bmw->msg)+8);
             else
@@ -1105,7 +1105,7 @@ bmw_head(
     XO *xo)
 {
     vs_head("察看訊息", str_site);
-    if(bmw_modetype & BMW_MODE)
+    if (bmw_modetype & BMW_MODE)
     {
         outs(
             "  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n"
@@ -1180,7 +1180,7 @@ bmw_query(
     move(1, 0);
     clrtobot();
     /* move(2, 0); *//* Thor.0810: 可以不加嗎? */
-    /* if(*pal->userid) *//* Thor.0806:偶爾好玩一下, 應該沒差 */
+    /* if (*pal->userid) *//* Thor.0806:偶爾好玩一下, 應該沒差 */
     my_query(bmw->userid, 1);
     return bmw_head(xo);
 }
@@ -1196,7 +1196,7 @@ bmw_write(
         BMW *benz;
 
         benz = (BMW *) xo_pool + (xo->pos - xo->top);
-        if( (benz->caller >= ushm->uslot && benz->caller < ushm->uslot + MAXACTIVE) && (benz->caller && benz->caller->userno == benz->sender) && can_message(benz->caller))
+        if ( (benz->caller >= ushm->uslot && benz->caller < ushm->uslot + MAXACTIVE) && (benz->caller && benz->caller->userno == benz->sender) && can_message(benz->caller))
         {
             up = benz->caller;
         }
@@ -1213,7 +1213,7 @@ bmw_write(
                 BMW bmw;
                 char buf[20];
 #ifdef  HAVE_SHOWNUMMSG
-                if(up->num_msg > 9 && (up->ufo & UFO_MAXMSG) && !HAS_PERM(PERM_SYSOP))
+                if (up->num_msg > 9 && (up->ufo & UFO_MAXMSG) && !HAS_PERM(PERM_SYSOP))
                 {
                     vmsg("對方已經被水球灌爆了!!");
                     return XO_INIT;
@@ -1224,7 +1224,7 @@ bmw_write(
             }
         }
 #ifdef	HAVE_BANMSG
-        else if(up && !(up->ufo & UFO_MESSAGE) && can_banmsg(up))
+        else if (up && !(up->ufo & UFO_MESSAGE) && can_banmsg(up))
         {
             vmsg("對方不想聽到您的聲音!!");
             return XO_INIT;
@@ -1392,7 +1392,7 @@ bm_belong(
             while (wcount > 0)
             {
                 datum = up[mid = wcount >> 1];
-                if(-userno == datum)
+                if (-userno == datum)
                 {
                     result = BRD_R_BIT;
                     break;
@@ -1521,7 +1521,7 @@ do_query(
     /* Thor.981108: 為滿足 cigar 徹底隱身的要求, 不過用 finger還是可以看到:p */
 
     mail = m_query(userid);
-    if(mail)
+    if (mail)
         prints(" [信箱] \033[1;31m有 %d 封新情書\033[m\n",mail);
     else
         prints(" [信箱] 都看過了\n");
@@ -1530,15 +1530,15 @@ do_query(
 
     if     (acct->money >= 100000000)
         rich=6;
-    else if(acct->money >=  10000000)
+    else if (acct->money >=  10000000)
         rich=5;
-    else if(acct->money >=   1000000)
+    else if (acct->money >=   1000000)
         rich=4;
-    else if(acct->money >=    100000)
+    else if (acct->money >=    100000)
         rich=3;
-    else if(acct->money >=     10000)
+    else if (acct->money >=     10000)
         rich=2;
-    else if(acct->money >=      1000)
+    else if (acct->money >=      1000)
         rich=1;
     else
         rich=0;
@@ -1555,9 +1555,9 @@ do_query(
     else
     {
         /* deny nick can't have plans. statue.2001.02.11 */
-        if(HAS_PERM(PERM_SYSOPX))
+        if (HAS_PERM(PERM_SYSOPX))
             showplans(userid);
-        else if(!(acct->userlevel & PERM_DENYNICK) && (acct->userlevel & PERM_VALID))
+        else if (!(acct->userlevel & PERM_DENYNICK) && (acct->userlevel & PERM_VALID))
             showplans(userid);
     }
 
@@ -1763,7 +1763,7 @@ static void bmw_display(int max,int pos)
             bmw2 = bmw;
 
 
-        if(max == pos)
+        if (max == pos)
             sprintf(color,"1;45");
         else
             sprintf(color,"0");
@@ -1941,7 +1941,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
         if (isprint2(cc))
         {
             userno = bmw.sender; /* Thor.980805: 防止系統協尋回扣 */
-            if(!userno)
+            if (!userno)
             {
                 vmsg("系統訊息無法回扣");
 //              vmsg("您並不是對方的好友，無法回扣上站通知");
@@ -1949,7 +1949,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 
                 break;
             }
-            if(bmw.caller->ufo & UFO_REJECT)
+            if (bmw.caller->ufo & UFO_REJECT)
             {
                 vmsg("對方有事，請稍待一會兒....");
                 break;
@@ -1976,7 +1976,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
             }
 
 #ifdef  HAVE_SHOWNUMMSG
-            if(up->num_msg > 9 && (up->ufo & UFO_MAXMSG) && !HAS_PERM(PERM_SYSOP))
+            if (up->num_msg > 9 && (up->ufo & UFO_MAXMSG) && !HAS_PERM(PERM_SYSOP))
             {
                 vmsg("對方已經被水球灌爆了!!");
                 break;
@@ -1984,7 +1984,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 #endif
 
 #ifdef  HAVE_BANMSG
-            if(!(up->ufo & UFO_MESSAGE) && can_banmsg(up))
+            if (!(up->ufo & UFO_MESSAGE) && can_banmsg(up))
             {
                 vmsg("對方不想聽到您的聲音!!");
                 break;
@@ -2045,7 +2045,7 @@ pal_list(
             fd = open(fpath,O_RDONLY);
             while (fd)
             {
-                if(read(fd,&list,sizeof(LIST)) == sizeof(LIST))
+                if (read(fd,&list,sizeof(LIST)) == sizeof(LIST))
                 {
                     if (!ll_has(list.userid))
                     {
@@ -2142,7 +2142,7 @@ aloha(void)
     usr_fpath(fpath, cuser.userid, FN_FRIEND_BENZ);
     if (((fd = open(fpath, O_RDONLY)) >= 0) && !fstat(fd, &st))
     {
-        if(st.st_size <= 0)
+        if (st.st_size <= 0)
         {
             close(fd);
             return;
@@ -2173,7 +2173,7 @@ aloha(void)
                 /*if (is_pal(userno))*/           /* lkchu.980806: 好友才可以 reply */
                 /*    benz.sender = cuser.userno;
                 else*/
-                if(!is_bad(userno) || (up->userlevel & PERM_SYSOP))
+                if (!is_bad(userno) || (up->userlevel & PERM_SYSOP))
                 {
                     benz.sender = 0;
 
@@ -2266,7 +2266,7 @@ loginNotify(void)
             {
 /*              benz.sender = is_pal(userno) ? cuser.userno : 0; */
                       /* lkchu.980806: 好友才可以 reply */
-                if(!is_bad(userno) || (up->userlevel & PERM_SYSOP))
+                if (!is_bad(userno) || (up->userlevel & PERM_SYSOP))
                 {
                     benz.sender = 0;
                     benz.recver = userno;
@@ -2352,9 +2352,9 @@ bmw_save(void)
     /* lkchu.981201: 放進私人信箱內/清除/保留 */
     if (fd >= 0 && check_max > sizeof(BMW))
     {
-        if(check_max >= BMW_MAX_SIZE * 1024)
+        if (check_max >= BMW_MAX_SIZE * 1024)
             ans = 'm';
-        else if(cuser.ufo2 & UFO2_NWLOG)
+        else if (cuser.ufo2 & UFO2_NWLOG)
             ans = 'r';
         else
         {
@@ -2467,7 +2467,7 @@ bmw_rqst(void)
 
         bmw_locus = locus;
 
-        if(!(cutmp->ufo & (UFO_REJECT | UFO_NET)))
+        if (!(cutmp->ufo & (UFO_REJECT | UFO_NET)))
         {
             if (strstr(mptr->msg,"★廣播"))
                 sprintf(buf, BMW_FORMAT_BC, mptr->userid, (mptr->msg)+8);
@@ -2714,13 +2714,13 @@ talk_speak(
 #if 1
             if (data[0] == Ctrl('A'))
             { /* Thor.990219: 呼叫外掛棋盤 */
-                if(DL_func("bin/bwboard.so:vaBWboard",fd,1)==-2)
+                if (DL_func("bin/bwboard.so:vaBWboard",fd,1)==-2)
                     break;
                 continue;
             }
             if (data[0] == Ctrl('B'))
             {
-                if(DL_func("bin/chess.so:vaChess",fd,1)==-2)
+                if (DL_func("bin/chess.so:vaChess",fd,1)==-2)
                     break;
                 continue;
             }
@@ -2768,7 +2768,7 @@ talk_speak(
             if (send(fd, data, 1, 0) != 1)
                 break;
             /* if (BWboard(fd,0)==-2) */
-            if(DL_func("bin/bwboard.so:vaBWboard",fd,0)==-2)
+            if (DL_func("bin/bwboard.so:vaBWboard",fd,0)==-2)
                 break;
         }
         else if (ch == Ctrl('B'))
@@ -2778,7 +2778,7 @@ talk_speak(
             if (send(fd, data, 1, 0) != 1)
                 break;
             /* if (BWboard(fd,0)==-2) */
-            if(DL_func("bin/chess.so:vaChess",fd,0)==-2)
+            if (DL_func("bin/chess.so:vaChess",fd,0)==-2)
                 break;
         }
 #endif
@@ -2821,7 +2821,7 @@ talk_speak(
 
 #ifdef EVERY_BIFF
             /* Thor.980805: 有人在旁邊按enter才需要check biff */
-            if(ch=='\n')
+            if (ch=='\n')
             {
                 static int old_biff,old_biffn;
                 int biff = cutmp->ufo & UFO_BIFF;
@@ -2928,7 +2928,7 @@ talk_page(
     if (myans == 'c')
     {
         usr_fpath(buf,up->userid,"chicken");
-        if(access(buf,0))
+        if (access(buf,0))
         {
             vmsg("對方沒有養小雞！");
             return 1;
@@ -2969,7 +2969,7 @@ talk_page(
     strcpy(cutmp->mateid, up->userid);
     up->talker = cutmp;
 #ifdef  HAVE_PIP_FIGHT
-    if(myans == 'c')
+    if (myans == 'c')
         utmp_mode(M_CHICKEN);
     else
 #endif
@@ -3034,11 +3034,11 @@ talk_page(
         talk_speak(msgsock);
     }
 #ifdef  HAVE_PIP_FIGHT
-    else if(ans == 'c')
+    else if (ans == 'c')
     {
-        if(!p)
+        if (!p)
             p = DL_get("bin/pip.so:pip_vf_fight");
-        if(p)
+        if (p)
         {
             up->pip = NULL;
             (*p)(msgsock,2);
@@ -3047,7 +3047,7 @@ talk_page(
         add_io(0,60);
 /*      pip_vf_fight(msgsock,1);*/
     }
-    else if(ans == 'C')
+    else if (ans == 'C')
     {
         outs("【回音】對方不想 PK 小雞！");
     }
@@ -3118,7 +3118,7 @@ ck_state(
         return '#';
     else if (up->ufo & in1)
     {
-        if(mode)
+        if (mode)
             return can_override(up) ? 'o' : '*';
         else
             return can_message(up) ? 'o' : '*';
@@ -3175,16 +3175,16 @@ ulist_body(
                 fcolor = (userno == self) ? 3 : paltmp;
 
 #ifdef	HAVE_BOARD_PAL
-                if(isbpal && is_boardpal(up) && userno != self)
+                if (isbpal && is_boardpal(up) && userno != self)
                     fcolor = 6;
 #else
-                if(userno != self)
+                if (userno != self)
                     fcolor = 6;
 #endif
 
                 colortmp = (pp->type == 1 || pp->type == 3);
 
-                if(paltmp && colortmp == 1)
+                if (paltmp && colortmp == 1)
                     fcolor = 3;
                 else if (!paltmp && colortmp == 1)
                     fcolor = 4;
@@ -3192,7 +3192,7 @@ ulist_body(
                 if (is_bad(userno))
                     fcolor = 2;
 
-                if(cuser.ufo2 & UFO2_SHIP)
+                if (cuser.ufo2 & UFO2_SHIP)
                 {
                     strcpy(ship," ");
                     copyship(ship,userno);
@@ -3206,9 +3206,9 @@ ulist_body(
 
                 colortmp = 1;
 
-                if(ufo & UFO_CLOAK)
+                if (ufo & UFO_CLOAK)
                     fcolor = 5;
-                else if(fcolor == 0)
+                else if (fcolor == 0)
                     colortmp = 0;
 
                 strcpy(color,wcolor[fcolor]);
@@ -3239,7 +3239,7 @@ static int
 ulist_cmp_userid(
     PICKUP *i, PICKUP *j)
 {
-    if(i->type == j->type)
+    if (i->type == j->type)
                 return str_cmp(i->utmp->userid, j->utmp->userid);
     else
         return i->type - j->type;
@@ -3312,7 +3312,7 @@ ulist_init(
     self = cuser.userno;
     filter = cuser.ufo2 & UFO2_PAL;
 
-    if(cutmp->pid <= 0 || cutmp->userno <= 0)
+    if (cutmp->pid <= 0 || cutmp->userno <= 0)
         reset_utmp();
 
     seecloak = HAS_PERM(PERM_SEECLOAK);
@@ -3338,7 +3338,7 @@ ulist_init(
         if (!seecloak && (up->ufo & UFO_CLOAK))
             continue;
         tmp = can_see(up);
-        if(is_bad(userno))
+        if (is_bad(userno))
         {
             bfriend_num++;
             bad = 1;
@@ -3349,7 +3349,7 @@ ulist_init(
         if (((seecloak || !(up->ufo & UFO_CLOAK)) && (tmp != 2)) || HAS_PERM(PERM_SYSOP|PERM_SEECLOAK) || up->userno == cuser.userno)
         {
 #ifdef HAVE_BOARD_PAL
-            if(isbpal && is_boardpal(up))
+            if (isbpal && is_boardpal(up))
                 board_pals++;
 #endif
             ispal = is_pal(userno);
@@ -3361,21 +3361,21 @@ ulist_init(
                 friend_num++;
                 pp++;
             }
-            else if(ispal && !(tmp == 1) && !filter && !bad)
+            else if (ispal && !(tmp == 1) && !filter && !bad)
             {
                 pp->utmp = up;
                 pp->type = 2;
                 pfriend_num++;
                 pp++;
             }
-            else if(!ispal && (tmp == 1) && !filter && !bad)
+            else if (!ispal && (tmp == 1) && !filter && !bad)
             {
                 pp->utmp = up;
                 pp->type = 3;
                 ofriend_num++;
                 pp++;
             }
-            else if(!filter)
+            else if (!filter)
             {
                 pp->utmp = up;
                 pp->type = 4;
@@ -3567,7 +3567,7 @@ ulist_makepal(
             pal.userno = userno;
             strcpy(pal.userid, buf);
             usr_fpath(buf, cuser.userid, FN_PAL);
-            if(rec_num(buf,sizeof(PAL)) < PAL_MAX)
+            if (rec_num(buf,sizeof(PAL)) < PAL_MAX)
             {
                 rec_add(buf, &pal, sizeof(PAL));
                 pal_cache();
@@ -3607,7 +3607,7 @@ ulist_makebad(
             pal.userno = userno;
             strcpy(pal.userid, buf);
             usr_fpath(buf, cuser.userid, FN_PAL);
-            if(rec_num(buf,sizeof(PAL)) < PAL_MAX)
+            if (rec_num(buf,sizeof(PAL)) < PAL_MAX)
             {
                 rec_add(buf, &pal, sizeof(PAL));
                 pal_cache();
@@ -3681,11 +3681,11 @@ ulist_broadcast(
     sprintf(buf,"★廣播：%s",bmw.msg);
     strcpy(bmw.msg,buf);
     admin = check_admin(cuser.userid);
-    if(admin && !(cuser.ufo2 & UFO2_PAL))
+    if (admin && !(cuser.ufo2 & UFO2_PAL))
     {
-        if((ans = vans("◎ 使用 SYSOP 廣播嗎？ [y/N]")) != 'Y' && ans != 'y')
+        if ((ans = vans("◎ 使用 SYSOP 廣播嗎？ [y/N]")) != 'Y' && ans != 'y')
             admin = 0;
-        if((ans = vans("◎ 確定全站廣播嗎？ [y/N]")) != 'Y' && ans != 'y')
+        if ((ans = vans("◎ 確定全站廣播嗎？ [y/N]")) != 'Y' && ans != 'y')
             return XO_INIT;
     }
     if (!(cuser.ufo2 & UFO2_PAL) && admin)
@@ -3742,7 +3742,7 @@ ulist_write(
             char buf[20];
 
 #ifdef	HAVE_SHOWNUMMSG
-            if(up->num_msg > 9 && (up->ufo & UFO_MAXMSG) && !HAS_PERM(PERM_SYSOP))
+            if (up->num_msg > 9 && (up->ufo & UFO_MAXMSG) && !HAS_PERM(PERM_SYSOP))
             {
                 vmsg("對方已經被水球灌爆了!!");
                 return XO_INIT;
@@ -3753,7 +3753,7 @@ ulist_write(
             bmw_edit(up, buf, &bmw, 0);
         }
 #ifdef	HAVE_BANMSG
-        else if(!(up->ufo & UFO_MESSAGE) && can_banmsg(up))
+        else if (!(up->ufo & UFO_MESSAGE) && can_banmsg(up))
         {
             vmsg("對方不想聽到您的聲音!!");
         }
@@ -3916,14 +3916,14 @@ ulist_pager(
 {
     if (!HAS_PERM(PERM_PAGE))
         return XO_NONE;
-    if((cuser.ufo & UFO_PAGER) && (cuser.ufo & UFO_PAGER1))
+    if ((cuser.ufo & UFO_PAGER) && (cuser.ufo & UFO_PAGER1))
     {
         cuser.ufo ^= UFO_PAGER;
         cutmp->ufo ^= UFO_PAGER;
         cuser.ufo ^= UFO_PAGER1;
         cutmp->ufo ^= UFO_PAGER1;
     }
-    else if(cuser.ufo & UFO_PAGER)
+    else if (cuser.ufo & UFO_PAGER)
     {
         cuser.ufo ^= UFO_PAGER1;
         cutmp->ufo ^= UFO_PAGER1;
@@ -3943,14 +3943,14 @@ ulist_message(
 
     if (!HAS_PERM(PERM_PAGE))
         return XO_NONE;
-    if((cuser.ufo & UFO_QUIET) && (cuser.ufo & UFO_MESSAGE))
+    if ((cuser.ufo & UFO_QUIET) && (cuser.ufo & UFO_MESSAGE))
     {
         cuser.ufo ^= UFO_QUIET;
         cutmp->ufo ^= UFO_QUIET;
         cuser.ufo ^= UFO_MESSAGE;
         cutmp->ufo ^= UFO_MESSAGE;
     }
-    else if(cuser.ufo & UFO_QUIET)
+    else if (cuser.ufo & UFO_QUIET)
     {
         cuser.ufo ^= UFO_MESSAGE;
         cutmp->ufo ^= UFO_MESSAGE;
@@ -3975,7 +3975,7 @@ static int
 ulist_realname(
     XO *xo)
 {
-    if(HAS_PERM(PERM_SYSOP))
+    if (HAS_PERM(PERM_SYSOP))
     {
         cuser.ufo2 ^= UFO2_REALNAME;
 //      cutmp->ufo ^= UFO_REALNAME;
@@ -3998,7 +3998,7 @@ ulist_mp(
 {
     int tmp;
 
-    if(!HAS_PERM(PERM_VALID))
+    if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
     tmp = t_pal();
     return ulist_init(xo);
@@ -4008,7 +4008,7 @@ static int
 ulist_readmail(
     XO *xo)
 {
-    if(cuser.userlevel)
+    if (cuser.userlevel)
     {
         if (HAS_PERM(PERM_DENYMAIL))
             vmsg("您的信箱被鎖了！");
@@ -4043,7 +4043,7 @@ ulist_del(
             mgets(-1);
             while ((pal = mread(fd, sizeof(PAL))))
             {
-                if(pal->userno!=userno)
+                if (pal->userno!=userno)
                     tmp = tmp + 1;
                 else
                 {
@@ -4076,12 +4076,12 @@ ulist_changeship(
 
 
     check = is_pal(userno) ? 1 : is_bad(userno) ? 2 : 0;
-    if(!check)
+    if (!check)
         return XO_NONE;
     strcpy(buf,"");
     copyship(buf,userno);
 
-    if(vget(b_lines, 0, check == 1 ?"友誼：":"惡行惡狀：", buf, sizeof(buf), GCARRY))
+    if (vget(b_lines, 0, check == 1 ?"友誼：":"惡行惡狀：", buf, sizeof(buf), GCARRY))
     {
         usr_fpath(fpath, cuser.userid, FN_PAL);
         if ((fd = open(fpath, O_RDONLY)) >= 0)
@@ -4089,7 +4089,7 @@ ulist_changeship(
             mgets(-1);
             while ((pal = mread(fd, sizeof(PAL))))
             {
-                if(pal->userno!=userno)
+                if (pal->userno!=userno)
                     tmp = tmp + 1;
                 else
                 {
@@ -4116,7 +4116,7 @@ ulist_test(
     char buf[128];
     fd = open(FN_ETC_SYSOP, O_RDONLY);
     sprintf(buf,"檔案編號 %d:%d:%d",fd,Ctrl('F'),'@');
-    if(fd)
+    if (fd)
         close(fd);
     pmsg(buf);
 /*  vget(b_lines,0,"多少人:",buf,6,DOECHO);
@@ -4129,7 +4129,7 @@ ulist_state(
     XO *xo)
 {
     char buf[128];
-    if(!HAS_PERM(PERM_SYSOP))
+    if (!HAS_PERM(PERM_SYSOP))
         return XO_NONE;
     sprintf(buf,"PID : %d",ulist_pool[xo->pos].utmp->pid);
     vmsg(buf);
@@ -4145,7 +4145,7 @@ ulist_april1(
     char buf[256];
     more("gem/brd/Admin/J/A106LL7J",NULL);
     sprintf(buf,"您是第 %d 個被騙的使用者 ^^y ",ushm->avgload);
-    if(!aprilfirst)
+    if (!aprilfirst)
         ushm->avgload++;
     vmsg(buf);
     aprilfirst = 1;
@@ -4212,14 +4212,14 @@ KeyFunc ulist_cb[] =
 int
 t_message(void)
 {
-    if((cuser.ufo & UFO_QUIET) && (cuser.ufo & UFO_MESSAGE))
+    if ((cuser.ufo & UFO_QUIET) && (cuser.ufo & UFO_MESSAGE))
     {
         cuser.ufo ^= UFO_QUIET;
         cutmp->ufo ^= UFO_QUIET;
         cuser.ufo ^= UFO_MESSAGE;
         cutmp->ufo ^= UFO_MESSAGE;
     }
-    else if(cuser.ufo & UFO_QUIET)
+    else if (cuser.ufo & UFO_QUIET)
     {
         cuser.ufo ^= UFO_MESSAGE;
         cutmp->ufo ^= UFO_MESSAGE;
@@ -4237,14 +4237,14 @@ int
 t_pager(void)
 {
     /* cuser.ufo = (cutmp->ufo ^= UFO_PAGER); */
-    if((cuser.ufo & UFO_PAGER) && (cuser.ufo & UFO_PAGER1))
+    if ((cuser.ufo & UFO_PAGER) && (cuser.ufo & UFO_PAGER1))
     {
         cuser.ufo ^= UFO_PAGER;
         cutmp->ufo ^= UFO_PAGER;
         cuser.ufo ^= UFO_PAGER1;
         cutmp->ufo ^= UFO_PAGER1;
     }
-    else if(cuser.ufo & UFO_PAGER)
+    else if (cuser.ufo & UFO_PAGER)
     {
         cuser.ufo ^= UFO_PAGER1;
         cutmp->ufo ^= UFO_PAGER1;
@@ -4261,7 +4261,7 @@ int
 t_cloak(
     XO *xo)
 {
-    if(HAS_PERM(PERM_CLOAK))
+    if (HAS_PERM(PERM_CLOAK))
     {
         cuser.ufo ^= UFO_CLOAK;
         cutmp->ufo ^= UFO_CLOAK;
@@ -4320,7 +4320,7 @@ talk_rqst(void)
 
     mode = bbsmode;
 #ifdef  HAVE_PIP_FIGHT
-    if(up->mode == M_CHICKEN)
+    if (up->mode == M_CHICKEN)
         utmp_mode(M_CHICKEN);
     else
 #endif
@@ -4351,7 +4351,7 @@ talk_rqst(void)
 
     bell();
 #ifdef  HAVE_PIP_FIGHT
-    if(up->mode != M_CHICKEN)
+    if (up->mode != M_CHICKEN)
 #endif
     {
         prints("您想跟 %s 聊天嗎？(來自 %s)", page_requestor, up->from);
@@ -4381,7 +4381,7 @@ talk_rqst(void)
         move(2, 0);
         clrtobot();
 #ifdef  HAVE_PIP_FIGHT
-        if(up->mode != M_CHICKEN)
+        if (up->mode != M_CHICKEN)
 #endif
         {
             for (ans = 0; ans < 5; ans++)
@@ -4410,7 +4410,7 @@ talk_rqst(void)
     else
     {
 #ifdef  HAVE_PIP_FIGHT
-        if(up->mode != M_CHICKEN)
+        if (up->mode != M_CHICKEN)
 #endif
             buf[0] = ans = 'y';
 #ifdef  HAVE_PIP_FIGHT
@@ -4453,12 +4453,12 @@ over_for:
             talk_speak(sock);
         }
 #ifdef  HAVE_PIP_FIGHT
-        else if(ans == 'c')
+        else if (ans == 'c')
         {
-            if(!p)
+            if (!p)
                 p = DL_get("bin/pip.so:pip_vf_fight");
             strcpy(cutmp->mateid, up->userid);
-            if(p)
+            if (p)
             {
                 cutmp->pip = NULL;
                 (*p)(sock,1);
@@ -4552,7 +4552,7 @@ banmsg_cache(void)
     fsize = 0;
     usr_fpath(fpath, cuser.userid, FN_BANMSG);
     fimage = f_img(fpath, &fsize);
-    if((fsize > (BANMSG_MAX * sizeof(BANMSG))) && (fd = open(fpath,O_RDWR)))
+    if ((fsize > (BANMSG_MAX * sizeof(BANMSG))) && (fd = open(fpath,O_RDWR)))
     {
         ftruncate(fd, BANMSG_MAX * sizeof(BANMSG));
         close(fd);
@@ -4585,7 +4585,7 @@ banmsg_cache(void)
 
     up->banmsg_max = count;
 
-    if(fimage)
+    if (fimage)
         free(fimage);
 }
 

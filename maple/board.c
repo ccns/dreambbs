@@ -368,7 +368,7 @@ void
 remove_perm(void)
 {
     int i;
-    for(i=0;i<(sizeof(brd_bits)/sizeof(int));i++)
+    for (i=0;i<(sizeof(brd_bits)/sizeof(int));i++)
         brd_bits[i] &= ~BRD_W_BIT;
 }
 #endif
@@ -391,7 +391,7 @@ Ben_Perm(
         extern int bm_belong();
 #ifdef  HAVE_WATER_LIST
 #ifdef	HAVE_SYSOP_WATERLIST
-        if(bm_belong(bname) == BRD_R_BIT)
+        if (bm_belong(bname) == BRD_R_BIT)
             return BRD_R_BIT;
         else
 #endif
@@ -436,7 +436,7 @@ Ben_Perm(
 
     }
 #ifdef HAVE_WATER_LIST
-    else if(bm_belong(bname) == BRD_R_BIT)
+    else if (bm_belong(bname) == BRD_R_BIT)
         bits &= ~BRD_W_BIT;
 
 #endif
@@ -578,7 +578,7 @@ brh_load(void)
 
             list = head + 2;
 
-            if(list > tail)
+            if (list > tail)
                 break;
 
             n = *list;
@@ -603,7 +603,7 @@ brh_load(void)
 
                     list += n;   /* Thor.980904: 註解: 最後一個tag */
 
-                    if(list > tail)
+                    if (list > tail)
                         break;
 
                     do
@@ -647,7 +647,7 @@ brh_load(void)
     cutmp->board_pal = brd_bno(currboard);
 #endif
 #ifdef	HAVE_RESIST_WATER
-    if(checkqt > CHECK_QUOT_MAX)
+    if (checkqt > CHECK_QUOT_MAX)
         remove_perm();
 #endif
 }
@@ -660,7 +660,7 @@ brh_save(void)
     char *bits;
 
     /* Thor.980830: lkchu patch:  還沒 load 就不用 save */
-    if(!(base = brh_base))
+    if (!(base = brh_base))
         return;
 
 #if 0
@@ -821,7 +821,7 @@ XoPost(
 
 #ifdef LOG_BRD_USIES
         /* lkchu.981201: 閱讀看版記錄 */
-        if(!(bbstate & BRD_NOLOGREAD))
+        if (!(bbstate & BRD_NOLOGREAD))
             brd_usies();
 #endif
 
@@ -829,8 +829,8 @@ XoPost(
             brd_usies_BMlog();
 
 #ifdef	HAVE_COUNT_BOARD
-//      if(!(strcmp(brd->brdname,"Test")))
-        if(!(bbstate & BRD_NOTOTAL) && !(bits & BRD_V_BIT))
+//      if (!(strcmp(brd->brdname,"Test")))
+        if (!(bbstate & BRD_NOTOTAL) && !(bits & BRD_V_BIT))
             brd->n_reads++;
 #endif
         ok=1;
@@ -941,7 +941,7 @@ class_check(
                 bnum++;
             }
         }
-        else if(!class_check(chn))
+        else if (!class_check(chn))
             continue;
         max++;
     } while (chead < ctail);
@@ -1039,7 +1039,7 @@ class_load(
                 bnum++;
             }
         }
-        else if(!class_check(chn))
+        else if (!class_check(chn))
         {
             continue;
         }
@@ -1154,9 +1154,9 @@ class_body(
                     {
                         fstat(fd, &st);
 
-                        if(st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
+                        if (st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
                         {
-                            if((fsize = st.st_size) >= sizeof(HDR))
+                            if ((fsize = st.st_size) >= sizeof(HDR))
                             {
                                 HDR hdr;
 
@@ -1190,9 +1190,9 @@ class_body(
                     {
                         fstat(fd, &st);
 
-                        if(st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
+                        if (st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
                         {
-                            if((fsize = st.st_size) >= sizeof(HDR))
+                            if ((fsize = st.st_size) >= sizeof(HDR))
                             {
                                 HDR hdr;
 
@@ -1228,12 +1228,12 @@ class_body(
                     tmp[32] = '\0';
 
 /* 081122.cache:看板性質,不訂閱,秘密,好友,一般 */
-                if(bits[chn] & BRD_Z_BIT)
+                if (bits[chn] & BRD_Z_BIT)
                     brdtype = '-';
 #ifdef HAVE_MODERATED_BOARD
-                else if(brd->readlevel & PERM_BOARD)
+                else if (brd->readlevel & PERM_BOARD)
                     brdtype = '.';
-                else if(brd->readlevel & PERM_SYSOP)
+                else if (brd->readlevel & PERM_SYSOP)
                     brdtype = ')';
 #endif
                 else
@@ -1497,7 +1497,7 @@ class_browse(
     else
     {
         XoPost(chn);
-        if(ok==1)
+        if (ok==1)
         {
             xover(XZ_POST);
             time(&brd_visit[chn]);
@@ -1607,7 +1607,7 @@ XoAuthor(
                 if (tail->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
                     continue;
 
-                /* if(str_str(temp,author)) *//* Thor.0818:希望比較快 */
+                /* if (str_str(temp,author)) *//* Thor.0818:希望比較快 */
 
                 if (!str_ncmp(tail->owner, author, len))
                 {
@@ -1696,7 +1696,7 @@ class_find_same(
     {
         while ((read(fd,&hdr, sizeof(HDR)) == sizeof(HDR)))
         {
-            if(!str_cmp(hdr.xname,src->xname))
+            if (!str_cmp(hdr.xname,src->xname))
             {
                 close(fd);
                 return i;
@@ -1718,25 +1718,25 @@ class_add(xo)
     HDR hdr;
     int chn,fasize;
     char fpath[128];
-    if(boardmode == 2 || !HAS_PERM(PERM_VALID))
+    if (boardmode == 2 || !HAS_PERM(PERM_VALID))
         return XO_NONE;
 
     usr_fpath(fpath,cuser.userid,FN_FAVORITE);
     chp = (short *) xo->xyz + xo->pos;
     chn = *chp;
-    if(chn < 0)
+    if (chn < 0)
     {
         return XO_NONE;
     }
     brd = bshm->bcache + chn;
     memset(&hdr,0,sizeof(HDR));
     brd2gem(brd,&hdr);
-    if(class_find_same(&hdr) < 0 )
+    if (class_find_same(&hdr) < 0 )
     {
         rec_add(fpath,&hdr,sizeof(HDR));
         favorite_main();
         usr_fpath(fpath,cuser.userid,FN_FAVORITE_IMG);
-        if(favorite_img)
+        if (favorite_img)
             free(favorite_img);
         favorite_img = f_img(fpath,&fasize);
         logitfile(FN_FAVORITE_LOG,"< ADD >",hdr.xname);
@@ -1762,10 +1762,10 @@ class_add2(          /* gaod: 我的最愛中直接新增新看板 */
     char fpath[128];
     char bname[IDLEN + 1];
 
-    if(boardmode != 2 || !HAS_PERM(PERM_VALID))
+    if (boardmode != 2 || !HAS_PERM(PERM_VALID))
         return XO_NONE;
 
-    if(!(brd = ask_board(bname, BRD_R_BIT, NULL)))
+    if (!(brd = ask_board(bname, BRD_R_BIT, NULL)))
     {
         vmsg(err_bid);
         return XO_HEAD;
@@ -1782,12 +1782,12 @@ class_add2(          /* gaod: 我的最愛中直接新增新看板 */
     chn = *chp;
     memset(&hdr,0,sizeof(HDR));
     brd2gem(brd,&hdr);
-    if(class_find_same(&hdr) < 0 )
+    if (class_find_same(&hdr) < 0 )
     {
         rec_add(fpath,&hdr,sizeof(HDR));
         favorite_main();
         usr_fpath(fpath,cuser.userid,FN_FAVORITE_IMG);
-        if(favorite_img)
+        if (favorite_img)
             free(favorite_img);
         favorite_img = f_img(fpath,&fasize);
         logitfile(FN_FAVORITE_LOG,"< ADD >",hdr.xname);
@@ -1809,7 +1809,7 @@ class_del(
     HDR hdr;
     int chn,fasize,pos;
     char fpath[128];
-    if(boardmode != 2 || !HAS_PERM(PERM_VALID))
+    if (boardmode != 2 || !HAS_PERM(PERM_VALID))
         return XO_NONE;
 
     usr_fpath(fpath,cuser.userid,FN_FAVORITE);
@@ -1818,18 +1818,18 @@ class_del(
     brd = bshm->bcache + chn;
     memset(&hdr,0,sizeof(HDR));
     brd2gem(brd,&hdr);
-    if((pos = class_find_same(&hdr)) >= 0)
+    if ((pos = class_find_same(&hdr)) >= 0)
     {
         rec_del(fpath, sizeof(HDR), pos, NULL, NULL);
         favorite_main();
         usr_fpath(fpath,cuser.userid,FN_FAVORITE_IMG);
-        if(favorite_img)
+        if (favorite_img)
             free(favorite_img);
         favorite_img = f_img(fpath,&fasize);
 
         logitfile(FN_FAVORITE_LOG,"< DEL >",hdr.xname);
         vmsg("已成功\從我的最愛移除！");
-        if(!favorite_img)
+        if (!favorite_img)
             return XO_QUIT;
     }
     else
@@ -1850,7 +1850,7 @@ class_mov(
     HDR hdr;
     int chn,fasize,pos,newOrder;
     char fpath[128],buf[128];
-    if(boardmode != 2 || !HAS_PERM(PERM_VALID))
+    if (boardmode != 2 || !HAS_PERM(PERM_VALID))
         return XO_NONE;
 
     usr_fpath(fpath,cuser.userid,FN_FAVORITE);
@@ -1871,9 +1871,9 @@ class_mov(
     else if (newOrder >= xo->max)
         newOrder = xo->max - 1;
 
-    if((pos = class_find_same(&hdr)) >= 0)
+    if ((pos = class_find_same(&hdr)) >= 0)
     {
-        if(newOrder != pos)
+        if (newOrder != pos)
         {
             if (!rec_del(fpath, sizeof(HDR), pos, NULL, NULL))
             {
@@ -2109,7 +2109,7 @@ board_main(void)
 #endif
 
 #ifdef  HAVE_FAVORITE
-    if(HAS_PERM(PERM_VALID))
+    if (HAS_PERM(PERM_VALID))
     {
         usr_fpath(fpath,cuser.userid,FN_FAVORITE_IMG);
         favorite_img = f_img(fpath,&fasize);
@@ -2142,7 +2142,7 @@ board_main(void)
     }
 
     board_xo.key = CH_END;
-    if(class_img)
+    if (class_img)
         class_load(&board_xo);
 
     xz[XZ_CLASS - XO_ZONE].xo = &board_xo;	/* Thor: default class_xo */
@@ -2186,7 +2186,7 @@ brd_list(
             fd = open(fpath,O_RDONLY);
             while (fd)
             {
-                if(read(fd,&list,sizeof(LIST)) == sizeof(LIST))
+                if (read(fd,&list,sizeof(LIST)) == sizeof(LIST))
                 {
                     if (!ll_has(list.userid))
                     {

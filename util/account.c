@@ -721,7 +721,7 @@ main(void)
         lseek(fact, 0, SEEK_SET);
     }
 
-    if(rename(run_file, tmp_file))
+    if (rename(run_file, tmp_file))
     {
         sprintf(buf,"touch %s",tmp_file);
         system(buf);
@@ -1051,20 +1051,20 @@ main(void)
 #ifdef HAVE_SIGNED_MAIL
     srandom(time(NULL));
 #if (PRIVATE_KEY_PERIOD == 0)
-    if(!dashf(PRIVATE_KEY))
+    if (!dashf(PRIVATE_KEY))
 #else
-    if(!dashf(PRIVATE_KEY) || (random() % PRIVATE_KEY_PERIOD) == 0)
+    if (!dashf(PRIVATE_KEY) || (random() % PRIVATE_KEY_PERIOD) == 0)
 #endif
     {
         sprintf(title,"log/prikey%s", ymd);
         f_mv(PRIVATE_KEY,title);
         i = 8;
-        for(;;)
+        for (;;)
         {
             j = random() & 0xff;
-            if(!j) continue;
+            if (!j) continue;
             title[--i] = j;
-            if(i == 0) break;
+            if (i == 0) break;
         }
         rec_add(PRIVATE_KEY, title, 8);
     }
@@ -1110,7 +1110,7 @@ keeplog(
         if (mode)
             unlink(fnlog);
     }
-    if(mode == 3)
+    if (mode == 3)
         hdr.xmode |= POST_MARKED;
 
     strcpy(hdr.title, title);

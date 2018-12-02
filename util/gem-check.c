@@ -179,7 +179,7 @@ sync_check(
     {
         fprintf(flog, "sync: %s\n", fgem);
         fpr = fopen(fgem, "w+");
-        if(fpr == NULL)
+        if (fpr == NULL)
         {
             fprintf(flog, "sync error: %s\n", fgem);
             return;
@@ -456,7 +456,7 @@ gcheck(
         if (*ptr == '@')
         {
             fprintf(flog, "\tspecial: %s\n", ptr);
-            if((xmode & (GEM_FOLDER | GEM_BOARD | GEM_GOPHER | GEM_HTTP)) ==
+            if ((xmode & (GEM_FOLDER | GEM_BOARD | GEM_GOPHER | GEM_HTTP)) ==
                         GEM_FOLDER)
             {
                 sprintf(fname, "@/%s", ptr);

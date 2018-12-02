@@ -134,7 +134,7 @@ mail2bbs(
     ACCT acct;
 
     /* 091209.cache: 限收站內信 */
-    if(acct_load(&acct, userid) >= 0)
+    if (acct_load(&acct, userid) >= 0)
     {
         if (acct.ufo2 & UFO2_DEF_LOCALMAIL)
         {

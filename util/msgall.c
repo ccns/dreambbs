@@ -97,7 +97,7 @@ main(
     BMW bmw;
 
     chdir(BBSHOME);
-    if(argc < 2)
+    if (argc < 2)
     {
         printf("Usage: msgall <msg>\n");
         exit(0);

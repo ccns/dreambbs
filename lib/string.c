@@ -347,7 +347,7 @@ mmdecode_header(
 
     case 'b':			/* Thor: base 64 */
 
-        /* Thor: pattern & bits are cleared outside while() */
+        /* Thor: pattern & bits are cleared outside while () */
         pattern = 0;
         bits = 0;
 
@@ -418,7 +418,7 @@ mmdecode(	/* 解 Header 的 mmdecode */
 
     case 'b':			/* Thor: base 64 */
 
-        /* Thor: pattern & bits are cleared outside while() */
+        /* Thor: pattern & bits are cleared outside while () */
         pattern = 0;
         bits = 0;
 
@@ -911,7 +911,7 @@ chkpasswd(
 {
     char* pw;
 
-    /* if(!*passwd) return -1 */ /* Thor.990416: 怕有時passwd是空的 */
+    /* if (!*passwd) return -1 */ /* Thor.990416: 怕有時passwd是空的 */
     str_ncpy(pwbuf, test, PASSLEN);
     pw = crypt(pwbuf, passwd);
     return (strncmp(pw, passwd, PASSLEN));
@@ -1290,7 +1290,7 @@ str_xor(
 )
 {
     register int cc;
-    for(; *src; src++, dst++)
+    for (; *src; src++, dst++)
     {
         if ((cc = *src ^ *dst))
             *dst = cc;

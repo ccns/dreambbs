@@ -30,14 +30,14 @@ is_big5(char *src,int pos,int mode)
     int word=0;
     char *str;
 
-    for(str = src;word<pos;str++)
+    for (str = src;word<pos;str++)
     {
-        if(mode)
+        if (mode)
         {
-            if(*str == '\033')
+            if (*str == '\033')
             {
                 str = strchr(str,'m');
-                if(!str)
+                if (!str)
                     return -1;
                 continue ;
             }
@@ -47,10 +47,10 @@ is_big5(char *src,int pos,int mode)
         word++;
     }
 
-    if(wstate)
+    if (wstate)
         return -1;
 
-    if(*str<0 && wstate==0)
+    if (*str<0 && wstate==0)
         return 1;
     else
         return 0;
@@ -64,10 +64,10 @@ do_cmd(MENU *mptr,XO *xo,int x,int y)
     int (*func) (void);
     int (*func_unary) (XO *xo);
 
-    if(mptr->umode < 0)
+    if (mptr->umode < 0)
     {
         p = DL_get(mptr->func);
-        if(!p)
+        if (!p)
             return 0;
         mptr->func = p;
         mptr->umode = - (mptr->umode);
@@ -77,7 +77,7 @@ do_cmd(MENU *mptr,XO *xo,int x,int y)
     {
         case POPUP_SO :
             p = DL_get(mptr->func);
-            if(!p) return 0;
+            if (!p) return 0;
             mptr->func = p;
             mptr->umode = POPUP_FUN;
             func = p;
@@ -114,12 +114,12 @@ count_len(
     ptr = data;
     len = strlen(data);
 
-    while(ptr)
+    while (ptr)
     {
         ptr = strstr(ptr,"\033");
-        if(ptr)
+        if (ptr)
         {
-            for(tmp=ptr;*tmp!='m';tmp++);
+            for (tmp=ptr;*tmp!='m';tmp++);
             len -= (tmp-ptr+1);
             ptr = tmp+1;
         }
@@ -138,32 +138,32 @@ get_color(char *s,int len,int *fc,int *bc,int *bbc)
     memset(buf,0,sizeof(buf));
     strncpy(buf,s+2,len-1);
 
-    for( p = e = &buf[0] ; exit == 0 ; ++p)
+    for ( p = e = &buf[0] ; exit == 0 ; ++p)
     {
-        if(*p == ';' || *p == 'm')
+        if (*p == ';' || *p == 'm')
         {
-            if(*p == 'm')
+            if (*p == 'm')
                     exit = 1;
             *p = 0;
 
             color = atoi(e);
 
-            if(color == 0)
+            if (color == 0)
             {
                 *bbc = 0;
                 reset = 1;
             }
-            else if(color > 0 && color < 10)
+            else if (color > 0 && color < 10)
             {
                 *bbc = color;
                 state |= 0x1;
             }
-            else if(color>29 && color < 38)
+            else if (color>29 && color < 38)
             {
                 *fc = color;
                 state |= 0x2;
             }
-            else if(color>39 && color < 48)
+            else if (color>39 && color < 48)
             {
                 *bc = color;
                 state |= 0x4;
@@ -172,17 +172,17 @@ get_color(char *s,int len,int *fc,int *bc,int *bbc)
         }
     }
 
-    if(reset == 1)
+    if (reset == 1)
     {
-        if(!(state & 0x4))
+        if (!(state & 0x4))
             *bc = 40;
-        if(!(state & 0x2))
+        if (!(state & 0x2))
             *fc = 37;
-        if(!(state & 0x1))
+        if (!(state & 0x1))
             *bbc = 0;
     }
 
-    if(state == 0)
+    if (state == 0)
     {
         *bc = 40;
         *fc = 37;
@@ -204,9 +204,9 @@ vs_line(char *msg,int x,int y)
     sl[x].data[sl[x].len] = '\0';
     str = tmp = sl[x].data;
 
-    for(word=0;word<y && *str;++str)
+    for (word=0;word<y && *str;++str)
     {
-        if(*str == KEY_ESC)
+        if (*str == KEY_ESC)
         {
             cstr = strchr(str,'m');
             get_color(str,cstr-str,&fc,&bc,&bbc);
@@ -218,22 +218,22 @@ vs_line(char *msg,int x,int y)
 
     strncpy(buf,sl[x].data, str - tmp);
 
-    while(word++<y)
+    while (word++<y)
         strcat(buf," ");
 
     slen = strlen(buf)-1;
 
     /* verit . 假如這為中文字元的前半碼就清掉 */
-    if(is_big5(buf,slen,0)>0)
+    if (is_big5(buf,slen,0)>0)
         buf[slen] = ' ';
 
     strcat(buf,msg);
 
-    if(*str)
+    if (*str)
     {
-        for(word=0;word<len && *str;++str)
+        for (word=0;word<len && *str;++str)
         {
-            if(*str == KEY_ESC)
+            if (*str == KEY_ESC)
             {
                 cstr = strchr(str,'m');
                 get_color(str,cstr-str,&fc,&bc,&bbc);
@@ -243,7 +243,7 @@ vs_line(char *msg,int x,int y)
             word++;
         }
 
-        if(*str)
+        if (*str)
         {
             /* verit . 解決後面顏色補色 */
             sprintf(color,"\033[%d;%d;%dm",bbc,fc,bc);
@@ -252,7 +252,7 @@ vs_line(char *msg,int x,int y)
             /* verit . 假如最後一字元為中文的後半部就清掉 */
             slen = strlen(buf);
             strcat(buf,str);
-            if(is_big5(tmp,str-tmp,0)<0)
+            if (is_big5(tmp,str-tmp,0)<0)
                 buf[slen] = ' ';
         }
     }
@@ -316,7 +316,7 @@ draw_menu(MENU *pmenu[20],int num,char *title,int x,int y,int cur)
     vs_line(buf,x-2,y);
     sprintf(buf," \033[0;37;44m▏\033[1m%-31s \033[0;47;34m▉\033[m   ",t);
     vs_line(buf,x-1,y);
-    for(i=0;i<num;++i,++x)
+    for (i=0;i<num;++i,++x)
     {
         draw_item(pmenu[i]->desc,(i==cur)?1:0,x,y);
     }
@@ -340,15 +340,15 @@ do_menu(
 
     memset(table ,0 ,sizeof(table));
     /* verit. menu 權限檢查 */
-    for( tmp=0,num=-1 ; pmenu[tmp].umode != POPUP_MENUTITLE ; tmp++ )
+    for ( tmp=0,num=-1 ; pmenu[tmp].umode != POPUP_MENUTITLE ; tmp++ )
     {
-        if(pmenu[tmp].level == 0 || pmenu[tmp].level & cuser.userlevel)
+        if (pmenu[tmp].level == 0 || pmenu[tmp].level & cuser.userlevel)
             table[++num] = &pmenu[tmp];
 
     }
 
     /* verit. 更新動態 */
-    if(pmenu[tmp].func)
+    if (pmenu[tmp].func)
     {
         strcpy(cutmp->mateid,pmenu[tmp].func);
         utmp_mode(M_IDLE);
@@ -358,15 +358,15 @@ do_menu(
     table_title = &pmenu[tmp];
 
     /* verit . 假如沒有任何選項就 return */
-    if(num < 0)
+    if (num < 0)
         return 1;
 
     cur = old_cur = 0;
 
     /* 跳到預設選項 */
-    for( tmp=0; tmp<= num ; tmp++ )
+    for ( tmp=0; tmp<= num ; tmp++ )
     {
-        if((table[tmp]->desc[0] | 0x20) == ((table_title->level & POPUP_MASK) | 0x20))
+        if ((table[tmp]->desc[0] | 0x20) == ((table_title->level & POPUP_MASK) | 0x20))
         {
             cur = old_cur = tmp;
             break;
@@ -376,7 +376,7 @@ do_menu(
 
     draw_menu(table,num+1,title,x,y,cur);
 
-    while(1)  /* verit . user 選擇 */
+    while (1)  /* verit . user 選擇 */
     {
         c = vkey();
         old_cur = cur;
@@ -399,9 +399,9 @@ do_menu(
                 break;
             case KEY_RIGHT:
             case '\n':
-                if(table[cur]->umode & POPUP_QUIT)
+                if (table[cur]->umode & POPUP_QUIT)
                     return 1;
-                if(do_cmd(table[cur],xo,x,y)<0)
+                if (do_cmd(table[cur],xo,x,y)<0)
                     return -1;
 #ifdef M3_USE_PFTERM
                 scr_restore(&old_screen); // restore foot
@@ -411,16 +411,16 @@ do_menu(
                     draw_menu(table,num+1,title,x,y,cur);
                 break;
             default:
-                for(tmp=0 ; tmp<=num ; tmp++)
+                for (tmp=0 ; tmp<=num ; tmp++)
                 {
-                    if( (c | 0x20) == (table[tmp]->desc[0] | 0x20 ))
+                    if ( (c | 0x20) == (table[tmp]->desc[0] | 0x20 ))
                     {
                         cur = tmp;
-                        if(table_title->level & POPUP_DO_INSTANT)
+                        if (table_title->level & POPUP_DO_INSTANT)
                         {
-                            if(table[cur]->umode == POPUP_QUIT)
+                            if (table[cur]->umode == POPUP_QUIT)
                                 return 1;
-                            if(do_cmd(table[cur],xo,x,y)<0)
+                            if (do_cmd(table[cur],xo,x,y)<0)
                                 return -1;
 #ifdef M3_USE_PFTERM
                             scr_restore(&old_screen); // restore foot
@@ -434,7 +434,7 @@ do_menu(
                 }
                 break;
         }
-        if(old_cur != cur)
+        if (old_cur != cur)
         {
             draw_item(table[old_cur]->desc,0,x+old_cur,y);
             draw_item(table[cur]->desc,1,x+cur,y);
@@ -474,7 +474,7 @@ draw_menu_des(char *desc[],char *title,int x,int y,int cur)
     vs_line(buf,x-2,y);
     sprintf(buf," \033[0;37;44m▏%-31s \033[0;47;34m▉\033[m   ",title);
     vs_line(buf,x-1,y);
-    for(num=1;desc[num];num++)
+    for (num=1;desc[num];num++)
         draw_ans_item(desc[num],(num==cur)?1:0,x++,y,hotkey);
     sprintf(buf," \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\033[40;30;1m▉\033[m ");
     vs_line(buf,x,y);
@@ -504,14 +504,14 @@ popupmenu_ans(char *desc[],char *title,int x,int y)
     sprintf(t,"【%s】",title);
     num = draw_menu_des(desc,t,x,y,0);
     cur = old_cur = 0;
-    for(tmp=0;tmp<num;tmp++)
+    for (tmp=0;tmp<num;tmp++)
     {
-        if(desc[tmp+1][0] == hotkey)
+        if (desc[tmp+1][0] == hotkey)
             cur = old_cur = tmp;
     }
     draw_ans_item(desc[cur+1],1,x+cur,y,hotkey);
 
-    while(1)
+    while (1)
     {
         c = vkey();
         old_cur = cur;
@@ -545,9 +545,9 @@ popupmenu_ans(char *desc[],char *title,int x,int y)
 #endif
                 return (desc[cur+1][0] | 0x20) ;
             default:
-                for(tmp=0 ; tmp<=num ; tmp++)
+                for (tmp=0 ; tmp<=num ; tmp++)
                 {
-                    if( (c | 0x20) == (desc[tmp+1][0] | 0x20 ))
+                    if ( (c | 0x20) == (desc[tmp+1][0] | 0x20 ))
                     {
                         cur = tmp;
                         break;
@@ -555,7 +555,7 @@ popupmenu_ans(char *desc[],char *title,int x,int y)
                 }
                 break;
         }
-        if(old_cur != cur)
+        if (old_cur != cur)
         {
             draw_ans_item(desc[old_cur+1],0,x+old_cur,y,hotkey);
             draw_ans_item(desc[cur+1],1,x+cur,y,hotkey);
@@ -587,7 +587,7 @@ static void pcopy(char *buf,char *patten,int len)
     *buf = '\0';
     size = strlen(patten);
 
-    for(i=1;i<=len;i++)
+    for (i=1;i<=len;i++)
     {
         strcpy(buf,patten);
         buf += size;
@@ -600,7 +600,7 @@ int pmsg(char *msg)
     char patten[ANSILINELEN];
     int len,plen,cc;
 
-    if(cuser.ufo2 & UFO2_ORIGUI)
+    if (cuser.ufo2 & UFO2_ORIGUI)
         return vmsg(msg);
 
 #ifdef M3_USE_PFTERM
@@ -610,14 +610,14 @@ int pmsg(char *msg)
 #endif
 
     len = (msg ? strlen(msg) : 0 );
-    if(len > 30)
+    if (len > 30)
     {
         plen = (len - 29) / 2;
     }
     else
         plen = 0;
 
-    if(len > 0)
+    if (len > 0)
     {
         pcopy(patten,"ˍ",plen);
         sprintf(buf," \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ%s\033[m  ",plen?patten:"");
@@ -670,12 +670,12 @@ Every_Z_Screen(void)
     char buf[512];
 
     fp = tbf_open();
-    if(!fp)
+    if (!fp)
     {
         vmsg("檔案開啟錯誤 !!");
         return 0;
     }
-    for(i=0;i<24;++i)
+    for (i=0;i<24;++i)
     {
         memset(buf,0,sizeof(buf));
         strncpy(buf,sl[i].data,sl[i].len);

@@ -25,17 +25,17 @@ void log_bank(
     strncpy(c_time, ctime(&now), 24);
     c_time[24] = '\0';
 
-    if(mode == 1)
+    if (mode == 1)
         sprintf(c_buf, "%s %s 優良點數(%d)->夢幣(%d)\n", c_time, cuser.userid, a, b);
-    else if(mode == 2)
+    else if (mode == 2)
         sprintf(c_buf, "%s %s 夢幣(%d)->優良點數(%d)\n", c_time, cuser.userid, a, b);
-    else if(mode == 3)
+    else if (mode == 3)
         sprintf(c_buf, "%s %s 夢幣(%d)->股票(%d)\n", c_time, cuser.userid, a, b);
-    else if(mode == 4)
+    else if (mode == 4)
     {
         sprintf(c_buf, "%s %s 匯款(%d)-> %s (%d)\n", c_time, cuser.userid, a, *who, b);
     }
-    else if(mode == 5)
+    else if (mode == 5)
         sprintf(c_buf, "%s %s 匯入舊夢幣(%d)\n", c_time, cuser.userid, a);
 
     f_cat(FN_BANK, c_buf);
@@ -49,7 +49,7 @@ int point1_money(void)
     int money;
     ACCT acct;
 
-    if(acct_load(&acct, cuser.userid) >= 0)
+    if (acct_load(&acct, cuser.userid) >= 0)
         money = acct.money;
     else
     {
@@ -67,20 +67,20 @@ int point1_money(void)
     move(2,0);
     prints("你的身上有 %9d 夢幣\n\n           %9d 優良點數"
                     ,acct.money, acct.point1);
-    if(acct.point1 < 1)
+    if (acct.point1 < 1)
     {
         pmsg2("優良點數不足");
         return 0;
     }
 
     vget(8, 0, "要轉換多少優良點數？", buf, 8, DOECHO);
-    if((num = atoi(buf)) <= 0)
+    if ((num = atoi(buf)) <= 0)
         return 0;
     else
     {
         double temp = num*4096 + acct.money;
 
-        if(temp > INT_MAX)
+        if (temp > INT_MAX)
         {
             pmsg2("轉換後夢幣超過上限！");
             return 0;
@@ -88,7 +88,7 @@ int point1_money(void)
 
         temp = (int)temp;
 
-        if(acct_load(&acct, cuser.userid) >= 0)
+        if (acct_load(&acct, cuser.userid) >= 0)
         {
             acct.money = temp;
             acct.point1 -= num;
@@ -137,7 +137,7 @@ TransferAccount(void)
 
     if (acct_get("要匯給誰：",&acct)<1)
         return 0;
-    if(acct.userno == cuser.userno)
+    if (acct.userno == cuser.userno)
     {
         pmsg2("不能跟自己交易啦！");
         return 0;
@@ -151,7 +151,7 @@ TransferAccount(void)
 #endif
     move(3,0);
 
-    if(acct_load(&selfacct, cuser.userid) >= 0)
+    if (acct_load(&selfacct, cuser.userid) >= 0)
         selfmoney = selfacct.money;
     else
     {
@@ -162,12 +162,12 @@ TransferAccount(void)
     prints("你自己的身上還有 %9d 夢幣。\n",selfacct.money);
     prints("\n%-12s則有 %9d 夢幣。",userid, acct.money);
 
-    if(!vget(7,0,"你要匯款多少夢幣：",buf,10,DOECHO))
+    if (!vget(7,0,"你要匯款多少夢幣：",buf,10,DOECHO))
         return 0;
 
     temp = ((int)atoi(buf) + acct.money);
 
-    if((int)atoi(buf) < 100)
+    if ((int)atoi(buf) < 100)
     {
         pmsg2("匯款金額不得低於 100 元");
         return 0;
@@ -194,7 +194,7 @@ TransferAccount(void)
     if (!vget(b_lines, 0, "匯款理由：", str, 60, DOECHO))
         return 0;
 
-    if(vans("確定要給他嗎？ [Y/n]") != 'n')
+    if (vans("確定要給他嗎？ [Y/n]") != 'n')
     {
 
         now = time(0);
@@ -345,7 +345,7 @@ int bank_main(void)
     int point1;
 
     ACCT acct;
-    if(acct_load(&acct, cuser.userid) >= 0)
+    if (acct_load(&acct, cuser.userid) >= 0)
     {
         money = acct.money;
         point1 = acct.point1;
@@ -371,16 +371,16 @@ int bank_main(void)
     prints("夢幣 %d ",money);
     move (6,2);
     prints("優良積分 %d ",point1);
-    if(!vget(b_lines,0,"請選擇您要的服務： [Q] 離開 ",buf,2,DOECHO))
+    if (!vget(b_lines,0,"請選擇您要的服務： [Q] 離開 ",buf,2,DOECHO))
         return 0;
 
-    if(*buf == '1')
+    if (*buf == '1')
         point1_money();
-    else if(*buf == '2')
+    else if (*buf == '2')
         pmsg2("此功\能尚未開放");
-    else if(*buf == '3')
+    else if (*buf == '3')
         pmsg2("此功\能尚未開放");
-    else if(*buf == '4')
+    else if (*buf == '4')
         TransferAccount();
     else
         pmsg2("離開銀行");

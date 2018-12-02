@@ -138,7 +138,7 @@ main(
     strcpy(fname = fpath, "usr/@");
     fname = (char *) strchr(fname, '@');
 
-    if(argc > 1)
+    if (argc > 1)
     {
         expire(argv[1]);
     }

@@ -68,16 +68,16 @@ reaper(
     if (fd < 0)
         return;
 
-    if(read(fd, &acct, sizeof(acct))!=sizeof(acct))
+    if (read(fd, &acct, sizeof(acct))!=sizeof(acct))
     {
         close(fd);
         return;
     }
     close(fd);
     acct.ufo2 = 0;
-    for(ptr = table;ptr->old;ptr++)
+    for (ptr = table;ptr->old;ptr++)
     {
-        if(acct.ufo & ptr->old)
+        if (acct.ufo & ptr->old)
             acct.ufo2 |= ptr->new;
         else
             acct.ufo2 &= ~ptr->new;

@@ -76,7 +76,7 @@ write_data(
 
     sprintf(buf, "\x1b[1;32m%%%ds\x1b[m\n\n", 80);
     printf(buf, "%s", title);
-    if(mode == 0)
+    if (mode == 0)
     {
         puts("\x1b[1;31m名次\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34mNickname\x1b[m)  "
 "           \x1b[1;36m次數\x1b[m    \x1b[1;31m名次\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34m"

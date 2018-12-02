@@ -793,7 +793,7 @@ void
 refresh(void)
 {
     // prevent passive update
-    if(ft.typeahead && fterm_typeahead())
+    if (ft.typeahead && fterm_typeahead())
         return;
     doupdate();
 }
@@ -1529,7 +1529,7 @@ fterm_prepare_str(int len)
 
     x = ft.x;
     // fix start and end
-    if(sdbcs == 2 && x > 0) // TAIL, remove word
+    if (sdbcs == 2 && x > 0) // TAIL, remove word
         x--;
     if (dbcs == 1 && len < ft.cols) // LEAD, remove word
         len ++;

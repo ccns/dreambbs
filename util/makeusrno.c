@@ -131,9 +131,9 @@ finduserno(
     char *userid)
 {
     int i;
-    for(i=1;i<=total;i++)
+    for (i=1;i<=total;i++)
     {
-        if(!strcmp(map[i].userid,userid))
+        if (!strcmp(map[i].userid,userid))
             return i;
     }
     return 0;
@@ -255,7 +255,7 @@ reaper(
     if (fd < 0)
         return;
 
-    if(read(fd, &acct, sizeof(acct))!=sizeof(acct))
+    if (read(fd, &acct, sizeof(acct))!=sizeof(acct))
     {
         close(fd);
         return;
@@ -316,9 +316,9 @@ traverse(
         if (fname[0] > ' ' && fname[0] != '.')
         {
             strcpy(str, fname);
-            if(mode == 1)
+            if (mode == 1)
                 reaper(fpath, fname);
-            else if(mode == 2)
+            else if (mode == 2)
                 optimize(fpath, fname);
         }
     }
@@ -340,7 +340,7 @@ main(void)
     strcpy(fname = fpath, "usr/@");
     fname = (char *) strchr(fname, '@');
 
-    for(mode = 1 ; mode <= 2 ; mode++)
+    for (mode = 1 ; mode <= 2 ; mode++)
     {
         for (ch = 'a'; ch <= 'z'; ch++)
         {
@@ -354,7 +354,7 @@ main(void)
             fname[1] = '\0';
             traverse(fpath,mode);
         }
-        if(mode == 2)
+        if (mode == 2)
             break;
         total--;
     }
@@ -365,7 +365,7 @@ main(void)
         int fd,num;
 
         fd = open(".USR.new", O_CREAT | O_TRUNC | O_WRONLY, 0600);
-        for(num = 1; num <= total; num++)
+        for (num = 1; num <= total; num++)
         {
             memset(&slot, 0, sizeof(SCHEMA));
             strcpy(slot.userid, map[num].userid);

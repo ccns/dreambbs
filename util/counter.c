@@ -50,10 +50,10 @@ main(
     FILE *fp;
     char ymd[80],flag;
 
-    if(argc > 1)
+    if (argc > 1)
     {
-        if(*argv[1] == 'r')  flag = 1;
-        else if(*argv[1] == 'w')  flag = 2;
+        if (*argv[1] == 'r')  flag = 1;
+        else if (*argv[1] == 'w')  flag = 2;
         else flag = 0;
     }
     else
@@ -88,7 +88,7 @@ main(
     }
     if (flag == 2)
     {
-        if(argc > 5)
+        if (argc > 5)
         {
             count->samehour_max_login = atoi(argv[2]);
             count->max_regist = atoi(argv[3]);
@@ -105,21 +105,21 @@ main(
         }
     }
 
-    if(flag == 0)
+    if (flag == 0)
     {
-        if(count->max_regist > count->max_regist_old)
+        if (count->max_regist > count->max_regist_old)
         {
             fprintf(fp,"★ 【%s】\x1b[1;32m總註冊人數\x1b[m提升到 \x1b[31;1m%d\x1b[m 人\n",ymd,count->max_regist);
             count->max_regist_old = count->max_regist;
         }
 
-        if(count->samehour_max_login > count->samehour_max_login_old)
+        if (count->samehour_max_login > count->samehour_max_login_old)
         {
             fprintf(fp,"◎ 【%s %02d:%02d】\x1b[32m同時在站內人數\x1b[m首次達到 \x1b[1;36m%d\x1b[m 人次\n",ymd,ptime.tm_hour,ptime.tm_min,count->samehour_max_login);
             count->samehour_max_login_old = count->samehour_max_login;
         }
 
-        if(count->cur_hour_max_login > count->hour_max_login)
+        if (count->cur_hour_max_login > count->hour_max_login)
         {
             fprintf(fp,"◇ 【%s %02d】\x1b[1;32m單一小時上線人次\x1b[m首次達到 \x1b[1;35m%d\x1b[m 人次\n",ymd,ntime.tm_hour,count->cur_hour_max_login);
             count->hour_max_login = count->cur_hour_max_login;
@@ -128,7 +128,7 @@ main(
 
         if (ntime.tm_hour == 0)
         {
-            if(count->cur_day_max_login > count->day_max_login)
+            if (count->cur_day_max_login > count->day_max_login)
             {
                 fprintf(fp,"◆ 【%s】\x1b[1;32m單日上線人次\x1b[m首次達到 \x1b[1;33m%d\x1b[m 人次\n",ymd,count->cur_day_max_login);
                 count->day_max_login = count->cur_day_max_login;

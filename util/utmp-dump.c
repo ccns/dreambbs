@@ -53,11 +53,11 @@ bmode(
     int mode;
     char *word;
 
-    if(!up)
+    if (!up)
         return "不在站上";
 
     mode = up->mode;
-    if(mode == M_IDLE)
+    if (mode == M_IDLE)
     {
         word = up->mateid;
     }
@@ -318,7 +318,7 @@ pal_cache(void)
     pal_pool = cache;
     up->pal_max = pal_count = count;
 
-    if(fimage)
+    if (fimage)
         free(fimage);
     cuser.ufo = ufo;
 }
@@ -356,7 +356,7 @@ ck_state(
         return '#';
     else if (up->ufo & in1)
     {
-        if(mode)
+        if (mode)
             return can_override(up) ? 'o' : '*';
         else
             return can_message(up) ? 'o' : '*';
@@ -403,7 +403,7 @@ ulist_body(
             fcolor = (userno == self) ? 3 : is_pal(userno);
 
             colortmp = can_see(up);
-            if(is_pal(userno) && colortmp == 1) fcolor = 3;
+            if (is_pal(userno) && colortmp == 1) fcolor = 3;
             else if (!is_pal(userno) && colortmp == 1) fcolor = 4;
 
             if (is_bad(userno)) fcolor = 2;
@@ -415,8 +415,8 @@ ulist_body(
             diffmsg = ck_state(UFO_QUIET,UFO_MESSAGE,up,0);
 
             colortmp = 1;
-            if(ufo & UFO_CLOAK) fcolor = 5;
-            else if(fcolor == 0)
+            if (ufo & UFO_CLOAK) fcolor = 5;
+            else if (fcolor == 0)
                 colortmp = 0;
             strcpy(color,wcolor[fcolor]);
 
@@ -509,7 +509,7 @@ ulist_init(
         if (!seecloak && (up->ufo & UFO_CLOAK))
             continue;
         tmp = can_see(up);
-        if(is_bad(userno)) bfriend_num++;
+        if (is_bad(userno)) bfriend_num++;
         if (((seecloak || !(up->ufo & UFO_CLOAK)) && (tmp != 2)) || HAS_PERM(PERM_SYSOP|PERM_SEECLOAK) || up->userno == cuser.userno)
         {
             if ((is_pal(userno) && (tmp == 1)) || (userno == self))
@@ -517,19 +517,19 @@ ulist_init(
                 *pp++ = up;
                 friend_num++;
             }
-            else if(is_pal(userno) && !(tmp == 1) && !filter)
+            else if (is_pal(userno) && !(tmp == 1) && !filter)
                 pf[pfriend_num++] = up;
-            else if(!is_pal(userno) && (tmp == 1) && !filter)
+            else if (!is_pal(userno) && (tmp == 1) && !filter)
                 of[ofriend_num++] = up;
-            else if(!filter)
+            else if (!filter)
                 nf[nf_num++] = up;
         }
     } while (++up <= uceil);
-    for(i=0;i<pfriend_num;i++)
+    for (i=0;i<pfriend_num;i++)
         *pp++ = pf[i];
-    for(i=0;i<ofriend_num;i++)
+    for (i=0;i<ofriend_num;i++)
         *pp++ = of[i];
-    for(i=0;i<nf_num;i++)
+    for (i=0;i<nf_num;i++)
         *pp++ = nf[i];
 
     xo->max = max = pp - ulist_pool;;
@@ -539,7 +539,7 @@ ulist_init(
 
     if ((max > 1) && (pickup_way))
     {
-        if(pickup_way==1)
+        if (pickup_way==1)
         {
             xsort(ulist_pool, friend_num, sizeof(pickup), ulist_cmp[pickup_way - 1]);
             xsort((ulist_pool+friend_num),pfriend_num , sizeof(pickup), ulist_cmp[pickup_way - 1]);
@@ -599,9 +599,9 @@ main(
     cutmp = &utmp;
     usr_fpath(fpath,argv[1],".ACCT");
     fd = open(fpath,O_RDONLY);
-    if(fd>=0)
+    if (fd>=0)
     {
-        if(read(fd,&cuser,sizeof(ACCT)) == sizeof(ACCT))
+        if (read(fd,&cuser,sizeof(ACCT)) == sizeof(ACCT))
         {
             reset_utmp();
             pickup_way = atoi(argv[2]);

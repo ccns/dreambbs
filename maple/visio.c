@@ -282,7 +282,7 @@ ansi_move(
                 continue;
             }
             x--;
-            if(x<=0 && (ansi==NA))
+            if (x<=0 && (ansi==NA))
                 break;
         }
         x = y;
@@ -655,7 +655,7 @@ void
 clrtohol(void)
 {
     int n;
-    for(n=cur_col;n<36;n++) /* 36是我的動態看板起始位置, 自己調整 */
+    for (n=cur_col;n<36;n++) /* 36是我的動態看板起始位置, 自己調整 */
         outc(' ');
 }
 
@@ -1562,7 +1562,7 @@ igetch(void)
                             cutmp->idle_time = idle = 0;
                         }
 #ifdef	HAVE_SHOWNUMMSG
-                        if(cutmp)
+                        if (cutmp)
                             cutmp->num_msg = 0;
 #endif
                         break;
@@ -1598,7 +1598,7 @@ igetch(void)
                         refresh();
                         abort_bbs();
                     }
-                    else if(idle > (cc ? (IDLE_TIMEOUT-4) : 4))
+                    else if (idle > (cc ? (IDLE_TIMEOUT-4) : 4))
                     {
                         outz("\033[41;5;1;37m警告！你已經閒置過久，系統將在三分後將你踢除！\033[m");
                         refresh();

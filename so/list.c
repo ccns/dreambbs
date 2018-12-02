@@ -231,7 +231,7 @@ XO *xo)
 
     str_lower(buf, buf);
 
-    while(++cur<max)
+    while (++cur<max)
     {
         rec_get(xo->dir,&list,sizeof(LIST),cur);
 

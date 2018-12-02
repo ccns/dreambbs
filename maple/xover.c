@@ -199,7 +199,7 @@ hdr_prune(
             (!nhead && Tagger(hdr->chrono, count - 1, TAG_NIN)))	/* TagList */
             && !(post == 3 && (hdr->xmode & POST_DELETE)))
         {
-            if(!post)
+            if (!post)
             {
                 if ((fwrite(hdr, sizeof(HDR), 1, fpw) != 1))
                 {
@@ -216,7 +216,7 @@ hdr_prune(
             /* 若為看板就連線砍信 */
             if (cancel)
                 cancel_post(hdr);
-            if(!post)
+            if (!post)
             {
 
                 hdr_fpath(fold, folder, hdr);
@@ -224,18 +224,18 @@ hdr_prune(
             }
             else
             {
-                if(post == 1)
+                if (post == 1)
                 {
                     hdr->xmode |= POST_MDELETE;
                     sprintf(hdr->title, "<< 本文章經 %s 刪除 >>", cuser.userid);
                 }
 #ifdef  HAVE_MAILUNDELETE
-                else if(post == 3 && (hdr->xmode & POST_DELETE))
+                else if (post == 3 && (hdr->xmode & POST_DELETE))
                 {
                     hdr_fpath(fold, folder, hdr);
                     unlink(fold);
                 }
-                else if(post != 3)
+                else if (post != 3)
 #else
                 else
 #endif
@@ -243,9 +243,9 @@ hdr_prune(
             }
         }
 #ifdef  HAVE_MAILUNDELETE
-        if(post && !(post == 3 && (hdr->xmode & POST_DELETE)))
+        if (post && !(post == 3 && (hdr->xmode & POST_DELETE)))
 #else
-        if(post)
+        if (post)
 #endif
         {
             if ((fwrite(hdr, sizeof(HDR), 1, fpw) != 1))
@@ -301,10 +301,10 @@ xo_delete(
 
     if (vget(b_lines, 41, msg_sure_ny, buf, 3, LCECHO) == 'y')
     {
-        if(bbsmode == M_READA)
+        if (bbsmode == M_READA)
             hdr_prune(xo->dir, head, tail , 0);
 #ifdef	HAVE_MAILUNDELETE
-        else if(bbsmode == M_RMAIL)
+        else if (bbsmode == M_RMAIL)
             hdr_prune(xo->dir, head, tail , 2);
 #endif
         else
@@ -506,10 +506,10 @@ xo_prune(
     blog("PRUNE", buf);
 #endif
 
-    if(bbsmode == M_READA)
+    if (bbsmode == M_READA)
         hdr_prune(xo->dir, 0, 0 , 1);
 #ifdef  HAVE_MAILUNDELETE
-    else if(bbsmode == M_RMAIL)
+    else if (bbsmode == M_RMAIL)
         hdr_prune(xo->dir, 0, 0 , 2);
 #endif
     else
@@ -577,7 +577,7 @@ xo_copy(
         }
 
         // check delete or not .. by statue 2000/05/18
-        if(hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE))
+        if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE))
             continue;
 
         if ((hdr->xmode & (POST_LOCK|GEM_RESERVED|GEM_RESTRICT)) && !(HAS_PERM(PERM_ALLBOARD) || (bbstate & STAT_BOARD)))
@@ -686,7 +686,7 @@ xo_forward(
     }
 
 /*
-    if((hdr->xmode & POST_LOCK) && !HAS_PERM(PERM_SYSOP))
+    if ((hdr->xmode & POST_LOCK) && !HAS_PERM(PERM_SYSOP))
     {
         vmsg("Access Deny!");
         return XO_NONE;
@@ -716,9 +716,9 @@ xo_forward(
     if (!mail_external(rcpt))    /* 中途攔截 */
     {
         usr_fpath(ckforward,rcpt,"forward");
-        if(!access(ckforward,0))
+        if (!access(ckforward,0))
         {
-            if(acct_load(&acct, rcpt) >= 0)
+            if (acct_load(&acct, rcpt) >= 0)
             {
                 strcpy(rcpt,acct.email);
                 method = 0;
@@ -736,7 +736,7 @@ xo_forward(
             /* userno = cuser.userno; */ /* Thor.981027: 寄精選集給自己不通知自己 */
             method = MF_SELF;
 
-            if(mail_stat(CHK_MAIL_NOMSG))
+            if (mail_stat(CHK_MAIL_NOMSG))
             {
                 vmsg("你的信箱容量超過上限，無法使用本功\能！");
                 chk_mailstat = 1;
@@ -784,13 +784,13 @@ xo_forward(
             EnumTagHdr(hdr, dir, locus++);
 
         // check delete or not .. by statue 2000/05/18
-        if(hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE))
+        if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE))
             continue;
 
-        if((hdr->xmode & (POST_LOCK|GEM_RESTRICT|GEM_RESERVED)) && !(HAS_PERM(PERM_ALLBOARD) || (bbstate & STAT_BOARD)))
+        if ((hdr->xmode & (POST_LOCK|GEM_RESTRICT|GEM_RESERVED)) && !(HAS_PERM(PERM_ALLBOARD) || (bbstate & STAT_BOARD)))
             continue;
 
-        if((hdr->xmode & GEM_LOCK) && !HAS_PERM(PERM_SYSOP))
+        if ((hdr->xmode & GEM_LOCK) && !HAS_PERM(PERM_SYSOP))
             continue;
 
         if (!(hdr->xmode & GEM_FOLDER))	/* 查 hdr 是否 plain text */
@@ -829,7 +829,7 @@ xo_forward(
 #undef	MF_SELF
 #undef	MF_USER
 
-    if(check)
+    if (check)
         strcpy(rcpt,cuser.email);
 
     if (userno > 0)
@@ -900,7 +900,7 @@ xo_zmodem(
             EnumTagHdr(hdr, dir, locus++);
 
         // check delete or not .. by statue 2000/05/18
-        if(hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE))
+        if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE))
             continue;
 
         if (hdr->xmode & (POST_LOCK|GEM_LOCK|GEM_RESERVED|GEM_RESTRICT))
@@ -1262,7 +1262,7 @@ xo_thread(
         }
 
         /* 跳過已刪除 or lock 文章 */
-        if(fhdr->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
+        if (fhdr->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
             continue;
 
         if (op & RS_SEQUENT)
@@ -1511,7 +1511,7 @@ xover(
     static int msg = 0;
 #endif
 
-    if(xo_user_level >= MAX_LEVEL)
+    if (xo_user_level >= MAX_LEVEL)
     {
         vmsg("已經超過最大層數，有問題請通知 root ！");
         return;
@@ -1573,7 +1573,7 @@ xover(
                 }
                 else if (pos > num)
                 {
-                    if(!(cuser.ufo2 & UFO2_CIRCLE) && (zone == XZ_POST || zone == XZ_XPOST))
+                    if (!(cuser.ufo2 & UFO2_CIRCLE) && (zone == XZ_POST || zone == XZ_XPOST))
                         pos = num;
                     else
                         pos = cmd ? 0 : num;
@@ -1619,7 +1619,7 @@ xover(
                 if (pos == num)
                 {
                     void *p = DL_get((char *) cb->func);
-                    if(p)
+                    if (p)
                     {
                         cb->func = p;
                         pos = cb->key = cmd;
@@ -1670,7 +1670,7 @@ xover(
             }
 #endif
 
-        } /* Thor.990220:註解: end of while(cmd!=XO_NONE) */
+        } /* Thor.990220:註解: end of while (cmd!=XO_NONE) */
 
 
         utmp_mode(sysmode);
@@ -1692,7 +1692,7 @@ xover(
         /* ------------------------------------------------- */
         /* switch Zone					 */
         /* ------------------------------------------------- */
-        if(cmd == Ctrl('B'))
+        if (cmd == Ctrl('B'))
         {
             every_B();
             cmd = XO_INIT;
@@ -1770,7 +1770,7 @@ xover(
         else if (cmd == KEY_LEFT || cmd == 'e')
         {
             /* cmd = XO_LAST; *//* try to load the last XO in future */
-            if(zone == XZ_MBOX)
+            if (zone == XZ_MBOX)
             {
 
 #ifdef HAVE_MAILUNDELETE
@@ -1780,14 +1780,14 @@ xover(
                 if ((deltotal = mbox_check()))
                 {
                     sprintf(fpath,"有 %d 封信件將要刪除，確定嗎？ [y/N]",deltotal);
-                    if(vans(fpath) == 'y')
+                    if (vans(fpath) == 'y')
                     {
                         usr_fpath(fpath,cuser.userid,FN_DIR);
                         hdr_prune(fpath, 0, 0 , 3);
                     }
                 }
 #endif
-                if(mail_stat(CHK_MAIL_VALID))
+                if (mail_stat(CHK_MAIL_VALID))
                 {
                     vmsg("你的信箱容量超過上限，請整理！");
                     chk_mailstat = 1;
@@ -1840,7 +1840,7 @@ xover(
 
             if (cmd == KEY_RIGHT || cmd == '\n')
             {
-                if(zone == XZ_ULIST)
+                if (zone == XZ_ULIST)
                     cmd = 'q'; //使用者名單會 Q
                 else
                     cmd = 'r';
@@ -1897,13 +1897,13 @@ xover(
                     cmd = gem_gather(xo);		/* 收錄文章到精華區 */
                 }
 #ifdef	HAVE_MAILGEM
-                else if(cmd == 'G' && HAS_PERM(PERM_MBOX))
+                else if (cmd == 'G' && HAS_PERM(PERM_MBOX))
                 {
                     static int (*mgp)(XO *xo);
-                    if(!mgp)
+                    if (!mgp)
                     {
                         mgp = DL_get("bin/mailgem.so:mailgem_gather");
-                        if(mgp)
+                        if (mgp)
                             cmd = (*mgp)(xo);
                         else
                             vmsg("動態連結失敗，請聯絡系統管理員！");
@@ -1987,11 +1987,11 @@ every_Z_Orig(void)
     select = vkey();
 
 #ifdef	HAVE_FAVORITE
-    if(select == 'p')
+    if (select == 'p')
     {
         outz(MSG_ZONE_ADVANCE);
         select = vkey();
-        if(select != 'w' && select != 'u')
+        if (select != 'w' && select != 'u')
             select = ' ';
     }
 #endif
@@ -2166,9 +2166,9 @@ every_Z(void)
     XZ xy;
 
 #ifdef  HAVE_CHK_MAILSIZE
- if(chk_mailstat == 1)
+ if (chk_mailstat == 1)
  {
-    if(mail_stat(CHK_MAIL_VALID))
+    if (mail_stat(CHK_MAIL_VALID))
     {
         vmsg("您的信箱已超出容量，無法使用本功\能，請清理您的信箱！");
         return;
@@ -2183,7 +2183,7 @@ every_Z(void)
     tmpbno = currbno;
 
 #ifdef M3_USE_PFTERM
-    if(xo_stack_level < XO_STACK) {
+    if (xo_stack_level < XO_STACK) {
         xo_stack_level++;
         scr_dump(&old_screen);
     } else {
@@ -2191,7 +2191,7 @@ every_Z(void)
         return;
     }
 #else
-    if(xo_stack_level < XO_STACK)
+    if (xo_stack_level < XO_STACK)
         xo_stack_level++;
     else
     {
@@ -2208,14 +2208,14 @@ every_Z(void)
     vs_save(sl);
 #endif
 
-    if( cuser.ufo2 & UFO2_ORIGUI)
+    if ( cuser.ufo2 & UFO2_ORIGUI)
         every_Z_Orig();
     else
         popupmenu(menu_everyz,NULL,7,20);
 
     memcpy(&(xz[XZ_OTHER - XO_ZONE]),&xy,sizeof(XZ));
 
-    if(tmpbno >= 0)
+    if (tmpbno >= 0)
         XoPost(tmpbno);
 
 #ifdef M3_USE_PFTERM
@@ -2244,9 +2244,9 @@ every_U(void)
     XZ xy;
 
 #ifdef  HAVE_CHK_MAILSIZE
- if(chk_mailstat == 1)
+ if (chk_mailstat == 1)
  {
-    if(mail_stat(CHK_MAIL_VALID))
+    if (mail_stat(CHK_MAIL_VALID))
     {
         vmsg("您的信箱已超出容量，無法使用本功\能，請清理您的信箱！");
         return;

@@ -37,13 +37,13 @@ reaper(
     if (fd < 0)
         return;
 
-    if(read(fd, &acct, sizeof(acct))!=sizeof(acct))
+    if (read(fd, &acct, sizeof(acct))!=sizeof(acct))
     {
         close(fd);
         return;
     }
     strcpy(map[acct.userno].userid,acct.userid);
-    if(total<acct.userno)
+    if (total<acct.userno)
         total = acct.userno;
 
     printf("%-14s : %d\n",acct.userid,acct.userno);
@@ -111,7 +111,7 @@ main(void)
         int fd,num;
 
         fd = open(".USR.new", O_CREAT | O_TRUNC | O_WRONLY, 0600);
-        for(num = 1; num <= total; num++)
+        for (num = 1; num <= total; num++)
         {
             memset(&slot, 0, sizeof(SCHEMA));
             strcpy(slot.userid, map[num].userid);

@@ -184,7 +184,7 @@ utmp_new(
     xshm = ushm;
 
 #ifdef	HAVE_MAXRESERVE
-    if(HAS_PERM(PERM_ADMIN))
+    if (HAS_PERM(PERM_ADMIN))
     {
 #endif
         uentp = xshm->uslot;
@@ -369,7 +369,7 @@ void
 classtable_free(void)
 {
     int pos;
-    while( (pos = rec_loc(FN_CLASSTABLE_DB,sizeof(CLASS_TABLE_ALERT), (void *)cmpclasstable)) >= 0)
+    while ( (pos = rec_loc(FN_CLASSTABLE_DB,sizeof(CLASS_TABLE_ALERT), (void *)cmpclasstable)) >= 0)
         rec_del(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), pos, (void *)cmpclasstable, NULL);
 }
 
@@ -397,9 +397,9 @@ classtable_main(void)
 
         pbase = (CLASS_TABLE2 *) malloc(size);
         size = read(fd, pbase, size);
-        for(i=0;i<78;i++)
+        for (i=0;i<78;i++)
         {
-            if(pbase[i].valid)
+            if (pbase[i].valid)
             {
                 strcpy(tmp.item[i].condensation,pbase[i].condensation);
                 strcpy(tmp.item[i].room,pbase[i].room);
@@ -600,17 +600,17 @@ observeshm_load(void)
     oshm->total = 0;
     memset(oshm->userno,0,sizeof(int)*MAXOBSERVELIST);
     fimage = f_img(FN_ETC_OBSERVE, &size);
-    if(fimage)
+    if (fimage)
     {
-        if(size > 0)
+        if (size > 0)
         {
             head = (OBSERVE *) fimage;
             tail = (OBSERVE *) (fimage + size);
-            for(;head<tail;head++)
+            for (;head<tail;head++)
             {
                 oshm->userno[oshm->total++] = head->userno;
             }
-            if(oshm->total>1)
+            if (oshm->total>1)
                 xsort(oshm->userno, oshm->total, sizeof(int), int_cmp);
         }
         free(fimage);
@@ -634,7 +634,7 @@ COUNTER *curcount;
 void
 count_update(void)
 {
-    if((ushm->count) > (curcount->samehour_max_login))
+    if ((ushm->count) > (curcount->samehour_max_login))
     {
         curcount->samehour_max_login = ushm->count;
         curcount->samehour_max_time = time(0);
@@ -651,10 +651,10 @@ count_load(void)
     struct stat st;
 
     head = curcount;
-    if((fw = open(FN_VAR_SYSHISTORY,O_RDONLY)))
+    if ((fw = open(FN_VAR_SYSHISTORY,O_RDONLY)))
     {
 
-        if(!fstat(fw, &st) && (size = st.st_size) > 0)
+        if (!fstat(fw, &st) && (size = st.st_size) > 0)
         {
             read(fw, head, sizeof(COUNTER));
         }
@@ -668,7 +668,7 @@ count_init(void)
     if (curcount == NULL)
     {
         curcount = attach_shm(COUNT_KEY, sizeof(COUNTER));
-        if(curcount->hour_max_login == 0)
+        if (curcount->hour_max_login == 0)
             count_load();
     }
 }
@@ -695,11 +695,11 @@ fwshm_load(void)
 
     head = fwshm->fwcache;
 
-    while(*head->data)
+    while (*head->data)
     {
         curfw = head;
         pos = rec_loc(FN_ETC_BANMAIL_ACL,sizeof(BANMAIL),cmpban);
-        if(pos >= 0)
+        if (pos >= 0)
         {
             rec_get(FN_ETC_BANMAIL_ACL, &data, sizeof(BANMAIL), pos);
             data.usage = head->usage;
@@ -713,9 +713,9 @@ fwshm_load(void)
     fw = open(FN_ETC_BANMAIL_ACL,O_RDONLY);
     fstat(fw, &st);
 
-    if(!fstat(fw, &st) && (size = st.st_size) > 0)
+    if (!fstat(fw, &st) && (size = st.st_size) > 0)
     {
-        if(size > MAXFIREWALL * sizeof(BANMAIL))
+        if (size > MAXFIREWALL * sizeof(BANMAIL))
             size = MAXFIREWALL * sizeof(BANMAIL);
 
         if (size)
@@ -731,7 +731,7 @@ fwshm_init(void)
     if (fwshm == NULL)
     {
         fwshm = attach_shm(FWSHM_KEY, sizeof(FWCACHE));
-        if(fwshm->number == 0)
+        if (fwshm->number == 0)
             fwshm_load();
     }
 }
@@ -764,7 +764,7 @@ out_rle(
     int x,y/*,count=0*/;
     int cc, rl;
 
-    if(film)
+    if (film)
         move(1,0/*item_length[count++]*/);
         //move(3,36+item_length[count++]);
     while ((cc = *str))
@@ -778,7 +778,7 @@ out_rle(
 
             while (--rl >= 0)
             {
-                if(cc=='\n' && film)
+                if (cc=='\n' && film)
                 {
                     getyx(&y,&x);
                     outs("\033[m\0");
@@ -806,7 +806,7 @@ out_rle(
                 cc = (cuser.ufo2 & UFO2_SHOWUSER) ? ' ' : '%';
 #endif
         }
-        if(cc=='\n' && film)
+        if (cc=='\n' && film)
         {
             getyx(&y,&x);
             outs("\033[m\0");
@@ -817,7 +817,7 @@ out_rle(
         else
             outc(cc);
     }
-/*  while(count>=0) item_length[count--]=0;*/
+/*  while (count>=0) item_length[count--]=0;*/
 }
 
 

@@ -39,7 +39,7 @@ reaper(
     if (fd < 0)
         return;
 
-    if(read(fd, &acct, sizeof(acct))!=sizeof(acct))
+    if (read(fd, &acct, sizeof(acct))!=sizeof(acct))
     {
         close(fd);
         return;
@@ -112,17 +112,17 @@ main(void)
     close(funo);
     total--;
     fprintf(flog, "total user %d\n",total);
-    for(i=1;i<=total;i++)
+    for (i=1;i<=total;i++)
     {
         k = 0;
-        for(j=0;j<total;j++)
+        for (j=0;j<total;j++)
         {
-            if(map[j].userno == i)
+            if (map[j].userno == i)
                 k=1;
-            if((map[i-1].userno == map[j].userno)&&((i-1)!=j))
+            if ((map[i-1].userno == map[j].userno)&&((i-1)!=j))
                 fprintf(flog, "userno %d is the same ~~\n",map[i-1].userno);
         }
-        if(k==0)
+        if (k==0)
             fprintf(flog, "userno %d is empty!\n", i);
     }
     return 0;

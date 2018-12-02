@@ -1089,7 +1089,7 @@ ve_quote(
 
 #ifdef HAVE_ANONYMOUS
     /* Thor.980909: gc patch: 匿名模式不問簽名檔 */
-    if(curredit & EDIT_ANONYMOUS || cuser.ufo2 & UFO2_SIGN)
+    if (curredit & EDIT_ANONYMOUS || cuser.ufo2 & UFO2_SIGN)
         goto OUT_ve_quote;
 #endif
 
@@ -1174,7 +1174,7 @@ quote_check(void)
     }
 
 #ifdef	HAVE_RESIST_WATER
-    if((post_line <= CHECK_QUOT) && (bbstate & BRD_CHECKWATER))
+    if ((post_line <= CHECK_QUOT) && (bbstate & BRD_CHECKWATER))
         checkqt++;
     else if (checkqt > 0)
         checkqt--;
@@ -1295,14 +1295,14 @@ ve_show_sign(
     FILE *fp;
     fp = fopen(fpath,"r");
     clear();
-    if(fp)
+    if (fp)
     {
-        for(j=1;j<=3;j++)
+        for (j=1;j<=3;j++)
         {
             prints("\033[36m【簽名檔.%d】\033[m\n",j);
             for (i=0;i<MAXSIGLINES;i++)
             {
-                if(fgets(buf, 256, fp))
+                if (fgets(buf, 256, fp))
                     prints("%s",buf);
                 else
                     prints("\n");
@@ -1343,7 +1343,7 @@ ve_select_sign(
             int i;
 
             op = (op - '1') * MAXSIGLINES;
-            for(i=0;i<op;i++)
+            for (i=0;i<op;i++)
                 fgets(buf, 256, fd);
             fprintf(fp,"--");
 
@@ -1351,11 +1351,11 @@ ve_select_sign(
             used = 0;
             for (i=0;i<MAXSIGLINES;i++)
             {
-                if(fgets(buf, 256, fd))
+                if (fgets(buf, 256, fd))
                 {
                     fprintf(fp,"\n");
                     len = strlen(buf);
-                    if(len > 0)
+                    if (len > 0)
                     {
                         used = 1;
                         buf[len - 1] = '\0';
@@ -1363,7 +1363,7 @@ ve_select_sign(
                     }
                 }
             }
-            if(used)
+            if (used)
                 fprintf(fp,"\033[m\n");
             else
                 fprintf(fp,"\n");
@@ -1411,7 +1411,7 @@ ve_filer(
 #endif
 
 /* cache.091023: 這邊註解掉就可以強制使用圖形選單 */
-//  if(cuser.ufo2 & UFO2_ORIGUI)
+//  if (cuser.ufo2 & UFO2_ORIGUI)
 //      re = vget(b_lines, 0, msg, buf, 3, LCECHO);
 //  else
 //  {
@@ -1521,12 +1521,12 @@ ve_filer(
                 {
                     str_trim(msg);
 
-                    if(v || (bbsmode != M_POST))
+                    if (v || (bbsmode != M_POST))
                         fprintf(fp, "%s\n", msg);
                     else
                         fprintf(fp, "%s\033[m\n", msg);
                 }
-                else if(bbsmode == M_POST)
+                else if (bbsmode == M_POST)
                 {
                     fprintf(fp, "\033[m\n");
                 }
@@ -1540,7 +1540,7 @@ ve_filer(
         if ((bbsmode == M_POST) || (bbsmode & M_SMAIL))
         {
 
-            if(!(curredit & EDIT_ANONYMOUS) && (cuser.ufo2 & UFO2_SIGN) && ve_op)
+            if (!(curredit & EDIT_ANONYMOUS) && (cuser.ufo2 & UFO2_SIGN) && ve_op)
             {
                 ve_select_sign(fp);
             }
@@ -1557,12 +1557,12 @@ ve_filer(
             else
 #endif
 
-            if(ve_op)
+            if (ve_op)
             {
                 fprintf(fp, ORIGIN_TAG,
                     /*str_site, MYHOSTNAME,*/ ((cuser.ufo & UFO_HIDDEN)&&(str_cmp(cuser.userid,"guest"))) ? HIDDEN_SRC : fromhost);
 
-                if((bbstate & BRD_LOGEMAIL) && !(bbsmode == M_SMAIL))
+                if ((bbstate & BRD_LOGEMAIL) && !(bbsmode == M_SMAIL))
                     fprintf(fp, EMAIL_TAG, cuser.email);
             }
 #endif				/* HAVE_ORIGIN */
@@ -1621,7 +1621,7 @@ select_title(
     int select;
     outs("\n\n1.【公告】2.【新聞】3.【閒聊】4.【文件】5.【問題】6.【測試】7.【其他】\n");
     select = vans("請選擇文章類別或按 Enter 跳過：") - '1';
-    if(select >=0 && select <=5)
+    if (select >=0 && select <=5)
     {
         sprintf(title,"%s",objs[select]);
         return 1;
@@ -1682,7 +1682,7 @@ vedit(
     /* 初始設定：載入檔案、引用文章、設定編輯模式		 */
     /* --------------------------------------------------- */
 
-    if(bbsothermode & OTHERSTAT_EDITING)
+    if (bbsothermode & OTHERSTAT_EDITING)
     {
         vmsg("你還有檔案還沒編完哦！");
         return -1;
@@ -1777,11 +1777,11 @@ vedit(
                 }
             }
 #ifdef EVERY_BIFF
-            if(!(mode & VE_BIFF))
+            if (!(mode & VE_BIFF))
             {
-                if(cutmp->ufo & UFO_BIFF)
+                if (cutmp->ufo & UFO_BIFF)
                     ve_mode = mode |= VE_BIFF;
-                else if(cutmp->ufo & UFO_BIFFN)
+                else if (cutmp->ufo & UFO_BIFFN)
                     ve_mode = mode |= VE_BIFFN;
             }
 #endif
@@ -2029,10 +2029,10 @@ ve_key:
 #ifdef  HAVE_INPUT_TOOLS
                 if (cc == VE_INPUTOOL)
                 {
-                    if(!input_tool)
+                    if (!input_tool)
                     {
                         input_tool = DL_get("bin/ascii.so:input_tools");
-                        if(input_tool)
+                        if (input_tool)
                             (*input_tool)();
                     }
                     else

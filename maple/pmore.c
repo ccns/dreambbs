@@ -1572,7 +1572,7 @@ mf_display(void)
             if (bpref.separator & MFDISP_SEP_LINE)
             {
                 outs(ANSI_COLOR(0;36));
-                for(col = 0; col < headerw; col+=2)
+                for (col = 0; col < headerw; col+=2)
                 {
                     // prints("%02d", col);
                     outs("¢w");
@@ -2991,7 +2991,7 @@ pmore_PromptBar(const char *caption, int shadow)
     if (shadow & PMORE_SHADOW_ABOVE)
     {
         outs(ANSI_COLOR(0;1;30));
-        for(i = 0; i+2 < t_columns ; i+=2)
+        for (i = 0; i+2 < t_columns ; i+=2)
             outs("¢b");
         outs(ANSI_RESET "\n");
     }
@@ -3000,14 +3000,14 @@ pmore_PromptBar(const char *caption, int shadow)
 
     outs(ANSI_REVERSE);
     outs(caption);
-    for(i -= strlen(caption); i > 0; i--)
+    for (i -= strlen(caption); i > 0; i--)
         outs(" ");
     outs(ANSI_RESET "\n");
 
     if (shadow & PMORE_SHADOW_BELOW)
     {
         outs(ANSI_COLOR(0;1;30));
-        for(i = 0; i+2 < t_columns ; i+=2)
+        for (i = 0; i+2 < t_columns ; i+=2)
             outs("¢v");
         outs(ANSI_RESET "\n");
     }

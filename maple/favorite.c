@@ -95,7 +95,7 @@ favorite_parse(
                     }
                 }
 
-                if(i>=0 && (brd_bits[i] & BRD_Z_BIT))
+                if (i>=0 && (brd_bits[i] & BRD_Z_BIT))
                 {
                     check = 1;
                     reserve[count2++] = i;
@@ -103,13 +103,13 @@ favorite_parse(
                     memcpy(&zap[count3++],&hdr,sizeof(HDR));
                     continue;
                 }
-                else if(i>=0 && !(brd_bits[i] & BRD_R_BIT))
+                else if (i>=0 && !(brd_bits[i] & BRD_R_BIT))
                 {
-                    if(!(cuser.userlevel & PERM_VALID))
+                    if (!(cuser.userlevel & PERM_VALID))
                     {
                         check = 1;
                         logitfile(FN_FAVORITE_LOG,"< NOP >",str);
-                        if(hdr.xid++<20)
+                        if (hdr.xid++<20)
                             memcpy(&nop[count2++],&hdr,sizeof(HDR));
                     }
                     else
@@ -144,7 +144,7 @@ favorite_parse(
         free(zap);
         free(nop);
 
-        if(check)
+        if (check)
         {
             unlink(key);
             rename(fpath,key);
@@ -155,7 +155,7 @@ favorite_parse(
         }
         chp->count = count;
 
-        if(count > 0)
+        if (count > 0)
             return 1;
     }
     else

@@ -688,7 +688,7 @@ re_key:
             break;
         }
 /* 081229.cache: BBSRuby */
-//      else if(key == '!')
+//      else if (key == '!')
 //      {
 //	    screenline slt[T_LINES];
 //	    vs_save(slt);

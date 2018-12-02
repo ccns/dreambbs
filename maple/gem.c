@@ -59,11 +59,11 @@ gem_manage(
     strcpy(buf,title);
 
     len = strlen(cuser.userid);
-    if((list = strrchr(buf,'[')) == NULL)
+    if ((list = strrchr(buf,'[')) == NULL)
         return 0;
 
     ch = *(++list);
-    if(ch)
+    if (ch)
     {
         do
         {
@@ -108,11 +108,11 @@ gem_item(
 
     if (!(bbstate & STAT_BOARD)&&!HAS_PERM(PERM_ADMIN|PERM_GEM)&&(xmode & GEM_RESTRICT))
         prints("\033[1;33m資料保密！\033[m\n");
-    else if(!HAS_PERM(PERM_SYSOP) && (xmode & GEM_LOCK))
+    else if (!HAS_PERM(PERM_SYSOP) && (xmode & GEM_LOCK))
         prints("\033[1;33m資料保密！\033[m\n");
     else
     {
-        if(xmode & GEM_BOARD)
+        if (xmode & GEM_BOARD)
         {
             sprintf(fpath,"gem/brd/%s/",ghdr->xname);
             prints("%-46.45s%-13s%s\n", ghdr->title,(gtype == 1 ? ghdr->xname : ghdr->owner), access(fpath,R_OK) ? "[deleted]" : ghdr->date);
@@ -185,7 +185,7 @@ gem_head(
 
     vs_head("精華文章", xo->xyz);
 
-    if(xo->key > GEM_USER && GemBufferNum > 0)
+    if (xo->key > GEM_USER && GemBufferNum > 0)
     {
         sprintf(buf,"(剪貼版 %d 篇)\n", GemBufferNum);
     }
@@ -207,7 +207,7 @@ gem_toggle(
     XO *xo)
 {
     gem_way = (gem_way + 1) % GEM_WAY;
-    if(!HAS_PERM(PERM_SYSOP) && (gem_way ==1))
+    if (!HAS_PERM(PERM_SYSOP) && (gem_way ==1))
         gem_way = 2;
     return gem_body(xo);
 }
@@ -398,7 +398,7 @@ gem_add(
 
             if (gtype == 'a')
             { /* Thor.981020: 注意被talk的問題 */
-                if(bbsothermode & OTHERSTAT_EDITING)
+                if (bbsothermode & OTHERSTAT_EDITING)
                 {
                     vmsg("你還有檔案還沒編完哦！");
                     return XO_FOOT;
@@ -454,7 +454,7 @@ gem_edit(
     char fpath[80];
     HDR *hdr;
 
-    if(bbsothermode & OTHERSTAT_EDITING)
+    if (bbsothermode & OTHERSTAT_EDITING)
     {
         vmsg("你還有檔案還沒編完哦！");
         return XO_FOOT;
@@ -515,7 +515,7 @@ gem_lock(
     HDR *ghdr;
     int num;
 
-    if(!HAS_PERM(PERM_SYSOP))
+    if (!HAS_PERM(PERM_SYSOP))
         return XO_NONE;
 
     if ((ghdr = gem_check(xo, NULL, GEM_WRITE)))
@@ -575,21 +575,21 @@ gem_state(
         return XO_NONE;
 
 
-    if(!(ghdr = gem_check(xo, fpath, GEM_READ)))
+    if (!(ghdr = gem_check(xo, fpath, GEM_READ)))
         return XO_NONE;
     /* Thor.980216: 注意! 有可能傳回 NULL導致踢人 */
 
-    if(!(HAS_PERM(PERM_ALLBOARD)))
+    if (!(HAS_PERM(PERM_ALLBOARD)))
     {
-        if(!str_ncmp(fpath,"gem/brd/",8))
+        if (!str_ncmp(fpath,"gem/brd/",8))
         {
             dir = fpath + 8;
-            if((str = strchr(dir,'/')))
+            if ((str = strchr(dir,'/')))
             {
                 *str = '\0';
                 bno = brd_bno(dir);
                 *str = '/';
-                if(bno < 0 || !(brd_bits[bno] & BRD_X_BIT))
+                if (bno < 0 || !(brd_bits[bno] & BRD_X_BIT))
                     return XO_NONE;
             }
             else
@@ -666,7 +666,7 @@ gem_browse(
 
             strcpy(title, ghdr->title);
 
-            if(gem_manage(title))
+            if (gem_manage(title))
                 op = GEM_LMANAGER;
 
             XoGem(fpath, title, op);
@@ -678,7 +678,7 @@ gem_browse(
         /* Thor.990204: 為考慮more 傳回值 */
         if ((xmode = more(fpath, MSG_GEM)) == -2)
             return XO_INIT;
-        if(xmode == -1)
+        if (xmode == -1)
             break;
 
         op = GEM_READ | GEM_FILE;
@@ -1142,7 +1142,7 @@ gem_gather(
 
     fd = fp = NULL;
 
-    if(vans("附加作者 ID [y/N] ") == 'y')
+    if (vans("附加作者 ID [y/N] ") == 'y')
         mode = 1;
     else
         mode = 0;
@@ -1157,7 +1157,7 @@ gem_gather(
     else
         hdr = (HDR *) xo_pool + xo->pos - xo->top;
 
-    if(hdr->xmode & POST_DELETE)
+    if (hdr->xmode & POST_DELETE)
         return XO_FOOT;
 
 
@@ -1217,15 +1217,15 @@ gem_gather(
                 fd = fdopen(hdr_stamp(folder, 'A', &ghdr, buf), "w"); /*by visor*/
                 /*hdr_stamp(folder, HDR_LINK | 'A', &ghdr, fpath);*/
                 strcpy(ghdr.owner, cuser.userid);
-                if(mode)
+                if (mode)
                 {
                     char tmp[80],*ptr;
                     strcpy(tmp,hdr->owner);
                     ptr = strchr(tmp,'.');
-                    if(ptr)
+                    if (ptr)
                         *ptr = '\0';
                     ptr = strchr(tmp,'@');
-                    if(ptr)
+                    if (ptr)
                         *ptr = '\0';
                     strncpy(ghdr.title, hdr->title,sizeof(ghdr.title) - IDLEN - 4);
                     strcat(ghdr.title," (");
@@ -1242,7 +1242,7 @@ gem_gather(
                 rec_add(folder, &ghdr, sizeof(HDR));
                 gem_log(folder, "新增", &ghdr);
 
-                if(fd>=0)                 /* by visor */
+                if (fd>=0)                 /* by visor */
                     fclose(fd);
 
                 gbuf[locus] = ghdr;	/* 放入 Gembuffer */
@@ -1331,7 +1331,7 @@ gem_cross(
 
         if (!tag)
         {
-            if(!(hdr->xmode & GEM_FOLDER) && !((hdr->xmode & (GEM_RESTRICT|GEM_RESERVED)) && (xo->key < GEM_MANAGER))
+            if (!(hdr->xmode & GEM_FOLDER) && !((hdr->xmode & (GEM_RESTRICT|GEM_RESERVED)) && (xo->key < GEM_MANAGER))
                 && !((hdr->xmode & GEM_LOCK) && !HAS_PERM(PERM_SYSOP)))
             {
                 sprintf(xtitle, "[轉錄]%.66s", hdr->title);
@@ -1393,7 +1393,7 @@ gem_cross(
 
 #ifdef  HAVE_DETECT_CROSSPOST
                 memcpy(&bpost,hdr,sizeof(HDR));
-                if(checksum_find(fpath,0,battr))
+                if (checksum_find(fpath,0,battr))
                 {
                     strcpy(bpost.owner,cuser.userid);
                     add_deny(&cuser,DENY_SEL_POST|DENY_DAYS_1|DENY_MODE_POST,0);

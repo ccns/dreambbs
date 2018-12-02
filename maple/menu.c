@@ -269,9 +269,9 @@ goodbye(void)
 {
     char ans;
     bmw_save();
-    if(cuser.ufo2 & UFO2_DEF_LEAVE)
+    if (cuser.ufo2 & UFO2_DEF_LEAVE)
     {
-        if(!(ans = vans("G)再別" NICKNAME " M)報告站長 N)留言板 Q)取消？[Q] ")))
+        if (!(ans = vans("G)再別" NICKNAME " M)報告站長 N)留言板 Q)取消？[Q] ")))
             ans = 'q';
     }
     else
@@ -289,7 +289,7 @@ goodbye(void)
 
     case 'n':
         /* if (cuser.userlevel) */
-        if(HAS_PERM(PERM_POST)) /* Thor.990118: 要能post才能留言, 提高門檻 */
+        if (HAS_PERM(PERM_POST)) /* Thor.990118: 要能post才能留言, 提高門檻 */
             pad_draw();
         break;
 
@@ -383,7 +383,7 @@ vs_head(
     spc = 2 + len - spc; /* 擺完 mid 以後，中間還有 spc 格空間，在 mid 左右各放 spc/2 長的空白 */
     len = 1 - spc & 1;
 
-    if(spc < 0)
+    if (spc < 0)
     {
         mid[strlen(mid)+spc]= '\0';
         spc = 0;
@@ -1176,12 +1176,12 @@ int count_len(
     ptr = data;
     len = strlen(data);
 
-    while(ptr)
+    while (ptr)
     {
         ptr = strstr(ptr,"\033");
-        if(ptr)
+        if (ptr)
         {
-            for(tmp=ptr;*tmp!='m';tmp++);
+            for (tmp=ptr;*tmp!='m';tmp++);
             len -= (tmp-ptr+1);
             ptr = tmp+1;
         }
@@ -1199,25 +1199,25 @@ check_info(char *input)
     char *name = NULL;
     name = input;
 #ifdef	HAVE_INFO
-    if(!strcmp(input,INFO_EMPTY))
+    if (!strcmp(input,INFO_EMPTY))
     {
         brd = bshm->bcache + brd_bno(BRD_BULLETIN);
-        if(brd)
+        if (brd)
         {
             check_new(brd);
-            if(brd->blast > brd_visit[brd_bno(BRD_BULLETIN)])
+            if (brd->blast > brd_visit[brd_bno(BRD_BULLETIN)])
                 name = INFO_HAVE;
         }
     }
 #endif
 #ifdef	HAVE_STUDENT
-    if(!strcmp(input,STUDENT_EMPTY))
+    if (!strcmp(input,STUDENT_EMPTY))
     {
         brd = bshm->bcache + brd_bno(BRD_SBULLETIN);
-        if(brd)
+        if (brd)
         {
             check_new(brd);
-            if(brd->blast > brd_visit[brd_bno(BRD_SBULLETIN)])
+            if (brd->blast > brd_visit[brd_bno(BRD_SBULLETIN)])
                 name = STUDENT_HAVE;
         }
     }
@@ -1269,7 +1269,7 @@ menu(void)
                 }
                 if (cc && !(cc & level))
                     continue;
-                if(!strncmp(menu->desc,OPT_OPERATOR,strlen(OPT_OPERATOR)) && !(supervisor || !str_cmp(cuser.userid,ELDER) || !str_cmp(cuser.userid,STR_SYSOP)))
+                if (!strncmp(menu->desc,OPT_OPERATOR,strlen(OPT_OPERATOR)) && !(supervisor || !str_cmp(cuser.userid,ELDER) || !str_cmp(cuser.userid,STR_SYSOP)))
                     continue;
 
                 table[++max] = menu;
@@ -1281,7 +1281,7 @@ menu(void)
 #ifndef	TREAT
             if ((depth == 0) && (cutmp->ufo & UFO_BIFF))
                 cmd = 'M';
-            else if((depth == 0) && (cutmp->ufo & UFO_BIFFN))
+            else if ((depth == 0) && (cutmp->ufo & UFO_BIFFN))
                 cmd = 'U';
             else
 #endif
@@ -1300,7 +1300,7 @@ menu(void)
             //prints("\n\033[30;47m     選項         選項說明                         動態看板                   \033[m\n");
             mode = 0;
             count = 0;
-            while(count<20)
+            while (count<20)
                 item_length[count++] = 0;
             do
             {
@@ -1319,7 +1319,7 @@ menu(void)
                 }
                 clrtoeol();
             } while (++mode <= mmx);
-            if(refilm)
+            if (refilm)
             {
                 movie();
                 cx = -1;
@@ -1362,10 +1362,10 @@ menu(void)
             cmd = mptr->umode;
 #if 1
             /* Thor.990212: dynamic load , with negative umode */
-            if(cmd < 0)
+            if (cmd < 0)
             {
                 void *p = DL_get(mptr->func);
-                if(!p) break;
+                if (!p) break;
                 mptr->func = p;
                 cmd = -cmd;
                 mptr->umode = cmd;
@@ -1402,7 +1402,7 @@ menu(void)
 #endif
 
 #ifdef	TREAT
-            if(mode == 12345)
+            if (mode == 12345)
             {
                 menu = menu_main;
                 mode = MENU_LOAD | MENU_DRAW | MENU_FILM;

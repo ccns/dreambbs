@@ -29,8 +29,8 @@ check_in(
     char *email)
 {
     int i;
-    for(i=0;i<MAX_AC;i++)
-        if(!strcmp(map[i].email,email))
+    for (i=0;i<MAX_AC;i++)
+        if (!strcmp(map[i].email,email))
         {
             map[i].num++;
             return 1;
@@ -54,15 +54,15 @@ reaper(
     if (fd < 0)
         return;
 
-    if(read(fd, &acct, sizeof(acct))!=sizeof(acct))
+    if (read(fd, &acct, sizeof(acct))!=sizeof(acct))
     {
         close(fd);
         return;
     }
-    if(acct.userlevel & PERM_VALID)
+    if (acct.userlevel & PERM_VALID)
     {
         str_lower(buf, acct.email);
-        if(!check_in(buf))
+        if (!check_in(buf))
         {
             strcpy(map[total].email,buf);
             map[total].num = 1;
@@ -136,7 +136,7 @@ main(
 
 
     printf("total user %d\n",total);
-    for(i=0;i<total;i++)
+    for (i=0;i<total;i++)
     {
         write(fd,&map[i],sizeof(MAP));
         printf("%-60s# %d\n",map[i].email,map[i].num);
@@ -144,7 +144,7 @@ main(
     close(fd);
     sprintf(bpath, FN_ETC_EMAILADDR_ACL);
     rename(FN_ETC_EMAILADDR_ACL".new",bpath);
-    if(argc > 1)
+    if (argc > 1)
     {
         sprintf(fpath,"mail %s.bbs@"MYHOSTNAME" < " FN_CHECKMAIL_MAIL,argv[1]);
         system("mail SYSOP.bbs@" MYHOSTNAME " < " FN_CHECKMAIL_MAIL);

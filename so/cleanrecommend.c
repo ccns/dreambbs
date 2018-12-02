@@ -38,12 +38,12 @@ cleanrecommend_log(
     FILE *fp;
     time_t now;
 
-    if(fp = fopen(FN_RECOMMEND_LOG,"a+"))
+    if (fp = fopen(FN_RECOMMEND_LOG,"a+"))
     {
         time(&now);
 
         fprintf(fp,"%24.24s %s 砍 %s 板 %s(%s) ",ctime(&now),cuser.userid,currboard,title,name);
-        if(!mode)
+        if (!mode)
             fprintf(fp,"中 %s 的留言 %s\n",rmsg->userid,rmsg->msg);
         else
             fprintf(fp,"所有留言\n");
@@ -63,12 +63,12 @@ cleanrecommend_item(
 
         pn = tmp;
 
-        if(cleanrecommend->pn == POSITIVE)
+        if (cleanrecommend->pn == POSITIVE)
         {
             pn = "\033[1;33m+";
             prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num,pn,cleanrecommend->verb,cleanrecommend->userid,cleanrecommend->msg,cleanrecommend->rtime);
         }
-        else if(cleanrecommend->pn == NEGATIVE)
+        else if (cleanrecommend->pn == NEGATIVE)
         {
             pn = "\033[1;31m-";
             prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num,pn,cleanrecommend->verb,cleanrecommend->userid,cleanrecommend->msg,cleanrecommend->rtime);
@@ -100,10 +100,10 @@ cleanrecommend_body(
     num = xo->top;
     tail = num + XO_TALL;
 /*
-    if((counter = max) > 127)
+    if ((counter = max) > 127)
         counter = 127;
 
-    if(counter < -127)
+    if (counter < -127)
         counter = -127;
 */
     if (max > tail)
@@ -153,9 +153,9 @@ cleanrecommend_edit(
     RMSG *cleanrecommend,
     int echo)
 {
-    if(echo == DOECHO)
+    if (echo == DOECHO)
         memset(cleanrecommend, 0, sizeof(RMSG));
-    if(vget(b_lines, 0, "使用者:", cleanrecommend->userid, sizeof(cleanrecommend->userid), echo)
+    if (vget(b_lines, 0, "使用者:", cleanrecommend->userid, sizeof(cleanrecommend->userid), echo)
      && vget(b_lines, 0, "動詞:",cleanrecommend->verb, sizeof(cleanrecommend->verb), echo)
      && vget(b_lines, 0, "留言:",cleanrecommend->msg, sizeof(cleanrecommend->msg), echo)
      && vget(b_lines, 0, "日期:",cleanrecommend->rtime, sizeof(cleanrecommend->rtime), echo))
@@ -195,7 +195,7 @@ cleanrecommend_change(
     RMSG *cleanrecommend, mate;
     int pos, cur;
 
-    if(!HAS_PERM(PERM_BOARD))
+    if (!HAS_PERM(PERM_BOARD))
         return XO_NONE;
 
     pos = xo->pos;
@@ -218,7 +218,7 @@ static int
 cleanrecommend_cleanall(
     XO *xo)
 {
-    if(vans("確定要刪除所有的留言嗎？[y/N]") == 'y')
+    if (vans("確定要刪除所有的留言嗎？[y/N]") == 'y')
     {
         unlink(xo->dir);
         cleanrecommend_log(NULL,1);
@@ -275,7 +275,7 @@ clean(
         cur = pos - xo->top;
         hdr = (HDR *) xo_pool + cur;
 
-        if(!hdr->recommend || hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
+        if (!hdr->recommend || hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
             return XO_NONE;
 
         chrono = hdr->chrono;
@@ -291,20 +291,20 @@ clean(
         brd = bshm->bcache + brd_bno(currboard);
         battr = brd->battr;
 
-        if(fp = fopen(fpath,"r"))
+        if (fp = fopen(fpath,"r"))
         {
 
 /*
-            if(brd->battr & BRD_PUSHSNEER)
+            if (brd->battr & BRD_PUSHSNEER)
             {
                 if (addscore == 1)
                     sprintf(add,                "[[1;33m→ %12s：[[36m%-54.54s [[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
                 else if (addscore == -1)
                     sprintf(add,      "[[1;31m噓[[m [[1;33m%12s：[[36m%-54.54s [[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
             }
-            else if(brd->battr & BRD_PUSHDEFINE)
+            else if (brd->battr & BRD_PUSHDEFINE)
             {
-                if(addscore == 1)
+                if (addscore == 1)
                     sprintf(            add,"[[1;33m%02.2s %12s：[[36m%-54.54s [[m%5.5s\n",verb,cuser.userid,msg,Btime(&hdr->pushtime)+3);
                 else if (addscore == -1)
                     sprintf(  add,"[[1;31m%02.2s[[m [[1;33m%12s：[[36m%-54.54s [[m%5.5s\n",verb,cuser.userid,msg,Btime(&hdr->pushtime)+3);
@@ -314,15 +314,15 @@ clean(
             else
                 sprintf(add,                  "[[1;33m→ %12s：[[36m%-54.54s [[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
 */
-                while(fgets(buf,256,fp))
+                while (fgets(buf,256,fp))
                 {
                     memset(&rmsg, 0, sizeof(RMSG));
-                    if(!strncmp(buf,"\033[1;32m※",9))
+                    if (!strncmp(buf,"\033[1;32m※",9))
                         pushstart = 1;
 
-                    if(pushstart)
+                    if (pushstart)
                     {
-                        if(!strncmp(buf,"\033[1;32m※",9))
+                        if (!strncmp(buf,"\033[1;32m※",9))
                         {
                             f_cat(tmp,buf);
                             continue;
@@ -339,26 +339,26 @@ clean(
                         c2 = strchr(buf, 'm');
                         strncpy(rmsg.verb, c2+1, 2);
 
-                        if((battr & BRD_PUSHDEFINE) && !strncmp(rmsg.verb,"→",2) )
+                        if ((battr & BRD_PUSHDEFINE) && !strncmp(rmsg.verb,"→",2) )
                             rmsg.pn = COMMENT;
-                        else if(!strncmp(rmsg.verb,"\033[m\033[1;33",2))
+                        else if (!strncmp(rmsg.verb,"\033[m\033[1;33",2))
                             rmsg.pn = COMMENT;
-                        /*else if(strncmp(buf, "\033[1;33→", 8))
+                        /*else if (strncmp(buf, "\033[1;33→", 8))
                             rmsg.pn = POSITIVE;*/
                         else
                             rmsg.pn = !strncmp(buf, "\033[1;33", 6);
 
                         rec_add(recommenddb,&rmsg,sizeof(RMSG));
-//                      if(!strncmp(buf,"\x1b[1;33m→",9))
+//                      if (!strncmp(buf,"\x1b[1;33m→",9))
 //                      {
 /*
-                            for(i=0;i<12;i++)
+                            for (i=0;i<12;i++)
                                 rmsg.userid[i] = buf[i+10];
                             rmsg.userid[12] = '\0';
-                            for(i=0;i<54;i++)
+                            for (i=0;i<54;i++)
                                 rmsg.msg[i] = buf[i+29];
                             rmsg.msg[54] = '\0';
-                            for(i=0;i<5;i++)
+                            for (i=0;i<5;i++)
                                 rmsg.rtime[i] = buf[i+87];
                             rmsg.rtime[5] = '\0';
                             rec_add(recommenddb,&rmsg,sizeof(RMSG));
@@ -377,15 +377,15 @@ clean(
     xover(XZ_OTHER);
     free(xoo);
 
-    for(i=0;i<rec_num(recommenddb,sizeof(RMSG));i++)
+    for (i=0;i<rec_num(recommenddb,sizeof(RMSG));i++)
     {
         rec_get(recommenddb,&rmsg,sizeof(RMSG),i);
-        if(rmsg.pn == POSITIVE)
+        if (rmsg.pn == POSITIVE)
         {
             counter++;
             sprintf(buf,"\x1b[1;33m%2s %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",rmsg.verb,rmsg.userid,rmsg.msg,rmsg.rtime);
         }
-        else if(rmsg.pn == NEGATIVE)
+        else if (rmsg.pn == NEGATIVE)
         {
             counter--;
             sprintf(buf,"\x1b[1;31m%2s \033[33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",rmsg.verb,rmsg.userid,rmsg.msg,rmsg.rtime);
@@ -397,30 +397,30 @@ clean(
         f_cat(tmp,buf);
     }
 
-    if(dashf(tmp))
+    if (dashf(tmp))
     {
         sprintf(buf,"mv %s %s",tmp,fpath);
         system(buf);
     }
 
-    if((fd = open(xo->dir, O_RDWR, 0600)) == -1)
+    if ((fd = open(xo->dir, O_RDWR, 0600)) == -1)
         return XO_NONE;
 
     fstat(fd, &st);
     total = st.st_size / sizeof(HDR);
-    if(pos > total)
+    if (pos > total)
         pos = total;
 
     f_exlock(fd);
-    while(pos >= -1)
+    while (pos >= -1)
     {
         lseek(fd, (off_t) (sizeof(HDR) * pos--), SEEK_SET);
         read(fd,&phdr,sizeof(HDR));
-        if(chrono == phdr.chrono)
+        if (chrono == phdr.chrono)
             break;
     }
 
-    if(++pos >= 0)
+    if (++pos >= 0)
     {
         phdr.recommend = counter;
         phdr.xmode &= ~POST_RECOMMEND;

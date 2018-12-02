@@ -251,8 +251,8 @@ char *path)
         {
             if (stud.inst[0] == '*' || !strcasecmp(stud.inst, buf1))
                 if (stud.level[0] == '*' || (stud.level[0] == buf2[0]))
-                    if(stud.admis[0] == '*' || !strcmp(stud.admis, buf3))
-                        if(atoi(buf4) >= atoi(stud.first) && atoi(buf4) <= atoi(stud.last))
+                    if (stud.admis[0] == '*' || !strcmp(stud.admis, buf3))
+                        if (atoi(buf4) >= atoi(stud.first) && atoi(buf4) <= atoi(stud.last))
                             return 1;
         /*
             if (((stud.grad[0] == '*' && stud.grad[1] == '*') || atoi(stud.grad) == atoi(buf1)) &&  atoi(buf1) <= 99 && atoi(buf1) >= 0)
@@ -842,7 +842,7 @@ char *account)
 
     strncpy(year, account + 3, 2);
 
-    if( atoi(year) <= 97 )// Ecchi.100331: 98年以前入學的信箱，帳號部分尾端都要消去一碼
+    if ( atoi(year) <= 97 )// Ecchi.100331: 98年以前入學的信箱，帳號部分尾端都要消去一碼
         strncpy(addr, account, 8);
     else
         strcpy(addr, account);

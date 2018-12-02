@@ -39,7 +39,7 @@ int main(void)
             if ((fd = open(buf, O_RDWR)) < 0)
 /*              continue; */exit(1);
 
-            while(read(fd, &bmw, sizeof(bmw)))
+            while (read(fd, &bmw, sizeof(bmw)))
             {
                 printf("ID:%-13s sender:%-4d recver:%-4d msg:%s\n"
                        , bmw.userid, bmw.sender, bmw.recver, bmw.msg);

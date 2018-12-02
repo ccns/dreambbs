@@ -133,7 +133,7 @@ main(
         memcpy(&brd,&old,sizeof(BRDOLD));
 
         key = (life *) bsearch(brd.brdname, table, count, sizeof(life), (int (*)(const void *lhs, const void *rhs))strcasecmp);
-        if(key)
+        if (key)
         {
             brd.expiremax = key->maxp;
             brd.expiremin = key->minp;

@@ -52,8 +52,8 @@ static int
 check_in_memory(char *bm,char *id)
 {
     char *i;
-    for(i=bm;strlen(i);i=i+IDLEN+1)
-    if(!strcmp(i,id))
+    for (i=bm;strlen(i);i=i+IDLEN+1)
+    if (!strcmp(i,id))
         return 0;
     return 1;
 }
@@ -65,7 +65,7 @@ send_to_all(char *title,char *fpath,char *bm)
     char buf[128],*ptr;
     HDR mhdr;
 
-    for(ptr=bm;strlen(ptr);ptr=ptr+IDLEN+1)
+    for (ptr=bm;strlen(ptr);ptr=ptr+IDLEN+1)
     {
         usr_fpath(buf, ptr, ".DIR");
         hdr_stamp(buf, HDR_LINK, &mhdr, fpath);
@@ -97,16 +97,16 @@ to_bm(
 
         strcpy(buf,head->BM);
         c = buf;
-        while(1)
+        while (1)
         {
             char *d;
             d = strchr(c,'/');
-            if(*c)
+            if (*c)
             {
-                if(d)
+                if (d)
                 {
                     *d++ = 0;
-                    if(check_in_memory(bm,c))
+                    if (check_in_memory(bm,c))
                     {
                         strcpy(ptr,c);
                         ptr+=IDLEN+1;
@@ -115,7 +115,7 @@ to_bm(
                 }
                 else
                 {
-                    if(check_in_memory(bm,c))
+                    if (check_in_memory(bm,c))
                     {
                         strcpy(ptr,c);
                         ptr+=IDLEN+1;
@@ -202,7 +202,7 @@ main(
 
     bshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
 
-    if(argc>3)
+    if (argc>3)
     {
         mode = atoi(argv[1]);
         switch(mode)

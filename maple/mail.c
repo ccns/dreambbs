@@ -138,11 +138,11 @@ ll_out(
             column = crow;
             outc('\n');
             cur_rownum++;
-            if(cur_rownum >= b_lines-1)
+            if (cur_rownum >= b_lines-1)
             {
                 outs("★ 列表(C)繼續 (Q)結束 ? [C]");
                 ch = vkey();
-                if(ch == 'q' || ch == 'Q')
+                if (ch == 'q' || ch == 'Q')
                     break;
                 else
                 {
@@ -278,13 +278,13 @@ bsmtp(
     {
         int i;
         char *alias[] = SMTP_SERVER;
-        for( i=0 ; (str = alias[i]) ; i++)
+        for ( i=0 ; (str = alias[i]) ; i++)
         {
             sock = dns_open(str, 25);
-            if(sock >= 0)
+            if (sock >= 0)
                 break;
         }
-        if(sock < 0)
+        if (sock < 0)
         {
             str = strchr(rcpt, '@') + 1;
             sock = dns_smtp(str);
@@ -302,7 +302,7 @@ bsmtp(
         move(b_lines, 0);
         clrtoeol();
 
-        if(method)
+        if (method)
         {
             prints("★ 寄信給 %s \033[5m...\033[m", rcpt);
             refresh();
@@ -403,7 +403,7 @@ bsmtp(
             fclose(fp);
         }
 #ifdef HAVE_SIGNED_MAIL
-        if(!(method & MQ_JUSTIFY) && !rec_get(PRIVATE_KEY, prikey, 8, 0))
+        if (!(method & MQ_JUSTIFY) && !rec_get(PRIVATE_KEY, prikey, 8, 0))
         /* Thor.990413: 除了認證函外, 其他信件都要加sign */
         {
             /* Thor.990413: buf用不到了, 借來用用 :P */
@@ -494,13 +494,13 @@ bsmtp_file(
     {
         int i;
         char *alias[] = SMTP_SERVER;
-        for( i=0 ; (str = alias[i]) ; i++)
+        for ( i=0 ; (str = alias[i]) ; i++)
         {
             sock = dns_open(str, 25);
-            if(sock >= 0)
+            if (sock >= 0)
                 break;
         }
-        if(sock < 0)
+        if (sock < 0)
         {
             str = strchr(rcpt, '@') + 1;
             sock = dns_smtp(str);
@@ -680,7 +680,7 @@ m_verify(void)
 
     prikey[8] = s.str[8] = '\0'; /* Thor.990413:註解: 字串結束 */
 
-    if(rec_get(PRIVATE_KEY, prikey, 8, 0))
+    if (rec_get(PRIVATE_KEY, prikey, 8, 0))
     {
         zmsg("本系統並無電子簽章，請洽SYSOP");
         return XEASY;
@@ -691,22 +691,22 @@ m_verify(void)
     move(15, 0);
     outs("請依序輸入信末兩行 X-Info X-Sign 以進行驗證");
 
-    if(!vget(17, 0, ":", info, sizeof info, DOECHO) ||
+    if (!vget(17, 0, ":", info, sizeof info, DOECHO) ||
         !vget(18, 0, ":", sign, sizeof sign, DOECHO))
         return 0;
 
     str_trim(info); /* Thor: 去尾巴, for ptelnet自動加空白 */
     str_trim(sign);
 
-    if(!memcmp("※ X-Info: ", p = info, 11))
+    if (!memcmp("※ X-Info: ", p = info, 11))
         p += 11;
-    while(*p == ' ') p++; /* Thor: 去前頭 */
+    while (*p == ' ') p++; /* Thor: 去前頭 */
 
-    if(!memcmp("※ X-Sign: ", q = sign, 11))
+    if (!memcmp("※ X-Sign: ", q = sign, 11))
         q += 11;
-    while(*q == ' ') q++;
+    while (*q == ' ') q++;
 
-    if(strlen(q) < 7 + 13)
+    if (strlen(q) < 7 + 13)
     {
         vmsg("電子簽章有誤");
         return 0;
@@ -724,7 +724,7 @@ m_verify(void)
 
     sprintf(buf,"(%s)", Btime(&chrono));
 
-    if(chkpasswd(q, s.str) || strcmp(q + PASSLEN, buf))
+    if (chkpasswd(q, s.str) || strcmp(q + PASSLEN, buf))
     {
         /* Thor.990413: log usage */
         sprintf(buf,"%s@%s - XInfo:%s", rusername, fromhost, p);
@@ -783,7 +783,7 @@ m_total_size(void)
 
             do
             {
-                if(head->xid > 0)
+                if (head->xid > 0)
                 {
                     total += head->xid;
                 }
@@ -799,7 +799,7 @@ m_total_size(void)
 
         }
 
-        if(changed == 1)
+        if (changed == 1)
         {
             lseek(fd, (off_t) 0, SEEK_SET);
             write(fd, base, fsize);
@@ -973,7 +973,7 @@ do_forward(
     char *userid;
     char addr[64], fpath[64], cmd[256];
 
-    if(strstr(cuser.email,".bbs@"))
+    if (strstr(cuser.email,".bbs@"))
     {
         vmsg("使用 BBS 信箱作為認證信箱/使用註冊單認證者無法打包！");
         return;
@@ -1093,7 +1093,7 @@ m_zip(void)			/* itoc.010228: 打包資料 */
             return XEASY;
         }
 
-        if(!(strstr(currboard,"P_")))
+        if (!(strstr(currboard,"P_")))
         {
             vmsg("非個人板暫不提供打包服務,特殊個人專板若需打包請洽站務");
             return XEASY;
@@ -1447,7 +1447,7 @@ mail_send(
         return rc;
     }
     usr_fpath(ckforward,rcpt,"forward");
-    if(access(ckforward,0))
+    if (access(ckforward,0))
     {
         usr_fpath(folder, rcpt, fn_dir);
         hdr_stamp(folder, HDR_LINK, &mhdr, fpath);
@@ -1459,7 +1459,7 @@ mail_send(
     }
     else
     {
-        if(acct_load(&acct, rcpt) >= 0)
+        if (acct_load(&acct, rcpt) >= 0)
         {
             if (!title)
                 title = ve_title;
@@ -1512,20 +1512,20 @@ mail_reply(
     int xmode, prefix;
     char *msg, buf[80];
 
-    if(bbsothermode & OTHERSTAT_EDITING)
+    if (bbsothermode & OTHERSTAT_EDITING)
     {
         vmsg("你還有檔案還沒編完哦！");
         return;
     }
 
 
-    if(!(HAS_PERM(PERM_INTERNET)))
+    if (!(HAS_PERM(PERM_INTERNET)))
         return ;
 
 //  if ((hdr->xmode & MAIL_NOREPLY) || m_count())
 //      return;
 
-    if((hdr->xmode & MAIL_NOREPLY) || mail_stat(CHK_MAIL_NOMSG))
+    if ((hdr->xmode & MAIL_NOREPLY) || mail_stat(CHK_MAIL_NOMSG))
     {
         vmsg("你的信箱容量超過上限，請整理！");
         chk_mailstat = 1;
@@ -1591,7 +1591,7 @@ my_send(
     int result;
     char *msg;
 
-    if(bbsothermode & OTHERSTAT_EDITING)
+    if (bbsothermode & OTHERSTAT_EDITING)
     {
         vmsg("你還有檔案還沒編完哦！");
         return ;
@@ -1599,7 +1599,7 @@ my_send(
 
 
 
-    if(mail_stat(CHK_MAIL_NOMSG))
+    if (mail_stat(CHK_MAIL_NOMSG))
     {
         vmsg("你的信箱容量超過上限，請整理！");
         chk_mailstat = 1;
@@ -1636,7 +1636,7 @@ my_send(
 int
 m_send(void)
 {
-    if(cuser.userlevel & PERM_DENYMAIL)
+    if (cuser.userlevel & PERM_DENYMAIL)
         vmsg("您的信箱被鎖了！");
     else
     {
@@ -1653,7 +1653,7 @@ int
 mail_sysop(void)
 {
     int fd;
-    if(bbsothermode & OTHERSTAT_EDITING)
+    if (bbsothermode & OTHERSTAT_EDITING)
     {
         vmsg("你還有檔案還沒編完哦！");
         return 0;
@@ -1734,7 +1734,7 @@ multi_send(
     int userno, reciper, listing;
     LinkList *wp;
 
-    if(bbsothermode & OTHERSTAT_EDITING)
+    if (bbsothermode & OTHERSTAT_EDITING)
     {
         vmsg("你還有檔案還沒編完哦！");
         return -1;
@@ -1896,7 +1896,7 @@ static void
 multi_reply(
     HDR *mhdr)
 {
-    if(!HAS_PERM(PERM_INTERNET))
+    if (!HAS_PERM(PERM_INTERNET))
         return ;
     strcpy(quote_user, mhdr->owner);
     strcpy(quote_nick, mhdr->nick);
@@ -1909,7 +1909,7 @@ int
 mail_list(void)
 {
 
-    if(mail_stat(CHK_MAIL_NOMSG))
+    if (mail_stat(CHK_MAIL_NOMSG))
     {
         vmsg("你的信箱容量超過上限，請整理！");
         chk_mailstat = 1;
@@ -1968,17 +1968,17 @@ hdr_outs(		/* print HDR's subject */
     if (cc)
     {
 #if 0
-        if(tag_char(hdr->chrono) == '*')
+        if (tag_char(hdr->chrono) == '*')
         {
             outc(' ');
             outc('*');
         }
 #ifdef	HAVE_RECOMMEND
-        else if(!(hdr->xmode &(POST_LOCK | POST_CANCEL | POST_DELETE | POST_MDELETE)) && hdr->recommend >= (MIN_RECOMMEND) && !(cuser.ufo2 & UFO2_PRH))
+        else if (!(hdr->xmode &(POST_LOCK | POST_CANCEL | POST_DELETE | POST_MDELETE)) && hdr->recommend >= (MIN_RECOMMEND) && !(cuser.ufo2 & UFO2_PRH))
         {
-            if(hdr->recommend <=30)
+            if (hdr->recommend <=30)
                 prints("\033[36m%02.2d\033[m",hdr->recommend);
-            else if(hdr->recommend > 30 && hdr->recommend <= 60)
+            else if (hdr->recommend > 30 && hdr->recommend <= 60)
                 prints("\033[1;33m%02.2d\033[m",hdr->recommend);
             else
                 prints("\033[1;31m%02.2d\033[m",hdr->recommend);
@@ -2035,7 +2035,7 @@ hdr_outs(		/* print HDR's subject */
     mark = title + cc;
     cc = ' ';
 
-    if(hdr->xmode & POST_LOCK && !HAS_PERM(PERM_SYSOP))
+    if (hdr->xmode & POST_LOCK && !HAS_PERM(PERM_SYSOP))
     {
         outs(" 此文章已加密鎖定！\033[m");
         outc('\n');
@@ -2248,14 +2248,14 @@ mbox_forward(
     ACCT muser;
     int pos;
     HDR *hdr;
-    if(bbsothermode & OTHERSTAT_EDITING)
+    if (bbsothermode & OTHERSTAT_EDITING)
     {
         vmsg("你還有檔案還沒編完哦！");
         return XO_FOOT;
     }
 
 
-    if(mail_stat(CHK_MAIL_NOMSG))
+    if (mail_stat(CHK_MAIL_NOMSG))
     {
         vmsg("你的信箱容量超過上限，請整理！");
         chk_mailstat = 1;
@@ -2315,9 +2315,9 @@ mbox_browse(
     xmode = mhdr->xmode;
 
 #ifdef  HAVE_CHK_MAILSIZE
- if(!(mhdr->xmode & MAIL_READ) && chk_mailstat == 1)
+ if (!(mhdr->xmode & MAIL_READ) && chk_mailstat == 1)
  {
-    if(mail_stat(CHK_MAIL_NOMSG))
+    if (mail_stat(CHK_MAIL_NOMSG))
     {
         vmsg("您的信箱已超出容量，無法閱\讀新信件，請清理您的信箱！");
         return XO_FOOT;
@@ -2329,12 +2329,12 @@ mbox_browse(
 
     hdr_fpath(fpath, dir, mhdr);
 
-    if((mode = more(fpath, MSG_MAILER)) == -1)
+    if ((mode = more(fpath, MSG_MAILER)) == -1)
     {
         *fpath = '\0';
         return XO_INIT;
     }
-    else if(mode == -2)
+    else if (mode == -2)
     {
         mhdr->xmode |= MAIL_READ;
         rec_put(dir, mhdr, sizeof(HDR), pos);
@@ -2342,7 +2342,7 @@ mbox_browse(
         return XO_INIT;
         /*nmode = vkey();*/
     }
-    else if(mode > 0)
+    else if (mode > 0)
         nmode = mode;
     else
         nmode = vkey();
@@ -2396,7 +2396,7 @@ mbox_reply(
 //  if (m_count())
 //      return mbox_head(xo);
 
-    if(mail_stat(CHK_MAIL_NOMSG))
+    if (mail_stat(CHK_MAIL_NOMSG))
     {
         vmsg("你的信箱容量超過上限，請整理！");
         chk_mailstat = 1;
@@ -2502,7 +2502,7 @@ mbox_other(
     ACCT acct;
     char path[80];
 
-    if(!supervisor)
+    if (!supervisor)
         return XO_NONE;
 
     while (acct_get(msg_uid, &acct) > 0)
@@ -2564,7 +2564,7 @@ mail_stat(
     total_e = rec_num(buf, sizeof(HDR));
     total_k = m_total_size() / 1024;
     sprintf(buf,"信件數 %d/%d 封，容量大小 %d/%d K！",total_e,limit_e,total_k,limit_k);
-    if(mode & CHK_MAIL_NORMAL)
+    if (mode & CHK_MAIL_NORMAL)
         vmsg(buf);
     return (total_k>=limit_k)||(total_e>limit_e);
 }
@@ -2583,7 +2583,7 @@ mbox_edit(
 {
     HDR *hdr;
     char fpath[128];
-    if(bbsothermode & OTHERSTAT_EDITING)
+    if (bbsothermode & OTHERSTAT_EDITING)
     {
         vmsg("你還有檔案還沒編完哦！");
         return XO_FOOT;
@@ -2644,7 +2644,7 @@ mbox_title(
 {
     HDR *hdr,mhdr;
 
-    if(!supervisor)
+    if (!supervisor)
         return XO_NONE;
 
 
@@ -2655,7 +2655,7 @@ mbox_title(
     vget(b_lines, 0, "作者：", mhdr.owner, 74 , GCARRY);
     vget(b_lines, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
     vget(b_lines, 0, "檔名：", mhdr.xname, sizeof(mhdr.date), GCARRY);
-    if(mhdr.xid > 1000)
+    if (mhdr.xid > 1000)
         mhdr.xid = 0;
     if (vans(msg_sure_ny) == 'y' &&
         memcmp(hdr, &mhdr, sizeof(HDR)))
@@ -2691,7 +2691,7 @@ static int
 mbox_clean(
     XO *xo)
 {
-    if(vans("\033[1;5;41;33m警告：\033[m清除之後不能救回。確定要清除嗎？(y/N)") == 'y')
+    if (vans("\033[1;5;41;33m警告：\033[m清除之後不能救回。確定要清除嗎？(y/N)") == 'y')
     {
         hdr_prune(xo->dir, 0, 0 , 3);
         return XO_INIT;
@@ -2708,11 +2708,11 @@ mbox_check(void)
 
     usr_fpath(fpath,cuser.userid,FN_DIR);
     total = 0;
-    if((fd = open(fpath, O_RDONLY)) >= 0)
+    if ((fd = open(fpath, O_RDONLY)) >= 0)
     {
-        while(read(fd, &hdr, sizeof(HDR)) == sizeof(HDR))
+        while (read(fd, &hdr, sizeof(HDR)) == sizeof(HDR))
         {
-            if( hdr.xmode & POST_DELETE )
+            if ( hdr.xmode & POST_DELETE )
                 total++;
         }
         close(fd);
@@ -2727,12 +2727,12 @@ mbox_gem(
     XO *xo)
 {
     static void (*mgp)(void);
-    if(!HAS_PERM(PERM_MBOX))
+    if (!HAS_PERM(PERM_MBOX))
         return XO_NONE;
-    if(!mgp)
+    if (!mgp)
     {
         mgp = DL_get("bin/mailgem.so:mailgem_main");
-        if(mgp)
+        if (mgp)
             (*mgp)();
         else
             vmsg("動態連結失敗，請聯絡系統管理員！");

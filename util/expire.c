@@ -379,7 +379,7 @@ main(
     chdir(BBSHOME);
 
     fd = open(".BRD",O_RDONLY);
-    if(fd < 0)
+    if (fd < 0)
     {
         fprintf(stderr,"Error open .BRD file\n");
         exit(1);
@@ -408,9 +408,9 @@ main(
     {
         ptr = de->d_name;
         /* Thor.981027: 加上 board時, 可sync 某一board. 加得很醜, 有空再改 */
-        if(argc > 4)
+        if (argc > 4)
         {
-            if(str_cmp(argv[4],ptr))
+            if (str_cmp(argv[4],ptr))
                 continue;
             else
                 number=0;
@@ -418,10 +418,10 @@ main(
 
         if (ptr[0] > ' ' && ptr[0] != '.')
         {
-            if(count > 0)
+            if (count > 0)
             {
                 fd = brdbno(ptr,count);
-                if(fd >= 0)
+                if (fd >= 0)
                 {
                     brd = &table[fd];
                     key.maxp = (brd->expiremax == 0 ? db.maxp : brd->expiremax);

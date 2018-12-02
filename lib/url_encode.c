@@ -15,13 +15,13 @@ url_encode(
     const char *src
 )
 {
-    for(; *src; src++)
+    for (; *src; src++)
     {
-        if(*src == ' ')
+        if (*src == ' ')
             *dst++ = '+';
-        else if(*src == '/' || *src == '.' || *src == '&' || *src == '?' || *src == '=' )
+        else if (*src == '/' || *src == '.' || *src == '&' || *src == '?' || *src == '=' )
             *dst++ = *src;
-        else if(is_alnum(*src))
+        else if (is_alnum(*src))
             *dst++ = *src;
         else
         {

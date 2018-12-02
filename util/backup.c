@@ -114,7 +114,7 @@ bk_brd(
 
     //chdir(BBSHOME);
 
-    if(day != 4 && day != 5)
+    if (day != 4 && day != 5)
         return;
 
 
@@ -135,7 +135,7 @@ bk_brd(
 
         if (ptr[0] > ' ' && ptr[0] != '.')
         {
-            if((day == 4 && ((ptr[0] >= '0' && ptr[0] <= '9') || (ptr[0] >= 'a' && ptr[0] <= 'k') || (ptr[0] >= 'A' && ptr[0] <= 'K'))) ||
+            if ((day == 4 && ((ptr[0] >= '0' && ptr[0] <= '9') || (ptr[0] >= 'a' && ptr[0] <= 'k') || (ptr[0] >= 'A' && ptr[0] <= 'K'))) ||
                 (day == 5 && ((ptr[0] >= 'l' && ptr[0] <= 'z') || (ptr[0] >= 'L' && ptr[0] <= 'Z'))))
             {
                 sprintf(cmd,"tar zvcf %s/brd/brd%02d%02d/%s.tgz %s",bk_path, mon, mday, ptr, ptr);
@@ -204,7 +204,7 @@ bk_system_src(void)
     sprintf(cmd,"gzip -c .BRD > %s/BRD.gz", path);
     system(cmd);
 
-    for(i=0;i<5;i++)
+    for (i=0;i<5;i++)
     {
         sprintf(cmd,"tar zcf %s/%s.tgz %s", path, system_folders[i], system_folders[i]);
         system(cmd);
@@ -216,12 +216,12 @@ bk_system_src(void)
     system(cmd);
     sprintf(cmd,"tar rvf %s/gem.tar gem/.GEM", path);
     system(cmd);
-    for(i = '0' ; i <= '9' ; i++)
+    for (i = '0' ; i <= '9' ; i++)
     {
         sprintf(cmd,"tar rvf %s/gem.tar gem/%c", path,i);
         system(cmd);
     }
-    for(i = 'A' ; i <= 'V' ; i++)
+    for (i = 'A' ; i <= 'V' ; i++)
     {
         sprintf(cmd,"tar rvf %s/gem.tar gem/%c", path,i);
         system(cmd);
@@ -253,9 +253,9 @@ main(
 
     day = t->tm_wday;
 
-    if(argc>1)
+    if (argc>1)
         day = atoi(argv[1]);
-    if(day > 6 || day < 0)
+    if (day > 6 || day < 0)
     {
         printf("Something error!\n");
         return 0;
@@ -268,9 +268,9 @@ main(
     mday = t->tm_mday;
 
     bk_system_src();
-    if(day >= 0 && day <= 3)
+    if (day >= 0 && day <= 3)
         bk_usr(day);
-    else if(day >= 4 && day <= 5)
+    else if (day >= 4 && day <= 5)
         bk_brd(day);
     else
         bk_gem();

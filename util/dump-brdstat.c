@@ -97,7 +97,7 @@ bshm_init(void)
         bshm = xshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
     }
 
-    if(bshm->uptime < 0)
+    if (bshm->uptime < 0)
         exit(1);
 
 }
@@ -148,7 +148,7 @@ main(void)
     tail = head + bshm->number;
     do
     {
-        if(!(head->battr & BRD_NOTOTAL) && head->brdname[0])
+        if (!(head->battr & BRD_NOTOTAL) && head->brdname[0])
         {
             count_board(head,0);
         }

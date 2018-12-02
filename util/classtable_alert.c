@@ -153,20 +153,20 @@ init(void)
         if (!(up->ufo & UFO_CLASSTABLE))
             continue;
 //      printf("%-13.13s  %6.6d  %6.6d\n",up->userid,up->userno,up->pid);
-        if((ptr=bfind(up->userno)))
+        if ((ptr=bfind(up->userno)))
         {
             //strcpy(bmw.msg,"訊息測試,不便請見諒");
 
             time(&now);
             p = localtime(&now);
-            if(p->tm_wday >= 1 && p->tm_hour >= 8 && p->tm_hour<=20)
+            if (p->tm_wday >= 1 && p->tm_hour >= 8 && p->tm_hour<=20)
             {
-                if(ptr->item[(p->tm_wday-1)*13 + (p->tm_hour - 8)].used)
+                if (ptr->item[(p->tm_wday-1)*13 + (p->tm_hour - 8)].used)
                 {
                     CLASS_TABLE_ALERT_ITEM *cur;
                     cur = &(ptr->item[(p->tm_wday-1)*13 + (p->tm_hour - 8)]);
 //		            cur = &(ptr->item[i]);
-                    if(strlen(cur->room))
+                    if (strlen(cur->room))
                     {
                         sprintf(bmw.msg, "◎您在 %-.16s 有一門 [%s] 課，上課不要遲到哦!!",cur->room,cur->condensation);
                         printf("%s:%s\n",up->userid,bmw.msg);
@@ -289,7 +289,7 @@ main(
 
     ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
 
-    if(!ushm)
+    if (!ushm)
     {
         exit(1);
     }
@@ -302,7 +302,7 @@ main(
 
     init();
 
-    if(cache)
+    if (cache)
         free(cache);
     f_cp(fpath, FN_CLASSTABLE_DB, O_APPEND);
     unlink(fpath);

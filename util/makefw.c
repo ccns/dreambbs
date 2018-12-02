@@ -58,11 +58,11 @@ expire(
 
     sprintf(buf,"%s/%s",brd,BANMAIL_ACL);
     fd = open(buf,O_RDONLY);
-    if(fd>=0 && total < (MAXOFILEWALL-1))
+    if (fd>=0 && total < (MAXOFILEWALL-1))
     {
-        while(read(fd,&head,sizeof(BANMAIL)) == sizeof(BANMAIL))
+        while (read(fd,&head,sizeof(BANMAIL)) == sizeof(BANMAIL))
         {
-            if(strlen(head.data) <=0)
+            if (strlen(head.data) <=0)
                 continue;
             strcpy(fwoshm->fwocache[total].name,brd);
             strcpy(fwoshm->fwocache[total].data,head.data);
@@ -71,7 +71,7 @@ expire(
             fwoshm->fwocache[total].mode = head.mode;
             printf("%-15s %6.6d %10.10ld %s\n",brd,head.usage,head.time,head.data);
             total++;
-            if(total >= (MAXOFILEWALL-1))
+            if (total >= (MAXOFILEWALL-1))
                 break;
         }
         close(fd);
@@ -91,16 +91,16 @@ rewrite(void)
     now = time(0);
 
     head = fwoshm->fwocache;
-    while(head->name[0])
+    while (head->name[0])
     {
         brd_fpath(fpath,head->name,BANMAIL_ACL);
         cur = head;
         pos = rec_loc(fpath,sizeof(BANMAIL),cmpfw);
-        if(pos >= 0)
+        if (pos >= 0)
         {
             rec_get(fpath, &data, sizeof(BANMAIL), pos);
             data.usage = head->usage;
-            if((now - head->time) > (BANMAIL_EXPIRE * 86400))
+            if ((now - head->time) > (BANMAIL_EXPIRE * 86400))
                 rec_del(fpath,sizeof(BANMAIL),pos,NULL,NULL);
             else
             {
@@ -143,7 +143,7 @@ main(
     }
     closedir(dirp);
     printf("usage : %d (%d)\n",total,MAXOFILEWALL);
-    if(total >= MAXOFILEWALL)
+    if (total >= MAXOFILEWALL)
         printf("out of memory!");
 
 

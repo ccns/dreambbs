@@ -171,7 +171,7 @@ u_exit(
             }
 #ifdef HAVE_SONG
             cuser.request = tuser.request;
-            if(cuser.request>500)
+            if (cuser.request>500)
                 cuser.request = 500;
             else if (cuser.request<=0)
                 cuser.request = 0;
@@ -181,11 +181,11 @@ u_exit(
             cuser.tvalid = tuser.tvalid;
             cuser.vtime = tuser.vtime;
             cuser.deny = tuser.deny;
-            if(tuser.numlogins > cuser.numlogins)
+            if (tuser.numlogins > cuser.numlogins)
                 cuser.numlogins = tuser.numlogins;
-            if(tuser.numposts > cuser.numposts)
+            if (tuser.numposts > cuser.numposts)
                 cuser.numposts = tuser.numposts;
-            if(tuser.staytime > cuser.staytime)
+            if (tuser.staytime > cuser.staytime)
                 cuser.staytime = tuser.staytime;
 
             strcpy(cuser.justify, tuser.justify);
@@ -194,9 +194,9 @@ u_exit(
             {
                 TABLE *ptr;
                 cuser.ufo2 = 0;
-                for(ptr = table;ptr->old;ptr++)
+                for (ptr = table;ptr->old;ptr++)
                 {
-                    if(cuser.ufo & ptr->old)
+                    if (cuser.ufo & ptr->old)
                         cuser.ufo2 |= ptr->new;
                     else
                         cuser.ufo2 &= ~ptr->new;
@@ -204,7 +204,7 @@ u_exit(
             }
 #endif
 #ifdef	HAVE_CLASSTABLEALERT
-            if(!utmp_find(cuser.userno))
+            if (!utmp_find(cuser.userno))
                 classtable_free();
 //	    vmsg("test");
 #endif
@@ -597,9 +597,9 @@ tn_login(void)
         FILE *fp;
         char buf[128];
         move(18, 0);
-        if( ( fp = fopen("gem/@/@AD","r") ) )
+        if ( ( fp = fopen("gem/@/@AD","r") ) )
             {
-                while(fgets(buf,sizeof(buf),fp))
+                while (fgets(buf,sizeof(buf),fp))
                 outs(buf);
                 fclose(fp);
             }
@@ -819,21 +819,21 @@ tn_login(void)
 #endif
 
             /* Thor.980629: 未經身分認證, 禁止 chat/talk/write */
-            if(!(level & PERM_VALID))
+            if (!(level & PERM_VALID))
             {
                 level &= ~(PERM_CHAT | PERM_PAGE | PERM_POST);
             }
 
-            if(level & (PERM_DENYPOST | PERM_DENYTALK | PERM_DENYCHAT | PERM_DENYMAIL | PERM_DENYNICK))
+            if (level & (PERM_DENYPOST | PERM_DENYTALK | PERM_DENYCHAT | PERM_DENYMAIL | PERM_DENYNICK))
             {
-                if(cuser.deny < check_deny && !(level & PERM_DENYSTOP))
+                if (cuser.deny < check_deny && !(level & PERM_DENYSTOP))
                 {
                     usr_fpath(fpath, cuser.userid, FN_STOPPERM_LOG);
                     unlink(fpath);
                     level &= ~(PERM_DENYPOST | PERM_DENYTALK | PERM_DENYCHAT | PERM_DENYMAIL | PERM_DENYNICK);
                 }
             }
-            else if(!(level & PERM_DENYSTOP) && cuser.deny > check_deny) cuser.deny = check_deny;
+            else if (!(level & PERM_DENYSTOP) && cuser.deny > check_deny) cuser.deny = check_deny;
 
             if (!(level & PERM_CLOAK))
                 ufo &= ~(UFO_CLOAK|UFO_HIDDEN);
@@ -864,14 +864,14 @@ tn_login(void)
         if (start > cuser.tcheck + CHECK_PERIOD)
         {
 #ifdef	HAVE_MAILGEM
-            if(cuser.userlevel & PERM_MBOX)
+            if (cuser.userlevel & PERM_MBOX)
             {
                 int (*p)(int level, char *fpath);
                 char fpath[128];
                 usr_fpath(fpath,cuser.userid,"gem");
 
                 p = DL_get("bin/mailgem.so:gcheck");
-                if(p)
+                if (p)
                     (*p)(0,fpath);
             }
 #endif
@@ -887,10 +887,10 @@ tn_login(void)
         }
         else
         {
-            if(m_query(cuser.userid)>0)
+            if (m_query(cuser.userid)>0)
                 ufo |= UFO_BIFF;
         }
-        if(check_personal_note(1,cuser.userid))
+        if (check_personal_note(1,cuser.userid))
             ufo |= UFO_BIFFN;
 
         cutmp->ufo = cuser.ufo = ufo; /* Thor.980805: 解決 ufo 同步問題 */
@@ -927,7 +927,7 @@ tn_login(void)
 #endif
 
         usr_fpath(fpath, cuser.userid, FN_STOPPERM_LOG);
-        if(more(fpath, (char *)-1)>= 0)
+        if (more(fpath, (char *)-1)>= 0)
             vmsg(NULL);
 
 #if 1
@@ -938,7 +938,7 @@ tn_login(void)
         }
         /* 有效時間逾期 10 天前提出警告 */
 #ifdef JUSTIFY_PERIODICAL
-        else if(!(level & (PERM_ADMIN|PERM_XEMPT)))
+        else if (!(level & (PERM_ADMIN|PERM_XEMPT)))
         {
             if (cuser.tvalid + VALID_PERIOD - 10 * 86400 < start)
             {
@@ -1016,7 +1016,7 @@ tn_login(void)
     }
 
 #if 0
-    if(cuser.ufo2 & UFO2_APRIL1)
+    if (cuser.ufo2 & UFO2_APRIL1)
     {
         more("gem/brd/Admin/J/A106LL7J",NULL);
         bell();
@@ -1084,13 +1084,13 @@ tn_main(void)
     sprintf(buf2, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
     str_lower(buf,fromhost);
 
-    if(acl_has(FN_ETC_BANIP_ACL, "", buf) > 0
+    if (acl_has(FN_ETC_BANIP_ACL, "", buf) > 0
         || acl_has(FN_ETC_BANIP_ACL, "", buf2) > 0)
         exit(0);
 
     /* 將 login 的部分清空 */
     add_io(0, 0);
-    while(igetch() != I_TIMEOUT);
+    while (igetch() != I_TIMEOUT);
     add_io(0, 60);
 
 
@@ -1118,7 +1118,7 @@ tn_main(void)
     getloadavg(load,3);
 
     //負載過高禁止login
-    if(load[0]>20)
+    if (load[0]>20)
     {
         prints("\n對不起...\n\n由於目前負載過高, 請稍後再來...");
         //pcman會自動重連時間設太短會變成 DOS 很可怕 :P
@@ -1151,12 +1151,12 @@ tn_main(void)
     /*tn_signals(); */
     brh_load();
 #ifdef	HAVE_FAVORITE
-    if(HAS_PERM(PERM_VALID))
+    if (HAS_PERM(PERM_VALID))
         favorite_main();
 #endif
 
 #ifdef  HAVE_DETECT_CROSSPOST
-    if(attr_get(cuser.userid,ATTR_CROSS_KEY,&cksum)<0)
+    if (attr_get(cuser.userid,ATTR_CROSS_KEY,&cksum)<0)
         memset(&cksum,0,sizeof(CHECKSUMCOUNT));
 #endif
 
@@ -1173,9 +1173,9 @@ tn_main(void)
     count_update();
     time(&ap_start);
 #ifdef	HAVE_CHK_MAILSIZE
-    if(!HAS_PERM(PERM_DENYMAIL) && HAS_PERM(PERM_BASIC))
+    if (!HAS_PERM(PERM_DENYMAIL) && HAS_PERM(PERM_BASIC))
     {
-        if(mail_stat(CHK_MAIL_VALID))
+        if (mail_stat(CHK_MAIL_VALID))
         {
             chk_mailstat = 1;
             vmsg("您的信箱已超出容量，無法使用本功\能，請清理您的信箱！");
@@ -1392,7 +1392,7 @@ start_daemon(
     close(1);
     close(2);
 
-    if(port == -1) /* Thor.981206: inetd -i */
+    if (port == -1) /* Thor.981206: inetd -i */
     {
         /* Give up root privileges: no way back from here	 */
         setgid(BBSGID);

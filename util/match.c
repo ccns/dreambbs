@@ -27,7 +27,7 @@ reaper(
     if (fd < 0)
         return;
 
-    if(read(fd, &acct, sizeof(acct))!=sizeof(acct))
+    if (read(fd, &acct, sizeof(acct))!=sizeof(acct))
     {
         close(fd);
         return;
@@ -98,7 +98,7 @@ main(
     fprintf(flog,"The end.\n");
     fclose(flog);
     rename(FN_MATCH_NEW,FN_MATCH_LOG);
-    if(argc > 1)
+    if (argc > 1)
     {
         sprintf(fpath,"mail %s.bbs@" MYHOSTNAME " < " FN_MATCH_MAIL,argv[1]);
         system(fpath);

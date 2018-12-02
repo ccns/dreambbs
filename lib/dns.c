@@ -430,12 +430,12 @@ dns_open(
 
 #if 1
     /* Thor.980707: 因gem.c呼叫時可能將host用ip放入，故作特別處理 */
-    if(*host>='0' && *host<='9')
+    if (*host>='0' && *host<='9')
     {
-        for(n=0, cp=host; n<4; n++, cp++)
+        for (n=0, cp=host; n<4; n++, cp++)
         {
             buf[n]=0;
-            while(*cp >= '0' && *cp <='9')
+            while (*cp >= '0' && *cp <='9')
             {
                 buf[n] *= 10;
                 buf[n] += *cp++ - '0';

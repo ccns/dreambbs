@@ -90,7 +90,7 @@ printchatline(
     move(i = 2, 0);
     last_slp = cur_slp;
 
-    while(++i <= line) {
+    while (++i <= line) {
       move(i, 0);
       memcpy(last_slp, cur_slp, sizeof(screenline));
       last_slp->smod = 0;

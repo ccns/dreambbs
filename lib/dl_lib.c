@@ -43,7 +43,7 @@ DL_get(
 
     *t++ = 0;
 
-    if(!dl_pool)
+    if (!dl_pool)
     {
         /* Initialize DL entries */
         dl_size = DL_ALLOC_MIN;
@@ -53,16 +53,16 @@ DL_get(
 
     p = dl_pool;
     tail = p + dl_head;
-    while(p < tail)
+    while (p < tail)
     {
-        if(!strcmp(buf, p->path))
+        if (!strcmp(buf, p->path))
             break;
         p++;
     }
 
-    if(p >= tail)
+    if (p >= tail)
     { /* not found */
-        if(dl_head >= dl_size)
+        if (dl_head >= dl_size)
         { /* not enough space */
             dl_size += DL_ALLOC_MIN;
             dl_pool = (DL_list *)realloc(dl_pool, dl_size * sizeof(DL_list));
@@ -76,7 +76,7 @@ DL_get(
         dl_head ++;
     }
 
-    if(!p->handle)
+    if (!p->handle)
         return NULL;
 
     return dlsym(p->handle,t);
@@ -90,7 +90,7 @@ DL_func(char *name, ...)
 
     va_start(args,name);
 
-    if(!(f = DL_get(name)))
+    if (!(f = DL_get(name)))
     { /* not get func */
         return -1;
     }

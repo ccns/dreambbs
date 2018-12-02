@@ -306,7 +306,7 @@ rec_loc(
     data = pool;
     off = 0;
     tmp = 0;
-    if(fchk)
+    if (fchk)
     {
         lseek(fd, off, SEEK_SET);
         while (read(fd, data, size) == size)

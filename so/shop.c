@@ -23,19 +23,19 @@ int cloak_temp(void)
     ACCT acct;
     int money;
 
-    if(HAS_PERM(PERM_CLOAK))
+    if (HAS_PERM(PERM_CLOAK))
     {
         pmsg2("你有隱身的權限！");
         return 0;
     }
 
-    if(cutmp->ufo & UFO_CLOAK)
+    if (cutmp->ufo & UFO_CLOAK)
     {
         pmsg2("您已經隱形了！");
         return 0;
     }
 
-    if(acct_load(&acct, cuser.userid) >= 0)
+    if (acct_load(&acct, cuser.userid) >= 0)
         money = acct.money;
     else
     {
@@ -44,13 +44,13 @@ int cloak_temp(void)
     }
 
 
-    if(money < 65536)
+    if (money < 65536)
     {
         pmsg2("您的夢幣不足!!");
         return 0;
     }
 
-    if(vans("確定購買嗎？ [y/N]") != 'y')
+    if (vans("確定購買嗎？ [y/N]") != 'y')
         return 0;
 
     acct.money -= 65536;
@@ -80,26 +80,26 @@ int hidefrom_temp(void)
     int money;
 
 /*
-    if(!HAS_PERM(PERM_12))
+    if (!HAS_PERM(PERM_12))
     {
         vmsg("此功\能暫時關閉");
         return 0;
     }
 */
 
-    if(HAS_PERM(PERM_CLOAK))
+    if (HAS_PERM(PERM_CLOAK))
     {
         pmsg2("你有隱身的權限！");
         return 0;
     }
 
-    if(cutmp->ufo & UFO_HIDDEN)
+    if (cutmp->ufo & UFO_HIDDEN)
     {
         pmsg2("您已經隱藏故鄉了！");
         return 0;
     }
 
-    if(acct_load(&acct, cuser.userid) >= 0)
+    if (acct_load(&acct, cuser.userid) >= 0)
         money = acct.money;
     else
     {
@@ -107,13 +107,13 @@ int hidefrom_temp(void)
         return 0;
     }
 
-    if(money < 4194304)
+    if (money < 4194304)
     {
         pmsg2("您的夢幣不足!!");
         return 0;
     }
 
-    if(vans("確定購買嗎？ [y/N]") != 'y')
+    if (vans("確定購買嗎？ [y/N]") != 'y')
         return 0;
 
     acct.money -= 4194304;
@@ -142,7 +142,7 @@ int shop_main(void)
     int money;
 
     ACCT acct;
-    if(acct_load(&acct, cuser.userid) >= 0)
+    if (acct_load(&acct, cuser.userid) >= 0)
     {
         money = acct.money;
     }
@@ -166,17 +166,17 @@ int shop_main(void)
         "            (3) 購買隱藏故鄉     (需要夢幣  4194304 元/次)\n\n"
         "            (4) 購買站長權限\033[1;31m HOT\033[m (需要夢幣 10000000 元)\n");
 
-    if(!vget(b_lines, 0, "請選擇您要的服務： [Q] 離開 ",buf,2,DOECHO))
+    if (!vget(b_lines, 0, "請選擇您要的服務： [Q] 離開 ",buf,2,DOECHO))
         return 0;
 
-    if(*buf == '1')
+    if (*buf == '1')
         cloak_temp();
-    else if(*buf == '2')
+    else if (*buf == '2')
         pmsg2("此功\能尚未開放");
-    else if(*buf == '3')
+    else if (*buf == '3')
         pmsg2("Sorry, we've closed this function...");
         //hidefrom_temp();
-    else if(*buf == '4')
+    else if (*buf == '4')
         sysop();
     else
         pmsg2("謝謝光臨");

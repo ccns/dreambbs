@@ -13,7 +13,7 @@ Get_Socket(  /* site for hostname, sock for port & socket */
     (void) memset((char *) &sin, 0, sizeof(sin));
     sin.sin_family = AF_INET;
     sin.sin_port = htons(*sock);
-    if((host = gethostbyname(site)) == NULL)
+    if ((host = gethostbyname(site)) == NULL)
         sin.sin_addr.s_addr = inet_addr(site);
 
     else
@@ -21,7 +21,7 @@ Get_Socket(  /* site for hostname, sock for port & socket */
 
     /* Getting a socket */
 
-    if((*sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    if ((*sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         return -1;
     }
@@ -33,7 +33,7 @@ Get_Socket(  /* site for hostname, sock for port & socket */
 
     /* perform connecting */
 
-    if(connect(*sock, (struct sockaddr *) & sin, sizeof(sin)) < 0)
+    if (connect(*sock, (struct sockaddr *) & sin, sizeof(sin)) < 0)
     {
         close(*sock);
 
@@ -61,10 +61,10 @@ POP3_Check(
     int sock=110,old_sock = 0;
     char buf[512];
 
-    if(Get_Socket(site, &sock))
+    if (Get_Socket(site, &sock))
         sock = 1;
     else
-    if(!(fsock = fdopen(sock, "r+")))
+    if (!(fsock = fdopen(sock, "r+")))
     {
         close(sock);
         sock = 1;
@@ -75,7 +75,7 @@ POP3_Check(
         sock = 2;
     }
 
-    while(sock < 6)
+    while (sock < 6)
     {
         switch(sock)
         {
@@ -105,12 +105,12 @@ POP3_Check(
             case 5:		/* Quit */
                 fprintf(fsock, "quit\r\n");
                 fclose(fsock);
-                if(old_sock)
+                if (old_sock)
                     close(old_sock);
                 return sock;
         }
 
-        if(strncmp(buf, "+OK", 3) || strstr(buf, ".bbs"))
+        if (strncmp(buf, "+OK", 3) || strstr(buf, ".bbs"))
         {
             prints("遠端系統傳回錯誤訊息如下：(如不明白訊息意思，請將訊息告知站長)\n");
             prints("%s\n", buf);
@@ -142,16 +142,16 @@ Ext_POP3_Check(
     struct tm *p;
 
 
-    if(!Get_Socket(site, &sock))
+    if (!Get_Socket(site, &sock))
     {
-        if(!(fsock = fdopen(sock, "r+")))
+        if (!(fsock = fdopen(sock, "r+")))
         {
             close(sock);
             return 1;
         }
         step = 1;
 
-        while(step < 9)
+        while (step < 9)
         {
             FD_ZERO(&rd);
             FD_SET(sock, &rd);
@@ -162,12 +162,12 @@ Ext_POP3_Check(
             switch(step)
             {
             case 1:
-                while(1)
+                while (1)
                 {
                     fgets(buf, 512, fsock);
-                    if(!strncmp(buf, "+OK", 3))
+                    if (!strncmp(buf, "+OK", 3))
                     {
-                        if(step == 2)
+                        if (step == 2)
                         {
                             pmsg("不受信任的 POP3 主機，請使用 Email 回信認證！");
                             step = 8;
@@ -186,20 +186,20 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if(nfds == 0 )
+                    if (nfds == 0 )
                         break;
                 }
                 break;
             case 2:
                 fprintf(fsock, "pass !@#$%^&*(\r\n");
-                while(1)
+                while (1)
                 {
                     fgets(buf, 512, fsock);
-                    if(!strncmp(buf, "-ERR", 4))
+                    if (!strncmp(buf, "-ERR", 4))
                     {
                         step = 3;
                     }
-                    else if(!strncmp(buf, "+OK", 3))
+                    else if (!strncmp(buf, "+OK", 3))
                     {
                         pmsg("不受信任的 POP3 主機，請使用 Email 回信認證！");
                         step = 8;
@@ -210,20 +210,20 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if(nfds == 0 )
+                    if (nfds == 0 )
                         break;
                 }
                 break;
             case 3:
                 fprintf(fsock, "noop\r\n");
-                while(1)
+                while (1)
                 {
                     fgets(buf, 512, fsock);
-                    if(!strncmp(buf, "-ERR", 4))
+                    if (!strncmp(buf, "-ERR", 4))
                     {
                         step = 4;
                     }
-                    else if(!strncmp(buf, "+OK", 3))
+                    else if (!strncmp(buf, "+OK", 3))
                     {
                         pmsg("不受信任的 POP3 主機，請使用 Email 回信認證！");
                         step = 8;
@@ -234,22 +234,22 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if(nfds == 0 )
+                    if (nfds == 0 )
                         break;
                 }
                 break;
             case 4:
                 fprintf(fsock, "user %s\r\n",account);
-                while(1)
+                while (1)
                 {
                     fgets(buf, 512, fsock);
-                    if(!strncmp(buf, "-ERR", 4))
+                    if (!strncmp(buf, "-ERR", 4))
                     {
                         pmsg("無此郵件帳號，請使用 Email 回信認證！");
                         step = 9;
                         break;
                     }
-                    else if(!strncmp(buf, "+OK", 3) && step == 4)
+                    else if (!strncmp(buf, "+OK", 3) && step == 4)
                     {
                         step = 5;
                     }
@@ -264,22 +264,22 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if(nfds == 0 )
+                    if (nfds == 0 )
                         break;
                 }
                 break;
             case 5:
                 fprintf(fsock, "pass %s\r\n",passwd);
-                while(1)
+                while (1)
                 {
                     fgets(buf, 512, fsock);
-                    if(!strncmp(buf, "-ERR", 4))
+                    if (!strncmp(buf, "-ERR", 4))
                     {
                         pmsg("帳號密碼錯誤，請重新認證！");
                         step = 9;
                         break;
                     }
-                    else if(!strncmp(buf, "+OK", 3) && step == 5)
+                    else if (!strncmp(buf, "+OK", 3) && step == 5)
                     {
                         step = 6;
                     }
@@ -294,17 +294,17 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if(nfds == 0 )
+                    if (nfds == 0 )
                         break;
                 }
                 break;
             case 6:
                 fprintf(fsock, "noop\r\n");
 
-                while(1)
+                while (1)
                 {
                     fgets(buf, 512, fsock);
-                    if(!strncmp(buf, "+OK", 3) && step == 6)
+                    if (!strncmp(buf, "+OK", 3) && step == 6)
                     {
                         step = 7;
                     }
@@ -319,16 +319,16 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if(nfds == 0 )
+                    if (nfds == 0 )
                         break;
                 }
                 break;
             case 7:
                 fprintf(fsock, "stat\r\n");
-                while(1)
+                while (1)
                 {
                     fgets(buf, 512, fsock);
-                    if(!strncmp(buf, "+OK", 3) && step == 7)
+                    if (!strncmp(buf, "+OK", 3) && step == 7)
                     {
                         step = 0;
                     }
@@ -343,7 +343,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if(nfds == 0 )
+                    if (nfds == 0 )
                         break;
                 }
                 break;

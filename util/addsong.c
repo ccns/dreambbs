@@ -46,19 +46,19 @@ reaper(
     if (fd < 0)
         return;
 
-    if(read(fd, &acct, sizeof(acct))!=sizeof(acct))
+    if (read(fd, &acct, sizeof(acct))!=sizeof(acct))
     {
         close(fd);
         return;
     }
     close(fd);
 
-    if(acct.userlevel & perm)
+    if (acct.userlevel & perm)
     {
         acct.request += num;
-        if(acct.request > 500)
+        if (acct.request > 500)
             acct.request = 500;
-        if(acct.request < 0)
+        if (acct.request < 0)
             acct.request = 0;
         acct_save(&acct);
     }
@@ -104,7 +104,7 @@ main(
     strcpy(fname = fpath, "usr/@");
     fname = (char *) strchr(fname, '@');
 
-    if(argc > 2)
+    if (argc > 2)
     {
         perm = atoi(argv[1]);
         num  = atoi(argv[2]);

@@ -132,7 +132,7 @@ attach_shm(
     register int shmid;
 
     shmid = shmget(shmkey, shmsize, 0);
-    if(shmid < 0)
+    if (shmid < 0)
         return NULL;
 
     shmptr = (void *) shmat(shmid, NULL, 0);
@@ -288,13 +288,13 @@ report_eaddr_group(void)
 
     fprintf(faddr, "Email registration over %d times list\n\n", EMAIL_REG_LIMIT);
 
-    for(i = 0; i < numC; i++)
+    for (i = 0; i < numC; i++)
     {
-        for(cnt = 0, j = chain[i].link; j; cnt++, j = plist[j]);
+        for (cnt = 0, j = chain[i].link; j; cnt++, j = plist[j]);
         if (cnt > EMAIL_REG_LIMIT)
         {
             fprintf(faddr, "\n> %d\n", chain[i].hash);
-            for(j = chain[i].link; j; j = plist[j])
+            for (j = chain[i].link; j; j = plist[j])
             {
                 off = (j - 1) * sizeof(schema);
                 if (lseek(funo, off, SEEK_SET) < 0)
@@ -410,7 +410,7 @@ reaper(
         return;
     }
 
-    if(read(fd, &acct, sizeof(acct))!=sizeof(acct))
+    if (read(fd, &acct, sizeof(acct))!=sizeof(acct))
     {
         fprintf(flog, "acct can't read %-13s ==> %s\n", lowid, buf);
         close(fd);
@@ -441,21 +441,21 @@ reaper(
 
     if (ulevel & (PERM_MANAGE|PERM_BM))
     {
-        if(ulevel != (PERM_BASIC|PERM_CHAT|PERM_PAGE|PERM_POST|PERM_VALID|PERM_BM))
+        if (ulevel != (PERM_BASIC|PERM_CHAT|PERM_PAGE|PERM_POST|PERM_VALID|PERM_BM))
         {
             fprintf(flst, "%5d) %-13s%s[%s] %d\n", fd, acct.userid, buf, data, login);
             manager++;
         }
 
-        if((ulevel & PERM_BM))
+        if ((ulevel & PERM_BM))
         {
-            if(bshm)
+            if (bshm)
             {
                 num = bm_list(acct.userid,bmlist);
                 fprintf(fbml, "%5d) %-13s%s %-6d %-2d %s\n", fd, acct.userid, buf, login, num, bmlist);
                 bms++;
 #if 0
-                if(*bmlist == '\0')
+                if (*bmlist == '\0')
                 {
                     char fl[256];
 
@@ -467,18 +467,18 @@ reaper(
                         fprintf(flog, "acct can't open %-13s ==> %s\n", lowid, fl);
                     }
 
-                    if(write(fd, &acct, sizeof(acct))!=sizeof(acct))
+                    if (write(fd, &acct, sizeof(acct))!=sizeof(acct))
                     {
                         fprintf(flog, "acct can't read %-13s ==> %s\n", lowid, fl);
                     }
-                    if(fd >= 0)
+                    if (fd >= 0)
                         close(fd);
                 }
 #endif
 
             }
 #ifdef CHECK_LAZYBM
-            if(life < due_lazybm)
+            if (life < due_lazybm)
             {
                 fprintf(fbm, "%5d) %-13s%s %d\n", fd, acct.userid, buf, login);
                 lazybm++;
@@ -488,7 +488,7 @@ reaper(
     }
     else if (ulevel)		/* guest.ulevel == 0, ¥Ã»·«O¯d */
     {
-        if(ulevel & PERM_CRIMINAL)
+        if (ulevel & PERM_CRIMINAL)
         {
                 fprintf(fcri, "%5d) %-13s%s[%s] %d\n", fd, acct.userid, buf, data, login);
                 criminal++;
@@ -538,7 +538,7 @@ reaper(
             prune++;
         }
 #ifdef	HAVE_MAILGEM
-        else if(!(ulevel & PERM_MBOX))
+        else if (!(ulevel & PERM_MBOX))
         {
             char fph[128];
             usr_fpath(fph,acct.userid,"gem");
@@ -592,9 +592,9 @@ check_vacation(void)
     xtime = localtime((time_t *)&now);
     ptime = *xtime;
     now = (ptime.tm_mon+1)*100 + ptime.tm_mday;
-    for(i=0;reaper_time[i].start;i++)
+    for (i=0;reaper_time[i].start;i++)
     {
-        if(now < reaper_time[i].end && now >= reaper_time[i].start)
+        if (now < reaper_time[i].end && now >= reaper_time[i].start)
             return 1;
     }
     return 0;
@@ -615,7 +615,7 @@ main(void)
 
     bshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
 
-    if(bshm->uptime < 0)
+    if (bshm->uptime < 0)
         bshm = NULL;
 
     vacation = check_vacation();
@@ -746,7 +746,7 @@ main(void)
         logit("counter");
 #endif
     counter = attach_shm(COUNT_KEY, sizeof(COUNTER));
-    if(counter)
+    if (counter)
         counter->max_regist = visit;
 
 #ifdef EADDR_GROUPING

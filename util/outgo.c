@@ -48,7 +48,7 @@ main(
     char *board;
     HDR hdr;
 
-    if(argc > 3)
+    if (argc > 3)
     {
         board = argv[1];
         start = atoi(argv[2]);
@@ -57,7 +57,7 @@ main(
         if ((fd = open(fpath,O_RDONLY)))
         {
             lseek(fd,(off_t)((start-1)*sizeof(HDR)),SEEK_SET);
-            while(read(fd, &hdr, sizeof(HDR)) == sizeof(HDR) && start <= end)
+            while (read(fd, &hdr, sizeof(HDR)) == sizeof(HDR) && start <= end)
             {
                 outgo_post(&hdr, board);
                 start++;

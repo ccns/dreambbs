@@ -581,7 +581,7 @@ str_swap(
     char *ptr,*tmp;
     char buf[600];
     ptr = strstr(str,src);
-    if(ptr)
+    if (ptr)
     {
         *ptr = '\0';
         tmp = ptr + strlen(src);
@@ -606,7 +606,7 @@ do_send(
     zerotv.tv_sec = 0;
     zerotv.tv_usec = 0;
 #endif
-    while(str_swap(msg,"\\033","\033"));
+    while (str_swap(msg,"\\033","\033"));
 
     sr = select(nfds + 1, NULL, wset, NULL, &zerotv);
 
@@ -976,7 +976,7 @@ chat_topic(
         return;
     }
 
-    if(strstr(msg,"\\033"))
+    if (strstr(msg,"\\033"))
     {
         send_to_user(cu, "※ 不合格的話題", 0, MSG_MESSAGE);
         return;
@@ -1422,9 +1422,9 @@ chat_setroom(
     /* Thor.980602: 不准 Main room 鎖起 or 秘密, 這成何體統?
                     離開的就進不來, 要看也看不到?
                     想要踢人也踢不進 main room, 不會很奇怪嗎? */
-    if(str_equal(MAIN_NAME, room->name))
+    if (str_equal(MAIN_NAME, room->name))
     {
-        if(room->rflag & (ROOM_LOCKED | ROOM_SECRET))
+        if (room->rflag & (ROOM_LOCKED | ROOM_SECRET))
         {
                 send_to_room(room, "※ 但 " SYSOPNICK " 施了『復原』的魔法", 0, MSG_MESSAGE);
                 room->rflag &= ~(ROOM_LOCKED|ROOM_SECRET);
@@ -1608,7 +1608,7 @@ arrive_room(
         strcat(buf, " Op");
     send_to_room(room, buf, 0, MSG_USERNOTIFY);
 
-    if(!CLOAK(cuser))
+    if (!CLOAK(cuser))
         room->occupants++;
     room_changed(room);
 
@@ -2202,7 +2202,7 @@ chat_makeop(
 
     room = cu->room;
 
-    if(!*newop && CHATSYSOP(cu))
+    if (!*newop && CHATSYSOP(cu))
     {
         /* Thor.980603: PERM_CHATROOM改為 default 沒有 roomop, 但可以自己取得 */
         cu->uflag ^= PERM_CHATOP;
@@ -2497,7 +2497,7 @@ person_action(
     {
         if (str_equal(verb, cmd))
         {
-            if(!*(cap->part2_msg))
+            if (!*(cap->part2_msg))
             {
                 sprintf(buf, "\x1b[1;32m%s \x1b[31m%s\x1b[m",
                     cu->chatid, cap->part1_msg);
@@ -2570,11 +2570,11 @@ static char *dscrb[] =
 
 static ChatAction *catbl(int in)
 {
-    if(in==0) return party_data;
-    else if(in==1) return speak_data;
-    else if(in==2) return condition_data;
-    else if(in==3) return party_data2;
-    else if(in==4) return person_data;
+    if (in==0) return party_data;
+    else if (in==1) return speak_data;
+    else if (in==2) return condition_data;
+    else if (in==3) return party_data2;
+    else if (in==4) return person_data;
     else return NULL;
 }
 
@@ -2799,7 +2799,7 @@ command_execute(
     check = 0;
 
     if (*cmd == '/')
-        if(*(cmd+1) <= '5' && *(cmd+1) >= '1')
+        if (*(cmd+1) <= '5' && *(cmd+1) >= '1')
         {
             view_action_verb(cu, *(cmd+1));
             check = 1;
@@ -2931,7 +2931,7 @@ cuser_serve(
             logbuf[ch] = '$';
 
     logbuf[len + 1] = '\0';
-    if(strncmp(logbuf,"/! ",3))
+    if (strncmp(logbuf,"/! ",3))
         logtalk(cu->userid, logbuf);
 #endif
 
@@ -3041,7 +3041,7 @@ servo_daemon(
     close(1);
 
     /* if (mode > 1) */
-    if(inetd)
+    if (inetd)
         return 0;
 
     close(0);
@@ -3294,9 +3294,9 @@ mudshm_init(void)
     fw = open(FN_CHAT_PARTY_DB,O_RDONLY);
     fstat(fw, &st);
 
-    if(!fstat(fw, &st) && (size = st.st_size) > 0)
+    if (!fstat(fw, &st) && (size = st.st_size) > 0)
     {
-        if(size > PARTY_MAX * sizeof(ChatAction))
+        if (size > PARTY_MAX * sizeof(ChatAction))
             size = PARTY_MAX * sizeof(ChatAction);
         memset(head,0,PARTY_MAX * sizeof(ChatAction));
         if (size)
@@ -3308,9 +3308,9 @@ mudshm_init(void)
     fw = open(FN_CHAT_PARTY2_DB,O_RDONLY);
     fstat(fw, &st);
 
-    if(!fstat(fw, &st) && (size = st.st_size) > 0)
+    if (!fstat(fw, &st) && (size = st.st_size) > 0)
     {
-        if(size > PARTY_MAX * sizeof(ChatAction))
+        if (size > PARTY_MAX * sizeof(ChatAction))
             size = PARTY_MAX * sizeof(ChatAction);
         memset(head,0,PARTY_MAX * sizeof(ChatAction));
         if (size)
@@ -3322,9 +3322,9 @@ mudshm_init(void)
     fw = open(FN_CHAT_SPEAK_DB,O_RDONLY);
     fstat(fw, &st);
 
-    if(!fstat(fw, &st) && (size = st.st_size) > 0)
+    if (!fstat(fw, &st) && (size = st.st_size) > 0)
     {
-        if(size > SPEAK_MAX * sizeof(ChatAction))
+        if (size > SPEAK_MAX * sizeof(ChatAction))
             size = SPEAK_MAX * sizeof(ChatAction);
         memset(head,0,SPEAK_MAX * sizeof(ChatAction));
         if (size)
@@ -3336,9 +3336,9 @@ mudshm_init(void)
     fw = open(FN_CHAT_CONDITION_DB,O_RDONLY);
     fstat(fw, &st);
 
-    if(!fstat(fw, &st) && (size = st.st_size) > 0)
+    if (!fstat(fw, &st) && (size = st.st_size) > 0)
     {
-        if(size > CONDITION_MAX * sizeof(ChatAction))
+        if (size > CONDITION_MAX * sizeof(ChatAction))
             size = CONDITION_MAX * sizeof(ChatAction);
         memset(head,0,CONDITION_MAX * sizeof(ChatAction));
         if (size)
@@ -3350,9 +3350,9 @@ mudshm_init(void)
     fw = open(FN_CHAT_PERSON_DB,O_RDONLY);
     fstat(fw, &st);
 
-    if(!fstat(fw, &st) && (size = st.st_size) > 0)
+    if (!fstat(fw, &st) && (size = st.st_size) > 0)
     {
-        if(size > CONDITION_MAX * sizeof(ChatAction))
+        if (size > CONDITION_MAX * sizeof(ChatAction))
             size = CONDITION_MAX * sizeof(ChatAction);
         memset(head,0,CONDITION_MAX * sizeof(ChatAction));
         if (size)

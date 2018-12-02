@@ -42,13 +42,13 @@ reaper(
     if (fd < 0)
         return;
 
-    if(read(fd, &acct, sizeof(acct))!=sizeof(acct))
+    if (read(fd, &acct, sizeof(acct))!=sizeof(acct))
     {
         close(fd);
         return;
     }
     close(fd);
-    if(acct.userlevel & PERM_VALID)
+    if (acct.userlevel & PERM_VALID)
     {
 
         if ((ptr = strstr(acct.email,"cloud.yzu.edu.tw")));
@@ -61,7 +61,7 @@ reaper(
         else if ((ptr = strstr(acct.email,"mail87.yzu.edu.tw")));
         else if ((ptr = strstr(acct.email,"mail88.yzu.edu.tw")));
         else if ((ptr = strstr(acct.email,"mail.yzu.edu.tw")));
-        if(ptr)
+        if (ptr)
         {
             acct.userlevel &= ~PERM_VALID;
 /*          strcpy(ptr,"mail.yzu.edu.tw");

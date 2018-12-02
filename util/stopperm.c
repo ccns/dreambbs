@@ -30,14 +30,14 @@ reaper(
     if (fd < 0)
         return;
 
-    if(read(fd, &acct, sizeof(acct))!=sizeof(acct))
+    if (read(fd, &acct, sizeof(acct))!=sizeof(acct))
     {
         close(fd);
         return;
     }
     close(fd);
 
-    if(!strcmp(acct.email,kmail))
+    if (!strcmp(acct.email,kmail))
     {
         fprintf(flog,"%-13s\n",acct.userid);
         total++;
@@ -197,12 +197,12 @@ seek_log_email(
     EMAIL email;
     int pos=0,fd;
     fd = open(FN_VIOLATELAW_DB, O_RDONLY);
-    while(fd)
+    while (fd)
     {
         lseek(fd, (off_t) (sizeof(email) * pos), SEEK_SET);
         if (read(fd, &email, sizeof(email)) == sizeof(email))
         {
-            if(!strcmp(email.email,mail))
+            if (!strcmp(email.email,mail))
             {
                 close(fd);
                 return pos;
@@ -227,10 +227,10 @@ deny_log_email(
     EMAIL email;
     int pos;
     pos = seek_log_email(mail);
-    if(pos >=0)
+    if (pos >=0)
     {
         rec_get(FN_VIOLATELAW_DB, &email, sizeof(EMAIL), pos);
-        if(deny > email.deny || deny == -1)
+        if (deny > email.deny || deny == -1)
             email.deny = deny;
         email.times++;
         rec_put(FN_VIOLATELAW_DB, &email, sizeof(EMAIL), pos);
@@ -282,57 +282,57 @@ add_deny_exer(
     time(&now);
     check_time = (x.deny > now) ? 1 : 0;
 
-    if(!strncmp(u->justify,"reg:",4))
+    if (!strncmp(u->justify,"reg:",4))
         adm = (adm & ~DENY_MODE_ALL)|DENY_MODE_GUEST;
 
     unlink(FN_STOP_LOG);
     fp = fopen(FN_STOP_LOG,"w");
-    if(adm & DENY_SEL_OK)
+    if (adm & DENY_SEL_OK)
     {
         x.deny = now;
         memcpy(u, &x, sizeof(x));
         acct_save(u);
         return adm;
     }
-    if(adm & DENY_SEL)
+    if (adm & DENY_SEL)
     {
-        if(adm & DENY_SEL_TALK) cselect = "不當言論";
-        else if(adm & DENY_SEL_POST) cselect = " Cross Post";
-        else if(adm & DENY_SEL_MAIL) cselect = "散發連鎖信";
-        else if(adm & DENY_SEL_AD)   cselect = "散發廣告信";
-        else if(adm & DENY_SEL_SELL) cselect = "販賣非法事物";
+        if (adm & DENY_SEL_TALK) cselect = "不當言論";
+        else if (adm & DENY_SEL_POST) cselect = " Cross Post";
+        else if (adm & DENY_SEL_MAIL) cselect = "散發連鎖信";
+        else if (adm & DENY_SEL_AD)   cselect = "散發廣告信";
+        else if (adm & DENY_SEL_SELL) cselect = "販賣非法事物";
         fprintf(fp,"查 %s 違反站規%s，依站規停止",u->userid,cselect);
     }
-    if((adm & (DENY_MODE_ALL)) && !(adm & DENY_MODE_GUEST))
+    if ((adm & (DENY_MODE_ALL)) && !(adm & DENY_MODE_GUEST))
     {
-        if((adm & DENY_MODE_ALL) == DENY_MODE_ALL)
+        if ((adm & DENY_MODE_ALL) == DENY_MODE_ALL)
         {
             x.userlevel |= (PERM_DENYPOST | PERM_DENYTALK | PERM_DENYCHAT | PERM_DENYMAIL | PERM_DENYNICK);
             cmode = " Talk , Mail , \nPost , 更改暱稱";
         }
-        else if(adm & DENY_MODE_POST)
+        else if (adm & DENY_MODE_POST)
         {
             x.userlevel |= (PERM_DENYPOST);
             cmode = " Post ";
         }
-        else if(adm & DENY_MODE_TALK)
+        else if (adm & DENY_MODE_TALK)
         {
             x.userlevel |= (PERM_DENYTALK|PERM_DENYCHAT);
             cmode = " Talk ";
         }
-        else if(adm & DENY_MODE_MAIL)
+        else if (adm & DENY_MODE_MAIL)
         {
             x.userlevel |= (PERM_DENYMAIL);
             cmode = " Mail ";
         }
-        else if(adm & DENY_MODE_NICK)
+        else if (adm & DENY_MODE_NICK)
         {
             x.userlevel |= (PERM_DENYNICK);
             cmode = "更改暱稱";
         }
         fprintf(fp,"%s權限",cmode);
     }
-    if(adm & DENY_MODE_GUEST)
+    if (adm & DENY_MODE_GUEST)
     {
         x.userlevel |= (PERM_DENYPOST | PERM_DENYTALK | PERM_DENYCHAT | PERM_DENYMAIL | PERM_DENYSTOP);
         x.userlevel &= ~(PERM_BASIC | PERM_VALID);
@@ -341,15 +341,15 @@ add_deny_exer(
         fprintf(fp,"%s權限，權限降至 guest ，永不復權，並保留帳號，\n其 E-mail：%s 永不得在本站註冊。\n\n",cmode,u->vmail);
         deny_add_email(u,exer);
     }
-    if((adm & DENY_DAYS) && !(adm & DENY_MODE_GUEST))
+    if ((adm & DENY_DAYS) && !(adm & DENY_MODE_GUEST))
     {
-        if(adm & DENY_DAYS_1) { cdays = "一星期";x.deny = now + 86400 * 7;}
-        else if(adm & DENY_DAYS_2) { cdays = "兩星期";x.deny = now + 86400 * 14;}
-        else if(adm & DENY_DAYS_3) { cdays = "參星期";x.deny = now + 86400 * 21;}
-        else if(adm & DENY_DAYS_4) { cdays = "一個月";x.deny = now + 86400 * 31;}
-        else if(adm & DENY_DAYS_5) { cdays = "";x.deny = now + 86400 * 31;x.userlevel |= PERM_DENYSTOP;}
+        if (adm & DENY_DAYS_1) { cdays = "一星期";x.deny = now + 86400 * 7;}
+        else if (adm & DENY_DAYS_2) { cdays = "兩星期";x.deny = now + 86400 * 14;}
+        else if (adm & DENY_DAYS_3) { cdays = "參星期";x.deny = now + 86400 * 21;}
+        else if (adm & DENY_DAYS_4) { cdays = "一個月";x.deny = now + 86400 * 31;}
+        else if (adm & DENY_DAYS_5) { cdays = "";x.deny = now + 86400 * 31;x.userlevel |= PERM_DENYSTOP;}
         fprintf(fp,"%s\n",cdays);
-        if(adm & DENY_DAYS_5)
+        if (adm & DENY_DAYS_5)
             fprintf(fp,"期間: 永不復權\n\n");
         else
             fprintf(fp,"期間: %s%s，期限一過自動復權。\n\n",check_time ? "上次處罰到期日累加":"從今天起",cdays);
@@ -396,21 +396,21 @@ setup(
     if (!flog)
         return;
 
-    for(i=1;i<=num;i++)
+    for (i=1;i<=num;i++)
     {
         fscanf(flog,"%13s",buf);
         acct_load(u,buf);
 
-        if(u != NULL)
+        if (u != NULL)
         {
-            if(strcmp(u->userid,id))
+            if (strcmp(u->userid,id))
                 add_deny_exer(u,mode,1,exer);
             else
                 add_deny_exer(u,mode,NULL,exer);
         }
     }
 
-    if(mode & DENY_MODE_ALL)
+    if (mode & DENY_MODE_ALL)
         deny_log_email(email,(x.userlevel & PERM_DENYSTOP) ? -1 : x.deny);
     fclose(flog);
     unlink(fpath);
@@ -425,7 +425,7 @@ main(
     char *argv[])
 {
     char buf[256];
-    if(argc > 5 )
+    if (argc > 5 )
     {
         setup(argv[1],argv[2],atoi(argv[3]),argv[4],argv[5]);
         sprintf(buf,"mail %s.bbs@" MYHOSTNAME " < " FN_STOPPERM_MAIL,argv[4]);

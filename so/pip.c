@@ -680,7 +680,7 @@ struct pipcommands cmdtable[])
 
         default:
             for (; (key1 = cmd1->key1); cmd1++)
-                /*if(key == tolower(pipkey))*/
+                /*if (key == tolower(pipkey))*/
                 if (key1 == pipkey)
                 {
                     cmd1->fptr();

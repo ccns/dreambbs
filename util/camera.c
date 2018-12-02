@@ -64,7 +64,7 @@ mirror(
     int fd, size;
     char *ptr;
 
-    if(number >= MOVIE_MAX - 1)
+    if (number >= MOVIE_MAX - 1)
         return;
 
     fd = open(fpath, O_RDONLY);
@@ -182,18 +182,18 @@ main(
     {
         strcpy(fname, str);
 #ifdef	HAVE_RAND_INCOME
-        if(!strcmp(str,"income"))
+        if (!strcmp(str,"income"))
         {
             now = time(NULL);
             xtime = localtime(&now);
             ptime = *xtime;
             sprintf(fincome,"gem/brd/%s/@/@income",BRD_CAMERA);
             fd = open(fincome,O_RDONLY);
-            if((fd>=0) && !fstat(fd, &st) && (size = st.st_size) > 0)
+            if ((fd>=0) && !fstat(fd, &st) && (size = st.st_size) > 0)
             {
                 size /= sizeof(HDR);
                 pos = ((rand() / size) + ptime.tm_mon + ptime.tm_mday + ptime.tm_year + rand()) % size;
-                if(pos < 0)
+                if (pos < 0)
                     pos += size;
                 lseek(fd, (off_t) (sizeof(HDR) * pos), SEEK_SET);
                 read(fd, &hdr, sizeof(HDR));
@@ -204,7 +204,7 @@ main(
             }
             else
                 mirror(fpath);
-            if(fd>=0)
+            if (fd>=0)
                 close(fd);
         }
         else
@@ -220,19 +220,19 @@ main(
     sprintf(fpath,"gem/brd/%s/@/@note",BRD_CAMERA);
 
 #ifdef      HAVE_SONG_TO_CAMERA
-    for(j=0;j<=1;j++)
+    for (j=0;j<=1;j++)
     {
 #endif
         if ((fp = fopen(fpath, "r")))
         {
 #ifdef      HAVE_SONG_TO_CAMERA
-            if(j==1) sprintf(fpath,"brd/%s/@/",BRD_ORDERSONGS);
+            if (j==1) sprintf(fpath,"brd/%s/@/",BRD_ORDERSONGS);
 #endif
             str = strchr(fpath, '@');
             while (fread(&hdr, sizeof hdr, 1, fp) == 1)
             {
                 /* Thor.981110: 限制級則不放入movie中 */
-                if(hdr.xmode & (GEM_RESTRICT|GEM_LOCK))
+                if (hdr.xmode & (GEM_RESTRICT|GEM_LOCK))
                     continue;
 
                 *str = hdr.xname[7];
@@ -251,15 +251,15 @@ main(
                     ptr = buf;
 
 #ifdef	HAVE_SONG_TO_CAMERA
-                    if(j == 1 /*&& !strncmp(buf,str_author1,strlen(str_author1))*/)
+                    if (j == 1 /*&& !strncmp(buf,str_author1,strlen(str_author1))*/)
                     {
-                        for(k=0;k<=3 && ptr;k++)
+                        for (k=0;k<=3 && ptr;k++)
                         {
                             ptr = strchr(ptr,'\n');
-                            if(ptr)
+                            if (ptr)
                                 ptr++;
                         }
-                        if(!ptr)
+                        if (!ptr)
                             continue;
                     }
 #endif

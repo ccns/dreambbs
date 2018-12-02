@@ -78,7 +78,7 @@ keeplog(
         if (mode)
             unlink(fnlog);
     }
-    if(mode == 3)
+    if (mode == 3)
         hdr.xmode |= POST_MARKED;
 
     strcpy(hdr.title, title);
@@ -155,7 +155,7 @@ bshm_init(void)
         bshm = xshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
     }
 
-    if(bshm->uptime < 0)
+    if (bshm->uptime < 0)
         exit(1);
 
 }
@@ -178,7 +178,7 @@ static void
 save_hot(void)
 {
     int i,fd;
-    for(i=0;i<hotcount;i++)
+    for (i=0;i<hotcount;i++)
         hotboard[i].xid = 0;
     fd = open(FN_HOTBOARD,O_WRONLY);
     write(fd,hotboard,sizeof(HDR)*hotcount);
@@ -191,14 +191,14 @@ count_hot(
     BRD *brd)
 {
     int i;
-    for(i=0;i<hotcount;i++)
+    for (i=0;i<hotcount;i++)
     {
-        if(brd->n_reads >= hotboard[i].xid)
+        if (brd->n_reads >= hotboard[i].xid)
             break;
     }
-    if(i < MAX_HOTBOARD)
+    if (i < MAX_HOTBOARD)
     {
-        if(i < MAX_HOTBOARD-1)
+        if (i < MAX_HOTBOARD-1)
             memmove(hotboard + i + 1, hotboard + i ,sizeof(HDR)*(MAX_HOTBOARD-i-1));
         memset(hotboard + i, 0, sizeof(HDR));
         time(&(hotboard[i].chrono));
@@ -206,7 +206,7 @@ count_hot(
         sprintf(hotboard[i].title, "%-16s%s", brd->brdname, brd->title );
         hotboard[i].xmode = GEM_BOARD | GEM_FOLDER;
         hotboard[i].xid = brd->n_reads;
-        if(hotcount < MAX_HOTBOARD)
+        if (hotcount < MAX_HOTBOARD)
             hotcount++;
     }
 }
@@ -245,10 +245,10 @@ count_board(
     brd_fpath(flog,brd->brdname,FN_BRD_STAT);
 
     fd = open(flog,O_RDONLY);
-    if(fd < 0)
+    if (fd < 0)
         return;
 
-    if(fstat(fd,&st) || (count = st.st_size / sizeof(BSTAT)) <= 0)
+    if (fstat(fd,&st) || (count = st.st_size / sizeof(BSTAT)) <= 0)
     {
         close(fd);
         return;
@@ -276,21 +276,21 @@ count_board(
 
     do
     {
-        if(hour <= pos)
+        if (hour <= pos)
             add_log(&(bcount.hour),head);
-        if(day <= pos)
+        if (day <= pos)
             add_log(&(bcount.day),head);
-        if(week <= pos)
+        if (week <= pos)
             add_log(&(bcount.week),head);
-        if(twoweek <= pos)
+        if (twoweek <= pos)
             add_log(&(bcount.twoweek),head);
-        if(month <= pos)
+        if (month <= pos)
             add_log(&(bcount.month),head);
-        if(threemonth <= pos)
+        if (threemonth <= pos)
             add_log(&(bcount.threemonth),head);
-        if(halfyear <= pos)
+        if (halfyear <= pos)
             add_log(&(bcount.halfyear),head);
-        if(year <= pos)
+        if (year <= pos)
             add_log(&(bcount.year),head);
         pos++;
     } while (++head < tail);
@@ -317,20 +317,20 @@ count_board(
     memcpy(bcount.lhour,tmp,sizeof(BSTAT) * 23);
     memcpy(&(bcount.lhour[23]),&(bcount.hour),sizeof(BSTAT));
 
-    if(ntime.tm_hour == 0)
+    if (ntime.tm_hour == 0)
     {
         memcpy(tmp,&(bcount.lday[1]),sizeof(BSTAT) * 23);
         memcpy(bcount.lday,tmp,sizeof(BSTAT) * 23);
         memcpy(&(bcount.lday[23]),&(bcount.day),sizeof(BSTAT));
 
-        if(ntime.tm_wday == 0)
+        if (ntime.tm_wday == 0)
         {
             memcpy(tmp,&(bcount.lweek[1]),sizeof(BSTAT) * 23);
             memcpy(bcount.lweek,tmp,sizeof(BSTAT) * 23);
             memcpy(&(bcount.lweek[23]),&(bcount.week),sizeof(BSTAT));
         }
 
-        if(ntime.tm_mday == 1)
+        if (ntime.tm_mday == 1)
         {
             memcpy(tmp,&(bcount.lmonth[1]),sizeof(BSTAT) * 23);
             memcpy(bcount.lmonth,tmp,sizeof(BSTAT) * 23);
@@ -385,15 +385,15 @@ main(void)
     tail = head + bshm->number;
     do
     {
-        if(((head->readlevel & (PERM_BASIC|PERM_VALID|PERM_POST)) || head->readlevel == 0) && head->brdname[0])
+        if (((head->readlevel & (PERM_BASIC|PERM_VALID|PERM_POST)) || head->readlevel == 0) && head->brdname[0])
         {
             count_hot(head);
         }
-        if(!(head->battr & BRD_NOTOTAL) && head->brdname[0])
+        if (!(head->battr & BRD_NOTOTAL) && head->brdname[0])
         {
 
 
-//          if(!str_cmp(head->brdname,"Test") || !str_cmp(head->brdname,"WindTop"))
+//          if (!str_cmp(head->brdname,"Test") || !str_cmp(head->brdname,"WindTop"))
 //          {
 //              printf("DEBUG: bname:%s  reads:%d  posts:%d\n",head->brdname,head->n_reads,head->n_posts);
                 memset(&bstat,0,sizeof(BSTAT));

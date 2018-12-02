@@ -33,11 +33,11 @@ reaper(
     printf("> processing account %-20s ",lowid);
 
     sprintf(buf,"%s/.DIR",fpath);
-    if((fd = open(buf,O_RDONLY)) >= 0)
+    if ((fd = open(buf,O_RDONLY)) >= 0)
     {
         fstat(fd, &st);
         size = st.st_size/sizeof(HDR);
-        if(size <= 0)
+        if (size <= 0)
         {
             base = NULL;
         }
@@ -59,7 +59,7 @@ reaper(
 
     if (!(dirp = opendir(folder)))
     {
-        if(base)
+        if (base)
             free(base);
         return;
     }
@@ -72,21 +72,21 @@ reaper(
         fname = de->d_name;
         if (fname[0] > ' ' && fname[0] != '.')
         {
-            if(base)
+            if (base)
             {
-                for(head = base;head < tail;head++)
+                for (head = base;head < tail;head++)
                 {
-                    if(!strcmp(head->xname,fname))
+                    if (!strcmp(head->xname,fname))
                     {
                         check = 1;
                         break;
                     }
                 }
             }
-            if(!check)
+            if (!check)
             {
                 strcpy(ptr,fname);
-                if(!(!stat(folder,&st) && (st.st_atime > now)))
+                if (!(!stat(folder,&st) && (st.st_atime > now)))
                 {
                     u_size += st.st_size;
                     ulink++;
@@ -127,11 +127,11 @@ expire(
     printf("> processing board %-20s ",lowid);
 
     sprintf(buf,"%s/.DIR",fpath);
-    if((fd = open(buf,O_RDONLY)) >= 0)
+    if ((fd = open(buf,O_RDONLY)) >= 0)
     {
         fstat(fd, &st);
         size = st.st_size/sizeof(HDR);
-        if(size <= 0)
+        if (size <= 0)
         {
             base = NULL;
         }
@@ -154,7 +154,7 @@ expire(
     str = strchr(folder,'@') ;
     *str = '0';
 
-    while(1)
+    while (1)
     {
         ptr = str+1;
         *ptr = 0;
@@ -167,21 +167,21 @@ expire(
                 fname = de->d_name;
                 if (fname[0] > ' ' && fname[0] != '.')
                 {
-                    if(base)
+                    if (base)
                     {
-                        for(head = base;head < tail;head++)
+                        for (head = base;head < tail;head++)
                         {
-                            if(!strcmp(head->xname,fname))
+                            if (!strcmp(head->xname,fname))
                             {
                                 check = 1;
                                 break;
                             }
                         }
                     }
-                    if(!check)
+                    if (!check)
                     {
                         strcpy(ptr,fname);
-                        if(!(!stat(folder,&st) && (st.st_atime > now)))
+                        if (!(!stat(folder,&st) && (st.st_atime > now)))
                         {
                             u_size += st.st_size;
                             ulink++;
@@ -202,9 +202,9 @@ expire(
             }
             closedir(dirp);
         }
-        if((*str)++ == '9')
+        if ((*str)++ == '9')
             *str = 'A';
-        if((*str) == 'W')
+        if ((*str) == 'W')
             break;
     }
     free(base);
@@ -232,9 +232,9 @@ traverse(
         if (fname[0] > ' ' && fname[0] != '.')
         {
             strcpy(str, fname);
-            if(mode == 1)
+            if (mode == 1)
                 reaper(fpath, fname);
-            else if(mode == 2)
+            else if (mode == 2)
                 expire(fpath, fname);
         }
     }
@@ -251,13 +251,13 @@ main(
 
     chdir(BBSHOME);
 
-    if(argc > 1 && !strncmp(argv[1],"-a",2))
+    if (argc > 1 && !strncmp(argv[1],"-a",2))
     {
-        if(argc > 2)
+        if (argc > 2)
         {
             str_lower(buf,argv[2]);
             sprintf(fpath,"usr/%c/%s",*buf,buf);
-            if(!access(fpath,0))
+            if (!access(fpath,0))
                 reaper(fpath, buf);
             else
                 printf("error open account %s\n",buf);
@@ -280,13 +280,13 @@ main(
             }
         }
     }
-    else if(argc > 1 && !strncmp(argv[1],"-b",2))
+    else if (argc > 1 && !strncmp(argv[1],"-b",2))
     {
-        if(argc > 2)
+        if (argc > 2)
         {
             strcpy(buf,argv[2]);
             sprintf(fpath,"brd/%s",buf);
-            if(!access(fpath,0))
+            if (!access(fpath,0))
                 expire(fpath, buf);
             else
                 printf("error open board %s\n",buf);
