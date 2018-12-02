@@ -158,33 +158,33 @@ myfavorite_item(
             if (bno > 4999)
                 str2 = "\033[1;32m TOP \033[m";
             else if (bno > 999)
-                str2 = "\033[1;32m  Éq\033[m ";
+                str2 = "\033[1;32m  Éq \033[m";
             else if (bno > 799)
-                str2 = "\033[1;35m  Éq\033[m ";
+                str2 = "\033[1;35m  Éq \033[m";
             else if (bno > 699)
-                str2 = "\033[1;33m  Éq\033[m ";
+                str2 = "\033[1;33m  Éq \033[m";
             else if (bno > 599)
-                str2 = "  \033[1;42mÃz\033[m ";
+                str2 = "\033[1;42m  Ãz \033[m";
             else if (bno > 499)
-                str2 = "  \033[1;45mÃz\033[m ";
+                str2 = "\033[1;45m  Ãz \033[m";
             else if (bno > 449)
-                str2 = "  \033[1;44mÃz\033[m ";
+                str2 = "\033[1;44m  Ãz \033[m";
             else if (bno > 399)
-                str2 = "\033[1;32m  Ãz\033[m ";
+                str2 = "\033[1;32m  Ãz \033[m";
             else if (bno > 349)
-                str2 = "\033[1;35m  Ãz\033[m ";
+                str2 = "\033[1;35m  Ãz \033[m";
             else if (bno > 299)
-                str2 = "\033[1;33m  Ãz\033[m ";
+                str2 = "\033[1;33m  Ãz \033[m";
             else if (bno > 249)
-                str2 = "\033[1;36m  Ãz\033[m ";
+                str2 = "\033[1;36m  Ãz \033[m";
             else if (bno > 199)
-                str2 = "\033[1;31m  Ãz\033[m ";
+                str2 = "\033[1;31m  Ãz \033[m";
             else if (bno > 149)
-                str2 = "\033[1;37m  Ãz\033[m ";
+                str2 = "\033[1;37m  Ãz \033[m";
             else if (bno > 99)
-                str2 = "\033[1;31m HOT\033[m ";
+                str2 = "\033[1;31m HOT \033[m";
             else if (bno > 49)
-                str2 = "\033[1;37m HOT\033[m ";
+                str2 = "\033[1;37m HOT \033[m";
             else if (bno > 1) /* r2.170810: let somebody know which board is still "alive" :P */
                 sprintf(str2, "  %2d ", bno);
             else
