@@ -1,6 +1,6 @@
 # Dreamland-BBS (夢之大地電子布告欄系統)
 
-![](https://i.imgur.com/c7XQP7k.png)
+[![](https://i.imgur.com/c7XQP7k.png)](https://github.com/ccns/dreambbs)
 
 This repository is the ***current code*** of Dreamland-bbs ( telnet://ccns.cc ) at NCKU. (under re-construction)
 
