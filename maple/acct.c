@@ -918,7 +918,7 @@ add_deny(
         if ((adm & DENY_MODE_ALL) == DENY_MODE_ALL)
         {
             x.userlevel |= (PERM_DENYPOST | PERM_DENYTALK | PERM_DENYCHAT | PERM_DENYMAIL | PERM_DENYNICK);
-            cmode = " Talk , Mail , \nPost , 更改暱稱";
+            cmode = " Talk、Mail、\nPost、更改暱稱";
         }
         else if (adm & DENY_MODE_POST)
         {
@@ -947,8 +947,8 @@ add_deny(
         x.userlevel |= (PERM_DENYPOST | PERM_DENYTALK | PERM_DENYCHAT | PERM_DENYMAIL | PERM_DENYNICK | PERM_DENYSTOP);
         x.userlevel &= ~(PERM_BASIC | PERM_VALID);
         x.deny += 86400 * 31;
-        cmode = " Talk , Mail , \nPost , 更改暱稱";
-        fprintf(fp,"%s權限，權限降至 guest，永不復權，並保留帳號，\n其 E-mail：%s 永不得在本站註冊。\n\n",cmode,u->vmail);
+        cmode = " Talk、Mail、\nPost、更改暱稱";
+        fprintf(fp,"%s權限，權限降至 guest，永不復權，並保留帳號，\n其 E-mail：%s 永不得在本站註冊。\n\n",cmode,u->vmail[0] ? u->vmail : "[無認證信箱]");
         deny_add_email(u);
     }
     if ((adm & DENY_DAYS) && !(adm & DENY_MODE_GUEST))
@@ -959,9 +959,9 @@ add_deny(
         else if (adm & DENY_DAYS_3) { cdays = "三星期";x.deny += 86400 * 21;}
         else if (adm & DENY_DAYS_4) { cdays = "一個月";x.deny += 86400 * 31;}
         else if (adm & DENY_DAYS_5) { cdays = "";x.deny += 86400 * 31;x.userlevel |= PERM_DENYSTOP;}
-        fprintf(fp,"%s\n",cdays);
+        fprintf(fp,"%s。\n",cdays);
         if (adm & DENY_DAYS_5)
-            fprintf(fp,"期間: 永不復權\n\n");
+            fprintf(fp,"期間: 永不復權。\n\n");
         else
             fprintf(fp,"期間: %s%s，期限一過自動復權。\n\n",check_time ? "上次處罰到期日累加":"從今天起",cdays);
     }
