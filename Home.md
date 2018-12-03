@@ -2,7 +2,7 @@
 
 This page will collect some info of how to use & how to install DreamBBS system. :)
 
-## [Releases](https://github.com/ccns/dreambbs/releases)
+## [Latest Releases](https://github.com/ccns/dreambbs/releases)
   + [Version 0.97.0 (codename: Stratosphere)](https://github.com/ccns/dreambbs/releases/tag/v0.97.0)
   + [Version 0.96.3 (Final)](https://github.com/ccns/dreambbs/releases/tag/v0.96.3)
 
