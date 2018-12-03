@@ -16,7 +16,7 @@ LNKOBJS	= bbslink.o bbslib.o convcode.o inntobbs.o rec_article.o nocem.o history
 
 EXE	= innbbsd bbslink
 
-all: 
+all:
 	@$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
 
 bbslink: $(LNKOBJS)

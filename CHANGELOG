@@ -1,10 +1,10 @@
 
 往後版本修改記錄方式如下:
 
-。程式碼排版整理、微調 與 相關文件、範例檔修正: 
+。程式碼排版整理、微調 與 相關文件、範例檔修正:
   僅用 git 版控記錄相關 commit , 並盡速上傳至 github。
 
-。重大程式碼修改以及各種 bug 修正 (會影響到使用者操作等情況)： 
+。重大程式碼修改以及各種 bug 修正 (會影響到使用者操作等情況)：
   會發佈公告在 夢之大地 ( telnet://ccns.cc ) Dream_commit 看板
 
 以下為風之塔(Wind's Top BBS)原始版本相關修改記錄：
@@ -17,10 +17,10 @@
 	修改檔案	innbbsd/bbslink.c
 
 。2004/04/20 visor	修改 maple/favorite.c favorite_main() 造成斷線的問題
-	修改檔案	maple/favorite.c  
+	修改檔案	maple/favorite.c
 
 。2004/04/20 visor	修改 maple/cache.c observeshm_load() 造成斷線的問題
-	修改檔案	maple/cache.c  
+	修改檔案	maple/cache.c
 
 。2004/03/13 visor	修改 so/pydict.c  so/dictd.c 安全性問題
 	修改檔案	so/pydict.c  so/dictd.c
@@ -28,87 +28,87 @@
 。2004/01/12 visor	修改 expire.c 砍錯文章 bug
 	修改檔案	util/expire.c
 
-。2003/08/29 visor	修改 gem-check 誤砍文章的問題 
-	修改檔案	util/gem-check.c 
+。2003/08/29 visor	修改 gem-check 誤砍文章的問題
+	修改檔案	util/gem-check.c
 
-。2003/08/18 visor	修改 bmtad 收 QP Encode 文章的問題 
+。2003/08/18 visor	修改 bmtad 收 QP Encode 文章的問題
 	修改檔案	bmtad/bmtad.c lib/str_decode.c
 
-。2003/08/17 visor	新增 看板資訊統計 
-	修改檔案	maple/board.c maple/post.c innbbsd/receive_article.c include/struct.h 
+。2003/08/17 visor	新增 看板資訊統計
+	修改檔案	maple/board.c maple/post.c innbbsd/receive_article.c include/struct.h
 	新增檔案	util/brdstat.c so/brdstat.c
 
-。2003/08/13 verit	新增 處罰名單加上搜尋 
+。2003/08/13 verit	新增 處罰名單加上搜尋
 	修改檔案	so/violate.c
 
-。2002/06/13 visor      新增 循環閱讀 
+。2002/06/13 visor      新增 循環閱讀
 	修改檔案	maple/acct.c maple/xover.c
 
-。2002/06/13 visor      關閉 小雞對戰 
+。2002/06/13 visor      關閉 小雞對戰
 	修改檔案	so/pip.c maple/talk.c
 
-。2002/06/13 visor      新增 推薦文章 
+。2002/06/13 visor      新增 推薦文章
 	修改檔案	maple/post.c
 
-。2002/06/13 visor      新增 孔明棋 
+。2002/06/13 visor      新增 孔明棋
 	新增檔案	so/km.c
 
-。2002/06/12 visor      修改 使用者名單資料結構 
+。2002/06/12 visor      修改 使用者名單資料結構
 	修改檔案	maple/talk.c
 
-。2002/06/03 visor	修改 連署系統 
+。2002/06/03 visor	修改 連署系統
 	修改檔案	so/newboard.c
 
-。2002/05/10 visor	新增 將風之塔包裝成 Ports  
+。2002/05/10 visor	新增 將風之塔包裝成 Ports
 
-。2002/04/11 visor	修改 使用者修改功能 
-	修改檔案	maple/post.c maple/acct.c include/hdr.h include/struct.h 
+。2002/04/11 visor	修改 使用者修改功能
+	修改檔案	maple/post.c maple/acct.c include/hdr.h include/struct.h
 			include/config.h include/global.h
 
-。2002/03/30 visor	新增 系統觀察名單 
-	maple/bbsd.c maple/cache.c maple/menu.c include/struct.h 
+。2002/03/30 visor	新增 系統觀察名單
+	maple/bbsd.c maple/cache.c maple/menu.c include/struct.h
 	新增檔案	so/observe.c
 
-。2002/03/21 visor	修改 新聞閱讀系統(抓取路徑問題) 
+。2002/03/21 visor	修改 新聞閱讀系統(抓取路徑問題)
 	修改檔案	util/news.c
 
-。2002/03/11 visor	新增 課表報時系統 
+。2002/03/11 visor	新增 課表報時系統
 	新增檔案	util/classtable_alert.c maple/cache.c maple/bbsd.c
 
-。2002/03/08 visor	修改 新聞閱讀系統(類別上限) 
+。2002/03/08 visor	修改 新聞閱讀系統(類別上限)
 	修改檔案	so/news_viewer.c
 
-。2002/03/08 visor	修改 新聞閱讀系統(使用 proxy) 
+。2002/03/08 visor	修改 新聞閱讀系統(使用 proxy)
 	修改檔案	util/news.c
 
-。2002/03/07 visor	修改 傳訊(收訊者下站的問題) 
+。2002/03/07 visor	修改 傳訊(收訊者下站的問題)
 	修改檔案	maple/talk.c
 
-。2002/03/06 visor	新增 好友名單搜尋功能 
+。2002/03/06 visor	新增 好友名單搜尋功能
 	修改檔案	maple/talk.c
 
-。2002/03/05 visor	修改 好友上站通知(不傳訊給壞人) 
+。2002/03/05 visor	修改 好友上站通知(不傳訊給壞人)
 	修改檔案	maple/talk.c
 
-。2002/03/05 visor	修改 系統網友協尋(不傳訊給壞人) 
+。2002/03/05 visor	修改 系統網友協尋(不傳訊給壞人)
 	修改檔案	maple/talk.c
 
-。2002/02/10 visor	新增 拒收訊息列表 
+。2002/02/10 visor	新增 拒收訊息列表
 	修改檔案	maple/talk.c
 
-。2002/01/31 visor	新增 新版功課表 
+。2002/01/31 visor	新增 新版功課表
 	新增檔案	so/table2.c
 
-。2001/11/21 visor	新增 串接文章模式搜尋站內文章 
+。2001/11/21 visor	新增 串接文章模式搜尋站內文章
 	修改檔案	maple/post.c
 
-。2001/07/31 visor	修改 使用者喜好設定(擴充成64bit) 
+。2001/07/31 visor	修改 使用者喜好設定(擴充成64bit)
 	修改檔案	maple/acct.c
 
-。2001/07/17 visor	新增 新聞閱讀系統 
+。2001/07/17 visor	新增 新聞閱讀系統
 	新增檔案	so/news_viewer.c util/news.c
 
-。2001/01/01 visor	新增 ChangeLog  
+。2001/01/01 visor	新增 ChangeLog
 	新增檔案	ChangeLog
 
 > ----------------------------------------------------------------------------

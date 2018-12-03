@@ -26,7 +26,7 @@ OBJ	+= acct.o bbsd.o board.o cache.o edit.o \
 	  window.o myfavorite.o
 
 .if $(USE_PMORE)
-SRC	+= pmore.c 
+SRC	+= pmore.c
 OBJ	+= pmore.o
 .endif
 
@@ -36,7 +36,7 @@ EXE	= bbsd xchatd
 
 .c.o:	; $(CC) $(CFLAGS) -c $*.c
 
-all: 
+all:
 	@$(MAKE) CC=$(CC) CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
 
 xchatd:	xchatd.o

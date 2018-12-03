@@ -16,9 +16,9 @@ SRCROOT	= ..
 
 .c.o:	; $(CC) $(MAKEFLAG) $(CFLAGS) -g -c $*.c
 
-EXE	= lib_str_decode lib_str_pat lib_str_xor lib_xsort lib_splay testsize 
+EXE	= lib_str_decode lib_str_pat lib_str_xor lib_xsort lib_splay testsize
 
-all: 
+all:
 	@$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
 
 lib_str_decode: lib_str_decode.o
@@ -39,7 +39,7 @@ lib_splay: lib_splay.o
 testsize: testsize.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
-test: 
+test:
 	@echo -e "\n"; for i in $(EXE); do ./$$i && echo -e "\x1b[1;32m$$i test done!\x1b[0m\n" || ( echo -e "\x1b[1;31m$$i test failed!\n\x1b[0m" && exit 1 ); done
 
 sizetest:
