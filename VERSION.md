@@ -31,12 +31,13 @@
         - features in plan:
           * add simple code test utilities
           * refine layout: removing trailing whitespaces.
-    + Drop plan of v0.98~v0.99 due to big change and it will be tested for a long time.
+    + Drop plan of `v0.98`~`v0.99` due to big change and it will be tested for a long time.
     + `v1.0`: Version 1.0, codename `rimuru` (not released yet)
         - features in plan:
           * applying resizing term feature
           * port `pfterm` in this release version
           * ...
+    + release date (plan): 1st, March, 2019.
 
 * preparing version name about `current`:
     + `v1.0-CURRENT`: developing for preparing version 1.0.
