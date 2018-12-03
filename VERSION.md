@@ -28,6 +28,7 @@
 
     + `v0.97`: Version 0.97, codename `stratosphere` ( **latest** )
         - `v0.97-RCx`~`v0.97.0`: pre-release
+        - `v0.97.1`: detail fixes based on `v0.97.0` (not released yet)
         - features in plan:
           * add simple code test utilities
           * refine layout: removing trailing whitespaces.
