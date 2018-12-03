@@ -78,7 +78,7 @@
 #define PERM_READMAIL	PERM_BASIC
 
 #define PERM_INTERNET	PERM_VALID	/* 身份認證過關的才能寄信到
-					   Internet */
+                                            Internet */
 
 #define PERM_FORWARD	PERM_INTERNET	/* to do the forwarding */
 

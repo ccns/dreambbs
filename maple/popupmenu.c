@@ -32,162 +32,162 @@ is_big5(char *src,int pos,int mode)
 
     for(str = src;word<pos;str++)
     {
-       if(mode)
-       {
-         if(*str == '\033')
-         {
-           str = strchr(str,'m');
-           if(!str)
-             return -1;
-           continue ;
-         }
-       }
+        if(mode)
+        {
+            if(*str == '\033')
+            {
+                str = strchr(str,'m');
+                if(!str)
+                    return -1;
+                continue ;
+            }
+        }
 
-       wstate = (*str<0)?((wstate==1)?0:1):0;
-       word++;
+        wstate = (*str<0)?((wstate==1)?0:1):0;
+        word++;
     }
 
     if(wstate)
-      return -1;
+        return -1;
 
     if(*str<0 && wstate==0)
-      return 1;
+        return 1;
     else
-      return 0;
+        return 0;
 }
 
 static int
 do_cmd(MENU *mptr,XO *xo,int x,int y)
 {
-   unsigned int mode;
-   void *p;
-   int (*func) (void);
-   int (*func_unary) (XO *xo);
+    unsigned int mode;
+    void *p;
+    int (*func) (void);
+    int (*func_unary) (XO *xo);
 
-   if(mptr->umode < 0)
-   {
-      p = DL_get(mptr->func);
-      if(!p)
-        return 0;
-      mptr->func = p;
-      mptr->umode = - (mptr->umode);
-   }
-
-   switch (mptr->umode)
-   {
-      case POPUP_SO :
+    if(mptr->umode < 0)
+    {
         p = DL_get(mptr->func);
-        if(!p) return 0;
+        if(!p)
+            return 0;
         mptr->func = p;
-        mptr->umode = POPUP_FUN;
-        func = p;
-        mode = (*func) ();
-        return -1;
-      case POPUP_MENU :
-//        sprintf(t,"【%s】",mptr->desc);
-#ifdef M3_USE_PFTERM
-        scr_restore(&old_screen); // restore foot
-#else
-        vs_restore(sl);
-#endif
-        return do_menu((MENU *)mptr->func,xo,x,y);
-      case POPUP_XO :
-        func_unary = mptr->func;
-        mode = (*func_unary) (xo);
-        return -1;
-      case POPUP_FUN :
-        func = mptr->func;
-        mode = (*func) ();
-        return -1;
-   }
+        mptr->umode = - (mptr->umode);
+    }
 
-   return -1;
+    switch (mptr->umode)
+    {
+        case POPUP_SO :
+            p = DL_get(mptr->func);
+            if(!p) return 0;
+            mptr->func = p;
+            mptr->umode = POPUP_FUN;
+            func = p;
+            mode = (*func) ();
+            return -1;
+        case POPUP_MENU :
+//          sprintf(t,"【%s】",mptr->desc);
+#ifdef M3_USE_PFTERM
+            scr_restore(&old_screen); // restore foot
+#else
+            vs_restore(sl);
+#endif
+            return do_menu((MENU *)mptr->func,xo,x,y);
+        case POPUP_XO :
+            func_unary = mptr->func;
+            mode = (*func_unary) (xo);
+            return -1;
+        case POPUP_FUN :
+            func = mptr->func;
+            mode = (*func) ();
+            return -1;
+    }
+
+    return -1;
 }
 
 /* verit . 計算扣掉色碼的實際長度 */
 static int
 count_len(
-  char *data)
+    char *data)
 {
-  int len;
-  char *ptr,*tmp;
-  ptr = data;
-  len = strlen(data);
+    int len;
+    char *ptr,*tmp;
+    ptr = data;
+    len = strlen(data);
 
-  while(ptr)
-  {
-    ptr = strstr(ptr,"\033");
-    if(ptr)
+    while(ptr)
     {
-      for(tmp=ptr;*tmp!='m';tmp++);
-      len -= (tmp-ptr+1);
-      ptr = tmp+1;
+        ptr = strstr(ptr,"\033");
+        if(ptr)
+        {
+            for(tmp=ptr;*tmp!='m';tmp++);
+            len -= (tmp-ptr+1);
+            ptr = tmp+1;
+        }
     }
-  }
-  return len;
+    return len;
 }
 
 /* verit . 取得顏色 */
 static void
 get_color(char *s,int len,int *fc,int *bc,int *bbc)
 {
-   char buf[32],*p,*e;
-   int color;
-   int state = 0,reset=0,exit = 0;
+    char buf[32],*p,*e;
+    int color;
+    int state = 0,reset=0,exit = 0;
 
-   memset(buf,0,sizeof(buf));
-   strncpy(buf,s+2,len-1);
+    memset(buf,0,sizeof(buf));
+    strncpy(buf,s+2,len-1);
 
-   for( p = e = &buf[0] ; exit == 0 ; ++p)
-   {
-       if(*p == ';' || *p == 'm')
-       {
-         if(*p == 'm')
-            exit = 1;
-         *p = 0;
+    for( p = e = &buf[0] ; exit == 0 ; ++p)
+    {
+        if(*p == ';' || *p == 'm')
+        {
+            if(*p == 'm')
+                    exit = 1;
+            *p = 0;
 
-         color = atoi(e);
+            color = atoi(e);
 
-         if(color == 0)
-         {
+            if(color == 0)
+            {
+                *bbc = 0;
+                reset = 1;
+            }
+            else if(color > 0 && color < 10)
+            {
+                *bbc = color;
+                state |= 0x1;
+            }
+            else if(color>29 && color < 38)
+            {
+                *fc = color;
+                state |= 0x2;
+            }
+            else if(color>39 && color < 48)
+            {
+                *bc = color;
+                state |= 0x4;
+            }
+            e = p+1;
+        }
+    }
+
+    if(reset == 1)
+    {
+        if(!(state & 0x4))
+            *bc = 40;
+        if(!(state & 0x2))
+            *fc = 37;
+        if(!(state & 0x1))
             *bbc = 0;
-            reset = 1;
-         }
-         else if(color > 0 && color < 10)
-         {
-            *bbc = color;
-            state |= 0x1;
-         }
-         else if(color>29 && color < 38)
-         {
-            *fc = color;
-            state |= 0x2;
-         }
-         else if(color>39 && color < 48)
-         {
-            *bc = color;
-            state |= 0x4;
-         }
-         e = p+1;
-       }
-   }
+    }
 
-   if(reset == 1)
-   {
-     if(!(state & 0x4))
-       *bc = 40;
-     if(!(state & 0x2))
-       *fc = 37;
-     if(!(state & 0x1))
-       *bbc = 0;
-   }
-
-   if(state == 0)
-   {
-     *bc = 40;
-     *fc = 37;
-     *bbc = 0;
-   }
+    if(state == 0)
+    {
+        *bc = 40;
+        *fc = 37;
+        *bbc = 0;
+    }
 
 }
 
@@ -195,99 +195,99 @@ get_color(char *s,int len,int *fc,int *bc,int *bbc)
 static void
 vs_line(char *msg,int x,int y)
 {
-   char buf[512],color[16],*str,*tmp,*cstr;
-   int len = count_len(msg);
-   int word,slen,fc=37,bc=40,bbc=0;
+    char buf[512],color[16],*str,*tmp,*cstr;
+    int len = count_len(msg);
+    int word,slen,fc=37,bc=40,bbc=0;
 
-   memset(buf,0,sizeof(buf));
+    memset(buf,0,sizeof(buf));
 
-   sl[x].data[sl[x].len] = '\0';
-   str = tmp = sl[x].data;
+    sl[x].data[sl[x].len] = '\0';
+    str = tmp = sl[x].data;
 
-   for(word=0;word<y && *str;++str)
-   {
-      if(*str == KEY_ESC)
-      {
-         cstr = strchr(str,'m');
-         get_color(str,cstr-str,&fc,&bc,&bbc);
-         str = cstr;
-         continue;
-      }
-      word++;
-   }
-
-   strncpy(buf,sl[x].data, str - tmp);
-
-   while(word++<y)
-     strcat(buf," ");
-
-   slen = strlen(buf)-1;
-
-   /* verit . 假如這為中文字元的前半碼就清掉 */
-   if(is_big5(buf,slen,0)>0)
-     buf[slen] = ' ';
-
-   strcat(buf,msg);
-
-   if(*str)
-   {
-      for(word=0;word<len && *str;++str)
-      {
+    for(word=0;word<y && *str;++str)
+    {
         if(*str == KEY_ESC)
         {
-           cstr = strchr(str,'m');
-           get_color(str,cstr-str,&fc,&bc,&bbc);
-           str = cstr;
-           continue;
+            cstr = strchr(str,'m');
+            get_color(str,cstr-str,&fc,&bc,&bbc);
+            str = cstr;
+            continue;
         }
         word++;
-      }
+    }
 
-      if(*str)
-      {
-        /* verit . 解決後面顏色補色 */
-        sprintf(color,"\033[%d;%d;%dm",bbc,fc,bc);
-        strcat(buf,color);
+    strncpy(buf,sl[x].data, str - tmp);
 
-        /* verit . 假如最後一字元為中文的後半部就清掉 */
-        slen = strlen(buf);
-        strcat(buf,str);
-        if(is_big5(tmp,str-tmp,0)<0)
-          buf[slen] = ' ';
-      }
-   }
+    while(word++<y)
+        strcat(buf," ");
 
-   move(x,0);
-   outs(buf);
+    slen = strlen(buf)-1;
+
+    /* verit . 假如這為中文字元的前半碼就清掉 */
+    if(is_big5(buf,slen,0)>0)
+        buf[slen] = ' ';
+
+    strcat(buf,msg);
+
+    if(*str)
+    {
+        for(word=0;word<len && *str;++str)
+        {
+            if(*str == KEY_ESC)
+            {
+                cstr = strchr(str,'m');
+                get_color(str,cstr-str,&fc,&bc,&bbc);
+                str = cstr;
+                continue;
+            }
+            word++;
+        }
+
+        if(*str)
+        {
+            /* verit . 解決後面顏色補色 */
+            sprintf(color,"\033[%d;%d;%dm",bbc,fc,bc);
+            strcat(buf,color);
+
+            /* verit . 假如最後一字元為中文的後半部就清掉 */
+            slen = strlen(buf);
+            strcat(buf,str);
+            if(is_big5(tmp,str-tmp,0)<0)
+                buf[slen] = ' ';
+        }
+    }
+
+    move(x,0);
+    outs(buf);
 
 }
 #else
 static void
 vs_line(msg)
-  char *msg;
+    char *msg;
 {
-  int head, tail;
+    int head, tail;
 
-  if (msg)
-    head = (strlen(msg) + 1) >> 1;
-  else
-    head = 0;
+    if (msg)
+        head = (strlen(msg) + 1) >> 1;
+    else
+        head = 0;
 
-  tail = head;
+    tail = head;
 
-  while (head++ < 38)
-    outc('-');
+    while (head++ < 38)
+        outc('-');
 
-  if (tail)
-  {
-    outc(' ');
-    outs(msg);
-    outc(' ');
-  }
+    if (tail)
+    {
+        outc(' ');
+        outs(msg);
+        outc(' ');
+    }
 
-  while (tail++ < 38)
-    outc('-');
-  outc('\n');
+    while (tail++ < 38)
+        outc('-');
+    outc('\n');
 }
 #endif //not M3_USE_PFTERM
 
@@ -295,190 +295,190 @@ vs_line(msg)
 static void
 draw_item(char *desc,int mode,int x,int y)
 {
-   char buf[128];
+    char buf[128];
 
-   sprintf(buf," \033[0;37m▏\033[4%d;37m%s(\033[1;36m%c\033[0;37;4%dm)%-25s%s\033[0;47;30m▉\033[40;30;1m▉\033[m ",mode,(mode>0)?"┤":"  ",*desc,mode,desc+1,(mode>0)?"├":"  ");
-   vs_line(buf,x,y);
-   move(b_lines,0);
+    sprintf(buf," \033[0;37m▏\033[4%d;37m%s(\033[1;36m%c\033[0;37;4%dm)%-25s%s\033[0;47;30m▉\033[40;30;1m▉\033[m ",mode,(mode>0)?"┤":"  ",*desc,mode,desc+1,(mode>0)?"├":"  ");
+    vs_line(buf,x,y);
+    move(b_lines,0);
 }
 
 
 static int
 draw_menu(MENU *pmenu[20],int num,char *title,int x,int y,int cur)
 {
-   char buf[128];
-   int i;
-   char t[128];
+    char buf[128];
+    int i;
+    char t[128];
 
-   sprintf(t,"【%s】",title);
+    sprintf(t,"【%s】",title);
 
-   sprintf(buf," \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\033[m   ");
-   vs_line(buf,x-2,y);
-   sprintf(buf," \033[0;37;44m▏\033[1m%-31s \033[0;47;34m▉\033[m   ",t);
-   vs_line(buf,x-1,y);
-   for(i=0;i<num;++i,++x)
-   {
-      draw_item(pmenu[i]->desc,(i==cur)?1:0,x,y);
-   }
-   sprintf(buf," \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\033[40;30;1m▉\033[m ");
-   vs_line(buf,x,y);
-   return 0;
+    sprintf(buf," \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\033[m   ");
+    vs_line(buf,x-2,y);
+    sprintf(buf," \033[0;37;44m▏\033[1m%-31s \033[0;47;34m▉\033[m   ",t);
+    vs_line(buf,x-1,y);
+    for(i=0;i<num;++i,++x)
+    {
+        draw_item(pmenu[i]->desc,(i==cur)?1:0,x,y);
+    }
+    sprintf(buf," \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\033[40;30;1m▉\033[m ");
+    vs_line(buf,x,y);
+    return 0;
 }
 
 static int
 do_menu(
-  MENU pmenu[],
-  XO *xo,
-  int x,
-  int y)
+    MENU pmenu[],
+    XO *xo,
+    int x,
+    int y)
 {
-   int cur,old_cur,num,tmp;
-   char c;
-   MENU *table[20];
-   char *title;
-   MENU *table_title;
+    int cur,old_cur,num,tmp;
+    char c;
+    MENU *table[20];
+    char *title;
+    MENU *table_title;
 
-   memset(table ,0 ,sizeof(table));
-   /* verit. menu 權限檢查 */
-   for( tmp=0,num=-1 ; pmenu[tmp].umode != POPUP_MENUTITLE ; tmp++ )
-   {
-     if(pmenu[tmp].level == 0 || pmenu[tmp].level & cuser.userlevel)
-       table[++num] = &pmenu[tmp];
+    memset(table ,0 ,sizeof(table));
+    /* verit. menu 權限檢查 */
+    for( tmp=0,num=-1 ; pmenu[tmp].umode != POPUP_MENUTITLE ; tmp++ )
+    {
+        if(pmenu[tmp].level == 0 || pmenu[tmp].level & cuser.userlevel)
+            table[++num] = &pmenu[tmp];
 
-   }
+    }
 
-   /* verit. 更新動態 */
-   if(pmenu[tmp].func)
-   {
-     strcpy(cutmp->mateid,pmenu[tmp].func);
-     utmp_mode(M_IDLE);
-   }
+    /* verit. 更新動態 */
+    if(pmenu[tmp].func)
+    {
+        strcpy(cutmp->mateid,pmenu[tmp].func);
+        utmp_mode(M_IDLE);
+    }
 
-   title = pmenu[tmp].desc;
-   table_title = &pmenu[tmp];
+    title = pmenu[tmp].desc;
+    table_title = &pmenu[tmp];
 
-   /* verit . 假如沒有任何選項就 return */
-   if(num < 0)
-     return 1;
+    /* verit . 假如沒有任何選項就 return */
+    if(num < 0)
+        return 1;
 
-   cur = old_cur = 0;
+    cur = old_cur = 0;
 
-   /* 跳到預設選項 */
-   for( tmp=0; tmp<= num ; tmp++ )
-   {
-      if((table[tmp]->desc[0] | 0x20) == ((table_title->level & POPUP_MASK) | 0x20))
-      {
-        cur = old_cur = tmp;
-        break;
-      }
-   }
-
-
-   draw_menu(table,num+1,title,x,y,cur);
-
-   while(1)  /* verit . user 選擇 */
-   {
-      c = vkey();
-      old_cur = cur;
-      switch(c)
-      {
-         case KEY_LEFT:
-            return 1;
+    /* 跳到預設選項 */
+    for( tmp=0; tmp<= num ; tmp++ )
+    {
+        if((table[tmp]->desc[0] | 0x20) == ((table_title->level & POPUP_MASK) | 0x20))
+        {
+            cur = old_cur = tmp;
             break;
-         case KEY_UP:
-            cur = (cur==0)?num:cur-1;
-            break;
-         case KEY_DOWN:
-            cur = (cur==num)?0:cur+1;
-            break;
-         case KEY_HOME:
-            cur = 0;
-            break;
-         case KEY_END:
-            cur = num;
-            break;
-         case KEY_RIGHT:
-         case '\n':
-            if(table[cur]->umode & POPUP_QUIT)
+        }
+    }
+
+
+    draw_menu(table,num+1,title,x,y,cur);
+
+    while(1)  /* verit . user 選擇 */
+    {
+        c = vkey();
+        old_cur = cur;
+        switch(c)
+        {
+            case KEY_LEFT:
                 return 1;
-            if(do_cmd(table[cur],xo,x,y)<0)
-                return -1;
+                break;
+            case KEY_UP:
+                cur = (cur==0)?num:cur-1;
+                break;
+            case KEY_DOWN:
+                cur = (cur==num)?0:cur+1;
+                break;
+            case KEY_HOME:
+                cur = 0;
+                break;
+            case KEY_END:
+                cur = num;
+                break;
+            case KEY_RIGHT:
+            case '\n':
+                if(table[cur]->umode & POPUP_QUIT)
+                    return 1;
+                if(do_cmd(table[cur],xo,x,y)<0)
+                    return -1;
 #ifdef M3_USE_PFTERM
-            scr_restore(&old_screen); // restore foot
+                scr_restore(&old_screen); // restore foot
 #else
-            vs_restore(sl);
+                vs_restore(sl);
 #endif
-            draw_menu(table,num+1,title,x,y,cur);
-            break;
-        default:
-            for(tmp=0 ; tmp<=num ; tmp++)
-            {
-                if( (c | 0x20) == (table[tmp]->desc[0] | 0x20 ))
+                    draw_menu(table,num+1,title,x,y,cur);
+                break;
+            default:
+                for(tmp=0 ; tmp<=num ; tmp++)
                 {
-                   cur = tmp;
-                   if(table_title->level & POPUP_DO_INSTANT)
-                   {
-                     if(table[cur]->umode == POPUP_QUIT)
-                        return 1;
-                     if(do_cmd(table[cur],xo,x,y)<0)
-                        return -1;
+                    if( (c | 0x20) == (table[tmp]->desc[0] | 0x20 ))
+                    {
+                        cur = tmp;
+                        if(table_title->level & POPUP_DO_INSTANT)
+                        {
+                            if(table[cur]->umode == POPUP_QUIT)
+                                return 1;
+                            if(do_cmd(table[cur],xo,x,y)<0)
+                                return -1;
 #ifdef M3_USE_PFTERM
-                     scr_restore(&old_screen); // restore foot
+                            scr_restore(&old_screen); // restore foot
 #else
-                     vs_restore(sl);
+                            vs_restore(sl);
 #endif
-                     draw_menu(table,num+1,title,x,y,cur);
-                   }
-                   break;
+                            draw_menu(table,num+1,title,x,y,cur);
+                        }
+                        break;
+                    }
                 }
-            }
-            break;
-      }
-      if(old_cur != cur)
-      {
-        draw_item(table[old_cur]->desc,0,x+old_cur,y);
-        draw_item(table[cur]->desc,1,x+cur,y);
-      }
-   }
+                break;
+        }
+        if(old_cur != cur)
+        {
+            draw_item(table[old_cur]->desc,0,x+old_cur,y);
+            draw_item(table[cur]->desc,1,x+cur,y);
+        }
+    }
 
-   return 0;
+    return 0;
 }
 
 
 /* mode 代表加背景的顏色 */
 static void
 draw_ans_item(
-  char *desc,
-  int mode,
-  int x,
-  int y,
-  char hotkey)
+    char *desc,
+    int mode,
+    int x,
+    int y,
+    char hotkey)
 {
-   char buf[128];
+    char buf[128];
 
-   sprintf(buf," \033[0;37m▏\033[4%d;37m%s%c\033[1;36m%c\033[0;37;4%dm%c%-25s%s\033[0;47;30m▉\033[40;30;1m▉\033[m ",mode,(mode>0)?"┤":"  ",(hotkey==*desc)?'[':'(',*desc,mode,(hotkey==*desc)?']':')',desc+1,(mode>0)?"├":"  ");
-   vs_line(buf,x,y);
-   move(b_lines,0);
+    sprintf(buf," \033[0;37m▏\033[4%d;37m%s%c\033[1;36m%c\033[0;37;4%dm%c%-25s%s\033[0;47;30m▉\033[40;30;1m▉\033[m ",mode,(mode>0)?"┤":"  ",(hotkey==*desc)?'[':'(',*desc,mode,(hotkey==*desc)?']':')',desc+1,(mode>0)?"├":"  ");
+    vs_line(buf,x,y);
+    move(b_lines,0);
 }
 
 
 static int
 draw_menu_des(char *desc[],char *title,int x,int y,int cur)
 {
-   int num;
-   char buf[128];
-   char hotkey;
-   hotkey = desc[0][0];
+    int num;
+    char buf[128];
+    char hotkey;
+    hotkey = desc[0][0];
 
-   sprintf(buf," \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\033[m   ");
-   vs_line(buf,x-2,y);
-   sprintf(buf," \033[0;37;44m▏%-31s \033[0;47;34m▉\033[m   ",title);
-   vs_line(buf,x-1,y);
-   for(num=1;desc[num];num++)
-      draw_ans_item(desc[num],(num==cur)?1:0,x++,y,hotkey);
-   sprintf(buf," \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\033[40;30;1m▉\033[m ");
-   vs_line(buf,x,y);
-   return num-2;
+    sprintf(buf," \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\033[m   ");
+    vs_line(buf,x-2,y);
+    sprintf(buf," \033[0;37;44m▏%-31s \033[0;47;34m▉\033[m   ",title);
+    vs_line(buf,x-1,y);
+    for(num=1;desc[num];num++)
+        draw_ans_item(desc[num],(num==cur)?1:0,x++,y,hotkey);
+    sprintf(buf," \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\033[40;30;1m▉\033[m ");
+    vs_line(buf,x,y);
+    return num-2;
 }
 
 /*------------------------------------------------------------- */
@@ -490,174 +490,174 @@ draw_menu_des(char *desc[],char *title,int x,int y,int cur)
 int
 popupmenu_ans(char *desc[],char *title,int x,int y)
 {
-   int cur,old_cur,num,tmp;
-   char c;
-   char t[64];
-   char hotkey;
-   hotkey = desc[0][0];
+    int cur,old_cur,num,tmp;
+    char c;
+    char t[64];
+    char hotkey;
+    hotkey = desc[0][0];
 
 #ifdef M3_USE_PFTERM
-   scr_dump(&old_screen);
+    scr_dump(&old_screen);
 #else
-   vs_save(sl);
+    vs_save(sl);
 #endif
-   sprintf(t,"【%s】",title);
-   num = draw_menu_des(desc,t,x,y,0);
-   cur = old_cur = 0;
-   for(tmp=0;tmp<num;tmp++)
-   {
-     if(desc[tmp+1][0] == hotkey)
-       cur = old_cur = tmp;
-   }
-   draw_ans_item(desc[cur+1],1,x+cur,y,hotkey);
+    sprintf(t,"【%s】",title);
+    num = draw_menu_des(desc,t,x,y,0);
+    cur = old_cur = 0;
+    for(tmp=0;tmp<num;tmp++)
+    {
+        if(desc[tmp+1][0] == hotkey)
+            cur = old_cur = tmp;
+    }
+    draw_ans_item(desc[cur+1],1,x+cur,y,hotkey);
 
-   while(1)
-   {
-      c = vkey();
-      old_cur = cur;
-      switch(c)
-      {
-         case KEY_LEFT:
+    while(1)
+    {
+        c = vkey();
+        old_cur = cur;
+        switch(c)
+        {
+            case KEY_LEFT:
 #ifdef M3_USE_PFTERM
-            scr_restore(&old_screen); // restore foot
+                scr_restore(&old_screen); // restore foot
 #else
-            vs_restore(sl);
+                vs_restore(sl);
 #endif
-            return (desc[0][1] | 0x20);
-         case KEY_UP:
-            cur = (cur==0)?num:cur-1;
-            break;
-         case KEY_DOWN:
-            cur = (cur==num)?0:cur+1;
-            break;
-         case KEY_HOME:
-            cur = 0;
-            break;
-         case KEY_END:
-            cur = num;
-            break;
-         case KEY_RIGHT:
-         case '\n':
+                return (desc[0][1] | 0x20);
+            case KEY_UP:
+                cur = (cur==0)?num:cur-1;
+                break;
+            case KEY_DOWN:
+                cur = (cur==num)?0:cur+1;
+                break;
+            case KEY_HOME:
+                cur = 0;
+                break;
+            case KEY_END:
+                cur = num;
+                break;
+            case KEY_RIGHT:
+            case '\n':
 #ifdef M3_USE_PFTERM
-            scr_restore(&old_screen); // restore foot
+                scr_restore(&old_screen); // restore foot
 #else
-            vs_restore(sl);
+                vs_restore(sl);
 #endif
-            return (desc[cur+1][0] | 0x20) ;
-        default:
-            for(tmp=0 ; tmp<=num ; tmp++)
-            {
-                if( (c | 0x20) == (desc[tmp+1][0] | 0x20 ))
+                return (desc[cur+1][0] | 0x20) ;
+            default:
+                for(tmp=0 ; tmp<=num ; tmp++)
                 {
-                   cur = tmp;
-                   break;
+                    if( (c | 0x20) == (desc[tmp+1][0] | 0x20 ))
+                    {
+                        cur = tmp;
+                        break;
+                    }
                 }
-            }
-            break;
-      }
-      if(old_cur != cur)
-      {
-        draw_ans_item(desc[old_cur+1],0,x+old_cur,y,hotkey);
-        draw_ans_item(desc[cur+1],1,x+cur,y,hotkey);
-      }
-   }
-   return 0;
+                break;
+        }
+        if(old_cur != cur)
+        {
+            draw_ans_item(desc[old_cur+1],0,x+old_cur,y,hotkey);
+            draw_ans_item(desc[cur+1],1,x+cur,y,hotkey);
+        }
+    }
+    return 0;
 }
 
 void
 popupmenu(MENU pmenu[],XO *xo,int x,int y)
 {
 #ifdef M3_USE_PFTERM
-   scr_dump(&old_screen);
+    scr_dump(&old_screen);
 #else
-   vs_save(sl);
+    vs_save(sl);
 #endif
-   do_menu(pmenu,xo,x,y);
+    do_menu(pmenu,xo,x,y);
 #ifdef M3_USE_PFTERM
-   scr_restore(&old_screen); // restore foot
+    scr_restore(&old_screen); // restore foot
 #else
-   vs_restore(sl);
+    vs_restore(sl);
 #endif
 }
 
 static void pcopy(char *buf,char *patten,int len)
 {
-  int i,size;
+    int i,size;
 
-  *buf = '\0';
-  size = strlen(patten);
+    *buf = '\0';
+    size = strlen(patten);
 
-  for(i=1;i<=len;i++)
-  {
-    strcpy(buf,patten);
-    buf += size;
-  }
+    for(i=1;i<=len;i++)
+    {
+        strcpy(buf,patten);
+        buf += size;
+    }
 }
 
 int pmsg(char *msg)
 {
-   char buf[ANSILINELEN];
-   char patten[ANSILINELEN];
-   int len,plen,cc;
+    char buf[ANSILINELEN];
+    char patten[ANSILINELEN];
+    int len,plen,cc;
 
-   if(cuser.ufo2 & UFO2_ORIGUI)
-     return vmsg(msg);
+    if(cuser.ufo2 & UFO2_ORIGUI)
+        return vmsg(msg);
 
 #ifdef M3_USE_PFTERM
-   scr_dump(&old_screen);
+    scr_dump(&old_screen);
 #else
-   vs_save(sl);
+    vs_save(sl);
 #endif
 
-   len = (msg ? strlen(msg) : 0 );
-   if(len > 30)
-   {
-     plen = (len - 29) / 2;
-   }
-   else
-     plen = 0;
+    len = (msg ? strlen(msg) : 0 );
+    if(len > 30)
+    {
+        plen = (len - 29) / 2;
+    }
+    else
+        plen = 0;
 
-   if(len > 0)
-   {
-     pcopy(patten,"ˍ",plen);
-     sprintf(buf," \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ%s\033[m  ",plen?patten:"");
-     vs_line(buf,7,18-plen);
-     pcopy(patten,"  ",plen);
-     sprintf(buf," \033[0;37;44m▏ 請按任意鍵繼續 .....         %s\033[0;47;34m▉\033[m ",plen?patten:"");
-     vs_line(buf,8,18-plen);
-     sprintf(buf," \033[0;37m▏                              %s\033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ",plen?patten:"");
-     vs_line(buf,9,18-plen);
-     sprintf(buf," \033[0;37m▏%-30s%s\033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ",msg,((len > 30 && len%2 == 1) ? " " : ""));
-     vs_line(buf,10,18-plen);
-     sprintf(buf," \033[0;37m▏                              %s\033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ",plen?patten:"");
-     vs_line(buf,11,18-plen);
-     pcopy(patten,"▇",plen);
-     sprintf(buf," \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇%s\033[40;30;1m▉\033[m ",plen?patten:"");
-     vs_line(buf,12,18-plen);
-   }
-   else
-   {
-     sprintf(buf," \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\033[m  ");
-     vs_line(buf,7,18);
-     sprintf(buf," \033[0;37;44m▏ 請按任意鍵繼續 .....           \033[0;47;34m▉\033[m ");
-     vs_line(buf,8,18);
-     sprintf(buf," \033[0;37m▏                                \033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ");
-     vs_line(buf,9,18);
-     sprintf(buf," \033[0;37m▏%-30s  \033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ","[請按任意鍵繼續]");
-     vs_line(buf,10,18);
-     sprintf(buf," \033[0;37m▏                                \033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ");
-     vs_line(buf,11,18);
-     sprintf(buf," \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\033[40;30;1m▉\033[m ");
-     vs_line(buf,12,18);
-   }
+    if(len > 0)
+    {
+        pcopy(patten,"ˍ",plen);
+        sprintf(buf," \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ%s\033[m  ",plen?patten:"");
+        vs_line(buf,7,18-plen);
+        pcopy(patten,"  ",plen);
+        sprintf(buf," \033[0;37;44m▏ 請按任意鍵繼續 .....         %s\033[0;47;34m▉\033[m ",plen?patten:"");
+        vs_line(buf,8,18-plen);
+        sprintf(buf," \033[0;37m▏                              %s\033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ",plen?patten:"");
+        vs_line(buf,9,18-plen);
+        sprintf(buf," \033[0;37m▏%-30s%s\033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ",msg,((len > 30 && len%2 == 1) ? " " : ""));
+        vs_line(buf,10,18-plen);
+        sprintf(buf," \033[0;37m▏                              %s\033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ",plen?patten:"");
+        vs_line(buf,11,18-plen);
+        pcopy(patten,"▇",plen);
+        sprintf(buf," \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇%s\033[40;30;1m▉\033[m ",plen?patten:"");
+        vs_line(buf,12,18-plen);
+    }
+    else
+    {
+        sprintf(buf," \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\033[m  ");
+        vs_line(buf,7,18);
+        sprintf(buf," \033[0;37;44m▏ 請按任意鍵繼續 .....           \033[0;47;34m▉\033[m ");
+        vs_line(buf,8,18);
+        sprintf(buf," \033[0;37m▏                                \033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ");
+        vs_line(buf,9,18);
+        sprintf(buf," \033[0;37m▏%-30s  \033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ","[請按任意鍵繼續]");
+        vs_line(buf,10,18);
+        sprintf(buf," \033[0;37m▏                                \033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ");
+        vs_line(buf,11,18);
+        sprintf(buf," \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\033[40;30;1m▉\033[m ");
+        vs_line(buf,12,18);
+    }
 
-   cc = vkey();
+    cc = vkey();
 #ifdef M3_USE_PFTERM
-   scr_restore(&old_screen); // restore foot
+    scr_restore(&old_screen); // restore foot
 #else
-   vs_restore(sl);
+    vs_restore(sl);
 #endif
-   return cc;
+    return cc;
 }
 
 #ifndef M3_USE_PFTERM
@@ -665,24 +665,24 @@ int pmsg(char *msg)
 int
 Every_Z_Screen(void)
 {
-  FILE *fp;
-  int i;
-  char buf[512];
+    FILE *fp;
+    int i;
+    char buf[512];
 
-  fp = tbf_open();
-  if(!fp)
-  {
-    vmsg("檔案開啟錯誤 !!");
-    return 0;
-  }
-  for(i=0;i<24;++i)
-  {
-     memset(buf,0,sizeof(buf));
-     strncpy(buf,sl[i].data,sl[i].len);
-     fprintf(fp,"%s\n",buf);
-  }
-  fclose(fp);
-  return 1;
+    fp = tbf_open();
+    if(!fp)
+    {
+        vmsg("檔案開啟錯誤 !!");
+        return 0;
+    }
+    for(i=0;i<24;++i)
+    {
+        memset(buf,0,sizeof(buf));
+        strncpy(buf,sl[i].data,sl[i].len);
+        fprintf(fp,"%s\n",buf);
+    }
+    fclose(fp);
+    return 1;
 }
 #endif
 

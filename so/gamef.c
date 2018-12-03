@@ -14,59 +14,59 @@ char *
 Cdate(
 time_t *chrono)
 {
-	struct tm *ptime;
+    struct tm *ptime;
 
-	ptime = localtime(chrono);
-	/* Thor.990329: y2k */
-	sprintf(Bdate, "%02d/%02d/%02d",
-			ptime->tm_year % 100, ptime->tm_mon + 1, ptime->tm_mday);
-	return Bdate;
+    ptime = localtime(chrono);
+    /* Thor.990329: y2k */
+    sprintf(Bdate, "%02d/%02d/%02d",
+            ptime->tm_year % 100, ptime->tm_mon + 1, ptime->tm_mday);
+    return Bdate;
 }
 
 void
 pressanykey(char *fmt, ...)
 {
-	va_list args;
-	unsigned char buf[512], *ptr;
-	int cc, ch;
+    va_list args;
+    unsigned char buf[512], *ptr;
+    int cc, ch;
 
-	va_start(args, fmt);
-	vsprintf(buf, fmt, args);
-	va_end(args);
-	move(b_lines, 0);
-	for (ptr = buf; cc = *ptr; ptr++)
-		outc(cc);
-	do
-	{
-		ch = vkey();
-	}
-	while ((ch != ' ') && (ch != KEY_LEFT) && (ch != '\r') && (ch != '\n'));
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);
+    va_end(args);
+    move(b_lines, 0);
+    for (ptr = buf; cc = *ptr; ptr++)
+        outc(cc);
+    do
+    {
+        ch = vkey();
+    }
+    while ((ch != ' ') && (ch != KEY_LEFT) && (ch != '\r') && (ch != '\n'));
 
-	move(b_lines, 0);
-	clrtoeol();
-	refresh();
+    move(b_lines, 0);
+    clrtoeol();
+    refresh();
 }
 
 void
 game_log(int file, char *fmt, ...)
 {
-	va_list args;
-	unsigned char buf[200], ff[40];
-	time_t now;
-	FILE *fs;
+    va_list args;
+    unsigned char buf[200], ff[40];
+    time_t now;
+    FILE *fs;
 
-	va_start(args, fmt);
-	vsprintf(buf, fmt, args);
-	va_end(args);
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);
+    va_end(args);
 
-	switch (file)
-	{
-	case 1: strcpy(ff, "run/mine.log"); break;
-	case 2: strcpy(ff, "run/bj.log"); break;
-	}
-	fs = fopen(ff, "a+");
-	now = time(0);
-	fprintf(fs, "\x1b[1;33m%s \x1b[32m%s \x1b[36m%s\x1b[m\n", Cdate(&now), cuser.userid, buf);
-	fclose(fs);
+    switch (file)
+    {
+    case 1: strcpy(ff, "run/mine.log"); break;
+    case 2: strcpy(ff, "run/bj.log"); break;
+    }
+    fs = fopen(ff, "a+");
+    now = time(0);
+    fprintf(fs, "\x1b[1;33m%s \x1b[32m%s \x1b[36m%s\x1b[m\n", Cdate(&now), cuser.userid, buf);
+    fclose(fs);
 }
 

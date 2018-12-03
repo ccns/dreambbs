@@ -47,41 +47,41 @@ static BCACHE *bshm;
 
 static void
 attach_err(
-  int shmkey,
-  char *name)
+    int shmkey,
+    char *name)
 {
-  fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
-  exit(1);
+    fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
+    exit(1);
 }
 
 
 static void *
 attach_shm(
-  register int shmkey, register int shmsize)
+    register int shmkey, register int shmsize)
 {
-  register void *shmptr;
-  register int shmid;
+    register void *shmptr;
+    register int shmid;
 
-  shmid = shmget(shmkey, shmsize, 0);
-  if (shmid < 0)
-  {
-    shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
+    shmid = shmget(shmkey, shmsize, 0);
     if (shmid < 0)
-      attach_err(shmkey, "shmget");
-  }
-  else
-  {
-    shmsize = 0;
-  }
+    {
+        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
+        if (shmid < 0)
+            attach_err(shmkey, "shmget");
+    }
+    else
+    {
+        shmsize = 0;
+    }
 
-  shmptr = (void *) shmat(shmid, NULL, 0);
-  if (shmptr == (void *) -1)
-    attach_err(shmkey, "shmat");
+    shmptr = (void *) shmat(shmid, NULL, 0);
+    if (shmptr == (void *) -1)
+        attach_err(shmkey, "shmat");
 
-  if (shmsize)
-    memset(shmptr, 0, shmsize);
+    if (shmsize)
+        memset(shmptr, 0, shmsize);
 
-  return shmptr;
+    return shmptr;
 }
 
 
@@ -89,16 +89,16 @@ attach_shm(
 void
 bshm_init(void)
 {
-  register BCACHE *xshm;
+    register BCACHE *xshm;
 
-  xshm = bshm;
-  if (xshm == NULL)
-  {
-    bshm = xshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
-  }
+    xshm = bshm;
+    if (xshm == NULL)
+    {
+        bshm = xshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
+    }
 
-  if(bshm->uptime < 0)
-    exit(1);
+    if(bshm->uptime < 0)
+        exit(1);
 
 }
 
@@ -108,20 +108,20 @@ bshm_init(void)
 
 static void
 count_board(
-  BRD *brd,
-  time_t now)
+    BRD *brd,
+    time_t now)
 {
-  BSTATCOUNT bcount;
-  char fpath[128];
+    BSTATCOUNT bcount;
+    char fpath[128];
 
-  memset(&bcount,0,sizeof(BSTATCOUNT));
+    memset(&bcount,0,sizeof(BSTATCOUNT));
 
-  brd_fpath(fpath,brd->brdname,FN_BRD_STATCOUNT);
+    brd_fpath(fpath,brd->brdname,FN_BRD_STATCOUNT);
 
-  rec_get(fpath,&bcount,sizeof(BSTATCOUNT),0);
-  printf("%-15s%10d %10d %10d %10d\n",brd->brdname,
-  	bcount.threemonth.n_reads,bcount.threemonth.n_posts,
-  	bcount.threemonth.n_news,bcount.threemonth.n_bans);
+    rec_get(fpath,&bcount,sizeof(BSTATCOUNT),0);
+    printf("%-15s%10d %10d %10d %10d\n",brd->brdname,
+        bcount.threemonth.n_reads,bcount.threemonth.n_posts,
+        bcount.threemonth.n_news,bcount.threemonth.n_bans);
 
 }
 
@@ -129,38 +129,38 @@ count_board(
 int
 main(void)
 {
-  BRD *bcache, *head, *tail;
+    BRD *bcache, *head, *tail;
 
-  chdir(BBSHOME);
-  umask(077);
+    chdir(BBSHOME);
+    umask(077);
 
-  /* --------------------------------------------------- */
-  /* build Class image					 */
-  /* --------------------------------------------------- */
+    /* --------------------------------------------------- */
+    /* build Class image					 */
+    /* --------------------------------------------------- */
 
-  bshm_init();
+    bshm_init();
 
-  /* --------------------------------------------------- */
-  /* 看板資訊統計					 */
-  /* --------------------------------------------------- */
+    /* --------------------------------------------------- */
+    /* 看板資訊統計					 */
+    /* --------------------------------------------------- */
 
-  head = bcache = bshm->bcache;
-  tail = head + bshm->number;
-  do
-  {
-    if(!(head->battr & BRD_NOTOTAL) && head->brdname[0])
+    head = bcache = bshm->bcache;
+    tail = head + bshm->number;
+    do
     {
-        count_board(head,0);
-    }
-  } while (++head < tail);
+        if(!(head->battr & BRD_NOTOTAL) && head->brdname[0])
+        {
+            count_board(head,0);
+        }
+    } while (++head < tail);
 
-  return 0;
+    return 0;
 }
 #else
 
 int main(void)
 {
-  return 0;
+    return 0;
 }
 
 #endif

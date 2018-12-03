@@ -15,13 +15,13 @@
 #include "dao.h"
 
 #if 0
-  int key;
-  key < 0 is reserved.
-  key & 0xff == 0 is reserved.
-  0x000000?? < key < 0x0000ff?? is reserved by maple.org
-  sizeof(attr): key & 0xff
+    int key;
+    key < 0 is reserved.
+    key & 0xff == 0 is reserved.
+    0x000000?? < key < 0x0000ff?? is reserved by maple.org
+    sizeof(attr): key & 0xff
 
-  file: $userhome/.ATTR
+    file: $userhome/.ATTR
 #endif
 
 #if 0
@@ -34,80 +34,80 @@
 /* return value if exist, else no change (it can set to default value) */
 int
 attr_get(
-  char *userid,
-  int key,
-  void *value
+    char *userid,
+    int key,
+    void *value
 )
 {
-  char fpath[64];
-  int k;
-  FILE *fp;
+    char fpath[64];
+    int k;
+    FILE *fp;
 
-  usr_fpath(fpath, userid, ".ATTR");
-  if((fp = fopen(fpath, "rb")))
-  {
-    while(fread(&k,sizeof k, 1,fp))
+    usr_fpath(fpath, userid, ".ATTR");
+    if((fp = fopen(fpath, "rb")))
     {
-      if(k == key)
-      {
-        k = fread(value, (size_t) (k & 0xff), 1, fp);
+        while(fread(&k,sizeof k, 1,fp))
+        {
+            if(k == key)
+            {
+                k = fread(value, (size_t) (k & 0xff), 1, fp);
+                fclose(fp);
+                return k-1;
+            }
+            else
+                fseek(fp, (unsigned long) (k & 0xff), SEEK_CUR);
+        }
         fclose(fp);
-        return k-1;
-      }
-      else
-        fseek(fp, (unsigned long) (k & 0xff), SEEK_CUR);
     }
-    fclose(fp);
-  }
-  return -1;
+    return -1;
 }
 
 /* set value if exist, else append new entry */
 int
 attr_put(
-  char *userid,
-  int key,
-  void *value
+    char *userid,
+    int key,
+    void *value
 )
 {
-  char fpath[64];
-  int k,fd;
-  FILE *fp;
+    char fpath[64];
+    int k,fd;
+    FILE *fp;
 
-  usr_fpath(fpath, userid, ".ATTR");
-  if((fd = open(fpath, O_RDWR | O_CREAT, 0600)) < 0) return -1;
-  k = 0;
-  if((fp = fdopen(fd, "rb+")))
-  {
-    f_exlock(fd);
-    for(;;)
+    usr_fpath(fpath, userid, ".ATTR");
+    if((fd = open(fpath, O_RDWR | O_CREAT, 0600)) < 0) return -1;
+    k = 0;
+    if((fp = fdopen(fd, "rb+")))
     {
-      if(fread(&k,sizeof k, 1,fp) <= 0)
-      {
-        if(fwrite(&key, (size_t)sizeof key, 1, fp) <= 0)
+        f_exlock(fd);
+        for(;;)
         {
-          k = 0; /* error code */
-          goto close_file;
+            if(fread(&k,sizeof k, 1,fp) <= 0)
+            {
+                if(fwrite(&key, (size_t)sizeof key, 1, fp) <= 0)
+                {
+                    k = 0; /* error code */
+                    goto close_file;
+                }
+                break;
+            }
+            if(k == key)
+            {
+                fseek(fp, 0, SEEK_CUR);
+                /* Thor.990311: for fwrite() at correct pos */
+                break;
+            }
+            else
+                fseek(fp, (unsigned long) (k & 0xff), SEEK_CUR);
         }
-        break;
-      }
-      if(k == key)
-      {
-        fseek(fp, 0, SEEK_CUR);
-        /* Thor.990311: for fwrite() at correct pos */
-        break;
-      }
-      else
-        fseek(fp, (unsigned long) (k & 0xff), SEEK_CUR);
-    }
-    k = fwrite(value, (size_t) (key & 0xff), 1, fp);
+        k = fwrite(value, (size_t) (key & 0xff), 1, fp);
 close_file:
-    f_unlock(fd);
-    fclose(fp);
-  }
-  else
-    close(fd);
-  return k-1;
+        f_unlock(fd);
+        fclose(fp);
+    }
+    else
+        close(fd);
+    return k-1;
 }
 
 /* with file lock scheme */
@@ -120,76 +120,76 @@ close_file:
 /* file fail or err key(-3) */
 int
 attr_step(
-  char *userid,
-  int key,
-  int dflt,
-  int step
+    char *userid,
+    int key,
+    int dflt,
+    int step
 )
 {
-  char fpath[64];
-  int fd,ret;
-  int k,value;
-  FILE *fp;
+    char fpath[64];
+    int fd,ret;
+    int k,value;
+    FILE *fp;
 
-  if((key & 0xff) != sizeof(int)) return -3;
-  usr_fpath(fpath, userid, ".ATTR");
-  if((fd = open(fpath, O_RDWR | O_CREAT, 0600)) < 0) return -3;
-  if(!(fp = fdopen(fd, "rb+")))
-  {
-    close(fd);
-    return -3;
-  }
-
-  ret = 0;
-  f_exlock(fd);
-  for(;;)
-  {
-    if(fread(&k,sizeof k, 1,fp) <= 0)
+    if((key & 0xff) != sizeof(int)) return -3;
+    usr_fpath(fpath, userid, ".ATTR");
+    if((fd = open(fpath, O_RDWR | O_CREAT, 0600)) < 0) return -3;
+    if(!(fp = fdopen(fd, "rb+")))
     {
-      if(dflt < 0)
-      {
-        ret = -2;
+        close(fd);
+        return -3;
+    }
+
+    ret = 0;
+    f_exlock(fd);
+    for(;;)
+    {
+        if(fread(&k,sizeof k, 1,fp) <= 0)
+        {
+            if(dflt < 0)
+            {
+                ret = -2;
+                goto close_file;
+            }
+            else if (fwrite(&key, sizeof key, 1, fp) <= 0)
+            {
+                ret = -3;
+                goto close_file;
+            }
+            else
+            {
+                value = dflt;
+                break;
+            }
+        }
+        if(k == key)
+        {
+            fread(&value, sizeof value, 1, fp);
+            fseek(fp, -(off_t)sizeof value, SEEK_CUR);
+            /* Thor.990311: for fwrite() at correct pos */
+            break;
+        }
+        else
+            fseek(fp, (unsigned long) (k & 0xff), SEEK_CUR);
+    }
+
+    value += step;
+    if(value < 0)
+    {
+        ret = -1;
         goto close_file;
-      }
-      else if (fwrite(&key, sizeof key, 1, fp) <= 0)
-      {
+    }
+
+    if(fwrite(&value, sizeof value , 1, fp) <= 0)
+    {
         ret = -3;
         goto close_file;
-      }
-      else
-      {
-        value = dflt;
-        break;
-      }
     }
-    if(k == key)
-    {
-      fread(&value, sizeof value, 1, fp);
-      fseek(fp, -(off_t)sizeof value, SEEK_CUR);
-      /* Thor.990311: for fwrite() at correct pos */
-      break;
-    }
-    else
-      fseek(fp, (unsigned long) (k & 0xff), SEEK_CUR);
-  }
 
-  value += step;
-  if(value < 0)
-  {
-    ret = -1;
-    goto close_file;
-  }
-
-  if(fwrite(&value, sizeof value , 1, fp) <= 0)
-  {
-    ret = -3;
-    goto close_file;
-  }
-
-  ret = value;
+    ret = value;
 
 close_file:
-  f_unlock(fd);
-  fclose(fp);
-  return ret;
+    f_unlock(fd);
+    fclose(fp);
+    return ret;
 }

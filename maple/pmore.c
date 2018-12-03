@@ -148,31 +148,31 @@
 #define PMORE_MSG_PROGVER  "pmore 2007+"
 
 #define PMORE_MSG_PREF_TITLE \
-     " piaip's more: " PMORE_MSG_PROGVER " 設定選項 "
+    " piaip's more: " PMORE_MSG_PROGVER " 設定選項 "
 #define PMORE_MSG_PREF_TITLE_QRAW \
-     " piaip's more: " PMORE_MSG_PROGVER " 快速設定 - 色彩(ANSI碼)顯示模式 "
+    " piaip's more: " PMORE_MSG_PROGVER " 快速設定 - 色彩(ANSI碼)顯示模式 "
 #define PMORE_MSG_HELP_TITLE \
-     " piaip's more: " PMORE_MSG_PROGVER " 瀏覽程式使用說明"
+    " piaip's more: " PMORE_MSG_PROGVER " 瀏覽程式使用說明"
 #define PMORE_MSG_HELP_PAUSE \
-     "請按任意鍵離開此說明畫面"
+    "請按任意鍵離開此說明畫面"
 //#define PMORE_MSG_WARN_FAKEUSERINFO \
-//     " ▲此頁內容會依閱\讀者不同,原文未必有您的資料 "  /*r2.170810: keep the traditional trick XD */
+//    " ▲此頁內容會依閱\讀者不同,原文未必有您的資料 "  /*r2.170810: keep the traditional trick XD */
 #define PMORE_MSG_WARN_MOVECMD \
-     " ▲此頁內容含移位碼,可能會顯示偽造的系統訊息 "
+    " ▲此頁內容含移位碼,可能會顯示偽造的系統訊息 "
 #define PMORE_MSG_SEARCH_KEYWORD \
-     "[搜尋]關鍵字:"
+    "[搜尋]關鍵字:"
 #define PMORE_MSG_SEARCH_LETTERCASE \
-     "區分大小寫(Y/N/Q)? "
+    "區分大小寫(Y/N/Q)? "
 #define PMORE_MSG_GOTO_PAGE \
-     "跳至此頁(若要改指定行數請在結尾加.): "
+    "跳至此頁(若要改指定行數請在結尾加.): "
 #define PMORE_MSG_GOTO_LINE \
-     "跳至此行: "
+    "跳至此行: "
 #define PMORE_MSG_QPREF_SUBJECT \
-     "色彩顯示方式:"
+    "色彩顯示方式:"
 #define PMORE_MSG_QPREF_OPTIONS \
-     "1.預設格式化內容\t2.原始ANSI控制碼\t3.純文字"
+    "1.預設格式化內容\t2.原始ANSI控制碼\t3.純文字"
 #define PMORE_MSG_QPREF_PROMPT \
-     "請調整設定 (1-3 可直接選定，\\可切換) 或其它任意鍵結束。"
+    "請調整設定 (1-3 可直接選定，\\可切換) 或其它任意鍵結束。"
 
 #define PMORE_MSG_MOVIE_DETECTED \
     " ★ 這份文件是可播放的文字動畫，要開始播放嗎？ [Y/n]"
@@ -741,8 +741,8 @@ MF_Movie mfmovie;
 }
 
 #define MOVIE_IS_PLAYING() \
-   ((mfmovie.mode == MFDISP_MOVIE_PLAYING) || \
-    (mfmovie.mode == MFDISP_MOVIE_PLAYING_OLD))
+    ((mfmovie.mode == MFDISP_MOVIE_PLAYING) || \
+     (mfmovie.mode == MFDISP_MOVIE_PLAYING_OLD))
 
 unsigned char *
     mf_movieFrameHeader(unsigned char *p, unsigned char *end);
@@ -1023,8 +1023,8 @@ mf_backward(int lines)
     /* backward n lines means to find n times of '\n'. */
 
     /* if we're already in a line break, add one mark. */
-   if (mf.disps < mf.end && *mf.disps == '\n')
-       lines++, real_moved --;
+    if (mf.disps < mf.end && *mf.disps == '\n')
+        lines++, real_moved --;
 
     while (1) {
         if (mf.disps < mf.start || *mf.disps == '\n') {
@@ -2109,8 +2109,8 @@ mf_display_footer(
         if (mf.lineno >= mf.maxlinenoS || nowpage > allpages)
             nowpage = allpages;
         /*
-           nowpage =
-           (int)((mf.lineno + mf.dispedlines-2) / MFNAV_PAGE)+1 ;
+            nowpage =
+            (int)((mf.lineno + mf.dispedlines-2) / MFNAV_PAGE)+1 ;
            */
     }
     /* why -2 and -1?
@@ -3226,29 +3226,29 @@ pmore_Help(void *ctx, int (*help_handler)(int y, void *ctx))
     {
         incomplete = n_t_tables;
         y++;
-	for (i = 0; i < n_t_tables; i++)
-	{
-	    const char *lvar = NULL, *rvar = "";
-	    if (*t_tables[i])
-	    {
-		lvar = *t_tables[i]++;
-		rvar = *t_tables[i]++;
-	    }
-	    if (!rvar) { // draw category
+        for (i = 0; i < n_t_tables; i++)
+        {
+            const char *lvar = NULL, *rvar = "";
+            if (*t_tables[i])
+            {
+                lvar = *t_tables[i]++;
+                rvar = *t_tables[i]++;
+            }
+            if (!rvar) { // draw category
                 prints(HLP_CATEGORY_COLOR "%-*s", col_widths[i], lvar);
-		continue;
-	    }
-	    if (!lvar) { // table is complete...
-		incomplete --;
-		lvar = "";
-	    }
-	    // draw table body
+                continue;
+            }
+            if (!lvar) { // table is complete...
+                incomplete --;
+                lvar = "";
+            }
+            // draw table body
             prints( HLP_DESCRIPTION_COLOR "%-*s"
                     HLP_KEYLIST_COLOR     "%-*s",
                     l_widths[i], lvar,
                     col_widths[i]-l_widths[i], rvar);
-	}
-	outc('\n');
+        }
+        outc('\n');
     } while (incomplete);
 
     // show additional help information
@@ -3689,14 +3689,14 @@ mf_movieCurrentFrameNo(void)
 
     do
     {
-       if ( mf_movieFrameHeader(mf.disps, mf.end))
-           no++;
+        if ( mf_movieFrameHeader(mf.disps, mf.end))
+            no++;
 
-       if (mf.disps >= p)
-           break;
+        if (mf.disps >= p)
+            break;
 
-       if (mf_forward(1) < 1)
-           break;
+        if (mf_forward(1) < 1)
+            break;
 
     } while ( 1 ); // mf.disps < p);
 

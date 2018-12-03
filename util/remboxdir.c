@@ -27,36 +27,36 @@ typedef char FNAME[9];
 static FNAME *n_pool;
 static int n_size, n_head;
 
-	int
+    int
 pool_add(
-	FNAME fname)
+    FNAME fname)
 {
-	char *p;
+    char *p;
 
-	/* initial pool */
-	if (!n_pool)
-	{
-		n_pool = (FNAME *) malloc(FNAME_DB_SIZE * sizeof(FNAME));
-		n_size = FNAME_DB_SIZE;
-		n_head = 0;
-	}
+    /* initial pool */
+    if (!n_pool)
+    {
+        n_pool = (FNAME *) malloc(FNAME_DB_SIZE * sizeof(FNAME));
+        n_size = FNAME_DB_SIZE;
+        n_head = 0;
+    }
 
-	if (n_head >= n_size)
-	{
-		n_size += (n_size >> 1);
-		n_pool = (FNAME *) realloc(n_pool, n_size * sizeof(FNAME));
-	}
+    if (n_head >= n_size)
+    {
+        n_size += (n_size >> 1);
+        n_pool = (FNAME *) realloc(n_pool, n_size * sizeof(FNAME));
+    }
 
-	p = n_pool[n_head];
+    p = n_pool[n_head];
 
-	if (fname[8])
-		return -1;          /* too long */
+    if (fname[8])
+        return -1;          /* too long */
 
-	strcpy(p, fname);
+    strcpy(p, fname);
 
-	n_head++;
+    n_head++;
 
-	return 0;
+    return 0;
 }
 
 #if 0
@@ -66,194 +66,194 @@ pool_add(
 /* ----------------------------------------------------- */
 
 static char radix32[32] = {
-	'0', '1', '2', '3', '4', '5', '6', '7',
-	'8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
-	'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-	'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
+    '0', '1', '2', '3', '4', '5', '6', '7',
+    '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
+    'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+    'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
 };
 #endif
 
 
-	HDR *
+    HDR *
 article_parse(
-	FILE *fp)
+    FILE *fp)
 {
-	static HDR hdr;
-	char buf[256], *ptr, *ptr2, *ptr3;
-	int local;
+    static HDR hdr;
+    char buf[256], *ptr, *ptr2, *ptr3;
+    int local;
 
-	if (!fgets(buf, sizeof(buf), fp))
-		return NULL;
+    if (!fgets(buf, sizeof(buf), fp))
+        return NULL;
 
-	if ((ptr2 = strrchr(buf, '\n')))
-		*ptr2 = '\0';
+    if ((ptr2 = strrchr(buf, '\n')))
+        *ptr2 = '\0';
 
-	memset(&hdr, 0, sizeof hdr);
+    memset(&hdr, 0, sizeof hdr);
 
-	local = 0;
-	if ((ptr = strstr(buf, STR_POST1))) /* 看版 */
-	{
-		local = 0;
-	}
-	else if ((ptr = strstr(buf, STR_POST2)))    /* 站內 */
-	{
-		local = 1;
-	}
+    local = 0;
+    if ((ptr = strstr(buf, STR_POST1))) /* 看版 */
+    {
+        local = 0;
+    }
+    else if ((ptr = strstr(buf, STR_POST2)))    /* 站內 */
+    {
+        local = 1;
+    }
 
-	if (ptr)
-	{
-		ptr[-1] = '\0';
-		if (ptr[-2] == ',')
-		{
-			ptr[-2] = '\0';
-		}
-	}
+    if (ptr)
+    {
+        ptr[-1] = '\0';
+        if (ptr[-2] == ',')
+        {
+            ptr[-2] = '\0';
+        }
+    }
 
-	/* hdr.owner, hdr.nick */
+    /* hdr.owner, hdr.nick */
 
-	if (strncmp(STR_AUTHOR1, buf, LEN_AUTHOR1) == 0)
-		ptr = buf + LEN_AUTHOR1 + 1;
-	else if (strncmp(STR_AUTHOR2, buf, LEN_AUTHOR2) == 0)
-		ptr = buf + LEN_AUTHOR2 + 1;
-	else
-		return &hdr;        /* no information */
+    if (strncmp(STR_AUTHOR1, buf, LEN_AUTHOR1) == 0)
+        ptr = buf + LEN_AUTHOR1 + 1;
+    else if (strncmp(STR_AUTHOR2, buf, LEN_AUTHOR2) == 0)
+        ptr = buf + LEN_AUTHOR2 + 1;
+    else
+        return &hdr;        /* no information */
 
-	if (strchr(ptr, '@'))
-	{
-		str_from(ptr, hdr.owner, hdr.nick);
-		hdr.xmode |= POST_INCOME;   /* also MAIL_INCOME */
-	}
-	else
-	{
-		if ((ptr2 = strchr(ptr, '(')))
-		{
-			ptr2[-1] = '\0';
-			strcpy(hdr.owner, ptr);
-			if ((ptr3 = strchr(ptr2 + 1, ')')))
-			{
-				*ptr3 = '\0';
-				strcpy(hdr.nick, ptr2 + 1);
-			}
-		}
-	}
+    if (strchr(ptr, '@'))
+    {
+        str_from(ptr, hdr.owner, hdr.nick);
+        hdr.xmode |= POST_INCOME;   /* also MAIL_INCOME */
+    }
+    else
+    {
+        if ((ptr2 = strchr(ptr, '(')))
+        {
+            ptr2[-1] = '\0';
+            strcpy(hdr.owner, ptr);
+            if ((ptr3 = strchr(ptr2 + 1, ')')))
+            {
+                *ptr3 = '\0';
+                strcpy(hdr.nick, ptr2 + 1);
+            }
+        }
+    }
 
-	/* hdr.title */
-	if (!fgets(buf, sizeof(buf), fp))
-		return &hdr;        /* no title info */
+    /* hdr.title */
+    if (!fgets(buf, sizeof(buf), fp))
+        return &hdr;        /* no title info */
 
-	if ((ptr2 = strrchr(buf, '\n')))
-		*ptr2 = '\0';
+    if ((ptr2 = strrchr(buf, '\n')))
+        *ptr2 = '\0';
 
-	strcpy(hdr.title, ptr);
+    strcpy(hdr.title, ptr);
 
-	/* go through until final part */
-	while (!feof(fp))
-		fgets(buf, sizeof(buf), fp);
+    /* go through until final part */
+    while (!feof(fp))
+        fgets(buf, sizeof(buf), fp);
 
-	/* part of hdr.xmode */
+    /* part of hdr.xmode */
 
 #if 0
-	if (strncmp("※ Origin: " BOARDNAME, buf, 11 + sizeof(BOARDNAME) - 1) == 0)
+    if (strncmp("※ Origin: " BOARDNAME, buf, 11 + sizeof(BOARDNAME) - 1) == 0)
 #endif
-		if (!(hdr.xmode & POST_INCOME))
-		{             /* inside maple */
-			hdr.xmode |= local ? 0 : POST_OUTGO;
-			if (strstr(buf, "◆ Mail:"))
-				hdr.xmode |= POST_EMAIL;
-		}
+    if (!(hdr.xmode & POST_INCOME))
+    {             /* inside maple */
+        hdr.xmode |= local ? 0 : POST_OUTGO;
+        if (strstr(buf, "◆ Mail:"))
+            hdr.xmode |= POST_EMAIL;
+    }
 #if 0
-		else
-		{
-			hdr.xmode |= POST_INCOME;
-		}
+    else
+    {
+        hdr.xmode |= POST_INCOME;
+    }
 #endif
 
-	return &hdr;
+    return &hdr;
 }
 
-	static int
+    static int
 fname_cmp(
-	char *s1, char *s2)
+    char *s1, char *s2)
 {
-	return strcmp(s1 + 1, s2 + 1);
+    return strcmp(s1 + 1, s2 + 1);
 }
 
 int main(int argc,char *argv[])
 {
-	struct dirent *de;
-	DIR *dirp;
-	int ch;
-	char fpath[80], upath[128], upath2[128];
-	char *str;
-	FILE *fp, *fh;
-	HDR *hdr;
+    struct dirent *de;
+    DIR *dirp;
+    int ch;
+    char fpath[80], upath[128], upath2[128];
+    char *str;
+    FILE *fp, *fh;
+    HDR *hdr;
 
-	dirp = NULL;
-	fpath[1] = '\0';
-	ch = '0';
-	/* readdir 0-9A-V if exists */
-	for (;;)
-	{
-		*fpath = ch++;
-		if ((dirp = opendir(fpath)))
-		{
-			while ((de = readdir(dirp)))
-			{
-				str = de->d_name;
-				if (*str == '.')
-					continue;
+    dirp = NULL;
+    fpath[1] = '\0';
+    ch = '0';
+    /* readdir 0-9A-V if exists */
+    for (;;)
+    {
+        *fpath = ch++;
+        if ((dirp = opendir(fpath)))
+        {
+            while ((de = readdir(dirp)))
+            {
+                str = de->d_name;
+                if (*str == '.')
+                    continue;
 
-				if (pool_add(str) < 0)
-				{
-					//printf("Bad article/folder name %c/%s\n", ch, str);
-				}
-			}
-			closedir(dirp);
-		}
+                if (pool_add(str) < 0)
+                {
+                    //printf("Bad article/folder name %c/%s\n", ch, str);
+                }
+            }
+            closedir(dirp);
+        }
 
-		if (ch == 'W')
-			break;
+        if (ch == 'W')
+            break;
 
-		if (ch == '9' + 1)
-			ch = 'A';
-	}
+        if (ch == '9' + 1)
+            ch = 'A';
+    }
 
-	n_head = 0;           /* reset pool */
+    n_head = 0;           /* reset pool */
 
-	/* readdir @ if exists */
-	if ((dirp = opendir("@")))
-	{
+    /* readdir @ if exists */
+    if ((dirp = opendir("@")))
+    {
 
-		/* generate .DIR.@ */
+        /* generate .DIR.@ */
 
- 	    usr_fpath(upath, cuser.userid, ".DIR.@");
- 	    usr_fpath(upath2, cuser.userid, NULL);
+        usr_fpath(upath, cuser.userid, ".DIR.@");
+        usr_fpath(upath2, cuser.userid, NULL);
 
-		if ((fh = fopen(upath, "wb")))
-		{
-			for (ch = 0; ch < n_head; ch++)
-			{
-				sprintf(fpath, "%s/@/%s", upath2, n_pool[ch]);
+        if ((fh = fopen(upath, "wb")))
+        {
+            for (ch = 0; ch < n_head; ch++)
+            {
+                sprintf(fpath, "%s/@/%s", upath2, n_pool[ch]);
 
-				if ((fp = fopen(fpath, "r")))
-				{
-					/* parse article header */
-					if ((hdr = article_parse(fp)))
-					{
-						/* fill in chrono/date/xid/xname */
-						hdr->chrono = chrono32(n_pool[ch]);
-						str_stamp(hdr->date, &hdr->chrono);
-						strcpy(hdr->xname, n_pool[ch]);
-						hdr->xid = 0;
+                if ((fp = fopen(fpath, "r")))
+                {
+                    /* parse article header */
+                    if ((hdr = article_parse(fp)))
+                    {
+                        /* fill in chrono/date/xid/xname */
+                        hdr->chrono = chrono32(n_pool[ch]);
+                        str_stamp(hdr->date, &hdr->chrono);
+                        strcpy(hdr->xname, n_pool[ch]);
+                        hdr->xid = 0;
 
-						/* write to .DIR */
-						fwrite(hdr, sizeof(HDR), 1, fh);
-					}
-					fclose(fp);
-				}
-			}
-			fclose(fh);
-		}
-	}
-	return 0;
+                        /* write to .DIR */
+                        fwrite(hdr, sizeof(HDR), 1, fh);
+                    }
+                    fclose(fp);
+                }
+            }
+            fclose(fh);
+        }
+    }
+    return 0;
 }

@@ -3,8 +3,8 @@
 
 int main(void)
 {
-  char t[]="Hello";
-  str_xor(t,"he3");
-  return 0;
+    char t[]="Hello";
+    str_xor(t,"he3");
+    return 0;
 }
 

@@ -321,7 +321,7 @@ int class_add(XO *xo);
 
 
 #define	STR4(x)		((x[0] << 24) + (x[1] << 16) + (x[2] << 8) + x[3])
-                     /* Thor.980913: 保證precedence */
+                    /* Thor.980913: 保證precedence */
 
 
 #endif				/* _PROTO_H_ */

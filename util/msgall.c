@@ -13,108 +13,108 @@ static UCACHE *ushm;
 
 static void *
 attach_shm(
-  int shmkey, int shmsize)
+    int shmkey, int shmsize)
 {
-  void *shmptr;
-  int shmid;
+    void *shmptr;
+    int shmid;
 
-  shmid = shmget(shmkey, shmsize, 0);
-  shmsize = 0;
-  shmptr = (void *) shmat(shmid, NULL, 0);
+    shmid = shmget(shmkey, shmsize, 0);
+    shmsize = 0;
+    shmptr = (void *) shmat(shmid, NULL, 0);
 
-  return shmptr;
+    return shmptr;
 }
 
 
 int
 bsend(
-  UTMP *callee,
-  BMW *bmw)
+    UTMP *callee,
+    BMW *bmw)
 {
-  BMW *mpool, *mhead, *mtail, **mslot;
-  int i;
-  pid_t pid;
-  time_t texpire;
+    BMW *mpool, *mhead, *mtail, **mslot;
+    int i;
+    pid_t pid;
+    time_t texpire;
 
-  if ((pid = callee->pid) <= 0)
-    return 1;
+    if ((pid = callee->pid) <= 0)
+        return 1;
 
-  mslot = callee->mslot;
-  i = 0;
+    mslot = callee->mslot;
+    i = 0;
 
-  for (;;)
-  {
-    if (mslot[i] == NULL)
-      break;
-
-    if (++i >= BMW_PER_USER)
+    for (;;)
     {
-      return 1;
+        if (mslot[i] == NULL)
+            break;
+
+        if (++i >= BMW_PER_USER)
+        {
+            return 1;
+        }
     }
-  }
 
-  texpire = time(&bmw->btime) - BMW_EXPIRE;
+    texpire = time(&bmw->btime) - BMW_EXPIRE;
 
-  mpool = ushm->mpool;
-  mhead = ushm->mbase;
-  if (mhead < mpool)
-    mhead = mpool;
-  mtail = mpool + BMW_MAX;
+    mpool = ushm->mpool;
+    mhead = ushm->mbase;
+    if (mhead < mpool)
+        mhead = mpool;
+    mtail = mpool + BMW_MAX;
 
-  do
-  {
-    if (++mhead >= mtail)
-      mhead = mpool;
-  } while (mhead->btime > texpire);
+    do
+    {
+        if (++mhead >= mtail)
+            mhead = mpool;
+    } while (mhead->btime > texpire);
 
-  *mhead = *bmw;
-  ushm->mbase = mslot[i] = mhead;
+    *mhead = *bmw;
+    ushm->mbase = mslot[i] = mhead;
 
-  return kill(pid, SIGUSR2);
+    return kill(pid, SIGUSR2);
 }
 
 
 void
 bedit(
-  UTMP *up,
-  BMW *bmw)
+    UTMP *up,
+    BMW *bmw)
 {
-  bmw->recver = up->userno;	/* 先記下 userno 作為 check */
+    bmw->recver = up->userno;	/* 先記下 userno 作為 check */
 
-  bmw->caller = NULL;
-  bmw->sender = 0;
-  strcpy(bmw->userid, "系統通告");
+    bmw->caller = NULL;
+    bmw->sender = 0;
+    strcpy(bmw->userid, "系統通告");
 
-  bsend(up, bmw);
+    bsend(up, bmw);
 }
 
 int
 main(
-  int argc,
-  char **argv)
+    int argc,
+    char **argv)
 {
-  UTMP *up, *uceil;
-  BMW bmw;
+    UTMP *up, *uceil;
+    BMW bmw;
 
-  chdir(BBSHOME);
-  if(argc < 2)
-  {
-	printf("Usage: msgall <msg>\n");
-	exit(0);
-  }
+    chdir(BBSHOME);
+    if(argc < 2)
+    {
+        printf("Usage: msgall <msg>\n");
+        exit(0);
+    }
 
-  ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
-  strcpy(bmw.msg,argv[1]);
+    ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
+    strcpy(bmw.msg,argv[1]);
 
-  up = ushm->uslot;
-  uceil = (void *) up + ushm->offset;
+    up = ushm->uslot;
+    uceil = (void *) up + ushm->offset;
 
-  do
-  {
-    if (up->pid <= 0)
-      continue;
-    bedit(up, &bmw);
-  } while (++up <= uceil);
+    do
+    {
+        if (up->pid <= 0)
+            continue;
+        bedit(up, &bmw);
+    } while (++up <= uceil);
 
-  return 0;
+    return 0;
 }

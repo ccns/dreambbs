@@ -82,44 +82,44 @@
 
 static int
 Isspace (
-     int ch)
+    int ch)
 {
-   return (ch == ' ' || ch == '\t' || ch == 10 || ch == 13);
+    return (ch == ' ' || ch == '\t' || ch == 10 || ch == 13);
 }
 
 
 static char *
 nextword (
-     char **str)
+    char **str)
 {
-   char *head, *tail;
-   int ch;
+    char *head, *tail;
+    int ch;
 
-   head = *str;
-   for (;;) {
+    head = *str;
+    for (;;) {
 
-      ch = *head;
-      if (!ch) {
-	 *str = head;
-	 return head;
-      }
-      if (!Isspace (ch))
-	 break;
-      head++;
-   }
+        ch = *head;
+        if (!ch) {
+            *str = head;
+            return head;
+        }
+        if (!Isspace (ch))
+            break;
+        head++;
+    }
 
-   tail = head + 1;
-   while ((ch = *tail)) {
+    tail = head + 1;
+    while ((ch = *tail)) {
 
-      if (Isspace (ch)) {
-	 *tail++ = '\0';
-	 break;
-      }
-      tail++;
-   }
-   *str = tail;
+        if (Isspace (ch)) {
+            *tail++ = '\0';
+            break;
+        }
+        tail++;
+    }
+    *str = tail;
 
-   return head;
+    return head;
 }
 
 

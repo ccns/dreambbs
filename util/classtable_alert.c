@@ -28,283 +28,283 @@ static int cache_size;
 
 static void *
 attach_shm(
-  int shmkey, int shmsize)
+    int shmkey, int shmsize)
 {
-  void *shmptr;
-  int shmid;
+    void *shmptr;
+    int shmid;
 
-  shmid = shmget(shmkey, shmsize, 0);
-  shmsize = 0;
-  shmptr = (void *) shmat(shmid, NULL, 0);
+    shmid = shmget(shmkey, shmsize, 0);
+    shmsize = 0;
+    shmptr = (void *) shmat(shmid, NULL, 0);
 
-  return shmptr;
+    return shmptr;
 }
 
 static CLASS_TABLE_ALERT *
 bfind(
-  int userno)
+    int userno)
 {
-  int count;
-  CLASS_TABLE_ALERT *tmpcache,*datum;
+    int count;
+    CLASS_TABLE_ALERT *tmpcache,*datum;
 
-  if ((tmpcache = cache))
-  {
-    for (count = 0; count < cache_size;count++)
+    if ((tmpcache = cache))
     {
-      datum = tmpcache + count;
-      if (userno == datum->userno)
-		return datum;
+        for (count = 0; count < cache_size;count++)
+        {
+            datum = tmpcache + count;
+            if (userno == datum->userno)
+                return datum;
+        }
     }
-  }
-  return NULL;
+    return NULL;
 }
 
 int
 bsend(
-  UTMP *callee,
-  BMW *bmw)
+    UTMP *callee,
+    BMW *bmw)
 {
-  BMW *mpool, *mhead, *mtail, **mslot;
-  int i;
-  pid_t pid;
-  time_t texpire;
+    BMW *mpool, *mhead, *mtail, **mslot;
+    int i;
+    pid_t pid;
+    time_t texpire;
 
-  if ((pid = callee->pid) <= 0)
-    return 1;
+    if ((pid = callee->pid) <= 0)
+        return 1;
 
-  /* sem_lock(BSEM_ENTER); */
+    /* sem_lock(BSEM_ENTER); */
 
-  /* find callee's available slot */
+    /* find callee's available slot */
 
-  mslot = callee->mslot;
-  i = 0;
+    mslot = callee->mslot;
+    i = 0;
 
-  for (;;)
-  {
-    if (mslot[i] == NULL)
-      break;
-
-    if (++i >= BMW_PER_USER)
+    for (;;)
     {
-      /* sem_lock(BSEM_LEAVE); */
-      return 1;
+        if (mslot[i] == NULL)
+            break;
+
+        if (++i >= BMW_PER_USER)
+        {
+            /* sem_lock(BSEM_LEAVE); */
+            return 1;
+        }
     }
-  }
 
-  /* find available BMW slot in pool */
+    /* find available BMW slot in pool */
 
-  texpire = time(&bmw->btime) - BMW_EXPIRE;
+    texpire = time(&bmw->btime) - BMW_EXPIRE;
 
-  mpool = ushm->mpool;
-  mhead = ushm->mbase;
-  if (mhead < mpool)
-    mhead = mpool;
-  mtail = mpool + BMW_MAX;
+    mpool = ushm->mpool;
+    mhead = ushm->mbase;
+    if (mhead < mpool)
+        mhead = mpool;
+    mtail = mpool + BMW_MAX;
 
-  do
-  {
-    if (++mhead >= mtail)
-      mhead = mpool;
-  } while (mhead->btime > texpire);
+    do
+    {
+        if (++mhead >= mtail)
+            mhead = mpool;
+    } while (mhead->btime > texpire);
 
-  *mhead = *bmw;
-  ushm->mbase = mslot[i] = mhead;
+    *mhead = *bmw;
+    ushm->mbase = mslot[i] = mhead;
 
-  /* sem_lock(BSEM_LEAVE); */
-  return kill(pid, SIGUSR2);
+    /* sem_lock(BSEM_LEAVE); */
+    return kill(pid, SIGUSR2);
 }
 
 
 void
 bedit(
-  UTMP *up,
-  BMW *bmw)
+    UTMP *up,
+    BMW *bmw)
 {
 
-  bmw->recver = up->userno;	/* 先記下 userno 作為 check */
+    bmw->recver = up->userno;	/* 先記下 userno 作為 check */
 
-  bmw->caller = NULL;
-  bmw->sender = 0;
-  strcpy(bmw->userid, "系統報時者");
+    bmw->caller = NULL;
+    bmw->sender = 0;
+    strcpy(bmw->userid, "系統報時者");
 
-  bsend(up, bmw);
+    bsend(up, bmw);
 }
 
 
 static void
 init(void)
 {
-  UTMP *up, *uceil;
-  int userno;
-  BMW bmw;
-  CLASS_TABLE_ALERT *ptr;
-  time_t now;
-  struct tm *p;
+    UTMP *up, *uceil;
+    int userno;
+    BMW bmw;
+    CLASS_TABLE_ALERT *ptr;
+    time_t now;
+    struct tm *p;
 
 
-  up = ushm->uslot;
-  uceil = (void *) up + ushm->offset;
+    up = ushm->uslot;
+    uceil = (void *) up + ushm->offset;
 
-  do
-  {
-    userno = up->userno;
-    if (up->pid <= 0)
-      continue;
-    if (!(up->ufo & UFO_CLASSTABLE))
-      continue;
-//    printf("%-13.13s  %6.6d  %6.6d\n",up->userid,up->userno,up->pid);
-	if((ptr=bfind(up->userno)))
-	{
-	  //strcpy(bmw.msg,"訊息測試,不便請見諒");
+    do
+    {
+        userno = up->userno;
+        if (up->pid <= 0)
+            continue;
+        if (!(up->ufo & UFO_CLASSTABLE))
+            continue;
+//      printf("%-13.13s  %6.6d  %6.6d\n",up->userid,up->userno,up->pid);
+        if((ptr=bfind(up->userno)))
+        {
+            //strcpy(bmw.msg,"訊息測試,不便請見諒");
 
-	  time(&now);
-      p = localtime(&now);
-	  if(p->tm_wday >= 1 && p->tm_hour >= 8 && p->tm_hour<=20)
-	  {
-	    if(ptr->item[(p->tm_wday-1)*13 + (p->tm_hour - 8)].used)
-		{
-		  CLASS_TABLE_ALERT_ITEM *cur;
-		  cur = &(ptr->item[(p->tm_wday-1)*13 + (p->tm_hour - 8)]);
-//		  cur = &(ptr->item[i]);
-		  if(strlen(cur->room))
-		  {
-            sprintf(bmw.msg, "◎您在 %-.16s 有一門 [%s] 課，上課不要遲到哦!!",cur->room,cur->condensation);
-			printf("%s:%s\n",up->userid,bmw.msg);
-		  }
-		  else
-		  {
-            sprintf(bmw.msg, "◎您有一門 [%s] 課，上課不要遲到哦!!",cur->condensation);
-			printf("%s:%s\n",up->userid,bmw.msg);
+            time(&now);
+            p = localtime(&now);
+            if(p->tm_wday >= 1 && p->tm_hour >= 8 && p->tm_hour<=20)
+            {
+                if(ptr->item[(p->tm_wday-1)*13 + (p->tm_hour - 8)].used)
+                {
+                    CLASS_TABLE_ALERT_ITEM *cur;
+                    cur = &(ptr->item[(p->tm_wday-1)*13 + (p->tm_hour - 8)]);
+//		            cur = &(ptr->item[i]);
+                    if(strlen(cur->room))
+                    {
+                        sprintf(bmw.msg, "◎您在 %-.16s 有一門 [%s] 課，上課不要遲到哦!!",cur->room,cur->condensation);
+                        printf("%s:%s\n",up->userid,bmw.msg);
+                    }
+                    else
+                    {
+                        sprintf(bmw.msg, "◎您有一門 [%s] 課，上課不要遲到哦!!",cur->condensation);
+                        printf("%s:%s\n",up->userid,bmw.msg);
 
-		  }
-	      bedit(up,&bmw);
-		}
-	  }
-	}
-  } while (++up <= uceil);
+                    }
+                bedit(up,&bmw);
+                }
+            }
+        }
+    } while (++up <= uceil);
 
 }
 /*
 static int
 int1_cmp(
-  CLASS_TABLE_ALERT **i, CLASS_TABLE_ALERT **j)
+    CLASS_TABLE_ALERT **i, CLASS_TABLE_ALERT **j)
 {
-  return (*i)->userno - (*j)->userno;
+    return (*i)->userno - (*j)->userno;
 }
 */
 UTMP *
 utmp_find(
-  int userno)
+    int userno)
 {
-  UTMP *uentp, *uceil;
+    UTMP *uentp, *uceil;
 
-  uentp = ushm->uslot;
-  uceil = (void *) uentp + ushm->offset;
-  do
-  {
-    if (uentp->userno == userno)
-      return uentp;
-  } while (++uentp <= uceil);
+    uentp = ushm->uslot;
+    uceil = (void *) uentp + ushm->offset;
+    do
+    {
+        if (uentp->userno == userno)
+            return uentp;
+    } while (++uentp <= uceil);
 
-  return NULL;
+    return NULL;
 }
 
 
 void
 bcache(
-  char *fpath)
+    char *fpath)
 {
-  int fd, size=0;
-  struct stat st;
-  int userno;
+    int fd, size=0;
+    struct stat st;
+    int userno;
 
-  if ((fd = open(fpath, O_RDWR, 0600)) < 0)
-    return;
+    if ((fd = open(fpath, O_RDWR, 0600)) < 0)
+        return;
 
 
-  if (!fstat(fd, &st) && (size = st.st_size) > 0)
-  {
-    CLASS_TABLE_ALERT *pbase, *phead, *ptail;
-
-    pbase = phead = (CLASS_TABLE_ALERT *) malloc(size);
-    size = read(fd, pbase, size);
-	//printf("2bcache:%d\n",size);
-    if (size >= sizeof(CLASS_TABLE_ALERT))
+    if (!fstat(fd, &st) && (size = st.st_size) > 0)
     {
-      ptail = (CLASS_TABLE_ALERT *) ((char *) pbase + size);
- // printf("2bcache\n");
-      while (phead < ptail)
-      {
-		userno = phead->userno;
-		if (utmp_find(userno))
-		{
-  //printf("3bcache\n");
-			phead++;
-			continue;
-		}
-  //printf("4bcache\n");
-		ptail--;
-		if (phead >= ptail)
-			break;
-		memcpy(phead, ptail, sizeof(CLASS_TABLE_ALERT));
-      }
+        CLASS_TABLE_ALERT *pbase, *phead, *ptail;
 
-      size = (char *) ptail - (char *) pbase;
-      if (size > 0)
-      {
-  //printf("6bcache:%d\n",size);
+        pbase = phead = (CLASS_TABLE_ALERT *) malloc(size);
+        size = read(fd, pbase, size);
+                //printf("2bcache:%d\n",size);
+        if (size >= sizeof(CLASS_TABLE_ALERT))
+        {
+            ptail = (CLASS_TABLE_ALERT *) ((char *) pbase + size);
+        //  printf("2bcache\n");
+            while (phead < ptail)
+            {
+                userno = phead->userno;
+                if (utmp_find(userno))
+                {
+                    //printf("3bcache\n");
+                    phead++;
+                    continue;
+                }
+                //printf("4bcache\n");
+                ptail--;
+                if (phead >= ptail)
+                    break;
+                memcpy(phead, ptail, sizeof(CLASS_TABLE_ALERT));
+            }
 
-//		if (size > sizeof(CLASS_TABLE_ALERT))
-//			xsort(pbase, size / sizeof(CLASS_TABLE_ALERT), sizeof(CLASS_TABLE_ALERT), int1_cmp);
-  //printf("5bcache\n");
+            size = (char *) ptail - (char *) pbase;
+            if (size > 0)
+            {
+                //printf("6bcache:%d\n",size);
 
-		lseek(fd, 0, SEEK_SET);
-		write(fd, pbase, size);
-		ftruncate(fd, size);
-      }
-  //printf("1bcache\n");
-	  cache = pbase;
-	  cache_size = size / sizeof(CLASS_TABLE_ALERT);
+//		        if (size > sizeof(CLASS_TABLE_ALERT))
+//			        xsort(pbase, size / sizeof(CLASS_TABLE_ALERT), sizeof(CLASS_TABLE_ALERT), int1_cmp);
+                //printf("5bcache\n");
+
+                lseek(fd, 0, SEEK_SET);
+                write(fd, pbase, size);
+                ftruncate(fd, size);
+            }
+            //printf("1bcache\n");
+            cache = pbase;
+            cache_size = size / sizeof(CLASS_TABLE_ALERT);
+        }
     }
-  }
-  close(fd);
+    close(fd);
 
-  if (size <= 0)
-  {
-    unlink(fpath);
-	cache = NULL;
-	cache_size = 0;
-  }
+    if (size <= 0)
+    {
+        unlink(fpath);
+        cache = NULL;
+        cache_size = 0;
+    }
  // printf("bcache\n");
 }
 
 int
 main(
-  int argc,
-  char *argv[])
+    int argc,
+    char *argv[])
 {
-  char fpath[128];
+    char fpath[128];
 
-  chdir(BBSHOME);
+    chdir(BBSHOME);
 
-  ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
+    ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
 
-  if(!ushm)
-  {
-    exit(1);
-  }
-
-
-  sprintf(fpath,"%s.new",FN_CLASSTABLE_DB);
-  f_mv(FN_CLASSTABLE_DB, fpath);
-  bcache(fpath);
+    if(!ushm)
+    {
+        exit(1);
+    }
 
 
-  init();
+    sprintf(fpath,"%s.new",FN_CLASSTABLE_DB);
+    f_mv(FN_CLASSTABLE_DB, fpath);
+    bcache(fpath);
 
-  if(cache)
-	free(cache);
-  f_cp(fpath, FN_CLASSTABLE_DB, O_APPEND);
-  unlink(fpath);
-  return 0;
+
+    init();
+
+    if(cache)
+        free(cache);
+    f_cp(fpath, FN_CLASSTABLE_DB, O_APPEND);
+    unlink(fpath);
+    return 0;
 }

@@ -11,26 +11,26 @@
 
 void
 url_encode(
-  char *dst, /* Thor.990331: 要 src的三倍空間 */
-  const char *src
+    char *dst, /* Thor.990331: 要 src的三倍空間 */
+    const char *src
 )
 {
-  for(; *src; src++)
-  {
-    if(*src == ' ')
-      *dst++ = '+';
-    else if(*src == '/' || *src == '.' || *src == '&' || *src == '?' || *src == '=' )
-      *dst++ = *src;
-    else if(is_alnum(*src))
-      *dst++ = *src;
-    else
+    for(; *src; src++)
     {
-      register int cc = *src;
-      *dst++ = '%';
-      *dst++ = radix32[cc >> 4];
-      *dst++ = radix32[cc & 0xf];
+        if(*src == ' ')
+            *dst++ = '+';
+        else if(*src == '/' || *src == '.' || *src == '&' || *src == '?' || *src == '=' )
+            *dst++ = *src;
+        else if(is_alnum(*src))
+            *dst++ = *src;
+        else
+        {
+            register int cc = *src;
+            *dst++ = '%';
+            *dst++ = radix32[cc >> 4];
+            *dst++ = radix32[cc & 0xf];
+        }
     }
-  }
-  *dst = '\0';
+    *dst = '\0';
 }
 

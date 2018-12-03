@@ -25,755 +25,755 @@ time_t brd_visit[MAXBOARD];	/* 最近瀏覽時間 */
 
 void
 brd2myfavorite(
-  BRD *brd,
-  HDR *gem)
+    BRD *brd,
+    HDR *gem)
 {
-  memset(gem, 0, sizeof(HDR));
-  time(&gem->chrono);
-  strcpy(gem->xname, brd->brdname);
-  sprintf(gem->title, "%-16s%s", brd->brdname, brd->title );
-  gem->xmode = GEM_BOARD;
+    memset(gem, 0, sizeof(HDR));
+    time(&gem->chrono);
+    strcpy(gem->xname, brd->brdname);
+    sprintf(gem->title, "%-16s%s", brd->brdname, brd->title );
+    gem->xmode = GEM_BOARD;
 }
 
 static void
 myfavorite_item(
-  int num,
-  HDR *myfavorite)
+    int num,
+    HDR *myfavorite)
 {
-  if(myfavorite->xmode & GEM_BOARD)
-  {
-    if(myfavorite->recommend == -1)
-      prints("%6d   %-13s< 本看板已不存在 >\n",num,myfavorite->xname);
-    else
+    if(myfavorite->xmode & GEM_BOARD)
     {
-      BRD *brd;
-      char str[20],buf[10],*bits,*str2,buf2[20],brdtype;
-      int chn,brdnew, bno;
+        if(myfavorite->recommend == -1)
+            prints("%6d   %-13s< 本看板已不存在 >\n",num,myfavorite->xname);
+        else
+        {
+            BRD *brd;
+            char str[20],buf[10],*bits,*str2,buf2[20],brdtype;
+            int chn,brdnew, bno;
 
-      chn = myfavorite->recommend;
-      brd = bshm->bcache + chn;
+            chn = myfavorite->recommend;
+            brd = bshm->bcache + chn;
 
-      brh_get(brd->bstamp, chn);
+            brh_get(brd->bstamp, chn);
 
-//      if(cuser.ufo2 & UFO2_ENHANCE)
-//        sprintf(str,"%c\033[1;32m%c\033[m",(brd->readlevel & PERM_SYSOP) ? ')' : ' ',brd->blast > brd_visit[chn] ? '+' : ' ');
-//      else
-//        sprintf(str,"%c\033[1;32m%c\033[m",(brd->readlevel & PERM_SYSOP) ? ')' : ' ',brh_unread(brd->blast) ? '+' : ' ');
-      brdnew = cuser.ufo2 & UFO2_BRDNEW;
-      bits = brd_bits;
+//          if(cuser.ufo2 & UFO2_ENHANCE)
+//              sprintf(str,"%c\033[1;32m%c\033[m",(brd->readlevel & PERM_SYSOP) ? ')' : ' ',brd->blast > brd_visit[chn] ? '+' : ' ');
+//          else
+//              sprintf(str,"%c\033[1;32m%c\033[m",(brd->readlevel & PERM_SYSOP) ? ')' : ' ',brh_unread(brd->blast) ? '+' : ' ');
+            brdnew = cuser.ufo2 & UFO2_BRDNEW;
+            bits = brd_bits;
 
-      sprintf(buf,"%d;3%d",brd->color/10,brd->color%10);
+            sprintf(buf,"%d;3%d",brd->color/10,brd->color%10);
 
-	if (!brdnew)
-	{
-	  int fd, fsize;
-	  char folder[64];
-	  struct stat st;
-
-	  brd_fpath(folder, brd->brdname, fn_dir);
-	  if ((fd = open(folder, O_RDONLY)) >= 0)
-	  {
-	    fstat(fd, &st);
-
-          if(st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
-          {
-            if((fsize = st.st_size) >= sizeof(HDR))
+            if (!brdnew)
             {
-              HDR hdr;
+                int fd, fsize;
+                char folder[64];
+                struct stat st;
 
-              brd->bpost = fsize / sizeof(HDR);
-              while ((fsize -= sizeof(HDR)) >= 0)
-              {
-                lseek(fd, fsize, SEEK_SET);
-                read(fd, &hdr, sizeof(HDR));
-                if (!(hdr.xmode & (POST_LOCK | POST_BOTTOM)))
-                  break;
-              }
-              brd->blast = hdr.chrono;
-            }
-           else
-              brd->blast = brd->bpost = 0;
-          }
+                brd_fpath(folder, brd->brdname, fn_dir);
+                if ((fd = open(folder, O_RDONLY)) >= 0)
+                {
+                    fstat(fd, &st);
 
-	    close(fd);
-	  }
+                if(st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
+                {
+                    if((fsize = st.st_size) >= sizeof(HDR))
+                    {
+                        HDR hdr;
 
-    }
+                        brd->bpost = fsize / sizeof(HDR);
+                        while ((fsize -= sizeof(HDR)) >= 0)
+                        {
+                            lseek(fd, fsize, SEEK_SET);
+                            read(fd, &hdr, sizeof(HDR));
+                            if (!(hdr.xmode & (POST_LOCK | POST_BOTTOM)))
+                                break;
+                        }
+                        brd->blast = hdr.chrono;
+                    }
+                    else
+                            brd->blast = brd->bpost = 0;
+                    }
 
-    else
-	{
-	  int fd, fsize;
-	  char folder[64];
-	  struct stat st;
+                    close(fd);
+                }
 
-	  brd_fpath(folder, brd->brdname, fn_dir);
-	  if ((fd = open(folder, O_RDONLY)) >= 0)
-	  {
-	    fstat(fd, &st);
+        }
 
-          if(st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
-          {
-            if((fsize = st.st_size) >= sizeof(HDR))
+        else
+        {
+            int fd, fsize;
+            char folder[64];
+            struct stat st;
+
+            brd_fpath(folder, brd->brdname, fn_dir);
+            if ((fd = open(folder, O_RDONLY)) >= 0)
             {
-              HDR hdr;
+                fstat(fd, &st);
 
-              brd->bpost = fsize / sizeof(HDR);
-              while ((fsize -= sizeof(HDR)) >= 0)
-              {
-                lseek(fd, fsize, SEEK_SET);
-                read(fd, &hdr, sizeof(HDR));
-                if (!(hdr.xmode & (POST_LOCK | POST_BOTTOM)))
-                  break;
-              }
-              brd->blast = (hdr.chrono > brd->blast) ? hdr.chrono : brd->blast;
+            if(st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
+            {
+                if((fsize = st.st_size) >= sizeof(HDR))
+                {
+                    HDR hdr;
+
+                    brd->bpost = fsize / sizeof(HDR);
+                    while ((fsize -= sizeof(HDR)) >= 0)
+                    {
+                        lseek(fd, fsize, SEEK_SET);
+                        read(fd, &hdr, sizeof(HDR));
+                        if (!(hdr.xmode & (POST_LOCK | POST_BOTTOM)))
+                            break;
+                    }
+                    brd->blast = (hdr.chrono > brd->blast) ? hdr.chrono : brd->blast;
+                }
+                else
+                        brd->blast = brd->bpost = 0;
+                }
+
+                close(fd);
             }
-           else
-              brd->blast = brd->bpost = 0;
-          }
+            num = brd->bpost;
+        }
 
-	    close(fd);
-	  }
-	  num = brd->bpost;
-    }
-
-    sprintf(str,"%s",brd->blast > brd_visit[chn] ? "\033[1;31m★\033[m" : "☆");
+        sprintf(str,"%s",brd->blast > brd_visit[chn] ? "\033[1;31m★\033[m" : "☆");
 
 /* 081122.cache:看板性質,不訂閱,秘密,好友,一般 */
-      if(bits[chn] & BRD_Z_BIT)
-        brdtype = '-';
+            if(bits[chn] & BRD_Z_BIT)
+                brdtype = '-';
 #ifdef HAVE_MODERATED_BOARD
-      else if(brd->readlevel & PERM_BOARD)
-        brdtype = '.';
-      else if(brd->readlevel & PERM_SYSOP)
-        brdtype = ')';
+            else if(brd->readlevel & PERM_BOARD)
+                brdtype = '.';
+            else if(brd->readlevel & PERM_SYSOP)
+                brdtype = ')';
 #endif
-      else
-        brdtype = ' ';
+            else
+                brdtype = ' ';
 
 /* 處理 人氣 */ /* cache.20090416: 仿ptt變色*/
-      bno = brd - bshm->bcache;
-      bno = bshm->mantime[bno];
-      str2 = buf2;
+            bno = brd - bshm->bcache;
+            bno = bshm->mantime[bno];
+            str2 = buf2;
 
-      if (bno > 4999)
-        str2 = "\033[1;32m TOP \033[m";
-      else if (bno > 999)
-        str2 = "\033[1;32m  夯\033[m ";
-      else if (bno > 799)
-        str2 = "\033[1;35m  夯\033[m ";
-      else if (bno > 699)
-        str2 = "\033[1;33m  夯\033[m ";
-      else if (bno > 599)
-        str2 = "  \033[1;42m爆\033[m ";
-      else if (bno > 499)
-        str2 = "  \033[1;45m爆\033[m ";
-      else if (bno > 449)
-        str2 = "  \033[1;44m爆\033[m ";
-      else if (bno > 399)
-        str2 = "\033[1;32m  爆\033[m ";
-      else if (bno > 349)
-        str2 = "\033[1;35m  爆\033[m ";
-      else if (bno > 299)
-        str2 = "\033[1;33m  爆\033[m ";
-      else if (bno > 249)
-        str2 = "\033[1;36m  爆\033[m ";
-      else if (bno > 199)
-        str2 = "\033[1;31m  爆\033[m ";
-      else if (bno > 149)
-        str2 = "\033[1;37m  爆\033[m ";
-      else if (bno > 99)
-        str2 = "\033[1;31m HOT\033[m ";
-      else if (bno > 49)
-        str2 = "\033[1;37m HOT\033[m ";
-      else if (bno > 1) /* r2.170810: let somebody know which board is still "alive" :P */
-        sprintf(str2, "  %2d ", bno);
-      else
-        str2 = "     ";
+            if (bno > 4999)
+                str2 = "\033[1;32m TOP \033[m";
+            else if (bno > 999)
+                str2 = "\033[1;32m  夯\033[m ";
+            else if (bno > 799)
+                str2 = "\033[1;35m  夯\033[m ";
+            else if (bno > 699)
+                str2 = "\033[1;33m  夯\033[m ";
+            else if (bno > 599)
+                str2 = "  \033[1;42m爆\033[m ";
+            else if (bno > 499)
+                str2 = "  \033[1;45m爆\033[m ";
+            else if (bno > 449)
+                str2 = "  \033[1;44m爆\033[m ";
+            else if (bno > 399)
+                str2 = "\033[1;32m  爆\033[m ";
+            else if (bno > 349)
+                str2 = "\033[1;35m  爆\033[m ";
+            else if (bno > 299)
+                str2 = "\033[1;33m  爆\033[m ";
+            else if (bno > 249)
+                str2 = "\033[1;36m  爆\033[m ";
+            else if (bno > 199)
+                str2 = "\033[1;31m  爆\033[m ";
+            else if (bno > 149)
+                str2 = "\033[1;37m  爆\033[m ";
+            else if (bno > 99)
+                str2 = "\033[1;31m HOT\033[m ";
+            else if (bno > 49)
+                str2 = "\033[1;37m HOT\033[m ";
+            else if (bno > 1) /* r2.170810: let somebody know which board is still "alive" :P */
+                sprintf(str2, "  %2d ", bno);
+            else
+                str2 = "     ";
 //注意有三格空白, 因為 HOT 是三個 char 故更改排版
 
-      //sprintf(buf,"%d;3%d",brd->color/10,brd->color%10);
-          prints("%6d%s%c%-13s\033[%sm%-4s \033[m%-33.32s%s%.13s\n", num, str,
-          brdtype,brd->brdname, buf, brd->class, brd->title, brd->bvote ? "\033[1;33m  投\033[m " : str2, brd->BM);
+            //sprintf(buf,"%d;3%d",brd->color/10,brd->color%10);
+            prints("%6d%s%c%-13s\033[%sm%-4s \033[m%-33.32s%s%.13s\n", num, str,
+                brdtype,brd->brdname, buf, brd->class, brd->title, brd->bvote ? "\033[1;33m  投\033[m " : str2, brd->BM);
 
-      //prints("%6d%s%c%-13s\033[%sm%-4s \033[m%-36.36s%c %.13s\n", num, str,
-        //bits[chn] & BRD_Z_BIT ? '-' : ' ',brd->brdname,
-        //buf,brd->class, brd->title, brd->bvote ? 'V' : ' ', brd->BM);
+            //prints("%6d%s%c%-13s\033[%sm%-4s \033[m%-36.36s%c %.13s\n", num, str,
+                //bits[chn] & BRD_Z_BIT ? '-' : ' ',brd->brdname,
+                //buf,brd->class, brd->title, brd->bvote ? 'V' : ' ', brd->BM);
 
+        }
     }
-  }
-  else if(myfavorite->xmode & GEM_GOPHER)
-  {
-    prints("%6d   ■ %s 精華區捷徑\n",num,myfavorite->xname);
-  }
-  else if(myfavorite->xmode & GEM_HTTP)
-  {
-    prints("  ----------------------------------------------------------------------------\n");
-  }
-  else
-  {
-    prints("%6d   %s\n",num,myfavorite->title);
-  }
+    else if(myfavorite->xmode & GEM_GOPHER)
+    {
+        prints("%6d   ■ %s 精華區捷徑\n",num,myfavorite->xname);
+    }
+    else if(myfavorite->xmode & GEM_HTTP)
+    {
+        prints("  ----------------------------------------------------------------------------\n");
+    }
+    else
+    {
+        prints("%6d   %s\n",num,myfavorite->title);
+    }
 }
 
 static int
 myfavorite_body(
-  XO *xo)
+    XO *xo)
 {
-  HDR *myfavorite;
-  int num, max, tail;
+    HDR *myfavorite;
+    int num, max, tail;
 
-  move(3, 0);
-  clrtobot();
-  max = xo->max;
-  if (max <= 0)
-  {
-    return myfavorite_add(xo);
-  }
+    move(3, 0);
+    clrtobot();
+    max = xo->max;
+    if (max <= 0)
+    {
+        return myfavorite_add(xo);
+    }
 
-  myfavorite = (HDR *) xo_pool;
-  num = xo->top;
-  tail = num + XO_TALL;
-  if (max > tail)
-    max = tail;
+    myfavorite = (HDR *) xo_pool;
+    num = xo->top;
+    tail = num + XO_TALL;
+    if (max > tail)
+        max = tail;
 
-  do
-  {
-    myfavorite_item(++num, myfavorite++);
-  } while (num < max);
+    do
+    {
+        myfavorite_item(++num, myfavorite++);
+    } while (num < max);
 
-  return XO_NONE;
+    return XO_NONE;
 }
 
 
 static int
 myfavorite_head(
-  XO *xo)
+    XO *xo)
 {
-  vs_head("我的最愛", str_site);
-  prints("[←]主選單 [→]閱\讀 [a]新增 [d]刪除 [c]篇數 [/]搜尋 [s]看板 [h]說明\n"
-    "\033[44m  %-7s看  板            %-33s人氣 板    主     \033[m",
-    cuser.ufo2 & UFO2_BRDNEW ? "總數" : "編號", "中   文   敘   述");
-  return myfavorite_body(xo);
+    vs_head("我的最愛", str_site);
+    prints("[←]主選單 [→]閱\讀 [a]新增 [d]刪除 [c]篇數 [/]搜尋 [s]看板 [h]說明\n"
+        "\033[44m  %-7s看  板            %-33s人氣 板    主     \033[m",
+        cuser.ufo2 & UFO2_BRDNEW ? "總數" : "編號", "中   文   敘   述");
+    return myfavorite_body(xo);
 }
 
 static int
 myfavorite_newmode(
-  XO *xo)
+    XO *xo)
 {
-  cuser.ufo2 ^= UFO2_BRDNEW;  /* Thor.980805: 特別注意 utmp.ufo的同步問題 */
-  return myfavorite_head(xo);
+    cuser.ufo2 ^= UFO2_BRDNEW;  /* Thor.980805: 特別注意 utmp.ufo的同步問題 */
+    return myfavorite_head(xo);
 }
 
 
 static int
 myfavorite_load(
-  XO *xo)
+    XO *xo)
 {
-  myfavorite_main();
-  xo_load(xo, sizeof(HDR));
-  return myfavorite_head(xo);
+    myfavorite_main();
+    xo_load(xo, sizeof(HDR));
+    return myfavorite_head(xo);
 }
 
 
 static int
 myfavorite_init(
-  XO *xo)
+    XO *xo)
 {
-  xo_load(xo, sizeof(HDR));
-  return myfavorite_head(xo);
+    xo_load(xo, sizeof(HDR));
+    return myfavorite_head(xo);
 }
 
 static int
 myfavorite_switch(
-  XO *xo)
+    XO *xo)
 {
-  Select();
-  return myfavorite_load(xo);
+    Select();
+    return myfavorite_load(xo);
 }
 
 static int
 myfavorite_browse(
-  XO *xo)
+    XO *xo)
 {
-  HDR *ghdr;
-  int xmode,op=0,chn;
-  char fpath[80], title[TTLEN + 1];
+    HDR *ghdr;
+    int xmode,op=0,chn;
+    char fpath[80], title[TTLEN + 1];
 
-  ghdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    ghdr = (HDR *) xo_pool + (xo->pos - xo->top);
 
-  xmode = ghdr->xmode;
-  /* browse folder */
+    xmode = ghdr->xmode;
+    /* browse folder */
 
-  if( xmode & GEM_HTTP)
-    return XO_NONE;
+    if( xmode & GEM_HTTP)
+        return XO_NONE;
 
-  if (xmode & GEM_BOARD)
-  {
-    if(ghdr->recommend == -1)
-      return XO_NONE;
-    chn = brd_bno(ghdr->xname);
-    XoPost(chn);
-    if(ok == 1)
+    if (xmode & GEM_BOARD)
     {
-      xover(XZ_POST);
-      time(&brd_visit[chn]);
+        if(ghdr->recommend == -1)
+            return XO_NONE;
+        chn = brd_bno(ghdr->xname);
+        XoPost(chn);
+        if(ok == 1)
+        {
+            xover(XZ_POST);
+            time(&brd_visit[chn]);
+        }
     }
-  }
-  else if(xmode & GEM_GOPHER)
-  {
-    sprintf(fpath,"gem/brd/%s/.DIR",ghdr->xname);
+    else if(xmode & GEM_GOPHER)
+    {
+        sprintf(fpath,"gem/brd/%s/.DIR",ghdr->xname);
 
-	chn = brd_bno(ghdr->xname);/*20100916.float 進入精華區等同進入看板*/
-    XoPost(chn);				/*防止利用其他看板的版主權限修改他版精華區 或觀看鎖定文章*/
+        chn = brd_bno(ghdr->xname);/*20100916.float 進入精華區等同進入看板*/
+        XoPost(chn);				/*防止利用其他看板的版主權限修改他版精華區 或觀看鎖定文章*/
 
-    op = HAS_PERM(PERM_ALLBOARD) ? GEM_SYSOP : (bbstate & STAT_BOARD ? GEM_MANAGER : GEM_USER);
-    strcpy(title, ghdr->title);
-    XoGem(fpath, title, op);
+        op = HAS_PERM(PERM_ALLBOARD) ? GEM_SYSOP : (bbstate & STAT_BOARD ? GEM_MANAGER : GEM_USER);
+        strcpy(title, ghdr->title);
+        XoGem(fpath, title, op);
+        return myfavorite_init(xo);
+    }
+    else
+    {
+        char buf[20];
+
+        op = xo->key;
+
+        sprintf(buf,"MF/%s",ghdr->xname);
+        usr_fpath(fpath,cuser.userid,buf);
+        strcpy(title, ghdr->title);
+        XoFavorite(fpath, title, op);
+        return myfavorite_init(xo);
+    }
     return myfavorite_init(xo);
-  }
-  else
-  {
-    char buf[20];
-
-    op = xo->key;
-
-    sprintf(buf,"MF/%s",ghdr->xname);
-    usr_fpath(fpath,cuser.userid,buf);
-    strcpy(title, ghdr->title);
-    XoFavorite(fpath, title, op);
-    return myfavorite_init(xo);
-  }
-  return myfavorite_init(xo);
 }
 
 static int
 myfavorite_find_same(
-  BRD *brd,
-  char *dir)
+    BRD *brd,
+    char *dir)
 {
-  int max,i;
-  HDR hdr;
+    int max,i;
+    HDR hdr;
 
-  max = rec_num(dir,sizeof(HDR));
+    max = rec_num(dir,sizeof(HDR));
 
-  for(i=0;i<max;i++)
-  {
-    rec_get(dir,&hdr,sizeof(HDR),i);
-    if(!strcmp(hdr.xname,brd->brdname) && hdr.xmode & GEM_BOARD)
-      return i;
-  }
-  return -1;
+    for(i=0;i<max;i++)
+    {
+        rec_get(dir,&hdr,sizeof(HDR),i);
+        if(!strcmp(hdr.xname,brd->brdname) && hdr.xmode & GEM_BOARD)
+            return i;
+    }
+    return -1;
 }
 
 static int
 myfavorite_add(
-  XO *xo)
+    XO *xo)
 {
-  char ans;
-  char buf[20];
-  BRD *brd;
-  HDR hdr;
+    char ans;
+    char buf[20];
+    BRD *brd;
+    HDR hdr;
 
-  if(!HAS_PERM(PERM_VALID))
+    if(!HAS_PERM(PERM_VALID))
     {
-    vmsg("尚未通過認證，無法新增我的最愛！");
-    return XO_QUIT;
+        vmsg("尚未通過認證，無法新增我的最愛！");
+        return XO_QUIT;
     }
-  memset(&hdr,0,sizeof(HDR));
-  ans = vans("新增 (B)看板捷徑 (F)資料夾 (G)精華區捷徑 (L)分隔線 (Q)離開 [Q]");
+    memset(&hdr,0,sizeof(HDR));
+    ans = vans("新增 (B)看板捷徑 (F)資料夾 (G)精華區捷徑 (L)分隔線 (Q)離開 [Q]");
 
-  if(ans == 'b')
-  {
-    brd = ask_board(buf, BRD_R_BIT, NULL);
-    if(brd == NULL)
+    if(ans == 'b')
     {
-      vmsg("錯誤的看板名稱");
-      return XO_HEAD;
+        brd = ask_board(buf, BRD_R_BIT, NULL);
+        if(brd == NULL)
+        {
+            vmsg("錯誤的看板名稱");
+            return XO_HEAD;
+        }
+        brd2myfavorite(brd,&hdr);
+        if(myfavorite_find_same(brd,currdir) >= 0)
+        {
+            vmsg("已有此看板!");
+            return XO_FOOT;
+        }
     }
-    brd2myfavorite(brd,&hdr);
-    if(myfavorite_find_same(brd,currdir) >= 0)
+    else if(ans == 'f')
     {
-      vmsg("已有此看板!");
-      return XO_FOOT;
+        char title[64];
+        char fpath[64];
+
+        if(!vget(b_lines,0,"請輸入標題: ",title,sizeof(title),DOECHO))
+            return XO_NONE;
+
+        hdr_stamp(currdir, ans|HDR_LINK , &hdr, fpath);
+        hdr.xmode = GEM_FOLDER;
+        sprintf(hdr.title,"◆ %s",title);
     }
-  }
-  else if(ans == 'f')
-  {
-    char title[64];
-    char fpath[64];
-
-    if(!vget(b_lines,0,"請輸入標題: ",title,sizeof(title),DOECHO))
-      return XO_NONE;
-
-    hdr_stamp(currdir, ans|HDR_LINK , &hdr, fpath);
-    hdr.xmode = GEM_FOLDER;
-    sprintf(hdr.title,"◆ %s",title);
-  }
-  else if(ans == 'g')
-  {
-    brd = ask_board(buf, BRD_R_BIT, NULL);
-    if(brd == NULL)
+    else if(ans == 'g')
     {
-      vmsg("錯誤的看板名稱");
-      return XO_HEAD;
+        brd = ask_board(buf, BRD_R_BIT, NULL);
+        if(brd == NULL)
+        {
+            vmsg("錯誤的看板名稱");
+            return XO_HEAD;
+        }
+        brd2myfavorite(brd,&hdr);
+        hdr.xmode = GEM_GOPHER;
+
     }
-    brd2myfavorite(brd,&hdr);
-    hdr.xmode = GEM_GOPHER;
+    else if(ans == 'l')
+    {
+        hdr.xmode = GEM_HTTP;
+        //sprintf(hdr.title,"◆ %s",title);
+    }
+    else
+    {
+        if(!xo->max)
+            return XO_QUIT;
+        return XO_FOOT;
+    }
 
-  }
-  else if(ans == 'l')
-  {
-    hdr.xmode = GEM_HTTP;
-    //sprintf(hdr.title,"◆ %s",title);
-  }
-  else
-  {
-    if(!xo->max)
-      return XO_QUIT;
-    return XO_FOOT;
-  }
+    ans = vans("存放位置 A)ppend I)nsert N)ext Q)uit [A] ");
 
-  ans = vans("存放位置 A)ppend I)nsert N)ext Q)uit [A] ");
+    if (ans == 'q')
+    {
+        return XO_FOOT;
+    }
 
-  if (ans == 'q')
-  {
-    return XO_FOOT;
-  }
+    if (ans == 'i' || ans == 'n')
+        rec_ins(currdir, &hdr, sizeof(HDR), xo->pos + (ans == 'n'), 1);
+    else
+        rec_add(currdir, &hdr, sizeof(HDR));
 
-  if (ans == 'i' || ans == 'n')
-    rec_ins(currdir, &hdr, sizeof(HDR), xo->pos + (ans == 'n'), 1);
-  else
-    rec_add(currdir, &hdr, sizeof(HDR));
+    logitfile(FN_FAVORITE_LOG,"< ADD >",hdr.xname);
 
-  logitfile(FN_FAVORITE_LOG,"< ADD >",hdr.xname);
-
-  return myfavorite_load(xo);
+    return myfavorite_load(xo);
 }
 
 static void
 remove_dir(
-  char *fpath)
+    char *fpath)
 {
-  HDR hdr;
-  int max,i;
-  char buf[20],path[80];
+    HDR hdr;
+    int max,i;
+    char buf[20],path[80];
 
-  max = rec_num(fpath,sizeof(HDR));
-  for(i=0;i<max;i++)
-  {
-    rec_get(fpath,&hdr,sizeof(HDR),i);
-    if(hdr.xmode & GEM_FOLDER)
+    max = rec_num(fpath,sizeof(HDR));
+    for(i=0;i<max;i++)
     {
-      sprintf(buf,"MF/%s",hdr.xname);
-      usr_fpath(path,cuser.userid,buf);
-      remove_dir(path);
+        rec_get(fpath,&hdr,sizeof(HDR),i);
+        if(hdr.xmode & GEM_FOLDER)
+        {
+            sprintf(buf,"MF/%s",hdr.xname);
+            usr_fpath(path,cuser.userid,buf);
+            remove_dir(path);
+        }
     }
-  }
-  unlink(fpath);
+    unlink(fpath);
 }
 
 static int
 myfavorite_delete(
-  XO *xo)
+    XO *xo)
 {
-  if(!HAS_PERM(PERM_VALID))
-    return XO_NONE;
+    if(!HAS_PERM(PERM_VALID))
+        return XO_NONE;
 
-  if (vans(msg_del_ny) == 'y')
-  {
-    HDR *hdr;
-
-    hdr = (HDR *) xo_pool + (xo->pos - xo->top);
-
-    if(hdr->xmode & GEM_FOLDER)
+    if (vans(msg_del_ny) == 'y')
     {
-      char buf[20];
-      char fpath[64];
+        HDR *hdr;
 
-      sprintf(buf,"MF/%s",hdr->xname);
-      usr_fpath(fpath,cuser.userid,buf);
-      remove_dir(fpath);
-    }
+        hdr = (HDR *) xo_pool + (xo->pos - xo->top);
 
-    if (!rec_del(currdir, sizeof(HDR), xo->pos, NULL, NULL))
-    {
-      logitfile(FN_FAVORITE_LOG,"< DEL >",hdr->xname);
-      return myfavorite_load(xo);
+        if(hdr->xmode & GEM_FOLDER)
+        {
+            char buf[20];
+            char fpath[64];
+
+            sprintf(buf,"MF/%s",hdr->xname);
+            usr_fpath(fpath,cuser.userid,buf);
+            remove_dir(fpath);
+        }
+
+        if (!rec_del(currdir, sizeof(HDR), xo->pos, NULL, NULL))
+        {
+            logitfile(FN_FAVORITE_LOG,"< DEL >",hdr->xname);
+            return myfavorite_load(xo);
+        }
     }
-  }
-  return XO_FOOT;
+    return XO_FOOT;
 }
 
 static int
 myfavorite_mov(
-  XO *xo)
+    XO *xo)
 {
-  HDR *ghdr;
-  char buf[80];
-  int pos, newOrder;
+    HDR *ghdr;
+    char buf[80];
+    int pos, newOrder;
 
-  if(!HAS_PERM(PERM_VALID))
-    return XO_NONE;
-  ghdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    if(!HAS_PERM(PERM_VALID))
+        return XO_NONE;
+    ghdr = (HDR *) xo_pool + (xo->pos - xo->top);
 
-  pos = xo->pos;
-  sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
-  if (!vget(b_lines, 0, buf + 5, buf, 5, DOECHO))
-    return XO_FOOT;
+    pos = xo->pos;
+    sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
+    if (!vget(b_lines, 0, buf + 5, buf, 5, DOECHO))
+        return XO_FOOT;
 
-  newOrder = atoi(buf) - 1;
-  if (newOrder < 0)
-    newOrder = 0;
-  else if (newOrder >= xo->max)
-    newOrder = xo->max - 1;
+    newOrder = atoi(buf) - 1;
+    if (newOrder < 0)
+        newOrder = 0;
+    else if (newOrder >= xo->max)
+        newOrder = xo->max - 1;
 
-  if (newOrder != pos)
-  {
-    if (!rec_del(currdir, sizeof(HDR), pos, NULL, NULL))
+    if (newOrder != pos)
     {
-      rec_ins(currdir, ghdr, sizeof(HDR), newOrder, 1);
-      xo->pos = newOrder;
-      logitfile(FN_FAVORITE_LOG,"< MOV >",ghdr->xname);
-      return XO_LOAD;
+        if (!rec_del(currdir, sizeof(HDR), pos, NULL, NULL))
+        {
+            rec_ins(currdir, ghdr, sizeof(HDR), newOrder, 1);
+            xo->pos = newOrder;
+            logitfile(FN_FAVORITE_LOG,"< MOV >",ghdr->xname);
+            return XO_LOAD;
+        }
     }
-  }
-  return XO_FOOT;
+    return XO_FOOT;
 }
 
 static int
 myfavorite_edit(
-  XO *xo)
+    XO *xo)
 {
-  HDR *hdr;
+    HDR *hdr;
 
-  if(!HAS_PERM(PERM_VALID))
-    return XO_NONE;
-  hdr = (HDR *) xo_pool + (xo->pos - xo->top);
-  if(hdr->xmode & GEM_BOARD)
-  {
-    int chn;
-
-    if(!HAS_PERM(PERM_BOARD))
-      return XO_NONE;
-
-    chn = hdr->recommend;
-    if (chn >= 0)
+    if(!HAS_PERM(PERM_VALID))
+        return XO_NONE;
+    hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    if(hdr->xmode & GEM_BOARD)
     {
-      brd_edit(chn);
-      return myfavorite_init(xo);
-    }
+        int chn;
 
-  }
-  else if(hdr->xmode & GEM_FOLDER)
-  {
-    if(!vget(b_lines,0,"請輸入標題: ",hdr->title,64,GCARRY))
-      return XO_FOOT;
-    rec_put(currdir,hdr,sizeof(HDR),xo->pos);
-    return myfavorite_load(xo);
-  }
-  return XO_NONE;
+        if(!HAS_PERM(PERM_BOARD))
+            return XO_NONE;
+
+        chn = hdr->recommend;
+        if (chn >= 0)
+        {
+            brd_edit(chn);
+            return myfavorite_init(xo);
+        }
+
+    }
+    else if(hdr->xmode & GEM_FOLDER)
+    {
+        if(!vget(b_lines,0,"請輸入標題: ",hdr->title,64,GCARRY))
+            return XO_FOOT;
+        rec_put(currdir,hdr,sizeof(HDR),xo->pos);
+        return myfavorite_load(xo);
+    }
+    return XO_NONE;
 
 }
 
 
 static int
 myfavorite_help(
-  XO *xo)
+    XO *xo)
 {
-  film_out(FILM_FAVORITE, -1);
-  return myfavorite_head(xo);
+    film_out(FILM_FAVORITE, -1);
+    return myfavorite_head(xo);
 }
 
 static int
 myfavorite_search(
-  XO *xo)
+    XO *xo)
 {
-  int num, pos, max;
-  char *ptr;
-  char buf[IDLEN + 1];
-  HDR *hdr;
+    int num, pos, max;
+    char *ptr;
+    char buf[IDLEN + 1];
+    HDR *hdr;
 
-  ptr = buf;
-  pos = vget(b_lines, 0, "請輸入搜尋關鍵字：", ptr, IDLEN + 1, DOECHO);
-  move(b_lines, 0);
-  clrtoeol();
+    ptr = buf;
+    pos = vget(b_lines, 0, "請輸入搜尋關鍵字：", ptr, IDLEN + 1, DOECHO);
+    move(b_lines, 0);
+    clrtoeol();
 
-  if (pos)
-  {
-    int chn;
-    BRD *brd;
-
-    //bcache = bshm->bcache;
-
-    //str_lower(ptr, ptr);
-    pos = num = xo->pos;
-    max = xo->max;
-    //chp = (short *) xo->xyz;
-    do
+    if (pos)
     {
-      if (++pos >= max)
-	pos = 0;
+        int chn;
+        BRD *brd;
 
-      hdr = (HDR *) xo_pool + (pos - xo->top);
+        //bcache = bshm->bcache;
 
-      if(hdr->xmode & GEM_BOARD)
-      {
-        chn = hdr->recommend;
-        brd = bshm->bcache + chn;
-        //vmsg(ptr);
+        //str_lower(ptr, ptr);
+        pos = num = xo->pos;
+        max = xo->max;
+        //chp = (short *) xo->xyz;
+        do
+        {
+            if (++pos >= max)
+                pos = 0;
 
-        if(strstr(brd->brdname, ptr) || strstr(brd->title, ptr))
-          return pos + XO_MOVE;
-      }
-      else if(hdr->xmode & GEM_FOLDER)
-      {
-        if(strstr(hdr->title, ptr))
-          return pos + XO_MOVE;
-      }
-      //chn = chp[pos];
-      //if (chn >= 0)
-      //{
-	//brd = bcache + chn;
-	//if (str_str(brd->brdname, ptr) || str_str(brd->title, ptr))
-	  //return pos + XO_MOVE;
-      //}
-    } while (pos != num);
-  }
+            hdr = (HDR *) xo_pool + (pos - xo->top);
 
-  return XO_NONE;
+            if(hdr->xmode & GEM_BOARD)
+            {
+                chn = hdr->recommend;
+                brd = bshm->bcache + chn;
+                //vmsg(ptr);
+
+                if(strstr(brd->brdname, ptr) || strstr(brd->title, ptr))
+                    return pos + XO_MOVE;
+            }
+            else if(hdr->xmode & GEM_FOLDER)
+            {
+                if(strstr(hdr->title, ptr))
+                    return pos + XO_MOVE;
+            }
+            //chn = chp[pos];
+            //if (chn >= 0)
+            //{
+                //brd = bcache + chn;
+                //if (str_str(brd->brdname, ptr) || str_str(brd->title, ptr))
+                    //return pos + XO_MOVE;
+            //}
+        } while (pos != num);
+    }
+
+    return XO_NONE;
 }
 
 
 KeyFunc myfavorite_cb[] =
 {
 #ifdef	HAVE_LIGHTBAR
-  XO_ITEM, myfavorite_item_bar,
+    XO_ITEM, myfavorite_item_bar,
 #endif
-  XO_INIT, myfavorite_init,
-  XO_LOAD, myfavorite_load,
-  XO_HEAD, myfavorite_head,
-  XO_BODY, myfavorite_body,
+    XO_INIT, myfavorite_init,
+    XO_LOAD, myfavorite_load,
+    XO_HEAD, myfavorite_head,
+    XO_BODY, myfavorite_body,
 
-  Ctrl('P'), myfavorite_add,
-  'a', myfavorite_add,
-  'r', myfavorite_browse,
-  's', myfavorite_switch,
-  'c', myfavorite_newmode,
-  'd', myfavorite_delete,
-  'M', myfavorite_mov,
-  'E', myfavorite_edit,
-  '/', myfavorite_search,
-  'h', myfavorite_help
+    Ctrl('P'), myfavorite_add,
+    'a', myfavorite_add,
+    'r', myfavorite_browse,
+    's', myfavorite_switch,
+    'c', myfavorite_newmode,
+    'd', myfavorite_delete,
+    'M', myfavorite_mov,
+    'E', myfavorite_edit,
+    '/', myfavorite_search,
+    'h', myfavorite_help
 };
 
 static void
 XoFavorite(
-  char *folder,
-  char *title,
-  int level)
+    char *folder,
+    char *title,
+    int level)
 {
-  XO *xo, *last;
-  char old[64];
+    XO *xo, *last;
+    char old[64];
 
-  last = xz[XZ_MYFAVORITE - XO_ZONE].xo;     /* record */
+    last = xz[XZ_MYFAVORITE - XO_ZONE].xo;     /* record */
 
-  strcpy(old,currdir);
+    strcpy(old,currdir);
 
-  strcpy(currdir,folder);
+    strcpy(currdir,folder);
 
-  xz[XZ_MYFAVORITE - XO_ZONE].xo = xo = xo_new(folder);
-  xz[XZ_MYFAVORITE - XO_ZONE].cb = myfavorite_cb;
-  xo->pos = 0;
-  xo->key = XZ_MYFAVORITE;
+    xz[XZ_MYFAVORITE - XO_ZONE].xo = xo = xo_new(folder);
+    xz[XZ_MYFAVORITE - XO_ZONE].cb = myfavorite_cb;
+    xo->pos = 0;
+    xo->key = XZ_MYFAVORITE;
 
-  xover(XZ_MYFAVORITE);
+    xover(XZ_MYFAVORITE);
 
-  free(xo);
+    free(xo);
 
-  strcpy(currdir,old);
+    strcpy(currdir,old);
 
-  xz[XZ_MYFAVORITE - XO_ZONE].xo = last;     /* restore */
+    xz[XZ_MYFAVORITE - XO_ZONE].xo = last;     /* restore */
 }
 
 
 int
 MyFavorite(void)
 {
-  char fpath[64];
+    char fpath[64];
 
-  utmp_mode(M_MYFAVORITE);
-  usr_fpath(fpath,cuser.userid,FN_MYFAVORITE);
-  myfavorite_main();
+    utmp_mode(M_MYFAVORITE);
+    usr_fpath(fpath,cuser.userid,FN_MYFAVORITE);
+    myfavorite_main();
 
-  XoFavorite(fpath, "我的最愛", XZ_MYFAVORITE);
+    XoFavorite(fpath, "我的最愛", XZ_MYFAVORITE);
 
-  return XO_HEAD;
+    return XO_HEAD;
 }
 
 int
 myfavorite_find_chn(
-  char *brdname)
+    char *brdname)
 {
-  BRD *bp;
-  int max,i;
+    BRD *bp;
+    int max,i;
 //  char *userid,bm[40];
 
-  bp = bshm->bcache;
-  max = bshm->number;
+    bp = bshm->bcache;
+    max = bshm->number;
 
-  for(i=0;i<max;i++,bp++)
-  {
-    if(!strcmp(bp->brdname,brdname))
+    for(i=0;i<max;i++,bp++)
     {
-    /*
-      strcpy(bm,bp->BM);
-      if(strstr(bm,cuser.userid))
-      {
-        userid = (char *) strtok(bm,"/");
-        do
+        if(!strcmp(bp->brdname,brdname))
         {
-          if(!strcmp(cuser.userid,userid))
-            return i;
-        } while(userid = (char *) strtok(NULL,"/"));
-      }
-      else
-      */
-      if(HAS_PERM(PERM_SYSOP) || HAS_PERM(PERM_ALLBOARD) /* || !(bp->readlevel & PERM_SYSOP) || bm_belong(brdname) & BRD_R_BIT || (bp->battr & BRD_FRIEND) */ || (Ben_Perm(bp, cuser.userlevel) & (BRD_R_BIT|BRD_F_BIT|BRD_X_BIT)))
-        return i;
-      else
-        break;
+        /*
+            strcpy(bm,bp->BM);
+            if(strstr(bm,cuser.userid))
+            {
+                userid = (char *) strtok(bm,"/");
+                do
+                {
+                    if(!strcmp(cuser.userid,userid))
+                        return i;
+                } while(userid = (char *) strtok(NULL,"/"));
+            }
+            else
+            */
+            if(HAS_PERM(PERM_SYSOP) || HAS_PERM(PERM_ALLBOARD) /* || !(bp->readlevel & PERM_SYSOP) || bm_belong(brdname) & BRD_R_BIT || (bp->battr & BRD_FRIEND) */ || (Ben_Perm(bp, cuser.userlevel) & (BRD_R_BIT|BRD_F_BIT|BRD_X_BIT)))
+                return i;
+            else
+                break;
+        }
     }
-  }
 
-  return -1;
+    return -1;
 }
 
 void
 myfavorite_parse(
-  char *fpath)
+    char *fpath)
 {
-  int i,max;
-  char buf[20];
-  HDR hdr;
+    int i,max;
+    char buf[20];
+    HDR hdr;
 
-  sprintf(buf,"MF/%s",fpath);
+    sprintf(buf,"MF/%s",fpath);
 
-  usr_fpath(fpath,cuser.userid,buf);
-  max = rec_num(fpath,sizeof(HDR));
+    usr_fpath(fpath,cuser.userid,buf);
+    max = rec_num(fpath,sizeof(HDR));
 
-  for(i=0;i<max;i++)
-  {
-    rec_get(fpath,&hdr,sizeof(HDR),i);
-    if(hdr.xmode & GEM_BOARD)
+    for(i=0;i<max;i++)
     {
-      hdr.recommend = myfavorite_find_chn(hdr.xname);
-      rec_put(fpath,&hdr,sizeof(HDR),i);
+        rec_get(fpath,&hdr,sizeof(HDR),i);
+        if(hdr.xmode & GEM_BOARD)
+        {
+            hdr.recommend = myfavorite_find_chn(hdr.xname);
+            rec_put(fpath,&hdr,sizeof(HDR),i);
+        }
+        else if(hdr.xmode & GEM_FOLDER)
+        {
+            myfavorite_parse(hdr.xname);
+        }
     }
-    else if(hdr.xmode & GEM_FOLDER)
-    {
-      myfavorite_parse(hdr.xname);
-    }
-  }
 
 }
 
@@ -781,72 +781,72 @@ myfavorite_parse(
 void
 myfavorite_main(void)
 {
-  int i,max;
-  char fpath[80];
-  HDR hdr;
+    int i,max;
+    char fpath[80];
+    HDR hdr;
 
-  usr_fpath(fpath, cuser.userid, "MF");
-  if(!mkdir(fpath, 0700))
-  {
-    char old[80],new[80],cmd[128];
-    usr_fpath(old,cuser.userid,FN_FAVORITE);
-    usr_fpath(new,cuser.userid,FN_MYFAVORITE);
-    sprintf(cmd,"cp %s %s", old, new);
-    system(cmd);
-  }
-
-  usr_fpath(fpath,cuser.userid,FN_MYFAVORITE);
-  max = rec_num(fpath,sizeof(HDR));
-
-  for(i=0;i<max;i++)
-  {
-    rec_get(fpath,&hdr,sizeof(HDR),i);
-    if(hdr.xmode & GEM_BOARD)
+    usr_fpath(fpath, cuser.userid, "MF");
+    if(!mkdir(fpath, 0700))
     {
-      hdr.recommend = myfavorite_find_chn(hdr.xname);
-      rec_put(fpath,&hdr,sizeof(HDR),i);
+        char old[80],new[80],cmd[128];
+        usr_fpath(old,cuser.userid,FN_FAVORITE);
+        usr_fpath(new,cuser.userid,FN_MYFAVORITE);
+        sprintf(cmd,"cp %s %s", old, new);
+        system(cmd);
     }
-    else if(hdr.xmode & GEM_FOLDER)
+
+    usr_fpath(fpath,cuser.userid,FN_MYFAVORITE);
+    max = rec_num(fpath,sizeof(HDR));
+
+    for(i=0;i<max;i++)
     {
-      myfavorite_parse(hdr.xname);
+        rec_get(fpath,&hdr,sizeof(HDR),i);
+        if(hdr.xmode & GEM_BOARD)
+        {
+            hdr.recommend = myfavorite_find_chn(hdr.xname);
+            rec_put(fpath,&hdr,sizeof(HDR),i);
+        }
+        else if(hdr.xmode & GEM_FOLDER)
+        {
+            myfavorite_parse(hdr.xname);
+        }
     }
-  }
 }
 
 int
 class_add(
-  XO *xo)
+    XO *xo)
 {
-  HDR hdr;
-  char fpath[64];
-  short chn,*chp;
-  BRD *brd;
+    HDR hdr;
+    char fpath[64];
+    short chn,*chp;
+    BRD *brd;
 
-  usr_fpath(fpath,cuser.userid,FN_MYFAVORITE);
+    usr_fpath(fpath,cuser.userid,FN_MYFAVORITE);
 
-  chp = (short *) xo->xyz + xo->pos;
-  chn = *chp;
-  if(chn < 0)
-  {
-    return XO_NONE;
-  }
+    chp = (short *) xo->xyz + xo->pos;
+    chn = *chp;
+    if(chn < 0)
+    {
+        return XO_NONE;
+    }
 
-  brd = bshm->bcache + chn;
+    brd = bshm->bcache + chn;
 
-  if(myfavorite_find_same(brd,fpath) >= 0)
-  {
-    vmsg("已有此看板!");
+    if(myfavorite_find_same(brd,fpath) >= 0)
+    {
+        vmsg("已有此看板!");
+        return XO_FOOT;
+    }
+
+    memset(&hdr,0,sizeof(HDR));
+    brd2myfavorite(brd,&hdr);
+
+    rec_add(fpath,&hdr,sizeof(HDR));
+    logitfile(FN_FAVORITE_LOG,"< ADD >",hdr.xname);
+    vmsg("已加入我的最愛");
+
     return XO_FOOT;
-  }
-
-  memset(&hdr,0,sizeof(HDR));
-  brd2myfavorite(brd,&hdr);
-
-  rec_add(fpath,&hdr,sizeof(HDR));
-  logitfile(FN_FAVORITE_LOG,"< ADD >",hdr.xname);
-  vmsg("已加入我的最愛");
-
-  return XO_FOOT;
 }
 
 #endif	/* HAVE_FAVORITE */

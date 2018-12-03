@@ -169,7 +169,7 @@
 #ifdef  HAVE_RECOMMEND
 #define	FN_RECOMMEND_LOG	"run/recommend.log"	/* 推薦文章 */
 #endif
-						/* MailService 使用紀錄 */
+                                                /* MailService 使用紀錄 */
 #define	FN_MANAGER_LOG	"run/manager.log"	/* 站務列表 */
 #define	FN_BMLIST_LOG	"run/bmlist.log"	/* 板主列表 */
 #define	FN_MATCH_LOG	"run/match.log"		/* 特殊搜尋 */

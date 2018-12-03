@@ -18,148 +18,148 @@ FILE *flog;
 
 static void
 expire(
-  char *userid)
+    char *userid)
 {
-  HDR hdr;
-  char fpath[128], fnew[128], index[128], *fname;
-  int done, keep, xmode;
-  FILE *fpr, *fpw;
+    HDR hdr;
+    char fpath[128], fnew[128], index[128], *fname;
+    int done, keep, xmode;
+    FILE *fpr, *fpw;
 
 
-  usr_fpath(index,userid,FN_DIR);
+    usr_fpath(index,userid,FN_DIR);
 
-  if (!(fpr = fopen(index, "r")))
-  {
-    fprintf(flog, "\tError open file: %s\n", index);
-    return;
-  }
+    if (!(fpr = fopen(index, "r")))
+    {
+        fprintf(flog, "\tError open file: %s\n", index);
+        return;
+    }
 
-  fpw = f_new(index, fnew);
-  if (!fpw)
-  {
-    fprintf(flog, "\tExclusive lock: %s\n", fnew);
+    fpw = f_new(index, fnew);
+    if (!fpw)
+    {
+        fprintf(flog, "\tExclusive lock: %s\n", fnew);
+        fclose(fpr);
+        return;
+    }
+
+    strcpy(fpath, index);
+    fname = (char *) strrchr(fpath, '.');
+    *fname++ = '@';
+    *fname++ = '/';
+
+    done = 1;
+
+    while (fread(&hdr, sizeof(hdr), 1, fpr) == 1)
+    {
+        xmode = hdr.xmode;
+        if (xmode & POST_DELETE )
+            keep = 0;
+        else
+            keep = 1;
+
+        if (keep)
+        {
+            if (fwrite(&hdr, sizeof(hdr), 1, fpw) != 1)
+            {
+                fprintf(flog, "\tError in write DIR.n: %s\n", hdr.xname);
+                done = 0;
+                break;
+            }
+        }
+        else
+        {
+            strcpy(fname, hdr.xname);
+            unlink(fpath);
+            fprintf(flog, "\t%s\n", fpath);
+        }
+    }
     fclose(fpr);
-    return;
-  }
+    fclose(fpw);
 
-  strcpy(fpath, index);
-  fname = (char *) strrchr(fpath, '.');
-  *fname++ = '@';
-  *fname++ = '/';
-
-  done = 1;
-
-  while (fread(&hdr, sizeof(hdr), 1, fpr) == 1)
-  {
-    xmode = hdr.xmode;
-    if (xmode & POST_DELETE )
-      keep = 0;
-    else
-      keep = 1;
-
-    if (keep)
+    if (done)
     {
-      if (fwrite(&hdr, sizeof(hdr), 1, fpw) != 1)
-      {
-	fprintf(flog, "\tError in write DIR.n: %s\n", hdr.xname);
-	done = 0;
-	break;
-      }
+        sprintf(fpath, "%s.o", index);
+        if (!rename(index, fpath))
+        {
+            if (rename(fnew, index))
+                rename(fpath, index);		/* 換回來 */
+        }
     }
-    else
-    {
-      strcpy(fname, hdr.xname);
-      unlink(fpath);
-      fprintf(flog, "\t%s\n", fpath);
-    }
-  }
-  fclose(fpr);
-  fclose(fpw);
-
-  if (done)
-  {
-    sprintf(fpath, "%s.o", index);
-    if (!rename(index, fpath))
-    {
-      if (rename(fnew, index))
-        rename(fpath, index);		/* 換回來 */
-    }
-  }
-  unlink(fnew);
+    unlink(fnew);
 
 }
 
 static void
 traverse(
-  char *fpath)
+    char *fpath)
 {
-  DIR *dirp;
-  struct dirent *de;
-  char *fname, *str;
+    DIR *dirp;
+    struct dirent *de;
+    char *fname, *str;
 
-  if (!(dirp = opendir(fpath)))
-  {
-    fprintf(flog, "## unable to enter hierarchy [%s]\n", fpath);
-    return;
-  }
-
-  for (str = fpath; *str; str++);
-  *str++ = '/';
-
-  while ((de = readdir(dirp)))
-  {
-    fname = de->d_name;
-    if (fname[0] > ' ' && fname[0] != '.')
+    if (!(dirp = opendir(fpath)))
     {
-      expire(fname);
+        fprintf(flog, "## unable to enter hierarchy [%s]\n", fpath);
+        return;
     }
-  }
-  closedir(dirp);
+
+    for (str = fpath; *str; str++);
+    *str++ = '/';
+
+    while ((de = readdir(dirp)))
+    {
+        fname = de->d_name;
+        if (fname[0] > ' ' && fname[0] != '.')
+        {
+            expire(fname);
+        }
+    }
+    closedir(dirp);
 }
 
 
 int
 main(
-  int argc,
-  char *argv[])
+    int argc,
+    char *argv[])
 {
-  char fpath[128],*fname,ch;
+    char fpath[128],*fname,ch;
 
-  setgid(BBSGID);
-  setuid(BBSUID);
-  chdir(BBSHOME);
+    setgid(BBSGID);
+    setuid(BBSUID);
+    chdir(BBSHOME);
 
-  /* --------------------------------------------------- */
-  /* visit all users					 */
-  /* --------------------------------------------------- */
+    /* --------------------------------------------------- */
+    /* visit all users					 */
+    /* --------------------------------------------------- */
 
-  flog = fopen(FN_MAILEXPIRE_LOG, "w");
+    flog = fopen(FN_MAILEXPIRE_LOG, "w");
 
-  strcpy(fname = fpath, "usr/@");
-  fname = (char *) strchr(fname, '@');
+    strcpy(fname = fpath, "usr/@");
+    fname = (char *) strchr(fname, '@');
 
-  if(argc > 1)
-  {
-    expire(argv[1]);
-  }
-  else
-  {
-
-    for (ch = 'a'; ch <= 'z'; ch++)
+    if(argc > 1)
     {
-      fname[0] = ch;
-      fname[1] = '\0';
-      traverse(fpath);
+        expire(argv[1]);
     }
-    for (ch = '0'; ch <= '9'; ch++)
+    else
     {
-      fname[0] = ch;
-      fname[1] = '\0';
-      traverse(fpath);
+
+        for (ch = 'a'; ch <= 'z'; ch++)
+        {
+            fname[0] = ch;
+            fname[1] = '\0';
+            traverse(fpath);
+        }
+        for (ch = '0'; ch <= '9'; ch++)
+        {
+            fname[0] = ch;
+            fname[1] = '\0';
+            traverse(fpath);
+        }
     }
-  }
 
 
-  fclose(flog);
-  exit(0);
+    fclose(flog);
+    exit(0);
 }

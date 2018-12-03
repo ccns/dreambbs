@@ -20,9 +20,9 @@
 #include "bbs.h"
 #define FN_MONEY		".MONEY"		/* PostRecommendHistory */
 
-    double m1 = 0;
-    double m2 = 0;
-    double m3 = 0;
+double m1 = 0;
+double m2 = 0;
+double m3 = 0;
 
 /* ----------------------------------------------------- */
 /* (新的) 使用者帳號 .ACCT struct			 */
@@ -31,35 +31,35 @@
 
 typedef struct
 {
-  int userno;			/* unique positive code */
-  char userid[IDLEN + 1];	/* userid */
-  char passwd[PASSLEN];		/* user password crypt by DES */
-  unsigned char signature;		/* user signature number */
-  char realname[20];		/* user realname */
-  char username[24];		/* user nickname */
-  unsigned int userlevel;		/* user perm */
-  int numlogins;		/* user login times */
-  int numposts;			/* user post times */
-  unsigned int ufo;			/* user basic flags */
-  time_t firstlogin;		/* user first login time */
-  time_t lastlogin;		/* user last login time */
-  time_t staytime;		/* user total stay time */
-  time_t tcheck;		/* time to check mbox/pal */
-  char lasthost[32];		/* user last login remote host */
-  int numemail;			/* 原為寄發 Inetrnet E-mail 次數, 在不更改資料結構的狀況下, 擴充為積分 */
-  time_t tvalid;		/* 通過認證、更改 mail address 的時間 */
-  char email[60];		/* user email */
-  char address[60];		/* user address */
-  char justify[60];		/* FROM of replied justify mail */
-  char vmail[60];		/* 通過認證之 email */
-  time_t deny;			/* user violatelaw time */
-  int request;			/* 點歌系統 */
-  int money;             /* 夢幣 */
-  unsigned int ufo2;			/* 延伸的個人設定 */
-  char ident[96];		/* user remote host ident */
-  int point1;           /* 優良積分 */
-  int point2;           /* 劣文 */
-  time_t vtime;			/* validate time */
+    int userno;			/* unique positive code */
+    char userid[IDLEN + 1];	/* userid */
+    char passwd[PASSLEN];		/* user password crypt by DES */
+    unsigned char signature;		/* user signature number */
+    char realname[20];		/* user realname */
+    char username[24];		/* user nickname */
+    unsigned int userlevel;		/* user perm */
+    int numlogins;		/* user login times */
+    int numposts;			/* user post times */
+    unsigned int ufo;			/* user basic flags */
+    time_t firstlogin;		/* user first login time */
+    time_t lastlogin;		/* user last login time */
+    time_t staytime;		/* user total stay time */
+    time_t tcheck;		/* time to check mbox/pal */
+    char lasthost[32];		/* user last login remote host */
+    int numemail;			/* 原為寄發 Inetrnet E-mail 次數, 在不更改資料結構的狀況下, 擴充為積分 */
+    time_t tvalid;		/* 通過認證、更改 mail address 的時間 */
+    char email[60];		/* user email */
+    char address[60];		/* user address */
+    char justify[60];		/* FROM of replied justify mail */
+    char vmail[60];		/* 通過認證之 email */
+    time_t deny;			/* user violatelaw time */
+    int request;			/* 點歌系統 */
+    int money;             /* 夢幣 */
+    unsigned int ufo2;			/* 延伸的個人設定 */
+    char ident[96];		/* user remote host ident */
+    int point1;           /* 優良積分 */
+    int point2;           /* 劣文 */
+    time_t vtime;			/* validate time */
 }	NEW;
 
 
@@ -70,34 +70,34 @@ typedef struct
 
 typedef struct
 {
-  int userno;			/* unique positive code */
-  char userid[IDLEN + 1];	/* userid */
-  char passwd[PASSLEN];		/* user password crypt by DES */
-  unsigned char signature;		/* user signature number */
-  char realname[20];		/* user realname */
-  char username[24];		/* user nickname */
-  unsigned int userlevel;		/* user perm */
-  int numlogins;		/* user login times */
-  int numposts;			/* user post times */
-  unsigned int ufo;			/* user basic flags */
-  time_t firstlogin;		/* user first login time */
-  time_t lastlogin;		/* user last login time */
-  time_t staytime;		/* user total stay time */
-  time_t tcheck;		/* time to check mbox/pal */
-  char lasthost[32];		/* user last login remote host */
-  int numemail;			/* 寄發 Inetrnet E-mail 次數 */
-  time_t tvalid;		/* 通過認證、更改 mail address 的時間 */
-  char email[60];		/* user email */
-  char address[60];		/* user address */
-  char justify[60];		/* FROM of replied justify mail */
-  char vmail[60];		/* 通過認證之 email */
-  time_t deny;			/* user violatelaw time */
-  int extrambox;		/* 加大信箱 (最大 50 封) */
-  int extrasize;		/* 加大信箱容量 (最大 1000K) */
-  unsigned int ufo2;			/* 延伸的個人設定 */
-  char ident[103];		/* user remote host ident */
-  char barcolor;		/* 光棒顏色 */
-  time_t vtime;			/* validate time */
+    int userno;			/* unique positive code */
+    char userid[IDLEN + 1];	/* userid */
+    char passwd[PASSLEN];		/* user password crypt by DES */
+    unsigned char signature;		/* user signature number */
+    char realname[20];		/* user realname */
+    char username[24];		/* user nickname */
+    unsigned int userlevel;		/* user perm */
+    int numlogins;		/* user login times */
+    int numposts;			/* user post times */
+    unsigned int ufo;			/* user basic flags */
+    time_t firstlogin;		/* user first login time */
+    time_t lastlogin;		/* user last login time */
+    time_t staytime;		/* user total stay time */
+    time_t tcheck;		/* time to check mbox/pal */
+    char lasthost[32];		/* user last login remote host */
+    int numemail;			/* 寄發 Inetrnet E-mail 次數 */
+    time_t tvalid;		/* 通過認證、更改 mail address 的時間 */
+    char email[60];		/* user email */
+    char address[60];		/* user address */
+    char justify[60];		/* FROM of replied justify mail */
+    char vmail[60];		/* 通過認證之 email */
+    time_t deny;			/* user violatelaw time */
+    int extrambox;		/* 加大信箱 (最大 50 封) */
+    int extrasize;		/* 加大信箱容量 (最大 1000K) */
+    unsigned int ufo2;			/* 延伸的個人設定 */
+    char ident[103];		/* user remote host ident */
+    char barcolor;		/* 光棒顏色 */
+    time_t vtime;			/* validate time */
 }	OLD;
 
 
@@ -146,70 +146,70 @@ typedef struct
 
 static unsigned int
 trans_ufo2(
-  unsigned int oldufo2)
+    unsigned int oldufo2)
 {
-  unsigned int ufo;
+    unsigned int ufo;
 
-  ufo = 0;
+    ufo = 0;
 
 //  if (oldufo2 & OLDUFO2_COLOR)
-    ufo |= UFO2_COLOR;
+        ufo |= UFO2_COLOR;
 
 //  if (oldufo2 & OLDUFO2_MOVIE)
-    ufo |= UFO2_MOVIE;
+        ufo |= UFO2_MOVIE;
 
 //  if (oldufo2 & OLDUFO2_BRDNEW)
-    ufo |= UFO2_BRDNEW;
+        ufo |= UFO2_BRDNEW;
 
 //  if (oldufo2 & OLDUFO2_BNOTE)
-    ufo |= UFO2_BNOTE;
+        ufo |= UFO2_BNOTE;
 
-  if (oldufo2 & OLDUFO2_VEDIT)
-    ufo |= UFO2_VEDIT;
+    if (oldufo2 & OLDUFO2_VEDIT)
+        ufo |= UFO2_VEDIT;
 
-  if (oldufo2 & OLDUFO2_MOTD)
-    ufo |= UFO2_MOTD;
+    if (oldufo2 & OLDUFO2_MOTD)
+        ufo |= UFO2_MOTD;
 
-  if (oldufo2 & OLDUFO2_MIME)
-    ufo |= UFO2_MIME;
+    if (oldufo2 & OLDUFO2_MIME)
+        ufo |= UFO2_MIME;
 
-  if (oldufo2 & OLDUFO2_SIGN)
-    ufo |= UFO2_SIGN;
+    if (oldufo2 & OLDUFO2_SIGN)
+        ufo |= UFO2_SIGN;
 
-  if (oldufo2 & OLDUFO2_SHOWUSER)
-    ufo |= UFO2_SHOWUSER;
+    if (oldufo2 & OLDUFO2_SHOWUSER)
+        ufo |= UFO2_SHOWUSER;
 
-  if (oldufo2 & OLDUFO2_PRH)
-    ufo |= UFO2_PRH;
+    if (oldufo2 & OLDUFO2_PRH)
+        ufo |= UFO2_PRH;
 
-  if (oldufo2 & OLDUFO2_SHIP)
-    ufo |= UFO2_SHIP;
+    if (oldufo2 & OLDUFO2_SHIP)
+        ufo |= UFO2_SHIP;
 
-  if (oldufo2 & OLDUFO2_NWLOG)
-    ufo |= UFO2_NWLOG;
+    if (oldufo2 & OLDUFO2_NWLOG)
+        ufo |= UFO2_NWLOG;
 
-  if (oldufo2 & OLDUFO2_NTLOG)
-    ufo |= UFO2_NTLOG;
+    if (oldufo2 & OLDUFO2_NTLOG)
+        ufo |= UFO2_NTLOG;
 
-  if (oldufo2 & OLDUFO2_CIRCLE)
-    ufo |= UFO2_CIRCLE;
+    if (oldufo2 & OLDUFO2_CIRCLE)
+        ufo |= UFO2_CIRCLE;
 
-  if (oldufo2 & OLDUFO2_ORIGUI)
-    ufo |= UFO2_ORIGUI;
+    if (oldufo2 & OLDUFO2_ORIGUI)
+        ufo |= UFO2_ORIGUI;
 
-  if (oldufo2 & OLDUFO2_DEF_ANONY)
-    ufo |= UFO2_DEF_ANONY;
+    if (oldufo2 & OLDUFO2_DEF_ANONY)
+        ufo |= UFO2_DEF_ANONY;
 
 //  if (oldufo2 & OLDUFO2_DEF_LEAVE)
-//    ufo |= UFO2_DEF_LEAVE;
+//      ufo |= UFO2_DEF_LEAVE;
 
-  if (oldufo2 & OLDUFO2_ACL)
-    ufo |= UFO2_ACL;
+    if (oldufo2 & OLDUFO2_ACL)
+        ufo |= UFO2_ACL;
 
-  if (oldufo2 & OLDUFO2_REALNAME)
-    ufo |= UFO2_REALNAME;
+    if (oldufo2 & OLDUFO2_REALNAME)
+        ufo |= UFO2_REALNAME;
 
-  return ufo;
+    return ufo;
 }
 
 /* ----------------------------------------------------- */
@@ -219,134 +219,134 @@ trans_ufo2(
 
 static void
 trans_acct(
-  OLD *old,
-  NEW *new)
+    OLD *old,
+    NEW *new)
 {
-  memset(new, 0, sizeof(NEW));
+    memset(new, 0, sizeof(NEW));
 
-  new->userno = old->userno;
+    new->userno = old->userno;
 
-  str_ncpy(new->userid, old->userid, sizeof(new->userid));
-  str_ncpy(new->passwd, old->passwd, sizeof(new->passwd));
-  str_ncpy(new->realname, old->realname, sizeof(new->realname));
-  str_ncpy(new->username, old->username, sizeof(new->username));
+    str_ncpy(new->userid, old->userid, sizeof(new->userid));
+    str_ncpy(new->passwd, old->passwd, sizeof(new->passwd));
+    str_ncpy(new->realname, old->realname, sizeof(new->realname));
+    str_ncpy(new->username, old->username, sizeof(new->username));
 
-  new->userlevel = old->userlevel;
-  new->ufo = old->ufo;
-  new->signature = old->signature;
-  new->ufo2 = trans_ufo2(old->ufo2);
+    new->userlevel = old->userlevel;
+    new->ufo = old->ufo;
+    new->signature = old->signature;
+    new->ufo2 = trans_ufo2(old->ufo2);
 
-  new->numlogins = old->numlogins;
-  new->numposts = old->numposts;
-  new->numemail = old->numemail;
+    new->numlogins = old->numlogins;
+    new->numposts = old->numposts;
+    new->numemail = old->numemail;
 
-  new->firstlogin = old->firstlogin;
-  new->lastlogin = old->lastlogin;
-  new->tcheck = old->tcheck;
-  new->staytime = old->staytime;
-  new->tvalid = old->tvalid;
-  new->deny = old->deny;
-  new->vtime = old->vtime;
+    new->firstlogin = old->firstlogin;
+    new->lastlogin = old->lastlogin;
+    new->tcheck = old->tcheck;
+    new->staytime = old->staytime;
+    new->tvalid = old->tvalid;
+    new->deny = old->deny;
+    new->vtime = old->vtime;
 
-  str_ncpy(new->lasthost, old->lasthost, sizeof(new->lasthost));
-  str_ncpy(new->email, old->email, sizeof(new->email));
-  str_ncpy(new->address, old->address, sizeof(new->address));
-  str_ncpy(new->justify, old->justify, sizeof(new->justify));
-  str_ncpy(new->vmail, old->vmail, sizeof(new->vmail));
-  str_ncpy(new->ident, old->ident, sizeof(new->ident));
+    str_ncpy(new->lasthost, old->lasthost, sizeof(new->lasthost));
+    str_ncpy(new->email, old->email, sizeof(new->email));
+    str_ncpy(new->address, old->address, sizeof(new->address));
+    str_ncpy(new->justify, old->justify, sizeof(new->justify));
+    str_ncpy(new->vmail, old->vmail, sizeof(new->vmail));
+    str_ncpy(new->ident, old->ident, sizeof(new->ident));
 
-  new->request = (int)m3;
-  new->money  = (int)m1;
+    new->request = (int)m3;
+    new->money  = (int)m1;
 
-  new->point1 =0;           /* 優良積分 */
-  new->point2 =0;           /* 劣文 */
+    new->point1 =0;           /* 優良積分 */
+    new->point2 =0;           /* 劣文 */
 
 }
 
 typedef struct
 {
-  int money;			/* 夢幣 */
-  int save;			    /* 存款 */
-  int request;			/* 小雞點券 */
+    int money;			/* 夢幣 */
+    int save;			    /* 存款 */
+    int request;			/* 小雞點券 */
 }	MONEY;
 
 int
 main(
-  int argc,
-  char *argv[])
+    int argc,
+    char *argv[])
 {
-  NEW new;
-  MONEY oldwealth;
-  char c;
+    NEW new;
+    MONEY oldwealth;
+    char c;
 
-  if (argc > 2)
-  {
-    printf("Usage: %s [userid]\n", argv[0]);
-    return -1;
-  }
-
-  for (c = 'a'; c <= 'z'; c++)
-  {
-    char buf[64];
-    struct dirent *de;
-    DIR *dirp;
-
-    sprintf(buf, BBSHOME "/usr/%c", c);
-    chdir(buf);
-
-    if (!(dirp = opendir(".")))
-      continue;
-
-    while ( ( de = readdir(dirp) ) )
+    if (argc > 2)
     {
-      OLD old;
-      int fd;
-      char *str;
+        printf("Usage: %s [userid]\n", argv[0]);
+        return -1;
+    }
 
-      str = de->d_name;
-      if (*str <= ' ' || *str == '.')
-	continue;
+    for (c = 'a'; c <= 'z'; c++)
+    {
+        char buf[64];
+        struct dirent *de;
+        DIR *dirp;
 
-      if ((argc == 2) && str_cmp(str, argv[1]))
-	continue;
+        sprintf(buf, BBSHOME "/usr/%c", c);
+        chdir(buf);
+
+        if (!(dirp = opendir(".")))
+            continue;
+
+        while ( ( de = readdir(dirp) ) )
+        {
+            OLD old;
+            int fd;
+            char *str;
+
+            str = de->d_name;
+            if (*str <= ' ' || *str == '.')
+                continue;
+
+            if ((argc == 2) && str_cmp(str, argv[1]))
+                continue;
 
 //讀取MONEY
-      sprintf(buf, "%s/" FN_MONEY, str);  //.MONEY似乎定義成FN_MONEY
-      if ((fd = open(buf, O_RDONLY)) < 0)
-	continue;
+            sprintf(buf, "%s/" FN_MONEY, str);  //.MONEY似乎定義成FN_MONEY
+            if ((fd = open(buf, O_RDONLY)) < 0)
+                continue;
 
-      read(fd, &oldwealth, sizeof(MONEY));
-      close(fd);
-//先不執行砍掉的動作      unlink(buf2);
+            read(fd, &oldwealth, sizeof(MONEY));
+            close(fd);
+//先不執行砍掉的動作            unlink(buf2);
 
-    m1 = oldwealth.money;
-    m2 = oldwealth.save;
-    m3 = oldwealth.request;
+            m1 = oldwealth.money;
+            m2 = oldwealth.save;
+            m3 = oldwealth.request;
 
-    m1 = ((m1+m2)/100000);  //請自行修改
+            m1 = ((m1+m2)/100000);  //請自行修改
 
-    if (m1 >= INT_MAX )
-       m1 = INT_MAX;
+            if (m1 >= INT_MAX )
+                m1 = INT_MAX;
 
-      sprintf(buf, "%s/" FN_ACCT, str);
-      if ((fd = open(buf, O_RDONLY)) < 0)
-	continue;
+                sprintf(buf, "%s/" FN_ACCT, str);
+                if ((fd = open(buf, O_RDONLY)) < 0)
+                    continue;
 
-      read(fd, &old, sizeof(OLD));
-      close(fd);
-      unlink(buf);			/* itoc.010831: 砍掉原來的 FN_ACCT */
+                read(fd, &old, sizeof(OLD));
+                close(fd);
+                unlink(buf);			/* itoc.010831: 砍掉原來的 FN_ACCT */
 
-      trans_acct(&old, &new);
+                trans_acct(&old, &new);
 
-      fd = open(buf, O_WRONLY | O_CREAT, 0600);	/* itoc.010831: 重建新的 FN_ACCT */
-      write(fd, &new, sizeof(NEW));
-      close(fd);
+                fd = open(buf, O_WRONLY | O_CREAT, 0600);	/* itoc.010831: 重建新的 FN_ACCT */
+                write(fd, &new, sizeof(NEW));
+                close(fd);
 
+            }
+            printf("/usr/%c is done.\n", c);
+
+        closedir(dirp);
     }
-      printf("/usr/%c is done.\n", c);
 
-    closedir(dirp);
-  }
-
-  return 0;
+    return 0;
 }

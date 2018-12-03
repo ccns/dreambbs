@@ -10,9 +10,9 @@
 
 
 #if 0	/* itoc.030109.註解: nocem.c 的流程 */
-  從 rec_article.c 收到 receive_nocem() 以後
-  receive_nocem() → NCMparse() 把 notice parse 出來 → NCMverify() 驗證是不是真的
-  → NCMcancel() 再送回 rec_article.c 的 cancel_article() 處理
+    從 rec_article.c 收到 receive_nocem() 以後
+    receive_nocem() → NCMparse() 把 notice parse 出來 → NCMverify() 驗證是不是真的
+    → NCMcancel() 再送回 rec_article.c 的 cancel_article() 處理
 #endif
 
 
@@ -46,35 +46,35 @@ static char errmsg[512] = "nothing";
 
 ncmperm_t *
 search_issuer(
-  char *issuer,
-  char *type)		/* 若 type == NULL 表示只比對 issuer */
+    char *issuer,
+    char *type)		/* 若 type == NULL 表示只比對 issuer */
 {
-  ncmperm_t *find;
-  int i;
+    ncmperm_t *find;
+    int i;
 
-  for (i = 0; i < NCMCOUNT; i++)
-  {
-    find = NCMPERM + i;
-    if (strstr(issuer, find->issuer) &&
-      (!type || !strcmp(find->type, "*") || !str_cmp(find->type, type)))
-      return find;
-  }
-  return NULL;
+    for (i = 0; i < NCMCOUNT; i++)
+    {
+        find = NCMPERM + i;
+        if (strstr(issuer, find->issuer) &&
+            (!type || !strcmp(find->type, "*") || !str_cmp(find->type, type)))
+            return find;
+    }
+    return NULL;
 }
 
 
 static void
 NCMupdate(
-  char *issuer, char *type)
+    char *issuer, char *type)
 {
-  ncmperm_t ncm;
+    ncmperm_t ncm;
 
-  memset(&ncm, 0, sizeof(ncmperm_t));
-  str_ncpy(ncm.issuer, issuer, sizeof(ncm.issuer));
-  str_ncpy(ncm.type, type, sizeof(ncm.type));
-  ncm.perm = 0;
-  rec_add("innd/ncmperm.bbs", &ncm, sizeof(ncmperm_t));
-  read_ncmperm();
+    memset(&ncm, 0, sizeof(ncmperm_t));
+    str_ncpy(ncm.issuer, issuer, sizeof(ncm.issuer));
+    str_ncpy(ncm.type, type, sizeof(ncm.type));
+    ncm.perm = 0;
+    rec_add("innd/ncmperm.bbs", &ncm, sizeof(ncmperm_t));
+    read_ncmperm();
 }
 
 
@@ -86,101 +86,101 @@ NCMupdate(
 #ifdef PGP
 static int
 run_pgp(
-  char *cmd,
-  FILE **in, **out)
+    char *cmd,
+    FILE **in, **out)
 {
-  int pin[2], pout[2], child_pid;
-  char fpath[64];
+    int pin[2], pout[2], child_pid;
+    char fpath[64];
 
-  strcpy(fpath, BBSHOME "/.pgp");
-  setenv("PGPPATH", fpath, 1);
+    strcpy(fpath, BBSHOME "/.pgp");
+    setenv("PGPPATH", fpath, 1);
 
-  *in = *out = NULL;
+    *in = *out = NULL;
 
-  pipe(pin);
-  pipe(pout);
+    pipe(pin);
+    pipe(pout);
 
-  if (!(child_pid = fork()))
-  {
-    /* We're the child. */
-    close(pin[1]);
-    dup2(pin[0], 0);
-    close(pin[0]);
+    if (!(child_pid = fork()))
+    {
+        /* We're the child. */
+        close(pin[1]);
+        dup2(pin[0], 0);
+        close(pin[0]);
 
-    close(pout[0]);
-    dup2(pout[1], 1);
+        close(pout[0]);
+        dup2(pout[1], 1);
+        close(pout[1]);
+
+        execl("/bin/sh", "sh", "-c", cmd, NULL);
+        _exit(127);
+    }
+    /* Only get here if we're the parent. */
     close(pout[1]);
+    *out = fdopen(pout[0], "r");
 
-    execl("/bin/sh", "sh", "-c", cmd, NULL);
-    _exit(127);
-  }
-  /* Only get here if we're the parent. */
-  close(pout[1]);
-  *out = fdopen(pout[0], "r");
+    close(pin[0]);
+    *in = fdopen(pin[1], "w");
 
-  close(pin[0]);
-  *in = fdopen(pin[1], "w");
-
-  return child_pid;
+    return child_pid;
 }
 
 
 static int
 verify_buffer(
-  char *buf, char *passphrase)
+    char *buf, char *passphrase)
 {
-  FILE *pgpin, *pgpout;
-  char tmpbuf[1024] = " ";
-  int ans = NOPGP;
+    FILE *pgpin, *pgpout;
+    char tmpbuf[1024] = " ";
+    int ans = NOPGP;
 
-  setenv("PGPPASSFD", "0", 1);
-  run_pgp("/usr/local/bin/pgpv -f +batchmode=1 +OutputInformationFD=1", &pgpin, &pgpout);
-  if (pgpin && pgpout)
-  {
-    fprintf(pgpin, "%s\n", passphrase);		/* Send the passphrase in, first */
-    memset(passphrase, 0, strlen(passphrase));	/* Burn the passphrase */
-    fprintf(pgpin, "%s", buf);
-    fclose(pgpin);
-
-    *buf = '\0';
-    fgets(tmpbuf, sizeof(tmpbuf), pgpout);
-    while (!feof(pgpout))
+    setenv("PGPPASSFD", "0", 1);
+    run_pgp("/usr/local/bin/pgpv -f +batchmode=1 +OutputInformationFD=1", &pgpin, &pgpout);
+    if (pgpin && pgpout)
     {
-      strcat(buf, tmpbuf);
-      fgets(tmpbuf, sizeof(tmpbuf), pgpout);
+        fprintf(pgpin, "%s\n", passphrase);		/* Send the passphrase in, first */
+        memset(passphrase, 0, strlen(passphrase));	/* Burn the passphrase */
+        fprintf(pgpin, "%s", buf);
+        fclose(pgpin);
+
+        *buf = '\0';
+        fgets(tmpbuf, sizeof(tmpbuf), pgpout);
+        while (!feof(pgpout))
+        {
+            strcat(buf, tmpbuf);
+            fgets(tmpbuf, sizeof(tmpbuf), pgpout);
+        }
+
+        wait(NULL);
+
+        fclose(pgpout);
     }
 
-    wait(NULL);
+    if (strstr(buf, "BAD signature made"))
+    {
+        strcpy(errmsg, "BAD signature");
+        ans = PGPBAD;
+    }
+    else if (strstr(buf, "Good signature made"))
+    {
+        strcpy(errmsg, "Good signature");
+        ans = PGPGOOD;
+    }
+    else if (strcpy(tmpbuf, strstr(buf, "Signature by unknown keyid:")))
+    {
+        sprintf(errmsg, "%s ", strtok(tmpbuf, "\r\n"));
+        ans = PGPUN;
+    }
 
-    fclose(pgpout);
-  }
-
-  if (strstr(buf, "BAD signature made"))
-  {
-    strcpy(errmsg, "BAD signature");
-    ans = PGPBAD;
-  }
-  else if (strstr(buf, "Good signature made"))
-  {
-    strcpy(errmsg, "Good signature");
-    ans = PGPGOOD;
-  }
-  else if (strcpy(tmpbuf, strstr(buf, "Signature by unknown keyid:")))
-  {
-    sprintf(errmsg, "%s ", strtok(tmpbuf, "\r\n"));
-    ans = PGPUN;
-  }
-
-  unsetenv("PGPPASSFD");
-  return ans;
+    unsetenv("PGPPASSFD");
+    return ans;
 }
 
 
 static int	/* return 0 success, otherwise fail */
 NCMverify(void)
 {
-  char passphrase[80] = "Haha, I am Leeym..";
-  return verify_buffer(BODY, passphrase);
+    char passphrase[80] = "Haha, I am Leeym..";
+    return verify_buffer(BODY, passphrase);
 }
 #endif	/* PGP */
 
@@ -193,99 +193,99 @@ NCMverify(void)
 #ifdef GPG
 static int
 run_gpg(
-  char *cmd,
-  FILE **in, FILE **out)
+    char *cmd,
+    FILE **in, FILE **out)
 {
-  int pin[2], pout[2], child_pid;
-  char fpath[64];
+    int pin[2], pout[2], child_pid;
+    char fpath[64];
 
-  strcpy(fpath, BBSHOME "/.gnupg");
-  setenv("GPGPATH", fpath, 1);
+    strcpy(fpath, BBSHOME "/.gnupg");
+    setenv("GPGPATH", fpath, 1);
 
-  *in = *out = NULL;
+    *in = *out = NULL;
 
-  pipe(pin);
-  pipe(pout);
+    pipe(pin);
+    pipe(pout);
 
-  if (!(child_pid = fork()))
-  {
-    /* We're the child. */
-    close(pin[1]);
-    dup2(pin[0], 0);
-    close(pin[0]);
+    if (!(child_pid = fork()))
+    {
+        /* We're the child. */
+        close(pin[1]);
+        dup2(pin[0], 0);
+        close(pin[0]);
 
-    close(pout[0]);
-    dup2(pout[1], 1);
+        close(pout[0]);
+        dup2(pout[1], 1);
+        close(pout[1]);
+
+        execl("/bin/sh", "sh", "-c", cmd, NULL);
+        _exit(127);
+    }
+    /* Only get here if we're the parent. */
     close(pout[1]);
+    *out = fdopen(pout[0], "r");
 
-    execl("/bin/sh", "sh", "-c", cmd, NULL);
-    _exit(127);
-  }
-  /* Only get here if we're the parent. */
-  close(pout[1]);
-  *out = fdopen(pout[0], "r");
+    close(pin[0]);
+    *in = fdopen(pin[1], "w");
 
-  close(pin[0]);
-  *in = fdopen(pin[1], "w");
-
-  return child_pid;
+    return child_pid;
 }
 
 
 static int
 verify_buffer(
-  char *buf)
+    char *buf)
 {
-  FILE *pgpin, *pgpout;
-  char tmpbuf[1024] = " ";
-  int ans = NOPGP;
+    FILE *pgpin, *pgpout;
+    char tmpbuf[1024] = " ";
+    int ans = NOPGP;
 
-  setenv("PGPPASSFD", "0", 1);
-  run_gpg("/usr/local/bin/gpg --no-secmem-warning --verify", &pgpin, &pgpout);
-  if (pgpin && pgpout)
-  {
-    fprintf(pgpin, "%s", buf);
-    fclose(pgpin);
-
-    *buf = '\0';
-    fgets(tmpbuf, sizeof(tmpbuf), pgpout);
-    while (!feof(pgpout))
+    setenv("PGPPASSFD", "0", 1);
+    run_gpg("/usr/local/bin/gpg --no-secmem-warning --verify", &pgpin, &pgpout);
+    if (pgpin && pgpout)
     {
-      strcat(buf, tmpbuf);
-      fgets(tmpbuf, sizeof(tmpbuf), pgpout);
+        fprintf(pgpin, "%s", buf);
+        fclose(pgpin);
+
+        *buf = '\0';
+        fgets(tmpbuf, sizeof(tmpbuf), pgpout);
+        while (!feof(pgpout))
+        {
+            strcat(buf, tmpbuf);
+            fgets(tmpbuf, sizeof(tmpbuf), pgpout);
+        }
+
+        wait(NULL);
+
+        fclose(pgpout);
     }
 
-    wait(NULL);
+    if (strstr(buf, "BAD signature made"))
+    {
+        strcpy(errmsg, "BAD signature");
+        ans = PGPBAD;
+    }
+    else if (strstr(buf, "Good signature made"))
+    {
+        strcpy(errmsg, "Good signature");
+        ans = PGPGOOD;
+    }
+    else if (strcpy(tmpbuf, strstr(buf, "Signature by unknown keyid:")))
+    {
+        sprintf(errmsg, "%s ", strtok(tmpbuf, "\r\n"));
+        strcpy(KEYID, strrchr(tmpbuf, ' ') + 1);
+        ans = PGPUN;
+    }
 
-    fclose(pgpout);
-  }
-
-  if (strstr(buf, "BAD signature made"))
-  {
-    strcpy(errmsg, "BAD signature");
-    ans = PGPBAD;
-  }
-  else if (strstr(buf, "Good signature made"))
-  {
-    strcpy(errmsg, "Good signature");
-    ans = PGPGOOD;
-  }
-  else if (strcpy(tmpbuf, strstr(buf, "Signature by unknown keyid:")))
-  {
-    sprintf(errmsg, "%s ", strtok(tmpbuf, "\r\n"));
-    strcpy(KEYID, strrchr(tmpbuf, ' ') + 1);
-    ans = PGPUN;
-  }
-
-  unsetenv("PGPPASSFD");
-  return ans;
+    unsetenv("PGPPASSFD");
+    return ans;
 }
 
 
 static int
 NCMverify(void)
 {
-  return verify_buffer(BODY);
+    return verify_buffer(BODY);
 }
 #endif	/* GPG */
 
@@ -297,153 +297,153 @@ NCMverify(void)
 
 static int
 readNCMheader(
-  char *line)
+    char *line)
 {
-  if (!str_ncmp(line, "Version", strlen("Version")))
-  {
-    str_ncpy(NCMVER, line + strlen("Version") + 2, sizeof(NCMVER));
-    if (strcmp(NCMVER, "0.9"))
+    if (!str_ncmp(line, "Version", strlen("Version")))
     {
-      sprintf(errmsg, "unknown version: %s", NCMVER);
-      return P_FAIL;
+        str_ncpy(NCMVER, line + strlen("Version") + 2, sizeof(NCMVER));
+        if (strcmp(NCMVER, "0.9"))
+        {
+            sprintf(errmsg, "unknown version: %s", NCMVER);
+            return P_FAIL;
+        }
     }
-  }
-  else if (!str_ncmp(line, "Issuer", strlen("Issuer")))
-  {
-    str_ncpy(ISSUER, line + strlen("Issuer") + 2, sizeof(ISSUER));
-    FROM = ISSUER;
-  }
-  else if (!str_ncmp(line, "Type", strlen("Type")))
-  {
-    str_ncpy(TYPE, line + strlen("Type") + 2, sizeof(TYPE));
-  }
-  else if (!str_ncmp(line, "Action", strlen("Action")))
-  {
-    str_ncpy(ACTION, line + strlen("Action") + 2, sizeof(ACTION));
-    if (strcmp(ACTION, "hide"))
+    else if (!str_ncmp(line, "Issuer", strlen("Issuer")))
     {
-      sprintf(errmsg, "unsupported action: %s", ACTION);
-      return P_FAIL;
+        str_ncpy(ISSUER, line + strlen("Issuer") + 2, sizeof(ISSUER));
+        FROM = ISSUER;
     }
-  }
+    else if (!str_ncmp(line, "Type", strlen("Type")))
+    {
+        str_ncpy(TYPE, line + strlen("Type") + 2, sizeof(TYPE));
+    }
+    else if (!str_ncmp(line, "Action", strlen("Action")))
+    {
+        str_ncpy(ACTION, line + strlen("Action") + 2, sizeof(ACTION));
+        if (strcmp(ACTION, "hide"))
+        {
+            sprintf(errmsg, "unsupported action: %s", ACTION);
+            return P_FAIL;
+        }
+    }
 
-  return P_OKAY;
+    return P_OKAY;
 }
 
 
 static int
 readNCMbody(
-  char *line)
+    char *line)
 {
-  char buf[LINELEN], *group;
+    char buf[LINELEN], *group;
 
-  strcpy(buf, line);
+    strcpy(buf, line);
 
-  if (!strstr(buf, "\t"))
-    return P_FAIL;
+    if (!strstr(buf, "\t"))
+        return P_FAIL;
 
-  group = strrchr(line, '\t') + 1;
+    group = strrchr(line, '\t') + 1;
 
-  if (buf[0] == '<' && strstr(buf, ">"))
-  {
-    strtok(buf, "\t");
-    strcpy(SPAMMID_NOW, buf);
-  }
+    if (buf[0] == '<' && strstr(buf, ">"))
+    {
+        strtok(buf, "\t");
+        strcpy(SPAMMID_NOW, buf);
+    }
 
-  if (num_spammid && !strcmp(SPAMMID[num_spammid - 1], SPAMMID_NOW))
+    if (num_spammid && !strcmp(SPAMMID[num_spammid - 1], SPAMMID_NOW))
+        return 0;
+
+    if (search_newsfeeds_bygroup(group))
+        strcpy(SPAMMID[num_spammid++], SPAMMID_NOW);
+
     return 0;
-
-  if (search_newsfeeds_bygroup(group))
-    strcpy(SPAMMID[num_spammid++], SPAMMID_NOW);
-
-  return 0;
 }
 
 
 static int	/* return 0 success, otherwise fail */
 NCMparse(void)
 {
-  char *fptr, *ptr;
-  int type = TEXT;
+    char *fptr, *ptr;
+    int type = TEXT;
 
-  if (!(fptr = strstr(BODY, "-----BEGIN PGP SIGNED MESSAGE-----")))
-  {
-    strcpy(errmsg, "notice isn't signed");
-    return P_FAIL;
-  }
-
-  for (ptr = strchr(fptr, '\n'); ptr != NULL && *ptr != '\0'; fptr = ptr + 1, ptr = strchr(fptr, '\n'))
-  {
-    int ch = *ptr;
-    int ch2 = *(ptr - 1);
-
-    *ptr = '\0';
-    if (*(ptr - 1) == '\r')
-      *(ptr - 1) = '\0';
-
-    if (num_spammid > MAXSPAMMID)
-      return P_OKAY;
-
-    if (!strncmp(fptr, "@@", 2))
+    if (!(fptr = strstr(BODY, "-----BEGIN PGP SIGNED MESSAGE-----")))
     {
-      if (strstr(fptr, "BEGIN NCM HEADERS"))
-      {
-	type = NCMHDR;
-      }
-      else if (strstr(fptr, "BEGIN NCM BODY"))
-      {
-	if (NCMVER && ISSUER && TYPE && ACTION)
-	{
-	  ncmperm_t *ncmt;
-	  ncmt = (ncmperm_t *) search_issuer(ISSUER, TYPE);
-	  if (ncmt == NULL)
-	  {
-	    NCMupdate(ISSUER, TYPE);
-	    sprintf(errmsg, "unknown issuer: %s, %s", ISSUER, MSGID);
-	    return P_UNKNOWN;
-	  }
-	  if (!ncmt->perm)
-	  {
-	    sprintf(errmsg, "disallow issuer: %s, %s", ISSUER, MSGID);
-	    return P_DISALLOW;
-	  }
-	}
-	else
-	{
-	  strcpy(errmsg, "HEADERS syntax not correct");
-	  return P_FAIL;
-	}
-	type = NCMBDY;
-      }
-      else if (strstr(fptr, "END NCM BODY"))
-      {
-        *ptr = ch;
-        *(ptr - 1) = ch2;
-        break;
-      }
-      else
-      {
-	strcpy(errmsg, "NCM Notice syntax not correct");
-	return P_FAIL;
-      }
-      *ptr = ch;
-      *(ptr - 1) = ch2;
-      continue;
+        strcpy(errmsg, "notice isn't signed");
+        return P_FAIL;
     }
 
-    if (type == NCMHDR && readNCMheader(fptr) == P_FAIL)
-      return P_FAIL;
-    if (type == NCMBDY)
-      readNCMbody(fptr);
-    *ptr = ch;
-    *(ptr - 1) = ch2;
-  }
+    for (ptr = strchr(fptr, '\n'); ptr != NULL && *ptr != '\0'; fptr = ptr + 1, ptr = strchr(fptr, '\n'))
+    {
+        int ch = *ptr;
+        int ch2 = *(ptr - 1);
 
-  if (NCMVER && ISSUER && TYPE && ACTION)
-    return P_OKAY;
+        *ptr = '\0';
+        if (*(ptr - 1) == '\r')
+            *(ptr - 1) = '\0';
 
-  strcpy(errmsg, "HEADERS syntax not correct");
-  return P_FAIL;
+        if (num_spammid > MAXSPAMMID)
+            return P_OKAY;
+
+        if (!strncmp(fptr, "@@", 2))
+        {
+            if (strstr(fptr, "BEGIN NCM HEADERS"))
+            {
+                type = NCMHDR;
+            }
+            else if (strstr(fptr, "BEGIN NCM BODY"))
+            {
+                if (NCMVER && ISSUER && TYPE && ACTION)
+                {
+                    ncmperm_t *ncmt;
+                    ncmt = (ncmperm_t *) search_issuer(ISSUER, TYPE);
+                    if (ncmt == NULL)
+                    {
+                        NCMupdate(ISSUER, TYPE);
+                        sprintf(errmsg, "unknown issuer: %s, %s", ISSUER, MSGID);
+                        return P_UNKNOWN;
+                    }
+                    if (!ncmt->perm)
+                    {
+                        sprintf(errmsg, "disallow issuer: %s, %s", ISSUER, MSGID);
+                        return P_DISALLOW;
+                    }
+                }
+                else
+                {
+                    strcpy(errmsg, "HEADERS syntax not correct");
+                    return P_FAIL;
+                }
+                type = NCMBDY;
+            }
+            else if (strstr(fptr, "END NCM BODY"))
+            {
+                *ptr = ch;
+                *(ptr - 1) = ch2;
+                break;
+            }
+            else
+            {
+                strcpy(errmsg, "NCM Notice syntax not correct");
+                return P_FAIL;
+            }
+            *ptr = ch;
+            *(ptr - 1) = ch2;
+            continue;
+        }
+
+        if (type == NCMHDR && readNCMheader(fptr) == P_FAIL)
+            return P_FAIL;
+        if (type == NCMBDY)
+            readNCMbody(fptr);
+        *ptr = ch;
+        *(ptr - 1) = ch2;
+    }
+
+    if (NCMVER && ISSUER && TYPE && ACTION)
+        return P_OKAY;
+
+    strcpy(errmsg, "HEADERS syntax not correct");
+    return P_FAIL;
 }
 
 
@@ -453,10 +453,10 @@ extern int cancel_article(char *msgid);
 static void
 NCMcancel(void)
 {
-  int i;
+    int i;
 
-  for (i = 0; i < num_spammid; i++)
-    cancel_article(SPAMMID[i]);
+    for (i = 0; i < num_spammid; i++)
+        cancel_article(SPAMMID[i]);
 }
 
 
@@ -468,43 +468,43 @@ NCMcancel(void)
 static void
 initial_nocem(void)
 {
-  memset(SPAMMID[0], 0, strlen(SPAMMID[0]) * num_spammid);
-  num_spammid = 0;
-  memset(SPAMMID_NOW, 0, strlen(SPAMMID_NOW));
+    memset(SPAMMID[0], 0, strlen(SPAMMID[0]) * num_spammid);
+    num_spammid = 0;
+    memset(SPAMMID_NOW, 0, strlen(SPAMMID_NOW));
 }
 
 
 int			/* 0:success  -1:fail */
 receive_nocem(void)
 {
-  int cc;
+    int cc;
 
-  initial_nocem();
+    initial_nocem();
 
-  cc = NCMparse();
+    cc = NCMparse();
 
-  if (cc != P_OKAY)
-  {
-    if (cc != P_DISALLOW)
-      bbslog("<nocem> :Warn: %s\n", errmsg);
-    return 0;
-  }
+    if (cc != P_OKAY)
+    {
+        if (cc != P_DISALLOW)
+            bbslog("<nocem> :Warn: %s\n", errmsg);
+        return 0;
+    }
 
-  if (!num_spammid)	/* nothing to cancel */
-    return 0;
+    if (!num_spammid)	/* nothing to cancel */
+        return 0;
 
 #if (defined(PGP) || defined(GPG))
-  cc = NCMverify();
+    cc = NCMverify();
 
-  if (cc != PGPGOOD)
-  {
-    bbslog("<nocem> :Warn: %s, %s, %s\n", errmsg, MSGID, ISSUER);
-    return -1;
-  }
+    if (cc != PGPGOOD)
+    {
+        bbslog("<nocem> :Warn: %s, %s, %s\n", errmsg, MSGID, ISSUER);
+        return -1;
+    }
 #endif
 
-  NCMcancel();
+    NCMcancel();
 
-  return 0;
+    return 0;
 }
 #endif	/* _NoCeM_ */

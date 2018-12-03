@@ -101,8 +101,8 @@
 
 #ifndef	MAXACTIVE
 #define MAXACTIVE	(4096)		/* 最多同時上站人數 (ex.1400)*/
-					/* 若要超過 1024 請修改 kernel */
-					/* options         SHMMAXPGS=? */
+                                        /* 若要超過 1024 請修改 kernel */
+                                        /* options         SHMMAXPGS=? */
 #endif
 
 #define MAXFIREWALL	(300)		/* 全域擋信列表上限 */
@@ -172,8 +172,8 @@
 
 //#ifdef __FreeBSD__
 #define	HAVE_MMAP               /* 採用 mmap(): memory mapped I/O */
-				/* 在 SunOS、FreeBSD 上可以加速 30 倍 */
-				/* Linux 的 mmap() 有問題，請暫時不要用 */
+                                /* 在 SunOS、FreeBSD 上可以加速 30 倍 */
+                                /* Linux 的 mmap() 有問題，請暫時不要用 */
 //endif //#ifdef __FreeBSD__
 
 #ifdef	HAVE_MMAP
@@ -332,14 +332,14 @@
 #define	FRIEND_FIRST            /* lkchu.990512: 好友置前 */
 
 #define	HAVE_SMTP_SERVER        /* bmtad是收信程式, 不是寄信程式
-				寄信程式是在bbsd中, mail.c的bsmtp
-				要relay的話 statue.00725 */
+                                寄信程式是在bbsd中, mail.c的bsmtp
+                                要relay的話 statue.00725 */
 #ifdef	HAVE_SMTP_SERVER
 #define	SMTP_SERVER             {"mail.ncku.edu.tw",NULL}
 #endif
 
 //#define	HAVE_FORCE_BOARD        /* 強迫 user login 時候讀取某公告看板: */
-	                                /* r2.20180430: please define it on your own if needed */
+                                  /* r2.20180430: please define it on your own if needed */
 
 #ifdef	HAVE_FORCE_BOARD
 #define	FORCE_BOARD             BRD_ANNOUNCE  /* statue.000725 */
@@ -357,7 +357,7 @@
 /* ----------------------------------------------------- */
 
 //#define	RLIMIT                  /* r2.20180430: Cygwin does not accept rlimit related functions */
-	                                /* r2.20180430: please define it on your own if needed */
+                                  /* r2.20180430: please define it on your own if needed */
 
 #ifdef  HAVE_PIP_FIGHT1
 #define	PIP_MAX	        (16)
@@ -401,10 +401,10 @@
 
 #define MAX_MAIL_SIZE	(102400) /* 總信箱容量 */
 
-                       /* Thor.981011: 以上for bbs主程式用, 超過則提示 */
-                       /* 記得同步修改 etc/mail.over */
-                       /* Thor.981014: bquota 用來清過期檔案/信件, 時間如下 */
-                       /* 記得同步修改 etc/justified 通知函以及 etc/approved */
+                        /* Thor.981011: 以上for bbs主程式用, 超過則提示 */
+                        /* 記得同步修改 etc/mail.over */
+                        /* Thor.981014: bquota 用來清過期檔案/信件, 時間如下 */
+                        /* 記得同步修改 etc/justified 通知函以及 etc/approved */
 
 #define MARK_DUE        (180)    /* 標記保存之信件 (天) */
 #define MAIL_DUE        (60)     /* 一般信件 (天) */
