@@ -148,42 +148,42 @@
 #define PMORE_MSG_PROGVER  "pmore 2007+"
 
 #define PMORE_MSG_PREF_TITLE \
-     " piaip's more: " PMORE_MSG_PROGVER " 設定選項 "
+    " piaip's more: " PMORE_MSG_PROGVER " 設定選項 "
 #define PMORE_MSG_PREF_TITLE_QRAW \
-     " piaip's more: " PMORE_MSG_PROGVER " 快速設定 - 色彩(ANSI碼)顯示模式 "
+    " piaip's more: " PMORE_MSG_PROGVER " 快速設定 - 色彩(ANSI碼)顯示模式 "
 #define PMORE_MSG_HELP_TITLE \
-     " piaip's more: " PMORE_MSG_PROGVER " 瀏覽程式使用說明"
+    " piaip's more: " PMORE_MSG_PROGVER " 瀏覽程式使用說明"
 #define PMORE_MSG_HELP_PAUSE \
-     "請按任意鍵離開此說明畫面"
+    "請按任意鍵離開此說明畫面"
 //#define PMORE_MSG_WARN_FAKEUSERINFO \
-//     " ▲此頁內容會依閱\讀者不同,原文未必有您的資料 "  /*r2.170810: keep the traditional trick XD */
+//    " ▲此頁內容會依閱\讀者不同，原文未必有您的資料 "  /*r2.170810: keep the traditional trick XD */
 #define PMORE_MSG_WARN_MOVECMD \
-     " ▲此頁內容含移位碼,可能會顯示偽造的系統訊息 "
+    " ▲此頁內容含移位碼，可能會顯示偽造的系統訊息 "
 #define PMORE_MSG_SEARCH_KEYWORD \
-     "[搜尋]關鍵字:"
+    "[搜尋]關鍵字:"
 #define PMORE_MSG_SEARCH_LETTERCASE \
-     "區分大小寫(Y/N/Q)? "
+    "區分大小寫(Y/N/Q)? "
 #define PMORE_MSG_GOTO_PAGE \
-     "跳至此頁(若要改指定行數請在結尾加.): "
+    "跳至此頁(若要改指定行數請在結尾加.): "
 #define PMORE_MSG_GOTO_LINE \
-     "跳至此行: "
+    "跳至此行: "
 #define PMORE_MSG_QPREF_SUBJECT \
-     "色彩顯示方式:"
+    "色彩顯示方式:"
 #define PMORE_MSG_QPREF_OPTIONS \
-     "1.預設格式化內容\t2.原始ANSI控制碼\t3.純文字"
+    "1.預設格式化內容\t2.原始ANSI控制碼\t3.純文字"
 #define PMORE_MSG_QPREF_PROMPT \
-     "請調整設定 (1-3 可直接選定，\\可切換) 或其它任意鍵結束。"
+    "請調整設定 (1-3 可直接選定，\\可切換) 或其它任意鍵結束。"
 
 #define PMORE_MSG_MOVIE_DETECTED \
     " ★ 這份文件是可播放的文字動畫，要開始播放嗎？ [Y/n]"
 #define PMORE_MSG_MOVIE_PLAYOLD_GETTIME \
-    "這可能是傳統動畫檔, 若要直接播放請輸入速度(秒): "
+    "這可能是傳統動畫檔，若要直接播放請輸入速度(秒): "
 #define PMORE_MSG_MOVIE_PLAYOLD_AS24L \
-    "傳統動畫是以 24 行為單位設計的, 要模擬 24 行嗎? (否則會用現在的行數)[Yn] "
+    "傳統動畫是以 24 行為單位設計的，要模擬 24 行嗎? (否則會用現在的行數)[Yn] "
 #define PMORE_MSG_MOVIE_PAUSE \
     " >>> 暫停播放動畫，請按任意鍵繼續或 q 中斷。 <<<"
 #define PMORE_MSG_MOVIE_PLAYING \
-    " >>> 動畫播放中... 可按 q, Ctrl-C 或其它任意鍵停止";
+    " >>> 動畫播放中... 可按 q、Ctrl-C 或其它任意鍵停止";
 #define PMORE_MSG_MOVIE_INTERACTION_PLAYING \
     " >>> 互動式動畫播放中... 可按 q 或 Ctrl-C 停止";
 #define PMORE_MSG_MOVIE_INTERACTION_WAITSEL \
@@ -256,8 +256,8 @@
 //     your own key_handler and help_handler.
 #ifdef M3_USE_PMORE
  // input/output API
- #define getdata(y,x,msg,buf,size,mode)     vget(y,x,msg,buf,size,mode)
- #define getdata_buf(y,x,msg,buf,size,mode) vget(y,x,msg,buf,size,GCARRY|mode)
+ #define getdata(y, x, msg, buf, size, mode)     vget(y, x, msg, buf, size, mode)
+ #define getdata_buf(y, x, msg, buf, size, mode) vget(y, x, msg, buf, size, GCARRY|mode)
  #define outs(x)                            outs((unsigned char*)(x))
  // variables
  #define t_lines    (b_lines + 1)
@@ -345,7 +345,7 @@
  *    time to key-in and for filelength).
  *  - Basically this file should only export one function, "pmore".
  *    Using any other functions here may be dangerous because they are not
- *    coded for external reentrance rightnow.
+ *    coded for external reentrance right now.
  *  - mf_* are operation functions to work with file buffer.
  *    Usually these function assumes "mf" can be accessed.
  *  - pmore_* are utility functions
@@ -392,8 +392,8 @@ static int debug = 0;
 
 /* DBCS users tend to write unsigned char. let's make compiler happy */
 #define ustrlen(x)      strlen((char*)x)
-#define ustrchr(x,y)    (unsigned char*)strchr((char*)x, y)
-#define ustrrchr(x,y)   (unsigned char*)strrchr((char*)x, y)
+#define ustrchr(x, y)    (unsigned char*)strchr((char*)x, y)
+#define ustrrchr(x, y)   (unsigned char*)strrchr((char*)x, y)
 
 // NOTE: this is a special strlen to speed up processing.
 // WARNING: x MUST be #define x "msg".
@@ -421,11 +421,11 @@ static int debug = 0;
 #define ANSI_COLOR(x)   ESC_STR "[" #x "m"
 //#define ANSI_CLRTOEND   ESC_STR "[K" /* cache.080920 (by hpo14's fix): M3 is not support [K, it might be dangerous */
 #define ANSI_CLRTOEND   ""
-#define ANSI_MOVETO(y,x) ESC_STR "[" #y ";" #x "H"
-#define ANSI_REVERSE	ANSI_COLOR(7)
+#define ANSI_MOVETO(y, x) ESC_STR "[" #y ";" #x "H"
+#define ANSI_REVERSE    ANSI_COLOR(7)
 
 #define ANSI_IN_ESCAPE(x) (((x) >= '0' && (x) <= '9') || \
-        (x) == ';' || (x) == ',' || (x) == '[')
+        (x) == ';' || (x) == ', ' || (x) == '[')
 
 #endif /* PMORE_STYLE_ANSI */
 
@@ -480,30 +480,30 @@ pmore_outns(const char *str, int n)
 typedef struct
 {
     unsigned char
-        *start, *end,   // file buffer
-        *disps, *dispe, // displayed content start/end
-        *maxdisps;      // a very special pointer,
-                        //   consider as "disps of last page"
-    off_t len;          // file total length
-    long  lineno,       // lineno of disps
-          oldlineno,    // last drawn lineno, < 0 means full update
-          xpos,         // starting x position
-                        //
-          wraplines,    // wrapped lines in last display
-          trunclines,   // truncated lines in last display
-          dispedlines,  // how many different lines displayed
-                        //  usually dispedlines = PAGE-wraplines,
-                        //  but if last line is incomplete(wrapped),
-                        //  dispedlines = PAGE-wraplines + 1
-          lastpagelines,// lines of last page to show
-                        //  this indicates how many lines can
-                        //  maxdisps(maxlinenoS) display.
-          maxlinenoS;   // lineno of maxdisps, "S"!
-                        //  What does the magic "S" mean?
-                        //  Just trying to notify you that it's
-                        //  NOT REAL MAX LINENO NOR FILELENGTH!!!
-                        //  You may consider "S" of "Start" (disps).
-    void (*detachHandler)();
+        *start, *end,     // file buffer
+        *disps, *dispe,   // displayed content start/end
+        *maxdisps;        // a very special pointer,
+                          //   consider as "disps of last page"
+    off_t len;            // file total length
+    long  lineno,         // lineno of disps
+          oldlineno,      // last drawn lineno, < 0 means full update
+          xpos,           // starting x position
+                          //
+          wraplines,      // wrapped lines in last display
+          trunclines,     // truncated lines in last display
+          dispedlines,    // how many different lines displayed
+                          //  usually dispedlines = PAGE-wraplines,
+                          //  but if last line is incomplete(wrapped),
+                          //  dispedlines = PAGE-wraplines + 1
+          lastpagelines,  // lines of last page to show
+                          //  this indicates how many lines can
+                          //  maxdisps(maxlinenoS) display.
+          maxlinenoS;     // lineno of maxdisps, "S"!
+                          //  What does the magic "S" mean?
+                          //  Just trying to notify you that it's
+                          //  NOT REAL MAX LINENO NOR FILELENGTH!!!
+                          //  You may consider "S" of "Start" (disps).
+    void (*detachHandler)(void);
 } MmappedFile;
 
 MmappedFile mf = {
@@ -552,7 +552,7 @@ enum MF_DISP_CONST {
 };
 
 #define MFDISP_PAGE (t_lines-1) // the real number of lines to be shown.
-#define MFDISP_DIRTY() { mf.oldlineno = -1; }
+#define MFDISP_DIRTY() (void) ( mf.oldlineno = -1 )
 
 /* Indicators */
 #define MFDISP_TRUNC_INDICATOR  ANSI_COLOR(0;1;37) ">" ANSI_RESET
@@ -599,7 +599,7 @@ typedef struct
     unsigned char *floats [FH_FLOATS];
 } MF_PrettyFormattedHeader;
 
-MF_PrettyFormattedHeader fh = { 0, {0,0,0,0}, {0, 0}};
+MF_PrettyFormattedHeader fh = { 0, {0, 0, 0, 0}, {0, 0}};
 
 /* search records */
 typedef struct
@@ -617,10 +617,10 @@ enum MFSEARCH_DIRECTION {
 };
 
 // Reset structures
-#define RESETMF() { memset(&mf, 0, sizeof(mf)); \
-    mf.lastpagelines = mf.maxlinenoS = mf.oldlineno = -1; }
-#define RESETFH() { memset(&fh, 0, sizeof(fh)); \
-    fh.lines = -1; }
+#define RESETMF() (void) ( memset(&mf, 0, sizeof(mf)), \
+    mf.lastpagelines = mf.maxlinenoS = mf.oldlineno = -1 )
+#define RESETFH() (void) ( memset(&fh, 0, sizeof(fh)), \
+    fh.lines = -1 )
 
 // Artwork
 #define OPTATTR_NORMAL        ANSI_COLOR(0;34;47)
@@ -715,34 +715,34 @@ typedef struct {
 
 MF_Movie mfmovie;
 
-#define STOP_MOVIE() {  \
-    mfmovie.options = NULL; \
-    mfmovie.pause    = 0; \
-    if (mfmovie.mode == MFDISP_MOVIE_PLAYING) \
-        mfmovie.mode =  MFDISP_MOVIE_YES; \
-    if (mfmovie.mode == MFDISP_MOVIE_PLAYING_OLD) \
-        mfmovie.mode =  MFDISP_MOVIE_NO; \
-    mf_determinemaxdisps(MFNAV_PAGE, 0); \
-    mf_forward(0); \
-}
+#define STOP_MOVIE() (void) (  \
+    mfmovie.options = NULL, \
+    mfmovie.pause    = 0, \
+    (mfmovie.mode == MFDISP_MOVIE_PLAYING) && \
+        (mfmovie.mode =  MFDISP_MOVIE_YES), \
+    (mfmovie.mode == MFDISP_MOVIE_PLAYING_OLD) && \
+        (mfmovie.mode =  MFDISP_MOVIE_NO), \
+    mf_determinemaxdisps(MFNAV_PAGE, 0), \
+    mf_forward(0) \
+)
 
-#define RESET_MOVIE() { \
-    mfmovie.mode = MFDISP_MOVIE_UNKNOWN; \
-    mfmovie.options = NULL; \
-    mfmovie.optkeys = NULL; \
-    mfmovie.intr_src= NULL; \
-    mfmovie.intr_dest_frame = 0; \
-    mfmovie.compat24 = 1; \
-    mfmovie.pause    = 0; \
-    mfmovie.interactive     = 0; \
-    mfmovie.synctime.tv_sec = mfmovie.synctime.tv_usec = 0; \
-    mfmovie.frameclk.tv_sec = 1; mfmovie.frameclk.tv_usec = 0; \
-    mfmovie.lastframe = NULL; \
-}
+#define RESET_MOVIE() (void) ( \
+    mfmovie.mode = MFDISP_MOVIE_UNKNOWN, \
+    mfmovie.options = NULL, \
+    mfmovie.optkeys = NULL, \
+    mfmovie.intr_src= NULL, \
+    mfmovie.intr_dest_frame = 0, \
+    mfmovie.compat24 = 1, \
+    mfmovie.pause    = 0, \
+    mfmovie.interactive     = 0, \
+    mfmovie.synctime.tv_sec = mfmovie.synctime.tv_usec = 0, \
+    mfmovie.frameclk.tv_sec = 1, mfmovie.frameclk.tv_usec = 0, \
+    mfmovie.lastframe = NULL \
+)
 
 #define MOVIE_IS_PLAYING() \
-   ((mfmovie.mode == MFDISP_MOVIE_PLAYING) || \
-    (mfmovie.mode == MFDISP_MOVIE_PLAYING_OLD))
+    ((mfmovie.mode == MFDISP_MOVIE_PLAYING) || \
+     (mfmovie.mode == MFDISP_MOVIE_PLAYING_OLD))
 
 unsigned char *
     mf_movieFrameHeader(unsigned char *p, unsigned char *end);
@@ -1023,8 +1023,8 @@ mf_backward(int lines)
     /* backward n lines means to find n times of '\n'. */
 
     /* if we're already in a line break, add one mark. */
-   if (mf.disps < mf.end && *mf.disps == '\n')
-       lines++, real_moved --;
+    if (mf.disps < mf.end && *mf.disps == '\n')
+        lines++, real_moved --;
 
     while (1) {
         if (mf.disps < mf.start || *mf.disps == '\n') {
@@ -1319,7 +1319,7 @@ mf_parseHeaders(void)
             pmore_str_chomp(np);
             // remove quote and traverse back
             *pb-- = 0;
-            while (pb > p && *pb != ',' && !(ISSPACE(*pb)))
+            while (pb > p && *pb != ', ' && !(ISSPACE(*pb)))
                 pb--;
 
             if (pb > p) {
@@ -1374,18 +1374,18 @@ MFDISP_DBCS_HEADERWIDTH(int originalw)
 //    return (originalw >> 1) << 1;
 }
 
-#define MFDISP_FORCEUPDATE2TOP() { startline = 0; }
-#define MFDISP_FORCEUPDATE2BOT() { endline   = MFDISP_PAGE - 1; }
-#define MFDISP_FORCEDIRTY2BOT() \
-    if (optimized == MFDISP_OPT_OPTIMIZED) { \
-        optimized = MFDISP_OPT_FORCEDIRTY; \
-        MFDISP_FORCEUPDATE2BOT(); \
-    }
+#define MFDISP_FORCEUPDATE2TOP() (void) ( startline = 0 )
+#define MFDISP_FORCEUPDATE2BOT() (void) ( endline   = MFDISP_PAGE - 1 )
+#define MFDISP_FORCEDIRTY2BOT() (void) ( \
+    (optimized == MFDISP_OPT_OPTIMIZED) && ( \
+        optimized = MFDISP_OPT_FORCEDIRTY, \
+        MFDISP_FORCEUPDATE2BOT(), 0 \
+    ))
 
 static char *override_msg = NULL;
 static char *override_attr = NULL;
 
-#define RESET_OVERRIDE_MSG() { override_attr = override_msg = NULL; }
+#define RESET_OVERRIDE_MSG() (void) ( override_attr = override_msg = NULL )
 
 /*
  * display mf content from disps for MFDISP_PAGE
@@ -1572,7 +1572,7 @@ mf_display(void)
             if (bpref.separator & MFDISP_SEP_LINE)
             {
                 outs(ANSI_COLOR(0;36));
-                for(col = 0; col < headerw; col+=2)
+                for (col = 0; col < headerw; col+=2)
                 {
                     // prints("%02d", col);
                     outs("─");
@@ -1775,7 +1775,7 @@ mf_display(void)
                         char esbuf[4]= "";
 
                         // the max expanded size of esc_star.
-                        char buf[64] = "" ;
+                        char buf[64] = "";
                         char *pbuf = buf;
 
                         memcpy(buf, mf.dispe, 3);  // ^[*s
@@ -1953,7 +1953,7 @@ mf_display(void)
                                      */
                                     // move(lines, col-1);
                                     char ansicmd[16];
-                                    sprintf(ansicmd, ANSI_MOVETO(%d,%d),
+                                    sprintf(ansicmd, ANSI_MOVETO(%d, %d),
                                             lines+1, col-1+1);
                                     /* to prevent ANSI ESCAPE being translated as
                                      * DBCS trailing byte. */
@@ -2084,7 +2084,7 @@ mf_display_footer(
         /* in debug mode don't print ANSI codes
          * because themselves are buggy.
          */
-        prints("L#%ld(w%ld,lp%ld) Dsp:%08X/%08X/%08X, "
+        prints("L#%ld(w%ld, lp%ld) Dsp:%08X/%08X/%08X, "
                 "F:%08X/%08X(%d) tScr(%dx%d)",
                 mf.lineno, mf.wraplines, mf.lastpagelines,
                 (unsigned int)mf.disps,
@@ -2109,8 +2109,8 @@ mf_display_footer(
         if (mf.lineno >= mf.maxlinenoS || nowpage > allpages)
             nowpage = allpages;
         /*
-           nowpage =
-           (int)((mf.lineno + mf.dispedlines-2) / MFNAV_PAGE)+1 ;
+            nowpage =
+            (int)((mf.lineno + mf.dispedlines-2) / MFNAV_PAGE)+1;
            */
     }
     /* why -2 and -1?
@@ -2178,7 +2178,7 @@ mf_display_footer(
         if (mf.xpos > 0)
         {
             snprintf(buf, sizeof(buf),
-                    " 顯示範圍: %d~%d 欄位, %02d~%02d 行",
+                    " 顯示範圍: %d~%d 欄位，%02d~%02d 行",
                     (int)mf.xpos+1,
                     (int)(mf.xpos + t_columns-(mf.trunclines ? 2 : 1)),
                     (int)(mf.lineno + 1),
@@ -2290,7 +2290,7 @@ PMORE_UINAV_FORWARDLINE(void)
     mf_forward(1);
 }
 
-#define REENTRANT_RESTORE() { mf = bkmf; fh = bkfh; }
+#define REENTRANT_RESTORE() (void) ( mf = bkmf, fh = bkfh )
 
 /*
  * piaip's more, a replacement for old more
@@ -2653,7 +2653,7 @@ _pmore2(
                     mf.xpos ++;
                 mf.xpos ++;
                 break;
-            case ',':
+            case ', ':
                 if (mf.xpos > 0)
                     mf.xpos --;
                 break;
@@ -2922,7 +2922,7 @@ MFPROTO void
 pmore_prefEntry(
         int isel,
         const char *key, int szKey,
-        const char *text,int szText,
+        const char *text, int szText,
         const char* options)
 {
     // each entry occupies 23 characters now.
@@ -2991,7 +2991,7 @@ pmore_PromptBar(const char *caption, int shadow)
     if (shadow & PMORE_SHADOW_ABOVE)
     {
         outs(ANSI_COLOR(0;1;30));
-        for(i = 0; i+2 < t_columns ; i+=2)
+        for (i = 0; i+2 < t_columns; i+=2)
             outs("▁");
         outs(ANSI_RESET "\n");
     }
@@ -3000,14 +3000,14 @@ pmore_PromptBar(const char *caption, int shadow)
 
     outs(ANSI_REVERSE);
     outs(caption);
-    for(i -= strlen(caption); i > 0; i--)
+    for (i -= strlen(caption); i > 0; i--)
         outs(" ");
     outs(ANSI_RESET "\n");
 
     if (shadow & PMORE_SHADOW_BELOW)
     {
         outs(ANSI_COLOR(0;1;30));
-        for(i = 0; i+2 < t_columns ; i+=2)
+        for (i = 0; i+2 < t_columns; i+=2)
             outs("▔");
         outs(ANSI_RESET "\n");
     }
@@ -3162,13 +3162,13 @@ pmore_Preference(void)
 
 // apply system colors if defined
 #ifndef HLP_CATEGORY_COLOR
-#define HLP_CATEGORY_COLOR	PMHLPATTR_HEADER
+#define HLP_CATEGORY_COLOR      PMHLPATTR_HEADER
 #endif
 #ifndef HLP_DESCRIPTION_COLOR
-#define HLP_DESCRIPTION_COLOR	PMHLPATTR_NORMAL
+#define HLP_DESCRIPTION_COLOR   PMHLPATTR_NORMAL
 #endif
 #ifndef HLP_KEYLIST_COLOR
-#define HLP_KEYLIST_COLOR	PMHLPATTR_NORMAL_KEY
+#define HLP_KEYLIST_COLOR       PMHLPATTR_NORMAL_KEY
 #endif
 
 static const char
@@ -3226,29 +3226,29 @@ pmore_Help(void *ctx, int (*help_handler)(int y, void *ctx))
     {
         incomplete = n_t_tables;
         y++;
-	for (i = 0; i < n_t_tables; i++)
-	{
-	    const char *lvar = NULL, *rvar = "";
-	    if (*t_tables[i])
-	    {
-		lvar = *t_tables[i]++;
-		rvar = *t_tables[i]++;
-	    }
-	    if (!rvar) { // draw category
+        for (i = 0; i < n_t_tables; i++)
+        {
+            const char *lvar = NULL, *rvar = "";
+            if (*t_tables[i])
+            {
+                lvar = *t_tables[i]++;
+                rvar = *t_tables[i]++;
+            }
+            if (!rvar) { // draw category
                 prints(HLP_CATEGORY_COLOR "%-*s", col_widths[i], lvar);
-		continue;
-	    }
-	    if (!lvar) { // table is complete...
-		incomplete --;
-		lvar = "";
-	    }
-	    // draw table body
+                continue;
+            }
+            if (!lvar) { // table is complete...
+                incomplete --;
+                lvar = "";
+            }
+            // draw table body
             prints( HLP_DESCRIPTION_COLOR "%-*s"
                     HLP_KEYLIST_COLOR     "%-*s",
                     l_widths[i], lvar,
                     col_widths[i]-l_widths[i], rvar);
-	}
-	outc('\n');
+        }
+        outc('\n');
     } while (incomplete);
 
     // show additional help information
@@ -3689,14 +3689,14 @@ mf_movieCurrentFrameNo(void)
 
     do
     {
-       if ( mf_movieFrameHeader(mf.disps, mf.end))
-           no++;
+        if ( mf_movieFrameHeader(mf.disps, mf.end))
+            no++;
 
-       if (mf.disps >= p)
-           break;
+        if (mf.disps >= p)
+            break;
 
-       if (mf_forward(1) < 1)
-           break;
+        if (mf_forward(1) < 1)
+            break;
 
     } while ( 1 ); // mf.disps < p);
 
@@ -3820,7 +3820,7 @@ mf_movieExecuteOffsetCmd(unsigned char *s, unsigned char *end)
 MFPROTO int
 mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
 {
-    // format: #time#key1,cmd,text1#key2,cmd,text2#
+    // format: #time#key1, cmd, text1#key2, cmd, text2#
     // if key  is empty, use auto-increased key.
     // if cmd  is empty, invalid.
     // if text is empty, display key only or hide if time is assigned.
@@ -3877,7 +3877,7 @@ mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
         newOpt = 1;
         promptlen = 0;
 
-        // parse (key,frame,text)
+        // parse (key, frame, text)
         for (   p = opt, ient = 0, maxsel = 0,
                 key = '0';      // default command
                 p < end && *p != '\n'; p++)
@@ -3893,7 +3893,7 @@ mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
             }
 
             // calculation of fields
-            if (*p == ',' || *p == '#')
+            if (*p == ', ' || *p == '#')
             {
                 switch (++ient)
                 {
@@ -3922,18 +3922,18 @@ mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
                 newOpt = 1;
 
                 // first, fix pointers
-                if (szCmd == 0 || *cmd == ',' || *cmd == '#')
+                if (szCmd == 0 || *cmd == ', ' || *cmd == '#')
                 { cmd = NULL; szCmd = 0; }
 
                 // quick abort if option is invalid.
                 if (!cmd)
                     continue;
 
-                if (szText == 0 || *text == ',' || *text == '#')
+                if (szText == 0 || *text == ', ' || *text == '#')
                 { text = NULL; szText = 0; }
 
                 // assign key
-                if (*pkey == ',' || *pkey == '#')
+                if (*pkey == ', ' || *pkey == '#')
                     key++;
                 else
                 {
@@ -4145,9 +4145,10 @@ mf_movieSyncFrame(void)
     }
 }
 
-#define MOVIECMD_SKIP_ALL(p,end) \
+#define MOVIECMD_SKIP_ALL(p, end) do { \
     while (p < end && *p && *p != '\n') \
     { p++; } \
+} while (0)
 
 MFPROTO unsigned char *
 mf_movieProcessCommand(unsigned char *p, unsigned char *end)
@@ -4164,7 +4165,7 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
             // END
             STOP_MOVIE();
             // MFDISP_SKIPCURLINE();
-            MOVIECMD_SKIP_ALL(p,end);
+            MOVIECMD_SKIP_ALL(p, end);
             return p;
         }
         else if (*p == 'P')
@@ -4172,14 +4173,14 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
             // PAUSE
             mfmovie.pause = 1;
             // MFDISP_SKIPCURLINE();
-            MOVIECMD_SKIP_ALL(p,end);
+            MOVIECMD_SKIP_ALL(p, end);
             return p;
 
         }
         else if (*p == 'I')
         {
             // INTERRUPT
-            // Syntax: Icmd_from,cmd_to
+            // Syntax: Icmd_from, cmd_to
             // Jump cmd_from, and execute until cmd_to,
             // then back here for next frame.
             unsigned char *pfs, *pfe, *pts, *pte;
@@ -4190,16 +4191,16 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
 
             // find parameters
             pfs = pfe = p+1;
-            while (pfe < end && *pfe > ' ' && *pfe != ',')
+            while (pfe < end && *pfe > ' ' && *pfe != ', ')
                 pfe++;
             pts = pte = pfe+1;
-            while (pte < end && *pte > ' ' && *pte != ',')
+            while (pte < end && *pte > ' ' && *pte != ', ')
                 pte++;
             // check syntax
-            if ( pfe >= end || *pfe != ',' ||
+            if ( pfe >= end || *pfe != ', ' ||
                  pts >= end)
             {
-                MOVIECMD_SKIP_ALL(p,end);
+                MOVIECMD_SKIP_ALL(p, end);
                 return p;
             }
 
@@ -4217,40 +4218,40 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
 
             // XXX what if jump to same location?
 
-            MOVIECMD_SKIP_ALL(p,end);
+            MOVIECMD_SKIP_ALL(p, end);
             return p;
         }
         else if (*p == 'G')
         {
             // GOTO
-            // Gt+-n,t+-n,t+-n (random select one)
-            // jump +-n of type(l,p,f)
+            // Gt+-n, t+-n, t+-n (random select one)
+            // jump +-n of type(l, p, f)
 
             // random select, if multiple
             unsigned char *pe = p;
             unsigned int igs = 0;
 
-            for (pe = p ; pe < end && *pe &&
+            for (pe = p; pe < end && *pe &&
                     *pe > ' ' && *pe < 0x80
                     ; pe ++)
-                if (*pe == ',') igs++;
+                if (*pe == ', ') igs++;
 
             if (igs)
             {
                 // make random
                 igs = random() % (igs+1);
 
-                for (pe = p ; igs > 0 && pe < end && *pe &&
+                for (pe = p; igs > 0 && pe < end && *pe &&
                         *pe > ' ' && *pe < 0x80
                         ; pe ++)
-                    if (*pe == ',') igs--;
+                    if (*pe == ', ') igs--;
 
                 if (pe != p)
                     p = pe-1;
             }
 
             mf_movieExecuteOffsetCmd(p+1, end);
-            MOVIECMD_SKIP_ALL(p,end);
+            MOVIECMD_SKIP_ALL(p, end);
             return p;
         }
         else if (*p == ':')
@@ -4295,17 +4296,17 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
                 p--;
                 continue;
             }
-            MOVIECMD_SKIP_ALL(p,end);
+            MOVIECMD_SKIP_ALL(p, end);
             return p;
         }
         else if (*p == '#')
         {
             // OPTIONS
-            // #key1,frame1,text1#key2,frame2,text2#
+            // #key1, frame1, text1#key2, frame2, text2#
             mfmovie.options = p+1;
             mfmovie.interactive = 1;
             // MFDISP_SKIPCURLINE();
-            MOVIECMD_SKIP_ALL(p,end);
+            MOVIECMD_SKIP_ALL(p, end);
             return p;
         }
         else if (*p == 'O')
@@ -4330,7 +4331,7 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
         else if (*p == 'L')
         {
             // LOOP
-            // Lm,n
+            // Lm, n
             // m times to backward n
             break;
         }

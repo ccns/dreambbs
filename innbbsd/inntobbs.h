@@ -14,4 +14,4 @@ extern void HISmaint(void);
 extern void HISadd(char *msgid, char *board, char *xname);
 extern int *HISfetch(char *msgid, char *board, char *xname);
 
-#endif	/* _INNTOBBS_H_ */
+#endif  /* _INNTOBBS_H_ */

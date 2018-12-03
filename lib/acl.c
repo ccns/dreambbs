@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* lib/acl_addr.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* lib/acl_addr.c       ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : Access Control List				 */
-/* create : 98/03/20					 */
-/* update : 98/03/29					 */
+/* target : Access Control List                          */
+/* create : 98/03/20                                     */
+/* update : 98/03/29                                     */
 /*-------------------------------------------------------*/
 
 #include <stdio.h>
@@ -11,11 +11,11 @@
 #include "dao.h"
 
 /* ----------------------------------------------------- */
-/* ACL config file format				 */
+/* ACL config file format                                */
 /* ----------------------------------------------------- */
-/* user:	majordomo@* bad@cs.nthu.edu.tw		 */
-/* host:	cs.nthu.edu.tw	140.114.77.1		 */
-/* subnet:	.nthu.edu.tw	140.114.77.		 */
+/* user:        majordomo@* bad@cs.nthu.edu.tw           */
+/* host:        cs.nthu.edu.tw  140.114.77.1             */
+/* subnet:      .nthu.edu.tw    140.114.77.              */
 /* ----------------------------------------------------- */
 
 
@@ -26,113 +26,113 @@
 
 int
 acl_addr(
-  char *acl,		/* file name of access control list */
-  char *addr
+    char *acl,                  /* file name of access control list */
+    char *addr
 )
 {
-  int i, cc, luser, lhost;
-  FILE *fp;
-  char buf[128], filter[256], *host, *str;
+    int i, cc, luser, lhost;
+    FILE *fp;
+    char buf[128], filter[256], *host, *str;
 
-  char *invalid[] = {"@bbs", "bbs@", "root@", "gopher@",
-    "guest@", "@ppp", "@slip", "@dial", "unknown@", "@anon.penet.fi",
-  "193.64.202.3", NULL};
+    char *invalid[] = {"@bbs", "bbs@", "root@", "gopher@",
+        "guest@", "@ppp", "@slip", "@dial", "unknown@", "@anon.penet.fi",
+    "193.64.202.3", NULL};
 
-  str_lower(buf, addr);
-  host = (char *) strchr(buf, '@');
+    str_lower(buf, addr);
+    host = (char *) strchr(buf, '@');
 
-  for (i = 0; (str = invalid[i]); i++)
-  {
-    if (strstr(buf, str))
-      return -2;
-  }
-
-  /* check for mail.acl (lower case filter) */
-
-  i = 0;
-
-  if ((fp = fopen(acl, "r")))
-  {
-    for (addr = buf; (cc = *addr); addr++)
+    for (i = 0; (str = invalid[i]); i++)
     {
-      if ((cc = '@'))
-      {
-	host = addr;
-	*host++ = '\0';
-      }
+        if (strstr(buf, str))
+            return -2;
     }
 
-    luser = host - buf;		/* length of user name */
-    lhost = addr - host;	/* length of host name */
+    /* check for mail.acl (lower case filter) */
 
-    while (fgets(filter, sizeof(filter), fp))
+    i = 0;
+
+    if ((fp = fopen(acl, "r")))
     {
-      str = filter;
-      addr = NULL;
+        for (addr = buf; (cc = *addr); addr++)
+        {
+            if ((cc = '@'))
+            {
+                host = addr;
+                *host++ = '\0';
+            }
+        }
 
-      for (;;)
-      {
-	cc = *str;
-	if (cc <= ' ')
-	{
-	  break;
-	}
+        luser = host - buf;     /* length of user name */
+        lhost = addr - host;    /* length of host name */
 
-	str++;
-	if (cc == '@')
-	  addr = str;
-      }
+        while (fgets(filter, sizeof(filter), fp))
+        {
+            str = filter;
+            addr = NULL;
 
-      if (str == filter)	/* empty line */
-	continue;
+            for (;;)
+            {
+                cc = *str;
+                if (cc <= ' ')
+                {
+                    break;
+                }
 
-      *str = '\0';
+                str++;
+                if (cc == '@')
+                    addr = str;
+            }
 
-      if (addr)			/* match user name */
-      {
-	if ((luser != addr - filter) || memcmp(buf, filter, luser))
-	  continue;
+            if (str == filter)  /* empty line */
+                continue;
 
-	if (!*addr)
-	  return -1;
-      }
-      else
-      {
-	addr = filter;
-      }
+            *str = '\0';
 
-      /* match host name */
+            if (addr)           /* match user name */
+            {
+                if ((luser != addr - filter) || memcmp(buf, filter, luser))
+                    continue;
 
-      cc = str - addr;
+                if (!*addr)
+                    return -1;
+            }
+            else
+            {
+                addr = filter;
+            }
 
-      if (((cc == lhost) && !strcmp(addr, host)) ||
-	((cc < lhost) && (*addr == '.') && !strcmp(addr, host + lhost - cc)))
-      {
-	i = -2;
-	break;
-      }
+            /* match host name */
+
+            cc = str - addr;
+
+            if (((cc == lhost) && !strcmp(addr, host)) ||
+                ((cc < lhost) && (*addr == '.') && !strcmp(addr, host + lhost - cc)))
+            {
+                i = -2;
+                break;
+            }
+        }
+
+        fclose(fp);
     }
 
-    fclose(fp);
-  }
-
-  return i;
+    return i;
 }
 /*-------------------------------------------------------*/
-/* lib/acl_has.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* lib/acl_has.c        ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : Access Control List				 */
-/* create : 98/03/20					 */
-/* update : 98/03/29					 */
+/* target : Access Control List                          */
+/* create : 98/03/20                                     */
+/* update : 98/03/29                                     */
 /*-------------------------------------------------------*/
 
 /* ----------------------------------------------------- */
-/* ACL config file format				 */
+/* ACL config file format                                */
 /* ----------------------------------------------------- */
-/* user:	majordomo@* bad@cs.nthu.edu.tw		 */
+/* user:        majordomo@* bad@cs.nthu.edu.tw           */
 /*                        ^ Thor.980825: 應為空白        */
-/* host:	cs.nthu.edu.tw	140.114.77.1		 */
-/* subnet:	.nthu.edu.tw	140.114.77.		 */
+/* host:        cs.nthu.edu.tw  140.114.77.1             */
+/* subnet:      .nthu.edu.tw    140.114.77.              */
 /* ----------------------------------------------------- */
 
 
@@ -143,77 +143,77 @@ acl_addr(
 
 int
 acl_has(
-  char *acl,			/* file name of access control list */
-  char *user,			/* lower-case string */
-  char *host			/* lower-case string */
+    char *acl,                  /* file name of access control list */
+    char *user,                 /* lower-case string */
+    char *host                  /* lower-case string */
 )
 {
-  int i, cc, luser, lhost;
-  FILE *fp;
-  char filter[256], *addr, *str;
+    int i, cc, luser, lhost;
+    FILE *fp;
+    char filter[256], *addr, *str;
 
-  if (!(fp = fopen(acl, "r")))
-    return -1;
+    if (!(fp = fopen(acl, "r")))
+        return -1;
 
-  i = 0;
-  luser = strlen(user);		/* length of user name */
-  lhost = strlen(host);		/* length of host name */
+    i = 0;
+    luser = strlen(user);       /* length of user name */
+    lhost = strlen(host);       /* length of host name */
 
-  while (fgets(filter, sizeof(filter), fp))
-  {
-    addr = NULL;
-
-    for (str = filter; (cc = *str) > ' '; str++)
-    { /* Thor.980825: 註解: 遇到 空白 就算此行結束 */
-      if (cc == '@')
-	addr = str;
-    }
-
-    if (str == filter)		/* empty line */
-      continue;
-
-    *str = '\0'; /* Thor.980825: 註解: 將結束處填0, 免生枝節 */
-    str_lower(filter, filter);  /* lkchu.981201: lower-case string */
-
-    if (addr)			/* match user name */
+    while (fgets(filter, sizeof(filter), fp))
     {
-      if ((luser != addr - filter) || memcmp(user, filter, luser))
-	continue;
+        addr = NULL;
 
-      if (!*++addr)
-      {
-	i = 1;
-	break;
-      }
+        for (str = filter; (cc = *str) > ' '; str++)
+        { /* Thor.980825: 註解: 遇到 空白 就算此行結束 */
+            if (cc == '@')
+                addr = str;
+        }
+
+        if (str == filter)      /* empty line */
+            continue;
+
+        *str = '\0'; /* Thor.980825: 註解: 將結束處填0, 免生枝節 */
+        str_lower(filter, filter);  /* lkchu.981201: lower-case string */
+
+        if (addr)               /* match user name */
+        {
+            if ((luser != addr - filter) || memcmp(user, filter, luser))
+                continue;
+
+            if (!*++addr)
+            {
+                i = 1;
+                break;
+            }
+        }
+        else
+        {
+            addr = filter;
+        }
+
+        /* match host name */
+
+        cc = str - addr;
+
+        if (cc > lhost)
+            continue;
+
+        if (cc == lhost)
+        {
+            if (memcmp(addr, host, lhost))
+                continue;
+        }
+        else
+        {
+            if (((*addr != '.') || memcmp(addr, host + lhost - cc, cc)) &&
+                ((addr[cc - 1] != '.') || memcmp(addr, host, cc)))
+                continue;
+        }
+
+        i = 1;
+        break;
     }
-    else
-    {
-      addr = filter;
-    }
 
-    /* match host name */
-
-    cc = str - addr;
-
-    if (cc > lhost)
-      continue;
-
-    if (cc == lhost)
-    {
-      if (memcmp(addr, host, lhost))
-	continue;
-    }
-    else
-    {
-      if (((*addr != '.') || memcmp(addr, host + lhost - cc, cc)) &&
-	((addr[cc - 1] != '.') || memcmp(addr, host, cc)))
-	continue;
-    }
-
-    i = 1;
-    break;
-  }
-
-  fclose(fp);
-  return i;
+    fclose(fp);
+    return i;
 }

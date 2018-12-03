@@ -11,45 +11,45 @@
 
 static void
 reaper(
-  char *lowid)
+    char *lowid)
 {
-  char buf[256];
-  sprintf(buf,"tar zxvf /var/tape/gem/%s ",lowid);
-  system(buf);
+    char buf[256];
+    sprintf(buf, "tar zxvf /var/tape/gem/%s ", lowid);
+    system(buf);
 }
 
 static void
 traverse(
-  char *fpath)
+    char *fpath)
 {
-  DIR *dirp;
-  struct dirent *de;
-  char *fname;
+    DIR *dirp;
+    struct dirent *de;
+    char *fname;
 
-  if (!(dirp = opendir(fpath)))
-  {
-    return;
-  }
-
-  while ((de = readdir(dirp)))
-  {
-    fname = de->d_name;
-    if (fname[0] > ' ' && fname[0] != '.')
+    if (!(dirp = opendir(fpath)))
     {
-      reaper(fname);
+        return;
     }
-  }
-  closedir(dirp);
+
+    while ((de = readdir(dirp)))
+    {
+        fname = de->d_name;
+        if (fname[0] > ' ' && fname[0] != '.')
+        {
+            reaper(fname);
+        }
+    }
+    closedir(dirp);
 }
 
 int
 main(void)
 {
-  char fpath[256];
+    char fpath[256];
 
-  strcpy(fpath, "/var/tape/gem");
+    strcpy(fpath, "/var/tape/gem");
 
-  chdir("/home/bbs/gem/brd");
-  traverse(fpath);
-  return 0;
+    chdir("/home/bbs/gem/brd");
+    traverse(fpath);
+    return 0;
 }

@@ -7,31 +7,31 @@
 
 void*
 shm_new(
-  int shmkey,
-  int shmsize
+    int shmkey,
+    int shmsize
 )
 {
-  void *shmptr;
-  int shmid;
+    void *shmptr;
+    int shmid;
 
-  shmid = shmget(shmkey, shmsize, 0);
-  if (shmid < 0)
-  {
-    shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
+    shmid = shmget(shmkey, shmsize, 0);
     if (shmid < 0)
-      exit(-1);
-  }
-  else
-  {
-    shmsize = 0;
-  }
+    {
+        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
+        if (shmid < 0)
+            exit(-1);
+    }
+    else
+    {
+        shmsize = 0;
+    }
 
-  shmptr = (void *) shmat(shmid, NULL, 0);
-  if (shmptr == (void *) -1)
-    exit(-2);
+    shmptr = (void *) shmat(shmid, NULL, 0);
+    if (shmptr == (void *) -1)
+        exit(-2);
 
-  if (shmsize)
-    memset(shmptr, 0, shmsize);
+    if (shmsize)
+        memset(shmptr, 0, shmsize);
 
-  return shmptr;
+    return shmptr;
 }

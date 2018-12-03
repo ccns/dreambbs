@@ -1,26 +1,26 @@
 /*-------------------------------------------------------*/
-/* util/mailpost.c	( NTHU CS MapleBBS Ver 2.36 )	 */
+/* util/mailpost.c      ( NTHU CS MapleBBS Ver 2.36 )    */
 /*-------------------------------------------------------*/
-/* target : (1) general user E-mail post 到看板		 */
-/*          (2) BM E-mail post 到精華區			 */
-/*          (3) 自動審核身份認證信函之回信		 */
-/* create : 95/03/29				 	 */
-/* update : 97/03/29				 	 */
+/* target : (1) general user E-mail post 到看板          */
+/*          (2) BM E-mail post 到精華區                  */
+/*          (3) 自動審核身份認證信函之回信               */
+/* create : 95/03/29                                     */
+/* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
 /* notice : brdshm (board shared memory) synchronize     */
 /*-------------------------------------------------------*/
 
-#include	"bbs.h"
+#include "bbs.h"
 
 extern char *crypt(const char *key, const char *salt);
 
-//#define	LOG_FILE	"run/mailog"
-#define		LOG_FILE	FN_BBSMAILPOST_LOG
+//#define LOG_FILE        "run/mailog"
+#define LOG_FILE        FN_BBSMAILPOST_LOG
 
-#define	JUNK		0
-#define	NET_SAVE	1
-#define	LOCAL_SAVE	2
-#define	DIGEST		3
+#define JUNK            0
+#define NET_SAVE        1
+#define LOCAL_SAVE      2
+#define DIGEST          3
 
 static int mymode = JUNK;
 
@@ -29,61 +29,61 @@ static char myfrom[128], mysub[128], myname[128], mypasswd[128], myboard[128], m
 
 static int
 acct_fetch(
-  char *userid
+    char *userid
 )
 {
-  int fd;
-  char fpath[80], buf[80];
+    int fd;
+    char fpath[80], buf[80];
 
-  str_lower(buf, userid);
-  sprintf(fpath, "usr/%c/%s/.ACCT", *buf, buf);
-  fd = open(fpath, O_RDWR, 0600);
-  if (fd >= 0)
-  {
-    if (read(fd, &myacct, sizeof(ACCT)) != sizeof(ACCT))
+    str_lower(buf, userid);
+    sprintf(fpath, "usr/%c/%s/.ACCT", *buf, buf);
+    fd = open(fpath, O_RDWR, 0600);
+    if (fd >= 0)
     {
-      close(fd);
-      fd = -1;
+        if (read(fd, &myacct, sizeof(ACCT)) != sizeof(ACCT))
+        {
+            close(fd);
+            fd = -1;
+        }
     }
-  }
-  return fd;
+    return fd;
 }
 
 /* ----------------------------------------------------- */
-/* .BOARDS shared memory (cache.c)			 */
+/* .BOARDS shared memory (cache.c)                       */
 /* ----------------------------------------------------- */
 
 static int
 brd_fetch(
-  char* bname,
-  BRD* brd
+    char* bname,
+    BRD* brd
 )
 {
-  FILE *fp;
+    FILE *fp;
 
-  fp = fopen(".BRD", "r");
-  if (!fp)
-    return -1;
+    fp = fopen(".BRD", "r");
+    if (!fp)
+        return -1;
 
-  while (fread(brd, sizeof(BRD), 1, fp) == 1)
-  {
-    if (!strcasecmp(bname, brd->brdname))
+    while (fread(brd, sizeof(BRD), 1, fp) == 1)
     {
-      fclose(fp);
-      return 0;
+        if (!strcasecmp(bname, brd->brdname))
+        {
+            fclose(fp);
+            return 0;
+        }
     }
-  }
 
-  fclose(fp);
-  return -1;
+    fclose(fp);
+    return -1;
 }
 
 /* ----------------------------------------------------- */
-/* buffered I/O for stdin				 */
+/* buffered I/O for stdin                                */
 /* ----------------------------------------------------- */
 
-#define POOL_SIZE	4096
-#define LINE_SIZE	512
+#define POOL_SIZE       4096
+#define LINE_SIZE       512
 
 static char pool[POOL_SIZE];
 static char mybuf[LINE_SIZE];
@@ -92,651 +92,651 @@ static int pool_ptr = POOL_SIZE;
 
 static int
 readline(
-  char *buf
+    char *buf
 )
 {
-  register int ch;
-  register int len, bytes;
+    register int ch;
+    register int len, bytes;
 
-  len = bytes = 0;
-  do
-  {
-    if (pool_ptr >= pool_size)
+    len = bytes = 0;
+    do
     {
-/*    pool_size = read(0, pool, POOL_SIZE); */
-      ch = fread(pool, 1, POOL_SIZE, stdin);
-      if (ch <= 0)
-	return 0;
+        if (pool_ptr >= pool_size)
+        {
+/*          pool_size = read(0, pool, POOL_SIZE); */
+            ch = fread(pool, 1, POOL_SIZE, stdin);
+            if (ch <= 0)
+                return 0;
 
-      pool_size = ch;
-      pool_ptr = 0;
-    }
-    ch = pool[pool_ptr++];
-    bytes++;
+            pool_size = ch;
+            pool_ptr = 0;
+        }
+        ch = pool[pool_ptr++];
+        bytes++;
 
-    if (ch == '\r')
-      continue;
+        if (ch == '\r')
+            continue;
 
-    buf[len++] = ch;
-  } while (ch != '\n' && len < (LINE_SIZE - 1));
+        buf[len++] = ch;
+    } while (ch != '\n' && len < (LINE_SIZE - 1));
 
-  buf[len] = '\0';
+    buf[len] = '\0';
 
-  if (buf[0] == '.' && (buf[1] == '\n' || buf[1] == '\0'))
-    return 0;
+    if (buf[0] == '.' && (buf[1] == '\n' || buf[1] == '\0'))
+        return 0;
 
-  return bytes;
+    return bytes;
 }
 
 /* ----------------------------------------------------- */
-/* record run/mailog for management			 */
+/* record run/mailog for management                      */
 /* ----------------------------------------------------- */
 
 static void
 mailog(
-  char* mode,
-  char* msg
+    char* mode,
+    char* msg
 )
 {
-  FILE *fp;
+    FILE *fp;
 
-  if ((fp = fopen(LOG_FILE, "a")))
-  {
-    time_t now;
-    struct tm *p;
+    if ((fp = fopen(LOG_FILE, "a")))
+    {
+        time_t now;
+        struct tm *p;
 
-    time(&now);
-    p = localtime(&now);
-    fprintf(fp, "%02d/%02d %02d:%02d:%02d <%s> %s\n",
-      p->tm_mon + 1, p->tm_mday, p->tm_hour, p->tm_min, p->tm_sec,
-      mode, msg);
-    fclose(fp);
-  }
+        time(&now);
+        p = localtime(&now);
+        fprintf(fp, "%02d/%02d %02d:%02d:%02d <%s> %s\n",
+            p->tm_mon + 1, p->tm_mday, p->tm_hour, p->tm_min, p->tm_sec,
+            mode, msg);
+        fclose(fp);
+    }
 }
 
 static int
 Link(
-  char* src,
-  char* dst
+    char* src,
+    char* dst
 )
 {
-  int ret;
+    int ret;
 
-  if ((ret = link(src, dst)))
-  {
-    if (errno != EEXIST)
-      ret = f_cp(src, dst, O_EXCL);
-  }
-  return ret;
+    if ((ret = link(src, dst)))
+    {
+        if (errno != EEXIST)
+            ret = f_cp(src, dst, O_EXCL);
+    }
+    return ret;
 }
 
 static void
 justify_user(void)
 {
-  char buf[128];
-  HDR mhdr;
-  int fd;
+    char buf[128];
+    HDR mhdr;
+    int fd;
 
-  sprintf(buf, "usr/%c/%s/.DIR", *myname, myname);
-  if (!hdr_stamp(buf, HDR_LINK, &mhdr, "etc/justified"))
-  {
-  strcpy(mhdr.title, "您已經通過身分認證了！");
-  strcpy(mhdr.owner, "SYSOP");
-  mhdr.xmode = MAIL_NOREPLY;
-  rec_append(buf, &mhdr, sizeof(mhdr));
-  }
-
-  sprintf(buf, "usr/%c/%s/email", *myname, myname);
-  fd = open(buf, O_WRONLY | O_CREAT | O_APPEND, 0600);
-  if (fd >= 0)
-  {
-    char *base, *str;
-    int count;
-
-    count = pool_ptr;
-    base = pool;
-    str = base + count;
-    str = strstr(str, "\n\n");
-    if (str != NULL)
+    sprintf(buf, "usr/%c/%s/.DIR", *myname, myname);
+    if (!hdr_stamp(buf, HDR_LINK, &mhdr, "etc/justified"))
     {
-      count = str - pool + 1;
+        strcpy(mhdr.title, "您已經通過身分認證了！");
+        strcpy(mhdr.owner, "SYSOP");
+        mhdr.xmode = MAIL_NOREPLY;
+        rec_append(buf, &mhdr, sizeof(mhdr));
     }
-    write(fd, pool, count);
-    close(fd);
-  }
 
-  myacct.vtime = time(&myacct.tvalid);
-  strcpy(myacct.justify, myfrom);
-  myfrom[sizeof(myacct.justify)-1] = 0;
-  strcpy(myacct.vmail, myacct.email);
-  myacct.userlevel |= PERM_VALID;
+    sprintf(buf, "usr/%c/%s/email", *myname, myname);
+    fd = open(buf, O_WRONLY | O_CREAT | O_APPEND, 0600);
+    if (fd >= 0)
+    {
+        char *base, *str;
+        int count;
+
+        count = pool_ptr;
+        base = pool;
+        str = base + count;
+        str = strstr(str, "\n\n");
+        if (str != NULL)
+        {
+            count = str - pool + 1;
+        }
+        write(fd, pool, count);
+        close(fd);
+    }
+
+    myacct.vtime = time(&myacct.tvalid);
+    strcpy(myacct.justify, myfrom);
+    myfrom[sizeof(myacct.justify)-1] = 0;
+    strcpy(myacct.vmail, myacct.email);
+    myacct.userlevel |= PERM_VALID;
 }
 
 static int
 valid_ident(
-  char *ident
+    char *ident
 )
 {
-  static char *invalid[] = {"bbs@", "@bbs", "unknown@", "root@", "gopher@",
-  "guest@", "@ppp", "@slip", NULL};
-  char buf[128], *str;
-  int i;
+    static char *invalid[] = {"bbs@", "@bbs", "unknown@", "root@", "gopher@",
+        "guest@", "@ppp", "@slip", NULL};
+    char buf[128], *str;
+    int i;
 
-  str_lower(buf, ident);
-  for (i = 0; (str = invalid[i]); i++)
-  {
-    if (strstr(buf, str))
-      return 0;
-  }
-  return 1;
+    str_lower(buf, ident);
+    for (i = 0; (str = invalid[i]); i++)
+    {
+        if (strstr(buf, str))
+            return 0;
+    }
+    return 1;
 }
 
 static void
 verify_user(
-  char *magic
+    char *magic
 )
 {
-  char *ptr, *next, buf[80];
-  int fh;
-  char buf2[512];
-  int done;
+    char *ptr, *next, buf[80];
+    int fh;
+    char buf2[512];
+    int done;
 
 /* printf("V1: %s\n", magic); */
 
-  done = 0;
-  strcpy(buf2, magic);
+    done = 0;
+    strcpy(buf2, magic);
 
-  if (valid_ident(myfrom) && (ptr = strchr(magic, '(')))
-  {
-    *ptr++ = '\0';
-
-    fh = acct_fetch(magic);
-    if (fh < 0)
+    if (valid_ident(myfrom) && (ptr = strchr(magic, '(')))
     {
-      sprintf(buf, "BBS user <%s> unknown: %s", magic, myfrom);
-      mailog("verify", buf);
-      puts(buf);
-      return;
+        *ptr++ = '\0';
+
+        fh = acct_fetch(magic);
+        if (fh < 0)
+        {
+            sprintf(buf, "BBS user <%s> unknown: %s", magic, myfrom);
+            mailog("verify", buf);
+            puts(buf);
+            return;
+        }
+
+        {
+/*          printf("V2: %s\n", ptr); */
+
+            if ((next = (char *) strchr(ptr, ')')))
+            {
+                *next = 0;
+
+                if (strstr(next+1, "[VALID]"))
+                {
+                    if (str_hash(myacct.email, myacct.vtime) == chrono32(ptr))
+                    {
+                        str_lower(myname, magic);
+                        justify_user();
+                        lseek(fh, (off_t) 0, SEEK_SET);
+                        write(fh, &myacct, sizeof(ACCT));
+                        sprintf(buf, "[%s]%s", myacct.userid, myfrom);
+                        mailog("valid", buf);
+                        done = 1;
+                    }
+                }
+                else
+                {
+
+                    str_lower(buf, myacct.email);
+                /*  printf("V3: %x %x\n", hash32(buf), chrono32(ptr)); */
+                    if (hash32(buf) == chrono32(ptr))
+                    {
+                        str_lower(myname, magic);
+                        justify_user();
+                        lseek(fh, (off_t) 0, SEEK_SET);
+                        write(fh, &myacct, sizeof(ACCT));
+                        sprintf(buf, "[%s]%s", myacct.userid, myfrom);
+                        mailog("verify", buf);
+                        done = 1;
+                    }
+                }
+            }
+        }
+        close(fh);
     }
 
+    if (!done)
     {
-/* printf("V2: %s\n", ptr); */
-
-      if ((next = (char *) strchr(ptr, ')')))
-      {
-	*next = 0;
-
-	if (strstr(next+1, "[VALID]"))
-	{
-	if (str_hash(myacct.email, myacct.vtime) == chrono32(ptr))
-	{
-	  str_lower(myname, magic);
-	  justify_user();
-	  lseek(fh, (off_t) 0, SEEK_SET);
-	  write(fh, &myacct, sizeof(ACCT));
-	  sprintf(buf, "[%s]%s", myacct.userid, myfrom);
-	  mailog("valid", buf);
-	  done = 1;
-	}
-	}
-	else
-	{
-
-	str_lower(buf, myacct.email);
-/* printf("V3: %x %x\n", hash32(buf), chrono32(ptr)); */
-	if (hash32(buf) == chrono32(ptr))
-	{
-	  str_lower(myname, magic);
-	  justify_user();
-	  lseek(fh, (off_t) 0, SEEK_SET);
-	  write(fh, &myacct, sizeof(ACCT));
-	  sprintf(buf, "[%s]%s", myacct.userid, myfrom);
-	  mailog("verify", buf);
-	  done = 1;
-	}
-	}
-      }
+        sprintf(buf, "Invalid [%s] %s", buf2, myfrom);
+        mailog("verify", buf);
     }
-	close(fh);
-  }
-
-  if (!done)
-  {
-    sprintf(buf, "Invalid [%s] %s", buf2, myfrom);
-    mailog("verify", buf);
-  }
 }
 
 
 static int
 post_article(void)
 {
-  int fd;
-  FILE *fp;
-  HDR hdr;
-  char fpath[80], buf[128];
+    int fd;
+    FILE *fp;
+    HDR hdr;
+    char fpath[80], buf[128];
 
-  if (mymode == JUNK)
-  {
-    pool_ptr = 0;
-    if (!readline(mybuf))
-      exit(0);
+    if (mymode == JUNK)
+    {
+        pool_ptr = 0;
+        if (!readline(mybuf))
+            exit(0);
 
-    if (!*myname)
-      strcpy(myname, "<mailpost>");
+        if (!*myname)
+            strcpy(myname, "<mailpost>");
 
-    if (!*mytitle)
-      strcpy(mytitle, *mysub ? mysub : "<< 原信照登 >>");
-  }
+        if (!*mytitle)
+            strcpy(mytitle, *mysub ? mysub : "<< 原信照登 >>");
+    }
 
-  sprintf(fpath, "brd/%s/.DIR", mymode == JUNK ? BRD_JUNK : myboard);
+    sprintf(fpath, "brd/%s/.DIR", mymode == JUNK ? BRD_JUNK : myboard);
 
-#ifdef	DEBUG
-  printf("dir: %s\n", fpath);
+#ifdef  DEBUG
+    printf("dir: %s\n", fpath);
 #endif
 
-  fd = hdr_stamp(fpath, 'A', &hdr, buf);
-  if (fd < 0)
-  {
-    sprintf(buf, "file error <%s>", fpath);
-    mailog("mailpost", buf);
-    return -1;
-  }
+    fd = hdr_stamp(fpath, 'A', &hdr, buf);
+    if (fd < 0)
+    {
+        sprintf(buf, "file error <%s>", fpath);
+        mailog("mailpost", buf);
+        return -1;
+    }
 
-  fp = fdopen(fd, "w");
+    fp = fdopen(fd, "w");
 
-#ifdef	DEBUG
-  printf("post to %s\n", buf);
+#ifdef  DEBUG
+    printf("post to %s\n", buf);
 #endif
 
-  if (mymode != JUNK)
-  {
-    fprintf(fp, "作者: %s (%s) %s: %s\n標題: %s\n時間: %s\n",
-      myname, myacct.username, (mymode == LOCAL_SAVE ? "站內" : "看板"),
-      myboard, mytitle, ctime(&hdr.chrono));
+    if (mymode != JUNK)
+    {
+        fprintf(fp, "作者: %s (%s) %s: %s\n標題: %s\n時間: %s\n",
+            myname, myacct.username, (mymode == LOCAL_SAVE ? "站內" : "看板"),
+            myboard, mytitle, ctime(&hdr.chrono));
 
-    hdr.xmode = (mymode == LOCAL_SAVE ? POST_EMAIL : POST_EMAIL | POST_OUTGO);
-  }
+        hdr.xmode = (mymode == LOCAL_SAVE ? POST_EMAIL : POST_EMAIL | POST_OUTGO);
+    }
 
-  do
-  {
-    fputs(mybuf, fp);
-  } while (readline(mybuf));
-  fprintf(fp, "\n--\n※ Origin: %s ◆ Mail: %s\n", BOARDNAME, myfrom);
-  fclose(fp);
-
-  strcpy(hdr.owner, myname);
-  if (mymode != JUNK)
-    strcpy(hdr.nick, myacct.username);
-  mytitle[TTLEN] = '\0';
-  strcpy(hdr.title, mytitle);
-  rec_append(fpath, &hdr, sizeof(hdr));
-
-  if ((mymode == NET_SAVE) && (fp = fopen("innd/out.bntp", "a")))
-  {
-    fprintf(fp, "%s\t%s\t%s\t%s\t%s\n",
-      myboard, hdr.xname, hdr.owner, hdr.nick, hdr.title);
+    do
+    {
+        fputs(mybuf, fp);
+    } while (readline(mybuf));
+    fprintf(fp, "\n--\n※ Origin: %s ◆ Mail: %s\n", BOARDNAME, myfrom);
     fclose(fp);
-  }
 
-  if (mymode != JUNK)
-  {
-    sprintf(buf, "[%s]%s => %s", myname, myfrom, myboard);
-    mailog("mailpost", buf);
-  }
+    strcpy(hdr.owner, myname);
+    if (mymode != JUNK)
+        strcpy(hdr.nick, myacct.username);
+    mytitle[TTLEN] = '\0';
+    strcpy(hdr.title, mytitle);
+    rec_append(fpath, &hdr, sizeof(hdr));
 
-  return 0;
+    if ((mymode == NET_SAVE) && (fp = fopen("innd/out.bntp", "a")))
+    {
+        fprintf(fp, "%s\t%s\t%s\t%s\t%s\n",
+            myboard, hdr.xname, hdr.owner, hdr.nick, hdr.title);
+        fclose(fp);
+    }
+
+    if (mymode != JUNK)
+    {
+        sprintf(buf, "[%s]%s => %s", myname, myfrom, myboard);
+        mailog("mailpost", buf);
+    }
+
+    return 0;
 }
 
 
 /* ----------------------------------------------------- */
-/* E-mail post to gem					 */
+/* E-mail post to gem                                    */
 /* ----------------------------------------------------- */
 
 static int
 digest_article(void)
 {
-  /* return post_article();*/	/* quick & dirty */
-  /* Thor.0606: post 到 精華區資源回收筒 */
-  int fd;
-  FILE *fp;
-  HDR hdr;
-  char fpath[80], buf[128];
+    /* return post_article();*/ /* quick & dirty */
+    /* Thor.0606: post 到 精華區資源回收筒 */
+    int fd;
+    FILE *fp;
+    HDR hdr;
+    char fpath[80], buf[128];
 
-  if (mymode == JUNK)
-  {
-/*    pool_ptr = 0;
-    if (!readline(mybuf)) */
-      exit(0);
+    if (mymode == JUNK)
+    {
+/*      pool_ptr = 0;
+        if (!readline(mybuf)) */
+            exit(0);
 /*
-    if (!*myname)
-      strcpy(myname, "<mailpost>");
+        if (!*myname)
+            strcpy(myname, "<mailpost>");
 
-    if (!*mytitle)
-      strcpy(mytitle, *mysub ? mysub : "<< 原信照登 >>");
+        if (!*mytitle)
+            strcpy(mytitle, *mysub ? mysub : "<< 原信照登 >>");
 */
-  }
+    }
 
-  sprintf(fpath, "gem/brd/%s/.GEM", myboard);
+    sprintf(fpath, "gem/brd/%s/.GEM", myboard);
 
-#ifdef	DEBUG
-  printf("dir: %s\n", fpath);
+#ifdef  DEBUG
+    printf("dir: %s\n", fpath);
 #endif
 
-  fd = hdr_stamp(fpath, 'A', &hdr, buf);
-  if (fd < 0)
-  {
-    sprintf(buf, "file error <%s>", fpath);
-    mailog("mailpost", buf);
-    return -1;
-  }
+    fd = hdr_stamp(fpath, 'A', &hdr, buf);
+    if (fd < 0)
+    {
+        sprintf(buf, "file error <%s>", fpath);
+        mailog("mailpost", buf);
+        return -1;
+    }
 
-  fp = fdopen(fd, "w");
+    fp = fdopen(fd, "w");
 
-#ifdef	DEBUG
-  printf("gem to %s\n", buf);
+#ifdef  DEBUG
+    printf("gem to %s\n", buf);
 #endif
 
 /*
-  if (mymode != JUNK)
-  {
+    if (mymode != JUNK)
+    {
 */
-    fprintf(fp, "作者: %s (%s) %s: %s\n標題: %s\n時間: %s\n",
-      myname, myacct.username, (mymode == LOCAL_SAVE ? "站內" : "看板"),
-      myboard, mytitle, ctime(&hdr.chrono));
+        fprintf(fp, "作者: %s (%s) %s: %s\n標題: %s\n時間: %s\n",
+            myname, myacct.username, (mymode == LOCAL_SAVE ? "站內" : "看板"),
+            myboard, mytitle, ctime(&hdr.chrono));
 
-    hdr.xmode =  POST_EMAIL;
+        hdr.xmode =  POST_EMAIL;
 /*
-    hdr.xmode = (mymode == LOCAL_SAVE ? POST_EMAIL : POST_EMAIL | POST_OUTGO);
-  }
+        hdr.xmode = (mymode == LOCAL_SAVE ? POST_EMAIL : POST_EMAIL | POST_OUTGO);
+    }
 */
 
-  do
-  {
-    fputs(mybuf, fp);
-  } while (readline(mybuf));
-  fprintf(fp, "\n--\n※ Origin: %s ◆ Mail: %s\n", BOARDNAME, myfrom);
-  fclose(fp);
-
-  strcpy(hdr.owner, myname);
-/*
-  if (mymode != JUNK)
-*/
-    strcpy(hdr.nick, myacct.username);
-  mytitle[TTLEN] = '\0';
-  strcpy(hdr.title, mytitle);
-  rec_append(fpath, &hdr, sizeof(hdr));
-/*
-  if ((mymode == NET_SAVE) && (fp = fopen("innd/out.bntp", "a")))
-  {
-    fprintf(fp, "%s\t%s\t%s\t%s\t%s\n",
-      myboard, hdr.xname, hdr.owner, hdr.nick, hdr.title);
+    do
+    {
+        fputs(mybuf, fp);
+    } while (readline(mybuf));
+    fprintf(fp, "\n--\n※ Origin: %s ◆ Mail: %s\n", BOARDNAME, myfrom);
     fclose(fp);
-  }
+
+    strcpy(hdr.owner, myname);
+/*
+    if (mymode != JUNK)
+*/
+        strcpy(hdr.nick, myacct.username);
+    mytitle[TTLEN] = '\0';
+    strcpy(hdr.title, mytitle);
+    rec_append(fpath, &hdr, sizeof(hdr));
+/*
+    if ((mymode == NET_SAVE) && (fp = fopen("innd/out.bntp", "a")))
+    {
+        fprintf(fp, "%s\t%s\t%s\t%s\t%s\n",
+            myboard, hdr.xname, hdr.owner, hdr.nick, hdr.title);
+        fclose(fp);
+    }
 */
 /*
-  if (mymode != JUNK)
-  {
+    if (mymode != JUNK)
+    {
 */
-    sprintf(buf, "[%s]%s => %s", myname, myfrom, myboard);
-    mailog("mailpost", buf);
+        sprintf(buf, "[%s]%s => %s", myname, myfrom, myboard);
+        mailog("mailpost", buf);
 /*
-  }
+    }
 */
-  return 0;
+    return 0;
 }
 
 
 static int
 mailpost(void)
 {
-  int fh, dirty;
-  char *ip, *ptr, *token, *key, buf[80];
-  BRD brd;
+    int fh, dirty;
+    char *ip, *ptr, *token, *key, buf[80];
+    BRD brd;
 
-  /* parse header */
+    /* parse header */
 
-  if (!readline(mybuf))
-    return 0;
+    if (!readline(mybuf))
+        return 0;
 
-  if (strncasecmp(mybuf, "From ", 5))
-    return post_article();	/* junk */
+    if (strncasecmp(mybuf, "From ", 5))
+        return post_article();  /* junk */
 
-  dirty = *myfrom = *mysub = *myname = *mypasswd = *myboard = *mytitle = 0;
+    dirty = *myfrom = *mysub = *myname = *mypasswd = *myboard = *mytitle = 0;
 
-  while (!*myname || !*mypasswd || !*myboard || !*mytitle)
-  {
-    if (mybuf[0] == '#')
+    while (!*myname || !*mypasswd || !*myboard || !*mytitle)
     {
-      key = mybuf + 1;
+        if (mybuf[0] == '#')
+        {
+            key = mybuf + 1;
 
-      /* remove trailing space */
+            /* remove trailing space */
 
-      if ((ptr = strchr(key, '\n')))
-      {
-	str_strip(ptr);
-      }
+            if ((ptr = strchr(key, '\n')))
+            {
+                str_strip(ptr);
+            }
 
-      /* split token & skip leading space */
+            /* split token & skip leading space */
 
-      if ((token = strchr(key, ':')))
-      {
-	str_strip(token);
+            if ((token = strchr(key, ':')))
+            {
+                str_strip(token);
 
-	do
-	{
-	  fh = *(++token);
-	} while (fh == ' ' || fh == '\t');
-      }
+                do
+                {
+                    fh = *(++token);
+                } while (fh == ' ' || fh == '\t');
+            }
 
-      if (!str_cmp(key, "name"))
-      {
-	strcpy(myname, token);
-      }
-      else if (!str_cmp(key, "passwd") || !str_cmp(key, "password") || !str_cmp(key, "passward"))
-      {
-	strcpy(mypasswd, token);
-      }
-      else if (!str_cmp(key, "board"))
-      {
-	strcpy(myboard, token);
-      }
-      else if (!str_cmp(key, "title") || !str_cmp(key, "subject"))
-      {
-	str_ansi(mytitle, token, sizeof(mytitle));
-      }
-      else if (!str_cmp(key, "digest"))
-      {
-	mymode = DIGEST;
-      }
-      else if (!str_cmp(key, "local"))
-      {
-	mymode = LOCAL_SAVE;
-      }
-    }
-    else if (!strncasecmp(mybuf, "From", 4))
-    {
-      str_lower(myfrom, mybuf + 4);
-      if (strstr(myfrom, "mailer-daemon"))	/* junk */
-      {
-	strcpy(mytitle, "<< 系統退信 >>");
-	return post_article();
-      }
+            if (!str_cmp(key, "name"))
+            {
+                strcpy(myname, token);
+            }
+            else if (!str_cmp(key, "passwd") || !str_cmp(key, "password") || !str_cmp(key, "passward"))
+            {
+                strcpy(mypasswd, token);
+            }
+            else if (!str_cmp(key, "board"))
+            {
+                strcpy(myboard, token);
+            }
+            else if (!str_cmp(key, "title") || !str_cmp(key, "subject"))
+            {
+                str_ansi(mytitle, token, sizeof(mytitle));
+            }
+            else if (!str_cmp(key, "digest"))
+            {
+                mymode = DIGEST;
+            }
+            else if (!str_cmp(key, "local"))
+            {
+                mymode = LOCAL_SAVE;
+            }
+        }
+        else if (!strncasecmp(mybuf, "From", 4))
+        {
+            str_lower(myfrom, mybuf + 4);
+            if (strstr(myfrom, "mailer-daemon"))        /* junk */
+            {
+                strcpy(mytitle, "<< 系統退信 >>");
+                return post_article();
+            }
 
-      if ((ip = strchr(mybuf, '<')) && (ptr = strrchr(ip, '>')))
-      {
-	*ptr = '\0';
-	if (ip[-1] == ' ')
-	  ip[-1] = '\0';
-	ptr = (char *) strchr(mybuf, ' ');
-	while (*++ptr == ' ');
-	sprintf(myfrom, "%s (%s)", ip + 1, ptr);
-      }
-      else
-      {
+            if ((ip = strchr(mybuf, '<')) && (ptr = strrchr(ip, '>')))
+            {
+                *ptr = '\0';
+                if (ip[-1] == ' ')
+                    ip[-1] = '\0';
+                ptr = (char *) strchr(mybuf, ' ');
+                while (*++ptr == ' ');
+                sprintf(myfrom, "%s (%s)", ip + 1, ptr);
+            }
+            else
+            {
 #if 0
-	strtok(mybuf, " ");
-	strcpy(myfrom, (char *) strtok(NULL, " "));
+                strtok(mybuf, " ");
+                strcpy(myfrom, (char *) strtok(NULL, " "));
 #endif
-	str_cut(myfrom, mybuf);
-      }
+                str_cut(myfrom, mybuf);
+            }
+        }
+        else if (!strncmp(mybuf, "Subject: ", 9))
+        {
+            /* audit justify mail */
+
+            str_decode(mybuf);
+            /* if (ptr = strstr(mybuf, "[MapleBBS]To ")) */
+            /* Thor.981012: 集中於 config.h 定義 */
+            if ((ptr = strstr(mybuf, TAG_VALID)))
+            {
+                /* gslin.990101: TAG_VALID 長度不一定 */
+                verify_user(ptr + sizeof(TAG_VALID) - 1);
+                /* verify_user(ptr + 13); */
+                return 1;               /* eat mail queue */
+            }
+
+            if ((ptr = strchr(token = mybuf + 9, '\n')))
+                *ptr = '\0';
+            str_ansi(mysub, token, sizeof(mytitle));
+        }
+
+        if ((++dirty > 70) || !readline(mybuf))
+        {
+            mymode = JUNK;
+            return post_article();      /* junk */
+        }
     }
-    else if (!strncmp(mybuf, "Subject: ", 9))
+
+    dirty = 0;
+
+    /* check if the userid is in our bbs now */
+
+    fh = acct_fetch(myname);
+    if (fh < 0)
     {
-      /* audit justify mail */
-
-      str_decode(mybuf);
-      /* if (ptr = strstr(mybuf, "[MapleBBS]To ")) */
-      /* Thor.981012: 集中於 config.h 定義 */
-      if ((ptr = strstr(mybuf, TAG_VALID)))
-      {
-        /* gslin.990101: TAG_VALID 長度不一定 */
-        verify_user(ptr + sizeof(TAG_VALID) - 1);
-	/* verify_user(ptr + 13); */
-	return 1;		/* eat mail queue */
-      }
-
-      if ((ptr = strchr(token = mybuf + 9, '\n')))
-	*ptr = '\0';
-      str_ansi(mysub, token, sizeof(mytitle));
+        sprintf(buf, "BBS user <%s> not existed", myname);
+        mailog("mailpost", buf);
+        puts(buf);
+        return -1;
     }
 
-    if ((++dirty > 70) || !readline(mybuf))
+    /* check password */
+
+    key = crypt(mypasswd, myacct.passwd);
+    if (strncmp(key, myacct.passwd, PASSLEN))
     {
-      mymode = JUNK;
-      return post_article();	/* junk */
+        close(fh);
+        sprintf(buf, "BBS user <%s> password incorrect", myname);
+        mailog("mailpost", buf);
+        puts(buf);
+        return -1;
     }
-  }
 
-  dirty = 0;
+#ifdef  MAIL_POST_VALID
+    if (!(myacct.userlevel & PERM_VALID) && valid_ident(myfrom))
+    {
 
-  /* check if the userid is in our bbs now */
+        /* ------------------------------ */
+        /* 順便記錄 user's E-mail address */
+        /* ------------------------------ */
 
-  fh = acct_fetch(myname);
-  if (fh < 0)
-  {
-    sprintf(buf, "BBS user <%s> not existed", myname);
-    mailog("mailpost", buf);
-    puts(buf);
-    return -1;
-  }
-
-  /* check password */
-
-  key = crypt(mypasswd, myacct.passwd);
-  if (strncmp(key, myacct.passwd, PASSLEN))
-  {
-    close(fh);
-    sprintf(buf, "BBS user <%s> password incorrect", myname);
-    mailog("mailpost", buf);
-    puts(buf);
-    return -1;
-  }
-
-#ifdef	MAIL_POST_VALID
-  if (!(myacct.userlevel & PERM_VALID) && valid_ident(myfrom))
-  {
-
-    /* ------------------------------ */
-    /* 順便記錄 user's E-mail address */
-    /* ------------------------------ */
-
-    str_lower(myname, myname);
-    justify_user();
-    dirty = YEA;
-  }
+        str_lower(myname, myname);
+        justify_user();
+        dirty = YEA;
+    }
 #endif
 
-  /* check if the board is in our bbs now */
+    /* check if the board is in our bbs now */
 
-  if (brd_fetch(myboard, &brd))
-  {
-    close(fh);
-    sprintf(buf, "No such board [%s]", myboard);
-    mailog("mailpost", buf);
-    puts(buf);
-    return -1;
-  }
-
-  strcpy(myboard, brd.brdname);
-
-  /* check permission */
-
-  if (mymode != DIGEST)
-  {
-    if (mymode != LOCAL_SAVE)
-      mymode = NET_SAVE;
-
-    /* if (brd.battr & BRD_NOCOUNT == 0) */
-    /* Thor.981123: lkchu patch: mailpost 文章數不增加問題 */
-    if (!(brd.battr & BRD_NOCOUNT))
+    if (brd_fetch(myboard, &brd))
     {
-      myacct.numposts++;
-      dirty = YEA;
+        close(fh);
+        sprintf(buf, "No such board [%s]", myboard);
+        mailog("mailpost", buf);
+        puts(buf);
+        return -1;
     }
-  }
 
-  while (mybuf[0] && mybuf[0] != '\n')
-  {
-    if (!readline(mybuf))
-      return 0;
-  }
+    strcpy(myboard, brd.brdname);
 
-  while (mybuf[0] == '\n')
-  {
-    if (!readline(mybuf))
-      return 0;
-  }
+    /* check permission */
 
-  if (dirty && mybuf[0])
-  {
-    lseek(fh, (off_t) 0, SEEK_SET);
-    write(fh, &myacct, sizeof(ACCT));
-  }
-  close(fh);
+    if (mymode != DIGEST)
+    {
+        if (mymode != LOCAL_SAVE)
+            mymode = NET_SAVE;
 
-  strcpy(myname, myacct.userid);
-  if (mybuf[0])
-    return (mymode == DIGEST) ? digest_article() : post_article();
+        /* if (brd.battr & BRD_NOCOUNT == 0) */
+        /* Thor.981123: lkchu patch: mailpost 文章數不增加問題 */
+        if (!(brd.battr & BRD_NOCOUNT))
+        {
+            myacct.numposts++;
+            dirty = YEA;
+        }
+    }
 
-  mymode = JUNK;
-  return post_article();
+    while (mybuf[0] && mybuf[0] != '\n')
+    {
+        if (!readline(mybuf))
+            return 0;
+    }
+
+    while (mybuf[0] == '\n')
+    {
+        if (!readline(mybuf))
+            return 0;
+    }
+
+    if (dirty && mybuf[0])
+    {
+        lseek(fh, (off_t) 0, SEEK_SET);
+        write(fh, &myacct, sizeof(ACCT));
+    }
+    close(fh);
+
+    strcpy(myname, myacct.userid);
+    if (mybuf[0])
+        return (mymode == DIGEST) ? digest_article() : post_article();
+
+    mymode = JUNK;
+    return post_article();
 }
 
 
 static void
 sig_catch(
-  int sig)
+    int sig)
 {
-  char buf[40];
+    char buf[40];
 
-  sprintf(buf, "signal [%d]", sig);
-  mailog("mailpost", buf);
-  exit(0);
+    sprintf(buf, "signal [%d]", sig);
+    mailog("mailpost", buf);
+    exit(0);
 }
 
 int
 main(void)
 {
-  setgid(BBSGID);
-  setuid(BBSUID);
-  chdir(BBSHOME);
+    setgid(BBSGID);
+    setuid(BBSUID);
+    chdir(BBSHOME);
 
-  signal(SIGBUS, sig_catch);
-  signal(SIGSEGV, sig_catch);
-  signal(SIGPIPE, sig_catch);
+    signal(SIGBUS, sig_catch);
+    signal(SIGSEGV, sig_catch);
+    signal(SIGPIPE, sig_catch);
 
 /*
 */
 
-  if (mailpost())
-  {
-    /* eat mail queue */
-    while (fread(pool, 1, POOL_SIZE, stdin) > 0)
+    if (mailpost())
     {
-      sleep(10);
+        /* eat mail queue */
+        while (fread(pool, 1, POOL_SIZE, stdin) > 0)
+        {
+            sleep(10);
+        }
+        /* exit(-1); */
     }
-    /* exit(-1); */
-  }
-  exit(0);
+    exit(0);
 }

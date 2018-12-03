@@ -1,13 +1,13 @@
 /*-------------------------------------------------------*/
-/* bbs.h	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* bbs.h        ( NTHU CS MapleBBS Ver 2.36 )            */
 /*-------------------------------------------------------*/
-/* target : all header files			 	 */
-/* create : 95/03/29				 	 */
-/* update : 95/12/15				 	 */
+/* target : all header files                             */
+/* create : 95/03/29                                     */
+/* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
 
-#ifndef	_BBS_H_
-#define	_BBS_H_
+#ifndef _BBS_H_
+#define _BBS_H_
 
 #include <stdio.h>
 #include <setjmp.h>
@@ -28,15 +28,15 @@
 #include "config.h"             /* User-configurable stuff */
 #include "struct.h"             /* data structure */
 #include "dao.h"                /* common library */
-#include "perm.h"		/* user/board permission */
-#include "modes.h"		/* The list of valid user modes */
-#include "global.h"		/* global variable & definition */
-#include "proto.h"		/* prototype of functions */
-#include "skin.h"		/* skin definition */
-#include "attr.h"		/* Thor.990311: dynamic attribute database */
-#include "popup.h"		/* popup menu define */
-#include "battr.h"		/* board attribution */
-#include "theme.h"		/* custom theme */
+#include "perm.h"               /* user/board permission */
+#include "modes.h"              /* The list of valid user modes */
+#include "global.h"             /* global variable & definition */
+#include "proto.h"              /* prototype of functions */
+#include "skin.h"               /* skin definition */
+#include "attr.h"               /* Thor.990311: dynamic attribute database */
+#include "popup.h"              /* popup menu define */
+#include "battr.h"              /* board attribution */
+#include "theme.h"              /* custom theme */
 
 #ifdef __linux__
     #include <time.h>
@@ -53,42 +53,42 @@
 #ifdef  SYSV
 
 #ifndef LOCK_EX
-#define LOCK_EX		F_LOCK
-#define LOCK_UN		F_ULOCK
+#define LOCK_EX         F_LOCK
+#define LOCK_UN         F_ULOCK
 #endif /* LOCK_EX */
 
 
 #define getdtablesize()         (64)
 
-#define usleep(usec)            {               \
+#define usleep(usec)         do {               \
     struct timeval t;                           \
-    t.tv_sec = usec / 1000000;                  \
-    t.tv_usec = usec % 1000000;                 \
+    t.tv_sec = (usec) / 1000000;                \
+    t.tv_usec = (usec) % 1000000;               \
     select( 0, NULL, NULL, NULL, &t);           \
-}
+} while (0)
 
 #endif  /* SYSV */
 
 
-#define	BMIN(a,b)	((a<b)?a:b)
-#define	BMAX(a,b)	((a>b)?a:b)
+#define BMIN(a, b)      ((a<b)?a:b)
+#define BMAX(a, b)      ((a>b)?a:b)
 
-/* #define	countof(x)		(sizeof(x)/sizeof(x[0])) */
+/* #define countof(x)      (sizeof(x)/sizeof(x[0])) */
 
-#define	YEA	(1)		/* Booleans  (Yep, for true and false) */
-#define	NA	(0)
+#define YEA     (1)             /* Booleans  (Yep, for true and false) */
+#define NA      (0)
 
-#ifndef	_BBTP_
+#ifndef _BBTP_
 
-#define NOECHO		0x0000		/* Flags to getdata input function */
-#define DOECHO		0x0100
-#define LCECHO		0x0200
-#define GCARRY		0x0400
+#define NOECHO          0x0000          /* Flags to getdata input function */
+#define DOECHO          0x0100
+#define LCECHO          0x0200
+#define GCARRY          0x0400
 
-#define	GET_LIST	0x1000		/* ¾켹 Link List */
-#define	GET_USER	0x2000		/* ¾켹 user id */
-#define	GET_BRD		0x4000		/* ¾켹 board id */
+#define GET_LIST        0x1000          /* ¾켹 Link List */
+#define GET_USER        0x2000          /* ¾켹 user id */
+#define GET_BRD         0x4000          /* ¾켹 board id */
 
 #endif
 
-#endif				/* _BBS_H_ */
+#endif                          /* _BBS_H_ */

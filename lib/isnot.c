@@ -2,142 +2,142 @@
 
 int
 is_alnum(
-  int ch
+    int ch
 )
 {
-  return ((ch >= '0' && ch <= '9') ||
-    (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
+    return ((ch >= '0' && ch <= '9') ||
+        (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
 }
 
 int
 is_alpha(
-  int ch
+    int ch
 )
 {
-  return ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
+    return ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
 }
 #include <string.h>
 #include "dao.h"
 
 int
 is_fname(
-  char* str
+    char* str
 )
 {
-  int ch;
+    int ch;
 
-  ch = *str;
-  if (ch == '/')
-    return 0;
+    ch = *str;
+    if (ch == '/')
+        return 0;
 
-  do
-  {
-    if (!is_alnum(ch) && !strchr("-._/+@", ch))
-      return 0;
-  } while ((ch = *++str));
-  return 1;
+    do
+    {
+        if (!is_alnum(ch) && !strchr("-._/+@", ch))
+            return 0;
+    } while ((ch = *++str));
+    return 1;
 }
 
 /* ----------------------------------------------------- */
-/* transform to real path & security check		 */
+/* transform to real path & security check               */
 /* ----------------------------------------------------- */
 
 int
 is_fpath(
-  char *path
+    char *path
 )
 {
-  int ch, level;
-  char *source, *target;
+    int ch, level;
+    char *source, *target;
 
-  level = 0;
-  source = target = path;
+    level = 0;
+    source = target = path;
 
 
-  for (;;)
-  {
-    ch = *source;
-
-    if (ch == '/')
+    for (;;)
     {
-      int next;
+        ch = *source;
 
-      next = source[1];
+        if (ch == '/')
+        {
+            int next;
 
-      if (next == '/')
-      {
-	return 0;		/* [//] */
-      }
-      else if (next == '.')
-      {
-	next = source[2];
+            next = source[1];
 
-	if (next == '/')
-	  return 0;		/* [/./] */
+            if (next == '/')
+            {
+                return 0;               /* [//] */
+            }
+            else if (next == '.')
+            {
+                next = source[2];
 
-	if (next == '.' && source[3] == '/')
-	{
-	  /* -------------------------- */
-	  /* abc/xyz/../def ==> abc/def */
-	  /* -------------------------- */
+                if (next == '/')
+                    return 0;           /* [/./] */
 
-	  for (;;)
-	  {
-	    if (target <= path)
-	      return 0;
+                if (next == '.' && source[3] == '/')
+                {
+                    /* -------------------------- */
+                    /* abc/xyz/../def ==> abc/def */
+                    /* -------------------------- */
 
-	    target--;
-	    if (*target == '/')
-	      break;
-	  }
+                    for (;;)
+                    {
+                        if (target <= path)
+                            return 0;
 
-	  source += 3;
-	  continue;
-	}
-      }
+                        target--;
+                        if (*target == '/')
+                            break;
+                    }
 
-      level++;
+                    source += 3;
+                    continue;
+                }
+            }
+
+            level++;
+        }
+
+        *target = ch;
+
+        if (ch == 0)
+            return level;
+
+        target++;
+        source++;
     }
-
-    *target = ch;
-
-    if (ch == 0)
-      return level;
-
-    target++;
-    source++;
-  }
 }
 
 #define STRICT_FQDN_EMAIL
 
 int
 not_addr(
-  char *addr
+    char *addr
 )
 {
-  int ch, mode;
+    int ch, mode;
 
-  mode = -1;
+    mode = -1;
 
-  while ((ch = *addr))
-  {
-    if (ch == '@')
+    while ((ch = *addr))
     {
-      if (++mode)
-	break;
-    }
+        if (ch == '@')
+        {
+            if (++mode)
+                break;
+        }
 
-#ifdef	STRICT_FQDN_EMAIL
-    else if ((ch != '.') && (ch != '-') && (ch != '_') && !is_alnum(ch))
+#ifdef  STRICT_FQDN_EMAIL
+        else if ((ch != '.') && (ch != '-') && (ch != '_') && !is_alnum(ch))
 #else
-    else if (!is_alnum(ch) && !strchr(".-_[]%!:", ch))
+        else if (!is_alnum(ch) && !strchr(".-_[]%!:", ch))
 #endif
 
-      return 1;
+            return 1;
 
-    addr++;
-  }
+        addr++;
+    }
 
-  return mode;
+    return mode;
 }

@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* modes.h	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* modes.h      ( NTHU CS MapleBBS Ver 2.36 )            */
 /*-------------------------------------------------------*/
-/* target : user operating mode & status		 */
-/* create : 95/03/29				 	 */
-/* update : 95/12/15				 	 */
+/* target : user operating mode & status                 */
+/* create : 95/03/29                                     */
+/* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
 
 
@@ -14,11 +14,11 @@ enum
 {STRIP_ALL, ONLY_COLOR, NO_RELOAD};
 
 /* ----------------------------------------------------- */
-/* user 操作狀態與模式					 */
+/* user 操作狀態與模式                                   */
 /* ----------------------------------------------------- */
 
 #define M_IDLE          0
-#define M_MMENU         1   /* menu mode */
+#define M_MMENU         1       /* menu mode */
 #define M_ADMIN         2
 #define M_MAIL          3
 #define M_TMENU         4
@@ -28,32 +28,32 @@ enum
 #define M_PROFESS       8
 #define M_CLASS         9
 
-#define M_LOGIN         10  /* main menu */
+#define M_LOGIN         10      /* main menu */
 
-#define M_GEM           11  /* announce */
+#define M_GEM           11      /* announce */
 
-#define M_BOARD	        12
-#define M_READA	        13
+#define M_BOARD         12
+#define M_READA         13
 
 #define M_XFILES        14
-#define M_UFILES        15  /* user menu */
+#define M_UFILES        15      /* user menu */
 
-#define M_RMAIL         16  /* mail menu */
+#define M_RMAIL         16      /* mail menu */
 
 #define M_PAL           17
 #define M_LUSERS        18
 
-#define	M_BBTP          19
-#define	M_WEB           20
+#define M_BBTP          19
+#define M_WEB           20
 
-#define M_POST          21  /* -> active mode : 不能接受 talk request */
-#define M_SMAIL         22  /* Thor.981020: 目前為 M_BBTP與 M_CHAT間不talk*/
+#define M_POST          21      /* -> active mode : 不能接受 talk request */
+#define M_SMAIL         22      /* Thor.981020: 目前為 M_BBTP與 M_CHAT間不talk*/
 #define M_TRQST         23
 #define M_TALK          24
 #define M_CHAT          25
 
 #define M_PAGE          26
-#define M_QUERY         27  /* <- mated mode : 可接對象 */
+#define M_QUERY         27      /* <- mated mode : 可接對象 */
 
 #define M_VOTE          28
 
@@ -66,14 +66,14 @@ enum
 
 #define M_MIME          34      /* statue: mime 解碼 */
 #define M_CHICKEN       35
-#define M_XMODE	        36
+#define M_XMODE         36
 #define M_MYFAVORITE    37
 
 #define M_MAX           M_XMODE
-#define	M_BBSNET        0
+#define M_BBSNET        0
 
 
-#ifdef	_MODES_C_
+#ifdef  _MODES_C_
 static char *ModeTypeTable[] =
 {
   "發呆",           /* M_IDLE */
@@ -117,105 +117,105 @@ static char *ModeTypeTable[] =
 };
 
 
-#endif				/* _MODES_C_ */
+#endif                          /* _MODES_C_ */
 
 
 /* ----------------------------------------------------- */
-/* menu.c 中的模式					 */
+/* menu.c 中的模式                                       */
 /* ----------------------------------------------------- */
 
 
-#define XEASY	0x333		/* Return value to un-redraw screen */
-#define QUIT	0x666		/* Return value to abort recursive functions */
-#define	SKIN	0x999		/* Return value to change skin */
+#define XEASY   0x333           /* Return value to un-redraw screen */
+#define QUIT    0x666           /* Return value to abort recursive functions */
+#define SKIN    0x999           /* Return value to change skin */
 
 
 /* ----------------------------------------------------- */
-/* read.c 中的模式					 */
+/* read.c 中的模式                                       */
 /* ----------------------------------------------------- */
 
 
-#define	TAG_NIN		0	/* 不屬於 TagList */
-#define	TAG_TOGGLE	1	/* 切換 Taglist */
-#define	TAG_INSERT	2	/* 加入 TagList */
+#define TAG_NIN         0       /* 不屬於 TagList */
+#define TAG_TOGGLE      1       /* 切換 Taglist */
+#define TAG_INSERT      2       /* 加入 TagList */
 
 
 /* for bbstate : bbs operating state */
 
 
-#define	STAT_POST	    0x01000000	/* 是否可以在 currboard 發表文章 */
-#define	STAT_BOARD	    0x02000000	/* 是否可以在 currboard 刪除、mark文章 */
-#define	STAT_VISIT	    0x04000000	/* 是否已經看過進板畫面 */
-#define	STAT_DIRTY	    0x08000000	/* 是否更動過 userflag */
-#define	STAT_MODERATED	0x10000000	/* currboard 是否為 moderated board */
-#define	STAT_LOCK	    0x20000000	/* 是否為鎖定螢幕 */
-#define STAT_BM         0x40000000  /* 是否為 currboard 的板主 */
-#define	STAT_STARTED	0x80000000	/* 是否已經進入系統 */
+#define STAT_POST           0x01000000      /* 是否可以在 currboard 發表文章 */
+#define STAT_BOARD          0x02000000      /* 是否可以在 currboard 刪除、mark文章 */
+#define STAT_VISIT          0x04000000      /* 是否已經看過進板畫面 */
+#define STAT_DIRTY          0x08000000      /* 是否更動過 userflag */
+#define STAT_MODERATED      0x10000000      /* currboard 是否為 moderated board */
+#define STAT_LOCK           0x20000000      /* 是否為鎖定螢幕 */
+#define STAT_BM             0x40000000      /* 是否為 currboard 的板主 */
+#define STAT_STARTED        0x80000000      /* 是否已經進入系統 */
 
-#define OTHERSTAT_EDITING    0x0000001       /* 編輯中 */
+#define OTHERSTAT_EDITING   0x0000001       /* 編輯中 */
 
 
 /* for user's board permission level & state record */
 
 
-#define BRD_R_BIT	0x01	/* 可讀，read */
-#define BRD_W_BIT	0x02	/* 可寫，write */
-#define BRD_X_BIT	0x04	/* 可管，execute，板主、看板總管、站長 */
-#define BRD_V_BIT	0x08	/* 已經逛過了 ==> 看過「進板畫面」 */
-#define BRD_H_BIT	0x10	/* .boardrc 中有閱讀記錄 (history) */
-#define BRD_Z_BIT	0x20	/* zap 掉了 */
-#define BRD_F_BIT	0x40	/* 好友看板*/
+#define BRD_R_BIT       0x01    /* 可讀，read */
+#define BRD_W_BIT       0x02    /* 可寫，write */
+#define BRD_X_BIT       0x04    /* 可管，execute，板主、看板總管、站長 */
+#define BRD_V_BIT       0x08    /* 已經逛過了 ==> 看過「進板畫面」 */
+#define BRD_H_BIT       0x10    /* .boardrc 中有閱讀記錄 (history) */
+#define BRD_Z_BIT       0x20    /* zap 掉了 */
+#define BRD_F_BIT       0x40    /* 好友看板*/
 
 /* for curredit */
 
 
-#define	EDIT_MAIL	0x01	/* 目前是 mail/board ? */
-#define	EDIT_LIST	0x02	/* 是否為 mail list ? */
-#define	EDIT_BOTH	0x04	/* both reply to author/board ? */
+#define EDIT_MAIL       0x01    /* 目前是 mail/board ? */
+#define EDIT_LIST       0x02    /* 是否為 mail list ? */
+#define EDIT_BOTH       0x04    /* both reply to author/board ? */
 #ifdef HAVE_ANONYMOUS
-#define EDIT_ANONYMOUS  0x08	/* 匿名模式 */
+#define EDIT_ANONYMOUS  0x08    /* 匿名模式 */
 #endif
-#define	EDIT_OUTGO	POST_OUTGO
-#define EDIT_RESTRICT	0x10
+#define EDIT_OUTGO      POST_OUTGO
+#define EDIT_RESTRICT   0x10
 
 /* ----------------------------------------------------- */
-/* xover.c 中的模式					 */
+/* xover.c 中的模式                                      */
 /* ----------------------------------------------------- */
 
 #if 1
-#define XO_DL		0x80000000
+#define XO_DL           0x80000000
 #endif
 
-#define	XO_MODE		0x10000000
+#define XO_MODE         0x10000000
 
 
-#define XO_NONE		(XO_MODE + 0)
-#define XO_INIT		(XO_MODE + 1)
-#define XO_LOAD		(XO_MODE + 2)
-#define XO_HEAD		(XO_MODE + 3)
-#define XO_NECK		(XO_MODE + 4)
-#define XO_BODY		(XO_MODE + 5)
-#define XO_FOOT		(XO_MODE + 6)
-#define XO_LAST		(XO_MODE + 7)
-#define	XO_QUIT		(XO_MODE + 8)
+#define XO_NONE         (XO_MODE + 0)
+#define XO_INIT         (XO_MODE + 1)
+#define XO_LOAD         (XO_MODE + 2)
+#define XO_HEAD         (XO_MODE + 3)
+#define XO_NECK         (XO_MODE + 4)
+#define XO_BODY         (XO_MODE + 5)
+#define XO_FOOT         (XO_MODE + 6)
+#define XO_LAST         (XO_MODE + 7)
+#define XO_QUIT         (XO_MODE + 8)
 
-#define	XO_RSIZ		256		/* max record length */
-#define	XO_TALL		20		/* page size */
-
-
-#define	XO_MOVE		0x20000000	/* cursor movement */
-#define	XO_WRAP		0x08000000	/* cursor wrap in movement */
-#define	XO_TAIL		(XO_MOVE - 999)	/* init cursor to tail */
+#define XO_RSIZ         256             /* max record length */
+#define XO_TALL         20              /* page size */
 
 
-#define	XO_ZONE		0x40000000	/* 進入某一個 zone */
-#define	XZ_BACK		0x100
+#define XO_MOVE         0x20000000      /* cursor movement */
+#define XO_WRAP         0x08000000      /* cursor wrap in movement */
+#define XO_TAIL         (XO_MOVE - 999) /* init cursor to tail */
 
 
-#define	XZ_CLASS	(XO_ZONE + 0)	/* 看板列表 */
-#define	XZ_ULIST	(XO_ZONE + 1)	/* 線上使用者名單 */
-#define	XZ_PAL		(XO_ZONE + 2)	/* 好友名單 */
-#define	XZ_VOTE		(XO_ZONE + 3)	/* 投票 */
+#define XO_ZONE         0x40000000      /* 進入某一個 zone */
+#define XZ_BACK         0x100
+
+
+#define XZ_CLASS        (XO_ZONE + 0)   /* 看板列表 */
+#define XZ_ULIST        (XO_ZONE + 1)   /* 線上使用者名單 */
+#define XZ_PAL          (XO_ZONE + 2)   /* 好友名單 */
+#define XZ_VOTE         (XO_ZONE + 3)   /* 投票 */
 #define XZ_BMW          (XO_ZONE + 4)   /* 熱訊 */
 
 #ifdef HAVE_XYPOST
@@ -224,19 +224,19 @@ static char *ModeTypeTable[] =
 
 /* 以下的有 thread 主題式閱讀的功能 */
 
-#define	XZ_MBOX		(XO_ZONE + 6)	/* 信箱 */
-#define	XZ_BOARD	(XO_ZONE + 7)	/* 看板 */
-#define XZ_GEM		(XO_ZONE + 8)	/* 精華區 */
-#define	XZ_MAILGEM	(XO_ZONE + 9)	/* 信件精華區 */
-#define XZ_BANMAIL	(XO_ZONE + 10)	/* 擋信列表 */
-#define XZ_OTHER	(XO_ZONE + 11)	/* 其他列表 */
-#define XZ_MYFAVORITE	(XO_ZONE + 12)  /* 我的最愛 */
+#define XZ_MBOX         (XO_ZONE + 6)   /* 信箱 */
+#define XZ_BOARD        (XO_ZONE + 7)   /* 看板 */
+#define XZ_GEM          (XO_ZONE + 8)   /* 精華區 */
+#define XZ_MAILGEM      (XO_ZONE + 9)   /* 信件精華區 */
+#define XZ_BANMAIL      (XO_ZONE + 10)  /* 擋信列表 */
+#define XZ_OTHER        (XO_ZONE + 11)  /* 其他列表 */
+#define XZ_MYFAVORITE   (XO_ZONE + 12)  /* 我的最愛 */
 
-#define	XZ_POST		XZ_BOARD
+#define XZ_POST         XZ_BOARD
 
 
 
-//cache,20101119
+//cache, 20101119
 
 #define PALTYPE_PAL     0               /* 朋友名單 */
 #define PALTYPE_LIST    1               /* 群組名單 */
@@ -245,4 +245,4 @@ static char *ModeTypeTable[] =
 
 
 
-#endif				/* _MODES_H_ */
+#endif                          /* _MODES_H_ */

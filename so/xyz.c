@@ -1,10 +1,10 @@
 /*-------------------------------------------------------*/
-/* xyz.c	( NTHU CS MapleBBS Ver 3.10 )	             */
+/* xyz.c        ( NTHU CS MapleBBS Ver 3.10 )            */
 /*-------------------------------------------------------*/
-/* target : 雜七雜八的外掛			                   	 */
-/* create : 09/04/08					                 */
+/* target : 雜七雜八的外掛                               */
+/* create : 09/04/08                                     */
 /* author : cache                                        */
-/* update :      					                     */
+/* update :                                              */
 /*-------------------------------------------------------*/
 
 
@@ -31,7 +31,7 @@ x_siteinfo(void)
     prints("程式版本： %s [%s]\033[m\n", BBSVERNAME, BBSVERSION);
     prints("站上人數： %d/%d\n", ushm->count, MAXACTIVE);
     prints("系統負載： %.2f %.2f %.2f [%s]\n"
-	    , load[0], load[1], load[2], load[0] > 10 ? "\033[1;41;37m過高\033[m" : load[0] > 5 ?
+       , load[0], load[1], load[2], load[0] > 10 ? "\033[1;41;37m過高\033[m" : load[0] > 5 ?
         "\033[1;42;37m稍高\033[m" : "\033[1;44;37m正常\033[m");
     prints("索引資料： BRD %d KB, ACCT %d KB, HDR %d KB\n", sizeof(BRD), sizeof(ACCT), sizeof(HDR));
     prints("\n");

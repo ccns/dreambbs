@@ -35,4 +35,4 @@ extern int receive_nocem(void);
 extern int read_ncmperm(void);
 #endif
 
-#endif	/* _BBSLIB_H_ */
+#endif  /* _BBSLIB_H_ */

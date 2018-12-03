@@ -35,8 +35,17 @@
 
 innbbsd/bbslink
 innbbsd/innbbsd
+
 maple/bbsd
 maple/xchatd
+
+test/lib_splay
+test/lib_str_decode
+test/lib_str_pat
+test/lib_str_xor
+test/lib_xsort
+test/testsize
+
 util/account
 util/acl-sort
 util/acpro
