@@ -2865,7 +2865,7 @@ static char *talk_reason[] =
     "你真的很煩，我實在不想跟你 talk"
 
 #ifdef EVERY_Z
-   , "我的嘴巴正忙著和別人講話呢，沒有空的嘴巴了"
+    , "我的嘴巴正忙著和別人講話呢，沒有空的嘴巴了"
     /* Thor.0725: for chat&talk 用^z 作準備 */
 #endif
 };
@@ -3103,7 +3103,7 @@ static char *msg_pickup_way[PICKUP_WAYS] =
     "暱稱",
     "閒置"
 #ifdef  HAVE_BOARD_PAL
-   , "板友"
+    , "板友"
 #endif
 };
 
@@ -3290,7 +3290,7 @@ static int (*ulist_cmp[]) (PICKUP *i, PICKUP *j) =
     ulist_cmp_nick,
     ulist_cmp_idle
 #ifdef  HAVE_BOARD_PAL
-   , ulist_cmp_board
+    , ulist_cmp_board
 #endif
 };
 
