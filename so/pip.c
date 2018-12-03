@@ -1265,7 +1265,7 @@ time_t cnow)
         else
             d.satisfy += 2;
         lasttime += stime;
-    };
+    }
     /*快樂度滿意度最大值設定*/
     if (d.happy > 100)
         d.happy = 100;

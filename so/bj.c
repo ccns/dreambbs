@@ -100,7 +100,7 @@ BlackJack(void)
                 }
             }
             while (m == 0);
-        };
+        }
 #endif
 
     /*  if (money>=20000) CHEAT=1;
@@ -195,7 +195,7 @@ BlackJack(void)
 
             if (guest_point > 21)
             {
-                if (A_count > 0){guest_point -= 10; A_count--;};
+                if (A_count > 0){guest_point -= 10; A_count--;}
             }
             move(12, 0); clrtoeol(); prints("\x1b[1;32m翴计: \x1b[33m%d\x1b[m", host_point);
             move(14, 0); clrtoeol(); prints("\x1b[1;32m翴计: \x1b[33m%d\x1b[m", guest_point);
@@ -263,7 +263,7 @@ BlackJack(void)
                 }
                 if (host_point > 21)
                 {
-                    if (AA_count > 0){host_point -= 10; AA_count--;};
+                    if (AA_count > 0){host_point -= 10; AA_count--;}
                 }
                 move(12, 0); clrtoeol(); prints("\x1b[1;32m翴计: \x1b[33m%d\x1b[m", host_point);
                 move(14, 0); clrtoeol(); prints("\x1b[1;32m翴计: \x1b[33m%d\x1b[m", guest_point);
