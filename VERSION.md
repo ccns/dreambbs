@@ -51,14 +51,17 @@
 ## other plan
 
 ### ToDo
-* ~variable size test~
-* vtuikit port test
-* pfterm port test (**testing**)
-    - screen resizing feature
-* logind port test
-  - wsproxy port test
-* bbslua port test
-* Static Web Page Recovering
+- port from pttbbs
+    * ~variable size test~
+    * pfterm port test (4-BSD, **testing**)
+    * bbslua port test (MIT)
+    * vtuikit port test (2-BSD)
+    * nios port test (2-BSD)
+    * logind port test (2-BSD)
+    * wsproxy port test
+- other improvement from other M3 version
+    * screen resizing feature
+- Static Web Page Recovering
 
 ### Version Number
 + v1.0, plan to be an LTS version:
