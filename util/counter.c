@@ -46,9 +46,9 @@ main(
 {
     int fd;
     time_t now;
-    struct tm ntime, *xtime ,ptime;
+    struct tm ntime, *xtime, ptime;
     FILE *fp;
-    char ymd[80],flag;
+    char ymd[80], flag;
 
     if (argc > 1)
     {
@@ -66,7 +66,7 @@ main(
     sprintf(ymd, "%02d/%02d/%02d",
         ntime.tm_year % 100, ntime.tm_mon + 1, ntime.tm_mday);
 
-    fp = fopen("etc/counter","a+");
+    fp = fopen("etc/counter", "a+");
 
     count = attach_shm(COUNT_KEY, sizeof(COUNTER));
 
@@ -76,15 +76,15 @@ main(
 
     if (flag == 1)
     {
-        printf("\nhour_max_login = %d \n",count->hour_max_login);
-        printf("day_max_login = %d \n",count->day_max_login);
-        printf("samehour_max_login = %d \n",count->samehour_max_login);
-        printf("max_regist = %d \n",count->max_regist);
-        printf("cur_hour_max_login = %d \n",count->cur_hour_max_login);
-        printf("cur_day_max_login = %d \n",count->cur_day_max_login);
-        printf("samehour_max_time = %d \n",(int) count->samehour_max_time);
-        printf("samehour_max_login_old = %d \n",count->samehour_max_login_old);
-        printf("max_regist_old = %d \n",count->max_regist_old);
+        printf("\nhour_max_login = %d \n", count->hour_max_login);
+        printf("day_max_login = %d \n", count->day_max_login);
+        printf("samehour_max_login = %d \n", count->samehour_max_login);
+        printf("max_regist = %d \n", count->max_regist);
+        printf("cur_hour_max_login = %d \n", count->cur_hour_max_login);
+        printf("cur_day_max_login = %d \n", count->cur_day_max_login);
+        printf("samehour_max_time = %d \n", (int) count->samehour_max_time);
+        printf("samehour_max_login_old = %d \n", count->samehour_max_login_old);
+        printf("max_regist_old = %d \n", count->max_regist_old);
     }
     if (flag == 2)
     {
@@ -109,19 +109,19 @@ main(
     {
         if (count->max_regist > count->max_regist_old)
         {
-            fprintf(fp,"★ 【%s】\x1b[1;32m總註冊人數\x1b[m提升到 \x1b[31;1m%d\x1b[m 人\n",ymd,count->max_regist);
+            fprintf(fp, "★ 【%s】\x1b[1;32m總註冊人數\x1b[m提升到 \x1b[31;1m%d\x1b[m 人\n", ymd, count->max_regist);
             count->max_regist_old = count->max_regist;
         }
 
         if (count->samehour_max_login > count->samehour_max_login_old)
         {
-            fprintf(fp,"◎ 【%s %02d:%02d】\x1b[32m同時在站內人數\x1b[m首次達到 \x1b[1;36m%d\x1b[m 人次\n",ymd,ptime.tm_hour,ptime.tm_min,count->samehour_max_login);
+            fprintf(fp, "◎ 【%s %02d:%02d】\x1b[32m同時在站內人數\x1b[m首次達到 \x1b[1;36m%d\x1b[m 人次\n", ymd, ptime.tm_hour, ptime.tm_min, count->samehour_max_login);
             count->samehour_max_login_old = count->samehour_max_login;
         }
 
         if (count->cur_hour_max_login > count->hour_max_login)
         {
-            fprintf(fp,"◇ 【%s %02d】\x1b[1;32m單一小時上線人次\x1b[m首次達到 \x1b[1;35m%d\x1b[m 人次\n",ymd,ntime.tm_hour,count->cur_hour_max_login);
+            fprintf(fp, "◇ 【%s %02d】\x1b[1;32m單一小時上線人次\x1b[m首次達到 \x1b[1;35m%d\x1b[m 人次\n", ymd, ntime.tm_hour, count->cur_hour_max_login);
             count->hour_max_login = count->cur_hour_max_login;
         }
         count->cur_hour_max_login = 0;
@@ -130,14 +130,14 @@ main(
         {
             if (count->cur_day_max_login > count->day_max_login)
             {
-                fprintf(fp,"◆ 【%s】\x1b[1;32m單日上線人次\x1b[m首次達到 \x1b[1;33m%d\x1b[m 人次\n",ymd,count->cur_day_max_login);
+                fprintf(fp, "◆ 【%s】\x1b[1;32m單日上線人次\x1b[m首次達到 \x1b[1;33m%d\x1b[m 人次\n", ymd, count->cur_day_max_login);
                 count->day_max_login = count->cur_day_max_login;
             }
             count->cur_day_max_login = 0;
         }
         if ((fd = open("run/var/counter", O_WRONLY | O_CREAT | O_TRUNC, 0600)))
         {
-            write(fd,count,sizeof(COUNTER));
+            write(fd, count, sizeof(COUNTER));
             close(fd);
         }
     }

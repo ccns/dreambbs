@@ -232,7 +232,7 @@ move(
 }
 
 #if 0
-/* verit : 030212 , 扣掉 ansi code */
+/* verit : 030212, 扣掉 ansi code */
 void
 ansi_move(
     int y,
@@ -1101,11 +1101,11 @@ void
 prints(char *fmt, ...)
 {
     va_list args;
-    unsigned char buf[512],*str;
+    unsigned char buf[512], *str;
 //  char buf[512], *str;
     int cc;
 
-    va_start(args,fmt);
+    va_start(args, fmt);
     vsprintf(buf, fmt, args);
     va_end(args);
     for (str = buf; (cc = *str); str++)
@@ -1267,7 +1267,7 @@ char *msg;                   /* length <= 54 */
         move(b_lines, 0);
 #ifdef HAVE_COLOR_VMSG
         color =time(0)%6+31;
-        prints("\033[1;%dm                                             ▏▎▍▌▋▊▉ \033[1;37m請按任意鍵繼續 \033[1;%dm▉\033[m ",color,color);
+        prints("\033[1;%dm                                             ▏▎▍▌▋▊▉ \033[1;37m請按任意鍵繼續 \033[1;%dm▉\033[m ", color, color);
 #else
         outs(VMSG_NULL);
 #endif
@@ -1296,7 +1296,7 @@ vmsg(
         clrtoeol();
 #ifdef HAVE_COLOR_VMSG
         color =time(0)%6+31;
-        prints("\033[1;%dm                                             ▏▎▍▌▋▊▉ \033[1;37m請按任意鍵繼續 \033[1;%dm▉\033[m ",color,color);
+        prints("\033[1;%dm                                             ▏▎▍▌▋▊▉ \033[1;37m請按任意鍵繼續 \033[1;%dm▉\033[m ", color, color);
 #else
         outs("\033[1;37;45m                              ● 請按任意鍵繼續 ●                           \033[m");
 #endif
@@ -1436,7 +1436,7 @@ grayout(int type)
         newslp[i].len = newslp[i].width + 7 + 3;
 
         str_ansi(buf, slp[i].data, slp[i].width + 1);
-        sprintf(newslp[i].data, "%s%s\033[m" , prefix[type], buf);
+        sprintf(newslp[i].data, "%s%s\033[m", prefix[type], buf);
     }
     vs_restore(newslp);
 }
@@ -1651,7 +1651,7 @@ igetch(void)
                 && !(imode & IM_REPLY))		/* lkchu.990513: 鎖定時不可回訊 */
         {
             /*
-            * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因 ,
+            * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
             * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
             */
             signal(SIGUSR1, SIG_IGN);
@@ -1661,7 +1661,7 @@ igetch(void)
             imode ^= IM_REPLY;
 
             /*
-            * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因 ,
+            * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
             * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
             */
             signal(SIGUSR1, (void *) talk_rqst);
@@ -1836,7 +1836,7 @@ vget_match(
 
         for (; cc <= cd; cc++)
         {
-            sprintf(fpath,"usr/%c", cc);
+            sprintf(fpath, "usr/%c", cc);
             dirp = opendir(fpath);
             while ((de = readdir(dirp)))
             {
@@ -1933,7 +1933,7 @@ vget_match(
 char lastcmd[MAXLASTCMD][80];
 
 
-int vget(int line,int col,unsigned char *prompt,unsigned char *data,int max,int echo)
+int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max, int echo)
 {
     int ch, len;
     int x, y;

@@ -302,13 +302,13 @@ xo_delete(
     if (vget(b_lines, 41, msg_sure_ny, buf, 3, LCECHO) == 'y')
     {
         if (bbsmode == M_READA)
-            hdr_prune(xo->dir, head, tail , 0);
+            hdr_prune(xo->dir, head, tail, 0);
 #ifdef	HAVE_MAILUNDELETE
         else if (bbsmode == M_RMAIL)
-            hdr_prune(xo->dir, head, tail , 2);
+            hdr_prune(xo->dir, head, tail, 2);
 #endif
         else
-            hdr_prune(xo->dir, head, tail , 0);
+            hdr_prune(xo->dir, head, tail, 0);
 
         return XO_LOAD;
     }
@@ -502,18 +502,18 @@ xo_prune(
 
 #if 1
     /* Thor.981122: 記載刪除記錄 */
-    sprintf(buf,"(%d)%s",num, xo->dir);
+    sprintf(buf, "(%d)%s", num, xo->dir);
     blog("PRUNE", buf);
 #endif
 
     if (bbsmode == M_READA)
-        hdr_prune(xo->dir, 0, 0 , 1);
+        hdr_prune(xo->dir, 0, 0, 1);
 #ifdef  HAVE_MAILUNDELETE
     else if (bbsmode == M_RMAIL)
-        hdr_prune(xo->dir, 0, 0 , 2);
+        hdr_prune(xo->dir, 0, 0, 2);
 #endif
     else
-        hdr_prune(xo->dir, 0, 0 , 0);
+        hdr_prune(xo->dir, 0, 0, 0);
 
     TagNum = 0;
     return XO_LOAD;
@@ -664,9 +664,9 @@ xo_forward(
     XO *xo)
 {
     static char rcpt[64];
-    char fpath[128], folder[80], *dir, *title, *userid , ckforward[80];
+    char fpath[128], folder[80], *dir, *title, *userid, ckforward[80];
     HDR *hdr, xhdr;
-    int tag, locus, userno, cc , check;
+    int tag, locus, userno, cc, check;
     unsigned int method;			/* 是否 uuencode */
     ACCT acct;
 
@@ -715,12 +715,12 @@ xo_forward(
 
     if (!mail_external(rcpt))    /* 中途攔截 */
     {
-        usr_fpath(ckforward,rcpt,"forward");
-        if (!access(ckforward,0))
+        usr_fpath(ckforward, rcpt, "forward");
+        if (!access(ckforward, 0))
         {
             if (acct_load(&acct, rcpt) >= 0)
             {
-                strcpy(rcpt,acct.email);
+                strcpy(rcpt, acct.email);
                 method = 0;
                 check = 1;
             }
@@ -830,7 +830,7 @@ xo_forward(
 #undef	MF_USER
 
     if (check)
-        strcpy(rcpt,cuser.email);
+        strcpy(rcpt, cuser.email);
 
     if (userno > 0)
         m_biff(userno);
@@ -946,7 +946,7 @@ xo_uquery_lite(
     clrtobot();  /* 避免畫面殘留 */
 
     prints("\033[1;34m"MSG_BLINE"\033[m");
-    prints("\n\033[1;33;44m \033[37m文章作者及資訊查詢： %*s \033[m\n", 55,"");
+    prints("\n\033[1;33;44m \033[37m文章作者及資訊查詢： %*s \033[m\n", 55, "");
     prints("\n");
 //  clrtobot();
     /* cpos = xo->pos; */		/* chuan 保留 xo->pos 的值，之後回存 */
@@ -1062,7 +1062,7 @@ static KeyMap keymap[] =
 
     /* i.e. < > : make life easier */
 
-    {',', RS_THREAD},
+    {', ', RS_THREAD},
     {'.', RS_THREAD | RS_FORWARD},
 
     /* thread : cursor */
@@ -1165,7 +1165,7 @@ xo_thread(
             strcpy(query, title);
         }
     }
-    else if (op & RS_UNREAD)	/* Thor: 向前找尋第一篇未讀文章,清 near */
+    else if (op & RS_UNREAD)	/* Thor: 向前找尋第一篇未讀文章, 清 near */
     {
 #define	RS_BOARD	0x1000	/* 用於 RS_UNREAD，跟前面的不可重疊 */
         /* Thor.980909: 詢問 "首篇未讀" 或 "末篇已讀" */
@@ -1469,22 +1469,22 @@ extern KeyFunc post_cb[];
 
 XZ xz[] =
 {
-    {NULL, NULL, M_BOARD},	/* XZ_CLASS */
-    {NULL, NULL, M_LUSERS},	/* XZ_ULIST */
-    {NULL, NULL, M_PAL},		/* XZ_PAL */
-    {NULL, NULL, M_VOTE},		/* XZ_VOTE */
+    {NULL, NULL, M_BOARD}, 	/* XZ_CLASS */
+    {NULL, NULL, M_LUSERS}, 	/* XZ_ULIST */
+    {NULL, NULL, M_PAL}, 		/* XZ_PAL */
+    {NULL, NULL, M_VOTE}, 		/* XZ_VOTE */
     {NULL, NULL, M_BMW},          /* XZ_BMW */    /* lkchu.981230: BMW 新介面 */
 #ifdef XZ_XPOST /* Thor.990303: 如果有 XZ_XPOST的話 */
-    {NULL, xpost_cb, M_READA},		/* XZ_XPOST */
+    {NULL, xpost_cb, M_READA}, 		/* XZ_XPOST */
 #else
-    {NULL, NULL, M_READA},		/* skip XZ_XPOST */
+    {NULL, NULL, M_READA}, 		/* skip XZ_XPOST */
 #endif
-    {NULL, NULL, M_RMAIL},	/* XZ_MBOX */
-    {NULL, post_cb, M_READA},		/* XZ_POST */
-    {NULL, NULL, M_GEM},		/* XZ_GEM */
-    {NULL, NULL, M_RMAIL},	/* XZ_MAILGEM */
-    {NULL, NULL, M_BANMAIL},	/* XZ_BANMAIL */
-    {NULL, NULL, M_OMENU},	/* XZ_OTHER */
+    {NULL, NULL, M_RMAIL}, 	/* XZ_MBOX */
+    {NULL, post_cb, M_READA}, 		/* XZ_POST */
+    {NULL, NULL, M_GEM}, 		/* XZ_GEM */
+    {NULL, NULL, M_RMAIL}, 	/* XZ_MAILGEM */
+    {NULL, NULL, M_BANMAIL}, 	/* XZ_BANMAIL */
+    {NULL, NULL, M_OMENU}, 	/* XZ_OTHER */
 };
 
 
@@ -1615,7 +1615,7 @@ xover(
             {
                 pos = cb->key;
 #if 1
-                /* Thor.990220: dynamic load , with key | XO_DL */
+                /* Thor.990220: dynamic load, with key | XO_DL */
                 if (pos == num)
                 {
                     void *p = DL_get((char *) cb->func);
@@ -1779,11 +1779,11 @@ xover(
 
                 if ((deltotal = mbox_check()))
                 {
-                    sprintf(fpath,"有 %d 封信件將要刪除，確定嗎？ [y/N]",deltotal);
+                    sprintf(fpath, "有 %d 封信件將要刪除，確定嗎？ [y/N]", deltotal);
                     if (vans(fpath) == 'y')
                     {
-                        usr_fpath(fpath,cuser.userid,FN_DIR);
-                        hdr_prune(fpath, 0, 0 , 3);
+                        usr_fpath(fpath, cuser.userid, FN_DIR);
+                        hdr_prune(fpath, 0, 0, 3);
                     }
                 }
 #endif
@@ -1928,7 +1928,7 @@ xover(
 
 #if 1
                     if (cmd == XO_NONE)
-                    {			/* Thor.0612: 找沒有或是 已經是了,游標不想動 */
+                    {			/* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
                         outz("\033[44m 找沒有了耶...:( \033[m");
                         msg = 1;
                     }
@@ -2156,7 +2156,7 @@ static MENU menu_everyz[] =
 void
 every_Z(void)
 {
-    int tmpmode,savemode;
+    int tmpmode, savemode;
 #ifdef M3_USE_PFTERM
     screen_backup_t old_screen;
 #else
@@ -2178,7 +2178,7 @@ every_Z(void)
  }
 #endif
 
-    memcpy(&xy,&(xz[XZ_OTHER - XO_ZONE]),sizeof(XZ));
+    memcpy(&xy, &(xz[XZ_OTHER - XO_ZONE]), sizeof(XZ));
 
     tmpbno = currbno;
 
@@ -2211,9 +2211,9 @@ every_Z(void)
     if ( cuser.ufo2 & UFO2_ORIGUI)
         every_Z_Orig();
     else
-        popupmenu(menu_everyz,NULL,7,20);
+        popupmenu(menu_everyz, NULL, 7, 20);
 
-    memcpy(&(xz[XZ_OTHER - XO_ZONE]),&xy,sizeof(XZ));
+    memcpy(&(xz[XZ_OTHER - XO_ZONE]), &xy, sizeof(XZ));
 
     if (tmpbno >= 0)
         XoPost(tmpbno);
@@ -2261,7 +2261,7 @@ every_U(void)
     if (bbsmode == M_READA)  /* guessi.061218: 進入看板後 ^U 預設排列 */
         pickup_way = 1;
 
-    memcpy(&xy,&(xz[XZ_OTHER - XO_ZONE]),sizeof(XZ));
+    memcpy(&xy, &(xz[XZ_OTHER - XO_ZONE]), sizeof(XZ));
 
     cmd = XZ_ULIST;
     tmpmode = bbsmode;
@@ -2277,7 +2277,7 @@ every_U(void)
     vs_restore(sl);
 #endif
 
-    memcpy(&(xz[XZ_OTHER - XO_ZONE]),&xy,sizeof(XZ));
+    memcpy(&(xz[XZ_OTHER - XO_ZONE]), &xy, sizeof(XZ));
 
     utmp_mode(tmpmode);
 
@@ -2294,7 +2294,7 @@ every_B(void)
 #else
     screenline sl[b_lines + 1];
 #endif
-    int tmpmode,stat;
+    int tmpmode, stat;
 
     stat = bbstate;
     tmpmode = bbsmode;

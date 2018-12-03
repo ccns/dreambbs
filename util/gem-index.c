@@ -129,7 +129,7 @@ int gindex(void)
         if (xmode & GEM_FOLDER)
         {
             fprintf(fndx, "%s\033[1;37;%dm%s\033[m\n",
-                    buf, 41 + (level % 6) , hdr.title);
+                    buf, 41 + (level % 6), hdr.title);
         }
         else
             fprintf(fndx, "%s%s\n", buf, hdr.title);

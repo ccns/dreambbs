@@ -20,8 +20,8 @@ char *fn_pnote_hint = FN_PNOTE_HINT;    /* 答錄機主人留言 */
 char Bdate[128];
 #include "pipfun.c"
 
-#define getdata(x1,x2,x3,x4,x5,x6,x7)  vget(x1,x2,x3,x4,x5,DOECHO)
-#define setuserfile(x1,x2)  usr_fpath(x1,cuser.userid,x2)
+#define getdata(x1, x2, x3, x4, x5, x6, x7)  vget(x1, x2, x3, x4, x5, DOECHO)
+#define setuserfile(x1, x2)  usr_fpath(x1, cuser.userid, x2)
 
 extern UCACHE *ushm;
 

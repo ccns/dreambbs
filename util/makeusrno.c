@@ -53,7 +53,7 @@ bimage(
             count = read(fd, pal, count) / sizeof(PAL);
             if (count > 0)
             {
-                int *userno,*ubase;
+                int *userno, *ubase;
                 int c = count;
 
                 ubase = userno = (int *) malloc(count * sizeof(int));
@@ -68,7 +68,7 @@ bimage(
                 if (count > 1)
                     xsort(ubase, count, sizeof(int), (void *)int_cmp);
 
-                brd_fpath(fpath,brd, "fimage");
+                brd_fpath(fpath, brd, "fimage");
 #ifndef FAKE_IO
                 if ((count = open(fpath, O_WRONLY | O_CREAT | O_TRUNC, 0600)) >= 0)
                 {
@@ -77,7 +77,7 @@ bimage(
                 }
 #endif
                 free(ubase);
-                printf("BRD : %s  OK~\n",brd);
+                printf("BRD : %s  OK~\n", brd);
             }
             else
             {
@@ -85,7 +85,7 @@ bimage(
                 brd_fpath(fpath, brd, "fimage");
                 unlink(fpath);
 #endif
-                printf("BRD : %s  UNLINK~\n",brd);
+                printf("BRD : %s  UNLINK~\n", brd);
             }
             free(pal);
         }
@@ -97,7 +97,7 @@ bimage(
         brd_fpath(fpath, brd, "fimage");
         unlink(fpath);
 #endif
-        printf("BRD : %s  UNLINK~\n",brd);
+        printf("BRD : %s  UNLINK~\n", brd);
     }
 }
 
@@ -106,7 +106,7 @@ resetbrd(void)
 {
     struct dirent *de;
     DIR *dirp;
-    char buf[128],*ptr;
+    char buf[128], *ptr;
 
     if (!(dirp = opendir(BBSHOME"/brd")))
     {
@@ -118,7 +118,7 @@ resetbrd(void)
         ptr = de->d_name;
         if (ptr[0] > ' ' && ptr[0] != '.')
         {
-            sprintf(buf,"/home/bbs/brd/%s/friend",ptr);
+            sprintf(buf, "/home/bbs/brd/%s/friend", ptr);
             pal_sync(buf);
             bimage(ptr);
         }
@@ -133,7 +133,7 @@ finduserno(
     int i;
     for (i=1;i<=total;i++)
     {
-        if (!strcmp(map[i].userid,userid))
+        if (!strcmp(map[i].userid, userid))
             return i;
     }
     return 0;
@@ -152,7 +152,7 @@ bmw_sync(
     if (fd >= 0)
     {
         FILE *fout;
-        char folder[80],buf[128];
+        char folder[80], buf[128];
         HDR fhdr;
 
         usr_fpath(folder, userid, ".DIR");
@@ -227,7 +227,7 @@ pal_sync(
                 write(fd, pbase, size);
                 ftruncate(fd, size);
 #endif
-                printf("PATH : %s  PAL : %d\n",fpath,size/sizeof(PAL));
+                printf("PATH : %s  PAL : %d\n", fpath, size/sizeof(PAL));
             }
         }
         free(pbase);
@@ -260,16 +260,16 @@ reaper(
         close(fd);
         return;
     }
-    bmw_sync(acct.userid,acct.userno);
+    bmw_sync(acct.userid, acct.userno);
 
     acct.userno = total;
-    strcpy(map[total++].userid,acct.userid);
+    strcpy(map[total++].userid, acct.userid);
 
 #ifndef FAKE_IO
     lseek(fd, 0, SEEK_SET);
     write(fd, &acct, sizeof(ACCT));
 #endif
-    printf("%-14s : %d\n",acct.userid,acct.userno);
+    printf("%-14s : %d\n", acct.userid, acct.userno);
 
     close(fd);
 }
@@ -328,7 +328,7 @@ traverse(
 int
 main(void)
 {
-    int ch,mode;
+    int ch, mode;
     char *fname, fpath[256];
 
     setgid(BBSGID);
@@ -346,13 +346,13 @@ main(void)
         {
             fname[0] = ch;
             fname[1] = '\0';
-            traverse(fpath,mode);
+            traverse(fpath, mode);
         }
         for (ch = '0'; ch <= '9'; ch++)
         {
             fname[0] = ch;
             fname[1] = '\0';
-            traverse(fpath,mode);
+            traverse(fpath, mode);
         }
         if (mode == 2)
             break;
@@ -362,7 +362,7 @@ main(void)
 #ifndef FAKE_IO
     {
         SCHEMA slot;
-        int fd,num;
+        int fd, num;
 
         fd = open(".USR.new", O_CREAT | O_TRUNC | O_WRONLY, 0600);
         for (num = 1; num <= total; num++)
@@ -376,6 +376,6 @@ main(void)
     }
 #endif
 
-    printf("total user %d\n",total);
+    printf("total user %d\n", total);
     return 0;
 }

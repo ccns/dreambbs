@@ -196,7 +196,7 @@ sync_check(
     }
 
     /* 清理逾期未整理者 */
-    /* Thor.981218: 不管了,暴力一下 */
+    /* Thor.981218: 不管了, 暴力一下 */
     strcpy(fpath, fgem);
     str = strrchr(fpath, '.');
     str[1] = '/';
@@ -225,9 +225,9 @@ sync_check(
                         expire++;
 
                         /* Thor.981218: unlink file */
-                        xsync->exotic = 0; /* Thor.981218: 被丟掉了,別檢回來 */
+                        xsync->exotic = 0; /* Thor.981218: 被丟掉了, 別檢回來 */
                         cc = xsync->chrono;
-                        *str = radix32[cc & 31];
+                         *str = radix32[cc & 31];
                         archiv32m(cc, fname);
                         fname[0] = xsync->prefix;
                         fprintf(flog, "\texpire: %s\n", fpath);

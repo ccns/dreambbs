@@ -295,7 +295,7 @@ n2ansi(
 
 
 /* ----------------------------------------------------- */
-/* delete_line deletes 'line' from the list,		 */
+/* delete_line deletes 'line' from the list, 		 */
 /* and maintains the vx_ini pointers.			 */
 /* ----------------------------------------------------- */
 
@@ -932,7 +932,7 @@ quote_line(
             strstr(str, ") 提到:\n"))
             return 0;
     }
-    return (*str != '\n' && (strncmp(str,"\033[m\n",4)));
+    return (*str != '\n' && (strncmp(str, "\033[m\n", 4)));
 }
 
 /* ----------------------------------------------------- */
@@ -1221,7 +1221,7 @@ ve_header(
     {
 
         /* Thor.980613: 如果在轉錄文章, 呼叫 ve_header, 由於不是在被轉的版, 因此屬性不對,
-                                        有可能使秘密版出現 , BRD_ANONYMOUS 亦同*/
+                                        有可能使秘密版出現, BRD_ANONYMOUS 亦同*/
 
         if (!(bbstate & BRD_NOSTAT))/* 看板不納入統計 */
         {
@@ -1280,7 +1280,7 @@ ve_header(
                 HAS_PERM(PERM_DENYNICK) ? cutmp->username : cuser.username
 #endif
 
-                ,curredit & EDIT_OUTGO ? str_post1 : str_post2, currboard);
+               , curredit & EDIT_OUTGO ? str_post1 : str_post2, currboard);
         }
     }
     fprintf(fp, "標題: %s\n時間: %s\n", title, ctime(&now));
@@ -1291,19 +1291,19 @@ ve_show_sign(
     char *fpath)
 {
     char buf[256];
-    int i,j;
+    int i, j;
     FILE *fp;
-    fp = fopen(fpath,"r");
+    fp = fopen(fpath, "r");
     clear();
     if (fp)
     {
         for (j=1;j<=3;j++)
         {
-            prints("\033[36m【簽名檔.%d】\033[m\n",j);
+            prints("\033[36m【簽名檔.%d】\033[m\n", j);
             for (i=0;i<MAXSIGLINES;i++)
             {
                 if (fgets(buf, 256, fp))
-                    prints("%s",buf);
+                    prints("%s", buf);
                 else
                     prints("\n");
             }
@@ -1320,7 +1320,7 @@ ve_select_sign(
     FILE *fd;
     char msg[] = "選擇簽名檔 (1/2/3, 0=不加)[0]：";
     char buf[256];
-    int ans,op,len,used;
+    int ans, op, len, used;
 
     msg[27] = op = cuser.signature + '0';
     usr_fpath(buf, cuser.userid, FN_SIGN);
@@ -1345,7 +1345,7 @@ ve_select_sign(
             op = (op - '1') * MAXSIGLINES;
             for (i=0;i<op;i++)
                 fgets(buf, 256, fd);
-            fprintf(fp,"--");
+            fprintf(fp, "--");
 
             len = 0;
             used = 0;
@@ -1353,20 +1353,20 @@ ve_select_sign(
             {
                 if (fgets(buf, 256, fd))
                 {
-                    fprintf(fp,"\n");
+                    fprintf(fp, "\n");
                     len = strlen(buf);
                     if (len > 0)
                     {
                         used = 1;
                         buf[len - 1] = '\0';
-                        fprintf(fp,"%s",buf);
+                        fprintf(fp, "%s", buf);
                     }
                 }
             }
             if (used)
-                fprintf(fp,"\033[m\n");
+                fprintf(fp, "\033[m\n");
             else
-                fprintf(fp,"\n");
+                fprintf(fp, "\n");
             fclose(fd);
         }
     }
@@ -1381,16 +1381,16 @@ ve_filer(
     int ans = 0;
     FILE *fp=NULL;
     textline *p, *v;
-    char buf[80], *msg , re;
+    char buf[80], *msg, re;
 
 #ifdef  HAVE_INPUT_TOOLS
-    char *menu1[] =  {"SE","Save     存檔","Abort    放棄","Title    改標題","Edit     繼續編輯","Input    符號輸入工具","Read     讀取暫存檔","Write    寫入暫存檔","Delete   刪除暫存檔" , "Quit     離開選單" , NULL};
-    char *menu2[] = {"SE","Save     存檔","Local    存為站內檔","Abort    放棄","Title    改標題","Edit     繼續編輯","Input    符號輸入工具","Read     讀取暫存檔","Write    寫入暫存檔","Delete   刪除暫存檔" , "Quit     離開選單" , NULL};
-    char *menu3[] = {"LE","Local    存為站內檔","Save     存檔","Abort    放棄","Title    改標題","Edit     繼續編輯","Input    符號輸入工具","Read     讀取暫存檔","Write    寫入暫存檔","Delete   刪除暫存檔" , "Quit     離開選單" , NULL};
+    char *menu1[] =  {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    char *menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    char *menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
 #else
-    char *menu1[] =  {"SE","Save     存檔","Abort    放棄","Title    改標題","Edit     繼續編輯","Read     讀取暫存檔","Write    寫入暫存檔","Delete   刪除暫存檔" , "Quit     離開選單" , NULL};
-    char *menu2[] = {"SE","Save     存檔","Local    存為站內檔","Abort    放棄","Title    改標題","Edit     繼續編輯","Read     讀取暫存檔","Write    寫入暫存檔","Delete   刪除暫存檔" , "Quit     離開選單" , NULL};
-    char *menu3[] = {"LE","Local    存為站內檔","Save     存檔","Abort    放棄","Title    改標題","Edit     繼續編輯","Read     讀取暫存檔","Write    寫入暫存檔","Delete   刪除暫存檔" , "Quit     離開選單" , NULL};
+    char *menu1[] =  {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    char *menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    char *menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
 #endif
 
 
@@ -1416,11 +1416,11 @@ ve_filer(
 //  else
 //  {
         if (bbsmode != M_POST)
-            re = popupmenu_ans2(menu1,"存檔選項",4,20);
+            re = popupmenu_ans2(menu1, "存檔選項", 4, 20);
         else if (curredit & EDIT_OUTGO)
-            re = popupmenu_ans2(menu2,"存檔選項",4,20);
+            re = popupmenu_ans2(menu2, "存檔選項", 4, 20);
         else
-            re = popupmenu_ans2(menu3,"存檔選項",4,20);
+            re = popupmenu_ans2(menu3, "存檔選項", 4, 20);
 
 //  }
 
@@ -1560,7 +1560,7 @@ ve_filer(
             if (ve_op)
             {
                 fprintf(fp, ORIGIN_TAG,
-                    /*str_site, MYHOSTNAME,*/ ((cuser.ufo & UFO_HIDDEN)&&(str_cmp(cuser.userid,"guest"))) ? HIDDEN_SRC : fromhost);
+                    /*str_site, MYHOSTNAME, */ ((cuser.ufo & UFO_HIDDEN)&&(str_cmp(cuser.userid, "guest"))) ? HIDDEN_SRC : fromhost);
 
                 if ((bbstate & BRD_LOGEMAIL) && !(bbsmode == M_SMAIL))
                     fprintf(fp, EMAIL_TAG, cuser.email);
@@ -1617,13 +1617,13 @@ static int
 select_title(
     char *title)
 {
-    char *objs[] = {"[公告]","[新聞]","[閒聊]","[文件]","[問題]","[測試]"};
+    char *objs[] = {"[公告]", "[新聞]", "[閒聊]", "[文件]", "[問題]", "[測試]"};
     int select;
     outs("\n\n1.【公告】2.【新聞】3.【閒聊】4.【文件】5.【問題】6.【測試】7.【其他】\n");
     select = vans("請選擇文章類別或按 Enter 跳過：") - '1';
     if (select >=0 && select <=5)
     {
-        sprintf(title,"%s",objs[select]);
+        sprintf(title, "%s", objs[select]);
         return 1;
     }
     else
@@ -1810,7 +1810,7 @@ vedit(
             move(b_lines, 0);
             clrtoeol();
 #ifdef EVERY_BIFF
-            prints("%s\033[0;31;47m  (Ctrl-Z)\033[30m 操作說明  \033[31m(^w,^x)\033[30m 檔案處理 ║%s│%s║%5d:%3d  \033[m",
+            prints("%s\033[0;31;47m  (Ctrl-Z)\033[30m 操作說明  \033[31m(^w, ^x)\033[30m 檔案處理 ║%s│%s║%5d:%3d  \033[m",
                 mode & VE_BIFF ? "\033[1;41;37;5m  郵差來了  ": mode & VE_BIFFN ? "\033[1;41;37;5m  訊差來了  ":"\033[0;34;46m  編輯文章  ",
                 mode & VE_INSERT ? "插入" : "取代",
                 mode & VE_ANSI ? "ANSI" : "一般",
@@ -1818,7 +1818,7 @@ vedit(
                 /* Thor.980805: UFO_BIFF everywhere */
 #else
 
-            prints("\033[34;46m  編輯文章  \033[31;47m  (Ctrl-Z)\033[30m 操作說明  \033[31m(^w,^x)\033[30m 檔案處理 ║%s│%s║%5d:%3d  \033[m",
+            prints("\033[34;46m  編輯文章  \033[31;47m  (Ctrl-Z)\033[30m 操作說明  \033[31m(^w, ^x)\033[30m 檔案處理 ║%s│%s║%5d:%3d  \033[m",
                 mode & VE_INSERT ? "插入" : "取代",
                 mode & VE_ANSI ? "ANSI" : "一般",
                 ve_lno, 1 + (mode & VE_ANSI ? pos : col));
@@ -2161,7 +2161,7 @@ ve_key:
                         NULL
                     };
 
-                    switch (cc = popupmenu_ans2(menu,"控制碼選擇", 7, 20))
+                    switch (cc = popupmenu_ans2(menu, "控制碼選擇", 7, 20))
                     {
                     case 'i':
                         ve_char(KEY_ESC);

@@ -102,7 +102,7 @@ brh_put(void)
 
 void
 brh_get(
-    time_t bstamp,		/* board stamp */
+    time_t bstamp, 		/* board stamp */
     int bhno)
 {
     int *head, *tail;
@@ -276,7 +276,7 @@ brh_add(time_t prev, time_t chrono, time_t next)
     }
     else
     {
-        /* [32, 30] [22, 10] */  /* Thor.980923: how about [6, 7, 8] ? [15,7]? */
+        /* [32, 30] [22, 10] */  /* Thor.980923: how about [6, 7, 8] ? [15, 7]? */
 
         tail--;
     }
@@ -829,7 +829,7 @@ XoPost(
             brd_usies_BMlog();
 
 #ifdef	HAVE_COUNT_BOARD
-//      if (!(strcmp(brd->brdname,"Test")))
+//      if (!(strcmp(brd->brdname, "Test")))
         if (!(bbstate & BRD_NOTOTAL) && !(bits & BRD_V_BIT))
             brd->n_reads++;
 #endif
@@ -1227,7 +1227,7 @@ class_body(
                     tmp[31] = ' ';
                     tmp[32] = '\0';
 
-/* 081122.cache:看板性質,不訂閱,秘密,好友,一般 */
+/* 081122.cache:看板性質, 不訂閱, 秘密, 好友, 一般 */
                 if (bits[chn] & BRD_Z_BIT)
                     brdtype = '-';
 #ifdef HAVE_MODERATED_BOARD
@@ -1277,10 +1277,10 @@ class_body(
                 else
                     str2 = "     ";
 //注意有三格空白, 因為 HOT 是三個 char 故更改排版
-//              prints("\033[%d;4%d;37m%6d%s%s%c%-13s\033[%sm%-4s %s%-33.32s%s%s%.13s",mode,mode?cuser.barcolor:0, num, str, mode ? "\033[37m" : "\033[m",
-//              brdtype,brd->brdname, buf, brd->class, mode ? "\033[37m" : "\033[m", brd->title,brd->bvote ? "\x1b[1;33m  投 " : str2, mode ? "\033[37m" : "\033[m", brd->BM);
+//              prints("\033[%d;4%d;37m%6d%s%s%c%-13s\033[%sm%-4s %s%-33.32s%s%s%.13s", mode, mode?cuser.barcolor:0, num, str, mode ? "\033[37m" : "\033[m",
+//              brdtype, brd->brdname, buf, brd->class, mode ? "\033[37m" : "\033[m", brd->title, brd->bvote ? "\x1b[1;33m  投 " : str2, mode ? "\033[37m" : "\033[m", brd->BM);
 
-                sprintf(buf,"%d;3%d",brd->color/10,brd->color%10);
+                sprintf(buf, "%d;3%d", brd->color/10, brd->color%10);
 //              prints("%6d%s%c%-13s\033[%sm%-4s \033[m%-36s%c %.13s", num, str,
 //              prints("%6d%s%c%-13s\033[%sm%-4s \033[m%s%c %.13s", num, str,
 
@@ -1607,7 +1607,7 @@ XoAuthor(
                 if (tail->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
                     continue;
 
-                /* if (str_str(temp,author)) *//* Thor.0818:希望比較快 */
+                /* if (str_str(temp, author)) *//* Thor.0818:希望比較快 */
 
                 if (!str_ncmp(tail->owner, author, len))
                 {
@@ -1687,16 +1687,16 @@ class_find_same(
     HDR *src)
 {
     char fpath[128];
-    int fd,i;
+    int fd, i;
     HDR hdr;
 
     i = 0;
-    usr_fpath(fpath,cuser.userid,FN_FAVORITE);
-    if ((fd = open(fpath,O_RDONLY)))
+    usr_fpath(fpath, cuser.userid, FN_FAVORITE);
+    if ((fd = open(fpath, O_RDONLY)))
     {
-        while ((read(fd,&hdr, sizeof(HDR)) == sizeof(HDR)))
+        while ((read(fd, &hdr, sizeof(HDR)) == sizeof(HDR)))
         {
-            if (!str_cmp(hdr.xname,src->xname))
+            if (!str_cmp(hdr.xname, src->xname))
             {
                 close(fd);
                 return i;
@@ -1716,12 +1716,12 @@ class_add(xo)
     short *chp;
     BRD *brd;
     HDR hdr;
-    int chn,fasize;
+    int chn, fasize;
     char fpath[128];
     if (boardmode == 2 || !HAS_PERM(PERM_VALID))
         return XO_NONE;
 
-    usr_fpath(fpath,cuser.userid,FN_FAVORITE);
+    usr_fpath(fpath, cuser.userid, FN_FAVORITE);
     chp = (short *) xo->xyz + xo->pos;
     chn = *chp;
     if (chn < 0)
@@ -1729,17 +1729,17 @@ class_add(xo)
         return XO_NONE;
     }
     brd = bshm->bcache + chn;
-    memset(&hdr,0,sizeof(HDR));
-    brd2gem(brd,&hdr);
+    memset(&hdr, 0, sizeof(HDR));
+    brd2gem(brd, &hdr);
     if (class_find_same(&hdr) < 0 )
     {
-        rec_add(fpath,&hdr,sizeof(HDR));
+        rec_add(fpath, &hdr, sizeof(HDR));
         favorite_main();
-        usr_fpath(fpath,cuser.userid,FN_FAVORITE_IMG);
+        usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
         if (favorite_img)
             free(favorite_img);
-        favorite_img = f_img(fpath,&fasize);
-        logitfile(FN_FAVORITE_LOG,"< ADD >",hdr.xname);
+        favorite_img = f_img(fpath, &fasize);
+        logitfile(FN_FAVORITE_LOG, "< ADD >", hdr.xname);
         vmsg("已成功\加入我的最愛！");
     }
     else
@@ -1780,17 +1780,17 @@ class_add2(          /* gaod: 我的最愛中直接新增新看板 */
     usr_fpath(fpath, cuser.userid, FN_FAVORITE);
     chp = (short *) xo->xyz + xo->pos;
     chn = *chp;
-    memset(&hdr,0,sizeof(HDR));
-    brd2gem(brd,&hdr);
+    memset(&hdr, 0, sizeof(HDR));
+    brd2gem(brd, &hdr);
     if (class_find_same(&hdr) < 0 )
     {
-        rec_add(fpath,&hdr,sizeof(HDR));
+        rec_add(fpath, &hdr, sizeof(HDR));
         favorite_main();
-        usr_fpath(fpath,cuser.userid,FN_FAVORITE_IMG);
+        usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
         if (favorite_img)
             free(favorite_img);
-        favorite_img = f_img(fpath,&fasize);
-        logitfile(FN_FAVORITE_LOG,"< ADD >",hdr.xname);
+        favorite_img = f_img(fpath, &fasize);
+        logitfile(FN_FAVORITE_LOG, "< ADD >", hdr.xname);
         vmsg("已成功\加入我的最愛！");
     }
     else
@@ -1807,27 +1807,27 @@ class_del(
     short *chp;
     BRD *brd;
     HDR hdr;
-    int chn,fasize,pos;
+    int chn, fasize, pos;
     char fpath[128];
     if (boardmode != 2 || !HAS_PERM(PERM_VALID))
         return XO_NONE;
 
-    usr_fpath(fpath,cuser.userid,FN_FAVORITE);
+    usr_fpath(fpath, cuser.userid, FN_FAVORITE);
     chp = (short *) xo->xyz + xo->pos;
     chn = *chp;
     brd = bshm->bcache + chn;
-    memset(&hdr,0,sizeof(HDR));
-    brd2gem(brd,&hdr);
+    memset(&hdr, 0, sizeof(HDR));
+    brd2gem(brd, &hdr);
     if ((pos = class_find_same(&hdr)) >= 0)
     {
         rec_del(fpath, sizeof(HDR), pos, NULL, NULL);
         favorite_main();
-        usr_fpath(fpath,cuser.userid,FN_FAVORITE_IMG);
+        usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
         if (favorite_img)
             free(favorite_img);
-        favorite_img = f_img(fpath,&fasize);
+        favorite_img = f_img(fpath, &fasize);
 
-        logitfile(FN_FAVORITE_LOG,"< DEL >",hdr.xname);
+        logitfile(FN_FAVORITE_LOG, "< DEL >", hdr.xname);
         vmsg("已成功\從我的最愛移除！");
         if (!favorite_img)
             return XO_QUIT;
@@ -1848,17 +1848,17 @@ class_mov(
     short *chp;
     BRD *brd;
     HDR hdr;
-    int chn,fasize,pos,newOrder;
-    char fpath[128],buf[128];
+    int chn, fasize, pos, newOrder;
+    char fpath[128], buf[128];
     if (boardmode != 2 || !HAS_PERM(PERM_VALID))
         return XO_NONE;
 
-    usr_fpath(fpath,cuser.userid,FN_FAVORITE);
+    usr_fpath(fpath, cuser.userid, FN_FAVORITE);
     chp = (short *) xo->xyz + xo->pos;
     chn = *chp;
     brd = bshm->bcache + chn;
-    memset(&hdr,0,sizeof(HDR));
-    brd2gem(brd,&hdr);
+    memset(&hdr, 0, sizeof(HDR));
+    brd2gem(brd, &hdr);
 
     pos = xo->pos;
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
@@ -1883,10 +1883,10 @@ class_mov(
 
 
             favorite_main();
-            usr_fpath(fpath,cuser.userid,FN_FAVORITE_IMG);
-            favorite_img = f_img(fpath,&fasize);
+            usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
+            favorite_img = f_img(fpath, &fasize);
 
-            logitfile(FN_FAVORITE_LOG,"< MOV >",hdr.xname);
+            logitfile(FN_FAVORITE_LOG, "< MOV >", hdr.xname);
         }
         else
             return XO_FOOT;
@@ -1919,7 +1919,7 @@ class_stat(xo)
     if (chn >= 0)
     {
         brd = bshm->bcache + chn;
-        sprintf(msg,"目前累積閱\讀數：%d，累積發文數：%d",brd->n_reads,brd->n_posts);
+        sprintf(msg, "目前累積閱\讀數：%d，累積發文數：%d", brd->n_reads, brd->n_posts);
         pmsg(msg);
     }
 
@@ -2111,8 +2111,8 @@ board_main(void)
 #ifdef  HAVE_FAVORITE
     if (HAS_PERM(PERM_VALID))
     {
-        usr_fpath(fpath,cuser.userid,FN_FAVORITE_IMG);
-        favorite_img = f_img(fpath,&fasize);
+        usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
+        favorite_img = f_img(fpath, &fasize);
     }
 #endif
 
@@ -2166,27 +2166,27 @@ brd_list(
     int reciper)
 {
     LIST list;
-    int userno, fd ,select;
-    char buf[32], fpath[64],msg[128],temp[30];
-    BRD brd,*ptr;
-    sprintf(msg,"A)增加 D)刪除 B)全部看版 C)分類 G)條件 [1~%d]群組名單 M)定案 Q)取消？[M]",MAX_LIST);
+    int userno, fd, select;
+    char buf[32], fpath[64], msg[128], temp[30];
+    BRD brd, *ptr;
+    sprintf(msg, "A)增加 D)刪除 B)全部看版 C)分類 G)條件 [1~%d]群組名單 M)定案 Q)取消？[M]", MAX_LIST);
 
     userno = 0;
 
     for (;;)
     {
-        select = vget(1, 0, msg , buf, 2, LCECHO);
+        select = vget(1, 0, msg, buf, 2, LCECHO);
         switch (select)
         {
 #if 1
         case '1': case '2': case '3': case '4': case '5': case '6': case '7':
         case '8': case '9':
-            sprintf(temp,"board.%c",*buf);
-            usr_fpath(fpath,cuser.userid,temp);
-            fd = open(fpath,O_RDONLY);
+            sprintf(temp, "board.%c", *buf);
+            usr_fpath(fpath, cuser.userid, temp);
+            fd = open(fpath, O_RDONLY);
             while (fd)
             {
-                if (read(fd,&list,sizeof(LIST)) == sizeof(LIST))
+                if (read(fd, &list, sizeof(LIST)) == sizeof(LIST))
                 {
                     if (!ll_has(list.userid))
                     {
@@ -2240,7 +2240,7 @@ brd_list(
             {
                 char *name;
 
-                while (read(fd,&brd, sizeof(BRD)) == sizeof(BRD))
+                while (read(fd, &brd, sizeof(BRD)) == sizeof(BRD))
                 {
                     name = brd.brdname;
                     if (!ll_has(name) && (

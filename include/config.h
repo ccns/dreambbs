@@ -83,7 +83,7 @@
 #undef  AUTO_FIX_INFO           /* 開啟使用者列表同時檢查上站/板友資訊 (除非有問題否則請勿開啟) */
 
 #define loginAD                 /* 進站觀看廣告 */
-#define NOIDENT                 /* 進站不反查,加快連線速度 */
+#define NOIDENT                 /* 進站不反查, 加快連線速度 */
 #define ANTI_PHONETIC           /* 開啟檢查注音文功能 */
 
 #define Modules                 /* 顯示模組資訊 */
@@ -335,7 +335,7 @@
                                 寄信程式是在bbsd中, mail.c的bsmtp
                                 要relay的話 statue.00725 */
 #ifdef	HAVE_SMTP_SERVER
-#define	SMTP_SERVER             {"mail.ncku.edu.tw",NULL}
+#define	SMTP_SERVER             {"mail.ncku.edu.tw", NULL}
 #endif
 
 //#define	HAVE_FORCE_BOARD        /* 強迫 user login 時候讀取某公告看板: */
@@ -420,7 +420,7 @@
 
 #define NBRD_MAX_CANCEL	(30)     /* 最大廢版主人數 */
 
-#define	MAXPAGES	(256)    /* more.c 中文章頁數上限 (lines/22),預設:128 */
+#define	MAXPAGES	(256)    /* more.c 中文章頁數上限 (lines/22), 預設:128 */
 
 #define	MOVIE_MAX	(180)    /* 動畫張數 */
 

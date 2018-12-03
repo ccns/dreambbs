@@ -52,14 +52,14 @@ static int
 gem_manage(
     char* title)
 {
-    int ch,len;
+    int ch, len;
     char buf[100];
     char *list;
 
-    strcpy(buf,title);
+    strcpy(buf, title);
 
     len = strlen(cuser.userid);
-    if ((list = strrchr(buf,'[')) == NULL)
+    if ((list = strrchr(buf, '[')) == NULL)
         return 0;
 
     ch = *(++list);
@@ -101,7 +101,7 @@ gem_item(
     prints("%6d%c%c\241%c ", num, (xmode & GEM_RESTRICT) ? ')' : (xmode & GEM_LOCK) ? 'L' :  ' ',
         TagNum && !Tagger(ghdr->chrono, num - 1, TAG_NIN) ? '*' : ' ', gtype);
 
-    /* Thor.0724: 連同 recno 一起比對, 因為在copy,paste後會有chrono一樣的 */
+    /* Thor.0724: 連同 recno 一起比對, 因為在copy, paste後會有chrono一樣的 */
     /* tag_char(ghdr->chrono), gtype); */
 
     gtype = gem_way;
@@ -114,11 +114,11 @@ gem_item(
     {
         if (xmode & GEM_BOARD)
         {
-            sprintf(fpath,"gem/brd/%s/",ghdr->xname);
-            prints("%-46.45s%-13s%s\n", ghdr->title,(gtype == 1 ? ghdr->xname : ghdr->owner), access(fpath,R_OK) ? "[deleted]" : ghdr->date);
+            sprintf(fpath, "gem/brd/%s/", ghdr->xname);
+            prints("%-46.45s%-13s%s\n", ghdr->title, (gtype == 1 ? ghdr->xname : ghdr->owner), access(fpath, R_OK) ? "[deleted]" : ghdr->date);
         }
         else
-            prints("%-46.45s%-13s%s\n", ghdr->title,(gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
+            prints("%-46.45s%-13s%s\n", ghdr->title, (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
     }
 }
 
@@ -187,7 +187,7 @@ gem_head(
 
     if (xo->key > GEM_USER && GemBufferNum > 0)
     {
-        sprintf(buf,"(剪貼版 %d 篇)\n", GemBufferNum);
+        sprintf(buf, "(剪貼版 %d 篇)\n", GemBufferNum);
     }
     else
     {
@@ -581,10 +581,10 @@ gem_state(
 
     if (!(HAS_PERM(PERM_ALLBOARD)))
     {
-        if (!str_ncmp(fpath,"gem/brd/",8))
+        if (!str_ncmp(fpath, "gem/brd/", 8))
         {
             dir = fpath + 8;
-            if ((str = strchr(dir,'/')))
+            if ((str = strchr(dir, '/')))
             {
                 *str = '\0';
                 bno = brd_bno(dir);
@@ -700,7 +700,7 @@ gem_browse(
 
 static char GemFolder[80], GemAnchor[80], GemSailor[24];
 static HDR *GemBuffer;
-static int GemBufferSiz; /* , GemBufferNum; */
+static int GemBufferSiz; /*, GemBufferNum; */
                          /* Thor.990414: 提前宣告給gem_head用 */
 
 
@@ -1116,9 +1116,9 @@ gem_gather(
     XO *xo)
 {
     HDR *hdr, *gbuf, ghdr, xhdr;
-    int tag, locus, rc, xmode, anchor,mode;
+    int tag, locus, rc, xmode, anchor, mode;
     char *dir, *folder, *msg, fpath[80], buf[80];
-    FILE *fp,*fd;
+    FILE *fp, *fd;
 
     folder = GemAnchor;
     if ((anchor = *folder))
@@ -1213,26 +1213,26 @@ gem_gather(
             }
             else
             {
-                /*strcpy(buf,fpath);*/
+                /*strcpy(buf, fpath);*/
                 fd = fdopen(hdr_stamp(folder, 'A', &ghdr, buf), "w"); /*by visor*/
                 /*hdr_stamp(folder, HDR_LINK | 'A', &ghdr, fpath);*/
                 strcpy(ghdr.owner, cuser.userid);
                 if (mode)
                 {
-                    char tmp[80],*ptr;
-                    strcpy(tmp,hdr->owner);
-                    ptr = strchr(tmp,'.');
+                    char tmp[80], *ptr;
+                    strcpy(tmp, hdr->owner);
+                    ptr = strchr(tmp, '.');
                     if (ptr)
                         *ptr = '\0';
-                    ptr = strchr(tmp,'@');
+                    ptr = strchr(tmp, '@');
                     if (ptr)
                         *ptr = '\0';
-                    strncpy(ghdr.title, hdr->title,sizeof(ghdr.title) - IDLEN - 4);
-                    strcat(ghdr.title," (");
-                    strcat(ghdr.title,tmp);
-                    strcat(ghdr.title,")");
-//                  sprintf(ghdr.title,"(%s)",tmp);
-//                  strncat(ghdr.title, hdr->title,sizeof(ghdr.title) - strlen(ghdr.title) - 1);
+                    strncpy(ghdr.title, hdr->title, sizeof(ghdr.title) - IDLEN - 4);
+                    strcat(ghdr.title, " (");
+                    strcat(ghdr.title, tmp);
+                    strcat(ghdr.title, ")");
+//                  sprintf(ghdr.title, "(%s)", tmp);
+//                  strncat(ghdr.title, hdr->title, sizeof(ghdr.title) - strlen(ghdr.title) - 1);
                 }
                 else
                 {
@@ -1304,7 +1304,7 @@ gem_cross(
     XO *xo)
 {
     char xboard[20], fpath[80], xfolder[80], xtitle[80], buf[80], *dir;
-    HDR *hdr, xpost,*ghdr;
+    HDR *hdr, xpost, *ghdr;
 #ifdef  HAVE_DETECT_CROSSPOST
     HDR bpost;
 #endif
@@ -1392,16 +1392,16 @@ gem_cross(
                 rec_bot(xfolder, &xpost, sizeof(xpost));
 
 #ifdef  HAVE_DETECT_CROSSPOST
-                memcpy(&bpost,hdr,sizeof(HDR));
-                if (checksum_find(fpath,0,battr))
+                memcpy(&bpost, hdr, sizeof(HDR));
+                if (checksum_find(fpath, 0, battr))
                 {
-                    strcpy(bpost.owner,cuser.userid);
-                    add_deny(&cuser,DENY_SEL_POST|DENY_DAYS_1|DENY_MODE_POST,0);
-                    deny_log_email(cuser.vmail,(cuser.userlevel & PERM_DENYSTOP) ? -1 : cuser.deny);
+                    strcpy(bpost.owner, cuser.userid);
+                    add_deny(&cuser, DENY_SEL_POST|DENY_DAYS_1|DENY_MODE_POST, 0);
+                    deny_log_email(cuser.vmail, (cuser.userlevel & PERM_DENYSTOP) ? -1 : cuser.deny);
                     bbstate &= ~STAT_POST;
                     cuser.userlevel &= ~PERM_POST;
 
-                    move_post(&bpost,BRD_VIOLATELAW,-2);
+                    move_post(&bpost, BRD_VIOLATELAW, -2);
 
                     board_main();
                 }

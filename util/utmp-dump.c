@@ -12,7 +12,7 @@
 #include <sys/shm.h>
 
 ACCT cuser;
-UTMP *cutmp,utmp;
+UTMP *cutmp, utmp;
 
 static int pal_count;
 static int *pal_pool;
@@ -330,7 +330,7 @@ pal_cache(void)
 
 
 static pickup ulist_pool[MAXACTIVE];
-static int friend_num,ofriend_num,pfriend_num,bfriend_num;
+static int friend_num, ofriend_num, pfriend_num, bfriend_num;
 static int ulist_head(XO *xo);
 static int ulist_init(XO *xo);
 
@@ -373,8 +373,8 @@ ulist_body(
 {
     pickup *pp;
     UTMP *up;
-    int cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor,colortmp;
-    char buf[8],color[20],ship[80],*wcolor[7] = {"\033[m",COLOR_PAL,COLOR_BAD,COLOR_BOTH,COLOR_OPAL,COLOR_CLOAK,COLOR_BOARDPAL};
+    int cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor, colortmp;
+    char buf[8], color[20], ship[80], *wcolor[7] = {"\033[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 
 //  pal = cuser.ufo;
 
@@ -411,14 +411,14 @@ ulist_body(
             ufo = up->ufo;
 
 
-            diff = ck_state(UFO_PAGER,UFO_PAGER1,up,1);
-            diffmsg = ck_state(UFO_QUIET,UFO_MESSAGE,up,0);
+            diff = ck_state(UFO_PAGER, UFO_PAGER1, up, 1);
+            diffmsg = ck_state(UFO_QUIET, UFO_MESSAGE, up, 0);
 
             colortmp = 1;
             if (ufo & UFO_CLOAK) fcolor = 5;
             else if (fcolor == 0)
                 colortmp = 0;
-            strcpy(color,wcolor[fcolor]);
+            strcpy(color, wcolor[fcolor]);
 
             printf("%5d %s%-13s%-22.21s%s%-16.15s%c%c %-16.16s%s\n",
                 cnt,
@@ -426,7 +426,7 @@ ulist_body(
                 (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
                 colortmp > 0 ? "\033[m" : "",
                 (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
-                HIDDEN_SRC : up->from , diff,diffmsg,
+                HIDDEN_SRC : up->from, diff, diffmsg,
                 bmode(up, 0), buf);
         }
     }
@@ -487,8 +487,8 @@ ulist_init(
 {
     UTMP *up, *uceil;
     pickup *pp;
-    int max, filter, seecloak, userno, self,i,nf_num,tmp;
-    pickup pf[MAXACTIVE],of[MAXACTIVE],nf[MAXACTIVE];
+    int max, filter, seecloak, userno, self, i, nf_num, tmp;
+    pickup pf[MAXACTIVE], of[MAXACTIVE], nf[MAXACTIVE];
     pp = ulist_pool;
 
     self = cuser.userno;
@@ -542,8 +542,8 @@ ulist_init(
         if (pickup_way==1)
         {
             xsort(ulist_pool, friend_num, sizeof(pickup), ulist_cmp[pickup_way - 1]);
-            xsort((ulist_pool+friend_num),pfriend_num , sizeof(pickup), ulist_cmp[pickup_way - 1]);
-            xsort((ulist_pool+friend_num+pfriend_num), ofriend_num , sizeof(pickup), ulist_cmp[pickup_way - 1]);
+            xsort((ulist_pool+friend_num), pfriend_num, sizeof(pickup), ulist_cmp[pickup_way - 1]);
+            xsort((ulist_pool+friend_num+pfriend_num), ofriend_num, sizeof(pickup), ulist_cmp[pickup_way - 1]);
             xsort((ulist_pool+friend_num+pfriend_num+ofriend_num), max - friend_num - pfriend_num - ofriend_num, sizeof(pickup), ulist_cmp[pickup_way - 1]);
         }
         else
@@ -560,8 +560,8 @@ ulist_neck(
 {
     printf("  排列方式：[\033[1m%s\033[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\033[m\n"
         "\033[30;47m No.  代號         %-22s%-13s   PM %-14s閒置 \033[m\n",
-        msg_pickup_way[pickup_way],total_num,COLOR_PAL,friend_num+pfriend_num,COLOR_OPAL,friend_num+ofriend_num,COLOR_BAD,bfriend_num,
-        "暱  稱","故鄉", "動態");
+        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num,
+        "暱  稱", "故鄉", "動態");
     return ulist_body(xo);
 }
 
@@ -597,11 +597,11 @@ main(
 
     ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
     cutmp = &utmp;
-    usr_fpath(fpath,argv[1],".ACCT");
-    fd = open(fpath,O_RDONLY);
+    usr_fpath(fpath, argv[1], ".ACCT");
+    fd = open(fpath, O_RDONLY);
     if (fd>=0)
     {
-        if (read(fd,&cuser,sizeof(ACCT)) == sizeof(ACCT))
+        if (read(fd, &cuser, sizeof(ACCT)) == sizeof(ACCT))
         {
             reset_utmp();
             pickup_way = atoi(argv[2]);

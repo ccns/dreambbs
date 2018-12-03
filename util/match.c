@@ -34,7 +34,7 @@ reaper(
     }
 
     close(fd);
-    fprintf(flog,"%-13s %-20s %-40.40s\n",acct.userid,acct.realname,acct.email);
+    fprintf(flog, "%-13s %-20s %-40.40s\n", acct.userid, acct.realname, acct.email);
 
 }
 
@@ -72,7 +72,7 @@ main(
 {
     int ch;
     char *fname, fpath[256];
-    flog = fopen(FN_MATCH_NEW,"w");
+    flog = fopen(FN_MATCH_NEW, "w");
 
     funo = open(".USR", O_RDWR | O_CREAT, 0600);
 
@@ -95,12 +95,12 @@ main(
         traverse(fpath);
     }
     close(funo);
-    fprintf(flog,"The end.\n");
+    fprintf(flog, "The end.\n");
     fclose(flog);
-    rename(FN_MATCH_NEW,FN_MATCH_LOG);
+    rename(FN_MATCH_NEW, FN_MATCH_LOG);
     if (argc > 1)
     {
-        sprintf(fpath,"mail %s.bbs@" MYHOSTNAME " < " FN_MATCH_MAIL,argv[1]);
+        sprintf(fpath, "mail %s.bbs@" MYHOSTNAME " < " FN_MATCH_MAIL, argv[1]);
         system(fpath);
     }
     else

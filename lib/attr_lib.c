@@ -46,7 +46,7 @@ attr_get(
     usr_fpath(fpath, userid, ".ATTR");
     if ((fp = fopen(fpath, "rb")))
     {
-        while (fread(&k,sizeof k, 1,fp))
+        while (fread(&k, sizeof k, 1, fp))
         {
             if (k == key)
             {
@@ -71,7 +71,7 @@ attr_put(
 )
 {
     char fpath[64];
-    int k,fd;
+    int k, fd;
     FILE *fp;
 
     usr_fpath(fpath, userid, ".ATTR");
@@ -82,7 +82,7 @@ attr_put(
         f_exlock(fd);
         for (;;)
         {
-            if (fread(&k,sizeof k, 1,fp) <= 0)
+            if (fread(&k, sizeof k, 1, fp) <= 0)
             {
                 if (fwrite(&key, (size_t)sizeof key, 1, fp) <= 0)
                 {
@@ -127,8 +127,8 @@ attr_step(
 )
 {
     char fpath[64];
-    int fd,ret;
-    int k,value;
+    int fd, ret;
+    int k, value;
     FILE *fp;
 
     if ((key & 0xff) != sizeof(int)) return -3;
@@ -144,7 +144,7 @@ attr_step(
     f_exlock(fd);
     for (;;)
     {
-        if (fread(&k,sizeof k, 1,fp) <= 0)
+        if (fread(&k, sizeof k, 1, fp) <= 0)
         {
             if (dflt < 0)
             {
@@ -180,7 +180,7 @@ attr_step(
         goto close_file;
     }
 
-    if (fwrite(&value, sizeof value , 1, fp) <= 0)
+    if (fwrite(&value, sizeof value, 1, fp) <= 0)
     {
         ret = -3;
         goto close_file;

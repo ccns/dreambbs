@@ -58,7 +58,7 @@ POP3_Check(
     char *site, char *account, char *passwd)
 {
     FILE *fsock = NULL;
-    int sock=110,old_sock = 0;
+    int sock=110, old_sock = 0;
     char buf[512];
 
     if (Get_Socket(site, &sock))
@@ -130,7 +130,7 @@ Ext_POP3_Check(
     char *site, char *account, char *passwd)
 {
     FILE *fsock = NULL;
-    int sock=110,step=1;
+    int sock=110, step=1;
 
     char buf[512];
 
@@ -239,7 +239,7 @@ Ext_POP3_Check(
                 }
                 break;
             case 4:
-                fprintf(fsock, "user %s\r\n",account);
+                fprintf(fsock, "user %s\r\n", account);
                 while (1)
                 {
                     fgets(buf, 512, fsock);
@@ -269,7 +269,7 @@ Ext_POP3_Check(
                 }
                 break;
             case 5:
-                fprintf(fsock, "pass %s\r\n",passwd);
+                fprintf(fsock, "pass %s\r\n", passwd);
                 while (1)
                 {
                     fgets(buf, 512, fsock);
@@ -352,9 +352,9 @@ Ext_POP3_Check(
 
                 p = localtime(&now);
                 sprintf(buf, "%s # %02d/%02d/%02d %02d:%02d 不受信任的主機\n",
-                    site,p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
+                    site, p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
                     p->tm_hour, p->tm_min);
-                f_cat(FN_ETC_UNTRUST_ACL,buf);
+                f_cat(FN_ETC_UNTRUST_ACL, buf);
             case 9:
             case 0:
                 fprintf(fsock, "quit\r\n");

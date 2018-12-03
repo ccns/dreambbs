@@ -7,7 +7,7 @@
 /*-------------------------------------------------------*/
 #include <stdarg.h>
 #include "bbs.h"
-#define getdata(x1,x2,x3,x4,x5,x6,x7) vget(x1,x2,x3,x4,x5,DOECHO)
+#define getdata(x1, x2, x3, x4, x5, x6, x7) vget(x1, x2, x3, x4, x5, DOECHO)
 char Bdate[20];
 
 char *

@@ -23,7 +23,7 @@ struct chicken d;
 time_t start_time;
 time_t lasttime;
 
-#define getdata(x1,x2,x3,x4,x5,x6,x7)  vget(x1,x2,x3,x4,x5,DOECHO)
+#define getdata(x1, x2, x3, x4, x5, x6, x7)  vget(x1, x2, x3, x4, x5, DOECHO)
 
 int KEY_ESC_arg;
 char *BoardName = currboard;
@@ -121,7 +121,7 @@ int p_pipple(void)
     more("game/pipgame/pip.welcome", NULL);
     vs_head("電子養小雞", BoardName);
     srandom(time(0));
-    /* sprintf(genbuf,"home/%s/chicken",cuser.userid);*/
+    /* sprintf(genbuf, "home/%s/chicken", cuser.userid);*/
     usr_fpath(genbuf, cuser.userid, "chicken");
     pip_load_levelup("game/pipdata/piplevel.dat");
     pip_load_mob("game/pipdata/pipmob.dat");
@@ -160,7 +160,7 @@ int p_pipple(void)
 
     lasttime = time(0);
     start_time = time(0);
-    /*pip_do_menu(0,0,pipmainlist);*/
+    /*pip_do_menu(0, 0, pipmainlist);*/
     if (d.death != 0 || !d.name[0])  return 0;
     pip_main_menu();
     d.bbtime += time(0) - start_time;
@@ -477,26 +477,26 @@ int pip_play_menu(void), pip_job_menu(void), pip_special_menu(void), pip_system_
 
 static struct pipcommands pipmainlist[] =
 {
-    {pip_basic_menu,	'1',	'1'},
-    {pip_store_menu,	'2',	'2'},
-    {pip_practice_menu,	'3',	'3'},
-    {pip_play_menu,		'4',	'4'},
-    {pip_job_menu,		'5',	'5'},
-    {pip_special_menu,	'6',	'6'},
-    {pip_system_menu,	'7',	'7'},
-    {NULL,			'\0',	'\0'}
+    {pip_basic_menu, 	'1', 	'1'},
+    {pip_store_menu, 	'2', 	'2'},
+    {pip_practice_menu, 	'3', 	'3'},
+    {pip_play_menu, 		'4', 	'4'},
+    {pip_job_menu, 		'5', 	'5'},
+    {pip_special_menu, 	'6', 	'6'},
+    {pip_system_menu, 	'7', 	'7'},
+    {NULL, 			'\0', 	'\0'}
 };
 
 /*基本選單*/
 int pip_basic_feed(void), pip_basic_takeshower(void), pip_basic_takerest(void), pip_basic_kiss(void);
 static struct pipcommands pipbasiclist[] =
 {
-    {pip_basic_feed,		'1',	'1'},
-    {pip_basic_takeshower,	'2',	'2'},
-    {pip_basic_takerest,	'3',	'3'},
-    {pip_basic_kiss,		'4',	'4'},
-    {pip_money,		'5',	'5'},
-    {NULL,			'\0',	'\0'}
+    {pip_basic_feed, 		'1', 	'1'},
+    {pip_basic_takeshower, 	'2', 	'2'},
+    {pip_basic_takerest, 	'3', 	'3'},
+    {pip_basic_kiss, 		'4', 	'4'},
+    {pip_money, 		'5', 	'5'},
+    {NULL, 			'\0', 	'\0'}
 };
 
 /*商店選單*/
@@ -506,15 +506,15 @@ int pip_store_weapon_body(void), pip_store_weapon_foot(void);
 
 static struct pipcommands pipstorelist[] =
 {
-    {pip_store_food,		'1',	'1'},
-    {pip_store_medicine,	'2',	'2'},
-    {pip_store_other,	'3',	'3'},
-    {pip_store_weapon_head,	'a',	'A'},
-    {pip_store_weapon_rhand,	'b',	'B'},
-    {pip_store_weapon_lhand,	'c',	'C'},
-    {pip_store_weapon_body,	'd',	'D'},
-    {pip_store_weapon_foot,	'e',	'E'},
-    {NULL,			'\0',	'\0'}
+    {pip_store_food, 		'1', 	'1'},
+    {pip_store_medicine, 	'2', 	'2'},
+    {pip_store_other, 	'3', 	'3'},
+    {pip_store_weapon_head, 	'a', 	'A'},
+    {pip_store_weapon_rhand, 	'b', 	'B'},
+    {pip_store_weapon_lhand, 	'c', 	'C'},
+    {pip_store_weapon_body, 	'd', 	'D'},
+    {pip_store_weapon_foot, 	'e', 	'E'},
+    {NULL, 			'\0', 	'\0'}
 };
 
 /*修行選單*/
@@ -525,17 +525,17 @@ int pip_practice_classJ(void);
 
 static struct pipcommands pippracticelist[] =
 {
-    {pip_practice_classA,	'a',	'A'},
-    {pip_practice_classB,	'b',	'B'},
-    {pip_practice_classC,	'c',	'C'},
-    {pip_practice_classD,	'd',	'D'},
-    {pip_practice_classE,	'e',	'E'},
-    {pip_practice_classF,	'f',	'F'},
-    {pip_practice_classG,	'g',	'G'},
-    {pip_practice_classH,	'h',	'H'},
-    {pip_practice_classI,	'i',	'I'},
-    {pip_practice_classJ,	'j',	'J'},
-    {NULL,			'\0',	'\0'}
+    {pip_practice_classA, 	'a', 	'A'},
+    {pip_practice_classB, 	'b', 	'B'},
+    {pip_practice_classC, 	'c', 	'C'},
+    {pip_practice_classD, 	'd', 	'D'},
+    {pip_practice_classE, 	'e', 	'E'},
+    {pip_practice_classF, 	'f', 	'F'},
+    {pip_practice_classG, 	'g', 	'G'},
+    {pip_practice_classH, 	'h', 	'H'},
+    {pip_practice_classI, 	'i', 	'I'},
+    {pip_practice_classJ, 	'j', 	'J'},
+    {NULL, 			'\0', 	'\0'}
 };
 
 /*玩樂選單*/
@@ -544,14 +544,14 @@ int pip_play_outing(void), pip_play_kite(void), pip_play_KTV(void);
 
 static struct pipcommands pipplaylist[] =
 {
-    {pip_play_stroll,	'1',	'1'},
-    {pip_play_sport,	'2',	'2'},
-    {pip_play_date,		'3',	'3'},
-    {pip_play_guess,	'4',	'4'},
-    {pip_play_outing,	'5',	'5'},
-    {pip_play_kite,		'6',	'6'},
-    {pip_play_KTV,		'7',	'7'},
-    {NULL,			'\0',	'\0'}
+    {pip_play_stroll, 	'1', 	'1'},
+    {pip_play_sport, 	'2', 	'2'},
+    {pip_play_date, 		'3', 	'3'},
+    {pip_play_guess, 	'4', 	'4'},
+    {pip_play_outing, 	'5', 	'5'},
+    {pip_play_kite, 		'6', 	'6'},
+    {pip_play_KTV, 		'7', 	'7'},
+    {NULL, 			'\0', 	'\0'}
 };
 
 /*打工選單*/
@@ -561,23 +561,23 @@ int pip_job_workI(void), pip_job_workJ(void), pip_job_workK(void), pip_job_workL
 int pip_job_workM(void), pip_job_workN(void), pip_job_workO(void), pip_job_workP(void);
 static struct pipcommands pipjoblist[] =
 {
-    {pip_job_workA,		'a',	'A'},
-    {pip_job_workB,		'b',	'B'},
-    {pip_job_workC,		'c',	'C'},
-    {pip_job_workD,		'd',	'D'},
-    {pip_job_workE,		'e',	'E'},
-    {pip_job_workF,		'f',	'F'},
-    {pip_job_workG,		'g',	'G'},
-    {pip_job_workH,		'h',	'H'},
-    {pip_job_workI,		'i',	'I'},
-    {pip_job_workJ,		'j',	'J'},
-    {pip_job_workK,		'k',	'K'},
-    {pip_job_workL,		'l',	'L'},
-    {pip_job_workM,		'm',	'M'},
-    {pip_job_workN,		'n',	'N'},
-    {pip_job_workO,		'o',	'O'},
-    {pip_job_workP,		'p',	'P'},
-    {NULL,			'\0',	'\0'}
+    {pip_job_workA, 		'a', 	'A'},
+    {pip_job_workB, 		'b', 	'B'},
+    {pip_job_workC, 		'c', 	'C'},
+    {pip_job_workD, 		'd', 	'D'},
+    {pip_job_workE, 		'e', 	'E'},
+    {pip_job_workF, 		'f', 	'F'},
+    {pip_job_workG, 		'g', 	'G'},
+    {pip_job_workH, 		'h', 	'H'},
+    {pip_job_workI, 		'i', 	'I'},
+    {pip_job_workJ, 		'j', 	'J'},
+    {pip_job_workK, 		'k', 	'K'},
+    {pip_job_workL, 		'l', 	'L'},
+    {pip_job_workM, 		'm', 	'M'},
+    {pip_job_workN, 		'n', 	'N'},
+    {pip_job_workO, 		'o', 	'O'},
+    {pip_job_workP, 		'p', 	'P'},
+    {NULL, 			'\0', 	'\0'}
 };
 
 /*特殊選單*/
@@ -585,27 +585,27 @@ int pip_see_doctor(void), pip_change_weight(void), pip_meet_vs_man(void), pip_qu
 int pip_vs_fight(void);
 static struct pipcommands pipspeciallist[] =
 {
-    {pip_see_doctor,		'1',	'1'},
-    {pip_change_weight,	'2',	'2'},
-    {pip_meet_vs_man,	'3',	'3'},
-    {pip_query,		'4',	'4'},
-    {pip_go_palace,		'5',	'5'},
-    /*{pip_vs_fight,		'z',	'z'},*/
-    {NULL,			'\0',	'\0'}
+    {pip_see_doctor, 		'1', 	'1'},
+    {pip_change_weight, 	'2', 	'2'},
+    {pip_meet_vs_man, 	'3', 	'3'},
+    {pip_query, 		'4', 	'4'},
+    {pip_go_palace, 		'5', 	'5'},
+    /*{pip_vs_fight, 		'z', 	'z'}, */
+    {NULL, 			'\0', 	'\0'}
 };
 
 static struct pipcommands pipsystemlist[] =
 {
-    {pip_data_list,		'1',	'1'},
-    {pip_system_freepip,	'2',	'2'},
-    {pip_system_service,	'3',	'3'},
-    {pip_write_backup,	'4',	'4'},
-    {pip_read_backup,	'5',	'5'},
+    {pip_data_list, 		'1', 	'1'},
+    {pip_system_freepip, 	'2', 	'2'},
+    {pip_system_service, 	'3', 	'3'},
+    {pip_write_backup, 	'4', 	'4'},
+    {pip_read_backup, 	'5', 	'5'},
     /*
-        {pip_divine,		'o',	'O'},
-        {pip_results_show,	's',	'S'},
+        {pip_divine, 		'o', 	'O'},
+        {pip_results_show, 	's', 	'S'},
     */
-    {NULL,			'\0',	'\0'}
+    {NULL, 			'\0', 	'\0'}
 };
 
 
@@ -903,8 +903,8 @@ int mode)
         color1 = 37;
     sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
     sprintf(buf
-            , " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m"
-            , yo[age], inbuf1, tm, color1, d.money);
+           , " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m"
+           , yo[age], inbuf1, tm, color1, d.money);
     prints(buf);
 
     move(2, 0);
@@ -932,8 +932,8 @@ int mode)
         color3 = 37;
 
     sprintf(buf
-            , " \x1b[1;32m[生  命]\x1b[%dm %-10d\x1b[32m[法  力]\x1b[%dm %-10d\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m "
-            , color1, d.hp, color2, d.mp, d.weight, color3, d.tired);
+           , " \x1b[1;32m[生  命]\x1b[%dm %-10d\x1b[32m[法  力]\x1b[%dm %-10d\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m "
+           , color1, d.hp, color2, d.mp, d.weight, color3, d.tired);
     prints(buf);
 
     move(3, 0);
@@ -962,8 +962,8 @@ int mode)
     else
         color4 = 37;
     sprintf(buf
-            , " \x1b[1;32m[命 MAX]\x1b[37m %-10d\x1b[32m[法 MAX]\x1b[37m %-10d\x1b[32m[髒／病]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[快／滿]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m"
-            , d.maxhp, d.maxmp, color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
+           , " \x1b[1;32m[命 MAX]\x1b[37m %-10d\x1b[32m[法 MAX]\x1b[37m %-10d\x1b[32m[髒／病]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[快／滿]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m"
+           , d.maxhp, d.maxmp, color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
     prints(buf);
     if (mode == 0)  /*主要畫面*/
     {
@@ -1008,8 +1008,8 @@ int mode)
         else
             color4 = 37;
         sprintf(buf
-                , " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m"
-                , color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
+               , " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m"
+               , color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
         prints(buf);
 
     }
@@ -1017,8 +1017,8 @@ int mode)
     {
         move(4, 0);
         sprintf(buf
-                , " \x1b[1;36m[愛心]\x1b[37m%-5d\x1b[36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[道德]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[家事]\x1b[37m%-5d\x1b[0m"
-                , d.love, d.wisdom, d.character, d.art, d.ethics, d.brave, d.homework);
+               , " \x1b[1;36m[愛心]\x1b[37m%-5d\x1b[36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[道德]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[家事]\x1b[37m%-5d\x1b[0m"
+               , d.love, d.wisdom, d.character, d.art, d.ethics, d.brave, d.homework);
         prints(buf);
 
     }
@@ -1026,8 +1026,8 @@ int mode)
     {
         move(4, 0);
         sprintf(buf
-                , " \x1b[1;36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[攻擊]\x1b[37m%-5d\x1b[36m[防禦]\x1b[37m%-5d\x1b[36m[速度]\x1b[37m%-5d\x1b[0m"
-                , d.wisdom, d.character, d.art, d.brave, d.attack, d.resist, d.speed);
+               , " \x1b[1;36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[攻擊]\x1b[37m%-5d\x1b[36m[防禦]\x1b[37m%-5d\x1b[36m[速度]\x1b[37m%-5d\x1b[0m"
+               , d.wisdom, d.character, d.art, d.brave, d.attack, d.resist, d.speed);
         prints(buf);
 
     }
@@ -1526,7 +1526,7 @@ void pip_write_file(void)
 {
     FILE *ff;
     char buf[200];
-    /* sprintf(buf,"home/%s/chicken",cuser.userid);*/
+    /* sprintf(buf, "home/%s/chicken", cuser.userid);*/
     usr_fpath(buf, cuser.userid, "chicken");
 
     if ((ff = fopen(buf, "w")))
@@ -1579,7 +1579,7 @@ void pip_read_file(char *userid)
 {
     FILE *fs;
     char buf[200];
-    /* sprintf(buf,"home/%s/chicken",userid);*/
+    /* sprintf(buf, "home/%s/chicken", userid);*/
     usr_fpath(buf, userid, "chicken");
 
     if ((fs = fopen(buf, "r")))
@@ -2204,7 +2204,7 @@ int oldnum[])
                 move(b_lines - 1, 1);
                 smoney = 0;
                 sprintf(inbuf, "你要賣出物品 [%s] 多少個呢?(上限 %d): ", p[choice].name, oldnum[choice]);
-                getdata(b_lines - 1, 1, inbuf, genbuf, 6, , 0);
+                getdata(b_lines - 1, 1, inbuf, genbuf, 6,, 0);
                 smoney = atoi(genbuf);
                 if (smoney < 0)
                 {
@@ -2271,9 +2271,9 @@ struct weapon *p)
         clear();
         vs_head(menutitle[type], BoardName);
         show_weapon_pic(0);
-   /*   move(10,2);
-        sprintf(buf,"\x1b[1;37m現今能力:體力Max:\x1b[36m%-5d\x1b[37m  法力Max:\x1b[36m%-5d\x1b[37m  攻擊:\x1b[36m%-5d\x1b[37m  防禦:\x1b[36m%-5d\x1b[37m  速度:\x1b[36m%-5d \x1b[m",
-                d.maxhp,d.maxmp,d.attack,d.resist,d.speed);
+   /*   move(10, 2);
+        sprintf(buf, "\x1b[1;37m現今能力:體力Max:\x1b[36m%-5d\x1b[37m  法力Max:\x1b[36m%-5d\x1b[37m  攻擊:\x1b[36m%-5d\x1b[37m  防禦:\x1b[36m%-5d\x1b[37m  速度:\x1b[36m%-5d \x1b[m",
+                d.maxhp, d.maxmp, d.attack, d.resist, d.speed);
         prints(buf);*/
         move(11, 2);
         sprintf(buf, "\x1b[1;37;41m [NO]  [器具名]  [體力]  [法力]  [速度]  [攻擊]  [防禦]  [速度]  [售  價] \x1b[m");
@@ -2437,8 +2437,8 @@ struct weapon *p)
 int pip_job_workA(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │家庭管理│待人接物 + N , 掃地洗衣 + N , 烹飪技巧 + N  │*/
-    /*  │        │和父親的關係 + N , 疲勞 + 1 , 感受 - 2      │*/
+    /*  │家庭管理│待人接物 + N, 掃地洗衣 + N, 烹飪技巧 + N  │*/
+    /*  │        │和父親的關係 + N, 疲勞 + 1, 感受 - 2      │*/
     /*  ├────┼──────────────────────┤*/
     /*  │家庭管理│若 體    力 - RND (疲勞) >=   5 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
@@ -2501,7 +2501,7 @@ int pip_job_workA(void)
 int pip_job_workB(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │育幼院  │母性 + N , 感受 + 1 , 魅力 - 1 , 疲勞 + 3   │*/
+    /*  │育幼院  │母性 + N, 感受 + 1, 魅力 - 1, 疲勞 + 3   │*/
     /*  ├────┼──────────────────────┤*/
     /*  │育幼院  │若 體    力 - RND (疲勞) >=  20 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
@@ -2558,7 +2558,7 @@ int pip_job_workB(void)
 int pip_job_workC(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │旅館    │掃地洗衣 + N , 戰鬥技術 - N , 疲勞 + 2      │*/
+    /*  │旅館    │掃地洗衣 + N, 戰鬥技術 - N, 疲勞 + 2      │*/
     /*  ├────┼──────────────────────┤*/
     /*  │旅館    │若 體    力 - RND (疲勞) >=  30 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
@@ -2622,7 +2622,7 @@ int pip_job_workC(void)
 int pip_job_workD(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │農場    │體力 + 1 , 腕力 + 1 , 氣質 - 1 , 疲勞 + 3   │*/
+    /*  │農場    │體力 + 1, 腕力 + 1, 氣質 - 1, 疲勞 + 3   │*/
     /*  ├────┼──────────────────────┤*/
     /*  │農場    │若 體    力 - RND (疲勞) >=  30 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
@@ -2670,7 +2670,7 @@ int pip_job_workD(void)
 int pip_job_workE(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │餐廳    │料理 + N , 戰鬥技術 - N , 疲勞 + 2          │*/
+    /*  │餐廳    │料理 + N, 戰鬥技術 - N, 疲勞 + 2          │*/
     /*  ├────┼──────────────────────┤*/
     /*  │餐廳    │若 烹飪技術 - RND (疲勞) >=  50 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
@@ -2738,7 +2738,7 @@ int pip_job_workE(void)
 int pip_job_workF(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │教堂    │信仰 + 2 , 道德 + 1 , 罪孽 - 2 , 疲勞 + 1   │*/
+    /*  │教堂    │信仰 + 2, 道德 + 1, 罪孽 - 2, 疲勞 + 1   │*/
     /*  ├────┼──────────────────────┤*/
     float class;
     long workmoney;
@@ -2783,7 +2783,7 @@ int pip_job_workF(void)
 int pip_job_workG(void)
 {
     /* ├────┼──────────────────────┤*/
-    /* │地攤    │體力 + 2 , 魅力 + 1 , 疲勞 + 3 ,談吐 +1     │*/
+    /* │地攤    │體力 + 2, 魅力 + 1, 疲勞 + 3, 談吐 +1     │*/
     /* ├────┼──────────────────────┤*/
     long workmoney;
 
@@ -2810,7 +2810,7 @@ int pip_job_workG(void)
 int pip_job_workH(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │伐木場  │腕力 + 2 , 氣質 - 2 , 疲勞 + 4              │*/
+    /*  │伐木場  │腕力 + 2, 氣質 - 2, 疲勞 + 4              │*/
     /*  ├────┼──────────────────────┤*/
     /*  │伐木場  │若 腕    力 - RND (疲勞) >=  80 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
@@ -2863,7 +2863,7 @@ int pip_job_workH(void)
 int pip_job_workI(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │美容院  │感受 + 1 , 腕力 - 1 , 疲勞 + 3              │*/
+    /*  │美容院  │感受 + 1, 腕力 - 1, 疲勞 + 3              │*/
     /*  ├────┼──────────────────────┤*/
     /*  │美容院  │若 藝術修養 - RND (疲勞) >=  40 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
@@ -2916,7 +2916,7 @@ int pip_job_workI(void)
 int pip_job_workJ(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │狩獵區  │體力 + 1 , 氣質 - 1 , 母性 - 1 , 疲勞 + 3   │*/
+    /*  │狩獵區  │體力 + 1, 氣質 - 1, 母性 - 1, 疲勞 + 3   │*/
     /*  │        │戰鬥技術 + N                                │*/
     /*  ├────┼──────────────────────┤*/
     /*  │狩獵區  │若 體    力 - RND (疲勞) >=  80 ＆          │*/
@@ -2989,7 +2989,7 @@ int pip_job_workJ(void)
 int pip_job_workK(void)
 {
     /* ├────┼──────────────────────┤*/
-    /* │工地    │體力 + 2 , 魅力 - 1 , 疲勞 + 3              │*/
+    /* │工地    │體力 + 2, 魅力 - 1, 疲勞 + 3              │*/
     /* ├────┼──────────────────────┤*/
     float class;
     long workmoney;
@@ -3049,7 +3049,7 @@ int pip_job_workK(void)
 int pip_job_workL(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │墓園    │抗魔能力 + N , 感受 + 1 , 魅力 - 1          │*/
+    /*  │墓園    │抗魔能力 + N, 感受 + 1, 魅力 - 1          │*/
     /*  │        │疲勞 + 2                                    │*/
     /*  ├────┼──────────────────────┤*/
     float class;
@@ -3110,7 +3110,7 @@ int pip_job_workL(void)
 int pip_job_workM(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │家庭教師│道德 + 1 , 母性 + N , 魅力 - 1 , 疲勞 + 7   │*/
+    /*  │家庭教師│道德 + 1, 母性 + N, 魅力 - 1, 疲勞 + 7   │*/
     /*  ├────┼──────────────────────┤*/
     float class;
     long workmoney;
@@ -3141,7 +3141,7 @@ int pip_job_workM(void)
 int pip_job_workN(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │酒店    │烹飪技巧 + N , 談話技巧 + N , 智力 - 2      │*/
+    /*  │酒店    │烹飪技巧 + N, 談話技巧 + N, 智力 - 2      │*/
     /*  │        │疲勞 + 5                                    │*/
     /*  ├────┼──────────────────────┤*/
     /*  │酒店    │若 體    力 - RND (疲勞) >=  60 ＆          │*/
@@ -3205,8 +3205,8 @@ int pip_job_workN(void)
 int pip_job_workO(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │酒家    │魅力 + 2 , 罪孽 + 2 , 道德 - 3 , 信仰 - 3   │*/
-    /*  │        │待人接物 - N , 和父親的關係 - N , 疲勞 + 12 │*/
+    /*  │酒家    │魅力 + 2, 罪孽 + 2, 道德 - 3, 信仰 - 3   │*/
+    /*  │        │待人接物 - N, 和父親的關係 - N, 疲勞 + 12 │*/
     /*  ├────┼──────────────────────┤*/
     /*  │酒家    │若 魅    力 - RND (疲勞) >=  70 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
@@ -3276,8 +3276,8 @@ int pip_job_workO(void)
 int pip_job_workP(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │大夜總會│魅力 + 3 , 罪孽 + 1 , 氣質 - 2 , 智力 - 1   │*/
-    /*  │        │待人接物 - N , 疲勞 + 8                     │*/
+    /*  │大夜總會│魅力 + 3, 罪孽 + 1, 氣質 - 2, 智力 - 1   │*/
+    /*  │        │待人接物 - N, 疲勞 + 8                     │*/
     /*  ├────┼──────────────────────┤*/
     /*  │大夜總會│若 魅    力 - RND (疲勞) >=  70 ＆          │*/
     /*  │        │若 藝術修養 - RND (疲勞) >=  30 則工作成功  │*/
@@ -3861,13 +3861,13 @@ char *classword[11][5] =
 int pip_practice_classA(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │自然科學│智力 + 1~ 4 , 信仰 - 0~0 , 抗魔能力 - 0~0   │*/
+    /*  │自然科學│智力 + 1~ 4, 信仰 - 0~0, 抗魔能力 - 0~0   │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │智力 + 2~ 6 , 信仰 - 0~1 , 抗魔能力 - 0~1   │*/
+    /*  │        │智力 + 2~ 6, 信仰 - 0~1, 抗魔能力 - 0~1   │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │智力 + 3~ 8 , 信仰 - 0~2 , 抗魔能力 - 0~1   │*/
+    /*  │        │智力 + 3~ 8, 信仰 - 0~2, 抗魔能力 - 0~1   │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │智力 + 4~12 , 信仰 - 1~3 , 抗魔能力 - 0~1   │*/
+    /*  │        │智力 + 4~12, 信仰 - 1~3, 抗魔能力 - 0~1   │*/
     /*  ├────┼──────────────────────┤*/
     int body, class;
     int change1, change2, change3, change4, change5;
@@ -3898,16 +3898,16 @@ int pip_practice_classA(void)
 int pip_practice_classB(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │詩詞    │感受 + 1~1 , 智力 + 0~1 , 藝術修養 + 0~1    │*/
+    /*  │詩詞    │感受 + 1~1, 智力 + 0~1, 藝術修養 + 0~1    │*/
     /*  │        │氣質 + 0~1                                  │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │感受 + 1~2 , 智力 + 0~2 , 藝術修養 + 0~1    │*/
+    /*  │        │感受 + 1~2, 智力 + 0~2, 藝術修養 + 0~1    │*/
     /*  │        │氣質 + 0~1                                  │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │感受 + 1~4 , 智力 + 0~3 , 藝術修養 + 0~1    │*/
+    /*  │        │感受 + 1~4, 智力 + 0~3, 藝術修養 + 0~1    │*/
     /*  │        │氣質 + 0~1                                  │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │感受 + 2~5 , 智力 + 0~4 , 藝術修養 + 0~1    │*/
+    /*  │        │感受 + 2~5, 智力 + 0~4, 藝術修養 + 0~1    │*/
     /*  │        │氣質 + 0~1                                  │*/
     /*  ├────┼──────────────────────┤*/
     int body, class;
@@ -3940,13 +3940,13 @@ int pip_practice_classB(void)
 int pip_practice_classC(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │神學    │智力 + 1~1 , 信仰 + 1~2 , 抗魔能力 + 0~1    │*/
+    /*  │神學    │智力 + 1~1, 信仰 + 1~2, 抗魔能力 + 0~1    │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │智力 + 1~1 , 信仰 + 1~3 , 抗魔能力 + 0~1    │*/
+    /*  │        │智力 + 1~1, 信仰 + 1~3, 抗魔能力 + 0~1    │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │智力 + 1~2 , 信仰 + 1~4 , 抗魔能力 + 0~1    │*/
+    /*  │        │智力 + 1~2, 信仰 + 1~4, 抗魔能力 + 0~1    │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │智力 + 1~3 , 信仰 + 1~5 , 抗魔能力 + 0~1    │*/
+    /*  │        │智力 + 1~3, 信仰 + 1~5, 抗魔能力 + 0~1    │*/
     /*  ├────┼──────────────────────┤*/
     int body, class;
     int change1, change2, change3, change4, change5;
@@ -3975,13 +3975,13 @@ int pip_practice_classC(void)
 int pip_practice_classD(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │軍學    │智力 + 1~2 , 戰鬥技術 + 0~1 , 感受 - 0~1    │*/
+    /*  │軍學    │智力 + 1~2, 戰鬥技術 + 0~1, 感受 - 0~1    │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │智力 + 2~4 , 戰鬥技術 + 0~1 , 感受 - 0~1    │*/
+    /*  │        │智力 + 2~4, 戰鬥技術 + 0~1, 感受 - 0~1    │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │智力 + 3~4 , 戰鬥技術 + 0~1 , 感受 - 0~1    │*/
+    /*  │        │智力 + 3~4, 戰鬥技術 + 0~1, 感受 - 0~1    │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │智力 + 4~5 , 戰鬥技術 + 0~1 , 感受 - 0~1    │*/
+    /*  │        │智力 + 4~5, 戰鬥技術 + 0~1, 感受 - 0~1    │*/
     /*  ├────┼──────────────────────┤*/
     int body, class;
     int change1, change2, change3, change4, change5;
@@ -4011,13 +4011,13 @@ int pip_practice_classD(void)
 int pip_practice_classE(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │劍術    │戰鬥技術 + 0~1 , 攻擊能力 + 1~1             │*/
+    /*  │劍術    │戰鬥技術 + 0~1, 攻擊能力 + 1~1             │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │戰鬥技術 + 0~1 , 攻擊能力 + 1~2             │*/
+    /*  │        │戰鬥技術 + 0~1, 攻擊能力 + 1~2             │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │戰鬥技術 + 0~1 , 攻擊能力 + 1~3             │*/
+    /*  │        │戰鬥技術 + 0~1, 攻擊能力 + 1~3             │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │戰鬥技術 + 0~1 , 攻擊能力 + 1~4             │*/
+    /*  │        │戰鬥技術 + 0~1, 攻擊能力 + 1~4             │*/
     /*  ├────┼──────────────────────┤*/
     int body, class;
     int change1, change2, change3, change4, change5;
@@ -4047,13 +4047,13 @@ int pip_practice_classE(void)
 int pip_practice_classF(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │格鬥術  │戰鬥技術 + 1~1 , 防禦能力 + 0~0             │*/
+    /*  │格鬥術  │戰鬥技術 + 1~1, 防禦能力 + 0~0             │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │戰鬥技術 + 1~1 , 防禦能力 + 0~1             │*/
+    /*  │        │戰鬥技術 + 1~1, 防禦能力 + 0~1             │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │戰鬥技術 + 1~2 , 防禦能力 + 0~1             │*/
+    /*  │        │戰鬥技術 + 1~2, 防禦能力 + 0~1             │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │戰鬥技術 + 1~3 , 防禦能力 + 0~1             │*/
+    /*  │        │戰鬥技術 + 1~3, 防禦能力 + 0~1             │*/
     /*  ├────┼──────────────────────┤*/
     int body, class;
     int change1, change2, change3, change4, change5;
@@ -4083,13 +4083,13 @@ int pip_practice_classF(void)
 int pip_practice_classG(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │魔法    │魔法技術 + 1~1 , 魔法能力 + 0~2             │*/
+    /*  │魔法    │魔法技術 + 1~1, 魔法能力 + 0~2             │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │魔法技術 + 1~2 , 魔法能力 + 0~3             │*/
+    /*  │        │魔法技術 + 1~2, 魔法能力 + 0~3             │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │魔法技術 + 1~3 , 魔法能力 + 0~4             │*/
+    /*  │        │魔法技術 + 1~3, 魔法能力 + 0~4             │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │魔法技術 + 2~4 , 魔法能力 + 0~5             │*/
+    /*  │        │魔法技術 + 2~4, 魔法能力 + 0~5             │*/
     /*  ├────┼──────────────────────┤*/
     int body, class;
     int change1, change2, change3, change4, change5;
@@ -4119,13 +4119,13 @@ int pip_practice_classG(void)
 int pip_practice_classH(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │禮儀    │禮儀表現 + 1~1 , 氣質 + 1~1                 │*/
+    /*  │禮儀    │禮儀表現 + 1~1, 氣質 + 1~1                 │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │禮儀表現 + 1~2 , 氣質 + 1~2                 │*/
+    /*  │        │禮儀表現 + 1~2, 氣質 + 1~2                 │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │禮儀表現 + 1~3 , 氣質 + 1~3                 │*/
+    /*  │        │禮儀表現 + 1~3, 氣質 + 1~3                 │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │禮儀表現 + 2~4 , 氣質 + 1~4                 │*/
+    /*  │        │禮儀表現 + 2~4, 氣質 + 1~4                 │*/
     /*  ├────┼──────────────────────┤*/
     int body, class;
     int change1, change2, change3, change4, change5;
@@ -4147,13 +4147,13 @@ int pip_practice_classH(void)
 int pip_practice_classI(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │繪畫    │藝術修養 + 1~1 , 感受 + 0~1                 │*/
+    /*  │繪畫    │藝術修養 + 1~1, 感受 + 0~1                 │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │藝術修養 + 1~2 , 感受 + 0~1                 │*/
+    /*  │        │藝術修養 + 1~2, 感受 + 0~1                 │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │藝術修養 + 1~3 , 感受 + 0~1                 │*/
+    /*  │        │藝術修養 + 1~3, 感受 + 0~1                 │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │藝術修養 + 2~4 , 感受 + 0~1                 │*/
+    /*  │        │藝術修養 + 2~4, 感受 + 0~1                 │*/
     /*  ├────┼──────────────────────┤*/
     int body, class;
     int change1, change2, change3, change4, change5;
@@ -4174,13 +4174,13 @@ int pip_practice_classI(void)
 int pip_practice_classJ(void)
 {
     /*  ├────┼──────────────────────┤*/
-    /*  │舞蹈    │藝術修養 + 0~1 , 魅力 + 0~1 , 體力 + 1~1    │*/
+    /*  │舞蹈    │藝術修養 + 0~1, 魅力 + 0~1, 體力 + 1~1    │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │藝術修養 + 1~1 , 魅力 + 0~1 , 體力 + 1~1    │*/
+    /*  │        │藝術修養 + 1~1, 魅力 + 0~1, 體力 + 1~1    │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │藝術修養 + 1~2 , 魅力 + 0~2 , 體力 + 1~1    │*/
+    /*  │        │藝術修養 + 1~2, 魅力 + 0~2, 體力 + 1~1    │*/
     /*  │        ├──────────────────────┤*/
-    /*  │        │藝術修養 + 1~3 , 魅力 + 1~2 , 體力 + 1~1    │*/
+    /*  │        │藝術修養 + 1~3, 魅力 + 1~2, 體力 + 1~1    │*/
     /*  └────┴──────────────────────┘*/
     int body, class;
     int change1, change2, change3, change4, change5;
@@ -4915,7 +4915,7 @@ int first)
                     sprintf(buf, "普通攻擊，對方體力減低%d", dinjure);
                     vmsg(buf);
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了普通攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
-                            , d.name, opponent->pip->name, dinjure);
+                           , d.name, opponent->pip->name, dinjure);
                 }
                 opponent->pip->resistmode = 0;
                 opponent->pip->msgcount++;
@@ -4950,7 +4950,7 @@ int first)
                         sprintf(buf, "全力攻擊，對方體力減低%d", dinjure);
                         vmsg(buf);
                         sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了全力攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
-                                , d.name, opponent->pip->name, dinjure);
+                               , d.name, opponent->pip->name, dinjure);
                     }
                     else
                     {
@@ -5012,7 +5012,7 @@ int first)
                             sprintf(buf, "魔法攻擊，對方體力減低%d", dinjure);
                             vmsg(buf);
                             sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了魔法攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
-                                    , d.name, opponent->pip->name, dinjure);
+                                   , d.name, opponent->pip->name, dinjure);
                         }
                     }
 
@@ -6424,7 +6424,7 @@ pip_money(void)
     int money = -1;
     if (!d.name[0] || d.death) return 0;
     clrchyiuan(6, 18);
-    /* move(12,0);
+    /* move(12, 0);
       clrtobot();*/
     prints("你身上有 %d 次點歌次數，雞金 %d 元\n", cuser.request, d.money);
     outs("\n一次換一千雞金唷!!\n");
@@ -6485,8 +6485,8 @@ char *genbuf)
 {
     FILE *fs;
     char buf[200];
-    /*char yo[14][5]={"誕生","嬰兒","幼兒","兒童","青年","少年","成年",
-            "壯年","壯年","壯年","更年","老年","老年","古稀"};*/
+    /*char yo[14][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
+            "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
     char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
                       "成年", "壯年", "更年", "老年", "古稀", "神仙"
                      };
@@ -6514,7 +6514,7 @@ char *genbuf)
     int workP1, workQ1, workR1, workS1, workT1;
     int workU1, workV1, workW1, workX1, workY1, workZ1;
 
-    /* sprintf(buf,"home/%s/chicken",genbuf);*/
+    /* sprintf(buf, "home/%s/chicken", genbuf);*/
     usr_fpath(buf, genbuf, "chicken");
     /* currutmp->destuid = genbuf;*/
 
@@ -6920,7 +6920,7 @@ char *userid)
     /* if (!isprint(userid[0]))*/
     usr_fpath(buf, cuser.userid, "chicken");
     /* else
-        usr_fpath(buf,userid,"chicken");*/
+        usr_fpath(buf, userid, "chicken");*/
 
     if ( ( fs = fopen(buf, "r") ) )
     {
@@ -8659,8 +8659,8 @@ int mode)
         color1 = 37;
     sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
     sprintf(buf
-            , " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m"
-            , yo[age], inbuf1, m, color1, d.money);
+           , " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m"
+           , yo[age], inbuf1, m, color1, d.money);
     prints(buf);
 
     move(2, 0);
@@ -8690,8 +8690,8 @@ int mode)
     sprintf(inbuf1, "%d/%d", d.hp, d.maxhp);
     sprintf(inbuf2, "%d/%d", d.mp, d.maxmp);
     sprintf(buf
-            , " \x1b[1;32m[生  命]\x1b[%dm %-10s\x1b[32m[法  力]\x1b[%dm %-10s\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m "
-            , color1, inbuf1, color2, inbuf2, d.weight, color3, d.tired);
+           , " \x1b[1;32m[生  命]\x1b[%dm %-10s\x1b[32m[法  力]\x1b[%dm %-10s\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m "
+           , color1, inbuf1, color2, inbuf2, d.weight, color3, d.tired);
     prints(buf);
 
     move(3, 0);
@@ -8720,8 +8720,8 @@ int mode)
     else
         color4 = 37;
     sprintf(buf
-            , " \x1b[1;32m[髒  髒]\x1b[%dm %-4d      \x1b[32m[病  氣]\x1b[%dm %-4d      \x1b[32m[快樂度]\x1b[%dm %-4d      \x1b[32m[滿意度]\x1b[%dm %-4d\x1b[0m"
-            , color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
+           , " \x1b[1;32m[髒  髒]\x1b[%dm %-4d      \x1b[32m[病  氣]\x1b[%dm %-4d      \x1b[32m[快樂度]\x1b[%dm %-4d      \x1b[32m[滿意度]\x1b[%dm %-4d\x1b[0m"
+           , color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
     prints(buf);
     if (mode == 1)/*餵食*/
     {
@@ -8751,8 +8751,8 @@ int mode)
         else
             color4 = 37;
         sprintf(buf
-                , " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m"
-                , color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
+               , " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m"
+               , color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
         prints(buf);
 
     }

@@ -24,8 +24,8 @@ dns_init(void)
 
 int
 dns_query(
-    char *name,			/* domain name */
-    int qtype,			/* type of query */
+    char *name, 			/* domain name */
+    int qtype, 			/* type of query */
     querybuf *ans 		/* buffer to put answer */
 )
 {
@@ -604,7 +604,7 @@ dns_smtp(
         str = host;
 
     for (;;)
-    { /* Thor.980820: 註解: 萬一host格式為 xxx:yyy:zzz, 則先試 xxx,不行再試 yyy */
+    { /* Thor.980820: 註解: 萬一host格式為 xxx:yyy:zzz, 則先試 xxx, 不行再試 yyy */
         ptr = str;
         while ( ( sock = *ptr ) )
         {

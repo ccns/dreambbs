@@ -112,7 +112,7 @@ main(
 
 
     inf = open(argv[1], O_RDONLY);
-    outf = open(".BRD.new",O_WRONLY | O_CREAT | O_TRUNC,0600);
+    outf = open(".BRD.new", O_WRONLY | O_CREAT | O_TRUNC, 0600);
     if (inf == -1)
     {
         printf("error open old file\n");
@@ -129,8 +129,8 @@ main(
     while (read(inf, &old, sizeof(BRDOLD)) == sizeof(BRDOLD))
     {
         num++;
-        memset(&brd,0,sizeof(BRD));
-        memcpy(&brd,&old,sizeof(BRDOLD));
+        memset(&brd, 0, sizeof(BRD));
+        memcpy(&brd, &old, sizeof(BRDOLD));
 
         key = (life *) bsearch(brd.brdname, table, count, sizeof(life), (int (*)(const void *lhs, const void *rhs))strcasecmp);
         if (key)
@@ -142,7 +142,7 @@ main(
 
         printf("%04d %-13s %-5s %-40s %-20s %5d %5d %5d\n", num, brd.brdname, brd.class, brd.title, brd.BM, brd.expiremax, brd.expiremin, brd.expireday);
 
-        write(outf,&brd,sizeof(BRD));
+        write(outf, &brd, sizeof(BRD));
     }
     close(inf);
     close(outf);

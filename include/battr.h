@@ -24,7 +24,7 @@
 #define BRD_NOBAN        0x000000100      /* 不擋信 */
 #define BRD_NOLOG        0x000000200      /* 不紀錄站內違法 */
 #define BRD_NOCNTCROSS   0x000000400      /* 不紀錄 cross post */
-#define BRD_NOREPLY      0x000000800      /* 不能回文章 -- cache.090928: 禁止發表,回推文 */
+#define BRD_NOREPLY      0x000000800      /* 不能回文章 -- cache.090928: 禁止發表, 回推文 */
 #define BRD_NOLOGREAD    0x000001000      /* 不紀錄看版閱讀率 */
 #define BRD_CHECKWATER   0x000002000      /* 紀錄灌水次數 */
 #define BRD_CHANGETITLE  0x000004000      /* 板主修改版名 */

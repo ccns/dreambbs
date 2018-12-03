@@ -42,11 +42,11 @@ reaper(
         close(fd);
         return;
     }
-    strcpy(map[acct.userno].userid,acct.userid);
+    strcpy(map[acct.userno].userid, acct.userid);
     if (total<acct.userno)
         total = acct.userno;
 
-    printf("%-14s : %d\n",acct.userid,acct.userno);
+    printf("%-14s : %d\n", acct.userid, acct.userno);
 
     close(fd);
 }
@@ -88,8 +88,8 @@ main(void)
     setuid(BBSUID);
     chdir(BBSHOME);
 
-//  memset(map,0,sizeof(MAP)60000);
-    memset(map,0,sizeof(map));
+//  memset(map, 0, sizeof(MAP)60000);
+    memset(map, 0, sizeof(map));
 
     strcpy(fname = fpath, "usr/@");
     fname = (char *) strchr(fname, '@');
@@ -108,7 +108,7 @@ main(void)
 #ifndef FAKE_IO
     {
         SCHEMA slot;
-        int fd,num;
+        int fd, num;
 
         fd = open(".USR.new", O_CREAT | O_TRUNC | O_WRONLY, 0600);
         for (num = 1; num <= total; num++)

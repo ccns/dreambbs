@@ -49,20 +49,20 @@ attach_shm(
 }
 
 static int
-check_in_memory(char *bm,char *id)
+check_in_memory(char *bm, char *id)
 {
     char *i;
     for (i=bm;strlen(i);i=i+IDLEN+1)
-    if (!strcmp(i,id))
+    if (!strcmp(i, id))
         return 0;
     return 1;
 }
 
 
 static void
-send_to_all(char *title,char *fpath,char *bm)
+send_to_all(char *title, char *fpath, char *bm)
 {
-    char buf[128],*ptr;
+    char buf[128], *ptr;
     HDR mhdr;
 
     for (ptr=bm;strlen(ptr);ptr=ptr+IDLEN+1)
@@ -82,10 +82,10 @@ to_bm(
     char *title)
 {
     BRD *bhdr, *head, *tail;
-    char *ptr,*bm;
+    char *ptr, *bm;
 
     bm = (char *)malloc(MAXBOARD*(IDLEN+1)*3);
-    memset(bm,0,MAXBOARD*(IDLEN+1)*3);
+    memset(bm, 0, MAXBOARD*(IDLEN+1)*3);
     ptr = bm;
 
     head = bhdr = bshm->bcache;
@@ -95,29 +95,29 @@ to_bm(
         char *c;
         char buf[BMLEN + 1];
 
-        strcpy(buf,head->BM);
+        strcpy(buf, head->BM);
         c = buf;
         while (1)
         {
             char *d;
-            d = strchr(c,'/');
+            d = strchr(c, '/');
             if (*c)
             {
                 if (d)
                 {
                     *d++ = 0;
-                    if (check_in_memory(bm,c))
+                    if (check_in_memory(bm, c))
                     {
-                        strcpy(ptr,c);
+                        strcpy(ptr, c);
                         ptr+=IDLEN+1;
                     }
                     c = d;
                 }
                 else
                 {
-                    if (check_in_memory(bm,c))
+                    if (check_in_memory(bm, c))
                     {
-                        strcpy(ptr,c);
+                        strcpy(ptr, c);
                         ptr+=IDLEN+1;
                     }
                     break;
@@ -128,7 +128,7 @@ to_bm(
         }
     } while (++head < tail);
 
-    send_to_all(title,fpath,bm);
+    send_to_all(title, fpath, bm);
 
     unlink(fpath);
     free(bm);
@@ -186,7 +186,7 @@ open_mail(
     {
         fname[0] = ch;
         fname[1] = '\0';
-        traverse(fpath,path,title);
+        traverse(fpath, path, title);
     }
     return 1;
 }
@@ -208,10 +208,10 @@ main(
         switch(mode)
         {
             case 1:
-                open_mail(argv[2],argv[3]);
+                open_mail(argv[2], argv[3]);
                 break;
             case 2:
-                to_bm(argv[2],argv[3]);
+                to_bm(argv[2], argv[3]);
                 break;
         }
 

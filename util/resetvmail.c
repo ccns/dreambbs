@@ -34,7 +34,7 @@ reaper(
 {
     int fd;
 
-    char buf[256],*ptr;
+    char buf[256], *ptr;
     ACCT acct;
 
     sprintf(buf, "%s/.ACCT", fpath);
@@ -51,21 +51,21 @@ reaper(
     if (acct.userlevel & PERM_VALID)
     {
 
-        if ((ptr = strstr(acct.email,"cloud.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email,"mozart.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email,"wind.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email,"bach.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email,"graduate.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email,"moon.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email,"mail86.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email,"mail87.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email,"mail88.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email,"mail.yzu.edu.tw")));
+        if ((ptr = strstr(acct.email, "cloud.yzu.edu.tw")));
+        else if ((ptr = strstr(acct.email, "mozart.yzu.edu.tw")));
+        else if ((ptr = strstr(acct.email, "wind.yzu.edu.tw")));
+        else if ((ptr = strstr(acct.email, "bach.yzu.edu.tw")));
+        else if ((ptr = strstr(acct.email, "graduate.yzu.edu.tw")));
+        else if ((ptr = strstr(acct.email, "moon.yzu.edu.tw")));
+        else if ((ptr = strstr(acct.email, "mail86.yzu.edu.tw")));
+        else if ((ptr = strstr(acct.email, "mail87.yzu.edu.tw")));
+        else if ((ptr = strstr(acct.email, "mail88.yzu.edu.tw")));
+        else if ((ptr = strstr(acct.email, "mail.yzu.edu.tw")));
         if (ptr)
         {
             acct.userlevel &= ~PERM_VALID;
-/*          strcpy(ptr,"mail.yzu.edu.tw");
-            strcpy(acct.vmail,acct.email);*/
+/*          strcpy(ptr, "mail.yzu.edu.tw");
+            strcpy(acct.vmail, acct.email);*/
         }
     }
 

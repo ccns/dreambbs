@@ -28,7 +28,7 @@ typedef struct RecommendMessage
 extern BCACHE *bshm;
 extern XZ xz[];
 int counter;
-char title[80],name[10];
+char title[80], name[10];
 
 static int
 cleanrecommend_log(
@@ -38,15 +38,15 @@ cleanrecommend_log(
     FILE *fp;
     time_t now;
 
-    if (fp = fopen(FN_RECOMMEND_LOG,"a+"))
+    if (fp = fopen(FN_RECOMMEND_LOG, "a+"))
     {
         time(&now);
 
-        fprintf(fp,"%24.24s %s 砍 %s 板 %s(%s) ",ctime(&now),cuser.userid,currboard,title,name);
+        fprintf(fp, "%24.24s %s 砍 %s 板 %s(%s) ", ctime(&now), cuser.userid, currboard, title, name);
         if (!mode)
-            fprintf(fp,"中 %s 的留言 %s\n",rmsg->userid,rmsg->msg);
+            fprintf(fp, "中 %s 的留言 %s\n", rmsg->userid, rmsg->msg);
         else
-            fprintf(fp,"所有留言\n");
+            fprintf(fp, "所有留言\n");
         fclose(fp);
     }
 
@@ -59,24 +59,24 @@ cleanrecommend_item(
     RMSG *cleanrecommend)
 {
 
-        char tmp[10],*pn;
+        char tmp[10], *pn;
 
         pn = tmp;
 
         if (cleanrecommend->pn == POSITIVE)
         {
             pn = "\033[1;33m+";
-            prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num,pn,cleanrecommend->verb,cleanrecommend->userid,cleanrecommend->msg,cleanrecommend->rtime);
+            prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, cleanrecommend->msg, cleanrecommend->rtime);
         }
         else if (cleanrecommend->pn == NEGATIVE)
         {
             pn = "\033[1;31m-";
-            prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num,pn,cleanrecommend->verb,cleanrecommend->userid,cleanrecommend->msg,cleanrecommend->rtime);
+            prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, cleanrecommend->msg, cleanrecommend->rtime);
         }
         else
         {
             pn = "   ";
-            prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num,pn,cleanrecommend->verb,cleanrecommend->userid,cleanrecommend->msg,cleanrecommend->rtime);
+            prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, cleanrecommend->msg, cleanrecommend->rtime);
         }
 }
 
@@ -156,9 +156,9 @@ cleanrecommend_edit(
     if (echo == DOECHO)
         memset(cleanrecommend, 0, sizeof(RMSG));
     if (vget(b_lines, 0, "使用者:", cleanrecommend->userid, sizeof(cleanrecommend->userid), echo)
-     && vget(b_lines, 0, "動詞:",cleanrecommend->verb, sizeof(cleanrecommend->verb), echo)
-     && vget(b_lines, 0, "留言:",cleanrecommend->msg, sizeof(cleanrecommend->msg), echo)
-     && vget(b_lines, 0, "日期:",cleanrecommend->rtime, sizeof(cleanrecommend->rtime), echo))
+     && vget(b_lines, 0, "動詞:", cleanrecommend->verb, sizeof(cleanrecommend->verb), echo)
+     && vget(b_lines, 0, "留言:", cleanrecommend->msg, sizeof(cleanrecommend->msg), echo)
+     && vget(b_lines, 0, "日期:", cleanrecommend->rtime, sizeof(cleanrecommend->rtime), echo))
         return 1;
     else
         return 0;
@@ -181,7 +181,7 @@ cleanrecommend_delete(
 
         if (!rec_del(xo->dir, sizeof(RMSG), xo->pos, NULL, NULL))
         {
-            cleanrecommend_log(rmsg,0);
+            cleanrecommend_log(rmsg, 0);
             return cleanrecommend_load(xo);
         }
     }
@@ -221,7 +221,7 @@ cleanrecommend_cleanall(
     if (vans("確定要刪除所有的留言嗎？[y/N]") == 'y')
     {
         unlink(xo->dir);
-        cleanrecommend_log(NULL,1);
+        cleanrecommend_log(NULL, 1);
         return cleanrecommend_load(xo);
     }
     return XO_FOOT;
@@ -254,12 +254,12 @@ clean(
     XO *xo)
 {
     XO *xoo;
-    HDR *hdr,phdr;
+    HDR *hdr, phdr;
     int pos, cur;
-    char fpath[128],buf[256],tmp[128],recommenddb[128],*c2;
+    char fpath[128], buf[256], tmp[128], recommenddb[128], *c2;
     FILE *fp;
     RMSG rmsg;
-    int i,chrono,pushstart;
+    int i, chrono, pushstart;
     struct stat st;
     int total, fd;
     BRD *brd;
@@ -279,55 +279,55 @@ clean(
             return XO_NONE;
 
         chrono = hdr->chrono;
-        strcpy(title,hdr->title);
-        strcpy(name,hdr->xname);
+        strcpy(title, hdr->title);
+        strcpy(name, hdr->xname);
 
-        hdr_fpath(fpath,xo->dir,hdr);
-        sprintf(recommenddb,"tmp/%s.recommenddb",cuser.userid);
-        sprintf(tmp,"tmp/%s.clean",cuser.userid);
+        hdr_fpath(fpath, xo->dir, hdr);
+        sprintf(recommenddb, "tmp/%s.recommenddb", cuser.userid);
+        sprintf(tmp, "tmp/%s.clean", cuser.userid);
         unlink(tmp);
         unlink(recommenddb);
 
         brd = bshm->bcache + brd_bno(currboard);
         battr = brd->battr;
 
-        if (fp = fopen(fpath,"r"))
+        if (fp = fopen(fpath, "r"))
         {
 
 /*
             if (brd->battr & BRD_PUSHSNEER)
             {
                 if (addscore == 1)
-                    sprintf(add,                "[[1;33m→ %12s：[[36m%-54.54s [[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                    sprintf(add,                "[[1;33m→ %12s：[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else if (addscore == -1)
-                    sprintf(add,      "[[1;31m噓[[m [[1;33m%12s：[[36m%-54.54s [[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                    sprintf(add,      "[[1;31m噓[[m [[1;33m%12s：[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
             }
             else if (brd->battr & BRD_PUSHDEFINE)
             {
                 if (addscore == 1)
-                    sprintf(            add,"[[1;33m%02.2s %12s：[[36m%-54.54s [[m%5.5s\n",verb,cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                    sprintf(            add, "[[1;33m%02.2s %12s：[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else if (addscore == -1)
-                    sprintf(  add,"[[1;31m%02.2s[[m [[1;33m%12s：[[36m%-54.54s [[m%5.5s\n",verb,cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                    sprintf(  add, "[[1;31m%02.2s[[m [[1;33m%12s：[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else
-                    sprintf(add,                "[[1;33m→ %12s：[[36m%-54.54s [[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                    sprintf(add,                "[[1;33m→ %12s：[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
             }
             else
-                sprintf(add,                  "[[1;33m→ %12s：[[36m%-54.54s [[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                sprintf(add,                  "[[1;33m→ %12s：[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
 */
-                while (fgets(buf,256,fp))
+                while (fgets(buf, 256, fp))
                 {
                     memset(&rmsg, 0, sizeof(RMSG));
-                    if (!strncmp(buf,"\033[1;32m※",9))
+                    if (!strncmp(buf, "\033[1;32m※", 9))
                         pushstart = 1;
 
                     if (pushstart)
                     {
-                        if (!strncmp(buf,"\033[1;32m※",9))
+                        if (!strncmp(buf, "\033[1;32m※", 9))
                         {
-                            f_cat(tmp,buf);
+                            f_cat(tmp, buf);
                             continue;
                         }
-                        c2 = strrchr(buf,'\n') - 5;
+                        c2 = strrchr(buf, '\n') - 5;
                         strncpy(rmsg.rtime, c2, 5);
 
                         c2 -= 58;
@@ -339,17 +339,17 @@ clean(
                         c2 = strchr(buf, 'm');
                         strncpy(rmsg.verb, c2+1, 2);
 
-                        if ((battr & BRD_PUSHDEFINE) && !strncmp(rmsg.verb,"→",2) )
+                        if ((battr & BRD_PUSHDEFINE) && !strncmp(rmsg.verb, "→", 2) )
                             rmsg.pn = COMMENT;
-                        else if (!strncmp(rmsg.verb,"\033[m\033[1;33",2))
+                        else if (!strncmp(rmsg.verb, "\033[m\033[1;33", 2))
                             rmsg.pn = COMMENT;
                         /*else if (strncmp(buf, "\033[1;33→", 8))
                             rmsg.pn = POSITIVE;*/
                         else
                             rmsg.pn = !strncmp(buf, "\033[1;33", 6);
 
-                        rec_add(recommenddb,&rmsg,sizeof(RMSG));
-//                      if (!strncmp(buf,"\x1b[1;33m→",9))
+                        rec_add(recommenddb, &rmsg, sizeof(RMSG));
+//                      if (!strncmp(buf, "\x1b[1;33m→", 9))
 //                      {
 /*
                             for (i=0;i<12;i++)
@@ -361,13 +361,13 @@ clean(
                             for (i=0;i<5;i++)
                                 rmsg.rtime[i] = buf[i+87];
                             rmsg.rtime[5] = '\0';
-                            rec_add(recommenddb,&rmsg,sizeof(RMSG));
+                            rec_add(recommenddb, &rmsg, sizeof(RMSG));
 */
 //                      }
 
                     }
                     else
-                        f_cat(tmp,buf);
+                        f_cat(tmp, buf);
                 }
                 fclose(fp);
         }
@@ -377,29 +377,29 @@ clean(
     xover(XZ_OTHER);
     free(xoo);
 
-    for (i=0;i<rec_num(recommenddb,sizeof(RMSG));i++)
+    for (i=0;i<rec_num(recommenddb, sizeof(RMSG));i++)
     {
-        rec_get(recommenddb,&rmsg,sizeof(RMSG),i);
+        rec_get(recommenddb, &rmsg, sizeof(RMSG), i);
         if (rmsg.pn == POSITIVE)
         {
             counter++;
-            sprintf(buf,"\x1b[1;33m%2s %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",rmsg.verb,rmsg.userid,rmsg.msg,rmsg.rtime);
+            sprintf(buf, "\x1b[1;33m%2s %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", rmsg.verb, rmsg.userid, rmsg.msg, rmsg.rtime);
         }
         else if (rmsg.pn == NEGATIVE)
         {
             counter--;
-            sprintf(buf,"\x1b[1;31m%2s \033[33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",rmsg.verb,rmsg.userid,rmsg.msg,rmsg.rtime);
+            sprintf(buf, "\x1b[1;31m%2s \033[33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", rmsg.verb, rmsg.userid, rmsg.msg, rmsg.rtime);
         }
         else
         {
-            sprintf(buf,"\033[m\033[1;33m   %12s：\033[36m%-54.54s \033[m%5.5s\n",rmsg.userid,rmsg.msg,rmsg.rtime);
+            sprintf(buf, "\033[m\033[1;33m   %12s：\033[36m%-54.54s \033[m%5.5s\n", rmsg.userid, rmsg.msg, rmsg.rtime);
         }
-        f_cat(tmp,buf);
+        f_cat(tmp, buf);
     }
 
     if (dashf(tmp))
     {
-        sprintf(buf,"mv %s %s",tmp,fpath);
+        sprintf(buf, "mv %s %s", tmp, fpath);
         system(buf);
     }
 
@@ -415,7 +415,7 @@ clean(
     while (pos >= -1)
     {
         lseek(fd, (off_t) (sizeof(HDR) * pos--), SEEK_SET);
-        read(fd,&phdr,sizeof(HDR));
+        read(fd, &phdr, sizeof(HDR));
         if (chrono == phdr.chrono)
             break;
     }
@@ -426,7 +426,7 @@ clean(
         phdr.xmode &= ~POST_RECOMMEND;
         phdr.xid = 0;
         lseek(fd, (off_t) (sizeof(HDR) * pos), SEEK_SET);
-        write(fd,&phdr,sizeof(HDR));
+        write(fd, &phdr, sizeof(HDR));
 //      rec_put(xo->dir, &phdr, sizeof(HDR), pos);
     }
 

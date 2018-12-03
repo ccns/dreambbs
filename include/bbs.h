@@ -70,8 +70,8 @@
 #endif  /* SYSV */
 
 
-#define	BMIN(a,b)	((a<b)?a:b)
-#define	BMAX(a,b)	((a>b)?a:b)
+#define	BMIN(a, b)	((a<b)?a:b)
+#define	BMAX(a, b)	((a>b)?a:b)
 
 /* #define	countof(x)		(sizeof(x)/sizeof(x[0])) */
 

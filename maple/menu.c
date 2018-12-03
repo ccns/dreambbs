@@ -29,8 +29,8 @@ static int
 system_result(void)
 {
     char fpath[128];
-    sprintf(fpath,"brd/%s/@/@vote",brd_sysop);
-    more(fpath,0);
+    sprintf(fpath, "brd/%s/@/@vote", brd_sysop);
+    more(fpath, 0);
     return 0;
 }
 
@@ -39,8 +39,8 @@ static int
 view_login_log(void)
 {
     char fpath[128];
-    usr_fpath(fpath,cuser.userid,FN_LOG);
-    more(fpath,0);
+    usr_fpath(fpath, cuser.userid, FN_LOG);
+    more(fpath, 0);
     return 0;
 }
 
@@ -129,7 +129,7 @@ x_sysload(void)
     char buf[80];
 
     /*load = ushm->sysload;*/
-    getloadavg(load,3);
+    getloadavg(load, 3);
     sprintf(buf, "系統負載 %.2f %.2f %.2f", load[0], load[1], load[2]);
     vmsg(buf);
     return XEASY;
@@ -201,10 +201,10 @@ pad_view(void)
 static void
 pad_draw(void)
 {
-    int i, cc, fdr,len;
+    int i, cc, fdr, len;
     FILE *fpw;
     Pad pad;
-    char *str,str2[300], buf[3][80];
+    char *str, str2[300], buf[3][80];
 
     do
     {
@@ -228,7 +228,7 @@ pad_draw(void)
     strcat(str, " \033[30;46m" + (len & 1));
 
     for (i = len >> 1; i < 41; i++)
-        strcat(str,"▄");
+        strcat(str, "▄");
     sprintf(str2, "\033[34;47m %.14s \033[37;46mΥ\033[m\n%-70.70s\n%-70.70s\n%-70.70s\n",
         Etime(&(pad.tpad)), buf[0], buf[1], buf[2]);
     strcat(str, str2);
@@ -395,7 +395,7 @@ vs_head(
 
 #ifdef	COLOR_HEADER
     prints("\033[1;%2d;37m【%s】%s\033[33m%s\033[1;%2d;37m%s\033[37m看板《%s》\033[m\n",
-        color, title, buf, mid , color, buf + ufo + len, currboard);
+        color, title, buf, mid, color, buf + ufo + len, currboard);
 #else
     prints("\033[1;46;37m【%s】%s\033[33m%s\033[46m%s\033[37m看板《%s》\033[m\n",
         title, buf, mid, buf + ufo + len, currboard);
@@ -521,10 +521,10 @@ static MENU menu_boardadm[] =
     {m_bmset, PERM_BOARD, M_SYSTEM,
     "BMset      設定版主權限"},
 
-    {BanMail,PERM_BOARD|PERM_SYSOP, M_BANMAIL,
+    {BanMail, PERM_BOARD|PERM_SYSOP, M_BANMAIL,
     "FireWall   擋信列表"},
 
-    {"bin/adminutil.so:bm_check",PERM_BOARD|PERM_SYSOP, - M_XMODE,
+    {"bin/adminutil.so:bm_check", PERM_BOARD|PERM_SYSOP, - M_XMODE,
     "Manage     板主確認"},
 
     {"bin/adminutil.so:m_expire", PERM_BOARD|PERM_SYSOP, - M_XMODE,
@@ -552,7 +552,7 @@ static MENU menu_accadm[] =
     "GetMoney   匯入舊夢幣"},
 
 #ifdef	HAVE_SONG
-    {"bin/song.so:AddRequestTimes",PERM_KTV , - M_XMODE,
+    {"bin/song.so:AddRequestTimes", PERM_KTV, - M_XMODE,
     "Addsongs   增加點歌次數"},
 #endif
 
@@ -582,19 +582,19 @@ static MENU menu_settingadm[] =
     {"bin/adminutil.so:m_xhlp", PERM_SYSOP, - M_XFILES,
     "Hlp        編輯說明檔案"},
 
-    {"bin/admin.so:Admin",PERM_SYSOP, - M_XMODE,
+    {"bin/admin.so:Admin", PERM_SYSOP, - M_XMODE,
     "Operator   系統管理員列表"},
 
-    {"bin/chatmenu.so:Chatmenu",PERM_CHATROOM|PERM_SYSOP,- M_XMODE,
+    {"bin/chatmenu.so:Chatmenu", PERM_CHATROOM|PERM_SYSOP, - M_XMODE,
     "Chatmenu   " CHATROOMNAME "動詞"},
 
-    {"bin/violate.so:Violate",PERM_SYSOP,- M_XMODE,
+    {"bin/violate.so:Violate", PERM_SYSOP, - M_XMODE,
     "Violate    處罰名單"},
 
-    {"bin/adminutil.so:special_search",PERM_SYSOP, - M_XMODE,
+    {"bin/adminutil.so:special_search", PERM_SYSOP, - M_XMODE,
     "XSpecial   特殊搜尋"},
 
-    {"bin/adminutil.so:update_all",PERM_SYSOP, - M_XMODE,
+    {"bin/adminutil.so:update_all", PERM_SYSOP, - M_XMODE,
     "Database   系統資料庫更新"},
 
     {menu_admin, PERM_MENU + 'X', M_XMENU,
@@ -729,7 +729,7 @@ static MENU menu_mail[] =
     {mail_sysop, PERM_BASIC, M_SMAIL,
     "Yes Sir!   寄信給站長"},
 
-    {menu_main, PERM_MENU + 'R', M_MMENU,	/* itoc.020829: 怕 guest 沒選項 */
+    {menu_main, PERM_MENU + 'R', M_MMENU, 	/* itoc.020829: 怕 guest 沒選項 */
     "電子郵件"}
 };
 
@@ -797,7 +797,7 @@ static MENU menu_talk[] =
 static MENU menu_information[] =
 {
 
-    {popmax, 0 , M_READA,
+    {popmax, 0, M_READA,
     "Login      上站次數排行榜"},
 
     {today, 0, M_READA,
@@ -828,7 +828,7 @@ static MENU menu_xyz[] =
     menu_information, 0, M_XMENU,
     "Tops       " NICKNAME "排行榜",
 
-    {version,0,M_READA,
+    {version, 0, M_READA,
     "Version    源碼發展資訊"},
 
     {"bin/xyz.so:x_siteinfo", 0, - M_READA,
@@ -877,7 +877,7 @@ static MENU menu_reg[] =
     {u_xfile, PERM_BASIC, M_UFILES,
     "Xfile      編輯個人檔案"},
 
-    {"bin/list.so:List",PERM_VALID,- M_XMODE,
+    {"bin/list.so:List", PERM_VALID, - M_XMODE,
     "1List      群組名單"},
 
     menu_user, PERM_MENU + 'I', M_MMENU,
@@ -900,7 +900,7 @@ static MENU menu_user[] =
     "PNote      個人答錄機"},
 
 #ifdef	HAVE_CLASSTABLEALERT
-    {"bin/classtable2.so:main_classtable",PERM_VALID,-M_XMODE,
+    {"bin/classtable2.so:main_classtable", PERM_VALID, -M_XMODE,
     "2Table     新版個人功\課表"},
 #endif
 
@@ -924,7 +924,7 @@ static MENU menu_service[];
 
 static MENU menu_game[] =
 {
-    {"bin/bj.so:BlackJack",PERM_VALID, - M_XMODE,
+    {"bin/bj.so:BlackJack", PERM_VALID, - M_XMODE,
     "BlackJack  " NICKNAME "黑傑克"},
 
     {"bin/guessnum.so:fightNum", PERM_VALID, - M_XMODE,
@@ -933,10 +933,10 @@ static MENU menu_game[] =
     {"bin/guessnum.so:guessNum", PERM_VALID, - M_XMODE,
     "GuessNum   傻瓜猜數字"},
 
-    {"bin/mine.so:Mine",PERM_VALID, - M_XMODE,
+    {"bin/mine.so:Mine", PERM_VALID, - M_XMODE,
     "Mine       " NICKNAME "踩地雷"},
 
-    {"bin/pip.so:p_pipple",PERM_VALID,- M_XMODE,
+    {"bin/pip.so:p_pipple", PERM_VALID, - M_XMODE,
     "Pip        " NICKNAME "戰鬥雞"},
 
     {menu_service, PERM_MENU + 'F', M_UMENU,
@@ -951,7 +951,7 @@ static MENU menu_game[] =
 static MENU menu_special[] =
 {
 
-    {"bin/personal.so:personal_apply",PERM_VALID, - M_XMODE,
+    {"bin/personal.so:personal_apply", PERM_VALID, - M_XMODE,
     "PBApply      申請個人看板"},
 
     {"bin/bank.so:bank_main", PERM_VALID, - M_XMODE,
@@ -1028,7 +1028,7 @@ static MENU menu_service[] =
     {"bin/newboard.so:XoNewBoard", PERM_VALID, - M_XMODE,
     "Cosign    【 連署申請區 】"},
 
-    {"bin/vote.so:SystemVote" , PERM_POST, - M_XMODE,
+    {"bin/vote.so:SystemVote", PERM_POST, - M_XMODE,
     "Vote      【 系統投票區 】"},
 
     {system_result, 0, M_READA,
@@ -1060,7 +1060,7 @@ sk_windtop_init(void)
 
 MENU skin_main[] =
 {
-    {sk_windtop_init,PERM_SYSOP, M_XMODE,
+    {sk_windtop_init, PERM_SYSOP, M_XMODE,
     "DreamBBS   預設的系統"},
 
     {menu_main, PERM_MENU + 'W', M_MMENU,
@@ -1100,10 +1100,10 @@ static MENU menu_main[] =
 #endif
 
 #ifdef HAVE_SIGNED_MAIL
-    {menu_mail, PERM_BASIC , M_MAIL, /* Thor.990413: 若不用m_verify, guest就沒有選單內容囉 */
+    {menu_mail, PERM_BASIC, M_MAIL, /* Thor.990413: 若不用m_verify, guest就沒有選單內容囉 */
     "Mail      【 信件工具區 】"},
 #else
-    {menu_mail, PERM_BASIC , M_MAIL,
+    {menu_mail, PERM_BASIC, M_MAIL,
     "Mail      【 私人信件區 】"},
 #endif
 
@@ -1118,7 +1118,7 @@ static MENU menu_main[] =
     "Xyz       【 系統資訊區 】"},
 
 #ifdef	HAVE_CHANGE_SKIN
-    {skin_main, PERM_SYSOP,M_XMENU,
+    {skin_main, PERM_SYSOP, M_XMENU,
     "2Skin     【 選擇介面區 】"},
 #endif
 
@@ -1172,13 +1172,13 @@ int count_len(
     char *data)
 {
     int len;
-    char *ptr,*tmp;
+    char *ptr, *tmp;
     ptr = data;
     len = strlen(data);
 
     while (ptr)
     {
-        ptr = strstr(ptr,"\033");
+        ptr = strstr(ptr, "\033");
         if (ptr)
         {
             for (tmp=ptr;*tmp!='m';tmp++);
@@ -1199,7 +1199,7 @@ check_info(char *input)
     char *name = NULL;
     name = input;
 #ifdef	HAVE_INFO
-    if (!strcmp(input,INFO_EMPTY))
+    if (!strcmp(input, INFO_EMPTY))
     {
         brd = bshm->bcache + brd_bno(BRD_BULLETIN);
         if (brd)
@@ -1211,7 +1211,7 @@ check_info(char *input)
     }
 #endif
 #ifdef	HAVE_STUDENT
-    if (!strcmp(input,STUDENT_EMPTY))
+    if (!strcmp(input, STUDENT_EMPTY))
     {
         brd = bshm->bcache + brd_bno(BRD_SBULLETIN);
         if (brd)
@@ -1232,10 +1232,10 @@ menu(void)
 {
     MENU *menu, *mptr, *table[17];
     unsigned int level, mode;
-    int cc=0, cx=0 , refilm=0;	/* current / previous cursor position */
+    int cc=0, cx=0, refilm=0;	/* current / previous cursor position */
     int max=0, mmx;			/* current / previous menu max */
-    int cmd=0, depth,count;
-    char *str,item[60];
+    int cmd=0, depth, count;
+    char *str, item[60];
 
     mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
 #ifdef	TREAT
@@ -1269,7 +1269,7 @@ menu(void)
                 }
                 if (cc && !(cc & level))
                     continue;
-                if (!strncmp(menu->desc,OPT_OPERATOR,strlen(OPT_OPERATOR)) && !(supervisor || !str_cmp(cuser.userid,ELDER) || !str_cmp(cuser.userid,STR_SYSOP)))
+                if (!strncmp(menu->desc, OPT_OPERATOR, strlen(OPT_OPERATOR)) && !(supervisor || !str_cmp(cuser.userid, ELDER) || !str_cmp(cuser.userid, STR_SYSOP)))
                     continue;
 
                 table[++max] = menu;
@@ -1309,7 +1309,7 @@ menu(void)
                 {
                     mptr = table[mode];
                     str = check_info(mptr->desc);
-                    sprintf(item,"\033[m(\033[1;36m%c\033[m)%s",*str,str+1);
+                    sprintf(item, "\033[m(\033[1;36m%c\033[m)%s", *str, str+1);
                     outs(item);
                     item_length[mode]=(cuser.ufo2 & UFO2_COLOR) ? strlen(item)-count_len(str)-2 : 0;
                     /*outs("(\033[1;36m");
@@ -1361,7 +1361,7 @@ menu(void)
             mptr = table[cc];
             cmd = mptr->umode;
 #if 1
-            /* Thor.990212: dynamic load , with negative umode */
+            /* Thor.990212: dynamic load, with negative umode */
             if (cmd < 0)
             {
                 void *p = DL_get(mptr->func);

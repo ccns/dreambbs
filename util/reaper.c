@@ -103,7 +103,7 @@ static SCHEMA schema;
 
 REAPER_TIME reaper_time[] =
 {
-    {701,1002},{117,229},{0,0}
+    {701, 1002}, {117, 229}, {0, 0}
 };
 
 
@@ -117,8 +117,8 @@ logit(
     char *msg)
 {
     FILE *fp;
-    fp = fopen("reaper.debug.log","a+");
-    fprintf(fp,"%s\n",msg);
+    fp = fopen("reaper.debug.log", "a+");
+    fprintf(fp, "%s\n", msg);
     fclose(fp);
 }
 #endif
@@ -236,7 +236,7 @@ eaddr_group(
     char *eaddr)
 {
     int left, right, mid, i;
-    int hash = str_hash(eaddr,0);
+    int hash = str_hash(eaddr, 0);
 
     left = 0;
     right = numC - 1;
@@ -299,12 +299,12 @@ report_eaddr_group(void)
                 off = (j - 1) * sizeof(schema);
                 if (lseek(funo, off, SEEK_SET) < 0)
                 {
-                    fprintf(faddr,"==> %d) can't lseek\n", j);
+                    fprintf(faddr, "==> %d) can't lseek\n", j);
                     continue;
                 }
                 if (read(funo, &s, sizeof(schema)) != sizeof(schema))
                 {
-                    fprintf(faddr,"==> %d) can't read\n", j);
+                    fprintf(faddr, "==> %d) can't read\n", j);
                     continue;
                 }
                 else
@@ -313,25 +313,25 @@ report_eaddr_group(void)
                     char buf[512];
                     if (s.userid[0]<=' ')
                     {
-                        fprintf(faddr,"==> %d) has been reapered\n", j);
+                        fprintf(faddr, "==> %d) has been reapered\n", j);
                         continue;
                     }
                     usr_fpath(buf, s.userid, ".ACCT");
                     fd = open(buf, O_RDONLY, 0);
                     if (fd < 0)
                     {
-                        fprintf(faddr,"==> %d)%-13s can't open\n", j, s.userid);
+                        fprintf(faddr, "==> %d)%-13s can't open\n", j, s.userid);
                         continue;
                     }
                     if (read(fd, &acct, sizeof(acct)) != sizeof(acct))
                     {
-                        fprintf(faddr,"==> %d)%-13s can't read\n", j, s.userid);
+                        fprintf(faddr, "==> %d)%-13s can't read\n", j, s.userid);
                         continue;
                     }
                     close(fd);
 
                     datemsg(buf, &acct.lastlogin);
-                    fprintf(faddr,"%5d) %-13s%s[%d]\t%s\n", acct.userno, acct.userid, buf, acct.numlogins, acct.email);
+                    fprintf(faddr, "%5d) %-13s%s[%d]\t%s\n", acct.userno, acct.userid, buf, acct.numlogins, acct.email);
                 }
             }
         }
@@ -372,8 +372,8 @@ bm_list(                 /* 顯示 userid 是哪些板的板主 */
                     ch = list[len];
                     if ((ch == 0) || (ch == '/'))
                     {
-                        strcat(msg,bhdr->brdname);
-                        strcat(msg," ");
+                        strcat(msg, bhdr->brdname);
+                        strcat(msg, " ");
                         num++;
                         break;
                     }
@@ -417,7 +417,7 @@ reaper(
         return;
     }
     close(fd);
-    fprintf(fmah,"%-13s %-20s %-40.40s\n",acct.userid,acct.realname,acct.email);
+    fprintf(fmah, "%-13s %-20s %-40.40s\n", acct.userid, acct.realname, acct.email);
 
     fd = acct.userno;
 
@@ -451,7 +451,7 @@ reaper(
         {
             if (bshm)
             {
-                num = bm_list(acct.userid,bmlist);
+                num = bm_list(acct.userid, bmlist);
                 fprintf(fbml, "%5d) %-13s%s %-6d %-2d %s\n", fd, acct.userid, buf, login, num, bmlist);
                 bms++;
 #if 0
@@ -541,7 +541,7 @@ reaper(
         else if (!(ulevel & PERM_MBOX))
         {
             char fph[128];
-            usr_fpath(fph,acct.userid,"gem");
+            usr_fpath(fph, acct.userid, "gem");
             f_rm(fph);
         }
 #endif
@@ -585,8 +585,8 @@ traverse(
 static int
 check_vacation(void)
 {
-    struct tm ptime,*xtime;
-    int now,i;
+    struct tm ptime, *xtime;
+    int now, i;
 
     now = time(NULL);
     xtime = localtime((time_t *)&now);
@@ -622,7 +622,7 @@ main(void)
     flog = fopen(FN_REAPER_LOG, "w");
     if (flog == NULL)
         exit(1);
-    fprintf(flog,"\n  UNO) ID                                     \n\n");
+    fprintf(flog, "\n  UNO) ID                                     \n\n");
 
     flst = fopen(FN_MANAGER_LOG, "w");
     if (flst == NULL)
@@ -680,7 +680,7 @@ main(void)
     plist = (int *) malloc((max_uno + 1) * sizeof(int));
     if (!chain || !plist)
     {
-        fprintf(faddr,"out of memory....\n");
+        fprintf(faddr, "out of memory....\n");
         exit(1);
     }
 #endif
@@ -719,7 +719,7 @@ main(void)
     fclose(flst);
     fprintf(fcri, "\n目前系統停權人數: %d\n\n", criminal);
     fclose(fcri);
-    fprintf(fbml, "\n目前擔任夢之大地的板主人數: %d\n\n",bms);
+    fprintf(fbml, "\n目前擔任夢之大地的板主人數: %d\n\n", bms);
     fclose(fbml);
 
     fclose(fmah);

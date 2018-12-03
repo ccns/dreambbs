@@ -139,7 +139,7 @@ Gtime(
 {
     static char datemsg[40];
 
-//  strftime(datemsg,sizeof(datemsg),"%d %b %Y %H:%M:%S GMT",localtime(&now));
+//  strftime(datemsg, sizeof(datemsg), "%d %b %Y %H:%M:%S GMT", localtime(&now));
     strftime(datemsg, sizeof(datemsg), "%d %b %Y %X GMT", gmtime(&now));
     return datemsg;
 }
@@ -723,7 +723,7 @@ changehigh(
 static void
 updaterc(
     newsfeeds_t *nf,
-    int pos,			/* 於 newsfeeds.bbs 裡面的位置 */
+    int pos, 			/* 於 newsfeeds.bbs 裡面的位置 */
     int high)			/* >=0:目前抓到哪一篇 <0:error */
 {
     nf->high = high;

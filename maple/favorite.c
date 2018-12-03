@@ -24,20 +24,20 @@ static int
 favorite_parse(
     char *key)
 {
-    char *str,fpath[128];
+    char *str, fpath[128];
     ClassHeader *chp;
     HDR hdr;
     BRD *bhead, *btail;
-    int i, count,check,count2,count3;
-    FILE *fp,*fw;
+    int i, count, check, count2, count3;
+    FILE *fp, *fw;
     short *reserve;
-    HDR *nop,*zap;
+    HDR *nop, *zap;
 
-    sprintf(fpath,"%s.new",key);
+    sprintf(fpath, "%s.new", key);
     /* build classes */
     bhead = bshm->bcache;
     btail = bhead + bshm->number;
-    if ((fw = fopen(fpath,"w")) == NULL)
+    if ((fw = fopen(fpath, "w")) == NULL)
         return CH_END;
 
     if ((fp = fopen(key, "r")))
@@ -90,7 +90,7 @@ favorite_parse(
                     {
                         check = 1;
                         i = -1;
-                        logitfile(FN_FAVORITE_LOG,"< NUL >",str);
+                        logitfile(FN_FAVORITE_LOG, "< NUL >", str);
                         break;
                     }
                 }
@@ -99,8 +99,8 @@ favorite_parse(
                 {
                     check = 1;
                     reserve[count2++] = i;
-                    //logitfile(FN_FAVORITE_LOG,"< ZAP >",str);
-                    memcpy(&zap[count3++],&hdr,sizeof(HDR));
+                    //logitfile(FN_FAVORITE_LOG, "< ZAP >", str);
+                    memcpy(&zap[count3++], &hdr, sizeof(HDR));
                     continue;
                 }
                 else if (i>=0 && !(brd_bits[i] & BRD_R_BIT))
@@ -108,13 +108,13 @@ favorite_parse(
                     if (!(cuser.userlevel & PERM_VALID))
                     {
                         check = 1;
-                        logitfile(FN_FAVORITE_LOG,"< NOP >",str);
+                        logitfile(FN_FAVORITE_LOG, "< NOP >", str);
                         if (hdr.xid++<20)
-                            memcpy(&nop[count2++],&hdr,sizeof(HDR));
+                            memcpy(&nop[count2++], &hdr, sizeof(HDR));
                     }
                     else
                     {
-                        logitfile(FN_FAVORITE_LOG,"< NOD >",str);
+                        logitfile(FN_FAVORITE_LOG, "< NOD >", str);
                     }
                     continue;
                 }
@@ -132,7 +132,7 @@ favorite_parse(
             fwrite(&hdr, sizeof(HDR), 1, fw);
 
         }
-        memcpy(&(chp->chno[count]),reserve,count3 * sizeof(short));
+        memcpy(&(chp->chno[count]), reserve, count3 * sizeof(short));
         count+=count3;
 
         fclose(fp);
@@ -147,7 +147,7 @@ favorite_parse(
         if (check)
         {
             unlink(key);
-            rename(fpath,key);
+            rename(fpath, key);
         }
         else
         {
@@ -211,17 +211,17 @@ favorite_sort(void)
 void
 favorite_main(void)
 {
-    int chn,i;
+    int chn, i;
     ClassHeader *chp;
     FILE *fp;
     short len, pos[3];
     char fpath[128];
 
-    usr_fpath(fpath,cuser.userid,FN_FAVORITE);
+    usr_fpath(fpath, cuser.userid, FN_FAVORITE);
     favorite_sort();
     chn = favorite_parse(fpath);
 
-    usr_fpath(fpath,cuser.userid,FN_FAVORITE_IMG);
+    usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
     unlink(fpath);
     if (chn < 1)  /* visor.990106: 尚沒有我的最愛 */
         return;

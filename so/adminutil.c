@@ -724,7 +724,7 @@ m_xfile(void)
 {
     static char *desc[] =
     {
-        "重要公告",		/* lkchu.990510: edit ~/etc/announce online */
+        "重要公告", 		/* lkchu.990510: edit ~/etc/announce online */
         "不雅名單",
         "修改 Email",
         "新手上路須知",
@@ -734,7 +734,7 @@ m_xfile(void)
         "廣告/垃圾信名單",         /* lkchu.981201: 線上編輯 mail.acl */
         "允許\註冊名單",
         "禁止上站位置",
-        "不信任名單",		/* pcbug.990806: edit ~/etc/untrust */
+        "不信任名單", 		/* pcbug.990806: edit ~/etc/untrust */
         "情書產生器",
         "程式版本",
         "歷史上的一刻",

@@ -4,7 +4,7 @@
 int main(void)
 {
     char t[]="Hello";
-    str_xor(t,"he3");
+    str_xor(t, "he3");
     return 0;
 }
 

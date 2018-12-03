@@ -248,7 +248,7 @@ typedef struct
     ftattr  attr;
     int     rows, cols;
     int     y, x;
-    int     sy,sx;  // stored cursor
+    int     sy, sx;  // stored cursor
     int     mi;     // map index, mi = current map and (1-mi) = old map
     int     dirty;
     int     scroll;
@@ -294,7 +294,7 @@ static FlatTerm ft;
 #define FTATTR_BLINK    (0x80)
 #define FTATTR_DEFAULT_FG   (FTATTR_GETFG(FTATTR_DEFAULT))
 #define FTATTR_DEFAULT_BG   (FTATTR_GETBG(FTATTR_DEFAULT))
-#define FTATTR_MAKE(f,b)    (((f)<<FTATTR_FGSHIFT)|((b)<<FTATTR_BGSHIFT))
+#define FTATTR_MAKE(f, b)    (((f)<<FTATTR_FGSHIFT)|((b)<<FTATTR_BGSHIFT))
 #define FTCHAR_ISBLANK(x)   ((x) == (FTCHAR_BLANK))
 
 #define FTCMAP  ft.cmap[ft.mi]
@@ -328,18 +328,18 @@ static FlatTerm ft;
     (((unsigned char)(x))>=' ' && ((unsigned char)(x))<0x80)
 
 #ifndef min
-#define min(x,y) (((x)<(y))?(x):(y))
+#define min(x, y) (((x)<(y))?(x):(y))
 #endif
 
 #ifndef max
-#define max(x,y) (((x)>(y))?(x):(y))
+#define max(x, y) (((x)>(y))?(x):(y))
 #endif
 
 #ifndef abs
 #define abs(x) (((x)>0)?(x):-(x))
 #endif
 
-#define ranged(x,vmin,vmax) (max(min(x,vmax),vmin))
+#define ranged(x, vmin, vmax) (max(min(x, vmax), vmin))
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -365,16 +365,16 @@ void    getmaxyx    (int *y, int *x);
 void    move        (int y, int x);
 
 // clear
-void    clear       (void); // clrscr + move(0,0)
+void    clear       (void); // clrscr + move(0, 0)
 void    clrtoeol    (void); // end of line
 void    clrtobot    (void);
 // clear (non-ncurses)
-void    clrtoln     (int ln); // clear down to ln ( excluding ln, as [y,ln) )
+void    clrtoln     (int ln); // clear down to ln ( excluding ln, as [y, ln) )
 void    clrcurln    (void); // whole line
 void    clrtobeg    (void); // begin of line
 void    clrtohome   (void);
 void    clrscr      (void); // clear and keep cursor untouched
-void    clrregion   (int r1, int r2); // clear [r1,r2], bi-directional.
+void    clrregion   (int r1, int r2); // clear [r1, r2], bi-directional.
 
 // window control
 void    newwin      (int nlines, int ncols, int y, int x);
@@ -649,7 +649,7 @@ void
 clear(void)
 {
     clrscr();
-    move(0,0);
+    move(0, 0);
 }
 
 void
@@ -820,7 +820,7 @@ doupdate(void)
         for (x = 0; x < ft.cols; x++)
         {
             WORD xAttr = FTAMAP[y][x], xxAttr;
-            // w32 attribute: bit swap (0,2) and (4, 6)
+            // w32 attribute: bit swap (0, 2) and (4, 6)
             xxAttr = xAttr & 0xAA;
             if (xAttr & 0x01) xxAttr |= 0x04;
             if (xAttr & 0x04) xxAttr |= 0x01;
@@ -847,7 +847,7 @@ doupdate(void)
 
         // reset dirty and display map
         memset(FTD, 0,          ft.cols * sizeof(ftchar));
-        memcpy(FTDC,FTCMAP[y],  ft.cols * sizeof(ftchar));
+        memcpy(FTDC, FTCMAP[y],  ft.cols * sizeof(ftchar));
 
         // first run: character diff
         for (x = 0; x < len; x++)
@@ -1509,7 +1509,7 @@ fterm_prepare_str(int len)
 
     // TODO what if x+len is outside range?
 
-    // check if (x,y) is in valid range
+    // check if (x, y) is in valid range
     if (x != ft.x || y != ft.y)
         return -1;
 
@@ -2179,7 +2179,7 @@ fterm_rawscroll (int dy)
     //
     // SCP: CSI s / RCP: CSI u
     // Warning: cannot use SCP/RCP here, because on Win/DOS telnet
-    // the position will change after scrolling (ex, (25,0)->(24,0).
+    // the position will change after scrolling (ex, (25, 0)->(24, 0).
     //
     // Since scroll does not happen very often, let's relax and not
     // optimize these commands here...
@@ -2189,7 +2189,7 @@ fterm_rawscroll (int dy)
         return;
     if (ady >= ft.rows) ady = ft.rows;
 
-    // we are not going to preserve (rx,ry)
+    // we are not going to preserve (rx, ry)
     // so don't use fterm_move*.
     if (dy > 0)
         fterm_rawcmd2(ft.rows, 1, 1, 'H');
@@ -2275,7 +2275,7 @@ grayout(int y, int end, int level)
             break;
 
         case GRAYOUT_DARK:
-            grattr = FTATTR_MAKE(0,0);
+            grattr = FTATTR_MAKE(0, 0);
             grattr |= FTATTR_BOLD;
             break;
 
@@ -2466,7 +2466,7 @@ int main(int argc, char* argv[])
         move(0, 8);
         inansistr(buf, sizeof(buf)-1);
 
-        move(3,5); outs(ANSI_RESET "(From inansistr:) "); outs(buf);
+        move(3, 5); outs(ANSI_RESET "(From inansistr:) "); outs(buf);
         move(7, 3);
         sprintf(buf, "strlen()=%d\n", fterm_strdlen(a1));
         outstr(buf);
@@ -2492,19 +2492,19 @@ int main(int argc, char* argv[])
         clear(); move(1, 0); outs("test resize\n");
         doupdate(); getchar();
         // expand X
-        resizeterm(25,200);
+        resizeterm(25, 200);
         clear(); move(20, 0); clrtoeol(); outs("200x25");
         doupdate(); getchar();
         // resize back
-        resizeterm(25,80);
+        resizeterm(25, 80);
         clear(); move(20, 0); clrtoeol(); outs("80x25");
         doupdate(); getchar();
         // expand Y
-        resizeterm(60,80);
+        resizeterm(60, 80);
         clear(); move(20, 0); clrtoeol(); outs("80x60");
         doupdate(); getchar();
         // see if you crash here.
-        resizeterm(60,200);
+        resizeterm(60, 200);
         clear(); move(20, 0); clrtoeol(); outs("200x60");
         doupdate(); getchar();
 #endif

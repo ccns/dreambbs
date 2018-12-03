@@ -51,7 +51,7 @@ reaper(
 /*  acct.request = 10;*/
 /*  acct.stay_min = 0;*/
     if (acct.request > 22)
-        printf("%s : %d\n",acct.userid,acct.request);
+        printf("%s : %d\n", acct.userid, acct.request);
 /*  acct_save(&acct);*/
 
 }

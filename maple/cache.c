@@ -244,7 +244,7 @@ utmp_free(void)
     sem_lock(BSEM_ENTER);
 #endif
 
-    memset(uentp,0,sizeof(UTMP));
+    memset(uentp, 0, sizeof(UTMP));
 /*  uentp->pid = uentp->userno = 0;*/
     ushm->count--;
 
@@ -369,7 +369,7 @@ void
 classtable_free(void)
 {
     int pos;
-    while ( (pos = rec_loc(FN_CLASSTABLE_DB,sizeof(CLASS_TABLE_ALERT), (void *)cmpclasstable)) >= 0)
+    while ( (pos = rec_loc(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), (void *)cmpclasstable)) >= 0)
         rec_del(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), pos, (void *)cmpclasstable, NULL);
 }
 
@@ -382,11 +382,11 @@ classtable_main(void)
     char fpath[128];
     CLASS_TABLE_ALERT tmp;
 
-    memset(&tmp,0,sizeof(CLASS_TABLE_ALERT));
+    memset(&tmp, 0, sizeof(CLASS_TABLE_ALERT));
 
     tmp.userno = cuser.userno;
 
-    usr_fpath(fpath,cuser.userid,FN_CLASSTABLE2);
+    usr_fpath(fpath, cuser.userid, FN_CLASSTABLE2);
 
     if ((fd = open(fpath, O_RDWR, 0600)) < 0)
         return;
@@ -401,8 +401,8 @@ classtable_main(void)
         {
             if (pbase[i].valid)
             {
-                strcpy(tmp.item[i].condensation,pbase[i].condensation);
-                strcpy(tmp.item[i].room,pbase[i].room);
+                strcpy(tmp.item[i].condensation, pbase[i].condensation);
+                strcpy(tmp.item[i].room, pbase[i].room);
                 tmp.item[i].used = 1;
             }
         }
@@ -592,13 +592,13 @@ observeshm_find(
 void
 observeshm_load(void)
 {
-    OBSERVE *head,*tail;
+    OBSERVE *head, *tail;
     int size;
     char *fimage;
 
     size = 0;
     oshm->total = 0;
-    memset(oshm->userno,0,sizeof(int)*MAXOBSERVELIST);
+    memset(oshm->userno, 0, sizeof(int)*MAXOBSERVELIST);
     fimage = f_img(FN_ETC_OBSERVE, &size);
     if (fimage)
     {
@@ -647,11 +647,11 @@ void
 count_load(void)
 {
     COUNTER *head;
-    int fw,size;
+    int fw, size;
     struct stat st;
 
     head = curcount;
-    if ((fw = open(FN_VAR_SYSHISTORY,O_RDONLY)))
+    if ((fw = open(FN_VAR_SYSHISTORY, O_RDONLY)))
     {
 
         if (!fstat(fw, &st) && (size = st.st_size) > 0)
@@ -683,14 +683,14 @@ static int
 cmpban(
     BANMAIL *ban)
 {
-    return !strcmp(ban->data,curfw->data);
+    return !strcmp(ban->data, curfw->data);
 }
 
 void
 fwshm_load(void)
 {
-    BANMAIL *head,data;
-    int fw,size,pos;
+    BANMAIL *head, data;
+    int fw, size, pos;
     struct stat st;
 
     head = fwshm->fwcache;
@@ -698,7 +698,7 @@ fwshm_load(void)
     while (*head->data)
     {
         curfw = head;
-        pos = rec_loc(FN_ETC_BANMAIL_ACL,sizeof(BANMAIL),cmpban);
+        pos = rec_loc(FN_ETC_BANMAIL_ACL, sizeof(BANMAIL), cmpban);
         if (pos >= 0)
         {
             rec_get(FN_ETC_BANMAIL_ACL, &data, sizeof(BANMAIL), pos);
@@ -710,7 +710,7 @@ fwshm_load(void)
     }
 
     head = fwshm->fwcache;
-    fw = open(FN_ETC_BANMAIL_ACL,O_RDONLY);
+    fw = open(FN_ETC_BANMAIL_ACL, O_RDONLY);
     fstat(fw, &st);
 
     if (!fstat(fw, &st) && (size = st.st_size) > 0)
@@ -761,12 +761,12 @@ out_rle(
     unsigned char *t_name = cuser.userid;
     unsigned char *t_nick = cuser.username;
 #endif
-    int x,y/*,count=0*/;
+    int x, y/*, count=0*/;
     int cc, rl;
 
     if (film)
-        move(1,0/*item_length[count++]*/);
-        //move(3,36+item_length[count++]);
+        move(1, 0/*item_length[count++]*/);
+        //move(3, 36+item_length[count++]);
     while ((cc = *str))
     {
         str++;
@@ -780,7 +780,7 @@ out_rle(
             {
                 if (cc=='\n' && film)
                 {
-                    getyx(&y,&x);
+                    getyx(&y, &x);
                     outs("\033[m\0");
                     clrtoeol();
                     move(y + 1, 0/*item_length[count++]*/);
@@ -808,7 +808,7 @@ out_rle(
         }
         if (cc=='\n' && film)
         {
-            getyx(&y,&x);
+            getyx(&y, &x);
             outs("\033[m\0");
             clrtoeol();
             move(y + 1, 0/*item_length[count++]*/);
@@ -871,11 +871,11 @@ film_out(
 
     if (tag > FILM_MOVIE)          /* FILM_MOVIE */
     {
-        out_rle(buf,1);
+        out_rle(buf, 1);
     }
     else
     {
-        out_rle(buf,0);
+        out_rle(buf, 0);
     }
 
     if (row < 0)			/* help screen */

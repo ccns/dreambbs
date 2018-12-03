@@ -37,9 +37,9 @@ reaper(
     }
     close(fd);
 
-    if (!strcmp(acct.email,kmail))
+    if (!strcmp(acct.email, kmail))
     {
-        fprintf(flog,"%-13s\n",acct.userid);
+        fprintf(flog, "%-13s\n", acct.userid);
         total++;
     }
 }
@@ -81,7 +81,7 @@ same_mail2(
     kmail = mail;
     total = 0;
 
-    sprintf(fpath,"%s.%s",FN_SAMEEMAIL_LOG,file);
+    sprintf(fpath, "%s.%s", FN_SAMEEMAIL_LOG, file);
 
     flog = fopen(fpath, "w");
     if (flog == NULL)
@@ -195,14 +195,14 @@ seek_log_email(
     char *mail)
 {
     EMAIL email;
-    int pos=0,fd;
+    int pos=0, fd;
     fd = open(FN_VIOLATELAW_DB, O_RDONLY);
     while (fd)
     {
         lseek(fd, (off_t) (sizeof(email) * pos), SEEK_SET);
         if (read(fd, &email, sizeof(email)) == sizeof(email))
         {
-            if (!strcmp(email.email,mail))
+            if (!strcmp(email.email, mail))
             {
                 close(fd);
                 return pos;
@@ -237,8 +237,8 @@ deny_log_email(
     }
     else
     {
-        memset(&email,0,sizeof(email));
-        strcpy(email.email,mail);
+        memset(&email, 0, sizeof(email));
+        strcpy(email.email, mail);
         email.deny = deny;
         rec_add(FN_VIOLATELAW_DB, &email, sizeof(EMAIL));
     }
@@ -260,8 +260,8 @@ deny_add_email(
     sprintf(buf, "%s # %02d/%02d/%02d %02d:%02d %s (%s)\n",
         he->vmail,
         p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
-        p->tm_hour, p->tm_min, "停權" ,exer);
-    f_cat(FN_ETC_UNTRUST_ACL,buf);
+        p->tm_hour, p->tm_min, "停權", exer);
+    f_cat(FN_ETC_UNTRUST_ACL, buf);
 }
 
 static int
@@ -276,17 +276,17 @@ add_deny_exer(
     ACCT x;
     time_t now;
     int check_time;
-    char *cselect=NULL,*cdays=NULL,*cmode=NULL;
+    char *cselect=NULL, *cdays=NULL, *cmode=NULL;
 
     memcpy(&x, u, sizeof(ACCT));
     time(&now);
     check_time = (x.deny > now) ? 1 : 0;
 
-    if (!strncmp(u->justify,"reg:",4))
+    if (!strncmp(u->justify, "reg:", 4))
         adm = (adm & ~DENY_MODE_ALL)|DENY_MODE_GUEST;
 
     unlink(FN_STOP_LOG);
-    fp = fopen(FN_STOP_LOG,"w");
+    fp = fopen(FN_STOP_LOG, "w");
     if (adm & DENY_SEL_OK)
     {
         x.deny = now;
@@ -301,7 +301,7 @@ add_deny_exer(
         else if (adm & DENY_SEL_MAIL) cselect = "散發連鎖信";
         else if (adm & DENY_SEL_AD)   cselect = "散發廣告信";
         else if (adm & DENY_SEL_SELL) cselect = "販賣非法事物";
-        fprintf(fp,"查 %s 違反站規%s，依站規停止",u->userid,cselect);
+        fprintf(fp, "查 %s 違反站規%s，依站規停止", u->userid, cselect);
     }
     if ((adm & (DENY_MODE_ALL)) && !(adm & DENY_MODE_GUEST))
     {
@@ -330,7 +330,7 @@ add_deny_exer(
             x.userlevel |= (PERM_DENYNICK);
             cmode = "更改暱稱";
         }
-        fprintf(fp,"%s權限",cmode);
+        fprintf(fp, "%s權限", cmode);
     }
     if (adm & DENY_MODE_GUEST)
     {
@@ -338,8 +338,8 @@ add_deny_exer(
         x.userlevel &= ~(PERM_BASIC | PERM_VALID);
         x.deny += 86400 * 31;
         cmode = " Talk、Mail、\nPost、更改暱稱";
-        fprintf(fp,"%s權限，權限降至 guest，永不復權，並保留帳號，\n其 E-mail：%s 永不得在本站註冊。\n\n",cmode,u->vmail[0] ? u->vmail : "[無認證信箱]");
-        deny_add_email(u,exer);
+        fprintf(fp, "%s權限，權限降至 guest，永不復權，並保留帳號，\n其 E-mail：%s 永不得在本站註冊。\n\n", cmode, u->vmail[0] ? u->vmail : "[無認證信箱]");
+        deny_add_email(u, exer);
     }
     if ((adm & DENY_DAYS) && !(adm & DENY_MODE_GUEST))
     {
@@ -348,21 +348,21 @@ add_deny_exer(
         else if (adm & DENY_DAYS_3) { cdays = "參星期";x.deny = now + 86400 * 21;}
         else if (adm & DENY_DAYS_4) { cdays = "一個月";x.deny = now + 86400 * 31;}
         else if (adm & DENY_DAYS_5) { cdays = "";x.deny = now + 86400 * 31;x.userlevel |= PERM_DENYSTOP;}
-        fprintf(fp,"%s\n",cdays);
+        fprintf(fp, "%s\n", cdays);
         if (adm & DENY_DAYS_5)
-            fprintf(fp,"期間: 永不復權。\n\n");
+            fprintf(fp, "期間: 永不復權。\n\n");
         else
-            fprintf(fp,"期間: %s%s，期限一過自動復權。\n\n",check_time ? "上次處罰到期日累加":"從今天起",cdays);
+            fprintf(fp, "期間: %s%s，期限一過自動復權。\n\n", check_time ? "上次處罰到期日累加":"從今天起", cdays);
     }
-    fprintf(fp,"\033[1;32m※ Origin: \033[1;33m%s \033[1;37m<%s>\n\033[1;31m◆ From: \033[1;36m%s\033[m\n",BOARDNAME,MYHOSTNAME,MYHOSTNAME);
+    fprintf(fp, "\033[1;32m※ Origin: \033[1;33m%s \033[1;37m<%s>\n\033[1;31m◆ From: \033[1;36m%s\033[m\n", BOARDNAME, MYHOSTNAME, MYHOSTNAME);
 
     fclose(fp);
-    sprintf(buf, "[%s處罰] %s %s",cross ? "連坐":"", u->userid,cselect);
+    sprintf(buf, "[%s處罰] %s %s", cross ? "連坐":"", u->userid, cselect);
     keeplog(FN_STOP_LOG, BRD_VIOLATELAW, buf, 3);
-    usr_fpath(buf,x.userid,FN_STOPPERM_LOG);
+    usr_fpath(buf, x.userid, FN_STOPPERM_LOG);
     unlink(buf);
-    fp = fopen(buf,"a+");
-    f_suck(fp,FN_STOP_LOG);
+    fp = fopen(buf, "a+");
+    f_suck(fp, FN_STOP_LOG);
     fclose(fp);
 
 
@@ -380,7 +380,7 @@ setup(
     char *exer,
     char *file)
 {
-    ACCT x,*u;
+    ACCT x, *u;
     int i, num;
     FILE *flog;
     char buf[80];
@@ -388,9 +388,9 @@ setup(
 
     u = &x;
 
-    sprintf(fpath,"%s.%s",FN_SAMEEMAIL_LOG,file);
+    sprintf(fpath, "%s.%s", FN_SAMEEMAIL_LOG, file);
 
-    num = same_mail2(email,file);
+    num = same_mail2(email, file);
     flog = fopen(fpath, "r");
 
     if (!flog)
@@ -398,20 +398,20 @@ setup(
 
     for (i=1;i<=num;i++)
     {
-        fscanf(flog,"%13s",buf);
-        acct_load(u,buf);
+        fscanf(flog, "%13s", buf);
+        acct_load(u, buf);
 
         if (u != NULL)
         {
-            if (strcmp(u->userid,id))
-                add_deny_exer(u,mode,1,exer);
+            if (strcmp(u->userid, id))
+                add_deny_exer(u, mode, 1, exer);
             else
-                add_deny_exer(u,mode,NULL,exer);
+                add_deny_exer(u, mode, NULL, exer);
         }
     }
 
     if (mode & DENY_MODE_ALL)
-        deny_log_email(email,(x.userlevel & PERM_DENYSTOP) ? -1 : x.deny);
+        deny_log_email(email, (x.userlevel & PERM_DENYSTOP) ? -1 : x.deny);
     fclose(flog);
     unlink(fpath);
 }
@@ -427,8 +427,8 @@ main(
     char buf[256];
     if (argc > 5 )
     {
-        setup(argv[1],argv[2],atoi(argv[3]),argv[4],argv[5]);
-        sprintf(buf,"mail %s.bbs@" MYHOSTNAME " < " FN_STOPPERM_MAIL,argv[4]);
+        setup(argv[1], argv[2], atoi(argv[3]), argv[4], argv[5]);
+        sprintf(buf, "mail %s.bbs@" MYHOSTNAME " < " FN_STOPPERM_MAIL, argv[4]);
         system(buf);
     }
     else

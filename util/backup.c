@@ -33,8 +33,8 @@ log_backup(
 
     chdir(BBSHOME);
 
-    fp = fopen("run/backup.log_backup","a+");
-    fprintf(fp,"%24.24s %s\n",ctime(&now),msg);
+    fp = fopen("run/backup.log_backup", "a+");
+    fprintf(fp, "%24.24s %s\n", ctime(&now), msg);
 
     fclose(fp);
 
@@ -61,7 +61,7 @@ proceed(
         if (fname[0] > ' ' && fname[0] != '.')
         {
             //strcpy(str, fname);
-            sprintf(cmd,"tar zcf %s/usr/usr%02d%02d/%c/%s.tgz %s", bk_path, mon, mday, *fname, fname, fname);
+            sprintf(cmd, "tar zcf %s/usr/usr%02d%02d/%c/%s.tgz %s", bk_path, mon, mday, *fname, fname, fname);
             system(cmd);
         }
     }
@@ -72,33 +72,33 @@ static void
 bk_usr(
     int day)
 {
-    char start[4] = {'a','e','l','s'}, end[4] = {'d','k','r','z'};
+    char start[4] = {'a', 'e', 'l', 's'}, end[4] = {'d', 'k', 'r', 'z'};
     char buf[256], fpath[256], *fname;
     char ch;
 
     chdir(BBSHOME);
 
-    sprintf(buf,"usr %c-%c backup start", start[day], end[day]);
+    sprintf(buf, "usr %c-%c backup start", start[day], end[day]);
     log_backup(buf);
 
     strcpy(fname = fpath, "usr/@");
     fname = (char *) strchr(fname, '@');
 
-    sprintf(buf, "%s/usr/usr%02d%02d",bk_path, mon, mday);
+    sprintf(buf, "%s/usr/usr%02d%02d", bk_path, mon, mday);
     mkdir (buf, 0700);
 
     for (ch = start[day]; ch <= end[day]; ch++)
     {
         fname[0] = ch;
         fname[1] = '\0';
-        sprintf(buf,"%s/usr/usr%02d%02d/%c",bk_path, mon, mday, ch);
+        sprintf(buf, "%s/usr/usr%02d%02d/%c", bk_path, mon, mday, ch);
         mkdir(buf, 0700);
-        sprintf(buf,"%s/%s",BBSHOME,fpath);
+        sprintf(buf, "%s/%s", BBSHOME, fpath);
         chdir(buf);
         proceed(fpath);
     }
 
-    sprintf(buf,"usr %c-%c backup complete", start[day], end[day]);
+    sprintf(buf, "usr %c-%c backup complete", start[day], end[day]);
     log_backup(buf);
 
 }
@@ -121,7 +121,7 @@ bk_brd(
     if (chdir(BBSHOME "/brd") || !(dirp = opendir(".")))
         return;
 
-    sprintf(cmd,"brd %s backup start",(day == 4) ? "#-k" : "l-z");
+    sprintf(cmd, "brd %s backup start", (day == 4) ? "#-k" : "l-z");
     log_backup(cmd);
 
     sprintf(cmd, "%s/brd/brd%02d%02d", bk_path, mon, mday);
@@ -138,7 +138,7 @@ bk_brd(
             if ((day == 4 && ((ptr[0] >= '0' && ptr[0] <= '9') || (ptr[0] >= 'a' && ptr[0] <= 'k') || (ptr[0] >= 'A' && ptr[0] <= 'K'))) ||
                 (day == 5 && ((ptr[0] >= 'l' && ptr[0] <= 'z') || (ptr[0] >= 'L' && ptr[0] <= 'Z'))))
             {
-                sprintf(cmd,"tar zvcf %s/brd/brd%02d%02d/%s.tgz %s",bk_path, mon, mday, ptr, ptr);
+                sprintf(cmd, "tar zvcf %s/brd/brd%02d%02d/%s.tgz %s", bk_path, mon, mday, ptr, ptr);
                 system(cmd);
             }
             else
@@ -147,7 +147,7 @@ bk_brd(
     }
     closedir(dirp);
 
-    sprintf(cmd,"brd %s backup complete",(day == 4) ? "#-k" : "l-z");
+    sprintf(cmd, "brd %s backup complete", (day == 4) ? "#-k" : "l-z");
     log_backup(cmd);
 }
 
@@ -176,7 +176,7 @@ bk_gem(void)
 
         if (ptr[0] > ' ' && ptr[0] != '.')
         {
-            sprintf(cmd,"tar zcf %s/gem/gem%02d%02d/%s.tgz %s",bk_path, mon, mday, ptr, ptr);
+            sprintf(cmd, "tar zcf %s/gem/gem%02d%02d/%s.tgz %s", bk_path, mon, mday, ptr, ptr);
             system(cmd);
         }
     }
@@ -187,49 +187,49 @@ bk_gem(void)
 static void
 bk_system_src(void)
 {
-    char system_folders[5][9] = {"bin","etc","innd","newboard","dreambbs"};
-    char path[64],cmd[256];
+    char system_folders[5][9] = {"bin", "etc", "innd", "newboard", "dreambbs"};
+    char path[64], cmd[256];
     int i;
 
     chdir(BBSHOME);
 
     log_backup("system backup start");
 
-    sprintf(path,"%s/system/system%02d%02d",bk_path, mon, mday);
+    sprintf(path, "%s/system/system%02d%02d", bk_path, mon, mday);
     mkdir(path, 0755);
 
-    sprintf(cmd,"gzip -c .USR > %s/USR.gz", path);
+    sprintf(cmd, "gzip -c .USR > %s/USR.gz", path);
     system(cmd);
 
-    sprintf(cmd,"gzip -c .BRD > %s/BRD.gz", path);
+    sprintf(cmd, "gzip -c .BRD > %s/BRD.gz", path);
     system(cmd);
 
     for (i=0;i<5;i++)
     {
-        sprintf(cmd,"tar zcf %s/%s.tgz %s", path, system_folders[i], system_folders[i]);
+        sprintf(cmd, "tar zcf %s/%s.tgz %s", path, system_folders[i], system_folders[i]);
         system(cmd);
     }
 
-    sprintf(cmd,"touch %s/gem.tar", path);
+    sprintf(cmd, "touch %s/gem.tar", path);
     system(cmd);
-    sprintf(cmd,"tar rvf %s/gem.tar gem/.DIR", path);
+    sprintf(cmd, "tar rvf %s/gem.tar gem/.DIR", path);
     system(cmd);
-    sprintf(cmd,"tar rvf %s/gem.tar gem/.GEM", path);
+    sprintf(cmd, "tar rvf %s/gem.tar gem/.GEM", path);
     system(cmd);
     for (i = '0' ; i <= '9' ; i++)
     {
-        sprintf(cmd,"tar rvf %s/gem.tar gem/%c", path,i);
+        sprintf(cmd, "tar rvf %s/gem.tar gem/%c", path, i);
         system(cmd);
     }
     for (i = 'A' ; i <= 'V' ; i++)
     {
-        sprintf(cmd,"tar rvf %s/gem.tar gem/%c", path,i);
+        sprintf(cmd, "tar rvf %s/gem.tar gem/%c", path, i);
         system(cmd);
     }
-    sprintf(cmd,"tar rvf %s/gem.tar gem/@",path);
+    sprintf(cmd, "tar rvf %s/gem.tar gem/@", path);
     system(cmd);
 
-    sprintf(cmd,"gzip -9 %s/gem.tar",path);
+    sprintf(cmd, "gzip -9 %s/gem.tar", path);
     system(cmd);
 
     log_backup("system backup complete");

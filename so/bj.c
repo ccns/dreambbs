@@ -1,6 +1,6 @@
 #include "bbs.h"
 #include "gamef.c"
-#define SWAP(x,y) do {int temp=(x);(x)=(y);(y)=temp;} while (0)
+#define SWAP(x, y) do {int temp=(x);(x)=(y);(y)=temp;} while (0)
 
 /* 黑傑克遊戲 */
 
@@ -148,7 +148,7 @@ BlackJack(void)
                 cuser_money += (money * seven);
 //              inmoney(money*seven);
                 game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;31m  ７７７   \x1b[m"
-                         , money*seven);
+                        , money*seven);
                 pressanykey("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
                 flag = 1;m = 0;
             }
@@ -159,7 +159,7 @@ BlackJack(void)
                 move(3, 0);prints("\x1b[1;41;33m超級正統 BLACK JACK !!! 得獎金 %d 金幣\x1b[m", money*super_jack);
                 cuser_money += (money * super_jack);
                 game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;41;33m 正統 ＡＪ \x1b[m"
-                         , money*super_jack);
+                        , money*super_jack);
                 pressanykey("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
                 flag = 1;m = 0;
             }
@@ -183,7 +183,7 @@ BlackJack(void)
                 move(3, 0);prints("\x1b[1;41;33mBLACK JACK !!!\x1b[44m 得獎金 %d 金幣\x1b[m", money*win_jack);
                 cuser_money += (money * win_jack);
 //              inmoney(money*win_jack);
-                move(0, 0);clrtoeol();//prints("您還有 \x1b[1;44;33m%d\x1b[m 金幣",cuser.money);
+                move(0, 0);clrtoeol();//prints("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser.money);
                 if (money*win_jack >= 500000)
                 {
                     game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;47;30m BlackJack \x1b[m", money*win_jack);

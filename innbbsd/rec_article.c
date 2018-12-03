@@ -528,7 +528,7 @@ receive_article(void)
         }
 
         bbspost_add(nf->board, myaddr, mynick);
-    }		/* for board1,board2,... */
+    }		/* for board1, board2, ... */
 
     return 0;
 }

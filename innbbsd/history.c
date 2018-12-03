@@ -97,7 +97,7 @@ HISadd(	/* 將 (msgid, path, xname) 此配對記錄在 history 中 */
 int				/* 1:在history中 0:不在history中 */
 HISfetch(	/* 查詢 history 中，msgid 發表去了哪裡 */
     char *msgid,
-    char *board,			/* 傳出在 history 中的記錄的看板及檔名 */
+    char *board, 			/* 傳出在 history 中的記錄的看板及檔名 */
     char *xname)
 {
     HIS his;

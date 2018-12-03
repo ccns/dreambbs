@@ -28,12 +28,12 @@ banmail_item(
 {
     time_t now;
     char modes[7];
-    sprintf(modes,"%c%c%c%c%c%c",(ban->mode&FW_OWNER)?'1':'0',(ban->mode&FW_TITLE)?'1':'0',
-            (ban->mode&FW_TIME)?'1':'0',(ban->mode&FW_PATH)?'1':'0',
-            (ban->mode&FW_ORIGIN)?'1':'0',(ban->mode&FW_CANCEL)?'1':'0');
+    sprintf(modes, "%c%c%c%c%c%c", (ban->mode&FW_OWNER)?'1':'0', (ban->mode&FW_TITLE)?'1':'0',
+            (ban->mode&FW_TIME)?'1':'0', (ban->mode&FW_PATH)?'1':'0',
+            (ban->mode&FW_ORIGIN)?'1':'0', (ban->mode&FW_CANCEL)?'1':'0');
 
     now = ((ban->time - time(0) + BANMAIL_EXPIRE*86400)/3600);
-    prints("%6d  %6d %6d %s  %-48.48s\n", num, ban->usage, now < 0 ? 0 : now,modes,ban->data);
+    prints("%6d  %6d %6d %s  %-48.48s\n", num, ban->usage, now < 0 ? 0 : now, modes, ban->data);
 }
 
 static int
@@ -150,19 +150,19 @@ banmail_edit(
     int echo)
 {
     int change = 0;
-    char modes[8],buf[64];
+    char modes[8], buf[64];
 
     if (echo == DOECHO)
         memset(banmail, 0, sizeof(BANMAIL));
 
-    sprintf(modes,"%c%c%c%c%c%c",(banmail->mode&FW_OWNER)?'1':'0',(banmail->mode&FW_TITLE)?'1':'0',
-            (banmail->mode&FW_TIME)?'1':'0',(banmail->mode&FW_PATH)?'1':'0',
-            (banmail->mode&FW_ORIGIN)?'1':'0',(banmail->mode&FW_CANCEL)?'1':'0');
+    sprintf(modes, "%c%c%c%c%c%c", (banmail->mode&FW_OWNER)?'1':'0', (banmail->mode&FW_TITLE)?'1':'0',
+            (banmail->mode&FW_TIME)?'1':'0', (banmail->mode&FW_PATH)?'1':'0',
+            (banmail->mode&FW_ORIGIN)?'1':'0', (banmail->mode&FW_CANCEL)?'1':'0');
 
     if (vget(b_lines, 0, "擋信列表：", banmail->data, sizeof(banmail->data), echo))
         change++;
-    sprintf(buf,"擋信模式：(作者、標題、時間、路徑、來源、連線砍信)[%s]",modes);
-    if (vget(b_lines,0,buf,modes,8,GCARRY))
+    sprintf(buf, "擋信模式：(作者、標題、時間、路徑、來源、連線砍信)[%s]", modes);
+    if (vget(b_lines, 0, buf, modes, 8, GCARRY))
     {
         banmail->mode=(modes[0]!='0')?FW_OWNER:0;
         banmail->mode|=(modes[1]!='0')?FW_TITLE:0;
@@ -186,7 +186,7 @@ banmail_add(
 {
         BANMAIL banmail;
 
-        if (banmail_edit(&banmail,DOECHO))
+        if (banmail_edit(&banmail, DOECHO))
         {
             banmail.time = time(0);
             rec_add(xo->dir, &banmail, sizeof(BANMAIL));

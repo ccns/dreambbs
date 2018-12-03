@@ -227,10 +227,10 @@ poststat(
 
 #ifdef	DEBUG
             printf("Title : %s, Board: %s\nPostNo : %d, Author: %s\n"
-                ,pp->title
-                ,pp->board
-                ,pp->number
-                ,pp->author);
+               , pp->title
+               , pp->board
+               , pp->number
+               , pp->author);
 #endif
 
             j = sort(pp, j);
@@ -267,7 +267,7 @@ poststat(
             fprintf(fp,
                 "\x1b[1;31m%3d. \x1b[33m¬ÝªO : \x1b[32m%-16s\x1b[35m¡m %s¡n\x1b[36m%4d ½g\x1b[33m%16s\n"
                 "     \x1b[33m¼ÐÃD : \x1b[0;44;37m%-60.60s\x1b[40m\n"
-                ,++cnt, tp->board, p, tp->number, tp->author, tp->title);
+               , ++cnt, tp->board, p, tp->number, tp->author, tp->title);
         }
         fclose(fp);
     }

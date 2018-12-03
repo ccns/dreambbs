@@ -574,7 +574,7 @@ typedef struct BoardReadingHistory
     /* time_t {final, begin} / {final | BRH_SIGN}		 */
     /* --------------------------------------------------- */
                             /* Thor.980904:註解: BRH_SIGN代表final begin 相同 */
-                            /* Thor.980904:註解: 由大到小排列,存放已讀interval */
+                            /* Thor.980904:註解: 由大到小排列, 存放已讀interval */
 } BRH;
 
 
@@ -619,7 +619,7 @@ typedef	struct
 
 typedef struct
 {
-    int shot[MOVIE_MAX]; /* Thor.980805: 可能還要再加1,因合理範圍為0..MOVIE_MAX */
+    int shot[MOVIE_MAX]; /* Thor.980805: 可能還要再加1, 因合理範圍為0..MOVIE_MAX */
     char film[MOVIE_SIZE];
 } FCACHE;
 

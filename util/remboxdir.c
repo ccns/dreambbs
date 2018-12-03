@@ -13,7 +13,7 @@
 /*
    還沒詳細的測試, 大家可以試看看
 
-   此程式可以重建看版,精華區,信箱的.DIR
+   此程式可以重建看版, 精華區, 信箱的.DIR
    會scan current directory, 產生 .DIR.re (即 0-9, A-V的目錄下文章)
    和 .DIR.@ (即 @ 下文章)
    會以 chrono來排序
@@ -103,7 +103,7 @@ article_parse(
     if (ptr)
     {
         ptr[-1] = '\0';
-        if (ptr[-2] == ',')
+        if (ptr[-2] == ', ')
         {
             ptr[-2] = '\0';
         }
@@ -178,7 +178,7 @@ fname_cmp(
     return strcmp(s1 + 1, s2 + 1);
 }
 
-int main(int argc,char *argv[])
+int main(int argc, char *argv[])
 {
     struct dirent *de;
     DIR *dirp;

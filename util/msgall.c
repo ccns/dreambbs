@@ -104,7 +104,7 @@ main(
     }
 
     ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
-    strcpy(bmw.msg,argv[1]);
+    strcpy(bmw.msg, argv[1]);
 
     up = ushm->uslot;
     uceil = (void *) up + ushm->offset;

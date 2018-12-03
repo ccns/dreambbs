@@ -392,7 +392,7 @@ XO *xo)
 
 static char MailGemFolder[80], MailGemAnchor[80], MailGemSailor[24];
 static HDR *MailGemBuffer;
-static int MailGemBufferSiz; /* , MailGemBufferNum; */
+static int MailGemBufferSiz; /*, MailGemBufferNum; */
 /* Thor.990414: 提前宣告給mailgem_head用 */
 
 

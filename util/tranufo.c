@@ -18,22 +18,22 @@ typedef	struct
 }	TABLE;
 
 TABLE table[] = {
-    {UFO_COLOR,UFO2_COLOR},
-    {UFO_MOVIE,UFO2_MOVIE},
-    {UFO_BRDNEW,UFO2_BRDNEW},
-    {UFO_BNOTE,UFO2_BNOTE},
-    {UFO_VEDIT,UFO2_VEDIT},
-    {UFO_PAL,UFO2_PAL},
-    {UFO_MOTD,UFO2_MOTD},
-    {UFO_MIME,UFO2_MIME},
-    {UFO_SIGN,UFO2_SIGN},
-    {UFO_SHOWUSER,UFO2_SHOWUSER},
-    {UFO_REALNAME,UFO2_REALNAME},
-    {UFO_SHIP,UFO2_SHIP},
-    {UFO_NWLOG,UFO2_NWLOG},
-    {UFO_NTLOG,UFO2_NTLOG},
-    {UFO_ACL,UFO2_ACL},
-    {0,0}
+    {UFO_COLOR, UFO2_COLOR},
+    {UFO_MOVIE, UFO2_MOVIE},
+    {UFO_BRDNEW, UFO2_BRDNEW},
+    {UFO_BNOTE, UFO2_BNOTE},
+    {UFO_VEDIT, UFO2_VEDIT},
+    {UFO_PAL, UFO2_PAL},
+    {UFO_MOTD, UFO2_MOTD},
+    {UFO_MIME, UFO2_MIME},
+    {UFO_SIGN, UFO2_SIGN},
+    {UFO_SHOWUSER, UFO2_SHOWUSER},
+    {UFO_REALNAME, UFO2_REALNAME},
+    {UFO_SHIP, UFO2_SHIP},
+    {UFO_NWLOG, UFO2_NWLOG},
+    {UFO_NTLOG, UFO2_NTLOG},
+    {UFO_ACL, UFO2_ACL},
+    {0, 0}
 };
 
 void
@@ -82,7 +82,7 @@ reaper(
         else
             acct.ufo2 &= ~ptr->new;
     }
-    printf("%-14.14s : ufo) %20.20d ufo2) %20.20d\n",acct.userid,acct.ufo,acct.ufo2);
+    printf("%-14.14s : ufo) %20.20d ufo2) %20.20d\n", acct.userid, acct.ufo, acct.ufo2);
     acct_save(&acct);
 
 }

@@ -97,40 +97,40 @@
 
 
 static char *perm_tbl[] = {
-  "基本權力",			/* PERM_BASIC */
-  "進入聊天室",			/* PERM_CHAT */
-  "找人聊天",			/* PERM_PAGE */
-  "發表文章",			/* PERM_POST */
-  "身分認證",			/* PERM_VALID */
-  "信件無上限",			/* PERM_MBOX */
-  "隱身術",			/* PERM_CLOAK */
-  "永久保留帳號",		/* PERM_XEMPT */
+  "基本權力", 			/* PERM_BASIC */
+  "進入聊天室", 			/* PERM_CHAT */
+  "找人聊天", 			/* PERM_PAGE */
+  "發表文章", 			/* PERM_POST */
+  "身分認證", 			/* PERM_VALID */
+  "信件無上限", 			/* PERM_MBOX */
+  "隱身術", 			/* PERM_CLOAK */
+  "永久保留帳號", 		/* PERM_XEMPT */
 
-  "公告看板發文權限",			/* PERM_9 */
-  "保留",			/* PERM_10 */
-  "保留",			/* PERM_11 */
-  "保留",			/* PERM_12 */
-  "保留",			/* PERM_13 */
-  "保留",			/* PERM_14 */
-  "保留",			/* PERM_15 */
-  "特殊標記",			/* PERM_16 */
+  "公告看板發文權限", 			/* PERM_9 */
+  "保留", 			/* PERM_10 */
+  "保留", 			/* PERM_11 */
+  "保留", 			/* PERM_12 */
+  "保留", 			/* PERM_13 */
+  "保留", 			/* PERM_14 */
+  "保留", 			/* PERM_15 */
+  "特殊標記", 			/* PERM_16 */
 
-  "禁止發表文章",		/* PERM_DENYPOST */
-  "禁止 talk",			/* PERM_DENYTALK */
-  "禁止 chat",			/* PERM_DENYCHAT */
-  "禁止 mail",			/* PERM_DENYMAIL */
-  "停權",			/* PERM_DENYSTOP */
-  "禁止更改暱稱",		/* PERM_DENYNICK */
-  "禁止 login",			/* PERM_DENYLOGIN */
-  "清除帳號",			/* PERM_PURGE */
+  "禁止發表文章", 		/* PERM_DENYPOST */
+  "禁止 talk", 			/* PERM_DENYTALK */
+  "禁止 chat", 			/* PERM_DENYCHAT */
+  "禁止 mail", 			/* PERM_DENYMAIL */
+  "停權", 			/* PERM_DENYSTOP */
+  "禁止更改暱稱", 		/* PERM_DENYNICK */
+  "禁止 login", 			/* PERM_DENYLOGIN */
+  "清除帳號", 			/* PERM_PURGE */
 
-  "板主",			/* PERM_BM */
-  "看見忍者",			/* PERM_SEECLOAK */
-  "點歌系統總管",		/* PERM_KTV */
-  "精華區總管",			/* PERM_GEM */
-  "帳號總管",			/* PERM_ACCOUNTS */
-  "聊天室總管",			/* PERM_CHATCLOAK */
-  "看板總管",			/* PERM_BOARD */
+  "板主", 			/* PERM_BM */
+  "看見忍者", 			/* PERM_SEECLOAK */
+  "點歌系統總管", 		/* PERM_KTV */
+  "精華區總管", 			/* PERM_GEM */
+  "帳號總管", 			/* PERM_ACCOUNTS */
+  "聊天室總管", 			/* PERM_CHATCLOAK */
+  "看板總管", 			/* PERM_BOARD */
   "站長"			/* PERM_SYSOP */
 };
 

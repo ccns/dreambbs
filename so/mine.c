@@ -3,12 +3,12 @@
  *
  * Author: piaip
  *
- * $Log: mine.c,v $
+ * $Log: mine.c, v $
  * Revision 1.1  1999/05/19 16:09:22  bbs
  * /home/bbs/src/maple: source original version
  *
  * Revision 1.3  1999/01/30 02:09:29  piaip
- * Better interface, keys help,... [beta]
+ * Better interface, keys help, ... [beta]
  *
  * Revision 1.2  1999/01/29 13:23:28  piaip
  * For bbs version [alpha]
@@ -165,7 +165,7 @@ void drawInfo(void)
     move(b_lines - 1, 0);
     clrtoeol();
     prints("所花時間: %.0lf 秒，剩下 %d 個地雷未標記.\n",
-           difftime(time(0), init_time) , TotalMines - TaggedMines);
+           difftime(time(0), init_time), TotalMines - TaggedMines);
 }
 
 void drawPrompt(void)
@@ -256,13 +256,13 @@ void ExpandMap(int y, int x, int flTrace)
     if (flTrace || countNeighbor(y, x, TILE_MINE) == 0)
     {
         if (flTrace || (MineMap [y-1][x  ] & TILE_EXPAND) == 0)
-            ExpandMap(y - 1, x  , 0);
+            ExpandMap(y - 1, x, 0);
         if (flTrace || (MineMap [y  ][x-1] & TILE_EXPAND) == 0)
-            ExpandMap(y  , x - 1, 0);
+            ExpandMap(y, x - 1, 0);
         if (flTrace || (MineMap [y+1][x  ] & TILE_EXPAND) == 0)
-            ExpandMap(y + 1, x  , 0);
+            ExpandMap(y + 1, x, 0);
         if (flTrace || (MineMap [y  ][x+1] & TILE_EXPAND) == 0)
-            ExpandMap(y  , x + 1, 0);
+            ExpandMap(y, x + 1, 0);
         if (flTrace || (MineMap [y-1][x-1] & TILE_EXPAND) == 0)
             ExpandMap(y - 1, x - 1, 0);
         if (flTrace || (MineMap [y+1][x-1] & TILE_EXPAND) == 0)

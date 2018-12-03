@@ -236,7 +236,7 @@ static char *ModeTypeTable[] =
 
 
 
-//cache,20101119
+//cache, 20101119
 
 #define PALTYPE_PAL     0               /* 朋友名單 */
 #define PALTYPE_LIST    1               /* 群組名單 */

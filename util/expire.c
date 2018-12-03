@@ -191,7 +191,7 @@ expire(
     FILE *fpr, *fpw;
 
     int days, maxp, minp;
-    int duetime,now;
+    int duetime, now;
 
     SyncData *xpool=NULL, *xsync;
     int xhead=0;
@@ -357,7 +357,7 @@ main(
     FILE *fp;
     int number, count;
 //  life db, table[MAXBOARD], key;
-    life db,key;
+    life db, key;
     struct dirent *de;
     DIR *dirp;
     char *ptr;
@@ -368,7 +368,7 @@ main(
     db.maxp = ((argc > 2) && (number = atoi(argv[2])) > 0) ? number : DEF_MAXP;
     db.minp = ((argc > 3) && (number = atoi(argv[3])) > 0) ? number : DEF_MINP;
 
-    memset(&key,0,sizeof(key));
+    memset(&key, 0, sizeof(key));
 
     /* --------------------------------------------------- */
     /* load expire.ctl					 */
@@ -378,14 +378,14 @@ main(
     setuid(BBSUID);
     chdir(BBSHOME);
 
-    fd = open(".BRD",O_RDONLY);
+    fd = open(".BRD", O_RDONLY);
     if (fd < 0)
     {
-        fprintf(stderr,"Error open .BRD file\n");
+        fprintf(stderr, "Error open .BRD file\n");
         exit(1);
     }
 
-    count = read(fd,table,sizeof(BRD)*MAXBOARD);
+    count = read(fd, table, sizeof(BRD)*MAXBOARD);
     count/=sizeof(BRD);
     close(fd);
 
@@ -410,7 +410,7 @@ main(
         /* Thor.981027: 加上 board時, 可sync 某一board. 加得很醜, 有空再改 */
         if (argc > 4)
         {
-            if (str_cmp(argv[4],ptr))
+            if (str_cmp(argv[4], ptr))
                 continue;
             else
                 number=0;
@@ -420,7 +420,7 @@ main(
         {
             if (count > 0)
             {
-                fd = brdbno(ptr,count);
+                fd = brdbno(ptr, count);
                 if (fd >= 0)
                 {
                     brd = &table[fd];
@@ -442,7 +442,7 @@ main(
                 key.days = db.days;
             }
             strcpy(key.bname, ptr);
-//          printf("Expire Board: %s\n",ptr);
+//          printf("Expire Board: %s\n", ptr);
             expire(fp, &key, !(number & 31));	/* 每隔 32 天 sync 一次 */
             ++number;
         }

@@ -26,7 +26,7 @@ expire(
     FILE *fpr, *fpw;
 
 
-    usr_fpath(index,userid,FN_DIR);
+    usr_fpath(index, userid, FN_DIR);
 
     if (!(fpr = fopen(index, "r")))
     {
@@ -123,7 +123,7 @@ main(
     int argc,
     char *argv[])
 {
-    char fpath[128],*fname,ch;
+    char fpath[128], *fname, ch;
 
     setgid(BBSGID);
     setuid(BBSUID);

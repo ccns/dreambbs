@@ -2,7 +2,7 @@
 
 void
 archiv32(
-    time_t chrono,	/* 32 bits */
+    time_t chrono, 	/* 32 bits */
     char *fname		/* 7 chars */
 )
 {
@@ -21,7 +21,7 @@ archiv32(
 
 void
 archiv32m(
-    time_t chrono,	/* 32 bits */
+    time_t chrono, 	/* 32 bits */
     char *fname		/* 7 chars */
 )
 {

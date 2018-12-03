@@ -293,7 +293,7 @@ rec_loc(
     int (*fchk) (void *obj)
 )
 {
-    int fd,pos,tmp;
+    int fd, pos, tmp;
     off_t off;
     char pool[REC_SIZ];
 

@@ -14,17 +14,17 @@
 
 
 void
-base64_encode(FILE *in,FILE *out)
+base64_encode(FILE *in, FILE *out)
 {
     unsigned char *ascii = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-    char base[3],*dst;
+    char base[3], *dst;
     char dest[73];
-    unsigned char c1,c2,c3;
+    unsigned char c1, c2, c3;
     int n;
 
     dst = dest;
 
-    while ((n=fread(base,1,sizeof(base),in)))
+    while ((n=fread(base, 1, sizeof(base), in)))
     {
 
         c1 = base[0];
@@ -52,14 +52,14 @@ base64_encode(FILE *in,FILE *out)
         if ((dst - dest) >= 72)
         {
             *dst = '\0';
-            fprintf(out,"%s\n",dest);
+            fprintf(out, "%s\n", dest);
             dst = dest;
         }
     }
     if ((dst - dest) > 0)
     {
         *dst = '\0';
-        fprintf(out,"%s\n",dest);
+        fprintf(out, "%s\n", dest);
     }
 }
 
@@ -73,12 +73,12 @@ main(
     if (argc > 1)
     {
         fclose(stdin);
-        stdin = fopen(argv[1],"r");
+        stdin = fopen(argv[1], "r");
     }
     if (stdin)
-        base64_encode(stdin,stdout);
+        base64_encode(stdin, stdout);
     else
-        fprintf(stdout,"error open file\n");
+        fprintf(stdout, "error open file\n");
 
     return 0;
 }

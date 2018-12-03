@@ -18,14 +18,14 @@ outgo_post(
 {
 
     bntp_t bntp;
-    memset(&bntp,0,sizeof(bntp_t));
+    memset(&bntp, 0, sizeof(bntp_t));
     bntp.chrono = hdr->chrono;
-    strcpy(bntp.board,board);
-    strcpy(bntp.xname,hdr->xname);
-    strcpy(bntp.owner,hdr->owner);
-    strcpy(bntp.nick,hdr->nick);
-    strcpy(bntp.title,hdr->title);
-    rec_add("innd/out.bntp",&bntp,sizeof(bntp_t));
+    strcpy(bntp.board, board);
+    strcpy(bntp.xname, hdr->xname);
+    strcpy(bntp.owner, hdr->owner);
+    strcpy(bntp.nick, hdr->nick);
+    strcpy(bntp.title, hdr->title);
+    rec_add("innd/out.bntp", &bntp, sizeof(bntp_t));
 
     /*
     char *fpath, buf[256];
@@ -44,7 +44,7 @@ main(
     char *argv[])
 {
     char fpath[128];
-    int start,end,fd;
+    int start, end, fd;
     char *board;
     HDR hdr;
 
@@ -53,10 +53,10 @@ main(
         board = argv[1];
         start = atoi(argv[2]);
         end = atoi(argv[3]);
-        brd_fpath(fpath,board,FN_DIR);
-        if ((fd = open(fpath,O_RDONLY)))
+        brd_fpath(fpath, board, FN_DIR);
+        if ((fd = open(fpath, O_RDONLY)))
         {
-            lseek(fd,(off_t)((start-1)*sizeof(HDR)),SEEK_SET);
+            lseek(fd, (off_t)((start-1)*sizeof(HDR)), SEEK_SET);
             while (read(fd, &hdr, sizeof(HDR)) == sizeof(HDR) && start <= end)
             {
                 outgo_post(&hdr, board);

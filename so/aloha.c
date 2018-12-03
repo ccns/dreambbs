@@ -252,7 +252,7 @@ XO *xo)
         {
             usr_fpath(fpath, aloha->userid, FN_FRIEND_BENZ);
             while (rec_loc(fpath, sizeof(BMW), cmpbmw) >= 0)
-                rec_del(fpath, sizeof(BMW), 0 , cmpbmw, NULL);
+                rec_del(fpath, sizeof(BMW), 0, cmpbmw, NULL);
             rec_del(xo->dir, sizeof(ALOHA), head - 1, NULL, NULL);
         }
         free(abase);

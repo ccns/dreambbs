@@ -26,12 +26,12 @@ main(
         exit(1);
     }
 
-    strcpy(fpath,BBSHOME"/");
-    usr_fpath(fpath + strlen(BBSHOME) + 1,argv[2],".ACCT");
+    strcpy(fpath, BBSHOME"/");
+    usr_fpath(fpath + strlen(BBSHOME) + 1, argv[2], ".ACCT");
     inf = open(fpath, O_RDONLY);
     if (inf == -1)
     {
-        printf("error open acct file %s\n",fpath);
+        printf("error open acct file %s\n", fpath);
         exit(1);
     }
     if (read(inf, &acct, sizeof(ACCT)) != sizeof(ACCT))

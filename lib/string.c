@@ -205,7 +205,7 @@ is_space(
 }
 
 
-/* 取Content-Transfer-Encode 的第一個字元, 依照標準只可能是 q,b,7,8 這四個 */
+/* 取Content-Transfer-Encode 的第一個字元, 依照標準只可能是 q, b, 7, 8 這四個 */
 char*
 mm_getencode(
     char* str,
@@ -301,8 +301,8 @@ mm_getcharset(
 /* 解 Header 的 mmdecode */
 static int
 mmdecode_header(
-    char* src,		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
-    char encode,		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
+    char* src, 		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
+    char encode, 		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
     char* dst
 )
 {
@@ -376,8 +376,8 @@ mmdecode_header(
 
 int
 mmdecode(	/* 解 Header 的 mmdecode */
-    char* src,		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
-    char encode,		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
+    char* src, 		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
+    char encode, 		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
     char* dst
 )
 {
@@ -1224,7 +1224,7 @@ Atime( /* Thor.990125: 假裝ARPANET時間格式 */
 {
     /* ARPANET format: Thu, 11 Feb 1999 06:00:37 +0800 (CST) */
     /* strftime(datemsg, 40, "%a, %d %b %Y %T %Z", localtime(clock)); */
-    /* Thor.990125: time zone的傳回值不知和ARPANET格式是否一樣,先硬給,同sendmail*/
+    /* Thor.990125: time zone的傳回值不知和ARPANET格式是否一樣, 先硬給, 同sendmail*/
     strftime(datemsg, 40, "%a, %d %b %Y %T +0800 (CST)", localtime(clock));
     return (datemsg);
 }
@@ -1285,7 +1285,7 @@ void
 str_xor(
     char* dst, /* Thor.990409: 任意長度任意binary seq, 至少要 src那麼長*/
     const char* src  /* Thor.990409: 任意長度str, 不含 \0 */
-                        /* Thor: 結果是將src xor到dst上, 若有0結果, 則不變 ,
+                        /* Thor: 結果是將src xor到dst上, 若有0結果, 則不變,
                                  所以dst長度必大於等於 src(以字串而言) */
 )
 {

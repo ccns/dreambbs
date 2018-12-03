@@ -44,11 +44,11 @@ reaper(
         close(fd);
         return;
     }
-    strcpy(map[total].userid,acct.userid);
+    strcpy(map[total].userid, acct.userid);
     map[total].userno = acct.userno;
     total++;
     close(fd);
-    fprintf(flog, "%14s  %5d\n",acct.userid,acct.userno);
+    fprintf(flog, "%14s  %5d\n", acct.userid, acct.userno);
     /*acct_save(&acct);*/
 }
 
@@ -84,7 +84,7 @@ main(void)
 {
     int ch;
     char *fname, fpath[256];
-    int i,j,k;
+    int i, j, k;
 
     total = 1;
     funo = open(".USR", O_RDWR | O_CREAT, 0600);
@@ -111,7 +111,7 @@ main(void)
     }
     close(funo);
     total--;
-    fprintf(flog, "total user %d\n",total);
+    fprintf(flog, "total user %d\n", total);
     for (i=1;i<=total;i++)
     {
         k = 0;
@@ -120,7 +120,7 @@ main(void)
             if (map[j].userno == i)
                 k=1;
             if ((map[i-1].userno == map[j].userno)&&((i-1)!=j))
-                fprintf(flog, "userno %d is the same ~~\n",map[i-1].userno);
+                fprintf(flog, "userno %d is the same ~~\n", map[i-1].userno);
         }
         if (k==0)
             fprintf(flog, "userno %d is empty!\n", i);

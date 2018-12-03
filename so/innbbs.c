@@ -231,7 +231,7 @@ nf_add(
 
     if ((brd = ask_board(nf.board, BRD_R_BIT, NULL)) &&
         vget(b_lines, 0, "英文站名：", nf.path, sizeof(nf.path), GCARRY) &&
-        vget(b_lines, 0, "群組：", nf.newsgroup,/*  sizeof(nf.newsgroup) */ 70, GCARRY))
+        vget(b_lines, 0, "群組：", nf.newsgroup, /*  sizeof(nf.newsgroup) */ 70, GCARRY))
     {
         if (!vget(b_lines, 0, "字集 [big5]：", nf.charset, sizeof(nf.charset), GCARRY))
             str_ncpy(nf.charset, "big5", sizeof(nf.charset));

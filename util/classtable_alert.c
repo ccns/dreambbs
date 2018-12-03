@@ -45,7 +45,7 @@ bfind(
     int userno)
 {
     int count;
-    CLASS_TABLE_ALERT *tmpcache,*datum;
+    CLASS_TABLE_ALERT *tmpcache, *datum;
 
     if ((tmpcache = cache))
     {
@@ -152,10 +152,10 @@ init(void)
             continue;
         if (!(up->ufo & UFO_CLASSTABLE))
             continue;
-//      printf("%-13.13s  %6.6d  %6.6d\n",up->userid,up->userno,up->pid);
+//      printf("%-13.13s  %6.6d  %6.6d\n", up->userid, up->userno, up->pid);
         if ((ptr=bfind(up->userno)))
         {
-            //strcpy(bmw.msg,"訊息測試，不便請見諒");
+            //strcpy(bmw.msg, "訊息測試，不便請見諒");
 
             time(&now);
             p = localtime(&now);
@@ -168,16 +168,16 @@ init(void)
 //		            cur = &(ptr->item[i]);
                     if (strlen(cur->room))
                     {
-                        sprintf(bmw.msg, "◎您在 %-.16s 有一門 [%s] 課，上課不要遲到哦!!",cur->room,cur->condensation);
-                        printf("%s:%s\n",up->userid,bmw.msg);
+                        sprintf(bmw.msg, "◎您在 %-.16s 有一門 [%s] 課，上課不要遲到哦!!", cur->room, cur->condensation);
+                        printf("%s:%s\n", up->userid, bmw.msg);
                     }
                     else
                     {
-                        sprintf(bmw.msg, "◎您有一門 [%s] 課，上課不要遲到哦!!",cur->condensation);
-                        printf("%s:%s\n",up->userid,bmw.msg);
+                        sprintf(bmw.msg, "◎您有一門 [%s] 課，上課不要遲到哦!!", cur->condensation);
+                        printf("%s:%s\n", up->userid, bmw.msg);
 
                     }
-                bedit(up,&bmw);
+                bedit(up, &bmw);
                 }
             }
         }
@@ -228,7 +228,7 @@ bcache(
 
         pbase = phead = (CLASS_TABLE_ALERT *) malloc(size);
         size = read(fd, pbase, size);
-                //printf("2bcache:%d\n",size);
+                //printf("2bcache:%d\n", size);
         if (size >= sizeof(CLASS_TABLE_ALERT))
         {
             ptail = (CLASS_TABLE_ALERT *) ((char *) pbase + size);
@@ -252,7 +252,7 @@ bcache(
             size = (char *) ptail - (char *) pbase;
             if (size > 0)
             {
-                //printf("6bcache:%d\n",size);
+                //printf("6bcache:%d\n", size);
 
 //		        if (size > sizeof(CLASS_TABLE_ALERT))
 //			        xsort(pbase, size / sizeof(CLASS_TABLE_ALERT), sizeof(CLASS_TABLE_ALERT), int1_cmp);
@@ -295,7 +295,7 @@ main(
     }
 
 
-    sprintf(fpath,"%s.new",FN_CLASSTABLE_DB);
+    sprintf(fpath, "%s.new", FN_CLASSTABLE_DB);
     f_mv(FN_CLASSTABLE_DB, fpath);
     bcache(fpath);
 

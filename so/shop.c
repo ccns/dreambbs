@@ -15,7 +15,7 @@
 int cloak_temp(void)
 {
     time_t now;
-    char c_time[25],c_buf[128];
+    char c_time[25], c_buf[128];
 
     now = time(0);
     strncpy(c_time, ctime(&now), 24);
@@ -61,8 +61,8 @@ int cloak_temp(void)
 
 //  acct_save(&cuser);
     pmsg2("要現身請重新上站");
-    sprintf(c_buf,"%s %s 購買 隱身 權限\n",c_time,cuser.userid);
-    f_cat(FN_SHOP,c_buf);
+    sprintf(c_buf, "%s %s 購買 隱身 權限\n", c_time, cuser.userid);
+    f_cat(FN_SHOP, c_buf);
 
     return 0;
 
@@ -71,7 +71,7 @@ int cloak_temp(void)
 int hidefrom_temp(void)
 {
     time_t now;
-    char c_time[25],c_buf[128];
+    char c_time[25], c_buf[128];
 
     now = time(0);
     strncpy(c_time, ctime(&now), 24);
@@ -124,8 +124,8 @@ int hidefrom_temp(void)
 
     acct_save(&cuser);
     pmsg2("故鄉已隱藏");
-    sprintf(c_buf,"%s %s 購買 隱藏故鄉 權限\n",c_time,cuser.userid);
-    f_cat(FN_SHOP,c_buf);
+    sprintf(c_buf, "%s %s 購買 隱藏故鄉 權限\n", c_time, cuser.userid);
+    f_cat(FN_SHOP, c_buf);
 
     return 0;
 
@@ -154,10 +154,10 @@ int shop_main(void)
 
     clear();
 
-    move(0,0);
+    move(0, 0);
     prints("\033[1;33;42m                            " BOARDNAME "    商店街                                 \033[m\n\n");
     prints("                     您的現金如下：\n\n                     夢幣：%d 元", money);
-    move(10,0);
+    move(10, 0);
 
     outs("          歡迎進入商店街，請問您需要什麼服務：\n"
         "  \n"
@@ -166,7 +166,7 @@ int shop_main(void)
         "            (3) 購買隱藏故鄉     (需要夢幣  4194304 元/次)\n\n"
         "            (4) 購買站長權限\033[1;31m HOT\033[m (需要夢幣 10000000 元)\n");
 
-    if (!vget(b_lines, 0, "請選擇您要的服務： [Q] 離開 ",buf,2,DOECHO))
+    if (!vget(b_lines, 0, "請選擇您要的服務： [Q] 離開 ", buf, 2, DOECHO))
         return 0;
 
     if (*buf == '1')

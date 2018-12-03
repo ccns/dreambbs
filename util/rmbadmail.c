@@ -12,7 +12,7 @@
 #undef	FAKE_IO
 #include "bbs.h"
 
-static int reserve,r_size,ulink,u_size;
+static int reserve, r_size, ulink, u_size;
 
 
 static void
@@ -20,8 +20,8 @@ reaper(
     char *fpath,
     char *lowid)
 {
-    int fd,size,check;
-    char buf[256],*fname,folder[128],*ptr;
+    int fd, size, check;
+    char buf[256], *fname, folder[128], *ptr;
     DIR *dirp;
     struct dirent *de;
     HDR *head, *tail = NULL, *base;
@@ -30,10 +30,10 @@ reaper(
 
     now = time(0) - 60;
 
-    printf("> processing account %-20s ",lowid);
+    printf("> processing account %-20s ", lowid);
 
-    sprintf(buf,"%s/.DIR",fpath);
-    if ((fd = open(buf,O_RDONLY)) >= 0)
+    sprintf(buf, "%s/.DIR", fpath);
+    if ((fd = open(buf, O_RDONLY)) >= 0)
     {
         fstat(fd, &st);
         size = st.st_size/sizeof(HDR);
@@ -45,7 +45,7 @@ reaper(
         {
             base = (HDR *)malloc(sizeof(HDR) * size);
             tail = base + size;
-            read(fd,base,sizeof(HDR) * size);
+            read(fd, base, sizeof(HDR) * size);
         }
         close(fd);
     }
@@ -54,8 +54,8 @@ reaper(
         size = 0;
         base = NULL;
     }
-    printf("total mail : %d\n",size);
-    sprintf(folder,"%s/@",fpath);
+    printf("total mail : %d\n", size);
+    sprintf(folder, "%s/@", fpath);
 
     if (!(dirp = opendir(folder)))
     {
@@ -63,7 +63,7 @@ reaper(
             free(base);
         return;
     }
-    ptr = strchr(folder,'@') + 1 ;
+    ptr = strchr(folder, '@') + 1 ;
     *ptr++ = '/';
 
     while ((de = readdir(dirp)))
@@ -76,7 +76,7 @@ reaper(
             {
                 for (head = base;head < tail;head++)
                 {
-                    if (!strcmp(head->xname,fname))
+                    if (!strcmp(head->xname, fname))
                     {
                         check = 1;
                         break;
@@ -85,13 +85,13 @@ reaper(
             }
             if (!check)
             {
-                strcpy(ptr,fname);
-                if (!(!stat(folder,&st) && (st.st_atime > now)))
+                strcpy(ptr, fname);
+                if (!(!stat(folder, &st) && (st.st_atime > now)))
                 {
                     u_size += st.st_size;
                     ulink++;
-                    printf("file is not in HDR : %s : unlink !\n",fname);
-                    printf("--> unlinking %s\n",folder);
+                    printf("file is not in HDR : %s : unlink !\n", fname);
+                    printf("--> unlinking %s\n", folder);
 #ifndef	FAKE_IO
                     unlink(folder);
 #endif
@@ -100,7 +100,7 @@ reaper(
                 {
                     r_size += st.st_size;
                     reserve++;
-                    printf("file is not in HDR : %s : reserve !\n",fname);
+                    printf("file is not in HDR : %s : reserve !\n", fname);
                 }
             }
         }
@@ -114,8 +114,8 @@ expire(
     char *fpath,
     char *lowid)
 {
-    int fd,size,check;
-    char buf[256],*fname,folder[128],*ptr,*str;
+    int fd, size, check;
+    char buf[256], *fname, folder[128], *ptr, *str;
     DIR *dirp;
     struct dirent *de;
     HDR *head, *tail = NULL, *base;
@@ -124,10 +124,10 @@ expire(
 
     now = time(0) - 60;
 
-    printf("> processing board %-20s ",lowid);
+    printf("> processing board %-20s ", lowid);
 
-    sprintf(buf,"%s/.DIR",fpath);
-    if ((fd = open(buf,O_RDONLY)) >= 0)
+    sprintf(buf, "%s/.DIR", fpath);
+    if ((fd = open(buf, O_RDONLY)) >= 0)
     {
         fstat(fd, &st);
         size = st.st_size/sizeof(HDR);
@@ -139,7 +139,7 @@ expire(
         {
             base = (HDR *)malloc(sizeof(HDR) * size);
             tail = base + size;
-            read(fd,base,sizeof(HDR) * size);
+            read(fd, base, sizeof(HDR) * size);
         }
         close(fd);
     }
@@ -148,10 +148,10 @@ expire(
         base = NULL;
         size = 0;
     }
-    printf("total article : %d\n",size);
-    sprintf(folder,"%s/@",fpath);
+    printf("total article : %d\n", size);
+    sprintf(folder, "%s/@", fpath);
 
-    str = strchr(folder,'@') ;
+    str = strchr(folder, '@') ;
     *str = '0';
 
     while (1)
@@ -171,7 +171,7 @@ expire(
                     {
                         for (head = base;head < tail;head++)
                         {
-                            if (!strcmp(head->xname,fname))
+                            if (!strcmp(head->xname, fname))
                             {
                                 check = 1;
                                 break;
@@ -180,13 +180,13 @@ expire(
                     }
                     if (!check)
                     {
-                        strcpy(ptr,fname);
-                        if (!(!stat(folder,&st) && (st.st_atime > now)))
+                        strcpy(ptr, fname);
+                        if (!(!stat(folder, &st) && (st.st_atime > now)))
                         {
                             u_size += st.st_size;
                             ulink++;
-                            printf("file is not in HDR : %s : unlink !\n",fname);
-                            printf("--> unlinking %s\n",folder);
+                            printf("file is not in HDR : %s : unlink !\n", fname);
+                            printf("--> unlinking %s\n", folder);
 #ifndef FAKE_IO
                             unlink(folder);
 #endif
@@ -195,7 +195,7 @@ expire(
                         {
                             r_size += st.st_size;
                             reserve++;
-                            printf("file is not in HDR : %s : reserve !\n",fname);
+                            printf("file is not in HDR : %s : reserve !\n", fname);
                         }
                     }
                 }
@@ -247,20 +247,20 @@ main(
     char *argv[])
 {
     int ch;
-    char *fname, fpath[256],buf[32];
+    char *fname, fpath[256], buf[32];
 
     chdir(BBSHOME);
 
-    if (argc > 1 && !strncmp(argv[1],"-a",2))
+    if (argc > 1 && !strncmp(argv[1], "-a", 2))
     {
         if (argc > 2)
         {
-            str_lower(buf,argv[2]);
-            sprintf(fpath,"usr/%c/%s",*buf,buf);
-            if (!access(fpath,0))
+            str_lower(buf, argv[2]);
+            sprintf(fpath, "usr/%c/%s", *buf, buf);
+            if (!access(fpath, 0))
                 reaper(fpath, buf);
             else
-                printf("error open account %s\n",buf);
+                printf("error open account %s\n", buf);
         }
         else
         {
@@ -270,38 +270,38 @@ main(
             {
                 fname[0] = ch;
                 fname[1] = '\0';
-                traverse(fpath,1);
+                traverse(fpath, 1);
             }
             for (ch = '0'; ch <= '9'; ch++)
             {
                 fname[0] = ch;
                 fname[1] = '\0';
-                traverse(fpath,1);
+                traverse(fpath, 1);
             }
         }
     }
-    else if (argc > 1 && !strncmp(argv[1],"-b",2))
+    else if (argc > 1 && !strncmp(argv[1], "-b", 2))
     {
         if (argc > 2)
         {
-            strcpy(buf,argv[2]);
-            sprintf(fpath,"brd/%s",buf);
-            if (!access(fpath,0))
+            strcpy(buf, argv[2]);
+            sprintf(fpath, "brd/%s", buf);
+            if (!access(fpath, 0))
                 expire(fpath, buf);
             else
-                printf("error open board %s\n",buf);
+                printf("error open board %s\n", buf);
         }
         else
         {
             strcpy(fpath, "brd");
-            traverse(fpath,2);
+            traverse(fpath, 2);
         }
     }
     else
     {
         printf("syntax : rmbadmail [-a|-b] [account|board]\n");
     }
-    printf("total unlink  %10d  unlink  size : %10d\n",ulink,u_size);
-    printf("total reserve %10d  reserve size : %10d\n",reserve,r_size);
+    printf("total unlink  %10d  unlink  size : %10d\n", ulink, u_size);
+    printf("total reserve %10d  reserve size : %10d\n", reserve, r_size);
     return 0;
 }

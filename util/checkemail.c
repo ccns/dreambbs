@@ -30,7 +30,7 @@ check_in(
 {
     int i;
     for (i=0;i<MAX_AC;i++)
-        if (!strcmp(map[i].email,email))
+        if (!strcmp(map[i].email, email))
         {
             map[i].num++;
             return 1;
@@ -64,7 +64,7 @@ reaper(
         str_lower(buf, acct.email);
         if (!check_in(buf))
         {
-            strcpy(map[total].email,buf);
+            strcpy(map[total].email, buf);
             map[total].num = 1;
             total++;
         }
@@ -105,12 +105,12 @@ main(
     char *argv[])
 {
     int ch;
-    char *fname, fpath[256],bpath[256];
-    int i,fd;
+    char *fname, fpath[256], bpath[256];
+    int i, fd;
 
     fd = open(FN_ETC_EMAILADDR_ACL".new", O_WRONLY | O_CREAT | O_TRUNC, 0600);
 
-    memset(map,0,MAX_AC * sizeof(MAP));
+    memset(map, 0, MAX_AC * sizeof(MAP));
     total = 0;
     funo = open(".USR", O_RDWR | O_CREAT, 0600);
 
@@ -135,18 +135,18 @@ main(
     close(funo);
 
 
-    printf("total user %d\n",total);
+    printf("total user %d\n", total);
     for (i=0;i<total;i++)
     {
-        write(fd,&map[i],sizeof(MAP));
-        printf("%-60s# %d\n",map[i].email,map[i].num);
+        write(fd, &map[i], sizeof(MAP));
+        printf("%-60s# %d\n", map[i].email, map[i].num);
     }
     close(fd);
     sprintf(bpath, FN_ETC_EMAILADDR_ACL);
-    rename(FN_ETC_EMAILADDR_ACL".new",bpath);
+    rename(FN_ETC_EMAILADDR_ACL".new", bpath);
     if (argc > 1)
     {
-        sprintf(fpath,"mail %s.bbs@"MYHOSTNAME" < " FN_CHECKMAIL_MAIL,argv[1]);
+        sprintf(fpath, "mail %s.bbs@"MYHOSTNAME" < " FN_CHECKMAIL_MAIL, argv[1]);
         system("mail SYSOP.bbs@" MYHOSTNAME " < " FN_CHECKMAIL_MAIL);
         system("mail Dream_log.brd@" MYHOSTNAME " < " FN_CHECKMAIL_MAIL);
         system(fpath);

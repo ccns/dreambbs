@@ -41,7 +41,7 @@ static int can_see(UTMP *up);
 static int can_banmsg(UTMP *up);
 
 #ifdef EVERY_Z
-extern int vio_fd;		/* Thor.0725: 為talk,chat可用^z作準備 */
+extern int vio_fd;		/* Thor.0725: 為talk, chat可用^z作準備 */
 extern int holdon_fd;
 #endif
 
@@ -97,7 +97,7 @@ bmode(
 {
     static char modestr[32];
 #ifdef	HAVE_SHOWNUMMSG
-    char *nums[9] = {"一","二","三","四","五","六","七","八","九"};
+    char *nums[9] = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
 #endif
     int mode;
     char *word;
@@ -108,12 +108,12 @@ bmode(
 #ifdef	HAVE_SHOWNUMMSG
     if (up->num_msg > 9)
     {
-        strcpy(modestr,"被灌爆了");
+        strcpy(modestr, "被灌爆了");
         return (modestr);
     }
     else if (up->num_msg > 0)
     {
-        sprintf(modestr,"收到%s封訊息",nums[up->num_msg-1]);
+        sprintf(modestr, "收到%s封訊息", nums[up->num_msg-1]);
         return (modestr);
     }
 #endif
@@ -158,7 +158,7 @@ copyship(
     shead = pal_ship;
     if (userno == cuser.userno)
     {
-        strcpy(ship,"那就是我");
+        strcpy(ship, "那就是我");
                 return;
     }
     if (shead)
@@ -167,7 +167,7 @@ copyship(
         {
             if (shead->pal_no == userno)
             {
-                strcpy(ship,shead->ship);
+                strcpy(ship, shead->ship);
                 return;
             }
             shead++;
@@ -429,7 +429,7 @@ int_cmp(
 void
 pal_cache(void)
 {
-    int count, fsize, ufo ,fd;
+    int count, fsize, ufo, fd;
     int *plist, *cache;
     int ship_total;
     PAL *phead, *ptail;
@@ -448,7 +448,7 @@ pal_cache(void)
     fsize = 0;
     usr_fpath(fpath, cuser.userid, FN_PAL);
     fimage = f_img(fpath, &fsize);
-    if ((fsize > (PAL_MAX * sizeof(PAL))) && (fd = open(fpath,O_RDWR)))
+    if ((fsize > (PAL_MAX * sizeof(PAL))) && (fd = open(fpath, O_RDWR)))
     {
         ftruncate(fd, PAL_MAX * sizeof(PAL));
         close(fd);
@@ -519,12 +519,12 @@ pal_cache(void)
         ptail = (PAL *) (fimage + fsize);
         if (pal_ship)
         {
-            memset(pal_ship,0,(ship_total+1)*sizeof(PAL_SHIP));
+            memset(pal_ship, 0, (ship_total+1)*sizeof(PAL_SHIP));
             do
             {
                 if (strlen(phead->ship)>0)
                 {
-                    strcpy(shead->ship,phead->ship);
+                    strcpy(shead->ship, phead->ship);
                     shead->pal_no = phead->userno;
                     shead++;
                 }
@@ -545,7 +545,7 @@ void
 aloha_sync(void)
 {
     char fpath[128];
-    int fd,size=0;
+    int fd, size=0;
     struct stat st;
 
     usr_fpath(fpath, cuser.userid, FN_FRIEND_BENZ);
@@ -1039,7 +1039,7 @@ bmw_item(
         }
         else
         {
-            if (strstr(bmw->msg,"★廣播"))
+            if (strstr(bmw->msg, "★廣播"))
                 prints("%5d \033[36;1m%02d:%02d %-13s★%-50.50s\033[m\n", num, ptime->tm_hour, ptime->tm_min,
                     bmw->userid, (bmw->msg)+8);
             else
@@ -1054,11 +1054,11 @@ bmw_item(
             if (!(*bmw->userid))
                 strcpy(bmw->userid, "眾家好友");
 
-            prints("%5d %-13s☆%-57.57s\n", num,bmw->userid, bmw->msg);
+            prints("%5d %-13s☆%-57.57s\n", num, bmw->userid, bmw->msg);
         }
         else
         {
-            if (strstr(bmw->msg,"★廣播"))
+            if (strstr(bmw->msg, "★廣播"))
                 prints("%5d \033[36;1m%-13s★%-57.57s\033[m\n", num,
                     bmw->userid, (bmw->msg)+8);
             else
@@ -1306,7 +1306,7 @@ bm_image(void)
             count = read(fd, pal, count) / sizeof(PAL);
             if (count > 0)
             {
-                int *userno,*ubase;
+                int *userno, *ubase;
                 int c = count;
 
                 ubase = userno = (int *)malloc(count*sizeof(int));
@@ -1349,7 +1349,7 @@ int
 bm_belong(
     char *board)
 {
-    int fsize, count, result,wcount;
+    int fsize, count, result, wcount;
     char fpath[80];
 
     result = 0;
@@ -1463,7 +1463,7 @@ showplans(
 
     if ((fp = fopen(buf, "r")))
     {
-        move(7,0);
+        move(7, 0);
 //      outs(" [名片]：\n\n");
         i = MAXQUERYLINES;
 
@@ -1486,7 +1486,7 @@ do_query(
     int paling)			/* 是否正在設定好友名單 */
 {
     UTMP *up;
-    int userno,mail, rich;
+    int userno, mail, rich;
     char *userid;
 
     utmp_mode(M_QUERY);
@@ -1522,7 +1522,7 @@ do_query(
 
     mail = m_query(userid);
     if (mail)
-        prints(" [信箱] \033[1;31m有 %d 封新情書\033[m\n",mail);
+        prints(" [信箱] \033[1;31m有 %d 封新情書\033[m\n", mail);
     else
         prints(" [信箱] 都看過了\n");
 
@@ -1598,7 +1598,7 @@ my_query(
 #define	BMW_LOCAL_MAX	10
 
 
-static BMW bmw_lslot[BMW_LOCAL_MAX],bmw_sentlot[BMW_LOCAL_MAX];
+static BMW bmw_lslot[BMW_LOCAL_MAX], bmw_sentlot[BMW_LOCAL_MAX];
 //static BMW bmw_lslot[BMW_LOCAL_MAX];
 static int bmw_locus;
 
@@ -1688,12 +1688,12 @@ bmw_edit(
 
     str = bmw->msg;
 
-    memset(str,0,sizeof(bmw->msg));
+    memset(str, 0, sizeof(bmw->msg));
 
     str[0] = cc;
     str[1] = '\0';
 
-    if (vget(b_lines - 1, 0, hint, str, 58 , GCARRY) &&
+    if (vget(b_lines - 1, 0, hint, str, 58, GCARRY) &&
                                         /* lkchu.990103: 新介面只允許 48 個字元 */
         vans("確定要送出《熱訊》嗎(Y/N)？[Y] ") != 'n')
     {
@@ -1742,17 +1742,17 @@ bmw_edit(
 }
 
 /*超炫回顧*/
-static void bmw_display(int max,int pos)
+static void bmw_display(int max, int pos)
 {
     int i=9, j, sent;
-    BMW bmw,bmw2;
-    char buf[128],color[10];
+    BMW bmw, bmw2;
+    char buf[128], color[10];
 
 //  bmw_pos = pos;
     move(i, 0);
     clrtobot();
     i++;
-    move(i,0);
+    move(i, 0);
     prints(" \033[1;36m╓──────╢\033[43;37m              夢大超炫水球回顧              \033[40;36m╟──────╖\033[m");
 
     i++;
@@ -1764,15 +1764,15 @@ static void bmw_display(int max,int pos)
 
 
         if (max == pos)
-            sprintf(color,"1;45");
+            sprintf(color, "1;45");
         else
-            sprintf(color,"0");
+            sprintf(color, "0");
 
-        if (strstr(bmw.msg,"★廣播"))
-            sprintf(buf, "   \033[1;45;37m[%-12s]\033[%sm %-58s\033[m", bmw.userid,color,(bmw.msg+8));
+        if (strstr(bmw.msg, "★廣播"))
+            sprintf(buf, "   \033[1;45;37m[%-12s]\033[%sm %-58s\033[m", bmw.userid, color, (bmw.msg+8));
         else
-            sprintf(buf, "   \033[37;%sm[\033[33m%-12s\033[37m] %-58s\033[m",color, bmw.userid,bmw.msg);
-        move(i,0);
+            sprintf(buf, "   \033[37;%sm[\033[33m%-12s\033[37m] %-58s\033[m", color, bmw.userid, bmw.msg);
+        move(i, 0);
         outs(buf);
         i++;
     }
@@ -1793,7 +1793,7 @@ static void bmw_display(int max,int pos)
         }
     }
     if (!sent)
-        prints("  \033[32m尚未傳訊給 %s\033[m",bmw2.userid);
+        prints("  \033[32m尚未傳訊給 %s\033[m", bmw2.userid);
     move(i+2, 0);
     prints(" \033[1;36m╙──────╢\033[43;37m 操作 (←、Enter)離開 (↑↓)選擇 (其他)回訊 \033[40;36m╟──────╜\033[m ");
 
@@ -1808,7 +1808,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 #ifdef M3_USE_PFTERM
     screen_backup_t old_screen;
 #else
-    screenline sl[2],slt[b_lines + 1];
+    screenline sl[2], slt[b_lines + 1];
 #endif
     char buf[128];
 
@@ -1863,7 +1863,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
                 bmw_display(max, pos);
             else
             {
-                if (strstr(bmw.msg,"★廣播"))
+                if (strstr(bmw.msg, "★廣播"))
                     sprintf(buf, BMW_FORMAT_BC, bmw.userid, (bmw.msg)+8);
                 else
                     sprintf(buf, BMW_FORMAT, bmw.userid, bmw.msg);
@@ -1993,7 +1993,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 
             /* bmw_edit(up, "★回應：", &bmw, cc); */
             /* Thor.981214: 為使回扣不致弄混 */
-            sprintf(buf,"★[%s]", up->userid);
+            sprintf(buf, "★[%s]", up->userid);
             bmw_edit(up, buf, &bmw, cc);
             break;
         }
@@ -2028,24 +2028,24 @@ pal_list(
 {
     LIST list;
     int userno, fd;
-    char buf[32], fpath[64],msg[128],temp[30];
+    char buf[32], fpath[64], msg[128], temp[30];
     ACCT acct;
-    sprintf(msg,"A)增加 D)刪除 F)好友 G)條件 [1~%d]群組名單 M)定案 Q)取消？[M]",MAX_LIST);
+    sprintf(msg, "A)增加 D)刪除 F)好友 G)條件 [1~%d]群組名單 M)定案 Q)取消？[M]", MAX_LIST);
 
     userno = 0;
 
     for (;;)
     {
-        switch (vget(1, 0, msg , buf, 2, LCECHO))
+        switch (vget(1, 0, msg, buf, 2, LCECHO))
         {
         case '1': case '2': case '3': case '4': case '5': case '6': case '7':
         case '8': case '9':
-            sprintf(temp,"list.%c",*buf);
-            usr_fpath(fpath,cuser.userid,temp);
-            fd = open(fpath,O_RDONLY);
+            sprintf(temp, "list.%c", *buf);
+            usr_fpath(fpath, cuser.userid, temp);
+            fd = open(fpath, O_RDONLY);
             while (fd)
             {
-                if (read(fd,&list,sizeof(LIST)) == sizeof(LIST))
+                if (read(fd, &list, sizeof(LIST)) == sizeof(LIST))
                 {
                     if (!ll_has(list.userid))
                     {
@@ -2332,9 +2332,9 @@ talk_save(void)
 void
 bmw_save(void)
 {
-    int fd,check_max;
+    int fd, check_max;
     char ans;
-    char fpath[64],buf[128];
+    char fpath[64], buf[128];
     struct stat st;
 
 
@@ -2358,7 +2358,7 @@ bmw_save(void)
             ans = 'r';
         else
         {
-            sprintf(buf,"本次上站熱訊處理 (M)備忘錄 (R)保留 (C)清除 [%dk/%dk] ？[R] ",check_max/1024,BMW_MAX_SIZE);
+            sprintf(buf, "本次上站熱訊處理 (M)備忘錄 (R)保留 (C)清除 [%dk/%dk] ？[R] ", check_max/1024, BMW_MAX_SIZE);
             ans = vans(buf);
         }
         switch (ans)
@@ -2469,7 +2469,7 @@ bmw_rqst(void)
 
         if (!(cutmp->ufo & (UFO_REJECT | UFO_NET)))
         {
-            if (strstr(mptr->msg,"★廣播"))
+            if (strstr(mptr->msg, "★廣播"))
                 sprintf(buf, BMW_FORMAT_BC, mptr->userid, (mptr->msg)+8);
             else
                 sprintf(buf, BMW_FORMAT, mptr->userid, mptr->msg);
@@ -2630,7 +2630,7 @@ talk_speak(
     prints("\033[1;46;37m  談天說地  \033[45m%s%s】 ◆  %s%s\033[m",
         data, buf, page_requestor, data);
 #if 1
-    outz("\033[34;46m 交談模式 \033[31;47m (^A)\033[30m對奕模式 \033[31m(^B)\033[30m象棋模式 \033[31m(^C,^D)\033[30m結束交談 \033[31m(^Z)\033[30m快捷列表 \033[31m(^G)\033[30m嗶嗶 \033[m");
+    outz("\033[34;46m 交談模式 \033[31;47m (^A)\033[30m對奕模式 \033[31m(^B)\033[30m象棋模式 \033[31m(^C, ^D)\033[30m結束交談 \033[31m(^Z)\033[30m快捷列表 \033[31m(^G)\033[30m嗶嗶 \033[m");
 #endif
     move(0, 0);
 
@@ -2714,13 +2714,13 @@ talk_speak(
 #if 1
             if (data[0] == Ctrl('A'))
             { /* Thor.990219: 呼叫外掛棋盤 */
-                if (DL_func("bin/bwboard.so:vaBWboard",fd,1)==-2)
+                if (DL_func("bin/bwboard.so:vaBWboard", fd, 1)==-2)
                     break;
                 continue;
             }
             if (data[0] == Ctrl('B'))
             {
-                if (DL_func("bin/chess.so:vaChess",fd,1)==-2)
+                if (DL_func("bin/chess.so:vaChess", fd, 1)==-2)
                     break;
                 continue;
             }
@@ -2767,8 +2767,8 @@ talk_speak(
             data[0] = ch;
             if (send(fd, data, 1, 0) != 1)
                 break;
-            /* if (BWboard(fd,0)==-2) */
-            if (DL_func("bin/bwboard.so:vaBWboard",fd,0)==-2)
+            /* if (BWboard(fd, 0)==-2) */
+            if (DL_func("bin/bwboard.so:vaBWboard", fd, 0)==-2)
                 break;
         }
         else if (ch == Ctrl('B'))
@@ -2777,8 +2777,8 @@ talk_speak(
             data[0] = ch;
             if (send(fd, data, 1, 0) != 1)
                 break;
-            /* if (BWboard(fd,0)==-2) */
-            if (DL_func("bin/chess.so:vaChess",fd,0)==-2)
+            /* if (BWboard(fd, 0)==-2) */
+            if (DL_func("bin/chess.so:vaChess", fd, 0)==-2)
                 break;
         }
 #endif
@@ -2823,7 +2823,7 @@ talk_speak(
             /* Thor.980805: 有人在旁邊按enter才需要check biff */
             if (ch=='\n')
             {
-                static int old_biff,old_biffn;
+                static int old_biff, old_biffn;
                 int biff = cutmp->ufo & UFO_BIFF;
                 if (biff && !old_biff)
                     talk_string(&mywin, "◆ 噹! 郵差衝進來了!\n");
@@ -2865,7 +2865,7 @@ static char *talk_reason[] =
     "你真的很煩，我實在不想跟你 talk"
 
 #ifdef EVERY_Z
-    ,"我的嘴巴正忙著和別人講話呢，沒有空的嘴巴了"
+   , "我的嘴巴正忙著和別人講話呢，沒有空的嘴巴了"
     /* Thor.0725: for chat&talk 用^z 作準備 */
 #endif
 };
@@ -2881,7 +2881,7 @@ talk_page(
     int sock, msgsock;
     struct sockaddr_in sin;
     pid_t pid;
-    int ans, length,myans;
+    int ans, length, myans;
     char buf[60];
 #if     defined(__OpenBSD__)
     struct hostent *h;
@@ -2927,8 +2927,8 @@ talk_page(
 #ifdef  HAVE_PIP_FIGHT
     if (myans == 'c')
     {
-        usr_fpath(buf,up->userid,"chicken");
-        if (access(buf,0))
+        usr_fpath(buf, up->userid, "chicken");
+        if (access(buf, 0))
         {
             vmsg("對方沒有養小雞！");
             return 1;
@@ -2998,7 +2998,7 @@ talk_page(
             bell();
 
             if (kill(pid, SIGUSR1))
-            /* Thor.990201:註解:其實這的kill,也只是看看對方是不是還在線上而已:p
+            /* Thor.990201:註解:其實這的kill, 也只是看看對方是不是還在線上而已:p
                                 重發signal其實似乎 talk_rqst不會再被叫 */
             {
                 talk_hangup(sock);
@@ -3041,11 +3041,11 @@ talk_page(
         if (p)
         {
             up->pip = NULL;
-            (*p)(msgsock,2);
+            (*p)(msgsock, 2);
             cutmp->pip = NULL;
         }
-        add_io(0,60);
-/*      pip_vf_fight(msgsock,1);*/
+        add_io(0, 60);
+/*      pip_vf_fight(msgsock, 1);*/
     }
     else if (ans == 'C')
     {
@@ -3087,7 +3087,7 @@ talk_page(
 
 static PICKUP ulist_pool[MAXACTIVE];
 #ifdef	FRIEND_FIRST
-static int friend_num,ofriend_num,pfriend_num,bfriend_num;/* visor.991103: 記錄目前站上好友數 */
+static int friend_num, ofriend_num, pfriend_num, bfriend_num;/* visor.991103: 記錄目前站上好友數 */
 #endif
 static int ulist_head(XO *xo);
 static int ulist_init(XO *xo);
@@ -3103,7 +3103,7 @@ static char *msg_pickup_way[PICKUP_WAYS] =
     "暱稱",
     "閒置"
 #ifdef	HAVE_BOARD_PAL
-    ,"板友"
+   , "板友"
 #endif
 };
 
@@ -3136,8 +3136,8 @@ ulist_body(
     PICKUP *pp;
     UTMP *up;
     int paltmp;
-    int n, cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor,colortmp;
-    char buf[8],color[20],ship[80],*wcolor[7] = {"\033[m",COLOR_PAL,COLOR_BAD,COLOR_BOTH,COLOR_OPAL,COLOR_CLOAK,COLOR_BOARDPAL};
+    int n, cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor, colortmp;
+    char buf[8], color[20], ship[80], *wcolor[7] = {"\033[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 
 #ifdef HAVE_BOARD_PAL
     int isbpal;
@@ -3194,15 +3194,15 @@ ulist_body(
 
                 if (cuser.ufo2 & UFO2_SHIP)
                 {
-                    strcpy(ship," ");
-                    copyship(ship,userno);
+                    strcpy(ship, " ");
+                    copyship(ship, userno);
                 }
 
                 ufo = up->ufo;
 
 
-                diff = ck_state(UFO_PAGER,UFO_PAGER1,up,1);
-                diffmsg = ck_state(UFO_QUIET,UFO_MESSAGE,up,0);
+                diff = ck_state(UFO_PAGER, UFO_PAGER1, up, 1);
+                diffmsg = ck_state(UFO_QUIET, UFO_MESSAGE, up, 0);
 
                 colortmp = 1;
 
@@ -3211,15 +3211,15 @@ ulist_body(
                 else if (fcolor == 0)
                     colortmp = 0;
 
-                strcpy(color,wcolor[fcolor]);
+                strcpy(color, wcolor[fcolor]);
 
                 prints("%5d%c%s%-13s%-22.21s%s%-16.15s%c%c %-16.16s%s",
-                    cnt,(up->ufo & UFO_WEB)?'*':' ',
+                    cnt, (up->ufo & UFO_WEB)?'*':' ',
                     color, up->userid,
-                    (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username ,
+                    (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
                     colortmp > 0 ? "\033[m" : "",
                     (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
-                    HIDDEN_SRC : up->from , diff,diffmsg,
+                    HIDDEN_SRC : up->from, diff, diffmsg,
                     bmode(up, 0), buf);
             }
             else
@@ -3290,7 +3290,7 @@ static int (*ulist_cmp[]) (PICKUP *i, PICKUP *j) =
     ulist_cmp_nick,
     ulist_cmp_idle
 #ifdef	HAVE_BOARD_PAL
-    ,ulist_cmp_board
+   , ulist_cmp_board
 #endif
 };
 
@@ -3301,8 +3301,8 @@ ulist_init(
 {
     UTMP *up, *uceil;
     PICKUP *pp;
-    int max, filter, seecloak, userno, self, nf_num,tmp;
-    int ispal,bad;
+    int max, filter, seecloak, userno, self, nf_num, tmp;
+    int ispal, bad;
 #ifdef HAVE_BOARD_PAL
     int isbpal;
 #endif
@@ -3431,13 +3431,13 @@ ulist_neck(
 #ifdef HAVE_BOARD_PAL
     prints("  排列方式：[\033[1m%s\033[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d \033[0;36m板友：%d\033[m\n"
         "\033[30;47m No.  代號         %-22s%-13s   PM %-14s閒置\033[m",
-        msg_pickup_way[pickup_way],total_num,COLOR_PAL,friend_num+pfriend_num,COLOR_OPAL,friend_num+ofriend_num,COLOR_BAD,bfriend_num,board_pals,
+        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num, board_pals,
         (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
         (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
 #else
     prints("  排列方式：[\033[1m%s\033[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\033[m\n"
         "\033[30;47m No.  代號         %-22s%-13s   PM %-14s閒置 \033[m",
-        msg_pickup_way[pickup_way],total_num,COLOR_PAL,friend_num+pfriend_num,COLOR_OPAL,friend_num+ofriend_num,COLOR_BAD,bfriend_num,
+        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num,
         (HAS_PERM(PERM_SYSOP) && (cuser.ufo & UFO_REALNAME)) ? "真實姓名" : "暱  稱",
         (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
 #endif
@@ -3567,7 +3567,7 @@ ulist_makepal(
             pal.userno = userno;
             strcpy(pal.userid, buf);
             usr_fpath(buf, cuser.userid, FN_PAL);
-            if (rec_num(buf,sizeof(PAL)) < PAL_MAX)
+            if (rec_num(buf, sizeof(PAL)) < PAL_MAX)
             {
                 rec_add(buf, &pal, sizeof(PAL));
                 pal_cache();
@@ -3607,7 +3607,7 @@ ulist_makebad(
             pal.userno = userno;
             strcpy(pal.userid, buf);
             usr_fpath(buf, cuser.userid, FN_PAL);
-            if (rec_num(buf,sizeof(PAL)) < PAL_MAX)
+            if (rec_num(buf, sizeof(PAL)) < PAL_MAX)
             {
                 rec_add(buf, &pal, sizeof(PAL));
                 pal_cache();
@@ -3665,7 +3665,7 @@ ulist_broadcast(
     PICKUP *pp;
     UTMP *up;
     BMW bmw;
-    char buf[80],ans,admin;
+    char buf[80], ans, admin;
 
     num = cuser.userlevel;
     if (!(num & (PERM_SYSOP)) &&
@@ -3678,8 +3678,8 @@ ulist_broadcast(
 
     bmw.caller = 0;
     bmw_edit(NULL, "★廣播：", &bmw, 0);
-    sprintf(buf,"★廣播：%s",bmw.msg);
-    strcpy(bmw.msg,buf);
+    sprintf(buf, "★廣播：%s", bmw.msg);
+    strcpy(bmw.msg, buf);
     admin = check_admin(cuser.userid);
     if (admin && !(cuser.ufo2 & UFO2_PAL))
     {
@@ -3690,7 +3690,7 @@ ulist_broadcast(
     }
     if (!(cuser.ufo2 & UFO2_PAL) && admin)
     {
-        strcpy(bmw.userid,"SYSOP");
+        strcpy(bmw.userid, "SYSOP");
         /*bmw.sender = 1;*/
     }
     if (bmw.caller)
@@ -3787,17 +3787,17 @@ ulist_su(
     XO *tmp;
     ACCT acct;
     char path[80];
-    int level,ufo;
+    int level, ufo;
     ufo = cuser.ufo;
     level = cuser.userlevel;
     if (!supervisor ||
             acct_load(&acct, ulist_pool[xo->pos].utmp->userid) < 0)
             return XO_NONE;
 
-    memcpy(&cuser,&acct,sizeof(ACCT));
+    memcpy(&cuser, &acct, sizeof(ACCT));
     cuser.userlevel = level;
     cuser.ufo = ufo;
-    usr_fpath(path,acct.userid,".DIR");
+    usr_fpath(path, acct.userid, ".DIR");
     tmp = xz[XZ_MBOX - XO_ZONE].xo;
     xz[XZ_MBOX - XO_ZONE].xo =  xo_new(path);
     free(tmp);
@@ -3816,7 +3816,7 @@ ulist_kick(
 {
     ACCT u;
     acct_load(&u, ulist_pool[xo->pos].utmp->userid);
-    if ((HAS_PERM(PERM_SYSOP)&& (!(u.userlevel & PERM_SYSOP) || !strcmp(cuser.userid,u.userid)) )||check_admin(cuser.userid))
+    if ((HAS_PERM(PERM_SYSOP)&& (!(u.userlevel & PERM_SYSOP) || !strcmp(cuser.userid, u.userid)) )||check_admin(cuser.userid))
     {
         UTMP *up;
         pid_t pid;
@@ -3831,7 +3831,7 @@ ulist_kick(
             sprintf(buf, "%s (%s)", up->userid, up->username);
 
             if ((kill(pid, SIGTERM) == -1) && (errno == ESRCH))
-            /*  memset(up,0,sizeof(UTMP)); */
+            /*  memset(up, 0, sizeof(UTMP)); */
             {
                 up->pid = up -> userno = 0;
                 ushm->count--;            /*r2.20170803: try to fix counting error*/
@@ -3845,7 +3845,7 @@ ulist_kick(
         {
             if (vans(msg_sure_ny) != 'y')
                 return XO_FOOT;
-            memset(up,0,sizeof(UTMP));
+            memset(up, 0, sizeof(UTMP));
             return ulist_init(xo);
         }
     }
@@ -4027,7 +4027,7 @@ ulist_del(
     UTMP *up;
     char ans;
     int userno;
-    int  fd,tmp=0;
+    int  fd, tmp=0;
     char fpath[64];
     PAL *pal;
 
@@ -4047,7 +4047,7 @@ ulist_del(
                     tmp = tmp + 1;
                 else
                 {
-                    rec_del(fpath,sizeof(PAL),tmp,NULL,NULL);
+                    rec_del(fpath, sizeof(PAL), tmp, NULL, NULL);
                     break;
                 }
             }
@@ -4066,8 +4066,8 @@ ulist_changeship(
 {
     UTMP *up;
     int userno;
-    int  fd,tmp=0;
-    char fpath[64],buf[46];
+    int  fd, tmp=0;
+    char fpath[64], buf[46];
     PAL *pal;
     int check;
 
@@ -4078,8 +4078,8 @@ ulist_changeship(
     check = is_pal(userno) ? 1 : is_bad(userno) ? 2 : 0;
     if (!check)
         return XO_NONE;
-    strcpy(buf,"");
-    copyship(buf,userno);
+    strcpy(buf, "");
+    copyship(buf, userno);
 
     if (vget(b_lines, 0, check == 1 ?"友誼：":"惡行惡狀：", buf, sizeof(buf), GCARRY))
     {
@@ -4093,7 +4093,7 @@ ulist_changeship(
                     tmp = tmp + 1;
                 else
                 {
-                    strcpy(pal->ship,buf);
+                    strcpy(pal->ship, buf);
                     rec_put(fpath, pal, sizeof(PAL), tmp);
                     break;
                 }
@@ -4115,11 +4115,11 @@ ulist_test(
     int fd;
     char buf[128];
     fd = open(FN_ETC_SYSOP, O_RDONLY);
-    sprintf(buf,"檔案編號 %d:%d:%d",fd,Ctrl('F'),'@');
+    sprintf(buf, "檔案編號 %d:%d:%d", fd, Ctrl('F'), '@');
     if (fd)
         close(fd);
     pmsg(buf);
-/*  vget(b_lines,0,"多少人:",buf,6,DOECHO);
+/*  vget(b_lines, 0, "多少人:", buf, 6, DOECHO);
     ushm->count = atoi(buf);*/
     return XO_INIT;
 }
@@ -4131,7 +4131,7 @@ ulist_state(
     char buf[128];
     if (!HAS_PERM(PERM_SYSOP))
         return XO_NONE;
-    sprintf(buf,"PID : %d",ulist_pool[xo->pos].utmp->pid);
+    sprintf(buf, "PID : %d", ulist_pool[xo->pos].utmp->pid);
     vmsg(buf);
     return XO_INIT;
 }
@@ -4143,8 +4143,8 @@ ulist_april1(
     XO *xo)
 {
     char buf[256];
-    more("gem/brd/Admin/J/A106LL7J",NULL);
-    sprintf(buf,"您是第 %d 個被騙的使用者 ^^y ",ushm->avgload);
+    more("gem/brd/Admin/J/A106LL7J", NULL);
+    sprintf(buf, "您是第 %d 個被騙的使用者 ^^y ", ushm->avgload);
     if (!aprilfirst)
         ushm->avgload++;
     vmsg(buf);
@@ -4173,17 +4173,17 @@ KeyFunc ulist_cb[] =
     {'A', ulist_makebad},
     {'t', ulist_talk},
     {'w', ulist_write},
-    {'l', ulist_recall},		/* Thor: 熱訊回顧 */
+    {'l', ulist_recall}, 		/* Thor: 熱訊回顧 */
     {'j', ulist_changeship},
     {'q', ulist_query},
     {'b', ulist_broadcast},
-    {'s', ulist_init},		/* refresh status Thor: 應user要求 */
+    {'s', ulist_init}, 		/* refresh status Thor: 應user要求 */
     {'c', t_cloak},
     {'R', ulist_realname},
     {'o', ulist_mp},
     {'d', ulist_del},
     {'p', ulist_pager},
-    {Ctrl('Q'),ulist_query},
+    {Ctrl('Q'), ulist_query},
     {Ctrl('K'), ulist_kick},
     {Ctrl('X'), ulist_edit},
     {'g', ulist_nickchange},
@@ -4461,12 +4461,12 @@ over_for:
             if (p)
             {
                 cutmp->pip = NULL;
-                (*p)(sock,1);
+                (*p)(sock, 1);
                 cutmp->pip = NULL;
 
             }
-            add_io(0,60);
-/*          pip_vf_fight(sock,2);*/
+            add_io(0, 60);
+/*          pip_vf_fight(sock, 2);*/
         }
 #endif
     }
@@ -4507,7 +4507,7 @@ check_personal_note(
     char *userid)
 {
     char fpath[256];
-    int  fd,total = 0;
+    int  fd, total = 0;
     notedata myitem;
     char *fn_note_dat      = "pnote.dat";
 
@@ -4518,7 +4518,7 @@ check_personal_note(
 
     if ((fd = open(fpath, O_RDONLY)) >=0)
     {
-        while (read(fd,&myitem, sizeof(myitem)) == sizeof(myitem))
+        while (read(fd, &myitem, sizeof(myitem)) == sizeof(myitem))
         {
             if (newflag)
             {
@@ -4552,7 +4552,7 @@ banmsg_cache(void)
     fsize = 0;
     usr_fpath(fpath, cuser.userid, FN_BANMSG);
     fimage = f_img(fpath, &fsize);
-    if ((fsize > (BANMSG_MAX * sizeof(BANMSG))) && (fd = open(fpath,O_RDWR)))
+    if ((fsize > (BANMSG_MAX * sizeof(BANMSG))) && (fd = open(fpath, O_RDWR)))
     {
         ftruncate(fd, BANMSG_MAX * sizeof(BANMSG));
         close(fd);

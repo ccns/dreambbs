@@ -559,7 +559,7 @@ XO *xo)
     }
 
 
-    if (!vget(b_lines, 0, "щ布肈", vxx.title, TTLEN + 1 - 5 /* sizeof(vxx.title) Thor.981020: ┤禬筁棵辊 */ , GCARRY))
+    if (!vget(b_lines, 0, "щ布肈", vxx.title, TTLEN + 1 - 5 /* sizeof(vxx.title) Thor.981020: ┤禬筁棵辊 */, GCARRY))
         return XO_FOOT;
 
     hdr_fpath(fpath, dir, (HDR *) vch);
@@ -718,7 +718,7 @@ XO *xo)
     buf[74] = '\0';
 
     fprintf(fp, "\n\n> %s <\n\n』 [%s]狾щ布%s\n\n羭快  %s\n\n羭快ら戳%s\n",
-            buf, currboard , vch->title, vch->owner, ctime(&vch->chrono));
+            buf, currboard, vch->title, vch->owner, ctime(&vch->chrono));
     fprintf(fp, "秨布ら戳%s\n』 щ布肈:\n\n", ctime(&vch->vclose));
 
     *fname = '@';
@@ -828,7 +828,7 @@ check_mail(
 char *account)
 {
     //char validemail[3][20] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw", "nckualumni.org.tw"};
-    char addr[20], buf[30] , line[80], server[60], *ptr;
+    char addr[20], buf[30], line[80], server[60], *ptr;
     char year[3];
     int sock = 110;
 
@@ -852,7 +852,7 @@ char *account)
     if (!Get_Socket(server, &sock))
     {
         close(sock);
-        vget(b_lines - 3, 0, line , buf, 20, NOECHO);
+        vget(b_lines - 3, 0, line, buf, 20, NOECHO);
         if (strlen(buf) < 1)
             return 0;
         if (!POP3_Check(server, addr, buf))
@@ -868,7 +868,7 @@ static int
 check_mail(
 char *mail)
 {
-    char addr[20], buf[30] , line[80], server[60], *ptr;
+    char addr[20], buf[30], line[80], server[60], *ptr;
     int sock = 110;
 
     sprintf(line, "s%s@%s", mail, DEFAULTSERVER);
@@ -891,7 +891,7 @@ char *mail)
     if (!Get_Socket(server, &sock))
     {
         close(sock);
-        vget(b_lines - 3, 0, line , buf, 20, NOECHO);
+        vget(b_lines - 3, 0, line, buf, 20, NOECHO);
         if (strlen(buf) < 1)
             return 0;
         if (!POP3_Check(server, addr, buf))

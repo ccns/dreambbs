@@ -113,7 +113,7 @@ write_data(
                 color = "\033[m";
         }
 
-        printf("%s[%2d]  %-25s%5d\033[m    [%2d]  %-25s%5d\n",color, i+1, buf1, data[i].num,
+        printf("%s[%2d]  %-25s%5d\033[m    [%2d]  %-25s%5d\n", color, i+1, buf1, data[i].num,
                i+TOPNUM_HALF+1, buf2, data[i+TOPNUM_HALF].num);
     }
 
@@ -186,8 +186,8 @@ main(void)
 
     chdir(BBSHOME);
 
-    write_data("\033[33;1m===========\033[44m    Ω计逼︽篯    \033[40m============\033[m", toplogins,0);
-    write_data("\033[33;1m===========\033[44m    拈Ω计逼︽篯    \033[40m============\033[m", topposts,0);
-    write_data("\033[33;1m===========\033[44m    本计逼︽篯    \033[40m============\033[m", topstay,1);
+    write_data("\033[33;1m===========\033[44m    Ω计逼︽篯    \033[40m============\033[m", toplogins, 0);
+    write_data("\033[33;1m===========\033[44m    拈Ω计逼︽篯    \033[40m============\033[m", topposts, 0);
+    write_data("\033[33;1m===========\033[44m    本计逼︽篯    \033[40m============\033[m", topstay, 1);
     return 0;
 }

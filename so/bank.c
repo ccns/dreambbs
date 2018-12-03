@@ -64,9 +64,9 @@ int point1_money(void)
 #endif
     vs_bar("夢幣轉換");
 
-    move(2,0);
+    move(2, 0);
     prints("你的身上有 %9d 夢幣\n\n           %9d 優良點數"
-                    ,acct.money, acct.point1);
+                   , acct.money, acct.point1);
     if (acct.point1 < 1)
     {
         pmsg2("優良點數不足");
@@ -118,7 +118,7 @@ TransferAccount(void)
     time_t now;
     HDR xhdr;
     FILE *fp;
-    char folder[128],date[9],fpath[128];
+    char folder[128], date[9], fpath[128];
     char userid[13];
     char str[128];
     int selfmoney, pay;
@@ -135,21 +135,21 @@ TransferAccount(void)
     prints("\033[1;33m轉帳相關規定： \033[36m１. 一次最少要給 100 夢幣(稅前)。\n"
         "                       ２. 收手續費 10 %%。\033[m");
 
-    if (acct_get("要匯給誰：",&acct)<1)
+    if (acct_get("要匯給誰：", &acct)<1)
         return 0;
     if (acct.userno == cuser.userno)
     {
         pmsg2("不能跟自己交易啦！");
         return 0;
     }
-    strcpy(userid,acct.userid);
+    strcpy(userid, acct.userid);
 
 #ifdef M3_USE_PFTERM
-    clrregion(1,21);
+    clrregion(1, 21);
 #else
-    clearange(1,21);
+    clearange(1, 21);
 #endif
-    move(3,0);
+    move(3, 0);
 
     if (acct_load(&selfacct, cuser.userid) >= 0)
         selfmoney = selfacct.money;
@@ -159,10 +159,10 @@ TransferAccount(void)
         return 0;
     }
 
-    prints("你自己的身上還有 %9d 夢幣。\n",selfacct.money);
-    prints("\n%-12s則有 %9d 夢幣。",userid, acct.money);
+    prints("你自己的身上還有 %9d 夢幣。\n", selfacct.money);
+    prints("\n%-12s則有 %9d 夢幣。", userid, acct.money);
 
-    if (!vget(7,0,"你要匯款多少夢幣：",buf,10,DOECHO))
+    if (!vget(7, 0, "你要匯款多少夢幣：", buf, 10, DOECHO))
         return 0;
 
     temp = ((int)atoi(buf) + acct.money);
@@ -185,10 +185,10 @@ TransferAccount(void)
 
     pay = (int)(atoi(buf)*1.1);
 
-    move(9,0);
+    move(9, 0);
     prints("欲轉 %d 元夢幣(稅前)，實際支付 %d 夢幣(稅後)", (int)atoi(buf), pay);
 
-    move(11,0);
+    move(11, 0);
     clrtobot();
 
     if (!vget(b_lines, 0, "匯款理由：", str, 60, DOECHO))
@@ -201,17 +201,17 @@ TransferAccount(void)
         str_stamp(date, &now);
 
         usr_fpath(folder, userid, FN_DIR);
-        fp = fdopen(hdr_stamp(folder, 0, &xhdr, fpath),"w");
+        fp = fdopen(hdr_stamp(folder, 0, &xhdr, fpath), "w");
         strcpy(xhdr.owner, cuser.userid);
         strcpy(xhdr.nick, cuser.username);
         sprintf(xhdr.title, "匯款通知");
         strcpy(xhdr.date, date);
 
-        fprintf(fp,"作者: %s (%s)\n",cuser.userid,cuser.username);
-        fprintf(fp,"標題: 匯款通知\n");
-        fprintf(fp,"時間: %s\n",date);
-        fprintf(fp,"\n\n%s 送給你 \033[1;31m%d\033[m 夢幣，請笑納~\n", cuser.userid, (int)atoi(buf));
-        fprintf(fp,"\n\n匯款理由：%s\n",str);
+        fprintf(fp, "作者: %s (%s)\n", cuser.userid, cuser.username);
+        fprintf(fp, "標題: 匯款通知\n");
+        fprintf(fp, "時間: %s\n", date);
+        fprintf(fp, "\n\n%s 送給你 \033[1;31m%d\033[m 夢幣，請笑納~\n", cuser.userid, (int)atoi(buf));
+        fprintf(fp, "\n\n匯款理由：%s\n", str);
         fclose(fp);
         rec_add(folder, &xhdr, sizeof(HDR));
 
@@ -276,7 +276,7 @@ money_back(void)
     }
     {
         clrtobot();
-        usr_fpath(fpath,acct.userid,FN_MONEY);
+        usr_fpath(fpath, acct.userid, FN_MONEY);
 
         //讀取MONEY
         if ((fd = open(fpath, O_RDONLY)) < 0)
@@ -358,20 +358,20 @@ int bank_main(void)
 
     clear();
 
-    move(0,0);
+    move(0, 0);
     prints("\033[1;33;42m                            " BOARDNAME "    銀行                                   \033[m\n\n");
-    move(10,0);
+    move(10, 0);
     prints("  您的帳號資訊如下    １. 用優良點數換取夢幣\n\n");
     prints("                      ２. 用夢幣換取優良點數\n\n");
     prints("                      ３. 投資\n\n");
     prints("                      ４. 匯款給其他人\n");
     prints("\n");
 
-    move (4,2);
-    prints("夢幣 %d ",money);
-    move (6,2);
-    prints("優良積分 %d ",point1);
-    if (!vget(b_lines,0,"請選擇您要的服務： [Q] 離開 ",buf,2,DOECHO))
+    move (4, 2);
+    prints("夢幣 %d ", money);
+    move (6, 2);
+    prints("優良積分 %d ", point1);
+    if (!vget(b_lines, 0, "請選擇您要的服務： [Q] 離開 ", buf, 2, DOECHO))
         return 0;
 
     if (*buf == '1')

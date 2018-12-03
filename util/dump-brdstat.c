@@ -114,14 +114,14 @@ count_board(
     BSTATCOUNT bcount;
     char fpath[128];
 
-    memset(&bcount,0,sizeof(BSTATCOUNT));
+    memset(&bcount, 0, sizeof(BSTATCOUNT));
 
-    brd_fpath(fpath,brd->brdname,FN_BRD_STATCOUNT);
+    brd_fpath(fpath, brd->brdname, FN_BRD_STATCOUNT);
 
-    rec_get(fpath,&bcount,sizeof(BSTATCOUNT),0);
-    printf("%-15s%10d %10d %10d %10d\n",brd->brdname,
-        bcount.threemonth.n_reads,bcount.threemonth.n_posts,
-        bcount.threemonth.n_news,bcount.threemonth.n_bans);
+    rec_get(fpath, &bcount, sizeof(BSTATCOUNT), 0);
+    printf("%-15s%10d %10d %10d %10d\n", brd->brdname,
+        bcount.threemonth.n_reads, bcount.threemonth.n_posts,
+        bcount.threemonth.n_news, bcount.threemonth.n_bans);
 
 }
 
@@ -150,7 +150,7 @@ main(void)
     {
         if (!(head->battr & BRD_NOTOTAL) && head->brdname[0])
         {
-            count_board(head,0);
+            count_board(head, 0);
         }
     } while (++head < tail);
 

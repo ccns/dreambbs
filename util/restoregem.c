@@ -14,7 +14,7 @@ reaper(
     char *lowid)
 {
     char buf[256];
-    sprintf(buf,"tar zxvf /var/tape/gem/%s ",lowid);
+    sprintf(buf, "tar zxvf /var/tape/gem/%s ", lowid);
     system(buf);
 }
 

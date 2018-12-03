@@ -329,7 +329,7 @@ find_cur(		/* 找 ch 這個按鍵是第幾個選項 */
 /*------------------------------------------------------ */
 
 int		/* 傳回小寫字母或數字 */
-popupmenu_ans2(char *desc[],char *title,int x,int y)
+popupmenu_ans2(char *desc[], char *title, int x, int y)
 {
     int cur, old_cur, max, ch;
     char hotkey;

@@ -87,7 +87,7 @@ static inline void
 showACCT(
     ACCT *acct)
 {
-    char /*msg1[40], msg2[40],*/ msg3[40], msg4[40], msg5[40], msg6[40];
+    char /*msg1[40], msg2[40], */ msg3[40], msg4[40], msg5[40], msg6[40];
 
     strcpy(msg3, Btime(&(acct->firstlogin)));
     strcpy(msg4, Btime(&(acct->lastlogin)));
@@ -106,7 +106,7 @@ showACCT(
         "«H½c: %-60s \n",
         acct->userno, acct->userid, acct->realname, acct->username,
 //      msg1, msg2,
-//      acct->signature, /*"¡H¡ñ¡ð" + (acct->sex << 1),*/
+//      acct->signature, /*"¡H¡ñ¡ð" + (acct->sex << 1), */
 //      acct->money, acct->gold, acct->year, acct->month, acct->day,
         acct->numlogins, acct->numposts, acct->numemail,
         msg3, msg4,

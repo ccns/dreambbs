@@ -120,7 +120,7 @@ ll_out(
     char *msg)
 {
     LinkList *list;
-    int cur_rownum,ch,crow;
+    int cur_rownum, ch, crow;
 
 
     move(row, column);
@@ -265,7 +265,7 @@ bsmtp(
             fprintf(fp, "%s\n", buf);
             fclose(fp);
         }
-        strncpy(valid,buf,10);
+        strncpy(valid, buf, 10);
 
     }
     else
@@ -407,12 +407,12 @@ bsmtp(
         /* Thor.990413: 除了認證函外, 其他信件都要加sign */
         {
             /* Thor.990413: buf用不到了, 借來用用 :P */
-            sprintf(buf,"%s -> %s", cuser.userid, rcpt);
+            sprintf(buf, "%s -> %s", cuser.userid, rcpt);
             sign.val.hash = str_hash(buf, stamp);
             sign.val.hash2 = str_hash2(buf, sign.val.hash);
             str_xor(sign.str, prikey);
             /* Thor.990413: 不加()的話, 時間尾空白會被吃掉(驗證時) */
-            fprintf(fw,"\033[1;32m※ X-Info: \033[33m%s\033[m\r\n\033[1;32m※ X-Sign: \033[36m%s%s \033[37m(%s)\033[m\r\n",
+            fprintf(fw, "\033[1;32m※ X-Info: \033[33m%s\033[m\r\n\033[1;32m※ X-Sign: \033[36m%s%s \033[37m(%s)\033[m\r\n",
                 buf, msgid, genpasswd(sign.str), Btime(&stamp));
         }
 #endif
@@ -470,7 +470,7 @@ bsmtp_file(
     int sock;
     time_t chrono, stamp;
     FILE *fp, *fr, *fw;
-    char *str, buf[512], from[80], msgid[80],boundary[256];
+    char *str, buf[512], from[80], msgid[80], boundary[256];
     char fname[256];
     struct tm ntime, *xtime;
 
@@ -481,7 +481,7 @@ bsmtp_file(
     xtime = localtime(&chrono);
     ntime = *xtime;
 
-    sprintf(fname,"mail_%04d%02d%02d.tgz",ntime.tm_year + 1900, ntime.tm_mon + 1, ntime.tm_mday);
+    sprintf(fname, "mail_%04d%02d%02d.tgz", ntime.tm_year + 1900, ntime.tm_mon + 1, ntime.tm_mday);
 
     /* --------------------------------------------------- */
     /* 身分認證信函					 */
@@ -515,7 +515,7 @@ bsmtp_file(
     {
         archiv32(chrono, msgid);
 
-        sprintf(boundary,"----=_NextPart_%s",msgid);
+        sprintf(boundary, "----=_NextPart_%s", msgid);
 
         move(b_lines, 0);
         clrtoeol();
@@ -583,16 +583,16 @@ bsmtp_file(
             Atime(&stamp), msgid, str_host,
             str_site);
 
-        fprintf(fw,"MIME-Version: 1.0\r\nContent-Type: multipart/mixed;\r\n"
-                "\tboundary=\"%s\"\r\n\r\n",boundary);
+        fprintf(fw, "MIME-Version: 1.0\r\nContent-Type: multipart/mixed;\r\n"
+                "\tboundary=\"%s\"\r\n\r\n", boundary);
 
-        fprintf(fw,"This is a multi-part message in MIME format.\r\n");
-        fprintf(fw,"--%s\r\nContent-Type: text/plain;\r\n\tcharset=\"big5\"\r\n"
-                "Content-Transfer-Encoding: 8bit\r\n\r\n附件名稱：%s\r\n",boundary,fname);
+        fprintf(fw, "This is a multi-part message in MIME format.\r\n");
+        fprintf(fw, "--%s\r\nContent-Type: text/plain;\r\n\tcharset=\"big5\"\r\n"
+                "Content-Transfer-Encoding: 8bit\r\n\r\n附件名稱：%s\r\n", boundary, fname);
 
-        fprintf(fw,"--%s\r\nContent-Type: application/x-compressed;\r\n\tname=\"%s\"\r\n"
+        fprintf(fw, "--%s\r\nContent-Type: application/x-compressed;\r\n\tname=\"%s\"\r\n"
                 "Content-Transfer-Encoding: base64\r\nContent-Disposition: attachment;\r\n"
-                "\tfilename=\"%s\"\r\n\r\n",boundary,fname,fname);
+                "\tfilename=\"%s\"\r\n\r\n", boundary, fname, fname);
 
         /* ------------------------------------------------- */
         /* begin of mail body				 */
@@ -616,7 +616,7 @@ bsmtp_file(
             }
             fclose(fp);
         }
-        fprintf(fw,"--%s--\r\n",boundary);
+        fprintf(fw, "--%s--\r\n", boundary);
 
         fputs("\r\n.\r\n", fw);
         fflush(fw);
@@ -722,13 +722,13 @@ m_verify(void)
     s.val.hash2 = str_hash2(p, s.val.hash);
     str_xor(s.str, prikey);
 
-    sprintf(buf,"(%s)", Btime(&chrono));
+    sprintf(buf, "(%s)", Btime(&chrono));
 
     if (chkpasswd(q, s.str) || strcmp(q + PASSLEN, buf))
     {
         /* Thor.990413: log usage */
-        sprintf(buf,"%s@%s - XInfo:%s", rusername, fromhost, p);
-        blog("VRFY",buf);
+        sprintf(buf, "%s@%s - XInfo:%s", rusername, fromhost, p);
+        blog("VRFY", buf);
         /* Thor: fake sign */
         move(20, 25);
         outs("\033[41;37;5m *注意* 驗證錯誤! \033[m");
@@ -736,8 +736,8 @@ m_verify(void)
         return 0;
     }
 
-    sprintf(buf,"%s@%s + XInfo:%s", rusername, fromhost, p);
-    blog("VRFY",buf);
+    sprintf(buf, "%s@%s + XInfo:%s", rusername, fromhost, p);
+    blog("VRFY", buf);
 
     vmsg("此信由本站所發出");
     return 0;
@@ -757,7 +757,7 @@ static struct
 int
 m_total_size(void)
 {
-    int fd, fsize,total;
+    int fd, fsize, total;
     struct stat st;
     HDR *head, *tail;
     char *base, *folder, fpath[80];
@@ -973,7 +973,7 @@ do_forward(
     char *userid;
     char addr[64], fpath[64], cmd[256];
 
-    if (strstr(cuser.email,".bbs@"))
+    if (strstr(cuser.email, ".bbs@"))
     {
         vmsg("使用 BBS 信箱作為認證信箱/使用註冊單認證者無法打包！");
         return;
@@ -994,7 +994,7 @@ do_forward(
  *  sprintf(fpath, "確定寄給 [%s] 嗎(Y/N)？[N] ", addr);
  */
 
-    sprintf(fpath, "確定寄給 [%s] 嗎(Y/N)？[N] ",cuser.email);
+    sprintf(fpath, "確定寄給 [%s] 嗎(Y/N)？[N] ", cuser.email);
     if (vans(fpath) != 'y')
         return;
 
@@ -1093,7 +1093,7 @@ m_zip(void)			/* itoc.010228: 打包資料 */
             return XEASY;
         }
 
-        if (!(strstr(currboard,"P_")))
+        if (!(strstr(currboard, "P_")))
         {
             vmsg("非個人板暫不提供打包服務，特殊個人專板若需打包請洽站務");
             return XEASY;
@@ -1393,7 +1393,7 @@ mail_send(
     char *rcpt, char *title)
 {
     HDR mhdr;
-    char fpath[80], folder[80],ckforward[80];
+    char fpath[80], folder[80], ckforward[80];
     int rc, userno=0;
     ACCT acct;
 
@@ -1446,8 +1446,8 @@ mail_send(
         unlink(fpath);
         return rc;
     }
-    usr_fpath(ckforward,rcpt,"forward");
-    if (access(ckforward,0))
+    usr_fpath(ckforward, rcpt, "forward");
+    if (access(ckforward, 0))
     {
         usr_fpath(folder, rcpt, fn_dir);
         hdr_stamp(folder, HDR_LINK, &mhdr, fpath);
@@ -1977,11 +1977,11 @@ hdr_outs(		/* print HDR's subject */
         else if (!(hdr->xmode &(POST_LOCK | POST_CANCEL | POST_DELETE | POST_MDELETE)) && hdr->recommend >= (MIN_RECOMMEND) && !(cuser.ufo2 & UFO2_PRH))
         {
             if (hdr->recommend <=30)
-                prints("\033[36m%02.2d\033[m",hdr->recommend);
+                prints("\033[36m%02.2d\033[m", hdr->recommend);
             else if (hdr->recommend > 30 && hdr->recommend <= 60)
-                prints("\033[1;33m%02.2d\033[m",hdr->recommend);
+                prints("\033[1;33m%02.2d\033[m", hdr->recommend);
             else
-                prints("\033[1;31m%02.2d\033[m",hdr->recommend);
+                prints("\033[1;31m%02.2d\033[m", hdr->recommend);
         }
 #endif
         else
@@ -2047,9 +2047,9 @@ hdr_outs(		/* print HDR's subject */
 
 #ifdef	HAVE_DECLARE		/* Thor.0508: Declaration, 嘗試使某些title更明顯 */
         int square = 0;		/* 0為無方括,
-                                 * 1為第一字為方括"["未out,2為已out"["未out"]"
+                                 * 1為第一字為方括"["未out, 2為已out"["未out"]"
                                  * , 3為均out, 不再處理 */
-        int angle = 0;		/* 0為normal未變色, 1為遇到angle,已變色 */
+        int angle = 0;		/* 0為normal未變色, 1為遇到angle, 已變色 */
         if (ch < 2)
         {
             if (*title == '[')
@@ -2121,7 +2121,7 @@ hdr_outs(		/* print HDR's subject */
 
 static inline void
 mbox_item(
-    int pos,			/* sequence number */
+    int pos, 			/* sequence number */
     HDR *hdr)
 {
 
@@ -2301,15 +2301,15 @@ static int
 mbox_browse(
     XO *xo)
 {
-    HDR *mhdr,hdr;
-    int pos, xmode, nmode,mode;
+    HDR *mhdr, hdr;
+    int pos, xmode, nmode, mode;
     char *dir, *fpath;
 
     dir = xo->dir;
     pos = xo->pos;
     fpath = quote_file;
     mhdr = (HDR *) xo_pool + (pos - xo->top);
-    memcpy(&hdr,mhdr,sizeof(HDR));
+    memcpy(&hdr, mhdr, sizeof(HDR));
     mhdr = &hdr;
     strcpy(currtitle, str_ttl(mhdr->title));
     xmode = mhdr->xmode;
@@ -2391,7 +2391,7 @@ mbox_reply(
     XO *xo)
 {
     int pos, xmode;
-    HDR *mhdr,hdr;
+    HDR *mhdr, hdr;
 
 //  if (m_count())
 //      return mbox_head(xo);
@@ -2407,7 +2407,7 @@ mbox_reply(
 
     pos = xo->pos;
     mhdr = (HDR *) xo_pool + pos - xo->top;
-    memcpy(&hdr,mhdr,sizeof(HDR));
+    memcpy(&hdr, mhdr, sizeof(HDR));
     mhdr = &hdr;
 
     xmode = mhdr->xmode;
@@ -2510,7 +2510,7 @@ mbox_other(
         XO *xx;
 
         //str_lower(id, acct.userid);
-        //sprintf(path,"usr/%c/%s/.DIR",*id,id);
+        //sprintf(path, "usr/%c/%s/.DIR", *id, id);
 
         usr_fpath(path, acct.userid, fn_dir);
         usr_fpath(cmbox.dir, acct.userid, fn_dir);
@@ -2540,8 +2540,8 @@ int
 mail_stat(
     int mode)
 {
-    int limit_e,total_e;
-    int limit_k,total_k;
+    int limit_e, total_e;
+    int limit_k, total_k;
     char buf[128];
 
     limit_e = cuser.userlevel;
@@ -2563,7 +2563,7 @@ mail_stat(
     usr_fpath(buf, cuser.userid, fn_dir);
     total_e = rec_num(buf, sizeof(HDR));
     total_k = m_total_size() / 1024;
-    sprintf(buf,"信件數 %d/%d 封，容量大小 %d/%d K！",total_e,limit_e,total_k,limit_k);
+    sprintf(buf, "信件數 %d/%d 封，容量大小 %d/%d K！", total_e, limit_e, total_k, limit_k);
     if (mode & CHK_MAIL_NORMAL)
         vmsg(buf);
     return (total_k>=limit_k)||(total_e>limit_e);
@@ -2604,12 +2604,12 @@ mbox_size(
     XO *xo)
 {
     HDR *hdr;
-    char *dir, fpath[80],buf[128];
+    char *dir, fpath[80], buf[128];
     struct stat st;
 
     dir = xo->dir;
     hdr = (HDR *) xo_pool + xo->pos - xo->top;
-    hdr_fpath(fpath,dir,hdr);
+    hdr_fpath(fpath, dir, hdr);
 
     if (HAS_PERM(PERM_SYSOP))
     {
@@ -2629,7 +2629,7 @@ mbox_size(
     else
     {
         stat(fpath, &st);
-        sprintf(buf,"容量大小: %d K", (int)st.st_size/1024);
+        sprintf(buf, "容量大小: %d K", (int)st.st_size/1024);
         vmsg(buf);
     }
 
@@ -2642,7 +2642,7 @@ static int
 mbox_title(
     XO *xo)
 {
-    HDR *hdr,mhdr;
+    HDR *hdr, mhdr;
 
     if (!supervisor)
         return XO_NONE;
@@ -2652,7 +2652,7 @@ mbox_title(
     mhdr = *hdr;
 
     vget(b_lines, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
-    vget(b_lines, 0, "作者：", mhdr.owner, 74 , GCARRY);
+    vget(b_lines, 0, "作者：", mhdr.owner, 74, GCARRY);
     vget(b_lines, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
     vget(b_lines, 0, "檔名：", mhdr.xname, sizeof(mhdr.date), GCARRY);
     if (mhdr.xid > 1000)
@@ -2693,7 +2693,7 @@ mbox_clean(
 {
     if (vans("\033[1;5;41;33m警告：\033[m清除之後不能救回。確定要清除嗎？(y/N)") == 'y')
     {
-        hdr_prune(xo->dir, 0, 0 , 3);
+        hdr_prune(xo->dir, 0, 0, 3);
         return XO_INIT;
     }
     return XO_HEAD;
@@ -2703,10 +2703,10 @@ int
 mbox_check(void)
 {
     HDR hdr;
-    int fd,total;
+    int fd, total;
     char fpath[256];
 
-    usr_fpath(fpath,cuser.userid,FN_DIR);
+    usr_fpath(fpath, cuser.userid, FN_DIR);
     total = 0;
     if ((fd = open(fpath, O_RDONLY)) >= 0)
     {

@@ -37,8 +37,8 @@ DL_get(
     char buf[512], *t;
     DL_list *p, *tail;
 
-    strcpy(buf,name);
-    if (!(t = (char *) strchr(buf,':')))
+    strcpy(buf, name);
+    if (!(t = (char *) strchr(buf, ':')))
         return NULL;
 
     *t++ = 0;
@@ -79,7 +79,7 @@ DL_get(
     if (!p->handle)
         return NULL;
 
-    return dlsym(p->handle,t);
+    return dlsym(p->handle, t);
 }
 
 int
@@ -88,7 +88,7 @@ DL_func(char *name, ...)
     va_list args;
     int (*f)(va_list), ret;
 
-    va_start(args,name);
+    va_start(args, name);
 
     if (!(f = DL_get(name)))
     { /* not get func */

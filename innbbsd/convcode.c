@@ -117,8 +117,8 @@ g2b(
 
 static char *
 hzconvert(
-    char *src,			/* source char buffer pointer */
-    char *dst,			/* destination char buffer pointer */
+    char *src, 			/* source char buffer pointer */
+    char *dst, 			/* destination char buffer pointer */
     void (*dbcvrt) (unsigned char *src, unsigned char *dst))		/* º~¦r 2-byte conversion function */
 {
     int len;

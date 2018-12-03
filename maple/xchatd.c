@@ -355,7 +355,7 @@ valid_chatid(
 
 
 /* Thor.990211: 統一使用dao library */
-#define str_equal(s1,s2) (!str_cmp(s1,s2))
+#define str_equal(s1, s2) (!str_cmp(s1, s2))
 
 /* ----------------------------------------------------- */
 /* match strings' similarity case-insensitively          */
@@ -370,7 +370,7 @@ valid_chatid(
 
 static int
 str_match(
-    unsigned char *s1,		/* lower-case (sub)string */
+    unsigned char *s1, 		/* lower-case (sub)string */
     unsigned char *s2)
 {
     int c1, c2;
@@ -578,15 +578,15 @@ str_swap(
     char *src,
     char *des)
 {
-    char *ptr,*tmp;
+    char *ptr, *tmp;
     char buf[600];
-    ptr = strstr(str,src);
+    ptr = strstr(str, src);
     if (ptr)
     {
         *ptr = '\0';
         tmp = ptr + strlen(src);
-        sprintf(buf,"%s%s%s",str,des,tmp);
-        strcpy(str,buf);
+        sprintf(buf, "%s%s%s", str, des, tmp);
+        strcpy(str, buf);
         return 1;
     }
     else
@@ -606,7 +606,7 @@ do_send(
     zerotv.tv_sec = 0;
     zerotv.tv_usec = 0;
 #endif
-    while (str_swap(msg,"\\033","\033"));
+    while (str_swap(msg, "\\033", "\033"));
 
     sr = select(nfds + 1, NULL, wset, NULL, &zerotv);
 
@@ -774,7 +774,7 @@ exit_room(
     user->room = NULL;
     /* user->uflag &= ~(PERM_ROOMOP | PERM_SYSOP | PERM_CHATROOM); */
     user->uflag &= ~PERM_ROOMOP;
-    /* Thor.980601: 離開房間時只清 room op, 不清 sysop,chatroom,因天生具有 */
+    /* Thor.980601: 離開房間時只清 room op, 不清 sysop, chatroom, 因天生具有 */
 
     if (room->occupants -= (CLOAK(user)) ? 0 : 1 )
     {
@@ -976,7 +976,7 @@ chat_topic(
         return;
     }
 
-    if (strstr(msg,"\\033"))
+    if (strstr(msg, "\\033"))
     {
         send_to_user(cu, "※ 不合格的話題", 0, MSG_MESSAGE);
         return;
@@ -1034,7 +1034,7 @@ chat_nick(
 
     chatid = nextword(&msg);
     chatid[8] = '\0';
-    if (!valid_chatid(chatid) || strstr(chatid,"\\033"))
+    if (!valid_chatid(chatid) || strstr(chatid, "\\033"))
     {
         send_to_user(cu, "※ 這個聊天代號是不正確的", 0, MSG_MESSAGE);
         return;
@@ -1077,7 +1077,7 @@ chat_list_rooms(
     char *msg)
 {
     ChatRoom *cr, *room;
-    char buf[128],from[128];
+    char buf[128], from[128];
     int mode;
 
     if (RESTRICTED(cuser))
@@ -1109,7 +1109,7 @@ chat_list_rooms(
             }
             else
             {
-                sprintf(from,"%%-%ds│%%4d│%%s",strlen(CHATROOMNAME)-6+12);
+                sprintf(from, "%%-%ds│%%4d│%%s", strlen(CHATROOMNAME)-6+12);
                 sprintf(buf, from, cr->name, cr->occupants, cr->topic);
                 if (LOCKED(cr))
                     strcat(buf, " [鎖住]");
@@ -1135,7 +1135,7 @@ chat_do_user_list(
 {
     ChatRoom *myroom, *room;
     ChatUser *user;
-    int start, stop, curr, mode; /* , uflag; */
+    int start, stop, curr, mode; /*, uflag; */
     char buf[128];
 
     curr = 0; /* Thor.980619: initialize curr */
@@ -1279,7 +1279,7 @@ chat_chatroom(
 
 static void
 chat_map_chatids(
-    ChatUser *cu,			/* Thor: 還沒有作不同間的 */
+    ChatUser *cu, 			/* Thor: 還沒有作不同間的 */
     ChatRoom *whichroom)
 {
     int c;
@@ -1445,7 +1445,7 @@ static char *chat_msg[] =
     /* "[/d]ate", "目前時間", *//* Thor: 指令太多 */
 
 #if 0
-    "[/f]ire <user> <msg>", "發送熱訊",	/* Thor.0727: 和 flag 衝key */
+    "[/f]ire <user> <msg>", "發送熱訊", 	/* Thor.0727: 和 flag 衝key */
 #endif
 
     "[/i]gnore [user]", "忽略使用者",
@@ -1476,7 +1476,7 @@ static char *room_msg[] =
     "[/kick] <id>", "將 <id> 踢出" CHATROOMNAME,
     "[/o]p [<id>]", "將 Op 的權力轉移給 <id>",
     "[/topic] <text>", "換個話題",
-    "[/mud]","更新" CHATROOMNAME "動態詞",
+    "[/mud]", "更新" CHATROOMNAME "動態詞",
     "[/w]all", "廣播 (站長專用)",
     NULL
 };
@@ -1852,7 +1852,7 @@ login_user(
 
     /* Thor.0813: 改用真實 password check, for C/S bbs */
 
-    /* Thor.990214: 注意,daolib中 非0代表失敗 */
+    /* Thor.990214: 注意, daolib中 非0代表失敗 */
     /* if (!chkpasswd(acct.passwd, passwd)) */
     if (chkpasswd(acct.passwd, passwd))
     {
@@ -2184,7 +2184,7 @@ chat_kick(
         xuser->uptime = 0;		/* logout_user(xuser); */
     else
         enter_room(xuser, MAIN_NAME, (char *) NULL);
-        /* Thor.980602: 其實踢就踢,不要show出xxx離開了的訊息比較好 */
+        /* Thor.980602: 其實踢就踢, 不要show出xxx離開了的訊息比較好 */
 }
 
 static void
@@ -2210,7 +2210,7 @@ chat_makeop(
         user_changed(cu);
         if (!CLOAK(cu))
         {
-            sprintf(buf,ROOMOP(cu) ? "※ " SYSOPNICK " 將 Op 權力授予 %s"
+            sprintf(buf, ROOMOP(cu) ? "※ " SYSOPNICK " 將 Op 權力授予 %s"
                                     : "※ " SYSOPNICK " 將 %s 的 Op 權力收回", cu->chatid);
             send_to_room(room, buf, 0, MSG_MESSAGE);
         }
@@ -2461,7 +2461,7 @@ speak_action(
 /* MUD-like social commands : condition			 */
 /* ----------------------------------------------------- */
 
-ChatAction *condition_data,*person_data;
+ChatAction *condition_data, *person_data;
 
 static int
 condition_action(
@@ -2691,7 +2691,7 @@ view_action_verb(	/* Thor.0726: 新加動詞分類顯示 */
             send_to_user(cu, expn, 0, MSG_MESSAGE);	/* Thor.0726: 顯示中文註解 */
         }
     }
-    /* send_to_user(cu, " ",0); *//* Thor.0726: 換行, 需要 " " 嗎? */
+    /* send_to_user(cu, " ", 0); *//* Thor.0726: 換行, 需要 " " 嗎? */
 }
 
 
@@ -2704,10 +2704,10 @@ static ChatCmd chatcmdlist[] =
 {
     {"act", chat_act, 0},
     {"bye", chat_bye, 0},
-    {"chatroom", chat_chatroom, 1},	/* Xshadow: for common client */
+    {"chatroom", chat_chatroom, 1}, 	/* Xshadow: for common client */
     {"clear", chat_clear, 0},
     {"cloak", chat_cloak, 2},
-    {"mud",chat_mud,2},
+    {"mud", chat_mud, 2},
     {"date", chat_date, 0},
     {"flags", chat_setroom, 0},
     {"help", chat_help, 0},
@@ -2718,8 +2718,8 @@ static ChatCmd chatcmdlist[] =
     {"msg", chat_private, 0},
     {"nick", chat_nick, 0},
     {"operator", chat_makeop, 0},
-    {"party", chat_party, 1},	/* Xshadow: party data for common client */
-    {"partyinfo", chat_partyinfo, 1},	/* Xshadow: party info for common
+    {"party", chat_party, 1}, 	/* Xshadow: party data for common client */
+    {"partyinfo", chat_partyinfo, 1}, 	/* Xshadow: party info for common
                                          * client */
 
 #ifndef STAND_ALONE
@@ -2750,7 +2750,7 @@ command_execute(
     char *cmd, *msg, buf[128];
     /* Thor.981108: lkchu patch: chatid + msg 只用 80 bytes 不夠, 改為 128 */
     ChatCmd *cmdrec;
-    int match, ch,check;
+    int match, ch, check;
 
     msg = cu->ibuf;
     match = *msg;
@@ -2814,9 +2814,9 @@ command_execute(
             view_action_verb(cu, *cmd);
             match = 1;
         }
-        else if (party_action(cu, cmd, msg,0) == 0)
+        else if (party_action(cu, cmd, msg, 0) == 0)
             match = 1;
-        else if (party_action(cu, cmd, msg,1) == 0)
+        else if (party_action(cu, cmd, msg, 1) == 0)
             match = 1;
         else if (speak_action(cu, cmd, msg) == 0)
             match = 1;
@@ -2931,7 +2931,7 @@ cuser_serve(
             logbuf[ch] = '$';
 
     logbuf[len + 1] = '\0';
-    if (strncmp(logbuf,"/! ",3))
+    if (strncmp(logbuf, "/! ", 3))
         logtalk(cu->userid, logbuf);
 #endif
 
@@ -3183,10 +3183,10 @@ sig_log(void)
     logtalk("OVER", "");
     fclose(ftalk);
 
-    sprintf(buf,"%s.old",CHAT_LOGFILE);
-    f_mv(CHAT_LOGFILE,buf);
-    sprintf(buf,"%s.old",CHAT_TALKFILE);
-    f_mv(CHAT_TALKFILE,buf);
+    sprintf(buf, "%s.old", CHAT_LOGFILE);
+    f_mv(CHAT_LOGFILE, buf);
+    sprintf(buf, "%s.old", CHAT_TALKFILE);
+    f_mv(CHAT_TALKFILE, buf);
 
     flog = fopen(CHAT_LOGFILE, "a+");
     logit("START", "chat daemon");
@@ -3284,77 +3284,77 @@ void
 mudshm_init(void)
 {
     ChatAction *head;
-    int fw,size;
+    int fw, size;
     struct stat st;
 
 
     mud = &muddata;
 
     head = party_data = mud->chat_party;
-    fw = open(FN_CHAT_PARTY_DB,O_RDONLY);
+    fw = open(FN_CHAT_PARTY_DB, O_RDONLY);
     fstat(fw, &st);
 
     if (!fstat(fw, &st) && (size = st.st_size) > 0)
     {
         if (size > PARTY_MAX * sizeof(ChatAction))
             size = PARTY_MAX * sizeof(ChatAction);
-        memset(head,0,PARTY_MAX * sizeof(ChatAction));
+        memset(head, 0, PARTY_MAX * sizeof(ChatAction));
         if (size)
             read(fw, head, size);
     }
     close(fw);
 
     head = party_data2 = mud->chat_party2;
-    fw = open(FN_CHAT_PARTY2_DB,O_RDONLY);
+    fw = open(FN_CHAT_PARTY2_DB, O_RDONLY);
     fstat(fw, &st);
 
     if (!fstat(fw, &st) && (size = st.st_size) > 0)
     {
         if (size > PARTY_MAX * sizeof(ChatAction))
             size = PARTY_MAX * sizeof(ChatAction);
-        memset(head,0,PARTY_MAX * sizeof(ChatAction));
+        memset(head, 0, PARTY_MAX * sizeof(ChatAction));
         if (size)
             read(fw, head, size);
     }
     close(fw);
 
     head = speak_data = mud->chat_speak;
-    fw = open(FN_CHAT_SPEAK_DB,O_RDONLY);
+    fw = open(FN_CHAT_SPEAK_DB, O_RDONLY);
     fstat(fw, &st);
 
     if (!fstat(fw, &st) && (size = st.st_size) > 0)
     {
         if (size > SPEAK_MAX * sizeof(ChatAction))
             size = SPEAK_MAX * sizeof(ChatAction);
-        memset(head,0,SPEAK_MAX * sizeof(ChatAction));
+        memset(head, 0, SPEAK_MAX * sizeof(ChatAction));
         if (size)
             read(fw, head, size);
     }
     close(fw);
 
     head = condition_data = mud->chat_condition;
-    fw = open(FN_CHAT_CONDITION_DB,O_RDONLY);
+    fw = open(FN_CHAT_CONDITION_DB, O_RDONLY);
     fstat(fw, &st);
 
     if (!fstat(fw, &st) && (size = st.st_size) > 0)
     {
         if (size > CONDITION_MAX * sizeof(ChatAction))
             size = CONDITION_MAX * sizeof(ChatAction);
-        memset(head,0,CONDITION_MAX * sizeof(ChatAction));
+        memset(head, 0, CONDITION_MAX * sizeof(ChatAction));
         if (size)
             read(fw, head, size);
     }
     close(fw);
 
     head = person_data = mud->chat_person;
-    fw = open(FN_CHAT_PERSON_DB,O_RDONLY);
+    fw = open(FN_CHAT_PERSON_DB, O_RDONLY);
     fstat(fw, &st);
 
     if (!fstat(fw, &st) && (size = st.st_size) > 0)
     {
         if (size > CONDITION_MAX * sizeof(ChatAction))
             size = CONDITION_MAX * sizeof(ChatAction);
-        memset(head,0,CONDITION_MAX * sizeof(ChatAction));
+        memset(head, 0, CONDITION_MAX * sizeof(ChatAction));
         if (size)
             read(fw, head, size);
     }
@@ -3369,7 +3369,7 @@ main(
     char *argv[])
 {
     int sock, nfds, maxfds=0, servo_sno;
-    ChatUser *cu,/* *userpool,*/ **FBI;
+    ChatUser *cu, /* *userpool, */ **FBI;
     time_t uptime, tcheck;
     fd_set rset, xset;
     static struct timeval tv = {CHAT_INTERVAL, 0};

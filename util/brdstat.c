@@ -177,11 +177,11 @@ add_log(
 static void
 save_hot(void)
 {
-    int i,fd;
+    int i, fd;
     for (i=0;i<hotcount;i++)
         hotboard[i].xid = 0;
-    fd = open(FN_HOTBOARD,O_WRONLY);
-    write(fd,hotboard,sizeof(HDR)*hotcount);
+    fd = open(FN_HOTBOARD, O_WRONLY);
+    write(fd, hotboard, sizeof(HDR)*hotcount);
     close(fd);
 
 }
@@ -199,7 +199,7 @@ count_hot(
     if (i < MAX_HOTBOARD)
     {
         if (i < MAX_HOTBOARD-1)
-            memmove(hotboard + i + 1, hotboard + i ,sizeof(HDR)*(MAX_HOTBOARD-i-1));
+            memmove(hotboard + i + 1, hotboard + i, sizeof(HDR)*(MAX_HOTBOARD-i-1));
         memset(hotboard + i, 0, sizeof(HDR));
         time(&(hotboard[i].chrono));
         strcpy(hotboard[i].xname, brd->brdname);
@@ -218,10 +218,10 @@ count_board(
 {
     struct tm ntime, *xtime;
     BSTATCOUNT bcount;
-    char fpath[128],flog[128];
-    BSTAT tmp[24],*base,*head,*tail;
+    char fpath[128], flog[128];
+    BSTAT tmp[24], *base, *head, *tail;
 
-    int fd,count,size;
+    int fd, count, size;
     struct stat st;
 
     int pos;
@@ -239,22 +239,22 @@ count_board(
 
     xtime = localtime(&now);
     ntime = *xtime;
-    memset(&bcount,0,sizeof(BSTATCOUNT));
+    memset(&bcount, 0, sizeof(BSTATCOUNT));
 
-    brd_fpath(fpath,brd->brdname,FN_BRD_STATCOUNT);
-    brd_fpath(flog,brd->brdname,FN_BRD_STAT);
+    brd_fpath(fpath, brd->brdname, FN_BRD_STATCOUNT);
+    brd_fpath(flog, brd->brdname, FN_BRD_STAT);
 
-    fd = open(flog,O_RDONLY);
+    fd = open(flog, O_RDONLY);
     if (fd < 0)
         return;
 
-    if (fstat(fd,&st) || (count = st.st_size / sizeof(BSTAT)) <= 0)
+    if (fstat(fd, &st) || (count = st.st_size / sizeof(BSTAT)) <= 0)
     {
         close(fd);
         return;
     }
     head = base = (BSTAT *)malloc(sizeof(BSTAT) * count);
-    size = read(fd,base,sizeof(BSTAT) * count);
+    size = read(fd, base, sizeof(BSTAT) * count);
     count = size / sizeof(BSTAT);
     tail = head + count;
 
@@ -269,40 +269,40 @@ count_board(
 
     pos = 1;
 
-    rec_get(fpath,&bcount,sizeof(BSTATCOUNT),0);
+    rec_get(fpath, &bcount, sizeof(BSTATCOUNT), 0);
 
 
-    memset(&bcount,0,sizeof(BSTAT) * 8);
+    memset(&bcount, 0, sizeof(BSTAT) * 8);
 
     do
     {
         if (hour <= pos)
-            add_log(&(bcount.hour),head);
+            add_log(&(bcount.hour), head);
         if (day <= pos)
-            add_log(&(bcount.day),head);
+            add_log(&(bcount.day), head);
         if (week <= pos)
-            add_log(&(bcount.week),head);
+            add_log(&(bcount.week), head);
         if (twoweek <= pos)
-            add_log(&(bcount.twoweek),head);
+            add_log(&(bcount.twoweek), head);
         if (month <= pos)
-            add_log(&(bcount.month),head);
+            add_log(&(bcount.month), head);
         if (threemonth <= pos)
-            add_log(&(bcount.threemonth),head);
+            add_log(&(bcount.threemonth), head);
         if (halfyear <= pos)
-            add_log(&(bcount.halfyear),head);
+            add_log(&(bcount.halfyear), head);
         if (year <= pos)
-            add_log(&(bcount.year),head);
+            add_log(&(bcount.year), head);
         pos++;
     } while (++head < tail);
 
-    strcpy(bcount.hour.type,"近一小時");
-    strcpy(bcount.day.type,"近一天");
-    strcpy(bcount.week.type,"近一週");
-    strcpy(bcount.twoweek.type,"近兩週");
-    strcpy(bcount.month.type,"近一月");
-    strcpy(bcount.threemonth.type,"近三月");
-    strcpy(bcount.halfyear.type,"近半年");
-    strcpy(bcount.year.type,"近一年");
+    strcpy(bcount.hour.type, "近一小時");
+    strcpy(bcount.day.type, "近一天");
+    strcpy(bcount.week.type, "近一週");
+    strcpy(bcount.twoweek.type, "近兩週");
+    strcpy(bcount.month.type, "近一月");
+    strcpy(bcount.threemonth.type, "近三月");
+    strcpy(bcount.halfyear.type, "近半年");
+    strcpy(bcount.year.type, "近一年");
 
     bcount.hour.chrono = now;
     bcount.day.chrono = now;
@@ -313,40 +313,40 @@ count_board(
     bcount.halfyear.chrono = now;
     bcount.year.chrono = now;
 
-    memcpy(tmp,&(bcount.lhour[1]),sizeof(BSTAT) * 23);
-    memcpy(bcount.lhour,tmp,sizeof(BSTAT) * 23);
-    memcpy(&(bcount.lhour[23]),&(bcount.hour),sizeof(BSTAT));
+    memcpy(tmp, &(bcount.lhour[1]), sizeof(BSTAT) * 23);
+    memcpy(bcount.lhour, tmp, sizeof(BSTAT) * 23);
+    memcpy(&(bcount.lhour[23]), &(bcount.hour), sizeof(BSTAT));
 
     if (ntime.tm_hour == 0)
     {
-        memcpy(tmp,&(bcount.lday[1]),sizeof(BSTAT) * 23);
-        memcpy(bcount.lday,tmp,sizeof(BSTAT) * 23);
-        memcpy(&(bcount.lday[23]),&(bcount.day),sizeof(BSTAT));
+        memcpy(tmp, &(bcount.lday[1]), sizeof(BSTAT) * 23);
+        memcpy(bcount.lday, tmp, sizeof(BSTAT) * 23);
+        memcpy(&(bcount.lday[23]), &(bcount.day), sizeof(BSTAT));
 
         if (ntime.tm_wday == 0)
         {
-            memcpy(tmp,&(bcount.lweek[1]),sizeof(BSTAT) * 23);
-            memcpy(bcount.lweek,tmp,sizeof(BSTAT) * 23);
-            memcpy(&(bcount.lweek[23]),&(bcount.week),sizeof(BSTAT));
+            memcpy(tmp, &(bcount.lweek[1]), sizeof(BSTAT) * 23);
+            memcpy(bcount.lweek, tmp, sizeof(BSTAT) * 23);
+            memcpy(&(bcount.lweek[23]), &(bcount.week), sizeof(BSTAT));
         }
 
         if (ntime.tm_mday == 1)
         {
-            memcpy(tmp,&(bcount.lmonth[1]),sizeof(BSTAT) * 23);
-            memcpy(bcount.lmonth,tmp,sizeof(BSTAT) * 23);
-            memcpy(&(bcount.lmonth[23]),&(bcount.month),sizeof(BSTAT));
+            memcpy(tmp, &(bcount.lmonth[1]), sizeof(BSTAT) * 23);
+            memcpy(bcount.lmonth, tmp, sizeof(BSTAT) * 23);
+            memcpy(&(bcount.lmonth[23]), &(bcount.month), sizeof(BSTAT));
         }
 
 
         head = base + (year - 1);
         size = ((count <= YEAR_HOUR) ? count : YEAR_HOUR) * sizeof(BSTAT);
         lseek(fd, (off_t) 0, SEEK_SET);
-        write(fd,head,size);
-        ftruncate(fd,size);
+        write(fd, head, size);
+        ftruncate(fd, size);
 
     }
 
-    rec_put(fpath,&bcount,sizeof(BSTATCOUNT),0);
+    rec_put(fpath, &bcount, sizeof(BSTATCOUNT), 0);
 
     free(base);
     close(fd);
@@ -393,10 +393,10 @@ main(void)
         {
 
 
-//          if (!str_cmp(head->brdname,"Test") || !str_cmp(head->brdname,"WindTop"))
+//          if (!str_cmp(head->brdname, "Test") || !str_cmp(head->brdname, "WindTop"))
 //          {
-//              printf("DEBUG: bname:%s  reads:%d  posts:%d\n",head->brdname,head->n_reads,head->n_posts);
-                memset(&bstat,0,sizeof(BSTAT));
+//              printf("DEBUG: bname:%s  reads:%d  posts:%d\n", head->brdname, head->n_reads, head->n_posts);
+                memset(&bstat, 0, sizeof(BSTAT));
                 bstat.chrono = now;
                 bstat.n_reads = head->n_reads;
                 bstat.n_posts = head->n_posts;
@@ -406,12 +406,12 @@ main(void)
                 head->n_posts = 0;
                 head->n_news = 0;
                 head->n_bans = 0;
-                strcpy(bstat.type,"每小時");
+                strcpy(bstat.type, "每小時");
 
-                brd_fpath(fpath,head->brdname,FN_BRD_STAT);
-                rec_add(fpath,&bstat,sizeof(BSTAT));
+                brd_fpath(fpath, head->brdname, FN_BRD_STAT);
+                rec_add(fpath, &bstat, sizeof(BSTAT));
 
-                count_board(head,now);
+                count_board(head, now);
 //          }
         }
     } while (++head < tail);

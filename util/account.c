@@ -131,7 +131,7 @@ TchoiceCompare(struct Tchoice * i, struct Tchoice * j)
 
 static int
 draw_vote(
-    BRD *bdh,			/* Thor: 傳入 BRD, 可查 battr */
+    BRD *bdh, 			/* Thor: 傳入 BRD, 可查 battr */
     char *fpath,
     VCH *vch)
 {
@@ -723,7 +723,7 @@ main(void)
 
     if (rename(run_file, tmp_file))
     {
-        sprintf(buf,"touch %s",tmp_file);
+        sprintf(buf, "touch %s", tmp_file);
         system(buf);
     }
     if ((fp = fopen(tmp_file, "r")) == NULL)
@@ -852,7 +852,7 @@ main(void)
 //        system("bin/brd_usies.sh");
 //        keeplog(FN_BRD_USIES".log", NULL, title, 2); /* 整理過後的 log */
 //        keeplog(FN_BRD_USIES, BRD_SECRET, title, 2); /* 未整理前的 log */
-//        gzip(FN_BRD_USIES,"brdusies/brdusies",ymd);   /* 未整理前的 log */
+//        gzip(FN_BRD_USIES, "brdusies/brdusies", ymd);   /* 未整理前的 log */
 
 //        sprintf(title, "[記錄] %s修改文章紀錄", date);
 //        keeplog(FN_POSTEDIT_LOG, BRD_SECRET, title, 2);
@@ -862,21 +862,21 @@ main(void)
 
 //        sprintf(title, "[記錄] %s擋信紀錄", date);
 //        keeplog(FN_BANMAIL_LOG, NULL, title, 2);
-//        gzip(FN_BANMAIL_LOG,"banmail/banmail",ymd);  /* 擋信紀錄 */
+//        gzip(FN_BANMAIL_LOG, "banmail/banmail", ymd);  /* 擋信紀錄 */
 
 //        sprintf(title, "[記錄] %s寄信紀錄", date);
 //        keeplog(FN_MAIL_LOG, BRD_SECRET, title, 2);
 
 //        sprintf(title, "[記錄] %s轉信紀錄", date);
 //        keeplog(FN_INNBBS_LOG, BRD_SECRET, title, 2);
-//        gzip(FN_INNBBS_LOG,"innbbsd/innbbsd",ymd);  /* 轉信紀錄 */
+//        gzip(FN_INNBBS_LOG, "innbbsd/innbbsd", ymd);  /* 轉信紀錄 */
 
 //        sprintf(title, "[記錄] %sMailService使用紀錄", date);
 //        keeplog(FN_MAILSERVICE_LOG, BRD_SECRET, title, 2);
 
 //        sprintf(title, "[記錄] %s看版信件刪除紀錄", date);
 //        keeplog(FN_EXPIRE_LOG, BRD_SECRET, title, 2);
-//        gzip(FN_EXPIRE_LOG,"expire/expire",ymd);  /* 看版信件刪除紀錄 */
+//        gzip(FN_EXPIRE_LOG, "expire/expire", ymd);  /* 看版信件刪除紀錄 */
 
 //        sprintf(title, "%sE-Mail 流量統計", date);
 //        keeplog("run/unlog.log", NULL, title, 2);
@@ -1023,7 +1023,7 @@ main(void)
 
         gzip(log_file, "usies/usies", ymd);
 
-        gzip(FN_CHATDATA_LOG".old","chat/chat",ymd);
+        gzip(FN_CHATDATA_LOG".old", "chat/chat", ymd);
 
 //#ifdef  LOG_BRD_USIES
 //      gzip(brd_file, FN_BRD_USIES, ymd);   /* lkchu.981201: 備份看版閱讀記錄 */
@@ -1056,8 +1056,8 @@ main(void)
     if (!dashf(PRIVATE_KEY) || (random() % PRIVATE_KEY_PERIOD) == 0)
 #endif
     {
-        sprintf(title,"log/prikey%s", ymd);
-        f_mv(PRIVATE_KEY,title);
+        sprintf(title, "log/prikey%s", ymd);
+        f_mv(PRIVATE_KEY, title);
         i = 8;
         for (;;)
         {

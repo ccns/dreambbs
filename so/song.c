@@ -343,7 +343,7 @@ XO *xo)
 
 
 
-//  memcpy(xpost.owner, cuser.userid,sizeof(xpost.owner) + sizeof(xpost.nick));
+//  memcpy(xpost.owner, cuser.userid, sizeof(xpost.owner) + sizeof(xpost.nick));
     strcpy(xpost.owner, cuser.userid);
     token = time(0);
     if (flag)
@@ -373,7 +373,7 @@ XO *xo)
 
         fputs(tmp, xfp);
     }
-    sprintf(buf, "\033[1;33m%s\033[m 想對 \033[1;33m%s\033[m 說 %s\n\033[30m%s\033[m\n", flag ? "某人" : cuser.userid, idwho , want_say, ctime(&now));
+    sprintf(buf, "\033[1;33m%s\033[m 想對 \033[1;33m%s\033[m 說 %s\n\033[30m%s\033[m\n", flag ? "某人" : cuser.userid, idwho, want_say, ctime(&now));
     fputs(buf, xfp);
 
     fclose(fp);
@@ -441,7 +441,7 @@ XO *xo)
     strcpy(title, hdr->title);
 
     usr_fpath(folder, acct.userid, fn_dir);
-    method = hdr_stamp(folder, 0 , &xhdr, buf);
+    method = hdr_stamp(folder, 0, &xhdr, buf);
 
     xfp = fdopen(method, "w");
 
@@ -470,7 +470,7 @@ XO *xo)
         fputs(tmp, xfp);
     }
     now = time(0);
-    sprintf(buf, "\033[1;33m%s\033[m 想對 \033[1;33m%s\033[m 說 %s\n\033[30m%s\033[m\n", cuser.userid, acct.userid , want_say, ctime(&now));
+    sprintf(buf, "\033[1;33m%s\033[m 想對 \033[1;33m%s\033[m 說 %s\n\033[30m%s\033[m\n", cuser.userid, acct.userid, want_say, ctime(&now));
     //sprintf(buf, "%s\n", ctime(&now));
     fputs(buf, xfp);
     fclose(fp);

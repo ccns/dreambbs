@@ -220,7 +220,7 @@ list_search(
 XO *xo)
 {
     LIST list;
-    int max,cur;
+    int max, cur;
     char buf[IDLEN+1];
 
     cur=xo->pos;
@@ -233,9 +233,9 @@ XO *xo)
 
     while (++cur<max)
     {
-        rec_get(xo->dir,&list,sizeof(LIST),cur);
+        rec_get(xo->dir, &list, sizeof(LIST), cur);
 
-        if (str_str(list.userid,buf))
+        if (str_str(list.userid, buf))
         {
             xo->pos = xo->top + cur;
             return list_init(xo);

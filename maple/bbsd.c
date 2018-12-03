@@ -28,7 +28,7 @@
 
 
 #define MAXPORTS        3
-static int myports[MAXPORTS] = {23, 3456, 3001 /* , 3002, 3003 */ };
+static int myports[MAXPORTS] = {23, 3456, 3001 /*, 3002, 3003 */ };
 
 extern BCACHE *bshm;
 extern UCACHE *ushm;
@@ -98,22 +98,22 @@ typedef struct
 }       TABLE;
 
 TABLE table[] = {
-//  {UFO_COLOR,UFO2_COLOR},
-//  {UFO_MOVIE,UFO2_MOVIE},
-//  {UFO_BRDNEW,UFO2_BRDNEW},
-//  {UFO_BNOTE,UFO2_BNOTE},
-//  {UFO_VEDIT,UFO2_VEDIT},
-//  {UFO_PAL,UFO2_PAL},
-//  {UFO_MOTD,UFO2_MOTD},
-//  {UFO_MIME,UFO2_MIME},
-//  {UFO_SIGN,UFO2_SIGN},
-//  {UFO_SHOWUSER,UFO2_SHOWUSER},
-//  {UFO_REALNAME,UFO2_REALNAME},
-//  {UFO_SHIP,UFO2_SHIP},
-//  {UFO_NWLOG,UFO2_NWLOG},
-//  {UFO_NTLOG,UFO2_NTLOG},
-    {UFO_ACL,UFO2_ACL},
-    {0,0}
+//  {UFO_COLOR, UFO2_COLOR},
+//  {UFO_MOVIE, UFO2_MOVIE},
+//  {UFO_BRDNEW, UFO2_BRDNEW},
+//  {UFO_BNOTE, UFO2_BNOTE},
+//  {UFO_VEDIT, UFO2_VEDIT},
+//  {UFO_PAL, UFO2_PAL},
+//  {UFO_MOTD, UFO2_MOTD},
+//  {UFO_MIME, UFO2_MIME},
+//  {UFO_SIGN, UFO2_SIGN},
+//  {UFO_SHOWUSER, UFO2_SHOWUSER},
+//  {UFO_REALNAME, UFO2_REALNAME},
+//  {UFO_SHIP, UFO2_SHIP},
+//  {UFO_NWLOG, UFO2_NWLOG},
+//  {UFO_NTLOG, UFO2_NTLOG},
+    {UFO_ACL, UFO2_ACL},
+    {0, 0}
 };
 
 #endif
@@ -139,7 +139,7 @@ u_exit(
         brh_save();			/* 儲存閱讀記錄檔 */
 
 #ifdef  HAVE_DETECT_CROSSPOST
-        attr_put(cuser.userid,ATTR_CROSS_KEY,&cksum);	/* 儲存 CrossPost 紀錄 */
+        attr_put(cuser.userid, ATTR_CROSS_KEY, &cksum);	/* 儲存 CrossPost 紀錄 */
 #endif
 
     }
@@ -477,7 +477,7 @@ logattempt(
 //  str_stamp(fpath, &ap_start);
 //  sprintf(buf, "%s %cBBS\t%s\n", fpath, type, currtitle);
     /* Thor.990415: currtitle已內含ip */
-    /* sprintf(buf, "%s %cBBS\t%s ip:%08x\n", fpath, type, currtitle,tn_addr); */
+    /* sprintf(buf, "%s %cBBS\t%s ip:%08x\n", fpath, type, currtitle, tn_addr); */
     /* Thor.980803: 追蹤 ip address */
     usr_fpath(fpath, cuser.userid, FN_LOG);
     f_cat(fpath, buf);
@@ -560,7 +560,7 @@ tn_login(void)
 {
     int fd, attempts;
     unsigned int level, ufo;
-    time_t start,check_deny;
+    time_t start, check_deny;
     char fpath[80], uid[IDLEN + 1];
 
 #ifndef CHAT_SECURE
@@ -571,12 +571,12 @@ tn_login(void)
 
     /* sprintf(currtitle, "%s@%s", rusername, fromhost); */
     /* Thor.990415: 紀錄ip, 怕正查不到 */
-    sprintf(currtitle, "%s@%s ip:%08lx", rusername, fromhost,(int) tn_addr);
+    sprintf(currtitle, "%s@%s ip:%08lx", rusername, fromhost, (int) tn_addr);
 
 
 /* by visor */
 #if 0
-    move(20,0);
+    move(20, 0);
     outs("關站中請見諒~~~~");
     vkey();
     sleep(10);
@@ -597,9 +597,9 @@ tn_login(void)
         FILE *fp;
         char buf[128];
         move(18, 0);
-        if ( ( fp = fopen("gem/@/@AD","r") ) )
+        if ( ( fp = fopen("gem/@/@AD", "r") ) )
             {
-                while (fgets(buf,sizeof(buf),fp))
+                while (fgets(buf, sizeof(buf), fp))
                 outs(buf);
                 fclose(fp);
             }
@@ -678,7 +678,7 @@ tn_login(void)
                     str_lower(fromhost, fromhost);
                     if (acl_has(fpath, rusername, fromhost) == 0
                             || acl_has(fpath, rusername, buf) == 0)
-                    {  /* Thor.980728: 注意 acl檔, 和 rusername,fromhost 要全部小寫 */
+                    {  /* Thor.980728: 注意 acl檔, 和 rusername, fromhost 要全部小寫 */
                         logattempt('*');
                         login_abort("\n你的上站地點不太對勁，請核對 [上站地點設定檔]");
                     }
@@ -748,7 +748,7 @@ tn_login(void)
     start = ap_start;
 
 
-//  setproctitle("%s@%s",cuser.userid,fromhost);
+//  setproctitle("%s@%s", cuser.userid, fromhost);
 
     sprintf(fpath, "%s (%d)", currtitle, currpid);
 
@@ -795,7 +795,7 @@ tn_login(void)
             if (cuser.tvalid + VALID_PERIOD < start)
             {
                 level ^= PERM_VALID;
-                find_same_email(cuser.email,3);
+                find_same_email(cuser.email, 3);
             }
         }
 #endif
@@ -868,11 +868,11 @@ tn_login(void)
             {
                 int (*p)(int level, char *fpath);
                 char fpath[128];
-                usr_fpath(fpath,cuser.userid,"gem");
+                usr_fpath(fpath, cuser.userid, "gem");
 
                 p = DL_get("bin/mailgem.so:gcheck");
                 if (p)
-                    (*p)(0,fpath);
+                    (*p)(0, fpath);
             }
 #endif
 
@@ -890,7 +890,7 @@ tn_login(void)
             if (m_query(cuser.userid)>0)
                 ufo |= UFO_BIFF;
         }
-        if (check_personal_note(1,cuser.userid))
+        if (check_personal_note(1, cuser.userid))
             ufo |= UFO_BIFFN;
 
         cutmp->ufo = cuser.ufo = ufo; /* Thor.980805: 解決 ufo 同步問題 */
@@ -1018,7 +1018,7 @@ tn_login(void)
 #if 0
     if (cuser.ufo2 & UFO2_APRIL1)
     {
-        more("gem/brd/Admin/J/A106LL7J",NULL);
+        more("gem/brd/Admin/J/A106LL7J", NULL);
         bell();
         sleep(1);
         bell();
@@ -1082,7 +1082,7 @@ tn_main(void)
     unsigned char *addr = (unsigned char*) &tn_addr;
 
     sprintf(buf2, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
-    str_lower(buf,fromhost);
+    str_lower(buf, fromhost);
 
     if (acl_has(FN_ETC_BANIP_ACL, "", buf) > 0
         || acl_has(FN_ETC_BANIP_ACL, "", buf2) > 0)
@@ -1095,7 +1095,7 @@ tn_main(void)
 
 
     clear();
-/*cache.080510: --維修用,開站時要記得設定這段變成註解--*/
+/*cache.080510: --維修用, 開站時要記得設定這段變成註解--*/
 /*cache.080714: power user 可以輸入busy開啟login畫面測試*/
 #if 0
     more("gem/@/@close", (char *) -1);    /* 禁止上站畫面 */
@@ -1115,7 +1115,7 @@ tn_main(void)
 
 
     //負載提到前面取得
-    getloadavg(load,3);
+    getloadavg(load, 3);
 
     //負載過高禁止login
     if (load[0]>20)
@@ -1129,12 +1129,12 @@ tn_main(void)
     //避免看板人氣負數
     currbno = -1;
 
-    //getloadavg(load,3);
+    //getloadavg(load, 3);
     prints( MYHOSTNAME " ⊙ " OWNER " ⊙ " BBSIP " [" BBSVERNAME " " BBSVERSION "]\n"
 "歡迎光臨【\033[1;33;46m %s \033[m】。系統負載：%.2f %.2f %.2f - [%s] 線上人數 [%d/%d]",
-        str_site, load[0],load[1],load[2],load[0]>16?"\033[1;37;41m過高\033[m":load[0]>8?"\033[1;37;42m偏高\033[m":"\033[1;37;44m正常\033[m", ushm->count, MAXACTIVE);
+        str_site, load[0], load[1], load[2], load[0]>16?"\033[1;37;41m過高\033[m":load[0]>8?"\033[1;37;42m偏高\033[m":"\033[1;37;44m正常\033[m", ushm->count, MAXACTIVE);
 
-    film_out(FILM_INCOME , 2);
+    film_out(FILM_INCOME, 2);
 
     total_num = ushm->count+1;
     currpid = getpid();
@@ -1156,8 +1156,8 @@ tn_main(void)
 #endif
 
 #ifdef  HAVE_DETECT_CROSSPOST
-    if (attr_get(cuser.userid,ATTR_CROSS_KEY,&cksum)<0)
-        memset(&cksum,0,sizeof(CHECKSUMCOUNT));
+    if (attr_get(cuser.userid, ATTR_CROSS_KEY, &cksum)<0)
+        memset(&cksum, 0, sizeof(CHECKSUMCOUNT));
 #endif
 
     board_main();
@@ -1333,7 +1333,7 @@ term_init(void)
 
 static void
 start_daemon(
-    int port /* Thor.981206: 取 0 代表 *沒有參數* , -1 代表 -i (inetd) */ )
+    int port /* Thor.981206: 取 0 代表 *沒有參數*, -1 代表 -i (inetd) */ )
 {
     int n;
     struct linger ld;
@@ -1579,7 +1579,7 @@ int main(int argc, char *argv[])
 
     /* Thor.990325: usage, bbsd, or bbsd -i, or bbsd 1234 */
     /* Thor.981206: 取 0 代表 *沒有參數*, -1 代表 -i */
-    start_daemon(argc > 1 ? strcmp("-i",argv[1]) ? atoi(argv[1]) : -1 : 0);
+    start_daemon(argc > 1 ? strcmp("-i", argv[1]) ? atoi(argv[1]) : -1 : 0);
 
     main_signals();
 
@@ -1657,7 +1657,7 @@ int main(int argc, char *argv[])
         /* Thor.990325: 修改dns_ident定義, 來自哪if連那 */
         /* dns_ident(mport, &sin, fromhost, rusername); */
 
-        /* cache.090728: 連線不反查,增加速度 */
+        /* cache.090728: 連線不反查, 增加速度 */
         unsigned char *addr;
         addr = (unsigned char *) &tn_addr;
         sprintf(fromhost, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);

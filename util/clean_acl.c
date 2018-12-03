@@ -21,7 +21,7 @@ check_in(
 {
     int i;
     for (i=0;i<MAX_AC;i++)
-        if (!strcmp(map[i],email))
+        if (!strcmp(map[i], email))
             return 1;
     return 0;
 }
@@ -31,31 +31,31 @@ main(
     int argc,
     char *argv[])
 {
-    FILE *fp,*fd;
-    char buf[256],tmp[256],*ptr;
+    FILE *fp, *fd;
+    char buf[256], tmp[256], *ptr;
 
     if (argc > 2)
     {
-        fp = fopen(argv[1],"r");
+        fp = fopen(argv[1], "r");
         if (fp)
         {
-            fd = fopen(argv[2],"w");
+            fd = fopen(argv[2], "w");
             if (fd)
             {
-                while (fgets(buf,256,fp))
+                while (fgets(buf, 256, fp))
                 {
-                    if (strstr(buf,".epaper.com.tw"))
+                    if (strstr(buf, ".epaper.com.tw"))
                         continue;
-                    if (strstr(buf,MYHOSTNAME))
+                    if (strstr(buf, MYHOSTNAME))
                         continue;
-                    strcpy(tmp,buf);
-                    ptr = (char *)strchr(buf,'#');
+                    strcpy(tmp, buf);
+                    ptr = (char *)strchr(buf, '#');
                     if (ptr)
                         *ptr = '\0';
                     if (!check_in(buf))
                     {
-                        fprintf(fd,"%s",tmp);
-                        strcpy(map[total++],buf);
+                        fprintf(fd, "%s", tmp);
+                        strcpy(map[total++], buf);
                     }
                 }
                 fclose(fd);

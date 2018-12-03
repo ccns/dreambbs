@@ -50,11 +50,11 @@ zhangba_detect(
     char checked[ZHANGBA_PATTERNS+1];
     FILE *fp;
     char buf[256];
-    int i,num=0;
+    int i, num=0;
 
-    if ((fp = fopen(fpath,"r")))
+    if ((fp = fopen(fpath, "r")))
     {
-        while (fgets(buf,sizeof(buf),fp))
+        while (fgets(buf, sizeof(buf), fp))
             for (i=0 ;  i < ZHANGBA_PATTERNS ; i++)
                 if (strstr(buf, zhangba_patterns[i]) && (checked[i] != '1'))
                 {
@@ -102,7 +102,7 @@ change_stamp(
 checksum_add(
     char *title)
 {
-    int sum=0,i,end;
+    int sum=0, i, end;
     int *ptr;
     ptr = (int *)title;
     end = strlen(title)/4;
@@ -155,14 +155,14 @@ checksum_find(
     FILE *fp;
     char *star = "※";
 
-    int sum,i,count=0;
+    int sum, i, count=0;
 
     if ((state & BRD_NOCNTCROSS) || HAS_PERM(PERM_ADMIN) ||
             (cksum.post_modetype & POST_STOP_PERM))
         return 0;
 
     sum = 0;
-    fp = fopen(fpath,"r");
+    fp = fopen(fpath, "r");
     if (fp)
     {
         for (i=0;count <= MAX_CHECKSUM;i++)
@@ -171,7 +171,7 @@ checksum_find(
             {
                 if (i>3)
                 {
-                    if (*buf != '>' && strncmp(buf,star,2) && *buf != ':' )
+                    if (*buf != '>' && strncmp(buf, star, 2) && *buf != ':' )
                     {
                         sum+=checksum_add(buf);
                         count++;
@@ -183,7 +183,7 @@ checksum_find(
         }
     }
     fclose(fp);
-    return checksum_put(sum,check);
+    return checksum_put(sum, check);
 }
 #endif
 
@@ -206,7 +206,7 @@ outgo_post(
 {
     bntp_t bntp;
 
-    memset(&bntp,0,sizeof(bntp_t));
+    memset(&bntp, 0, sizeof(bntp_t));
 
     if (board)
     {
@@ -217,12 +217,12 @@ outgo_post(
         board=currboard;
     }
 
-    strcpy(bntp.board,board);
-    strcpy(bntp.xname,hdr->xname);
-    strcpy(bntp.owner,hdr->owner);
-    strcpy(bntp.nick,hdr->nick);
-    strcpy(bntp.title,hdr->title);
-    rec_add("innd/out.bntp",&bntp,sizeof(bntp_t));
+    strcpy(bntp.board, board);
+    strcpy(bntp.xname, hdr->xname);
+    strcpy(bntp.owner, hdr->owner);
+    strcpy(bntp.nick, hdr->nick);
+    strcpy(bntp.title, hdr->title);
+    rec_add("innd/out.bntp", &bntp, sizeof(bntp_t));
     /*
     char *fpath, buf[256];
 
@@ -277,7 +277,7 @@ move_post(	/* 將 hdr 從 currboard 搬到 board */
 
     memcpy(post.owner, hdr->owner, TTLEN + 140);
     if (by_bm == -1)
-        strcpy(post.owner,cuser.userid);
+        strcpy(post.owner, cuser.userid);
     if (by_bm == -2)
         post.xmode |= POST_MARKED;
 
@@ -315,7 +315,7 @@ seek_log(
     char *title,
     int state)
 {
-    BANMAIL *head,*tail;
+    BANMAIL *head, *tail;
     if (state & BRD_NOLOG)
         return 0;
 
@@ -325,7 +325,7 @@ seek_log(
 
     while (fwshm->number && head<tail)
     {
-        if (strstr(title,head->data))
+        if (strstr(title, head->data))
             return 1;
         head++;
     }
@@ -425,10 +425,10 @@ do_post(
 
     brd_fpath(fpath, currboard, "post");
 
-    if (more(fpath,(char *)-1)==-1)
+    if (more(fpath, (char *)-1)==-1)
         film_out(FILM_POST, 0);
 
-    move(20,0);
+    move(20, 0);
     prints("發表文章於【 %s 】看板", currboard);
 
     if (!ve_subject(21, title, NULL))
@@ -481,10 +481,10 @@ do_post(
     } while (strlen(post.date) != 8);
 
 #ifdef	HAVE_DETECT_VIOLATELAW
-    banpost = seek_log(ve_title,bbstate);
+    banpost = seek_log(ve_title, bbstate);
 #endif
 #ifdef	HAVE_DETECT_CROSSPOST
-    crosspost = checksum_find(fpath,0,bbstate);
+    crosspost = checksum_find(fpath, 0, bbstate);
 #endif
 
     /* set owner to anonymous for anonymous board */
@@ -522,19 +522,19 @@ do_post(
     strcpy(post.title, title);
 
     if (brd->battr & BRD_PRH)
-        strcpy(post.lastrecommend,"$");
+        strcpy(post.lastrecommend, "$");
 
     post.modifytimes = 0;
     post.pushtime = 0;
     post.recommend = 0;
-    strcpy(post.lastrecommend,cuser.userid);
+    strcpy(post.lastrecommend, cuser.userid);
 
 #ifdef  HAVE_DETECT_CROSSPOST
     if (crosspost)
     {
-        move_post(&post,BRD_VIOLATELAW,-2);
-        add_deny(&cuser,DENY_SEL_POST|DENY_DAYS_1|DENY_MODE_POST,0);
-        deny_log_email(cuser.vmail,(cuser.userlevel & PERM_DENYSTOP) ? -1 : cuser.deny);
+        move_post(&post, BRD_VIOLATELAW, -2);
+        add_deny(&cuser, DENY_SEL_POST|DENY_DAYS_1|DENY_MODE_POST, 0);
+        deny_log_email(cuser.vmail, (cuser.userlevel & PERM_DENYSTOP) ? -1 : cuser.deny);
         bbstate &= ~STAT_POST;
         cuser.userlevel &= ~PERM_POST;
     }
@@ -546,9 +546,9 @@ do_post(
 
     if (zhangba_currentsession > 5)
     {
-        move_post(&post,BRD_VIOLATELAW,-2);
-        add_deny(&cuser,DENY_SEL_POST|DENY_DAYS_5|DENY_MODE_POST,0);
-        deny_log_email(cuser.vmail,(cuser.userlevel & PERM_DENYSTOP) ? -1 : cuser.deny);
+        move_post(&post, BRD_VIOLATELAW, -2);
+        add_deny(&cuser, DENY_SEL_POST|DENY_DAYS_5|DENY_MODE_POST, 0);
+        deny_log_email(cuser.vmail, (cuser.userlevel & PERM_DENYSTOP) ? -1 : cuser.deny);
         bbstate &= ~STAT_POST;
         cuser.userlevel &= ~PERM_POST;
     }
@@ -568,7 +568,7 @@ do_post(
     }
 #endif
 
-    move_post(&post,BRD_LOCALPOSTS,-3);
+    move_post(&post, BRD_LOCALPOSTS, -3);
 
     if (!rec_bot(folder, &post, sizeof(HDR)))
     {
@@ -586,7 +586,7 @@ do_post(
         clear();
         //outs("順利貼出佈告，");
 
-        if (bbstate & BRD_NOCOUNT || (/*BMIN(wordsnum,*/ keysnum/*)*/) < 30)
+        if (bbstate & BRD_NOCOUNT || (/*BMIN(wordsnum, */ keysnum/*)*/) < 30)
         {
             pmsg2("文章不列入紀錄，敬請包涵。");
         }
@@ -648,7 +648,7 @@ do_post(
 #endif
 
 #ifdef  HAVE_COUNT_BOARD
-    //  if (!(strcmp(brd->brdname,"Test")))
+    //  if (!(strcmp(brd->brdname, "Test")))
     if (!(bbstate & BRD_NOTOTAL))
         brd->n_posts++;
 #endif
@@ -781,7 +781,7 @@ seek_rec(
     XO *xo,
     HDR *hdr)
 {
-    int fd,total,pos;
+    int fd, total, pos;
     struct stat st;
     HDR thdr;
 
@@ -796,14 +796,14 @@ seek_rec(
     if (pos >= total)
         pos = total-1;
 
-    memcpy(&thdr,hdr,sizeof(HDR));
+    memcpy(&thdr, hdr, sizeof(HDR));
 
     f_exlock(fd);
 
     while (pos >= -1)
     {
         lseek(fd, (off_t) (sizeof(HDR) * pos--), SEEK_SET);
-        read(fd,hdr,sizeof(HDR));
+        read(fd, hdr, sizeof(HDR));
         if (hdr->chrono == thdr.chrono)
             break;
     }
@@ -1159,7 +1159,7 @@ post_cross(
                     strcpy(xtitle, hdr->title);
             }
 
-            /* verit 2002.04.04 : 整批轉錄時 , 檢查 tag 那篇是否被刪除或取消過 */
+            /* verit 2002.04.04 : 整批轉錄時, 檢查 tag 那篇是否被刪除或取消過 */
             if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_CURMODIFY))
                 continue;
 
@@ -1221,14 +1221,14 @@ post_cross(
                     xpost.xmode = POST_OUTGO;
 
 #ifdef  HAVE_DETECT_CROSSPOST
-                memcpy(&bhdr,hdr,sizeof(HDR));
-                strcpy(bhdr.owner,cuser.userid);
-                if (checksum_find(fpath,0,battr))
+                memcpy(&bhdr, hdr, sizeof(HDR));
+                strcpy(bhdr.owner, cuser.userid);
+                if (checksum_find(fpath, 0, battr))
                 {
-                    move_post(&bhdr,BRD_VIOLATELAW,-2);
+                    move_post(&bhdr, BRD_VIOLATELAW, -2);
 
-                    add_deny(&cuser,DENY_SEL_POST|DENY_DAYS_1|DENY_MODE_POST,0);
-                    deny_log_email(cuser.vmail,(cuser.userlevel & PERM_DENYSTOP) ? -1 : cuser.deny);
+                    add_deny(&cuser, DENY_SEL_POST|DENY_DAYS_1|DENY_MODE_POST, 0);
+                    deny_log_email(cuser.vmail, (cuser.userlevel & PERM_DENYSTOP) ? -1 : cuser.deny);
                     bbstate &= ~STAT_POST;
                     cuser.userlevel &= ~PERM_POST;
 
@@ -1238,17 +1238,17 @@ post_cross(
 #ifdef	HAVE_CROSSPOSTLOG
                 if (hdr->xname[0] != '@')
                 {
-                    memcpy(&chdr,hdr,sizeof(HDR));
-                    strcpy(chdr.owner,cuser.userid);
-                    sprintf(cbuf,"(%s) %s",xboard,hdr->title);
-                    strncpy(chdr.title,cbuf,TTLEN);
-                    move_post(&chdr,BRD_CROSSPOST,-3);
+                    memcpy(&chdr, hdr, sizeof(HDR));
+                    strcpy(chdr.owner, cuser.userid);
+                    sprintf(cbuf, "(%s) %s", xboard, hdr->title);
+                    strncpy(chdr.title, cbuf, TTLEN);
+                    move_post(&chdr, BRD_CROSSPOST, -3);
                 }
 #endif
 
                 rec_bot(xfolder, &xpost, sizeof(xpost));
 #ifdef	HAVE_DETECT_VIOLATELAW
-                if (rc == 's' && (!(battr & BRD_NOTRAN)) && (!(seek_log(xpost.title,battr))))
+                if (rc == 's' && (!(battr & BRD_NOTRAN)) && (!(seek_log(xpost.title, battr))))
 #else
                     if (rc == 's' && !(battr & BRD_NOTRAN))
 #endif
@@ -1266,7 +1266,7 @@ post_cross(
           ptime = localtime(&now);
           sprintf(tgt, "轉錄至 %s 看板", xboard);
           xfp = fopen(fpath, "a");
-          sprintf(add, "\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,tgt,Btime(&hdr->pushtime)+3);
+          sprintf(add, "\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, tgt, Btime(&hdr->pushtime)+3);
           fprintf(xfp, "%s", add);
           fclose(xfp);
         }
@@ -1397,7 +1397,7 @@ post_history(
 
 
   if (brh_unread(push))
-    brh_add(push,push,push);
+    brh_add(push, push, push);
 
   if (!brh_unread(chrono))
     //if ( !brh_unread(push))
@@ -1429,7 +1429,7 @@ post_history(
   if (push)
     prev = chrono = next = push;
 */
-  brh_add(prev,chrono, next);
+  brh_add(prev, chrono, next);
 
 }
 
@@ -1552,9 +1552,9 @@ post_browse(
             case XO_BODY:
                 continue;
             case Ctrl('U'):
-                memcpy(poolbuf,xo_pool,sizeof(HDR)*20);
+                memcpy(poolbuf, xo_pool, sizeof(HDR)*20);
                 every_U();
-                memcpy(xo_pool,poolbuf,sizeof(HDR)*20);
+                memcpy(xo_pool, poolbuf, sizeof(HDR)*20);
                 continue;
             case Ctrl('B'):
                 every_B();
@@ -1683,7 +1683,7 @@ post_memo_edit(
     mode = vans("備忘錄 (D)刪除 (E)修改 (Q)取消？[E] ");
     if (mode != 'q')
     {
-        brd_fpath(fpath, currboard,FN_NOTE);
+        brd_fpath(fpath, currboard, FN_NOTE);
         if (mode == 'd')
         {
             unlink(fpath);
@@ -1757,7 +1757,7 @@ post_tag(
         //move(3 + cur, 8);
         //outc(tag > 0 ? '*' : ' ');
         //outs(tag > 0 ? " *" : "  ");
-        post_item(xo->pos + 1,hdr);
+        post_item(xo->pos + 1, hdr);
     }
 
     /* return XO_NONE; */
@@ -1791,7 +1791,7 @@ post_mark(
         //    move(3 + cur, 7);
         //    outc(post_attr(hdr));
         move(3 + cur, 0);
-        post_item(pos + 1,hdr);
+        post_item(pos + 1, hdr);
 
     }
     return XO_NONE;
@@ -1801,7 +1801,7 @@ post_mark(
 lazy_delete(
     HDR *hdr)
 {
-    if (!strcmp(hdr->owner,cuser.userid))
+    if (!strcmp(hdr->owner, cuser.userid))
     {
         sprintf(hdr->title, "<< 本文章經 %s 刪除 >>", cuser.userid);
         hdr->xmode |= POST_DELETE;
@@ -1813,7 +1813,7 @@ lazy_delete(
     }
     else
     {
-        sprintf(hdr->title, "[刪除]%s：%s",cuser.userid,delete_reason);
+        sprintf(hdr->title, "[刪除]%s：%s", cuser.userid, delete_reason);
         hdr->xmode |= POST_MDELETE;
     }
 
@@ -1826,7 +1826,7 @@ post_delete(
 {
     int pos, cur, by_BM;
     HDR *fhdr, phdr;
-    char buf[80],fpath[80];
+    char buf[80], fpath[80];
 
 #define BN_DELETED	BRD_DELETED
 #define BN_JUNK		BRD_JUNK
@@ -1879,7 +1879,7 @@ post_delete(
     if (!(bbstate & STAT_BOARD) && by_BM)
         return XO_NONE;
 
-    hdr_fpath(fpath,xo->dir,fhdr);
+    hdr_fpath(fpath, xo->dir, fhdr);
     if (vans(msg_del_ny) == 'y')
     {
         currchrono = fhdr->chrono;
@@ -1893,15 +1893,15 @@ post_delete(
         }
 
         if (by_BM/* && (bbstate & BRD_NOTRAN) && !(fhdr->xmode & POST_BOTTOM)*/)
-            vget(b_lines,0,"請輸入刪除理由：",delete_reason,29,DOECHO);
+            vget(b_lines, 0, "請輸入刪除理由：", delete_reason, 29, DOECHO);
         //    return 0;
-        if (by_BM/* && bbstate & BRD_NOTRAN*/&& (bbstate & STAT_BOARD) && !strstr(fhdr->owner,".") && !strstr(fhdr->lastrecommend,"$") && !(fhdr->xmode & POST_BOTTOM))
+        if (by_BM/* && bbstate & BRD_NOTRAN*/&& (bbstate & STAT_BOARD) && !strstr(fhdr->owner, ".") && !strstr(fhdr->lastrecommend, "$") && !(fhdr->xmode & POST_BOTTOM))
         {
-            char folder[128],buf[80],cmd[64];
+            char folder[128], buf[80], cmd[64];
             ACCT tmp;
 
             usr_fpath(folder, fhdr->owner, fn_dir);
-            if (acct_load(&tmp,fhdr->owner) >= 0)
+            if (acct_load(&tmp, fhdr->owner) >= 0)
             {
                 if (vans("是否退回文章？[y/N]") == 'y')
                 {
@@ -1929,9 +1929,9 @@ post_delete(
 
                     if (dashf(fpath))
                     {
-                        sprintf(cmd,"cp %s run/deleted.%s",fpath,cuser.userid);
+                        sprintf(cmd, "cp %s run/deleted.%s", fpath, cuser.userid);
                         system(cmd);
-                        sprintf(cmd,"run/deleted.%s",cuser.userid);
+                        sprintf(cmd, "run/deleted.%s", cuser.userid);
                         f_suck(fp, cmd);
                         unlink(cmd);
                     }
@@ -1953,7 +1953,7 @@ post_delete(
                 sprintf(buf, "%s，您的文章減為 %d 篇", MSG_DEL_OK, cuser.numposts);
                 vmsg(buf);
 #ifdef  HAVE_DETECT_CROSSPOST
-                checksum_find(fpath,1,bbstate);
+                checksum_find(fpath, 1, bbstate);
 #endif
             }
             lazy_delete(fhdr); /* Thor.980911: 註解: 修改 xo_pool */
@@ -2114,7 +2114,7 @@ post_state(
         clrtobot();
 
         prints("\033[1;34m"MSG_BLINE"\033[m");
-        prints("\n\033[1;33;44m \033[37m文章代碼及資訊查詢： %*s \033[m", 55,"");
+        prints("\n\033[1;33;44m \033[37m文章代碼及資訊查詢： %*s \033[m", 55, "");
         outs("\n\n \033[1;37m★\033[m 文章索引: ");
         outs(dir);
         outs("\n \033[1;37m★\033[m 文章代碼: #");
@@ -2129,7 +2129,7 @@ post_state(
         outs("\n \033[1;37m★\033[m 文章位置: ");
         outs(fpath);
 #/*
-        int k,l,m;
+        int k, l, m;
         k = l = m = 0;
         if (ghdr->chrono > ghdr->stamp)
             k=1;
@@ -2160,7 +2160,7 @@ post_state(
         clrtobot();
 
         prints("\033[1;34m"MSG_BLINE"\033[m");
-        prints("\n\033[1;33;44m \033[37m文章代碼及資訊查詢： %*s \033[m", 55,"");
+        prints("\n\033[1;33;44m \033[37m文章代碼及資訊查詢： %*s \033[m", 55, "");
         if (ghdr->xmode & (POST_EXPIRE | POST_MDELETE | POST_DELETE | POST_CANCEL | POST_LOCK | POST_CURMODIFY))
         {
           outs("\n\n \033[1;37m★\033[m 文章被鎖定、編輯或者刪除中");
@@ -2203,7 +2203,7 @@ post_state(
 
     dir = xo->dir;
     hdr = (HDR *) xo_pool + xo->pos - xo->top;
-    hdr_fpath(fpath,dir,hdr);
+    hdr_fpath(fpath, dir, hdr);
 
 
     move(12, 0);
@@ -2217,9 +2217,9 @@ post_state(
     if (!stat(fpath, &st))
         prints("\nTime: %s\nSize: %d\n", Ctime(&st.st_mtime), st.st_size);
     bitmsg("Flag: ", "rmg---cdIEOR--------DLSMC-------", hdr->xmode);
-    prints("Xid : %d\n",hdr->xid);
-    prints("Modify : %d times\n",hdr->modifytimes);
-    prints("Chrono : %d Pushtime : %d\n",hdr->chrono,hdr->pushtime);
+    prints("Xid : %d\n", hdr->xid);
+    prints("Modify : %d times\n", hdr->modifytimes);
+    prints("Chrono : %d Pushtime : %d\n", hdr->chrono, hdr->pushtime);
 
     vmsg(NULL);
 
@@ -2233,7 +2233,7 @@ post_undelete(
 {
     int pos, cur, i, len;
     HDR *fhdr;
-    char buf[256],fpath[128],*ptr;
+    char buf[256], fpath[128], *ptr;
     FILE *fp;
 
     if (!cuser.userlevel)
@@ -2242,7 +2242,7 @@ post_undelete(
     pos = xo->pos;
     cur = pos - xo->top;
     fhdr = (HDR *) xo_pool + cur;
-    hdr_fpath(fpath,xo->dir,fhdr);
+    hdr_fpath(fpath, xo->dir, fhdr);
 
     if (!(fhdr->xmode & (POST_MDELETE | POST_DELETE | POST_CANCEL)))
         return XO_NONE;
@@ -2253,7 +2253,7 @@ post_undelete(
         return XO_NONE;
 
 
-    fp = fopen(fpath,"r");
+    fp = fopen(fpath, "r");
     if (fp)
     {
         fgets(buf, 256, fp);
@@ -2261,15 +2261,15 @@ post_undelete(
         buf[strlen(buf)-1] = 0;
         ptr = strchr(buf, ':');
         ptr = ptr ? ptr+2:buf;
-        strncpy(fhdr->title,ptr,60);
+        strncpy(fhdr->title, ptr, 60);
         if (!HAS_PERM(PERM_SYSOP))
         {
-            sprintf(buf,"{%s}",cuser.userid);
-            strcat(fhdr->title,buf);
+            sprintf(buf, "{%s}", cuser.userid);
+            strcat(fhdr->title, buf);
         }
         fhdr->title[71] = 0;  /* verit 2002.01.23 避免救文章造成 title 爆掉 */
 
-        /* verit 2003.10.16 避免救文章時 , 出現彩色標題 */
+        /* verit 2003.10.16 避免救文章時, 出現彩色標題 */
         len = strlen(fhdr->title);
         for ( i=0 ; i<len ; ++i )
             if ( fhdr->title[i] == '\033' )
@@ -2277,7 +2277,7 @@ post_undelete(
 
         fclose(fp);
 #if 0
-        if (!strcmp(fhdr->owner,cuser.userid) && (fhdr->xmode & POST_DELETE)
+        if (!strcmp(fhdr->owner, cuser.userid) && (fhdr->xmode & POST_DELETE)
                 && !(bbstate & BRD_NOCOUNT))
         {
             /*
@@ -2285,7 +2285,7 @@ post_undelete(
             sprintf(buf, "復原刪除，您的文章增為 %d 篇", cuser.numposts);
             vmsg(buf);*/  /* 20000724 visor: 有文章篇數的 bug */
 #ifdef  HAVE_DETECT_CROSSPOST
-            checksum_find(fpath,0,bbstate);
+            checksum_find(fpath, 0, bbstate);
 #endif
         }
 #endif
@@ -2326,7 +2326,7 @@ post_expire(
     if ((fhdr->xmode & POST_LOCK) && !(HAS_PERM(PERM_SYSOP| PERM_BOARD)||bbstate & STAT_BOARD))
         return XO_NONE;
 
-    hdr_fpath(fpath,xo->dir,fhdr);
+    hdr_fpath(fpath, xo->dir, fhdr);
     if (fhdr->xmode & POST_EXPIRE)
       fhdr->xmode &= ~POST_EXPIRE;
     else
@@ -2359,7 +2359,7 @@ post_unexpire(
     if (!(fhdr->xmode & (POST_EXPIRE)))
         return XO_NONE;
 
-    hdr_fpath(fpath,xo->dir,fhdr);
+    hdr_fpath(fpath, xo->dir, fhdr);
 
     if ( !((bbstate & STAT_BOARD) || HAS_PERM(PERM_ALLBOARD)) )
         return XO_NONE;
@@ -2389,10 +2389,10 @@ post_edit(
     int temp=0;
     int bno;
     BRD *brd;
-    char buf[512],mfpath[80],mfolder[80],str[256];
+    char buf[512], mfpath[80], mfolder[80], str[256];
     int fd;
     time_t now;
-    FILE *fp,*xfp;
+    FILE *fp, *xfp;
 
     bno = brd_bno(currboard);
     brd = bshm->bcache + bno;
@@ -2407,7 +2407,7 @@ post_edit(
     pos = xo->pos;
     hdr = (HDR *) xo_pool + (pos - xo->top);
 
-    pos = seek_rec(xo,hdr);
+    pos = seek_rec(xo, hdr);
 
     hdr_fpath(fpath, xo->dir, hdr);
 #if 0
@@ -2439,7 +2439,7 @@ post_edit(
         hdr->xid = cutmp->pid;
         rec_put(xo->dir, hdr, sizeof(HDR), pos);
 
-        if (strcmp(brd->brdname,"test"))
+        if (strcmp(brd->brdname, "test"))
         {
             HDR phdr;
 
@@ -2450,118 +2450,118 @@ post_edit(
             fclose(fp);
             close(fd);
 
-            strcpy(phdr.owner,hdr->owner);
-            strcpy(phdr.nick,hdr->nick);
-            strcpy(phdr.title,hdr->title);
+            strcpy(phdr.owner, hdr->owner);
+            strcpy(phdr.nick, hdr->nick);
+            strcpy(phdr.title, hdr->title);
 
             rec_add(mfolder, &phdr, sizeof(HDR));
         }
 
-        strcpy(ve_title,hdr->title);
+        strcpy(ve_title, hdr->title);
 
-        fp = fopen(fpath,"r");
+        fp = fopen(fpath, "r");
 
-        sprintf(buf,"tmp/%s.header",cuser.userid);
-        xfp = fopen(buf,"w");
+        sprintf(buf, "tmp/%s.header", cuser.userid);
+        xfp = fopen(buf, "w");
         while (fgets(str, 256, fp) && *str != '\n')
         {
-            fputs(str,xfp);
+            fputs(str, xfp);
         }
-        fputs("\n",xfp);
+        fputs("\n", xfp);
         fclose(xfp);
 
-        sprintf(buf,"tmp/%s.edit",cuser.userid);
-        xfp = fopen(buf,"w");
+        sprintf(buf, "tmp/%s.edit", cuser.userid);
+        xfp = fopen(buf, "w");
         while (fgets(str, 256, fp))
         {
-            if (!strcmp(str,"--\n"))
+            if (!strcmp(str, "--\n"))
                 break;
-            fputs(str,xfp);
+            fputs(str, xfp);
         }
         fclose(xfp);
 
-        sprintf(buf,"tmp/%s.footer",cuser.userid);
-        xfp = fopen(buf,"w");
-        fputs("--\n",xfp);
+        sprintf(buf, "tmp/%s.footer", cuser.userid);
+        xfp = fopen(buf, "w");
+        fputs("--\n", xfp);
         while (fgets(str, 256, fp))
         {
-//          if (!strncmp(str,"\x1b[1;33m→",9))
+//          if (!strncmp(str, "\x1b[1;33m→", 9))
 //  modified by cat@20090422
-            if ((!strncmp(str,"\x1b[1;33m",7) || !strncmp(str,"\x1b[1;31m", 7)) && strrchr(str,'/') > str)
+            if ((!strncmp(str, "\x1b[1;33m", 7) || !strncmp(str, "\x1b[1;31m", 7)) && strrchr(str, '/') > str)
             {
                 temp = 1;
                 break;
             }
-            else if ((!strncmp(str,"\x1b[m\x1b[1;33m",10) || !strncmp(str,"\x1b[m\x1b[1;31m", 7)) && strrchr(str,'/') > str)
+            else if ((!strncmp(str, "\x1b[m\x1b[1;33m", 10) || !strncmp(str, "\x1b[m\x1b[1;31m", 7)) && strrchr(str, '/') > str)
             {
                 temp = 1;
                 break;
             }
-            fputs(str,xfp);
+            fputs(str, xfp);
         }
         fclose(xfp);
 
-        sprintf(buf,"tmp/%s.recommend",cuser.userid);
-        xfp = fopen(buf,"w");
+        sprintf(buf, "tmp/%s.recommend", cuser.userid);
+        xfp = fopen(buf, "w");
         if (temp)
-            fputs(str,xfp);
+            fputs(str, xfp);
 
         while (fgets(str, 256, fp) && *str != '\n')
-            fputs(str,xfp);
+            fputs(str, xfp);
 
         fclose(xfp);
         fclose(fp);
 
 
-        sprintf(buf,"tmp/%s.edit",cuser.userid);
+        sprintf(buf, "tmp/%s.edit", cuser.userid);
 
         if ((temp = vedit(buf, NA)) < 0)
         {
-            sprintf(buf,"tmp/%s.header",cuser.userid);
+            sprintf(buf, "tmp/%s.header", cuser.userid);
             unlink(buf);
-            sprintf(buf,"tmp/%s.edit",cuser.userid);
+            sprintf(buf, "tmp/%s.edit", cuser.userid);
             unlink(buf);
-            sprintf(buf,"tmp/%s.footer",cuser.userid);
+            sprintf(buf, "tmp/%s.footer", cuser.userid);
             unlink(buf);
-            sprintf(buf,"tmp/%s.recommend",cuser.userid);
+            sprintf(buf, "tmp/%s.recommend", cuser.userid);
             unlink(buf);
         }
         else
         {
             char tmp[128];
 
-            fp = fopen(fpath,"w");
-            sprintf(buf,"tmp/%s.header",cuser.userid);
+            fp = fopen(fpath, "w");
+            sprintf(buf, "tmp/%s.header", cuser.userid);
             f_suck(fp, buf);
             unlink(buf);
-            sprintf(buf,"tmp/%s.edit",cuser.userid);
+            sprintf(buf, "tmp/%s.edit", cuser.userid);
             f_suck(fp, buf);
             unlink(buf);
-            sprintf(buf,"tmp/%s.footer",cuser.userid);
+            sprintf(buf, "tmp/%s.footer", cuser.userid);
             time(&now);
-            sprintf(tmp,MODIFY_TAG,fromhost,ctime(&now));
-            f_cat(buf,tmp);
+            sprintf(tmp, MODIFY_TAG, fromhost, ctime(&now));
+            f_cat(buf, tmp);
             f_suck(fp, buf);
             unlink(buf);
-            sprintf(buf,"tmp/%s.recommend",cuser.userid);
+            sprintf(buf, "tmp/%s.recommend", cuser.userid);
             f_suck(fp, buf);
             unlink(buf);
             fclose(fp);
         }
 
-        if ((pos = seek_rec(xo,hdr)) >= 0)
+        if ((pos = seek_rec(xo, hdr)) >= 0)
         {
-            if (temp>=0 && strcmp(brd->brdname,"test") /*&& ++hdr->modifytimes >= 5*/)
+            if (temp>=0 && strcmp(brd->brdname, "test") /*&& ++hdr->modifytimes >= 5*/)
                 hdr->xmode |= POST_MODIFY;
             hdr->xmode &= ~POST_CURMODIFY;
             hdr->xid = 0;
             if (temp>=0)
             {
                 hdr->pushtime = time(0);
-                brh_add(hdr->pushtime,hdr->pushtime,hdr->pushtime);
+                brh_add(hdr->pushtime, hdr->pushtime, hdr->pushtime);
             }
 
-            rec_put(xo->dir,hdr, sizeof(HDR), pos);
+            rec_put(xo->dir, hdr, sizeof(HDR), pos);
             if (temp < 0)
                 vmsg("取消修改");
             else
@@ -2596,11 +2596,11 @@ int post_edit(XO *xo)
 #ifdef	HAVE_USER_MODIFY
     int bno;
     BRD *brd;
-    char buf[512],mfpath[80],mfolder[80],str[256];
+    char buf[512], mfpath[80], mfolder[80], str[256];
     int fd;
     HDR phdr;
     time_t now;
-    FILE *fp,*xfp;
+    FILE *fp, *xfp;
 
     bno = brd_bno(currboard);
     brd = bshm->bcache + bno;
@@ -2630,7 +2630,7 @@ int post_edit(XO *xo)
 #ifdef	HAVE_USER_MODIFY
         else if ((brd->battr & BRD_MODIFY) && HAS_PERM(PERM_VALID) /*&& ((hdr->modifytimes)<MAX_MODIFY)*/ && !strcmp(hdr->owner, cuser.userid) && !(hdr->xmode & (/*POST_MODIFY|*/POST_CANCEL|POST_DELETE|POST_LOCK|POST_MARKED|POST_MDELETE/*|POST_CURMODIFY*/)) )
         {
-            //    move_post(hdr,BRD_MODIFIED,-3);
+            //    move_post(hdr, BRD_MODIFIED, -3);
 
             brd_fpath(mfolder, BRD_MODIFIED, FN_DIR);
             fd = hdr_stamp(mfolder, 'A', &phdr, mfpath);
@@ -2639,9 +2639,9 @@ int post_edit(XO *xo)
             f_suck(fp, fpath);
             fclose(fp);
             close(fd);
-            strcpy(phdr.owner,hdr->owner);
-            strcpy(phdr.nick,hdr->nick);
-            strcpy(phdr.title,hdr->title);
+            strcpy(phdr.owner, hdr->owner);
+            strcpy(phdr.nick, hdr->nick);
+            strcpy(phdr.title, hdr->title);
 
             rec_bot(mfolder, &phdr, sizeof(HDR));
 
@@ -2649,50 +2649,50 @@ int post_edit(XO *xo)
             hdr->xid = cutmp->pid;
             rec_put(xo->dir, hdr, sizeof(HDR), pos);
 
-            strcpy(ve_title,hdr->title);
+            strcpy(ve_title, hdr->title);
 
-            fp = fopen(fpath,"r");
+            fp = fopen(fpath, "r");
 
-            sprintf(buf,"tmp/%s.header",cuser.userid);
-            xfp = fopen(buf,"w");
+            sprintf(buf, "tmp/%s.header", cuser.userid);
+            xfp = fopen(buf, "w");
 
             while (fgets(str, 256, fp) && *str != '\n')
             {
-                fputs(str,xfp);
+                fputs(str, xfp);
             }
-            fputs("\n",xfp);
+            fputs("\n", xfp);
             fclose(xfp);
 
-            sprintf(buf,"tmp/%s.edit",cuser.userid);
-            xfp = fopen(buf,"w");
+            sprintf(buf, "tmp/%s.edit", cuser.userid);
+            xfp = fopen(buf, "w");
             while (fgets(str, 256, fp))
             {
-                if (!strcmp(str,"--\n"))
+                if (!strcmp(str, "--\n"))
                     break;
-                fputs(str,xfp);
+                fputs(str, xfp);
             }
             fclose(xfp);
 
-            sprintf(buf,"tmp/%s.footer",cuser.userid);
-            xfp = fopen(buf,"w");
-            fputs("--\n",xfp);
+            sprintf(buf, "tmp/%s.footer", cuser.userid);
+            xfp = fopen(buf, "w");
+            fputs("--\n", xfp);
             while (fgets(str, 256, fp))
             {
-                fputs(str,xfp);
+                fputs(str, xfp);
             }
             fclose(xfp);
 
             fclose(fp);
 
-            sprintf(buf,"tmp/%s.edit",cuser.userid);
+            sprintf(buf, "tmp/%s.edit", cuser.userid);
 
             if (vedit(buf, NA)<0)
             {
-                sprintf(buf,"tmp/%s.header",cuser.userid);
+                sprintf(buf, "tmp/%s.header", cuser.userid);
                 unlink(buf);
-                sprintf(buf,"tmp/%s.edit",cuser.userid);
+                sprintf(buf, "tmp/%s.edit", cuser.userid);
                 unlink(buf);
-                sprintf(buf,"tmp/%s.footer",cuser.userid);
+                sprintf(buf, "tmp/%s.footer", cuser.userid);
                 unlink(buf);
 
                 rec_get(xo->dir, &phdr, sizeof(HDR), pos);
@@ -2703,21 +2703,21 @@ int post_edit(XO *xo)
             }
             else
             {
-                fp = fopen(fpath,"w");
-                sprintf(buf,"tmp/%s.header",cuser.userid);
+                fp = fopen(fpath, "w");
+                sprintf(buf, "tmp/%s.header", cuser.userid);
                 f_suck(fp, buf);
                 unlink(buf);
-                sprintf(buf,"tmp/%s.edit",cuser.userid);
+                sprintf(buf, "tmp/%s.edit", cuser.userid);
                 f_suck(fp, buf);
                 unlink(buf);
-                sprintf(buf,"tmp/%s.footer",cuser.userid);
+                sprintf(buf, "tmp/%s.footer", cuser.userid);
                 f_suck(fp, buf);
                 unlink(buf);
                 fclose(fp);
 
                 time(&now);
-                sprintf(buf,MODIFY_TAG,fromhost,ctime(&now));
-                f_cat(fpath,buf);
+                sprintf(buf, MODIFY_TAG, fromhost, ctime(&now));
+                f_cat(fpath, buf);
                 rec_get(xo->dir, &phdr, sizeof(HDR), pos);
 
                 phdr.xmode |= POST_MODIFY;
@@ -2849,7 +2849,7 @@ post_title(
 post_cross_terminator(	/* Thor.0521: 終極文章大法 */
     XO *xo)
 {
-    char *title, buf[128],other[128];
+    char *title, buf[128], other[128];
     int mode;
     HDR *fhdr;
 
@@ -2905,21 +2905,21 @@ post_cross_terminator(	/* Thor.0521: 終極文章大法 */
             char fnew[80], fold[80];
             HDR *hdr;
 
-            if (!str_cmp(head->brdname,BRD_LOCALPOSTS))  /* LocalPosts 版不砍 */
+            if (!str_cmp(head->brdname, BRD_LOCALPOSTS))  /* LocalPosts 版不砍 */
                 continue;
 
-            if (!str_cmp(head->brdname,brd_sysop))  /* SYSOP 版不砍 */
+            if (!str_cmp(head->brdname, brd_sysop))  /* SYSOP 版不砍 */
                 continue;
 
-            if (!str_cmp(head->brdname,BRD_CAMERA))  /* ActiveInfo 版不砍 */
+            if (!str_cmp(head->brdname, BRD_CAMERA))  /* ActiveInfo 版不砍 */
                 continue;
 
 #ifdef	HAVE_CROSSPOSTLOG
-            if (!str_cmp(head->brdname,BRD_CROSSPOST))  /* CostPost 版不砍 */
+            if (!str_cmp(head->brdname, BRD_CROSSPOST))  /* CostPost 版不砍 */
                 continue;
 #endif
 
-            /* Thor.0616:更改currboard,以cancel post */
+            /* Thor.0616:更改currboard, 以cancel post */
 
             strcpy(currboard, head->brdname);
 
@@ -2951,7 +2951,7 @@ post_cross_terminator(	/* Thor.0521: 終極文章大法 */
                 if (mode==1)
                     check_mode = strcmp(title, str_ttl(hdr->owner));
                 else if (mode==2)
-                    check_mode = !((int)strstr(hdr->owner,title)|(int)strstr(hdr->title,title));
+                    check_mode = !((int)strstr(hdr->owner, title)|(int)strstr(hdr->title, title));
                 else
                     check_mode = strcmp(title, str_ttl(hdr->title));
 
@@ -3082,14 +3082,14 @@ post_recommend_log(
     HDR *hdr)
 {
     time_t now;
-    char c_time[25],buf[300];
+    char c_time[25], buf[300];
 
     now = time(0);
     strncpy(c_time, ctime(&now), 24);
     c_time[24] = '\0';
 
-    sprintf(buf,"%s %s %s %s 板：%s(%d) from %s\n",c_time,cuser.userid,(mode == 0) ? "清除":"推薦",currboard,hdr->title,hdr->chrono,fromhost);
-    f_cat(FN_RECOMMEND_LOG,buf);
+    sprintf(buf, "%s %s %s %s 板：%s(%d) from %s\n", c_time, cuser.userid, (mode == 0) ? "清除":"推薦", currboard, hdr->title, hdr->chrono, fromhost);
+    f_cat(FN_RECOMMEND_LOG, buf);
 }
  */
 
@@ -3164,8 +3164,8 @@ post_resetscore(
                     return XO_FOOT;
             }
 
-            strcpy(hdr->lastrecommend,cuser.userid);
-            rec_put(xo->dir,hdr,sizeof(HDR),pos);
+            strcpy(hdr->lastrecommend, cuser.userid);
+            rec_put(xo->dir, hdr, sizeof(HDR), pos);
 
             move(3 + cur, 7);
             outc(post_attr(hdr));
@@ -3190,8 +3190,8 @@ post_recommend(
     HDR *hdr;
     int pos, cur, addscore, eof, point=0;
     BRD *brd;
-    char fpath[80],msg[53],add[128],lastrecommend[IDLEN+1],verb[2];
-    char ans,getans,pushverb;
+    char fpath[80], msg[53], add[128], lastrecommend[IDLEN+1], verb[2];
+    char ans, getans, pushverb;
 
     /* 081122.cache: 推文時間限制 */
     static time_t next = 0;
@@ -3204,7 +3204,7 @@ post_recommend(
         cur = pos - xo->top;
         hdr = (HDR *) xo_pool + cur;
 
-        if (!strcmp(hdr->lastrecommend,"$"))
+        if (!strcmp(hdr->lastrecommend, "$"))
         {
             zmsg("此文章不可推薦！");
             return XO_NONE;
@@ -3222,7 +3222,7 @@ post_recommend(
         }
 
         //更新資料操硬碟
-        pos = seek_rec(xo,hdr);
+        pos = seek_rec(xo, hdr);
 
         if (pos < 0)
             return XO_NONE;
@@ -3237,7 +3237,7 @@ post_recommend(
 
         else if (brd->battr & BRD_PUSHDISCON)
         {
-            if (!strcmp(hdr->lastrecommend,cuser.userid))
+            if (!strcmp(hdr->lastrecommend, cuser.userid))
             {
                 zmsg("不可連續推同樣一篇文章！自己也不能第一推");
                 return XO_NONE;
@@ -3247,7 +3247,7 @@ post_recommend(
         hdr->xmode |= POST_RECOMMEND_ING;
         hdr->xid = cutmp->pid;
 
-        rec_put(xo->dir,hdr,sizeof(HDR),pos);
+        rec_put(xo->dir, hdr, sizeof(HDR), pos);
 
         /* 081121.cache: 推噓文功能 */
         /* 081122.cache: 自訂推噓文動詞 */
@@ -3259,15 +3259,15 @@ post_recommend(
             switch(ans = vans("◎ 評論 1)推文 2)噓文 ？[Q] "))
             {
                 case '1':
-                    getans = vget(b_lines,0,"推文：",msg,53,DOECHO);
+                    getans = vget(b_lines, 0, "推文：", msg, 53, DOECHO);
                     addscore = 1;
                     break;
                 case '2':
-                    getans = vget(b_lines,0,"噓文：",msg,53,DOECHO);
+                    getans = vget(b_lines, 0, "噓文：", msg, 53, DOECHO);
                     addscore = -1;
                     break;
                 case '3':
-                    getans = vget(b_lines,0,"留言：",msg,53,DOECHO);
+                    getans = vget(b_lines, 0, "留言：", msg, 53, DOECHO);
                     addscore = 0;
                     break;
                 default:
@@ -3281,17 +3281,17 @@ post_recommend(
             switch(ans = vans("◎ 評論 1)推文 2)噓文 3)留言 4)自訂推文 5)自訂噓文 ？[Q] "))
             {
                 case '1':
-                    getans = vget(b_lines,0,"推文：",msg,53,DOECHO);
-                    strcpy(verb,"推");
+                    getans = vget(b_lines, 0, "推文：", msg, 53, DOECHO);
+                    strcpy(verb, "推");
                     addscore = 1;
                     break;
                 case '2':
-                    getans = vget(b_lines,0,"噓文：",msg,53,DOECHO);
-                    strcpy(verb,"噓");
+                    getans = vget(b_lines, 0, "噓文：", msg, 53, DOECHO);
+                    strcpy(verb, "噓");
                     addscore = -1;
                     break;
                 case '3':
-                    getans = vget(b_lines,0,"留言：",msg,53,DOECHO);
+                    getans = vget(b_lines, 0, "留言：", msg, 53, DOECHO);
                     addscore = 0;
                     break;
 
@@ -3303,7 +3303,7 @@ post_recommend(
                         zmsg("動詞須為一個中文字元或者兩個英文字元");
                         return XO_FOOT;
                     }
-                    getans = vget(b_lines,0,"推文：",msg,53,DOECHO);
+                    getans = vget(b_lines, 0, "推文：", msg, 53, DOECHO);
                     addscore = 1;
                     break;
 
@@ -3315,7 +3315,7 @@ post_recommend(
                         zmsg("動詞須為一個中文字元或者兩個英文字元");
                         return XO_FOOT;
                     }
-                    getans = vget(b_lines,0,"噓文：",msg,53,DOECHO);
+                    getans = vget(b_lines, 0, "噓文：", msg, 53, DOECHO);
                     addscore = -1;
                     break;
 
@@ -3325,7 +3325,7 @@ post_recommend(
             }
         }
         else
-            getans = vget(b_lines,0,"推文：",msg,53,DOECHO);
+            getans = vget(b_lines, 0, "推文：", msg, 53, DOECHO);
 
         /* 081121.cache: 後悔的機會 */
         if (getans)
@@ -3334,7 +3334,7 @@ post_recommend(
             ans = 'n';
 
         //更新資料操硬碟
-        pos = seek_rec(xo,hdr);
+        pos = seek_rec(xo, hdr);
         hdr->xmode &= ~POST_RECOMMEND_ING;
         hdr->xid = 0;
 
@@ -3360,7 +3360,7 @@ post_recommend(
             }
         }
 
-        strcpy(lastrecommend,hdr->lastrecommend);
+        strcpy(lastrecommend, hdr->lastrecommend);
 
         if (ans == 'y' || ans == 'Y')
         {
@@ -3395,42 +3395,42 @@ post_recommend(
                     hdr->recommend++;
             }
 
-            strcpy(hdr->lastrecommend,cuser.userid);
-            rec_put(xo->dir,hdr,sizeof(HDR),pos);
+            strcpy(hdr->lastrecommend, cuser.userid);
+            rec_put(xo->dir, hdr, sizeof(HDR), pos);
 
-            hdr_fpath(fpath,xo->dir,hdr);
+            hdr_fpath(fpath, xo->dir, hdr);
 
             /* 081121.cache: 推噓文和普通推薦有不同的outs */
             /* 081122.cache: 自訂推噓文動詞 */
             if (brd->battr & BRD_PUSHSNEER)
             {
                 if (addscore == 1)
-                    sprintf(add,"\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else if (addscore == -1)
-                    sprintf(add,"\x1b[1;31m噓\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;31m噓\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else
-                    sprintf(add,"\x1b[m\x1b[1;33m   %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[m\x1b[1;33m   %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
             }
             else if (brd->battr & BRD_PUSHDEFINE)
             {
                 if (addscore == 1)
-                    sprintf(add,"\x1b[1;33m%02.2s %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",verb,cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;33m%02.2s %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else if (addscore == -1)
-                    sprintf(add,"\x1b[1;31m%02.2s\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",verb,cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;31m%02.2s\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else
-                    sprintf(add,"\x1b[1;33m→\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;33m→\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
             }
             else
-                sprintf(add,"\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n",cuser.userid,msg,Btime(&hdr->pushtime)+3);
+                sprintf(add, "\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
             /*
                 if (dashf(fpath))
-                f_cat(fpath,add);
+                f_cat(fpath, add);
              */
-            if ((fd = open(fpath,O_WRONLY | O_APPEND)) >= 0)
+            if ((fd = open(fpath, O_WRONLY | O_APPEND)) >= 0)
             {
                 f_exlock(fd);
 
-                write(fd,add,strlen(add));
+                write(fd, add, strlen(add));
 
                 f_unlock(fd);
                 close(fd);
@@ -3456,7 +3456,7 @@ post_recommend(
             if (!HAVE_PERM(PERM_SYSOP))
                 record_recommend(hdr->chrono, msg);
 
-            //    post_recommend_log(1,hdr);
+            //    post_recommend_log(1, hdr);
             //    brd->btime = time(0);[A
             //btime_update(currbno);
             brd->blast = hdr->pushtime;
@@ -3467,8 +3467,8 @@ post_recommend(
         }
         else
         {
-            strcpy(hdr->lastrecommend,lastrecommend);
-            rec_put(xo->dir,hdr,sizeof(HDR),pos);
+            strcpy(hdr->lastrecommend, lastrecommend);
+            rec_put(xo->dir, hdr, sizeof(HDR), pos);
             zmsg("取消");
         }
     }
@@ -3499,7 +3499,7 @@ post_showBRD_setting(
     clrtobot();  /* 避免畫面殘留 */
 
     prints("\033[1;34m"MSG_BLINE"\033[m");
-    prints("\n\033[1;33;44m \033[37m看板設定及資訊查詢： %*s \033[m\n", 55,"");
+    prints("\n\033[1;33;44m \033[37m看板設定及資訊查詢： %*s \033[m\n", 55, "");
 
     prints("\n看板:[%s]  板主:[%s] \n", brd->brdname, str);
 
@@ -3700,7 +3700,7 @@ post_battr_score(
 }
 
 /* cache.100917: RSS 設定功能 */
-/* cache.090928: 看板唯讀,作者修文,轉文設定 */
+/* cache.090928: 看板唯讀, 作者修文, 轉文設定 */
 /* cache.090928: 看板互斥屬性 */
     static int
 post_rule(
@@ -3951,7 +3951,7 @@ post_manage(
     grayout(GRAYOUT_DARK);
 #endif
 
-    switch (re = popupmenu_ans2(menu,"板主管理", 3, 20))
+    switch (re = popupmenu_ans2(menu, "板主管理", 3, 20))
     {
         case 't':
             return post_brdtitle(xo);
@@ -4087,9 +4087,9 @@ post_spam(
 
     dir = xo->dir;
     hdr = (HDR *) xo_pool + xo->pos - xo->top;
-    hdr_fpath(fpath,dir,hdr);
+    hdr_fpath(fpath, dir, hdr);
 
-    sprintf(msg,"%s\n",fpath);
+    sprintf(msg, "%s\n", fpath);
     f_cat(FN_SPAMPATH_LOG, msg);
 
     vmsg(fpath);
@@ -4165,8 +4165,8 @@ KeyFunc post_cb[] =
 #endif
 
 #ifdef XZ_XPOST
-    {'/', XoXpost},			/* Thor: for XoXpost */
-    {'~', XoXpost},			/* Thor: for XoXpost */
+    {'/', XoXpost}, 			/* Thor: for XoXpost */
+    {'~', XoXpost}, 			/* Thor: for XoXpost */
 #endif
 
 #ifdef HAVE_POST_BOTTOM
@@ -4183,7 +4183,7 @@ KeyFunc post_cb[] =
   可指定一keyword, 列出所有keyword相關之文章列表
 
   在 tmp/ 下開 xpost.{pid} 作為 folder, 另建一map陣列, 用作與原post作map
-  記載該文章是在原post的何處, 如此可作 mark,gem,edit,title等功能,
+  記載該文章是在原post的何處, 如此可作 mark, gem, edit, title等功能,
   且能離開時回至對應文章處
   <以上想法 obsolete...>
 
@@ -4200,9 +4200,9 @@ KeyFunc post_cb[] =
   o  o  o
   |  |  |
 
-  index含field {next,text} 均為int, 配置也用 int
+  index含field {next, text} 均為int, 配置也用 int
   第一層 sorted by title, 插入時用 binary search
-  且 MMAP only , 第一層顯示 # and +
+  且 MMAP only, 第一層顯示 # and +
 
   不提供任何刪除動作, 避免混亂
 
@@ -4261,7 +4261,7 @@ XoXpost(			/* Thor: call from post_cb */
     Chain *chain;
     char *fimage, *key=NULL, author[30], buf[30];
     HDR *head, *tail;
-    int filter_author=0,filter_title=0,mode;
+    int filter_author=0, filter_title=0, mode;
     XO *xt;
 
     if ((max = xo->max) <= 0) /* Thor.980911: 註解: 以防萬一 */
@@ -4311,7 +4311,7 @@ XoXpost(			/* Thor: call from post_cb */
 
     /* allocate index memory, remember free first */
 
-    /* Thor.990113: 怕問title,author的瞬間又有人post */
+    /* Thor.990113: 怕問title, author的瞬間又有人post */
     max = fsize / sizeof(HDR);
 
     plist = (int *) malloc(sizeof(int) * max);
@@ -4361,7 +4361,7 @@ XoXpost(			/* Thor: call from post_cb */
         }
         else
         {
-            if (strchr(head->owner,'.'))
+            if (strchr(head->owner, '.'))
                 continue;
         }
 
@@ -4515,7 +4515,7 @@ xpost_body(
 xpost_head(
     XO *xo)
 {
-    vs_head("主題串列" /* currBM */ , xo->xyz);
+    vs_head("主題串列" /* currBM */, xo->xyz);
     outs(MSG_XYPOST);
     if (*xypostKeyword)
         outs(xypostKeyword);

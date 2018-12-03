@@ -256,8 +256,8 @@
 //     your own key_handler and help_handler.
 #ifdef M3_USE_PMORE
  // input/output API
- #define getdata(y,x,msg,buf,size,mode)     vget(y,x,msg,buf,size,mode)
- #define getdata_buf(y,x,msg,buf,size,mode) vget(y,x,msg,buf,size,GCARRY|mode)
+ #define getdata(y, x, msg, buf, size, mode)     vget(y, x, msg, buf, size, mode)
+ #define getdata_buf(y, x, msg, buf, size, mode) vget(y, x, msg, buf, size, GCARRY|mode)
  #define outs(x)                            outs((unsigned char*)(x))
  // variables
  #define t_lines    (b_lines + 1)
@@ -392,8 +392,8 @@ static int debug = 0;
 
 /* DBCS users tend to write unsigned char. let's make compiler happy */
 #define ustrlen(x)      strlen((char*)x)
-#define ustrchr(x,y)    (unsigned char*)strchr((char*)x, y)
-#define ustrrchr(x,y)   (unsigned char*)strrchr((char*)x, y)
+#define ustrchr(x, y)    (unsigned char*)strchr((char*)x, y)
+#define ustrrchr(x, y)   (unsigned char*)strrchr((char*)x, y)
 
 // NOTE: this is a special strlen to speed up processing.
 // WARNING: x MUST be #define x "msg".
@@ -421,11 +421,11 @@ static int debug = 0;
 #define ANSI_COLOR(x)   ESC_STR "[" #x "m"
 //#define ANSI_CLRTOEND   ESC_STR "[K" /* cache.080920 (by hpo14's fix): M3 is not support [K, it might be dangerous */
 #define ANSI_CLRTOEND   ""
-#define ANSI_MOVETO(y,x) ESC_STR "[" #y ";" #x "H"
+#define ANSI_MOVETO(y, x) ESC_STR "[" #y ";" #x "H"
 #define ANSI_REVERSE	ANSI_COLOR(7)
 
 #define ANSI_IN_ESCAPE(x) (((x) >= '0' && (x) <= '9') || \
-        (x) == ';' || (x) == ',' || (x) == '[')
+        (x) == ';' || (x) == ', ' || (x) == '[')
 
 #endif /* PMORE_STYLE_ANSI */
 
@@ -495,7 +495,7 @@ typedef struct
                         //  usually dispedlines = PAGE-wraplines,
                         //  but if last line is incomplete(wrapped),
                         //  dispedlines = PAGE-wraplines + 1
-          lastpagelines,// lines of last page to show
+          lastpagelines, // lines of last page to show
                         //  this indicates how many lines can
                         //  maxdisps(maxlinenoS) display.
           maxlinenoS;   // lineno of maxdisps, "S"!
@@ -599,7 +599,7 @@ typedef struct
     unsigned char *floats [FH_FLOATS];
 } MF_PrettyFormattedHeader;
 
-MF_PrettyFormattedHeader fh = { 0, {0,0,0,0}, {0, 0}};
+MF_PrettyFormattedHeader fh = { 0, {0, 0, 0, 0}, {0, 0}};
 
 /* search records */
 typedef struct
@@ -1319,7 +1319,7 @@ mf_parseHeaders(void)
             pmore_str_chomp(np);
             // remove quote and traverse back
             *pb-- = 0;
-            while (pb > p && *pb != ',' && !(ISSPACE(*pb)))
+            while (pb > p && *pb != ', ' && !(ISSPACE(*pb)))
                 pb--;
 
             if (pb > p) {
@@ -1953,7 +1953,7 @@ mf_display(void)
                                      */
                                     // move(lines, col-1);
                                     char ansicmd[16];
-                                    sprintf(ansicmd, ANSI_MOVETO(%d,%d),
+                                    sprintf(ansicmd, ANSI_MOVETO(%d, %d),
                                             lines+1, col-1+1);
                                     /* to prevent ANSI ESCAPE being translated as
                                      * DBCS trailing byte. */
@@ -2084,7 +2084,7 @@ mf_display_footer(
         /* in debug mode don't print ANSI codes
          * because themselves are buggy.
          */
-        prints("L#%ld(w%ld,lp%ld) Dsp:%08X/%08X/%08X, "
+        prints("L#%ld(w%ld, lp%ld) Dsp:%08X/%08X/%08X, "
                 "F:%08X/%08X(%d) tScr(%dx%d)",
                 mf.lineno, mf.wraplines, mf.lastpagelines,
                 (unsigned int)mf.disps,
@@ -2653,7 +2653,7 @@ _pmore2(
                     mf.xpos ++;
                 mf.xpos ++;
                 break;
-            case ',':
+            case ', ':
                 if (mf.xpos > 0)
                     mf.xpos --;
                 break;
@@ -2922,7 +2922,7 @@ MFPROTO void
 pmore_prefEntry(
         int isel,
         const char *key, int szKey,
-        const char *text,int szText,
+        const char *text, int szText,
         const char* options)
 {
     // each entry occupies 23 characters now.
@@ -3820,7 +3820,7 @@ mf_movieExecuteOffsetCmd(unsigned char *s, unsigned char *end)
 MFPROTO int
 mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
 {
-    // format: #time#key1,cmd,text1#key2,cmd,text2#
+    // format: #time#key1, cmd, text1#key2, cmd, text2#
     // if key  is empty, use auto-increased key.
     // if cmd  is empty, invalid.
     // if text is empty, display key only or hide if time is assigned.
@@ -3877,7 +3877,7 @@ mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
         newOpt = 1;
         promptlen = 0;
 
-        // parse (key,frame,text)
+        // parse (key, frame, text)
         for (   p = opt, ient = 0, maxsel = 0,
                 key = '0';      // default command
                 p < end && *p != '\n'; p++)
@@ -3893,7 +3893,7 @@ mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
             }
 
             // calculation of fields
-            if (*p == ',' || *p == '#')
+            if (*p == ', ' || *p == '#')
             {
                 switch (++ient)
                 {
@@ -3922,18 +3922,18 @@ mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
                 newOpt = 1;
 
                 // first, fix pointers
-                if (szCmd == 0 || *cmd == ',' || *cmd == '#')
+                if (szCmd == 0 || *cmd == ', ' || *cmd == '#')
                 { cmd = NULL; szCmd = 0; }
 
                 // quick abort if option is invalid.
                 if (!cmd)
                     continue;
 
-                if (szText == 0 || *text == ',' || *text == '#')
+                if (szText == 0 || *text == ', ' || *text == '#')
                 { text = NULL; szText = 0; }
 
                 // assign key
-                if (*pkey == ',' || *pkey == '#')
+                if (*pkey == ', ' || *pkey == '#')
                     key++;
                 else
                 {
@@ -4145,7 +4145,7 @@ mf_movieSyncFrame(void)
     }
 }
 
-#define MOVIECMD_SKIP_ALL(p,end) do { \
+#define MOVIECMD_SKIP_ALL(p, end) do { \
     while (p < end && *p && *p != '\n') \
     { p++; } \
 } while (0)
@@ -4165,7 +4165,7 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
             // END
             STOP_MOVIE();
             // MFDISP_SKIPCURLINE();
-            MOVIECMD_SKIP_ALL(p,end);
+            MOVIECMD_SKIP_ALL(p, end);
             return p;
         }
         else if (*p == 'P')
@@ -4173,14 +4173,14 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
             // PAUSE
             mfmovie.pause = 1;
             // MFDISP_SKIPCURLINE();
-            MOVIECMD_SKIP_ALL(p,end);
+            MOVIECMD_SKIP_ALL(p, end);
             return p;
 
         }
         else if (*p == 'I')
         {
             // INTERRUPT
-            // Syntax: Icmd_from,cmd_to
+            // Syntax: Icmd_from, cmd_to
             // Jump cmd_from, and execute until cmd_to,
             // then back here for next frame.
             unsigned char *pfs, *pfe, *pts, *pte;
@@ -4191,16 +4191,16 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
 
             // find parameters
             pfs = pfe = p+1;
-            while (pfe < end && *pfe > ' ' && *pfe != ',')
+            while (pfe < end && *pfe > ' ' && *pfe != ', ')
                 pfe++;
             pts = pte = pfe+1;
-            while (pte < end && *pte > ' ' && *pte != ',')
+            while (pte < end && *pte > ' ' && *pte != ', ')
                 pte++;
             // check syntax
-            if ( pfe >= end || *pfe != ',' ||
+            if ( pfe >= end || *pfe != ', ' ||
                  pts >= end)
             {
-                MOVIECMD_SKIP_ALL(p,end);
+                MOVIECMD_SKIP_ALL(p, end);
                 return p;
             }
 
@@ -4218,14 +4218,14 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
 
             // XXX what if jump to same location?
 
-            MOVIECMD_SKIP_ALL(p,end);
+            MOVIECMD_SKIP_ALL(p, end);
             return p;
         }
         else if (*p == 'G')
         {
             // GOTO
-            // Gt+-n,t+-n,t+-n (random select one)
-            // jump +-n of type(l,p,f)
+            // Gt+-n, t+-n, t+-n (random select one)
+            // jump +-n of type(l, p, f)
 
             // random select, if multiple
             unsigned char *pe = p;
@@ -4234,7 +4234,7 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
             for (pe = p ; pe < end && *pe &&
                     *pe > ' ' && *pe < 0x80
                     ; pe ++)
-                if (*pe == ',') igs++;
+                if (*pe == ', ') igs++;
 
             if (igs)
             {
@@ -4244,14 +4244,14 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
                 for (pe = p ; igs > 0 && pe < end && *pe &&
                         *pe > ' ' && *pe < 0x80
                         ; pe ++)
-                    if (*pe == ',') igs--;
+                    if (*pe == ', ') igs--;
 
                 if (pe != p)
                     p = pe-1;
             }
 
             mf_movieExecuteOffsetCmd(p+1, end);
-            MOVIECMD_SKIP_ALL(p,end);
+            MOVIECMD_SKIP_ALL(p, end);
             return p;
         }
         else if (*p == ':')
@@ -4296,17 +4296,17 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
                 p--;
                 continue;
             }
-            MOVIECMD_SKIP_ALL(p,end);
+            MOVIECMD_SKIP_ALL(p, end);
             return p;
         }
         else if (*p == '#')
         {
             // OPTIONS
-            // #key1,frame1,text1#key2,frame2,text2#
+            // #key1, frame1, text1#key2, frame2, text2#
             mfmovie.options = p+1;
             mfmovie.interactive = 1;
             // MFDISP_SKIPCURLINE();
-            MOVIECMD_SKIP_ALL(p,end);
+            MOVIECMD_SKIP_ALL(p, end);
             return p;
         }
         else if (*p == 'O')
@@ -4331,7 +4331,7 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
         else if (*p == 'L')
         {
             // LOOP
-            // Lm,n
+            // Lm, n
             // m times to backward n
             break;
         }

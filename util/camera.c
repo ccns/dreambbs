@@ -149,15 +149,15 @@ main(
 {
     int i, fd, size;
 #ifdef      HAVE_SONG_TO_CAMERA
-    int j,k;
+    int j, k;
 #endif
-    char *ptr,*str, *fname, fpath[80], buf[FILM_SIZ + 1];
+    char *ptr, *str, *fname, fpath[80], buf[FILM_SIZ + 1];
 #ifdef	HAVE_RAND_INCOME
     char fincome[128];
     int pos;
     time_t now;
     struct stat st;
-    struct tm *xtime ,ptime;
+    struct tm *xtime, ptime;
 #endif
     FCACHE *fshm;
     FILE *fp;
@@ -182,13 +182,13 @@ main(
     {
         strcpy(fname, str);
 #ifdef	HAVE_RAND_INCOME
-        if (!strcmp(str,"income"))
+        if (!strcmp(str, "income"))
         {
             now = time(NULL);
             xtime = localtime(&now);
             ptime = *xtime;
-            sprintf(fincome,"gem/brd/%s/@/@income",BRD_CAMERA);
-            fd = open(fincome,O_RDONLY);
+            sprintf(fincome, "gem/brd/%s/@/@income", BRD_CAMERA);
+            fd = open(fincome, O_RDONLY);
             if ((fd>=0) && !fstat(fd, &st) && (size = st.st_size) > 0)
             {
                 size /= sizeof(HDR);
@@ -217,7 +217,7 @@ main(
     /* --------------------------------------------------- */
     i = FILM_MOVIE;
 
-    sprintf(fpath,"gem/brd/%s/@/@note",BRD_CAMERA);
+    sprintf(fpath, "gem/brd/%s/@/@note", BRD_CAMERA);
 
 #ifdef      HAVE_SONG_TO_CAMERA
     for (j=0;j<=1;j++)
@@ -226,7 +226,7 @@ main(
         if ((fp = fopen(fpath, "r")))
         {
 #ifdef      HAVE_SONG_TO_CAMERA
-            if (j==1) sprintf(fpath,"brd/%s/@/",BRD_ORDERSONGS);
+            if (j==1) sprintf(fpath, "brd/%s/@/", BRD_ORDERSONGS);
 #endif
             str = strchr(fpath, '@');
             while (fread(&hdr, sizeof hdr, 1, fp) == 1)
@@ -251,11 +251,11 @@ main(
                     ptr = buf;
 
 #ifdef	HAVE_SONG_TO_CAMERA
-                    if (j == 1 /*&& !strncmp(buf,str_author1,strlen(str_author1))*/)
+                    if (j == 1 /*&& !strncmp(buf, str_author1, strlen(str_author1))*/)
                     {
                         for (k=0;k<=3 && ptr;k++)
                         {
-                            ptr = strchr(ptr,'\n');
+                            ptr = strchr(ptr, '\n');
                             if (ptr)
                                 ptr++;
                         }
@@ -288,12 +288,12 @@ main(
             }
             else
             { /* 針對當沒有 @error-camera 時的處理 */
-                strcpy(buf,"動態看版錯誤\n請聯絡系統管理員\n");
+                strcpy(buf, "動態看版錯誤\n請聯絡系統管理員\n");
                 play(buf);
             }
         }
 #ifdef	    HAVE_SONG_TO_CAMERA
-        sprintf(fpath, "brd/%s/.DIR",BRD_ORDERSONGS);
+        sprintf(fpath, "brd/%s/.DIR", BRD_ORDERSONGS);
     }
 #endif
     i = number;	/* 總共有幾片 ? */

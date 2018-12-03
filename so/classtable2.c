@@ -134,12 +134,12 @@ int add_classtable(int x, int y)
     classtable.y = y;
     classtable.x = x;
 
-    if (vget(b_lines, 0, "課程簡稱 : " , classtable.condensation, sizeof(classtable.condensation), DOECHO))
+    if (vget(b_lines, 0, "課程簡稱 : ", classtable.condensation, sizeof(classtable.condensation), DOECHO))
     {
-        vget(b_lines, 0, "課程名稱 : " , classtable.name, sizeof(classtable.name), DOECHO);
-        vget(b_lines, 0, "授課教師 : " , classtable.teacher, sizeof(classtable.teacher), DOECHO);
-        vget(b_lines, 0, "上課地點 : " , classtable.room, sizeof(classtable.room), DOECHO);
-        vget(b_lines, 0, "備    註 : " , classtable.other, sizeof(classtable.other), DOECHO);
+        vget(b_lines, 0, "課程名稱 : ", classtable.name, sizeof(classtable.name), DOECHO);
+        vget(b_lines, 0, "授課教師 : ", classtable.teacher, sizeof(classtable.teacher), DOECHO);
+        vget(b_lines, 0, "上課地點 : ", classtable.room, sizeof(classtable.room), DOECHO);
+        vget(b_lines, 0, "備    註 : ", classtable.other, sizeof(classtable.other), DOECHO);
 
 
         memcpy(&tmp_table[p], &classtable, sizeof(CLASS_TABLE2));
@@ -180,12 +180,12 @@ int edit_classtable(int x, int y)
     if (tmp_table[p].valid == 1)
     {
         memcpy(&classtable, &tmp_table[p], sizeof(CLASS_TABLE2));
-        if (vget(b_lines, 0, "課程簡稱 : " , classtable.condensation, sizeof(classtable.condensation), GCARRY))
+        if (vget(b_lines, 0, "課程簡稱 : ", classtable.condensation, sizeof(classtable.condensation), GCARRY))
         {
-            vget(b_lines, 0, "課程名稱 : " , classtable.name, sizeof(classtable.name), GCARRY);
-            vget(b_lines, 0, "授課教師 : " , classtable.teacher, sizeof(classtable.teacher), GCARRY);
-            vget(b_lines, 0, "上課地點 : " , classtable.room, sizeof(classtable.room), GCARRY);
-            vget(b_lines, 0, "備    註 : " , classtable.other, sizeof(classtable.other), GCARRY);
+            vget(b_lines, 0, "課程名稱 : ", classtable.name, sizeof(classtable.name), GCARRY);
+            vget(b_lines, 0, "授課教師 : ", classtable.teacher, sizeof(classtable.teacher), GCARRY);
+            vget(b_lines, 0, "上課地點 : ", classtable.room, sizeof(classtable.room), GCARRY);
+            vget(b_lines, 0, "備    註 : ", classtable.other, sizeof(classtable.other), GCARRY);
             memcpy(&tmp_table[p], &classtable, sizeof(CLASS_TABLE2));
 
             show_classtable(x, y, classtable.condensation);

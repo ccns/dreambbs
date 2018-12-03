@@ -26,7 +26,7 @@
 
 int
 acl_addr(
-    char *acl,		/* file name of access control list */
+    char *acl, 		/* file name of access control list */
     char *addr
 )
 {
@@ -143,8 +143,8 @@ acl_addr(
 
 int
 acl_has(
-    char *acl,			/* file name of access control list */
-    char *user,			/* lower-case string */
+    char *acl, 			/* file name of access control list */
+    char *user, 			/* lower-case string */
     char *host			/* lower-case string */
 )
 {
