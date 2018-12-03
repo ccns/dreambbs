@@ -2453,13 +2453,13 @@ int main(int argc, char* argv[])
     {
 #if 0
         // DBCS test
-        char *a1 = ANSI_COLOR(1; 33) "代刚" ANSI_COLOR(34) "いゅ"
+        char *a1 = ANSI_COLOR(1;33) "代刚" ANSI_COLOR(34) "いゅ"
             ANSI_REVERSE "代刚" ANSI_RESET "代刚"
             "代刚a" ANSI_RESET "\n";
         outstr(a1);
         move(0, 2);
         outstr("いゅ1");
-        outstr(ANSI_COLOR(1; 33)"いゅ2");
+        outstr(ANSI_COLOR(1;33)"いゅ2");
         outstr(" い\x85");
         outstr("okok herer\x8a");
 
@@ -2473,8 +2473,8 @@ int main(int argc, char* argv[])
         refresh();
         getchar();
 
-        outs(ANSI_COLOR(1; 33) "test " ANSI_COLOR(34) "x"
-                ANSI_RESET "te" ANSI_COLOR(43; 0; 1; 35) " st"
+        outs(ANSI_COLOR(1;33) "test " ANSI_COLOR(34) "x"
+                ANSI_RESET "te" ANSI_COLOR(43;0;1;35) " st"
                 ANSI_RESET "testx\n");
         refresh();
         getchar();
