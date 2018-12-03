@@ -24,14 +24,15 @@
           * other detail changes from Current version.
         - `v0.96.1`: detail fixes based on `v0.96`
         - `v0.96.2`: detail fixes based on `v0.96.1`
-        - It is going to be End-Of-Life after `v0.98.0` released.
+        - It is going to be End-Of-Life after `v0.97.1` released.
 
     + `v0.97`: Version 0.97, codename `stratosphere` ( **latest** )
         - `v0.97-RCx`~`v0.97.0`: pre-release
         - features in plan:
           * add simple code test utilities
           * refine layout: removing trailing whitespaces.
-    + `v0.98`: Version 0.98, codename `rimuru` (not released yet)
+    + Drop plan of v0.98~v0.99 due to big change and it will be tested for a long time.
+    + `v1.0`: Version 1.0, codename `rimuru` (not released yet)
         - features in plan:
           * applying resizing term feature
           * port `pfterm` in this release version
