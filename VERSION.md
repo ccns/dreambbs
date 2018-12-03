@@ -37,7 +37,7 @@
           * applying resizing term feature
           * port `pfterm` in this release version
           * ...
-    + release date (plan): 1st, March, 2019.
+    + release date (plan): **1st, March, 2019.**
 
 * preparing version name about `current`:
     + `v1.0-CURRENT`: developing for preparing version 1.0.
