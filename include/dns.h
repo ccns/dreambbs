@@ -30,8 +30,8 @@
 
 typedef union
 {
-  unsigned char d[4];
-  unsigned long addr;
+    unsigned char d[4];
+    unsigned long addr;
 }     ip_addr;
 
 /*
@@ -53,17 +53,17 @@ typedef union
 
 typedef union
 {
-  HEADER hdr;
-  unsigned char buf[MAXPACKET];
-} querybuf;                 /* response of DNS query */
+    HEADER hdr;
+    unsigned char buf[MAXPACKET];
+} querybuf;                     /* response of DNS query */
 
 static inline unsigned short
 getshort(unsigned char *c)
 {
-  unsigned short u;
+    unsigned short u;
 
-  u = c[0];
-  return (u << 8) + c[1];
+    u = c[0];
+    return (u << 8) + c[1];
 }
 
 #endif  /* _DNS_H_ */

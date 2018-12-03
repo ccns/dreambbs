@@ -602,8 +602,8 @@ static struct pipcommands pipsystemlist[] =
     {pip_write_backup,          '4',    '4'},
     {pip_read_backup,           '5',    '5'},
     /*
-        {pip_divine,            'o',    'O'},
-        {pip_results_show,      's',    'S'},
+    {pip_divine,                'o',    'O'},
+    {pip_results_show,          's',    'S'},
     */
     {NULL,                     '\0',   '\0'}
 };
@@ -6425,7 +6425,7 @@ pip_money(void)
     if (!d.name[0] || d.death) return 0;
     clrchyiuan(6, 18);
     /* move(12, 0);
-      clrtobot();*/
+    clrtobot();*/
     prints("你身上有 %d 次點歌次數，雞金 %d 元\n", cuser.request, d.money);
     outs("\n一次換一千雞金唷!!\n");
     while (money < 0 || money > cuser.request)
@@ -6486,7 +6486,7 @@ char *genbuf)
     FILE *fs;
     char buf[200];
     /*char yo[14][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
-            "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
+                      "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
     char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
                       "成年", "壯年", "更年", "老年", "古稀", "神仙"
                      };
@@ -6918,7 +6918,7 @@ char *userid)
     FILE *fs;
 
     /* if (!isprint(userid[0]))*/
-    usr_fpath(buf, cuser.userid, "chicken");
+        usr_fpath(buf, cuser.userid, "chicken");
     /* else
         usr_fpath(buf, userid, "chicken");*/
 

@@ -1258,17 +1258,17 @@ post_cross(
 
         if (!HAS_PERM(PERM_ADMIN))
         {
-          time_t now;
-          struct tm *ptime;
-          char add[180], tgt[30];
+            time_t now;
+            struct tm *ptime;
+            char add[180], tgt[30];
 
-          time(&now);
-          ptime = localtime(&now);
-          sprintf(tgt, "轉錄至 %s 看板", xboard);
-          xfp = fopen(fpath, "a");
-          sprintf(add, "\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, tgt, Btime(&hdr->pushtime)+3);
-          fprintf(xfp, "%s", add);
-          fclose(xfp);
+            time(&now);
+            ptime = localtime(&now);
+            sprintf(tgt, "轉錄至 %s 看板", xboard);
+            xfp = fopen(fpath, "a");
+            sprintf(add, "\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, tgt, Btime(&hdr->pushtime)+3);
+            fprintf(xfp, "%s", add);
+            fclose(xfp);
         }
 
         /* Thor.981205: check 被轉的版有沒有列入紀錄? */
@@ -1375,61 +1375,61 @@ post_xcross(
 
 void
 post_history(
-  XO *xo,
-  HDR *fhdr)
+    XO *xo,
+    HDR *fhdr)
 {
-  int prev, chrono, next, pos, top, push=0;
-  char *dir;
-  HDR buf;
+    int prev, chrono, next, pos, top, push=0;
+    char *dir;
+    HDR buf;
 
 #ifdef  HAVE_BOTTOM
-  if (fhdr->xmode & POST_BOTTOM && fhdr->xmode & POST_COMPLETE)
-    return;
+    if (fhdr->xmode & POST_BOTTOM && fhdr->xmode & POST_COMPLETE)
+        return;
 #endif
 
 
-  dir = xo->dir;
-  pos = xo->pos;
-  top = xo->top;
+    dir = xo->dir;
+    pos = xo->pos;
+    top = xo->top;
 
-  chrono = fhdr->chrono;
-  push = fhdr->pushtime;
+    chrono = fhdr->chrono;
+    push = fhdr->pushtime;
 
 
-  if (brh_unread(push))
-    brh_add(push, push, push);
+    if (brh_unread(push))
+        brh_add(push, push, push);
 
-  if (!brh_unread(chrono))
-    //if ( !brh_unread(push))
-      return;
+    if (!brh_unread(chrono))
+        //if ( !brh_unread(push))
+            return;
 
-  if (--pos >= top)
-  {
-    prev = fhdr[-1].chrono;
-  }
-  else
-  {
-    if (!rec_get(dir, &buf, sizeof(HDR), pos))
-        prev = buf.chrono;
+    if (--pos >= top)
+    {
+        prev = fhdr[-1].chrono;
+    }
     else
-      prev = chrono;
-  }
+    {
+        if (!rec_get(dir, &buf, sizeof(HDR), pos))
+                prev = buf.chrono;
+        else
+            prev = chrono;
+    }
 
-  pos +=2;
-  if (pos < top + XO_TALL)
-      next = fhdr[1].chrono;
-  else
-  {
-    if (!rec_get(dir, &buf, sizeof(HDR), pos))
-      next = buf.chrono;
+    pos +=2;
+    if (pos < top + XO_TALL)
+            next = fhdr[1].chrono;
     else
-      next = chrono;
-  }
+    {
+        if (!rec_get(dir, &buf, sizeof(HDR), pos))
+            next = buf.chrono;
+        else
+            next = chrono;
+    }
 /*
-  if (push)
-    prev = chrono = next = push;
+    if (push)
+        prev = chrono = next = push;
 */
-  brh_add(prev, chrono, next);
+    brh_add(prev, chrono, next);
 
 }
 
@@ -1969,33 +1969,33 @@ post_delete(
 
 static int
 post_clean_delete(
-  XO *xo)
+    XO *xo)
 {
-  int pos, cur, by_BM;
-  HDR *hdr;
+    int pos, cur, by_BM;
+    HDR *hdr;
 
-  pos = xo->pos;
-  cur = pos - xo->top;
-  hdr = (HDR *) xo_pool + cur;
+    pos = xo->pos;
+    cur = pos - xo->top;
+    hdr = (HDR *) xo_pool + cur;
 
-  by_BM = (strcmp(hdr->owner, cuser.userid) ? 1 : 0);
+    by_BM = (strcmp(hdr->owner, cuser.userid) ? 1 : 0);
 
-  if ((hdr->xmode & POST_MARKED) || (hdr->xmode & POST_LOCK) || !(bbstate & STAT_BOARD) )
-  {
-    return XO_NONE;
-  }
-
-  if (vans("是否直接砍除文章？[y/N]") == 'y')
-  {
-    currchrono = hdr->chrono;
-
-    if (!rec_del(xo->dir, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid, (void *)cmpchrono, 0))
+    if ((hdr->xmode & POST_MARKED) || (hdr->xmode & POST_LOCK) || !(bbstate & STAT_BOARD) )
     {
-      move_post(hdr, by_BM ? BRD_DELETED : BRD_JUNK, by_BM);
-      return XO_LOAD;
+        return XO_NONE;
     }
-  }
-  return XO_FOOT;
+
+    if (vans("是否直接砍除文章？[y/N]") == 'y')
+    {
+        currchrono = hdr->chrono;
+
+        if (!rec_del(xo->dir, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid, (void *)cmpchrono, 0))
+        {
+            move_post(hdr, by_BM ? BRD_DELETED : BRD_JUNK, by_BM);
+            return XO_LOAD;
+        }
+    }
+    return XO_FOOT;
 }
 
 #ifdef HAVE_POST_BOTTOM
@@ -2728,9 +2728,9 @@ int post_edit(XO *xo)
                 /* cache.090922: 修改次數檢查機制 */
                 /*
                     if (hdr->modifytimes < 0)
-                    hdr->modifytimes = 1;
+                        hdr->modifytimes = 1;
                     else
-                    hdr->modifytimes += 1;
+                        hdr->modifytimes += 1;
                  */
                 vmsg("修改完成");
             }
@@ -2945,7 +2945,7 @@ post_cross_terminator(  /* Thor.0521: 終極文章大法 */
                 int check_mode;
                 xmode = hdr->xmode;
 
-                /*      if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
+                /*if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
                     continue;*/
 
                 if (mode==1)
@@ -2977,7 +2977,7 @@ post_cross_terminator(  /* Thor.0521: 終極文章大法 */
                     hdr->xmode |= POST_MDELETE;
                     sprintf(hdr->title, "<< 本文章經 %s 做系統功\能刪除 >>", cuser.userid);
                     /*hdr_fpath(fold, fpath, hdr);
-                      unlink(fold);*/
+                    unlink(fold);*/
                 }
 
                 if ((fwrite(hdr, sizeof(HDR), 1, fpw) != 1))
@@ -3423,7 +3423,7 @@ post_recommend(
             else
                 sprintf(add, "\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
             /*
-                if (dashf(fpath))
+            if (dashf(fpath))
                 f_cat(fpath, add);
              */
             if ((fd = open(fpath, O_WRONLY | O_APPEND)) >= 0)
