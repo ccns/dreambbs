@@ -1,6 +1,6 @@
 /* ----------------------------------------------------- */
-/* chrono ==> file name (32-based)			 */
-/* 0123456789ABCDEFGHIJKLMNOPQRSTUV			 */
+/* chrono ==> file name (32-based)                       */
+/* 0123456789ABCDEFGHIJKLMNOPQRSTUV                      */
 /* ----------------------------------------------------- */
 
 char radix32[32] = {

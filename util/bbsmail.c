@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* util/bbsmail.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* util/bbsmail.c       ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : 由 Internet 寄信給 BBS 站內使用者		 */
-/* create : 95/03/29					 */
-/* update : 97/03/29					 */
+/* target : 由 Internet 寄信給 BBS 站內使用者            */
+/* create : 95/03/29                                     */
+/* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
 
 
@@ -11,10 +11,10 @@
 
 #include <sysexits.h>
 
-#define	ANTI_HTMLMAIL		/* itoc.021014: 擋 html_mail */
-#define	ANTI_NOTMYCHARSETMAIL	/* itoc.030513: 擋 not-mycharset mail */
+#define ANTI_HTMLMAIL           /* itoc.021014: 擋 html_mail */
+#define ANTI_NOTMYCHARSETMAIL   /* itoc.030513: 擋 not-mycharset mail */
 
-#define         LOG_FILE        FN_BBSMAILPOST_LOG
+#define LOG_FILE        FN_BBSMAILPOST_LOG
 
 static void
 mailog(
@@ -39,7 +39,7 @@ mailog(
 
 
 /* ----------------------------------------------------- */
-/* user：shm 部份須與 cache.c 相容			 */
+/* user：shm 部份須與 cache.c 相容                       */
 /* ----------------------------------------------------- */
 
 
@@ -86,7 +86,7 @@ bbs_biff(
     unsigned int offset;
 
     offset = ushm->offset;
-    if (offset > (MAXACTIVE - 1) * sizeof(UTMP))	/* Thor.980805: 不然call不到 */
+    if (offset > (MAXACTIVE - 1) * sizeof(UTMP))        /* Thor.980805: 不然call不到 */
         offset = (MAXACTIVE - 1) * sizeof(UTMP);
 
     utmp = ushm->uslot;
@@ -101,7 +101,7 @@ bbs_biff(
 #endif
 
 /* ----------------------------------------------------- */
-/* 主程式						 */
+/* 主程式                                                */
 /* ----------------------------------------------------- */
 
 int
@@ -179,7 +179,7 @@ mail2bbs(
 
                 if (strchr(++str, '@'))
                     *ptr = '\0';
-                else					/* 由 local host 寄信 */
+                else                                    /* 由 local host 寄信 */
                     strcpy(ptr, "@" MYHOSTNAME);
 
                 if ((ptr = (char *) strchr(buf, ' ')))
@@ -200,7 +200,7 @@ mail2bbs(
                     strcpy(nick, ptr);
                     strcpy(owner, str);
                 }
-                else	/* Thor.980907: 沒有 finger name, 特別處理 */
+                else    /* Thor.980907: 沒有 finger name, 特別處理 */
                 {
                     strcpy(sender, str);
                     strcpy(owner, str);
@@ -211,14 +211,14 @@ mail2bbs(
                 strtok(buf, " \t\n\r");
                 strcpy(sender, (char *) strtok(NULL, " \t\n\r"));
 
-                if (!strchr(sender, '@'))	/* 由 local host 寄信 */
+                if (!strchr(sender, '@'))       /* 由 local host 寄信 */
                     strcat(sender, "@" MYHOSTNAME);
                 strcpy(owner, sender);
             }
 
 #if 0
             /* itoc.040804: 擋信黑白名單 */
-            str_lower(buf, owner);	/* 保持原 email 的大小寫 */
+            str_lower(buf, owner);      /* 保持原 email 的大小寫 */
             if (ptr = (char *) strchr(buf, '@'))
             {
                 *ptr++ = '\0';
@@ -327,7 +327,7 @@ mail2bbs(
 
     rec_add(folder, &hdr, sizeof(HDR));
 
-    bbs_biff(userid);	/* itoc.021113: 通知 user 有新信件 */
+    bbs_biff(userid);   /* itoc.021113: 通知 user 有新信件 */
 //  my_biff(userid);
 
     /* Thor.980827: 加上 parent process id，以便抓垃圾信 */
@@ -376,7 +376,7 @@ main(
     signal(SIGPIPE, sig_catch);
 
     init_ushm();
-    str_lower(buf, argv[1]);	/* 把 userid 換成小寫 */
+    str_lower(buf, argv[1]);    /* 把 userid 換成小寫 */
 
     if (mail2bbs(buf))
     {

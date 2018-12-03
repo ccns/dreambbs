@@ -2,7 +2,7 @@
 /* classtable.c   ( YZU_CSE WindTop BBS )                */
 /*-------------------------------------------------------*/
 /* author : verit.bbs@bbs.yzu.edu.tw                     */
-/* modify : verit.bbs@bbs.yzu.edu.tw			 */
+/* modify : verit.bbs@bbs.yzu.edu.tw                     */
 /* target : ¥\½Òªí                                       */
 /* create : 2002/01/18                                   */
 /* update : 2004/05/20                                   */
@@ -198,8 +198,8 @@ int edit_classtable(int x, int y)
 
 #define HTTP_PORT         80
 #define SERVER_student    "portal.yzu.edu.tw"
-#define CGI_stage1	  "/logincheck.asp"
-#define CGI_stage2	  "/"
+#define CGI_stage1        "/logincheck.asp"
+#define CGI_stage2        "/"
 #define CGI_stage3        "/VC/classLeft.asp"
 #define CGI_stage4        "/VC/Login_Student.asp"
 
@@ -218,7 +218,7 @@ int main_classtable(void)
     int x = 1, y = 1;
     int fd;
 
-#ifdef	HAVE_CLASSTABLEALERT
+#ifdef  HAVE_CLASSTABLEALERT
     classtable_free();
 #endif
     usr_fpath(fpath_classtable, cuser.userid, FN_CLASSTABLE2);
@@ -289,7 +289,7 @@ int main_classtable(void)
         write(fd, tmp_table, sizeof(CLASS_TABLE2)*78);
         close(fd);
     }
-#ifdef	HAVE_CLASSTABLEALERT
+#ifdef  HAVE_CLASSTABLEALERT
     classtable_main();
 #endif
 

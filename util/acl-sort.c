@@ -1,13 +1,13 @@
 /*-------------------------------------------------------*/
-/* util/acl-sort.c	( YZU WindTopBBS Ver 3.00 )	 */
+/* util/acl-sort.c      ( YZU WindTopBBS Ver 3.00 )      */
 /*-------------------------------------------------------*/
 /* author : visor.bbs@bbs.yzu.edu.tw                     */
-/* target : sort [Access Control List]			 */
-/*          主要用來排序用, 還有問題			 */
-/* create : 99/03/29				 	 */
-/* update : 99/03/29				 	 */
+/* target : sort [Access Control List]                   */
+/*          主要用來排序用, 還有問題                     */
+/* create : 99/03/29                                     */
+/* update : 99/03/29                                     */
 /*-------------------------------------------------------*/
-/* syntax : acl-sort [file]				 */
+/* syntax : acl-sort [file]                              */
 /*-------------------------------------------------------*/
 
 

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
-/* util/resetvmail.c    ( YZU WindTop 3.00 ) 		 */
+/* util/resetvmail.c    ( YZU WindTop 3.00 )             */
 /*-------------------------------------------------------*/
-/* author : visor.bbs@bbs.yzu.edu.tw			 */
+/* author : visor.bbs@bbs.yzu.edu.tw                     */
 /* target : 清除特定已註冊之 Email 成未註冊              */
 /* create : 95/03/29                                     */
 /* update : 97/03/29                                     */

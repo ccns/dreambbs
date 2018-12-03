@@ -1,21 +1,21 @@
 /*-------------------------------------------------------*/
-/* xover.c	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* xover.c      ( NTHU CS MapleBBS Ver 2.36 )            */
 /*-------------------------------------------------------*/
-/* target : board/mail interactive reading routines 	 */
-/* create : 95/03/29				 	 */
-/* update : 2000/01/02				 	 */
+/* target : board/mail interactive reading routines      */
+/* create : 95/03/29                                     */
+/* update : 2000/01/02                                   */
 /*-------------------------------------------------------*/
 
 #include "bbs.h"
 
-#define XO_STACK	(5)
-#define MAX_LEVEL	(20)
+#define XO_STACK        (5)
+#define MAX_LEVEL       (20)
 static int xo_stack_level;
 static int xo_user_level;
 
 extern int boardmode;
 
-#ifdef	HAVE_FAVORITE
+#ifdef  HAVE_FAVORITE
 #define MSG_ZONE_SWITCH \
     "快速切換：A)精華區 B)文章列表 C)看板列表 M)信件 F)我的最愛 P)進階功\能："
 
@@ -24,16 +24,16 @@ extern int boardmode;
 
 #else
 
-#define	MSG_ZONE_SWITCH \
+#define MSG_ZONE_SWITCH \
     "快速切換：A)精華區 B)文章列表 C)看板列表 M)信件 U)使用者名單 W)察看訊息："
 #endif
 
 
 /* ----------------------------------------------------- */
-/* keep xover record					 */
+/* keep xover record                                     */
 /* ----------------------------------------------------- */
 
-static XO *xo_root;		/* root of overview list */
+static XO *xo_root;             /* root of overview list */
 
 
 XO *
@@ -69,7 +69,7 @@ xo_get(
     xo->nxt = xo_root;
     xo_root = xo;
     xo->xyz = NULL;
-    xo->pos = XO_TAIL;		/* 第一次進入時，將游標放在最後面 */
+    xo->pos = XO_TAIL;          /* 第一次進入時，將游標放在最後面 */
 
     return xo;
 }
@@ -90,7 +90,7 @@ xo_free(
 
 
 /* ----------------------------------------------------- */
-/* interactive menu routines			 	 */
+/* interactive menu routines                             */
 /* ----------------------------------------------------- */
 
 
@@ -151,12 +151,12 @@ xo_fpath(
 
 
 /* ----------------------------------------------------- */
-/* nhead:						 */
-/* 0 ==> 依據 TagList 連鎖刪除				 */
-/* !0 ==> 依據 range [nhead, ntail] 刪除		 */
+/* nhead:                                                */
+/* 0 ==> 依據 TagList 連鎖刪除                           */
+/* !0 ==> 依據 range [nhead, ntail] 刪除                 */
 /* ----------------------------------------------------- */
-/* notice : *.n - new file				 */
-/* *.o - old file					 */
+/* notice : *.n - new file                               */
+/* *.o - old file                                        */
 /* ----------------------------------------------------- */
 
 
@@ -191,12 +191,12 @@ hdr_prune(
         xmode = hdr->xmode;
         count++;
 #if 0
-        if (xmode & dmode)		/* 已刪除 */
+        if (xmode & dmode)              /* 已刪除 */
                 continue;
 #endif
-        if (((xmode & (POST_MARKED|POST_LOCK|POST_DELETE)) ||	/* 標記 */
-                (nhead && (count < nhead || count > ntail)) ||	/* range */
-            (!nhead && Tagger(hdr->chrono, count - 1, TAG_NIN)))	/* TagList */
+        if (((xmode & (POST_MARKED|POST_LOCK|POST_DELETE)) ||   /* 標記 */
+                (nhead && (count < nhead || count > ntail)) ||  /* range */
+            (!nhead && Tagger(hdr->chrono, count - 1, TAG_NIN)))        /* TagList */
             && !(post == 3 && (hdr->xmode & POST_DELETE)))
         {
             if (!post)
@@ -303,7 +303,7 @@ xo_delete(
     {
         if (bbsmode == M_READA)
             hdr_prune(xo->dir, head, tail, 0);
-#ifdef	HAVE_MAILUNDELETE
+#ifdef  HAVE_MAILUNDELETE
         else if (bbsmode == M_RMAIL)
             hdr_prune(xo->dir, head, tail, 2);
 #endif
@@ -317,23 +317,23 @@ xo_delete(
 
 
 /* ----------------------------------------------------- */
-/* Tag List 標籤					 */
+/* Tag List 標籤                                         */
 /* ----------------------------------------------------- */
 
 
-int TagNum;			/* tag's number */
-TagItem TagList[TAG_MAX];	/* ascending list */
+int TagNum;                     /* tag's number */
+TagItem TagList[TAG_MAX];       /* ascending list */
 
 
 int
 Tagger(
     time_t chrono,
     int recno,
-    int op)			/* op : TAG_NIN / TOGGLE / INSERT */
+    int op)                     /* op : TAG_NIN / TOGGLE / INSERT */
 /* ----------------------------------------------------- */
-/* return 0 : not found	/ full				 */
-/* 1 : add						 */
-/* -1 : remove						 */
+/* return 0 : not found / full                           */
+/* 1 : add                                               */
+/* -1 : remove                                           */
 /* ----------------------------------------------------- */
 {
     int head, tail, pos=0, cmp;
@@ -359,7 +359,7 @@ Tagger(
 
     if (op == TAG_NIN)
     {
-        if (!cmp && recno)		/* 絕對嚴謹：連 recno 一起比對 */
+        if (!cmp && recno)              /* 絕對嚴謹：連 recno 一起比對 */
             cmp = recno - tagp[pos].recno;
         return cmp;
     }
@@ -411,10 +411,10 @@ int
 AskTag(
     char *msg)
 /* ----------------------------------------------------- */
-/* return value :					 */
-/* -1	: 取消						 */
-/* 0	: single article				 */
-/* o.w.	: whole tag list				 */
+/* return value :                                        */
+/* -1   : 取消                                           */
+/* 0    : single article                                 */
+/* o.w. : whole tag list                                 */
 /* ----------------------------------------------------- */
 {
     char buf[80];
@@ -437,7 +437,7 @@ AskTag(
 
 
 /* ----------------------------------------------------- */
-/* tag articles according to title / author		 */
+/* tag articles according to title / author              */
 /* ----------------------------------------------------- */
 
 
@@ -521,7 +521,7 @@ xo_prune(
 
 
 /* ----------------------------------------------------- */
-/* Tag's batch operation routines			 */
+/* Tag's batch operation routines                        */
 /* ----------------------------------------------------- */
 
 
@@ -587,7 +587,7 @@ xo_copy(
             continue;
 
 
-        if (!(hdr->xmode & GEM_FOLDER))	/* 查 hdr 是否 plain text */
+        if (!(hdr->xmode & GEM_FOLDER)) /* 查 hdr 是否 plain text */
         {
             xo_fpath(fpath, dir, hdr);
             f_suck(fp, fpath);
@@ -667,7 +667,7 @@ xo_forward(
     char fpath[128], folder[80], *dir, *title, *userid, ckforward[80];
     HDR *hdr, xhdr;
     int tag, locus, userno, cc, check;
-    unsigned int method;			/* 是否 uuencode */
+    unsigned int method;                        /* 是否 uuencode */
     ACCT acct;
 
     if (deny_forward())
@@ -707,8 +707,8 @@ xo_forward(
 
     /* 參考 struct.h 之 MQ_UUENCODE / MQ_JUSTIFY */
 
-#define	MF_SELF	0x04
-#define	MF_USER	0x08
+#define MF_SELF 0x04
+#define MF_USER 0x08
 
     userno = 0;
     check = 0;
@@ -793,7 +793,7 @@ xo_forward(
         if ((hdr->xmode & GEM_LOCK) && !HAS_PERM(PERM_SYSOP))
             continue;
 
-        if (!(hdr->xmode & GEM_FOLDER))	/* 查 hdr 是否 plain text */
+        if (!(hdr->xmode & GEM_FOLDER)) /* 查 hdr 是否 plain text */
         {
             xo_fpath(fpath, dir, hdr);
 
@@ -826,8 +826,8 @@ xo_forward(
         }
     } while (locus < tag);
 
-#undef	MF_SELF
-#undef	MF_USER
+#undef  MF_SELF
+#undef  MF_USER
 
     if (check)
         strcpy(rcpt, cuser.email);
@@ -845,7 +845,7 @@ static void
 z_download(
     char *fpath)
 {
-    static int num = 0;		/* 流水號 */
+    static int num = 0;         /* 流水號 */
     int pid, status;
     char buf[64];
 
@@ -907,7 +907,7 @@ xo_zmodem(
             continue;
 
 
-        if (!(hdr->xmode & GEM_FOLDER))	/* 查 hdr 是否 plain text */
+        if (!(hdr->xmode & GEM_FOLDER)) /* 查 hdr 是否 plain text */
         {
             xo_fpath(fpath, dir, hdr);
             z_download(fpath);
@@ -919,7 +919,7 @@ xo_zmodem(
 #endif
 
 /* ----------------------------------------------------- */
-/* 文章作者查詢、權限設定				 */
+/* 文章作者查詢、權限設定                                */
 /* ----------------------------------------------------- */
 
 /* 090929.cache: 簡易版 */
@@ -949,7 +949,7 @@ xo_uquery_lite(
     prints("\n\033[1;33;44m \033[37m文章作者及資訊查詢： %*s \033[m\n", 55, "");
     prints("\n");
 //  clrtobot();
-    /* cpos = xo->pos; */		/* chuan 保留 xo->pos 的值，之後回存 */
+    /* cpos = xo->pos; */               /* chuan 保留 xo->pos 的值，之後回存 */
 
     my_query(userid, 2);
 
@@ -979,7 +979,7 @@ xo_uquery(
     move(1, 0);
     clrtobot();
 //  move(2, 0);
-    /* cpos = xo->pos; */		/* chuan 保留 xo->pos 的值，之後回存 */
+    /* cpos = xo->pos; */               /* chuan 保留 xo->pos 的值，之後回存 */
     my_query(userid, 0);
     /* xo->pos = cpos; */
     return XO_HEAD;
@@ -1009,39 +1009,39 @@ xo_usetup(
 
 
 /* ----------------------------------------------------- */
-/* 主題式閱讀						 */
+/* 主題式閱讀                                            */
 /* ----------------------------------------------------- */
 
 
-#define RS_TITLE        0x001	/* author/title */
-#define RS_FORWARD      0x002	/* backward */
+#define RS_TITLE        0x001   /* author/title */
+#define RS_FORWARD      0x002   /* backward */
 #define RS_RELATED      0x004
-#define RS_FIRST        0x008	/* find first article */
-#define RS_CURRENT      0x010	/* match current read article */
-#define RS_THREAD	0x020	/* search the first article */
-#define RS_SEQUENT	0x040	/* sequential read */
-#define RS_MARKED 	0x080	/* marked article */
-#define RS_UNREAD 	0x100	/* unread article */
+#define RS_FIRST        0x008   /* find first article */
+#define RS_CURRENT      0x010   /* match current read article */
+#define RS_THREAD       0x020   /* search the first article */
+#define RS_SEQUENT      0x040   /* sequential read */
+#define RS_MARKED       0x080   /* marked article */
+#define RS_UNREAD       0x100   /* unread article */
 
-#define CURSOR_FIRST	(RS_RELATED | RS_TITLE | RS_FIRST)
-#define CURSOR_NEXT	(RS_RELATED | RS_TITLE | RS_FORWARD)
-#define CURSOR_PREV	(RS_RELATED | RS_TITLE)
-#define RELATE_FIRST	(RS_RELATED | RS_TITLE | RS_FIRST | RS_CURRENT)
-#define RELATE_NEXT	(RS_RELATED | RS_TITLE | RS_FORWARD | RS_CURRENT)
-#define RELATE_PREV	(RS_RELATED | RS_TITLE | RS_CURRENT)
-#define THREAD_NEXT	(RS_THREAD | RS_FORWARD)
-#define THREAD_PREV	(RS_THREAD)
+#define CURSOR_FIRST    (RS_RELATED | RS_TITLE | RS_FIRST)
+#define CURSOR_NEXT     (RS_RELATED | RS_TITLE | RS_FORWARD)
+#define CURSOR_PREV     (RS_RELATED | RS_TITLE)
+#define RELATE_FIRST    (RS_RELATED | RS_TITLE | RS_FIRST | RS_CURRENT)
+#define RELATE_NEXT     (RS_RELATED | RS_TITLE | RS_FORWARD | RS_CURRENT)
+#define RELATE_PREV     (RS_RELATED | RS_TITLE | RS_CURRENT)
+#define THREAD_NEXT     (RS_THREAD | RS_FORWARD)
+#define THREAD_PREV     (RS_THREAD)
 
 /* Thor: 前後找mark文章, 方便知道有什麼問題未處理 */
 
-#define MARK_NEXT	(RS_MARKED | RS_FORWARD | RS_CURRENT)
-#define MARK_PREV	(RS_MARKED | RS_CURRENT)
+#define MARK_NEXT       (RS_MARKED | RS_FORWARD | RS_CURRENT)
+#define MARK_PREV       (RS_MARKED | RS_CURRENT)
 
 
 typedef struct
 {
-    int key;			/* key stroke */
-    int map;			/* the mapped threading op-code */
+    int key;                    /* key stroke */
+    int map;                    /* the mapped threading op-code */
 }      KeyMap;
 
 
@@ -1126,7 +1126,7 @@ xo_thread(
     char buf[80];
 
     char *tag, *query=NULL, *title=NULL;
-    int pos, match, near=0, neartop=0, max;	/* Thor: neartop與near成對用 */
+    int pos, match, near=0, neartop=0, max;     /* Thor: neartop與near成對用 */
 
     int fd, top, bottom, step, len;
     HDR *pool, *fhdr;
@@ -1165,9 +1165,9 @@ xo_thread(
             strcpy(query, title);
         }
     }
-    else if (op & RS_UNREAD)	/* Thor: 向前找尋第一篇未讀文章, 清 near */
+    else if (op & RS_UNREAD)    /* Thor: 向前找尋第一篇未讀文章, 清 near */
     {
-#define	RS_BOARD	0x1000	/* 用於 RS_UNREAD，跟前面的不可重疊 */
+#define RS_BOARD        0x1000  /* 用於 RS_UNREAD，跟前面的不可重疊 */
         /* Thor.980909: 詢問 "首篇未讀" 或 "末篇已讀" */
         if (!vget(b_lines, 0, "向前找尋 0)首篇未讀 1)末篇已讀 ", s_unread, sizeof(s_unread), GCARRY))
             return XO_FOOT; /* Thor.980911: 找到時, 則沒清XO_FOOT, 再看看怎麼改 */
@@ -1176,9 +1176,9 @@ xo_thread(
             op |= RS_FIRST;  /* Thor.980909: 向前找尋首篇未讀 */
 
         near = xo->dir[0];
-        if (near == 'b')		/* search board */
+        if (near == 'b')                /* search board */
             op |= RS_BOARD;
-        else if (near != 'u')	/* search user's mbox */
+        else if (near != 'u')   /* search user's mbox */
             return XO_NONE;
 
         near = -1;
@@ -1302,7 +1302,7 @@ xo_thread(
                     continue;
             }
 
-#undef	RS_BOARD
+#undef  RS_BOARD
             /* Thor.980909: 末篇已讀(!RS_FIRST) */
             if (!(op & RS_FIRST))
             {
@@ -1310,19 +1310,19 @@ xo_thread(
                 break;
             }
 
-            near = pos;		/* Thor:記下最接近起點的位置 */
+            near = pos;         /* Thor:記下最接近起點的位置 */
             neartop = top;
             continue;
         }
 
         /* ------------------------------------------------- */
-        /* 以下搜尋 title / author				 */
+        /* 以下搜尋 title / author                           */
         /* ------------------------------------------------- */
 
         if (op & (RS_TITLE | RS_THREAD))
         {
-            title = fhdr->title;	/* title 指向 [title] field */
-            tag = str_ttl(title);	/* tag 指向 thread's subject */
+            title = fhdr->title;        /* title 指向 [title] field */
+            tag = str_ttl(title);       /* tag 指向 thread's subject */
 
             if (op & RS_THREAD)
             {
@@ -1336,7 +1336,7 @@ xo_thread(
         }
         else
         {
-            tag = fhdr->owner;	/* tag 指向 [owner] field */
+            tag = fhdr->owner;  /* tag 指向 [owner] field */
         }
 
         if (((op & RS_RELATED) && !strncmp(tag, query, 40)) ||
@@ -1346,7 +1346,7 @@ xo_thread(
             {
                 if (tag != title)
                 {
-                    near = pos;		/* 記下最接近起點的位置 */
+                    near = pos;         /* 記下最接近起點的位置 */
                     neartop = top;
                     continue;
                 }
@@ -1375,21 +1375,21 @@ xo_thread(
         if (bottom != top)
         {
             xo->top = top;
-            match = XO_BODY;		/* 找到了，並且需要更新畫面 */
+            match = XO_BODY;            /* 找到了，並且需要更新畫面 */
         }
-    }				/* Thor: 加上 RS_FIRST功能 */
+    }                           /* Thor: 加上 RS_FIRST功能 */
     else if ((op & RS_FIRST) && near >= 0)
     {
         xo->pos = near;
-        if (top != neartop)		/* Thor.0609: top 為目前的buffer之top */
+        if (top != neartop)             /* Thor.0609: top 為目前的buffer之top */
         {
             lseek(fd, (off_t) (sizeof(HDR) * neartop), SEEK_SET);
             read(fd, pool, len);
         }
-        if (bottom != neartop)	/* Thor.0609: bottom為畫面之top */
+        if (bottom != neartop)  /* Thor.0609: bottom為畫面之top */
         {
             xo->top = neartop;
-            match = XO_BODY;		/* 找到了，並且需要更新畫面 */
+            match = XO_BODY;            /* 找到了，並且需要更新畫面 */
         }
         else
             match = -1;
@@ -1424,7 +1424,7 @@ xo_getch(
     {
         ch = xo_thread(xo, op);
         if (ch != XO_NONE)
-            ch = XO_BODY;		/* 繼續瀏覽 */
+            ch = XO_BODY;               /* 繼續瀏覽 */
     }
 
 #if 0
@@ -1440,7 +1440,7 @@ xo_getch(
 
 
 static int
-xo_jump(			/* 移動游標到 number 所在的特定位置 */
+xo_jump(                        /* 移動游標到 number 所在的特定位置 */
     int pos)
 {
     char buf[6];
@@ -1469,27 +1469,27 @@ extern KeyFunc post_cb[];
 
 XZ xz[] =
 {
-    {NULL, NULL, M_BOARD}, 	/* XZ_CLASS */
-    {NULL, NULL, M_LUSERS}, 	/* XZ_ULIST */
-    {NULL, NULL, M_PAL}, 		/* XZ_PAL */
-    {NULL, NULL, M_VOTE}, 		/* XZ_VOTE */
-    {NULL, NULL, M_BMW},          /* XZ_BMW */    /* lkchu.981230: BMW 新介面 */
+    {NULL, NULL, M_BOARD},      /* XZ_CLASS */
+    {NULL, NULL, M_LUSERS},     /* XZ_ULIST */
+    {NULL, NULL, M_PAL},        /* XZ_PAL */
+    {NULL, NULL, M_VOTE},       /* XZ_VOTE */
+    {NULL, NULL, M_BMW},        /* XZ_BMW */    /* lkchu.981230: BMW 新介面 */
 #ifdef XZ_XPOST /* Thor.990303: 如果有 XZ_XPOST的話 */
-    {NULL, xpost_cb, M_READA}, 		/* XZ_XPOST */
+    {NULL, xpost_cb, M_READA},  /* XZ_XPOST */
 #else
-    {NULL, NULL, M_READA}, 		/* skip XZ_XPOST */
+    {NULL, NULL, M_READA},      /* skip XZ_XPOST */
 #endif
-    {NULL, NULL, M_RMAIL}, 	/* XZ_MBOX */
-    {NULL, post_cb, M_READA}, 		/* XZ_POST */
-    {NULL, NULL, M_GEM}, 		/* XZ_GEM */
-    {NULL, NULL, M_RMAIL}, 	/* XZ_MAILGEM */
-    {NULL, NULL, M_BANMAIL}, 	/* XZ_BANMAIL */
-    {NULL, NULL, M_OMENU}, 	/* XZ_OTHER */
+    {NULL, NULL, M_RMAIL},      /* XZ_MBOX */
+    {NULL, post_cb, M_READA},   /* XZ_POST */
+    {NULL, NULL, M_GEM},        /* XZ_GEM */
+    {NULL, NULL, M_RMAIL},      /* XZ_MAILGEM */
+    {NULL, NULL, M_BANMAIL},    /* XZ_BANMAIL */
+    {NULL, NULL, M_OMENU},      /* XZ_OTHER */
 };
 
 
 /* ----------------------------------------------------- */
-/* interactive menu routines			 	 */
+/* interactive menu routines                             */
 /* ----------------------------------------------------- */
 
 
@@ -1538,7 +1538,7 @@ xover(
             if (cmd >= XO_ZONE)
             {
                 /* --------------------------------------------- */
-                /* switch zone					 */
+                /* switch zone                                   */
                 /* --------------------------------------------- */
 
 
@@ -1548,14 +1548,14 @@ xover(
                 xcmd = xz[cmd].cb;
                 sysmode = xz[cmd].mode;
 
-                TagNum = 0;		/* clear TagList */
+                TagNum = 0;             /* clear TagList */
                 cmd = XO_INIT;
                 utmp_mode(sysmode);
             }
             else if (cmd >= XO_MOVE - XO_TALL)
             {
                 /* --------------------------------------------- */
-                /* calc cursor pos and show cursor correctly	 */
+                /* calc cursor pos and show cursor correctly     */
                 /* --------------------------------------------- */
 
                 /* cmd >= XO_MOVE - XO_TALL so ... :chuan: 假設 cmd = -1 ?? */
@@ -1592,7 +1592,7 @@ xover(
                 if ((pos < num) || (pos >= num + XO_TALL))
                 {
                     xo->top = (pos / XO_TALL) * XO_TALL;
-                    cmd = XO_LOAD;	/* 載入資料並予以顯示 */
+                    cmd = XO_LOAD;      /* 載入資料並予以顯示 */
                 }
                 else
                 {
@@ -1601,12 +1601,12 @@ xover(
                     move(3 + cmd - num, 0);
                     outc(' ');
 
-                    break;		/* 只移動游標 */
+                    break;              /* 只移動游標 */
                 }
             }
 
             /* ----------------------------------------------- */
-            /* 執行 call-back routines			 */
+            /* 執行 call-back routines                         */
             /* ----------------------------------------------- */
 
             cb = xcmd;
@@ -1658,7 +1658,7 @@ xover(
             {
                 if (xo->top + XO_TALL == xo->max)
                 {
-                    /*outz("\033[44m 都給我看光光了! ^O^ \033[m");*/	/* Thor.0616 */
+                    /*outz("\033[44m 都給我看光光了! ^O^ \033[m");*/    /* Thor.0616 */
                     msg = 1;
                 }
                 else if (msg)
@@ -1678,7 +1678,7 @@ xover(
 
         pos = xo->pos;
 
-        if (xo->max > 0)		/* Thor:若是無東西就不show了 */
+        if (xo->max > 0)                /* Thor:若是無東西就不show了 */
         {
             num = 3 + pos - xo->top;
 
@@ -1690,7 +1690,7 @@ xover(
         cmd = vkey();
 
         /* ------------------------------------------------- */
-        /* switch Zone					 */
+        /* switch Zone                                       */
         /* ------------------------------------------------- */
         if (cmd == Ctrl('B'))
         {
@@ -1756,7 +1756,7 @@ xover(
                 continue;
             }
 
-            if (zone == cmd)		/* 跟原來的一樣 */
+            if (zone == cmd)            /* 跟原來的一樣 */
             {
                 cmd = XO_FOOT;
             }
@@ -1764,7 +1764,7 @@ xover(
 
         }
         /* ------------------------------------------------- */
-        /* 基本的游標移動 routines				 */
+        /* 基本的游標移動 routines                           */
         /* ------------------------------------------------- */
 
         else if (cmd == KEY_LEFT || cmd == 'e')
@@ -1799,7 +1799,7 @@ xover(
             xo_user_level--;
             return;
         }
-        else if (xo->max <= 0)	/* Thor: 無東西則無法移游標 */
+        else if (xo->max <= 0)  /* Thor: 無東西則無法移游標 */
         {
             continue;
         }
@@ -1812,7 +1812,7 @@ xover(
             cmd = pos + 1 + XO_MOVE + XO_WRAP;
         }
         else if (cmd == ' ' || cmd == KEY_PGDN || cmd == 'N'  /*|| cmd == Ctrl('F') */)
-        {				       /* lkchu.990428: 給「暫時更改來源」用 */
+        {                                   /* lkchu.990428: 給「暫時更改來源」用 */
             cmd = pos + XO_MOVE + XO_TALL;
         }
         else if (cmd == KEY_PGUP || cmd == 'P' /*|| cmd == Ctrl('B')*/)
@@ -1826,7 +1826,7 @@ xover(
         else if (cmd == KEY_END || cmd == '$')
         {
             /* cmd = xo->max + XO_MOVE; */
-            cmd = XO_MOVE + XO_WRAP - 1;	/* force re-load */
+            cmd = XO_MOVE + XO_WRAP - 1;        /* force re-load */
         }
         else if (cmd >= '1' && cmd <= '9')
         {
@@ -1835,7 +1835,7 @@ xover(
         else
         {
             /* ----------------------------------------------- */
-            /* keyboard mapping				 */
+            /* keyboard mapping                                */
             /* ----------------------------------------------- */
 
             if (cmd == KEY_RIGHT || cmd == '\n')
@@ -1852,7 +1852,7 @@ xover(
 #endif
             {
                 /* --------------------------------------------- */
-                /* Tag						 */
+                /* Tag                                           */
                 /* --------------------------------------------- */
 
                 if (cmd == 'C')
@@ -1894,9 +1894,9 @@ xover(
                 else if (cmd == 'g' && (bbstate & STAT_BOARD))
                 { /* Thor.980806: 要注意沒進看版(未定看版)時, bbstate會沒有STAT_BOARD
                                         站長會無法收錄文章 */
-                    cmd = gem_gather(xo);		/* 收錄文章到精華區 */
+                    cmd = gem_gather(xo);               /* 收錄文章到精華區 */
                 }
-#ifdef	HAVE_MAILGEM
+#ifdef  HAVE_MAILGEM
                 else if (cmd == 'G' && HAS_PERM(PERM_MBOX))
                 {
                     static int (*mgp)(XO *xo);
@@ -1913,7 +1913,7 @@ xover(
                 }
 #endif
                 /* --------------------------------------------- */
-                /* 主題式閱讀					 */
+                /* 主題式閱讀                                    */
                 /* --------------------------------------------- */
 
 #ifdef XZ_XPOST
@@ -1928,7 +1928,7 @@ xover(
 
 #if 1
                     if (cmd == XO_NONE)
-                    {			/* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
+                    {                   /* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
                         outz("\033[44m 找沒有了耶...:( \033[m");
                         msg = 1;
                     }
@@ -1951,7 +1951,7 @@ xover(
                 }
             }
             /* ----------------------------------------------- */
-            /* 其他的交給 call-back routine 去處理		 */
+            /* 其他的交給 call-back routine 去處理             */
             /* ----------------------------------------------- */
 
         } /* Thor.990220:註解: end of vkey() handling */
@@ -1960,11 +1960,11 @@ xover(
 
 
 /* ----------------------------------------------------- */
-/* Thor.0725: ctrl Z everywhere				 */
+/* Thor.0725: ctrl Z everywhere                          */
 /* ----------------------------------------------------- */
 
 
-#ifdef	EVERY_Z
+#ifdef  EVERY_Z
 static void
 every_Z_Orig(void)
 {
@@ -1986,7 +1986,7 @@ every_Z_Orig(void)
     outz(MSG_ZONE_SWITCH);
     select = vkey();
 
-#ifdef	HAVE_FAVORITE
+#ifdef  HAVE_FAVORITE
     if (select == 'p')
     {
         outz(MSG_ZONE_ADVANCE);
@@ -2344,7 +2344,7 @@ every_S(void)
     return;
 }
 /* ----------------------------------------------------- */
-/* 類 XZ_* 結構的游標移動				 */
+/* 類 XZ_* 結構的游標移動                                */
 /* ----------------------------------------------------- */
 
 
@@ -2488,7 +2488,7 @@ xo_cursor(
                 *cur = pos % XO_TALL;
             }
 
-            *redraw = 1;	/* 就算沒有換頁，也要重繪 footer */
+            *redraw = 1;        /* 就算沒有換頁，也要重繪 footer */
         }
     }
 

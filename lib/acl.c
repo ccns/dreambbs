@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* lib/acl_addr.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* lib/acl_addr.c       ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : Access Control List				 */
-/* create : 98/03/20					 */
-/* update : 98/03/29					 */
+/* target : Access Control List                          */
+/* create : 98/03/20                                     */
+/* update : 98/03/29                                     */
 /*-------------------------------------------------------*/
 
 #include <stdio.h>
@@ -11,11 +11,11 @@
 #include "dao.h"
 
 /* ----------------------------------------------------- */
-/* ACL config file format				 */
+/* ACL config file format                                */
 /* ----------------------------------------------------- */
-/* user:	majordomo@* bad@cs.nthu.edu.tw		 */
-/* host:	cs.nthu.edu.tw	140.114.77.1		 */
-/* subnet:	.nthu.edu.tw	140.114.77.		 */
+/* user:        majordomo@* bad@cs.nthu.edu.tw           */
+/* host:        cs.nthu.edu.tw  140.114.77.1             */
+/* subnet:      .nthu.edu.tw    140.114.77.              */
 /* ----------------------------------------------------- */
 
 
@@ -26,7 +26,7 @@
 
 int
 acl_addr(
-    char *acl, 		/* file name of access control list */
+    char *acl,                  /* file name of access control list */
     char *addr
 )
 {
@@ -62,8 +62,8 @@ acl_addr(
             }
         }
 
-        luser = host - buf;		/* length of user name */
-        lhost = addr - host;	/* length of host name */
+        luser = host - buf;     /* length of user name */
+        lhost = addr - host;    /* length of host name */
 
         while (fgets(filter, sizeof(filter), fp))
         {
@@ -83,12 +83,12 @@ acl_addr(
                     addr = str;
             }
 
-            if (str == filter)	/* empty line */
+            if (str == filter)  /* empty line */
                 continue;
 
             *str = '\0';
 
-            if (addr)			/* match user name */
+            if (addr)           /* match user name */
             {
                 if ((luser != addr - filter) || memcmp(buf, filter, luser))
                     continue;
@@ -119,20 +119,20 @@ acl_addr(
     return i;
 }
 /*-------------------------------------------------------*/
-/* lib/acl_has.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* lib/acl_has.c        ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : Access Control List				 */
-/* create : 98/03/20					 */
-/* update : 98/03/29					 */
+/* target : Access Control List                          */
+/* create : 98/03/20                                     */
+/* update : 98/03/29                                     */
 /*-------------------------------------------------------*/
 
 /* ----------------------------------------------------- */
-/* ACL config file format				 */
+/* ACL config file format                                */
 /* ----------------------------------------------------- */
-/* user:	majordomo@* bad@cs.nthu.edu.tw		 */
+/* user:        majordomo@* bad@cs.nthu.edu.tw           */
 /*                        ^ Thor.980825: 應為空白        */
-/* host:	cs.nthu.edu.tw	140.114.77.1		 */
-/* subnet:	.nthu.edu.tw	140.114.77.		 */
+/* host:        cs.nthu.edu.tw  140.114.77.1             */
+/* subnet:      .nthu.edu.tw    140.114.77.              */
 /* ----------------------------------------------------- */
 
 
@@ -143,9 +143,9 @@ acl_addr(
 
 int
 acl_has(
-    char *acl, 			/* file name of access control list */
-    char *user, 			/* lower-case string */
-    char *host			/* lower-case string */
+    char *acl,                  /* file name of access control list */
+    char *user,                 /* lower-case string */
+    char *host                  /* lower-case string */
 )
 {
     int i, cc, luser, lhost;
@@ -156,8 +156,8 @@ acl_has(
         return -1;
 
     i = 0;
-    luser = strlen(user);		/* length of user name */
-    lhost = strlen(host);		/* length of host name */
+    luser = strlen(user);       /* length of user name */
+    lhost = strlen(host);       /* length of host name */
 
     while (fgets(filter, sizeof(filter), fp))
     {
@@ -169,13 +169,13 @@ acl_has(
                 addr = str;
         }
 
-        if (str == filter)		/* empty line */
+        if (str == filter)      /* empty line */
             continue;
 
         *str = '\0'; /* Thor.980825: 註解: 將結束處填0, 免生枝節 */
         str_lower(filter, filter);  /* lkchu.981201: lower-case string */
 
-        if (addr)			/* match user name */
+        if (addr)               /* match user name */
         {
             if ((luser != addr - filter) || memcmp(user, filter, luser))
                 continue;

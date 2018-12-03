@@ -5,7 +5,7 @@
 *                                    by herb    *
 *************************************************/
 
-#include        "bbs.h"
+#include "bbs.h"
 #define MAX_PNOTE        (10)            /* 答錄機保留通數 */
 #define MAXHINTLINES     (10)            /* 答錄機主人留言長度 */
 

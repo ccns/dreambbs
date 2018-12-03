@@ -39,7 +39,7 @@ is_fname(
 }
 
 /* ----------------------------------------------------- */
-/* transform to real path & security check		 */
+/* transform to real path & security check               */
 /* ----------------------------------------------------- */
 
 int
@@ -66,14 +66,14 @@ is_fpath(
 
             if (next == '/')
             {
-                return 0;		/* [//] */
+                return 0;               /* [//] */
             }
             else if (next == '.')
             {
                 next = source[2];
 
                 if (next == '/')
-                    return 0;		/* [/./] */
+                    return 0;           /* [/./] */
 
                 if (next == '.' && source[3] == '/')
                 {
@@ -128,7 +128,7 @@ not_addr(
                 break;
         }
 
-#ifdef	STRICT_FQDN_EMAIL
+#ifdef  STRICT_FQDN_EMAIL
         else if ((ch != '.') && (ch != '-') && (ch != '_') && !is_alnum(ch))
 #else
         else if (!is_alnum(ch) && !strchr(".-_[]%!:", ch))

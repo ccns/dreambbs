@@ -11,13 +11,13 @@
 
 #include "bbs.h"
 
-#define MAX_AC	(60000)
+#define MAX_AC  (60000)
 
 typedef struct
 {
     char email[60];
     int num;
-}	MAP;
+}       MAP;
 MAP map[MAX_AC];
 
 

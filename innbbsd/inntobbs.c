@@ -1,11 +1,11 @@
 /*-------------------------------------------------------*/
-/* inntobbs.c	( NTHU CS MapleBBS Ver 3.10 )		 */
+/* inntobbs.c   ( NTHU CS MapleBBS Ver 3.10 )            */
 /*-------------------------------------------------------*/
-/* target : innbbsd INN to BBS				 */
-/* create : 95/04/27					 */
-/* update :   /  /  					 */
-/* author : skhuang@csie.nctu.edu.tw			 */
-/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw		 */
+/* target : innbbsd INN to BBS                           */
+/* create : 95/04/27                                     */
+/* update :   /  /                                       */
+/* author : skhuang@csie.nctu.edu.tw                     */
+/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw                 */
 /*-------------------------------------------------------*/
 
 
@@ -21,7 +21,7 @@ typedef struct Header
 }      header_t;
 
 
-enum HeaderValue	/* 所有有用到的 header */
+enum HeaderValue        /* 所有有用到的 header */
 {
     SUBJECT_H,
     FROM_H,
@@ -41,17 +41,17 @@ enum HeaderValue	/* 所有有用到的 header */
 /* 只對這些檔頭有興趣 */
 static header_t headertable[LASTHEADER] =
 {
-    "Subject", 			SUBJECT_H,
-    "From", 			FROM_H,
-    "Date", 			DATE_H,
-    "Path", 			PATH_H,
-    "Newsgroups", 			GROUP_H,
-    "Message-ID", 			MSGID_H,
+    "Subject",                  SUBJECT_H,
+    "From",                     FROM_H,
+    "Date",                     DATE_H,
+    "Path",                     PATH_H,
+    "Newsgroups",               GROUP_H,
+    "Message-ID",               MSGID_H,
 
     /* SITE_H (含) 以下為非必備檔頭 */
-    "Organization", 		SITE_H,
-    "NNTP-Posting-Host", 		POSTHOST_H,
-    "Control", 			CONTROL_H,
+    "Organization",             SITE_H,
+    "NNTP-Posting-Host",        POSTHOST_H,
+    "Control",                  CONTROL_H,
 };
 
 
@@ -97,7 +97,7 @@ is_loopback(
 {
     int cc;
 
-    if (!path)		/* 若沒有 PATH 則不檢查 */
+    if (!path)          /* 若沒有 PATH 則不檢查 */
         return 0;
 
     for (;;)
@@ -121,8 +121,8 @@ is_loopback(
 }
 
 
-int 			/* 1:成功 0:PATH包括自己 -1:檔頭不完整 */
-readlines(		/* 讀入檔頭和內文 */
+int                     /* 1:成功 0:PATH包括自己 -1:檔頭不完整 */
+readlines(              /* 讀入檔頭和內文 */
     char *data)
 {
     int i;
@@ -161,7 +161,7 @@ readlines(		/* 讀入檔頭和內文 */
             *hptr = '\0';
 
             i = header_value(front);
-            if (i >= 0)		/* 是有興趣的檔頭 */
+            if (i >= 0)         /* 是有興趣的檔頭 */
             {
                 HEADER[i] = hptr + 2;
 
@@ -204,7 +204,7 @@ readlines(		/* 讀入檔頭和內文 */
     }
 
     /* 檢查檔頭欄位是否完整 */
-    for (i = 0; i < POSTHOST_H; i++)	/* POSTHOST_H (含) 以下為非必備檔頭 */
+    for (i = 0; i < POSTHOST_H; i++)    /* POSTHOST_H (含) 以下為非必備檔頭 */
     {
         if (!HEADER[i] || !*HEADER[i])
             return -1;
@@ -230,7 +230,7 @@ readlines(		/* 讀入檔頭和內文 */
     if (CONTROL && !*CONTROL)
         return -1;
 
-    if (!CONTROL)		/* 一般信件 */
+    if (!CONTROL)       /* 一般信件 */
     {
         /* itoc.030223.註解: 看到 path 裡面有自己站的名稱以後，信就不會進來，
              避免站上的信被 bbslink 送去 news server 以後，又被自己用 bbsnnrp 取回 */

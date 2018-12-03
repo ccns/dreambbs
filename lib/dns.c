@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* lib/dns.c		( NTHU CS MapleBBS Ver 3.00 )	 */
+/* lib/dns.c            ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : included C file for DNS routines		 */
-/* create : 96/11/20					 */
-/* update : 96/12/15					 */
+/* target : included C file for DNS routines             */
+/* create : 96/11/20                                     */
+/* update : 96/12/15                                     */
 /*-------------------------------------------------------*/
 
 #include "dns.h"
@@ -24,9 +24,9 @@ dns_init(void)
 
 int
 dns_query(
-    char *name, 			/* domain name */
-    int qtype, 			/* type of query */
-    querybuf *ans 		/* buffer to put answer */
+    char *name,                 /* domain name */
+    int qtype,                  /* type of query */
+    querybuf *ans               /* buffer to put answer */
 )
 {
     querybuf buf;
@@ -47,15 +47,15 @@ dns_query(
     return qtype;
 }
 /*-------------------------------------------------------*/
-/* lib/dns_addr.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* lib/dns_addr.c       ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : included C file for DNS routines		 */
-/* create : 96/11/20					 */
-/* update : 96/12/15					 */
+/* target : included C file for DNS routines             */
+/* create : 96/11/20                                     */
+/* update : 96/12/15                                     */
 /*-------------------------------------------------------*/
 
 /* ----------------------------------------------------- */
-/* get IP address by host name				 */
+/* get IP address by host name                           */
 /* ----------------------------------------------------- */
 
 unsigned long
@@ -176,7 +176,7 @@ pseudo_handler()        /* Thor.991215: for timeout */
 void
 dns_ident(
     int sock,  /* Thor.990330: 負數保留給, 用getsock無法抓出正確port的時候.
-                                                        代表 Port, 不過不太可能用到 */
+                               代表 Port, 不過不太可能用到 */
     struct sockaddr_in *from,
     char *rhost,
     char *ruser
@@ -308,15 +308,15 @@ dns_ident(
 }
 
 /*-------------------------------------------------------*/
-/* lib/dns_name.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* lib/dns_name.c       ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : included C file for DNS routines		 */
-/* create : 96/11/20					 */
-/* update : 96/12/15					 */
+/* target : included C file for DNS routines             */
+/* create : 96/11/20                                     */
+/* update : 96/12/15                                     */
 /*-------------------------------------------------------*/
 
 /* ----------------------------------------------------- */
-/* get host name by IP address				 */
+/* get host name by IP address                           */
 /* ----------------------------------------------------- */
 
 int
@@ -337,7 +337,7 @@ dns_name(
 
     sprintf(name, INADDR_FMT, addr[0], addr[1], addr[2], addr[3]);
 
-#ifdef	HAVE_ETC_HOSTS
+#ifdef  HAVE_ETC_HOSTS
     /* lkchu: reference to etc/hosts */
 
     if ( ( fp = fopen("etc/hosts", "r") ) )
@@ -408,11 +408,11 @@ dns_name(
     return -1;
 }
 /*-------------------------------------------------------*/
-/* lib/dns_open.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* lib/dns_open.c       ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : included C file for DNS routines		 */
-/* create : 96/11/20					 */
-/* update : 96/12/15					 */
+/* target : included C file for DNS routines             */
+/* create : 96/11/20                                     */
+/* update : 96/12/15                                     */
 /*-------------------------------------------------------*/
 
 int
@@ -515,11 +515,11 @@ ip:
     return -1;
 }
 /*-------------------------------------------------------*/
-/* lib/dns_smtp.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* lib/dns_smtp.c       ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : included C file for DNS routines		 */
-/* create : 96/11/20					 */
-/* update : 96/12/15					 */
+/* target : included C file for DNS routines             */
+/* create : 96/11/20                                     */
+/* update : 96/12/15                                     */
 /*-------------------------------------------------------*/
 
 static inline void

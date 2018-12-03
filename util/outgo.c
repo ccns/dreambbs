@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
-/* util/outgo.c		( YZU WindTopBBS Ver 3.00 )	 */
+/* util/outgo.c         ( YZU WindTopBBS Ver 3.00 )      */
 /*-------------------------------------------------------*/
-/* author : visor.bbs@bbs.yzu.edu.tw			 */
+/* author : visor.bbs@bbs.yzu.edu.tw                     */
 /* target : 自動送信程式                                 */
 /* create : 2000/06/22                                   */
 /* update :                                              */

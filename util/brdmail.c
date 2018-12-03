@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* util/brdmail.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* util/brdmail.c       ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : 由 Internet 寄信給 BBS 站內看板，視為 post	 */
-/* create : 95/03/29					 */
-/* update : 97/03/29					 */
+/* target : 由 Internet 寄信給 BBS 站內看板，視為 post   */
+/* create : 95/03/29                                     */
+/* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
 
 
@@ -11,10 +11,10 @@
 
 #include <sysexits.h>
 
-//#define	ANTI_HTMLMAIL		/* itoc.021014: 擋 html_mail */
-//#define	ANTI_NOTMYCHARSETMAIL	/* itoc.030513: 擋 not-mycharset mail */
+//#define ANTI_HTMLMAIL                   /* itoc.021014: 擋 html_mail */
+//#define ANTI_NOTMYCHARSETMAIL           /* itoc.030513: 擋 not-mycharset mail */
 
-#define         LOG_FILE        FN_BBSMAILPOST_LOG
+#define LOG_FILE        FN_BBSMAILPOST_LOG
 
 static void
 mailog(
@@ -38,7 +38,7 @@ mailog(
 
 
 /* ----------------------------------------------------- */
-/* board：shm 部份須與 cache.c 相容			 */
+/* board：shm 部份須與 cache.c 相容                      */
 /* ----------------------------------------------------- */
 
 
@@ -53,7 +53,7 @@ init_bshm(void)
 
     bshm = shm_new(BRDSHM_KEY, sizeof(BCACHE));
 
-    if (bshm->uptime <= 0)	/* bshm 未設定完成 */
+    if (bshm->uptime <= 0)      /* bshm 未設定完成 */
         exit(0);
 }
 
@@ -76,7 +76,7 @@ brd_get(
 
 
 /* ----------------------------------------------------- */
-/* 主程式						 */
+/* 主程式                                                */
 /* ----------------------------------------------------- */
 
 
@@ -136,12 +136,12 @@ start:
                 strcpy(sender, owner);
 
             /* itoc.040804: 擋信黑白名單 */
-            str_lower(buf, owner);	/* 保持原 email 的大小寫 */
+            str_lower(buf, owner);      /* 保持原 email 的大小寫 */
             if ( ( ptr = (char *) strchr(buf, '@') ) )
             {
                 *ptr++ = '\0';
 
-/*	        if (!acl_has(MAIL_ACLFILE, buf, ptr) ||
+/*              if (!acl_has(MAIL_ACLFILE, buf, ptr) ||
                     acl_has(UNMAIL_ACLFILE, buf, ptr) > 0)
                 {
                     sprintf(buf, "SPAM %s", sender);

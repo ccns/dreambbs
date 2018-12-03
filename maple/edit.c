@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* edit.c	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* edit.c       ( NTHU CS MapleBBS Ver 2.36 )            */
 /*-------------------------------------------------------*/
-/* target : simple ANSI/Chinese editor			 */
-/* create : 95/03/29					 */
-/* update : 95/12/15					 */
+/* target : simple ANSI/Chinese editor                   */
+/* create : 95/03/29                                     */
+/* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
 
 #include "bbs.h"
@@ -17,43 +17,43 @@ typedef struct textline
 }        textline;
 
 
-static textline *vx_ini;	/* first line */
-static textline *vx_cur;	/* current line */
-static textline *vx_top;	/* top line in current window */
+static textline *vx_ini;        /* first line */
+static textline *vx_cur;        /* current line */
+static textline *vx_top;        /* top line in current window */
 
 
-static int ve_lno;		/* current line number */
-static int ve_row;		/* cursor position */
+static int ve_lno;              /* current line number */
+static int ve_row;              /* cursor position */
 static int ve_col;
 
 
-static int ve_mode;		/* operation mode */
+static int ve_mode;             /* operation mode */
 
 
-#define	VE_INSERT	0x01
-#define	VE_ANSI		0x02
-#define	VE_FOOTER	0x04
-#define	VE_REDRAW	0x08
+#define VE_INSERT       0x01
+#define VE_ANSI         0x02
+#define VE_FOOTER       0x04
+#define VE_REDRAW       0x08
 
-#ifdef	HAVE_INPUT_TOOLS
-#define	VE_INPUTOOL	0x100
+#ifdef  HAVE_INPUT_TOOLS
+#define VE_INPUTOOL     0x100
 #endif
 
 #ifdef EVERY_BIFF
-#define VE_BIFF		0x10
-#define VE_BIFFN	0x20
+#define VE_BIFF         0x10
+#define VE_BIFFN        0x20
 #endif /* Thor.980805: 郵差到處來按鈴 */
 
 
-#define	FN_BAK		"bak"
+#define FN_BAK          "bak"
 
 
 /* ----------------------------------------------------- */
-/* 記憶體管理與編輯處理					 */
+/* 記憶體管理與編輯處理                                  */
 /* ----------------------------------------------------- */
 
 
-#ifdef	DEBUG_VEDIT
+#ifdef  DEBUG_VEDIT
 static void
 ve_abort(
     int i)
@@ -66,7 +66,7 @@ ve_abort(
 
 #else
 
-#define	ve_abort(n)	(void) 0
+#define ve_abort(n)     (void) 0
 #endif
 
 
@@ -208,14 +208,14 @@ ve_alloc(void)
         return p;
     }
 
-    ve_abort(13);			/* 記憶體用光了 */
+    ve_abort(13);                       /* 記憶體用光了 */
     abort_bbs();
     return NULL;
 }
 
 
 /* ----------------------------------------------------- */
-/* Thor: ansi 座標轉換  for color 編輯模式		 */
+/* Thor: ansi 座標轉換  for color 編輯模式               */
 /* ----------------------------------------------------- */
 
 
@@ -295,8 +295,8 @@ n2ansi(
 
 
 /* ----------------------------------------------------- */
-/* delete_line deletes 'line' from the list, 		 */
-/* and maintains the vx_ini pointers.			 */
+/* delete_line deletes 'line' from the list,             */
+/* and maintains the vx_ini pointers.                    */
 /* ----------------------------------------------------- */
 
 
@@ -327,7 +327,7 @@ delete_line(
 
 
 /* ----------------------------------------------------- */
-/* split 'line' right before the character pos		 */
+/* split 'line' right before the character pos           */
 /* ----------------------------------------------------- */
 
 
@@ -371,13 +371,13 @@ ve_split(
 
 
 /* ----------------------------------------------------- */
-/* connects 'line' and the next line. returns true if:	 */
-/* 1) lines were joined and one was deleted		 */
-/* 2) lines could not be joined		 		 */
-/* 3) next line is empty				 */
+/* connects 'line' and the next line. returns true if:   */
+/* 1) lines were joined and one was deleted              */
+/* 2) lines could not be joined                          */
+/* 3) next line is empty                                 */
 /* ----------------------------------------------------- */
-/* returns false if:					 */
-/* 1) Some of the joined line wrapped			 */
+/* returns false if:                                     */
+/* 1) Some of the joined line wrapped                    */
 /* ----------------------------------------------------- */
 
 
@@ -454,7 +454,7 @@ join_up(
 
 
 /* ----------------------------------------------------- */
-/* character insert / detete				 */
+/* character insert / detete                             */
 /* ----------------------------------------------------- */
 
 
@@ -480,7 +480,7 @@ ve_char(
     mode = ve_mode;
 
     /* --------------------------------------------------- */
-    /* overwrite						 */
+    /* overwrite                                           */
     /* --------------------------------------------------- */
 
     if ((col < len) && !(mode & VE_INSERT))
@@ -497,7 +497,7 @@ ve_char(
     }
 
     /* --------------------------------------------------- */
-    /* insert / append					 */
+    /* insert / append                                     */
     /* --------------------------------------------------- */
 
     for (mode = len; mode >= col; mode--)
@@ -581,7 +581,7 @@ ve_string(str)
     while ((ch = *str))
     {
 
-#ifdef	SHOW_USER_IN_TEXT
+#ifdef  SHOW_USER_IN_TEXT
         if (isprint2(ch) || ch == KEY_ESC || ch <= 2)
 #else
         if (isprint2(ch) || ch == KEY_ESC)
@@ -716,7 +716,7 @@ ve_line(this, str)
 
 
 /* ----------------------------------------------------- */
-/* 暫存檔 TBF (Temporary Buffer File) routines		 */
+/* 暫存檔 TBF (Temporary Buffer File) routines           */
 /* ----------------------------------------------------- */
 
 
@@ -833,7 +833,7 @@ tbf_erase(void)
 
 
 /* ----------------------------------------------------- */
-/* 編輯器自動備份					 */
+/* 編輯器自動備份                                        */
 /* ----------------------------------------------------- */
 
 
@@ -885,13 +885,13 @@ ve_recover(void)
 
 
 /* ----------------------------------------------------- */
-/* 引用文章						 */
+/* 引用文章                                              */
 /* ----------------------------------------------------- */
 
 
 static int
 is_quoted(
-    char *str)			/* "--\n", "-- \n", "--", "-- " */
+    char *str)                  /* "--\n", "-- \n", "--", "-- " */
 {
     if (*str == '-')
     {
@@ -912,7 +912,7 @@ is_quoted(
 static inline int
 quote_line(
     char *str,
-    int qlimit)			/* 允許幾層引言？ */
+    int qlimit)                 /* 允許幾層引言？ */
 {
     int qlevel = 0;
     int ch;
@@ -936,11 +936,11 @@ quote_line(
 }
 
 /* ----------------------------------------------------- */
-/* 審查 user 發表文章字數/注音文的使用			 */
+/* 審查 user 發表文章字數/注音文的使用                   */
 /* ----------------------------------------------------- */
 
 
-int wordsnum;		/* itoc.010408: 算文章字數 */
+int wordsnum;           /* itoc.010408: 算文章字數 */
 int keysnum;
 
 #ifdef ANTI_PHONETIC
@@ -949,13 +949,13 @@ words_check(void)
 {
     textline *p;
     unsigned char *str, *pend;
-    int phonetic;		/* 注音文數目 */
+    int phonetic;               /* 注音文數目 */
 
     wordsnum = phonetic = 0;
 
     for (p = vx_ini; p; p = p->next)
     {
-        if (is_quoted(str = p->data))	/* 簽名檔開始 */
+        if (is_quoted(str = p->data))   /* 簽名檔開始 */
             break;
 
         if (!(str[0] == QUOTE_CHAR1 && str[1] == ' ') && strncmp(str, "※ ", 3)) /* 非引用他人文章 */
@@ -965,11 +965,11 @@ words_check(void)
             pend = str + p->len;
             while (str < pend)
             {
-                if (str[0] >= 0x81 && str[0] < 0xFE && str[1] >= 0x40 && str[1] <= 0xFE && str[1] != 0x7F)	/* 中文字 BIG5+ */
+                if (str[0] >= 0x81 && str[0] < 0xFE && str[1] >= 0x40 && str[1] <= 0xFE && str[1] != 0x7F)      /* 中文字 BIG5+ */
                 {
-                    if (str[0] == 0xA3 && str[1] >= 0x74 && str[1] <= 0xBA)	/* 注音文 */
+                    if (str[0] == 0xA3 && str[1] >= 0x74 && str[1] <= 0xBA)     /* 注音文 */
                         phonetic++;
-                    str++;	/* 中文字雙位元，要多加一次 */
+                    str++;      /* 中文字雙位元，要多加一次 */
                 }
                 str++;
             }
@@ -991,7 +991,7 @@ words_check(void)
 
     for (p = vx_ini; p; p = p->next)
     {
-        if (is_quoted(str = p->data))	/* 簽名檔開始 */
+        if (is_quoted(str = p->data))   /* 簽名檔開始 */
             break;
 
         if (!(str[0] == QUOTE_CHAR1 && str[1] == ' ') && strncmp(str, "※ ", 3)) /* 非引用他人文章 */
@@ -1013,7 +1013,7 @@ ve_quote(
     next = this->next;
 
     /* --------------------------------------------------- */
-    /* 引言						 */
+    /* 引言                                                */
     /* --------------------------------------------------- */
 
     if (*quote_file)
@@ -1029,9 +1029,9 @@ ve_quote(
                 if ((op >= '1') && (op <= '9'))
                     op -= '1';
                 else if ((op != 'a') && (op != 'r'))
-                    op = 1;		/* default : 2 level */
+                    op = 1;             /* default : 2 level */
 
-                if (op != 'a')		/* 去掉 header */
+                if (op != 'a')          /* 去掉 header */
                 {
                     if (*quote_nick)
                         sprintf(buf + 128, " (%s)", quote_nick);
@@ -1044,7 +1044,7 @@ ve_quote(
 
                     while (fgets(str, 256, fp) && *str != '\n');
 
-                    if (curredit & EDIT_LIST)	/* 去掉 mail list 之 header */
+                    if (curredit & EDIT_LIST)   /* 去掉 mail list 之 header */
                     {
                         while (fgets(str, 256, fp) && (!memcmp(str, "※ ", 3)));
                     }
@@ -1069,7 +1069,7 @@ ve_quote(
                 {
                     while (fgets(str, 254, fp))
                     {
-                        if (is_quoted(str))	/* "--\n" */
+                        if (is_quoted(str))     /* "--\n" */
                             break;
                         if (quote_line(str, op))
                             this = ve_line(this, buf);
@@ -1084,7 +1084,7 @@ ve_quote(
     this = ve_line(this, "");
 
     /* --------------------------------------------------- */
-    /* 簽名檔						 */
+    /* 簽名檔                                              */
     /* --------------------------------------------------- */
 
 #ifdef HAVE_ANONYMOUS
@@ -1142,7 +1142,7 @@ OUT_ve_quote:
 
 
 /* ----------------------------------------------------- */
-/* 審查 user 引言的使用					 */
+/* 審查 user 引言的使用                                  */
 /* ----------------------------------------------------- */
 
 
@@ -1173,7 +1173,7 @@ quote_check(void)
         }
     }
 
-#ifdef	HAVE_RESIST_WATER
+#ifdef  HAVE_RESIST_WATER
     if ((post_line <= CHECK_QUOT) && (bbstate & BRD_CHECKWATER))
         checkqt++;
     else if (checkqt > 0)
@@ -1192,7 +1192,7 @@ quote_check(void)
 
 
 /* ----------------------------------------------------- */
-/* 檔案處理：讀檔、存檔、標題、簽名檔			 */
+/* 檔案處理：讀檔、存檔、標題、簽名檔                    */
 /* ----------------------------------------------------- */
 
 
@@ -1221,7 +1221,7 @@ ve_header(
     {
 
         /* Thor.980613: 如果在轉錄文章, 呼叫 ve_header, 由於不是在被轉的版, 因此屬性不對,
-                                        有可能使秘密版出現, BRD_ANONYMOUS 亦同*/
+                        有可能使秘密版出現, BRD_ANONYMOUS 亦同*/
 
         if (!(bbstate & BRD_NOSTAT))/* 看板不納入統計 */
         {
@@ -1232,8 +1232,8 @@ ve_header(
                 char author[IDLEN + 1];
                 char board[IDLEN + 1];
                 char title[66];
-                time_t date;		/* last post's date */
-                int number;		/* post number */
+                time_t date;            /* last post's date */
+                int number;             /* post number */
             }      postlog;
 
 #ifdef HAVE_ANONYMOUS
@@ -1384,17 +1384,17 @@ ve_filer(
     char buf[80], *msg, re;
 
 #ifdef  HAVE_INPUT_TOOLS
-    char *menu1[] =  {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    char *menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
     char *menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
     char *menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
 #else
-    char *menu1[] =  {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    char *menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
     char *menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
     char *menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
 #endif
 
 
-#ifdef	HAVE_INPUT_TOOLS
+#ifdef  HAVE_INPUT_TOOLS
     if (bbsmode != M_POST)
         msg = "[S]存檔 (A)放棄 (T)改標題 (E)繼續 (I)符號 (R/W/D)讀寫刪暫存檔？";
     else if (curredit & EDIT_OUTGO)
@@ -1426,7 +1426,7 @@ ve_filer(
 
     switch (re)
     {
-#ifdef	HAVE_INPUT_TOOLS
+#ifdef  HAVE_INPUT_TOOLS
     case 'i':
         return VE_INPUTOOL;
 #endif
@@ -1500,7 +1500,7 @@ ve_filer(
         }
 
 #ifndef ANTI_PHONETIC
-        words_check();	/* itoc.010408: 算文章字數 */
+        words_check();  /* itoc.010408: 算文章字數 */
 #endif
 
         if (ve_op == 1)
@@ -1545,9 +1545,9 @@ ve_filer(
                 ve_select_sign(fp);
             }
 
-#ifdef	HAVE_ORIGIN
+#ifdef  HAVE_ORIGIN
 
-#ifdef 	HAVE_ANONYMOUS
+#ifdef  HAVE_ANONYMOUS
             /* Thor.980909: anonymous post mode */
             if ((bbstate & BRD_ANONYMOUS) && (curredit & EDIT_ANONYMOUS)
                 && (bbsmode != M_SMAIL))
@@ -1565,7 +1565,7 @@ ve_filer(
                 if ((bbstate & BRD_LOGEMAIL) && !(bbsmode == M_SMAIL))
                     fprintf(fp, EMAIL_TAG, cuser.email);
             }
-#endif				/* HAVE_ORIGIN */
+#endif                          /* HAVE_ORIGIN */
         }
         fclose(fp);
     }
@@ -1575,7 +1575,7 @@ ve_filer(
 
 
 /* ----------------------------------------------------- */
-/* 螢幕處理：輔助訊息、顯示編輯內容			 */
+/* 螢幕處理：輔助訊息、顯示編輯內容                      */
 /* ----------------------------------------------------- */
 
 
@@ -1665,21 +1665,21 @@ ve_subject(
 
 
 /* ----------------------------------------------------- */
-/* 編輯處理：主程式、鍵盤處理				 */
+/* 編輯處理：主程式、鍵盤處理                            */
 /* ----------------------------------------------------- */
 
 
 int
 vedit(
     char *fpath,
-    int ve_op)	/* 0: 純粹編輯檔案 1: quote/header 2: quote */
+    int ve_op)  /* 0: 純粹編輯檔案 1: quote/header 2: quote */
 {
     textline *vln, *tmp;
     int cc, col, mode, margin, pos;
     static void (*input_tool)(void);
 
     /* --------------------------------------------------- */
-    /* 初始設定：載入檔案、引用文章、設定編輯模式		 */
+    /* 初始設定：載入檔案、引用文章、設定編輯模式          */
     /* --------------------------------------------------- */
 
     if (bbsothermode & OTHERSTAT_EDITING)
@@ -1732,7 +1732,7 @@ vedit(
     ve_mode = VE_INSERT | VE_REDRAW | (cuser.ufo2 & UFO2_VEDIT ? 0 : VE_FOOTER);
 
     /* --------------------------------------------------- */
-    /* 主迴圈：螢幕顯示、鍵盤處理、檔案處理		 */
+    /* 主迴圈：螢幕顯示、鍵盤處理、檔案處理                */
     /* --------------------------------------------------- */
 
     clear();
@@ -1797,12 +1797,12 @@ vedit(
         }
 
         /* ------------------------------------------------- */
-        /* 顯示狀態、讀取鍵盤				 */
+        /* 顯示狀態、讀取鍵盤                            */
         /* ------------------------------------------------- */
 
-        if (mode & VE_ANSI)		/* Thor: 作 ansi 編輯 */
-            pos = n2ansi(col, vln);	/* Thor: ansi 不會用到cc */
-        else			/* Thor: 不是ansi要作margin shift */
+        if (mode & VE_ANSI)             /* Thor: 作 ansi 編輯 */
+            pos = n2ansi(col, vln);     /* Thor: ansi 不會用到cc */
+        else                    /* Thor: 不是ansi要作margin shift */
             pos = col - margin;
 
         if (mode & VE_FOOTER)
@@ -1853,13 +1853,13 @@ ve_key:
                 } while (ve_col & (TAB_STOP - 1));
                 break;
 
-            case KEY_INS:		/* Toggle insert/overwrite */
+            case KEY_INS:               /* Toggle insert/overwrite */
             case Ctrl('O'):
 
                 ve_mode = mode ^ VE_INSERT;
                 continue;
 
-            case Ctrl('H'):		/* backspace */
+            case Ctrl('H'):             /* backspace */
 
                 /* Thor: 在 ANSI 編輯模式下, 不可以按倒退, 不然會很可怕.... */
 
@@ -1887,7 +1887,7 @@ ve_key:
                 break;
 
             case Ctrl('D'):
-            case KEY_DEL:		/* delete current character */
+            case KEY_DEL:               /* delete current character */
 
                 cc = vln->len;
                 if (cc == col)
@@ -1900,7 +1900,7 @@ ve_key:
                     if (cc == 0)
                         goto ve_key;
                     delete_char(vln, col);
-                    if (mode & VE_ANSI)	/* Thor: 雖然增加 load, 不過edit 時會比較好看 */
+                    if (mode & VE_ANSI) /* Thor: 雖然增加 load, 不過edit 時會比較好看 */
                         ve_col = ansi2n(n2ansi(col, vln), vln);
                 }
                 continue;
@@ -2002,12 +2002,12 @@ ve_key:
 
             case KEY_PGDN:
             case Ctrl('F'):
-            case Ctrl('T'):		/* tail of file */
+            case Ctrl('T'):             /* tail of file */
 
                 ve_forward(cc == Ctrl('T') ? 0 : 22);
                 continue;
 
-            case Ctrl('S'):		/* start of file */
+            case Ctrl('S'):             /* start of file */
 
                 vx_cur = vx_top = vx_ini;
                 ve_col = ve_row = 0;
@@ -2015,14 +2015,14 @@ ve_key:
                 ve_mode = mode | VE_REDRAW;
                 continue;
 
-            case Ctrl('V'):		/* Toggle ANSI color */
+            case Ctrl('V'):             /* Toggle ANSI color */
 
                 mode ^= VE_ANSI;
                 clear();
                 ve_mode = mode | VE_REDRAW;
                 continue;
 
-            case Ctrl('X'):		/* Save and exit */
+            case Ctrl('X'):             /* Save and exit */
             case Ctrl('W'):
 
                 cc = ve_filer(fpath, ve_op & 11);
@@ -2061,7 +2061,7 @@ ve_key:
                 ve_ansi();
                 break;
 
-            case Ctrl('G'):		/* delete to end of file */
+            case Ctrl('G'):             /* delete to end of file */
 
                 /* vln->len = ve_col = cc = 0; */
                 tmp = vln->next;
@@ -2075,12 +2075,12 @@ ve_key:
                 ve_mode = mode | VE_REDRAW;
                 continue;
 
-            case Ctrl('Y'):		/* delete current line */
+            case Ctrl('Y'):             /* delete current line */
 
                 vln->len = ve_col = 0;
                 vln->data[0] = '\0'; /* Thor.981001: 將內容一併清除 */
 
-            case Ctrl('K'):		/* delete to end of line */
+            case Ctrl('K'):             /* delete to end of line */
 
                 if ((cc = vln->len))
                 {
@@ -2203,7 +2203,7 @@ ve_key:
         }
 
         /* ------------------------------------------------- */
-        /* ve_row / ve_lno 調整				 */
+        /* ve_row / ve_lno 調整                          */
         /* ------------------------------------------------- */
 
 

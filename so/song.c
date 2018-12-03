@@ -15,10 +15,10 @@ static int song_order(XO *xo);
 #define GEM_WRITE       2       /* writable */
 #define GEM_FILE        4       /* 預期是檔案 */
 
-#define	SONG_SRC	"<~Src~>"
-#define SONG_DES	"<~Des~>"
-#define SONG_SAY	"<~Say~>"
-#define SONG_END	"<~End~>"
+#define SONG_SRC        "<~Src~>"
+#define SONG_DES        "<~Des~>"
+#define SONG_SAY        "<~Say~>"
+#define SONG_END        "<~End~>"
 
 static void
 log_song(
@@ -222,7 +222,7 @@ XO *xo)
 
 
 /* ----------------------------------------------------- */
-/* 資料之新增：append / insert				 */
+/* 資料之新增：append / insert                           */
 /* ----------------------------------------------------- */
 
 
@@ -583,7 +583,7 @@ int level)
     XO *xo, *last;
     char *str;
 
-    last = xz[XZ_OTHER - XO_ZONE].xo;	/* record */
+    last = xz[XZ_OTHER - XO_ZONE].xo;   /* record */
 
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(folder);
     xz[XZ_OTHER - XO_ZONE].cb = song_cb;
@@ -597,7 +597,7 @@ int level)
 
     free(xo);
 
-    xz[XZ_OTHER - XO_ZONE].xo = last;	/* restore */
+    xz[XZ_OTHER - XO_ZONE].xo = last;   /* restore */
 }
 
 int
@@ -674,4 +674,4 @@ AddRequestTimes(void)
 }
 
 
-#endif 		/* HAVE_SONG */
+#endif          /* HAVE_SONG */

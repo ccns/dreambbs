@@ -1,11 +1,11 @@
 /*-------------------------------------------------------*/
-/* bbslib.c	( NTHU CS MapleBBS Ver 3.10 )		 */
+/* bbslib.c     ( NTHU CS MapleBBS Ver 3.10 )            */
 /*-------------------------------------------------------*/
-/* target : innbbsd library				 */
-/* create : 95/04/27					 */
-/* update :   /  /  					 */
-/* author : skhuang@csie.nctu.edu.tw			 */
-/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw		 */
+/* target : innbbsd library                              */
+/* create : 95/04/27                                     */
+/* update :   /  /                                       */
+/* author : skhuang@csie.nctu.edu.tw                     */
+/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw                 */
 /*-------------------------------------------------------*/
 
 
@@ -22,7 +22,7 @@
 
 
 /* ----------------------------------------------------- */
-/* read nodelist.bbs					 */
+/* read nodelist.bbs                                     */
 /* ----------------------------------------------------- */
 
 
@@ -38,7 +38,7 @@ nl_bynamecmp(
 }
 
 
-static int		/* 0:success  -1:fail */
+static int              /* 0:success  -1:fail */
 read_nodelist(void)
 {
     int fd, size;
@@ -69,7 +69,7 @@ read_nodelist(void)
 
 
 /* ----------------------------------------------------- */
-/* read newsfeeds.bbs					 */
+/* read newsfeeds.bbs                                    */
 /* ----------------------------------------------------- */
 
 
@@ -95,7 +95,7 @@ nf_bygroupcmp(
 }
 
 
-static int		/* 0:success  -1:fail */
+static int              /* 0:success  -1:fail */
 read_newsfeeds(void)
 {
     int fd, size;
@@ -138,7 +138,7 @@ read_newsfeeds(void)
 
 #ifdef _NoCeM_
 /* ----------------------------------------------------- */
-/* read ncmperm.bbs					 */
+/* read ncmperm.bbs                                      */
 /* ----------------------------------------------------- */
 
 
@@ -146,7 +146,7 @@ ncmperm_t *NCMPERM = NULL;
 int NCMCOUNT = 0;
 
 
-int			/* 0:success  -1:fail */
+int                     /* 0:success  -1:fail */
 read_ncmperm(void)
 {
     int fd, size;
@@ -169,11 +169,11 @@ read_ncmperm(void)
 
     return 0;
 }
-#endif	/* _NoCeM_ */
+#endif  /* _NoCeM_ */
 
 
 /* ----------------------------------------------------- */
-/* read spamrule.bbs					 */
+/* read spamrule.bbs                                     */
 /* ----------------------------------------------------- */
 
 
@@ -181,7 +181,7 @@ spamrule_t *SPAMRULE = NULL;
 int SPAMCOUNT = 0;
 
 
-static int		/* 0:success  -1:fail */
+static int              /* 0:success  -1:fail */
 read_spamrule(void)
 {
     int fd, size;
@@ -216,14 +216,14 @@ read_spamrule(void)
 
 
 /* ----------------------------------------------------- */
-/* initial INNBBSD					 */
+/* initial INNBBSD                                       */
 /* ----------------------------------------------------- */
 
 
-int			/* 1:success  0:failure */
+int                     /* 1:success  0:failure */
 initial_bbs(void)
 {
-    chdir(BBSHOME);		/* chdir to bbs_home first */
+    chdir(BBSHOME);             /* chdir to bbs_home first */
 
     /* 依序載入 nodelist.bbs、newsfeeds.bbs、ncmperm.bbs、spamrule.bbs */
 
@@ -243,14 +243,14 @@ initial_bbs(void)
     if (read_ncmperm() < 0)
     {
         printf("請檢查 ncmperm.bbs，無法讀檔；如果您不想設定 NoCeM，那麼請忽略此訊息\n");
-        /* return 0; */	/* ncmperm.bbs 可以是空的 */
+        /* return 0; */ /* ncmperm.bbs 可以是空的 */
     }
 #endif
 
     if (read_spamrule() < 0)
     {
         printf("請檢查 spamrule.bbs，無法讀檔；如果您不想設定擋信規則，那麼請忽略此訊息\n");
-        /* return 0; */	/* spamrule.bbs 可以是空的 */
+        /* return 0; */ /* spamrule.bbs 可以是空的 */
     }
 
     return 1;
@@ -258,7 +258,7 @@ initial_bbs(void)
 
 
 /* ----------------------------------------------------- */
-/* log function						 */
+/* log function                                          */
 /* ----------------------------------------------------- */
 
 

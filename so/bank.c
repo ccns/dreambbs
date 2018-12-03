@@ -235,14 +235,14 @@ TransferAccount(void)
 }
 
 /* 100618.cache: 舊夢幣轉換 */
-#define FN_MONEY		".MONEY"		/* PostRecommendHistory */
+#define FN_MONEY        ".MONEY"        /* PostRecommendHistory */
 
 typedef struct
 {
-    int money;			/* 夢幣 */
-    int save;			    /* 存款 */
-    int request;			/* 小雞點券 */
-}	MONEY;
+    int money;          /* 夢幣 */
+    int save;           /* 存款 */
+    int request;        /* 小雞點券 */
+}       MONEY;
 
 /*
 int

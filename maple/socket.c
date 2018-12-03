@@ -26,7 +26,7 @@ Get_Socket(  /* site for hostname, sock for port & socket */
         return -1;
     }
 
-#ifdef	SET_ALARM
+#ifdef  SET_ALARM
     signal(SIGALRM, timeout);
     alarm(SET_ALARM);
 #endif
@@ -37,14 +37,14 @@ Get_Socket(  /* site for hostname, sock for port & socket */
     {
         close(*sock);
 
-#ifdef	SET_ALARM
+#ifdef  SET_ALARM
         init_alarm();
 #endif
 
         return -3;
     }
 
-#ifdef	SET_ALARM
+#ifdef  SET_ALARM
     init_alarm();
 #endif
 
@@ -79,30 +79,30 @@ POP3_Check(
     {
         switch(sock)
         {
-            case 1:		/* Open Socket Fail */
+            case 1:             /* Open Socket Fail */
                 prints("\n傳回錯誤值 [1]，請重試幾次看看\n");
                 refresh();
                 return sock;
 
-            case 2:		/* Welcome Message */
+            case 2:             /* Welcome Message */
                 fgets(buf, 512, fsock);
                 break;
 
-            case 3:		/* Verify Account */
+            case 3:             /* Verify Account */
                 fprintf(fsock, "user %s\r\n", account);
                 fflush(fsock);
                 fgets(buf, 512, fsock);
                 break;
 
-            case 4:		/* Verify Password */
+            case 4:             /* Verify Password */
                 fprintf(fsock, "pass %s\r\n", passwd);
                 fflush(fsock);
                 fgets(buf, 512, fsock);
                 sock = -1;
                 break;
 
-            case 0:		/* Successful Verification */
-            case 5:		/* Quit */
+            case 0:             /* Successful Verification */
+            case 5:             /* Quit */
                 fprintf(fsock, "quit\r\n");
                 fclose(fsock);
                 if (old_sock)

@@ -1,26 +1,26 @@
 /*-------------------------------------------------------*/
-/* util/mailpost.c	( NTHU CS MapleBBS Ver 2.36 )	 */
+/* util/mailpost.c      ( NTHU CS MapleBBS Ver 2.36 )    */
 /*-------------------------------------------------------*/
-/* target : (1) general user E-mail post 到看板		 */
-/*          (2) BM E-mail post 到精華區			 */
-/*          (3) 自動審核身份認證信函之回信		 */
-/* create : 95/03/29				 	 */
-/* update : 97/03/29				 	 */
+/* target : (1) general user E-mail post 到看板          */
+/*          (2) BM E-mail post 到精華區                  */
+/*          (3) 自動審核身份認證信函之回信               */
+/* create : 95/03/29                                     */
+/* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
 /* notice : brdshm (board shared memory) synchronize     */
 /*-------------------------------------------------------*/
 
-#include	"bbs.h"
+#include "bbs.h"
 
 extern char *crypt(const char *key, const char *salt);
 
-//#define	LOG_FILE	"run/mailog"
-#define		LOG_FILE	FN_BBSMAILPOST_LOG
+//#define LOG_FILE        "run/mailog"
+#define LOG_FILE        FN_BBSMAILPOST_LOG
 
-#define	JUNK		0
-#define	NET_SAVE	1
-#define	LOCAL_SAVE	2
-#define	DIGEST		3
+#define JUNK            0
+#define NET_SAVE        1
+#define LOCAL_SAVE      2
+#define DIGEST          3
 
 static int mymode = JUNK;
 
@@ -50,7 +50,7 @@ acct_fetch(
 }
 
 /* ----------------------------------------------------- */
-/* .BOARDS shared memory (cache.c)			 */
+/* .BOARDS shared memory (cache.c)                       */
 /* ----------------------------------------------------- */
 
 static int
@@ -79,11 +79,11 @@ brd_fetch(
 }
 
 /* ----------------------------------------------------- */
-/* buffered I/O for stdin				 */
+/* buffered I/O for stdin                                */
 /* ----------------------------------------------------- */
 
-#define POOL_SIZE	4096
-#define LINE_SIZE	512
+#define POOL_SIZE       4096
+#define LINE_SIZE       512
 
 static char pool[POOL_SIZE];
 static char mybuf[LINE_SIZE];
@@ -129,7 +129,7 @@ readline(
 }
 
 /* ----------------------------------------------------- */
-/* record run/mailog for management			 */
+/* record run/mailog for management                      */
 /* ----------------------------------------------------- */
 
 static void
@@ -331,7 +331,7 @@ post_article(void)
 
     sprintf(fpath, "brd/%s/.DIR", mymode == JUNK ? BRD_JUNK : myboard);
 
-#ifdef	DEBUG
+#ifdef  DEBUG
     printf("dir: %s\n", fpath);
 #endif
 
@@ -345,7 +345,7 @@ post_article(void)
 
     fp = fdopen(fd, "w");
 
-#ifdef	DEBUG
+#ifdef  DEBUG
     printf("post to %s\n", buf);
 #endif
 
@@ -390,13 +390,13 @@ post_article(void)
 
 
 /* ----------------------------------------------------- */
-/* E-mail post to gem					 */
+/* E-mail post to gem                                    */
 /* ----------------------------------------------------- */
 
 static int
 digest_article(void)
 {
-    /* return post_article();*/	/* quick & dirty */
+    /* return post_article();*/ /* quick & dirty */
     /* Thor.0606: post 到 精華區資源回收筒 */
     int fd;
     FILE *fp;
@@ -419,7 +419,7 @@ digest_article(void)
 
     sprintf(fpath, "gem/brd/%s/.GEM", myboard);
 
-#ifdef	DEBUG
+#ifdef  DEBUG
     printf("dir: %s\n", fpath);
 #endif
 
@@ -433,7 +433,7 @@ digest_article(void)
 
     fp = fdopen(fd, "w");
 
-#ifdef	DEBUG
+#ifdef  DEBUG
     printf("gem to %s\n", buf);
 #endif
 
@@ -500,7 +500,7 @@ mailpost(void)
         return 0;
 
     if (strncasecmp(mybuf, "From ", 5))
-        return post_article();	/* junk */
+        return post_article();  /* junk */
 
     dirty = *myfrom = *mysub = *myname = *mypasswd = *myboard = *mytitle = 0;
 
@@ -557,7 +557,7 @@ mailpost(void)
         else if (!strncasecmp(mybuf, "From", 4))
         {
             str_lower(myfrom, mybuf + 4);
-            if (strstr(myfrom, "mailer-daemon"))	/* junk */
+            if (strstr(myfrom, "mailer-daemon"))        /* junk */
             {
                 strcpy(mytitle, "<< 系統退信 >>");
                 return post_article();
@@ -593,7 +593,7 @@ mailpost(void)
                 /* gslin.990101: TAG_VALID 長度不一定 */
                 verify_user(ptr + sizeof(TAG_VALID) - 1);
                 /* verify_user(ptr + 13); */
-                return 1;		/* eat mail queue */
+                return 1;               /* eat mail queue */
             }
 
             if ((ptr = strchr(token = mybuf + 9, '\n')))
@@ -604,7 +604,7 @@ mailpost(void)
         if ((++dirty > 70) || !readline(mybuf))
         {
             mymode = JUNK;
-            return post_article();	/* junk */
+            return post_article();      /* junk */
         }
     }
 
@@ -633,7 +633,7 @@ mailpost(void)
         return -1;
     }
 
-#ifdef	MAIL_POST_VALID
+#ifdef  MAIL_POST_VALID
     if (!(myacct.userlevel & PERM_VALID) && valid_ident(myfrom))
     {
 

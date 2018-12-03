@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* util/msgall.c	( YZU WindTopBBS Ver 3.00 )	 */
+/* util/msgall.c        ( YZU WindTopBBS Ver 3.00 )      */
 /*-------------------------------------------------------*/
-/* target : 		 	 			 */
-/* create : 					 	 */
-/* update : 					 	 */
+/* target :                                              */
+/* create :                                              */
+/* update :                                              */
 /*-------------------------------------------------------*/
 
 #include <sys/shm.h>
@@ -79,7 +79,7 @@ bedit(
     UTMP *up,
     BMW *bmw)
 {
-    bmw->recver = up->userno;	/* 先記下 userno 作為 check */
+    bmw->recver = up->userno;   /* 先記下 userno 作為 check */
 
     bmw->caller = NULL;
     bmw->sender = 0;

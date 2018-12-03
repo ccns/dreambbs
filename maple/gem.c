@@ -19,26 +19,26 @@ extern char radix32[];
 extern char brd_bits[];
 
 extern BCACHE *bshm;
-extern int TagNum;		/* Thor.0724: For tag_char */
+extern int TagNum;              /* Thor.0724: For tag_char */
 extern TagItem TagList[];
 
 /* definitions of Gem Mode */
 
 
-#define	GM_WORKING	0x01	/* 精華區施工中 */
-#define	GM_DELETE	0x02	/* 精華區已刪除 */
+#define GM_WORKING      0x01    /* 精華區施工中 */
+#define GM_DELETE       0x02    /* 精華區已刪除 */
 
 
-#define	GEM_CUT		1
-#define	GEM_COPY	2
+#define GEM_CUT         1
+#define GEM_COPY        2
 
 
-#ifndef	INADDR_NONE
-#define	INADDR_NONE	0xffffffff
+#ifndef INADDR_NONE
+#define INADDR_NONE     0xffffffff
 #endif
 
 
-#define	GEM_WAY		3
+#define GEM_WAY         3
 static int gem_way;
 
 static int GemBufferNum; /* Thor.990414: 提前宣告, 用於gem_head */
@@ -231,13 +231,13 @@ gem_load(
 }
 
 /* ----------------------------------------------------- */
-/* gem_check : attribute / permission check out		 */
+/* gem_check : attribute / permission check out          */
 /* ----------------------------------------------------- */
 
 
-#define	GEM_READ	1	/* readable */
-#define	GEM_WRITE	2	/* writable */
-#define	GEM_FILE	4	/* 預期是檔案 */
+#define GEM_READ        1       /* readable */
+#define GEM_WRITE       2       /* writable */
+#define GEM_FILE        4       /* 預期是檔案 */
 
 
 static HDR *
@@ -286,7 +286,7 @@ gem_check(
 
 
 /* ----------------------------------------------------- */
-/* 資料之新增：append / insert				 */
+/* 資料之新增：append / insert                           */
 /* ----------------------------------------------------- */
 
 
@@ -330,7 +330,7 @@ gem_add(
     HDR ghdr;
 
     level = xo->key;
-    if (level < GEM_LMANAGER)	/* [回收筒] 中不能新增 */
+    if (level < GEM_LMANAGER)   /* [回收筒] 中不能新增 */
         return XO_NONE;
 
     gtype = vans(level == GEM_SYSOP ?
@@ -443,7 +443,7 @@ gem_add(
 
 
 /* ----------------------------------------------------- */
-/* 資料之修改：edit / title				 */
+/* 資料之修改：edit / title                              */
 /* ----------------------------------------------------- */
 
 
@@ -620,7 +620,7 @@ gem_state(
 
 
 /* ----------------------------------------------------- */
-/* 資料之瀏覽：edit / title				 */
+/* 資料之瀏覽：edit / title                              */
 /* ----------------------------------------------------- */
 
 
@@ -694,7 +694,7 @@ gem_browse(
 
 
 /* ----------------------------------------------------- */
-/* 精華區之刪除： copy / cut (delete) paste / move	 */
+/* 精華區之刪除： copy / cut (delete) paste / move       */
 /* ----------------------------------------------------- */
 
 
@@ -736,7 +736,7 @@ gbuf_malloc(
 static void
 gem_buffer(
     char *dir,
-    HDR *ghdr)			/* NULL 代表放入 TagList, 否則將傳入的放入 */
+    HDR *ghdr)                  /* NULL 代表放入 TagList, 否則將傳入的放入 */
 {
     int num, locus;
     HDR *gbuf;
@@ -920,7 +920,7 @@ gem_extend(
     {
         if ((hdr->chrono != chrono) && !(hdr->xmode & GEM_FOLDER))
         {
-            hdr_fpath(gpath, dir, hdr);	/* Thor: 假設 hdr和 xo->dir是同一目錄 */
+            hdr_fpath(gpath, dir, hdr); /* Thor: 假設 hdr和 xo->dir是同一目錄 */
             fputs(STR_LINE, fp);
             f_suck(fp, gpath);
         }
@@ -1202,7 +1202,7 @@ gem_gather(
         /* Thor.981018: 特別注意, anchor 沒法收錄 folder, 因程式不好寫(跨區copy),
                         此時同區的folder可以用copy & paste,
                         不同區就只好一篇篇收錄 */
-        if (!(xmode & (GEM_FOLDER|POST_DELETE)))	/* 查 hdr 是否 plain text */
+        if (!(xmode & (GEM_FOLDER|POST_DELETE)))        /* 查 hdr 是否 plain text */
         {
             hdr_fpath(fpath, dir, hdr);
 
@@ -1245,7 +1245,7 @@ gem_gather(
                 if (fd>=0)                 /* by visor */
                     fclose(fd);
 
-                gbuf[locus] = ghdr;	/* 放入 Gembuffer */
+                gbuf[locus] = ghdr;     /* 放入 Gembuffer */
             }
 
             if ((rc == XO_LOAD) && !(xmode & POST_GEM))
@@ -1269,7 +1269,7 @@ gem_gather(
 
     zmsg("收錄完成");
 
-    return rc;			/* Thor: 清除上面顯示的訊息 */
+    return rc;                  /* Thor: 清除上面顯示的訊息 */
 }
 
 
@@ -1465,7 +1465,7 @@ XoGem(
 {
     XO *xo, *last;
 
-    last = xz[XZ_GEM - XO_ZONE].xo;	/* record */
+    last = xz[XZ_GEM - XO_ZONE].xo;     /* record */
 
     xz[XZ_GEM - XO_ZONE].xo = xo = xo_new(folder);
     xo->pos = 0;
@@ -1476,7 +1476,7 @@ XoGem(
 
     free(xo);
 
-    xz[XZ_GEM - XO_ZONE].xo = last;	/* restore */
+    xz[XZ_GEM - XO_ZONE].xo = last;     /* restore */
 }
 
 

@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* more.c	( NTHU CS MapleBBS Ver 3.00 )		 */
+/* more.c       ( NTHU CS MapleBBS Ver 3.00 )            */
 /*-------------------------------------------------------*/
-/* target : simple & beautiful ANSI/Chinese browser	 */
-/* create : 95/03/29				 	 */
-/* update : 97/03/29				 	 */
+/* target : simple & beautiful ANSI/Chinese browser      */
+/* create : 95/03/29                                     */
+/* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
 
 
@@ -11,22 +11,22 @@
 
 
 /* ----------------------------------------------------- */
-/* buffered file read					 */
+/* buffered file read                                    */
 /* ----------------------------------------------------- */
 
 
-#define MORE_BUFSIZE	4096
+#define MORE_BUFSIZE    4096
 
 
-static int more_width;	/* more screen 的寬度 */
+static int more_width;  /* more screen 的寬度 */
 
 static unsigned char more_pool[MORE_BUFSIZE];
-static int more_base;		/* more_pool[more_base ~ more_base+more_size] 有值 */
+static int more_base;           /* more_pool[more_base ~ more_base+more_size] 有值 */
 static int more_size;
 
 
 /* ----------------------------------------------------- */
-/* mget 閱讀文字檔；mread 閱讀二進位檔			 */
+/* mget 閱讀文字檔；mread 閱讀二進位檔                   */
 /* ----------------------------------------------------- */
 
 
@@ -123,16 +123,16 @@ mread(
 
 
 /* ----------------------------------------------------- */
-/* more 閱讀文字檔					 */
+/* more 閱讀文字檔                                       */
 /* ----------------------------------------------------- */
 
 
-#define	STR_ANSICODE	"[0123456789;"
+#define STR_ANSICODE    "[0123456789;"
 
 
-static unsigned char *fimage;		/* file image begin */
-static unsigned char *fend;		/* file image end */
-static unsigned char *foff;		/* 目前讀到哪裡 */
+static unsigned char *fimage;           /* file image begin */
+static unsigned char *fend;             /* file image end */
+static unsigned char *foff;             /* 目前讀到哪裡 */
 
 
 static int
@@ -177,7 +177,7 @@ more_line(
         }
         else
         {
-            ch = ' ';		/* 印出不來的都換成空白 */
+            ch = ' ';           /* 印出不來的都換成空白 */
             len++;
         }
 
@@ -207,7 +207,7 @@ more_line(
 
 
 static void
-outs_line(			/* 印出一般內容 */
+outs_line(                      /* 印出一般內容 */
     char *str)
 {
     int ch1, ch2, ansi;
@@ -217,13 +217,13 @@ outs_line(			/* 印出一般內容 */
     ch1 = str[0];
     ch2 = str[1];
 
-    if (ch2 == ' ' && (ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2))	/* 引言 */
+    if (ch2 == ' ' && (ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2))       /* 引言 */
     {
         ansi = 1;
         ch1 = str[2];
-        outs((ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2) ? "\033[33m" : "\033[36m");	/* 引用一層/二層不同顏色 */
+        outs((ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2) ? "\033[33m" : "\033[36m");     /* 引用一層/二層不同顏色 */
     }
-    else if (ch1 == '\241' && ch2 == '\260')	/* ※ 引言者 */
+    else if (ch1 == '\241' && ch2 == '\260')    /* ※ 引言者 */
     {
         ansi = 1;
         outs("\033[1;36m");
@@ -253,7 +253,7 @@ outs_line(			/* 印出一般內容 */
                 break;
             }
 
-            if (buf + ANSILINELEN - 1 <= ptr2 + (ptr1 - str) + (len + 7))	/* buf 空間不夠 */
+            if (buf + ANSILINELEN - 1 <= ptr2 + (ptr1 - str) + (len + 7))       /* buf 空間不夠 */
                 break;
 
             str_ncpy(ptr2, str, ptr1 - str + 1);
@@ -272,7 +272,7 @@ outs_line(			/* 印出一般內容 */
 
 
 static void
-outs_header(	/* 印出檔頭 */
+outs_header(    /* 印出檔頭 */
     char *str,
     int header_len)
 {
@@ -346,7 +346,7 @@ outs_footer(
 
 
 #ifdef SLIDE_SHOW
-static int slideshow;		/* !=0: 播放 movie 的速度 */
+static int slideshow;           /* !=0: 播放 movie 的速度 */
 
 static int
 more_slideshow(void)
@@ -393,14 +393,14 @@ more_slideshow(void)
 #endif
 
 
-#define END_MASK	0x200	/* 按 KEY_END 直達最後一頁 */
+#define END_MASK        0x200   /* 按 KEY_END 直達最後一頁 */
 
-#define HUNT_MASK	0x400
-#define HUNT_NEXT	0x001	/* 按 n 搜尋下一筆 */
-#define HUNT_FOUND	0x002	/* 按 / 開始搜尋，且已經找到 match 的字串 */
-#define HUNT_START	0x004	/* 按 / 開始搜尋，且尚未找到 match 的字串 */
+#define HUNT_MASK       0x400
+#define HUNT_NEXT       0x001   /* 按 n 搜尋下一筆 */
+#define HUNT_FOUND      0x002   /* 按 / 開始搜尋，且已經找到 match 的字串 */
+#define HUNT_START      0x004   /* 按 / 開始搜尋，且尚未找到 match 的字串 */
 
-#define MAXBLOCK	256	/* 記錄幾個 block 的 offset。可加速 MAXBLOCK*32 列以內的長文在上捲/翻時的速度 */
+#define MAXBLOCK        256     /* 記錄幾個 block 的 offset。可加速 MAXBLOCK*32 列以內的長文在上捲/翻時的速度 */
 
 /* Thor.990204: 傳回值 -1 為無法show出
                         0 為全數show完
@@ -413,16 +413,16 @@ more(
     char buf[ANSILINELEN];
     int i;
 
-    unsigned char *headend;		/* 檔頭結束 */
+    unsigned char *headend;             /* 檔頭結束 */
 
-    int shift;			/* 還需要往下移動幾列 */
-    int lino;			/* 目前 line number */
-    int header_len;		/* 檔頭的長度，同時也是站內/站外信的區別 */
-    int key;			/* 按鍵 */
-    int cmd;			/* 中斷時所按的鍵 */
+    int shift;                  /* 還需要往下移動幾列 */
+    int lino;                   /* 目前 line number */
+    int header_len;             /* 檔頭的長度，同時也是站內/站外信的區別 */
+    int key;                    /* 按鍵 */
+    int cmd;                    /* 中斷時所按的鍵 */
 
-    int fsize;			/* 檔案大小 */
-    static off_t block[MAXBLOCK];	/* 每 32 列為一個 block，記錄此 block 的 offset */
+    int fsize;                  /* 檔案大小 */
+    static off_t block[MAXBLOCK];       /* 每 32 列為一個 block，記錄此 block 的 offset */
 
 #ifdef M3_USE_PMORE
     cmd = pmore(fpath, footer && footer != (char*)-1);
@@ -434,8 +434,8 @@ more(
     foff = fimage;
     fend = fimage + fsize;
 
-    /* more_width = b_cols - 1; */	/* itoc.070517.註解: 若用這個，每列最大字數會和 header 及 footer 對齊 (即會有留白二格) */
-    more_width = b_cols + 1;		/* itoc.070517.註解: 若用這個，每列最大字數與螢幕同寬 */
+    /* more_width = b_cols - 1; */      /* itoc.070517.註解: 若用這個，每列最大字數會和 header 及 footer 對齊 (即會有留白二格) */
+    more_width = b_cols + 1;            /* itoc.070517.註解: 若用這個，每列最大字數與螢幕同寬 */
 
     /* 找檔頭結束的地方 */
     for (i = 0; i < LINE_HEADER; i++)
@@ -447,12 +447,12 @@ more(
         if (i == 0)
         {
             header_len =
-                !memcmp(buf, str_author1, LEN_AUTHOR1) ? LEN_AUTHOR1 :	/* 「作者:」表站內文章 */
-                !memcmp(buf, str_author2, LEN_AUTHOR2) ? LEN_AUTHOR2 : 	/* 「發信人:」表轉信文章 */
-                0;							/* 沒有檔頭 */
+                !memcmp(buf, str_author1, LEN_AUTHOR1) ? LEN_AUTHOR1 :  /* 「作者:」表站內文章 */
+                !memcmp(buf, str_author2, LEN_AUTHOR2) ? LEN_AUTHOR2 :  /* 「發信人:」表轉信文章 */
+                0;                                                      /* 沒有檔頭 */
         }
 
-        if (!*buf)	/* 第一次 "\n\n" 是檔頭的結尾 */
+        if (!*buf)      /* 第一次 "\n\n" 是檔頭的結尾 */
             break;
     }
     headend = foff;
@@ -467,7 +467,7 @@ more(
     slideshow = 0;
 #endif
 
-    if (hunt[0])		/* 在 xxxx_browse() 請求搜尋字串 */
+    if (hunt[0])                /* 在 xxxx_browse() 請求搜尋字串 */
     {
         str_lowest(hunt, hunt);
         shift = HUNT_MASK | HUNT_START;
@@ -482,7 +482,7 @@ more(
     while (more_line(buf))
     {
         /* ------------------------------------------------- */
-        /* 印出一列的文字					 */
+        /* 印出一列的文字                                        */
         /* ------------------------------------------------- */
 
         /* 首頁前幾列才需要處理檔頭 */
@@ -494,7 +494,7 @@ more(
         outc('\n');
 
         /* ------------------------------------------------- */
-        /* 依 shift 來決定動作				 */
+        /* 依 shift 來決定動作                           */
         /* ------------------------------------------------- */
 
         /* itoc.030303.註解: shift 在此的意義
@@ -502,9 +502,9 @@ more(
            <0: 還需要往上移幾列
            =0: 結束這頁，等待使用者按鍵 */
 
-        if (shift > 0)		/* 還要下移 shift 列 */
+        if (shift > 0)          /* 還要下移 shift 列 */
         {
-            if (lino >= b_lines)	/* 只有在剛進 more，第一次印第一頁時才可能 lino <= b_lines */
+            if (lino >= b_lines)        /* 只有在剛進 more，第一次印第一頁時才可能 lino <= b_lines */
                 scroll();
 
             lino++;
@@ -513,30 +513,30 @@ more(
                 block[i] = foff - fimage;
 
 
-            if (!(shift & (HUNT_MASK | END_MASK)))	/* 一般資料讀取 */
+            if (!(shift & (HUNT_MASK | END_MASK)))      /* 一般資料讀取 */
             {
                 shift--;
             }
-            else if (shift & HUNT_MASK)		/* 字串搜尋 */
+            else if (shift & HUNT_MASK)         /* 字串搜尋 */
             {
-                if (shift & HUNT_NEXT)	/* 按 n 搜尋下一筆 */
+                if (shift & HUNT_NEXT)  /* 按 n 搜尋下一筆 */
                 {
                     /* 一找到就停於該列 */
                     if (str_sub(buf, hunt))
                         shift = 0;
                 }
-                else			/* 按 / 開始搜尋 */
+                else                    /* 按 / 開始搜尋 */
                 {
                     /* 若在第二頁以後找到，一找到就停於該列；
                        若在第一頁找到，必須等到讀完第一頁才能停止 */
                     if (shift & HUNT_START && str_sub(buf, hunt))
-                        shift ^= HUNT_START | HUNT_FOUND;		/* 拿掉 HUNT_START 並加上 HUNT_FOUND */
+                        shift ^= HUNT_START | HUNT_FOUND;               /* 拿掉 HUNT_START 並加上 HUNT_FOUND */
                     if (shift & HUNT_FOUND && lino >= b_lines)
                         shift = 0;
                 }
             }
         }
-        else if (shift < 0)		/* 還要上移 -shift 列 */
+        else if (shift < 0)             /* 還要上移 -shift 列 */
         {
             shift++;
 
@@ -551,7 +551,7 @@ more(
             }
         }
 
-        if (foff >= fend)		/* 已經讀完全部的檔案 */
+        if (foff >= fend)               /* 已經讀完全部的檔案 */
         {
             /* 倘若是按 End 移到最後一頁，那麼停留在 100% 而不結束；否則一律結束 */
             if (!(shift & END_MASK))
@@ -559,12 +559,12 @@ more(
             shift = 0;
         }
 
-        if (shift)			/* 還需要繼續讀資料 */
+        if (shift)                      /* 還需要繼續讀資料 */
             continue;
 
         /* ------------------------------------------------- */
         /* 到此印完所需的 shift 列，接下來印出 footer 並等待 */
-        /* 使用者按鍵					 */
+        /* 使用者按鍵                                    */
         /* ------------------------------------------------- */
 
 re_key:
@@ -618,7 +618,7 @@ re_key:
 
         else if (key == KEY_HOME || key == '0')
         {
-            if (lino <= b_lines)	/* 已經在最開始了 */
+            if (lino <= b_lines)        /* 已經在最開始了 */
                 shift = 0;
             else
                 shift = -PAGE_SCROLL - 1;
@@ -626,7 +626,7 @@ re_key:
 
         else if (key == '/' || key == 'n')
         {
-            if (key == 'n' && hunt[0])	/* 如果按 n 卻未輸入過搜尋字串，那麼視同按 / */
+            if (key == 'n' && hunt[0])  /* 如果按 n 卻未輸入過搜尋字串，那麼視同按 / */
             {
                 shift = HUNT_MASK | HUNT_NEXT;
             }
@@ -635,13 +635,13 @@ re_key:
                 str_lowest(hunt, hunt);
                 shift = HUNT_MASK | HUNT_START;
             }
-            else				/* 如果取消搜尋的話，重繪 footer 即可 */
+            else                                /* 如果取消搜尋的話，重繪 footer 即可 */
             {
                 shift = 0;
             }
         }
 
-        else if (key == 'C')	/* Thor.980405: more 時可存入暫存檔 */
+        else if (key == 'C')    /* Thor.980405: more 時可存入暫存檔 */
         {
             FILE *fp;
             if (fp = tbf_open())
@@ -649,7 +649,7 @@ re_key:
                 f_suck(fp, fpath);
                 fclose(fp);
             }
-            shift = 0;		/* 重繪 footer */
+            shift = 0;          /* 重繪 footer */
         }
 
 /* 090924.cache: 目前的 Windtop 不支援 */
@@ -690,13 +690,13 @@ re_key:
 /* 081229.cache: BBSRuby */
 //      else if (key == '!')
 //      {
-//	    screenline slt[T_LINES];
-//	    vs_save(slt);
-//	    run_ruby(fpath);
-//	    vs_restore(slt);
+//          screenline slt[T_LINES];
+//          vs_save(slt);
+//          run_ruby(fpath);
+//          vs_restore(slt);
 //      }
 
-        else		/* 其他鍵都是使用者中斷 */
+        else            /* 其他鍵都是使用者中斷 */
         {
             /* itoc.041006: 使用者中斷的按鍵要 > 0 (而 KEY_LEFT 是 < 0) */
             cmd = key > 0 ? key : 'q';
@@ -705,12 +705,12 @@ re_key:
 
         /* ------------------------------------------------- */
         /* 使用者已按鍵，若 break 則離開迴圈；否則依照 shift */
-        /* 的種類 (亦即按鍵的種類) 而做不同的動作		 */
+        /* 的種類 (亦即按鍵的種類) 而做不同的動作                */
         /* ------------------------------------------------- */
 
-        if (shift > 0)			/* 準備下移 shift 列 */
+        if (shift > 0)                  /* 準備下移 shift 列 */
         {
-            if (shift < (HUNT_MASK | HUNT_START))	/* 一般下移 */
+            if (shift < (HUNT_MASK | HUNT_START))       /* 一般下移 */
             {
                 /* itoc.041114.註解: 目標是秀出 lino-b_lines+1+shift ~ lino+shift 列的內容：
                    就只要清 footer 即可，其他的就交給前面循序印 shift 列的程式 */
@@ -723,7 +723,7 @@ re_key:
                    會造成前面循序印 shift 列的程式就得一直翻，直到找到最後一頁，這樣會做太多 outs_line() 白工，
                    所以在此特別檢查超長文章時，就先去找最後一頁所在 */
 
-                if ((shift & END_MASK) && (fend - foff >= MORE_BUFSIZE))	/* 還有一堆沒讀過，才特別處理 */
+                if ((shift & END_MASK) && (fend - foff >= MORE_BUFSIZE))        /* 還有一堆沒讀過，才特別處理 */
                 {
                     int totallino = lino;
 
@@ -758,9 +758,9 @@ re_key:
                 clear();
             }
         }
-        else if (shift < 0)			/* 準備上移 -shift 列 */
+        else if (shift < 0)                     /* 準備上移 -shift 列 */
         {
-            if (shift >= -PAGE_SCROLL)	/* 上捲數列 */
+            if (shift >= -PAGE_SCROLL)  /* 上捲數列 */
             {
                 lino += shift;
 
@@ -791,7 +791,7 @@ re_key:
 
                 i = shift;
             }
-            else			/* Home */
+            else                        /* Home */
             {
                 /* itoc.041226.註解: 目標是秀出 1 ~ b_lines 列的內容：
                    作法就是全部都歸零，從頭再印 b_lines 列即可 */
@@ -803,38 +803,38 @@ re_key:
                 shift = b_lines;
             }
         }
-        else				/* 重繪 footer 並 re-key */
+        else                            /* 重繪 footer 並 re-key */
         {
             move(b_lines, 0);
             clrtoeol();
             goto re_key;
         }
-    }	/* while 迴圈的結束 */
+    }   /* while 迴圈的結束 */
 
     /* --------------------------------------------------- */
-    /* 檔案已經秀完 (cmd = 0) 或 使用者中斷 (cmd != 0)	 */
+    /* 檔案已經秀完 (cmd = 0) 或 使用者中斷 (cmd != 0)   */
     /* --------------------------------------------------- */
 
     free(fimage);
 
 #endif // M3_USE_PMORE
 
-    if (!cmd)	/* 檔案正常秀完，要處理 footer */
+    if (!cmd)   /* 檔案正常秀完，要處理 footer */
     {
-        if (footer)		/* 有 footer */
+        if (footer)             /* 有 footer */
         {
             if (footer != (char *) -1)
                 outf(footer);
             else
                 outs(str_ransi);
         }
-        else		/* 沒有 footer 要 vmsg() */
+        else            /* 沒有 footer 要 vmsg() */
         {
             /* lkchu.981201: 先清一次以免重疊顯示 */
             move(b_lines, 0);
             clrtoeol();
 
-            if (vmsg(NULL) == 'C')	/* Thor.990204: 特別注意若回傳 'C' 表示暫存檔 */
+            if (vmsg(NULL) == 'C')      /* Thor.990204: 特別注意若回傳 'C' 表示暫存檔 */
             {
                 FILE *fp;
 
@@ -846,7 +846,7 @@ re_key:
             }
         }
     }
-    else		/* 使用者中斷，直接離開 */
+    else                /* 使用者中斷，直接離開 */
     {
         outs(str_ransi);
     }

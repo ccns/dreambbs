@@ -1,12 +1,12 @@
 /*-------------------------------------------------------*/
-/* acct.c	( NTHU CS MapleBBS Ver 3.00 )		 */
+/* acct.c       ( NTHU CS MapleBBS Ver 3.00 )            */
 /*-------------------------------------------------------*/
-/* target : account / administration routines	 	 */
-/* create : 95/03/29				 	 */
-/* update : 96/04/05				 	 */
+/* target : account / administration routines            */
+/* create : 95/03/29                                     */
+/* update : 96/04/05                                     */
 /*-------------------------------------------------------*/
 
-#define	_ADMIN_C_
+#define _ADMIN_C_
 
 #include "bbs.h"
 
@@ -14,8 +14,8 @@ extern XZ xz[];
 extern BCACHE *bshm;
 
 
-#undef	CHANGE_USERNO
-#undef	CHANGE_SECOND
+#undef  CHANGE_USERNO
+#undef  CHANGE_SECOND
 
 #define STR_PERM      "bctpjm#x--------PTCMSNL*B#KGACBS"
 
@@ -39,7 +39,7 @@ void logitfile(
 }
 
 /* ----------------------------------------------------- */
-/* 增加銀幣, 優良積分, 劣退                     		 */
+/* 增加銀幣, 優良積分, 劣退                              */
 /* ----------------------------------------------------- */
 
 void
@@ -95,7 +95,7 @@ addpoint2(
 }
 
 /* ----------------------------------------------------- */
-/* (.ACCT) 使用者帳號 (account) subroutines		 */
+/* (.ACCT) 使用者帳號 (account) subroutines              */
 /* ----------------------------------------------------- */
 
 void
@@ -103,7 +103,7 @@ keeplog(
     char *fnlog,
     char *board,
     char *title,
-    int mode		/* 0:load 1:rename 2:unlink 3:mark */
+    int mode            /* 0:load 1:rename 2:unlink 3:mark */
 )
 {
     HDR hdr;
@@ -181,7 +181,7 @@ acct_save(
     char fpath[80];
 
     usr_fpath(fpath, acct->userid, FN_ACCT);
-    fd = open(fpath, O_WRONLY, 0600);	/* fpath 必須已經存在 */
+    fd = open(fpath, O_WRONLY, 0600);   /* fpath 必須已經存在 */
     if (fd >= 0)
     {
         write(fd, acct, sizeof(ACCT));
@@ -212,12 +212,12 @@ acct_userno(
 
 
 /* ----------------------------------------------------- */
-/* name complete for user ID				 */
+/* name complete for user ID                             */
 /* ----------------------------------------------------- */
-/* return value :					 */
-/* 0 : 使用直接按 enter ==> cancel			 */
-/* -1 : bad user id					 */
-/* o.w.: 傳回該 userid 之 userno				 */
+/* return value :                                        */
+/* 0 : 使用直接按 enter ==> cancel                       */
+/* -1 : bad user id                                      */
+/* o.w.: 傳回該 userid 之 userno                         */
 /* ----------------------------------------------------- */
 
 int
@@ -238,14 +238,14 @@ acct_get(
 
 
 /* ----------------------------------------------------- */
-/* 設定系統檔案						 */
+/* 設定系統檔案                                          */
 /* ----------------------------------------------------- */
 
 void
 x_file(
-    int mode, 			/* M_XFILES / M_UFILES */
-    char *xlist[], 		/* description list */
-    char *flist[]		/* filename list */
+    int mode,                   /* M_XFILES / M_UFILES */
+    char *xlist[],              /* description list */
+    char *flist[]               /* filename list */
 )
 {
     int n, i;
@@ -320,7 +320,7 @@ x_file(
     fpath = flist[--i];
     if (mode == M_UFILES)
         usr_fpath(buf, cuser.userid, fpath);
-    else				/* M_XFILES */
+    else                                /* M_XFILES */
         sprintf(buf, "%s", fpath);
 
     if (n == 'd')
@@ -374,7 +374,7 @@ check_admin(
 }
 
 /* ----------------------------------------------------- */
-/* bit-wise display and setup				 */
+/* bit-wise display and setup                            */
 /* ----------------------------------------------------- */
 
 void
@@ -401,8 +401,8 @@ bitmsg(
 unsigned int
 bitset(
     unsigned int pbits,
-    int count, 			/* 共有幾個選項 */
-    int maxon, 			/* 最多可以 enable 幾項 */
+    int count,                  /* 共有幾個選項 */
+    int maxon,                  /* 最多可以 enable 幾項 */
     char *msg,
     char *perms[]
 )
@@ -477,7 +477,7 @@ setperm(
 
 
 /* ----------------------------------------------------- */
-/* 帳號管理						 */
+/* 帳號管理                                              */
 /* ----------------------------------------------------- */
 
 /* BLACK SU */
@@ -514,7 +514,7 @@ acct_su(
 /* BLACK SU */
 
 static void
-bm_list(			/* 顯示 userid 是哪些板的板主 */
+bm_list(                        /* 顯示 userid 是哪些板的板主 */
     char *userid
 )
 {
@@ -590,7 +590,7 @@ perm_log(
 void
 acct_show(
     ACCT *u,
-    int adm			/* 1: admin 2: reg-form */
+    int adm                     /* 1: admin 2: reg-form */
 )
 {
     time_t now;
@@ -684,7 +684,7 @@ acct_show(
     if (ulevel & PERM_BM)
         bm_list(uid);
 
-#ifdef	NEWUSER_LIMIT
+#ifdef  NEWUSER_LIMIT
     if (u->lastlogin - u->firstlogin < 3 * 86400)
         outs("\n新手上路：三天後開放權限");
 #endif
@@ -1248,7 +1248,7 @@ acct_setup(
         if ((num = atoi(buf)) >= 0)
             x.point2 = num;
 
-#ifdef	CHANGE_SECOND
+#ifdef  CHANGE_SECOND
         sprintf(buf, "%d", u->staytime);
         vget(++i, 0, "上站總秒數：", buf, 20, GCARRY);
         if ((num = atoi(buf)) >= 0)
@@ -1361,7 +1361,7 @@ m_bmset(void)
 
 
 /* ----------------------------------------------------- */
-/* 設定 E-mail address					 */
+/* 設定 E-mail address                                   */
 /* ----------------------------------------------------- */
 
 
@@ -1529,7 +1529,7 @@ u_addr(void)
                                         /* lkchu.981201 */
     if (vget(b_lines - 1, 0, "E-Mail 地址：", addr, sizeof(cuser.email), DOECHO))
     {
-#ifndef	HAVE_SIMPLE_RFORM
+#ifndef HAVE_SIMPLE_RFORM
         vtime = REG_REQUEST;
 #endif
         str_lower(addr, addr);
@@ -1548,7 +1548,7 @@ u_addr(void)
 #ifdef HAVE_WRITE
         else if (!allow_addr(addr))
         {
-#ifndef	HAVE_SIMPLE_RFORM
+#ifndef HAVE_SIMPLE_RFORM
             attr_put(cuser.userid, ATTR_REG_KEY, &vtime);
 #endif
             msg = "尚未申請通過的 E-mail 主機";
@@ -1747,46 +1747,46 @@ static char *UFO_FLAGS[] =
 
 static char *UFO2_FLAGS[] =
 {
-    /* COLOR */	"彩色模式",
-    /* MOVIE */	"動畫顯示",
-    /* BRDNEW */	"新推文",
-    /* BNOTE */	"顯示進板畫面",
-    /* VEDIT */	"簡化編輯器",
-    /* PAL */	"只顯示好友",
-    /* MOTD */	"簡化進站畫面",
+    /* COLOR */         "彩色模式",
+    /* MOVIE */         "動畫顯示",
+    /* BRDNEW */        "新推文",
+    /* BNOTE */         "顯示進板畫面",
+    /* VEDIT */         "簡化編輯器",
+    /* PAL */           "只顯示好友",
+    /* MOTD */          "簡化進站畫面",
 #ifdef HAVE_MIME_TRANSFER
-    /* MIME */	"MIME 解碼",
+    /* MIME */          "MIME 解碼",
 #else
-    /* MIME */	"MIME 解碼(系統功\能尚未開啟)",
+    /* MIME */          "MIME 解碼(系統功\能尚未開啟)",
 #endif
-    /* SIGN */	"選擇簽名檔 開啟:後 關閉:前",
-    /* SHOWUSER */	"顯示自己 ID 和暱稱",
+    /* SIGN */          "選擇簽名檔 開啟:後 關閉:前",
+    /* SHOWUSER */      "顯示自己 ID 和暱稱",
 #ifdef HAVE_RECOMMEND
-    /* PRH */	"關閉推薦文章分數",
+    /* PRH */           "關閉推薦文章分數",
 #else
-    /* PRH */	"關閉推薦文章分數(系統功\能尚未開啟)",
+    /* PRH */           "關閉推薦文章分數(系統功\能尚未開啟)",
 #endif
-    /* SHIP */	"好友描述",
-    /* NWLOG */	"不儲存熱訊紀錄",
-    /* NTLOG */	"不儲存聊天紀錄",
-    /* CIRCLE */	"循環閱\讀",
-    /* ORIGUI */	"關閉超炫介面",
-    /* DEF_ANONY */	"預設不匿名",
-    /* DEF_LEAVE */	"預設不離站",
-    /* REPLY */	"記錄水球資訊",
-    /* DEF_LOCALMAIL */	"只收站內信",
-    /* RESERVE */	"【保留】",
-    /* RESERVE */	"【保留】",
-    /* RESERVE */	"【保留】",
-    /* RESERVE */	"【保留】",
-    /* ACL */	"ACL",
-    /* RESERVE */	"【保留】",
-    /* RESERVE */	"【保留】",
-    /* RESERVE */	"【保留】",
-    /* REALNAME */	"真實姓名",
-    /* RESERVE */	"【保留】",
-    /* RESERVE */	"【保留】",
-    /* REALNAME */	"【保留】"
+    /* SHIP */          "好友描述",
+    /* NWLOG */         "不儲存熱訊紀錄",
+    /* NTLOG */         "不儲存聊天紀錄",
+    /* CIRCLE */        "循環閱\讀",
+    /* ORIGUI */        "關閉超炫介面",
+    /* DEF_ANONY */     "預設不匿名",
+    /* DEF_LEAVE */     "預設不離站",
+    /* REPLY */         "記錄水球資訊",
+    /* DEF_LOCALMAIL */ "只收站內信",
+    /* RESERVE */       "【保留】",
+    /* RESERVE */       "【保留】",
+    /* RESERVE */       "【保留】",
+    /* RESERVE */       "【保留】",
+    /* ACL */           "ACL",
+    /* RESERVE */       "【保留】",
+    /* RESERVE */       "【保留】",
+    /* RESERVE */       "【保留】",
+    /* REALNAME */      "真實姓名",
+    /* RESERVE */       "【保留】",
+    /* RESERVE */       "【保留】",
+    /* REALNAME */      "【保留】"
 };
 
 
@@ -1845,7 +1845,7 @@ u_setup(void)
     else if (nflag & PERM_CLOAK)
         len = 20;
     else
-        len = 18;	/* lkchu.990428: 加了 電子郵件傳呼 */
+        len = 18;       /* lkchu.990428: 加了 電子郵件傳呼 */
 
     ufo = cuser.ufo;
     nflag = bitset(ufo, len, len, "操作模式設定：", flags);
@@ -2014,7 +2014,7 @@ u_xfile(void)
 
 
 /* ----------------------------------------------------- */
-/* 看板管理						 */
+/* 看板管理                                              */
 /* ----------------------------------------------------- */
 
 
@@ -2079,7 +2079,7 @@ m_setbrd(
         }
 
         if (!strcmp(old_brdname, data) && valid_brdname(data))
-        {				/* Thor: 與原名同則跳過 */
+        {                               /* Thor: 與原名同則跳過 */
             break;
         }
 
@@ -2122,13 +2122,13 @@ m_setbrd(
     switch (vget(++i, 0, "看板權限 A)一般 B)自定 C)秘密 D)好友？[Q] ", buf, 3, LCECHO))
     {
     case 'c':
-        brd->readlevel = (PERM_SYSOP | PERM_BOARD);	/* 秘密看板 */
+        brd->readlevel = (PERM_SYSOP | PERM_BOARD);     /* 秘密看板 */
         brd->postlevel = PERM_POST;
         brd->battr |= (BRD_NOSTAT | BRD_NOVOTE);
         break;
 
     case 'd':
-        brd->readlevel = PERM_SYSOP;	/* 好友看板 */
+        brd->readlevel = PERM_SYSOP;    /* 好友看板 */
         brd->postlevel = PERM_POST;
         brd->battr |= (BRD_NOSTAT | BRD_NOVOTE);
         break;
@@ -2139,8 +2139,8 @@ m_setbrd(
 
     case 'a':
         brd->readlevel = 0;
-        brd->postlevel = PERM_POST;		/* 一般看板發表權限為 PERM_POST */
-        brd->battr &= ~(BRD_NOSTAT | BRD_NOVOTE);	/* 拿掉好友＆秘密板屬性 */
+        brd->postlevel = PERM_POST;             /* 一般看板發表權限為 PERM_POST */
+        brd->battr &= ~(BRD_NOSTAT | BRD_NOVOTE);       /* 拿掉好友＆秘密板屬性 */
         break;
 
     case 'b':
@@ -2161,7 +2161,7 @@ m_setbrd(
         }
         break;
 
-    default:	/* 預設不變動 */
+    default:    /* 預設不變動 */
         break;
     }
 
@@ -2237,7 +2237,7 @@ m_newbrd(void)
     mak_dirs(fpath);
     mak_dirs(fpath + 4);
 
-    bshm->uptime = 0;		/* force reload of bcache */
+    bshm->uptime = 0;           /* force reload of bcache */
     bshm_init();
 
     /* 順便加進 NewBoard */
@@ -2340,7 +2340,7 @@ brd_edit(
 }
 
 int
-a_editbrd(void)		/* cache.100618: 修改看板選項 */
+a_editbrd(void)         /* cache.100618: 修改看板選項 */
 {
     int bno;
     BRD *brd;
@@ -2359,9 +2359,9 @@ a_editbrd(void)		/* cache.100618: 修改看板選項 */
     return 0;
 }
 
-#ifdef	HAVE_REGISTER_FORM
+#ifdef  HAVE_REGISTER_FORM
 /* ----------------------------------------------------- */
-/* 使用者填寫註冊表格					 */
+/* 使用者填寫註冊表格                                    */
 /* ----------------------------------------------------- */
 
 
@@ -2403,7 +2403,7 @@ check_idno(char *s)
     return (x==*p-'0');
 }  /* CheckID */
 
-#ifndef	HAVE_SIMPLE_RFORM
+#ifndef HAVE_SIMPLE_RFORM
 static void
 send_request(void)
 {
@@ -2432,7 +2432,7 @@ u_register(void)
     FILE *fn;
     int ans;
     RFORM rform;
-#ifndef	HAVE_SIMPLE_RFORM
+#ifndef HAVE_SIMPLE_RFORM
     int formstate=0;
 
     if (attr_get(cuser.userid, ATTR_REG_KEY, &formstate)>=0)
@@ -2534,7 +2534,7 @@ u_register(void)
 
 
 /* ----------------------------------------------------- */
-/* 處理 Register Form					 */
+/* 處理 Register Form                                    */
 /* ----------------------------------------------------- */
 
 
@@ -2625,7 +2625,7 @@ scan_register_form(
 
             break;
 
-        case 'q':			/* 太累了，結束休息 */
+        case 'q':                       /* 太累了，結束休息 */
 
             do
             {
@@ -2672,14 +2672,14 @@ scan_register_form(
                     rec_add(folder, &fhdr, sizeof(fhdr));
                 }
 
-                strcpy(rform.reply, buf);	/* 理由 */
+                strcpy(rform.reply, buf);       /* 理由 */
                 strcpy(rform.agent, agent);
                 rec_add(logfile, &rform, sizeof(RFORM));
 
                 break;
             }
 
-        default:			/* put back to regfile */
+        default:                        /* put back to regfile */
 
             rec_add(FN_RFORM, &rform, sizeof(RFORM));
         }
@@ -2687,7 +2687,7 @@ scan_register_form(
     return 0;
 }
 
-#ifndef	HAVE_SIMPLE_RFORM
+#ifndef HAVE_SIMPLE_RFORM
 static int
 ans_request(void)
 {
@@ -2796,19 +2796,19 @@ int
 m_register(void)
 {
     int num;
-#ifndef	HAVE_SIMPLE_RFORM
+#ifndef HAVE_SIMPLE_RFORM
     int num2;
     char msg[128];
 #endif
     char buf[80];
 
     num = rec_num(FN_RFORM, sizeof(RFORM));
-#ifndef	HAVE_SIMPLE_RFORM
+#ifndef HAVE_SIMPLE_RFORM
     num2 = rec_num(FN_RFORM_R, sizeof(RFORM_R));
     sprintf(msg, "審核 : 1)註冊單< %d 筆> 2)註冊單請求< %d 筆> [1]", num, num2);
 #endif
 
-#ifndef	HAVE_SIMPLE_RFORM
+#ifndef HAVE_SIMPLE_RFORM
     if (vans(msg) == '2')
     {
         return ans_request();
@@ -2866,11 +2866,11 @@ m_register(void)
 
 
 /* ----------------------------------------------------- */
-/* 產生追蹤記錄：建議改用 log_usies()、TRACE()		 */
+/* 產生追蹤記錄：建議改用 log_usies()、TRACE()           */
 /* ----------------------------------------------------- */
 
 
-#ifdef	HAVE_REPORT
+#ifdef  HAVE_REPORT
 void
 report(
     char *s
@@ -3006,7 +3006,7 @@ m_trace(void)
     }
     clear();
 }
-#endif				/* HAVE_REPORT */
+#endif                          /* HAVE_REPORT */
 
 int
 u_verify(void)

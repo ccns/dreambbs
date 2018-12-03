@@ -1,22 +1,22 @@
 /*-------------------------------------------------------*/
-/* util/backup.c     ( ES BBS )	                         */
+/* util/backup.c     ( ES BBS )                          */
 /*-------------------------------------------------------*/
-/* author : catalyst.bbs@bbs.es.ncku.edu.tw	             */
+/* author : catalyst.bbs@bbs.es.ncku.edu.tw              */
 /* target : 排程備份使用者/看板/精華區                   */
 /* create : 2007/05/28                                   */
-/* comment: Sun usr a-d	                                 */
-/*	    Mon usr e-k	                                     */
-/*	    Tue usr l-r	                                     */
-/*	    Wed usr s-z	                                     */
-/*	    Thr brd a-k 0-9	                                 */
-/*	    Fri brd l-z	                                     */
-/*	    Sat gem                                          */
-/*	    everyday src system                              */
+/* comment: Sun usr a-d                                  */
+/*          Mon usr e-k                                  */
+/*          Tue usr l-r                                  */
+/*          Wed usr s-z                                  */
+/*          Thr brd a-k 0-9                              */
+/*          Fri brd l-z                                  */
+/*          Sat gem                                      */
+/*          everyday src system                          */
 /*-------------------------------------------------------*/
 
 #include "bbs.h"
 
-char	*bk_path;
+char *bk_path;
 
 struct tm *t;
 time_t now;

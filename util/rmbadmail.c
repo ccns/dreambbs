@@ -1,15 +1,15 @@
 /*-------------------------------------------------------*/
-/* util/rmbadmail.c      ( YZU WindTop 2000)    	 */
+/* util/rmbadmail.c      ( YZU WindTop 2000)             */
 /*-------------------------------------------------------*/
-/* author : visor.bbs@bbs.yzu.edu.tw			 */
-/* target : 刪除未在 .DIR 裡的信件	                 */
+/* author : visor.bbs@bbs.yzu.edu.tw                     */
+/* target : 刪除未在 .DIR 裡的信件                       */
 /* create :                                              */
 /* update :                                              */
 /*-------------------------------------------------------*/
 /* syntax : rmbadmail                                    */
 /*-------------------------------------------------------*/
 
-#undef	FAKE_IO
+#undef  FAKE_IO
 #include "bbs.h"
 
 static int reserve, r_size, ulink, u_size;
@@ -92,7 +92,7 @@ reaper(
                     ulink++;
                     printf("file is not in HDR : %s : unlink !\n", fname);
                     printf("--> unlinking %s\n", folder);
-#ifndef	FAKE_IO
+#ifndef FAKE_IO
                     unlink(folder);
 #endif
                 }

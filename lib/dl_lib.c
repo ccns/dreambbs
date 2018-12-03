@@ -21,7 +21,7 @@ typedef struct
 DL_list  *dl_pool;
 int dl_size, dl_head;
 
-#define DL_ALLOC_MIN	5
+#define DL_ALLOC_MIN    5
 
 #if 1
 extern void blog(char *, char *);

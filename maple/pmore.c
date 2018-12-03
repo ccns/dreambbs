@@ -422,7 +422,7 @@ static int debug = 0;
 //#define ANSI_CLRTOEND   ESC_STR "[K" /* cache.080920 (by hpo14's fix): M3 is not support [K, it might be dangerous */
 #define ANSI_CLRTOEND   ""
 #define ANSI_MOVETO(y, x) ESC_STR "[" #y ";" #x "H"
-#define ANSI_REVERSE	ANSI_COLOR(7)
+#define ANSI_REVERSE    ANSI_COLOR(7)
 
 #define ANSI_IN_ESCAPE(x) (((x) >= '0' && (x) <= '9') || \
         (x) == ';' || (x) == ', ' || (x) == '[')
@@ -480,29 +480,29 @@ pmore_outns(const char *str, int n)
 typedef struct
 {
     unsigned char
-        *start, *end,   // file buffer
-        *disps, *dispe, // displayed content start/end
-        *maxdisps;      // a very special pointer,
-                        //   consider as "disps of last page"
-    off_t len;          // file total length
-    long  lineno,       // lineno of disps
-          oldlineno,    // last drawn lineno, < 0 means full update
-          xpos,         // starting x position
-                        //
-          wraplines,    // wrapped lines in last display
-          trunclines,   // truncated lines in last display
-          dispedlines,  // how many different lines displayed
-                        //  usually dispedlines = PAGE-wraplines,
-                        //  but if last line is incomplete(wrapped),
-                        //  dispedlines = PAGE-wraplines + 1
-          lastpagelines, // lines of last page to show
-                        //  this indicates how many lines can
-                        //  maxdisps(maxlinenoS) display.
-          maxlinenoS;   // lineno of maxdisps, "S"!
-                        //  What does the magic "S" mean?
-                        //  Just trying to notify you that it's
-                        //  NOT REAL MAX LINENO NOR FILELENGTH!!!
-                        //  You may consider "S" of "Start" (disps).
+        *start, *end,     // file buffer
+        *disps, *dispe,   // displayed content start/end
+        *maxdisps;        // a very special pointer,
+                          //   consider as "disps of last page"
+    off_t len;            // file total length
+    long  lineno,         // lineno of disps
+          oldlineno,      // last drawn lineno, < 0 means full update
+          xpos,           // starting x position
+                          //
+          wraplines,      // wrapped lines in last display
+          trunclines,     // truncated lines in last display
+          dispedlines,    // how many different lines displayed
+                          //  usually dispedlines = PAGE-wraplines,
+                          //  but if last line is incomplete(wrapped),
+                          //  dispedlines = PAGE-wraplines + 1
+          lastpagelines,  // lines of last page to show
+                          //  this indicates how many lines can
+                          //  maxdisps(maxlinenoS) display.
+          maxlinenoS;     // lineno of maxdisps, "S"!
+                          //  What does the magic "S" mean?
+                          //  Just trying to notify you that it's
+                          //  NOT REAL MAX LINENO NOR FILELENGTH!!!
+                          //  You may consider "S" of "Start" (disps).
     void (*detachHandler)(void);
 } MmappedFile;
 
@@ -3162,13 +3162,13 @@ pmore_Preference(void)
 
 // apply system colors if defined
 #ifndef HLP_CATEGORY_COLOR
-#define HLP_CATEGORY_COLOR	PMHLPATTR_HEADER
+#define HLP_CATEGORY_COLOR      PMHLPATTR_HEADER
 #endif
 #ifndef HLP_DESCRIPTION_COLOR
-#define HLP_DESCRIPTION_COLOR	PMHLPATTR_NORMAL
+#define HLP_DESCRIPTION_COLOR   PMHLPATTR_NORMAL
 #endif
 #ifndef HLP_KEYLIST_COLOR
-#define HLP_KEYLIST_COLOR	PMHLPATTR_NORMAL_KEY
+#define HLP_KEYLIST_COLOR       PMHLPATTR_NORMAL_KEY
 #endif
 
 static const char

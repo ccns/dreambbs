@@ -1,10 +1,10 @@
 /*-------------------------------------------------------*/
-/* innbbs.c	( NTHU CS MapleBBS Ver 3.10 )		 */
+/* innbbs.c     ( NTHU CS MapleBBS Ver 3.10 )            */
 /*-------------------------------------------------------*/
-/* target : 轉信設定					 */
-/* create : 04/04/25					 */
-/* update :   /  /  					 */
-/* author : itoc.bbs@bbs.tnfsh.tn.edu.tw		 */
+/* target : 轉信設定                                     */
+/* create : 04/04/25                                     */
+/* update :   /  /                                       */
+/* author : itoc.bbs@bbs.tnfsh.tn.edu.tw                 */
 /*-------------------------------------------------------*/
 
 
@@ -15,7 +15,7 @@ extern BCACHE *bshm;
 
 
 /* ----------------------------------------------------- */
-/* nodelist.bbs 子函式					 */
+/* nodelist.bbs 子函式                                   */
 /* ----------------------------------------------------- */
 
 
@@ -41,7 +41,7 @@ nl_query(
 }
 
 
-static int	/* 1:成功 0:失敗 */
+static int      /* 1:成功 0:失敗 */
 nl_add(
     char *fpath,
     nodelist_t *old,
@@ -61,14 +61,14 @@ nl_add(
     if (vget(b_lines, 0, "英文站名：", nl.name, sizeof(nl.name), GCARRY) &&
         vget(b_lines, 0, "站址：", nl.host, /* sizeof(nl.host) */ 70, GCARRY))
     {
-        msg1[24] = (nl.xmode & INN_USEPOST) ? '2' : '1';	/* 新增資料預設 INN_HAVE */
+        msg1[24] = (nl.xmode & INN_USEPOST) ? '2' : '1';        /* 新增資料預設 INN_HAVE */
         ch = vans(msg1);
         if (ch != '1' && ch != '2')
             ch = msg1[24];
 
         if (ch == '1')
         {
-            nl.xmode = INN_USEIHAVE | INN_FEEDED;	/* IHAVE 一定是被餵信 */
+            nl.xmode = INN_USEIHAVE | INN_FEEDED;       /* IHAVE 一定是被餵信 */
             vget(b_lines, 0, "Port：[7777] ", ans, 6, DOECHO);
             if ((port = atoi(ans)) <= 0)
                 port = 7777;
@@ -80,7 +80,7 @@ nl_add(
             if ((port = atoi(ans)) <= 0)
                 port = 119;
 
-            msg2[32] = (old && old->xmode & INN_FEEDED) ? 'Y' : 'N';	/* 新增資料預設不餵信 */
+            msg2[32] = (old && old->xmode & INN_FEEDED) ? 'Y' : 'N';    /* 新增資料預設不餵信 */
             ch = vans(msg2);
             if (ch != 'y' && ch != 'n')
                 ch = msg2[32] | 0x20;
@@ -119,7 +119,7 @@ nl_search(
 
 
 /* ----------------------------------------------------- */
-/* newsfeeds.bbs 子函式					 */
+/* newsfeeds.bbs 子函式                                  */
 /* ----------------------------------------------------- */
 
 
@@ -210,7 +210,7 @@ nf_query(
 }
 
 
-static int	/* 1:成功 0:失敗 */
+static int      /* 1:成功 0:失敗 */
 nf_add(
     char *fpath,
     newsfeeds_t *old,
@@ -226,7 +226,7 @@ nf_add(
     else
     {
         memset(&nf, 0, sizeof(newsfeeds_t));
-        nf.high = INT_MAX;		/* 第一次取信強迫 reload */
+        nf.high = INT_MAX;              /* 第一次取信強迫 reload */
     }
 
     if ((brd = ask_board(nf.board, BRD_R_BIT, NULL)) &&
@@ -284,7 +284,7 @@ nf_search(
 
 
 /* ----------------------------------------------------- */
-/* ncmperm.bbs 子函式					 */
+/* ncmperm.bbs 子函式                                    */
 /* ----------------------------------------------------- */
 
 
@@ -310,7 +310,7 @@ ncm_query(
 }
 
 
-static int	/* 1:成功 0:失敗 */
+static int      /* 1:成功 0:失敗 */
 ncm_add(
     char *fpath,
     ncmperm_t *old,
@@ -358,7 +358,7 @@ ncm_search(
 
 
 /* ----------------------------------------------------- */
-/* spamrule.bbs 子函式					 */
+/* spamrule.bbs 子函式                                   */
 /* ----------------------------------------------------- */
 
 
@@ -418,7 +418,7 @@ spam_query(
 }
 
 
-static int	/* 1:成功 0:失敗 */
+static int      /* 1:成功 0:失敗 */
 spam_add(
     char *fpath,
     spamrule_t *old,
@@ -498,7 +498,7 @@ spam_search(
 
 
 /* ----------------------------------------------------- */
-/* 轉信設定主函式					 */
+/* 轉信設定主函式                                        */
 /* ----------------------------------------------------- */
 
 

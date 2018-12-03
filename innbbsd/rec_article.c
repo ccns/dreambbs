@@ -1,11 +1,11 @@
 /*-------------------------------------------------------*/
-/* rec_article.c( NTHU CS MapleBBS Ver 3.10 )		 */
+/* rec_article.c( NTHU CS MapleBBS Ver 3.10 )            */
 /*-------------------------------------------------------*/
-/* target : innbbsd receive article			 */
-/* create : 95/04/27					 */
-/* update :   /  /  					 */
-/* author : skhuang@csie.nctu.edu.tw			 */
-/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw		 */
+/* target : innbbsd receive article                      */
+/* create : 95/04/27                                     */
+/* update :   /  /                                       */
+/* author : skhuang@csie.nctu.edu.tw                     */
+/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw                 */
 /*-------------------------------------------------------*/
 
 
@@ -24,7 +24,7 @@
 #include <sys/time.h>
 
 /* ----------------------------------------------------- */
-/* board：shm 部份須與 cache.c 相容			 */
+/* board：shm 部份須與 cache.c 相容                      */
 /* ----------------------------------------------------- */
 
 
@@ -39,17 +39,17 @@ init_bshm(void)
 
     bshm = shm_new(BRDSHM_KEY, sizeof(BCACHE));
 
-    if (bshm->uptime <= 0)	/* bshm 未設定完成 */
+    if (bshm->uptime <= 0)      /* bshm 未設定完成 */
         exit(0);
 }
 
 
 /* ----------------------------------------------------- */
-/* 處理 DATE						 */
+/* 處理 DATE                                             */
 /* ----------------------------------------------------- */
 
 
-#if 0	/* itoc.030303.註解: RFC 822 的 DATE 欄位；RFC 1123 將 year 改成 4-DIGIT */
+#if 0   /* itoc.030303.註解: RFC 822 的 DATE 欄位；RFC 1123 將 year 改成 4-DIGIT */
 
 date-time := [ wday "," ] date time ; dd mm yy, hh:mm:ss zzz
 wday      :=  "Mon" / "Tue" / "Wed" / "Thu" / "Fri" / "Sat" / "Sun"
@@ -64,7 +64,7 @@ zone      :=  "UT" / "GMT" / "EST" / "EDT" / "CST" / "CDT" / "MST" / "MDT" / "PS
 static time_t datevalue;
 
 static void
-parse_date(void)		/* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
+parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
 {
     static char months[12][4] = {"jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"};
     int i;
@@ -72,7 +72,7 @@ parse_date(void)		/* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
     struct tm ptime;
 
     str_ncpy(buf, DATE, sizeof(buf));
-    str_lower(buf, buf);			/* 通通換小寫，因為 Dec DEC dec 各種都有人用 */
+    str_lower(buf, buf);                        /* 通通換小寫，因為 Dec DEC dec 各種都有人用 */
 
     str = buf + 2;
     for (i = 0; i < 12; i++)
@@ -88,7 +88,7 @@ parse_date(void)		/* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
         ptime.tm_sec = atoi(ptr + 15);
         ptime.tm_min = atoi(ptr + 12);
         ptime.tm_hour = atoi(ptr + 9);
-        ptime.tm_mday = (ptr == buf + 2 || ptr == buf + 7) ? atoi(ptr - 2) : atoi(ptr - 3);	/* RFC 822 允許 mday 是 1- 或 2- DIGIT */
+        ptime.tm_mday = (ptr == buf + 2 || ptr == buf + 7) ? atoi(ptr - 2) : atoi(ptr - 3);     /* RFC 822 允許 mday 是 1- 或 2- DIGIT */
         ptime.tm_mon = i;
         ptime.tm_year = atoi(ptr + 4) - 1900;
         ptime.tm_isdst = 0;
@@ -109,7 +109,7 @@ parse_date(void)		/* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
             /* 如果有 -1000 (HST) 等註明時區，先調回 GMT 時區 */
             datevalue += ((ptr[1] - '0') * 10 + (ptr[2] - '0')) * 3600 + ((ptr[3] - '0') * 10 + (ptr[4] - '0')) * 60;
         }
-        datevalue += 28800;		/* 台灣所在的 CST 時區比 GMT 快八小時 */
+        datevalue += 28800;             /* 台灣所在的 CST 時區比 GMT 快八小時 */
     }
     else
     {
@@ -121,7 +121,7 @@ parse_date(void)		/* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
 
 
 /* ----------------------------------------------------- */
-/* process post write					 */
+/* process post write                                    */
 /* ----------------------------------------------------- */
 
 
@@ -192,7 +192,7 @@ bbspost_add(
     /* Thor.980825: 防止字串太長蓋過頭 */
     str_ncpy(hdr.owner, addr, sizeof(hdr.owner));
     str_ncpy(hdr.nick, nick, sizeof(hdr.nick));
-    str_stamp(hdr.date, &datevalue);	/* 依 DATE: 欄位的日期，與 hdr.chrono 不同步 */
+    str_stamp(hdr.date, &datevalue);    /* 依 DATE: 欄位的日期，與 hdr.chrono 不同步 */
     str_ncpy(hdr.title, SUBJECT, sizeof(hdr.title));
 
     rec_bot(folder, &hdr, sizeof(HDR));
@@ -204,7 +204,7 @@ bbspost_add(
 
 
 /* ----------------------------------------------------- */
-/* process cancel write					 */
+/* process cancel write                                  */
 /* ----------------------------------------------------- */
 
 
@@ -272,7 +272,7 @@ bbspost_cancel(
         if (read(fd, &hdr, size) != size)
             break;
 
-        if (hdr.chrono <= chrono)	/* 落在這個 block 裡 */
+        if (hdr.chrono <= chrono)       /* 落在這個 block 裡 */
         {
             do
             {
@@ -324,7 +324,7 @@ bbspost_cancel(
 }
 
 
-int			/* 0:cancel success  -1:cancel fail */
+int                     /* 0:cancel success  -1:cancel fail */
 cancel_article(
     char *msgid)
 {
@@ -341,7 +341,7 @@ cancel_article(
 
     /* XLOG("cancel %s (%s)\n", cancelfrom, buffer); */
 
-    sprintf(fpath, "brd/%s/%c/%s", board, xname[7], xname);	/* 去找出那篇文章 */
+    sprintf(fpath, "brd/%s/%c/%s", board, xname[7], xname);     /* 去找出那篇文章 */
 
     /* XLOG("cancel fpath (%s)\n", fpath); */
 
@@ -384,11 +384,11 @@ cancel_article(
 
 
 /* ----------------------------------------------------- */
-/* check spam rule					 */
+/* check spam rule                                       */
 /* ----------------------------------------------------- */
 
 
-static int		/* 1: 符合擋信規則 */
+static int              /* 1: 符合擋信規則 */
 is_spam(
     char *board, char *addr, char *nick)
 {
@@ -423,9 +423,9 @@ is_spam(
             compare = MSGID;
         else if (xmode & INN_SPAMBODY)
             compare = BODY;
-        else if (xmode & INN_SPAMSITE && SITE)		/* SITE 可以是 NULL */
+        else if (xmode & INN_SPAMSITE && SITE)          /* SITE 可以是 NULL */
             compare = SITE;
-        else if (xmode & INN_SPAMPOSTHOST && POSTHOST)	/* POSTHOST 可以是 NULL */
+        else if (xmode & INN_SPAMPOSTHOST && POSTHOST)  /* POSTHOST 可以是 NULL */
             compare = POSTHOST;
         else
             continue;
@@ -438,7 +438,7 @@ is_spam(
 
 
 /* ----------------------------------------------------- */
-/* process receive article				 */
+/* process receive article                               */
 /* ----------------------------------------------------- */
 
 
@@ -459,7 +459,7 @@ search_newsfeeds_bygroup(
 }
 
 
-int				/* 0:success  -1:fail */
+int                     /* 0:success  -1:fail */
 receive_article(void)
 {
     newsfeeds_t *nf;
@@ -475,18 +475,18 @@ receive_article(void)
         if (!(nf = search_newsfeeds_bygroup(group)))
             continue;
 
-        if (firstboard)	/* opus: 第一個板才需要處理 */
+        if (firstboard) /* opus: 第一個板才需要處理 */
         {
             /* Thor.980825: gc patch: lib/str_decode 只能接受 decode 完 strlen < 256 */
 
             str_ncpy(poolx, SUBJECT, 255);
             str_decode(poolx);
-            str_ansi(mysubject, poolx, 70);	/* 70 是 bbspost_add() 標題所需的長度 */
+            str_ansi(mysubject, poolx, 70);     /* 70 是 bbspost_add() 標題所需的長度 */
             SUBJECT = mysubject;
 
             str_ncpy(poolx, FROM, 255);
             str_decode(poolx);
-            str_ansi(myfrom, poolx, 128);	/* 雖然 bbspost_add() 發信人所需的長度只需要 50，但是 str_from() 需要長一些 */
+            str_ansi(myfrom, poolx, 128);       /* 雖然 bbspost_add() 發信人所需的長度只需要 50，但是 str_from() 需要長一些 */
             FROM = myfrom;
 
             str_ncpy(poolx, PATH, 255);
@@ -528,7 +528,7 @@ receive_article(void)
         }
 
         bbspost_add(nf->board, myaddr, mynick);
-    }		/* for board1, board2, ... */
+    }           /* for board1, board2, ... */
 
     return 0;
 }

@@ -24,29 +24,29 @@ void    getmaxyx    (int *y, int *x);
 void    move        (int y, int x);
 
 // clear
-void    clear       (void); // clrscr + move(0, 0)
-void    clrtoeol    (void); // end of line
+void    clear       (void);             // clrscr + move(0, 0)
+void    clrtoeol    (void);             // end of line
 void    clrtobot    (void);
 // clear (non-ncurses)
-void    clrtoln     (int ln); // clear down to ln ( excluding ln, as [y, ln) )
-void    clrcurln    (void); // whole line
-void    clrtobeg    (void); // begin of line
+void    clrtoln     (int ln);           // clear down to ln ( excluding ln, as [y, ln) )
+void    clrcurln    (void);             // whole line
+void    clrtobeg    (void);             // begin of line
 void    clrtohome   (void);
-void    clrscr      (void); // clear and keep cursor untouched
-void    clrregion   (int r1, int r2); // clear [r1, r2], bi-directional.
+void    clrscr      (void);             // clear and keep cursor untouched
+void    clrregion   (int r1, int r2);   // clear [r1, r2], bi-directional.
 
 // window control
 void    newwin      (int nlines, int ncols, int y, int x);
 
 // flushing
-void    refresh     (void); // optimized refresh
-void    doupdate    (void); // optimized refresh, ignore input queue
-void    redrawwin   (void); // invalidate whole screen
-int     typeahead   (int fd);// prevent refresh if input queue is not empty
+void    refresh     (void);             // optimized refresh
+void    doupdate    (void);             // optimized refresh, ignore input queue
+void    redrawwin   (void);             // invalidate whole screen
+int     typeahead   (int fd);           // prevent refresh if input queue is not empty
 
 // scrolling
-void    scroll      (void);     // scroll up
-void    rscroll     (void);     // scroll down
+void    scroll      (void);             // scroll up
+void    rscroll     (void);             // scroll down
 void    scrl        (int rows);
 
 // output (ncurses flavor)

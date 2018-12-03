@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
-/* util/makefw.c	( YZU WindTopBBS Ver 3.00 )	 */
+/* util/makefw.c        ( YZU WindTopBBS Ver 3.00 )      */
 /*-------------------------------------------------------*/
-/* author : visor.bbs@bbs.yzu.edu.tw			 */
+/* author : visor.bbs@bbs.yzu.edu.tw                     */
 /* target : 更新各版面的檔信列表                         */
 /* create : 95/03/29                                     */
 /* update : 95/12/15                                     */

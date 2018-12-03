@@ -11,12 +11,12 @@
 /*-------------------------------------------------------*/
 #include "bbs.h"
 
-#undef	FAKE_IO
+#undef  FAKE_IO
 
 typedef struct
 {
     char userid[IDLEN+1];
-}	MAP;
+}       MAP;
 MAP map[100000];
 
 

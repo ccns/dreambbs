@@ -1,12 +1,12 @@
 /*-------------------------------------------------------*/
-/* talk.c	( NTHU CS MapleBBS Ver 3.00 )		 */
+/* talk.c       ( NTHU CS MapleBBS Ver 3.00 )            */
 /*-------------------------------------------------------*/
-/* target : talk/query/friend(pal) routines	 	 */
-/* create : 95/03/29				 	 */
-/* update : 2000/01/02				 	 */
+/* target : talk/query/friend(pal) routines              */
+/* create : 95/03/29                                     */
+/* update : 2000/01/02                                   */
 /*-------------------------------------------------------*/
 
-#undef	_MODES_C_
+#undef  _MODES_C_
 
 
 #include "bbs.h"
@@ -16,7 +16,7 @@ static int aloha_loadpal(XO *xo);
 extern XZ xz[];
 
 /* ----------------------------------------------------- */
-/* 上站通知名單			           Jerics 2k.01  */
+/* 上站通知名單                            Jerics 2k.01  */
 /* ----------------------------------------------------- */
 
 int

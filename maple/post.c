@@ -1,16 +1,16 @@
 /*-------------------------------------------------------*/
 /* post.c       ( NTHU CS MapleBBS Ver 2.39 )            */
 /*-------------------------------------------------------*/
-/* target : bulletin boards' routines		 	 */
-/* create : 95/03/29				 	 */
-/* update : 2000/01/02				 	 */
+/* target : bulletin boards' routines                    */
+/* create : 95/03/29                                     */
+/* update : 2000/01/02                                   */
 /*-------------------------------------------------------*/
 
 
-#define xlog(x)		f_cat("/tmp/b.log", x)
+#define xlog(x)         f_cat("/tmp/b.log", x)
 
 #include "bbs.h"
-extern int wordsnum;		/* itoc.010408: 計算文章字數 */
+extern int wordsnum;            /* itoc.010408: 計算文章字數 */
 extern int keysnum;
 extern FWCACHE *fwshm;
 extern BCACHE *bshm;
@@ -188,7 +188,7 @@ checksum_find(
 #endif
 
 /* ----------------------------------------------------- */
-/* 改良 innbbsd 轉出信件、連線砍信之處理程序		 */
+/* 改良 innbbsd 轉出信件、連線砍信之處理程序             */
 /* ----------------------------------------------------- */
 
     void
@@ -247,8 +247,8 @@ outgo_post(
 cancel_post(
     HDR *hdr)
 {
-    if ((hdr->xmode & POST_OUTGO) &&	/* 外轉信件 */
-            (hdr->chrono > ap_start - 7 * 86400))	/* 7 天之內有效 */
+    if ((hdr->xmode & POST_OUTGO) &&    /* 外轉信件 */
+            (hdr->chrono > ap_start - 7 * 86400))       /* 7 天之內有效 */
     {
         outgo_post(hdr, NULL);
     }
@@ -258,7 +258,7 @@ cancel_post(
 /*static inline void*/
 
     void
-move_post(	/* 將 hdr 從 currboard 搬到 board */
+move_post(      /* 將 hdr 從 currboard 搬到 board */
     HDR *hdr,
     char *board,
     int by_bm)
@@ -291,7 +291,7 @@ move_post(	/* 將 hdr 從 currboard 搬到 board */
 
 
 /* ----------------------------------------------------- */
-/* 發表、回應、編輯、轉錄文章				 */
+/* 發表、回應、編輯、轉錄文章                            */
 /* ----------------------------------------------------- */
 
 #ifdef HAVE_ANONYMOUS
@@ -309,7 +309,7 @@ log_anonymous(
 }
 #endif
 
-#ifdef	HAVE_DETECT_VIOLATELAW
+#ifdef  HAVE_DETECT_VIOLATELAW
     int
 seek_log(
     char *title,
@@ -347,14 +347,14 @@ do_post(
     bno = brd_bno(currboard);
     brd = bshm->bcache + bno;
 
-#ifdef	HAVE_DETECT_VIOLATELAW
+#ifdef  HAVE_DETECT_VIOLATELAW
     int banpost;
 #endif
 #ifdef  HAVE_DETECT_CROSSPOST
     int crosspost;
 #endif
 
-#ifdef	HAVE_RESIST_WATER
+#ifdef  HAVE_RESIST_WATER
     if (checkqt > CHECK_QUOT_MAX)
     {
         vmsg("您已經灌太多水了，請下次再來吧！");
@@ -466,7 +466,7 @@ do_post(
         return XO_HEAD;
     }
 
-    spendtime = time(0) - spendtime;	/* itoc.010712: 總共花的時間(秒數) */
+    spendtime = time(0) - spendtime;    /* itoc.010712: 總共花的時間(秒數) */
 
     //bno = brd_bno(currboard);
     brd = bshm->bcache + currbno;
@@ -475,15 +475,15 @@ do_post(
     /* build filename */
 
     brd_fpath(folder, currboard, fn_dir);
-    do	/* cat.20050729 黑洞問題 @@ 黑洞經常沒有日期 */
+    do  /* cat.20050729 黑洞問題 @@ 黑洞經常沒有日期 */
     {
         hdr_stamp(folder, HDR_LINK | 'A', &post, fpath);
     } while (strlen(post.date) != 8);
 
-#ifdef	HAVE_DETECT_VIOLATELAW
+#ifdef  HAVE_DETECT_VIOLATELAW
     banpost = seek_log(ve_title, bbstate);
 #endif
-#ifdef	HAVE_DETECT_CROSSPOST
+#ifdef  HAVE_DETECT_CROSSPOST
     crosspost = checksum_find(fpath, 0, bbstate);
 #endif
 
@@ -554,14 +554,14 @@ do_post(
     }
 #endif
 
-#ifdef	HAVE_DETECT_VIOLATELAW
+#ifdef  HAVE_DETECT_VIOLATELAW
     if (banpost)
     {
         move_post(&post, BRD_BANPOSTLOG, -1);
     }
 #endif
 
-#ifdef	HAVE_OBSERVE_LIST
+#ifdef  HAVE_OBSERVE_LIST
     if (observeshm_find(cuser.userno))
     {
         move_post(&post, BRD_OBSERVE, -1);
@@ -576,7 +576,7 @@ do_post(
         /* Thor.990111: 已由 edit.c 中統一check */
         brh_add( post.chrono, post.chrono,  post.chrono);
         //post_history(xz[XZ_POST - XO_ZONE].xo, &post);
-#ifdef	HAVE_DETECT_VIOLATELAW
+#ifdef  HAVE_DETECT_VIOLATELAW
         if (mode && !banpost)
 #else
             if (mode)
@@ -604,7 +604,7 @@ do_post(
           }
           else
           {
-            mode = BMIN(keysnum, spendtime) / 10;	/* 每十字/秒 一元 */
+            mode = BMIN(keysnum, spendtime) / 10;       /* 每十字/秒 一元 */
             sprintf(buf, "這是您的第 %d 篇文章，獲得 %d 夢幣。", ++cuser.numposts, mode);
             pmsg2(buf);
             brd->blast = time(0);
@@ -617,7 +617,7 @@ do_post(
         if (curredit & EDIT_BOTH)
         {
             char *msg = "作者無法收信";
-#define	_MSG_OK_	"回應至作者信箱"
+#define _MSG_OK_        "回應至作者信箱"
 
             rcpt = quote_user;
             if (strchr(rcpt, '@'))
@@ -654,7 +654,7 @@ do_post(
 #endif
 
 
-#ifdef	HAVE_RESIST_WATER
+#ifdef  HAVE_RESIST_WATER
     if (checkqt > CHECK_QUOT_MAX && !HAS_PERM(PERM_ADMIN))
     {
         remove_perm();
@@ -747,7 +747,7 @@ post_reply(
 
 
 /* ----------------------------------------------------- */
-/* 看板功能表						 */
+/* 看板功能表                                            */
 /* ----------------------------------------------------- */
 
 #ifdef HAVE_MODERATED_BOARD
@@ -760,11 +760,11 @@ extern int XoBM(XO *xo);
 
 static int post_add(XO *xo);
 static int post_body(XO *xo);
-static int post_head(XO *xo);		/* Thor: 因為 XoBM 要用 */
+static int post_head(XO *xo);           /* Thor: 因為 XoBM 要用 */
 
 
 #ifdef XZ_XPOST
-static int XoXpost(XO *xo);		/* Thor: for XoXpost */
+static int XoXpost(XO *xo);             /* Thor: for XoXpost */
 #endif
 
 
@@ -776,7 +776,7 @@ post_init(
     return post_head(xo);
 }
 
-    static int		/* cat@20050628 search record in .DIR file */
+    static int          /* cat@20050628 search record in .DIR file */
 seek_rec(
     XO *xo,
     HDR *hdr)
@@ -854,7 +854,7 @@ post_attr(
     //attr = brh_unread(fhdr->chrono) ? 0 : 0x20;
     if (fhdr->pushtime)
       attr = brh_unread(fhdr->pushtime) ? 0 : 0x20;
-    mode &= (bbstate & STAT_BOARD) ? ~0 : ~POST_GEM;	/* Thor:一般user看不到G */
+    mode &= (bbstate & STAT_BOARD) ? ~0 : ~POST_GEM;    /* Thor:一般user看不到G */
 
     if (mode &= (POST_MARKED | POST_GEM))
         attr |= (mode == POST_MARKED ? 'M' : (mode == POST_GEM ? 'G' : 'B'));
@@ -966,7 +966,7 @@ post_body(
 }
 
 
-    static int			/* Thor: 因為 XoBM 要用 */
+    static int                  /* Thor: 因為 XoBM 要用 */
 post_head(
     XO *xo)
 {
@@ -1062,7 +1062,7 @@ post_cross(
 #ifdef  HAVE_DETECT_CROSSPOST
     HDR bhdr;
 #endif
-#ifdef	HAVE_CROSSPOSTLOG
+#ifdef  HAVE_CROSSPOSTLOG
     char cbuf[128];
     HDR chdr;
 #endif
@@ -1107,7 +1107,7 @@ post_cross(
 
     if (ask_board(xboard, BRD_W_BIT,
                 "\n\n\x1b[1;33m請挑選適當的看板，相同文章切勿超過限制數目。\x1b[m\n\n")
-            && (*xboard || xo->dir[0] == 'u'))	/* 信箱中可以轉貼至currboard */
+            && (*xboard || xo->dir[0] == 'u'))  /* 信箱中可以轉貼至currboard */
     {
         if (*xboard == 0)
             strcpy(xboard, currboard);
@@ -1147,7 +1147,7 @@ post_cross(
 
         battr = (bshm->bcache + brd_bno(xboard))->battr;
 
-        do	/* lkchu.981201: 整批轉貼 */
+        do      /* lkchu.981201: 整批轉貼 */
         {
             if (tag)
             {
@@ -1235,7 +1235,7 @@ post_cross(
                     board_main();
                 }
 #endif
-#ifdef	HAVE_CROSSPOSTLOG
+#ifdef  HAVE_CROSSPOSTLOG
                 if (hdr->xname[0] != '@')
                 {
                     memcpy(&chdr, hdr, sizeof(HDR));
@@ -1247,7 +1247,7 @@ post_cross(
 #endif
 
                 rec_bot(xfolder, &xpost, sizeof(xpost));
-#ifdef	HAVE_DETECT_VIOLATELAW
+#ifdef  HAVE_DETECT_VIOLATELAW
                 if (rc == 's' && (!(battr & BRD_NOTRAN)) && (!(seek_log(xpost.title, battr))))
 #else
                     if (rc == 's' && !(battr & BRD_NOTRAN))
@@ -1370,7 +1370,7 @@ post_xcross(
 
 
 /* ----------------------------------------------------- */
-/* 資料之瀏覽：edit / title				 */
+/* 資料之瀏覽：edit / title                              */
 /* ----------------------------------------------------- */
 
 void
@@ -1382,7 +1382,7 @@ post_history(
   char *dir;
   HDR buf;
 
-#ifdef	HAVE_BOTTOM
+#ifdef  HAVE_BOTTOM
   if (fhdr->xmode & POST_BOTTOM && fhdr->xmode & POST_COMPLETE)
     return;
 #endif
@@ -1503,7 +1503,7 @@ post_browse(
         if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE))
             break;
 
-#ifdef	HAVE_USER_MODIFY
+#ifdef  HAVE_USER_MODIFY
         if (xmode & POST_CURMODIFY)
         {
             if (pid_find(hdr->xid))
@@ -1564,7 +1564,7 @@ post_browse(
                 if (bbstate & STAT_POST)
                 {
                     strcpy(quote_file, fpath);
-                    if (do_reply(hdr) == XO_INIT)	/* 有成功地 post 出去了 */
+                    if (do_reply(hdr) == XO_INIT)       /* 有成功地 post 出去了 */
                         return post_init(xo);
                 }
                 break;
@@ -1592,7 +1592,7 @@ post_browse(
 
 
 /* ----------------------------------------------------- */
-/* 精華區						 */
+/* 精華區                                                */
 /* ----------------------------------------------------- */
 
 
@@ -1614,7 +1614,7 @@ post_gem(
 
 
 /* ----------------------------------------------------- */
-/* 看板備忘錄						 */
+/* 看板備忘錄                                            */
 /* ----------------------------------------------------- */
 
 
@@ -1731,7 +1731,7 @@ post_switch(
 
 
 /* ----------------------------------------------------- */
-/* 功能：tag / copy / forward / download		 */
+/* 功能：tag / copy / forward / download                 */
 /* ----------------------------------------------------- */
 
 
@@ -1766,7 +1766,7 @@ post_tag(
 
 
 /* ----------------------------------------------------- */
-/* 板主功能：mark / delete				 */
+/* 板主功能：mark / delete                               */
 /* ----------------------------------------------------- */
 
 
@@ -1828,8 +1828,8 @@ post_delete(
     HDR *fhdr, phdr;
     char buf[80], fpath[80];
 
-#define BN_DELETED	BRD_DELETED
-#define BN_JUNK		BRD_JUNK
+#define BN_DELETED      BRD_DELETED
+#define BN_JUNK         BRD_JUNK
 
     if (!cuser.userlevel ||
             !strcmp(currboard, BN_DELETED) ||
@@ -1963,8 +1963,8 @@ post_delete(
     }
     return XO_FOOT;
 
-#undef	BN_DELETED
-#undef	BN_JUNK
+#undef  BN_DELETED
+#undef  BN_JUNK
 }
 
 static int
@@ -2375,7 +2375,7 @@ post_unexpire(
 }
 
 /* ----------------------------------------------------- */
-/* 站長功能：edit / title				 */
+/* 站長功能：edit / title                                */
 /* ----------------------------------------------------- */
 
 int
@@ -2385,7 +2385,7 @@ post_edit(
     HDR *hdr;
     char fpath[80];
     int pos;
-#ifdef	HAVE_USER_MODIFY
+#ifdef  HAVE_USER_MODIFY
     int temp=0;
     int bno;
     BRD *brd;
@@ -2421,7 +2421,7 @@ post_edit(
         vedit(fpath, NA); /* Thor.981020: 注意被talk的問題 */
         post_head(xo);
     }
-#ifdef	HAVE_USER_MODIFY
+#ifdef  HAVE_USER_MODIFY
     else if ((!(brd->battr & BRD_MODIFY)) && HAS_PERM(PERM_VALID) && !strcmp(hdr->owner, cuser.userid) && !(hdr->xmode & (/*POST_MODIFY|*/POST_CANCEL|POST_DELETE|POST_LOCK|POST_MARKED|POST_MDELETE|POST_CURMODIFY)))
     {
         if (hdr->xmode & POST_RECOMMEND)
@@ -2593,7 +2593,7 @@ int post_edit(XO *xo)
     HDR *hdr;
     char fpath[80];
     int pos;
-#ifdef	HAVE_USER_MODIFY
+#ifdef  HAVE_USER_MODIFY
     int bno;
     BRD *brd;
     char buf[512], mfpath[80], mfolder[80], str[256];
@@ -2627,7 +2627,7 @@ int post_edit(XO *xo)
             vedit(fpath, NA); /* Thor.981020: 注意被talk的問題 */
             post_head(xo);
         }
-#ifdef	HAVE_USER_MODIFY
+#ifdef  HAVE_USER_MODIFY
         else if ((brd->battr & BRD_MODIFY) && HAS_PERM(PERM_VALID) /*&& ((hdr->modifytimes)<MAX_MODIFY)*/ && !strcmp(hdr->owner, cuser.userid) && !(hdr->xmode & (/*POST_MODIFY|*/POST_CANCEL|POST_DELETE|POST_LOCK|POST_MARKED|POST_MDELETE/*|POST_CURMODIFY*/)) )
         {
             //    move_post(hdr, BRD_MODIFIED, -3);
@@ -2756,7 +2756,7 @@ int post_edit(XO *xo)
 #endif
 
 void
-header_replace(		/* 0911105.cache: 修改文章標題順便修改內文的標題 */
+header_replace(         /* 0911105.cache: 修改文章標題順便修改內文的標題 */
     XO *xo,
     HDR *hdr)
 {
@@ -2777,11 +2777,11 @@ header_replace(		/* 0911105.cache: 修改文章標題順便修改內文的標題 */
         return;
     }
 
-    fgets(buf, sizeof(buf), fpr);		/* 加入作者 */
+    fgets(buf, sizeof(buf), fpr);               /* 加入作者 */
     fputs(buf, fpw);
 
-    fgets(buf, sizeof(buf), fpr);		/* 加入標題 */
-    if (!str_ncmp(buf, "標", 2))		/* 如果有 header 才改 */
+    fgets(buf, sizeof(buf), fpr);               /* 加入標題 */
+    if (!str_ncmp(buf, "標", 2))                /* 如果有 header 才改 */
     {
         strcpy(buf, buf[2] == ' ' ? "標  題: " : "標題: ");
         strcat(buf, hdr->title);
@@ -2789,7 +2789,7 @@ header_replace(		/* 0911105.cache: 修改文章標題順便修改內文的標題 */
     }
     fputs(buf, fpw);
 
-    while (fgets(buf, sizeof(buf), fpr))	/* 加入其他 */
+    while (fgets(buf, sizeof(buf), fpr))        /* 加入其他 */
         fputs(buf, fpw);
 
     fclose(fpr);
@@ -2846,7 +2846,7 @@ post_title(
 
 #ifdef HAVE_TERMINATOR
     static int
-post_cross_terminator(	/* Thor.0521: 終極文章大法 */
+post_cross_terminator(  /* Thor.0521: 終極文章大法 */
     XO *xo)
 {
     char *title, buf[128], other[128];
@@ -2897,7 +2897,7 @@ post_cross_terminator(	/* Thor.0521: 終極文章大法 */
 
         head = bhdr = bshm->bcache;
         tail = bhdr + bshm->number;
-        do				/* 至少有sysop一版 */
+        do                              /* 至少有sysop一版 */
         {
             int fdr, fsize, xmode;
             FILE *fpw;
@@ -2914,7 +2914,7 @@ post_cross_terminator(	/* Thor.0521: 終極文章大法 */
             if (!str_cmp(head->brdname, BRD_CAMERA))  /* ActiveInfo 版不砍 */
                 continue;
 
-#ifdef	HAVE_CROSSPOSTLOG
+#ifdef  HAVE_CROSSPOSTLOG
             if (!str_cmp(head->brdname, BRD_CROSSPOST))  /* CostPost 版不砍 */
                 continue;
 #endif
@@ -2945,7 +2945,7 @@ post_cross_terminator(	/* Thor.0521: 終極文章大法 */
                 int check_mode;
                 xmode = hdr->xmode;
 
-                /*	if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
+                /*      if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
                     continue;*/
 
                 if (mode==1)
@@ -3025,7 +3025,7 @@ post_ban_mail(
         return XO_NONE;
 }
 
-#ifdef	HAVE_BRDTITLE_CHANGE
+#ifdef  HAVE_BRDTITLE_CHANGE
     static int
 post_brdtitle(
     XO *xo)
@@ -4147,7 +4147,7 @@ KeyFunc post_cb[] =
     {'T', post_title},
     {'m', post_mark},
 
-#ifdef	HAVE_RECOMMEND
+#ifdef  HAVE_RECOMMEND
     {'X', post_recommend},
     {'%', post_recommend},           /* r2.20170802: 與 itoc 版熱鍵通用 */
     //  {'o', post_recommend_options},
@@ -4165,8 +4165,8 @@ KeyFunc post_cb[] =
 #endif
 
 #ifdef XZ_XPOST
-    {'/', XoXpost}, 			/* Thor: for XoXpost */
-    {'~', XoXpost}, 			/* Thor: for XoXpost */
+    {'/', XoXpost},                     /* Thor: for XoXpost */
+    {'~', XoXpost},                     /* Thor: for XoXpost */
 #endif
 
 #ifdef HAVE_POST_BOTTOM
@@ -4209,14 +4209,14 @@ KeyFunc post_cb[] =
   Thor.980911: 考慮提供刪除指令, 方便版主
   -------------------------------------------------------------------------*/
 #if 0
-extern XO *xpost_xo;		/* Thor: dynamic programming for variable dir
+extern XO *xpost_xo;            /* Thor: dynamic programming for variable dir
                              * name */
 extern XO *ypost_xo;
 #endif
 
 
-#define	MSG_XYPOST	"[串接模式]標題關鍵字:"
-#define	MSG_XY_NONE	"空無一物"
+#define MSG_XYPOST      "[串接模式]標題關鍵字:"
+#define MSG_XY_NONE     "空無一物"
 
 
 typedef struct
@@ -4225,7 +4225,7 @@ typedef struct
     int first;
     int last;
     time_t chrono;
-}      Chain;			/* Thor: negative is end */
+}      Chain;                   /* Thor: negative is end */
 
 
 
@@ -4254,7 +4254,7 @@ static char xypostKeyword[30];
 
 
     static int
-XoXpost(			/* Thor: call from post_cb */
+XoXpost(                        /* Thor: call from post_cb */
     XO *xo)
 {
     int *plist, *xlist, fsize, max, locus, sum, i, m, n;
@@ -4330,7 +4330,7 @@ XoXpost(			/* Thor: call from post_cb */
 
         locus++;
         if (head->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE))
-            continue;			/* Thor.0701: 跳過看不到的文章 */
+            continue;                   /* Thor.0701: 跳過看不到的文章 */
 
         if ((head->xmode & POST_LOCK) && !(HAS_PERM(PERM_SYSOP| PERM_BOARD)||bbstate & STAT_BOARD))
             continue;
@@ -4442,7 +4442,7 @@ XoXpost(			/* Thor: call from post_cb */
     if ((xt = xz[XZ_XPOST - XO_ZONE].xo))
         free(xt);
 
-    comebackPos = xo->pos;	/* Thor: record pos, future use */
+    comebackPos = xo->pos;      /* Thor: record pos, future use */
     xz[XZ_XPOST - XO_ZONE].xo = xt = xo_new(xo->dir);
     xt->pos = 0;
     xt->max = sum;
@@ -4619,7 +4619,7 @@ xpost_browse(
         if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE))
             break;
 
-#ifdef	HAVE_USER_MODIFY
+#ifdef  HAVE_USER_MODIFY
         if (xmode & POST_CURMODIFY)
         {
             vmsg("此文章正在修改中!!");
@@ -4729,7 +4729,7 @@ xpost_browse(
                 if (bbstate & STAT_POST)
                 {
                     strcpy(quote_file, fpath);
-                    if (do_reply(hdr) == XO_INIT)	/* 有成功地 post 出去了 */
+                    if (do_reply(hdr) == XO_INIT)       /* 有成功地 post 出去了 */
                         return xpost_init(xo);
                 }
                 break;

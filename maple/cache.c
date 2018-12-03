@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* cache.c	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* cache.c      ( NTHU CS MapleBBS Ver 2.36 )            */
 /*-------------------------------------------------------*/
-/* target : cache up data by shared memory		 */
-/* create : 95/03/29				 	 */
-/* update : 95/12/15				 	 */
+/* target : cache up data by shared memory               */
+/* create : 95/03/29                                     */
+/* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
 
 
@@ -12,7 +12,7 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
-#ifdef	HAVE_SEM
+#ifdef  HAVE_SEM
 #include <sys/sem.h>
 #endif
 
@@ -66,11 +66,11 @@ attach_shm(
 }
 
 
-#ifdef	HAVE_SEM
+#ifdef  HAVE_SEM
 
 
 /* ----------------------------------------------------- */
-/* semaphore : for critical section			 */
+/* semaphore : for critical section                      */
 /* ----------------------------------------------------- */
 
 
@@ -105,7 +105,7 @@ sem_init(void)
 
 static void
 sem_lock(
-    int op)			/* op is BSEM_ENTER or BSEM_LEAVE */
+    int op)                     /* op is BSEM_ENTER or BSEM_LEAVE */
 {
     struct sembuf sops;
 
@@ -115,11 +115,11 @@ sem_lock(
     semop(ap_semid, &sops, 1);
 }
 
-#endif	/* HAVE_SEM */
+#endif  /* HAVE_SEM */
 
 
 /*-------------------------------------------------------*/
-/* .UTMP cache						 */
+/* .UTMP cache                                           */
 /*-------------------------------------------------------*/
 
 
@@ -140,7 +140,7 @@ ushm_init(void)
 }
 
 
-#ifndef	_BBTP_
+#ifndef _BBTP_
 
 
 void
@@ -174,22 +174,22 @@ utmp_new(
     UTMP *uentp, *utail;
 
     /* --------------------------------------------------- */
-    /* semaphore : critical section			 */
+    /* semaphore : critical section                        */
     /* --------------------------------------------------- */
 
-#ifdef	HAVE_SEM
+#ifdef  HAVE_SEM
     sem_lock(BSEM_ENTER);
 #endif
 
     xshm = ushm;
 
-#ifdef	HAVE_MAXRESERVE
+#ifdef  HAVE_MAXRESERVE
     if (HAS_PERM(PERM_ADMIN))
     {
 #endif
         uentp = xshm->uslot;
         utail = uentp + MAXACTIVE;
-#ifdef	HAVE_MAXRESERVE
+#ifdef  HAVE_MAXRESERVE
     }
     else
     {
@@ -198,7 +198,7 @@ utmp_new(
     }
 #endif
 
-    /* uentp += (up->pid % xshm->count);	*//* hashing */
+    /* uentp += (up->pid % xshm->count);        *//* hashing */
 
     do
     {
@@ -213,7 +213,7 @@ utmp_new(
                 xshm->offset = offset;
             cutmp = uentp;
 
-#ifdef	HAVE_SEM
+#ifdef  HAVE_SEM
             sem_lock(BSEM_LEAVE);
 #endif
 
@@ -223,7 +223,7 @@ utmp_new(
 
     /* Thor:告訴user有人登先一步了 */
 
-#ifdef	HAVE_SEM
+#ifdef  HAVE_SEM
     sem_lock(BSEM_LEAVE);
 #endif
 
@@ -240,7 +240,7 @@ utmp_free(void)
     if (!uentp || !uentp->pid)
         return;
 
-#ifdef	HAVE_SEM
+#ifdef  HAVE_SEM
     sem_lock(BSEM_ENTER);
 #endif
 
@@ -248,7 +248,7 @@ utmp_free(void)
 /*  uentp->pid = uentp->userno = 0;*/
     ushm->count--;
 
-#ifdef	HAVE_SEM
+#ifdef  HAVE_SEM
     sem_lock(BSEM_LEAVE);
 #endif
 }
@@ -311,7 +311,7 @@ apply_ulist(
 UTMP *
 utmp_search(
     int userno,
-    int order)			/* 第幾個 */
+    int order)                  /* 第幾個 */
 {
     UTMP *uentp, *uceil;
 
@@ -357,7 +357,7 @@ utmp_count(
 }
 
 #if 1
-#ifdef	HAVE_CLASSTABLEALERT
+#ifdef  HAVE_CLASSTABLEALERT
 int
 cmpclasstable(
     CLASS_TABLE_ALERT *ptr)
@@ -418,7 +418,7 @@ classtable_main(void)
 #endif
 
 /*-------------------------------------------------------*/
-/* .BRD cache						 */
+/* .BRD cache                                            */
 /*-------------------------------------------------------*/
 
 
@@ -546,9 +546,9 @@ getbrd(
 }
 #endif
 
-#ifdef	HAVE_OBSERVE_LIST
+#ifdef  HAVE_OBSERVE_LIST
 /*-------------------------------------------------------*/
-/* etc/observe.db cache                                 */
+/* etc/observe.db cache                                  */
 /*-------------------------------------------------------*/
 OCACHE *oshm;
 
@@ -737,7 +737,7 @@ fwshm_init(void)
 }
 
 /*-------------------------------------------------------*/
-/* etc/movie cache					 */
+/* etc/movie cache                                       */
 /*-------------------------------------------------------*/
 
 
@@ -824,7 +824,7 @@ out_rle(
 int
 film_out(
     int tag,
-    int row)			/* -1 : help */
+    int row)                    /* -1 : help */
 {
     int fmax, len, *shot;
     char *film, buf[FILM_SIZ];
@@ -838,16 +838,16 @@ film_out(
     shot = fshm->shot;
     film = fshm->film;
 
-    while (!(fmax = *shot))	/* util/camera.c 正在換片 */
+    while (!(fmax = *shot))     /* util/camera.c 正在換片 */
     {
         sleep(5);
         if (++len > 10)
             return FILM_MOVIE;
     }
 
-    if (tag >= FILM_MOVIE)	/* random select */
+    if (tag >= FILM_MOVIE)      /* random select */
     {
-        tag += (time(0) & 7);	/* 7 steps forward */
+        tag += (time(0) & 7);   /* 7 steps forward */
         if (tag >= fmax)
             tag = FILM_MOVIE;
     }    /* Thor.980804: 可能是故意的吧? 第一張 random select前八個其中一個 */
@@ -869,7 +869,7 @@ film_out(
     memcpy(buf, film, len);
     buf[len] = '\0';
 
-    if (tag > FILM_MOVIE)          /* FILM_MOVIE */
+    if (tag > FILM_MOVIE)         /* FILM_MOVIE */
     {
         out_rle(buf, 1);
     }
@@ -878,7 +878,7 @@ film_out(
         out_rle(buf, 0);
     }
 
-    if (row < 0)			/* help screen */
+    if (row < 0)                  /* help screen */
         vmsg(NULL);
 
     return tag;
@@ -906,4 +906,4 @@ utmp_check(        /* 檢查使用者是否在站上 */
     return NULL;
 }
 
-#endif	/* _BBTP_ */
+#endif  /* _BBTP_ */

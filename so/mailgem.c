@@ -1,10 +1,10 @@
 /*-------------------------------------------------------*/
-/* so/mailgem.c        (YZU WindTop BBS 3.0)		 */
+/* so/mailgem.c        (YZU WindTop BBS 3.0)             */
 /*-------------------------------------------------------*/
-/* author : visor.bbs@bbs.yzu.edu.tw     		 */
+/* author : visor.bbs@bbs.yzu.edu.tw                     */
 /* target : 精華區閱讀、編選                             */
-/* create : 2000/08/27					 */
-/* update : 						 */
+/* create : 2000/08/27                                   */
+/* update :                                              */
 /*-------------------------------------------------------*/
 
 
@@ -22,7 +22,7 @@ extern TagItem TagList[];
 /* definitions of MailGem Mode */
 
 
-#define	GEM_WAY		2
+#define GEM_WAY         2
 static int mailgem_way;
 
 static int MailGemBufferNum;
@@ -111,7 +111,7 @@ XO *xo)
 
     sprintf(buf, "(剪貼版 %d 篇)\n", MailGemBufferNum);
 
-//	outs("  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [F]轉寄 [Z]下載 [h]說明 ");
+//  outs("  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [F]轉寄 [Z]下載 [h]說明 ");
     outs("  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明 "); /*r2.20170802: disable "Z" option
                                     in case of confusion*/
     outs(buf);
@@ -149,7 +149,7 @@ XO *xo)
 
 
 /* ----------------------------------------------------- */
-/* mailgem_check : attribute / permission check out	 */
+/* mailgem_check : attribute / permission check out      */
 /* ----------------------------------------------------- */
 
 
@@ -177,7 +177,7 @@ char *fpath)
 
 
 /* ----------------------------------------------------- */
-/* 資料之新增：append / insert				 */
+/* 資料之新增：append / insert                           */
 /* ----------------------------------------------------- */
 
 static int
@@ -250,7 +250,7 @@ XO *xo)
 
 
 /* ----------------------------------------------------- */
-/* 資料之修改：edit / title				 */
+/* 資料之修改：edit / title                              */
 /* ----------------------------------------------------- */
 
 
@@ -340,7 +340,7 @@ XO *xo)
 
 
 /* ----------------------------------------------------- */
-/* 資料之瀏覽：edit / title				 */
+/* 資料之瀏覽：edit / title                              */
 /* ----------------------------------------------------- */
 
 
@@ -386,7 +386,7 @@ XO *xo)
 
 
 /* ----------------------------------------------------- */
-/* 精華區之刪除： copy / cut (delete) paste / move	 */
+/* 精華區之刪除： copy / cut (delete) paste / move       */
 /* ----------------------------------------------------- */
 
 
@@ -428,7 +428,7 @@ int num)
 static void
 mailgem_buffer(
 char *dir,
-HDR *ghdr)			/* NULL 代表放入 TagList, 否則將傳入的放入 */
+HDR *ghdr)                      /* NULL 代表放入 TagList, 否則將傳入的放入 */
 {
     int num, locus;
     HDR *gbuf;
@@ -584,7 +584,7 @@ int num)
     {
         if ((hdr->chrono != chrono) && !(hdr->xmode & GEM_FOLDER))
         {
-            hdr_fpath(gpath, dir, hdr);	/* Thor: 假設 hdr和 xo->dir是同一目錄 */
+            hdr_fpath(gpath, dir, hdr); /* Thor: 假設 hdr和 xo->dir是同一目錄 */
             fputs(STR_LINE, fp);
             f_suck(fp, gpath);
         }
@@ -795,7 +795,7 @@ XO *xo)
 
         xmode = hdr->xmode;
 
-        if (!(xmode & GEM_FOLDER))	/* 查 hdr 是否 plain text */
+        if (!(xmode & GEM_FOLDER))      /* 查 hdr 是否 plain text */
         {
             hdr_fpath(fpath, dir, hdr);
 
@@ -815,7 +815,7 @@ XO *xo)
                 if (fd >= 0)              /* by visor */
                     fclose(fd);
 
-                gbuf[locus] = ghdr;	/* 放入 MailGembuffer */
+                gbuf[locus] = ghdr;     /* 放入 MailGembuffer */
             }
 
         }
@@ -1017,7 +1017,7 @@ char *title)
 {
     XO *xo, *last;
 
-    last = xz[XZ_MAILGEM - XO_ZONE].xo;	/* record */
+    last = xz[XZ_MAILGEM - XO_ZONE].xo; /* record */
 
     xz[XZ_MAILGEM - XO_ZONE].xo = xo = xo_new(folder);
     xo->pos = 0;
@@ -1028,7 +1028,7 @@ char *title)
 
     free(xo);
 
-    xz[XZ_MAILGEM - XO_ZONE].xo = last;	/* restore */
+    xz[XZ_MAILGEM - XO_ZONE].xo = last; /* restore */
 }
 
 
@@ -1055,11 +1055,11 @@ mailgem_main(void)
 
 
 /* ----------------------------------------------------- */
-/* sync mailgem			                         */
+/* sync mailgem                                          */
 /* ----------------------------------------------------- */
-#define	GEM_DROP	0x0080
-#define	GCHECK_DEPTH	30
-#define	GEM_EXPIRE	45	/* gem 至多存 45 天 */
+#define GEM_DROP        0x0080
+#define GCHECK_DEPTH    30
+#define GEM_EXPIRE      45      /* gem 至多存 45 天 */
 
 static char pgem[128], pool[128];
 
@@ -1067,7 +1067,7 @@ int gcheck(int level, char *fpath);
 
 
 /* ----------------------------------------------------- */
-/* synchronize folder & files				 */
+/* synchronize folder & files                            */
 /* ----------------------------------------------------- */
 
 
@@ -1083,7 +1083,7 @@ static SyncData *sync_pool;
 static int sync_size, sync_head;
 
 
-#define	SYNC_DB_SIZE	2048
+#define SYNC_DB_SIZE    2048
 
 
 static int
@@ -1226,7 +1226,7 @@ char *fgem)
         {
             if ((xsync = (SyncData *) bsearch(&hdr.chrono, sync_pool, sync_head, sizeof(SyncData), sync_cmp)))
             {
-                if (xsync->exotic == 0)	/* 已被 reference */
+                if (xsync->exotic == 0) /* 已被 reference */
                     continue;
                 else
                 {
@@ -1330,7 +1330,7 @@ char *fgem)
 
 
 /* ----------------------------------------------------- */
-/* visit the hierarchy recursively			 */
+/* visit the hierarchy recursively                       */
 /* ----------------------------------------------------- */
 
 
@@ -1376,14 +1376,14 @@ char *fpath)
     fname = ptr;
 
     /* --------------------------------------------------- */
-    /* visit the header file				 */
+    /* visit the header file                             */
     /* --------------------------------------------------- */
 
     count = 0;
     xhead = sync_head;
     while (fread(&hdr, sizeof(hdr), 1, fp) == 1)
     {
-        ptr = hdr.xname;		/* F1234567 */
+        ptr = hdr.xname;                /* F1234567 */
 
         if (*ptr == '@')
         {
@@ -1394,7 +1394,7 @@ char *fpath)
 
         if ((xsync = (SyncData *) bsearch(&hdr.chrono, sync_pool, xhead, sizeof(SyncData), sync_cmp)))
         {
-            xsync->exotic = 0;	/* 正常情況 : 有被 reference */
+            xsync->exotic = 0;  /* 正常情況 : 有被 reference */
         }
 
         /* 若為一般 folder 則 recursive 進入 */

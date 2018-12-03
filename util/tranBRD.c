@@ -1,11 +1,11 @@
 /*-------------------------------------------------------*/
-/* util/tranBRD.c	( YZU CSE WindTop Ver 3.xx )	 */
+/* util/tranBRD.c       ( YZU CSE WindTop Ver 3.xx )     */
 /*-------------------------------------------------------*/
-/* target : 新舊版 BRD 轉換     			 */
-/* create : 					 	 */
-/* update : 					 	 */
+/* target : 新舊版 BRD 轉換                              */
+/* create :                                              */
+/* update :                                              */
 /*-------------------------------------------------------*/
-/* Usage  : tranBRD 		  			 */
+/* Usage  : tranBRD                                      */
 /*-------------------------------------------------------*/
 
 #include "bbs.h"
@@ -25,12 +25,12 @@ typedef struct BoardHeaderOld
     char class[5];
     char BM[BMLEN + 1];           /* BMs' uid, token '/' */
 
-    unsigned char bvote;                 /* 共有幾項投票舉行中 */
+    unsigned char bvote;          /* 共有幾項投票舉行中 */
 
     time_t bstamp;                /* 建立看板的時間, unique */
-    unsigned int readlevel;              /* 閱讀文章的權限 */
-    unsigned int postlevel;              /* 發表文章的權限 */
-    unsigned int battr;                  /* 看板屬性 */
+    unsigned int readlevel;       /* 閱讀文章的權限 */
+    unsigned int postlevel;       /* 發表文章的權限 */
+    unsigned int battr;           /* 看板屬性 */
     time_t btime;                 /* .DIR 的 st_mtime */
     int bpost;                    /* 共有幾篇 post */
     time_t blast;                 /* 最後一篇 post 的時間 */

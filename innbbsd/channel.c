@@ -1,11 +1,11 @@
 /*-------------------------------------------------------*/
-/* channel.c	( NTHU CS MapleBBS Ver 3.10 )		 */
+/* channel.c    ( NTHU CS MapleBBS Ver 3.10 )            */
 /*-------------------------------------------------------*/
-/* target : innbbsd main program			 */
-/* create : 95/04/27					 */
-/* update :   /  /  					 */
-/* author : skhuang@csie.nctu.edu.tw			 */
-/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw		 */
+/* target : innbbsd main program                         */
+/* create : 95/04/27                                     */
+/* update :   /  /                                       */
+/* author : skhuang@csie.nctu.edu.tw                     */
+/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw                 */
 /*-------------------------------------------------------*/
 
 
@@ -21,11 +21,11 @@
 #endif
 
 
-#define INNBBSD_PIDFILE	"run/innbbsd.pid"
+#define INNBBSD_PIDFILE "run/innbbsd.pid"
 
 
 /* ----------------------------------------------------- */
-/* my recv						 */
+/* my recv                                               */
 /* ----------------------------------------------------- */
 
 typedef struct ClientType ClientType;
@@ -33,13 +33,13 @@ typedef struct
 {
     char *name;
     char *usage;
-    int minargc;		/* argc 最少幾個 */
-    int maxargc;		/* argc 最多幾個 */
-    int mode;		/* 0:要command-mode才能跑  1:要data-mode才能跑  2:沒有限制 */
+    int minargc;                /* argc 最少幾個 */
+    int maxargc;                /* argc 最多幾個 */
+    int mode;                   /* 0:要command-mode才能跑  1:要data-mode才能跑  2:沒有限制 */
     int errorcode;
     int normalcode;
     void (*main) (ClientType *client);
-}	daemoncmd_t;
+}       daemoncmd_t;
 
 
 typedef struct
@@ -48,7 +48,7 @@ typedef struct
     int argc;
     char **argv;
     daemoncmd_t *dc;
-}	argv_t;
+}       argv_t;
 
 
 typedef struct
@@ -56,16 +56,16 @@ typedef struct
     char *data;
     int used;
     int left;
-}	buffer_t;
+}       buffer_t;
 
 
 struct ClientType
 {
     char nodename[13];
-    char hostname[128];		/* client hostname */
+    char hostname[128];         /* client hostname */
     char buffer[4096];
 
-    int mode;			/* 1:data mode  0:command mode */
+    int mode;                   /* 1:data mode  0:command mode */
     argv_t Argv;
 
     int fd;
@@ -74,7 +74,7 @@ struct ClientType
 };
 
 
-#if 0	/* itoc.030109.註解: my_recv 的流程 */
+#if 0   /* itoc.030109.註解: my_recv 的流程 */
             ┌→ receive_article() → bbspost_add()
   my_recv() ├→ receive_nocem()   → 送去 nocem.c 處理
             └→ cancel_article()  → bbspost_cancel()
@@ -120,11 +120,11 @@ my_recv(
         else
             fprintf(fout, "235\r\n");
     }
-    else if (rel == 0)		/* PATH包括自己 */
+    else if (rel == 0)          /* PATH包括自己 */
     {
         fprintf(fout, "235\r\n");
     }
-    else /* if (rel < 0) */	/* 檔頭欄位不完整 */
+    else /* if (rel < 0) */     /* 檔頭欄位不完整 */
     {
         fputs("437\r\n", fout);
     }
@@ -134,7 +134,7 @@ my_recv(
 
 
 /* ----------------------------------------------------- */
-/* command sets						 */
+/* command sets                                          */
 /* ----------------------------------------------------- */
 
 
@@ -157,8 +157,8 @@ searchcmd(
 }
 
 
-#define MAX_ARG 	16
-#define MAX_ARG_SIZE	1024
+#define MAX_ARG         16
+#define MAX_ARG_SIZE    1024
 
 
 static int
@@ -188,11 +188,11 @@ argify(
 
 
 /* ----------------------------------------------------- */
-/* innd channel						 */
+/* innd channel                                          */
 /* ----------------------------------------------------- */
 
 
-static fd_set rfd;		/* read fd_set */
+static fd_set rfd;              /* read fd_set */
 
 
 static void
@@ -215,10 +215,10 @@ dokill(
 }
 
 
-static int				/* -1:失敗 */
+static int                      /* -1:失敗 */
 initinetserver(void)
 {
-    struct sockaddr_in sin;	/* Internet endpoint address */
+    struct sockaddr_in sin;     /* Internet endpoint address */
     int fd, value;
     struct linger foobar;
 
@@ -264,7 +264,7 @@ tryaccept(
 {
     int ns;
     int fromlen = sizeof(struct sockaddr_in);
-    struct sockaddr sockaddr;	/* Internet endpoint address */
+    struct sockaddr sockaddr;   /* Internet endpoint address */
 
     do
     {
@@ -365,7 +365,7 @@ channelreader(
     head[len] = '\0';
     head[len + 1] = '\0';
 
-    if (client->mode)		/* data mode */
+    if (client->mode)           /* data mode */
     {
         char *dest;
         int cc;
@@ -396,7 +396,7 @@ channelreader(
                 if (used == '.')
                 {
                     if (dest[-1] == '\n')
-                        break;		/* end of article body */
+                        break;          /* end of article body */
                 }
                 else
                 {
@@ -421,7 +421,7 @@ channelreader(
         my_recv(client);
         client->mode = 0;
     }
-    else				/* command mode */
+    else                        /* command mode */
     {
         argv_t *argv;
         daemoncmd_t *dp;
@@ -445,17 +445,17 @@ channelreader(
 
         if (dp)
         {
-            if ((argv->argc < dp->minargc) || (argv->argc > dp->maxargc))		/* 檢查 argc 是否滿足要求 */
+            if ((argv->argc < dp->minargc) || (argv->argc > dp->maxargc))               /* 檢查 argc 是否滿足要求 */
             {
                 fprintf(out, "%d Usage: %s\r\n", dp->errorcode, dp->usage);
                 fflush(out);
             }
-            else if ((dp->mode == 0 || dp->mode == 1) && (client->mode != dp->mode))	/* 檢查 data/command mode 是否滿足要求 */
+            else if ((dp->mode == 0 || dp->mode == 1) && (client->mode != dp->mode))    /* 檢查 data/command mode 是否滿足要求 */
             {
                 fprintf(out, "%d %s error\r\n", dp->errorcode, dp->name);
                 fflush(out);
             }
-            else		/* 通過以上三道檢查 */
+            else                /* 通過以上三道檢查 */
             {
                 void (*Main) (ClientType *client);
 
@@ -498,7 +498,7 @@ channelreader(
 
 
 /* ----------------------------------------------------- */
-/* command set						 */
+/* command set                                           */
 /* ----------------------------------------------------- */
 
 
@@ -558,11 +558,11 @@ CMDstat(
     FILE *out = argv->out;
     char *data = argv->argv[1];
 
-    if (data[0] != '<')		/* 只支援 <msgid> 查詢 */
+    if (data[0] != '<')         /* 只支援 <msgid> 查詢 */
     {
         fprintf(out, "%d We does NOT support article number stating\r\n", p->errorcode);
     }
-    else				/* 查詢是否已經收到 <msgid> */
+    else                        /* 查詢是否已經收到 <msgid> */
     {
         if (HISfetch(data, NULL, NULL))
             fprintf(out, "%d 0 %s article received\r\n", p->normalcode, data);
@@ -601,11 +601,11 @@ static daemoncmd_t cmds[] =
 
 
 /* ----------------------------------------------------- */
-/* 主程式						 */
+/* 主程式                                                */
 /* ----------------------------------------------------- */
 
 
-static char *	/* 傳回是由哪一個站台餵信進來的 */
+static char *                   /* 傳回是由哪一個站台餵信進來的 */
 search_nodelist_byhost(
     char *hostname)
 {
@@ -633,7 +633,7 @@ search_nodelist_byhost(
 
 
 static time_t
-filetime(		/* 傳回 fpath 的檔案時間 */
+filetime(                       /* 傳回 fpath 的檔案時間 */
     char *fpath)
 {
     struct stat st;
@@ -649,25 +649,25 @@ inndchannel(void)
 {
     int i, fd, sock;
     char *nodename, hostname[128];
-    time_t uptime1;		/* time to maintain history */
-    time_t uptime2;		/* time in initial_bbs */
+    time_t uptime1;             /* time to maintain history */
+    time_t uptime2;             /* time in initial_bbs */
     time_t now;
     struct tm *ptime;
     struct timeval to;
-    fd_set orfd;			/* temp read fd_set */
+    fd_set orfd;                /* temp read fd_set */
     struct sockaddr_in sin;
     ClientType *clientp;
     ClientType Channel[MAXCLIENT];
 
     /* --------------------------------------------------- */
-    /* initial server					 */
+    /* initial server                                      */
     /* --------------------------------------------------- */
 
-    if (inetdstart)	/* inetd 啟動 */
+    if (inetdstart)             /* inetd 啟動 */
     {
         sock = 0;
     }
-    else			/* standalone */
+    else                        /* standalone */
     {
         if ((sock = initinetserver()) < 0)
             return;
@@ -677,7 +677,7 @@ inndchannel(void)
     FD_SET(sock, &rfd);
 
     /* --------------------------------------------------- */
-    /* initial history maintain time			 */
+    /* initial history maintain time                      */
     /* --------------------------------------------------- */
 
     time(&uptime1);
@@ -685,10 +685,10 @@ inndchannel(void)
     i = (HIS_MAINT_HOUR - ptime->tm_hour) * 3600 + (HIS_MAINT_MIN - ptime->tm_min) * 60;
     uptime1 += i;
 
-    uptime2 = 0;		/* force to initial_bbs in the first time */
+    uptime2 = 0;                /* force to initial_bbs in the first time */
 
     /* --------------------------------------------------- */
-    /* initial channel					 */
+    /* initial channel                                    */
     /* --------------------------------------------------- */
 
     memset(Channel, 0, sizeof(Channel));
@@ -700,7 +700,7 @@ inndchannel(void)
     }
 
     /* --------------------------------------------------- */
-    /* main loop						 */
+    /* main loop                                           */
     /* --------------------------------------------------- */
 
     for (;;)
@@ -736,13 +736,13 @@ inndchannel(void)
 
         /* 有人來訪問了 */
 
-        if (FD_ISSET(sock, &orfd))		/* 剛上站 */
+        if (FD_ISSET(sock, &orfd))              /* 剛上站 */
         {
             if ((fd = tryaccept(sock)) < 0)
                 continue;
 
             /* 檢查有沒有在 nodelist.bbs 裡面 */
-            i = sizeof(sin);		/* 借用 i */
+            i = sizeof(sin);            /* 借用 i */
             if (getpeername(fd, (struct sockaddr *) &sin, &i) < 0)
             {
                 close(fd);

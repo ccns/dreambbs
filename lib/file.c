@@ -31,7 +31,7 @@ int
 f_cp(
     char* src,
     char* dst,
-    int mode			/* O_EXCL / O_APPEND / O_TRUNC */
+    int mode                    /* O_EXCL / O_APPEND / O_TRUNC */
 )
 {
     int fsrc, fdst, ret;
@@ -91,7 +91,7 @@ f_img(
 }
 
 /* ----------------------------------------------------- */
-/* f_ln() : link() cross partition / disk		 */
+/* f_ln() : link() cross partition / disk                */
 /* ----------------------------------------------------- */
 
 int
@@ -204,7 +204,7 @@ f_mv(
     return ret;
 }
 /* ----------------------------------------------------- */
-/* exclusively create file [*.n]			 */
+/* exclusively create file [*.n]                         */
 /* ----------------------------------------------------- */
 
 FILE*
@@ -234,12 +234,12 @@ f_new(
 
             if (stat(fnew, &st) < 0)
                 break;
-            if (st.st_mtime < time(NULL) - 20 * 60)	/* 假設 20 分鐘內應該處理完 */
+            if (st.st_mtime < time(NULL) - 20 * 60)     /* 假設 20 分鐘內應該處理完 */
                 unlink(fnew);
         }
         else
         {
-            if (try > 24)		/* 等待 120 秒鐘 */
+            if (try > 24)               /* 等待 120 秒鐘 */
                 break;
             sleep(5);
         }
@@ -268,7 +268,7 @@ f_open(
     return fd;
 }
 /* ----------------------------------------------------- */
-/* file structure : set file path for boards/user home	 */
+/* file structure : set file path for boards/user home   */
 /* ----------------------------------------------------- */
 
 static void
@@ -356,10 +356,10 @@ usr_fpath(
     *fpath++ = '/';
 
 #if 0
-    str_lower(buf, user);		/* lower case */
+    str_lower(buf, user);               /* lower case */
 #endif
     /* Thor.981027: 防止 buffer overflow, 雖然 SunOS 4.1.x上無此情況,
-                                    以後再想好的改法 */
+                    以後再想好的改法 */
     str_ncpy(buf, user, sizeof(buf));
     str_lower(buf, buf);
 
@@ -476,7 +476,7 @@ mak_dirs(
         if (ch == 'W')
             break;
         if (ch == '9' + 1)
-            ch = '@';			/* @ : for special purpose */
+            ch = '@';                   /* @ : for special purpose */
     }
 
     fname[-1] = '\0';

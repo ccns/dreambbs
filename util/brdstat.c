@@ -1,11 +1,11 @@
 /*-------------------------------------------------------*/
-/* util/brdstat.c	( YZU CSE WindTop BBS 3.02 )	 */
+/* util/brdstat.c       ( YZU CSE WindTop BBS 3.02 )     */
 /*-------------------------------------------------------*/
-/* target : 狾戈癟参璸				 */
-/* create : 2003/08/17				 	 */
-/* update : 					 	 */
+/* target : 狾戈癟参璸                                 */
+/* create : 2003/08/17                                   */
+/* update :                                              */
 /*-------------------------------------------------------*/
-/* syntax : brdstat					 */
+/* syntax : brdstat                                      */
 /*-------------------------------------------------------*/
 
 
@@ -21,24 +21,24 @@
 
 #include "bbs.h"
 
-#ifdef	HAVE_COUNT_BOARD
+#ifdef  HAVE_COUNT_BOARD
 
 
-#define	MAX_LINE	16
-#define	ADJUST_M	10	/* adjust back 10 minutes */
+#define MAX_LINE        16
+#define ADJUST_M        10      /* adjust back 10 minutes */
 
-#define	YEAR_HOUR	(365 * 24)
-#define HALFYEAR_HOUR	(180 * 24)
-#define	THREEMONTH_HOUR	(90 * 24)
-#define	MONTH_HOUR	(30 * 24)
-#define	TWOWEEK_HOUR	(14 * 24)
-#define	WEEK_HOUR	(7 * 24)
-#define	DAY_HOUR	(1 * 24)
-#define	HOUR		(1)
+#define YEAR_HOUR       (365 * 24)
+#define HALFYEAR_HOUR   (180 * 24)
+#define THREEMONTH_HOUR (90 * 24)
+#define MONTH_HOUR      (30 * 24)
+#define TWOWEEK_HOUR    (14 * 24)
+#define WEEK_HOUR       (7 * 24)
+#define DAY_HOUR        (1 * 24)
+#define HOUR            (1)
 
 
-HDR		hotboard[MAX_HOTBOARD];
-int		hotcount;
+HDR hotboard[MAX_HOTBOARD];
+int hotcount;
 
 
 void
@@ -46,7 +46,7 @@ keeplog(
     char *fnlog,
     char *board,
     char *title,
-    int mode)		/* 0:load 1: rename  2:unlink 3:mark*/
+    int mode)           /* 0:load 1: rename  2:unlink 3:mark*/
 {
     HDR hdr;
     char folder[128], fpath[128];
@@ -96,7 +96,7 @@ keeplog(
 
 
 /* ----------------------------------------------------- */
-/* 秨布shm 场斗籔 cache.c 甧			 */
+/* 秨布shm 场斗籔 cache.c 甧                       */
 /* ----------------------------------------------------- */
 
 
@@ -372,13 +372,13 @@ main(void)
     umask(077);
 
     /* --------------------------------------------------- */
-    /* build Class image					 */
+    /* build Class image                                   */
     /* --------------------------------------------------- */
 
     bshm_init();
 
     /* --------------------------------------------------- */
-    /* 狾戈癟参璸					 */
+    /* 狾戈癟参璸                                        */
     /* --------------------------------------------------- */
 
     head = bcache = bshm->bcache;

@@ -255,7 +255,7 @@ rec_ins(
     len = st.st_size;
 
     /* lkchu.990428: ernie patch 如果 len=0 & pos>0
-                                      (在剛開精華區目錄進去貼上，選下一個) 時會寫入垃圾 */
+                     (在剛開精華區目錄進去貼上，選下一個) 時會寫入垃圾 */
     off = len ? size * pos : 0;
     lseek(fd, off, SEEK_SET);
 
@@ -487,7 +487,7 @@ rec_put2(
     {
         if (len)
         {
-            pos = 0;	/* 從頭找起 */
+            pos = 0;    /* 從頭找起 */
         }
         else
         {
@@ -569,7 +569,7 @@ rec_ref(
     {
         if (len)
         {
-            pos = 0;	/* 從頭找起 */
+            pos = 0;    /* 從頭找起 */
         }
         else
         {
@@ -638,7 +638,7 @@ rec_sync(
 
         if (fsize >= size)
         {
-            if (fchk)		/* 檢查是否有不正確的資料 */
+            if (fchk)           /* 檢查是否有不正確的資料 */
             {
                 char* head;
                 char* tail;
@@ -647,7 +647,7 @@ rec_sync(
                 tail = base + fsize;
                 while (head < tail)
                 {
-                    if (fchk(head))	/* 此筆資料正確 */
+                    if (fchk(head))     /* 此筆資料正確 */
                     {
                         head += size;
                         continue;

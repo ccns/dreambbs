@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
-/* util/match.c         ( YZU WindTopBBS Ver 3.00 )	 */
+/* util/match.c         ( YZU WindTopBBS Ver 3.00 )      */
 /*-------------------------------------------------------*/
-/* author : visor.bbs@bbs.yzu.edu.tw			 */
+/* author : visor.bbs@bbs.yzu.edu.tw                     */
 /* target : ID, 真實姓名, Email對照表                    */
 /* create : 2000/06/08                                   */
 /* update :                                              */

@@ -1,20 +1,20 @@
 #include <sys/types.h>
 #include <stdlib.h>
 
-#define min(a, b)	((a) < (b) ? (a) : (b))
-#undef	TEST
+#define min(a, b)       ((a) < (b) ? (a) : (b))
+#undef  TEST
 
 /* Qsort routine from Bentley & McIlroy's "Engineering a Sort Function". */
 
-#define swapcode(TYPE, parmi, parmj, n) do { 		\
-    long i = (n) / sizeof (TYPE); 			\
-    register TYPE *pi = (TYPE *) (parmi); 		\
-    register TYPE *pj = (TYPE *) (parmj); 		\
-    do { 						\
-        register TYPE	t = *pi;		\
-        *pi++ = *pj;				\
-        *pj++ = t;				\
-    } while (--i > 0);				\
+#define swapcode(TYPE, parmi, parmj, n) do {    \
+    long i = (n) / sizeof (TYPE);               \
+    register TYPE *pi = (TYPE *) (parmi);       \
+    register TYPE *pj = (TYPE *) (parmj);       \
+    do {                                        \
+        register TYPE   t = *pi;                \
+        *pi++ = *pj;                            \
+        *pj++ = t;                              \
+    } while (--i > 0);                          \
 } while (0)
 
 #define SWAPINIT(a, es) (void) \
@@ -35,16 +35,16 @@ swapfunc(
         swapcode(char, a, b, n);
 }
 
-#define swap(a, b) do {					\
-    if (swaptype == 0) {				\
-        long t = *(long *)(a);			\
-        *(long *)(a) = *(long *)(b);		\
-        *(long *)(b) = t;			\
-    } else						\
-        swapfunc(a, b, es, swaptype);	\
+#define swap(a, b) do {                         \
+    if (swaptype == 0) {                        \
+        long t = *(long *)(a);                  \
+        *(long *)(a) = *(long *)(b);            \
+        *(long *)(b) = t;                       \
+    } else                                      \
+        swapfunc(a, b, es, swaptype);           \
 } while (0)
 
-#define vecswap(a, b, n) 	(void) (((n) > 0) && (swapfunc(a, b, n, swaptype), 0))
+#define vecswap(a, b, n)        (void) (((n) > 0) && (swapfunc(a, b, n, swaptype), 0))
 
 static inline char*
 med3(
@@ -134,7 +134,7 @@ loop:
     }
 
     if (swap_cnt == 0)
-    {				/* Switch to insertion sort */
+    {                           /* Switch to insertion sort */
         for (pm = a + es; pm < (char *) a + n * es; pm += es)
             for (pl = pm; pl > (char *) a && cmp(pl - es, pl) > 0; pl -= es)
                 swap(pl, pl - es);

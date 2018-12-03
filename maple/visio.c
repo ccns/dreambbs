@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* visio.c	( NTHU CS MapleBBS Ver 3.00 )		 */
+/* visio.c      ( NTHU CS MapleBBS Ver 3.00 )            */
 /*-------------------------------------------------------*/
-/* target : VIrtual Screen Input Output routines 	 */
-/* create : 95/03/29				 	 */
-/* update : 96/10/10				 	 */
+/* target : VIrtual Screen Input Output routines         */
+/* create : 95/03/29                                     */
+/* update : 96/10/10                                     */
 /*-------------------------------------------------------*/
 
 
@@ -15,8 +15,8 @@
 #define VO_MAX  (5120)
 #define VI_MAX  (256)
 
-#define INPUT_ACTIVE	0
-#define INPUT_IDLE	1
+#define INPUT_ACTIVE    0
+#define INPUT_IDLE      1
 
 #define t_lines    (b_lines + 1)
 #define p_lines    (b_lines - 5)
@@ -29,11 +29,11 @@
 #define STANDEND   (void) ( attrsetbg(0), attrsetfg(7) )
 #else
 int cur_row, cur_col;
-int cur_pos;			/* current position with ANSI codes */
+int cur_pos;                    /* current position with ANSI codes */
 #endif
 
 /* ----------------------------------------------------- */
-/* output routines					 */
+/* output routines                                       */
 /* ----------------------------------------------------- */
 
 
@@ -41,7 +41,7 @@ static unsigned char vo_pool[VO_MAX];
 static int vo_size;
 
 
-#ifdef	VERBOSE
+#ifdef  VERBOSE
 static void
 telnet_flush(
     char *data,
@@ -61,7 +61,7 @@ telnet_flush(
 
 #else
 
-# define telnet_flush(data, size)	send(0, data, size, 0)
+# define telnet_flush(data, size)       send(0, data, size, 0)
 #endif
 
 
@@ -150,16 +150,16 @@ bell(void)
 
 
 /* ----------------------------------------------------- */
-/* virtual screen					 */
+/* virtual screen                                        */
 /* ----------------------------------------------------- */
 
 #ifndef M3_USE_PFTERM
-#define	o_ansi(x)	output(x, sizeof(x)-1)
+#define o_ansi(x)       output(x, sizeof(x)-1)
 
-#define o_clear()	o_ansi("\033[;H\033[2J")
-#define o_cleol()	o_ansi("\033[K")
-#define o_standup()	o_ansi("\033[7m")
-#define o_standdown()	o_ansi("\033[m")
+#define o_clear()       o_ansi("\033[;H\033[2J")
+#define o_cleol()       o_ansi("\033[K")
+#define o_standup()     o_ansi("\033[7m")
+#define o_standdown()   o_ansi("\033[m")
 
 
 static int docls;
@@ -169,7 +169,7 @@ static int scrollcnt, tc_col, tc_row;
 
 static screenline vbuf[100];  //r2: maximum totel lines (t_lines)
 //static
-screenline *cur_slp;	/* current screen line pointer */
+screenline *cur_slp;    /* current screen line pointer */
 
 
 void
@@ -216,7 +216,7 @@ move(
             if (ansi)
             {
                 y++;
-                if (ch == 'm')		/* (!strchr(str_ansicode, ch)) */
+                if (ch == 'm')          /* (!strchr(str_ansicode, ch)) */
                 {
                     ansi = NA;
                 }
@@ -303,7 +303,7 @@ getyx(
 
 
 /*-------------------------------------------------------*/
-/* 計算 slp 中 len 之處的游標 column 所在		 */
+/* 計算 slp 中 len 之處的游標 column 所在                */
 /*-------------------------------------------------------*/
 
 
@@ -424,8 +424,8 @@ standoutput(
 }
 
 
-#define	STANDOUT	cur_slp->sso = cur_pos; cur_slp->mode |= SL_STANDOUT;
-#define	STANDEND	cur_slp->eso = cur_pos;
+#define STANDOUT        cur_slp->sso = cur_pos; cur_slp->mode |= SL_STANDOUT;
+#define STANDEND        cur_slp->eso = cur_pos;
 
 
 #if 0
@@ -572,7 +572,7 @@ refresh(void)
 
                 /* tc_col = ansicol(slp, emod); */
 
-#if 0				/* 0501 */
+#if 0                           /* 0501 */
                 if (mode & SL_ANSICODE)
                 {
                     unsigned char *data;
@@ -763,7 +763,7 @@ new_line:
         return;
     }
 
-    data = &(slp->data[pos]);	/* 指向目前輸出位置 */
+    data = &(slp->data[pos]);   /* 指向目前輸出位置 */
 
     /* -------------------- */
     /* 補足所需要的空白字元 */
@@ -867,7 +867,7 @@ outs(
 #endif // #ifdef M3_USE_PFTERM
 
 /* ----------------------------------------------------- */
-/* eXtended output: 秀出 user 的 name 和 nick		 */
+/* eXtended output: 秀出 user 的 name 和 nick            */
 /* ----------------------------------------------------- */
 
 /* 090924.cache: pmore使用的控制碼 */
@@ -1013,7 +1013,7 @@ outx(
 #endif
 
 /* ----------------------------------------------------- */
-/* clear the bottom line and show the message		 */
+/* clear the bottom line and show the message            */
 /* ----------------------------------------------------- */
 
 
@@ -1156,7 +1156,7 @@ static int old_pos; /* Thor.990401: 多存一個 */
 
 
 /* static void */
-void				/* Thor.1028: 為了讓 talk.c
+void                            /* Thor.1028: 為了讓 talk.c
                      * 有人呼叫時會show字 */
 cursor_save(void)
 {
@@ -1168,7 +1168,7 @@ cursor_save(void)
 
 
 /* static void */
-void				/* Thor.1028: 為了讓 talk.c
+void                            /* Thor.1028: 為了讓 talk.c
                      * 有人呼叫時會show字 */
 cursor_restore(void)
 {
@@ -1225,7 +1225,7 @@ vs_save(
 #endif
     old_roll = roll;
     memcpy(slp, vbuf, sizeof(screenline) * t_lines);
-    return old_roll;	/* itoc.030723: 傳回目前的 roll */
+    return old_roll;    /* itoc.030723: 傳回目前的 roll */
 }
 
 
@@ -1278,7 +1278,7 @@ char *msg;                   /* length <= 54 */
 #else
 int
 vmsg(
-    char *msg)			/* length < 54 */
+    char *msg)                  /* length < 54 */
 {
 
     if (msg)
@@ -1307,7 +1307,7 @@ vmsg(
 #endif // ifdef M3_USE_PFTERM
 
 static inline void
-zkey(void)				/* press any key or timeout */
+zkey(void)                              /* press any key or timeout */
 {
     /* static */ struct timeval tv = {1, 100};
     /* Thor.980806: man page 假設 timeval struct是會改變的 */
@@ -1327,7 +1327,7 @@ zkey(void)				/* press any key or timeout */
 
 
 void
-zmsg(			/* easy message */
+zmsg(                   /* easy message */
     char *msg)
 {
 #if 0
@@ -1443,7 +1443,7 @@ grayout(int type)
 #endif //#ifndef M3_USE_PFTERM
 
 /* ----------------------------------------------------- */
-/* input routines					 */
+/* input routines                                        */
 /* ----------------------------------------------------- */
 
 static unsigned char vi_pool[VI_MAX];
@@ -1452,10 +1452,10 @@ static int vi_head;
 
 
 /* static int vio_fd; */
-int vio_fd;			/* Thor.0725: 為以後在talk & chat 進 ^z 作準備 */
+int vio_fd;                     /* Thor.0725: 為以後在talk & chat 進 ^z 作準備 */
 
 #ifdef EVERY_Z
-int holdon_fd;			/* Thor.0727: 跳出chat&talk暫存vio_fd用 */
+int holdon_fd;                  /* Thor.0727: 跳出chat&talk暫存vio_fd用 */
 #endif
 
 
@@ -1484,7 +1484,7 @@ iac_count(
     case WONT:
         return 3;
 
-    case SB:			/* loop forever looking for the SE */
+    case SB:                    /* loop forever looking for the SE */
         {
             unsigned char *look = current + 2;
 
@@ -1508,9 +1508,9 @@ int
 igetch(void)
 {
 
-#define	IM_TRAIL	0x01
-#define	IM_REPLY	0x02	/* ^R */
-#define	IM_TALK		0x04
+#define IM_TRAIL        0x01
+#define IM_REPLY        0x02    /* ^R */
+#define IM_TALK         0x04
 
     static int imode = 0;
     static int idle = 0;
@@ -1561,7 +1561,7 @@ igetch(void)
 
                             cutmp->idle_time = idle = 0;
                         }
-#ifdef	HAVE_SHOWNUMMSG
+#ifdef  HAVE_SHOWNUMMSG
                         if (cutmp)
                             cutmp->num_msg = 0;
 #endif
@@ -1573,11 +1573,11 @@ igetch(void)
                 else if (cc == 0)
                 {
                     cc = vio_to.tv_sec;
-                    if (cc < 60)		/* paging timeout */
+                    if (cc < 60)                /* paging timeout */
                         return I_TIMEOUT;
 
                     idle += cc / 60;
-                    vio_to.tv_sec = cc + 60; /* Thor.980806: 每次 timeout都增加60秒,
+                    vio_to.tv_sec = cc + 60;  /* Thor.980806: 每次 timeout都增加60秒,
                                                               所以片子愈換愈慢, 好懶:p */
                     /* Thor.990201: 註解: 除了talk_rqst, chat之外, 需要在動一動之後
                                           重設 tv_sec為 60秒嗎? (預設值) */
@@ -1648,7 +1648,7 @@ igetch(void)
         }
 
         if ((cc == Ctrl('R')) && (bbstate & STAT_STARTED) && !(bbstate & STAT_LOCK)
-                && !(imode & IM_REPLY))		/* lkchu.990513: 鎖定時不可回訊 */
+                && !(imode & IM_REPLY))         /* lkchu.990513: 鎖定時不可回訊 */
         {
             /*
             * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
@@ -1674,7 +1674,7 @@ igetch(void)
 }
 
 
-#define	MATCH_END	0x8000
+#define MATCH_END       0x8000
 /* Thor.990204: 註解: 代表MATCH完結, 要嘛就補足,
                       要嘛就維持原狀, 不秀出可能的值了 */
 
@@ -1704,7 +1704,7 @@ match_getch(void)
 
 
 /* ----------------------------------------------------- */
-/* 選擇 board	 					 */
+/* 選擇 board                                            */
 /* ----------------------------------------------------- */
 
 
@@ -1727,7 +1727,7 @@ ask_board(
             board, IDLEN + 1, GET_BRD | perm))
     {
         if (!str_cmp(board, currboard))
-            *board = 0;		/* 跟目前的看板一樣 */
+            *board = 0;         /* 跟目前的看板一樣 */
         return xbrd;
     }
 
@@ -1851,7 +1851,7 @@ vget_match(
                 if (!match++)
                 {
                     match_title();
-                    strcpy(hit = fpath, data);	/* 第一筆符合的資料 */
+                    strcpy(hit = fpath, data);  /* 第一筆符合的資料 */
                 }
 
                 move(row, col);
@@ -1970,7 +1970,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
     }
 
     /* --------------------------------------------------- */
-    /* 取得 board / userid / on-line user			 */
+    /* 取得 board / userid / on-line user                        */
     /* --------------------------------------------------- */
 
     ch = len;
@@ -2040,7 +2040,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
                 continue;
 
             /* ----------------------------------------------- */
-            /* insert data and display it			 */
+            /* insert data and display it                        */
             /* ----------------------------------------------- */
 
             prompt = &data[col];
@@ -2098,7 +2098,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
                 continue;
 
             /* ----------------------------------------------- */
-            /* remove data and display it			 */
+            /* remove data and display it                        */
             /* ----------------------------------------------- */
 
             i = col--;
@@ -2135,7 +2135,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
             col = len;
             break;
 
-        case Ctrl('Y'):		/* clear / reset */
+        case Ctrl('Y'):         /* clear / reset */
             if (len)
             {
                 move(y, x);
@@ -2176,7 +2176,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
             len = col;
             break;
 
-        case Ctrl('K'):		/* delete to end of line */
+        case Ctrl('K'):         /* delete to end of line */
             if (col < len)
             {
                 move(y, x + col);
@@ -2222,9 +2222,9 @@ vans(
 }
 
 
-#undef	TRAP_ESC
+#undef  TRAP_ESC
 
-#ifdef	TRAP_ESC
+#ifdef  TRAP_ESC
 int
 vkey(void)
 {
@@ -2240,10 +2240,10 @@ vkey(void)
             if (ch == KEY_ESC)
                 mode = 1;
             else
-                return ch;		/* Normal Key */
+                return ch;              /* Normal Key */
         }
         else if (mode == 1)
-        {				/* Escape sequence */
+        {                               /* Escape sequence */
             if (ch == '[' || ch == 'O')
                 mode = 2;
             else if (ch == '1' || ch == '4')
@@ -2254,7 +2254,7 @@ vkey(void)
             }
         }
         else if (mode == 2)
-        {				/* Cursor key */
+        {                               /* Cursor key */
             if (ch >= 'A' && ch <= 'D')
                 return KEY_UP - (ch - 'A');
             else if (ch >= '1' && ch <= '6')
@@ -2263,7 +2263,7 @@ vkey(void)
                 return ch;
         }
         else if (mode == 3)
-        {				/* Ins Del Home End PgUp PgDn */
+        {                               /* Ins Del Home End PgUp PgDn */
             if (ch == '~')
                 return KEY_HOME - (last - '1');
             else
@@ -2273,7 +2273,7 @@ vkey(void)
     }
 }
 
-#else				/* TRAP_ESC */
+#else                           /* TRAP_ESC */
 
 int
 vkey(void)
@@ -2287,12 +2287,12 @@ vkey(void)
         ch = igetch();
         if (ch == KEY_ESC)
             mode = 1;
-        else if (mode == 0)		/* Normal Key */
+        else if (mode == 0)             /* Normal Key */
         {
             return ch;
         }
         else if (mode == 1)
-        {				/* Escape sequence */
+        {                               /* Escape sequence */
             if (ch == '[' || ch == 'O')
                 mode = 2;
             else if (ch == '1' || ch == '4')
@@ -2301,7 +2301,7 @@ vkey(void)
                 return ch;
         }
         else if (mode == 2)
-        {				/* Cursor key */
+        {                               /* Cursor key */
             if (ch >= 'A' && ch <= 'D')
                 return KEY_UP - (ch - 'A');
             else if (ch >= '1' && ch <= '6')
@@ -2310,7 +2310,7 @@ vkey(void)
                 return ch;
         }
         else if (mode == 3)
-        {				/* Ins Del Home End PgUp PgDn */
+        {                               /* Ins Del Home End PgUp PgDn */
             if (ch == '~')
                 return KEY_HOME - (last - '1');
             else
@@ -2319,4 +2319,4 @@ vkey(void)
         last = ch;
     }
 }
-#endif				/* TRAP_ESC */
+#endif                          /* TRAP_ESC */

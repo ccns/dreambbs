@@ -1,12 +1,12 @@
-#ifndef	_SPLAY_H_
+#ifndef _SPLAY_H_
 #define _SPLAY_H_
 
 
 typedef struct SplayNode
 {
-  void *data;
-  struct SplayNode *left;
-  struct SplayNode *right;
+    void *data;
+    struct SplayNode *left;
+    struct SplayNode *right;
 }         SplayNode;
 
 

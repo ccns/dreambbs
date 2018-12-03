@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* gamef.c	( WindTopBBS Ver 3.02 )			 */
+/* gamef.c      ( WindTopBBS Ver 3.02 )                  */
 /*-------------------------------------------------------*/
-/* target : WindTop Games' API				 */
-/* create : 2001/04/10				 	 */
-/* update : 2001/04/10				 	 */
+/* target : WindTop Games' API                           */
+/* create : 2001/04/10                                   */
+/* update : 2001/04/10                                   */
 /*-------------------------------------------------------*/
 #include <stdarg.h>
 #include "bbs.h"

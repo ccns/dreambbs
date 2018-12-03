@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
 /* util/topuser.c         (MapleBBS Ver 3.00 )           */
 /*-------------------------------------------------------*/
-/* author : gslin@abpe.org			         */
+/* author : gslin@abpe.org                               */
 /*          mat.bbs@fall.twbbs.org                       */
 /* target : Ω计拈Ω计本计逼︽篯           */
 /* create : 99/03/29                                     */

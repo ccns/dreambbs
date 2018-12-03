@@ -1,13 +1,13 @@
 /*-------------------------------------------------------*/
-/* bbsd.c	( NTHU CS MapleBBS Ver 3.00 )		 */
+/* bbsd.c       ( NTHU CS MapleBBS Ver 3.00 )            */
 /*-------------------------------------------------------*/
-/* author : opus.bbs@bbs.cs.nthu.edu.tw		 	 */
-/* target : BBS daemon/main/login/top-menu routines 	 */
-/* create : 95/03/29				 	 */
-/* update : 96/10/10				 	 */
+/* author : opus.bbs@bbs.cs.nthu.edu.tw                  */
+/* target : BBS daemon/main/login/top-menu routines      */
+/* create : 95/03/29                                     */
+/* update : 96/10/10                                     */
 /*-------------------------------------------------------*/
 
-#define	_MAIN_C_
+#define _MAIN_C_
 
 #include "bbs.h"
 #include "dns.h"
@@ -21,10 +21,10 @@
 #include <sys/resource.h>
 
 
-#define	QLEN		3
-#define	PID_FILE	"run/bbs.pid"
-#define	LOG_FILE	"run/bbs.log"
-#undef	SERVER_USAGE
+#define QLEN            3
+#define PID_FILE        "run/bbs.pid"
+#define LOG_FILE        "run/bbs.log"
+#undef  SERVER_USAGE
 
 
 #define MAXPORTS        3
@@ -46,7 +46,7 @@ static u_long tn_addr;
 char passbuf[9];
 #endif
 
-#ifdef	TREAT
+#ifdef  TREAT
 int treat=0;
 #endif
 
@@ -57,7 +57,7 @@ extern time_t mode_lastchange;
 #endif
 
 /* ----------------------------------------------------- */
-/* 離開 BBS 程式					 */
+/* 離開 BBS 程式                                         */
 /* ----------------------------------------------------- */
 
 void
@@ -90,7 +90,7 @@ log_modes(void)
 }
 #endif
 
-#ifdef	TRANUFO
+#ifdef  TRANUFO
 typedef struct
 {
     unsigned int old;
@@ -130,16 +130,16 @@ u_exit(
     if ((fd = brd_bno(currboard)) >= 0)
         bshm->mantime[fd]--;        /* 退出最後看的那個板 */
 
-    utmp_free();			/* 釋放 UTMP shm */
+    utmp_free();                        /* 釋放 UTMP shm */
     blog(mode, NULL);
 
     if (cuser.userlevel)
     {
-        ve_backup();		/* 編輯器自動備份 */
-        brh_save();			/* 儲存閱讀記錄檔 */
+        ve_backup();            /* 編輯器自動備份 */
+        brh_save();                     /* 儲存閱讀記錄檔 */
 
 #ifdef  HAVE_DETECT_CROSSPOST
-        attr_put(cuser.userid, ATTR_CROSS_KEY, &cksum);	/* 儲存 CrossPost 紀錄 */
+        attr_put(cuser.userid, ATTR_CROSS_KEY, &cksum); /* 儲存 CrossPost 紀錄 */
 #endif
 
     }
@@ -190,7 +190,7 @@ u_exit(
 
             strcpy(cuser.justify, tuser.justify);
             strcpy(cuser.vmail, tuser.vmail);
-#ifdef	TRANUFO
+#ifdef  TRANUFO
             {
                 TABLE *ptr;
                 cuser.ufo2 = 0;
@@ -203,10 +203,10 @@ u_exit(
                 }
             }
 #endif
-#ifdef	HAVE_CLASSTABLEALERT
+#ifdef  HAVE_CLASSTABLEALERT
             if (!utmp_find(cuser.userno))
                 classtable_free();
-//	    vmsg("test");
+//          vmsg("test");
 #endif
             lseek(fd, (off_t) 0, SEEK_SET);
             write(fd, &cuser, sizeof(ACCT));
@@ -243,7 +243,7 @@ login_abort(
 #ifdef LOGINASNEW
 
 /* ----------------------------------------------------- */
-/* 檢查 user 註冊情況					 */
+/* 檢查 user 註冊情況                                    */
 /* ----------------------------------------------------- */
 
 
@@ -311,7 +311,7 @@ uniq_userno(
 {
     char buf[4096];
     int userno, size;
-    SCHEMA *sp;			/* record length 16 可整除 4096 */
+    SCHEMA *sp;                 /* record length 16 可整除 4096 */
 
     userno = 1;
 
@@ -452,11 +452,11 @@ acct_apply(void)
 #endif /* LOGINASNEW */
 
 /* ----------------------------------------------------- */
-/* bad login						 */
+/* bad login                                             */
 /* ----------------------------------------------------- */
 static void
 logattempt(
-    int type			/* '-' login failure   ' ' success */
+    int type                    /* '-' login failure   ' ' success */
 )
 {
     char buf[128], fpath[80];
@@ -493,7 +493,7 @@ logattempt(
 
 
 /* ----------------------------------------------------- */
-/* 登錄 BBS 程式					 */
+/* 登錄 BBS 程式                                         */
 /* ----------------------------------------------------- */
 
 extern void talk_rqst(void);
@@ -518,7 +518,7 @@ utmp_setup(
     utmp.ufo = cuser.ufo;
     utmp.flag = 0;
     utmp.userlevel = cuser.userlevel;
-#ifdef	HAVE_SHOWNUMMSG
+#ifdef  HAVE_SHOWNUMMSG
     utmp.num_msg = 0;
 #endif
 #ifdef HAVE_BOARD_PAL
@@ -545,14 +545,14 @@ utmp_setup(
         login_abort("\n您剛剛選的位子已經被人捷足先登了，請下次再來吧");
     }
     pal_cache();
-#ifdef	HAVE_BANMSG
+#ifdef  HAVE_BANMSG
     banmsg_cache();
 #endif
 }
 
 
 /* ----------------------------------------------------- */
-/* user login						 */
+/* user login                                            */
 /* ----------------------------------------------------- */
 
 static void
@@ -640,7 +640,7 @@ tn_login(void)
         {
             if (!vget(21, 36, MSG_PASSWD, passbuf, 9, NOECHO))
             {
-                continue;	/* 發現 userid 輸入錯誤，在輸入 passwd 時直接跳過 */
+                continue;       /* 發現 userid 輸入錯誤，在輸入 passwd 時直接跳過 */
             }
 
             passbuf[8] = '\0';
@@ -698,14 +698,14 @@ tn_login(void)
 
 
                     if (!(ui = (UTMP *) utmp_find(cuser.userno)))
-                        break;		/* user isn't logged in */
+                        break;          /* user isn't logged in */
 
 
                     pid = ui->pid;
                     if (!pid || (kill(pid, 0) == -1))
                     {
                         memset(ui, 0, sizeof(UTMP));
-                        break;		/* stale entry in utmp file */
+                        break;          /* stale entry in utmp file */
                     }
 
                     if (vans("偵測到多重登入，您想刪除其他重複的 login (Y/N)嗎？[Y] ") != 'n')
@@ -725,7 +725,7 @@ tn_login(void)
             }
         }
         else
-        {				/* guest */
+        {                               /* guest */
             logattempt(' ');
             cuser.userlevel = level = 0;
             /* Thor.981207: 怕人亂玩, 強制寫回cuser.userlevel */
@@ -742,7 +742,7 @@ tn_login(void)
     }
 
     /* --------------------------------------------------- */
-    /* 登錄系統						 */
+    /* 登錄系統                                          */
     /* --------------------------------------------------- */
 
     start = ap_start;
@@ -758,7 +758,7 @@ tn_login(void)
         strcpy(cuser.ident, currtitle);
 
     /* --------------------------------------------------- */
-    /* 初始化 utmp、flag、mode				 */
+    /* 初始化 utmp、flag、mode                           */
     /* --------------------------------------------------- */
 
     cuser.ufo = ufo & (~UFO_WEB);
@@ -776,7 +776,7 @@ tn_login(void)
     mode_lastchange = ap_start;
 #endif
 
-    if (level)			/* not guest */
+    if (level)                  /* not guest */
     {
         /*
          * Thor: 內部改變過 userlevel, 所以 substitute_record 必須要可寫入
@@ -785,7 +785,7 @@ tn_login(void)
         /* Thor.990318: 現在只有在"使用者資料稽核中"時不能改userlevel, 其他都可 */
 
         /* ------------------------------------------------- */
-        /* 核對 user level					 */
+        /* 核對 user level                                       */
         /* ------------------------------------------------- */
 
 #ifdef JUSTIFY_PERIODICAL
@@ -814,7 +814,7 @@ tn_login(void)
             if (start - cuser.firstlogin < 3 * 86400)
             {
                 /* if (!(level & PERM_VALID)) */
-                level &= ~PERM_POST;	/* 即使已經通過認證，還是要見習三天 */
+                level &= ~PERM_POST;    /* 即使已經通過認證，還是要見習三天 */
             }
 #endif
 
@@ -858,12 +858,12 @@ tn_login(void)
         supervisor = check_admin(cuser.userid);
 
         /* ------------------------------------------------- */
-        /* 好友名單同步、清理過期信件			 */
+        /* 好友名單同步、清理過期信件                    */
         /* ------------------------------------------------- */
 
         if (start > cuser.tcheck + CHECK_PERIOD)
         {
-#ifdef	HAVE_MAILGEM
+#ifdef  HAVE_MAILGEM
             if (cuser.userlevel & PERM_MBOX)
             {
                 int (*p)(int level, char *fpath);
@@ -878,8 +878,8 @@ tn_login(void)
 
             pal_sync(NULL); /* Thor.990318: 在這回認證信的機率不大:P */
             aloha_sync();
-#ifdef	HAVE_BANMSG
-            banmsg_sync(NULL);	/* 拒收訊息 */
+#ifdef  HAVE_BANMSG
+            banmsg_sync(NULL);  /* 拒收訊息 */
 #endif
             ufo |= m_quota(); /* Thor.980804: 註解, 資料整理稽核有包含 BIFF check */
             cuser.ufo = ufo;
@@ -896,7 +896,7 @@ tn_login(void)
         cutmp->ufo = cuser.ufo = ufo; /* Thor.980805: 解決 ufo 同步問題 */
 
         /* ------------------------------------------------- */
-        /* 將 .ACCT 寫回					 */
+        /* 將 .ACCT 寫回                                         */
         /* ------------------------------------------------- */
 
 #if 1
@@ -995,7 +995,7 @@ tn_login(void)
     }
     else
     {
-        vmsg(NULL);			/* Thor: for guest look welcome */
+        vmsg(NULL);                     /* Thor: for guest look welcome */
     }
 
     /* lkchu.990510: 重要公告放到 announce, 不跟 welcome 擠 :p */
@@ -1010,7 +1010,7 @@ tn_login(void)
 
     if (!(cuser.ufo2 & UFO2_MOTD))
     {
-        more("gem/@/@-day", NULL);	/* 今日熱門話題 */
+        more("gem/@/@-day", NULL);      /* 今日熱門話題 */
         clear();
         pad_view();
     }
@@ -1026,7 +1026,7 @@ tn_login(void)
 #endif
 
 /* 20100615.cache: 3000人以上會造成效能上的問題 */
-//#ifdef	HAVE_CLASSTABLEALERT
+//#ifdef        HAVE_CLASSTABLEALERT
 //  classtable_free();
 //  classtable_main();
 //#endif
@@ -1036,7 +1036,7 @@ tn_login(void)
 
 
 /* ----------------------------------------------------- */
-/* trap signals						 */
+/* trap signals                                          */
 /* ----------------------------------------------------- */
 
 
@@ -1150,7 +1150,7 @@ tn_main(void)
 
     /*tn_signals(); */
     brh_load();
-#ifdef	HAVE_FAVORITE
+#ifdef  HAVE_FAVORITE
     if (HAS_PERM(PERM_VALID))
         favorite_main();
 #endif
@@ -1166,13 +1166,13 @@ tn_main(void)
 
     talk_main();
 
-#ifdef	HAVE_FORCE_BOARD
+#ifdef  HAVE_FORCE_BOARD
     force_board();  /* CdChen.990417: 強制閱讀公告板 */
 #endif
 
     count_update();
     time(&ap_start);
-#ifdef	HAVE_CHK_MAILSIZE
+#ifdef  HAVE_CHK_MAILSIZE
     if (!HAS_PERM(PERM_DENYMAIL) && HAS_PERM(PERM_BASIC))
     {
         if (mail_stat(CHK_MAIL_VALID))
@@ -1185,12 +1185,12 @@ tn_main(void)
 #endif
 
     menu();
-    abort_bbs();			/* to make sure it will terminate */
+    abort_bbs();                        /* to make sure it will terminate */
 }
 
 
 /* ----------------------------------------------------- */
-/* FSA (finite state automata) for telnet protocol	 */
+/* FSA (finite state automata) for telnet protocol       */
 /* ----------------------------------------------------- */
 
 static void
@@ -1211,7 +1211,7 @@ telnet_init(void)
     char buf[64];
 
     /* --------------------------------------------------- */
-    /* init telnet protocol				 */
+    /* init telnet protocol                              */
     /* --------------------------------------------------- */
 
 #if 0
@@ -1328,7 +1328,7 @@ term_init(void)
 }
 
 /* ----------------------------------------------------- */
-/* stand-alone daemon					 */
+/* stand-alone daemon                                    */
 /* ----------------------------------------------------- */
 
 static void
@@ -1356,7 +1356,7 @@ start_daemon(
 
 #ifdef RLIMIT
     /* --------------------------------------------------- */
-    /* adjust resource : 16 mega is enough		 */
+    /* adjust resource : 16 mega is enough                 */
     /* --------------------------------------------------- */
 
     rl.rlim_cur = rl.rlim_max = 16 * 1024 * 1024;
@@ -1379,14 +1379,14 @@ start_daemon(
 #endif //RLIMIT
 
     /* --------------------------------------------------- */
-    /* change directory to bbshome       			 */
+    /* change directory to bbshome                         */
     /* --------------------------------------------------- */
 
     chdir(BBSHOME);
     umask(077);
 
     /* --------------------------------------------------- */
-    /* detach daemon process				 */
+    /* detach daemon process                               */
     /* --------------------------------------------------- */
 
     close(1);
@@ -1394,7 +1394,7 @@ start_daemon(
 
     if (port == -1) /* Thor.981206: inetd -i */
     {
-        /* Give up root privileges: no way back from here	 */
+        /* Give up root privileges: no way back from here        */
         setgid(BBSGID);
         setuid(BBSUID);
 #if 1
@@ -1420,7 +1420,7 @@ start_daemon(
         exit(0);
 
     /* --------------------------------------------------- */
-    /* fork daemon process				 */
+    /* fork daemon process                                 */
     /* --------------------------------------------------- */
 
     sin.sin_family = AF_INET;
@@ -1460,7 +1460,7 @@ start_daemon(
         exit(1);
 
     /* --------------------------------------------------- */
-    /* Give up root privileges: no way back from here	 */
+    /* Give up root privileges: no way back from here      */
     /* --------------------------------------------------- */
 
     setgid(BBSGID);
@@ -1472,7 +1472,7 @@ start_daemon(
 
 
 /* ----------------------------------------------------- */
-/* reaper - clean up zombie children			 */
+/* reaper - clean up zombie children                     */
 /* ----------------------------------------------------- */
 
 
@@ -1483,7 +1483,7 @@ reaper(void)
 }
 
 
-#ifdef	SERVER_USAGE
+#ifdef  SERVER_USAGE
 static void
 servo_usage(void)
 {
@@ -1535,7 +1535,7 @@ servo_usage(void)
 static void
 main_term(void)
 {
-#ifdef	SERVER_USAGE
+#ifdef  SERVER_USAGE
     servo_usage();
 #endif
     exit(0);
@@ -1557,7 +1557,7 @@ main_signals(void)
     act.sa_handler = main_term;
     sigaction(SIGTERM, &act, NULL);
 
-#ifdef	SERVER_USAGE
+#ifdef  SERVER_USAGE
     act.sa_handler = servo_usage;
     sigaction(SIGPROF, &act, NULL);
 #endif
@@ -1568,13 +1568,13 @@ main_signals(void)
 
 int main(int argc, char *argv[])
 {
-    int csock;			/* socket for Master and Child */
+    int csock;                  /* socket for Master and Child */
     int *totaluser;
     int value;
     struct sockaddr_in sin;
 
     /* --------------------------------------------------- */
-    /* setup standalone daemon				 */
+    /* setup standalone daemon                             */
     /* --------------------------------------------------- */
 
     /* Thor.990325: usage, bbsd, or bbsd -i, or bbsd 1234 */
@@ -1584,9 +1584,9 @@ int main(int argc, char *argv[])
     main_signals();
 
     /* --------------------------------------------------- */
-    /* attach shared memory & semaphore			 */
+    /* attach shared memory & semaphore                    */
     /* --------------------------------------------------- */
-#ifdef	HAVE_SEM
+#ifdef  HAVE_SEM
     sem_init();
 #endif
     ushm_init();
@@ -1594,12 +1594,12 @@ int main(int argc, char *argv[])
     fshm_init();
     fwshm_init();
     count_init();
-#ifdef	HAVE_OBSERVE_LIST
+#ifdef  HAVE_OBSERVE_LIST
     observeshm_init();
 #endif
 
     /* --------------------------------------------------- */
-    /* main loop						 */
+    /* main loop                                           */
     /* --------------------------------------------------- */
 
     totaluser = (int *) &ushm->count;
@@ -1648,7 +1648,7 @@ int main(int argc, char *argv[])
 #endif
 
         /* ------------------------------------------------- */
-        /* ident remote host / user name via RFC931		 */
+        /* ident remote host / user name via RFC931          */
         /* ------------------------------------------------- */
 
         /* rfc931(&sin, fromhost, rusername); */

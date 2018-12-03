@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "dao.h"
 
-#define	STR_PAT(x, y)	printf("<%s, %s> : %d\n", x, y, str_pat(x, y))
+#define STR_PAT(x, y)   printf("<%s, %s> : %d\n", x, y, str_pat(x, y))
 
 int main(void)
 {

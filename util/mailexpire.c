@@ -1,12 +1,12 @@
 /*-------------------------------------------------------*/
-/* util/mailexpire.c	( YZU WindTop Ver 3.02 )	 */
+/* util/mailexpire.c    ( YZU WindTop Ver 3.02 )         */
 /*-------------------------------------------------------*/
-/* target : 自動砍信工具程式				 */
-/* create : 2000/07/14				 	 */
-/* update : 					 	 */
+/* target : 自動砍信工具程式                             */
+/* create : 2000/07/14                                   */
+/* update :                                              */
 /*-------------------------------------------------------*/
-/* syntax : mailexpire [userid] 		 	 */
-/* NOTICE : clean user's mbox				 */
+/* syntax : mailexpire [userid]                          */
+/* NOTICE : clean user's mbox                            */
 /*-------------------------------------------------------*/
 
 #include <strings.h>
@@ -82,7 +82,7 @@ expire(
         if (!rename(index, fpath))
         {
             if (rename(fnew, index))
-                rename(fpath, index);		/* 換回來 */
+                rename(fpath, index);           /* 換回來 */
         }
     }
     unlink(fnew);
@@ -130,7 +130,7 @@ main(
     chdir(BBSHOME);
 
     /* --------------------------------------------------- */
-    /* visit all users					 */
+    /* visit all users                                     */
     /* --------------------------------------------------- */
 
     flog = fopen(FN_MAILEXPIRE_LOG, "w");

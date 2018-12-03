@@ -1,11 +1,11 @@
 /*-------------------------------------------------------*/
-/* util/poststat.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* util/poststat.c      ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : 統計今日、週、月、年熱門話題		 */
-/* create : 95/03/29				 	 */
-/* update : 97/08/29				 	 */
+/* target : 統計今日、週、月、年熱門話題                 */
+/* create : 95/03/29                                     */
+/* update : 97/08/29                                     */
 /*-------------------------------------------------------*/
-/* syntax : poststat [day]				 */
+/* syntax : poststat [day]                               */
 /*-------------------------------------------------------*/
 
 
@@ -24,24 +24,24 @@ static int mytop[] = {10, 50, 100, 100};
 static char *mytitle[] = {"日十", "週五十", "月百", "年度百"};
 
 
-#define	FN_POST_DB	"post.db"
-#define	FN_POST_AUTHOR	"var/post.author"
-#define	FN_POST_LOG	"post.log"
-#define	FN_POST_OLD_DB	"var/post.old.db"
-#define HASHSIZE	1024		/* 2's power */
-#define TOPCOUNT	200
-#define	LOWER_BOUND	4
+#define FN_POST_DB      "post.db"
+#define FN_POST_AUTHOR  "var/post.author"
+#define FN_POST_LOG     "post.log"
+#define FN_POST_OLD_DB  "var/post.old.db"
+#define HASHSIZE        1024            /* 2's power */
+#define TOPCOUNT        200
+#define LOWER_BOUND     4
 
 
 static
 struct postrec
 {
-    char author[13];		/* author name */
-    char board[13];		/* board name */
-    char title[66];		/* title name */
-    time_t date;			/* last post's date */
-    int number;			/* post number */
-    struct postrec *next;		/* next rec */
+    char author[13];            /* author name */
+    char board[13];             /* board name */
+    char title[66];             /* title name */
+    time_t date;                /* last post's date */
+    int number;                 /* post number */
+    struct postrec *next;       /* next rec */
 }      *bucket[HASHSIZE];
 
 
@@ -51,11 +51,11 @@ struct postrec
 static
 struct posttop
 {
-    char author[13];		/* author name */
-    char board[13];		/* board name */
-    char title[66];		/* title name */
-    time_t date;			/* last post's date */
-    int number;			/* post number */
+    char author[13];            /* author name */
+    char board[13];             /* board name */
+    char title[66];             /* title name */
+    time_t date;                /* last post's date */
+    int number;                 /* post number */
 }       top[TOPCOUNT], *tp;
 
 
@@ -102,7 +102,7 @@ search(
     if (found)
     {
         p->number += t->number;
-        if (p->date < t->date)	/* 取較近日期 */
+        if (p->date < t->date)  /* 取較近日期 */
             p->date = t->date;
     }
     else
@@ -225,7 +225,7 @@ poststat(
         for (pp = bucket[i]; pp; pp = pp->next)
         {
 
-#ifdef	DEBUG
+#ifdef  DEBUG
             printf("Title : %s, Board: %s\nPostNo : %d, Author: %s\n"
                , pp->title
                , pp->board
@@ -246,7 +246,7 @@ poststat(
     }
 
     /* --------------------------------------------------- */
-    /* report file : gem/@/@-				 */
+    /* report file : gem/@/@-                              */
     /* --------------------------------------------------- */
 
     sprintf(curfile, BBSHOME "/gem/@/@-%s", p);

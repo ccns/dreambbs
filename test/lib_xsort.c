@@ -3,7 +3,7 @@
 #include <time.h>
 #include "dao.h"
 
-#define	MMM	(0x40000)
+#define MMM     (0x40000)
 
 static int
 int_cmp(

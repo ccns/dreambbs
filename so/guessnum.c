@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
 /* guessnum.c   ( NTHU CS MapleBBS Ver 3.10 )            */
 /*-------------------------------------------------------*/
-/* author : thor.bbs@bbs.cs.nthu.edu.tw			 */
+/* author : thor.bbs@bbs.cs.nthu.edu.tw                  */
 /* target : Guess Number tool dynamic link module        */
 /* create : 99/02/16                                     */
 /* update :   /  /                                       */
@@ -258,11 +258,11 @@ foolme:
 int guessNum(void)
 {
     return mainNum(0);
-//	return 0;
+//    return 0;
 }
 
 int fightNum(void)
 {
     return mainNum(1);
-//	return 0;
+//    return 0;
 }

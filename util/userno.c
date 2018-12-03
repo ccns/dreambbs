@@ -15,7 +15,7 @@ typedef struct
 {
     int userno;
     char userid[IDLEN+1];
-}	MAP;
+}       MAP;
 MAP map[60000];
 
 

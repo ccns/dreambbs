@@ -49,12 +49,12 @@ hdr_fpath(
 }
 
 /* ----------------------------------------------------- */
-/* hdr_stamp - create unique HDR based on timestamp	 */
+/* hdr_stamp - create unique HDR based on timestamp      */
 /* ----------------------------------------------------- */
-/* fpath - directory					 */
-/* token - A / F / 0					 */
+/* fpath - directory                                     */
+/* token - A / F / 0                                     */
 /* ----------------------------------------------------- */
-/* return : open() fd (not close yet) or link() result	 */
+/* return : open() fd (not close yet) or link() result   */
 /* ----------------------------------------------------- */
 
 int

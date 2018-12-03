@@ -1,12 +1,12 @@
 /*-------------------------------------------------------*/
-/* util/transacct.c	( NTHU CS MapleBBS Ver 3.10 )	     */
+/* util/transacct.c     ( NTHU CS MapleBBS Ver 3.10 )    */
 /*-------------------------------------------------------*/
-/* target : DreamBBS -> DreamBBS.2010 ACCT 轉換程式 	 */
-/* create : 09/10/08                  					 */
-/* update :  					                         */
-/* author : cache.bbs@bbs.ee.ncku.edu.tw	             */
+/* target : DreamBBS -> DreamBBS.2010 ACCT 轉換程式      */
+/* create : 09/10/08                                     */
+/* update :                                              */
+/* author : cache.bbs@bbs.ee.ncku.edu.tw                 */
 /*-------------------------------------------------------*/
-/* syntax : transacct [userid]				             */
+/* syntax : transacct [userid]                           */
 /*-------------------------------------------------------*/
 
 
@@ -18,87 +18,87 @@
 
 
 #include "bbs.h"
-#define FN_MONEY		".MONEY"		/* PostRecommendHistory */
+#define FN_MONEY        ".MONEY"        /* PostRecommendHistory */
 
 double m1 = 0;
 double m2 = 0;
 double m3 = 0;
 
 /* ----------------------------------------------------- */
-/* (新的) 使用者帳號 .ACCT struct			 */
+/* (新的) 使用者帳號 .ACCT struct                        */
 /* ----------------------------------------------------- */
 
 
 typedef struct
 {
-    int userno;			/* unique positive code */
-    char userid[IDLEN + 1];	/* userid */
-    char passwd[PASSLEN];		/* user password crypt by DES */
-    unsigned char signature;		/* user signature number */
-    char realname[20];		/* user realname */
-    char username[24];		/* user nickname */
-    unsigned int userlevel;		/* user perm */
-    int numlogins;		/* user login times */
-    int numposts;			/* user post times */
-    unsigned int ufo;			/* user basic flags */
-    time_t firstlogin;		/* user first login time */
-    time_t lastlogin;		/* user last login time */
-    time_t staytime;		/* user total stay time */
-    time_t tcheck;		/* time to check mbox/pal */
-    char lasthost[32];		/* user last login remote host */
-    int numemail;			/* 原為寄發 Inetrnet E-mail 次數, 在不更改資料結構的狀況下, 擴充為積分 */
-    time_t tvalid;		/* 通過認證、更改 mail address 的時間 */
-    char email[60];		/* user email */
-    char address[60];		/* user address */
-    char justify[60];		/* FROM of replied justify mail */
-    char vmail[60];		/* 通過認證之 email */
-    time_t deny;			/* user violatelaw time */
-    int request;			/* 點歌系統 */
-    int money;             /* 夢幣 */
-    unsigned int ufo2;			/* 延伸的個人設定 */
-    char ident[96];		/* user remote host ident */
-    int point1;           /* 優良積分 */
-    int point2;           /* 劣文 */
-    time_t vtime;			/* validate time */
-}	NEW;
+    int userno;                 /* unique positive code */
+    char userid[IDLEN + 1];     /* userid */
+    char passwd[PASSLEN];       /* user password crypt by DES */
+    unsigned char signature;    /* user signature number */
+    char realname[20];          /* user realname */
+    char username[24];          /* user nickname */
+    unsigned int userlevel;     /* user perm */
+    int numlogins;              /* user login times */
+    int numposts;               /* user post times */
+    unsigned int ufo;           /* user basic flags */
+    time_t firstlogin;          /* user first login time */
+    time_t lastlogin;           /* user last login time */
+    time_t staytime;            /* user total stay time */
+    time_t tcheck;              /* time to check mbox/pal */
+    char lasthost[32];          /* user last login remote host */
+    int numemail;               /* 原為寄發 Inetrnet E-mail 次數, 在不更改資料結構的狀況下, 擴充為積分 */
+    time_t tvalid;              /* 通過認證、更改 mail address 的時間 */
+    char email[60];             /* user email */
+    char address[60];           /* user address */
+    char justify[60];           /* FROM of replied justify mail */
+    char vmail[60];             /* 通過認證之 email */
+    time_t deny;                /* user violatelaw time */
+    int request;                /* 點歌系統 */
+    int money;                  /* 夢幣 */
+    unsigned int ufo2;          /* 延伸的個人設定 */
+    char ident[96];             /* user remote host ident */
+    int point1;                 /* 優良積分 */
+    int point2;                 /* 劣文 */
+    time_t vtime;               /* validate time */
+}       NEW;
 
 
 /* ----------------------------------------------------- */
-/* (舊的) 使用者帳號 .ACCT struct			 */
+/* (舊的) 使用者帳號 .ACCT struct                        */
 /* ----------------------------------------------------- */
 
 
 typedef struct
 {
-    int userno;			/* unique positive code */
-    char userid[IDLEN + 1];	/* userid */
-    char passwd[PASSLEN];		/* user password crypt by DES */
-    unsigned char signature;		/* user signature number */
-    char realname[20];		/* user realname */
-    char username[24];		/* user nickname */
-    unsigned int userlevel;		/* user perm */
-    int numlogins;		/* user login times */
-    int numposts;			/* user post times */
-    unsigned int ufo;			/* user basic flags */
-    time_t firstlogin;		/* user first login time */
-    time_t lastlogin;		/* user last login time */
-    time_t staytime;		/* user total stay time */
-    time_t tcheck;		/* time to check mbox/pal */
-    char lasthost[32];		/* user last login remote host */
-    int numemail;			/* 寄發 Inetrnet E-mail 次數 */
-    time_t tvalid;		/* 通過認證、更改 mail address 的時間 */
-    char email[60];		/* user email */
-    char address[60];		/* user address */
-    char justify[60];		/* FROM of replied justify mail */
-    char vmail[60];		/* 通過認證之 email */
-    time_t deny;			/* user violatelaw time */
-    int extrambox;		/* 加大信箱 (最大 50 封) */
-    int extrasize;		/* 加大信箱容量 (最大 1000K) */
-    unsigned int ufo2;			/* 延伸的個人設定 */
-    char ident[103];		/* user remote host ident */
-    char barcolor;		/* 光棒顏色 */
-    time_t vtime;			/* validate time */
-}	OLD;
+    int userno;                 /* unique positive code */
+    char userid[IDLEN + 1];     /* userid */
+    char passwd[PASSLEN];       /* user password crypt by DES */
+    unsigned char signature;    /* user signature number */
+    char realname[20];          /* user realname */
+    char username[24];          /* user nickname */
+    unsigned int userlevel;     /* user perm */
+    int numlogins;              /* user login times */
+    int numposts;               /* user post times */
+    unsigned int ufo;           /* user basic flags */
+    time_t firstlogin;          /* user first login time */
+    time_t lastlogin;           /* user last login time */
+    time_t staytime;            /* user total stay time */
+    time_t tcheck;              /* time to check mbox/pal */
+    char lasthost[32];          /* user last login remote host */
+    int numemail;               /* 寄發 Inetrnet E-mail 次數 */
+    time_t tvalid;              /* 通過認證、更改 mail address 的時間 */
+    char email[60];             /* user email */
+    char address[60];           /* user address */
+    char justify[60];           /* FROM of replied justify mail */
+    char vmail[60];             /* 通過認證之 email */
+    time_t deny;                /* user violatelaw time */
+    int extrambox;              /* 加大信箱 (最大 50 封) */
+    int extrasize;              /* 加大信箱容量 (最大 1000K) */
+    unsigned int ufo2;          /* 延伸的個人設定 */
+    char ident[103];            /* user remote host ident */
+    char barcolor;              /* 光棒顏色 */
+    time_t vtime;               /* validate time */
+}       OLD;
 
 
 #define OLDUFO2_COLOR      BFLAG(0)        /* true if the ANSI color mode open */
@@ -122,26 +122,26 @@ typedef struct
 #define OLDUFO2_ACL        BFLAG(24)       /* true if ACL was ON */
 #define OLDUFO2_REALNAME   BFLAG(28)       /* visor.991030: 真實姓名 */
 
-#define	UFO2_COLOR	       BFLAG(0)	       /* true if the ANSI color mode open */
-#define	UFO2_MOVIE	       BFLAG(1)	       /* true if show movie */
-#define	UFO2_BRDNEW	       BFLAG(2)	       /* 新文章模式 */
-#define UFO2_BNOTE	       BFLAG(3)	       /* 顯示進板畫面 */
-#define UFO2_VEDIT	       BFLAG(4)	       /* 簡化編輯器 */
-#define UFO2_PAL	       BFLAG(5)	       /* true if show pals only */
-#define	UFO2_MOTD	       BFLAG(6)	       /* 簡化進站畫面 */
-#define UFO2_MIME	       BFLAG(7)	       /* MIME 解碼 */
-#define UFO2_SIGN	       BFLAG(8)	       /* 簽名檔 */
-#define UFO2_SHOWUSER	   BFLAG(9)	       /* 顯示 ID 和 暱稱 */
-#define UFO2_PRH	       BFLAG(10)	   /* 關閉推薦文章分數 */
-#define UFO2_SHIP	       BFLAG(11)	   /* visor.991030: 好友描述 */
-#define	UFO2_NWLOG	       BFLAG(12)	   /* lkchu.990510: 不存對話紀錄 */
-#define UFO2_NTLOG	       BFLAG(13)	   /* lkchu.990510: 不存聊天紀錄 */
-#define	UFO2_CIRCLE	       BFLAG(14)	   /* 循環閱讀 */
-#define	UFO2_ORIGUI	       BFLAG(15)	   /* 關閉超炫介面 */
-#define	UFO2_DEF_ANONY	   BFLAG(16)	   /* 預設不匿名 */
-#define	UFO2_DEF_LEAVE	   BFLAG(17)	   /* 預設不離站 */
-#define	UFO2_ACL	       BFLAG(24)	   /* true if ACL was ON */
-#define UFO2_REALNAME	   BFLAG(28)	   /* visor.991030: 真實姓名 */
+#define UFO2_COLOR         BFLAG(0)        /* true if the ANSI color mode open */
+#define UFO2_MOVIE         BFLAG(1)        /* true if show movie */
+#define UFO2_BRDNEW        BFLAG(2)        /* 新文章模式 */
+#define UFO2_BNOTE         BFLAG(3)        /* 顯示進板畫面 */
+#define UFO2_VEDIT         BFLAG(4)        /* 簡化編輯器 */
+#define UFO2_PAL           BFLAG(5)        /* true if show pals only */
+#define UFO2_MOTD          BFLAG(6)        /* 簡化進站畫面 */
+#define UFO2_MIME          BFLAG(7)        /* MIME 解碼 */
+#define UFO2_SIGN          BFLAG(8)        /* 簽名檔 */
+#define UFO2_SHOWUSER      BFLAG(9)        /* 顯示 ID 和 暱稱 */
+#define UFO2_PRH           BFLAG(10)       /* 關閉推薦文章分數 */
+#define UFO2_SHIP          BFLAG(11)       /* visor.991030: 好友描述 */
+#define UFO2_NWLOG         BFLAG(12)       /* lkchu.990510: 不存對話紀錄 */
+#define UFO2_NTLOG         BFLAG(13)       /* lkchu.990510: 不存聊天紀錄 */
+#define UFO2_CIRCLE        BFLAG(14)       /* 循環閱讀 */
+#define UFO2_ORIGUI        BFLAG(15)       /* 關閉超炫介面 */
+#define UFO2_DEF_ANONY     BFLAG(16)       /* 預設不匿名 */
+#define UFO2_DEF_LEAVE     BFLAG(17)       /* 預設不離站 */
+#define UFO2_ACL           BFLAG(24)       /* true if ACL was ON */
+#define UFO2_REALNAME      BFLAG(28)       /* visor.991030: 真實姓名 */
 
 
 static unsigned int
@@ -213,7 +213,7 @@ trans_ufo2(
 }
 
 /* ----------------------------------------------------- */
-/* 轉換主程式						 */
+/* 轉換主程式                                            */
 /* ----------------------------------------------------- */
 
 
@@ -265,10 +265,10 @@ trans_acct(
 
 typedef struct
 {
-    int money;			/* 夢幣 */
-    int save;			    /* 存款 */
-    int request;			/* 小雞點券 */
-}	MONEY;
+    int money;                /* 夢幣 */
+    int save;                 /* 存款 */
+    int request;              /* 小雞點券 */
+}       MONEY;
 
 int
 main(
@@ -334,11 +334,11 @@ main(
 
                 read(fd, &old, sizeof(OLD));
                 close(fd);
-                unlink(buf);			/* itoc.010831: 砍掉原來的 FN_ACCT */
+                unlink(buf);                    /* itoc.010831: 砍掉原來的 FN_ACCT */
 
                 trans_acct(&old, &new);
 
-                fd = open(buf, O_WRONLY | O_CREAT, 0600);	/* itoc.010831: 重建新的 FN_ACCT */
+                fd = open(buf, O_WRONLY | O_CREAT, 0600);       /* itoc.010831: 重建新的 FN_ACCT */
                 write(fd, &new, sizeof(NEW));
                 close(fd);
 

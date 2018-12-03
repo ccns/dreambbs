@@ -1,8 +1,8 @@
 /*-------------------------------------------------------*/
-/* util/template.c      ( YZU WindTop 2000)    		 */
+/* util/template.c      ( YZU WindTop 2000)              */
 /*-------------------------------------------------------*/
-/* author : visor.bbs@bbs.yzu.edu.tw			 */
-/* target : 標本用			                 */
+/* author : visor.bbs@bbs.yzu.edu.tw                     */
+/* target : 標本用                                       */
 /* create : 98/03/29                                     */
 /* update : 98/05/29                                     */
 /*-------------------------------------------------------*/
@@ -11,11 +11,11 @@
 
 #include "bbs.h"
 
-typedef	struct
+typedef struct
 {
     unsigned int old;
     unsigned int new;
-}	TABLE;
+}       TABLE;
 
 TABLE table[] = {
     {UFO_COLOR, UFO2_COLOR},

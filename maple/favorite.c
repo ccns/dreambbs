@@ -1,20 +1,20 @@
 /*-------------------------------------------------------*/
-/* maple/favorite.c	( YZU WindTopBBS Ver 3.00 )	 */
+/* maple/favorite.c     ( YZU WindTopBBS Ver 3.00 )      */
 /*-------------------------------------------------------*/
 /* author : visor.bbs@bbs.yzu.edu.tw                     */
-/* target : 建立 [我的最愛區] cache			 */
-/* create : 2000/07/20				 	 */
-/* update : 					 	 */
+/* target : 建立 [我的最愛區] cache                      */
+/* create : 2000/07/20                                   */
+/* update :                                              */
 /*-------------------------------------------------------*/
 
 #include "bbs.h"
 
-#ifdef	HAVE_FAVORITE
+#ifdef  HAVE_FAVORITE
 extern BCACHE *bshm;
 extern char brd_bits[];
 
 /* ----------------------------------------------------- */
-/* build favorite image					 */
+/* build favorite image                                  */
 /* ----------------------------------------------------- */
 
 
@@ -249,5 +249,5 @@ favorite_main(void)
     return;
 }
 
-#endif	/* HAVE_FAVORITE */
+#endif  /* HAVE_FAVORITE */
 

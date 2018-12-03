@@ -1,8 +1,8 @@
 /*-------------------------------------------------------*/
 /* lib/url_encode.c     ( NTHU CS MapleBBS Ver 3.10 )    */
 /*-------------------------------------------------------*/
-/* author : thor.bbs@bbs.cs.nthu.edu.tw			 */
-/* target : included C for URL encoding  		 */
+/* author : thor.bbs@bbs.cs.nthu.edu.tw                  */
+/* target : included C for URL encoding                  */
 /* create : 99/03/30                                     */
 /* update :   /  /                                       */
 /*-------------------------------------------------------*/

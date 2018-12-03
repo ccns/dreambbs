@@ -1,11 +1,11 @@
 /*-------------------------------------------------------*/
-/* bbslink.c	( NTHU CS MapleBBS Ver 3.10 )		 */
+/* bbslink.c    ( NTHU CS MapleBBS Ver 3.10 )            */
 /*-------------------------------------------------------*/
-/* target : innbbsd NNTP and NNRP			 */
-/* create : 95/04/27					 */
-/* update : 04/10/23					 */
-/* author : skhuang@csie.nctu.edu.tw			 */
-/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw		 */
+/* target : innbbsd NNTP and NNRP                        */
+/* create : 95/04/27                                     */
+/* update : 04/10/23                                     */
+/* author : skhuang@csie.nctu.edu.tw                     */
+/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw                 */
 /*-------------------------------------------------------*/
 
 
@@ -17,7 +17,7 @@
 #include <time.h>
 #include <sys/time.h>
 
-#if 0	/* itoc.030122.註解: 程式流程 */
+#if 0   /* itoc.030122.註解: 程式流程 */
 
     0. bbsd 會把新文章的檔頭記錄在 out.bntp
 
@@ -47,18 +47,18 @@ static char SERVERbuffer[1024];
 
 
 /* itoc.030122.註解: 以下這幾個在指定參數時才有用 */
-static int Verbose = 0;			/* 1: 顯示詳細訊息 */
-static int KillFormerProc = 0;		/* 1: 刪除上次執行失敗的 bbslink */
-static int ResetActive = 0;		/* 1: 將 high-number 更新到與 news server 上相同 */
-static int MaxArts = MAX_ARTS;		/* 對 news server 每個群組最多只抓幾封文章 */
-static char *DefaultProcSite = NULL;	/* !=NULL: 只處理某特定站台 */
+static int Verbose = 0;                 /* 1: 顯示詳細訊息 */
+static int KillFormerProc = 0;          /* 1: 刪除上次執行失敗的 bbslink */
+static int ResetActive = 0;             /* 1: 將 high-number 更新到與 news server 上相同 */
+static int MaxArts = MAX_ARTS;          /* 對 news server 每個群組最多只抓幾封文章 */
+static char *DefaultProcSite = NULL;    /* !=NULL: 只處理某特定站台 */
 
 
-#define DEBUG(arg)	if (Verbose) printf arg
+#define DEBUG(arg)      if (Verbose) printf arg
 
 
 /*-------------------------------------------------------*/
-/* 處理 bntp 檔						 */
+/* 處理 bntp 檔                                          */
 /*-------------------------------------------------------*/
 
 
@@ -95,7 +95,7 @@ typedef struct
     char msgid[80];
     char control[80];
     char charset[20];
-}	soverview_t;
+}       soverview_t;
 
 
 static void
@@ -172,16 +172,16 @@ deal_sover(
 
     memset(&sover, 0, sizeof(soverview_t));
 
-    if (bntp->chrono > 0)		/* 新信 */
+    if (bntp->chrono > 0)               /* 新信 */
     {
         mtime = bntp->chrono;
         str_ncpy(sover.title, bntp->title, sizeof(sover.title));
         sprintf(sover.msgid, "%s$%s@" MYHOSTNAME, board, filename);
     }
-    else				/* cancel */
+    else                                /* cancel */
     {
         time(&mtime);
-        sprintf(buf, "%s$%s@" MYHOSTNAME, board, filename);		/* 欲砍文章的 Message-ID */
+        sprintf(buf, "%s$%s@" MYHOSTNAME, board, filename);             /* 欲砍文章的 Message-ID */
         sprintf(sover.title, "cmsg cancel <%s>", buf);
         sprintf(sover.msgid, "C%s$%s@" MYHOSTNAME, board, filename);/* LHD.030628: 在原 msgid 加任意字串當作 cmsg 的 Message-ID */
         sprintf(sover.control, "cancel <%s>", buf);
@@ -201,12 +201,12 @@ deal_sover(
 static void
 deal_bntp(void)
 {
-    char *OUTING = "innd/.outing";		/* 處理時暫存的檔 */
+    char *OUTING = "innd/.outing";              /* 處理時暫存的檔 */
     int fd, i;
     nodelist_t *node;
     bntp_t bntp;
 
-    if (rename("innd/out.bntp", OUTING))	/* 沒有新文章 */
+    if (rename("innd/out.bntp", OUTING))        /* 沒有新文章 */
         return;
 
     /* initial 各 node 的 feedfd */
@@ -237,7 +237,7 @@ deal_bntp(void)
 
 
 /*-------------------------------------------------------*/
-/* 連去某個站						 */
+/* 連去某個站                                            */
 /*-------------------------------------------------------*/
 
 
@@ -246,8 +246,8 @@ inetclient(
     char *server,
     int port)
 {
-    struct hostent *host;		/* host information entry */
-    struct sockaddr_in sin;	/* Internet endpoint address */
+    struct hostent *host;       /* host information entry */
+    struct sockaddr_in sin;     /* Internet endpoint address */
     int fd;
 
     if (!*server || !port)
@@ -303,8 +303,8 @@ tcpcommand(char *fmt, ...)
 }
 
 
-static int			/* 200~202:成功 0:失敗 */
-open_connect(		/* 連去這個站 */
+static int                      /* 200~202:成功 0:失敗 */
+open_connect(                   /* 連去這個站 */
     nodelist_t *node)
 {
     char *host = node->host;
@@ -326,7 +326,7 @@ open_connect(		/* 連去這個站 */
         return 0;
     }
 
-    if (!fgets(SERVERbuffer, sizeof(SERVERbuffer), SERVERrfp) || SERVERbuffer[0] != '2')	/* 200 201 202 都能取信 */
+    if (!fgets(SERVERbuffer, sizeof(SERVERbuffer), SERVERrfp) || SERVERbuffer[0] != '2')        /* 200 201 202 都能取信 */
     {
         bbslog("<bbslink> :Err: 伺服器拒絕連線：%s %d\n", host, port);
         DEBUG(("╰<open_connect> 伺服器拒絕連線\n"));
@@ -337,7 +337,7 @@ open_connect(		/* 連去這個站 */
     if (node->xmode & INN_USEPOST)
     {
         tcpcommand("MODE READER");
-        if (SERVERbuffer[0] != '2')	/* 200 201 202 都能取信 */
+        if (SERVERbuffer[0] != '2')     /* 200 201 202 都能取信 */
         {
             bbslog("<bbslink> :Err: 伺服器拒絕連線：%s %d\n", host, port);
             DEBUG(("╰<open_connect> 伺服器拒絕連線\n"));
@@ -351,7 +351,7 @@ open_connect(		/* 連去這個站 */
 
 
 static void
-close_connect(void)		/* 結束連去這個站 */
+close_connect(void)             /* 結束連去這個站 */
 {
     int status;
 
@@ -374,22 +374,22 @@ close_connect(void)		/* 結束連去這個站 */
 
 
 /*-------------------------------------------------------*/
-/* 送出文章						 */
+/* 送出文章                                              */
 /*-------------------------------------------------------*/
 
 
-static int			/* -1:失敗 */
+static int                      /* -1:失敗 */
 sover_post(
     soverview_t *sover)
 {
-    if (sover->control[0])	/* 送出 cancel message */
+    if (sover->control[0])      /* 送出 cancel message */
     {
         static char BODY_BUF[128];
 
         sprintf(BODY_BUF, "%s\r\n", sover->title);
-        BODY = BODY_BUF;	/* cancel message 時，BODY 指向 BODY_BUF */
+        BODY = BODY_BUF;        /* cancel message 時，BODY 指向 BODY_BUF */
     }
-    else				/* 送出新文章 */
+    else                        /* 送出新文章 */
     {
         static char *BODY_BUF;
         char *ptr, *str, fpath[64];
@@ -420,13 +420,13 @@ sover_post(
         for (str = BODY_BUF;; str = ptr + 1)
         {
             ptr = strchr(str, '\n');
-            if (!ptr)			/* 找到文章最後了還找不到空行，那麼整個檔案都當做內文 */
+            if (!ptr)           /* 找到文章最後了還找不到空行，那麼整個檔案都當做內文 */
             {
                 BODY = BODY_BUF;
                 break;
             }
 
-            if (ptr == str)		/* 找到一行空行，那麼以下就都是內文了 */
+            if (ptr == str)     /* 找到一行空行，那麼以下就都是內文了 */
             {
                 BODY = str + 1;
                 break;
@@ -503,14 +503,14 @@ send_outgoing(
     /*fprintf(SERVERwfp, "Subject: %s\r\n", sover->title);*/
     output_rfc2047_qp(SERVERwfp, "Subject: ", sover->title, sover->charset, "\r\n");
     fprintf(SERVERwfp, "Date: %s\r\n", sover->date);
-    fprintf(SERVERwfp, "Organization: %s\r\n", *sover->charset == 'b' ? BOARDNAME : BBSNAME);	/* itoc.040425: 若不是 big5 就用英文站名 */
+    fprintf(SERVERwfp, "Organization: %s\r\n", *sover->charset == 'b' ? BOARDNAME : BBSNAME);   /* itoc.040425: 若不是 big5 就用英文站名 */
     fprintf(SERVERwfp, "Message-ID: <%s>\r\n", msgid);
     fprintf(SERVERwfp, "Mime-Version: 1.0\r\n");
     fprintf(SERVERwfp, "Content-Type: text/plain; charset=\"%s\"\r\n", sover->charset);
     fprintf(SERVERwfp, "Content-Transfer-Encoding: 8bit\r\n");
     if (sover->control[0])
         fprintf(SERVERwfp, "Control: %s\r\n", sover->control);
-    fputs("\r\n", SERVERwfp);	/* 檔頭和內文空一行 */
+    fputs("\r\n", SERVERwfp);   /* 檔頭和內文空一行 */
 
     /* 寫入文章的內容 */
     for (str = BODY; cc = *str; str++)
@@ -550,12 +550,12 @@ send_outgoing(
 
 
 /*-------------------------------------------------------*/
-/* 對 news server 下指令				 */
+/* 對 news server 下指令                                 */
 /*-------------------------------------------------------*/
 
 
-static int		/* 1:成功 0:失敗 */
-NNRPgroup(	/* 切換 group，並傳回 low-number 及 high-number */
+static int                      /* 1:成功 0:失敗 */
+NNRPgroup(                      /* 切換 group，並傳回 low-number 及 high-number */
     char *newsgroup,
     int *low, int *high)
 {
@@ -590,8 +590,8 @@ NNRPgroup(	/* 切換 group，並傳回 low-number 及 high-number */
 
 static char *tempfile = "innd/bbslinktmp";
 
-static int			/* 1:成功 0:失敗 */
-NNRParticle(		/* 取回第 artno 篇的全文 */
+static int                      /* 1:成功 0:失敗 */
+NNRParticle(                    /* 取回第 artno 篇的全文 */
     int artno)
 {
     FILE *fp;
@@ -610,7 +610,7 @@ NNRParticle(		/* 取回第 artno 篇的全文 */
         if (ptr = strchr(SERVERbuffer, '\n'))
             *ptr = '\0';
 
-        if (!strcmp(SERVERbuffer, "."))	/* 文章結束 */
+        if (!strcmp(SERVERbuffer, ".")) /* 文章結束 */
             break;
 
         fprintf(fp, "%s\n", SERVERbuffer);
@@ -622,7 +622,7 @@ NNRParticle(		/* 取回第 artno 篇的全文 */
 
 
 
-#if 0	/* itoc.030109.註解: my_post 的流程 */
+#if 0   /* itoc.030109.註解: my_post 的流程 */
             ┌→ receive_article() → bbspost_add()
   my_post() ├→ receive_nocem()   → 送去 nocem.c 處理
             └→ cancel_article()  → bbspost_cancel()
@@ -640,16 +640,16 @@ my_post(void)
     {
         fstat(rel, &st);
         size = st.st_size;
-        data = (char *) malloc(size + 1);	/* 保留 1 byte 給 '\0' */
+        data = (char *) malloc(size + 1);       /* 保留 1 byte 給 '\0' */
         size = read(rel, data, size);
         close(rel);
 
         if (size >= 2)
         {
-            if (data[size - 2] == '\n')	/* 把最後重覆的 '\n' 換成 '\0' */
+            if (data[size - 2] == '\n') /* 把最後重覆的 '\n' 換成 '\0' */
                 size--;
         }
-        data[size] = '\0';		/* 補上 '\0' */
+        data[size] = '\0';              /* 補上 '\0' */
 
         rel = readlines(data - 1);
 
@@ -675,11 +675,11 @@ my_post(void)
                 DEBUG(("│→<my_post> 接收文章失敗\n"));
             }
         }
-        else if (rel == 0)		/* PATH包括自己 */
+        else if (rel == 0)              /* PATH包括自己 */
         {
             DEBUG(("│→<my_post> PATH 包括自己\n"));
         }
-        else /* if (rel < 0) */	/* 檔頭欄位不完整 */
+        else /* if (rel < 0) */ /* 檔頭欄位不完整 */
         {
             DEBUG(("│→<my_post> 檔頭欄位不完整\n"));
         }
@@ -692,7 +692,7 @@ my_post(void)
 
 
 /*-------------------------------------------------------*/
-/* 更新 high-number					 */
+/* 更新 high-number                                      */
 /*-------------------------------------------------------*/
 
 
@@ -723,8 +723,8 @@ changehigh(
 static void
 updaterc(
     newsfeeds_t *nf,
-    int pos, 			/* 於 newsfeeds.bbs 裡面的位置 */
-    int high)			/* >=0:目前抓到哪一篇 <0:error */
+    int pos,                    /* 於 newsfeeds.bbs 裡面的位置 */
+    int high)                   /* >=0:目前抓到哪一篇 <0:error */
 {
     nf->high = high;
     GROUP = nf->newsgroup;
@@ -733,7 +733,7 @@ updaterc(
 
 
 /*-------------------------------------------------------*/
-/* 抓取文章						 */
+/* 抓取文章                                              */
 /*-------------------------------------------------------*/
 
 
@@ -747,11 +747,11 @@ readnews(
 
     name = node->name;
 
-    for (i = 0; i < NFCOUNT; i++)	/* 依序讀取每個 newsgroup */
+    for (i = 0; i < NFCOUNT; i++)       /* 依序讀取每個 newsgroup */
     {
         nf = NEWSFEEDS + i;
 
-        if (strcmp(name, nf->path))	/* 如果不是這個站台就跳過 */
+        if (strcmp(name, nf->path))     /* 如果不是這個站台就跳過 */
             continue;
 
         newsgroup = nf->newsgroup;
@@ -763,7 +763,7 @@ readnews(
         {
             updaterc(nf, i, -1);
             DEBUG(("│└<readnews> 無法取得此群組的 low-number 及 high-number 或此群組不存在\n"));
-            continue;		/* 此群組不存在，輪下一個群組 */
+            continue;           /* 此群組不存在，輪下一個群組 */
         }
 
         if (ResetActive)
@@ -771,23 +771,23 @@ readnews(
             if (nf->high != high || nf->xmode & INN_ERROR)
                 updaterc(nf, i, high);
             DEBUG(("│└<readnews> 結束 %s，此群組之 high-number 已與伺服器同步\n", newsgroup));
-            continue;		/* 若 ResetActive 則不取信，輪下一個群組 */
+            continue;           /* 若 ResetActive 則不取信，輪下一個群組 */
         }
 
         if (nf->high >= high)
         {
-            if (nf->high > high || nf->xmode & INN_ERROR)	/* server re-number */
+            if (nf->high > high || nf->xmode & INN_ERROR)       /* server re-number */
                 updaterc(nf, i, high);
 
             DEBUG(("│└<readnews> 結束 %s，此群組已沒有新文章\n", newsgroup));
-            continue;		/* 這群組已沒有新文章，輪下一個群組 */
+            continue;           /* 這群組已沒有新文章，輪下一個群組 */
         }
 
-        if (nf->high < low - 1)				/* server re-number */
+        if (nf->high < low - 1)                         /* server re-number */
         {
             updaterc(nf, i, high);
             DEBUG(("│└<readnews> 結束 %s，此群組之 high-number 因伺服器異動而更新\n", newsgroup));
-            continue;		/* 這群組變更過 low-number，輪下一個群組 */
+            continue;           /* 這群組變更過 low-number，輪下一個群組 */
         }
 
         /* 取回群組上第 nf->high + 1 開始的 MaxArts 篇的文章 */
@@ -809,12 +809,12 @@ readnews(
         updaterc(nf, i, artno);
 
         DEBUG(("│└<readnews> 結束 %s，一共取回 %d 篇新文章\n", newsgroup, artcount));
-    }			/* end for () */
+    }                   /* end for () */
 }
 
 
 /*-------------------------------------------------------*/
-/* lock/unlock 程式，同時只能有一個 bbslink 在跑	 */
+/* lock/unlock 程式，同時只能有一個 bbslink 在跑         */
 /*-------------------------------------------------------*/
 
 
@@ -867,7 +867,7 @@ bbslink_get_lock(void)
 
 
 /*-------------------------------------------------------*/
-/* 主程式						 */
+/* 主程式                                                */
 /*-------------------------------------------------------*/
 
 
@@ -895,16 +895,16 @@ visit_site(
     if (!(node->xmode & INN_FEEDED))
         status ^= 0x02;
 
-    if (!status)		/* 不需要去拜訪對方 */
+    if (!status)                /* 不需要去拜訪對方 */
     {
         DEBUG(("→ 此站台沒有新信待送且被餵信，不需要去拜訪\n"));
         return;
     }
 
-    if (!(response = open_connect(node)))		/* 連線失敗 */
+    if (!(response = open_connect(node)))               /* 連線失敗 */
         return;
 
-    if (status & 0x01)	/* 有新信待送 */
+    if (status & 0x01)  /* 有新信待送 */
     {
         if (response == NNTP_POSTOK_VAL)
         {
@@ -932,7 +932,7 @@ visit_site(
         DEBUG(("│→ 沒有新信待送\n"));
     }
 
-    if (status & 0x02)	/* 需要連去取信 */
+    if (status & 0x02)  /* 需要連去取信 */
     {
         readnews(node);
     }

@@ -130,15 +130,15 @@ str_cut(
 }
 
 /*-------------------------------------------------------*/
-/* lib/str_decode.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* lib/str_decode.c     ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : included C for QP/BASE64 decoding		 */
-/* create : 95/03/29				 	 */
-/* update : 97/03/29				 	 */
+/* target : included C for QP/BASE64 decoding            */
+/* create : 95/03/29                                     */
+/* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
 
 /* ----------------------------------------------------- */
-/* QP code : "0123456789ABCDEF"				 */
+/* QP code : "0123456789ABCDEF"                          */
 /* ----------------------------------------------------- */
 
 
@@ -158,7 +158,7 @@ qp_code(
 
 
 /* ------------------------------------------------------------------ */
-/* BASE64 :							      */
+/* BASE64 :                                                           */
 /* "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/" */
 /* ------------------------------------------------------------------ */
 
@@ -183,7 +183,7 @@ base64_code(
 
 
 /* ----------------------------------------------------- */
-/* 取 encode / charset					 */
+/* 取 encode / charset                                   */
 /* ----------------------------------------------------- */
 
 
@@ -240,7 +240,7 @@ void
 mm_getcharset(
     const char* str,
     char* charset,
-    int size		/* charset size */
+    int size            /* charset size */
 )
 {
     char* src, *dst, *end;
@@ -257,7 +257,7 @@ mm_getcharset(
 
     src += 8;
     dst = charset;
-    end = dst + size - 1;	/* 保留空間給 '\0' */
+    end = dst + size - 1;       /* 保留空間給 '\0' */
     delim = '\0';
 
     while ( (ch = *src++) )
@@ -282,13 +282,13 @@ mm_getcharset(
 
     *dst = '\0';
 
-    if (!str_cmp(charset, "iso-8859-1"))	/* 歷史包伏不可丟 */
+    if (!str_cmp(charset, "iso-8859-1"))        /* 歷史包伏不可丟 */
         *charset = '\0';
 }
 
 
 /* ----------------------------------------------------- */
-/* judge & decode QP / BASE64				 */
+/* judge & decode QP / BASE64                            */
 /* ----------------------------------------------------- */
 
 
@@ -301,8 +301,8 @@ mm_getcharset(
 /* 解 Header 的 mmdecode */
 static int
 mmdecode_header(
-    char* src, 		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
-    char encode, 		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
+    char* src,          /* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
+    char encode,        /* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
     char* dst
 )
 {
@@ -311,13 +311,13 @@ mmdecode_header(
     int ch;
 
     t = dst;
-    encode |= 0x20;		/* Thor: to lower */
+    encode |= 0x20;             /* Thor: to lower */
 
     switch (encode)
     {
-    case 'q':			/* Thor: quoted-printable */
+    case 'q':                   /* Thor: quoted-printable */
 
-        while ((ch = *src) && ch != '?')	/* Thor: Header 裡面 0 和 '?' 都是 delimiter */
+        while ((ch = *src) && ch != '?')        /* Thor: Header 裡面 0 和 '?' 都是 delimiter */
         {
             if (ch == '=')
             {
@@ -333,7 +333,7 @@ mmdecode_header(
 
                 *t++ = (x << 4) + y;
             }
-            else if (ch == '_')	/* Header 要把 '_' 換成 ' ' */
+            else if (ch == '_') /* Header 要把 '_' 換成 ' ' */
             {
                 *t++ = ' ';
             }
@@ -345,23 +345,23 @@ mmdecode_header(
         }
         return t - dst;
 
-    case 'b':			/* Thor: base 64 */
+    case 'b':                   /* Thor: base 64 */
 
         /* Thor: pattern & bits are cleared outside while () */
         pattern = 0;
         bits = 0;
 
-        while ((ch = *src) && ch != '?')	/* Thor: Header 裡面 0 和 '?' 都是 delimiter */
+        while ((ch = *src) && ch != '?')        /* Thor: Header 裡面 0 和 '?' 都是 delimiter */
         {
             int x;
 
             x = base64_code(*src++);
-            if (x < 0)		/* Thor: ignore everything not in the base64,=,.. */
+            if (x < 0)          /* Thor: ignore everything not in the base64,=,.. */
                 continue;
 
             pattern = (pattern << 6) | x;
-            bits += 6;		/* Thor: 1 code gains 6 bits */
-            if (bits >= 8)		/* Thor: enough to form a byte */
+            bits += 6;          /* Thor: 1 code gains 6 bits */
+            if (bits >= 8)              /* Thor: enough to form a byte */
             {
                 bits -= 8;
                 *t++ = (pattern >> bits) & 0xff;
@@ -375,9 +375,9 @@ mmdecode_header(
 
 
 int
-mmdecode(	/* 解 Header 的 mmdecode */
-    char* src, 		/* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
-    char encode, 		/* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
+mmdecode(       /* 解 Header 的 mmdecode */
+    char* src,          /* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
+    char encode,        /* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
     char* dst
 )
 {
@@ -386,13 +386,13 @@ mmdecode(	/* 解 Header 的 mmdecode */
     int ch;
 
     t = dst;
-    encode |= 0x20;		/* Thor: to lower */
+    encode |= 0x20;             /* Thor: to lower */
 
     switch (encode)
     {
-    case 'q':			/* Thor: quoted-printable */
+    case 'q':                   /* Thor: quoted-printable */
 
-        while ( (ch = *src) )		/* Thor: 0 是 delimiter */
+        while ( (ch = *src) )           /* Thor: 0 是 delimiter */
         {
             if (ch == '=')
             {
@@ -416,23 +416,23 @@ mmdecode(	/* 解 Header 的 mmdecode */
         }
         return t - dst;
 
-    case 'b':			/* Thor: base 64 */
+    case 'b':                   /* Thor: base 64 */
 
         /* Thor: pattern & bits are cleared outside while () */
         pattern = 0;
         bits = 0;
 
-        while ( (ch = *src) )		/* Thor: 0 是 delimiter */
+        while ( (ch = *src) )           /* Thor: 0 是 delimiter */
         {
             int x;
 
             x = base64_code(*src++);
-            if (x < 0)		/* Thor: ignore everything not in the base64,=,.. */
+            if (x < 0)          /* Thor: ignore everything not in the base64,=,.. */
                 continue;
 
             pattern = (pattern << 6) | x;
-            bits += 6;		/* Thor: 1 code gains 6 bits */
-            if (bits >= 8)		/* Thor: enough to form a byte */
+            bits += 6;          /* Thor: 1 code gains 6 bits */
+            if (bits >= 8)              /* Thor: enough to form a byte */
             {
                 bits -= 8;
                 *t++ = (pattern >> bits) & 0xff;
@@ -461,45 +461,45 @@ str_decode(
     while (*src && (dst - buf) < sizeof(buf) - 1)
     {
         if (*src != '=')
-        {				/* Thor: not coded */
+        {                               /* Thor: not coded */
             char* tmp = src;
             while (adj && *tmp && is_space(*tmp))
                 tmp++;
             if (adj && *tmp == '=')
-            {				/* Thor: jump over space */
+            {                           /* Thor: jump over space */
                 adj = 0;
                 src = tmp;
             }
             else
                 *dst++ = *src++;
         }
-        else			/* Thor: *src == '=' */
+        else                    /* Thor: *src == '=' */
         {
             char* tmp = src + 1;
-            if (*tmp == '?')		/* Thor: =? coded */
+            if (*tmp == '?')            /* Thor: =? coded */
             {
                 /* "=?%s?Q?" for QP, "=?%s?B?" for BASE64 */
                 tmp++;
                 while (*tmp && *tmp != '?')
                     tmp++;
-                if (*tmp && tmp[1] && tmp[2] == '?')	/* Thor: *tmp == '?' */
+                if (*tmp && tmp[1] && tmp[2] == '?')    /* Thor: *tmp == '?' */
                 {
                     int i = mmdecode_header(tmp + 3, tmp[1], dst);
                     if (i >= 0)
                     {
-                        tmp += 3;		/* Thor: decode's src */
-                        while (*tmp && *tmp++ != '?');	/* Thor: no ? end, mmdecode_header -1 */
+                        tmp += 3;               /* Thor: decode's src */
+                        while (*tmp && *tmp++ != '?');  /* Thor: no ? end, mmdecode_header -1 */
                         /* Thor.980901: 0 也算 decode 結束 */
                         if (*tmp == '=')
                             tmp++;
-                        src = tmp;		/* Thor: decode over */
+                        src = tmp;              /* Thor: decode over */
                         dst += i;
-                        adj = 1;		/* Thor: adjacent */
+                        adj = 1;                /* Thor: adjacent */
                     }
                 }
             }
 
-            while (src != tmp)	/* Thor: not coded */
+            while (src != tmp)  /* Thor: not coded */
                 *dst++ = *src++;
         }
     }
@@ -562,14 +562,14 @@ setdirpath(
     strcpy(target, fname);
 }
 /* ----------------------------------------------------  */
-/* E-mail address format				 */
+/* E-mail address format                                 */
 /* ----------------------------------------------------  */
-/* 1. user@domain					 */
-/* 2. <user@domain>					 */
-/* 3. user@domain (nick)				 */
-/* 4. user@domain ("nick")				 */
-/* 5. nick <user@domain>				 */
-/* 6. "nick" <user@domain>				 */
+/* 1. user@domain                                        */
+/* 2. <user@domain>                                      */
+/* 3. user@domain (nick)                                 */
+/* 4. user@domain ("nick")                               */
+/* 5. nick <user@domain>                                 */
+/* 6. "nick" <user@domain>                               */
 /* ----------------------------------------------------  */
 
 int
@@ -689,7 +689,7 @@ str_hash2(
 
     while ((cc = *str++))
     {
-        seed = (seed << 7) - seed + cc;	/* 127 * seed + cc */
+        seed = (seed << 7) - seed + cc; /* 127 * seed + cc */
     }
     return (seed & 0x7fffffff);
 }
@@ -704,7 +704,7 @@ str_hash(
 
     while ((cc = *str++))
     {
-        seed = (seed << 5) - seed + cc;	/* 31 * seed + cc */
+        seed = (seed << 5) - seed + cc; /* 31 * seed + cc */
     }
     return (seed & 0x7fffffff);
 }
@@ -749,7 +749,7 @@ str_lowest(
 )
 {
     int ch;
-    int in_chi = 0;	/* 1: 前一碼是中文字 */
+    int in_chi = 0;     /* 1: 前一碼是中文字 */
 
     do
     {
@@ -861,13 +861,13 @@ str_ndup(
     return dst;
 }
 
-#ifndef	PASSLEN
-#define	PASSLEN 14
+#ifndef PASSLEN
+#define PASSLEN 14
 #endif
 
 
 /* ----------------------------------------------------- */
-/* password encryption					 */
+/* password encryption                                   */
 /* ----------------------------------------------------- */
 
 char* crypt();
@@ -960,7 +960,7 @@ str_pat(
         if (cp == '\\')
             cp = *pat++;
 
-#ifdef	CASE_IN_SENSITIVE
+#ifdef  CASE_IN_SENSITIVE
         if (cp >= 'A' && cp <= 'Z')
             cp += 0x20;
 
@@ -1011,7 +1011,7 @@ str_rev(
 }
 
 int
-str_rle(			/* run-length encoding */
+str_rle(        /* run-length encoding */
     char* str
 )
 {
@@ -1045,8 +1045,8 @@ str_rle(			/* run-length encoding */
 /* ------------------------------------------ */
 /* mail / post 時，依據時間建立檔案，加上郵戳 */
 /* ------------------------------------------ */
-/* Input: fpath = directory;		      */
-/* Output: fpath = full path;		      */
+/* Input: fpath = directory;                  */
+/* Output: fpath = full path;                 */
 /* ------------------------------------------ */
 
 void
@@ -1063,14 +1063,14 @@ str_stamp(
         ptime->tm_year % 100, ptime->tm_mon + 1, ptime->tm_mday);
 }
 
-#ifndef	NULL
-#define	NULL	(char* ) 0
+#ifndef NULL
+#define NULL    (char* ) 0
 #endif
 
 char*
 str_str(
     char* str,
-    char* tag                  /* non-empty lower case pattern */
+    char* tag           /* non-empty lower case pattern */
 )
 {
     int cc, c1, c2;
@@ -1110,13 +1110,13 @@ str_str(
 char*
 str_sub(
     char* str,
-    char* tag		/* non-empty lowest case pattern */
+    char* tag           /* non-empty lowest case pattern */
 )
 {
     int cc, c1, c2;
     char* p1, *p2;
-    int in_chi = 0;	/* 1: 前一碼是中文字 */
-    int in_chii;		/* 1: 前一碼是中文字 */
+    int in_chi = 0;     /* 1: 前一碼是中文字 */
+    int in_chii;        /* 1: 前一碼是中文字 */
 
     cc = *tag++;
 
@@ -1239,7 +1239,7 @@ Now(void)
 }
 
 void
-str_trim(			/* remove trailing space */
+str_trim(       /* remove trailing space */
     char* buf
 )
 {
@@ -1272,10 +1272,10 @@ str_ttl(
 }
 
 /*-------------------------------------------------------*/
-/* lib/str_xor.c     ( NTHU CS MapleBBS Ver 3.10 )   	 */
+/* lib/str_xor.c     ( NTHU CS MapleBBS Ver 3.10 )       */
 /*-------------------------------------------------------*/
-/* author : thor.bbs@bbs.cs.nthu.edu.tw			 */
-/* target : included C for str xor-ing (signed mail)	 */
+/* author : thor.bbs@bbs.cs.nthu.edu.tw                  */
+/* target : included C for str xor-ing (signed mail)     */
 /* create : 99/03/30                                     */
 /* update :   /  /                                       */
 /*-------------------------------------------------------*/
@@ -1374,10 +1374,10 @@ hash32(
 {
     int xo, cc;
 
-    xo = 1048583;			/* a big prime number */
+    xo = 1048583;                       /* a big prime number */
     while ((cc = *str++))
     {
-        xo = (xo << 5) - xo + cc;	/* 31 * xo + cc */
+        xo = (xo << 5) - xo + cc;       /* 31 * xo + cc */
     }
     return (xo & 0x7fffffff);
 }

@@ -1,16 +1,16 @@
 /*-------------------------------------------------------*/
-/* maple/myfavorite.c	( ES_BBS )	 	         */
+/* maple/myfavorite.c   ( ES_BBS )                       */
 /*-------------------------------------------------------*/
 /* author : cat.bbs@bbs.es.ncku.edu.tw                   */
-/* target : 建立 [我的最愛區] 				 */
-/* create : 2005/07/28				 	 */
-/* update : 					 	 */
-/* note   : for ccns bbs				 */
+/* target : 建立 [我的最愛區]                            */
+/* create : 2005/07/28                                   */
+/* update :                                              */
+/* note   : for ccns bbs                                 */
 /*-------------------------------------------------------*/
 
 #include "bbs.h"
 
-#ifdef	HAVE_FAVORITE
+#ifdef  HAVE_FAVORITE
 extern BCACHE *bshm;
 
 extern XZ xz[];
@@ -21,7 +21,7 @@ static void XoFavorite(char *folder, char *title, int level);
 static int myfavorite_add(XO *xo);
 static char currdir[64];
 
-time_t brd_visit[MAXBOARD];	/* 最近瀏覽時間 */
+time_t brd_visit[MAXBOARD];     /* 最近瀏覽時間 */
 
 void
 brd2myfavorite(
@@ -324,7 +324,7 @@ myfavorite_browse(
         sprintf(fpath, "gem/brd/%s/.DIR", ghdr->xname);
 
         chn = brd_bno(ghdr->xname);/*20100916.float 進入精華區等同進入看板*/
-        XoPost(chn);				/*防止利用其他看板的版主權限修改他版精華區 或觀看鎖定文章*/
+        XoPost(chn);                            /*防止利用其他看板的版主權限修改他版精華區 或觀看鎖定文章*/
 
         op = HAS_PERM(PERM_ALLBOARD) ? GEM_SYSOP : (bbstate & STAT_BOARD ? GEM_MANAGER : GEM_USER);
         strcpy(title, ghdr->title);
@@ -646,7 +646,7 @@ myfavorite_search(
 
 KeyFunc myfavorite_cb[] =
 {
-#ifdef	HAVE_LIGHTBAR
+#ifdef  HAVE_LIGHTBAR
     XO_ITEM, myfavorite_item_bar,
 #endif
     XO_INIT, myfavorite_init,
@@ -849,5 +849,5 @@ class_add(
     return XO_FOOT;
 }
 
-#endif	/* HAVE_FAVORITE */
+#endif  /* HAVE_FAVORITE */
 

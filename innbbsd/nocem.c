@@ -1,15 +1,15 @@
 /*-------------------------------------------------------*/
-/* nocem.c	( NTHU CS MapleBBS Ver 3.10 )		 */
+/* nocem.c      ( NTHU CS MapleBBS Ver 3.10 )            */
 /*-------------------------------------------------------*/
-/* target : NoCeM-INNBBSD				 */
-/* create : 99/02/25					 */
-/* update :   /  /  					 */
-/* author : leeym@cae.ce.ntu.edu.tw			 */
-/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw		 */
+/* target : NoCeM-INNBBSD                                */
+/* create : 99/02/25                                     */
+/* update :   /  /                                       */
+/* author : leeym@cae.ce.ntu.edu.tw                      */
+/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw                 */
 /*-------------------------------------------------------*/
 
 
-#if 0	/* itoc.030109.註解: nocem.c 的流程 */
+#if 0   /* itoc.030109.註解: nocem.c 的流程 */
     從 rec_article.c 收到 receive_nocem() 以後
     receive_nocem() → NCMparse() 把 notice parse 出來 → NCMverify() 驗證是不是真的
     → NCMcancel() 再送回 rec_article.c 的 cancel_article() 處理
@@ -26,8 +26,8 @@
 
 
 /* 驗證簽名：以下二者至多只能選一者 #define (可以二者都 #undef) */
-#undef	PGP	/* 必須裝有 pgp5 才可 define，並請檢查 pgpv 的路徑 */
-#undef	GPG	/* 必須裝有 gpg 才可 define，並請檢查 gpg 的路徑 */
+#undef  PGP     /* 必須裝有 pgp5 才可 define，並請檢查 pgpv 的路徑 */
+#undef  GPG     /* 必須裝有 gpg 才可 define，並請檢查 gpg 的路徑 */
 
 static int num_spammid = 0;
 static char NCMVER[20];
@@ -40,14 +40,14 @@ static char errmsg[512] = "nothing";
 
 
 /* ----------------------------------------------------- */
-/* NCM maintain						 */
+/* NCM maintain                                          */
 /* ----------------------------------------------------- */
 
 
 ncmperm_t *
 search_issuer(
     char *issuer,
-    char *type)		/* 若 type == NULL 表示只比對 issuer */
+    char *type)         /* 若 type == NULL 表示只比對 issuer */
 {
     ncmperm_t *find;
     int i;
@@ -79,7 +79,7 @@ NCMupdate(
 
 
 /* ----------------------------------------------------- */
-/* PGP verify						 */
+/* PGP verify                                            */
 /* ----------------------------------------------------- */
 
 
@@ -137,8 +137,8 @@ verify_buffer(
     run_pgp("/usr/local/bin/pgpv -f +batchmode=1 +OutputInformationFD=1", &pgpin, &pgpout);
     if (pgpin && pgpout)
     {
-        fprintf(pgpin, "%s\n", passphrase);		/* Send the passphrase in, first */
-        memset(passphrase, 0, strlen(passphrase));	/* Burn the passphrase */
+        fprintf(pgpin, "%s\n", passphrase);             /* Send the passphrase in, first */
+        memset(passphrase, 0, strlen(passphrase));      /* Burn the passphrase */
         fprintf(pgpin, "%s", buf);
         fclose(pgpin);
 
@@ -176,17 +176,17 @@ verify_buffer(
 }
 
 
-static int	/* return 0 success, otherwise fail */
+static int      /* return 0 success, otherwise fail */
 NCMverify(void)
 {
     char passphrase[80] = "Haha, I am Leeym..";
     return verify_buffer(BODY, passphrase);
 }
-#endif	/* PGP */
+#endif  /* PGP */
 
 
 /* ----------------------------------------------------- */
-/* GPG verify						 */
+/* GPG verify                                            */
 /* ----------------------------------------------------- */
 
 
@@ -287,11 +287,11 @@ NCMverify(void)
 {
     return verify_buffer(BODY);
 }
-#endif	/* GPG */
+#endif  /* GPG */
 
 
 /* ----------------------------------------------------- */
-/* parse NoCeM Notice Headers/Body			 */
+/* parse NoCeM Notice Headers/Body                       */
 /* ----------------------------------------------------- */
 
 
@@ -360,7 +360,7 @@ readNCMbody(
 }
 
 
-static int	/* return 0 success, otherwise fail */
+static int              /* return 0 success, otherwise fail */
 NCMparse(void)
 {
     char *fptr, *ptr;
@@ -461,7 +461,7 @@ NCMcancel(void)
 
 
 /* ----------------------------------------------------- */
-/* NoCeM-innbbsd					 */
+/* NoCeM-innbbsd                                         */
 /* ----------------------------------------------------- */
 
 
@@ -474,7 +474,7 @@ initial_nocem(void)
 }
 
 
-int			/* 0:success  -1:fail */
+int                     /* 0:success  -1:fail */
 receive_nocem(void)
 {
     int cc;
@@ -490,7 +490,7 @@ receive_nocem(void)
         return 0;
     }
 
-    if (!num_spammid)	/* nothing to cancel */
+    if (!num_spammid)   /* nothing to cancel */
         return 0;
 
 #if (defined(PGP) || defined(GPG))
@@ -507,4 +507,4 @@ receive_nocem(void)
 
     return 0;
 }
-#endif	/* _NoCeM_ */
+#endif  /* _NoCeM_ */

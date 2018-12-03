@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* cleanrecommend.c   ( CCNS BBS )  		         */
+/* cleanrecommend.c   ( CCNS BBS )                       */
 /*-------------------------------------------------------*/
 /* author : cat@ccns.ncku.edu.tw                         */
 /* target : cleanrecommend                               */
@@ -7,14 +7,14 @@
 /* update : NULL                                         */
 /*-------------------------------------------------------*/
 
-#undef	_MODES_C_
+#undef  _MODES_C_
 #include "bbs.h"
 
 #define NEGATIVE 0
 #define POSITIVE 1
 #define COMMENT  2
 
-#ifdef	HAVE_RECOMMEND
+#ifdef  HAVE_RECOMMEND
 typedef struct RecommendMessage
 {
     char userid[IDLEN + 1];
@@ -33,7 +33,7 @@ char title[80], name[10];
 static int
 cleanrecommend_log(
     RMSG *rmsg,
-    int mode)	/* 0:partial 1:all */
+    int mode)   /* 0:partial 1:all */
 {
     FILE *fp;
     time_t now;

@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* personal.c   ( CCNS BBS )  		                 */
+/* personal.c   ( CCNS BBS )                             */
 /*-------------------------------------------------------*/
 /* author : cat@ccns.ncku.edu.tw                         */
 /* target : personal                                     */
@@ -7,19 +7,19 @@
 /* update : NULL                                         */
 /*-------------------------------------------------------*/
 
-#undef	_MODES_C_
+#undef  _MODES_C_
 #include "bbs.h"
 
 
 extern XZ xz[];
 extern BCACHE *bshm;
-static int mode = 0;	/* 0:email 1:brdtitle */
+static int mode = 0;    /* 0:email 1:brdtitle */
 char msg[60];
 
 static int
 personal_log(
     PB *personal,
-    int admin)		/* 0:¥Ó½Ð  1:¶}ªO  2:©Úµ´ */
+    int admin)          /* 0:¥Ó½Ð  1:¶}ªO  2:©Úµ´ */
 {
     FILE *fp;
     time_t now;
@@ -362,7 +362,7 @@ personal_switch(
 static int
 mail2usr(
     PB *personal,
-    int admin)		/* 0:open 1:deny */
+    int admin)          /* 0:open 1:deny */
 {
     HDR hdr;
     time_t now;

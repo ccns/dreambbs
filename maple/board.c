@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* board.c	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* board.c      ( NTHU CS MapleBBS Ver 2.36 )            */
 /*-------------------------------------------------------*/
-/* target : 看板、群組功能	 			 */
-/* create : 95/03/29				 	 */
-/* update : 95/12/15				 	 */
+/* target : 看板、群組功能                               */
+/* create : 95/03/29                                     */
+/* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
 
 #include "bbs.h"
@@ -13,14 +13,14 @@ extern XZ xz[];
 
 
 char brd_bits[MAXBOARD];
-time_t brd_visit[MAXBOARD];	/* 最近瀏覽時間 */
+time_t brd_visit[MAXBOARD];     /* 最近瀏覽時間 */
 static char *class_img;
 
-#ifdef	HAVE_PROFESS
+#ifdef  HAVE_PROFESS
 static char *profess_img = NULL;
 #endif
 
-#ifdef	HAVE_FAVORITE
+#ifdef  HAVE_FAVORITE
 static char *favorite_img = NULL;
 #endif
 
@@ -41,7 +41,7 @@ brh_alloc(
     if (size > brh_size)
     {
         /* size = (size & -BRH_PAGE) + BRH_PAGE; */
-        size += n >> 4;		/* 多預約一些記憶體 */
+        size += n >> 4;         /* 多預約一些記憶體 */
         base = (int *) realloc((char *) base, size);
 
         if (base == NULL)
@@ -102,7 +102,7 @@ brh_put(void)
 
 void
 brh_get(
-    time_t bstamp, 		/* board stamp */
+    time_t bstamp,              /* board stamp */
     int bhno)
 {
     int *head, *tail;
@@ -143,7 +143,7 @@ brh_get(
     *tail++ = bstamp;
     *tail++ = bhno;
 
-    if (bcnt)			/* expand history list */
+    if (bcnt)                   /* expand history list */
     {
         int *list;
 
@@ -201,7 +201,7 @@ brh_unread(
 
 void
 brh_visit(
-    int mode)			/* 0 : visit, 1: un-visit */
+    int mode)                   /* 0 : visit, 1: un-visit */
 {
     int *list;
 
@@ -236,10 +236,10 @@ brh_add(time_t prev, time_t chrono, time_t next)
         {
             if (prev <= final)
             {
-                if (next < begin)	/* increase */
+                if (next < begin)       /* increase */
                     *head = chrono;
                 else
-                {			/* merge */
+                {                       /* merge */
                     *base = item - 2;
                     base = head - 1;
                     do
@@ -302,11 +302,11 @@ brh_add(time_t prev, time_t chrono, time_t next)
 }
 
 /* ----------------------------------------------------- */
-/* 強迫 user login 時候讀取某公告看板			 */
+/* 強迫 user login 時候讀取某公告看板                    */
 /* ----------------------------------------------------- */
 
 /* cdchen.bbs@bbs.ntcic.edu.tw add by statue.000725 */
-#ifdef	HAVE_FORCE_BOARD
+#ifdef  HAVE_FORCE_BOARD
 extern void
 force_board (void)
 {
@@ -334,13 +334,13 @@ force_board (void)
 
 
 /* ----------------------------------------------------- */
-/* board permission check				 */
+/* board permission check                                */
 /* ----------------------------------------------------- */
 
 
 static inline int
 is_bm(
-    char *list)			/* 板主：BM list */
+    char *list)                 /* 板主：BM list */
 {
     int cc, len;
     char *userid;
@@ -363,7 +363,7 @@ is_bm(
     return 0;
 }
 
-#if	defined(HAVE_RESIST_WATER) || defined(HAVE_DETECT_CROSSPOST)
+#if     defined(HAVE_RESIST_WATER) || defined(HAVE_DETECT_CROSSPOST)
 void
 remove_perm(void)
 {
@@ -390,7 +390,7 @@ Ben_Perm(
 #ifdef  HAVE_MODERATED_BOARD
         extern int bm_belong();
 #ifdef  HAVE_WATER_LIST
-#ifdef	HAVE_SYSOP_WATERLIST
+#ifdef  HAVE_SYSOP_WATERLIST
         if (bm_belong(bname) == BRD_R_BIT)
             return BRD_R_BIT;
         else
@@ -461,7 +461,7 @@ Ben_Perm(
 
 
 /* ----------------------------------------------------- */
-/* 載入 currboard 進行若干設定				 */
+/* 載入 currboard 進行若干設定                           */
 /* ----------------------------------------------------- */
 
 int
@@ -517,7 +517,7 @@ brh_load(void)
     }
 
     /* --------------------------------------------------- */
-    /* 將 .BRH 載入 memory				 */
+    /* 將 .BRH 載入 memory                                 */
     /* --------------------------------------------------- */
 
     size = 0;
@@ -534,7 +534,7 @@ brh_load(void)
     }
 
     /* --------------------------------------------------- */
-    /* 多保留 BRH_WINDOW 的運作空間			 */
+    /* 多保留 BRH_WINDOW 的運作空間                        */
     /* --------------------------------------------------- */
 
     /* brh_size = n = ((size + BRH_WINDOW) & -BRH_PAGE) + BRH_PAGE; */
@@ -560,7 +560,7 @@ brh_load(void)
         {
             bstamp = *head;
 
-            if (bstamp & BRH_SIGN)	/* zap */
+            if (bstamp & BRH_SIGN)      /* zap */
             {
                 bstamp ^= BRH_SIGN;
 
@@ -590,7 +590,7 @@ brh_load(void)
             {
 
                 bits[bhno] |= BRD_H_BIT;/* 已有閱讀記錄 */
-                bstp[bhno] = head[1];	/* 上次閱讀時間 */
+                bstp[bhno] = head[1];   /* 上次閱讀時間 */
                 cbno = bhno;
 
                 if (n > 0)
@@ -639,14 +639,14 @@ brh_load(void)
     brh_tail = base;
 
     /* --------------------------------------------------- */
-    /* 設定 default board					 */
+    /* 設定 default board                                  */
     /* --------------------------------------------------- */
 
     strcpy(currboard, "尚未選定");
 #ifdef HAVE_BOARD_PAL
     cutmp->board_pal = brd_bno(currboard);
 #endif
-#ifdef	HAVE_RESIST_WATER
+#ifdef  HAVE_RESIST_WATER
     if (checkqt > CHECK_QUOT_MAX)
         remove_perm();
 #endif
@@ -828,7 +828,7 @@ XoPost(
         if (!(brd->battr & BRD_ANONYMOUS))
             brd_usies_BMlog();
 
-#ifdef	HAVE_COUNT_BOARD
+#ifdef  HAVE_COUNT_BOARD
 //      if (!(strcmp(brd->brdname, "Test")))
         if (!(bbstate & BRD_NOTOTAL) && !(bits & BRD_V_BIT))
             brd->n_reads++;
@@ -840,7 +840,7 @@ XoPost(
 
 
 /* ----------------------------------------------------- */
-/* Class [分類群組]					 */
+/* Class [分類群組]                                      */
 /* ----------------------------------------------------- */
 
 /* cache.090503: 即時熱門看板 */
@@ -857,7 +857,7 @@ static int class_hot = 0;
 static int class_flag2 = 0;  /* 1:列出好友/秘密板，且自己又有閱讀權限的 */
 static int class_flag;
 
-#define	BFO_YANK	0x01
+#define BFO_YANK        0x01
 
 static int
 class_check(
@@ -878,7 +878,7 @@ class_check(
         case 0:
             cbase = (short *) class_img;
             break;
-#ifdef	HAVE_PROFESS
+#ifdef  HAVE_PROFESS
         case 1:
             cbase = (short *) profess_img;
             break;
@@ -957,7 +957,7 @@ class_load(
     XO *xo)
 {
     short *cbase, *chead, *ctail;
-    int chn;			/* ClassHeader number */
+    int chn;                    /* ClassHeader number */
     int pos, max, val, zap;
     int bnum = 0;
     BRD *brd;
@@ -970,7 +970,7 @@ class_load(
         case 0:
             cbase = (short *) class_img;
             break;
-#ifdef	HAVE_PROFESS
+#ifdef  HAVE_PROFESS
         case 1:
             cbase = (short *) profess_img;
             break;
@@ -1100,7 +1100,7 @@ class_body(
         case 0:
             img = class_img;
             break;
-#ifdef	HAVE_PROFESS
+#ifdef  HAVE_PROFESS
         case 1:
             img = profess_img;
             break;
@@ -1328,7 +1328,7 @@ class_head(
 }
 
 static int
-class_init(			/* re-init */
+class_init(                     /* re-init */
     XO *xo)
 {
     class_load(xo);
@@ -1504,7 +1504,7 @@ class_browse(
         }
     }
 
-    return class_head(xo);	/* Thor.0701: 無法清少一點, 因為 XoPost */
+    return class_head(xo);      /* Thor.0701: 無法清少一點, 因為 XoPost */
 }
 
 int
@@ -1576,7 +1576,7 @@ XoAuthor(
 
     do
     {
-        if ((chn = *chead++) >= 0)	/* Thor.0818: 不為 group */
+        if ((chn = *chead++) >= 0)      /* Thor.0818: 不為 group */
         {
             /* Thor.0701: 尋找指定作者文章, 有則移位置, 並放入 */
 
@@ -1621,7 +1621,7 @@ XoAuthor(
 
 #else
             xo_t = xo_new(folder);
-            xo_t->pos = XO_TAIL;	/* 第一次進入時，將游標放在最後面 */
+            xo_t->pos = XO_TAIL;        /* 第一次進入時，將游標放在最後面 */
             xo_load(xo_t, sizeof(HDR));
             if (xo_t->max <= 0)
                 continue;
@@ -1632,7 +1632,7 @@ XoAuthor(
                 if (!(tail->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK)))
                 {
                     /* check condition */
-                    if (!str_ncmp(tail->owner, author, len))	/* Thor.0818:希望比較快 */
+                    if (!str_ncmp(tail->owner, author, len))    /* Thor.0818:希望比較快 */
                     {
                         xo_get(folder)->pos = tail - head;
                         chp[tag++] = chn;
@@ -1665,17 +1665,17 @@ XoAuthor(
 
     xo_a.pos = xo_a.top = 0;
     xo_a.max = tag;
-    xo_a.key = 1;			/* all boards */
+    xo_a.key = 1;                       /* all boards */
     xo_a.xyz = (char *) chp;
 
-    xoTmp = xz[XZ_CLASS - XO_ZONE].xo;	/* Thor.0701: 記下原來的class_xo */
+    xoTmp = xz[XZ_CLASS - XO_ZONE].xo;  /* Thor.0701: 記下原來的class_xo */
 
     xz[XZ_CLASS - XO_ZONE].xo = &xo_a;
     xover(XZ_CLASS);
 
     free(chp);
 
-    xz[XZ_CLASS - XO_ZONE].xo = xoTmp;		/* Thor.0701: 還原 class_xo */
+    xz[XZ_CLASS - XO_ZONE].xo = xoTmp;          /* Thor.0701: 還原 class_xo */
 
     return class_body(xo);
 }
@@ -2026,7 +2026,7 @@ check_new(
     }
 }
 
-#ifdef	HAVE_INFO
+#ifdef  HAVE_INFO
 int
 Information(void)
 {
@@ -2039,7 +2039,7 @@ Information(void)
 }
 #endif
 
-#ifdef	HAVE_STUDENT
+#ifdef  HAVE_STUDENT
 int
 Student(void)
 {
@@ -2052,7 +2052,7 @@ Student(void)
 }
 #endif
 
-#ifdef	HAVE_PROFESS
+#ifdef  HAVE_PROFESS
 int
 Profess(void)
 {
@@ -2084,7 +2084,7 @@ void
 board_main(void)
 {
     int fsize;
-#ifdef	HAVE_PROFESS
+#ifdef  HAVE_PROFESS
     int psize;
 #endif
     struct stat st;
@@ -2094,7 +2094,7 @@ board_main(void)
 #endif
 //  brh_load();
 
-#ifdef	HAVE_RECOMMEND
+#ifdef  HAVE_RECOMMEND
     recommend_time = time(0);
 #endif
 
@@ -2104,7 +2104,7 @@ board_main(void)
         unlink(CLASS_IMGFILE);
 
     class_img = f_img(CLASS_IMGFILE, &fsize);
-#ifdef	HAVE_PROFESS
+#ifdef  HAVE_PROFESS
     profess_img = f_img(PROFESS_IMGFILE, &psize);
 #endif
 
@@ -2120,14 +2120,14 @@ board_main(void)
     {
         blog("CACHE", CLASS_IMGFILE);
     }
-#ifdef	HAVE_PROFESS
+#ifdef  HAVE_PROFESS
     if (profess_img == NULL)
     {
         blog("CACHE", PROFESS_IMGFILE);
     }
 #endif
 
-    if (!cuser.userlevel)		/* guest yank all boards */
+    if (!cuser.userlevel)               /* guest yank all boards */
     {
         class_flag = BFO_YANK;
     }
@@ -2135,7 +2135,7 @@ board_main(void)
     {
 
 #if 0
-        class_flag = 0;		/* to speed up */
+        class_flag = 0;         /* to speed up */
 #endif
 
         class_flag = cuser.ufo2 & UFO2_BRDNEW;
@@ -2145,8 +2145,8 @@ board_main(void)
     if (class_img)
         class_load(&board_xo);
 
-    xz[XZ_CLASS - XO_ZONE].xo = &board_xo;	/* Thor: default class_xo */
-    xz[XZ_CLASS - XO_ZONE].cb = class_cb;		/* Thor: default class_xo */
+    xz[XZ_CLASS - XO_ZONE].xo = &board_xo;      /* Thor: default class_xo */
+    xz[XZ_CLASS - XO_ZONE].cb = class_cb;               /* Thor: default class_xo */
 }
 
 int

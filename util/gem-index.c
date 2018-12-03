@@ -1,27 +1,27 @@
 /*-------------------------------------------------------*/
-/* util/gem-index.c	( NTHU CS MapleBBS Ver 2.39 )	 */
+/* util/gem-index.c     ( NTHU CS MapleBBS Ver 2.39 )    */
 /*-------------------------------------------------------*/
-/* target : 精華區索引程式 (man index)			 */
-/* create : 95/03/29				 	 */
-/* update : 95/08/08				 	 */
+/* target : 精華區索引程式 (man index)                   */
+/* create : 95/03/29                                     */
+/* update : 95/08/08                                     */
 /*-------------------------------------------------------*/
-/* syntax : gem-index [board]				 */
-/* [board] 有值 ==> 只跑該 board		 */
-/* 空的 ==> 所有的 boards 都跑		 */
+/* syntax : gem-index [board]                            */
+/* [board] 有值 ==> 只跑該 board                         */
+/* 空的 ==> 所有的 boards 都跑                           */
 /*-------------------------------------------------------*/
 
 
-#include	"bbs.h"
+#include "bbs.h"
 
-#define	COLOR_INDEX	/* Thor.980307: 加上顏色試試是否比較易找 */
+#define COLOR_INDEX     /* Thor.980307: 加上顏色試試是否比較易找 */
 
 
 /* GINDEX_LOG  眸殿晶儭纁| */
 #define GINDEX_LOG      BBSHOME"/"FN_GINDEX_LOG
 
 
-#define	CHRONO_INDEX	1
-#define	CHRONO_LOG	2
+#define CHRONO_INDEX    1
+#define CHRONO_LOG      2
 
 
 static char fn_index[] = "@/@index";
@@ -50,7 +50,7 @@ gindex(
     FILE *fgem;
     HDR hdr;
 
-    if (level > 7)		/* endless loop ? */
+    if (level > 7)              /* endless loop ? */
     {
         fprintf(flog, "level: %d [%s]\n", level, fpath);
         return;
@@ -58,7 +58,7 @@ gindex(
 
     if (!level)
     {
-        fprintf(flog, "%-14s", fpath);	/* report */
+        fprintf(flog, "%-14s", fpath);  /* report */
         sprintf(pool, "%s/.DIR", fpath);
         fpath = pool;
         strcpy(pgem, fpath);
@@ -150,7 +150,7 @@ int gindex(void)
         if ((xmode & (GEM_FOLDER | GEM_BOARD | GEM_GOPHER | GEM_HTTP)) ==
             GEM_FOLDER)
         {
-            ptr = hdr.xname;		/* F1234567 */
+            ptr = hdr.xname;            /* F1234567 */
             sprintf(fname, "%c/%s", (*ptr == '@' ? '@' : ptr[7]), ptr);
             gindex(level + 1, buf, fpath, fndx);
         }

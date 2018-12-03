@@ -16,7 +16,7 @@
 
 #ifdef SHOW_PASSWORD
 
-#define GUESS_LEN       3               /* 代絏()盞絏舱 (程琌 PSWDLEN) */
+#define GUESS_LEN       3       /* 代絏()盞絏舱 (程琌 PSWDLEN) */
 
 static inline void
 showpasswd(

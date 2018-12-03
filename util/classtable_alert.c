@@ -1,23 +1,23 @@
 /*-------------------------------------------------------*/
-/* util/classtable_alert.c	( YZU WindTopBBS Ver 3.00 )	 */
+/* util/classtable_alert.c   ( YZU WindTopBBS Ver 3.00 ) */
 /*-------------------------------------------------------*/
-/* target : 		 	 			 */
-/* create : 					 	 */
-/* update : 					 	 */
+/* target :                                              */
+/* create :                                              */
+/* update :                                              */
 /*-------------------------------------------------------*/
 
 
-//           int tm_sec;     /* seconds (0 - 60) */
-//           int tm_min;     /* minutes (0 - 59) */
-//           int tm_hour;    /* hours (0 - 23) */
-//           int tm_mday;    /* day of month (1 - 31) */
-//           int tm_mon;     /* month of year (0 - 11) */
-//           int tm_year;    /* year - 1900 */
-//           int tm_wday;    /* day of week (Sunday = 0) */
-//           int tm_yday;    /* day of year (0 - 365) */
-//           int tm_isdst;   /* is summer time in effect? */
-//           char *tm_zone;  /* abbreviation of timezone name */
-//           long tm_gmtoff; /* offset from UTC in seconds */
+//int tm_sec;             /* seconds (0 - 60) */
+//int tm_min;             /* minutes (0 - 59) */
+//int tm_hour;            /* hours (0 - 23) */
+//int tm_mday;            /* day of month (1 - 31) */
+//int tm_mon;             /* month of year (0 - 11) */
+//int tm_year;            /* year - 1900 */
+//int tm_wday;            /* day of week (Sunday = 0) */
+//int tm_yday;            /* day of year (0 - 365) */
+//int tm_isdst;           /* is summer time in effect? */
+//char *tm_zone;          /* abbreviation of timezone name */
+long tm_gmtoff;         /* offset from UTC in seconds */
 
 #include <sys/shm.h>
 #include "bbs.h"
@@ -121,7 +121,7 @@ bedit(
     BMW *bmw)
 {
 
-    bmw->recver = up->userno;	/* 先記下 userno 作為 check */
+    bmw->recver = up->userno;   /* 先記下 userno 作為 check */
 
     bmw->caller = NULL;
     bmw->sender = 0;
@@ -165,7 +165,7 @@ init(void)
                 {
                     CLASS_TABLE_ALERT_ITEM *cur;
                     cur = &(ptr->item[(p->tm_wday-1)*13 + (p->tm_hour - 8)]);
-//		            cur = &(ptr->item[i]);
+//                  cur = &(ptr->item[i]);
                     if (strlen(cur->room))
                     {
                         sprintf(bmw.msg, "◎您在 %-.16s 有一門 [%s] 課，上課不要遲到哦!!", cur->room, cur->condensation);
@@ -254,8 +254,8 @@ bcache(
             {
                 //printf("6bcache:%d\n", size);
 
-//		        if (size > sizeof(CLASS_TABLE_ALERT))
-//			        xsort(pbase, size / sizeof(CLASS_TABLE_ALERT), sizeof(CLASS_TABLE_ALERT), int1_cmp);
+//              if (size > sizeof(CLASS_TABLE_ALERT))
+//                  xsort(pbase, size / sizeof(CLASS_TABLE_ALERT), sizeof(CLASS_TABLE_ALERT), int1_cmp);
                 //printf("5bcache\n");
 
                 lseek(fd, 0, SEEK_SET);

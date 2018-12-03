@@ -1,14 +1,14 @@
 /*-------------------------------------------------------*/
 /* newboard.c   ( YZU_CSE WindTop BBS )                  */
 /*-------------------------------------------------------*/
-/* target : newboard routines			 	 */
-/* create : 2000/01/02				 	 */
-/* update : NULL				 	 */
+/* target : newboard routines                            */
+/* create : 2000/01/02                                   */
+/* update : NULL                                         */
 /*-------------------------------------------------------*/
 
 #include "bbs.h"
 
-#undef	TEST_COSIGN
+#undef  TEST_COSIGN
 
 
 extern XZ xz[];
@@ -21,11 +21,11 @@ static int nbrd_head(XO *xo);
 
 extern BCACHE *bshm;
 
-#define	S_PART		"-----------------------------------------------------------\n"
-#define	S_AGREE_START	">------------------- [   贊成開始   ] --------------------<\n"
-#define	S_AGREE_END	">------------------- [   贊成結束   ] --------------------<\n"
-#define	S_ASSIST_START	">------------------- [   反對開始   ] --------------------<\n"
-#define	S_ASSIST_END	">------------------- [   反對結束   ] --------------------<\n"
+#define S_PART          "-----------------------------------------------------------\n"
+#define S_AGREE_START   ">------------------- [   贊成開始   ] --------------------<\n"
+#define S_AGREE_END     ">------------------- [   贊成結束   ] --------------------<\n"
+#define S_ASSIST_START  ">------------------- [   反對開始   ] --------------------<\n"
+#define S_ASSIST_END    ">------------------- [   反對結束   ] --------------------<\n"
 
 
 
@@ -509,10 +509,10 @@ XO *xo)
     }
 
     /* --------------------------------------------------- */
-    /* 檢查是否已經連署過					 */
+    /* 檢查是否已經連署過                                        */
     /* --------------------------------------------------- */
 
-#define	FV_SZ	(sizeof(time_t))
+#define FV_SZ   (sizeof(time_t))
 
     usr_fpath(buf, cuser.userid, "newboard");
     fv = open(buf, O_RDWR | O_CREAT, 0600);
@@ -530,7 +530,7 @@ XO *xo)
     }
     check = nbrd->btime;
     /* --------------------------------------------------- */
-    /* 開始連署						 */
+    /* 開始連署                                          */
     /* --------------------------------------------------- */
 
     nbrd_fpath(fpath, xo->dir, nbrd);
@@ -802,7 +802,7 @@ XO *xo)
     return nbrd_head(xo);
 }
 
-#ifdef	TEST_COSIGN
+#ifdef  TEST_COSIGN
 static int
 nbrd_zero(
 XO *xo)
@@ -931,7 +931,7 @@ KeyFunc nbrd_cb[] =
     {'c', nbrd_close},
     {'d', nbrd_delete},
     {'x', nbrd_cross},
-#ifdef	TEST_COSIGN
+#ifdef  TEST_COSIGN
     {'z', nbrd_zero},
 #endif
     {Ctrl('P'), nbrd_add},

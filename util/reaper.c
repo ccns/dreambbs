@@ -1,16 +1,16 @@
 /*-------------------------------------------------------*/
-/* util/reaper.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* util/reaper.c        ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : 使用者帳號定期清理				 */
-/* create : 95/03/29				 	 */
-/* update : 97/03/29				 	 */
+/* target : 使用者帳號定期清理                           */
+/* create : 95/03/29                                     */
+/* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
-/* syntax : reaper					 */
+/* syntax : reaper                                       */
 /*-------------------------------------------------------*/
-/* notice : ~bbs/usr/@/     - expired users's data	 */
-/*          run/reaper.log  - list of expired users	 */
-/*          run/manager.log - list of managers		 */
-/*          run/lazybm.log - list of lazy bm		 */
+/* notice : ~bbs/usr/@/     - expired users's data       */
+/*          run/reaper.log  - list of expired users      */
+/*          run/manager.log - list of managers           */
+/*          run/lazybm.log - list of lazy bm             */
 /*          run/emailaddr.log - list of same email addr  */
 /*-------------------------------------------------------*/
 
@@ -43,22 +43,22 @@
 
 #define BANREGIST       "etc/banregist.acl"
 #define CHECK_LAZYBM
-#define	EADDR_GROUPING  /* Thor.980930: 若關閉時用 undef即可 */
+#define EADDR_GROUPING  /* Thor.980930: 若關閉時用 undef即可 */
 
-#undef	DEBUG
+#undef  DEBUG
 
 #ifdef CHECK_LAZYBM
-#define DAY_LAZYBM	30
+#define DAY_LAZYBM      30
 #endif
 
 #ifdef EADDR_GROUPING
 /* Thor.980930: 3個以上account同一email即注意 */
-#define EMAIL_REG_LIMIT 	3
+#define EMAIL_REG_LIMIT         3
 #endif
 
-#define DAY_NEWUSR	90	 /* login 不超過 10 次 */
-#define DAY_FORFUN	365	 /* 未完成身份認證 */
-#define DAY_OCCUPY	730  /* 已完成身份認證 */
+#define DAY_NEWUSR      90      /* login 不超過 10 次 */
+#define DAY_FORFUN      365     /* 未完成身份認證 */
+#define DAY_OCCUPY      730     /* 已完成身份認證 */
 
 
 static time_t due_newusr;
@@ -486,7 +486,7 @@ reaper(
 #endif
         }
     }
-    else if (ulevel)		/* guest.ulevel == 0, 永遠保留 */
+    else if (ulevel)            /* guest.ulevel == 0, 永遠保留 */
     {
         if (ulevel & PERM_CRIMINAL)
         {
@@ -497,7 +497,7 @@ reaper(
         if (login <= 3 && life < due_newusr)
             life = 0;
 
-#ifdef	VACATION
+#ifdef  VACATION
         if (life < due_occupy)
             life = 0;
 #else
@@ -537,7 +537,7 @@ reaper(
             fprintf(flog, "%5d) %-13s%s%d\n", fd, acct.userid, buf, login);
             prune++;
         }
-#ifdef	HAVE_MAILGEM
+#ifdef  HAVE_MAILGEM
         else if (!(ulevel & PERM_MBOX))
         {
             char fph[128];

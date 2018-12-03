@@ -1,26 +1,26 @@
 /*-------------------------------------------------------*/
-/* util/account.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* util/account.c       ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : 上站人次統計、系統資料備份、開票		 */
-/* create : 95/03/29				 	 */
-/* update : 97/03/29				 	 */
+/* target : 上站人次統計、系統資料備份、開票             */
+/* create : 95/03/29                                     */
+/* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
-/* syntax : 本程式宜以 crontab 執行，設定時間為每小時	 */
-/* 1-5 分 之間						 */
+/* syntax : 本程式宜以 crontab 執行，設定時間為每小時    */
+/* 1-5 分 之間                                           */
 /*-------------------------------------------------------*/
-/* notice : brdshm (board shared memory) synchronize	 */
+/* notice : brdshm (board shared memory) synchronize     */
 /*-------------------------------------------------------*/
 
 #include "bbs.h"
 
-#define	MAX_LINE	16
-#define	ADJUST_M	10	/* adjust back 10 minutes */
+#define MAX_LINE        16
+#define ADJUST_M        10      /* adjust back 10 minutes */
 
-static char fn_today[] = "gem/@/@-act";	/* 今日上站人次統計 */
-static char fn_yesterday[] = "gem/@/@=act";	/* 昨日上站人次統計 */
+static char fn_today[] = "gem/@/@-act"; /* 今日上站人次統計 */
+static char fn_yesterday[] = "gem/@/@=act";     /* 昨日上站人次統計 */
 
 /* ----------------------------------------------------- */
-/* 開票：shm 部份須與 cache.c 相容			 */
+/* 開票：shm 部份須與 cache.c 相容                       */
 /* ----------------------------------------------------- */
 
 static BCACHE *bshm;
@@ -131,7 +131,7 @@ TchoiceCompare(struct Tchoice * i, struct Tchoice * j)
 
 static int
 draw_vote(
-    BRD *bdh, 			/* Thor: 傳入 BRD, 可查 battr */
+    BRD *bdh,                   /* Thor: 傳入 BRD, 可查 battr */
     char *fpath,
     VCH *vch)
 {
@@ -178,7 +178,7 @@ draw_vote(
 
     /* 累計投票結果 */
 
-    bollt = 0;			/* Thor: 總票數歸0 */
+    bollt = 0;                  /* Thor: 總票數歸0 */
 
     list = (int *) malloc(total);
     total = read(fd, list, total);
@@ -253,7 +253,7 @@ draw_vote(
     f_suck(fp, fpath);
     fclose(fp);
 
-    fp = fopen(fpath, "w");	/* Thor: 用 O_ 暫存一下下... */
+    fp = fopen(fpath, "w");     /* Thor: 用 O_ 暫存一下下... */
     *fname = 'Z';
     f_suck(fp, fpath);
     sprintf(bpath, "brd/%s/@/@vote", bid);
@@ -420,14 +420,14 @@ closepolls(void)
 
 
 /* ----------------------------------------------------- */
-/* build Class image					 */
+/* build Class image                                     */
 /* ----------------------------------------------------- */
 
 
-#define CLASS_RUNFILE	"run/class.run"
-#define PROFESS_RUNFILE	"run/profess.run"
+#define CLASS_RUNFILE   "run/class.run"
+#define PROFESS_RUNFILE "run/profess.run"
 
-#define	CH_MAX	5000
+#define CH_MAX  5000
 
 
 static ClassHeader *chx[CH_MAX];
@@ -691,7 +691,7 @@ main(void)
     char buf[256], ymd[16];
     FILE *fp, *fpw;
 
-    int act[26];			/* 次數/累計時間 */
+    int act[26];                        /* 次數/累計時間 */
     time_t now;
     struct tm ntime, ptime, *xtime;
 
@@ -699,7 +699,7 @@ main(void)
     xtime = localtime(&now);
     ntime = *xtime;
 
-    now -= ADJUST_M * 60;		/* back to ancent */
+    now -= ADJUST_M * 60;               /* back to ancent */
     xtime = localtime(&now);
     ptime = *xtime;
 
@@ -707,7 +707,7 @@ main(void)
     umask(077);
 
     /* --------------------------------------------------- */
-    /* 上站人次統計					 */
+    /* 上站人次統計                                        */
     /* --------------------------------------------------- */
 
     memset(act, 0, sizeof(act));
@@ -815,7 +815,7 @@ main(void)
     fclose(fp);
 
     /* --------------------------------------------------- */
-    /* build Class image					 */
+    /* build Class image                                   */
     /* --------------------------------------------------- */
 
     bshm_init();
@@ -823,13 +823,13 @@ main(void)
     /*bshm_init();
     profess_image();*/
     /* --------------------------------------------------- */
-    /* 系統開票						 */
+    /* 系統開票                                            */
     /* --------------------------------------------------- */
 
     closepolls();
 
     /* --------------------------------------------------- */
-    /* 資料壓縮備份、熱門話題統計				 */
+    /* 資料壓縮備份、熱門話題統計                          */
     /* --------------------------------------------------- */
 
     /* Thor.990329: y2k */
@@ -960,7 +960,7 @@ main(void)
         sprintf(title, "[記錄] %s看板遺失 .DIR 紀錄", date);
         keeplog("run/NOBRDDIR.log", BRD_SECRET, title, 2);
 
-#ifdef	HAVE_FAVORITE
+#ifdef  HAVE_FAVORITE
         sprintf(title, "[記錄] %s我的最愛紀錄", date);
         keeplog(FN_FAVORITE_LOG, BRD_SECRET, title, 2);
 #endif
@@ -1038,7 +1038,7 @@ main(void)
         system("bin/userno");
         keeplog(FN_USERNO_LOG, BRD_SECRET, title, 2);
         gzip(FN_USERNO_LOG, "userno/userno", ymd);        /* 所有 [使用者編號紀錄] 記錄 */
-        gzip(FN_MAIL_LOG, "mail/mail", ymd);	/* 所有 [寄信] 記錄 */
+        gzip(FN_MAIL_LOG, "mail/mail", ymd);    /* 所有 [寄信] 記錄 */
 
 
         if (ntime.tm_wday == 6)
@@ -1078,7 +1078,7 @@ keeplog(
     char *fnlog,
     char *board,
     char *title,
-    int mode)		/* 0:load 1: rename  2:unlink 3:mark*/
+    int mode)           /* 0:load 1: rename  2:unlink 3:mark*/
 {
     HDR hdr;
     char folder[128], fpath[128];

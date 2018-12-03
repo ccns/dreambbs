@@ -1,6 +1,6 @@
 /* ----------------------------------------------------- */
 /* author : thor.bbs@bbs.cs.nthu.edu.tw                  */
-/* target : dynamic attribute library for maple bbs   	 */
+/* target : dynamic attribute library for maple bbs      */
 /* create : 99/03/09                                     */
 /* update :   /  /                                       */
 /* ----------------------------------------------------- */

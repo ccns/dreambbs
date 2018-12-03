@@ -1,10 +1,10 @@
 /*-------------------------------------------------------*/
-/* history.c	( NTHU CS MapleBBS Ver 3.10 )		 */
+/* history.c    ( NTHU CS MapleBBS Ver 3.10 )            */
 /*-------------------------------------------------------*/
-/* target : innbbsd history				 */
-/* create : 04/04/01					 */
-/* update :   /  /  					 */
-/* author : itoc.bbs@bbs.tnfsh.tn.edu.tw		 */
+/* target : innbbsd history                              */
+/* create : 04/04/01                                     */
+/* update :   /  /                                       */
+/* author : itoc.bbs@bbs.tnfsh.tn.edu.tw                 */
 /*-------------------------------------------------------*/
 
 
@@ -13,16 +13,16 @@
 
 typedef struct
 {
-    time_t htime;			/* 加入 history 檔的時間 */
-    int hash;			/* 為了快速搜尋 */
-    char msgid[256];		/* message id (假設 256 已夠長) */
+    time_t htime;               /* 加入 history 檔的時間 */
+    int hash;                   /* 為了快速搜尋 */
+    char msgid[256];            /* message id (假設 256 已夠長) */
     char board[IDLEN + 1];
     char xname[9];
-}	HIS;
+}       HIS;
 
 
 void
-HISmaint(void)			/* 維護 history 檔，將過早的 history 刪除 */
+HISmaint(void)                  /* 維護 history 檔，將過早的 history 刪除 */
 {
     int i, fd, total;
     char fpath[64];
@@ -52,7 +52,7 @@ HISmaint(void)			/* 維護 history 檔，將過早的 history 刪除 */
 
         for (his = hhead; his < htail; his++)
         {
-            if (his->htime > now)	/* 這筆 history 不被砍 */
+            if (his->htime > now)       /* 這筆 history 不被砍 */
             {
                 memcpy(hhead, his, sizeof(HIS));
                 hhead++;
@@ -72,7 +72,7 @@ HISmaint(void)			/* 維護 history 檔，將過早的 history 刪除 */
 
 
 void
-HISadd(	/* 將 (msgid, path, xname) 此配對記錄在 history 中 */
+HISadd(                         /* 將 (msgid, path, xname) 此配對記錄在 history 中 */
     char *msgid,
     char *board,
     char *xname)
@@ -94,10 +94,10 @@ HISadd(	/* 將 (msgid, path, xname) 此配對記錄在 history 中 */
 }
 
 
-int				/* 1:在history中 0:不在history中 */
-HISfetch(	/* 查詢 history 中，msgid 發表去了哪裡 */
+int                             /* 1:在history中 0:不在history中 */
+HISfetch(                       /* 查詢 history 中，msgid 發表去了哪裡 */
     char *msgid,
-    char *board, 			/* 傳出在 history 中的記錄的看板及檔名 */
+    char *board,                /* 傳出在 history 中的記錄的看板及檔名 */
     char *xname)
 {
     HIS his;

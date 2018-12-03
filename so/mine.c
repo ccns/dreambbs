@@ -48,7 +48,7 @@ int fasttime[4];
 void clrtokol(void)
 {
     int n;
-    for (n = cur_col; n < 17; n++)
+    for (n = cur_col;n < 17;n++)
         outc(' ');
 }
 
@@ -85,7 +85,7 @@ show_fasttime(void)
     char buf[40], *buf1[4] = {"入門級:", "進階級:", "高  級:", "變態級:"};
     fp = fopen("game/mine/mine_fasttime", "r");
     clear();
-    for (i = 0; i < 4; i++)
+    for (i = 0;i < 4;i++)
     {
         fscanf(fp, "%s%d", buf, &fasttime[i]);
         prints("\x1b[1;31m%s  \x1b[1;32m%s %d\x1b[m\n", buf1[i], buf, fasttime[i]);
@@ -102,7 +102,7 @@ load_fasttime(void)
     char buf[40];
     FILE *fp;
     fp = fopen("game/mine/mine_fasttime", "r");
-    for (i = 0; i < 4; i++)
+    for (i = 0;i < 4;i++)
     {
         fscanf(fp, "%s%d", buf, &fasttime[i]);
     }
@@ -117,7 +117,7 @@ change_fasttime(int n, int t)
     char buf[4][40];
     FILE *fp;
     fp = fopen("game/mine/mine_fasttime", "r");
-    for (i = 0; i < 4; i++)
+    for (i = 0;i < 4;i++)
     {
         fscanf(fp, "%s%d", buf[i], &fasttime[i]);
     }
@@ -125,7 +125,7 @@ change_fasttime(int n, int t)
     fasttime[n] = t;
     fclose(fp);
     fp = fopen("game/mine/mine_fasttime", "w");
-    for (i = 0; i < 4; i++)
+    for (i = 0;i < 4;i++)
     {
         fprintf(fp, "%s %d\n", buf[i], fasttime[i]);
     }
@@ -171,24 +171,24 @@ void drawInfo(void)
 void drawPrompt(void)
 {
     int i;
-    for (i = 1; i <= 20; i++)
+    for (i = 1;i <= 20;i++)
     {
         move(i, 0);
         clrtokol();
     }
     vs_bar("踩地雷");
     move(3, 0);
-    outs("按鍵說明:"); clrtokol();
+    outs("按鍵說明:");clrtokol();
     move(4, 0);
-    outs("移動     方向鍵"); clrtokol();
+    outs("移動     方向鍵");clrtokol();
     move(5, 0);
-    outs("翻開     空白鍵"); clrtokol();
+    outs("翻開     空白鍵");clrtokol();
     move(6, 0);
-    outs("標記地雷   ｍ"); clrtokol();
+    outs("標記地雷   ｍ");clrtokol();
     move(7, 0);
-    outs("掃雷       ｔ"); clrtokol();
+    outs("掃雷       ｔ");clrtokol();
     move(9, 0);
-    outs("離開    Esc / q"); clrtokol();
+    outs("離開    Esc / q");clrtokol();
 }
 
 void drawMapLine(int y, int flShow)
@@ -285,7 +285,7 @@ void TraceMap(int y, int x)
 
 void playMine(void)
 {
-    int ch;
+    int ch ;
     currx = MAP_X / 2 + 1, curry = MAP_Y / 2 + 1;
     flLoseMine = 0;
     move(2, 0);

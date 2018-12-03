@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* mail.c	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* mail.c       ( NTHU CS MapleBBS Ver 2.36 )            */
 /*-------------------------------------------------------*/
-/* target : local/internet mail routines	 	 */
-/* create : 95/03/29				 	 */
-/* update : 95/12/15				 	 */
+/* target : local/internet mail routines                 */
+/* create : 95/03/29                                     */
+/* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
 
 #include "bbs.h"
@@ -20,15 +20,15 @@ extern UCACHE *ushm;
 
 
 /* ----------------------------------------------------- */
-/* Link List routines					 */
+/* Link List routines                                    */
 /* ----------------------------------------------------- */
 
 
-#define	MSG_CC "\033[32m[群組名單]\033[m\n"
+#define MSG_CC "\033[32m[群組名單]\033[m\n"
 
 
-LinkList *ll_head;		/* head of link list */
-static LinkList *ll_tail;	/* tail of link list */
+LinkList *ll_head;              /* head of link list */
+static LinkList *ll_tail;       /* tail of link list */
 extern BCACHE *bshm;
 
 
@@ -162,11 +162,11 @@ ll_out(
 }
 
 /* ----------------------------------------------------- */
-/* BBS (batch) SMTP					 */
+/* BBS (batch) SMTP                                      */
 /* ----------------------------------------------------- */
 
 
-#ifdef	BATCH_SMTP
+#ifdef  BATCH_SMTP
 int
 bsmtp(
     char *fpath, char *title, char *rcpt,
@@ -209,14 +209,14 @@ bsmtp(
     if (rec_add(MAIL_QUEUE, &mqueue, sizeof(mqueue)) < 0)
         return -1;
 
-    cuser.numemail++;		/* 記錄使用者共寄出幾封 Internet E-mail */
+    cuser.numemail++;           /* 記錄使用者共寄出幾封 Internet E-mail */
     return chrono;
 }
 
 #else
 
 /* ----------------------------------------------------- */
-/* (direct) SMTP					 */
+/* (direct) SMTP                                         */
 /* ----------------------------------------------------- */
 
 
@@ -241,11 +241,11 @@ bsmtp(
     *prikey = prikey[8] = sign.str[8] = '\0'; /* Thor.990413:註解: 字串結束 */
 #endif
 
-    cuser.numemail++;		/* 記錄使用者共寄出幾封 Internet E-mail */
+    cuser.numemail++;           /* 記錄使用者共寄出幾封 Internet E-mail */
     chrono = time(&stamp);
 
     /* --------------------------------------------------- */
-    /* 身分認證信函					 */
+    /* 身分認證信函                                      */
     /* --------------------------------------------------- */
 
     if (method == MQ_JUSTIFY)
@@ -313,7 +313,7 @@ bsmtp(
             refresh();
         }
 
-        sleep(1);			/* wait for mail server response */
+        sleep(1);                       /* wait for mail server response */
 
         fr = fdopen(sock, "r");
         fw = fdopen(sock, "w");
@@ -363,7 +363,7 @@ bsmtp(
         } while (buf[3] == '-');
 
         /* ------------------------------------------------- */
-        /* begin of mail header				 */
+        /* begin of mail header                              */
         /* ------------------------------------------------- */
 
         /* Thor.990125: 儘可能的像 RFC822 & sendmail的作法, 免得別人不接:p */
@@ -374,14 +374,14 @@ bsmtp(
             Atime(&stamp), msgid, str_host,
             str_site);
 
-        if (method & MQ_JUSTIFY)	/* 身分認證信函 */
+        if (method & MQ_JUSTIFY)        /* 身分認證信函 */
         {
             fprintf(fw, " ID: %s (%s)  E-mail: %s\r\n\r\n",
                 cuser.userid, cuser.username, rcpt);
         }
 
         /* ------------------------------------------------- */
-        /* begin of mail body				 */
+        /* begin of mail body                            */
         /* ------------------------------------------------- */
 
         if ((fp = fopen(fpath, "r")))
@@ -445,7 +445,7 @@ smtp_error:
 smtp_log:
 
     /* --------------------------------------------------- */
-    /* 記錄寄信						 */
+    /* 記錄寄信                                          */
     /* --------------------------------------------------- */
 
     sprintf(buf, "%s%-13s%c> %s %s %s\n\t%s\n\t%s\n", Btime(&stamp), cuser.userid,
@@ -476,7 +476,7 @@ bsmtp_file(
 
 
 
-    cuser.numemail++;		/* 記錄使用者共寄出幾封 Internet E-mail */
+    cuser.numemail++;           /* 記錄使用者共寄出幾封 Internet E-mail */
     chrono = time(&stamp);
     xtime = localtime(&chrono);
     ntime = *xtime;
@@ -484,7 +484,7 @@ bsmtp_file(
     sprintf(fname, "mail_%04d%02d%02d.tgz", ntime.tm_year + 1900, ntime.tm_mon + 1, ntime.tm_mday);
 
     /* --------------------------------------------------- */
-    /* 身分認證信函					 */
+    /* 身分認證信函                                      */
     /* --------------------------------------------------- */
 
     /* Thor.990125: MYHOSTNAME統一放入 str_host */
@@ -523,7 +523,7 @@ bsmtp_file(
         prints("★ 寄信給 %s \033[5m...\033[m", rcpt);
         refresh();
 
-        sleep(1);			/* wait for mail server response */
+        sleep(1);                       /* wait for mail server response */
 
         fr = fdopen(sock, "r");
         fw = fdopen(sock, "w");
@@ -572,7 +572,7 @@ bsmtp_file(
         } while (buf[3] == '-');
 
         /* ------------------------------------------------- */
-        /* begin of mail header				 */
+        /* begin of mail header                          */
         /* ------------------------------------------------- */
 
         /* Thor.990125: 儘可能的像 RFC822 & sendmail的作法, 免得別人不接:p */
@@ -595,7 +595,7 @@ bsmtp_file(
                 "\tfilename=\"%s\"\r\n\r\n", boundary, fname, fname);
 
         /* ------------------------------------------------- */
-        /* begin of mail body				 */
+        /* begin of mail body                            */
         /* ------------------------------------------------- */
 
         if ((fp = fopen(fpath, "r")))
@@ -647,7 +647,7 @@ smtp_file_error:
 smtp_file_log:
 
     /* --------------------------------------------------- */
-    /* 記錄寄信						 */
+    /* 記錄寄信                                          */
     /* --------------------------------------------------- */
 
     sprintf(buf, "%s%-13s> %s %s\n\t%s\n\t%s\n", Btime(&stamp), cuser.userid,
@@ -745,7 +745,7 @@ m_verify(void)
 #endif
 
 /* ----------------------------------------------------- */
-/* mail routines					 */
+/* mail routines                                         */
 /* ----------------------------------------------------- */
 
 static struct
@@ -842,7 +842,7 @@ m_quota(void)
 
         if ((fsize = read(fd, base, fsize)) >= sizeof(HDR))
         {
-            int prune;		/* number of pruned mail */
+            int prune;          /* number of pruned mail */
 
             limit = time(0);
             mail_due = limit - MAIL_DUE * 86400;
@@ -933,10 +933,10 @@ m_quota(void)
     return ufo;
 }
 
-#ifdef	HAVE_DOWNLOAD
+#ifdef  HAVE_DOWNLOAD
 
 
-#define    PACKLOG     "run/mzip.log"
+#define PACKLOG     "run/mzip.log"
 
 static void
 packlog(
@@ -960,7 +960,7 @@ packlog(
 }
 
 /* ----------------------------------------------------- */
-/* Zip mbox & board gem					 */
+/* Zip mbox & board gem                                  */
 /* ----------------------------------------------------- */
 
 
@@ -999,11 +999,11 @@ do_forward(
         return;
 
     userid = strchr(addr, '@') + 1;
-    if (dns_smtp(userid) >= 0)	 /* itoc.註解: 雖然 bsmtp_file() 也會做，但是這邊先做，以免壓縮完才知道是無效的工作站地址 */
+    if (dns_smtp(userid) >= 0)   /* itoc.註解: 雖然 bsmtp_file() 也會做，但是這邊先做，以免壓縮完才知道是無效的工作站地址 */
     {
         userid = cuser.userid;
 
-        if (mode == '1')		/* 個人信件 */
+        if (mode == '1')                /* 個人信件 */
         {
             /* usr_fpath(fpath, userid, "@"); */
             /* 因為 .DIR 不在 @/ 裡，要一起打包 */
@@ -1012,11 +1012,11 @@ do_forward(
             strcat(fpath, " ");
             strcat(fpath, cmd);
         }
-        else if (mode == '2')	/* 看板文章 */
+        else if (mode == '2')   /* 看板文章 */
         {
             brd_fpath(fpath, currboard, NULL);
         }
-        else /* if (mode == '3') */	/* 看板精華區 */
+        else /* if (mode == '3') */     /* 看板精華區 */
         {
             gem_fpath(fpath, currboard, NULL);
         }
@@ -1063,7 +1063,7 @@ do_forward(
 
 
 int
-m_zip(void)			/* itoc.010228: 打包資料 */
+m_zip(void)                     /* itoc.010228: 打包資料 */
 {
     int ans;
     char *name, *item, buf[80];
@@ -1176,7 +1176,7 @@ m_biff(
         {
             utmp->ufo |= UFO_BIFF;
 
-#ifdef	BELL_ONCE_ONLY
+#ifdef  BELL_ONCE_ONLY
             return;
 #endif
         }
@@ -1322,7 +1322,7 @@ m_setmboxdir(void)
 }
 
 /* ----------------------------------------------------- */
-/* in boards/mail 回信給原作者，轉信站亦可		 */
+/* in boards/mail 回信給原作者，轉信站亦可               */
 /* ----------------------------------------------------- */
 
 
@@ -1412,7 +1412,7 @@ mail_send(
     utmp_mode(M_SMAIL);
     fpath[0] = '\0';
 
-    curredit = EDIT_MAIL;		/* Thor.1105: 直接指定寫信 */
+    curredit = EDIT_MAIL;               /* Thor.1105: 直接指定寫信 */
 
     if (vedit(fpath, internet_mail ? 2 : 1) == -1)
     {
@@ -1452,7 +1452,7 @@ mail_send(
         usr_fpath(folder, rcpt, fn_dir);
         hdr_stamp(folder, HDR_LINK, &mhdr, fpath);
         strcpy(mhdr.owner, cuser.userid);
-        strcpy(mhdr.nick, cuser.username);	/* :chuan: 加入 nick */
+        strcpy(mhdr.nick, cuser.username);      /* :chuan: 加入 nick */
         strcpy(mhdr.title, ve_title);
         rc = rec_add(folder, &mhdr, sizeof(mhdr));
         forward_mail(fpath, rcpt, ve_title);
@@ -1669,7 +1669,7 @@ mail_sysop(void)
         {
             char userid[IDLEN + 1];
             char duty[40];
-        }         sysoplist[9];	/* 假設 9 個足矣 */
+        }         sysoplist[9]; /* 假設 9 個足矣 */
 
         j = 0;
         mgets(-1);
@@ -1715,7 +1715,7 @@ mail_sysop(void)
 
 
 /* ----------------------------------------------------- */
-/* 群組寄信、回信 : multi_send, multi_reply		 */
+/* 群組寄信、回信 : multi_send, multi_reply              */
 /* ----------------------------------------------------- */
 
 #ifndef MULTI_MAIL
@@ -1879,7 +1879,7 @@ multi_send(
         unlink(fpath);
 
 #if 0
-        curredit = 0;		/* Thor.1105: 其實是可以不加了 */
+        curredit = 0;           /* Thor.1105: 其實是可以不加了 */
 #endif
     }
     else
@@ -1928,7 +1928,7 @@ mail_list(void)
 #endif
 
 /* ----------------------------------------------------- */
-/* Mail Box call-back routines				 */
+/* Mail Box call-back routines                           */
 /* ----------------------------------------------------- */
 
 
@@ -1955,7 +1955,7 @@ tag_char(
 
 
 void
-hdr_outs(		/* print HDR's subject */
+hdr_outs(               /* print HDR's subject */
     HDR *hdr,
     int cc)
 {
@@ -1973,7 +1973,7 @@ hdr_outs(		/* print HDR's subject */
             outc(' ');
             outc('*');
         }
-#ifdef	HAVE_RECOMMEND
+#ifdef  HAVE_RECOMMEND
         else if (!(hdr->xmode &(POST_LOCK | POST_CANCEL | POST_DELETE | POST_MDELETE)) && hdr->recommend >= (MIN_RECOMMEND) && !(cuser.ufo2 & UFO2_PRH))
         {
             if (hdr->recommend <=30)
@@ -2045,11 +2045,11 @@ hdr_outs(		/* print HDR's subject */
 
     {
 
-#ifdef	HAVE_DECLARE		/* Thor.0508: Declaration, 嘗試使某些title更明顯 */
-        int square = 0;		/* 0為無方括,
+#ifdef  HAVE_DECLARE            /* Thor.0508: Declaration, 嘗試使某些title更明顯 */
+        int square = 0;         /* 0為無方括,
                                  * 1為第一字為方括"["未out, 2為已out"["未out"]"
                                  * , 3為均out, 不再處理 */
-        int angle = 0;		/* 0為normal未變色, 1為遇到angle, 已變色 */
+        int angle = 0;          /* 0為normal未變色, 1為遇到angle, 已變色 */
         if (ch < 2)
         {
             if (*title == '[')
@@ -2062,7 +2062,7 @@ hdr_outs(		/* print HDR's subject */
         do
         {
 
-#ifdef	HAVE_DECLARE
+#ifdef  HAVE_DECLARE
             if (ch < 2)
             {
                 switch (square)
@@ -2106,8 +2106,8 @@ hdr_outs(		/* print HDR's subject */
             outc(cc);
         } while ((cc = *title++) && (title < mark));
 
-#ifdef	HAVE_DECLARE
-        if (angle || square == 2)	/* Thor.0508: 變色還原用 */
+#ifdef  HAVE_DECLARE
+        if (angle || square == 2)       /* Thor.0508: 變色還原用 */
             outs("\033[m");
 #endif
     }
@@ -2121,11 +2121,11 @@ hdr_outs(		/* print HDR's subject */
 
 static inline void
 mbox_item(
-    int pos, 			/* sequence number */
+    int pos,                    /* sequence number */
     HDR *hdr)
 {
 
-#if 0				/* Thor.0508: 變色看看 */
+#if 0                           /* Thor.0508: 變色看看 */
     prints("%5d %c%", pos, mbox_attr(hdr->xmode));
 #endif
 
@@ -2207,7 +2207,7 @@ mbox_delete(
     int pos, xmode;
     HDR *hdr;
     char *dir;
-#ifndef	HAVE_MAILUNDELETE
+#ifndef HAVE_MAILUNDELETE
     char fpath[64];
 #endif
 
@@ -2721,7 +2721,7 @@ mbox_check(void)
 }
 #endif  /* HAVE_MAILUNDELETE */
 
-#ifdef	HAVE_MAILGEM
+#ifdef  HAVE_MAILGEM
 static int
 mbox_gem(
     XO *xo)
@@ -2750,7 +2750,7 @@ static KeyFunc mbox_cb[] =
     {XO_HEAD, mbox_head},
     {XO_BODY, mbox_body},
 
-#ifdef	HAVE_MAIL_FIX
+#ifdef  HAVE_MAIL_FIX
     {'T', mbox_title},
 #endif
     {'r', mbox_browse},
@@ -2759,7 +2759,7 @@ static KeyFunc mbox_cb[] =
     {'d', mbox_delete},
     {Ctrl('X'), mbox_forward},
     {'m', mbox_mark},
-#ifdef	HAVE_MAILGEM
+#ifdef  HAVE_MAILGEM
     {'z', mbox_gem},
 #endif
     {'R', mbox_reply},

@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* chat.c	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* chat.c       ( NTHU CS MapleBBS Ver 2.36 )            */
 /*-------------------------------------------------------*/
-/* target : chat client for xchatd			 */
-/* create : 95/03/29					 */
-/* update : 99/12/21					 */
+/* target : chat client for xchatd                       */
+/* create : 95/03/29                                     */
+/* update : 99/12/21                                     */
 /*-------------------------------------------------------*/
 
 
@@ -15,15 +15,15 @@
 #include <netdb.h>
 
 
-static char chatroom[IDLEN];	/* Chat-Room Name */
-static int chatline;		/* Where to display message now */
+static char chatroom[IDLEN];    /* Chat-Room Name */
+static int chatline;            /* Where to display message now */
 static char chatopic[48];
 static FILE *frec;
-#ifdef	LOG_CHAT
+#ifdef  LOG_CHAT
 static FILE *fmail;
 #endif
 
-#define	stop_line	(b_lines - 2)
+#define stop_line       (b_lines - 2)
 
 
 extern char *bmode(UTMP *up, int simple);
@@ -166,7 +166,7 @@ chat_record(void)
     chat_topic();
 }
 
-#ifdef	LOG_CHAT
+#ifdef  LOG_CHAT
 static void
 chat_recordtomail(
 int mode)
@@ -382,12 +382,12 @@ char *arg)
     strtok(arg, STR_SPACE);
     if ((str = strtok(NULL, STR_SPACE)) && (uno = acct_userno(str)) > 0)
     {
-        cmsg.recver = uno;		/* 先記下 userno 作為 check */
+        cmsg.recver = uno;              /* 先記下 userno 作為 check */
         if (up = utmp_find(uno))
         {
             if (can_override(up))
             {
-                if (str = strtok(NULL, "\n"))	/* Thor.0725:抓整句話 */
+                if (str = strtok(NULL, "\n"))   /* Thor.0725:抓整句話 */
                 {
                     /* Thor.0724: 從 my_write 改過來 */
                     int len;
@@ -488,8 +488,8 @@ chat_users(void)
 
 struct chat_command
 {
-    char *cmdname;		/* Char-room command length */
-    void (*cmdfunc)(char *buf);		/* Pointer to function */
+    char *cmdname;              /* Char-room command length */
+    void (*cmdfunc)(char *buf);         /* Pointer to function */
 };
 
 
@@ -723,7 +723,7 @@ t_chat(void)
     add_io(cfd, 60);
 
     strcpy(cutmp->mateid, chatid);
-#ifdef	LOG_CHAT
+#ifdef  LOG_CHAT
     chat_recordtomail(1);
 #endif
     for (;;)
@@ -983,7 +983,7 @@ t_chat(void)
     if (frec)
         chat_record();
 
-#ifdef	LOG_CHAT
+#ifdef  LOG_CHAT
     chat_recordtomail(0);
 #endif
 

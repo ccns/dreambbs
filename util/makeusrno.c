@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
-/* util/makeuserno.c    ( YZU WindTopBBS Ver 3.00 )	 */
+/* util/makeuserno.c    ( YZU WindTopBBS Ver 3.00 )      */
 /*-------------------------------------------------------*/
-/* author : visor.bbs@bbs.yzu.edu.tw			 */
+/* author : visor.bbs@bbs.yzu.edu.tw                     */
 /* target : 自動重整 userno 重複的程式                   */
 /* create : 2000/06/08                                   */
 /* update :                                              */
@@ -13,12 +13,12 @@
 
 #include "bbs.h"
 
-#undef	FAKE_IO
+#undef  FAKE_IO
 
 typedef struct
 {
     char userid[IDLEN+1];
-}	MAP;
+}       MAP;
 MAP map[60000];
 
 
@@ -222,7 +222,7 @@ pal_sync(
             {
                 if (size > sizeof(PAL))
                     xsort(pbase, size / sizeof(PAL), sizeof(PAL), (void *)str_cmp);
-#ifndef	FAKE_IO
+#ifndef FAKE_IO
                 lseek(fd, 0, SEEK_SET);
                 write(fd, pbase, size);
                 ftruncate(fd, size);

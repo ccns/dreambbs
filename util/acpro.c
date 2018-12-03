@@ -1,10 +1,10 @@
 /*-------------------------------------------------------*/
-/* util/acpro.c		( YZU WindTopBBS Ver 3.00 )	 */
+/* util/acpro.c         ( YZU WindTopBBS Ver 3.00 )      */
 /*-------------------------------------------------------*/
 /* author : visor.bbs@bbs.yzu.edu.tw                     */
-/* target : 建立 [專業討論區] cache			 */
-/* create : 95/03/29				 	 */
-/* update : 97/03/29				 	 */
+/* target : 建立 [專業討論區] cache                      */
+/* create : 95/03/29                                     */
+/* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
 
 #include <stdio.h>
@@ -108,13 +108,13 @@ bshm_init(void)
 }
 
 /* ----------------------------------------------------- */
-/* build Class image					 */
+/* build Class image                                     */
 /* ----------------------------------------------------- */
 
 
-#define PROFESS_RUNFILE	"run/profess.run"
+#define PROFESS_RUNFILE "run/profess.run"
 
-#define	CH_MAX	100
+#define CH_MAX  100
 
 
 static ClassHeader *chx[CH_MAX];
@@ -305,7 +305,7 @@ main(void)
     chdir(BBSHOME);
     umask(077);
     /* --------------------------------------------------- */
-    /* build Class image					 */
+    /* build Class image                                   */
     /* --------------------------------------------------- */
     bshm_init();
     profess_image();

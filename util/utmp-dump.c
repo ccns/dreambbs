@@ -1,12 +1,12 @@
 /*-------------------------------------------------------*/
-/* util/utmp-dump.c	( YZU WindTopBBS Ver 3.00 )	 */
+/* util/utmp-dump.c     ( YZU WindTopBBS Ver 3.00 )      */
 /*-------------------------------------------------------*/
-/* target : 		 	 			 */
-/* create : 					 	 */
-/* update : 					 	 */
+/* target :                                              */
+/* create :                                              */
+/* update :                                              */
 /*-------------------------------------------------------*/
 
-#define	_MODES_C_
+#define _MODES_C_
 
 #include "bbs.h"
 #include <sys/shm.h>
@@ -37,10 +37,10 @@ attach_shm(
 
 
 /* ----------------------------------------------------- */
-/* 記錄 pal 的 user number				 */
+/* 記錄 pal 的 user number                               */
 /* ----------------------------------------------------- */
 
-#define PICKUP_WAYS	(6)
+#define PICKUP_WAYS     (6)
 
 static int pickup_way;
 
@@ -81,7 +81,7 @@ bmode(
 
 
 /* ----------------------------------------------------- */
-/* 好友名單：查詢狀態、友誼描述				 */
+/* 好友名單：查詢狀態、友誼描述                          */
 /* ----------------------------------------------------- */
 
 
@@ -167,21 +167,21 @@ can_message(
     if (up->userno == (self = cuser.userno))
         return NA;
 
-    if (HAS_PERM(PERM_SYSOP | PERM_ACCOUNTS | PERM_CHATROOM))	/* 站長、帳號、聊天室 */
+    if (HAS_PERM(PERM_SYSOP | PERM_ACCOUNTS | PERM_CHATROOM))   /* 站長、帳號、聊天室 */
         return YEA;
 
     ufo = up->ufo;
 
-    if ( ufo & (UFO_MESSAGE))		/* 遠離塵囂 */
+    if ( ufo & (UFO_MESSAGE))           /* 遠離塵囂 */
         return NA;
 
     if (!(ufo & UFO_QUIET))
-        return YEA;			/* 呼叫器沒關掉，亦無損友 */
+        return YEA;                     /* 呼叫器沒關掉，亦無損友 */
 
-    can = 0;			/* 找不到為 normal */
+    can = 0;                    /* 找不到為 normal */
     can = can_see(up);
     return (ufo & UFO_QUIET)
-        ? can == 1			/* 只有好友可以 */
+        ? can == 1                      /* 只有好友可以 */
         : can < 2 /* 只要不是損友 */ ;
 }
 
@@ -195,27 +195,27 @@ can_override(
     if (up->userno == (self = cuser.userno))
         return NA;
 
-    if (HAS_PERM(PERM_SYSOP | PERM_ACCOUNTS | PERM_CHATROOM))	/* 站長、帳號、聊天室 */
+    if (HAS_PERM(PERM_SYSOP | PERM_ACCOUNTS | PERM_CHATROOM))   /* 站長、帳號、聊天室 */
         return YEA;
 
     ufo = up->ufo;
 
-    if (ufo & (UFO_PAGER1 | UFO_REJECT))		/* 遠離塵囂 */
+    if (ufo & (UFO_PAGER1 | UFO_REJECT))                /* 遠離塵囂 */
         return NA;
 
     if (!(ufo & UFO_PAGER))
-        return YEA;			/* 呼叫器沒關掉，亦無損友 */
+        return YEA;                     /* 呼叫器沒關掉，亦無損友 */
 
-    can = 0;			/* 找不到為 normal */
+    can = 0;                    /* 找不到為 normal */
 
     can = can_see(up);
     return (ufo & UFO_PAGER)
-        ? can == 1			/* 只有好友可以 */
+        ? can == 1                      /* 只有好友可以 */
         : can < 2 /* 只要不是損友 */ ;
 }
 
 /* ----------------------------------------------------- */
-/* 好友名單：新增、刪除、修改、載入、同步		 */
+/* 好友名單：新增、刪除、修改、載入、同步                */
 /* ----------------------------------------------------- */
 
 
@@ -325,7 +325,7 @@ pal_cache(void)
 
 
 /*-------------------------------------------------------*/
-/* 選單式聊天介面					 */
+/* 選單式聊天介面                                        */
 /*-------------------------------------------------------*/
 
 
@@ -501,7 +501,7 @@ ulist_init(
 
     max = 0;
     friend_num = ofriend_num = pfriend_num = nf_num = bfriend_num = 0;
-    do					/* 先找好友 */
+    do                                  /* 先找好友 */
     {
         userno = up->userno;
         if (userno <= 0 || (up->pid <= 0 && !HAS_PERM(PERM_SYSOP|PERM_SEECLOAK)))

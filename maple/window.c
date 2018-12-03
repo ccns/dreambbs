@@ -1,11 +1,11 @@
 /*-------------------------------------------------------*/
-/* window.c	( NTHU CS MapleBBS Ver 3.10 )		 */
+/* window.c     ( NTHU CS MapleBBS Ver 3.10 )            */
 /*-------------------------------------------------------*/
-/* target : popup window menu				 */
-/* create : 03/02/12					 */
-/* update : 03/07/23					 */
-/* author : verit.bbs@bbs.yzu.edu.tw			 */
-/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw		 */
+/* target : popup window menu                            */
+/* create : 03/02/12                                     */
+/* update : 03/07/23                                     */
+/* author : verit.bbs@bbs.yzu.edu.tw                     */
+/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw                 */
 /*-------------------------------------------------------*/
 
 /* 90929.cache: 第二種圖形選單 */
@@ -36,12 +36,12 @@ static screenline slt[T_LINES];
 static int x_roll;
 
 /* ----------------------------------------------------- */
-/* 畫面繪製						 */
+/* 畫面繪製                                              */
 /* ----------------------------------------------------- */
 
 
 static void
-draw_line(x, y, msg)	/* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
+draw_line(x, y, msg)    /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
     int x, y;
     unsigned char *msg;
 {
@@ -50,9 +50,9 @@ draw_line(x, y, msg)	/* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
     char color[4];
     int ch, i;
     int len;
-    int ansi;		/* 1: 在 ANSI 中 */
-    int in_chi = 0;	/* 1: 在中文字中 */
-    int fg, bg, hl;	/* 前景/背景/高彩 */
+    int ansi;           /* 1: 在 ANSI 中 */
+    int in_chi = 0;     /* 1: 在中文字中 */
+    int fg, bg, hl;     /* 前景/背景/高彩 */
 
     hl = 0;
     fg = 37;
@@ -71,7 +71,7 @@ draw_line(x, y, msg)	/* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
 
     /* 印出 (x, 0) 至 (x, y - 1) */
     ansi = 0;
-    len = 0;		/* 已印出幾個字 (不含控制碼) */
+    len = 0;            /* 已印出幾個字 (不含控制碼) */
     while (ch = *str++)
     {
         if (ch == KEY_ESC)
@@ -145,7 +145,7 @@ draw_line(x, y, msg)	/* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
     /* 印出 (x, y) 至 (x, y + strip_ansi_len(msg) - 1) */
     ptr = msg;
     ansi = 0;
-    len = 0;		/* msg 的長度(不含控制碼) */
+    len = 0;            /* msg 的長度(不含控制碼) */
     while (ch = *ptr++)
     {
         if (ch == KEY_ESC)
@@ -209,7 +209,7 @@ draw_line(x, y, msg)	/* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
         }
         else
         {
-            if (--len < 0)	/* 跳過 strip_ansi_len(msg) 的長度 */
+            if (--len < 0)      /* 跳過 strip_ansi_len(msg) 的長度 */
                 break;
 
             if (in_chi || IS_ZHC_HI(ch))
@@ -229,7 +229,7 @@ draw_line(x, y, msg)	/* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
 #endif //M3_USE_PFTERM
 
 /* ----------------------------------------------------- */
-/* 選項繪製						 */
+/* 選項繪製                                              */
 /* ----------------------------------------------------- */
 
 
@@ -238,7 +238,7 @@ draw_item(
     int x, int y,
     char *desc,
     char hotkey,
-    int mode)		/* 0:清除光棒  1:畫上光棒 */
+    int mode)           /* 0:清除光棒  1:畫上光棒 */
 {
     char buf[128];
 
@@ -251,13 +251,13 @@ draw_item(
 }
 
 
-static int	/* 回傳總共有幾個選項 */
+static int      /* 回傳總共有幾個選項 */
 draw_menu(
     int x, int y,
     char *title,
     char *desc[],
     char hotkey,
-    int *cur)	/* 回傳預設值所在位置 */
+    int *cur)   /* 回傳預設值所在位置 */
 {
     int i, meet;
     char buf[128];
@@ -287,25 +287,25 @@ draw_menu(
 
 
 /* ----------------------------------------------------- */
-/* 找選項						 */
+/* 找選項                                                */
 /* ----------------------------------------------------- */
 
 
-static int			/* -1:找不到 >=0:第幾個選項 */
-find_cur(		/* 找 ch 這個按鍵是第幾個選項 */
+static int                      /* -1:找不到 >=0:第幾個選項 */
+find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
     int ch, int max,
     char *desc[])
 {
     int i, cc;
 
     if (ch >= 'A' && ch <= 'Z')
-        ch |= 0x20;		/* 換小寫 */
+        ch |= 0x20;             /* 換小寫 */
 
     for (i = 1; i <= max; i++)
     {
         cc = desc[i][0];
         if (cc >= 'A' && cc <= 'Z')
-            cc |= 0x20;	/* 換小寫 */
+            cc |= 0x20; /* 換小寫 */
 
         if (ch == cc)
             return i;
@@ -316,19 +316,19 @@ find_cur(		/* 找 ch 這個按鍵是第幾個選項 */
 
 
 /*------------------------------------------------------ */
-/* 詢問選項，可用來取代 vans()				 */
+/* 詢問選項，可用來取代 vans()                           */
 /*------------------------------------------------------ */
-/* x, y  是蹦出視窗左上角的 (x, y) 位置			 */
-/* title 是視窗的標題					 */
-/* desc  是選項的敘述：					 */
-/*       第一個字串必須為兩個 char			 */
-/*         第一個字元代表一開始游標停的位置		 */
-/*         第二個字元代表按下 KEY_LEFT 的預設回傳值	 */
-/*       中間的字串是每個選項的敘述 (首字母為熱鍵)	 */
-/*       最後一個字串必須為 NULL			 */
+/* x, y  是蹦出視窗左上角的 (x, y) 位置                  */
+/* title 是視窗的標題                                    */
+/* desc  是選項的敘述：                                  */
+/*       第一個字串必須為兩個 char                       */
+/*         第一個字元代表一開始游標停的位置              */
+/*         第二個字元代表按下 KEY_LEFT 的預設回傳值      */
+/*       中間的字串是每個選項的敘述 (首字母為熱鍵)       */
+/*       最後一個字串必須為 NULL                         */
 /*------------------------------------------------------ */
 
-int		/* 傳回小寫字母或數字 */
+int             /* 傳回小寫字母或數字 */
 popupmenu_ans2(char *desc[], char *title, int x, int y)
 {
     int cur, old_cur, max, ch;
@@ -364,7 +364,7 @@ popupmenu_ans2(char *desc[], char *title, int x, int y)
 #endif
             ch = (ch == KEY_LEFT) ? desc[0][1] : desc[cur][0];
             if (ch >= 'A' && ch <= 'Z')
-                ch |= 0x20;		/* 回傳小寫 */
+                ch |= 0x20;             /* 回傳小寫 */
             return ch;
 
         case KEY_UP:
@@ -383,13 +383,13 @@ popupmenu_ans2(char *desc[], char *title, int x, int y)
             cur = max;
             break;
 
-        default:		/* 去找所按鍵是哪一個選項 */
+        default:                /* 去找所按鍵是哪一個選項 */
             if ((ch = find_cur(ch, max, desc)) > 0)
                 cur = ch;
             break;
         }
 
-        if (old_cur != cur)		/* 游標變動位置才需要重繪 */
+        if (old_cur != cur)             /* 游標變動位置才需要重繪 */
         {
             draw_item(x + old_cur, y, desc[old_cur], hotkey, 0);
             draw_item(x + cur, y, desc[cur], hotkey, 1);
@@ -401,7 +401,7 @@ popupmenu_ans2(char *desc[], char *title, int x, int y)
 }
 
 /*------------------------------------------------------ */
-/* 蹦出式視窗訊息，可用來取代 vmsg()			 */
+/* 蹦出式視窗訊息，可用來取代 vmsg()                     */
 /*------------------------------------------------------ */
 
 int
@@ -422,11 +422,11 @@ pmsg2(char *msg)
 #endif
 
     len = strlen(msg);
-    if (len < 16)		/* 取 msg title 其中較長者為 len */
+    if (len < 16)               /* 取 msg title 其中較長者為 len */
         len = 16;
-    if (len % 2)		/* 變成偶數 */
+    if (len % 2)                /* 變成偶數 */
         len++;
-    x = (b_lines - 4) >> 1;	/* 置中 */
+    x = (b_lines - 4) >> 1;     /* 置中 */
     y = (b_cols - 8 - len) >> 1;
 
     strcpy(buf, "╭");

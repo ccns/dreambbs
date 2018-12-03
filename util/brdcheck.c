@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
 /* checkbrd.c                                            */
 /*-------------------------------------------------------*/
-/* author : cache.bbs@bbs.ee.ncku.edu.tw			     */
+/* author : cache.bbs@bbs.ee.ncku.edu.tw                 */
 /* target : ÀË¬d brd ¤Uªº .DIR                           */
 /* create : 09/12/18                                     */
 /* update :                                              */

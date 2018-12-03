@@ -1,11 +1,11 @@
 /*-------------------------------------------------------*/
-/* util/gem-check.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* util/gem-check.c     ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : 精華區整理程式				 */
-/* create : 95/03/29				 	 */
-/* update : 95/08/08				 	 */
+/* target : 精華區整理程式                               */
+/* create : 95/03/29                                     */
+/* update : 95/08/08                                     */
 /*-------------------------------------------------------*/
-/* syntax : gem-check					 */
+/* syntax : gem-check                                    */
 /*-------------------------------------------------------*/
 
 
@@ -15,22 +15,22 @@
 
 /* GCHECK_LOG 必須絕對路徑 */
 #define GCHECK_LOG      BBSHOME"/"FN_GCHECK_LOG
-#define	GEM_DROP	0x0080
+#define GEM_DROP        0x0080
 
 
-#define	GCHECK_PERIOD	(16 - 1)/* 每隔 16 天輪換一次 */
+#define GCHECK_PERIOD   (16 - 1)        /* 每隔 16 天輪換一次 */
 
 
-#define	GCHECK_DEPTH	30
+#define GCHECK_DEPTH    30
 
 
-#define	GEM_EXPIRE	45	/* gem 至多存 45 天 */
+#define GEM_EXPIRE      45              /* gem 至多存 45 天 */
 
 
-#define	PROXY_DUE	30	/* proxy 至多存 30 天 */
+#define PROXY_DUE       30              /* proxy 至多存 30 天 */
 
 
-#define	CHRONO_INDEX	1
+#define CHRONO_INDEX    1
 
 
 static char pgem[256], pool[256];
@@ -41,7 +41,7 @@ static int gcheck(int level, char *fpath);
 
 
 /* ----------------------------------------------------- */
-/* synchronize folder & files				 */
+/* synchronize folder & files                            */
 /* ----------------------------------------------------- */
 
 
@@ -57,7 +57,7 @@ static SyncData *sync_pool;
 static int sync_size, sync_head;
 
 
-#define	SYNC_DB_SIZE	4096
+#define SYNC_DB_SIZE    4096
 
 
 static int
@@ -214,7 +214,7 @@ sync_check(
             if ((xsync = (SyncData *) bsearch(&hdr.chrono,
                     sync_pool, sync_head, sizeof(SyncData), sync_cmp)))
             {
-                if (xsync->exotic == 0)	/* 已被 reference */
+                if (xsync->exotic == 0) /* 已被 reference */
                     continue;
                 else
                 {
@@ -333,7 +333,7 @@ sync_check(
 
 
 /* ----------------------------------------------------- */
-/* check the BM's operation log				 */
+/* check the BM's operation log                          */
 /* ----------------------------------------------------- */
 
 
@@ -389,7 +389,7 @@ check_log(
 
 
 /* ----------------------------------------------------- */
-/* visit the hierarchy recursively			 */
+/* visit the hierarchy recursively                       */
 /* ----------------------------------------------------- */
 
 
@@ -406,7 +406,7 @@ gcheck(
 
     if (!level)
     {
-        fprintf(flog, "\n%s\n", fpath);	/* report */
+        fprintf(flog, "\n%s\n", fpath); /* report */
 
         check_log(fpath);
 
@@ -442,14 +442,14 @@ gcheck(
     fname = ptr;
 
     /* --------------------------------------------------- */
-    /* visit the header file				 */
+    /* visit the header file                               */
     /* --------------------------------------------------- */
 
     count = 0;
     xhead = sync_head;
     while (fread(&hdr, sizeof(hdr), 1, fp) == 1)
     {
-        ptr = hdr.xname;		/* F1234567 */
+        ptr = hdr.xname;                /* F1234567 */
 
         xmode = hdr.xmode;
 
@@ -473,7 +473,7 @@ gcheck(
             if ((xsync = (SyncData *) bsearch(&hdr.chrono,
                     sync_pool, xhead, sizeof(SyncData), sync_cmp)))
             {
-                xsync->exotic = 0;	/* 正常情況 : 有被 reference */
+                xsync->exotic = 0;      /* 正常情況 : 有被 reference */
             }
             else if (hdr.chrono > time(0) - 20 * 60)
             {
@@ -570,7 +570,7 @@ main(
     char *fname, fpath[128];
 
     /* -------------------------------------------------- */
-    /* 整理精華區 gem/					 */
+    /* 整理精華區 gem/                                    */
     /* -------------------------------------------------- */
 
     umask(077);
@@ -585,7 +585,7 @@ main(
     }
 
     /* --------------------------------------------------- */
-    /* visit the top folder				 */
+    /* visit the top folder                                */
     /* --------------------------------------------------- */
 
     flog = fopen(GCHECK_LOG, "w");
@@ -598,7 +598,7 @@ main(
         gcheck(0, ".");
 
     /* --------------------------------------------------- */
-    /* visit the second hierarchy for all boards		 */
+    /* visit the second hierarchy for all boards           */
     /* --------------------------------------------------- */
 
     strcpy(fpath, "brd");
@@ -626,7 +626,7 @@ main(
     }
 
     /* -------------------------------------------------- */
-    /* 整理 proxy net/					 */
+    /* 整理 proxy net/                                    */
     /* -------------------------------------------------- */
 
     fprintf(flog, "\n[proxy]\n");

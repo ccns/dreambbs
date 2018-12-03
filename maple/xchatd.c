@@ -23,15 +23,15 @@
 
 
 
-#define	SERVER_USAGE
+#define SERVER_USAGE
 #define WATCH_DOG
-#undef	DEBUG			/* 程式除錯之用 */
-#undef	MONITOR			/* 監督 chatroom 活動以解決糾紛 */
-#undef	STAND_ALONE		/* 不搭配 BBS 獨立執行 */
+#undef  DEBUG                   /* 程式除錯之用 */
+#undef  MONITOR                 /* 監督 chatroom 活動以解決糾紛 */
+#undef  STAND_ALONE             /* 不搭配 BBS 獨立執行 */
 
 
-#ifdef	DEBUG
-#define	MONITOR
+#ifdef  DEBUG
+#define MONITOR
 #endif
 
 static int gline;
@@ -39,45 +39,45 @@ static int gline;
 #ifdef  WATCH_DOG
 #define MYDOG  gline = __LINE__
 #else
-#define MYDOG			/* NOOP */
+#define MYDOG                   /* NOOP */
 #endif
 
 
 #define CHAT_PIDFILE    "run/chat.pid"
 #define CHAT_LOGFILE    FN_CHAT_LOG
-#define	CHAT_TALKFILE	FN_CHATDATA_LOG
-#define	CHAT_INTERVAL	(60 * 30)
-#define SOCK_QLEN	3
+#define CHAT_TALKFILE   FN_CHATDATA_LOG
+#define CHAT_INTERVAL   (60 * 30)
+#define SOCK_QLEN       3
 
 
 /* name of the main room (always exists) */
 
 
-#define	MAIN_NAME	"Lobby"
-#define	MAIN_TOPIC	"隨便聊聊..."
+#define MAIN_NAME       "Lobby"
+#define MAIN_TOPIC      "隨便聊聊..."
 
 
 
 
-#define ROOM_LOCKED	1
-#define ROOM_SECRET	2
+#define ROOM_LOCKED     1
+#define ROOM_SECRET     2
 #define ROOM_OPENTOPIC  4
-#define ROOM_ALL	(NULL)
+#define ROOM_ALL        (NULL)
 
 
-#define LOCKED(room)	(room->rflag & ROOM_LOCKED)
-#define SECRET(room)	(room->rflag & ROOM_SECRET)
+#define LOCKED(room)    (room->rflag & ROOM_LOCKED)
+#define SECRET(room)    (room->rflag & ROOM_SECRET)
 #define OPENTOPIC(room) (room->rflag & ROOM_OPENTOPIC)
 
 
-#define RESTRICTED(usr)	(usr->uflag == 0)	/* guest */
-#define CHATSYSOP(usr)	(usr->uflag & (PERM_SYSOP | PERM_CHATROOM))
-#define	PERM_ROOMOP	PERM_CHAT	/* Thor: 借 PERM_CHAT為 PERM_ROOMOP */
-#define	PERM_CHATOP	PERM_DENYCHAT	/* Thor: 借 PERM_DENYCHAT為 PERM_CHATOP */
-/* #define ROOMOP(usr)  (usr->uflag & ( PERM_ROOMOP | PERM_SYSOP | PERM_CHATROOM)) */
+#define RESTRICTED(usr) (usr->uflag == 0)       /* guest */
+#define CHATSYSOP(usr)  (usr->uflag & (PERM_SYSOP | PERM_CHATROOM))
+#define PERM_ROOMOP     PERM_CHAT       /* Thor: 借 PERM_CHAT為 PERM_ROOMOP */
+#define PERM_CHATOP     PERM_DENYCHAT   /* Thor: 借 PERM_DENYCHAT為 PERM_CHATOP */
+/* #define ROOMOP(usr)     (usr->uflag & ( PERM_ROOMOP | PERM_SYSOP | PERM_CHATROOM)) */
 /* Thor.980603: PERM_CHATROOM改為 default 沒有 roomop, 但可以自己取得 chatop*/
-#define ROOMOP(usr)  (usr->uflag & (PERM_ROOMOP|PERM_CHATOP))
-#define CLOAK(usr)	(usr->uflag & PERM_CLOAK)
+#define ROOMOP(usr)     (usr->uflag & (PERM_ROOMOP|PERM_CHATOP))
+#define CLOAK(usr)      (usr->uflag & PERM_CLOAK)
 
 
 /* ----------------------------------------------------- */
@@ -102,22 +102,22 @@ struct ChatUser
     ChatUser *unext;
     ChatRoom *room;
     UserList *ignore;
-    int sock;			/* user socket */
+    int sock;                   /* user socket */
     int userno;
     int uflag;
-    int clitype;			/* Xshadow: client type. 1 for common client,
-                             * 0 for bbs only client */
+    int clitype;                /* Xshadow: client type. 1 for common client,
+                                 * 0 for bbs only client */
     time_t tbegin;
     time_t uptime;
     int sno;
     int xdata;
     int retry;
 
-    int isize;			/* current size of ibuf */
-    char ibuf[80];		/* buffer for non-blocking receiving */
-    char userid[IDLEN + 1];	/* real userid */
-    char chatid[9];		/* chat id */
-    char rhost[30];		/* host address */
+    int isize;                  /* current size of ibuf */
+    char ibuf[80];              /* buffer for non-blocking receiving */
+    char userid[IDLEN + 1];     /* real userid */
+    char chatid[9];             /* chat id */
+    char rhost[30];             /* host address */
 };
 
 
@@ -126,9 +126,9 @@ struct ChatRoom
     ChatRoom *next, *prev;
     UserList *invite;
     char name[IDLEN];
-    char topic[48];		/* Let the room op to define room topic */
-    int rflag;			/* ROOM_LOCKED, ROOM_SECRET, ROOM_OPENTOPIC */
-    int occupants;		/* number of users in room */
+    char topic[48];             /* Let the room op to define room topic */
+    int rflag;                  /* ROOM_LOCKED, ROOM_SECRET, ROOM_OPENTOPIC */
+    int occupants;              /* number of users in room */
 };
 
 
@@ -151,13 +151,13 @@ struct ChatCmd
 static ChatRoom mainroom, *roompool;
 static ChatUser *mainuser, *userpool;
 static fd_set mainfset;
-static int totaluser;		/* current number of connections */
-static struct timeval zerotv;	/* timeval for selecting */
+static int totaluser;           /* current number of connections */
+static struct timeval zerotv;   /* timeval for selecting */
 static int common_client_command;
 
 
 #ifdef STAND_ALONE
-static int userno_inc = 0;	/* userno auto-incrementer */
+static int userno_inc = 0;      /* userno auto-incrementer */
 #endif
 
 
@@ -166,7 +166,7 @@ static char msg_no_such_id[] = "◆ 目前沒有人使用 [%s] 這個聊天代號";
 static char msg_not_here[] = "◆ [%s] 不在這間" CHATROOMNAME "。";
 
 
-#define	FUZZY_USER	((ChatUser *) -1)
+#define FUZZY_USER      ((ChatUser *) -1)
 
 void load_mud_like(void);
 
@@ -220,7 +220,7 @@ log_init(void)
     FILE *fp;
 
     /* --------------------------------------------------- */
-    /* log daemon's PID					 */
+    /* log daemon's PID                                    */
     /* --------------------------------------------------- */
 
     if ((fp = fopen(CHAT_PIDFILE, "w")))
@@ -237,8 +237,8 @@ log_init(void)
 }
 
 
-#ifdef	DEBUG
-static char chatbuf[256];	/* general purpose buffer */
+#ifdef  DEBUG
+static char chatbuf[256];       /* general purpose buffer */
 
 
 static void
@@ -326,7 +326,7 @@ log_user(
     else
         log_num = 0;
 }
-#endif				/* DEBUG */
+#endif                          /* DEBUG */
 
 
 /* ----------------------------------------------------- */
@@ -360,7 +360,7 @@ valid_chatid(
 /* ----------------------------------------------------- */
 /* match strings' similarity case-insensitively          */
 /* ----------------------------------------------------- */
-/* str_match(keyword, string)				 */
+/* str_match(keyword, string)                            */
 /* ----------------------------------------------------- */
 /* 0 : equal            ("foo", "foo")                   */
 /* -1 : mismatch        ("abc", "xyz")                   */
@@ -370,7 +370,7 @@ valid_chatid(
 
 static int
 str_match(
-    unsigned char *s1, 		/* lower-case (sub)string */
+    unsigned char *s1,          /* lower-case (sub)string */
     unsigned char *s2)
 {
     int c1, c2;
@@ -462,7 +462,7 @@ fuzzy_cuser_by_chatid(
         if (mode > 0)
         {
             if (xuser)
-                return FUZZY_USER;	/* 符合者大於 2 人 */
+                return FUZZY_USER;      /* 符合者大於 2 人 */
 
             xuser = cu;
         }
@@ -636,7 +636,7 @@ send_to_room(
     ChatUser *cu;
     fd_set wset;
     int sock, max;
-    int clitype;			/* 分為 bbs client 及 common client 兩次處理 */
+    int clitype;                        /* 分為 bbs client 及 common client 兩次處理 */
     char *str, buf[256];
 
     for (clitype = (number == MSG_MESSAGE || !number) ? 0 : 1;
@@ -790,7 +790,7 @@ exit_room(
             {
                 strcat(buf, ": ");
 
-                msg[79] = 0;		/* Thor:防止太長 */
+                msg[79] = 0;            /* Thor:防止太長 */
 
                 strncat(buf, msg, 79);
             }
@@ -1198,7 +1198,7 @@ chat_do_user_list(
         if (mode)
         {
             if (!room)
-                continue;		/* Xshadow: 還沒進入任何房間的就不列出 */
+                continue;               /* Xshadow: 還沒進入任何房間的就不列出 */
 
             sprintf(buf, "%s %s %s %s",
                 user->chatid, user->userid, room->name, user->rhost);
@@ -1279,7 +1279,7 @@ chat_chatroom(
 
 static void
 chat_map_chatids(
-    ChatUser *cu, 			/* Thor: 還沒有作不同間的 */
+    ChatUser *cu,                       /* Thor: 還沒有作不同間的 */
     ChatRoom *whichroom)
 {
     int c;
@@ -1303,12 +1303,12 @@ chat_map_chatids(
 
         if (myroom != room)
         {
-            if (RESTRICTED(cu) ||	/* Thor: 要先check room 是不是空的 */
+            if (RESTRICTED(cu) ||       /* Thor: 要先check room 是不是空的 */
                 (room && SECRET(room) && !CHATSYSOP(cu)))
                 continue;
         }
 
-        if (CLOAK(user) && (user != cu) && !CHATSYSOP(cu))	/* Thor:隱身術 */
+        if (CLOAK(user) && (user != cu) && !CHATSYSOP(cu))      /* Thor:隱身術 */
             continue;
 
         sprintf(buf + (c * 24), " %-8s%c%-12s%s",
@@ -1445,7 +1445,7 @@ static char *chat_msg[] =
     /* "[/d]ate", "目前時間", *//* Thor: 指令太多 */
 
 #if 0
-    "[/f]ire <user> <msg>", "發送熱訊", 	/* Thor.0727: 和 flag 衝key */
+    "[/f]ire <user> <msg>", "發送熱訊",         /* Thor.0727: 和 flag 衝key */
 #endif
 
     "[/i]gnore [user]", "忽略使用者",
@@ -1519,7 +1519,7 @@ chat_private(
     userno = 0;
     recipient = nextword(&msg);
     xuser = (ChatUser *) fuzzy_cuser_by_chatid(recipient);
-    if (xuser == NULL)		/* Thor.0724: 用 userid也可傳悄悄話 */
+    if (xuser == NULL)          /* Thor.0724: 用 userid也可傳悄悄話 */
     {
         xuser = cuser_by_userid(recipient);
     }
@@ -1529,19 +1529,19 @@ chat_private(
         sprintf(buf, msg_no_such_id, recipient);
     }
     else if (xuser == FUZZY_USER)
-    {				/* ambiguous */
+    {                           /* ambiguous */
         strcpy(buf, "※ 請指明聊天代號");
     }
     else if (*msg)
     {
         userno = cu->userno;
         sprintf(buf, "\x1b[1m*%s*\x1b[m ", cu->chatid);
-        msg[79] = 0;		/* Thor:防止太長 */
+        msg[79] = 0;            /* Thor:防止太長 */
         strncat(buf, msg, 80);
         send_to_user(xuser, buf, userno, MSG_MESSAGE);
 
         if (xuser->clitype)
-        {				/* Xshadow: 如果對方是用 client 上來的 */
+        {                               /* Xshadow: 如果對方是用 client 上來的 */
             sprintf(buf, "%s %s ", cu->userid, cu->chatid);
             msg[79] = 0;
             strncat(buf, msg, 80);
@@ -1814,7 +1814,7 @@ login_user(
     userid = nextword(&msg);
     chatid = nextword(&msg);
 
-#ifdef	DEBUG
+#ifdef  DEBUG
     logit("ENTER", userid);
 #endif
 
@@ -1838,7 +1838,7 @@ login_user(
     if (!*userid || (acct_load(&acct, userid) < 0))
     {
 
-#ifdef	DEBUG
+#ifdef  DEBUG
         logit("noexist", userid);
 #endif
 
@@ -1857,7 +1857,7 @@ login_user(
     if (chkpasswd(acct.passwd, passwd))
     {
 
-#ifdef	DEBUG
+#ifdef  DEBUG
         logit("fake", userid);
 #endif
 
@@ -1872,10 +1872,10 @@ login_user(
     level = acct.userlevel;
     utent = acct.userno;
 
-#else				/* STAND_ALONE */
+#else                           /* STAND_ALONE */
     level = 1;
     utent = ++userno_inc;
-#endif				/* STAND_ALONE */
+#endif                          /* STAND_ALONE */
 
     /* Thor.0819: for client/server bbs */
 
@@ -1893,7 +1893,7 @@ login_user(
         if (xuser->userno == utent)
         {
 
-#ifdef	DEBUG
+#ifdef  DEBUG
             logit("enter", "bogus");
 #endif
 
@@ -1902,7 +1902,7 @@ login_user(
                     ERR_LOGIN_USERONLINE);
             else
                 send_to_user(cu, CHAT_LOGIN_BOGUS, 0, MSG_MESSAGE);
-            return -1;		/* Thor: 或是0等它自己了斷? */
+            return -1;          /* Thor: 或是0等它自己了斷? */
         }
     }
 
@@ -1913,7 +1913,7 @@ login_user(
     if (!valid_chatid(chatid) || !(level & PERM_CHAT) || (level & PERM_DENYCHAT))
     { /* Thor.981012: 徹底一些, 連 denychat也BAN掉, 免得 client作怪 */
 
-#ifdef	DEBUG
+#ifdef  DEBUG
         logit("enter", chatid);
 #endif
 
@@ -1925,7 +1925,7 @@ login_user(
     }
 #endif
 
-#ifdef	DEBUG
+#ifdef  DEBUG
     debug_user();
 #endif
 
@@ -1933,7 +1933,7 @@ login_user(
     {
         /* chatid in use */
 
-#ifdef	DEBUG
+#ifdef  DEBUG
         logit("enter", "duplicate");
 #endif
 
@@ -1944,7 +1944,7 @@ login_user(
         return 0;
     }
 
-#ifdef DEBUG			/* CHATSYSOP 一進來就隱身 */
+#ifdef DEBUG                    /* CHATSYSOP 一進來就隱身 */
     cu->uflag = level & ~(PERM_ROOMOP | PERM_CHATOP | (CHATSYSOP(cu) ? 0 : PERM_CLOAK));
 #else
     cu->uflag = level & ~(PERM_ROOMOP | PERM_CHATOP | PERM_CLOAK);
@@ -1984,7 +1984,7 @@ login_user(
     print_user_counts(cu);
     send_to_user(cu, "", 0, MSG_MOTDEND);
 
-#ifdef	DEBUG
+#ifdef  DEBUG
     logit("enter", "OK");
 #endif
 
@@ -2181,7 +2181,7 @@ chat_kick(
     exit_room(xuser, EXIT_KICK, (char *) NULL);
 
     if (room == &mainroom)
-        xuser->uptime = 0;		/* logout_user(xuser); */
+        xuser->uptime = 0;              /* logout_user(xuser); */
     else
         enter_room(xuser, MAIN_NAME, (char *) NULL);
         /* Thor.980602: 其實踢就踢, 不要show出xxx離開了的訊息比較好 */
@@ -2305,7 +2305,7 @@ chat_invite(
         return;
     }
 
-    room = cu->room;		/* Thor: 是否要 check room 是否 NULL ? */
+    room = cu->room;            /* Thor: 是否要 check room 是否 NULL ? */
     list = &(room->invite);
 
     if (list_belong(*list, xuser->userno))
@@ -2392,7 +2392,7 @@ party_action(
 
                 xuser = fuzzy_cuser_by_chatid(party);
                 if (xuser == NULL)
-                {			/* Thor.0724: 用 userid也嘛通 */
+                {                       /* Thor.0724: 用 userid也嘛通 */
                     xuser = cuser_by_userid(party);
                 }
 
@@ -2421,7 +2421,7 @@ party_action(
             sprintf(buf, "\x1b[1;32m%s \x1b[31m%s\x1b[33m %s \x1b[31m%s\x1b[m",
                 cu->chatid, cap->part1_msg, party, cap->part2_msg);
             send_to_room(cu->room, buf, cu->userno, MSG_MESSAGE);
-            return 0;			/* Thor: cu->room 是否為 NULL? */
+            return 0;                   /* Thor: cu->room 是否為 NULL? */
         }
     }
     return 1;
@@ -2458,7 +2458,7 @@ speak_action(
 
 
 /* ----------------------------------------------------- */
-/* MUD-like social commands : condition			 */
+/* MUD-like social commands : condition                  */
 /* ----------------------------------------------------- */
 
 ChatAction *condition_data, *person_data;
@@ -2623,13 +2623,13 @@ chat_party(
 }
 
 
-#define	SCREEN_WIDTH	80
-#define	MAX_VERB_LEN	8
-#define VERB_NO		10
+#define SCREEN_WIDTH    80
+#define MAX_VERB_LEN    8
+#define VERB_NO         10
 
 
 static void
-view_action_verb(	/* Thor.0726: 新加動詞分類顯示 */
+view_action_verb(       /* Thor.0726: 新加動詞分類顯示 */
     ChatUser *cu,
     int cmd)
 {
@@ -2642,13 +2642,13 @@ view_action_verb(	/* Thor.0726: 新加動詞分類顯示 */
     data = buf;
 
     if (cmd < '1' || cmd > '5')
-    {				/* Thor.0726: 寫得不好, 想辦法改進... */
+    {                           /* Thor.0726: 寫得不好, 想辦法改進... */
         for (i = 0; (p = dscrb[i]); i++)
         {
             sprintf(data, "  [//]help %d          - MUD-like 社交動詞   第 %d 類", i + 1, i + 1);
             send_to_user(cu, data, 0, MSG_MESSAGE);
             send_to_user(cu, p, 0, MSG_MESSAGE);
-            send_to_user(cu, " ", 0, MSG_MESSAGE);	/* Thor.0726: 換行 */
+            send_to_user(cu, " ", 0, MSG_MESSAGE);      /* Thor.0726: 換行 */
         }
     }
     else
@@ -2657,7 +2657,7 @@ view_action_verb(	/* Thor.0726: 新加動詞分類顯示 */
 
         send_to_user(cu, dscrb[i], 0, MSG_MESSAGE);
 
-        expn = buf + 100;		/* Thor.0726: 應該不會overlap吧? */
+        expn = buf + 100;               /* Thor.0726: 應該不會overlap吧? */
 
         *data = '\0';
         *expn = '\0';
@@ -2674,7 +2674,7 @@ view_action_verb(	/* Thor.0726: 新加動詞分類顯示 */
             if (((i + 1) % VERB_NO) == 0)
             {
                 send_to_user(cu, data, 0, MSG_MESSAGE);
-                send_to_user(cu, expn, 0, MSG_MESSAGE);	/* Thor.0726: 顯示中文註解 */
+                send_to_user(cu, expn, 0, MSG_MESSAGE); /* Thor.0726: 顯示中文註解 */
                 *data = '\0';
                 *expn = '\0';
             }
@@ -2688,7 +2688,7 @@ view_action_verb(	/* Thor.0726: 新加動詞分類顯示 */
         if (i % VERB_NO)
         {
             send_to_user(cu, data, 0, MSG_MESSAGE);
-            send_to_user(cu, expn, 0, MSG_MESSAGE);	/* Thor.0726: 顯示中文註解 */
+            send_to_user(cu, expn, 0, MSG_MESSAGE);     /* Thor.0726: 顯示中文註解 */
         }
     }
     /* send_to_user(cu, " ", 0); *//* Thor.0726: 換行, 需要 " " 嗎? */
@@ -2704,7 +2704,7 @@ static ChatCmd chatcmdlist[] =
 {
     {"act", chat_act, 0},
     {"bye", chat_bye, 0},
-    {"chatroom", chat_chatroom, 1}, 	/* Xshadow: for common client */
+    {"chatroom", chat_chatroom, 1},     /* Xshadow: for common client */
     {"clear", chat_clear, 0},
     {"cloak", chat_cloak, 2},
     {"mud", chat_mud, 2},
@@ -2718,8 +2718,8 @@ static ChatCmd chatcmdlist[] =
     {"msg", chat_private, 0},
     {"nick", chat_nick, 0},
     {"operator", chat_makeop, 0},
-    {"party", chat_party, 1}, 	/* Xshadow: party data for common client */
-    {"partyinfo", chat_partyinfo, 1}, 	/* Xshadow: party info for common
+    {"party", chat_party, 1},           /* Xshadow: party data for common client */
+    {"partyinfo", chat_partyinfo, 1},   /* Xshadow: party info for common
                                          * client */
 
 #ifndef STAND_ALONE
@@ -2781,7 +2781,7 @@ command_execute(
     {
         if (match)
         {
-            if (cu->room && !CLOAK(cu))	/* 隱身的人也不能說話哦 */
+            if (cu->room && !CLOAK(cu)) /* 隱身的人也不能說話哦 */
             {
                 char chatid[16];
 
@@ -2810,7 +2810,7 @@ command_execute(
         cmd++;
         if (!*cmd || str_equal("help", cmd))
         {
-            cmd = nextword(&msg);	/* Thor.0726: 動詞分類 */
+            cmd = nextword(&msg);       /* Thor.0726: 動詞分類 */
             view_action_verb(cu, *cmd);
             match = 1;
         }
@@ -2834,7 +2834,7 @@ command_execute(
         {
             if (cu->clitype)
             {
-                cmd++;			/* Xshadow: 指令從下一個字元才開始 */
+                cmd++;                  /* Xshadow: 指令從下一個字元才開始 */
                 common_client_command = 1;
             }
             else
@@ -2849,16 +2849,16 @@ command_execute(
         {
             switch (cmdrec->exact)
             {
-            case 1:			/* exactly equal */
+            case 1:                     /* exactly equal */
                 match = str_equal(str, buf);
                 break;
 
-            case 2:			/* Thor: secret command */
+            case 2:                     /* Thor: secret command */
                 if (CHATSYSOP(cu))
                     match = str_equal(str, buf);
                 break;
 
-            default:			/* not necessary equal */
+            default:                    /* not necessary equal */
                 match = str_match(buf, str) >= 0;
                 break;
             }
@@ -2912,7 +2912,7 @@ cuser_serve(
             return -1;
         }
 
-        return 0;			/* would block, so leave it to do later */
+        return 0;                       /* would block, so leave it to do later */
 #endif
     }
 
@@ -3055,7 +3055,7 @@ servo_daemon(
         exit(0);
 
     /* --------------------------------------------------- */
-    /* bind the service port				 */
+    /* bind the service port                               */
     /* --------------------------------------------------- */
 
     fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -3092,7 +3092,7 @@ servo_daemon(
 }
 
 
-#ifdef	SERVER_USAGE
+#ifdef  SERVER_USAGE
 static void
 server_usage(void)
 {
@@ -3412,7 +3412,7 @@ main(
     main_signals();
 
     /* --------------------------------------------------- */
-    /* init variable : rooms & users			 */
+    /* init variable : rooms & users                       */
     /* --------------------------------------------------- */
 
     userpool = NULL;
@@ -3421,7 +3421,7 @@ main(
     mainroom.rflag |= ROOM_OPENTOPIC;
 
     /* --------------------------------------------------- */
-    /* main loop						 */
+    /* main loop                                           */
     /* --------------------------------------------------- */
 
     tcheck = 0;
@@ -3475,7 +3475,7 @@ main(
         }
 
         /* ------------------------------------------------- */
-        /* Set up the fdsets				 */
+        /* Set up the fdsets                                 */
         /* ------------------------------------------------- */
 
         rset = mainfset;
@@ -3514,7 +3514,7 @@ main(
         }
 
         /* ------------------------------------------------- */
-        /* serve active agents				 */
+        /* serve active agents                               */
         /* ------------------------------------------------- */
 
         uptime = time(0);
@@ -3550,7 +3550,7 @@ main(
                 nfds = 0;
             }
 
-            if (nfds < 0 || cu->uptime <= 0)	/* free this client */
+            if (nfds < 0 || cu->uptime <= 0)    /* free this client */
             {
                 cuser_free(cu);
 
@@ -3571,7 +3571,7 @@ main(
         }
 
         /* ------------------------------------------------- */
-        /* accept new connection				 */
+        /* accept new connection                             */
         /* ------------------------------------------------- */
 
         if (FD_ISSET(0, &rset))
@@ -3653,7 +3653,7 @@ main(
         }
 
         /* ------------------------------------------------- */
-        /* tail of main loop				 */
+        /* tail of main loop                                 */
         /* ------------------------------------------------- */
 
     }

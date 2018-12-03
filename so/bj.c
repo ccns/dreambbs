@@ -4,7 +4,7 @@
 
 /* 黑傑克遊戲 */
 
-int cuser_money = 1000;	//一開始每人1000元現金
+int cuser_money = 1000; //一開始每人1000元現金
 
 void show_money(int m)
 {
@@ -24,7 +24,7 @@ int print_card(int card, int x, int y)
                        "Ｋ", "Ｋ", "Ｋ", "Ｋ"
                       };
 
-    move(x, y);   prints("╭───╮");
+    move(x, y);     prints("╭───╮");
     move(x + 1, y); prints("│%s    │", poker[card]);
     move(x + 2, y); prints("│%s    │", flower[card%4]);
     move(x + 3, y); prints("│      │");
@@ -39,10 +39,10 @@ int
 BlackJack(void)
 {
     char buf[20];
-    int    num[52] = {11, 11, 11, 11, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6,
-                      7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10,
-                      10, 10, 10, 10, 10, 10, 10, 10
-                     };
+    int  num[52] = {11, 11, 11, 11, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6,
+                     7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10,
+                     10, 10, 10, 10, 10, 10, 10, 10
+                   };
     int cardlist[52];
     int i, m, tmp = 0, ch = 0, flag;
     int win = 2, win_jack = 5; /* win 為贏時的倍率, win_jack 為前兩張就 21 點倍率 */

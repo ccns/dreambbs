@@ -1,12 +1,12 @@
 /*-------------------------------------------------------*/
-/* util/expire.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* util/expire.c        ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : 自動砍信工具程式				 */
-/* create : 95/03/29				 	 */
-/* update : 97/03/29				 	 */
+/* target : 自動砍信工具程式                             */
+/* create : 95/03/29                                     */
+/* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
-/* syntax : expire [day] [max] [min] [board]	 	 */
-/* NOTICE : give board to sync				 */
+/* syntax : expire [day] [max] [min] [board]             */
+/* NOTICE : give board to sync                           */
 /*-------------------------------------------------------*/
 
 /* Thor.981027: 加上 board時, 可sync 某一board */
@@ -15,26 +15,26 @@
 
 #include "bbs.h"
 
-#define	DEF_DAYS	9999
-#define	DEF_MAXP	8000
-#define	DEF_MINP	7500
+#define DEF_DAYS        9999
+#define DEF_MAXP        8000
+#define DEF_MINP        7500
 
-#define	EXPIRE_CONF	FN_ETC_EXPIRE_CONF
-#define	EXPIRE_LOG	FN_EXPIRE_LOG
+#define EXPIRE_CONF     FN_ETC_EXPIRE_CONF
+#define EXPIRE_LOG      FN_EXPIRE_LOG
 
 typedef struct
 {
-    char bname[16];		/* board ID */
-    int days;			/* expired days */
-    int maxp;			/* max post */
-    int minp;			/* min post */
+    char bname[16];             /* board ID */
+    int days;                   /* expired days */
+    int maxp;                   /* max post */
+    int minp;                   /* min post */
 }      life;
 
 
 BRD table[MAXBOARD];
 
 /* ----------------------------------------------------- */
-/* synchronize folder & files				 */
+/* synchronize folder & files                            */
 /* ----------------------------------------------------- */
 
 
@@ -50,7 +50,7 @@ static SyncData *sync_pool;
 static int sync_size, sync_head;
 
 
-#define	SYNC_DB_SIZE	2048
+#define SYNC_DB_SIZE    2048
 
 
 static int
@@ -206,7 +206,7 @@ expire(
 
     if (sync)
     {
-        uptime = time(0) - 10 * 60;		/* 太新的不 sync */
+        uptime = time(0) - 10 * 60;             /* 太新的不 sync */
         sync_init(bname, uptime);
         xpool = sync_pool;
         xhead = sync_head;
@@ -316,7 +316,7 @@ expire(
         if (!rename(index, fpath))
         {
             if (rename(fnew, index))
-                rename(fpath, index);		/* 換回來 */
+                rename(fpath, index);           /* 換回來 */
         }
     }
     unlink(fnew);
@@ -371,7 +371,7 @@ main(
     memset(&key, 0, sizeof(key));
 
     /* --------------------------------------------------- */
-    /* load expire.ctl					 */
+    /* load expire.ctl                                     */
     /* --------------------------------------------------- */
 
     setgid(BBSGID);
@@ -390,7 +390,7 @@ main(
     close(fd);
 
     /* --------------------------------------------------- */
-    /* visit all boards					 */
+    /* visit all boards                                    */
     /* --------------------------------------------------- */
 
     fp = fopen(EXPIRE_LOG, "w");
@@ -443,7 +443,7 @@ main(
             }
             strcpy(key.bname, ptr);
 //          printf("Expire Board: %s\n", ptr);
-            expire(fp, &key, !(number & 31));	/* 每隔 32 天 sync 一次 */
+            expire(fp, &key, !(number & 31));   /* 每隔 32 天 sync 一次 */
             ++number;
         }
     }

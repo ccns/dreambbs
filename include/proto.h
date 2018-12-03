@@ -1,27 +1,27 @@
 /*-------------------------------------------------------*/
-/* proto.h	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* proto.h      ( NTHU CS MapleBBS Ver 2.36 )            */
 /*-------------------------------------------------------*/
-/* target : prototype and macros			 */
-/* create : 95/03/29				 	 */
-/* update : 95/12/15				 	 */
+/* target : prototype and macros                         */
+/* create : 95/03/29                                     */
+/* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
 
-#ifndef	_PROTO_H_
-#define	_PROTO_H_
+#ifndef _PROTO_H_
+#define _PROTO_H_
 
 #ifdef M3_USE_PFTERM
 #include "pfterm.h"
 #endif
 
 /* ----------------------------------------------------- */
-/* External function declarations			 */
+/* External function declarations                        */
 /* ----------------------------------------------------- */
 
 /* OS */
 char *genpasswd(char *pw);
 
 /* ----------------------------------------------------- */
-/* prototypes						 */
+/* prototypes                                            */
 /* ----------------------------------------------------- */
 
 /* acct.c */
@@ -227,7 +227,7 @@ void bell(void);
 #ifdef M3_USE_PFTERM
 void outl(int line, unsigned char *msg);
 void outr(unsigned char *str);
-#else
+#else                
 void move(int y, int x);
 void refresh(void);
 void clear(void);
@@ -309,20 +309,20 @@ void myfavorite_main(void);
 int class_add(XO *xo);
 
 /* ----------------------------------------------------- */
-/* macros						 */
+/* macros                                                */
 /* ----------------------------------------------------- */
 
 
-#define	TRACE	blog
+#define TRACE   blog
 
 
-#define	dashd(fpath)	S_ISDIR(f_mode(fpath))
-#define	dashf(fpath)	S_ISREG(f_mode(fpath))
+#define dashd(fpath)    S_ISDIR(f_mode(fpath))
+#define dashf(fpath)    S_ISREG(f_mode(fpath))
 
 
-#define	STR4(x)		((x[0] << 24) + (x[1] << 16) + (x[2] << 8) + x[3])
-                    /* Thor.980913: 保證precedence */
+#define STR4(x)         ((x[0] << 24) + (x[1] << 16) + (x[2] << 8) + x[3])
+                        /* Thor.980913: 保證precedence */
 
 
-#endif				/* _PROTO_H_ */
+#endif                          /* _PROTO_H_ */
 

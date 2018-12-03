@@ -1,23 +1,23 @@
 /* ----------------------------------------------------- */
 /* 簡繁體漢字轉換                                        */
 /* ----------------------------------------------------- */
-/* create :   /  /  					 */
-/* update : 03/05/16					 */
-/* author : kcn@cic.tsinghua.edu.cn			 */
-/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw		 */
+/* create :   /  /                                       */
+/* update : 03/05/16                                     */
+/* author : kcn@cic.tsinghua.edu.cn                      */
+/* modify : itoc.bbs@bbs.tnfsh.tn.edu.tw                 */
 /* ----------------------------------------------------- */
 
 
 #include "innbbsconf.h"
 
 
-#define BtoG_count	13973
-#define GtoB_count	7614
+#define BtoG_count      13973
+#define GtoB_count      7614
 
-#define BtoG_bad1	0xa1
-#define BtoG_bad2	0xf5
-#define GtoB_bad1	0xa1
-#define GtoB_bad2	0xbc
+#define BtoG_bad1       0xa1
+#define BtoG_bad2       0xf5
+#define GtoB_bad1       0xa1
+#define GtoB_bad2       0xbc
 
 
 static unsigned char *BtoG = NULL;
@@ -33,7 +33,7 @@ conv_init(void)
     if (BtoG != NULL)
         return;
 
-    BGsize = BtoG_count << 1;	/* 每個漢字 2-byte */
+    BGsize = BtoG_count << 1;   /* 每個漢字 2-byte */
     GBsize = GtoB_count << 1;
     BtoG = (unsigned char *) malloc(BGsize + GBsize);
     GtoB = BtoG + BGsize;
@@ -55,8 +55,8 @@ conv_init(void)
 }
 
 
-#define c1	(unsigned char)(src[0])
-#define c2	(unsigned char)(src[1])
+#define c1      (unsigned char)(src[0])
+#define c2      (unsigned char)(src[1])
 
 
 static void
@@ -117,9 +117,9 @@ g2b(
 
 static char *
 hzconvert(
-    char *src, 			/* source char buffer pointer */
-    char *dst, 			/* destination char buffer pointer */
-    void (*dbcvrt) (unsigned char *src, unsigned char *dst))		/* 漢字 2-byte conversion function */
+    char *src,                  /* source char buffer pointer */
+    char *dst,                  /* destination char buffer pointer */
+    void (*dbcvrt) (unsigned char *src, unsigned char *dst))            /* 漢字 2-byte conversion function */
 {
     int len;
     char *end, *p;
@@ -131,20 +131,20 @@ hzconvert(
     end = src + len;
     while (src < end)
     {
-        if (*src & 0x80)		/* hi-bit on 表示是漢字 */
+        if (*src & 0x80)        /* hi-bit on 表示是漢字 */
         {
             dbcvrt(src, p);
-            src += 2;			/* 一次轉二碼 */
+            src += 2;           /* 一次轉二碼 */
             p += 2;
         }
         else
         {
-            /* *p = *src; */		/* 不需要，因為在 b52gb()、gb2b5() 的應用裡 src == dst */
+            /* *p = *src; */    /* 不需要，因為在 b52gb()、gb2b5() 的應用裡 src == dst */
             src++;
             p++;
         }
     }
-    /* dst[len] = '\0'; */	/* 不需要，因為在 b52gb()、gb2b5() 的應用裡 src == dst */
+    /* dst[len] = '\0'; */      /* 不需要，因為在 b52gb()、gb2b5() 的應用裡 src == dst */
 
     return dst;
 }

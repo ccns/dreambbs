@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* util/camera.c	( NTHU CS MapleBBS Ver 3.00 )	 */
+/* util/camera.c        ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
-/* target : 建立 [動態看板] cache			 */
-/* create : 95/03/29				 	 */
-/* update : 97/03/29				 	 */
+/* target : 建立 [動態看板] cache                        */
+/* create : 95/03/29                                     */
+/* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
 
 
@@ -43,13 +43,13 @@ static char *list[] = {
     "memorandum.hlp",
     "aloha.hlp",
     "signup.hlp",
-//	NULL
+//    NULL
     "myfav.hlp",    /* r2.20170727: test add back my favorite*/
     NULL
 };
 
 
-#define MAX_LINE	MOVIE_LINES
+#define MAX_LINE        MOVIE_LINES
 
 
 static FCACHE image;
@@ -104,7 +104,7 @@ play(
 
     head = data;
     line = 0;
-    while ((ch = *data))		/* at most 10 lines */
+    while ((ch = *data))                /* at most 10 lines */
     {
         data++;
         if (ch == '\n')
@@ -118,7 +118,7 @@ play(
     *data++ = '[';
     *data++ = 'm';
 
-    while (line < MAX_LINE)	/* at lease 10 lines */
+    while (line < MAX_LINE)     /* at lease 10 lines */
     {
         *data++ = '\n';
         line++;
@@ -126,15 +126,15 @@ play(
 
     *data = '\0';
 
-    /* *data++ = '\0';*/		/* mark for end of movie */
+    /* *data++ = '\0';*/                /* mark for end of movie */
 
-    /* ch = data - head; */		/* length */
+    /* ch = data - head; */             /* length */
 
     ch = str_rle(head) + 1; /* Thor.980804: +1 將結尾的0也算入 */
 
     line = tail + ch;
     if (line >= MOVIE_SIZE)
-        return 1;			/* overflow */
+        return 1;                       /* overflow */
 
     data = image.film + tail;
     memcpy(data, head, ch);
@@ -152,7 +152,7 @@ main(
     int j, k;
 #endif
     char *ptr, *str, *fname, fpath[80], buf[FILM_SIZ + 1];
-#ifdef	HAVE_RAND_INCOME
+#ifdef  HAVE_RAND_INCOME
     char fincome[128];
     int pos;
     time_t now;
@@ -167,7 +167,7 @@ main(
     srand(time(0));
 
     /* --------------------------------------------------- */
-    /* mirror pictures					 */
+    /* mirror pictures                                     */
     /* --------------------------------------------------- */
 
 
@@ -181,7 +181,7 @@ main(
     for (i = 0; (str = list[i]); i++)
     {
         strcpy(fname, str);
-#ifdef	HAVE_RAND_INCOME
+#ifdef  HAVE_RAND_INCOME
         if (!strcmp(str, "income"))
         {
             now = time(NULL);
@@ -213,19 +213,19 @@ main(
     }
 
     /* --------------------------------------------------- */
-    /* visit all films					 */
+    /* visit all films                                     */
     /* --------------------------------------------------- */
     i = FILM_MOVIE;
 
     sprintf(fpath, "gem/brd/%s/@/@note", BRD_CAMERA);
 
-#ifdef      HAVE_SONG_TO_CAMERA
+#ifdef  HAVE_SONG_TO_CAMERA
     for (j=0; j<=1; j++)
     {
 #endif
         if ((fp = fopen(fpath, "r")))
         {
-#ifdef      HAVE_SONG_TO_CAMERA
+#ifdef  HAVE_SONG_TO_CAMERA
             if (j==1) sprintf(fpath, "brd/%s/@/", BRD_ORDERSONGS);
 #endif
             str = strchr(fpath, '@');
@@ -250,7 +250,7 @@ main(
                     buf[size] = '\0';
                     ptr = buf;
 
-#ifdef	HAVE_SONG_TO_CAMERA
+#ifdef  HAVE_SONG_TO_CAMERA
                     if (j == 1 /*&& !strncmp(buf, str_author1, strlen(str_author1))*/)
                     {
                         for (k=0; k<=3 && ptr; k++)
@@ -264,7 +264,7 @@ main(
                     }
 #endif
 
-                    if (play(ptr))	/* overflow */
+                    if (play(ptr))      /* overflow */
                         break;
                     if (++i >= MOVIE_MAX) /* Thor.980804: 為什麼不乾脆用 number算了?:P */
                         break;
@@ -292,20 +292,20 @@ main(
                 play(buf);
             }
         }
-#ifdef	    HAVE_SONG_TO_CAMERA
+#ifdef      HAVE_SONG_TO_CAMERA
         sprintf(fpath, "brd/%s/.DIR", BRD_ORDERSONGS);
     }
 #endif
-    i = number;	/* 總共有幾片 ? */
+    i = number; /* 總共有幾片 ? */
 
     /* --------------------------------------------------- */
-    /* resolve shared memory				 */
+    /* resolve shared memory                               */
     /* --------------------------------------------------- */
 
     fshm = (FCACHE *) shm_new(FILMSHM_KEY, sizeof(FCACHE));
     memcpy(fshm, &image, sizeof(image.shot) + tail);
     /* Thor.980805: 再加上 shot的部分 */
-    image.shot[0] = fshm->shot[0] = i;	/* 總共有幾片 ? */
+    image.shot[0] = fshm->shot[0] = i;  /* 總共有幾片 ? */
 
     if ((fp = fopen(FN_CAMERA_LOG, "a")))
     {

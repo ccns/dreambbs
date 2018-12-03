@@ -1,13 +1,13 @@
 /*-------------------------------------------------------*/
-/* stopperm.c	( YZU WindTopBBS Ver 3.00 )		 */
+/* stopperm.c   ( YZU WindTopBBS Ver 3.00 )              */
 /*-------------------------------------------------------*/
-/* target : 連坐處罰程式			 	 */
-/* create : 95/03/29				 	 */
-/* update : 96/04/05				 	 */
+/* target : 連坐處罰程式                                 */
+/* create : 95/03/29                                     */
+/* update : 96/04/05                                     */
 /*-------------------------------------------------------*/
 
 
-#undef	_ADMIN_C_
+#undef  _ADMIN_C_
 #include "bbs.h"
 
 static int funo;
@@ -117,7 +117,7 @@ keeplog(
     char *fnlog,
     char *board,
     char *title,
-    int mode)		/* 0:load 1:rename 2:unlink 3:mark */
+    int mode)           /* 0:load 1:rename 2:unlink 3:mark */
 {
     HDR hdr;
     char folder[128], fpath[128];
@@ -181,7 +181,7 @@ acct_save(
     char fpath[80];
 
     usr_fpath(fpath, acct->userid, ".ACCT");
-    fd = open(fpath, O_WRONLY, 0600);	/* fpath 必須已經存在 */
+    fd = open(fpath, O_WRONLY, 0600);   /* fpath 必須已經存在 */
     if (fd >= 0)
     {
         write(fd, acct, sizeof(ACCT));

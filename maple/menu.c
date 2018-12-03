@@ -1,9 +1,9 @@
 /*-------------------------------------------------------*/
-/* menu.c	( NTHU CS MapleBBS Ver 3.00 )		 */
+/* menu.c       ( NTHU CS MapleBBS Ver 3.00 )            */
 /*-------------------------------------------------------*/
-/* target : menu/help/movie routines		 	 */
-/* create : 95/03/29				 	 */
-/* update : 2000/01/02				 	 */
+/* target : menu/help/movie routines                     */
+/* create : 95/03/29                                     */
+/* update : 2000/01/02                                   */
 /*-------------------------------------------------------*/
 
 #include "bbs.h"
@@ -15,14 +15,14 @@ int item_length[20]={0};
 
 extern time_t brd_visit[MAXBOARD];
 
-#ifdef	HAVE_INFO
-#define INFO_EMPTY	"Info      【 \033[1;36m校方公告區\033[m 】"
-#define	INFO_HAVE	"Info      【 \033[41;33;1m快進來看看\033[m 】"
+#ifdef  HAVE_INFO
+#define INFO_EMPTY      "Info      【 \033[1;36m校方公告區\033[m 】"
+#define INFO_HAVE       "Info      【 \033[41;33;1m快進來看看\033[m 】"
 #endif
 
-#ifdef	HAVE_STUDENT
-#define	STUDENT_EMPTY	"1Student  【 \033[1;36m學生公告區\033[m 】"
-#define STUDENT_HAVE	"1Student  【 \033[41;33;1m快進來看看\033[m 】"
+#ifdef  HAVE_STUDENT
+#define STUDENT_EMPTY   "1Student  【 \033[1;36m學生公告區\033[m 】"
+#define STUDENT_HAVE    "1Student  【 \033[41;33;1m快進來看看\033[m 】"
 #endif
 
 static int
@@ -137,14 +137,14 @@ x_sysload(void)
 
 
 /* ----------------------------------------------------- */
-/* 離開 BBS 站						 */
+/* 離開 BBS 站                                           */
 /* ----------------------------------------------------- */
 
 
-#define	FN_NOTE_PAD	"run/note.pad"
-#define	FN_NOTE_TMP	"run/note.tmp"
-#define	NOTE_MAX	100
-#define	NOTE_DUE	48
+#define FN_NOTE_PAD     "run/note.pad"
+#define FN_NOTE_TMP     "run/note.tmp"
+#define NOTE_MAX        100
+#define NOTE_DUE        48
 
 
 typedef struct
@@ -318,7 +318,7 @@ goodbye(void)
 
 
 /* ----------------------------------------------------- */
-/* help & menu processing				 */
+/* help & menu processing                                */
 /* ----------------------------------------------------- */
 
 void
@@ -393,7 +393,7 @@ vs_head(
     memset(buf, ' ', spc >>= 1);
     buf[spc] = '\0';
 
-#ifdef	COLOR_HEADER
+#ifdef  COLOR_HEADER
     prints("\033[1;%2d;37m【%s】%s\033[33m%s\033[1;%2d;37m%s\033[37m看板《%s》\033[m\n",
         color, title, buf, mid, color, buf + ufo + len, currboard);
 #else
@@ -404,7 +404,7 @@ vs_head(
 
 
 /* ------------------------------------- */
-/* 動畫處理				 */
+/* 動畫處理                              */
 /* ------------------------------------- */
 
 
@@ -471,10 +471,10 @@ movie(void)
 }
 
 
-#define	MENU_CHANG	0x80000000
+#define MENU_CHANG      0x80000000
 
 
-#define	PERM_MENU	PERM_PURGE
+#define PERM_MENU       PERM_PURGE
 
 
 static MENU menu_main[];
@@ -551,7 +551,7 @@ static MENU menu_accadm[] =
     {"bin/bank.so:money_back", PERM_ACCOUNTS, - M_XMODE,
     "GetMoney   匯入舊夢幣"},
 
-#ifdef	HAVE_SONG
+#ifdef  HAVE_SONG
     {"bin/song.so:AddRequestTimes", PERM_KTV, - M_XMODE,
     "Addsongs   增加點歌次數"},
 #endif
@@ -636,7 +636,7 @@ static MENU menu_reset[] =
 
 
 /* ----------------------------------------------------- */
-/* administrator's maintain menu			 */
+/* administrator's maintain menu                         */
 /* ----------------------------------------------------- */
 
 
@@ -658,12 +658,12 @@ static MENU menu_admin[] =
     {menu_reset, PERM_ADMIN, M_XMENU,
     "ResetSys   重置系統"},
 
-#ifdef	HAVE_ADM_SHELL
+#ifdef  HAVE_ADM_SHELL
     {x_csh, PERM_SYSOP, M_SYSTEM,
     "Shell      執行系統 Shell"},
 #endif
 
-#ifdef	HAVE_REPORT
+#ifdef  HAVE_REPORT
     {m_trace, PERM_SYSOP, M_SYSTEM,
     "Trace      設定是否記錄除錯資訊"},
 #endif
@@ -674,7 +674,7 @@ static MENU menu_admin[] =
 
 
 /* ----------------------------------------------------- */
-/* mail menu						 */
+/* mail menu                                             */
 /* ----------------------------------------------------- */
 
 
@@ -729,13 +729,13 @@ static MENU menu_mail[] =
     {mail_sysop, PERM_BASIC, M_SMAIL,
     "Yes Sir!   寄信給站長"},
 
-    {menu_main, PERM_MENU + 'R', M_MMENU, 	/* itoc.020829: 怕 guest 沒選項 */
+    {menu_main, PERM_MENU + 'R', M_MMENU,       /* itoc.020829: 怕 guest 沒選項 */
     "電子郵件"}
 };
 
 
 /* ----------------------------------------------------- */
-/* Talk menu						 */
+/* Talk menu                                             */
 /* ----------------------------------------------------- */
 
 static int
@@ -754,7 +754,7 @@ static MENU menu_talk[] =
     {t_pal, PERM_BASIC, M_PAL,
     "Friend     編輯好友名單"},
 
-#ifdef	HAVE_BANMSG
+#ifdef  HAVE_BANMSG
     {t_banmsg, PERM_BASIC, M_XMODE,
     "Banmsg     拒收訊息名單"},
 #endif
@@ -770,7 +770,7 @@ static MENU menu_talk[] =
     {t_query, 0, M_QUERY,
     "Query      查詢網友"},
 
-#ifdef HAVE_CHATROOM_CLIENT	/* r2.20180405: still fixing chatroom..... */
+#ifdef HAVE_CHATROOM_CLIENT     /* r2.20180405: still fixing chatroom..... */
 
     /* Thor.990220: chatroom client 改採外掛 */
     {"bin/chat.so:t_chat", PERM_CHAT, - M_CHAT,
@@ -791,7 +791,7 @@ static MENU menu_talk[] =
 
 
 /* ----------------------------------------------------- */
-/* System menu						 */
+/* System menu                                           */
 /* ----------------------------------------------------- */
 
 static MENU menu_information[] =
@@ -863,7 +863,7 @@ static MENU menu_reg[] =
     u_verify, PERM_BASIC, M_UFILES,
     "Verify     填寫《註冊認證碼》",
 
-#ifdef	HAVE_REGISTER_FORM
+#ifdef  HAVE_REGISTER_FORM
     {u_register, PERM_BASIC, M_UFILES,
     "Register   填寫《註冊申請單》"},
 #endif
@@ -899,7 +899,7 @@ static MENU menu_user[] =
     {"bin/pnote.so:main_note", PERM_VALID, - M_XMODE,
     "PNote      個人答錄機"},
 
-#ifdef	HAVE_CLASSTABLEALERT
+#ifdef  HAVE_CLASSTABLEALERT
     {"bin/classtable2.so:main_classtable", PERM_VALID, -M_XMODE,
     "2Table     新版個人功\課表"},
 #endif
@@ -913,13 +913,13 @@ static MENU menu_user[] =
 
 
 /* ----------------------------------------------------- */
-/* tool menu					         */
+/* tool menu                                             */
 /* ----------------------------------------------------- */
 
 static MENU menu_service[];
 
 /* ----------------------------------------------------- */
-/* game menu					         */
+/* game menu                                             */
 /* ----------------------------------------------------- */
 
 static MENU menu_game[] =
@@ -945,7 +945,7 @@ static MENU menu_game[] =
 };
 
 /* ----------------------------------------------------- */
-/* yzu menu					         */
+/* yzu menu                                              */
 /* ----------------------------------------------------- */
 
 static MENU menu_special[] =
@@ -997,7 +997,7 @@ static MENU menu_song[] =
 
 
 /* ----------------------------------------------------- */
-/* service menu					         */
+/* service menu                                          */
 /* ----------------------------------------------------- */
 
 /* Thor.990224: 開放外掛界面 */
@@ -1013,12 +1013,12 @@ static MENU menu_service[] =
     {menu_game, PERM_VALID, M_XMENU,
     "Game      【 遊戲體驗區 】"},
 
-#ifdef	HAVE_INFO
+#ifdef  HAVE_INFO
     {Information, 0, M_BOARD,
     INFO_EMPTY},
 #endif
 
-#ifdef	HAVE_STUDENT
+#ifdef  HAVE_STUDENT
     {Student, 0, M_BOARD,
     STUDENT_EMPTY},
 #endif
@@ -1045,10 +1045,10 @@ static MENU menu_service[] =
 };
 
 /* ----------------------------------------------------- */
-/* main menu						 */
+/* main menu                                             */
 /* ----------------------------------------------------- */
 
-#ifdef	HAVE_CHANGE_SKIN
+#ifdef  HAVE_CHANGE_SKIN
 static int
 sk_windtop_init(void)
 {
@@ -1089,12 +1089,12 @@ static MENU menu_main[] =
     {Class, 0, M_CLASS,
     "Class     【 \033[1;33m分組討論區\033[m 】"},
 
-#ifdef	HAVE_PROFESS
+#ifdef  HAVE_PROFESS
     {Profess, 0, M_PROFESS,
     "Profession【 \033[1;33m專業討論區\033[m 】"},
 #endif
 
-#ifdef	HAVE_FAVORITE
+#ifdef  HAVE_FAVORITE
     {MyFavorite, PERM_BASIC, M_CLASS,
     "Favorite  【 \033[1;32m我的最愛區\033[m 】"},
 #endif
@@ -1117,7 +1117,7 @@ static MENU menu_main[] =
     {menu_xyz, 0, M_SMENU,
     "Xyz       【 系統資訊區 】"},
 
-#ifdef	HAVE_CHANGE_SKIN
+#ifdef  HAVE_CHANGE_SKIN
     {skin_main, PERM_SYSOP, M_XMENU,
     "2Skin     【 選擇介面區 】"},
 #endif
@@ -1129,7 +1129,7 @@ static MENU menu_main[] =
     "主功\能表"}
 };
 
-#ifdef	TREAT
+#ifdef  TREAT
 static int
 goodbye1(void)
 {
@@ -1198,7 +1198,7 @@ check_info(char *input)
 #endif
     char *name = NULL;
     name = input;
-#ifdef	HAVE_INFO
+#ifdef  HAVE_INFO
     if (!strcmp(input, INFO_EMPTY))
     {
         brd = bshm->bcache + brd_bno(BRD_BULLETIN);
@@ -1210,7 +1210,7 @@ check_info(char *input)
         }
     }
 #endif
-#ifdef	HAVE_STUDENT
+#ifdef  HAVE_STUDENT
     if (!strcmp(input, STUDENT_EMPTY))
     {
         brd = bshm->bcache + brd_bno(BRD_SBULLETIN);
@@ -1232,13 +1232,13 @@ menu(void)
 {
     MENU *menu, *mptr, *table[17];
     unsigned int level, mode;
-    int cc=0, cx=0, refilm=0;	/* current / previous cursor position */
-    int max=0, mmx;			/* current / previous menu max */
+    int cc=0, cx=0, refilm=0;   /* current / previous cursor position */
+    int max=0, mmx;                     /* current / previous menu max */
     int cmd=0, depth, count;
     char *str, item[60];
 
     mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
-#ifdef	TREAT
+#ifdef  TREAT
     menu = menu_treat;
 #else
     menu = menu_main;
@@ -1257,8 +1257,8 @@ menu(void)
                 if (cc & PERM_MENU)
                 {
 
-#ifdef	MENU_VERBOSE
-                    if (max < 0)		/* 找不到適合權限之功能，回上一層功能表 */
+#ifdef  MENU_VERBOSE
+                    if (max < 0)                /* 找不到適合權限之功能，回上一層功能表 */
                     {
                         menu = (MENU *) menu->func;
                         continue;
@@ -1278,14 +1278,14 @@ menu(void)
             if (mmx < max)
                 mmx = max;
 
-#ifndef	TREAT
+#ifndef TREAT
             if ((depth == 0) && (cutmp->ufo & UFO_BIFF))
                 cmd = 'M';
             else if ((depth == 0) && (cutmp->ufo & UFO_BIFFN))
                 cmd = 'U';
             else
 #endif
-                cmd = cc ^ PERM_MENU;	/* default command */
+                cmd = cc ^ PERM_MENU;   /* default command */
             utmp_mode(menu->umode);
         }
 
@@ -1389,7 +1389,7 @@ menu(void)
                 mode = (*func) ();
             }
 
-#ifdef	HAVE_CHANGE_SKIN
+#ifdef  HAVE_CHANGE_SKIN
             if (skin)
             {
                 vmsg("DEBUG:SKIN");
@@ -1401,7 +1401,7 @@ menu(void)
 
 #endif
 
-#ifdef	TREAT
+#ifdef  TREAT
             if (mode == 12345)
             {
                 menu = menu_main;
@@ -1432,7 +1432,7 @@ menu(void)
 
 #ifdef EVERY_Z
         case Ctrl('Z'):
-            every_Z();		/* Thor: ctrl-Z everywhere */
+            every_Z();          /* Thor: ctrl-Z everywhere */
             goto menu_key;
 #endif
         case Ctrl('U'):

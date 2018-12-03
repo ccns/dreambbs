@@ -6,25 +6,25 @@
 #ifndef _NOCEM_H_
 #define _NOCEM_H_
 
-#define NCMINNBBSVER	"NoCeM-INNBBSD-0.8"	/* 版本宣告 */
+#define NCMINNBBSVER    "NoCeM-INNBBSD-0.8"     /* 版本宣告 */
 
 
-#define TEXT		0
-#define NCMHDR		1
-#define NCMBDY		2
+#define TEXT            0
+#define NCMHDR          1
+#define NCMBDY          2
 
-#define NOPGP		-1
-#define PGPGOOD		0
-#define PGPBAD		1
-#define PGPUN		2
+#define NOPGP           -1
+#define PGPGOOD         0
+#define PGPBAD          1
+#define PGPUN           2
 
-#define P_OKAY		0
-#define P_FAIL		-1
-#define P_UNKNOWN	-2
-#define P_DISALLOW	-3
+#define P_OKAY          0
+#define P_FAIL          -1
+#define P_UNKNOWN       -2
+#define P_DISALLOW      -3
 
 #define MAXSPAMMID      10000
-#define	LINELEN		512
+#define LINELEN         512
 
 
 /* bbslib.c */
@@ -38,4 +38,4 @@ extern newsfeeds_t *search_newsfeeds_bygroup(char *newsgroup);
 extern ncmperm_t *search_issuer(char *issuer, char *type);
 extern int receive_nocem(void);
 
-#endif	/* _NOCEM_H_ */
+#endif  /* _NOCEM_H_ */
