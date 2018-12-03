@@ -32,7 +32,7 @@
         - features in plan:
           * add simple code test utilities
           * refine layout: removing trailing whitespaces.
-    + Drop plan of `v0.98`~`v0.99` due to big change and it will be tested for a long time.
+    + Drop plan of `v0.98`~`v0.99` release due to big change and it will be tested for a long time.
     + `v1.0`: Version 1.0, codename `rimuru` (not released yet)
         - features in plan:
           * applying resizing term feature
