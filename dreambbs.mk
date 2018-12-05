@@ -4,6 +4,10 @@ ARCHI	!= getconf LONG_BIT
 
 OPSYS	!= uname -o
 
+BUILDTIME	!= date '+%s'
+
+BBSHOME	?= $(HOME)
+
 # rules ref: PttBBS: mbbsd/Makefile
 BBSCONF		:= $(SRCROOT)/dreambbs.conf
 DEF_PATTERN	:= ^[ \t]*\#[ \t]*define[ \t]*

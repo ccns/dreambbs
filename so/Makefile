@@ -42,7 +42,7 @@ all:
 so: $(SO)
 
 install: $(EXE)
-	install -m 0700 $(SO) $(HOME)/bin
+	install -m 0700 $(SO) $(BBSHOME)/bin
 
 clean: /tmp
 	rm -fr $(SO) *~ *.o

@@ -26,10 +26,10 @@ innbbsd: $(INNOBJS)
 	$(CC) -o innbbsd $(INNOBJS) $(OPT) $(LDFLAGS)
 
 install: $(EXE)
-	install -m 0700 $? $(HOME)/innd
+	install -m 0700 $? $(BBSHOME)/innd
 
 update:
-	-csh -c "kill `tail -1 $(HOME)/run/innbbsd.pid | awk '{print $$1}'`"; exit 0
+	-csh -c "kill `tail -1 $(BBSHOME)/run/innbbsd.pid | awk '{print $$1}'`"; exit 0
 
 clean:
 	rm -f $(EXE) *.o *~

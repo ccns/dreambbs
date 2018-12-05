@@ -39,7 +39,7 @@ EXE	= bbsd xchatd
 all:
 	@$(MAKE) CC=$(CC) CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
 
-xchatd:	xchatd.o
+xchatd: xchatd.o
 	$(CC) -o $@ $? $(LDFLAGS)
 
 bbsd: $(OBJ)
@@ -49,11 +49,14 @@ maple.p: $(SRC)
 	$(CPROTO) -o $@ $?
 
 install: $(EXE)
-	install -m 0700 $? $(HOME)/bin
+	install -d $(BBSHOME)/bin
+	install -m 0755 $? $(BBSHOME)/bin
+	mv -f $(BBSHOME)/bin/bbsd $(BBSHOME)/bin/bbsd.$(BUILDTIME)
+	ln -sv $(BBSHOME)/bin/bbsd.$(BUILDTIME) $(BBSHOME)/bin/bbsd
 
 clean:
 	rm -rf $(OBJ) $(EXE) $(LNFILES)  *~ *.o *.so *.p tags
 
-tags:	$(SRC) ../include/*.h ../lib/*.c
+tags: $(SRC) ../include/*.h ../lib/*.c
 	exctags $(SRC) $(SRCROOT)/include/*.h $(SRCROOT)/lib/*.c
 
