@@ -12,11 +12,7 @@
 
 static int rm_dir();
 
-void
-f_cat(
-    char* fpath,
-    char* msg
-)
+void f_cat(char *fpath, char *msg)
 {
     int fd;
 
@@ -27,12 +23,8 @@ f_cat(
     }
 }
 
-int
-f_cp(
-    char* src,
-    char* dst,
-    int mode                    /* O_EXCL / O_APPEND / O_TRUNC */
-)
+int f_cp(char *src, char *dst, int mode    /* O_EXCL / O_APPEND / O_TRUNC */
+    )
 {
     int fsrc, fdst, ret;
 
@@ -52,7 +44,8 @@ f_cp(
                 ret = read(fsrc, src, BLK_SIZ);
                 if (ret <= 0)
                     break;
-            } while (write(fdst, src, ret) > 0);
+            }
+            while (write(fdst, src, ret) > 0);
             close(fdst);
         }
         close(fsrc);
@@ -61,11 +54,7 @@ f_cp(
 }
 
 
-char*
-f_img(
-    char* fpath,
-    int *fsize
-)
+char *f_img(char *fpath, int *fsize)
 {
     int fd, size;
     struct stat st;
@@ -76,7 +65,7 @@ f_img(
     fpath = NULL;
 
     if (!fstat(fd, &st) && S_ISREG(st.st_mode) && (size = st.st_size) > 0
-        && (fpath = (char* ) malloc(size)))
+        && (fpath = (char *)malloc(size)))
     {
         *fsize = size;
         if (read(fd, fpath, size) != size)
@@ -94,11 +83,7 @@ f_img(
 /* f_ln() : link() cross partition / disk                */
 /* ----------------------------------------------------- */
 
-int
-f_ln(
-    char* src,
-    char* dst
-)
+int f_ln(char *src, char *dst)
 {
     int ret;
 
@@ -116,10 +101,7 @@ static struct flock fl = {
     .l_len = 0,
 };
 
-int
-f_exlock(
-    int fd
-)
+int f_exlock(int fd)
 {
 #if 0
     return flock(fd, LOCK_EX);
@@ -127,57 +109,47 @@ f_exlock(
     /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
     fl.l_type = F_WRLCK;
     /* Thor.990309: with blocking */
-    return fcntl(fd, F_SETLKW /*F_SETLK*/, &fl);
+    return fcntl(fd, F_SETLKW /*F_SETLK */ , &fl);
 }
 
-int
-f_unlock(
-    int fd
-)
+int f_unlock(int fd)
 {
 #if 0
     return flock(fd, LOCK_UN);
 #endif
     /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
     fl.l_type = F_UNLCK;
-    return fcntl(fd, F_SETLKW /*F_SETLK*/, &fl);
+    return fcntl(fd, F_SETLKW /*F_SETLK */ , &fl);
 }
 
-#ifdef MAP_FILE         /* 44BSD defines this & requires it to mmap files */
-#  define DAO_MAP       (MAP_SHARED | MAP_FILE)
+#ifdef MAP_FILE                    /* 44BSD defines this & requires it to mmap files */
+#define DAO_MAP       (MAP_SHARED | MAP_FILE)
 #else
-#  define DAO_MAP       (MAP_SHARED)
+#define DAO_MAP       (MAP_SHARED)
 #endif
 
-char*
-f_map(
-    char* fpath,
-    int *fsize
-)
+char *f_map(char *fpath, int *fsize)
 {
     int fd, size;
     struct stat st;
 
     if ((fd = open(fpath, O_RDONLY)) < 0)
-        return (char* ) -1;
+        return (char *)-1;
 
     if (fstat(fd, &st) || !S_ISREG(st.st_mode) || (size = st.st_size) <= 0)
     {
         close(fd);
-        return (char* ) -1;
+        return (char *)-1;
     }
 
-    fpath = (char* ) mmap(NULL, size, PROT_READ, DAO_MAP, fd, 0);
+    fpath = (char *)mmap(NULL, size, PROT_READ, DAO_MAP, fd, 0);
     close(fd);
     *fsize = size;
     return fpath;
 }
 
 
-int
-f_mode(
-    char* fpath
-)
+int f_mode(char *fpath)
 {
     struct stat st;
 
@@ -187,11 +159,7 @@ f_mode(
     return st.st_mode;
 }
 
-int
-f_mv(
-    char* src,
-    char* dst
-)
+int f_mv(char *src, char *dst)
 {
     int ret;
 
@@ -203,15 +171,12 @@ f_mv(
     }
     return ret;
 }
+
 /* ----------------------------------------------------- */
 /* exclusively create file [*.n]                         */
 /* ----------------------------------------------------- */
 
-FILE*
-f_new(
-    char* fold,
-    char* fnew
-)
+FILE *f_new(char *fold, char *fnew)
 {
     int fd, try;
 
@@ -234,12 +199,12 @@ f_new(
 
             if (stat(fnew, &st) < 0)
                 break;
-            if (st.st_mtime < time(NULL) - 20 * 60)     /* 假設 20 分鐘內應該處理完 */
+            if (st.st_mtime < time(NULL) - 20 * 60)    /* 假設 20 分鐘內應該處理完 */
                 unlink(fnew);
         }
         else
         {
-            if (try > 24)               /* 等待 120 秒鐘 */
+            if (try > 24)        /* 等待 120 秒鐘 */
                 break;
             sleep(5);
         }
@@ -247,10 +212,7 @@ f_new(
     return NULL;
 }
 
-int
-f_open(
-    char* fpath
-)
+int f_open(char *fpath)
 {
     int fd;
     struct stat st;
@@ -267,16 +229,12 @@ f_open(
 
     return fd;
 }
+
 /* ----------------------------------------------------- */
 /* file structure : set file path for boards/user home   */
 /* ----------------------------------------------------- */
 
-static void
-mak_fpath(
-    char* str,
-    char* key,
-    char* name
-)
+static void mak_fpath(char *str, char *key, char *name)
 {
     int cc;
 
@@ -303,12 +261,7 @@ mak_fpath(
 }
 
 
-void
-brd_fpath(
-    char* fpath,
-    char* board,
-    char* fname
-)
+void brd_fpath(char *fpath, char *board, char *fname)
 {
     *fpath++ = 'b';
     *fpath++ = 'r';
@@ -317,12 +270,7 @@ brd_fpath(
 }
 
 
-void
-gem_fpath(
-    char* fpath,
-    char* board,
-    char* fname
-)
+void gem_fpath(char *fpath, char *board, char *fname)
 {
     *fpath++ = 'g';
     *fpath++ = 'e';
@@ -335,18 +283,13 @@ gem_fpath(
 }
 
 
-void
-usr_fpath(
-    char* fpath,
-    char* user,
-    char* fname
-)
+void usr_fpath(char *fpath, char *user, char *fname)
 {
 #if 0
     char buf[16];
 #endif
 
-#define IDLEN    12 /* Length of board / user id, copy from  struct.h */
+#define IDLEN    12                /* Length of board / user id, copy from  struct.h */
 
     char buf[IDLEN + 1];
 
@@ -356,10 +299,10 @@ usr_fpath(
     *fpath++ = '/';
 
 #if 0
-    str_lower(buf, user);               /* lower case */
+    str_lower(buf, user);        /* lower case */
 #endif
     /* Thor.981027: 防止 buffer overflow, 雖然 SunOS 4.1.x上無此情況,
-                    以後再想好的改法 */
+       以後再想好的改法 */
     str_ncpy(buf, user, sizeof(buf));
     str_lower(buf, buf);
 
@@ -368,10 +311,7 @@ usr_fpath(
 }
 
 
-int
-f_rm(
-    char* fpath
-)
+int f_rm(char *fpath)
 {
     struct stat st;
 
@@ -384,10 +324,7 @@ f_rm(
     return rm_dir(fpath);
 }
 
-static int
-rm_dir(
-    char* fpath
-)
+static int rm_dir(char *fpath)
 {
     struct stat st;
     DIR *dirp;
@@ -426,11 +363,7 @@ rm_dir(
     return rmdir(buf);
 }
 
-void
-f_suck(
-    FILE* fp,
-    char* fpath
-)
+void f_suck(FILE * fp, char *fpath)
 {
     int fd;
 
@@ -452,12 +385,9 @@ f_suck(
 /* make directory hierarchy [0-9A-V] : 32-way interleave */
 /* ----------------------------------------------------- */
 
-void
-mak_dirs(
-    char* fpath
-)
+void mak_dirs(char *fpath)
 {
-    char* fname;
+    char *fname;
     int ch;
 
     if (mkdir(fpath, 0755))
@@ -476,7 +406,7 @@ mak_dirs(
         if (ch == 'W')
             break;
         if (ch == '9' + 1)
-            ch = '@';                   /* @ : for special purpose */
+            ch = '@';            /* @ : for special purpose */
     }
 
     fname[-1] = '\0';

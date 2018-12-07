@@ -6,12 +6,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-int
-rec_add(
-    char* fpath,
-    void* data,
-    int size
-)
+int rec_add(char *fpath, void *data, int size)
 {
     int fd;
 
@@ -26,24 +21,17 @@ rec_add(
     return 0;
 }
 
-static int
-is_bottompost(
-    HDR *hdr
-)
+static int is_bottompost(HDR * hdr)
 {
     return (hdr->xmode & POST_BOTTOM);
 }
 
 
-int
-rec_bot(      /* amaki.040715: 嵌入式寫檔 */
-    char* fpath,
-    void* data,
-    int size
-)
+int rec_bot(                    /* amaki.040715: 嵌入式寫檔 */
+               char *fpath, void *data, int size)
 {
     int fd, fsize, count;
-    void* pool = NULL, *set;
+    void *pool = NULL, *set;
     char set_pool[REC_SIZ];
     struct stat st;
 
@@ -57,7 +45,7 @@ rec_bot(      /* amaki.040715: 嵌入式寫檔 */
     fstat(fd, &st);
 
     count = 0;
-    set = (void* ) set_pool;
+    set = (void *)set_pool;
 
     if ((fsize = st.st_size))
     {
@@ -69,17 +57,17 @@ rec_bot(      /* amaki.040715: 嵌入式寫檔 */
             {
                 if (count)
                 {
-                    pool = (void* ) malloc(count * size);
+                    pool = (void *)malloc(count * size);
 
                     read(fd, pool, count * size);
                     lseek(fd, -size * count, SEEK_CUR);
                 }
                 break;
             }
-            else if (fsize <= 0)      /* amaki.040715: 全部都是置底的東西 */
+            else if (fsize <= 0)    /* amaki.040715: 全部都是置底的東西 */
             {
                 count++;
-                pool = (void* ) malloc(count * size);
+                pool = (void *)malloc(count * size);
 
                 lseek(fd, -size, SEEK_CUR);
                 read(fd, pool, count * size);
@@ -109,13 +97,8 @@ rec_bot(      /* amaki.040715: 嵌入式寫檔 */
 }
 
 int
-rec_del(
-    char* data,
-    int size,
-    int pos,
-    int (*fchk) (void *obj),
-    int (*fdel) (void *obj)
-)
+rec_del(char *data,
+        int size, int pos, int (*fchk) (void *obj), int (*fdel) (void *obj))
 {
     int fd;
     off_t off, len;
@@ -176,7 +159,7 @@ rec_del(
             /* really delete it */
 
             len -= (off + size);
-            data = (char* ) malloc(len);
+            data = (char *)malloc(len);
             read(fd, data, len);
         }
         else
@@ -205,13 +188,7 @@ rec_del(
     return 0;
 }
 
-int
-rec_get(
-    char* fpath,
-    void* data,
-    int size,
-    int pos
-)
+int rec_get(char *fpath, void *data, int size, int pos)
 {
     int fd;
     int ret;
@@ -231,14 +208,7 @@ rec_get(
 }
 
 
-int
-rec_ins(
-    char* fpath,
-    void* data,
-    int size,
-    int pos,
-    int num
-)
+int rec_ins(char *fpath, void *data, int size, int pos, int num)
 {
     int fd;
     off_t off, len;
@@ -255,7 +225,7 @@ rec_ins(
     len = st.st_size;
 
     /* lkchu.990428: ernie patch 如果 len=0 & pos>0
-                     (在剛開精華區目錄進去貼上，選下一個) 時會寫入垃圾 */
+       (在剛開精華區目錄進去貼上，選下一個) 時會寫入垃圾 */
     off = len ? size * pos : 0;
     lseek(fd, off, SEEK_SET);
 
@@ -263,7 +233,7 @@ rec_ins(
     len -= off;
     if (len > 0)
     {
-        fpath = (char* ) malloc(pos = len + size);
+        fpath = (char *)malloc(pos = len + size);
         memcpy(fpath, data, size);
         read(fd, fpath + size, len);
         lseek(fd, off, SEEK_SET);
@@ -286,12 +256,7 @@ rec_ins(
 }
 
 
-int
-rec_loc(
-    char* data,
-    int size,
-    int (*fchk) (void *obj)
-)
+int rec_loc(char *data, int size, int (*fchk) (void *obj))
 {
     int fd, pos, tmp;
     off_t off;
@@ -327,17 +292,11 @@ rec_loc(
     return tmp ? pos : -1;
 }
 
-int
-rec_mov(
-    char* data,
-    int size,
-    int from,
-    int to
-)
+int rec_mov(char *data, int size, int from, int to)
 {
     int fd, backward;
     off_t off, len;
-    char* pool;
+    char *pool;
     struct stat st;
 
     if ((fd = open(data, O_RDWR)) < 0)
@@ -369,7 +328,7 @@ rec_mov(
     lseek(fd, off, SEEK_SET);
 
     len = (to - from + 1) * size;
-    pool = data = (char* ) malloc(len + size);
+    pool = data = (char *)malloc(len + size);
 
     if (backward)
         data += size;
@@ -399,11 +358,7 @@ rec_mov(
 }
 
 
-int
-rec_num(
-    char* fpath,
-    int size
-)
+int rec_num(char *fpath, int size)
 {
     struct stat st;
 
@@ -412,13 +367,7 @@ rec_num(
     return (st.st_size / size);
 }
 
-int
-rec_put(
-    char* fpath,
-    void* data,
-    int size,
-    int pos
-)
+int rec_put(char *fpath, void *data, int size, int pos)
 {
     int fd;
 
@@ -442,13 +391,7 @@ rec_put(
 }
 
 int
-rec_put2(
-    char* fpath,
-    void* data,
-    int size,
-    int pos,
-    int (*fchk)(void *obj)
-)
+rec_put2(char *fpath, void *data, int size, int pos, int (*fchk) (void *obj))
 {
     int fd;
     off_t off, len;
@@ -487,7 +430,7 @@ rec_put2(
     {
         if (len)
         {
-            pos = 0;    /* 從頭找起 */
+            pos = 0;            /* 從頭找起 */
         }
         else
         {
@@ -505,7 +448,7 @@ rec_put2(
         lseek(fd, off, SEEK_SET);
         while (read(fd, fpath, size) == size)
         {
-            if ( ( pos = (*fchk) (fpath) ) )
+            if ((pos = (*fchk) (fpath)))
                 break;
 
             off += size;
@@ -530,14 +473,10 @@ rec_put2(
 }
 
 int
-rec_ref(
-    char* fpath,
-    void* data,
-    int size,
-    int pos,
-    int (*fchk)(void *obj),
-    void (*fref)(void *obj, void *ref)
-)
+rec_ref(char *fpath,
+        void *data,
+        int size,
+        int pos, int (*fchk) (void *obj), void (*fref) (void *obj, void *ref))
 {
     int fd;
     off_t off, len;
@@ -569,7 +508,7 @@ rec_ref(
     {
         if (len)
         {
-            pos = 0;    /* 從頭找起 */
+            pos = 0;            /* 從頭找起 */
         }
         else
         {
@@ -588,7 +527,7 @@ rec_ref(
         lseek(fd, off, SEEK_SET);
         while (read(fd, fpath, size) == size)
         {
-            if ( ( pos = (*fchk) (fpath) ) )
+            if ((pos = (*fchk) (fpath)))
                 break;
 
             off += size;
@@ -614,12 +553,9 @@ rec_ref(
 }
 
 int
-rec_sync(
-    char* fpath,
-    int size,
-    int (*fsync) (void *lhs, void *rhs),
-    int (*fchk) (void *obj)
-)
+rec_sync(char *fpath,
+         int size,
+         int (*fsync) (void *lhs, void *rhs), int (*fchk) (void *obj))
 {
     int fd, fsize;
     struct stat st;
@@ -631,23 +567,23 @@ rec_sync(
 
     if (!fstat(fd, &st) && (fsize = st.st_size) > 0)
     {
-        char* base;
+        char *base;
 
-        base = (char* ) malloc(fsize);
+        base = (char *)malloc(fsize);
         fsize = read(fd, base, fsize);
 
         if (fsize >= size)
         {
-            if (fchk)           /* 檢查是否有不正確的資料 */
+            if (fchk)            /* 檢查是否有不正確的資料 */
             {
-                char* head;
-                char* tail;
+                char *head;
+                char *tail;
 
                 head = base;
                 tail = base + fsize;
                 while (head < tail)
                 {
-                    if (fchk(head))     /* 此筆資料正確 */
+                    if (fchk(head))    /* 此筆資料正確 */
                     {
                         head += size;
                         continue;
@@ -666,7 +602,6 @@ rec_sync(
             {
                 if (fsize > size)
                     qsort(base, fsize / size, size, fsync);
-
                 lseek(fd, 0, SEEK_SET);
                 write(fd, base, fsize);
                 ftruncate(fd, fsize);
@@ -682,12 +617,7 @@ rec_sync(
     return fsize;
 }
 
-int
-rec_append(
-    char *fpath,
-    void *data,
-    int size
-)
+int rec_append(char *fpath, void *data, int size)
 {
     register int fd;
 
@@ -699,4 +629,3 @@ rec_append(
 
     return 0;
 }
-

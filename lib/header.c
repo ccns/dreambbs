@@ -6,12 +6,7 @@
 #include <time.h>
 #include <unistd.h>
 
-void
-hdr_fpath(
-    char *fpath,
-    char *folder,
-    HDR *hdr
-)
+void hdr_fpath(char *fpath, char *folder, HDR * hdr)
 {
     char *str = NULL;
     int cc, chrono;
@@ -57,13 +52,7 @@ hdr_fpath(
 /* return : open() fd (not close yet) or link() result   */
 /* ----------------------------------------------------- */
 
-int
-hdr_stamp(
-    char *folder,
-    int token,
-    HDR *hdr,
-    char *fpath
-)
+int hdr_stamp(char *folder, int token, HDR * hdr, char *fpath)
 {
     char *fname, *family = NULL;
     int rc, chrono;
@@ -94,7 +83,7 @@ hdr_stamp(
         *fname++ = '/';
     }
 
-    if ((rc = token & 0xdf))        /* 變大寫 */
+    if ((rc = token & 0xdf))    /* 變大寫 */
     {
         *fname++ = rc;
     }
@@ -140,4 +129,3 @@ hdr_stamp(
 
     return rc;
 }
-

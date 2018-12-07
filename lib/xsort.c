@@ -21,13 +21,7 @@
     (swaptype = (((char *)(a) - (char *)0) % sizeof(long) || \
     (es) % sizeof(long)) ? 2 : ((es) == sizeof(long)? 0 : 1))
 
-static inline void
-swapfunc(
-    char* a,
-    char* b,
-    int n,
-    int swaptype
-)
+static inline void swapfunc(char *a, char *b, int n, int swaptype)
 {
     if (swaptype <= 1)
         swapcode(long, a, b, n);
@@ -46,40 +40,28 @@ swapfunc(
 
 #define vecswap(a, b, n)        (void) (((n) > 0) && (swapfunc(a, b, n, swaptype), 0))
 
-static inline char*
-med3(
-    char* a,
-    char* b,
-    char* c,
-    int (*cmp) (void *lhs, void *rhs)
-)
+static inline char *med3(char *a,
+                         char *b, char *c, int (*cmp) (void *lhs, void *rhs))
 {
     return cmp(a, b) < 0 ?
         (cmp(b, c) < 0 ? b : (cmp(a, c) < 0 ? c : a))
         : (cmp(b, c) > 0 ? b : (cmp(a, c) < 0 ? a : c));
 }
 
-void
-xsort(
-    void *a,
-    size_t n,
-    size_t es,
-    int (*cmp) (void *lhs, void *rhs)
-)
+void xsort(void *a, size_t n, size_t es, int (*cmp) (void *lhs, void *rhs))
 {
     char *pa, *pb, *pc, *pd, *pl, *pm, *pn;
     int d, r, swaptype, swap_cnt;
 
     SWAPINIT(a, es);
 
-loop:
+  loop:
 
     swap_cnt = 0;
     if (n < 7)
     {
-        for (pm = a + es; pm < (char *) a + n * es; pm += es)
-            for (pl = pm; pl > (char *) a && cmp(pl - es, pl) > 0;
-                pl -= es)
+        for (pm = a + es; pm < (char *)a + n * es; pm += es)
+            for (pl = pm; pl > (char *)a && cmp(pl - es, pl) > 0; pl -= es)
                 swap(pl, pl - es);
         return;
     }
@@ -134,15 +116,15 @@ loop:
     }
 
     if (swap_cnt == 0)
-    {                           /* Switch to insertion sort */
-        for (pm = a + es; pm < (char *) a + n * es; pm += es)
-            for (pl = pm; pl > (char *) a && cmp(pl - es, pl) > 0; pl -= es)
+    {                            /* Switch to insertion sort */
+        for (pm = a + es; pm < (char *)a + n * es; pm += es)
+            for (pl = pm; pl > (char *)a && cmp(pl - es, pl) > 0; pl -= es)
                 swap(pl, pl - es);
         return;
     }
 
     pn = a + n * es;
-    r = min(pa - (char *) a, pb - pa);
+    r = min(pa - (char *)a, pb - pa);
     vecswap(a, pb - r, r);
 
     r = min(pd - pc, pn - pd - es);
@@ -160,4 +142,3 @@ loop:
     }
     /* xsort(pn - r, r / es, es, cmp); */
 }
-

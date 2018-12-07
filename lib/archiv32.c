@@ -1,10 +1,8 @@
 #include "dao.h"
 
-void
-archiv32(
-    time_t chrono,      /* 32 bits */
-    char *fname         /* 7 chars */
-)
+void archiv32(time_t chrono,    /* 32 bits */
+              char *fname        /* 7 chars */
+    )
 {
     char *str;
 
@@ -19,11 +17,9 @@ archiv32(
     }
 }
 
-void
-archiv32m(
-    time_t chrono,      /* 32 bits */
-    char *fname         /* 7 chars */
-)
+void archiv32m(time_t chrono,    /* 32 bits */
+               char *fname        /* 7 chars */
+    )
 {
     char *str;
 

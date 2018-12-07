@@ -1,28 +1,18 @@
-#include "dao.h"
-
-int
-is_alnum(
-    int ch
-)
-{
-    return ((ch >= '0' && ch <= '9') ||
-        (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
-}
-
-int
-is_alpha(
-    int ch
-)
-{
-    return ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
-}
 #include <string.h>
 #include "dao.h"
 
-int
-is_fname(
-    char* str
-)
+int is_alnum(int ch)
+{
+    return ((ch >= '0' && ch <= '9') ||
+            (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
+}
+
+int is_alpha(int ch)
+{
+    return ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
+}
+
+int is_fname(char *str)
 {
     int ch;
 
@@ -34,7 +24,8 @@ is_fname(
     {
         if (!is_alnum(ch) && !strchr("-._/+@", ch))
             return 0;
-    } while ((ch = *++str));
+    }
+    while ((ch = *++str));
     return 1;
 }
 
@@ -42,10 +33,7 @@ is_fname(
 /* transform to real path & security check               */
 /* ----------------------------------------------------- */
 
-int
-is_fpath(
-    char *path
-)
+int is_fpath(char *path)
 {
     int ch, level;
     char *source, *target;
@@ -66,14 +54,14 @@ is_fpath(
 
             if (next == '/')
             {
-                return 0;               /* [//] */
+                return 0;        /* [//] */
             }
             else if (next == '.')
             {
                 next = source[2];
 
                 if (next == '/')
-                    return 0;           /* [/./] */
+                    return 0;    /* [/./] */
 
                 if (next == '.' && source[3] == '/')
                 {
@@ -111,10 +99,7 @@ is_fpath(
 
 #define STRICT_FQDN_EMAIL
 
-int
-not_addr(
-    char *addr
-)
+int not_addr(char *addr)
 {
     int ch, mode;
 

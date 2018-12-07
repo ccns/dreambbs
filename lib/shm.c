@@ -5,11 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-void*
-shm_new(
-    int shmkey,
-    int shmsize
-)
+void *shm_new(int shmkey, int shmsize)
 {
     void *shmptr;
     int shmid;
@@ -26,8 +22,8 @@ shm_new(
         shmsize = 0;
     }
 
-    shmptr = (void *) shmat(shmid, NULL, 0);
-    if (shmptr == (void *) -1)
+    shmptr = (void *)shmat(shmid, NULL, 0);
+    if (shmptr == (void *)-1)
         exit(-2);
 
     if (shmsize)

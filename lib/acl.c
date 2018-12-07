@@ -24,22 +24,20 @@
 /* return -2 : 不合格之認證地址 */
 
 
-int
-acl_addr(
-    char *acl,                  /* file name of access control list */
-    char *addr
-)
+int acl_addr(char *acl,            /* file name of access control list */
+             char *addr)
 {
     int i, cc, luser, lhost;
     FILE *fp;
     char buf[128], filter[256], *host, *str;
 
-    char *invalid[] = {"@bbs", "bbs@", "root@", "gopher@",
+    char *invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
         "guest@", "@ppp", "@slip", "@dial", "unknown@", "@anon.penet.fi",
-    "193.64.202.3", NULL};
+        "193.64.202.3", NULL
+    };
 
     str_lower(buf, addr);
-    host = (char *) strchr(buf, '@');
+    host = (char *)strchr(buf, '@');
 
     for (i = 0; (str = invalid[i]); i++)
     {
@@ -62,7 +60,7 @@ acl_addr(
             }
         }
 
-        luser = host - buf;     /* length of user name */
+        luser = host - buf;        /* length of user name */
         lhost = addr - host;    /* length of host name */
 
         while (fgets(filter, sizeof(filter), fp))
@@ -83,12 +81,12 @@ acl_addr(
                     addr = str;
             }
 
-            if (str == filter)  /* empty line */
+            if (str == filter)    /* empty line */
                 continue;
 
             *str = '\0';
 
-            if (addr)           /* match user name */
+            if (addr)            /* match user name */
             {
                 if ((luser != addr - filter) || memcmp(buf, filter, luser))
                     continue;
@@ -106,7 +104,8 @@ acl_addr(
             cc = str - addr;
 
             if (((cc == lhost) && !strcmp(addr, host)) ||
-                ((cc < lhost) && (*addr == '.') && !strcmp(addr, host + lhost - cc)))
+                ((cc < lhost) && (*addr == '.')
+                 && !strcmp(addr, host + lhost - cc)))
             {
                 i = -2;
                 break;
@@ -118,6 +117,7 @@ acl_addr(
 
     return i;
 }
+
 /*-------------------------------------------------------*/
 /* lib/acl_has.c        ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
@@ -141,12 +141,10 @@ acl_addr(
 /* return 1 : ACL 符合該 pattern */
 
 
-int
-acl_has(
-    char *acl,                  /* file name of access control list */
-    char *user,                 /* lower-case string */
-    char *host                  /* lower-case string */
-)
+int acl_has(char *acl,            /* file name of access control list */
+            char *user,           /* lower-case string */
+            char *host            /* lower-case string */
+    )
 {
     int i, cc, luser, lhost;
     FILE *fp;
@@ -156,26 +154,26 @@ acl_has(
         return -1;
 
     i = 0;
-    luser = strlen(user);       /* length of user name */
-    lhost = strlen(host);       /* length of host name */
+    luser = strlen(user);        /* length of user name */
+    lhost = strlen(host);        /* length of host name */
 
     while (fgets(filter, sizeof(filter), fp))
     {
         addr = NULL;
 
         for (str = filter; (cc = *str) > ' '; str++)
-        { /* Thor.980825: 註解: 遇到 空白 就算此行結束 */
+        {                        /* Thor.980825: 註解: 遇到 空白 就算此行結束 */
             if (cc == '@')
                 addr = str;
         }
 
-        if (str == filter)      /* empty line */
+        if (str == filter)        /* empty line */
             continue;
 
-        *str = '\0'; /* Thor.980825: 註解: 將結束處填0, 免生枝節 */
-        str_lower(filter, filter);  /* lkchu.981201: lower-case string */
+        *str = '\0';            /* Thor.980825: 註解: 將結束處填0, 免生枝節 */
+        str_lower(filter, filter);    /* lkchu.981201: lower-case string */
 
-        if (addr)               /* match user name */
+        if (addr)                /* match user name */
         {
             if ((luser != addr - filter) || memcmp(user, filter, luser))
                 continue;

@@ -1,9 +1,7 @@
 #include "dao.h"
 
-time_t
-chrono32(
-    char *str           /* M0123456 */
-)
+time_t chrono32(char *str        /* M0123456 */
+    )
 {
     time_t chrono;
     int ch;

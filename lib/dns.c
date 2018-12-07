@@ -7,36 +7,36 @@
 /*-------------------------------------------------------*/
 
 #include "dns.h"
-#include "bbs.h"        /* lkchu.981201: 是否有 define HAVE_ETC_HOSTS */
+#include "bbs.h"                /* lkchu.981201: 是否有 define HAVE_ETC_HOSTS */
 #include <signal.h>
 #include <unistd.h>
 #include <string.h>
 
-void
-dns_init(void)
+void dns_init(void)
 {
     res_init();
-    /* _res.retrans = 5; */ /* DNS query timeout */
+    /* _res.retrans = 5; *//* DNS query timeout */
     _res.retry = 2;
-//  _res.options |= RES_USEVC;
+    //  _res.options |= RES_USEVC;
 }
 
 
-int
-dns_query(
-    char *name,                 /* domain name */
-    int qtype,                  /* type of query */
-    querybuf *ans               /* buffer to put answer */
-)
+int dns_query(char *name,       /* domain name */
+              int qtype,        /* type of query */
+              querybuf * ans    /* buffer to put answer */
+    )
 {
     querybuf buf;
 
-    qtype = res_mkquery(QUERY, name, C_IN, qtype, (unsigned char *) NULL, 0, NULL,
-        (unsigned char *) &buf, sizeof(buf));
+    qtype =
+        res_mkquery(QUERY, name, C_IN, qtype, (unsigned char *)NULL, 0, NULL,
+                    (unsigned char *)&buf, sizeof(buf));
 
     if (qtype >= 0)
     {
-        qtype = res_send((unsigned char *) &buf, qtype, (unsigned char *) ans, sizeof(querybuf));
+        qtype =
+            res_send((unsigned char *)&buf, qtype, (unsigned char *)ans,
+                     sizeof(querybuf));
 
         /* avoid problems after truncation in tcp packets */
 
@@ -46,6 +46,7 @@ dns_query(
 
     return qtype;
 }
+
 /*-------------------------------------------------------*/
 /* lib/dns_addr.c       ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
@@ -58,10 +59,7 @@ dns_query(
 /* get IP address by host name                           */
 /* ----------------------------------------------------- */
 
-unsigned long
-dns_addr(
-    char *name
-)
+unsigned long dns_addr(char *name)
 {
     ip_addr addr;
     unsigned char *cp, *eom;
@@ -101,8 +99,8 @@ dns_addr(
 
     /* find first satisfactory answer */
 
-    cp = (unsigned char *) & ans + sizeof(HEADER);
-    eom = (unsigned char *) & ans + n;
+    cp = (unsigned char *)&ans + sizeof(HEADER);
+    eom = (unsigned char *)&ans + n;
 
     for (qdcount = ntohs(ans.hdr.qdcount); qdcount--; cp += n + QFIXEDSZ)
     {
@@ -113,7 +111,8 @@ dns_addr(
     ancount = ntohs(ans.hdr.ancount);
     while (--ancount >= 0 && cp < eom)
     {
-        if ((n = dn_expand((unsigned char *) &ans, eom, cp, hostbuf, MAXDNAME)) < 0)
+        if ((n =
+             dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME)) < 0)
             return INADDR_NONE;
 
         cp += n;
@@ -155,17 +154,16 @@ dns_addr(
  * not be used for authentication purposes.
  */
 
-#define RFC931_PORT     113     /* Semi-well-known port */
-#define ANY_PORT        0       /* Any old port will do */
+#define RFC931_PORT     113        /* Semi-well-known port */
+#define ANY_PORT        0        /* Any old port will do */
 
 
-#define RFC931_TIMEOUT          /* Thor.991215: 是否提供 timeout */
+#define RFC931_TIMEOUT            /* Thor.991215: 是否提供 timeout */
 
 #ifdef RFC931_TIMEOUT
-static const int timeout = 1;   /* 若 1 秒後連線未完成，則放棄 */
+static const int timeout = 1;    /* 若 1 秒後連線未完成，則放棄 */
 
-static void
-pseudo_handler()        /* Thor.991215: for timeout */
+static void pseudo_handler()    /* Thor.991215: for timeout */
 {
     /* connect time out */
 }
@@ -173,14 +171,9 @@ pseudo_handler()        /* Thor.991215: for timeout */
 
 /* Thor.990325: 為了讓反查時能確定查出，來自哪個interface就從那連回，以防反查不到 */
 
-void
-dns_ident(
-    int sock,  /* Thor.990330: 負數保留給, 用getsock無法抓出正確port的時候.
-                               代表 Port, 不過不太可能用到 */
-    struct sockaddr_in *from,
-    char *rhost,
-    char *ruser
-)
+void dns_ident(int sock,        /* Thor.990330: 負數保留給, 用getsock無法抓出正確port的時候.
+                                   代表 Port, 不過不太可能用到 */
+               struct sockaddr_in *from, char *rhost, char *ruser)
 {
     struct sockaddr_in rmt_sin;
     struct sockaddr_in our_sin;
@@ -190,7 +183,7 @@ dns_ident(
     char buf[512];
 
 #ifdef RFC931_TIMEOUT
-    unsigned old_alarm; /* Thor.991215: for timeout */
+    unsigned old_alarm;            /* Thor.991215: for timeout */
     struct sigaction act, oact;
 #endif
 
@@ -198,8 +191,8 @@ dns_ident(
 
     /* get remote host name */
 
-    if (dns_name((char *) &from->sin_addr, rhost))
-        return;                     /* 假設沒有 FQDN 就沒有跑 identd */
+    if (dns_name((char *)&from->sin_addr, rhost))
+        return;                    /* 假設沒有 FQDN 就沒有跑 identd */
 
     /*
      * Use one unbuffered stdio stream for writing to and for reading from the
@@ -216,7 +209,7 @@ dns_ident(
     {
         s = sizeof(our_sin);
 
-        if (getsockname(sock, (struct sockaddr *) &our_sin, &s) < 0)
+        if (getsockname(sock, (struct sockaddr *)&our_sin, &s) < 0)
             return;
 
         /* Thor.990325: 為了讓反查時能確定查出，來自哪個interface就從那連回 */
@@ -243,7 +236,7 @@ dns_ident(
     /* Thor.991215: set for timeout */
     sigemptyset(&act.sa_mask);
     act.sa_flags = 0;
-    act.sa_handler = pseudo_handler; /* SIG_IGN; */
+    act.sa_handler = pseudo_handler;    /* SIG_IGN; */
     sigaction(SIGALRM, &act, &oact);
 
     old_alarm = alarm(timeout);
@@ -254,8 +247,8 @@ dns_ident(
     rmt_sin.sin_port = htons(RFC931_PORT);
 
     /* Thor.990325: 為了讓反查時能確定查出，來自哪個interface就從那連回 */
-    if ((sock < 0 || !bind(s, (struct sockaddr *) & our_sin, sizeof(our_sin)))
-        && !connect(s, (struct sockaddr *) & rmt_sin, sizeof(rmt_sin)))
+    if ((sock < 0 || !bind(s, (struct sockaddr *)&our_sin, sizeof(our_sin)))
+        && !connect(s, (struct sockaddr *)&rmt_sin, sizeof(rmt_sin)))
     {
         /*
          * Send query to server. Neglect the risk that a 13-byte write would have
@@ -271,8 +264,9 @@ dns_ident(
         {
             buf[cc] = '\0';
 
-            if (sscanf(buf, "%u , %u : USERID :%*[^:]:%79s", &rmt_port, &our_port, ruser) == 3 &&
-                rmt_pt == rmt_port && our_pt == our_port)
+            if (sscanf
+                (buf, "%u , %u : USERID :%*[^:]:%79s", &rmt_port, &our_port,
+                 ruser) == 3 && rmt_pt == rmt_port && our_pt == our_port)
             {
                 /*
                  * Strip trailing carriage return. It is part of the protocol, not
@@ -319,11 +313,7 @@ dns_ident(
 /* get host name by IP address                           */
 /* ----------------------------------------------------- */
 
-int
-dns_name(
-    unsigned char *addr,
-    char *name
-)
+int dns_name(unsigned char *addr, char *name)
 {
     querybuf ans;
     char qbuf[MAXDNAME];
@@ -340,16 +330,16 @@ dns_name(
 #ifdef  HAVE_ETC_HOSTS
     /* lkchu: reference to etc/hosts */
 
-    if ( ( fp = fopen("etc/hosts", "r") ) )
+    if ((fp = fopen("etc/hosts", "r")))
     {
         while (fgets(abuf, sizeof(abuf), fp))
         {
             if (abuf[0] != '#')
             {
                 /* if (!strcmp(name, (char *) strtok(abuf, " \t\r\n"))) */
-                if (strstr(name, (char *) strtok(abuf, " \t\r\n")))
+                if (strstr(name, (char *)strtok(abuf, " \t\r\n")))
                 {
-                    strcpy(name, (char *) strtok(NULL, " \t\r\n"));
+                    strcpy(name, (char *)strtok(NULL, " \t\r\n"));
                     fclose(fp);
                     return 0;
                 }
@@ -360,7 +350,7 @@ dns_name(
 #endif
 
     sprintf(qbuf, INADDR_FMT ".in-addr.arpa",
-        addr[3], addr[2], addr[1], addr[0]);
+            addr[3], addr[2], addr[1], addr[0]);
 
     n = dns_query(qbuf, T_PTR, &ans);
     if (n < 0)
@@ -368,8 +358,8 @@ dns_name(
 
     /* find first satisfactory answer */
 
-    cp = (unsigned char *) & ans + sizeof(HEADER);
-    eom = (unsigned char *) & ans + n;
+    cp = (unsigned char *)&ans + sizeof(HEADER);
+    eom = (unsigned char *)&ans + n;
 
     for (qdcount = ntohs(ans.hdr.qdcount); qdcount--; cp += n + QFIXEDSZ)
     {
@@ -379,7 +369,8 @@ dns_name(
 
     for (ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom; cp += n)
     {
-        if ((n = dn_expand((unsigned char *) &ans, eom, cp, hostbuf, MAXDNAME)) < 0)
+        if ((n =
+             dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME)) < 0)
             return n;
 
         cp += n;
@@ -389,7 +380,9 @@ dns_name(
 
         if (type == T_PTR)
         {
-            if ((n = dn_expand((unsigned char *) &ans, eom, cp, hostbuf, MAXDNAME)) >= 0)
+            if ((n =
+                 dn_expand((unsigned char *)&ans, eom, cp, hostbuf,
+                           MAXDNAME)) >= 0)
             {
                 strcpy(name, hostbuf);
                 return 0;
@@ -407,6 +400,7 @@ dns_name(
 
     return -1;
 }
+
 /*-------------------------------------------------------*/
 /* lib/dns_open.c       ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
@@ -415,11 +409,7 @@ dns_name(
 /* update : 96/12/15                                     */
 /*-------------------------------------------------------*/
 
-int
-dns_open(
-    char *host,
-    int port
-)
+int dns_open(char *host, int port)
 {
     querybuf ans;
     int n, ancount, qdcount;
@@ -430,12 +420,12 @@ dns_open(
 
 #if 1
     /* Thor.980707: 因gem.c呼叫時可能將host用ip放入，故作特別處理 */
-    if (*host>='0' && *host<='9')
+    if (*host >= '0' && *host <= '9')
     {
-        for (n=0, cp=host; n<4; n++, cp++)
+        for (n = 0, cp = host; n < 4; n++, cp++)
         {
-            buf[n]=0;
-            while (*cp >= '0' && *cp <='9')
+            buf[n] = 0;
+            while (*cp >= '0' && *cp <= '9')
             {
                 buf[n] *= 10;
                 buf[n] += *cp++ - '0';
@@ -443,7 +433,7 @@ dns_open(
             if (!*cp)
                 break;
         }
-        if (n==3)
+        if (n == 3)
         {
             cp = buf;
             goto ip;
@@ -458,8 +448,8 @@ dns_open(
 
     /* find first satisfactory answer */
 
-    cp = (unsigned char *) & ans + sizeof(HEADER);
-    eom = (unsigned char *) & ans + n;
+    cp = (unsigned char *)&ans + sizeof(HEADER);
+    eom = (unsigned char *)&ans + n;
 
     for (qdcount = ntohs(ans.hdr.qdcount); qdcount--; cp += n + QFIXEDSZ)
     {
@@ -471,7 +461,7 @@ dns_open(
 
     while (--ancount >= 0 && cp < eom)
     {
-        if ((n = dn_expand((unsigned char *) &ans, eom, cp, buf, MAXDNAME)) < 0)
+        if ((n = dn_expand((unsigned char *)&ans, eom, cp, buf, MAXDNAME)) < 0)
             return -1;
 
         cp += n;
@@ -485,7 +475,7 @@ dns_open(
             int sock;
             ip_addr *ip;
 #if 1
-ip:
+          ip:
 #endif
 
             sin.sin_family = AF_INET;
@@ -503,7 +493,7 @@ ip:
             if (sock < 0)
                 return sock;
 
-            if (!connect(sock, (struct sockaddr *) & sin, sizeof(sin)))
+            if (!connect(sock, (struct sockaddr *)&sin, sizeof(sin)))
                 return sock;
 
             close(sock);
@@ -514,6 +504,7 @@ ip:
 
     return -1;
 }
+
 /*-------------------------------------------------------*/
 /* lib/dns_smtp.c       ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
@@ -522,11 +513,7 @@ ip:
 /* update : 96/12/15                                     */
 /*-------------------------------------------------------*/
 
-static inline void
-dns_mx(
-    char *domain,
-    char *mxlist
-)
+static inline void dns_mx(char *domain, char *mxlist)
 {
     querybuf ans;
     int n, ancount, qdcount;
@@ -542,8 +529,8 @@ dns_mx(
 
     /* find first satisfactory answer */
 
-    cp = (unsigned char *) & ans + sizeof(HEADER);
-    eom = (unsigned char *) & ans + n;
+    cp = (unsigned char *)&ans + sizeof(HEADER);
+    eom = (unsigned char *)&ans + n;
 
     for (qdcount = ntohs(ans.hdr.qdcount); qdcount--; cp += n + QFIXEDSZ)
     {
@@ -556,7 +543,8 @@ dns_mx(
 
     while (--ancount >= 0 && cp < eom)
     {
-        if ((n = dn_expand((unsigned char *) &ans, eom, cp, mxlist, MAXDNAME)) < 0)
+        if ((n =
+             dn_expand((unsigned char *)&ans, eom, cp, mxlist, MAXDNAME)) < 0)
             break;
 
         cp += n;
@@ -569,7 +557,8 @@ dns_mx(
         {
             /* pref = getshort(cp); */
             *mxlist = '\0';
-            if ((dn_expand((unsigned char *) &ans, eom, cp + 2, mxlist, MAXDNAME)) < 0)
+            if ((dn_expand
+                 ((unsigned char *)&ans, eom, cp + 2, mxlist, MAXDNAME)) < 0)
                 break;
 
             if (!*mxlist)
@@ -591,10 +580,7 @@ dns_mx(
 }
 
 
-int
-dns_smtp(
-    char *host
-)
+int dns_smtp(char *host)
 {
     int sock;
     char *str, *ptr, mxlist[MAX_MXLIST];
@@ -604,9 +590,9 @@ dns_smtp(
         str = host;
 
     for (;;)
-    { /* Thor.980820: 註解: 萬一host格式為 xxx:yyy:zzz, 則先試 xxx, 不行再試 yyy */
+    {                            /* Thor.980820: 註解: 萬一host格式為 xxx:yyy:zzz, 則先試 xxx, 不行再試 yyy */
         ptr = str;
-        while ( ( sock = *ptr ) )
+        while ((sock = *ptr))
         {
             if (sock == ':')
             {

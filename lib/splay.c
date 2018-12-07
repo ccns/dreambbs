@@ -11,12 +11,8 @@
 #include <stdlib.h>
 #include "splay.h"
 
-SplayNode*
-splay_in(
-    SplayNode *top,
-    void *data,
-    int (*compare)(void *lhs, void *rhs)
-)
+SplayNode *splay_in(SplayNode * top,
+                    void *data, int (*compare) (void *lhs, void *rhs))
 {
     int splay_cmp;
     SplayNode *node, *l, *r, *x, N;
@@ -54,7 +50,7 @@ splay_in(
                 if (top->left == NULL)
                     break;
             }
-            r->left = top;              /* link right */
+            r->left = top;        /* link right */
             r = top;
             top = top->left;
         }
@@ -72,7 +68,7 @@ splay_in(
                 if (top->right == NULL)
                     break;
             }
-            l->right = top;             /* link left */
+            l->right = top;        /* link left */
             l = top;
             top = top->right;
         }
@@ -82,7 +78,7 @@ splay_in(
         }
     }
 
-    l->right = top->left;               /* assemble */
+    l->right = top->left;        /* assemble */
     r->left = top->right;
     top->left = N.right;
     top->right = N.left;
@@ -112,4 +108,3 @@ splay_in(
     free(node);
     return top;
 }
-
