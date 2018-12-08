@@ -11,8 +11,8 @@
 #0 8 * * * /home/bbs/checkbrdDIR.sh
 
 # 每小時轉信出去 2 次
-#8, 18, 28, 38, 48, 58 * * * * exec innd/bbslink /home/bbs > /dev/null 2>&1
-#22, 46 * * * * innd/bbslink > /dev/null 2>&1
+#8,18,28,38,48,58 * * * * exec innd/bbslink /home/bbs > /dev/null 2>&1
+#22,46 * * * * innd/bbslink > /dev/null 2>&1
 
 # 每小時作一次人次統計及開票
 5 */3 * * * exec bin/account > /dev/null 2>&1
@@ -51,7 +51,7 @@
 30 5 * * * exec bin/gem-check > /dev/null 2>&1
 
 #每天對精華區作索引檔, 方便使用者搜尋
-20 6 * * 1, 4 exec bin/gem-index > /dev/null 2>&1
+20 6 * * 1,4 exec bin/gem-index > /dev/null 2>&1
 
 # 每小時作歷史紀錄
 58 * * * * exec bin/counter > /dev/null 2>&1
@@ -72,7 +72,7 @@
 0 5 * * * exec bin/checkemail > /dev/null 2>&1
 
 # 排行榜
-0 4, 10, 15, 20 * * * /home/bbs/sh/top.sh
+0 4,10,15,20 * * * /home/bbs/sh/top.sh
 
 # comment out for summer vacation
 # 每天清理久未上站使用者, 清出的user會被搬至 usr/@目錄下, 請自行再刪除
