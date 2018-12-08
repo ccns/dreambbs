@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* proto.h      ( NTHU CS MapleBBS Ver 2.36 )            */
+/* proto.h      ( NTHU CS MapleBBS Ver 3.02 )            */
 /*-------------------------------------------------------*/
 /* target : prototype and macros                         */
 /* create : 95/03/29                                     */
@@ -312,17 +312,12 @@ int class_add(XO *xo);
 /* macros                                                */
 /* ----------------------------------------------------- */
 
-
 #define TRACE   blog
-
 
 #define dashd(fpath)    S_ISDIR(f_mode(fpath))
 #define dashf(fpath)    S_ISREG(f_mode(fpath))
 
-
 #define STR4(x)         ((x[0] << 24) + (x[1] << 16) + (x[2] << 8) + x[3])
                         /* Thor.980913: «OÃÒprecedence */
 
-
 #endif                          /* _PROTO_H_ */
-

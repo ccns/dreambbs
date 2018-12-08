@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* pip.h     ( WindTop MapleBBS Ver 2.36 )               */
+/* pip.h     ( WindTop MapleBBS Ver 3.02 )               */
 /*-------------------------------------------------------*/
 /* target : StarChicken                                  */
 /* create : 2000/05/25                                   */
@@ -30,7 +30,7 @@ typedef struct
     int speed;          /*速    度*/
     int hskill;         /*戰鬥技術*/
     int mskill;         /*魔法技術*/
-}       levelup;
+} levelup;
 
 
 struct chicken {

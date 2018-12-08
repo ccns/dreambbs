@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* modes.h      ( NTHU CS MapleBBS Ver 2.36 )            */
+/* modes.h      ( NTHU CS MapleBBS Ver 3.02 )            */
 /*-------------------------------------------------------*/
 /* target : user operating mode & status                 */
 /* create : 95/03/29                                     */
@@ -242,7 +242,5 @@ static char *ModeTypeTable[] =
 #define PALTYPE_LIST    1               /* 群組名單 */
 #define PALTYPE_BPAL    2               /* 板友名單 */
 #define PALTYPE_VOTE    3               /* 限制投票名單 */
-
-
 
 #endif                          /* _MODES_H_ */

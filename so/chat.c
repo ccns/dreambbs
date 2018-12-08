@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* chat.c       ( NTHU CS MapleBBS Ver 2.36 )            */
+/* chat.c       ( NTHU CS MapleBBS Ver 3.02 )            */
 /*-------------------------------------------------------*/
 /* target : chat client for xchatd                       */
 /* create : 95/03/29                                     */

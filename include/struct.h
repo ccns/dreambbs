@@ -1,11 +1,10 @@
 /*-------------------------------------------------------*/
-/* struct.h     ( NTHU CS MapleBBS Ver 2.36 )            */
+/* struct.h     ( NTHU CS MapleBBS Ver 3.02 )            */
 /*-------------------------------------------------------*/
 /* target : all definitions about data structure         */
 /* create : 95/03/29                                     */
 /* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
-
 
 #ifndef _STRUCT_H_
 #define _STRUCT_H_
@@ -43,20 +42,20 @@ typedef struct UTMP UTMP;
 typedef struct
 {
     char name[IDLEN+1];
-}       ADMIN;
+} ADMIN;
 
 typedef struct
 {
     char name[IDLEN+1];
     char email[60];
-}       CONTACT;
+} CONTACT;
 
 typedef struct
 {
     char date[8];
     char time[8];
     char work[50];
-}       MEMORANDUM;
+} MEMORANDUM;
 
 typedef struct
 {
@@ -64,7 +63,7 @@ typedef struct
     int     mode;
     time_t  time;
     int     usage;
-}       BANMAIL;
+} BANMAIL;
 
 typedef struct
 {
@@ -72,7 +71,7 @@ typedef struct
     int     mode;  time_t  time;
     int     usage;
     char    name[IDLEN+1];
-}       FW;
+} FW;
 
 #define FW_OWNER        0x01
 #define FW_TITLE        0x02
@@ -119,13 +118,13 @@ typedef struct
     int point1;                 /* 優良積分 */
     int point2;                 /* 劣文 */
     time_t vtime;               /* validate time */
-}      ACCT;
+} ACCT;
 
 typedef struct                  /* 16 bytes */
 {
     time_t uptime;
     char userid[IDLEN];
-}      SCHEMA;
+} SCHEMA;
 
 
 #ifdef  HAVE_REGISTER_FORM
@@ -142,7 +141,7 @@ typedef struct  /* 註冊表單 (Register From) 256 bytes */
     char phone[20];
     char reply[61];
     char idno[11];
-}      RFORM;
+} RFORM;
 
 #ifndef HAVE_SIMPLE_RFORM
 typedef struct
@@ -150,7 +149,7 @@ typedef struct
     int userno;
     char userid[IDLEN + 1];
     char msg[80];
-}       RFORM_R;
+} RFORM_R;
 #endif
 #endif
 
@@ -276,7 +275,7 @@ typedef struct VoteControlHeader
     int limitposts;               /* ??????????n??o??????W??L??X??????H??W??????????????????~¯??§?????? */
 
     char nouse[88];
-}      VCH;
+} VCH;
 #endif
 
 
@@ -295,7 +294,7 @@ typedef struct VoteControlHeader
     char check;                 /* 學生投票系統 */
     char date[9];               /* 開始日期 */ /* Thor: match HDR的date*/
     char title[TTLEN + 1];      /* 投票主題 */
-}           VCH;
+} VCH;
 
 
 typedef struct VoteStudents
@@ -314,7 +313,7 @@ typedef struct VoteStudents
     char first[5]; /* 身分別及入學序 :        0000 ~ 9999   */
     char last[5];
     char end;      /* \n，存檔時要用的                      */
-}           VCHS;
+} VCHS;
 
 
 typedef char vitem_t[32];       /* 投票選項 */
@@ -325,7 +324,7 @@ typedef struct
     char userid[IDLEN + 1];
     char numvotes;
     unsigned int choice;
-}      VLOG;
+} VLOG;
 
 
 /* filepath : brd/<board>/.VCH, brd/<board>/@/... */
@@ -346,7 +345,7 @@ typedef struct
     char rcpt[60];
     char filepath[77];
     char *revdomain;            /* reverse domain */
-}      MailQueue;
+} MailQueue;
 
 
 #define MQ_UUENCODE     0x01    /* 先 uuencode 再寄出 */
@@ -369,7 +368,7 @@ typedef struct
     char ftype;
     char ship[46];
     int userno;
-}      PAL;
+} PAL;
 
 #ifdef  HAVE_BANMSG
 typedef struct
@@ -377,7 +376,7 @@ typedef struct
     char userid[IDLEN + 1];
     char ship[46];
     int userno;
-}      BANMSG;
+} BANMSG;
 #endif
 
 
@@ -386,7 +385,7 @@ typedef struct
 {
     char userid[IDLEN+1];
     int userno;
-}       ALOHA;
+} ALOHA;
 
 
 #define PAL_BAD 0x02    /* 好友 vs 損友 */
@@ -405,7 +404,7 @@ typedef struct
     int recver;                 /* called userno */
     char userid[IDLEN + 1];
     char msg[71];               /* 熱訊 */
-}      BMW;                     /* bbs message write */
+} BMW;                     /* bbs message write */
 
 #define BMW_MODE        0x01
 
@@ -435,13 +434,13 @@ typedef struct
     int chatcount;
     char msg[150];              /*訊息內容*/
     char chat[10][150];         /*聊天內容*/
-}       pipdata;
+} pipdata;
 
 typedef struct
 {
     pipdata pip1;
     pipdata pip2;
-}       PIPUTMP;
+} PIPUTMP;
 #endif
 
 struct UTMP
@@ -498,7 +497,7 @@ typedef struct
     int numlogins;
     int numposts;
     int point2;
-}    THRESHOLD;
+} THRESHOLD;
 
 typedef struct BoardHeader
 {
@@ -525,7 +524,7 @@ typedef struct BoardHeader
     unsigned int n_news;        /* 看板轉信累計 times/hour */
     unsigned int n_bans;        /* 看板檔信累計 times/hour */
     char  reserve[100];         /* 保留未用 */
-}           BRD;
+} BRD;
 
 #define POST_STOP_PERM   0x01   /* 自動抓 crosspost 開關旗標 */
 
@@ -543,7 +542,7 @@ typedef struct NewBoardHeader
     unsigned int  agree;
     unsigned int  assist;
     char          reserve[64];
-}       NBRD;
+} NBRD;
 
 
 #define NBRD_ING        0x01    /* 連署中 */
@@ -571,7 +570,7 @@ typedef struct BoardReadingHistory
     int bcount;                                    /* Thor.980902:沒用到? */
                                                    /* Thor.980902:給自己看的 */
     /* --------------------------------------------------- */
-    /* time_t {final, begin} / {final | BRH_SIGN}          */
+    /* time_t {final, begin} / {final | BRH_SIGN}    */
     /* --------------------------------------------------- */
                             /* Thor.980904:註解: BRH_SIGN代表final begin 相同 */
                             /* Thor.980904:註解: 由大到小排列, 存放已讀interval */
@@ -738,14 +737,14 @@ typedef struct screenline
     unsigned char sso;                  /* start of standout data */
     unsigned char eso;                  /* end of standout data */
     unsigned char data[ANSILINELEN];
-}          screenline;
+} screenline;
 
 
 typedef struct LinkList
 {
     struct LinkList *next;
     char data[0];
-}        LinkList;
+} LinkList;
 
 
 /* ----------------------------------------------------- */
@@ -762,14 +761,14 @@ typedef struct OverView
     char *xyz;                  /* staff */
     struct OverView *nxt;       /* next */
     char dir[0];                /* data path */
-}        XO;
+} XO;
 
 
 typedef struct
 {
     int key;
     int (*func) (XO *xo);
-}      KeyFunc;
+} KeyFunc;
 
 
 typedef struct
@@ -784,7 +783,7 @@ typedef struct
 {
     time_t chrono;
     int recno;
-}      TagItem;
+} TagItem;
 
 
 #ifdef MODE_STAT
@@ -866,14 +865,14 @@ typedef struct
 {
     CLOCK start[13];
     CLOCK end[13];
-}  CLASS_TIME;
+} CLASS_TIME;
 
 typedef struct
 {
     int mode;
     CLASS table[6][13];
     CLASS_TIME time;
-}   CLASS_TABLE;
+} CLASS_TABLE;
 
 /* ----------------------------------------------------- */
 /* list.c 中運用的資料結構                               */
@@ -881,12 +880,12 @@ typedef struct
 typedef struct
 {
     char userid[IDLEN+1];
-}       LIST;
+} LIST;
 
 typedef struct
 {
     char title[MAX_LIST][41];
-}       LIST_TITLE;
+} LIST_TITLE;
 
 /* ----------------------------------------------------- */
 /* counter.c 中運用的資料結構                            */
@@ -903,7 +902,7 @@ typedef struct
     int max_regist_old;
     int samehour_max_login_old;
     char ident[90];
-}       COUNTER;
+} COUNTER;
 
 typedef struct
 {
@@ -912,13 +911,13 @@ typedef struct
     char userid[IDLEN + 1];
     char username[19];
     char buf[3][80];
-}       notedata;
+} notedata;
 
 typedef struct
 {
     int start;
     int end;
-}       REAPER_TIME;
+} REAPER_TIME;
 
 /* ----------------------------------------------------- */
 /* 生日年齡星座統計 中運用的資料結構                     */
@@ -928,7 +927,7 @@ typedef struct
 {
     char *grad;
     char *server;
-}       YZU_MAIL;
+} YZU_MAIL;
 
 typedef struct
 {
@@ -936,7 +935,7 @@ typedef struct
     char host[26];
     char ip[16];
     char port[6];
-}       BBSNET;
+} BBSNET;
 
 
 #define TOPLOGINS       (0)
@@ -963,7 +962,7 @@ typedef struct
     int  valid;
     int  x;
     int  y;
-}       CLASS_TABLE2;
+} CLASS_TABLE2;
 
 #ifdef  HAVE_CLASSTABLEALERT
 typedef struct
@@ -971,13 +970,13 @@ typedef struct
     char condensation[9];
     char room[20];
     unsigned int used;
-}       CLASS_TABLE_ALERT_ITEM;
+} CLASS_TABLE_ALERT_ITEM;
 
 typedef struct
 {
     CLASS_TABLE_ALERT_ITEM item[78];
     unsigned int userno;
-}       CLASS_TABLE_ALERT;
+} CLASS_TABLE_ALERT;
 
 #endif
 #endif
@@ -989,7 +988,7 @@ typedef struct
     unsigned int userno;
     char title[64];
     char reserve[44];
-}       OBSERVE;
+} OBSERVE;
 
 typedef struct
 {
@@ -1006,7 +1005,7 @@ typedef struct PostRecommendHistory
 {
     time_t chrono;
     time_t bstamp;
-}       PRH;
+} PRH;
 #endif
 #endif
 
@@ -1017,7 +1016,7 @@ typedef struct
     unsigned int level;
     int umode;
     char *desc;
-}      MENU;
+} MENU;
 
 #ifdef  HAVE_COUNT_BOARD
 #define BSTAT_LAST      0x01
@@ -1032,7 +1031,7 @@ typedef struct
     unsigned int n_news;        /* 看板轉信累計 times/hour */
     unsigned int n_bans;        /* 看板檔信累計 times/hour */
     char reserve[28];           /* 保留 */
-}       BSTAT;
+} BSTAT;
 
 typedef struct
 {
@@ -1048,7 +1047,7 @@ typedef struct
     BSTAT lday[24];
     BSTAT lweek[24];
     BSTAT lmonth[24];
-}       BSTATCOUNT;
+} BSTATCOUNT;
 #endif
 
 
@@ -1057,14 +1056,14 @@ typedef struct
 {
     int sum;
     int total;
-}       CHECKSUM;
+} CHECKSUM;
 
 typedef struct
 {
     CHECKSUM checksum[5];
     int post_modetype;
     int checknum;
-}       CHECKSUMCOUNT;
+} CHECKSUMCOUNT;
 
 #endif
 
@@ -1075,7 +1074,7 @@ typedef struct PersonalBoard
     char brdname[IDLEN + 1];
     char brdtitle[BTLEN + 1];
     unsigned int state;
-}       PB;
+} PB;
 
 #define PB_APPLY        0x01    /* 申請中 */
 #define PB_OPEN         0x02    /* 已開版 */
@@ -1109,8 +1108,7 @@ typedef struct
     unsigned int xmode;         /* 該站的 xmode */
     char blank[20];             /* 保留 */
     int feedfd;                 /* bbslink.c 使用 */
-}nodelist_t;
-
+} nodelist_t;
 
 #define INN_NOINCOME    0x0001
 #define INN_ERROR       0x0004

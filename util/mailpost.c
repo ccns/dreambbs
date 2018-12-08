@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* util/mailpost.c      ( NTHU CS MapleBBS Ver 2.36 )    */
+/* util/mailpost.c      ( NTHU CS MapleBBS Ver 3.02 )    */
 /*-------------------------------------------------------*/
 /* target : (1) general user E-mail post 到看板          */
 /*          (2) BM E-mail post 到精華區                  */

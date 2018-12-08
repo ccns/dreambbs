@@ -30,7 +30,7 @@ typedef struct
                    定義 2000為 00, 2001為01 */
 
     char title[73];               /* 主題 (TTLEN + 1) */
-}          HDR;
+} HDR;
 
 /* gopher url 字串：xname + owner + nick + date */
 #define GEM_URLEN               (32 + 80 + 50 + 9 - 1)

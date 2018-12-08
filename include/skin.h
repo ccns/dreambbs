@@ -5,6 +5,7 @@
 /* create :                                              */
 /* update :                                              */
 /*-------------------------------------------------------*/
+
 #ifndef _SKIN_H_
 #define _SKIN_H_
 
@@ -15,7 +16,6 @@
 # define VAR            extern
 # define INI(x)
 #endif
-
 
 VAR void (*s_menu)(void);
 VAR int skin INI(1);
