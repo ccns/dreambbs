@@ -5229,7 +5229,7 @@ pip_ending_screen(void)
     system(buf);
     sprintf(buf, "得到 %d 元，%d 點經驗值", endgrade*10*ba, endgrade*10);
     vmsg(buf);
-    vmsg("下一頁是小雞資料  趕快copy下來做紀念");
+    vmsg("下一頁是小雞資料  趕快copy下來作紀念");
     pip_data_list(cuser.userid);
     vmsg("歡迎再來挑戰....");
     /*記錄開始*/

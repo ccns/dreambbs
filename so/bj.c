@@ -52,7 +52,7 @@ BlackJack(void)
     int host_card[12], guest_card[12];
     int money;
 
-//  int CHEAT=0; /* 暗国把计, 1 碞国, 0 碞ぃ */
+//  int CHEAT=0; /* 国把计, 1 碞国, 0 碞ぃ */
     time_t now = time(0);
     time(&now);
     srand(time(NULL));
