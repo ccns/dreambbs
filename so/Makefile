@@ -34,6 +34,8 @@ EXE	= so
 .else
 .o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386
 .endif   #OPSYS
+.else
+.o.so:  ;   ld -G $*.o -o $*.so -L../lib -ldao
 .endif #ARCHI
 
 all: 
