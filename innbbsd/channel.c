@@ -615,7 +615,7 @@ search_nodelist_byhost(
     int i;
 
     /* itoc.021216: 把 NODELIST 都換成 host，這樣的話，
-         如果 nodelist.bbs 裡面填的不是正解，對方還是可以 access */
+       如果 nodelist.bbs 裡面填的不是正解，對方還是可以 access */
 
     for (i = 0; i < NLCOUNT; i++)
     {

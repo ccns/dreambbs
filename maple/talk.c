@@ -1422,9 +1422,9 @@ XoBM(
     if ((bbstate & STAT_BOARD) /*&& (bbstate & STAT_MODERATED)*/)
         /* && (cbhdr.readlevel == PERM_SYSOP)) */
         /*
-        * Thor.1020: bbstate有 STAT_MODERATED就代表符合MODERATED BOARD,
-        * 不需再check readlevel PERM_SYSOP
-        */
+         * Thor.1020: bbstate有 STAT_MODERATED就代表符合MODERATED BOARD,
+         * 不需再check readlevel PERM_SYSOP
+         */
     {
         XO *xt;
         char fpath[80];

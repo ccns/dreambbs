@@ -523,7 +523,7 @@ send_outgoing(
         else if (cc == '.')
         {
             /* If the text contained a period as the first character of the text
-                 line in the original, that first period is doubled. */
+               line in the original, that first period is doubled. */
             if (str == BODY || str[-1] == '\n')
                 fputc('.', SERVERwfp);
         }

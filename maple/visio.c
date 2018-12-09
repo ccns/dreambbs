@@ -1157,7 +1157,7 @@ static int old_pos; /* Thor.990401: 多存一個 */
 
 /* static void */
 void                            /* Thor.1028: 為了讓 talk.c
-                     * 有人呼叫時會show字 */
+                                 * 有人呼叫時會show字 */
 cursor_save(void)
 {
     old_col = cur_col;
@@ -1169,7 +1169,7 @@ cursor_save(void)
 
 /* static void */
 void                            /* Thor.1028: 為了讓 talk.c
-                     * 有人呼叫時會show字 */
+                                 * 有人呼叫時會show字 */
 cursor_restore(void)
 {
     move(old_row, old_col);
@@ -1651,9 +1651,9 @@ igetch(void)
                 && !(imode & IM_REPLY))         /* lkchu.990513: 鎖定時不可回訊 */
         {
             /*
-            * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
-            * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
-            */
+             * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
+             * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
+             */
             signal(SIGUSR1, SIG_IGN);
 
             imode |= IM_REPLY;
@@ -1661,9 +1661,9 @@ igetch(void)
             imode ^= IM_REPLY;
 
             /*
-            * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
-            * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
-            */
+             * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
+             * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
+             */
             signal(SIGUSR1, (void *) talk_rqst);
 
             continue;

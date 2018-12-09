@@ -1893,7 +1893,7 @@ xover(
                 }
                 else if (cmd == 'g' && (bbstate & STAT_BOARD))
                 { /* Thor.980806: 要注意沒進看版(未定看版)時, bbstate會沒有STAT_BOARD
-                                        站長會無法收錄文章 */
+                                  站長會無法收錄文章 */
                     cmd = gem_gather(xo);               /* 收錄文章到精華區 */
                 }
 #ifdef  HAVE_MAILGEM

@@ -785,8 +785,8 @@ t_chat(void)
                     ch = chat_cmd(cfd, ptr);
 
                 /* Thor.980602: 有個要注意的小地方, 原本如果是『/』,
-                        會秀出 /help的畫面,
-                        現在打 /, 會變成 /p 切換 pager */
+                                會秀出 /help的畫面,
+                                現在打 /, 會變成 /p 切換 pager */
 
                 /* Thor.980925: 保留 ptr 最原始樣, 不加 /n */
                 for (cmdpos = MAXLASTCMD - 1; cmdpos; cmdpos--)

@@ -4210,7 +4210,7 @@ KeyFunc post_cb[] =
   -------------------------------------------------------------------------*/
 #if 0
 extern XO *xpost_xo;            /* Thor: dynamic programming for variable dir
-                             * name */
+                                 * name */
 extern XO *ypost_xo;
 #endif
 
