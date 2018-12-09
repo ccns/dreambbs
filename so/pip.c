@@ -1802,7 +1802,7 @@ pip_live_again(void)
     d.maxmp = d.maxmp * ALIVE;
     d.mp = d.maxmp;
 
-    /*變的不快樂*/
+    /*變得不快樂*/
     d.happy = 0;
     d.satisfy = 0;
 

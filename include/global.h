@@ -51,9 +51,9 @@
 #define FN_PNOTE_ANS_SAVE       "p_note.ans.save"       /* 答錄機中儲存的留言 */
 #define FN_PNOTE_HINT           "p_note.hint"           /* 答錄機主人留言 */
 #define FN_PLANS                "plans"                 /* 名片檔 (N) */
-#define FN_PNOTE_DAT            "pnote.dat"             /* 答錄機資料庫新的流言  */
+#define FN_PNOTE_DAT            "pnote.dat"             /* 答錄機資料庫新的留言  */
 #define FN_PNOTE_TMP            "pnote.tmp"             /*   */
-#define FN_PNOTE_DAT_SAVE       "pnote.dat.save"        /* 答錄機資料庫保留下來的流言 */
+#define FN_PNOTE_DAT_SAVE       "pnote.dat.save"        /* 答錄機資料庫保留下來的留言 */
 #define FN_SIGN                 "sign"                  /* 簽名檔 */
 #define FN_STOPPERM_LOG         "stopperm.log"          /* 個人停權紀錄 */
 #define FN_VOTE                 "vote"                  /* 投票紀錄資料庫 (N) */
