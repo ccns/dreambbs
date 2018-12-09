@@ -2146,13 +2146,13 @@ int oldnum[])
                 }
                 else
                 {
-                    sprintf(inbuf, "確定買入物品 [%s] 數量 %d 個嗎?(店家賣價 %d) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money);
+                    sprintf(inbuf, "確定買入物品 [%s] 數量 %ld 個嗎?(店家賣價 %ld) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money);
                     getdata(b_lines - 1, 1, inbuf, genbuf, 2, DOECHO, 0);
                     if (genbuf[0] == 'y' || genbuf[0] == 'Y')
                     {
                         oldnum[choice] += smoney;
                         d.money -= smoney * p[choice].money;
-                        sprintf(inbuf, "老闆給了你%d個%s", smoney, p[choice].name);
+                        sprintf(inbuf, "老闆給了你%ld個%s", smoney, p[choice].name);
                         vmsg(inbuf);
                         vmsg(p[choice].msguse);
                         if (mode == 3 && choice == 1)
@@ -2217,13 +2217,13 @@ int oldnum[])
                 }
                 else
                 {
-                    sprintf(inbuf, "確定賣出物品 [%s] 數量 %d 個嗎?(店家買價 %d) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money*8 / 10);
+                    sprintf(inbuf, "確定賣出物品 [%s] 數量 %ld 個嗎?(店家買價 %ld) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money*8 / 10);
                     getdata(b_lines - 1, 1, inbuf, genbuf, 2, DOECHO, 0);
                     if (genbuf[0] == 'y' || genbuf[0] == 'Y')
                     {
                         oldnum[choice] -= smoney;
                         d.money += smoney * p[choice].money * 8 / 10;
-                        sprintf(inbuf, "老闆拿走了你的%d個%s", smoney, p[choice].name);
+                        sprintf(inbuf, "老闆拿走了你的%ld個%s", smoney, p[choice].name);
                         vmsg(inbuf);
                     }
                     else
@@ -4220,7 +4220,7 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
     smoney = classgrade * classmoney[classnum][0] + classmoney[classnum][1];
     move(b_lines - 2, 0);
     clrtoeol();
-    sprintf(inbuf, "[%8s%4s課程]要花 $%d，確定要嗎??[y/N]: ", classword[classnum][0], classrank[classgrade], smoney);
+    sprintf(inbuf, "[%8s%4s課程]要花 $%ld，確定要嗎??[y/N]: ", classword[classnum][0], classrank[classgrade], smoney);
     getdata(b_lines - 2, 1, inbuf, ans, 2, DOECHO, 0);
     if (ans[0] != 'y' && ans[0] != 'Y')  return 0;
     if (d.money < smoney)
@@ -6381,7 +6381,7 @@ int pip_divine(void) /*占卜師來訪*/
     if (d.money >= money)
     {
         randvalue = rand() % 5;
-        sprintf(buf, "你要占卜嗎? 要花%d元喔...[y/N]: ", money);
+        sprintf(buf, "你要占卜嗎? 要花%ld元喔...[y/N]: ", money);
         getdata(12, 14, buf, ans, 2, 1, 0);
         if (ans[0] == 'y' || ans[0] == 'Y')
         {

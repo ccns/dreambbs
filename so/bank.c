@@ -101,7 +101,7 @@ int point1_money(void)
         now = time(0);
         strncpy(c_time, ctime(&now), 24);
         c_time[24] = '\0';
-        sprintf(c_buf, "%s %s Àu¨}ÂI¼Æ(%d)->¹Ú¹ô(%d)\n", c_time, cuser.userid, num, temp);
+        sprintf(c_buf, "%s %s Àu¨}ÂI¼Æ(%d)->¹Ú¹ô(%d)\n", c_time, cuser.userid, num, (int)temp);
         f_cat(FN_BANK, c_buf);
 
     }

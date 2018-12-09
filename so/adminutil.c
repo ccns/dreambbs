@@ -146,7 +146,7 @@ mail_to_bm(void)
     strcpy(ve_title, "[板主通告]");
     title = ve_title;
     vget(1, 0, "◎ 主 題：", title, 60, GCARRY);
-    sprintf(buf, "mailtobm.%d", time(0));
+    sprintf(buf, "mailtobm.%lld", (long long)time(0));
     usr_fpath(fpath, cuser.userid, buf);
     if ((fp = fopen(fpath, "w")))
     {
@@ -254,7 +254,7 @@ mail_to_all(void)
     strcpy(ve_title, "[系統通告]");
     title = ve_title;
     vget(1, 0, "◎ 主 題：", title, 60, GCARRY);
-    sprintf(buf, "mailtoall.%d", time(0));
+    sprintf(buf, "mailtoall.%lld", (long long)time(0));
     usr_fpath(fpath, cuser.userid, buf);
     utmp_mode(M_SMAIL);
     curredit = EDIT_MAIL | EDIT_LIST;

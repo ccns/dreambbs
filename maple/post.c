@@ -1528,7 +1528,7 @@ post_browse(
         time_t now;
         time(&now);
 
-        snprintf(desc, sizeof(desc), "%s %s %s %d %s\n", Atime(&now), cuser.userid, currboard, hdr->chrono, ipv4addr);
+        snprintf(desc, sizeof(desc), "%s %s %s %lld %s\n", Atime(&now), cuser.userid, currboard, (long long)hdr->chrono, ipv4addr);
         f_cat(FN_BROWSE_LOG, desc);
 
         hdr_fpath(fpath, dir, hdr);
@@ -2219,7 +2219,7 @@ post_state(
     bitmsg("Flag: ", "rmg---cdIEOR--------DLSMC-------", hdr->xmode);
     prints("Xid : %d\n", hdr->xid);
     prints("Modify : %d times\n", hdr->modifytimes);
-    prints("Chrono : %d Pushtime : %d\n", hdr->chrono, hdr->pushtime);
+    prints("Chrono : %lld Pushtime : %d\n", (long long)hdr->chrono, hdr->pushtime);
 
     vmsg(NULL);
 
@@ -3088,7 +3088,7 @@ post_recommend_log(
     strncpy(c_time, ctime(&now), 24);
     c_time[24] = '\0';
 
-    sprintf(buf, "%s %s %s %s 板：%s(%d) from %s\n", c_time, cuser.userid, (mode == 0) ? "清除":"推薦", currboard, hdr->title, hdr->chrono, fromhost);
+    sprintf(buf, "%s %s %s %s 板：%s(%lld) from %s\n", c_time, cuser.userid, (mode == 0) ? "清除":"推薦", currboard, hdr->title, (long long)hdr->chrono, fromhost);
     f_cat(FN_RECOMMEND_LOG, buf);
 }
  */
@@ -3414,9 +3414,9 @@ post_recommend(
             else if (brd->battr & BRD_PUSHDEFINE)
             {
                 if (addscore == 1)
-                    sprintf(add, "\x1b[1;33m%02.2s %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;33m%2.2s %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else if (addscore == -1)
-                    sprintf(add, "\x1b[1;31m%02.2s\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;31m%2.2s\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else
                     sprintf(add, "\x1b[1;33m→\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
             }
@@ -4635,7 +4635,7 @@ xpost_browse(
         time_t now;
         time(&now);
 
-        snprintf(desc, sizeof(desc), "%s %s %s %d %s\n", Atime(&now), cuser.userid, currboard, hdr->chrono, ipv4addr);
+        snprintf(desc, sizeof(desc), "%s %s %s %lld %s\n", Atime(&now), cuser.userid, currboard, (long long)hdr->chrono, ipv4addr);
         f_cat(FN_BROWSE_LOG, desc);
 
         hdr_fpath(fpath, dir, hdr);
