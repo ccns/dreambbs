@@ -50,7 +50,7 @@
 # 每天對精華區作 garbage collection, garbage的形成詳見精華區編輯之document
 30 5 * * * exec bin/gem-check > /dev/null 2>&1
 
-#每天對精華區作索引檔, 方便使用者搜尋
+# 每天對精華區作索引檔, 方便使用者搜尋
 20 6 * * 1,4 exec bin/gem-index > /dev/null 2>&1
 
 # 每小時作歷史紀錄
