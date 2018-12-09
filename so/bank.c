@@ -19,7 +19,7 @@ void log_bank(
     char *who)
 {
     time_t now;
-    char c_time[25], c_buf[100]={};
+    char c_time[25], c_buf[100]={0};
 
     now = time(0);
     strncpy(c_time, ctime(&now), 24);
@@ -97,7 +97,7 @@ int point1_money(void)
         acct_save(&acct);
 
         time_t now;
-        char c_time[25], c_buf[100]={};
+        char c_time[25], c_buf[100]={0};
         now = time(0);
         strncpy(c_time, ctime(&now), 24);
         c_time[24] = '\0';
@@ -221,7 +221,7 @@ TransferAccount(void)
         acct_save(&selfacct);
 
         time_t now;
-        char c_time[25], c_buf[100]={};
+        char c_time[25], c_buf[100]={0};
         now = time(0);
         strncpy(c_time, ctime(&now), 24);
         c_time[24] = '\0';
@@ -317,7 +317,7 @@ money_back(void)
         acct_save(&acct);
 
         time_t now;
-        char c_time[25], c_buf[100]={};
+        char c_time[25], c_buf[100]={0};
         now = time(0);
         strncpy(c_time, ctime(&now), 24);
         c_time[24] = '\0';

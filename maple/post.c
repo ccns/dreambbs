@@ -74,7 +74,7 @@ extern char brd_bits[];
 
 /* Thor.990113: imports for anonymous log */
 extern char rusername[];
-static char delete_reason[30] = {};
+static char delete_reason[30] = {0};
 
     int
 cmpchrono(
