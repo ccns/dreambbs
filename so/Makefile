@@ -2,7 +2,7 @@
 #  so/Makefile ( NTHU CS MapleBBS Ver 3.x )              #
 # ------------------------------------------------------ #
 #  author : opus.bbs@bbs.cs.nthu.edu.tw                  #
-#  target : Makefile for MapleBBS main programs	         #
+#  target : Makefile for MapleBBS main programs          #
 #  create : 95/03/29                                     #
 #  update : 18/03/28                                     #
 # ------------------------------------------------------ #
