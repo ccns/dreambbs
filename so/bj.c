@@ -106,9 +106,7 @@ BlackJack(void)
     /*  if (money>=20000) CHEAT=1;
         if (CHEAT==1){
             if (cardlist[1]<=3){
-                tmp2=cardlist[50];
-                cardlist[50]=cardlist[1];
-                cardlist[1]=tmp2;
+                SWAP(cardlist[50], cardlist[1]);
             }
         } */                            /* §@¹ú½X */
 
