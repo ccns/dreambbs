@@ -172,7 +172,7 @@ BlackJack(void)
 //              inmoney(money*aj);
                 game_log(2, "中了 \x1b[1;33m%d\x1b[m 元的 \x1b[1;44;33m SuperＡＪ \x1b[m", money*aj);
                 pressanykey("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
-                flag = 1; m = 0;
+                flag = 1; m = 0; tmp = 0;
             }
 
             if (guest_point == 21 && guest_count == 1)
