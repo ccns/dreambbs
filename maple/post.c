@@ -1803,12 +1803,12 @@ lazy_delete(
 {
     if (!strcmp(hdr->owner, cuser.userid))
     {
-        sprintf(hdr->title, "<< 本文章經 %s 刪除 >>", cuser.userid);
+        sprintf(hdr->title, "<< 本文章由 %s 刪除 >>", cuser.userid);
         hdr->xmode |= POST_DELETE;
     }
     else if (strlen(delete_reason) < 1)
     {
-        sprintf(hdr->title, "<< 本文章經 %s 刪除 >>", cuser.userid);
+        sprintf(hdr->title, "<< 本文章由 %s 刪除 >>", cuser.userid);
         hdr->xmode |= POST_MDELETE;
     }
     else
@@ -2975,7 +2975,7 @@ post_cross_terminator(  /* Thor.0521: 終極文章大法 */
 
                     cancel_post(hdr);
                     hdr->xmode |= POST_MDELETE;
-                    sprintf(hdr->title, "<< 本文章經 %s 做系統功\能刪除 >>", cuser.userid);
+                    sprintf(hdr->title, "<< 本文章由 %s 以系統功\能刪除 >>", cuser.userid);
                     /*hdr_fpath(fold, fpath, hdr);
                     unlink(fold);*/
                 }

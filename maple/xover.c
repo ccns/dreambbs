@@ -227,7 +227,7 @@ hdr_prune(
                 if (post == 1)
                 {
                     hdr->xmode |= POST_MDELETE;
-                    sprintf(hdr->title, "<< 本文章經 %s 刪除 >>", cuser.userid);
+                    sprintf(hdr->title, "<< 本文章由 %s 刪除 >>", cuser.userid);
                 }
 #ifdef  HAVE_MAILUNDELETE
                 else if (post == 3 && (hdr->xmode & POST_DELETE))

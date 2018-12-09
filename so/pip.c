@@ -8041,7 +8041,7 @@ struct magicset *p)
     do
     {
         move(16, 4);
-        sprintf(buf, "你想使用那一個%8s呢?  [Q]放棄: ", p[0].name);
+        sprintf(buf, "你想使用哪一個%8s呢?  [Q]放棄: ", p[0].name);
         getdata(16, 4, buf, ans, 2, 1, 0);
         if (ans[0] != 'q' && ans[0] != 'Q')
         {
@@ -8134,7 +8134,7 @@ UTMP *opt)
     do
     {
         move(16, 4);
-        sprintf(buf, "你想使用那一個%8s呢?  [Q]放棄: ", p[0].name);
+        sprintf(buf, "你想使用哪一個%8s呢?  [Q]放棄: ", p[0].name);
         getdata(16, 4, buf, ans, 2, 1, 0);
         if (ans[0] != 'q' && ans[0] != 'Q')
         {
