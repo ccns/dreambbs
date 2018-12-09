@@ -2128,7 +2128,7 @@ post_state(
         outs("\033[m");
         outs("\n \033[1;37m¡¹\033[m ¤å³¹¦ì¸m: ");
         outs(fpath);
-#/*
+/*
         int k, l, m;
         k = l = m = 0;
         if (ghdr->chrono > ghdr->stamp)
