@@ -1113,7 +1113,7 @@ void acct_setup(ACCT * u, int adm)
             case 'o':
                 {
                     char command[256];
-                    mode = select_mode(NULL);
+                    mode = select_mode(0);
                     sprintf(command, "bin/stopperm %s %s %d %s %d &",
                             u->userid, u->vmail, mode, cuser.userid,
                             (int)time(0));

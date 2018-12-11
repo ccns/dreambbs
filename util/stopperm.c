@@ -406,7 +406,7 @@ setup(
             if (strcmp(u->userid, id))
                 add_deny_exer(u, mode, 1, exer);
             else
-                add_deny_exer(u, mode, NULL, exer);
+                add_deny_exer(u, mode, 0, exer);
         }
     }
 
