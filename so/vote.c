@@ -1182,7 +1182,7 @@ vote_sync(void)
     if ((fd = open(fpath, O_RDWR, 0600)) < 0)
         return;
 
-    outz("★ 資料整理稽核中，請稍後 \033[5m...\033[m");
+    outz("★ 資料整理稽核中，請稍候 \033[5m...\033[m");
     refresh();
 
     if (!fstat(fd, &st) && (size = st.st_size) > 0)

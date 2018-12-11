@@ -74,7 +74,7 @@ extern char brd_bits[];
 
 /* Thor.990113: imports for anonymous log */
 extern char rusername[];
-static char delete_reason[30] = {};
+static char delete_reason[30] = {0};
 
     int
 cmpchrono(
@@ -1258,17 +1258,17 @@ post_cross(
 
         if (!HAS_PERM(PERM_ADMIN))
         {
-          time_t now;
-          struct tm *ptime;
-          char add[180], tgt[30];
+            time_t now;
+            struct tm *ptime;
+            char add[180], tgt[30];
 
-          time(&now);
-          ptime = localtime(&now);
-          sprintf(tgt, "轉錄至 %s 看板", xboard);
-          xfp = fopen(fpath, "a");
-          sprintf(add, "\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, tgt, Btime(&hdr->pushtime)+3);
-          fprintf(xfp, "%s", add);
-          fclose(xfp);
+            time(&now);
+            ptime = localtime(&now);
+            sprintf(tgt, "轉錄至 %s 看板", xboard);
+            xfp = fopen(fpath, "a");
+            sprintf(add, "\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, tgt, Btime(&hdr->pushtime)+3);
+            fprintf(xfp, "%s", add);
+            fclose(xfp);
         }
 
         /* Thor.981205: check 被轉的版有沒有列入紀錄? */
@@ -1375,61 +1375,61 @@ post_xcross(
 
 void
 post_history(
-  XO *xo,
-  HDR *fhdr)
+    XO *xo,
+    HDR *fhdr)
 {
-  int prev, chrono, next, pos, top, push=0;
-  char *dir;
-  HDR buf;
+    int prev, chrono, next, pos, top, push=0;
+    char *dir;
+    HDR buf;
 
 #ifdef  HAVE_BOTTOM
-  if (fhdr->xmode & POST_BOTTOM && fhdr->xmode & POST_COMPLETE)
-    return;
+    if (fhdr->xmode & POST_BOTTOM && fhdr->xmode & POST_COMPLETE)
+        return;
 #endif
 
 
-  dir = xo->dir;
-  pos = xo->pos;
-  top = xo->top;
+    dir = xo->dir;
+    pos = xo->pos;
+    top = xo->top;
 
-  chrono = fhdr->chrono;
-  push = fhdr->pushtime;
+    chrono = fhdr->chrono;
+    push = fhdr->pushtime;
 
 
-  if (brh_unread(push))
-    brh_add(push, push, push);
+    if (brh_unread(push))
+        brh_add(push, push, push);
 
-  if (!brh_unread(chrono))
-    //if ( !brh_unread(push))
-      return;
+    if (!brh_unread(chrono))
+        //if ( !brh_unread(push))
+            return;
 
-  if (--pos >= top)
-  {
-    prev = fhdr[-1].chrono;
-  }
-  else
-  {
-    if (!rec_get(dir, &buf, sizeof(HDR), pos))
-        prev = buf.chrono;
+    if (--pos >= top)
+    {
+        prev = fhdr[-1].chrono;
+    }
     else
-      prev = chrono;
-  }
+    {
+        if (!rec_get(dir, &buf, sizeof(HDR), pos))
+                prev = buf.chrono;
+        else
+            prev = chrono;
+    }
 
-  pos +=2;
-  if (pos < top + XO_TALL)
-      next = fhdr[1].chrono;
-  else
-  {
-    if (!rec_get(dir, &buf, sizeof(HDR), pos))
-      next = buf.chrono;
+    pos +=2;
+    if (pos < top + XO_TALL)
+            next = fhdr[1].chrono;
     else
-      next = chrono;
-  }
+    {
+        if (!rec_get(dir, &buf, sizeof(HDR), pos))
+            next = buf.chrono;
+        else
+            next = chrono;
+    }
 /*
-  if (push)
-    prev = chrono = next = push;
+    if (push)
+        prev = chrono = next = push;
 */
-  brh_add(prev, chrono, next);
+    brh_add(prev, chrono, next);
 
 }
 
@@ -1528,7 +1528,7 @@ post_browse(
         time_t now;
         time(&now);
 
-        snprintf(desc, sizeof(desc), "%s %s %s %d %s\n", Atime(&now), cuser.userid, currboard, hdr->chrono, ipv4addr);
+        snprintf(desc, sizeof(desc), "%s %s %s %lld %s\n", Atime(&now), cuser.userid, currboard, (long long)hdr->chrono, ipv4addr);
         f_cat(FN_BROWSE_LOG, desc);
 
         hdr_fpath(fpath, dir, hdr);
@@ -1803,12 +1803,12 @@ lazy_delete(
 {
     if (!strcmp(hdr->owner, cuser.userid))
     {
-        sprintf(hdr->title, "<< 本文章經 %s 刪除 >>", cuser.userid);
+        sprintf(hdr->title, "<< 本文章由 %s 刪除 >>", cuser.userid);
         hdr->xmode |= POST_DELETE;
     }
     else if (strlen(delete_reason) < 1)
     {
-        sprintf(hdr->title, "<< 本文章經 %s 刪除 >>", cuser.userid);
+        sprintf(hdr->title, "<< 本文章由 %s 刪除 >>", cuser.userid);
         hdr->xmode |= POST_MDELETE;
     }
     else
@@ -1969,33 +1969,33 @@ post_delete(
 
 static int
 post_clean_delete(
-  XO *xo)
+    XO *xo)
 {
-  int pos, cur, by_BM;
-  HDR *hdr;
+    int pos, cur, by_BM;
+    HDR *hdr;
 
-  pos = xo->pos;
-  cur = pos - xo->top;
-  hdr = (HDR *) xo_pool + cur;
+    pos = xo->pos;
+    cur = pos - xo->top;
+    hdr = (HDR *) xo_pool + cur;
 
-  by_BM = (strcmp(hdr->owner, cuser.userid) ? 1 : 0);
+    by_BM = (strcmp(hdr->owner, cuser.userid) ? 1 : 0);
 
-  if ((hdr->xmode & POST_MARKED) || (hdr->xmode & POST_LOCK) || !(bbstate & STAT_BOARD) )
-  {
-    return XO_NONE;
-  }
-
-  if (vans("是否直接砍除文章？[y/N]") == 'y')
-  {
-    currchrono = hdr->chrono;
-
-    if (!rec_del(xo->dir, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid, (void *)cmpchrono, 0))
+    if ((hdr->xmode & POST_MARKED) || (hdr->xmode & POST_LOCK) || !(bbstate & STAT_BOARD) )
     {
-      move_post(hdr, by_BM ? BRD_DELETED : BRD_JUNK, by_BM);
-      return XO_LOAD;
+        return XO_NONE;
     }
-  }
-  return XO_FOOT;
+
+    if (vans("是否直接砍除文章？[y/N]") == 'y')
+    {
+        currchrono = hdr->chrono;
+
+        if (!rec_del(xo->dir, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid, (void *)cmpchrono, 0))
+        {
+            move_post(hdr, by_BM ? BRD_DELETED : BRD_JUNK, by_BM);
+            return XO_LOAD;
+        }
+    }
+    return XO_FOOT;
 }
 
 #ifdef HAVE_POST_BOTTOM
@@ -2128,7 +2128,7 @@ post_state(
         outs("\033[m");
         outs("\n \033[1;37m★\033[m 文章位置: ");
         outs(fpath);
-#/*
+/*
         int k, l, m;
         k = l = m = 0;
         if (ghdr->chrono > ghdr->stamp)
@@ -2219,7 +2219,7 @@ post_state(
     bitmsg("Flag: ", "rmg---cdIEOR--------DLSMC-------", hdr->xmode);
     prints("Xid : %d\n", hdr->xid);
     prints("Modify : %d times\n", hdr->modifytimes);
-    prints("Chrono : %d Pushtime : %d\n", hdr->chrono, hdr->pushtime);
+    prints("Chrono : %lld Pushtime : %d\n", (long long)hdr->chrono, hdr->pushtime);
 
     vmsg(NULL);
 
@@ -2728,9 +2728,9 @@ int post_edit(XO *xo)
                 /* cache.090922: 修改次數檢查機制 */
                 /*
                     if (hdr->modifytimes < 0)
-                    hdr->modifytimes = 1;
+                        hdr->modifytimes = 1;
                     else
-                    hdr->modifytimes += 1;
+                        hdr->modifytimes += 1;
                  */
                 vmsg("修改完成");
             }
@@ -2945,7 +2945,7 @@ post_cross_terminator(  /* Thor.0521: 終極文章大法 */
                 int check_mode;
                 xmode = hdr->xmode;
 
-                /*      if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
+                /*if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
                     continue;*/
 
                 if (mode==1)
@@ -2975,9 +2975,9 @@ post_cross_terminator(  /* Thor.0521: 終極文章大法 */
 
                     cancel_post(hdr);
                     hdr->xmode |= POST_MDELETE;
-                    sprintf(hdr->title, "<< 本文章經 %s 做系統功\能刪除 >>", cuser.userid);
+                    sprintf(hdr->title, "<< 本文章由 %s 以系統功\能刪除 >>", cuser.userid);
                     /*hdr_fpath(fold, fpath, hdr);
-                      unlink(fold);*/
+                    unlink(fold);*/
                 }
 
                 if ((fwrite(hdr, sizeof(HDR), 1, fpw) != 1))
@@ -3088,7 +3088,7 @@ post_recommend_log(
     strncpy(c_time, ctime(&now), 24);
     c_time[24] = '\0';
 
-    sprintf(buf, "%s %s %s %s 板：%s(%d) from %s\n", c_time, cuser.userid, (mode == 0) ? "清除":"推薦", currboard, hdr->title, hdr->chrono, fromhost);
+    sprintf(buf, "%s %s %s %s 板：%s(%lld) from %s\n", c_time, cuser.userid, (mode == 0) ? "清除":"推薦", currboard, hdr->title, (long long)hdr->chrono, fromhost);
     f_cat(FN_RECOMMEND_LOG, buf);
 }
  */
@@ -3414,16 +3414,16 @@ post_recommend(
             else if (brd->battr & BRD_PUSHDEFINE)
             {
                 if (addscore == 1)
-                    sprintf(add, "\x1b[1;33m%02.2s %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;33m%2.2s %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else if (addscore == -1)
-                    sprintf(add, "\x1b[1;31m%02.2s\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;31m%2.2s\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else
                     sprintf(add, "\x1b[1;33m→\x1b[m \x1b[1;33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
             }
             else
                 sprintf(add, "\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
             /*
-                if (dashf(fpath))
+            if (dashf(fpath))
                 f_cat(fpath, add);
              */
             if ((fd = open(fpath, O_WRONLY | O_APPEND)) >= 0)
@@ -4210,7 +4210,7 @@ KeyFunc post_cb[] =
   -------------------------------------------------------------------------*/
 #if 0
 extern XO *xpost_xo;            /* Thor: dynamic programming for variable dir
-                             * name */
+                                 * name */
 extern XO *ypost_xo;
 #endif
 
@@ -4635,7 +4635,7 @@ xpost_browse(
         time_t now;
         time(&now);
 
-        snprintf(desc, sizeof(desc), "%s %s %s %d %s\n", Atime(&now), cuser.userid, currboard, hdr->chrono, ipv4addr);
+        snprintf(desc, sizeof(desc), "%s %s %s %lld %s\n", Atime(&now), cuser.userid, currboard, (long long)hdr->chrono, ipv4addr);
         f_cat(FN_BROWSE_LOG, desc);
 
         hdr_fpath(fpath, dir, hdr);

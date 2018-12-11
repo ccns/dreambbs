@@ -225,8 +225,10 @@ int t_banmsg(void);
 /* visio.c */
 void bell(void);
 #ifdef M3_USE_PFTERM
+void ochar(int ch);
 void outl(int line, unsigned char *msg);
 void outr(unsigned char *str);
+void oflush(void);
 #else                
 void move(int y, int x);
 void refresh(void);
@@ -292,6 +294,10 @@ void favorite_main(void);
 int Get_Socket(char *site, int *sock);
 int POP3_Check(char *site, char *account, char *passwd);
 int Ext_POP3_Check(char *site, char *account, char *passwd);
+#ifdef M3_USE_PMORE
+/* pmore.c */
+int pmore(const char *fpath, int promptend);
+#endif
 /* popupmenu.c */
 int popupmenu_ans(char *desc[], char *title, int x, int y);
 void popupmenu(MENU pmenu[], XO *xo, int x, int y);

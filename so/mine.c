@@ -235,11 +235,11 @@ void drawMap(int flShow)
 
 static int flLoseMine = 0;
 
-static void loseMine(void)
+static void loseMine(int is_cheat)
 {
     drawMap(1);
-    game_log(1, "\x1b[31;1m在 %.01f 秒時踩到地雷啦!!!", difftime(time(0), init_time));
-    vmsg("你輸了");
+    game_log(1, "\x1b[31;1m在 %.01f 秒時%s啦!!!", difftime(time(0), init_time), (is_cheat) ? "自爆" : "踩到地雷");
+    vmsg((is_cheat) ? "你自爆了" : "你輸了");
     flLoseMine = 1;
 }
 
@@ -249,7 +249,7 @@ void ExpandMap(int y, int x, int flTrace)
     {
         if (MineMap[y][x] & TILE_TAGGED || MineMap[y][x] & TILE_EXPAND) return;
         if ((MineMap[y][x] & TILE_MINE) && (!(MineMap[y][x] & TILE_TAGGED)))
-            { loseMine(); return; }
+            { loseMine(0); return; }
         MineMap[y][x] |= TILE_EXPAND;
         drawMapLine(y, 0);
     }
@@ -328,6 +328,7 @@ void playMine(void)
             drawMap(1);
             pressanykey(0);
             drawMap(0);
+            loseMine(1);
             break;
 
         case '\r':
@@ -420,7 +421,7 @@ start:
             for (x = 1; x < MAP_X + 1; x++)
                 if ((MineMap[y][x] & TILE_MINE) &&
                     !(MineMap[y][x] & TILE_TAGGED))
-                    { loseMine(); y = MAP_Y + 1; break; }
+                    { loseMine(0); y = MAP_Y + 1; break; }
 
         if (!flLoseMine)
         {

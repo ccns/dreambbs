@@ -69,43 +69,43 @@ char *msg)
 #else
 static void
 printchatline(
-  char *msg)
+    char *msg)
 {
-  int line;
-  extern screenline *cur_slp;
+    int line;
+    extern screenline *cur_slp;
 
-  line = chatline;
-  move(line, 0);
-  clrtoeol();
-  outs(msg);
-  outc('\n');
+    line = chatline;
+    move(line, 0);
+    clrtoeol();
+    outs(msg);
+    outc('\n');
 
-  if (frec)
-    fprintf(frec, "%s\n", msg);
+    if (frec)
+        fprintf(frec, "%s\n", msg);
 
-  if (++line == stop_line) {
-    int i;
-    screenline *last_slp;
-    line--;
-    move(i = 2, 0);
-    last_slp = cur_slp;
+    if (++line == stop_line) {
+        int i;
+        screenline *last_slp;
+        line--;
+        move(i = 2, 0);
+        last_slp = cur_slp;
 
-    while (++i <= line) {
-      move(i, 0);
-      memcpy(last_slp, cur_slp, sizeof(screenline));
-      last_slp->smod = 0;
-      last_slp->emod = ANSILINELEN;
-      last_slp->oldlen = ANSILINELEN;
-      last_slp->mode = SL_MODIFIED;
-      last_slp = cur_slp;
+        while (++i <= line) {
+            move(i, 0);
+            memcpy(last_slp, cur_slp, sizeof(screenline));
+            last_slp->smod = 0;
+            last_slp->emod = ANSILINELEN;
+            last_slp->oldlen = ANSILINELEN;
+            last_slp->mode = SL_MODIFIED;
+            last_slp = cur_slp;
+        }
     }
-  }
 
-  move(line, 0);
-  clrtoeol();
-  outs("\033[0m→");
-  clrtoeol();
-  chatline = line;
+    move(line, 0);
+    clrtoeol();
+    outs("\033[0m→");
+    clrtoeol();
+    chatline = line;
 }
 #endif
 
@@ -785,8 +785,8 @@ t_chat(void)
                     ch = chat_cmd(cfd, ptr);
 
                 /* Thor.980602: 有個要注意的小地方, 原本如果是『/』,
-                        會秀出 /help的畫面,
-                        現在打 /, 會變成 /p 切換 pager */
+                                會秀出 /help的畫面,
+                                現在打 /, 會變成 /p 切換 pager */
 
                 /* Thor.980925: 保留 ptr 最原始樣, 不加 /n */
                 for (cmdpos = MAXLASTCMD - 1; cmdpos; cmdpos--)

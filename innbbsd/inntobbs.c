@@ -233,7 +233,7 @@ readlines(              /* 讀入檔頭和內文 */
     if (!CONTROL)       /* 一般信件 */
     {
         /* itoc.030223.註解: 看到 path 裡面有自己站的名稱以後，信就不會進來，
-             避免站上的信被 bbslink 送去 news server 以後，又被自己用 bbsnnrp 取回 */
+           避免站上的信被 bbslink 送去 news server 以後，又被自己用 bbsnnrp 取回 */
         if (is_loopback(PATH, MYBBSID, strlen(MYBBSID)))
             return 0;
     }

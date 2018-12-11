@@ -1057,7 +1057,7 @@ char *Btime(time_t * clock)
 
     /* Thor.990329: y2k */
     /* Thor.990413: 最後的空格是用在 mail.c的bsmtp末, 在時間和user間空一格用,
-       嗯... 不知道放在這的好處是不是連空格也一起共用:P */
+                    嗯... 不知道放在這的好處是不是連空格也一起共用:P */
     sprintf(datemsg, "%02d/%02d/%02d%3d:%02d:%02d ",
             t->tm_year % 100, t->tm_mon + 1, t->tm_mday,
             t->tm_hour, t->tm_min, t->tm_sec);
@@ -1141,7 +1141,7 @@ char *str_ttl(char *title)
 void str_xor(char *dst,            /* Thor.990409: 任意長度任意binary seq, 至少要 src那麼長 */
              const char *src    /* Thor.990409: 任意長度str, 不含 \0 */
              /* Thor: 結果是將src xor到dst上, 若有0結果, 則不變,
-                所以dst長度必大於等於 src(以字串而言) */
+                      所以dst長度必大於等於 src(以字串而言) */
     )
 {
     register int cc;

@@ -19,7 +19,7 @@ void log_bank(
     char *who)
 {
     time_t now;
-    char c_time[25], c_buf[100]={};
+    char c_time[25], c_buf[100]={0};
 
     now = time(0);
     strncpy(c_time, ctime(&now), 24);
@@ -66,7 +66,7 @@ int point1_money(void)
 
     move(2, 0);
     prints("你的身上有 %9d 夢幣\n\n           %9d 優良點數"
-                   , acct.money, acct.point1);
+           , acct.money, acct.point1);
     if (acct.point1 < 1)
     {
         pmsg2("優良點數不足");
@@ -97,11 +97,11 @@ int point1_money(void)
         acct_save(&acct);
 
         time_t now;
-        char c_time[25], c_buf[100]={};
+        char c_time[25], c_buf[100]={0};
         now = time(0);
         strncpy(c_time, ctime(&now), 24);
         c_time[24] = '\0';
-        sprintf(c_buf, "%s %s 優良點數(%d)->夢幣(%d)\n", c_time, cuser.userid, num, temp);
+        sprintf(c_buf, "%s %s 優良點數(%d)->夢幣(%d)\n", c_time, cuser.userid, num, (int)temp);
         f_cat(FN_BANK, c_buf);
 
     }
@@ -221,7 +221,7 @@ TransferAccount(void)
         acct_save(&selfacct);
 
         time_t now;
-        char c_time[25], c_buf[100]={};
+        char c_time[25], c_buf[100]={0};
         now = time(0);
         strncpy(c_time, ctime(&now), 24);
         c_time[24] = '\0';
@@ -317,7 +317,7 @@ money_back(void)
         acct_save(&acct);
 
         time_t now;
-        char c_time[25], c_buf[100]={};
+        char c_time[25], c_buf[100]={0};
         now = time(0);
         strncpy(c_time, ctime(&now), 24);
         c_time[24] = '\0';

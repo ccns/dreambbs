@@ -52,7 +52,7 @@ BlackJack(void)
     int host_card[12], guest_card[12];
     int money;
 
-//  int CHEAT=0; /* 暗国把计, 1 碞国, 0 碞ぃ */
+//  int CHEAT=0; /* 国把计, 1 碞国, 0 碞ぃ */
     time_t now = time(0);
     time(&now);
     srand(time(NULL));
@@ -100,15 +100,13 @@ BlackJack(void)
                 }
             }
             while (m == 0);
-        };
+        }
 #endif
 
     /*  if (money>=20000) CHEAT=1;
-            if (CHEAT==1){
-                if (cardlist[1]<=3){
-                    tmp2=cardlist[50];
-                cardlist[50]=cardlist[1];
-                cardlist[1]=tmp2;
+        if (CHEAT==1){
+            if (cardlist[1]<=3){
+                SWAP(cardlist[50], cardlist[1]);
             }
         } */                            /* 国絏 */
 
@@ -148,7 +146,7 @@ BlackJack(void)
                 cuser_money += (money * seven);
 //              inmoney(money*seven);
                 game_log(2, "い \x1b[1;33m%d\x1b[m 刽 \x1b[1;31m  ⒍⒍⒍   \x1b[m"
-                        , money*seven);
+                         , money*seven);
                 pressanykey("眤临Τ \x1b[1;44;33m%d\x1b[m 刽", cuser_money);
                 flag = 1; m = 0;
             }
@@ -159,7 +157,7 @@ BlackJack(void)
                 move(3, 0); prints("\x1b[1;41;33m禬タ参 BLACK JACK !!! 眔贱 %d 刽\x1b[m", money*super_jack);
                 cuser_money += (money * super_jack);
                 game_log(2, "い \x1b[1;33m%d\x1b[m 刽 \x1b[1;41;33m タ参 ⑾⒇ \x1b[m"
-                        , money*super_jack);
+                         , money*super_jack);
                 pressanykey("眤临Τ \x1b[1;44;33m%d\x1b[m 刽", cuser_money);
                 flag = 1; m = 0;
             }
@@ -174,7 +172,7 @@ BlackJack(void)
 //              inmoney(money*aj);
                 game_log(2, "い \x1b[1;33m%d\x1b[m じ \x1b[1;44;33m Super⑾⒇ \x1b[m", money*aj);
                 pressanykey("眤临Τ \x1b[1;44;33m%d\x1b[m 刽", cuser_money);
-                flag = 1; m = 0;
+                flag = 1; m = 0; tmp = 0;
             }
 
             if (guest_point == 21 && guest_count == 1)
@@ -195,7 +193,7 @@ BlackJack(void)
 
             if (guest_point > 21)
             {
-                if (A_count > 0){guest_point -= 10; A_count--;};
+                if (A_count > 0){guest_point -= 10; A_count--;}
             }
             move(12, 0); clrtoeol(); prints("\x1b[1;32m翴计: \x1b[33m%d\x1b[m", host_point);
             move(14, 0); clrtoeol(); prints("\x1b[1;32m翴计: \x1b[33m%d\x1b[m", guest_point);
@@ -263,7 +261,7 @@ BlackJack(void)
                 }
                 if (host_point > 21)
                 {
-                    if (AA_count > 0){host_point -= 10; AA_count--;};
+                    if (AA_count > 0){host_point -= 10; AA_count--;}
                 }
                 move(12, 0); clrtoeol(); prints("\x1b[1;32m翴计: \x1b[33m%d\x1b[m", host_point);
                 move(14, 0); clrtoeol(); prints("\x1b[1;32m翴计: \x1b[33m%d\x1b[m", guest_point);

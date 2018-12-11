@@ -602,8 +602,8 @@ static struct pipcommands pipsystemlist[] =
     {pip_write_backup,          '4',    '4'},
     {pip_read_backup,           '5',    '5'},
     /*
-        {pip_divine,            'o',    'O'},
-        {pip_results_show,      's',    'S'},
+    {pip_divine,                'o',    'O'},
+    {pip_results_show,          's',    'S'},
     */
     {NULL,                     '\0',   '\0'}
 };
@@ -903,8 +903,8 @@ int mode)
         color1 = 37;
     sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
     sprintf(buf
-           , " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m"
-           , yo[age], inbuf1, tm, color1, d.money);
+            , " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m"
+            , yo[age], inbuf1, tm, color1, d.money);
     prints(buf);
 
     move(2, 0);
@@ -932,8 +932,8 @@ int mode)
         color3 = 37;
 
     sprintf(buf
-           , " \x1b[1;32m[生  命]\x1b[%dm %-10d\x1b[32m[法  力]\x1b[%dm %-10d\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m "
-           , color1, d.hp, color2, d.mp, d.weight, color3, d.tired);
+            , " \x1b[1;32m[生  命]\x1b[%dm %-10d\x1b[32m[法  力]\x1b[%dm %-10d\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m "
+            , color1, d.hp, color2, d.mp, d.weight, color3, d.tired);
     prints(buf);
 
     move(3, 0);
@@ -962,8 +962,8 @@ int mode)
     else
         color4 = 37;
     sprintf(buf
-           , " \x1b[1;32m[命 MAX]\x1b[37m %-10d\x1b[32m[法 MAX]\x1b[37m %-10d\x1b[32m[髒／病]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[快／滿]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m"
-           , d.maxhp, d.maxmp, color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
+            , " \x1b[1;32m[命 MAX]\x1b[37m %-10d\x1b[32m[法 MAX]\x1b[37m %-10d\x1b[32m[髒／病]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[快／滿]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m"
+            , d.maxhp, d.maxmp, color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
     prints(buf);
     if (mode == 0)  /*主要畫面*/
     {
@@ -1008,8 +1008,8 @@ int mode)
         else
             color4 = 37;
         sprintf(buf
-               , " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m"
-               , color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
+                , " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m"
+                , color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
         prints(buf);
 
     }
@@ -1017,8 +1017,8 @@ int mode)
     {
         move(4, 0);
         sprintf(buf
-               , " \x1b[1;36m[愛心]\x1b[37m%-5d\x1b[36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[道德]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[家事]\x1b[37m%-5d\x1b[0m"
-               , d.love, d.wisdom, d.character, d.art, d.ethics, d.brave, d.homework);
+                , " \x1b[1;36m[愛心]\x1b[37m%-5d\x1b[36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[道德]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[家事]\x1b[37m%-5d\x1b[0m"
+                , d.love, d.wisdom, d.character, d.art, d.ethics, d.brave, d.homework);
         prints(buf);
 
     }
@@ -1026,8 +1026,8 @@ int mode)
     {
         move(4, 0);
         sprintf(buf
-               , " \x1b[1;36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[攻擊]\x1b[37m%-5d\x1b[36m[防禦]\x1b[37m%-5d\x1b[36m[速度]\x1b[37m%-5d\x1b[0m"
-               , d.wisdom, d.character, d.art, d.brave, d.attack, d.resist, d.speed);
+                , " \x1b[1;36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[攻擊]\x1b[37m%-5d\x1b[36m[防禦]\x1b[37m%-5d\x1b[36m[速度]\x1b[37m%-5d\x1b[0m"
+                , d.wisdom, d.character, d.art, d.brave, d.attack, d.resist, d.speed);
         prints(buf);
 
     }
@@ -1265,7 +1265,7 @@ time_t cnow)
         else
             d.satisfy += 2;
         lasttime += stime;
-    };
+    }
     /*快樂度滿意度最大值設定*/
     if (d.happy > 100)
         d.happy = 100;
@@ -1802,7 +1802,7 @@ pip_live_again(void)
     d.maxmp = d.maxmp * ALIVE;
     d.mp = d.maxmp;
 
-    /*變的不快樂*/
+    /*變得不快樂*/
     d.happy = 0;
     d.satisfy = 0;
 
@@ -2146,13 +2146,13 @@ int oldnum[])
                 }
                 else
                 {
-                    sprintf(inbuf, "確定買入物品 [%s] 數量 %d 個嗎?(店家賣價 %d) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money);
+                    sprintf(inbuf, "確定買入物品 [%s] 數量 %ld 個嗎?(店家賣價 %ld) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money);
                     getdata(b_lines - 1, 1, inbuf, genbuf, 2, DOECHO, 0);
                     if (genbuf[0] == 'y' || genbuf[0] == 'Y')
                     {
                         oldnum[choice] += smoney;
                         d.money -= smoney * p[choice].money;
-                        sprintf(inbuf, "老闆給了你%d個%s", smoney, p[choice].name);
+                        sprintf(inbuf, "老闆給了你%ld個%s", smoney, p[choice].name);
                         vmsg(inbuf);
                         vmsg(p[choice].msguse);
                         if (mode == 3 && choice == 1)
@@ -2217,13 +2217,13 @@ int oldnum[])
                 }
                 else
                 {
-                    sprintf(inbuf, "確定賣出物品 [%s] 數量 %d 個嗎?(店家買價 %d) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money*8 / 10);
+                    sprintf(inbuf, "確定賣出物品 [%s] 數量 %ld 個嗎?(店家買價 %ld) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money*8 / 10);
                     getdata(b_lines - 1, 1, inbuf, genbuf, 2, DOECHO, 0);
                     if (genbuf[0] == 'y' || genbuf[0] == 'Y')
                     {
                         oldnum[choice] -= smoney;
                         d.money += smoney * p[choice].money * 8 / 10;
-                        sprintf(inbuf, "老闆拿走了你的%d個%s", smoney, p[choice].name);
+                        sprintf(inbuf, "老闆拿走了你的%ld個%s", smoney, p[choice].name);
                         vmsg(inbuf);
                     }
                     else
@@ -4220,7 +4220,7 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
     smoney = classgrade * classmoney[classnum][0] + classmoney[classnum][1];
     move(b_lines - 2, 0);
     clrtoeol();
-    sprintf(inbuf, "[%8s%4s課程]要花 $%d，確定要嗎??[y/N]: ", classword[classnum][0], classrank[classgrade], smoney);
+    sprintf(inbuf, "[%8s%4s課程]要花 $%ld，確定要嗎??[y/N]: ", classword[classnum][0], classrank[classgrade], smoney);
     getdata(b_lines - 2, 1, inbuf, ans, 2, DOECHO, 0);
     if (ans[0] != 'y' && ans[0] != 'Y')  return 0;
     if (d.money < smoney)
@@ -4915,7 +4915,7 @@ int first)
                     sprintf(buf, "普通攻擊，對方體力減低%d", dinjure);
                     vmsg(buf);
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了普通攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
-                           , d.name, opponent->pip->name, dinjure);
+                            , d.name, opponent->pip->name, dinjure);
                 }
                 opponent->pip->resistmode = 0;
                 opponent->pip->msgcount++;
@@ -4950,7 +4950,7 @@ int first)
                         sprintf(buf, "全力攻擊，對方體力減低%d", dinjure);
                         vmsg(buf);
                         sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了全力攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
-                               , d.name, opponent->pip->name, dinjure);
+                                , d.name, opponent->pip->name, dinjure);
                     }
                     else
                     {
@@ -5012,7 +5012,7 @@ int first)
                             sprintf(buf, "魔法攻擊，對方體力減低%d", dinjure);
                             vmsg(buf);
                             sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了魔法攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
-                                   , d.name, opponent->pip->name, dinjure);
+                                    , d.name, opponent->pip->name, dinjure);
                         }
                     }
 
@@ -5229,7 +5229,7 @@ pip_ending_screen(void)
     system(buf);
     sprintf(buf, "得到 %d 元，%d 點經驗值", endgrade*10*ba, endgrade*10);
     vmsg(buf);
-    vmsg("下一頁是小雞資料  趕快copy下來做紀念");
+    vmsg("下一頁是小雞資料  趕快copy下來作紀念");
     pip_data_list(cuser.userid);
     vmsg("歡迎再來挑戰....");
     /*記錄開始*/
@@ -6381,7 +6381,7 @@ int pip_divine(void) /*占卜師來訪*/
     if (d.money >= money)
     {
         randvalue = rand() % 5;
-        sprintf(buf, "你要占卜嗎? 要花%d元喔...[y/N]: ", money);
+        sprintf(buf, "你要占卜嗎? 要花%ld元喔...[y/N]: ", money);
         getdata(12, 14, buf, ans, 2, 1, 0);
         if (ans[0] == 'y' || ans[0] == 'Y')
         {
@@ -6425,7 +6425,7 @@ pip_money(void)
     if (!d.name[0] || d.death) return 0;
     clrchyiuan(6, 18);
     /* move(12, 0);
-      clrtobot();*/
+    clrtobot();*/
     prints("你身上有 %d 次點歌次數，雞金 %d 元\n", cuser.request, d.money);
     outs("\n一次換一千雞金唷!!\n");
     while (money < 0 || money > cuser.request)
@@ -6486,7 +6486,7 @@ char *genbuf)
     FILE *fs;
     char buf[200];
     /*char yo[14][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
-            "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
+                      "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
     char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
                       "成年", "壯年", "更年", "老年", "古稀", "神仙"
                      };
@@ -6918,7 +6918,7 @@ char *userid)
     FILE *fs;
 
     /* if (!isprint(userid[0]))*/
-    usr_fpath(buf, cuser.userid, "chicken");
+        usr_fpath(buf, cuser.userid, "chicken");
     /* else
         usr_fpath(buf, userid, "chicken");*/
 
@@ -8041,7 +8041,7 @@ struct magicset *p)
     do
     {
         move(16, 4);
-        sprintf(buf, "你想使用那一個%8s呢?  [Q]放棄: ", p[0].name);
+        sprintf(buf, "你想使用哪一個%8s呢?  [Q]放棄: ", p[0].name);
         getdata(16, 4, buf, ans, 2, 1, 0);
         if (ans[0] != 'q' && ans[0] != 'Q')
         {
@@ -8134,7 +8134,7 @@ UTMP *opt)
     do
     {
         move(16, 4);
-        sprintf(buf, "你想使用那一個%8s呢?  [Q]放棄: ", p[0].name);
+        sprintf(buf, "你想使用哪一個%8s呢?  [Q]放棄: ", p[0].name);
         getdata(16, 4, buf, ans, 2, 1, 0);
         if (ans[0] != 'q' && ans[0] != 'Q')
         {
@@ -8659,8 +8659,8 @@ int mode)
         color1 = 37;
     sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
     sprintf(buf
-           , " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m"
-           , yo[age], inbuf1, m, color1, d.money);
+            , " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m"
+            , yo[age], inbuf1, m, color1, d.money);
     prints(buf);
 
     move(2, 0);
@@ -8690,8 +8690,8 @@ int mode)
     sprintf(inbuf1, "%d/%d", d.hp, d.maxhp);
     sprintf(inbuf2, "%d/%d", d.mp, d.maxmp);
     sprintf(buf
-           , " \x1b[1;32m[生  命]\x1b[%dm %-10s\x1b[32m[法  力]\x1b[%dm %-10s\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m "
-           , color1, inbuf1, color2, inbuf2, d.weight, color3, d.tired);
+            , " \x1b[1;32m[生  命]\x1b[%dm %-10s\x1b[32m[法  力]\x1b[%dm %-10s\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m "
+            , color1, inbuf1, color2, inbuf2, d.weight, color3, d.tired);
     prints(buf);
 
     move(3, 0);
@@ -8720,8 +8720,8 @@ int mode)
     else
         color4 = 37;
     sprintf(buf
-           , " \x1b[1;32m[髒  髒]\x1b[%dm %-4d      \x1b[32m[病  氣]\x1b[%dm %-4d      \x1b[32m[快樂度]\x1b[%dm %-4d      \x1b[32m[滿意度]\x1b[%dm %-4d\x1b[0m"
-           , color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
+            , " \x1b[1;32m[髒  髒]\x1b[%dm %-4d      \x1b[32m[病  氣]\x1b[%dm %-4d      \x1b[32m[快樂度]\x1b[%dm %-4d      \x1b[32m[滿意度]\x1b[%dm %-4d\x1b[0m"
+            , color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
     prints(buf);
     if (mode == 1)/*餵食*/
     {
@@ -8751,8 +8751,8 @@ int mode)
         else
             color4 = 37;
         sprintf(buf
-               , " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m"
-               , color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
+                , " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m"
+                , color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
         prints(buf);
 
     }

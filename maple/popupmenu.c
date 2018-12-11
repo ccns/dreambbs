@@ -482,10 +482,10 @@ draw_menu_des(char *desc[], char *title, int x, int y, int cur)
 }
 
 /*------------------------------------------------------------- */
-/* verit . desc 第一各必須有兩個 char,                          */
-/*              第一各字元代表一開始游標停的位置                */
-/*              第二各字元代表按下 KEY_LEFT 的預設回傳值        */
-/*         desc 最後一各必須為 NULL                             */
+/* verit . desc 第一個必須有兩個 char,                          */
+/*              第一個字元代表一開始游標停的位置                */
+/*              第二個字元代表按下 KEY_LEFT 的預設回傳值        */
+/*         desc 最後一個必須為 NULL                             */
 /*------------------------------------------------------------- */
 int
 popupmenu_ans(char *desc[], char *title, int x, int y)

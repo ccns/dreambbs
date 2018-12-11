@@ -1,7 +1,7 @@
 # ------------------------------------------------------ #
 #  lib/Makefile  ( NTHU CS MapleBBS Ver 3.00 )           #
 # ------------------------------------------------------ #
-#  author : opus.bbs@bbs.cs.nthu.edu.tw	                 #
+#  author : opus.bbs@bbs.cs.nthu.edu.tw                  #
 #  target : Makefile for MapleBBS library routines       #
 #  create : 95/03/29                                     #
 #  update : 95/12/15                                     #

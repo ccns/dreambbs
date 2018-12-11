@@ -291,7 +291,7 @@
 
 #undef  HAVE_COUNT_BOARD        /* visor.20030816: 看板資訊統計 */
 
-#undef  MODE_STAT               /* 觀察及統計 user 的生態, 以做為經營方針 */
+#undef  MODE_STAT               /* 觀察及統計 user 的生態, 以作為經營方針 */
 
 #define HAVE_DECLARE            /* 使某些title更明顯 */
 

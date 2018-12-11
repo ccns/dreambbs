@@ -2292,7 +2292,7 @@ void brd_edit(int bno)
         else
         {
             char *bname = bhdr->brdname;
-            /* 以免造成*bname為NULL時，就會砍到 gem/brd and brd。 statue.000728 */
+            /* 以免造成*bname為NULL時，會砍到 gem/brd and brd。 statue.000728 */
             if (*bname)
             {
                 char cmd[256];

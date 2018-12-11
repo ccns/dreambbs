@@ -1280,7 +1280,7 @@ ve_header(
                 HAS_PERM(PERM_DENYNICK) ? cutmp->username : cuser.username
 #endif
 
-               , curredit & EDIT_OUTGO ? str_post1 : str_post2, currboard);
+                , curredit & EDIT_OUTGO ? str_post1 : str_post2, currboard);
         }
     }
     fprintf(fp, "標題: %s\n時間: %s\n", title, ctime(&now));

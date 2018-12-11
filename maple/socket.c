@@ -191,7 +191,7 @@ Ext_POP3_Check(
                 }
                 break;
             case 2:
-                fprintf(fsock, "pass !@#$%^&*(\r\n");
+                fprintf(fsock, "pass !@#$%%^&*(\r\n");
                 while (1)
                 {
                     fgets(buf, 512, fsock);

@@ -420,7 +420,7 @@ sover_post(
         for (str = BODY_BUF;; str = ptr + 1)
         {
             ptr = strchr(str, '\n');
-            if (!ptr)           /* 找到文章最後了還找不到空行，那麼整個檔案都當做內文 */
+            if (!ptr)           /* 找到文章最後了還找不到空行，那麼整個檔案都當作內文 */
             {
                 BODY = BODY_BUF;
                 break;
@@ -523,7 +523,7 @@ send_outgoing(
         else if (cc == '.')
         {
             /* If the text contained a period as the first character of the text
-                 line in the original, that first period is doubled. */
+               line in the original, that first period is doubled. */
             if (str == BODY || str[-1] == '\n')
                 fputc('.', SERVERwfp);
         }

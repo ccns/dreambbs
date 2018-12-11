@@ -2,6 +2,12 @@
 #define __PFTERM_H__
 
 //////////////////////////////////////////////////////////////////////////
+// Flat Terminal Data Type
+//////////////////////////////////////////////////////////////////////////
+
+typedef unsigned char ftattr;   // primitive attribute type
+
+//////////////////////////////////////////////////////////////////////////
 // Flat Terminal API
 //////////////////////////////////////////////////////////////////////////
 
@@ -13,10 +19,10 @@ int     resizeterm  (int rows, int cols);
 int     endwin      (void);
 
 // attributes
-//ftattr  attrget     (void);
-//void    attrset     (ftattr attr);
-//void    attrsetfg   (ftattr attr);
-//void    attrsetbg   (ftattr attr);
+ftattr  attrget     (void);
+void    attrset     (ftattr attr);
+void    attrsetfg   (ftattr attr);
+void    attrsetbg   (ftattr attr);
 
 // cursor
 void    getyx       (int *y, int *x);
@@ -72,5 +78,11 @@ void    standend    (void);
 
 // grayout advanced control
 void    grayout     (int y, int end, int level);
+
+//////////////////////////////////////////////////////////////////////////
+// environment specific
+//////////////////////////////////////////////////////////////////////////
+void    scr_dump    (screen_backup_t *psb);
+void    scr_restore (const screen_backup_t *psb);
 
 #endif // __PFTERM_H__
