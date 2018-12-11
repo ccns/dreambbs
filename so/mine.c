@@ -42,13 +42,14 @@ enum {  MAP_MAXY = 20,
 static int MAP_Y = MAP_MAXY, MAP_X = MAP_MAXX;
 static int TotalMines = 0, TaggedMines = 0, currx = 0, curry = 0;
 static char MineMap[ MAP_MAXY+2 ][ MAP_MAXX+2 ];
-extern int cur_col;
 int fasttime[4];
 
 void clrtokol(void)
 {
     int n;
-    for (n = cur_col;n < 17;n++)
+    int y, x;
+    getyx(&y, &x);
+    for (n = x;n < 17;n++)
         outc(' ');
 }
 
