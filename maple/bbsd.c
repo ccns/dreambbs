@@ -1477,18 +1477,21 @@ start_daemon(
 
 
 static inline void
-reaper(void)
+reaper(int signum)
 {
+    (void)signum;
     while (waitpid(-1, NULL, WNOHANG | WUNTRACED) > 0);
 }
 
 
 #ifdef  SERVER_USAGE
 static void
-servo_usage(void)
+servo_usage(int signum)
 {
     struct rusage ru;
     FILE *fp;
+
+    (void)signum;
 
     fp = fopen("run/bbs.usage", "a");
 
@@ -1533,8 +1536,9 @@ servo_usage(void)
 
 
 static void
-main_term(void)
+main_term(int signum)
 {
+    (void)signum;
 #ifdef  SERVER_USAGE
     servo_usage();
 #endif
@@ -1614,7 +1618,7 @@ int main(int argc, char *argv[])
         csock = accept(0, (struct sockaddr *) &sin, (socklen_t *) &value);
         if (csock < 0)
         {
-            reaper();
+            reaper(0);
             continue;
         }
 
