@@ -1641,7 +1641,7 @@ int u_addr(void)
                         gem_main();
                         talk_main();
                         cutmp->ufo |= UFO_BIFF;
-                        msg = "身份確認成功，立刻提昇權限";
+                        msg = "身份確認成功\，立刻提昇權限";
                         break;
                     }
                     else
@@ -3070,7 +3070,7 @@ int u_verify(void)
             gem_main();
             talk_main();
             cutmp->ufo |= UFO_BIFF;
-            vmsg("身份確認成功，立刻提昇權限");
+            vmsg("身份確認成功\，立刻提昇權限");
         }
     }
 
