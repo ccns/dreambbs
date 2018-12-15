@@ -624,7 +624,7 @@ a_innbbs(void)
                 i++;
             } while (i <= ch);
 
-            outf(FOOTER_INNBBS);
+            outf(FEETER_INNBBS);
             move(3 + cur, 0);
             outc('>');
             redraw = 0;
