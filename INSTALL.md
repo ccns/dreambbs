@@ -145,10 +145,10 @@
 #! /bin/sh
 # MapleBBS-WindTop-DreamBBS
 
-su -c bbs '/home/bbs/bin/camera'
-su -c bbs '/home/bbs/bin/account'
-su -c bbs '/home/bbs/bin/acpro'
-su -c bbs '/home/bbs/bin/makefw'
+su bbs -c '/home/bbs/bin/camera'
+su bbs -c '/home/bbs/bin/account'
+su bbs -c '/home/bbs/bin/acpro'
+su bbs -c '/home/bbs/bin/makefw'
 
 ```
 
@@ -178,7 +178,7 @@ service telnet
 ```
 
 # 前略..
-su -c bbs '/home/bbs/bin/bbsd 3456'  # 大於3000的備用port可這樣設定
+su bbs -c '/home/bbs/bin/bbsd 3456'  # 大於3000的備用port可這樣設定
 /home/bbs/bin/bbsd                   # port 23 請直接用 root 權限啟動
 
 ```
