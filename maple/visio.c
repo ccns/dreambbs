@@ -1247,8 +1247,9 @@ vs_restore(
 #ifdef M3_USE_PFTERM
 #define VMSG_NULL "\033[1;37;45m                              ● 請按任意鍵繼續 ●                           \033[m"
 
-vmsg(msg)
-char *msg;                   /* length <= 54 */
+int
+vmsg(
+    char *msg)                   /* length <= 54 */
 {
     static int old_b_cols = 23;
     static char foot[512] = VMSG_NULL;

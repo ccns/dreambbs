@@ -18,9 +18,9 @@
 /* ----------------------------------------------------- */
 
 static void
-draw_line(x, y, msg)
-    int x, y;
-    unsigned char *msg;
+draw_line(
+    int x, int y,
+    unsigned char *msg)
 {
     /* hrs.090928: 讓 terminal 去處理 */
     move(x, y);
@@ -41,9 +41,9 @@ static int x_roll;
 
 
 static void
-draw_line(x, y, msg)    /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
-    int x, y;
-    unsigned char *msg;
+draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
+    int x, int y,
+    unsigned char *msg)
 {
     unsigned char *str, *ptr;
     unsigned char data[ANSILINELEN];

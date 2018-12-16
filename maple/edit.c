@@ -573,8 +573,8 @@ delete_char(
 
 
 void
-ve_string(str)
-    unsigned char *str;
+ve_string(
+    unsigned char *str)
 {
     int ch;
 
@@ -658,9 +658,9 @@ ve_ansi(void)
 
 
 static textline *
-ve_line(this, str)
-    textline *this;
-    unsigned char *str;
+ve_line(
+    textline *this,
+    unsigned char *str)
 {
     int cc, len;
     unsigned char *data;
@@ -1580,8 +1580,8 @@ ve_filer(
 
 
 static void
-ve_outs(text)
-    unsigned char *text;
+ve_outs(
+    unsigned char *text)
 {
     int ch;
     unsigned char *tail;
