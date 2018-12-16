@@ -13,7 +13,7 @@ typedef struct textline
     struct textline *prev;
     struct textline *next;
     int len;
-    unsigned char data[ANSILINELEN];
+    char data[ANSILINELEN];
 }        textline;
 
 
@@ -224,7 +224,7 @@ ansi2n(
     int ansix,
     textline *line)
 {
-    unsigned char *data, *tmp;
+    char *data, *tmp;
     int ch;
 
     data = tmp = line->data;
@@ -235,7 +235,7 @@ ansi2n(
         {
             for (;;)
             {
-                ch = *++tmp;
+                ch = (unsigned char) *++tmp;
                 if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */ )
                 {
                     tmp++;
@@ -260,7 +260,7 @@ n2ansi(
     int nx,
     textline *line)
 {
-    unsigned char *tmp, *nxp;
+    char *tmp, *nxp;
     int ansix;
     int ch;
 
@@ -274,7 +274,7 @@ n2ansi(
         {
             for (;;)
             {
-                ch = *++tmp;
+                ch = (unsigned char) *++tmp;
                 if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */ )
                 {
                     tmp++;
@@ -341,7 +341,7 @@ ve_split(
     if (len >= 0)
     {
         textline *p, *n;
-        unsigned char *ptr;
+        char *ptr;
 
         line->len = pos;
         p = ve_alloc();
@@ -386,7 +386,7 @@ ve_join(
     textline *line)
 {
     textline *n;
-    unsigned char *data, *s;
+    char *data, *s;
     int sum, len;
 
     if (!(n = line->next))
@@ -464,7 +464,7 @@ ve_char(
 {
     textline *p;
     int col, len, mode;
-    unsigned char *data;
+    char *data;
 
     p = vx_cur;
     len = p->len;
@@ -515,7 +515,7 @@ ve_char(
         ve_split(p, VE_WIDTH - 3);
 
 #if 0
-        unsigned char *str = data + len;
+        char *str = data + len;
 
         while (*--str == ' ')
         {
@@ -558,7 +558,7 @@ delete_char(
     textline *cur,
     int col)
 {
-    unsigned char *dst, *src;
+    char *dst, *src;
 
     cur->len--;
     dst = cur->data + col;
@@ -663,7 +663,7 @@ ve_line(
     char *str)
 {
     int cc, len;
-    unsigned char *data;
+    char *data;
     textline *line;
 
     do
@@ -806,7 +806,7 @@ tbf_write(void)
 {
     FILE *fp;
     textline *p;
-    unsigned char *data;
+    char *data;
 
     if ((fp = tbf_open()))
     {
@@ -948,7 +948,7 @@ static int
 words_check(void)
 {
     textline *p;
-    unsigned char *str, *pend;
+    char *str, *pend;
     int phonetic;               /* 注音文數目 */
 
     wordsnum = phonetic = 0;
@@ -965,9 +965,9 @@ words_check(void)
             pend = str + p->len;
             while (str < pend)
             {
-                if (str[0] >= 0x81 && str[0] < 0xFE && str[1] >= 0x40 && str[1] <= 0xFE && str[1] != 0x7F)      /* 中文字 BIG5+ */
+                if ((unsigned char) str[0] >= 0x81 && (unsigned char) str[0] < 0xFE && (unsigned char) str[1] >= 0x40 && (unsigned char) str[1] <= 0xFE && (unsigned char) str[1] != 0x7F)      /* 中文字 BIG5+ */
                 {
-                    if (str[0] == 0xA3 && str[1] >= 0x74 && str[1] <= 0xBA)     /* 注音文 */
+                    if ((unsigned char) str[0] == 0xA3 && (unsigned char) str[1] >= 0x74 && (unsigned char) str[1] <= 0xBA)     /* 注音文 */
                         phonetic++;
                     str++;      /* 中文字雙位元，要多加一次 */
                 }

@@ -220,7 +220,7 @@ vs_line(char *msg, int x, int y)
         word++;
     }
 
-    strncpy(buf, sl[x].data, str - tmp);
+    strncpy(buf, (char *) sl[x].data, str - tmp);
 
     while (word++<y)
         strcat(buf, " ");
@@ -682,7 +682,7 @@ Every_Z_Screen(void)
     for (i=0; i<24; ++i)
     {
         memset(buf, 0, sizeof(buf));
-        strncpy(buf, sl[i].data, sl[i].len);
+        strncpy(buf, (char *) sl[i].data, sl[i].len);
         fprintf(fp, "%s\n", buf);
     }
     fclose(fp);

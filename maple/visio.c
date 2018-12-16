@@ -397,10 +397,10 @@ standoutput(
     screenline *slp,
     int ds, int de)
 {
-    unsigned char *data;
+    char *data;
     int sso, eso;
 
-    data = slp->data;
+    data = (char *) slp->data;
     sso = slp->sso;
     eso = slp->eso;
 
@@ -492,7 +492,7 @@ vs_redraw(void)
             if (mode & SL_STANDOUT)
                 standoutput(slp, 0, len);
             else
-                output(slp->data, len);
+                output((char *) slp->data, len);
 
             tc_col = width;
         }
@@ -568,7 +568,7 @@ refresh(void)
                 if (mode & SL_STANDOUT)
                     standoutput(slp, smod, emod);
                 else
-                    output(&slp->data[smod], emod - smod);
+                    output((char *) &slp->data[smod], emod - smod);
 
                 /* tc_col = ansicol(slp, emod); */
 
@@ -1059,7 +1059,7 @@ void outl (int line, char *msg)   /* line output */
 void outr (char *str)
 /* restricted output (strip the ansiscreen contolling code only) */
 {
-    unsigned char ch, buf[256], *p = NULL;
+    char ch, buf[256], *p = NULL;
     int ansi = 0;
 
     while ((ch = *str++))
@@ -1091,7 +1091,7 @@ void outr (char *str)
             }
         }
         else
-            outc(ch);
+            outc((unsigned char)ch);
     }
 }
 
@@ -1101,14 +1101,14 @@ void
 prints(char *fmt, ...)
 {
     va_list args;
-    unsigned char buf[512], *str;
+    char buf[512], *str;
 //  char buf[512], *str;
     int cc;
 
     va_start(args, fmt);
     vsprintf(buf, fmt, args);
     va_end(args);
-    for (str = buf; (cc = *str); str++)
+    for (str = buf; (cc = (unsigned char) *str); str++)
         outc(cc);
 }
 
@@ -1439,8 +1439,8 @@ grayout(int type)
         newslp[i].oldlen = newslp[i].len;
         newslp[i].len = newslp[i].width + 7 + 3;
 
-        str_ansi(buf, slp[i].data, slp[i].width + 1);
-        sprintf(newslp[i].data, "%s%s\033[m", prefix[type], buf);
+        str_ansi(buf, (char *) slp[i].data, slp[i].width + 1);
+        sprintf((char *) newslp[i].data, "%s%s\033[m", prefix[type], buf);
     }
     vs_restore(newslp);
 }

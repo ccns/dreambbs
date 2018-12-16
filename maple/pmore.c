@@ -258,7 +258,7 @@
  // input/output API
  #define getdata(y, x, msg, buf, size, mode)     vget(y, x, msg, buf, size, mode)
  #define getdata_buf(y, x, msg, buf, size, mode) vget(y, x, msg, buf, size, GCARRY|mode)
- #define outs(x)                            outs((unsigned char*)(x))
+ #define outs(x)                            outs((char*)(x))
  // variables
  #define t_lines    (b_lines + 1)
  #define t_columns  (b_cols + 1)
