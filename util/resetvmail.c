@@ -60,7 +60,8 @@ reaper(
         else if ((ptr = strstr(acct.email, "mail86.yzu.edu.tw")));
         else if ((ptr = strstr(acct.email, "mail87.yzu.edu.tw")));
         else if ((ptr = strstr(acct.email, "mail88.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email, "mail.yzu.edu.tw")));
+        else if ((ptr = strstr(acct.email, "mail.yzu.edu.tw")))
+            ;
         if (ptr)
         {
             acct.userlevel &= ~PERM_VALID;
