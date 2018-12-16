@@ -229,7 +229,7 @@ void ochar(int ch);
 void outl(int line, unsigned char *msg);
 void outr(unsigned char *str);
 void oflush(void);
-#else                
+#else
 void move(int y, int x);
 void refresh(void);
 void clear(void);
