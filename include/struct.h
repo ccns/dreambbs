@@ -570,7 +570,7 @@ typedef struct BoardReadingHistory
     int bcount;                                    /* Thor.980902:沒用到? */
                                                    /* Thor.980902:給自己看的 */
     /* --------------------------------------------------- */
-    /* time_t {final, begin} / {final | BRH_SIGN}    */
+    /* time_t {final, begin} / {final | BRH_SIGN}          */
     /* --------------------------------------------------- */
                             /* Thor.980904:註解: BRH_SIGN代表final begin 相同 */
                             /* Thor.980904:註解: 由大到小排列, 存放已讀interval */

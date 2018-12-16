@@ -6,7 +6,7 @@
 /* ----------------------------------------------------- */
 
 /* Thor.990311: 之所以用暴力而簡單的方式, 是為了考慮讓一般util也能用到此attr
-   特別要注意, working directory必須為 BBSHOME */
+                特別要注意, working directory必須為 BBSHOME */
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -15,11 +15,15 @@
 #include "dao.h"
 
 #if 0
-int key;
-key < 0 is reserved.key & 0xff == 0 is reserved.0x000000 ? ? <key <
-    0x0000ff ? ? is reserved by maple.
-    org sizeof(attr) : key & 0xff file : $userhome /.ATTR
+  int key;
+  key < 0 is reserved.
+  key & 0xff == 0 is reserved.
+  0x000000?? < key < 0x0000ff?? is reserved by maple.org
+  sizeof(attr): key & 0xff
+
+  file: $userhome/.ATTRP
 #endif
+
 #if 0
 #define ATTR_OTHELLO_TOTAL 0x00001004
 #define ATTR_FIVE_TOTAL 0x00001104
@@ -27,7 +31,7 @@ key < 0 is reserved.key & 0xff == 0 is reserved.0x000000 ? ? <key <
 #define ATTR_FIVE_WIN 0x00001504
 #endif
 
-    /* return value if exist, else no change (it can set to default value) */
+/* return value if exist, else no change (it can set to default value) */
 int attr_get(char *userid, int key, void *value)
 {
     char fpath[64];

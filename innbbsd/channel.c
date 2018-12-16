@@ -677,7 +677,7 @@ inndchannel(void)
     FD_SET(sock, &rfd);
 
     /* --------------------------------------------------- */
-    /* initial history maintain time                      */
+    /* initial history maintain time                       */
     /* --------------------------------------------------- */
 
     time(&uptime1);
@@ -688,7 +688,7 @@ inndchannel(void)
     uptime2 = 0;                /* force to initial_bbs in the first time */
 
     /* --------------------------------------------------- */
-    /* initial channel                                    */
+    /* initial channel                                     */
     /* --------------------------------------------------- */
 
     memset(Channel, 0, sizeof(Channel));

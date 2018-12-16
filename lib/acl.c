@@ -60,7 +60,7 @@ int acl_addr(char *acl,            /* file name of access control list */
             }
         }
 
-        luser = host - buf;        /* length of user name */
+        luser = host - buf;     /* length of user name */
         lhost = addr - host;    /* length of host name */
 
         while (fgets(filter, sizeof(filter), fp))
@@ -167,11 +167,11 @@ int acl_has(char *acl,            /* file name of access control list */
                 addr = str;
         }
 
-        if (str == filter)        /* empty line */
+        if (str == filter)       /* empty line */
             continue;
 
-        *str = '\0';            /* Thor.980825: 註解: 將結束處填0, 免生枝節 */
-        str_lower(filter, filter);    /* lkchu.981201: lower-case string */
+        *str = '\0';             /* Thor.980825: 註解: 將結束處填0, 免生枝節 */
+        str_lower(filter, filter);   /* lkchu.981201: lower-case string */
 
         if (addr)                /* match user name */
         {

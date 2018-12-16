@@ -1970,7 +1970,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
     }
 
     /* --------------------------------------------------- */
-    /* 取得 board / userid / on-line user                        */
+    /* 取得 board / userid / on-line user                  */
     /* --------------------------------------------------- */
 
     ch = len;
@@ -2040,7 +2040,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
                 continue;
 
             /* ----------------------------------------------- */
-            /* insert data and display it                        */
+            /* insert data and display it                      */
             /* ----------------------------------------------- */
 
             prompt = &data[col];
@@ -2098,7 +2098,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
                 continue;
 
             /* ----------------------------------------------- */
-            /* remove data and display it                        */
+            /* remove data and display it                      */
             /* ----------------------------------------------- */
 
             i = col--;
