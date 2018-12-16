@@ -2763,7 +2763,7 @@ talk_speak(
 #if 1
         else if (ch == Ctrl('A'))
         { /* Thor.990219: ©I¥s¥~±¾´Ñ½L */
-            /* extern int BWboard(); */
+            /* extern int BWboard(int sock, int later); */
             data[0] = ch;
             if (send(fd, data, 1, 0) != 1)
                 break;
@@ -2773,7 +2773,7 @@ talk_speak(
         }
         else if (ch == Ctrl('B'))
         { /* Thor.990219: ©I¥s¥~±¾´Ñ½L */
-            /* extern int BWboard(); */
+            /* extern int BWboard(int sock, int later); */
             data[0] = ch;
             if (send(fd, data, 1, 0) != 1)
                 break;

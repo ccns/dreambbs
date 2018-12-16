@@ -10,7 +10,7 @@
 #include <sys/stat.h>
 #include <time.h>
 
-static int rm_dir();
+static int rm_dir(char *fpath);
 
 void f_cat(char *fpath, char *msg)
 {

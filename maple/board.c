@@ -388,7 +388,7 @@ Ben_Perm(
     if (!str_cmp(bname, DEFAULT_BOARD))
     {
 #ifdef  HAVE_MODERATED_BOARD
-        extern int bm_belong();
+        extern int bm_belong(char *board);
 #ifdef  HAVE_WATER_LIST
 #ifdef  HAVE_SYSOP_WATERLIST
         if (bm_belong(bname) == BRD_R_BIT)
@@ -423,7 +423,7 @@ Ben_Perm(
     {
         bits = 0;
 
-        extern int bm_belong();
+        extern int bm_belong(char *board);
         bits = bm_belong(bname);  /* Thor.980813: 對秘密看版而言, 是重新判斷的 */
 
             if (readlevel & PERM_SYSOP)
