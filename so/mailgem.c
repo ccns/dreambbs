@@ -531,7 +531,7 @@ XO *xo)
     else
     {
         currchrono = ghdr->chrono;
-        rec_del(dir, sizeof(HDR), xo->pos, (void *)cmpchrono, NULL);
+        rec_del(dir, sizeof(HDR), xo->pos, cmpchrono, NULL);
     }
 
     return mailgem_init(xo);

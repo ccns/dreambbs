@@ -816,7 +816,7 @@ XO *xo)
 
             cc = currchrono;
             currchrono = vch->chrono;
-            rec_del(dir, sizeof(VCH), pos, (void *)cmpchrono, NULL);
+            rec_del(dir, sizeof(VCH), pos, cmpchrono, NULL);
             currchrono = cc;
             return vote_init(xo);
         }

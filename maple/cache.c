@@ -360,17 +360,17 @@ utmp_count(
 #ifdef  HAVE_CLASSTABLEALERT
 int
 cmpclasstable(
-    CLASS_TABLE_ALERT *ptr)
+    const void *ptr)
 {
-    return ptr->userno == cuser.userno;
+    return ((const CLASS_TABLE_ALERT *)ptr)->userno == cuser.userno;
 }
 
 void
 classtable_free(void)
 {
     int pos;
-    while ( (pos = rec_loc(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), (void *)cmpclasstable)) >= 0)
-        rec_del(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), pos, (void *)cmpclasstable, NULL);
+    while ( (pos = rec_loc(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), cmpclasstable)) >= 0)
+        rec_del(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), pos, cmpclasstable, NULL);
 }
 
 void
@@ -682,9 +682,9 @@ BANMAIL *curfw;
 
 static int
 cmpban(
-    BANMAIL *ban)
+    const void *ban)
 {
-    return !strcmp(ban->data, curfw->data);
+    return !strcmp(((const BANMAIL *)ban) -> data, curfw->data);
 }
 
 void

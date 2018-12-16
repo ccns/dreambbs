@@ -90,7 +90,7 @@ void utmp_free(void);
 UTMP *utmp_find(int userno);
 UTMP *pid_find(int pid);
 int utmp_count(int userno, int show);
-int cmpclasstable(CLASS_TABLE_ALERT *ptr);
+int cmpclasstable(const void *ptr);
 void classtable_free(void);
 void classtable_main(void);
 void bshm_init(void);
@@ -162,7 +162,7 @@ char *mgets(int fd);
 void *mread(int fd, int len);
 int more(char *fpath, char *footer);
 /* post.c */
-int cmpchrono(HDR *hdr);
+int cmpchrono(const void *hdr);
 int checksum_find(char *fpath, int check, int state);
 void btime_update(int bno);
 void outgo_post(HDR *hdr, char *board);

@@ -17,9 +17,9 @@ FW *cur;
 
 static int
 cmpfw(
-    BANMAIL *ban)
+    const void *ban)
 {
-    return !strcmp(ban->data, cur->data);
+    return !strcmp(((const BANMAIL *)ban) -> data, cur->data);
 }
 
 static void *

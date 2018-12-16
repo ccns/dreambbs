@@ -20,7 +20,7 @@ extern LinkList *ll_head;
 #endif
 
 extern int can_message(UTMP *up);
-extern int cmpchrono(HDR *hdr);
+extern int cmpchrono(const void *hdr);
 extern int xo_delete(XO *xo);
 extern int xo_uquery_lite(XO *xo);
 extern int xo_usetup(XO *xo);
@@ -78,9 +78,9 @@ static char delete_reason[30] = {0};
 
     int
 cmpchrono(
-    HDR *hdr)
+    const void *hdr)
 {
-    return hdr->chrono == currchrono;
+    return ((const HDR *)hdr)->chrono == currchrono;
 }
 
 
@@ -1944,7 +1944,7 @@ post_delete(
 
         /* Thor.980911: for ª©¥D¬å¤å³¹ in ¦ê±µ */
         /* if (!rec_del(xo->dir, sizeof(HDR), xo->pos, cmpchrono, lazy_delete)) */
-        if (!rec_del(xo->dir, sizeof(HDR), xo->key == XZ_POST ? pos : fhdr->xid, (void *)cmpchrono, lazy_delete))
+        if (!rec_del(xo->dir, sizeof(HDR), xo->key == XZ_POST ? pos : fhdr->xid, cmpchrono, lazy_delete))
         {
             move_post(fhdr, by_BM ? BN_DELETED : BN_JUNK, by_BM);
             if (!by_BM && !(bbstate & BRD_NOCOUNT))
@@ -1990,7 +1990,7 @@ post_clean_delete(
     {
         currchrono = hdr->chrono;
 
-        if (!rec_del(xo->dir, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid, (void *)cmpchrono, 0))
+        if (!rec_del(xo->dir, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid, cmpchrono, 0))
         {
             move_post(hdr, by_BM ? BRD_DELETED : BRD_JUNK, by_BM);
             return XO_LOAD;

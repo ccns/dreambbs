@@ -698,9 +698,9 @@ my_post(void)
 
 static int
 nf_samegroup(
-    newsfeeds_t *nf)
+    const void *nf)
 {
-    return !strcmp(nf->newsgroup, GROUP) && !strcmp(nf->path, NODENAME);
+    return !strcmp(((const newsfeeds_t *)nf) -> newsgroup, GROUP) && !strcmp(((const newsfeeds_t *)nf) -> path, NODENAME);
 }
 
 

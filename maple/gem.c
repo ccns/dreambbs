@@ -10,7 +10,7 @@
 
 extern int xo_uquery(XO *xo);
 extern int xo_usetup(XO *xo);
-extern int cmpchrono(HDR *hdr);
+extern int cmpchrono(const void *hdr);
 
 
 extern XZ xz[];
@@ -867,7 +867,7 @@ gem_delete(
     else
     {
         currchrono = ghdr->chrono;
-        rec_del(dir, sizeof(HDR), xo->pos, (void *) cmpchrono, NULL);
+        rec_del(dir, sizeof(HDR), xo->pos, cmpchrono, NULL);
         gem_log(dir, "§R°£", ghdr);
     }
 
