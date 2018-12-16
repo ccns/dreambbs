@@ -129,7 +129,7 @@ int str_pat(const char *str, const char *pat);
 char *str_rev(char *dst, char *src);
 int str_rle(char *str);
 void str_stamp(char *str, time_t *chrono);
-char *str_str(char *str, char *tag);
+char *str_str(const char *str, const char *tag);
 char *str_sub(char *str, char *tag);
 char *str_tail(char *str);
 char *Btime(time_t *clock);

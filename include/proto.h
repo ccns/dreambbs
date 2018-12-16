@@ -94,7 +94,7 @@ int cmpclasstable(const void *ptr);
 void classtable_free(void);
 void classtable_main(void);
 void bshm_init(void);
-int brd_bno(char *bname);
+int brd_bno(const char *bname);
 int observeshm_find(int userno);
 void observeshm_load(void);
 void observeshm_init(void);

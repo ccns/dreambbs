@@ -949,11 +949,11 @@ void str_stamp(char *str, time_t * chrono)
 #define NULL    (char* ) 0
 #endif
 
-char *str_str(char *str, char *tag      /* non-empty lower case pattern */
+char *str_str(const char *str, const char *tag      /* non-empty lower case pattern */
     )
 {
     int cc, c1, c2;
-    char *p1, *p2;
+    const char *p1, *p2;
 
     cc = *tag++;
 
@@ -971,7 +971,7 @@ char *str_str(char *str, char *tag      /* non-empty lower case pattern */
             {
                 c2 = *p2;
                 if (!c2)
-                    return str;
+                    return (char *)str;
 
                 p2++;
                 c1 = *++p1;

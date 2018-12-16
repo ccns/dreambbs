@@ -507,7 +507,7 @@ apply_boards(
 
 int
 brd_bno(
-    char *bname)
+    const char *bname)
 {
     BRD *brdp, *bend;
     int bno;
