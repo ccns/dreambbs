@@ -3354,7 +3354,7 @@ ulist_init(
 #endif
             ispal = is_pal(userno);
 
-            if (!bad && (ispal && (tmp == 1)) || (userno == self))
+            if ((!bad && (ispal && (tmp == 1))) || (userno == self))
             {
                 pp->utmp = up;
                 pp->type = 1;
