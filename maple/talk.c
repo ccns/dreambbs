@@ -2567,11 +2567,11 @@ talk_char(
 static void
 talk_string(
     talk_win *twin,
-    unsigned char *str)
+    char *str)
 {
     int ch;
 
-    while ((ch = *str))
+    while ((ch = (unsigned char) *str))
     {
         talk_char(twin, ch);
         str++;

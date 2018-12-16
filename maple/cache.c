@@ -754,7 +754,7 @@ fshm_init(void)
 
 static inline void
 out_rle(
-    unsigned char *str,
+    char *str,
     int film)
 {
 #ifdef SHOW_USER_IN_TEXT
@@ -767,7 +767,7 @@ out_rle(
     if (film)
         move(1, 0/*item_length[count++]*/);
         //move(3, 36+item_length[count++]);
-    while ((cc = *str))
+    while ((cc = (unsigned char) *str))
     {
         str++;
         switch (cc)

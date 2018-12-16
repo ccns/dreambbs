@@ -107,7 +107,7 @@ void fshm_init(void);
 int film_out(int tag, int row);
 UTMP *utmp_check(char *userid);
 /* edit.c */
-void ve_string(unsigned char *str);
+void ve_string(char *str);
 char *tbf_ask(void);
 FILE *tbf_open(void);
 void ve_backup(void);
@@ -226,8 +226,8 @@ int t_banmsg(void);
 void bell(void);
 #ifdef M3_USE_PFTERM
 void ochar(int ch);
-void outl(int line, unsigned char *msg);
-void outr(unsigned char *str);
+void outl(int line, char *msg);
+void outr(char *str);
 void oflush(void);
 #else
 void move(int y, int x);
@@ -236,7 +236,7 @@ void clear(void);
 void clrtoeol(void);
 void clrtobot(void);
 void outc(int ch);
-void outs(unsigned char *str);
+void outs(char *str);
 void scroll(void);
 void rscroll(void);
 void save_foot(screenline *slp);
@@ -249,9 +249,9 @@ void clrtohol(void);
 
 void getyx(int *y, int *x);
 int expand_esc_star_visio(char *buf, const char *src, int szbuf);
-void outx(unsigned char *str);
-void outz(unsigned char *msg);
-void outf(unsigned char *str);
+void outx(char *str);
+void outz(char *msg);
+void outf(char *str);
 void prints(char *fmt, ...);
 void cursor_save(void);
 void cursor_restore(void);
@@ -264,7 +264,7 @@ void grayout(int type);
 void add_io(int fd, int timeout);
 int igetch(void);
 BRD *ask_board(char *board, int perm, char *msg);
-int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max, int echo);
+int vget(int line, int col, char *prompt, char *data, int max, int echo);
 int vans(char *prompt);
 int vkey(void);
 

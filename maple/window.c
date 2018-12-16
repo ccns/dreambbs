@@ -20,7 +20,7 @@
 static void
 draw_line(
     int x, int y,
-    unsigned char *msg)
+    char *msg)
 {
     /* hrs.090928: 讓 terminal 去處理 */
     move(x, y);
@@ -43,7 +43,7 @@ static int x_roll;
 static void
 draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
     int x, int y,
-    unsigned char *msg)
+    char *msg)
 {
     unsigned char *str, *ptr;
     unsigned char data[ANSILINELEN];
@@ -143,7 +143,7 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
         outc(' ');
 
     /* 印出 (x, y) 至 (x, y + strip_ansi_len(msg) - 1) */
-    ptr = msg;
+    ptr = (unsigned char *)msg;
     ansi = 0;
     len = 0;            /* msg 的長度(不含控制碼) */
     while ((ch = *ptr++))

@@ -61,7 +61,7 @@ conv_init(void)
 
 static void
 b2g(
-    unsigned char *src, unsigned char *dst)
+    char *src, char *dst)
 {
     int i;
 
@@ -89,7 +89,7 @@ b2g(
 
 static void
 g2b(
-    unsigned char *src, unsigned char *dst)
+    char *src, char *dst)
 {
     int i;
 
@@ -119,7 +119,7 @@ static char *
 hzconvert(
     char *src,                  /* source char buffer pointer */
     char *dst,                  /* destination char buffer pointer */
-    void (*dbcvrt) (unsigned char *src, unsigned char *dst))            /* 漢字 2-byte conversion function */
+    void (*dbcvrt) (char *src, char *dst))            /* 漢字 2-byte conversion function */
 {
     int len;
     char *end, *p;
@@ -131,7 +131,7 @@ hzconvert(
     end = src + len;
     while (src < end)
     {
-        if (*src & 0x80)        /* hi-bit on 表示是漢字 */
+        if ((unsigned char)*src & 0x80)        /* hi-bit on 表示是漢字 */
         {
             dbcvrt(src, p);
             src += 2;           /* 一次轉二碼 */

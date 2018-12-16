@@ -191,7 +191,7 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
 
     /* get remote host name */
 
-    if (dns_name((char *)&from->sin_addr, rhost))
+    if (dns_name((unsigned char *)&from->sin_addr, rhost))
         return;                    /* °²³]¨S¦³ FQDN ´N¨S¦³¶] identd */
 
     /*

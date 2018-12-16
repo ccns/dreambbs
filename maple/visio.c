@@ -37,7 +37,7 @@ int cur_pos;                    /* current position with ANSI codes */
 /* ----------------------------------------------------- */
 
 
-static unsigned char vo_pool[VO_MAX];
+static char vo_pool[VO_MAX];
 static int vo_size;
 
 
@@ -84,11 +84,11 @@ oflush(void)
 #ifndef M3_USE_PFTERM
 static void
 output(
-    unsigned char *str,
+    char *str,
     int len)
 {
     int size, ch;
-    unsigned char *data;
+    char *data;
 
     size = vo_size;
     data = vo_pool;
@@ -105,7 +105,7 @@ output(
 
     while (--len >= 0)
     {
-        ch = *str++;
+        ch = (unsigned) *str++;
         *data++ = ch;
         if (ch == IAC)
         {
@@ -125,7 +125,7 @@ static void
 ochar(
     int ch)
 {
-    unsigned char *data;
+    char *data;
     int size;
 
     data = vo_pool;
@@ -853,11 +853,11 @@ new_line:
 
 void
 outs(
-    unsigned char *str)
+    char *str)
 {
     int ch;
 
-    while ((ch = *str))
+    while ((ch = (unsigned char) *str))
     {
         outc(ch);
         str++;
@@ -915,7 +915,7 @@ expand_esc_star_visio(char *buf, const char *src, int szbuf)
 #ifdef SHOW_USER_IN_TEXT
 void
 outx(
-    unsigned char *str)
+    char *str)
 {
 /*
     unsigned char *t_name = cuser.userid;
@@ -932,11 +932,11 @@ outx(
         if (ch == KEY_ESC)
         {
             str++;
-            ch = *str;
+            ch = (unsigned char) *str;
             if (ch == '*')
             {
                 str++;
-                ch = *str;
+                ch = (unsigned char) *str;
                 switch (ch)
                 {
                     case 's':       /* **s Εγ₯ά ID */
@@ -973,7 +973,7 @@ outx(
             str--;
             str--;
             str--;
-            ch = *str;
+            ch = (unsigned char) *str;
             outc(ch);
             str++;
         }
@@ -984,7 +984,7 @@ outx(
         }
     }
 /*
-    while ((ch = *str))
+    while ((ch = (unsigned char) *str))
     {
 
 
@@ -1019,14 +1019,14 @@ outx(
 
 void
 outz(
-    unsigned char *msg)
+    char *msg)
 //  const char *msg)
 {
     int ch;
 
     move(b_lines, 0);
     clrtoeol();
-    while ((ch = *msg))
+    while ((ch = (unsigned char) *msg))
     {
         outc(ch);
         msg++;
@@ -1035,7 +1035,7 @@ outz(
 
 void
 outf(
-    unsigned char *str)
+    char *str)
 {
     outz(str);
     prints("%*s\033[m", d_cols, "");
@@ -1043,7 +1043,7 @@ outf(
 
 #ifdef M3_USE_PFTERM
 
-void outl (int line, unsigned char *msg)   /* line output */
+void outl (int line, char *msg)   /* line output */
 {
     move (line, 0);
     clrtoeol();
@@ -1056,7 +1056,7 @@ void outl (int line, unsigned char *msg)   /* line output */
 #define ANSI_COLOR_CODE            "[m;0123456789"
 #define ANSI_COLOR_END     "m"
 
-void outr (unsigned char *str)
+void outr (char *str)
 /* restricted output (strip the ansiscreen contolling code only) */
 {
     unsigned char ch, buf[256], *p = NULL;
@@ -1937,7 +1937,7 @@ vget_match(
 char lastcmd[MAXLASTCMD][80];
 
 
-int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max, int echo)
+int vget(int line, int col, char *prompt, char *data, int max, int echo)
 {
     int ch, len;
     int x, y;
@@ -2057,7 +2057,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
             for (;;)
             {
                 outc(echo ? ch : '*');
-                next = *prompt;
+                next = (unsigned char) *prompt;
                 *prompt++ = ch;
                 if (i >= len)
                     break;
@@ -2110,7 +2110,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
             move(y, x + col);
             while (i <= len)
             {
-                data[i - 1] = ch = data[i];
+                data[i - 1] = ch = (unsigned char) data[i];
                 outc(echo ? ch : '*');
                 i++;
             }
@@ -2164,7 +2164,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
 
             do
             {
-                if (!(ch = *prompt++))
+                if (!(ch = (unsigned char) *prompt++))
                 {
                     /* clrtoeol */
 
@@ -2204,7 +2204,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
 
     outc('\n');
 
-    ch = data[0];
+    ch = (unsigned char) data[0];
     if ((echo & LCECHO) && (ch >= 'A' && ch <= 'Z'))
         data[0] = (ch += 32);
 

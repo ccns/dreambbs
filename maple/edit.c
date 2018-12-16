@@ -574,7 +574,7 @@ delete_char(
 
 void
 ve_string(
-    unsigned char *str)
+    char *str)
 {
     int ch;
 
@@ -660,7 +660,7 @@ ve_ansi(void)
 static textline *
 ve_line(
     textline *this,
-    unsigned char *str)
+    char *str)
 {
     int cc, len;
     unsigned char *data;
@@ -674,7 +674,7 @@ ve_line(
 
         for (;;)
         {
-            cc = *str;
+            cc = (unsigned char) *str;
 
             if (cc == '\n')
                 cc = 0;
@@ -765,7 +765,7 @@ ve_load(
     textline *this,
     int fd)
 {
-    unsigned char *str;
+    char *str;
     textline *next;
 
     next = this->next;
@@ -1581,13 +1581,13 @@ ve_filer(
 
 static void
 ve_outs(
-    unsigned char *text)
+    char *text)
 {
     int ch;
     unsigned char *tail;
 
     tail = text + SCR_WIDTH - 1;
-    while ((ch = *text))
+    while ((ch = (unsigned char) *text))
     {
         switch (ch)
         {
