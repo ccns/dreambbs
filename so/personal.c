@@ -217,6 +217,8 @@ personal_attr(unsigned int state)
 
     if (state & PB_OPEN)
         return 'O';
+
+    return ' ';
 }
 
 static void

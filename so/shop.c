@@ -134,6 +134,7 @@ int hidefrom_temp(void)
 int sysop(void)
 {
     pmsg2("是誰說你可以當站長的！");
+    return 0;
 }
 
 int shop_main(void)
