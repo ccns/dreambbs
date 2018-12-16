@@ -3344,14 +3344,14 @@ post_recommend(
         //Àu¦H¤å
         if ( (brd->battr & (BRD_PUSHTIME | BRD_PUSHDISCON)) && (brd->battr & BRD_VALUE) )
         {
-            if      (/*(hdr->recommend == 49) || */(hdr->recommend == 99))
+            if      (/*hdr->recommend == 49 || */hdr->recommend == 99)
             {
                 if (addscore > 0)
                     point = 1;
                 else
                     point = -1;
             }
-            else if (/*(hdr->recommend == -49) || */(hdr->recommend == -99))
+            else if (/*hdr->recommend == -49 || */hdr->recommend == -99)
             {
                 if (addscore > 0)
                     point = 1;
