@@ -927,13 +927,13 @@ outx(
 
 /* cache.090922: ±±¨î½X */
 
-    while (ch = *str)
+    while ((ch = *str))
     {
         if (ch == KEY_ESC)
         {
             str++;
             ch = *str;
-            if (ch = '*')
+            if (ch == '*')
             {
                 str++;
                 ch = *str;
@@ -1062,7 +1062,7 @@ void outr (unsigned char *str)
     unsigned char ch, buf[256], *p = NULL;
     int ansi = 0;
 
-    while (ch = *str++)
+    while ((ch = *str++))
     {
         if (ch == KEY_ESC)
         {

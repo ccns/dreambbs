@@ -37,7 +37,7 @@ main(
         if (!(dirp = opendir(".")))
             continue;
 
-        while (de = readdir(dirp))
+        while ((de = readdir(dirp)))
         {
             int fd;
             char *str;

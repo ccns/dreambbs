@@ -34,7 +34,7 @@ pressanykey(char *fmt, ...)
     vsprintf(buf, fmt, args);
     va_end(args);
     move(b_lines, 0);
-    for (ptr = buf; cc = *ptr; ptr++)
+    for (ptr = buf; (cc = *ptr); ptr++)
         outc(cc);
     do
     {

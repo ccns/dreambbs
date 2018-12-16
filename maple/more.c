@@ -59,7 +59,7 @@ mgets(
     {
         if (head >= tail)
         {
-            if (ch = head - base)
+            if ((ch = head - base))
                 memcpy(pool, base, ch);
 
             head = pool + ch;
@@ -644,7 +644,7 @@ re_key:
         else if (key == 'C')    /* Thor.980405: more 時可存入暫存檔 */
         {
             FILE *fp;
-            if (fp = tbf_open())
+            if ((fp = tbf_open()))
             {
                 f_suck(fp, fpath);
                 fclose(fp);
@@ -838,7 +838,7 @@ re_key:
             {
                 FILE *fp;
 
-                if (fp = tbf_open())
+                if ((fp = tbf_open()))
                 {
                     f_suck(fp, fpath);
                     fclose(fp);

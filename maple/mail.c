@@ -1254,7 +1254,7 @@ m_setforward(void)
     FILE *fp;
 
     usr_fpath(fpath, cuser.userid, FN_FORWARD);
-    if (fp = fopen(fpath, "r"))
+    if ((fp = fopen(fpath, "r")))
     {
         fscanf(fp, "%s", ip);
         fclose(fp);

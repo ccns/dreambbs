@@ -270,7 +270,7 @@ bbslog(char *fmt, ...)
     time_t now;
     FILE *fp;
 
-    if (fp = fopen(LOGFILE, "a"))
+    if ((fp = fopen(LOGFILE, "a")))
     {
         time(&now);
         strftime(datebuf, sizeof(datebuf), "%d/%b/%Y %H:%M:%S", localtime(&now));

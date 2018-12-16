@@ -38,7 +38,7 @@ cleanrecommend_log(
     FILE *fp;
     time_t now;
 
-    if (fp = fopen(FN_RECOMMEND_LOG, "a+"))
+    if ((fp = fopen(FN_RECOMMEND_LOG, "a+")))
     {
         time(&now);
 
@@ -291,7 +291,7 @@ clean(
         brd = bshm->bcache + brd_bno(currboard);
         battr = brd->battr;
 
-        if (fp = fopen(fpath, "r"))
+        if ((fp = fopen(fpath, "r")))
         {
 
 /*

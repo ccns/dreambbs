@@ -294,9 +294,9 @@ tcpcommand(char *fmt, ...)
     if (!fgets(SERVERbuffer, sizeof(SERVERbuffer), SERVERrfp))
         return 0;
 
-    if (ptr = strchr(SERVERbuffer, '\r'))
+    if ((ptr = strchr(SERVERbuffer, '\r')))
         *ptr = '\0';
-    if (ptr = strchr(SERVERbuffer, '\n'))
+    if ((ptr = strchr(SERVERbuffer, '\n')))
         *ptr = '\0';
 
     return atoi(SERVERbuffer);
@@ -513,7 +513,7 @@ send_outgoing(
     fputs("\r\n", SERVERwfp);   /* 檔頭和內文空一行 */
 
     /* 寫入文章的內容 */
-    for (str = BODY; cc = *str; str++)
+    for (str = BODY; (cc = *str); str++)
     {
         if (cc == '\n')
         {
@@ -605,9 +605,9 @@ NNRParticle(                    /* 取回第 artno 篇的全文 */
 
     while (fgets(SERVERbuffer, sizeof(SERVERbuffer), SERVERrfp))
     {
-        if (ptr = strchr(SERVERbuffer, '\r'))
+        if ((ptr = strchr(SERVERbuffer, '\r')))
             *ptr = '\0';
-        if (ptr = strchr(SERVERbuffer, '\n'))
+        if ((ptr = strchr(SERVERbuffer, '\n')))
             *ptr = '\0';
 
         if (!strcmp(SERVERbuffer, ".")) /* 文章結束 */
@@ -655,7 +655,7 @@ my_post(void)
 
         if (rel > 0)
         {
-            if (ptr = CONTROL)
+            if ((ptr = CONTROL))
             {
                 if (!str_ncmp(ptr, "cancel ", 7))
                     rel = cancel_article(ptr + 7);

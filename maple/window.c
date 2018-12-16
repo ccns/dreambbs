@@ -72,7 +72,7 @@ draw_line(x, y, msg)    /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
     /* 印出 (x, 0) 至 (x, y - 1) */
     ansi = 0;
     len = 0;            /* 已印出幾個字 (不含控制碼) */
-    while (ch = *str++)
+    while ((ch = *str++))
     {
         if (ch == KEY_ESC)
         {
@@ -146,7 +146,7 @@ draw_line(x, y, msg)    /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
     ptr = msg;
     ansi = 0;
     len = 0;            /* msg 的長度(不含控制碼) */
-    while (ch = *ptr++)
+    while ((ch = *ptr++))
     {
         if (ch == KEY_ESC)
         {
@@ -166,7 +166,7 @@ draw_line(x, y, msg)    /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
 
     /* 跳掉 str 中間一整段，並取出最後的顏色 */
     ansi = 0;
-    while (ch = *str++)
+    while ((ch = *str++))
     {
         if (ch == KEY_ESC)
         {
