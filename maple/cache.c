@@ -565,7 +565,8 @@ int
 observeshm_find(
     int userno)
 {
-    int count, *cache, datum, mid;
+    unsigned int *cache, datum;
+    int count, mid;
 
     if ((cache = oshm->userno))
     {

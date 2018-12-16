@@ -209,7 +209,7 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
     {
         s = sizeof(our_sin);
 
-        if (getsockname(sock, (struct sockaddr *)&our_sin, &s) < 0)
+        if (getsockname(sock, (struct sockaddr *)&our_sin, (socklen_t *) &s) < 0)
             return;
 
         /* Thor.990325: ¬°¤FÅý¤Ï¬d®É¯à½T©w¬d¥X¡A¨Ó¦Û­þ­Óinterface´N±q¨º³s¦^ */

@@ -2959,7 +2959,7 @@ talk_page(
 #endif
 
     length = sizeof(sin);
-    if (bind(sock, (struct sockaddr *) &sin, length) < 0 || getsockname(sock, (struct sockaddr *) &sin, &length) < 0)
+    if (bind(sock, (struct sockaddr *) &sin, length) < 0 || getsockname(sock, (struct sockaddr *) &sin, (socklen_t *) &length) < 0)
     {
         close(sock);
         return 0;

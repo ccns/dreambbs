@@ -263,7 +263,7 @@ tryaccept(
     int s)
 {
     int ns;
-    int fromlen = sizeof(struct sockaddr_in);
+    socklen_t fromlen = sizeof(struct sockaddr_in);
     struct sockaddr sockaddr;   /* Internet endpoint address */
 
     do
@@ -743,7 +743,7 @@ inndchannel(void)
 
             /* 檢查有沒有在 nodelist.bbs 裡面 */
             i = sizeof(sin);            /* 借用 i */
-            if (getpeername(fd, (struct sockaddr *) &sin, &i) < 0)
+            if (getpeername(fd, (struct sockaddr *) &sin, (socklen_t *) &i) < 0)
             {
                 close(fd);
                 continue;
@@ -865,7 +865,7 @@ main(
         {
         case 'i':
             c = sizeof(sin);
-            if (getsockname(0, (struct sockaddr *) &sin, &c) < 0)
+            if (getsockname(0, (struct sockaddr *) &sin, (socklen_t *) &c) < 0)
             {
                 printf("您不是從 inetd 啟動，無需使用 -i\n");
                 exit(0);
