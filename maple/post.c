@@ -1800,8 +1800,9 @@ post_mark(
 
     static int
 lazy_delete(
-    HDR *hdr)
+    void *hdr_obj)
 {
+    HDR *hdr = (HDR *)hdr_obj;
     if (!strcmp(hdr->owner, cuser.userid))
     {
         sprintf(hdr->title, "<< 本文章由 %s 刪除 >>", cuser.userid);

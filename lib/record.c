@@ -476,7 +476,7 @@ int
 rec_ref(char *fpath,
         void *data,
         int size,
-        int pos, int (*fchk) (const void *obj), void (*fref) (void *obj, void *ref))
+        int pos, int (*fchk) (const void *obj), void (*fref) (void *obj, const void *ref))
 {
     int fd;
     off_t off, len;

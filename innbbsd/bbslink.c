@@ -706,11 +706,12 @@ nf_samegroup(
 
 static void
 changehigh(
-    newsfeeds_t *hdd, newsfeeds_t *ram)
+    void *nf_hdd, const void *ram)
 {
-    if (ram->high >= 0)
+    newsfeeds_t *hdd = (newsfeeds_t *)nf_hdd;
+    if (((const newsfeeds_t *)ram)->high >= 0)
     {
-        hdd->high = ram->high;
+        hdd->high = ((const newsfeeds_t *)ram) -> high;
         hdd->xmode &= ~INN_ERROR;
     }
     else
