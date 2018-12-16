@@ -268,7 +268,7 @@ vs_line(char *msg, int x, int y)
 #else
 static void
 vs_line(
-    char *msg)
+    char *msg, int x, int y)
 {
     int head, tail;
 
