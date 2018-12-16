@@ -103,7 +103,7 @@ article_parse(
     if (ptr)
     {
         ptr[-1] = '\0';
-        if (ptr[-2] == ', ')
+        if (ptr[-2] == ',')
         {
             ptr[-2] = '\0';
         }

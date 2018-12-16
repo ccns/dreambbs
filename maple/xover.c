@@ -1062,7 +1062,7 @@ static KeyMap keymap[] =
 
     /* i.e. < > : make life easier */
 
-    {', ', RS_THREAD},
+    {',', RS_THREAD},
     {'.', RS_THREAD | RS_FORWARD},
 
     /* thread : cursor */

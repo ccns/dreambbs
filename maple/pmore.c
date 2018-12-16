@@ -425,7 +425,7 @@ static int debug = 0;
 #define ANSI_REVERSE    ANSI_COLOR(7)
 
 #define ANSI_IN_ESCAPE(x) (((x) >= '0' && (x) <= '9') || \
-        (x) == ';' || (x) == ', ' || (x) == '[')
+        (x) == ';' || (x) == ',' || (x) == '[')
 
 #endif /* PMORE_STYLE_ANSI */
 
@@ -1321,7 +1321,7 @@ mf_parseHeaders(void)
             pmore_str_chomp(np);
             // remove quote and traverse back
             *pb-- = 0;
-            while (pb > p && *pb != ', ' && !(ISSPACE(*pb)))
+            while (pb > p && *pb != ',' && !(ISSPACE(*pb)))
                 pb--;
 
             if (pb > p) {
@@ -2655,7 +2655,7 @@ _pmore2(
                     mf.xpos ++;
                 mf.xpos ++;
                 break;
-            case ', ':
+            case ',':
                 if (mf.xpos > 0)
                     mf.xpos --;
                 break;
@@ -3895,7 +3895,7 @@ mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
             }
 
             // calculation of fields
-            if (*p == ', ' || *p == '#')
+            if (*p == ',' || *p == '#')
             {
                 switch (++ient)
                 {
@@ -3924,18 +3924,18 @@ mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
                 newOpt = 1;
 
                 // first, fix pointers
-                if (szCmd == 0 || *cmd == ', ' || *cmd == '#')
+                if (szCmd == 0 || *cmd == ',' || *cmd == '#')
                 { cmd = NULL; szCmd = 0; }
 
                 // quick abort if option is invalid.
                 if (!cmd)
                     continue;
 
-                if (szText == 0 || *text == ', ' || *text == '#')
+                if (szText == 0 || *text == ',' || *text == '#')
                 { text = NULL; szText = 0; }
 
                 // assign key
-                if (*pkey == ', ' || *pkey == '#')
+                if (*pkey == ',' || *pkey == '#')
                     key++;
                 else
                 {
@@ -4193,13 +4193,13 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
 
             // find parameters
             pfs = pfe = p+1;
-            while (pfe < end && *pfe > ' ' && *pfe != ', ')
+            while (pfe < end && *pfe > ' ' && *pfe != ',')
                 pfe++;
             pts = pte = pfe+1;
-            while (pte < end && *pte > ' ' && *pte != ', ')
+            while (pte < end && *pte > ' ' && *pte != ',')
                 pte++;
             // check syntax
-            if ( pfe >= end || *pfe != ', ' ||
+            if ( pfe >= end || *pfe != ',' ||
                  pts >= end)
             {
                 MOVIECMD_SKIP_ALL(p, end);
@@ -4236,7 +4236,7 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
             for (pe = p; pe < end && *pe &&
                     *pe > ' ' && *pe < 0x80
                     ; pe ++)
-                if (*pe == ', ') igs++;
+                if (*pe == ',') igs++;
 
             if (igs)
             {
@@ -4246,7 +4246,7 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
                 for (pe = p; igs > 0 && pe < end && *pe &&
                         *pe > ' ' && *pe < 0x80
                         ; pe ++)
-                    if (*pe == ', ') igs--;
+                    if (*pe == ',') igs--;
 
                 if (pe != p)
                     p = pe-1;
