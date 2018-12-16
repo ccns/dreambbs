@@ -206,7 +206,7 @@ vs_line(char *msg, int x, int y)
     memset(buf, 0, sizeof(buf));
 
     sl[x].data[sl[x].len] = '\0';
-    str = tmp = sl[x].data;
+    str = tmp = (char *) sl[x].data;
 
     for (word=0; word<y && *str; ++str)
     {
