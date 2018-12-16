@@ -2612,7 +2612,7 @@ chat_party(
     send_to_user(cu, buf, 0, MSG_PARTYLISTSTART);
 
     cap = catbl(kind);
-    for (i = 0; cap[i].verb; i++)
+    for (i = 0; cap[i].verb[0]; i++)
     {
         sprintf(buf, "%-10s %-20s", cap[i].verb, cap[i].chinese);
         send_to_user(cu, buf, 0, MSG_PARTYLIST);

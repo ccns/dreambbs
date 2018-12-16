@@ -392,7 +392,7 @@ NCMparse(void)
             }
             else if (strstr(fptr, "BEGIN NCM BODY"))
             {
-                if (NCMVER && ISSUER && TYPE && ACTION)
+                if (NCMVER[0] && ISSUER[0] && TYPE[0] && ACTION[0])
                 {
                     ncmperm_t *ncmt;
                     ncmt = (ncmperm_t *) search_issuer(ISSUER, TYPE);
@@ -439,7 +439,7 @@ NCMparse(void)
         *(ptr - 1) = ch2;
     }
 
-    if (NCMVER && ISSUER && TYPE && ACTION)
+    if (NCMVER[0] && ISSUER[0] && TYPE[0] && ACTION[0])
         return P_OKAY;
 
     strcpy(errmsg, "HEADERS syntax not correct");

@@ -192,7 +192,7 @@ favorite_sort(void)
 
     for (i = j = 0; i < max; i++, bp++)
     {
-        if (bp->brdname)
+        if (bp->brdname[0])
         {
             chp->chno[j++] = i;
         }
