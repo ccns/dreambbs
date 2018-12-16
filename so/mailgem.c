@@ -1088,9 +1088,9 @@ static int sync_size, sync_head;
 
 static int
 sync_cmp(
-SyncData *s1, SyncData *s2)
+const void *s1, const void *s2)
 {
-    return s1->chrono - s2->chrono;
+    return ((const SyncData *)s1)->chrono - ((const SyncData *)s2)->chrono;
 }
 
 

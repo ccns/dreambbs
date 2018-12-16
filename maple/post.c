@@ -4232,10 +4232,10 @@ typedef struct
 
     static int
 chain_cmp(
-    Chain *a,
-    Chain *b)
+    const void *a,
+    const void *b)
 {
-    return a->chrono - b->chrono;
+    return ((const Chain *)a)->chrono - ((const Chain *)b)->chrono;
 }
 
 

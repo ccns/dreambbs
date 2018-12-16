@@ -187,9 +187,9 @@ init(void)
 /*
 static int
 int1_cmp(
-    CLASS_TABLE_ALERT **i, CLASS_TABLE_ALERT **j)
+    const void *i, const void *j)
 {
-    return (*i)->userno - (*j)->userno;
+    return (*(const CLASS_TABLE_ALERT **)i)->userno - (*(const CLASS_TABLE_ALERT **)j)->userno;
 }
 */
 UTMP *

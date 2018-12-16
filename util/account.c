@@ -539,9 +539,9 @@ class_parse(
 
 static int
 chno_cmp(
-    short *i, short *j)
+    const void *i, const void *j)
 {
-    return strcasecmp(bhead[*i].brdname, bhead[*j].brdname);
+    return strcasecmp(bhead[* (const short *)i].brdname, bhead[* (const short *)j].brdname);
 }
 
 

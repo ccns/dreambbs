@@ -12,7 +12,7 @@
 #include "splay.h"
 
 SplayNode *splay_in(SplayNode * top,
-                    void *data, int (*compare) (void *lhs, void *rhs))
+                    void *data, int (*compare) (const void *lhs, const void *rhs))
 {
     int splay_cmp;
     SplayNode *node, *l, *r, *x, N;

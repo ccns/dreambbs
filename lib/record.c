@@ -555,7 +555,7 @@ rec_ref(char *fpath,
 int
 rec_sync(char *fpath,
          int size,
-         int (*fsync) (void *lhs, void *rhs), int (*fchk) (void *obj))
+         int (*fsync) (const void *lhs, const void *rhs), int (*fchk) (void *obj))
 {
     int fd, fsize;
     struct stat st;

@@ -59,7 +59,7 @@ void str_cat(char *dst, char *s1, char *s2)
         ;
 }
 
-int str_cmp(char *s1, char *s2)
+int str_cmp(const char *s1, const char *s2)
 {
     int c1, c2, diff;
 

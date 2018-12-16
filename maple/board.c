@@ -846,11 +846,11 @@ XoPost(
 /* cache.090503: 即時熱門看板 */
 static int
 mantime_cmp(
-    short *a,
-    short *b)
+    const void *a,
+    const void *b)
 {
     /* 由多排到少 */
-    return bshm->mantime[*b] - bshm->mantime[*a];
+    return bshm->mantime[* (const short *)b] - bshm->mantime[* (const short *)a];
 }
 
 static int class_hot = 0;

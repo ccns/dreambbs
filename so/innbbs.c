@@ -102,10 +102,10 @@ nl_add(
 
 static int
 nl_cmp(
-    nodelist_t *a, nodelist_t *b)
+    const void *a, const void *b)
 {
     /* 依 name 排序 */
-    return str_cmp(a->name, b->name);
+    return str_cmp(((const nodelist_t *)a) -> name, ((const nodelist_t *)b) -> name);
 }
 
 
@@ -266,11 +266,11 @@ nf_add(
 
 static int
 nf_cmp(
-    newsfeeds_t *a, newsfeeds_t *b)
+    const void *a, const void *b)
 {
     /* path/newsgroup 交叉比對 */
-    int k = str_cmp(a->path, b->path);
-    return k ? k : str_cmp(a->newsgroup, b->newsgroup);
+    int k = str_cmp(((const newsfeeds_t *)a) -> path, ((const newsfeeds_t *)b) -> path);
+    return k ? k : str_cmp(((const newsfeeds_t *)a) -> newsgroup, ((const newsfeeds_t *)b) -> newsgroup);
 }
 
 
@@ -340,11 +340,11 @@ ncm_add(
 
 static int
 ncm_cmp(
-    ncmperm_t *a, ncmperm_t *b)
+    const void *a, const void *b)
 {
     /* issuer/type 交叉比對 */
-    int k = str_cmp(a->issuer, b->issuer);
-    return k ? k : str_cmp(a->type, b->type);
+    int k = str_cmp(((const ncmperm_t *)a) -> issuer, ((const ncmperm_t *)b) -> issuer);
+    return k ? k : str_cmp(((const ncmperm_t *)a) -> type, ((const ncmperm_t *)b) -> type);
 }
 
 
@@ -478,13 +478,15 @@ spam_add(
 
 static int
 spam_cmp(
-    spamrule_t *a, spamrule_t *b)
+    const void *a, const void *b)
 {
+    const spamrule_t *x = (const spamrule_t *)a;
+    const spamrule_t *y = (const spamrule_t *)b;
     /* path/board/xmode/detail 交叉比對 */
-    int i = strcmp(a->path, b->path);
-    int j = strcmp(a->board, b->board);
-    int k = a->xmode - b->xmode;
-    return i ? i : j ? j : k ? k : str_cmp(a->detail, b->detail);
+    int i = strcmp(x->path, y->path);
+    int j = strcmp(x->board, y->board);
+    int k = x->xmode - y->xmode;
+    return i ? i : j ? j : k ? k : str_cmp(x->detail, y->detail);
 }
 
 
@@ -513,7 +515,7 @@ a_innbbs(void)
     char *fpath;
     char buf[40];
     void (*item_func)(int num, void *obj), (*query_func)(void *obj);
-    int (*add_func)(char *fpath, void *old, int pos), (*sync_func)(void *lhs, void *rhs), (*search_func)(void *obj, char *key);
+    int (*add_func)(char *fpath, void *old, int pos), (*sync_func)(const void *lhs, const void *rhs), (*search_func)(void *obj, char *key);
 
     vs_bar("轉信設定");
     more("etc/innbbs.hlp", (char *) -1);

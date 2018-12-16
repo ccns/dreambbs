@@ -419,10 +419,10 @@ is_banmsg(
 
 static int
 int_cmp(
-    int *a,
-    int *b)
+    const void *a,
+    const void *b)
 {
-    return *a - *b;
+    return *(const int *)a - *(const int *)b;
 }
 
 
@@ -3237,52 +3237,54 @@ ulist_body(
 
 static int
 ulist_cmp_userid(
-    PICKUP *i, PICKUP *j)
+    const void *i, const void *j)
 {
-    if (i->type == j->type)
-                return str_cmp(i->utmp->userid, j->utmp->userid);
+    const PICKUP *a = (const PICKUP *)i;
+    const PICKUP *b = (const PICKUP *)j;
+    if (a->type == b->type)
+                return str_cmp(a->utmp->userid, b->utmp->userid);
     else
-        return i->type - j->type;
+        return a->type - b->type;
 }
 
 static int
 ulist_cmp_host(
-    PICKUP *i, PICKUP *j)
+    const void *i, const void *j)
 {
-    return str_cmp(i->utmp->from, j->utmp->from);
+    return str_cmp(((const PICKUP *)i)->utmp->from, ((const PICKUP *)j)->utmp->from);
 }
 
 static int
 ulist_cmp_idle(
-    PICKUP *i, PICKUP *j)
+    const void *i, const void *j)
 {
-    return i->utmp->idle_time - j->utmp->idle_time;
+    return ((const PICKUP *)i)->utmp->idle_time - ((const PICKUP *)j)->utmp->idle_time;
 }
 
 static int
 ulist_cmp_mode(
-    PICKUP *i, PICKUP *j)
+    const void *i, const void *j)
 {
-    return i->utmp->mode - j->utmp->mode;
+    return ((const PICKUP *)i)->utmp->mode - ((const PICKUP *)j)->utmp->mode;
 }
 
 static int
 ulist_cmp_nick(
-    PICKUP *i, PICKUP *j)
+    const void *i, const void *j)
 {
-    return str_cmp(i->utmp->username, j->utmp->username);
+    return str_cmp(((const PICKUP *)i)->utmp->username, ((const PICKUP *)j)->utmp->username);
 }
 
 #ifdef  HAVE_BOARD_PAL
 static int
 ulist_cmp_board(
-    PICKUP *i, PICKUP *j)
+    const void *i, const void *j)
 {
-    return i->utmp->board_pal - j->utmp->board_pal;
+    return ((const PICKUP *)i)->utmp->board_pal - ((const PICKUP *)j)->utmp->board_pal;
 }
 #endif
 
-static int (*ulist_cmp[]) (PICKUP *i, PICKUP *j) =
+static int (*ulist_cmp[]) (const void *i, const void *j) =
 {
     ulist_cmp_userid,
     ulist_cmp_host,

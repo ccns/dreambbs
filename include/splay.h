@@ -8,6 +8,6 @@ typedef struct SplayNode
     struct SplayNode *right;
 } SplayNode;
 
-SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(void *x, void *y));
+SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(const void *x, const void *y));
 
 #endif /* _SPLAY_H_ */

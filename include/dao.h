@@ -75,12 +75,12 @@ int rec_num(char *fpath, int size);
 int rec_put(char *fpath, void *data, int size, int pos);
 int rec_put2(char *fpath, void *data, int size, int pos, int (*fchk)(void *obj));
 int rec_ref(char *fpath, void *data, int size, int pos, int (*fchk)(void *obj), void (*fref)(void *obj, void *ref));
-int rec_sync(char *fpath, int size, int (*fsync)(void *lhs, void *rhs), int (*fchk)(void *obj));
+int rec_sync(char *fpath, int size, int (*fsync)(const void *lhs, const void *rhs), int (*fchk)(void *obj));
 int rec_append(char *fpath, void *data, int size);
 /* splay.c */
-SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(void *lhs, void *rhs));
+SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(const void *lhs, const void *rhs));
 /* xsort.c */
-void xsort(void *a, size_t n, size_t es, int (*cmp)(void *lhs, void *rhs));
+void xsort(void *a, size_t n, size_t es, int (*cmp)(const void *lhs, const void *rhs));
 /* attr_lib.c */
 int attr_get(char *userid, int key, void *value);
 int attr_put(char *userid, int key, void *value);
@@ -101,7 +101,7 @@ void output_rfc2047_qp(FILE *fp, char *prefix, char *str, char *charset, char *s
 char *str_add(char *dst, char *src);
 void str_ansi(char *dst, char *str, int max);
 void str_cat(char *dst, char *s1, char *s2);
-int str_cmp(char *s1, char *s2);
+int str_cmp(const char *s1, const char *s2);
 void str_cut(char *dst, char *src);
 int qp_code(register int x);
 int base64_code(register int x);

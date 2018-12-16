@@ -32,9 +32,9 @@ nodelist_t *NODELIST = NULL;
 
 int
 nl_bynamecmp(
-    nodelist_t *a, nodelist_t *b)
+    const void *a, const void *b)
 {
-    return str_cmp(a->name, b->name);
+    return str_cmp(((const nodelist_t *)a) -> name, ((const nodelist_t *)b) -> name);
 }
 
 
@@ -81,17 +81,17 @@ newsfeeds_t *NEWSFEEDS_G = NULL;
 
 int
 nf_byboardcmp(
-    newsfeeds_t *a, newsfeeds_t *b)
+    const void *a, const void *b)
 {
-    return str_cmp(a->board, b->board);
+    return str_cmp(((const newsfeeds_t *)a) -> board, ((const newsfeeds_t *)b) -> board);
 }
 
 
 int
 nf_bygroupcmp(
-    newsfeeds_t *a, newsfeeds_t *b)
+    const void *a, const void *b)
 {
-    return str_cmp(a->newsgroup, b->newsgroup);
+    return str_cmp(((const newsfeeds_t *)a) -> newsgroup, ((const newsfeeds_t *)b) -> newsgroup);
 }
 
 

@@ -62,9 +62,9 @@ char *SUBJECT, *FROM, *DATE, *PATH, *GROUP, *MSGID, *POSTHOST, *SITE, *CONTROL;
 
 static int
 header_cmp(
-    header_t *a, header_t *b)
+    const void *a, const void *b)
 {
-    return str_cmp(a->name, b->name);
+    return str_cmp(((const header_t *)a) -> name, ((const header_t *)b) -> name);
 }
 
 

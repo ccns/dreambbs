@@ -173,9 +173,9 @@ article_parse(
 
     static int
 fname_cmp(
-    char *s1, char *s2)
+    const void *s1, const void *s2)
 {
-    return strcmp(s1 + 1, s2 + 1);
+    return strcmp((const char *)s1 + 1, (const char *)s2 + 1);
 }
 
 int main(int argc, char *argv[])
