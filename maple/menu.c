@@ -225,7 +225,7 @@ pad_draw(void)
 
     sprintf(str, "\033[1;37;46mΥ\033[34;47m %s \033[33m(%s)", cuser.userid, cuser.username);
     len = strlen(str);
-    strcat(str, " \033[30;46m" + (len & 1));
+    strcat(str, & " \033[30;46m"[len & 1]);
 
     for (i = len >> 1; i < 41; i++)
         strcat(str, "▄");
@@ -454,7 +454,7 @@ movie(void)
         ptime = localtime(&now);
         sprintf(datemsg, "[%d/%d 星期%.2s ",
             ptime->tm_mon + 1, ptime->tm_mday,
-            "天一二三四五六" + (ptime->tm_wday << 1));
+            & "天一二三四五六"[ptime->tm_wday << 1]);
 
         uptime = now + 86400 - ptime->tm_hour * 3600 -
             ptime->tm_min * 60 - ptime->tm_sec;
