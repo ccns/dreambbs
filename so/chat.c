@@ -110,11 +110,13 @@ printchatline(
 #endif
 
 static void
-chat_record(void)
+chat_record(char *arg)
 {
     FILE *fp;
     time_t now;
     char buf[80];
+
+    (void)arg;
 
     if (!cuser.userlevel)
         return;
@@ -229,9 +231,11 @@ int mode)
 
 
 static void
-chat_clear(void)
+chat_clear(char *arg)
 {
     int line;
+
+    (void)arg;
 
     for (line = 2; line < stop_line; line++)
     {
@@ -302,7 +306,7 @@ char *chatid)
 
             if (fd == 'c')
             {
-                chat_clear();
+                chat_clear(NULL);
             }
             else if (fd == 'n')
             {
@@ -471,8 +475,10 @@ user_info *uentp)
 
 
 static void
-chat_users(void)
+chat_users(char *arg)
 {
+    (void)arg;
+
     /* 因為人數動輒上百，意義不大 */
     printchatline("");
     printchatline("【 " BOARDNAME "遊客列表 】");
@@ -981,7 +987,7 @@ t_chat(void)
     }
 
     if (frec)
-        chat_record();
+        chat_record(NULL);
 
 #ifdef  LOG_CHAT
     chat_recordtomail(0);
