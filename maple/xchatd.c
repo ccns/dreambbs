@@ -3172,7 +3172,7 @@ sig_over(int signum)
     fclose(flog);
     for (fd = 0; fd < 64; fd++)
         close(fd);
-    execl("bin/xchatd", NULL);
+    execl("bin/xchatd", "bin/xchatd", (const char *)NULL);
 }
 
 static void
