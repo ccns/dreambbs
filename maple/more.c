@@ -136,7 +136,6 @@ mread(
 static unsigned char *fimage;           /* file image begin */
 static unsigned char *fend;             /* file image end */
 static unsigned char *foff;             /* 目前讀到哪裡 */
-#endif
 
 
 static int
@@ -397,7 +396,6 @@ more_slideshow(void)
 #endif
 
 
-#ifndef M3_USE_PMORE
 #define END_MASK        0x200   /* 按 KEY_END 直達最後一頁 */
 
 #define HUNT_MASK       0x400

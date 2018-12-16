@@ -2052,12 +2052,14 @@ every_Z_Orig(void)
         xover(cmd);
 }
 
+#ifdef TEST_Z_FAV
 static int
 Every_Z_Favorite(void)
 {
     MyFavorite();
     return 0;
 }
+#endif
 
 static int
 Every_Z_Gem(void)

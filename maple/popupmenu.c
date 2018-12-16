@@ -23,6 +23,7 @@ static int do_menu(MENU pmenu[], XO *xo, int x, int y);
 /*            0  代表不是中文字              */
 /* ----------------------------------------- */
 
+#ifndef M3_USE_PFTERM
 static int
 is_big5(char *src, int pos, int mode)
 {
@@ -55,6 +56,7 @@ is_big5(char *src, int pos, int mode)
     else
         return 0;
 }
+#endif
 
 static int
 do_cmd(MENU *mptr, XO *xo, int x, int y)
@@ -104,6 +106,7 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
     return -1;
 }
 
+#ifndef M3_USE_PFTERM
 /* verit . 計算扣掉色碼的實際長度 */
 static int
 count_len(
@@ -190,6 +193,7 @@ get_color(char *s, int len, int *fc, int *bc, int *bbc)
     }
 
 }
+#endif
 
 #ifndef M3_USE_PFTERM
 static void

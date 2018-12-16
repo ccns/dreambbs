@@ -1557,6 +1557,9 @@ XoAuthor(
 #ifndef HAVE_MMAP
     XO *xo_t;
 #endif
+
+    (void)XoAuthor;
+
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
 

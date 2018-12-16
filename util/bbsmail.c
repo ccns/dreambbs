@@ -57,6 +57,8 @@ my_biff(char *userid)
 {
     UTMP *utmp, *uceil;
 
+    (void)my_biff;
+
     // XXX 這個 userid 已經轉成小寫了嗎? 好像是
 
     // XXX 沒效率? 唉

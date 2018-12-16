@@ -89,6 +89,7 @@ change_stamp(
     char *folder,
     HDR *hdr)
 {
+    (void)change_stamp;
     hdr->stamp = time(0);
 }
 

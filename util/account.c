@@ -657,6 +657,8 @@ gtar(
 {
     char buf[128];
 
+    (void)gtar;
+
     sprintf(buf, "`which tar` cfz log/%s%s.tgz %s", target, stamp, source);
     system(buf);
 

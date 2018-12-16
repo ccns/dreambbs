@@ -1619,6 +1619,7 @@ select_title(
 {
     char *objs[] = {"[公告]", "[新聞]", "[閒聊]", "[文件]", "[問題]", "[測試]"};
     int select;
+    (void)select_title;
     outs("\n\n1.【公告】2.【新聞】3.【閒聊】4.【文件】5.【問題】6.【測試】7.【其他】\n");
     select = vans("請選擇文章類別或按 Enter 跳過：") - '1';
     if (select >=0 && select <=5)

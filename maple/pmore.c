@@ -753,7 +753,9 @@ MFPROTO int mf_movieWaitKey(struct timeval *ptv, int dorefresh);
 MFPROTO int mf_movieNextFrame(void);
 MFPROTO int mf_movieSyncFrame(void);
 MFPROTO int mf_moviePromptPlaying(int type);
+#if defined(PMORE_USE_ASCII_MOVIE) && defined(PMORE_AUTOEXIT_FIRSTPAGE)
 MFPROTO unsigned char *mf_movieNextLine(unsigned char *frame);
+#endif
 MFFPROTO int mf_movieMaskedInput(int c);
 
 #define MOVIE_MIN_FRAMECLK (0.1f)
@@ -4427,6 +4429,7 @@ mf_movieNextFrame(void)
     return 0;
 }
 
+#ifdef PMORE_AUTOEXIT_FIRSTPAGE
 MFPROTO unsigned char *
 mf_movieNextLine(unsigned char *frame)
 {
@@ -4440,6 +4443,7 @@ mf_movieNextLine(unsigned char *frame)
 
     return frame;
 }
+#endif
 
 #endif
 
