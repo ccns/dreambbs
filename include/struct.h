@@ -728,12 +728,12 @@ typedef struct
 
 typedef struct screenline
 {
-    unsigned char oldlen;               /* previous line length */
+    unsigned short oldlen;               /* previous line length */
     unsigned char len;                  /* current length of line */
     unsigned char width;                /* padding length of ANSI codes */
     unsigned char mode;                 /* status of line, as far as update */
     unsigned char smod;                 /* start of modified data */
-    unsigned char emod;                 /* end of modified data */
+    unsigned short emod;                 /* end of modified data */
     unsigned char sso;                  /* start of standout data */
     unsigned char eso;                  /* end of standout data */
     unsigned char data[ANSILINELEN];
