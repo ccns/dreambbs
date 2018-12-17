@@ -596,18 +596,18 @@ personal_help(
 
 KeyFunc personal_cb[] =
 {
-    XO_INIT, personal_init,
-    XO_LOAD, personal_load,
-    XO_HEAD, personal_head,
-    XO_BODY, personal_body,
+    {XO_INIT, personal_init},
+    {XO_LOAD, personal_load},
+    {XO_HEAD, personal_head},
+    {XO_BODY, personal_body},
 
-    'c', personal_change,
-    's', personal_init,
-    'd', personal_delete,
-    KEY_TAB, personal_switch,
-    'O', personal_open,
-    'D', personal_deny,
-    'h', personal_help
+    {'c', personal_change},
+    {'s', personal_init},
+    {'d', personal_delete},
+    {KEY_TAB, personal_switch},
+    {'O', personal_open},
+    {'D', personal_deny},
+    {'h', personal_help}
 };
 
 int

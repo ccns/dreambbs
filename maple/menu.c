@@ -536,8 +536,8 @@ static MENU menu_boardadm[] =
     {"bin/adminutil.so:mail_to_all", PERM_SYSOP, - M_XMODE,
     "Alluser    系統通告"},
 
-    "bin/personal.so:personal_admin", PERM_BOARD|PERM_SYSOP, - M_XMODE,
-    "Personal   個人板審核",
+    {"bin/personal.so:personal_admin", PERM_BOARD|PERM_SYSOP, - M_XMODE,
+    "Personal   個人板審核"},
 
     {menu_admin, PERM_MENU + 'N', M_XMENU,
     "看板總管"}
@@ -818,15 +818,15 @@ static MENU menu_information[] =
     {year, 0, M_READA,
     "3Year      本年度百大熱門話題"},
 
-    menu_xyz, PERM_MENU + 'L', M_MMENU,
-    "統計資料"
+    {menu_xyz, PERM_MENU + 'L', M_MMENU,
+    "統計資料"}
 };
 
 
 static MENU menu_xyz[] =
 {
-    menu_information, 0, M_XMENU,
-    "Tops       " NICKNAME "排行榜",
+    {menu_information, 0, M_XMENU,
+    "Tops       " NICKNAME "排行榜"},
 
     {version, 0, M_READA,
     "Version    源碼發展資訊"},
@@ -860,8 +860,8 @@ static MENU menu_reg[] =
     {u_addr, PERM_BASIC, M_XMODE,
     "Address    填寫電子信箱及認證"},
 
-    u_verify, PERM_BASIC, M_UFILES,
-    "Verify     填寫《註冊認證碼》",
+    {u_verify, PERM_BASIC, M_UFILES,
+    "Verify     填寫《註冊認證碼》"},
 
 #ifdef  HAVE_REGISTER_FORM
     {u_register, PERM_BASIC, M_UFILES,
@@ -880,15 +880,15 @@ static MENU menu_reg[] =
     {"bin/list.so:List", PERM_VALID, - M_XMODE,
     "1List      群組名單"},
 
-    menu_user, PERM_MENU + 'I', M_MMENU,
-    "註冊資訊"
+    {menu_user, PERM_MENU + 'I', M_MMENU,
+    "註冊資訊"}
 };
 
 
 static MENU menu_user[] =
 {
-    menu_reg, 0, M_XMENU,
-    "Configure  註冊及設定個人資訊",
+    {menu_reg, 0, M_XMENU,
+    "Configure  註冊及設定個人資訊"},
 
     {u_lock, PERM_BASIC, M_XMODE,
     "Lock       鎖定螢幕"},
@@ -1080,8 +1080,8 @@ static MENU menu_main[] =
     {menu_admin, PERM_ADMIN, M_ADMIN,
     "0Admin    【 系統維護區 】"},
 
-    Gem, 0, M_GEM,
-    "Announce  【 精華公佈欄 】",
+    {Gem, 0, M_GEM,
+    "Announce  【 精華公佈欄 】"},
 
     {Boards, 0, M_BOARD,
     "Boards    【 \033[1;33m佈告討論區\033[m 】"},
