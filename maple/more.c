@@ -22,7 +22,7 @@
 static int more_width;  /* more screen 的寬度 */
 #endif
 
-static unsigned char more_pool[MORE_BUFSIZE];
+static char more_pool[MORE_BUFSIZE];
 static int more_base;           /* more_pool[more_base ~ more_base+more_size] 有值 */
 static int more_size;
 
@@ -133,9 +133,9 @@ mread(
 #define STR_ANSICODE    "[0123456789;"
 
 
-static unsigned char *fimage;           /* file image begin */
-static unsigned char *fend;             /* file image end */
-static unsigned char *foff;             /* 目前讀到哪裡 */
+static char *fimage;           /* file image begin */
+static char *fend;             /* file image end */
+static char *foff;             /* 目前讀到哪裡 */
 
 
 static int
@@ -151,7 +151,7 @@ more_line(
         if (foff >= fend)
             break;
 
-        ch = *foff;
+        ch = (unsigned char) *foff;
 
         /* weiyu.040802: 如果這碼是中文字的首碼，但是只剩下一碼的空間可以印，那麼不要印這碼 */
         if (in_chi || IS_ZHC_HI(ch))
@@ -418,7 +418,7 @@ more(
     char buf[ANSILINELEN];
     int i;
 
-    unsigned char *headend;             /* 檔頭結束 */
+    char *headend;             /* 檔頭結束 */
 
     int shift;                          /* 還需要往下移動幾列 */
     int lino;                           /* 目前 line number */
@@ -665,9 +665,9 @@ re_key:
         else if (key == 'h')
         {
             screenline slt[T_LINES];
-            unsigned char *tmp_fimage;
-            unsigned char *tmp_fend;
-            unsigned char *tmp_foff;
+            char *tmp_fimage;
+            char *tmp_fend;
+            char *tmp_foff;
             off_t tmp_block[MAXBLOCK];
 */
             /* itoc.060420: xo_help() 會進入第二次 more()，所以要把所有 static 宣告的都記錄下來 */

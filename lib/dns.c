@@ -72,7 +72,7 @@ unsigned long dns_addr(char *name)
     cc = name[0];
     if (cc >= '0' && cc <= '9')
     {
-        for (cp = name;; ++cp)
+        for (cp = (unsigned char *)name;; ++cp)
         {
             cc = *cp;
             if (!cc)
@@ -422,7 +422,7 @@ int dns_open(char *host, int port)
     /* Thor.980707: 因gem.c呼叫時可能將host用ip放入，故作特別處理 */
     if (*host >= '0' && *host <= '9')
     {
-        for (n = 0, cp = host; n < 4; n++, cp++)
+        for (n = 0, cp = (unsigned char *)host; n < 4; n++, cp++)
         {
             buf[n] = 0;
             while (*cp >= '0' && *cp <= '9')
@@ -435,7 +435,7 @@ int dns_open(char *host, int port)
         }
         if (n == 3)
         {
-            cp = buf;
+            cp = (unsigned char *)buf;
             goto ip;
         }
     }

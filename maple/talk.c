@@ -1669,7 +1669,7 @@ bmw_edit(
     BMW *bmw,
     int cc)
 {
-    unsigned char *str;
+    char *str;
 #ifdef M3_USE_PFTERM
     screen_backup_t old_screen;
 #else

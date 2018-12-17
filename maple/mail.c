@@ -1961,7 +1961,7 @@ hdr_outs(               /* print HDR's subject */
 {
     static char *type[4] =
     {"Re", "◇", "\033[1;33m=>", "\033[1;32m◆"};
-    unsigned char *title, *mark;
+    char *title, *mark;
     int ch, len;
     UTMP *online;
 
@@ -2001,7 +2001,7 @@ hdr_outs(               /* print HDR's subject */
         if (online != NULL)
         outs("\033[1;37m");
 
-        while ((ch = *mark))
+        while ((ch = (unsigned char) *mark))
         {
             if ((--len == 0) || (ch == '@'))
                 ch = '.';
@@ -2104,7 +2104,7 @@ hdr_outs(               /* print HDR's subject */
 #endif
 
             outc(cc);
-        } while ((cc = *title++) && (title < mark));
+        } while ((cc = (unsigned char) *title++) && (title < mark));
 
 #ifdef  HAVE_DECLARE
         if (angle || square == 2)       /* Thor.0508: 變色還原用 */

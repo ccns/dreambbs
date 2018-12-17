@@ -758,8 +758,8 @@ out_rle(
     int film)
 {
 #ifdef SHOW_USER_IN_TEXT
-    unsigned char *t_name = cuser.userid;
-    unsigned char *t_nick = cuser.username;
+    char *t_name = cuser.userid;
+    char *t_nick = cuser.username;
 #endif
     int x, y/*, count=0*/;
     int cc, rl;
@@ -793,14 +793,14 @@ out_rle(
 
 #ifdef SHOW_USER_IN_TEXT
         case 1:
-            if ((cc = *t_name) && (cuser.ufo2 & UFO2_SHOWUSER))
+            if ((cc = (unsigned char) *t_name) && (cuser.ufo2 & UFO2_SHOWUSER))
                 t_name++;
             else
                 cc = (cuser.ufo2 & UFO2_SHOWUSER) ? ' ': '#';
             break;
 
         case 2:
-            if ((cc = *t_nick) && (cuser.ufo2 & UFO2_SHOWUSER))
+            if ((cc = (unsigned char) *t_nick) && (cuser.ufo2 & UFO2_SHOWUSER))
                 t_nick++;
             else
                 cc = (cuser.ufo2 & UFO2_SHOWUSER) ? ' ' : '%';

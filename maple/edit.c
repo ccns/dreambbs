@@ -1584,7 +1584,7 @@ ve_outs(
     char *text)
 {
     int ch;
-    unsigned char *tail;
+    char *tail;
 
     tail = text + SCR_WIDTH - 1;
     while ((ch = (unsigned char) *text))
