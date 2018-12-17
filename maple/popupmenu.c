@@ -88,7 +88,7 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
         case POPUP_MENU :
 //          sprintf(t, "¡i%s¡j", mptr->desc);
 #ifdef M3_USE_PFTERM
-            scr_restore(&old_screen); // restore foot
+            scr_restore_keep(&old_screen); // restore foot
 #else
             vs_restore(sl);
 #endif
@@ -394,7 +394,7 @@ do_menu(
                 if (do_cmd(table[cur], xo, x, y)<0)
                     return -1;
 #ifdef M3_USE_PFTERM
-                scr_restore(&old_screen); // restore foot
+                scr_restore_keep(&old_screen); // restore foot
 #else
                 vs_restore(sl);
 #endif
@@ -413,7 +413,7 @@ do_menu(
                             if (do_cmd(table[cur], xo, x, y)<0)
                                 return -1;
 #ifdef M3_USE_PFTERM
-                            scr_restore(&old_screen); // restore foot
+                            scr_restore_keep(&old_screen); // restore foot
 #else
                             vs_restore(sl);
 #endif
@@ -484,13 +484,15 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
     char c;
     char t[64];
     char hotkey;
-    hotkey = desc[0][0];
-
 #ifdef M3_USE_PFTERM
+    screen_backup_t old_screen = {0};
+
     scr_dump(&old_screen);
 #else
     vs_save(sl);
 #endif
+    hotkey = desc[0][0];
+
     sprintf(t, "¡i%s¡j", title);
     num = draw_menu_des(desc, t, x, y, 0);
     cur = old_cur = 0;
@@ -509,7 +511,7 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
         {
             case KEY_LEFT:
 #ifdef M3_USE_PFTERM
-                scr_restore(&old_screen); // restore foot
+                scr_restore_free(&old_screen); // restore foot
 #else
                 vs_restore(sl);
 #endif
@@ -529,7 +531,7 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
             case KEY_RIGHT:
             case '\n':
 #ifdef M3_USE_PFTERM
-                scr_restore(&old_screen); // restore foot
+                scr_restore_free(&old_screen); // restore foot
 #else
                 vs_restore(sl);
 #endif
@@ -564,7 +566,7 @@ popupmenu(MENU pmenu[], XO *xo, int x, int y)
 #endif
     do_menu(pmenu, xo, x, y);
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen); // restore foot
+    scr_restore_free(&old_screen); // restore foot
 #else
     vs_restore(sl);
 #endif
@@ -643,7 +645,7 @@ int pmsg(char *msg)
 
     cc = vkey();
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen); // restore foot
+    scr_restore_free(&old_screen); // restore foot
 #else
     vs_restore(sl);
 #endif

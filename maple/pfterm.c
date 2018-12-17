@@ -2309,7 +2309,7 @@ scr_dump(screen_backup_t *psb)
     psb->y   = ft.y;
     psb->x   = ft.x;
     p = psb->raw_memory =
-        malloc (ft.rows * ft.cols * (sizeof(ftchar) + sizeof(ftattr)));
+        realloc (psb->raw_memory, ft.rows * ft.cols * (sizeof(ftchar) + sizeof(ftattr)));
 
     for (y = 0; y < ft.rows; y++)
     {
@@ -2320,8 +2320,18 @@ scr_dump(screen_backup_t *psb)
     }
 }
 
+void (*const scr_restore)(screen_backup_t *psb) = scr_restore_free;
+
 void
-scr_restore(const screen_backup_t *psb)
+scr_restore_free(screen_backup_t *psb)
+{
+    scr_restore_keep(psb);
+    free(psb->raw_memory);
+    psb->raw_memory = NULL;
+}
+
+void
+scr_restore_keep(const screen_backup_t *psb)
 {
     int y = 0;
     char *p = NULL;
@@ -2345,7 +2355,6 @@ scr_restore(const screen_backup_t *psb)
         p += psb->col * sizeof(ftattr);
     }
 
-    free(psb->raw_memory);
     ft.dirty = 1;
     refresh();
 }

@@ -83,6 +83,9 @@ void    grayout     (int y, int end, int level);
 // environment specific
 //////////////////////////////////////////////////////////////////////////
 void    scr_dump    (screen_backup_t *psb);
-void    scr_restore (const screen_backup_t *psb);
+extern void (*const scr_restore)  (screen_backup_t *psb);
+       void    scr_restore_free   (screen_backup_t *psb);
+       void    scr_restore_keep   (const screen_backup_t *psb);
+
 
 #endif // __PFTERM_H__

@@ -28,8 +28,6 @@ draw_line(
     return;
 }
 
-static screen_backup_t old_screen;
-
 #else
 
 static screenline slt[T_LINES];
@@ -335,6 +333,8 @@ popupmenu_ans2(char *desc[], char *title, int x, int y)
     char hotkey;
 
 #ifdef M3_USE_PFTERM
+    screen_backup_t old_screen = {0};
+
     scr_dump(&old_screen);
     grayout(0, b_lines, GRAYOUT_DARK);
 #else
@@ -358,7 +358,7 @@ popupmenu_ans2(char *desc[], char *title, int x, int y)
         case KEY_RIGHT:
         case '\n':
 #ifdef M3_USE_PFTERM
-            scr_restore(&old_screen);
+            scr_restore_free(&old_screen);
 #else
             vs_restore(slt);
 #endif
@@ -412,6 +412,8 @@ pmsg2(char *msg)
     char buf[80];
 
 #ifdef M3_USE_PFTERM
+    screen_backup_t old_screen = {0};
+
     if (!msg)
     return vmsg(NULL);
 
@@ -457,7 +459,7 @@ pmsg2(char *msg)
 
     x = vkey();
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     vs_restore(slt);
 #endif

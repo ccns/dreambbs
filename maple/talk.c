@@ -1671,7 +1671,7 @@ bmw_edit(
 {
     char *str;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[2];
 #endif
@@ -1712,7 +1712,7 @@ bmw_edit(
                 vmsg(MSG_USR_LEFT);
                 if (!cc)
 #ifdef M3_USE_PFTERM
-                    scr_restore(&old_screen);
+                    scr_restore_free(&old_screen);
 #else
                     restore_foot(sl);
 #endif
@@ -1735,7 +1735,7 @@ bmw_edit(
 
     if (!cc)
 #ifdef M3_USE_PFTERM
-        scr_restore(&old_screen);
+        scr_restore_free(&old_screen);
 #else
         restore_foot(sl);
 #endif
@@ -1806,7 +1806,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
     UTMP *up, *uhead;
     BMW bmw;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[2], slt[b_lines + 1];
 #endif
@@ -1824,7 +1824,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
     {
         vmsg("先前並無熱訊呼叫");
 #ifdef M3_USE_PFTERM
-        scr_restore(&old_screen);
+        scr_restore_free(&old_screen);
 #else
         restore_foot(sl); /* Thor.981222: 想清掉message */
 #endif
@@ -1877,13 +1877,13 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
         {
             if (cuser.ufo2 & UFO2_REPLY || replymode)
 #ifdef M3_USE_PFTERM
-                scr_restore(&old_screen);
+                scr_restore_free(&old_screen);
 #else
                 vs_restore(slt);      /* 還原 bmw_display 之前的 screen */
 #endif
             else
 #ifdef M3_USE_PFTERM
-                scr_restore(&old_screen);
+                scr_restore_free(&old_screen);
 #else
                 restore_foot(sl);
 #endif
@@ -1931,7 +1931,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
         {
             if (cuser.ufo2 & UFO2_REPLY || replymode)
 #ifdef M3_USE_PFTERM
-                scr_restore(&old_screen);
+                scr_restore_keep(&old_screen);
 #else
                 vs_restore(slt);      /* 還原 bmw_display 之前的 screen */
 #endif
@@ -2001,13 +2001,13 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 
     if (cuser.ufo2 & UFO2_REPLY || replymode)
 #ifdef M3_USE_PFTERM
-        scr_restore(&old_screen);
+        scr_restore_free(&old_screen);
 #else
         vs_restore(slt);
 #endif
     else
 #ifdef M3_USE_PFTERM
-        scr_restore(&old_screen);
+        scr_restore_free(&old_screen);
 #else
         restore_foot(sl);
 #endif
@@ -2658,7 +2658,7 @@ talk_speak(
         if (ch == Ctrl('Z'))
         {
 #ifdef M3_USE_PFTERM
-            screen_backup_t old_screen;
+            screen_backup_t old_screen = {0};
 #else
             screenline sl[b_lines + 1];
 #endif
@@ -2676,7 +2676,7 @@ talk_speak(
 #endif
             every_Z();
 #ifdef M3_USE_PFTERM
-            scr_restore(&old_screen);
+            scr_restore_free(&old_screen);
 #else
             vs_restore(sl);
 #endif
@@ -4303,7 +4303,7 @@ talk_rqst(void)
     char buf[80];
     struct sockaddr_in sin;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -4479,7 +4479,7 @@ over_for:
         talk_save();          /* lkchu.981201: talk 記錄處理 */
 #endif
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     vs_restore(sl);
 #endif

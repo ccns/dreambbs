@@ -1971,7 +1971,7 @@ every_Z_Orig(void)
     int cmd;
     char select;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2001,7 +2001,7 @@ every_Z_Orig(void)
 #ifdef  HAVE_FAVORITE
         case 'f':
 #ifdef M3_USE_PFTERM
-            scr_restore(&old_screen);
+            scr_restore_keep(&old_screen);
 #else
             restore_foot(sl);
 #endif
@@ -2043,7 +2043,7 @@ every_Z_Orig(void)
     }
 
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     restore_foot(sl);
 #endif
@@ -2160,7 +2160,7 @@ every_Z(void)
 {
     int tmpmode, savemode;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2210,7 +2210,7 @@ every_Z(void)
         XoPost(tmpbno);
 
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     vs_restore(sl);
 #endif
@@ -2228,7 +2228,7 @@ every_U(void)
 {
     int cmd, tmpmode;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2263,7 +2263,7 @@ every_U(void)
 #endif
     xover(cmd);
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     vs_restore(sl);
 #endif
@@ -2281,7 +2281,7 @@ void
 every_B(void)
 {
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2298,7 +2298,7 @@ every_B(void)
     u_lock();
 
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     vs_restore(sl);
 #endif
@@ -2313,7 +2313,7 @@ every_S(void)
 {
     int tmpmode;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2326,7 +2326,7 @@ every_S(void)
 #endif
     Select();
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     vs_restore(sl);
 #endif

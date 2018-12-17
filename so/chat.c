@@ -889,7 +889,7 @@ t_chat(void)
         if (ch == Ctrl('Z'))
         {
             char buf[IDLEN + 1];
-            screen_backup_t old_screen;
+            screen_backup_t old_screen = {0};
             scr_dump(&old_screen);
 
             /* Thor.0731: 暫存 mateid, 因為出去時可能會用掉 mateid(like query) */
@@ -905,7 +905,7 @@ t_chat(void)
 
             /* Thor.0731: 還原 mateid, 因為出去時可能會用掉 mateid(like query) */
             strcpy(cutmp->mateid, buf);
-            scr_restore(&old_screen);
+            scr_restore_free(&old_screen);
             continue;
         }
 #else
