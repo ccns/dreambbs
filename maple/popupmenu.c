@@ -270,28 +270,14 @@ static void
 vs_line(
     char *msg, int y, int x)
 {
-    int head, tail;
+    move(y, x);
 
     if (msg)
-        head = (strlen(msg) + 1) >> 1;
-    else
-        head = 0;
-
-    tail = head;
-
-    while (head++ < 38)
-        outc('-');
-
-    if (tail)
     {
-        outc(' ');
-        outs(msg);
-        outc(' ');
+        outstr(msg);
     }
 
-    while (tail++ < 38)
-        outc('-');
-    outc('\n');
+    move(y, 0);
 }
 #endif //not M3_USE_PFTERM
 
