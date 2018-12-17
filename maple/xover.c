@@ -2184,31 +2184,20 @@ every_Z(void)
 
     tmpbno = currbno;
 
-#ifdef M3_USE_PFTERM
     if (xo_stack_level < XO_STACK) {
         xo_stack_level++;
+#ifdef M3_USE_PFTERM
         scr_dump(&old_screen);
+#else
+        vs_save(sl);
+#endif
     } else {
         vmsg("已達到最大上限堆疊空間！");
         return;
     }
-#else
-    if (xo_stack_level < XO_STACK)
-        xo_stack_level++;
-    else
-    {
-        vmsg("已達到最大上限堆疊空間！");
-        return;
-    }
-#endif
 
     savemode = boardmode;
     tmpmode = bbsmode;
-#ifdef M3_USE_PFTERM
-    scr_dump(&old_screen);
-#else
-    vs_save(sl);
-#endif
 
     if ( cuser.ufo2 & UFO2_ORIGUI)
         every_Z_Orig();
