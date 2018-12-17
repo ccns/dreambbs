@@ -86,7 +86,7 @@ int pickup_way=1;
 #else
 #define PICKUP_WAYS     (6)
 int pickup_way=1;
-#endif
+#endif  /* #ifdef  HAVE_BOARD_PAL */
 
 static char page_requestor[40];
 
@@ -1443,7 +1443,7 @@ XoBM(
     }
     return XO_NONE;
 }
-#endif
+#endif  /* #ifdef HAVE_MODERATED_BOARD */
 
 
 /* ------------------------------------- */
@@ -2185,7 +2185,7 @@ aloha(void)
         close(fd);
     }
 }
-#endif
+#endif  /* #ifdef HAVE_ALOHA */
 
 
 #ifdef LOGIN_NOTIFY
@@ -2284,7 +2284,7 @@ loginNotify(void)
         vmsg(NULL);
     }
 }
-#endif
+#endif  /* #ifdef LOGIN_NOTIFY */
 
 
 /* Thor: for ask last call-in messages */
@@ -2411,7 +2411,7 @@ bmw_save(void)
     }
 
 }
-#endif
+#endif  /* #ifdef LOG_BMW */
 
 
 void
@@ -2688,7 +2688,7 @@ talk_speak(
             strcpy(cutmp->mateid, buf);
             continue;
         }
-#endif
+#endif  /* #ifdef EVERY_Z */
         if (ch == Ctrl('U'))
         {
             char buf[IDLEN + 1];
@@ -3398,7 +3398,7 @@ ulist_init(
         }
     } while (++up <= uceil);
 
-#endif
+#endif  /* #ifdef  FRIEND_FIRST */
 
     xo->max = max = pp - ulist_pool;
 
@@ -4137,7 +4137,7 @@ ulist_state(
     vmsg(buf);
     return XO_INIT;
 }
-#endif
+#endif  /* #if 1 */
 
 #ifdef  APRIL_FIRST
 static int
@@ -4920,4 +4920,4 @@ t_banmsg(void)
 
     return 0;
 }
-#endif
+#endif  /* #ifdef  HAVE_BANMSG */

@@ -66,7 +66,7 @@ zhangba_detect(
     return num;
 }
 
-#endif
+#endif  /* #ifdef HAVE_DETECT_ZHANGBA */
 
 extern int TagNum;
 extern char xo_pool[];
@@ -186,7 +186,7 @@ checksum_find(
     fclose(fp);
     return checksum_put(sum, check);
 }
-#endif
+#endif  /* #ifdef  HAVE_DETECT_CROSSPOST */
 
 /* ----------------------------------------------------- */
 /* 改良 innbbsd 轉出信件、連線砍信之處理程序             */
@@ -925,7 +925,7 @@ post_item(
 #else
     prints("%6d%c%c ", (hdr->xmode & POST_BOTTOM) ? -1 : num, tag_char(hdr->chrono), post_attr(hdr));
     hdr_outs(hdr, 47);
-#endif
+#endif  /* #ifdef HAVE_RECOMMEND */
 }
 
     static int
@@ -1367,7 +1367,7 @@ post_xcross(
     return XO_HEAD;
 }
 
-#endif
+#endif  /* #ifdef HAVE_MULTI_CROSSPOST */
 
 
 /* ----------------------------------------------------- */
@@ -1477,7 +1477,7 @@ post_history(          /* 將 hdr 這篇加入 brh */
         brh_add(prev, chrono, next);
     }
 }
-#endif
+#endif  /* #if 0 */
 
     static int
 post_browse(
@@ -2036,7 +2036,7 @@ post_bottom(
     }
     return XO_NONE;
 }
-#endif
+#endif  /* #ifdef HAVE_POST_BOTTOM */
 
     static int
 post_complete(
@@ -2227,7 +2227,7 @@ post_state(
 
     return post_body(xo);
 }
-#endif
+#endif  /* #if 0 */
 
     static int
 post_undelete(
@@ -2290,7 +2290,7 @@ post_undelete(
             checksum_find(fpath, 0, bbstate);
 #endif
         }
-#endif
+#endif  /* #if 0 */
     }
     fhdr->xmode &= (~(POST_MDELETE | POST_DELETE | POST_CANCEL));
     if (!rec_put(xo->dir, fhdr, sizeof(HDR), pos))
@@ -2585,7 +2585,7 @@ post_edit(
             hdr->modifytimes = 0;
         vmsg("此文章不能被修改!!");
     }
-#endif
+#endif  /* #ifdef  HAVE_USER_MODIFY */
     return XO_FOOT;
 }
 
@@ -2752,10 +2752,10 @@ int post_edit(XO *xo)
             vmsg("此文章不能被修改!!");
             return XO_FOOT;
         }
-#endif
+#endif  /* #ifdef  HAVE_USER_MODIFY */
     return XO_NONE;
 }
-#endif
+#endif  /* #if 0 */
 
 void
 header_replace(         /* 0911105.cache: 修改文章標題順便修改內文的標題 */
@@ -3011,7 +3011,7 @@ contWhileOuter:
 
     return XO_FOOT;
 }
-#endif
+#endif  /* #ifdef HAVE_TERMINATOR */
 
     int
 post_ban_mail(
@@ -3055,7 +3055,7 @@ post_brdtitle(
 
     return XO_HEAD;
 }
-#endif
+#endif  /* #ifdef  HAVE_BRDTITLE_CHANGE */
 
 
 
@@ -3477,7 +3477,7 @@ post_recommend(
     return XO_FOOT;
 }
 
-#endif
+#endif  /* #ifdef HAVE_RECOMMEND */
 
 /* cache.081122: 看板資訊顯示 */
     static int
@@ -4511,7 +4511,7 @@ xpost_body(
     return XO_NONE;
 }
 
-#endif
+#endif  /* #if 0 */
 
     static int
 xpost_head(
@@ -4786,5 +4786,5 @@ KeyFunc xpost_cb[] =
 
     {'h', xpost_help}
 };
-#endif
+#endif  /* #ifdef XZ_XPOST */
 

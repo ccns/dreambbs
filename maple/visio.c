@@ -30,7 +30,7 @@
 #else
 int cur_row, cur_col;
 int cur_pos;                    /* current position with ANSI codes */
-#endif
+#endif  /* #ifdef M3_USE_PFTERM */
 
 /* ----------------------------------------------------- */
 /* output routines                                       */
@@ -62,7 +62,7 @@ telnet_flush(
 #else
 
 # define telnet_flush(data, size)       send(0, data, size, 0)
-#endif
+#endif  /* #ifdef  VERBOSE */
 
 
 #ifdef M3_USE_PFTERM
@@ -115,7 +115,7 @@ output(
     }
     vo_size = size;
 }
-#endif
+#endif  /* #ifndef M3_USE_PFTERM */
 
 #ifdef M3_USE_PFTERM
 void
@@ -291,7 +291,7 @@ ansi_move(
     cur_pos = x;
 
 }
-#endif
+#endif  /* #if 0 */
 
 void
 getyx(
@@ -1010,7 +1010,7 @@ outx(
 */
 
 }
-#endif
+#endif  /* #ifdef SHOW_USER_IN_TEXT */
 
 /* ----------------------------------------------------- */
 /* clear the bottom line and show the message            */
@@ -1387,7 +1387,7 @@ cursor_key(
     outs(STR_UNCUR);
     return ch;
 }
-#endif
+#endif  /* #if 0 */
 
 static void
 vs_line(

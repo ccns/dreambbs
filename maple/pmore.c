@@ -269,7 +269,7 @@
  #define READ_PREV   'k'
  #if !defined(FULLUPDATE) && defined(XO_HEAD)
  # define FULLUPDATE XO_HEAD
- #endif
+ #endif  /* #if !defined(FULLUPDATE) && defined(XO_HEAD) */
  // environments and features
  #undef PMORE_USE_INTERNAL_HELP
  #undef PMORE_USE_REPLYKEY_HINTS
@@ -326,7 +326,7 @@
 #define MF_MMAP_OPTION (MAP_POPULATE|MAP_SHARED)
 #else
 #define MF_MMAP_OPTION (MAP_SHARED)
-#endif
+#endif  /* #ifdef MAP_NOSYNC */
 
 /* Developer's Guide
  *
@@ -772,7 +772,7 @@ MFFPROTO int mf_movieMaskedInput(int c);
 #define MOVIE_KEY_BS2 (0x7f)
 #endif
 
-#endif
+#endif  /* #ifdef PMORE_USE_ASCII_MOVIE */
 // --------------------------------------------- </Optional Modules>
 
 // used by mf_attach
@@ -838,7 +838,7 @@ mf_gunzip(const char *fn GCC_UNUSED, int fd)
     close(fd);
     return tmp_fd;
 }
-#endif
+#endif  /* #ifdef PMORE_GUNZIP_CMD */
 
 /*
  * mmap basic operations
@@ -1487,7 +1487,7 @@ mf_display(void)
         // return;      // uncomment if you want to observe scrolling
     }
     else
-#endif
+#endif  /* #ifdef PMORE_USE_OPT_SCROLL */
         clear(), move(0, 0);
 
     mf.dispe = mf.disps;
@@ -1556,7 +1556,7 @@ mf_display(void)
                         return;
                 }
         }
-#endif
+#endif  /* #ifdef PMORE_USE_ASCII_MOVIE */
 
         /* Is currentline visible? */
         if (lines < startline || lines > endline)
@@ -1968,7 +1968,7 @@ mf_display(void)
                                     outs(ansicmd);
                                 }
                             }
-#endif
+#endif  /* #ifdef PMORE_USE_DBCS_WRAP */
                         }
                     }
                 }
@@ -2430,7 +2430,7 @@ _pmore2(
                 continue;
 
             } else if (mfmovie.mode != MFDISP_MOVIE_PLAYING)
-#endif
+#endif  /* #ifdef PMORE_USE_ASCII_MOVIE */
 #ifndef PMORE_AUTOEXIT_FIRSTPAGE
             if (mf_viewedAll())
 #endif // PMORE_AUTOEXIT_FIRSTPAGE
@@ -2551,7 +2551,7 @@ _pmore2(
                 }
                 continue;
         }
-#endif
+#endif  /* #ifdef PMORE_USE_ASCII_MOVIE */
 
         /* PRINT FOOTER */
         mf_display_footer(footer_handler, ctx);
@@ -2646,7 +2646,7 @@ _pmore2(
                 /* one more try. */
                 mf_goBottom();
                 invalidate = 1;
-#endif
+#endif  /* #ifdef PMORE_ACCURATE_WRAPEND */
                 break;
 
             /* Compound Navigation */
@@ -2893,7 +2893,7 @@ _pmore2(
                     }
                 }
                 break;
-#endif
+#endif  /* #ifdef PMORE_USE_INTERNAL_HELP */
 
 #ifndef PMORE_IGNORE_UNKNOWN_NAVKEYS
             default:
@@ -3165,13 +3165,13 @@ pmore_Preference(void)
 // apply system colors if defined
 #ifndef HLP_CATEGORY_COLOR
 #define HLP_CATEGORY_COLOR      PMHLPATTR_HEADER
-#endif
+#endif  /* #ifndef HLP_CATEGORY_COLOR */
 #ifndef HLP_DESCRIPTION_COLOR
 #define HLP_DESCRIPTION_COLOR   PMHLPATTR_NORMAL
-#endif
+#endif  /* #ifndef HLP_DESCRIPTION_COLOR */
 #ifndef HLP_KEYLIST_COLOR
 #define HLP_KEYLIST_COLOR       PMHLPATTR_NORMAL_KEY
-#endif
+#endif  /* #ifndef HLP_KEYLIST_COLOR */
 
 static const char
 *hlp_basic[] = {
@@ -4445,7 +4445,7 @@ mf_movieNextLine(unsigned char *frame)
 }
 #endif
 
-#endif
+#endif  /* #ifdef PMORE_USE_ASCII_MOVIE */
 
 /* vim:sw=4:ts=8:et:nofoldenable
  */

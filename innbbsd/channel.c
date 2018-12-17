@@ -810,7 +810,7 @@ getdtablesize(void)
     return -1;
 }
 #endif //RLIMIT
-#endif
+#endif  /* #ifdef SOLARIS */
 
 
 static void

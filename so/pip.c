@@ -5145,7 +5145,7 @@ int first)
     memcpy(&d, &chickentemp, sizeof(d));
     return 0;
 }
-#endif
+#endif  /* #ifdef  HAVE_PIP_FIGHT */
 
 /*---------------------------------------------------------------------------*/
 /* 結局函式                                                                  */
@@ -8175,7 +8175,7 @@ UTMP *opt)
     }
     return injure;
 }
-#endif
+#endif  /* #ifdef  HAVE_PIP_FIGHT */
 /*---------------------------------------------------------------------------*/
 /* 函式特區                                                                  */
 /*                                                                           */
@@ -8825,7 +8825,7 @@ int mode)
     prints(" 戰鬥中.............\n");
 
 }
-#endif
+#endif  /* #ifdef HAVE_PIP_FIGHT */
 #ifdef  HAVE_PIP_FIGHT
 static int pip_fight_feed(void)     /* 餵食*/
 {
@@ -8984,4 +8984,4 @@ case 'Q': case 'q': case KEY_LEFT:
 
     return 0;
 }
-#endif
+#endif  /* #ifdef  HAVE_PIP_FIGHT */

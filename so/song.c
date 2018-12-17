@@ -391,7 +391,7 @@ XO *xo)
     rec_add(xfolder, &xpost, sizeof(xpost));
     return XO_HEAD;
 }
-#endif
+#endif  /* #if 1 */
 
 static int
 song_query(

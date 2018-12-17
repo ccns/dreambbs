@@ -916,7 +916,7 @@ xo_zmodem(
 
     return XO_HEAD;
 }
-#endif
+#endif  /* #if 0 */
 
 /* ----------------------------------------------------- */
 /* 文章作者查詢、權限設定                                */
@@ -1760,7 +1760,7 @@ xover(
             {
                 cmd = XO_FOOT;
             }
-#endif
+#endif  /* #if 0 */
 
         }
         /* ------------------------------------------------- */
@@ -2007,7 +2007,7 @@ every_Z_Orig(void)
 #endif
             Favorite();
             break;
-#endif
+#endif  /* #ifdef  HAVE_FAVORITE */
         case 'a':
             cmd = XZ_GEM;
             break;
@@ -2118,11 +2118,9 @@ extern int Every_Z_Screen(void);
 
 static MENU menu_everyz[] =
 {
-#ifdef HAVE_FAVORITE
-#ifdef TEST_Z_FAV
+#if   defined(HAVE_FAVORITE) && defined(TEST_Z_FAV)
     {Every_Z_Favorite, PERM_VALID, POPUP_FUN,
     "Favorite 我的最愛"},
-#endif
 #endif
 
     {Every_Z_Gem, 0, POPUP_FUN,
@@ -2221,7 +2219,7 @@ every_Z(void)
 
 }
 
-#endif
+#endif  /* #ifdef  EVERY_Z */
 
 void
 every_U(void)

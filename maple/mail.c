@@ -460,7 +460,7 @@ smtp_log:
 
     return chrono;
 }
-#endif
+#endif  /* #ifdef  BATCH_SMTP */
 
 #ifdef HAVE_DOWNLOAD
 int
@@ -657,7 +657,7 @@ smtp_file_log:
     return chrono;
 }
 
-#endif
+#endif  /* #ifdef HAVE_DOWNLOAD */
 
 #ifdef HAVE_SIGNED_MAIL
 /* Thor.990413: 提供驗證功能 */
@@ -742,7 +742,7 @@ m_verify(void)
     vmsg("此信由本站所發出");
     return 0;
 }
-#endif
+#endif  /* #ifdef HAVE_SIGNED_MAIL */
 
 /* ----------------------------------------------------- */
 /* mail routines                                         */
@@ -897,7 +897,7 @@ m_quota(void)
                     head[prune] = head[0];
 
             } while (++head < tail);
-#endif
+#endif  /* #if 1 */
             fsize += (prune * sizeof(HDR));
 #if 0
             if ((fsize > 0) && (prune || (ufo & UFO_MQUOTA)))
@@ -1031,7 +1031,7 @@ do_forward(
             #else
                 sprintf(cmd, "tar -zcf - %s | bin/base64encode > tmp/%s.tgz", fpath, userid);
             #endif
-        #endif
+        #endif  /* #ifdef __linux__ */
 
         system(cmd);
 
@@ -1117,7 +1117,7 @@ m_zip(void)                     /* itoc.010228: 打包資料 */
     return XEASY;
 }
 
-#endif
+#endif  /* #ifdef  HAVE_DOWNLOAD */
 
 int
 m_query(
@@ -1216,7 +1216,7 @@ m_count(void)
     more(FN_ETC_MAIL_OVER, NULL);
     return 1;
 }
-#endif
+#endif  /* #if 0 */
 
 static void
 mail_hold(
@@ -1925,7 +1925,7 @@ mail_list(void)
     return 0;
 }
 
-#endif
+#endif  /* #ifndef MULTI_MAIL */
 
 /* ----------------------------------------------------- */
 /* Mail Box call-back routines                           */
@@ -1989,7 +1989,7 @@ hdr_outs(               /* print HDR's subject */
             outc(' ');
             outc(' ');
         }
-#endif
+#endif  /* #if 0 */
         outs("\033[m ");
         outs(hdr->date + 3);
         outc(' ');
@@ -2101,7 +2101,7 @@ hdr_outs(               /* print HDR's subject */
                 }
 #endif
             }
-#endif
+#endif  /* #ifdef  HAVE_DECLARE */
 
             outc(cc);
         } while ((cc = (unsigned char) *title++) && (title < mark));

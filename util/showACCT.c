@@ -57,7 +57,7 @@ showpasswd(
         }
     }
 }
-#endif
+#endif  /* #ifdef SHOW_PASSWORD */
 
 #if 0
 static char *

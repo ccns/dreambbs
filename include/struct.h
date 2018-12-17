@@ -151,7 +151,7 @@ typedef struct
     char msg[80];
 } RFORM_R;
 #endif
-#endif
+#endif  /* #ifdef  HAVE_REGISTER_FORM */
 
 
 /* ----------------------------------------------------- */
@@ -276,7 +276,7 @@ typedef struct VoteControlHeader
 
     char nouse[88];
 } VCH;
-#endif
+#endif  /* #if 0 */
 
 
 typedef struct VoteControlHeader
@@ -441,7 +441,7 @@ typedef struct
     pipdata pip1;
     pipdata pip2;
 } PIPUTMP;
-#endif
+#endif  /* #ifdef  HAVE_PIP_FIGHT1 */
 
 struct UTMP
 {
@@ -979,7 +979,7 @@ typedef struct
 } CLASS_TABLE_ALERT;
 
 #endif
-#endif
+#endif  /*#ifdef  HAVE_CLASSTABLE  */
 
 #ifdef  HAVE_OBSERVE_LIST
 typedef struct
@@ -1007,7 +1007,7 @@ typedef struct PostRecommendHistory
     time_t bstamp;
 } PRH;
 #endif
-#endif
+#endif  /* #if 0 */
 
 typedef struct
 {
@@ -1048,7 +1048,7 @@ typedef struct
     BSTAT lweek[24];
     BSTAT lmonth[24];
 } BSTATCOUNT;
-#endif
+#endif  /* #ifdef  HAVE_COUNT_BOARD */
 
 
 #ifdef  HAVE_DETECT_CROSSPOST

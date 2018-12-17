@@ -56,7 +56,7 @@ is_big5(char *src, int pos, int mode)
     else
         return 0;
 }
-#endif
+#endif  /* #ifndef M3_USE_PFTERM */
 
 static int
 do_cmd(MENU *mptr, XO *xo, int x, int y)
@@ -193,7 +193,7 @@ get_color(char *s, int len, int *fc, int *bc, int *bbc)
     }
 
 }
-#endif
+#endif  /* #ifndef M3_USE_PFTERM */
 
 #ifndef M3_USE_PFTERM
 static void

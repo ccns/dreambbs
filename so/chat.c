@@ -107,7 +107,7 @@ printchatline(
     clrtoeol();
     chatline = line;
 }
-#endif
+#endif  /* #ifdef M3_CHAT_SCROLL_MODE */
 
 static void
 chat_record(char *arg)
@@ -227,7 +227,7 @@ int mode)
         }
     }
 }
-#endif
+#endif  /* #ifdef  LOG_CHAT */
 
 
 static void
@@ -489,7 +489,7 @@ chat_users(char *arg)
 
     printuserent(NULL);
 }
-#endif
+#endif  /* #if 0 */
 
 
 struct chat_command
@@ -690,7 +690,7 @@ t_chat(void)
 #else
         sprintf(buf, "/! %d %d %s %s\n",
                 cuser.userno, cuser.userlevel, cuser.userid, chatid);
-#endif
+#endif  /* #ifdef CHAT_SECURE */
 
         chat_send(cfd, buf);
         if (recv(cfd, buf, 3, 0) != 3)

@@ -435,4 +435,4 @@ clean(
 
     return XO_INIT;
 }
-#endif
+#endif  /* #ifdef  HAVE_RECOMMEND */

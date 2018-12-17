@@ -393,7 +393,7 @@ more_slideshow(void)
 
     return ch;
 }
-#endif
+#endif  /* #ifdef SLIDE_SHOW */
 
 
 #define END_MASK        0x200   /* 按 KEY_END 直達最後一頁 */
@@ -404,7 +404,7 @@ more_slideshow(void)
 #define HUNT_START      0x004   /* 按 / 開始搜尋，且尚未找到 match 的字串 */
 
 #define MAXBLOCK        256     /* 記錄幾個 block 的 offset。可加速 MAXBLOCK*32 列以內的長文在上捲/翻時的速度 */
-#endif
+#endif  /* #ifndef M3_USE_PMORE */
 
 /* Thor.990204: 傳回值 -1 為無法show出
                         0 為全數show完
@@ -756,7 +756,7 @@ re_key:
 
                     lino = totallino - b_lines;
                 }
-#endif
+#endif  /* #if 1 */
             }
             else
             {

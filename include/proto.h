@@ -245,7 +245,7 @@ int vs_save(screenline *slp);
 void vs_restore(screenline *slp);
 void clearange(int from, int to);
 void clrtohol(void);
-#endif
+#endif  /* #ifdef M3_USE_PFTERM */
 
 void getyx(int *y, int *x);
 int expand_esc_star_visio(char *buf, const char *src, int szbuf);
@@ -260,7 +260,7 @@ void zmsg(char *msg);
 void vs_bar(char *title);
 #ifndef M3_USE_PFTERM
 void grayout(int type);
-#endif
+#endif  /* #ifndef M3_USE_PFTERM */
 void add_io(int fd, int timeout);
 int igetch(void);
 BRD *ask_board(char *board, int perm, char *msg);
@@ -297,7 +297,7 @@ int Ext_POP3_Check(char *site, char *account, char *passwd);
 #ifdef M3_USE_PMORE
 /* pmore.c */
 int pmore(const char *fpath, int promptend);
-#endif
+#endif  /* #ifdef M3_USE_PMORE */
 /* popupmenu.c */
 int popupmenu_ans(char *desc[], char *title, int x, int y);
 void popupmenu(MENU pmenu[], XO *xo, int x, int y);

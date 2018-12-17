@@ -913,7 +913,7 @@ chat_query(
         send_to_user(cu, buf, 0, MSG_MESSAGE);
     }
 }
-#endif
+#endif  /* #ifndef STAND_ALONE */
 
 
 static void
@@ -1923,7 +1923,7 @@ login_user(
             send_to_user(cu, CHAT_LOGIN_INVALID, 0, MSG_MESSAGE);
         return 0;
     }
-#endif
+#endif  /* #ifndef STAND_ALONE */
 
 #ifdef  DEBUG
     debug_user();
@@ -3138,7 +3138,7 @@ server_usage(int signum)
 
     fflush(flog);
 }
-#endif
+#endif  /* #ifdef  SERVER_USAGE */
 
 
 static void

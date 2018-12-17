@@ -36,7 +36,7 @@ void _fini(void)
     free(hisList);
     free(numSet);
 }
-#endif
+#endif  /* #if 1 */
 
 static void AB(Num p, Num q, int *A, int *B)
 {

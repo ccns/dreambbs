@@ -33,7 +33,7 @@
 #include <assert.h>
 #endif //M3_USE_PFTERM
 
-#endif
+#endif  /* #ifdef _PFTERM_TEST_MAIN */
 
 //////////////////////////////////////////////////////////////////////////
 // pfterm debug settings
@@ -2053,7 +2053,7 @@ fterm_rawmove_rel(int dy, int dx)
         // (dy, dx) are given - use fterm_move.
         fterm_rawmove(ft.ry + dy, ft.rx + dx);
     }
-#endif
+#endif  /* #ifndef FTCONF_USE_ANSI_RELMOVE */
 }
 
 void
@@ -2218,7 +2218,7 @@ fterm_rawscroll (int dy)
     // the coordinates are already out of sync.
     fterm_rawcmd2(ft.ry+1, ft.rx+1, 1, 'H');
     ft.scroll -= dy;
-#endif
+#endif  /* #ifdef FTCONF_USE_ANSI_SCROLL */
 }
 
 void
@@ -2402,7 +2402,7 @@ region_scroll_up(int top, int bottom)
     fterm_markdirty();
 }
 
-#endif
+#endif  /* #ifndef _PFTERM_TEST_MAIN */
 
 //////////////////////////////////////////////////////////////////////////
 // adapter
@@ -2496,7 +2496,7 @@ int main(int argc, char* argv[])
         outs(" this\xFF (ff)is te.(80 tail)->\x80 (80)");
         refresh();
         getchar();
-#endif
+#endif  /* #if 0 */
 
 #if 1
         // test resize

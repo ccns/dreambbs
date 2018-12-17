@@ -100,7 +100,7 @@ struct user_info
     char feeling[4];              /* ¤ß±¡ */
 };
 typedef struct user_info user_info;
-#endif
+#endif  /* #if 0 */
 
 
-#endif
+#endif  /* #ifndef _PIPSTRUCT_H_ */

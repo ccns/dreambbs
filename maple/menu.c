@@ -1066,7 +1066,7 @@ MENU skin_main[] =
     {menu_main, PERM_MENU + 'W', M_MMENU,
     "介面選單"}
 };
-#endif
+#endif  /* #ifdef  HAVE_CHANGE_SKIN */
 
 static int
 Gem(void)
@@ -1165,7 +1165,7 @@ static MENU menu_treat[] =
     NULL, PERM_MENU + 'G', M_MMENU,
     "主功\能表"
 };
-#endif
+#endif  /* #ifdef  TREAT */
 
 static
 int count_len(

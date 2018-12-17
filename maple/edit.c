@@ -181,7 +181,7 @@ ve_goto(void)
         ve_position(vln, top);
     }
 }
-#endif
+#endif  /* #if 0 */
 
 
 static inline char *
@@ -998,7 +998,7 @@ words_check(void)
             wordsnum += p->len;
     }
 }
-#endif
+#endif  /* #ifdef ANTI_PHONETIC */
 
 static void
 ve_quote(
@@ -2195,7 +2195,7 @@ ve_key:
                 }
                 break;
 
-#endif
+#endif  /* #ifdef SHOW_USER_IN_TEXT */
 
             default:
 

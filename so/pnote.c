@@ -257,7 +257,7 @@ del_pnote(notedata *pitem, int newflag)
     }
     unlink(fold);
 }
-#endif
+#endif  /* #if 0 */
 
 /*                                                              *
  *  show_pnote_hint()改自showplan(), 可以show出主人自製的答錄機 *

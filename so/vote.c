@@ -1250,4 +1250,4 @@ outerLoop:
         unlink(fpath);
     }
 }
-#endif
+#endif  /* #if 0 */

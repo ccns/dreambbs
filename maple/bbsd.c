@@ -116,7 +116,7 @@ TABLE table[] = {
     {0, 0}
 };
 
-#endif
+#endif  /* #ifdef  TRANUFO */
 
 void
 u_exit(
@@ -947,7 +947,7 @@ tn_login(void)
             }
         }
 #endif
-#endif
+#endif  /* #if 1 */
 
 #ifdef NEWUSER_LIMIT
             /* Thor.980825: lkchu patch: 既然有 NEWUSER_LIMIT, 還是加一下好了,
@@ -1532,7 +1532,7 @@ servo_usage(int signum)
 
     fclose(fp);
 }
-#endif
+#endif  /* #ifdef  SERVER_USAGE */
 
 
 static void

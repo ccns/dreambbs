@@ -1556,7 +1556,7 @@ int u_addr(void)
             pmsg(msg);
             return 0;
         }
-#endif
+#endif  /* #ifdef HAVE_WRITE */
         else if (strcmp(temp, addr) && (seek_log_email(addr, 1) != -1))
         {
             msg = "暫時禁止註冊的 E-mail address";
@@ -2459,7 +2459,7 @@ int u_register(void)
         vmsg("請善用 POP3 或 E-mail 認證方式");
         return 0;
     }
-#endif
+#endif  /* #ifndef HAVE_SIMPLE_RFORM */
 
     if (cuser.userlevel & PERM_VALID)
     {
@@ -2791,7 +2791,7 @@ static int ans_request(void)
 
     return 0;
 }
-#endif
+#endif  /* #ifndef HAVE_SIMPLE_RFORM */
 
 int m_register(void)
 {
@@ -2865,7 +2865,7 @@ int m_register(void)
     }
     return num;
 }
-#endif
+#endif  /* #ifdef  HAVE_REGISTER_FORM */
 
 
 /* ----------------------------------------------------- */

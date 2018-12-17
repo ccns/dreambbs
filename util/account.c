@@ -1070,7 +1070,7 @@ main(void)
         }
         rec_add(PRIVATE_KEY, title, 8);
     }
-#endif
+#endif  /* #ifdef HAVE_SIGNED_MAIL */
 
     exit(0);
 }

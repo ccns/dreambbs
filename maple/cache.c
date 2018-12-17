@@ -327,7 +327,7 @@ utmp_search(
     } while (++uentp <= uceil);
     return NULL;
 }
-#endif
+#endif  /* #if 0 */
 
 
 int
@@ -356,8 +356,7 @@ utmp_count(
     return count;
 }
 
-#if 1
-#ifdef  HAVE_CLASSTABLEALERT
+#if 1 && defined(HAVE_CLASSTABLEALERT)
 int
 cmpclasstable(
     const void *ptr)
@@ -414,7 +413,6 @@ classtable_main(void)
     close(fd);
 
 }
-#endif
 #endif
 
 /*-------------------------------------------------------*/
@@ -625,7 +623,7 @@ observeshm_init(void)
     oshm = attach_shm(OBSERVE_KEY, sizeof(OCACHE));
     observeshm_load();
 }
-#endif
+#endif  /* #ifdef  HAVE_OBSERVE_LIST */
 
 /*-------------------------------------------------------*/
 /* run/var/counter cache                                 */
