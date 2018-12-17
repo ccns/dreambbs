@@ -197,7 +197,7 @@ get_color(char *s, int len, int *fc, int *bc, int *bbc)
 
 #ifndef M3_USE_PFTERM
 static void
-vs_line(char *msg, int x, int y)
+vs_line(char *msg, int y, int x)
 {
     char buf[512], color[16], *str, *tmp, *cstr;
     int len = count_len(msg);
@@ -205,10 +205,10 @@ vs_line(char *msg, int x, int y)
 
     memset(buf, 0, sizeof(buf));
 
-    sl[x].data[sl[x].len] = '\0';
-    str = tmp = (char *) sl[x].data;
+    sl[y].data[sl[y].len] = '\0';
+    str = tmp = (char *) sl[y].data;
 
-    for (word=0; word<y && *str; ++str)
+    for (word=0; word<x && *str; ++str)
     {
         if (*str == KEY_ESC)
         {
@@ -220,9 +220,9 @@ vs_line(char *msg, int x, int y)
         word++;
     }
 
-    strncpy(buf, (char *) sl[x].data, str - tmp);
+    strncpy(buf, (char *) sl[y].data, str - tmp);
 
-    while (word++<y)
+    while (word++<x)
         strcat(buf, " ");
 
     slen = strlen(buf)-1;
@@ -261,14 +261,14 @@ vs_line(char *msg, int x, int y)
         }
     }
 
-    move(x, 0);
+    move(y, 0);
     outs(buf);
 
 }
 #else
 static void
 vs_line(
-    char *msg, int x, int y)
+    char *msg, int y, int x)
 {
     int head, tail;
 
