@@ -2043,7 +2043,7 @@ every_Z_Orig(void)
     }
 
 #ifdef M3_USE_PFTERM
-        scr_restore(&old_screen);
+    scr_restore(&old_screen);
 #else
     restore_foot(sl);
 #endif

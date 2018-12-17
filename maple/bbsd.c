@@ -167,7 +167,7 @@ u_exit(
             /* lkchu.981201: 用 delta, 每次上站都要超過三分鐘才算 */
             if (delta > 3 * 60)
             {
-                        cuser.numlogins++;
+                cuser.numlogins++;
             }
 #ifdef HAVE_SONG
             cuser.request = tuser.request;
@@ -1605,8 +1605,8 @@ int main(int argc, char *argv[])
     totaluser = (int *) &ushm->count;
     /* avgload = &ushm->avgload; */
 
-        for (;;)
-        {
+    for (;;)
+    {
         value = 1;
         if (select(1, (fd_set *) & value, NULL, NULL, NULL) < 0)
             continue;

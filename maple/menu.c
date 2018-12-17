@@ -536,7 +536,7 @@ static MENU menu_boardadm[] =
     {"bin/adminutil.so:mail_to_all", PERM_SYSOP, - M_XMODE,
     "Alluser    系統通告"},
 
-        "bin/personal.so:personal_admin", PERM_BOARD|PERM_SYSOP, - M_XMODE,
+    "bin/personal.so:personal_admin", PERM_BOARD|PERM_SYSOP, - M_XMODE,
     "Personal   個人板審核",
 
     {menu_admin, PERM_MENU + 'N', M_XMENU,
