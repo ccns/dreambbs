@@ -119,7 +119,7 @@ count_len(
         ptr = strstr(ptr, "\033");
         if (ptr)
         {
-            for (tmp=ptr;*tmp!='m'; tmp++);
+            for (tmp=ptr; *tmp!='m'; tmp++);
             len -= (tmp-ptr+1);
             ptr = tmp+1;
         }
@@ -204,7 +204,7 @@ vs_line(char *msg, int x, int y)
     sl[x].data[sl[x].len] = '\0';
     str = tmp = sl[x].data;
 
-    for (word=0; word<y && *str;++str)
+    for (word=0; word<y && *str; ++str)
     {
         if (*str == KEY_ESC)
         {
@@ -231,7 +231,7 @@ vs_line(char *msg, int x, int y)
 
     if (*str)
     {
-        for (word=0; word<len && *str;++str)
+        for (word=0; word<len && *str; ++str)
         {
             if (*str == KEY_ESC)
             {
@@ -316,7 +316,7 @@ draw_menu(MENU *pmenu[20], int num, char *title, int x, int y, int cur)
     vs_line(buf, x-2, y);
     sprintf(buf, " \033[0;37;44m¢j\033[1m%-31s \033[0;47;34m¢p\033[m   ", t);
     vs_line(buf, x-1, y);
-    for (i=0; i<num;++i, ++x)
+    for (i=0; i<num; ++i, ++x)
     {
         draw_item(pmenu[i]->desc, (i==cur)?1:0, x, y);
     }
@@ -675,7 +675,7 @@ Every_Z_Screen(void)
         vmsg("ÀÉ®×¶}±Ò¿ù»~ !!");
         return 0;
     }
-    for (i=0; i<24;++i)
+    for (i=0; i<24; ++i)
     {
         memset(buf, 0, sizeof(buf));
         strncpy(buf, sl[i].data, sl[i].len);
