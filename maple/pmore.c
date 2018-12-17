@@ -3636,7 +3636,7 @@ mf_movieGotoNamedFrame(const unsigned char *name, const unsigned char *end)
         if (memcmp(p, name, sz) == 0)
             return 1;
 
-    } while  (mf_forward(1) > 0);
+    } while (mf_forward(1) > 0);
     return 0;
 }
 

@@ -1528,7 +1528,7 @@ do_query(
 
     char fortune[7][9] = {"窮困阿宅", "家境普通", "家境小康", "家境富有", "財力雄厚", "富可敵國", "I'm Rich"};
 
-    if     (acct->money >= 100000000)
+    if      (acct->money >= 100000000)
         rich=6;
     else if (acct->money >=  10000000)
         rich=5;
