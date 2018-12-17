@@ -1253,6 +1253,9 @@ char *msg;                   /* length <= 54 */
     static int old_b_cols = 23;
     static char foot[512] = VMSG_NULL;
 
+    (void)old_b_cols;
+    (void)foot;
+
     move(b_lines, 0);
     clrtoeol();
     if (msg)

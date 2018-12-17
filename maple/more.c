@@ -18,7 +18,9 @@
 #define MORE_BUFSIZE    4096
 
 
+#ifndef M3_USE_PMORE
 static int more_width;  /* more screen 的寬度 */
+#endif
 
 static unsigned char more_pool[MORE_BUFSIZE];
 static int more_base;           /* more_pool[more_base ~ more_base+more_size] 有值 */
@@ -127,12 +129,14 @@ mread(
 /* ----------------------------------------------------- */
 
 
+#ifndef M3_USE_PMORE
 #define STR_ANSICODE    "[0123456789;"
 
 
 static unsigned char *fimage;           /* file image begin */
 static unsigned char *fend;             /* file image end */
 static unsigned char *foff;             /* 目前讀到哪裡 */
+#endif
 
 
 static int
@@ -393,6 +397,7 @@ more_slideshow(void)
 #endif
 
 
+#ifndef M3_USE_PMORE
 #define END_MASK        0x200   /* 按 KEY_END 直達最後一頁 */
 
 #define HUNT_MASK       0x400
@@ -401,6 +406,7 @@ more_slideshow(void)
 #define HUNT_START      0x004   /* 按 / 開始搜尋，且尚未找到 match 的字串 */
 
 #define MAXBLOCK        256     /* 記錄幾個 block 的 offset。可加速 MAXBLOCK*32 列以內的長文在上捲/翻時的速度 */
+#endif
 
 /* Thor.990204: 傳回值 -1 為無法show出
                         0 為全數show完
@@ -410,6 +416,7 @@ more(
     char *fpath,
     char *footer)
 {
+#ifndef M3_USE_PMORE
     char buf[ANSILINELEN];
     int i;
 
@@ -419,10 +426,13 @@ more(
     int lino;                           /* 目前 line number */
     int header_len;                     /* 檔頭的長度，同時也是站內/站外信的區別 */
     int key;                            /* 按鍵 */
+#endif
     int cmd;                            /* 中斷時所按的鍵 */
 
+#ifndef M3_USE_PMORE
     int fsize;                          /* 檔案大小 */
     static off_t block[MAXBLOCK];       /* 每 32 列為一個 block，記錄此 block 的 offset */
+#endif
 
 #ifdef M3_USE_PMORE
     cmd = pmore(fpath, footer && footer != (char*)-1);

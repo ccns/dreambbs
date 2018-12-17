@@ -31,6 +31,8 @@ main(
         struct dirent *de;
         DIR *dirp;
 
+        (void)buf2;
+
         sprintf(buf, "/home/bbs/brd/%c", c);
         chdir(buf);
 

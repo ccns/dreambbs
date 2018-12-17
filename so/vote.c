@@ -229,6 +229,9 @@ char *path)
     int pos = 0, fd;
     /* char buf1[3], buf2[2], buf3[4]; */
     char buf1[3], buf2[2], buf3[3], buf4[5];
+
+    (void)buf;
+
     /*
     buf1[0] = account[0];
     buf1[1] = account[1];

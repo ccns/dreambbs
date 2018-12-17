@@ -564,6 +564,9 @@ gem_state(
     struct stat st;
     int bno;
 
+    (void)site;
+    (void)path;
+
     /* Thor.990107: Ernie patch:
       gem.c gem_browse() 在進入 路)的 folder 時一律 op = GEM_VISIT
       使得板主只能在 gopher 最外層觀看檔案屬性及 update proxy，進入 gopher
