@@ -86,7 +86,7 @@ int pickup_way=1;
 #else
 #define PICKUP_WAYS     (6)
 int pickup_way=1;
-#endif
+#endif  /* #ifdef  HAVE_BOARD_PAL */
 
 static char page_requestor[40];
 
@@ -419,10 +419,10 @@ is_banmsg(
 
 static int
 int_cmp(
-    int *a,
-    int *b)
+    const void *a,
+    const void *b)
 {
-    return *a - *b;
+    return *(const int *)a - *(const int *)b;
 }
 
 
@@ -1443,7 +1443,7 @@ XoBM(
     }
     return XO_NONE;
 }
-#endif
+#endif  /* #ifdef HAVE_MODERATED_BOARD */
 
 
 /* ------------------------------------- */
@@ -1528,7 +1528,7 @@ do_query(
 
     char fortune[7][9] = {"窮困阿宅", "家境普通", "家境小康", "家境富有", "財力雄厚", "富可敵國", "I'm Rich"};
 
-    if     (acct->money >= 100000000)
+    if      (acct->money >= 100000000)
         rich=6;
     else if (acct->money >=  10000000)
         rich=5;
@@ -1669,9 +1669,9 @@ bmw_edit(
     BMW *bmw,
     int cc)
 {
-    unsigned char *str;
+    char *str;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[2];
 #endif
@@ -1712,7 +1712,7 @@ bmw_edit(
                 vmsg(MSG_USR_LEFT);
                 if (!cc)
 #ifdef M3_USE_PFTERM
-                    scr_restore(&old_screen);
+                    scr_restore_free(&old_screen);
 #else
                     restore_foot(sl);
 #endif
@@ -1735,7 +1735,7 @@ bmw_edit(
 
     if (!cc)
 #ifdef M3_USE_PFTERM
-        scr_restore(&old_screen);
+        scr_restore_free(&old_screen);
 #else
         restore_foot(sl);
 #endif
@@ -1806,7 +1806,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
     UTMP *up, *uhead;
     BMW bmw;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[2], slt[b_lines + 1];
 #endif
@@ -1824,7 +1824,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
     {
         vmsg("先前並無熱訊呼叫");
 #ifdef M3_USE_PFTERM
-        scr_restore(&old_screen);
+        scr_restore_free(&old_screen);
 #else
         restore_foot(sl); /* Thor.981222: 想清掉message */
 #endif
@@ -1877,13 +1877,13 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
         {
             if (cuser.ufo2 & UFO2_REPLY || replymode)
 #ifdef M3_USE_PFTERM
-                scr_restore(&old_screen);
+                scr_restore_free(&old_screen);
 #else
                 vs_restore(slt);      /* 還原 bmw_display 之前的 screen */
 #endif
             else
 #ifdef M3_USE_PFTERM
-                scr_restore(&old_screen);
+                scr_restore_free(&old_screen);
 #else
                 restore_foot(sl);
 #endif
@@ -1931,7 +1931,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
         {
             if (cuser.ufo2 & UFO2_REPLY || replymode)
 #ifdef M3_USE_PFTERM
-                scr_restore(&old_screen);
+                scr_restore_keep(&old_screen);
 #else
                 vs_restore(slt);      /* 還原 bmw_display 之前的 screen */
 #endif
@@ -2001,13 +2001,13 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 
     if (cuser.ufo2 & UFO2_REPLY || replymode)
 #ifdef M3_USE_PFTERM
-        scr_restore(&old_screen);
+        scr_restore_free(&old_screen);
 #else
         vs_restore(slt);
 #endif
     else
 #ifdef M3_USE_PFTERM
-        scr_restore(&old_screen);
+        scr_restore_free(&old_screen);
 #else
         restore_foot(sl);
 #endif
@@ -2185,7 +2185,7 @@ aloha(void)
         close(fd);
     }
 }
-#endif
+#endif  /* #ifdef HAVE_ALOHA */
 
 
 #ifdef LOGIN_NOTIFY
@@ -2284,7 +2284,7 @@ loginNotify(void)
         vmsg(NULL);
     }
 }
-#endif
+#endif  /* #ifdef LOGIN_NOTIFY */
 
 
 /* Thor: for ask last call-in messages */
@@ -2411,7 +2411,7 @@ bmw_save(void)
     }
 
 }
-#endif
+#endif  /* #ifdef LOG_BMW */
 
 
 void
@@ -2567,11 +2567,11 @@ talk_char(
 static void
 talk_string(
     talk_win *twin,
-    unsigned char *str)
+    char *str)
 {
     int ch;
 
-    while ((ch = *str))
+    while ((ch = (unsigned char) *str))
     {
         talk_char(twin, ch);
         str++;
@@ -2658,7 +2658,7 @@ talk_speak(
         if (ch == Ctrl('Z'))
         {
 #ifdef M3_USE_PFTERM
-            screen_backup_t old_screen;
+            screen_backup_t old_screen = {0};
 #else
             screenline sl[b_lines + 1];
 #endif
@@ -2676,7 +2676,7 @@ talk_speak(
 #endif
             every_Z();
 #ifdef M3_USE_PFTERM
-            scr_restore(&old_screen);
+            scr_restore_free(&old_screen);
 #else
             vs_restore(sl);
 #endif
@@ -2688,7 +2688,7 @@ talk_speak(
             strcpy(cutmp->mateid, buf);
             continue;
         }
-#endif
+#endif  /* #ifdef EVERY_Z */
         if (ch == Ctrl('U'))
         {
             char buf[IDLEN + 1];
@@ -2763,7 +2763,7 @@ talk_speak(
 #if 1
         else if (ch == Ctrl('A'))
         { /* Thor.990219: 呼叫外掛棋盤 */
-            /* extern int BWboard(); */
+            /* extern int BWboard(int sock, int later); */
             data[0] = ch;
             if (send(fd, data, 1, 0) != 1)
                 break;
@@ -2773,7 +2773,7 @@ talk_speak(
         }
         else if (ch == Ctrl('B'))
         { /* Thor.990219: 呼叫外掛棋盤 */
-            /* extern int BWboard(); */
+            /* extern int BWboard(int sock, int later); */
             data[0] = ch;
             if (send(fd, data, 1, 0) != 1)
                 break;
@@ -2959,7 +2959,7 @@ talk_page(
 #endif
 
     length = sizeof(sin);
-    if (bind(sock, (struct sockaddr *) &sin, length) < 0 || getsockname(sock, (struct sockaddr *) &sin, &length) < 0)
+    if (bind(sock, (struct sockaddr *) &sin, length) < 0 || getsockname(sock, (struct sockaddr *) &sin, (socklen_t *) &length) < 0)
     {
         close(sock);
         return 0;
@@ -3237,52 +3237,54 @@ ulist_body(
 
 static int
 ulist_cmp_userid(
-    PICKUP *i, PICKUP *j)
+    const void *i, const void *j)
 {
-    if (i->type == j->type)
-                return str_cmp(i->utmp->userid, j->utmp->userid);
+    const PICKUP *a = (const PICKUP *)i;
+    const PICKUP *b = (const PICKUP *)j;
+    if (a->type == b->type)
+                return str_cmp(a->utmp->userid, b->utmp->userid);
     else
-        return i->type - j->type;
+        return a->type - b->type;
 }
 
 static int
 ulist_cmp_host(
-    PICKUP *i, PICKUP *j)
+    const void *i, const void *j)
 {
-    return str_cmp(i->utmp->from, j->utmp->from);
+    return str_cmp(((const PICKUP *)i)->utmp->from, ((const PICKUP *)j)->utmp->from);
 }
 
 static int
 ulist_cmp_idle(
-    PICKUP *i, PICKUP *j)
+    const void *i, const void *j)
 {
-    return i->utmp->idle_time - j->utmp->idle_time;
+    return ((const PICKUP *)i)->utmp->idle_time - ((const PICKUP *)j)->utmp->idle_time;
 }
 
 static int
 ulist_cmp_mode(
-    PICKUP *i, PICKUP *j)
+    const void *i, const void *j)
 {
-    return i->utmp->mode - j->utmp->mode;
+    return ((const PICKUP *)i)->utmp->mode - ((const PICKUP *)j)->utmp->mode;
 }
 
 static int
 ulist_cmp_nick(
-    PICKUP *i, PICKUP *j)
+    const void *i, const void *j)
 {
-    return str_cmp(i->utmp->username, j->utmp->username);
+    return str_cmp(((const PICKUP *)i)->utmp->username, ((const PICKUP *)j)->utmp->username);
 }
 
 #ifdef  HAVE_BOARD_PAL
 static int
 ulist_cmp_board(
-    PICKUP *i, PICKUP *j)
+    const void *i, const void *j)
 {
-    return i->utmp->board_pal - j->utmp->board_pal;
+    return ((const PICKUP *)i)->utmp->board_pal - ((const PICKUP *)j)->utmp->board_pal;
 }
 #endif
 
-static int (*ulist_cmp[]) (PICKUP *i, PICKUP *j) =
+static int (*ulist_cmp[]) (const void *i, const void *j) =
 {
     ulist_cmp_userid,
     ulist_cmp_host,
@@ -3354,7 +3356,7 @@ ulist_init(
 #endif
             ispal = is_pal(userno);
 
-            if (!bad && (ispal && (tmp == 1)) || (userno == self))
+            if ((!bad && (ispal && (tmp == 1))) || (userno == self))
             {
                 pp->utmp = up;
                 pp->type = 1;
@@ -3396,7 +3398,7 @@ ulist_init(
         }
     } while (++up <= uceil);
 
-#endif
+#endif  /* #ifdef  FRIEND_FIRST */
 
     xo->max = max = pp - ulist_pool;
 
@@ -4135,7 +4137,7 @@ ulist_state(
     vmsg(buf);
     return XO_INIT;
 }
-#endif
+#endif  /* #if 1 */
 
 #ifdef  APRIL_FIRST
 static int
@@ -4301,7 +4303,7 @@ talk_rqst(void)
     char buf[80];
     struct sockaddr_in sin;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -4477,7 +4479,7 @@ over_for:
         talk_save();          /* lkchu.981201: talk 記錄處理 */
 #endif
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     vs_restore(sl);
 #endif
@@ -4918,4 +4920,4 @@ t_banmsg(void)
 
     return 0;
 }
-#endif
+#endif  /* #ifdef  HAVE_BANMSG */

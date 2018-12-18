@@ -338,7 +338,7 @@ report_eaddr_group(void)
     }
 }
 
-#endif
+#endif  /* #ifdef EADDR_GROUPING */
 
 static int
 bm_list(                 /* 顯示 userid 是哪些板的板主 */

@@ -151,7 +151,7 @@ typedef struct
     char msg[80];
 } RFORM_R;
 #endif
-#endif
+#endif  /* #ifdef  HAVE_REGISTER_FORM */
 
 
 /* ----------------------------------------------------- */
@@ -271,12 +271,12 @@ typedef struct VoteControlHeader
     int maxblt;                   /* 每人可投幾票 */
     int price;                    /* 每張賭票的售價 */
 
-    int limitlogins;              /* ??????????n??n??J??W??L??X??????H??W??????????????????~¯??§?????? */
-    int limitposts;               /* ??????????n??o??????W??L??X??????H??W??????????????????~¯??§?????? */
+    int limitlogins;              /* 限制要登入超過幾次以上的使用者才能投票 */
+    int limitposts;               /* 限制要發文超過幾次以上的使用者才能投票 */
 
     char nouse[88];
 } VCH;
-#endif
+#endif  /* #if 0 */
 
 
 typedef struct VoteControlHeader
@@ -441,7 +441,7 @@ typedef struct
     pipdata pip1;
     pipdata pip2;
 } PIPUTMP;
-#endif
+#endif  /* #ifdef  HAVE_PIP_FIGHT1 */
 
 struct UTMP
 {
@@ -570,7 +570,7 @@ typedef struct BoardReadingHistory
     int bcount;                                    /* Thor.980902:沒用到? */
                                                    /* Thor.980902:給自己看的 */
     /* --------------------------------------------------- */
-    /* time_t {final, begin} / {final | BRH_SIGN}    */
+    /* time_t {final, begin} / {final | BRH_SIGN}          */
     /* --------------------------------------------------- */
                             /* Thor.980904:註解: BRH_SIGN代表final begin 相同 */
                             /* Thor.980904:註解: 由大到小排列, 存放已讀interval */
@@ -728,12 +728,12 @@ typedef struct
 
 typedef struct screenline
 {
-    unsigned char oldlen;               /* previous line length */
+    unsigned short oldlen;               /* previous line length */
     unsigned char len;                  /* current length of line */
     unsigned char width;                /* padding length of ANSI codes */
     unsigned char mode;                 /* status of line, as far as update */
     unsigned char smod;                 /* start of modified data */
-    unsigned char emod;                 /* end of modified data */
+    unsigned short emod;                 /* end of modified data */
     unsigned char sso;                  /* start of standout data */
     unsigned char eso;                  /* end of standout data */
     unsigned char data[ANSILINELEN];
@@ -979,7 +979,7 @@ typedef struct
 } CLASS_TABLE_ALERT;
 
 #endif
-#endif
+#endif  /*#ifdef  HAVE_CLASSTABLE  */
 
 #ifdef  HAVE_OBSERVE_LIST
 typedef struct
@@ -1007,7 +1007,7 @@ typedef struct PostRecommendHistory
     time_t bstamp;
 } PRH;
 #endif
-#endif
+#endif  /* #if 0 */
 
 typedef struct
 {
@@ -1048,7 +1048,7 @@ typedef struct
     BSTAT lweek[24];
     BSTAT lmonth[24];
 } BSTATCOUNT;
-#endif
+#endif  /* #ifdef  HAVE_COUNT_BOARD */
 
 
 #ifdef  HAVE_DETECT_CROSSPOST

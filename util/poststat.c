@@ -311,15 +311,15 @@ poststat(
 
 static int
 pa_cmp(
- PostAuthor *x,
- PostAuthor *y)
+    void const *x,
+    void const *y)
 {
     int dif;
 
-    dif = y->count - x->count;
+    dif = ((const PostAuthor *)y)->count - ((const PostAuthor *)x)->count;
     if (dif)
         return dif;
-    return strcmp(x->author, y->author);
+    return strcmp(((const PostAuthor *)x) -> author, ((const PostAuthor *)y) -> author);
 }
 
 

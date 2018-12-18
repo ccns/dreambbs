@@ -134,7 +134,7 @@ static char *perm_tbl[] = {
   "¯¸ªø"                        /* PERM_SYSOP */
 };
 
-#endif
+#endif  /* #ifdef _ADMIN_C_ */
 
 
 /* ----------------------------------------------------- */

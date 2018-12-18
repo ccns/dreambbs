@@ -29,8 +29,8 @@
 
 #define ANSIRESET       "\033[m"        /* 終止顏色 */
 
-#define COLOR1          "\033[34;46m"   /* footer 的前段顏色 */
-#define COLOR2          "\033[31;47m"   /* footer 的後段顏色 */
+#define COLOR1          "\033[34;46m"   /* footer/feeter 的前段顏色 */
+#define COLOR2          "\033[31;47m"   /* footer/feeter 的後段顏色 */
 #define COLOR3          "\033[30;47m"   /* neck 的顏色 */
 #define COLOR4          "\033[1;44m"    /* 光棒 的顏色 */
 #define COLOR5          "\033[34;47m"   /* more 檔頭的標題顏色 */
@@ -96,9 +96,11 @@
 
 
 /* ----------------------------------------------------- */
-/* 訊息字串：xo_foot() 時的 footer 都抓出來定義在這      */
+/* 訊息字串：more() 時的 footer 都抓出來定義在這         */
 /* ----------------------------------------------------- */
 
+
+/* itoc.010914.註解: 單一篇，所以叫 FOOTER，都是 78 char */
 
 #define FOOTER_POST     \
     COLOR1 " 文章選讀 " COLOR2 " (ry)回應 (=\\[]<>-+;'`)主題 (|?QA)搜尋標題作者 (kj)上下篇 (C)暫存   "
@@ -107,10 +109,17 @@
     COLOR1 " 瀏覽 P.%d (%d%%) " COLOR2 " (h)說明 [PgUp][PgDn][0][$]移動 (/n)搜尋 (C)暫存 (←q)結束 "
 
 
-#define FOOTER_INNBBS   \
+/* ----------------------------------------------------- */
+/* 訊息字串：xo_foot() 時的 feeter 都抓出來定義在這      */
+/* ----------------------------------------------------- */
+
+
+/* itoc.010914.註解: 列表多篇，所以叫 FEETER，都是 78 char */
+
+#define FEETER_INNBBS   \
     COLOR1 " 轉信設定 " COLOR2 " (↑/↓)上下 (PgUp/PgDn)上下頁 (Home/End)首尾 (←)(q)離開           "
 
-#define FOOTER_VOTEALL  \
+#define FEETER_VOTEALL  \
     COLOR1 " 投票中心 " COLOR2 " (↑/↓)上下 (PgUp/PgDn)上下頁 (Home/End)首尾 (→)投票 (←)(q)離開  "
 
 /* ----------------------------------------------------- */

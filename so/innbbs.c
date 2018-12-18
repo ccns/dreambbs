@@ -22,8 +22,9 @@ extern BCACHE *bshm;
 static void
 nl_item(
     int num,
-    nodelist_t *nl)
+    const void *nl_obj)
 {
+    const nodelist_t *nl = (const nodelist_t *)nl_obj;
     prints("%6d %-13s%-*.*s %s(%d)\n", num,
         nl->name, d_cols + 45, d_cols + 45, nl->host, nl->xmode & INN_USEIHAVE ? "IHAVE" : "POST", nl->port);
 }
@@ -31,8 +32,10 @@ nl_item(
 
 static void
 nl_query(
-    nodelist_t *nl)
+    const void *nl_obj)
 {
+    const nodelist_t *nl = (const nodelist_t *)nl_obj;
+
     move(3, 0);
     clrtobot();
     prints("\n\n轉信站台：%s\n站台位址：%s\n站台協定：%s(%d)\n被 餵 信：%s",
@@ -44,9 +47,10 @@ nl_query(
 static int      /* 1:成功 0:失敗 */
 nl_add(
     char *fpath,
-    nodelist_t *old,
+    const void *nl_old,
     int pos)
 {
+    const nodelist_t *old = (const nodelist_t *)nl_old;
     nodelist_t nl;
     int ch, port;
     char ans[8];
@@ -102,19 +106,19 @@ nl_add(
 
 static int
 nl_cmp(
-    nodelist_t *a, nodelist_t *b)
+    const void *a, const void *b)
 {
     /* 依 name 排序 */
-    return str_cmp(a->name, b->name);
+    return str_cmp(((const nodelist_t *)a) -> name, ((const nodelist_t *)b) -> name);
 }
 
 
 static int
 nl_search(
-    nodelist_t *nl,
+    const void *nl,
     char *key)
 {
-    return (int) (str_str(nl->name, key) || str_str(nl->host, key));
+    return (int) (str_str(((const nodelist_t *)nl) -> name, key) || str_str(((const nodelist_t *)nl) -> host, key));
 }
 
 
@@ -126,8 +130,9 @@ nl_search(
 static void
 nf_item(
     int num,
-    newsfeeds_t *nf)
+    const void *nf_obj)
 {
+    const newsfeeds_t *nf = (const newsfeeds_t *)nf_obj;
     int bno;
     BRD *brd;
     char outgo, income;
@@ -157,8 +162,9 @@ nf_item(
 
 static void
 nf_query(
-    newsfeeds_t *nf)
+    const void *nf_obj)
 {
+    const newsfeeds_t *nf = (const newsfeeds_t *)nf_obj;
     nodelist_t nl;
     int fd;
     int rc = 0;
@@ -213,9 +219,10 @@ nf_query(
 static int      /* 1:成功 0:失敗 */
 nf_add(
     char *fpath,
-    newsfeeds_t *old,
+    const void *nf_old,
     int pos)
 {
+    const newsfeeds_t *old = (const newsfeeds_t *)nf_old;
     newsfeeds_t nf;
     int high;
     char ans[12];
@@ -266,20 +273,20 @@ nf_add(
 
 static int
 nf_cmp(
-    newsfeeds_t *a, newsfeeds_t *b)
+    const void *a, const void *b)
 {
     /* path/newsgroup 交叉比對 */
-    int k = str_cmp(a->path, b->path);
-    return k ? k : str_cmp(a->newsgroup, b->newsgroup);
+    int k = str_cmp(((const newsfeeds_t *)a) -> path, ((const newsfeeds_t *)b) -> path);
+    return k ? k : str_cmp(((const newsfeeds_t *)a) -> newsgroup, ((const newsfeeds_t *)b) -> newsgroup);
 }
 
 
 static int
 nf_search(
-    newsfeeds_t *nf,
+    const void *nf,
     char *key)
 {
-    return (int) (str_str(nf->newsgroup, key) || str_str(nf->board, key));
+    return (int) (str_str(((const newsfeeds_t *)nf) -> newsgroup, key) || str_str(((const newsfeeds_t *)nf) -> board, key));
 }
 
 
@@ -291,8 +298,9 @@ nf_search(
 static void
 ncm_item(
     int num,
-    ncmperm_t *ncm)
+    const void *ncm_obj)
 {
+    const ncmperm_t *ncm = (const ncmperm_t *)ncm_obj;
     prints("%6d %-*.*s%-23.23s %s\n", num,
         d_cols + 44, d_cols + 44, ncm->issuer, ncm->type, ncm->perm ? "○" : "╳");
 }
@@ -300,8 +308,10 @@ ncm_item(
 
 static void
 ncm_query(
-    ncmperm_t *ncm)
+    const void *ncm_obj)
 {
+    const ncmperm_t *ncm = (const ncmperm_t *)ncm_obj;
+
     move(3, 0);
     clrtobot();
     prints("\n\n發行站台：%s\n砍信種類：%s\n允許\砍信：%s",
@@ -313,9 +323,10 @@ ncm_query(
 static int      /* 1:成功 0:失敗 */
 ncm_add(
     char *fpath,
-    ncmperm_t *old,
+    const void *ncm_old,
     int pos)
 {
+    const ncmperm_t *old = (const ncmperm_t *)ncm_old;
     ncmperm_t ncm;
 
     if (old)
@@ -340,20 +351,20 @@ ncm_add(
 
 static int
 ncm_cmp(
-    ncmperm_t *a, ncmperm_t *b)
+    const void *a, const void *b)
 {
     /* issuer/type 交叉比對 */
-    int k = str_cmp(a->issuer, b->issuer);
-    return k ? k : str_cmp(a->type, b->type);
+    int k = str_cmp(((const ncmperm_t *)a) -> issuer, ((const ncmperm_t *)b) -> issuer);
+    return k ? k : str_cmp(((const ncmperm_t *)a) -> type, ((const ncmperm_t *)b) -> type);
 }
 
 
 static int
 ncm_search(
-    ncmperm_t *ncm,
+    const void *ncm,
     char *key)
 {
-    return (int) (str_str(ncm->issuer, key) || str_str(ncm->type, key));
+    return (int) (str_str(((const ncmperm_t *)ncm) -> issuer, key) || str_str(((const ncmperm_t *)ncm) -> type, key));
 }
 
 
@@ -389,9 +400,10 @@ spam_compare(
 static void
 spam_item(
     int num,
-    spamrule_t *spam)
+    const void *spam_obj)
 {
-    char *path, *board;
+    const spamrule_t *spam = (const spamrule_t *)spam_obj;
+    const char *path, *board;
 
     path = spam->path;
     board = spam->board;
@@ -403,9 +415,10 @@ spam_item(
 
 static void
 spam_query(
-    spamrule_t *spam)
+    const void *spam_obj)
 {
-    char *path, *board;
+    const spamrule_t *spam = (const spamrule_t *)spam_obj;
+    const char *path, *board;
 
     path = spam->path;
     board = spam->board;
@@ -421,9 +434,10 @@ spam_query(
 static int      /* 1:成功 0:失敗 */
 spam_add(
     char *fpath,
-    spamrule_t *old,
+    const void *spam_old,
     int pos)
 {
+    const spamrule_t *old = (const spamrule_t *)spam_old;
     spamrule_t spam;
 
     if (old)
@@ -478,22 +492,24 @@ spam_add(
 
 static int
 spam_cmp(
-    spamrule_t *a, spamrule_t *b)
+    const void *a, const void *b)
 {
+    const spamrule_t *x = (const spamrule_t *)a;
+    const spamrule_t *y = (const spamrule_t *)b;
     /* path/board/xmode/detail 交叉比對 */
-    int i = strcmp(a->path, b->path);
-    int j = strcmp(a->board, b->board);
-    int k = a->xmode - b->xmode;
-    return i ? i : j ? j : k ? k : str_cmp(a->detail, b->detail);
+    int i = strcmp(x->path, y->path);
+    int j = strcmp(x->board, y->board);
+    int k = x->xmode - y->xmode;
+    return i ? i : j ? j : k ? k : str_cmp(x->detail, y->detail);
 }
 
 
 static int
 spam_search(
-    spamrule_t *spam,
+    const void *spam,
     char *key)
 {
-    return (int) (str_str(spam->detail, key));
+    return (int) (str_str(((const spamrule_t *)spam) -> detail, key));
 }
 
 
@@ -512,8 +528,8 @@ a_innbbs(void)
     int recsiz;
     char *fpath;
     char buf[40];
-    void (*item_func)(int num, void *obj), (*query_func)(void *obj);
-    int (*add_func)(char *fpath, void *old, int pos), (*sync_func)(void *lhs, void *rhs), (*search_func)(void *obj, char *key);
+    void (*item_func)(int num, const void *obj), (*query_func)(const void *obj);
+    int (*add_func)(char *fpath, const void *old, int pos), (*sync_func)(const void *lhs, const void *rhs), (*search_func)(const void *obj, char *key);
 
     vs_bar("轉信設定");
     more("etc/innbbs.hlp", (char *) -1);
@@ -624,7 +640,7 @@ a_innbbs(void)
                 i++;
             } while (i <= ch);
 
-            outf(FOOTER_INNBBS);
+            outf(FEETER_INNBBS);
             move(3 + cur, 0);
             outc('>');
             redraw = 0;

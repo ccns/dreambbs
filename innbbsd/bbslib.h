@@ -4,15 +4,15 @@
 /* bbslib.c */
 extern int NLCOUNT;
 extern nodelist_t *NODELIST;
-extern int nl_bynamecmp(nodelist_t *a, nodelist_t *b);
+extern int nl_bynamecmp(const void *a, const void *b);
 
 /* bbslib.c */
 extern int NFCOUNT;
 extern newsfeeds_t *NEWSFEEDS;
 extern newsfeeds_t *NEWSFEEDS_B;
 extern newsfeeds_t *NEWSFEEDS_G;
-extern int nf_byboardcmp(newsfeeds_t *a, newsfeeds_t *b);
-extern int nf_bygroupcmp(newsfeeds_t *a, newsfeeds_t *b);
+extern int nf_byboardcmp(const void *a, const void *b);
+extern int nf_bygroupcmp(const void *a, const void *b);
 
 /* bbslib.c */
 extern int SPAMCOUNT;

@@ -116,7 +116,7 @@ TABLE table[] = {
     {0, 0}
 };
 
-#endif
+#endif  /* #ifdef  TRANUFO */
 
 void
 u_exit(
@@ -167,7 +167,7 @@ u_exit(
             /* lkchu.981201: 用 delta, 每次上站都要超過三分鐘才算 */
             if (delta > 3 * 60)
             {
-                        cuser.numlogins++;
+                cuser.numlogins++;
             }
 #ifdef HAVE_SONG
             cuser.request = tuser.request;
@@ -947,7 +947,7 @@ tn_login(void)
             }
         }
 #endif
-#endif
+#endif  /* #if 1 */
 
 #ifdef NEWUSER_LIMIT
             /* Thor.980825: lkchu patch: 既然有 NEWUSER_LIMIT, 還是加一下好了,
@@ -1211,7 +1211,7 @@ telnet_init(void)
     char buf[64];
 
     /* --------------------------------------------------- */
-    /* init telnet protocol                              */
+    /* init telnet protocol                                */
     /* --------------------------------------------------- */
 
 #if 0
@@ -1477,18 +1477,21 @@ start_daemon(
 
 
 static inline void
-reaper(void)
+reaper(int signum)
 {
+    (void)signum;
     while (waitpid(-1, NULL, WNOHANG | WUNTRACED) > 0);
 }
 
 
 #ifdef  SERVER_USAGE
 static void
-servo_usage(void)
+servo_usage(int signum)
 {
     struct rusage ru;
     FILE *fp;
+
+    (void)signum;
 
     fp = fopen("run/bbs.usage", "a");
 
@@ -1529,12 +1532,13 @@ servo_usage(void)
 
     fclose(fp);
 }
-#endif
+#endif  /* #ifdef  SERVER_USAGE */
 
 
 static void
-main_term(void)
+main_term(int signum)
 {
+    (void)signum;
 #ifdef  SERVER_USAGE
     servo_usage();
 #endif
@@ -1605,8 +1609,8 @@ int main(int argc, char *argv[])
     totaluser = (int *) &ushm->count;
     /* avgload = &ushm->avgload; */
 
-        for (;;)
-        {
+    for (;;)
+    {
         value = 1;
         if (select(1, (fd_set *) & value, NULL, NULL, NULL) < 0)
             continue;
@@ -1614,7 +1618,7 @@ int main(int argc, char *argv[])
         csock = accept(0, (struct sockaddr *) &sin, (socklen_t *) &value);
         if (csock < 0)
         {
-            reaper();
+            reaper(0);
             continue;
         }
 

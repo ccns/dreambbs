@@ -27,10 +27,10 @@ void pal_sync(char *fpath);
 
 static int
 int_cmp(
-    int *a,
-    int *b)
+    const void *a,
+    const void *b)
 {
-    return *a - *b;
+    return *(const int *)a - *(const int *)b;
 }
 
 static void

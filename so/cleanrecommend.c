@@ -38,7 +38,7 @@ cleanrecommend_log(
     FILE *fp;
     time_t now;
 
-    if (fp = fopen(FN_RECOMMEND_LOG, "a+"))
+    if ((fp = fopen(FN_RECOMMEND_LOG, "a+")))
     {
         time(&now);
 
@@ -237,16 +237,16 @@ cleanrecommend_help(
 
 KeyFunc cleanrecommend_cb[] =
 {
-    XO_INIT, cleanrecommend_init,
-    XO_LOAD, cleanrecommend_load,
-    XO_HEAD, cleanrecommend_head,
-    XO_BODY, cleanrecommend_body,
+    {XO_INIT, cleanrecommend_init},
+    {XO_LOAD, cleanrecommend_load},
+    {XO_HEAD, cleanrecommend_head},
+    {XO_BODY, cleanrecommend_body},
 
-    'c', cleanrecommend_change,
-    's', cleanrecommend_init,
-    'd', cleanrecommend_delete,
-    'D', cleanrecommend_cleanall,
-    'h', cleanrecommend_help
+    {'c', cleanrecommend_change},
+    {'s', cleanrecommend_init},
+    {'d', cleanrecommend_delete},
+    {'D', cleanrecommend_cleanall},
+    {'h', cleanrecommend_help}
 };
 
 int
@@ -291,7 +291,7 @@ clean(
         brd = bshm->bcache + brd_bno(currboard);
         battr = brd->battr;
 
-        if (fp = fopen(fpath, "r"))
+        if ((fp = fopen(fpath, "r")))
         {
 
 /*
@@ -435,4 +435,4 @@ clean(
 
     return XO_INIT;
 }
-#endif
+#endif  /* #ifdef  HAVE_RECOMMEND */

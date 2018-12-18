@@ -21,4 +21,4 @@
 
 #define POPUP_MASK              0x000000FF
 
-#endif
+#endif  /* #ifndef _POPUP_H_ */

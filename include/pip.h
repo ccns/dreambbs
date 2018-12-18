@@ -541,7 +541,7 @@ struct playrule badmanlist[] = {
     "WindTop",    16000, 0, 16000, 0, 16000,  16000,   16000,  16000, "00000",   79, 0,
     NULL,             0, 0,     0, 0,     0,      0,       0,      0,    NULL,    0, 0
 };
-#endif
+#endif  /* #if 1 */
 
 struct magicset treatmagiclist[] =
 {
@@ -775,4 +775,4 @@ struct newendingset endmodefamily[] =
     {"正在新娘修行",            "正在新郎修行",        50},
     {NULL,                      NULL,                   0}
 };
-#endif
+#endif  /* #ifndef _PIP_H_ */

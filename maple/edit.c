@@ -13,7 +13,7 @@ typedef struct textline
     struct textline *prev;
     struct textline *next;
     int len;
-    unsigned char data[ANSILINELEN];
+    char data[ANSILINELEN];
 }        textline;
 
 
@@ -181,7 +181,7 @@ ve_goto(void)
         ve_position(vln, top);
     }
 }
-#endif
+#endif  /* #if 0 */
 
 
 static inline char *
@@ -224,7 +224,7 @@ ansi2n(
     int ansix,
     textline *line)
 {
-    unsigned char *data, *tmp;
+    char *data, *tmp;
     int ch;
 
     data = tmp = line->data;
@@ -235,7 +235,7 @@ ansi2n(
         {
             for (;;)
             {
-                ch = *++tmp;
+                ch = (unsigned char) *++tmp;
                 if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */ )
                 {
                     tmp++;
@@ -260,7 +260,7 @@ n2ansi(
     int nx,
     textline *line)
 {
-    unsigned char *tmp, *nxp;
+    char *tmp, *nxp;
     int ansix;
     int ch;
 
@@ -274,7 +274,7 @@ n2ansi(
         {
             for (;;)
             {
-                ch = *++tmp;
+                ch = (unsigned char) *++tmp;
                 if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */ )
                 {
                     tmp++;
@@ -341,7 +341,7 @@ ve_split(
     if (len >= 0)
     {
         textline *p, *n;
-        unsigned char *ptr;
+        char *ptr;
 
         line->len = pos;
         p = ve_alloc();
@@ -386,7 +386,7 @@ ve_join(
     textline *line)
 {
     textline *n;
-    unsigned char *data, *s;
+    char *data, *s;
     int sum, len;
 
     if (!(n = line->next))
@@ -464,7 +464,7 @@ ve_char(
 {
     textline *p;
     int col, len, mode;
-    unsigned char *data;
+    char *data;
 
     p = vx_cur;
     len = p->len;
@@ -515,7 +515,7 @@ ve_char(
         ve_split(p, VE_WIDTH - 3);
 
 #if 0
-        unsigned char *str = data + len;
+        char *str = data + len;
 
         while (*--str == ' ')
         {
@@ -558,7 +558,7 @@ delete_char(
     textline *cur,
     int col)
 {
-    unsigned char *dst, *src;
+    char *dst, *src;
 
     cur->len--;
     dst = cur->data + col;
@@ -573,8 +573,8 @@ delete_char(
 
 
 void
-ve_string(str)
-    unsigned char *str;
+ve_string(
+    char *str)
 {
     int ch;
 
@@ -658,12 +658,12 @@ ve_ansi(void)
 
 
 static textline *
-ve_line(this, str)
-    textline *this;
-    unsigned char *str;
+ve_line(
+    textline *this,
+    char *str)
 {
     int cc, len;
-    unsigned char *data;
+    char *data;
     textline *line;
 
     do
@@ -674,7 +674,7 @@ ve_line(this, str)
 
         for (;;)
         {
-            cc = *str;
+            cc = (unsigned char) *str;
 
             if (cc == '\n')
                 cc = 0;
@@ -765,7 +765,7 @@ ve_load(
     textline *this,
     int fd)
 {
-    unsigned char *str;
+    char *str;
     textline *next;
 
     next = this->next;
@@ -806,7 +806,7 @@ tbf_write(void)
 {
     FILE *fp;
     textline *p;
-    unsigned char *data;
+    char *data;
 
     if ((fp = tbf_open()))
     {
@@ -948,7 +948,7 @@ static int
 words_check(void)
 {
     textline *p;
-    unsigned char *str, *pend;
+    char *str, *pend;
     int phonetic;               /* 注音文數目 */
 
     wordsnum = phonetic = 0;
@@ -965,9 +965,9 @@ words_check(void)
             pend = str + p->len;
             while (str < pend)
             {
-                if (str[0] >= 0x81 && str[0] < 0xFE && str[1] >= 0x40 && str[1] <= 0xFE && str[1] != 0x7F)      /* 中文字 BIG5+ */
+                if ((unsigned char) str[0] >= 0x81 && (unsigned char) str[0] < 0xFE && (unsigned char) str[1] >= 0x40 && (unsigned char) str[1] <= 0xFE && (unsigned char) str[1] != 0x7F)      /* 中文字 BIG5+ */
                 {
-                    if (str[0] == 0xA3 && str[1] >= 0x74 && str[1] <= 0xBA)     /* 注音文 */
+                    if ((unsigned char) str[0] == 0xA3 && (unsigned char) str[1] >= 0x74 && (unsigned char) str[1] <= 0xBA)     /* 注音文 */
                         phonetic++;
                     str++;      /* 中文字雙位元，要多加一次 */
                 }
@@ -998,7 +998,7 @@ words_check(void)
             wordsnum += p->len;
     }
 }
-#endif
+#endif  /* #ifdef ANTI_PHONETIC */
 
 static void
 ve_quote(
@@ -1580,14 +1580,14 @@ ve_filer(
 
 
 static void
-ve_outs(text)
-    unsigned char *text;
+ve_outs(
+    char *text)
 {
     int ch;
-    unsigned char *tail;
+    char *tail;
 
     tail = text + SCR_WIDTH - 1;
-    while ((ch = *text))
+    while ((ch = (unsigned char) *text))
     {
         switch (ch)
         {
@@ -1619,6 +1619,7 @@ select_title(
 {
     char *objs[] = {"[公告]", "[新聞]", "[閒聊]", "[文件]", "[問題]", "[測試]"};
     int select;
+    (void)select_title;
     outs("\n\n1.【公告】2.【新聞】3.【閒聊】4.【文件】5.【問題】6.【測試】7.【其他】\n");
     select = vans("請選擇文章類別或按 Enter 跳過：") - '1';
     if (select >=0 && select <=5)
@@ -2194,7 +2195,7 @@ ve_key:
                 }
                 break;
 
-#endif
+#endif  /* #ifdef SHOW_USER_IN_TEXT */
 
             default:
 

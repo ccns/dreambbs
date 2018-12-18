@@ -388,15 +388,13 @@ Ben_Perm(
     if (!str_cmp(bname, DEFAULT_BOARD))
     {
 #ifdef  HAVE_MODERATED_BOARD
-        extern int bm_belong();
-#ifdef  HAVE_WATER_LIST
-#ifdef  HAVE_SYSOP_WATERLIST
+        extern int bm_belong(char *board);
+#if defined(HAVE_WATER_LIST) && defined(HAVE_SYSOP_WATERLIST)
         if (bm_belong(bname) == BRD_R_BIT)
             return BRD_R_BIT;
         else
 #endif
-#endif
-#endif
+#endif  /* #ifdef  HAVE_MODERATED_BOARD */
             return (BRD_R_BIT | BRD_W_BIT);
     }
 
@@ -423,7 +421,7 @@ Ben_Perm(
     {
         bits = 0;
 
-        extern int bm_belong();
+        extern int bm_belong(char *board);
         bits = bm_belong(bname);  /* Thor.980813: 對秘密看版而言, 是重新判斷的 */
 
             if (readlevel & PERM_SYSOP)
@@ -440,7 +438,7 @@ Ben_Perm(
         bits &= ~BRD_W_BIT;
 
 #endif
-#endif
+#endif  /* #ifdef HAVE_MODERATED_BOARD */
 
     /* Thor.980813: 註解: 特別為 BM 考量, bm 有該版的所有權限 */
 
@@ -846,11 +844,11 @@ XoPost(
 /* cache.090503: 即時熱門看板 */
 static int
 mantime_cmp(
-    short *a,
-    short *b)
+    const void *a,
+    const void *b)
 {
     /* 由多排到少 */
-    return bshm->mantime[*b] - bshm->mantime[*a];
+    return bshm->mantime[* (const short *)b] - bshm->mantime[* (const short *)a];
 }
 
 static int class_hot = 0;
@@ -1557,6 +1555,9 @@ XoAuthor(
 #ifndef HAVE_MMAP
     XO *xo_t;
 #endif
+
+    (void)XoAuthor;
+
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
 
@@ -1651,7 +1652,7 @@ XoAuthor(
             }
 
             free(xo_t);
-#endif
+#endif  /* #ifdef HAVE_MMAP */
 
         }
     } while (chead < ctail);
@@ -1679,7 +1680,7 @@ XoAuthor(
 
     return class_body(xo);
 }
-#endif
+#endif  /* #ifdef AUTHOR_EXTRACTION */
 
 #ifdef  HAVE_FAVORITE
 static int
@@ -1749,7 +1750,7 @@ class_add(xo)
 
     return XO_FOOT;
 }
-#endif
+#endif  /* #if 0 */
 
 static int
 class_add2(          /* gaod: 我的最愛中直接新增新看板 */
@@ -1900,10 +1901,9 @@ class_mov(
     return class_init(xo);
 }
 
-#endif
+#endif  /* #ifdef  HAVE_FAVORITE */
 
-#ifdef  HAVE_COUNT_BOARD
-#if 0
+#if defined(HAVE_COUNT_BOARD) && 0
 static int
 class_stat(xo)
     XO *xo;
@@ -1925,7 +1925,6 @@ class_stat(xo)
 
     return XO_NONE;
 }
-#endif
 #endif
 
 static int
@@ -2203,7 +2202,7 @@ brd_list(
             }
 
             break;
-#endif
+#endif  /* #if 1 */
         case 'a':
             while ((ptr = ask_board(buf, BRD_W_BIT, NULL)))
             {
@@ -2257,7 +2256,7 @@ brd_list(
             ll_out(3, 0, MSG_CC);
             userno = 0;
             break;
-#endif
+#endif  /* #if 1 */
         case 'q':
             return 0;
 
@@ -2267,4 +2266,4 @@ brd_list(
     }
 }
 
-#endif
+#endif  /* #ifdef HAVE_MULTI_CROSSPOST */

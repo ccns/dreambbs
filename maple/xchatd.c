@@ -370,8 +370,8 @@ valid_chatid(
 
 static int
 str_match(
-    unsigned char *s1,          /* lower-case (sub)string */
-    unsigned char *s2)
+    char *s1,                   /* lower-case (sub)string */
+    char *s2)
 {
     int c1, c2;
 
@@ -913,7 +913,7 @@ chat_query(
         send_to_user(cu, buf, 0, MSG_MESSAGE);
     }
 }
-#endif
+#endif  /* #ifndef STAND_ALONE */
 
 
 static void
@@ -1923,7 +1923,7 @@ login_user(
             send_to_user(cu, CHAT_LOGIN_INVALID, 0, MSG_MESSAGE);
         return 0;
     }
-#endif
+#endif  /* #ifndef STAND_ALONE */
 
 #ifdef  DEBUG
     debug_user();
@@ -2612,7 +2612,7 @@ chat_party(
     send_to_user(cu, buf, 0, MSG_PARTYLISTSTART);
 
     cap = catbl(kind);
-    for (i = 0; cap[i].verb; i++)
+    for (i = 0; cap[i].verb[0]; i++)
     {
         sprintf(buf, "%-10s %-20s", cap[i].verb, cap[i].chinese);
         send_to_user(cu, buf, 0, MSG_PARTYLIST);
@@ -3094,9 +3094,11 @@ servo_daemon(
 
 #ifdef  SERVER_USAGE
 static void
-server_usage(void)
+server_usage(int signum)
 {
     struct rusage ru;
+
+    (void)signum;
 
     if (getrusage(RUSAGE_SELF, &ru))
         return;
@@ -3136,12 +3138,13 @@ server_usage(void)
 
     fflush(flog);
 }
-#endif
+#endif  /* #ifdef  SERVER_USAGE */
 
 
 static void
-reaper(void)
+reaper(int signum)
 {
+    (void)signum;
     while (waitpid(-1, NULL, WNOHANG | WUNTRACED) > 0);
 }
 
@@ -3160,22 +3163,24 @@ sig_trap(
 
 
 static void
-sig_over(void)
+sig_over(int signum)
 {
     int fd;
 
-    server_usage();
+    server_usage(signum);
     logit("OVER", "");
     fclose(flog);
     for (fd = 0; fd < 64; fd++)
         close(fd);
-    execl("bin/xchatd", NULL);
+    execl("bin/xchatd", "bin/xchatd", (const char *)NULL);
 }
 
 static void
-sig_log(void)
+sig_log(int signum)
 {
     char buf[128];
+
+    (void)signum;
 
     logit("OVER", "");
     fclose(flog);

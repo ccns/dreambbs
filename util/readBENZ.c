@@ -35,7 +35,7 @@ int main(void)
                 continue;
             sprintf(buf, "%s/friend", de->d_name);
 #endif
-strcpy(buf, "/home/bbs/usr/p/pcbug/benz");
+            strcpy(buf, "/home/bbs/usr/p/pcbug/benz");
             if ((fd = open(buf, O_RDWR)) < 0)
 /*              continue; */exit(1);
 

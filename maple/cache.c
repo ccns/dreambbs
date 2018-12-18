@@ -327,7 +327,7 @@ utmp_search(
     } while (++uentp <= uceil);
     return NULL;
 }
-#endif
+#endif  /* #if 0 */
 
 
 int
@@ -356,21 +356,20 @@ utmp_count(
     return count;
 }
 
-#if 1
-#ifdef  HAVE_CLASSTABLEALERT
+#if 1 && defined(HAVE_CLASSTABLEALERT)
 int
 cmpclasstable(
-    CLASS_TABLE_ALERT *ptr)
+    const void *ptr)
 {
-    return ptr->userno == cuser.userno;
+    return ((const CLASS_TABLE_ALERT *)ptr)->userno == cuser.userno;
 }
 
 void
 classtable_free(void)
 {
     int pos;
-    while ( (pos = rec_loc(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), (void *)cmpclasstable)) >= 0)
-        rec_del(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), pos, (void *)cmpclasstable, NULL);
+    while ( (pos = rec_loc(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), cmpclasstable)) >= 0)
+        rec_del(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), pos, cmpclasstable, NULL);
 }
 
 void
@@ -414,7 +413,6 @@ classtable_main(void)
     close(fd);
 
 }
-#endif
 #endif
 
 /*-------------------------------------------------------*/
@@ -507,7 +505,7 @@ apply_boards(
 
 int
 brd_bno(
-    char *bname)
+    const char *bname)
 {
     BRD *brdp, *bend;
     int bno;
@@ -554,10 +552,10 @@ OCACHE *oshm;
 
 static int
 int_cmp(
-    int *a,
-    int *b)
+    const void *a,
+    const void *b)
 {
-    return *a - *b;
+    return *(const int *)a - *(const int *)b;
 }
 
 
@@ -565,7 +563,8 @@ int
 observeshm_find(
     int userno)
 {
-    int count, *cache, datum, mid;
+    unsigned int *cache, datum;
+    int count, mid;
 
     if ((cache = oshm->userno))
     {
@@ -624,7 +623,7 @@ observeshm_init(void)
     oshm = attach_shm(OBSERVE_KEY, sizeof(OCACHE));
     observeshm_load();
 }
-#endif
+#endif  /* #ifdef  HAVE_OBSERVE_LIST */
 
 /*-------------------------------------------------------*/
 /* run/var/counter cache                                 */
@@ -681,9 +680,9 @@ BANMAIL *curfw;
 
 static int
 cmpban(
-    BANMAIL *ban)
+    const void *ban)
 {
-    return !strcmp(ban->data, curfw->data);
+    return !strcmp(((const BANMAIL *)ban) -> data, curfw->data);
 }
 
 void
@@ -754,12 +753,12 @@ fshm_init(void)
 
 static inline void
 out_rle(
-    unsigned char *str,
+    char *str,
     int film)
 {
 #ifdef SHOW_USER_IN_TEXT
-    unsigned char *t_name = cuser.userid;
-    unsigned char *t_nick = cuser.username;
+    char *t_name = cuser.userid;
+    char *t_nick = cuser.username;
 #endif
     int x, y/*, count=0*/;
     int cc, rl;
@@ -767,7 +766,7 @@ out_rle(
     if (film)
         move(1, 0/*item_length[count++]*/);
         //move(3, 36+item_length[count++]);
-    while ((cc = *str))
+    while ((cc = (unsigned char) *str))
     {
         str++;
         switch (cc)
@@ -793,14 +792,14 @@ out_rle(
 
 #ifdef SHOW_USER_IN_TEXT
         case 1:
-            if ((cc = *t_name) && (cuser.ufo2 & UFO2_SHOWUSER))
+            if ((cc = (unsigned char) *t_name) && (cuser.ufo2 & UFO2_SHOWUSER))
                 t_name++;
             else
                 cc = (cuser.ufo2 & UFO2_SHOWUSER) ? ' ': '#';
             break;
 
         case 2:
-            if ((cc = *t_nick) && (cuser.ufo2 & UFO2_SHOWUSER))
+            if ((cc = (unsigned char) *t_nick) && (cuser.ufo2 & UFO2_SHOWUSER))
                 t_nick++;
             else
                 cc = (cuser.ufo2 & UFO2_SHOWUSER) ? ' ' : '%';

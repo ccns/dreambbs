@@ -14,7 +14,7 @@ extern XZ xz[];
 
 static int ways;
 
-static int list_add();
+static int list_add(XO *xo);
 
 static int mode;
 

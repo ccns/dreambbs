@@ -229,6 +229,9 @@ char *path)
     int pos = 0, fd;
     /* char buf1[3], buf2[2], buf3[4]; */
     char buf1[3], buf2[2], buf3[3], buf4[5];
+
+    (void)buf;
+
     /*
     buf1[0] = account[0];
     buf1[1] = account[1];
@@ -813,7 +816,7 @@ XO *xo)
 
             cc = currchrono;
             currchrono = vch->chrono;
-            rec_del(dir, sizeof(VCH), pos, (void *)cmpchrono, NULL);
+            rec_del(dir, sizeof(VCH), pos, cmpchrono, NULL);
             currchrono = cc;
             return vote_init(xo);
         }
@@ -1247,4 +1250,4 @@ outerLoop:
         unlink(fpath);
     }
 }
-#endif
+#endif  /* #if 0 */

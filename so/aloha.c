@@ -21,9 +21,9 @@ extern XZ xz[];
 
 int
 cmpbmw(
-BMW *benz)
+const void *benz)
 {
-    return benz->recver == cuser.userno;
+    return ((const BMW *)benz)->recver == cuser.userno;
 }
 
 static int

@@ -35,10 +35,10 @@ typedef struct
 }      intnode;
 
 int
-compareint(void *a, void *b)
+compareint(const void *a, const void *b)
 {
-    intnode *A = a;
-    intnode *B = b;
+    const intnode *A = (const intnode *)a;
+    const intnode *B = (const intnode *)b;
     return A->i - B->i;
 }
 

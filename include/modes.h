@@ -174,7 +174,7 @@ static char *ModeTypeTable[] =
 #define EDIT_BOTH       0x04    /* both reply to author/board ? */
 #ifdef HAVE_ANONYMOUS
 #define EDIT_ANONYMOUS  0x08    /* °Î¦W¼Ò¦¡ */
-#endif
+#endif  /* #ifdef HAVE_ANONYMOUS */
 #define EDIT_OUTGO      POST_OUTGO
 #define EDIT_RESTRICT   0x10
 

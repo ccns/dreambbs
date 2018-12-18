@@ -25,7 +25,7 @@ personal_log(
     time_t now;
     char tag[3][5] = {"申請", "開板", "拒絕"};
 
-    if (fp = fopen(FN_PERSONAL_LOG, "a+"))
+    if ((fp = fopen(FN_PERSONAL_LOG, "a+")))
     {
         time(&now);
 
@@ -55,7 +55,7 @@ belong(
     {
         mgets(-1);
 
-        while (flist = mgets(fd))
+        while ((flist = mgets(fd)))
         {
             str_lower(flist, flist);
             if (str_str(key, flist))
@@ -88,7 +88,7 @@ is_badid(
         return 1;
 
     str = userid;
-    while (ch = *(++str))
+    while ((ch = *(++str)))
     {
         if (!is_alnum(ch))
             return 1;
@@ -217,6 +217,8 @@ personal_attr(unsigned int state)
 
     if (state & PB_OPEN)
         return 'O';
+
+    return ' ';
 }
 
 static void
@@ -381,7 +383,7 @@ mail2usr(
     strcpy(hdr.title, title[admin]);
     rec_add(folder, &hdr, sizeof(HDR));
 
-    if (fp = fopen(fpath, "w"))
+    if ((fp = fopen(fpath, "w")))
     {
         fprintf(fp, "作者: SYSOP (%s)\n標題: %s\n時間: %s\n", SYSOPNICK, title[admin], ctime(&now));
         fprintf(fp, "申請人:   %s\n", personal->userid);
@@ -594,18 +596,18 @@ personal_help(
 
 KeyFunc personal_cb[] =
 {
-    XO_INIT, personal_init,
-    XO_LOAD, personal_load,
-    XO_HEAD, personal_head,
-    XO_BODY, personal_body,
+    {XO_INIT, personal_init},
+    {XO_LOAD, personal_load},
+    {XO_HEAD, personal_head},
+    {XO_BODY, personal_body},
 
-    'c', personal_change,
-    's', personal_init,
-    'd', personal_delete,
-    KEY_TAB, personal_switch,
-    'O', personal_open,
-    'D', personal_deny,
-    'h', personal_help
+    {'c', personal_change},
+    {'s', personal_init},
+    {'d', personal_delete},
+    {KEY_TAB, personal_switch},
+    {'O', personal_open},
+    {'D', personal_deny},
+    {'h', personal_help}
 };
 
 int

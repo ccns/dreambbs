@@ -75,7 +75,7 @@ x_siteinfo(void)
 
 #else
 //    prints("\033[1;30mModules & Plug-in: None\033[m\n");
-#endif
+#endif  /* #ifdef Modules */
     vmsg(NULL);
     return 0;
 }

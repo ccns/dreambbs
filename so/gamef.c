@@ -27,14 +27,14 @@ void
 pressanykey(char *fmt, ...)
 {
     va_list args;
-    unsigned char buf[512], *ptr;
+    char buf[512], *ptr;
     int cc, ch;
 
     va_start(args, fmt);
     vsprintf(buf, fmt, args);
     va_end(args);
     move(b_lines, 0);
-    for (ptr = buf; cc = *ptr; ptr++)
+    for (ptr = buf; (cc = (unsigned char) *ptr); ptr++)
         outc(cc);
     do
     {
@@ -51,7 +51,7 @@ void
 game_log(int file, char *fmt, ...)
 {
     va_list args;
-    unsigned char buf[200], ff[40];
+    char buf[200], ff[40];
     time_t now;
     FILE *fs;
 

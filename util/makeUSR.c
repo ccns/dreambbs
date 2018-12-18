@@ -84,6 +84,8 @@ main(void)
     int ch, mode = 0;
     char *fname, fpath[256];
 
+    (void)mode;
+
     setgid(BBSGID);
     setuid(BBSUID);
     chdir(BBSHOME);

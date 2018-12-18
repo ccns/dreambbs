@@ -531,7 +531,7 @@ XO *xo)
     else
     {
         currchrono = ghdr->chrono;
-        rec_del(dir, sizeof(HDR), xo->pos, (void *)cmpchrono, NULL);
+        rec_del(dir, sizeof(HDR), xo->pos, cmpchrono, NULL);
     }
 
     return mailgem_init(xo);
@@ -1088,9 +1088,9 @@ static int sync_size, sync_head;
 
 static int
 sync_cmp(
-SyncData *s1, SyncData *s2)
+const void *s1, const void *s2)
 {
-    return s1->chrono - s2->chrono;
+    return ((const SyncData *)s1)->chrono - ((const SyncData *)s2)->chrono;
 }
 
 
@@ -1376,7 +1376,7 @@ char *fpath)
     fname = ptr;
 
     /* --------------------------------------------------- */
-    /* visit the header file                             */
+    /* visit the header file                               */
     /* --------------------------------------------------- */
 
     count = 0;

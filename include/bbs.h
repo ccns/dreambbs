@@ -89,6 +89,6 @@
 #define GET_USER        0x2000          /* 取得 user id */
 #define GET_BRD         0x4000          /* 取得 board id */
 
-#endif
+#endif  /* #ifndef _BBTP_ */
 
 #endif                          /* _BBS_H_ */

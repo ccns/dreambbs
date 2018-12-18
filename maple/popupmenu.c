@@ -23,6 +23,7 @@ static int do_menu(MENU pmenu[], XO *xo, int x, int y);
 /*            0  代表不是中文字              */
 /* ----------------------------------------- */
 
+#ifndef M3_USE_PFTERM
 static int
 is_big5(char *src, int pos, int mode)
 {
@@ -55,6 +56,7 @@ is_big5(char *src, int pos, int mode)
     else
         return 0;
 }
+#endif  /* #ifndef M3_USE_PFTERM */
 
 static int
 do_cmd(MENU *mptr, XO *xo, int x, int y)
@@ -86,7 +88,7 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
         case POPUP_MENU :
 //          sprintf(t, "【%s】", mptr->desc);
 #ifdef M3_USE_PFTERM
-            scr_restore(&old_screen); // restore foot
+            scr_restore_keep(&old_screen); // restore foot
 #else
             vs_restore(sl);
 #endif
@@ -104,6 +106,7 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
     return -1;
 }
 
+#ifndef M3_USE_PFTERM
 /* verit . 計算扣掉色碼的實際長度 */
 static int
 count_len(
@@ -119,7 +122,7 @@ count_len(
         ptr = strstr(ptr, "\033");
         if (ptr)
         {
-            for (tmp=ptr;*tmp!='m'; tmp++);
+            for (tmp=ptr; *tmp!='m'; tmp++);
             len -= (tmp-ptr+1);
             ptr = tmp+1;
         }
@@ -190,10 +193,11 @@ get_color(char *s, int len, int *fc, int *bc, int *bbc)
     }
 
 }
+#endif  /* #ifndef M3_USE_PFTERM */
 
 #ifndef M3_USE_PFTERM
 static void
-vs_line(char *msg, int x, int y)
+vs_line(char *msg, int y, int x)
 {
     char buf[512], color[16], *str, *tmp, *cstr;
     int len = count_len(msg);
@@ -201,10 +205,10 @@ vs_line(char *msg, int x, int y)
 
     memset(buf, 0, sizeof(buf));
 
-    sl[x].data[sl[x].len] = '\0';
-    str = tmp = sl[x].data;
+    sl[y].data[sl[y].len] = '\0';
+    str = tmp = (char *) sl[y].data;
 
-    for (word=0; word<y && *str;++str)
+    for (word=0; word<x && *str; ++str)
     {
         if (*str == KEY_ESC)
         {
@@ -216,9 +220,9 @@ vs_line(char *msg, int x, int y)
         word++;
     }
 
-    strncpy(buf, sl[x].data, str - tmp);
+    strncpy(buf, (char *) sl[y].data, str - tmp);
 
-    while (word++<y)
+    while (word++<x)
         strcat(buf, " ");
 
     slen = strlen(buf)-1;
@@ -231,7 +235,7 @@ vs_line(char *msg, int x, int y)
 
     if (*str)
     {
-        for (word=0; word<len && *str;++str)
+        for (word=0; word<len && *str; ++str)
         {
             if (*str == KEY_ESC)
             {
@@ -257,37 +261,23 @@ vs_line(char *msg, int x, int y)
         }
     }
 
-    move(x, 0);
+    move(y, 0);
     outs(buf);
 
 }
 #else
 static void
-vs_line(msg)
-    char *msg;
+vs_line(
+    char *msg, int y, int x)
 {
-    int head, tail;
+    move(y, x);
 
     if (msg)
-        head = (strlen(msg) + 1) >> 1;
-    else
-        head = 0;
-
-    tail = head;
-
-    while (head++ < 38)
-        outc('-');
-
-    if (tail)
     {
-        outc(' ');
-        outs(msg);
-        outc(' ');
+        outstr(msg);
     }
 
-    while (tail++ < 38)
-        outc('-');
-    outc('\n');
+    move(y, 0);
 }
 #endif //not M3_USE_PFTERM
 
@@ -316,7 +306,7 @@ draw_menu(MENU *pmenu[20], int num, char *title, int x, int y, int cur)
     vs_line(buf, x-2, y);
     sprintf(buf, " \033[0;37;44m▏\033[1m%-31s \033[0;47;34m▉\033[m   ", t);
     vs_line(buf, x-1, y);
-    for (i=0; i<num;++i, ++x)
+    for (i=0; i<num; ++i, ++x)
     {
         draw_item(pmenu[i]->desc, (i==cur)?1:0, x, y);
     }
@@ -404,7 +394,7 @@ do_menu(
                 if (do_cmd(table[cur], xo, x, y)<0)
                     return -1;
 #ifdef M3_USE_PFTERM
-                scr_restore(&old_screen); // restore foot
+                scr_restore_keep(&old_screen); // restore foot
 #else
                 vs_restore(sl);
 #endif
@@ -423,7 +413,7 @@ do_menu(
                             if (do_cmd(table[cur], xo, x, y)<0)
                                 return -1;
 #ifdef M3_USE_PFTERM
-                            scr_restore(&old_screen); // restore foot
+                            scr_restore_keep(&old_screen); // restore foot
 #else
                             vs_restore(sl);
 #endif
@@ -494,13 +484,15 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
     char c;
     char t[64];
     char hotkey;
-    hotkey = desc[0][0];
-
 #ifdef M3_USE_PFTERM
+    screen_backup_t old_screen = {0};
+
     scr_dump(&old_screen);
 #else
     vs_save(sl);
 #endif
+    hotkey = desc[0][0];
+
     sprintf(t, "【%s】", title);
     num = draw_menu_des(desc, t, x, y, 0);
     cur = old_cur = 0;
@@ -519,7 +511,7 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
         {
             case KEY_LEFT:
 #ifdef M3_USE_PFTERM
-                scr_restore(&old_screen); // restore foot
+                scr_restore_free(&old_screen); // restore foot
 #else
                 vs_restore(sl);
 #endif
@@ -539,7 +531,7 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
             case KEY_RIGHT:
             case '\n':
 #ifdef M3_USE_PFTERM
-                scr_restore(&old_screen); // restore foot
+                scr_restore_free(&old_screen); // restore foot
 #else
                 vs_restore(sl);
 #endif
@@ -574,7 +566,7 @@ popupmenu(MENU pmenu[], XO *xo, int x, int y)
 #endif
     do_menu(pmenu, xo, x, y);
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen); // restore foot
+    scr_restore_free(&old_screen); // restore foot
 #else
     vs_restore(sl);
 #endif
@@ -653,7 +645,7 @@ int pmsg(char *msg)
 
     cc = vkey();
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen); // restore foot
+    scr_restore_free(&old_screen); // restore foot
 #else
     vs_restore(sl);
 #endif
@@ -675,10 +667,10 @@ Every_Z_Screen(void)
         vmsg("檔案開啟錯誤 !!");
         return 0;
     }
-    for (i=0; i<24;++i)
+    for (i=0; i<24; ++i)
     {
         memset(buf, 0, sizeof(buf));
-        strncpy(buf, sl[i].data, sl[i].len);
+        strncpy(buf, (char *) sl[i].data, sl[i].len);
         fprintf(fp, "%s\n", buf);
     }
     fclose(fp);

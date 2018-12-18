@@ -26,14 +26,14 @@ typedef struct
 
 static int
 at_cmp(
-    AclText *x,
-    AclText *y)
+    const void *x,
+    const void *y)
 {
-    char *tail1, *tail2;
+    const char *tail1, *tail2;
     int c1, c2, diff;
 
-    tail1 = x->text + x->domain;
-    tail2 = y->text + y->domain;
+    tail1 = ((const AclText *)x)->text + ((const AclText *)x)->domain;
+    tail2 = ((const AclText *)y)->text + ((const AclText *)y)->domain;
 
     for (;;)
     {

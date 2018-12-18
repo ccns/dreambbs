@@ -107,14 +107,16 @@ printchatline(
     clrtoeol();
     chatline = line;
 }
-#endif
+#endif  /* #ifdef M3_CHAT_SCROLL_MODE */
 
 static void
-chat_record(void)
+chat_record(char *arg)
 {
     FILE *fp;
     time_t now;
     char buf[80];
+
+    (void)arg;
 
     if (!cuser.userlevel)
         return;
@@ -225,13 +227,15 @@ int mode)
         }
     }
 }
-#endif
+#endif  /* #ifdef  LOG_CHAT */
 
 
 static void
-chat_clear(void)
+chat_clear(char *arg)
 {
     int line;
+
+    (void)arg;
 
     for (line = 2; line < stop_line; line++)
     {
@@ -302,7 +306,7 @@ char *chatid)
 
             if (fd == 'c')
             {
-                chat_clear();
+                chat_clear(NULL);
             }
             else if (fd == 'n')
             {
@@ -471,8 +475,10 @@ user_info *uentp)
 
 
 static void
-chat_users(void)
+chat_users(char *arg)
 {
+    (void)arg;
+
     /* 因為人數動輒上百，意義不大 */
     printchatline("");
     printchatline("【 " BOARDNAME "遊客列表 】");
@@ -483,7 +489,7 @@ chat_users(void)
 
     printuserent(NULL);
 }
-#endif
+#endif  /* #if 0 */
 
 
 struct chat_command
@@ -684,7 +690,7 @@ t_chat(void)
 #else
         sprintf(buf, "/! %d %d %s %s\n",
                 cuser.userno, cuser.userlevel, cuser.userid, chatid);
-#endif
+#endif  /* #ifdef CHAT_SECURE */
 
         chat_send(cfd, buf);
         if (recv(cfd, buf, 3, 0) != 3)
@@ -883,7 +889,7 @@ t_chat(void)
         if (ch == Ctrl('Z'))
         {
             char buf[IDLEN + 1];
-            screen_backup_t old_screen;
+            screen_backup_t old_screen = {0};
             scr_dump(&old_screen);
 
             /* Thor.0731: 暫存 mateid, 因為出去時可能會用掉 mateid(like query) */
@@ -899,7 +905,7 @@ t_chat(void)
 
             /* Thor.0731: 還原 mateid, 因為出去時可能會用掉 mateid(like query) */
             strcpy(cutmp->mateid, buf);
-            scr_restore(&old_screen);
+            scr_restore_free(&old_screen);
             continue;
         }
 #else
@@ -981,7 +987,7 @@ t_chat(void)
     }
 
     if (frec)
-        chat_record();
+        chat_record(NULL);
 
 #ifdef  LOG_CHAT
     chat_recordtomail(0);

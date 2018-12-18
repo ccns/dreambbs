@@ -72,7 +72,7 @@ unsigned long dns_addr(char *name)
     cc = name[0];
     if (cc >= '0' && cc <= '9')
     {
-        for (cp = name;; ++cp)
+        for (cp = (unsigned char *)name;; ++cp)
         {
             cc = *cp;
             if (!cc)
@@ -191,7 +191,7 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
 
     /* get remote host name */
 
-    if (dns_name((char *)&from->sin_addr, rhost))
+    if (dns_name((unsigned char *)&from->sin_addr, rhost))
         return;                    /* °²³]¨S¦³ FQDN ´N¨S¦³¶] identd */
 
     /*
@@ -209,7 +209,7 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
     {
         s = sizeof(our_sin);
 
-        if (getsockname(sock, (struct sockaddr *)&our_sin, &s) < 0)
+        if (getsockname(sock, (struct sockaddr *)&our_sin, (socklen_t *) &s) < 0)
             return;
 
         /* Thor.990325: ¬°¤FÅý¤Ï¬d®É¯à½T©w¬d¥X¡A¨Ó¦Û­þ­Óinterface´N±q¨º³s¦^ */
@@ -422,7 +422,7 @@ int dns_open(char *host, int port)
     /* Thor.980707: ¦]gem.c©I¥s®É¥i¯à±Nhost¥Îip©ñ¤J¡A¬G§@¯S§O³B²z */
     if (*host >= '0' && *host <= '9')
     {
-        for (n = 0, cp = host; n < 4; n++, cp++)
+        for (n = 0, cp = (unsigned char *)host; n < 4; n++, cp++)
         {
             buf[n] = 0;
             while (*cp >= '0' && *cp <= '9')
@@ -435,7 +435,7 @@ int dns_open(char *host, int port)
         }
         if (n == 3)
         {
-            cp = buf;
+            cp = (unsigned char *)buf;
             goto ip;
         }
     }

@@ -57,7 +57,7 @@ showpasswd(
         }
     }
 }
-#endif
+#endif  /* #ifdef SHOW_PASSWORD */
 
 #if 0
 static char *
@@ -106,7 +106,7 @@ showACCT(
         "«H½c: %-60s \n",
         acct->userno, acct->userid, acct->realname, acct->username,
 //      msg1, msg2,
-//      acct->signature, /*"¡H¡ñ¡ð" + (acct->sex << 1), */
+//      acct->signature, /*& "¡H¡ñ¡ð"[acct->sex << 1], */
 //      acct->money, acct->gold, acct->year, acct->month, acct->day,
         acct->numlogins, acct->numposts, acct->numemail,
         msg3, msg4,

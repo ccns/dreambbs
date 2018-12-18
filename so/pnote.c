@@ -95,7 +95,7 @@ rebuild_pnote_ansi(int newflag)
         sprintf(buf, "\x1b[1;33m□═ \x1b[32m%s\x1b[37m(%s)",
                 myitem.userid, myitem.username);
         len = strlen(buf);
-        strcat(buf, " \x1b[33m" + (len & 1));
+        strcat(buf, & " \x1b[33m"[len & 1]);
 
         for (i = len >> 1; i < 36; i++)
             strcat(buf, "═");
@@ -185,7 +185,7 @@ do_pnote(char *userid)
         sprintf(buf, "\x1b[1;33m□═ \x1b[32m%s\x1b[37m(%s)",
                 myitem.userid, myitem.username);
         len = strlen(buf);
-        strcat(buf, " \x1b[33m" + (len & 1));
+        strcat(buf, & " \x1b[33m"[len & 1]);
 
         for (i = len >> 1; i < 36; i++)
             strcat(buf, "═");
@@ -257,7 +257,7 @@ del_pnote(notedata *pitem, int newflag)
     }
     unlink(fold);
 }
-#endif
+#endif  /* #if 0 */
 
 /*                                                              *
  *  show_pnote_hint()改自showplan(), 可以show出主人自製的答錄機 *

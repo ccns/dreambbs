@@ -96,7 +96,7 @@ my_recv(
     if (rel > 0)
     {
         rel = 0;
-        if (ptr = CONTROL)
+        if ((ptr = CONTROL))
         {
             if (!str_ncmp(ptr, "cancel ", 7))
             {
@@ -148,7 +148,7 @@ searchcmd(
     daemoncmd_t *p;
     char *name;
 
-    for (p = cmds; name = p->name; p++)
+    for (p = cmds; (name = p->name); p++)
     {
         if (!str_cmp(name, cmd))
             return p;
@@ -263,7 +263,7 @@ tryaccept(
     int s)
 {
     int ns;
-    int fromlen = sizeof(struct sockaddr_in);
+    socklen_t fromlen = sizeof(struct sockaddr_in);
     struct sockaddr sockaddr;   /* Internet endpoint address */
 
     do
@@ -459,7 +459,7 @@ channelreader(
             {
                 void (*Main) (ClientType *client);
 
-                if (Main = dp->main)
+                if ((Main = dp->main))
                     (*Main) (client);
             }
         }
@@ -478,12 +478,12 @@ channelreader(
 
         left = in->left + in->used;
 
-        if (used = *head)
+        if ((used = *head))
         {
             char *str;
 
             str = data;
-            while (*str++ = *head++)
+            while ((*str++ = *head++))
                 ;
 
             used = str - data;
@@ -620,7 +620,7 @@ search_nodelist_byhost(
     for (i = 0; i < NLCOUNT; i++)
     {
         find = NODELIST + i;
-        if (he = gethostbyname(find->host))
+        if ((he = gethostbyname(find->host)))
         {
             str_ncpy(client, inet_ntoa(*(struct in_addr *) he->h_addr_list[0]), sizeof(client));
             if (!strcmp(hostname, client))
@@ -677,7 +677,7 @@ inndchannel(void)
     FD_SET(sock, &rfd);
 
     /* --------------------------------------------------- */
-    /* initial history maintain time                      */
+    /* initial history maintain time                       */
     /* --------------------------------------------------- */
 
     time(&uptime1);
@@ -688,7 +688,7 @@ inndchannel(void)
     uptime2 = 0;                /* force to initial_bbs in the first time */
 
     /* --------------------------------------------------- */
-    /* initial channel                                    */
+    /* initial channel                                     */
     /* --------------------------------------------------- */
 
     memset(Channel, 0, sizeof(Channel));
@@ -743,7 +743,7 @@ inndchannel(void)
 
             /* 檢查有沒有在 nodelist.bbs 裡面 */
             i = sizeof(sin);            /* 借用 i */
-            if (getpeername(fd, (struct sockaddr *) &sin, &i) < 0)
+            if (getpeername(fd, (struct sockaddr *) &sin, (socklen_t *) &i) < 0)
             {
                 close(fd);
                 continue;
@@ -810,7 +810,7 @@ getdtablesize(void)
     return -1;
 }
 #endif //RLIMIT
-#endif
+#endif  /* #ifdef SOLARIS */
 
 
 static void
@@ -829,7 +829,7 @@ standaloneinit(void)
     for (s = 3; s < ndescriptors; s++)
         close(s);
 
-    if (fp = fopen(INNBBSD_PIDFILE, "w"))
+    if ((fp = fopen(INNBBSD_PIDFILE, "w")))
     {
         fprintf(fp, "%d\n", getpid());
         fclose(fp);
@@ -865,7 +865,7 @@ main(
         {
         case 'i':
             c = sizeof(sin);
-            if (getsockname(0, (struct sockaddr *) &sin, &c) < 0)
+            if (getsockname(0, (struct sockaddr *) &sin, (socklen_t *) &c) < 0)
             {
                 printf("您不是從 inetd 啟動，無需使用 -i\n");
                 exit(0);

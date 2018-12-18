@@ -33,7 +33,7 @@
 #include <assert.h>
 #endif //M3_USE_PFTERM
 
-#endif
+#endif  /* #ifdef _PFTERM_TEST_MAIN */
 
 //////////////////////////////////////////////////////////////////////////
 // pfterm debug settings
@@ -2053,7 +2053,7 @@ fterm_rawmove_rel(int dy, int dx)
         // (dy, dx) are given - use fterm_move.
         fterm_rawmove(ft.ry + dy, ft.rx + dx);
     }
-#endif
+#endif  /* #ifndef FTCONF_USE_ANSI_RELMOVE */
 }
 
 void
@@ -2218,7 +2218,7 @@ fterm_rawscroll (int dy)
     // the coordinates are already out of sync.
     fterm_rawcmd2(ft.ry+1, ft.rx+1, 1, 'H');
     ft.scroll -= dy;
-#endif
+#endif  /* #ifdef FTCONF_USE_ANSI_SCROLL */
 }
 
 void
@@ -2309,7 +2309,7 @@ scr_dump(screen_backup_t *psb)
     psb->y   = ft.y;
     psb->x   = ft.x;
     p = psb->raw_memory =
-        malloc (ft.rows * ft.cols * (sizeof(ftchar) + sizeof(ftattr)));
+        realloc (psb->raw_memory, ft.rows * ft.cols * (sizeof(ftchar) + sizeof(ftattr)));
 
     for (y = 0; y < ft.rows; y++)
     {
@@ -2320,8 +2320,18 @@ scr_dump(screen_backup_t *psb)
     }
 }
 
+void (*const scr_restore)(screen_backup_t *psb) = scr_restore_free;
+
 void
-scr_restore(const screen_backup_t *psb)
+scr_restore_free(screen_backup_t *psb)
+{
+    scr_restore_keep(psb);
+    free(psb->raw_memory);
+    psb->raw_memory = NULL;
+}
+
+void
+scr_restore_keep(const screen_backup_t *psb)
 {
     int y = 0;
     char *p = NULL;
@@ -2345,7 +2355,6 @@ scr_restore(const screen_backup_t *psb)
         p += psb->col * sizeof(ftattr);
     }
 
-    free(psb->raw_memory);
     ft.dirty = 1;
     refresh();
 }
@@ -2393,7 +2402,7 @@ region_scroll_up(int top, int bottom)
     fterm_markdirty();
 }
 
-#endif
+#endif  /* #ifndef _PFTERM_TEST_MAIN */
 
 //////////////////////////////////////////////////////////////////////////
 // adapter
@@ -2487,7 +2496,7 @@ int main(int argc, char* argv[])
         outs(" this\xFF (ff)is te.(80 tail)->\x80 (80)");
         refresh();
         getchar();
-#endif
+#endif  /* #if 0 */
 
 #if 1
         // test resize

@@ -183,7 +183,7 @@
 #else
 #  define BBS_MAP       (MAP_SHARED)
 #endif
-#endif
+#endif  /* #ifdef  HAVE_MMAP */
 
 #define HAVE_INPUT_TOOLS        /* 符號輸入工具 */
 
@@ -249,7 +249,7 @@
 #ifdef  HAVE_WATER_LIST
 #define HAVE_SYSOP_WATERLIST    /* SYSOP 水桶名單 */
 #endif
-#endif
+#endif  /* #ifdef  HAVE_MODERATED_BOARD */
 
 #undef  HAVE_GAME_QKMJ          /* 提供 QKMJ 遊戲 */
 
@@ -542,7 +542,7 @@
 #define OBSERVE_KEY     (6000)
 #endif
 
-#endif
+#endif  /* #ifdef  HAVE_OBSERVE_LIST */
 
 #define SPEAK_MAX       (50)
 #define CONDITION_MAX   (100)

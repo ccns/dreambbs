@@ -168,11 +168,11 @@ favorite_parse(
 
 static int
 chno_cmp(
-    short *i, short *j)
+    const void *i, const void *j)
 {
     BRD *bhead;
     bhead = bshm->bcache;
-    return strcasecmp(bhead[*i].brdname, bhead[*j].brdname);
+    return strcasecmp(bhead[* (const short *)i].brdname, bhead[* (const short *)j].brdname);
 }
 
 
@@ -192,7 +192,7 @@ favorite_sort(void)
 
     for (i = j = 0; i < max; i++, bp++)
     {
-        if (bp->brdname)
+        if (bp->brdname[0])
         {
             chp->chno[j++] = i;
         }

@@ -90,11 +90,11 @@ void utmp_free(void);
 UTMP *utmp_find(int userno);
 UTMP *pid_find(int pid);
 int utmp_count(int userno, int show);
-int cmpclasstable(CLASS_TABLE_ALERT *ptr);
+int cmpclasstable(const void *ptr);
 void classtable_free(void);
 void classtable_main(void);
 void bshm_init(void);
-int brd_bno(char *bname);
+int brd_bno(const char *bname);
 int observeshm_find(int userno);
 void observeshm_load(void);
 void observeshm_init(void);
@@ -107,7 +107,7 @@ void fshm_init(void);
 int film_out(int tag, int row);
 UTMP *utmp_check(char *userid);
 /* edit.c */
-void ve_string(unsigned char *str);
+void ve_string(char *str);
 char *tbf_ask(void);
 FILE *tbf_open(void);
 void ve_backup(void);
@@ -162,7 +162,7 @@ char *mgets(int fd);
 void *mread(int fd, int len);
 int more(char *fpath, char *footer);
 /* post.c */
-int cmpchrono(HDR *hdr);
+int cmpchrono(const void *hdr);
 int checksum_find(char *fpath, int check, int state);
 void btime_update(int bno);
 void outgo_post(HDR *hdr, char *board);
@@ -226,17 +226,17 @@ int t_banmsg(void);
 void bell(void);
 #ifdef M3_USE_PFTERM
 void ochar(int ch);
-void outl(int line, unsigned char *msg);
-void outr(unsigned char *str);
+void outl(int line, char *msg);
+void outr(char *str);
 void oflush(void);
-#else                
+#else
 void move(int y, int x);
 void refresh(void);
 void clear(void);
 void clrtoeol(void);
 void clrtobot(void);
 void outc(int ch);
-void outs(unsigned char *str);
+void outs(char *str);
 void scroll(void);
 void rscroll(void);
 void save_foot(screenline *slp);
@@ -245,13 +245,13 @@ int vs_save(screenline *slp);
 void vs_restore(screenline *slp);
 void clearange(int from, int to);
 void clrtohol(void);
-#endif
+#endif  /* #ifdef M3_USE_PFTERM */
 
 void getyx(int *y, int *x);
 int expand_esc_star_visio(char *buf, const char *src, int szbuf);
-void outx(unsigned char *str);
-void outz(unsigned char *msg);
-void outf(unsigned char *str);
+void outx(char *str);
+void outz(char *msg);
+void outf(char *str);
 void prints(char *fmt, ...);
 void cursor_save(void);
 void cursor_restore(void);
@@ -260,11 +260,11 @@ void zmsg(char *msg);
 void vs_bar(char *title);
 #ifndef M3_USE_PFTERM
 void grayout(int type);
-#endif
+#endif  /* #ifndef M3_USE_PFTERM */
 void add_io(int fd, int timeout);
 int igetch(void);
 BRD *ask_board(char *board, int perm, char *msg);
-int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max, int echo);
+int vget(int line, int col, char *prompt, char *data, int max, int echo);
 int vans(char *prompt);
 int vkey(void);
 
@@ -297,7 +297,7 @@ int Ext_POP3_Check(char *site, char *account, char *passwd);
 #ifdef M3_USE_PMORE
 /* pmore.c */
 int pmore(const char *fpath, int promptend);
-#endif
+#endif  /* #ifdef M3_USE_PMORE */
 /* popupmenu.c */
 int popupmenu_ans(char *desc[], char *title, int x, int y);
 void popupmenu(MENU pmenu[], XO *xo, int x, int y);

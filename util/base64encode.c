@@ -16,7 +16,7 @@
 void
 base64_encode(FILE *in, FILE *out)
 {
-    unsigned char *ascii = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    char *ascii = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     char base[3], *dst;
     char dest[73];
     unsigned char c1, c2, c3;

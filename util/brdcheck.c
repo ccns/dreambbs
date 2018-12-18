@@ -31,13 +31,15 @@ main(
         struct dirent *de;
         DIR *dirp;
 
+        (void)buf2;
+
         sprintf(buf, "/home/bbs/brd/%c", c);
         chdir(buf);
 
         if (!(dirp = opendir(".")))
             continue;
 
-        while (de = readdir(dirp))
+        while ((de = readdir(dirp)))
         {
             int fd;
             char *str;

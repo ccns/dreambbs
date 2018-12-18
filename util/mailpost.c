@@ -162,6 +162,8 @@ Link(
 {
     int ret;
 
+    (void)Link;
+
     if ((ret = link(src, dst)))
     {
         if (errno != EEXIST)

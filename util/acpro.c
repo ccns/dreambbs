@@ -226,9 +226,9 @@ class_parse(
 
 static int
 chno_cmp(
-    short *i, short *j)
+    const void *i, const void *j)
 {
-    return strcasecmp(bhead[*i].brdname, bhead[*j].brdname);
+    return strcasecmp(bhead[* (const short *)i].brdname, bhead[* (const short *)j].brdname);
 }
 
 
@@ -247,7 +247,7 @@ class_sort(void)
 
     for (i = j = 0; i < max; i++, bp++)
     {
-        if (bp->brdname)
+        if (bp->brdname[0])
         {
             chp->chno[j++] = i;
         }

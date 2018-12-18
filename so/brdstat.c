@@ -197,4 +197,4 @@ XO *xo)
 
 
 
-#endif
+#endif  /* #ifdef  HAVE_COUNT_BOARD */

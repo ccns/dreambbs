@@ -39,4 +39,4 @@
 #define REG_SENT                0x00000008
 #define REG_OK                  0x00000010
 
-#endif
+#endif  /* ifndef _ATTR_H_ */

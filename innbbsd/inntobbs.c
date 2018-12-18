@@ -41,17 +41,17 @@ enum HeaderValue        /* 所有有用到的 header */
 /* 只對這些檔頭有興趣 */
 static header_t headertable[LASTHEADER] =
 {
-    "Subject",                  SUBJECT_H,
-    "From",                     FROM_H,
-    "Date",                     DATE_H,
-    "Path",                     PATH_H,
-    "Newsgroups",               GROUP_H,
-    "Message-ID",               MSGID_H,
+    {"Subject",                  SUBJECT_H},
+    {"From",                     FROM_H},
+    {"Date",                     DATE_H},
+    {"Path",                     PATH_H},
+    {"Newsgroups",               GROUP_H},
+    {"Message-ID",               MSGID_H},
 
     /* SITE_H (含) 以下為非必備檔頭 */
-    "Organization",             SITE_H,
-    "NNTP-Posting-Host",        POSTHOST_H,
-    "Control",                  CONTROL_H,
+    {"Organization",             SITE_H},
+    {"NNTP-Posting-Host",        POSTHOST_H},
+    {"Control",                  CONTROL_H},
 };
 
 
@@ -62,9 +62,9 @@ char *SUBJECT, *FROM, *DATE, *PATH, *GROUP, *MSGID, *POSTHOST, *SITE, *CONTROL;
 
 static int
 header_cmp(
-    header_t *a, header_t *b)
+    const void *a, const void *b)
 {
-    return str_cmp(a->name, b->name);
+    return str_cmp(((const header_t *)a) -> name, ((const header_t *)b) -> name);
 }
 
 

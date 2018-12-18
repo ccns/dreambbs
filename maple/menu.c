@@ -225,7 +225,7 @@ pad_draw(void)
 
     sprintf(str, "\033[1;37;46mΥ\033[34;47m %s \033[33m(%s)", cuser.userid, cuser.username);
     len = strlen(str);
-    strcat(str, " \033[30;46m" + (len & 1));
+    strcat(str, & " \033[30;46m"[len & 1]);
 
     for (i = len >> 1; i < 41; i++)
         strcat(str, "▄");
@@ -454,7 +454,7 @@ movie(void)
         ptime = localtime(&now);
         sprintf(datemsg, "[%d/%d 星期%.2s ",
             ptime->tm_mon + 1, ptime->tm_mday,
-            "天一二三四五六" + (ptime->tm_wday << 1));
+            & "天一二三四五六"[ptime->tm_wday << 1]);
 
         uptime = now + 86400 - ptime->tm_hour * 3600 -
             ptime->tm_min * 60 - ptime->tm_sec;
@@ -536,8 +536,8 @@ static MENU menu_boardadm[] =
     {"bin/adminutil.so:mail_to_all", PERM_SYSOP, - M_XMODE,
     "Alluser    系統通告"},
 
-        "bin/personal.so:personal_admin", PERM_BOARD|PERM_SYSOP, - M_XMODE,
-    "Personal   個人板審核",
+    {"bin/personal.so:personal_admin", PERM_BOARD|PERM_SYSOP, - M_XMODE,
+    "Personal   個人板審核"},
 
     {menu_admin, PERM_MENU + 'N', M_XMENU,
     "看板總管"}
@@ -818,15 +818,15 @@ static MENU menu_information[] =
     {year, 0, M_READA,
     "3Year      本年度百大熱門話題"},
 
-    menu_xyz, PERM_MENU + 'L', M_MMENU,
-    "統計資料"
+    {menu_xyz, PERM_MENU + 'L', M_MMENU,
+    "統計資料"}
 };
 
 
 static MENU menu_xyz[] =
 {
-    menu_information, 0, M_XMENU,
-    "Tops       " NICKNAME "排行榜",
+    {menu_information, 0, M_XMENU,
+    "Tops       " NICKNAME "排行榜"},
 
     {version, 0, M_READA,
     "Version    源碼發展資訊"},
@@ -860,8 +860,8 @@ static MENU menu_reg[] =
     {u_addr, PERM_BASIC, M_XMODE,
     "Address    填寫電子信箱及認證"},
 
-    u_verify, PERM_BASIC, M_UFILES,
-    "Verify     填寫《註冊認證碼》",
+    {u_verify, PERM_BASIC, M_UFILES,
+    "Verify     填寫《註冊認證碼》"},
 
 #ifdef  HAVE_REGISTER_FORM
     {u_register, PERM_BASIC, M_UFILES,
@@ -880,15 +880,15 @@ static MENU menu_reg[] =
     {"bin/list.so:List", PERM_VALID, - M_XMODE,
     "1List      群組名單"},
 
-    menu_user, PERM_MENU + 'I', M_MMENU,
-    "註冊資訊"
+    {menu_user, PERM_MENU + 'I', M_MMENU,
+    "註冊資訊"}
 };
 
 
 static MENU menu_user[] =
 {
-    menu_reg, 0, M_XMENU,
-    "Configure  註冊及設定個人資訊",
+    {menu_reg, 0, M_XMENU,
+    "Configure  註冊及設定個人資訊"},
 
     {u_lock, PERM_BASIC, M_XMODE,
     "Lock       鎖定螢幕"},
@@ -1066,7 +1066,7 @@ MENU skin_main[] =
     {menu_main, PERM_MENU + 'W', M_MMENU,
     "介面選單"}
 };
-#endif
+#endif  /* #ifdef  HAVE_CHANGE_SKIN */
 
 static int
 Gem(void)
@@ -1080,8 +1080,8 @@ static MENU menu_main[] =
     {menu_admin, PERM_ADMIN, M_ADMIN,
     "0Admin    【 系統維護區 】"},
 
-    Gem, 0, M_GEM,
-    "Announce  【 精華公佈欄 】",
+    {Gem, 0, M_GEM,
+    "Announce  【 精華公佈欄 】"},
 
     {Boards, 0, M_BOARD,
     "Boards    【 \033[1;33m佈告討論區\033[m 】"},
@@ -1165,7 +1165,7 @@ static MENU menu_treat[] =
     NULL, PERM_MENU + 'G', M_MMENU,
     "主功\能表"
 };
-#endif
+#endif  /* #ifdef  TREAT */
 
 static
 int count_len(
@@ -1181,7 +1181,7 @@ int count_len(
         ptr = strstr(ptr, "\033");
         if (ptr)
         {
-            for (tmp=ptr;*tmp!='m'; tmp++);
+            for (tmp=ptr; *tmp!='m'; tmp++);
             len -= (tmp-ptr+1);
             ptr = tmp+1;
         }

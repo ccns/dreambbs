@@ -18,9 +18,11 @@
 #define MORE_BUFSIZE    4096
 
 
+#ifndef M3_USE_PMORE
 static int more_width;  /* more screen 的寬度 */
+#endif
 
-static unsigned char more_pool[MORE_BUFSIZE];
+static char more_pool[MORE_BUFSIZE];
 static int more_base;           /* more_pool[more_base ~ more_base+more_size] 有值 */
 static int more_size;
 
@@ -59,7 +61,7 @@ mgets(
     {
         if (head >= tail)
         {
-            if (ch = head - base)
+            if ((ch = head - base))
                 memcpy(pool, base, ch);
 
             head = pool + ch;
@@ -127,12 +129,13 @@ mread(
 /* ----------------------------------------------------- */
 
 
+#ifndef M3_USE_PMORE
 #define STR_ANSICODE    "[0123456789;"
 
 
-static unsigned char *fimage;           /* file image begin */
-static unsigned char *fend;             /* file image end */
-static unsigned char *foff;             /* 目前讀到哪裡 */
+static char *fimage;           /* file image begin */
+static char *fend;             /* file image end */
+static char *foff;             /* 目前讀到哪裡 */
 
 
 static int
@@ -148,7 +151,7 @@ more_line(
         if (foff >= fend)
             break;
 
-        ch = *foff;
+        ch = (unsigned char) *foff;
 
         /* weiyu.040802: 如果這碼是中文字的首碼，但是只剩下一碼的空間可以印，那麼不要印這碼 */
         if (in_chi || IS_ZHC_HI(ch))
@@ -390,7 +393,7 @@ more_slideshow(void)
 
     return ch;
 }
-#endif
+#endif  /* #ifdef SLIDE_SHOW */
 
 
 #define END_MASK        0x200   /* 按 KEY_END 直達最後一頁 */
@@ -401,6 +404,7 @@ more_slideshow(void)
 #define HUNT_START      0x004   /* 按 / 開始搜尋，且尚未找到 match 的字串 */
 
 #define MAXBLOCK        256     /* 記錄幾個 block 的 offset。可加速 MAXBLOCK*32 列以內的長文在上捲/翻時的速度 */
+#endif  /* #ifndef M3_USE_PMORE */
 
 /* Thor.990204: 傳回值 -1 為無法show出
                         0 為全數show完
@@ -410,19 +414,23 @@ more(
     char *fpath,
     char *footer)
 {
+#ifndef M3_USE_PMORE
     char buf[ANSILINELEN];
     int i;
 
-    unsigned char *headend;             /* 檔頭結束 */
+    char *headend;             /* 檔頭結束 */
 
-    int shift;                  /* 還需要往下移動幾列 */
-    int lino;                   /* 目前 line number */
-    int header_len;             /* 檔頭的長度，同時也是站內/站外信的區別 */
-    int key;                    /* 按鍵 */
-    int cmd;                    /* 中斷時所按的鍵 */
+    int shift;                          /* 還需要往下移動幾列 */
+    int lino;                           /* 目前 line number */
+    int header_len;                     /* 檔頭的長度，同時也是站內/站外信的區別 */
+    int key;                            /* 按鍵 */
+#endif
+    int cmd;                            /* 中斷時所按的鍵 */
 
-    int fsize;                  /* 檔案大小 */
+#ifndef M3_USE_PMORE
+    int fsize;                          /* 檔案大小 */
     static off_t block[MAXBLOCK];       /* 每 32 列為一個 block，記錄此 block 的 offset */
+#endif
 
 #ifdef M3_USE_PMORE
     cmd = pmore(fpath, footer && footer != (char*)-1);
@@ -482,7 +490,7 @@ more(
     while (more_line(buf))
     {
         /* ------------------------------------------------- */
-        /* 印出一列的文字                                        */
+        /* 印出一列的文字                                    */
         /* ------------------------------------------------- */
 
         /* 首頁前幾列才需要處理檔頭 */
@@ -494,7 +502,7 @@ more(
         outc('\n');
 
         /* ------------------------------------------------- */
-        /* 依 shift 來決定動作                           */
+        /* 依 shift 來決定動作                               */
         /* ------------------------------------------------- */
 
         /* itoc.030303.註解: shift 在此的意義
@@ -564,7 +572,7 @@ more(
 
         /* ------------------------------------------------- */
         /* 到此印完所需的 shift 列，接下來印出 footer 並等待 */
-        /* 使用者按鍵                                    */
+        /* 使用者按鍵                                        */
         /* ------------------------------------------------- */
 
 re_key:
@@ -644,7 +652,7 @@ re_key:
         else if (key == 'C')    /* Thor.980405: more 時可存入暫存檔 */
         {
             FILE *fp;
-            if (fp = tbf_open())
+            if ((fp = tbf_open()))
             {
                 f_suck(fp, fpath);
                 fclose(fp);
@@ -657,9 +665,9 @@ re_key:
         else if (key == 'h')
         {
             screenline slt[T_LINES];
-            unsigned char *tmp_fimage;
-            unsigned char *tmp_fend;
-            unsigned char *tmp_foff;
+            char *tmp_fimage;
+            char *tmp_fend;
+            char *tmp_foff;
             off_t tmp_block[MAXBLOCK];
 */
             /* itoc.060420: xo_help() 會進入第二次 more()，所以要把所有 static 宣告的都記錄下來 */
@@ -705,7 +713,7 @@ re_key:
 
         /* ------------------------------------------------- */
         /* 使用者已按鍵，若 break 則離開迴圈；否則依照 shift */
-        /* 的種類 (亦即按鍵的種類) 而做不同的動作                */
+        /* 的種類 (亦即按鍵的種類) 而做不同的動作            */
         /* ------------------------------------------------- */
 
         if (shift > 0)                  /* 準備下移 shift 列 */
@@ -748,7 +756,7 @@ re_key:
 
                     lino = totallino - b_lines;
                 }
-#endif
+#endif  /* #if 1 */
             }
             else
             {
@@ -812,7 +820,7 @@ re_key:
     }   /* while 迴圈的結束 */
 
     /* --------------------------------------------------- */
-    /* 檔案已經秀完 (cmd = 0) 或 使用者中斷 (cmd != 0)   */
+    /* 檔案已經秀完 (cmd = 0) 或 使用者中斷 (cmd != 0)     */
     /* --------------------------------------------------- */
 
     free(fimage);
@@ -838,7 +846,7 @@ re_key:
             {
                 FILE *fp;
 
-                if (fp = tbf_open())
+                if ((fp = tbf_open()))
                 {
                     f_suck(fp, fpath);
                     fclose(fp);

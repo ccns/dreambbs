@@ -98,7 +98,7 @@ int rec_bot(                    /* amaki.040715: ¥O§J¶°ºg¿… */
 
 int
 rec_del(char *data,
-        int size, int pos, int (*fchk) (void *obj), int (*fdel) (void *obj))
+        int size, int pos, int (*fchk) (const void *obj), int (*fdel) (void *obj))
 {
     int fd;
     off_t off, len;
@@ -256,7 +256,7 @@ int rec_ins(char *fpath, void *data, int size, int pos, int num)
 }
 
 
-int rec_loc(char *data, int size, int (*fchk) (void *obj))
+int rec_loc(char *data, int size, int (*fchk) (const void *obj))
 {
     int fd, pos, tmp;
     off_t off;
@@ -391,7 +391,7 @@ int rec_put(char *fpath, void *data, int size, int pos)
 }
 
 int
-rec_put2(char *fpath, void *data, int size, int pos, int (*fchk) (void *obj))
+rec_put2(char *fpath, void *data, int size, int pos, int (*fchk) (const void *obj))
 {
     int fd;
     off_t off, len;
@@ -476,7 +476,7 @@ int
 rec_ref(char *fpath,
         void *data,
         int size,
-        int pos, int (*fchk) (void *obj), void (*fref) (void *obj, void *ref))
+        int pos, int (*fchk) (const void *obj), void (*fref) (void *obj, const void *ref))
 {
     int fd;
     off_t off, len;
@@ -555,7 +555,7 @@ rec_ref(char *fpath,
 int
 rec_sync(char *fpath,
          int size,
-         int (*fsync) (void *lhs, void *rhs), int (*fchk) (void *obj))
+         int (*fsync) (const void *lhs, const void *rhs), int (*fchk) (const void *obj))
 {
     int fd, fsize;
     struct stat st;

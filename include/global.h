@@ -144,13 +144,13 @@
 #ifdef  HAVE_ANONYMOUS
 /* Thor.980727:lkchu patch: anonymous post log */
 #define FN_ANONYMOUS_LOG        "run/anonymous.log"     /* 匿名板紀錄 */
-#endif
+#endif  /* #ifdef  HAVE_ANONYMOUS */
 #define FN_BANMAIL_LOG          "run/banmail.log"       /* 擋信紀錄 */
 #define FN_BLACKSU_LOG          "run/blacksu.log"       /* 超級站務使用紀錄 */
 #define FN_BSMTP_LOG            "run/bsmtp.log"         /* 所有 [寄信] 記錄 */
 #ifdef LOG_BRD_USIES
 #define FN_BRD_USIES            "run/brd_usies"         /* 版面閱讀紀錄 */
-#endif
+#endif  /* #ifdef LOG_BRD_USIES */
 #define FN_CAMERA_LOG           "run/camera.log"        /* 動態看板更新紀錄 */
 #define FN_CHECKBM_LOG          "run/checkbm.log"       /* 確認版主紀錄檔 */
 #define FN_EXPIRE_LOG           "run/expire.log"        /* 自動砍信工具程式 */
@@ -197,17 +197,17 @@
 
 #ifdef LOG_TALK
 #define FN_TALK_LOG             "talk.log"              /* lkchu.981201: talk 記錄檔 */
-#endif
+#endif  /* #ifdef LOG_TALK */
 #ifdef  LOG_CHAT
 #define FN_UCHAT_LOG            "chat.log"              /* 聊天室 log */
-#endif
+#endif  /* #ifdef  LOG_CHAT */
 #define FN_USIES                "run/usies"             /* BBS log */
 #define FN_USERNO_LOG           "run/userno.log"        /* 使用者編號紀錄 in crontab */
 #define FN_LOGIN_LOG            "run/login.log"         /* 使用者上站記錄檔 */
 #define FN_NOTE_ALL             "run/note.all"
 #ifdef LOG_ADMIN
 #define FN_SECURITY             "run/secure.log"        /* lkchu.981201: 系統安全記錄 */
-#endif
+#endif  /* #ifdef LOG_ADMIN */
 #define FN_VERIFY_LOG           "run/verify.log"        /* 認證記錄 */
 #define FN_CRIMINAL_LOG         "run/criminal.log"      /* 停權名單 */
 #define FN_UEEQUERY_LOG         "run/ueequery.log"      /* 聯考查榜紀錄 */

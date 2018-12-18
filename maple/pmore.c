@@ -258,7 +258,7 @@
  // input/output API
  #define getdata(y, x, msg, buf, size, mode)     vget(y, x, msg, buf, size, mode)
  #define getdata_buf(y, x, msg, buf, size, mode) vget(y, x, msg, buf, size, GCARRY|mode)
- #define outs(x)                            outs((unsigned char*)(x))
+ #define outs(x)                            outs((char*)(x))
  // variables
  #define t_lines    (b_lines + 1)
  #define t_columns  (b_cols + 1)
@@ -269,7 +269,7 @@
  #define READ_PREV   'k'
  #if !defined(FULLUPDATE) && defined(XO_HEAD)
  # define FULLUPDATE XO_HEAD
- #endif
+ #endif  /* #if !defined(FULLUPDATE) && defined(XO_HEAD) */
  // environments and features
  #undef PMORE_USE_INTERNAL_HELP
  #undef PMORE_USE_REPLYKEY_HINTS
@@ -326,7 +326,7 @@
 #define MF_MMAP_OPTION (MAP_POPULATE|MAP_SHARED)
 #else
 #define MF_MMAP_OPTION (MAP_SHARED)
-#endif
+#endif  /* #ifdef MAP_NOSYNC */
 
 /* Developer's Guide
  *
@@ -425,7 +425,7 @@ static int debug = 0;
 #define ANSI_REVERSE    ANSI_COLOR(7)
 
 #define ANSI_IN_ESCAPE(x) (((x) >= '0' && (x) <= '9') || \
-        (x) == ';' || (x) == ', ' || (x) == '[')
+        (x) == ';' || (x) == ',' || (x) == '[')
 
 #endif /* PMORE_STYLE_ANSI */
 
@@ -753,7 +753,9 @@ MFPROTO int mf_movieWaitKey(struct timeval *ptv, int dorefresh);
 MFPROTO int mf_movieNextFrame(void);
 MFPROTO int mf_movieSyncFrame(void);
 MFPROTO int mf_moviePromptPlaying(int type);
+#if defined(PMORE_USE_ASCII_MOVIE) && defined(PMORE_AUTOEXIT_FIRSTPAGE)
 MFPROTO unsigned char *mf_movieNextLine(unsigned char *frame);
+#endif
 MFFPROTO int mf_movieMaskedInput(int c);
 
 #define MOVIE_MIN_FRAMECLK (0.1f)
@@ -770,7 +772,7 @@ MFFPROTO int mf_movieMaskedInput(int c);
 #define MOVIE_KEY_BS2 (0x7f)
 #endif
 
-#endif
+#endif  /* #ifdef PMORE_USE_ASCII_MOVIE */
 // --------------------------------------------- </Optional Modules>
 
 // used by mf_attach
@@ -836,7 +838,7 @@ mf_gunzip(const char *fn GCC_UNUSED, int fd)
     close(fd);
     return tmp_fd;
 }
-#endif
+#endif  /* #ifdef PMORE_GUNZIP_CMD */
 
 /*
  * mmap basic operations
@@ -1319,7 +1321,7 @@ mf_parseHeaders(void)
             pmore_str_chomp(np);
             // remove quote and traverse back
             *pb-- = 0;
-            while (pb > p && *pb != ', ' && !(ISSPACE(*pb)))
+            while (pb > p && *pb != ',' && !(ISSPACE(*pb)))
                 pb--;
 
             if (pb > p) {
@@ -1485,7 +1487,7 @@ mf_display(void)
         // return;      // uncomment if you want to observe scrolling
     }
     else
-#endif
+#endif  /* #ifdef PMORE_USE_OPT_SCROLL */
         clear(), move(0, 0);
 
     mf.dispe = mf.disps;
@@ -1554,7 +1556,7 @@ mf_display(void)
                         return;
                 }
         }
-#endif
+#endif  /* #ifdef PMORE_USE_ASCII_MOVIE */
 
         /* Is currentline visible? */
         if (lines < startline || lines > endline)
@@ -1966,7 +1968,7 @@ mf_display(void)
                                     outs(ansicmd);
                                 }
                             }
-#endif
+#endif  /* #ifdef PMORE_USE_DBCS_WRAP */
                         }
                     }
                 }
@@ -2428,7 +2430,7 @@ _pmore2(
                 continue;
 
             } else if (mfmovie.mode != MFDISP_MOVIE_PLAYING)
-#endif
+#endif  /* #ifdef PMORE_USE_ASCII_MOVIE */
 #ifndef PMORE_AUTOEXIT_FIRSTPAGE
             if (mf_viewedAll())
 #endif // PMORE_AUTOEXIT_FIRSTPAGE
@@ -2549,7 +2551,7 @@ _pmore2(
                 }
                 continue;
         }
-#endif
+#endif  /* #ifdef PMORE_USE_ASCII_MOVIE */
 
         /* PRINT FOOTER */
         mf_display_footer(footer_handler, ctx);
@@ -2644,7 +2646,7 @@ _pmore2(
                 /* one more try. */
                 mf_goBottom();
                 invalidate = 1;
-#endif
+#endif  /* #ifdef PMORE_ACCURATE_WRAPEND */
                 break;
 
             /* Compound Navigation */
@@ -2653,7 +2655,7 @@ _pmore2(
                     mf.xpos ++;
                 mf.xpos ++;
                 break;
-            case ', ':
+            case ',':
                 if (mf.xpos > 0)
                     mf.xpos --;
                 break;
@@ -2891,7 +2893,7 @@ _pmore2(
                     }
                 }
                 break;
-#endif
+#endif  /* #ifdef PMORE_USE_INTERNAL_HELP */
 
 #ifndef PMORE_IGNORE_UNKNOWN_NAVKEYS
             default:
@@ -3163,13 +3165,13 @@ pmore_Preference(void)
 // apply system colors if defined
 #ifndef HLP_CATEGORY_COLOR
 #define HLP_CATEGORY_COLOR      PMHLPATTR_HEADER
-#endif
+#endif  /* #ifndef HLP_CATEGORY_COLOR */
 #ifndef HLP_DESCRIPTION_COLOR
 #define HLP_DESCRIPTION_COLOR   PMHLPATTR_NORMAL
-#endif
+#endif  /* #ifndef HLP_DESCRIPTION_COLOR */
 #ifndef HLP_KEYLIST_COLOR
 #define HLP_KEYLIST_COLOR       PMHLPATTR_NORMAL_KEY
-#endif
+#endif  /* #ifndef HLP_KEYLIST_COLOR */
 
 static const char
 *hlp_basic[] = {
@@ -3636,7 +3638,7 @@ mf_movieGotoNamedFrame(const unsigned char *name, const unsigned char *end)
         if (memcmp(p, name, sz) == 0)
             return 1;
 
-    } while  (mf_forward(1) > 0);
+    } while (mf_forward(1) > 0);
     return 0;
 }
 
@@ -3893,7 +3895,7 @@ mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
             }
 
             // calculation of fields
-            if (*p == ', ' || *p == '#')
+            if (*p == ',' || *p == '#')
             {
                 switch (++ient)
                 {
@@ -3922,18 +3924,18 @@ mf_movieOptionHandler(unsigned char *opt, unsigned char *end)
                 newOpt = 1;
 
                 // first, fix pointers
-                if (szCmd == 0 || *cmd == ', ' || *cmd == '#')
+                if (szCmd == 0 || *cmd == ',' || *cmd == '#')
                 { cmd = NULL; szCmd = 0; }
 
                 // quick abort if option is invalid.
                 if (!cmd)
                     continue;
 
-                if (szText == 0 || *text == ', ' || *text == '#')
+                if (szText == 0 || *text == ',' || *text == '#')
                 { text = NULL; szText = 0; }
 
                 // assign key
-                if (*pkey == ', ' || *pkey == '#')
+                if (*pkey == ',' || *pkey == '#')
                     key++;
                 else
                 {
@@ -4191,13 +4193,13 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
 
             // find parameters
             pfs = pfe = p+1;
-            while (pfe < end && *pfe > ' ' && *pfe != ', ')
+            while (pfe < end && *pfe > ' ' && *pfe != ',')
                 pfe++;
             pts = pte = pfe+1;
-            while (pte < end && *pte > ' ' && *pte != ', ')
+            while (pte < end && *pte > ' ' && *pte != ',')
                 pte++;
             // check syntax
-            if ( pfe >= end || *pfe != ', ' ||
+            if ( pfe >= end || *pfe != ',' ||
                  pts >= end)
             {
                 MOVIECMD_SKIP_ALL(p, end);
@@ -4234,7 +4236,7 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
             for (pe = p; pe < end && *pe &&
                     *pe > ' ' && *pe < 0x80
                     ; pe ++)
-                if (*pe == ', ') igs++;
+                if (*pe == ',') igs++;
 
             if (igs)
             {
@@ -4244,7 +4246,7 @@ mf_movieProcessCommand(unsigned char *p, unsigned char *end)
                 for (pe = p; igs > 0 && pe < end && *pe &&
                         *pe > ' ' && *pe < 0x80
                         ; pe ++)
-                    if (*pe == ', ') igs--;
+                    if (*pe == ',') igs--;
 
                 if (pe != p)
                     p = pe-1;
@@ -4427,6 +4429,7 @@ mf_movieNextFrame(void)
     return 0;
 }
 
+#ifdef PMORE_AUTOEXIT_FIRSTPAGE
 MFPROTO unsigned char *
 mf_movieNextLine(unsigned char *frame)
 {
@@ -4440,8 +4443,9 @@ mf_movieNextLine(unsigned char *frame)
 
     return frame;
 }
-
 #endif
+
+#endif  /* #ifdef PMORE_USE_ASCII_MOVIE */
 
 /* vim:sw=4:ts=8:et:nofoldenable
  */

@@ -77,7 +77,7 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
     str = buf + 2;
     for (i = 0; i < 12; i++)
     {
-        if (ptr = strstr(str, months[i]))
+        if ((ptr = strstr(str, months[i])))
             break;
     }
 
@@ -99,12 +99,12 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
 
         datevalue = mktime(&ptime);
         str = ptr + 18;
-        if (ptr = strchr(str, '+'))
+        if ((ptr = strchr(str, '+')))
         {
             /* 如果有 +0100 (MET) 等註明時區，先調回 GMT 時區 */
             datevalue -= ((ptr[1] - '0') * 10 + (ptr[2] - '0')) * 3600 + ((ptr[3] - '0') * 10 + (ptr[4] - '0')) * 60;
         }
-        else if (ptr = strchr(str, '-'))
+        else if ((ptr = strchr(str, '-')))
         {
             /* 如果有 -1000 (HST) 等註明時區，先調回 GMT 時區 */
             datevalue += ((ptr[1] - '0') * 10 + (ptr[2] - '0')) * 3600 + ((ptr[3] - '0') * 10 + (ptr[4] - '0')) * 60;
@@ -158,7 +158,7 @@ bbspost_add(
 
     brd_fpath(folder, board, FN_DIR);
 
-    if (fp = fdopen(hdr_stamp(folder, 'A', &hdr, fpath), "w"))
+    if ((fp = fdopen(hdr_stamp(folder, 'A', &hdr, fpath), "w")))
     {
         fprintf(fp, "發信人: %.50s 看板: %s\n", FROM, board);
         fprintf(fp, "標  題: %.70s\n", SUBJECT);
@@ -170,7 +170,7 @@ bbspost_add(
 
         /* fprintf(fp, "%s", BODY); */
 
-        for (str = BODY; cc = *str; str++)
+        for (str = BODY; (cc = *str); str++)
         {
             if (cc == '.')
             {
@@ -358,7 +358,7 @@ cancel_article(
             char *xfrom, *str;
 
             xfrom = buffer + 8;
-            if (str = strchr(xfrom, ' '))
+            if ((str = strchr(xfrom, ' ')))
             {
                 *str = '\0';
 
@@ -494,7 +494,7 @@ receive_article(void)
             str_ansi(mypath, poolx, 128);
             sprintf(mypath, "%s!%.*s", MYBBSID, (int)(sizeof(mypath) - strlen(MYBBSID) - 2), PATH);
             /* itoc.030115.註解: PATH 如果有 .edu.tw 就截掉 */
-            for (pathptr = mypath; pathptr = strstr(pathptr, ".edu.tw");)
+            for (pathptr = mypath; (pathptr = strstr(pathptr, ".edu.tw"));)
                 strcpy(pathptr, pathptr + 7);
             mypath[70] = '\0';
             PATH = mypath;

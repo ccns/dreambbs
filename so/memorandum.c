@@ -76,7 +76,7 @@ get_sch_time(void)
     prints("您剛剛輸入的時間是:%s", get_date(&sch_time));
     return sch_time;
 }
-#endif
+#endif  /* #if 0 */
 
 static void
 memorandum_item(

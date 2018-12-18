@@ -43,6 +43,7 @@ static void pip_load_levelup(char *fpath);
 static int twice(int x, int max, int min);
 static int pip_magic_menu(int mode, UTMP *opt);
 static int pip_magic_doing_menu(struct magicset *p);
+int pip_data_list(char *userid);
 void pip_read_file(char *userid);
 void pip_write_file(void);
 void show_system_pic(int i);
@@ -75,7 +76,7 @@ int pip_practice_gradeup(int classnum, int classgrade, int data);
 int pip_read(char *genbuf);
 
 /*系統選單*/
-int pip_data_list(char *userid), pip_system_freepip(void), pip_system_service(void);
+int pip_data_list_cuser(void), pip_system_freepip(void), pip_system_service(void);
 int pip_write_backup(void), pip_read_backup(void);
 int pip_divine(void), pip_results_show(void);
 
@@ -596,7 +597,7 @@ static struct pipcommands pipspeciallist[] =
 
 static struct pipcommands pipsystemlist[] =
 {
-    {pip_data_list,             '1',    '1'},
+    {pip_data_list_cuser,       '1',    '1'},
     {pip_system_freepip,        '2',    '2'},
     {pip_system_service,        '3',    '3'},
     {pip_write_backup,          '4',    '4'},
@@ -3742,6 +3743,7 @@ int pip_play_guess(void)   /* 猜拳程式 */
         break;
     }
 
+    return 0;
 }
 
 void win(void)
@@ -5143,7 +5145,7 @@ int first)
     memcpy(&d, &chickentemp, sizeof(d));
     return 0;
 }
-#endif
+#endif  /* #ifdef  HAVE_PIP_FIGHT */
 
 /*---------------------------------------------------------------------------*/
 /* 結局函式                                                                  */
@@ -6705,6 +6707,8 @@ char *genbuf)
         clrtobot();
         vmsg("這一家的人沒有養小雞......");
     }
+
+    return 0;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -6903,6 +6907,11 @@ pip_data_list_va(va_list pvar)
     pip_data_list(cuser.userid);
 }
 
+int
+pip_data_list_cuser(void)
+{
+    return pip_data_list(cuser.userid);
+}
 
 int
 pip_data_list(  /*看小雞個人詳細資料*/
@@ -8166,7 +8175,7 @@ UTMP *opt)
     }
     return injure;
 }
-#endif
+#endif  /* #ifdef  HAVE_PIP_FIGHT */
 /*---------------------------------------------------------------------------*/
 /* 函式特區                                                                  */
 /*                                                                           */
@@ -8816,7 +8825,7 @@ int mode)
     prints(" 戰鬥中.............\n");
 
 }
-#endif
+#endif  /* #ifdef HAVE_PIP_FIGHT */
 #ifdef  HAVE_PIP_FIGHT
 static int pip_fight_feed(void)     /* 餵食*/
 {
@@ -8975,4 +8984,4 @@ case 'Q': case 'q': case KEY_LEFT:
 
     return 0;
 }
-#endif
+#endif  /* #ifdef  HAVE_PIP_FIGHT */

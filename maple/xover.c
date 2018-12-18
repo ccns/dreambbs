@@ -916,7 +916,7 @@ xo_zmodem(
 
     return XO_HEAD;
 }
-#endif
+#endif  /* #if 0 */
 
 /* ----------------------------------------------------- */
 /* 文章作者查詢、權限設定                                */
@@ -1062,7 +1062,7 @@ static KeyMap keymap[] =
 
     /* i.e. < > : make life easier */
 
-    {', ', RS_THREAD},
+    {',', RS_THREAD},
     {'.', RS_THREAD | RS_FORWARD},
 
     /* thread : cursor */
@@ -1760,7 +1760,7 @@ xover(
             {
                 cmd = XO_FOOT;
             }
-#endif
+#endif  /* #if 0 */
 
         }
         /* ------------------------------------------------- */
@@ -1971,7 +1971,7 @@ every_Z_Orig(void)
     int cmd;
     char select;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2001,13 +2001,13 @@ every_Z_Orig(void)
 #ifdef  HAVE_FAVORITE
         case 'f':
 #ifdef M3_USE_PFTERM
-            scr_restore(&old_screen);
+            scr_restore_keep(&old_screen);
 #else
             restore_foot(sl);
 #endif
             Favorite();
             break;
-#endif
+#endif  /* #ifdef  HAVE_FAVORITE */
         case 'a':
             cmd = XZ_GEM;
             break;
@@ -2043,7 +2043,7 @@ every_Z_Orig(void)
     }
 
 #ifdef M3_USE_PFTERM
-        scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     restore_foot(sl);
 #endif
@@ -2052,12 +2052,14 @@ every_Z_Orig(void)
         xover(cmd);
 }
 
+#ifdef TEST_Z_FAV
 static int
 Every_Z_Favorite(void)
 {
     MyFavorite();
     return 0;
 }
+#endif
 
 static int
 Every_Z_Gem(void)
@@ -2116,11 +2118,9 @@ extern int Every_Z_Screen(void);
 
 static MENU menu_everyz[] =
 {
-#ifdef HAVE_FAVORITE
-#ifdef TEST_Z_FAV
+#if   defined(HAVE_FAVORITE) && defined(TEST_Z_FAV)
     {Every_Z_Favorite, PERM_VALID, POPUP_FUN,
     "Favorite 我的最愛"},
-#endif
 #endif
 
     {Every_Z_Gem, 0, POPUP_FUN,
@@ -2158,7 +2158,7 @@ every_Z(void)
 {
     int tmpmode, savemode;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2182,31 +2182,20 @@ every_Z(void)
 
     tmpbno = currbno;
 
-#ifdef M3_USE_PFTERM
     if (xo_stack_level < XO_STACK) {
         xo_stack_level++;
+#ifdef M3_USE_PFTERM
         scr_dump(&old_screen);
+#else
+        vs_save(sl);
+#endif
     } else {
         vmsg("已達到最大上限堆疊空間！");
         return;
     }
-#else
-    if (xo_stack_level < XO_STACK)
-        xo_stack_level++;
-    else
-    {
-        vmsg("已達到最大上限堆疊空間！");
-        return;
-    }
-#endif
 
     savemode = boardmode;
     tmpmode = bbsmode;
-#ifdef M3_USE_PFTERM
-    scr_dump(&old_screen);
-#else
-    vs_save(sl);
-#endif
 
     if ( cuser.ufo2 & UFO2_ORIGUI)
         every_Z_Orig();
@@ -2219,7 +2208,7 @@ every_Z(void)
         XoPost(tmpbno);
 
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     vs_restore(sl);
 #endif
@@ -2230,14 +2219,14 @@ every_Z(void)
 
 }
 
-#endif
+#endif  /* #ifdef  EVERY_Z */
 
 void
 every_U(void)
 {
     int cmd, tmpmode;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2272,7 +2261,7 @@ every_U(void)
 #endif
     xover(cmd);
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     vs_restore(sl);
 #endif
@@ -2290,7 +2279,7 @@ void
 every_B(void)
 {
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2307,7 +2296,7 @@ every_B(void)
     u_lock();
 
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     vs_restore(sl);
 #endif
@@ -2322,7 +2311,7 @@ every_S(void)
 {
     int tmpmode;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
+    screen_backup_t old_screen = {0};
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2335,7 +2324,7 @@ every_S(void)
 #endif
     Select();
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     vs_restore(sl);
 #endif

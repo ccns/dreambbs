@@ -10,7 +10,7 @@
 
 extern int xo_uquery(XO *xo);
 extern int xo_usetup(XO *xo);
-extern int cmpchrono(HDR *hdr);
+extern int cmpchrono(const void *hdr);
 
 
 extern XZ xz[];
@@ -564,6 +564,9 @@ gem_state(
     struct stat st;
     int bno;
 
+    (void)site;
+    (void)path;
+
     /* Thor.990107: Ernie patch:
       gem.c gem_browse() 在進入 路)的 folder 時一律 op = GEM_VISIT
       使得板主只能在 gopher 最外層觀看檔案屬性及 update proxy，進入 gopher
@@ -864,7 +867,7 @@ gem_delete(
     else
     {
         currchrono = ghdr->chrono;
-        rec_del(dir, sizeof(HDR), xo->pos, (void *) cmpchrono, NULL);
+        rec_del(dir, sizeof(HDR), xo->pos, cmpchrono, NULL);
         gem_log(dir, "刪除", ghdr);
     }
 

@@ -18,17 +18,15 @@
 /* ----------------------------------------------------- */
 
 static void
-draw_line(x, y, msg)
-    int x, y;
-    unsigned char *msg;
+draw_line(
+    int x, int y,
+    char *msg)
 {
     /* hrs.090928: 讓 terminal 去處理 */
     move(x, y);
     outstr(msg);
     return;
 }
-
-static screen_backup_t old_screen;
 
 #else
 
@@ -41,12 +39,12 @@ static int x_roll;
 
 
 static void
-draw_line(x, y, msg)    /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
-    int x, y;
-    unsigned char *msg;
+draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
+    int x, int y,
+    char *msg)
 {
-    unsigned char *str, *ptr;
-    unsigned char data[ANSILINELEN];
+    char *str, *ptr;
+    char data[ANSILINELEN];
     char color[4];
     int ch, i;
     int len;
@@ -63,7 +61,7 @@ draw_line(x, y, msg)    /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
         i -= b_lines + 1;
 
     memset(data, 0, sizeof(data));
-    strncpy(data, slt[i].data, slt[i].len);
+    strncpy(data, (char *) slt[i].data, slt[i].len);
     str = data;
 
     move(x, 0);
@@ -72,7 +70,7 @@ draw_line(x, y, msg)    /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
     /* 印出 (x, 0) 至 (x, y - 1) */
     ansi = 0;
     len = 0;            /* 已印出幾個字 (不含控制碼) */
-    while (ch = *str++)
+    while ((ch = (unsigned char) *str++))
     {
         if (ch == KEY_ESC)
         {
@@ -146,7 +144,7 @@ draw_line(x, y, msg)    /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
     ptr = msg;
     ansi = 0;
     len = 0;            /* msg 的長度(不含控制碼) */
-    while (ch = *ptr++)
+    while ((ch = (unsigned char) *ptr++))
     {
         if (ch == KEY_ESC)
         {
@@ -166,7 +164,7 @@ draw_line(x, y, msg)    /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
 
     /* 跳掉 str 中間一整段，並取出最後的顏色 */
     ansi = 0;
-    while (ch = *str++)
+    while ((ch = (unsigned char) *str++))
     {
         if (ch == KEY_ESC)
         {
@@ -335,6 +333,8 @@ popupmenu_ans2(char *desc[], char *title, int x, int y)
     char hotkey;
 
 #ifdef M3_USE_PFTERM
+    screen_backup_t old_screen = {0};
+
     scr_dump(&old_screen);
     grayout(0, b_lines, GRAYOUT_DARK);
 #else
@@ -358,7 +358,7 @@ popupmenu_ans2(char *desc[], char *title, int x, int y)
         case KEY_RIGHT:
         case '\n':
 #ifdef M3_USE_PFTERM
-            scr_restore(&old_screen);
+            scr_restore_free(&old_screen);
 #else
             vs_restore(slt);
 #endif
@@ -412,6 +412,8 @@ pmsg2(char *msg)
     char buf[80];
 
 #ifdef M3_USE_PFTERM
+    screen_backup_t old_screen = {0};
+
     if (!msg)
     return vmsg(NULL);
 
@@ -457,7 +459,7 @@ pmsg2(char *msg)
 
     x = vkey();
 #ifdef M3_USE_PFTERM
-    scr_restore(&old_screen);
+    scr_restore_free(&old_screen);
 #else
     vs_restore(slt);
 #endif

@@ -59,7 +59,7 @@ void str_cat(char *dst, char *s1, char *s2)
         ;
 }
 
-int str_cmp(char *s1, char *s2)
+int str_cmp(const char *s1, const char *s2)
 {
     int c1, c2, diff;
 
@@ -268,11 +268,11 @@ static int mmdecode_header(char *src,    /* Thor.980901: src和dst可相同, 但src一
     int ch;
 
     t = dst;
-    encode |= 0x20;                /* Thor: to lower */
+    encode |= 0x20;                 /* Thor: to lower */
 
     switch (encode)
     {
-    case 'q':                    /* Thor: quoted-printable */
+    case 'q':                       /* Thor: quoted-printable */
 
         while ((ch = *src) && ch != '?')    /* Thor: Header 裡面 0 和 '?' 都是 delimiter */
         {
@@ -331,9 +331,9 @@ static int mmdecode_header(char *src,    /* Thor.980901: src和dst可相同, 但src一
 }
 
 
-int mmdecode(                    /* 解 Header 的 mmdecode */
-                char *src,        /* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
-                char encode,    /* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
+int mmdecode(                       /* 解 Header 的 mmdecode */
+                char *src,          /* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
+                char encode,        /* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
                 char *dst)
 {
     char *t;
@@ -341,13 +341,13 @@ int mmdecode(                    /* 解 Header 的 mmdecode */
     int ch;
 
     t = dst;
-    encode |= 0x20;                /* Thor: to lower */
+    encode |= 0x20;                 /* Thor: to lower */
 
     switch (encode)
     {
-    case 'q':                    /* Thor: quoted-printable */
+    case 'q':                       /* Thor: quoted-printable */
 
-        while ((ch = *src))        /* Thor: 0 是 delimiter */
+        while ((ch = *src))         /* Thor: 0 是 delimiter */
         {
             if (ch == '=')
             {
@@ -371,23 +371,23 @@ int mmdecode(                    /* 解 Header 的 mmdecode */
         }
         return t - dst;
 
-    case 'b':                    /* Thor: base 64 */
+    case 'b':                       /* Thor: base 64 */
 
         /* Thor: pattern & bits are cleared outside while () */
         pattern = 0;
         bits = 0;
 
-        while ((ch = *src))        /* Thor: 0 是 delimiter */
+        while ((ch = *src))         /* Thor: 0 是 delimiter */
         {
             int x;
 
             x = base64_code(*src++);
-            if (x < 0)            /* Thor: ignore everything not in the base64,=,.. */
+            if (x < 0)              /* Thor: ignore everything not in the base64,=,.. */
                 continue;
 
             pattern = (pattern << 6) | x;
-            bits += 6;            /* Thor: 1 code gains 6 bits */
-            if (bits >= 8)        /* Thor: enough to form a byte */
+            bits += 6;              /* Thor: 1 code gains 6 bits */
+            if (bits >= 8)          /* Thor: enough to form a byte */
             {
                 bits -= 8;
                 *t++ = (pattern >> bits) & 0xff;
@@ -413,45 +413,46 @@ void str_decode(char *str)
     while (*src && (dst - buf) < sizeof(buf) - 1)
     {
         if (*src != '=')
-        {                        /* Thor: not coded */
+        {                           /* Thor: not coded */
             char *tmp = src;
             while (adj && *tmp && is_space(*tmp))
                 tmp++;
             if (adj && *tmp == '=')
-            {                    /* Thor: jump over space */
+            {                       /* Thor: jump over space */
                 adj = 0;
                 src = tmp;
             }
             else
                 *dst++ = *src++;
         }
-        else                    /* Thor: *src == '=' */
+        else                        /* Thor: *src == '=' */
         {
             char *tmp = src + 1;
-            if (*tmp == '?')    /* Thor: =? coded */
+            if (*tmp == '?')        /* Thor: =? coded */
             {
                 /* "=?%s?Q?" for QP, "=?%s?B?" for BASE64 */
                 tmp++;
                 while (*tmp && *tmp != '?')
                     tmp++;
-                if (*tmp && tmp[1] && tmp[2] == '?')    /* Thor: *tmp == '?' */
+                if (*tmp && tmp[1] && tmp[2] == '?')        /* Thor: *tmp == '?' */
                 {
                     int i = mmdecode_header(tmp + 3, tmp[1], dst);
                     if (i >= 0)
                     {
-                        tmp += 3;    /* Thor: decode's src */
-                        while (*tmp && *tmp++ != '?');    /* Thor: no ? end, mmdecode_header -1 */
+
+                        tmp += 3;       /* Thor: decode's src */
+                        while (*tmp && *tmp++ != '?');      /* Thor: no ? end, mmdecode_header -1 */
                         /* Thor.980901: 0 也算 decode 結束 */
                         if (*tmp == '=')
                             tmp++;
-                        src = tmp;    /* Thor: decode over */
+                        src = tmp;      /* Thor: decode over */
                         dst += i;
-                        adj = 1;    /* Thor: adjacent */
+                        adj = 1;        /* Thor: adjacent */
                     }
                 }
             }
 
-            while (src != tmp)    /* Thor: not coded */
+            while (src != tmp)      /* Thor: not coded */
                 *dst++ = *src++;
         }
     }
@@ -948,11 +949,11 @@ void str_stamp(char *str, time_t * chrono)
 #define NULL    (char* ) 0
 #endif
 
-char *str_str(char *str, char *tag    /* non-empty lower case pattern */
+char *str_str(const char *str, const char *tag      /* non-empty lower case pattern */
     )
 {
     int cc, c1, c2;
-    char *p1, *p2;
+    const char *p1, *p2;
 
     cc = *tag++;
 
@@ -970,7 +971,7 @@ char *str_str(char *str, char *tag    /* non-empty lower case pattern */
             {
                 c2 = *p2;
                 if (!c2)
-                    return str;
+                    return (char *)str;
 
                 p2++;
                 c1 = *++p1;
@@ -986,13 +987,13 @@ char *str_str(char *str, char *tag    /* non-empty lower case pattern */
     return NULL;
 }
 
-char *str_sub(char *str, char *tag    /* non-empty lowest case pattern */
+char *str_sub(char *str, char *tag      /* non-empty lowest case pattern */
     )
 {
     int cc, c1, c2;
     char *p1, *p2;
-    int in_chi = 0;                /* 1: 前一碼是中文字 */
-    int in_chii;                /* 1: 前一碼是中文字 */
+    int in_chi = 0;                     /* 1: 前一碼是中文字 */
+    int in_chii;                        /* 1: 前一碼是中文字 */
 
     cc = *tag++;
 
@@ -1138,7 +1139,7 @@ char *str_ttl(char *title)
 /*-------------------------------------------------------*/
 
 //const char*
-void str_xor(char *dst,            /* Thor.990409: 任意長度任意binary seq, 至少要 src那麼長 */
+void str_xor(char *dst,         /* Thor.990409: 任意長度任意binary seq, 至少要 src那麼長 */
              const char *src    /* Thor.990409: 任意長度str, 不含 \0 */
              /* Thor: 結果是將src xor到dst上, 若有0結果, 則不變,
                       所以dst長度必大於等於 src(以字串而言) */
@@ -1218,19 +1219,19 @@ size_t strlcpy(char *dst, const char *src, size_t siz)
     if (n == 0)
     {
         if (siz != 0)
-            *d = '\0';            /* NUL-terminate dst */
+            *d = '\0';          /* NUL-terminate dst */
         while (*s++)
             ;
     }
 
-    return (s - src - 1);        /* count does not include NUL */
+    return (s - src - 1);       /* count does not include NUL */
 }
 
 int hash32(const char *str)
 {
     int xo, cc;
 
-    xo = 1048583;                /* a big prime number */
+    xo = 1048583;               /* a big prime number */
     while ((cc = *str++))
     {
         xo = (xo << 5) - xo + cc;    /* 31 * xo + cc */

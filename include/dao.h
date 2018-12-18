@@ -66,21 +66,21 @@ int DL_func(char *name, ...);
 /* record.c */
 int rec_add(char *fpath, void *data, int size);
 int rec_bot(char *fpath, void *data, int size);
-int rec_del(char *data, int size, int pos, int (*fchk)(void *obj), int (*fdel)(void *obj));
+int rec_del(char *data, int size, int pos, int (*fchk)(const void *obj), int (*fdel)(void *obj));
 int rec_get(char *fpath, void *data, int size, int pos);
 int rec_ins(char *fpath, void *data, int size, int pos, int num);
-int rec_loc(char *data, int size, int (*fchk)(void *obj));
+int rec_loc(char *data, int size, int (*fchk)(const void *obj));
 int rec_mov(char *data, int size, int from, int to);
 int rec_num(char *fpath, int size);
 int rec_put(char *fpath, void *data, int size, int pos);
-int rec_put2(char *fpath, void *data, int size, int pos, int (*fchk)(void *obj));
-int rec_ref(char *fpath, void *data, int size, int pos, int (*fchk)(void *obj), void (*fref)(void *obj, void *ref));
-int rec_sync(char *fpath, int size, int (*fsync)(void *lhs, void *rhs), int (*fchk)(void *obj));
+int rec_put2(char *fpath, void *data, int size, int pos, int (*fchk)(const void *obj));
+int rec_ref(char *fpath, void *data, int size, int pos, int (*fchk)(const void *obj), void (*fref)(void *obj, const void *ref));
+int rec_sync(char *fpath, int size, int (*fsync)(const void *lhs, const void *rhs), int (*fchk)(const void *obj));
 int rec_append(char *fpath, void *data, int size);
 /* splay.c */
-SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(void *lhs, void *rhs));
+SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(const void *lhs, const void *rhs));
 /* xsort.c */
-void xsort(void *a, size_t n, size_t es, int (*cmp)(void *lhs, void *rhs));
+void xsort(void *a, size_t n, size_t es, int (*cmp)(const void *lhs, const void *rhs));
 /* attr_lib.c */
 int attr_get(char *userid, int key, void *value);
 int attr_put(char *userid, int key, void *value);
@@ -101,7 +101,7 @@ void output_rfc2047_qp(FILE *fp, char *prefix, char *str, char *charset, char *s
 char *str_add(char *dst, char *src);
 void str_ansi(char *dst, char *str, int max);
 void str_cat(char *dst, char *s1, char *s2);
-int str_cmp(char *s1, char *s2);
+int str_cmp(const char *s1, const char *s2);
 void str_cut(char *dst, char *src);
 int qp_code(register int x);
 int base64_code(register int x);
@@ -129,7 +129,7 @@ int str_pat(const char *str, const char *pat);
 char *str_rev(char *dst, char *src);
 int str_rle(char *str);
 void str_stamp(char *str, time_t *chrono);
-char *str_str(char *str, char *tag);
+char *str_str(const char *str, const char *tag);
 char *str_sub(char *str, char *tag);
 char *str_tail(char *str);
 char *Btime(time_t *clock);

@@ -41,14 +41,14 @@ static inline void swapfunc(char *a, char *b, int n, int swaptype)
 #define vecswap(a, b, n)        (void) (((n) > 0) && (swapfunc(a, b, n, swaptype), 0))
 
 static inline char *med3(char *a,
-                         char *b, char *c, int (*cmp) (void *lhs, void *rhs))
+                         char *b, char *c, int (*cmp) (const void *lhs, const void *rhs))
 {
     return cmp(a, b) < 0 ?
         (cmp(b, c) < 0 ? b : (cmp(a, c) < 0 ? c : a))
         : (cmp(b, c) > 0 ? b : (cmp(a, c) < 0 ? a : c));
 }
 
-void xsort(void *a, size_t n, size_t es, int (*cmp) (void *lhs, void *rhs))
+void xsort(void *a, size_t n, size_t es, int (*cmp) (const void *lhs, const void *rhs))
 {
     char *pa, *pb, *pc, *pd, *pl, *pm, *pn;
     int d, r, swaptype, swap_cnt;

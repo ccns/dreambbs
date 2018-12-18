@@ -30,14 +30,14 @@
 #else
 int cur_row, cur_col;
 int cur_pos;                    /* current position with ANSI codes */
-#endif
+#endif  /* #ifdef M3_USE_PFTERM */
 
 /* ----------------------------------------------------- */
 /* output routines                                       */
 /* ----------------------------------------------------- */
 
 
-static unsigned char vo_pool[VO_MAX];
+static char vo_pool[VO_MAX];
 static int vo_size;
 
 
@@ -62,7 +62,7 @@ telnet_flush(
 #else
 
 # define telnet_flush(data, size)       send(0, data, size, 0)
-#endif
+#endif  /* #ifdef  VERBOSE */
 
 
 #ifdef M3_USE_PFTERM
@@ -84,11 +84,11 @@ oflush(void)
 #ifndef M3_USE_PFTERM
 static void
 output(
-    unsigned char *str,
+    char *str,
     int len)
 {
     int size, ch;
-    unsigned char *data;
+    char *data;
 
     size = vo_size;
     data = vo_pool;
@@ -105,7 +105,7 @@ output(
 
     while (--len >= 0)
     {
-        ch = *str++;
+        ch = (unsigned) *str++;
         *data++ = ch;
         if (ch == IAC)
         {
@@ -115,7 +115,7 @@ output(
     }
     vo_size = size;
 }
-#endif
+#endif  /* #ifndef M3_USE_PFTERM */
 
 #ifdef M3_USE_PFTERM
 void
@@ -125,7 +125,7 @@ static void
 ochar(
     int ch)
 {
-    unsigned char *data;
+    char *data;
     int size;
 
     data = vo_pool;
@@ -291,7 +291,7 @@ ansi_move(
     cur_pos = x;
 
 }
-#endif
+#endif  /* #if 0 */
 
 void
 getyx(
@@ -397,10 +397,10 @@ standoutput(
     screenline *slp,
     int ds, int de)
 {
-    unsigned char *data;
+    char *data;
     int sso, eso;
 
-    data = slp->data;
+    data = (char *) slp->data;
     sso = slp->sso;
     eso = slp->eso;
 
@@ -492,7 +492,7 @@ vs_redraw(void)
             if (mode & SL_STANDOUT)
                 standoutput(slp, 0, len);
             else
-                output(slp->data, len);
+                output((char *) slp->data, len);
 
             tc_col = width;
         }
@@ -568,7 +568,7 @@ refresh(void)
                 if (mode & SL_STANDOUT)
                     standoutput(slp, smod, emod);
                 else
-                    output(&slp->data[smod], emod - smod);
+                    output((char *) &slp->data[smod], emod - smod);
 
                 /* tc_col = ansicol(slp, emod); */
 
@@ -853,11 +853,11 @@ new_line:
 
 void
 outs(
-    unsigned char *str)
+    char *str)
 {
     int ch;
 
-    while ((ch = *str))
+    while ((ch = (unsigned char) *str))
     {
         outc(ch);
         str++;
@@ -915,7 +915,7 @@ expand_esc_star_visio(char *buf, const char *src, int szbuf)
 #ifdef SHOW_USER_IN_TEXT
 void
 outx(
-    unsigned char *str)
+    char *str)
 {
 /*
     unsigned char *t_name = cuser.userid;
@@ -927,16 +927,16 @@ outx(
 
 /* cache.090922: 控制碼 */
 
-    while (ch = *str)
+    while ((ch = *str))
     {
         if (ch == KEY_ESC)
         {
             str++;
-            ch = *str;
-            if (ch = '*')
+            ch = (unsigned char) *str;
+            if (ch == '*')
             {
                 str++;
-                ch = *str;
+                ch = (unsigned char) *str;
                 switch (ch)
                 {
                     case 's':       /* **s 顯示 ID */
@@ -973,7 +973,7 @@ outx(
             str--;
             str--;
             str--;
-            ch = *str;
+            ch = (unsigned char) *str;
             outc(ch);
             str++;
         }
@@ -984,7 +984,7 @@ outx(
         }
     }
 /*
-    while ((ch = *str))
+    while ((ch = (unsigned char) *str))
     {
 
 
@@ -1010,7 +1010,7 @@ outx(
 */
 
 }
-#endif
+#endif  /* #ifdef SHOW_USER_IN_TEXT */
 
 /* ----------------------------------------------------- */
 /* clear the bottom line and show the message            */
@@ -1019,14 +1019,14 @@ outx(
 
 void
 outz(
-    unsigned char *msg)
+    char *msg)
 //  const char *msg)
 {
     int ch;
 
     move(b_lines, 0);
     clrtoeol();
-    while ((ch = *msg))
+    while ((ch = (unsigned char) *msg))
     {
         outc(ch);
         msg++;
@@ -1035,7 +1035,7 @@ outz(
 
 void
 outf(
-    unsigned char *str)
+    char *str)
 {
     outz(str);
     prints("%*s\033[m", d_cols, "");
@@ -1043,7 +1043,7 @@ outf(
 
 #ifdef M3_USE_PFTERM
 
-void outl (int line, unsigned char *msg)   /* line output */
+void outl (int line, char *msg)   /* line output */
 {
     move (line, 0);
     clrtoeol();
@@ -1056,13 +1056,13 @@ void outl (int line, unsigned char *msg)   /* line output */
 #define ANSI_COLOR_CODE            "[m;0123456789"
 #define ANSI_COLOR_END     "m"
 
-void outr (unsigned char *str)
+void outr (char *str)
 /* restricted output (strip the ansiscreen contolling code only) */
 {
-    unsigned char ch, buf[256], *p = NULL;
+    char ch, buf[256], *p = NULL;
     int ansi = 0;
 
-    while (ch = *str++)
+    while ((ch = *str++))
     {
         if (ch == KEY_ESC)
         {
@@ -1091,7 +1091,7 @@ void outr (unsigned char *str)
             }
         }
         else
-            outc(ch);
+            outc((unsigned char)ch);
     }
 }
 
@@ -1101,14 +1101,14 @@ void
 prints(char *fmt, ...)
 {
     va_list args;
-    unsigned char buf[512], *str;
+    char buf[512], *str;
 //  char buf[512], *str;
     int cc;
 
     va_start(args, fmt);
     vsprintf(buf, fmt, args);
     va_end(args);
-    for (str = buf; (cc = *str); str++)
+    for (str = buf; (cc = (unsigned char) *str); str++)
         outc(cc);
 }
 
@@ -1247,11 +1247,15 @@ vs_restore(
 #ifdef M3_USE_PFTERM
 #define VMSG_NULL "\033[1;37;45m                              ● 請按任意鍵繼續 ●                           \033[m"
 
-vmsg(msg)
-char *msg;                   /* length <= 54 */
+int
+vmsg(
+    char *msg)                   /* length <= 54 */
 {
     static int old_b_cols = 23;
     static char foot[512] = VMSG_NULL;
+
+    (void)old_b_cols;
+    (void)foot;
 
     move(b_lines, 0);
     clrtoeol();
@@ -1383,7 +1387,7 @@ cursor_key(
     outs(STR_UNCUR);
     return ch;
 }
-#endif
+#endif  /* #if 0 */
 
 static void
 vs_line(
@@ -1435,8 +1439,8 @@ grayout(int type)
         newslp[i].oldlen = newslp[i].len;
         newslp[i].len = newslp[i].width + 7 + 3;
 
-        str_ansi(buf, slp[i].data, slp[i].width + 1);
-        sprintf(newslp[i].data, "%s%s\033[m", prefix[type], buf);
+        str_ansi(buf, (char *) slp[i].data, slp[i].width + 1);
+        sprintf((char *) newslp[i].data, "%s%s\033[m", prefix[type], buf);
     }
     vs_restore(newslp);
 }
@@ -1933,7 +1937,7 @@ vget_match(
 char lastcmd[MAXLASTCMD][80];
 
 
-int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max, int echo)
+int vget(int line, int col, char *prompt, char *data, int max, int echo)
 {
     int ch, len;
     int x, y;
@@ -1970,7 +1974,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
     }
 
     /* --------------------------------------------------- */
-    /* 取得 board / userid / on-line user                        */
+    /* 取得 board / userid / on-line user                  */
     /* --------------------------------------------------- */
 
     ch = len;
@@ -2040,7 +2044,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
                 continue;
 
             /* ----------------------------------------------- */
-            /* insert data and display it                        */
+            /* insert data and display it                      */
             /* ----------------------------------------------- */
 
             prompt = &data[col];
@@ -2053,7 +2057,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
             for (;;)
             {
                 outc(echo ? ch : '*');
-                next = *prompt;
+                next = (unsigned char) *prompt;
                 *prompt++ = ch;
                 if (i >= len)
                     break;
@@ -2098,7 +2102,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
                 continue;
 
             /* ----------------------------------------------- */
-            /* remove data and display it                        */
+            /* remove data and display it                      */
             /* ----------------------------------------------- */
 
             i = col--;
@@ -2106,7 +2110,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
             move(y, x + col);
             while (i <= len)
             {
-                data[i - 1] = ch = data[i];
+                data[i - 1] = ch = (unsigned char) data[i];
                 outc(echo ? ch : '*');
                 i++;
             }
@@ -2160,7 +2164,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
 
             do
             {
-                if (!(ch = *prompt++))
+                if (!(ch = (unsigned char) *prompt++))
                 {
                     /* clrtoeol */
 
@@ -2200,7 +2204,7 @@ int vget(int line, int col, unsigned char *prompt, unsigned char *data, int max,
 
     outc('\n');
 
-    ch = data[0];
+    ch = (unsigned char) data[0];
     if ((echo & LCECHO) && (ch >= 'A' && ch <= 'Z'))
         data[0] = (ch += 32);
 

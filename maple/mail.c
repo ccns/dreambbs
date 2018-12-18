@@ -245,7 +245,7 @@ bsmtp(
     chrono = time(&stamp);
 
     /* --------------------------------------------------- */
-    /* 身分認證信函                                      */
+    /* 身分認證信函                                        */
     /* --------------------------------------------------- */
 
     if (method == MQ_JUSTIFY)
@@ -381,7 +381,7 @@ bsmtp(
         }
 
         /* ------------------------------------------------- */
-        /* begin of mail body                            */
+        /* begin of mail body                                */
         /* ------------------------------------------------- */
 
         if ((fp = fopen(fpath, "r")))
@@ -445,7 +445,7 @@ smtp_error:
 smtp_log:
 
     /* --------------------------------------------------- */
-    /* 記錄寄信                                          */
+    /* 記錄寄信                                            */
     /* --------------------------------------------------- */
 
     sprintf(buf, "%s%-13s%c> %s %s %s\n\t%s\n\t%s\n", Btime(&stamp), cuser.userid,
@@ -460,7 +460,7 @@ smtp_log:
 
     return chrono;
 }
-#endif
+#endif  /* #ifdef  BATCH_SMTP */
 
 #ifdef HAVE_DOWNLOAD
 int
@@ -484,7 +484,7 @@ bsmtp_file(
     sprintf(fname, "mail_%04d%02d%02d.tgz", ntime.tm_year + 1900, ntime.tm_mon + 1, ntime.tm_mday);
 
     /* --------------------------------------------------- */
-    /* 身分認證信函                                      */
+    /* 身分認證信函                                        */
     /* --------------------------------------------------- */
 
     /* Thor.990125: MYHOSTNAME統一放入 str_host */
@@ -572,7 +572,7 @@ bsmtp_file(
         } while (buf[3] == '-');
 
         /* ------------------------------------------------- */
-        /* begin of mail header                          */
+        /* begin of mail header                              */
         /* ------------------------------------------------- */
 
         /* Thor.990125: 儘可能的像 RFC822 & sendmail的作法, 免得別人不接:p */
@@ -595,7 +595,7 @@ bsmtp_file(
                 "\tfilename=\"%s\"\r\n\r\n", boundary, fname, fname);
 
         /* ------------------------------------------------- */
-        /* begin of mail body                            */
+        /* begin of mail body                                */
         /* ------------------------------------------------- */
 
         if ((fp = fopen(fpath, "r")))
@@ -647,7 +647,7 @@ smtp_file_error:
 smtp_file_log:
 
     /* --------------------------------------------------- */
-    /* 記錄寄信                                          */
+    /* 記錄寄信                                            */
     /* --------------------------------------------------- */
 
     sprintf(buf, "%s%-13s> %s %s\n\t%s\n\t%s\n", Btime(&stamp), cuser.userid,
@@ -657,7 +657,7 @@ smtp_file_log:
     return chrono;
 }
 
-#endif
+#endif  /* #ifdef HAVE_DOWNLOAD */
 
 #ifdef HAVE_SIGNED_MAIL
 /* Thor.990413: 提供驗證功能 */
@@ -742,7 +742,7 @@ m_verify(void)
     vmsg("此信由本站所發出");
     return 0;
 }
-#endif
+#endif  /* #ifdef HAVE_SIGNED_MAIL */
 
 /* ----------------------------------------------------- */
 /* mail routines                                         */
@@ -897,7 +897,7 @@ m_quota(void)
                     head[prune] = head[0];
 
             } while (++head < tail);
-#endif
+#endif  /* #if 1 */
             fsize += (prune * sizeof(HDR));
 #if 0
             if ((fsize > 0) && (prune || (ufo & UFO_MQUOTA)))
@@ -1031,7 +1031,7 @@ do_forward(
             #else
                 sprintf(cmd, "tar -zcf - %s | bin/base64encode > tmp/%s.tgz", fpath, userid);
             #endif
-        #endif
+        #endif  /* #ifdef __linux__ */
 
         system(cmd);
 
@@ -1117,7 +1117,7 @@ m_zip(void)                     /* itoc.010228: 打包資料 */
     return XEASY;
 }
 
-#endif
+#endif  /* #ifdef  HAVE_DOWNLOAD */
 
 int
 m_query(
@@ -1216,7 +1216,7 @@ m_count(void)
     more(FN_ETC_MAIL_OVER, NULL);
     return 1;
 }
-#endif
+#endif  /* #if 0 */
 
 static void
 mail_hold(
@@ -1254,7 +1254,7 @@ m_setforward(void)
     FILE *fp;
 
     usr_fpath(fpath, cuser.userid, FN_FORWARD);
-    if (fp = fopen(fpath, "r"))
+    if ((fp = fopen(fpath, "r")))
     {
         fscanf(fp, "%s", ip);
         fclose(fp);
@@ -1925,7 +1925,7 @@ mail_list(void)
     return 0;
 }
 
-#endif
+#endif  /* #ifndef MULTI_MAIL */
 
 /* ----------------------------------------------------- */
 /* Mail Box call-back routines                           */
@@ -1961,7 +1961,7 @@ hdr_outs(               /* print HDR's subject */
 {
     static char *type[4] =
     {"Re", "◇", "\033[1;33m=>", "\033[1;32m◆"};
-    unsigned char *title, *mark;
+    char *title, *mark;
     int ch, len;
     UTMP *online;
 
@@ -1989,7 +1989,7 @@ hdr_outs(               /* print HDR's subject */
             outc(' ');
             outc(' ');
         }
-#endif
+#endif  /* #if 0 */
         outs("\033[m ");
         outs(hdr->date + 3);
         outc(' ');
@@ -2001,7 +2001,7 @@ hdr_outs(               /* print HDR's subject */
         if (online != NULL)
         outs("\033[1;37m");
 
-        while ((ch = *mark))
+        while ((ch = (unsigned char) *mark))
         {
             if ((--len == 0) || (ch == '@'))
                 ch = '.';
@@ -2101,10 +2101,10 @@ hdr_outs(               /* print HDR's subject */
                 }
 #endif
             }
-#endif
+#endif  /* #ifdef  HAVE_DECLARE */
 
             outc(cc);
-        } while ((cc = *title++) && (title < mark));
+        } while ((cc = (unsigned char) *title++) && (title < mark));
 
 #ifdef  HAVE_DECLARE
         if (angle || square == 2)       /* Thor.0508: 變色還原用 */
