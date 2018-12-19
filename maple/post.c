@@ -4522,6 +4522,7 @@ xpost_head(
     if (*xypostKeyword)
         outs(xypostKeyword);
 
+    outs("\n"); //r2.20181219: this part may need to be refined
     outs(
             "\033[30;47m  編號   日 期  作  者       文  章  標  題                                   \033[m");
 
