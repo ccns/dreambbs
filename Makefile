@@ -8,7 +8,7 @@
 
 OPSYS	!= uname -o
 
-# 需要 compile 的目錄
+# some directories need to be compiled:
 # lib innbbsd maple so util test
 
 all:
