@@ -27,7 +27,7 @@
 
 #define LOGFILE         "innd/innbbs.log"       /* 記錄檔路徑 */
 
-#define INNBBS_PORT     "7777"
+#define INNBBS_PORT     (7777)
 
 /* ----------------------------------------------------- */
 /* innbbsd 的設定                                        */
