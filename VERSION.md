@@ -39,8 +39,12 @@
         - features in plan:
           * applying resizing term feature
           * port `pfterm` in this release version
-          * ...
-    + release date (plan): **1st, March, 2019.**
+          * Set workaround option for disabling DSO
+    + `v2.0`: Version 2.0
+        - features in plan:
+          * test BBSLua/Ruby
+          * test simple websocket patch for Maple3
+          * test use 32bit int type variable in 64bit environment
 
 * preparing version name about `current`:
     + `v1.0-CURRENT`: developing for preparing version 1.0.
