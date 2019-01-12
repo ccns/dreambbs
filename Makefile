@@ -7,6 +7,7 @@
 # ------------------------------------------------------- #
 
 OPSYS	!= uname -o
+NPROC	!= nproc
 
 # some directories need to be compiled:
 # lib innbbsd maple so util test
@@ -20,6 +21,16 @@ all:
 	@cd so; $(MAKE) all
 .endif
 	@cd test; $(MAKE) all
+
+njob:
+	@cd lib; $(MAKE) -j$(NPROC) all
+	@cd maple; $(MAKE) -j$(NPROC) all
+	@cd util; $(MAKE) -j$(NPROC) all
+	@cd innbbsd; $(MAKE) -j$(NPROC) all
+.if $(OPSYS) != "Cygwin"
+	@cd so; $(MAKE) -j$(NPROC) all
+.endif
+	@cd test; $(MAKE) -j$(NPROC) all
 
 install:
 	@cd test; $(MAKE) test
