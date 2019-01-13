@@ -358,26 +358,24 @@ vs_head(
         if (ufo & UFO_BIFFN)
             cutmp->ufo = ufo ^ UFO_BIFFN;     /* 看過就算 */
     }
-    else
+
+    len = d_cols + 65 - strlen(title) - strlen(currboard); /* len: 中間還剩下多長的空間 */
+    if (ufo & UFO_BIFF)
     {
-        len = d_cols + 65 - strlen(title) - strlen(currboard); /* len: 中間還剩下多長的空間 */
-        if (ufo & UFO_BIFF)
-        {
-            mid = NEWMAILMSG; // 你有新情書
-            spc = 15;
-        }
-        else if (ufo & UFO_BIFFN)
-        {
-            mid = NEWPASSMSG; // 你有新留言
-            spc = 15;
-        }
-        else if ( spc > len )
-        {
-            spc = len;
-            memcpy(ttl, mid, spc);
-            mid = ttl;
-            mid[spc] = '\0';
-        }
+        mid = NEWMAILMSG; // 你有新情書
+        spc = 15;
+    }
+    else if (ufo & UFO_BIFFN)
+    {
+        mid = NEWPASSMSG; // 你有新留言
+        spc = 15;
+    }
+    else if ( spc > len )
+    {
+        spc = len;
+        memcpy(ttl, mid, spc);
+        mid = ttl;
+        mid[spc] = '\0';
     }
 
     spc = 2 + len - spc; /* 擺完 mid 以後，中間還有 spc 格空間，在 mid 左右各放 spc/2 長的空白 */
