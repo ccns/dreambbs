@@ -348,17 +348,6 @@ vs_head(
     spc = strlen(mid);
     ufo = cutmp->ufo;
 
-
-    if (!*title)
-    {
-        title++;
-
-        if (ufo & UFO_BIFF)
-            cutmp->ufo = ufo ^ UFO_BIFF;     /* 看過就算 */
-        if (ufo & UFO_BIFFN)
-            cutmp->ufo = ufo ^ UFO_BIFFN;     /* 看過就算 */
-    }
-
     len = d_cols + 65 - strlen(title) - strlen(currboard); /* len: 中間還剩下多長的空間 */
     if (ufo & UFO_BIFF)
     {
@@ -398,6 +387,17 @@ vs_head(
     prints("\033[1;46;37m【%s】%s\033[33m%s\033[46m%s\033[37m看板《%s》\033[m\n",
         title, buf, mid, buf + ufo + len, currboard);
 #endif
+}
+
+
+void clear_notification(void)
+{
+    unsigned int ufo = cutmp->ufo;
+
+    if (ufo & UFO_BIFF)
+        cutmp->ufo = ufo ^ UFO_BIFF;     /* 看過就算 */
+    if (ufo & UFO_BIFFN)
+        cutmp->ufo = ufo ^ UFO_BIFFN;     /* 看過就算 */
 }
 
 

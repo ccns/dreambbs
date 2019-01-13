@@ -2174,6 +2174,7 @@ static int
 mbox_head(
     XO *xo)
 {
+    clear_notification();
     vs_head("¶l¥ó¿ï³æ", str_site);
 
     outs(NECKMAIL);

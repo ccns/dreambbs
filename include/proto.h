@@ -154,6 +154,7 @@ void mbox_main(void);
 /* menu.c */
 int pad_view(void);
 void vs_head(char *title, char *mid);
+void clear_notification(void);
 void movie(void);
 char *check_info(char *input);
 void menu(void);
