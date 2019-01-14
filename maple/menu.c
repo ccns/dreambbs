@@ -348,36 +348,23 @@ vs_head(
     spc = strlen(mid);
     ufo = cutmp->ufo;
 
-
-    if (!*title)
+    len = d_cols + 65 - strlen(title) - strlen(currboard); /* len: 中間還剩下多長的空間 */
+    if (ufo & UFO_BIFF)
     {
-        title++;
-
-        if (ufo & UFO_BIFF)
-            cutmp->ufo = ufo ^ UFO_BIFF;     /* 看過就算 */
-        if (ufo & UFO_BIFFN)
-            cutmp->ufo = ufo ^ UFO_BIFFN;     /* 看過就算 */
+        mid = NEWMAILMSG; // 你有新情書
+        spc = 15;
     }
-    else
+    else if (ufo & UFO_BIFFN)
     {
-        len = d_cols + 65 - strlen(title) - strlen(currboard); /* len: 中間還剩下多長的空間 */
-        if (ufo & UFO_BIFF)
-        {
-            mid = NEWMAILMSG; // 你有新情書
-            spc = 15;
-        }
-        else if (ufo & UFO_BIFFN)
-        {
-            mid = NEWPASSMSG; // 你有新留言
-            spc = 15;
-        }
-        else if ( spc > len )
-        {
-            spc = len;
-            memcpy(ttl, mid, spc);
-            mid = ttl;
-            mid[spc] = '\0';
-        }
+        mid = NEWPASSMSG; // 你有新留言
+        spc = 15;
+    }
+    else if ( spc > len )
+    {
+        spc = len;
+        memcpy(ttl, mid, spc);
+        mid = ttl;
+        mid[spc] = '\0';
     }
 
     spc = 2 + len - spc; /* 擺完 mid 以後，中間還有 spc 格空間，在 mid 左右各放 spc/2 長的空白 */
@@ -400,6 +387,17 @@ vs_head(
     prints("\033[1;46;37m【%s】%s\033[33m%s\033[46m%s\033[37m看板《%s》\033[m\n",
         title, buf, mid, buf + ufo + len, currboard);
 #endif
+}
+
+
+void clear_notification(void)
+{
+    unsigned int ufo = cutmp->ufo;
+
+    if (ufo & UFO_BIFF)
+        cutmp->ufo = ufo ^ UFO_BIFF;     /* 看過就算 */
+    if (ufo & UFO_BIFFN)
+        cutmp->ufo = ufo ^ UFO_BIFFN;     /* 看過就算 */
 }
 
 
