@@ -128,21 +128,22 @@ int chkpasswd(char *passwd, char *test);
 int str_pat(const char *str, const char *pat);
 char *str_rev(char *dst, char *src);
 int str_rle(char *str);
-void str_stamp(char *str, time_t *chrono);
 char *str_str(const char *str, const char *tag);
 char *str_sub(char *str, char *tag);
 char *str_tail(char *str);
-char *Btime(time_t *clock);
-char *Ctime(time_t *clock);
-char *Etime(time_t *clock);
-char *Atime(time_t *clock);
-char *Now(void);
 void str_trim(char *buf);
 char *str_ttl(char *title);
 void str_xor(char *dst, const char *src);
 size_t strlcat(char *dst, const char *src, size_t siz);
 size_t strlcpy(char *dst, const char *src, size_t siz);
 int hash32(const char *str);
+/* date_str.c */
+void str_stamp(char *str, time_t *chrono);
+char *Btime(time_t *clock);
+char *Ctime(time_t *clock);
+char *Etime(time_t *clock);
+char *Atime(time_t *clock);
+char *Now(void);
 /* xwrite.c */
 int xwrite(int fd, char *data, int size);
 
