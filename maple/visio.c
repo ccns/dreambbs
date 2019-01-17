@@ -2204,7 +2204,6 @@ vans(
 
 #undef  TRAP_ESC
 
-#ifdef  TRAP_ESC
 int
 vkey(void)
 {
@@ -2215,6 +2214,7 @@ vkey(void)
     for (;;)
     {
         ch = igetch();
+#ifdef  TRAP_ESC
         if (mode == 0)
         {
             if (ch == KEY_ESC)
@@ -2222,6 +2222,14 @@ vkey(void)
             else
                 return ch;              /* Normal Key */
         }
+#else
+        if (ch == KEY_ESC)
+            mode = 1;
+        else if (mode == 0)             /* Normal Key */
+        {
+            return ch;
+        }
+#endif
         else if (mode == 1)
         {                               /* Escape sequence */
             if (ch == '[' || ch == 'O')
@@ -2230,7 +2238,11 @@ vkey(void)
                 mode = 3;
             else
             {
+#ifdef  TRAP_ESC
                 return Meta(ch);
+#else
+                return ch;
+#endif
             }
         }
         else if (mode == 2)
@@ -2252,51 +2264,3 @@ vkey(void)
         last = ch;
     }
 }
-
-#else                           /* TRAP_ESC */
-
-int
-vkey(void)
-{
-    int mode;
-    int ch, last;
-
-    mode = last = 0;
-    for (;;)
-    {
-        ch = igetch();
-        if (ch == KEY_ESC)
-            mode = 1;
-        else if (mode == 0)             /* Normal Key */
-        {
-            return ch;
-        }
-        else if (mode == 1)
-        {                               /* Escape sequence */
-            if (ch == '[' || ch == 'O')
-                mode = 2;
-            else if (ch == '1' || ch == '4')
-                mode = 3;
-            else
-                return ch;
-        }
-        else if (mode == 2)
-        {                               /* Cursor key */
-            if (ch >= 'A' && ch <= 'D')
-                return KEY_UP - (ch - 'A');
-            else if (ch >= '1' && ch <= '6')
-                mode = 3;
-            else
-                return ch;
-        }
-        else if (mode == 3)
-        {                               /* Ins Del Home End PgUp PgDn */
-            if (ch == '~')
-                return KEY_HOME - (last - '1');
-            else
-                return ch;
-        }
-        last = ch;
-    }
-}
-#endif                          /* TRAP_ESC */
