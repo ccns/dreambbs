@@ -231,10 +231,9 @@ move(
     cur_pos = x;
 }
 
-#if 0
 /* verit : 030212, ¦©±¼ ansi code */
 void
-ansi_move(
+move_ansi(
     int y,
     int x)
 {
@@ -291,7 +290,6 @@ ansi_move(
     cur_pos = x;
 
 }
-#endif  /* #if 0 */
 
 void
 getyx(
