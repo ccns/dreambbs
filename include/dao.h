@@ -144,6 +144,7 @@ char *Ctime(time_t *clock);
 char *Etime(time_t *clock);
 char *Atime(time_t *clock);
 char *Now(void);
+void syncnow(void);
 /* xwrite.c */
 int xwrite(int fd, char *data, int size);
 

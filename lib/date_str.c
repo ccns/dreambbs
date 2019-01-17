@@ -3,6 +3,9 @@
 
 /* static char datemsg[32]; */
 static char datemsg[40];
+time_t now;
+
+void syncnow(void);
 
 /* ------------------------------------------ */
 /* mail / post 時，依據時間建立檔案，加上郵戳 */
@@ -64,8 +67,11 @@ char *Atime(                    /* Thor.990125: 假裝ARPANET時間格式 */
 
 char *Now(void)
 {
-    time_t now;
-
-    time(&now);
+    syncnow();
     return Btime(&now);
+}
+
+void syncnow(void)
+{
+    time(&now);
 }
