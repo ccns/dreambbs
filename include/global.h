@@ -276,25 +276,38 @@
 #define KEY_TAB         9
 #define KEY_ENTER       10
 #define KEY_ESC         27
-#define KEY_UP          -1
-#define KEY_DOWN        -2
-#define KEY_RIGHT       -3
-#define KEY_LEFT        -4
-#define KEY_HOME        -21
-#define KEY_INS         -22
-#define KEY_DEL         -23
-#define KEY_END         -24
-#define KEY_PGUP        -25
-#define KEY_PGDN        -26
+#define KEY_UP          0x0101
+#define KEY_DOWN        0x0102
+#define KEY_RIGHT       0x0103
+#define KEY_LEFT        0x0104
+#define KEY_HOME        0x0201
+#define KEY_INS         0x0202
+#define KEY_DEL         0x0203
+#define KEY_END         0x0204
+#define KEY_PGUP        0x0205
+#define KEY_PGDN        0x0206
 
-#define KEY_NONE        12345
+#define KEY_NONE        0x12345
 
-#define I_TIMEOUT       -31
-#define I_OTHERDATA     -32
+#define KEY_F1          0x0301
+#define KEY_F2          0x0302
+#define KEY_F3          0x0303
+#define KEY_F4          0x0304
+#define KEY_F5          0x0305
+#define KEY_F6          0x0306
+#define KEY_F7          0x0307
+#define KEY_F8          0x0308
+#define KEY_F9          0x0309
+#define KEY_F10         0x030A
+#define KEY_F11         0x030B
+#define KEY_F12         0x030C
+
+#define I_TIMEOUT       0X05FD
+#define I_OTHERDATA     0X05FE
 
 #define Ctrl(c)         ( c & 037 )
-#define Meta(c)         ( c + 0x0200 )
-#define isprint2(c)     ((c >= ' ')) /* ((c & 0x80 || isprint(c))) */
+#define Meta(c)         ( c + 0x2000 )
+#define isprint2(c)     ((c >= ' ') && (c <= 0xff)) /* ((c & 0x80 || isprint(c))) */
 
 /* ----------------------------------------------------- */
 /* 參數設定                                              */

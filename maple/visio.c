@@ -2208,9 +2208,9 @@ int
 vkey(void)
 {
     int mode;
-    int ch, last;
+    int ch, last, last2;
 
-    mode = last = 0;
+    mode = last = last2 = 0;
     for (;;)
     {
         ch = igetch();
@@ -2246,9 +2246,16 @@ vkey(void)
             }
         }
         else if (mode == 2)
-        {                               /* Cursor key */
-            if (ch >= 'A' && ch <= 'D')
-                return KEY_UP - (ch - 'A');
+        {
+            if (ch >= 'A' && ch <= 'D')      /* Cursor key */
+                return KEY_UP + (ch - 'A');
+            else if (last == 'O')
+            {
+                if (ch >= 'P' && ch <= 'S')  /* F1 - F4 */
+                    return KEY_F1 + (ch - 'P');
+                else
+                    return ch;
+            }
             else if (ch >= '1' && ch <= '6')
                 mode = 3;
             else
@@ -2257,10 +2264,27 @@ vkey(void)
         else if (mode == 3)
         {                               /* Ins Del Home End PgUp PgDn */
             if (ch == '~')
-                return KEY_HOME - (last - '1');
+                return KEY_HOME + (last - '1');
+            else if (last >= '1' && last <= '2')
+                mode = 4;
             else
                 return ch;
         }
+        else if (mode == 4)
+        {                               /* F1 - F12 */
+            if (ch == '~')
+            {
+                if (last2 == '1')       /* F1 - F8 */
+                    return KEY_F1 + (last - '1') - (last > '6');
+                else if (last2 == '2')  /* F9 - F12 */
+                    return KEY_F9 + (last - '0') - (last > '2');
+                else
+                    return ch;
+            }
+            else
+                return ch;
+        }
+        last2 = last;
         last = ch;
     }
 }
