@@ -183,7 +183,7 @@
 #define FN_POST_LOG             "run/post.log"          /* 文章篇數統計 */
 #define FN_POST_DB              "run/post.db"           /* 文章篇數統計資料庫 */
 #define FN_POSTEDIT_LOG         "run/postedit.log"      /* 修改文章紀錄 */
-#define FN_PYDICT_LOG           "run/pydict.log"        /* 英漢漢英字典 */D
+#define FN_PYDICT_LOG           "run/pydict.log"        /* 英漢漢英字典 */
 
 #define FN_REAPER_LOG           "run/reaper.log"        /* 本日砍帳號紀錄 */
 #define FN_LOGIN_LOG            "run/login.log"         /* 所有 [登錄] 記錄 */
