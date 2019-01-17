@@ -1,4 +1,207 @@
 //////////////////////////////////////////////////////////////////////////
+// bbslua environment settings
+//////////////////////////////////////////////////////////////////////////
+#define HAVE_GRAYOUT
+
+#define M3_USE_BBSLUA
+
+#ifdef M3_USE_BBSLUA
+#include <assert.h>
+#include <sys/file.h>
+#include <sys/time.h>
+#include "bbs.h"
+#endif //M3_USE_BBSLUA
+
+//////////////////////////////////////////////////////////////////////////
+// pmore style ansi
+// #include "ansi.h"
+//////////////////////////////////////////////////////////////////////////
+
+#ifndef PMORE_STYLE_ANSI
+#define ESC_CHR '\x1b'
+#define ESC_STR "\x1b"
+#define ANSI_COLOR(x) ESC_STR "[" #x "m"
+#define ANSI_RESET ESC_STR "[m"
+#endif // PMORE_STYLE_ANSI
+
+#ifndef ANSI_IS_PARAM
+#define ANSI_IS_PARAM(c) (c == ';' || (c >= '0' && c <= '9'))
+#endif // ANSI_IS_PARAM
+
+//////////////////////////////////////////////////////////////////////////
+// grayout advanced control
+// #include "grayout.h"
+//////////////////////////////////////////////////////////////////////////
+#ifndef GRAYOUT_DARK
+#define GRAYOUT_COLORBOLD (-2)
+#define GRAYOUT_BOLD (-1)
+#define GRAYOUT_DARK (0)
+#define GRAYOUT_NORM (1)
+#define GRAYOUT_COLORNORM (+2)
+#endif // GRAYOUT_DARK
+
+//////////////////////////////////////////////////////////////////////////
+// Other macros
+// #include config.h
+//////////////////////////////////////////////////////////////////////////
+
+#ifndef PATHLEN
+#define PATHLEN (256)
+#endif
+
+#ifndef DEFAULT_FILE_CREATE_PERM
+#define DEFAULT_FILE_CREATE_PERM (0644)
+#endif
+
+//////////////////////////////////////////////////////////////////////////
+// External variables
+// #include "var.h"
+//////////////////////////////////////////////////////////////////////////
+
+extern time_t now;
+
+//////////////////////////////////////////////////////////////////////////
+// Redirect macros and functions
+//////////////////////////////////////////////////////////////////////////
+
+#define BLCONF_CURRENT_USERNICK cuser.username
+
+#ifndef t_columns
+#define t_columns  (b_cols + 1)
+#endif
+
+static char *(*const ctime4)(time_t *clock) = Btime;
+static inline void strip_ansi(char *dst, char *str, int mode)
+{
+    (void)mode;  // Suppress unused-parameter warning
+    str_ansi(dst, str, strlen(str));
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Utility macros and functions
+//////////////////////////////////////////////////////////////////////////
+
+static int
+strlen_noansi(const char *str)        /* String length after stripping ANSI code */
+{
+    int count, ch, ansi;
+
+    for (ansi = 0, count = 0; (ch = *str); str++)
+    {
+        if (ch == '\n')
+        {
+            break;
+        }
+        else if (ch == '\033')
+        {
+            ansi = 1;
+        }
+        else if (ansi)
+        {
+            if ((ch < '0' || ch > '9') && ch != ';' && ch != '[')
+                ansi = 0;
+        }
+        else
+        {
+            count++;
+        }
+    }
+    return count;
+}
+
+static const char *const str_home_file = "usr/%c/%s/%s";
+static void
+setuserfile(char *buf, const char *fname)
+{
+    snprintf(buf, PATHLEN, str_home_file, cuser.userid[0], cuser.userid, fname);
+}
+
+static int
+OpenCreate(const char *path, int flags)
+{
+    return open(path, flags | O_CREAT, DEFAULT_FILE_CREATE_PERM);
+}
+
+#ifndef VBUFLEN
+#define VBUFLEN		(ANSILINELEN)
+#endif
+static int
+vmsgf(const char *fmt, ...)
+{
+    char msg[VBUFLEN];
+    va_list ap;
+    va_start(ap, fmt);
+    vsnprintf(msg, sizeof(msg), fmt, ap);
+    va_end(ap);
+
+    return vmsg(msg);
+}
+
+static void
+vs_hdr(const char *title)
+{
+#ifdef  COLOR_HEADER
+/*  int color = (time(0) % 7) + 41;        lkchu.981201: random color */
+    int color = 44; //090911.cache: 太花了固定一種顏色
+#endif
+
+    clear();
+
+#ifdef  COLOR_HEADER
+    prints("\033[1;%2d;37m【%s】\033[m\n", color, title);
+#else
+    prints("\033[1;46;37m【%s】\033[m\n", title);
+#endif
+}
+
+// IID.20190125: To be compatible with PttBBS's BBSLua.
+#define BL_NOECHO     0x0
+#define BL_DOECHO     0x1
+#define BL_LCECHO     0x2
+#define BL_NUMECHO    0x4
+#define BL_PASSECHO   0X10
+#define BL_GCARRY     0x8     // Ignored
+
+static int
+getdata_str(int line, int col, const char *prompt, char *buf, int len, int echo,
+            const char *defaultstr)
+{
+    int new_echo = 0;
+
+    if (echo == BL_NOECHO)
+        new_echo = NOECHO;
+    else if (echo == BL_DOECHO)
+        new_echo = DOECHO;
+    else
+    {
+        if (echo & BL_LCECHO)
+            new_echo |= LCECHO;
+#ifdef  NUMECHO   // IID.20190125: Some BBSs do not have `NUMECHO`.
+        if (echo & BL_NUMECHO)
+            new_echo |= NUMECHO;
+#endif
+        if (echo & BL_PASSECHO)
+            new_echo
+#ifdef  PASSECHO  // IID.20190125: Some BBSs do not have `PASSECHO`,
+                |= PASSECHO;
+#else                           //    but their `NOECHO` acks just like `PASSECHO`.
+                = NOECHO;
+#endif
+    }
+
+    // IID.20190125: `vget()` with `NOECHO` should not have default string.
+    if (new_echo != NOECHO && defaultstr && *defaultstr)
+    {
+        strlcpy(buf, defaultstr, len);
+        str_ansi(buf, buf, len);
+        new_echo |= GCARRY;
+    }
+
+    return vget(line, col, prompt, buf, len, new_echo);
+}
+
+
+//////////////////////////////////////////////////////////////////////////
 // BBS-Lua Project
 //
 // Author: Hung-Te Lin(piaip), Jan. 2008.
@@ -97,7 +300,7 @@
 
 #define BLCONF_MMAP_ATTACH
 #define BLCONF_CURRENT_USERID   cuser.userid
-#define BLCONF_CURRENT_USERNICK cuser.nickname
+//#define BLCONF_CURRENT_USERNICK cuser.nickname  // Overridden
 
 // BBS-Lua Storage
 enum {
