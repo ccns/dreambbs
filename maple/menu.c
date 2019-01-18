@@ -1135,7 +1135,7 @@ goodbye1(void)
     {
     case 'g':
     case 'y':
-        return 12345;
+        return KEY_NONE;
         break;
 
     case 'q':
@@ -1150,7 +1150,7 @@ goodbye1(void)
     outs("※ 哈哈  騙你的啦  ^O^ ，" BOARDNAME "祝您愚人節快樂 ※\n");
     bell();
     vkey();
-    return 12345;
+    return KEY_NONE;
 }
 
 
@@ -1400,7 +1400,7 @@ menu(void)
 #endif
 
 #ifdef  TREAT
-            if (mode == 12345)
+            if (mode == KEY_NONE)
             {
                 menu = menu_main;
                 mode = MENU_LOAD | MENU_DRAW | MENU_FILM;

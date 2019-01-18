@@ -287,6 +287,8 @@
 #define KEY_PGUP        -25
 #define KEY_PGDN        -26
 
+#define KEY_NONE        12345
+
 #define I_TIMEOUT       -31
 #define I_OTHERDATA     -32
 

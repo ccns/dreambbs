@@ -1849,14 +1849,14 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
         outs("\033[34;46m 熱訊回應 \033[31;47m (← Enter)\033[30m離開 \033[31m(↑↓→)\033[30m瀏覽 \033[31m(其他)\033[30m回應 \033[m");
     }
 
-    cc = 12345;
+    cc = KEY_NONE;
     pos = max;
 
     uhead = ushm->uslot;
 
     for (;;)
     {
-        if (cc == 12345)
+        if (cc == KEY_NONE)
         {
             bmw = bmw_lslot[pos];
             if (cuser.ufo2 & UFO2_REPLY || replymode)
@@ -1902,7 +1902,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
             if (pos > 0)
             {
                 pos--;
-                cc = 12345;
+                cc = KEY_NONE;
             }
             continue;
         }
@@ -1912,7 +1912,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
             if (pos < max)
             {
                 pos++;
-                cc = 12345;
+                cc = KEY_NONE;
             }
             continue;
         }
@@ -1922,7 +1922,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
             if (pos != max)
             {
                 pos = max;
-                cc = 12345;
+                cc = KEY_NONE;
             }
             continue;
         }
