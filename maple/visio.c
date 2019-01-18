@@ -979,7 +979,7 @@ outx(
         }
         else
         {
-            outc(ch);
+            outc((unsigned char)ch);
             str++;
         }
     }
