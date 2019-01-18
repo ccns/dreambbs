@@ -1602,7 +1602,7 @@ igetch(void)
             }
         }
 
-        cc = data[vi_head++];
+        cc = (unsigned char) data[vi_head++];
         if (imode & IM_TRAIL)
         {
             imode ^= IM_TRAIL;
