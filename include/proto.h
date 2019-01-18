@@ -238,7 +238,7 @@ void clear(void);
 void clrtoeol(void);
 void clrtobot(void);
 void outc(int ch);
-void outs(char *str);
+void outs(const char *str);
 void scroll(void);
 void rscroll(void);
 void save_foot(screenline *slp);
@@ -256,7 +256,7 @@ void outf(char *str);
 void prints(char *fmt, ...);
 void cursor_save(void);
 void cursor_restore(void);
-int vmsg(char *msg);
+int vmsg(const char *msg);
 void zmsg(char *msg);
 void vs_bar(char *title);
 #ifndef M3_USE_PFTERM
@@ -265,7 +265,7 @@ void grayout(int y, int end, int level);
 void add_io(int fd, int timeout);
 int igetch(void);
 BRD *ask_board(char *board, int perm, char *msg);
-int vget(int line, int col, char *prompt, char *data, int max, int echo);
+int vget(int line, int col, const char *prompt, char *data, int max, int echo);
 int vans(char *prompt);
 int vkey(void);
 
