@@ -16,7 +16,7 @@ char *str_add(char *dst, char *src)
 }
 
 void str_ansi(                    /* strip ANSI code */
-                 char *dst, char *str, int max)
+                 char *dst, const char *str, int max)
 {
     int ch, ansi;
     char *tail;

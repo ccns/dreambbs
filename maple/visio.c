@@ -851,7 +851,7 @@ new_line:
 
 void
 outs(
-    char *str)
+    const char *str)
 {
     int ch;
 
@@ -1223,7 +1223,7 @@ vs_restore(
 
 int
 vmsg(
-    char *msg)                   /* length <= 54 */
+    const char *msg)             /* length <= 54 */
 {
     static int old_b_cols = 23;
     static char foot[512] = VMSG_NULL;
@@ -1256,7 +1256,7 @@ vmsg(
 #else
 int
 vmsg(
-    char *msg)                  /* length < 54 */
+    const char *msg)                  /* length < 54 */
 {
 
     if (msg)
@@ -1911,8 +1911,9 @@ vget_match(
 char lastcmd[MAXLASTCMD][80];
 
 
-int vget(int line, int col, char *prompt, char *data, int max, int echo)
+int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 {
+    char *data_prompt;
     int ch, len;
     int x, y;
     int i, next;
@@ -2021,7 +2022,7 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
             /* insert data and display it                      */
             /* ----------------------------------------------- */
 
-            prompt = &data[col];
+            data_prompt = &data[col];
             i = col;
             move(y, x + col);
 #ifdef M3_USE_PFTERM
@@ -2031,8 +2032,8 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
             for (;;)
             {
                 outc(echo ? ch : '*');
-                next = (unsigned char) *prompt;
-                *prompt++ = ch;
+                next = (unsigned char) *data_prompt;
+                *data_prompt++ = ch;
                 if (i >= len)
                     break;
                 i++;
@@ -2132,13 +2133,13 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
         case Ctrl('P'):
 
             line = (line + 1) % MAXLASTCMD;
-            prompt = lastcmd[line];
+            data_prompt = lastcmd[line];
             col = 0;
             move(y, x);
 
             do
             {
-                if (!(ch = (unsigned char) *prompt++))
+                if (!(ch = (unsigned char) *data_prompt++))
                 {
                     /* clrtoeol */
 

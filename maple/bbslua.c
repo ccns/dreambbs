@@ -71,7 +71,7 @@ extern time_t now;
 #endif
 
 static char *(*const ctime4)(time_t *clock) = Btime;
-static inline void strip_ansi(char *dst, char *str, int mode)
+static inline void strip_ansi(char *dst, const char *str, int mode)
 {
     (void)mode;  // Suppress unused-parameter warning
     str_ansi(dst, str, strlen(str));
