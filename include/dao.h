@@ -99,7 +99,7 @@ int dns_smtp(char *host);
 void output_rfc2047_qp(FILE *fp, char *prefix, char *str, char *charset, char *suffix);
 /* string.c */
 char *str_add(char *dst, char *src);
-void str_ansi(char *dst, char *str, int max);
+void str_ansi(char *dst, const char *str, int max);
 void str_cat(char *dst, char *s1, char *s2);
 int str_cmp(const char *s1, const char *s2);
 void str_cut(char *dst, char *src);
