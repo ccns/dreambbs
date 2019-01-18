@@ -2256,6 +2256,8 @@ vkey(void)
                 else
                     return ch;
             }
+            else if (ch == 'Z')              /* Shift-Tab */
+                return KEY_STAB;
             else if (ch >= '1' && ch <= '6')
                 mode = 3;
             else

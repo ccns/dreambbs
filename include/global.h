@@ -280,6 +280,7 @@
 #define KEY_DOWN        0x0102
 #define KEY_RIGHT       0x0103
 #define KEY_LEFT        0x0104
+#define KEY_STAB        0X0109  /* Shift-Tab */
 #define KEY_HOME        0x0201
 #define KEY_INS         0x0202
 #define KEY_DEL         0x0203
