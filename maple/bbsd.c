@@ -571,7 +571,7 @@ tn_login(void)
 
     /* sprintf(currtitle, "%s@%s", rusername, fromhost); */
     /* Thor.990415: 紀錄ip, 怕正查不到 */
-    sprintf(currtitle, "%s@%s ip:%08x", rusername, fromhost, (int) tn_addr);
+    sprintf(currtitle, "%s@%s ip:%08x (%d)", rusername, fromhost, (int) tn_addr, currpid);
 
 
 /* by visor */
