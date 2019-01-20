@@ -7,6 +7,8 @@
 #  update : 18/03/28                                     #
 # ------------------------------------------------------ #
 
+BBSHOME	= $(HOME)
+
 SRCROOT	= ..
 .include "$(SRCROOT)/dreambbs.mk"
 
@@ -37,7 +39,7 @@ all:
 xchatd:	xchatd.o
 	$(CC) -o $@ $? $(LDFLAGS)
 
-bbsd: $(OBJ)
+bbsd-0.97: $(OBJ)
 	$(CC) $(MAKEFLAG) -o $@ $(OBJ) $(LDFLAGS) $(LIBS)
 
 maple.p: $(SRC)
