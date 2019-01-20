@@ -4514,8 +4514,8 @@ xpost_head(
 	if (*xypostKeyword)
 		outs(xypostKeyword);
 
-	outs("\n\
-			\033[30;47m  編號   日 期  作  者       文  章  標  題                                   \033[m");
+	outs("\n"
+	"\033[30;47m  編號   日 期  作  者       文  章  標  題                                   \033[m");
 
 	/* return xpost_body(xo); */
 	return post_body(xo); /* Thor.980911: 共用即可 */
