@@ -9,6 +9,8 @@
 
 BBSHOME	= $(HOME)
 
+BUILDTIME	!= date '+%s'
+
 SRCROOT	= ..
 .include "$(SRCROOT)/dreambbs.mk"
 
