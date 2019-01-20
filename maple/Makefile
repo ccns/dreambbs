@@ -25,7 +25,7 @@ SRC	+= pmore.c
 OBJ	+= pmore.o
 .endif
 
-EXE	= bbsd xchatd
+EXE	= bbsd-0.97 xchatd
 
 .SUFFIXES: .o .c
 
@@ -44,7 +44,10 @@ maple.p: $(SRC)
 	$(CPROTO) -o $@ $?
 
 install: $(EXE)
-	install -m 0700 $? $(HOME)/bin
+	install -d $(BBSHOME)/bin
+	install -m 0755 $? $(BBSHOME)/bin
+	mv -f $(BBSHOME)/bin/bbsd-0.97 $(BBSHOME)/bin/bbsd-0.97.$(BUILDTIME)
+	ln -sv $(BBSHOME)/bin/bbsd-0.97.$(BUILDTIME) $(BBSHOME)/bin/bbsd-0.97
 
 clean:
 	rm -rf $(OBJ) $(EXE) $(LNFILES)  *~ *.o *.so *.p tags
