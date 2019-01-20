@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* struct.h     ( NTHU CS MapleBBS Ver 2.36 )            */
+/* struct.h     ( NTHU CS MapleBBS Ver 3.02 )            */
 /*-------------------------------------------------------*/
 /* target : all definitions about data structure         */
 /* create : 95/03/29                                     */

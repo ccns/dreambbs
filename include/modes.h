@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* modes.h	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* modes.h	( NTHU CS MapleBBS Ver 3.02 )		 */
 /*-------------------------------------------------------*/
 /* target : user operating mode & status		 */
 /* create : 95/03/29				 	 */

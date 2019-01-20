@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* global.h	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* global.h	( NTHU CS MapleBBS Ver 3.02 )		 */
 /*-------------------------------------------------------*/
 /* target : global definitions & variables		 */
 /* create : 95/03/29				 	 */

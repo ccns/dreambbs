@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* xover.c	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* xover.c	( NTHU CS MapleBBS Ver 3.02 )		 */
 /*-------------------------------------------------------*/
 /* target : board/mail interactive reading routines 	 */
 /* create : 95/03/29				 	 */

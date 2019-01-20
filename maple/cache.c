@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* cache.c	( NTHU CS MapleBBS Ver 2.36 )		 */
+/* cache.c	( NTHU CS MapleBBS Ver 3.02 )		 */
 /*-------------------------------------------------------*/
 /* target : cache up data by shared memory		 */
 /* create : 95/03/29				 	 */
