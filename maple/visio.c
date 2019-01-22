@@ -953,9 +953,7 @@ outx(
                     default:
                         break;
                 }
-                str += 3;
             }
-            str -= 3;
             ch = (unsigned char) str[0];
         }
         outc(ch);
