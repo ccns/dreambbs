@@ -927,50 +927,39 @@ outx(
 
 /* cache.090922: 控制碼 */
 
-    while ((ch = *str))
+    while ((ch = (unsigned char) *str))
     {
         if (ch == KEY_ESC)
         {
-            str++;
-            ch = (unsigned char) *str;
+            ch = (unsigned char) str[1];
             if (ch == '*')
             {
-                str++;
-                ch = (unsigned char) *str;
+                ch = (unsigned char) str[2];
                 switch (ch)
                 {
                     case 's':       /* **s 顯示 ID */
                         outs(cuser.userid);
-                        str += 4;
+                        str += 3;
                         break;
                     case 'n':       /* **n 顯示暱稱 */
                         outs(cuser.username);
-                        str += 4;
+                        str += 3;
                         break;
                     case 't':       /* **t 顯示日期 */
                         time(&now);
                         outs(Ctime(&now));
-                        str += 4;
+                        str += 3;
                         break;
                     default:
-                        str++;
                         break;
                 }
-            }
-            else
-            {
-                str--;
+                str += 3;
             }
             str -= 3;
-            ch = (unsigned char) *str;
-            outc(ch);
-            str++;
+            ch = (unsigned char) str[0];
         }
-        else
-        {
-            outc((unsigned char)ch);
-            str++;
-        }
+        outc(ch);
+        str++;
     }
 /*
     while ((ch = (unsigned char) *str))
