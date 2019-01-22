@@ -941,25 +941,16 @@ outx(
                 {
                     case 's':       /* **s 顯示 ID */
                         outs(cuser.userid);
-                        str++;
-                        str++;
-                        str++;
-                        str++;
+                        str += 4;
                         break;
                     case 'n':       /* **n 顯示暱稱 */
                         outs(cuser.username);
-                        str++;
-                        str++;
-                        str++;
-                        str++;
+                        str += 4;
                         break;
                     case 't':       /* **t 顯示日期 */
                         time(&now);
                         outs(Ctime(&now));
-                        str++;
-                        str++;
-                        str++;
-                        str++;
+                        str += 4;
                         break;
                     default:
                         str++;
@@ -970,9 +961,7 @@ outx(
             {
                 str--;
             }
-            str--;
-            str--;
-            str--;
+            str -= 3;
             ch = (unsigned char) *str;
             outc(ch);
             str++;
