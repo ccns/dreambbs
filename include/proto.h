@@ -261,7 +261,7 @@ int vmsg(char *msg);
 void zmsg(char *msg);
 void vs_bar(char *title);
 #ifndef M3_USE_PFTERM
-void grayout(int type);
+void grayout(int y, int end, int level);
 #endif  /* #ifndef M3_USE_PFTERM */
 void add_io(int fd, int timeout);
 int igetch(void);
