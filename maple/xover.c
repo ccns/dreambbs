@@ -938,9 +938,7 @@ xo_uquery_lite(
     if (strchr(userid, '.'))
         return XO_NONE;
 
-#ifndef M3_USE_PFTERM
-    grayout(GRAYOUT_DARK);
-#endif
+    grayout(0, b_lines, GRAYOUT_DARK);
 
     move(b_lines - 8, 0);
     clrtobot();  /* Á×§Kµe­±´Ý¯d */
