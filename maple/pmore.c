@@ -2831,6 +2831,14 @@ _pmore2(
                 break;
 #endif // PMORE_USE_INTERNAL_HELP
 
+            /* BBS-Lua */
+#ifdef USE_BBSLUA
+            case 'l': case 'L':
+                bbslua(* (char **)ahctx);
+                MFDISP_DIRTY();
+                break;
+#endif // USE_BBSLUA
+
             /* debug system */
 #ifdef DEBUG
             case 'd':
