@@ -689,7 +689,11 @@ re_key:
             shift = 0;
         }
 */
-        else if ((key == 'h') || (key == '?'))
+        else if ((key == 'H') || (key == 'h') || (key == '?')
+#ifdef KEY_F1
+                 || (key == KEY_F1)
+#endif
+        )
         {
             film_out(FILM_MORE, -1);
             shift = 0;
