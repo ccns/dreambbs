@@ -2814,22 +2814,18 @@ _pmore2(
                 break;
 
             /* internal help */
-#ifdef PMORE_USE_INTERNAL_HELP
             case 'h': case 'H': case '?':
 #ifdef KEY_F1
             case KEY_F1:
 #endif
+#ifdef PMORE_USE_INTERNAL_HELP
                 pmore_Help(ctx, help_handler);
-                MFDISP_DIRTY();
-                break;
 #else     /* r2.170810: For Our BBS system data... (not new patch) */
-            case 'h': case 'H':
-            case '?':
                 // help
                 film_out(FILM_MORE, -1);
+#endif // PMORE_USE_INTERNAL_HELP
                 MFDISP_DIRTY();
                 break;
-#endif // PMORE_USE_INTERNAL_HELP
 
             /* debug system */
 #ifdef DEBUG
