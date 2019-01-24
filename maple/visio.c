@@ -1394,7 +1394,7 @@ vs_line(
 #ifndef M3_USE_PFTERM
 /* 090127.cache 淡入淡出特效 */
 void
-grayout(int type)
+grayout(int y, int end, int level)
 // GRAYOUT_DARK(0): dark, GRAYOUT_BOLD(1): bold, GRAYOUR_NORMAL(2): normal
 {
     screenline slp[T_LINES], newslp[T_LINES];
@@ -1405,7 +1405,12 @@ grayout(int type)
     vs_save(slp);
     memcpy(newslp, slp, sizeof(newslp));
 
-    for (i = 0; i < T_LINES; i++)
+    if (y < 0)
+        y = 0;
+    if (end > T_LINES)
+        end = T_LINES;
+
+    for (i = y; i < end; i++)
     {
         if (!newslp[i].width)
             continue;
@@ -1414,7 +1419,7 @@ grayout(int type)
         newslp[i].len = newslp[i].width + 7 + 3;
 
         str_ansi(buf, (char *) slp[i].data, slp[i].width + 1);
-        sprintf((char *) newslp[i].data, "%s%s\033[m", prefix[type], buf);
+        sprintf((char *) newslp[i].data, "%s%s\033[m", prefix[level], buf);
     }
     vs_restore(newslp);
 }
