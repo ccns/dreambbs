@@ -222,6 +222,9 @@ void banmsg_cache(void);
 void banmsg_sync(char *fpath);
 int t_banmsg(void);
 
+/* bbslua.c */
+int bbslua(const char *fpath);
+int bbslua_isHeader(const char *ps, const char *pe);
 
 /* visio.c */
 void bell(void);
