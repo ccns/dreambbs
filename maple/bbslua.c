@@ -50,8 +50,9 @@ static inline void grayout(int y, int end, int level)
 
 //////////////////////////////////////////////////////////////////////////
 // Other macros
-// #include config.h
 //////////////////////////////////////////////////////////////////////////
+
+// #include config.h
 
 #ifndef PATHLEN
 #define PATHLEN (256)
@@ -61,6 +62,11 @@ static inline void grayout(int y, int end, int level)
 #define DEFAULT_FILE_CREATE_PERM (0644)
 #endif
 
+// #include common.h
+
+#ifndef MILLISECONDS
+#define MILLISECONDS (1000)  // milliseconds of one second
+#endif
 //////////////////////////////////////////////////////////////////////////
 // External variables
 // #include "var.h"
@@ -84,6 +90,10 @@ static inline void strip_ansi(char *dst, const char *str, int mode)
     (void)mode;  // Suppress unused-parameter warning
     str_ansi(dst, str, strlen(str));
 }
+
+#ifndef M3_USE_PFTERM
+static void (*const doupdate)(void) = refresh;
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 // Utility macros and functions
@@ -208,6 +218,262 @@ getdata_str(int line, int col, const char *prompt, char *buf, int len, int echo,
     return vget(line, col, prompt, buf, len, new_echo);
 }
 
+#ifndef M3_USE_PFTERM
+static void
+newwin(int nlines, int ncols, int y, int x)
+{
+    int i, oy, ox;
+    getyx(&oy, &ox);
+
+    while (nlines-- > 0)
+    {
+        move_ansi(y++, x);
+        for (i = 0; i < ncols; i++)
+            outc(' ');
+    }
+    move(oy, ox);
+}
+#endif
+
+//////////////////////////////////////////////////////////////////////////
+// Input handling
+//////////////////////////////////////////////////////////////////////////
+
+#if !(defined(M3_USE_NIOS_VKEY) || defined(PMORE_HAVE_VKEY))
+
+// IID.20190124: If this BBS does not have the vkey input system,
+//                  give it a simplified one.
+
+#define IBUFSIZE  128
+static char vin[IBUFSIZE];
+static int vin_size = 0;
+
+
+// IID.20190124: Override `vkey()`.
+#define vkey()  vkey_getch()
+
+static int vin_pop(void)
+{
+    if (vin_size <= 0)
+        return EOF;
+    return (unsigned char) vin[vin_size-- - 1];
+}
+
+#undef  TRAP_ESC
+
+static int
+vkey_getch(void)  // `vkey()`, but tries `vin_pop()` before `igetch()`
+{
+    int mode;
+    int ch, last, last2;
+
+    mode = last = last2 = 0;
+    for (;;)
+    {
+        ch = vin_pop();
+
+        if (ch == EOF)
+            ch = igetch();
+
+#ifdef  TRAP_ESC
+        if (mode == 0)
+        {
+            if (ch == KEY_ESC)
+                mode = 1;
+            else
+                return ch;              /* Normal Key */
+        }
+#else
+        if (ch == KEY_ESC)
+            mode = 1;
+        else if (mode == 0)             /* Normal Key */
+        {
+            return ch;
+        }
+#endif
+        else if (mode == 1)
+        {                               /* Escape sequence */
+            if (ch == '[' || ch == 'O')
+                mode = 2;
+            else if (ch == '1' || ch == '4')
+                mode = 3;
+            else
+            {
+#ifdef  TRAP_ESC
+                return Meta(ch);
+#else
+                return ch;
+#endif
+            }
+        }
+        else if (mode == 2)
+        {
+            if (ch >= 'A' && ch <= 'D')      /* Cursor key */
+                return KEY_UP + (ch - 'A');
+            else if (last == 'O')
+            {
+                if (ch >= 'P' && ch <= 'S')  /* F1 - F4 */
+                    return KEY_F1 + (ch - 'P');
+                else
+                    return ch;
+            }
+            else if (ch == 'Z')              /* Shift-Tab */
+                return KEY_STAB;
+            else if (ch >= '1' && ch <= '6')
+                mode = 3;
+            else
+                return ch;
+        }
+        else if (mode == 3)
+        {                               /* Ins Del Home End PgUp PgDn */
+            if (ch == '~')
+                return KEY_HOME + (last - '1');
+            else if (last >= '1' && last <= '2')
+                mode = 4;
+            else
+                return ch;
+        }
+        else if (mode == 4)
+        {                               /* F1 - F12 */
+            if (ch == '~')
+            {
+                if (last2 == '1')       /* F1 - F8 */
+                    return KEY_F1 + (last - '1') - (last > '6');
+                else if (last2 == '2')  /* F9 - F12 */
+                    return KEY_F9 + (last - '0') - (last > '2');
+                else
+                    return ch;
+            }
+            else
+                return ch;
+        }
+        last2 = last;
+        last = ch;
+    }
+}
+
+
+static int
+read_vin(void)
+{
+    int len = read(0, vin + vin_size, IBUFSIZE - vin_size);
+
+    if (len == 0 || (len < 0 && !(errno == EINTR || errno == EAGAIN)))
+        abort_bbs();
+
+    vin_size += len;
+    return len;
+}
+
+static int
+wait_input(float f, int bIgnoreBuf)
+{
+    int sel = 0;
+    fd_set readfds;
+    struct timeval tv, *ptv;
+
+    if (!bIgnoreBuf && vin_size > 0)
+        return 1;
+
+    // Check if something already in input queue,
+    // detemine if ok to break.
+
+    // wait for real user interaction
+    FD_ZERO(&readfds);
+    FD_SET(0, &readfds);
+
+#ifdef STATINC
+    STATINC(STAT_SYSSELECT);
+#endif
+
+    if (f >= 0)
+    {
+        tv.tv_sec = (time_t)f;
+        tv.tv_usec = 1000000L * (f - (time_t)f);
+        ptv = &tv;
+    }
+    else
+    {
+        ptv = NULL;
+    }
+
+    do {
+        sel = select(1, &readfds, NULL, NULL, ptv);
+
+    // if select() stopped by other interrupt,
+    // do it again.
+    } while (sel < 0 && errno == EINTR);
+
+    // now, maybe something for read (sel > 0)
+    // or time out (sel == 0)
+    // or weird error (sel < 0)
+
+    // sync clock(now) if timeout.
+#ifdef PMORE_HAVE_SYNCNOW
+    if (sel == 0)
+        syncnow();
+#endif // PMORE_HAVE_SYNCNOW
+    return (sel == 0) ? 0 : 1;
+}
+
+static int
+vkey_is_ready(void)
+{
+    return wait_input(0, 0);
+}
+
+static int
+vkey_is_full(void)
+{
+    return vin_size >= IBUFSIZE;
+}
+
+static void
+vkey_purge(void)
+{
+    int max_try = 64;
+    vin_size = 0;
+
+#ifdef STATINC
+    STATINC(STAT_SYSREADSOCKET);
+#endif
+    while (wait_input(0.01, 1) && max_try-- > 0)
+    {
+        read_vin();
+        vin_size = 0;
+    }
+}
+
+static int
+vkey_poll(int ms)
+{
+    if (ms)
+        refresh();
+    return wait_input(ms / (double)MILLISECONDS, 0);
+}
+
+static int
+vkey_prefetch(int timeout)
+{
+    if (wait_input(timeout / (double)MILLISECONDS, 1)
+            && vin_size < IBUFSIZE)
+        read_vin();
+    return vin_size > 0;
+}
+
+static int
+vkey_is_prefetched(char c)
+{
+    if (c == EOF)
+        return 0;
+
+    char *res = (char *) memchr(vin, c, vin_size);
+    if (!res)
+        return 0;
+    return res - vin >= 0;
+}
+
+#endif  // #if !(defined(M3_USE_NIOS_VKEY) || defined(PMORE_HAVE_VKEY))
 
 //////////////////////////////////////////////////////////////////////////
 // BBS-Lua Project
