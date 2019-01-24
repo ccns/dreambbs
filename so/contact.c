@@ -179,30 +179,6 @@ XO *xo)
     return contact_init(xo);
 }
 
-static int
-contact_pop3(
-XO *xo)
-{
-    int pos, cur;
-    CONTACT *contact;
-    static int (*pop3)(char *email);
-
-    pos = xo->pos;
-    cur = pos - xo->top;
-    contact = (CONTACT *) xo_pool + cur;
-    if (pop3)
-        (*pop3)(contact->email);
-    else
-    {
-        pop3 = DL_get("bin/pop3mail.so:Pop3Contact");
-        if (pop3)
-            (*pop3)(contact->email);
-        else
-            vmsg("動態載入失敗，請聯絡系統管理員！");
-    }
-    return contact_init(xo);
-}
-
 void
 contact_send(
 CONTACT *contact)
@@ -256,7 +232,6 @@ KeyFunc contact_cb[] =
     {'c', contact_change},
     {'s', contact_init},
     {'d', contact_delete},
-    {'p', contact_pop3},
     {'h', contact_help}
 };
 
