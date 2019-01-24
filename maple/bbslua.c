@@ -32,6 +32,14 @@
 // grayout advanced control
 // #include "grayout.h"
 //////////////////////////////////////////////////////////////////////////
+#if ! (defined(GRAYOUT) || defined(HAVE_GRAYOUT))
+// IID.20190124: If there is no `grayout()` at all
+static inline void grayout(int y, int end, int level)
+{
+    // Does nothing
+}
+#endif
+
 #ifndef GRAYOUT_DARK
 #define GRAYOUT_COLORBOLD (-2)
 #define GRAYOUT_BOLD (-1)
