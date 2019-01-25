@@ -10,6 +10,22 @@
 SRCROOT	= ..
 .include "$(SRCROOT)/dreambbs.mk"
 
+.if $(USE_BBSLUA)
+.if $(OPSYS) == "FreeBSD"
+    LUA_PKG_NAME	?= lua-5.1
+    LDFLAGS	+= -Wl,--no-as-needed
+.else
+    LUA_PKG_NAME	?= lua5.1
+.endif
+
+LUA_CFLAGS	!= pkg-config --cflags ${LUA_PKG_NAME}
+LUA_LDFLAGS	!= pkg-config --libs ${LUA_PKG_NAME}
+CFLAGS	+= ${LUA_CFLAGS}
+LDFLAGS	+= ${LUA_LDFLAGS}
+SRC	+= bbslua.c bbsluaext.c
+OBJ	+= bbslua.o bbsluaext.o
+.endif
+
 .if $(USE_PFTERM)
 SRC	+= pfterm.c
 OBJ	+= pfterm.o

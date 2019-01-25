@@ -689,12 +689,35 @@ re_key:
             shift = 0;
         }
 */
-        else if ((key == 'h') || (key == '?'))
+        else if ((key == 'H') || (key == 'h') || (key == '?')
+#ifdef KEY_F1
+                 || (key == KEY_F1)
+#endif
+        )
         {
             film_out(FILM_MORE, -1);
             shift = 0;
             break;
         }
+/* BBS-Lua */
+#ifdef M3_USE_BBSLUA
+        else if (key == 'L' || key == 'l')
+        {
+#ifdef M3_USE_PFTERM
+            screen_backup_t old_screen = {0};
+            scr_dump(&old_screen);
+#else
+            screenline slt[T_LINES];
+            vs_save(slt);
+#endif
+            bbslua(fpath);
+#ifdef M3_USE_PFTERM
+            scr_restore_free(&old_screen);
+#else
+            vs_restore(slt);
+#endif
+        }
+#endif  /* #ifdef M3_USE_BBSLUA */
 /* 081229.cache: BBSRuby */
 //      else if (key == '!')
 //      {

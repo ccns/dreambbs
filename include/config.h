@@ -89,7 +89,19 @@
 #define Modules                 /* 顯示模組資訊 */
 #define MultiRecommend          /* 顯示多重推文 */
 
+#ifdef  M3_USE_PMORE            /* Enable pmore */
+#define USE_PMORE
+#endif
+
+#ifdef  M3_USE_PFTERM           /* Enable pfterm */
+#define USE_PFTERM
+#endif
+
 #define GRAYOUT                 /* 淡入淡出特效系統 */
+
+#ifdef  M3_USE_BBSLUA           /* Enable BBS-Lua */
+#define USE_BBSLUA
+#endif
 
 /* ----------------------------------------------------- */
 /* 隨 BBS 站規模成長而擴增                               */

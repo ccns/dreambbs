@@ -2814,22 +2814,26 @@ _pmore2(
                 break;
 
             /* internal help */
-#ifdef PMORE_USE_INTERNAL_HELP
             case 'h': case 'H': case '?':
 #ifdef KEY_F1
             case KEY_F1:
 #endif
+#ifdef PMORE_USE_INTERNAL_HELP
                 pmore_Help(ctx, help_handler);
-                MFDISP_DIRTY();
-                break;
 #else     /* r2.170810: For Our BBS system data... (not new patch) */
-            case 'h': case 'H':
-            case '?':
                 // help
                 film_out(FILM_MORE, -1);
+#endif // PMORE_USE_INTERNAL_HELP
                 MFDISP_DIRTY();
                 break;
-#endif // PMORE_USE_INTERNAL_HELP
+
+            /* BBS-Lua */
+#ifdef USE_BBSLUA
+            case 'l': case 'L':
+                bbslua(* (char **)ahctx);
+                MFDISP_DIRTY();
+                break;
+#endif // USE_BBSLUA
 
             /* debug system */
 #ifdef DEBUG
@@ -3026,11 +3030,7 @@ pmore_QuickRawModePref(void)
 * #endif // HAVE_GRAYOUT
 */
 #ifdef GRAYOUT
-#ifndef M3_USE_PFTERM
-    grayout(GRAYOUT_DARK); /*r2.170810: GRAY For M3 First (ref. from cache)*/
-#else
     grayout(0, ystart-1, GRAYOUT_DARK);
-#endif //#ifndef M3_USE_PFTERM
 #endif // GRAYOUT
 
     while (1)
@@ -3081,11 +3081,7 @@ pmore_Preference(void)
 * #endif // HAVE_GRAYOUT
 */
 #ifdef GRAYOUT
-#ifndef M3_USE_PFTERM
-    grayout(GRAYOUT_DARK);     /*r2.170810: GRAY For M3 First (ref. from cache)*/
-#else
     grayout(0, ystart-1, GRAYOUT_DARK);
-#endif //#ifndef M3_USE_PFTERM
 #endif  // GRAYOUT
 
     // workaround some poor terms: their clrtobot() refresh is buggy.

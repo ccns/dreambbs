@@ -231,10 +231,9 @@ move(
     cur_pos = x;
 }
 
-#if 0
 /* verit : 030212, 扣掉 ansi code */
 void
-ansi_move(
+move_ansi(
     int y,
     int x)
 {
@@ -291,7 +290,6 @@ ansi_move(
     cur_pos = x;
 
 }
-#endif  /* #if 0 */
 
 void
 getyx(
@@ -853,7 +851,7 @@ new_line:
 
 void
 outs(
-    char *str)
+    const char *str)
 {
     int ch;
 
@@ -927,61 +925,37 @@ outx(
 
 /* cache.090922: 控制碼 */
 
-    while ((ch = *str))
+    while ((ch = (unsigned char) *str))
     {
         if (ch == KEY_ESC)
         {
-            str++;
-            ch = (unsigned char) *str;
+            ch = (unsigned char) str[1];
             if (ch == '*')
             {
-                str++;
-                ch = (unsigned char) *str;
+                ch = (unsigned char) str[2];
                 switch (ch)
                 {
                     case 's':       /* **s 顯示 ID */
                         outs(cuser.userid);
-                        str++;
-                        str++;
-                        str++;
-                        str++;
+                        str += 3;
                         break;
                     case 'n':       /* **n 顯示暱稱 */
                         outs(cuser.username);
-                        str++;
-                        str++;
-                        str++;
-                        str++;
+                        str += 3;
                         break;
                     case 't':       /* **t 顯示日期 */
                         time(&now);
                         outs(Ctime(&now));
-                        str++;
-                        str++;
-                        str++;
-                        str++;
+                        str += 3;
                         break;
                     default:
-                        str++;
                         break;
                 }
             }
-            else
-            {
-                str--;
-            }
-            str--;
-            str--;
-            str--;
-            ch = (unsigned char) *str;
-            outc(ch);
-            str++;
+            ch = (unsigned char) str[0];
         }
-        else
-        {
-            outc(ch);
-            str++;
-        }
+        outc(ch);
+        str++;
     }
 /*
     while ((ch = (unsigned char) *str))
@@ -1249,7 +1223,7 @@ vs_restore(
 
 int
 vmsg(
-    char *msg)                   /* length <= 54 */
+    const char *msg)             /* length <= 54 */
 {
     static int old_b_cols = 23;
     static char foot[512] = VMSG_NULL;
@@ -1282,7 +1256,7 @@ vmsg(
 #else
 int
 vmsg(
-    char *msg)                  /* length < 54 */
+    const char *msg)                  /* length < 54 */
 {
 
     if (msg)
@@ -1420,7 +1394,7 @@ vs_line(
 #ifndef M3_USE_PFTERM
 /* 090127.cache 淡入淡出特效 */
 void
-grayout(int type)
+grayout(int y, int end, int level)
 // GRAYOUT_DARK(0): dark, GRAYOUT_BOLD(1): bold, GRAYOUR_NORMAL(2): normal
 {
     screenline slp[T_LINES], newslp[T_LINES];
@@ -1431,7 +1405,12 @@ grayout(int type)
     vs_save(slp);
     memcpy(newslp, slp, sizeof(newslp));
 
-    for (i = 0; i < T_LINES; i++)
+    if (y < 0)
+        y = 0;
+    if (end > T_LINES)
+        end = T_LINES;
+
+    for (i = y; i < end; i++)
     {
         if (!newslp[i].width)
             continue;
@@ -1440,7 +1419,7 @@ grayout(int type)
         newslp[i].len = newslp[i].width + 7 + 3;
 
         str_ansi(buf, (char *) slp[i].data, slp[i].width + 1);
-        sprintf((char *) newslp[i].data, "%s%s\033[m", prefix[type], buf);
+        sprintf((char *) newslp[i].data, "%s%s\033[m", prefix[level], buf);
     }
     vs_restore(newslp);
 }
@@ -1626,7 +1605,7 @@ igetch(void)
             }
         }
 
-        cc = data[vi_head++];
+        cc = (unsigned char) data[vi_head++];
         if (imode & IM_TRAIL)
         {
             imode ^= IM_TRAIL;
@@ -1937,8 +1916,9 @@ vget_match(
 char lastcmd[MAXLASTCMD][80];
 
 
-int vget(int line, int col, char *prompt, char *data, int max, int echo)
+int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 {
+    char *data_prompt;
     int ch, len;
     int x, y;
     int i, next;
@@ -2047,7 +2027,7 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
             /* insert data and display it                      */
             /* ----------------------------------------------- */
 
-            prompt = &data[col];
+            data_prompt = &data[col];
             i = col;
             move(y, x + col);
 #ifdef M3_USE_PFTERM
@@ -2057,8 +2037,8 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
             for (;;)
             {
                 outc(echo ? ch : '*');
-                next = (unsigned char) *prompt;
-                *prompt++ = ch;
+                next = (unsigned char) *data_prompt;
+                *data_prompt++ = ch;
                 if (i >= len)
                     break;
                 i++;
@@ -2158,13 +2138,13 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
         case Ctrl('P'):
 
             line = (line + 1) % MAXLASTCMD;
-            prompt = lastcmd[line];
+            data_prompt = lastcmd[line];
             col = 0;
             move(y, x);
 
             do
             {
-                if (!(ch = (unsigned char) *prompt++))
+                if (!(ch = (unsigned char) *data_prompt++))
                 {
                     /* clrtoeol */
 
@@ -2228,17 +2208,17 @@ vans(
 
 #undef  TRAP_ESC
 
-#ifdef  TRAP_ESC
 int
 vkey(void)
 {
     int mode;
-    int ch, last;
+    int ch, last, last2;
 
-    mode = last = 0;
+    mode = last = last2 = 0;
     for (;;)
     {
         ch = igetch();
+#ifdef  TRAP_ESC
         if (mode == 0)
         {
             if (ch == KEY_ESC)
@@ -2246,6 +2226,14 @@ vkey(void)
             else
                 return ch;              /* Normal Key */
         }
+#else
+        if (ch == KEY_ESC)
+            mode = 1;
+        else if (mode == 0)             /* Normal Key */
+        {
+            return ch;
+        }
+#endif
         else if (mode == 1)
         {                               /* Escape sequence */
             if (ch == '[' || ch == 'O')
@@ -2254,60 +2242,26 @@ vkey(void)
                 mode = 3;
             else
             {
+#ifdef  TRAP_ESC
                 return Meta(ch);
+#else
+                return ch;
+#endif
             }
         }
         else if (mode == 2)
-        {                               /* Cursor key */
-            if (ch >= 'A' && ch <= 'D')
-                return KEY_UP - (ch - 'A');
-            else if (ch >= '1' && ch <= '6')
-                mode = 3;
-            else
-                return ch;
-        }
-        else if (mode == 3)
-        {                               /* Ins Del Home End PgUp PgDn */
-            if (ch == '~')
-                return KEY_HOME - (last - '1');
-            else
-                return ch;
-        }
-        last = ch;
-    }
-}
-
-#else                           /* TRAP_ESC */
-
-int
-vkey(void)
-{
-    int mode;
-    int ch, last;
-
-    mode = last = 0;
-    for (;;)
-    {
-        ch = igetch();
-        if (ch == KEY_ESC)
-            mode = 1;
-        else if (mode == 0)             /* Normal Key */
         {
-            return ch;
-        }
-        else if (mode == 1)
-        {                               /* Escape sequence */
-            if (ch == '[' || ch == 'O')
-                mode = 2;
-            else if (ch == '1' || ch == '4')
-                mode = 3;
-            else
-                return ch;
-        }
-        else if (mode == 2)
-        {                               /* Cursor key */
-            if (ch >= 'A' && ch <= 'D')
-                return KEY_UP - (ch - 'A');
+            if (ch >= 'A' && ch <= 'D')      /* Cursor key */
+                return KEY_UP + (ch - 'A');
+            else if (last == 'O')
+            {
+                if (ch >= 'P' && ch <= 'S')  /* F1 - F4 */
+                    return KEY_F1 + (ch - 'P');
+                else
+                    return ch;
+            }
+            else if (ch == 'Z')              /* Shift-Tab */
+                return KEY_STAB;
             else if (ch >= '1' && ch <= '6')
                 mode = 3;
             else
@@ -2316,11 +2270,27 @@ vkey(void)
         else if (mode == 3)
         {                               /* Ins Del Home End PgUp PgDn */
             if (ch == '~')
-                return KEY_HOME - (last - '1');
+                return KEY_HOME + (last - '1');
+            else if (last >= '1' && last <= '2')
+                mode = 4;
             else
                 return ch;
         }
+        else if (mode == 4)
+        {                               /* F1 - F12 */
+            if (ch == '~')
+            {
+                if (last2 == '1')       /* F1 - F8 */
+                    return KEY_F1 + (last - '1') - (last > '6');
+                else if (last2 == '2')  /* F9 - F12 */
+                    return KEY_F9 + (last - '0') - (last > '2');
+                else
+                    return ch;
+            }
+            else
+                return ch;
+        }
+        last2 = last;
         last = ch;
     }
 }
-#endif                          /* TRAP_ESC */

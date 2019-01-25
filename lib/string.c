@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <time.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdlib.h>
@@ -17,7 +16,7 @@ char *str_add(char *dst, char *src)
 }
 
 void str_ansi(                    /* strip ANSI code */
-                 char *dst, char *str, int max)
+                 char *dst, const char *str, int max)
 {
     int ch, ansi;
     char *tail;
@@ -928,23 +927,6 @@ int str_rle(                    /* run-length encoding */
     return dst - str;
 }
 
-/* ------------------------------------------ */
-/* mail / post 時，依據時間建立檔案，加上郵戳 */
-/* ------------------------------------------ */
-/* Input: fpath = directory;                  */
-/* Output: fpath = full path;                 */
-/* ------------------------------------------ */
-
-void str_stamp(char *str, time_t * chrono)
-{
-    struct tm *ptime;
-
-    ptime = localtime(chrono);
-    /* Thor.990329: y2k */
-    sprintf(str, "%02d/%02d/%02d",
-            ptime->tm_year % 100, ptime->tm_mon + 1, ptime->tm_mday);
-}
-
 #ifndef NULL
 #define NULL    (char* ) 0
 #endif
@@ -1046,59 +1028,6 @@ char *str_tail(char *str)
         str++;
     }
     return str;
-}
-
-
-/* static char datemsg[32]; */
-static char datemsg[40];
-
-char *Btime(time_t * clock)
-{
-    struct tm *t = localtime(clock);
-
-    /* Thor.990329: y2k */
-    /* Thor.990413: 最後的空格是用在 mail.c的bsmtp末, 在時間和user間空一格用,
-                    嗯... 不知道放在這的好處是不是連空格也一起共用:P */
-    sprintf(datemsg, "%02d/%02d/%02d%3d:%02d:%02d ",
-            t->tm_year % 100, t->tm_mon + 1, t->tm_mday,
-            t->tm_hour, t->tm_min, t->tm_sec);
-    return (datemsg);
-}
-
-
-char *Ctime(time_t * clock)
-{
-    struct tm *t = localtime(clock);
-    static char week[] = "日一二三四五六";
-
-    sprintf(datemsg, "%d年%2d月%2d日%3d:%02d:%02d 星期%.2s",
-            t->tm_year - 11, t->tm_mon + 1, t->tm_mday,
-            t->tm_hour, t->tm_min, t->tm_sec, &week[t->tm_wday << 1]);
-    return (datemsg);
-}
-
-char *Etime(time_t * clock)
-{
-    strftime(datemsg, 22, "%D %T %a", localtime(clock));
-    return (datemsg);
-}
-
-char *Atime(                    /* Thor.990125: 假裝ARPANET時間格式 */
-               time_t * clock)
-{
-    /* ARPANET format: Thu, 11 Feb 1999 06:00:37 +0800 (CST) */
-    /* strftime(datemsg, 40, "%a, %d %b %Y %T %Z", localtime(clock)); */
-    /* Thor.990125: time zone的傳回值不知和ARPANET格式是否一樣, 先硬給, 同sendmail */
-    strftime(datemsg, 40, "%a, %d %b %Y %T +0800 (CST)", localtime(clock));
-    return (datemsg);
-}
-
-char *Now(void)
-{
-    time_t now;
-
-    time(&now);
-    return Btime(&now);
 }
 
 void str_trim(                    /* remove trailing space */

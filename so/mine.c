@@ -286,7 +286,7 @@ void TraceMap(int y, int x)
 
 void playMine(void)
 {
-    int ch ;
+    int ch;
     currx = MAP_X / 2 + 1, curry = MAP_Y / 2 + 1;
     flLoseMine = 0;
     move(2, 0);

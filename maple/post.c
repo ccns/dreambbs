@@ -2106,9 +2106,7 @@ post_state(
 
     strcpy(buf, currboard);
 
-#ifndef M3_USE_PFTERM
-    grayout(GRAYOUT_DARK);
-#endif
+    grayout(0, b_lines, GRAYOUT_DARK);
 
     if (HAS_PERM(PERM_ADMIN))
     {
@@ -3493,9 +3491,7 @@ post_showBRD_setting(
     if (*str <= ' ')
         str = "\033[1;33m徵求中\033[m";
 
-#ifndef M3_USE_PFTERM
-    grayout(GRAYOUT_DARK);
-#endif
+    grayout(0, b_lines, GRAYOUT_DARK);
 
     move(b_lines - 14, 0);
     clrtobot();  /* 避免畫面殘留 */
@@ -3949,9 +3945,7 @@ post_manage(
         return XO_HEAD;
     }
 
-#ifndef M3_USE_PFTERM
-    grayout(GRAYOUT_DARK);
-#endif
+    grayout(0, b_lines, GRAYOUT_DARK);
 
     switch (re = popupmenu_ans2(menu, "板主管理", 3, 20))
     {
