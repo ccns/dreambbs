@@ -17,7 +17,7 @@
         - `v0.95.4`: aka. `REV-BETA4.4`, plan to be the final release of `v0.95-testing`.
         - It is going to be End-Of-Life after `v0.97.0` released.
 
-    + `v0.96`: no `REV-BETA` prefix, just `DreamBBS Version 0.96` 
+    + `v0.96`: no `REV-BETA` prefix, just `DreamBBS Version 0.96` ( **End-Of-Life** )
         - features: 
           * sorted common library and refined structure.
           * split out sample file to another repository.
@@ -26,20 +26,22 @@
         - `v0.96.2`: detail fixes based on `v0.96.1`
         - It is going to be End-Of-Life after `v0.97.1` released.
 
-    + `v0.97`: Version 0.97, codename `stratosphere` ( **latest** )
+    + `v0.97`: Version 0.97, codename `stratosphere` ( **Latest Release Branch** )
         - `v0.97-RCx`~`v0.97.0`: pre-release
-        - `v0.97.1`: detail fixes based on `v0.97.0` (not released yet)
+        - `v0.97.1`: detail fixes based on `v0.97.0`
+        - `v0.97.2`: detail fixes based on `v0.97.1` ( **latest** )
+        - `v0.97.3`: detail fixes based on `v0.97.2` (not released yet)
         - features in plan:
           * add simple code test utilities
           * refine layout: removing trailing whitespaces.
-    + Drop plan of `v0.98`~`v0.99` release due to big change and it will be tested for a long time.
+    + Drop plan of `v0.98`~`v0.99` release branch due to big change and it will be tested for a long time.
         - alternative preparation:
           * `v1.0-alpha1`-`v1.0-alpha4`, `v1.0-beta1`-`v1.0-beta2`, `v1.0-RC1`-`v1.0-RC2`,
     + `v1.0`: Version 1.0, codename `rimuru` (not released yet)
         - features in plan:
           * applying resizing term feature
           * port `pfterm` in this release version
-    + `v2.0`: Version 2.0
+    + `v2.0 ~`: Version 2.0 or later
         - features in plan:
           * Set workaround option for disabling DSO
           * test BBSLua/Ruby
@@ -47,12 +49,12 @@
           * test use 32bit int type variable in 64bit environment
 
 * preparing version name about `current`:
-    + `v1.0-CURRENT`: developing for preparing version 1.0.
-    + `v2.0-CURRENT`: developing for preparing version 2.0.
+    + ~`v1.0-CURRENT`: developing for preparing version 1.0.~
+    + `v2.0-CURRENT`: developing for preparing version 2.0. ( **We are HERE** )
     + `vX.0-CURRENT`: developing for preparing version X.0.
 
-* backports for `testing`:
-    + something significant bug fixes or detail changed, port this commits back to `testing` version.
+* backports for released branch:
+    + something significant bug fixes or detail changed, port this commits back to released version branch.
 
 ## other plan
 
@@ -75,5 +77,5 @@
     - features (from Rev.Beta 3):
     - fixes (from Rev.Beta 3):
     - changed (from Rev.Beta 3):
-+ v2.0:
-+ v3.0:
++ v2.0: plan to test BBSLua, re-struct some parts for enhancement.
++ v3.0: ...
