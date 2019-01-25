@@ -26,6 +26,21 @@ SRC	+= bbslua.c bbsluaext.c
 OBJ	+= bbslua.o bbsluaext.o
 .endif
 
+
+.if $(USE_BBSRUBY)
+.if $(OPSYS) == "FreeBSD"
+    LDFLAGS	+= -Wl,--no-as-needed
+.endif
+
+RUBY_CFLAGS	!= pkg-config --cflags ruby
+RUBY_LDFLAGS	!= pkg-config --libs ruby
+CFLAGS	+= ${RUBY_CFLAGS}
+LDFLAGS	+= ${RUBY_LDFLAGS}
+SRC	+= bbsruby.c
+OBJ	+= bbsruby.o
+.endif
+
+
 .if $(USE_PFTERM)
 SRC	+= pfterm.c
 OBJ	+= pfterm.o

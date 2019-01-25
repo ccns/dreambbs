@@ -20,6 +20,7 @@ DEF_YES		:= && echo "YES" || echo ""
 USE_PMORE	!= sh -c '${DEF_CMD}"M3_USE_PMORE" ${BBSCONF} ${DEF_YES}'
 USE_PFTERM	!= sh -c '${DEF_CMD}"M3_USE_PFTERM" ${BBSCONF} ${DEF_YES}'
 USE_BBSLUA	!= sh -c '${DEF_CMD}"M3_USE_BBSLUA" ${BBSCONF} ${DEF_YES}'
+USE_BBSRUBY	!= sh -c '${DEF_CMD}"M3_USE_BBSRUBY" ${BBSCONF} ${DEF_YES}'
 
 CC	= clang
 
