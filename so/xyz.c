@@ -49,7 +49,7 @@ x_siteinfo(void)
     prints("\033[1;32m  online \033[1;30m  Multi Recommend Control 多樣化推文控制系統\033[m\n");
 #endif
 #ifdef M3_USE_PMORE
-    prints("\033[1;32m  online \033[1;30m  pmore (piaip's more) 2007 w/Movie\033[m\n");
+    prints("\033[1;32m  online \033[1;30m  pmore (piaip's more) 2007+ w/Movie\033[m\n");
 #endif
 #ifdef M3_USE_PFTERM
     prints("\033[1;32m  online \033[1;30m  pfterm (piaip's flat terminal, Perfect Term)\033[m\n");
