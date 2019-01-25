@@ -6,6 +6,9 @@ This page will collect some info of how to use & how to install DreamBBS system.
 
   + [Changelog](CHANGELOG)
 
+## Latest Pre-Releases
+  + [Version 1.0-Alpha3 (codename: rimuru) ](https://github.com/ccns/dreambbs/releases/tag/v1.0-alpha3)
+
 ## Latest Releases
   + [Version 0.97.1 (codename: Stratosphere)](https://github.com/ccns/dreambbs/releases/tag/v0.97.1)
   + [Version 0.96.3 (Final)](https://github.com/ccns/dreambbs/releases/tag/v0.96.3)
