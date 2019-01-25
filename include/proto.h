@@ -232,6 +232,7 @@ void outr(char *str);
 void oflush(void);
 #else
 void move(int y, int x);
+void move_ansi(int y, int x);
 void refresh(void);
 void clear(void);
 void clrtoeol(void);

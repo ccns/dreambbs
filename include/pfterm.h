@@ -87,5 +87,7 @@ extern void (*const scr_restore)  (screen_backup_t *psb);
        void    scr_restore_free   (screen_backup_t *psb);
        void    scr_restore_keep   (const screen_backup_t *psb);
 
+void move_ansi(int y, int x);
+
 
 #endif // __PFTERM_H__

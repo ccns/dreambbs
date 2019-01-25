@@ -323,7 +323,7 @@ do_menu(
     int y)
 {
     int cur, old_cur, num, tmp;
-    char c;
+    int c;
     MENU *table[20];
     char *title;
     MENU *table_title;
@@ -481,7 +481,7 @@ int
 popupmenu_ans(char *desc[], char *title, int x, int y)
 {
     int cur, old_cur, num, tmp;
-    char c;
+    int c;
     char t[64];
     char hotkey;
 #ifdef M3_USE_PFTERM

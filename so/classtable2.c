@@ -214,7 +214,7 @@ int init_classtable(void)
 
 int main_classtable(void)
 {
-    char c;
+    int c;
     int x = 1, y = 1;
     int fd;
 
