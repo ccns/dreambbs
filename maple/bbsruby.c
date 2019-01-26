@@ -243,11 +243,11 @@ VALUE bbs_pause(VALUE self, VALUE msg)
         char buf[200];
         move(b_lines, 0);
 
-        sprintf(buf, COLOR1 " ¡¹ %s", STR2CSTR(msg));
+        sprintf(buf, COLOR1 " �� %s", STR2CSTR(msg));
         outs(buf);
 
         char buf2[200];
-        sprintf(buf2, COLOR2 " [½Ð«ö¥ô·NÁäÄ~Äò] ");
+        sprintf(buf2, COLOR2 " [�Ы����N���~��] ");
 
         int i;
         for (i = b_cols + sizeof(COLOR1) + sizeof(COLOR2) - strlen(buf) - strlen(buf2); i > 3; i--)
@@ -279,7 +279,7 @@ void out_footer(reason, msg)
         char buf[200];
         move(b_lines, 0);
 
-        sprintf(buf, COLOR1 " ¡¹ BBSRuby " BBSRUBY_VERSION_STR " (" __DATE__ " " __TIME__ ")%s", reason);
+        sprintf(buf, COLOR1 " �� BBSRuby " BBSRUBY_VERSION_STR " (" __DATE__ " " __TIME__ ")%s", reason);
         outs(buf);
 
         char buf2[200];
@@ -309,7 +309,7 @@ int getkey(double wait)
 	wait-=(int)wait;
 	tv.tv_usec = wait * 1000000;
 
-	/* ­Y¦³«öÁä¡A¦^¶Ç©Ò«öªºÁä¡F­Y delay ªº®É¶¡¨ì¤F¤´¨S¦³«öÁä¡A¦^¶Ç 0 */
+	/* �Y������A�^�ǩҫ�����F�Y delay ���ɶ���F���S������A�^�� 0 */
 
 	if (select(1, (fd_set *) &fd, NULL, NULL, &tv) > 0)
 		return vkey();
@@ -488,7 +488,7 @@ void print_exception()
                 char* buffer = RSTRING(rb_obj_as_string(exception))->as.ary;
                 clear();
                 move(0, 0);
-                outs("µ{¦¡µo¥Í¿ù»~¡AµLªkÄ~Äò°õ¦æ¡C½Ð³qª¾­ì§@ªÌ¡C\n¿ù»~¸ê°T¡G\n");
+                outs("�{���o�Ϳ��~�A�L�k�~�����C�гq����@�̡C\n���~��T�G\n");
                 outs(buffer);
                 outs("\n");
                 /*VALUE ary = rb_funcall(rb_errinfo, rb_intern("backtrace"), 0);
@@ -499,12 +499,12 @@ void print_exception()
                         outs(STR2CSTR(RARRAY(ary)->ptr[c]));
                         outs("\n");
                 }*/
-                out_footer(" (µo¥Í¿ù»~)", "«ö¥ô·NÁäªð¦^");
+                out_footer(" (�o�Ϳ��~)", "�����N���^");
 }
 
 void sig_handler(int sig)
 {
-	vmsg("ÄY­«¿ù»~¡IµLªkÄ~Äò°õ¦æ¡I");
+	vmsg("�Y�����~�I�L�k�~�����I");
 	// print_exception();
 	rb_thread_kill(rb_thread_current());
 }
@@ -571,7 +571,7 @@ void run_ruby(fpath)
 	post = ruby_script_attach(fpath, &pLen);
 	if (!post)
 	{
-		out_footer(" (¤º³¡¿ù»~)",  "«ö¥ô·NÁäªð¦^");
+		out_footer(" (�������~)",  "�����N���^");
 		return;
 	}
 
@@ -580,7 +580,7 @@ void run_ruby(fpath)
 	cEnd = post + pLen;
 	if (ruby_script_range_detect(&cStart, &cEnd) == 0 || cStart == NULL || cEnd == NULL)
 	{
-		out_footer(" (§ä¤£¨ìµ{¦¡°Ï¬q)",  "«ö¥ô·NÁäªð¦^");
+		out_footer(" (�䤣��{���Ϭq)",  "�����N���^");
                 return;
 	}
 	rb_load_file("empty.rb");
@@ -592,9 +592,9 @@ void run_ruby(fpath)
 	move(b_lines - 1, 0);
 	char msgBuf[200]="";
 	if (d == 0)
-		sprintf(msgBuf, "\033[1;41m ¡´ µ{¦¡¥¼¸ü©ú¬Û®eªºInterfaceª©¥»¡A¥i¯àµo¥Í¤£¬Û®e°ÝÃD");
+		sprintf(msgBuf, "\033[1;41m �� �{���������ۮe��Interface�����A�i��o�ͤ��ۮe���D");
 	else if (d < BBSRUBY_INTERFACE_VER)
-		sprintf(msgBuf, "\033[1;41m ¡´ µ{¦¡ª©¥»¹LÂÂ¡A¥i¯àµo¥Í¤£¬Û®e°ÝÃD");
+		sprintf(msgBuf, "\033[1;41m �� �{�������L�¡A�i��o�ͤ��ۮe���D");
 	outs(msgBuf);
 	int i;
 	for(i=0;i<b_cols - strlen(msgBuf) + 7;i++)
@@ -606,7 +606,7 @@ void run_ruby(fpath)
 	strncpy(cpBuf, cStart, cEnd - cStart);
 	cpBuf[cEnd - cStart + 1] = '\0';
 	// sprintf(evalBuf, "begin\n%s\nend", cpBuf);
-	out_footer("", "«ö¥ô·NÁä¶}©l°õ¦æ");
+	out_footer("", "�����N��}�l����");
 
 	//Before execution, preapre keyboard buffer
 	//KB_QUEUE = rb_ary_new();
@@ -614,7 +614,7 @@ void run_ruby(fpath)
 	error = ruby_exec_node(root, "BBSRuby");
 	
 	if (error == 0 || ABORT_BBSRUBY)
-		out_footer(ABORT_BBSRUBY ? " (¨Ï¥ÎªÌ¤¤Â_)" : " (µ{¦¡µ²§ô)", "«ö¥ô·NÁäªð¦^");
+		out_footer(ABORT_BBSRUBY ? " (�ϥΪ̤��_)" : " (�{������)", "�����N���^");
 	else
 	{
 		print_exception();
