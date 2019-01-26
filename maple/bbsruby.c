@@ -28,9 +28,8 @@ static inline void getxy(int *x, int *y)
 //#include "bbs.h"
 #include <ruby.h>
 #include <rubysig.h>
-#include <ruby/node.h>
+#include <node.h>
 #include <signal.h>
-#include "RubyFix.h"
 
 #define BBSRUBY_MAJOR_VERSION (0)
 #define BBSRUBY_MINOR_VERSION (3)
@@ -340,7 +339,7 @@ int getkey(double wait)
 }
 
 void BBSRubyHook(event, node, self, mid, klass)
-	rb_event_flag_t event;
+	rb_event_t event;
 	NODE *node;
 	VALUE self;
 	ID mid;
@@ -507,7 +506,7 @@ void print_exception()
 {
                 clear();
                 VALUE exception = rb_gv_get("$!");
-                char* buffer = RSTRING(rb_obj_as_string(exception))->as.ary;
+                char* buffer = RSTRING_PTR(rb_obj_as_string(exception));
                 clear();
                 move(0, 0);
                 outs("程式發生錯誤，無法繼續執行。請通知原作者。\n錯誤資訊：\n");
@@ -582,7 +581,7 @@ void run_ruby(fpath)
 		rb_set_safe_level(2);
 
 		// Hook Ruby
-		rb_add_event_hook(BBSRubyHook, RUBY_EVENT_LINE, 0);
+		rb_add_event_hook(BBSRubyHook, RUBY_EVENT_LINE);
 	}
 
 	// Run
@@ -633,7 +632,7 @@ void run_ruby(fpath)
 	//Before execution, preapre keyboard buffer
 	//KB_QUEUE = rb_ary_new();
 	NODE* root = rb_compile_string("BBSRuby", rb_str_new2(cpBuf), 1);
-	error = ruby_exec_node(root, "BBSRuby");
+	error = ruby_exec_node(root);
 	
 	if (error == 0 || ABORT_BBSRUBY)
 		out_footer(ABORT_BBSRUBY ? " (使用者中斷)" : " (程式結束)", "按任意鍵返回");
