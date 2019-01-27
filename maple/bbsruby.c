@@ -32,6 +32,8 @@ double KBHIT_TMIN = 0.001;
 double KBHIT_TMAX = 60*10;
 VALUE KB_QUEUE;
 
+int getkey(double wait);
+
 /* BBS helper class : following BBSLua SDK */
 VALUE bbs_keyToString(int key)
 {
