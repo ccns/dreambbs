@@ -1,4 +1,20 @@
 //-------------------------------------------------------
+// bbsruby environment settings
+//-------------------------------------------------------
+
+#define M3_USE_BBSRUBY
+
+#ifdef M3_USE_BBSRUBY
+#include <sys/time.h>
+#include "bbs.h"
+#endif
+
+static inline void getxy(int *x, int *y)
+{
+    getyx(y, x);
+}
+
+//-------------------------------------------------------
 // BBSRuby.c				 
 //-------------------------------------------------------
 // target : Ruby script support for BBS 			
@@ -9,7 +25,7 @@
 // This program is licensed under MIT License.
 //-------------------------------------------------------
 
-#include "bbs.h"
+//#include "bbs.h"
 #include <ruby.h>
 #include <rubysig.h>
 #include <ruby/node.h>
@@ -60,7 +76,11 @@ VALUE bbs_keyToString(int key)
 		return rb_str_new2("PGUP");
 	else if (key == KEY_PGDN)
 		return rb_str_new2("PGDN");
+#ifdef KEY_BKSP
 	else if (key == KEY_BKSP)
+#else
+	else if (key == '\b' || key == 0x7F)
+#endif
 		return rb_str_new2("BKSP");
 	else if (key == KEY_TAB)
 		return rb_str_new2("TAB");
