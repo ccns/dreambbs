@@ -27,8 +27,13 @@ static inline void getxy(int *x, int *y)
 
 //#include "bbs.h"
 #include <ruby.h>
+
+#ifndef RUBY_VM
 #include <rubysig.h>
 #include <node.h>
+typedef rb_event_t rb_event_flag_t;
+#endif
+
 #include <signal.h>
 
 #define BBSRUBY_MAJOR_VERSION (0)
@@ -112,7 +117,7 @@ VALUE bbs_clock(VALUE self)
 
 VALUE bbs_getch(VALUE self)
 {
-	//if (RARRAY(KB_QUEUE)->len == 0)
+	//if (RARRAY_LEN(KB_QUEUE) == 0)
 		int c = vkey();
 		return bbs_keyToString(c);
 	//else
@@ -121,7 +126,7 @@ VALUE bbs_getch(VALUE self)
 
 VALUE bbs_getdata(VALUE self, VALUE args)
 {
-	int count = RARRAY(args)->len;
+	int count = RARRAY_LEN(args);
 	int echo = DOECHO;
 	if (count > 1 && NUM2INT(rb_ary_entry(args, 1)) == 0)
 		echo = NOECHO;
@@ -155,16 +160,16 @@ VALUE bbs_kbhit(VALUE self, VALUE wait)
 
 void bbs_outs(VALUE self, VALUE args)
 {
-	int i, count = RARRAY(args)->len;
+	int i, count = RARRAY_LEN(args);
 	for(i=0;i<count;i++)
 	{
-		outs(STR2CSTR(rb_ary_entry(args, i)));
+		outs(StringValueCStr(RARRAY_PTR(args)[i]));
 	}
 }
 
 void bbs_title(VALUE self, VALUE msg)
 {
-	vs_bar(STR2CSTR(msg));
+	vs_bar(StringValueCStr(msg));
 }
 
 void bbs_print(VALUE self, VALUE args)
@@ -205,7 +210,7 @@ void bbs_clrtobot(VALUE self) { clrtobot(); }
 
 void bbs_refresh(VALUE self) { refresh(); }
 
-void bbs_vmsg(VALUE self, VALUE msg) { vmsg(STR2CSTR(msg)); }
+void bbs_vmsg(VALUE self, VALUE msg) { vmsg(StringValueCStr(msg)); }
 
 VALUE bbs_name(VALUE self) { return rb_str_new2(BBSNAME); }
 VALUE bbs_interface(VALUE self) { return rb_float_new(BBSRUBY_INTERFACE_VER); }
@@ -215,7 +220,7 @@ VALUE bbs_ansi_color(VALUE self, VALUE args)
 	char buf[50] = "\033[";
 	char *p = buf + strlen(buf);
 
-	int count = RARRAY(args)->len;
+	int count = RARRAY_LEN(args);
 	char sep[2] = ";";
 	int i;
 	for(i=0;i<count;i++)
@@ -242,7 +247,7 @@ VALUE bbs_esc(VALUE self)
 
 VALUE bbs_color(VALUE self, VALUE args)
 {
-	int count = RARRAY(args)->len;
+	int count = RARRAY_LEN(args);
 	VALUE str;
 	if (count == 0)
 		str = bbs_ansi_reset(self);
@@ -264,7 +269,7 @@ VALUE bbs_pause(VALUE self, VALUE msg)
         char buf[200];
         move(b_lines, 0);
 
-        sprintf(buf, COLOR1 " ★ %s", STR2CSTR(msg));
+        sprintf(buf, COLOR1 " ★ %s", StringValueCStr(msg));
         outs(buf);
 
         char buf2[200];
@@ -338,9 +343,17 @@ int getkey(double wait)
 	return 0;
 }
 
+#ifdef RUBY_VM
+void BBSRubyHook(event, data, self, mid, klass)
+#else
 void BBSRubyHook(event, node, self, mid, klass)
-	rb_event_t event;
+#endif
+	rb_event_flag_t event;
+#ifdef RUBY_VM
+	VALUE data;
+#else
 	NODE *node;
+#endif
 	VALUE self;
 	ID mid;
 	VALUE klass;
@@ -514,10 +527,10 @@ void print_exception()
                 outs("\n");
                 /*VALUE ary = rb_funcall(rb_errinfo, rb_intern("backtrace"), 0);
                 int c;
-                for(c=0;c < RARRAY(ary)->len;c++)
+                for(c=0;c < RARRAY_LEN(ary);c++)
                 {
                         outs("  from: ");
-                        outs(STR2CSTR(RARRAY(ary)->ptr[c]));
+                        outs(StringValueCStr(RARRAY_PTR(ary)[c]));
                         outs("\n");
                 }*/
                 out_footer(" (發生錯誤)", "按任意鍵返回");
@@ -581,7 +594,11 @@ void run_ruby(fpath)
 		rb_set_safe_level(2);
 
 		// Hook Ruby
+#ifdef RUBY_VM
+		rb_add_event_hook(BBSRubyHook, RUBY_EVENT_LINE, Qnil);
+#else
 		rb_add_event_hook(BBSRubyHook, RUBY_EVENT_LINE);
+#endif
 	}
 
 	// Run
@@ -631,7 +648,7 @@ void run_ruby(fpath)
 
 	//Before execution, preapre keyboard buffer
 	//KB_QUEUE = rb_ary_new();
-	NODE* root = rb_compile_string("BBSRuby", rb_str_new2(cpBuf), 1);
+	void* root = rb_compile_string("BBSRuby", rb_str_new2(cpBuf), 1);
 	error = ruby_exec_node(root);
 	
 	if (error == 0 || ABORT_BBSRUBY)
