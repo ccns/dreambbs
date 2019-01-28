@@ -7,6 +7,7 @@
 
 #ifdef M3_USE_BBSLUA
 #include <assert.h>
+#include <stdarg.h>
 #include <sys/file.h>
 #include <sys/time.h>
 #include "bbs.h"
