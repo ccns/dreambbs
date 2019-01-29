@@ -41,10 +41,10 @@
         - features in plan:
           * applying resizing term feature
           * port `pfterm` in this release version
+          * Set workaround option for disabling DSO
           * internal code refine or re-struct
     + `v2.0 ~`: Version 2.0 or later
         - features in plan:
-          * Set workaround option for disabling DSO
           * test BBSLua/Ruby
           * test simple websocket patch for Maple3
           * test use 32bit int type variable in 64bit environment
@@ -74,8 +74,10 @@
 
 ### Version Number
 + v1.0, plan to be an LTS version:
-    - release version: `v1.0.x` ~ `v1.y.x` (2<y<10)
+    - release version: `v1.0` ~ `v1.x` (2<y<10)
     - features (from Rev.Beta 3):
+        * port `pfterm` in this release version
+        * internal code refine or re-struct
     - fixes (from Rev.Beta 3):
     - changed (from Rev.Beta 3):
 + v2.0: plan to test BBSLua, re-struct some parts for enhancement.
