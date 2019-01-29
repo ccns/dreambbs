@@ -634,7 +634,6 @@ void run_ruby(
         out_footer(" (找不到程式區段)",  "按任意鍵返回");
         return;
     }
-    rb_load_file("empty.rb");
 
     // Check interface version
     float d = 0;
