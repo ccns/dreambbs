@@ -7,8 +7,8 @@
 /*-------------------------------------------------------*/
 
 
-#ifndef _THEME_H_
-#define _THEME_H_
+#ifndef THEME_H
+#define THEME_H
 
 /* ----------------------------------------------------- */
 /* ¼È¦s°Ï                                                */
@@ -268,4 +268,4 @@
 #define FILEDFG            (0)
 #define FILEDBG            (7)
 
-#endif                          /* _THEME_H_ */
+#endif                          /* THEME_H */

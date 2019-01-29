@@ -7,8 +7,8 @@
 /*-------------------------------------------------------*/
 
 
-#ifndef _PIPSTRUCT_H_
-#define _PIPSTRUCT_H_
+#ifndef PIPSTRUCT_H
+#define PIPSTRUCT_H
 
 
 /* ----------------------------------------------------- */
@@ -103,4 +103,4 @@ typedef struct user_info user_info;
 #endif  /* #if 0 */
 
 
-#endif  /* #ifndef _PIPSTRUCT_H_ */
+#endif  /* #ifndef PIPSTRUCT_H */

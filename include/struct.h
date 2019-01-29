@@ -6,8 +6,8 @@
 /* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
 
-#ifndef _STRUCT_H_
-#define _STRUCT_H_
+#ifndef STRUCT_H
+#define STRUCT_H
 
 /* screen control */
 
@@ -1169,4 +1169,4 @@ typedef struct {
     void *raw_memory;
 } screen_backup_t;
 
-#endif                          /* _STRUCT_H_ */
+#endif                          /* STRUCT_H */

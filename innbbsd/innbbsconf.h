@@ -9,8 +9,8 @@
 /*-------------------------------------------------------*/
 
 
-#ifndef _INNBBSCONF_H_
-#define _INNBBSCONF_H_
+#ifndef INNBBSCONF_H
+#define INNBBSCONF_H
 
 #include "bbs.h"
 
@@ -46,9 +46,9 @@
     /* rec_article 的設定                                  */
     /* --------------------------------------------------- */
 
-#define _NoCeM_                         /* No See Them 擋信機制 */
+#define NoCeM                           /* No See Them 擋信機制 */
 
-#undef  _KEEP_CANCEL_                   /* 保留 cancel 的文章於 deleted 板 */
+#undef  KEEP_CANCEL                     /* 保留 cancel 的文章於 deleted 板 */
 
 
 /* ----------------------------------------------------- */
@@ -68,4 +68,4 @@
 #define HIS_MAINT_HOUR  4               /* time to maintain history database */
 #define HIS_MAINT_MIN   30              /* time to maintain history database */
 
-#endif  /* _INNBBSCONF_H_ */
+#endif  /* INNBBSCONF_H */

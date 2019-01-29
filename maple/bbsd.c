@@ -7,7 +7,7 @@
 /* update : 96/10/10                                     */
 /*-------------------------------------------------------*/
 
-#define _MAIN_C_
+#define MAIN_C
 
 #include "bbs.h"
 #include "dns.h"

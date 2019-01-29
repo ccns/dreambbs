@@ -1,6 +1,6 @@
-#ifndef _DNS_H_
+#ifndef DNS_H
 
-#define _DNS_H_
+#define DNS_H
 /*-------------------------------------------------------*/
 /* lib/dns.h            ( NTHU CS MapleBBS Ver 3.00 )    */
 /*-------------------------------------------------------*/
@@ -66,4 +66,4 @@ getshort(unsigned char *c)
     return (u << 8) + c[1];
 }
 
-#endif  /* _DNS_H_ */
+#endif  /* DNS_H */

@@ -18,7 +18,7 @@
 
 #include "innbbsconf.h"
 
-#ifdef _NoCeM_
+#ifdef NoCeM
 
 #include "bbslib.h"
 #include "inntobbs.h"
@@ -507,4 +507,4 @@ receive_nocem(void)
 
     return 0;
 }
-#endif  /* _NoCeM_ */
+#endif  /* NoCeM */

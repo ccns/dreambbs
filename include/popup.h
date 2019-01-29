@@ -7,8 +7,8 @@
 /*-------------------------------------------------------*/
 
 
-#ifndef _POPUP_H_
-#define _POPUP_H_
+#ifndef POPUP_H
+#define POPUP_H
 
 #define POPUP_QUIT              0x00
 #define POPUP_FUN               0x01
@@ -21,4 +21,4 @@
 
 #define POPUP_MASK              0x000000FF
 
-#endif  /* #ifndef _POPUP_H_ */
+#endif  /* #ifndef POPUP_H */

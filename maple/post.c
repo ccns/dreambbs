@@ -615,13 +615,13 @@ do_post(
         if (curredit & EDIT_BOTH)
         {
             char *msg = "作者無法收信";
-#define _MSG_OK_        "回應至作者信箱"
+#define MSG_OK          "回應至作者信箱"
 
             rcpt = quote_user;
             if (strchr(rcpt, '@'))
             {
                 if (bsmtp(fpath, title, rcpt, 0) >= 0)
-                    msg = _MSG_OK_;
+                    msg = MSG_OK;
             }
             else
             {
@@ -631,7 +631,7 @@ do_post(
                     strcpy(post.owner, cuser.userid);
                     strcpy(post.title, title);
                     if (!rec_bot(folder, &post, sizeof(post)))
-                        msg = _MSG_OK_;
+                        msg = MSG_OK;
                 }
             }
             outs(msg);
