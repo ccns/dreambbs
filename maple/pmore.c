@@ -2835,6 +2835,14 @@ _pmore2(
                 break;
 #endif // USE_BBSLUA
 
+            /* BBS-Ruby */
+#ifdef USE_BBSRUBY
+            case '!':
+                run_ruby(* (char **)ahctx);
+                MFDISP_DIRTY();
+                break;
+#endif // USE_BBSRUBY
+
             /* debug system */
 #ifdef DEBUG
             case 'd':

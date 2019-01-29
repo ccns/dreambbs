@@ -105,6 +105,10 @@
 #define USE_BBSLUA
 #endif
 
+#ifdef  M3_USE_BBSRUBY          /* Enable BBS-Ruby */
+#define USE_BBSRUBY
+#endif
+
 /* ----------------------------------------------------- */
 /* 隨 BBS 站規模成長而擴增                               */
 /* ----------------------------------------------------- */

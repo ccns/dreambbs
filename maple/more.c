@@ -718,14 +718,25 @@ re_key:
 #endif
         }
 #endif  /* #ifdef M3_USE_BBSLUA */
+#ifdef M3_USE_BBSRUBY
 /* 081229.cache: BBSRuby */
-//      else if (key == '!')
-//      {
-//          screenline slt[T_LINES];
-//          vs_save(slt);
-//          run_ruby(fpath);
-//          vs_restore(slt);
-//      }
+        else if (key == '!')
+        {
+#ifdef M3_USE_PFTERM
+            screen_backup_t old_screen = {0};
+            scr_dump(&old_screen);
+#else
+            screenline slt[T_LINES];
+            vs_save(slt);
+#endif
+            run_ruby(fpath);
+#ifdef M3_USE_PFTERM
+            scr_restore_free(&old_screen);
+#else
+            vs_restore(slt);
+#endif
+        }
+#endif  /* #ifdef M3_USE_BBSRUBY */
 
         else            /* 其他鍵都是使用者中斷 */
         {
