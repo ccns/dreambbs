@@ -10,7 +10,7 @@
 SRCROOT	= ..
 .include "$(SRCROOT)/dreambbs.mk"
 
-HDR	= bbs.h config.h global.h modes.h perm.h struct.h
+HDR	= bbs.h config.h global.h modes.h perm.h struct.h bbs_script.h
 
 SO	= chat.so vote.so xyz.so guessnum.so \
 	  admin.so chatmenu.so  mailgem.so\

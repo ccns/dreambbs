@@ -11,6 +11,7 @@
 #include <sys/file.h>
 #include <sys/time.h>
 #include "bbs.h"
+#include "bbs_script.h"
 #endif //M3_USE_BBSLUA
 
 //////////////////////////////////////////////////////////////////////////

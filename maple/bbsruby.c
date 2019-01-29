@@ -7,6 +7,7 @@
 #ifdef M3_USE_BBSRUBY
 #include <sys/time.h>
 #include "bbs.h"
+#include "bbs_script.h"
 #endif
 
 static inline void getxy(int *x, int *y)
@@ -38,10 +39,10 @@ typedef rb_event_t rb_event_flag_t;
 
 #define BBSRUBY_MAJOR_VERSION (0)
 #define BBSRUBY_MINOR_VERSION (3)
-#define BBSRUBY_VERSION_STR "v0.3"
+//#define BBSRUBY_VERSION_STR "v0.3"
 #define BBSRUBY_SIGNATURE "###BBSRuby"
 
-double BBSRUBY_INTERFACE_VER = 0.111;
+#define BBSRUBY_INTERFACE_VER 0.111
 int ABORT_BBSRUBY = 0;
 
 #define BBSRUBY_TOC_HEADERS (6)

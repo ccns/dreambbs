@@ -9,6 +9,7 @@
 
 
 #include "bbs.h"
+#include "bbs_script.h"
 
 #include <netinet/tcp.h>
 #include <sys/wait.h>
