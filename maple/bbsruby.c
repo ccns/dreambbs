@@ -62,46 +62,46 @@ VALUE bbs_keyToString(int key)
         ABORT_BBSRUBY = 1;
 
     if (key == KEY_UP)
-        return rb_str_new2("UP");
+        return rb_str_new_cstr("UP");
     else if (key == KEY_DOWN)
-        return rb_str_new2("DOWN");
+        return rb_str_new_cstr("DOWN");
     else if (key == KEY_LEFT)
-        return rb_str_new2("LEFT");
+        return rb_str_new_cstr("LEFT");
     else if (key == KEY_RIGHT)
-        return rb_str_new2("RIGHT");
+        return rb_str_new_cstr("RIGHT");
     else if (key == KEY_HOME)
-        return rb_str_new2("HOME");
+        return rb_str_new_cstr("HOME");
     else if (key == KEY_INS)
-        return rb_str_new2("INS");
+        return rb_str_new_cstr("INS");
     else if (key == KEY_DEL)
-        return rb_str_new2("DEL");
+        return rb_str_new_cstr("DEL");
     else if (key == KEY_END)
-        return rb_str_new2("END");
+        return rb_str_new_cstr("END");
     else if (key == KEY_PGUP)
-        return rb_str_new2("PGUP");
+        return rb_str_new_cstr("PGUP");
     else if (key == KEY_PGDN)
-        return rb_str_new2("PGDN");
+        return rb_str_new_cstr("PGDN");
 #ifdef KEY_BKSP
     else if (key == KEY_BKSP)
 #else
     else if (key == '\b' || key == 0x7F)
 #endif
-        return rb_str_new2("BKSP");
+        return rb_str_new_cstr("BKSP");
     else if (key == KEY_TAB)
-        return rb_str_new2("TAB");
+        return rb_str_new_cstr("TAB");
     else if (key == KEY_ENTER)
-        return rb_str_new2("ENTER");
+        return rb_str_new_cstr("ENTER");
     else if (key > 0x00 && key < 0x1b) // Ctrl()
     {
         char buf[3];
         sprintf(buf, "^%c", key + 'A' - 1);
-        return rb_str_new2(buf);
+        return rb_str_new_cstr(buf);
     }
     else // Normal characters
     {
         char buf[2];
         sprintf(buf, "%c", key);
-        return rb_str_new2(buf);
+        return rb_str_new_cstr(buf);
     }
 }
 
@@ -140,7 +140,7 @@ VALUE bbs_getdata(VALUE self, VALUE args)
 
     vget(cur_col, cur_row, "", data, maxsize, echo);
 
-    return rb_str_new2(data);
+    return rb_str_new_cstr(data);
 }
 
 VALUE bbs_kbhit(VALUE self, VALUE wait)
@@ -185,8 +185,8 @@ VALUE bbs_print(VALUE self, VALUE args)
 VALUE bbs_getmaxyx(VALUE self)
 {
     VALUE rethash = rb_hash_new();
-    rb_hash_aset(rethash, rb_str_new2("x"), INT2NUM(b_lines + 1));
-    rb_hash_aset(rethash, rb_str_new2("y"), INT2NUM(b_cols + 1));
+    rb_hash_aset(rethash, rb_str_new_cstr("x"), INT2NUM(b_lines + 1));
+    rb_hash_aset(rethash, rb_str_new_cstr("y"), INT2NUM(b_cols + 1));
     return rethash;
 }
 
@@ -195,8 +195,8 @@ VALUE bbs_getyx(VALUE self)
     VALUE rethash = rb_hash_new();
     int cur_row, cur_col;
     getxy(&cur_col, &cur_row);
-    rb_hash_aset(rethash, rb_str_new2("x"), INT2NUM(cur_row));
-    rb_hash_aset(rethash, rb_str_new2("y"), INT2NUM(cur_col));
+    rb_hash_aset(rethash, rb_str_new_cstr("x"), INT2NUM(cur_row));
+    rb_hash_aset(rethash, rb_str_new_cstr("y"), INT2NUM(cur_col));
     return rethash;
 }
 
@@ -217,7 +217,7 @@ VALUE bbs_refresh(VALUE self) { refresh(); return Qnil; }
 
 VALUE bbs_vmsg(VALUE self, VALUE msg) { vmsg(StringValueCStr(msg)); return Qnil; }
 
-VALUE bbs_name(VALUE self) { return rb_str_new2(BBSNAME); }
+VALUE bbs_name(VALUE self) { return rb_str_new_cstr(BBSNAME); }
 VALUE bbs_interface(VALUE self) { return rb_float_new(BBSRUBY_INTERFACE_VER); }
 
 VALUE bbs_ansi_color(VALUE self, VALUE args)
@@ -237,17 +237,17 @@ VALUE bbs_ansi_color(VALUE self, VALUE args)
 
     *p++ = 'm'; *p = '\0';
 
-    return rb_str_new2(buf);
+    return rb_str_new_cstr(buf);
 }
 
 VALUE bbs_ansi_reset(VALUE self)
 {
-    return rb_str_new2("\033[m");
+    return rb_str_new_cstr("\033[m");
 }
 
 VALUE bbs_esc(VALUE self)
 {
-    return rb_str_new2("\033");
+    return rb_str_new_cstr("\033");
 }
 
 VALUE bbs_color(VALUE self, VALUE args)
@@ -267,7 +267,7 @@ VALUE bbs_color(VALUE self, VALUE args)
 
 VALUE bbs_userid(VALUE self)
 {
-    return rb_str_new2(cuser.userid);
+    return rb_str_new_cstr(cuser.userid);
 }
 
 VALUE bbs_pause(VALUE self, VALUE msg)
@@ -497,7 +497,7 @@ int ruby_script_range_detect(char **pStart, char **pEnd)
                     data[tEnd - tStart] ='\0';
                     free(TOCs_DATA[i]);
                     TOCs_DATA[i] = data;
-                    rb_hash_aset(hashTOC, rb_str_new2(TOCs_HEADER[i]), rb_str_new2(data));
+                    rb_hash_aset(hashTOC, rb_str_new_cstr(TOCs_HEADER[i]), rb_str_new_cstr(data));
                     TOCfound = 1;
                     break;
                 }
@@ -669,7 +669,7 @@ void run_ruby(
 
     //Before execution, prepare keyboard buffer
     //KB_QUEUE = rb_ary_new();
-    void* root = rb_compile_string("BBSRuby", rb_str_new2(cpBuf), 1);
+    void* root = rb_compile_string("BBSRuby", rb_str_new_cstr(cpBuf), 1);
     free(cpBuf);
     // free(evalBuf);
     error = ruby_exec_node(root);
