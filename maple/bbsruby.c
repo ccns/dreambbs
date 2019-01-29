@@ -46,7 +46,7 @@ int ABORT_BBSRUBY = 0;
 
 #define BBSRUBY_TOC_HEADERS (6)
 char* TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"Interface", "Title", "Notes", "Author", "Version", "Date"};
-char* TOCs_DATA[BBSRUBY_TOC_HEADERS] = {""};
+char* TOCs_DATA[BBSRUBY_TOC_HEADERS] = {0};
 VALUE TOCs_rubyhash;
 double KBHIT_TMIN = 0.001;
 double KBHIT_TMAX = 60*10;
@@ -495,10 +495,10 @@ int ruby_script_range_detect(char **pStart, char **pEnd)
 				{
 					tStart+=lenBuf;
 					while(*tStart == ' ') tStart++;
-				 	malloc(sizeof(char) * (tEnd - tStart) + 1);
-					char data[200];
+					char *data = malloc(sizeof(char) * (tEnd - tStart) + 1);
 					strncpy(data, tStart, tEnd - tStart);
 					data[tEnd - tStart] ='\0';
+					free(TOCs_DATA[i]);
 					TOCs_DATA[i] = data;
 					rb_hash_aset(hashTOC, rb_str_new2(TOCs_HEADER[i]), rb_str_new2(data));
 					TOCfound = 1;
@@ -633,6 +633,7 @@ void run_ruby(fpath)
 	cEnd = post + pLen;
 	if (ruby_script_range_detect(&cStart, &cEnd) == 0 || cStart == NULL || cEnd == NULL)
 	{
+		ruby_script_detach(post, pLen);
 		out_footer(" (找不到程式區段)",  "按任意鍵返回");
                 return;
 	}
@@ -654,16 +655,26 @@ void run_ruby(fpath)
 		outs(" ");
 	outs("\033[m");
 	*/
+	for (int i = 0; i < BBSRUBY_TOC_HEADERS; i++)
+	{
+		free(TOCs_DATA[i]);
+		TOCs_DATA[i] = NULL;
+	}
+
 	char *cpBuf = malloc(sizeof(char) * strlen(post) + 1);
 	// char *evalBuf = malloc(sizeof(char) * strlen(post) + 1 + 10);
 	strncpy(cpBuf, cStart, cEnd - cStart);
 	cpBuf[cEnd - cStart + 1] = '\0';
+	ruby_script_detach(post, pLen);
+
 	// sprintf(evalBuf, "begin\n%s\nend", cpBuf);
 	out_footer("", "按任意鍵開始執行");
 
 	//Before execution, preapre keyboard buffer
 	//KB_QUEUE = rb_ary_new();
 	void* root = rb_compile_string("BBSRuby", rb_str_new2(cpBuf), 1);
+	free(cpBuf);
+	// free(evalBuf);
 	error = ruby_exec_node(root);
 	
 	if (error == 0 || ABORT_BBSRUBY)
