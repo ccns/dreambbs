@@ -1,5 +1,5 @@
-#ifndef __PFTERM_H__
-#define __PFTERM_H__
+#ifndef PFTERM_H
+#define PFTERM_H
 
 //////////////////////////////////////////////////////////////////////////
 // Flat Terminal Data Type
@@ -90,4 +90,4 @@ extern void (*const scr_restore)  (screen_backup_t *psb);
 void move_ansi(int y, int x);
 
 
-#endif // __PFTERM_H__
+#endif // PFTERM_H

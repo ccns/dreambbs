@@ -6,8 +6,8 @@
 /* update :   /  /                                       */
 /*-------------------------------------------------------*/
 
-#ifndef _ATTR_H_
-#define _ATTR_H_
+#ifndef ATTR_H
+#define ATTR_H
 
 #if 0
   int key;
@@ -39,4 +39,4 @@
 #define REG_SENT                0x00000008
 #define REG_OK                  0x00000010
 
-#endif  /* ifndef _ATTR_H_ */
+#endif  /* ifndef ATTR_H */

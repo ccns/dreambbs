@@ -662,7 +662,7 @@ my_post(void)
             }
             else
             {
-#ifdef _NoCeM_
+#ifdef NoCeM
                 if (strstr(SUBJECT, "@@") && strstr(BODY, "NCM") && strstr(BODY, "PGP"))
                     rel = receive_nocem();
                 else

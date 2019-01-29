@@ -7,8 +7,8 @@
 /*-------------------------------------------------------*/
 
 
-#ifndef _MODES_H_
-#define _MODES_H_
+#ifndef MODES_H
+#define MODES_H
 
 enum
 {STRIP_ALL, ONLY_COLOR, NO_RELOAD};
@@ -73,7 +73,7 @@ enum
 #define M_BBSNET        0
 
 
-#ifdef  _MODES_C_
+#ifdef  MODES_C
 static char *ModeTypeTable[] =
 {
   "發呆",           /* M_IDLE */
@@ -117,7 +117,7 @@ static char *ModeTypeTable[] =
 };
 
 
-#endif                          /* _MODES_C_ */
+#endif                          /* MODES_C */
 
 
 /* ----------------------------------------------------- */
@@ -243,4 +243,4 @@ static char *ModeTypeTable[] =
 #define PALTYPE_BPAL    2               /* 板友名單 */
 #define PALTYPE_VOTE    3               /* 限制投票名單 */
 
-#endif                          /* _MODES_H_ */
+#endif                          /* MODES_H */

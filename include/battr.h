@@ -6,8 +6,8 @@
 /* create : 2008/10/05                                  */
 /*------------------------------------------------------*/
 
-#ifndef _BATTR_H_
-#define _BATTR_H_
+#ifndef BATTR_H
+#define BATTR_H
 
 /* ----------------------------------------------------- */
 /* Board Attribution : flags in BRD.battr                */
@@ -48,7 +48,7 @@
 /* 各種旗標的中文意義                                    */
 /* ----------------------------------------------------- */
 
-#ifdef _ADMIN_C_
+#ifdef ADMIN_C
 
 #define NUMATTRS        30
 
@@ -128,7 +128,7 @@ static char *battrs[NUMATTRS] =
       "板主可自訂發文類別",
       "RSS看板"
 };
-#endif  /* _ADMIN_C_ */
+#endif  /* ADMIN_C */
 
-#endif  /* _BATTR_H_ */
+#endif  /* BATTR_H */
 

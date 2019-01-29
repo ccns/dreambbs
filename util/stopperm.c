@@ -7,7 +7,7 @@
 /*-------------------------------------------------------*/
 
 
-#undef  _ADMIN_C_
+#undef  ADMIN_C
 #include "bbs.h"
 
 static int funo;

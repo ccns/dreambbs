@@ -1,5 +1,5 @@
-#ifndef _INNTOBBS_H_
-#define _INNTOBBS_H_
+#ifndef INNTOBBS_H
+#define INNTOBBS_H
 
 /* inntobbs.c */
 extern char *NODENAME;
@@ -14,4 +14,4 @@ extern void HISmaint(void);
 extern void HISadd(char *msgid, char *board, char *xname);
 extern int *HISfetch(char *msgid, char *board, char *xname);
 
-#endif  /* _INNTOBBS_H_ */
+#endif  /* INNTOBBS_H */

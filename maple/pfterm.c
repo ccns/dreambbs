@@ -1,7 +1,7 @@
 //////////////////////////////////////////////////////////////////////////
 // pfterm environment settings
 //////////////////////////////////////////////////////////////////////////
-#ifdef _PFTERM_TEST_MAIN
+#ifdef PFTERM_TEST_MAIN
 
 #define EXP_PFTERM
 #define DBCSAWARE
@@ -33,7 +33,7 @@
 #include <assert.h>
 #endif //M3_USE_PFTERM
 
-#endif  /* #ifdef _PFTERM_TEST_MAIN */
+#endif  /* #ifdef PFTERM_TEST_MAIN */
 
 //////////////////////////////////////////////////////////////////////////
 // pfterm debug settings
@@ -233,7 +233,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 typedef unsigned char ftchar;   // primitive character type
-#ifndef __PFTERM_H__
+#ifndef PFTERM_H
 typedef unsigned char ftattr;   // primitive attribute type
 #endif
 
@@ -2296,7 +2296,7 @@ grayout(int y, int end, int level)
 // environment specific
 //////////////////////////////////////////////////////////////////////////
 
-#ifndef _PFTERM_TEST_MAIN
+#ifndef PFTERM_TEST_MAIN
 
 void
 scr_dump(screen_backup_t *psb)
@@ -2402,7 +2402,7 @@ region_scroll_up(int top, int bottom)
     fterm_markdirty();
 }
 
-#endif  /* #ifndef _PFTERM_TEST_MAIN */
+#endif  /* #ifndef PFTERM_TEST_MAIN */
 
 //////////////////////////////////////////////////////////////////////////
 // adapter
@@ -2411,7 +2411,7 @@ region_scroll_up(int top, int bottom)
 int
 fterm_typeahead(void)
 {
-#if defined (_PFTERM_TEST_MAIN) || !defined (PMORE_HAVE_VKEY)
+#if defined (PFTERM_TEST_MAIN) || !defined (PMORE_HAVE_VKEY)
     return 0;
 #else
     return vkey_is_typeahead();
@@ -2421,7 +2421,7 @@ fterm_typeahead(void)
 void
 fterm_rawc(int c)
 {
-#ifdef _PFTERM_TEST_MAIN
+#ifdef PFTERM_TEST_MAIN
     // if (c == ESC_CHR) putchar('*'); else
     putchar(c);
 #else
@@ -2432,7 +2432,7 @@ fterm_rawc(int c)
 void
 fterm_rawnewline(void)
 {
-#ifdef _PFTERM_TEST_MAIN
+#ifdef PFTERM_TEST_MAIN
     putchar('\n');
 #else
     ochar('\r');
@@ -2443,7 +2443,7 @@ fterm_rawnewline(void)
 void
 fterm_rawflush(void)
 {
-#ifdef _PFTERM_TEST_MAIN
+#ifdef PFTERM_TEST_MAIN
     fflush(stdout);
 #else
     oflush();
@@ -2454,7 +2454,7 @@ fterm_rawflush(void)
 // test
 //////////////////////////////////////////////////////////////////////////
 
-#ifdef _PFTERM_TEST_MAIN
+#ifdef PFTERM_TEST_MAIN
 int main(int argc, char* argv[])
 {
     char buf[512];
@@ -2557,7 +2557,7 @@ int main(int argc, char* argv[])
     getchar();
     return 0;
 }
-#endif // _PFTERM_TEST_MAIN
+#endif // PFTERM_TEST_MAIN
 
 #endif // defined(EXP_PFTERM) || defined(M3_USE_PFTERM)
 
