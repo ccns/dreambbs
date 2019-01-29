@@ -846,7 +846,8 @@ m_xhlp(void)
         "翴簈╰参",
         "Ч册ぱも",
         "щ布絚",
-        "程稲矗ボ礶"
+        "程稲矗ボ礶",
+        NULL
     };
 
     static char *path[] =
