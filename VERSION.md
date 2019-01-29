@@ -37,10 +37,11 @@
     + Drop plan of `v0.98`~`v0.99` release branch due to big change and it will be tested for a long time.
         - alternative preparation:
           * ~~`v1.0-alpha1`-`v1.0-alpha3`,`v1.0-beta1`~~,`v1.0-beta2`, `v1.0-RC1`-`v1.0-RC2`,
-    + `v1.0`: Version 1.0, codename `rimuru` (not released yet)
+    + `v1.0`: Version 1.0, codename `rimuru` ( **Testing, Preparing to release** )
         - features in plan:
           * applying resizing term feature
           * port `pfterm` in this release version
+          * internal code refine or re-struct
     + `v2.0 ~`: Version 2.0 or later
         - features in plan:
           * Set workaround option for disabling DSO
