@@ -1886,7 +1886,7 @@ bbslua_logo(lua_State *L)
     }
     else
     {
-        // should be comtaible
+        // should be compatible
         // prints("¬Û®e (%.03f)", tocinterface);
     }
 
