@@ -51,12 +51,18 @@ x_siteinfo(void)
 
 #ifdef MultiRecommend
     prints(ONLINE_STR("Multi Recommend Control 妓て崩ゅ北╰参"));
+#else
+    prints(OFFLINE_STR("Multi Recommend Control 妓て崩ゅ北╰参"));
 #endif
 #ifdef M3_USE_PMORE
     prints(ONLINE_STR("pmore (piaip's more) 2007+ w/Movie"));
+#else
+    prints(OFFLINE_STR("pmore (piaip's more) 2007+ w/Movie"));
 #endif
 #ifdef M3_USE_PFTERM
     prints(ONLINE_STR("pfterm (piaip's flat terminal, Perfect Term)"));
+#else
+    prints(OFFLINE_STR("pfterm (piaip's flat terminal, Perfect Term)"));
 #endif
 #ifdef GRAYOUT
     prints(ONLINE_STR("Grayout Advanced Control 睭睭疭╰参"));
