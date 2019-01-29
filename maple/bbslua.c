@@ -1187,7 +1187,7 @@ bl_attrset(lua_State *L)
         outs(ANSI_RESET);
     for (i = 1; i <= n; i++)
     {
-        sprintf(p, "%dm",(int)lua_tointeger(L, i));
+        sprintf(p, "%dm", (int)lua_tointeger(L, i));
         outs(buf);
     }
     return 0;
