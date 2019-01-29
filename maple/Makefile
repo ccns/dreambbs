@@ -49,10 +49,10 @@ maple.p: $(SRC)
 	$(CPROTO) -o $@ $?
 
 install: $(EXE)
-	install -d $(BBSHOME)/bin
-	install -m 0755 $? $(BBSHOME)/bin
-	mv -f $(BBSHOME)/bin/bbsd $(BBSHOME)/bin/bbsd.$(BUILDTIME)
-	ln -sv $(BBSHOME)/bin/bbsd.$(BUILDTIME) $(BBSHOME)/bin/bbsd
+	install -d $(BBSHOME)/bin$(BBSVER)
+	install -m 0755 $? $(BBSHOME)/bin$(BBSVER)
+	mv -f $(BBSHOME)/bin$(BBSVER)/bbsd $(BBSHOME)/bin$(BBSVER)/bbsd.$(BUILDTIME)
+	ln -sv $(BBSHOME)/bin$(BBSVER)/bbsd.$(BUILDTIME) $(BBSHOME)/bin$(BBSVER)/bbsd
 
 clean:
 	rm -rf $(OBJ) $(EXE) $(LNFILES)  *~ *.o *.so *.p tags

@@ -54,7 +54,7 @@ m_expire(void)
     outs("清除特定看板 cancel 之文章。");
     if ((brd = ask_board(bname, BRD_R_BIT, NULL)))
     {
-        sprintf(buf, "bin/expire 999 20000 20000 \"%s\" &", brd->brdname);
+        sprintf(buf, BINARY_PREFIX"expire 999 20000 20000 \"%s\" &", brd->brdname);
         system(buf);
         logitfile(FN_EXPIRED_LOG, cuser.userid, buf);
     }
@@ -173,7 +173,7 @@ mail_to_bm(void)
         else
         {
             char command[128];
-            sprintf(command, "bin/mailtoall 2 \"%s\" \"%s\" &", fpath, title);
+            sprintf(command, BINARY_PREFIX"mailtoall 2 \"%s\" \"%s\" &", fpath, title);
             system(command);
         }
     }
@@ -273,7 +273,7 @@ mail_to_all(void)
         else
         {
             char command[128];
-            sprintf(command, "bin/mailtoall 1 \"%s\" \"%s\" &", fpath, title);
+            sprintf(command, BINARY_PREFIX"mailtoall 1 \"%s\" \"%s\" &", fpath, title);
             system(command);
         }
     }
@@ -633,7 +633,7 @@ static void
 update_match(void)
 {
     char fpath[128];
-    sprintf(fpath, "bin/match \"%s\" &", cuser.userid);
+    sprintf(fpath, BINARY_PREFIX"match \"%s\" &", cuser.userid);
     if (access(FN_MATCH_NEW, 0))
         system(fpath);
     else
@@ -644,7 +644,7 @@ static void
 update_email(void)
 {
     char fpath[128];
-    sprintf(fpath, "bin/checkemail \"%s\" &", cuser.userid);
+    sprintf(fpath, BINARY_PREFIX"checkemail \"%s\" &", cuser.userid);
     if (access(FN_ETC_EMAILADDR_ACL".new", 0))
         system(fpath);
     else
@@ -656,7 +656,7 @@ update_spammer_acl(void)
 {
     if (access(FN_ETC_SPAMMER_ACL".new", 0))
     {
-        system("bin/clean_acl " FN_ETC_SPAMMER_ACL " " FN_ETC_SPAMMER_ACL".new");
+        system(BINARY_PREFIX"clean_acl " FN_ETC_SPAMMER_ACL " " FN_ETC_SPAMMER_ACL".new");
         rename(FN_ETC_SPAMMER_ACL".new", FN_ETC_SPAMMER_ACL);
     }
     else
@@ -668,7 +668,7 @@ update_untrust_acl(void)
 {
     if (access(FN_ETC_UNTRUST_ACL".new", 0))
     {
-        system("bin/clean_acl " FN_ETC_UNTRUST_ACL " " FN_ETC_UNTRUST_ACL ".new");
+        system(BINARY_PREFIX"clean_acl " FN_ETC_UNTRUST_ACL " " FN_ETC_UNTRUST_ACL ".new");
         rename(FN_ETC_UNTRUST_ACL".new", FN_ETC_UNTRUST_ACL);
     }
     else
@@ -900,13 +900,13 @@ int select)
     switch (select)
     {
     case 1:
-        system("bin/camera");
+        system(BINARY_PREFIX"camera");
         logitfile(FN_RESET_LOG, "< 動態看板 >", NULL);
         break;
     case 2:
         if (ntime.tm_hour != 0 && ntime.tm_hour != 1)
         {
-            system("bin/account; bin/acpro");
+            system(BINARY_PREFIX"account; bin/acpro");
             board_main();
             logitfile(FN_RESET_LOG, "< 分類看板 >", NULL);
         }
@@ -927,7 +927,7 @@ int select)
         logitfile(FN_RESET_LOG, "< 異常程序 >", NULL);
         break;
     case 5:
-        system("bin/makefw");
+        system(BINARY_PREFIX"makefw");
         logitfile(FN_RESET_LOG, "< 擋信列表 >", NULL);
         break;
     case 6:
@@ -938,9 +938,9 @@ int select)
         if (ntime.tm_hour != 0 && ntime.tm_hour != 1)
         {
             system("kill -9 `cat run/bmta.pid`; "
-                   "bin/camera; "
-                   "bin/account; "
-                   "bin/acpro; "
+                   BINARY_PREFIX"camera; "
+                   BINARY_PREFIX"account; "
+                   BINARY_PREFIX"acpro; "
                    "kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`; "
                    "kill -9 `ps -auxwww | grep bbslink | awk '{print $2}'`; "
                    "kill -9 `ps -auxwww | grep bbsnnrp | awk '{print $2}'`; "

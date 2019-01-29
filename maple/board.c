@@ -1966,7 +1966,7 @@ static KeyFunc class_cb[] =
     {'E', class_edit},
     {'v', class_visit},
 #ifdef  HAVE_COUNT_BOARD
-    {'S' | XO_DL, (int (*)())"bin/brdstat.so:main_bstat"},
+    {'S' | XO_DL, (int (*)())BINARY_PREFIX"brdstat.so:main_bstat"},
 #endif
 
 #ifdef  HAVE_FAVORITE
