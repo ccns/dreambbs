@@ -1075,7 +1075,7 @@ void acct_setup(ACCT * u, int adm)
             case 'i':
                 if (!sm)
                 {
-                    sm = DL_get("bin/same_mail.so:same_mail");
+                    sm = DL_get(BINARY_PREFIX"same_mail.so:same_mail");
                 }
                 strcpy(id, u->userid);
                 if (sm)
@@ -1115,7 +1115,7 @@ void acct_setup(ACCT * u, int adm)
                 {
                     char command[256];
                     mode = select_mode(0);
-                    sprintf(command, "bin/stopperm %s %s %d %s %d &",
+                    sprintf(command, BINARY_PREFIX"stopperm %s %s %d %s %d &",
                             u->userid, u->vmail, mode, cuser.userid,
                             (int)time(0));
                     system(command);

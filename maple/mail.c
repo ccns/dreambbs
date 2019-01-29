@@ -1497,7 +1497,7 @@ mail_send(
         char *p;
 
         if ((p = str_str(acct.address, "bbc")) != NULL)  /* §ä BBC ´y­z */
-            DL_func("bin/emailpage.so:vaEMailPager", p + 3, cuser.userid, ve_title);
+            DL_func(BINARY_PREFIX"emailpage.so:vaEMailPager", p + 3, cuser.userid, ve_title);
     }
 #endif
 
@@ -2732,7 +2732,7 @@ mbox_gem(
         return XO_NONE;
     if (!mgp)
     {
-        mgp = DL_get("bin/mailgem.so:mailgem_main");
+        mgp = DL_get(BINARY_PREFIX"mailgem.so:mailgem_main");
         if (mgp)
             (*mgp)();
         else

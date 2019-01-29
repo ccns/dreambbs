@@ -8,6 +8,10 @@ BUILDTIME	!= date '+%s'
 
 BBSHOME	?= $(HOME)
 
+## BBS Release Version Prefix
+BBSCONF_ORIGIN		:= $(SRCROOT)/include/config.h
+BBSVER != grep BBSVER_PREFIX ${BBSCONF_ORIGIN} | awk 'NR==1 {printf $$3}'
+
 # rules ref: PttBBS: mbbsd/Makefile
 BBSCONF		:= $(SRCROOT)/dreambbs.conf
 DEF_PATTERN	:= ^[ \t]*\#[ \t]*define[ \t]*

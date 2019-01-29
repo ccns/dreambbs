@@ -1112,7 +1112,7 @@ static KeyFunc vote_cb[] =
     {'v', vote_join},
     {'R', vote_result},
     {'m', vote_browse},
-    {'S' | XO_DL, (int (*)(XO *xo))"bin/showvote.so:Showvote"},
+    {'S' | XO_DL, (int (*)(XO *xo))BINARY_PREFIX"showvote.so:Showvote"},
     {'E', vote_edit},
     {Ctrl('P'), vote_add},
     {Ctrl('Q'), vote_query},
