@@ -233,9 +233,9 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
 
         if (mode == M_UFILES)
         {
-            move(n + 11, 36);
+            move(n + 11, 38);
             clrtoeol();
-            move(n + 11, 36);
+            move(n + 11, 38);
             prints("(\033[1;36m%d\033[m) %s", n, desc);
         }
         else
