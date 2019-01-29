@@ -437,7 +437,7 @@ wait_input(float f, int bIgnoreBuf)
         return 1;
 
     // Check if something already in input queue,
-    // detemine if ok to break.
+    // determine if ok to break.
 
     // wait for real user interaction
     FD_ZERO(&readfds);

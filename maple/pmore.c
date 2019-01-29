@@ -3314,7 +3314,7 @@ mf_movieWaitKey(struct timeval *ptv, int dorefresh)
 
     do {
         // Check if something already in input queue,
-        // detemine if ok to break.
+        // determine if ok to break.
 #ifdef PMORE_HAVE_VKEY
         while (vkey_is_typeahead())
         {
