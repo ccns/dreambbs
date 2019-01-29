@@ -393,7 +393,7 @@ ruby_script_attach(const char *fpath, int *plen)
     if (fd < 0) return buf;
     if (fstat(fd, &st) || ((*plen = st.st_size) < 1) || S_ISDIR(st.st_mode))
     {
-        fclose(fd);
+        close(fd);
         return buf;
     }
 
