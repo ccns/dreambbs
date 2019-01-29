@@ -249,7 +249,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
 
 
             if (n < 21)
-                clrtoeol();
+                clrtohol();
 
             if (mode == M_XFILES)
             {
@@ -269,7 +269,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
         if (mode == M_XFILES)
             clrtoeol();
         else
-            clrtoeol();
+            clrtohol();
     }
 
     vget(b_lines, 0, "請選擇檔案編號，或按 [0] 取消：", buf, 3, DOECHO);

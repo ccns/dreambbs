@@ -225,6 +225,7 @@ int t_banmsg(void);
 
 /* visio.c */
 void bell(void);
+void clrtohol(void);
 #ifdef M3_USE_PFTERM
 void ochar(int ch);
 void outl(int line, char *msg);
@@ -246,7 +247,6 @@ void restore_foot(screenline *slp);
 int vs_save(screenline *slp);
 void vs_restore(screenline *slp);
 void clearange(int from, int to);
-void clrtohol(void);
 #endif  /* #ifdef M3_USE_PFTERM */
 
 void getyx(int *y, int *x);
