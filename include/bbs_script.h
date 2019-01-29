@@ -52,6 +52,10 @@
 
 /* BBS-Lua */
 
+#ifdef M3_USE_BBSLUA
+  #include <lua.h>
+#endif
+
 #define HAVE_BBSLUA
 
 // Must be consistent with "bbslua.c"

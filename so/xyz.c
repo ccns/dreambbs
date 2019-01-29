@@ -60,11 +60,13 @@ x_siteinfo(void)
 #else
     prints("\x1b[1;31m  offline\x1b[1;30m  Grayout Advanced Control 淡入淡出特效系統\x1b[m\n");
 #endif
-#ifdef M3_USE_BBSLUA
-#define STR(str)  #str
-    prints("\x1b[1;32m  online \x1b[1;30m  BBS-Lua " STR(BBSLUA_INTERFACE_VER) "\x1b[m\n");
-#undef  STR
-#endif
+#ifdef HAVE_BBSLUA
+  #ifdef M3_USE_BBSLUA
+    prints("\x1b[1;32m  online \x1b[1;30m  BBS-Lua " BBSLUA_INTERFACE_VER_STR " / " LUA_RELEASE "\x1b[m\n");
+  #else
+    prints("\x1b[1;31m  offline\x1b[1;30m  BBS-Lua " BBSLUA_INTERFACE_VER_STR "\x1b[m\n");
+  #endif
+#endif  // #ifdef HAVE_BBSLUA
 
 /*
 #ifdef SMerge
