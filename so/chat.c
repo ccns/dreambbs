@@ -42,6 +42,34 @@ chat_topic(void)
 }
 
 #ifdef M3_CHAT_SCROLL_MODE
+#  ifdef M3_USE_PFTERM
+static void
+printchatline(
+    char *msg)
+{
+    int line;
+
+    line = chatline;
+    move(line, 0);
+    clrtoeol();
+    outs(msg);
+    outc('\n');
+
+    if (frec) {
+        fprintf(frec, "%s\n", msg);
+    }
+
+    if (chatline >= stop_line-1) {
+        region_scroll_up(2, stop_line-1);
+    } else {
+        chatline++;
+    }
+
+    move(chatline, 0);
+    outs("\033[0m¡÷");
+    clrtoeol();
+}
+#  else /* #ifdef M3_USE_PFTERM */
 static void
 printchatline(
     char *msg)
@@ -82,7 +110,8 @@ printchatline(
     clrtoeol();
     chatline = line;
 }
-#else
+#  endif /* #ifdef M3_USE_PFTERM */
+#else /* #ifdef M3_CHAT_SCROLL_MODE */
 static void
 printchatline(
 char *msg)
