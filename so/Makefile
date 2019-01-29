@@ -21,6 +21,16 @@ LUA_CFLAGS	!= pkg-config --cflags ${LUA_PKG_NAME}
 CFLAGS	+= ${LUA_CFLAGS}
 .endif
 
+
+.if $(USE_BBSRUBY)
+.if $(ARCHI) == "64"
+    RUBY_CFLAGS_CMD	= | sed 's/x86_64/i386/'
+.endif
+
+RUBY_CFLAGS	!= pkg-config --cflags ruby-2.2 ${RUBY_CFLAGS_CMD}
+CFLAGS	+= ${RUBY_CFLAGS}
+.endif
+
 HDR	= bbs.h config.h global.h modes.h perm.h struct.h bbs_script.h
 
 SO	= chat.so vote.so xyz.so guessnum.so \

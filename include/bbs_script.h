@@ -66,6 +66,13 @@
 
 /* BBS-Ruby */
 
+#ifdef M3_USE_BBSRUBY
+  #include <ruby/version.h>
+
+  #define RUBY_RELEASE_STR \
+      VER_PATCH_STR(RUBY_API_VERSION_MAJOR, RUBY_API_VERSION_MINOR, RUBY_API_VERSION_TEENY)
+#endif
+
 #define HAVE_BBSRUBY
 
 // Must be consistent with "bbsruby.c"

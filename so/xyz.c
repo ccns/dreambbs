@@ -74,12 +74,14 @@ x_siteinfo(void)
 #else
     prints("\x1b[1;31m  offline\x1b[1;30m  Smart Merge 修文自動合併\x1b[m\n");
 #endif
-#ifdef BBSRuby
-    prints("\x1b[1;32m  online \x1b[1;30m  (EXP) BBSRuby v0.3\x1b[m\n");
-#else
-    prints("\x1b[1;31m  offline\x1b[1;30m  (EXP) BBSRuby v0.3\x1b[m\n");
-#endif
 */
+#ifdef HAVE_BBSRUBY
+  #ifdef M3_USE_BBSRUBY
+    prints("\x1b[1;32m  online \x1b[1;30m  (EXP) BBSRuby " BBSRUBY_VERSION_STR " Interface: " BBSRUBY_INTERFACE_VER_STR " / Ruby " RUBY_RELEASE_STR "\x1b[m\n");
+  #else
+    prints("\x1b[1;31m  offline\x1b[1;30m  (EXP) BBSRuby " BBSRUBY_VERSION_STR " Interface: " BBSRUBY_INTERFACE_VER_STR "\x1b[m\n");
+  #endif
+#endif
 
 #else
 //    prints("\x1b[1;30mModules & Plug-in: None\x1b[m\n");
