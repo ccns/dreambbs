@@ -1,4 +1,4 @@
-#define _ADMIN_C_
+#define ADMIN_C
 
 #include "bbs.h"
 

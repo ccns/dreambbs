@@ -6,7 +6,7 @@
 /* update :                                              */
 /*-------------------------------------------------------*/
 
-#define _MODES_C_
+#define MODES_C
 
 #include "bbs.h"
 #include <sys/shm.h>

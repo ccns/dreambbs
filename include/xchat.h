@@ -7,8 +7,8 @@
 /*-------------------------------------------------------*/
 
 
-#ifndef _XCHAT_H_
-#define _XCHAT_H_
+#ifndef XCHAT_H
+#define XCHAT_H
 
 
 #define XCHAT_VERSION_MAJOR 3
@@ -130,4 +130,4 @@ nextword (
 #define MSG_UNCLOAK     "我要重現江湖了...."
 
 
-#endif                          /* _XCHAT_H_ */
+#endif                          /* XCHAT_H */

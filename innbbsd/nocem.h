@@ -3,8 +3,8 @@
     Yen-Ming Lee <leeym@cae.ce.ntu.edu.tw>
 */
 
-#ifndef _NOCEM_H_
-#define _NOCEM_H_
+#ifndef NOCEM_H
+#define NOCEM_H
 
 #define NCMINNBBSVER    "NoCeM-INNBBSD-0.8"     /* ª©¥»«Å§i */
 
@@ -38,4 +38,4 @@ extern newsfeeds_t *search_newsfeeds_bygroup(char *newsgroup);
 extern ncmperm_t *search_issuer(char *issuer, char *type);
 extern int receive_nocem(void);
 
-#endif  /* _NOCEM_H_ */
+#endif  /* NOCEM_H */

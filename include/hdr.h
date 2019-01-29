@@ -1,5 +1,5 @@
-#ifndef _HDR_H_
-#define _HDR_H_
+#ifndef HDR_H
+#define HDR_H
 
 #include <sys/types.h>
 
@@ -97,4 +97,4 @@ typedef struct
 #define HDR_LINK        0x00000400      /* link() */
 #define HDR_COPY        0x00000800      /* copy() */
 
-#endif  /* _HDR_H_ */
+#endif  /* HDR_H */

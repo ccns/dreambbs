@@ -7,7 +7,7 @@
 /* update : NULL                                         */
 /*-------------------------------------------------------*/
 
-#undef  _MODES_C_
+#undef  MODES_C
 #include "bbs.h"
 
 extern XZ xz[];

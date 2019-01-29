@@ -1,5 +1,5 @@
-#ifndef _SPLAY_H_
-#define _SPLAY_H_
+#ifndef SPLAY_H
+#define SPLAY_H
 
 typedef struct SplayNode
 {
@@ -10,4 +10,4 @@ typedef struct SplayNode
 
 SplayNode *splay_in(SplayNode *top, void *data, int (*compare)(const void *x, const void *y));
 
-#endif /* _SPLAY_H_ */
+#endif /* SPLAY_H */

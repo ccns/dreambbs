@@ -208,7 +208,7 @@ bbspost_add(
 /* ----------------------------------------------------- */
 
 
-#ifdef _KEEP_CANCEL_
+#ifdef KEEP_CANCEL
 static inline void
 move_post(
     HDR *hdr,
@@ -282,7 +282,7 @@ bbspost_cancel(
                     if (hdr.xmode & POST_MARKED)
                         break;
 
-#ifdef _KEEP_CANCEL_
+#ifdef KEEP_CANCEL
                     /* itoc.030613: 保留被 cancel 的文章於 [deleted] */
                     move_post(&hdr, BN_DELETED, fpath);
 #else
@@ -362,7 +362,7 @@ cancel_article(
             {
                 *str = '\0';
 
-#ifdef _NoCeM_
+#ifdef NoCeM
                 /* gslin.000607: ncm_issuer 可以砍別站發的信 */
                 if (strcmp(xfrom, cancelfrom) && !search_issuer(FROM, NULL))
 #else
@@ -442,7 +442,7 @@ is_spam(
 /* ----------------------------------------------------- */
 
 
-#ifndef _NoCeM_
+#ifndef NoCeM
 static
 #endif
 newsfeeds_t *
@@ -518,7 +518,7 @@ receive_article(void)
 
             if (is_spam(nf->board, myaddr, mynick))
             {
-#ifdef _KEEP_CANCEL_
+#ifdef KEEP_CANCEL
                 bbspost_add(BN_DELETED, myaddr, mynick);
 #endif
                 break;

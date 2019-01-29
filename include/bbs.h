@@ -6,8 +6,8 @@
 /* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
 
-#ifndef _BBS_H_
-#define _BBS_H_
+#ifndef BBS_H
+#define BBS_H
 
 #include <stdio.h>
 #include <setjmp.h>
@@ -91,4 +91,4 @@
 
 #endif  /* #ifndef _BBTP_ */
 
-#endif                          /* _BBS_H_ */
+#endif                          /* BBS_H */

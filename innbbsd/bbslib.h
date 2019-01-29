@@ -1,5 +1,5 @@
-#ifndef _BBSLIB_H_
-#define _BBSLIB_H_
+#ifndef BBSLIB_H
+#define BBSLIB_H
 
 /* bbslib.c */
 extern int NLCOUNT;
@@ -30,9 +30,9 @@ extern void gb2b5(char *str);
 extern void init_bshm(void);
 extern int cancel_article(char *msgid);
 extern int receive_article(void);
-#ifdef _NoCeM_
+#ifdef NoCeM
 extern int receive_nocem(void);
 extern int read_ncmperm(void);
 #endif
 
-#endif  /* _BBSLIB_H_ */
+#endif  /* BBSLIB_H */

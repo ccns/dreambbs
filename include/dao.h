@@ -1,5 +1,5 @@
-#ifndef _DAO_H_
-#define _DAO_H_
+#ifndef DAO_H
+#define DAO_H
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -148,4 +148,4 @@ void syncnow(void);
 /* xwrite.c */
 int xwrite(int fd, char *data, int size);
 
-#endif  /* _DAO_H_ */
+#endif  /* DAO_H */
