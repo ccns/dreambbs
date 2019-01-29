@@ -636,9 +636,9 @@ void run_ruby(
     rb_load_file("empty.rb");
 
     // Check interface version
-    /*
-    float d;
-    sscanf(TOCs_DATA[4], "%f", d);
+    float d = 0;
+    if (TOCs_DATA[4])
+        d = atof(TOCs_DATA[4]);
     move(b_lines - 1, 0);
     char msgBuf[200]="";
     if (d == 0)
@@ -650,7 +650,7 @@ void run_ruby(
     for(i=0;i<b_cols - strlen(msgBuf) + 7;i++)
         outs(" ");
     outs("\033[m");
-    */
+
     for (int i = 0; i < BBSRUBY_TOC_HEADERS; i++)
     {
         free(TOCs_DATA[i]);
