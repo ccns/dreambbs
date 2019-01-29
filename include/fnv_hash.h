@@ -80,14 +80,14 @@ fnv1a_32_dbcs_strcase(const char *str, Fnv32_t hval)
 	while ((c = *s++) != 0) {
 		if (isDBCS)
 		{
-		    // 2nd DBCS 
-		    isDBCS = 0;
+			// 2nd DBCS 
+			isDBCS = 0;
 		} else {
-		    // ASCII?
-		    if ( c < 0x80)
-			c = toupper(c);
-		    else
-			isDBCS = 1;
+			// ASCII?
+			if ( c < 0x80)
+				c = toupper(c);
+			else
+				isDBCS = 1;
 		}
 		hval ^= c;
 		hval *= FNV_32_PRIME;
