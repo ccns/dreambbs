@@ -80,7 +80,7 @@ fnv1a_32_dbcs_strcase(const char *str, Fnv32_t hval)
 	while ((c = *s++) != 0) {
 		if (isDBCS)
 		{
-			// 2nd DBCS 
+			// 2nd DBCS
 			isDBCS = 0;
 		} else {
 			// ASCII?
