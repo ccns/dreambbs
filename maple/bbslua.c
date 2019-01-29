@@ -142,7 +142,7 @@ OpenCreate(const char *path, int flags)
 }
 
 #ifndef VBUFLEN
-#define VBUFLEN		(ANSILINELEN)
+#define VBUFLEN     (ANSILINELEN)
 #endif
 static int
 vmsgf(const char *fmt, ...)
