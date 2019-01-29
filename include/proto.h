@@ -226,6 +226,9 @@ int t_banmsg(void);
 int bbslua(const char *fpath);
 int bbslua_isHeader(const char *ps, const char *pe);
 
+/* bbsruby.c */
+void run_ruby(char *fpath);
+
 /* visio.c */
 void bell(void);
 void clrtohol(void);
