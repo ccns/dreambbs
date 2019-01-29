@@ -44,31 +44,6 @@ chat_topic(void)
 #ifdef M3_CHAT_SCROLL_MODE
 static void
 printchatline(
-char *msg)
-{
-    int line;
-
-    line = chatline;
-    move(line, 0);
-    outs(msg);
-    outc('\n');
-
-    if (frec)
-        fprintf(frec, "%s\n", msg);
-
-    if (fmail)
-        fprintf(fmail, "%s\n", msg);
-
-    if (++line == stop_line)
-        line = 2;
-    move(line, 0);
-    outs("¡÷");
-    clrtoeol();
-    chatline = line;
-}
-#else
-static void
-printchatline(
     char *msg)
 {
     int line;
@@ -104,6 +79,31 @@ printchatline(
     move(line, 0);
     clrtoeol();
     outs("\033[0m¡÷");
+    clrtoeol();
+    chatline = line;
+}
+#else
+static void
+printchatline(
+char *msg)
+{
+    int line;
+
+    line = chatline;
+    move(line, 0);
+    outs(msg);
+    outc('\n');
+
+    if (frec)
+        fprintf(frec, "%s\n", msg);
+
+    if (fmail)
+        fprintf(fmail, "%s\n", msg);
+
+    if (++line == stop_line)
+        line = 2;
+    move(line, 0);
+    outs("¡÷");
     clrtoeol();
     chatline = line;
 }
