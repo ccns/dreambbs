@@ -303,9 +303,9 @@ VALUE bbs_toc(VALUE self)
 }
 /* End of BBS helper class */
 
-void out_footer(reason, msg)
-	char* reason;
-	char* msg;
+void out_footer(
+	char* reason,
+	char* msg)
 {
         char buf[200];
         move(b_lines, 0);
@@ -348,20 +348,16 @@ int getkey(double wait)
 	return 0;
 }
 
+void BBSRubyHook(
+	rb_event_flag_t event,
 #ifdef RUBY_VM
-void BBSRubyHook(event, data, self, mid, klass)
+	VALUE data,
 #else
-void BBSRubyHook(event, node, self, mid, klass)
+	NODE *node,
 #endif
-	rb_event_flag_t event;
-#ifdef RUBY_VM
-	VALUE data;
-#else
-	NODE *node;
-#endif
-	VALUE self;
-	ID mid;
-	VALUE klass;
+	VALUE self,
+	ID mid,
+	VALUE klass)
 {
 	static int hook_count = 0;
 	hook_count++;
@@ -520,7 +516,7 @@ void run_ruby_test(void)
 	run_ruby("test.rb");
 }
 
-void print_exception()
+void print_exception(void)
 {
                 clear();
                 VALUE exception = rb_gv_get("$!");
@@ -548,8 +544,8 @@ void sig_handler(int sig)
 	rb_thread_kill(rb_thread_current());
 }
 
-void run_ruby(fpath)
-	char* fpath;
+void run_ruby(
+	char* fpath)
 {
 	static int ruby_inited = 0;
 	ABORT_BBSRUBY = 0;
