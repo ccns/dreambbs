@@ -133,5 +133,5 @@ fnv1a_64_strcase(const char *str, Fnv64_t hval)
 	return hval;
 }
 
-#define FNV1A_CHAR(c,hval) do { hval^=(unsigned char)c; hval*=FNV_32_PRIME; } while(0)
+#define FNV1A_CHAR(c,hval) do { hval^=(unsigned char)c; hval*=FNV_32_PRIME; } while (0)
 #endif

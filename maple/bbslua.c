@@ -885,7 +885,7 @@ bl_addstr(lua_State* L)
     for (i = 1; i <= n; i++)
     {
         const char *s = lua_tostring(L, i);
-        if(s)
+        if (s)
             outs(s);
     }
     return 0;
@@ -2040,7 +2040,7 @@ void bbslua_loadLatest(lua_State *L,
         xps = xbs;
         xpe = xps + xsz;
 
-        if(!bbslua_detect_range(&xps, &xpe, &xlineshift))
+        if (!bbslua_detect_range(&xps, &xpe, &xlineshift))
         {
             // not detected
             bbslua_detach(xbs, xsz);

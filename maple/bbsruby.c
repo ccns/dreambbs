@@ -162,7 +162,7 @@ VALUE bbs_kbhit(VALUE self, VALUE wait)
 VALUE bbs_outs(VALUE self, VALUE args)
 {
     int i, count = RARRAY_LEN(args);
-    for(i=0;i<count;i++)
+    for (i=0;i<count;i++)
     {
         outs(StringValueCStr(RARRAY_PTR(args)[i]));
     }
@@ -228,7 +228,7 @@ VALUE bbs_ansi_color(VALUE self, VALUE args)
     int count = RARRAY_LEN(args);
     char sep[2] = ";";
     int i;
-    for(i=0;i<count;i++)
+    for (i=0;i<count;i++)
     {
         int ansi = NUM2INT(rb_ary_entry(args, i));
         sprintf(p, "%d%s", ansi, (i == count - 1) ? "" : sep);
@@ -424,13 +424,13 @@ int ruby_script_range_detect(char **pStart, char **pEnd)
     cEnd = *pEnd;
 
     // Find head signature first
-    while(cStart + lenSignature < cEnd)
+    while (cStart + lenSignature < cEnd)
     {
         if (strncmp(cStart, BBSRUBY_SIGNATURE, lenSignature) == 0)
             break;
 
         // Skip to next line
-        while(cStart + lenSignature < cEnd && *cStart++ != '\n');
+        while (cStart + lenSignature < cEnd && *cStart++ != '\n');
     }
 
     if (cStart + lenSignature >= *pEnd) // Cannot found signature.
@@ -440,13 +440,13 @@ int ruby_script_range_detect(char **pStart, char **pEnd)
 
     // Find the tail signature
     cEnd = cStart + 1;
-    while(cEnd + lenSignature < *pEnd)
+    while (cEnd + lenSignature < *pEnd)
     {
         if (strncmp(cEnd, BBSRUBY_SIGNATURE, lenSignature) == 0)
             break;
 
         // Skip to next line
-        while(cEnd + lenSignature < *pEnd && *cEnd++ != '\n');
+        while (cEnd + lenSignature < *pEnd && *cEnd++ != '\n');
     }
 
     if (cEnd + lenSignature >= *pEnd)
@@ -463,7 +463,7 @@ int ruby_script_range_detect(char **pStart, char **pEnd)
     }
 
     cEnd = *pEnd;
-    while(cEnd > cStart && !*cEnd)
+    while (cEnd > cStart && !*cEnd)
         cEnd--;
     *pEnd = cEnd;
 
@@ -473,17 +473,17 @@ int ruby_script_range_detect(char **pStart, char **pEnd)
     VALUE hashTOC = rb_hash_new();
     int TOCfound = 0;
     // In this implement, we only allow TOC to be put BEFORE the actual script code
-    while(tStart < cEnd)
+    while (tStart < cEnd)
     {
         if (tStart[0] == '#' && tStart[1] == '#' && tStart[2] == '#')
         {
             tStart += 3;
             tEnd = tStart + 1;
-            while(*tEnd != '\n') tEnd++;
+            while (*tEnd != '\n') tEnd++;
 
             // Possible TOC item, check patterns
             int i;
-            for(i=0;i<BBSRUBY_TOC_HEADERS;i++)
+            for (i=0;i<BBSRUBY_TOC_HEADERS;i++)
             {
                 char preBuf[100];
                 sprintf(preBuf, "%s:", TOCs_HEADER[i]);
@@ -491,7 +491,7 @@ int ruby_script_range_detect(char **pStart, char **pEnd)
                 if (strncmp(tStart, preBuf, lenBuf) == 0)
                 {
                     tStart+=lenBuf;
-                    while(*tStart == ' ') tStart++;
+                    while (*tStart == ' ') tStart++;
                     char *data = malloc(sizeof(char) * (tEnd - tStart) + 1);
                     strncpy(data, tStart, tEnd - tStart);
                     data[tEnd - tStart] ='\0';
@@ -529,7 +529,7 @@ void print_exception(void)
     outs("\n");
     /*VALUE ary = rb_funcall(rb_errinfo, rb_intern("backtrace"), 0);
     int c;
-    for(c=0;c < RARRAY_LEN(ary);c++)
+    for (c=0;c < RARRAY_LEN(ary);c++)
     {
         outs("  from: ");
         outs(StringValueCStr(RARRAY_PTR(ary)[c]));
@@ -552,7 +552,7 @@ void run_ruby(
     ABORT_BBSRUBY = 0;
 
     int sig;
-    for(sig=0;sig<31;sig++)
+    for (sig=0;sig<31;sig++)
         signal(sig, sig_handler);
 
     // Initialize Ruby interpreter first.
@@ -648,7 +648,7 @@ void run_ruby(
         sprintf(msgBuf, "\033[1;41m ● 程式版本過舊，可能發生不相容問題");
     outs(msgBuf);
     int i;
-    for(i=0;i<b_cols - strlen(msgBuf) + 7;i++)
+    for (i=0;i<b_cols - strlen(msgBuf) + 7;i++)
         outs(" ");
     outs("\033[m");
 
