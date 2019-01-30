@@ -205,7 +205,7 @@ addpost: addpost.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
 install: $(EXE)
-	install -m 0700 $? $(HOME)/bin/
+	install -m 0700 $? $(HOME)/bin$(BBSVER)
 
 clean:
 	rm -fr $(EXE) *.o *.bak *.BAK *.log *~

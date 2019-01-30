@@ -3169,7 +3169,7 @@ sig_over(void)
   fclose(flog);
   for (fd = 0; fd < 64; fd++)
     close(fd);
-  execl("bin/xchatd", NULL);
+  execl(BINARY_PREFIX"xchatd", NULL);
 }
 
 static void

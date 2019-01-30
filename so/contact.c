@@ -194,7 +194,7 @@ XO *xo)
 		(*pop3)(contact->email);
 	else
 	{
-		pop3 = DL_get("bin/pop3mail.so:Pop3Contact");
+		pop3 = DL_get(BINARY_PREFIX"pop3mail.so:Pop3Contact");
 		if (pop3)
 			(*pop3)(contact->email);
 		else

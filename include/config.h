@@ -36,6 +36,8 @@
 
 #define BBSVERNAME      "DreamBBS"                  /* 版本名稱 */
 #define BBSVERSION      "Version 0.97.2"            /* 版本編號 */
+#define BBSVER_PREFIX   "-0.97"                     /* Version prefix for naming */
+#define BINARY_PREFIX   "bin"BBSVER_PREFIX"/"       /* todo: move it to global.h, or merge global.h to here */
 
 #ifndef SYSOPNICK
 #define SYSOPNICK       "夢之精靈"                  /* SYSOP 暱稱 */

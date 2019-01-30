@@ -4145,12 +4145,12 @@ KeyFunc post_cb[] =
 	{'X', post_recommend},
         {'%', post_recommend},           /* r2.20170802: 與 itoc 版熱鍵通用 */
 	//  {'o', post_recommend_options},
-	{'o' | XO_DL, (int (*)(XO *xo))"bin/cleanrecommend.so:clean"},
+	{'o' | XO_DL, (int (*)(XO *xo))BINARY_PREFIX"cleanrecommend.so:clean"},
 	{Ctrl('S'), post_resetscore},         /* cache.090416: 推文設定 */
 #endif
 
-	{'R' | XO_DL, (int (*)(XO *xo))"bin/vote.so:vote_result"},
-	{'V' | XO_DL, (int (*)(XO *xo))"bin/vote.so:XoVote"},
+	{'R' | XO_DL, (int (*)(XO *xo))BINARY_PREFIX"vote.so:vote_result"},
+	{'V' | XO_DL, (int (*)(XO *xo))BINARY_PREFIX"vote.so:XoVote"},
 
 	{'b', post_memo},
 

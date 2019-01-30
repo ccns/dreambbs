@@ -864,7 +864,7 @@ z_download(
     waitpid(pid, &status, 0);
   else
   {
-    execl("bin/sz", "-a", buf, NULL);
+    execl(BINARY_PREFIX"sz", "-a", buf, NULL);
     exit(0);
   }
   unlink(buf);
@@ -1900,7 +1900,7 @@ xover(
 	  static int (*mgp)(XO *xo);
 	  if(!mgp)
 	  {
-	    mgp = DL_get("bin/mailgem.so:mailgem_gather");
+	    mgp = DL_get(BINARY_PREFIX"mailgem.so:mailgem_gather");
 	    if(mgp)
 	      cmd = (*mgp)(xo);
 	    else

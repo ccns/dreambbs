@@ -44,7 +44,7 @@ all:
 so: $(SO)
 
 install: $(EXE)
-	install -m 0700 $(SO) $(HOME)/bin
+	install -m 0700 $(SO) $(HOME)/bin$(BBSVER)
 
 clean: /tmp
 	rm -fr $(SO) *~ *.o

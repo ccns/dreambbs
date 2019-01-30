@@ -666,7 +666,7 @@ AddRequestTimes(void)
 		if (!vget(b_lines, 0, "加幾次：", buf, 5, DOECHO))
 			return 0;
 		times = atoi(buf);
-		sprintf(buf, "bin/addsong %d %d &", n, times);
+		sprintf(buf, BINARY_PREFIX"addsong %d %d &", n, times);
 		if (vans("確定增加嗎？ [y/N]") == 'y')
 			system(buf);
 	}
