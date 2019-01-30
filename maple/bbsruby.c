@@ -367,8 +367,8 @@ void BBSRubyHook(
         int key = getkey(KBHIT_TMIN);
         if (key == Ctrl('C'))
             ABORT_BBSRUBY = 1;
-        else
-            rb_ary_push(KB_QUEUE, INT2NUM(key));
+        // else
+            // rb_ary_push(KB_QUEUE, INT2NUM(key));
         hook_count = 0;
     }
 
