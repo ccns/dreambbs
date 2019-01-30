@@ -41,7 +41,7 @@
         - features in plan:
           * port `pfterm` in this release version
           * internal code refine or re-struct
-    + `v2.0`: Version 2.0, codename `mirimu`
+    + `v2.0`: Version 2.0, codename `milim`
         - features in plan:
           * applying resizing term feature
           * Set workaround option for disabling DSO
