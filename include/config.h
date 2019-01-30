@@ -35,7 +35,7 @@
 #endif
 
 #define BBSVERNAME      "DreamBBS"                  /* 版本名稱 */
-#define BBSVERSION      "Version 0.97.2"            /* 版本編號 */
+#define BBSVERSION      "Version 0.97.3"            /* 版本編號 */
 #define BBSVER_PREFIX   "-0.97"                     /* Version prefix for naming */
 #define BINARY_PREFIX   "bin"BBSVER_PREFIX"/"       /* todo: move it to global.h, or merge global.h to here */
 
