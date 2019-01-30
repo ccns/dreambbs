@@ -551,9 +551,8 @@ void run_ruby(
     static int ruby_inited = 0;
     ABORT_BBSRUBY = 0;
 
-    int sig;
-    for (sig=0; sig<31; sig++)
-        signal(sig, sig_handler);
+    void (*old_sig_handler)(int);
+    old_sig_handler = signal(SIGSEGV, sig_handler);
 
     // Initialize Ruby interpreter first.
     if (!ruby_inited)
@@ -622,6 +621,7 @@ void run_ruby(
     if (!post)
     {
         out_footer(" (內部錯誤)",  "按任意鍵返回");
+        signal(SIGSEGV, old_sig_handler);
         return;
     }
 
@@ -632,6 +632,7 @@ void run_ruby(
     {
         ruby_script_detach(post, pLen);
         out_footer(" (找不到程式區段)",  "按任意鍵返回");
+        signal(SIGSEGV, old_sig_handler);
         return;
     }
 
@@ -679,4 +680,5 @@ void run_ruby(
     {
         print_exception();
     }
+    signal(SIGSEGV, old_sig_handler);
 }
