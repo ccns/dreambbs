@@ -391,13 +391,13 @@
 #define ERR_UID         "錯誤的使用者代號"
 #define ERR_PASSWD      "密碼輸入錯誤"
 
-#define MSG_POST        "\033[34;46m 文章選讀 \033[31;47m (y)\033[30m回應 \033[31m(=\\[]<>-+;'`jk)\033[30m相關主題 \033[31m(/?)\033[30m搜尋標題 \033[31m(aA)\033[30m搜尋作者 \033[m"
+#define MSG_POST        "\x1b[34;46m 文章選讀 \x1b[31;47m (y)\x1b[30m回應 \x1b[31m(=\\[]<>-+;'`jk)\x1b[30m相關主題 \x1b[31m(/?)\x1b[30m搜尋標題 \x1b[31m(aA)\x1b[30m搜尋作者 \x1b[m"
 
-#define MSG_MAILER      "\033[34;46m 魚雁往返 \033[31;47m (r)\033[30m回信 \033[31m(x)\033[30m轉達 \033[31m(y)\033[30m群組回信 \033[31m(d)\033[30m刪除 \033[31m[m]\033[30m標記 \033[m"
+#define MSG_MAILER      "\x1b[34;46m 魚雁往返 \x1b[31;47m (r)\x1b[30m回信 \x1b[31m(x)\x1b[30m轉達 \x1b[31m(y)\x1b[30m群組回信 \x1b[31m(d)\x1b[30m刪除 \x1b[31m[m]\x1b[30m標記 \x1b[m"
 
-#define MSG_GEM         "\033[34;46m 閱\讀精華 \033[31;47m (=\\[]<>-+jk)\033[30m相關主題 \033[31m(/?aA)\033[30m搜尋標題作者 \033[31m(↑↓)\033[30m上下 \033[31m(←)\033[30m離開 \033[m"
+#define MSG_GEM         "\x1b[34;46m 閱\讀精華 \x1b[31;47m (=\\[]<>-+jk)\x1b[30m相關主題 \x1b[31m(/?aA)\x1b[30m搜尋標題作者 \x1b[31m(↑↓)\x1b[30m上下 \x1b[31m(←)\x1b[30m離開 \x1b[m"
 
-#define MSG_CHAT_ULIST  "\033[7m 使用者代號    目前狀態  │ 使用者代號    目前狀態  │ 使用者代號    目前狀態 \033[m"
+#define MSG_CHAT_ULIST  "\x1b[7m 使用者代號    目前狀態  │ 使用者代號    目前狀態  │ 使用者代號    目前狀態 \x1b[m"
 
 /* ----------------------------------------------------- */
 /* GLOBAL VARIABLE                                       */
@@ -433,7 +433,7 @@ VAR char ve_title[80];
 VAR char currboard[IDLEN + 2];          /* name of currently selected board */
 VAR char currBM[BMLEN + 7];             /* BM of currently selected board */
 VAR int  currbno        INI(-1);
-VAR char str_ransi[4]   INI("\033[m");
+VAR char str_ransi[4]   INI("\x1b[m");
 VAR unsigned int currbattr;            /* currently selected board battr */
 VAR char ipv4addr[15];                 /* MAX_LEN: strlen(aaa.bbb.ccc.ddd) => 15 */
 

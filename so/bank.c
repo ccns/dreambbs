@@ -132,8 +132,8 @@ TransferAccount(void)
     vs_bar("匯款");
 
     move (9, 8);
-    prints("\033[1;33m轉帳相關規定： \033[36m１. 一次最少要給 100 夢幣(稅前)。\n"
-        "                       ２. 收手續費 10 %%。\033[m");
+    prints("\x1b[1;33m轉帳相關規定： \x1b[36m１. 一次最少要給 100 夢幣(稅前)。\n"
+        "                       ２. 收手續費 10 %%。\x1b[m");
 
     if (acct_get("要匯給誰：", &acct)<1)
         return 0;
@@ -210,7 +210,7 @@ TransferAccount(void)
         fprintf(fp, "作者: %s (%s)\n", cuser.userid, cuser.username);
         fprintf(fp, "標題: 匯款通知\n");
         fprintf(fp, "時間: %s\n", date);
-        fprintf(fp, "\n\n%s 送給你 \033[1;31m%d\033[m 夢幣，請笑納~\n", cuser.userid, (int)atoi(buf));
+        fprintf(fp, "\n\n%s 送給你 \x1b[1;31m%d\x1b[m 夢幣，請笑納~\n", cuser.userid, (int)atoi(buf));
         fprintf(fp, "\n\n匯款理由：%s\n", str);
         fclose(fp);
         rec_add(folder, &xhdr, sizeof(HDR));
@@ -359,7 +359,7 @@ int bank_main(void)
     clear();
 
     move(0, 0);
-    prints("\033[1;33;42m                            " BOARDNAME "    銀行                                   \033[m\n\n");
+    prints("\x1b[1;33;42m                            " BOARDNAME "    銀行                                   \x1b[m\n\n");
     move(10, 0);
     prints("  您的帳號資訊如下    １. 用優良點數換取夢幣\n\n");
     prints("                      ２. 用夢幣換取優良點數\n\n");

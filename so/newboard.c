@@ -184,7 +184,7 @@ XO *xo)
     vs_head("連署系統", NULL);
     outs(
         "  [←]離開 [→]閱\讀 [^P]發表 [d]刪除 [j]加入連署 [TAB]精華區 [h]elp\n"
-        "\033[44m  編號   日 期 舉辦人        看  版  標  題                                   \033[m");
+        "\x1b[44m  編號   日 期 舉辦人        看  版  標  題                                   \x1b[m");
     return nbrd_body(xo);
 }
 
@@ -870,7 +870,7 @@ XO *xo)
     nbrd = (NBRD *) xo_pool + (xo->pos - xo->top);
 
     if (ask_board(xboard, BRD_W_BIT,
-                  "\n\n\033[1;33m請挑選適當的看板，切勿轉貼超過三板。\033[m\n\n")
+                  "\n\n\x1b[1;33m請挑選適當的看板，切勿轉貼超過三板。\x1b[m\n\n")
         && (*xboard || xo->dir[0] == 'u'))
     {
         if (*xboard == 0)

@@ -586,7 +586,7 @@ tn_login(void)
 
     /* 081119.cache: 正常顯示進站畫面 */
     move(b_lines, 0);
-    prints("\033[m參觀用帳號：\033[1;32mguest\033[m  申請新帳號：\033[1;31mnew\033[m");
+    prints("\x1b[m參觀用帳號：\x1b[1;32mguest\x1b[m  申請新帳號：\x1b[1;31mnew\x1b[m");
 
     /*move(b_lines, 0);
     outs("※ 無法連線時，請利用 port 3456 上站");*/
@@ -902,9 +902,9 @@ tn_login(void)
 #if 1
         /* Thor.990318: 為防止有大機率 有人在welcome畫面回認證信, 故移至此 */
         move(b_lines - 3, 0);
-        prints("★ 歡迎您第 \033[1;33m%d\033[m 度拜訪本站，我記得那天是 \033[1;33m%s\033[m\n",
+        prints("★ 歡迎您第 \x1b[1;33m%d\x1b[m 度拜訪本站，我記得那天是 \x1b[1;33m%s\x1b[m\n",
             cuser.numlogins, Ctime(&cuser.lastlogin));
-        prints("★ 來自於 \033[1;33m%s\033[m", cuser.lasthost);
+        prints("★ 來自於 \x1b[1;33m%s\x1b[m", cuser.lasthost);
         /* Thor.990321: 將vmsg移至後方, 防止有人在此時回認證信 */
 #endif
 
@@ -1131,8 +1131,8 @@ tn_main(void)
 
     //getloadavg(load, 3);
     prints( MYHOSTNAME " ⊙ " OWNER " ⊙ " BBSIP " [" BBSVERNAME " " BBSVERSION "]\n"
-"歡迎光臨【\033[1;33;46m %s \033[m】。系統負載：%.2f %.2f %.2f - [%s] 線上人數 [%d/%d]",
-        str_site, load[0], load[1], load[2], load[0]>16?"\033[1;37;41m過高\033[m":load[0]>8?"\033[1;37;42m偏高\033[m":"\033[1;37;44m正常\033[m", ushm->count, MAXACTIVE);
+"歡迎光臨【\x1b[1;33;46m %s \x1b[m】。系統負載：%.2f %.2f %.2f - [%s] 線上人數 [%d/%d]",
+        str_site, load[0], load[1], load[2], load[0]>16?"\x1b[1;37;41m過高\x1b[m":load[0]>8?"\x1b[1;37;42m偏高\x1b[m":"\x1b[1;37;44m正常\x1b[m", ushm->count, MAXACTIVE);
 
     film_out(FILM_INCOME, 2);
 

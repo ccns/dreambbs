@@ -780,7 +780,7 @@ out_rle(
                 if (cc=='\n' && film)
                 {
                     getyx(&y, &x);
-                    outs("\033[m\0");
+                    outs("\x1b[m\0");
                     clrtoeol();
                     move(y + 1, 0/*item_length[count++]*/);
                 }
@@ -808,7 +808,7 @@ out_rle(
         if (cc=='\n' && film)
         {
             getyx(&y, &x);
-            outs("\033[m\0");
+            outs("\x1b[m\0");
             clrtoeol();
             move(y + 1, 0/*item_length[count++]*/);
 

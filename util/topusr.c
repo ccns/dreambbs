@@ -101,19 +101,19 @@ write_data(
         switch(i)
         {
             case 0:
-                color = "\033[1;31m";
+                color = "\x1b[1;31m";
                 break;
             case 1:
-                color = "\033[1;32m";
+                color = "\x1b[1;32m";
                 break;
             case 2:
-                color = "\033[1;33m";
+                color = "\x1b[1;33m";
                 break;
             default:
-                color = "\033[m";
+                color = "\x1b[m";
         }
 
-        printf("%s[%2d]  %-25s%5d\033[m    [%2d]  %-25s%5d\n", color, i+1, buf1, data[i].num,
+        printf("%s[%2d]  %-25s%5d\x1b[m    [%2d]  %-25s%5d\n", color, i+1, buf1, data[i].num,
                i+TOPNUM_HALF+1, buf2, data[i+TOPNUM_HALF].num);
     }
 
@@ -186,8 +186,8 @@ main(void)
 
     chdir(BBSHOME);
 
-    write_data("\033[33;1m===========\033[44m    Ω计逼︽篯    \033[40m============\033[m", toplogins, 0);
-    write_data("\033[33;1m===========\033[44m    拈Ω计逼︽篯    \033[40m============\033[m", topposts, 0);
-    write_data("\033[33;1m===========\033[44m    本计逼︽篯    \033[40m============\033[m", topstay, 1);
+    write_data("\x1b[33;1m===========\x1b[44m    Ω计逼︽篯    \x1b[40m============\x1b[m", toplogins, 0);
+    write_data("\x1b[33;1m===========\x1b[44m    拈Ω计逼︽篯    \x1b[40m============\x1b[m", topposts, 0);
+    write_data("\x1b[33;1m===========\x1b[44m    本计逼︽篯    \x1b[40m============\x1b[m", topstay, 1);
     return 0;
 }

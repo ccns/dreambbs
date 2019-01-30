@@ -73,7 +73,7 @@ static int banmail_head(XO * xo)
 {
     vs_head("擋信列表", str_site);
     outs("  [←]離開 ^P)新增 c)修改 d)刪除 S)重整 [h]elp\n"
-         "\033[30;47m  編號  使用率 更新期 模  式  擋  信  內  容                                  \033[m");
+         "\x1b[30;47m  編號  使用率 更新期 模  式  擋  信  內  容                                  \x1b[m");
     return banmail_body(xo);
 }
 
@@ -102,7 +102,7 @@ static int banmail_sync(XO * xo)
     if ((fd = open(fpath, O_RDWR, 0600)) < 0)
         return XO_NONE;
 
-    outz("★ 資料整理稽核中，請稍候 \033[5m...\033[m");
+    outz("★ 資料整理稽核中，請稍候 \x1b[5m...\x1b[m");
     refresh();
 
     if (!fstat(fd, &st) && (size = st.st_size) > 0)

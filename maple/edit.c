@@ -619,12 +619,12 @@ ve_ansi(void)
     if (mode & VE_ANSI)
     {
         move(b_lines - 1, 55);
-        outs("\033[1;33;40mB\033[41mR\033[42mG\033[43mY\033[44mL\033[45mP\033[46mC\033[47mW\033[m");
+        outs("\x1b[1;33;40mB\x1b[41mR\x1b[42mG\x1b[43mY\x1b[44mL\x1b[45mP\x1b[46mC\x1b[47mW\x1b[m");
         if ((fg = vget(b_lines, 0, "請輸入  亮度/前景/背景[正常白字黑底][0wb]：",
                 apos = ans, 4, LCECHO)))
         {
             color = buf;
-            strcpy(color, "\033[");
+            strcpy(color, "\x1b[");
             if (isdigit(fg))
             {
                 sprintf(color, "%s%c", color, *(apos++));
@@ -932,7 +932,7 @@ quote_line(
             strstr(str, ") 提到:\n"))
             return 0;
     }
-    return (*str != '\n' && (strncmp(str, "\033[m\n", 4)));
+    return (*str != '\n' && (strncmp(str, "\x1b[m\n", 4)));
 }
 
 /* ----------------------------------------------------- */
@@ -1299,7 +1299,7 @@ ve_show_sign(
     {
         for (j=1; j<=3; j++)
         {
-            prints("\033[36m【簽名檔.%d】\033[m\n", j);
+            prints("\x1b[36m【簽名檔.%d】\x1b[m\n", j);
             for (i=0; i<MAXSIGLINES; i++)
             {
                 if (fgets(buf, 256, fp))
@@ -1364,7 +1364,7 @@ ve_select_sign(
                 }
             }
             if (used)
-                fprintf(fp, "\033[m\n");
+                fprintf(fp, "\x1b[m\n");
             else
                 fprintf(fp, "\n");
             fclose(fd);
@@ -1437,7 +1437,7 @@ ve_filer(
         break;
 
     case 'a':
-        /* outs("文章\033[1m 沒有 \033[m存入"); */
+        /* outs("文章\x1b[1m 沒有 \x1b[m存入"); */
         ans = -1;
         break;
 
@@ -1524,11 +1524,11 @@ ve_filer(
                     if (v || (bbsmode != M_POST))
                         fprintf(fp, "%s\n", msg);
                     else
-                        fprintf(fp, "%s\033[m\n", msg);
+                        fprintf(fp, "%s\x1b[m\n", msg);
                 }
                 else if (bbsmode == M_POST)
                 {
-                    fprintf(fp, "\033[m\n");
+                    fprintf(fp, "\x1b[m\n");
                 }
             }
             free(p);
@@ -1811,15 +1811,15 @@ vedit(
             move(b_lines, 0);
             clrtoeol();
 #ifdef EVERY_BIFF
-            prints("%s\033[0;31;47m  (Ctrl-Z)\033[30m 操作說明  \033[31m(^w, ^x)\033[30m 檔案處理 ║%s│%s║%5d:%3d  \033[m",
-                mode & VE_BIFF ? "\033[1;41;37;5m  郵差來了  ": mode & VE_BIFFN ? "\033[1;41;37;5m  訊差來了  ":"\033[0;34;46m  編輯文章  ",
+            prints("%s\x1b[0;31;47m  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s║%5d:%3d  \x1b[m",
+                mode & VE_BIFF ? "\x1b[1;41;37;5m  郵差來了  ": mode & VE_BIFFN ? "\x1b[1;41;37;5m  訊差來了  ":"\x1b[0;34;46m  編輯文章  ",
                 mode & VE_INSERT ? "插入" : "取代",
                 mode & VE_ANSI ? "ANSI" : "一般",
                 ve_lno, 1 + (mode & VE_ANSI ? pos : col));
                 /* Thor.980805: UFO_BIFF everywhere */
 #else
 
-            prints("\033[34;46m  編輯文章  \033[31;47m  (Ctrl-Z)\033[30m 操作說明  \033[31m(^w, ^x)\033[30m 檔案處理 ║%s│%s║%5d:%3d  \033[m",
+            prints("\x1b[34;46m  編輯文章  \x1b[31;47m  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s║%5d:%3d  \x1b[m",
                 mode & VE_INSERT ? "插入" : "取代",
                 mode & VE_ANSI ? "ANSI" : "一般",
                 ve_lno, 1 + (mode & VE_ANSI ? pos : col));

@@ -149,7 +149,7 @@ HDR *ghdr)
     gtype = 0;
 
     if (!HAS_PERM(PERM_SYSOP) && (xmode & (GEM_RESTRICT | GEM_LOCK)))
-        prints("\033[1;33m資料保密！\033[m\n");
+        prints("\x1b[1;33m資料保密！\x1b[m\n");
     else if ((gtype == 0) || (xmode & GEM_GOPHER))
         prints("%-.64s\n", ghdr->title);
 }
@@ -197,8 +197,8 @@ XO *xo)
 
     outs(
         "  [←]離開 [→]瀏覽 [o]點歌到動態看板 [m]點歌到信箱 [q]查詢剩餘次數 [h]說明 \n");
-    outs("\033[44m"
-        "  編號     主              題                           [編      選] [日  期]\033[m");
+    outs("\x1b[44m"
+        "  編號     主              題                           [編      選] [日  期]\x1b[m");
     return song_body(xo);
 }
 
@@ -373,7 +373,7 @@ XO *xo)
 
         fputs(tmp, xfp);
     }
-    sprintf(buf, "\033[1;33m%s\033[m 想對 \033[1;33m%s\033[m 說 %s\n\033[30m%s\033[m\n", flag ? "某人" : cuser.userid, idwho, want_say, ctime(&now));
+    sprintf(buf, "\x1b[1;33m%s\x1b[m 想對 \x1b[1;33m%s\x1b[m 說 %s\n\x1b[30m%s\x1b[m\n", flag ? "某人" : cuser.userid, idwho, want_say, ctime(&now));
     fputs(buf, xfp);
 
     fclose(fp);
@@ -470,7 +470,7 @@ XO *xo)
         fputs(tmp, xfp);
     }
     now = time(0);
-    sprintf(buf, "\033[1;33m%s\033[m 想對 \033[1;33m%s\033[m 說 %s\n\033[30m%s\033[m\n", cuser.userid, acct.userid, want_say, ctime(&now));
+    sprintf(buf, "\x1b[1;33m%s\x1b[m 想對 \x1b[1;33m%s\x1b[m 說 %s\n\x1b[30m%s\x1b[m\n", cuser.userid, acct.userid, want_say, ctime(&now));
     //sprintf(buf, "%s\n", ctime(&now));
     fputs(buf, xfp);
     fclose(fp);

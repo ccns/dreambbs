@@ -216,7 +216,7 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
     }
 
     /* 印出 (x, y + strip_ansi_len(msg)) 這個字及後面的控制碼 */
-    prints("\033[%d;%d;%dm", hl, fg, bg);
+    prints("\x1b[%d;%d;%dm", hl, fg, bg);
     /* 此字若是中文字的尾碼，就不印 */
     outc(in_chi ? ' ' : ch);
 
@@ -240,8 +240,8 @@ draw_item(
 {
     char buf[128];
 
-    sprintf(buf, " │%s%c %c%c%c%-25s  \033[m│ ",
-        mode ? COLOR4 : "\033[30;47m", mode ? '>' : ' ',
+    sprintf(buf, " │%s%c %c%c%c%-25s  \x1b[m│ ",
+        mode ? COLOR4 : "\x1b[30;47m", mode ? '>' : ' ',
         (hotkey == *desc) ? '[' : '(', *desc,
         (hotkey == *desc) ? ']' : ')', desc + 1);
 
@@ -262,7 +262,7 @@ draw_menu(
 
     draw_line(x++, y, " ╭────────────────╮ ");
 
-    sprintf(buf, " │" COLOR4 "  %-28s  \033[m│ ", title);
+    sprintf(buf, " │" COLOR4 "  %-28s  \x1b[m│ ", title);
     draw_line(x++, y, buf);
 
     draw_line(x++, y, " ├────────────────┤ ");
@@ -437,7 +437,7 @@ pmsg2(char *msg)
     strcat(buf, "╮");
     draw_line(x++, y, buf);
 
-    sprintf(buf, "│" COLOR4 "  %-*s  \033[m│", len, "請按任意鍵繼續..");
+    sprintf(buf, "│" COLOR4 "  %-*s  \x1b[m│", len, "請按任意鍵繼續..");
     draw_line(x++, y, buf);
 
     strcpy(buf, "├");
@@ -446,7 +446,7 @@ pmsg2(char *msg)
     strcat(buf, "┤");
     draw_line(x++, y, buf);
 
-    sprintf(buf, "│\033[30;47m  %-*s  \033[m│", len, msg);
+    sprintf(buf, "│\x1b[30;47m  %-*s  \x1b[m│", len, msg);
     draw_line(x++, y, buf);
 
     strcpy(buf, "╰");

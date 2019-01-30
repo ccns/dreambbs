@@ -57,8 +57,8 @@ main(
     {
         struct tm *ptime = localtime(&bmw.btime);
         count++;
-        printf("%s%s(%02d:%02d)¡G%s\033[m\n",
-               bmw.sender == acct.userno ? "¡¸" : "\033[32m¡¹",
+        printf("%s%s(%02d:%02d)¡G%s\x1b[m\n",
+               bmw.sender == acct.userno ? "¡¸" : "\x1b[32m¡¹",
                bmw.userid, ptime->tm_hour, ptime->tm_min, bmw.msg);
     }
     close(inf);

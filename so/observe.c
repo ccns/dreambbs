@@ -69,7 +69,7 @@ XO *xo)
     vs_head("觀察名單列表", str_site);
     outs(
         "  [←]離開 ^P)新增 c)修改 d)刪除 S)重整 [h]elp\n"
-        "\033[30;47m  編號 使用者ID      說明                                                     \033[m");
+        "\x1b[30;47m  編號 使用者ID      說明                                                     \x1b[m");
     return observe_body(xo);
 }
 
@@ -104,7 +104,7 @@ XO *xo)
     if ((fd = open(fpath, O_RDWR, 0600)) < 0)
         return XO_NONE;
 
-    outz("★ 資料整理稽核中，請稍候 \033[5m...\033[m");
+    outz("★ 資料整理稽核中，請稍候 \x1b[5m...\x1b[m");
     refresh();
 
     if (!fstat(fd, &st) && (size = st.st_size) > 0)

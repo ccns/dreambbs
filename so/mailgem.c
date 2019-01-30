@@ -115,8 +115,8 @@ XO *xo)
     outs("  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明 "); /*r2.20170802: disable "Z" option
                                     in case of confusion*/
     outs(buf);
-    outs("\033[44m"
-        "  編號     主              題                           [編      選] [日  期]\033[m");
+    outs("\x1b[44m"
+        "  編號     主              題                           [編      選] [日  期]\x1b[m");
     return mailgem_body(xo);
 }
 
@@ -884,7 +884,7 @@ XO *xo)
 
 
     if (ask_board(xboard, BRD_W_BIT,
-                  "\n\n\033[1;33m請挑選適當的看板，切勿轉貼超過三板。\033[m\n\n"))
+                  "\n\n\x1b[1;33m請挑選適當的看板，切勿轉貼超過三板。\x1b[m\n\n"))
     {
         if (*xboard == 0)
             strcpy(xboard, currboard);

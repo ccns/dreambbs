@@ -89,11 +89,11 @@ XO *xo)
     if (mode == 0)
         outs(
             "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 M)搬移 TAB)動詞 f)訊息 [h]elp\n"
-            "\033[30;47m  編號 動詞      中文   訊息一                                                \033[m");
+            "\x1b[30;47m  編號 動詞      中文   訊息一                                                \x1b[m");
     else
         outs(
             "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 M)搬移 TAB)動詞 f)訊息 [h]elp\n"
-            "\033[30;47m  編號 動詞      中文   訊息二                                                \033[m");
+            "\x1b[30;47m  編號 動詞      中文   訊息二                                                \x1b[m");
     return chat_body(xo);
 }
 
@@ -279,7 +279,7 @@ XO *xo)
     if ((fd = open(xo->dir, O_RDWR, 0600)) < 0)
         return 0;
 
-    outz("★ 資料整理稽核中，請稍候 \033[5m...\033[m");
+    outz("★ 資料整理稽核中，請稍候 \x1b[5m...\x1b[m");
     refresh();
 
     if (!fstat(fd, &st) && (size = st.st_size) > 0)

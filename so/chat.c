@@ -66,7 +66,7 @@ printchatline(
     }
 
     move(chatline, 0);
-    outs("\033[0m¡÷");
+    outs("\x1b[0m¡÷");
     clrtoeol();
 }
 #  else /* #ifdef M3_USE_PFTERM */
@@ -106,7 +106,7 @@ printchatline(
 
     move(line, 0);
     clrtoeol();
-    outs("\033[0m¡÷");
+    outs("\x1b[0m¡÷");
     clrtoeol();
     chatline = line;
 }
@@ -438,7 +438,7 @@ char *arg)
                     sprintf(buf, "%s(%s", cuser.userid, cuser.username);
                     len = strlen(str);
                     buf[71 - len] = '\0';
-                    sprintf(cmsg.msg, "\033[1;33;46m¡¹ %s) \033[37;45m %s \033[m", buf, str);
+                    sprintf(cmsg.msg, "\x1b[1;33;46m¡¹ %s) \x1b[37;45m %s \x1b[m", buf, str);
 
                     cmsg.caller = cutmp;
                     cmsg.sender = cuser.userno;

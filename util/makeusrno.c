@@ -165,8 +165,8 @@ bmw_sync(
             {
                 struct tm *ptime = localtime(&bmw.btime);
 
-                fprintf(fout, "%s%s(%02d:%02d)¡G%s\033[m\n",
-                    bmw.sender == userno ? "¡¸" : "\033[32m¡¹",
+                fprintf(fout, "%s%s(%02d:%02d)¡G%s\x1b[m\n",
+                    bmw.sender == userno ? "¡¸" : "\x1b[32m¡¹",
                     bmw.userid, ptime->tm_hour, ptime->tm_min, bmw.msg);
             }
             fclose(fout);

@@ -374,7 +374,7 @@ ulist_body(
     pickup *pp;
     UTMP *up;
     int cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor, colortmp;
-    char buf[8], color[20], ship[80], *wcolor[7] = {"\033[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
+    char buf[8], color[20], ship[80], *wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 
 //  pal = cuser.ufo;
 
@@ -424,7 +424,7 @@ ulist_body(
                 cnt,
                 color, up->userid,
                 (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
-                colortmp > 0 ? "\033[m" : "",
+                colortmp > 0 ? "\x1b[m" : "",
                 (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
                 HIDDEN_SRC : up->from, diff, diffmsg,
                 bmode(up, 0), buf);
@@ -558,8 +558,8 @@ static int
 ulist_neck(
     XO *xo)
 {
-    printf("  排列方式：[\033[1m%s\033[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\033[m\n"
-        "\033[30;47m No.  代號         %-22s%-13s   PM %-14s閒置 \033[m\n",
+    printf("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\x1b[m\n"
+        "\x1b[30;47m No.  代號         %-22s%-13s   PM %-14s閒置 \x1b[m\n",
         msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num,
         "暱  稱", "故鄉", "動態");
     return ulist_body(xo);
