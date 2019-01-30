@@ -1214,7 +1214,7 @@ class_body(
                     num = brd->bpost;
                 }
 
-                str = brd->blast > brd_visit[chn] ? "\033[1;31m★\033[m" : "☆";
+                str = brd->blast > brd_visit[chn] ? "\x1b[1;31m★\x1b[m" : "☆";
 
                 char tmp[BTLEN + 1];
 
@@ -1241,48 +1241,48 @@ class_body(
                 bno = brd - bshm->bcache;
                 bno = bshm->mantime[bno];
                 if (brd->bvote)
-                    str2 = "\033[1;33m  投 \033[m";
+                    str2 = "\x1b[1;33m  投 \x1b[m";
                 else if (bno > 999)
-                    str2 = "\033[1;32m  夯 \033[m";
+                    str2 = "\x1b[1;32m  夯 \x1b[m";
                 else if (bno > 799)
-                    str2 = "\033[1;35m  夯 \033[m";
+                    str2 = "\x1b[1;35m  夯 \x1b[m";
                 else if (bno > 699)
-                    str2 = "\033[1;33m  夯 \033[m";
+                    str2 = "\x1b[1;33m  夯 \x1b[m";
                 else if (bno > 599)
-                    str2 = "\033[1;42m  爆 \033[m";
+                    str2 = "\x1b[1;42m  爆 \x1b[m";
                 else if (bno > 499)
-                    str2 = "\033[1;45m  爆 \033[m";
+                    str2 = "\x1b[1;45m  爆 \x1b[m";
                 else if (bno > 449)
-                    str2 = "\033[1;44m  爆 \033[m";
+                    str2 = "\x1b[1;44m  爆 \x1b[m";
                 else if (bno > 399)
-                    str2 = "\033[1;32m  爆 \033[m";
+                    str2 = "\x1b[1;32m  爆 \x1b[m";
                 else if (bno > 349)
-                    str2 = "\033[1;35m  爆 \033[m";
+                    str2 = "\x1b[1;35m  爆 \x1b[m";
                 else if (bno > 299)
-                    str2 = "\033[1;33m  爆 \033[m";
+                    str2 = "\x1b[1;33m  爆 \x1b[m";
                 else if (bno > 249)
-                    str2 = "\033[1;36m  爆 \033[m";
+                    str2 = "\x1b[1;36m  爆 \x1b[m";
                 else if (bno > 199)
-                    str2 = "\033[1;31m  爆 \033[m";
+                    str2 = "\x1b[1;31m  爆 \x1b[m";
                 else if (bno > 149)
-                    str2 = "\033[1;37m  爆 \033[m";
+                    str2 = "\x1b[1;37m  爆 \x1b[m";
                 else if (bno > 99)
-                    str2 = "\033[1;31m HOT \033[m";
+                    str2 = "\x1b[1;31m HOT \x1b[m";
                 else if (bno > 49)
-                    str2 = "\033[1;37m HOT \033[m";
+                    str2 = "\x1b[1;37m HOT \x1b[m";
                 else if (bno > 1)    /* r2.170810: let somebody know which board is still "alive" :P */
                     sprintf(str2 = buf2, "  %2d ", bno);
                 else
                     str2 = "     ";
 //注意有三格空白, 因為 HOT 是三個 char 故更改排版
-//              prints("\033[%d;4%d;37m%6d%s%s%c%-13s\033[%sm%-4s %s%-33.32s%s%s%.13s", mode, mode?cuser.barcolor:0, num, str, mode ? "\033[37m" : "\033[m",
-//              brdtype, brd->brdname, buf, brd->class, mode ? "\033[37m" : "\033[m", brd->title, brd->bvote ? "\x1b[1;33m  投 " : str2, mode ? "\033[37m" : "\033[m", brd->BM);
+//              prints("\x1b[%d;4%d;37m%6d%s%s%c%-13s\x1b[%sm%-4s %s%-33.32s%s%s%.13s", mode, mode?cuser.barcolor:0, num, str, mode ? "\x1b[37m" : "\x1b[m",
+//              brdtype, brd->brdname, buf, brd->class, mode ? "\x1b[37m" : "\x1b[m", brd->title, brd->bvote ? "\x1b[1;33m  投 " : str2, mode ? "\x1b[37m" : "\x1b[m", brd->BM);
 
                 sprintf(buf, "%d;3%d", brd->color/10, brd->color%10);
-//              prints("%6d%s%c%-13s\033[%sm%-4s \033[m%-36s%c %.13s", num, str,
-//              prints("%6d%s%c%-13s\033[%sm%-4s \033[m%s%c %.13s", num, str,
+//              prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-36s%c %.13s", num, str,
+//              prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%s%c %.13s", num, str,
 
-                prints("%6d%s%c%-13s\033[%sm%-4s \033[m%-32s %s", num, str, brdtype, brd->brdname, buf, brd->class, tmp, str2);
+                prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-32s %s", num, str, brdtype, brd->brdname, buf, brd->class, tmp, str2);
 
                 strcpy(tmp, brd->BM);
                 if (tmp[13] & 0x80)
@@ -1588,7 +1588,7 @@ XoAuthor(
             char folder[80];
             HDR *head, *tail;
 
-            sprintf(folder, "《尋找指定作者》看版：%s \033[5m...\033[m",
+            sprintf(folder, "《尋找指定作者》看版：%s \x1b[5m...\x1b[m",
                 brd[chn].brdname);
             outz(folder);
             refresh();
@@ -2158,7 +2158,7 @@ Boards(void)
 }
 
 #ifdef HAVE_MULTI_CROSSPOST
-#define MSG_CC "\033[32m[看板群組名單]\033[m\n"
+#define MSG_CC "\x1b[32m[看板群組名單]\x1b[m\n"
 
 int
 brd_list(

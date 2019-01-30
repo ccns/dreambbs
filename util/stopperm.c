@@ -354,7 +354,7 @@ add_deny_exer(
         else
             fprintf(fp, "期間: %s%s，期限一過自動復權。\n\n", check_time ? "上次處罰到期日累加":"從今天起", cdays);
     }
-    fprintf(fp, "\033[1;32m※ Origin: \033[1;33m%s \033[1;37m<%s>\n\033[1;31m◆ From: \033[1;36m%s\033[m\n", BOARDNAME, MYHOSTNAME, MYHOSTNAME);
+    fprintf(fp, "\x1b[1;32m※ Origin: \x1b[1;33m%s \x1b[1;37m<%s>\n\x1b[1;31m◆ From: \x1b[1;36m%s\x1b[m\n", BOARDNAME, MYHOSTNAME, MYHOSTNAME);
 
     fclose(fp);
     sprintf(buf, "[%s處罰] %s %s", cross ? "連坐":"", u->userid, cselect);

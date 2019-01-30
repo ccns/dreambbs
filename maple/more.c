@@ -224,12 +224,12 @@ outs_line(                      /* 印出一般內容 */
     {
         ansi = 1;
         ch1 = str[2];
-        outs((ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2) ? "\033[33m" : "\033[36m");     /* 引用一層/二層不同顏色 */
+        outs((ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2) ? "\x1b[33m" : "\x1b[36m");     /* 引用一層/二層不同顏色 */
     }
     else if (ch1 == '\241' && ch2 == '\260')    /* ※ 引言者 */
     {
         ansi = 1;
-        outs("\033[1;36m");
+        outs("\x1b[1;36m");
     }
     else
         ansi = 0;
@@ -261,7 +261,7 @@ outs_line(                      /* 印出一般內容 */
 
             str_ncpy(ptr2, str, ptr1 - str + 1);
             ptr2 += ptr1 - str;
-            sprintf(ptr2, "\033[7m%.*s\033[m", len, ptr1);
+            sprintf(ptr2, "\x1b[7m%.*s\x1b[m", len, ptr1);
             ptr2 += len + 7;
             str = ptr1 + len;
         }
@@ -294,13 +294,13 @@ outs_header(    /* 印出檔頭 */
         if ((ptr = strstr(word, str_post1)) || (ptr = strstr(word, str_post2)))
         {
             ptr[-1] = ptr[4] = '\0';
-            prints(COLOR5 " %s " COLOR6 "%-*.*s" COLOR5 " %s " COLOR6 "%-13s\033[m",
+            prints(COLOR5 " %s " COLOR6 "%-*.*s" COLOR5 " %s " COLOR6 "%-13s\x1b[m",
                 header1[0], d_cols + 53, d_cols + 53, word, ptr, ptr + 5);
         }
         else
         {
             /* 少看板這欄 */
-            prints(COLOR5 " %s " COLOR6 "%-*.*s\033[m",
+            prints(COLOR5 " %s " COLOR6 "%-*.*s\x1b[m",
                 header1[0], d_cols + 72, d_cols + 72, word);
         }
         return;
@@ -313,7 +313,7 @@ outs_header(    /* 印出檔頭 */
         {
             /* 其他檔頭都只有一欄 */
             word = str + header_len;
-            prints(COLOR5 " %s " COLOR6 "%-*.*s\033[m",
+            prints(COLOR5 " %s " COLOR6 "%-*.*s\x1b[m",
                 header1[i], d_cols + 72, d_cols + 72, word);
             return;
         }

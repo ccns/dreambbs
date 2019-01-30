@@ -25,7 +25,7 @@
 #ifdef M3_USE_PFTERM
 // filed color   (defined in theme.h)
 #define STANDOUT   (void) ( attrsetbg(FILEDBG), attrsetfg(FILEDFG) )
-// default color (\033[37; 40m)
+// default color (\x1b[37; 40m)
 #define STANDEND   (void) ( attrsetbg(0), attrsetfg(7) )
 #endif  /* #ifdef M3_USE_PFTERM */
 int cur_row, cur_col;
@@ -155,10 +155,10 @@ bell(void)
 #ifndef M3_USE_PFTERM
 #define o_ansi(x)       output(x, sizeof(x)-1)
 
-#define o_clear()       o_ansi("\033[;H\033[2J")
-#define o_cleol()       o_ansi("\033[K")
-#define o_standup()     o_ansi("\033[7m")
-#define o_standdown()   o_ansi("\033[m")
+#define o_clear()       o_ansi("\x1b[;H\x1b[2J")
+#define o_cleol()       o_ansi("\x1b[K")
+#define o_standup()     o_ansi("\x1b[7m")
+#define o_standdown()   o_ansi("\x1b[m")
 
 
 static int docls;
@@ -384,7 +384,7 @@ rel_move(
         }
     }
 
-    sprintf(buf, "\033[%d;%dH", new_row + 1, new_col + 1);
+    sprintf(buf, "\x1b[%d;%dH", new_row + 1, new_col + 1);
     output(buf, strlen(buf));
 }
 
@@ -520,7 +520,7 @@ refresh(void)
         scrollcnt = j = 0;
         if (i < 0)
         {
-            sprintf(buf, "\033[%dL", -i);
+            sprintf(buf, "\x1b[%dL", -i);
             i = strlen(buf);
         }
         else
@@ -706,7 +706,7 @@ outc(
     unsigned char *data;
     int i, cx, pos;
 
-    static char ansibuf[16] = "\033";
+    static char ansibuf[16] = "\x1b";
     static int ansipos = 0;
 
     slp = cur_slp;
@@ -1012,7 +1012,7 @@ outf(
     char *str)
 {
     outz(str);
-    prints("%*s\033[m", d_cols, "");
+    prints("%*s\x1b[m", d_cols, "");
 }
 
 #ifdef M3_USE_PFTERM
@@ -1219,7 +1219,7 @@ vs_restore(
 #endif  // M3_USE_PFTERM
 
 #ifdef M3_USE_PFTERM
-#define VMSG_NULL "\033[1;37;45m                              ● 請按任意鍵繼續 ●                           \033[m"
+#define VMSG_NULL "\x1b[1;37;45m                              ● 請按任意鍵繼續 ●                           \x1b[m"
 
 int
 vmsg(
@@ -1235,7 +1235,7 @@ vmsg(
     clrtoeol();
     if (msg)
     {
-        prints(COLOR1 " ◆ %-55s " COLOR2 " [請按任意鍵繼續] \033[m", msg);
+        prints(COLOR1 " ◆ %-55s " COLOR2 " [請按任意鍵繼續] \x1b[m", msg);
     }
     else
     {
@@ -1245,7 +1245,7 @@ vmsg(
         move(b_lines, 0);
 #ifdef HAVE_COLOR_VMSG
         color =time(0)%6+31;
-        prints("\033[1;%dm                                             ▏▎▍▌▋▊▉ \033[1;37m請按任意鍵繼續 \033[1;%dm▉\033[m ", color, color);
+        prints("\x1b[1;%dm                                             ▏▎▍▌▋▊▉ \x1b[1;37m請按任意鍵繼續 \x1b[1;%dm▉\x1b[m ", color, color);
 #else
         outs(VMSG_NULL);
 #endif
@@ -1263,7 +1263,7 @@ vmsg(
     {
         move(b_lines, 0);
         clrtoeol();
-        prints("\033[34;46m ★ %-54s\033[31;47m [請按任意鍵繼續] \033[m", msg);
+        prints("\x1b[34;46m ★ %-54s\x1b[31;47m [請按任意鍵繼續] \x1b[m", msg);
     }
     else
     {
@@ -1274,9 +1274,9 @@ vmsg(
         clrtoeol();
 #ifdef HAVE_COLOR_VMSG
         color =time(0)%6+31;
-        prints("\033[1;%dm                                             ▏▎▍▌▋▊▉ \033[1;37m請按任意鍵繼續 \033[1;%dm▉\033[m ", color, color);
+        prints("\x1b[1;%dm                                             ▏▎▍▌▋▊▉ \x1b[1;37m請按任意鍵繼續 \x1b[1;%dm▉\x1b[m ", color, color);
 #else
-        outs("\033[1;37;45m                              ● 請按任意鍵繼續 ●                           \033[m");
+        outs("\x1b[1;37;45m                              ● 請按任意鍵繼續 ●                           \x1b[m");
 #endif
     }
     return vkey();
@@ -1325,7 +1325,7 @@ vs_bar(
     char *title)
 {
     clear();
-    prints("\033[1;33;44m【 %s 】\033[m\n", title);
+    prints("\x1b[1;33;44m【 %s 】\x1b[m\n", title);
 }
 
 
@@ -1398,7 +1398,7 @@ grayout(int y, int end, int level)
 // GRAYOUT_DARK(0): dark, GRAYOUT_BOLD(1): bold, GRAYOUR_NORMAL(2): normal
 {
     screenline slp[T_LINES], newslp[T_LINES];
-    char *prefix[3] = { "\033[1;30m", "\033[1;37m", "\033[0;37m" };
+    char *prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
     char buf[ANSILINELEN];
     register int i;
 
@@ -1419,7 +1419,7 @@ grayout(int y, int end, int level)
         newslp[i].len = newslp[i].width + 7 + 3;
 
         str_ansi(buf, (char *) slp[i].data, slp[i].width + 1);
-        sprintf((char *) newslp[i].data, "%s%s\033[m", prefix[level], buf);
+        sprintf((char *) newslp[i].data, "%s%s\x1b[m", prefix[level], buf);
     }
     vs_restore(newslp);
 }
@@ -1583,7 +1583,7 @@ igetch(void)
                     }
                     else if (idle > (cc ? (IDLE_TIMEOUT-4) : 4))
                     {
-                        outz("\033[41;5;1;37m警告！你已經閒置過久，系統將在三分後將你踢除！\033[m");
+                        outz("\x1b[41;5;1;37m警告！你已經閒置過久，系統將在三分後將你踢除！\x1b[m");
                         refresh();
                     }
 #endif // KICK_IDLE_TIMEOUT

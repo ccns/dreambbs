@@ -24,7 +24,7 @@ extern UCACHE *ushm;
 /* ----------------------------------------------------- */
 
 
-#define MSG_CC "\033[32m[群組名單]\033[m\n"
+#define MSG_CC "\x1b[32m[群組名單]\x1b[m\n"
 
 
 LinkList *ll_head;              /* head of link list */
@@ -304,12 +304,12 @@ bsmtp(
 
         if (method)
         {
-            prints("★ 寄信給 %s \033[5m...\033[m", rcpt);
+            prints("★ 寄信給 %s \x1b[5m...\x1b[m", rcpt);
             refresh();
         }
         else
         {
-            prints("★ 寄信中 \033[5m...\033[m");
+            prints("★ 寄信中 \x1b[5m...\x1b[m");
             refresh();
         }
 
@@ -412,7 +412,7 @@ bsmtp(
             sign.val.hash2 = str_hash2(buf, sign.val.hash);
             str_xor(sign.str, prikey);
             /* Thor.990413: 不加()的話, 時間尾空白會被吃掉(驗證時) */
-            fprintf(fw, "\033[1;32m※ X-Info: \033[33m%s\033[m\r\n\033[1;32m※ X-Sign: \033[36m%s%s \033[37m(%s)\033[m\r\n",
+            fprintf(fw, "\x1b[1;32m※ X-Info: \x1b[33m%s\x1b[m\r\n\x1b[1;32m※ X-Sign: \x1b[36m%s%s \x1b[37m(%s)\x1b[m\r\n",
                 buf, msgid, genpasswd(sign.str), Btime(&stamp));
         }
 #endif
@@ -520,7 +520,7 @@ bsmtp_file(
         move(b_lines, 0);
         clrtoeol();
 
-        prints("★ 寄信給 %s \033[5m...\033[m", rcpt);
+        prints("★ 寄信給 %s \x1b[5m...\x1b[m", rcpt);
         refresh();
 
         sleep(1);                       /* wait for mail server response */
@@ -731,7 +731,7 @@ m_verify(void)
         blog("VRFY", buf);
         /* Thor: fake sign */
         move(20, 25);
-        outs("\033[41;37;5m *注意* 驗證錯誤! \033[m");
+        outs("\x1b[41;37;5m *注意* 驗證錯誤! \x1b[m");
         vmsg("此信並非由本站所發，請查照");
         return 0;
     }
@@ -1698,10 +1698,10 @@ mail_sysop(void)
 
         for (i = 0; i < j; i++)
         {
-            prints("%15d.   \033[1;%dm%-16s%s\033[m\n",
+            prints("%15d.   \x1b[1;%dm%-16s%s\x1b[m\n",
                 i + 1, 31 + i, sysoplist[i].userid, sysoplist[i].duty);
         }
-        prints("%-14s0.   \033[1;%dm離開\033[m", "", 31 + j);
+        prints("%-14s0.   \x1b[1;%dm離開\x1b[m", "", 31 + j);
 
         i = vans("請輸入代碼[0]：") - '0' - 1;
         if (i >= 0 && i < j)
@@ -1960,7 +1960,7 @@ hdr_outs(               /* print HDR's subject */
     int cc)
 {
     static char *type[4] =
-    {"Re", "◇", "\033[1;33m=>", "\033[1;32m◆"};
+    {"Re", "◇", "\x1b[1;33m=>", "\x1b[1;32m◆"};
     char *title, *mark;
     int ch, len;
     UTMP *online;
@@ -1977,11 +1977,11 @@ hdr_outs(               /* print HDR's subject */
         else if (!(hdr->xmode &(POST_LOCK | POST_CANCEL | POST_DELETE | POST_MDELETE)) && hdr->recommend >= (MIN_RECOMMEND) && !(cuser.ufo2 & UFO2_PRH))
         {
             if (hdr->recommend <=30)
-                prints("\033[36m%02.2d\033[m", hdr->recommend);
+                prints("\x1b[36m%02.2d\x1b[m", hdr->recommend);
             else if (hdr->recommend > 30 && hdr->recommend <= 60)
-                prints("\033[1;33m%02.2d\033[m", hdr->recommend);
+                prints("\x1b[1;33m%02.2d\x1b[m", hdr->recommend);
             else
-                prints("\033[1;31m%02.2d\033[m", hdr->recommend);
+                prints("\x1b[1;31m%02.2d\x1b[m", hdr->recommend);
         }
 #endif
         else
@@ -1990,7 +1990,7 @@ hdr_outs(               /* print HDR's subject */
             outc(' ');
         }
 #endif  /* #if 0 */
-        outs("\033[m ");
+        outs("\x1b[m ");
         outs(hdr->date + 3);
         outc(' ');
 
@@ -1999,7 +1999,7 @@ hdr_outs(               /* print HDR's subject */
 
         online = utmp_check(mark);  /* 使用者在站上就變色 */
         if (online != NULL)
-        outs("\033[1;37m");
+        outs("\x1b[1;37m");
 
         while ((ch = (unsigned char) *mark))
         {
@@ -2024,7 +2024,7 @@ hdr_outs(               /* print HDR's subject */
     }
 
     if (online != NULL)
-        outs("\033[m");
+        outs("\x1b[m");
 
     title = str_ttl(mark = hdr->title);
     ch = title == mark;
@@ -2037,7 +2037,7 @@ hdr_outs(               /* print HDR's subject */
 
     if (hdr->xmode & POST_LOCK && !HAS_PERM(PERM_SYSOP))
     {
-        outs(" 此文章已加密鎖定！\033[m");
+        outs(" 此文章已加密鎖定！\x1b[m");
         outc('\n');
         return;
     }
@@ -2070,14 +2070,14 @@ hdr_outs(               /* print HDR's subject */
                 case 1:
                     if (cc == '[')
                     {
-                        outs("\033[1;37m[");
+                        outs("\x1b[1;37m[");
                         square = 2;
                         continue;
                     }
                 case 2:
                     if (cc == ']')
                     {
-                        outs("]\033[m");
+                        outs("]\x1b[m");
                         square = 3;
                         continue;
                     }
@@ -2087,7 +2087,7 @@ hdr_outs(               /* print HDR's subject */
                 {
                     if (cc != '<' && cc != '>')
                     {
-                        outs("\033[m");
+                        outs("\x1b[m");
                         angle = 0;
                     }
                 }
@@ -2095,7 +2095,7 @@ hdr_outs(               /* print HDR's subject */
                 {
                     if (cc == '<' || cc == '>')
                     {
-                        outs("\033[1;37m");
+                        outs("\x1b[1;37m");
                         angle = 1;
                     }
                 }
@@ -2108,12 +2108,12 @@ hdr_outs(               /* print HDR's subject */
 
 #ifdef  HAVE_DECLARE
         if (angle || square == 2)       /* Thor.0508: 變色還原用 */
-            outs("\033[m");
+            outs("\x1b[m");
 #endif
     }
 
     if (ch >= 2)
-        outs("\033[m");
+        outs("\x1b[m");
 
     outc('\n');
 }
@@ -2130,8 +2130,8 @@ mbox_item(
 #endif
 
     int xmode = hdr->xmode;
-    prints(xmode & MAIL_DELETE ? "%5d \033[1;5;37;41m%c\033[m"
-        : xmode & MAIL_MARKED ? "%5d \033[1;36m%c\033[m"
+    prints(xmode & MAIL_DELETE ? "%5d \x1b[1;5;37;41m%c\x1b[m"
+        : xmode & MAIL_MARKED ? "%5d \x1b[1;36m%c\x1b[m"
         : "%5d %c", pos, mbox_attr(hdr->xmode));
 
     hdr_outs(hdr, 47);
@@ -2692,7 +2692,7 @@ static int
 mbox_clean(
     XO *xo)
 {
-    if (vans("\033[1;5;41;33m警告：\033[m清除之後不能救回。確定要清除嗎？(y/N)") == 'y')
+    if (vans("\x1b[1;5;41;33m警告：\x1b[m清除之後不能救回。確定要清除嗎？(y/N)") == 'y')
     {
         hdr_prune(xo->dir, 0, 0, 3);
         return XO_INIT;

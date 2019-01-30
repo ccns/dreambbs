@@ -269,11 +269,11 @@ personal_head(
     vs_head("個人板清單", str_site);
     outs(
         "  [←]離開 c)修改 d)刪除 s)重整 TAB)中文版名/E-mail O)開板 D)退件 [h]elp\n"
-        "\033[44m  編號   申請人       看板名稱     ");
+        "\x1b[44m  編號   申請人       看板名稱     ");
     if (!mode)
-        outs("E-mail                                  \033[m");
+        outs("E-mail                                  \x1b[m");
     else
-        outs("中文版名                                \033[m");
+        outs("中文版名                                \x1b[m");
     return personal_body(xo);
 }
 

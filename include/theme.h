@@ -14,11 +14,11 @@
 /* 暫存區                                                */
 /* ----------------------------------------------------- */
 
-#define NEWMAILMSG              "\033[41;37;5m 郵差衝進來了! \033[0;1;33;44m"
-#define NEWPASSMSG              "\033[42;37;5m 收到神秘留言! \033[0;1;33;44m"
+#define NEWMAILMSG              "\x1b[41;37;5m 郵差衝進來了! \x1b[0;1;33;44m"
+#define NEWPASSMSG              "\x1b[42;37;5m 收到神秘留言! \x1b[0;1;33;44m"
 
-#define ICON_GAMBLED_BRD        "\033[1;31m賭\033[m"    /* 舉行賭盤中的看板 */
-#define ICON_VOTED_BRD          "\033[1;33m投\033[m"    /* 舉行投票中的看板 */
+#define ICON_GAMBLED_BRD        "\x1b[1;31m賭\x1b[m"    /* 舉行賭盤中的看板 */
+#define ICON_VOTED_BRD          "\x1b[1;33m投\x1b[m"    /* 舉行投票中的看板 */
 
 //下一次推文時間限制
 #define NEXTPUSHTIME 15
@@ -27,27 +27,27 @@
 /* 基本顏色定義，以利介面修改                            */
 /* ----------------------------------------------------- */
 
-#define ANSIRESET       "\033[m"        /* 終止顏色 */
+#define ANSIRESET       "\x1b[m"        /* 終止顏色 */
 
-#define COLOR1          "\033[34;46m"   /* footer/feeter 的前段顏色 */
-#define COLOR2          "\033[31;47m"   /* footer/feeter 的後段顏色 */
-#define COLOR3          "\033[30;47m"   /* neck 的顏色 */
-#define COLOR4          "\033[1;44m"    /* 光棒 的顏色 */
-#define COLOR5          "\033[34;47m"   /* more 檔頭的標題顏色 */
-#define COLOR6          "\033[37;44m"   /* more 檔頭的內容顏色 */
-#define COLOR7          "\033[0m"       /* 作者在線上的顏色 */
+#define COLOR1          "\x1b[34;46m"   /* footer/feeter 的前段顏色 */
+#define COLOR2          "\x1b[31;47m"   /* footer/feeter 的後段顏色 */
+#define COLOR3          "\x1b[30;47m"   /* neck 的顏色 */
+#define COLOR4          "\x1b[1;44m"    /* 光棒 的顏色 */
+#define COLOR5          "\x1b[34;47m"   /* more 檔頭的標題顏色 */
+#define COLOR6          "\x1b[37;44m"   /* more 檔頭的內容顏色 */
+#define COLOR7          "\x1b[0m"       /* 作者在線上的顏色 */
 
 
 /* ----------------------------------------------------- */
 /* 使用者名單顏色                                        */
 /* ----------------------------------------------------- */
 
-#define COLOR_PAL       "\033[1;32m"
-#define COLOR_BAD       "\033[1;31m"
-#define COLOR_CLOAK     "\033[1;35m"
-#define COLOR_BOTH      "\033[1;36m"
-#define COLOR_OPAL      "\033[1;33m"
-#define COLOR_BOARDPAL  "\033[36m"
+#define COLOR_PAL       "\x1b[1;32m"
+#define COLOR_BAD       "\x1b[1;31m"
+#define COLOR_CLOAK     "\x1b[1;35m"
+#define COLOR_BOTH      "\x1b[1;36m"
+#define COLOR_OPAL      "\x1b[1;33m"
+#define COLOR_BOARDPAL  "\x1b[36m"
 
 /* ----------------------------------------------------- */
 /* 選單位置                                              */
@@ -69,23 +69,23 @@
                    "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明 "
                    /*r2.20170802: disable some tips in case of confusion*/
 
-#define NECKGEM2   "\033[44m" \
-                   "  編號     主              題                            [編      選] [日  期]\033[m"
+#define NECKGEM2   "\x1b[44m" \
+                   "  編號     主              題                            [編      選] [日  期]\x1b[m"
 
 #define NECKPOST \
                    "  [←]離開 [→]閱\讀 [^P]發表 [b]備忘錄 [d]刪除 [V]投票 [TAB]精華區 [h]說明\n" \
-                   "\033[30;47m  編號    日 期  作  者       文  章  標  題                                  \033[m"
+                   "\x1b[30;47m  編號    日 期  作  者       文  章  標  題                                  \x1b[m"
 
 #define NECKMAIL \
-                   "  [←]離開 [→]讀信 [d]刪除 [R]回信 [s]寄信 [x]轉貼 [y]群組回信 [h]說明\n\033[44m" \
-                   "  編號    日 期  作 者          信  件  標  題                                \033[m"
+                   "  [←]離開 [→]讀信 [d]刪除 [R]回信 [s]寄信 [x]轉貼 [y]群組回信 [h]說明\n\x1b[44m" \
+                   "  編號    日 期  作 者          信  件  標  題                                \x1b[m"
 
 #define NECKVOTE \
-                   "  [←]離開 [v]投票 [R]結果 [E]修改 [^P]舉行 [^Q]查詢/中止/改期 [h]說明\n\033[44m" \
-                   "  編號  開票日  主辦人       投  票  宗  旨                                  \033[m"
+                   "  [←]離開 [v]投票 [R]結果 [E]修改 [^P]舉行 [^Q]查詢/中止/改期 [h]說明\n\x1b[44m" \
+                   "  編號  開票日  主辦人       投  票  宗  旨                                  \x1b[m"
 
 #define NECKINNBBS "  [←]離開 [^P]新增 [d]刪除 [E]編輯 [/]搜尋 [Enter]詳細\n" \
-            COLOR3 "  編號            內         容%*s                                               \033[m"
+            COLOR3 "  編號            內         容%*s                                               \x1b[m"
 
 
 // cache.101119
@@ -129,17 +129,17 @@
 #ifndef ORIGIN_TAG
 #define ORIGIN_TAG \
     "--\n" \
-    "\033[1;44;32m  ◢\033[0;32;44m◣   \033[1;37m︵︵     \033[30m█▔◣ █▔█ █▔▔ █▔█ █▆▉ █   █▔█ █◣█ █▔\033[31m● \033[m\n" \
-    "\033[1;32;44m◢\033[42m◤\033[0;44;32m█◣\033[1m◢\033[0;32;44m◣ \033[1;37m︵︵ \033[0;37;44m█  █ █▁◤ █▁▁ █▁█ ▉▉▉ █   █▁█ █◥█ █  █ \033[m\n" \
-    "\033[1;36;42m夢之大地 逼逼ㄟ四 \033[37m█▁◤ █  █ █▁▁ █  █ ▉▉▉ █▁ █  █ █  █ █▁◤ \033[m\n" \
-    "\033[1;32m※ Origin:\033[33m <bbs.ccns.ncku.edu.tw>  \033[31m◆ From:\033[36m %-34.34s \033[m\n"
+    "\x1b[1;44;32m  ◢\x1b[0;32;44m◣   \x1b[1;37m︵︵     \x1b[30m█▔◣ █▔█ █▔▔ █▔█ █▆▉ █   █▔█ █◣█ █▔\x1b[31m● \x1b[m\n" \
+    "\x1b[1;32;44m◢\x1b[42m◤\x1b[0;44;32m█◣\x1b[1m◢\x1b[0;32;44m◣ \x1b[1;37m︵︵ \x1b[0;37;44m█  █ █▁◤ █▁▁ █▁█ ▉▉▉ █   █▁█ █◥█ █  █ \x1b[m\n" \
+    "\x1b[1;36;42m夢之大地 逼逼ㄟ四 \x1b[37m█▁◤ █  █ █▁▁ █  █ ▉▉▉ █▁ █  █ █  █ █▁◤ \x1b[m\n" \
+    "\x1b[1;32m※ Origin:\x1b[33m <bbs.ccns.ncku.edu.tw>  \x1b[31m◆ From:\x1b[36m %-34.34s \x1b[m\n"
 #endif  // ORIGIN_TAG
 
-#define MODIFY_TAG    "\033[1;32m※ Modify: \033[33m<%s> \033[m%s"
+#define MODIFY_TAG    "\x1b[1;32m※ Modify: \x1b[33m<%s> \x1b[m%s"
 
-#define ANONYMOUS_TAG "--\n\033[1;32m※ Origin: \033[33m%s \033[37m<%s> \033[m\n\033[1;31m◆ From: \033[36m%s\033[m\n"
+#define ANONYMOUS_TAG "--\n\x1b[1;32m※ Origin: \x1b[33m%s \x1b[37m<%s> \x1b[m\n\x1b[1;31m◆ From: \x1b[36m%s\x1b[m\n"
 
-#define EMAIL_TAG     "\033[1;32m※ E-mail: \033[36m%s\033[m\n"
+#define EMAIL_TAG     "\x1b[1;32m※ E-mail: \x1b[36m%s\x1b[m\n"
 
 /* ----------------------------------------------------- */
 /* 其他訊息字串                                          */

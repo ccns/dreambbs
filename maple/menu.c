@@ -16,13 +16,13 @@ int item_length[20]={0};
 extern time_t brd_visit[MAXBOARD];
 
 #ifdef  HAVE_INFO
-#define INFO_EMPTY      "Info      【 \033[1;36m校方公告區\033[m 】"
-#define INFO_HAVE       "Info      【 \033[41;33;1m快進來看看\033[m 】"
+#define INFO_EMPTY      "Info      【 \x1b[1;36m校方公告區\x1b[m 】"
+#define INFO_HAVE       "Info      【 \x1b[41;33;1m快進來看看\x1b[m 】"
 #endif
 
 #ifdef  HAVE_STUDENT
-#define STUDENT_EMPTY   "1Student  【 \033[1;36m學生公告區\033[m 】"
-#define STUDENT_HAVE    "1Student  【 \033[41;33;1m快進來看看\033[m 】"
+#define STUDENT_EMPTY   "1Student  【 \x1b[1;36m學生公告區\x1b[m 】"
+#define STUDENT_HAVE    "1Student  【 \x1b[41;33;1m快進來看看\x1b[m 】"
 #endif
 
 static int
@@ -165,7 +165,7 @@ pad_view(void)
 
     clear();
     move(0, 23);
-    outs("\033[1;37;45m ●  " BOARDNAME " 留 言 板  ● \n\n");
+    outs("\x1b[1;37;45m ●  " BOARDNAME " 留 言 板  ● \n\n");
     count = 0;
 
     mgets(-1);
@@ -223,13 +223,13 @@ pad_draw(void)
 
     str = pad.msg;
 
-    sprintf(str, "\033[1;37;46mΥ\033[34;47m %s \033[33m(%s)", cuser.userid, cuser.username);
+    sprintf(str, "\x1b[1;37;46mΥ\x1b[34;47m %s \x1b[33m(%s)", cuser.userid, cuser.username);
     len = strlen(str);
-    strcat(str, & " \033[30;46m"[len & 1]);
+    strcat(str, & " \x1b[30;46m"[len & 1]);
 
     for (i = len >> 1; i < 41; i++)
         strcat(str, "▄");
-    sprintf(str2, "\033[34;47m %.14s \033[37;46mΥ\033[m\n%-70.70s\n%-70.70s\n%-70.70s\n",
+    sprintf(str2, "\x1b[34;47m %.14s \x1b[37;46mΥ\x1b[m\n%-70.70s\n%-70.70s\n%-70.70s\n",
         Etime(&(pad.tpad)), buf[0], buf[1], buf[2]);
     strcat(str, str2);
 
@@ -304,10 +304,10 @@ goodbye(void)
 #endif
 
     clear();
-    prints("       \033[1;31m ●       \033[1;36m ┌─┐┌─┐┌─┐┌─╮ ┌─╮┌╮┐┌─┐\n"
-        "      \033[1;31m●\033[1;37m○\033[1;33m●\033[1;37m═══\033[1;36m│  ┬│  ││  ││  │ │ ═ └  ┘│═╡\033[1;37m════\n"
-        "       \033[1;33m ●        \033[1;34m└─┤└─┘└─┘└─╯ └─╯ └┘ └─┘\033[m\n");
-    prints("Dear \033[32m%s(%s)\033[m，別忘了再度光臨【 %s 】\n"
+    prints("       \x1b[1;31m ●       \x1b[1;36m ┌─┐┌─┐┌─┐┌─╮ ┌─╮┌╮┐┌─┐\n"
+        "      \x1b[1;31m●\x1b[1;37m○\x1b[1;33m●\x1b[1;37m═══\x1b[1;36m│  ┬│  ││  ││  │ │ ═ └  ┘│═╡\x1b[1;37m════\n"
+        "       \x1b[1;33m ●        \x1b[1;34m└─┤└─┘└─┘└─╯ └─╯ └┘ └─┘\x1b[m\n");
+    prints("Dear \x1b[32m%s(%s)\x1b[m，別忘了再度光臨【 %s 】\n"
         "以下是您在站內的註冊資料:\n",
         cuser.userid, cuser.username, str_site);
     acct_show(&cuser, 3);
@@ -381,10 +381,10 @@ vs_head(
     buf[spc] = '\0';
 
 #ifdef  COLOR_HEADER
-    prints("\033[1;%2d;37m【%s】%s\033[33m%s\033[1;%2d;37m%s\033[37m看板《%s》\033[m\n",
+    prints("\x1b[1;%2d;37m【%s】%s\x1b[33m%s\x1b[1;%2d;37m%s\x1b[37m看板《%s》\x1b[m\n",
         color, title, buf, mid, color, buf + ufo + len, currboard);
 #else
-    prints("\033[1;46;37m【%s】%s\033[33m%s\033[46m%s\033[37m看板《%s》\033[m\n",
+    prints("\x1b[1;46;37m【%s】%s\x1b[33m%s\x1b[46m%s\x1b[37m看板《%s》\x1b[m\n",
         title, buf, mid, buf + ufo + len, currboard);
 #endif
 }
@@ -462,7 +462,7 @@ movie(void)
     /* Thor.980913: 註解: 最常見呼叫 movie()的時機是每次更新 film, 在 60秒以上,
                           故不需針對 xx:yy 來特別作一字串儲存以加速 */
 
-    sprintf(footer, "\033[0;34;46m%s%d:%02d] \033[30;47m 目前站上有\033[31m%4d\033[30m 人，我是 \033[31m%-12s\033[30m [呼叫/訊息]\033[31m%s",
+    sprintf(footer, "\x1b[0;34;46m%s%d:%02d] \x1b[30;47m 目前站上有\x1b[31m%4d\x1b[30m 人，我是 \x1b[31m%-12s\x1b[30m [呼叫/訊息]\x1b[31m%s",
         datemsg, ufo / 60, ufo % 60,
         /*ushm->count*/total_num, cuser.userid, flagmsg);
     outf(footer);
@@ -1082,19 +1082,19 @@ static MENU menu_main[] =
     "Announce  【 精華公佈欄 】"},
 
     {Boards, 0, M_BOARD,
-    "Boards    【 \033[1;33m佈告討論區\033[m 】"},
+    "Boards    【 \x1b[1;33m佈告討論區\x1b[m 】"},
 
     {Class, 0, M_CLASS,
-    "Class     【 \033[1;33m分組討論區\033[m 】"},
+    "Class     【 \x1b[1;33m分組討論區\x1b[m 】"},
 
 #ifdef  HAVE_PROFESS
     {Profess, 0, M_PROFESS,
-    "Profession【 \033[1;33m專業討論區\033[m 】"},
+    "Profession【 \x1b[1;33m專業討論區\x1b[m 】"},
 #endif
 
 #ifdef  HAVE_FAVORITE
     {MyFavorite, PERM_BASIC, M_CLASS,
-    "Favorite  【 \033[1;32m我的最愛區\033[m 】"},
+    "Favorite  【 \x1b[1;32m我的最愛區\x1b[m 】"},
 #endif
 
 #ifdef HAVE_SIGNED_MAIL
@@ -1176,7 +1176,7 @@ int count_len(
 
     while (ptr)
     {
-        ptr = strstr(ptr, "\033");
+        ptr = strstr(ptr, "\x1b");
         if (ptr)
         {
             for (tmp=ptr; *tmp!='m'; tmp++);
@@ -1295,7 +1295,7 @@ menu(void)
                 refilm = 1;
             }
             vs_head(menu->desc, NULL);
-            //prints("\n\033[30;47m     選項         選項說明                         動態看板                   \033[m\n");
+            //prints("\n\x1b[30;47m     選項         選項說明                         動態看板                   \x1b[m\n");
             mode = 0;
             count = 0;
             while (count<20)
@@ -1307,12 +1307,12 @@ menu(void)
                 {
                     mptr = table[mode];
                     str = check_info(mptr->desc);
-                    sprintf(item, "\033[m(\033[1;36m%c\033[m)%s", *str, str+1);
+                    sprintf(item, "\x1b[m(\x1b[1;36m%c\x1b[m)%s", *str, str+1);
                     outs(item);
                     item_length[mode]=(cuser.ufo2 & UFO2_COLOR) ? strlen(item)-count_len(str)-2 : 0;
-                    /*outs("(\033[1;36m");
+                    /*outs("(\x1b[1;36m");
                     outc(*str++);
-                    outs("\033[m)");
+                    outs("\x1b[m)");
                     outs(str);*/
                 }
                 clrtoeol();

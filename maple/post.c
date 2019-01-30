@@ -879,12 +879,12 @@ post_item(
             attr = ' ';
         else if (attr == 'M')
             attr |= 0x20;
-        prints("  \033[1;33m  ★\033[m%c%s%c%s", tag_char(hdr->chrono), hdr->xmode & POST_MARKED ? "\033[1;36m" : "", attr, hdr->xmode & POST_MARKED ? "\033[m" : "");
+        prints("  \x1b[1;33m  ★\x1b[m%c%s%c%s", tag_char(hdr->chrono), hdr->xmode & POST_MARKED ? "\x1b[1;36m" : "", attr, hdr->xmode & POST_MARKED ? "\x1b[m" : "");
     }
     else
         prints("%6d%c%s%c%s", num, tag_char(hdr->chrono),
-                hdr->xmode & POST_MARKED ? "\033[1;36m" : "", post_attr(hdr),
-                hdr->xmode & POST_MARKED ? "\033[m" : "");
+                hdr->xmode & POST_MARKED ? "\x1b[1;36m" : "", post_attr(hdr),
+                hdr->xmode & POST_MARKED ? "\x1b[m" : "");
 
     /* 考量到舊版本相容性先註解掉, 加此判斷可以快一點點 */
     if (/*hdr->xmode & POST_RECOMMEND &&*/ !(hdr->xmode & POST_BOTTOM) && !(cuser.ufo2 & UFO2_PRH))
@@ -894,24 +894,24 @@ post_item(
         if (num>0)
         {
             if (num > 120)                    /* 推爆 */
-                prints("\033[1;33m爆\033[m");
+                prints("\x1b[1;33m爆\x1b[m");
             else if (num > 99)                /* 推爆 */
-                prints("\033[1;31m爆\033[m");
+                prints("\x1b[1;31m爆\x1b[m");
             else if (num > 4)
-                prints("\033[1;31m%02d\033[m", num);
+                prints("\x1b[1;31m%02d\x1b[m", num);
             else
-                prints("\033[1;31m%02d\033[m", num);
+                prints("\x1b[1;31m%02d\x1b[m", num);
         }
         else if (num<0)
         {
             if (num < -120)              /* 推爛 */
-                prints("\033[1;30m弱\033[m");
+                prints("\x1b[1;30m弱\x1b[m");
             else if (num < -99)               /* 推爛 */
-                prints("\033[1;32m嫩\033[m");
+                prints("\x1b[1;32m嫩\x1b[m");
             else if (num < -5)
-                prints("\033[32m%02d\033[m", -num);
+                prints("\x1b[32m%02d\x1b[m", -num);
             else
-                prints("\033[32m%02d\033[m", -num);
+                prints("\x1b[32m%02d\x1b[m", -num);
         }
         else
             prints("  ");
@@ -1924,9 +1924,9 @@ post_delete(
                     fp = fopen(buf, "w");
                     fprintf(fp, "作者: %s (%s)\n", cuser.userid, cuser.username);
                     fprintf(fp, "標題: %s\n時間: %s\n", "文章退回通知", ctime(&now));
-                    fprintf(fp, "\n\033[1;31m***** 本信件由系統自動產生，如要申訴請重新上站後轉寄給站務並保留此信件 *****\033[m\n\n");
-                    fprintf(fp, "\033[1;33m您在 %s 板的文章《%s》被退回\033[m\n", currboard, fhdr->title);
-                    fprintf(fp, "\033[1;33m理由：%s\033[m\n\n", delete_reason);
+                    fprintf(fp, "\n\x1b[1;31m***** 本信件由系統自動產生，如要申訴請重新上站後轉寄給站務並保留此信件 *****\x1b[m\n\n");
+                    fprintf(fp, "\x1b[1;33m您在 %s 板的文章《%s》被退回\x1b[m\n", currboard, fhdr->title);
+                    fprintf(fp, "\x1b[1;33m理由：%s\x1b[m\n\n", delete_reason);
                     fprintf(fp, "文章內容如下：\n\n");
 
                     if (dashf(fpath))
@@ -2113,20 +2113,20 @@ post_state(
         move(b_lines - 10, 0);
         clrtobot();
 
-        prints("\033[1;34m"MSG_BLINE"\033[m");
-        prints("\n\033[1;33;44m \033[37m文章代碼及資訊查詢： %*s \033[m", 55, "");
-        outs("\n\n \033[1;37m★\033[m 文章索引: ");
+        prints("\x1b[1;34m"MSG_BLINE"\x1b[m");
+        prints("\n\x1b[1;33;44m \x1b[37m文章代碼及資訊查詢： %*s \x1b[m", 55, "");
+        outs("\n\n \x1b[1;37m★\x1b[m 文章索引: ");
         outs(dir);
-        outs("\n \033[1;37m★\033[m 文章代碼: #");
-        outs("\033[1;32m");
+        outs("\n \x1b[1;37m★\x1b[m 文章代碼: #");
+        outs("\x1b[1;32m");
         outs(ghdr->xname);
-        outs("\033[m");
-        outs("\n \033[1;37m★\033[m 好讀連結: " URL_PREFIX "/");
+        outs("\x1b[m");
+        outs("\n \x1b[1;37m★\x1b[m 好讀連結: " URL_PREFIX "/");
         outs(buf);
         outs("/");
         outs(ghdr->xname);
-        outs("\033[m");
-        outs("\n \033[1;37m★\033[m 文章位置: ");
+        outs("\x1b[m");
+        outs("\n \x1b[1;37m★\x1b[m 文章位置: ");
         outs(fpath);
 /*
         int k, l, m;
@@ -2146,7 +2146,7 @@ post_state(
             l=2;
 */
         if (!stat(fpath, &st))
-            prints("\n \033[1;37m★\033[m 最後編輯: %s\n \033[1;37m★\033[m 檔案大小: \033[1;32m%d\033[m bytes", Ctime(&st.st_mtime), st.st_size);
+            prints("\n \x1b[1;37m★\x1b[m 最後編輯: %s\n \x1b[1;37m★\x1b[m 檔案大小: \x1b[1;32m%d\x1b[m bytes", Ctime(&st.st_mtime), st.st_size);
 
     }
     else if (!(cuser.userlevel))
@@ -2159,28 +2159,28 @@ post_state(
         move(b_lines - 8, 0);
         clrtobot();
 
-        prints("\033[1;34m"MSG_BLINE"\033[m");
-        prints("\n\033[1;33;44m \033[37m文章代碼及資訊查詢： %*s \033[m", 55, "");
+        prints("\x1b[1;34m"MSG_BLINE"\x1b[m");
+        prints("\n\x1b[1;33;44m \x1b[37m文章代碼及資訊查詢： %*s \x1b[m", 55, "");
         if (ghdr->xmode & (POST_EXPIRE | POST_MDELETE | POST_DELETE | POST_CANCEL | POST_LOCK | POST_CURMODIFY))
         {
-          outs("\n\n \033[1;37m★\033[m 文章被鎖定、編輯或者刪除中");
-          outs("\033[m");
+          outs("\n\n \x1b[1;37m★\x1b[m 文章被鎖定、編輯或者刪除中");
+          outs("\x1b[m");
           outs("\n");
         }
         else
         {
-          outs("\n\n \033[1;37m★\033[m 文章代碼: #");
-          outs("\033[1;32m");
+          outs("\n\n \x1b[1;37m★\x1b[m 文章代碼: #");
+          outs("\x1b[1;32m");
           outs(ghdr->xname);
-          outs("\033[m");
-          outs("\n \033[1;37m★\033[m 好讀連結: " URL_PREFIX "/");
+          outs("\x1b[m");
+          outs("\n \x1b[1;37m★\x1b[m 好讀連結: " URL_PREFIX "/");
           outs(buf);
           outs("/");
           outs(ghdr->xname);
-          outs("\033[m");
+          outs("\x1b[m");
         }
         if (!stat(fpath, &st))
-            prints("\n \033[1;37m★\033[m 最後存取: %s\n \033[1;37m★\033[m 檔案大小: \033[1;32m%d\033[m bytes", Ctime(&st.st_mtime), st.st_size);
+            prints("\n \x1b[1;37m★\x1b[m 最後存取: %s\n \x1b[1;37m★\x1b[m 檔案大小: \x1b[1;32m%d\x1b[m bytes", Ctime(&st.st_mtime), st.st_size);
 
     }
 
@@ -2272,7 +2272,7 @@ post_undelete(
         /* verit 2003.10.16 避免救文章時, 出現彩色標題 */
         len = strlen(fhdr->title);
         for ( i=0; i<len; ++i )
-            if ( fhdr->title[i] == '\033' )
+            if ( fhdr->title[i] == '\x1b' )
                 fhdr->title[i] = '*';
 
         fclose(fp);
@@ -2923,7 +2923,7 @@ post_cross_terminator(  /* Thor.0521: 終極文章大法 */
 
             strcpy(currboard, head->brdname);
 
-            sprintf(fpath, "《拂花落楓斬》看版：%s \033[5m...\033[m", currboard);
+            sprintf(fpath, "《拂花落楓斬》看版：%s \x1b[5m...\x1b[m", currboard);
             outz(fpath);
             refresh();
 
@@ -3489,20 +3489,20 @@ post_showBRD_setting(
 
     str = brd->BM;
     if (*str <= ' ')
-        str = "\033[1;33m徵求中\033[m";
+        str = "\x1b[1;33m徵求中\x1b[m";
 
     grayout(0, b_lines, GRAYOUT_DARK);
 
     move(b_lines - 14, 0);
     clrtobot();  /* 避免畫面殘留 */
 
-    prints("\033[1;34m"MSG_BLINE"\033[m");
-    prints("\n\033[1;33;44m \033[37m看板設定及資訊查詢： %*s \033[m\n", 55, "");
+    prints("\x1b[1;34m"MSG_BLINE"\x1b[m");
+    prints("\n\x1b[1;33;44m \x1b[37m看板設定及資訊查詢： %*s \x1b[m\n", 55, "");
 
     prints("\n看板:[%s]  板主:[%s] \n", brd->brdname, str);
 
     prints("\n 看板性質 - %s",
-            (brd->battr & BRD_NOTRAN) ? "站內" : "\033[1;33m轉信\033[m");
+            (brd->battr & BRD_NOTRAN) ? "站內" : "\x1b[1;33m轉信\x1b[m");
 
     if (brd->battr & BRD_RSS)
         prints("    RSS 功\能 - " URL_PREFIX "/%s.xml ", brd->brdname);
@@ -3510,39 +3510,39 @@ post_showBRD_setting(
         prints("    RSS 功\能 - 關閉");
 
     prints("\n 記錄篇數 - %s    轉錄文章 - %s",
-            (brd->battr & BRD_NOCOUNT) ? "忽略" : "\033[1;33m記錄\033[m",
-            (brd->battr & BRD_NOFORWARD) ? "\033[1;31m不可轉錄\033[m" : "可以轉錄");
+            (brd->battr & BRD_NOCOUNT) ? "忽略" : "\x1b[1;33m記錄\x1b[m",
+            (brd->battr & BRD_NOFORWARD) ? "\x1b[1;31m不可轉錄\x1b[m" : "可以轉錄");
 
     prints("\n 熱門話題 - %s    看板狀態 - %s",
-            (brd->battr & BRD_NOSTAT) ? "忽略" : "\033[1;33m記錄\033[m",
-            (brd->battr & BRD_NOREPLY) ? "\033[1;31m看板唯讀\033[m" : "自由發表");
+            (brd->battr & BRD_NOSTAT) ? "忽略" : "\x1b[1;33m記錄\x1b[m",
+            (brd->battr & BRD_NOREPLY) ? "\x1b[1;31m看板唯讀\x1b[m" : "自由發表");
 
     prints("\n 投票結果 - %s    修改板名 - %s",
-            (brd->battr & BRD_NOVOTE) ? "忽略" : "\033[1;33m記錄\033[m",
-            (brd->battr & BRD_CHANGETITLE) ? "可以修改" : "\033[1;33m不能修改\033[m");
+            (brd->battr & BRD_NOVOTE) ? "忽略" : "\x1b[1;33m記錄\x1b[m",
+            (brd->battr & BRD_CHANGETITLE) ? "可以修改" : "\x1b[1;33m不能修改\x1b[m");
 
     prints("\n 匿名功\能 - %s    修改文章 - %s",
-            (brd->battr & BRD_ANONYMOUS) ? "\033[1;33m開啟\033[m" : "關閉",
-            (brd->battr & BRD_MODIFY) ? "\033[1;31m不能修改\033[m" : "可以修改");
+            (brd->battr & BRD_ANONYMOUS) ? "\x1b[1;33m開啟\x1b[m" : "關閉",
+            (brd->battr & BRD_MODIFY) ? "\x1b[1;31m不能修改\x1b[m" : "可以修改");
 
     prints("\n 推文功\能 - %s    噓文功\能 - %s",
-            (brd->battr & BRD_PRH) ? "關閉" : "\033[1;33m開啟\033[m",
-            (brd->battr & BRD_PUSHSNEER || brd->battr & BRD_PUSHDEFINE) ? "\033[1;33m開啟\033[m" : "關閉");
+            (brd->battr & BRD_PRH) ? "關閉" : "\x1b[1;33m開啟\x1b[m",
+            (brd->battr & BRD_PUSHSNEER || brd->battr & BRD_PUSHDEFINE) ? "\x1b[1;33m開啟\x1b[m" : "關閉");
 
     prints("\n 推文限制 - %s    自訂動詞 - %s",
-            (brd->battr & BRD_PUSHDISCON) ? "\033[1;36mＩＤ\033[m" : (brd->battr & BRD_PUSHTIME) ?
-            "\033[1;36m時間\033[m" : "沒有",
-            (brd->battr & BRD_PUSHDEFINE) ? "\033[1;33m開啟\033[m" : "關閉");
+            (brd->battr & BRD_PUSHDISCON) ? "\x1b[1;36mＩＤ\x1b[m" : (brd->battr & BRD_PUSHTIME) ?
+            "\x1b[1;36m時間\x1b[m" : "沒有",
+            (brd->battr & BRD_PUSHDEFINE) ? "\x1b[1;33m開啟\x1b[m" : "關閉");
 
     prints("\n 文章類別 - %s    禁注音文 - %s",
-            (brd->battr & BRD_POSTFIX) ? "\033[1;33m開啟\033[m" : "關閉",
-            (brd->battr & BRD_NOPHONETIC) ? "\033[1;33m開啟\033[m" : "關閉");
+            (brd->battr & BRD_POSTFIX) ? "\x1b[1;33m開啟\x1b[m" : "關閉",
+            (brd->battr & BRD_NOPHONETIC) ? "\x1b[1;33m開啟\x1b[m" : "關閉");
 
     prints("\n 進板記錄 - %s    ",
-            (brd->battr & BRD_USIES) ? "\033[1;33m開啟\033[m" : "關閉");
+            (brd->battr & BRD_USIES) ? "\x1b[1;33m開啟\x1b[m" : "關閉");
 
     if ((bbstate & STAT_BOARD) || HAS_PERM(PERM_BOARD))
-        prints("\n\n您目前 \033[1;33m擁有\033[m 此看板的管理權限");
+        prints("\n\n您目前 \x1b[1;33m擁有\x1b[m 此看板的管理權限");
     else
         prints("\n\n您目前 沒有 此看板的管理權限");
 
@@ -4518,7 +4518,7 @@ xpost_head(
 
     outs("\n"); //r2.20181219: this part may need to be refined
     outs(
-            "\033[30;47m  編號   日 期  作  者       文  章  標  題                                   \033[m");
+            "\x1b[30;47m  編號   日 期  作  者       文  章  標  題                                   \x1b[m");
 
     /* return xpost_body(xo); */
     return post_body(xo); /* Thor.980911: 共用即可 */

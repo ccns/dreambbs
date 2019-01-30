@@ -606,7 +606,7 @@ do_send(
     zerotv.tv_sec = 0;
     zerotv.tv_usec = 0;
 #endif
-    while (str_swap(msg, "\\033", "\033"));
+    while (str_swap(msg, "\\x1b", "\x1b"));
 
     sr = select(nfds + 1, NULL, wset, NULL, &zerotv);
 
@@ -976,7 +976,7 @@ chat_topic(
         return;
     }
 
-    if (strstr(msg, "\\033"))
+    if (strstr(msg, "\\x1b"))
     {
         send_to_user(cu, "※ 不合格的話題", 0, MSG_MESSAGE);
         return;
@@ -1034,7 +1034,7 @@ chat_nick(
 
     chatid = nextword(&msg);
     chatid[8] = '\0';
-    if (!valid_chatid(chatid) || strstr(chatid, "\\033"))
+    if (!valid_chatid(chatid) || strstr(chatid, "\\x1b"))
     {
         send_to_user(cu, "※ 這個聊天代號是不正確的", 0, MSG_MESSAGE);
         return;

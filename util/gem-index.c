@@ -128,7 +128,7 @@ int gindex(void)
         /* Thor.980307: 加上顏色試試是否比較易找 */
         if (xmode & GEM_FOLDER)
         {
-            fprintf(fndx, "%s\033[1;37;%dm%s\033[m\n",
+            fprintf(fndx, "%s\x1b[1;37;%dm%s\x1b[m\n",
                     buf, 41 + (level % 6), hdr.title);
         }
         else

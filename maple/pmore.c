@@ -411,7 +411,7 @@ static int debug = 0;
 #ifndef PMORE_STYLE_ANSI
 #define PMORE_STYLE_ANSI
 
-// Escapes. I don't like \033 everywhere.
+// Escapes. I don't like \x1b everywhere.
 #define ESC_NUM (0x1b)
 #define ESC_STR "\x1b"
 #define ESC_CHR '\x1b'

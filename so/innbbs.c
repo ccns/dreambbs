@@ -187,19 +187,19 @@ nf_query(
     if (!rc)
     {
         memset(&nl, 0, sizeof(nodelist_t));
-        strcpy(nl.host, "\033[1;33m此站台不在 nodelist.bbs 中\033[m");
+        strcpy(nl.host, "\x1b[1;33m此站台不在 nodelist.bbs 中\x1b[m");
     }
 
     /* 看板狀態 */
     if ((rc = brd_bno(nf->board)) >= 0)
     {
         brd = bshm->bcache + rc;
-        outgo = brd->battr & BRD_NOTRAN ? "\033[1;33m不轉出\033[m"  : "轉出";
-        income = nf->xmode & INN_NOINCOME ? "且\033[1;33m不轉進\033[m" : "且轉進";
+        outgo = brd->battr & BRD_NOTRAN ? "\x1b[1;33m不轉出\x1b[m"  : "轉出";
+        income = nf->xmode & INN_NOINCOME ? "且\x1b[1;33m不轉進\x1b[m" : "且轉進";
     }
     else
     {
-        outgo = "\033[1;33m此看板不存在\033[m";
+        outgo = "\x1b[1;33m此看板不存在\x1b[m";
         income = "";
     }
 
@@ -208,7 +208,7 @@ nf_query(
     prints("\n\n轉信站台：%s\n站台位址：%s\n站台協定：%s(%d)\n"
         "轉信群組：%s%s\n本站看板：%s (%s%s)\n使用字集：%s",
         nf->path, nl.host, nl.xmode & INN_USEIHAVE ? "IHAVE" : "POST", nl.port,
-        nf->newsgroup, nf->xmode & INN_ERROR ? " (\033[1;33m此群組不存在\033[m)" : "",
+        nf->newsgroup, nf->xmode & INN_ERROR ? " (\x1b[1;33m此群組不存在\x1b[m)" : "",
         nf->board, outgo, income, nf->charset);
     if (rc && !(nl.xmode & INN_FEEDED))
         prints("\n目前篇數：%d", nf->high);

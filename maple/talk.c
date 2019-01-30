@@ -552,7 +552,7 @@ aloha_sync(void)
     if ((fd = open(fpath, O_RDWR, 0600)) < 0)
             return;
 
-    outz("★ 資料整理稽核中，請稍候 \033[5m...\033[m");
+    outz("★ 資料整理稽核中，請稍候 \x1b[5m...\x1b[m");
     refresh();
 
     if (!fstat(fd, &st) && (size = st.st_size) > 0)
@@ -613,7 +613,7 @@ pal_sync(
     if ((fd = open(fpath, O_RDWR, 0600)) < 0)
         return;
 
-    outz("★ 資料整理稽核中，請稍候 \033[5m...\033[m");
+    outz("★ 資料整理稽核中，請稍候 \x1b[5m...\x1b[m");
     refresh();
 
     if (!fstat(fd, &st) && (size = st.st_size) > 0)
@@ -724,7 +724,7 @@ pal_head(
     vs_head("好友名單", str_site);
     outs(
         "  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [/?]搜尋 [q]查詢 [h]elp\n"
-        "\033[30;47m  編號    代 號         友       誼                                           \033[m");
+        "\x1b[30;47m  編號    代 號         友       誼                                           \x1b[m");
     return pal_body(xo);
 }
 
@@ -1040,10 +1040,10 @@ bmw_item(
         else
         {
             if (strstr(bmw->msg, "★廣播"))
-                prints("%5d \033[36;1m%02d:%02d %-13s★%-50.50s\033[m\n", num, ptime->tm_hour, ptime->tm_min,
+                prints("%5d \x1b[36;1m%02d:%02d %-13s★%-50.50s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
                     bmw->userid, (bmw->msg)+8);
             else
-                prints("%5d \033[32m%02d:%02d %-13s★%-50.50s\033[m\n", num, ptime->tm_hour, ptime->tm_min,
+                prints("%5d \x1b[32m%02d:%02d %-13s★%-50.50s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
                     bmw->userid, bmw->msg);
         }
     }
@@ -1059,10 +1059,10 @@ bmw_item(
         else
         {
             if (strstr(bmw->msg, "★廣播"))
-                prints("%5d \033[36;1m%-13s★%-57.57s\033[m\n", num,
+                prints("%5d \x1b[36;1m%-13s★%-57.57s\x1b[m\n", num,
                     bmw->userid, (bmw->msg)+8);
             else
-                prints("%5d \033[32m%-13s★%-57.57s\033[m\n", num,
+                prints("%5d \x1b[32m%-13s★%-57.57s\x1b[m\n", num,
                     bmw->userid, bmw->msg);
         }
     }
@@ -1109,13 +1109,13 @@ bmw_head(
     {
         outs(
             "  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n"
-            "\033[30;47m  編號 代 號        內       容                                               \033[m");
+            "\x1b[30;47m  編號 代 號        內       容                                               \x1b[m");
     }
     else
     {
         outs(
             "  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n"
-            "\033[30;47m  編號 時 間 代 號        內       容                                         \033[m");
+            "\x1b[30;47m  編號 時 間 代 號        內       容                                         \x1b[m");
     }
     return bmw_body(xo);
 }
@@ -1498,7 +1498,7 @@ do_query(
         userid, (HAS_PERM(PERM_SYSOPX) || !(acct->userlevel & PERM_DENYNICK)) ? acct->username : GUEST_1, acct->numlogins, acct->numposts,
         acct->userlevel & PERM_VALID ? "已" : "未");
 
-    prints(" 上次(\033[1;33m%s\033[m)來自(%s)\n",
+    prints(" 上次(\x1b[1;33m%s\x1b[m)來自(%s)\n",
     Ctime(&acct->lastlogin), ((acct->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
     HIDDEN_SRC : acct->lasthost);
 
@@ -1515,14 +1515,14 @@ do_query(
     outs(" [動態] ");
     /*  up = (acct->lastlogin < time(0) - 6 * 3600) ? NULL : utmp_find(userno);  */
     up = utmp_find(userno);
-    outs("\033[1;36m");
+    outs("\x1b[1;36m");
     outs((!up || (up && ((!HAS_PERM(PERM_SEECLOAK) && (up->ufo & UFO_CLOAK)) || (can_see(up)==2)) && !HAS_PERM(PERM_SYSOP))) ? "不在站上":bmode(up, 1));
-    outs("\033[m");
+    outs("\x1b[m");
     /* Thor.981108: 為滿足 cigar 徹底隱身的要求, 不過用 finger還是可以看到:p */
 
     mail = m_query(userid);
     if (mail)
-        prints(" [信箱] \033[1;31m有 %d 封新情書\033[m\n", mail);
+        prints(" [信箱] \x1b[1;31m有 %d 封新情書\x1b[m\n", mail);
     else
         prints(" [信箱] 都看過了\n");
 
@@ -1544,9 +1544,9 @@ do_query(
         rich=0;
 
     if (acct->point1 > 10)
-        prints(" [優良積分] \033[1;32m%d\033[m [劣文] %d [經濟] %s", acct->point1, acct->point2, fortune[rich]);
+        prints(" [優良積分] \x1b[1;32m%d\x1b[m [劣文] %d [經濟] %s", acct->point1, acct->point2, fortune[rich]);
     else if (acct->point2 > 1)
-        prints(" [優良積分] %d [劣文] \033[1;31m%d\033[m [經濟] %s", acct->point1, acct->point2, fortune[rich]);
+        prints(" [優良積分] %d [劣文] \x1b[1;31m%d\x1b[m [經濟] %s", acct->point1, acct->point2, fortune[rich]);
     else
         prints(" [優良積分] %d [劣文] %d [經濟] %s", acct->point1, acct->point2, fortune[rich]);
 
@@ -1591,8 +1591,8 @@ my_query(
 /* ----------------------------------------------------- */
 
 
-#define BMW_FORMAT      "\033[1;33;46m★%s \033[37;45m %s \033[m"
-#define BMW_FORMAT_BC   "\033[1;37;45m★%s \033[1;33;46m %s \033[m"
+#define BMW_FORMAT      "\x1b[1;33;46m★%s \x1b[37;45m %s \x1b[m"
+#define BMW_FORMAT_BC   "\x1b[1;37;45m★%s \x1b[1;33;46m %s \x1b[m"
 /* patch by visor : BMW_LOCAL_MAX >= BMW_PER_USER
     以免進入無限迴圈                               */
 #define BMW_LOCAL_MAX   10
@@ -1753,7 +1753,7 @@ static void bmw_display(int max, int pos)
     clrtobot();
     i++;
     move(i, 0);
-    prints(" \033[1;36m╓──────╢\033[43;37m              夢大超炫水球回顧              \033[40;36m╟──────╖\033[m");
+    prints(" \x1b[1;36m╓──────╢\x1b[43;37m              夢大超炫水球回顧              \x1b[40;36m╟──────╖\x1b[m");
 
     i++;
     for (max=0; max<8; max++)
@@ -1769,16 +1769,16 @@ static void bmw_display(int max, int pos)
             sprintf(color, "0");
 
         if (strstr(bmw.msg, "★廣播"))
-            sprintf(buf, "   \033[1;45;37m[%-12s]\033[%sm %-58s\033[m", bmw.userid, color, (bmw.msg+8));
+            sprintf(buf, "   \x1b[1;45;37m[%-12s]\x1b[%sm %-58s\x1b[m", bmw.userid, color, (bmw.msg+8));
         else
-            sprintf(buf, "   \033[37;%sm[\033[33m%-12s\033[37m] %-58s\033[m", color, bmw.userid, bmw.msg);
+            sprintf(buf, "   \x1b[37;%sm[\x1b[33m%-12s\x1b[37m] %-58s\x1b[m", color, bmw.userid, bmw.msg);
         move(i, 0);
         outs(buf);
         i++;
     }
 
     move(i, 0);
-    outs(" \033[1;36m├────────────────────────────────────┤\033[m\n");
+    outs(" \x1b[1;36m├────────────────────────────────────┤\x1b[m\n");
     sent = 0;
     for (j=0; j<BMW_LOCAL_MAX; j++)
     {
@@ -1787,15 +1787,15 @@ static void bmw_display(int max, int pos)
         {
             sent = 1;
             bmw = bmw_sentlot[j];
-            sprintf(buf, "  \x1b[1;32mTo %-12s\033[m: \033[32m%-57s\033[m", bmw.userid, bmw.msg);
+            sprintf(buf, "  \x1b[1;32mTo %-12s\x1b[m: \x1b[32m%-57s\x1b[m", bmw.userid, bmw.msg);
             outs(buf);
             break;
         }
     }
     if (!sent)
-        prints("  \033[32m尚未傳訊給 %s\033[m", bmw2.userid);
+        prints("  \x1b[32m尚未傳訊給 %s\x1b[m", bmw2.userid);
     move(i+2, 0);
-    prints(" \033[1;36m╙──────╢\033[43;37m 操作 (←、Enter)離開 (↑↓)選擇 (其他)回訊 \033[40;36m╟──────╜\033[m ");
+    prints(" \x1b[1;36m╙──────╢\x1b[43;37m 操作 (←、Enter)離開 (↑↓)選擇 (其他)回訊 \x1b[40;36m╟──────╜\x1b[m ");
 
 }
 
@@ -1845,8 +1845,8 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
     {
         move(b_lines - 1, 0);
         clrtoeol();
-//      outs("\033[34;46m 熱訊回應 \033[31;47m (←)\033[30m離開 \033[31m(↑↓→)\033[30m瀏覽 \033[31m(Enter)\033[30m選擇線上使用者扣應 \033[31m(其他)\033[30m回應 \033[m");
-        outs("\033[34;46m 熱訊回應 \033[31;47m (← Enter)\033[30m離開 \033[31m(↑↓→)\033[30m瀏覽 \033[31m(其他)\033[30m回應 \033[m");
+//      outs("\x1b[34;46m 熱訊回應 \x1b[31;47m (←)\x1b[30m離開 \x1b[31m(↑↓→)\x1b[30m瀏覽 \x1b[31m(Enter)\x1b[30m選擇線上使用者扣應 \x1b[31m(其他)\x1b[30m回應 \x1b[m");
+        outs("\x1b[34;46m 熱訊回應 \x1b[31;47m (← Enter)\x1b[30m離開 \x1b[31m(↑↓→)\x1b[30m瀏覽 \x1b[31m(其他)\x1b[30m回應 \x1b[m");
     }
 
     cc = KEY_NONE;
@@ -2020,7 +2020,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 /* ----------------------------------------------------- */
 
 
-#define MSG_CC "\033[32m[群組名單]\033[m\n"
+#define MSG_CC "\x1b[32m[群組名單]\x1b[m\n"
 
 int
 pal_list(
@@ -2387,8 +2387,8 @@ bmw_save(void)
                     {
                         struct tm *ptime = localtime(&bmw.btime);
 
-                        fprintf(fout, "%s%s(%02d:%02d)：%s\033[m\n",
-                            bmw.sender == cuser.userno ? "☆" : "\033[32m★",
+                        fprintf(fout, "%s%s(%02d:%02d)：%s\x1b[m\n",
+                            bmw.sender == cuser.userno ? "☆" : "\x1b[32m★",
                             bmw.userid, ptime->tm_hour, ptime->tm_min, bmw.msg);
                     }
                     fclose(fout);
@@ -2627,10 +2627,10 @@ talk_speak(
 
     clear();
     move(i, 0);
-    prints("\033[1;46;37m  談天說地  \033[45m%s%s】 ◆  %s%s\033[m",
+    prints("\x1b[1;46;37m  談天說地  \x1b[45m%s%s】 ◆  %s%s\x1b[m",
         data, buf, page_requestor, data);
 #if 1
-    outz("\033[34;46m 交談模式 \033[31;47m (^A)\033[30m對奕模式 \033[31m(^B)\033[30m象棋模式 \033[31m(^C, ^D)\033[30m結束交談 \033[31m(^Z)\033[30m快捷列表 \033[31m(^G)\033[30m嗶嗶 \033[m");
+    outz("\x1b[34;46m 交談模式 \x1b[31;47m (^A)\x1b[30m對奕模式 \x1b[31m(^B)\x1b[30m象棋模式 \x1b[31m(^C, ^D)\x1b[30m結束交談 \x1b[31m(^Z)\x1b[30m快捷列表 \x1b[31m(^G)\x1b[30m嗶嗶 \x1b[m");
 #endif
     move(0, 0);
 
@@ -2735,7 +2735,7 @@ talk_speak(
                     /* lkchu.981201: 有換行就把 itswords 印出清掉 */
                     if (itswords[0] != '\0')
                     {
-                        fprintf(fp, "\033[32m%s：%s\033[m\n", itsuserid, itswords);
+                        fprintf(fp, "\x1b[32m%s：%s\x1b[m\n", itsuserid, itswords);
                         itswords[0] = '\0';
                     }
                     break;
@@ -2751,7 +2751,7 @@ talk_speak(
                     }
                     else        /* lkchu.981201: itswords 裝滿了 */
                     {
-                        fprintf(fp, "\033[32m%s：%s%c\033[m\n", itsuserid, itswords, data[i]);
+                        fprintf(fp, "\x1b[32m%s：%s%c\x1b[m\n", itsuserid, itswords, data[i]);
                         itswords[0] = '\0';
                     }
                     break;
@@ -3137,7 +3137,7 @@ ulist_body(
     UTMP *up;
     int paltmp;
     int n, cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor, colortmp;
-    char buf[8], color[20], ship[80], *wcolor[7] = {"\033[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
+    char buf[8], color[20], ship[80], *wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 
 #ifdef HAVE_BOARD_PAL
     int isbpal;
@@ -3217,7 +3217,7 @@ ulist_body(
                     cnt, (up->ufo & UFO_WEB)?'*':' ',
                     color, up->userid,
                     (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
-                    colortmp > 0 ? "\033[m" : "",
+                    colortmp > 0 ? "\x1b[m" : "",
                     (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
                     HIDDEN_SRC : up->from, diff, diffmsg,
                     bmode(up, 0), buf);
@@ -3431,14 +3431,14 @@ ulist_neck(
 {
     move(1, 0);
 #ifdef HAVE_BOARD_PAL
-    prints("  排列方式：[\033[1m%s\033[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d \033[0;36m板友：%d\033[m\n"
-        "\033[30;47m No.  代號         %-22s%-13s   PM %-14s閒置\033[m",
+    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d \x1b[0;36m板友：%d\x1b[m\n"
+        "\x1b[30;47m No.  代號         %-22s%-13s   PM %-14s閒置\x1b[m",
         msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num, board_pals,
         (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
         (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
 #else
-    prints("  排列方式：[\033[1m%s\033[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\033[m\n"
-        "\033[30;47m No.  代號         %-22s%-13s   PM %-14s閒置 \033[m",
+    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\x1b[m\n"
+        "\x1b[30;47m No.  代號         %-22s%-13s   PM %-14s閒置 \x1b[m",
         msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num,
         (HAS_PERM(PERM_SYSOP) && (cuser.ufo & UFO_REALNAME)) ? "真實姓名" : "暱  稱",
         (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
@@ -4609,7 +4609,7 @@ banmsg_sync(
     if ((fd = open(fpath, O_RDWR, 0600)) < 0)
         return;
 
-    outz("★ 資料整理稽核中，請稍候 \033[5m...\033[m");
+    outz("★ 資料整理稽核中，請稍候 \x1b[5m...\x1b[m");
     refresh();
 
     if (!fstat(fd, &st) && (size = st.st_size) > 0)
@@ -4715,7 +4715,7 @@ banmsg_head(
     vs_head("拒收名單", str_site);
     outs(
         "  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [q]查詢 [h]elp\n"
-        "\033[30;47m  編號    代 號         描       述                                           \033[m");
+        "\x1b[30;47m  編號    代 號         描       述                                           \x1b[m");
     return banmsg_body(xo);
 }
 

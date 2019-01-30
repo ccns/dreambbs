@@ -60,7 +60,7 @@ void show_icon_classtable(int x, int y, int mode)
 
 void help_classtable(void)
 {
-    outz("\033[1;37;42m 【操作說明】a)新增 e)修改 d)刪除 q)離開 c)清除 \033[1;30mCopyRight By Verit@yzu \033[m");
+    outz("\x1b[1;37;42m 【操作說明】a)新增 e)修改 d)刪除 q)離開 c)清除 \x1b[1;30mCopyRight By Verit@yzu \x1b[m");
 }
 
 int show_table(void)

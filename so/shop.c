@@ -156,7 +156,7 @@ int shop_main(void)
     clear();
 
     move(0, 0);
-    prints("\033[1;33;42m                            " BOARDNAME "    商店街                                 \033[m\n\n");
+    prints("\x1b[1;33;42m                            " BOARDNAME "    商店街                                 \x1b[m\n\n");
     prints("                     您的現金如下：\n\n                     夢幣：%d 元", money);
     move(10, 0);
 
@@ -165,7 +165,7 @@ int shop_main(void)
         "            (1) 購買暫時隱身術   (需要夢幣   65536 元/次)\n\n"
         "            (2) 購買永久隱身術   (需要夢幣  1048576 元/次)\n\n"
         "            (3) 購買隱藏故鄉     (需要夢幣  4194304 元/次)\n\n"
-        "            (4) 購買站長權限\033[1;31m HOT\033[m (需要夢幣 10000000 元)\n");
+        "            (4) 購買站長權限\x1b[1;31m HOT\x1b[m (需要夢幣 10000000 元)\n");
 
     if (!vget(b_lines, 0, "請選擇您要的服務： [Q] 離開 ", buf, 2, DOECHO))
         return 0;

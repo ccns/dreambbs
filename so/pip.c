@@ -97,7 +97,7 @@ int money)
     if (money < 100000)
         return;
     if (money > 300000)
-        sprintf(buf, "\033[1;31m%s %s : %d\033[m\n", Cdate(&now), cuser.userid, money);
+        sprintf(buf, "\x1b[1;31m%s %s : %d\x1b[m\n", Cdate(&now), cuser.userid, money);
     else
         sprintf(buf, "%s %s : %d\n", Cdate(&now), cuser.userid, money);
     f_cat(FN_PIPMONEY_LOG, buf);
@@ -7214,8 +7214,8 @@ pip_meet_vs_man(void)
     class = (d.maxhp * 30 + d.maxmp * 20 + d.attack * 20 + d.resist * 15 + d.mexp * 5 + d.hexp * 5 + d.speed * 10) / 8500 + 1;
 
     move(b_lines - 1, 0);
-    outs("\033[1;44;37m 區域 \033[46m[1]炎之洞窟  [2]北方冰原  [3]古代遺跡  [4]人工島  [5]地獄之門            \033[m\n");
-    outs("\033[1;44;37m 區域 \033[46m                                                                  [Q]回家\033[m");
+    outs("\x1b[1;44;37m 區域 \x1b[46m[1]炎之洞窟  [2]北方冰原  [3]古代遺跡  [4]人工島  [5]地獄之門            \x1b[m\n");
+    outs("\x1b[1;44;37m 區域 \x1b[46m                                                                  [Q]回家\x1b[m");
     while (1)
     {
         char buf[128];
@@ -7235,7 +7235,7 @@ pip_meet_vs_man(void)
     while (d.hp > 0)
     {
         move(b_lines, 0);
-        outs("\x1b[1;44;37m 方向 \x1b[46m[R]回家 [F]餵食 (E/W/S/N)東西南北                                        \033[m");
+        outs("\x1b[1;44;37m 方向 \x1b[46m[R]回家 [F]餵食 (E/W/S/N)東西南北                                        \x1b[m");
         ans = vkey();
         if (ans == 'r' || ans == 'R')
             return 0;

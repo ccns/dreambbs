@@ -73,7 +73,7 @@ XO *xo)
     sprintf(buf, "看板使用資訊：%s", brd->brdname);
 
     vs_head(buf, str_site);
-    outs("  [←]離開 s)重整 S)目前資訊 [h]elp\n\033[30;47m  編號   型    態  閱\讀次數  發文次數  轉信次數  擋信次數                     \033[m");
+    outs("  [←]離開 s)重整 S)目前資訊 [h]elp\n\x1b[30;47m  編號   型    態  閱\讀次數  發文次數  轉信次數  擋信次數                     \x1b[m");
     return bstat_body(xo);
 }
 

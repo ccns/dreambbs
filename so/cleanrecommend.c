@@ -65,18 +65,18 @@ cleanrecommend_item(
 
         if (cleanrecommend->pn == POSITIVE)
         {
-            pn = "\033[1;33m+";
-            prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, cleanrecommend->msg, cleanrecommend->rtime);
+            pn = "\x1b[1;33m+";
+            prints("%4d%s%2s\x1b[m%-12s %-54s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, cleanrecommend->msg, cleanrecommend->rtime);
         }
         else if (cleanrecommend->pn == NEGATIVE)
         {
-            pn = "\033[1;31m-";
-            prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, cleanrecommend->msg, cleanrecommend->rtime);
+            pn = "\x1b[1;31m-";
+            prints("%4d%s%2s\x1b[m%-12s %-54s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, cleanrecommend->msg, cleanrecommend->rtime);
         }
         else
         {
             pn = "   ";
-            prints("%4d%s%2s\033[m%-12s %-54s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, cleanrecommend->msg, cleanrecommend->rtime);
+            prints("%4d%s%2s\x1b[m%-12s %-54s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, cleanrecommend->msg, cleanrecommend->rtime);
         }
 }
 
@@ -125,7 +125,7 @@ cleanrecommend_head(
     vs_head("推薦留言清單", str_site);
     outs(
 "  [←]離開 c)修改[站長專用] d)刪除 D)清除全部 s)重整 [h]elp\n"
-"\033[44m  編號 推      使用者 留言                                                日 期\x1b[m");
+"\x1b[44m  編號 推      使用者 留言                                                日 期\x1b[m");
     return cleanrecommend_body(xo);
 }
 
@@ -317,12 +317,12 @@ clean(
                 while (fgets(buf, 256, fp))
                 {
                     memset(&rmsg, 0, sizeof(RMSG));
-                    if (!strncmp(buf, "\033[1;32m※", 9))
+                    if (!strncmp(buf, "\x1b[1;32m※", 9))
                         pushstart = 1;
 
                     if (pushstart)
                     {
-                        if (!strncmp(buf, "\033[1;32m※", 9))
+                        if (!strncmp(buf, "\x1b[1;32m※", 9))
                         {
                             f_cat(tmp, buf);
                             continue;
@@ -341,12 +341,12 @@ clean(
 
                         if ((battr & BRD_PUSHDEFINE) && !strncmp(rmsg.verb, "→", 2) )
                             rmsg.pn = COMMENT;
-                        else if (!strncmp(rmsg.verb, "\033[m\033[1;33", 2))
+                        else if (!strncmp(rmsg.verb, "\x1b[m\x1b[1;33", 2))
                             rmsg.pn = COMMENT;
-                        /*else if (strncmp(buf, "\033[1;33→", 8))
+                        /*else if (strncmp(buf, "\x1b[1;33→", 8))
                             rmsg.pn = POSITIVE;*/
                         else
-                            rmsg.pn = !strncmp(buf, "\033[1;33", 6);
+                            rmsg.pn = !strncmp(buf, "\x1b[1;33", 6);
 
                         rec_add(recommenddb, &rmsg, sizeof(RMSG));
 //                      if (!strncmp(buf, "\x1b[1;33m→", 9))
@@ -388,11 +388,11 @@ clean(
         else if (rmsg.pn == NEGATIVE)
         {
             counter--;
-            sprintf(buf, "\x1b[1;31m%2s \033[33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", rmsg.verb, rmsg.userid, rmsg.msg, rmsg.rtime);
+            sprintf(buf, "\x1b[1;31m%2s \x1b[33m%12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", rmsg.verb, rmsg.userid, rmsg.msg, rmsg.rtime);
         }
         else
         {
-            sprintf(buf, "\033[m\033[1;33m   %12s：\033[36m%-54.54s \033[m%5.5s\n", rmsg.userid, rmsg.msg, rmsg.rtime);
+            sprintf(buf, "\x1b[m\x1b[1;33m   %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", rmsg.userid, rmsg.msg, rmsg.rtime);
         }
         f_cat(tmp, buf);
     }

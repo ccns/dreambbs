@@ -236,7 +236,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
             move(n + 11, 38);
             clrtoeol();
             move(n + 11, 38);
-            prints("(\033[1;36m%d\033[m) %s", n, desc);
+            prints("(\x1b[1;36m%d\x1b[m) %s", n, desc);
         }
         else
         {
@@ -245,7 +245,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
             else
                 move(n + 2 - 20, 2 + 44);
 
-            prints("(\033[1;36m%2d\033[m) %s", n, desc);
+            prints("(\x1b[1;36m%2d\x1b[m) %s", n, desc);
 
 
             if (n < 21)
@@ -571,7 +571,7 @@ void acct_show(ACCT * u, int adm    /* 1: admin 2: reg-form */
 
     ulevel = u->userlevel;
 
-    outs("身分認證：\033[32m");
+    outs("身分認證：\x1b[32m");
     if (ulevel & PERM_VALID)
     {
         outs(u->tvalid ? Ctime(&u->tvalid) : "有效期間已過，請重新認證");
@@ -580,17 +580,17 @@ void acct_show(ACCT * u, int adm    /* 1: admin 2: reg-form */
     {
         outs("請參考本站公佈欄進行確認，以提昇權限");
     }
-    outs("\033[m\n");
+    outs("\x1b[m\n");
     time(&now);
     if ((u->deny - now) > 0 || u->userlevel & PERM_DENYSTOP)
     {
-        outs("處罰到期日期：\033[1;31m");
+        outs("處罰到期日期：\x1b[1;31m");
         if (u->userlevel & PERM_DENYSTOP)
-            outs("無期徒刑 \033[m\n");
+            outs("無期徒刑 \x1b[m\n");
         else
         {
             outs(Ctime(&u->deny));
-            outs("\033[m");
+            outs("\x1b[m");
             prints("  距今還剩 %d 天 %d 時 \n", (u->deny - now) / 86400,
                    (u->deny - now) / 3600 - ((u->deny - now) / 86400) * 24);
         }
@@ -961,7 +961,7 @@ int add_deny(ACCT * u, int adm, int cross)
                     check_time ? "上次處罰到期日累加" : "從今天起", cdays);
     }
     fprintf(fp,
-            "\033[1;32m※ Origin: \033[1;33m%s \033[1;37m<%s>\n\033[1;31m◆ From: \033[1;36m%s\033[m\n",
+            "\x1b[1;32m※ Origin: \x1b[1;33m%s \x1b[1;37m<%s>\n\x1b[1;31m◆ From: \x1b[1;36m%s\x1b[m\n",
             BOARDNAME, MYHOSTNAME, MYHOSTNAME);
 
     fclose(fp);
@@ -1587,7 +1587,7 @@ int u_addr(void)
             clear();
             move(2, 0);
             prints("主機: %s\n帳號: %s\n", ptr + 1, title);
-            prints("\033[1;5;36m連線遠端主機中...請稍候\033[m\n");
+            prints("\x1b[1;5;36m連線遠端主機中...請稍候\x1b[m\n");
             refresh();
             if (!Get_Socket(ptr + 1, &sock))
             {
@@ -1601,7 +1601,7 @@ int u_addr(void)
                     vget(15, 0, "請輸入以上所列出之工作站帳號的密碼: ", buf,
                          20, NOECHO);
                     move(16, 0);
-                    prints("\033[5;37m身份確認中...請稍候\033[m\n\n");
+                    prints("\x1b[5;37m身份確認中...請稍候\x1b[m\n\n");
                     refresh();
 
                     if (!(popreturn = POP3_Check(ptr + 1, title, buf)))
@@ -1673,8 +1673,8 @@ int u_addr(void)
             }
             else
             {
-                prints("POP3: 不支援，身份確認\033[1;36m使用認證信函\033[m"
-                       "\n\n\033[1;36;5m系統送信中...\033[m");
+                prints("POP3: 不支援，身份確認\x1b[1;36m使用認證信函\x1b[m"
+                       "\n\n\x1b[1;36;5m系統送信中...\x1b[m");
                 refresh();
                 sleep(1);
                 buf[0] = 'n';
@@ -1713,7 +1713,7 @@ int u_addr(void)
                 more(FN_ETC_JUSTIFY, (char *)-1);
                 /* lkchu.981201 */
                 prints("\n%s(%s)您好，由於您更新 E-mail address 的設定，\n"
-                       "請您儘快到 \033[44m%s\033[m 所在的工作站回覆『身份認證信函』。",
+                       "請您儘快到 \x1b[44m%s\x1b[m 所在的工作站回覆『身份認證信函』。",
                        cuser.userid, cuser.username, addr);
                 msg = NULL;
             }
@@ -1947,8 +1947,8 @@ int u_lock(void)
              DOECHO);
 
     clear();
-    prints("\033[1;44;33m                        " BOARDNAME
-           "    閒置/鎖定狀態                      \033[m");
+    prints("\x1b[1;44;33m                        " BOARDNAME
+           "    閒置/鎖定狀態                      \x1b[m");
     move(4, 6);
     prints("閒置中：%s", cutmp->mateid);
     if (buf[0] == 'y' || buf[0] == 'Y')

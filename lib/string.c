@@ -27,7 +27,7 @@ void str_ansi(                    /* strip ANSI code */
         {
             break;
         }
-        else if (ch == '\033')
+        else if (ch == '\x1b')
         {
             ansi = 1;
         }

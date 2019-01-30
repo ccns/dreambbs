@@ -107,9 +107,9 @@ gem_item(
     gtype = gem_way;
 
     if (!(bbstate & STAT_BOARD)&&!HAS_PERM(PERM_ADMIN|PERM_GEM)&&(xmode & GEM_RESTRICT))
-        prints("\033[1;33m資料保密！\033[m\n");
+        prints("\x1b[1;33m資料保密！\x1b[m\n");
     else if (!HAS_PERM(PERM_SYSOP) && (xmode & GEM_LOCK))
-        prints("\033[1;33m資料保密！\033[m\n");
+        prints("\x1b[1;33m資料保密！\x1b[m\n");
     else
     {
         if (xmode & GEM_BOARD)
@@ -1324,7 +1324,7 @@ gem_cross(
 
 
     if (ask_board(xboard, BRD_W_BIT,
-            "\n\n\033[1;33m請挑選適當的看板，切勿轉貼超過三板。\033[m\n\n"))
+            "\n\n\x1b[1;33m請挑選適當的看板，切勿轉貼超過三板。\x1b[m\n\n"))
     {
         if (*xboard == 0)
             strcpy(xboard, currboard);

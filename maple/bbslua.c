@@ -110,7 +110,7 @@ strlen_noansi(const char *str)        /* String length after stripping ANSI code
         {
             break;
         }
-        else if (ch == '\033')
+        else if (ch == '\x1b')
         {
             ansi = 1;
         }
@@ -166,9 +166,9 @@ vs_hdr(const char *title)
     clear();
 
 #ifdef  COLOR_HEADER
-    prints("\033[1;%2d;37m¡i%s¡j\033[m\n", color, title);
+    prints("\x1b[1;%2d;37m¡i%s¡j\x1b[m\n", color, title);
 #else
-    prints("\033[1;46;37m¡i%s¡j\033[m\n", title);
+    prints("\x1b[1;46;37m¡i%s¡j\x1b[m\n", title);
 #endif
 }
 

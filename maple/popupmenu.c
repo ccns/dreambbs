@@ -35,7 +35,7 @@ is_big5(char *src, int pos, int mode)
     {
         if (mode)
         {
-            if (*str == '\033')
+            if (*str == '\x1b')
             {
                 str = strchr(str, 'm');
                 if (!str)
@@ -119,7 +119,7 @@ count_len(
 
     while (ptr)
     {
-        ptr = strstr(ptr, "\033");
+        ptr = strstr(ptr, "\x1b");
         if (ptr)
         {
             for (tmp=ptr; *tmp!='m'; tmp++);
@@ -250,7 +250,7 @@ vs_line(char *msg, int y, int x)
         if (*str)
         {
             /* verit . 解決後面顏色補色 */
-            sprintf(color, "\033[%d;%d;%dm", bbc, fc, bc);
+            sprintf(color, "\x1b[%d;%d;%dm", bbc, fc, bc);
             strcat(buf, color);
 
             /* verit . 假如最後一字元為中文的後半部就清掉 */
@@ -287,7 +287,7 @@ draw_item(char *desc, int mode, int x, int y)
 {
     char buf[128];
 
-    sprintf(buf, " \033[0;37m▏\033[4%d;37m%s(\033[1;36m%c\033[0;37;4%dm)%-25s%s\033[0;47;30m▉\033[40;30;1m▉\033[m ", mode, (mode>0)?"┤":"  ", *desc, mode, desc+1, (mode>0)?"├":"  ");
+    sprintf(buf, " \x1b[0;37m▏\x1b[4%d;37m%s(\x1b[1;36m%c\x1b[0;37;4%dm)%-25s%s\x1b[0;47;30m▉\x1b[40;30;1m▉\x1b[m ", mode, (mode>0)?"┤":"  ", *desc, mode, desc+1, (mode>0)?"├":"  ");
     vs_line(buf, x, y);
     move(b_lines, 0);
 }
@@ -302,15 +302,15 @@ draw_menu(MENU *pmenu[20], int num, char *title, int x, int y, int cur)
 
     sprintf(t, "【%s】", title);
 
-    sprintf(buf, " \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\033[m   ");
+    sprintf(buf, " \x1b[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\x1b[m   ");
     vs_line(buf, x-2, y);
-    sprintf(buf, " \033[0;37;44m▏\033[1m%-31s \033[0;47;34m▉\033[m   ", t);
+    sprintf(buf, " \x1b[0;37;44m▏\x1b[1m%-31s \x1b[0;47;34m▉\x1b[m   ", t);
     vs_line(buf, x-1, y);
     for (i=0; i<num; ++i, ++x)
     {
         draw_item(pmenu[i]->desc, (i==cur)?1:0, x, y);
     }
-    sprintf(buf, " \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\033[40;30;1m▉\033[m ");
+    sprintf(buf, " \x1b[0;47;30m▇\x1b[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\x1b[40;30;1m▉\x1b[m ");
     vs_line(buf, x, y);
     return 0;
 }
@@ -446,7 +446,7 @@ draw_ans_item(
 {
     char buf[128];
 
-    sprintf(buf, " \033[0;37m▏\033[4%d;37m%s%c\033[1;36m%c\033[0;37;4%dm%c%-25s%s\033[0;47;30m▉\033[40;30;1m▉\033[m ", mode, (mode>0)?"┤":"  ", (hotkey==*desc)?'[':'(', *desc, mode, (hotkey==*desc)?']':')', desc+1, (mode>0)?"├":"  ");
+    sprintf(buf, " \x1b[0;37m▏\x1b[4%d;37m%s%c\x1b[1;36m%c\x1b[0;37;4%dm%c%-25s%s\x1b[0;47;30m▉\x1b[40;30;1m▉\x1b[m ", mode, (mode>0)?"┤":"  ", (hotkey==*desc)?'[':'(', *desc, mode, (hotkey==*desc)?']':')', desc+1, (mode>0)?"├":"  ");
     vs_line(buf, x, y);
     move(b_lines, 0);
 }
@@ -460,13 +460,13 @@ draw_menu_des(char *desc[], char *title, int x, int y, int cur)
     char hotkey;
     hotkey = desc[0][0];
 
-    sprintf(buf, " \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\033[m   ");
+    sprintf(buf, " \x1b[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\x1b[m   ");
     vs_line(buf, x-2, y);
-    sprintf(buf, " \033[0;37;44m▏%-31s \033[0;47;34m▉\033[m   ", title);
+    sprintf(buf, " \x1b[0;37;44m▏%-31s \x1b[0;47;34m▉\x1b[m   ", title);
     vs_line(buf, x-1, y);
     for (num=1; desc[num]; num++)
         draw_ans_item(desc[num], (num==cur)?1:0, x++, y, hotkey);
-    sprintf(buf, " \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\033[40;30;1m▉\033[m ");
+    sprintf(buf, " \x1b[0;47;30m▇\x1b[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\x1b[40;30;1m▉\x1b[m ");
     vs_line(buf, x, y);
     return num-2;
 }
@@ -612,34 +612,34 @@ int pmsg(char *msg)
     if (len > 0)
     {
         pcopy(patten, "ˍ", plen);
-        sprintf(buf, " \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ%s\033[m  ", plen?patten:"");
+        sprintf(buf, " \x1b[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ%s\x1b[m  ", plen?patten:"");
         vs_line(buf, 7, 18-plen);
         pcopy(patten, "  ", plen);
-        sprintf(buf, " \033[0;37;44m▏ 請按任意鍵繼續 .....         %s\033[0;47;34m▉\033[m ", plen?patten:"");
+        sprintf(buf, " \x1b[0;37;44m▏ 請按任意鍵繼續 .....         %s\x1b[0;47;34m▉\x1b[m ", plen?patten:"");
         vs_line(buf, 8, 18-plen);
-        sprintf(buf, " \033[0;37m▏                              %s\033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ", plen?patten:"");
+        sprintf(buf, " \x1b[0;37m▏                              %s\x1b[0;47;30m▉\x1b[m\x1b[40;30;1m▉\x1b[m ", plen?patten:"");
         vs_line(buf, 9, 18-plen);
-        sprintf(buf, " \033[0;37m▏%-30s%s\033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ", msg, ((len > 30 && len%2 == 1) ? " " : ""));
+        sprintf(buf, " \x1b[0;37m▏%-30s%s\x1b[0;47;30m▉\x1b[m\x1b[40;30;1m▉\x1b[m ", msg, ((len > 30 && len%2 == 1) ? " " : ""));
         vs_line(buf, 10, 18-plen);
-        sprintf(buf, " \033[0;37m▏                              %s\033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ", plen?patten:"");
+        sprintf(buf, " \x1b[0;37m▏                              %s\x1b[0;47;30m▉\x1b[m\x1b[40;30;1m▉\x1b[m ", plen?patten:"");
         vs_line(buf, 11, 18-plen);
         pcopy(patten, "▇", plen);
-        sprintf(buf, " \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇%s\033[40;30;1m▉\033[m ", plen?patten:"");
+        sprintf(buf, " \x1b[0;47;30m▇\x1b[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇%s\x1b[40;30;1m▉\x1b[m ", plen?patten:"");
         vs_line(buf, 12, 18-plen);
     }
     else
     {
-        sprintf(buf, " \033[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\033[m  ");
+        sprintf(buf, " \x1b[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\x1b[m  ");
         vs_line(buf, 7, 18);
-        sprintf(buf, " \033[0;37;44m▏ 請按任意鍵繼續 .....           \033[0;47;34m▉\033[m ");
+        sprintf(buf, " \x1b[0;37;44m▏ 請按任意鍵繼續 .....           \x1b[0;47;34m▉\x1b[m ");
         vs_line(buf, 8, 18);
-        sprintf(buf, " \033[0;37m▏                                \033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ");
+        sprintf(buf, " \x1b[0;37m▏                                \x1b[0;47;30m▉\x1b[m\x1b[40;30;1m▉\x1b[m ");
         vs_line(buf, 9, 18);
-        sprintf(buf, " \033[0;37m▏%-30s  \033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ", "[請按任意鍵繼續]");
+        sprintf(buf, " \x1b[0;37m▏%-30s  \x1b[0;47;30m▉\x1b[m\x1b[40;30;1m▉\x1b[m ", "[請按任意鍵繼續]");
         vs_line(buf, 10, 18);
-        sprintf(buf, " \033[0;37m▏                                \033[0;47;30m▉\033[m\033[40;30;1m▉\033[m ");
+        sprintf(buf, " \x1b[0;37m▏                                \x1b[0;47;30m▉\x1b[m\x1b[40;30;1m▉\x1b[m ");
         vs_line(buf, 11, 18);
-        sprintf(buf, " \033[0;47;30m▇\033[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\033[40;30;1m▉\033[m ");
+        sprintf(buf, " \x1b[0;47;30m▇\x1b[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\x1b[40;30;1m▉\x1b[m ");
         vs_line(buf, 12, 18);
     }
 

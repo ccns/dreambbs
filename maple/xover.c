@@ -943,8 +943,8 @@ xo_uquery_lite(
     move(b_lines - 8, 0);
     clrtobot();  /* 避免畫面殘留 */
 
-    prints("\033[1;34m"MSG_BLINE"\033[m");
-    prints("\n\033[1;33;44m \033[37m文章作者及資訊查詢： %*s \033[m\n", 55, "");
+    prints("\x1b[1;34m"MSG_BLINE"\x1b[m");
+    prints("\n\x1b[1;33;44m \x1b[37m文章作者及資訊查詢： %*s \x1b[m\n", 55, "");
     prints("\n");
 //  clrtobot();
     /* cpos = xo->pos; */               /* chuan 保留 xo->pos 的值，之後回存 */
@@ -1656,7 +1656,7 @@ xover(
             {
                 if (xo->top + XO_TALL == xo->max)
                 {
-                    /*outz("\033[44m 都給我看光光了! ^O^ \033[m");*/    /* Thor.0616 */
+                    /*outz("\x1b[44m 都給我看光光了! ^O^ \x1b[m");*/    /* Thor.0616 */
                     msg = 1;
                 }
                 else if (msg)
@@ -1927,7 +1927,7 @@ xover(
 #if 1
                     if (cmd == XO_NONE)
                     {                   /* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
-                        outz("\033[44m 找沒有了耶...:( \033[m");
+                        outz("\x1b[44m 找沒有了耶...:( \x1b[m");
                         msg = 1;
                     }
                     else if (msg)
