@@ -39,30 +39,31 @@
           * ~`v1.0-alpha1`~,~`v1.0-alpha2`~,~`v1.0-alpha3`~,~`v1.0-beta1`~,`v1.0-beta2`, `v1.0-beta3`, `v1.0-RC1`, `v1.0-RC2`,
     + `v1.0`: Version 1.0, codename `rimuru` ( **Testing, Preparing to release** )
         - features in plan:
-          * applying resizing term feature
           * port `pfterm` in this release version
-          * Set workaround option for disabling DSO
           * internal code refine or re-struct
-    + `v2.0 ~`: Version 2.0 or later
+    + `v2.0`: Version 2.0, codename `mirimu`
         - features in plan:
+          * applying resizing term feature
+          * Set workaround option for disabling DSO
           * test BBSLua/Ruby
+    + `v3.0 ~`: Version 3.0 or later
+        - features in plan:
           * test simple websocket patch for Maple3
           * test use 32bit int type variable in 64bit environment
 
-* preparing version name about `current`:
-    + ~`v1.0-CURRENT`: developing for preparing version 1.0.~
+* preparing version name about `current`(`master` branch):
+    + `v1.0-CURRENT`: developing for preparing version 1.0.
     + `v2.0-CURRENT`: developing for preparing version 2.0. ( **We are HERE** )
+    + `v3.0-CURRENT`: developing for preparing version 3.0.
     + `vX.0-CURRENT`: developing for preparing version X.0.
 
 * backports for released branch:
     + something significant bug fixes or detail changed, port this commits back to released version branch.
 
-## other plan
-
-### ToDo
+## TODO
 - port from pttbbs
     * ~variable size test~
-    * pfterm port test (4-BSD, **testing**)
+    * ~pfterm port test (4-BSD)~
     * bbslua port test (MIT, **testing**)
     * vtuikit port test (2-BSD)
     * nios port test (2-BSD)
@@ -71,14 +72,3 @@
 - other improvement from other M3 version
     * screen resizing feature
 - Static Web Page Recovering
-
-### Version Number
-+ v1.0, plan to be an LTS version:
-    - release version: `v1.0` ~ `v1.x` (2<y<10)
-    - features (from Rev.Beta 3):
-        * port `pfterm` in this release version
-        * internal code refine or re-struct
-    - fixes (from Rev.Beta 3):
-    - changed (from Rev.Beta 3):
-+ v2.0: plan to test BBSLua, re-struct some parts for enhancement.
-+ v3.0: ...
