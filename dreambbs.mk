@@ -28,7 +28,7 @@ RANLIB	= ranlib
 
 CPROTO	= cproto -E"clang -pipe -E" -I$(SRCROOT)/include
 
-CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wall -Wno-invalid-source-encoding -I$(SRCROOT)/include
+CFLAGS	= -ggdb3 -O0 -pipe -fomit-frame-pointer -Wall -Wno-invalid-source-encoding -I$(SRCROOT)/include
 
 LDFLAGS	= -L../lib -ldao -lcrypt
 
