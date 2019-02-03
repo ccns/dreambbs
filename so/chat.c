@@ -59,6 +59,9 @@ printchatline(
         fprintf(frec, "%s\n", msg);
     }
 
+    if (fmail)
+        fprintf(fmail, "%s\n", msg);
+
     if (chatline >= stop_line-1) {
         region_scroll_up(2, stop_line-1);
     } else {
@@ -85,6 +88,9 @@ printchatline(
 
     if (frec)
         fprintf(frec, "%s\n", msg);
+
+    if (fmail)
+        fprintf(fmail, "%s\n", msg);
 
     if (++line == stop_line) {
         int i;
