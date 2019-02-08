@@ -538,6 +538,13 @@ void print_exception(void)
     out_footer(" (發生錯誤)", "按任意鍵返回");
 }
 
+static VALUE bbsruby_eval_code(VALUE code)
+{
+    VALUE eval_args[] = {code, rb_str_new_cstr("BBSRuby"), INT2FIX(1)};
+    rb_obj_instance_eval(3, eval_args, rb_current_receiver());
+    return Qnil;
+}
+
 void sig_handler(int sig)
 {
     vmsg("嚴重錯誤！無法繼續執行！");
@@ -669,10 +676,10 @@ void run_ruby(
 
     //Before execution, prepare keyboard buffer
     //KB_QUEUE = rb_ary_new();
-    void* root = rb_compile_string("BBSRuby", rb_str_new_cstr(cpBuf), 1);
+    VALUE code = rb_str_new_cstr(cpBuf);
     free(cpBuf);
     // free(evalBuf);
-    error = ruby_exec_node(root);
+    rb_protect(bbsruby_eval_code, code, &error);
 
     if (error == 0 || ABORT_BBSRUBY)
         out_footer(ABORT_BBSRUBY ? " (使用者中斷)" : " (程式結束)", "按任意鍵返回");
