@@ -1,4 +1,4 @@
-# Dreamland-BBS (夢之大地電子布告欄系統)
+# Dreamland-BBS
 
 [![](https://i.imgur.com/0EpI7Fa.png)](https://github.com/ccns/dreambbs)
 
