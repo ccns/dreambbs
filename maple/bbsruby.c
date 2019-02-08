@@ -520,21 +520,24 @@ void run_ruby_test(void)
 void print_exception(void)
 {
     clear();
-    VALUE exception = rb_gv_get("$!");
+    VALUE exception = rb_errinfo();
+    rb_set_errinfo(Qnil);
+    if (!RTEST(exception)) return;
+
     char* buffer = RSTRING_PTR(rb_obj_as_string(exception));
     clear();
     move(0, 0);
     outs("程式發生錯誤，無法繼續執行。請通知原作者。\n錯誤資訊：\n");
     outs(buffer);
     outs("\n");
-    /*VALUE ary = rb_funcall(rb_errinfo, rb_intern("backtrace"), 0);
+    VALUE ary = rb_funcall(exception, rb_intern("backtrace"), 0);
     int c;
     for (c=0; c < RARRAY_LEN(ary); c++)
     {
         outs("  from: ");
         outs(StringValueCStr(RARRAY_PTR(ary)[c]));
         outs("\n");
-    }*/
+    }
     out_footer(" (發生錯誤)", "按任意鍵返回");
 }
 
