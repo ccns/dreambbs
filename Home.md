@@ -2,10 +2,6 @@
 
 This page will collect some info of how to use & how to install DreamBBS system. :)
 
-## Changes
-
-  + [Changelog](CHANGELOG)
-
 ## Latest Pre-Releases
   + [Version 1.0 RC3 (codename: Rimuru) ](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc3)
   + [Version 1.0-Rimuru Release Notes (Draft)](v1.0-rimuru) ([zh_tw](https://github.com/ccns/dreambbs/wiki/v1.0-rimuru-zh_tw))
