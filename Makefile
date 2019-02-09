@@ -40,6 +40,7 @@ install:
 .if $(OPSYS) != "Cygwin"
 	@cd so; $(MAKE) install
 .endif
+	@cd scripts; $(MAKE) install
 
 clean:
 	@cd lib; $(MAKE) clean
