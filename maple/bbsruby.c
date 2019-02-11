@@ -591,7 +591,17 @@ void run_ruby(fpath)
 
 		// Set safe level to 2
 		// We cannot have protection if the safe level > 2
+#if defined(RUBY_SAFE_LEVEL_MAX) && RUBY_SAFE_LEVEL_MAX < 2
+		// IID.20190129: Set to 1 to be compatible with Ruby 2.3+
+		rb_set_safe_level(1);
+
+		// IID.20190211: Vanilla Ruby with safe level < 2 is not safe;
+		//    temporarily disable compiling BBS-Ruby against Ruby 2.3+
+		//    where safe levels 2 to 4 are obsoleted
+		#error  BBS-Ruby: Ruby 2.3+ is not supported by now for security reasons.
+#else
 		rb_set_safe_level(2);
+#endif
 
 		// Hook Ruby
 #ifdef RUBY_VM

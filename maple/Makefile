@@ -35,8 +35,8 @@ OBJ	+= bbslua.o bbsluaext.o
     RUBY_CFLAGS_CMD	= | sed 's/x86_64/i386/'
 .endif
 
-RUBY_CFLAGS	!= pkg-config --cflags ruby ${RUBY_CFLAGS_CMD}
-RUBY_LDFLAGS	!= pkg-config --libs ruby
+RUBY_CFLAGS	!= pkg-config --cflags ruby-2.2 ${RUBY_CFLAGS_CMD}
+RUBY_LDFLAGS	!= pkg-config --libs ruby-2.2
 CFLAGS	+= ${RUBY_CFLAGS}
 LDFLAGS	+= ${RUBY_LDFLAGS}
 SRC	+= bbsruby.c
