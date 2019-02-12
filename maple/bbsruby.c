@@ -626,7 +626,14 @@ void run_ruby(
     if (!ruby_inited)
     {
         RUBY_INIT_STACK;
-        ruby_init();
+        if (ruby_setup())
+        {
+            print_exception();
+            out_footer(" (內部錯誤)",  "按任意鍵返回");
+            signal(SIGSEGV, old_sig_handler);
+            return;
+        }
+
         ruby_init_loadpath();
         ruby_inited = 1;
 
