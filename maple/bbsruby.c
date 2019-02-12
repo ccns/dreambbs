@@ -688,10 +688,10 @@ void run_ruby(
         TOCs_DATA[i] = NULL;
     }
 
-    char *cpBuf = malloc(sizeof(char) * strlen(post) + 1);
-    // char *evalBuf = malloc(sizeof(char) * strlen(post) + 1 + 10);
+    char *cpBuf = malloc(sizeof(char) * (cEnd - cStart) + 1);
+    // char *evalBuf = malloc(sizeof(char) * (cEnd - cStart) + 1 + 10);
     strncpy(cpBuf, cStart, cEnd - cStart);
-    cpBuf[cEnd - cStart + 1] = '\0';
+    cpBuf[cEnd - cStart] = '\0';
     ruby_script_detach(post, pLen);
 
     // sprintf(evalBuf, "begin\n%s\nend", cpBuf);
