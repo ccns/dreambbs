@@ -65,6 +65,7 @@
     * ~variable size test~
     * ~pfterm port test (4-BSD)~
     * bbslua port test (MIT, **testing**)
+    * bbsruby port test (**testing**)
     * vtuikit port test (2-BSD)
     * nios port test (2-BSD)
     * logind port test (2-BSD)
