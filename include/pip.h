@@ -6,8 +6,8 @@
 /* update : 2000/05/26                                   */
 /*-------------------------------------------------------*/
 
-#ifndef _PIP_H_
-#define _PIP_H_
+#ifndef PIP_H
+#define PIP_H
 
 #define ALIVE   (9/10)  /* 復活比 */
 
@@ -775,4 +775,4 @@ struct newendingset endmodefamily[] =
     {"正在新娘修行",            "正在新郎修行",        50},
     {NULL,                      NULL,                   0}
 };
-#endif  /* #ifndef _PIP_H_ */
+#endif  /* #ifndef PIP_H */

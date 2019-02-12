@@ -5,10 +5,10 @@
 /* create : 95/03/29                                     */
 /* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
-#ifndef _GLOBAL_H_
-#define _GLOBAL_H_
+#ifndef GLOBAL_H
+#define GLOBAL_H
 
-#ifdef  _MAIN_C_
+#ifdef  MAIN_C
 # define VAR
 # define INI(x)         = x
 #else
@@ -479,4 +479,4 @@ VAR int aprilfirst      INI(0);
 extern char xo_pool[];          /* XO's data I/O pool */
 int total_num;                  /* 重設 站上人數*/
 
-#endif                          /* _GLOBAL_H_ */
+#endif                          /* GLOBAL_H */

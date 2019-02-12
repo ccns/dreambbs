@@ -6,8 +6,8 @@
 /* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
 
-#ifndef _PROTO_H_
-#define _PROTO_H_
+#ifndef PROTO_H
+#define PROTO_H
 
 #ifdef M3_USE_PFTERM
 #include "pfterm.h"
@@ -226,6 +226,9 @@ int t_banmsg(void);
 int bbslua(const char *fpath);
 int bbslua_isHeader(const char *ps, const char *pe);
 
+/* bbsruby.c */
+void run_ruby(char *fpath);
+
 /* visio.c */
 void bell(void);
 void clrtohol(void);
@@ -331,4 +334,4 @@ int class_add(XO *xo);
 #define STR4(x)         ((x[0] << 24) + (x[1] << 16) + (x[2] << 8) + x[3])
                         /* Thor.980913: «OÃÒprecedence */
 
-#endif                          /* _PROTO_H_ */
+#endif                          /* PROTO_H */

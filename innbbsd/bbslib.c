@@ -14,7 +14,7 @@
 #include <time.h>
 #include <sys/time.h>
 
-#ifdef _NoCeM_
+#ifdef NoCeM
 #include "nocem.h"
 #endif
 
@@ -136,7 +136,7 @@ read_newsfeeds(void)
 }
 
 
-#ifdef _NoCeM_
+#ifdef NoCeM
 /* ----------------------------------------------------- */
 /* read ncmperm.bbs                                      */
 /* ----------------------------------------------------- */
@@ -169,7 +169,7 @@ read_ncmperm(void)
 
     return 0;
 }
-#endif  /* _NoCeM_ */
+#endif  /* NoCeM */
 
 
 /* ----------------------------------------------------- */
@@ -239,7 +239,7 @@ initial_bbs(void)
         return 0;
     }
 
-#ifdef _NoCeM_
+#ifdef NoCeM
     if (read_ncmperm() < 0)
     {
         printf("請檢查 ncmperm.bbs，無法讀檔；如果您不想設定 NoCeM，那麼請忽略此訊息\n");

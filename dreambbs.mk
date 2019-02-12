@@ -20,6 +20,7 @@ DEF_YES		:= && echo "YES" || echo ""
 USE_PMORE	!= sh -c '${DEF_CMD}"M3_USE_PMORE" ${BBSCONF} ${DEF_YES}'
 USE_PFTERM	!= sh -c '${DEF_CMD}"M3_USE_PFTERM" ${BBSCONF} ${DEF_YES}'
 USE_BBSLUA	!= sh -c '${DEF_CMD}"M3_USE_BBSLUA" ${BBSCONF} ${DEF_YES}'
+USE_BBSRUBY	!= sh -c '${DEF_CMD}"M3_USE_BBSRUBY" ${BBSCONF} ${DEF_YES}'
 
 CC	= clang
 
@@ -27,7 +28,7 @@ RANLIB	= ranlib
 
 CPROTO	= cproto -E"clang -pipe -E" -I$(SRCROOT)/include
 
-CFLAGS	= -g -O2 -pipe -fomit-frame-pointer -Wall -Wno-invalid-source-encoding -I$(SRCROOT)/include
+CFLAGS	= -ggdb3 -O0 -pipe -fomit-frame-pointer -Wall -Wno-invalid-source-encoding -I$(SRCROOT)/include
 
 LDFLAGS	= -L../lib -ldao -lcrypt
 

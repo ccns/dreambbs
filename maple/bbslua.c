@@ -7,9 +7,11 @@
 
 #ifdef M3_USE_BBSLUA
 #include <assert.h>
+#include <stdarg.h>
 #include <sys/file.h>
 #include <sys/time.h>
 #include "bbs.h"
+#include "bbs_script.h"
 #endif //M3_USE_BBSLUA
 
 //////////////////////////////////////////////////////////////////////////
@@ -141,7 +143,7 @@ OpenCreate(const char *path, int flags)
 }
 
 #ifndef VBUFLEN
-#define VBUFLEN		(ANSILINELEN)
+#define VBUFLEN     (ANSILINELEN)
 #endif
 static int
 vmsgf(const char *fmt, ...)
@@ -245,18 +247,51 @@ newwin(int nlines, int ncols, int y, int x)
 //                  give it a simplified one.
 
 #define IBUFSIZE  128
+#define VIN_CAPACITY  (int) (IBUFSIZE - 1)
+#define VIN_END  (char *) (vin + IBUFSIZE)
 static char vin[IBUFSIZE];
-static int vin_size = 0;
+static char *vin_head = vin;
+static char *vin_tail = vin;
 
 
 // IID.20190124: Override `vkey()`.
 #define vkey()  vkey_getch()
 
+static int vin_is_empty(void)
+{
+    return vin_head == vin_tail;
+}
+
+static int vin_size(void)
+{
+    return (vin_tail >= vin_head)
+        ? (vin_tail - vin_head)
+        : (VIN_CAPACITY - (vin_tail - vin_head));
+}
+
+static int vin_space(void)
+{
+    return VIN_CAPACITY - vin_size();
+}
+
 static int vin_pop(void)
 {
-    if (vin_size <= 0)
+    int peaked_char;
+
+    if (vin_is_empty())
         return EOF;
-    return (unsigned char) vin[vin_size-- - 1];
+
+    peaked_char = (unsigned char) *vin_head;
+
+    if (++vin_head == VIN_END)
+        vin_head = vin;
+
+    return peaked_char;
+}
+
+static void vin_clear()
+{
+    vin_head = vin_tail = vin;
 }
 
 #undef  TRAP_ESC
@@ -352,17 +387,44 @@ vkey_getch(void)  // `vkey()`, but tries `vin_pop()` before `igetch()`
     }
 }
 
+// After reading `VIN_AFTER_HEAD_SIZE()` chars from `vin`,
+//    the next char cursor will be at `vin_tail`
+//    or at `VIN_END` depending on which condition comes first.
+#define VIN_AFTER_HEAD_SIZE()  \
+    ((vin_tail >= vin_head) ? vin_tail - vin_head : VIN_END - vin_head)
+
+// After reading `VIN_AFTER_TAIL_SPACE()` chars into `vin`,
+//    the next char cursor will be one char before `vin_head` in the queue
+//    or at `VIN_END` depending on which condition comes first.
+#define VIN_AFTER_TAIL_SPACE()  \
+    ((vin_head == vin) ? VIN_END - 1 - vin_tail \
+      : (vin_head > vin_tail) ? vin_head - 1 - vin_tail : VIN_END - vin_tail)
 
 static int
 read_vin(void)
 {
-    int len = read(0, vin + vin_size, IBUFSIZE - vin_size);
+    int total_len = 0;
+    int len;
 
-    if (len == 0 || (len < 0 && !(errno == EINTR || errno == EAGAIN)))
-        abort_bbs();
+    while (vin_space() > 0) {
+        len = read(0, vin_tail, VIN_AFTER_TAIL_SPACE());
 
-    vin_size += len;
-    return len;
+        if (len == 0 || (len < 0 && !(errno == EINTR || errno == EAGAIN)))
+            abort_bbs();
+
+        if (len > 0) {
+            total_len += len;
+            vin_tail += len;
+            if (vin_tail == VIN_END) {
+                vin_tail = vin;
+                continue;
+            }
+        }
+
+        break;
+    }
+
+    return total_len;
 }
 
 static int
@@ -372,11 +434,11 @@ wait_input(float f, int bIgnoreBuf)
     fd_set readfds;
     struct timeval tv, *ptv;
 
-    if (!bIgnoreBuf && vin_size > 0)
+    if (!bIgnoreBuf && !vin_is_empty())
         return 1;
 
     // Check if something already in input queue,
-    // detemine if ok to break.
+    // determine if ok to break.
 
     // wait for real user interaction
     FD_ZERO(&readfds);
@@ -425,14 +487,14 @@ vkey_is_ready(void)
 static int
 vkey_is_full(void)
 {
-    return vin_size >= IBUFSIZE;
+    return vin_size() >= VIN_CAPACITY;
 }
 
 static void
 vkey_purge(void)
 {
     int max_try = 64;
-    vin_size = 0;
+    vin_clear();
 
 #ifdef STATINC
     STATINC(STAT_SYSREADSOCKET);
@@ -440,7 +502,7 @@ vkey_purge(void)
     while (wait_input(0.01, 1) && max_try-- > 0)
     {
         read_vin();
-        vin_size = 0;
+        vin_clear();
     }
 }
 
@@ -456,21 +518,24 @@ static int
 vkey_prefetch(int timeout)
 {
     if (wait_input(timeout / (double)MILLISECONDS, 1)
-            && vin_size < IBUFSIZE)
+            && !vkey_is_full())
         read_vin();
-    return vin_size > 0;
+    return !vin_is_empty();
 }
 
 static int
 vkey_is_prefetched(char c)
 {
+    char *res;
+
     if (c == EOF)
         return 0;
 
-    char *res = (char *) memchr(vin, c, vin_size);
-    if (!res)
-        return 0;
-    return res - vin >= 0;
+    res = (char *) memchr(vin_head, c, VIN_AFTER_HEAD_SIZE());
+    if (!res && vin_head > vin_tail)
+        res = (char *) memchr(vin, c, vin_tail - vin);
+
+    return res >= vin;
 }
 
 #endif  // #if !(defined(M3_USE_NIOS_VKEY) || defined(PMORE_HAVE_VKEY))
@@ -820,7 +885,7 @@ bl_addstr(lua_State* L)
     for (i = 1; i <= n; i++)
     {
         const char *s = lua_tostring(L, i);
-        if(s)
+        if (s)
             outs(s);
     }
     return 0;
@@ -1122,7 +1187,7 @@ bl_attrset(lua_State *L)
         outs(ANSI_RESET);
     for (i = 1; i <= n; i++)
     {
-        sprintf(p, "%dm",(int)lua_tointeger(L, i));
+        sprintf(p, "%dm", (int)lua_tointeger(L, i));
         outs(buf);
     }
     return 0;
@@ -1822,7 +1887,7 @@ bbslua_logo(lua_State *L)
     }
     else
     {
-        // should be comtaible
+        // should be compatible
         // prints("¬Û®e (%.03f)", tocinterface);
     }
 
@@ -1975,7 +2040,7 @@ void bbslua_loadLatest(lua_State *L,
         xps = xbs;
         xpe = xps + xsz;
 
-        if(!bbslua_detect_range(&xps, &xpe, &xlineshift))
+        if (!bbslua_detect_range(&xps, &xpe, &xlineshift))
         {
             // not detected
             bbslua_detach(xbs, xsz);

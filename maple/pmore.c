@@ -2835,6 +2835,14 @@ _pmore2(
                 break;
 #endif // USE_BBSLUA
 
+            /* BBS-Ruby */
+#ifdef USE_BBSRUBY
+            case '!':
+                run_ruby(* (char **)ahctx);
+                MFDISP_DIRTY();
+                break;
+#endif // USE_BBSRUBY
+
             /* debug system */
 #ifdef DEBUG
             case 'd':
@@ -3314,7 +3322,7 @@ mf_movieWaitKey(struct timeval *ptv, int dorefresh)
 
     do {
         // Check if something already in input queue,
-        // detemine if ok to break.
+        // determine if ok to break.
 #ifdef PMORE_HAVE_VKEY
         while (vkey_is_typeahead())
         {

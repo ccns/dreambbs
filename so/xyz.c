@@ -9,6 +9,7 @@
 
 
 #include "bbs.h"
+#include "bbs_script.h"
 
 #include <netinet/tcp.h>
 #include <sys/wait.h>
@@ -45,38 +46,51 @@ x_siteinfo(void)
     prints("\x1b[1;30mModules & Plug-in: \x1b[m\n\n");
 
 //家舱て硂娩
+#define ONLINE_STR(module)  "\x1b[1;32m  online \x1b[1;30m  " module "\x1b[m\n"
+#define OFFLINE_STR(module) "\x1b[1;31m  offline\x1b[1;30m  " module "\x1b[m\n"
+
 #ifdef MultiRecommend
-    prints("\x1b[1;32m  online \x1b[1;30m  Multi Recommend Control 妓て崩ゅ北╰参\x1b[m\n");
+    prints(ONLINE_STR("Multi Recommend Control 妓て崩ゅ北╰参"));
+#else
+    prints(OFFLINE_STR("Multi Recommend Control 妓て崩ゅ北╰参"));
 #endif
 #ifdef M3_USE_PMORE
-    prints("\x1b[1;32m  online \x1b[1;30m  pmore (piaip's more) 2007+ w/Movie\x1b[m\n");
+    prints(ONLINE_STR("pmore (piaip's more) 2007+ w/Movie"));
+#else
+    prints(OFFLINE_STR("pmore (piaip's more) 2007+ w/Movie"));
 #endif
 #ifdef M3_USE_PFTERM
-    prints("\x1b[1;32m  online \x1b[1;30m  pfterm (piaip's flat terminal, Perfect Term)\x1b[m\n");
+    prints(ONLINE_STR("pfterm (piaip's flat terminal, Perfect Term)"));
+#else
+    prints(OFFLINE_STR("pfterm (piaip's flat terminal, Perfect Term)"));
 #endif
 #ifdef GRAYOUT
-    prints("\x1b[1;32m  online \x1b[1;30m  Grayout Advanced Control 睭睭疭╰参\x1b[m\n");
+    prints(ONLINE_STR("Grayout Advanced Control 睭睭疭╰参"));
 #else
-    prints("\x1b[1;31m  offline\x1b[1;30m  Grayout Advanced Control 睭睭疭╰参\x1b[m\n");
+    prints(OFFLINE_STR("Grayout Advanced Control 睭睭疭╰参"));
 #endif
-#ifdef M3_USE_BBSLUA
-#define STR(str)  #str
-    prints("\x1b[1;32m  online \x1b[1;30m  BBS-Lua " STR(BBSLUA_INTERFACE_VER) "\x1b[m\n");
-#undef  STR
-#endif
+#ifdef HAVE_BBSLUA
+  #ifdef M3_USE_BBSLUA
+    prints(ONLINE_STR("BBS-Lua " BBSLUA_INTERFACE_VER_STR " / " LUA_RELEASE));
+  #else
+    prints(OFFLINE_STR("BBS-Lua " BBSLUA_INTERFACE_VER_STR));
+  #endif
+#endif  // #ifdef HAVE_BBSLUA
 
 /*
 #ifdef SMerge
-    prints("\x1b[1;32m  online \x1b[1;30m  Smart Merge ゅ笆ㄖ\x1b[m\n");
+    prints(ONLINE_STR("Smart Merge ゅ笆ㄖ));
 #else
-    prints("\x1b[1;31m  offline\x1b[1;30m  Smart Merge ゅ笆ㄖ\x1b[m\n");
-#endif
-#ifdef BBSRuby
-    prints("\x1b[1;32m  online \x1b[1;30m  (EXP) BBSRuby v0.3\x1b[m\n");
-#else
-    prints("\x1b[1;31m  offline\x1b[1;30m  (EXP) BBSRuby v0.3\x1b[m\n");
+    prints(OFFLINE_STR("Smart Merge ゅ笆ㄖ));
 #endif
 */
+#ifdef HAVE_BBSRUBY
+  #ifdef M3_USE_BBSRUBY
+    prints(ONLINE_STR("(EXP) BBSRuby " BBSRUBY_VERSION_STR " Interface: " BBSRUBY_INTERFACE_VER_STR " / Ruby " RUBY_RELEASE_STR));
+  #else
+    prints(OFFLINE_STR("(EXP) BBSRuby " BBSRUBY_VERSION_STR " Interface: " BBSRUBY_INTERFACE_VER_STR));
+  #endif
+#endif
 
 #else
 //    prints("\x1b[1;30mModules & Plug-in: None\x1b[m\n");

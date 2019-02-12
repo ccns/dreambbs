@@ -16,7 +16,7 @@
 #include <time.h>
 #include <sys/time.h>
 
-#ifdef _NoCeM_
+#ifdef NoCeM
 #include "nocem.h"
 #endif
 
@@ -107,7 +107,7 @@ my_recv(
         }
         else
         {
-#ifdef _NoCeM_
+#ifdef NoCeM
             if (strstr(SUBJECT, "@@") && strstr(BODY, "NCM") && strstr(BODY, "PGP"))
                 rel = receive_nocem();
             else
@@ -717,7 +717,7 @@ inndchannel(void)
         /* 若檔案比 uptime2 還新的話，那麼重新載入 */
         if (filetime("innd/nodelist.bbs") > uptime2 ||
             filetime("innd/newsfeeds.bbs") > uptime2 ||
-#ifdef _NoCeM_
+#ifdef NoCeM
             filetime("innd/ncmperm.bbs") > uptime2 ||
 #endif
             filetime("innd/spamrule.bbs") > uptime2)

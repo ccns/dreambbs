@@ -26,6 +26,24 @@ SRC	+= bbslua.c bbsluaext.c
 OBJ	+= bbslua.o bbsluaext.o
 .endif
 
+
+.if $(USE_BBSRUBY)
+.if $(OPSYS) == "FreeBSD"
+    LDFLAGS	+= -Wl,--no-as-needed
+.endif
+.if $(ARCHI) == "64"
+    RUBY_CFLAGS_CMD	= | sed 's/x86_64/i386/'
+.endif
+
+RUBY_CFLAGS	!= pkg-config --cflags ruby-2.2 ${RUBY_CFLAGS_CMD}
+RUBY_LDFLAGS	!= pkg-config --libs ruby-2.2
+CFLAGS	+= ${RUBY_CFLAGS}
+LDFLAGS	+= ${RUBY_LDFLAGS}
+SRC	+= bbsruby.c
+OBJ	+= bbsruby.o
+.endif
+
+
 .if $(USE_PFTERM)
 SRC	+= pfterm.c
 OBJ	+= pfterm.o

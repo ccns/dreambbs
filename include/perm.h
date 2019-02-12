@@ -7,8 +7,8 @@
 /*-------------------------------------------------------*/
 
 
-#ifndef _PERM_H_
-#define _PERM_H_
+#ifndef PERM_H
+#define PERM_H
 
 
 /* ----------------------------------------------------- */
@@ -93,7 +93,7 @@
 #define NUMPERMS        32
 
 
-#ifdef _ADMIN_C_
+#ifdef ADMIN_C
 
 
 static char *perm_tbl[] = {
@@ -134,7 +134,7 @@ static char *perm_tbl[] = {
   "¯¸ªø"                        /* PERM_SYSOP */
 };
 
-#endif  /* #ifdef _ADMIN_C_ */
+#endif  /* #ifdef ADMIN_C */
 
 
 /* ----------------------------------------------------- */
@@ -151,4 +151,4 @@ static char *perm_tbl[] = {
 #define GEM_SYSOP       4
 
 
-#endif                          /* _PERM_H_ */
+#endif                          /* PERM_H */

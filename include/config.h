@@ -6,8 +6,8 @@
 /* update : 106/2/24                                     */
 /*-------------------------------------------------------*/
 
-#ifndef _CONFIG_H_
-#define _CONFIG_H_
+#ifndef CONFIG_H
+#define CONFIG_H
 
 #include "../dreambbs.conf"
 
@@ -103,6 +103,10 @@
 
 #ifdef  M3_USE_BBSLUA           /* Enable BBS-Lua */
 #define USE_BBSLUA
+#endif
+
+#ifdef  M3_USE_BBSRUBY          /* Enable BBS-Ruby */
+#define USE_BBSRUBY
 #endif
 
 /* ----------------------------------------------------- */
@@ -581,5 +585,5 @@
 #undef  QUERY_REALNAMES         /* 被 Query 的 User 告知真實姓名 */
 #endif
 
-#endif                          /* _CONFIG_H_ */
+#endif                          /* CONFIG_H */
 

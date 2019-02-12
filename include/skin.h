@@ -6,10 +6,10 @@
 /* update :                                              */
 /*-------------------------------------------------------*/
 
-#ifndef _SKIN_H_
-#define _SKIN_H_
+#ifndef SKIN_H
+#define SKIN_H
 
-#ifdef  _MAIN_C_
+#ifdef  MAIN_C
 # define VAR
 # define INI(x)         = x
 #else
@@ -23,4 +23,4 @@ VAR int skin INI(1);
 #undef  VAR
 #undef  INI
 
-#endif                          /* _SKIN_H_ */
+#endif                          /* SKIN_H */
