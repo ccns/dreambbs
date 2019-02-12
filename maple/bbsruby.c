@@ -56,7 +56,7 @@ typedef rb_event_t rb_event_flag_t;
 int ABORT_BBSRUBY = 0;
 
 #define BBSRUBY_TOC_HEADERS (6)
-char* TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"Interface", "Title", "Notes", "Author", "Version", "Date"};
+char* TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"interface", "title", "notes", "author", "version", "date"};
 char* TOCs_DATA[BBSRUBY_TOC_HEADERS] = {0};
 VALUE TOCs_rubyhash;
 double KBHIT_TMIN = 0.001;
@@ -517,6 +517,7 @@ int ruby_script_range_detect(char **pStart, char **pEnd)
                     free(TOCs_DATA[i]);
                     TOCs_DATA[i] = data;
                     rb_hash_aset(hashTOC, rb_str_new_cstr(TOCs_HEADER[i]), rb_str_new_cstr(data));
+                    rb_hash_aset(hashTOC, rb_funcall(rb_str_new_cstr(TOCs_HEADER[i]), rb_intern("capitalize!"), 0), rb_str_new_cstr(data));
                     TOCfound = 1;
                     break;
                 }
