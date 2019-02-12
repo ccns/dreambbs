@@ -26,18 +26,18 @@
         - `v0.96.2`: detail fixes based on `v0.96.1`
         - It is going to be End-Of-Life after `v0.97.1` released.
 
-    + `v0.97`: Version 0.97, codename `stratosphere` ( **Latest Release Branch** )
+    + `v0.97`: Version 0.97, codename `stratosphere` 
         - `v0.97-RCx`~`v0.97.0`: pre-release
         - `v0.97.1`: detail fixes based on `v0.97.0`
         - `v0.97.2`: detail fixes based on `v0.97.1` 
-        - `v0.97.3`: detail fixes based on `v0.97.2` ( **latest** )
+        - `v0.97.3`: detail fixes based on `v0.97.2`
         - features:
           * add simple code test utilities
           * refine layout: removing trailing whitespaces.
     + Drop plan of `v0.98`~`v0.99` release branch due to big change and it will be tested for a long time.
         - alternative preparation:
           * ~`v1.0-alpha1`~,~`v1.0-alpha2`~,~`v1.0-alpha3`~,~`v1.0-beta1`~, ~`v1.0-RC1`~, ~`v1.0-RC2`~, `v1.0-RC3`
-    + `v1.0`: Version 1.0, codename `rimuru` ( **Testing, Preparing to release** )
+    + `v1.0`: Version 1.0, codename `rimuru` ( **Latest Release Branch** )
         - features in plan:
           * port `pfterm` in this release version
           * internal code refine or re-struct
