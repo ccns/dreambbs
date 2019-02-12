@@ -15,6 +15,16 @@ static inline void getxy(int *x, int *y)
     getyx(y, x);
 }
 
+static inline void movexy(int x, int y)
+{
+    move(y, x);
+}
+
+static inline int vgetxy(int col, int line, const char *prompt, char *data, int max, int echo)
+{
+    return vget(line, col, prompt, data, max, echo);
+}
+
 //-------------------------------------------------------
 // BBSRuby.c
 //-------------------------------------------------------
@@ -138,7 +148,7 @@ VALUE bbs_getdata(VALUE self, VALUE args)
     int cur_row, cur_col;
     getxy(&cur_col, &cur_row);
 
-    vget(cur_col, cur_row, "", data, maxsize, echo);
+    vgetxy(cur_col, cur_row, "", data, maxsize, echo);
 
     return rb_str_new_cstr(data);
 }
@@ -185,8 +195,8 @@ VALUE bbs_print(VALUE self, VALUE args)
 VALUE bbs_getmaxyx(VALUE self)
 {
     VALUE rethash = rb_hash_new();
-    rb_hash_aset(rethash, rb_str_new_cstr("x"), INT2NUM(b_lines + 1));
-    rb_hash_aset(rethash, rb_str_new_cstr("y"), INT2NUM(b_cols + 1));
+    rb_hash_aset(rethash, rb_str_new_cstr("y"), INT2NUM(b_lines + 1));
+    rb_hash_aset(rethash, rb_str_new_cstr("x"), INT2NUM(b_cols + 1));
     return rethash;
 }
 
@@ -195,16 +205,16 @@ VALUE bbs_getyx(VALUE self)
     VALUE rethash = rb_hash_new();
     int cur_row, cur_col;
     getxy(&cur_col, &cur_row);
-    rb_hash_aset(rethash, rb_str_new_cstr("x"), INT2NUM(cur_row));
-    rb_hash_aset(rethash, rb_str_new_cstr("y"), INT2NUM(cur_col));
+    rb_hash_aset(rethash, rb_str_new_cstr("y"), INT2NUM(cur_row));
+    rb_hash_aset(rethash, rb_str_new_cstr("x"), INT2NUM(cur_col));
     return rethash;
 }
 
-VALUE bbs_move(VALUE self, VALUE y, VALUE x) { move(NUM2INT(x), NUM2INT(y)); return Qnil; }
+VALUE bbs_move(VALUE self, VALUE y, VALUE x) { movexy(NUM2INT(x), NUM2INT(y)); return Qnil; }
 VALUE bbs_moverel(VALUE self, VALUE dy, VALUE dx) {
     int cur_row, cur_col;
     getxy(&cur_col, &cur_row);
-    move(cur_col + dx, cur_row + dy);
+    movexy(cur_col + dx, cur_row + dy);
     return Qnil;
 }
 
