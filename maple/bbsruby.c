@@ -692,6 +692,9 @@ void run_ruby(
     VALUE code = rb_str_new_cstr(cpBuf);
     free(cpBuf);
     // free(evalBuf);
+
+    clear();
+
     rb_protect(bbsruby_eval_code, code, &error);
 
     if (error == 0 || ABORT_BBSRUBY)
