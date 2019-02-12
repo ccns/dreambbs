@@ -214,7 +214,7 @@ VALUE bbs_move(VALUE self, VALUE y, VALUE x) { movexy(NUM2INT(x), NUM2INT(y)); r
 VALUE bbs_moverel(VALUE self, VALUE dy, VALUE dx) {
     int cur_row, cur_col;
     getxy(&cur_col, &cur_row);
-    movexy(cur_col + dx, cur_row + dy);
+    movexy(cur_col + NUM2INT(dx), cur_row + NUM2INT(dy));
     return Qnil;
 }
 
