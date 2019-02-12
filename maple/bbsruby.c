@@ -561,10 +561,47 @@ void print_exception(void)
     out_footer(" (發生錯誤)", "按任意鍵返回");
 }
 
+static void bbsruby_init_bbs_class(void)
+{
+    // Remove former definition
+    rb_define_global_const("BBS", Qundef);
+
+    // Prepare BBS wrapper class
+    VALUE rb_cBBS = rb_define_class("BBS", rb_cObject);
+    rb_define_singleton_method(rb_cBBS, "outs", bbs_outs, -2);
+    rb_define_singleton_method(rb_cBBS, "title", bbs_title, 1);
+    rb_define_singleton_method(rb_cBBS, "print", bbs_print, -2);
+    rb_define_singleton_method(rb_cBBS, "getyx", bbs_getyx, 0);
+    rb_define_singleton_method(rb_cBBS, "getmaxyx", bbs_getmaxyx, 0);
+    rb_define_singleton_method(rb_cBBS, "move", bbs_move, 2);
+    rb_define_singleton_method(rb_cBBS, "moverel", bbs_moverel, 2);
+    rb_define_singleton_method(rb_cBBS, "clear", bbs_clear, 0);
+    rb_define_singleton_method(rb_cBBS, "clrtoeol", bbs_clrtoeol, 0);
+    rb_define_singleton_method(rb_cBBS, "clrtobot", bbs_clrtobot, 0);
+    rb_define_singleton_method(rb_cBBS, "refresh", bbs_refresh, 0);
+    rb_define_singleton_method(rb_cBBS, "vmsg", bbs_vmsg, 1);
+    rb_define_singleton_method(rb_cBBS, "pause", bbs_pause, 1);
+    rb_define_singleton_method(rb_cBBS, "sitename", bbs_name, 0);
+    rb_define_singleton_method(rb_cBBS, "interface", bbs_interface, 0);
+    rb_define_singleton_method(rb_cBBS, "toc", bbs_toc, 0);
+    rb_define_singleton_method(rb_cBBS, "ansi_color", bbs_ansi_color, -2);
+    rb_define_singleton_method(rb_cBBS, "color", bbs_color, -2);
+    rb_define_singleton_method(rb_cBBS, "ANSI_RESET", bbs_ansi_reset, 0);
+    rb_define_singleton_method(rb_cBBS, "ESC", bbs_esc, 0);
+    rb_define_singleton_method(rb_cBBS, "userid", bbs_userid, 0);
+    rb_define_singleton_method(rb_cBBS, "getdata", bbs_getdata, -2);
+    rb_define_singleton_method(rb_cBBS, "clock", bbs_clock, 0);
+    rb_define_singleton_method(rb_cBBS, "getch", bbs_getch, 0);
+    rb_define_singleton_method(rb_cBBS, "kbhit", bbs_kbhit, 1);
+}
+
 static VALUE bbsruby_eval_code(VALUE code)
 {
     VALUE eval_args[] = {code, rb_str_new_cstr("BBSRuby"), INT2FIX(1)};
-    rb_obj_instance_eval(3, eval_args, rb_current_receiver());
+
+    bbsruby_init_bbs_class();
+
+    rb_obj_instance_eval(3, eval_args, rb_class_new_instance(0, NULL, rb_cObject));
     return Qnil;
 }
 
@@ -591,34 +628,6 @@ void run_ruby(
         ruby_init();
         ruby_init_loadpath();
         ruby_inited = 1;
-
-        // Prepare BBS wrapper class
-        VALUE rb_cBBS = rb_define_class("BBS", rb_cObject);
-        rb_define_singleton_method(rb_cBBS, "outs", bbs_outs, -2);
-        rb_define_singleton_method(rb_cBBS, "title", bbs_title, 1);
-        rb_define_singleton_method(rb_cBBS, "print", bbs_print, -2);
-        rb_define_singleton_method(rb_cBBS, "getyx", bbs_getyx, 0);
-        rb_define_singleton_method(rb_cBBS, "getmaxyx", bbs_getmaxyx, 0);
-        rb_define_singleton_method(rb_cBBS, "move", bbs_move, 2);
-        rb_define_singleton_method(rb_cBBS, "moverel", bbs_moverel, 2);
-        rb_define_singleton_method(rb_cBBS, "clear", bbs_clear, 0);
-        rb_define_singleton_method(rb_cBBS, "clrtoeol", bbs_clrtoeol, 0);
-        rb_define_singleton_method(rb_cBBS, "clrtobot", bbs_clrtobot, 0);
-        rb_define_singleton_method(rb_cBBS, "refresh", bbs_refresh, 0);
-        rb_define_singleton_method(rb_cBBS, "vmsg", bbs_vmsg, 1);
-        rb_define_singleton_method(rb_cBBS, "pause", bbs_pause, 1);
-        rb_define_singleton_method(rb_cBBS, "sitename", bbs_name, 0);
-        rb_define_singleton_method(rb_cBBS, "interface", bbs_interface, 0);
-        rb_define_singleton_method(rb_cBBS, "toc", bbs_toc, 0);
-        rb_define_singleton_method(rb_cBBS, "ansi_color", bbs_ansi_color, -2);
-        rb_define_singleton_method(rb_cBBS, "color", bbs_color, -2);
-        rb_define_singleton_method(rb_cBBS, "ANSI_RESET", bbs_ansi_reset, 0);
-        rb_define_singleton_method(rb_cBBS, "ESC", bbs_esc, 0);
-        rb_define_singleton_method(rb_cBBS, "userid", bbs_userid, 0);
-        rb_define_singleton_method(rb_cBBS, "getdata", bbs_getdata, -2);
-        rb_define_singleton_method(rb_cBBS, "clock", bbs_clock, 0);
-        rb_define_singleton_method(rb_cBBS, "getch", bbs_getch, 0);
-        rb_define_singleton_method(rb_cBBS, "kbhit", bbs_kbhit, 1);
 
         // Set safe level to 2
         // We cannot have protection if the safe level < 2
