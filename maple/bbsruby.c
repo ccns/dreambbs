@@ -424,12 +424,13 @@ void ruby_script_detach(char *p, int len)
     munmap(p, len);
 }
 
-int ruby_script_range_detect(char **pStart, char **pEnd)
+int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
 {
     int lenSignature = strlen(BBSRUBY_SIGNATURE);
 
     // Search range
     char *cStart, *cEnd;
+    int line = 0;
     cStart = *pStart;
     cEnd = *pEnd;
 
@@ -441,7 +442,9 @@ int ruby_script_range_detect(char **pStart, char **pEnd)
 
         // Skip to next line
         while (cStart + lenSignature < cEnd && *cStart++ != '\n');
+        line++;
     }
+    *lineshift = line;
 
     if (cStart + lenSignature >= *pEnd) // Cannot found signature.
         return 0;
@@ -595,13 +598,11 @@ static void bbsruby_init_bbs_class(void)
     rb_define_singleton_method(rb_cBBS, "kbhit", bbs_kbhit, 1);
 }
 
-static VALUE bbsruby_eval_code(VALUE code)
+static VALUE bbsruby_eval_code(VALUE eval_args)
 {
-    VALUE eval_args[] = {code, rb_str_new_cstr("BBSRuby"), INT2FIX(1)};
-
     bbsruby_init_bbs_class();
 
-    rb_obj_instance_eval(3, eval_args, rb_class_new_instance(0, NULL, rb_cObject));
+    rb_obj_instance_eval(3, (VALUE *)eval_args, rb_class_new_instance(0, NULL, rb_cObject));
     return Qnil;
 }
 
@@ -665,9 +666,10 @@ void run_ruby(
     }
 
     char *cStart, *cEnd;
+    int lineshift;
     cStart = post;
     cEnd = post + pLen;
-    if (ruby_script_range_detect(&cStart, &cEnd) == 0 || cStart == NULL || cEnd == NULL)
+    if (ruby_script_range_detect(&cStart, &cEnd, &lineshift) == 0 || cStart == NULL || cEnd == NULL)
     {
         ruby_script_detach(post, pLen);
         out_footer(" (找不到程式區段)",  "按任意鍵返回");
@@ -708,13 +710,13 @@ void run_ruby(
 
     //Before execution, prepare keyboard buffer
     //KB_QUEUE = rb_ary_new();
-    VALUE code = rb_str_new_cstr(cpBuf);
+    VALUE eval_args[] = {rb_str_new_cstr(cpBuf), rb_str_new_cstr("BBSRuby"), INT2FIX(lineshift + 1)};
     free(cpBuf);
     // free(evalBuf);
 
     clear();
 
-    rb_protect(bbsruby_eval_code, code, &error);
+    rb_protect(bbsruby_eval_code, (VALUE)eval_args, &error);
 
     if (error == 0 || ABORT_BBSRUBY)
         out_footer(ABORT_BBSRUBY ? " (使用者中斷)" : " (程式結束)", "按任意鍵返回");
