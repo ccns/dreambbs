@@ -485,9 +485,14 @@ int ruby_script_range_detect(char **pStart, char **pEnd)
     // In this implement, we only allow TOC to be put BEFORE the actual script code
     while (tStart < cEnd)
     {
-        if (tStart[0] == '#' && tStart[1] == '#' && tStart[2] == '#')
+        if (tStart[0] == '#' && tStart[1] == '#')
         {
-            tStart += 3;
+            tStart += 2;
+
+            // The third '#' is optional
+            if (tStart[0] == '#')
+                tStart++;
+
             tEnd = tStart + 1;
             while (*tEnd != '\n') tEnd++;
 
