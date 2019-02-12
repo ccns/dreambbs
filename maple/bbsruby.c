@@ -493,19 +493,23 @@ int ruby_script_range_detect(char **pStart, char **pEnd)
             if (tStart[0] == '#')
                 tStart++;
 
-            tEnd = tStart + 1;
+            while (*tStart == ' ') tStart++;
+
+            tEnd = tStart;
             while (*tEnd != '\n') tEnd++;
 
             // Possible TOC item, check patterns
             int i;
             for (i=0; i<BBSRUBY_TOC_HEADERS; i++)
             {
-                char preBuf[100];
-                sprintf(preBuf, "%s:", TOCs_HEADER[i]);
-                int lenBuf = strlen(preBuf);
-                if (strncmp(tStart, preBuf, lenBuf) == 0)
+                int lenBuf = strlen(TOCs_HEADER[i]);
+                if (strncmp(tStart, TOCs_HEADER[i], lenBuf) == 0)
                 {
                     tStart+=lenBuf;
+                    while (*tStart == ' ') tStart++;
+                    if (*tStart != ':') break;
+                    tStart++;
+
                     while (*tStart == ' ') tStart++;
                     char *data = malloc(sizeof(char) * (tEnd - tStart) + 1);
                     strncpy(data, tStart, tEnd - tStart);
