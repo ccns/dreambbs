@@ -82,6 +82,9 @@ extern time_t now;
 
 #define BLCONF_CURRENT_USERNICK cuser.username
 
+#ifndef t_lines
+#define t_lines  (b_lines + 1)
+#endif
 #ifndef t_columns
 #define t_columns  (b_cols + 1)
 #endif
