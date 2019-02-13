@@ -624,14 +624,14 @@ void
 attrsetfg(ftattr attr)
 {
     ft.attr &= (~FTATTR_FGMASK);
-    ft.attr |= ((attr & FTATTR_FGMASK) << FTATTR_FGSHIFT);
+    ft.attr |= ((attr << FTATTR_FGSHIFT) & FTATTR_FGMASK);
 }
 
 void
 attrsetbg(ftattr attr)
 {
     ft.attr &= (~FTATTR_BGMASK);
-    ft.attr |= ((attr & FTATTR_FGMASK) << FTATTR_BGSHIFT);
+    ft.attr |= ((attr << FTATTR_BGSHIFT) & FTATTR_BGMASK);
 }
 
 // clear
