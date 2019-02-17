@@ -5,9 +5,6 @@ This page will collect some info of how to use & how to install DreamBBS system.
 ## Latest Release
   + [Version 1.0.0 (codename: Rimuru)](https://github.com/ccns/dreambbs/releases/tag/v1.0.0)
 
-## Legacy Releases
-  + [Version 0.97.3 (codename: Stratosphere)](https://github.com/ccns/dreambbs/releases/tag/v0.97.3)
-
 ## Installation Guide (程式安裝手冊)
 
 ### Install and Backup
