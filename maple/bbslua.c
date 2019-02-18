@@ -89,7 +89,8 @@ extern time_t now;
 #define t_columns  (b_cols + 1)
 #endif
 
-static char *(*const ctime4)(time_t *clock) = Btime;
+static char *(*const ctime4)(const time_t *clock) = ctime;
+
 static inline void strip_ansi(char *dst, const char *str, int mode)
 {
     (void)mode;  // Suppress unused-parameter warning
