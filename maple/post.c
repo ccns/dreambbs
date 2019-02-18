@@ -535,7 +535,7 @@ do_post(
     {
         move_post(&post, BRD_VIOLATELAW, -2);
         add_deny(&cuser, DENY_SEL_POST|DENY_DAYS_1|DENY_MODE_POST, 0);
-        deny_log_email(cuser.vmail, (cuser.userlevel & PERM_DENYSTOP) ? -1 : cuser.deny);
+        deny_log_email(cuser.vmail, (HAS_PERM(PERM_DENYSTOP)) ? -1 : cuser.deny);
         bbstate &= ~STAT_POST;
         cuser.userlevel &= ~PERM_POST;
     }
@@ -549,7 +549,7 @@ do_post(
     {
         move_post(&post, BRD_VIOLATELAW, -2);
         add_deny(&cuser, DENY_SEL_POST|DENY_DAYS_5|DENY_MODE_POST, 0);
-        deny_log_email(cuser.vmail, (cuser.userlevel & PERM_DENYSTOP) ? -1 : cuser.deny);
+        deny_log_email(cuser.vmail, (HAS_PERM(PERM_DENYSTOP)) ? -1 : cuser.deny);
         bbstate &= ~STAT_POST;
         cuser.userlevel &= ~PERM_POST;
     }
@@ -1229,7 +1229,7 @@ post_cross(
                     move_post(&bhdr, BRD_VIOLATELAW, -2);
 
                     add_deny(&cuser, DENY_SEL_POST|DENY_DAYS_1|DENY_MODE_POST, 0);
-                    deny_log_email(cuser.vmail, (cuser.userlevel & PERM_DENYSTOP) ? -1 : cuser.deny);
+                    deny_log_email(cuser.vmail, (HAS_PERM(PERM_DENYSTOP)) ? -1 : cuser.deny);
                     bbstate &= ~STAT_POST;
                     cuser.userlevel &= ~PERM_POST;
 
@@ -1838,7 +1838,7 @@ post_delete(
             !strcmp(currboard, BN_JUNK))
         return XO_NONE;
 
-    if (cuser.userlevel & PERM_DENYPOST)
+    if (HAS_PERM(PERM_DENYPOST))
     {
         vmsg("你正被停權中，無法刪除任何文章！");
         return XO_NONE;
@@ -2411,7 +2411,7 @@ post_edit(
 
     hdr_fpath(fpath, xo->dir, hdr);
 #if 0
-    if ((cuser.userlevel & PERM_ALLBOARD)|| ( (cuser.userlevel & PERM_VALID) \
+    if ((HAS_PERM(PERM_ALLBOARD))|| ( (HAS_PERM(PERM_VALID)) \
                                             && !strcmp(hdr->owner, cuser.userid)))
 #endif
     if (HAS_PERM(PERM_SYSOP) && !(hdr->xmode & (POST_CANCEL|POST_DELETE)))
@@ -2617,7 +2617,7 @@ int post_edit(XO *xo)
     hdr = (HDR *) xo_pool + (xo->pos - xo->top);
     hdr_fpath(fpath, xo->dir, hdr);
 #if 0
-    if ((cuser.userlevel & PERM_ALLBOARD)|| ( (cuser.userlevel & PERM_VALID) \
+    if ((HAS_PERM(PERM_ALLBOARD))|| ( (HAS_PERM(PERM_VALID)) \
                 && !strcmp(hdr->owner, cuser.userid)))
 #endif
         if (HAS_PERM(PERM_ALLBOARD))
