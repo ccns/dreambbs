@@ -529,7 +529,7 @@ XO *xo)
     vget(b_lines, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
 
     dir = xo->dir;
-    if (cuser.userlevel & (PERM_SYSOP | PERM_KTV))
+    if (HAS_PERM(PERM_SYSOP | PERM_KTV))
     {
         vget(b_lines, 0, "編者：", xhdr.owner, IDLEN + 2, GCARRY);
         vget(b_lines, 0, "時間：", xhdr.date, 9, GCARRY);

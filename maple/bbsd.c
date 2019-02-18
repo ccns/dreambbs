@@ -864,7 +864,7 @@ tn_login(void)
         if (start > cuser.tcheck + CHECK_PERIOD)
         {
 #ifdef  HAVE_MAILGEM
-            if (cuser.userlevel & PERM_MBOX)
+            if (HAS_PERM(PERM_MBOX))
             {
                 int (*p)(int level, char *fpath);
                 char fpath[128];

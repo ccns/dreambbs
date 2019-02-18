@@ -412,7 +412,7 @@ unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
 
 static unsigned int setperm(unsigned int level)
 {
-    if (cuser.userlevel & PERM_SYSOP)
+    if (HAS_PERM(PERM_SYSOP))
         return bitset(level, NUMPERMS, NUMPERMS, MSG_USERPERM, perm_tbl);
 
     /* [帳號管理員] 不能管 SYSOP */
@@ -2010,7 +2010,7 @@ int u_xfile(void)
         "buf.5"
     };
 
-    i = (cuser.userlevel & PERM_ADMIN) ? 0 : 1;
+    i = (HAS_PERM(PERM_ADMIN)) ? 0 : 1;
     x_file(M_UFILES, &desc[i], &path[i]);
     return 0;
 }
@@ -2461,7 +2461,7 @@ int u_register(void)
     }
 #endif  /* #ifndef HAVE_SIMPLE_RFORM */
 
-    if (cuser.userlevel & PERM_VALID)
+    if (HAS_PERM(PERM_VALID))
     {
         zmsg("您的身份確認已經完成，不需填寫申請表");
         return XEASY;

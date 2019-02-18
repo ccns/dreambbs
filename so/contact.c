@@ -191,7 +191,7 @@ CONTACT *contact)
 
     if (not_addr(contact->email))
         vmsg("E-mail 不正確!!");
-    else if (cuser.userlevel & PERM_DENYMAIL)
+    else if (HAS_PERM(PERM_DENYMAIL))
         vmsg("你的信箱被鎖!!");
     else if (vget(21, 0, "主  題：", ve_title, TTLEN, DOECHO))
     {
