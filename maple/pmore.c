@@ -2598,6 +2598,12 @@ _pmore2(
             }
         }
 
+#ifndef PMORE_IGNORE_UNKNOWN_NAVKEYS
+#define HANDLE_UNKNOWN_NAVKEY() do { return ch; } while (0)
+#else
+#define HANDLE_UNKNOWN_NAVKEY() break
+#endif // PMORE_IGNORE_UNKNOWN_NAVKEYS
+
         // built-in navigation keys
         switch (ch) {
 
@@ -2844,11 +2850,7 @@ _pmore2(
 #ifdef USE_BBSLUA
             case 'l': case 'L':
                 if (!HasUserPerm(PERM_BBSLUA))
-#ifndef PMORE_IGNORE_UNKNOWN_NAVKEYS
-                    return ch;
-#else
-                    break;
-#endif // PMORE_IGNORE_UNKNOWN_NAVKEYS
+                    HANDLE_UNKNOWN_NAVKEY();
 
                 bbslua(* (char **)ahctx);
                 MFDISP_DIRTY();
@@ -2859,11 +2861,7 @@ _pmore2(
 #ifdef USE_BBSRUBY
             case '!':
                 if (!HasUserPerm(PERM_BBSRUBY))
-#ifndef PMORE_IGNORE_UNKNOWN_NAVKEYS
-                    return ch;
-#else
-                    break;
-#endif // PMORE_IGNORE_UNKNOWN_NAVKEYS
+                    HANDLE_UNKNOWN_NAVKEY();
 
                 run_ruby(* (char **)ahctx);
                 MFDISP_DIRTY();
@@ -2934,10 +2932,8 @@ _pmore2(
                 break;
 #endif  /* #ifdef PMORE_USE_INTERNAL_HELP */
 
-#ifndef PMORE_IGNORE_UNKNOWN_NAVKEYS
             default:
-                return ch;
-#endif // PMORE_IGNORE_UNKNOWN_NAVKEYS
+                HANDLE_UNKNOWN_NAVKEY();
         }
         /* DO NOT DO ANYTHING HERE. NOT SAFE RIGHT NOW. */
     }
