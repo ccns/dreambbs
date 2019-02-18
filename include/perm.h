@@ -82,7 +82,10 @@
 
 #define PERM_FORWARD    PERM_INTERNET   /* to do the forwarding */
 
+/*
 #define HAS_PERM(x)     ((x)?cuser.userlevel&(x):1)
+*/
+#define HAS_PERM        HAVE_PERM
 #define HAVE_PERM(x)    (cuser.userlevel&(x))
 
 
