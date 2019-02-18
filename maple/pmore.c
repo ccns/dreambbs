@@ -262,6 +262,19 @@
  // variables
  #define t_lines    (b_lines + 1)
  #define t_columns  (b_cols + 1)
+ // Permissions
+ #if !defined(HasUserPerm)
+ # define HasUserPerm(x)  HAS_PERM(x)
+ #endif  /* #if !defined(HasUserPerm) */
+ #if !defined(HAS_PERM)
+ # define HAS_PERM(x)  ((cuser.userlevel & (x)) != 0)
+ #endif  /* #if defined(HAS_PERM) */
+ #if !defined(PERM_BBSLUA)
+ # define PERM_BBSLUA PERM_BASIC
+ #endif  /* #if !defined(PERM_BBSLUA) */
+ #if !defined(PERM_BBSRUBY)
+ # define PERM_BBSRUBY PERM_BASIC
+ #endif  /* #if !defined(PERM_BBSRUBY) */
  // key mapping
  #define RELATE_PREV '['
  #define RELATE_NEXT ']'
@@ -2830,6 +2843,13 @@ _pmore2(
             /* BBS-Lua */
 #ifdef USE_BBSLUA
             case 'l': case 'L':
+                if (!HasUserPerm(PERM_BBSLUA))
+#ifndef PMORE_IGNORE_UNKNOWN_NAVKEYS
+                    return ch;
+#else
+                    break;
+#endif // PMORE_IGNORE_UNKNOWN_NAVKEYS
+
                 bbslua(* (char **)ahctx);
                 MFDISP_DIRTY();
                 break;
@@ -2838,6 +2858,13 @@ _pmore2(
             /* BBS-Ruby */
 #ifdef USE_BBSRUBY
             case '!':
+                if (!HasUserPerm(PERM_BBSRUBY))
+#ifndef PMORE_IGNORE_UNKNOWN_NAVKEYS
+                    return ch;
+#else
+                    break;
+#endif // PMORE_IGNORE_UNKNOWN_NAVKEYS
+
                 run_ruby(* (char **)ahctx);
                 MFDISP_DIRTY();
                 break;

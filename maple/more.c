@@ -701,7 +701,7 @@ re_key:
         }
 /* BBS-Lua */
 #ifdef M3_USE_BBSLUA
-        else if (key == 'L' || key == 'l')
+        else if ((key == 'L' || key == 'l') && HAS_PERM(PERM_BBSLUA))
         {
 #ifdef M3_USE_PFTERM
             screen_backup_t old_screen = {0};
@@ -720,7 +720,7 @@ re_key:
 #endif  /* #ifdef M3_USE_BBSLUA */
 #ifdef M3_USE_BBSRUBY
 /* 081229.cache: BBSRuby */
-        else if (key == '!')
+        else if (key == '!' && HAS_PERM(PERM_BBSRUBY))
         {
 #ifdef M3_USE_PFTERM
             screen_backup_t old_screen = {0};
