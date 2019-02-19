@@ -161,6 +161,16 @@ vmsgf(const char *fmt, ...)
     return vmsg(msg);
 }
 
+#ifndef VCLR_HDR
+#define VCLR_HDR  "\x1b[1;46;37m"
+#endif
+#ifndef VMSG_HDR_PREFIX
+#define VMSG_HDR_PREFIX   "¡i"
+#endif
+#ifndef VMSG_HDR_POSTFIX
+#define VMSG_HDR_POSTFIX  "¡j"
+#endif
+
 static void
 vs_hdr(const char *title)
 {
@@ -172,10 +182,12 @@ vs_hdr(const char *title)
     clear();
 
 #ifdef  COLOR_HEADER
-    prints("\x1b[1;%2d;37m¡i%s¡j\x1b[m\n", color, title);
+    prints(VCLR_HDR "\x1b[%2dm" VMSG_HDR_PREFIX, color);
 #else
-    prints("\x1b[1;46;37m¡i%s¡j\x1b[m\n", title);
+    outs(VCLR_HDR VMSG_HDR_PREFIX);
 #endif
+    outs(title);
+    outs(VMSG_HDR_POSTFIX ANSI_RESET "\n");
 }
 
 // IID.20190125: To be compatible with PttBBS's BBSLua.
