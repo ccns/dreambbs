@@ -754,14 +754,21 @@ bl_k2s(lua_State* L, int v)
         lua_pushstring(L, "TAB");
     else if (v == '\b' || v == 0x7F)
         lua_pushstring(L, "BS");
-    else if (v == KEY_ENTER)
+    else if (v == '\n' || v == '\r')
         lua_pushstring(L, "ENTER");
     else if (v < ' ')
         lua_pushfstring(L, "^%c", v-1+'A');
     else if (v < 0x100)
         lua_pushfstring(L, "%c", v);
+#ifdef KEY_F1
+  #if KEY_F1 < KEY_F2
     else if (v >= KEY_F1 && v <= KEY_F12)
         lua_pushfstring(L, "F%d", v - KEY_F1 +1);
+  #else  /* Key values for special keys are negative on some BBSs */
+    else if (v >= KEY_F12 && v <= KEY_F1)
+        lua_pushfstring(L, "F%d", KEY_F1 - v +1);
+  #endif
+#endif
     else switch(v)
     {
         case KEY_UP:    lua_pushstring(L, "UP");    break;
