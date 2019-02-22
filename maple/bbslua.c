@@ -775,6 +775,9 @@ bl_k2s(lua_State* L, int v)
         case KEY_DOWN:  lua_pushstring(L, "DOWN");  break;
         case KEY_RIGHT: lua_pushstring(L, "RIGHT"); break;
         case KEY_LEFT:  lua_pushstring(L, "LEFT");  break;
+#ifdef KEY_STAB
+        case KEY_STAB:  lua_pushstring(L, "STAB");  break;
+#endif
         case KEY_HOME:  lua_pushstring(L, "HOME");  break;
         case KEY_END:   lua_pushstring(L, "END");   break;
         case KEY_INS:   lua_pushstring(L, "INS");   break;
