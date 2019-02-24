@@ -2055,6 +2055,9 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
                 continue;
             }
 
+            if (!isdigit(ch) && (echo & NUMECHO))
+                continue;
+
             if (len >= max)
                 continue;
 
@@ -2099,11 +2102,11 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         /* ----------------------------------------------- */
 
 #if 0
-        if ((!(echo & DOECHO) || mfunc) && ch != Ctrl('H'))
+        if ((!(echo & DOECHO) || (echo & NUMECHO) || mfunc) && ch != Ctrl('H'))
             continue;
 #endif
 
-        if (!(echo & DOECHO) && ch != Ctrl('H'))
+        if ((!(echo & DOECHO) || (echo & NUMECHO)) && ch != Ctrl('H'))
             continue;
 
 #ifdef M3_USE_PFTERM
@@ -2226,7 +2229,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 #endif
     }
 
-    if (len > 2 && (echo & DOECHO))
+    if (len > 2 && (echo & DOECHO) && !(echo & NUMECHO))
     {
         for (line = MAXLASTCMD - 1; line; line--)
             strcpy(lastcmd[line], lastcmd[line - 1]);
