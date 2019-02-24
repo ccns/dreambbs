@@ -1490,7 +1490,7 @@ bls_save(lua_State *L)
 // BBSLUA LIBRARY
 //////////////////////////////////////////////////////////////////////////
 
-static const struct luaL_reg lib_bbslua [] = {
+static const struct luaL_Reg lib_bbslua [] = {
     /* curses output */
     { "getyx",      bl_getyx },
     { "getmaxyx",   bl_getmaxyx },
@@ -1530,7 +1530,7 @@ static const struct luaL_reg lib_bbslua [] = {
 };
 
 #ifdef BLSCONF_ENABLED
-static const struct luaL_reg lib_store [] = {
+static const struct luaL_Reg lib_store [] = {
     { "load",       bls_load },
     { "save",       bls_save },
     { "limit",      bls_limit },
