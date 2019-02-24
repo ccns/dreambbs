@@ -2018,7 +2018,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
                     data[0] = '\0';
                 }
 #ifdef M3_USE_PFTERM
-        STANDEND;
+                STANDEND;
 #endif
             }
             break;
