@@ -1529,6 +1529,7 @@ static const struct luaL_reg lib_bbslua [] = {
     { NULL, NULL},
 };
 
+#ifdef BLSCONF_ENABLED
 static const struct luaL_reg lib_store [] = {
     { "load",       bls_load },
     { "save",       bls_save },
@@ -1536,6 +1537,7 @@ static const struct luaL_reg lib_store [] = {
     { "iolimit",    bls_iolimit },
     { NULL, NULL},
 };
+#endif
 
 // non-standard modules in bbsluaext.c
 LUALIB_API int luaopen_bit (lua_State *L);
@@ -2110,8 +2112,11 @@ void bbslua_loadLatest(lua_State *L,
         char *xbs = NULL, *xps = NULL, *xpe = NULL, *xpc = NULL;
         int xlineshift = 0;
         size_t xsz;
+#ifdef AID_DISPLAYNAME
         const char *lastref = NULL;
-        char loadnext = 0, isnewver = 0;
+        char loadnext = 0;
+#endif
+        char isnewver = 0;
 
         // detect file
         xbs = bbslua_attach(bfpath, &xsz);
