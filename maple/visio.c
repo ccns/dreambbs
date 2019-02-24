@@ -2115,6 +2115,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 #endif
         switch (ch)
         {
+        case KEY_DEL:
         case Ctrl('D'):
 
             if (col >= len)
