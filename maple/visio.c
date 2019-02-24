@@ -2024,6 +2024,17 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             break;
         }
 
+        if (ch == Ctrl('C') && (echo & VGET_BREAKABLE))
+        {
+            data[0] = '\0';
+            outc('\n');
+#ifdef M3_USE_PFTERM
+            if (!(echo & VGET_STEALTH_NOECHO))
+                STANDEND;
+#endif
+            return VGET_EXIT_BREAK;
+        }
+
         if (isprint2(ch))
         {
             if (ch == ' ' && (echo & (GET_USER | GET_BRD | GET_LIST)))

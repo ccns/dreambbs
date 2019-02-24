@@ -95,6 +95,9 @@
 
 #define VGET_STRICT_DOECHO  0x0001      /* Show the input only if `DOECHO` is set (ignore implications) */
 #define VGET_STEALTH_NOECHO 0x0002      /* Hide the entire input field if `DOECHO` is not set */
+#define VGET_BREAKABLE      0x0004      /* Whether Ctrl-C closes the input field */
+
+#define VGET_EXIT_BREAK     -1          /* The input field is closed with Ctrl-C */
 
 #endif  /* #ifndef _BBTP_ */
 
