@@ -198,6 +198,10 @@ vs_hdr(const char *title)
 #define BL_PASSECHO   0X10
 #define BL_GCARRY     0x8     // Ignored
 
+#define NEW_HIDEECHO  0x8000
+
+#define MACRO_NONZERO(macro)  ((macro-0) != 0)
+
 static int
 getdata_str(int line, int col, const char *prompt, char *buf, int len, int echo,
             const char *defaultstr)
@@ -205,7 +209,11 @@ getdata_str(int line, int col, const char *prompt, char *buf, int len, int echo,
     int new_echo = 0;
 
     if (echo == BL_NOECHO)
-        new_echo = NOECHO;
+#if MACRO_NONZERO(VGET_STEALTH_NOECHO)
+        new_echo = NEW_HIDEECHO | NOECHO | VGET_STEALTH_NOECHO;
+#else
+        new_echo = NEW_HIDEECHO | NOECHO;
+#endif
     else if (echo == BL_DOECHO)
         new_echo = DOECHO;
     else
@@ -218,20 +226,46 @@ getdata_str(int line, int col, const char *prompt, char *buf, int len, int echo,
 #endif
         if (echo & BL_PASSECHO)
             new_echo
-#ifdef  PASSECHO  // IID.20190125: Some BBSs do not have `PASSECHO`,
+#if defined(PASSECHO) && PASSECHO != NOECHO
                 |= PASSECHO;
-#else                           //    but their `NOECHO` acks just like `PASSECHO`.
-                = NOECHO;
+#else   // IID.20190125: Some BBSs do not have `PASSECHO`,
+                      //    but their `NOECHO` acks just like `PASSECHO`.
+    #ifdef  VGET_STRICT_DOECHO
+                |= NEW_HIDEECHO | NOECHO;
+    #else
+                = NEW_HIDEECHO | NOECHO;
+    #endif
 #endif
     }
 
-    // IID.20190125: `vget()` with `NOECHO` should not have default string.
+#if defined(VGET_STRICT_DOECHO) || NOECHO != 0
+    // IID.20190224: Unless setting other flags does not imply `DOECHO`,
+    if (defaultstr && *defaultstr)
+#elif  // IID.20190125: `vget()` with `NOECHO` should not have default string.
     if (new_echo != NOECHO && defaultstr && *defaultstr)
+#endif
     {
         strlcpy(buf, defaultstr, len);
         str_ansi(buf, buf, len);
         new_echo |= GCARRY;
     }
+
+#if defined(VGET_STRICT_DOECHO) && MACRO_NONZERO(VGET_BREAKABLE)
+    new_echo |= VGET_BREAKABLE;
+#endif
+
+    if (new_echo & NEW_HIDEECHO)
+    {
+        new_echo ^= NEW_HIDEECHO;
+#if MACRO_NONZERO(VGET_STRICT_DOECHO) && NOECHO == 0
+        if (new_echo != NOECHO)
+            new_echo |= VGET_STRICT_DOECHO;
+#endif
+    }
+#if defined(VGET_STRICT_DOECHO) && !MACRO_NONZERO(VGET_STRICT_DOECHO)
+    else
+        new_echo |= DOECHO;
+#endif
 
     return vget(line, col, prompt, buf, len, new_echo);
 }
