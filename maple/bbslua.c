@@ -196,6 +196,7 @@ vs_hdr(const char *title)
 #define BL_LCECHO     0x2
 #define BL_NUMECHO    0x4
 #define BL_PASSECHO   0X10
+#define BL_HIDEECHO   0x20
 #define BL_GCARRY     0x8     // Ignored
 
 #define NEW_HIDEECHO  0x8000
@@ -224,7 +225,19 @@ getdata_str(int line, int col, const char *prompt, char *buf, int len, int echo,
         if (echo & BL_NUMECHO)
             new_echo |= NUMECHO;
 #endif
-        if (echo & BL_PASSECHO)
+
+        if (echo & BL_HIDEECHO)
+            new_echo
+#ifdef  VGET_STRICT_DOECHO
+                |= NEW_HIDEECHO | NOECHO
+#else
+                = NEW_HIDEECHO | NOECHO
+#endif
+#if MACRO_NONZERO(VGET_STEALTH_NOECHO)
+                    | VGET_STEALTH_NOECHO
+#endif
+                ;
+        else if (echo & BL_PASSECHO)
             new_echo
 #if defined(PASSECHO) && PASSECHO != NOECHO
                 |= PASSECHO;
