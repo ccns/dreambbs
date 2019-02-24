@@ -1614,6 +1614,17 @@ bbsluaRegConst(lua_State *L)
     lua_pushcfunction(L, bl_print);
     lua_setglobal(L, "print");
 
+    // bit.*
+    // IID.20190224: If using BitOp, make `bit.cast` an alias for `bit.tobit`
+    //                  to be compatible with bitlib.
+    lua_getglobal(L, "bit");
+    lua_getfield(L, -1, "cast");
+    if (lua_isnil(L, -1)) {
+        lua_getfield(L, -2, "tobit");
+        lua_setfield(L, -3, "cast");
+    }
+    lua_pop(L, 2);
+
     // bbs.*
     lua_getglobal(L, "bbs");
     for (i = 0; bbsluaStrs[i].name; i++)
