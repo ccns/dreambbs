@@ -1931,6 +1931,8 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
     }
     if (echo & VGET_FORCE_DOECHO)
         echo |= DOECHO;
+    if ((echo & DOECHO) && (echo & VGET_STEALTH_NOECHO))
+        echo ^= VGET_STEALTH_NOECHO;
 
     if (prompt)
     {
@@ -1943,7 +1945,8 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         clrtoeol();
     }
 
-    STANDOUT;
+    if (!(echo & VGET_STEALTH_NOECHO))
+        STANDOUT;
 
 #ifdef M3_USE_PFTERM
     getyx (&y, &x);
@@ -1954,7 +1957,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
     if (echo & GCARRY)
     {
-        if ((len = strlen(data)))
+        if ((len = strlen(data)) && !(echo & VGET_STEALTH_NOECHO))
         {
             if (echo & DOECHO)
                 outs(data);
@@ -1975,12 +1978,14 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
     /* --------------------------------------------------- */
 
     ch = len;
-    do
-    {
-        outc(' ');
-    } while (++ch < max);
+    if (!(echo & VGET_STEALTH_NOECHO))
+        do
+        {
+            outc(' ');
+        } while (++ch < max);
 
-    STANDEND;
+    if (!(echo & VGET_STEALTH_NOECHO))
+        STANDEND;
 
     line = -1;
     col = len;
@@ -1988,7 +1993,9 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
     for (;;)
     {
-        move(y, x + col);
+        if (!(echo & VGET_STEALTH_NOECHO))
+            move(y, x + col);
+
         ch = vkey();
         if (ch == '\n')
         {
@@ -2046,14 +2053,20 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
             data_prompt = &data[col];
             i = col;
-            move(y, x + col);
+
+            if (!(echo & VGET_STEALTH_NOECHO))
+            {
+                move(y, x + col);
 #ifdef M3_USE_PFTERM
-            STANDOUT;
+                STANDOUT;
 #endif
+            }
 
             for (;;)
             {
-                outc((echo & DOECHO) ? ch : '*');
+                if (!(echo & VGET_STEALTH_NOECHO))
+                    outc((echo & DOECHO) ? ch : '*');
+
                 next = (unsigned char) *data_prompt;
                 *data_prompt++ = ch;
                 if (i >= len)
@@ -2062,7 +2075,8 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
                 ch = next;
             }
 #ifdef M3_USE_PFTERM
-            STANDEND;
+            if (!(echo & VGET_STEALTH_NOECHO))
+                STANDEND;
 #endif
             col++;
             len++;
@@ -2082,7 +2096,8 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             continue;
 
 #ifdef M3_USE_PFTERM
-        STANDOUT;
+        if (!(echo & VGET_STEALTH_NOECHO))
+            STANDOUT;
 #endif
         switch (ch)
         {
@@ -2104,14 +2119,21 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
             i = col--;
             len--;
-            move(y, x + col);
+
+            if (!(echo & VGET_STEALTH_NOECHO))
+                move(y, x + col);
+
             while (i <= len)
             {
                 data[i - 1] = ch = (unsigned char) data[i];
-                outc((echo & DOECHO) ? ch : '*');
+
+                if (!(echo & VGET_STEALTH_NOECHO))
+                    outc((echo & DOECHO) ? ch : '*');
                 i++;
             }
-            outc(' ');
+            if (!(echo & VGET_STEALTH_NOECHO))
+                outc(' ');
+
             break;
 
         case KEY_LEFT:
@@ -2188,7 +2210,8 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             break;
         }
 #ifdef M3_USE_PFTERM
-        STANDEND;
+        if (!(echo & VGET_STEALTH_NOECHO))
+            STANDEND;
 #endif
     }
 
@@ -2206,6 +2229,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         data[0] = (ch += 32);
 
 #ifdef M3_USE_PFTERM
+    if (!(echo & VGET_STEALTH_NOECHO))
         STANDEND;
 #endif
 
