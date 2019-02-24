@@ -2102,11 +2102,11 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         /* ----------------------------------------------- */
 
 #if 0
-        if ((!(echo & DOECHO) || (echo & NUMECHO) || mfunc) && ch != Ctrl('H'))
+        if ((!(echo & DOECHO) || mfunc) && ch != Ctrl('H'))
             continue;
 #endif
 
-        if ((!(echo & DOECHO) || (echo & NUMECHO)) && ch != Ctrl('H'))
+        if (!(echo & DOECHO) && ch != Ctrl('H'))
             continue;
 
 #ifdef M3_USE_PFTERM
@@ -2183,6 +2183,30 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             }
             break;
 
+        case Ctrl('K'):         /* delete to end of line */
+            if (col < len)
+            {
+                move(y, x + col);
+                for (ch = col; ch < len; ch++)
+                    outc(' ');
+                len = col;
+            }
+            break;
+        }
+#ifdef M3_USE_PFTERM
+        if (!(echo & VGET_STEALTH_NOECHO))
+            STANDEND;
+#endif
+
+        /* No input history for `NUMECHO` or hidden inputs */
+        if (!(echo & DOECHO) || (echo & NUMECHO))
+            continue;
+
+#ifdef M3_USE_PFTERM
+        STANDOUT;
+#endif
+        switch (ch)
+        {
         case KEY_DOWN:
         case Ctrl('N'):
 
@@ -2214,19 +2238,9 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             len = col;
             break;
 
-        case Ctrl('K'):         /* delete to end of line */
-            if (col < len)
-            {
-                move(y, x + col);
-                for (ch = col; ch < len; ch++)
-                    outc(' ');
-                len = col;
-            }
-            break;
         }
 #ifdef M3_USE_PFTERM
-        if (!(echo & VGET_STEALTH_NOECHO))
-            STANDEND;
+        STANDEND;
 #endif
     }
 
