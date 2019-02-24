@@ -280,7 +280,7 @@
 #define KEY_DOWN        0x0102
 #define KEY_RIGHT       0x0103
 #define KEY_LEFT        0x0104
-#define KEY_STAB        0X0109  /* Shift-Tab */
+#define KEY_STAB        0x0109  /* Shift-Tab */
 #define KEY_HOME        0x0201
 #define KEY_INS         0x0202
 #define KEY_DEL         0x0203
@@ -303,8 +303,8 @@
 #define KEY_F11         0x030B
 #define KEY_F12         0x030C
 
-#define I_TIMEOUT       0X05FD
-#define I_OTHERDATA     0X05FE
+#define I_TIMEOUT       0x05FD
+#define I_OTHERDATA     0x05FE
 
 #define Ctrl(c)         ( c & 037 )
 #define Meta(c)         ( c + 0x2000 )

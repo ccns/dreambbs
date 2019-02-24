@@ -195,7 +195,7 @@ vs_hdr(const char *title)
 #define BL_DOECHO     0x1
 #define BL_LCECHO     0x2
 #define BL_NUMECHO    0x4
-#define BL_PASSECHO   0X10
+#define BL_PASSECHO   0x10
 #define BL_HIDEECHO   0x20
 #define BL_GCARRY     0x8     // Ignored
 
