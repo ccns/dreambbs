@@ -666,6 +666,10 @@ vkey_is_prefetched(char c)
 #include <lualib.h>
 #include <lauxlib.h>
 
+#ifdef BBSLUA_USE_LUAJIT
+  #include <luajit.h>
+#endif
+
 //////////////////////////////////////////////////////////////////////////
 // CONST DEFINITION
 //////////////////////////////////////////////////////////////////////////
@@ -1539,8 +1543,10 @@ static const struct luaL_Reg lib_store [] = {
 };
 #endif
 
+#ifndef BBSLUA_USE_LUAJIT
 // non-standard modules in bbsluaext.c
 LUALIB_API int luaopen_bit (lua_State *L);
+#endif
 
 static const luaL_Reg bbslualibs[] = {
   // standard modules
@@ -1554,8 +1560,15 @@ static const luaL_Reg bbslualibs[] = {
   {LUA_MATHLIBNAME, luaopen_math},
   // {LUA_DBLIBNAME, luaopen_debug},
 
+#ifdef BBSLUA_USE_LUAJIT
+  // LuaJIT built-in extension modules
+  {LUA_BITLIBNAME, luaopen_bit},
+  {LUA_JITLIBNAME, luaopen_jit},
+  // {LUA_FFILIBNAME, luaopen_ffi},
+#else
   // bbslua-ext modules
   {"bit", luaopen_bit},
+#endif
 
   {NULL, NULL}
 };
@@ -1624,6 +1637,13 @@ bbsluaRegConst(lua_State *L)
         lua_setfield(L, -3, "cast");
     }
     lua_pop(L, 2);
+
+#ifdef BBSLUA_USE_LUAJIT
+    // jit.*
+    // IID.20190224: The module needs to be loaded to enable JIT compilation,
+    //                  but the functions are either unsafe or useless.
+    lua_pushnil(L); lua_setglobal(L, "jit");
+#endif
 
     // bbs.*
     lua_getglobal(L, "bbs");
