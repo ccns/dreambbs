@@ -1031,11 +1031,19 @@ bl_getstr(lua_State* L)
     len = getdata_str(y, x, NULL, buf, len, echo, pmsg);
     if (len <= 0)
     {
+#ifdef VGET_EXIT_BREAK
+        int res = len;
+#endif
         len = 0;
+
+#ifdef VGET_EXIT_BREAK
+        if (res == VGET_EXIT_BREAK)
+#else
         // check if we got Ctrl-C? (workaround in getdata)
         // TODO someday write 'ungetch()' in io.c to prevent
         // such workaround.
         if (buf[1] == Ctrl('C'))
+#endif
         {
             vkey_purge();
             blrt.abort = 1;
