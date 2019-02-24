@@ -45,3 +45,30 @@ LDFLAGS	+= -lresolv -ldl -rdynamic
 LDFLAGS	+= -Wl,-export-dynamic
 .endif
 
+
+# BBS-Lua & BBS-Ruby make rule definitions
+
+.if $(USE_BBSLUA)
+.if $(OPSYS) == "FreeBSD"
+    LUA_PKG_NAME	?= lua-5.1
+    LUA_LDFLAGS_ARCHI	= -Wl,--no-as-needed
+.else
+    LUA_PKG_NAME	?= lua5.1
+.endif
+
+LUA_CFLAGS	!= pkg-config --cflags ${LUA_PKG_NAME}
+LUA_LDFLAGS	!= pkg-config --libs ${LUA_PKG_NAME}
+.endif
+
+
+.if $(USE_BBSRUBY)
+.if $(OPSYS) == "FreeBSD"
+    RUBY_LDFLAGS_ARCHI	= -Wl,--no-as-needed
+.endif
+.if $(ARCHI) == "64"
+    RUBY_CFLAGS_CMD	= | sed 's/x86_64/i386/'
+.endif
+
+RUBY_CFLAGS	!= pkg-config --cflags ruby-2.2 ${RUBY_CFLAGS_CMD}
+RUBY_LDFLAGS	!= pkg-config --libs ruby-2.2
+.endif

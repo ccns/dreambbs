@@ -11,23 +11,10 @@ SRCROOT	= ..
 .include "$(SRCROOT)/dreambbs.mk"
 
 .if $(USE_BBSLUA)
-.if $(OPSYS) == "FreeBSD"
-    LUA_PKG_NAME	?= lua-5.1
-.else
-    LUA_PKG_NAME	?= lua5.1
-.endif
-
-LUA_CFLAGS	!= pkg-config --cflags ${LUA_PKG_NAME}
 CFLAGS	+= ${LUA_CFLAGS}
 .endif
 
-
 .if $(USE_BBSRUBY)
-.if $(ARCHI) == "64"
-    RUBY_CFLAGS_CMD	= | sed 's/x86_64/i386/'
-.endif
-
-RUBY_CFLAGS	!= pkg-config --cflags ruby-2.2 ${RUBY_CFLAGS_CMD}
 CFLAGS	+= ${RUBY_CFLAGS}
 .endif
 
