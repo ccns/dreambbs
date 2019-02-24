@@ -1923,6 +1923,15 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
     int x, y;
     int i, next;
 
+    /* Adjust flags */
+    if (!(echo & VGET_STRICT_DOECHO))
+    {
+        if (echo & VGET_IMPLY_DOECHO)
+            echo |= DOECHO;
+    }
+    if (echo & VGET_FORCE_DOECHO)
+        echo |= DOECHO;
+
     if (prompt)
     {
         move(line, col);
@@ -1946,7 +1955,15 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
     if (echo & GCARRY)
     {
         if ((len = strlen(data)))
-            outs(data);
+        {
+            if (echo & DOECHO)
+                outs(data);
+            else
+            {
+                for (ch = 0; ch < len; ch++)
+                    outc('*');
+            }
+        }
     }
     else
     {
@@ -2036,7 +2053,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
             for (;;)
             {
-                outc(echo ? ch : '*');
+                outc((echo & DOECHO) ? ch : '*');
                 next = (unsigned char) *data_prompt;
                 *data_prompt++ = ch;
                 if (i >= len)
@@ -2057,11 +2074,11 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         /* ----------------------------------------------- */
 
 #if 0
-        if ((!echo || mfunc) && ch != Ctrl('H'))
+        if ((!(echo & DOECHO) || mfunc) && ch != Ctrl('H'))
             continue;
 #endif
 
-        if (!echo && ch != Ctrl('H'))
+        if (!(echo & DOECHO) && ch != Ctrl('H'))
             continue;
 
 #ifdef M3_USE_PFTERM
@@ -2091,7 +2108,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             while (i <= len)
             {
                 data[i - 1] = ch = (unsigned char) data[i];
-                outc(echo ? ch : '*');
+                outc((echo & DOECHO) ? ch : '*');
                 i++;
             }
             outc(' ');
@@ -2175,7 +2192,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 #endif
     }
 
-    if (len > 2 && echo)
+    if (len > 2 && (echo & DOECHO))
     {
         for (line = MAXLASTCMD - 1; line; line--)
             strcpy(lastcmd[line], lastcmd[line - 1]);

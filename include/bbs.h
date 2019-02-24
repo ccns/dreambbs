@@ -89,6 +89,11 @@
 #define GET_USER        0x2000          /* 取得 user id */
 #define GET_BRD         0x4000          /* 取得 board id */
 
+#define VGET_IMPLY_DOECHO (LCECHO | GCARRY)  /* The flags which imply `DOECHO` */
+#define VGET_FORCE_DOECHO (GET_LIST | GET_USER | GET_BRD)  /* The flags which force `DOECHO` */
+
+#define VGET_STRICT_DOECHO  0x0001      /* Show the input only if `DOECHO` is set (ignore implications) */
+
 #endif  /* #ifndef _BBTP_ */
 
 #endif                          /* BBS_H */
