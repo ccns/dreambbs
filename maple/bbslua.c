@@ -23,6 +23,12 @@
  #define HAVE_GRAYOUT
 #endif //M3_USE_BBSLUA
 
+/* Inferred settings */
+
+#ifdef USE_NIOS_VKEY
+# define BBSLUA_HAVE_VKEY
+#endif
+
 //////////////////////////////////////////////////////////////////////////
 // pmore style ansi
 // #include "ansi.h"
@@ -317,7 +323,7 @@ newwin(int nlines, int ncols, int y, int x)
 // Input handling
 //////////////////////////////////////////////////////////////////////////
 
-#if !(defined(M3_USE_NIOS_VKEY) || defined(BBSLUA_HAVE_VKEY))
+#ifndef BBSLUA_HAVE_VKEY
 
 // IID.20190124: If this BBS does not have the vkey input system,
 //                  give it a simplified one.
@@ -614,7 +620,7 @@ vkey_is_prefetched(char c)
     return res >= vin;
 }
 
-#endif  // #if !(defined(M3_USE_NIOS_VKEY) || defined(BBSLUA_HAVE_VKEY))
+#endif  // #ifndef BBSLUA_HAVE_VKEY
 
 //////////////////////////////////////////////////////////////////////////
 // BBS-Lua Project
