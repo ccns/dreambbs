@@ -2192,11 +2192,19 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
                 len = col;
             }
             break;
+
+        default:
+            ch |= KEY_NONE;   /* Non-processed key */
+            break;
         }
 #ifdef M3_USE_PFTERM
         if (!(echo & VGET_STEALTH_NOECHO))
             STANDEND;
 #endif
+
+        /* No further processing is needed */
+        if (!(ch & KEY_NONE))
+            continue;
 
         /* No input history for `NUMECHO` or hidden inputs */
         if (!(echo & DOECHO) || (echo & NUMECHO))
@@ -2205,6 +2213,8 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 #ifdef M3_USE_PFTERM
         STANDOUT;
 #endif
+
+        ch ^= KEY_NONE;
         switch (ch)
         {
         case KEY_DOWN:
