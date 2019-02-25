@@ -2182,6 +2182,40 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
             }
             break;
 
+        case Ctrl('K'):         /* delete to end of line */
+            if (col < len)
+            {
+                move(y, x + col);
+                for (ch = col; ch < len; ch++)
+                    outc(' ');
+                len = col;
+            }
+            break;
+
+        default:
+            ch |= KEY_NONE;   /* Non-processed key */
+            break;
+        }
+#ifdef M3_USE_PFTERM
+        if (!(echo & VGET_STEALTH_NOECHO))
+            STANDEND;
+#endif
+
+        /* No further processing is needed */
+        if (!(ch & KEY_NONE))
+            continue;
+
+        /* No input history for `NUMECHO` or hidden inputs */
+        if (!(echo & DOECHO) || (echo & NUMECHO))
+            continue;
+
+#ifdef M3_USE_PFTERM
+        STANDOUT;
+#endif
+
+        ch ^= KEY_NONE;
+        switch (ch)
+        {
         case KEY_DOWN:
         case Ctrl('N'):
 
