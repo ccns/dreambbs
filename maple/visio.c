@@ -2292,9 +2292,19 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
     outc('\n');
 
+    if (echo & LCECHO)
+    {
+        for (col = 0; col < len; col++)
+        {
+            ch = (unsigned char) data[col];
+            if (ch >= 0x81 && ch <= 0xFE)
+                /* The first byte of double-byte char of Big5 */
+                col++;  /* Skip the next byte */
+            else if (ch >= 'A' && ch <= 'Z')
+                data[col] += 32;
+        }
+    }
     ch = (unsigned char) data[0];
-    if ((echo & LCECHO) && (ch >= 'A' && ch <= 'Z'))
-        data[0] = (ch += 32);
 
 #ifdef M3_USE_PFTERM
     if (!(echo & VGET_STEALTH_NOECHO))
