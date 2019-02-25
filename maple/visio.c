@@ -2102,14 +2102,20 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
         case Ctrl('D'):
 
             if (col >= len)
-                continue;
+            {
+                bell();
+                break;
+            }
 
             col++;
 
         case Ctrl('H'):
 
             if (!col)
-                continue;
+            {
+                bell();
+                break;
+            }
 
             /* ----------------------------------------------- */
             /* remove data and display it                      */
