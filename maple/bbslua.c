@@ -5,6 +5,7 @@
 /* Default settings */
 //#define BBSLUA_HAVE_SYNCNOW              // system needs calling sync API
 //#define BBSLUA_HAVE_VKEY                 // input system is vkey compatible
+//#define BLSCONF_ENABLED                  // Enable `store.*` BBS-Lua API
 #define HAVE_GRAYOUT                     // The BBS has `grayout()`
 
 #define M3_USE_BBSLUA
@@ -18,6 +19,7 @@
 #include "bbs_script.h"
 #define BBSLUA_HAVE_SYNCNOW
 #undef BBSLUA_HAVE_VKEY
+#undef BLSCONF_ENABLED
 #define HAVE_GRAYOUT
 #endif //M3_USE_BBSLUA
 
@@ -140,6 +142,7 @@ strlen_noansi(const char *str)        /* String length after stripping ANSI code
     return count;
 }
 
+#ifdef BLSCONF_ENABLED
 static const char *const str_home_file = "usr/%c/%s/%s";
 static void
 setuserfile(char *buf, const char *fname)
@@ -152,6 +155,7 @@ OpenCreate(const char *path, int flags)
 {
     return open(path, flags | O_CREAT, DEFAULT_FILE_CREATE_PERM);
 }
+#endif
 
 #ifndef VBUFLEN
 #define VBUFLEN     (ANSILINELEN)
@@ -666,7 +670,11 @@ vkey_is_prefetched(char c)
 //////////////////////////////////////////////////////////////////////////
 
 #include "bbs.h"
-#include "fnv_hash.h"
+
+#ifdef BLSCONF_ENABLED
+  #include "fnv_hash.h"
+#endif
+
 #include <sys/time.h>
 
 #include <lua.h>
@@ -749,17 +757,25 @@ typedef struct {
     char running;   // prevent re-entrant
     char abort;     // system break key hit
     char iocounter; // prevent bursting i/o
+#ifdef BLSCONF_ENABLED
     Fnv32_t storename;  // storage filename
+#endif
 } BBSLuaRT;
 
 // runtime information
 // static
 BBSLuaRT blrt = {0};
 
-#define BL_INIT_RUNTIME() { \
-    memset(&blrt, 0, sizeof(blrt)); \
-    blrt.storename = FNV1_32_INIT; \
-}
+#ifdef BLSCONF_ENABLED
+  #define BL_INIT_RUNTIME() { \
+      memset(&blrt, 0, sizeof(blrt)); \
+      blrt.storename = FNV1_32_INIT; \
+  }
+#else
+  #define BL_INIT_RUNTIME() { \
+      memset(&blrt, 0, sizeof(blrt)); \
+  }
+#endif
 
 #define BL_END_RUNTIME() { \
     memset(&blrt, 0, sizeof(blrt)); \
@@ -1333,6 +1349,7 @@ bl_clock(lua_State *L)
 //////////////////////////////////////////////////////////////////////////
 // BBS-Lua Storage System
 //////////////////////////////////////////////////////////////////////////
+#ifdef BLSCONF_ENABLED
 static int
 bls_getcat(const char *s)
 {
@@ -1496,6 +1513,7 @@ bls_save(lua_State *L)
     lua_pushboolean(L, ret);
     return 1;
 }
+#endif  // #ifdef BLSCONF_ENABLED
 
 //////////////////////////////////////////////////////////////////////////
 // BBSLUA LIBRARY
@@ -2278,6 +2296,7 @@ void bbslua_loadLatest(lua_State *L,
 // BBSLUA Hash
 //////////////////////////////////////////////////////////////////////////
 
+#ifdef BLSCONF_ENABLED
 #if 0
 static int
 bbslua_hashWriter(lua_State *L, const void *p, size_t sz, void *ud)
@@ -2314,6 +2333,7 @@ bbslua_path2hash(const char *path)
         seed = fnv_32_str(BBSHOME "/", seed);
     return fnv_32_str(path, seed);
 }
+#endif  // #ifdef BLSCONF_ENABLED
 
 //////////////////////////////////////////////////////////////////////////
 // BBSLUA Main
@@ -2385,9 +2405,11 @@ bbslua(const char *fpath)
     // load script
     r = bbslua_loadbuffer(L, ps, pe-ps, "BBS-Lua", lineshift);
 
+#ifdef BLSCONF_ENABLED
     // build hash or store name
     blrt.storename = bbslua_path2hash(fpath);
     // vmsgf("BBS-Lua Hash: %08X", blrt.storename);
+#endif
 
     // unmap
     bbslua_detach(bs, sz);
