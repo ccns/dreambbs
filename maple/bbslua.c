@@ -3,19 +3,19 @@
 //////////////////////////////////////////////////////////////////////////
 
 /* Default settings */
-//#define BBSLUA_HAVE_SYNCNOW              // system needs calling sync API
-//#define BBSLUA_HAVE_VKEY                 // input system is vkey compatible
-//#define BBSLUA_HAVE_VTUIKIT              // The BBS has vtuikit
-//#define BBSLUA_HAVE_OPENCREATE           // The BBS has `OpenCreate` function
-//#define BBSLUA_NATIVE_T_LINES            // `t_lines` is a global variable
-//#define BBSLUA_NATIVE_T_COLUMNS          // `t_columns` is a global variable
+#define BBSLUA_HAVE_SYNCNOW              // system needs calling sync API
+#define BBSLUA_HAVE_VKEY                 // input system is vkey compatible
+#define BBSLUA_HAVE_VTUIKIT              // The BBS has vtuikit
+#define BBSLUA_HAVE_OPENCREATE           // The BBS has `OpenCreate` function
+#define BBSLUA_NATIVE_T_LINES            // `t_lines` is a global variable
+#define BBSLUA_NATIVE_T_COLUMNS          // `t_columns` is a global variable
 #define BBSLUA_HAVE_GRAYOUT              // The BBS has `grayout()`
 //#define BBSLUA_UNARY_GRAYOUT             // `grayout()` accepts only one argument
-//#define BBSLUA_HAVE_DOUPDATE             // The BBS has `doupdate()`
-//#define BBSLUA_HAVE_GETYX                // The BBS has `getyx()`
-//#define BBSLUA_FORCE_TIME4_T             // The BBS uses 32-bit `time_t` on 64-bit OSs
+#define BBSLUA_HAVE_DOUPDATE             // The BBS has `doupdate()`
+#define BBSLUA_HAVE_GETYX                // The BBS has `getyx()`
+#define BBSLUA_FORCE_TIME4_T             // The BBS uses 32-bit `time_t` on 64-bit OSs
 //#define BBSLUA_HAVE_STR_ANSI             // The BBS uses `str_ansi()` instead of `strip_ansi()`
-//#define BBSLUA_HAVE_STRLEN_NOANSI        // The BBS has `strlen_noansi()`
+#define BBSLUA_HAVE_STRLEN_NOANSI        // The BBS has `strlen_noansi()`
 //#define BBSLUA_VER_INFO_FILE             // The file with version information for BBS-Lua
 //#define BLSCONF_ENABLED                  // Enable `store.*` BBS-Lua API
 
