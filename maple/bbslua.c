@@ -5,27 +5,62 @@
 /* Default settings */
 //#define BBSLUA_HAVE_SYNCNOW              // system needs calling sync API
 //#define BBSLUA_HAVE_VKEY                 // input system is vkey compatible
+//#define BBSLUA_HAVE_VTUIKIT              // The BBS has vtuikit
+//#define BBSLUA_HAVE_OPENCREATE           // The BBS has `OpenCreate` function
+//#define BBSLUA_NATIVE_T_LINES            // `t_lines` is a global variable
+//#define BBSLUA_NATIVE_T_COLUMNS          // `t_columns` is a global variable
 #define BBSLUA_HAVE_GRAYOUT              // The BBS has `grayout()`
 //#define BBSLUA_UNARY_GRAYOUT             // `grayout()` accepts only one argument
+//#define BBSLUA_HAVE_DOUPDATE             // The BBS has `doupdate()`
 //#define BBSLUA_HAVE_GETYX                // The BBS has `getyx()`
+//#define BBSLUA_FORCE_TIME4_T             // The BBS uses 32-bit `time_t` on 64-bit OSs
+//#define BBSLUA_HAVE_STR_ANSI             // The BBS uses `str_ansi()` instead of `strip_ansi()`
+//#define BBSLUA_HAVE_STRLEN_NOANSI        // The BBS has `strlen_noansi()`
 //#define BLSCONF_ENABLED                  // Enable `store.*` BBS-Lua API
 
-#define M3_USE_BBSLUA
+#include "bbs.h"
+#include <sys/time.h>
+
+#define M3_USE_BBSLUA     // For compiling on Maple3
+//#define PTT_USE_BBSLUA    // For compiling on PttBBS
 
 #ifdef M3_USE_BBSLUA
  #include <assert.h>
  #include <stdarg.h>
  #include <sys/file.h>
- #include <sys/time.h>
- #include "bbs.h"
  #include "bbs_script.h"
  #define BBSLUA_HAVE_SYNCNOW
  #undef BBSLUA_HAVE_VKEY
+ #undef BBSLUA_HAVE_VTUIKIT
+ #undef BBSLUA_HAVE_OPENCREATE
+ #undef BBSLUA_NATIVE_T_LINES
+ #undef BBSLUA_NATIVE_T_COLUMNS
  #define BBSLUA_HAVE_GRAYOUT
  #undef BBSLUA_UNARY_GRAYOUT
+ #undef BBSLUA_HAVE_DOUPDATE
  #define BBSLUA_HAVE_GETYX
+ #undef BBSLUA_FORCE_TIME4_T
+ #define BBSLUA_HAVE_STR_ANSI
+ #undef BBSLUA_HAVE_STRLEN_NOANSI
  #undef BLSCONF_ENABLED
 #endif //M3_USE_BBSLUA
+
+#ifdef PTT_USE_BBSLUA
+ #define BBSLUA_HAVE_SYNCNOW
+ #define BBSLUA_HAVE_VKEY
+ #define BBSLUA_HAVE_VTUIKIT
+ #define BBSLUA_HAVE_OPENCREATE
+ #define BBSLUA_NATIVE_T_LINES
+ #define BBSLUA_NATIVE_T_COLUMNS
+ #define BBSLUA_HAVE_GRAYOUT
+ #undef BBSLUA_UNARY_GRAYOUT
+ #define BBSLUA_HAVE_DOUPDATE
+ #define BBSLUA_HAVE_GETYX
+ #define BBSLUA_FORCE_TIME4_T
+ #undef BBSLUA_HAVE_STR_ANSI
+ #define BBSLUA_HAVE_STRLEN_NOANSI
+ #undef BLSCONF_ENABLED
+#endif //PTT_USE_BBSLUA
 
 /* Inferred settings */
 
@@ -35,6 +70,8 @@
 
 #ifdef USE_PFTERM
 # undef BBSLUA_UNARY_GRAYOUT
+# define BBSLUA_HAVE_DOUPDATE
+# define BBSLUA_HAVE_GETYX
 #endif
 
 #if defined(GRAYOUT) || defined(HAVE_GRAYOUT)
@@ -94,31 +131,37 @@
 //////////////////////////////////////////////////////////////////////////
 
 #ifdef BBSLUA_HAVE_SYNCNOW
+ #ifdef BBSLUA_FORCE_TIME4_T
+extern time4_t now;
+ #else
 extern time_t now;
+ #endif
 #endif
 
 //////////////////////////////////////////////////////////////////////////
 // Redirect macros and functions
 //////////////////////////////////////////////////////////////////////////
 
-#define BLCONF_CURRENT_USERNICK cuser.username
-
-#ifndef t_lines
+#if !defined(BBSLUA_NATIVE_T_LINES) && !defined(t_lines)
 #define t_lines  (b_lines + 1)
 #endif
-#ifndef t_columns
+#if !defined(BBSLUA_NATIVE_T_COLUMNS) && !defined(t_columns)
 #define t_columns  (b_cols + 1)
 #endif
 
+#ifndef BBSLUA_FORCE_TIME4_T
 static char *(*const ctime4)(const time_t *clock) = ctime;
+#endif
 
+#ifdef BBSLUA_HAVE_STR_ANSI
 static inline void strip_ansi(char *dst, const char *str, int mode)
 {
     (void)mode;  // Suppress unused-parameter warning
     str_ansi(dst, str, strlen(str));
 }
+#endif
 
-#ifndef M3_USE_PFTERM
+#ifndef BBSLUA_HAVE_DOUPDATE
 static void (*const doupdate)(void) = refresh;
 #endif
 
@@ -134,6 +177,7 @@ static inline void getyx(int *y, int *x)
 // Utility macros and functions
 //////////////////////////////////////////////////////////////////////////
 
+#ifndef BBSLUA_HAVE_STRLEN_NOANSI
 static int
 strlen_noansi(const char *str)        /* String length after stripping ANSI code */
 {
@@ -161,8 +205,9 @@ strlen_noansi(const char *str)        /* String length after stripping ANSI code
     }
     return count;
 }
+#endif  // #ifndef BBSLUA_HAVE_STRLEN_NOANSI
 
-#ifdef BLSCONF_ENABLED
+#if defined(BLSCONF_ENABLED) && !defined(BBSLUA_HAVE_OPENCREATE)
 static const char *const str_home_file = "usr/%c/%s/%s";
 static void
 setuserfile(char *buf, const char *fname)
@@ -176,6 +221,9 @@ OpenCreate(const char *path, int flags)
     return open(path, flags | O_CREAT, DEFAULT_FILE_CREATE_PERM);
 }
 #endif
+
+
+#ifndef BBSLUA_HAVE_VTUIKIT
 
 #ifndef VBUFLEN
 #define VBUFLEN     (ANSILINELEN)
@@ -314,7 +362,7 @@ getdata_str(int line, int col, const char *prompt, char *buf, int len, int echo,
     return vget(line, col, prompt, buf, len, new_echo);
 }
 
-#ifndef M3_USE_PFTERM
+#ifndef USE_PFTERM
 static void
 newwin(int nlines, int ncols, int y, int x)
 {
@@ -330,6 +378,7 @@ newwin(int nlines, int ncols, int y, int x)
     move(oy, ox);
 }
 #endif
+#endif  // #ifndef BBSLUA_HAVE_VTUIKIT
 
 //////////////////////////////////////////////////////////////////////////
 // Input handling
@@ -689,13 +738,13 @@ vkey_is_prefetched(char c)
 //  1. n people communication
 //////////////////////////////////////////////////////////////////////////
 
-#include "bbs.h"
+// #include "bbs.h"  // Included
 
 #ifdef BLSCONF_ENABLED
   #include "fnv_hash.h"
 #endif
 
-#include <sys/time.h>
+// #include <sys/time.h>  // Included
 
 #include <lua.h>
 #include <lualib.h>
@@ -741,7 +790,12 @@ vkey_is_prefetched(char c)
 
 #define BLCONF_MMAP_ATTACH
 #define BLCONF_CURRENT_USERID   cuser.userid
-//#define BLCONF_CURRENT_USERNICK cuser.nickname  // Overridden
+
+#ifdef M3_USE_BBSLUA
+ #define BLCONF_CURRENT_USERNICK cuser.username
+#else
+ #define BLCONF_CURRENT_USERNICK cuser.nickname
+#endif
 
 // BBS-Lua Storage
 enum {
