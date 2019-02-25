@@ -5,8 +5,9 @@
 /* Default settings */
 //#define BBSLUA_HAVE_SYNCNOW              // system needs calling sync API
 //#define BBSLUA_HAVE_VKEY                 // input system is vkey compatible
+#define BBSLUA_HAVE_GRAYOUT              // The BBS has `grayout()`
+//#define BBSLUA_UNARY_GRAYOUT             // `grayout()` accepts only one argument
 //#define BLSCONF_ENABLED                  // Enable `store.*` BBS-Lua API
-#define HAVE_GRAYOUT                     // The BBS has `grayout()`
 
 #define M3_USE_BBSLUA
 
@@ -19,14 +20,23 @@
  #include "bbs_script.h"
  #define BBSLUA_HAVE_SYNCNOW
  #undef BBSLUA_HAVE_VKEY
+ #define BBSLUA_HAVE_GRAYOUT
+ #undef BBSLUA_UNARY_GRAYOUT
  #undef BLSCONF_ENABLED
- #define HAVE_GRAYOUT
 #endif //M3_USE_BBSLUA
 
 /* Inferred settings */
 
 #ifdef USE_NIOS_VKEY
 # define BBSLUA_HAVE_VKEY
+#endif
+
+#ifdef USE_PFTERM
+# undef BBSLUA_UNARY_GRAYOUT
+#endif
+
+#if defined(GRAYOUT) || defined(HAVE_GRAYOUT)
+# define BBSLUA_HAVE_GRAYOUT
 #endif
 
 //////////////////////////////////////////////////////////////////////////
@@ -49,14 +59,6 @@
 // grayout advanced control
 // #include "grayout.h"
 //////////////////////////////////////////////////////////////////////////
-#if ! (defined(GRAYOUT) || defined(HAVE_GRAYOUT))
-// IID.20190124: If there is no `grayout()` at all
-static inline void grayout(int y, int end, int level)
-{
-    // Does nothing
-}
-#endif
-
 #ifndef GRAYOUT_DARK
 #define GRAYOUT_COLORBOLD (-2)
 #define GRAYOUT_BOLD (-1)
@@ -2013,7 +2015,13 @@ bbslua_logo(lua_State *L)
     }
 
     // prepare logo window
+#ifdef BBSLUA_HAVE_GRAYOUT
+ #ifdef BBSLUA_UNARY_GRAYOUT
+    grayout(GRAYOUT_DARK);
+ #else
     grayout(0, b_lines, GRAYOUT_DARK);
+ #endif
+#endif
 
     // print compatibility test
     // now (by) is the base of new information
@@ -2493,7 +2501,13 @@ bbslua(const char *fpath)
     }
 #endif
 
+#ifdef BBSLUA_HAVE_GRAYOUT
+ #ifdef BBSLUA_UNARY_GRAYOUT
+    // grayout(GRAYOUT_DARK);
+ #else
     // grayout(0, b_lines, GRAYOUT_DARK);
+ #endif
+#endif
     move(b_lines, 0); clrtoeol();
     vmsgf("BBS-Lua 執行結束%s。",
             blrt.abort ? " (使用者中斷)" : r ? " (程式錯誤)" : "");
