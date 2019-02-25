@@ -16,6 +16,7 @@
 //#define BBSLUA_FORCE_TIME4_T             // The BBS uses 32-bit `time_t` on 64-bit OSs
 //#define BBSLUA_HAVE_STR_ANSI             // The BBS uses `str_ansi()` instead of `strip_ansi()`
 //#define BBSLUA_HAVE_STRLEN_NOANSI        // The BBS has `strlen_noansi()`
+//#define BBSLUA_VER_INFO_FILE             // The file with version information for BBS-Lua
 //#define BLSCONF_ENABLED                  // Enable `store.*` BBS-Lua API
 
 #include "bbs.h"
@@ -28,7 +29,6 @@
  #include <assert.h>
  #include <stdarg.h>
  #include <sys/file.h>
- #include "bbs_script.h"
  #define BBSLUA_HAVE_SYNCNOW
  #undef BBSLUA_HAVE_VKEY
  #undef BBSLUA_HAVE_VTUIKIT
@@ -42,6 +42,7 @@
  #undef BBSLUA_FORCE_TIME4_T
  #define BBSLUA_HAVE_STR_ANSI
  #undef BBSLUA_HAVE_STRLEN_NOANSI
+ #define BBSLUA_VER_INFO_FILE "bbs_script.h"
  #undef BLSCONF_ENABLED
 #endif //M3_USE_BBSLUA
 
@@ -59,6 +60,7 @@
  #define BBSLUA_FORCE_TIME4_T
  #undef BBSLUA_HAVE_STR_ANSI
  #define BBSLUA_HAVE_STRLEN_NOANSI
+ #undef BBSLUA_VER_INFO_FILE
  #undef BLSCONF_ENABLED
 #endif //PTT_USE_BBSLUA
 
@@ -76,6 +78,10 @@
 
 #if defined(GRAYOUT) || defined(HAVE_GRAYOUT)
 # define BBSLUA_HAVE_GRAYOUT
+#endif
+
+#ifdef BBSLUA_VER_INFO_FILE
+# include BBSLUA_VER_INFO_FILE
 #endif
 
 //////////////////////////////////////////////////////////////////////////
