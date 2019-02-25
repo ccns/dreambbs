@@ -288,7 +288,7 @@
 #define KEY_PGUP        0x0205
 #define KEY_PGDN        0x0206
 
-#define KEY_NONE        0x12345
+#define KEY_NONE        0x4000
 
 #define KEY_F1          0x0301
 #define KEY_F2          0x0302
