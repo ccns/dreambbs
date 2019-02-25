@@ -844,19 +844,19 @@ typedef struct {
 BBSLuaRT blrt = {0};
 
 #ifdef BLSCONF_ENABLED
-  #define BL_INIT_RUNTIME() { \
-      memset(&blrt, 0, sizeof(blrt)); \
-      blrt.storename = FNV1_32_INIT; \
-  }
+  #define BL_INIT_RUNTIME()  (void) ( \
+      memset(&blrt, 0, sizeof(blrt)), \
+      blrt.storename = FNV1_32_INIT \
+  )
 #else
-  #define BL_INIT_RUNTIME() { \
-      memset(&blrt, 0, sizeof(blrt)); \
-  }
+  #define BL_INIT_RUNTIME()  (void) ( \
+      memset(&blrt, 0, sizeof(blrt)) \
+  )
 #endif
 
-#define BL_END_RUNTIME() { \
-    memset(&blrt, 0, sizeof(blrt)); \
-}
+#define BL_END_RUNTIME()  (void) ( \
+    memset(&blrt, 0, sizeof(blrt)) \
+)
 
 #ifdef BBSLUA_USAGE
 static int bbslua_count;
