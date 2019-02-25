@@ -2472,7 +2472,7 @@ bbslua(const char *fpath)
 
     // even if r == yield, let's abort - you cannot yield main thread.
 
-    if (r != 0)
+    if (r != 0 && !blrt.abort)
     {
         const char *errmsg = lua_tostring(L, -1);
         move(b_lines-3, 0); clrtobot();
