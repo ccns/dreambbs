@@ -7,6 +7,7 @@
 //#define BBSLUA_HAVE_VKEY                 // input system is vkey compatible
 #define BBSLUA_HAVE_GRAYOUT              // The BBS has `grayout()`
 //#define BBSLUA_UNARY_GRAYOUT             // `grayout()` accepts only one argument
+//#define BBSLUA_HAVE_GETYX                // The BBS has `getyx()`
 //#define BLSCONF_ENABLED                  // Enable `store.*` BBS-Lua API
 
 #define M3_USE_BBSLUA
@@ -22,6 +23,7 @@
  #undef BBSLUA_HAVE_VKEY
  #define BBSLUA_HAVE_GRAYOUT
  #undef BBSLUA_UNARY_GRAYOUT
+ #define BBSLUA_HAVE_GETYX
  #undef BLSCONF_ENABLED
 #endif //M3_USE_BBSLUA
 
@@ -118,6 +120,14 @@ static inline void strip_ansi(char *dst, const char *str, int mode)
 
 #ifndef M3_USE_PFTERM
 static void (*const doupdate)(void) = refresh;
+#endif
+
+#ifndef BBSLUA_HAVE_GETYX
+static inline void getyx(int *y, int *x)
+{
+    *y = cur_row;
+    *x = cur_col;
+}
 #endif
 
 //////////////////////////////////////////////////////////////////////////
