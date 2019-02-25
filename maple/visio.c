@@ -2067,8 +2067,17 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
                 continue;
             }
 
-            if (len >= max)
+            if (!isdigit(ch) && (echo & NUMECHO))
+            {
+                bell();
                 continue;
+            }
+
+            if (len >= max)
+            {
+                bell();
+                continue;
+            }
 
             /* ----------------------------------------------- */
             /* insert data and display it                      */
@@ -2103,13 +2112,11 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
         /* 輸入 password / match-list 時只能按 BackSpace   */
         /* ----------------------------------------------- */
 
-#if 0
-        if ((!echo || mfunc) && ch != Ctrl('H'))
+        if (!(echo & DOECHO) && ch != Ctrl('H'))
+        {
+            bell();
             continue;
-#endif
-
-        if (!echo && ch != Ctrl('H'))
-            continue;
+        }
 
 #ifdef M3_USE_PFTERM
         STANDOUT;
@@ -2121,7 +2128,7 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
             if (col >= len)
             {
                 bell();
-                break;
+                continue;
             }
 
             col++;
@@ -2131,7 +2138,7 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
             if (!col)
             {
                 bell();
-                break;
+                continue;
             }
 
             /* ----------------------------------------------- */
@@ -2154,12 +2161,16 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
         case Ctrl('B'):
             if (col)
                 --col;
+            else
+                bell();
             break;
 
         case KEY_RIGHT:
         case Ctrl('F'):
             if (col < len)
                 ++col;
+            else
+                bell();
             break;
 
         case KEY_HOME:
@@ -2207,7 +2218,10 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
 
         /* No input history for `NUMECHO` or hidden inputs */
         if (!(echo & DOECHO) || (echo & NUMECHO))
+        {
+            bell();
             continue;
+        }
 
 #ifdef M3_USE_PFTERM
         STANDOUT;
@@ -2255,6 +2269,9 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
                     outc(' ');
                 len = col;
             }
+        default:
+            /* Invalid key */
+            bell();
             break;
         }
 #ifdef M3_USE_PFTERM
