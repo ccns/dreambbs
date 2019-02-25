@@ -2056,10 +2056,16 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             }
 
             if (!isdigit(ch) && (echo & NUMECHO))
+            {
+                bell();
                 continue;
+            }
 
             if (len >= max)
+            {
+                bell();
                 continue;
+            }
 
             /* ----------------------------------------------- */
             /* insert data and display it                      */
@@ -2103,11 +2109,17 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
 #if 0
         if ((!(echo & DOECHO) || mfunc) && ch != Ctrl('H'))
+        {
+            bell();
             continue;
+        }
 #endif
 
         if (!(echo & DOECHO) && ch != Ctrl('H'))
+        {
+            bell();
             continue;
+        }
 
 #ifdef M3_USE_PFTERM
         if (!(echo & VGET_STEALTH_NOECHO))
@@ -2119,14 +2131,20 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         case Ctrl('D'):
 
             if (col >= len)
+            {
+                bell();
                 continue;
+            }
 
             col++;
 
         case Ctrl('H'):
 
             if (!col)
+            {
+                bell();
                 continue;
+            }
 
             /* ----------------------------------------------- */
             /* remove data and display it                      */
@@ -2155,12 +2173,16 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         case Ctrl('B'):
             if (col)
                 --col;
+            else
+                bell();
             break;
 
         case KEY_RIGHT:
         case Ctrl('F'):
             if (col < len)
                 ++col;
+            else
+                bell();
             break;
 
         case KEY_HOME:
@@ -2208,7 +2230,10 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
         /* No input history for `NUMECHO` or hidden inputs */
         if (!(echo & DOECHO) || (echo & NUMECHO))
+        {
+            bell();
             continue;
+        }
 
 #ifdef M3_USE_PFTERM
         STANDOUT;
@@ -2248,6 +2273,10 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             len = col;
             break;
 
+        default:
+            /* Invalid key */
+            bell();
+            break;
         }
 #ifdef M3_USE_PFTERM
         STANDEND;
