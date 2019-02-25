@@ -1975,8 +1975,25 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
 
     if (echo & GCARRY)
     {
-        if ((len = strlen(data)))
-            outs(data);
+        if ((len = strlen(data)) && (echo & NUMECHO))
+        {
+            /* Remove non-digit characters */
+            col = 0;
+            for (ch = 0; ch < len; ch++)
+                if (isdigit(data[ch]))
+                    data[col++] = data[ch];
+            data[col] = '\0';
+        }
+        if ((len = strlen(data)) && !(echo & VGET_STEALTH_NOECHO))
+        {
+            if (echo & DOECHO)
+                outs(data);
+            else
+            {
+                for (ch = 0; ch < len; ch++)
+                    outc('*');
+            }
+        }
     }
     else
     {
