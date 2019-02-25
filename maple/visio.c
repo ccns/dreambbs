@@ -2142,7 +2142,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             if (col >= len)
             {
                 bell();
-                continue;
+                break;
             }
 
             col++;
@@ -2152,7 +2152,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             if (!col)
             {
                 bell();
-                continue;
+                break;
             }
 
             /* ----------------------------------------------- */
