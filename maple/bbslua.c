@@ -83,7 +83,9 @@ static inline void grayout(int y, int end, int level)
 // #include "var.h"
 //////////////////////////////////////////////////////////////////////////
 
+#ifdef BBSLUA_HAVE_SYNCNOW
 extern time_t now;
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 // Redirect macros and functions
@@ -1304,7 +1306,11 @@ bl_attrset(lua_State *L)
 BLAPI_PROTO
 bl_time(lua_State *L)
 {
+#ifdef BBSLUA_HAVE_SYNCNOW
     syncnow();
+#else
+    time_t now = time(NULL);
+#endif
     lua_pushinteger(L, now);
     return 1;
 }
@@ -1312,7 +1318,11 @@ bl_time(lua_State *L)
 BLAPI_PROTO
 bl_ctime(lua_State *L)
 {
+#ifdef BBSLUA_HAVE_SYNCNOW
     syncnow();
+#else
+    time_t now = time(NULL);
+#endif
     lua_pushstring(L, ctime4(&now));
     return 1;
 }
@@ -1327,10 +1337,14 @@ bl_clock(lua_State *L)
     // XXX this is a fast hack because we don't want to do 64bit calculation.
     SYSTEMTIME st;
     GetSystemTime(&st);
+#ifdef BBSLUA_HAVE_SYNCNOW
     syncnow();
     // XXX the may be some latency between our GetSystemTime and syncnow.
     // So build again the "second" part.
     d = (int)((now / 60) * 60);
+#else
+    d = (int)((time(NULL) / 60) * 60);
+#endif
     d += st.wSecond;
     d += (st.wMilliseconds / 1000.0f);
 
