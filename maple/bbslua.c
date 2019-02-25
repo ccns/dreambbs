@@ -1,7 +1,11 @@
 //////////////////////////////////////////////////////////////////////////
 // bbslua environment settings
 //////////////////////////////////////////////////////////////////////////
-#define HAVE_GRAYOUT
+
+/* Default settings */
+//#define BBSLUA_HAVE_SYNCNOW              // system needs calling sync API
+//#define BBSLUA_HAVE_VKEY                 // input system is vkey compatible
+#define HAVE_GRAYOUT                     // The BBS has `grayout()`
 
 #define M3_USE_BBSLUA
 
@@ -12,6 +16,9 @@
 #include <sys/time.h>
 #include "bbs.h"
 #include "bbs_script.h"
+#define BBSLUA_HAVE_SYNCNOW
+#undef BBSLUA_HAVE_VKEY
+#define HAVE_GRAYOUT
 #endif //M3_USE_BBSLUA
 
 //////////////////////////////////////////////////////////////////////////
@@ -304,7 +311,7 @@ newwin(int nlines, int ncols, int y, int x)
 // Input handling
 //////////////////////////////////////////////////////////////////////////
 
-#if !(defined(M3_USE_NIOS_VKEY) || defined(PMORE_HAVE_VKEY))
+#if !(defined(M3_USE_NIOS_VKEY) || defined(BBSLUA_HAVE_VKEY))
 
 // IID.20190124: If this BBS does not have the vkey input system,
 //                  give it a simplified one.
@@ -534,10 +541,10 @@ wait_input(float f, int bIgnoreBuf)
     // or weird error (sel < 0)
 
     // sync clock(now) if timeout.
-#ifdef PMORE_HAVE_SYNCNOW
+#ifdef BBSLUA_HAVE_SYNCNOW
     if (sel == 0)
         syncnow();
-#endif // PMORE_HAVE_SYNCNOW
+#endif // BBSLUA_HAVE_SYNCNOW
     return (sel == 0) ? 0 : 1;
 }
 
@@ -601,7 +608,7 @@ vkey_is_prefetched(char c)
     return res >= vin;
 }
 
-#endif  // #if !(defined(M3_USE_NIOS_VKEY) || defined(PMORE_HAVE_VKEY))
+#endif  // #if !(defined(M3_USE_NIOS_VKEY) || defined(BBSLUA_HAVE_VKEY))
 
 //////////////////////////////////////////////////////////////////////////
 // BBS-Lua Project

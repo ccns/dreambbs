@@ -1,6 +1,8 @@
 //////////////////////////////////////////////////////////////////////////
 // pfterm environment settings
 //////////////////////////////////////////////////////////////////////////
+//#define PFTERM_HAVE_VKEY
+
 #ifdef PFTERM_TEST_MAIN
 
 #define EXP_PFTERM
@@ -31,6 +33,7 @@
 
 #ifdef M3_USE_PFTERM
 #include <assert.h>
+#undef PFTERM_HAVE_VKEY
 #endif //M3_USE_PFTERM
 
 #endif  /* #ifdef PFTERM_TEST_MAIN */
@@ -2411,7 +2414,7 @@ region_scroll_up(int top, int bottom)
 int
 fterm_typeahead(void)
 {
-#if defined (PFTERM_TEST_MAIN) || !defined (PMORE_HAVE_VKEY)
+#if defined (PFTERM_TEST_MAIN) || !defined (PFTERM_HAVE_VKEY)
     return 0;
 #else
     return vkey_is_typeahead();
