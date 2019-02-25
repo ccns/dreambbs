@@ -22,10 +22,7 @@
 #include "bbs.h"
 #include <sys/time.h>
 
-#define M3_USE_BBSLUA     // For compiling on Maple3
-//#define PTT_USE_BBSLUA    // For compiling on PttBBS
-
-#ifdef M3_USE_BBSLUA
+#ifdef M3_USE_BBSLUA     // For compiling on Maple3
  #include <assert.h>
  #include <stdarg.h>
  #include <sys/file.h>
@@ -46,7 +43,7 @@
  #undef BLSCONF_ENABLED
 #endif //M3_USE_BBSLUA
 
-#ifdef PTT_USE_BBSLUA
+#ifdef PTT_USE_BBSLUA    // For compiling on PttBBS
  #define BBSLUA_HAVE_SYNCNOW
  #define BBSLUA_HAVE_VKEY
  #define BBSLUA_HAVE_VTUIKIT

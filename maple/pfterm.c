@@ -21,8 +21,6 @@
 #define HAVE_GRAYOUT
 #include "bbs.h"
 
-#define M3_USE_PFTERM
-
 #ifndef FT_DBCS_NOINTRESC
 # ifdef  UF_DBCS_NOINTRESC
 #  define FT_DBCS_NOINTRESC (cuser.uflag & UF_DBCS_NOINTRESC)
