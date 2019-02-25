@@ -32,8 +32,8 @@
 #endif
 
 #ifdef M3_USE_PFTERM
-#include <assert.h>
-#undef PFTERM_HAVE_VKEY
+ #include <assert.h>
+ #undef PFTERM_HAVE_VKEY
 #endif //M3_USE_PFTERM
 
 #endif  /* #ifdef PFTERM_TEST_MAIN */

@@ -11,16 +11,16 @@
 #define M3_USE_BBSLUA
 
 #ifdef M3_USE_BBSLUA
-#include <assert.h>
-#include <stdarg.h>
-#include <sys/file.h>
-#include <sys/time.h>
-#include "bbs.h"
-#include "bbs_script.h"
-#define BBSLUA_HAVE_SYNCNOW
-#undef BBSLUA_HAVE_VKEY
-#undef BLSCONF_ENABLED
-#define HAVE_GRAYOUT
+ #include <assert.h>
+ #include <stdarg.h>
+ #include <sys/file.h>
+ #include <sys/time.h>
+ #include "bbs.h"
+ #include "bbs_script.h"
+ #define BBSLUA_HAVE_SYNCNOW
+ #undef BBSLUA_HAVE_VKEY
+ #undef BLSCONF_ENABLED
+ #define HAVE_GRAYOUT
 #endif //M3_USE_BBSLUA
 
 //////////////////////////////////////////////////////////////////////////
