@@ -1157,11 +1157,11 @@ goodbye1(void)
 
 static MENU menu_treat[] =
 {
-    goodbye1, 0, M_XMODE,
-    "Goodbye   【再別" NICKNAME "】",
+    {goodbye1, 0, M_XMODE,
+    "Goodbye   【再別" NICKNAME "】"},
 
-    NULL, PERM_MENU + 'G', M_MMENU,
-    "主功\能表"
+    {NULL, PERM_MENU + 'G', M_MMENU,
+    "主功\能表"}
 };
 #endif  /* #ifdef  TREAT */
 
