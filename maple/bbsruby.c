@@ -68,6 +68,14 @@ static const char str_ransi[] = "\x1b[m";
   #define vget(y, x, msg, buf, size, mode)  getdata(y, x, msg, buf, size, mode)
 #endif
 
+#ifndef BBSRUBY_HAVE_GETYX
+static inline void getyx(int *y, int *x)
+{
+    *y = cur_row;
+    *x = cur_col;
+}
+#endif
+
 static inline void getxy(int *x, int *y)
 {
     getyx(y, x);
