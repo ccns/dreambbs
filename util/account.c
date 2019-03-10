@@ -14,7 +14,7 @@
 #include "bbs.h"
 
 #define MAX_LINE        16
-#define ADJUST_M        10      /* adjust back 10 minutes */
+#define ADJUST_M        60      /* adjust back 1 hour */
 
 static char fn_today[] = "gem/@/@-act"; /* 今日上站人次統計 */
 static char fn_yesterday[] = "gem/@/@=act";     /* 昨日上站人次統計 */
