@@ -243,33 +243,10 @@ vmsgf(const char *fmt, ...)
     return vmsg(msg);
 }
 
-#ifndef VCLR_HDR
-#define VCLR_HDR  "\x1b[1;46;37m"
-#endif
-#ifndef VMSG_HDR_PREFIX
-#define VMSG_HDR_PREFIX   "【"
-#endif
-#ifndef VMSG_HDR_POSTFIX
-#define VMSG_HDR_POSTFIX  "】"
-#endif
-
 static void
 vs_hdr(const char *title)
 {
-#ifdef  COLOR_HEADER
-/*  int color = (time(0) % 7) + 41;        lkchu.981201: random color */
-    int color = 44; //090911.cache: 太花了固定一種顏色
-#endif
-
-    clear();
-
-#ifdef  COLOR_HEADER
-    prints(VCLR_HDR "\x1b[%2dm" VMSG_HDR_PREFIX, color);
-#else
-    outs(VCLR_HDR VMSG_HDR_PREFIX);
-#endif
-    outs(title);
-    outs(VMSG_HDR_POSTFIX ANSI_RESET "\n");
+    vs_bar(title);
 }
 
 // IID.20190125: To be compatible with PttBBS's BBSLua.
