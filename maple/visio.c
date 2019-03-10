@@ -1471,6 +1471,28 @@ iac_count(
         {
             unsigned char *look = current + 2;
 
+            /* fuse.030518: 線上調整畫面大小，重抓 b_lines */
+            if ((*look) == TELOPT_NAWS)
+            {
+                b_lines = ntohs(* (short *) (look + 3)) - 1;
+                b_cols = ntohs(* (short *) (look + 1)) - 1;
+
+                /* b_lines 至少要 23，最多不能超過 T_LINES - 1 */
+                if (b_lines >= T_LINES)
+                    b_lines = T_LINES - 1;
+                else if (b_lines < 23)
+                    b_lines = 23;
+                /* b_cols 至少要 79，最多不能超過 T_COLS - 1 */
+                if (b_cols >= T_COLS)
+                    b_cols = T_COLS - 1;
+                else if (b_cols < 79)
+                    b_cols = 79;
+#ifdef M3_USE_PFTERM
+                resizeterm(b_lines + 1, b_cols + 1);
+#endif
+                d_cols = b_cols - 79;
+            }
+
             for (;;)
             {
                 if ((*look++) == IAC)
