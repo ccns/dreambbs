@@ -1,13 +1,71 @@
-//-------------------------------------------------------
-// bbsruby environment settings
-//-------------------------------------------------------
+//------------------------------------------------------------------------
+// bbslua environment settings
+//------------------------------------------------------------------------
 
-#define M3_USE_BBSRUBY
+/* Default settings */
+#define BBSRUBY_HAVE_VTUIKIT              // The BBS has vtuikit
+//#define BBSRUBY_NATIVE_B_LINES            // `b_lines` is a global variable
+//#define BBSRUBY_NATIVE_B_COLS             // `b_cols` is a global variable
+#define BBSRUBY_HAVE_GETYX                // The BBS has `getyx()`
+//#define BBSRUBY_HAVE_STR_RANSI            // The BBS has `str_ransi` variable
+//#define BBSRUBY_VER_INFO_FILE             // The file with version information for BBS-Ruby
 
-#ifdef M3_USE_BBSRUBY
-#include <sys/time.h>
 #include "bbs.h"
-#include "bbs_script.h"
+#include <sys/time.h>
+
+#ifdef M3_USE_BBSRUBY     // For compiling on Maple3
+ #undef BBSRUBY_HAVE_VTUIKIT
+ #define BBSRUBY_NATIVE_B_LINES
+ #define BBSRUBY_NATIVE_B_COLS
+ #define BBSRUBY_HAVE_GETYX
+ #define BBSRUBY_HAVE_STR_RANSI
+ #define BBSRUBY_VER_INFO_FILE "bbs_script.h"
+#endif //M3_USE_BBSRUBY
+
+#ifdef PTT_USE_BBSRUBY    // For compiling on PttBBS
+ #define BBSRUBY_HAVE_VTUIKIT
+ #undef BBSRUBY_NATIVE_B_LINES
+ #undef BBSRUBY_NATIVE_B_COLS
+ #define BBSRUBY_HAVE_GETYX
+ #undef BBSRUBY_HAVE_STR_RANSI
+ #undef BBSRUBY_VER_INFO_FILE
+#endif //PTT_USE_BBSRUBY
+
+/* Inferred settings */
+
+#ifdef USE_PFTERM
+# define BBSRUBY_HAVE_GETYX
+#endif
+
+#ifdef BBSRUBY_VER_INFO_FILE
+# include BBSRUBY_VER_INFO_FILE
+#endif
+
+//------------------------------------------------------------------------
+// Redirect macros and functions
+//------------------------------------------------------------------------
+
+#if !defined(BBSRUBY_NATIVE_B_LINES) && !defined(b_lines)
+  #define b_lines  (t_lines - 1)
+#endif
+#if !defined(BBSRUBY_NATIVE_B_COLS) && !defined(b_cols)
+  #define b_cols  (t_columns - 1)
+#endif
+
+#ifndef BBSRUBY_HAVE_STR_RANSI
+static const char str_ransi[] = "\x1b[m";
+#endif
+
+#ifndef COLOR1
+  #define COLOR1          "\x1b[34;46m"   /* footer/feeter 的前段顏色 */
+#endif
+#ifndef COLOR2
+  #define COLOR2          "\x1b[31;47m"   /* footer/feeter 的後段顏色 */
+#endif
+
+#ifdef BBSRUBY_HAVE_VTUIKIT
+  #define vs_bar(title)  vs_hdr(title)
+  #define vget(y, x, msg, buf, size, mode)  getdata(y, x, msg, buf, size, mode)
 #endif
 
 static inline void getxy(int *x, int *y)
@@ -49,7 +107,11 @@ typedef rb_event_t rb_event_flag_t;
 
 #define BBSRUBY_MAJOR_VERSION (0)
 #define BBSRUBY_MINOR_VERSION (3)
-//#define BBSRUBY_VERSION_STR "v0.3"
+
+#ifndef BBSRUBY_VERSION_STR
+  #define BBSRUBY_VERSION_STR "v0.3"
+#endif
+
 #define BBSRUBY_SIGNATURE "###BBSRuby"
 
 #define BBSRUBY_INTERFACE_VER 0.111
