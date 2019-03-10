@@ -200,7 +200,7 @@ static char *ModeTypeTable[] =
 #define XO_QUIT         (XO_MODE + 8)
 
 #define XO_RSIZ         256             /* max record length */
-#define XO_TALL         20              /* page size */
+#define XO_TALL         (b_lines - 3)   /* page size = b_lines - 3 (扣去 head/neck/foot 共三行) */
 
 
 #define XO_MOVE         0x20000000      /* cursor movement */
