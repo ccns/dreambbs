@@ -1478,11 +1478,14 @@ XZ xz[] =
     {NULL, NULL, M_READA},      /* skip XZ_XPOST */
 #endif
     {NULL, NULL, M_RMAIL},      /* XZ_MBOX */
-    {NULL, post_cb, M_READA},   /* XZ_POST */
+    {NULL, post_cb, M_READA},   /* XZ_BOARD / XZ_POST */
     {NULL, NULL, M_GEM},        /* XZ_GEM */
     {NULL, NULL, M_RMAIL},      /* XZ_MAILGEM */
     {NULL, NULL, M_BANMAIL},    /* XZ_BANMAIL */
     {NULL, NULL, M_OMENU},      /* XZ_OTHER */
+#ifdef HAVE_FAVORITE
+    {NULL, NULL, M_MYFAVORITE}, /* XZ_MYFAVORITE */
+#endif
 };
 
 
