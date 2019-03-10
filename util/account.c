@@ -934,7 +934,7 @@ main(void)
         sprintf(title, "[記錄] %s商店交易紀錄", date);
         keeplog("run/shop.log", BRD_SECRET, title, 2);
 
-        system("cat run/usies | grep APPLY > run/apply.log");
+        system("cat run/usies= | grep APPLY > run/apply.log");
         sprintf(title, "[記錄] %s每日註冊使用者紀錄", date);
         keeplog("run/apply.log", BRD_SECRET, title, 2);
 
