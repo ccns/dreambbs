@@ -1324,8 +1324,17 @@ void
 vs_bar(
     char *title)
 {
+#ifdef  COLOR_HEADER
+/*  int color = (time(0) % 7) + 41;        lkchu.981201: random color */
+    int color = 44; //090911.cache: 太花了固定一種顏色
+#endif
+
     clear();
-    prints("\x1b[1;33;44m【 %s 】\x1b[m\n", title);
+#ifdef  COLOR_HEADER
+    prints("\x1b[1;%2d;37m【%s】\x1b[m\n", color, title);
+#else
+    prints("\x1b[1;46;37m【%s】\x1b[m\n", title);
+#endif
 }
 
 
