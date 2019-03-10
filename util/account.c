@@ -701,7 +701,7 @@ main(void)
     xtime = localtime(&now);
     ntime = *xtime;
 
-    now -= ADJUST_M * 60;               /* back to ancent */
+    now -= ADJUST_M * 60;               /* back to ancient */
     xtime = localtime(&now);
     ptime = *xtime;
 
