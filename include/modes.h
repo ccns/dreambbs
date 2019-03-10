@@ -83,7 +83,7 @@ static char *ModeTypeTable[] =
   "交談選單",       /* M_TMENU */
   "使用者選單",     /* M_UMENU */
   "系統資訊",       /* M_SMENU */
-  "網路連線選單",   /* M_XMENU */
+  "工具選單",       /* M_XMENU */
   "專業看板",       /* M_PROFESS */
   "分類看板",       /* M_CLASS */
   "上站途中",       /* M_LOGIN */
