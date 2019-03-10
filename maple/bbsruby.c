@@ -6,6 +6,7 @@
 #define BBSRUBY_HAVE_VTUIKIT              // The BBS has vtuikit
 //#define BBSRUBY_NATIVE_B_LINES            // `b_lines` is a global variable
 //#define BBSRUBY_NATIVE_B_COLS             // `b_cols` is a global variable
+//#define BBSRUBY_USE_RH_COOR               // Use right-handed coordinate; `x` => row, `y` => col
 #define BBSRUBY_HAVE_GETYX                // The BBS has `getyx()`
 //#define BBSRUBY_HAVE_STR_RANSI            // The BBS has `str_ransi` variable
 //#define BBSRUBY_VER_INFO_FILE             // The file with version information for BBS-Ruby
@@ -17,6 +18,7 @@
  #undef BBSRUBY_HAVE_VTUIKIT
  #define BBSRUBY_NATIVE_B_LINES
  #define BBSRUBY_NATIVE_B_COLS
+ #undef BBSRUBY_USE_RH_COOR
  #define BBSRUBY_HAVE_GETYX
  #define BBSRUBY_HAVE_STR_RANSI
  #define BBSRUBY_VER_INFO_FILE "bbs_script.h"
@@ -26,6 +28,7 @@
  #define BBSRUBY_HAVE_VTUIKIT
  #undef BBSRUBY_NATIVE_B_LINES
  #undef BBSRUBY_NATIVE_B_COLS
+ #undef BBSRUBY_USE_RH_COOR
  #define BBSRUBY_HAVE_GETYX
  #undef BBSRUBY_HAVE_STR_RANSI
  #undef BBSRUBY_VER_INFO_FILE
@@ -74,6 +77,14 @@ static inline void getyx(int *y, int *x)
     *y = cur_row;
     *x = cur_col;
 }
+#endif
+
+#ifdef BBSRUBY_USE_RH_COOR
+  #define BRB_COOR_ROW  "x"
+  #define BRB_COOR_COL  "y"
+#else
+  #define BRB_COOR_ROW  "y"
+  #define BRB_COOR_COL  "x"
 #endif
 
 //-------------------------------------------------------
@@ -250,8 +261,8 @@ VALUE brb_print(VALUE self, VALUE args)
 VALUE brb_getmaxyx(VALUE self)
 {
     VALUE rethash = rb_hash_new();
-    rb_hash_aset(rethash, rb_str_new_cstr("y"), INT2NUM(b_lines + 1));
-    rb_hash_aset(rethash, rb_str_new_cstr("x"), INT2NUM(b_cols + 1));
+    rb_hash_aset(rethash, rb_str_new_cstr(BRB_COOR_ROW), INT2NUM(b_lines + 1));
+    rb_hash_aset(rethash, rb_str_new_cstr(BRB_COOR_COL), INT2NUM(b_cols + 1));
     return rethash;
 }
 
@@ -260,8 +271,8 @@ VALUE brb_getyx(VALUE self)
     VALUE rethash = rb_hash_new();
     int cur_row, cur_col;
     getyx(&cur_row, &cur_col);
-    rb_hash_aset(rethash, rb_str_new_cstr("y"), INT2NUM(cur_row));
-    rb_hash_aset(rethash, rb_str_new_cstr("x"), INT2NUM(cur_col));
+    rb_hash_aset(rethash, rb_str_new_cstr(BRB_COOR_ROW), INT2NUM(cur_row));
+    rb_hash_aset(rethash, rb_str_new_cstr(BRB_COOR_COL), INT2NUM(cur_col));
     return rethash;
 }
 
