@@ -201,12 +201,18 @@ VALUE brb_getch(VALUE self)
         //return rb_ary_pop(KB_QUEUE);
 }
 
+#define MACRO_NONZERO(macro)  ((macro-0) != 0)
+
 VALUE brb_getdata(VALUE self, VALUE args)
 {
     int count = RARRAY_LEN(args);
     int echo = DOECHO;
     if (count > 1 && NUM2INT(rb_ary_entry(args, 1)) == 0)
+#if MACRO_NONZERO(VGET_STEALTH_NOECHO)
+        echo = NOECHO | VGET_STEALTH_NOECHO;
+#else
         echo = NOECHO;
+#endif
 
     int maxsize = NUM2INT(rb_ary_entry(args, 0));
     if (maxsize > 511) maxsize = 511;
