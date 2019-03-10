@@ -760,7 +760,13 @@ main(void)
     fclose(fpw);
     unlink(tmp_file);
 
-    write(fact, act, sizeof(act));
+    // IID.20190311: Zero-out the file `fact` to reset the login count at 0 am.
+    if (ntime.tm_hour == 0)
+        for (i = 0; i < sizeof(act); i++)
+            write(fact, "", sizeof(char));
+    else
+        write(fact, act, sizeof(act));
+
     close(fact);
 
     for (i = max = total = 0; i < 24; i++)
