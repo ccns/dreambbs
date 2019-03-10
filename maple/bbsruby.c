@@ -213,6 +213,13 @@ VALUE brb_getdata(VALUE self, VALUE args)
 #else
         echo = NOECHO;
 #endif
+#if MACRO_NONZERO(VGET_STRICT_DOECHO)
+    if (echo == NOECHO)
+        echo |= VGET_STRICT_DOECHO;
+#endif
+#if defined(VGET_STRICT_DOECHO) && MACRO_NONZERO(VGET_BREAKABLE)
+    echo |= VGET_BREAKABLE;
+#endif
 
     int maxsize = NUM2INT(rb_ary_entry(args, 0));
     if (maxsize > 511) maxsize = 511;
