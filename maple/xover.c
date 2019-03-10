@@ -94,7 +94,7 @@ xo_free(
 /* ----------------------------------------------------- */
 
 
-char xo_pool[XO_TALL * XO_RSIZ];
+char xo_pool[(T_LINES - 4) * XO_RSIZ];  /* XO's data I/O pool */
 
 
 void
