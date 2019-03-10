@@ -227,9 +227,23 @@ VALUE brb_getdata(VALUE self, VALUE args)
     int cur_row, cur_col;
     getyx(&cur_row, &cur_col);
 
-    vget(cur_row, cur_col, "", data, maxsize, echo);
-
-    return rb_str_new_cstr(data);
+    int res = vget(cur_row, cur_col, "", data, maxsize, echo);
+    if (res <= 0)
+    {
+#ifdef VGET_EXIT_BREAK
+        if (res == VGET_EXIT_BREAK)
+#else
+        if (buf[1] == Ctrl('C'))
+#endif
+        {
+            ABORT_BBSRUBY = 1;
+        }
+        return rb_str_new_cstr("");
+    }
+    else
+    {
+        return rb_str_new_cstr(data);
+    }
 }
 
 VALUE brb_kbhit(VALUE self, VALUE wait)
