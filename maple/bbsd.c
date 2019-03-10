@@ -1292,7 +1292,7 @@ term_init(void)
                 to.tv_usec = 1;
                 if (select(1, (fd_set *) & rset, NULL, NULL, &to) > 0)
                     recv(0, buf + 3, sizeof(buf) - 3, 0);
-                }
+            }
                 if ((unsigned char) buf[3] == IAC && (unsigned char) buf[4] == SB && buf[5] == TELOPT_NAWS)
                     rcv = buf + 6;
         }
