@@ -69,7 +69,7 @@ enum
 #define M_XMODE         36
 #define M_MYFAVORITE    37
 
-#define M_MAX           M_XMODE
+#define M_MAX           M_MYFAVORITE
 #define M_BBSNET        0
 
 
