@@ -76,21 +76,6 @@ static inline void getyx(int *y, int *x)
 }
 #endif
 
-static inline void getxy(int *x, int *y)
-{
-    getyx(y, x);
-}
-
-static inline void movexy(int x, int y)
-{
-    move(y, x);
-}
-
-static inline int vgetxy(int col, int line, const char *prompt, char *data, int max, int echo)
-{
-    return vget(line, col, prompt, data, max, echo);
-}
-
 //-------------------------------------------------------
 // BBSRuby.c
 //-------------------------------------------------------
@@ -216,9 +201,9 @@ VALUE brb_getdata(VALUE self, VALUE args)
     if (maxsize > 511) maxsize = 511;
     char data[512] = "";
     int cur_row, cur_col;
-    getxy(&cur_col, &cur_row);
+    getyx(&cur_row, &cur_col);
 
-    vgetxy(cur_col, cur_row, "", data, maxsize, echo);
+    vget(cur_row, cur_col, "", data, maxsize, echo);
 
     return rb_str_new_cstr(data);
 }
@@ -274,17 +259,17 @@ VALUE brb_getyx(VALUE self)
 {
     VALUE rethash = rb_hash_new();
     int cur_row, cur_col;
-    getxy(&cur_col, &cur_row);
+    getyx(&cur_row, &cur_col);
     rb_hash_aset(rethash, rb_str_new_cstr("y"), INT2NUM(cur_row));
     rb_hash_aset(rethash, rb_str_new_cstr("x"), INT2NUM(cur_col));
     return rethash;
 }
 
-VALUE brb_move(VALUE self, VALUE y, VALUE x) { movexy(NUM2INT(x), NUM2INT(y)); return Qnil; }
+VALUE brb_move(VALUE self, VALUE y, VALUE x) { move(NUM2INT(y), NUM2INT(x)); return Qnil; }
 VALUE brb_moverel(VALUE self, VALUE dy, VALUE dx) {
     int cur_row, cur_col;
-    getxy(&cur_col, &cur_row);
-    movexy(cur_col + NUM2INT(dx), cur_row + NUM2INT(dy));
+    getyx(&cur_row, &cur_col);
+    move(cur_row + NUM2INT(dy), cur_col + NUM2INT(dx));
     return Qnil;
 }
 
