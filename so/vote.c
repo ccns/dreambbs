@@ -456,7 +456,7 @@ XO *xo)
     if (fd < 0)
     {
         vmsg("無法建立投票說明檔");
-        blog("VOTE ", fpath);
+        blog("VOTE", fpath);
         return XO_INIT;
     }
 
@@ -494,7 +494,7 @@ XO *xo)
     if (fd < 0)
     {
         vmsg("無法建立投票選項檔");
-        blog("VOTE ", fpath);
+        blog("VOTE", fpath);
         return XO_INIT;
     }
     write(fd, vlist, item * sizeof(vitem_t));
@@ -599,7 +599,7 @@ XO *xo)
     if (fd < 0)
     {
         vmsg("無法建立投票選項檔");
-        blog("VOTE ", fpath);
+        blog("VOTE", fpath);
         return XO_HEAD;
     }
     write(fd, vlist, item * sizeof(vitem_t));
