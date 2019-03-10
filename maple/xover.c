@@ -20,12 +20,12 @@ extern int boardmode;
     "快速切換：A)精華區 B)文章列表 C)看板列表 M)信件 F)我的最愛 P)進階功\能："
 
 #define MSG_ZONE_ADVANCE \
-    "進階功\能：U)使用者名單 W)察看訊息："
+    "進階功\能：U)使用者名單 W)查看訊息："
 
 #else
 
 #define MSG_ZONE_SWITCH \
-    "快速切換：A)精華區 B)文章列表 C)看板列表 M)信件 U)使用者名單 W)察看訊息："
+    "快速切換：A)精華區 B)文章列表 C)看板列表 M)信件 U)使用者名單 W)查看訊息："
 #endif
 
 

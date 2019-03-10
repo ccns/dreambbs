@@ -107,7 +107,7 @@ static char *ModeTypeTable[] =
   "投票中",         /* M_VOTE */
   "系統管理",       /* M_SYSTEM */
   "熱訊回應",       /* M_BMW_REPLY *//*熱訊回應*/
-  "察看訊息",       /* M_BMW *//*察看訊息*/
+  "查看訊息",       /* M_BMW *//*查看訊息*/
   "擋信列表",       /* M_BANMAIL */
   "其他選單",       /* M_OMENU */
   "MIME讀信",       /* M_MIME */

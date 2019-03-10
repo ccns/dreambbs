@@ -1104,7 +1104,7 @@ static int
 bmw_head(
     XO *xo)
 {
-    vs_head("察看訊息", str_site);
+    vs_head("查看訊息", str_site);
     if (bmw_modetype & BMW_MODE)
     {
         outs(
