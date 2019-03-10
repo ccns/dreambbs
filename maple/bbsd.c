@@ -76,7 +76,7 @@ blog(
         sprintf(data, "Stay: %d (%d)", (int)(now - ap_start) / 60, currpid);
     }
 
-    sprintf(buf, "%s %s %-13s%s\n", Etime(&now), mode, cuser.userid, msg);
+    sprintf(buf, "%s %-5.5s %-13s%s\n", Etime(&now), mode, cuser.userid, msg);
     f_cat(FN_USIES, buf);
 }
 

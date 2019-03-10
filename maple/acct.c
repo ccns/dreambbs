@@ -1954,7 +1954,7 @@ int u_lock(void)
     if (buf[0] == 'y' || buf[0] == 'Y')
     {
         int check;
-        blog("LOCK ", "screen");
+        blog("LOCK", "screen");
         bbstate |= STAT_LOCK;    /* lkchu.990513: 鎖定時不可回訊息 */
         check = 0;
         do
