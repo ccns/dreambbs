@@ -535,11 +535,6 @@ int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
     return 1;
 }
 
-void run_ruby_test(void)
-{
-    run_ruby("test.rb");
-}
-
 void print_exception(void)
 {
     clear();
