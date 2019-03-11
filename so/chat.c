@@ -17,7 +17,7 @@
 
 static char chatroom[IDLEN];    /* Chat-Room Name */
 static int chatline;            /* Where to display message now */
-static char chatopic[48];
+static char chattopic[48];
 static FILE *frec;
 #ifdef  LOG_CHAT
 static FILE *fmail;
@@ -38,7 +38,7 @@ chat_topic(void)
 {
     move(0, 0);
     prints("\x1b[1;37;46m %s：%-12s\x1b[45m 話題：%-48s\x1b[m",
-           (frec ? " 錄音室 " : CHATROOMNAME), chatroom, chatopic);
+           (frec ? " 錄音室 " : CHATROOMNAME), chatroom, chattopic);
 }
 
 #ifdef M3_CHAT_SCROLL_MODE
@@ -189,7 +189,7 @@ chat_record(char *arg)
         if (fp)
         {
             fprintf(fp, "主題: %s\n包廂: %s\n錄音: %s (%s)\n開始: %s\n%s\n",
-                    chatopic, chatroom, cuser.userid, cuser.username,
+                    chattopic, chatroom, cuser.userid, cuser.username,
                     Ctime(&now), msg_separator);
             printchatline("◆ 開始錄音囉！");
             frec = fp;
@@ -369,9 +369,9 @@ char *chatid)
             }
             else if (fd == 't')
             {
-                /* str_ncpy(chatopic, str, sizeof(chatopic) - 1); */
+                /* str_ncpy(chattopic, str, sizeof(chattopic) - 1); */
                 /* Thor.980921: str_ncpy含0*/
-                str_ncpy(chatopic, str, sizeof(chatopic));
+                str_ncpy(chattopic, str, sizeof(chattopic));
                 chat_topic();
             }
         }
