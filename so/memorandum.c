@@ -42,7 +42,7 @@ get_sch_time(void)
     for (i = 0; i < 8; i++)
     {
         move(23, 23 + i / 2*4 + i % 2);
-        ch = egetch();
+        ch = igetch();
         if (ch == 'q' || ch == 'Q') return 0;
         else if (ch == '\r')
         {
