@@ -1977,22 +1977,7 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
     {
         if ((len = strlen(data)))
         {
-            /* Remove non-digit characters */
-            col = 0;
-            for (ch = 0; ch < len; ch++)
-                if (isdigit(data[ch]))
-                    data[col++] = data[ch];
-            data[col] = '\0';
-        }
-        if ((len = strlen(data)))
-        {
-            if (echo & DOECHO)
-                outs(data);
-            else
-            {
-                for (ch = 0; ch < len; ch++)
-                    outc('*');
-            }
+            outs(data);
         }
     }
     else
@@ -2067,12 +2052,6 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
                 continue;
             }
 
-            if (!isdigit(ch))
-            {
-                bell();
-                continue;
-            }
-
             if (len >= max)
             {
                 bell();
@@ -2112,7 +2091,7 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
         /* 輸入 password / match-list 時只能按 BackSpace   */
         /* ----------------------------------------------- */
 
-        if (!(echo & DOECHO) && ch != Ctrl('H'))
+        if (!echo && ch != Ctrl('H'))
         {
             bell();
             continue;
@@ -2123,12 +2102,13 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
 #endif
         switch (ch)
         {
+        case KEY_DEL:
         case Ctrl('D'):
 
             if (col >= len)
             {
                 bell();
-                continue;
+                break;
             }
 
             col++;
@@ -2138,7 +2118,7 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
             if (!col)
             {
                 bell();
-                continue;
+                break;
             }
 
             /* ----------------------------------------------- */
@@ -2207,13 +2187,16 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
             ch |= KEY_NONE;   /* Non-processed key */
             break;
         }
+#ifdef M3_USE_PFTERM
+        STANDEND;
+#endif
 
         /* No further processing is needed */
         if (!(ch & KEY_NONE))
             continue;
 
         /* No input history hidden inputs */
-        if (!(echo & DOECHO))
+        if (!echo)
         {
             bell();
             continue;
