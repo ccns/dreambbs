@@ -3,7 +3,7 @@ declare -i a
 declare -i b
 declare -i c
 cd /home/bbs/run
-if (test -e USRNODIR.log); then
+if (test -e NOUSRDIR.log); then
     rm NOUSRDIR.log
 fi
 cd /home/bbs/usr
