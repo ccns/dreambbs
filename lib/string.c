@@ -241,7 +241,7 @@ void mm_getcharset(const char *str, char *charset, int size    /* charset size *
 
     *dst = '\0';
 
-    if (!str_cmp(charset, "iso-8859-1"))    /* 歷史包伏不可丟 */
+    if (!str_cmp(charset, "iso-8859-1"))    /* 歷史包袱不可丟 */
         *charset = '\0';
 }
 
@@ -254,7 +254,7 @@ void mm_getcharset(const char *str, char *charset, int size    /* charset size *
 /* PaulLiu.030410:
    RFC 2047 (Header) QP 部分，裡面規定 '_' 表示 ' ' (US_ASCII的空白)
    而 RFC 2045 (Body) QP 部分，'_' 還是 '_'，沒有特殊用途
-   所以在此 mmdecode 分二隻寫
+   所以在此 mmdecode 分二支寫
  */
 
 /* 解 Header 的 mmdecode */

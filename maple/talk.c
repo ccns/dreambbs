@@ -1030,7 +1030,7 @@ bmw_item(
     {
         if (bmw->sender == cuser.userno)
         {
-            /* lkchu.990206: 好友廣撥 */
+            /* lkchu.990206: 好友廣播 */
             if (!(*bmw->userid))
                 strcpy(bmw->userid, "眾家好友");
 
@@ -1653,7 +1653,7 @@ bmw_send(
     *mhead = *bmw;
     ushm->mbase = mslot[i] = mhead;
     /* Thor.981206: 需注意, 若ushm mapping不同,
-                    則不同隻 bbsd 互call會core dump,
+                    則不同支 bbsd 互call會core dump,
                     除非這也用offset, 不過除了 -i, 應該是非必要 */
 
 
@@ -1725,7 +1725,7 @@ bmw_edit(
             strcpy(bmw->userid, up->userid);
             /* lkchu.990103: 若是自己送出的 bmw, 存對方的 userid */
         else
-            *bmw->userid = '\0';        /* lkchu.990206: 好友廣撥設為 NULL */
+            *bmw->userid = '\0';        /* lkchu.990206: 好友廣播設為 NULL */
 
         time(&bmw->btime);
         usr_fpath(fpath, userid, FN_BMW);
