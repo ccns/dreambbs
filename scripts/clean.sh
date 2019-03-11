@@ -1,10 +1,10 @@
 #!/bin/bash
 declare -i a
-declare -i b
-declare -i c
-cd /home/bbs/brd
-for file in $(ls); do
-    cd /home/bbs/brd/$file
+#declare -i b
+#declare -i c
+cd /home/bbs/brd || exit 1
+for file in */; do
+    cd "/home/bbs/brd/$file" || continue
     if (test -e usies); then
         rm -f usies
         let a++
