@@ -105,7 +105,7 @@ favorite_parse(
                 }
                 else if (i>=0 && !(brd_bits[i] & BRD_R_BIT))
                 {
-                    if (!(cuser.userlevel & PERM_VALID))
+                    if (!(HAS_PERM(PERM_VALID)))
                     {
                         check = 1;
                         logitfile(FN_FAVORITE_LOG, "< NOP >", str);

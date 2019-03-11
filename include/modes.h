@@ -69,7 +69,7 @@ enum
 #define M_XMODE         36
 #define M_MYFAVORITE    37
 
-#define M_MAX           M_XMODE
+#define M_MAX           M_MYFAVORITE
 #define M_BBSNET        0
 
 
@@ -83,7 +83,7 @@ static char *ModeTypeTable[] =
   "交談選單",       /* M_TMENU */
   "使用者選單",     /* M_UMENU */
   "系統資訊",       /* M_SMENU */
-  "網路連線選單",   /* M_XMENU */
+  "工具選單",       /* M_XMENU */
   "專業看板",       /* M_PROFESS */
   "分類看板",       /* M_CLASS */
   "上站途中",       /* M_LOGIN */
@@ -107,7 +107,7 @@ static char *ModeTypeTable[] =
   "投票中",         /* M_VOTE */
   "系統管理",       /* M_SYSTEM */
   "熱訊回應",       /* M_BMW_REPLY *//*熱訊回應*/
-  "察看訊息",       /* M_BMW *//*察看訊息*/
+  "查看訊息",       /* M_BMW *//*查看訊息*/
   "擋信列表",       /* M_BANMAIL */
   "其他選單",       /* M_OMENU */
   "MIME讀信",       /* M_MIME */
@@ -200,7 +200,7 @@ static char *ModeTypeTable[] =
 #define XO_QUIT         (XO_MODE + 8)
 
 #define XO_RSIZ         256             /* max record length */
-#define XO_TALL         20              /* page size */
+#define XO_TALL         (b_lines - 3)   /* page size = b_lines - 3 (扣去 head/neck/foot 共三行) */
 
 
 #define XO_MOVE         0x20000000      /* cursor movement */

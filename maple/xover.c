@@ -20,12 +20,12 @@ extern int boardmode;
     "快速切換：A)精華區 B)文章列表 C)看板列表 M)信件 F)我的最愛 P)進階功\能："
 
 #define MSG_ZONE_ADVANCE \
-    "進階功\能：U)使用者名單 W)察看訊息："
+    "進階功\能：U)使用者名單 W)查看訊息："
 
 #else
 
 #define MSG_ZONE_SWITCH \
-    "快速切換：A)精華區 B)文章列表 C)看板列表 M)信件 U)使用者名單 W)察看訊息："
+    "快速切換：A)精華區 B)文章列表 C)看板列表 M)信件 U)使用者名單 W)查看訊息："
 #endif
 
 
@@ -94,7 +94,7 @@ xo_free(
 /* ----------------------------------------------------- */
 
 
-char xo_pool[XO_TALL * XO_RSIZ];
+char xo_pool[(T_LINES - 4) * XO_RSIZ];  /* XO's data I/O pool */
 
 
 void
@@ -1478,11 +1478,14 @@ XZ xz[] =
     {NULL, NULL, M_READA},      /* skip XZ_XPOST */
 #endif
     {NULL, NULL, M_RMAIL},      /* XZ_MBOX */
-    {NULL, post_cb, M_READA},   /* XZ_POST */
+    {NULL, post_cb, M_READA},   /* XZ_BOARD / XZ_POST */
     {NULL, NULL, M_GEM},        /* XZ_GEM */
     {NULL, NULL, M_RMAIL},      /* XZ_MAILGEM */
     {NULL, NULL, M_BANMAIL},    /* XZ_BANMAIL */
     {NULL, NULL, M_OMENU},      /* XZ_OTHER */
+#ifdef HAVE_FAVORITE
+    {NULL, NULL, M_MYFAVORITE}, /* XZ_MYFAVORITE */
+#endif
 };
 
 

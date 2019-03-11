@@ -1636,7 +1636,7 @@ my_send(
 int
 m_send(void)
 {
-    if (cuser.userlevel & PERM_DENYMAIL)
+    if (HAS_PERM(PERM_DENYMAIL))
         vmsg("您的信箱被鎖了！");
     else
     {
@@ -2480,7 +2480,7 @@ static int
 mbox_sysop(
     XO *xo)
 {
-    if (/*(xo == (XO *) & cmbox) &&*/ (cuser.userlevel & PERM_SYSOP))
+    if (/*(xo == (XO *) & cmbox) &&*/ (HAS_PERM(PERM_SYSOP)))
     {
         XO *xx;
 
@@ -2592,7 +2592,7 @@ mbox_edit(
 
     hdr = (HDR *) xo_pool + (xo->pos - xo->top);
     hdr_fpath(fpath, xo->dir, hdr);
-    if (cuser.userlevel & PERM_SYSOP)
+    if (HAS_PERM(PERM_SYSOP))
     {
         vedit(fpath, NA);
         return mbox_head(xo);

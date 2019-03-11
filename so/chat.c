@@ -652,7 +652,7 @@ t_chat(void)
     if (connect(cfd, (struct sockaddr *) & sin, sizeof sin))
     {
         close(cfd);
-        blog("CHAT ", "connect");
+        blog("CHAT", "connect");
         return -1;
     }
 

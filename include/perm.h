@@ -70,6 +70,9 @@
 #define PERM_SEEULEVELS PERM_SYSOP
 #define PERM_SEEBLEVELS (PERM_SYSOP | PERM_BM)
 
+#define PERM_BBSLUA     (PERM_BASIC)
+#define PERM_BBSRUBY    (PERM_BASIC)
+
 
 /*
 #define PERM_NOTIMEOUT  PERM_SYSOP
@@ -82,7 +85,10 @@
 
 #define PERM_FORWARD    PERM_INTERNET   /* to do the forwarding */
 
+/*
 #define HAS_PERM(x)     ((x)?cuser.userlevel&(x):1)
+*/
+#define HAS_PERM        HAVE_PERM
 #define HAVE_PERM(x)    (cuser.userlevel&(x))
 
 

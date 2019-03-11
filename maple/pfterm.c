@@ -1,6 +1,8 @@
 //////////////////////////////////////////////////////////////////////////
 // pfterm environment settings
 //////////////////////////////////////////////////////////////////////////
+//#define PFTERM_HAVE_VKEY
+
 #ifdef PFTERM_TEST_MAIN
 
 #define EXP_PFTERM
@@ -19,8 +21,6 @@
 #define HAVE_GRAYOUT
 #include "bbs.h"
 
-#define M3_USE_PFTERM
-
 #ifndef FT_DBCS_NOINTRESC
 # ifdef  UF_DBCS_NOINTRESC
 #  define FT_DBCS_NOINTRESC (cuser.uflag & UF_DBCS_NOINTRESC)
@@ -30,7 +30,8 @@
 #endif
 
 #ifdef M3_USE_PFTERM
-#include <assert.h>
+ #include <assert.h>
+ #undef PFTERM_HAVE_VKEY
 #endif //M3_USE_PFTERM
 
 #endif  /* #ifdef PFTERM_TEST_MAIN */
@@ -624,14 +625,14 @@ void
 attrsetfg(ftattr attr)
 {
     ft.attr &= (~FTATTR_FGMASK);
-    ft.attr |= ((attr & FTATTR_FGMASK) << FTATTR_FGSHIFT);
+    ft.attr |= ((attr << FTATTR_FGSHIFT) & FTATTR_FGMASK);
 }
 
 void
 attrsetbg(ftattr attr)
 {
     ft.attr &= (~FTATTR_BGMASK);
-    ft.attr |= ((attr & FTATTR_FGMASK) << FTATTR_BGSHIFT);
+    ft.attr |= ((attr << FTATTR_BGSHIFT) & FTATTR_BGMASK);
 }
 
 // clear
@@ -2411,7 +2412,7 @@ region_scroll_up(int top, int bottom)
 int
 fterm_typeahead(void)
 {
-#if defined (PFTERM_TEST_MAIN) || !defined (PMORE_HAVE_VKEY)
+#if defined (PFTERM_TEST_MAIN) || !defined (PFTERM_HAVE_VKEY)
     return 0;
 #else
     return vkey_is_typeahead();

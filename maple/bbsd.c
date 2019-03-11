@@ -76,7 +76,7 @@ blog(
         sprintf(data, "Stay: %d (%d)", (int)(now - ap_start) / 60, currpid);
     }
 
-    sprintf(buf, "%s %s %-13s%s\n", Etime(&now), mode, cuser.userid, msg);
+    sprintf(buf, "%s %-5.5s %-13s%s\n", Etime(&now), mode, cuser.userid, msg);
     f_cat(FN_USIES, buf);
 }
 
@@ -864,7 +864,7 @@ tn_login(void)
         if (start > cuser.tcheck + CHECK_PERIOD)
         {
 #ifdef  HAVE_MAILGEM
-            if (cuser.userlevel & PERM_MBOX)
+            if (HAS_PERM(PERM_MBOX))
             {
                 int (*p)(int level, char *fpath);
                 char fpath[128];
@@ -1292,7 +1292,7 @@ term_init(void)
                 to.tv_usec = 1;
                 if (select(1, (fd_set *) & rset, NULL, NULL, &to) > 0)
                     recv(0, buf + 3, sizeof(buf) - 3, 0);
-                }
+            }
                 if ((unsigned char) buf[3] == IAC && (unsigned char) buf[4] == SB && buf[5] == TELOPT_NAWS)
                     rcv = buf + 6;
         }

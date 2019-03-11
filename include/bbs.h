@@ -83,11 +83,22 @@
 #define NOECHO          0x0000          /* Flags to getdata input function */
 #define DOECHO          0x0100
 #define LCECHO          0x0200
-#define GCARRY          0x0400
+#define NUMECHO         0x0400
+#define GCARRY          0x0800
+#define PASSECHO        (NOECHO)        /* `NOECHO` without `VGET_STEALTH_NOECHO` */
 
 #define GET_LIST        0x1000          /* 取得 Link List */
 #define GET_USER        0x2000          /* 取得 user id */
 #define GET_BRD         0x4000          /* 取得 board id */
+
+#define VGET_IMPLY_DOECHO (LCECHO | NUMECHO | GCARRY)  /* The flags which imply `DOECHO` */
+#define VGET_FORCE_DOECHO (GET_LIST | GET_USER | GET_BRD)  /* The flags which force `DOECHO` */
+
+#define VGET_STRICT_DOECHO  0x0001      /* Show the input only if `DOECHO` is set (ignore implications) */
+#define VGET_STEALTH_NOECHO 0x0002      /* Hide the entire input field if `DOECHO` is not set */
+#define VGET_BREAKABLE      0x0004      /* Whether Ctrl-C closes the input field */
+
+#define VGET_EXIT_BREAK     -1          /* The input field is closed with Ctrl-C */
 
 #endif  /* #ifndef _BBTP_ */
 

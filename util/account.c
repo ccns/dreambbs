@@ -14,7 +14,7 @@
 #include "bbs.h"
 
 #define MAX_LINE        16
-#define ADJUST_M        10      /* adjust back 10 minutes */
+#define ADJUST_M        60      /* adjust back 1 hour */
 
 static char fn_today[] = "gem/@/@-act"; /* 今日上站人次統計 */
 static char fn_yesterday[] = "gem/@/@=act";     /* 昨日上站人次統計 */
@@ -701,7 +701,7 @@ main(void)
     xtime = localtime(&now);
     ntime = *xtime;
 
-    now -= ADJUST_M * 60;               /* back to ancent */
+    now -= ADJUST_M * 60;               /* back to ancient */
     xtime = localtime(&now);
     ptime = *xtime;
 
@@ -760,7 +760,13 @@ main(void)
     fclose(fpw);
     unlink(tmp_file);
 
-    write(fact, act, sizeof(act));
+    // IID.20190311: Zero-out the file `fact` to reset the login count at 0 am.
+    if (ntime.tm_hour == 0)
+        for (i = 0; i < sizeof(act); i++)
+            write(fact, "", sizeof(char));
+    else
+        write(fact, act, sizeof(act));
+
     close(fact);
 
     for (i = max = total = 0; i < 24; i++)
@@ -928,7 +934,7 @@ main(void)
         sprintf(title, "[記錄] %s商店交易紀錄", date);
         keeplog("run/shop.log", BRD_SECRET, title, 2);
 
-        system("cat run/usies | grep APPLY > run/apply.log");
+        system("cat run/usies= | grep APPLY > run/apply.log");
         sprintf(title, "[記錄] %s每日註冊使用者紀錄", date);
         keeplog("run/apply.log", BRD_SECRET, title, 2);
 

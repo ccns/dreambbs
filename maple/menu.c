@@ -504,7 +504,7 @@ static MENU menu_load[] =
     {x_sysload, PERM_ADMIN, M_SYSTEM,
     "Load       ╰参璽更"},
 
-    {menu_admin, PERM_MENU + 'T', M_XMENU,
+    {menu_admin, PERM_MENU + 'T', M_ADMIN,
     "╰参璽更"}
 };
 
@@ -537,7 +537,7 @@ static MENU menu_boardadm[] =
     {BINARY_PREFIX"personal.so:personal_admin", PERM_BOARD|PERM_SYSOP, - M_XMODE,
     "Personal   狾糵"},
 
-    {menu_admin, PERM_MENU + 'N', M_XMENU,
+    {menu_admin, PERM_MENU + 'N', M_ADMIN,
     "狾羆恨"}
 };
 
@@ -567,7 +567,7 @@ static MENU menu_accadm[] =
     "2Observe   ╰参芠诡虫"},
 #endif
 
-    {menu_admin, PERM_MENU + 'U', M_XMENU,
+    {menu_admin, PERM_MENU + 'U', M_ADMIN,
     "爹羆恨"}
 };
 
@@ -595,7 +595,7 @@ static MENU menu_settingadm[] =
     {BINARY_PREFIX"adminutil.so:update_all", PERM_SYSOP, - M_XMODE,
     "Database   ╰参戈畐穝"},
 
-    {menu_admin, PERM_MENU + 'X', M_XMENU,
+    {menu_admin, PERM_MENU + 'X', M_ADMIN,
     "╰参戈"}
 };
 
@@ -604,7 +604,7 @@ static MENU menu_settingadm[] =
 /* ----------------------------------------------------- */
 static MENU menu_reset[] =
 {
-    {menu_load, PERM_ADMIN, M_XMENU,
+    {menu_load, PERM_ADMIN, M_ADMIN,
     "Load       ╰参璽更"},
 
     {BINARY_PREFIX"adminutil.so:reset1", PERM_BOARD, - M_XMODE,
@@ -628,7 +628,7 @@ static MENU menu_reset[] =
     {BINARY_PREFIX"adminutil.so:reset7", PERM_SYSOP, - M_XMODE,
     "All        场"},
 
-    {menu_admin, PERM_MENU + 'K', M_XMENU,
+    {menu_admin, PERM_MENU + 'K', M_ADMIN,
     "╰参竚"}
 };
 
@@ -641,19 +641,19 @@ static MENU menu_reset[] =
 static MENU menu_admin[] =
 {
 
-    {menu_accadm, PERM_ADMIN, M_XMENU,
+    {menu_accadm, PERM_ADMIN, M_ADMIN,
     "Acctadm    爹羆恨\"},
 
-    {menu_boardadm, PERM_BOARD, M_XMENU,
+    {menu_boardadm, PERM_BOARD, M_ADMIN,
     "Boardadm   狾羆恨\"},
 
-    {menu_settingadm, PERM_ADMIN, M_XMENU,
+    {menu_settingadm, PERM_ADMIN, M_ADMIN,
     "Data       ╰参戈畐砞﹚"},
 
     {BINARY_PREFIX"innbbs.so:a_innbbs", PERM_BOARD, - M_SYSTEM,
     "InnBBS     锣獺砞﹚"},
 
-    {menu_reset, PERM_ADMIN, M_XMENU,
+    {menu_reset, PERM_ADMIN, M_ADMIN,
     "ResetSys   竚╰参"},
 
 #ifdef  HAVE_ADM_SHELL
@@ -1157,11 +1157,11 @@ goodbye1(void)
 
 static MENU menu_treat[] =
 {
-    goodbye1, 0, M_XMODE,
-    "Goodbye   " NICKNAME "",
+    {goodbye1, 0, M_XMODE,
+    "Goodbye   " NICKNAME ""},
 
-    NULL, PERM_MENU + 'G', M_MMENU,
-    "\"
+    {NULL, PERM_MENU + 'G', M_MMENU,
+    "\"}
 };
 #endif  /* #ifdef  TREAT */
 

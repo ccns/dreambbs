@@ -11,38 +11,18 @@ SRCROOT	= ..
 .include "$(SRCROOT)/dreambbs.mk"
 
 .if $(USE_BBSLUA)
-.if $(OPSYS) == "FreeBSD"
-    LUA_PKG_NAME	?= lua-5.1
-    LDFLAGS	+= -Wl,--no-as-needed
-.else
-    LUA_PKG_NAME	?= lua5.1
-.endif
-
-LUA_CFLAGS	!= pkg-config --cflags ${LUA_PKG_NAME}
-LUA_LDFLAGS	!= pkg-config --libs ${LUA_PKG_NAME}
 CFLAGS	+= ${LUA_CFLAGS}
-LDFLAGS	+= ${LUA_LDFLAGS}
+LDFLAGS	+= ${LUA_LDFLAGS} ${LUA_LDFLAGS_ARCH}
 SRC	+= bbslua.c bbsluaext.c
 OBJ	+= bbslua.o bbsluaext.o
 .endif
 
-
 .if $(USE_BBSRUBY)
-.if $(OPSYS) == "FreeBSD"
-    LDFLAGS	+= -Wl,--no-as-needed
-.endif
-.if $(ARCHI) == "64"
-    RUBY_CFLAGS_CMD	= | sed 's/x86_64/i386/'
-.endif
-
-RUBY_CFLAGS	!= pkg-config --cflags ruby-2.2 ${RUBY_CFLAGS_CMD}
-RUBY_LDFLAGS	!= pkg-config --libs ruby-2.2
 CFLAGS	+= ${RUBY_CFLAGS}
-LDFLAGS	+= ${RUBY_LDFLAGS}
+LDFLAGS	+= ${RUBY_LDFLAGS} ${RUBY_LDFLAGS_ARCH}
 SRC	+= bbsruby.c
 OBJ	+= bbsruby.o
 .endif
-
 
 .if $(USE_PFTERM)
 SRC	+= pfterm.c

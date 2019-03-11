@@ -54,6 +54,10 @@
 
 #ifdef M3_USE_BBSLUA
   #include <lua.h>
+
+  #ifdef BBSLUA_USE_LUAJIT
+    #include <luajit.h>
+  #endif
 #endif
 
 #define HAVE_BBSLUA

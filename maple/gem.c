@@ -486,7 +486,7 @@ gem_title(
     vget(b_lines, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
 
     dir = xo->dir;
-    if (cuser.userlevel & (PERM_ALLBOARD|PERM_GEM))
+    if (HAS_PERM(PERM_ALLBOARD|PERM_GEM))
     {
         vget(b_lines, 0, "編者：", xhdr.owner, IDLEN + 2, GCARRY);
         vget(b_lines, 0, "時間：", xhdr.date, 9, GCARRY);
@@ -1400,7 +1400,7 @@ gem_cross(
                 {
                     strcpy(bpost.owner, cuser.userid);
                     add_deny(&cuser, DENY_SEL_POST|DENY_DAYS_1|DENY_MODE_POST, 0);
-                    deny_log_email(cuser.vmail, (cuser.userlevel & PERM_DENYSTOP) ? -1 : cuser.deny);
+                    deny_log_email(cuser.vmail, (HAS_PERM(PERM_DENYSTOP)) ? -1 : cuser.deny);
                     bbstate &= ~STAT_POST;
                     cuser.userlevel &= ~PERM_POST;
 

@@ -1,29 +1,91 @@
-//-------------------------------------------------------
-// bbsruby environment settings
-//-------------------------------------------------------
+//------------------------------------------------------------------------
+// bbslua environment settings
+//------------------------------------------------------------------------
 
-#define M3_USE_BBSRUBY
+/* Default settings */
+#define BBSRUBY_HAVE_VTUIKIT              // The BBS has vtuikit
+//#define BBSRUBY_NATIVE_B_LINES            // `b_lines` is a global variable
+//#define BBSRUBY_NATIVE_B_COLS             // `b_cols` is a global variable
+//#define BBSRUBY_USE_RH_COOR               // Use right-handed coordinate; `x` => row, `y` => col
+#define BBSRUBY_HAVE_GETYX                // The BBS has `getyx()`
+//#define BBSRUBY_HAVE_STR_RANSI            // The BBS has `str_ransi` variable
+//#define BBSRUBY_VER_INFO_FILE             // The file with version information for BBS-Ruby
 
-#ifdef M3_USE_BBSRUBY
-#include <sys/time.h>
 #include "bbs.h"
-#include "bbs_script.h"
+#include <sys/time.h>
+
+#ifdef M3_USE_BBSRUBY     // For compiling on Maple3
+ #undef BBSRUBY_HAVE_VTUIKIT
+ #define BBSRUBY_NATIVE_B_LINES
+ #define BBSRUBY_NATIVE_B_COLS
+ #undef BBSRUBY_USE_RH_COOR
+ #define BBSRUBY_HAVE_GETYX
+ #define BBSRUBY_HAVE_STR_RANSI
+ #define BBSRUBY_VER_INFO_FILE "bbs_script.h"
+#endif //M3_USE_BBSRUBY
+
+#ifdef PTT_USE_BBSRUBY    // For compiling on PttBBS
+ #define BBSRUBY_HAVE_VTUIKIT
+ #undef BBSRUBY_NATIVE_B_LINES
+ #undef BBSRUBY_NATIVE_B_COLS
+ #undef BBSRUBY_USE_RH_COOR
+ #define BBSRUBY_HAVE_GETYX
+ #undef BBSRUBY_HAVE_STR_RANSI
+ #undef BBSRUBY_VER_INFO_FILE
+#endif //PTT_USE_BBSRUBY
+
+/* Inferred settings */
+
+#ifdef USE_PFTERM
+# define BBSRUBY_HAVE_GETYX
 #endif
 
-static inline void getxy(int *x, int *y)
-{
-    getyx(y, x);
-}
+#ifdef BBSRUBY_VER_INFO_FILE
+# include BBSRUBY_VER_INFO_FILE
+#endif
 
-static inline void movexy(int x, int y)
-{
-    move(y, x);
-}
+//------------------------------------------------------------------------
+// Redirect macros and functions
+//------------------------------------------------------------------------
 
-static inline int vgetxy(int col, int line, const char *prompt, char *data, int max, int echo)
+#if !defined(BBSRUBY_NATIVE_B_LINES) && !defined(b_lines)
+  #define b_lines  (t_lines - 1)
+#endif
+#if !defined(BBSRUBY_NATIVE_B_COLS) && !defined(b_cols)
+  #define b_cols  (t_columns - 1)
+#endif
+
+#ifndef BBSRUBY_HAVE_STR_RANSI
+static const char str_ransi[] = "\x1b[m";
+#endif
+
+#ifndef COLOR1
+  #define COLOR1          "\x1b[34;46m"   /* footer/feeter 的前段顏色 */
+#endif
+#ifndef COLOR2
+  #define COLOR2          "\x1b[31;47m"   /* footer/feeter 的後段顏色 */
+#endif
+
+#ifdef BBSRUBY_HAVE_VTUIKIT
+  #define vs_bar(title)  vs_hdr(title)
+  #define vget(y, x, msg, buf, size, mode)  getdata(y, x, msg, buf, size, mode)
+#endif
+
+#ifndef BBSRUBY_HAVE_GETYX
+static inline void getyx(int *y, int *x)
 {
-    return vget(line, col, prompt, data, max, echo);
+    *y = cur_row;
+    *x = cur_col;
 }
+#endif
+
+#ifdef BBSRUBY_USE_RH_COOR
+  #define BRB_COOR_ROW  "x"
+  #define BRB_COOR_COL  "y"
+#else
+  #define BRB_COOR_ROW  "y"
+  #define BRB_COOR_COL  "x"
+#endif
 
 //-------------------------------------------------------
 // BBSRuby.c
@@ -49,7 +111,11 @@ typedef rb_event_t rb_event_flag_t;
 
 #define BBSRUBY_MAJOR_VERSION (0)
 #define BBSRUBY_MINOR_VERSION (3)
-//#define BBSRUBY_VERSION_STR "v0.3"
+
+#ifndef BBSRUBY_VERSION_STR
+  #define BBSRUBY_VERSION_STR "v0.3"
+#endif
+
 #define BBSRUBY_SIGNATURE "###BBSRuby"
 
 #define BBSRUBY_INTERFACE_VER 0.111
@@ -135,22 +201,49 @@ VALUE brb_getch(VALUE self)
         //return rb_ary_pop(KB_QUEUE);
 }
 
+#define MACRO_NONZERO(macro)  ((macro-0) != 0)
+
 VALUE brb_getdata(VALUE self, VALUE args)
 {
     int count = RARRAY_LEN(args);
     int echo = DOECHO;
     if (count > 1 && NUM2INT(rb_ary_entry(args, 1)) == 0)
+#if MACRO_NONZERO(VGET_STEALTH_NOECHO)
+        echo = NOECHO | VGET_STEALTH_NOECHO;
+#else
         echo = NOECHO;
+#endif
+#if MACRO_NONZERO(VGET_STRICT_DOECHO)
+    if (echo == NOECHO)
+        echo |= VGET_STRICT_DOECHO;
+#endif
+#if defined(VGET_STRICT_DOECHO) && MACRO_NONZERO(VGET_BREAKABLE)
+    echo |= VGET_BREAKABLE;
+#endif
 
     int maxsize = NUM2INT(rb_ary_entry(args, 0));
     if (maxsize > 511) maxsize = 511;
     char data[512] = "";
     int cur_row, cur_col;
-    getxy(&cur_col, &cur_row);
+    getyx(&cur_row, &cur_col);
 
-    vgetxy(cur_col, cur_row, "", data, maxsize, echo);
-
-    return rb_str_new_cstr(data);
+    int res = vget(cur_row, cur_col, "", data, maxsize, echo);
+    if (res <= 0)
+    {
+#ifdef VGET_EXIT_BREAK
+        if (res == VGET_EXIT_BREAK)
+#else
+        if (buf[1] == Ctrl('C'))
+#endif
+        {
+            ABORT_BBSRUBY = 1;
+        }
+        return rb_str_new_cstr("");
+    }
+    else
+    {
+        return rb_str_new_cstr(data);
+    }
 }
 
 VALUE brb_kbhit(VALUE self, VALUE wait)
@@ -195,8 +288,8 @@ VALUE brb_print(VALUE self, VALUE args)
 VALUE brb_getmaxyx(VALUE self)
 {
     VALUE rethash = rb_hash_new();
-    rb_hash_aset(rethash, rb_str_new_cstr("y"), INT2NUM(b_lines + 1));
-    rb_hash_aset(rethash, rb_str_new_cstr("x"), INT2NUM(b_cols + 1));
+    rb_hash_aset(rethash, rb_str_new_cstr(BRB_COOR_ROW), INT2NUM(b_lines + 1));
+    rb_hash_aset(rethash, rb_str_new_cstr(BRB_COOR_COL), INT2NUM(b_cols + 1));
     return rethash;
 }
 
@@ -204,17 +297,17 @@ VALUE brb_getyx(VALUE self)
 {
     VALUE rethash = rb_hash_new();
     int cur_row, cur_col;
-    getxy(&cur_col, &cur_row);
-    rb_hash_aset(rethash, rb_str_new_cstr("y"), INT2NUM(cur_row));
-    rb_hash_aset(rethash, rb_str_new_cstr("x"), INT2NUM(cur_col));
+    getyx(&cur_row, &cur_col);
+    rb_hash_aset(rethash, rb_str_new_cstr(BRB_COOR_ROW), INT2NUM(cur_row));
+    rb_hash_aset(rethash, rb_str_new_cstr(BRB_COOR_COL), INT2NUM(cur_col));
     return rethash;
 }
 
-VALUE brb_move(VALUE self, VALUE y, VALUE x) { movexy(NUM2INT(x), NUM2INT(y)); return Qnil; }
+VALUE brb_move(VALUE self, VALUE y, VALUE x) { move(NUM2INT(y), NUM2INT(x)); return Qnil; }
 VALUE brb_moverel(VALUE self, VALUE dy, VALUE dx) {
     int cur_row, cur_col;
-    getxy(&cur_col, &cur_row);
-    movexy(cur_col + NUM2INT(dx), cur_row + NUM2INT(dy));
+    getyx(&cur_row, &cur_col);
+    move(cur_row + NUM2INT(dy), cur_col + NUM2INT(dx));
     return Qnil;
 }
 
@@ -533,11 +626,6 @@ int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
 
     TOCs_rubyhash = hashTOC;
     return 1;
-}
-
-void run_ruby_test(void)
-{
-    run_ruby("test.rb");
 }
 
 void print_exception(void)

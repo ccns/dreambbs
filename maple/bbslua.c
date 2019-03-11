@@ -1,18 +1,85 @@
 //////////////////////////////////////////////////////////////////////////
 // bbslua environment settings
 //////////////////////////////////////////////////////////////////////////
-#define HAVE_GRAYOUT
 
-#define M3_USE_BBSLUA
+/* Default settings */
+#define BBSLUA_HAVE_SYNCNOW              // system needs calling sync API
+#define BBSLUA_HAVE_VKEY                 // input system is vkey compatible
+#define BBSLUA_HAVE_VTUIKIT              // The BBS has vtuikit
+#define BBSLUA_HAVE_OPENCREATE           // The BBS has `OpenCreate` function
+#define BBSLUA_NATIVE_T_LINES            // `t_lines` is a global variable
+#define BBSLUA_NATIVE_T_COLUMNS          // `t_columns` is a global variable
+#define BBSLUA_HAVE_GRAYOUT              // The BBS has `grayout()`
+//#define BBSLUA_UNARY_GRAYOUT             // `grayout()` accepts only one argument
+#define BBSLUA_HAVE_DOUPDATE             // The BBS has `doupdate()`
+#define BBSLUA_HAVE_GETYX                // The BBS has `getyx()`
+#define BBSLUA_FORCE_TIME4_T             // The BBS uses 32-bit `time_t` on 64-bit OSs
+//#define BBSLUA_HAVE_STR_ANSI             // The BBS uses `str_ansi()` instead of `strip_ansi()`
+#define BBSLUA_HAVE_STRLEN_NOANSI        // The BBS has `strlen_noansi()`
+//#define BBSLUA_VER_INFO_FILE             // The file with version information for BBS-Lua
+//#define BLSCONF_ENABLED                  // Enable `store.*` BBS-Lua API
 
-#ifdef M3_USE_BBSLUA
-#include <assert.h>
-#include <stdarg.h>
-#include <sys/file.h>
-#include <sys/time.h>
 #include "bbs.h"
-#include "bbs_script.h"
+#include <sys/time.h>
+
+#ifdef M3_USE_BBSLUA     // For compiling on Maple3
+ #include <assert.h>
+ #include <stdarg.h>
+ #include <sys/file.h>
+ #define BBSLUA_HAVE_SYNCNOW
+ #undef BBSLUA_HAVE_VKEY
+ #undef BBSLUA_HAVE_VTUIKIT
+ #undef BBSLUA_HAVE_OPENCREATE
+ #undef BBSLUA_NATIVE_T_LINES
+ #undef BBSLUA_NATIVE_T_COLUMNS
+ #define BBSLUA_HAVE_GRAYOUT
+ #undef BBSLUA_UNARY_GRAYOUT
+ #undef BBSLUA_HAVE_DOUPDATE
+ #define BBSLUA_HAVE_GETYX
+ #undef BBSLUA_FORCE_TIME4_T
+ #define BBSLUA_HAVE_STR_ANSI
+ #undef BBSLUA_HAVE_STRLEN_NOANSI
+ #define BBSLUA_VER_INFO_FILE "bbs_script.h"
+ #undef BLSCONF_ENABLED
 #endif //M3_USE_BBSLUA
+
+#ifdef PTT_USE_BBSLUA    // For compiling on PttBBS
+ #define BBSLUA_HAVE_SYNCNOW
+ #define BBSLUA_HAVE_VKEY
+ #define BBSLUA_HAVE_VTUIKIT
+ #define BBSLUA_HAVE_OPENCREATE
+ #define BBSLUA_NATIVE_T_LINES
+ #define BBSLUA_NATIVE_T_COLUMNS
+ #define BBSLUA_HAVE_GRAYOUT
+ #undef BBSLUA_UNARY_GRAYOUT
+ #define BBSLUA_HAVE_DOUPDATE
+ #define BBSLUA_HAVE_GETYX
+ #define BBSLUA_FORCE_TIME4_T
+ #undef BBSLUA_HAVE_STR_ANSI
+ #define BBSLUA_HAVE_STRLEN_NOANSI
+ #undef BBSLUA_VER_INFO_FILE
+ #undef BLSCONF_ENABLED
+#endif //PTT_USE_BBSLUA
+
+/* Inferred settings */
+
+#ifdef USE_NIOS_VKEY
+# define BBSLUA_HAVE_VKEY
+#endif
+
+#ifdef USE_PFTERM
+# undef BBSLUA_UNARY_GRAYOUT
+# define BBSLUA_HAVE_DOUPDATE
+# define BBSLUA_HAVE_GETYX
+#endif
+
+#if defined(GRAYOUT) || defined(HAVE_GRAYOUT)
+# define BBSLUA_HAVE_GRAYOUT
+#endif
+
+#ifdef BBSLUA_VER_INFO_FILE
+# include BBSLUA_VER_INFO_FILE
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 // pmore style ansi
@@ -34,14 +101,6 @@
 // grayout advanced control
 // #include "grayout.h"
 //////////////////////////////////////////////////////////////////////////
-#if ! (defined(GRAYOUT) || defined(HAVE_GRAYOUT))
-// IID.20190124: If there is no `grayout()` at all
-static inline void grayout(int y, int end, int level)
-{
-    // Does nothing
-}
-#endif
-
 #ifndef GRAYOUT_DARK
 #define GRAYOUT_COLORBOLD (-2)
 #define GRAYOUT_BOLD (-1)
@@ -74,33 +133,54 @@ static inline void grayout(int y, int end, int level)
 // #include "var.h"
 //////////////////////////////////////////////////////////////////////////
 
+#ifdef BBSLUA_HAVE_SYNCNOW
+ #ifdef BBSLUA_FORCE_TIME4_T
+extern time4_t now;
+ #else
 extern time_t now;
+ #endif
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 // Redirect macros and functions
 //////////////////////////////////////////////////////////////////////////
 
-#define BLCONF_CURRENT_USERNICK cuser.username
-
-#ifndef t_columns
+#if !defined(BBSLUA_NATIVE_T_LINES) && !defined(t_lines)
+#define t_lines  (b_lines + 1)
+#endif
+#if !defined(BBSLUA_NATIVE_T_COLUMNS) && !defined(t_columns)
 #define t_columns  (b_cols + 1)
 #endif
 
-static char *(*const ctime4)(time_t *clock) = Btime;
+#ifndef BBSLUA_FORCE_TIME4_T
+static char *(*const ctime4)(const time_t *clock) = ctime;
+#endif
+
+#ifdef BBSLUA_HAVE_STR_ANSI
 static inline void strip_ansi(char *dst, const char *str, int mode)
 {
     (void)mode;  // Suppress unused-parameter warning
     str_ansi(dst, str, strlen(str));
 }
+#endif
 
-#ifndef M3_USE_PFTERM
+#ifndef BBSLUA_HAVE_DOUPDATE
 static void (*const doupdate)(void) = refresh;
+#endif
+
+#ifndef BBSLUA_HAVE_GETYX
+static inline void getyx(int *y, int *x)
+{
+    *y = cur_row;
+    *x = cur_col;
+}
 #endif
 
 //////////////////////////////////////////////////////////////////////////
 // Utility macros and functions
 //////////////////////////////////////////////////////////////////////////
 
+#ifndef BBSLUA_HAVE_STRLEN_NOANSI
 static int
 strlen_noansi(const char *str)        /* String length after stripping ANSI code */
 {
@@ -128,7 +208,9 @@ strlen_noansi(const char *str)        /* String length after stripping ANSI code
     }
     return count;
 }
+#endif  // #ifndef BBSLUA_HAVE_STRLEN_NOANSI
 
+#if defined(BLSCONF_ENABLED) && !defined(BBSLUA_HAVE_OPENCREATE)
 static const char *const str_home_file = "usr/%c/%s/%s";
 static void
 setuserfile(char *buf, const char *fname)
@@ -141,6 +223,10 @@ OpenCreate(const char *path, int flags)
 {
     return open(path, flags | O_CREAT, DEFAULT_FILE_CREATE_PERM);
 }
+#endif
+
+
+#ifndef BBSLUA_HAVE_VTUIKIT
 
 #ifndef VBUFLEN
 #define VBUFLEN     (ANSILINELEN)
@@ -160,18 +246,7 @@ vmsgf(const char *fmt, ...)
 static void
 vs_hdr(const char *title)
 {
-#ifdef  COLOR_HEADER
-/*  int color = (time(0) % 7) + 41;        lkchu.981201: random color */
-    int color = 44; //090911.cache: 太花了固定一種顏色
-#endif
-
-    clear();
-
-#ifdef  COLOR_HEADER
-    prints("\x1b[1;%2d;37m【%s】\x1b[m\n", color, title);
-#else
-    prints("\x1b[1;46;37m【%s】\x1b[m\n", title);
-#endif
+    vs_bar(title);
 }
 
 // IID.20190125: To be compatible with PttBBS's BBSLua.
@@ -179,8 +254,13 @@ vs_hdr(const char *title)
 #define BL_DOECHO     0x1
 #define BL_LCECHO     0x2
 #define BL_NUMECHO    0x4
-#define BL_PASSECHO   0X10
+#define BL_PASSECHO   0x10
+#define BL_HIDEECHO   0x20
 #define BL_GCARRY     0x8     // Ignored
+
+#define NEW_HIDEECHO  0x8000
+
+#define MACRO_NONZERO(macro)  ((macro-0) != 0)
 
 static int
 getdata_str(int line, int col, const char *prompt, char *buf, int len, int echo,
@@ -189,7 +269,11 @@ getdata_str(int line, int col, const char *prompt, char *buf, int len, int echo,
     int new_echo = 0;
 
     if (echo == BL_NOECHO)
-        new_echo = NOECHO;
+#if MACRO_NONZERO(VGET_STEALTH_NOECHO)
+        new_echo = NEW_HIDEECHO | NOECHO | VGET_STEALTH_NOECHO;
+#else
+        new_echo = NEW_HIDEECHO | NOECHO;
+#endif
     else if (echo == BL_DOECHO)
         new_echo = DOECHO;
     else
@@ -200,27 +284,65 @@ getdata_str(int line, int col, const char *prompt, char *buf, int len, int echo,
         if (echo & BL_NUMECHO)
             new_echo |= NUMECHO;
 #endif
-        if (echo & BL_PASSECHO)
+
+        if (echo & BL_HIDEECHO)
             new_echo
-#ifdef  PASSECHO  // IID.20190125: Some BBSs do not have `PASSECHO`,
+#ifdef  VGET_STRICT_DOECHO
+                |= NEW_HIDEECHO | NOECHO
+#else
+                = NEW_HIDEECHO | NOECHO
+#endif
+#if MACRO_NONZERO(VGET_STEALTH_NOECHO)
+                    | VGET_STEALTH_NOECHO
+#endif
+                ;
+        else if (echo & BL_PASSECHO)
+            new_echo
+#if defined(PASSECHO) && PASSECHO != NOECHO
                 |= PASSECHO;
-#else                           //    but their `NOECHO` acks just like `PASSECHO`.
-                = NOECHO;
+#else   // IID.20190125: Some BBSs do not have `PASSECHO`,
+                      //    but their `NOECHO` acks just like `PASSECHO`.
+    #ifdef  VGET_STRICT_DOECHO
+                |= NEW_HIDEECHO | NOECHO;
+    #else
+                = NEW_HIDEECHO | NOECHO;
+    #endif
 #endif
     }
 
-    // IID.20190125: `vget()` with `NOECHO` should not have default string.
+#if defined(VGET_STRICT_DOECHO) || NOECHO != 0
+    // IID.20190224: Unless setting other flags does not imply `DOECHO`,
+    if (defaultstr && *defaultstr)
+#elif  // IID.20190125: `vget()` with `NOECHO` should not have default string.
     if (new_echo != NOECHO && defaultstr && *defaultstr)
+#endif
     {
         strlcpy(buf, defaultstr, len);
         str_ansi(buf, buf, len);
         new_echo |= GCARRY;
     }
 
+#if defined(VGET_STRICT_DOECHO) && MACRO_NONZERO(VGET_BREAKABLE)
+    new_echo |= VGET_BREAKABLE;
+#endif
+
+    if (new_echo & NEW_HIDEECHO)
+    {
+        new_echo ^= NEW_HIDEECHO;
+#if MACRO_NONZERO(VGET_STRICT_DOECHO) && NOECHO == 0
+        if (new_echo != NOECHO)
+            new_echo |= VGET_STRICT_DOECHO;
+#endif
+    }
+#if defined(VGET_STRICT_DOECHO) && !MACRO_NONZERO(VGET_STRICT_DOECHO)
+    else
+        new_echo |= DOECHO;
+#endif
+
     return vget(line, col, prompt, buf, len, new_echo);
 }
 
-#ifndef M3_USE_PFTERM
+#ifndef USE_PFTERM
 static void
 newwin(int nlines, int ncols, int y, int x)
 {
@@ -236,12 +358,13 @@ newwin(int nlines, int ncols, int y, int x)
     move(oy, ox);
 }
 #endif
+#endif  // #ifndef BBSLUA_HAVE_VTUIKIT
 
 //////////////////////////////////////////////////////////////////////////
 // Input handling
 //////////////////////////////////////////////////////////////////////////
 
-#if !(defined(M3_USE_NIOS_VKEY) || defined(PMORE_HAVE_VKEY))
+#ifndef BBSLUA_HAVE_VKEY
 
 // IID.20190124: If this BBS does not have the vkey input system,
 //                  give it a simplified one.
@@ -471,10 +594,10 @@ wait_input(float f, int bIgnoreBuf)
     // or weird error (sel < 0)
 
     // sync clock(now) if timeout.
-#ifdef PMORE_HAVE_SYNCNOW
+#ifdef BBSLUA_HAVE_SYNCNOW
     if (sel == 0)
         syncnow();
-#endif // PMORE_HAVE_SYNCNOW
+#endif // BBSLUA_HAVE_SYNCNOW
     return (sel == 0) ? 0 : 1;
 }
 
@@ -538,7 +661,7 @@ vkey_is_prefetched(char c)
     return res >= vin;
 }
 
-#endif  // #if !(defined(M3_USE_NIOS_VKEY) || defined(PMORE_HAVE_VKEY))
+#endif  // #ifndef BBSLUA_HAVE_VKEY
 
 //////////////////////////////////////////////////////////////////////////
 // BBS-Lua Project
@@ -595,13 +718,21 @@ vkey_is_prefetched(char c)
 //  1. n people communication
 //////////////////////////////////////////////////////////////////////////
 
-#include "bbs.h"
-#include "fnv_hash.h"
-#include <sys/time.h>
+// #include "bbs.h"  // Included
+
+#ifdef BLSCONF_ENABLED
+  #include "fnv_hash.h"
+#endif
+
+// #include <sys/time.h>  // Included
 
 #include <lua.h>
 #include <lualib.h>
 #include <lauxlib.h>
+
+#ifdef BBSLUA_USE_LUAJIT
+  #include <luajit.h>
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 // CONST DEFINITION
@@ -639,7 +770,12 @@ vkey_is_prefetched(char c)
 
 #define BLCONF_MMAP_ATTACH
 #define BLCONF_CURRENT_USERID   cuser.userid
-//#define BLCONF_CURRENT_USERNICK cuser.nickname  // Overridden
+
+#ifdef M3_USE_BBSLUA
+ #define BLCONF_CURRENT_USERNICK cuser.username
+#else
+ #define BLCONF_CURRENT_USERNICK cuser.nickname
+#endif
 
 // BBS-Lua Storage
 enum {
@@ -675,21 +811,29 @@ typedef struct {
     char running;   // prevent re-entrant
     char abort;     // system break key hit
     char iocounter; // prevent bursting i/o
+#ifdef BLSCONF_ENABLED
     Fnv32_t storename;  // storage filename
+#endif
 } BBSLuaRT;
 
 // runtime information
 // static
 BBSLuaRT blrt = {0};
 
-#define BL_INIT_RUNTIME() { \
-    memset(&blrt, 0, sizeof(blrt)); \
-    blrt.storename = FNV1_32_INIT; \
-}
+#ifdef BLSCONF_ENABLED
+  #define BL_INIT_RUNTIME()  (void) ( \
+      memset(&blrt, 0, sizeof(blrt)), \
+      blrt.storename = FNV1_32_INIT \
+  )
+#else
+  #define BL_INIT_RUNTIME()  (void) ( \
+      memset(&blrt, 0, sizeof(blrt)) \
+  )
+#endif
 
-#define BL_END_RUNTIME() { \
-    memset(&blrt, 0, sizeof(blrt)); \
-}
+#define BL_END_RUNTIME()  (void) ( \
+    memset(&blrt, 0, sizeof(blrt)) \
+)
 
 #ifdef BBSLUA_USAGE
 static int bbslua_count;
@@ -738,20 +882,30 @@ bl_k2s(lua_State* L, int v)
         lua_pushstring(L, "TAB");
     else if (v == '\b' || v == 0x7F)
         lua_pushstring(L, "BS");
-    else if (v == KEY_ENTER)
+    else if (v == '\n' || v == '\r')
         lua_pushstring(L, "ENTER");
     else if (v < ' ')
         lua_pushfstring(L, "^%c", v-1+'A');
     else if (v < 0x100)
         lua_pushfstring(L, "%c", v);
+#ifdef KEY_F1
+  #if KEY_F1 < KEY_F2
     else if (v >= KEY_F1 && v <= KEY_F12)
         lua_pushfstring(L, "F%d", v - KEY_F1 +1);
+  #else  /* Key values for special keys are negative on some BBSs */
+    else if (v >= KEY_F12 && v <= KEY_F1)
+        lua_pushfstring(L, "F%d", KEY_F1 - v +1);
+  #endif
+#endif
     else switch(v)
     {
         case KEY_UP:    lua_pushstring(L, "UP");    break;
         case KEY_DOWN:  lua_pushstring(L, "DOWN");  break;
         case KEY_RIGHT: lua_pushstring(L, "RIGHT"); break;
         case KEY_LEFT:  lua_pushstring(L, "LEFT");  break;
+#ifdef KEY_STAB
+        case KEY_STAB:  lua_pushstring(L, "STAB");  break;
+#endif
         case KEY_HOME:  lua_pushstring(L, "HOME");  break;
         case KEY_END:   lua_pushstring(L, "END");   break;
         case KEY_INS:   lua_pushstring(L, "INS");   break;
@@ -971,11 +1125,19 @@ bl_getstr(lua_State* L)
     len = getdata_str(y, x, NULL, buf, len, echo, pmsg);
     if (len <= 0)
     {
+#ifdef VGET_EXIT_BREAK
+        int res = len;
+#endif
         len = 0;
+
+#ifdef VGET_EXIT_BREAK
+        if (res == VGET_EXIT_BREAK)
+#else
         // check if we got Ctrl-C? (workaround in getdata)
         // TODO someday write 'ungetch()' in io.c to prevent
         // such workaround.
         if (buf[1] == Ctrl('C'))
+#endif
         {
             vkey_purge();
             blrt.abort = 1;
@@ -1196,7 +1358,11 @@ bl_attrset(lua_State *L)
 BLAPI_PROTO
 bl_time(lua_State *L)
 {
+#ifdef BBSLUA_HAVE_SYNCNOW
     syncnow();
+#else
+    time_t now = time(NULL);
+#endif
     lua_pushinteger(L, now);
     return 1;
 }
@@ -1204,7 +1370,11 @@ bl_time(lua_State *L)
 BLAPI_PROTO
 bl_ctime(lua_State *L)
 {
+#ifdef BBSLUA_HAVE_SYNCNOW
     syncnow();
+#else
+    time_t now = time(NULL);
+#endif
     lua_pushstring(L, ctime4(&now));
     return 1;
 }
@@ -1219,10 +1389,14 @@ bl_clock(lua_State *L)
     // XXX this is a fast hack because we don't want to do 64bit calculation.
     SYSTEMTIME st;
     GetSystemTime(&st);
+#ifdef BBSLUA_HAVE_SYNCNOW
     syncnow();
     // XXX the may be some latency between our GetSystemTime and syncnow.
     // So build again the "second" part.
     d = (int)((now / 60) * 60);
+#else
+    d = (int)((time(NULL) / 60) * 60);
+#endif
     d += st.wSecond;
     d += (st.wMilliseconds / 1000.0f);
 
@@ -1241,6 +1415,7 @@ bl_clock(lua_State *L)
 //////////////////////////////////////////////////////////////////////////
 // BBS-Lua Storage System
 //////////////////////////////////////////////////////////////////////////
+#ifdef BLSCONF_ENABLED
 static int
 bls_getcat(const char *s)
 {
@@ -1404,12 +1579,13 @@ bls_save(lua_State *L)
     lua_pushboolean(L, ret);
     return 1;
 }
+#endif  // #ifdef BLSCONF_ENABLED
 
 //////////////////////////////////////////////////////////////////////////
 // BBSLUA LIBRARY
 //////////////////////////////////////////////////////////////////////////
 
-static const struct luaL_reg lib_bbslua [] = {
+static const struct luaL_Reg lib_bbslua [] = {
     /* curses output */
     { "getyx",      bl_getyx },
     { "getmaxyx",   bl_getmaxyx },
@@ -1448,16 +1624,20 @@ static const struct luaL_reg lib_bbslua [] = {
     { NULL, NULL},
 };
 
-static const struct luaL_reg lib_store [] = {
+#ifdef BLSCONF_ENABLED
+static const struct luaL_Reg lib_store [] = {
     { "load",       bls_load },
     { "save",       bls_save },
     { "limit",      bls_limit },
     { "iolimit",    bls_iolimit },
     { NULL, NULL},
 };
+#endif
 
+#ifndef BBSLUA_USE_LUAJIT
 // non-standard modules in bbsluaext.c
 LUALIB_API int luaopen_bit (lua_State *L);
+#endif
 
 static const luaL_Reg bbslualibs[] = {
   // standard modules
@@ -1471,8 +1651,15 @@ static const luaL_Reg bbslualibs[] = {
   {LUA_MATHLIBNAME, luaopen_math},
   // {LUA_DBLIBNAME, luaopen_debug},
 
+#ifdef BBSLUA_USE_LUAJIT
+  // LuaJIT built-in extension modules
+  {LUA_BITLIBNAME, luaopen_bit},
+  {LUA_JITLIBNAME, luaopen_jit},
+  // {LUA_FFILIBNAME, luaopen_ffi},
+#else
   // bbslua-ext modules
   {"bit", luaopen_bit},
+#endif
 
   {NULL, NULL}
 };
@@ -1530,6 +1717,24 @@ bbsluaRegConst(lua_State *L)
     // global
     lua_pushcfunction(L, bl_print);
     lua_setglobal(L, "print");
+
+    // bit.*
+    // IID.20190224: If using BitOp, make `bit.cast` an alias for `bit.tobit`
+    //                  to be compatible with bitlib.
+    lua_getglobal(L, "bit");
+    lua_getfield(L, -1, "cast");
+    if (lua_isnil(L, -1)) {
+        lua_getfield(L, -2, "tobit");
+        lua_setfield(L, -3, "cast");
+    }
+    lua_pop(L, 2);
+
+#ifdef BBSLUA_USE_LUAJIT
+    // jit.*
+    // IID.20190224: The module needs to be loaded to enable JIT compilation,
+    //                  but the functions are either unsafe or useless.
+    lua_pushnil(L); lua_setglobal(L, "jit");
+#endif
 
     // bbs.*
     lua_getglobal(L, "bbs");
@@ -1854,7 +2059,13 @@ bbslua_logo(lua_State *L)
     }
 
     // prepare logo window
+#ifdef BBSLUA_HAVE_GRAYOUT
+ #ifdef BBSLUA_UNARY_GRAYOUT
+    grayout(GRAYOUT_DARK);
+ #else
     grayout(0, b_lines, GRAYOUT_DARK);
+ #endif
+#endif
 
     // print compatibility test
     // now (by) is the base of new information
@@ -2029,8 +2240,11 @@ void bbslua_loadLatest(lua_State *L,
         char *xbs = NULL, *xps = NULL, *xpe = NULL, *xpc = NULL;
         int xlineshift = 0;
         size_t xsz;
+#ifdef AID_DISPLAYNAME
         const char *lastref = NULL;
-        char loadnext = 0, isnewver = 0;
+        char loadnext = 0;
+#endif
+        char isnewver = 0;
 
         // detect file
         xbs = bbslua_attach(bfpath, &xsz);
@@ -2154,6 +2368,7 @@ void bbslua_loadLatest(lua_State *L,
 // BBSLUA Hash
 //////////////////////////////////////////////////////////////////////////
 
+#ifdef BLSCONF_ENABLED
 #if 0
 static int
 bbslua_hashWriter(lua_State *L, const void *p, size_t sz, void *ud)
@@ -2190,6 +2405,7 @@ bbslua_path2hash(const char *path)
         seed = fnv_32_str(BBSHOME "/", seed);
     return fnv_32_str(path, seed);
 }
+#endif  // #ifdef BLSCONF_ENABLED
 
 //////////////////////////////////////////////////////////////////////////
 // BBSLUA Main
@@ -2261,9 +2477,11 @@ bbslua(const char *fpath)
     // load script
     r = bbslua_loadbuffer(L, ps, pe-ps, "BBS-Lua", lineshift);
 
+#ifdef BLSCONF_ENABLED
     // build hash or store name
     blrt.storename = bbslua_path2hash(fpath);
     // vmsgf("BBS-Lua Hash: %08X", blrt.storename);
+#endif
 
     // unmap
     bbslua_detach(bs, sz);
@@ -2298,7 +2516,7 @@ bbslua(const char *fpath)
 
     // even if r == yield, let's abort - you cannot yield main thread.
 
-    if (r != 0)
+    if (r != 0 && !blrt.abort)
     {
         const char *errmsg = lua_tostring(L, -1);
         move(b_lines-3, 0); clrtobot();
@@ -2327,7 +2545,13 @@ bbslua(const char *fpath)
     }
 #endif
 
+#ifdef BBSLUA_HAVE_GRAYOUT
+ #ifdef BBSLUA_UNARY_GRAYOUT
+    // grayout(GRAYOUT_DARK);
+ #else
     // grayout(0, b_lines, GRAYOUT_DARK);
+ #endif
+#endif
     move(b_lines, 0); clrtoeol();
     vmsgf("BBS-Lua 執行結束%s。",
             blrt.abort ? " (使用者中斷)" : r ? " (程式錯誤)" : "");

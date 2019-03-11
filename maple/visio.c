@@ -1324,8 +1324,17 @@ void
 vs_bar(
     char *title)
 {
+#ifdef  COLOR_HEADER
+/*  int color = (time(0) % 7) + 41;        lkchu.981201: random color */
+    int color = 44; //090911.cache: 太花了固定一種顏色
+#endif
+
     clear();
-    prints("\x1b[1;33;44m【 %s 】\x1b[m\n", title);
+#ifdef  COLOR_HEADER
+    prints("\x1b[1;%2d;37m【%s】\x1b[m\n", color, title);
+#else
+    prints("\x1b[1;46;37m【%s】\x1b[m\n", title);
+#endif
 }
 
 
@@ -1470,6 +1479,28 @@ iac_count(
     case SB:                    /* loop forever looking for the SE */
         {
             unsigned char *look = current + 2;
+
+            /* fuse.030518: 線上調整畫面大小，重抓 b_lines */
+            if ((*look) == TELOPT_NAWS)
+            {
+                b_lines = ntohs(* (short *) (look + 3)) - 1;
+                b_cols = ntohs(* (short *) (look + 1)) - 1;
+
+                /* b_lines 至少要 23，最多不能超過 T_LINES - 1 */
+                if (b_lines >= T_LINES)
+                    b_lines = T_LINES - 1;
+                else if (b_lines < 23)
+                    b_lines = 23;
+                /* b_cols 至少要 79，最多不能超過 T_COLS - 1 */
+                if (b_cols >= T_COLS)
+                    b_cols = T_COLS - 1;
+                else if (b_cols < 79)
+                    b_cols = 79;
+#ifdef M3_USE_PFTERM
+                resizeterm(b_lines + 1, b_cols + 1);
+#endif
+                d_cols = b_cols - 79;
+            }
 
             for (;;)
             {
@@ -1923,6 +1954,17 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
     int x, y;
     int i, next;
 
+    /* Adjust flags */
+    if (!(echo & VGET_STRICT_DOECHO))
+    {
+        if (echo & VGET_IMPLY_DOECHO)
+            echo |= DOECHO;
+    }
+    if (echo & VGET_FORCE_DOECHO)
+        echo |= DOECHO;
+    if ((echo & DOECHO) && (echo & VGET_STEALTH_NOECHO))
+        echo ^= VGET_STEALTH_NOECHO;
+
     if (prompt)
     {
         move(line, col);
@@ -1934,7 +1976,8 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         clrtoeol();
     }
 
-    STANDOUT;
+    if (!(echo & VGET_STEALTH_NOECHO))
+        STANDOUT;
 
 #ifdef M3_USE_PFTERM
     getyx (&y, &x);
@@ -1945,8 +1988,25 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
     if (echo & GCARRY)
     {
-        if ((len = strlen(data)))
-            outs(data);
+        if ((len = strlen(data)) && (echo & NUMECHO))
+        {
+            /* Remove non-digit characters */
+            col = 0;
+            for (ch = 0; ch < len; ch++)
+                if (isdigit(data[ch]))
+                    data[col++] = data[ch];
+            data[col] = '\0';
+        }
+        if ((len = strlen(data)) && !(echo & VGET_STEALTH_NOECHO))
+        {
+            if (echo & DOECHO)
+                outs(data);
+            else
+            {
+                for (ch = 0; ch < len; ch++)
+                    outc('*');
+            }
+        }
     }
     else
     {
@@ -1958,12 +2018,14 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
     /* --------------------------------------------------- */
 
     ch = len;
-    do
-    {
-        outc(' ');
-    } while (++ch < max);
+    if (!(echo & VGET_STEALTH_NOECHO))
+        do
+        {
+            outc(' ');
+        } while (++ch < max);
 
-    STANDEND;
+    if (!(echo & VGET_STEALTH_NOECHO))
+        STANDEND;
 
     line = -1;
     col = len;
@@ -1971,7 +2033,9 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
     for (;;)
     {
-        move(y, x + col);
+        if (!(echo & VGET_STEALTH_NOECHO))
+            move(y, x + col);
+
         ch = vkey();
         if (ch == '\n')
         {
@@ -1994,10 +2058,21 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
                     data[0] = '\0';
                 }
 #ifdef M3_USE_PFTERM
-        STANDEND;
+                STANDEND;
 #endif
             }
             break;
+        }
+
+        if (ch == Ctrl('C') && (echo & VGET_BREAKABLE))
+        {
+            data[0] = '\0';
+            outc('\n');
+#ifdef M3_USE_PFTERM
+            if (!(echo & VGET_STEALTH_NOECHO))
+                STANDEND;
+#endif
+            return VGET_EXIT_BREAK;
         }
 
         if (isprint2(ch))
@@ -2020,8 +2095,17 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
                 continue;
             }
 
-            if (len >= max)
+            if (!isdigit(ch) && (echo & NUMECHO))
+            {
+                bell();
                 continue;
+            }
+
+            if (len >= max)
+            {
+                bell();
+                continue;
+            }
 
             /* ----------------------------------------------- */
             /* insert data and display it                      */
@@ -2029,14 +2113,20 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
             data_prompt = &data[col];
             i = col;
-            move(y, x + col);
+
+            if (!(echo & VGET_STEALTH_NOECHO))
+            {
+                move(y, x + col);
 #ifdef M3_USE_PFTERM
-            STANDOUT;
+                STANDOUT;
 #endif
+            }
 
             for (;;)
             {
-                outc(echo ? ch : '*');
+                if (!(echo & VGET_STEALTH_NOECHO))
+                    outc((echo & DOECHO) ? ch : '*');
+
                 next = (unsigned char) *data_prompt;
                 *data_prompt++ = ch;
                 if (i >= len)
@@ -2045,7 +2135,8 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
                 ch = next;
             }
 #ifdef M3_USE_PFTERM
-            STANDEND;
+            if (!(echo & VGET_STEALTH_NOECHO))
+                STANDEND;
 #endif
             col++;
             len++;
@@ -2057,29 +2148,43 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         /* ----------------------------------------------- */
 
 #if 0
-        if ((!echo || mfunc) && ch != Ctrl('H'))
+        if ((!(echo & DOECHO) || mfunc) && ch != Ctrl('H'))
+        {
+            bell();
             continue;
+        }
 #endif
 
-        if (!echo && ch != Ctrl('H'))
+        if (!(echo & DOECHO) && ch != Ctrl('H'))
+        {
+            bell();
             continue;
+        }
 
 #ifdef M3_USE_PFTERM
-        STANDOUT;
+        if (!(echo & VGET_STEALTH_NOECHO))
+            STANDOUT;
 #endif
         switch (ch)
         {
+        case KEY_DEL:
         case Ctrl('D'):
 
             if (col >= len)
-                continue;
+            {
+                bell();
+                break;
+            }
 
             col++;
 
         case Ctrl('H'):
 
             if (!col)
-                continue;
+            {
+                bell();
+                break;
+            }
 
             /* ----------------------------------------------- */
             /* remove data and display it                      */
@@ -2087,26 +2192,37 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
             i = col--;
             len--;
-            move(y, x + col);
+
+            if (!(echo & VGET_STEALTH_NOECHO))
+                move(y, x + col);
+
             while (i <= len)
             {
                 data[i - 1] = ch = (unsigned char) data[i];
-                outc(echo ? ch : '*');
+
+                if (!(echo & VGET_STEALTH_NOECHO))
+                    outc((echo & DOECHO) ? ch : '*');
                 i++;
             }
-            outc(' ');
+            if (!(echo & VGET_STEALTH_NOECHO))
+                outc(' ');
+
             break;
 
         case KEY_LEFT:
         case Ctrl('B'):
             if (col)
                 --col;
+            else
+                bell();
             break;
 
         case KEY_RIGHT:
         case Ctrl('F'):
             if (col < len)
                 ++col;
+            else
+                bell();
             break;
 
         case KEY_HOME:
@@ -2129,6 +2245,43 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             }
             break;
 
+        case Ctrl('K'):         /* delete to end of line */
+            if (col < len)
+            {
+                move(y, x + col);
+                for (ch = col; ch < len; ch++)
+                    outc(' ');
+                len = col;
+            }
+            break;
+
+        default:
+            ch |= KEY_NONE;   /* Non-processed key */
+            break;
+        }
+#ifdef M3_USE_PFTERM
+        if (!(echo & VGET_STEALTH_NOECHO))
+            STANDEND;
+#endif
+
+        /* No further processing is needed */
+        if (!(ch & KEY_NONE))
+            continue;
+
+        /* No input history for `NUMECHO` or hidden inputs */
+        if (!(echo & DOECHO) || (echo & NUMECHO))
+        {
+            bell();
+            continue;
+        }
+
+#ifdef M3_USE_PFTERM
+        STANDOUT;
+#endif
+
+        ch ^= KEY_NONE;
+        switch (ch)
+        {
         case KEY_DOWN:
         case Ctrl('N'):
 
@@ -2160,14 +2313,9 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             len = col;
             break;
 
-        case Ctrl('K'):         /* delete to end of line */
-            if (col < len)
-            {
-                move(y, x + col);
-                for (ch = col; ch < len; ch++)
-                    outc(' ');
-                len = col;
-            }
+        default:
+            /* Invalid key */
+            bell();
             break;
         }
 #ifdef M3_USE_PFTERM
@@ -2175,7 +2323,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 #endif
     }
 
-    if (len > 2 && echo)
+    if (len > 2 && (echo & DOECHO) && !(echo & NUMECHO))
     {
         for (line = MAXLASTCMD - 1; line; line--)
             strcpy(lastcmd[line], lastcmd[line - 1]);
@@ -2184,11 +2332,22 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
     outc('\n');
 
+    if (echo & LCECHO)
+    {
+        for (col = 0; col < len; col++)
+        {
+            ch = (unsigned char) data[col];
+            if (ch >= 0x81 && ch <= 0xFE)
+                /* The first byte of double-byte char of Big5 */
+                col++;  /* Skip the next byte */
+            else if (ch >= 'A' && ch <= 'Z')
+                data[col] += 32;
+        }
+    }
     ch = (unsigned char) data[0];
-    if ((echo & LCECHO) && (ch >= 'A' && ch <= 'Z'))
-        data[0] = (ch += 32);
 
 #ifdef M3_USE_PFTERM
+    if (!(echo & VGET_STEALTH_NOECHO))
         STANDEND;
 #endif
 

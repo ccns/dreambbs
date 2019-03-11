@@ -1104,7 +1104,7 @@ static int
 bmw_head(
     XO *xo)
 {
-    vs_head("察看訊息", str_site);
+    vs_head("查看訊息", str_site);
     if (bmw_modetype & BMW_MODE)
     {
         outs(
@@ -3840,7 +3840,7 @@ ulist_kick(
             }
             else
                 sleep(3);               /* 被踢的人這時候正在自我了斷 */
-            blog("KICK ", buf);
+            blog("KICK", buf);
             return ulist_init(xo);
         }
         else
