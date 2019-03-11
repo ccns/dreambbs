@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 declare -i a
 declare -i b
 declare -i c
