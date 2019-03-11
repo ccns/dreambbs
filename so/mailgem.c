@@ -976,7 +976,7 @@ XO *xo)
 {
     char fpath[128];
     usr_fpath(fpath, cuser.userid, "gem/.GEM");
-    XoMailGem(fpath, "我的精華區資源回收統");
+    XoMailGem(fpath, "我的精華區資源回收筒");
     return XO_INIT;
 }
 
