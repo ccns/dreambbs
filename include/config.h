@@ -35,8 +35,8 @@
 #endif
 
 #define BBSVERNAME      "DreamBBS"                  /* 版本名稱 */
-#define BBSVERSION      "v1.0-Rimuru"               /* 版本編號 */
-#define BBSVER_PREFIX   "-1.0"                      /* Version prefix for naming */
+#define BBSVERSION      "v1.1-Milim"                /* 版本編號 */
+#define BBSVER_PREFIX   "-1.1"                      /* Version prefix for naming */
 #define BINARY_PREFIX   "bin"BBSVER_PREFIX"/"       /* todo: move it to global.h, or merge global.h to here */
 
 #ifndef SYSOPNICK
