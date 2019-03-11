@@ -1975,7 +1975,7 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
 
     if (echo & GCARRY)
     {
-        if ((len = strlen(data)) && (echo & NUMECHO))
+        if ((len = strlen(data)))
         {
             /* Remove non-digit characters */
             col = 0;
@@ -1984,7 +1984,7 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
                     data[col++] = data[ch];
             data[col] = '\0';
         }
-        if ((len = strlen(data)) && !(echo & VGET_STEALTH_NOECHO))
+        if ((len = strlen(data)))
         {
             if (echo & DOECHO)
                 outs(data);
@@ -2067,7 +2067,7 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
                 continue;
             }
 
-            if (!isdigit(ch) && (echo & NUMECHO))
+            if (!isdigit(ch))
             {
                 bell();
                 continue;
@@ -2207,17 +2207,13 @@ int vget(int line, int col, char *prompt, char *data, int max, int echo)
             ch |= KEY_NONE;   /* Non-processed key */
             break;
         }
-#ifdef M3_USE_PFTERM
-        if (!(echo & VGET_STEALTH_NOECHO))
-            STANDEND;
-#endif
 
         /* No further processing is needed */
         if (!(ch & KEY_NONE))
             continue;
 
-        /* No input history for `NUMECHO` or hidden inputs */
-        if (!(echo & DOECHO) || (echo & NUMECHO))
+        /* No input history hidden inputs */
+        if (!(echo & DOECHO))
         {
             bell();
             continue;
