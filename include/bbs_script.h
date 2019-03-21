@@ -31,8 +31,8 @@
 
 /* Macros for acquiring version strings from number literals */
 
-#define DB_PATCH_STR  "DBpatch"
-#define DB_PATCH_SEP  "-" DB_PATCH_STR "-"
+#define DL_PATCH_STR  "DlPatch"
+#define DL_PATCH_SEP  "-" DL_PATCH_STR "-"
 
 // major . minor
 #define VER_STR(major, minor)  CPP_STR(CPP_UNPAREN_OPT(major)) "." CPP_STR(CPP_UNPAREN_OPT(minor))
@@ -41,13 +41,13 @@
 #define VER_PATCH_STR(major, minor, patch) \
     VER_STR(major, minor) "." CPP_STR(CPP_UNPAREN_OPT(patch))
 
-// major . minor -DBpatch- db_patch
-#define VER_DB_STR(major, minor, db_patch) \
-    VER_STR(major, minor) DB_PATCH_SEP CPP_STR(CPP_UNPAREN_OPT(db_patch))
+// major . minor -DlPatch- dl_patch
+#define VER_DL_STR(major, minor, dl_patch) \
+    VER_STR(major, minor) DL_PATCH_SEP CPP_STR(CPP_UNPAREN_OPT(dl_patch))
 
-// major . minor . patch -DBpatch- db_patch
-#define VER_PATCH_DB_STR(major, minor, patch, db_patch) \
-    VER_PATCH_STR(major, minor, patch) DB_PATCH_SEP CPP_STR(CPP_UNPAREN_OPT(db_patch))
+// major . minor . patch -DlPatch- dl_patch
+#define VER_PATCH_DL_STR(major, minor, patch, dl_patch) \
+    VER_PATCH_STR(major, minor, patch) DL_PATCH_SEP CPP_STR(CPP_UNPAREN_OPT(dl_patch))
 
 
 /* BBS-Lua */
@@ -83,9 +83,9 @@
 
 #define BBSRUBY_MAJOR_VERSION   (0)
 #define BBSRUBY_MINOR_VERSION   (3)
-#define BBSRUBY_DB_PATCH_VERSION  1
+#define BBSRUBY_DL_PATCH_VERSION  1
 #define BBSRUBY_VERSION_STR \
-    VER_DB_STR(BBSRUBY_MAJOR_VERSION, BBSRUBY_MINOR_VERSION, BBSRUBY_DB_PATCH_VERSION)
+    VER_DL_STR(BBSRUBY_MAJOR_VERSION, BBSRUBY_MINOR_VERSION, BBSRUBY_DL_PATCH_VERSION)
 
 #define BBSRUBY_INTERFACE_VER   0.111
 #define BBSRUBY_INTERFACE_VER_STR  CPP_STR(BBSRUBY_INTERFACE_VER)
