@@ -519,7 +519,7 @@
 
 #define MOVIE_LINES     (11)            /* 動畫最多有 11 列 */
 
-#define MENU_XPOS       23              /* 選單開始的 (x, y) 座標 */
+#define MENU_XPOS       23              /* 選單開始的 (y, x) 座標 */
 #define MENU_YPOS       13
 #define MENU_LOAD       1
 #define MENU_DRAW       2
