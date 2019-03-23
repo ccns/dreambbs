@@ -3137,7 +3137,7 @@ ulist_body(
     UTMP *up;
     int paltmp;
     int n, cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor, colortmp;
-    char buf[8], color[20], ship[80], *wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
+    char buf[16], color[20], ship[80], *wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 
 #ifdef HAVE_BOARD_PAL
     int isbpal;
@@ -3167,7 +3167,10 @@ ulist_body(
             if ((userno = up->userno) && (up->userid[0]) && !((up->ufo & UFO_CLOAK) && !HAS_PERM(PERM_SEECLOAK) && (up->userno != cuser.userno)) )
             {
                 if ((diff = up->idle_time))
-                    sprintf(buf, "%2d", diff);
+                    if (diff <= 9999)
+                        sprintf(buf, "%4d", diff);
+                    else
+                        sprintf(buf, "\x1b[1;31m9999\x1b[m");
                 else
                     buf[0] = '\0';
 
@@ -3213,7 +3216,7 @@ ulist_body(
 
                 strcpy(color, wcolor[fcolor]);
 
-                prints("%5d%c%s%-13s%-22.21s%s%-16.15s%c%c %-16.16s%s",
+                prints("%5d%c%s%-13s%-22.21s%s%-16.15s%c%c %-14.14s%s",
                     cnt, (up->ufo & UFO_WEB)?'*':' ',
                     color, up->userid,
                     (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
