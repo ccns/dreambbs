@@ -613,34 +613,34 @@ int pmsg(char *msg)
     {
         pcopy(patten, "ˍ", plen);
         sprintf(buf, " \x1b[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ%s\x1b[m  ", plen?patten:"");
-        vs_line(buf, 7, 18-plen);
+        vs_line(buf, (b_lines >> 1) - 4, (d_cols >> 1) + 18-plen);
         pcopy(patten, "  ", plen);
         sprintf(buf, " \x1b[0;37;44m▏ 請按任意鍵繼續 .....         %s\x1b[0;47;34m▉\x1b[m ", plen?patten:"");
-        vs_line(buf, 8, 18-plen);
+        vs_line(buf, (b_lines >> 1) - 3, (d_cols >> 1) + 18-plen);
         sprintf(buf, " \x1b[0;37m▏                              %s\x1b[0;47;30m▉\x1b[m\x1b[40;30;1m▉\x1b[m ", plen?patten:"");
-        vs_line(buf, 9, 18-plen);
+        vs_line(buf, (b_lines >> 1) - 2, (d_cols >> 1) + 18-plen);
         sprintf(buf, " \x1b[0;37m▏%-30s%s\x1b[0;47;30m▉\x1b[m\x1b[40;30;1m▉\x1b[m ", msg, ((len > 30 && len%2 == 1) ? " " : ""));
-        vs_line(buf, 10, 18-plen);
+        vs_line(buf, (b_lines >> 1) - 1, (d_cols >> 1) + 18-plen);
         sprintf(buf, " \x1b[0;37m▏                              %s\x1b[0;47;30m▉\x1b[m\x1b[40;30;1m▉\x1b[m ", plen?patten:"");
-        vs_line(buf, 11, 18-plen);
+        vs_line(buf, (b_lines >> 1) + 0, (d_cols >> 1) + 18-plen);
         pcopy(patten, "▇", plen);
         sprintf(buf, " \x1b[0;47;30m▇\x1b[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇%s\x1b[40;30;1m▉\x1b[m ", plen?patten:"");
-        vs_line(buf, 12, 18-plen);
+        vs_line(buf, (b_lines >> 1) + 1, (d_cols >> 1) + 18-plen);
     }
     else
     {
         sprintf(buf, " \x1b[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\x1b[m  ");
-        vs_line(buf, 7, 18);
+        vs_line(buf, (b_lines >> 1) - 4, (d_cols >> 1) + 18);
         sprintf(buf, " \x1b[0;37;44m▏ 請按任意鍵繼續 .....           \x1b[0;47;34m▉\x1b[m ");
-        vs_line(buf, 8, 18);
+        vs_line(buf, (b_lines >> 1) - 3, (d_cols >> 1) + 18);
         sprintf(buf, " \x1b[0;37m▏                                \x1b[0;47;30m▉\x1b[m\x1b[40;30;1m▉\x1b[m ");
-        vs_line(buf, 9, 18);
+        vs_line(buf, (b_lines >> 1) - 2, (d_cols >> 1) + 18);
         sprintf(buf, " \x1b[0;37m▏%-30s  \x1b[0;47;30m▉\x1b[m\x1b[40;30;1m▉\x1b[m ", "[請按任意鍵繼續]");
-        vs_line(buf, 10, 18);
+        vs_line(buf, (b_lines >> 1) - 1, (d_cols >> 1) + 18);
         sprintf(buf, " \x1b[0;37m▏                                \x1b[0;47;30m▉\x1b[m\x1b[40;30;1m▉\x1b[m ");
-        vs_line(buf, 11, 18);
+        vs_line(buf, (b_lines >> 1) + 0, (d_cols >> 1) + 18);
         sprintf(buf, " \x1b[0;47;30m▇\x1b[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\x1b[40;30;1m▉\x1b[m ");
-        vs_line(buf, 12, 18);
+        vs_line(buf, (b_lines >> 1) + 1, (d_cols >> 1) + 18);
     }
 
     cc = vkey();
