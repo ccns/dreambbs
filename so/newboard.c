@@ -128,11 +128,11 @@ int num,
 NBRD *nbrd)
 {
     if (nbrd->mode & NBRD_NBRD)
-        prints("%6d %c %-5s %-13s %-13s:%-22.22s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, nbrd->brdname, nbrd->title);
+        prints("%6d %c %-5s %-13s %-13s:%-*.*s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, nbrd->brdname, d_cols + 22, d_cols + 22, nbrd->title);
     else if (nbrd->mode & NBRD_CANCEL)
         prints("%6d %c %-5s %-13s ¼o°£ %s ª©ª©¥D\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, nbrd->brdname);
     else
-        prints("%6d %c %-5s %-13s %-36.36s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, nbrd->title);
+        prints("%6d %c %-5s %-13s %-*.*s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, d_cols + 36, d_cols + 36, nbrd->title);
 }
 
 

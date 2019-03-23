@@ -83,7 +83,7 @@ memorandum_item(
 int num,
 MEMORANDUM *memorandum)
 {
-    prints("%6d  %-8s  %-8s  %-50s\n", num, memorandum->date, memorandum->time, memorandum->work);
+    prints("%6d  %-8s  %-8s  %-*s\n", num, memorandum->date, memorandum->time, d_cols + 50, memorandum->work);
 }
 
 static int

@@ -66,17 +66,17 @@ cleanrecommend_item(
         if (cleanrecommend->pn == POSITIVE)
         {
             pn = "\x1b[1;33m+";
-            prints("%4d%s%2s\x1b[m%-12s %-54s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, cleanrecommend->msg, cleanrecommend->rtime);
+            prints("%4d%s%2s\x1b[m%-12s %-*s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
         }
         else if (cleanrecommend->pn == NEGATIVE)
         {
             pn = "\x1b[1;31m-";
-            prints("%4d%s%2s\x1b[m%-12s %-54s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, cleanrecommend->msg, cleanrecommend->rtime);
+            prints("%4d%s%2s\x1b[m%-12s %-*s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
         }
         else
         {
             pn = "   ";
-            prints("%4d%s%2s\x1b[m%-12s %-54s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, cleanrecommend->msg, cleanrecommend->rtime);
+            prints("%4d%s%2s\x1b[m%-12s %-*s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
         }
 }
 

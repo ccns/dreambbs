@@ -97,8 +97,8 @@ vote_item(
 int num,
 VCH *vch)
 {
-    prints("%6d %-9.8s%-12s %-48.48s\n",
-           num, vch->cdate, vch->owner, vch->title);
+    prints("%6d %-9.8s%-12s %-*.*s\n",
+           num, vch->cdate, vch->owner, d_cols + 48, d_cols + 48, vch->title);
 }
 
 

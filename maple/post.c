@@ -921,10 +921,10 @@ post_item(
         outs("  ");
     }
 
-    hdr_outs(hdr, 47);   /* 少一格來放分數 */
+    hdr_outs(hdr, d_cols + 47);   /* 少一格來放分數 */
 #else
     prints("%6d%c%c ", (hdr->xmode & POST_BOTTOM) ? -1 : num, tag_char(hdr->chrono), post_attr(hdr));
-    hdr_outs(hdr, 47);
+    hdr_outs(hdr, d_cols + 47);
 #endif  /* #ifdef HAVE_RECOMMEND */
 }
 
