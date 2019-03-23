@@ -38,12 +38,12 @@ EXE	= so
 
 .if    $(ARCHI)=="64"
 .if      $(OPSYS) == "FreeBSD"
-.o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386_fbsd
+.o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -lc -melf_i386_fbsd
 .else
-.o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -melf_i386
+.o.so:	;   ld -G $*.o -o $*.so -L../lib -ldao -lc -melf_i386
 .endif   #OPSYS
 .else
-.o.so:  ;   ld -G $*.o -o $*.so -L../lib -ldao
+.o.so:  ;   ld -G $*.o -o $*.so -L../lib -ldao -lc
 .endif #ARCHI
 
 all:
