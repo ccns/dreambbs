@@ -3947,7 +3947,7 @@ post_manage(
 
     grayout(0, b_lines, GRAYOUT_DARK);
 
-    switch (re = popupmenu_ans2(menu, "板主管理", 3, 20))
+    switch (re = popupmenu_ans2(menu, "板主管理", (b_lines >> 1) - 8, (d_cols >> 1) + 20))
     {
         case 't':
             return post_brdtitle(xo);
