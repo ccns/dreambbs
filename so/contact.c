@@ -20,7 +20,7 @@ contact_item(
 int num,
 CONTACT *contact)
 {
-    prints("%6d     %-13s      %-48s\n", num, contact->name, contact->email);
+    prints("%6d     %-13s      %-*s\n", num, contact->name, d_cols + 48, contact->email);
 }
 
 static int

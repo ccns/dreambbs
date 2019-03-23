@@ -1216,14 +1216,14 @@ class_body(
 
                 str = brd->blast > brd_visit[chn] ? "\x1b[1;31m★\x1b[m" : "☆";
 
-                char tmp[BTLEN + 1];
+                char tmp[BTLEN + 1] = {0};
 
                 strcpy(tmp, brd->title);
-                if (tmp[31] & 0x80)
-//                  tmp[33] = '\0';
+                if (tmp[d_cols + 31] & 0x80)
+//                  tmp[d_cols + 33] = '\0';
 //              else
-                    tmp[31] = ' ';
-                    tmp[32] = '\0';
+                    tmp[d_cols + 31] = ' ';
+                    tmp[d_cols + 32] = '\0';
 
 /* 081122.cache:看板性質, 不訂閱, 秘密, 好友, 一般 */
                 if (bits[chn] & BRD_Z_BIT)
@@ -1282,7 +1282,7 @@ class_body(
 //              prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-36s%c %.13s", num, str,
 //              prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%s%c %.13s", num, str,
 
-                prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-32s %s", num, str, brdtype, brd->brdname, buf, brd->class, tmp, str2);
+                prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-*s %s", num, str, brdtype, brd->brdname, buf, brd->class, d_cols + 32, tmp, str2);
 
                 strcpy(tmp, brd->BM);
                 if (tmp[13] & 0x80)

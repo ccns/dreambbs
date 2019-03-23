@@ -2134,7 +2134,7 @@ mbox_item(
         : xmode & MAIL_MARKED ? "%5d \x1b[1;36m%c\x1b[m"
         : "%5d %c", pos, mbox_attr(hdr->xmode));
 
-    hdr_outs(hdr, 47);
+    hdr_outs(hdr, d_cols + 47);
 }
 
 

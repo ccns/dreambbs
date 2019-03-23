@@ -26,7 +26,7 @@ observe_item(
 int num,
 OBSERVE *observe)
 {
-    prints("%6d %-13.13s %-55.55s\n", num, observe->userid, observe->title);
+    prints("%6d %-13.13s %-*.*s\n", num, observe->userid, d_cols + 55, d_cols + 55, observe->title);
 }
 
 static int

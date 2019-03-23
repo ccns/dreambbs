@@ -151,7 +151,7 @@ HDR *ghdr)
     if (!HAS_PERM(PERM_SYSOP) && (xmode & (GEM_RESTRICT | GEM_LOCK)))
         prints("\x1b[1;33m¸ê®Æ«O±K¡I\x1b[m\n");
     else if ((gtype == 0) || (xmode & GEM_GOPHER))
-        prints("%-.64s\n", ghdr->title);
+        prints("%-.*s\n", d_cols + 64, ghdr->title);
 }
 
 
