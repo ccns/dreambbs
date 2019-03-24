@@ -182,9 +182,7 @@ XO *xo)
 {
     clear();
     vs_head("連署系統", NULL);
-    outs(
-        "  [←]離開 [→]閱\讀 [^P]發表 [d]刪除 [j]加入連署 [TAB]精華區 [h]elp\n"
-        "\x1b[44m  編號   日 期 舉辦人        看  版  標  題                                   \x1b[m");
+    prints(NECK_NBRD, d_cols, "");
     return nbrd_body(xo);
 }
 

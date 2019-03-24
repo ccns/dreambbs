@@ -1312,7 +1312,7 @@ class_neck(
     XO *xo)
 {
     move(1, 0);
-    prints(NECKBOARD, class_flag & UFO2_BRDNEW ? "總數" : "編號", "中   文   敘   述");
+    prints(NECKBOARD, class_flag & UFO2_BRDNEW ? "總數" : "編號", d_cols + 33, "中   文   敘   述");
 
     return class_body(xo);
 }

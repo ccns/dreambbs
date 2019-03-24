@@ -722,9 +722,7 @@ pal_head(
     XO *xo)
 {
     vs_head("好友名單", str_site);
-    outs(
-        "  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [/?]搜尋 [q]查詢 [h]elp\n"
-        "\x1b[30;47m  編號    代 號         友       誼                                           \x1b[m");
+    prints(NECK_PAL, d_cols, "");
     return pal_body(xo);
 }
 
@@ -1107,15 +1105,11 @@ bmw_head(
     vs_head("查看訊息", str_site);
     if (bmw_modetype & BMW_MODE)
     {
-        outs(
-            "  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n"
-            "\x1b[30;47m  編號 代 號        內       容                                               \x1b[m");
+        prints(NECK_BMW, d_cols, "");
     }
     else
     {
-        outs(
-            "  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n"
-            "\x1b[30;47m  編號 時 間 代 號        內       容                                         \x1b[m");
+        prints(NECK_BMWTIME, d_cols, "");
     }
     return bmw_body(xo);
 }
@@ -3434,16 +3428,16 @@ ulist_neck(
 {
     move(1, 0);
 #ifdef HAVE_BOARD_PAL
-    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d \x1b[0;36m板友：%d\x1b[m\n"
-        "\x1b[30;47m No.  代號         %-22s%-13s   PM %-14s閒置\x1b[m",
-        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num, board_pals,
-        (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
+    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d \x1b[0;36m板友：%d\x1b[m",
+        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num, board_pals);
+    prints(NECK_ULIST,
+        d_cols + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
         (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
 #else
-    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\x1b[m\n"
-        "\x1b[30;47m No.  代號         %-22s%-13s   PM %-14s閒置 \x1b[m",
-        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num,
-        (HAS_PERM(PERM_SYSOP) && (cuser.ufo & UFO_REALNAME)) ? "真實姓名" : "暱  稱",
+    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\x1b[m",
+        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num);
+    prints(NECK_ULIST,
+        d_cols + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo & UFO_REALNAME)) ? "真實姓名" : "暱  稱",
         (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
 #endif
 
@@ -4716,9 +4710,7 @@ banmsg_head(
     XO *xo)
 {
     vs_head("拒收名單", str_site);
-    outs(
-        "  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [q]查詢 [h]elp\n"
-        "\x1b[30;47m  編號    代 號         描       述                                           \x1b[m");
+    prints(NECK_BANMSG, d_cols, "");
     return banmsg_body(xo);
 }
 

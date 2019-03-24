@@ -2177,7 +2177,7 @@ mbox_head(
     clear_notification();
     vs_head("¶l¥ó¿ï³æ", str_site);
 
-    outs(NECKMAIL);
+    prints(NECKMAIL, d_cols, "");
 
     return mbox_body(xo);
 }

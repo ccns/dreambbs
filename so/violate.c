@@ -69,9 +69,7 @@ viol_head(
 XO *xo)
 {
     vs_head("暫時禁止名單", str_site);
-    outs(
-        "  [←]離開 ^P)新增 c)修改 d)刪除 f)搜尋 [h]elp\n"
-        "\x1b[30;47m  編號 次數 時間 禁止註冊 Email                                              \x1b[m");
+    prints(NECK_VIOL, d_cols, "");
     return viol_body(xo);
 }
 
