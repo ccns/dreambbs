@@ -197,7 +197,7 @@ gem_head(
 
     outs(NECKGEM1);
     outs(buf);
-    outs(NECKGEM2);
+    prints(NECKGEM2, d_cols, "");
     return gem_body(xo);
 }
 

@@ -147,7 +147,7 @@ vote_head(
 XO *xo)
 {
     vs_head(currBM, "§ë²¼©Ò");
-    outs(NECKVOTE);
+    prints(NECKVOTE, d_cols, "");
     return vote_body(xo);
 }
 

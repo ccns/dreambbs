@@ -61,9 +61,7 @@ admin_head(
 XO *xo)
 {
     vs_head("超級站務", str_site);
-    outs(
-        "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 [h]elp\n"
-        "\x1b[30;47m  編號     站  務  名  單                                                     \x1b[m");
+    prints(NECK_ADMIN, d_cols, "");
     return admin_body(xo);
 }
 

@@ -194,11 +194,7 @@ XO *xo)
 {
 
     vs_head("精華文章", xo->xyz);
-
-    outs(
-        "  [←]離開 [→]瀏覽 [o]點歌到動態看板 [m]點歌到信箱 [q]查詢剩餘次數 [h]說明 \n");
-    outs("\x1b[44m"
-        "  編號     主              題                           [編      選] [日  期]\x1b[m");
+    prints(NECK_SONG, d_cols, "");
     return song_body(xo);
 }
 

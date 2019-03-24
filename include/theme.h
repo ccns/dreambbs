@@ -29,6 +29,7 @@
 
 #define ANSIRESET       "\x1b[m"        /* 終止顏色 */
 
+#define COLOR0          "\x1b[44m"      /* header 的底色 */
 #define COLOR1          "\x1b[34;46m"   /* footer/feeter 的前段顏色 */
 #define COLOR2          "\x1b[31;47m"   /* footer/feeter 的後段顏色 */
 #define COLOR3          "\x1b[30;47m"   /* neck 的顏色 */
@@ -60,7 +61,7 @@
 /* ----------------------------------------------------- */
 
 #define NECKBOARD  "  [←]主選單 [→]閱\讀 [↑↓]選擇 [c]篇數 [y]載入 [/]搜尋 [s]看板 [h]說明\n" \
-                   "\x1b[30;47m  %-7s看  板            %-33s人氣 板    主     \x1b[m"
+            COLOR3 "  %-7s看  板            %-*s人氣 板    主     \x1b[m"
 
 //#define NECKGEM1 \
 //                   "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [F]轉寄 [Z]下載 [h]說明 "
@@ -69,24 +70,112 @@
                    "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明 "
                    /*r2.20170802: disable some tips in case of confusion*/
 
-#define NECKGEM2   "\x1b[44m" \
-                   "  編號     主              題                            [編      選] [日  期]\x1b[m"
+#define NECKGEM2 \
+            COLOR0 "  編號     主              題%*s                            [編      選] [日  期]\x1b[m"
 
 #define NECKPOST \
                    "  [←]離開 [→]閱\讀 [^P]發表 [b]備忘錄 [d]刪除 [V]投票 [TAB]精華區 [h]說明\n" \
-                   "\x1b[30;47m  編號    日 期  作  者       文  章  標  題                                  \x1b[m"
+            COLOR3 "  編號    日 期  作  者       文  章  標  題%*s                                  \x1b[m"
 
 #define NECKMAIL \
-                   "  [←]離開 [→]讀信 [d]刪除 [R]回信 [s]寄信 [x]轉貼 [y]群組回信 [h]說明\n\x1b[44m" \
-                   "  編號    日 期  作 者          信  件  標  題                                \x1b[m"
+                   "  [←]離開 [→]讀信 [d]刪除 [R]回信 [s]寄信 [x]轉貼 [y]群組回信 [h]說明\n" \
+            COLOR0 "  編號    日 期  作 者          信  件  標  題%*s                                \x1b[m"
 
 #define NECKVOTE \
-                   "  [←]離開 [v]投票 [R]結果 [E]修改 [^P]舉行 [^Q]查詢/中止/改期 [h]說明\n\x1b[44m" \
-                   "  編號  開票日  主辦人       投  票  宗  旨                                  \x1b[m"
+                   "  [←]離開 [v]投票 [R]結果 [E]修改 [^P]舉行 [^Q]查詢/中止/改期 [h]說明\n" \
+            COLOR0 "  編號  開票日  主辦人       投  票  宗  旨%*s                                   \x1b[m"
 
 #define NECKINNBBS "  [←]離開 [^P]新增 [d]刪除 [E]編輯 [/]搜尋 [Enter]詳細\n" \
             COLOR3 "  編號            內         容%*s                                               \x1b[m"
 
+// IID.190324
+
+/* ulist_neck() 及 xpost_head() 的第一行比較特別，不在此定義 */
+
+#define NECK_MYFAVORITE \
+                   "  [←]主選單 [→]閱\讀 [a]新增 [d]刪除 [c]篇數 [/]搜尋 [s]看板 [h]說明\n" \
+            COLOR0 "  %-7s看  板            %-*s人氣 板    主     \x1b[m"
+
+#define NECK_XPOST "\n" /*r2.20181219: this part may need to be refined*/ \
+            COLOR3 "  編號   日 期  作  者       文  章  標  題%*s                                   \x1b[m"
+
+#define NECK_ULIST "\n" \
+            COLOR3 " No.  代號         %-*s%-13s   PM %-14s閒置\x1b[m"
+
+#define NECK_PAL   "  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [/?]搜尋 [q]查詢 [h]elp\n" \
+            COLOR3 "  編號    代 號         友       誼%*s                                           \x1b[m"
+
+#define NECK_BMW   "  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n" \
+            COLOR3 "  編號 代 號        內       容%*s                                               \x1b[m"
+
+#define NECK_BMWTIME \
+                   "  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n" \
+            COLOR3 "  編號 時 間 代 號        內       容%*s                                         \x1b[m"
+
+#define NECK_BANMSG \
+                   "  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [q]查詢 [h]elp\n" \
+            COLOR3 "  編號    代 號         描       述%*s                                           \x1b[m"
+
+// so/*
+
+#define NECK_ADMIN \
+                   "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 [h]elp\n" \
+            COLOR3 "  編號     站  務  名  單%*s                                                     \x1b[m"
+
+#define NECK_CLEANRECOMMEND \
+                   "  [←]離開 c)修改[站長專用] d)刪除 D)清除全部 s)重整 [h]elp\n" \
+            COLOR0 "  編號 推      使用者 留言%*s                                               日 期\x1b[m"
+
+#define NECK_CONTACT \
+                   "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 m)寄信 [h]elp\n" \
+            COLOR3 "  編號     聯  絡  名  單     e-mail address%*s                                  \x1b[m"
+
+#define NECK_LISTBRD \
+                   "  [←]離開 a)新增 d)刪除 s)重整 TAB)切換名單 T)更改群組名稱 /)搜尋\n" \
+            COLOR3 "  編號     看板名稱%*s                                                           \x1b[m"
+
+#define NECK_LISTUSR \
+                   "  [←]離開 a)新增 d)刪除 s)重整 TAB)切換名單 T)更改群組名稱 /)搜尋\n" \
+            COLOR3 "  編號     使用者 ID%*s                                                          \x1b[m"
+
+//#define NECK_MAILGEM1 \
+//                   "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [F]轉寄 [Z]下載 [h]說明 "
+#define NECK_MAILGEM1 \
+                   "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明 "
+                   /*r2.20170802: disable "Z" option in case of confusion*/
+
+#define NECK_MAILGEM2 \
+            COLOR0 "  編號     主              題%*s                            [編      選] [日  期]\x1b[m"
+
+#define NECK_MEMORANDUM \
+                   "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 [h]elp\n" \
+            COLOR3 "  編號  日期      時間      工作或行程%*s                                        \x1b[m"
+
+#define NECK_NBRD  "  [←]離開 [→]閱\讀 [^P]發表 [d]刪除 [j]加入連署 [TAB]精華區 [h]elp\n" \
+            COLOR0 "  編號   日 期 舉辦人        看  版  標  題%*s                                   \x1b[m"
+
+#define NECK_OBSERVE \
+                   "  [←]離開 ^P)新增 c)修改 d)刪除 S)重整 [h]elp\n" \
+            COLOR3 "  編號 使用者ID      說明%*s                                                     \x1b[m"
+
+#define NECK_PERSONAL1 \
+                   "  [←]離開 c)修改 d)刪除 s)重整 TAB)中文版名/E-mail O)開板 D)退件 [h]elp\n" \
+            COLOR0 "  編號   申請人       看板名稱     "
+
+#define NECK_PERSONALEMAIL2 \
+                   "E-mail%*s                                  \x1b[m"
+
+#define NECK_PERSONALTITLE2 \
+                   "中文版名%*s                                \x1b[m"
+
+#define NECK_SHOW  "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 [h]elp\n" \
+            COLOR3 "  編號     已投票的 Email%*s                                                     \x1b[m"
+
+#define NECK_VIOL  "  [←]離開 ^P)新增 c)修改 d)刪除 f)搜尋 [h]elp\n" \
+            COLOR3 "  編號 次數 時間 禁止註冊 Email%*s                                               \x1b[m"
+
+#define NECK_SONG  "  [←]離開 [→]瀏覽 [o]點歌到動態看板 [m]點歌到信箱 [q]查詢剩餘次數 [h]說明 \n" \
+            COLOR0 "  編號     主              題%*s                            [編      選] [日  期]\x1b[m"
 
 // cache.101119
 

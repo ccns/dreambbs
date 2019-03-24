@@ -123,9 +123,7 @@ cleanrecommend_head(
     XO *xo)
 {
     vs_head("推薦留言清單", str_site);
-    outs(
-"  [←]離開 c)修改[站長專用] d)刪除 D)清除全部 s)重整 [h]elp\n"
-"\x1b[44m  編號 推      使用者 留言                                                日 期\x1b[m");
+    prints(NECK_CLEANRECOMMEND, d_cols, "");
     return cleanrecommend_body(xo);
 }
 

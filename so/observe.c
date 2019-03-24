@@ -67,9 +67,7 @@ observe_head(
 XO *xo)
 {
     vs_head("觀察名單列表", str_site);
-    outs(
-        "  [←]離開 ^P)新增 c)修改 d)刪除 S)重整 [h]elp\n"
-        "\x1b[30;47m  編號 使用者ID      說明                                                     \x1b[m");
+    prints(NECK_OBSERVE, d_cols, "");
     return observe_body(xo);
 }
 
