@@ -376,16 +376,15 @@ vs_head(
         spc = 0;
     }
 
-    ufo = 1 - (spc & 1);
     memset(buf, ' ', spc >>= 1);
     buf[spc] = '\0';
 
 #ifdef  COLOR_HEADER
     prints("\x1b[1;%2d;37m¡i%s¡j%s\x1b[33m%s\x1b[1;%2d;37m%s\x1b[37m¬ÝªO¡m%s¡n\x1b[m\n",
-        color, title, buf, mid, color, buf + ufo + len, currboard);
+        color, title, buf, mid, color, buf + len, currboard);
 #else
     prints("\x1b[1;46;37m¡i%s¡j%s\x1b[33m%s\x1b[46m%s\x1b[37m¬ÝªO¡m%s¡n\x1b[m\n",
-        title, buf, mid, buf + ufo + len, currboard);
+        title, buf, mid, buf + len, currboard);
 #endif
 }
 
