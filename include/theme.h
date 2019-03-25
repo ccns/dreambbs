@@ -198,6 +198,33 @@
     COLOR1 " 瀏覽 P.%d (%d%%) " COLOR2 " (h)說明 [PgUp][PgDn][0][$]移動 (/n)搜尋 (C)暫存 (←q)結束 "
 
 
+#define FOOTER_TALK \
+    COLOR1 " 交談模式 " COLOR2 " (^A)\x1b[30m對奕模式 \x1b[31m(^B)\x1b[30m象棋模式 \x1b[31m(^C, ^D)\x1b[30m結束交談 \x1b[31m(^Z)\x1b[30m快捷列表 \x1b[31m(^G)\x1b[30m嗶嗶   "
+
+
+#define FOOTER_VEDIT_BIFF \
+               "%s\x1b[m" COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s║%5d:%3d%*s    \x1b[m"
+
+#define FOOTER_VEDIT \
+    COLOR1 "  編輯文章  " COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s║%5d:%3d%*s    \x1b[m"
+
+
+//#define FOOTER_BMW_REPLY \
+//    COLOR1 " 熱訊回應 " COLOR2 " (←)\x1b[30m離開 \x1b[31m(↑↓→)\x1b[30m瀏覽 \x1b[31m(Enter)\x1b[30m選擇線上使用者扣應 \x1b[31m(其他)\x1b[30m回應%*s        \x1b[m"
+#define FOOTER_BMW_REPLY \
+    COLOR1 " 熱訊回應 " COLOR2 " (← Enter)\x1b[30m離開 \x1b[31m(↑↓→)\x1b[30m瀏覽 \x1b[31m(其他)\x1b[30m回應%*s                            \x1b[m"
+
+
+#define MSG_POST \
+    COLOR1 " 文章選讀 " COLOR2 " (y)\x1b[30m回應 \x1b[31m(=\\[]<>-+;'`jk)\x1b[30m相關主題 \x1b[31m(/?)\x1b[30m搜尋標題 \x1b[31m(aA)\x1b[30m搜尋作者          "
+
+#define MSG_MAILER \
+    COLOR1 " 魚雁往返 " COLOR2 " (r)\x1b[30m回信 \x1b[31m(x)\x1b[30m轉達 \x1b[31m(y)\x1b[30m群組回信 \x1b[31m(d)\x1b[30m刪除 \x1b[31m[m]\x1b[30m標記                        "
+
+#define MSG_GEM \
+    COLOR1 " 閱\讀精華 " COLOR2 " (=\\[]<>-+jk)\x1b[30m相關主題 \x1b[31m(/?aA)\x1b[30m搜尋標題作者 \x1b[31m(↑↓)\x1b[30m上下 \x1b[31m(←)\x1b[30m離開        "
+
+
 /* ----------------------------------------------------- */
 /* 訊息字串：xo_foot() 時的 feeter 都抓出來定義在這      */
 /* ----------------------------------------------------- */

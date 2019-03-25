@@ -1811,18 +1811,18 @@ vedit(
             move(b_lines, 0);
             clrtoeol();
 #ifdef EVERY_BIFF
-            prints("%s\x1b[0;31;47m  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s║%5d:%3d  \x1b[m",
+            prints(FOOTER_VEDIT_BIFF,
                 mode & VE_BIFF ? "\x1b[1;41;37;5m  郵差來了  ": mode & VE_BIFFN ? "\x1b[1;41;37;5m  訊差來了  ":"\x1b[0;34;46m  編輯文章  ",
                 mode & VE_INSERT ? "插入" : "取代",
                 mode & VE_ANSI ? "ANSI" : "一般",
-                ve_lno, 1 + (mode & VE_ANSI ? pos : col));
+                ve_lno, 1 + (mode & VE_ANSI ? pos : col), d_cols, "");
                 /* Thor.980805: UFO_BIFF everywhere */
 #else
 
-            prints("\x1b[34;46m  編輯文章  \x1b[31;47m  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s║%5d:%3d  \x1b[m",
+            prints(FOOTER_VEDIT,
                 mode & VE_INSERT ? "插入" : "取代",
                 mode & VE_ANSI ? "ANSI" : "一般",
-                ve_lno, 1 + (mode & VE_ANSI ? pos : col));
+                ve_lno, 1 + (mode & VE_ANSI ? pos : col), d_cols, "");
 #endif
         }
 

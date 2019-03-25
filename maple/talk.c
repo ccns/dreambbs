@@ -1839,8 +1839,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
     {
         move(b_lines - 1, 0);
         clrtoeol();
-//      outs("\x1b[34;46m 熱訊回應 \x1b[31;47m (←)\x1b[30m離開 \x1b[31m(↑↓→)\x1b[30m瀏覽 \x1b[31m(Enter)\x1b[30m選擇線上使用者扣應 \x1b[31m(其他)\x1b[30m回應 \x1b[m");
-        outs("\x1b[34;46m 熱訊回應 \x1b[31;47m (← Enter)\x1b[30m離開 \x1b[31m(↑↓→)\x1b[30m瀏覽 \x1b[31m(其他)\x1b[30m回應 \x1b[m");
+        prints(FOOTER_BMW_REPLY, d_cols, "");
     }
 
     cc = KEY_NONE;
@@ -2594,37 +2593,31 @@ talk_speak(
 
     utmp_mode(M_TALK);
 
-    ch = 58 - strlen(page_requestor);
+    ch = 59 + d_cols - strlen(page_requestor);
 
     sprintf(buf, "%s【%s", cuser.userid, cuser.username);
 
     i = ch - strlen(buf);
-    if (i >= 0)
-    {
-        i = (i >> 1) + 1;
-    }
-    else
+    if (i < 0)
     {
         buf[ch] = '\0';
-        i = 1;
+        i = 0;
     }
-    memset(data, ' ', i);
-    data[i] = '\0';
 
     memset(&mywin, 0, sizeof(mywin));
     memset(&itswin, 0, sizeof(itswin));
 
-    i = b_lines >> 1;
-    mywin.eline = i - 1;
-    itswin.curln = itswin.sline = i + 1;
+    ch = b_lines >> 1;
+    mywin.eline = ch - 1;
+    itswin.curln = itswin.sline = ch + 1;
     itswin.eline = b_lines - 1;
 
     clear();
-    move(i, 0);
-    prints("\x1b[1;46;37m  談天說地  \x1b[45m%s%s】 ◆  %s%s\x1b[m",
-        data, buf, page_requestor, data);
+    move(ch, 0);
+    prints("\x1b[1;46;37m  談天說地  \x1b[45m%*s%s】 ◆  %s%*s\x1b[m",
+        i>>1, "", buf, page_requestor, (i+1)>>1, "");
 #if 1
-    outz("\x1b[34;46m 交談模式 \x1b[31;47m (^A)\x1b[30m對奕模式 \x1b[31m(^B)\x1b[30m象棋模式 \x1b[31m(^C, ^D)\x1b[30m結束交談 \x1b[31m(^Z)\x1b[30m快捷列表 \x1b[31m(^G)\x1b[30m嗶嗶 \x1b[m");
+    outf(FOOTER_TALK);
 #endif
     move(0, 0);
 
