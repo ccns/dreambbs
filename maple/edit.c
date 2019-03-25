@@ -1586,7 +1586,7 @@ ve_outs(
     int ch;
     char *tail;
 
-    tail = text + SCR_WIDTH - 1;
+    tail = text + b_cols;
     while ((ch = (unsigned char) *text))
     {
         switch (ch)
@@ -1745,7 +1745,7 @@ vedit(
         vln = vx_cur;
         mode = ve_mode;
         col = ve_col;
-        cc = (col < SCR_WIDTH - 1) ? 0 : (col / 72) * 72;
+        cc = (col < b_cols) ? 0 : (col / (b_cols-7)) * (b_cols-7);
         if (cc != margin)
         {
             mode |= VE_REDRAW;
@@ -1774,7 +1774,7 @@ vedit(
                 }
                 else
                 {
-                    outc('~');
+                    prints("~%*s|", 77, "");
                 }
             }
 #ifdef EVERY_BIFF
