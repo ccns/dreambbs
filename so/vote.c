@@ -38,9 +38,9 @@ typedef struct
 } LOG;
 
 static int
-TchoiceCompare(struct Tchoice * i, struct Tchoice * j)
+TchoiceCompare(const void * i, const void * j)
 {
-    return j->count - i->count;
+    return ((struct Tchoice *)j)->count - ((struct Tchoice *)i)->count;
 }
 
 
@@ -731,7 +731,7 @@ XO *xo)
             vch->maxblt, total / sizeof(int), bollt);
 
     if (vch->vsort == 's')
-        qsort(choice, items, sizeof(struct Tchoice), (int (*)())TchoiceCompare);
+        qsort(choice, items, sizeof(struct Tchoice), (int (*)(const void *lhs, const void *rhs))TchoiceCompare);
 
     if (vch->vpercent == '%')
         fd = BMAX(1, total / sizeof(int));
