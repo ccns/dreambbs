@@ -810,7 +810,7 @@ dmesg(void)
 int
 top(void)
 {
-    system("top > tmp/top");
+    system("top -bn 1 > tmp/top");
     more("tmp/top", NULL);
     return 0;
 }
