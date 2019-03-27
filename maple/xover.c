@@ -2053,7 +2053,7 @@ every_Z_Orig(void)
         xover(cmd);
 }
 
-#ifdef TEST_Z_FAV
+#ifdef HAVE_FAVORITE
 static int
 Every_Z_Favorite(void)
 {
@@ -2119,7 +2119,7 @@ extern int Every_Z_Screen(void);
 
 static MENU menu_everyz[] =
 {
-#if   defined(HAVE_FAVORITE) && defined(TEST_Z_FAV)
+#ifdef HAVE_FAVORITE
     {Every_Z_Favorite, PERM_VALID, POPUP_FUN,
     "Favorite 我的最愛"},
 #endif
