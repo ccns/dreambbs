@@ -217,15 +217,11 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
     char buf[80];
 
     n = 0;
-    if (mode == M_XFILES)
-    {
-#ifdef M3_USE_PFTERM
-        clrregion(3, 20);
-#else
-        clearange(3, 20);
-#endif
-
-    }
+    if (mode == M_UFILES)
+        move(MENU_YPOS, 0);
+    else
+        move(1, 0);
+    clrtobot();
 
     while ((desc = xlist[n]))
     {
@@ -233,17 +229,17 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
 
         if (mode == M_UFILES)
         {
-            move(n + 11, 38);
+            move(n + MENU_YPOS - 1, MENU_XPOS + 2);
             clrtoeol();
-            move(n + 11, 38);
+            move(n + MENU_YPOS - 1, MENU_XPOS + 2);
             prints("(\x1b[1;36m%d\x1b[m) %s", n, desc);
         }
         else
         {
             if (n < 21)            /* statue.000703: 註解: 一個畫面只能 show 20 個資料 */
-                move(n + 2, 2);
+                move_ansi(n + ((b_lines-21) >> 1), 2);
             else
-                move(n + 2 - 20, 2 + 44);
+                move_ansi(n + ((b_lines-21) >> 1) - 20, 2 + ((b_cols+1) >> 1));
 
             prints("(\x1b[1;36m%2d\x1b[m) %s", n, desc);
 
@@ -254,22 +250,14 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
             if (mode == M_XFILES)
             {
                 if (n < 21)
-                    move(n + 2, 33);    /* Thor.980806: 註解: 印出檔名 */
+                    move_ansi(n + ((b_lines-21) >> 1), 24 + (d_cols >> 2));    /* Thor.980806: 註解: 印出檔名 */
                 else
-                    move(n + 2 - 20, 33 + 44);
+                    move_ansi(n + ((b_lines-21) >> 1) - 20, 24 + (d_cols >> 2) + ((b_cols+1) >> 1));
                 outs(flist[n - 1] + 4);    /* statue.000703: 註解: +4 去掉目錄 */
                 clrtoeol();
             }
 
         }
-    }
-    for (; n < 20; n++)
-    {
-        move(n + 3, 2);
-        if (mode == M_XFILES)
-            clrtoeol();
-        else
-            clrtohol();
     }
 
     vget(b_lines, 0, "請選擇檔案編號，或按 [0] 取消：", buf, 3, DOECHO);
