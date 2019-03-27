@@ -667,7 +667,7 @@ Every_Z_Screen(void)
         vmsg("ÀÉ®×¶}±Ò¿ù»~ !!");
         return 0;
     }
-    for (i=0; i<24; ++i)
+    for (i=0; i<=b_lines; ++i)
     {
         memset(buf, 0, sizeof(buf));
         strncpy(buf, (char *) sl[i].data, sl[i].len);
