@@ -262,6 +262,12 @@ brh_add(time_t prev, time_t chrono, time_t next)
         head++;
     }
 
+    if (next >= begin)
+    {
+        head[-1] = chrono;
+        return;
+    }
+
     /* insert or append */
 
     /* [21, 22, 23] ==> [32, 30] [15, 10] */
