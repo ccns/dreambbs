@@ -652,7 +652,6 @@ int pmsg(char *msg)
     return cc;
 }
 
-#ifndef M3_USE_PFTERM
 /* verit. 030211 抓取螢幕畫面到暫存檔 */
 int
 Every_Z_Screen(void)
@@ -660,6 +659,11 @@ Every_Z_Screen(void)
     FILE *fp;
     int i;
     char buf[512];
+#ifdef M3_USE_PFTERM
+    int oy, ox;
+
+    getyx(&oy, &ox);
+#endif
 
     fp = tbf_open();
     if (!fp)
@@ -670,11 +674,19 @@ Every_Z_Screen(void)
     for (i=0; i<=b_lines; ++i)
     {
         memset(buf, 0, sizeof(buf));
+#ifdef M3_USE_PFTERM
+        move(i, 0);
+        inansistr(buf, 512);
+#else
         strncpy(buf, (char *) sl[i].data, sl[i].len);
+#endif
         fprintf(fp, "%s\n", buf);
     }
     fclose(fp);
+
+#ifdef M3_USE_PFTERM
+    move(oy, ox);
+#endif
     return 1;
 }
-#endif
 
