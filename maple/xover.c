@@ -2113,9 +2113,7 @@ Every_Z_BMW(void)
     return 0;
 }
 
-#ifndef M3_USE_PFTERM
 extern int Every_Z_Screen(void);
-#endif
 
 static MENU menu_everyz[] =
 {
@@ -2142,10 +2140,8 @@ static MENU menu_everyz[] =
     {Every_Z_BMW, 0, POPUP_FUN,
     "Bmw      熱訊紀錄"},
 
-#ifndef M3_USE_PFTERM
     {Every_Z_Screen, 0, POPUP_FUN,
     "Screen   螢幕擷取"},
-#endif
 
     {NULL, 0, POPUP_QUIT,
     "Quit     離開"},
