@@ -630,12 +630,12 @@ brh_load(void)
                     } while (n > 0);
 
                     head[2] = n;
-                }
 
-                n = n * sizeof(time_t) + sizeof(BRH);
-                if (base != head)
-                    memcpy(base, head, n);
-                base = (int *) ((char *) base + n);
+                    n = n * sizeof(time_t) + sizeof(BRH);
+                    if (base != head)
+                        memcpy(base, head, n);
+                    base = (int *) ((char *) base + n);
+                }
             }
             head += size;
         }
