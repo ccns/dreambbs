@@ -18,7 +18,7 @@ CFLAGS	+= ${LUA_CFLAGS}
 CFLAGS	+= ${RUBY_CFLAGS}
 .endif
 
-HDR	= bbs.h config.h global.h modes.h perm.h struct.h bbs_script.h
+HDR	= bbs.h config.h global.h modes.h perm.h struct.h bbs_script.h cppdef.h
 
 SO	= chat.so vote.so xyz.so guessnum.so \
 	  admin.so chatmenu.so  mailgem.so\
