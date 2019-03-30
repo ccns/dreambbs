@@ -57,4 +57,19 @@
 #define VER_PATCH_DL_STR(major, minor, patch, dl_patch) \
     VER_PATCH_STR(major, minor, patch) DL_PATCH_SEP CPP_STR(CPP_UNPAREN_OPT(dl_patch))
 
+
+/* Macros for manipulating structs with flexible array member */
+
+#include <stddef.h>
+
+#if __STDC_VERSION__ >= 199901L
+  #define FLEX_SIZE     /* For declaration of flexible array member */
+#else
+  #define FLEX_SIZE     0
+#endif
+
+#define SIZEOF_FLEX(Type, n) \
+    (offsetof(Type, Type##_FLEX_MEMBER) \
+      + (n) * sizeof(((Type *)NULL)->Type##_FLEX_MEMBER[0]))
+
 #endif  // #ifndef CPPDEF_H

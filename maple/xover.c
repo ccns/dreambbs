@@ -45,7 +45,7 @@ xo_new(
 
     len = strlen(path) + 1;
 
-    xo = (XO *) malloc(sizeof(XO) + len);
+    xo = (XO *) malloc(SIZEOF_FLEX(XO, len));
 
     memcpy(xo->dir, path, len);
 

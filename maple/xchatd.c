@@ -136,8 +136,9 @@ struct UserList
 {
     UserList *next;
     int userno;
-    char userid[0];
+    char userid[FLEX_SIZE];
 };
+#define UserList_FLEX_MEMBER    userid
 
 
 struct ChatCmd
@@ -518,7 +519,7 @@ list_add(
     int len;
 
     len = strlen(userid = user->userid) + 1;
-    if ((node = (UserList *) malloc(sizeof(UserList) + len)))
+    if ((node = (UserList *) malloc(SIZEOF_FLEX(UserList, len))))
     {
         node->next = *list;
         node->userno = user->userno;
