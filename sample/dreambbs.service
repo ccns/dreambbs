@@ -1,0 +1,21 @@
+[Unit]
+Description=DreamBBS Telnet server
+After=syslog.target network.target remote-fs.target nss-lookup.target dreambbs.service
+
+[Service]
+User=bbs
+Group=bbs
+Type=forking
+PIDFile=/home/bbs/run/bbs.pid
+ExecStartPre=/home/bbs/bin/camera
+ExecStartPre=/home/bbs/bin/account
+ExecStartPre=/home/bbs/bin/acpro
+ExecStartPre=/home/bbs/bin/makefw
+ExecStart=/home/bbs/bin/bbsd 8888 &
+#ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
+
