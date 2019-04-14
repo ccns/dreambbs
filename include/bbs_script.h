@@ -18,7 +18,7 @@
 #define CPP_CAT(x, y)  CPP_CAT_PRIME(x, y)
 
 // Remove a pair of parentheses, or noop if nothing to remove:
-//    CPP_UNPAREN_OPT((STH)) => CPP_CAT(NIL_, CPP_DUP (STH) => CPP_CAT(NIL_, CPP_DUP STH) => NIL_CPP_DUP STH => STH
+//    CPP_UNPAREN_OPT((STH)) => CPP_CAT(NIL_, CPP_DUP (STH)) => CPP_CAT(NIL_, CPP_DUP STH) => NIL_CPP_DUP STH => STH
 //    CPP_UNPAREN_OPT(STH) => CPP_CAT(NIL_, CPP_DUP STH) => NIL_CPP_DUP STH => STH
 #define CPP_UNPAREN_OPT(x)  CPP_CAT(NIL_, CPP_DUP x)
 
