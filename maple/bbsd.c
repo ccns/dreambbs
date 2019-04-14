@@ -1466,7 +1466,9 @@ start_daemon(
     setgid(BBSGID);
     setuid(BBSUID);
 
-    sprintf(data, "%d\t%s\t%d\n", getpid(), buf, port);
+    //sprintf(data, "%d\t%s\t%d\n", getpid(), buf, port);
+    //f_cat(PID_FILE, data);
+    sprintf(data, "%d\n", getpid());
     f_cat(PID_FILE, data);
 }
 
