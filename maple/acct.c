@@ -1894,7 +1894,7 @@ int ue_setup(void)
 int u_lock(void)
 {
     char buf[PASSLEN];
-    char swapmateid[IDLEN + 1] = "\0";
+    char swapmateid[IDLEN + 1] = "";
     char IdleState[][IDLEN] = {
         "自強觀星",
         "勝後放閃",
@@ -3020,9 +3020,12 @@ int u_verify(void)
         zmsg("開啟檔案有問題，請通知站長");
         return XEASY;
     }
+    // FIXME(IID.20190415): What is the intent of the loop? Fetch last line?
     while (fgets(buf, 80, fp))
     {
-        key = strtok(buf, "\0");
+        // FIXME(IID.20190415): The `strtok()` does absolutely nothing other than `key = buf`.
+        //    To skip initial null characters? This does not work
+        key = strtok(buf, "");
     }
     fclose(fp);
 
