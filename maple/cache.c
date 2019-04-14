@@ -785,7 +785,7 @@ out_rle(
                 {
                     if (film)
                     {
-                        outs("\x1b[m\0");
+                        outs("\x1b[m");
                         clrtoeol();
                     }
                     move(++y, d_cols >> 1/*item_length[count++]*/);
@@ -816,7 +816,7 @@ out_rle(
             getyx(&y, &x);
             if (film)
             {
-                outs("\x1b[m\0");
+                outs("\x1b[m");
                 clrtoeol();
             }
             move(++y, d_cols >> 1/*item_length[count++]*/);
