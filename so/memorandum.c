@@ -42,7 +42,7 @@ get_sch_time(void)
     for (i = 0; i < 8; i++)
     {
         move(23, 23 + i / 2*4 + i % 2);
-        ch = egetch();
+        ch = igetch();
         if (ch == 'q' || ch == 'Q') return 0;
         else if (ch == '\r')
         {
@@ -83,7 +83,7 @@ memorandum_item(
 int num,
 MEMORANDUM *memorandum)
 {
-    prints("%6d  %-8s  %-8s  %-50s\n", num, memorandum->date, memorandum->time, memorandum->work);
+    prints("%6d  %-8s  %-8s  %-*s\n", num, memorandum->date, memorandum->time, d_cols + 50, memorandum->work);
 }
 
 static int
@@ -124,9 +124,7 @@ memorandum_head(
 XO *xo)
 {
     vs_head("聯絡名單", str_site);
-    outs(
-        "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 [h]elp\n"
-        "\x1b[30;47m  編號  日期      時間      工作或行程                                        \x1b[m");
+    prints(NECK_MEMORANDUM, d_cols, "");
     return memorandum_body(xo);
 }
 

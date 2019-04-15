@@ -125,7 +125,7 @@ do_pnote(char *userid)
 
     clrtobot();
     move(13, 0);
-    prints("\x1b[1;33m口畢～～～！\x1b[m");
+    outs("\x1b[1;33m口畢～～～！\x1b[m");
     memset(&myitem, 0, sizeof(notedata));
     do
     {
@@ -136,7 +136,7 @@ do_pnote(char *userid)
         for (i = 0; (i < 3) &&
             getdata(16 + i, 0, ":", myitem.buf[i], 77, DOECHO, 0); i++);
 
-        getdata(b_lines - 1, 0, "(S)儲存 (E)重新來過 (Q)取消？[S] ", buf, 3, LCECHO, 0);
+        getdata(b_lines, 0, "(S)儲存 (E)重新來過 (Q)取消？[S] ", buf, 3, LCECHO, 0);
         if ((buf[0] == 'q' || i == 0) && *buf != 'e')
         {
             return;
@@ -212,15 +212,13 @@ do_pnote(char *userid)
 static void
 show_pnote(notedata *pitem)
 {
-    char str[200];
-
     clrchyiuan(2, 6);
     move(2, 0);
-    sprintf(str, "\x1b[1;36m┌─── \x1b[37m%s(%s)在 \x1b[33m%s\x1b[37m 留的話 \x1b[m", pitem->userid, pitem->username,
+    prints_centered("\x1b[1;36m┌─── \x1b[37m%s(%s)在 \x1b[33m%s\x1b[37m 留的話 \x1b[m", pitem->userid, pitem->username,
             Cdate(&(pitem->date)));
-    prints(str);
-    prints("\n\x1b[1;37m  %s\n  %s\n  %s\n\x1b[0m", pitem->buf[0], pitem->buf[1], pitem->buf[2], "");
-    prints("                 \x1b[1;36m──────────────────────────────┘\x1b[m\n");
+    prints("\n\x1b[1;37m%*s  %s\n%*s  %s\n%*s  %s\n\x1b[0m",
+           d_cols>>1, "", pitem->buf[0], d_cols>>1, "", pitem->buf[1], d_cols>>1, "", pitem->buf[2]);
+    outs_centered("                 \x1b[1;36m──────────────────────────────┘\x1b[m\n");
     pitem->mode = 1;
 }
 
@@ -275,18 +273,18 @@ char *uid)
     usr_fpath(genbuf, uid, fn_pnote_hint);
     if ((hintfile = fopen(genbuf, "r")))
     {
-        prints("\x1b[1;34m●────────────────────────────────●\x1b[m\n", uid);
+        prints_centered("\x1b[1;34m●────────────────────────────────●\x1b[m\n", uid);
         i = 0;
         while (i++ < MAXHINTLINES && fgets(genbuf, 256, hintfile))
         {
-            outs(genbuf);
+            outs_centered(genbuf);
         }
-        prints("\x1b[1;34m●────────────────────────────────●\x1b[m\n", uid);
+        prints_centered("\x1b[1;34m●────────────────────────────────●\x1b[m\n", uid);
         fclose(hintfile);
     }
     else
         prints("您好，這是 %s 的電話答錄機，", uid);
-    prints("\n請在聽到「嗶」聲後，開始留言，謝謝。");
+    outs("\n請在聽到「嗶」聲後，開始留言，謝謝。");
 }
 
 /*                                                              *
@@ -306,7 +304,7 @@ p_edithint(void)
 
 
     sprintf(genbuf, "主人留言(最多%d行) (D)刪除 (E)錄製 [Q]取消？[Q]", MAXHINTLINES);
-    getdata(b_lines - 1, 0, genbuf, genbuf, 3, LCECHO, 0);
+    getdata(b_lines, 0, genbuf, genbuf, 3, LCECHO, 0);
 
     if (genbuf[0] == 'e')
     {
@@ -380,7 +378,7 @@ Pnote(int newflag)
 
         show_pnote(&item_array[offset - 1]);
         sprintf(prompt, "(N/P)往前/後 (A)全部 (R)回電 %s(X)刪除全部 (E)離開:", newflag ? "(S)保留 " : "(D)刪除 ");
-        getdata(b_lines - 1, 0, prompt, ans, 2, DOECHO, 0);
+        getdata(b_lines, 0, prompt, ans, 2, DOECHO, 0);
 
         if (ans[0] == 'r' || ans[0] == 'R')
         {
@@ -426,13 +424,13 @@ Pnote(int newflag)
             setuserfile(fpath, fn_note_dat_save);
             if ((num1 = get_pnote(item_array, 0)) >= MAX_PNOTE)
             {
-                move(b_lines - 2, 0);
+                move(b_lines - 1, 0);
                 vmsg("答錄機已經錄到底囉，沒辦法保存了，記得快整理整理喔...");
                 break;
             }
             else if ((num1 = get_pnote(item_array, 0)) >= MAX_PNOTE - 3)
             {
-                move(b_lines - 2, 0);
+                move(b_lines - 1, 0);
                 vmsg("答錄機快滿了，記得清理清理喔...");
             }
             // shakalaca patch [原本顯示的內容都變成第一篇]

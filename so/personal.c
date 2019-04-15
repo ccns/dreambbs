@@ -227,9 +227,9 @@ personal_item(
     PB *personal)
 {
     if (!mode)
-        prints("%6d %c %-12s %-12s %-40s\n", num, personal_attr(personal->state), personal->userid, personal->brdname, personal->email);
+        prints("%6d %c %-12s %-12s %-*s\n", num, personal_attr(personal->state), personal->userid, personal->brdname, d_cols + 40, personal->email);
     else
-        prints("%6d %c %-12s %-12s %-40s\n", num, personal_attr(personal->state), personal->userid, personal->brdname, personal->brdtitle);
+        prints("%6d %c %-12s %-12s %-*s\n", num, personal_attr(personal->state), personal->userid, personal->brdname, d_cols + 40, personal->brdtitle);
 }
 
 static int
@@ -267,13 +267,11 @@ personal_head(
     XO *xo)
 {
     vs_head("個人板清單", str_site);
-    outs(
-        "  [←]離開 c)修改 d)刪除 s)重整 TAB)中文版名/E-mail O)開板 D)退件 [h]elp\n"
-        "\x1b[44m  編號   申請人       看板名稱     ");
+    outs(NECK_PERSONAL1);
     if (!mode)
-        outs("E-mail                                  \x1b[m");
+        prints(NECK_PERSONALEMAIL2, d_cols, "");
     else
-        outs("中文版名                                \x1b[m");
+        prints(NECK_PERSONALTITLE2, d_cols, "");
     return personal_body(xo);
 }
 

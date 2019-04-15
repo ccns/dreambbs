@@ -151,7 +151,7 @@ HDR *ghdr)
     if (!HAS_PERM(PERM_SYSOP) && (xmode & (GEM_RESTRICT | GEM_LOCK)))
         prints("\x1b[1;33m資料保密！\x1b[m\n");
     else if ((gtype == 0) || (xmode & GEM_GOPHER))
-        prints("%-.64s\n", ghdr->title);
+        prints("%-.*s\n", d_cols + 64, ghdr->title);
 }
 
 
@@ -194,11 +194,7 @@ XO *xo)
 {
 
     vs_head("精華文章", xo->xyz);
-
-    outs(
-        "  [←]離開 [→]瀏覽 [o]點歌到動態看板 [m]點歌到信箱 [q]查詢剩餘次數 [h]說明 \n");
-    outs("\x1b[44m"
-        "  編號     主              題                           [編      選] [日  期]\x1b[m");
+    prints(NECK_SONG, d_cols, "");
     return song_body(xo);
 }
 

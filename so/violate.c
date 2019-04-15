@@ -28,7 +28,7 @@ EMAIL *viol)
         sprintf(buf, "%s", "永久");
     else
         sprintf(buf, "%4d", now > 0 ? now : 0);
-    prints("%6d %4d %4s %-56.56s\n", num, viol->times, buf, viol->email);
+    prints("%6d %4d %4s %-*.*s\n", num, viol->times, buf, d_cols + 56, d_cols + 56, viol->email);
 }
 
 static int
@@ -69,9 +69,7 @@ viol_head(
 XO *xo)
 {
     vs_head("暫時禁止名單", str_site);
-    outs(
-        "  [←]離開 ^P)新增 c)修改 d)刪除 f)搜尋 [h]elp\n"
-        "\x1b[30;47m  編號 次數 時間 禁止註冊 Email                                              \x1b[m");
+    prints(NECK_VIOL, d_cols, "");
     return viol_body(xo);
 }
 

@@ -921,10 +921,10 @@ post_item(
         outs("  ");
     }
 
-    hdr_outs(hdr, 47);   /* 少一格來放分數 */
+    hdr_outs(hdr, d_cols + 47);   /* 少一格來放分數 */
 #else
     prints("%6d%c%c ", (hdr->xmode & POST_BOTTOM) ? -1 : num, tag_char(hdr->chrono), post_attr(hdr));
-    hdr_outs(hdr, 47);
+    hdr_outs(hdr, d_cols + 47);
 #endif  /* #ifdef HAVE_RECOMMEND */
 }
 
@@ -972,7 +972,7 @@ post_head(
     XO *xo)
 {
     vs_head(currBM, xo->xyz);
-    outs(NECKPOST);
+    prints(NECKPOST, d_cols, "");
     return post_body(xo);
 }
 
@@ -3947,7 +3947,7 @@ post_manage(
 
     grayout(0, b_lines, GRAYOUT_DARK);
 
-    switch (re = popupmenu_ans2(menu, "板主管理", 3, 20))
+    switch (re = popupmenu_ans2(menu, "板主管理", (b_lines >> 1) - 8, (d_cols >> 1) + 20))
     {
         case 't':
             return post_brdtitle(xo);
@@ -4516,9 +4516,8 @@ xpost_head(
     if (*xypostKeyword)
         outs(xypostKeyword);
 
-    outs("\n"); //r2.20181219: this part may need to be refined
-    outs(
-            "\x1b[30;47m  編號   日 期  作  者       文  章  標  題                                   \x1b[m");
+    //r2.20181219: this part may need to be refined
+    prints(NECK_XPOST, d_cols, "");
 
     /* return xpost_body(xo); */
     return post_body(xo); /* Thor.980911: 共用即可 */

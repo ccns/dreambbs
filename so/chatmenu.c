@@ -23,9 +23,9 @@ int num,
 ChatAction *chat)
 {
     if (!mode)
-        prints("%6d %-9s %-6s %-54.54s\n", num, chat->verb, chat->chinese, chat->part1_msg);
+        prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->chinese, d_cols + 54, d_cols + 54, chat->part1_msg);
     else
-        prints("%6d %-9s %-6s %-54.54s\n", num, chat->verb, chat->chinese, chat->part2_msg);
+        prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->chinese, d_cols + 54, d_cols + 54, chat->part2_msg);
 }
 
 static int

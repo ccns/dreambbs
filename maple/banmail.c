@@ -33,8 +33,8 @@ static void banmail_item(int num, BANMAIL * ban)
             (ban->mode & FW_CANCEL) ? '1' : '0');
 
     now = ((ban->time - time(0) + BANMAIL_EXPIRE * 86400) / 3600);
-    prints("%6d  %6d %6d %s  %-48.48s\n", num, ban->usage, now < 0 ? 0 : now,
-           modes, ban->data);
+    prints("%6d  %6d %6d %s  %-*.*s\n", num, ban->usage, now < 0 ? 0 : now,
+           modes, d_cols + 48, d_cols + 48, ban->data);
 }
 
 static int banmail_body(XO * xo)
@@ -232,27 +232,17 @@ static int banmail_help(XO * xo)
 
 
 KeyFunc banmail_cb[] = {
-    {XO_INIT, banmail_init}
-    ,
-    {XO_LOAD, banmail_load}
-    ,
-    {XO_HEAD, banmail_head}
-    ,
-    {XO_BODY, banmail_body}
-    ,
+    {XO_INIT, banmail_init},
+    {XO_LOAD, banmail_load},
+    {XO_HEAD, banmail_head},
+    {XO_BODY, banmail_body},
 
-    {Ctrl('P'), banmail_add}
-    ,
-    {'S', banmail_sync}
-    ,
-    {'r', banmail_change}
-    ,
-    {'c', banmail_change}
-    ,
-    {'s', banmail_init}
-    ,
-    {'d', banmail_delete}
-    ,
+    {Ctrl('P'), banmail_add},
+    {'S', banmail_sync},
+    {'r', banmail_change},
+    {'c', banmail_change},
+    {'s', banmail_init},
+    {'d', banmail_delete},
     {'h', banmail_help}
 };
 

@@ -45,7 +45,7 @@ xo_new(
 
     len = strlen(path) + 1;
 
-    xo = (XO *) malloc(sizeof(XO) + len);
+    xo = (XO *) malloc(SIZEOF_FLEX(XO, len));
 
     memcpy(xo->dir, path, len);
 
@@ -1974,7 +1974,7 @@ every_Z_Orig(void)
 #ifdef M3_USE_PFTERM
     screen_backup_t old_screen = {0};
 #else
-    screenline sl[b_lines + 1];
+    screenline sl[2];
 #endif
 
 #ifdef M3_USE_PFTERM
@@ -2053,7 +2053,7 @@ every_Z_Orig(void)
         xover(cmd);
 }
 
-#ifdef TEST_Z_FAV
+#ifdef HAVE_FAVORITE
 static int
 Every_Z_Favorite(void)
 {
@@ -2113,13 +2113,11 @@ Every_Z_BMW(void)
     return 0;
 }
 
-#ifndef M3_USE_PFTERM
 extern int Every_Z_Screen(void);
-#endif
 
 static MENU menu_everyz[] =
 {
-#if   defined(HAVE_FAVORITE) && defined(TEST_Z_FAV)
+#ifdef HAVE_FAVORITE
     {Every_Z_Favorite, PERM_VALID, POPUP_FUN,
     "Favorite 我的最愛"},
 #endif
@@ -2142,10 +2140,8 @@ static MENU menu_everyz[] =
     {Every_Z_BMW, 0, POPUP_FUN,
     "Bmw      熱訊紀錄"},
 
-#ifndef M3_USE_PFTERM
     {Every_Z_Screen, 0, POPUP_FUN,
     "Screen   螢幕擷取"},
-#endif
 
     {NULL, 0, POPUP_QUIT,
     "Quit     離開"},
@@ -2161,7 +2157,7 @@ every_Z(void)
 #ifdef M3_USE_PFTERM
     screen_backup_t old_screen = {0};
 #else
-    screenline sl[b_lines + 1];
+    screenline sl[T_LINES];
 #endif
     int tmpbno;
     XZ xy;
@@ -2201,7 +2197,7 @@ every_Z(void)
     if ( cuser.ufo2 & UFO2_ORIGUI)
         every_Z_Orig();
     else
-        popupmenu(menu_everyz, NULL, 7, 20);
+        popupmenu(menu_everyz, NULL, (b_lines >> 1) - 4, (d_cols >> 1) + 20);
 
     memcpy(&(xz[XZ_OTHER - XO_ZONE]), &xy, sizeof(XZ));
 

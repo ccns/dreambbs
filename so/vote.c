@@ -38,9 +38,9 @@ typedef struct
 } LOG;
 
 static int
-TchoiceCompare(struct Tchoice * i, struct Tchoice * j)
+TchoiceCompare(const void * i, const void * j)
 {
-    return j->count - i->count;
+    return ((struct Tchoice *)j)->count - ((struct Tchoice *)i)->count;
 }
 
 
@@ -97,8 +97,8 @@ vote_item(
 int num,
 VCH *vch)
 {
-    prints("%6d %-9.8s%-12s %-48.48s\n",
-           num, vch->cdate, vch->owner, vch->title);
+    prints("%6d %-9.8s%-12s %-*.*s\n",
+           num, vch->cdate, vch->owner, d_cols + 48, d_cols + 48, vch->title);
 }
 
 
@@ -147,7 +147,7 @@ vote_head(
 XO *xo)
 {
     vs_head(currBM, "§ë²¼©Ò");
-    outs(NECKVOTE);
+    prints(NECKVOTE, d_cols, "");
     return vote_body(xo);
 }
 
@@ -731,7 +731,7 @@ XO *xo)
             vch->maxblt, total / sizeof(int), bollt);
 
     if (vch->vsort == 's')
-        qsort(choice, items, sizeof(struct Tchoice), (int (*)())TchoiceCompare);
+        qsort(choice, items, sizeof(struct Tchoice), (int (*)(const void *lhs, const void *rhs))TchoiceCompare);
 
     if (vch->vpercent == '%')
         fd = BMAX(1, total / sizeof(int));

@@ -52,7 +52,7 @@ favorite_parse(
             return CH_END;
         }
 
-        chx[1] = chp = (ClassHeader *) malloc(sizeof(ClassHeader) + count * sizeof(short));
+        chx[1] = chp = (ClassHeader *) malloc(SIZEOF_FLEX(ClassHeader, count));
 
         nop = (HDR *)malloc(count * sizeof(HDR));
         zap = (HDR *)malloc(count * sizeof(HDR));
@@ -188,7 +188,7 @@ favorite_sort(void)
     bhead = bp = bshm->bcache;
     btail = bp + max;
 
-    chp = (ClassHeader *) malloc(sizeof(ClassHeader) + max * sizeof(short));
+    chp = (ClassHeader *) malloc(SIZEOF_FLEX(ClassHeader, max));
 
     for (i = j = 0; i < max; i++, bp++)
     {

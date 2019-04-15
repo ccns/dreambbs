@@ -170,7 +170,7 @@ class_parse(
         }
 
         chx[chn++] = chp =
-            (ClassHeader *) malloc(sizeof(ClassHeader) + count * sizeof(short));
+            (ClassHeader *) malloc(SIZEOF_FLEX(ClassHeader, count));
         memset(chp->title, 0, CH_TTLEN);
         strcpy(chp->title, key);
 
@@ -243,7 +243,7 @@ class_sort(void)
     bhead = bp = bshm->bcache;
     btail = bp + max;
 
-    chp = (ClassHeader *) malloc(sizeof(ClassHeader) + max * sizeof(short));
+    chp = (ClassHeader *) malloc(SIZEOF_FLEX(ClassHeader, max));
 
     for (i = j = 0; i < max; i++, bp++)
     {

@@ -132,7 +132,7 @@ rec_del(char *data,
         pos = 0;
     }
 
-    /* 不對的話，重頭找起 */
+    /* 不對的話，從頭找起 */
 
     if (!pos)
     {
@@ -440,7 +440,7 @@ rec_put2(char *fpath, void *data, int size, int pos, int (*fchk) (const void *ob
         }
     }
 
-    /* 不對的話，重頭找起 */
+    /* 不對的話，從頭找起 */
 
     if (!pos)
     {
@@ -519,7 +519,7 @@ rec_ref(char *fpath,
         }
     }
 
-    /* 不對的話，重頭找起 */
+    /* 不對的話，從頭找起 */
 
     if (!pos)
     {

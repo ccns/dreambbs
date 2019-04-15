@@ -58,7 +58,7 @@ ll_add(
     int len;
 
     len = strlen(name) + 1;
-    node = (LinkList *) malloc(sizeof(LinkList) + len);
+    node = (LinkList *) malloc(SIZEOF_FLEX(LinkList, len));
     node->next = NULL;
     strcpy(node->data, name);
 
@@ -748,10 +748,10 @@ m_verify(void)
 /* mail routines                                         */
 /* ----------------------------------------------------- */
 
-static struct
+static union
 {
     XO mail_xo;
-    char dir[32];
+    char bytes[SIZEOF_FLEX(XO, 32)];
 }      cmbox;
 
 int
@@ -763,7 +763,7 @@ m_total_size(void)
     char *base, *folder, fpath[80];
     int changed;
 
-    if ((fd = open(folder = cmbox.dir, O_RDWR)) < 0)
+    if ((fd = open(folder = cmbox.mail_xo.dir, O_RDWR)) < 0)
         return 0;
 
     fsize = 0;
@@ -826,7 +826,7 @@ m_quota(void)
     HDR *head, *tail;
     char *base, *folder, date[9];
 
-    if ((fd = open(folder = cmbox.dir, O_RDWR)) < 0)
+    if ((fd = open(folder = cmbox.mail_xo.dir, O_RDWR)) < 0)
         return 0;
 
     ufo = 0;
@@ -1200,7 +1200,7 @@ m_count(void)
         return 1;
     }
 
-    if (stat(cmbox.dir, &st))
+    if (stat(cmbox.mail_xo.dir, &st))
         return 0;
 
     if (ulevel & (PERM_SYSOP | PERM_ACCOUNTS | PERM_MBOX))
@@ -1229,7 +1229,7 @@ mail_hold(
     if (vans("是否自存底稿(Y/N)？[N] ") != 'y')
         return;
 
-    folder = cmbox.dir;
+    folder = cmbox.mail_xo.dir;
     hdr_stamp(folder, HDR_LINK, &mhdr, fpath);
 
     mhdr.xmode = MAIL_READ | MAIL_HOLD /* | MAIL_NOREPLY */;
@@ -2134,7 +2134,7 @@ mbox_item(
         : xmode & MAIL_MARKED ? "%5d \x1b[1;36m%c\x1b[m"
         : "%5d %c", pos, mbox_attr(hdr->xmode));
 
-    hdr_outs(hdr, 47);
+    hdr_outs(hdr, d_cols + 47);
 }
 
 
@@ -2177,7 +2177,7 @@ mbox_head(
     clear_notification();
     vs_head("郵件選單", str_site);
 
-    outs(NECKMAIL);
+    prints(NECKMAIL, d_cols, "");
 
     return mbox_body(xo);
 }
@@ -2480,7 +2480,7 @@ static int
 mbox_sysop(
     XO *xo)
 {
-    if (/*(xo == (XO *) & cmbox) &&*/ (HAS_PERM(PERM_SYSOP)))
+    if (/*(xo == & cmbox.mail_xo) &&*/ (HAS_PERM(PERM_SYSOP)))
     {
         XO *xx;
 
@@ -2514,13 +2514,13 @@ mbox_other(
         //sprintf(path, "usr/%c/%s/.DIR", *id, id);
 
         usr_fpath(path, acct.userid, fn_dir);
-        usr_fpath(cmbox.dir, acct.userid, fn_dir);
+        usr_fpath(cmbox.mail_xo.dir, acct.userid, fn_dir);
 
         xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new(path);
         xover(XZ_MBOX);
         free(xx);
 
-        usr_fpath(cmbox.dir, cuser.userid, fn_dir);
+        usr_fpath(cmbox.mail_xo.dir, cuser.userid, fn_dir);
 
         xz[XZ_MBOX - XO_ZONE].xo = xo;
         mbox_init(xo);
@@ -2789,8 +2789,8 @@ void
 mbox_main(void)
 {
     cmbox.mail_xo.pos = XO_TAIL;
-    usr_fpath(cmbox.dir, cuser.userid, fn_dir);
-    xz[XZ_MBOX - XO_ZONE].xo = (XO *) &cmbox;
+    usr_fpath(cmbox.mail_xo.dir, cuser.userid, fn_dir);
+    xz[XZ_MBOX - XO_ZONE].xo = & cmbox.mail_xo;
     xz[XZ_MBOX - XO_ZONE].cb = mbox_cb;
 }
 

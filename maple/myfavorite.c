@@ -192,12 +192,12 @@ myfavorite_item(
 //注意有三格空白, 因為 HOT 是三個 char 故更改排版
 
             //sprintf(buf, "%d;3%d", brd->color/10, brd->color%10);
-            prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-33.32s%s%.13s\n", num, str,
-                brdtype, brd->brdname, buf, brd->class, brd->title, brd->bvote ? "\x1b[1;33m  投\x1b[m " : str2, brd->BM);
+            prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-*.*s%s%.13s\n", num, str,
+                brdtype, brd->brdname, buf, brd->class, d_cols + 33, d_cols + 32, brd->title, brd->bvote ? "\x1b[1;33m  投\x1b[m " : str2, brd->BM);
 
-            //prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-36.36s%c %.13s\n", num, str,
+            //prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-*.*s%c %.13s\n", num, str,
                 //bits[chn] & BRD_Z_BIT ? '-' : ' ', brd->brdname,
-                //buf, brd->class, brd->title, brd->bvote ? 'V' : ' ', brd->BM);
+                //buf, brd->class, d_cols + 36, d_cols + 36, brd->title, brd->bvote ? 'V' : ' ', brd->BM);
 
         }
     }
@@ -250,9 +250,8 @@ myfavorite_head(
     XO *xo)
 {
     vs_head("我的最愛", str_site);
-    prints("  [←]主選單 [→]閱\讀 [a]新增 [d]刪除 [c]篇數 [/]搜尋 [s]看板 [h]說明\n"
-        "\x1b[44m  %-7s看  板            %-33s人氣 板    主     \x1b[m",
-        cuser.ufo2 & UFO2_BRDNEW ? "總數" : "編號", "中   文   敘   述");
+    prints(NECK_MYFAVORITE,
+        cuser.ufo2 & UFO2_BRDNEW ? "總數" : "編號", d_cols + 33, "中   文   敘   述");
     return myfavorite_body(xo);
 }
 

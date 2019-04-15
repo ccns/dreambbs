@@ -764,8 +764,12 @@ out_rle(
     int cc, rl;
 
     if (film)
-        move(1, 0/*item_length[count++]*/);
+        y = 1;
         //move(3, 36+item_length[count++]);
+    else
+        getyx(&y, &x);
+
+    move(y, d_cols >> 1/*item_length[count++]*/);
     while ((cc = (unsigned char) *str))
     {
         str++;
@@ -777,12 +781,14 @@ out_rle(
 
             while (--rl >= 0)
             {
-                if (cc=='\n' && film)
+                if (cc=='\n')
                 {
-                    getyx(&y, &x);
-                    outs("\x1b[m\0");
-                    clrtoeol();
-                    move(y + 1, 0/*item_length[count++]*/);
+                    if (film)
+                    {
+                        outs("\x1b[m");
+                        clrtoeol();
+                    }
+                    move(++y, d_cols >> 1/*item_length[count++]*/);
                 }
                 else
                     outc(cc);
@@ -805,17 +811,25 @@ out_rle(
                 cc = (cuser.ufo2 & UFO2_SHOWUSER) ? ' ' : '%';
 #endif
         }
-        if (cc=='\n' && film)
+        if (cc=='\n')
         {
             getyx(&y, &x);
-            outs("\x1b[m\0");
-            clrtoeol();
-            move(y + 1, 0/*item_length[count++]*/);
+            if (film)
+            {
+                outs("\x1b[m");
+                clrtoeol();
+            }
+            move(++y, d_cols >> 1/*item_length[count++]*/);
 
         }
         else
             outc(cc);
     }
+#ifndef M3_USE_PFTERM
+    // XXX(IID.20190415): Workaround for broken visio `move()`.
+    //    Without the workaround, the next line after the film will be offset
+    clrtoeol();
+#endif
 /*  while (count>=0) item_length[count--]=0;*/
 }
 

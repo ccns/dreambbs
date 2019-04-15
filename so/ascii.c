@@ -116,7 +116,7 @@ input_tools(void)
             sprintf(tmp, "%d%s%s ", i, ".", show[page][i]);
             strcat(buf, tmp);
         }
-        strcat(buf, "(P:上  N:下)[Q]\0");
+        strcat(buf, "(P:上  N:下)[Q]");
         outz(buf);
         ch = vkey();
 

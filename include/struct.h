@@ -9,6 +9,8 @@
 #ifndef STRUCT_H
 #define STRUCT_H
 
+#include "cppdef.h"
+
 /* screen control */
 
 #define STRLEN          80             /* Length of most string data */
@@ -607,8 +609,9 @@ typedef struct
 {
     int count;
     char title[CH_TTLEN];
-    short chno[0];
+    short chno[FLEX_SIZE];
 } ClassHeader;
+#define ClassHeader_FLEX_MEMBER    chno
 
 
 /* ----------------------------------------------------- */
@@ -743,8 +746,9 @@ typedef struct screenline
 typedef struct LinkList
 {
     struct LinkList *next;
-    char data[0];
+    char data[FLEX_SIZE];
 } LinkList;
+#define LinkList_FLEX_MEMBER    data
 
 
 /* ----------------------------------------------------- */
@@ -760,8 +764,10 @@ typedef struct OverView
     int key;                    /* key */
     char *xyz;                  /* staff */
     struct OverView *nxt;       /* next */
-    char dir[0];                /* data path */
+    char dir[FLEX_SIZE];        /* data path */
 } XO;
+#define OverView_FLEX_MEMBER    dir
+#define XO_FLEX_MEMBER          dir
 
 
 typedef struct

@@ -15,13 +15,15 @@
 #include <stdlib.h>
 #include <string.h>
 #include "splay.h"
+#include "cppdef.h"
 
 
 typedef struct
 {
     int domain;
-    char text[0];
+    char text[FLEX_SIZE];
 } AclText;
+#define AclText_FLEX_MEMBER    text
 
 
 static int
@@ -105,7 +107,7 @@ acl_sort(
 
         len = str - buf;
 
-        at = (AclText *) malloc(sizeof(AclText) + len + 2);
+        at = (AclText *) malloc(SIZEOF_FLEX(AclText, len + 2));
         at->domain = domain;
         at->text[0] = '\0';
         strcpy(at->text + 1, buf);

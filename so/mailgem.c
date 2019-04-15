@@ -49,7 +49,7 @@ HDR *ghdr)
 
     gtype = HAS_PERM(PERM_SYSOP) ? mailgem_way : 0;
 
-    prints("%-46.45s%-13s%s\n", ghdr->title,
+    prints("%-*.*s%-13s%s\n", d_cols + 46, d_cols + 45, ghdr->title,
            (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
 }
 
@@ -111,12 +111,9 @@ XO *xo)
 
     sprintf(buf, "(剪貼版 %d 篇)\n", MailGemBufferNum);
 
-//  outs("  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [F]轉寄 [Z]下載 [h]說明 ");
-    outs("  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明 "); /*r2.20170802: disable "Z" option
-                                    in case of confusion*/
+    outs(NECK_MAILGEM1);
     outs(buf);
-    outs("\x1b[44m"
-        "  編號     主              題                           [編      選] [日  期]\x1b[m");
+    prints(NECK_MAILGEM2, d_cols, "");
     return mailgem_body(xo);
 }
 
@@ -976,7 +973,7 @@ XO *xo)
 {
     char fpath[128];
     usr_fpath(fpath, cuser.userid, "gem/.GEM");
-    XoMailGem(fpath, "我的精華區資源回收統");
+    XoMailGem(fpath, "我的精華區資源回收筒");
     return XO_INIT;
 }
 

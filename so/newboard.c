@@ -128,11 +128,11 @@ int num,
 NBRD *nbrd)
 {
     if (nbrd->mode & NBRD_NBRD)
-        prints("%6d %c %-5s %-13s %-13s:%-22.22s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, nbrd->brdname, nbrd->title);
+        prints("%6d %c %-5s %-13s %-13s:%-*.*s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, nbrd->brdname, d_cols + 22, d_cols + 22, nbrd->title);
     else if (nbrd->mode & NBRD_CANCEL)
         prints("%6d %c %-5s %-13s 廢除 %s 版版主\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, nbrd->brdname);
     else
-        prints("%6d %c %-5s %-13s %-36.36s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, nbrd->title);
+        prints("%6d %c %-5s %-13s %-*.*s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, d_cols + 36, d_cols + 36, nbrd->title);
 }
 
 
@@ -182,9 +182,7 @@ XO *xo)
 {
     clear();
     vs_head("連署系統", NULL);
-    outs(
-        "  [←]離開 [→]閱\讀 [^P]發表 [d]刪除 [j]加入連署 [TAB]精華區 [h]elp\n"
-        "\x1b[44m  編號   日 期 舉辦人        看  版  標  題                                   \x1b[m");
+    prints(NECK_NBRD, d_cols, "");
     return nbrd_body(xo);
 }
 

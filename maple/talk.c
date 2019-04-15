@@ -722,9 +722,7 @@ pal_head(
     XO *xo)
 {
     vs_head("好友名單", str_site);
-    outs(
-        "  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [/?]搜尋 [q]查詢 [h]elp\n"
-        "\x1b[30;47m  編號    代 號         友       誼                                           \x1b[m");
+    prints(NECK_PAL, d_cols, "");
     return pal_body(xo);
 }
 
@@ -1030,21 +1028,21 @@ bmw_item(
     {
         if (bmw->sender == cuser.userno)
         {
-            /* lkchu.990206: 好友廣撥 */
+            /* lkchu.990206: 好友廣播 */
             if (!(*bmw->userid))
                 strcpy(bmw->userid, "眾家好友");
 
-            prints("%5d %02d:%02d %-13s☆%-50.50s\n", num, ptime->tm_hour, ptime->tm_min,
-                bmw->userid, bmw->msg);
+            prints("%5d %02d:%02d %-13s☆%-*.*s\n", num, ptime->tm_hour, ptime->tm_min,
+                bmw->userid, d_cols + 50, d_cols + 50, bmw->msg);
         }
         else
         {
             if (strstr(bmw->msg, "★廣播"))
-                prints("%5d \x1b[36;1m%02d:%02d %-13s★%-50.50s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
-                    bmw->userid, (bmw->msg)+8);
+                prints("%5d \x1b[36;1m%02d:%02d %-13s★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
+                    bmw->userid, d_cols + 50, d_cols + 50, (bmw->msg)+8);
             else
-                prints("%5d \x1b[32m%02d:%02d %-13s★%-50.50s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
-                    bmw->userid, bmw->msg);
+                prints("%5d \x1b[32m%02d:%02d %-13s★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
+                    bmw->userid, d_cols + 50, d_cols + 50, bmw->msg);
         }
     }
     else
@@ -1054,16 +1052,16 @@ bmw_item(
             if (!(*bmw->userid))
                 strcpy(bmw->userid, "眾家好友");
 
-            prints("%5d %-13s☆%-57.57s\n", num, bmw->userid, bmw->msg);
+            prints("%5d %-13s☆%-*.*s\n", num, bmw->userid, d_cols + 57, d_cols + 57, bmw->msg);
         }
         else
         {
             if (strstr(bmw->msg, "★廣播"))
-                prints("%5d \x1b[36;1m%-13s★%-57.57s\x1b[m\n", num,
-                    bmw->userid, (bmw->msg)+8);
+                prints("%5d \x1b[36;1m%-13s★%-*.*s\x1b[m\n", num,
+                    bmw->userid, d_cols + 57, d_cols + 57, (bmw->msg)+8);
             else
-                prints("%5d \x1b[32m%-13s★%-57.57s\x1b[m\n", num,
-                    bmw->userid, bmw->msg);
+                prints("%5d \x1b[32m%-13s★%-*.*s\x1b[m\n", num,
+                    bmw->userid, d_cols + 57, d_cols + 57, bmw->msg);
         }
     }
 }
@@ -1107,15 +1105,11 @@ bmw_head(
     vs_head("查看訊息", str_site);
     if (bmw_modetype & BMW_MODE)
     {
-        outs(
-            "  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n"
-            "\x1b[30;47m  編號 代 號        內       容                                               \x1b[m");
+        prints(NECK_BMW, d_cols, "");
     }
     else
     {
-        outs(
-            "  [←]離開  [d]刪除  [m]寄信  [w]快訊  [s]更新  [→]查詢  [h]elp\n"
-            "\x1b[30;47m  編號 時 間 代 號        內       容                                         \x1b[m");
+        prints(NECK_BMWTIME, d_cols, "");
     }
     return bmw_body(xo);
 }
@@ -1653,7 +1647,7 @@ bmw_send(
     *mhead = *bmw;
     ushm->mbase = mslot[i] = mhead;
     /* Thor.981206: 需注意, 若ushm mapping不同,
-                    則不同隻 bbsd 互call會core dump,
+                    則不同支 bbsd 互call會core dump,
                     除非這也用offset, 不過除了 -i, 應該是非必要 */
 
 
@@ -1725,7 +1719,7 @@ bmw_edit(
             strcpy(bmw->userid, up->userid);
             /* lkchu.990103: 若是自己送出的 bmw, 存對方的 userid */
         else
-            *bmw->userid = '\0';        /* lkchu.990206: 好友廣撥設為 NULL */
+            *bmw->userid = '\0';        /* lkchu.990206: 好友廣播設為 NULL */
 
         time(&bmw->btime);
         usr_fpath(fpath, userid, FN_BMW);
@@ -1845,8 +1839,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
     {
         move(b_lines - 1, 0);
         clrtoeol();
-//      outs("\x1b[34;46m 熱訊回應 \x1b[31;47m (←)\x1b[30m離開 \x1b[31m(↑↓→)\x1b[30m瀏覽 \x1b[31m(Enter)\x1b[30m選擇線上使用者扣應 \x1b[31m(其他)\x1b[30m回應 \x1b[m");
-        outs("\x1b[34;46m 熱訊回應 \x1b[31;47m (← Enter)\x1b[30m離開 \x1b[31m(↑↓→)\x1b[30m瀏覽 \x1b[31m(其他)\x1b[30m回應 \x1b[m");
+        prints(FOOTER_BMW_REPLY, d_cols, "");
     }
 
     cc = KEY_NONE;
@@ -2600,37 +2593,31 @@ talk_speak(
 
     utmp_mode(M_TALK);
 
-    ch = 58 - strlen(page_requestor);
+    ch = 59 + d_cols - strlen(page_requestor);
 
     sprintf(buf, "%s【%s", cuser.userid, cuser.username);
 
     i = ch - strlen(buf);
-    if (i >= 0)
-    {
-        i = (i >> 1) + 1;
-    }
-    else
+    if (i < 0)
     {
         buf[ch] = '\0';
-        i = 1;
+        i = 0;
     }
-    memset(data, ' ', i);
-    data[i] = '\0';
 
     memset(&mywin, 0, sizeof(mywin));
     memset(&itswin, 0, sizeof(itswin));
 
-    i = b_lines >> 1;
-    mywin.eline = i - 1;
-    itswin.curln = itswin.sline = i + 1;
+    ch = b_lines >> 1;
+    mywin.eline = ch - 1;
+    itswin.curln = itswin.sline = ch + 1;
     itswin.eline = b_lines - 1;
 
     clear();
-    move(i, 0);
-    prints("\x1b[1;46;37m  談天說地  \x1b[45m%s%s】 ◆  %s%s\x1b[m",
-        data, buf, page_requestor, data);
+    move(ch, 0);
+    prints("\x1b[1;46;37m  談天說地  \x1b[45m%*s%s】 ◆  %s%*s\x1b[m",
+        i>>1, "", buf, page_requestor, (i+1)>>1, "");
 #if 1
-    outz("\x1b[34;46m 交談模式 \x1b[31;47m (^A)\x1b[30m對奕模式 \x1b[31m(^B)\x1b[30m象棋模式 \x1b[31m(^C, ^D)\x1b[30m結束交談 \x1b[31m(^Z)\x1b[30m快捷列表 \x1b[31m(^G)\x1b[30m嗶嗶 \x1b[m");
+    outf(FOOTER_TALK);
 #endif
     move(0, 0);
 
@@ -3137,7 +3124,7 @@ ulist_body(
     UTMP *up;
     int paltmp;
     int n, cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor, colortmp;
-    char buf[8], color[20], ship[80], *wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
+    char buf[16], color[20], ship[80], *wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 
 #ifdef HAVE_BOARD_PAL
     int isbpal;
@@ -3167,7 +3154,10 @@ ulist_body(
             if ((userno = up->userno) && (up->userid[0]) && !((up->ufo & UFO_CLOAK) && !HAS_PERM(PERM_SEECLOAK) && (up->userno != cuser.userno)) )
             {
                 if ((diff = up->idle_time))
-                    sprintf(buf, "%2d", diff);
+                    if (diff <= 9999)
+                        sprintf(buf, "%4d", diff);
+                    else
+                        sprintf(buf, "\x1b[1;31m9999\x1b[m");
                 else
                     buf[0] = '\0';
 
@@ -3213,10 +3203,10 @@ ulist_body(
 
                 strcpy(color, wcolor[fcolor]);
 
-                prints("%5d%c%s%-13s%-22.21s%s%-16.15s%c%c %-16.16s%s",
+                prints("%5d%c%s%-13s%-*.*s%s%-16.15s%c%c %-14.14s%s",
                     cnt, (up->ufo & UFO_WEB)?'*':' ',
                     color, up->userid,
-                    (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
+                    d_cols + 22, d_cols + 21,(HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
                     colortmp > 0 ? "\x1b[m" : "",
                     (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
                     HIDDEN_SRC : up->from, diff, diffmsg,
@@ -3431,16 +3421,16 @@ ulist_neck(
 {
     move(1, 0);
 #ifdef HAVE_BOARD_PAL
-    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d \x1b[0;36m板友：%d\x1b[m\n"
-        "\x1b[30;47m No.  代號         %-22s%-13s   PM %-14s閒置\x1b[m",
-        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num, board_pals,
-        (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
+    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d \x1b[0;36m板友：%d\x1b[m",
+        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num, board_pals);
+    prints(NECK_ULIST,
+        d_cols + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
         (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
 #else
-    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\x1b[m\n"
-        "\x1b[30;47m No.  代號         %-22s%-13s   PM %-14s閒置 \x1b[m",
-        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num,
-        (HAS_PERM(PERM_SYSOP) && (cuser.ufo & UFO_REALNAME)) ? "真實姓名" : "暱  稱",
+    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\x1b[m",
+        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num);
+    prints(NECK_ULIST,
+        d_cols + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo & UFO_REALNAME)) ? "真實姓名" : "暱  稱",
         (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
 #endif
 
@@ -4713,9 +4703,7 @@ banmsg_head(
     XO *xo)
 {
     vs_head("拒收名單", str_site);
-    outs(
-        "  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [q]查詢 [h]elp\n"
-        "\x1b[30;47m  編號    代 號         描       述                                           \x1b[m");
+    prints(NECK_BANMSG, d_cols, "");
     return banmsg_body(xo);
 }
 
