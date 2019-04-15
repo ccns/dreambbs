@@ -1,4 +1,4 @@
-void
+static inline void
 clrchyiuan(
 int i, int j)
 {
@@ -10,7 +10,7 @@ int i, int j)
     }
 }
 
-int
+static inline int
 show_file(char *filename, int y, int lines, int mode)
 {
     FILE *fp;
@@ -29,14 +29,14 @@ show_file(char *filename, int y, int lines, int mode)
     return 1;
 }
 
-void
+static inline void
 usercomplete(
 char *msg, char *buf)
 {
     vget(1, 0, msg, buf, IDLEN + 1, GET_USER);
 }
 
-char *
+static inline char *
 Cdate(
 time_t *chrono)
 {
