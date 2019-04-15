@@ -10,17 +10,42 @@ int i, int j)
     }
 }
 
+static inline void
+outs_centered(char *str)
+{
+    prints("%*s", d_cols>>1, "");
+    outs(str);
+}
+
+static inline void
+prints_centered(char *fmt, ...)
+{
+    va_list args;
+    char buf[512], *str;
+    int cc;
+
+    prints("%*s", d_cols>>1, "");
+
+    va_start(args, fmt);
+    vsprintf(buf, fmt, args);
+    va_end(args);
+    for (str = buf; (cc = (unsigned char) *str); str++)
+        outc(cc);
+}
+
 static inline int
 show_file(char *filename, int y, int lines, int mode)
 {
     FILE *fp;
     char buf[256];
     clrchyiuan(y, y + lines);
-    move(y, 0);
+    move(y, d_cols>>1);
     if ((fp = fopen(filename, "r")))
     {
-        while (fgets(buf, 256, fp) && lines--)
+        while (fgets(buf, 256, fp) && lines--) {
+            move(++y, d_cols>>1);
             outs(buf);
+        }
         fclose(fp);
     }
     else
