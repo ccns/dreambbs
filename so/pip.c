@@ -7252,7 +7252,7 @@ pip_meet_vs_man(void)
 
     move(b_lines - 1, 0);
     prints("\x1b[1;44;37m 區域 \x1b[46m[1]炎之洞窟  [2]北方冰原  [3]古代遺跡  [4]人工島  [5]地獄之門           %*s\x1b[m\n", d_cols, "");
-    prints("\x1b[1;44;37m 區域 \x1b[46m                                                                %*s[Q]回家 \x1b[m", d_cols, "");
+    prints("\x1b[1;44;37m 選單 \x1b[46m                                                                %*s[Q]回家 \x1b[m", d_cols, "");
     while (1)
     {
         char buf[128];
