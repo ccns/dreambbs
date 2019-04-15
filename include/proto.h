@@ -231,7 +231,6 @@ void run_ruby(char *fpath);
 
 /* visio.c */
 void bell(void);
-void clrtohol(void);
 #ifdef M3_USE_PFTERM
 void ochar(int ch);
 void outl(int line, char *msg);
