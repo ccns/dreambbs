@@ -855,15 +855,6 @@ outs(
 
 #endif // #ifdef M3_USE_PFTERM
 
-/* r2.20190129: TODO: let this function deprecated and find better alternative ways in the future version */
-void
-clrtohol(void)
-{
-    int n;
-    for (n=cur_col; n<36; n++) /* 36是我的動態看板起始位置, 自己調整 */
-        outc(' ');
-}
-
 /* ----------------------------------------------------- */
 /* eXtended output: 秀出 user 的 name 和 nick            */
 /* ----------------------------------------------------- */

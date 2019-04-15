@@ -244,9 +244,6 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
             prints("(\x1b[1;36m%2d\x1b[m) %s", n, desc);
 
 
-            if (n < 21)
-                clrtohol();
-
             if (mode == M_XFILES)
             {
                 if (n < 21)
