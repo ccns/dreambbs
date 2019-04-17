@@ -486,27 +486,6 @@ static MENU menu_song[];
 /* ----------------------------------------------------- */
 static MENU menu_admin[];
 
-static MENU menu_load[] =
-{
-    {BINARY_PREFIX"adminutil.so:top", PERM_SYSOP, - M_XMODE,
-    "Top        絬 Load"},
-
-    {BINARY_PREFIX"adminutil.so:psaux", PERM_SYSOP, - M_XMODE,
-    "Ps         絬磅︽祘Α"},
-
-    {BINARY_PREFIX"adminutil.so:dmesg", PERM_SYSOP, - M_XMODE,
-    "Dmesg      ╰参癟"},
-
-    {BINARY_PREFIX"adminutil.so:df", PERM_SYSOP, - M_XMODE,
-    "FileSys    合盒╰参"},
-
-    {x_sysload, PERM_ADMIN, M_SYSTEM,
-    "Load       ╰参璽更"},
-
-    {menu_admin, PERM_MENU + 'T', M_ADMIN,
-    "╰参璽更"}
-};
-
 static MENU menu_boardadm[] =
 {
     {m_newbrd, PERM_BOARD, M_SYSTEM,
@@ -603,9 +582,6 @@ static MENU menu_settingadm[] =
 /* ----------------------------------------------------- */
 static MENU menu_reset[] =
 {
-    {menu_load, PERM_ADMIN, M_ADMIN,
-    "Load       ╰参璽更"},
-
     {BINARY_PREFIX"adminutil.so:reset1", PERM_BOARD, - M_XMODE,
     "Camera     笆篈狾"},
 

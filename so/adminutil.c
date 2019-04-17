@@ -784,39 +784,6 @@ m_xfile(void)
 }
 
 int
-psaux(void)
-{
-    system("ps -aux > tmp/psaux");
-    more("tmp/psaux", NULL);
-    return 0;
-}
-
-int
-df(void)
-{
-    system("df -i > tmp/df");
-    more("tmp/df", NULL);
-    return 0;
-}
-
-int
-dmesg(void)
-{
-    system("dmesg > tmp/dmesg");
-    more("tmp/dmesg", NULL);
-    return 0;
-}
-
-int
-top(void)
-{
-    system("top -bn 1 > tmp/top");
-    more("tmp/top", NULL);
-    return 0;
-}
-
-
-int
 m_xhlp(void)
 {
     static char *desc[] =
