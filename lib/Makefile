@@ -22,9 +22,7 @@ OBJ	= acl.o       chrono32.o  file.o    isnot.o    radix32.o   shm.o   \
 
 .c.o:   ;$(CC) $(CFLAGS) -c $*.c
 
-
 all:	libdao.a
-
 
 dao.p:	$(SRC)
 	$(CPROTO) $> | sed '/querybuf/d' > dao.p

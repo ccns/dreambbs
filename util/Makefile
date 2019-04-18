@@ -24,8 +24,7 @@ EXE	= account acl-sort camera expire gem-check gem-index makeUSR \
 	  msgall transacct showACCT showBRD \
 	  backup brdmail addpost
 
-all:
-	@$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
+all: $(EXE)
 
 msgall: msgall.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)

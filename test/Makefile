@@ -18,8 +18,7 @@ SRCROOT	= ..
 
 EXE	= lib_str_decode lib_str_pat lib_str_xor lib_xsort lib_splay testsize
 
-all:
-	@$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
+all: $(EXE)
 
 lib_str_decode: lib_str_decode.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
@@ -47,4 +46,3 @@ sizetest:
 
 clean:
 	rm -fr $(EXE) *.o *.bak *.BAK *.log *~
-

@@ -28,8 +28,6 @@ SO	= chat.so vote.so xyz.so guessnum.so \
 	  classtable2.so observe.so pip.so brdstat.so personal.so \
 	  cleanrecommend.so shop.so bank.so innbbs.so contact.so
 
-EXE	= so
-
 .SUFFIXES: .o .c .ln .x .so
 
 .c.o:	;   $(CC) $(MAKEFLAG) $(CFLAGS) -c $*.c
@@ -46,12 +44,9 @@ EXE	= so
 .o.so:  ;   ld -G $*.o -o $*.so -L../lib -ldao -lc
 .endif #ARCHI
 
-all:
-	@$(MAKE) CC=$(CC) CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
+all: $(SO)
 
-so: $(SO)
-
-install: $(EXE)
+install: $(SO)
 	install -m 0700 $(SO) $(BBSHOME)/bin$(BBSVER)
 
 clean: /tmp

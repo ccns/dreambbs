@@ -50,8 +50,7 @@ EXE	= bbsd xchatd
 
 .c.o:	; $(CC) $(CFLAGS) -c $*.c
 
-all:
-	@$(MAKE) CC=$(CC) CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
+all: $(EXE)
 
 xchatd: xchatd.o
 	$(CC) -o $@ $? $(LDFLAGS)

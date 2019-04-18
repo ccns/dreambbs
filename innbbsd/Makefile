@@ -16,8 +16,7 @@ LNKOBJS	= bbslink.o bbslib.o convcode.o inntobbs.o rec_article.o nocem.o history
 
 EXE	= innbbsd bbslink
 
-all:
-	@$(MAKE) CC="$(CC)" CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
+all: $(EXE)
 
 bbslink: $(LNKOBJS)
 	$(CC) -o bbslink $(LNKOBJS) $(OPT) $(LDFLAGS)
@@ -27,9 +26,6 @@ innbbsd: $(INNOBJS)
 
 install: $(EXE)
 	install -m 0700 $? $(BBSHOME)/innd
-
-update:
-	-csh -c "kill `tail -1 $(BBSHOME)/run/innbbsd.pid | awk '{print $$1}'`"; exit 0
 
 clean:
 	rm -f $(EXE) *.o *~
