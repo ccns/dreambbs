@@ -47,7 +47,7 @@ void
 printint(void *a)
 {
     intnode *A = a;
-    printf("%d\n", A->i);
+    printf("%d ", A->i);
 }
 
 int main(int argc, char *argv[])
@@ -63,5 +63,6 @@ int main(int argc, char *argv[])
         top = splay_in(top, I, compareint);
     }
     splay_out(top, printint);
+    printf("\n");
     return 0;
 }
