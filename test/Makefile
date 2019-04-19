@@ -47,7 +47,7 @@ lib_f_mv: lib_f_mv.o
 testsize: testsize.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
-test: noargtest scripttest sizetest
+runtest: noargtest scripttest sizetest
 
 noargtest:
 	@printf "\n"; for i in $(LIBSTR) $(LIBOTHER); do ./$$i && printf "\033[1;32m$$i test done!\033[0m\n" || ( printf "\033[1;31m$$i test failed!\n\033[0m" && exit 1 ); done

@@ -32,8 +32,11 @@ njob:
 .endif
 	@cd test; $(MAKE) -j$(NPROC) all
 
+runtest:
+	@cd test; $(MAKE) runtest
+
 install:
-	@cd test; $(MAKE) test
+	@cd test; $(MAKE) runtest
 	@cd maple; $(MAKE) install
 	@cd innbbsd; $(MAKE) install
 	@cd util; $(MAKE) install
