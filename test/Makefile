@@ -16,7 +16,13 @@ SRCROOT	= ..
 
 .c.o:	; $(CC) $(MAKEFLAG) $(CFLAGS) -g -c $*.c
 
-EXE	= lib_str_decode lib_str_pat lib_str_xor lib_xsort lib_splay testsize
+LIBSTR	= lib_str_decode lib_str_pat lib_str_xor
+
+LIBFILE	= lib_f_mv
+
+LIBOTHER= lib_xsort lib_splay
+
+EXE	= $(LIBSTR) $(LIBFILE) $(LIBOTHER)
 
 all: $(EXE)
 
@@ -35,11 +41,19 @@ lib_xsort: lib_xsort.o
 lib_splay: lib_splay.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
+lib_f_mv: lib_f_mv.o
+	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
+
 testsize: testsize.o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
 
-test:
-	@printf "\n"; for i in $(EXE); do ./$$i && printf "\033[1;32m$$i test done!\033[0m\n" || ( printf "\033[1;31m$$i test failed!\n\033[0m" && exit 1 ); done
+test: noargtest scripttest sizetest
+
+noargtest:
+	@printf "\n"; for i in $(LIBSTR) $(LIBOTHER); do ./$$i && printf "\033[1;32m$$i test done!\033[0m\n" || ( printf "\033[1;31m$$i test failed!\n\033[0m" && exit 1 ); done
+
+scripttest:
+	@printf "\n\033[1;33mrunning testing script...\033[0m\n"; sh testscript.sh
 
 sizetest:
 	@printf "\n"; ./testsize && printf "\033[1;32msize test done!\033[0m\n" || ( printf "\033[1;31msize test failed!\n\033[0m" && exit 1 )

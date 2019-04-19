@@ -45,6 +45,7 @@ test/lib_str_pat
 test/lib_str_xor
 test/lib_xsort
 test/testsize
+test/lib_f_mv
 
 util/account
 util/acl-sort
