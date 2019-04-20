@@ -790,7 +790,7 @@ myfavorite_main(void)
         char old[80], new[80], cmd[128];
         usr_fpath(old, cuser.userid, FN_FAVORITE);
         usr_fpath(new, cuser.userid, FN_MYFAVORITE);
-        sprintf(cmd, "cp %s %s", old, new);
+        f_cp(old,new,0600);
         system(cmd);
     }
 
