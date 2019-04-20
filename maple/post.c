@@ -1899,7 +1899,7 @@ post_delete(
         //    return 0;
         if (by_BM/* && bbstate & BRD_NOTRAN*/&& (bbstate & STAT_BOARD) && !strstr(fhdr->owner, ".") && !strstr(fhdr->lastrecommend, "$") && !(fhdr->xmode & POST_BOTTOM))
         {
-            char folder[128], buf[80], cmd[64];
+            char folder[128], buf[80], deleted_notify[64];
             ACCT tmp;
 
             usr_fpath(folder, fhdr->owner, fn_dir);
@@ -1931,11 +1931,9 @@ post_delete(
 
                     if (dashf(fpath))
                     {
-                        sprintf(cmd, "cp %s run/deleted.%s", fpath, cuser.userid);
-                        system(cmd);
-                        sprintf(cmd, "run/deleted.%s", cuser.userid);
-                        f_suck(fp, cmd);
-                        unlink(cmd);
+                        sprintf(deleted_notify, "run/deleted.%s", cuser.userid);
+                        f_cp(fpath, deleted_notify, 0600);
+                        f_suck(fp, deleted_notify);
                     }
                     fclose(fp);
                 }
