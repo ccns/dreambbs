@@ -20,7 +20,7 @@ LIBSTR	= lib_str_decode lib_str_pat lib_str_xor
 
 LIBFILE	= lib_f_mv lib_f_cp
 
-LIBOTHER= lib_xsort lib_splay
+LIBOTHER= lib_xsort lib_splay testsize
 
 EXE	= $(LIBSTR) $(LIBFILE) $(LIBOTHER)
 
