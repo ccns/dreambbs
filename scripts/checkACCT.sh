@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 declare -i a
 declare -i b
 cd /home/bbs/run || exit 1
