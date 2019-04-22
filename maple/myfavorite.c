@@ -787,11 +787,10 @@ myfavorite_main(void)
     usr_fpath(fpath, cuser.userid, "MF");
     if (!mkdir(fpath, 0700))
     {
-        char old[80], new[80], cmd[128];
+        char old[80], new[80];
         usr_fpath(old, cuser.userid, FN_FAVORITE);
         usr_fpath(new, cuser.userid, FN_MYFAVORITE);
         f_cp(old,new,0600);
-        system(cmd);
     }
 
     usr_fpath(fpath, cuser.userid, FN_MYFAVORITE);

@@ -2945,7 +2945,7 @@ int m_trace(void)
             else
             {
                 report("closed report log");
-                system("/bin/mv trace trace.old");
+                f_mv("trace","trace.old");
                 msg = "BBS   tracing disabled; log is in trace.old";
             }
             break;
@@ -2959,7 +2959,7 @@ int m_trace(void)
             }
             else
             {
-                system("/bin/mv trace.chatd trace.chatd.old");
+                f_mv("trace.chatd","trace.chatd.old");
                 msg = "Chat  tracing disabled; log is in trace.chatd.old";
                 report("chatd trace log closed");
             }
@@ -2974,7 +2974,7 @@ int m_trace(void)
             }
             else
             {
-                system("/bin/mv trace.bvote trace.bvote.old");
+                f_mv("trace.bvote","trace.bvote.old");
                 msg = "BVote tracing disabled; log is in trace.bvote.old";
                 report("BoardVote trace log closed");
             }

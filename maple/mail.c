@@ -1309,8 +1309,8 @@ m_setmboxdir(void)
 
         chdir(fpath1);
         system(fpath2);
-        system(fpath3);
-        chdir("/home/bbs");
+        f_mv(".DIR.@",".DIR");
+        chdir(BBSHOME);
 
         pmsg2("重建完成");
         return 0;

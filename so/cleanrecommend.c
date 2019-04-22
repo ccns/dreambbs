@@ -397,8 +397,7 @@ clean(
 
     if (dashf(tmp))
     {
-        sprintf(buf, "mv %s %s", tmp, fpath);
-        system(buf);
+        f_mv(tmp,fpath);
     }
 
     if ((fd = open(xo->dir, O_RDWR, 0600)) == -1)
