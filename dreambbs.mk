@@ -31,7 +31,7 @@ CPROTO	= cproto -E"clang -pipe -E" -I$(SRCROOT)/include
 
 CFLAGS	= -ggdb3 -O0 -pipe -fomit-frame-pointer -Wall -Wunreachable-code-aggressive -Wno-invalid-source-encoding -I$(SRCROOT)/include
 
-LDFLAGS	= -L../lib -ldao -lcrypt
+LDFLAGS	= -L$(SRCROOT)/lib -ldao -lcrypt
 
 .if $(ARCHI)=="64"
 CFLAGS	+= -m32

@@ -70,6 +70,6 @@ install: $(EXE)
 clean:
 	rm -rf $(OBJ) $(EXE) $(LNFILES)  *~ *.o *.so *.p tags
 
-tags: $(SRC) ../include/*.h ../lib/*.c
+tags: $(SRC) $(SRCROOT)/include/*.h $(SRCROOT)/lib/*.c
 	exctags $(SRC) $(SRCROOT)/include/*.h $(SRCROOT)/lib/*.c
 
