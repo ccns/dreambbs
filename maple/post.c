@@ -1934,6 +1934,7 @@ post_delete(
                         sprintf(deleted_notify, "run/deleted.%s", cuser.userid);
                         f_cp(fpath, deleted_notify, 0600);
                         f_suck(fp, deleted_notify);
+                        unlink(deleted_notify);
                     }
                     fclose(fp);
                 }
