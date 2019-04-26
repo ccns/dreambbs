@@ -1040,7 +1040,7 @@ main(void)
     }
     else if (ntime.tm_hour == 1)
     {
-        sprintf(date, "[%2d 月 %2d 日] ", ptime.tm_mon + 1, ptime.tm_mday);
+        sprintf(date, "[%02d 月 %02d 日] ", ptime.tm_mon + 1, ptime.tm_mday);
 
         sprintf(title, "[記錄] %s使用者編號紀錄", date);
         system(BINARY_PREFIX"userno");
