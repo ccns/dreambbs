@@ -72,5 +72,5 @@
     * logind port test (2-BSD)
     * wsproxy port test
 - other improvement from other M3 version
-    * screen resizing feature
+    * ~screen resizing feature~
 - Static Web Page Recovering
