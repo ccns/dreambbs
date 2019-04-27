@@ -26,7 +26,7 @@
         - `v0.96.2`: detail fixes based on `v0.96.1`
         - It is going to be End-Of-Life after `v0.97.1` released.
 
-    + `v0.97`: Version 0.97, codename `stratosphere` 
+    + `v0.97`: Version 0.97, codename `stratosphere` ( **End-Of-Life** )
         - `v0.97-RCx`~`v0.97.0`: pre-release
         - `v0.97.1`: detail fixes based on `v0.97.0`
         - `v0.97.2`: detail fixes based on `v0.97.1` 
