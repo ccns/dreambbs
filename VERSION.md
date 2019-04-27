@@ -39,14 +39,13 @@
           * ~`v1.0-alpha1`~,~`v1.0-alpha2`~,~`v1.0-alpha3`~,~`v1.0-beta1`~, ~`v1.0-RC1`~, ~`v1.0-RC2`~, ~`v1.0-RC3`~
     + `v1.0`: Version 1.0, codename `rimuru` ( **Latest Release Branch** )
         - features:
-          * port `pfterm` in this release version
-          * internal code refine or re-struct
-          * others: see https://github.com/ccns/dreambbs/releases/tag/v1.0.0
-    + `v2.0`: Version 2.0, codename `milim`
+          * ~~port `pfterm` in this release version~~
+          * others: see https://github.com/ccns/dreambbs/releases/tag/v1.1.0
+    + `v2.0`: Version 2.0
         - features in plan:
-          * applying resizing term feature
+          * ~~applying resizing term feature~~
           * Set workaround option for disabling DSO
-          * test BBSLua/Ruby
+          * test BBSLua/BBSRuby
     + `v3.0 ~`: Version 3.0 or later
         - features in plan:
           * test simple websocket patch for Maple3
