@@ -4,6 +4,8 @@ ARCHI	!= getconf LONG_BIT
 
 OPSYS	!= uname -o
 
+CLANG_MODERN != if [ $$(clang --version 2>/dev/null | grep version 2>/dev/null | sed "s/.*version \([0-9]*\).*/\1/") -ge 6 ]; then echo 1; fi
+
 BUILDTIME	!= date '+%s'
 
 BBSHOME	?= $(HOME)
@@ -29,7 +31,7 @@ RANLIB	= ranlib
 
 CPROTO	= cproto -E"clang -pipe -E" -I$(SRCROOT)/include
 
-CFLAGS	= -ggdb3 -O0 -pipe -fomit-frame-pointer -Wall -Wunreachable-code-aggressive -Wno-invalid-source-encoding -I$(SRCROOT)/include
+CFLAGS	= -ggdb3 -O0 -pipe -fomit-frame-pointer -Wall -Wno-invalid-source-encoding -I$(SRCROOT)/include
 
 LDFLAGS	= -L$(SRCROOT)/lib -ldao -lcrypt
 
@@ -46,6 +48,11 @@ LDFLAGS	+= -lresolv -ldl -rdynamic
 LDFLAGS	+= -Wl,-export-dynamic
 .endif
 
+.if $(CLANG_MODERN) == "1"
+CFLAGS  += -Wunreachable-code-aggressive
+.else
+CFLAGS  += -Wunreachable-code
+.endif
 
 # BBS-Lua & BBS-Ruby make rule definitions
 
