@@ -4,7 +4,7 @@ ARCHI	!= getconf LONG_BIT
 
 OPSYS	!= uname -o
 
-CLANG_MODERN != if [ $$(clang --version 2>/dev/null | grep version 2>/dev/null | sed "s/.*version \([0-9]*\).*/\1/") -ge 6 ]; then echo 1; fi
+CLANG_MODERN != if [ $$(echo '__clang_major__' | clang -E - | tail -1) -ge 6 ]; then echo 1; fi
 
 BUILDTIME	!= date '+%s'
 
