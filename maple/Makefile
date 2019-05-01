@@ -68,7 +68,7 @@ install: $(EXE)
 	ln -sv $(BBSHOME)/bin$(BBSVER)/bbsd.$(BUILDTIME) $(BBSHOME)/bin$(BBSVER)/bbsd
 
 clean:
-	rm -rf $(OBJ) $(EXE) $(LNFILES)  *~ *.o *.so *.p tags
+	rm -rf $(OBJ) $(EXE) *~ *.o *.so *.p tags
 
 tags: $(SRC) $(SRCROOT)/include/*.h $(SRCROOT)/lib/*.c
 	exctags $(SRC) $(SRCROOT)/include/*.h $(SRCROOT)/lib/*.c

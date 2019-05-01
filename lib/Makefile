@@ -32,7 +32,7 @@ libdao.a: $(OBJ)
 	$(RANLIB) $@
 
 clean:
-	rm -fr $(GARBAGE) $(OBJ) *.a *.bak *.BAK *~ *.p tags
+	rm -fr $(OBJ) *.a *.bak *.BAK *~ *.p tags
 
 tags:
 	ctags $(SRC) $(SRCROOT)/include/*.h
