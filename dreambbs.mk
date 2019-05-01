@@ -1,57 +1,80 @@
 ## Common BSD make rules for DreamBBS Project
 
-ARCHI	!= getconf LONG_BIT
-
-OPSYS	!= uname -o
-
-CLANG_MODERN != if [ $$(echo '__clang_major__' | clang -E - | tail -1) -ge 6 ]; then echo 1; fi
-
-BUILDTIME	!= date '+%s'
-
-BBSHOME	?= $(HOME)
-
-## BBS Release Version Prefix
-BBSCONF_ORIGIN		:= $(SRCROOT)/include/config.h
-BBSVER != grep BBSVER_PREFIX ${BBSCONF_ORIGIN} | awk 'NR==1 {printf $$3}'
-
-# rules ref: PttBBS: mbbsd/Makefile
-BBSCONF		:= $(SRCROOT)/dreambbs.conf
-DEF_PATTERN	:= ^[ \t]*\#[ \t]*define[ \t]*
-DEF_CMD		:= grep -Ew "${DEF_PATTERN}"
-DEF_YES		:= && echo "YES" || echo ""
-USE_PMORE	!= sh -c '${DEF_CMD}"M3_USE_PMORE" ${BBSCONF} ${DEF_YES}'
-USE_PFTERM	!= sh -c '${DEF_CMD}"M3_USE_PFTERM" ${BBSCONF} ${DEF_YES}'
-USE_BBSLUA	!= sh -c '${DEF_CMD}"M3_USE_BBSLUA" ${BBSCONF} ${DEF_YES}'
-USE_BBSRUBY	!= sh -c '${DEF_CMD}"M3_USE_BBSRUBY" ${BBSCONF} ${DEF_YES}'
-USE_LUAJIT	!= sh -c '${DEF_CMD}"BBSLUA_USE_LUAJIT" ${BBSCONF} ${DEF_YES}'
+## Toolchain settings
 
 CC	= clang
 
 RANLIB	= ranlib
 
-CPROTO	= cproto -E"clang -pipe -E" -I$(SRCROOT)/include
+CPROTO	= cproto -E"$(CC) -pipe -E" -I$$(SRCROOT)/include
 
-CFLAGS	= -ggdb3 -O0 -pipe -fomit-frame-pointer -Wall -Wno-invalid-source-encoding -I$(SRCROOT)/include
 
-LDFLAGS	= -L$(SRCROOT)/lib -ldao -lcrypt
+.ifndef DREAMBBS_MK
+DREAMBBS_MK	:= 1
+
+REALSRCROOT	?= $(SRCROOT)
+
+ARCHI	!= getconf LONG_BIT
+
+OPSYS	!= uname -o
+
+BUILDTIME	!= date '+%s'
+
+BBSHOME	?= $(HOME)
+
+## To be expanded
+
+CFLAGS_WARN	= -Wall
+CFLAGS_MK	= -ggdb3 -O0 -pipe -fomit-frame-pointer $(CFLAGS_WARN) -I$$(SRCROOT)/include $(CFLAGS_ARCHI) $(CFLAGS_COMPAT)
+
+LDFLAGS_MK = -L$$(SRCROOT)/lib -ldao -lcrypt $(LDFLAGS_ARCHI)
+
+
+## Tool functions
+## Called with $(function$(para1::=arg1)$(para2::=arg2)...)
+UNQUOTE = S/^"//:S/"$$//
+VALUEIF = "\#ifdef $(conf)$(.newline)$(conf:M*)$(.newline)\#else$(.newline)$(default:M*)$(.newline)\#endif"
+GETCONFS = echo "" | $(CC) -x c -dM -E -P $(hdr:@v@-imacros "$v"@) -
+GETVALUE = echo $(VALUEIF$(conf::= $(conf:M*:$(UNQUOTE)))$(default::= $(default:M*))) | $(CC) -x c -E -P $(hdr:@v@-imacros "$v"@) -
+
+## BBS Release Version Prefix
+BBSCONF_ORIGIN		:= $(REALSRCROOT)/include/config.h
+BBSVER != ${GETVALUE${conf::= "BBSVER_PREFIX"}${default::= ""}${hdr::= ${BBSCONF_ORIGIN}}}
+
+# rules ref: PttBBS: mbbsd/Makefile
+BBSCONF		:= $(REALSRCROOT)/dreambbs.conf
+DEF_LIST	!= sh -c '${GETCONFS${hdr::= ${BBSCONF}}}'
+DEF_TEST	 = [ ${DEF_LIST:M${conf:M*:S/"//g:N"}} ]  # Balance the quotes
+DEF_YES		:= && echo "YES" || echo ""
+USE_PMORE	!= sh -c '${DEF_TEST${conf::= "M3_USE_PMORE"}} ${DEF_YES}'
+USE_PFTERM	!= sh -c '${DEF_TEST${conf::= "M3_USE_PFTERM"}} ${DEF_YES}'
+USE_BBSLUA	!= sh -c '${DEF_TEST${conf::= "M3_USE_BBSLUA"}} ${DEF_YES}'
+USE_BBSRUBY	!= sh -c '${DEF_TEST${conf::= "M3_USE_BBSRUBY"}} ${DEF_YES}'
+USE_LUAJIT	!= sh -c '${DEF_TEST${conf::= "BBSLUA_USE_LUAJIT"}} ${DEF_YES}'
+
+CLANG_MODERN != [ $$(${GETVALUE${conf::= "__clang_major__"}${default::= 0}${hdr::=}}) -ge 6 ] ${DEF_YES}
+
+.if $(CC) == "clang"
+CFLAGS_WARN	+= -Wno-invalid-source-encoding
+.endif
 
 .if $(ARCHI)=="64"
-CFLAGS	+= -m32
-LDFLAGS	+= -m32
+CFLAGS_ARCHI	+= -m32
+LDFLAGS_ARCHI	+= -m32
 .endif
 
 .if $(OPSYS) == "GNU/Linux"
-LDFLAGS	+= -lresolv -ldl -rdynamic
+LDFLAGS_ARCHI	+= -lresolv -ldl -rdynamic
 .endif
 
 .if $(OPSYS) == "FreeBSD"
-LDFLAGS	+= -Wl,-export-dynamic
+LDFLAGS_ARCHI	+= -Wl,-export-dynamic
 .endif
 
-.if ($(CLANG_MODERN) == "1") && ($(CC) == clang)
-CFLAGS  += -Wunreachable-code-aggressive
+.if $(CLANG_MODERN)
+CFLAGS_COMPAT  += -Wunreachable-code-aggressive
 .else
-CFLAGS  += -Wunreachable-code
+CFLAGS_COMPAT  += -Wunreachable-code
 .endif
 
 # BBS-Lua & BBS-Ruby make rule definitions
@@ -86,4 +109,14 @@ LUA_LDFLAGS	!= pkg-config --libs ${LUA_PKG_NAME}
 
 RUBY_CFLAGS	!= pkg-config --cflags ruby-2.2 ${RUBY_CFLAGS_CMD}
 RUBY_LDFLAGS	!= pkg-config --libs ruby-2.2
+.endif
+
+.endif  # .ifndef DREAMBBS_MK
+
+
+## Expand `SRCROOT`
+.ifdef SRCROOT
+CPROTO	:= $(CPROTO)
+CFLAGS	:= $(CFLAGS_MK)
+LDFLAGS	:= $(LDFLAGS_MK)
 .endif

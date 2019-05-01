@@ -9,6 +9,10 @@
 OPSYS	!= uname -o
 NPROC	!= nproc
 
+REALSRCROOT	:= .
+.include "$(REALSRCROOT)/dreambbs.mk"
+.export
+
 # some directories need to be compiled:
 # lib innbbsd maple so util test
 
