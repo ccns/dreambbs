@@ -17,42 +17,42 @@ REALSRCROOT	:= .
 # lib innbbsd maple so util test
 
 all:
-	@cd lib; $(MAKE) all
-	@cd maple; $(MAKE) all
-	@cd util; $(MAKE) all
-	@cd innbbsd; $(MAKE) all
+	@(cd lib; $(MAKE) all)
+	@(cd maple; $(MAKE) all)
+	@(cd util; $(MAKE) all)
+	@(cd innbbsd; $(MAKE) all)
 .if $(OPSYS) != "Cygwin"
-	@cd so; $(MAKE) all
+	@(cd so; $(MAKE) all)
 .endif
-	@cd test; $(MAKE) all
+	@(cd test; $(MAKE) all)
 
 njob:
-	@cd lib; $(MAKE) -j$(NPROC) all
-	@cd maple; $(MAKE) -j$(NPROC) all
-	@cd util; $(MAKE) -j$(NPROC) all
-	@cd innbbsd; $(MAKE) -j$(NPROC) all
+	@(cd lib; $(MAKE) -j$(NPROC) all)
+	@(cd maple; $(MAKE) -j$(NPROC) all)
+	@(cd util; $(MAKE) -j$(NPROC) all)
+	@(cd innbbsd; $(MAKE) -j$(NPROC) all)
 .if $(OPSYS) != "Cygwin"
-	@cd so; $(MAKE) -j$(NPROC) all
+	@(cd so; $(MAKE) -j$(NPROC) all)
 .endif
-	@cd test; $(MAKE) -j$(NPROC) all
+	@(cd test; $(MAKE) -j$(NPROC) all)
 
 runtest:
-	@cd test; $(MAKE) runtest
+	@(cd test; $(MAKE) runtest)
 
 install:
-	@cd test; $(MAKE) runtest
-	@cd maple; $(MAKE) install
-	@cd innbbsd; $(MAKE) install
-	@cd util; $(MAKE) install
+	@(cd test; $(MAKE) runtest)
+	@(cd maple; $(MAKE) install)
+	@(cd innbbsd; $(MAKE) install)
+	@(cd util; $(MAKE) install)
 .if $(OPSYS) != "Cygwin"
-	@cd so; $(MAKE) install
+	@(cd so; $(MAKE) install)
 .endif
-	@cd scripts; $(MAKE) install
+	@(cd scripts; $(MAKE) install)
 
 clean:
-	@cd lib; $(MAKE) clean
-	@cd test; $(MAKE) clean
-	@cd maple; $(MAKE) clean
-	@cd util; $(MAKE) clean
-	@cd innbbsd; $(MAKE) clean
-	@cd so; $(MAKE) clean
+	@(cd lib; $(MAKE) clean)
+	@(cd test; $(MAKE) clean)
+	@(cd maple; $(MAKE) clean)
+	@(cd util; $(MAKE) clean)
+	@(cd innbbsd; $(MAKE) clean)
+	@(cd so; $(MAKE) clean)
