@@ -12,14 +12,14 @@ SRCROOT	= ..
 
 .if $(USE_BBSLUA)
 CFLAGS	+= ${LUA_CFLAGS}
-LDFLAGS	+= ${LUA_LDFLAGS} ${LUA_LDFLAGS_ARCH}
+LDFLAGS	+= ${LUA_LDFLAGS} ${LUA_LDFLAGS_ARCHI}
 SRC	+= bbslua.c bbsluaext.c
 OBJ	+= bbslua.o bbsluaext.o
 .endif
 
 .if $(USE_BBSRUBY)
 CFLAGS	+= ${RUBY_CFLAGS}
-LDFLAGS	+= ${RUBY_LDFLAGS} ${RUBY_LDFLAGS_ARCH}
+LDFLAGS	+= ${RUBY_LDFLAGS} ${RUBY_LDFLAGS_ARCHI}
 SRC	+= bbsruby.c
 OBJ	+= bbsruby.o
 .endif
