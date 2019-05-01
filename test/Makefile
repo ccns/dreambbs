@@ -26,29 +26,10 @@ EXE	= $(LIBSTR) $(LIBFILE) $(LIBOTHER)
 
 all: $(EXE)
 
-lib_str_decode: lib_str_decode.o
+.for targets in $(EXE)
+$(targets): $(targets).o
 	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-lib_str_pat: lib_str_pat.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-lib_str_xor: lib_str_xor.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-lib_xsort: lib_xsort.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-lib_splay: lib_splay.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-lib_f_mv: lib_f_mv.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-lib_f_cp: lib_f_cp.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
-
-testsize: testsize.o
-	$(CC) $(MAKEFLAG) -o $@ $? $(LDFLAGS)
+.endfor
 
 runtest: noargtest scripttest
 
