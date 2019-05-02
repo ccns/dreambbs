@@ -550,12 +550,16 @@ read_vin(void)
     return total_len;
 }
 
+static void bl_double2tv(double d, struct timeval *tv);
+static double bl_tv2double(const struct timeval *tv);
+
 static int
 wait_input(float f, int bIgnoreBuf)
 {
     int sel = 0;
     fd_set readfds;
-    struct timeval tv, *ptv;
+    struct timeval tv, *ptv, torig, tsrc, tdest;
+    double ntv;
 
     if (!bIgnoreBuf && !vin_is_empty())
         return 1;
@@ -576,6 +580,7 @@ wait_input(float f, int bIgnoreBuf)
         tv.tv_sec = (time_t)f;
         tv.tv_usec = 1000000L * (f - (time_t)f);
         ptv = &tv;
+        torig = tv;
     }
     else
     {
@@ -583,10 +588,20 @@ wait_input(float f, int bIgnoreBuf)
     }
 
     do {
+        gettimeofday(&tsrc, NULL);
         sel = select(1, &readfds, NULL, NULL, ptv);
+        gettimeofday(&tdest, NULL);
 
-    // if select() stopped by other interrupt,
-    // do it again.
+        // if select() stopped by other interrupt,
+        // decrease tv and do it again.
+        if (ptv)
+        {
+            ntv = bl_tv2double(&torig) - (bl_tv2double(&tdest) - bl_tv2double(&tsrc));
+            if (ntv < 0)
+                sel = 0;
+            bl_double2tv(ntv, ptv);
+            torig = tv;
+        }
     } while (sel < 0 && errno == EINTR);
 
     // now, maybe something for read (sel > 0)
@@ -622,7 +637,7 @@ vkey_purge(void)
 #ifdef STATINC
     STATINC(STAT_SYSREADSOCKET);
 #endif
-    while (wait_input(0.01, 1) && max_try-- > 0)
+    while (wait_input(0, 0) && max_try-- > 0)
     {
         read_vin();
         vin_clear();
