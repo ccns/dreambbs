@@ -18,6 +18,8 @@
 #define BBSLUA_HAVE_STRLEN_NOANSI        // The BBS has `strlen_noansi()`
 //#define BBSLUA_VER_INFO_FILE             // The file with version information for BBS-Lua
 //#define BLSCONF_ENABLED                  // Enable `store.*` BBS-Lua API
+//#define BBSLUA_EXPOSED_VISIO_VI          // `vi_*` variables of visio input is exposed
+//#define BBSLUA_EXPOSED_VISIO_IDLE        // Idle handling of visio is exposed
 
 #include "bbs.h"
 #include <sys/time.h>
@@ -41,6 +43,8 @@
  #undef BBSLUA_HAVE_STRLEN_NOANSI
  #define BBSLUA_VER_INFO_FILE "bbs_script.h"
  #undef BLSCONF_ENABLED
+ #define BBSLUA_EXPOSED_VISIO_VI
+ #define BBSLUA_EXPOSED_VISIO_IDLE
 #endif //M3_USE_BBSLUA
 
 #ifdef PTT_USE_BBSLUA    // For compiling on PttBBS
@@ -59,6 +63,8 @@
  #define BBSLUA_HAVE_STRLEN_NOANSI
  #undef BBSLUA_VER_INFO_FILE
  #undef BLSCONF_ENABLED
+ #undef BBSLUA_EXPOSED_VISIO_VI
+ #undef BBSLUA_EXPOSED_VISIO_IDLE
 #endif //PTT_USE_BBSLUA
 
 /* Inferred settings */
@@ -81,6 +87,9 @@
 # include BBSLUA_VER_INFO_FILE
 #endif
 
+#if !defined(BBSLUA_HAVE_VKEY) && defined(BBSLUA_EXPOSED_VISIO_VI)
+# include <arpa/telnet.h>
+#endif
 //////////////////////////////////////////////////////////////////////////
 // pmore style ansi
 // #include "ansi.h"
@@ -369,186 +378,118 @@ newwin(int nlines, int ncols, int y, int x)
 // IID.20190124: If this BBS does not have the vkey input system,
 //                  give it a simplified one.
 
-#define IBUFSIZE  128
-#define VIN_CAPACITY  (int) (IBUFSIZE - 1)
-#define VIN_END  (char *) (vin + IBUFSIZE)
-static char vin[IBUFSIZE];
-static char *vin_head = vin;
-static char *vin_tail = vin;
-
-
-// IID.20190124: Override `vkey()`.
-#define vkey()  vkey_getch()
+#ifdef BBSLUA_EXPOSED_VISIO_VI
+// IID.20190502: Using visio internal variables.
+extern const int vi_max;
+extern unsigned char vi_pool[];
+extern int vi_size;
+extern int vi_head;
+#ifdef BBSLUA_EXPOSED_VISIO_IDLE
+extern int idle;
+#endif
 
 static int vin_is_empty(void)
 {
-    return vin_head == vin_tail;
+    return vi_head >= vi_size;
 }
 
-static int vin_size(void)
+static void vin_clear(void)
 {
-    return (vin_tail >= vin_head)
-        ? (vin_tail - vin_head)
-        : (VIN_CAPACITY - (vin_tail - vin_head));
-}
-
-static int vin_space(void)
-{
-    return VIN_CAPACITY - vin_size();
-}
-
-static int vin_pop(void)
-{
-    int peaked_char;
-
-    if (vin_is_empty())
-        return EOF;
-
-    peaked_char = (unsigned char) *vin_head;
-
-    if (++vin_head == VIN_END)
-        vin_head = vin;
-
-    return peaked_char;
-}
-
-static void vin_clear()
-{
-    vin_head = vin_tail = vin;
-}
-
-#undef  TRAP_ESC
-
-static int
-vkey_getch(void)  // `vkey()`, but tries `vin_pop()` before `igetch()`
-{
-    int mode;
-    int ch, last, last2;
-
-    mode = last = last2 = 0;
-    for (;;)
-    {
-        ch = vin_pop();
-
-        if (ch == EOF)
-            ch = igetch();
-
-#ifdef  TRAP_ESC
-        if (mode == 0)
-        {
-            if (ch == KEY_ESC)
-                mode = 1;
-            else
-                return ch;              /* Normal Key */
-        }
-#else
-        if (ch == KEY_ESC)
-            mode = 1;
-        else if (mode == 0)             /* Normal Key */
-        {
-            return ch;
-        }
-#endif
-        else if (mode == 1)
-        {                               /* Escape sequence */
-            if (ch == '[' || ch == 'O')
-                mode = 2;
-            else if (ch == '1' || ch == '4')
-                mode = 3;
-            else
-            {
-#ifdef  TRAP_ESC
-                return Meta(ch);
-#else
-                return ch;
-#endif
-            }
-        }
-        else if (mode == 2)
-        {
-            if (ch >= 'A' && ch <= 'D')      /* Cursor key */
-                return KEY_UP + (ch - 'A');
-            else if (last == 'O')
-            {
-                if (ch >= 'P' && ch <= 'S')  /* F1 - F4 */
-                    return KEY_F1 + (ch - 'P');
-                else
-                    return ch;
-            }
-            else if (ch == 'Z')              /* Shift-Tab */
-                return KEY_STAB;
-            else if (ch >= '1' && ch <= '6')
-                mode = 3;
-            else
-                return ch;
-        }
-        else if (mode == 3)
-        {                               /* Ins Del Home End PgUp PgDn */
-            if (ch == '~')
-                return KEY_HOME + (last - '1');
-            else if (last >= '1' && last <= '2')
-                mode = 4;
-            else
-                return ch;
-        }
-        else if (mode == 4)
-        {                               /* F1 - F12 */
-            if (ch == '~')
-            {
-                if (last2 == '1')       /* F1 - F8 */
-                    return KEY_F1 + (last - '1') - (last > '6');
-                else if (last2 == '2')  /* F9 - F12 */
-                    return KEY_F9 + (last - '0') - (last > '2');
-                else
-                    return ch;
-            }
-            else
-                return ch;
-        }
-        last2 = last;
-        last = ch;
-    }
+    vi_head = vi_size = 0;
 }
 
 // After reading `VIN_AFTER_HEAD_SIZE()` chars from `vin`,
-//    the next char cursor will be at `vin_tail`
-//    or at `VIN_END` depending on which condition comes first.
+//    the next char cursor will be at `vi_size`.
 #define VIN_AFTER_HEAD_SIZE()  \
-    ((vin_tail >= vin_head) ? vin_tail - vin_head : VIN_END - vin_head)
+    ((vi_size >= vi_head) ? vi_size - vi_head : 0)
 
 // After reading `VIN_AFTER_TAIL_SPACE()` chars into `vin`,
-//    the next char cursor will be one char before `vin_head` in the queue
-//    or at `VIN_END` depending on which condition comes first.
+//    the next char cursor will be at `vi_max`.
 #define VIN_AFTER_TAIL_SPACE()  \
-    ((vin_head == vin) ? VIN_END - 1 - vin_tail \
-      : (vin_head > vin_tail) ? vin_head - 1 - vin_tail : VIN_END - vin_tail)
+    (vi_max - vi_size)
 
+#else  // #ifdef BBSLUA_EXPOSED_VISIO_VI
+
+// IID.20190502: If `vi_pool` is not exposed, only peek un`recv()`ed data.
+//               This is not used to store inputs, but just to peek.
+#define IBUFSIZE  (128)
+static unsigned char peek_buf[IBUFSIZE];
+static int peek_size;
+
+#ifndef ADD_IO_DEFAULT_TIMEOUT
+#define ADD_IO_DEFAULT_TIMEOUT  60
+#endif
+
+// Try to empty `vl_pool`; may not be actually emptied
+// Use `vin_clear_fd()` beforehand to ensure a complete emptying
+static int vin_clear(void)
+{
+    int max_try = IBUFSIZE;
+    int no_break = 1;
+
+    while (max_try-- > 0)
+    {
+        int ch;
+        add_io(0, 0);
+        ch = vkey();
+        if (ch == Ctrl('C'))
+            no_break = 0;
+#ifdef I_TIMEOUT
+        else if (ch == I_TIMEOUT)
+            break;
+#endif
+    }
+    add_io(0, ADD_IO_DEFAULT_TIMEOUT);
+    return no_break;
+}
+
+#endif  // #ifdef BBSLUA_EXPOSED_VISIO_VI
+
+
+#ifdef BBSLUA_EXPOSED_VISIO_VI
 static int
 read_vin(void)
 {
     int total_len = 0;
     int len;
+    int iac_len;
 
-    while (vin_space() > 0) {
-        len = read(0, vin_tail, VIN_AFTER_TAIL_SPACE());
-
-        if (len == 0 || (len < 0 && !(errno == EINTR || errno == EAGAIN)))
-            abort_bbs();
-
-        if (len > 0) {
-            total_len += len;
-            vin_tail += len;
-            if (vin_tail == VIN_END) {
-                vin_tail = vin;
-                continue;
-            }
+    unsigned char *vi_tail = vi_pool + vi_size;
+    len = recv(0, vi_tail, VIN_AFTER_TAIL_SPACE(), MSG_DONTWAIT);
+    if (len > 0)
+    {
+        vi_size += len;
+        iac_len = (*vi_tail == IAC) ? iac_count(vi_tail) : 0;
+        if (iac_len >= len)
+        {
+            vi_size -= len;
+            return 0;
         }
+        vi_size -= iac_len;
 
-        break;
+        memmove(vi_tail, vi_tail + iac_len, iac_len);
+        total_len += len - iac_len;
+
+#ifdef BBSLUA_EXPOSED_VISIO_IDLE
+        if (idle && cutmp)
+        {
+
+            cutmp->idle_time = idle = 0;
+        }
+#ifdef  HAVE_SHOWNUMMSG
+        if (cutmp)
+            cutmp->num_msg = 0;
+#endif
+#endif  // #ifdef BBSLUA_EXPOSED_VISIO_IDLE
     }
+
+    if (len == 0 || (len < 0 && !(errno == EINTR || errno == EAGAIN)))
+        abort_bbs();
 
     return total_len;
 }
+#endif  // #ifdef BBSLUA_EXPOSED_VISIO_VI
+
 
 static void bl_double2tv(double d, struct timeval *tv);
 static double bl_tv2double(const struct timeval *tv);
@@ -561,8 +502,12 @@ wait_input(float f, int bIgnoreBuf)
     struct timeval tv, *ptv, torig, tsrc, tdest;
     double ntv;
 
+#ifdef BBSLUA_EXPOSED_VISIO_VI
     if (!bIgnoreBuf && !vin_is_empty())
         return 1;
+#else
+    (void)bIgnoreBuf;
+#endif
 
     // Check if something already in input queue,
     // determine if ok to break.
@@ -616,6 +561,21 @@ wait_input(float f, int bIgnoreBuf)
     return (sel == 0) ? 0 : 1;
 }
 
+static void
+vin_clear_fd(int fd)
+{
+    // An arbitrarily large buffer
+    unsigned char ignore_buf[4096];
+
+    while (wait_input(fd, 1))
+    {
+        int len = recv(fd, ignore_buf, sizeof(ignore_buf), MSG_DONTWAIT);
+
+        if (len == 0 || (len < 0 && !(errno == EINTR || errno == EAGAIN)))
+            break;
+    }
+}
+
 static int
 vkey_is_ready(void)
 {
@@ -625,23 +585,12 @@ vkey_is_ready(void)
 static int
 vkey_is_full(void)
 {
-    return vin_size() >= VIN_CAPACITY;
-}
-
-static void
-vkey_purge(void)
-{
-    int max_try = 64;
-    vin_clear();
-
-#ifdef STATINC
-    STATINC(STAT_SYSREADSOCKET);
+#ifdef BBSLUA_EXPOSED_VISIO_VI
+    return vi_size >= vi_max;
+#else
+    // No input buffer used; never be full
+    return 0;
 #endif
-    while (wait_input(0, 0) && max_try-- > 0)
-    {
-        read_vin();
-        vin_clear();
-    }
 }
 
 static int
@@ -657,23 +606,78 @@ vkey_prefetch(int timeout)
 {
     if (wait_input(timeout / (double)MILLISECONDS, 1)
             && !vkey_is_full())
+#ifdef BBSLUA_EXPOSED_VISIO_VI
         read_vin();
     return !vin_is_empty();
+#else
+    // Peek un`recv()`ed data.
+        peek_size = recv(0, peek_buf, IBUFSIZE, MSG_PEEK | MSG_DONTWAIT);
+    else
+        peek_size = 0;
+    return peek_size > 0;
+#endif
 }
 
 static int
 vkey_is_prefetched(char c)
 {
-    char *res;
+    unsigned char *res;
 
     if (c == EOF)
         return 0;
 
-    res = (char *) memchr(vin_head, c, VIN_AFTER_HEAD_SIZE());
-    if (!res && vin_head > vin_tail)
-        res = (char *) memchr(vin, c, vin_tail - vin);
+#ifdef BBSLUA_EXPOSED_VISIO_VI
+    res = (unsigned char *) memchr(vi_pool + vi_head, c, VIN_AFTER_HEAD_SIZE());
+    return res >= vi_pool + vi_head;
+#else
+    res = (unsigned char *) memchr(peek_buf, c, peek_size);
+    return res >= peek_buf;
+#endif
+}
 
-    return res >= vin;
+// IID.20190502: Return `0` if encounter `Ctrl-C` with `vkey()`; return `1` otherwise.
+static int
+vkey_purge(void)
+{
+#ifndef BBSLUA_EXPOSED_VISIO_VI
+    int no_break = 1;
+#else
+    // a magic number to set how much data we're going to process
+    // before a real purge (may contain telnet protocol)
+    int bytes_before_purge = 32;
+#endif
+
+#ifdef STATINC
+    STATINC(STAT_SYSREADSOCKET);
+#endif
+
+#ifdef BBSLUA_EXPOSED_VISIO_VI
+    // Process some of the remaining input bytes
+    vkey_prefetch(0);
+    while (wait_input(0, 0) && bytes_before_purge-- > 0)
+    {
+        int ch = vkey();
+#ifdef I_OTHERDATA
+        // we can't deal with I_OTHERDATA...
+        if (ch == I_OTHERDATA)
+            break;
+#endif
+    }
+    vin_clear_fd(0);
+    vin_clear();
+    return 1;
+
+#else  // #ifdef BBSLUA_EXPOSED_VISIO_VI
+
+    // Process some of the remaining input bytes
+    if (!vin_clear())
+        no_break = 0;
+
+    vin_clear_fd(0);
+    if (!vin_clear())
+        no_break = 0;
+    return no_break;
+#endif  // #ifdef BBSLUA_EXPOSED_VISIO_VI
 }
 
 #endif  // #ifndef BBSLUA_HAVE_VKEY
@@ -888,12 +892,21 @@ bl_peekbreak(float f)
     return 0;
 }
 
+#if KEY_UP > 0  /* Key values for special keys are negative on some BBSs */
+  #define IS_NORMAL_KEY(v) (v < 0x100)
+#else
+  #define IS_NORMAL_KEY(v) (v > 0 && v < 0x100)
+#endif
+
 static void
 bl_k2s(lua_State* L, int v)
 {
+#if IS_NORMAL_KEY(-1)  /* Negative key values are ignored */
     if (v <= 0)
         lua_pushnil(L);
-    else if (v == KEY_TAB)
+    else
+#endif
+    if (v == KEY_TAB)
         lua_pushstring(L, "TAB");
     else if (v == '\b' || v == 0x7F)
         lua_pushstring(L, "BS");
@@ -901,7 +914,7 @@ bl_k2s(lua_State* L, int v)
         lua_pushstring(L, "ENTER");
     else if (v < ' ')
         lua_pushfstring(L, "^%c", v-1+'A');
-    else if (v < 0x100)
+    else if (IS_NORMAL_KEY(v))
         lua_pushfstring(L, "%c", v);
 #ifdef KEY_F1
   #if KEY_F1 < KEY_F2
@@ -1200,7 +1213,17 @@ bl_kbreset(lua_State *L)
     if (bl_peekbreak(BLCONF_PEEK_TIME))
         return lua_yield(L, 0);
 
+#ifdef BBSLUA_EXPOSED_VISIO_VI
     vkey_purge();
+#else
+    // `recv()`ed bytes/keys have not being checked; check purged keys
+    if (!vkey_purge())
+    {
+        blrt.abort = 1;
+        return lua_yield(L, 0);
+    }
+#endif
+
     return 0;
 }
 
@@ -1273,11 +1296,34 @@ bl_kball(lua_State *L)
         i++;
     }
 #else
+#ifdef BBSLUA_EXPOSED_VISIO_VI
     while (i < LUA_MINSTACK && vkey_is_ready()) {
         bl_k2s(L, vkey());
         i++;
     }
+#else
+    while (i < LUA_MINSTACK)
+    {
+        int ch;
+        add_io(0, 0);
+        ch = vkey();
+        // Handle `Ctrl-C`s from `vi_pool`.
+        if (ch == BLCONF_BREAK_KEY)
+        {
+            vkey_purge();
+            blrt.abort = 1;
+            return lua_yield(L, 0);
+        }
+#ifdef I_TIMEOUT
+        if (ch == I_TIMEOUT)
+            break;
 #endif
+        bl_k2s(L, ch);
+        i++;
+    }
+    add_io(0, ADD_IO_DEFAULT_TIMEOUT);
+#endif  // #ifndef BBSLUA_EXPOSED_VISIO_VI
+#endif  // #ifdef _WIN32
 
     return i;
 }
