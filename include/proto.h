@@ -269,6 +269,7 @@ void vs_bar(const char *title);
 void grayout(int y, int end, int level);
 #endif  /* #ifndef M3_USE_PFTERM */
 void add_io(int fd, int timeout);
+int iac_count(unsigned char *current);
 int igetch(void);
 BRD *ask_board(char *board, int perm, const char *msg);
 int vget(int line, int col, const char *prompt, char *data, int max, int echo);

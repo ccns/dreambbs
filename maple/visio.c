@@ -1391,9 +1391,12 @@ grayout(int y, int end, int level)
 /* input routines                                        */
 /* ----------------------------------------------------- */
 
-static unsigned char vi_pool[VI_MAX];
-static int vi_size;
-static int vi_head;
+// IID.20190502: Exposed to BBS-Lua/BBS-Ruby.
+const int vi_max = VI_MAX;
+unsigned char vi_pool[VI_MAX];
+int vi_size;
+int vi_head;
+int idle;
 
 
 /* static int vio_fd; */
@@ -1417,7 +1420,7 @@ add_io(
 }
 
 
-static inline int
+int
 iac_count(
     unsigned char *current)
 {
@@ -1487,7 +1490,7 @@ igetch(void)
 #define IM_TALK         0x04
 
     static int imode = 0;
-    static int idle = 0;
+    extern int idle;
 
     int cc, fd=0, nfds, rset;
     unsigned char *data;
