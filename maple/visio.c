@@ -1421,6 +1421,9 @@ static inline int
 iac_count(
     unsigned char *current)
 {
+    unsigned char *const end = vi_pool + vi_size;
+    if (current + 1 >= end) { return 1; }
+
     switch (*(current + 1))
     {
     case DO:
@@ -1432,10 +1435,12 @@ iac_count(
     case SB:                    /* loop forever looking for the SE */
         {
             unsigned char *look = current + 2;
+            if (look >= end) { return look + 1 - current; }
 
             /* fuse.030518: 線上調整畫面大小，重抓 b_lines */
             if ((*look) == TELOPT_NAWS)
             {
+                if (look + 4 >= end) { return look + 4 - current; }
                 b_lines = ntohs(* (short *) (look + 3)) - 1;
                 b_cols = ntohs(* (short *) (look + 1)) - 1;
 
@@ -1453,13 +1458,15 @@ iac_count(
                 resizeterm(b_lines + 1, b_cols + 1);
 #endif
                 d_cols = b_cols - 79;
+
+                look += 5;
             }
 
             for (;;)
             {
-                if ((*look++) == IAC)
+                if (look >= end || (*look++) == IAC)
                 {
-                    if ((*look++) == SE)
+                    if (look >= end || (*look++) == SE)
                     {
                         return look - current;
                     }
@@ -1518,9 +1525,14 @@ igetch(void)
                     cc = recv(0, data, VI_MAX, 0);
                     if (cc > 0)
                     {
+                        vi_size += cc;
                         vi_head = (*data) == IAC ? iac_count(data) : 0;
                         if (vi_head >= cc)
+                        {
+                            vi_size -= cc;
                             continue;
+                        }
+
                         vi_size = cc;
 
                         if (idle && cutmp)
