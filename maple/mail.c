@@ -274,6 +274,7 @@ bsmtp(
     {
         int i;
         const char *alias[] = SMTP_SERVER, *str_alias;
+        sock = -1;
         for ( i=0; (str_alias = alias[i]); i++)
         {
             sock = dns_open(str_alias, 25);
@@ -2016,14 +2017,14 @@ hdr_outs(               /* print HDR's subject */
         {
             outc(' ');
         }
+
+        if (online != NULL)
+            outs("\x1b[m");
     }
     else
     {
         cc = 64;
     }
-
-    if (online != NULL)
-        outs("\x1b[m");
 
     title = str_ttl(mark = hdr->title);
     ch = title == mark;
@@ -2485,6 +2486,7 @@ mbox_sysop(
         XO *xx;
 
         xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new("usr/s/sysop/.DIR");
+        xx->pos = 0;
         xover(XZ_MBOX);
         free(xx);
 
@@ -2517,6 +2519,7 @@ mbox_other(
         usr_fpath(cmbox.mail_xo.dir, acct.userid, fn_dir);
 
         xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new(path);
+        xx->pos = 0;
         xover(XZ_MBOX);
         free(xx);
 

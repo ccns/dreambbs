@@ -5961,10 +5961,10 @@ int mode)
         data = d.social;
     else  // mode == 4
         data = d.family;
-    if (class > 1000) class = 1;
-    else if (class > 800) class = 2;
-    else if (class > 500) class = 3;
-    else if (class > 300) class = 4;
+    if (data > 1000) class = 1;
+    else if (data > 800) class = 2;
+    else if (data > 500) class = 3;
+    else if (data > 300) class = 4;
     else class = 5;
 
     data = pip_max_worktime(&num);
