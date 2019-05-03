@@ -1230,13 +1230,14 @@ class_body(
                 str = brd->blast > brd_visit[chn] ? "\x1b[1;31m★\x1b[m" : "☆";
 
                 char tmp[BTLEN + 1] = {0};
+                int e_cols = (d_cols + 32 > BTLEN) ? BTLEN - 32 : d_cols;
 
                 strcpy(tmp, brd->title);
-                if (tmp[d_cols + 31] & 0x80)
-//                  tmp[d_cols + 33] = '\0';
+                if (tmp[e_cols + 31] & 0x80)
+//                  tmp[e_cols + 33] = '\0';
 //              else
-                    tmp[d_cols + 31] = ' ';
-                    tmp[d_cols + 32] = '\0';
+                    tmp[e_cols + 31] = ' ';
+                    tmp[e_cols + 32] = '\0';
 
 /* 081122.cache:看板性質, 不訂閱, 秘密, 好友, 一般 */
                 if (bits[chn] & BRD_Z_BIT)
