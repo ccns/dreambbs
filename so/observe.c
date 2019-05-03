@@ -94,7 +94,7 @@ observe_sync(
 XO *xo)
 {
     char *fpath;
-    int fd, size = 0, total, userno;
+    int fd, size, total = 0, userno;
     struct stat st;
 
     fpath = xo->dir;
@@ -278,6 +278,7 @@ Observe_list(void)
     sprintf(fpath, FN_ETC_OBSERVE);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xz[XZ_OTHER - XO_ZONE].cb = observe_cb;
+    xo->pos = 0;
     xover(XZ_OTHER);
     observeshm_load();
     free(xo);

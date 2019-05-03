@@ -242,6 +242,7 @@ Contact(void)
     usr_fpath(fpath, cuser.userid, "contact");
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xz[XZ_OTHER - XO_ZONE].cb = contact_cb;
+    xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
     return 0;
