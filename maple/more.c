@@ -218,7 +218,7 @@ outs_line(                      /* 印出一般內容 */
     /* ※處理引用者 & 引言 */
 
     ch1 = str[0];
-    ch2 = str[1];
+    ch2 = (str[0]) ? str[1] : '\0';
 
     if (ch2 == ' ' && (ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2))       /* 引言 */
     {
