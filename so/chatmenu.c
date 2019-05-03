@@ -232,6 +232,7 @@ XO *xo)
     }
     free(xz[XZ_OTHER - XO_ZONE].xo);
     xz[XZ_OTHER - XO_ZONE].xo = xo_new(fpath);
+    xz[XZ_OTHER - XO_ZONE].xo->pos = 0;
     return XO_INIT;
 }
 
@@ -328,6 +329,7 @@ Chatmenu(void)
     kind = 0;
     xz[XZ_OTHER - XO_ZONE].xo = xx = xo_new(fpath);
     xz[XZ_OTHER - XO_ZONE].cb = chat_cb;
+    xx->pos = 0;
     xover(XZ_OTHER);
     free(xx);
     return 0;

@@ -208,6 +208,7 @@ XO *xo)
     usr_fpath(fpath, cuser.userid, buf);
     free(xo);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
+    xo->pos = 0;
     return XO_INIT;
 }
 
@@ -312,6 +313,7 @@ XO *xo)
     usr_fpath(fpath, cuser.userid, buf);
     free(xo);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
+    xo->pos = 0;
     return list_init(xo);
 }
 #endif
@@ -387,6 +389,7 @@ List(void)
     usr_fpath(fpath, cuser.userid, buf);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xz[XZ_OTHER - XO_ZONE].cb = list_cb;
+    xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
     return 0;

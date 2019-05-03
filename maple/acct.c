@@ -433,11 +433,13 @@ static void acct_su(ACCT * u)
     str_lower(id, u->userid);
     sprintf(path, "usr/%c/%s/.DIR", *id, id);
     xz[XZ_MBOX - XO_ZONE].xo = xo = xo_new(path);
+    xo->pos = 0;
     free(xo);
     sprintf(path, "usr/%c/%s/bmw", *id, id);
     //  xo = xz[XZ_BMW - XO_ZONE].xo;
     //  xz[XZ_BMW - XO_ZONE].xo =  xo_new(path);
     xz[XZ_BMW - XO_ZONE].xo = xo = xo_new(path);
+    xo->pos = 0;
     free(xo);
     pal_cache();
 }
