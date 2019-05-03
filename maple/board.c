@@ -129,8 +129,9 @@ brh_get(
             {
                 bcnt = item;
                 memcpy(buf, head + 3, size - 3 * sizeof(time_t));
+                tail = (int *) ((char *) tail - size);
                 if ((item = (char *) tail - (char *) head))
-                    memcpy(head, (char *) head + size, item - size);
+                    memcpy(head, (char *) head + size, item);
                 break;
             }
             head = (int *) ((char *) head + size);
