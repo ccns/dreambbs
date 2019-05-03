@@ -313,7 +313,7 @@ getdata_str(int line, int col, const char *prompt, char *buf, int len, int echo,
 #if defined(VGET_STRICT_DOECHO) || NOECHO != 0
     // IID.20190224: Unless setting other flags does not imply `DOECHO`,
     if (defaultstr && *defaultstr)
-#elif  // IID.20190125: `vget()` with `NOECHO` should not have default string.
+#else  // IID.20190125: `vget()` with `NOECHO` should not have default string.
     if (new_echo != NOECHO && defaultstr && *defaultstr)
 #endif
     {
