@@ -164,6 +164,8 @@ int p_pipple(void)
     /*pip_do_menu(0, 0, pipmainlist);*/
     if (d.death != 0 || !d.name[0])  return 0;
     pip_main_menu();
+    free(badmanlist);
+    badmanlist = NULL;
     d.bbtime += time(0) - start_time;
     pip_write_file();
     logit(d.money);
