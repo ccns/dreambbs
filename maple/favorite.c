@@ -52,6 +52,7 @@ favorite_parse(
             return CH_END;
         }
 
+        free(chx[1]);
         chx[1] = chp = (ClassHeader *) malloc(SIZEOF_FLEX(ClassHeader, count));
 
         nop = (HDR *)malloc(count * sizeof(HDR));
@@ -204,6 +205,7 @@ favorite_sort(void)
 
     memset(chp->title, 0, CH_TTLEN);
     strcpy(chp->title, "Boards");
+    free(chx[0]);
     chx[0] = chp;
 }
 
