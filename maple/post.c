@@ -1187,7 +1187,6 @@ post_cross(
                     f_suck(xfp, fpath);
                     /* ve_sign(xfp); */
                     fclose(xfp);
-                    close(method);
 
                     strcpy(xpost.owner, cuser.userid);
                     /* if (rc == 's') */
@@ -2440,7 +2439,6 @@ post_edit(
             fp = fdopen(fd, "w");
             f_suck(fp, fpath);
             fclose(fp);
-            close(fd);
 
             strcpy(phdr.owner, hdr->owner);
             strcpy(phdr.nick, hdr->nick);
@@ -2630,7 +2628,6 @@ int post_edit(XO *xo)
 
             f_suck(fp, fpath);
             fclose(fp);
-            close(fd);
             strcpy(phdr.owner, hdr->owner);
             strcpy(phdr.nick, hdr->nick);
             strcpy(phdr.title, hdr->title);

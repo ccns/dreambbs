@@ -375,7 +375,6 @@ XO *xo)
     fclose(fp);
 
     fclose(xfp);
-    close(method);
 
     acct_load(&acct, cuser.userid);
     acct.request -= 1;
@@ -475,7 +474,6 @@ XO *xo)
     rec_add(folder, &xhdr, sizeof(HDR));
 
     fclose(xfp);
-    close(method);
     cacct.request -= 1;
     if (cacct.request <= 0) cacct.request = 0;
     cuser.request = cacct.request;

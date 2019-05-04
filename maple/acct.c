@@ -112,7 +112,6 @@ void keeplog(const char *fnlog, const char *board, const char *title, int mode  
                 SYSOPNICK, title, ctime(&hdr.chrono));
         f_suck(fp, fnlog);
         fclose(fp);
-        close(fd);
         if (mode == 2)
             unlink(fnlog);
     }

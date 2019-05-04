@@ -50,7 +50,6 @@ new_passwd(void)
                 fprintf(fp, BOARDNAME "·s±K½X : %s\n", passwd);
 
                 fclose(fp);
-                close(fd);
 
                 bsmtp(Email, BOARDNAME "·s±K½X", acct.email, 0);
 

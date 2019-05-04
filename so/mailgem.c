@@ -941,7 +941,6 @@ XO *xo)
 
                 f_suck(xfp, fpath);
                 fclose(xfp);
-                close(method);
 
                 strcpy(xpost.owner, cuser.userid);
                 strcpy(xpost.nick, cuser.username);
