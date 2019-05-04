@@ -259,7 +259,7 @@
  // input/output API
  #define getdata(y, x, msg, buf, size, mode)     vget(y, x, msg, buf, size, mode)
  #define getdata_buf(y, x, msg, buf, size, mode) vget(y, x, msg, buf, size, GCARRY|mode)
- #define outs(x)                            outs((char*)(x))
+ // #define outs(x)                            outs((unsigned char*)(x))
  // variables
  #define t_lines    (b_lines + 1)
  #define t_columns  (b_cols + 1)
@@ -1385,8 +1385,8 @@ MFDISP_DBCS_HEADERWIDTH(int originalw)
         MFDISP_FORCEUPDATE2BOT(), 0 \
     ))
 
-static char *override_msg = NULL;
-static char *override_attr = NULL;
+static const char *override_msg = NULL;
+static const char *override_attr = NULL;
 
 #define RESET_OVERRIDE_MSG() (void) ( override_attr = override_msg = NULL )
 
@@ -3554,8 +3554,8 @@ mf_movieFrameHeader(unsigned char *p, unsigned char *end)
     // ANSI has ESC_STR [8m as "Conceal" but
     // not widely supported, even PieTTY.
     // So let's go back to fixed format...
-    static char *patHeader = "==" ESC_STR "[30;40m^L";
-    static char *patHeader2= ESC_STR "[30;40m^L"; // patHeader + 2; // "=="
+    static const char *patHeader = "==" ESC_STR "[30;40m^L";
+    static const char *patHeader2= ESC_STR "[30;40m^L"; // patHeader + 2; // "=="
     // static char *patHeader3= ESC_STR "[m^L";
     static size_t szPatHeader   = 12; // strlen(patHeader);
     static size_t szPatHeader2  = 10; // strlen(patHeader2);

@@ -16,7 +16,7 @@ static CLASS_TABLE2 tmp_table[78];
 static char fpath_classtable[80];
 
 
-int show_classtable(int x, int y, char *msg)
+int show_classtable(int x, int y, const char *msg)
 {
     y--;
     move(x + 3, 7 + y*12);

@@ -434,30 +434,30 @@ VAR char ipv4addr[15];                 /* MAX_LEN: strlen(aaa.bbb.ccc.ddd) => 15
 VAR int  chk_mailstat   INI(0);
 
 /* filename */
-VAR char *fn_dir        INI(FN_DIR);
+VAR const char *fn_dir          INI(FN_DIR);
 
 /* message */
-VAR char *msg_separator INI(MSG_SEPARATOR);
+VAR const char *msg_separator   INI(MSG_SEPARATOR);
 
-VAR char *msg_cancel    INI(MSG_CANCEL);
+VAR const char *msg_cancel      INI(MSG_CANCEL);
 
-VAR char *msg_sure_ny   INI(MSG_SURE_NY);
+VAR const char *msg_sure_ny     INI(MSG_SURE_NY);
 
-VAR char *msg_uid       INI(MSG_UID);
+VAR const char *msg_uid         INI(MSG_UID);
 
-VAR char *msg_del_ny    INI(MSG_DEL_NY);
+VAR const char *msg_del_ny      INI(MSG_DEL_NY);
 
-VAR char *err_bid       INI(ERR_BID);
-VAR char *err_uid       INI(ERR_UID);
+VAR const char *err_bid         INI(ERR_BID);
+VAR const char *err_uid         INI(ERR_UID);
 
-VAR char *str_sysop     INI("sysop");
-VAR char *brd_sysop     INI("SYSOP");
-VAR char *str_author1   INI(STR_AUTHOR1);
-VAR char *str_author2   INI(STR_AUTHOR2);
-VAR char *str_post1     INI(STR_POST1);
-VAR char *str_post2     INI(STR_POST2);
-VAR char *str_host      INI(MYHOSTNAME);
-VAR char *str_site      INI(BOARDNAME);
+VAR const char *str_sysop       INI("sysop");
+VAR const char *brd_sysop       INI("SYSOP");
+VAR const char *str_author1     INI(STR_AUTHOR1);
+VAR const char *str_author2     INI(STR_AUTHOR2);
+VAR const char *str_post1       INI(STR_POST1);
+VAR const char *str_post2       INI(STR_POST2);
+VAR const char *str_host        INI(MYHOSTNAME);
+VAR const char *str_site        INI(BOARDNAME);
 
 #ifdef  HAVE_RECOMMEND
 VAR int recommend_time  INI(0);

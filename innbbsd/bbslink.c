@@ -201,7 +201,7 @@ deal_sover(
 static void
 deal_bntp(void)
 {
-    char *OUTING = "innd/.outing";              /* 處理時暫存的檔 */
+    const char *OUTING = "innd/.outing";        /* 處理時暫存的檔 */
     int fd, i;
     nodelist_t *node;
     bntp_t bntp;
@@ -280,7 +280,7 @@ inetclient(
 
 
 static int
-tcpcommand(char *fmt, ...)
+tcpcommand(const char *fmt, ...)
 {
     va_list args;
     char *ptr;
@@ -588,7 +588,7 @@ NNRPgroup(                      /* 切換 group，並傳回 low-number 及 high-number 
 }
 
 
-static char *tempfile = "innd/bbslinktmp";
+static const char *tempfile = "innd/bbslinktmp";
 
 static int                      /* 1:成功 0:失敗 */
 NNRParticle(                    /* 取回第 artno 篇的全文 */
@@ -819,7 +819,7 @@ readnews(
 /*-------------------------------------------------------*/
 
 
-static char *lockfile = "innd/bbslinking";
+static const char *lockfile = "innd/bbslinking";
 
 static void
 bbslink_un_lock(void)

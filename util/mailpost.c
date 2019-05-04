@@ -135,7 +135,7 @@ readline(
 
 static void
 mailog(
-    char* mode,
+    const char* mode,
     char* msg
 )
 {
@@ -220,9 +220,10 @@ valid_ident(
     char *ident
 )
 {
-    static char *invalid[] = {"bbs@", "@bbs", "unknown@", "root@", "gopher@",
+    static const char *invalid[] = {"bbs@", "@bbs", "unknown@", "root@", "gopher@",
         "guest@", "@ppp", "@slip", NULL};
-    char buf[128], *str;
+    char buf[128];
+    const char *str;
     int i;
 
     str_lower(buf, ident);

@@ -114,9 +114,9 @@ same_mail2(
 
 void
 keeplog(
-    char *fnlog,
-    char *board,
-    char *title,
+    const char *fnlog,
+    const char *board,
+    const char *title,
     int mode)           /* 0:load 1:rename 2:unlink 3:mark */
 {
     HDR hdr;
@@ -276,7 +276,7 @@ add_deny_exer(
     ACCT x;
     time_t now;
     int check_time;
-    char *cselect=NULL, *cdays=NULL, *cmode=NULL;
+    const char *cselect=NULL, *cdays=NULL, *cmode=NULL;
 
     memcpy(&x, u, sizeof(ACCT));
     time(&now);

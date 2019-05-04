@@ -43,7 +43,7 @@ chat_topic(void)
 #  ifdef M3_USE_PFTERM
 static void
 printchatline(
-    char *msg)
+    const char *msg)
 {
     int line;
 
@@ -118,7 +118,7 @@ printchatline(
 #else /* #ifdef M3_CHAT_SCROLL_MODE */
 static void
 printchatline(
-char *msg)
+const char *msg)
 {
     int line;
 
@@ -296,7 +296,7 @@ char *chatid)
 static inline int
 chat_send(
 int fd,
-char *buf)
+const char *buf)
 {
     int len;
 
@@ -528,7 +528,7 @@ chat_users(char *arg)
 
 struct chat_command
 {
-    char *cmdname;              /* Char-room command length */
+    const char *cmdname;                /* Char-room command length */
     void (*cmdfunc)(char *buf);         /* Pointer to function */
 };
 
@@ -552,7 +552,7 @@ struct chat_command chat_cmdtbl[] =
 static inline int
 chat_cmd_match(
 char *buf,
-char *str)
+const char *str)
 {
     int c1, c2;
 
@@ -583,7 +583,7 @@ int fd,
 char *buf)
 {
     struct chat_command *cmd;
-    char *key;
+    const char *key;
 
     buf++;
     for (cmd = chat_cmdtbl; (key = cmd->cmdname); cmd++)
@@ -657,6 +657,8 @@ t_chat(void)
 
     for (;;)
     {
+        const char *msg;
+
         move(b_lines - 1, 0);
         outs("若不進入聊天室，則暱稱請使用 \x1b[1;33;45m * \x1b[0m \n");
         ch = vget(b_lines, 0, "請輸入聊天代號：", chatid, 9, DOECHO);
@@ -733,9 +735,9 @@ t_chat(void)
         if (!strcmp(buf, CHAT_LOGIN_OK))
             break;
         else if (!strcmp(buf, CHAT_LOGIN_EXISTS))
-            ptr = "這個代號已經有人用了";
+            msg = "這個代號已經有人用了";
         else if (!strcmp(buf, CHAT_LOGIN_INVALID))
-            ptr = "這個代號是錯誤的";
+            msg = "這個代號是錯誤的";
         else if (!strcmp(buf, CHAT_LOGIN_BOGUS))
         {
             /* Thor: 禁止相同二人進入 */
@@ -744,7 +746,7 @@ t_chat(void)
             return 0;
         }
         move(b_lines - 1, 0);
-        outs(ptr);
+        outs(msg);
         clrtoeol();
         bell();
     }

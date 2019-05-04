@@ -28,7 +28,7 @@ static BCACHE *bshm;
 static void
 attach_err(
     int shmkey,
-    char *name)
+    const char *name)
 {
     fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
     exit(1);
@@ -125,7 +125,7 @@ struct Tchoice
 static int
 TchoiceCompare(const void * i, const void * j)
 {
-    return ((struct Tchoice *)j)->count - ((struct Tchoice *)i)->count;
+    return ((const struct Tchoice *)j)->count - ((const struct Tchoice *)i)->count;
 }
 
 
@@ -437,9 +437,10 @@ static BRD *bhead, *btail;
 
 static int
 class_parse(
-    char *key)
+    const char *key)
 {
-    char *str, *ptr, fpath[80];
+    char *str, fpath[80];
+    const char *ptr;
     ClassHeader *chp;
     HDR hdr;
     int i, len, count;
@@ -639,7 +640,7 @@ ansi_puts(
 
 static void
 gzip(
-    char *source, char *target, char *stamp)
+    const char *source, const char *target, char *stamp)
 {
     char buf[128];
 
@@ -1083,9 +1084,9 @@ main(void)
 
 void
 keeplog(
-    char *fnlog,
-    char *board,
-    char *title,
+    const char *fnlog,
+    const char *board,
+    const char *title,
     int mode)           /* 0:load 1: rename  2:unlink 3:mark*/
 {
     HDR hdr;

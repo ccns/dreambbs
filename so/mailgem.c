@@ -31,7 +31,7 @@ static int mailgem_add(XO *xo);
 static int mailgem_paste(XO *xo);
 static int mailgem_anchor(XO *xo);
 static int mailgem_recycle(XO *xo);
-static void XoMailGem(char *folder, char *title);
+static void XoMailGem(char *folder, const char *title);
 
 static void
 mailgem_item(
@@ -717,7 +717,8 @@ XO *xo)
 {
     HDR *hdr, *gbuf, ghdr, xhdr;
     int tag, locus, rc, xmode, anchor;
-    char *dir, *folder, *msg, fpath[80], buf[80];
+    char *dir, *folder, fpath[80], buf[80];
+    const char *msg;
     FILE *fp, *fd;
 
     usr_fpath(fpath, cuser.userid, "gem");
@@ -728,8 +729,8 @@ XO *xo)
     folder = MailGemAnchor;
     if ((anchor = *folder))
     {
+        sprintf(buf, "收錄至信件精華定錨區 (%s)", MailGemSailor);
         msg = buf;
-        sprintf(msg, "收錄至信件精華定錨區 (%s)", MailGemSailor);
     }
     else
     {
@@ -1010,7 +1011,7 @@ static KeyFunc mailgem_cb[] =
 static void
 XoMailGem(
 char *folder,
-char *title)
+const char *title)
 {
     XO *xo, *last;
 

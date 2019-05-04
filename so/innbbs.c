@@ -46,7 +46,7 @@ nl_query(
 
 static int      /* 1:成功 0:失敗 */
 nl_add(
-    char *fpath,
+    const char *fpath,
     const void *nl_old,
     int pos)
 {
@@ -169,7 +169,7 @@ nf_query(
     int fd;
     int rc = 0;
     BRD *brd;
-    char *outgo, *income;
+    const char *outgo, *income;
 
     /* 找出該站台在 nodelist.bbs 中的資訊 */
     if ((fd = open("innd/nodelist.bbs", O_RDONLY)) >= 0)
@@ -218,7 +218,7 @@ nf_query(
 
 static int      /* 1:成功 0:失敗 */
 nf_add(
-    char *fpath,
+    const char *fpath,
     const void *nf_old,
     int pos)
 {
@@ -322,7 +322,7 @@ ncm_query(
 
 static int      /* 1:成功 0:失敗 */
 ncm_add(
-    char *fpath,
+    const char *fpath,
     const void *ncm_old,
     int pos)
 {
@@ -373,7 +373,7 @@ ncm_search(
 /* ----------------------------------------------------- */
 
 
-static char *
+static const char *
 spam_compare(
     int xmode)
 {
@@ -433,7 +433,7 @@ spam_query(
 
 static int      /* 1:成功 0:失敗 */
 spam_add(
-    char *fpath,
+    const char *fpath,
     const void *spam_old,
     int pos)
 {
@@ -526,10 +526,10 @@ a_innbbs(void)
     struct stat st;
     char *data;
     int recsiz;
-    char *fpath;
+    const char *fpath;
     char buf[40];
     void (*item_func)(int num, const void *obj), (*query_func)(const void *obj);
-    int (*add_func)(char *fpath, const void *old, int pos), (*sync_func)(const void *lhs, const void *rhs), (*search_func)(const void *obj, char *key);
+    int (*add_func)(const char *fpath, const void *old, int pos), (*sync_func)(const void *lhs, const void *rhs), (*search_func)(const void *obj, char *key);
 
     vs_bar("轉信設定");
     more("etc/innbbs.hlp", (char *) -1);

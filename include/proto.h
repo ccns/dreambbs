@@ -25,19 +25,19 @@ char *genpasswd(char *pw);
 /* ----------------------------------------------------- */
 
 /* acct.c */
-void logitfile(char *file, char *key, char *msg);
+void logitfile(const char *file, const char *key, const char *msg);
 void addmoney(int addend, char *userid);
 void addpoint1(int addend, char *userid);
 void addpoint2(int addend, char *userid);
-void keeplog(char *fnlog, char *board, char *title, int mode);
+void keeplog(const char *fnlog, const char *board, const char *title, int mode);
 int acct_load(ACCT *acct, char *userid);
 void acct_save(ACCT *acct);
 int acct_userno(char *userid);
-int acct_get(char *msg, ACCT *acct);
-void x_file(int mode, char *xlist[], char *flist[]);
+int acct_get(const char *msg, ACCT *acct);
+void x_file(int mode, const char *xlist[], const char *flist[]);
 int check_admin(char *name);
-void bitmsg(char *msg, char *str, int level);
-unsigned int bitset(unsigned int pbits, int count, int maxon, char *msg, char *perms[]);
+void bitmsg(const char *msg, const char *str, int level);
+unsigned int bitset(unsigned int pbits, int count, int maxon, const char *msg, const char *perms[]);
 void acct_show(ACCT *u, int adm);
 void bm_setup(ACCT *u, int adm);
 void deny_log_email(char *mail, time_t deny);
@@ -60,8 +60,8 @@ void brd_edit(int bno);
 int a_editbrd(void);
 int u_verify(void);
 /* bbsd.c */
-void blog(char *mode, char *msg);
-void u_exit(char *mode);
+void blog(const char *mode, const char *msg);
+void u_exit(const char *mode);
 void abort_bbs(void);
 /* board.c */
 void brh_get(time_t bstamp, int bhno);
@@ -105,7 +105,7 @@ void fwshm_load(void);
 void fwshm_init(void);
 void fshm_init(void);
 int film_out(int tag, int row);
-UTMP *utmp_check(char *userid);
+UTMP *utmp_check(const char *userid);
 /* edit.c */
 void ve_string(char *str);
 char *tbf_ask(void);
@@ -113,21 +113,21 @@ FILE *tbf_open(void);
 void ve_backup(void);
 void ve_recover(void);
 void ve_header(FILE *fp);
-int ve_subject(int row, char *topic, char *dft);
+int ve_subject(int row, char *topic, const char *dft);
 int vedit(char *fpath, int ve_op);
 /* gem.c */
 int url_fpath(char *fpath, char *folder, HDR *hdr);
 void brd2gem(BRD *brd, HDR *gem);
 int gem_gather(XO *xo);
-void XoGem(char *folder, char *title, int level);
+void XoGem(const char *folder, const char *title, int level);
 void gem_main(void);
 /* mail.c */
 void ll_new(void);
 void ll_add(char *name);
 int ll_del(char *name);
 int ll_has(char *name);
-void ll_out(int row, int column, char *msg);
-int bsmtp(char *fpath, char *title, char *rcpt, int method);
+void ll_out(int row, int column, const char *msg);
+int bsmtp(const char *fpath, const char *title, const char *rcpt, int method);
 int bsmtp_file(char *fpath, char *title, char *rcpt);
 int m_verify(void);
 int m_total_size(void);
@@ -153,22 +153,22 @@ int mbox_check(void);
 void mbox_main(void);
 /* menu.c */
 int pad_view(void);
-void vs_head(char *title, char *mid);
+void vs_head(const char *title, const char *mid);
 void clear_notification(void);
 void movie(void);
-char *check_info(char *input);
+const char *check_info(const char *input);
 void menu(void);
 /* more.c */
 char *mgets(int fd);
 void *mread(int fd, int len);
-int more(char *fpath, char *footer);
+int more(const char *fpath, const char *footer);
 /* post.c */
 int cmpchrono(const void *hdr);
 int checksum_find(char *fpath, int check, int state);
 void btime_update(int bno);
 void outgo_post(HDR *hdr, char *board);
 void cancel_post(HDR *hdr);
-void move_post(HDR *hdr, char *board, int by_bm);
+void move_post(HDR *hdr, const char *board, int by_bm);
 void log_anonymous(char *fname);
 int seek_log(char *title, int state);
 int getsubject(int row, int reply);
@@ -189,7 +189,7 @@ int post_write(XO *xo);
 int BanMail(void);
 void post_mail(void);
 /* talk.c */
-char *bmode(UTMP *up, int simple);
+const char *bmode(UTMP *up, int simple);
 int is_boardpal(UTMP *up);
 int is_pal(int userno);
 int is_banmsg(int userno);
@@ -201,7 +201,7 @@ int t_bmw(void);
 int bm_belong(char *board);
 int XoBM(XO *xo);
 void my_query(char *userid, int paling);
-void bmw_edit(UTMP *up, char *hint, BMW *bmw, int cc);
+void bmw_edit(UTMP *up, const char *hint, BMW *bmw, int cc);
 void bmw_reply(int replymode);
 int pal_list(int reciper);
 void aloha(void);
@@ -251,26 +251,26 @@ void clearange(int from, int to);
 void getyx(int *y, int *x);
 int expand_esc_star_visio(char *buf, const char *src, int szbuf);
 void outx(char *str);
-void outz(char *msg);
-void outf(char *str);
-void prints(char *fmt, ...);
+void outz(const char *msg);
+void outf(const char *str);
+void prints(const char *fmt, ...);
 void cursor_save(void);
 void cursor_restore(void);
 int vmsg(const char *msg);
-void zmsg(char *msg);
-void vs_bar(char *title);
+void zmsg(const char *msg);
+void vs_bar(const char *title);
 #ifndef M3_USE_PFTERM
 void grayout(int y, int end, int level);
 #endif  /* #ifndef M3_USE_PFTERM */
 void add_io(int fd, int timeout);
 int igetch(void);
-BRD *ask_board(char *board, int perm, char *msg);
+BRD *ask_board(char *board, int perm, const char *msg);
 int vget(int line, int col, const char *prompt, char *data, int max, int echo);
-int vans(char *prompt);
+int vans(const char *prompt);
 int vkey(void);
 
 /* xover.c */
-XO *xo_new(char *path);
+XO *xo_new(const char *path);
 XO *xo_get(char *path);
 void xo_load(XO *xo, int recsiz);
 void xo_fpath(char *fpath, char *dir, HDR *hdr);
@@ -278,7 +278,7 @@ int hdr_prune(char *folder, int nhead, int ntail, int post);
 int xo_delete(XO *xo);
 int Tagger(time_t chrono, int recno, int op);
 void EnumTagHdr(HDR *hdr, char *dir, int locus);
-int AskTag(char *msg);
+int AskTag(const char *msg);
 int xo_uquery_lite(XO *xo);
 int xo_uquery(XO *xo);
 int xo_usetup(XO *xo);
@@ -302,11 +302,11 @@ int pmore(const char *fpath, int promptend);
 /* popupmenu.c */
 int popupmenu_ans(char *desc[], char *title, int x, int y);
 void popupmenu(MENU pmenu[], XO *xo, int x, int y);
-int pmsg(char *msg);
+int pmsg(const char *msg);
 int Every_Z_Screen(void);
 /* window.c */
-int popupmenu_ans2(char *desc[], char *title, int x, int y);
-int pmsg2(char *msg);
+int popupmenu_ans2(const char *desc[], const char *title, int x, int y);
+int pmsg2(const char *msg);
 /* myfavorite.c */
 void brd2myfavorite(BRD *brd, HDR *gem);
 int MyFavorite(void);

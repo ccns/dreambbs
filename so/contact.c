@@ -193,7 +193,7 @@ CONTACT *contact)
         vmsg("你的信箱被鎖!!");
     else if (vget(21, 0, "主  題：", ve_title, TTLEN, DOECHO))
     {
-        char *msg;
+        const char *msg;
         switch (mail_send(contact->email, ve_title))
         {
         case - 1:

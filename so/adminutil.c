@@ -493,7 +493,7 @@ bm_check(void)
 
 static int
 find_bm(
-char *fpath,
+const char *fpath,
 char *id)
 {
     BM bm;
@@ -527,7 +527,7 @@ user_check_bm(void)
 {
     char buf[128], temp[3];
     int ans, i;
-    char *fpath;
+    const char *fpath;
     BM bm;
     BRD *head;
     struct stat st;
@@ -722,7 +722,7 @@ special_search(void)
 int
 m_xfile(void)
 {
-    static char *desc[] =
+    static const char *desc[] =
     {
         "重要公告",             /* lkchu.990510: edit ~/etc/announce online */
         "不雅名單",
@@ -751,7 +751,7 @@ m_xfile(void)
         NULL
     };
 
-    static char *path[] =
+    static const char *path[] =
     {
         FN_ETC_ANNOUNCE,
         FN_ETC_BADID,
@@ -819,7 +819,7 @@ top(void)
 int
 m_xhlp(void)
 {
-    static char *desc[] =
+    static const char *desc[] =
     {
         "進站廣告",
         "註冊提示畫面",
@@ -850,7 +850,7 @@ m_xhlp(void)
         NULL
     };
 
-    static char *path[] =
+    static const char *path[] =
     {
         "gem/@/@AD",
         "gem/@/@apply",

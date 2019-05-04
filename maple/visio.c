@@ -83,7 +83,7 @@ oflush(void)
 #ifndef M3_USE_PFTERM
 static void
 output(
-    char *str,
+    const char *str,
     int len)
 {
     int size, ch;
@@ -984,7 +984,7 @@ outx(
 
 void
 outz(
-    char *msg)
+    const char *msg)
 //  const char *msg)
 {
     int ch;
@@ -1000,7 +1000,7 @@ outz(
 
 void
 outf(
-    char *str)
+    const char *str)
 {
     outz(str);
     prints("%*s\x1b[m", d_cols, "");
@@ -1063,7 +1063,7 @@ void outr (char *str)
 #endif //M3_USE_PFTERM
 
 void
-prints(char *fmt, ...)
+prints(const char *fmt, ...)
 {
     va_list args;
     char buf[512], *str;
@@ -1259,7 +1259,7 @@ zkey(void)                              /* press any key or timeout */
 
 void
 zmsg(                   /* easy message */
-    char *msg)
+    const char *msg)
 {
 #if 0
     move(b_lines, 0);
@@ -1275,7 +1275,7 @@ zmsg(                   /* easy message */
 
 void
 vs_bar(
-    char *title)
+    const char *title)
 {
 #ifdef  COLOR_HEADER
 /*  int color = (time(0) % 7) + 41;        lkchu.981201: random color */
@@ -1327,7 +1327,7 @@ cursor_key(
 
 static void
 vs_line(
-    char *msg)
+    const char *msg)
 {
     int head, tail;
 
@@ -1360,7 +1360,7 @@ grayout(int y, int end, int level)
 // GRAYOUT_DARK(0): dark, GRAYOUT_BOLD(1): bold, GRAYOUR_NORMAL(2): normal
 {
     screenline slp[T_LINES], newslp[T_LINES];
-    char *prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
+    const char *prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
     char buf[ANSILINELEN];
     register int i;
 
@@ -1684,7 +1684,7 @@ BRD *
 ask_board(
     char *board,
     int perm,
-    char *msg)
+    const char *msg)
 {
     if (msg)
     {
@@ -2249,7 +2249,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
 int
 vans(
-    char *prompt)
+    const char *prompt)
 {
     char ans[3];
 

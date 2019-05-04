@@ -46,7 +46,7 @@ void str_ansi(                    /* strip ANSI code */
     *dst = '\0';
 }
 
-void str_cat(char *dst, char *s1, char *s2)
+void str_cat(char *dst, const char *s1, const char *s2)
 {
     while ((*dst = *s1))
     {
@@ -331,7 +331,7 @@ static int mmdecode_header(char *src,    /* Thor.980901: src和dst可相同, 但src一
 
 
 int mmdecode(                       /* 解 Header 的 mmdecode */
-                char *src,          /* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
+                const char *src,    /* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
                 char encode,        /* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
                 char *dst)
 {
@@ -468,7 +468,7 @@ char *str_dup(char *src, int pad)
     return dst;
 }
 
-void str_folder(char *fpath, char *folder, char *fname)
+void str_folder(char *fpath, char *folder, const char *fname)
 {
     int ch;
     char *token = NULL;
@@ -484,7 +484,7 @@ void str_folder(char *fpath, char *folder, char *fname)
     strcpy(token, fname);
 }
 
-void setdirpath(char *fpath, char *direct, char *fname)
+void setdirpath(char *fpath, char *direct, const char *fname)
 {
     int ch;
     char *target = NULL;
@@ -621,7 +621,7 @@ int str_hash2(char *str, int seed)
     return (seed & 0x7fffffff);
 }
 
-int str_hash(char *str, int seed)
+int str_hash(const char *str, int seed)
 {
     int cc;
 
@@ -645,7 +645,7 @@ int str_len(char *str)
     return len;
 }
 
-void str_lower(char *dst, char *src)
+void str_lower(char *dst, const char *src)
 {
     int ch;
 
@@ -676,7 +676,7 @@ void str_lowest(char *dst, char *src)
     while (ch);
 }
 
-int str_ncmp(char *s1, char *s2, int n)
+int str_ncmp(const char *s1, const char *s2, int n)
 {
     int c1, c2;
 
@@ -717,7 +717,7 @@ void str_strip(                    /* remove trailing space */
  * str_ncpy() - similar to strncpy(3) but terminates string always with '\0'
  * if n != 0, and doesn't do padding
  */
-void str_ncpy(char *dst, char *src, int n)
+void str_ncpy(char *dst, const char *src, int n)
 {
     char *end;
 
@@ -1050,7 +1050,7 @@ void str_trim(                    /* remove trailing space */
     }
 }
 
-char *str_ttl(char *title)
+const char *str_ttl(const char *title)
 {
     if (title[0] == 'R' && title[1] == 'e' && title[2] == ':')
     {
