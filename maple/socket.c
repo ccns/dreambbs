@@ -105,8 +105,6 @@ POP3_Check(
             case 5:             /* Quit */
                 fprintf(fsock, "quit\r\n");
                 fclose(fsock);
-                if (old_sock)
-                    close(old_sock);
                 return sock;
         }
 
@@ -360,7 +358,6 @@ Ext_POP3_Check(
             case 0:
                 fprintf(fsock, "quit\r\n");
                 fclose(fsock);
-                close(sock);
                 return step;
             }
         }
