@@ -189,9 +189,11 @@ XO *xo)
             pos++;
         }
         else
+        {
+            close(fd);
             break;
+        }
     }
-    close(fd);
 
     return viol_init(xo);
 }

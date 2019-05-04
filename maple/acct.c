@@ -3020,7 +3020,6 @@ int u_verify(void)
 
     if (!(fp = fopen(keyfile, "r")))
     {
-        fclose(fp);
         zmsg("開啟檔案有問題，請通知站長");
         return XEASY;
     }

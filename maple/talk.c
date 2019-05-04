@@ -2824,7 +2824,8 @@ talk_speak(
     }
 
 #ifdef LOG_TALK
-    fclose(fp);
+    if (fp)
+        fclose(fp);
 #endif
 
     add_io(0, 60);

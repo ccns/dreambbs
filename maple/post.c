@@ -179,8 +179,8 @@ checksum_find(
             else
                 break;
         }
+        fclose(fp);
     }
-    fclose(fp);
     return checksum_put(sum, check);
 }
 #endif  /* #ifdef  HAVE_DETECT_CROSSPOST */
