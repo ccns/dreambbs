@@ -77,6 +77,7 @@ rebuild_pnote_ansi(int newflag)
 
     if ((fd = open(fpath, O_RDONLY)) == -1)
     {
+        fclose(fp);
         unlink(fname);
         return;
     }
