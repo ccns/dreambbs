@@ -44,10 +44,11 @@ personal_log(
 
 static int
 belong(
-    char *flist,
+    const char *flist,
     char *key)
 {
     int fd, rc;
+    char *str;
 
     rc = 0;
     fd = open(flist, O_RDONLY);
@@ -55,10 +56,10 @@ belong(
     {
         mgets(-1);
 
-        while ((flist = mgets(fd)))
+        while ((str = mgets(fd)))
         {
-            str_lower(flist, flist);
-            if (str_str(key, flist))
+            str_lower(str, str);
+            if (str_str(key, str))
             {
                 rc = 1;
                 break;
@@ -407,17 +408,17 @@ sort_compare(
     const void *p1,
     const void *p2)
 {
-    HDR *a1, *a2;
+    const HDR *a1, *a2;
 
-    a1 = (HDR *) p1;
-    a2 = (HDR *) p2;
+    a1 = (const HDR *) p1;
+    a2 = (const HDR *) p2;
     return str_cmp(a1->xname, a2->xname);
 
 }
 
 static int
 personal_sort(
-    char *gem)
+    const char *gem)
 {
     HDR *sort;
     int max, fd, total;

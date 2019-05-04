@@ -142,7 +142,7 @@ struct UserList
 
 struct ChatCmd
 {
-    char *cmdstr;
+    const char *cmdstr;
     void (*cmdfunc) (ChatUser *cu, char *msg);
     int exact;
 };
@@ -184,8 +184,8 @@ static FILE *ftalk;
 
 static void
 logtalk(
-    char *key,
-    char *msg)
+    const char *key,
+    const char *msg)
 {
     time_t now;
     struct tm *p;
@@ -200,8 +200,8 @@ logtalk(
 
 static void
 logit(
-    char *key,
-    char *msg)
+    const char *key,
+    const char *msg)
 {
     time_t now;
     struct tm *p;
@@ -371,7 +371,7 @@ valid_chatid(
 static int
 str_match(
     char *s1,                   /* lower-case (sub)string */
-    char *s2)
+    const char *s2)
 {
     int c1, c2;
 
@@ -402,7 +402,7 @@ str_match(
 
 static ChatUser *
 cuser_by_userid(
-    char *userid)
+    const char *userid)
 {
     ChatUser *cu;
     char buf[80]; /* Thor.980727: 一次最長才80 */
@@ -441,7 +441,7 @@ cuser_by_chatid(
 
 static ChatUser *
 fuzzy_cuser_by_chatid(
-    char *chatid)
+    const char *chatid)
 {
     ChatUser *cu, *xuser;
     int mode;
@@ -473,7 +473,7 @@ fuzzy_cuser_by_chatid(
 
 static ChatRoom *
 croom_by_roomid(
-    char *roomid)
+    const char *roomid)
 {
     ChatRoom *room;
     char buf[80]; /* Thor.980727: 一次最長才80 */
@@ -575,8 +575,8 @@ list_belong(
 static int
 str_swap(
     char *str,
-    char *src,
-    char *des)
+    const char *src,
+    const char *des)
 {
     char *ptr, *tmp;
     char buf[600];
@@ -629,7 +629,7 @@ do_send(
 static void
 send_to_room(
     ChatRoom *room,
-    char *msg,
+    const char *msg,
     int userno,
     int number)
 {
@@ -674,7 +674,8 @@ send_to_room(
         }
         else
         {
-            str = msg;
+            str = buf;
+            strcpy(str, msg);
         }
 
         do_send(max, &wset, str);
@@ -685,7 +686,7 @@ send_to_room(
 static void
 send_to_user(
     ChatUser *user,
-    char *msg,
+    const char *msg,
     int userno,
     int number)
 {
@@ -717,8 +718,10 @@ send_to_user(
                 sprintf(buf, "%3d", number);
             msg = buf;
         }
+        else
+            strcpy(buf, msg);
 
-        do_send(sock, &wset, msg);
+        do_send(sock, &wset, buf);
     }
 }
 
@@ -1345,7 +1348,8 @@ chat_setroom(
     ChatRoom *room;
     char *chatid;
     int sign, flag;
-    char *fstr=NULL, buf[128];
+    char buf[128];
+    const char *fstr=NULL;
 
     if (!ROOMOP(cu))
     {
@@ -1435,7 +1439,7 @@ chat_setroom(
 }
 
 
-static char *chat_msg[] =
+static const char *chat_msg[] =
 {
     "[//]help", "MUD-like 社交動詞",
     "[/h]elp op", CHATROOMNAME "管理員專用指令",
@@ -1469,7 +1473,7 @@ static char *chat_msg[] =
 };
 
 
-static char *room_msg[] =
+static const char *room_msg[] =
 {
     "[/f]lag [+-][lst]", "設定鎖定、秘密、開放話題",
     "[/i]nvite <id>", "邀請 <id> 加入" CHATROOMNAME,
@@ -1487,7 +1491,8 @@ chat_help(
     ChatUser *cu,
     char *msg)
 {
-    char **table, *str, buf[128];
+    char buf[128];
+    const char **table, *str;
 
     if (str_equal("op", nextword(&msg)))
     {
@@ -1641,7 +1646,7 @@ arrive_room(
 static int
 enter_room(
     ChatUser *cuser,
-    char *rname,
+    const char *rname,
     char *msg)
 {
     ChatRoom *room;
@@ -2012,7 +2017,8 @@ chat_ignore(
     ChatUser *cu,
     char *msg)
 {
-    char *str, buf[256];
+    char buf[256];
+    const char *str;
 
     if (RESTRICTED(cu))
     {
@@ -2022,7 +2028,6 @@ chat_ignore(
     {
         char *ignoree;
 
-        str = buf;
         ignoree = nextword(&msg);
         if (*ignoree)
         {
@@ -2032,23 +2037,23 @@ chat_ignore(
 
             if (xuser == NULL)
             {
-                sprintf(str, msg_no_such_id, ignoree);
+                sprintf(buf, msg_no_such_id, ignoree);
             }
             else if (xuser == cu || CHATSYSOP(xuser) ||
                 (ROOMOP(xuser) && (xuser->room == cu->room)))
             {
-                sprintf(str, "◆ 不可以 ignore [%s]", ignoree);
+                sprintf(buf, "◆ 不可以 ignore [%s]", ignoree);
             }
             else
             {
                 if (list_belong(cu->ignore, xuser->userno))
                 {
-                    sprintf(str, "※ %s 已經被凍結了", xuser->chatid);
+                    sprintf(buf, "※ %s 已經被凍結了", xuser->chatid);
                 }
                 else
                 {
                     list_add(&(cu->ignore), xuser);
-                    sprintf(str, "◆ 將 [%s] 打入冷宮了 :p", xuser->chatid);
+                    sprintf(buf, "◆ 將 [%s] 打入冷宮了 :p", xuser->chatid);
                 }
             }
         }
@@ -2066,11 +2071,11 @@ chat_ignore(
                 do
                 {
                     sprintf(userid, "%-13s", list->userid);
-                    strcpy(str + len, userid);
+                    strcpy(buf + len, userid);
                     len += 13;
                     if (len >= 78)
                     {
-                        send_to_user(cu, str, 0, MSG_MESSAGE);
+                        send_to_user(cu, buf, 0, MSG_MESSAGE);
                         len = 0;
                     }
                 } while ((list = list->next));
@@ -2083,6 +2088,7 @@ chat_ignore(
                 str = "◆ 您目前並沒有 ignore 任何人";
             }
         }
+        str = buf;
     }
 
     send_to_user(cu, str, 0, MSG_MESSAGE);
@@ -2094,15 +2100,17 @@ chat_unignore(
     ChatUser *cu,
     char *msg)
 {
-    char *ignoree, *str, buf[80];
+    char *ignoree, buf[80];
+    const char *str;
 
     ignoree = nextword(&msg);
 
     if (*ignoree)
     {
-        sprintf(str = buf, (list_delete(&(cu->ignore), ignoree)) ?
+        sprintf(buf, (list_delete(&(cu->ignore), ignoree)) ?
             "◆ [%s] 不再被你冷落了" :
             "◆ 您並未 ignore [%s] 這號人物", ignoree);
+        str = buf;
     }
     else
     {
@@ -2373,7 +2381,7 @@ static int
 party_action(
     ChatUser *cu,
     char *cmd,
-    char *party,
+    const char *party,
     int mode)
 {
     ChatAction *cap;
@@ -2488,7 +2496,7 @@ static int
 person_action(
     ChatUser *cu,
     char *cmd,
-    char *party)
+    const char *party)
 {
     ChatAction *cap;
     char *verb, buf[256];
@@ -2557,7 +2565,7 @@ person_action(
 /* --------------------------------------------- */
 
 
-static char *dscrb[] =
+static const char *dscrb[] =
 {
     "\x1b[1;37m【 Verb + Nick：   動詞 + 對方名字 】\x1b[36m  例：//kick piggy\x1b[m",
     "\x1b[1;37m【 Verb + Message：動詞 + 要說的話 】\x1b[36m  例：//sing 天天天藍\x1b[m",
@@ -2634,7 +2642,8 @@ view_action_verb(       /* Thor.0726: 新加動詞分類顯示 */
     int cmd)
 {
     int i;
-    char *p, *q, *data, *expn, buf[256];
+    char *q, *data, *expn, buf[256];
+    const char *p;
     ChatAction *cap;
 
     send_to_user(cu, "/c", 0, MSG_CLRSCR);
@@ -2827,7 +2836,7 @@ command_execute(
     }
     else
     {
-        char *str;
+        const char *str;
 
         common_client_command = 0;
         if (*cmd == '-')

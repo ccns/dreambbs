@@ -18,10 +18,10 @@
 #include "config.h"
 
 
-static char *myfile[] = {"day", "week", "month", "year"};
+static const char *myfile[] = {"day", "week", "month", "year"};
 static int mycount[4] = {7, 4, 12};
 static int mytop[] = {10, 50, 100, 100};
-static char *mytitle[] = {"日十", "週五十", "月百", "年度百"};
+static const char *mytitle[] = {"日十", "週五十", "月百", "年度百"};
 
 
 #define FN_POST_DB      "post.db"
@@ -163,7 +163,8 @@ poststat(
     int mytype)
 {
     FILE *fp;
-    char buf[40], curfile[80] = "var/day.0", *p;
+    char buf[40], curfile[80] = "var/day.0";
+    const char *p;
     struct postrec *pp;
     int i, j;
 

@@ -59,7 +59,8 @@ cleanrecommend_item(
     RMSG *cleanrecommend)
 {
 
-        char tmp[10], *pn;
+        char tmp[10];
+        const char *pn;
 
         pn = tmp;
 

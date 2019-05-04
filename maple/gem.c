@@ -302,7 +302,7 @@ brd2gem(
 static void
 gem_log(
     char *folder,
-    char *action,
+    const char *action,
     HDR *hdr)
 {
     char fpath[80], buf[256];
@@ -1116,14 +1116,15 @@ gem_gather(
 {
     HDR *hdr, *gbuf, ghdr, xhdr;
     int tag, locus, rc, xmode, anchor, mode;
-    char *dir, *folder, *msg, fpath[80], buf[80];
+    char *dir, *folder, fpath[80], buf[80];
+    const char *msg;
     FILE *fp, *fd;
 
     folder = GemAnchor;
     if ((anchor = *folder))
     {
+        sprintf(buf, "收錄至精華定錨區 (%s)", GemSailor);
         msg = buf;
-        sprintf(msg, "收錄至精華定錨區 (%s)", GemSailor);
     }
     else
     {
@@ -1458,8 +1459,8 @@ static KeyFunc gem_cb[] =
 
 void
 XoGem(
-    char *folder,
-    char *title,
+    const char *folder,
+    const char *title,
     int level)
 {
     XO *xo, *last;

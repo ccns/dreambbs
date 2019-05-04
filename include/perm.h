@@ -99,7 +99,7 @@
 #ifdef ADMIN_C
 
 
-static char *perm_tbl[] = {
+static const char *perm_tbl[] = {
   "基本權力",                   /* PERM_BASIC */
   "進入聊天室",                 /* PERM_CHAT */
   "找人聊天",                   /* PERM_PAGE */

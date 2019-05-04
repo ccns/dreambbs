@@ -16,7 +16,7 @@
 
 typedef struct Header
 {
-    char *name;
+    const char *name;
     int id;
 }      header_t;
 
@@ -92,7 +92,7 @@ header_value(
 
 static int
 is_loopback(
-    char *path, char *token,
+    char *path, const char *token,
     int len)
 {
     int cc;

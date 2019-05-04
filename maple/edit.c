@@ -660,7 +660,7 @@ ve_ansi(void)
 static textline *
 ve_line(
     textline *this,
-    char *str)
+    const char *str)
 {
     int cc, len;
     char *data;
@@ -1381,16 +1381,17 @@ ve_filer(
     int ans = 0;
     FILE *fp=NULL;
     textline *p, *v;
-    char buf[80], *msg, re;
+    char buf[80], *str, re;
+    const char *msg;
 
 #ifdef  HAVE_INPUT_TOOLS
-    char *menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
-    char *menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
-    char *menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
 #else
-    char *menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
-    char *menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
-    char *menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
 #endif
 
 
@@ -1516,15 +1517,15 @@ ve_filer(
             v = p->next;
             if (!ans)
             {
-                msg = p->data;
-                if (v || msg[0])
+                str = p->data;
+                if (v || str[0])
                 {
-                    str_trim(msg);
+                    str_trim(str);
 
                     if (v || (bbsmode != M_POST))
-                        fprintf(fp, "%s\n", msg);
+                        fprintf(fp, "%s\n", str);
                     else
-                        fprintf(fp, "%s\x1b[m\n", msg);
+                        fprintf(fp, "%s\x1b[m\n", str);
                 }
                 else if (bbsmode == M_POST)
                 {
@@ -1637,7 +1638,7 @@ int
 ve_subject(
     int row,
     char *topic,
-    char *dft)
+    const char *dft)
 {
     char *title;
     int select=0;
@@ -2152,7 +2153,7 @@ ve_key:
 */
 
 /* cache.090922: 控制碼 */
-                    char *menu[] =
+                    const char *menu[] =
                     {
                         "IQ",
                         "Id     userＩＤ(**s)",

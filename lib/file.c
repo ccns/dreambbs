@@ -12,7 +12,7 @@
 
 static int rm_dir(char *fpath);
 
-void f_cat(char *fpath, char *msg)
+void f_cat(const char *fpath, const char *msg)
 {
     int fd;
 
@@ -23,7 +23,7 @@ void f_cat(char *fpath, char *msg)
     }
 }
 
-int f_cp(char *src, char *dst, int mode    /* O_EXCL / O_APPEND / O_TRUNC */
+int f_cp(const char *src, const char *dst, int mode    /* O_EXCL / O_APPEND / O_TRUNC */
     )
 {
     int fsrc, fdst, ret;
@@ -38,14 +38,14 @@ int f_cp(char *src, char *dst, int mode    /* O_EXCL / O_APPEND / O_TRUNC */
         {
             char pool[BLK_SIZ];
 
-            src = pool;
+            char *data = pool;
             do
             {
-                ret = read(fsrc, src, BLK_SIZ);
+                ret = read(fsrc, data, BLK_SIZ);
                 if (ret <= 0)
                     break;
             }
-            while (write(fdst, src, ret) > 0);
+            while (write(fdst, data, ret) > 0);
             close(fdst);
         }
         close(fsrc);
@@ -54,36 +54,37 @@ int f_cp(char *src, char *dst, int mode    /* O_EXCL / O_APPEND / O_TRUNC */
 }
 
 
-char *f_img(char *fpath, int *fsize)
+char *f_img(const char *fpath, int *fsize)
 {
     int fd, size;
     struct stat st;
+    char* data;
 
     if ((fd = open(fpath, O_RDONLY)) < 0)
         return NULL;
 
-    fpath = NULL;
+    data = NULL;
 
     if (!fstat(fd, &st) && S_ISREG(st.st_mode) && (size = st.st_size) > 0
-        && (fpath = (char *)malloc(size)))
+        && (data = (char *)malloc(size)))
     {
         *fsize = size;
-        if (read(fd, fpath, size) != size)
+        if (read(fd, data, size) != size)
         {
-            free(fpath);
-            fpath = NULL;
+            free(data);
+            data = NULL;
         }
     }
 
     close(fd);
-    return fpath;
+    return data;
 }
 
 /* ----------------------------------------------------- */
 /* f_ln() : link() cross partition / disk                */
 /* ----------------------------------------------------- */
 
-int f_ln(char *src, char *dst)
+int f_ln(const char *src, const char *dst)
 {
     int ret;
 
@@ -149,7 +150,7 @@ char *f_map(char *fpath, int *fsize)
 }
 
 
-int f_mode(char *fpath)
+int f_mode(const char *fpath)
 {
     struct stat st;
 
@@ -159,7 +160,7 @@ int f_mode(char *fpath)
     return st.st_mode;
 }
 
-int f_mv(char *src, char *dst)
+int f_mv(const char *src, const char *dst)
 {
     int ret;
 
@@ -234,7 +235,7 @@ int f_open(char *fpath)
 /* file structure : set file path for boards/user home   */
 /* ----------------------------------------------------- */
 
-static void mak_fpath(char *str, char *key, char *name)
+static void mak_fpath(char *str, const char *key, const char *name)
 {
     int cc;
 
@@ -261,7 +262,7 @@ static void mak_fpath(char *str, char *key, char *name)
 }
 
 
-void brd_fpath(char *fpath, char *board, char *fname)
+void brd_fpath(char *fpath, const char *board, const char *fname)
 {
     *fpath++ = 'b';
     *fpath++ = 'r';
@@ -283,7 +284,7 @@ void gem_fpath(char *fpath, char *board, char *fname)
 }
 
 
-void usr_fpath(char *fpath, char *user, char *fname)
+void usr_fpath(char *fpath, const char *user, const char *fname)
 {
 #if 0
     char buf[16];
@@ -363,7 +364,7 @@ static int rm_dir(char *fpath)
     return rmdir(buf);
 }
 
-void f_suck(FILE * fp, char *fpath)
+void f_suck(FILE * fp, const char *fpath)
 {
     int fd;
 
@@ -372,10 +373,10 @@ void f_suck(FILE * fp, char *fpath)
         char pool[BLK_SIZ];
         int size;
 
-        fpath = pool;
-        while ((size = read(fd, fpath, BLK_SIZ)) > 0)
+        char *data = pool;
+        while ((size = read(fd, data, BLK_SIZ)) > 0)
         {
-            fwrite(fpath, size, 1, fp);
+            fwrite(data, size, 1, fp);
         }
         close(fd);
     }

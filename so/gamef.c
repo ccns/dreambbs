@@ -24,7 +24,7 @@ time_t *chrono)
 }
 
 static inline void
-pressanykey(char *fmt, ...)
+pressanykey(const char *fmt, ...)
 {
     va_list args;
     char buf[512], *ptr;
@@ -48,7 +48,7 @@ pressanykey(char *fmt, ...)
 }
 
 static inline void
-game_log(int file, char *fmt, ...)
+game_log(int file, const char *fmt, ...)
 {
     va_list args;
     char buf[200], ff[40];

@@ -62,8 +62,8 @@ extern time_t mode_lastchange;
 
 void
 blog(
-    char *mode,
-    char *msg
+    const char *mode,
+    const char *msg
 )
 {
     char buf[512], data[256];
@@ -120,7 +120,7 @@ TABLE table[] = {
 
 void
 u_exit(
-    char *mode
+    const char *mode
 )
 {
     int fd, delta;
@@ -228,7 +228,7 @@ abort_bbs(void)
 
 static void
 login_abort(
-    char *msg
+    const char *msg
 )
 {
     outs(msg);
@@ -249,7 +249,7 @@ login_abort(
 
 static int
 belong(
-    char *flist,
+    const char *flist,
     char *key
 )
 {
@@ -259,12 +259,13 @@ belong(
     fd = open(flist, O_RDONLY);
     if (fd >= 0)
     {
+        char *str;
         mgets(-1);
 
-        while ((flist = mgets(fd)))
+        while ((str = mgets(fd)))
         {
-            str_lower(flist, flist);
-            if (str_str(key, flist))
+            str_lower(str, str);
+            if (str_str(key, str))
             {
                 rc = 1;
                 break;
@@ -502,7 +503,7 @@ utmp_setup(
 )
 {
     UTMP utmp;
-    char *guestname[GUESTNAME]={GUEST_NAMES};
+    const char *guestname[GUESTNAME]={GUEST_NAMES};
 
     cutmp = NULL; /* Thor.980805: pal_cache¤¤·| check cutmp  */
     /*pal_cache();*/  /* by visor */

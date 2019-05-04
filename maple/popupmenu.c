@@ -62,7 +62,7 @@ static int
 do_cmd(MENU *mptr, XO *xo, int x, int y)
 {
     unsigned int mode;
-    void *p;
+    const void *p;
     int (*func) (void);
     int (*func_unary) (XO *xo);
 
@@ -283,7 +283,7 @@ vs_line(
 
 /* mode 代表加背景的顏色 */
 static void
-draw_item(char *desc, int mode, int x, int y)
+draw_item(const char *desc, int mode, int x, int y)
 {
     char buf[128];
 
@@ -294,7 +294,7 @@ draw_item(char *desc, int mode, int x, int y)
 
 
 static int
-draw_menu(MENU *pmenu[20], int num, char *title, int x, int y, int cur)
+draw_menu(MENU *pmenu[20], int num, const char *title, int x, int y, int cur)
 {
     char buf[128];
     int i;
@@ -325,7 +325,7 @@ do_menu(
     int cur, old_cur, num, tmp;
     int c;
     MENU *table[20];
-    char *title;
+    const char *title;
     MENU *table_title;
 
     memset(table, 0, sizeof(table));
@@ -571,7 +571,7 @@ popupmenu(MENU pmenu[], XO *xo, int x, int y)
 #endif
 }
 
-static void pcopy(char *buf, char *patten, int len)
+static void pcopy(char *buf, const char *patten, int len)
 {
     int i, size;
 
@@ -585,7 +585,7 @@ static void pcopy(char *buf, char *patten, int len)
     }
 }
 
-int pmsg(char *msg)
+int pmsg(const char *msg)
 {
     char buf[ANSILINELEN];
     char patten[ANSILINELEN];

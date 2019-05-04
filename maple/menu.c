@@ -324,7 +324,7 @@ goodbye(void)
 
 void
 vs_head(
-    char *title, char *mid)
+    const char *title, const char *mid)
 {
     char buf[(T_COLS - 1) - 79 + 69 + 1];     /* d_cols 最大可能是 (T_COLS - 1) */
     char ttl[(T_COLS - 1) - 79 + 69 + 1];
@@ -363,17 +363,17 @@ vs_head(
     else if ( spc > len )
     {
         spc = len;
-        memcpy(ttl, mid, spc);
-        mid = ttl;
-        mid[spc] = '\0';
     }
+    memcpy(ttl, mid, spc);
+    ttl[spc] = '\0';
+    mid = ttl;
 
     spc = 2 + len - spc; /* 擺完 mid 以後，中間還有 spc 格空間，在 mid 左右各放 spc/2 長的空白 */
     len = (1 - spc) & 1;
 
     if (spc < 0)
     {
-        mid[strlen(mid)+spc]= '\0';
+        ttl[strlen(mid)+spc]= '\0';
         spc = 0;
     }
 
@@ -1164,10 +1164,10 @@ static MENU menu_treat[] =
 
 static
 int count_len(
-    char *data)
+    const char *data)
 {
     int len;
-    char *ptr, *tmp;
+    const char *ptr, *tmp;
     ptr = data;
     len = strlen(data);
 
@@ -1185,13 +1185,13 @@ int count_len(
 }
 
 
-char *
-check_info(char *input)
+const char *
+check_info(const char *input)
 {
 #if defined(HAVE_INFO) || defined(HAVE_STUDENT)
     BRD *brd;
 #endif
-    char *name = NULL;
+    const char *name = NULL;
     name = input;
 #ifdef  HAVE_INFO
     if (!strcmp(input, INFO_EMPTY))
@@ -1230,7 +1230,8 @@ menu(void)
     int cc=0, cx=0, refilm=0;   /* current / previous cursor position */
     int max=0, mmx;                     /* current / previous menu max */
     int cmd=0, depth, count;
-    char *str, item[60];
+    char item[60];
+    const char *str;
 
     mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
 #ifdef  TREAT

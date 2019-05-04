@@ -28,7 +28,7 @@ extern void blog(char *, char *);
 #define TRACE blog
 #endif
 
-void *DL_get(char *name
+void *DL_get(const char *name
              /* format: "Xmodule_path:Xname" */
     )
 {

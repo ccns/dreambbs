@@ -20,7 +20,7 @@ extern spamrule_t *SPAMRULE;
 
 /* bbslib.c */
 extern int initial_bbs(void);
-extern void bbslog(char *fmt, ...);
+extern void bbslog(const char *fmt, ...);
 
 /* convcode.c */
 extern void b52gb(char *str);

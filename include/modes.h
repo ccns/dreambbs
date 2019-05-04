@@ -74,7 +74,7 @@ enum
 
 
 #ifdef  MODES_C
-static char *ModeTypeTable[] =
+static const char *ModeTypeTable[] =
 {
   "發呆",           /* M_IDLE */
   "主選單",         /* M_MMENU */
