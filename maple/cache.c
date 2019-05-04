@@ -650,7 +650,7 @@ count_load(void)
     struct stat st;
 
     head = curcount;
-    if ((fw = open(FN_VAR_SYSHISTORY, O_RDONLY)))
+    if ((fw = open(FN_VAR_SYSHISTORY, O_RDONLY)) >= 0)
     {
 
         if (!fstat(fw, &st) && (size = st.st_size) > 0)

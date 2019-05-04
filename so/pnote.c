@@ -161,7 +161,7 @@ do_pnote(char *userid)
     }
 
     usr_fpath(fname, userid, fn_note_tmp);
-    if ((fx = open(fname, O_WRONLY | O_CREAT, 0644)) <= 0)
+    if ((fx = open(fname, O_WRONLY | O_CREAT, 0644)) < 0)
     {
         fclose(fp);
         return;

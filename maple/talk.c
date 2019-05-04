@@ -448,7 +448,7 @@ pal_cache(void)
     fsize = 0;
     usr_fpath(fpath, cuser.userid, FN_PAL);
     fimage = f_img(fpath, &fsize);
-    if ((fsize > (PAL_MAX * sizeof(PAL))) && (fd = open(fpath, O_RDWR)))
+    if ((fsize > (PAL_MAX * sizeof(PAL))) && (fd = open(fpath, O_RDWR)) >= 0)
     {
         ftruncate(fd, PAL_MAX * sizeof(PAL));
         close(fd);
@@ -2033,7 +2033,7 @@ pal_list(
             sprintf(temp, "list.%c", *buf);
             usr_fpath(fpath, cuser.userid, temp);
             fd = open(fpath, O_RDONLY);
-            while (fd)
+            while (fd >= 0)
             {
                 if (read(fd, &list, sizeof(LIST)) == sizeof(LIST))
                 {
@@ -4114,7 +4114,7 @@ ulist_test(
     char buf[128];
     fd = open(FN_ETC_SYSOP, O_RDONLY);
     sprintf(buf, "檔案編號 %d:%d:%d", fd, Ctrl('F'), '@');
-    if (fd)
+    if (fd >= 0)
         close(fd);
     pmsg(buf);
 /*  vget(b_lines, 0, "多少人:", buf, 6, DOECHO);
@@ -4552,7 +4552,7 @@ banmsg_cache(void)
     fsize = 0;
     usr_fpath(fpath, cuser.userid, FN_BANMSG);
     fimage = f_img(fpath, &fsize);
-    if ((fsize > (BANMSG_MAX * sizeof(BANMSG))) && (fd = open(fpath, O_RDWR)))
+    if ((fsize > (BANMSG_MAX * sizeof(BANMSG))) && (fd = open(fpath, O_RDWR)) >= 0)
     {
         ftruncate(fd, BANMSG_MAX * sizeof(BANMSG));
         close(fd);

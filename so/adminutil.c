@@ -353,7 +353,7 @@ bm_check(void)
         int pos = 0;
 
         fd = open(fpath, O_RDONLY);
-        while (fd)
+        while (fd >= 0)
         {
             lseek(fd, (off_t)(sizeof(BM) * pos), SEEK_SET);
             if (read(fd, &tmp, sizeof(BM)) == sizeof(BM))
@@ -385,7 +385,7 @@ bm_check(void)
         int pos = 0;
 
         fd = open(fpath, O_RDWR);
-        while (fd)
+        while (fd >= 0)
         {
             lseek(fd, (off_t)(sizeof(BM) * pos), SEEK_SET);
             if (read(fd, &tmp, sizeof(BM)) == sizeof(BM))
@@ -501,7 +501,7 @@ char *id)
     int pos = 0;
 
     fd = open(fpath, O_RDONLY);
-    while (fd)
+    while (fd >= 0)
     {
         lseek(fd, (off_t)(sizeof(BM) * pos), SEEK_SET);
         if (read(fd, &bm, sizeof(BM)) == sizeof(BM))
