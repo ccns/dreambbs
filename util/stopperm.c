@@ -217,7 +217,6 @@ seek_log_email(
             break;
         }
     }
-    close(fd);
     return -1;
 }
 

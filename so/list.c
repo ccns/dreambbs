@@ -132,7 +132,7 @@ char *dir)
             return 0;
         }
     }
-    if (fd)
+    if (fd >= 0)
         close(fd);
     return 0;
 }

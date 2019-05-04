@@ -214,9 +214,11 @@ char *path)
             pos++;
         }
         else
+        {
+            close(fd);
             return;
+        }
     }
-    close(fd);
     return;
 }
 
@@ -266,9 +268,11 @@ char *path)
             pos++;
         }
         else
+        {
+            close(fd);
             return 0;
+        }
     }
-    close(fd);
     return 0;
 }
 

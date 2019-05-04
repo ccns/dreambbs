@@ -204,7 +204,8 @@ do_pnote(char *userid)
             read(fd, (char *) &myitem, sizeof(myitem));
     }
     fclose(fp);
-    close(fd);
+    if (fd >= 0)
+        close(fd);
     close(fx);
     f_mv(fname, fname2);
     m_biffn(acct_userno(userid));
