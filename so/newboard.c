@@ -208,9 +208,11 @@ int mode)
             pos++;
         }
         else
+        {
+            close(fd);
             break;
+        }
     }
-    close(fd);
     return 0;
 }
 
