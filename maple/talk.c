@@ -1320,8 +1320,8 @@ bm_image(void)
                 {
                     write(count, ubase, (char *) userno - (char *) ubase);
                     close(count);
-                    free(ubase);
                 }
+                free(ubase);
             }
             else  /* Thor.980811: lkchu patch: 與 friend 同步 */
             {
@@ -4490,6 +4490,7 @@ talk_main(void)
 
     /* lkchu.981230: 利用 xover 整合 bmw */
     usr_fpath(fpath, cuser.userid, FN_BMW);
+    free(xz[XZ_BMW - XO_ZONE].xo);
     xz[XZ_BMW - XO_ZONE].xo = xo_new(fpath);
     xz[XZ_BMW - XO_ZONE].cb = bmw_cb;
     xz[XZ_BMW - XO_ZONE].xo->pos = 0;
