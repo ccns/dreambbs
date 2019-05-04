@@ -54,7 +54,7 @@ main(
         start = atoi(argv[2]);
         end = atoi(argv[3]);
         brd_fpath(fpath, board, FN_DIR);
-        if ((fd = open(fpath, O_RDONLY)))
+        if ((fd = open(fpath, O_RDONLY)) >= 0)
         {
             lseek(fd, (off_t)((start-1)*sizeof(HDR)), SEEK_SET);
             while (read(fd, &hdr, sizeof(HDR)) == sizeof(HDR) && start <= end)

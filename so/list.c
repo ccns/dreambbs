@@ -70,7 +70,7 @@ int item)
     memset(&list, 0, sizeof(LIST_TITLE));
     usr_fpath(fpath, cuser.userid, mode ? "board" : "list");
     fd = open(fpath, O_RDONLY);
-    if (fd)
+    if (fd >= 0)
     {
         read(fd, &list, sizeof(LIST_TITLE));
         close(fd);
@@ -114,7 +114,7 @@ char *dir)
     LIST clist;
     int pos = 0, fd;
     fd = open(dir, O_RDONLY);
-    while (fd)
+    while (fd >= 0)
     {
         lseek(fd, (off_t)(sizeof(LIST) * pos), SEEK_SET);
         if (read(fd, &clist, sizeof(LIST)) == sizeof(LIST))
@@ -271,14 +271,14 @@ XO *xo)
     memset(&list, 0, sizeof(LIST_TITLE));
     usr_fpath(fpath, cuser.userid, mode ? "board" : "list");
     fd = open(fpath, O_RDONLY);
-    if (fd)
+    if (fd >= 0)
     {
         read(fd, &list, sizeof(LIST_TITLE));
         close(fd);
         vget(b_lines, 0, "請輸入群組名稱：", list.title[ways-1], 41, GCARRY);
     }
 
-    if ((fd = open(fpath, O_WRONLY | O_CREAT | O_TRUNC, 0600))
+    if ((fd = open(fpath, O_WRONLY | O_CREAT | O_TRUNC, 0600)) >= 0
         && vans("確定嗎 [Y/n]：") != 'n')
     {
         write(fd, &list, sizeof(LIST_TITLE));

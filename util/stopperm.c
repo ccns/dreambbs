@@ -200,7 +200,7 @@ seek_log_email(
     EMAIL email;
     int pos=0, fd;
     fd = open(FN_VIOLATELAW_DB, O_RDONLY);
-    while (fd)
+    while (fd >= 0)
     {
         lseek(fd, (off_t) (sizeof(email) * pos), SEEK_SET);
         if (read(fd, &email, sizeof(email)) == sizeof(email))

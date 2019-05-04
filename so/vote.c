@@ -52,7 +52,7 @@ char *mail)
     LOG email;
     int pos = 0, fd;
     fd = open(fpath, O_RDONLY);
-    while (fd)
+    while (fd >= 0)
     {
         lseek(fd, (off_t)(sizeof(email) * pos), SEEK_SET);
         if (read(fd, &email, sizeof(email)) == sizeof(email))
@@ -204,7 +204,7 @@ char *path)
     move(3, 0);
     prints("本次投票名冊如下：\n");
     fd = open(path, O_RDONLY);
-    while (fd)
+    while (fd >= 0)
     {
         lseek(fd, (off_t)(sizeof(VCHS) * pos), SEEK_SET);
         if (read(fd, &stud, sizeof(VCHS)) == sizeof(VCHS))
@@ -247,7 +247,7 @@ char *path)
     buf1[2] = buf2[1] = buf3[2] = buf4[4] = '\0';
 
     fd = open(path, O_RDONLY);
-    while (fd)
+    while (fd >= 0)
     {
         lseek(fd, (off_t)(sizeof(VCHS) * pos), SEEK_SET);
         if (read(fd, &stud, sizeof(VCHS)) == sizeof(VCHS))
