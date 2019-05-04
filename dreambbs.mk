@@ -48,7 +48,7 @@ LDFLAGS	+= -lresolv -ldl -rdynamic
 LDFLAGS	+= -Wl,-export-dynamic
 .endif
 
-.if $(CLANG_MODERN) == "1"
+.if ($(CLANG_MODERN) == "1") && ($(CC) == clang)
 CFLAGS  += -Wunreachable-code-aggressive
 .else
 CFLAGS  += -Wunreachable-code
