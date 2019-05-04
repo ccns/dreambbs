@@ -202,16 +202,16 @@ int mode)
         {
             if (!str_cmp(nbrd.brdname, ptr) && !(nbrd.mode & (NBRD_REJECT | NBRD_STOP | NBRD_CLOSE | NBRD_OPEN)) && (nbrd.mode & mode))
             {
-                return 1;
                 close(fd);
+                return 1;
             }
             pos++;
         }
         else
             break;
     }
-    return 0;
     close(fd);
+    return 0;
 }
 
 

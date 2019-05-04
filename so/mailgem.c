@@ -810,7 +810,7 @@ XO *xo)
                 f_suck(fd, fpath);
                 rec_add(folder, &ghdr, sizeof(HDR));
 
-                if (fd >= 0)              /* by visor */
+                if (fd)                 /* by visor */
                     fclose(fd);
 
                 gbuf[locus] = ghdr;     /* ©ñ¤J MailGembuffer */
