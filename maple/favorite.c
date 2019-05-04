@@ -161,6 +161,7 @@ favorite_parse(
     }
     else
     {
+        fclose(fw);
         unlink(fpath);
     }
 

@@ -1242,7 +1242,7 @@ gem_gather(
                 rec_add(folder, &ghdr, sizeof(HDR));
                 gem_log(folder, "新增", &ghdr);
 
-                if (fd>=0)                 /* by visor */
+                if (fd)                 /* by visor */
                     fclose(fd);
 
                 gbuf[locus] = ghdr;     /* 放入 Gembuffer */

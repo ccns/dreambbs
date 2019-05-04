@@ -90,7 +90,10 @@ same_mail2(
     funo = open(FN_SCHEMA, O_RDWR | O_CREAT, 0600);
 
     if (funo < 0)
+    {
+        fclose(flog);
         return 0;
+    }
 
     strcpy(fname = fpath, "usr/@");
     fname = (char *) strchr(fname, '@');
