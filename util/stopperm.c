@@ -140,7 +140,6 @@ keeplog(
         title, ctime(&hdr.chrono));
     f_suck(fp, fnlog);
     fclose(fp);
-    close(fd);
 
     strcpy(hdr.title, title);
     strcpy(hdr.owner, "SYSOP");

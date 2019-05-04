@@ -74,7 +74,6 @@ keeplog(
             title, ctime(&hdr.chrono));
         f_suck(fp, fnlog);
         fclose(fp);
-        close(fd);
         if (mode)
             unlink(fnlog);
     }
