@@ -175,7 +175,7 @@ XO *xo)
 
     pos = xo->pos + 1;
 
-    while (fd)
+    while (fd >= 0)
     {
         lseek(fd, (off_t)(sizeof(EMAIL) * pos), SEEK_SET);
         if (read(fd, &viol, sizeof(EMAIL)) == sizeof(EMAIL))

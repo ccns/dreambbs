@@ -135,7 +135,7 @@ main(
             }
             count->cur_day_max_login = 0;
         }
-        if ((fd = open(FN_VAR_SYSHISTORY, O_WRONLY | O_CREAT | O_TRUNC, 0600)))
+        if ((fd = open(FN_VAR_SYSHISTORY, O_WRONLY | O_CREAT | O_TRUNC, 0600)) >= 0)
         {
             write(fd, count, sizeof(COUNTER));
             close(fd);

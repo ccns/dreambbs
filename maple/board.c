@@ -1715,7 +1715,7 @@ class_find_same(
 
     i = 0;
     usr_fpath(fpath, cuser.userid, FN_FAVORITE);
-    if ((fd = open(fpath, O_RDONLY)))
+    if ((fd = open(fpath, O_RDONLY)) >= 0)
     {
         while ((read(fd, &hdr, sizeof(HDR)) == sizeof(HDR)))
         {
@@ -2206,7 +2206,7 @@ brd_list(
             sprintf(temp, "board.%c", *buf);
             usr_fpath(fpath, cuser.userid, temp);
             fd = open(fpath, O_RDONLY);
-            while (fd)
+            while (fd >= 0)
             {
                 if (read(fd, &list, sizeof(LIST)) == sizeof(LIST))
                 {

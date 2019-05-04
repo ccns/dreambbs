@@ -34,7 +34,7 @@ ALOHA *aloha)
     ALOHA new;
     int pos = 0, fd;
     fd = open(fpath, O_RDONLY);
-    while (fd)
+    while (fd >= 0)
     {
         lseek(fd, (off_t)(sizeof(ALOHA) * pos), SEEK_SET);
         if (read(fd, &new, sizeof(ALOHA)) == sizeof(ALOHA))

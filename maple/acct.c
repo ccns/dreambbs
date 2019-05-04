@@ -298,7 +298,7 @@ int check_admin(char *name)
         return 1;
 
     fd = open(FN_ETC_ADMIN_DB, O_RDONLY);
-    while (fd)
+    while (fd >= 0)
     {
         lseek(fd, (off_t) (sizeof(admin) * pos), SEEK_SET);
         if (read(fd, &admin, sizeof(admin)) == sizeof(admin))
@@ -664,7 +664,7 @@ static int seek_log_email(char *mail, int mode)
     EMAIL email;
     int pos = 0, fd;
     fd = open(FN_VIOLATELAW_DB, O_RDONLY);
-    while (fd)
+    while (fd >= 0)
     {
         lseek(fd, (off_t) (sizeof(email) * pos), SEEK_SET);
         if (read(fd, &email, sizeof(email)) == sizeof(email))
@@ -1446,7 +1446,7 @@ int find_same_email(            /* mode : 1.find 2.add 3.del */
     {
         fd = open(fpath, O_RDONLY);
         pos = 0;
-        while (fd)
+        while (fd >= 0)
         {
             lseek(fd, (off_t) (sizeof(SAME_EMAIL) * pos), SEEK_SET);
             if (read(fd, &email, sizeof(SAME_EMAIL)) == sizeof(SAME_EMAIL))
@@ -1461,7 +1461,7 @@ int find_same_email(            /* mode : 1.find 2.add 3.del */
                 break;
             }
         }
-        if (fd)
+        if (fd >= 0)
             close(fd);
     }
 

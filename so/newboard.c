@@ -195,7 +195,7 @@ int mode)
     int pos = 0, fd;
     NBRD nbrd;
     fd = open(xo->dir, O_RDONLY);
-    while (fd)
+    while (fd >= 0)
     {
         lseek(fd, (off_t)(sizeof(NBRD) * pos), SEEK_SET);
         if (read(fd, &nbrd, sizeof(NBRD)) == sizeof(NBRD))
@@ -440,7 +440,7 @@ char *mail)
     LOG email;
     int pos = 0, fd;
     fd = open(fpath, O_RDONLY);
-    while (fd)
+    while (fd >= 0)
     {
         lseek(fd, (off_t)(sizeof(email) * pos), SEEK_SET);
         if (read(fd, &email, sizeof(email)) == sizeof(email))
