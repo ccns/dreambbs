@@ -3783,8 +3783,8 @@ ulist_su(
     ufo = cuser.ufo;
     level = cuser.userlevel;
     if (!supervisor ||
-            acct_load(&acct, ulist_pool[xo->pos].utmp->userid) < 0)
-            return XO_NONE;
+        acct_load(&acct, ulist_pool[xo->pos].utmp->userid) < 0)
+        return XO_NONE;
 
     memcpy(&cuser, &acct, sizeof(ACCT));
     cuser.userlevel = level;

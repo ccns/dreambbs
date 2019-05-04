@@ -1237,7 +1237,7 @@ class_body(
 //                  tmp[e_cols + 33] = '\0';
 //              else
                     tmp[e_cols + 31] = ' ';
-                    tmp[e_cols + 32] = '\0';
+                tmp[e_cols + 32] = '\0';
 
 /* 081122.cache:看板性質, 不訂閱, 秘密, 好友, 一般 */
                 if (bits[chn] & BRD_Z_BIT)
