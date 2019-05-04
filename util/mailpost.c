@@ -42,6 +42,7 @@ acct_fetch(
     {
         if (read(fd, &myacct, sizeof(ACCT)) != sizeof(ACCT))
         {
+            // IID.20190505: Always fails; seems like this is disabled.
             close(fd);
             fd = -1;
         }
