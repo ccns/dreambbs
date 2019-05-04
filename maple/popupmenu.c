@@ -398,7 +398,7 @@ do_menu(
 #else
                 vs_restore(sl);
 #endif
-                    draw_menu(table, num+1, title, x, y, cur);
+                draw_menu(table, num+1, title, x, y, cur);
                 break;
             default:
                 for (tmp=0; tmp<=num; tmp++)

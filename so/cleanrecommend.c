@@ -269,106 +269,106 @@ clean(
     if (!(bbstate & STAT_BOARD))
         return 0;
 
-        pos = xo->pos;
-        cur = pos - xo->top;
-        hdr = (HDR *) xo_pool + cur;
+    pos = xo->pos;
+    cur = pos - xo->top;
+    hdr = (HDR *) xo_pool + cur;
 
-        if (!hdr->recommend || hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
-            return XO_NONE;
+    if (!hdr->recommend || hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
+        return XO_NONE;
 
-        chrono = hdr->chrono;
-        strcpy(title, hdr->title);
-        strcpy(name, hdr->xname);
+    chrono = hdr->chrono;
+    strcpy(title, hdr->title);
+    strcpy(name, hdr->xname);
 
-        hdr_fpath(fpath, xo->dir, hdr);
-        sprintf(recommenddb, "tmp/%s.recommenddb", cuser.userid);
-        sprintf(tmp, "tmp/%s.clean", cuser.userid);
-        unlink(tmp);
-        unlink(recommenddb);
+    hdr_fpath(fpath, xo->dir, hdr);
+    sprintf(recommenddb, "tmp/%s.recommenddb", cuser.userid);
+    sprintf(tmp, "tmp/%s.clean", cuser.userid);
+    unlink(tmp);
+    unlink(recommenddb);
 
-        brd = bshm->bcache + brd_bno(currboard);
-        battr = brd->battr;
+    brd = bshm->bcache + brd_bno(currboard);
+    battr = brd->battr;
 
-        if ((fp = fopen(fpath, "r")))
-        {
+    if ((fp = fopen(fpath, "r")))
+    {
 
 /*
-            if (brd->battr & BRD_PUSHSNEER)
+        if (brd->battr & BRD_PUSHSNEER)
+        {
+            if (addscore == 1)
+                sprintf(add,                "[[1;33m¡÷ %12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+            else if (addscore == -1)
+                sprintf(add,      "[[1;31m¼N[[m [[1;33m%12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+        }
+        else if (brd->battr & BRD_PUSHDEFINE)
+        {
+            if (addscore == 1)
+                sprintf(            add, "[[1;33m%02.2s %12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+            else if (addscore == -1)
+                sprintf(  add, "[[1;31m%02.2s[[m [[1;33m%12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+            else
+                sprintf(add,                "[[1;33m¡÷ %12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+        }
+        else
+            sprintf(add,                  "[[1;33m¡÷ %12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+*/
+        while (fgets(buf, 256, fp))
+        {
+            memset(&rmsg, 0, sizeof(RMSG));
+            if (!strncmp(buf, "\x1b[1;32m¡°", 9))
+                pushstart = 1;
+
+            if (pushstart)
             {
-                if (addscore == 1)
-                    sprintf(add,                "[[1;33m¡÷ %12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
-                else if (addscore == -1)
-                    sprintf(add,      "[[1;31m¼N[[m [[1;33m%12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
-            }
-            else if (brd->battr & BRD_PUSHDEFINE)
-            {
-                if (addscore == 1)
-                    sprintf(            add, "[[1;33m%02.2s %12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
-                else if (addscore == -1)
-                    sprintf(  add, "[[1;31m%02.2s[[m [[1;33m%12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                if (!strncmp(buf, "\x1b[1;32m¡°", 9))
+                {
+                    f_cat(tmp, buf);
+                    continue;
+                }
+                c2 = strrchr(buf, '\n') - 5;
+                strncpy(rmsg.rtime, c2, 5);
+
+                c2 -= 58;
+                strncpy(rmsg.msg, c2, 54);
+
+                c2 -= 19;
+                strncpy(rmsg.userid, c2, 12);
+
+                c2 = strchr(buf, 'm');
+                strncpy(rmsg.verb, c2+1, 2);
+
+                if ((battr & BRD_PUSHDEFINE) && !strncmp(rmsg.verb, "¡÷", 2) )
+                    rmsg.pn = COMMENT;
+                else if (!strncmp(rmsg.verb, "\x1b[m\x1b[1;33", 2))
+                    rmsg.pn = COMMENT;
+                /*else if (strncmp(buf, "\x1b[1;33¡÷", 8))
+                    rmsg.pn = POSITIVE;*/
                 else
-                    sprintf(add,                "[[1;33m¡÷ %12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                    rmsg.pn = !strncmp(buf, "\x1b[1;33", 6);
+
+                rec_add(recommenddb, &rmsg, sizeof(RMSG));
+//              if (!strncmp(buf, "\x1b[1;33m¡÷", 9))
+//              {
+/*
+                    for (i=0; i<12; i++)
+                        rmsg.userid[i] = buf[i+10];
+                    rmsg.userid[12] = '\0';
+                    for (i=0; i<54; i++)
+                        rmsg.msg[i] = buf[i+29];
+                    rmsg.msg[54] = '\0';
+                    for (i=0; i<5; i++)
+                        rmsg.rtime[i] = buf[i+87];
+                    rmsg.rtime[5] = '\0';
+                    rec_add(recommenddb, &rmsg, sizeof(RMSG));
+*/
+//              }
+
             }
             else
-                sprintf(add,                  "[[1;33m¡÷ %12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
-*/
-                while (fgets(buf, 256, fp))
-                {
-                    memset(&rmsg, 0, sizeof(RMSG));
-                    if (!strncmp(buf, "\x1b[1;32m¡°", 9))
-                        pushstart = 1;
-
-                    if (pushstart)
-                    {
-                        if (!strncmp(buf, "\x1b[1;32m¡°", 9))
-                        {
-                            f_cat(tmp, buf);
-                            continue;
-                        }
-                        c2 = strrchr(buf, '\n') - 5;
-                        strncpy(rmsg.rtime, c2, 5);
-
-                        c2 -= 58;
-                        strncpy(rmsg.msg, c2, 54);
-
-                        c2 -= 19;
-                        strncpy(rmsg.userid, c2, 12);
-
-                        c2 = strchr(buf, 'm');
-                        strncpy(rmsg.verb, c2+1, 2);
-
-                        if ((battr & BRD_PUSHDEFINE) && !strncmp(rmsg.verb, "¡÷", 2) )
-                            rmsg.pn = COMMENT;
-                        else if (!strncmp(rmsg.verb, "\x1b[m\x1b[1;33", 2))
-                            rmsg.pn = COMMENT;
-                        /*else if (strncmp(buf, "\x1b[1;33¡÷", 8))
-                            rmsg.pn = POSITIVE;*/
-                        else
-                            rmsg.pn = !strncmp(buf, "\x1b[1;33", 6);
-
-                        rec_add(recommenddb, &rmsg, sizeof(RMSG));
-//                      if (!strncmp(buf, "\x1b[1;33m¡÷", 9))
-//                      {
-/*
-                            for (i=0; i<12; i++)
-                                rmsg.userid[i] = buf[i+10];
-                            rmsg.userid[12] = '\0';
-                            for (i=0; i<54; i++)
-                                rmsg.msg[i] = buf[i+29];
-                            rmsg.msg[54] = '\0';
-                            for (i=0; i<5; i++)
-                                rmsg.rtime[i] = buf[i+87];
-                            rmsg.rtime[5] = '\0';
-                            rec_add(recommenddb, &rmsg, sizeof(RMSG));
-*/
-//                      }
-
-                    }
-                    else
-                        f_cat(tmp, buf);
-                }
-                fclose(fp);
+                f_cat(tmp, buf);
         }
+        fclose(fp);
+    }
 
     xz[XZ_OTHER - XO_ZONE].xo = xoo = xo_new(recommenddb);
     xz[XZ_OTHER - XO_ZONE].cb = cleanrecommend_cb;

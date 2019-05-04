@@ -328,22 +328,22 @@ main(
             if (m1 >= INT_MAX )
                 m1 = INT_MAX;
 
-                sprintf(buf, "%s/" FN_ACCT, str);
-                if ((fd = open(buf, O_RDONLY)) < 0)
-                    continue;
+            sprintf(buf, "%s/" FN_ACCT, str);
+            if ((fd = open(buf, O_RDONLY)) < 0)
+                continue;
 
-                read(fd, &old, sizeof(OLD));
-                close(fd);
-                unlink(buf);                    /* itoc.010831: 砍掉原來的 FN_ACCT */
+            read(fd, &old, sizeof(OLD));
+            close(fd);
+            unlink(buf);                    /* itoc.010831: 砍掉原來的 FN_ACCT */
 
-                trans_acct(&old, &new);
+            trans_acct(&old, &new);
 
-                fd = open(buf, O_WRONLY | O_CREAT, 0600);       /* itoc.010831: 重建新的 FN_ACCT */
-                write(fd, &new, sizeof(NEW));
-                close(fd);
+            fd = open(buf, O_WRONLY | O_CREAT, 0600);       /* itoc.010831: 重建新的 FN_ACCT */
+            write(fd, &new, sizeof(NEW));
+            close(fd);
 
-            }
-            printf("/usr/%c is done.\n", c);
+        }
+        printf("/usr/%c is done.\n", c);
 
         closedir(dirp);
     }

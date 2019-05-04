@@ -706,7 +706,7 @@ main(void)
     unlink(BANREGIST);
 
 #ifdef DEBUG
-        logit("report_eaddr_group");
+    logit("report_eaddr_group");
 #endif
 
 #ifdef EADDR_GROUPING
@@ -743,7 +743,7 @@ main(void)
 
 
 #ifdef DEBUG
-        logit("counter");
+    logit("counter");
 #endif
     counter = attach_shm(COUNT_KEY, sizeof(COUNTER));
     if (counter)

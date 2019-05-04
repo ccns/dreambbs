@@ -1999,7 +1999,7 @@ hdr_outs(               /* print HDR's subject */
 
         online = utmp_check(mark);  /* 使用者在站上就變色 */
         if (online != NULL)
-        outs("\x1b[1;37m");
+            outs("\x1b[1;37m");
 
         while ((ch = (unsigned char) *mark))
         {

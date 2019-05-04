@@ -75,68 +75,68 @@ myfavorite_item(
                 {
                     fstat(fd, &st);
 
-                if (st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
-                {
-                    if ((fsize = st.st_size) >= sizeof(HDR))
+                    if (st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
                     {
-                        HDR hdr;
-
-                        brd->bpost = fsize / sizeof(HDR);
-                        while ((fsize -= sizeof(HDR)) >= 0)
+                        if ((fsize = st.st_size) >= sizeof(HDR))
                         {
-                            lseek(fd, fsize, SEEK_SET);
-                            read(fd, &hdr, sizeof(HDR));
-                            if (!(hdr.xmode & (POST_LOCK | POST_BOTTOM)))
-                                break;
+                            HDR hdr;
+
+                            brd->bpost = fsize / sizeof(HDR);
+                            while ((fsize -= sizeof(HDR)) >= 0)
+                            {
+                                lseek(fd, fsize, SEEK_SET);
+                                read(fd, &hdr, sizeof(HDR));
+                                if (!(hdr.xmode & (POST_LOCK | POST_BOTTOM)))
+                                    break;
+                            }
+                            brd->blast = hdr.chrono;
                         }
-                        brd->blast = hdr.chrono;
-                    }
-                    else
+                        else
                             brd->blast = brd->bpost = 0;
                     }
 
                     close(fd);
                 }
 
-        }
-
-        else
-        {
-            int fd, fsize;
-            char folder[64];
-            struct stat st;
-
-            brd_fpath(folder, brd->brdname, fn_dir);
-            if ((fd = open(folder, O_RDONLY)) >= 0)
-            {
-                fstat(fd, &st);
-
-            if (st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
-            {
-                if ((fsize = st.st_size) >= sizeof(HDR))
-                {
-                    HDR hdr;
-
-                    brd->bpost = fsize / sizeof(HDR);
-                    while ((fsize -= sizeof(HDR)) >= 0)
-                    {
-                        lseek(fd, fsize, SEEK_SET);
-                        read(fd, &hdr, sizeof(HDR));
-                        if (!(hdr.xmode & (POST_LOCK | POST_BOTTOM)))
-                            break;
-                    }
-                    brd->blast = (hdr.chrono > brd->blast) ? hdr.chrono : brd->blast;
-                }
-                else
-                        brd->blast = brd->bpost = 0;
-                }
-
-                close(fd);
             }
-            num = brd->bpost;
-        }
 
-        sprintf(str, "%s", brd->blast > brd_visit[chn] ? "\x1b[1;31m★\x1b[m" : "☆");
+            else
+            {
+                int fd, fsize;
+                char folder[64];
+                struct stat st;
+
+                brd_fpath(folder, brd->brdname, fn_dir);
+                if ((fd = open(folder, O_RDONLY)) >= 0)
+                {
+                    fstat(fd, &st);
+
+                    if (st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
+                    {
+                        if ((fsize = st.st_size) >= sizeof(HDR))
+                        {
+                            HDR hdr;
+
+                            brd->bpost = fsize / sizeof(HDR);
+                            while ((fsize -= sizeof(HDR)) >= 0)
+                            {
+                                lseek(fd, fsize, SEEK_SET);
+                                read(fd, &hdr, sizeof(HDR));
+                                if (!(hdr.xmode & (POST_LOCK | POST_BOTTOM)))
+                                    break;
+                            }
+                            brd->blast = (hdr.chrono > brd->blast) ? hdr.chrono : brd->blast;
+                        }
+                        else
+                            brd->blast = brd->bpost = 0;
+                    }
+
+                    close(fd);
+                }
+                num = brd->bpost;
+            }
+
+            sprintf(str, "%s", brd->blast > brd_visit[chn] ? "\x1b[1;31m★\x1b[m" : "☆");
 
 /* 081122.cache:看板性質, 不訂閱, 秘密, 好友, 一般 */
             if (bits[chn] & BRD_Z_BIT)
