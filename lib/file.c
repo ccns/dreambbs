@@ -28,12 +28,10 @@ int f_cp(const char *src, const char *dst, int mode    /* O_EXCL / O_APPEND / O_
 {
     int fsrc, fdst, ret;
 
-    ret = 0;
+    ret = -1;
 
     if ((fsrc = open(src, O_RDONLY)) >= 0)
     {
-        ret = -1;
-
         if ((fdst = open(dst, O_WRONLY | O_CREAT | mode, 0600)) >= 0)
         {
             char pool[BLK_SIZ];
