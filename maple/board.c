@@ -729,6 +729,10 @@ brh_save(void)
             close(fd);
         }
     }
+
+    // Unload
+    free(brh_base);
+    brh_base = NULL;
 }
 
 /*-------------------------------------------------------*/
