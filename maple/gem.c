@@ -1485,6 +1485,7 @@ gem_main(void)
 {
     XO *xo;
 
+    free(xz[XZ_GEM - XO_ZONE].xo);
     xz[XZ_GEM - XO_ZONE].xo = xo = xo_new("gem/.DIR");
     xz[XZ_GEM - XO_ZONE].cb = gem_cb;
     xo->pos = 0;

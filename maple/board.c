@@ -1900,6 +1900,7 @@ class_mov(
 
             favorite_main();
             usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
+            free(favorite_img);
             favorite_img = f_img(fpath, &fasize);
 
             logitfile(FN_FAVORITE_LOG, "< MOV >", hdr.xname);
@@ -2117,8 +2118,10 @@ board_main(void)
     if (stat(FN_BRD, &st) || st.st_size <= 0)
         unlink(CLASS_IMGFILE);
 
+    free(class_img);
     class_img = f_img(CLASS_IMGFILE, &fsize);
 #ifdef  HAVE_PROFESS
+    free(profess_img);
     profess_img = f_img(PROFESS_IMGFILE, &psize);
 #endif
 
@@ -2126,6 +2129,7 @@ board_main(void)
     if (HAS_PERM(PERM_VALID))
     {
         usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
+        free(favorite_img);
         favorite_img = f_img(fpath, &fasize);
     }
 #endif
