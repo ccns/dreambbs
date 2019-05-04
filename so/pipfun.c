@@ -13,14 +13,14 @@ int i, int j)
 }
 
 static inline void
-outs_centered(char *str)
+outs_centered(const char *str)
 {
     prints("%*s", d_cols>>1, "");
     outs(str);
 }
 
 static inline void
-prints_centered(char *fmt, ...)
+prints_centered(const char *fmt, ...)
 {
     va_list args;
     char buf[512], *str;
@@ -58,7 +58,7 @@ show_file(char *filename, int y, int lines, int mode)
 
 static inline void
 usercomplete(
-char *msg, char *buf)
+const char *msg, char *buf)
 {
     vget(1, 0, msg, buf, IDLEN + 1, GET_USER);
 }

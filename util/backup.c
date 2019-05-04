@@ -16,7 +16,7 @@
 
 #include "bbs.h"
 
-char *bk_path;
+const char *bk_path;
 
 struct tm *t;
 time_t now;
@@ -24,7 +24,7 @@ int mon, mday;
 
 static void
 log_backup(
-    char *msg)
+    const char *msg)
 {
     time_t now;
     FILE *fp;

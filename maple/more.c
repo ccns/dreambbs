@@ -411,8 +411,8 @@ more_slideshow(void)
                        >0 為未全show，中斷所按的key */
 int
 more(
-    char *fpath,
-    char *footer)
+    const char *fpath,
+    const char *footer)
 {
 #ifndef M3_USE_PMORE
     char buf[ANSILINELEN];

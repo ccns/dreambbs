@@ -20,7 +20,7 @@ extern BCACHE *bshm;
 #define STR_PERM      "bctpjm#x--------PTCMSNL*B#KGACBS"
 
 /* log admin command by statue@WindTop */
-void logitfile(char *file, char *key, char *msg)
+void logitfile(const char *file, const char *key, const char *msg)
 {
     time_t now;
     struct tm *p;
@@ -83,7 +83,7 @@ void addpoint2(int addend, char *userid)
 /* (.ACCT) 使用者帳號 (account) subroutines              */
 /* ----------------------------------------------------- */
 
-void keeplog(char *fnlog, char *board, char *title, int mode    /* 0:load 1:rename 2:unlink 3:mark */
+void keeplog(const char *fnlog, const char *board, const char *title, int mode    /* 0:load 1:rename 2:unlink 3:mark */
     )
 {
     HDR hdr;
@@ -190,7 +190,7 @@ int acct_userno(char *userid)
 /* o.w.: 傳回該 userid 之 userno                         */
 /* ----------------------------------------------------- */
 
-int acct_get(char *msg, ACCT * acct)
+int acct_get(const char *msg, ACCT * acct)
 {
     if (!vget(1, 0, msg, acct->userid, IDLEN + 1, GET_USER))
         return 0;
@@ -208,12 +208,12 @@ int acct_get(char *msg, ACCT * acct)
 /* ----------------------------------------------------- */
 
 void x_file(int mode,            /* M_XFILES / M_UFILES */
-            char *xlist[],        /* description list */
-            char *flist[]        /* filename list */
+            const char *xlist[], /* description list */
+            const char *flist[]  /* filename list */
     )
 {
     int n, i;
-    char *fpath, *desc;
+    const char *fpath, *desc;
     char buf[80];
 
     n = 0;
@@ -323,7 +323,7 @@ int check_admin(char *name)
 /* bit-wise display and setup                            */
 /* ----------------------------------------------------- */
 
-void bitmsg(char *msg, char *str, int level)
+void bitmsg(const char *msg, const char *str, int level)
 {
     int cc;
 
@@ -341,7 +341,7 @@ void bitmsg(char *msg, char *str, int level)
 
 unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
                     int maxon,    /* 最多可以 enable 幾項 */
-                    char *msg, char *perms[])
+                    const char *msg, const char *perms[])
 {
     int i, j, on;
 
@@ -822,7 +822,7 @@ int add_deny(ACCT * u, int adm, int cross)
     ACCT x;
     time_t now;
     int check_time;
-    char *cselect = NULL, *cdays = NULL, *cmode = NULL;
+    const char *cselect = NULL, *cdays = NULL, *cmode = NULL;
 
     memcpy(&x, u, sizeof(ACCT));
     time(&now);
@@ -1368,8 +1368,9 @@ int ban_addr(char *addr)
     int i;
     char *host, *str;
     char foo[64];                /* SoC: 放置待檢查的 email address */
+    const char* str_invalid;
 
-    static char *invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
+    static const char *invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
         "guest@", "@ppp", "@slip", "@dial", "unknown@", "@anon.penet.fi",
         "193.64.202.3", "brd@", NULL
     };
@@ -1377,9 +1378,9 @@ int ban_addr(char *addr)
     /* SoC: 保持原 email 的大小寫 */
     str_lower(foo, addr);
 
-    for (i = 0; (str = invalid[i]); i++)
+    for (i = 0; (str_invalid = invalid[i]); i++)
     {
-        if (strstr(foo, str))
+        if (strstr(foo, str_invalid))
             return 1;
     }
 
@@ -1429,7 +1430,7 @@ int find_same_email(            /* mode : 1.find 2.add 3.del */
                        char *mail, int mode)
 {
     int pos = 0, fd;
-    char *fpath;
+    const char *fpath;
     SAME_EMAIL email;
 
 
@@ -1500,7 +1501,8 @@ int find_same_email(            /* mode : 1.find 2.add 3.del */
 
 int u_addr(void)
 {
-    char *msg, addr[60], buf[30], agent[128], temp[60];
+    const char *msg;
+    char addr[60], buf[30], agent[128], temp[60];
     HDR fhdr;
     FILE *fout;
     int vtime;
@@ -1708,7 +1710,7 @@ int u_addr(void)
     return 0;
 }
 
-static char *UFO_FLAGS[] = {
+static const char *UFO_FLAGS[] = {
     "【保留】",
     "【保留】",
     "【保留】",
@@ -1738,7 +1740,7 @@ static char *UFO_FLAGS[] = {
     "【保留】"
 };
 
-static char *UFO2_FLAGS[] = {
+static const char *UFO2_FLAGS[] = {
     /* COLOR */ "彩色模式",
     /* MOVIE */ "動畫顯示",
     /* BRDNEW */ "新推文",
@@ -1787,7 +1789,7 @@ void su_setup(ACCT * u)
     int ufo, nflag, len;
     char fpath[80];
     UTMP *up;
-    char **flags = UFO_FLAGS;
+    const char **flags = UFO_FLAGS;
 
     up = utmp_find(u->userno);
     len = 21;
@@ -1822,7 +1824,7 @@ int u_setup(void)
     int ufo, nflag, len;
     char fpath[80];
 
-    char **flags = UFO_FLAGS;
+    const char **flags = UFO_FLAGS;
 
     nflag = cuser.userlevel;
     if (!nflag)
@@ -1865,7 +1867,7 @@ int ue_setup(void)
 {
     int ufo2, nflag, len;
 
-    char **flags = UFO2_FLAGS;
+    const char **flags = UFO2_FLAGS;
 
     nflag = cuser.userlevel;
     if (!nflag)
@@ -1972,7 +1974,7 @@ int u_xfile(void)
 {
     int i;
 
-    static char *desc[] = {
+    static const char *desc[] = {
         "上站地點設定檔",
         "名片檔",
         "簽名檔 (每個 6 行，共 3 個)",
@@ -1984,7 +1986,7 @@ int u_xfile(void)
         NULL
     };
 
-    static char *path[] = {
+    static const char *path[] = {
         "acl",
         FN_PLANS,
         FN_SIGN,

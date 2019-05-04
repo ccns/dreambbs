@@ -18,7 +18,7 @@
 #include "dao.h"
 
 
-static char *list[] = {
+static const char *list[] = {
     "welcome",
     "bye",
     "apply",
@@ -151,7 +151,8 @@ main(
 #ifdef      HAVE_SONG_TO_CAMERA
     int j, k;
 #endif
-    char *ptr, *str, *fname, fpath[80], buf[FILM_SIZ + 1];
+    char *ptr, *fname, fpath[80], buf[FILM_SIZ + 1];
+    const char *str;
 #ifdef  HAVE_RAND_INCOME
     char fincome[128];
     int pos;
@@ -197,9 +198,9 @@ main(
                     pos += size;
                 lseek(fd, (off_t) (sizeof(HDR) * pos), SEEK_SET);
                 read(fd, &hdr, sizeof(HDR));
-                str = strchr(fincome, '@');
-                *str = hdr.xname[7];
-                strcpy(str + 2, hdr.xname);
+                ptr = strchr(fincome, '@');
+                *ptr = hdr.xname[7];
+                strcpy(ptr + 2, hdr.xname);
                 mirror(fincome);
             }
             else
@@ -228,15 +229,15 @@ main(
 #ifdef  HAVE_SONG_TO_CAMERA
             if (j==1) sprintf(fpath, "brd/%s/@/", BRD_ORDERSONGS);
 #endif
-            str = strchr(fpath, '@');
+            ptr = strchr(fpath, '@');
             while (fread(&hdr, sizeof hdr, 1, fp) == 1)
             {
                 /* Thor.981110: 限制級則不放入movie中 */
                 if (hdr.xmode & (GEM_RESTRICT|GEM_LOCK))
                     continue;
 
-                *str = hdr.xname[7];
-                strcpy(str + 2, hdr.xname);
+                *ptr = hdr.xname[7];
+                strcpy(ptr + 2, hdr.xname);
                 if ((fd = open(fpath, O_RDONLY)) >= 0)
                 {
                     /* 讀入檔案 */

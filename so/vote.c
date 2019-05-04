@@ -40,7 +40,7 @@ typedef struct
 static int
 TchoiceCompare(const void * i, const void * j)
 {
-    return ((struct Tchoice *)j)->count - ((struct Tchoice *)i)->count;
+    return ((const struct Tchoice *)j)->count - ((const struct Tchoice *)i)->count;
 }
 
 
@@ -807,7 +807,7 @@ XO *xo)
     {
         if (vans("確定要取消這項投票嗎？") == 'y')
         {
-            char *list = "@IOVSE";
+            const char *list = "@IOVSE";
 
             while ((*fname = *list++))
             {
@@ -915,7 +915,8 @@ XO *xo)
 {
     VCH *vch;
     int count, choice, fd, fv;
-    char *fname, fpath[80], buf[80], *slist[MAX_CHOICES];
+    char *fname, fpath[80], buf[80];
+    const char *slist[MAX_CHOICES];
     char account[10/*7*/];
     vitem_t vlist[MAX_CHOICES];
 
@@ -1020,7 +1021,7 @@ XO *xo)
 
     for (fd = 0; fd < count; fd++)
     {
-        slist[fd] = (char *) & vlist[fd];
+        slist[fd] = vlist[fd];
     }
 
     /* --------------------------------------------------- */

@@ -282,7 +282,7 @@ typedef struct playrule playrule;
 /*--------------------------------------------------------------------------*/
 struct magicset
 {
-    char *name;         /*魔法的名字*/
+    const char *name;   /*魔法的名字*/
     int needmp;         /*需要的法力*/
     int hpmode;         /*0:減少 1:增加 2:最大值*/
     int hp;             /*殺傷生命力*/
@@ -298,14 +298,14 @@ typedef struct magicset magicset;
 /*--------------------------------------------------------------------------*/
 struct royalset
 {
-    char *num;          /*代碼*/
-    char *name;         /*王臣的名字*/
+    const char *num;    /*代碼*/
+    const char *name;   /*王臣的名字*/
     int needmode;       /*需要的mode*/ /*0:不需要 1:禮儀 2:談吐*/
     int needvalue;      /*需要的value*/
     int addtoman;       /*最大的增加量*/
     int maxtoman;       /*庫存量*/
-    char *words1;
-    char *words2;
+    const char *words1;
+    const char *words2;
 };
 typedef struct royalset royalset;
 
@@ -315,9 +315,9 @@ typedef struct royalset royalset;
 struct goodsofpip
 {
     int num;            /*編號*/
-    char *name;         /*名字*/
-    char *msgbuy;       /*功用*/
-    char *msguse;       /*說明*/
+    const char *name;   /*名字*/
+    const char *msgbuy; /*功用*/
+    const char *msguse; /*說明*/
     int money;          /*金錢*/
     int change;         /*改變量*/
     int pic1;
@@ -355,7 +355,7 @@ struct goodsofpip pipotherlist[] = {
 /*--------------------------------------------------------------------------*/
 struct weapon
 {
-    char *name;         /*名字*/
+    const char *name;   /*名字*/
     int needmaxhp;      /*需要hp*/
     int needmaxmp;      /*需要mp*/
     int needspeed;      /*需要的speed*/
@@ -646,8 +646,8 @@ struct playrule resultmanlist[] =
 
 struct newendingset
 {
-    char *girl;         /*女生結局的職業*/
-    char *boy;          /*男生結局的職業*/
+    const char *girl;   /*女生結局的職業*/
+    const char *boy;    /*男生結局的職業*/
     int grade;          /*評分*/
 };
 typedef struct newendingset newendingset;

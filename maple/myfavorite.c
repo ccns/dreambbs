@@ -17,7 +17,7 @@ extern XZ xz[];
 extern char brd_bits[MAXBOARD];
 extern int ok;
 
-static void XoFavorite(char *folder, char *title, int level);
+static void XoFavorite(char *folder, const char *title, int level);
 static int myfavorite_add(XO *xo);
 static char currdir[64];
 
@@ -47,7 +47,8 @@ myfavorite_item(
         else
         {
             BRD *brd;
-            char str[20], buf[10], *bits, *str2, buf2[20], brdtype;
+            char str[20], buf[10], *bits, buf2[20], brdtype;
+            const char *str2;
             int chn, brdnew, bno;
 
             chn = myfavorite->recommend;
@@ -153,7 +154,6 @@ myfavorite_item(
 /* 處理 人氣 */ /* cache.20090416: 仿ptt變色*/
             bno = brd - bshm->bcache;
             bno = bshm->mantime[bno];
-            str2 = buf2;
 
             if (bno > 4999)
                 str2 = "\x1b[1;32m TOP \x1b[m";
@@ -185,8 +185,10 @@ myfavorite_item(
                 str2 = "\x1b[1;31m HOT \x1b[m";
             else if (bno > 49)
                 str2 = "\x1b[1;37m HOT \x1b[m";
-            else if (bno > 1) /* r2.170810: let somebody know which board is still "alive" :P */
-                sprintf(str2, "  %2d ", bno);
+            else if (bno > 1) { /* r2.170810: let somebody know which board is still "alive" :P */
+                sprintf(buf2, "  %2d ", bno);
+                str2 = buf2;
+            }
             else
                 str2 = "     ";
 //注意有三格空白, 因為 HOT 是三個 char 故更改排版
@@ -668,7 +670,7 @@ KeyFunc myfavorite_cb[] =
 static void
 XoFavorite(
     char *folder,
-    char *title,
+    const char *title,
     int level)
 {
     XO *xo, *last;

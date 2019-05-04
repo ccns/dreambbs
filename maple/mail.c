@@ -113,7 +113,7 @@ ll_has(
 void
 ll_out(
     int row, int column,
-    char *msg)
+    const char *msg)
 {
     LinkList *list;
     int cur_rownum, ch, crow;
@@ -218,7 +218,7 @@ bsmtp(
 
 int
 bsmtp(
-    char *fpath, char *title, char *rcpt,
+    const char *fpath, const char *title, const char *rcpt,
     int method)
 {
     int sock;
@@ -247,13 +247,13 @@ bsmtp(
     if (method == MQ_JUSTIFY)
     {
         fpath = FN_ETC_VALID;
-        title = subject;
         /* Thor.990125: MYHOSTNAME統一放入 str_host */
         sprintf(from, "bbsreg@%s", str_host);
         archiv32(str_hash(rcpt, chrono), buf);
-        /* sprintf(title, "[MapleBBS]To %s(%s) [VALID]", cuser.userid, buf); */
+        /* sprintf(subject, "[MapleBBS]To %s(%s) [VALID]", cuser.userid, buf); */
         /* Thor.981012: 集中在 config.h 管理 */
-        sprintf(title, TAG_VALID"%s(%s) [VALID]", cuser.userid, buf);
+        sprintf(subject, TAG_VALID"%s(%s) [VALID]", cuser.userid, buf);
+        title = subject;
 
         usr_fpath(keyfile, cuser.userid, FN_REGKEY);
         if ( ( fp = fopen(keyfile, "w") ) )
@@ -273,10 +273,10 @@ bsmtp(
 #ifdef HAVE_SMTP_SERVER
     {
         int i;
-        char *alias[] = SMTP_SERVER;
-        for ( i=0; (str = alias[i]); i++)
+        const char *alias[] = SMTP_SERVER, *str_alias;
+        for ( i=0; (str_alias = alias[i]); i++)
         {
-            sock = dns_open(str, 25);
+            sock = dns_open(str_alias, 25);
             if (sock >= 0)
                 break;
         }
@@ -489,10 +489,10 @@ bsmtp_file(
 #ifdef HAVE_SMTP_SERVER
     {
         int i;
-        char *alias[] = SMTP_SERVER;
-        for ( i=0; (str = alias[i]); i++)
+        const char *alias[] = SMTP_SERVER, *str_alias;
+        for ( i=0; (str_alias = alias[i]); i++)
         {
-            sock = dns_open(str, 25);
+            sock = dns_open(str_alias, 25);
             if (sock >= 0)
                 break;
         }
@@ -1062,7 +1062,8 @@ int
 m_zip(void)                     /* itoc.010228: 打包資料 */
 {
     int ans;
-    char *name, *item, buf[80];
+    const char *name, *item;
+    char buf[80];
 
     ans = vans("打包資料 1)個人信件 2)看板文章 3)看板精華區 到註冊信箱 [Q] ");
 
@@ -1506,7 +1507,8 @@ mail_reply(
     HDR *hdr)
 {
     int xmode, prefix;
-    char *msg, buf[80];
+    char buf[80];
+    const char *msg;
 
     if (bbsothermode & OTHERSTAT_EDITING)
     {
@@ -1562,7 +1564,8 @@ mail_reply(
         break;
 
     case -3:  /* Thor.980707: 有此情況嗎 ?*/
-        sprintf(msg = buf, "[%s] 無法收信", quote_user);
+        sprintf(buf, "[%s] 無法收信", quote_user);
+        msg = buf;
         break;
 
     default:
@@ -1585,7 +1588,7 @@ my_send(
     char *rcpt)
 {
     int result;
-    char *msg;
+    const char *msg;
 
     if (bbsothermode & OTHERSTAT_EDITING)
     {
@@ -1955,9 +1958,9 @@ hdr_outs(               /* print HDR's subject */
     HDR *hdr,
     int cc)
 {
-    static char *type[4] =
+    static const char *type[4] =
     {"Re", "◇", "\x1b[1;33m=>", "\x1b[1;32m◆"};
-    char *title, *mark;
+    const char *title, *mark;
     int ch, len;
     UTMP *online;
 

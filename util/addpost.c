@@ -16,7 +16,7 @@ static char *username;
 static void
 out_post(
     HDR *hdr,
-    char *board)
+    const char *board)
 {
     bntp_t bntp;
 
@@ -32,9 +32,9 @@ out_post(
 
 static void
 add_post(           /* 發文到看板 */
-    char *brdname,        /* 欲 post 的看板 */
-    char *fpath,          /* 檔案路徑 */
-    char *title)          /* 文章標題 */
+    const char *brdname,  /* 欲 post 的看板 */
+    const char *fpath,    /* 檔案路徑 */
+    const char *title)    /* 文章標題 */
 {
     HDR hdr;
     char folder[64];
@@ -56,7 +56,8 @@ main(
     int argc,
     char *argv[])
 {
-    char *fpath, *brdname, *title, *fname;
+    const char *fpath;
+    const char *brdname, *title, *fname;
     FILE *fp;
 
     if (argc != 6)

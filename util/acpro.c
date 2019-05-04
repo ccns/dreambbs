@@ -22,7 +22,7 @@ static BCACHE *bshm;
 static void
 attach_err(
     int shmkey,
-    char *name)
+    const char *name)
 {
     fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
     exit(1);
@@ -124,9 +124,10 @@ static BRD *bhead, *btail;
 
 static int
 class_parse(
-    char *key)
+    const char *key)
 {
-    char *str, *ptr, fpath[80];
+    char *str, fpath[80];
+    const char *ptr;
     ClassHeader *chp;
     HDR hdr;
     int i, len, count;

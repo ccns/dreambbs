@@ -1965,7 +1965,7 @@ static const char *bbsluaTocPrompts[] =
 int
 bbslua_load_TOC(lua_State *L, const char *bs, const char *be, char **ppc)
 {
-    unsigned char *ps = NULL, *pe = NULL;
+    const unsigned char *ps = NULL, *pe = NULL;
     int i = 0;
 
     lua_newtable(L);
@@ -1974,10 +1974,10 @@ bbslua_load_TOC(lua_State *L, const char *bs, const char *be, char **ppc)
     while (bs < be)
     {
         // find stripped line start, end
-        ps = pe = (unsigned char *) bs;
-        while (pe < (unsigned char*)be && *pe != '\n' && *pe != '\r')
+        ps = pe = (const unsigned char *) bs;
+        while (pe < (const unsigned char*)be && *pe != '\n' && *pe != '\r')
             pe ++;
-        bs = (char*)pe+1;
+        bs = (const char*)pe+1;
         while (ps < pe && *ps <= ' ') ps++;
         while (pe > ps && *(pe-1) <= ' ') pe--;
         // at least "--"
@@ -1995,7 +1995,7 @@ bbslua_load_TOC(lua_State *L, const char *bs, const char *be, char **ppc)
             int l = strlen(bbsluaTocTags[i]);
             if (ps + l > pe)
                 continue;
-            if (strncasecmp((char*)ps, bbsluaTocTags[i], l) != 0)
+            if (strncasecmp((const char*)ps, bbsluaTocTags[i], l) != 0)
                 continue;
             ps += l;
             // found matching pattern, now find value
@@ -2007,7 +2007,7 @@ bbslua_load_TOC(lua_State *L, const char *bs, const char *be, char **ppc)
             if (ps >= pe)
                 break;
 
-            lua_pushlstring(L, (char*)ps, pe-ps);
+            lua_pushlstring(L, (const char*)ps, pe-ps);
 
             // accept only real floats for interface ([0])
             if (i == 0 && lua_tonumber(L, -1) <= 0)
@@ -2022,7 +2022,7 @@ bbslua_load_TOC(lua_State *L, const char *bs, const char *be, char **ppc)
         }
     }
 
-    if (ps >= (unsigned char*)bs && ps < (unsigned char*)be)
+    if (ps >= (const unsigned char*)bs && ps < (const unsigned char*)be)
         *ppc = (char*)ps;
     lua_setglobal(L, "toc");
     return 0;

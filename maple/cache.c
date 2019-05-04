@@ -26,7 +26,7 @@ extern int item_length[20];
 static void
 attach_err(
     int shmkey,
-    char *name)
+    const char *name)
 {
     char buf[80];
 
@@ -899,7 +899,7 @@ film_out(
 
 UTMP *
 utmp_check(        /* 檢查使用者是否在站上 */
-    char *userid)
+    const char *userid)
 {
     UTMP *uentp, *uceil;
 

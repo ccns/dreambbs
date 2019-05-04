@@ -151,7 +151,7 @@ checksum_find(
 {
     char buf[256];
     FILE *fp;
-    char *star = "※";
+    const char *star = "※";
 
     int sum, i, count=0;
 
@@ -258,7 +258,7 @@ cancel_post(
     void
 move_post(      /* 將 hdr 從 currboard 搬到 board */
     HDR *hdr,
-    char *board,
+    const char *board,
     int by_bm)
 {
     HDR post;
@@ -337,7 +337,8 @@ do_post(
 {
     /* Thor.1105: 進入前需設好 curredit */
     HDR post;
-    char fpath[80], folder[80], *nick, *rcpt, buf[50];
+    char fpath[80], folder[80], buf[50];
+    const char *nick, *rcpt;
     int mode, bno = -1;
     BRD *brd;
     time_t spendtime;
@@ -614,8 +615,8 @@ do_post(
 
         if (curredit & EDIT_BOTH)
         {
-            char *msg = "作者無法收信";
-#define MSG_OK          "回應至作者信箱"
+            const char *msg = "作者無法收信";
+#define MSG_OK                "回應至作者信箱"
 
             rcpt = quote_user;
             if (strchr(rcpt, '@'))
@@ -668,7 +669,7 @@ do_post(
 do_reply(
     HDR *hdr)
 {
-    char *msg;
+    const char *msg;
 
     curredit = 0;
     if ((bbstate & BRD_NOREPLY) && !HAS_PERM(PERM_SYSOP))
@@ -3473,7 +3474,7 @@ post_recommend(
 post_showBRD_setting(
     XO *xo)
 {
-    char *str;
+    const char *str;
     BRD *brd;
 
     brd = bshm->bcache + brd_bno(currboard);
@@ -3908,7 +3909,7 @@ post_manage(
 {
     char re;
 
-    char *menu[] =
+    const char *menu[] =
     {
         "BQ",
         "Title   修改看板主題",

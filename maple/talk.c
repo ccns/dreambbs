@@ -90,17 +90,17 @@ int pickup_way=1;
 
 static char page_requestor[40];
 
-char *
+const char *
 bmode(
     UTMP *up,
     int simple)
 {
     static char modestr[32];
 #ifdef  HAVE_SHOWNUMMSG
-    char *nums[9] = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
+    const char *nums[9] = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
 #endif
     int mode;
-    char *word;
+    const char *word;
 
     if (!up)
         return "不在站上";
@@ -1014,7 +1014,7 @@ t_pal(void)
 /* ----------------------------------------------------- */
 
 
-/*static */void bmw_edit(UTMP *up, char *hint, BMW *bmw, int cc);
+/*static */void bmw_edit(UTMP *up, const char *hint, BMW *bmw, int cc);
 
 
 static void
@@ -1659,7 +1659,7 @@ bmw_send(
 /*static */void
 bmw_edit(
     UTMP *up,
-    char *hint,
+    const char *hint,
     BMW *bmw,
     int cc)
 {
@@ -2561,7 +2561,7 @@ talk_char(
 static void
 talk_string(
     talk_win *twin,
-    char *str)
+    const char *str)
 {
     int ch;
 
@@ -2844,7 +2844,7 @@ talk_hangup(
 }
 
 
-static char *talk_reason[] =
+static const char *talk_reason[] =
 {
     "對不起，我有事情不能跟你 talk",
     "我現在很忙，請等一會兒再 call 我",
@@ -3042,12 +3042,12 @@ talk_page(
 #endif
     else
     {
-        char *reply;
+        const char *reply;
 
         if (ans == ' ')
         {
+            buf[length] = '\0';
             reply = buf;
-            reply[length] = '\0';
         }
         else
             reply = talk_reason[ans - '1'];
@@ -3082,7 +3082,7 @@ static int ulist_init(XO *xo);
 static XO ulist_xo;
 
 
-static char *msg_pickup_way[PICKUP_WAYS] =
+static const char *msg_pickup_way[PICKUP_WAYS] =
 {
     "任意",
     "代號",
@@ -3125,7 +3125,8 @@ ulist_body(
     UTMP *up;
     int paltmp;
     int n, cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor, colortmp;
-    char buf[16], color[20], ship[80], *wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
+    char buf[16], color[20], ship[80];
+    const char *wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 
 #ifdef HAVE_BOARD_PAL
     int isbpal;
@@ -4502,7 +4503,7 @@ check_personal_note(
     char fpath[256];
     int  fd, total = 0;
     notedata myitem;
-    char *fn_note_dat      = FN_PNOTE_DAT;
+    const char *fn_note_dat = FN_PNOTE_DAT;
 
     if (userid == NULL)
         usr_fpath(fpath, cuser.userid, fn_note_dat);

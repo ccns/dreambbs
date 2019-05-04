@@ -31,8 +31,8 @@
 typedef struct ClientType ClientType;
 typedef struct
 {
-    char *name;
-    char *usage;
+    const char *name;
+    const char *usage;
     int minargc;                /* argc 最少幾個 */
     int maxargc;                /* argc 最多幾個 */
     int mode;                   /* 0:要command-mode才能跑  1:要data-mode才能跑  2:沒有限制 */
@@ -146,7 +146,7 @@ searchcmd(
     char *cmd)
 {
     daemoncmd_t *p;
-    char *name;
+    const char *name;
 
     for (p = cmds; (name = p->name); p++)
     {
@@ -634,7 +634,7 @@ search_nodelist_byhost(
 
 static time_t
 filetime(                       /* 傳回 fpath 的檔案時間 */
-    char *fpath)
+    const char *fpath)
 {
     struct stat st;
 
@@ -769,7 +769,7 @@ inndchannel(void)
             }
             if (i == MAXCLIENT)
             {
-                static char *msg_no_desc = "502 目前連線人數過多，請稍後再試\r\n";
+                static const char *msg_no_desc = "502 目前連線人數過多，請稍後再試\r\n";
 
                 write(fd, msg_no_desc, sizeof(msg_no_desc));
                 close(fd);

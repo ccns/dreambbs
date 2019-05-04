@@ -765,7 +765,8 @@ XoPost(
     XO *xo;
     BRD *brd;
     int bits;
-    char *str, fpath[64];
+    char *str_bit, fpath[64];
+    const char *str;
     static int LastBno = -1;
 
     /* 090823.cache: 看板人氣 */
@@ -795,8 +796,8 @@ XoPost(
     bbstate = /* (bbstate & STAT_DIRTY) | */ STAT_STARTED | brd->battr;
     bbstate &= ~STAT_POST;
 
-    str = &brd_bits[bno];
-    bits = *str;
+    str_bit = &brd_bits[bno];
+    bits = *str_bit;
 
 /* cache.081206: 對好友看版重新判斷是不是也具有 R 權限 */
     if (!(bits & BRD_R_BIT)/* && (bits & BRD_F_BIT)*/)
@@ -818,7 +819,7 @@ XoPost(
 
         if (/*!(bits & BRD_V_BIT) && */(cuser.ufo2 & UFO2_BNOTE))
         {
-            *str = bits | BRD_V_BIT;
+            *str_bit = bits | BRD_V_BIT;
             brd_fpath(fpath, currboard, FN_NOTE);
             more(fpath, NULL);
         }
@@ -1102,7 +1103,8 @@ static int
 class_body(
     XO *xo)
 {
-    char *img, *bits, buf[16], buf2[20], brdtype, *str2;
+    char *img, *bits, buf[16], buf2[20], brdtype;
+    const char *str2;
     short *chp;
     BRD *bcache;
     int n, cnt, max, brdnew, bno;
@@ -1145,7 +1147,7 @@ class_body(
         if (cnt < max)
         {
             int chn;
-            char *str;
+            const char *str;
 
             cnt++;
             chn = *chp++;
@@ -1286,8 +1288,10 @@ class_body(
                     str2 = "\x1b[1;31m HOT \x1b[m";
                 else if (bno > 49)
                     str2 = "\x1b[1;37m HOT \x1b[m";
-                else if (bno > 1)    /* r2.170810: let somebody know which board is still "alive" :P */
-                    sprintf(str2 = buf2, "  %2d ", bno);
+                else if (bno > 1) {  /* r2.170810: let somebody know which board is still "alive" :P */
+                    sprintf(buf2, "  %2d ", bno);
+                    str2 = buf2;
+                }
                 else
                     str2 = "     ";
 //注意有三格空白, 因為 HOT 是三個 char 故更改排版

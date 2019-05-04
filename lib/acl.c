@@ -30,8 +30,9 @@ int acl_addr(char *acl,            /* file name of access control list */
     int i, cc, luser, lhost;
     FILE *fp;
     char buf[128], filter[256], *host, *str;
+    const char *str_invalid;
 
-    char *invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
+    const char *invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
         "guest@", "@ppp", "@slip", "@dial", "unknown@", "@anon.penet.fi",
         "193.64.202.3", NULL
     };
@@ -39,9 +40,9 @@ int acl_addr(char *acl,            /* file name of access control list */
     str_lower(buf, addr);
     host = (char *)strchr(buf, '@');
 
-    for (i = 0; (str = invalid[i]); i++)
+    for (i = 0; (str_invalid = invalid[i]); i++)
     {
-        if (strstr(buf, str))
+        if (strstr(buf, str_invalid))
             return -2;
     }
 
@@ -141,8 +142,8 @@ int acl_addr(char *acl,            /* file name of access control list */
 /* return 1 : ACL ²Å¦X¸Ó pattern */
 
 
-int acl_has(char *acl,            /* file name of access control list */
-            char *user,           /* lower-case string */
+int acl_has(const char *acl,      /* file name of access control list */
+            const char *user,     /* lower-case string */
             char *host            /* lower-case string */
     )
 {

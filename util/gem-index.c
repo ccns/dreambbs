@@ -41,7 +41,7 @@ static FILE *flog;
 static void
 gindex(
     int level,
-    char *toc,
+    const char *toc,
     char *fpath,
     FILE *fndx)
 {

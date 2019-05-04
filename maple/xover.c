@@ -38,7 +38,7 @@ static XO *xo_root;             /* root of overview list */
 
 XO *
 xo_new(
-    char *path)
+    const char *path)
 {
     XO *xo;
     int len;
@@ -409,7 +409,7 @@ EnumTagHdr(
 
 int
 AskTag(
-    char *msg)
+    const char *msg)
 /* ----------------------------------------------------- */
 /* return value :                                        */
 /* -1   : 取消                                           */
@@ -447,7 +447,8 @@ xo_tag(
     int op)
 {
     int fsize, count;
-    char *token, *fimage;
+    char *fimage;
+    const char *token;
     HDR *head, *tail;
 
     fimage = f_map(xo->dir, &fsize);
@@ -1123,7 +1124,8 @@ xo_thread(
     static char s_author[16], s_title[32], s_unread[2]="0";
     char buf[80];
 
-    char *tag, *query=NULL, *title=NULL;
+    char *query=NULL;
+    const char *tag, *title=NULL;
     int pos, match, near=0, neartop=0, max;     /* Thor: neartop與near成對用 */
 
     int fd, top, bottom, step, len;
@@ -1183,26 +1185,27 @@ xo_thread(
     }
     else if (!(op & (RS_THREAD | RS_SEQUENT | RS_MARKED)))
     {
+        char *tag_query;
         if (op & RS_TITLE)
         {
             title = "標題";
-            tag = s_title;
+            tag_query = s_title;
             len = sizeof(s_title);
         }
         else
         {
             title = "作者";
-            tag = s_author;
+            tag_query = s_author;
             len = sizeof(s_author);
         }
         query = buf;
         sprintf(query, "搜尋%s(%s)：", title, (step > 0) ? "↓" : "↑");
-        if (!vget(b_lines, 0, query, tag, len, GCARRY))
+        if (!vget(b_lines, 0, query, tag_query, len, GCARRY))
             return XO_FOOT;
         /* Thor.980911: 要注意, 如果沒找到, "搜尋"的訊息會被清,
                         如果找到了, 則沒被清, 因傳回值為match, 沒法帶 XO_FOOT */
 
-        str_lower(query, tag);
+        str_lower(query, tag_query);
     }
 
     fd = -1;

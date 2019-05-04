@@ -70,11 +70,11 @@ sync_cmp(
 
 static void
 sync_init(
-    char *fname)
+    const char *fname)
 {
     int ch, prefix;
     time_t chrono;
-    char *str, fpath[256];
+    char *str, *fname_ptr, fpath[256];
     struct stat st;
     struct dirent *de;
     DIR *dirp;
@@ -96,18 +96,18 @@ sync_init(
 
     ch = strlen(fname);
     memcpy(fpath, fname, ch);
-    fname = fpath + ch;
-    *fname++ = '/';
+    fname_ptr = fpath + ch;
+    *fname_ptr++ = '/';
 
     ch = '0';
     for (;;)
     {
-        *fname = ch++;
-        fname[1] = '\0';
+        *fname_ptr = ch++;
+        fname_ptr[1] = '\0';
 
         if ((dirp = opendir(fpath)))
         {
-            fname[1] = '/';
+            fname_ptr[1] = '/';
             while ((de = readdir(dirp)))
             {
                 str = de->d_name;
@@ -115,7 +115,7 @@ sync_init(
                 if (prefix == '.')
                     continue;
 
-                strcpy(fname + 2, str);
+                strcpy(fname_ptr + 2, str);
                 if (stat(fpath, &st) || !st.st_size)
                 {
                     unlink(fpath);
@@ -339,7 +339,7 @@ sync_check(
 
 static void
 check_log(
-    char *fpath)
+    const char *fpath)
 {
     FILE *fpr, *fpw;
     struct stat st;

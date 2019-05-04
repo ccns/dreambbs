@@ -20,7 +20,7 @@
 static void
 draw_line(
     int x, int y,
-    char *msg)
+    const char *msg)
 {
     /* hrs.090928: 讓 terminal 去處理 */
     move(x, y);
@@ -41,9 +41,10 @@ static int x_roll;
 static void
 draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
     int x, int y,
-    char *msg)
+    const char *msg)
 {
-    char *str, *ptr;
+    char *str;
+    const char *ptr;
     char data[ANSILINELEN];
     char color[4];
     int ch, i;
@@ -234,7 +235,7 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
 static void
 draw_item(
     int x, int y,
-    char *desc,
+    const char *desc,
     char hotkey,
     int mode)           /* 0:清除光棒  1:畫上光棒 */
 {
@@ -252,8 +253,8 @@ draw_item(
 static int      /* 回傳總共有幾個選項 */
 draw_menu(
     int x, int y,
-    char *title,
-    char *desc[],
+    const char *title,
+    const char *desc[],
     char hotkey,
     int *cur)   /* 回傳預設值所在位置 */
 {
@@ -292,7 +293,7 @@ draw_menu(
 static int                      /* -1:找不到 >=0:第幾個選項 */
 find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
     int ch, int max,
-    char *desc[])
+    const char *desc[])
 {
     int i, cc;
 
@@ -327,7 +328,7 @@ find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
 /*------------------------------------------------------ */
 
 int             /* 傳回小寫字母或數字 */
-popupmenu_ans2(char *desc[], char *title, int x, int y)
+popupmenu_ans2(const char *desc[], const char *title, int x, int y)
 {
     int cur, old_cur, max, ch;
     char hotkey;
@@ -405,7 +406,7 @@ popupmenu_ans2(char *desc[], char *title, int x, int y)
 /*------------------------------------------------------ */
 
 int
-pmsg2(char *msg)
+pmsg2(const char *msg)
 /* 不可為 NULL */
 {
     int len, x, y, i;

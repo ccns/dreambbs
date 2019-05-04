@@ -65,7 +65,7 @@ static int
 chat_head(
 XO *xo)
 {
-    char *title = NULL;
+    const char *title = NULL;
     switch (kind)
     {
     case 0:

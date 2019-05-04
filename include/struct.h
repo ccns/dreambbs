@@ -1013,11 +1013,11 @@ typedef struct PostRecommendHistory
 
 typedef struct
 {
-    void *func;
+    const void *func;
     /* int (*func) (void); */
     unsigned int level;
     int umode;
-    char *desc;
+    const char *desc;
 } MENU;
 
 #ifdef  HAVE_COUNT_BOARD

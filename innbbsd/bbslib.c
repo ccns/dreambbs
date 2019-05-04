@@ -263,7 +263,7 @@ initial_bbs(void)
 
 
 void
-bbslog(char *fmt, ...)
+bbslog(const char *fmt, ...)
 {
     va_list args;
     char datebuf[40];

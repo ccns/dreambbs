@@ -122,7 +122,7 @@ typedef rb_event_t rb_event_flag_t;
 int ABORT_BBSRUBY = 0;
 
 #define BBSRUBY_TOC_HEADERS (6)
-char* TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"interface", "title", "notes", "author", "version", "date"};
+const char* TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"interface", "title", "notes", "author", "version", "date"};
 char* TOCs_DATA[BBSRUBY_TOC_HEADERS] = {0};
 VALUE TOCs_rubyhash;
 double KBHIT_TMIN = 0.001;
@@ -408,8 +408,8 @@ VALUE brb_toc(VALUE self)
 /* End of BBS helper class */
 
 void out_footer(
-    char* reason,
-    char* msg)
+    const char* reason,
+    const char* msg)
 {
     char buf[200];
     move(b_lines, 0);

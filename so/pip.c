@@ -35,11 +35,11 @@ static levelup ml[2];
 #include "pipfun.c"
 
 static int pip_money(void);
-static void pip_load_mob(char *fpath);
-static void pip_load_mobset(char *fpath);
+static void pip_load_mob(const char *fpath);
+static void pip_load_mobset(const char *fpath);
 static void pip_check_levelup(void);
 static void pip_check_level(void);
-static void pip_load_levelup(char *fpath);
+static void pip_load_levelup(const char *fpath);
 static int twice(int x, int max, int min);
 static int pip_magic_menu(int mode, UTMP *opt);
 static int pip_magic_doing_menu(struct magicset *p);
@@ -105,7 +105,7 @@ int money)
 
 static char *
 get_path(
-char *id, char *file)
+char *id, const char *file)
 {
     usr_fpath(pippath, id, file);
     return pippath;
@@ -187,7 +187,7 @@ static void pip_new_game(void)
 {
     char buf[256];
     time_t now;
-    char *pipsex[3] = {"？", "♂", "♀"};
+    const char *pipsex[3] = {"？", "♂", "♀"};
     struct tm *ptime;
     ptime = localtime(&now);
 
@@ -341,7 +341,7 @@ static void pip_new_game(void)
 /*小雞死亡函式*/
 static void
 pipdie(
-char *msg,
+const char *msg,
 int mode)
 {
     char genbuf[200];
@@ -381,7 +381,7 @@ int mode)
 static void
 count_tired(
 int prob, int base,
-char *mode,
+const char *mode,
 int mul,
 int cal)
 {
@@ -445,7 +445,7 @@ int cal)
 /*主畫面和選單                                                               */
 /*---------------------------------------------------------------------------*/
 
-static char *menuname[8][2] =
+static const char *menuname[8][2] =
 {
     {"             ",
      "\x1b[1;44;37m 選單 \x1b[46m[1]基本 [2]逛街 [3]修行 [4]玩樂 [5]打工 [6]特殊 [7]系統 [Q]離開         %*s\x1b[m"},
@@ -1663,7 +1663,7 @@ char *msg)
 static int
 pip_write_backup(void)
 {
-    char *files[4] = {"沒有", "進度一", "進度二", "進度三"};
+    const char *files[4] = {"沒有", "進度一", "進度二", "進度三"};
     char buf[200], buf1[200];
     char ans[3];
     int num = 0;
@@ -1720,7 +1720,7 @@ static int
 pip_read_backup(void)
 {
     char buf[200], buf1[200], buf2[200];
-    char *files[4] = {"沒有", "進度一", "進度二", "進度三"};
+    const char *files[4] = {"沒有", "進度一", "進度二", "進度三"};
     char ans[3];
     int pipkey;
     int num = 0;
@@ -2122,7 +2122,7 @@ int mode,
 struct goodsofpip *p,
 int oldnum[])
 {
-    char *shopname[4] = {"店名", "便利商店", NICKNAME "藥鋪", "夜裡書局"};
+    const char *shopname[4] = {"店名", "便利商店", NICKNAME "藥鋪", "夜裡書局"};
     char inbuf[256];
     char genbuf[20];
     long smoney;
@@ -2295,7 +2295,7 @@ struct weapon *p)
 {
     time_t now;
     register int n = 0;
-    register char *s;
+    register const char *s;
     char buf[256];
     char ans[5];
     char shortbuf[100];
@@ -3845,7 +3845,7 @@ static void situ(void)
 /*---------------------------------------------------------------------------*/
 /* 資料庫                                                                    */
 /*---------------------------------------------------------------------------*/
-static char *classrank[6] = {"沒有", "初級", "中級", "高級", "進階", "專業"};
+static const char *classrank[6] = {"沒有", "初級", "中級", "高級", "進階", "專業"};
 static int classmoney[11][2] = {{ 0,  0},
     {60, 110}, {70, 120}, {70, 120}, {80, 130}, {70, 120},
     {60, 110}, {90, 140}, {70, 120}, {70, 120}, {80, 130}
@@ -3858,7 +3858,7 @@ static int classvariable[11][4] =
 };
 
 
-static char *classword[11][5] =
+static const char *classword[11][5] =
 {
     {"課名", "成功\一", "成功\二", "失敗一", "失敗二"},
 
@@ -4514,7 +4514,7 @@ struct royalset *p)
     char buf[256];
     char inbuf1[20];
     char inbuf2[20];
-    char *needmode[3] = {"      ", "禮儀表現＞", "談吐技巧＞"};
+    const char *needmode[3] = {"      ", "禮儀表現＞", "談吐技巧＞"};
     int save[11] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     d.nodone = 0;
@@ -5295,7 +5295,7 @@ pip_ending_decide(
 char *endbuf1, char *endbuf2, char *endbuf3,
 int *endmode, int *endgrade)
 {
-    char *name[8][2] = {{"男的", "女的"},
+    const char *name[8][2] = {{"男的", "女的"},
         {"嫁給王子",   "娶了公主"},
         {"嫁給你",     "娶了你"},
         {"嫁給商人Ａ", "娶了女商人Ａ"},
@@ -8049,7 +8049,7 @@ pip_magic_doing_menu(   /*魔法畫面*/
 struct magicset *p)
 {
     register int n = 1;
-    register char *s;
+    register const char *s;
     char buf[256];
     char ans[5];
     int pipkey;
@@ -8229,7 +8229,7 @@ pip_marriage_offer(void)
     char ans[4];
     int money;
     int who;
-    char *name[5][2] = {{"女商人Ａ", "商人Ａ"},
+    const char *name[5][2] = {{"女商人Ａ", "商人Ａ"},
         {"女商人Ｂ", "商人Ｂ"},
         {"女商人Ｃ", "商人Ｃ"},
         {"女商人Ｄ", "商人Ｄ"},
@@ -8287,7 +8287,7 @@ pip_marriage_offer(void)
 
 static int pip_results_show(void)  /*收穫季*/
 {
-    char *showname[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
+    const char *showname[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
     char buf[256];
     int pipkey, i = 0;
     int winorlost = 0;
@@ -8479,7 +8479,7 @@ static int pip_results_show(void)  /*收穫季*/
 static int pip_results_show_ending(
 int winorlost, int mode, int a, int b, int c)
 {
-    char *gamename[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
+    const char *gamename[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
     int resultmoney[4] = {0, 3000, 5000, 8000};
     char name1[25], name2[25], name3[25], name4[25];
     char buf[256];
@@ -8546,7 +8546,7 @@ int x, int max, int min)
 
 static void
 pip_load_mob(
-char *fpath)
+const char *fpath)
 {
     FILE *fp;
     int max, i;
@@ -8571,7 +8571,7 @@ char *fpath)
 
 static void
 pip_load_mobset(
-char *fpath)
+const char *fpath)
 {
     FILE *fp;
     int i;
@@ -8624,7 +8624,7 @@ pip_check_level(void)
 
 static void
 pip_load_levelup(
-char *fpath)
+const char *fpath)
 {
     FILE *fp;
     int i, temp;

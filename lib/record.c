@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-int rec_add(char *fpath, void *data, int size)
+int rec_add(const char *fpath, void *data, int size)
 {
     int fd;
 
@@ -97,15 +97,15 @@ int rec_bot(                    /* amaki.040715: 嵌入式寫檔 */
 }
 
 int
-rec_del(char *data,
+rec_del(const char *fpath,
         int size, int pos, int (*fchk) (const void *obj), int (*fdel) (void *obj))
 {
     int fd;
     off_t off, len;
-    char pool[REC_SIZ];
+    char pool[REC_SIZ], *data;
     struct stat st;
 
-    if ((fd = open(data, O_RDWR)) < 0)
+    if ((fd = open(fpath, O_RDWR)) < 0)
         return -1;
 
     /* flock(fd, LOCK_EX); */
@@ -188,7 +188,7 @@ rec_del(char *data,
     return 0;
 }
 
-int rec_get(char *fpath, void *data, int size, int pos)
+int rec_get(const char *fpath, void *data, int size, int pos)
 {
     int fd;
     int ret;
@@ -256,13 +256,13 @@ int rec_ins(char *fpath, void *data, int size, int pos, int num)
 }
 
 
-int rec_loc(char *data, int size, int (*fchk) (const void *obj))
+int rec_loc(const char *fpath, int size, int (*fchk) (const void *obj))
 {
     int fd, pos, tmp;
     off_t off;
-    char pool[REC_SIZ];
+    char pool[REC_SIZ], *data;
 
-    if ((fd = open(data, O_RDWR)) < 0)
+    if ((fd = open(fpath, O_RDWR)) < 0)
         return -1;
 
     f_exlock(fd);
@@ -358,7 +358,7 @@ int rec_mov(char *data, int size, int from, int to)
 }
 
 
-int rec_num(char *fpath, int size)
+int rec_num(const char *fpath, int size)
 {
     struct stat st;
 
@@ -367,7 +367,7 @@ int rec_num(char *fpath, int size)
     return (st.st_size / size);
 }
 
-int rec_put(char *fpath, void *data, int size, int pos)
+int rec_put(const char *fpath, void *data, int size, int pos)
 {
     int fd;
 
@@ -473,7 +473,7 @@ rec_put2(char *fpath, void *data, int size, int pos, int (*fchk) (const void *ob
 }
 
 int
-rec_ref(char *fpath,
+rec_ref(const char *fpath,
         void *data,
         int size,
         int pos, int (*fchk) (const void *obj), void (*fref) (void *obj, const void *ref))
@@ -481,6 +481,7 @@ rec_ref(char *fpath,
     int fd;
     off_t off, len;
     char pool[REC_SIZ];
+    char *data_read;
     struct stat st;
 
     if ((fd = open(fpath, O_RDWR, 0600)) < 0)
@@ -493,7 +494,7 @@ rec_ref(char *fpath,
     fstat(fd, &st);
     len = st.st_size;
 
-    fpath = pool;
+    data_read = pool;
     off = size * pos;
 
     /* 驗證 pos 位置資料的正確性 */
@@ -501,8 +502,8 @@ rec_ref(char *fpath,
     if (len > off)
     {
         lseek(fd, off, SEEK_SET);
-        read(fd, fpath, size);
-        pos = fchk ? (*fchk) (fpath) : 1;
+        read(fd, data_read, size);
+        pos = fchk ? (*fchk) (data_read) : 1;
     }
     else
     {
@@ -525,9 +526,9 @@ rec_ref(char *fpath,
     {
         off = 0;
         lseek(fd, off, SEEK_SET);
-        while (read(fd, fpath, size) == size)
+        while (read(fd, data_read, size) == size)
         {
-            if ((pos = (*fchk) (fpath)))
+            if ((pos = (*fchk) (data_read)))
                 break;
 
             off += size;
@@ -538,9 +539,9 @@ rec_ref(char *fpath,
 
     if (pos)
     {
-        (*fref) (fpath, data);
+        (*fref) (data_read, data);
         lseek(fd, off, SEEK_SET);
-        write(fd, fpath, size);
+        write(fd, data_read, size);
     }
 
     /* flock(fd, LOCK_UN); */
@@ -553,7 +554,7 @@ rec_ref(char *fpath,
 }
 
 int
-rec_sync(char *fpath,
+rec_sync(const char *fpath,
          int size,
          int (*fsync) (const void *lhs, const void *rhs), int (*fchk) (const void *obj))
 {
