@@ -1,12 +1,12 @@
 #include <stdio.h>
 
-void main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     FILE *fp;
     unsigned int a;
 
     if (argc !=2)
-        return;
+        return 1;
 
     fp = fopen(argv[1], "r");
     if (fp)
@@ -18,4 +18,5 @@ void main(int argc, char **argv)
         } while (!feof(fp));
         fclose(fp);
     }
+    return !fp;
 }

@@ -143,7 +143,7 @@ init(void)
 
 
     up = ushm->uslot;
-    uceil = (void *) up + ushm->offset;
+    uceil = (UTMP *) ((char *) up + ushm->offset);
 
     do
     {
@@ -199,7 +199,7 @@ utmp_find(
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (void *) uentp + ushm->offset;
+    uceil = (UTMP *) ((char *) uentp + ushm->offset);
     do
     {
         if (uentp->userno == userno)

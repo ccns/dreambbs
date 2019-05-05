@@ -2143,7 +2143,7 @@ aloha(void)
         sprintf(benz.msg, "◎ 進 入 (%s) 囉!! ◎", BOARDNAME);
 
         ubase = ushm->uslot;
-        uceil = (void *) ubase + ushm->offset;
+        uceil = (UTMP *) ((char *) ubase + ushm->offset);
 
         mgets(-1);
         while ((bmw = mread(fd, sizeof(BMW))))
@@ -2239,7 +2239,7 @@ loginNotify(void)
         sprintf(benz.msg, "◎ 剛剛踏進%s的門 [系統協尋] ◎", BOARDNAME);
 
         ubase = ushm->uslot;
-        uceil = (void *) ubase + ushm->offset;
+        uceil = (UTMP *) ((char *) ubase + ushm->offset);
 
         mgets(-1);
         while ((bmw = mread(fd, sizeof(BMW))))
@@ -3307,7 +3307,7 @@ ulist_init(
     seecloak = HAS_PERM(PERM_SEECLOAK);
 
     up = ushm->uslot;
-    uceil = (void *) up + ushm->offset;
+    uceil = (UTMP *) ((char *) up + ushm->offset);
 
     max = 0;
     bad = 0;

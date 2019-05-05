@@ -206,7 +206,7 @@ utmp_new(
         {
             unsigned int offset;
 
-            offset = (void *) uentp - (void *) xshm->uslot;
+            offset = (char *) uentp - (char *) xshm->uslot;
             memcpy(uentp, up, sizeof(UTMP));
             xshm->count++;
             if (xshm->offset < offset)
@@ -261,7 +261,7 @@ utmp_find(
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (void *) uentp + ushm->offset;
+    uceil = (UTMP *) ((char *) uentp + ushm->offset);
     do
     {
         if (uentp->userno == userno)
@@ -278,7 +278,7 @@ pid_find(
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (void *) uentp + ushm->offset;
+    uceil = (UTMP *) ((char *) uentp + ushm->offset);
     do
     {
         if (uentp->pid == pid && uentp->pid != 0)
@@ -316,7 +316,7 @@ utmp_search(
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (void *) uentp + ushm->offset;
+    uceil = (UTMP *) ((char *) uentp + ushm->offset);
     do
     {
         if (uentp->userno == userno)
@@ -340,7 +340,7 @@ utmp_count(
 
     count = 0;
     uentp = ushm->uslot;
-    uceil = (void *) uentp + ushm->offset;
+    uceil = (UTMP *) ((char *) uentp + ushm->offset);
     do
     {
         if (uentp->userno == userno)
@@ -904,7 +904,7 @@ utmp_check(        /* 檢查使用者是否在站上 */
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (void *) uentp + ushm->offset;
+    uceil = (UTMP *) ((char *) uentp + ushm->offset);
     do
     {
         if (uentp->pid)

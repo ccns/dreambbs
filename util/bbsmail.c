@@ -64,7 +64,7 @@ my_biff(char *userid)
     ushm_init();
 
     utmp = ushm->uslot;
-    uceil = (void *) utmp + ushm->offset;
+    uceil = (UTMP *) ((char *) uentp + ushm->offset);
     do
     {
         if (!strcasecmp(utmp->userid, userid))
@@ -92,7 +92,7 @@ bbs_biff(
         offset = (MAXACTIVE - 1) * sizeof(UTMP);
 
     utmp = ushm->uslot;
-    uceil = (void *) utmp + offset;
+    uceil = (UTMP *) ((char *) utmp + offset);
 
     do
     {
