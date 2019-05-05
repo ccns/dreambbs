@@ -334,7 +334,7 @@ myfavorite_browse(
     }
     else
     {
-        char buf[20];
+        char buf[40];
 
         op = xo->key;
 
@@ -457,7 +457,7 @@ remove_dir(
 {
     HDR hdr;
     int max, i;
-    char buf[20], path[80];
+    char buf[40], path[80];
 
     max = rec_num(fpath, sizeof(HDR));
     for (i=0; i<max; i++)
@@ -488,7 +488,7 @@ myfavorite_delete(
 
         if (hdr->xmode & GEM_FOLDER)
         {
-            char buf[20];
+            char buf[40];
             char fpath[64];
 
             sprintf(buf, "MF/%s", hdr->xname);
