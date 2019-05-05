@@ -2074,6 +2074,7 @@ hdr_outs(               /* print HDR's subject */
                         square = 2;
                         continue;
                     }
+                    break;  // cc == ' '
                 case 2:
                     if (cc == ']')
                     {
