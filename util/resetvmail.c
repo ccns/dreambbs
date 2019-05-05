@@ -51,18 +51,16 @@ reaper(
     if (acct.userlevel & PERM_VALID)
     {
 
-        if ((ptr = strstr(acct.email, "cloud.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email, "mozart.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email, "wind.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email, "bach.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email, "graduate.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email, "moon.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email, "mail86.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email, "mail87.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email, "mail88.yzu.edu.tw")));
-        else if ((ptr = strstr(acct.email, "mail.yzu.edu.tw")))
-            ;
-        if (ptr)
+        if ((ptr = strstr(acct.email, "cloud.yzu.edu.tw"))
+            || (ptr = strstr(acct.email, "mozart.yzu.edu.tw"))
+            || (ptr = strstr(acct.email, "wind.yzu.edu.tw"))
+            || (ptr = strstr(acct.email, "bach.yzu.edu.tw"))
+            || (ptr = strstr(acct.email, "graduate.yzu.edu.tw"))
+            || (ptr = strstr(acct.email, "moon.yzu.edu.tw"))
+            || (ptr = strstr(acct.email, "mail86.yzu.edu.tw"))
+            || (ptr = strstr(acct.email, "mail87.yzu.edu.tw"))
+            || (ptr = strstr(acct.email, "mail88.yzu.edu.tw"))
+            || (ptr = strstr(acct.email, "mail.yzu.edu.tw")))
         {
             acct.userlevel &= ~PERM_VALID;
 /*          strcpy(ptr, "mail.yzu.edu.tw");
