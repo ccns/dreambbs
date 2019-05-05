@@ -302,8 +302,7 @@ main(
 
     init();
 
-    if (cache)
-        free(cache);
+    free(cache);
     f_cp(fpath, FN_CLASSTABLE_DB, O_APPEND);
     unlink(fpath);
     return 0;

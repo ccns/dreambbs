@@ -295,15 +295,13 @@ channelcreate(
     client->mode = 0;
 
     in = &client->in;
-    if (in->data != NULL)
-        free(in->data);
+    free(in->data);
     in->data = (char *) malloc(ChannelSize * 4);
     in->left = ChannelSize * 4;
     in->used = 0;
 
     out = &client->out;
-    if (out->data != NULL)
-        free(out->data);
+    free(out->data);
     out->data = (char *) malloc(ChannelSize);
     out->left = ChannelSize;
     out->used = 0;
@@ -320,16 +318,10 @@ channeldestroy(
     close(client->fd);
     client->fd = -1;
 
-    if (client->in.data != NULL)
-    {
-        free(client->in.data);
-        client->in.data = NULL;
-    }
-    if (client->out.data != NULL)
-    {
-        free(client->out.data);
-        client->out.data = NULL;
-    }
+    free(client->in.data);
+    client->in.data = NULL;
+    free(client->out.data);
+    client->out.data = NULL;
 }
 
 

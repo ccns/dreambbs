@@ -8552,8 +8552,7 @@ char *fpath)
     int max, i;
     char buf[128];
     playrule *p;
-    if (badmanlist)
-        free(badmanlist);
+    free(badmanlist);
     if ( ( fp = fopen(fpath, "r") ) )
     {
         fscanf(fp, "%d%s", &max, buf);
