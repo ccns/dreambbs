@@ -82,7 +82,7 @@ reaper(
         else
             acct.ufo2 &= ~ptr->new;
     }
-    printf("%-14.14s : ufo) %20.20d ufo2) %20.20d\n", acct.userid, acct.ufo, acct.ufo2);
+    printf("%-14.14s : ufo) %#18.18x ufo2) %#18.18x\n", acct.userid, acct.ufo, acct.ufo2);
     acct_save(&acct);
 
 }
