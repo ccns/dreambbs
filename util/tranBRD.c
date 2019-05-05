@@ -140,7 +140,7 @@ main(
             brd.expireday = key->days;
         }
 
-        printf("%04d %-13s %-5s %-40s %-20s %5d %5d %5d\n", num, brd.brdname, brd.class, brd.title, brd.BM, brd.expiremax, brd.expiremin, brd.expireday);
+        printf("%04d %-13s %-5s %-40s %-20s %5u %5u %5u\n", num, brd.brdname, brd.class, brd.title, brd.BM, brd.expiremax, brd.expiremin, brd.expireday);
 
         write(outf, &brd, sizeof(BRD));
     }
