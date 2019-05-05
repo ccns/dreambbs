@@ -190,6 +190,7 @@ Ext_POP3_Check(
                 break;
             case 2:
                 fprintf(fsock, "pass !@#$%%^&*(\r\n");
+                fflush(fsock);
                 while (1)
                 {
                     fgets(buf, 512, fsock);
@@ -214,6 +215,7 @@ Ext_POP3_Check(
                 break;
             case 3:
                 fprintf(fsock, "noop\r\n");
+                fflush(fsock);
                 while (1)
                 {
                     fgets(buf, 512, fsock);
@@ -238,6 +240,7 @@ Ext_POP3_Check(
                 break;
             case 4:
                 fprintf(fsock, "user %s\r\n", account);
+                fflush(fsock);
                 while (1)
                 {
                     fgets(buf, 512, fsock);
@@ -268,6 +271,7 @@ Ext_POP3_Check(
                 break;
             case 5:
                 fprintf(fsock, "pass %s\r\n", passwd);
+                fflush(fsock);
                 while (1)
                 {
                     fgets(buf, 512, fsock);
@@ -298,6 +302,7 @@ Ext_POP3_Check(
                 break;
             case 6:
                 fprintf(fsock, "noop\r\n");
+                fflush(fsock);
 
                 while (1)
                 {
@@ -323,6 +328,7 @@ Ext_POP3_Check(
                 break;
             case 7:
                 fprintf(fsock, "stat\r\n");
+                fflush(fsock);
                 while (1)
                 {
                     fgets(buf, 512, fsock);

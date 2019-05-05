@@ -74,6 +74,7 @@ int attr_put(char *userid, int key, void *value)
         {
             if (fread(&k, sizeof k, 1, fp) <= 0)
             {
+                fseek(fp, 0, SEEK_CUR);
                 if (fwrite(&key, (size_t) sizeof key, 1, fp) <= 0)
                 {
                     k = 0;        /* error code */
@@ -136,6 +137,7 @@ int attr_step(char *userid, int key, int dflt, int step)
                 ret = -2;
                 goto close_file;
             }
+            fseek(fp, 0, SEEK_CUR);
             if (fwrite(&key, sizeof key, 1, fp) <= 0)
             {
                 ret = -3;
