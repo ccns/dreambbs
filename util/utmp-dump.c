@@ -318,8 +318,7 @@ pal_cache(void)
     pal_pool = cache;
     up->pal_max = pal_count = count;
 
-    if (fimage)
-        free(fimage);
+    free(fimage);
     cuser.ufo = ufo;
 }
 
