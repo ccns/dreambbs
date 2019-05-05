@@ -9,15 +9,15 @@
 
 ## 0. 作業系統環境：
 
-本程式試用可以安裝的環境：FreeBSD 11.1-RELEASE , GNU/Linux , Cygwin in Windows 7/10
+本程式試用可以安裝的環境：FreeBSD 11.1~12.0 , GNU/Linux , Cygwin in Windows 7/10
 
-Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurses` 等相依函式庫
+Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurses` 等 32-bit 相依函式庫
 
 ## 1. 安裝作業系統及相關環境:
 
 作業系統部分前面提過了, 套件部分則建議先裝好 
 
-`git` `make` `clang` 等程式 （`bmake` `openssh-server` `nano` `vim` `xinetd` 可自行選擇是否安裝 )
+`git` `bmake`(BSD-like使用原生的`make`即可) `clang` 等程式
 
 ## 2. 建立 BBS 帳號:
 
@@ -70,7 +70,7 @@ Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurse
 
 == 以下用 bbs 的權限即可!! ==
 
-    $ cd /home/bbs; git clone https://github.com/ccns/dreambbs; cd dreambbs; git checkout v0.95.2
+    $ cd /home/bbs; git clone https://github.com/ccns/dreambbs; cd dreambbs; git checkout v1.1.1
 
 接著進去 dreambbs 主目錄
 
@@ -81,7 +81,7 @@ Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurse
 
     $ cp sample/dreambbs.conf ./
 
-接著編輯 `include/config.h` 檔案:
+接著編輯 `dreambbs.conf` 檔案:
 
     $ vim -c 'set fenc=big5 enc=big5 tenc=utf8' -c 'e!' dreambbs.conf
 
@@ -89,23 +89,23 @@ Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurse
 
 設定完之後, 先不要急著執行編譯指令, 而是先檢視 BBS 家目錄下全部的目錄結構, 確認已完整配置
 
-若您的 BBS 家目錄( `/home/bbs` )下沒有任何 source code ( `dreambbs/` ) 以外的資料, 
+若您的 BBS 家目錄( `/home/bbs` )下沒有任何 source code ( `dreambbs/` ) 以外的資料 , 
 
-或是尚未熟悉本版本 BBS 運作必要的目錄結構, 可參考本版本目前在 sample/bbs 下的範例目錄
+或是尚未熟悉本版本 BBS 運作必要的目錄結構, 可參考位在 [dreambbs-snap](https://github.com/ccns/dreambbs-snap) 的範例目錄，基本上就是:
+```
+git clone https://github.com/ccns/dreambbs-snap.git bbs
+cp -r bbs /home/
+```
 
 此範例目錄是套用 WindTopBBS-3.02-20040420-SNAP 的架構來修改的
 ( 參考連結: http://ftp.isu.edu.tw/pub/Unix/BBS/WindTop/WindTopBBS-3.02-20040420-SNAP.tgz )
 
 若發現仍有不合之處, 請成功執行程式後, 再自行調整修改.
 
-執行以下指令可使範例目錄架構直接安裝到 BBS 家目錄 下:
-
-    $ cp -r sample/bbs /home/ # 若家目錄名稱不是 /home/bbs, 請自行調整修改
-
 ## 6. 編譯 BBS 執行檔
 
 接著就開始編譯囉!
-若您的作業系統有安裝 bmake 套件，則建議執行以下指令編譯：
+若您的作業系統有安裝 `bmake` 套件(BSD-like系統代換成 `make` 指令即可)，則建議執行以下指令編譯：
 
     $ bmake all install clean
 
@@ -128,7 +128,7 @@ Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurse
     $ /home/bbs/bin/acpro
     $ /home/bbs/bin/makefw
 
-或是自行拿 `sample/bbs/sh` 裡面的 `start.sh` 這個 shell script 去執行也可以
+或是自行拿 `scripts` 裡面的 `start.sh` 這個 shell script 去執行也可以
 
 之後要提供 port 23 的 telnet 連線的話, 請用 root 權限執行:
 
