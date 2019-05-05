@@ -32,7 +32,7 @@
 /* Thor.990330: 為防止引言後, ">"要變色, 一行會超過ANSILINELEN, 故多留空間 */
 #define VE_WIDTH        (ANSILINELEN - 11)
 
-#define BFLAG(n)        (1 << n)       /* 32 bit-wise flag */
+#define BFLAG(n)        (1U << n)       /* 32 bit-wise flag */
 
 
 typedef char const *STRING;

@@ -32,7 +32,7 @@ int userno)
     UTMP *utmp, *uceil;
 
     utmp = ushm->uslot;
-    uceil = (void *) utmp + ushm->offset;
+    uceil = (UTMP *) ((char *) utmp + ushm->offset);
     do
     {
         if (utmp->userno == userno)

@@ -500,7 +500,7 @@ ulist_init(
     seecloak = HAS_PERM(PERM_SEECLOAK);
 
     up = ushm->uslot;
-    uceil = (void *) up + ushm->offset;
+    uceil = (UTMP *) ((char *) up + ushm->offset);
 
     max = 0;
     friend_num = ofriend_num = pfriend_num = nf_num = bfriend_num = 0;
