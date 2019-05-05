@@ -152,8 +152,10 @@ main(
         system(fpath);
     }
     else
+    {
         system("mail bbs@" MYHOSTNAME " < " FN_CHECKMAIL_MAIL);
         system("mail SYSOP.bbs@" MYHOSTNAME " < " FN_CHECKMAIL_MAIL);
         system("mail Dream_log.brd@" MYHOSTNAME " < " FN_CHECKMAIL_MAIL);
+    }
     return 0;
 }
