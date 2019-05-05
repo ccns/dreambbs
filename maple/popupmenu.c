@@ -388,7 +388,7 @@ do_menu(
                 break;
             case KEY_RIGHT:
             case '\n':
-                if (table[cur]->umode & POPUP_QUIT)
+                if (table[cur]->umode == POPUP_QUIT)
                     return 1;
                 if (do_cmd(table[cur], xo, x, y)<0)
                     return -1;
