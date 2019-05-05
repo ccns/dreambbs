@@ -89,6 +89,7 @@ int DL_func(char *name, ...)
 
     if (!(f = DL_get(name)))
     {                            /* not get func */
+        va_end(args);
         return -1;
     }
 
