@@ -457,7 +457,7 @@ pal_cache(void)
     {
         if (fsize > (PAL_MAX * sizeof(PAL)))
         {
-            sprintf(fpath, "%-13s%d > %d * %d\n", cuser.userid, fsize, PAL_MAX, sizeof(PAL));
+            sprintf(fpath, "%-13s%d > %d * %zu\n", cuser.userid, fsize, PAL_MAX, sizeof(PAL));
             f_cat(FN_PAL_LOG, fpath);
             fsize = PAL_MAX * sizeof(PAL);
         }

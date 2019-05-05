@@ -625,7 +625,7 @@ XO *xo)
                     }
                 fprintf(fds, "%s", buf);
             }
-            fprintf(fds, "%3d -> %-12s: %s\n", rmode == 1 ? nbrd->agree : nbrd->assist, cuser.userid, cuser.email);
+            fprintf(fds, "%3u -> %-12s: %s\n", rmode == 1 ? nbrd->agree : nbrd->assist, cuser.userid, cuser.email);
             if (vget(b_lines, 0, "我有話要說：", say, 65, DOECHO))
                 fprintf(fds, "    %s : %s\n", cuser.userid, say);
 
@@ -640,7 +640,7 @@ XO *xo)
             write(fv, &check, FV_SZ);
             if ((nbrd->mode & NBRD_OK) ? 0 : (rmode == 1 ? (--nbrd->total > 0) : 1))
             {
-                sprintf(buf, "加入連署完成！尚需連署人數 %d 人。", nbrd->total);
+                sprintf(buf, "加入連署完成！尚需連署人數 %u 人。", nbrd->total);
                 vmsg(buf);
             }
             else

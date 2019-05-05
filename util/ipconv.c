@@ -14,7 +14,7 @@ int main(int argc, char **argv)
         do
         {
             fscanf(fp, "%x", &a);
-            printf("%d.%d.%d.%d\n", (a&0xFF), (a&0x0000FF00)>>8, (a&0x00FF0000)>>16, (a&0xFF000000)>>24);
+            printf("%u.%u.%u.%u\n", (a&0xFF), (a&0x0000FF00)>>8, (a&0x00FF0000)>>16, (a&0xFF000000)>>24);
         } while (!feof(fp));
         fclose(fp);
     }
