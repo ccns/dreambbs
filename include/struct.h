@@ -658,7 +658,7 @@ typedef struct
 typedef struct
 {
     UTMP uslot[MAXACTIVE];      /* UTMP slots */
-    unsigned int count;         /* number of active session */
+    int count;                  /* number of active session */
     unsigned int offset;        /* offset for last active UTMP */
 
     double sysload[3];
