@@ -585,11 +585,6 @@ typedef struct BoardReadingHistory
 #define BRH_SIGN        0x80000000   /* Thor.980902:註解:zap及壓final專用 */
 #define BRH_WINDOW      (sizeof(BRH) + sizeof(time_t) * BRH_MAX * 2)
 
-static int *brh_base;           /* allocated memory */
-static int *brh_tail;           /* allocated memory */
-static int brh_size;            /* allocated memory size */
-static time_t brh_expire;
-
 /* ----------------------------------------------------- */
 /* Class image                                           */
 /* ----------------------------------------------------- */
