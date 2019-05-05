@@ -2245,9 +2245,11 @@ brd_list(
         case 'g':
             if ((userno = vget(b_lines, 0, "群組條件：", buf, 16, DOECHO)))
                 str_lower(buf, buf);
+            // Falls through
         case 'c':
             if (!userno && vget(b_lines, 0, "分類：", buf, 16, DOECHO))
                 str_lower(buf, buf);
+            // Falls through
         case 'b':
             if ((fd = open(FN_BRD, O_RDONLY)) >= 0)
             {

@@ -2130,6 +2130,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             }
 
             col++;
+            // Falls through
 
         case Ctrl('H'):
 
@@ -2239,6 +2240,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         case Ctrl('N'):
 
             line += MAXLASTCMD - 2;
+            // Falls through
 
         case KEY_UP:
         case Ctrl('P'):

@@ -2080,6 +2080,7 @@ ve_key:
 
                 vln->len = ve_col = 0;
                 vln->data[0] = '\0'; /* Thor.981001: 將內容一併清除 */
+                // Falls through
 
             case Ctrl('K'):             /* delete to end of line */
 

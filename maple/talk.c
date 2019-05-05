@@ -2083,6 +2083,7 @@ pal_list(
         case 'g':
             if ((userno = vget(b_lines, 0, "¸s²Õ±ø¥ó¡G", buf, 16, DOECHO)))
                 str_lower(buf, buf);
+            // Falls through
 #endif
         case 'f':
             usr_fpath(fpath, cuser.userid, FN_PAL);
