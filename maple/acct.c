@@ -2090,15 +2090,15 @@ static int m_setbrd(BRD * brd)
     brd->color = (char)atoi(data);
     vget(++i, 0, "狾虫", brd->BM, BMLEN + 1, GCARRY);
 
-    sprintf(data, "%d", brd->expiremax);
+    sprintf(data, "%u", brd->expiremax);
     vget(++i, 0, "程ゅ彻计秖 ( [0] 箇砞)", data, 6, GCARRY);
     brd->expiremax = atoi(data);
 
-    sprintf(data, "%d", brd->expiremin);
+    sprintf(data, "%u", brd->expiremin);
     vget(++i, 0, "程ゅ彻计秖 ( [0] 箇砞)", data, 6, GCARRY);
     brd->expiremin = atoi(data);
 
-    sprintf(data, "%d", brd->expireday);
+    sprintf(data, "%u", brd->expireday);
     vget(++i, 0, "ゅ彻玂痙ぱ计 ( [0] 箇砞)", data, 6, GCARRY);
     brd->expireday = atoi(data);
 

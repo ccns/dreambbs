@@ -727,7 +727,7 @@ XO *xo)
     *fname = '@';
     f_suck(fp, fpath);
 
-    fprintf(fp, "』 щ布挡狦–щ %d 布 %d 把щ %d 布\n\n",
+    fprintf(fp, "』 щ布挡狦–щ %d 布 %zu 把щ %d 布\n\n",
             vch->maxblt, total / sizeof(int), bollt);
 
     if (vch->vsort == 's')

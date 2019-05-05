@@ -227,7 +227,7 @@ pal_sync(
                 write(fd, pbase, size);
                 ftruncate(fd, size);
 #endif
-                printf("PATH : %s  PAL : %d\n", fpath, size/sizeof(PAL));
+                printf("PATH : %s  PAL : %zu\n", fpath, size/sizeof(PAL));
             }
         }
         free(pbase);
