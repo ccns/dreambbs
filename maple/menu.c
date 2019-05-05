@@ -238,6 +238,8 @@ pad_draw(void)
 
     if (!(fpw = fopen(FN_NOTE_TMP, "w")))
         return;
+    len = 342;  // strlen(str)
+    memset(str + len + 1, 0, sizeof(pad.msg) - (len + 1));
     str[355] = '\n';
 
     fwrite(&pad, sizeof(pad), 1, fpw);

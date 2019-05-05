@@ -2392,7 +2392,7 @@ int check_idno(char *s)
 #ifndef HAVE_SIMPLE_RFORM
 static void send_request(void)
 {
-    RFORM_R form;
+    RFORM_R form = {0};
     int check;
 
     check = REG_SENT;
