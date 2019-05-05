@@ -63,8 +63,9 @@
 #define NECKBOARD  "  [←]主選單 [→]閱\讀 [↑↓]選擇 [c]篇數 [y]載入 [/]搜尋 [s]看板 [h]說明\n" \
             COLOR3 "  %-7s看  板            %-*s人氣 板    主     \x1b[m"
 
-//#define NECKGEM1 \
-//                   "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [F]轉寄 [Z]下載 [h]說明 "
+/*#define NECKGEM1 \
+                   "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [F]轉寄 [Z]下載 [h]說明 "
+*/
 
 #define NECKGEM1 \
                    "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明 "
@@ -138,8 +139,9 @@
                    "  [←]離開 a)新增 d)刪除 s)重整 TAB)切換名單 T)更改群組名稱 /)搜尋\n" \
             COLOR3 "  編號     使用者 ID%*s                                                          \x1b[m"
 
-//#define NECK_MAILGEM1 \
-//                   "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [F]轉寄 [Z]下載 [h]說明 "
+/*#define NECK_MAILGEM1 \
+                   "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [F]轉寄 [Z]下載 [h]說明 "
+*/
 #define NECK_MAILGEM1 \
                    "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明 "
                    /*r2.20170802: disable "Z" option in case of confusion*/
@@ -209,8 +211,9 @@
     COLOR1 "  編輯文章  " COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s║%5d:%3d%*s    \x1b[m"
 
 
-//#define FOOTER_BMW_REPLY \
-//    COLOR1 " 熱訊回應 " COLOR2 " (←)\x1b[30m離開 \x1b[31m(↑↓→)\x1b[30m瀏覽 \x1b[31m(Enter)\x1b[30m選擇線上使用者扣應 \x1b[31m(其他)\x1b[30m回應%*s        \x1b[m"
+/*#define FOOTER_BMW_REPLY \
+    COLOR1 " 熱訊回應 " COLOR2 " (←)\x1b[30m離開 \x1b[31m(↑↓→)\x1b[30m瀏覽 \x1b[31m(Enter)\x1b[30m選擇線上使用者扣應 \x1b[31m(其他)\x1b[30m回應%*s        \x1b[m"
+*/
 #define FOOTER_BMW_REPLY \
     COLOR1 " 熱訊回應 " COLOR2 " (← Enter)\x1b[30m離開 \x1b[31m(↑↓→)\x1b[30m瀏覽 \x1b[31m(其他)\x1b[30m回應%*s                            \x1b[m"
 

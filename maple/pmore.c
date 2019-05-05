@@ -155,8 +155,9 @@
     " piaip's more: " PMORE_MSG_PROGVER " 瀏覽程式使用說明"
 #define PMORE_MSG_HELP_PAUSE \
     "請按任意鍵離開此說明畫面"
-//#define PMORE_MSG_WARN_FAKEUSERINFO \
-//    " ▲此頁內容會依閱\讀者不同，原文未必有您的資料 "  /*r2.170810: keep the traditional trick XD */
+/*#define PMORE_MSG_WARN_FAKEUSERINFO \
+    " ▲此頁內容會依閱\讀者不同，原文未必有您的資料 "  //r2.170810: keep the traditional trick XD
+*/
 #define PMORE_MSG_WARN_MOVECMD \
     " ▲此頁內容含移位碼，可能會顯示偽造的系統訊息 "
 #define PMORE_MSG_SEARCH_KEYWORD \

@@ -102,7 +102,7 @@ traverse(
     for (str = fpath; *str; str++);
     *str++ = '/';
 
-    while (de = readdir(dirp))
+    while ((de = readdir(dirp)))
     {
         fname = de->d_name;
         if (fname[0] > ' ' && fname[0] != '.')

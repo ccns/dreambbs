@@ -368,7 +368,7 @@ vs_head(
     }
 
     spc = 2 + len - spc; /* 擺完 mid 以後，中間還有 spc 格空間，在 mid 左右各放 spc/2 長的空白 */
-    len = 1 - spc & 1;
+    len = (1 - spc) & 1;
 
     if (spc < 0)
     {
@@ -1340,6 +1340,8 @@ menu(void)
         case KEY_DOWN:
             if (++cc <= max)
                 break;
+            // Else falls through
+            //    to wrap around cursor
 
         case KEY_HOME:
             cc = 0;
@@ -1348,6 +1350,8 @@ menu(void)
         case KEY_UP:
             if (--cc >= 0)
                 break;
+            // Else falls through
+            //    to wrap around cursor
 
         case KEY_END:
             cc = max;
@@ -1456,6 +1460,9 @@ menu(void)
             }
 
             cmd = 'G';
+
+            // Falls through
+            //    to move the cursor to option 'G' ('Goodbye'; exiting BBS)
 
         default:
 

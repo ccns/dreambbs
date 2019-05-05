@@ -355,6 +355,7 @@ Ext_POP3_Check(
                     site, p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
                     p->tm_hour, p->tm_min);
                 f_cat(FN_ETC_UNTRUST_ACL, buf);
+                // Falls through
             case 9:
             case 0:
                 fprintf(fsock, "quit\r\n");

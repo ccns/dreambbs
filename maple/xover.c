@@ -2021,6 +2021,8 @@ every_Z_Orig(void)
                 cmd = XZ_POST;
                 break;
             }
+            // If the user has not entered any board, show the board list instead
+            // Falls through
 
         case 'c':
             cmd = XZ_CLASS;

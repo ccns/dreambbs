@@ -240,6 +240,7 @@ int mode)
                     fhdr.xmode = MAIL_READ | MAIL_NOREPLY;
                     rec_add(tmp, &fhdr, sizeof(fhdr));
                 }
+                // Falls through
             default:
                 unlink(buf);
             }
