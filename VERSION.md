@@ -38,7 +38,8 @@
         - alternative preparation:
           * ~`v1.0-alpha1`~,~`v1.0-alpha2`~,~`v1.0-alpha3`~,~`v1.0-beta1`~, ~`v1.0-RC1`~, ~`v1.0-RC2`~, ~`v1.0-RC3`~
     + `v1.0`: Version 1.0, codename `rimuru` ( **Latest Release Branch** )
-        - `v1.1`: backports improvement based on `v1.0`, codename `milim`
+        - `v1.1.0`: backports improvement based on `v1.0.0`, codename `milim`
+        - `v1.1.1`: detail fixes based on `v1.1.0`
         - features:
           * ~~port `pfterm` in this release version~~
           * others: see https://github.com/ccns/dreambbs/releases/tag/v1.1.0
