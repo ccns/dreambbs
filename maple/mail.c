@@ -968,7 +968,7 @@ do_forward(
 {
     int rc;
     char *userid;
-    char addr[64], fpath[64], cmd[256];
+    char addr[64], fpath[128], cmd[256];
 
     if (strstr(cuser.email, ".bbs@"))
     {
