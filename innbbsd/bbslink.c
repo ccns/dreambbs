@@ -410,7 +410,7 @@ sover_post(
 
         /* 一般文章時，BODY 指向 malloc 生出來的區塊 */
 
-        BODY_BUF = !BODY_BUF ? (char *) malloc(size + 1) : (char *) realloc(BODY_BUF, size + 1);
+        BODY_BUF = (char *) realloc(BODY_BUF, size + 1);
         read(fd, BODY_BUF, size);
         close(fd);
         ptr = BODY_BUF + size;

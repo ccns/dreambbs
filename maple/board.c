@@ -1008,10 +1008,7 @@ class_load(
 
     max -= pos;
 
-    if ((cbase = (short *) xo->xyz))
-        cbase = (short *) realloc(cbase, max);
-    else
-        cbase = (short *) malloc(max);
+    cbase = (short *) realloc(xo->xyz, max);
     xo->xyz = (char *) cbase;
 
     max = 0;
@@ -1757,8 +1754,7 @@ class_add(xo)
         rec_add(fpath, &hdr, sizeof(HDR));
         favorite_main();
         usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
-        if (favorite_img)
-            free(favorite_img);
+        free(favorite_img);
         favorite_img = f_img(fpath, &fasize);
         logitfile(FN_FAVORITE_LOG, "< ADD >", hdr.xname);
         vmsg("已成功\加入我的最愛！");
@@ -1808,8 +1804,7 @@ class_add2(          /* gaod: 我的最愛中直接新增新看板 */
         rec_add(fpath, &hdr, sizeof(HDR));
         favorite_main();
         usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
-        if (favorite_img)
-            free(favorite_img);
+        free(favorite_img);
         favorite_img = f_img(fpath, &fasize);
         logitfile(FN_FAVORITE_LOG, "< ADD >", hdr.xname);
         vmsg("已成功\加入我的最愛！");
@@ -1844,8 +1839,7 @@ class_del(
         rec_del(fpath, sizeof(HDR), pos, NULL, NULL);
         favorite_main();
         usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
-        if (favorite_img)
-            free(favorite_img);
+        free(favorite_img);
         favorite_img = f_img(fpath, &fasize);
 
         logitfile(FN_FAVORITE_LOG, "< DEL >", hdr.xname);

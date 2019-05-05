@@ -615,7 +615,7 @@ a_innbbs(void)
 
             if ((ch = open(fpath, O_RDONLY)) >= 0)
             {
-                data = data ? (char *) realloc(data, i) : (char *) malloc(i);
+                data = (char *) realloc(data, i);
                 read(ch, data, i);
                 close(ch);
             }

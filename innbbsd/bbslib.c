@@ -53,7 +53,7 @@ read_nodelist(void)
         close(fd);
         return -1;
     }
-    NODELIST = !NODELIST ? (nodelist_t *) malloc(size) : (nodelist_t *) realloc(NODELIST, size);
+    NODELIST = (nodelist_t *) realloc(NODELIST, size);
     read(fd, NODELIST, size);
     close(fd);
 
@@ -110,14 +110,14 @@ read_newsfeeds(void)
         close(fd);
         return -1;
     }
-    NEWSFEEDS = !NEWSFEEDS ? (newsfeeds_t *) malloc(size) : (newsfeeds_t *) realloc(NEWSFEEDS, size);
+    NEWSFEEDS = (newsfeeds_t *) realloc(NEWSFEEDS, size);
     read(fd, NEWSFEEDS, size);
     close(fd);
 
     /* 另外準備二份相同的資訊，但是排序方法不同 */
-    NEWSFEEDS_B = !NEWSFEEDS_B ? (newsfeeds_t *) malloc(size) : (newsfeeds_t *) realloc(NEWSFEEDS_B, size);
+    NEWSFEEDS_B = (newsfeeds_t *) realloc(NEWSFEEDS_B, size);
     memcpy(NEWSFEEDS_B, NEWSFEEDS, size);
-    NEWSFEEDS_G = !NEWSFEEDS_G ? (newsfeeds_t *) malloc(size) : (newsfeeds_t *) realloc(NEWSFEEDS_G, size);
+    NEWSFEEDS_G = (newsfeeds_t *) realloc(NEWSFEEDS_G, size);
     memcpy(NEWSFEEDS_G, NEWSFEEDS, size);
 
     NFCOUNT = size / sizeof(newsfeeds_t);
@@ -161,7 +161,7 @@ read_ncmperm(void)
         close(fd);
         return -1;
     }
-    NCMPERM = !NCMPERM ? (ncmperm_t *) malloc(size) : (ncmperm_t *) realloc(NCMPERM, size);
+    NCMPERM = (ncmperm_t *) realloc(NCMPERM, size);
     read(fd, NCMPERM, size);
     close(fd);
 
@@ -198,7 +198,7 @@ read_spamrule(void)
         close(fd);
         return -1;
     }
-    SPAMRULE = !SPAMRULE ? (spamrule_t *) malloc(size) : (spamrule_t *) realloc(SPAMRULE, size);
+    SPAMRULE = (spamrule_t *) realloc(SPAMRULE, size);
     read(fd, SPAMRULE, size);
     close(fd);
 

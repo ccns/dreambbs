@@ -4294,8 +4294,7 @@ XoXpost(                        /* Thor: call from post_cb */
         return XO_FOOT;
     }
 
-    if ((xlist = xypostI)) /* Thor.980911: 註解: 怕重覆進入時, 浪費記憶體 */
-        free(xlist);
+    free(xypostI); /* Thor.980911: 註解: 怕重覆進入時, 浪費記憶體 */
 
     /* allocate index memory, remember free first */
 
@@ -4427,8 +4426,7 @@ XoXpost(                        /* Thor: call from post_cb */
 
     /* build XO for xpost_xo */
 
-    if ((xt = xz[XZ_XPOST - XO_ZONE].xo))
-        free(xt);
+    free(xz[XZ_XPOST - XO_ZONE].xo);
 
     comebackPos = xo->pos;      /* Thor: record pos, future use */
     xz[XZ_XPOST - XO_ZONE].xo = xt = xo_new(xo->dir);
@@ -4445,19 +4443,13 @@ XoXpost(                        /* Thor: call from post_cb */
 
     /* free xpost_xo */
 
-    if ((xt = xz[XZ_XPOST - XO_ZONE].xo))
-    {
-        free(xt);
-        xz[XZ_XPOST - XO_ZONE].xo = NULL;
-    }
+    free(xz[XZ_XPOST - XO_ZONE].xo);
+    xz[XZ_XPOST - XO_ZONE].xo = NULL;
 
     /* free index memory, remember check free pointer */
 
-    if ((xlist = xypostI))
-    {
-        free(xlist);
-        xypostI = NULL;
-    }
+    free(xypostI);
+    xypostI = NULL;
 
     return XO_INIT;
 }

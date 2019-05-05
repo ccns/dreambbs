@@ -80,10 +80,7 @@ void
 xo_free(
     XO *xo)
 {
-    char *ptr;
-
-    if (ptr = xo->xyz)
-        free(ptr);
+    free(xo->xyz);
     free(xo);
 }
 #endif

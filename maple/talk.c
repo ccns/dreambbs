@@ -505,11 +505,8 @@ pal_cache(void)
         /* Thor.980805: 解決 cutmp.ufo和 cuser.ufo的同步問題 */
         cutmp->ufo = ufo & (~UFO_REJECT);
     }
-    if (pal_ship)
-    {
-        free(pal_ship);
-        pal_ship = NULL;
-    }
+    free(pal_ship);
+    pal_ship = NULL;
 
 
     if (ship_total)
@@ -536,7 +533,7 @@ pal_cache(void)
     else
         pal_ship = NULL;
 
-    if (fimage) free(fimage);
+    free(fimage);
     cuser.ufo = ufo;
 }
 
@@ -794,15 +791,13 @@ pal_search(
             {
                 move(b_lines, 0);
                 clrtoeol();
-                if (fimage)
-                    free(fimage);
+                free(fimage);
                 return pos + XO_MOVE;
             }
 
         } while (pos != num);
     }
-    if (fimage)
-        free(fimage);
+    free(fimage);
 
     return XO_FOOT;
 }
@@ -4579,8 +4574,7 @@ banmsg_cache(void)
 
     up->banmsg_max = count;
 
-    if (fimage)
-        free(fimage);
+    free(fimage);
 }
 
 

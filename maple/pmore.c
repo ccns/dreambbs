@@ -2760,10 +2760,8 @@ _pmore2(
                     char sbuf[81] = "";
                     char ans[4] = "n";
 
-                    if (sr.search_str) {
-                        free(sr.search_str);
-                        sr.search_str = NULL;
-                    }
+                    free(sr.search_str);
+                    sr.search_str = NULL;
 
                     getdata(b_lines - 1, 0, PMORE_MSG_SEARCH_KEYWORD, sbuf,
                             40, DOECHO);

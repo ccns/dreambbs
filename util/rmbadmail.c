@@ -59,8 +59,7 @@ reaper(
 
     if (!(dirp = opendir(folder)))
     {
-        if (base)
-            free(base);
+        free(base);
         return;
     }
     ptr = strchr(folder, '@') + 1;
