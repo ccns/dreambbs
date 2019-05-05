@@ -1557,6 +1557,7 @@ class_switch(
 
 /* opus.1127 : 計畫重寫, 可 extract author/title */
 
+#if 0  // Unused
 static int
 XoAuthor(
     XO *xo)
@@ -1569,8 +1570,6 @@ XoAuthor(
 #ifndef HAVE_MMAP
     XO *xo_t;
 #endif
-
-    (void)XoAuthor;
 
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
@@ -1694,6 +1693,7 @@ XoAuthor(
 
     return class_body(xo);
 }
+#endif  // #if 0  // Unused
 #endif  /* #ifdef AUTHOR_EXTRACTION */
 
 #ifdef  HAVE_FAVORITE

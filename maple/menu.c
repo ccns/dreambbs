@@ -122,6 +122,7 @@ resetbrd(void)
     return 0;
 }
 
+#if 0  // Unused
 static int
 x_sysload(void)
 {
@@ -134,6 +135,7 @@ x_sysload(void)
     vmsg(buf);
     return XEASY;
 }
+#endif
 
 
 /* ----------------------------------------------------- */

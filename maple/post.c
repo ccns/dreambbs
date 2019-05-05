@@ -84,14 +84,15 @@ cmpchrono(
 }
 
 
+#if 0  // Unused
     static void
 change_stamp(
     char *folder,
     HDR *hdr)
 {
-    (void)change_stamp;
     hdr->stamp = time(0);
 }
+#endif
 
 
 /* ----------------------------------------------------- */

@@ -650,14 +650,13 @@ gzip(
 }
 
 
+#if 0  // Unused
 static void
 gtar(
     char *source, char *target, char *stamp,
     int prune)
 {
     char buf[128];
-
-    (void)gtar;
 
     sprintf(buf, "`which tar` cfz log/%s%s.tgz %s", target, stamp, source);
     system(buf);
@@ -667,6 +666,7 @@ gtar(
         f_rm(source);
     }
 }
+#endif
 
 static void
 error(
