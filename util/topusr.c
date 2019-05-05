@@ -131,7 +131,7 @@ main(void)
 
     for (c = 'a'; c <= 'z'; c++)
     {
-        char buf[64];
+        char buf[512];
         struct dirent *de;
         DIR *dirp;
 

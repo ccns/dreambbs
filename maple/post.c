@@ -3183,7 +3183,7 @@ post_recommend(
     HDR *hdr;
     int pos, cur, addscore, eof, point=0;
     BRD *brd;
-    char fpath[80], msg[53], add[128], lastrecommend[IDLEN+1], verb[2];
+    char fpath[80], msg[53], add[128], lastrecommend[IDLEN+1], verb[3];
     char ans, getans, pushverb;
 
     /* 081122.cache: 推文時間限制 */
