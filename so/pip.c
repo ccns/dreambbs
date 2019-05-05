@@ -906,7 +906,7 @@ int mode)
         age = 9;
     else if (m >= 70 && m <= 100) /*古稀*/
         age = 10;
-    else if (m > 100)             /*神仙*/
+    else  // m > 100              /*神仙*/
         age = 11;
     clear();
     /*vs_head("電子養小雞", BoardName);*/
@@ -5959,7 +5959,7 @@ int mode)
         data = d.mexp;
     else if (mode == 3)
         data = d.social;
-    else if (mode == 4)
+    else  // mode == 4
         data = d.family;
     if (class > 1000) class = 1;
     else if (class > 800) class = 2;
