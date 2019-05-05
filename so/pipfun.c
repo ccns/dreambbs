@@ -1,3 +1,5 @@
+#include <stdarg.h>
+
 static inline void
 clrchyiuan(
 int i, int j)
