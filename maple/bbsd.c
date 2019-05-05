@@ -1621,7 +1621,7 @@ int main(int argc, char *argv[])
     /* main loop                                           */
     /* --------------------------------------------------- */
 
-    totaluser = (int *) &ushm->count;
+    totaluser = &ushm->count;
     /* avgload = &ushm->avgload; */
 
     for (;;)
