@@ -11,6 +11,10 @@
 extern BCACHE *bshm;
 extern XZ xz[];
 
+static int *brh_base;           /* allocated memory */
+static int *brh_tail;           /* allocated memory */
+static int brh_size;            /* allocated memory size */
+static time_t brh_expire;
 
 char brd_bits[MAXBOARD];
 time_t brd_visit[MAXBOARD];     /* 最近瀏覽時間 */
