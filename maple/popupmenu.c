@@ -374,7 +374,6 @@ do_menu(
         {
             case KEY_LEFT:
                 return 1;
-                break;
             case KEY_UP:
                 cur = (cur==0)?num:cur-1;
                 break;
@@ -431,7 +430,7 @@ do_menu(
         }
     }
 
-    return 0;
+    // return 0;
 }
 
 
@@ -553,7 +552,7 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
             draw_ans_item(desc[cur+1], 1, x+cur, y, hotkey);
         }
     }
-    return 0;
+    // return 0;
 }
 
 void

@@ -49,8 +49,7 @@ int attr_get(char *userid, int key, void *value)
                 fclose(fp);
                 return k - 1;
             }
-            else
-                fseek(fp, (unsigned long)(k & 0xff), SEEK_CUR);
+            fseek(fp, (unsigned long)(k & 0xff), SEEK_CUR);
         }
         fclose(fp);
     }
@@ -88,8 +87,7 @@ int attr_put(char *userid, int key, void *value)
                 /* Thor.990311: for fwrite() at correct pos */
                 break;
             }
-            else
-                fseek(fp, (unsigned long)(k & 0xff), SEEK_CUR);
+            fseek(fp, (unsigned long)(k & 0xff), SEEK_CUR);
         }
         k = fwrite(value, (size_t) (key & 0xff), 1, fp);
       close_file:
@@ -138,16 +136,13 @@ int attr_step(char *userid, int key, int dflt, int step)
                 ret = -2;
                 goto close_file;
             }
-            else if (fwrite(&key, sizeof key, 1, fp) <= 0)
+            if (fwrite(&key, sizeof key, 1, fp) <= 0)
             {
                 ret = -3;
                 goto close_file;
             }
-            else
-            {
-                value = dflt;
-                break;
-            }
+            value = dflt;
+            break;
         }
         if (k == key)
         {
@@ -156,8 +151,7 @@ int attr_step(char *userid, int key, int dflt, int step)
             /* Thor.990311: for fwrite() at correct pos */
             break;
         }
-        else
-            fseek(fp, (unsigned long)(k & 0xff), SEEK_CUR);
+        fseek(fp, (unsigned long)(k & 0xff), SEEK_CUR);
     }
 
     value += step;

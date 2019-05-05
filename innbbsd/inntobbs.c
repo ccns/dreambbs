@@ -117,7 +117,7 @@ is_loopback(
         }
     }
 
-    return 0;
+    // return 0;
 }
 
 
