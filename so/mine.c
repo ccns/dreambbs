@@ -300,7 +300,6 @@ void playMine(void)
         {
         case KEY_ESC:
             return;
-            break;
 
         case KEY_UP:
             if (curry > 1)

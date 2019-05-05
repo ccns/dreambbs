@@ -38,13 +38,13 @@ base64_encode(FILE *in, FILE *out)
             *dst++ = '=';
             break;
         }
-        else if (n==2)
+        if (n==2)
         {
             *dst++ = ascii[(c2 & 0xf) << 2 | (c3 & 0xc0) >> 6];
             *dst++ = '=';
             break;
         }
-        else
+        // n==3
         {
             *dst++ = ascii[(c2 & 0xf) << 2 | (c3 & 0xc0) >> 6];
             *dst++ = ascii[(c3 & 0x3f)];
