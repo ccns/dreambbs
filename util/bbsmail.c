@@ -52,12 +52,11 @@ init_ushm(void)
     ushm = shm_new(UTMPSHM_KEY, sizeof(UCACHE));
 }
 
+#if 0  // Unused
 static inline void
 my_biff(char *userid)
 {
     UTMP *utmp, *uceil;
-
-    (void)my_biff;
 
     // XXX 這個 userid 已經轉成小寫了嗎? 好像是
 
@@ -78,6 +77,7 @@ my_biff(char *userid)
         }
     } while (++utmp <= uceil);
 }
+#endif  // #if 0  // Unused
 
 #if 1
 static inline void

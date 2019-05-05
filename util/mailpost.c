@@ -155,6 +155,7 @@ mailog(
     }
 }
 
+#if 0  // Unused
 static int
 Link(
     char* src,
@@ -163,8 +164,6 @@ Link(
 {
     int ret;
 
-    (void)Link;
-
     if ((ret = link(src, dst)))
     {
         if (errno != EEXIST)
@@ -172,6 +171,7 @@ Link(
     }
     return ret;
 }
+#endif
 
 static void
 justify_user(void)
