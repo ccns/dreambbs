@@ -31,21 +31,23 @@ base64_encode(FILE *in, FILE *out)
         c2 = base[1];
         c3 = base[2];
         *dst++ = ascii[c1 >> 2];
-        *dst++ = ascii[(c1 & 0x3) << 4 | (c2 & 0xf0) >> 4];
         if (n==1)
         {
+            *dst++ = ascii[(c1 & 0x3) << 4];
             *dst++ = '=';
             *dst++ = '=';
             break;
         }
         if (n==2)
         {
-            *dst++ = ascii[(c2 & 0xf) << 2 | (c3 & 0xc0) >> 6];
+            *dst++ = ascii[(c1 & 0x3) << 4 | (c2 & 0xf0) >> 4];
+            *dst++ = ascii[(c2 & 0xf) << 2];
             *dst++ = '=';
             break;
         }
         // n==3
         {
+            *dst++ = ascii[(c1 & 0x3) << 4 | (c2 & 0xf0) >> 4];
             *dst++ = ascii[(c2 & 0xf) << 2 | (c3 & 0xc0) >> 6];
             *dst++ = ascii[(c3 & 0x3f)];
         }
