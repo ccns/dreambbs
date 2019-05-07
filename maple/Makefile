@@ -10,6 +10,12 @@
 SRCROOT	= ..
 .include "$(SRCROOT)/dreambbs.mk"
 
+.if $(NO_SO)
+.include "$(SRCROOT)/so/so.mk"
+.endif
+
+CFLAGS	+= $(CFLAGS_MAPLE)
+
 .if $(USE_BBSLUA)
 CFLAGS	+= ${LUA_CFLAGS}
 LDFLAGS	+= ${LUA_LDFLAGS} ${LUA_LDFLAGS_ARCHI}
@@ -42,6 +48,18 @@ OBJ	+= acct.o bbsd.o board.o cache.o edit.o \
 .if $(USE_PMORE)
 SRC	+= pmore.c
 OBJ	+= pmore.o
+.endif
+
+.if $(NO_SO)
+SO_SRC	= $(SO:R:@v@$(SRCROOT)/so/$v.c@)  # Add path
+SO_OBJ	= $(SO:R:@v@$(SRCROOT)/so/$v.o@)
+SRC	+= $(SO_SRC)
+OBJ	+= $(SO_OBJ)
+
+.for target in $(SO_OBJ)
+$(target):
+	$(CC) $(CFLAGS) -c $(target:R).c -o $(target)
+.endfor
 .endif
 
 EXE	= bbsd xchatd

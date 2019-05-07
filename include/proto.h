@@ -9,6 +9,10 @@
 #ifndef PROTO_H
 #define PROTO_H
 
+#ifdef NO_SO
+#include "so.h"
+#endif
+
 #ifdef M3_USE_PFTERM
 #include "pfterm.h"
 #endif

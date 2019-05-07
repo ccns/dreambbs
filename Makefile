@@ -21,7 +21,7 @@ all:
 	@(cd maple; $(MAKE) all)
 	@(cd util; $(MAKE) all)
 	@(cd innbbsd; $(MAKE) all)
-.if $(OPSYS) != "Cygwin"
+.if !$(NO_SO)
 	@(cd so; $(MAKE) all)
 .endif
 	@(cd test; $(MAKE) all)
@@ -31,7 +31,7 @@ njob:
 	@(cd maple; $(MAKE) -j$(NPROC) all)
 	@(cd util; $(MAKE) -j$(NPROC) all)
 	@(cd innbbsd; $(MAKE) -j$(NPROC) all)
-.if $(OPSYS) != "Cygwin"
+.if !$(NO_SO)
 	@(cd so; $(MAKE) -j$(NPROC) all)
 .endif
 	@(cd test; $(MAKE) -j$(NPROC) all)
@@ -44,7 +44,7 @@ install:
 	@(cd maple; $(MAKE) install)
 	@(cd innbbsd; $(MAKE) install)
 	@(cd util; $(MAKE) install)
-.if $(OPSYS) != "Cygwin"
+.if !$(NO_SO)
 	@(cd so; $(MAKE) install)
 .endif
 	@(cd scripts; $(MAKE) install)

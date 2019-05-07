@@ -71,6 +71,16 @@ LDFLAGS_ARCHI	+= -lresolv -ldl -rdynamic
 LDFLAGS_ARCHI	+= -Wl,-export-dynamic
 .endif
 
+.if $(OPSYS) == "Cygwin"
+NO_SO		 = YES
+.else
+NO_SO		?=
+.endif
+
+.if $(NO_SO)
+CFLAGS_MAPLE	+= -DNO_SO
+.endif
+
 .if $(CLANG_MODERN)
 CFLAGS_COMPAT  += -Wunreachable-code-aggressive
 .else

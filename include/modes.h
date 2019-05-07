@@ -17,7 +17,11 @@ enum
 /* user 操作狀態與模式                                   */
 /* ----------------------------------------------------- */
 
+#ifdef NO_SO
+#define M_DL(umode)     (umode)
+#else
 #define M_DL(umode)     (-(umode))  /* For dynamic library loading */
+#endif
 
 #define M_IDLE          0
 #define M_MMENU         1       /* menu mode */
@@ -184,7 +188,9 @@ static const char *ModeTypeTable[] =
 /* xover.c 中的模式                                      */
 /* ----------------------------------------------------- */
 
-#if 1
+#if NO_SO
+#define XO_DL           0x00000000
+#else
 #define XO_DL           0x80000000
 #endif
 
