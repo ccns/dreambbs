@@ -49,13 +49,22 @@
 #define VER_PATCH_STR(major, minor, patch) \
     VER_STR(major, minor) "." CPP_STR(CPP_UNPAREN_OPT(patch))
 
+// ver -DlPatch- dl_patch
+// `ver` is a string
+#define VERSION_STR_DL_PATCH_STR(version_str, dl_patch) \
+    version_str DL_PATCH_SEP CPP_STR(CPP_UNPAREN_OPT(dl_patch))
+
+// `ver` is not a string
+#define VERSION_DL_PATCH_STR(version, dl_patch) \
+    VERSION_STR_DL_PATCH_STR(CPP_STR(CPP_UNPAREN_OPT(version)), dl_patch)
+
 // major . minor -DlPatch- dl_patch
 #define VER_DL_STR(major, minor, dl_patch) \
-    VER_STR(major, minor) DL_PATCH_SEP CPP_STR(CPP_UNPAREN_OPT(dl_patch))
+    VERSION_STR_DL_PATCH_STR(VER_STR(major, minor), dl_patch)
 
 // major . minor . patch -DlPatch- dl_patch
 #define VER_PATCH_DL_STR(major, minor, patch, dl_patch) \
-    VER_PATCH_STR(major, minor, patch) DL_PATCH_SEP CPP_STR(CPP_UNPAREN_OPT(dl_patch))
+    VERSION_STR_DL_PATCH_STR(VER_PATCH_STR(major, minor, patch), dl_patch)
 
 
 /* Macros for manipulating structs with flexible array member */
