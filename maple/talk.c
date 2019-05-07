@@ -2696,7 +2696,7 @@ talk_speak(
             ch = recv(fd, data, 80, 0);
             if (ch <= 0)
                 break;
-#if 1
+#if 0   // IID.20190508: `bwboard.so` and `chess.so` do not exist anymore.
             if (data[0] == Ctrl('A'))
             { /* Thor.990219: ©I¥s¥~±¾´Ñ½L */
                 if (DL_CALL(DL_NAME("bwboard.so", vaBWboard))(fd, 1)==-2)
@@ -2745,7 +2745,7 @@ talk_speak(
 
             }
         }
-#if 1
+#if 0   // IID.20190508: `bwboard.so` and `chess.so` do not exist anymore.
         else if (ch == Ctrl('A'))
         { /* Thor.990219: ©I¥s¥~±¾´Ñ½L */
             /* extern int BWboard(int sock, int later); */
