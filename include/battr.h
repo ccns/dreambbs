@@ -52,7 +52,7 @@
 
 #define NUMATTRS        30
 
-char *battrs[NUMATTRS] =
+static char *battrs[NUMATTRS] =
 {
       "不可 Zap",
       "不轉信",
