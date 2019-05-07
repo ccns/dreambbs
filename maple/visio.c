@@ -2305,11 +2305,7 @@ vkey(void)
                 mode = 3;
             else
             {
-#ifdef  TRAP_ESC
                 return Meta(ch);
-#else
-                return ch;
-#endif
             }
         }
         else if (mode == 2)
