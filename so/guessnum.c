@@ -24,7 +24,7 @@ static His *hisList;
 static int numNum;
 static char *numSet;
 
-#if 1
+#ifndef NO_SO
 void _init(void)
 {
     hisList = (His *)malloc(sizeof(His)); /* pseudo */
