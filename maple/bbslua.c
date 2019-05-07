@@ -893,14 +893,132 @@ bl_peekbreak(float f)
 }
 
 #if KEY_UP > 0  /* Key values for special keys are negative on some BBSs */
+  #define KEY_BIT(v)  (v)
   #define IS_NORMAL_KEY(v) (v < 0x100)
 #else
+  #define KEY_BIT(v)  ((v > 0) ? v : ~v)
   #define IS_NORMAL_KEY(v) (v > 0 && v < 0x100)
+#endif
+
+#ifndef META_BIT
+  #ifndef Meta
+    // Find other possible macro names
+    #if defined(META)
+      #define Meta  META
+    #elif defined(ALT)
+      #define Meta  ALT
+    #elif defined(Alt)
+      #define Meta  Alt
+    #elif defined(ESC)
+      #define Meta  ESC
+    #elif defined(Esc)
+      #define Meta  Esc
+    #endif
+  #endif
+  #ifdef Meta
+    // Found a defined macro for Meta key
+    // Find the bit representing Meta
+    #if Meta != 0  // `Meta` is a nonzero macro value
+      #define META_BIT  Meta
+    #elif Meta(0) != 0  // `Meta` is a macro function and not a no-op
+      #define META_BIT  Meta(0)
+    #endif
+  #endif
+#endif
+// Define `IS_META()`
+#if !defined(IS_META) && defined(META_BIT)
+  #define IS_META(v)  ((KEY_BIT(v) & META_BIT) != 0)
+#endif
+
+#ifndef SHIFT_BIT
+  #ifndef Shift
+    // Find other possible macro names
+    #if defined(SHIFT)
+      #define Shift  SHIFT
+    #endif
+  #endif
+  #ifdef Shift
+    // Found a defined macro for Shift key
+    // Find the bit representing Shift
+    #if Shift != 0  // `Shift` is a nonzero macro value
+      #define SHIFT_BIT  Shift
+    #elif Shift(0) != 0  // `Shift` is a macro function and not a no-op
+      #define SHIFT_BIT  Shift(0)
+    #endif
+  #endif
+#endif
+// Define `IS_SHIFT()`
+#if !defined(IS_SHIFT) && defined(SHIFT_BIT)
+  #define IS_SHIFT(v)  ((KEY_BIT(v) & SHIFT_BIT) != 0)
+#endif
+
+// Define `CTRL_BIT`
+#ifndef CTRL_BIT
+  #ifndef Ctrl
+    // Find other possible macro names
+    // IID.20190509: `CTRL` is predefined in system; do not use this one.
+    //#if defined(CTRL)     // Defined in "/usr/include/*-*-gnu/sys/ttydefaults.h"
+    //  #define Ctrl  CTRL
+    //#endif
+  #endif
+  #ifdef Ctrl
+    // Found a defined macro for Ctrl key
+    // Find the bit representing Ctrl
+    #if Ctrl != 0  // `Ctrl` is a nonzero macro value
+      #define CTRL_BIT  Ctrl
+      #define CTRL_FLIP
+    #elif Ctrl(0) != 0  // `Ctrl` is a macro function which sets bits
+      #define CTRL_BIT  Ctrl(0)
+      #define CTRL_FLIP
+    #elif Ctrl(~0) != ~0  // `Ctrl` is a macro function which unsets bits
+      #ifdef SHIFT_BIT      // `Ctrl` may unsets `SHIFT_BIT`
+        #define CTRL_BIT  ~ (Ctrl(~0) | SHIFT_BIT)
+      #else
+        #define CTRL_BIT  ~ Ctrl(~0)
+      #endif
+      #define CTRL_FLIP ~  // Flip the result
+    #endif
+  #endif
+#endif
+// Define `IS_CTRL()`
+#if !defined(IS_CTRL) && defined(CTRL_BIT)
+  #define IS_CTRL(v)  ((CTRL_FLIP KEY_BIT(v) & CTRL_BIT) != 0)
 #endif
 
 static void
 bl_k2s(lua_State* L, int v)
 {
+#if defined(IS_META) || defined(BBSLUA_HAVE_VKEY)
+    int is_meta;
+#endif
+#ifdef IS_SHIFT
+    int is_shift;
+#endif
+#ifdef IS_CTRL
+    int is_ctrl;
+#endif
+
+    // Find the unmodified key value
+#ifdef IS_META
+    is_meta = IS_META(v);
+    if (is_meta)
+        v ^= META_BIT;
+#elif defined(BBSLUA_HAVE_VKEY)
+    is_meta = v == '\x1b';
+    if (is_meta)
+        v = KEY_ESC_arg;
+#endif
+#ifdef IS_SHIFT
+    is_shift = !IS_NORMAL_KEY(v) && IS_SHIFT(v);
+    if (is_shift)
+        v ^= SHIFT_BIT;
+#endif
+#ifdef IS_CTRL
+    is_ctrl = !IS_NORMAL_KEY(v) && IS_CTRL(v);
+    if (is_ctrl)
+        v ^= CTRL_BIT;
+#endif
+
 #if IS_NORMAL_KEY(-1)  /* Negative key values are ignored */
     if (v <= 0)
         lua_pushnil(L);
@@ -942,6 +1060,31 @@ bl_k2s(lua_State* L, int v)
         case KEY_PGDN:  lua_pushstring(L, "PGDN");  break;
         default:        lua_pushnil(L);             break;
     }
+
+#ifdef IS_CTRL
+    if (!lua_isnil(L, -1) && is_ctrl)
+    {
+        lua_pushstring(L, "^");
+        lua_insert(L, -2);
+        lua_concat(L, 2);
+    }
+#endif
+#ifdef IS_SHIFT
+    if (!lua_isnil(L, -1) && is_shift)
+    {
+        lua_pushstring(L, "SHIFT-");
+        lua_insert(L, -2);
+        lua_concat(L, 2);
+    }
+#endif
+#if defined(BBSLUA_HAVE_VKEY) || defined(IS_META)
+    if (!lua_isnil(L, -1) && is_meta)
+    {
+        lua_pushstring(L, "ESC-");
+        lua_insert(L, -2);
+        lua_concat(L, 2);
+    }
+#endif
 }
 
 BLAPI_PROTO
