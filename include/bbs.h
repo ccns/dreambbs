@@ -25,6 +25,7 @@
 #include <sys/wait.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include "cppdef.h"             /* Preprocessor utility macros */
 #include "config.h"             /* User-configurable stuff */
 #include "struct.h"             /* data structure */
 #include "dao.h"                /* common library */

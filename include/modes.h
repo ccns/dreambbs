@@ -17,6 +17,8 @@ enum
 /* user ¾Þ§@ª¬ºA»P¼Ò¦¡                                   */
 /* ----------------------------------------------------- */
 
+#define M_DL(umode)     (-(umode))  /* For dynamic library loading */
+
 #define M_IDLE          0
 #define M_MMENU         1       /* menu mode */
 #define M_ADMIN         2

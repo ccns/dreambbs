@@ -1619,7 +1619,7 @@ xover(
                 /* Thor.990220: dynamic load, with key | XO_DL */
                 if (pos == num)
                 {
-                    void *p = DL_get((char *) cb->func);
+                    void *p = DL_GET((char *) cb->func);
                     if (p)
                     {
                         cb->func = p;
@@ -1903,7 +1903,7 @@ xover(
                     static int (*mgp)(XO *xo);
                     if (!mgp)
                     {
-                        mgp = DL_get(BINARY_PREFIX"mailgem.so:mailgem_gather");
+                        mgp = DL_GET(DL_NAME("mailgem.so", mailgem_gather));
                         if (mgp)
                             cmd = (*mgp)(xo);
                         else

@@ -1985,7 +1985,7 @@ static KeyFunc class_cb[] =
     {'E', class_edit},
     {'v', class_visit},
 #ifdef  HAVE_COUNT_BOARD
-    {'S' | XO_DL, (int (*)(XO *xo))BINARY_PREFIX"brdstat.so:main_bstat"},
+    {'S' | XO_DL, (int (*)(XO *xo))DL_NAME("brdstat.so", main_bstat)},
 #endif
 
 #ifdef  HAVE_FAVORITE

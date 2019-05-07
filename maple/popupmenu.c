@@ -68,7 +68,7 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
 
     if (mptr->umode < 0)
     {
-        p = DL_get(mptr->func);
+        p = DL_GET(mptr->func);
         if (!p)
             return 0;
         mptr->func = p;
@@ -78,7 +78,7 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
     switch (mptr->umode)
     {
         case POPUP_SO :
-            p = DL_get(mptr->func);
+            p = DL_GET(mptr->func);
             if (!p) return 0;
             mptr->func = p;
             mptr->umode = POPUP_FUN;

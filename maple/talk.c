@@ -2699,13 +2699,13 @@ talk_speak(
 #if 1
             if (data[0] == Ctrl('A'))
             { /* Thor.990219: ©I¥s¥~±¾´Ñ½L */
-                if (DL_func(BINARY_PREFIX"bwboard.so:vaBWboard", fd, 1)==-2)
+                if (DL_CALL(DL_NAME("bwboard.so", vaBWboard))(fd, 1)==-2)
                     break;
                 continue;
             }
             if (data[0] == Ctrl('B'))
             {
-                if (DL_func(BINARY_PREFIX"chess.so:vaChess", fd, 1)==-2)
+                if (DL_CALL(DL_NAME("chess.so", vaChess))(fd, 1)==-2)
                     break;
                 continue;
             }
@@ -2753,7 +2753,7 @@ talk_speak(
             if (send(fd, data, 1, 0) != 1)
                 break;
             /* if (BWboard(fd, 0)==-2) */
-            if (DL_func(BINARY_PREFIX"bwboard.so:vaBWboard", fd, 0)==-2)
+            if (DL_CALL(DL_NAME("bwboard.so", vaBWboard))(fd, 0)==-2)
                 break;
         }
         else if (ch == Ctrl('B'))
@@ -2763,7 +2763,7 @@ talk_speak(
             if (send(fd, data, 1, 0) != 1)
                 break;
             /* if (BWboard(fd, 0)==-2) */
-            if (DL_func(BINARY_PREFIX"chess.so:vaChess", fd, 0)==-2)
+            if (DL_CALL(DL_NAME("chess.so", vaChess))(fd, 0)==-2)
                 break;
         }
 #endif
@@ -3023,7 +3023,7 @@ talk_page(
     else if (ans == 'c')
     {
         if (!p)
-            p = DL_get(BINARY_PREFIX"pip.so:pip_vf_fight");
+            p = DL_GET(DL_NAME("pip.so", pip_vf_fight));
         if (p)
         {
             up->pip = NULL;
@@ -4455,7 +4455,7 @@ over_for:
         else if (ans == 'c')
         {
             if (!p)
-                p = DL_get(BINARY_PREFIX"pip.so:pip_vf_fight");
+                p = DL_GET(DL_NAME("pip.so", pip_vf_fight));
             strcpy(cutmp->mateid, up->userid);
             if (p)
             {

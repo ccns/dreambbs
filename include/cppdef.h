@@ -81,4 +81,19 @@
     (offsetof(Type, Type##_FLEX_MEMBER) \
       + (n) * sizeof(((Type *)NULL)->Type##_FLEX_MEMBER[0]))
 
+/* Macros for managing loading of dynamic libraries */
+
+#define DL_NAME(module_str, func) \
+    BINARY_PREFIX module_str ":" CPP_STR(CPP_UNPAREN_OPT(func))
+
+#define DL_GET(dl_name)  DL_get(dl_name)
+
+#if __STDC_VERSION__ >= 199901L
+  #define CPP_APPEND_CLOSEPAREN(...)  __VA_ARGS__)
+#else
+  #define CPP_APPEND_CLOSEPAREN(args...)  args)
+#endif
+
+#define DL_CALL(dl_name)  DL_func((dl_name), CPP_APPEND_CLOSEPAREN
+
 #endif  // #ifndef CPPDEF_H

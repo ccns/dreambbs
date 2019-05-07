@@ -503,19 +503,19 @@ static MENU menu_boardadm[] =
     {BanMail, PERM_BOARD|PERM_SYSOP, M_BANMAIL,
     "FireWall   擋信列表"},
 
-    {BINARY_PREFIX"adminutil.so:bm_check", PERM_BOARD|PERM_SYSOP, - M_XMODE,
+    {DL_NAME("adminutil.so", bm_check), PERM_BOARD|PERM_SYSOP, M_DL(M_XMODE),
     "Manage     板主確認"},
 
-    {BINARY_PREFIX"adminutil.so:m_expire", PERM_BOARD|PERM_SYSOP, - M_XMODE,
+    {DL_NAME("adminutil.so", m_expire), PERM_BOARD|PERM_SYSOP, M_DL(M_XMODE),
     "DExpire    清除看板刪除文章"},
 
-    {BINARY_PREFIX"adminutil.so:mail_to_bm", PERM_SYSOP, - M_XMODE,
+    {DL_NAME("adminutil.so", mail_to_bm), PERM_SYSOP, M_DL(M_XMODE),
     "ToBM       寄信給板主"},
 
-    {BINARY_PREFIX"adminutil.so:mail_to_all", PERM_SYSOP, - M_XMODE,
+    {DL_NAME("adminutil.so", mail_to_all), PERM_SYSOP, M_DL(M_XMODE),
     "Alluser    系統通告"},
 
-    {BINARY_PREFIX"personal.so:personal_admin", PERM_BOARD|PERM_SYSOP, - M_XMODE,
+    {DL_NAME("personal.so", personal_admin), PERM_BOARD|PERM_SYSOP, M_DL(M_XMODE),
     "Personal   個人板審核"},
 
     {menu_admin, PERM_MENU + 'N', M_ADMIN,
@@ -527,15 +527,15 @@ static MENU menu_accadm[] =
     {m_user, PERM_ACCOUNTS, M_SYSTEM,
     "User       使用者資料"},
 
-    {BINARY_PREFIX"bank.so:money_back", PERM_ACCOUNTS, - M_XMODE,
+    {DL_NAME("bank.so", money_back), PERM_ACCOUNTS, M_DL(M_XMODE),
     "GetMoney   匯入舊夢幣"},
 
 #ifdef  HAVE_SONG
-    {BINARY_PREFIX"song.so:AddRequestTimes", PERM_KTV, - M_XMODE,
+    {DL_NAME("song.so", AddRequestTimes), PERM_KTV, M_DL(M_XMODE),
     "Addsongs   增加點歌次數"},
 #endif
 
-    {BINARY_PREFIX"passwd.so:new_passwd", PERM_SYSOP, - M_XMODE,
+    {DL_NAME("passwd.so", new_passwd), PERM_SYSOP, M_DL(M_XMODE),
     "Password   重送新密碼"},
 
 #ifdef  HAVE_REGISTER_FORM
@@ -544,7 +544,7 @@ static MENU menu_accadm[] =
 #endif
 
 #ifdef HAVE_OBSERVE_LIST
-    {BINARY_PREFIX"observe.so:Observe_list", PERM_SYSOP|PERM_BOARD, - M_XMODE,
+    {DL_NAME("observe.so", Observe_list), PERM_SYSOP|PERM_BOARD, M_DL(M_XMODE),
     "2Observe   系統觀察名單"},
 #endif
 
@@ -555,25 +555,25 @@ static MENU menu_accadm[] =
 static MENU menu_settingadm[] =
 {
 
-    {BINARY_PREFIX"adminutil.so:m_xfile", PERM_SYSOP, - M_XFILES,
+    {DL_NAME("adminutil.so", m_xfile), PERM_SYSOP, M_DL(M_XFILES),
     "File       編輯系統檔案"},
 
-    {BINARY_PREFIX"adminutil.so:m_xhlp", PERM_SYSOP, - M_XFILES,
+    {DL_NAME("adminutil.so", m_xhlp), PERM_SYSOP, M_DL(M_XFILES),
     "Hlp        編輯說明檔案"},
 
-    {BINARY_PREFIX"admin.so:Admin", PERM_SYSOP, - M_XMODE,
+    {DL_NAME("admin.so", Admin), PERM_SYSOP, M_DL(M_XMODE),
     "Operator   系統管理員列表"},
 
-    {BINARY_PREFIX"chatmenu.so:Chatmenu", PERM_CHATROOM|PERM_SYSOP, - M_XMODE,
+    {DL_NAME("chatmenu.so", Chatmenu), PERM_CHATROOM|PERM_SYSOP, M_DL(M_XMODE),
     "Chatmenu   " CHATROOMNAME "動詞"},
 
-    {BINARY_PREFIX"violate.so:Violate", PERM_SYSOP, - M_XMODE,
+    {DL_NAME("violate.so", Violate), PERM_SYSOP, M_DL(M_XMODE),
     "Violate    處罰名單"},
 
-    {BINARY_PREFIX"adminutil.so:special_search", PERM_SYSOP, - M_XMODE,
+    {DL_NAME("adminutil.so", special_search), PERM_SYSOP, M_DL(M_XMODE),
     "XSpecial   特殊搜尋"},
 
-    {BINARY_PREFIX"adminutil.so:update_all", PERM_SYSOP, - M_XMODE,
+    {DL_NAME("adminutil.so", update_all), PERM_SYSOP, M_DL(M_XMODE),
     "Database   系統資料庫更新"},
 
     {menu_admin, PERM_MENU + 'X', M_ADMIN,
@@ -585,25 +585,25 @@ static MENU menu_settingadm[] =
 /* ----------------------------------------------------- */
 static MENU menu_reset[] =
 {
-    {BINARY_PREFIX"adminutil.so:reset1", PERM_BOARD, - M_XMODE,
+    {DL_NAME("adminutil.so", reset1), PERM_BOARD, M_DL(M_XMODE),
     "Camera     動態看板"},
 
-    {BINARY_PREFIX"adminutil.so:reset2", PERM_BOARD, - M_XMODE,
+    {DL_NAME("adminutil.so", reset2), PERM_BOARD, M_DL(M_XMODE),
     "Group      分類群組"},
 
-    {BINARY_PREFIX"adminutil.so:reset3", PERM_SYSOP, - M_XMODE,
+    {DL_NAME("adminutil.so", reset3), PERM_SYSOP, M_DL(M_XMODE),
     "Mail       寄信收信轉信"},
 
-    {BINARY_PREFIX"adminutil.so:reset4", PERM_ADMIN, - M_XMODE,
+    {DL_NAME("adminutil.so", reset4), PERM_ADMIN, M_DL(M_XMODE),
     "Killbbs    清除不正常 BBS"},
 
-    {BINARY_PREFIX"adminutil.so:reset5", PERM_BOARD, - M_XMODE,
+    {DL_NAME("adminutil.so", reset5), PERM_BOARD, M_DL(M_XMODE),
     "Firewall   擋信列表"},
 
-    {BINARY_PREFIX"adminutil.so:reset6", PERM_CHATROOM, - M_XMODE,
+    {DL_NAME("adminutil.so", reset6), PERM_CHATROOM, M_DL(M_XMODE),
     "Xchatd     重開聊天室"},
 
-    {BINARY_PREFIX"adminutil.so:reset7", PERM_SYSOP, - M_XMODE,
+    {DL_NAME("adminutil.so", reset7), PERM_SYSOP, M_DL(M_XMODE),
     "All        全部"},
 
     {menu_admin, PERM_MENU + 'K', M_ADMIN,
@@ -628,7 +628,7 @@ static MENU menu_admin[] =
     {menu_settingadm, PERM_ADMIN, M_ADMIN,
     "Data       系統資料庫設定"},
 
-    {BINARY_PREFIX"innbbs.so:a_innbbs", PERM_BOARD, - M_SYSTEM,
+    {DL_NAME("innbbs.so", a_innbbs), PERM_BOARD, M_DL(M_SYSTEM),
     "InnBBS     轉信設定"},
 
     {menu_reset, PERM_ADMIN, M_ADMIN,
@@ -683,7 +683,7 @@ static MENU menu_mail[] =
     "Group      群組寄信"},
 #endif
 
-    {BINARY_PREFIX"contact.so:Contact", PERM_INTERNET, - M_XMODE,
+    {DL_NAME("contact.so", Contact), PERM_INTERNET, M_DL(M_XMODE),
     "Contact    聯絡名單"},
 
     {m_setforward, PERM_INTERNET, M_SMAIL,
@@ -734,7 +734,7 @@ static MENU menu_talk[] =
     {t_banmsg, PERM_BASIC, M_XMODE,
     "Banmsg     拒收訊息名單"},
 #endif
-    {BINARY_PREFIX"aloha.so:t_aloha", PERM_BASIC, - M_XMODE,
+    {DL_NAME("aloha.so", t_aloha), PERM_BASIC, M_DL(M_XMODE),
     "Aloha      上站通知名單"},
 
     {t_pager, PERM_BASIC, M_XMODE,
@@ -749,7 +749,7 @@ static MENU menu_talk[] =
 #ifdef HAVE_CHATROOM_CLIENT     /* r2.20180405: still fixing chatroom..... */
 
     /* Thor.990220: chatroom client 改採外掛 */
-    {BINARY_PREFIX"chat.so:t_chat", PERM_CHAT, - M_CHAT,
+    {DL_NAME("chat.so", t_chat), PERM_CHAT, M_DL(M_CHAT),
     "ChatRoom   " NICKNAME CHATROOMNAME},
 
 #endif
@@ -807,7 +807,7 @@ static MENU menu_xyz[] =
     {version, 0, M_READA,
     "Version    源碼發展資訊"},
 
-    {BINARY_PREFIX"xyz.so:x_siteinfo", 0, - M_READA,
+    {DL_NAME("xyz.so", x_siteinfo), 0, M_DL(M_READA),
     "Xinfo      系統程式資訊"},
 
     {pad_view, 0, M_READA,
@@ -853,7 +853,7 @@ static MENU menu_reg[] =
     {u_xfile, PERM_BASIC, M_UFILES,
     "Xfile      編輯個人檔案"},
 
-    {BINARY_PREFIX"list.so:List", PERM_VALID, - M_XMODE,
+    {DL_NAME("list.so", List), PERM_VALID, M_DL(M_XMODE),
     "1List      群組名單"},
 
     {menu_user, PERM_MENU + 'I', M_MMENU,
@@ -869,14 +869,14 @@ static MENU menu_user[] =
     {u_lock, PERM_BASIC, M_XMODE,
     "Lock       鎖定螢幕"},
 
-    {BINARY_PREFIX"memorandum.so:Memorandum", PERM_VALID, -M_XMODE,
+    {DL_NAME("memorandum.so", Memorandum), PERM_VALID, M_DL(M_XMODE),
     "Note       備忘錄"},
 
-    {BINARY_PREFIX"pnote.so:main_note", PERM_VALID, - M_XMODE,
+    {DL_NAME("pnote.so", main_note), PERM_VALID, M_DL(M_XMODE),
     "PNote      個人答錄機"},
 
 #ifdef  HAVE_CLASSTABLEALERT
-    {BINARY_PREFIX"classtable2.so:main_classtable", PERM_VALID, -M_XMODE,
+    {DL_NAME("classtable2.so", main_classtable), PERM_VALID, M_DL(M_XMODE),
     "2Table     新版個人功\課表"},
 #endif
 
@@ -900,19 +900,19 @@ static MENU menu_service[];
 
 static MENU menu_game[] =
 {
-    {BINARY_PREFIX"bj.so:BlackJack", PERM_VALID, - M_XMODE,
+    {DL_NAME("bj.so", BlackJack), PERM_VALID, M_DL(M_XMODE),
     "BlackJack  " NICKNAME "黑傑克"},
 
-    {BINARY_PREFIX"guessnum.so:fightNum", PERM_VALID, - M_XMODE,
+    {DL_NAME("guessnum.so", fightNum), PERM_VALID, M_DL(M_XMODE),
     "FightNum   數字大決戰"},
 
-    {BINARY_PREFIX"guessnum.so:guessNum", PERM_VALID, - M_XMODE,
+    {DL_NAME("guessnum.so", guessNum), PERM_VALID, M_DL(M_XMODE),
     "GuessNum   傻瓜猜數字"},
 
-    {BINARY_PREFIX"mine.so:Mine", PERM_VALID, - M_XMODE,
+    {DL_NAME("mine.so", Mine), PERM_VALID, M_DL(M_XMODE),
     "Mine       " NICKNAME "踩地雷"},
 
-    {BINARY_PREFIX"pip.so:p_pipple", PERM_VALID, - M_XMODE,
+    {DL_NAME("pip.so", p_pipple), PERM_VALID, M_DL(M_XMODE),
     "Pip        " NICKNAME "戰鬥雞"},
 
     {menu_service, PERM_MENU + 'F', M_UMENU,
@@ -927,13 +927,13 @@ static MENU menu_game[] =
 static MENU menu_special[] =
 {
 
-    {BINARY_PREFIX"personal.so:personal_apply", PERM_VALID, - M_XMODE,
+    {DL_NAME("personal.so", personal_apply), PERM_VALID, M_DL(M_XMODE),
     "PBApply      申請個人看板"},
 
-    {BINARY_PREFIX"bank.so:bank_main", PERM_VALID, - M_XMODE,
+    {DL_NAME("bank.so", bank_main), PERM_VALID, M_DL(M_XMODE),
     "Bank       　銀行"},
 
-    {BINARY_PREFIX"shop.so:shop_main", PERM_VALID, - M_XMODE,
+    {DL_NAME("shop.so", shop_main), PERM_VALID, M_DL(M_XMODE),
     "Pay        　商店"},
 
 #ifdef HAVE_SONG
@@ -957,13 +957,13 @@ static MENU menu_special[] =
 #ifdef HAVE_SONG
 static MENU menu_song[] =
 {
-    {BINARY_PREFIX"song.so:XoSongMain", PERM_VALID, - M_XMODE,
+    {DL_NAME("song.so", XoSongMain), PERM_VALID, M_DL(M_XMODE),
     "Request       點歌歌本"},
 
-    {BINARY_PREFIX"song.so:XoSongLog", PERM_VALID, - M_XMODE,
+    {DL_NAME("song.so", XoSongLog), PERM_VALID, M_DL(M_XMODE),
     "OrderSongs    點歌紀錄"},
 
-    {BINARY_PREFIX"song.so:XoSongSub", PERM_VALID, - M_XMODE,
+    {DL_NAME("song.so", XoSongSub), PERM_VALID, M_DL(M_XMODE),
     "Submit        投稿專區"},
 
     {menu_special, PERM_MENU + 'R', M_XMENU,
@@ -1001,10 +1001,10 @@ static MENU menu_service[] =
 
 /* 091007.cache: 拉人灌票沒意義... */
 
-    {BINARY_PREFIX"newboard.so:XoNewBoard", PERM_VALID, - M_XMODE,
+    {DL_NAME("newboard.so", XoNewBoard), PERM_VALID, M_DL(M_XMODE),
     "Cosign    【 連署申請區 】"},
 
-    {BINARY_PREFIX"vote.so:SystemVote", PERM_POST, - M_XMODE,
+    {DL_NAME("vote.so", SystemVote), PERM_POST, M_DL(M_XMODE),
     "Vote      【 系統投票區 】"},
 
     {system_result, 0, M_READA,
@@ -1345,7 +1345,7 @@ menu(void)
             /* Thor.990212: dynamic load, with negative umode */
             if (cmd < 0)
             {
-                void *p = DL_get(mptr->func);
+                void *p = DL_GET(mptr->func);
                 if (!p) break;
                 mptr->func = p;
                 cmd = -cmd;

@@ -2042,7 +2042,7 @@ ve_key:
                 {
                     if (!input_tool)
                     {
-                        input_tool = DL_get(BINARY_PREFIX"ascii.so:input_tools");
+                        input_tool = DL_GET(DL_NAME("ascii.so", input_tools));
                         if (input_tool)
                             (*input_tool)();
                     }
