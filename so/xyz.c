@@ -72,12 +72,12 @@ x_siteinfo(void)
 #ifdef HAVE_BBSLUA
   #ifdef M3_USE_BBSLUA
     #ifdef BBSLUA_USE_LUAJIT
-    prints(ONLINE_STR("BBS-Lua " BBSLUA_INTERFACE_VER_STR " / " LUA_RELEASE " / " LUAJIT_VERSION));
+    prints(ONLINE_STR("BBS-Lua " BBSLUA_VERSION_STR " / " LUA_RELEASE " / " LUAJIT_VERSION));
     #else
-    prints(ONLINE_STR("BBS-Lua " BBSLUA_INTERFACE_VER_STR " / " LUA_RELEASE));
+    prints(ONLINE_STR("BBS-Lua " BBSLUA_VERSION_STR " / " LUA_RELEASE));
     #endif
   #else
-    prints(OFFLINE_STR("BBS-Lua " BBSLUA_INTERFACE_VER_STR));
+    prints(OFFLINE_STR("BBS-Lua " BBSLUA_VERSION_STR));
   #endif
 #endif  // #ifdef HAVE_BBSLUA
 
