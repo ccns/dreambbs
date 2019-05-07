@@ -276,37 +276,37 @@
 #define KEY_TAB         9
 #define KEY_ENTER       10
 #define KEY_ESC         27
-#define KEY_UP          0x0101
-#define KEY_DOWN        0x0102
-#define KEY_RIGHT       0x0103
-#define KEY_LEFT        0x0104
-#define KEY_STAB        0x0109  /* Shift-Tab */
-#define KEY_HOME        0x0201
-#define KEY_INS         0x0202
-#define KEY_DEL         0x0203
-#define KEY_END         0x0204
-#define KEY_PGUP        0x0205
-#define KEY_PGDN        0x0206
+#define KEY_UP          0x0151
+#define KEY_DOWN        0x0152
+#define KEY_RIGHT       0x0153
+#define KEY_LEFT        0x0154
+#define KEY_STAB        0x0159  /* Shift-Tab */
+#define KEY_HOME        0x0251
+#define KEY_INS         0x0252
+#define KEY_DEL         0x0253
+#define KEY_END         0x0254
+#define KEY_PGUP        0x0255
+#define KEY_PGDN        0x0256
 
 #define KEY_NONE        0x4000
 
-#define KEY_F1          0x0301
-#define KEY_F2          0x0302
-#define KEY_F3          0x0303
-#define KEY_F4          0x0304
-#define KEY_F5          0x0305
-#define KEY_F6          0x0306
-#define KEY_F7          0x0307
-#define KEY_F8          0x0308
-#define KEY_F9          0x0309
-#define KEY_F10         0x030A
-#define KEY_F11         0x030B
-#define KEY_F12         0x030C
+#define KEY_F1          0x0351
+#define KEY_F2          0x0352
+#define KEY_F3          0x0353
+#define KEY_F4          0x0354
+#define KEY_F5          0x0355
+#define KEY_F6          0x0356
+#define KEY_F7          0x0357
+#define KEY_F8          0x0358
+#define KEY_F9          0x0359
+#define KEY_F10         0x035A
+#define KEY_F11         0x035B
+#define KEY_F12         0x035C
 
 #define I_TIMEOUT       0x05FD
 #define I_OTHERDATA     0x05FE
 
-#define Ctrl(c)         ( c & 037 )
+#define Ctrl(c)         ( c & ~0x0060 )
 #define Meta(c)         ( c + 0x2000 )
 #define isprint2(c)     ((c >= ' ') && (c <= 0xff)) /* ((c & 0x80 || isprint(c))) */
 
