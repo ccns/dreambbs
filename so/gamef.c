@@ -8,9 +8,9 @@
 #include <stdarg.h>
 #include "bbs.h"
 #define getdata(x1, x2, x3, x4, x5, x6, x7) vget(x1, x2, x3, x4, x5, DOECHO)
-char Bdate[20];
+static char Bdate[20];
 
-char *
+static inline char *
 Cdate(
 time_t *chrono)
 {
@@ -23,7 +23,7 @@ time_t *chrono)
     return Bdate;
 }
 
-void
+static inline void
 pressanykey(char *fmt, ...)
 {
     va_list args;
@@ -47,7 +47,7 @@ pressanykey(char *fmt, ...)
     refresh();
 }
 
-void
+static inline void
 game_log(int file, char *fmt, ...)
 {
     va_list args;
