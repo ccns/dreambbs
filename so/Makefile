@@ -9,6 +9,7 @@
 
 SRCROOT	= ..
 .include "$(SRCROOT)/dreambbs.mk"
+.include "./so.mk"
 
 .if $(USE_BBSLUA)
 CFLAGS	+= ${LUA_CFLAGS}
@@ -17,16 +18,6 @@ CFLAGS	+= ${LUA_CFLAGS}
 .if $(USE_BBSRUBY)
 CFLAGS	+= ${RUBY_CFLAGS}
 .endif
-
-HDR	= bbs.h config.h global.h modes.h perm.h struct.h bbs_script.h cppdef.h
-
-SO	= chat.so vote.so xyz.so guessnum.so \
-	  admin.so chatmenu.so  mailgem.so\
-	  memorandum.so aloha.so newboard.so violate.so song.so same_mail.so\
-	  showvote.so list.so mine.so bj.so \
-	  pnote.so passwd.so adminutil.so ascii.so\
-	  classtable2.so observe.so pip.so brdstat.so personal.so \
-	  cleanrecommend.so shop.so bank.so innbbs.so contact.so
 
 .SUFFIXES: .o .c .ln .x .so
 
