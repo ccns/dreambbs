@@ -1858,6 +1858,7 @@ ve_key:
 
             case KEY_INS:               /* Toggle insert/overwrite */
             case Ctrl('O'):
+            case Meta('o'):
 
                 ve_mode = mode ^ VE_INSERT;
                 continue;
@@ -1999,6 +2000,7 @@ ve_key:
 
             case KEY_PGUP:
             case Ctrl('B'):
+            case Meta('v'):
 
                 ve_pageup();
                 continue;
@@ -2006,11 +2008,13 @@ ve_key:
             case KEY_PGDN:
             case Ctrl('F'):
             case Ctrl('T'):             /* tail of file */
+            case Meta('.'):
 
-                ve_forward(cc == Ctrl('T') ? 0 : 22);
+                ve_forward((cc == Ctrl('T') || cc == Meta('.')) ? 0 : 22);
                 continue;
 
             case Ctrl('S'):             /* start of file */
+            case Meta(','):
 
                 vx_cur = vx_top = vx_ini;
                 ve_col = ve_row = 0;
@@ -2019,6 +2023,8 @@ ve_key:
                 continue;
 
             case Ctrl('V'):             /* Toggle ANSI color */
+            case Meta('a'):
+            case Meta('A'):
 
                 mode ^= VE_ANSI;
                 clear();
@@ -2027,6 +2033,8 @@ ve_key:
 
             case Ctrl('X'):             /* Save and exit */
             case Ctrl('W'):
+            case Meta('X'):
+            case KEY_F10:
 
                 cc = ve_filer(fpath, ve_op & 11);
 #ifdef  HAVE_INPUT_TOOLS
@@ -2054,6 +2062,7 @@ ve_key:
                 continue;
 
             case Ctrl('Z'):
+            case KEY_F1:
 
                 film_out(FILM_EDIT, -1);
                 ve_mode = mode | VE_REDRAW;
@@ -2122,6 +2131,8 @@ ve_key:
                 break;
 
             case Ctrl('U'):
+            case Meta('U'):
+            case KEY_F8:
 
                 every_U();
                 /*ve_char(27);*/
