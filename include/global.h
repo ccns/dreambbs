@@ -308,6 +308,9 @@
 
 #define Ctrl(c)         ( c & ~0x0060 )
 #define Meta(c)         ( c + 0x2000 )
+#define Shift(c)        ( c ^ 0x0020 )  /* Only works on 'A'-']', 'a'-'}', and special keys */
+/* If needed, apply `Shift()` after applying `Ctrl()`, e.g., `Shift(Ctrl(c))`. Do not do the reverse */
+/* For normal keys, do not apply `Shift()` on `Ctrl()`ed keys. */
 #define isprint2(c)     ((c >= ' ') && (c <= 0xff)) /* ((c & 0x80 || isprint(c))) */
 
 /* ----------------------------------------------------- */
