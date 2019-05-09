@@ -1107,6 +1107,12 @@ bl_getstr(lua_State* L)
     if (n > 2)
         pmsg = lua_tostring(L, 3);
 
+#ifdef BBSLUA_HAVE_VKEY
+    // Avoid assertion failure
+    if (echo & BL_GCARRY)
+        echo ^= BL_GCARRY;
+#endif
+
     if (len < 2)
         len = 2;
     if (len >= (int)sizeof(buf))
