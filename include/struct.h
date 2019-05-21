@@ -94,7 +94,7 @@ typedef struct
 {
     int userno;                 /* unique positive code */
     char userid[IDLEN + 1];     /* userid */
-    char passwd[PASSLEN];       /* user password crypt by DES */
+    char passwd[PASSLEN];       /* user password crypt by DES / salt for SHA-256 */
     unsigned char signature;    /* user signature number */
     char realname[20];          /* user realname */
     char username[24];          /* user nickname */
@@ -117,7 +117,8 @@ typedef struct
     int request;                /* 點歌系統 */
     int money;                  /* 夢幣 */
     unsigned int ufo2;          /* 延伸的個人設定 */
-    char ident[96];             /* user remote host ident */
+    char passhash[66];          /* user password, encrypted using SHA-256 (extra bytes reserved for SHA-512) */
+    char ident[30];             /* user remote host ident */
     int point1;                 /* 優良積分 */
     int point2;                 /* 劣文 */
     time_t vtime;               /* validate time */

@@ -592,7 +592,8 @@ void acct_show(ACCT * u, int adm    /* 1: admin 2: reg-form */
         {
             prints("認證資料：%s\n", u->justify);
             prints("認證地址：%s\n", u->vmail);
-            prints("RFC 931 ：%s\n", u->ident);
+            // IID.20190521: Currently unused; disabled for now.
+            // prints("RFC 931 ：%s\n", u->ident);
         }
         prints("上站地點：%s (站外信 %d )\n", u->lasthost, u->numemail);
         bitmsg(MSG_USERPERM, STR_PERM, ulevel);
@@ -1268,7 +1269,8 @@ void acct_setup(ACCT * u, int adm)
         /* lkchu.981201: 特殊用途 :p */
         vget(++i, 0, "認證地址：", x.vmail, 44, GCARRY);
         vget(++i, 0, "上站地點：", x.lasthost, 30, GCARRY);
-        vget(++i, 0, "RFC 931 ：", x.ident, 44, GCARRY);
+        // IID.20190521: Currently unused; disabled for now.
+        // vget(++i, 0, "RFC 931 ：", x.ident, 44, GCARRY);
 
         if (vans("設定權限(Y/N)?[N] ") == 'y')
         {

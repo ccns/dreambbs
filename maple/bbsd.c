@@ -753,8 +753,9 @@ tn_login(void)
 
 
     blog("ENTER", fpath);
-    if (rusername[0])
-        strcpy(cuser.ident, currtitle);
+    // IID.20190521: Currently unused; disabled for now.
+    // if (rusername[0])
+    //     strcpy(cuser.ident, currtitle);
 
     /* --------------------------------------------------- */
     /* ªì©l¤Æ utmp¡Bflag¡Bmode                           */
