@@ -766,6 +766,10 @@ char *str_ndup(char *src, int len)
 #define PASSLEN 14
 #endif
 
+#ifndef PLAINPASSLEN
+#define PLAINPASSLEN 9
+#endif
+
 
 /* ----------------------------------------------------- */
 /* password encryption                                   */
@@ -806,7 +810,7 @@ int chkpasswd(char *passwd, char *test)
     char *pw;
 
     /* if (!*passwd) return -1 *//* Thor.990416: 怕有時passwd是空的 */
-    str_ncpy(pwbuf, test, PASSLEN);
+    str_ncpy(pwbuf, test, PLAINPASSLEN);
     pw = crypt(pwbuf, passwd);
     return (strncmp(pw, passwd, PASSLEN));
 }
