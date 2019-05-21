@@ -6,7 +6,7 @@ new_passwd(void)
     ACCT acct;
     FILE *fp;
     int ans, fd;
-    char Email[61], passwd[9];
+    char Email[61], passwd[PLAINPASSLEN];
 
     srand(time(0));
     move(22, 0);
@@ -28,11 +28,11 @@ new_passwd(void)
                 vget(22, 0, "Email 正確，請確認是否產生新密碼？(Y/N)[N] ", Email, 2, LCECHO);
                 if (Email[0] != 'y')
                     break;
-                for (fd = 0; fd < 8; fd++)
+                for (fd = 0; fd < PLAINPASSLEN-1; fd++)
                 {
                     passwd[fd] = (rand() % 26) + ((rand() % 2 == 1) ? 'a' : 'A');
                 }
-                passwd[8] = '\0';
+                passwd[PLAINPASSLEN-1] = '\0';
                 str_ncpy(acct.passwd, genpasswd(passwd), PASSLEN);
                 acct_save(&acct);
                 do

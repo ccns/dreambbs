@@ -16,14 +16,14 @@
 
 #ifdef SHOW_PASSWORD
 
-#define GUESS_LEN       3       /* 代絏()盞絏舱 (程琌 PSWDLEN) */
+#define GUESS_LEN       3       /* 代絏()盞絏舱 (程琌 PLAINPASSLEN) */
 
 static inline void
 showpasswd(
     char *passwd)
 {
     int i;
-    char guess[PSWDLEN + 1];
+    char guess[PLAINPASSLEN];
 
     /* 礚阶琌ぐ或 encrypt よ猭常祑眖 ' ' 秨﹍ try  0x7f */
 

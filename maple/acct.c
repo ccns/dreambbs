@@ -971,7 +971,7 @@ void acct_setup(ACCT * u, int adm)
 
     int i, num, tmp, mode;
     FILE *flog;
-    char *str, buf[80], pass[PASSLEN];
+    char *str, buf[80], pass[PLAINPASSLEN];
     char id[13];
     tmp = 0;
 
@@ -1144,7 +1144,7 @@ void acct_setup(ACCT * u, int adm)
     {
         /* pcbug.990813: 新PASSLEN過長, 改成直接寫死 */
         /*    vget(i, 0, "請確認密碼：", buf, PASSLEN, NOECHO); */
-        vget(i, 0, "請確認密碼：", buf, 9, NOECHO);
+        vget(i, 0, "請確認密碼：", buf, PLAINPASSLEN, NOECHO);
         if (chkpasswd(u->passwd, buf))
         {
             vmsg("密碼錯誤");
@@ -1156,15 +1156,15 @@ void acct_setup(ACCT * u, int adm)
     for (;;)
     {
         if (!vget
-            (++i, 0, "設定新密碼(不改請按 Enter)：", buf, /*PASSLEN*/ 9,
+            (++i, 0, "設定新密碼(不改請按 Enter)：", buf, /*PASSLEN*/ PLAINPASSLEN,
              NOECHO))
             break;
 
         strcpy(pass, buf);
-        vget(i + 1, 0, "檢查新密碼：", buf, /*PASSLEN*/ 9, NOECHO);
+        vget(i + 1, 0, "檢查新密碼：", buf, /*PASSLEN*/ PLAINPASSLEN, NOECHO);
         if (!strcmp(buf, pass))
         {
-            buf[8] = '\0';
+            buf[PLAINPASSLEN-1] = '\0';
             str_ncpy(x.passwd, genpasswd(buf), PASSLEN);
             i++;
             logitfile(FN_PASS_LOG, cuser.userid, cuser.lasthost);
@@ -1890,7 +1890,7 @@ int ue_setup(void)
 
 int u_lock(void)
 {
-    char buf[PASSLEN];
+    char buf[PLAINPASSLEN];
     char swapmateid[IDLEN + 1] = "";
     char IdleState[][IDLEN] = {
         "自強觀星",
@@ -1944,7 +1944,7 @@ int u_lock(void)
         check = 0;
         do
         {
-            vget(7, 0, "▲ 請輸入密碼，以解除螢幕鎖定：", buf, 9, NOECHO);
+            vget(7, 0, "▲ 請輸入密碼，以解除螢幕鎖定：", buf, PLAINPASSLEN, NOECHO);
             check = chkpasswd(cuser.passwd, buf);
             if (check)
             {

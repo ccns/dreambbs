@@ -18,6 +18,7 @@
 #define FNLEN           28             /* Length of filename  */
 #define IDLEN           12             /* Length of board / user id */
 #define PASSLEN         14             /* Length of encrypted passwd field */
+#define PLAINPASSLEN    9              /* Length of plaintext passwd field */
 #define BCLEN           4              /* Length of board class */
 #define ANSILINELEN     500            /* Maximum Screen width in chars¡A¤£¯à¶W¹L 1023 */
 
