@@ -43,7 +43,7 @@ extern CHECKSUMCOUNT cksum;
 static u_long tn_addr;
 
 #ifdef CHAT_SECURE
-char passbuf[9];
+char passbuf[PLAINPASSLEN];
 #endif
 
 #ifdef  TREAT
@@ -372,15 +372,15 @@ acct_apply(void)
 
     for (;;)
     {
-        vget(18, 0, "請設定密碼：", buf, 9, NOECHO);
+        vget(18, 0, "請設定密碼：", buf, PLAINPASSLEN, NOECHO);
         if ((strlen(buf) < 3) || !strcmp(buf, userid))
         {
             vmsg("密碼太簡單易遭入侵，至少要 4 個字而且不可和代號相似");
             continue;
         }
 
-        vget(19, 0, "請檢查密碼：", buf + 10, 9, NOECHO);
-        if (!strcmp(buf, buf + 10))
+        vget(19, 0, "請檢查密碼：", buf + PLAINPASSLEN + 1, PLAINPASSLEN, NOECHO);
+        if (!strcmp(buf, buf + PLAINPASSLEN + 1))
             break;
 
         vmsg("密碼輸入錯誤，請重新輸入密碼");
@@ -564,7 +564,7 @@ tn_login(void)
     char fpath[80], uid[IDLEN + 1];
 
 #ifndef CHAT_SECURE
-    char passbuf[9];
+    char passbuf[PLAINPASSLEN];
 #endif
 
     /* 借 currtitle 一用 */
@@ -638,12 +638,12 @@ tn_login(void)
         }
         else if (str_cmp(uid, STR_GUEST))
         {
-            if (!vget(21, 36, MSG_PASSWD, passbuf, 9, NOECHO))
+            if (!vget(21, 36, MSG_PASSWD, passbuf, PLAINPASSLEN, NOECHO))
             {
                 continue;       /* 發現 userid 輸入錯誤，在輸入 passwd 時直接跳過 */
             }
 
-            passbuf[8] = '\0';
+            passbuf[PLAINPASSLEN-1] = '\0';
 
             if (chkpasswd(cuser.passwd, passbuf))
             {

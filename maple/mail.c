@@ -230,15 +230,15 @@ bsmtp(
     FILE *fp, *fr, *fw;
     char *str, buf[512], from[80], subject[80], msgid[80], keyfile[80], valid[10];
 #ifdef HAVE_SIGNED_MAIL
-    char prikey[9];
+    char prikey[PLAINPASSLEN];
     union{
-        char str[9];
+        char str[PLAINPASSLEN];
         struct {
             unsigned int hash, hash2;
         } val;
     } sign;
 
-    *prikey = prikey[8] = sign.str[8] = '\0'; /* Thor.990413:註解: 字串結束 */
+    *prikey = prikey[PLAINPASSLEN-1] = sign.str[PLAINPASSLEN-1] = '\0'; /* Thor.990413:註解: 字串結束 */
 #endif
 
     cuser.numemail++;           /* 記錄使用者共寄出幾封 Internet E-mail */
@@ -403,7 +403,7 @@ bsmtp(
             fclose(fp);
         }
 #ifdef HAVE_SIGNED_MAIL
-        if (!(method & MQ_JUSTIFY) && !rec_get(PRIVATE_KEY, prikey, 8, 0))
+        if (!(method & MQ_JUSTIFY) && !rec_get(PRIVATE_KEY, prikey, PLAINPASSLEN-1, 0))
         /* Thor.990413: 除了認證函外, 其他信件都要加sign */
         {
             /* Thor.990413: buf用不到了, 借來用用 :P */
@@ -670,17 +670,17 @@ m_verify(void)
     char sign[79], *q;
     char buf[160];
 
-    char prikey[9];
+    char prikey[PLAINPASSLEN];
     union{
-        char str[9];
+        char str[PLAINPASSLEN];
         struct {
             unsigned int hash, hash2;
         } val;
     } s;
 
-    prikey[8] = s.str[8] = '\0'; /* Thor.990413:註解: 字串結束 */
+    prikey[PLAINPASSLEN-1] = s.str[PLAINPASSLEN-1] = '\0'; /* Thor.990413:註解: 字串結束 */
 
-    if (rec_get(PRIVATE_KEY, prikey, 8, 0))
+    if (rec_get(PRIVATE_KEY, prikey, PLAINPASSLEN-1, 0))
     {
         zmsg("本系統並無電子簽章，請洽SYSOP");
         return XEASY;
@@ -706,7 +706,7 @@ m_verify(void)
         q += 11;
     while (*q == ' ') q++;
 
-    if (strlen(q) < 7 + 13)
+    if (strlen(q) < 7 + PASSLEN-1)
     {
         vmsg("電子簽章有誤");
         return 0;
