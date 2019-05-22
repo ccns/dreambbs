@@ -28,9 +28,10 @@ new_passwd(void)
                 vget(22, 0, "Email 正確，請確認是否產生新密碼？(Y/N)[N] ", Email, 2, LCECHO);
                 if (Email[0] != 'y')
                     break;
+                getrandom_bytes(passwd, PLAINPASSLEN-1);
                 for (fd = 0; fd < PLAINPASSLEN-1; fd++)
                 {
-                    passwd[fd] = (rand() % 26) + ((rand() % 2 == 1) ? 'a' : 'A');
+                    passwd[fd] = (passwd[fd] % 26) + ((passwd[fd] % 52 >= 26) ? 'a' : 'A');
                 }
                 passwd[PLAINPASSLEN-1] = '\0';
                 str_ncpy(acct.passwd, genpasswd(passwd), PASSLEN);

@@ -123,6 +123,7 @@ int str_ncmp(const char *s1, const char *s2, int n);
 void str_strip(char *str);
 void str_ncpy(char *dst, const char *src, int n);
 char *str_ndup(char *src, int len);
+char *getrandom_bytes(char *buf, size_t buflen);
 char *genpasswd(char *pw);
 int chkpasswd(char *passwd, char *test);
 int str_pat(const char *str, const char *pat);
