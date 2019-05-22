@@ -5,6 +5,10 @@
 #include <string.h>
 #include "dao.h"
 
+#ifdef __linux__
+  #include <sys/random.h>
+#endif
+
 char *str_add(char *dst, char *src)
 {
     while ((*dst = *src))
@@ -775,6 +779,25 @@ char *str_ndup(char *src, int len)
 /* password encryption                                   */
 /* ----------------------------------------------------- */
 
+/* IID.20190524: Get bytes from the system PRNG device. */
+char *getrandom_bytes(char *buf, size_t buflen)
+{
+#if defined(__linux__)
+    if (getrandom(buf, buflen, GRND_NONBLOCK) == -1)
+        return NULL;
+#elif OpenBSD >= 201311 /* 5.4 */ || __FreeBSD_version >= 1200000 /* 12.0 */
+    arc4random_buf(buf, buflen);
+#else
+    int fd;
+    if ((fd = open("/dev/urandom", O_RDONLY)) < 0)
+        return NULL;
+    read(fd, buf, buflen);
+    close(fd);
+#endif
+
+    return buf;
+}
+
 char *crypt(const char *key, const char *salt);
 static char pwbuf[PASSLEN];
 
@@ -786,13 +809,13 @@ char *genpasswd(char *pw)
     if (!*pw)
         return pw;
 
-    i = 9 * getpid();
-    saltc[0] = i & 077;
-    saltc[1] = (i >> 6) & 077;
+    /* IID.20190524: Get salt from the system PRNG device. */
+    if (!getrandom_bytes(saltc, 2))
+        return NULL;
 
     for (i = 0; i < 2; i++)
     {
-        c = saltc[i] + '.';
+        c = (saltc[i] & 0x3f) + '.';
         if (c > '9')
             c += 7;
         if (c > 'Z')
