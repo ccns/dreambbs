@@ -2357,7 +2357,7 @@ int a_editbrd(void)                /* cache.100618: 修改看板選項 */
 /* ----------------------------------------------------- */
 
 
-static void getfield(int line, int len, char *hint, char *desc, char *buf)
+static void getfield(int line, int len, char *buf, char *desc, char *hint)
 {
     move(line, 0);
     prints("%s:%s\n", desc, hint);
