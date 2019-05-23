@@ -763,7 +763,7 @@ XO *xo)
     if (!HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
     if (nbrd->mode & NBRD_OK)
-        vmsg("已連連署完畢，不能關閉！");
+        vmsg("已連署完畢，不能關閉！");
     else if (nbrd->mode & NBRD_OPEN)
         vmsg("已完成開版！");
     else if (nbrd->mode & NBRD_CLOSE)
