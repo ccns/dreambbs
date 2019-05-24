@@ -272,10 +272,10 @@ static void pip_new_game(void)
         d.chickenmode = 1;
 
         /*身體參數*/
-        d.hp = rand() % 15 + START_HP;
-        d.maxhp = rand() % 20 + START_HP;
+        d.hp = random() % 15 + START_HP;
+        d.maxhp = random() % 20 + START_HP;
         if (d.hp > d.maxhp) d.hp = d.maxhp;
-        d.weight = rand() % 10 + 50;
+        d.weight = random() % 10 + 50;
         d.tired = d.sick = d.shit = d.wrist = 0;
         d.bodyA = d.bodyB = d.bodyC = d.bodyD = d.bodyE = 0;
 
@@ -297,8 +297,8 @@ static void pip_new_game(void)
         d.learnA = d.learnB = d.learnC = d.learnD = d.learnE = 0;
 
         /*狀態數值*/
-        d.happy = rand() % 10 + START_HAPPY;
-        d.satisfy = rand() % 10 + START_SATISFY;
+        d.happy = random() % 10 + START_HAPPY;
+        d.satisfy = random() % 10 + START_SATISFY;
         d.fallinlove = d.belief = d.offense = d.affect = 0;
         d.stateA = d.stateB = d.stateC = d.stateD = d.stateE = 0;
 
@@ -396,35 +396,35 @@ int cal)
         if (tm >= 0 && tm <= 3)
         {
             if (cal == 1)
-                tiredvary = (rand() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp) * 120 / 100;
+                tiredvary = (random() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp) * 120 / 100;
             else if (cal == 0)
-                tiredvary = (rand() % prob + base) * 4 / 3;
+                tiredvary = (random() % prob + base) * 4 / 3;
         }
         else if (tm >= 4 && tm <= 7)
         {
             if (cal == 1)
-                tiredvary = (rand() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp);
+                tiredvary = (random() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp);
             else if (cal == 0)
-                tiredvary = (rand() % prob + base) * 3 / 2;
+                tiredvary = (random() % prob + base) * 3 / 2;
         }
         else if (tm >= 8 && tm <= 10)
         {
             if (cal == 1)
-                tiredvary = (rand() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp) * 110 / 100;
+                tiredvary = (random() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp) * 110 / 100;
             else if (cal == 0)
-                tiredvary = (rand() % prob + base) * 5 / 4;
+                tiredvary = (random() % prob + base) * 5 / 4;
         }
         else if (tm >= 11)
         {
             if (cal == 1)
-                tiredvary = (rand() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp) * 150 / 100;
+                tiredvary = (random() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp) * 150 / 100;
             else if (cal == 0)
-                tiredvary = (rand() % prob + base) * 1;
+                tiredvary = (random() % prob + base) * 1;
         }
     }
     else if (!strcmp(mode, "N"))
     {
-        tiredvary = rand() % prob + base;
+        tiredvary = random() % prob + base;
     }
 
     if (cal == 1)
@@ -838,14 +838,14 @@ int mode)
     if (m != tm)
     {
         d.wisdom += 10;
-        d.happy += rand() % 5 + 5;
+        d.happy += random() % 5 + 5;
         if (d.happy > 100)
             d.happy = 100;
-        d.satisfy += rand() % 5;
+        d.satisfy += random() % 5;
         if (d.satisfy > 100)
             d.satisfy = 100;
-        if (tm < 13) d.maxhp += rand() % 5 + 5; else d.maxhp -= rand() % 15;
-        d.character += rand() % 5;
+        if (tm < 13) d.maxhp += random() % 5 + 5; else d.maxhp -= random() % 15;
+        d.character += random() % 5;
         d.money += 500;
         d.seeroyalJ = 1;
         count_tired(1, 7, "N", 100, 0);
@@ -874,10 +874,10 @@ int mode)
     color = 37;
     m = tm;
 
-    if ((rand() % 3000 == 29) && tm >= 15 && d.charm >= 300 && d.character >= 300)
+    if ((random() % 3000 == 29) && tm >= 15 && d.charm >= 300 && d.character >= 300)
         pip_marriage_offer();
 
-    if (mode != 1 && rand() % 4000 == 69)
+    if (mode != 1 && random() % 4000 == 69)
         pip_divine();
 
     /*武官*/
@@ -995,7 +995,7 @@ int mode)
     if (mode == 0)  /*主要畫面*/
     {
         anynum = 0;
-        anynum = rand() % 4;
+        anynum = random() % 4;
         move(4, 0);
         if (anynum == 0)
             sprintf(buf, " \x1b[1;35m[站長曰]:\x1b[31m紅色\x1b[36m表示危險  \x1b[33m黃色\x1b[36m表示警告  \x1b[37m白色\x1b[36m表示安全\x1b[0m");
@@ -1126,7 +1126,7 @@ int mode)
     {
         outs("\x1b[1;35m快臭死了\x1b[m  ");
         d.sick += 4;
-        d.character -= (rand() % 3 + 3);
+        d.character -= (random() % 3 + 3);
     }
     if (d.shit >= 100)
     {
@@ -1258,11 +1258,11 @@ time_t cnow)
     {
         /*不做事  還是會變髒的*/
         if ((time(0) - cnow) >= stime)
-            d.shit += (rand() % 3 + 3);
+            d.shit += (random() % 3 + 3);
         /*不做事  疲勞當然減低啦*/
         if (d.tired >= stired) d.tired -= stired; else d.tired = 0;
         /*不做事  肚子也會餓咩 */
-        d.hp -= rand() % 2 + 2;
+        d.hp -= random() % 2 + 2;
         if (d.mexp < 0)
             d.mexp = 0;
         if (d.hexp < 0)
@@ -1270,24 +1270,24 @@ time_t cnow)
         /*體力會因生病降低一點*/
         d.hp -= d.sick / 10;
         /*病氣會隨機率增加減少少許*/
-        if (rand() % 3 > 0)
+        if (random() % 3 > 0)
         {
-            d.sick -= rand() % 2;
+            d.sick -= random() % 2;
             if (d.sick < 0)
                 d.sick = 0;
         }
         else
-            d.sick += rand() % 2;
+            d.sick += random() % 2;
         /*隨機減快樂度*/
-        if (rand() % 4 > 0)
+        if (random() % 4 > 0)
         {
-            d.happy -= rand() % 2 + 2;
+            d.happy -= random() % 2 + 2;
         }
         else
             d.happy += 2;
-        if (rand() % 4 > 0)
+        if (random() % 4 > 0)
         {
-            d.satisfy -= (rand() % 4 + 5);
+            d.satisfy -= (random() % 4 + 5);
         }
         else
             d.satisfy += 2;
@@ -1327,9 +1327,9 @@ static int pip_basic_takeshower(void) /*洗澡*/
     int lucky;
     d.shit -= 20;
     if (d.shit < 0) d.shit = 0;
-    d.hp -= rand() % 2 + 3;
+    d.hp -= random() % 2 + 3;
     move(4, 0);
-    lucky = rand() % 3;
+    lucky = random() % 3;
     if (lucky == 0)
     {
         show_usual_pic(1);
@@ -1364,19 +1364,19 @@ static int pip_basic_takerest(void) /*休息*/
 
 static int pip_basic_kiss(void)/*親親*/
 {
-    if (rand() % 2 > 0)
+    if (random() % 2 > 0)
     {
-        d.happy += rand() % 3 + 4;
-        d.satisfy += rand() % 2 + 1;
+        d.happy += random() % 3 + 4;
+        d.satisfy += random() % 2 + 1;
     }
     else
     {
-        d.happy += rand() % 2 + 1;
-        d.satisfy += rand() % 3 + 4;
+        d.happy += random() % 2 + 1;
+        d.satisfy += random() % 3 + 4;
     }
     count_tired(1, 2, "N", 100, 1);
-    d.shit += rand() % 5 + 4;
-    d.relation += rand() % 2;
+    d.shit += random() % 5 + 4;
+    d.relation += random() % 2;
     move(4, 0);
     show_usual_pic(3);
     if (d.shit < 60)
@@ -1436,7 +1436,7 @@ static int pip_basic_feed(void)     /* 餵食*/
             if (d.hp >= d.maxhp)
             {
                 d.hp = d.maxhp;
-                d.weight += rand() % 2;
+                d.weight += random() % 2;
             }
             d.nodone = 0;
             vmsg("每吃一次食物會恢復體力50喔!");
@@ -1455,18 +1455,18 @@ static int pip_basic_feed(void)     /* 餵食*/
             if (d.hp >= d.maxhp)
             {
                 d.hp = d.maxhp;
-                d.weight += (rand() % 2 + 2);
+                d.weight += (random() % 2 + 2);
             }
             else
             {
-                d.weight += (rand() % 2 + 1);
+                d.weight += (random() % 2 + 1);
             }
-            if (rand() % 2 > 0)
+            if (random() % 2 > 0)
                 show_feed_pic(2);
             else
                 show_feed_pic(3);
-            d.happy += (rand() % 3 + 4);
-            d.satisfy += rand() % 3 + 2;
+            d.happy += (random() % 3 + 4);
+            d.satisfy += random() % 3 + 2;
             d.nodone = 0;
             vmsg("吃零食容易胖喔...");
             break;
@@ -1481,7 +1481,7 @@ static int pip_basic_feed(void)     /* 餵食*/
             d.bighp--;
             d.hp += 600;
             d.tired -= 20;
-            d.weight += rand() % 2;
+            d.weight += random() % 2;
             move(4, 0);
             show_feed_pic(4);
             d.nodone = 0;
@@ -2160,7 +2160,7 @@ int oldnum[])
             if (choice >= 1 && choice <= oldnum[0])
             {
                 clrchyiuan(6, b_lines - 6);
-                if (rand() % 2 > 0)
+                if (random() % 2 > 0)
                     show_buy_pic(p[choice].pic1);
                 else
                     show_buy_pic(p[choice].pic2);
@@ -2197,15 +2197,15 @@ int oldnum[])
                         vmsg(p[choice].msguse);
                         if (mode == 3 && choice == 1)
                         {
-                            d.happy += rand() % 10 + 20 * smoney;
-                            d.satisfy += rand() % 10 + 20 * smoney;
+                            d.happy += random() % 10 + 20 * smoney;
+                            d.satisfy += random() % 10 + 20 * smoney;
                         }
                         if (mode == 3 && choice == 2)
                         {
-                            d.happy += (rand() % 2 + 2) * smoney;
+                            d.happy += (random() % 2 + 2) * smoney;
                             d.wisdom += (2 + 10 / (d.wisdom / 100 + 1)) * smoney;
-                            d.character += (rand() % 4 + 2) * smoney;
-                            d.art += (rand() % 2 + 1) * smoney;
+                            d.character += (random() % 4 + 2) * smoney;
+                            d.art += (random() % 2 + 1) * smoney;
                         }
                     }
                     else
@@ -2235,7 +2235,7 @@ int oldnum[])
             if (choice >= 1 && choice <= oldnum[0])
             {
                 clrchyiuan(6, b_lines - 6);
-                if (rand() % 2 > 0)
+                if (random() % 2 > 0)
                     show_buy_pic(p[choice].pic1);
                 else
                     show_buy_pic(p[choice].pic2);
@@ -2487,49 +2487,49 @@ static int pip_job_workA(void)
 
     workmoney = 0;
     class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    d.maxhp += rand() % 2 * LEARN_LEVEL;
-    d.shit += rand() % 3 + 5;
+    d.maxhp += random() % 2 * LEARN_LEVEL;
+    d.shit += random() % 3 + 5;
     count_tired(3, 7, "Y", 100, 1);
-    d.hp -= (rand() % 2 + 4);
-    d.happy -= (rand() % 3 + 4);
-    d.satisfy -= rand() % 3 + 4;
-    d.affect -= 7 + rand() % 7;
+    d.hp -= (random() % 2 + 4);
+    d.happy -= (random() % 3 + 4);
+    d.satisfy -= random() % 3 + 4;
+    d.affect -= 7 + random() % 7;
     if (d.affect <= 0)
         d.affect = 0;
     show_job_pic(11);
     if (class >= 75)
     {
-        d.cookskill += rand() % 2 + 7;
-        d.homework += rand() % 2 + 7;
-        d.family += rand() % 3 + 4;
-        d.relation += rand() % 3 + 4;
+        d.cookskill += random() % 2 + 7;
+        d.homework += random() % 2 + 7;
+        d.family += random() % 3 + 4;
+        d.relation += random() % 3 + 4;
         workmoney = 80 + (d.cookskill * 2 + d.homework + d.family) / 40;
         vmsg("家事很成功\喔..多一點錢給你..");
     }
     else if (class < 75 && class >= 50)
     {
-        d.cookskill += rand() % 2 + 5;
-        d.homework += rand() % 2 + 5;
-        d.family += rand() % 3 + 3;
-        d.relation += rand() % 3 + 3;
+        d.cookskill += random() % 2 + 5;
+        d.homework += random() % 2 + 5;
+        d.family += random() % 3 + 3;
+        d.relation += random() % 3 + 3;
         workmoney = 60 + (d.cookskill * 2 + d.homework + d.family) / 45;
         vmsg("家事還蠻順利的唷..嗯嗯..");
     }
     else if (class < 50 && class >= 25)
     {
-        d.cookskill += rand() % 3 + 3;
-        d.homework += rand() % 3 + 3;
-        d.family += rand() % 3 + 2;
-        d.relation += rand() % 3 + 2;
+        d.cookskill += random() % 3 + 3;
+        d.homework += random() % 3 + 3;
+        d.family += random() % 3 + 2;
+        d.relation += random() % 3 + 2;
         workmoney = 40 + (d.cookskill * 2 + d.homework + d.family) / 50;
         vmsg("家事普普通通啦..可以更好的..加油..");
     }
     else if (class < 25)
     {
-        d.cookskill += rand() % 3 + 1;
-        d.homework += rand() % 3 + 1;
-        d.family += rand() % 3 + 1;
-        d.relation += rand() % 3 + 1;
+        d.cookskill += random() % 3 + 1;
+        d.homework += random() % 3 + 1;
+        d.family += random() % 3 + 1;
+        d.relation += random() % 3 + 1;
         workmoney = 20 + (d.cookskill * 2 + d.homework + d.family) / 60;
         vmsg("家事很糟糕喔..這樣不行啦..");
     }
@@ -2550,43 +2550,43 @@ static int pip_job_workB(void)
 
     workmoney = 0;
     class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    d.maxhp += (rand() % 2 + 1) * LEARN_LEVEL;
-    d.shit += rand() % 3 + 5;
-    d.affect += rand() % 3 + 4;
+    d.maxhp += (random() % 2 + 1) * LEARN_LEVEL;
+    d.shit += random() % 3 + 5;
+    d.affect += random() % 3 + 4;
 
     count_tired(3, 9, "Y", 100, 1);
-    d.hp -= (rand() % 3 + 6);
-    d.happy -= (rand() % 3 + 4);
-    d.satisfy -= rand() % 3 + 4;
-    d.charm -= rand() % 3 + 4;
+    d.hp -= (random() % 3 + 6);
+    d.happy -= (random() % 3 + 4);
+    d.satisfy -= random() % 3 + 4;
+    d.charm -= random() % 3 + 4;
     if (d.charm <= 0)
         d.charm = 0;
     show_job_pic(21);
     if (class >= 90)
     {
-        d.love += rand() % 2 + 7;
-        d.toman += rand() % 2 + 2;
+        d.love += random() % 2 + 7;
+        d.toman += random() % 2 + 2;
         workmoney = 150 + (d.love + d.toman) / 50;
         vmsg("當保姆很成功\喔..下次再來喔..");
     }
     else if (class < 90 && class >= 75)
     {
-        d.love += rand() % 2 + 5;
-        d.toman += rand() % 2 + 2;
+        d.love += random() % 2 + 5;
+        d.toman += random() % 2 + 2;
         workmoney = 120 + (d.love + d.toman) / 50;
         vmsg("保姆還當的不錯唷..嗯嗯..");
     }
     else if (class < 75 && class >= 50)
     {
-        d.love += rand() % 2 + 3;
-        d.toman += rand() % 2 + 1;
+        d.love += random() % 2 + 3;
+        d.toman += random() % 2 + 1;
         workmoney = 100 + (d.love + d.toman) / 50;
         vmsg("小朋友很皮喔..加油..");
     }
     else if (class < 50)
     {
-        d.love += rand() % 2 + 1;
-        d.toman += rand() % 2 + 1;
+        d.love += random() % 2 + 1;
+        d.toman += random() % 2 + 1;
         workmoney = 80 + (d.love + d.toman) / 50;
         vmsg("很糟糕喔..你罩不住小朋友耶...");
     }
@@ -2607,18 +2607,18 @@ static int pip_job_workC(void)
 
     workmoney = 0;
     class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    d.maxhp += (rand() % 2 + 2) * LEARN_LEVEL;
-    d.shit += rand() % 3 + 5;
+    d.maxhp += (random() % 2 + 2) * LEARN_LEVEL;
+    d.shit += random() % 3 + 5;
     count_tired(5, 12, "Y", 100, 1);
-    d.hp -= (rand() % 4 + 8);
-    d.happy -= (rand() % 3 + 4);
-    d.satisfy -= rand() % 3 + 4;
+    d.hp -= (random() % 4 + 8);
+    d.happy -= (random() % 3 + 4);
+    d.satisfy -= random() % 3 + 4;
     show_job_pic(31);
     if (class >= 95)
     {
-        d.homework += rand() % 2 + 7;
-        d.family += rand() % 2 + 4;
-        d.hskill -= rand() % 2 + 7;
+        d.homework += random() % 2 + 7;
+        d.family += random() % 2 + 4;
+        d.hskill -= random() % 2 + 7;
         if (d.hskill < 0)
             d.hskill = 0;
         workmoney = 250 + (d.cookskill * 2 + d.homework * 2) / 40;
@@ -2626,9 +2626,9 @@ static int pip_job_workC(void)
     }
     else if (class < 95 && class >= 80)
     {
-        d.homework += rand() % 2 + 5;
-        d.family += rand() % 2 + 3;
-        d.hskill -= rand() % 2 + 5;
+        d.homework += random() % 2 + 5;
+        d.family += random() % 2 + 3;
+        d.hskill -= random() % 2 + 5;
         if (d.hskill < 0)
             d.hskill = 0;
         workmoney = 200 + (d.cookskill * 2 + d.homework * 2) / 50;
@@ -2636,9 +2636,9 @@ static int pip_job_workC(void)
     }
     else if (class < 80 && class >= 60)
     {
-        d.homework += rand() % 2 + 3;
-        d.family += rand() % 2 + 3;
-        d.hskill -= rand() % 2 + 5;
+        d.homework += random() % 2 + 3;
+        d.family += random() % 2 + 3;
+        d.hskill -= random() % 2 + 5;
         if (d.hskill < 0)
             d.hskill = 0;
         workmoney = 150 + (d.cookskill * 2 + d.homework * 2) / 50;
@@ -2646,9 +2646,9 @@ static int pip_job_workC(void)
     }
     else if (class < 60)
     {
-        d.homework += rand() % 2 + 1;
-        d.family += rand() % 2 + 1;
-        d.hskill -= rand() % 2 + 1;
+        d.homework += random() % 2 + 1;
+        d.family += random() % 2 + 1;
+        d.hskill -= random() % 2 + 1;
         if (d.hskill < 0)
             d.hskill = 0;
         workmoney = 100 + (d.cookskill * 2 + d.homework * 2) / 50;
@@ -2671,14 +2671,14 @@ static int pip_job_workD(void)
 
     workmoney = 0;
     class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    d.maxhp += (rand() % 3 + 2) * LEARN_LEVEL;
-    d.wrist += rand() % 2 + 2;
-    d.shit += rand() % 5 + 10;
+    d.maxhp += (random() % 3 + 2) * LEARN_LEVEL;
+    d.wrist += random() % 2 + 2;
+    d.shit += random() % 5 + 10;
     count_tired(5, 15, "Y", 100, 1);
-    d.hp -= (rand() % 4 + 10);
-    d.happy -= (rand() % 3 + 4);
-    d.satisfy -= rand() % 3 + 4;
-    d.character -= rand() % 3 + 4;
+    d.hp -= (random() % 4 + 10);
+    d.happy -= (random() % 3 + 4);
+    d.satisfy -= random() % 3 + 4;
+    d.character -= random() % 3 + 4;
     if (d.character < 0)
         d.character = 0;
     show_job_pic(41);
@@ -2719,54 +2719,54 @@ static int pip_job_workE(void)
 
     workmoney = 0;
     class = (d.cookskill - d.tired) * LEARN_LEVEL;
-    d.maxhp += (rand() % 2 + 1) * LEARN_LEVEL;
-    d.shit += rand() % 4 + 12;
+    d.maxhp += (random() % 2 + 1) * LEARN_LEVEL;
+    d.shit += random() % 4 + 12;
     count_tired(5, 9, "Y", 100, 1);
-    d.hp -= (rand() % 4 + 8);
-    d.happy -= (rand() % 3 + 4);
-    d.satisfy -= rand() % 3 + 4;
+    d.hp -= (random() % 4 + 8);
+    d.happy -= (random() % 3 + 4);
+    d.satisfy -= random() % 3 + 4;
     show_job_pic(51);
     if (class >= 80)
     {
-        d.homework += rand() % 2 + 1;
-        d.family += rand() % 2 + 1;
-        d.hskill -= rand() % 2 + 5;
+        d.homework += random() % 2 + 1;
+        d.family += random() % 2 + 1;
+        d.hskill -= random() % 2 + 5;
         if (d.hskill < 0)
             d.hskill = 0;
-        d.cookskill += rand() % 2 + 6;
+        d.cookskill += random() % 2 + 6;
         workmoney = 250 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
         vmsg("客人都說太好吃了..再來一盤吧...");
     }
     else if (class < 80 && class >= 60)
     {
-        d.homework += rand() % 2 + 1;
-        d.family += rand() % 2 + 1;
-        d.hskill -= rand() % 2 + 5;
+        d.homework += random() % 2 + 1;
+        d.family += random() % 2 + 1;
+        d.hskill -= random() % 2 + 5;
         if (d.hskill < 0)
             d.hskill = 0;
-        d.cookskill += rand() % 2 + 4;
+        d.cookskill += random() % 2 + 4;
         workmoney = 200 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
         vmsg("煮的還不錯吃唷..:)");
     }
     else if (class < 60 && class >= 30)
     {
-        d.homework += rand() % 2 + 1;
-        d.family += rand() % 2 + 1;
-        d.hskill -= rand() % 2 + 5;
+        d.homework += random() % 2 + 1;
+        d.family += random() % 2 + 1;
+        d.hskill -= random() % 2 + 5;
         if (d.hskill < 0)
             d.hskill = 0;
-        d.cookskill += rand() % 2 + 2;
+        d.cookskill += random() % 2 + 2;
         workmoney = 150 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
         vmsg("普普通通啦..可以更好的..");
     }
     else if (class < 30)
     {
-        d.homework += rand() % 2 + 1;
-        d.family += rand() % 2 + 1;
-        d.hskill -= rand() % 2 + 5;
+        d.homework += random() % 2 + 1;
+        d.family += random() % 2 + 1;
+        d.hskill -= random() % 2 + 5;
         if (d.hskill < 0)
             d.hskill = 0;
-        d.cookskill += rand() % 2 + 1;
+        d.cookskill += random() % 2 + 1;
         workmoney = 100 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
         vmsg("你的廚藝待加強喔...");
     }
@@ -2786,12 +2786,12 @@ static int pip_job_workF(void)
     workmoney = 0;
     class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     count_tired(5, 7, "Y", 100, 1);
-    d.love += (rand() % 3 + 4) * LEARN_LEVEL;
-    d.belief += (rand() % 4 + 7) * LEARN_LEVEL;
-    d.ethics += (rand() % 3 + 7) * LEARN_LEVEL;
-    d.shit += rand() % 3 + 3;
-    d.hp -= rand() % 3 + 5;
-    d.offense -= rand() % 4 + 7;
+    d.love += (random() % 3 + 4) * LEARN_LEVEL;
+    d.belief += (random() % 4 + 7) * LEARN_LEVEL;
+    d.ethics += (random() % 3 + 7) * LEARN_LEVEL;
+    d.shit += random() % 3 + 3;
+    d.hp -= random() % 3 + 5;
+    d.offense -= random() % 4 + 7;
     if (d.offense < 0)
         d.offense = 0;
     show_job_pic(61);
@@ -2830,15 +2830,15 @@ static int pip_job_workG(void)
     workmoney = 0;
     workmoney = 200 + (d.charm * 3 + d.speech * 2 + d.toman) / 50;
     count_tired(3, 12, "Y", 100, 1);
-    d.shit += rand() % 3 + 8;
-    d.speed += (rand() % 2) * LEARN_LEVEL;
-    d.weight -= rand() % 2;
-    d.happy -= (rand() % 3 + 7);
-    d.satisfy -= rand() % 3 + 5;
-    d.hp -= (rand() % 6 + 6);
-    d.charm += (rand() % 2 + 3) * LEARN_LEVEL;
-    d.speech += (rand() % 2 + 3) * LEARN_LEVEL;
-    d.toman += (rand() % 2 + 3) * LEARN_LEVEL;
+    d.shit += random() % 3 + 8;
+    d.speed += (random() % 2) * LEARN_LEVEL;
+    d.weight -= random() % 2;
+    d.happy -= (random() % 3 + 7);
+    d.satisfy -= random() % 3 + 5;
+    d.hp -= (random() % 6 + 6);
+    d.charm += (random() % 2 + 3) * LEARN_LEVEL;
+    d.speech += (random() % 2 + 3) * LEARN_LEVEL;
+    d.toman += (random() % 2 + 3) * LEARN_LEVEL;
     move(4, 0);
     show_job_pic(71);
     vmsg("擺\地攤要躲警察啦..:p");
@@ -2864,14 +2864,14 @@ static int pip_job_workH(void)
     }
     workmoney = 0;
     class = (d.wrist - d.tired) * LEARN_LEVEL;
-    d.maxhp += (rand() % 2 + 3) * LEARN_LEVEL;
-    d.shit += rand() % 7 + 15;
-    d.wrist += (rand() % 3 + 4) * LEARN_LEVEL;
+    d.maxhp += (random() % 2 + 3) * LEARN_LEVEL;
+    d.shit += random() % 7 + 15;
+    d.wrist += (random() % 3 + 4) * LEARN_LEVEL;
     count_tired(5, 15, "Y", 100, 1);
-    d.hp -= (rand() % 4 + 10);
-    d.happy -= (rand() % 3 + 4);
-    d.satisfy -= rand() % 3 + 4;
-    d.character -= rand() % 3 + 7;
+    d.hp -= (random() % 4 + 10);
+    d.happy -= (random() % 3 + 4);
+    d.satisfy -= random() % 3 + 4;
+    d.character -= random() % 3 + 7;
     if (d.character < 0)
         d.character = 0;
     show_job_pic(81);
@@ -2917,14 +2917,14 @@ static int pip_job_workI(void)
     }
     workmoney = 0;
     class = (d.art - d.tired) * LEARN_LEVEL;
-    d.maxhp += (rand() % 2) * LEARN_LEVEL;
-    d.affect += (rand() % 2 + 3) * LEARN_LEVEL;
+    d.maxhp += (random() % 2) * LEARN_LEVEL;
+    d.affect += (random() % 2 + 3) * LEARN_LEVEL;
     count_tired(3, 11, "Y", 100, 1);
-    d.shit += rand() % 4 + 8;
-    d.hp -= (rand() % 4 + 10);
-    d.happy -= (rand() % 3 + 4);
-    d.satisfy -= rand() % 3 + 4;
-    d.wrist -= rand() % + 3;
+    d.shit += random() % 4 + 8;
+    d.hp -= (random() % 4 + 10);
+    d.happy -= (random() % 3 + 4);
+    d.satisfy -= random() % 3 + 4;
+    d.wrist -= random() % + 3;
     if (d.wrist < 0)
         d.wrist = 0;
     /*show_job_pic(4);*/
@@ -2976,15 +2976,15 @@ static int pip_job_workJ(void)
     class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     class1 = (d.wisdom - d.tired) * LEARN_LEVEL;
     count_tired(5, 15, "Y", 100, 1);
-    d.shit += rand() % 4 + 13;
-    d.weight -= (rand() % 2 + 1);
-    d.maxhp += (rand() % 2 + 3) * LEARN_LEVEL;
-    d.speed += (rand() % 2 + 3) * LEARN_LEVEL;
-    d.hp -= (rand() % 6 + 8);
-    d.character -= rand() % 3 + 4;
-    d.happy -= rand() % 5 + 8;
-    d.satisfy -= rand() % 5 + 6;
-    d.love -= rand() % 3 + 4;
+    d.shit += random() % 4 + 13;
+    d.weight -= (random() % 2 + 1);
+    d.maxhp += (random() % 2 + 3) * LEARN_LEVEL;
+    d.speed += (random() % 2 + 3) * LEARN_LEVEL;
+    d.hp -= (random() % 6 + 8);
+    d.character -= random() % 3 + 4;
+    d.happy -= random() % 5 + 8;
+    d.satisfy -= random() % 5 + 6;
+    d.love -= random() % 3 + 4;
     if (d.character < 0)
         d.character = 0;
     if (d.love < 0)
@@ -2993,31 +2993,31 @@ static int pip_job_workJ(void)
     show_job_pic(101);
     if (class >= 80 && class1 >= 80)
     {
-        d.hskill += rand() % 2 + 7;
+        d.hskill += random() % 2 + 7;
         workmoney = 300 + d.maxhp / 50 + d.hskill / 20;
         vmsg("你是完美的獵人..");
     }
     else if ((class < 75 && class >= 50) && class1 >= 60)
     {
-        d.hskill += rand() % 2 + 5;
+        d.hskill += random() % 2 + 5;
         workmoney = 270 + d.maxhp / 45 + d.hskill / 20;
         vmsg("收獲還不錯喔..可以飽餐\一頓了..:)");
     }
     else if ((class < 50 && class >= 25) && class1 >= 40)
     {
-        d.hskill += rand() % 2 + 3;
+        d.hskill += random() % 2 + 3;
         workmoney = 240 + d.maxhp / 40 + d.hskill / 20;
         vmsg("技術差強人意  再加油喔..");
     }
     else if ((class < 25 && class >= 0) && class1 >= 20)
     {
-        d.hskill += rand() % 2 + 1;
+        d.hskill += random() % 2 + 1;
         workmoney = 210 + d.maxhp / 30 + d.hskill / 20;
         vmsg("狩獵是體力與智力的結合....");
     }
     else if (class < 0)
     {
-        d.hskill += rand() % 2;
+        d.hskill += random() % 2;
         workmoney = 190 + d.hskill / 20;
         vmsg("要多多鍛鍊和增進智慧啦....");
     }
@@ -3043,14 +3043,14 @@ static int pip_job_workK(void)
     workmoney = 0;
     class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     count_tired(5, 15, "Y", 100, 1);
-    d.shit += rand() % 4 + 16;
-    d.weight -= (rand() % 2 + 2);
-    d.maxhp += (rand() % 2 + 1) * LEARN_LEVEL;
-    d.speed += (rand() % 2 + 2) * LEARN_LEVEL;
-    d.hp -= (rand() % 6 + 10);
-    d.charm -= rand() % 3 + 6;
-    d.happy -= (rand() % 5 + 10);
-    d.satisfy -= rand() % 5 + 6;
+    d.shit += random() % 4 + 16;
+    d.weight -= (random() % 2 + 2);
+    d.maxhp += (random() % 2 + 1) * LEARN_LEVEL;
+    d.speed += (random() % 2 + 2) * LEARN_LEVEL;
+    d.hp -= (random() % 6 + 10);
+    d.charm -= random() % 3 + 6;
+    d.happy -= (random() % 5 + 10);
+    d.satisfy -= random() % 5 + 6;
     if (d.charm < 0)
         d.charm = 0;
     move(4, 0);
@@ -3105,39 +3105,39 @@ static int pip_job_workL(void)
     workmoney = 0;
     class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     class1 = (d.belief - d.tired) * LEARN_LEVEL;
-    d.shit += rand() % 5 + 8;
-    d.maxmp += (rand() % 2) * LEARN_LEVEL;
-    d.affect += (rand() % 2 + 2) * LEARN_LEVEL;
-    d.brave += (rand() % 2 + 2) * LEARN_LEVEL;
+    d.shit += random() % 5 + 8;
+    d.maxmp += (random() % 2) * LEARN_LEVEL;
+    d.affect += (random() % 2 + 2) * LEARN_LEVEL;
+    d.brave += (random() % 2 + 2) * LEARN_LEVEL;
     count_tired(5, 12, "Y", 100, 1);
-    d.hp -= (rand() % 3 + 7);
-    d.happy -= (rand() % 4 + 6);
-    d.satisfy -= rand() % 3 + 5;
-    d.charm -= rand() % 3 + 6;
+    d.hp -= (random() % 3 + 7);
+    d.happy -= (random() % 4 + 6);
+    d.satisfy -= random() % 3 + 5;
+    d.charm -= random() % 3 + 6;
     if (d.charm < 0)
         d.charm = 0;
     show_job_pic(121);
     if (class >= 75 && class1 >= 75)
     {
-        d.mresist += rand() % 2 + 7;
+        d.mresist += random() % 2 + 7;
         workmoney = 200 + (d.affect + d.brave) / 40;
         vmsg("守墓成功\喔  給你多點錢");
     }
     else if ((class < 75 && class >= 50) && class1 >= 50)
     {
-        d.mresist += rand() % 2 + 5;
+        d.mresist += random() % 2 + 5;
         workmoney = 150 + (d.affect + d.brave) / 50;
         vmsg("守墓還算成功\喔..謝啦..");
     }
     else if ((class < 50 && class >= 25) && class1 >= 25)
     {
-        d.mresist += rand() % 2 + 3;
+        d.mresist += random() % 2 + 3;
         workmoney = 120 + (d.affect + d.brave) / 60;
         vmsg("守墓還算差強人意喔..加油..");
     }
     else
     {
-        d.mresist += rand() % 2 + 1;
+        d.mresist += random() % 2 + 1;
         workmoney = 80 + (d.affect + d.brave) / 70;
         vmsg("我也不方便說啥了..請再加油..");
     }
@@ -3164,12 +3164,12 @@ static int pip_job_workM(void)
     class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     workmoney = 50 + d.wisdom / 20 + d.character / 20;
     count_tired(5, 10, "Y", 100, 1);
-    d.shit += rand() % 3 + 8;
-    d.character += (rand() % 2) * LEARN_LEVEL;
-    d.wisdom += (rand() % 2) * LEARN_LEVEL;
-    d.happy -= (rand() % 3 + 6);
-    d.satisfy -= rand() % 3 + 5;
-    d.hp -= (rand() % 3 + 8);
+    d.shit += random() % 3 + 8;
+    d.character += (random() % 2) * LEARN_LEVEL;
+    d.wisdom += (random() % 2) * LEARN_LEVEL;
+    d.happy -= (random() % 3 + 6);
+    d.satisfy -= random() % 3 + 5;
+    d.hp -= (random() % 3 + 8);
     d.money += workmoney * LEARN_LEVEL;
     move(4, 0);
     show_job_pic(131);
@@ -3199,41 +3199,41 @@ static int pip_job_workN(void)
     workmoney = 0;
     class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     class1 = (d.charm - d.tired) * LEARN_LEVEL;
-    d.shit += rand() % 5 + 5;
+    d.shit += random() % 5 + 5;
     count_tired(5, 14, "Y", 100, 1);
-    d.hp -= (rand() % 3 + 5);
-    d.social -= rand() % 5 + 6;
-    d.happy -= (rand() % 4 + 6);
-    d.satisfy -= rand() % 3 + 5;
-    d.wisdom -= rand() % 3 + 4;
+    d.hp -= (random() % 3 + 5);
+    d.social -= random() % 5 + 6;
+    d.happy -= (random() % 4 + 6);
+    d.satisfy -= random() % 3 + 5;
+    d.wisdom -= random() % 3 + 4;
     if (d.wisdom < 0)
         d.wisdom = 0;
     /*show_job_pic(6);*/
     if (class >= 75 && class1 >= 75)
     {
-        d.cookskill += rand() % 2 + 7;
-        d.speech += rand() % 2 + 5;
+        d.cookskill += random() % 2 + 7;
+        d.speech += random() % 2 + 5;
         workmoney = 500 + (d.charm) / 5;
         vmsg("你很紅唷  :)");
     }
     else if ((class < 75 && class >= 50) && class1 >= 50)
     {
-        d.cookskill += rand() % 2 + 5;
-        d.speech += rand() % 2 + 5;
+        d.cookskill += random() % 2 + 5;
+        d.speech += random() % 2 + 5;
         workmoney = 400 + (d.charm) / 5;
         vmsg("蠻受歡迎的耶....");
     }
     else if ((class < 50 && class >= 25) && class1 >= 25)
     {
-        d.cookskill += rand() % 2 + 4;
-        d.speech += rand() % 2 + 3;
+        d.cookskill += random() % 2 + 4;
+        d.speech += random() % 2 + 3;
         workmoney = 300 + (d.charm) / 5;
         vmsg("很平凡啦..但馬馬虎虎...");
     }
     else
     {
-        d.cookskill += rand() % 2 + 2;
-        d.speech += rand() % 2 + 2;
+        d.cookskill += random() % 2 + 2;
+        d.speech += random() % 2 + 2;
         workmoney = 200 + (d.charm) / 5;
         vmsg("你的魅力不夠啦..請加油....");
     }
@@ -3260,16 +3260,16 @@ static int pip_job_workO(void)
     }
     workmoney = 0;
     class = (d.charm - d.tired) * LEARN_LEVEL;
-    d.shit += rand() % 5 + 14;
-    d.charm += (rand() % 3 + 8) * LEARN_LEVEL;
-    d.offense += (rand() % 3 + 8) * LEARN_LEVEL;
+    d.shit += random() % 5 + 14;
+    d.charm += (random() % 3 + 8) * LEARN_LEVEL;
+    d.offense += (random() % 3 + 8) * LEARN_LEVEL;
     count_tired(5, 22, "Y", 100, 1);
-    d.hp -= (rand() % 3 + 8);
-    d.social -= rand() % 6 + 12;
-    d.happy -= (rand() % 4 + 8);
-    d.satisfy -= rand() % 3 + 8;
-    d.ethics -= rand() % 6 + 10;
-    d.belief -= rand() % 6 + 10;
+    d.hp -= (random() % 3 + 8);
+    d.social -= random() % 6 + 12;
+    d.happy -= (random() % 4 + 8);
+    d.satisfy -= random() % 3 + 8;
+    d.ethics -= random() % 6 + 10;
+    d.belief -= random() % 6 + 10;
     if (d.ethics < 0)
         d.ethics = 0;
     if (d.belief < 0)
@@ -3278,29 +3278,29 @@ static int pip_job_workO(void)
     /*show_job_pic(6);*/
     if (class >= 75)
     {
-        d.relation -= rand() % 5 + 12;
-        d.toman -= rand() % 5 + 12;
+        d.relation -= random() % 5 + 12;
+        d.toman -= random() % 5 + 12;
         workmoney = 600 + (d.charm) / 5;
         vmsg("你是本店的紅牌唷  :)");
     }
     else if (class < 75 && class >= 50)
     {
-        d.relation -= rand() % 5 + 8;
-        d.toman -= rand() % 5 + 8;
+        d.relation -= random() % 5 + 8;
+        d.toman -= random() % 5 + 8;
         workmoney = 500 + (d.charm) / 5;
         vmsg("你蠻受歡迎的耶..:)");
     }
     else if (class < 50 && class >= 25)
     {
-        d.relation -= rand() % 5 + 5;
-        d.toman -= rand() % 5 + 5;
+        d.relation -= random() % 5 + 5;
+        d.toman -= random() % 5 + 5;
         workmoney = 400 + (d.charm) / 5;
         vmsg("你很平凡..但馬馬虎虎啦...");
     }
     else
     {
-        d.relation -= rand() % 5 + 1;
-        d.toman -= rand() % 5 + 1;
+        d.relation -= random() % 5 + 1;
+        d.toman -= random() % 5 + 1;
         workmoney = 300 + (d.charm) / 5;
         vmsg("唉..你的魅力不夠啦....");
     }
@@ -3334,16 +3334,16 @@ static int pip_job_workP(void)
     workmoney = 0;
     class = (d.charm - d.tired) * LEARN_LEVEL;
     class1 = (d.art - d.tired) * LEARN_LEVEL;
-    d.shit += rand() % 5 + 7;
-    d.charm += (rand() % 3 + 8) * LEARN_LEVEL;
-    d.offense += (rand() % 3 + 8) * LEARN_LEVEL;
+    d.shit += random() % 5 + 7;
+    d.charm += (random() % 3 + 8) * LEARN_LEVEL;
+    d.offense += (random() % 3 + 8) * LEARN_LEVEL;
     count_tired(5, 22, "Y", 100, 1);
-    d.hp -= (rand() % 3 + 8);
-    d.social -= rand() % 6 + 12;
-    d.happy -= (rand() % 4 + 8);
-    d.satisfy -= rand() % 3 + 8;
-    d.character -= rand() % 3 + 8;
-    d.wisdom -= rand() % 3 + 5;
+    d.hp -= (random() % 3 + 8);
+    d.social -= random() % 6 + 12;
+    d.happy -= (random() % 4 + 8);
+    d.satisfy -= random() % 3 + 8;
+    d.character -= random() % 3 + 8;
+    d.wisdom -= random() % 3 + 5;
     if (d.character < 0)
         d.character = 0;
     if (d.wisdom < 0)
@@ -3351,29 +3351,29 @@ static int pip_job_workP(void)
     /*show_job_pic(6);*/
     if (class >= 75 && class1 > 30)
     {
-        d.speech += rand() % 5 + 12;
-        d.toman -= rand() % 5 + 12;
+        d.speech += random() % 5 + 12;
+        d.toman -= random() % 5 + 12;
         workmoney = 1000 + (d.charm) / 5;
         vmsg("你是夜總會最閃亮的星星唷  :)");
     }
     else if ((class < 75 && class >= 50) && class1 > 20)
     {
-        d.speech += rand() % 5 + 8;
-        d.toman -= rand() % 5 + 8;
+        d.speech += random() % 5 + 8;
+        d.toman -= random() % 5 + 8;
         workmoney = 800 + (d.charm) / 5;
         vmsg("嗯嗯..你蠻受歡迎的耶..:)");
     }
     else if ((class < 50 && class >= 25) && class1 > 10)
     {
-        d.speech += rand() % 5 + 5;
-        d.toman -= rand() % 5 + 5;
+        d.speech += random() % 5 + 5;
+        d.toman -= random() % 5 + 5;
         workmoney = 600 + (d.charm) / 5;
         vmsg("你要加油了啦..但普普啦...");
     }
     else
     {
-        d.speech += rand() % 5 + 1;
-        d.toman -= rand() % 5 + 1;
+        d.speech += random() % 5 + 1;
+        d.toman -= random() % 5 + 1;
         workmoney = 400 + (d.charm) / 5;
         vmsg("唉..你不行啦....");
     }
@@ -3393,15 +3393,15 @@ static int pip_play_stroll(void)       /*散步*/
 {
     int lucky;
     count_tired(3, 3, "Y", 100, 0);
-    lucky = rand() % 7;
+    lucky = random() % 7;
     if (lucky == 2)
     {
-        d.happy += rand() % 3 + rand() % 3 + 9;
-        d.satisfy += rand() % 3 + rand() % 3 + 3;
-        d.shit += rand() % 3 + 3;
-        d.hp -= (rand() % 3 + 5);
+        d.happy += random() % 3 + random() % 3 + 9;
+        d.satisfy += random() % 3 + random() % 3 + 3;
+        d.shit += random() % 3 + 3;
+        d.hp -= (random() % 3 + 5);
         move(4, 0);
-        if (rand() % 2 > 0)
+        if (random() % 2 > 0)
             show_play_pic(1);
         else
             show_play_pic(2);
@@ -3410,10 +3410,10 @@ static int pip_play_stroll(void)       /*散步*/
     else if (lucky == 3)
     {
         d.money += 100;
-        d.happy += rand() % 3 + 6;
-        d.satisfy += rand() % 3 + 4;
-        d.shit += rand() % 3 + 3;
-        d.hp -= (rand() % 3 + 4);
+        d.happy += random() % 3 + 6;
+        d.satisfy += random() % 3 + 4;
+        d.shit += random() % 3 + 3;
+        d.hp -= (random() % 3 + 4);
         move(4, 0);
         show_play_pic(3);
         vmsg("撿到了100元了..耶耶耶....");
@@ -3421,11 +3421,11 @@ static int pip_play_stroll(void)       /*散步*/
 
     else if (lucky == 4)
     {
-        if (rand() % 2 > 0)
+        if (random() % 2 > 0)
         {
-            d.happy -= (rand() % 2 + 5);
+            d.happy -= (random() % 2 + 5);
             move(4, 0);
-            d.hp -= (rand() % 3 + 3);
+            d.hp -= (random() % 3 + 3);
             show_play_pic(4);
             if (d.money >= 50)
             {
@@ -3435,38 +3435,38 @@ static int pip_play_stroll(void)       /*散步*/
             else
             {
                 d.money = 0;
-                d.hp -= (rand() % 3 + 3);
+                d.hp -= (random() % 3 + 3);
                 vmsg("錢掉光光了..嗚嗚嗚....");
             }
-            d.shit += rand() % 3 + 2;
+            d.shit += random() % 3 + 2;
         }
         else
         {
-            d.happy += rand() % 3 + 5;
+            d.happy += random() % 3 + 5;
             move(4, 0);
             show_play_pic(5);
             if (d.money >= 50)
             {
                 d.money -= 50;
-                d.hp -= (rand() % 3 + 3);
+                d.hp -= (random() % 3 + 3);
                 vmsg("用了50元了..不可以罵我喔....");
             }
             else
             {
                 d.money = 0;
-                d.hp -= (rand() % 3 + 3);
+                d.hp -= (random() % 3 + 3);
                 vmsg("錢被我偷用光光了..:p");
             }
-            d.shit += rand() % 3 + 2;
+            d.shit += random() % 3 + 2;
         }
     }
     else if (lucky == 5)
     {
-        d.happy += rand() % 3 + 6;
-        d.satisfy += rand() % 3 + 5;
+        d.happy += random() % 3 + 6;
+        d.satisfy += random() % 3 + 5;
         d.shit += 2;
         move(4, 0);
-        if (rand() % 2 > 0)
+        if (random() % 2 > 0)
             show_play_pic(6);
         else
             show_play_pic(7);
@@ -3474,18 +3474,18 @@ static int pip_play_stroll(void)       /*散步*/
     }
     else if (lucky == 6)
     {
-        d.happy -= (rand() % 3 + 10);
-        d.shit += (rand() % 3 + 20);
+        d.happy -= (random() % 3 + 10);
+        d.shit += (random() % 3 + 20);
         move(4, 0);
         show_play_pic(9);
         vmsg("真是倒楣  可以去買愛國獎券");
     }
     else
     {
-        d.happy += rand() % 3 + 3;
-        d.satisfy += rand() % 2 + 1;
-        d.shit += rand() % 3 + 2;
-        d.hp -= (rand() % 3 + 2);
+        d.happy += random() % 3 + 3;
+        d.satisfy += random() % 2 + 1;
+        d.shit += random() % 3 + 2;
+        d.hp -= (random() % 3 + 2);
         move(4, 0);
         show_play_pic(8);
         vmsg("沒有特別的事發生啦.....");
@@ -3496,14 +3496,14 @@ static int pip_play_stroll(void)       /*散步*/
 static int pip_play_sport(void)        /*運動*/
 {
     count_tired(3, 8, "Y", 100, 1);
-    d.weight -= (rand() % 3 + 2);
-    d.satisfy += rand() % 2 + 3;
+    d.weight -= (random() % 3 + 2);
+    d.satisfy += random() % 2 + 3;
     if (d.satisfy > 100)
         d.satisfy = 100;
-    d.shit += rand() % 5 + 10;
-    d.hp -= (rand() % 2 + 8);
-    d.maxhp += rand() % 2;
-    d.speed += (2 + rand() % 3);
+    d.shit += random() % 5 + 10;
+    d.hp -= (random() % 2 + 8);
+    d.maxhp += random() % 2;
+    d.speed += (2 + random() % 3);
     move(4, 0);
     show_play_pic(10);
     vmsg("運動好處多多啦...");
@@ -3519,11 +3519,11 @@ static int pip_play_date(void) /*約會*/
     else
     {
         count_tired(3, 6, "Y", 100, 1);
-        d.happy += rand() % 5 + 12;
-        d.shit += rand() % 3 + 5;
-        d.hp -= rand() % 4 + 8;
-        d.satisfy += rand() % 5 + 7;
-        d.character += rand() % 3 + 1;
+        d.happy += random() % 5 + 12;
+        d.shit += random() % 3 + 5;
+        d.hp -= random() % 4 + 8;
+        d.satisfy += random() % 5 + 7;
+        d.character += random() % 3 + 1;
         d.money = d.money - 150;
         move(4, 0);
         show_play_pic(11);
@@ -3542,55 +3542,55 @@ static int pip_play_outing(void)       /*郊遊*/
     }
     else
     {
-        d.weight += rand() % 2 + 1;
+        d.weight += random() % 2 + 1;
         d.money -= 250;
         count_tired(10, 45, "N", 100, 0);
-        d.hp -= rand() % 10 + 20;
+        d.hp -= random() % 10 + 20;
         if (d.hp >= d.maxhp)
             d.hp = d.maxhp;
-        d.happy += rand() % 10 + 12;
-        d.character += rand() % 5 + 5;
-        d.satisfy += rand() % 10 + 10;
-        lucky = rand() % 4;
+        d.happy += random() % 10 + 12;
+        d.character += random() % 5 + 5;
+        d.satisfy += random() % 10 + 10;
+        lucky = random() % 4;
         if (lucky == 0)
         {
-            d.maxmp += rand() % 3;
-            d.art += rand() % 2;
+            d.maxmp += random() % 3;
+            d.art += random() % 2;
             show_play_pic(12);
-            if (rand() % 2 > 0)
+            if (random() % 2 > 0)
                 vmsg("心中有一股淡淡的感覺  好舒服喔....");
             else
                 vmsg("雲水 閑情 心情好多了.....");
         }
         else if (lucky == 1)
         {
-            d.art += rand() % 3;
-            d.maxmp += rand() % 2;
+            d.art += random() % 3;
+            d.maxmp += random() % 2;
             show_play_pic(13);
-            if (rand() % 2 > 0)
+            if (random() % 2 > 0)
                 vmsg("有山有水有落日  形成一幅美麗的畫..");
             else
                 vmsg("看著看著  全身疲憊都不見囉..");
         }
         else if (lucky == 2)
         {
-            d.love += rand() % 3;
+            d.love += random() % 3;
             show_play_pic(14);
-            if (rand() % 2 > 0)
+            if (random() % 2 > 0)
                 vmsg("看  太陽快沒入水中囉...");
             else
                 vmsg("聽說這是海邊啦  你說呢?");
         }
         else if (lucky == 3)
         {
-            d.maxhp += rand() % 3;
+            d.maxhp += random() % 3;
             show_play_pic(15);
-            if (rand() % 2 > 0)
+            if (random() % 2 > 0)
                 vmsg("讓我們瘋狂在夜裡的海灘吧....呼呼..");
             else
                 vmsg("涼爽的海風迎面襲來  最喜歡這種感覺了....");
         }
-        if ((rand() % 301 + rand() % 200) % 100 == 12)
+        if ((random() % 301 + random() % 200) % 100 == 12)
         {
             lucky = 0;
             clear();
@@ -3603,7 +3603,7 @@ static int pip_play_outing(void)       /*郊遊*/
             move(b_lines - 4, (d_cols>>1) + 10);
             outs("\x1b[1;36m小天使我決定給你獎賞鼓勵鼓勵  偷偷地幫助你一下....^_^\x1b[0m");
             move(b_lines - 3, (d_cols>>1) + 10);
-            lucky = rand() % 7;
+            lucky = random() % 7;
             if (lucky == 6)
             {
                 outs("\x1b[1;33m我將幫你的各項能力全部提升百分之五喔......\x1b[0m");
@@ -3658,14 +3658,14 @@ static int pip_play_outing(void)       /*郊遊*/
 static int pip_play_kite(void) /*風箏*/
 {
     count_tired(4, 4, "Y", 100, 0);
-    d.weight += (rand() % 2 + 2);
-    d.satisfy += rand() % 3 + 12;
+    d.weight += (random() % 2 + 2);
+    d.satisfy += random() % 3 + 12;
     if (d.satisfy > 100)
         d.satisfy = 100;
-    d.happy += rand() % 5 + 10;
-    d.shit += rand() % 5 + 6;
-    d.hp -= (rand() % 2 + 7);
-    d.affect += rand() % 4 + 6;
+    d.happy += random() % 5 + 10;
+    d.shit += random() % 5 + 6;
+    d.hp -= (random() % 2 + 7);
+    d.affect += random() % 4 + 6;
     move(4, 0);
     show_play_pic(16);
     vmsg("放風箏真好玩啦...");
@@ -3681,14 +3681,14 @@ static int pip_play_KTV(void)  /*KTV*/
     else
     {
         count_tired(10, 10, "Y", 100, 0);
-        d.satisfy += rand() % 2 + 20;
+        d.satisfy += random() % 2 + 20;
         if (d.satisfy > 100)
             d.satisfy = 100;
-        d.happy += rand() % 3 + 20;
-        d.shit += rand() % 5 + 6;
+        d.happy += random() % 3 + 20;
+        d.shit += random() % 5 + 6;
         d.money -= 250;
-        d.hp += (rand() % 2 + 6);
-        d.art += rand() % 4 + 3;
+        d.hp += (random() % 2 + 6);
+        d.art += random() % 4 + 3;
         move(4, 0);
         show_play_pic(17);
         vmsg("你說你  想要逃...");
@@ -3705,9 +3705,9 @@ static int pip_play_guess(void)   /* 猜拳程式 */
 
     time(&now);
     qtime = localtime(&now);
-    d.satisfy += (rand() % 3 + 2);
+    d.satisfy += (random() % 3 + 2);
     count_tired(2, 2, "Y", 100, 1);
-    d.shit += rand() % 3 + 2;
+    d.shit += random() % 3 + 2;
     do
     {
         if (d.death == 1 || d.death == 2 || d.death == 3)
@@ -3731,7 +3731,7 @@ static int pip_play_guess(void)   /* 猜拳程式 */
     }
     while ((pipkey != '1') && (pipkey != '2') && (pipkey != '3') && (pipkey != 'q') && (pipkey != 'Q'));
 
-    com = rand() % 3;
+    com = random() % 3;
     move(b_lines - 5, 0);
     clrtobot();
     switch (com)
@@ -3788,7 +3788,7 @@ static int pip_play_guess(void)   /* 猜拳程式 */
 static void win(void)
 {
     d.winn++;
-    d.hp -= rand() % 2 + 3;
+    d.hp -= random() % 2 + 3;
     move(4, 0);
     show_guess_pic(2);
     move(b_lines, 0);
@@ -3798,8 +3798,8 @@ static void win(void)
 
 static void tie(void)
 {
-    d.hp -= rand() % 2 + 3;
-    d.happy += rand() % 3 + 5;
+    d.hp -= random() % 2 + 3;
+    d.happy += random() % 3 + 5;
     move(4, 0);
     show_guess_pic(3);
     move(b_lines, 0);
@@ -3810,8 +3810,8 @@ static void tie(void)
 static void lose(void)
 {
     d.losee++;
-    d.happy += rand() % 3 + 5;
-    d.hp -= rand() % 2 + 3;
+    d.happy += random() % 3 + 5;
+    d.hp -= random() % 2 + 3;
     move(4, 0);
     show_guess_pic(1);
     move(b_lines, 0);
@@ -3921,13 +3921,13 @@ static int pip_practice_classA(void)
     d.wisdom += change4 * LEARN_LEVEL;
     if (body == 1)
     {
-        d.belief -= rand() % (2 + class * 2);
-        d.mresist -= rand() % 4;
+        d.belief -= random() % (2 + class * 2);
+        d.mresist -= random() % 4;
     }
     else
     {
-        d.belief -= rand() % (2 + class * 2);
-        d.mresist -= rand() % 3;
+        d.belief -= random() % (2 + class * 2);
+        d.mresist -= random() % 3;
     }
     pip_practice_gradeup(1, class, d.wisdom / 200 + 1);
     if (d.belief < 0)  d.belief = 0;
@@ -3962,15 +3962,15 @@ static int pip_practice_classB(void)
     d.affect += change3 * LEARN_LEVEL;
     if (body == 1)
     {
-        d.wisdom += rand() % (class + 3) * LEARN_LEVEL;
-        d.character += rand() % (class + 3) * LEARN_LEVEL;
-        d.art += rand() % (class + 3) * LEARN_LEVEL;
+        d.wisdom += random() % (class + 3) * LEARN_LEVEL;
+        d.character += random() % (class + 3) * LEARN_LEVEL;
+        d.art += random() % (class + 3) * LEARN_LEVEL;
     }
     else
     {
-        d.wisdom += rand() % (class + 2) * LEARN_LEVEL;
-        d.character += rand() % (class + 2) * LEARN_LEVEL;
-        d.art += rand() % (class + 2) * LEARN_LEVEL;
+        d.wisdom += random() % (class + 2) * LEARN_LEVEL;
+        d.character += random() % (class + 2) * LEARN_LEVEL;
+        d.art += random() % (class + 2) * LEARN_LEVEL;
     }
     body = (d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400 + 1;
     pip_practice_gradeup(2, class, body);
@@ -4001,11 +4001,11 @@ static int pip_practice_classC(void)
     d.belief += change3 * LEARN_LEVEL;
     if (body == 1)
     {
-        d.mresist += rand() % 5 * LEARN_LEVEL;
+        d.mresist += random() % 5 * LEARN_LEVEL;
     }
     else
     {
-        d.mresist += rand() % 3 * LEARN_LEVEL;
+        d.mresist += random() % 3 * LEARN_LEVEL;
     }
     body = (d.belief * 2 + d.wisdom) / 400 + 1;
     pip_practice_gradeup(3, class, body);
@@ -4034,13 +4034,13 @@ static int pip_practice_classD(void)
     d.wisdom += change2 * LEARN_LEVEL;
     if (body == 1)
     {
-        d.hskill += (rand() % 3 + 4) * LEARN_LEVEL;
-        d.affect -= rand() % 3 + 6;
+        d.hskill += (random() % 3 + 4) * LEARN_LEVEL;
+        d.affect -= random() % 3 + 6;
     }
     else
     {
-        d.hskill += (rand() % 3 + 2) * LEARN_LEVEL;
-        d.affect -= rand() % 3 + 6;
+        d.hskill += (random() % 3 + 2) * LEARN_LEVEL;
+        d.affect -= random() % 3 + 6;
     }
     body = (d.hskill * 2 + d.wisdom) / 400 + 1;
     pip_practice_gradeup(4, class, body);
@@ -4068,16 +4068,16 @@ static int pip_practice_classE(void)
 
     body = pip_practice_function(5, class, 51, 51, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
-    d.speed += (rand() % 3 + 2) * LEARN_LEVEL;
-    d.hexp += (rand() % 2 + 2) * LEARN_LEVEL;
+    d.speed += (random() % 3 + 2) * LEARN_LEVEL;
+    d.hexp += (random() % 2 + 2) * LEARN_LEVEL;
     d.attack += change4 * LEARN_LEVEL;
     if (body == 1)
     {
-        d.hskill += (rand() % 3 + 5) * LEARN_LEVEL;
+        d.hskill += (random() % 3 + 5) * LEARN_LEVEL;
     }
     else
     {
-        d.hskill += (rand() % 3 + 3) * LEARN_LEVEL;
+        d.hskill += (random() % 3 + 3) * LEARN_LEVEL;
     }
     body = (d.hskill + d.attack) / 400 + 1;
     pip_practice_gradeup(5, class, body);
@@ -4104,16 +4104,16 @@ static int pip_practice_classF(void)
 
     body = pip_practice_function(6, class, 61, 61, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
-    d.hexp += (rand() % 2 + 2) * LEARN_LEVEL;
-    d.speed += (rand() % 3 + 2) * LEARN_LEVEL;
+    d.hexp += (random() % 2 + 2) * LEARN_LEVEL;
+    d.speed += (random() % 3 + 2) * LEARN_LEVEL;
     d.resist += change2 * LEARN_LEVEL;
     if (body == 1)
     {
-        d.hskill += (rand() % 3 + 5) * LEARN_LEVEL;
+        d.hskill += (random() % 3 + 5) * LEARN_LEVEL;
     }
     else
     {
-        d.hskill += (rand() % 3 + 3) * LEARN_LEVEL;
+        d.hskill += (random() % 3 + 3) * LEARN_LEVEL;
     }
     body = (d.hskill + d.resist) / 400 + 1;
     pip_practice_gradeup(6, class, body);
@@ -4141,14 +4141,14 @@ static int pip_practice_classG(void)
     body = pip_practice_function(7, class, 71, 72, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.maxmp += change3 * LEARN_LEVEL;
-    d.mexp += (rand() % 2 + 2) * LEARN_LEVEL;
+    d.mexp += (random() % 2 + 2) * LEARN_LEVEL;
     if (body == 1)
     {
-        d.mskill += (rand() % 3 + 7) * LEARN_LEVEL;
+        d.mskill += (random() % 3 + 7) * LEARN_LEVEL;
     }
     else
     {
-        d.mskill += (rand() % 3 + 4) * LEARN_LEVEL;
+        d.mskill += (random() % 3 + 4) * LEARN_LEVEL;
     }
 
     body = (d.mskill + d.maxmp) / 400 + 1;
@@ -4176,9 +4176,9 @@ static int pip_practice_classH(void)
 
     body = pip_practice_function(8, class, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
-    d.social += (rand() % 2 + 2) * LEARN_LEVEL;
-    d.manners += (change1 + rand() % 2) * LEARN_LEVEL;
-    d.character += (change1 + rand() % 2) * LEARN_LEVEL;
+    d.social += (random() % 2 + 2) * LEARN_LEVEL;
+    d.manners += (change1 + random() % 2) * LEARN_LEVEL;
+    d.character += (change1 + random() % 2) * LEARN_LEVEL;
     body = (d.character + d.manners) / 400 + 1;
     pip_practice_gradeup(8, class, body);
     d.classH += 1;
@@ -4232,14 +4232,14 @@ static int pip_practice_classJ(void)
     body = pip_practice_function(10, class, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.art += change2 * LEARN_LEVEL;
-    d.maxhp += (rand() % 3 + 2) * LEARN_LEVEL;
+    d.maxhp += (random() % 3 + 2) * LEARN_LEVEL;
     if (body == 1)
     {
-        d.charm += rand() % (4 + class) * LEARN_LEVEL;
+        d.charm += random() % (4 + class) * LEARN_LEVEL;
     }
     else if (body == 2)
     {
-        d.charm += rand() % (2 + class) * LEARN_LEVEL;
+        d.charm += random() % (2 + class) * LEARN_LEVEL;
     }
     body = (d.art * 2 + d.charm) / 400 + 1;
     pip_practice_gradeup(10, class, body);
@@ -4272,22 +4272,22 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
     count_tired(4, 5, "Y", 100, 1);
     d.money = d.money - smoney;
     /*成功與否的判斷*/
-    health = d.hp * 1 / 2 + rand() % 20 - d.tired;
+    health = d.hp * 1 / 2 + random() % 20 - d.tired;
     if (health > 0) body = 1;
     else body = 2;
 
-    a = rand() % 3 + 2;
-    b = (rand() % 12 + rand() % 13) % 2;
-    d.hp -= rand() % (3 + rand() % 3) + classvariable[classnum][0];
-    d.happy -= rand() % (3 + rand() % 3) + classvariable[classnum][1];
-    d.satisfy -= rand() % (3 + rand() % 3) + classvariable[classnum][2];
-    d.shit += rand() % (3 + rand() % 3) + classvariable[classnum][3];
-    *change1 = rand() % a + 2 + classgrade * 2 / (body + 1);    /* rand()%3+3 */
-    *change2 = rand() % a + 4 + classgrade * 2 / (body + 1);    /* rand()%3+5 */
-    *change3 = rand() % a + 5 + classgrade * 3 / (body + 1);    /* rand()%3+7 */
-    *change4 = rand() % a + 7 + classgrade * 3 / (body + 1);    /* rand()%3+9 */
-    *change5 = rand() % a + 9 + classgrade * 3 / (body + 1);    /* rand()%3+11 */
-    if (rand() % 2 > 0 && pic1 > 0)
+    a = random() % 3 + 2;
+    b = (random() % 12 + random() % 13) % 2;
+    d.hp -= random() % (3 + random() % 3) + classvariable[classnum][0];
+    d.happy -= random() % (3 + random() % 3) + classvariable[classnum][1];
+    d.satisfy -= random() % (3 + random() % 3) + classvariable[classnum][2];
+    d.shit += random() % (3 + random() % 3) + classvariable[classnum][3];
+    *change1 = random() % a + 2 + classgrade * 2 / (body + 1);    /* random()%3+3 */
+    *change2 = random() % a + 4 + classgrade * 2 / (body + 1);    /* random()%3+5 */
+    *change3 = random() % a + 5 + classgrade * 3 / (body + 1);    /* random()%3+7 */
+    *change4 = random() % a + 7 + classgrade * 3 / (body + 1);    /* random()%3+9 */
+    *change5 = random() % a + 9 + classgrade * 3 / (body + 1);    /* random()%3+11 */
+    if (random() % 2 > 0 && pic1 > 0)
         show_practice_pic(pic1);
     else if (pic2 > 0)
         show_practice_pic(pic2);
@@ -4324,11 +4324,11 @@ static int pip_see_doctor(void)        /*看醫生*/
     if (d.sick <= 0)
     {
         vmsg("哇哩..沒病來醫院幹嘛..被罵了..嗚~~");
-        d.character -= (rand() % 3 + 1);
+        d.character -= (random() % 3 + 1);
         if (d.character < 0)
             d.character = 0;
-        d.happy -= (rand() % 3 + 3);
-        d.satisfy -= rand() % 3 + 2;
+        d.happy -= (random() % 3 + 3);
+        d.satisfy -= random() % 3 + 2;
     }
     else if (d.money < savemoney)
     {
@@ -4337,7 +4337,7 @@ static int pip_see_doctor(void)        /*看醫生*/
     }
     else if (d.sick > 0 && d.money >= savemoney)
     {
-        d.tired -= rand() % 10 + 20;
+        d.tired -= random() % 10 + 20;
         if (d.tired < 0)
             d.tired = 0;
         d.sick = 0;
@@ -4374,11 +4374,11 @@ static int pip_change_weight(void)
                 getdata(b_lines - 1, 1, "需花費80元(3～5公斤)，你確定嗎? [y/N]: ", genbuf, 2, 1, 0);
                 if (genbuf[0] == 'Y' || genbuf[0] == 'y')
                 {
-                    weightmp = 3 + rand() % 3;
+                    weightmp = 3 + random() % 3;
                     d.weight += weightmp;
                     d.money -= 80;
-                    d.maxhp -= rand() % 2;
-                    d.hp -= rand() % 2 + 3;
+                    d.maxhp -= random() % 2;
+                    d.hp -= random() % 2 + 3;
                     show_special_pic(3);
                     sprintf(inbuf, "總共增加了%d公斤", weightmp);
                     vmsg(inbuf);
@@ -4405,10 +4405,10 @@ static int pip_change_weight(void)
                 {
                     d.money -= weightmp * 30;
                     d.weight += weightmp;
-                    d.maxhp -= (rand() % 2 + 2);
+                    d.maxhp -= (random() % 2 + 2);
                     count_tired(5, 8, "N", 100, 1);
-                    d.hp -= (rand() % 2 + 3);
-                    d.sick += rand() % 10 + 5;
+                    d.hp -= (random() % 2 + 3);
+                    d.sick += random() % 10 + 5;
                     show_special_pic(3);
                     sprintf(inbuf, "總共增加了%d公斤", weightmp);
                     vmsg(inbuf);
@@ -4434,13 +4434,13 @@ static int pip_change_weight(void)
                 getdata(b_lines - 1, 1, "需花費80元(3～5公斤)，你確定嗎? [y/N]: ", genbuf, 2, 1, 0);
                 if (genbuf[0] == 'Y' || genbuf[0] == 'y')
                 {
-                    weightmp = 3 + rand() % 3;
+                    weightmp = 3 + random() % 3;
                     d.weight -= weightmp;
                     if (d.weight < 0)
                         d.weight = 0;
                     d.money -= 100;
-                    d.maxhp += rand() % 2;
-                    d.hp -= rand() % 2 + 3;
+                    d.maxhp += random() % 2;
+                    d.hp -= random() % 2 + 3;
                     show_special_pic(4);
                     sprintf(inbuf, "總共減少了%d公斤", weightmp);
                     vmsg(inbuf);
@@ -4470,10 +4470,10 @@ static int pip_change_weight(void)
                 {
                     d.money -= weightmp * 30;
                     d.weight -= weightmp;
-                    d.maxhp -= (rand() % 2 + 2);
+                    d.maxhp -= (random() % 2 + 2);
                     count_tired(5, 8, "N", 100, 1);
-                    d.hp -= (rand() % 2 + 3);
-                    d.sick += rand() % 10 + 5;
+                    d.hp -= (random() % 2 + 3);
+                    d.sick += random() % 10 + 5;
                     show_special_pic(4);
                     sprintf(inbuf, "總共減少了%d公斤", weightmp);
                     vmsg(inbuf);
@@ -4592,9 +4592,9 @@ struct royalset *p)
 
         if ((choice >= 1 && choice <= 10 && d.seeroyalJ == 1) || (choice >= 1 && choice <= 9 && d.seeroyalJ == 0))
         {
-            d.social += rand() % 3 + 3;
-            d.hp -= rand() % 5 + 6;
-            d.tired += rand() % 5 + 8;
+            d.social += random() % 3 + 3;
+            d.hp -= random() % 5 + 6;
+            d.tired += random() % 5 + 8;
             if (d.tired >= 100)
             {
                 d.death = 1;
@@ -4617,7 +4617,7 @@ struct royalset *p)
                 {
                     if (choice >= 1 && choice <= 9 && save[choice] >= p[choice].maxtoman)
                     {
-                        if (rand() % 2 > 0)
+                        if (random() % 2 > 0)
                             sprintf(buf, "能和這麼偉大的你講話真是榮幸ㄚ...");
                         else
                             sprintf(buf, "很高興你來拜訪我，但我不能給你什麼了..");
@@ -4666,15 +4666,15 @@ struct royalset *p)
                         else if (choice == 9)
                         {
                             save[9] = 0;
-                            d.social -= 13 + rand() % 4;
-                            d.affect += 13 + rand() % 4;
+                            d.social -= 13 + random() % 4;
+                            d.affect += 13 + random() % 4;
                         }
                         else if (choice == 10 && d.seeroyalJ == 1)
                         {
-                            save[10] += 15 + rand() % 4;
+                            save[10] += 15 + random() % 4;
                             d.seeroyalJ = 0;
                         }
-                        if (rand() % 2 > 0)
+                        if (random() % 2 > 0)
                             sprintf(buf, "%s", p[choice].words1);
                         else
                             sprintf(buf, "%s", p[choice].words2);
@@ -4682,7 +4682,7 @@ struct royalset *p)
                 }
                 else
                 {
-                    if (rand() % 2 > 0)
+                    if (random() % 2 > 0)
                         sprintf(buf, "我不和你這樣的雞談話....");
                     else
                         sprintf(buf, "你這隻沒教養的雞，再去學學禮儀吧....");
@@ -4938,7 +4938,7 @@ int first)
             {
                 char buf[256];
             case '1':
-                if (rand() % 9 == 0)
+                if (random() % 9 == 0)
                 {
                     vmsg("竟然沒打中..:~~~");
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m對 \x1b[33m%s\x1b[37m 施展普通攻擊，但是沒有打中...",
@@ -4947,13 +4947,13 @@ int first)
                 else
                 {
                     if (opponent->pip->resistmode == 0)
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - opponent->pip->resist / 12 + rand() % 20 - opponent->pip->speed / 30 + d.speed / 30);
+                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - opponent->pip->resist / 12 + random() % 20 - opponent->pip->speed / 30 + d.speed / 30);
                     else
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - opponent->pip->resist / 6 + rand() % 20 - opponent->pip->speed / 10 + d.speed / 30);
+                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - opponent->pip->resist / 6 + random() % 20 - opponent->pip->speed / 10 + d.speed / 30);
                     if (dinjure <= 10)  dinjure = 10;
                     opponent->pip->hp -= dinjure;
-                    d.hexp += rand() % 2 + 2;
-                    d.hskill += rand() % 2 + 1;
+                    d.hexp += random() % 2 + 2;
+                    d.hskill += random() % 2 + 1;
                     sprintf(buf, "普通攻擊，對方體力減低%d", dinjure);
                     vmsg(buf);
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了普通攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
@@ -4970,7 +4970,7 @@ int first)
 
             case '2':
                 show_fight_pic(2);
-                if (rand() % 11 == 0)
+                if (random() % 11 == 0)
                 {
                     vmsg("竟然沒打中..:~~~");
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m對 \x1b[33m%s\x1b[37m 施展全力攻擊，但是沒有打中...",
@@ -4979,16 +4979,16 @@ int first)
                 else
                 {
                     if (opponent->pip->resistmode == 0)
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - opponent->pip->resist / 12 + rand() % 30 - opponent->pip->speed / 50 + d.speed / 30);
+                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - opponent->pip->resist / 12 + random() % 30 - opponent->pip->speed / 50 + d.speed / 30);
                     else
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - opponent->pip->resist / 6 + rand() % 30 - opponent->pip->speed / 30 + d.speed / 30);
+                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - opponent->pip->resist / 6 + random() % 30 - opponent->pip->speed / 30 + d.speed / 30);
                     if (dinjure <= 20) dinjure = 20;
                     if (d.hp > 5)
                     {
                         opponent->pip->hp -= dinjure;
                         d.hp -= 5;
-                        d.hexp += rand() % 3 + 3;
-                        d.hskill += rand() % 2 + 2;
+                        d.hexp += random() % 3 + 3;
+                        d.hskill += random() % 2 + 2;
                         sprintf(buf, "全力攻擊，對方體力減低%d", dinjure);
                         vmsg(buf);
                         sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了全力攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
@@ -5031,7 +5031,7 @@ int first)
                     }
                     else
                     {
-                        if (rand() % 15 == 0)
+                        if (random() % 15 == 0)
                         {
                             vmsg("竟然沒打中..:~~~");
                             sprintf(buf, "\x1b[1;33m%s \x1b[37m對 \x1b[33m%s\x1b[37m 施展魔法攻擊，但是沒有打中...",
@@ -5050,7 +5050,7 @@ int first)
                             dinjure = (int)dinjure * mresist;
 
                             opponent->pip->hp -= dinjure;
-                            d.mskill += rand() % 2 + 2;
+                            d.mskill += random() % 2 + 2;
                             sprintf(buf, "魔法攻擊，對方體力減低%d", dinjure);
                             vmsg(buf);
                             sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了魔法攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
@@ -5105,7 +5105,7 @@ int first)
             case '6':
                 opponent->pip->msgcount++;
                 currutmp->pip->msgcount++;
-                if (rand() % 20 >= 18 || (rand() % 20 > 13 && d.speed <= opponent->pip->speed))
+                if (random() % 20 >= 18 || (random() % 20 > 13 && d.speed <= opponent->pip->speed))
                 {
                     vmsg("想逃跑，卻失敗了...");
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m想先逃跑再說...但卻失敗了...\x1b[m", d.name);
@@ -6422,20 +6422,20 @@ static int pip_divine(void) /*占卜師來訪*/
     vmsg("開門讓他進來吧....");
     if (d.money >= money)
     {
-        randvalue = rand() % 5;
+        randvalue = random() % 5;
         sprintf(buf, "你要占卜嗎? 要花%ld元喔...[y/N]: ", money);
         getdata(12, 14, buf, ans, 2, 1, 0);
         if (ans[0] == 'y' || ans[0] == 'Y')
         {
             pip_ending_decide(endbuf1, endbuf2, endbuf3, &endmode, &endgrade);
             if (randvalue == 0)
-                sprintf(buf, "\x1b[1;37m  你的小雞%s以後可能的身份是%s  \x1b[m", d.name, endmodemagic[2+rand()%5].girl);
+                sprintf(buf, "\x1b[1;37m  你的小雞%s以後可能的身份是%s  \x1b[m", d.name, endmodemagic[2+random()%5].girl);
             else if (randvalue == 1)
-                sprintf(buf, "\x1b[1;37m  你的小雞%s以後可能的身份是%s  \x1b[m", d.name, endmodecombat[2+rand()%6].girl);
+                sprintf(buf, "\x1b[1;37m  你的小雞%s以後可能的身份是%s  \x1b[m", d.name, endmodecombat[2+random()%6].girl);
             else if (randvalue == 2)
-                sprintf(buf, "\x1b[1;37m  你的小雞%s以後可能的身份是%s  \x1b[m", d.name, endmodeall_purpose[6+rand()%15].girl);
+                sprintf(buf, "\x1b[1;37m  你的小雞%s以後可能的身份是%s  \x1b[m", d.name, endmodeall_purpose[6+random()%15].girl);
             else if (randvalue == 3)
-                sprintf(buf, "\x1b[1;37m  你的小雞%s以後可能的身份是%s  \x1b[m", d.name, endmodeart[2+rand()%6].girl);
+                sprintf(buf, "\x1b[1;37m  你的小雞%s以後可能的身份是%s  \x1b[m", d.name, endmodeart[2+random()%6].girl);
             else if (randvalue == 4)
                 sprintf(buf, "\x1b[1;37m  你的小雞%s以後可能的身份是%s  \x1b[m", d.name, endbuf1);
             d.money -= money;
@@ -7228,18 +7228,18 @@ get_man(
 int class, int mob, int plus)
 {
     int lucky, man;
-    lucky = rand() % (class * 5);
+    lucky = random() % (class * 5);
     if (lucky <= (class*2))
     {
-        man = rand() % mob + plus;
+        man = random() % mob + plus;
     }
     else if (lucky <= (class*4) && lucky > (class*2))
     {
-        man = rand() % (mob + plus / 2) + (plus / 2);
+        man = random() % (mob + plus / 2) + (plus / 2);
     }
     else
     {
-        man = rand() % (mob + plus);
+        man = random() % (mob + plus);
     }
     return man;
 }
@@ -7281,7 +7281,7 @@ pip_meet_vs_man(void)
         if (ans == 'r' || ans == 'R')
             return 0;
 
-        lucky = rand() % 2000;
+        lucky = random() % 2000;
         if (ans != 'e' && ans != 'w' && ans != 's' && ans != 'n' && ans != 'E' && ans != 'W' && ans != 'S' && ans != 'N' &&
             ans != 'F' && ans != 'f')
             continue;
@@ -7372,31 +7372,31 @@ int mode)
     oldmoney = d.money;
     if (mode == 1)
     {
-        m.hp = p[n].hp - rand() % 10;
+        m.hp = p[n].hp - random() % 10;
         m.maxhp = (m.hp + p[n].hp) / 2;
-        m.mp = p[n].mp - rand() % 10;
+        m.mp = p[n].mp - random() % 10;
         m.maxmp = (m.mp + p[n].mp) / 2;
-        m.speed = p[n].speed - rand() % 4 - 1;
-        m.attack = p[n].attack - rand() % 10;
-        m.resist = p[n].resist - rand() % 10;
-        m.money = p[n].money - rand() % 50;
+        m.speed = p[n].speed - random() % 4 - 1;
+        m.attack = p[n].attack - random() % 10;
+        m.resist = p[n].resist - random() % 10;
+        m.money = p[n].money - random() % 50;
         m.death = p[n].death;
         m.map = p[n].map;
     }
     else
     {
-        m.maxhp = d.maxhp * (80 + rand() % 50) / 100 + 20;;
-        m.hp = m.maxhp - rand() % 10 + 20;
-        m.maxmp = d.maxmp * (80 + rand() % 50) / 100 + 10;
-        m.mp = m.maxmp - rand() % 20 + 10;
-        m.speed = d.speed * (80 + rand() % 50) / 100 + 10;
-        m.attack = d.attack * (80 + rand() % 50) / 100 + 10;
-        m.resist = d.resist * (80 + rand() % 50) / 100 + 10;
+        m.maxhp = d.maxhp * (80 + random() % 50) / 100 + 20;;
+        m.hp = m.maxhp - random() % 10 + 20;
+        m.maxmp = d.maxmp * (80 + random() % 50) / 100 + 10;
+        m.mp = m.maxmp - random() % 20 + 10;
+        m.speed = d.speed * (80 + random() % 50) / 100 + 10;
+        m.attack = d.attack * (80 + random() % 50) / 100 + 10;
+        m.resist = d.resist * (80 + random() % 50) / 100 + 10;
         m.money = 0;
         m.death = 0;
     }
-    /*d.tired+=rand()%(n+1)/4+2;*/
-    /*d.shit+=rand()%(n+1)/4+2;*/
+    /*d.tired+=random()%(n+1)/4+2;*/
+    /*d.shit+=random()%(n+1)/4+2;*/
     do
     {
         if (m.hp <= 0) /*敵人死掉了*/
@@ -7404,7 +7404,7 @@ int mode)
             m.hp = 0;
             d.money += m.money;
             m.death = 1;
-            d.brave += rand() % 4 + 3;
+            d.brave += random() % 4 + 3;
         }
         if (d.hp <= 0 || d.tired >= 100)  /*小雞陣亡*/
         {
@@ -7417,8 +7417,8 @@ int mode)
             else
             {
                 d.hp = d.maxhp / 3 + 10;
-                d.hexp -= rand() % 3 + 2;
-                d.mexp -= rand() % 3 + 2;
+                d.hexp -= random() % 3 + 2;
+                d.mexp -= random() % 3 + 2;
                 d.tired = 50;
                 d.death = 1;
             }
@@ -7493,48 +7493,48 @@ int mode)
             switch (pipkey)
             {
             case '1':
-                if (rand() % 9 == 0)
+                if (random() % 9 == 0)
                 {
                     vmsg("竟然沒打中..:~~~");
                 }
                 else
                 {
                     if (mresistmode == 0)
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - m.resist / 8 + rand() % 12 + 2 - m.speed / 30 + d.speed / 30);
+                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - m.resist / 8 + random() % 12 + 2 - m.speed / 30 + d.speed / 30);
                     else
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - m.resist / 6 + rand() % 12 + 2 - m.speed / 30 + d.speed / 30);
+                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - m.resist / 6 + random() % 12 + 2 - m.speed / 30 + d.speed / 30);
                     if (dinjure <= 0)
                         dinjure = 9;
                     m.hp -= dinjure;
-                    d.hexp += rand() % 2 + 2;
-                    d.hskill += rand() % 2 + 1;
+                    d.hexp += random() % 2 + 2;
+                    d.hskill += random() % 2 + 1;
                     sprintf(buf, "普通攻擊，對方生命力減低%d", dinjure);
                     vmsg(buf);
                 }
-                d.tired += rand() % (n + 1) / 15 + 2;
+                d.tired += random() % (n + 1) / 15 + 2;
                 break;
 
             case '2':
                 show_fight_pic(2);
-                if (rand() % 11 == 0)
+                if (random() % 11 == 0)
                 {
                     vmsg("竟然沒打中..:~~~");
                 }
                 else
                 {
                     if (mresistmode == 0)
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - m.resist / 12 + rand() % 12 + 6 - m.speed / 50 + d.speed / 30);
+                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - m.resist / 12 + random() % 12 + 6 - m.speed / 50 + d.speed / 30);
                     else
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - m.resist / 8 + rand() % 12 + 6 - m.speed / 40 + d.speed / 30);
+                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - m.resist / 8 + random() % 12 + 6 - m.speed / 40 + d.speed / 30);
                     if (dinjure <= 15)
                         dinjure = 20;
                     if (d.hp > 5)
                     {
                         m.hp -= dinjure;
                         d.hp -= 5;
-                        d.hexp += rand() % 3 + 3;
-                        d.hskill += rand() % 2 + 2;
-                        d.tired += rand() % (n + 1) / 10 + 3;
+                        d.hexp += random() % 3 + 3;
+                        d.hskill += random() % 2 + 2;
+                        d.tired += random() % (n + 1) / 10 + 3;
                         sprintf(buf, "全力攻擊，對方生命力減低%d", dinjure);
                         vmsg(buf);
                     }
@@ -7564,41 +7564,41 @@ int mode)
                     }
                     else
                     {
-                        if (rand() % 15 == 0)
+                        if (random() % 15 == 0)
                             vmsg("竟然沒打中..:~~~");
                         else
                         {
                             if (d.mexp <= 100)
                             {
-                                if (rand() % 4 > 0)
+                                if (random() % 4 > 0)
                                     dinjure = dinjure * 60 / 100;
                                 else
                                     dinjure = dinjure * 80 / 100;
                             }
                             else if (d.mexp <= 250 && d.mexp > 100)
                             {
-                                if (rand() % 4 > 0)
+                                if (random() % 4 > 0)
                                     dinjure = dinjure * 70 / 100;
                                 else
                                     dinjure = dinjure * 85 / 100;
                             }
                             else if (d.mexp <= 500 && d.mexp > 250)
                             {
-                                if (rand() % 4 > 0)
+                                if (random() % 4 > 0)
                                     dinjure = dinjure * 85 / 100;
                                 else
                                     dinjure = dinjure * 95 / 100;
                             }
                             else if (d.mexp > 500)
                             {
-                                if (rand() % 10 > 0)
+                                if (random() % 10 > 0)
                                     dinjure = dinjure * 90 / 100;
                                 else
                                     dinjure = dinjure * 99 / 100;
                             }
                             if ((p[n].special[d.magicmode-2] - 48) == 1)
                             {
-                                if (rand() % 2 > 0)
+                                if (random() % 2 > 0)
                                 {
                                     dinjure = dinjure * 125 / 100;
                                 }
@@ -7609,7 +7609,7 @@ int mode)
                             }
                             else
                             {
-                                if (rand() % 2 > 0)
+                                if (random() % 2 > 0)
                                 {
                                     dinjure = dinjure * 60 / 100;
                                 }
@@ -7618,10 +7618,10 @@ int mode)
                                     dinjure = dinjure * 75 / 100;
                                 }
                             }
-                            d.tired += rand() % (n + 1) / 12 + 2;
+                            d.tired += random() % (n + 1) / 12 + 2;
                             m.hp -= dinjure;
-                            /*d.mexp+=rand()%2+2;*/
-                            d.mskill += rand() % 2 + 2;
+                            /*d.mexp+=random()%2+2;*/
+                            d.mskill += random() % 2 + 2;
                             sprintf(buf, "魔法攻擊，對方生命力減低%d", dinjure);
                             vmsg(buf);
                         }
@@ -7630,7 +7630,7 @@ int mode)
                 break;
             case '4':
                 dresistmode = 1;
-                d.tired += rand() % (n + 1) / 20 + 1;
+                d.tired += random() % (n + 1) / 20 + 1;
                 vmsg("小雞加強防禦啦....");
                 break;
 
@@ -7640,8 +7640,8 @@ int mode)
                 break;
 
             case '6':
-                d.money -= (rand() % 100 + 30);
-                d.brave -= (rand() % 3 + 2);
+                d.money -= (random() % 100 + 30);
+                d.brave -= (random() % 3 + 2);
                 if (d.money < 0)
                     d.money = 0;
                 if (d.hskill < 0)
@@ -7729,7 +7729,7 @@ int mode)
         if ((m.hp > 0) && (pipkey != '6') && (pipkey == '1' || pipkey == '2' || pipkey == '3' || pipkey == '4' || pipkey == '5') && (d.death == 0) && (d.nodone == 0))
         {
             mresistmode = 0;
-            lucky = rand() % 100;
+            lucky = random() % 100;
             if (lucky >= 0 && lucky <= 50)
                 mankey = 1;
             else if (lucky >= 51 && lucky <= 84)
@@ -7741,27 +7741,27 @@ int mode)
             switch (mankey)
             {
             case 1:
-                if (rand() % 6 == 5)
+                if (random() % 6 == 5)
                 {
                     vmsg("對方沒打中..:~~~");
                 }
                 else
                 {
                     if (dresistmode == 0)
-                        minjure = (m.attack / 9 - d.resist / 12 + rand() % 15 + 4 - d.speed / 30 + m.speed / 30 - d.hskill / 200 - d.hexp / 200);
+                        minjure = (m.attack / 9 - d.resist / 12 + random() % 15 + 4 - d.speed / 30 + m.speed / 30 - d.hskill / 200 - d.hexp / 200);
                     else
-                        minjure = (m.attack / 9 - d.resist / 8 + rand() % 12 + 4 - d.speed / 50 + m.speed / 20 - d.hskill / 200 - d.hexp / 200);
+                        minjure = (m.attack / 9 - d.resist / 8 + random() % 12 + 4 - d.speed / 50 + m.speed / 20 - d.hskill / 200 - d.hexp / 200);
                     if (minjure <= 0)
                         minjure = 8;
                     d.hp -= minjure;
-                    d.tired += rand() % 3 + 2;
+                    d.tired += random() % 3 + 2;
                     sprintf(buf, "對方普通攻擊，生命力減低%d", minjure);
                     vmsg(buf);
                 }
                 break;
 
             case 2:
-                if (rand() % 11 == 10)
+                if (random() % 11 == 10)
                 {
                     vmsg("對方沒打中..:~~~");
                 }
@@ -7770,27 +7770,27 @@ int mode)
                     if (m.hp > 5)
                     {
                         if (dresistmode == 0)
-                            minjure = (m.attack / 5 - d.resist / 12 + rand() % 12 + 6 - d.speed / 30 + m.speed / 30 - d.hskill / 200 - d.hexp / 200);
+                            minjure = (m.attack / 5 - d.resist / 12 + random() % 12 + 6 - d.speed / 30 + m.speed / 30 - d.hskill / 200 - d.hexp / 200);
                         else
-                            minjure = (m.attack / 5 - d.resist / 8 + rand() % 12 + 6 - d.speed / 30 + m.speed / 30 - d.hskill / 200 - d.hexp / 200);
+                            minjure = (m.attack / 5 - d.resist / 8 + random() % 12 + 6 - d.speed / 30 + m.speed / 30 - d.hskill / 200 - d.hexp / 200);
                         if (minjure <= 15)
                             minjure = 20;
                         d.hp -= minjure;
                         m.hp -= 5;
                         sprintf(buf, "對方全力攻擊，生命力減低%d", minjure);
-                        d.tired += rand() % 4 + 4;
+                        d.tired += random() % 4 + 4;
                         vmsg(buf);
                     }
                     else
                     {
                         if (dresistmode == 0)
-                            minjure = (m.attack / 9 - d.resist / 12 + rand() % 12 + 4 - d.speed / 30 + m.speed / 25 - d.hexp / 200 - d.hskill / 200);
+                            minjure = (m.attack / 9 - d.resist / 12 + random() % 12 + 4 - d.speed / 30 + m.speed / 25 - d.hexp / 200 - d.hskill / 200);
                         else
-                            minjure = (m.attack / 9 - d.resist / 8 + rand() % 12 + 3 - d.speed / 30 + m.speed / 25 - d.hexp / 200 - d.hskill / 200);
+                            minjure = (m.attack / 9 - d.resist / 8 + random() % 12 + 3 - d.speed / 30 + m.speed / 25 - d.hexp / 200 - d.hskill / 200);
                         if (minjure <= 0)
                             minjure = 4;
                         d.hp -= minjure;
-                        d.tired += rand() % 3 + 2;
+                        d.tired += random() % 3 + 2;
                         sprintf(buf, "對方普通攻擊，生命力減低%d", minjure);
                         vmsg(buf);
                     }
@@ -7798,15 +7798,15 @@ int mode)
                 break;
 
             case 3:
-                if (rand() % 5 > 3 && m.mp > 20)
+                if (random() % 5 > 3 && m.mp > 20)
                 {
-                    if (rand() % 6 > 0 && m.mp >= 50 && m.hp > (m.maxhp / 10))
+                    if (random() % 6 > 0 && m.mp >= 50 && m.hp > (m.maxhp / 10))
                     {
                         if (m.mp >= (m.maxmp / 2))
                         {
                             minjure = m.maxmp / 4;
-                            m.mp -= (500 - rand() % 300);
-                            if (rand() % 2)
+                            m.mp -= (500 - random() % 300);
+                            if (random() % 2)
                                 sprintf(inbuf1, "熱火魔");
                             else
                                 sprintf(inbuf1, "寒氣鬼");
@@ -7814,8 +7814,8 @@ int mode)
                         else if (m.mp < (m.maxmp / 2) && m.mp >= (m.maxmp / 4))
                         {
                             minjure = m.maxmp / 5;
-                            m.mp -= (300 + rand() % 200);
-                            if (rand() % 2)
+                            m.mp -= (300 + random() % 200);
+                            if (random() % 2)
                                 sprintf(inbuf1, "狂水怪");
                             else
                                 sprintf(inbuf1, "怒土虫");
@@ -7823,8 +7823,8 @@ int mode)
                         else if (m.mp < (m.maxmp / 4) && m.mp >= (m.maxmp / 6))
                         {
                             minjure = m.maxmp / 6;
-                            m.mp -= (100 + rand() % 100);
-                            if (rand() % 2)
+                            m.mp -= (100 + random() % 100);
+                            if (random() % 2)
                                 sprintf(inbuf1, "迷魂鬼差");
                             else
                                 sprintf(inbuf1, "石怪");
@@ -7833,24 +7833,24 @@ int mode)
                         {
                             minjure = m.maxmp / 8;
                             m.mp -= 50;
-                            if (rand() % 2)
+                            if (random() % 2)
                                 sprintf(inbuf1, "鬼木魂");
                             else
                                 sprintf(inbuf1, "風妖");
                         }
-                        minjure = minjure - d.resist / 50 - d.mresist / 10 - d.mskill / 200 - d.mexp / 200 + rand() % 10;
+                        minjure = minjure - d.resist / 50 - d.mresist / 10 - d.mskill / 200 - d.mexp / 200 + random() % 10;
                         if (minjure < 0)
                             minjure = 15;
                         d.hp -= minjure;
                         if (m.mp < 0) m.mp = 0;
-                        d.mresist += rand() % 2 + 1;
+                        d.mresist += random() % 2 + 1;
                         sprintf(buf, "對方召喚了%s，你受傷了%d點", inbuf1, minjure);
                         vmsg(buf);
                     }
                     else
                     {
                         m.mp -= 20;
-                        m.hp += (m.maxmp / 6) + rand() % 20;
+                        m.hp += (m.maxmp / 6) + random() % 20;
                         if (m.hp > m.maxhp)
                             m.hp = m.maxhp;
                         vmsg("對方使用魔法治療了自己...");
@@ -7864,9 +7864,9 @@ int mode)
                 break;
 
             case 4:
-                d.money += (m.money + m.money / 2) / 3 + rand() % 10;
-                d.hskill += rand() % 4 + 3;
-                d.brave += rand() % 3 + 2;
+                d.money += (m.money + m.money / 2) / 3 + random() % 10;
+                d.hskill += random() % 4 + 3;
+                d.brave += random() % 3 + 2;
                 m.death = 1;
                 sprintf(buf, "對方先閃了..但掉了一些錢給你...");
                 vmsg(buf);
@@ -7877,7 +7877,7 @@ int mode)
         if (m.death == 1)
         {
             clear();
-            oldexp = ((d.hexp - oldhexp) + (d.mexp - oldmexp) + rand() % 10) * (d.level + 1) + rand() % (d.level + 1);
+            oldexp = ((d.hexp - oldhexp) + (d.mexp - oldmexp) + random() % 10) * (d.level + 1) + random() % (d.level + 1);
             d.exp += oldexp;
             vs_head("電子養小雞", BoardName);
             if (mode == 1)
@@ -7951,7 +7951,7 @@ get_hurt(int hurt, int mexp)
     if (mexp > 14000)
         mexp = 14000;
     mexp = (int)mexp / 100;
-    if (rand() % 5 > 0)
+    if (random() % 5 > 0)
         dinjure = (int)hurt * (60 + mexp) / 100;
     else
         dinjure = (int)hurt * (70 + mexp) / 100;
@@ -8125,10 +8125,10 @@ struct magicset *p)
             }
             else
             {
-                injure = (p[pipkey].hp + (d.maxmp / 8) - rand() % 5);
+                injure = (p[pipkey].hp + (d.maxmp / 8) - random() % 5);
                 d.mp -= p[pipkey].needmp;
             }
-            d.mexp += rand() % 3 + pipkey;
+            d.mexp += random() % 3 + pipkey;
         }
         else
         {
@@ -8198,9 +8198,9 @@ UTMP *opt)
         getdata(17, 4, "確定使用嗎? [Y/n]: ", ans, 2, 1, 0);
         if (ans[0] != 'n' && ans[0] != 'N')
         {
-            injure = (opt->pip->hp * p[mg[pipkey]].hp / 100 - rand() % 300);
+            injure = (opt->pip->hp * p[mg[pipkey]].hp / 100 - random() % 300);
             d.mp -= p[mg[pipkey]].needmp;
-            d.mexp += rand() % 30 + pipkey + 100;
+            d.mexp += random() % 30 + pipkey + 100;
             cutmp->pip->mode = - mg[pipkey];
         }
         else
@@ -8239,11 +8239,11 @@ pip_marriage_offer(void)
     };
     do
     {
-        who = rand() % 5;
+        who = random() % 5;
     }
     while (d.lover == (who + 3));
 
-    money = rand() % 2000 + rand() % 3000 + 4000;
+    money = random() % 2000 + random() % 3000 + 4000;
     sprintf(buf, "%s帶來了金錢%d，要向你的小雞求婚，您願意嗎？[y/N]: ", name[who][d.sex-1], money);
     getdata(b_lines - 1, 1, buf, ans, 2, 1, 0);
     if (ans[0] == 'y' || ans[0] == 'Y')
@@ -8258,9 +8258,9 @@ pip_marriage_offer(void)
                 vmsg("還是維持舊婚約好了..");
                 return 0;
             }
-            d.social -= rand() % 50 + 100;
+            d.social -= random() % 50 + 100;
         }
-        d.charm -= rand() % 5 + 20;
+        d.charm -= random() % 5 + 20;
         d.lover = who + 3;
         d.relation -= 20;
         if (d.relation < 0)
@@ -8276,7 +8276,7 @@ pip_marriage_offer(void)
     }
     else
     {
-        d.charm += rand() % 5 + 20;
+        d.charm += random() % 5 + 20;
         d.relation += 20;
         if (d.wantend == 1 || d.wantend == 4)
             vmsg("我還年輕  心情還不定...");
@@ -8311,7 +8311,7 @@ static int pip_results_show(void)  /*收穫季*/
     while (pipkey != 'q' && pipkey != 'Q' && pipkey != 'A' && pipkey != 'a' &&
            pipkey != 'B' && pipkey != 'b' && pipkey != 'C' && pipkey != 'c' &&
            pipkey != 'D' && pipkey != 'd');
-    a = rand() % 4 + 1;
+    a = random() % 4 + 1;
     b[0][0] = a - 1;
     b[1][0] = a + 1;
     b[2][0] = a;
@@ -8336,7 +8336,7 @@ static int pip_results_show(void)  /*收穫季*/
         {
         case 3:
             pip_results_show_ending(3, 1, b[1][0], b[0][0], b[2][0]);
-            d.hexp += rand() % 10 + 50;
+            d.hexp += random() % 10 + 50;
             break;
         case 2:
             if (b[0][1] != 1)
@@ -8358,7 +8358,7 @@ static int pip_results_show(void)  /*收穫季*/
                 c[2] = b[1][0];
             }
             pip_results_show_ending(2, 1, c[0], c[1], c[2]);
-            d.hexp += rand() % 10 + 30;
+            d.hexp += random() % 10 + 30;
             break;
         case 1:
             if (b[0][1] == 1)
@@ -8380,11 +8380,11 @@ static int pip_results_show(void)  /*收穫季*/
                 c[2] = b[2][0];
             }
             pip_results_show_ending(1, 1, c[0], c[1], c[2]);
-            d.hexp += rand() % 10 + 10;
+            d.hexp += random() % 10 + 10;
             break;
         case 0:
             pip_results_show_ending(0, 1, b[0][0], b[1][0], b[2][0]);
-            d.hexp -= rand() % 10 + 10;
+            d.hexp -= random() % 10 + 10;
             break;
         }
         break;
@@ -8409,9 +8409,9 @@ static int pip_results_show(void)  /*收穫季*/
         {
             winorlost = 0;
         }
-        pip_results_show_ending(winorlost, 2, rand() % 2, rand() % 2 + 2, rand() % 2 + 4);
-        d.art += rand() % 10 + 20 * winorlost;
-        d.character += rand() % 10 + 20 * winorlost;
+        pip_results_show_ending(winorlost, 2, random() % 2, random() % 2 + 2, random() % 2 + 4);
+        d.art += random() % 10 + 20 * winorlost;
+        d.character += random() % 10 + 20 * winorlost;
         break;
     case 'C':
     case 'c':
@@ -8432,9 +8432,9 @@ static int pip_results_show(void)  /*收穫季*/
         {
             winorlost = 0;
         }
-        d.art += rand() % 10 + 20 * winorlost;
-        d.charm += rand() % 10 + 20 * winorlost;
-        pip_results_show_ending(winorlost, 3, rand() % 2, rand() % 2 + 4, rand() % 2 + 2);
+        d.art += random() % 10 + 20 * winorlost;
+        d.charm += random() % 10 + 20 * winorlost;
+        pip_results_show_ending(winorlost, 3, random() % 2, random() % 2 + 4, random() % 2 + 2);
         break;
     case 'D':
     case 'd':
@@ -8455,25 +8455,25 @@ static int pip_results_show(void)  /*收穫季*/
         {
             winorlost = 0;
         }
-        d.cookskill += rand() % 10 + 20 * winorlost;
-        d.family += rand() % 10 + 20 * winorlost;
-        pip_results_show_ending(winorlost, 4, rand() % 2 + 2, rand() % 2, rand() % 2 + 4);
+        d.cookskill += random() % 10 + 20 * winorlost;
+        d.family += random() % 10 + 20 * winorlost;
+        pip_results_show_ending(winorlost, 4, random() % 2 + 2, random() % 2, random() % 2 + 4);
         break;
     case 'Q':
     case 'q':
         vmsg("今年不參加啦.....:(");
-        d.happy -= rand() % 10 + 10;
-        d.satisfy -= rand() % 10 + 10;
-        d.relation -= rand() % 10;
+        d.happy -= random() % 10 + 10;
+        d.satisfy -= random() % 10 + 10;
+        d.relation -= random() % 10;
         break;
     }
     if (pipkey != 'Q' && pipkey != 'q')
     {
         d.tired = 0;
         d.hp = d.maxhp;
-        d.happy += rand() % 20;
-        d.satisfy += rand() % 20;
-        d.relation += rand() % 10;
+        d.happy += random() % 20;
+        d.satisfy += random() % 20;
+        d.relation += random() % 10;
     }
     return 0;
 }
@@ -8911,7 +8911,7 @@ static int pip_fight_feed(void)     /* 餵食*/
             if (d.hp >= d.maxhp)
             {
                 d.hp = d.maxhp;
-                d.weight += rand() % 2;
+                d.weight += random() % 2;
             }
             d.nodone = 0;
             vmsg("每吃一次食物會恢復體力50喔!");
@@ -8930,18 +8930,18 @@ static int pip_fight_feed(void)     /* 餵食*/
             if (d.hp >= d.maxhp)
             {
                 d.hp = d.maxhp;
-                d.weight += (rand() % 2 + 2);
+                d.weight += (random() % 2 + 2);
             }
             else
             {
-                d.weight += (rand() % 2 + 1);
+                d.weight += (random() % 2 + 1);
             }
-            if (rand() % 2 > 0)
+            if (random() % 2 > 0)
                 show_feed_pic(2);
             else
                 show_feed_pic(3);
-            d.happy += (rand() % 3 + 4);
-            d.satisfy += rand() % 3 + 2;
+            d.happy += (random() % 3 + 4);
+            d.satisfy += random() % 3 + 2;
             d.nodone = 0;
             vmsg("吃零食容易胖喔...");
             break;
@@ -8956,7 +8956,7 @@ static int pip_fight_feed(void)     /* 餵食*/
             d.bighp--;
             d.hp += 600;
             d.tired -= 20;
-            d.weight += rand() % 2;
+            d.weight += random() % 2;
             move(4, 0);
             show_feed_pic(4);
             d.nodone = 0;
