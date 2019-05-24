@@ -525,6 +525,7 @@ utmp_setup(
 
     strcpy(utmp.userid, cuser.userid);
     srand(time(0));
+    srandom(time(0));
     strcpy(utmp.username, ((!str_cmp(cuser.userid, "guest")||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
     strcpy(utmp.realname, cuser.realname);
     /* str_ncpy(utmp.from, fromhost, sizeof(utmp.from) - 1); */
