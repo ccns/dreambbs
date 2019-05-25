@@ -1,4 +1,8 @@
-related commands:
+# Indentation Style
+
+This page describes the indentation style for the DreamBBS project.
+
+## Related commands
 
 ```
 find . -name "*.c" -execdir sh -c "indent -st -bap -bli0 -i4 -l79 -ncs -npcs -npsl -fca -lc79 -fc1 -ts4 {} > {}.new " \;
