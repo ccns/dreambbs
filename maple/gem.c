@@ -1316,7 +1316,7 @@ gem_cross(
 
     ghdr = gem_check(xo, NULL, GEM_READ);
     tag = AskTag("Âà¶K");
-    if ((tag < 0) || (tag==0 && (ghdr->xmode & GEM_FOLDER)))
+    if ((tag < 0) || (tag==0 && (!ghdr || ghdr->xmode & GEM_FOLDER)))
         return XO_FOOT;
 
 
