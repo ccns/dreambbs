@@ -1,7 +1,7 @@
 # Changelog
 
-Elastically records and sort changes recently.
+This page is for recording and sorting recent code changes.
 
-Confirm changes in release version will record in `CHANGELOG`   in repository and release notes.
+Confirmed and sorted changes in the release version will be moved into `CHANGELOG` in the repository and the release notes.
 
 ## To be continued
