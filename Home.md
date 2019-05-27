@@ -3,7 +3,7 @@
 This wiki has been created to gathers information about how to use & how to install the DreamBBS system. :)
 
 ## Latest Release
-  + [Version 1.1.0 (codename: Milim)](https://github.com/ccns/dreambbs/releases/tag/v1.1.0)
+  + [Version 1.1.1 (codename: Milim)](https://github.com/ccns/dreambbs/releases/tag/v1.1.1)
 
 ## Installation Guide (程式安裝手冊)
 
