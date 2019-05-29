@@ -13,6 +13,10 @@
 enum
 {STRIP_ALL, ONLY_COLOR, NO_RELOAD};
 
+/* For `genpasswd()` */
+#define GENPASSWD_DES      0
+#define GENPASSWD_SHA256   5
+
 /* ----------------------------------------------------- */
 /* user ¾Þ§@ª¬ºA»P¼Ò¦¡                                   */
 /* ----------------------------------------------------- */

@@ -232,7 +232,7 @@ bsmtp(
         struct {
             unsigned int hash, hash2;
         } val;
-    } sign;
+    } sign = {{0}};
 
     *prikey = prikey[PLAINPASSLEN-1] = sign.str[PLAINPASSLEN-1] = '\0'; /* Thor.990413:註解: 字串結束 */
 #endif
@@ -410,7 +410,7 @@ bsmtp(
             str_xor(sign.str, prikey);
             /* Thor.990413: 不加()的話, 時間尾空白會被吃掉(驗證時) */
             fprintf(fw, "\x1b[1;32m※ X-Info: \x1b[33m%s\x1b[m\r\n\x1b[1;32m※ X-Sign: \x1b[36m%s%s \x1b[37m(%s)\x1b[m\r\n",
-                buf, msgid, genpasswd(sign.str), Btime(&stamp));
+                buf, msgid, gensignature(sign.str), Btime(&stamp));
         }
 #endif
         fputs("\r\n.\r\n", fw);
@@ -448,7 +448,7 @@ smtp_log:
     sprintf(buf, "%s%-13s%c> %s %s %s\n\t%s\n\t%s\n", Btime(&stamp), cuser.userid,
         ((method == MQ_JUSTIFY) ? '=' : '-'), rcpt, msgid,
 #ifdef HAVE_SIGNED_MAIL
-            *prikey ? genpasswd(sign.str): "NoPriKey",
+            *prikey ? gensignature(sign.str): "NoPriKey",
 #else
             "",
 #endif
@@ -658,6 +658,8 @@ smtp_file_log:
 
 #ifdef HAVE_SIGNED_MAIL
 /* Thor.990413: 提供驗證功能 */
+
+#define SIGNATURELEN  (PASSLEN-1-3 + PASSHASHLEN-1-1 + 1)
 int
 m_verify(void)
 {
@@ -673,7 +675,7 @@ m_verify(void)
         struct {
             unsigned int hash, hash2;
         } val;
-    } s;
+    } s = {{0}};
 
     prikey[PLAINPASSLEN-1] = s.str[PLAINPASSLEN-1] = '\0'; /* Thor.990413:註解: 字串結束 */
 
@@ -703,7 +705,7 @@ m_verify(void)
         q += 11;
     while (*q == ' ') q++;
 
-    if (strlen(q) < 7 + PASSLEN-1)
+    if (strlen(q) < 7 + PASSLEN-1 || (isalnum(q[7+PASSLEN-1]) && strlen(q) < 7 + SIGNATURELEN-1))
     {
         vmsg("電子簽章有誤");
         return 0;
@@ -713,7 +715,10 @@ m_verify(void)
     chrono = chrono32(s.str); /* prefix 1 char */
 
     q += 7; /* real sign */
-    q[PASSLEN-1] = 0; /* 補尾0 */
+    if (isalnum(q[PASSLEN-1]))
+        q[SIGNATURELEN-1] = 0; /* 補尾0 */
+    else
+        q[PASSLEN-1] = 0; /* 補尾0 */
 
     s.val.hash = str_hash(p, chrono);
     s.val.hash2 = str_hash2(p, s.val.hash);
@@ -721,7 +726,7 @@ m_verify(void)
 
     sprintf(buf, "(%s)", Btime(&chrono));
 
-    if (chkpasswd(q, s.str) || strcmp(q + PASSLEN, buf))
+    if (chksignature(q, s.str) || strcmp(q + ((isalnum(q[PASSLEN-1])) ? SIGNATURELEN : PASSLEN), buf))
     {
         /* Thor.990413: log usage */
         sprintf(buf, "%s@%s - XInfo:%s", rusername, fromhost, p);

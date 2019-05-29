@@ -20,7 +20,8 @@
 
 static inline void
 showpasswd(
-    char *passwd)
+    char *passwd,
+    char *passhash)
 {
     int i;
     char guess[PLAINPASSLEN];
@@ -44,7 +45,7 @@ showpasswd(
             guess[i + 1]++;
         }
 
-        if (!chkpasswd(passwd, guess))
+        if (!chkpasswd(passwd, passhash, guess))
         {
             printf("±K½X: %s \n", guess);
             break;
@@ -115,7 +116,7 @@ showACCT(
         acct->email);
 
 #ifdef SHOW_PASSWORD
-    showpasswd(acct->passwd);
+    showpasswd(acct->passwd, acct->passhash);
 #endif
 }
 

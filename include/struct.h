@@ -19,8 +19,9 @@
 #define TTLEN           72             /* Length of title */
 #define FNLEN           28             /* Length of filename  */
 #define IDLEN           12             /* Length of board / user id */
-#define PASSLEN         14             /* Length of encrypted passwd field */
+#define PASSLEN         14             /* Length of (salt-part) encrypted passwd field */
 #define PLAINPASSLEN    9              /* Length of plaintext passwd field */
+#define PASSHASHLEN     45             /* Length of hash-part encrypted passwd field */
 #define BCLEN           4              /* Length of board class */
 #define ANSILINELEN     500            /* Maximum Screen width in chars¡A¤£¯à¶W¹L 1023 */
 

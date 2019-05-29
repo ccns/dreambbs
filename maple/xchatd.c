@@ -1859,8 +1859,8 @@ login_user(
     /* Thor.0813: 改用真實 password check, for C/S bbs */
 
     /* Thor.990214: 注意, daolib中 非0代表失敗 */
-    /* if (!chkpasswd(acct.passwd, passwd)) */
-    if (chkpasswd(acct.passwd, passwd))
+    /* if (!chkpasswd(acct.passwd, acct.passhash, passwd)) */
+    if (chkpasswd(acct.passwd, acct.passhash, passwd))
     {
 
 #ifdef  DEBUG

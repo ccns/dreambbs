@@ -6,7 +6,7 @@ new_passwd(void)
     ACCT acct;
     FILE *fp;
     int ans, fd;
-    char Email[61], passwd[PLAINPASSLEN];
+    char Email[61], passwd[PLAINPASSLEN], *pw;
 
     srand(time(0));
     move(22, 0);
@@ -34,7 +34,8 @@ new_passwd(void)
                     passwd[fd] = (passwd[fd] % 26) + ((passwd[fd] % 52 >= 26) ? 'a' : 'A');
                 }
                 passwd[PLAINPASSLEN-1] = '\0';
-                str_ncpy(acct.passwd, genpasswd(passwd), PASSLEN);
+                str_ncpy(acct.passwd, pw = genpasswd(passwd, GENPASSWD_SHA256), PASSLEN);
+                str_ncpy(acct.passhash, pw + PASSLEN, sizeof(acct.passhash));
                 acct_save(&acct);
                 do
                 {

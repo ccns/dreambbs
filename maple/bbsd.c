@@ -341,7 +341,7 @@ acct_apply(void)
 {
     SCHEMA slot;
     char buf[80];
-    char *userid;
+    char *userid, *pw;
     int try, fd;
 
     film_out(FILM_APPLY, 0);
@@ -387,7 +387,8 @@ acct_apply(void)
         vmsg("密碼輸入錯誤，請重新輸入密碼");
     }
 
-    str_ncpy(cuser.passwd, genpasswd(buf), PASSLEN);
+    str_ncpy(cuser.passwd, pw = genpasswd(buf, GENPASSWD_SHA256), PASSLEN);
+    str_ncpy(cuser.passhash, pw + PASSLEN, sizeof(cuser.passhash));
 
     do
     {
@@ -644,7 +645,7 @@ tn_login(void)
 
             passbuf[PLAINPASSLEN-1] = '\0';
 
-            if (chkpasswd(cuser.passwd, passbuf))
+            if (chkpasswd(cuser.passwd, cuser.passhash, passbuf))
             {
                 logattempt('-');
                 vmsg(ERR_PASSWD);

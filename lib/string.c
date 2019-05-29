@@ -774,6 +774,18 @@ char *str_ndup(char *src, int len)
 #define PLAINPASSLEN 9
 #endif
 
+#ifndef PASSHASHLEN
+#define PASSHASHLEN 45
+#endif
+
+#ifndef SHA256_SALT
+#define SHA256_SALT "$5$"
+#endif
+
+#ifndef GENPASSWD_DES
+#define GENPASSWD_DES      0
+#define GENPASSWD_SHA256   5
+#endif
 
 /* ----------------------------------------------------- */
 /* password encryption                                   */
@@ -799,21 +811,34 @@ char *getrandom_bytes(char *buf, size_t buflen)
 }
 
 char *crypt(const char *key, const char *salt);
-static char pwbuf[PASSLEN];
+static char pwbuf[PASSLEN + PASSHASHLEN];
 
-char *genpasswd(char *pw)
+/* `mode`: Encryption method
+    `GENPASSWD_SHA256` (5): SHA-256
+    `GENPASSWD_DES` (0) / otherwise: DES
+*/
+char *genpasswd(char *pw, int mode)
 {
-    char saltc[2];
+    char saltc[PASSLEN], *hash;
     int i, c;
 
     if (!*pw)
         return pw;
 
+    c = 0;
+    if (mode == GENPASSWD_SHA256)
+    {
+        memcpy(saltc, SHA256_SALT, 3);  /* IID.20190522: SHA-256. */
+        c += 3;
+    }
+
     /* IID.20190524: Get salt from the system PRNG device. */
-    if (!getrandom_bytes(saltc, 2))
+    if (!getrandom_bytes(saltc + c, PASSLEN-1 - c))
         return NULL;
 
-    for (i = 0; i < 2; i++)
+    saltc[PASSLEN-1] = '\0';
+
+    for (i = c; i < PASSLEN-1; i++)
     {
         c = (saltc[i] & 0x3f) + '.';
         if (c > '9')
@@ -823,20 +848,80 @@ char *genpasswd(char *pw)
         saltc[i] = c;
     }
     strcpy(pwbuf, pw);
-    return crypt(pwbuf, saltc);
+
+    if (!(hash = crypt(pwbuf, saltc)))
+    {
+        if (mode)
+            return genpasswd(pw, GENPASSWD_DES);  /* Fall back to DES encryption */
+        return NULL;
+    }
+    str_ncpy(pwbuf, hash, PASSLEN + PASSHASHLEN);
+
+    if (mode == GENPASSWD_SHA256)
+        memmove(pwbuf + PASSLEN, pwbuf + PASSLEN-1, PASSHASHLEN);  /* Prefix `passhash` with `$` */
+    else
+        pwbuf[PASSLEN] = '\0';  /* Make `passhash` an empty string */
+    pwbuf[PASSLEN-1] = '\0';
+    return pwbuf;
+}
+
+/* `genpasswd` for site signature */
+char *gensignature(char *pw)
+{
+    char *hash;
+
+    if (!(hash = genpasswd(pw, GENPASSWD_SHA256)))
+        return NULL;
+
+    if (hash[PASSLEN])  /* `genpasswd()` is not falled back */
+    {
+        memmove(hash, hash+3, PASSLEN-3);   /* Remove `SHA256_SALT` prefix */
+        memmove(hash + PASSLEN-1-3, hash + PASSLEN, PASSHASHLEN-1);   /* Remove `$` prefix for `passhash` */
+        hash[PASSLEN-1-3 + PASSHASHLEN-1-1] = '\0';
+    }
+    return hash;
 }
 
 
 /* Thor.990214: 註解: 合密碼時, 傳回0 */
-int chkpasswd(char *passwd, char *test)
+int chkpasswd(char *passwd, char *passhash, char *test)
 {
     char *pw;
 
     /* if (!*passwd) return -1 *//* Thor.990416: 怕有時passwd是空的 */
-    str_ncpy(pwbuf, test, PLAINPASSLEN);
-    pw = crypt(pwbuf, passwd);
-    return (strncmp(pw, passwd, PASSLEN));
+    if (*passwd == '$')   /* IID.20190522: `passhash` is the encrypted password. */
+    {
+        str_ncpy(pwbuf, test, PLAINPASSLEN);
+        pw = crypt(pwbuf, passwd) + PASSLEN;
+        return (strncmp(pw, passhash+1, PASSHASHLEN));  /* `passhash` is prefixed with `$` */
+    }
+    else  /* IID.20190522: `passwd` is the encrypted password; legacy/falled-back `passwd`. */
+    {
+        str_ncpy(pwbuf, test, PLAINPASSLEN);
+        pw = crypt(pwbuf, passwd);
+        return (strncmp(pw, passwd, PASSLEN));
+    }
 }
+
+/* `chkpasswd` for site signature */
+int chksignature(char *passwd, char *test)
+{
+    char saltc[PASSLEN], hashc[PASSHASHLEN];
+
+    if (strlen(passwd) <= PASSLEN-1)  /* Legacy/falled-back `passwd` */
+        return chkpasswd(passwd, NULL, test);
+
+    memcpy(saltc, SHA256_SALT, 3);  /* Restore `SHA256_SALT` prefix */
+    str_ncpy(saltc+3, passwd, PASSLEN-3);
+    saltc[PASSLEN-1] = '\0';
+
+    hashc[0] = '$';   /* Restore `$` prefix for `passhash` */
+    str_ncpy(hashc+1, passwd + PASSLEN-3, PASSHASHLEN-1);
+    hashc[PASSHASHLEN-1] = '\0';
+
+    return chkpasswd(saltc, hashc, test);
+}
+
 
 /* str_pat : wild card string pattern match support ? * \ */
 
