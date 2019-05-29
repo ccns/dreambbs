@@ -371,38 +371,50 @@ acct_apply(void)
             login_abort("\n您嘗試錯誤的輸入太多，請下次再來吧");
     }
 
+    /* IID.20190530: For forward compatibility with older versions */
+    if (vget(18, 0, "是否使用新式密碼加密(Y/N)？[N]", buf, 3, LCECHO) == 'y')
+    {
+        try = GENPASSWD_SHA256;
+        fd = PLAINPASSLEN;
+    }
+    else
+    {
+        try = GENPASSWD_DES;
+        fd = OLDPLAINPASSLEN;
+    }
+
     for (;;)
     {
-        vget(18, 0, "請設定密碼：", buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+        vget(19, 0, "請設定密碼：", buf, fd, NOECHO | VGET_STEALTH_NOECHO);
         if ((strlen(buf) < 3) || !strcmp(buf, userid))
         {
             vmsg("密碼太簡單易遭入侵，至少要 4 個字而且不可和代號相似");
             continue;
         }
 
-        vget(19, 0, "請檢查密碼：", buf + PLAINPASSLEN + 1, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+        vget(20, 0, "請檢查密碼：", buf + PLAINPASSLEN + 1, fd, NOECHO | VGET_STEALTH_NOECHO);
         if (!strcmp(buf, buf + PLAINPASSLEN + 1))
             break;
 
         vmsg("密碼輸入錯誤，請重新輸入密碼");
     }
 
-    str_ncpy(cuser.passwd, pw = genpasswd(buf, GENPASSWD_SHA256), PASSLEN);
+    str_ncpy(cuser.passwd, pw = genpasswd(buf, try), PASSLEN);
     str_ncpy(cuser.passhash, pw + PASSLEN, sizeof(cuser.passhash));
 
     do
     {
-        vget(19, 0, "暱    稱：", cuser.username, sizeof(cuser.username), DOECHO);
+        vget(20, 0, "暱    稱：", cuser.username, sizeof(cuser.username), DOECHO);
     } while (strlen(cuser.username) < 2);
 
     do
     {
-        vget(20, 0, "真實姓名：", cuser.realname, sizeof(cuser.realname), DOECHO);
+        vget(21, 0, "真實姓名：", cuser.realname, sizeof(cuser.realname), DOECHO);
     } while (strlen(cuser.realname) < 4);
 
     do
     {
-        vget(21, 0, "居住地址：", cuser.address, sizeof(cuser.address), DOECHO);
+        vget(22, 0, "居住地址：", cuser.address, sizeof(cuser.address), DOECHO);
     } while (strlen(cuser.address) < 12);
 
     cuser.point1 = 0;

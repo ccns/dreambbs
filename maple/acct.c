@@ -1161,17 +1161,29 @@ void acct_setup(ACCT * u, int adm)
     i++;
     for (;;)
     {
+        /* IID.20190530: For forward compatibility with older versions */
+        if (vget(++i, 0, "是否使用新式密碼加密(Y/N)？[N]", buf, 3, LCECHO) == 'y')
+        {
+            mode = GENPASSWD_SHA256;
+            num = PLAINPASSLEN;
+        }
+        else
+        {
+            mode = GENPASSWD_DES;
+            num = OLDPLAINPASSLEN;
+        }
+
         if (!vget
-            (++i, 0, "設定新密碼(不改請按 Enter)：", buf, /*PASSLEN*/ PLAINPASSLEN,
+            (++i, 0, "設定新密碼(不改請按 Enter)：", buf, /*PASSLEN*/ num,
              NOECHO | VGET_STEALTH_NOECHO))
             break;
 
         strcpy(pass, buf);
-        vget(i + 1, 0, "檢查新密碼：", buf, /*PASSLEN*/ PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+        vget(i + 1, 0, "檢查新密碼：", buf, /*PASSLEN*/ num, NOECHO | VGET_STEALTH_NOECHO);
         if (!strcmp(buf, pass))
         {
-            buf[PLAINPASSLEN-1] = '\0';
-            str_ncpy(x.passwd, str = genpasswd(buf, GENPASSWD_SHA256), PASSLEN);
+            buf[num-1] = '\0';
+            str_ncpy(x.passwd, str = genpasswd(buf, mode), PASSLEN);
             str_ncpy(x.passhash, str + PASSLEN, sizeof(x.passhash));
             i++;
             logitfile(FN_PASS_LOG, cuser.userid, cuser.lasthost);
