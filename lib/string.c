@@ -771,7 +771,7 @@ char *str_ndup(char *src, int len)
 #endif
 
 #ifndef PLAINPASSLEN
-#define PLAINPASSLEN 9
+#define PLAINPASSLEN 37
 #endif
 
 #ifndef PASSHASHLEN
