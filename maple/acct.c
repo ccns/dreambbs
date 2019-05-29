@@ -1150,7 +1150,7 @@ void acct_setup(ACCT * u, int adm)
     {
         /* pcbug.990813: 新PASSLEN過長, 改成直接寫死 */
         /*    vget(i, 0, "請確認密碼：", buf, PASSLEN, NOECHO); */
-        vget(i, 0, "請確認密碼：", buf, PLAINPASSLEN, NOECHO);
+        vget(i, 0, "請確認密碼：", buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
         if (chkpasswd(u->passwd, u->passhash, buf))
         {
             vmsg("密碼錯誤");
@@ -1163,11 +1163,11 @@ void acct_setup(ACCT * u, int adm)
     {
         if (!vget
             (++i, 0, "設定新密碼(不改請按 Enter)：", buf, /*PASSLEN*/ PLAINPASSLEN,
-             NOECHO))
+             NOECHO | VGET_STEALTH_NOECHO))
             break;
 
         strcpy(pass, buf);
-        vget(i + 1, 0, "檢查新密碼：", buf, /*PASSLEN*/ PLAINPASSLEN, NOECHO);
+        vget(i + 1, 0, "檢查新密碼：", buf, /*PASSLEN*/ PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
         if (!strcmp(buf, pass))
         {
             buf[PLAINPASSLEN-1] = '\0';
@@ -1954,7 +1954,7 @@ int u_lock(void)
         check = 0;
         do
         {
-            vget(7, 0, "▲ 請輸入密碼，以解除螢幕鎖定：", buf, PLAINPASSLEN, NOECHO);
+            vget(7, 0, "▲ 請輸入密碼，以解除螢幕鎖定：", buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
             check = chkpasswd(cuser.passwd, cuser.passhash, buf);
             if (check)
             {

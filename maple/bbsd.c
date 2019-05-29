@@ -373,14 +373,14 @@ acct_apply(void)
 
     for (;;)
     {
-        vget(18, 0, "請設定密碼：", buf, PLAINPASSLEN, NOECHO);
+        vget(18, 0, "請設定密碼：", buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
         if ((strlen(buf) < 3) || !strcmp(buf, userid))
         {
             vmsg("密碼太簡單易遭入侵，至少要 4 個字而且不可和代號相似");
             continue;
         }
 
-        vget(19, 0, "請檢查密碼：", buf + PLAINPASSLEN + 1, PLAINPASSLEN, NOECHO);
+        vget(19, 0, "請檢查密碼：", buf + PLAINPASSLEN + 1, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
         if (!strcmp(buf, buf + PLAINPASSLEN + 1))
             break;
 
@@ -638,7 +638,7 @@ tn_login(void)
         }
         else if (str_cmp(uid, STR_GUEST))
         {
-            if (!vget(21, d_cols + 26, MSG_PASSWD, passbuf, PLAINPASSLEN, NOECHO))
+            if (!vget(21, d_cols + 26, MSG_PASSWD, passbuf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO))
             {
                 continue;       /* 發現 userid 輸入錯誤，在輸入 passwd 時直接跳過 */
             }
