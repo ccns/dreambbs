@@ -1036,6 +1036,21 @@ tn_login(void)
 /* trap signals                                          */
 /* ----------------------------------------------------- */
 
+static void abort_bbs_signal(int signum)
+{
+    (void)signum;
+    abort_bbs();
+}
+void talk_rqst_signal(int signum)
+{
+    (void)signum;
+    talk_rqst();
+}
+static void bmw_rqst_signal(int signum)
+{
+    (void)signum;
+    bmw_rqst();
+}
 
 static void
 tn_signals(void)
@@ -1046,7 +1061,7 @@ tn_signals(void)
     sigemptyset(&act.sa_mask);
     act.sa_flags = 0;
 
-    act.sa_handler = (void (*)(int signum))abort_bbs;
+    act.sa_handler = abort_bbs_signal;
     sigaction(SIGBUS, &act, NULL);
     sigaction(SIGSEGV, &act, NULL);
     sigaction(SIGTERM, &act, NULL);
@@ -1056,10 +1071,10 @@ tn_signals(void)
     sigaction(SIGSYS, &act, NULL);/* bad argument to system call */
 #endif
 
-    act.sa_handler = (void (*)(int signum))talk_rqst;
+    act.sa_handler = talk_rqst_signal;
     sigaction(SIGUSR1, &act, NULL);
 
-    act.sa_handler = (void (*)(int signum))bmw_rqst;
+    act.sa_handler = bmw_rqst_signal;
     sigaction(SIGUSR2, &act, NULL);
 
     /* sigblock(sigmask(SIGPIPE)); */

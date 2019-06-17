@@ -1631,7 +1631,8 @@ igetch(void)
              * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
              * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
              */
-            signal(SIGUSR1, (void (*)(int signum))talk_rqst);
+            extern void (*talk_rqst_signal)(int signum);
+            signal(SIGUSR1, talk_rqst_signal);
 
             continue;
         }
