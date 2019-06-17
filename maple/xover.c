@@ -2115,8 +2115,6 @@ Every_Z_BMW(void)
     return 0;
 }
 
-extern int Every_Z_Screen(void);
-
 static MENU menu_everyz[] =
 {
 #ifdef HAVE_FAVORITE

@@ -8,10 +8,6 @@
 
 #include "bbs.h"
 
-extern int xo_uquery(XO *xo);
-extern int xo_usetup(XO *xo);
-extern int cmpchrono(const void *hdr);
-
 
 extern XZ xz[];
 extern char xo_pool[];

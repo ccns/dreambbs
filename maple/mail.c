@@ -8,10 +8,6 @@
 
 #include "bbs.h"
 
-extern int xo_delete(XO *xo);
-extern int xo_uquery(XO *xo);
-extern int xo_usetup(XO *xo);
-extern int post_cross(XO *xo);
 extern XZ xz[];
 
 extern int TagNum;

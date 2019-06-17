@@ -496,9 +496,6 @@ logattempt(
 /* µn¿ý BBS µ{¦¡                                         */
 /* ----------------------------------------------------- */
 
-extern void talk_rqst(void);
-extern void bmw_rqst(void);
-
 static void
 utmp_setup(
     int mode
