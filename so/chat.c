@@ -26,8 +26,6 @@ static FILE *fmail;
 #define stop_line       (b_lines - 2)
 
 
-extern char *bmode(UTMP *up, int simple);
-
 #ifdef EVERY_Z
 extern int vio_fd, holdon_fd;
 #endif
