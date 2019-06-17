@@ -66,7 +66,7 @@ bimage(
                 } while (--c);
 
                 if (count > 1)
-                    xsort(ubase, count, sizeof(int), (void *)int_cmp);
+                    xsort(ubase, count, sizeof(int), (int (*)(const void *lhs, const void *rhs))int_cmp);
 
                 brd_fpath(fpath, brd, "fimage");
 #ifndef FAKE_IO
@@ -221,7 +221,7 @@ pal_sync(
             if (size > 0)
             {
                 if (size > sizeof(PAL))
-                    xsort(pbase, size / sizeof(PAL), sizeof(PAL), (void *)str_cmp);
+                    xsort(pbase, size / sizeof(PAL), sizeof(PAL), (int (*)(const void *lhs, const void *rhs))str_cmp);
 #ifndef FAKE_IO
                 lseek(fd, 0, SEEK_SET);
                 write(fd, pbase, size);

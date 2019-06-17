@@ -134,7 +134,7 @@ XO *xo)
             if (total > 0)
             {
                 if (total > 1)
-                    xsort(pbase, total, sizeof(OBSERVE), (void *)str_cmp);
+                    xsort(pbase, total, sizeof(OBSERVE), (int (*)(const void *lhs, const void *rhs))str_cmp);
 
                 lseek(fd, 0, SEEK_SET);
                 write(fd, pbase, total * sizeof(OBSERVE));
