@@ -487,7 +487,7 @@ pal_cache(void)
             {
                 ufo |= UFO_FCACHE;
                 if (count > 1)
-                    xsort(cache, count, sizeof(int), (void *)int_cmp);
+                    xsort(cache, count, sizeof(int), (int (*)(const void *lhs, const void *rhs))int_cmp);
             }
             else
             {
@@ -645,7 +645,7 @@ pal_sync(
                 {
                     if (size > PAL_ALMR * sizeof(PAL))
                         vmsg("您的好友名單太多，請善加整理");
-                    xsort(pbase, size / sizeof(PAL), sizeof(PAL), (void *)str_cmp);
+                    xsort(pbase, size / sizeof(PAL), sizeof(PAL), (int (*)(const void *lhs, const void *rhs))str_cmp);
                 }
 
                 /* Thor.0709: 是否要加上消除重覆的好友的動作? */
@@ -4627,7 +4627,7 @@ banmsg_sync(
             {
                 if (size > sizeof(BANMSG))
                 {
-                    xsort(pbase, size / sizeof(BANMSG), sizeof(BANMSG), (void *)str_cmp);
+                    xsort(pbase, size / sizeof(BANMSG), sizeof(BANMSG), (int (*)(const void *lhs, const void *rhs))str_cmp);
                 }
 
                 lseek(fd, 0, SEEK_SET);
