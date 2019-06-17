@@ -8,7 +8,6 @@
 
 #include "bbs.h"
 
-extern int t_aloha(void);
 extern BCACHE *bshm;
 extern UCACHE *ushm;
 int item_length[20]={0};

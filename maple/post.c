@@ -20,10 +20,6 @@ extern LinkList *ll_head;
 #endif
 
 extern int can_message(UTMP *up);
-extern int cmpchrono(const void *hdr);
-extern int xo_delete(XO *xo);
-extern int xo_uquery_lite(XO *xo);
-extern int xo_usetup(XO *xo);
 /*extern int xo_fpath(char *fpath, char *dir, HDR *hdr);*/          /* lkchu.981201 */
 
 #ifdef  HAVE_DETECT_CROSSPOST
@@ -751,11 +747,6 @@ post_reply(
 /* ----------------------------------------------------- */
 /* 看板功能表                                            */
 /* ----------------------------------------------------- */
-
-#ifdef HAVE_MODERATED_BOARD
-extern int XoBM(XO *xo);
-#endif
-
 
 /* ----------------------------------------------------- */
 
