@@ -775,7 +775,7 @@ char *str_ndup(char *src, int len)
 /* password encryption                                   */
 /* ----------------------------------------------------- */
 
-char *crypt();
+char *crypt(const char *key, const char *salt);
 static char pwbuf[PASSLEN];
 
 char *genpasswd(char *pw)
