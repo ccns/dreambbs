@@ -125,8 +125,6 @@ int p_pipple(void)
     /* sprintf(genbuf, "home/%s/chicken", cuser.userid);*/
     usr_fpath(genbuf, cuser.userid, "chicken");
     pip_load_levelup("game/pipdata/piplevel.dat");
-    pip_load_mob("game/pipdata/pipmob.dat");
-    pip_load_mobset("game/pipdata/pipmobset.dat");
     pip_read_file(cuser.userid);
     if ((fs = fopen(genbuf, "r")) == NULL)
     {
@@ -163,6 +161,8 @@ int p_pipple(void)
     start_time = time(0);
     /*pip_do_menu(0, 0, pipmainlist);*/
     if (d.death != 0 || !d.name[0])  return 0;
+    pip_load_mob("game/pipdata/pipmob.dat");
+    pip_load_mobset("game/pipdata/pipmobset.dat");
     pip_main_menu();
     free(badmanlist);
     badmanlist = NULL;
