@@ -715,7 +715,7 @@ xo_forward(
 
     if (!mail_external(rcpt))    /* ¤¤³~ÄdºI */
     {
-        usr_fpath(ckforward, rcpt, "forward");
+        usr_fpath(ckforward, rcpt, FN_FORWARD);
         if (!access(ckforward, 0))
         {
             if (acct_load(&acct, rcpt) >= 0)

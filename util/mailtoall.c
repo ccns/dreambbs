@@ -67,7 +67,7 @@ send_to_all(char *title, char *fpath, char *bm)
 
     for (ptr=bm; strlen(ptr); ptr=ptr+IDLEN+1)
     {
-        usr_fpath(buf, ptr, ".DIR");
+        usr_fpath(buf, ptr, FN_DIR);
         hdr_stamp(buf, HDR_LINK, &mhdr, fpath);
         strcpy(mhdr.owner, "SYSOP");
         strcpy(mhdr.title, title);

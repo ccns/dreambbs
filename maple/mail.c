@@ -1310,7 +1310,7 @@ m_setmboxdir(void)
         chdir(fpath1);
         system(fpath2);
         system(fpath3);
-        chdir("/home/bbs");
+        chdir(BBSHOME);
 
         pmsg2("重建完成");
         return 0;
@@ -1446,7 +1446,7 @@ mail_send(
         unlink(fpath);
         return rc;
     }
-    usr_fpath(ckforward, rcpt, "forward");
+    usr_fpath(ckforward, rcpt, FN_FORWARD);
     if (access(ckforward, 0))
     {
         usr_fpath(folder, rcpt, fn_dir);

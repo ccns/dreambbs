@@ -600,7 +600,7 @@ main(
 
     ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
     cutmp = &utmp;
-    usr_fpath(fpath, argv[1], ".ACCT");
+    usr_fpath(fpath, argv[1], FN_ACCT);
     fd = open(fpath, O_RDONLY);
     if (fd>=0)
     {

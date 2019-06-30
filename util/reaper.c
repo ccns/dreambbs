@@ -316,7 +316,7 @@ report_eaddr_group(void)
                         fprintf(faddr, "==> %d) has been reapered\n", j);
                         continue;
                     }
-                    usr_fpath(buf, s.userid, ".ACCT");
+                    usr_fpath(buf, s.userid, FN_ACCT);
                     fd = open(buf, O_RDONLY, 0);
                     if (fd < 0)
                     {
@@ -653,9 +653,9 @@ main(void)
 #endif
 
 #ifdef EADDR_GROUPING
-    funo = open(".USR", O_RDWR | O_CREAT, 0600); /* Thor.980930: for read name */
+    funo = open(FN_SCHEMA, O_RDWR | O_CREAT, 0600);     /* Thor.980930: for read name */
 #else
-    funo = open(".USR", O_WRONLY | O_CREAT, 0600);
+    funo = open(FN_SCHEMA, O_WRONLY | O_CREAT, 0600);
 #endif
     if (funo < 0)
         exit(1);
