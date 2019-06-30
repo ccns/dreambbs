@@ -2,7 +2,7 @@
 /* cppdef.h     ( NCKU CCNS WindTop-DreamBBS 2.0)        */
 /*-------------------------------------------------------*/
 /* Author: 37586669+IepIweidieng@users.noreply.github.com*/
-/* Target: C preprocessor utilization macros             */
+/* Target: C preprocessor utility macros                 */
 /* Create: 2019/03/30                                    */
 /*-------------------------------------------------------*/
 
