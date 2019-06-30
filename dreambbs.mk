@@ -24,7 +24,7 @@ BBSHOME	?= $(HOME)
 
 ## To be expanded
 
-CFLAGS_WARN	= -Wall
+CFLAGS_WARN	= -Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Wstrict-prototypes
 CFLAGS_MK	= -ggdb3 -O0 -pipe -fomit-frame-pointer $(CFLAGS_WARN) -I$$(SRCROOT)/include $(CFLAGS_ARCHI) $(CFLAGS_COMPAT)
 
 LDFLAGS_MK = -L$$(SRCROOT)/lib -ldao -lcrypt $(LDFLAGS_ARCHI)
