@@ -40,7 +40,7 @@ bimage(
     int fd;
     char fpath[128];
 
-    brd_fpath(fpath, brd, "friend");
+    brd_fpath(fpath, brd, FN_PAL);
     if ((fd = open(fpath, O_RDONLY)) >= 0)
     {
         struct stat st;
@@ -155,7 +155,7 @@ bmw_sync(
         char folder[80], buf[128];
         HDR fhdr;
 
-        usr_fpath(folder, userid, ".DIR");
+        usr_fpath(folder, userid, FN_DIR);
 #ifndef FAKE_IO
         if ((fout = fdopen(hdr_stamp(folder, 0, &fhdr, buf), "w")))
         {

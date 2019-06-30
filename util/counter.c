@@ -66,7 +66,7 @@ main(
     sprintf(ymd, "%02d/%02d/%02d",
         ntime.tm_year % 100, ntime.tm_mon + 1, ntime.tm_mday);
 
-    fp = fopen("etc/counter", "a+");
+    fp = fopen(FN_ETC_COUNTER, "a+");
 
     count = attach_shm(COUNT_KEY, sizeof(COUNTER));
 
@@ -135,7 +135,7 @@ main(
             }
             count->cur_day_max_login = 0;
         }
-        if ((fd = open("run/var/counter", O_WRONLY | O_CREAT | O_TRUNC, 0600)))
+        if ((fd = open(FN_VAR_SYSHISTORY, O_WRONLY | O_CREAT | O_TRUNC, 0600)))
         {
             write(fd, count, sizeof(COUNTER));
             close(fd);

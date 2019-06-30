@@ -1805,7 +1805,7 @@ void su_setup(ACCT * u)
         //      showansi = nflag & UFO_COLOR;
         outs(str_ransi);
     }
-    usr_fpath(fpath, u->userid, "forward");
+    usr_fpath(fpath, u->userid, FN_FORWARD);
     if (u->ufo & UFO_FORWARD)
     {
         FILE *fd;
@@ -1848,7 +1848,7 @@ int u_setup(void)
         //      showansi = nflag & UFO_COLOR;
         outs(str_ransi);
     }
-    usr_fpath(fpath, cuser.userid, "forward");
+    usr_fpath(fpath, cuser.userid, FN_FORWARD);
     if (cuser.ufo & UFO_FORWARD)
     {
         FILE *fd;
@@ -1986,8 +1986,8 @@ int u_xfile(void)
 
     static char *path[] = {
         "acl",
-        "plans",
-        "sign",
+        FN_PLANS,
+        FN_SIGN,
         "buf.1",
         "buf.2",
         "buf.3",

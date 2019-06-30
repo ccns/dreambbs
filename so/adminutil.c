@@ -821,7 +821,7 @@ m_xhlp(void)
     {
         "gem/@/@AD",
         "gem/@/@apply",
-        "gem/@/@error-camera",
+        FN_ERROR_CAMERA,
         "gem/@/@income",
         "gem/@/@post",
         "gem/@/@tryout",

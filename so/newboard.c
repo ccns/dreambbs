@@ -512,7 +512,7 @@ XO *xo)
 
 #define FV_SZ   (sizeof(time_t))
 
-    usr_fpath(buf, cuser.userid, "newboard");
+    usr_fpath(buf, cuser.userid, FN_NEWBOARD);
     fv = open(buf, O_RDWR | O_CREAT, 0600);
     f_exlock(fv);
 

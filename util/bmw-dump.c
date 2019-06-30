@@ -27,7 +27,7 @@ main(
     }
 
     strcpy(fpath, BBSHOME"/");
-    usr_fpath(fpath + strlen(BBSHOME) + 1, argv[2], ".ACCT");
+    usr_fpath(fpath + strlen(BBSHOME) + 1, argv[2], FN_ACCT);
     inf = open(fpath, O_RDONLY);
     if (inf == -1)
     {

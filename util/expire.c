@@ -378,7 +378,7 @@ main(
     setuid(BBSUID);
     chdir(BBSHOME);
 
-    fd = open(".BRD", O_RDONLY);
+    fd = open(FN_BRD, O_RDONLY);
     if (fd < 0)
     {
         fprintf(stderr, "Error open .BRD file\n");
