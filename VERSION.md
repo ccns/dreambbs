@@ -56,7 +56,7 @@
     + `v2.0`: Version 2.X
         - Features in plan:
           * ~~Screen resizing feature.~~
-          * Workaround option for disabling DSO.
+          * ~~Workaround option for disabling DSO.~~
           * BBS-Lua/BBS-Ruby.
     + `v3.0 ~`: Version 3.X or later
         - Features in plan:
