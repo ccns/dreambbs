@@ -35,12 +35,11 @@ LDFLAGS_MK = -L$$(SRCROOT)/lib -ldao -lcrypt $(LDFLAGS_ARCHI)
 UNQUOTE = S/^"//:S/"$$//
 VALUEIF = "\#ifdef $(conf)$(.newline)$(conf:M*)$(.newline)\#else$(.newline)$(default:M*)$(.newline)\#endif"
 GETCONFS = echo "" | $(CC) -x c -dM -E -P $(hdr:@v@-imacros "$v"@) -
-GETVALUE = echo $(VALUEIF$(conf::= $(conf:M*:$(UNQUOTE)))$(default::= $(default:M*))) | $(CC) -x c -E -P $(hdr:@v@-imacros "$v"@) -
+GETVALUE = echo $(VALUEIF$(conf::= $(conf:M*:$(UNQUOTE)))$(default::= $(default:M*))) | $(CC) -x c -E -P $(hdr:@v@-imacros "$v"@) - | xargs
 
 ## BBS Release Version Prefix
 BBSCONF_ORIGIN		:= $(REALSRCROOT)/include/config.h
-#BBSVER != ${GETVALUE${conf::= "BBSVER_PREFIX"}${default::= ""}${hdr::= ${BBSCONF_ORIGIN}}}
-BBSVER = ""
+BBSVER != ${GETVALUE${conf::= "BBSVER_PREFIX"}${default::= ""}${hdr::= ${BBSCONF_ORIGIN}}}
 
 # rules ref: PttBBS: mbbsd/Makefile
 BBSCONF		:= $(REALSRCROOT)/dreambbs.conf
