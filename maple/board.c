@@ -593,6 +593,11 @@ brh_load(void)
             n = *list;
             size = n + 3;
 
+            if (n < 0 || head + size > tail) {
+                n = 0;
+                size = 3;
+            }
+
             /* 這個看板存在、沒有被 zap 掉、可以 read */
 
             if (bhno >= 0 && (bits[bhno] & BRD_R_BIT))
@@ -633,10 +638,6 @@ brh_load(void)
                     } while (n > 0);
 
                     head[2] = n;
-                }
-                else
-                {
-                    n = 0;
                 }
 
                 n = n * sizeof(time_t) + sizeof(BRH);
