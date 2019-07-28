@@ -32,7 +32,7 @@ $(target): $(target).o
 .endfor
 
 install: $(EXE)
-	install -m 0700 $? $(BBSHOME)/bin$(BBSVER)/
+	install -m 0700 $? "$(BBSHOME)/bin$(BBSVER)/"
 
 clean:
 	rm -fr $(EXE) *.o *.bak *.BAK *.log *~
