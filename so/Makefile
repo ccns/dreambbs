@@ -36,10 +36,7 @@ SO	= chat.so vote.so xyz.so guessnum.so \
 .o.so:  ;   ld -G $*.o -o $*.so -L../lib -ldao
 .endif #ARCHI
 
-all:
-	@$(MAKE) CC=$(CC) CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS)" $(EXE)
-
-so: $(SO)
+all: $(SO)
 
 install: $(SO)
 	install -m 0700 $(SO) "$(BBSHOME)/bin$(BBSVER)"
