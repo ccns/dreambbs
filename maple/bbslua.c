@@ -1356,7 +1356,7 @@ bl_kbreset(lua_State *L)
     if (bl_peekbreak(BLCONF_PEEK_TIME))
         return lua_yield(L, 0);
 
-#ifdef BBSLUA_EXPOSED_VISIO_VI
+#if defined(BBSLUA_HAVE_VKEY) || defined(BBSLUA_EXPOSED_VISIO_VI)
     vkey_purge();
 #else
     // `recv()`ed bytes/keys have not being checked; check purged keys
@@ -1439,7 +1439,7 @@ bl_kball(lua_State *L)
         i++;
     }
 #else
-#ifdef BBSLUA_EXPOSED_VISIO_VI
+#if defined(BBSLUA_HAVE_VKEY) || defined(BBSLUA_EXPOSED_VISIO_VI)
     while (i < LUA_MINSTACK && vkey_is_ready()) {
         bl_k2s(L, vkey());
         i++;
@@ -1465,7 +1465,7 @@ bl_kball(lua_State *L)
         i++;
     }
     add_io(0, ADD_IO_DEFAULT_TIMEOUT);
-#endif  // #ifndef BBSLUA_EXPOSED_VISIO_VI
+#endif  // #if defined(BBSLUA_HAVE_VKEY) || defined(BBSLUA_EXPOSED_VISIO_VI)
 #endif  // #ifdef _WIN32
 
     return i;
