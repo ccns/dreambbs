@@ -501,9 +501,6 @@ static MENU menu_load[] =
     {BINARY_PREFIX"adminutil.so:df", PERM_SYSOP, - M_XMODE,
     "FileSys    合盒╰参"},
 
-    {x_sysload, PERM_ADMIN, M_SYSTEM,
-    "Load       ╰参璽更"},
-
     {menu_admin, PERM_MENU + 'T', M_ADMIN,
     "╰参璽更"}
 };
