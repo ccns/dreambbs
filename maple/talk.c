@@ -3150,10 +3150,10 @@ ulist_body(
             if ((userno = up->userno) && (up->userid[0]) && !((up->ufo & UFO_CLOAK) && !HAS_PERM(PERM_SEECLOAK) && (up->userno != cuser.userno)) )
             {
                 if ((diff = up->idle_time))
-                    if (diff <= 9999)
-                        sprintf(buf, "%4d", diff);
+                    if (diff <= 1440)
+                        sprintf(buf, "%2d:%02d", diff / 60 , diff % 60);
                     else
-                        sprintf(buf, "\x1b[1;31m9999\x1b[m");
+                        sprintf(buf, "--:--");
                 else
                     buf[0] = '\0';
 
@@ -3199,7 +3199,7 @@ ulist_body(
 
                 strcpy(color, wcolor[fcolor]);
 
-                prints("%5d%c%s%-13s%-*.*s%s%-16.15s%c%c %-14.14s%s",
+                prints("%5d%c%s%-13s%-*.*s%s%-16.15s%c%c %-12.12s %5.5s",
                     cnt, (up->ufo & UFO_WEB)?'*':' ',
                     color, up->userid,
                     d_cols + 22, d_cols + 21,(HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
