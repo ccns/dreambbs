@@ -3,7 +3,7 @@
 /*-------------------------------------------------------*/
 /* target : VIrtual Screen Input Output routines         */
 /* create : 95/03/29                                     */
-/* update : 96/10/10                                     */
+/* update : 19/07/28                                     */
 /*-------------------------------------------------------*/
 
 
@@ -1557,20 +1557,19 @@ igetch(void)
                     }
 
                     cc = bbsmode;
-#ifdef KICK_IDLE_TIMEOUT
-                    if (idle > (cc ? IDLE_TIMEOUT : 4))
+                    if ( (idle > (cc ? IDLE_TIMEOUT : 4) ) && ( strcmp(cuser.userid, STR_GUEST ) == 0 ) )
                     {
                         clear();
                         outs("超過閒置時間！");
                         refresh();
                         abort_bbs();
                     }
-                    else if (idle > (cc ? (IDLE_TIMEOUT-4) : 4))
+                    else if ( (idle > (cc ? (IDLE_TIMEOUT-4) : 4) ) && ( strcmp(cuser.userid, STR_GUEST ) == 0 ) )
                     {
                         outz("\x1b[41;5;1;37m警告！你已經閒置過久，系統將在三分後將你踢除！\x1b[m");
                         refresh();
                     }
-#endif // KICK_IDLE_TIMEOUT
+
                     if (cc)
                     {
                         cutmp->idle_time = idle;
