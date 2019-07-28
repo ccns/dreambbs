@@ -3,7 +3,7 @@
 # ------------------------------------------------------- #
 #  target : Makefile for common library test utils        #
 #  create :   /  /                                        #
-#  update : 18/11/20                                      #
+#  update : 19/07/28                                      #
 # ------------------------------------------------------- #
 #
 # TODO: make variable size test utils.
@@ -18,7 +18,7 @@ SRCROOT	= ..
 
 LIBSTR	= lib_str_decode lib_str_pat lib_str_xor
 
-LIBFILE	= lib_f_mv lib_f_cp
+LIBFILE	= lib_f_mv lib_f_cp lib_f_rm
 
 LIBOTHER= lib_xsort lib_splay testsize
 
