@@ -20,8 +20,6 @@ SO	= chat.so vote.so xyz.so guessnum.so \
 	  classtable2.so observe.so pip.so brdstat.so personal.so \
 	  cleanrecommend.so shop.so bank.so innbbs.so contact.so
 
-EXE	= so
-
 .SUFFIXES: .o .c .ln .x .so
 
 .c.o:	;   $(CC) $(MAKEFLAG) $(CFLAGS) -c $*.c
@@ -43,8 +41,8 @@ all:
 
 so: $(SO)
 
-install: $(EXE)
-	install -m 0700 $(SO) $(BBSHOME)/bin$(BBSVER)
+install: $(SO)
+	install -m 0700 $(SO) "$(BBSHOME)/bin$(BBSVER)"
 
 clean: /tmp
 	rm -fr $(SO) *~ *.o
