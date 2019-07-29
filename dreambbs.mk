@@ -10,7 +10,7 @@ BBSHOME	?= $(HOME)
 
 ## BBS Release Version Prefix
 BBSCONF_ORIGIN		:= $(SRCROOT)/include/config.h
-BBSVER != grep BBSVER_PREFIX ${BBSCONF_ORIGIN} | awk 'NR==1 {printf $$3}'
+BBSVER != grep BBSVER_PREFIX ${BBSCONF_ORIGIN} | awk 'NR==1 {printf $$3}' | xargs
 
 # rules ref: PttBBS: mbbsd/Makefile
 BBSCONF		:= $(SRCROOT)/dreambbs.conf
