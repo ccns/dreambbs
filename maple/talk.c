@@ -3790,7 +3790,7 @@ ulist_su(
     memcpy(&cuser, &acct, sizeof(ACCT));
     cuser.userlevel = level;
     cuser.ufo = ufo;
-    usr_fpath(path, acct.userid, ".DIR");
+    usr_fpath(path, acct.userid, FN_DIR);
     tmp = xz[XZ_MBOX - XO_ZONE].xo;
     xz[XZ_MBOX - XO_ZONE].xo =  xo_new(path);
     free(tmp);
@@ -4502,7 +4502,7 @@ check_personal_note(
     char fpath[256];
     int  fd, total = 0;
     notedata myitem;
-    char *fn_note_dat      = "pnote.dat";
+    char *fn_note_dat      = FN_PNOTE_DAT;
 
     if (userid == NULL)
         usr_fpath(fpath, cuser.userid, fn_note_dat);

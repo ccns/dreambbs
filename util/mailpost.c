@@ -62,7 +62,7 @@ brd_fetch(
 {
     FILE *fp;
 
-    fp = fopen(".BRD", "r");
+    fp = fopen(FN_BRD, "r");
     if (!fp)
         return -1;
 

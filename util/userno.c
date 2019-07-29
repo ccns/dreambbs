@@ -87,7 +87,7 @@ main(void)
     int i, j, k;
 
     total = 1;
-    funo = open(".USR", O_RDWR | O_CREAT, 0600);
+    funo = open(FN_SCHEMA, O_RDWR | O_CREAT, 0600);
 
     if (funo < 0)
         return 0;

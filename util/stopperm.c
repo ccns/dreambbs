@@ -87,7 +87,7 @@ same_mail2(
     if (flog == NULL)
         return 0;
 
-    funo = open(".USR", O_RDWR | O_CREAT, 0600);
+    funo = open(FN_SCHEMA, O_RDWR | O_CREAT, 0600);
 
     if (funo < 0)
         return 0;
@@ -162,7 +162,7 @@ acct_load(
 {
     int fd;
 
-    usr_fpath((char *) acct, userid, ".ACCT");
+    usr_fpath((char *) acct, userid, FN_ACCT);
     fd = open((char *) acct, O_RDONLY);
     if (fd >= 0)
     {
@@ -180,7 +180,7 @@ acct_save(
     int fd;
     char fpath[80];
 
-    usr_fpath(fpath, acct->userid, ".ACCT");
+    usr_fpath(fpath, acct->userid, FN_ACCT);
     fd = open(fpath, O_WRONLY, 0600);   /* fpath 必須已經存在 */
     if (fd >= 0)
     {

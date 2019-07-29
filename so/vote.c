@@ -1132,7 +1132,7 @@ XO *xo)
     if (!(bbstate & STAT_POST) || !cuser.userlevel)
         return XO_NONE;
 
-    setdirpath(fpath, xo->dir, ".VCH");
+    setdirpath(fpath, xo->dir, FN_VCH);
     if (!(bbstate & STAT_BOARD) && !rec_num(fpath, sizeof(VCH)))
     {
         vmsg("目前沒有投票舉行");
@@ -1207,7 +1207,7 @@ outerLoop:
                 {
                     int fv;
 
-                    brd_fpath(buf, bshm->bcache[bno].brdname, ".VCH");
+                    brd_fpath(buf, bshm->bcache[bno].brdname, FN_VCH);
                     fv = open(buf, O_RDONLY);
                     if (fv >= 0)
                     {

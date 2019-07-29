@@ -51,7 +51,7 @@ main(
             if ((argc == 2) && str_cmp(str, argv[1]))
                 continue;
 
-            sprintf(buf, "%s/" ".DIR", str);
+            sprintf(buf, "%s/" FN_DIR, str);
             if ((fd = open(buf, O_RDONLY)) < 0)
             {
                 printf("brd/%s is missing, cp DIR.o\n", buf);

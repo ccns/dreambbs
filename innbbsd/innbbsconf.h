@@ -25,7 +25,7 @@
 
 #define MYBBSID         BBSNAME                 /* Path: 用英文站名 */
 
-#define LOGFILE         "innd/innbbs.log"       /* 記錄檔路徑 */
+#define LOGFILE         FN_INNBBS_LOG           /* 記錄檔路徑 */
 
 #define INNBBS_PORT     (7777)
 

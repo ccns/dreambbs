@@ -685,7 +685,7 @@ main(void)
     char title[80];
 
     static char act_file[] = "run/var/act";
-    static char run_file[] = "run/usies";
+    static char run_file[] = FN_USIES;
     static char tmp_file[] = "run/tmp";
     static char log_file[] = "run/usies=";
 //  static char brd_file[] = FN_BRD_USIES;
@@ -917,7 +917,7 @@ main(void)
         keeplog(FN_POP3_LOG, BRD_SECRET, title, 2);
 
         sprintf(title, "[記錄] %s重複 E-mail 認證紀錄", date);
-        keeplog("run/emailaddr.log", BRD_SECRET, title, 2);
+        keeplog(FN_EMAILADDR_LOG, BRD_SECRET, title, 2);
 
         sprintf(title, "[記錄] %s站務行為紀錄", date);
         keeplog(FN_BLACKSU_LOG, BRD_SECRET, title, 2);
@@ -932,7 +932,7 @@ main(void)
         keeplog(FN_BANK, BRD_SECRET, title, 2);
 
         sprintf(title, "[記錄] %s商店交易紀錄", date);
-        keeplog("run/shop.log", BRD_SECRET, title, 2);
+        keeplog(FN_SHOP, BRD_SECRET, title, 2);
 
         system("cat run/usies= | grep APPLY > run/apply.log");
         sprintf(title, "[記錄] %s每日註冊使用者紀錄", date);

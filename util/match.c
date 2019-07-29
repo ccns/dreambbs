@@ -74,7 +74,7 @@ main(
     char *fname, fpath[256];
     flog = fopen(FN_MATCH_NEW, "w");
 
-    funo = open(".USR", O_RDWR | O_CREAT, 0600);
+    funo = open(FN_SCHEMA, O_RDWR | O_CREAT, 0600);
 
     if (funo < 0)
         return 0;
