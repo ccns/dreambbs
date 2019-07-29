@@ -7,7 +7,17 @@
 #include <fcntl.h>
 #include "dao.h"
 
-#if defined(__linux__) && defined(_SYS_RANDOM_H)
+#if defined __GLIBC_PREREQ && !defined __UCLIBC__
+#define GLIBC_PREREQ(M, m) (__GLIBC_PREREQ(M, m))
+#else
+#define GLIBC_PREREQ(M, m) 0
+#endif
+
+#ifndef LINUX_HAVE_GETRANDOM
+#define LINUX_HAVE_GETRANDOM (GLIBC_PREREQ(2, 25) && __linux__)
+#endif
+
+#ifdef LINUX_HAVE_GETRANDOM
   #include <sys/random.h>
 #endif
 
@@ -784,7 +794,7 @@ char *str_ndup(char *src, int len)
 /* IID.20190524: Get bytes from the system PRNG device. */
 char *getrandom_bytes(char *buf, size_t buflen)
 {
-#if defined(__linux__) && defined(_SYS_RANDOM_H)
+#ifdef LINUX_HAVE_GETRANDOM
     if (getrandom(buf, buflen, GRND_NONBLOCK) == -1)
         return NULL;
 #elif OpenBSD >= 201311 /* 5.4 */ || __FreeBSD_version >= 1200000 /* 12.0 */
