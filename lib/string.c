@@ -3,9 +3,11 @@
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "dao.h"
 
-#ifdef __linux__
+#if defined(__linux__) && defined(_SYS_RANDOM_H)
   #include <sys/random.h>
 #endif
 
@@ -782,7 +784,7 @@ char *str_ndup(char *src, int len)
 /* IID.20190524: Get bytes from the system PRNG device. */
 char *getrandom_bytes(char *buf, size_t buflen)
 {
-#if defined(__linux__)
+#if defined(__linux__) && defined(_SYS_RANDOM_H)
     if (getrandom(buf, buflen, GRND_NONBLOCK) == -1)
         return NULL;
 #elif OpenBSD >= 201311 /* 5.4 */ || __FreeBSD_version >= 1200000 /* 12.0 */
