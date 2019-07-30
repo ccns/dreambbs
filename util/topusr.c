@@ -98,7 +98,7 @@ write_data(
         merge_id_nick(buf1, data[i].userid, data[i].username);
         merge_id_nick(buf2, data[i+TOPNUM_HALF].userid,
                       data[i+TOPNUM_HALF].username);
-        switch(i)
+        switch (i)
         {
             case 0:
                 color = "\x1b[1;31m";

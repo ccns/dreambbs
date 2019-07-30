@@ -886,7 +886,7 @@ class_check(
         return 0;
 
     chn = CH_END - chn;
-    switch(boardmode)
+    switch (boardmode)
     {
         case 0:
             cbase = (short *) class_img;
@@ -978,7 +978,7 @@ class_load(
 
     chn = CH_END - xo->key;
 
-    switch(boardmode)
+    switch (boardmode)
     {
         case 0:
             cbase = (short *) class_img;
@@ -1106,7 +1106,7 @@ class_body(
     int n, cnt, max, brdnew, bno;
 
 
-    switch(boardmode)
+    switch (boardmode)
     {
         case 0:
             img = class_img;

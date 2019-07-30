@@ -876,7 +876,7 @@ expand_esc_star_visio(char *buf, const char *src, int szbuf)
         return 0;
     }
 
-    switch(*++src)
+    switch (*++src)
     {
         // insecure content
         case 's':   // current user id

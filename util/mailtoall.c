@@ -205,7 +205,7 @@ main(
     if (argc>3)
     {
         mode = atoi(argv[1]);
-        switch(mode)
+        switch (mode)
         {
             case 1:
                 open_mail(argv[2], argv[3]);

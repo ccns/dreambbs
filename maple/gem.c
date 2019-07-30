@@ -133,7 +133,7 @@ gem_body(
         if (xo->key >= GEM_LMANAGER)
         {
             max = vans("(A)新增資料 (G)海錨功\能 (W)資源回收筒 [N]無所事事 ");
-            switch(max)
+            switch (max)
             {
                 case 'a':
                     max = gem_add(xo);

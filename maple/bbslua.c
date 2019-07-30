@@ -1043,7 +1043,7 @@ bl_k2s(lua_State* L, int v)
         lua_pushfstring(L, "F%d", KEY_F1 - v +1);
   #endif
 #endif
-    else switch(v)
+    else switch (v)
     {
         case KEY_UP:    lua_pushstring(L, "UP");    break;
         case KEY_DOWN:  lua_pushstring(L, "DOWN");  break;
@@ -1641,7 +1641,7 @@ bls_getcat(const char *s)
 static int
 bls_getlimit(const char *p)
 {
-    switch(bls_getcat(p))
+    switch (bls_getcat(p))
     {
         case BLS_GLOBAL:
             return  BLSCONF_GMAXSIZE;
@@ -1655,7 +1655,7 @@ static int
 bls_setfn(char *fn, size_t sz, const char *p)
 {
     *fn = 0;
-    switch(bls_getcat(p))
+    switch (bls_getcat(p))
     {
         case BLS_GLOBAL:
             snprintf(fn, sz, "%s/" BLSCONF_PREFIX "U%08x",
