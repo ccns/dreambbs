@@ -849,7 +849,7 @@ doupdate(void)
 
         // reset dirty and display map
         memset(FTD, 0,          ft.cols * sizeof(ftchar));
-        memcpy(FTDC, FTCMAP[y],  ft.cols * sizeof(ftchar));
+        memcpy(FTDC, FTCMAP[y], ft.cols * sizeof(ftchar));
 
         // first run: character diff
         for (x = 0; x < len; x++)
