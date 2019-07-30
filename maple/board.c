@@ -429,13 +429,13 @@ Ben_Perm(
 
         bits = bm_belong(bname);  /* Thor.980813: 對秘密看版而言, 是重新判斷的 */
 
-            if (readlevel & PERM_SYSOP)
-            {
-                if (readlevel & PERM_BOARD)
-                    ;
-                else
-                    bits |= BRD_F_BIT;
-            }
+        if (readlevel & PERM_SYSOP)
+        {
+            if (readlevel & PERM_BOARD)
+                ;
+            else
+                bits |= BRD_F_BIT;
+        }
 
     }
 #ifdef HAVE_WATER_LIST
@@ -798,7 +798,7 @@ XoPost(
     str_bit = &brd_bits[bno];
     bits = *str_bit;
 
-/* cache.081206: 對好友看版重新判斷是不是也具有 R 權限 */
+    /* cache.081206: 對好友看版重新判斷是不是也具有 R 權限 */
     if (!(bits & BRD_R_BIT)/* && (bits & BRD_F_BIT)*/)
     {
         vmsg("請聯絡板主將您加入看板好友");

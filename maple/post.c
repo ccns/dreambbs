@@ -848,7 +848,7 @@ post_attr(
     attr = brh_unread(BMAX(fhdr->chrono, fhdr->stamp)) ? 0 : 0x20;
     //attr = brh_unread(fhdr->chrono) ? 0 : 0x20;
     if (fhdr->pushtime)
-      attr = brh_unread(fhdr->pushtime) ? 0 : 0x20;
+        attr = brh_unread(fhdr->pushtime) ? 0 : 0x20;
     mode &= (bbstate & STAT_BOARD) ? ~0 : ~POST_GEM;    /* Thor:一般user看不到G */
 
     if (mode &= (POST_MARKED | POST_GEM))
@@ -1902,8 +1902,8 @@ post_delete(
                 {
                     if (vans("是否給予劣文？[y/N]") == 'y')
                     {
-                      addpoint2(1, fhdr->owner);
-                      pmsg2("劣退完畢！");
+                        addpoint2(1, fhdr->owner);
+                        pmsg2("劣退完畢！");
                     }
 
                     FILE *fp;
@@ -2014,9 +2014,9 @@ post_bottom(
         hdr_stamp(xo->dir, HDR_LINK | 'A', &post, fpath);
 
         if (hdr->xmode & POST_BOTTOM) /* 已經被置底的不能再置底 */
-          return XO_NONE;
+            return XO_NONE;
         else
-          post.xmode = POST_MARKED | POST_BOTTOM;  /* 自動加 mark */
+            post.xmode = POST_MARKED | POST_BOTTOM;  /* 自動加 mark */
 
         strcpy(post.owner, hdr->owner);
         strcpy(post.nick, hdr->nick);
@@ -2156,21 +2156,21 @@ post_state(
         prints("\n\x1b[1;33;44m \x1b[37m文章代碼及資訊查詢： %*s \x1b[m", 55, "");
         if (ghdr->xmode & (POST_EXPIRE | POST_MDELETE | POST_DELETE | POST_CANCEL | POST_LOCK | POST_CURMODIFY))
         {
-          outs("\n\n \x1b[1;37m★\x1b[m 文章被鎖定、編輯或者刪除中");
-          outs("\x1b[m");
-          outs("\n");
+            outs("\n\n \x1b[1;37m★\x1b[m 文章被鎖定、編輯或者刪除中");
+            outs("\x1b[m");
+            outs("\n");
         }
         else
         {
-          outs("\n\n \x1b[1;37m★\x1b[m 文章代碼: #");
-          outs("\x1b[1;32m");
-          outs(ghdr->xname);
-          outs("\x1b[m");
-          outs("\n \x1b[1;37m★\x1b[m 好讀連結: " URL_PREFIX "/");
-          outs(buf);
-          outs("/");
-          outs(ghdr->xname);
-          outs("\x1b[m");
+            outs("\n\n \x1b[1;37m★\x1b[m 文章代碼: #");
+            outs("\x1b[1;32m");
+            outs(ghdr->xname);
+            outs("\x1b[m");
+            outs("\n \x1b[1;37m★\x1b[m 好讀連結: " URL_PREFIX "/");
+            outs(buf);
+            outs("/");
+            outs(ghdr->xname);
+            outs("\x1b[m");
         }
         if (!stat(fpath, &st))
             prints("\n \x1b[1;37m★\x1b[m 最後存取: %s\n \x1b[1;37m★\x1b[m 檔案大小: \x1b[1;32m%d\x1b[m bytes", Ctime(&st.st_mtime), st.st_size);
@@ -2321,9 +2321,9 @@ post_expire(
 
     hdr_fpath(fpath, xo->dir, fhdr);
     if (fhdr->xmode & POST_EXPIRE)
-      fhdr->xmode &= ~POST_EXPIRE;
+        fhdr->xmode &= ~POST_EXPIRE;
     else
-      fhdr->xmode |= POST_EXPIRE;
+        fhdr->xmode |= POST_EXPIRE;
     fhdr->expire = time(0) + 86400 * 7;
     if (!rec_put(xo->dir, fhdr, sizeof(HDR), pos))
     {
@@ -2615,7 +2615,7 @@ int post_edit(XO *xo)
         if (HAS_PERM(PERM_ALLBOARD))
         {
             /*hdr = (HDR *) xo_pool + (xo->pos - xo->top);
-              hdr_fpath(fpath, xo->dir, hdr);*/
+                hdr_fpath(fpath, xo->dir, hdr);*/
             vedit(fpath, NA); /* Thor.981020: 注意被talk的問題 */
             post_head(xo);
         }
@@ -3780,15 +3780,15 @@ post_rule(
 
         case '5':
             if (vans("確定要變更看板RSS設定？[y/N] ") != 'y')
-              return XO_HEAD;
+                return XO_HEAD;
             //更改旗標
             if (newbrd.battr & BRD_RSS) {
-              newbrd.battr &= ~BRD_RSS;
-              vmsg("關閉RSS功\能");
+                newbrd.battr &= ~BRD_RSS;
+                vmsg("關閉RSS功\能");
             }
             else {
-              newbrd.battr |= BRD_RSS;
-              vmsg("開啟RSS功\能");
+                newbrd.battr |= BRD_RSS;
+                vmsg("開啟RSS功\能");
             }
             memcpy(oldbrd, &newbrd, sizeof(BRD));
             rec_put(FN_BRD, &newbrd, sizeof(BRD), bno);
