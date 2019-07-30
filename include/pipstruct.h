@@ -64,7 +64,7 @@ typedef struct pipdata
     int chatcount;
     char msg[150];                /*訊息內容*/
     char chat[10][150];           /*聊天內容*/
-}pipdata;
+} pipdata;
 
 
 struct user_info

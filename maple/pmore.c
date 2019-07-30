@@ -613,7 +613,7 @@ typedef struct
     unsigned char *floats [FH_FLOATS];
 } MF_PrettyFormattedHeader;
 
-MF_PrettyFormattedHeader fh = { 0, {0, 0, 0, 0}, {0, 0}};
+MF_PrettyFormattedHeader fh = { 0, {0, 0, 0, 0}, {0, 0} };
 
 /* search records */
 typedef struct
@@ -623,7 +623,7 @@ typedef struct
     unsigned char *search_str;  // maybe we can change to dynamic allocation
 } MF_SearchRecord;
 
-MF_SearchRecord sr = { 0, strncmp, NULL};
+MF_SearchRecord sr = { 0, strncmp, NULL };
 
 enum MFSEARCH_DIRECTION {
     MFSEARCH_FORWARD,
@@ -3241,7 +3241,7 @@ static const char
 MFPROTO void
 pmore_Help(void *ctx, int (*help_handler)(int y, void *ctx))
 {
-    const char **t_tables[PMHLP_BLOCKS] = { hlp_basic, hlp_adv, hlp_sys};
+    const char **t_tables[PMHLP_BLOCKS] = { hlp_basic, hlp_adv, hlp_sys };
     const int  col_widths[PMHLP_BLOCKS] = { 29, 27, 20 },
                l_widths  [PMHLP_BLOCKS] = { 12, 13, 15 };
     const int n_t_tables =PMHLP_BLOCKS;

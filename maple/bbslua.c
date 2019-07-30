@@ -1831,7 +1831,7 @@ static const struct luaL_Reg lib_bbslua [] = {
     { "color",      bl_attrset },
     { "attrset",    bl_attrset },
     { "strip_ansi", bl_strip_ansi },
-    { NULL, NULL},
+    { NULL, NULL },
 };
 
 #ifdef BLSCONF_ENABLED
@@ -1840,7 +1840,7 @@ static const struct luaL_Reg lib_store [] = {
     { "save",       bls_save },
     { "limit",      bls_limit },
     { "iolimit",    bls_iolimit },
-    { NULL, NULL},
+    { NULL, NULL },
 };
 #endif
 

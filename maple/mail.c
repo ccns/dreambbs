@@ -227,7 +227,7 @@ bsmtp(
     char *str, buf[512], from[80], subject[80], msgid[80], keyfile[80], valid[10];
 #ifdef HAVE_SIGNED_MAIL
     char prikey[PLAINPASSLEN];
-    union{
+    union {
         char str[PLAINPASSLEN];
         struct {
             unsigned int hash, hash2;
@@ -670,7 +670,7 @@ m_verify(void)
     char buf[160];
 
     char prikey[PLAINPASSLEN];
-    union{
+    union {
         char str[PLAINPASSLEN];
         struct {
             unsigned int hash, hash2;

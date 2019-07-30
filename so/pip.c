@@ -437,7 +437,7 @@ int cal)
     {
         d.tired = d.tired - tiredvary;
         if (d.tired <= 0)
-            {d.tired = 0;}
+            { d.tired = 0; }
     }
     tiredvary = 0;
     return;
@@ -6682,10 +6682,10 @@ char *genbuf)
             if (shit1 > 40 && shit1 < 60) outs("臭臭的..");
             if (shit1 >= 60 && shit1 < 80) outs("好臭喔..");
             if (shit1 >= 80 && shit1 < 100) outs("\x1b[1;34m快臭死了..\x1b[m");
-            if (shit1 >= 100) {outs("\x1b[1;31m臭死了..\x1b[m"); return -1;}
+            if (shit1 >= 100) { outs("\x1b[1;31m臭死了..\x1b[m"); return -1; }
 
             pc1 = hp1 * 100 / maxhp1;
-            if (pc1 == 0) {outs("餓死了.."); return -1;}
+            if (pc1 == 0) { outs("餓死了.."); return -1; }
             if (pc1 < 20) outs("\x1b[1;35m全身無力中.快餓死了.\x1b[m");
             if (pc1 < 40 && pc1 >= 20) outs("體力不太夠..想吃點東西..");
             if (pc1 < 100 && pc1 >= 80) outs("嗯～肚子飽飽有體力..");
@@ -6694,21 +6694,21 @@ char *genbuf)
             pc1 = tired1;
             if (pc1 < 20) outs("精神抖擻中..");
             if (pc1 < 80 && pc1 >= 60) outs("\x1b[1;34m有點小累..\x1b[m");
-            if (pc1 < 100 && pc1 >= 80) {outs("\x1b[1;31m好累喔，快不行了..\x1b[m"); }
-            if (pc1 >= 100) {outs("累死了..."); return -1;}
+            if (pc1 < 100 && pc1 >= 80) { outs("\x1b[1;31m好累喔，快不行了..\x1b[m"); }
+            if (pc1 >= 100) { outs("累死了..."); return -1; }
 
             pc1 = 60 + 10 * age;
             if (weight1 < (pc1 + 30) && weight1 >= (pc1 + 10)) outs("有點小胖..");
             if (weight1 < (pc1 + 50) && weight1 >= (pc1 + 30)) outs("太胖了..");
-            if (weight1 > (pc1 + 50)) {outs("胖死了..."); return -1;}
+            if (weight1 > (pc1 + 50)) { outs("胖死了..."); return -1; }
 
-            if (weight1 < (pc1 - 50)) {outs("瘦死了.."); return -1;}
+            if (weight1 < (pc1 - 50)) { outs("瘦死了.."); return -1; }
             if (weight1 > (pc1 - 30) && weight1 <= (pc1 - 10)) outs("有點小瘦..");
             if (weight1 > (pc1 - 50) && weight1 <= (pc1 - 30)) outs("太瘦了..");
 
             if (sick1 < 75 && sick1 >= 50) outs("\x1b[1;34m生病了..\x1b[m");
-            if (sick1 < 100 && sick1 >= 75) {outs("\x1b[1;31m病重!!..\x1b[m"); }
-            if (sick1 >= 100) {outs("病死了.!."); return -1;}
+            if (sick1 < 100 && sick1 >= 75) { outs("\x1b[1;31m病重!!..\x1b[m"); }
+            if (sick1 >= 100) { outs("病死了.!."); return -1; }
 
             pc1 = happy1;
             if (pc1 < 20) outs("\x1b[1;31m很不快樂..\x1b[m");

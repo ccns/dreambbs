@@ -28,7 +28,7 @@
 
 
 #define MAXPORTS        3
-static int myports[MAXPORTS] = {23, 3456, 3001 /*, 3002, 3003 */ };
+static int myports[MAXPORTS] = {23, 3456, 3001 /*, 3002, 3003 */};
 
 extern BCACHE *bshm;
 extern UCACHE *ushm;
