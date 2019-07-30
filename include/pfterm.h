@@ -83,9 +83,9 @@ void    grayout     (int y, int end, int level);
 // environment specific
 //////////////////////////////////////////////////////////////////////////
 void    scr_dump    (screen_backup_t *psb);
-extern void (*const scr_restore)  (screen_backup_t *psb);
-       void    scr_restore_free   (screen_backup_t *psb);
-       void    scr_restore_keep   (const screen_backup_t *psb);
+void    scr_restore_free   (screen_backup_t *psb);
+void    scr_restore_keep   (const screen_backup_t *psb);
+static inline void  scr_restore   (screen_backup_t *psb) { scr_restore_free(psb); }
 
 void move_ansi(int y, int x);
 
