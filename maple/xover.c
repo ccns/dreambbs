@@ -667,6 +667,7 @@ xo_forward(
     int tag, locus, userno, cc, check;
     unsigned int method;                        /* 是否 uuencode */
     ACCT acct;
+    int success_count = 0;
 
     if (deny_forward())
         return XO_NONE;
@@ -821,6 +822,7 @@ xo_forward(
                 if ((cc = bsmtp(fpath, title, rcpt, method)) < 0)
                     break;
             }
+            success_count++;
         }
     } while (locus < tag);
 
@@ -833,6 +835,8 @@ xo_forward(
     if (userno > 0)
         m_biff(userno);
 
+    if (!(cc < 0) && success_count < ((tag == 0) ? 1 : tag))
+        cc = -1;
     zmsg(cc < 0 ? "部份信件無法寄達" : "寄信完畢");
 
     return XO_FOOT;
