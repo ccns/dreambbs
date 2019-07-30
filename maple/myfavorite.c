@@ -31,7 +31,7 @@ brd2myfavorite(
     memset(gem, 0, sizeof(HDR));
     time(&gem->chrono);
     strcpy(gem->xname, brd->brdname);
-    sprintf(gem->title, "%-16s%s", brd->brdname, brd->title );
+    sprintf(gem->title, "%-16s%s", brd->brdname, brd->title);
     gem->xmode = GEM_BOARD;
 }
 
@@ -305,7 +305,7 @@ myfavorite_browse(
     xmode = ghdr->xmode;
     /* browse folder */
 
-    if ( xmode & GEM_HTTP)
+    if (xmode & GEM_HTTP)
         return XO_NONE;
 
     if (xmode & GEM_BOARD)

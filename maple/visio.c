@@ -656,8 +656,8 @@ clrtoeol(void)
 
     if ((len = cur_pos))
     {
-        if ( len > slp->len)
-            for ( len = slp->len; len < cur_pos; len++)
+        if (len > slp->len)
+            for (len = slp->len; len < cur_pos; len++)
                 slp->data[len] = ' ';
         slp->len = len;
         slp->width = cur_col;
@@ -811,7 +811,7 @@ new_line:
     /* 判定哪些文字需要重新送出螢幕 */
     /* ---------------------------- */
 
-    if ( /* !(slp->mode & SL_ANSICODE) && */ (ch != cx))
+    if ( /* !(slp->mode & SL_ANSICODE) && */ (ch != cx) )
     {
         *data = ch;
         cx = slp->mode;
@@ -1580,7 +1580,7 @@ igetch(void)
                     }
 
                     cc = bbsmode;
-                    if ( (idle > (cc ? IDLE_TIMEOUT : 4) ) && ( strcmp(cuser.userid, STR_GUEST ) == 0 ) )
+                    if ( (idle > (cc ? IDLE_TIMEOUT : 4)) && ( strcmp(cuser.userid, STR_GUEST) == 0 ) )
                     {
                         clear();
                         outs("超過閒置時間！");
@@ -1588,7 +1588,7 @@ igetch(void)
                         refresh();
                         abort_bbs();
                     }
-                    else if ( (idle > (cc ? (IDLE_TIMEOUT-4) : 4) ) && ( strcmp(cuser.userid, STR_GUEST ) == 0 ) )
+                    else if ( (idle > (cc ? (IDLE_TIMEOUT-4) : 4)) && ( strcmp(cuser.userid, STR_GUEST) == 0 ) )
                     {
                         outz("\x1b[41;5;1;37m警告！你已經閒置過久，系統將在三分後將你踢除！\x1b[m");
                         bell();

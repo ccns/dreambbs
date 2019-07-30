@@ -202,7 +202,7 @@ utmp_new(
 
     do
     {
-        if (!uentp->pid && !uentp->userno )
+        if (!uentp->pid && !uentp->userno)
         {
             unsigned int offset;
 
@@ -368,7 +368,7 @@ void
 classtable_free(void)
 {
     int pos;
-    while ( (pos = rec_loc(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), cmpclasstable)) >= 0)
+    while ((pos = rec_loc(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), cmpclasstable)) >= 0)
         rec_del(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), pos, cmpclasstable, NULL);
 }
 

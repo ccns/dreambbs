@@ -169,7 +169,7 @@ checksum_find(
             {
                 if (i>3)
                 {
-                    if (*buf != '>' && strncmp(buf, star, 2) && *buf != ':' )
+                    if (*buf != '>' && strncmp(buf, star, 2) && *buf != ':')
                     {
                         sum+=checksum_add(buf);
                         count++;
@@ -414,7 +414,7 @@ do_post(
                 vmsg(msg);
                 return XO_FOOT;
             }
-            if ((th.point2 != 0 ) && (cuser.point2 >= th.point2))
+            if ((th.point2 != 0) && (cuser.point2 >= th.point2))
             {
                 sprintf(msg, "劣文 %d 篇(含)以下，方可在此看板發表文章", th.point2);
                 vmsg(msg);
@@ -574,7 +574,7 @@ do_post(
     {
         /* if ((mode) && (!(bbstate & BRD_NOTRAN))) */
         /* Thor.990111: 已由 edit.c 中統一check */
-        brh_add( post.chrono, post.chrono,  post.chrono);
+        brh_add(post.chrono, post.chrono,  post.chrono);
         //post_history(xz[XZ_POST - XO_ZONE].xo, &post);
 #ifdef  HAVE_DETECT_VIOLATELAW
         if (mode && !banpost)
@@ -837,13 +837,13 @@ post_attr(
         return 'D';
 
     if (mode & POST_EXPIRE)
-        return (brh_unread(BMAX(fhdr->chrono, fhdr->stamp)) ? 0 : 0x20 ) | 'E';
+        return (brh_unread(BMAX(fhdr->chrono, fhdr->stamp)) ? 0 : 0x20) | 'E';
 
     if (mode & POST_LOCK)
         return 'L';
 
     if (mode & POST_COMPLETE)
-        return (brh_unread(BMAX(fhdr->chrono, fhdr->stamp)) ? 0 : 0x20 ) | 'S';
+        return (brh_unread(BMAX(fhdr->chrono, fhdr->stamp)) ? 0 : 0x20) | 'S';
 
     attr = brh_unread(BMAX(fhdr->chrono, fhdr->stamp)) ? 0 : 0x20;
     //attr = brh_unread(fhdr->chrono) ? 0 : 0x20;
@@ -1394,7 +1394,7 @@ post_history(
         brh_add(push, push, push);
 
     if (!brh_unread(chrono))
-        //if ( !brh_unread(push))
+        //if (!brh_unread(push))
             return;
 
     if (--pos >= top)
@@ -1974,7 +1974,7 @@ post_clean_delete(
 
     by_BM = (strcmp(hdr->owner, cuser.userid) ? 1 : 0);
 
-    if ((hdr->xmode & POST_MARKED) || (hdr->xmode & POST_LOCK) || !(bbstate & STAT_BOARD) )
+    if ((hdr->xmode & POST_MARKED) || (hdr->xmode & POST_LOCK) || !(bbstate & STAT_BOARD))
     {
         return XO_NONE;
     }
@@ -2125,7 +2125,7 @@ post_state(
         k = l = m = 0;
         if (ghdr->chrono > ghdr->stamp)
             k=1;
-        else if (ghdr->chrono < ghdr->stamp )
+        else if (ghdr->chrono < ghdr->stamp)
             k=2;
         else if (ghdr->chrono = ghdr->stamp)
             k=3;
@@ -2403,7 +2403,7 @@ post_edit(
 
     hdr_fpath(fpath, xo->dir, hdr);
 #if 0
-    if ((HAS_PERM(PERM_ALLBOARD))|| ( (HAS_PERM(PERM_VALID)) \
+    if ((HAS_PERM(PERM_ALLBOARD))|| ((HAS_PERM(PERM_VALID)) \
                                             && !strcmp(hdr->owner, cuser.userid)))
 #endif
     if (HAS_PERM(PERM_SYSOP) && !(hdr->xmode & (POST_CANCEL|POST_DELETE)))
@@ -2608,7 +2608,7 @@ int post_edit(XO *xo)
     hdr = (HDR *) xo_pool + (xo->pos - xo->top);
     hdr_fpath(fpath, xo->dir, hdr);
 #if 0
-    if ((HAS_PERM(PERM_ALLBOARD))|| ( (HAS_PERM(PERM_VALID)) \
+    if ((HAS_PERM(PERM_ALLBOARD))|| ((HAS_PERM(PERM_VALID)) \
                 && !strcmp(hdr->owner, cuser.userid)))
 #endif
         if (HAS_PERM(PERM_ALLBOARD))
@@ -2619,7 +2619,7 @@ int post_edit(XO *xo)
             post_head(xo);
         }
 #ifdef  HAVE_USER_MODIFY
-        else if ((brd->battr & BRD_MODIFY) && HAS_PERM(PERM_VALID) /*&& ((hdr->modifytimes)<MAX_MODIFY)*/ && !strcmp(hdr->owner, cuser.userid) && !(hdr->xmode & (/*POST_MODIFY|*/POST_CANCEL|POST_DELETE|POST_LOCK|POST_MARKED|POST_MDELETE/*|POST_CURMODIFY*/)) )
+        else if ((brd->battr & BRD_MODIFY) && HAS_PERM(PERM_VALID) /*&& ((hdr->modifytimes)<MAX_MODIFY)*/ && !strcmp(hdr->owner, cuser.userid) && !(hdr->xmode & (/*POST_MODIFY|*/POST_CANCEL|POST_DELETE|POST_LOCK|POST_MARKED|POST_MDELETE/*|POST_CURMODIFY*/)))
         {
             //    move_post(hdr, BRD_MODIFIED, -3);
 
@@ -3101,7 +3101,7 @@ post_resetscore(
         xmode = hdr->xmode;
         brd = bshm->bcache + brd_bno(currboard);
 
-        if ( hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
+        if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
             return XO_FOOT;
 
         //if (!hdr->recommend)
@@ -3431,7 +3431,7 @@ post_recommend(
                 next = time(NULL) + NEXTPUSHTIME;  /* 定義在theme.h */
 
             //change_stamp(xo->dir, hdr);
-            brh_add( hdr->pushtime, hdr->pushtime,  hdr->pushtime);
+            brh_add(hdr->pushtime, hdr->pushtime,  hdr->pushtime);
 
             /* 091009.cache: 優良積分 */
             if ( point!=0 )

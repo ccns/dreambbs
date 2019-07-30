@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* util/rmbadmail.c      ( YZU WindTop 2000)             */
+/* util/rmbadmail.c      ( YZU WindTop 2000 )            */
 /*-------------------------------------------------------*/
 /* author : visor.bbs@bbs.yzu.edu.tw                     */
 /* target : 刪除未在 .DIR 裡的信件                       */

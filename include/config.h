@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* config.h     ( NCKU CCNS WindTop-DreamBBS Rev.Beta 3) */
+/* config.h     ( NCKU CCNS WindTop-DreamBBS Rev.Beta 3 )*/
 /*-------------------------------------------------------*/
 /* target : site-configurable settings                   */
 /* create : 95/03/29                                     */

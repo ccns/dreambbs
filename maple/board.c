@@ -773,7 +773,7 @@ XoPost(
     {
         if (LastBno >= 0)
         {
-            if (bshm->mantime[LastBno] > 0 )//ňゎ跑Θ璽计
+            if (bshm->mantime[LastBno] > 0)//ňゎ跑Θ璽计
                 bshm->mantime[LastBno]--; /* 癶狾 */
             else
                 bshm->mantime[LastBno] = 0;//璽计杠耴箂
@@ -1442,7 +1442,7 @@ class_zap(
     if (chn >= 0)
     {
         brd = bshm->bcache + chn;
-        if (!(brd->battr & BRD_NOZAP) || ( brd_bits[chn] & BRD_Z_BIT))
+        if (!(brd->battr & BRD_NOZAP) || (brd_bits[chn] & BRD_Z_BIT))
         {
             move(3 + num - xo->top, 8);
             num = brd_bits[chn] ^= BRD_Z_BIT;
@@ -1748,7 +1748,7 @@ class_add(xo)
     brd = bshm->bcache + chn;
     memset(&hdr, 0, sizeof(HDR));
     brd2gem(brd, &hdr);
-    if (class_find_same(&hdr) < 0 )
+    if (class_find_same(&hdr) < 0)
     {
         rec_add(fpath, &hdr, sizeof(HDR));
         favorite_main();
@@ -1798,7 +1798,7 @@ class_add2(          /* gaod: и程稲い钡穝糤穝狾 */
     chn = *chp;
     memset(&hdr, 0, sizeof(HDR));
     brd2gem(brd, &hdr);
-    if (class_find_same(&hdr) < 0 )
+    if (class_find_same(&hdr) < 0)
     {
         rec_add(fpath, &hdr, sizeof(HDR));
         favorite_main();

@@ -202,7 +202,7 @@ count_hot(
         memset(hotboard + i, 0, sizeof(HDR));
         time(&(hotboard[i].chrono));
         strcpy(hotboard[i].xname, brd->brdname);
-        sprintf(hotboard[i].title, "%-16s%s", brd->brdname, brd->title );
+        sprintf(hotboard[i].title, "%-16s%s", brd->brdname, brd->title);
         hotboard[i].xmode = GEM_BOARD | GEM_FOLDER;
         hotboard[i].xid = brd->n_reads;
         if (hotcount < MAX_HOTBOARD)

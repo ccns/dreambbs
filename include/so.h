@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* so.h         ( NCKU CCNS WindTop-DreamBBS 2.0)        */
+/* so.h         ( NCKU CCNS WindTop-DreamBBS 2.0 )       */
 /*-------------------------------------------------------*/
 /* Author: 37586669+IepIweidieng@users.noreply.github.com*/
 /* Target: Prototype for shared object library           */

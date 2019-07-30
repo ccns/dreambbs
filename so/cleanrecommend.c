@@ -304,9 +304,9 @@ clean(
         else if (brd->battr & BRD_PUSHDEFINE)
         {
             if (addscore == 1)
-                sprintf(            add, "[[1;33m%02.2s %12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                sprintf(add, "[[1;33m%02.2s %12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
             else if (addscore == -1)
-                sprintf(  add, "[[1;31m%02.2s[[m [[1;33m%12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                sprintf(add, "[[1;31m%02.2s[[m [[1;33m%12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
             else
                 sprintf(add,                "[[1;33m¡÷ %12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
         }

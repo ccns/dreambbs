@@ -1654,7 +1654,7 @@ int main(int argc, char *argv[])
 
         time(&ap_start);
         argc = *totaluser;
-        if (argc >= MAXACTIVE - 5 /* || *avgload > THRESHOLD */ )
+        if (argc >= MAXACTIVE - 5 /* || *avgload > THRESHOLD */)
         {
             sprintf(currtitle,
                 "目前線上人數 [%d] 人，系統滿載，請稍後再來\n", argc);

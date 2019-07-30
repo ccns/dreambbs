@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* util/template.c      ( YZU WindTop 2000)              */
+/* util/template.c      ( YZU WindTop 2000 )             */
 /*-------------------------------------------------------*/
 /* author : visor.bbs@bbs.yzu.edu.tw                     */
 /* target : ¼Ð¥»¥Î                                       */

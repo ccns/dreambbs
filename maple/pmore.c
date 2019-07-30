@@ -1620,7 +1620,7 @@ mf_display(void)
             else
                 MFDISP_SKIPCURLINE();
         }
-        else if (currline < fh.lines && bpref.rawmode == MFDISP_RAW_NA )
+        else if (currline < fh.lines && bpref.rawmode == MFDISP_RAW_NA)
         {
             /* case 2, we're printing headers */
             const char *val = (const char*)fh.headers[currline];
@@ -3717,7 +3717,7 @@ mf_movieCurrentFrameNo(void)
 
     do
     {
-        if ( mf_movieFrameHeader(mf.disps, mf.end))
+        if (mf_movieFrameHeader(mf.disps, mf.end))
             no++;
 
         if (mf.disps >= p)

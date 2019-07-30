@@ -84,7 +84,7 @@ fnv1a_32_dbcs_strcase(const char *str, Fnv32_t hval)
 			isDBCS = 0;
 		} else {
 			// ASCII?
-			if ( c < 0x80)
+			if (c < 0x80)
 				c = toupper(c);
 			else
 				isDBCS = 1;

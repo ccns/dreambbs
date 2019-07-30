@@ -160,7 +160,7 @@ ve_goto(void)
     char buf[8];
 
     if (vget(b_lines, 0, "跳至第幾行：", buf, sizeof(buf), DOECHO) &&
-        (lno = atoi(buf)) > 0 )
+        (lno = atoi(buf)) > 0)
     {
         textline *vln, *tmp, *top;
 
@@ -236,7 +236,7 @@ ansi2n(
             for (;;)
             {
                 ch = (unsigned char) *++tmp;
-                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */ )
+                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */)
                 {
                     tmp++;
                     break;
@@ -275,7 +275,7 @@ n2ansi(
             for (;;)
             {
                 ch = (unsigned char) *++tmp;
-                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */ )
+                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */)
                 {
                     tmp++;
                     break;

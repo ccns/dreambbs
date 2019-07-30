@@ -2718,7 +2718,7 @@ bbslua(const char *fpath)
     // ready for running
     clear();
     blrt.running =1;
-    lua_sethook(L, bbsluaHook, LUA_MASKCOUNT, BLCONF_EXEC_COUNT );
+    lua_sethook(L, bbsluaHook, LUA_MASKCOUNT, BLCONF_EXEC_COUNT);
 
     refresh();
     // check is now done inside hook

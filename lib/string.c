@@ -1052,7 +1052,7 @@ int str_rle(                    /* run-length encoding */
 }
 
 #ifndef NULL
-#define NULL    (char* ) 0
+#define NULL    (char*) 0
 #endif
 
 char *str_str(const char *str, const char *tag      /* non-empty lower case pattern */
