@@ -399,7 +399,7 @@ clean(
 
     if (dashf(tmp))
     {
-        f_mv(tmp,fpath);
+        f_mv(tmp, fpath);
     }
 
     if ((fd = open(xo->dir, O_RDWR, 0600)) == -1)

@@ -574,7 +574,7 @@ do_post(
     {
         /* if ((mode) && (!(bbstate & BRD_NOTRAN))) */
         /* Thor.990111: 已由 edit.c 中統一check */
-        brh_add(post.chrono, post.chrono,  post.chrono);
+        brh_add(post.chrono, post.chrono, post.chrono);
         //post_history(xz[XZ_POST - XO_ZONE].xo, &post);
 #ifdef  HAVE_DETECT_VIOLATELAW
         if (mode && !banpost)
@@ -3431,7 +3431,7 @@ post_recommend(
                 next = time(NULL) + NEXTPUSHTIME;  /* 定義在theme.h */
 
             //change_stamp(xo->dir, hdr);
-            brh_add(hdr->pushtime, hdr->pushtime,  hdr->pushtime);
+            brh_add(hdr->pushtime, hdr->pushtime, hdr->pushtime);
 
             /* 091009.cache: 優良積分 */
             if ( point!=0 )

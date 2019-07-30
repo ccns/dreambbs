@@ -792,7 +792,7 @@ myfavorite_main(void)
         char old[80], new[80];
         usr_fpath(old, cuser.userid, FN_FAVORITE);
         usr_fpath(new, cuser.userid, FN_MYFAVORITE);
-        f_cp(old,new,0600);
+        f_cp(old, new, 0600);
     }
 
     usr_fpath(fpath, cuser.userid, FN_MYFAVORITE);

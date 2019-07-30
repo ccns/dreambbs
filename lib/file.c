@@ -108,7 +108,7 @@ int f_exlock(int fd)
     /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
     fl.l_type = F_WRLCK;
     /* Thor.990309: with blocking */
-    return fcntl(fd, F_SETLKW /*F_SETLK */ , &fl);
+    return fcntl(fd, F_SETLKW /*F_SETLK */, &fl);
 }
 
 int f_unlock(int fd)
@@ -118,7 +118,7 @@ int f_unlock(int fd)
 #endif
     /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
     fl.l_type = F_UNLCK;
-    return fcntl(fd, F_SETLKW /*F_SETLK */ , &fl);
+    return fcntl(fd, F_SETLKW /*F_SETLK */, &fl);
 }
 
 #ifdef MAP_FILE                    /* 44BSD defines this & requires it to mmap files */

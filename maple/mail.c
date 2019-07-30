@@ -1312,7 +1312,7 @@ m_setmboxdir(void)
 
         chdir(fpath1);
         system(fpath2);
-        f_mv(".DIR.@",FN_DIR);
+        f_mv(".DIR.@", FN_DIR);
         chdir(BBSHOME);
 
         pmsg2("重建完成");
