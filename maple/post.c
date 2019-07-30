@@ -209,7 +209,8 @@ outgo_post(
     if (board)
     {
         bntp.chrono = hdr->chrono;
-    }else
+    }
+    else
     {
         bntp.chrono = -1;
         board=currboard;
@@ -3561,11 +3562,11 @@ post_FriendSet(
         return XO_HEAD;
 
     //更改旗標
-    if (newbrd.readlevel & PERM_SYSOP){
+    if (newbrd.readlevel & PERM_SYSOP) {
         newbrd.readlevel = 0;
         vmsg("目前為公開看板");
     }
-    else{
+    else {
         newbrd.readlevel = PERM_SYSOP;
         vmsg("目前為好友看板");
     }
@@ -3600,11 +3601,11 @@ post_battr_score(
             if (vans("確定要變更推文設定？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
-            if (newbrd.battr & BRD_PRH){
+            if (newbrd.battr & BRD_PRH) {
                 newbrd.battr &= ~BRD_PRH;
                 vmsg("允許\推文");
             }
-            else{
+            else {
                 newbrd.battr |= BRD_PRH;
                 newbrd.battr &= ~BRD_PUSHDISCON;
                 newbrd.battr &= ~BRD_PUSHTIME;
@@ -3620,11 +3621,11 @@ post_battr_score(
             if (vans("確定要變更噓文模式？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
-            if (newbrd.battr & BRD_PUSHSNEER){
+            if (newbrd.battr & BRD_PUSHSNEER) {
                 newbrd.battr &= ~BRD_PUSHSNEER;
                 vmsg("關閉噓文模式");
             }
-            else{
+            else {
                 newbrd.battr |= BRD_PUSHSNEER;
                 newbrd.battr &= ~BRD_PUSHDEFINE;
                 vmsg("開啟噓文模式");
@@ -3637,11 +3638,11 @@ post_battr_score(
             if (vans("確定要變更自訂推文動詞模式？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
-            if (newbrd.battr & BRD_PUSHDEFINE){
+            if (newbrd.battr & BRD_PUSHDEFINE) {
                 newbrd.battr &= ~BRD_PUSHDEFINE;
                 vmsg("關閉自訂推文動詞");
             }
-            else{
+            else {
                 newbrd.battr |= BRD_PUSHDEFINE;
                 newbrd.battr &= ~BRD_PUSHSNEER;
                 vmsg("開啟自訂推文動詞");
@@ -3654,11 +3655,11 @@ post_battr_score(
             if (vans("確定要變更ID連推限制？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
-            if (newbrd.battr & BRD_PUSHDISCON){
+            if (newbrd.battr & BRD_PUSHDISCON) {
                 newbrd.battr &= ~BRD_PUSHDISCON;
                 vmsg("同ID允許\連推");
             }
-            else{
+            else {
                 newbrd.battr |= BRD_PUSHDISCON;
                 vmsg("同ID禁止連推");
             }
@@ -3670,11 +3671,11 @@ post_battr_score(
             if (vans("確定要變更時間連推限制？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
-            if (newbrd.battr & BRD_PUSHTIME){
+            if (newbrd.battr & BRD_PUSHTIME) {
                 newbrd.battr &= ~BRD_PUSHTIME;
                 vmsg("允許\快速連推");
             }
-            else{
+            else {
                 newbrd.battr |= BRD_PUSHTIME;
                 vmsg("禁止快速連推");
             }
@@ -3712,11 +3713,11 @@ post_rule(
             if (vans("確定要變更看板唯讀設定？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
-            if (newbrd.battr & BRD_NOREPLY){
+            if (newbrd.battr & BRD_NOREPLY) {
                 newbrd.battr &= ~BRD_NOREPLY;
                 vmsg("取消唯讀");
             }
-            else{
+            else {
                 newbrd.battr |= BRD_NOREPLY;
                 newbrd.battr |= BRD_PRH;
                 newbrd.battr &= ~BRD_PUSHDISCON;
@@ -3733,11 +3734,11 @@ post_rule(
             if (vans("確定要變更作者修文設定？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
-            if (newbrd.battr & BRD_MODIFY){
+            if (newbrd.battr & BRD_MODIFY) {
                 newbrd.battr &= ~BRD_MODIFY;
                 vmsg("允許\作者修文");
             }
-            else{
+            else {
                 newbrd.battr |= BRD_MODIFY;
                 vmsg("禁止作者修文");
             }
@@ -3749,11 +3750,11 @@ post_rule(
             if (vans("確定要變更轉錄文章設定？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
-            if (newbrd.battr & BRD_NOFORWARD){
+            if (newbrd.battr & BRD_NOFORWARD) {
                 newbrd.battr &= ~BRD_NOFORWARD;
                 vmsg("允許\轉錄文章");
             }
-            else{
+            else {
                 newbrd.battr |= BRD_NOFORWARD;
                 vmsg("禁止轉錄文章");
             }
@@ -3765,11 +3766,11 @@ post_rule(
             if (vans("確定要變更注音文限制設定？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
-            if (newbrd.battr & BRD_NOPHONETIC){
+            if (newbrd.battr & BRD_NOPHONETIC) {
                 newbrd.battr &= ~BRD_NOPHONETIC;
                 vmsg("允許\注音文");
             }
-            else{
+            else {
                 newbrd.battr |= BRD_NOPHONETIC;
                 vmsg("禁止注音文");
             }
@@ -3781,11 +3782,11 @@ post_rule(
             if (vans("確定要變更看板RSS設定？[y/N] ") != 'y')
               return XO_HEAD;
             //更改旗標
-            if (newbrd.battr & BRD_RSS){
+            if (newbrd.battr & BRD_RSS) {
               newbrd.battr &= ~BRD_RSS;
               vmsg("關閉RSS功\能");
             }
-            else{
+            else {
               newbrd.battr |= BRD_RSS;
               vmsg("開啟RSS功\能");
             }

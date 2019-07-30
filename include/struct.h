@@ -1117,7 +1117,7 @@ typedef struct
     char charset[11];           /* 該群組的字集 */
     unsigned int xmode;         /* 該群組的 xmode */
     int high;                   /* 目前抓到該群組的哪一篇 */
-    }newsfeeds_t;
+    } newsfeeds_t;
 
 
 typedef struct
