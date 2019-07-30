@@ -141,7 +141,7 @@ get_color(char *s, int len, int *fc, int *bc, int *bbc)
     memset(buf, 0, sizeof(buf));
     strncpy(buf, s+2, len-1);
 
-    for ( p = e = &buf[0]; exit == 0; ++p)
+    for (p = e = &buf[0]; exit == 0; ++p)
     {
         if (*p == ';' || *p == 'm')
         {
@@ -402,7 +402,7 @@ do_menu(
             default:
                 for (tmp=0; tmp<=num; tmp++)
                 {
-                    if ( (c | 0x20) == (table[tmp]->desc[0] | 0x20 ))
+                    if ((c | 0x20) == (table[tmp]->desc[0] | 0x20))
                     {
                         cur = tmp;
                         if (table_title->level & POPUP_DO_INSTANT)
@@ -538,7 +538,7 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
             default:
                 for (tmp=0; tmp<=num; tmp++)
                 {
-                    if ( (c | 0x20) == (desc[tmp+1][0] | 0x20 ))
+                    if ((c | 0x20) == (desc[tmp+1][0] | 0x20))
                     {
                         cur = tmp;
                         break;
@@ -598,7 +598,7 @@ void pmsg_body(const char *msg)
         return;
     }
 
-    len = (msg ? strlen(msg) : 0 );
+    len = (msg ? strlen(msg) : 0);
     if (len > 30)
     {
         plen = (len - 29) / 2;

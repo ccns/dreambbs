@@ -172,7 +172,7 @@ can_message(
 
     ufo = up->ufo;
 
-    if ( ufo & (UFO_MESSAGE))           /* »·Â÷¹ÐÄÛ */
+    if (ufo & (UFO_MESSAGE))           /* »·Â÷¹ÐÄÛ */
         return NA;
 
     if (!(ufo & UFO_QUIET))
@@ -270,7 +270,7 @@ pal_cache(void)
 
     cache = NULL;
     count = 0;
-    ufo = cuser.ufo & ~( UFO_BIFF | UFO_BIFFN | UFO_REJECT | UFO_FCACHE);
+    ufo = cuser.ufo & ~( UFO_BIFF | UFO_BIFFN | UFO_REJECT | UFO_FCACHE );
 
     fsize = 0;
     usr_fpath(fpath, cuser.userid, FN_PAL);

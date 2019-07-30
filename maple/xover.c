@@ -1847,7 +1847,7 @@ xover(
                     cmd = 'r';
             }
 #ifdef XZ_XPOST
-            else if (zone >= XZ_XPOST && zone < XZ_BANMAIL/* XZ_MBOX */ )
+            else if (zone >= XZ_XPOST && zone < XZ_BANMAIL/* XZ_MBOX */)
 #else
             else if (zone >= XZ_MBOX && zone < XZ_BANMAIL)
 #endif
@@ -2194,7 +2194,7 @@ every_Z(void)
     savemode = boardmode;
     tmpmode = bbsmode;
 
-    if ( cuser.ufo2 & UFO2_ORIGUI)
+    if (cuser.ufo2 & UFO2_ORIGUI)
         every_Z_Orig();
     else
         popupmenu(menu_everyz, NULL, (b_lines >> 1) - 4, (d_cols >> 1) + 20);

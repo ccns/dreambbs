@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* util/topuser.c         (MapleBBS Ver 3.00 )           */
+/* util/topuser.c       ( MapleBBS Ver 3.00 )            */
 /*-------------------------------------------------------*/
 /* author : gslin@abpe.org                               */
 /*          mat.bbs@fall.twbbs.org                       */

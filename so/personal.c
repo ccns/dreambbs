@@ -131,7 +131,7 @@ personal_apply(void)
     enteryear = (cuser.email[3]-'0') * 10 + (cuser.email[4]-'0');
 
     //κ挛 ecchi float 2012/4/25
-    if ( (thisyear - enteryear)%100 > 5)
+    if ((thisyear - enteryear)%100 > 5)
     {
         vmsg("眤ōぃ!");
         return 0;
@@ -478,7 +478,7 @@ personal_open(
         return XO_NONE;
     }
 
-    if ( bshm->number >= MAXBOARD)
+    if (bshm->number >= MAXBOARD)
     {
         vmsg("禬筁╰参┮甧计叫秸俱╰参把计");
         return XO_NONE;

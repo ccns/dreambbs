@@ -22,7 +22,7 @@ int main(void)
     if (sizeof(CLASS) != 36) return 1;
     printf("sizeof(ACCT): %zu\n", sizeof(ACCT));
     if (sizeof(ACCT) != 512) return 1;
-    //printf("sizeof(): %zu\n", );
+    //printf("sizeof(): %zu\n",);
 
     return 0;
 }

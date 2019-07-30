@@ -184,7 +184,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;
@@ -209,7 +209,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;
@@ -234,7 +234,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;
@@ -265,7 +265,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;
@@ -296,7 +296,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;
@@ -322,7 +322,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;
@@ -347,7 +347,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;

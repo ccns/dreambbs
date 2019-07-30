@@ -293,9 +293,9 @@ money_back(void)
 
         m1 = ((m1+m2)/2) - 1;  //請自行修改
 
-        if (m1 >= INT_MAX )
+        if (m1 >= INT_MAX)
             m1 = INT_MAX;
-        if (m2 >= INT_MAX )
+        if (m2 >= INT_MAX)
             m2 = INT_MAX;
 
         //為了方便所以沒有砍掉舊記錄, 對方可能洗錢

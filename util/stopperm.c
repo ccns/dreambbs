@@ -426,7 +426,7 @@ main(
     char *argv[])
 {
     char buf[256];
-    if (argc > 5 )
+    if (argc > 5)
     {
         setup(argv[1], argv[2], atoi(argv[3]), argv[4], argv[5]);
         sprintf(buf, "mail %s.bbs@" MYHOSTNAME " < " FN_STOPPERM_MAIL, argv[4]);

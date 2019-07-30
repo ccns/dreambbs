@@ -325,7 +325,7 @@ main(
 
             m1 = ((m1+m2)/100000);  //請自行修改
 
-            if (m1 >= INT_MAX )
+            if (m1 >= INT_MAX)
                 m1 = INT_MAX;
 
             sprintf(buf, "%s/" FN_ACCT, str);

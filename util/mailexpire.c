@@ -52,7 +52,7 @@ expire(
     while (fread(&hdr, sizeof(hdr), 1, fpr) == 1)
     {
         xmode = hdr.xmode;
-        if (xmode & POST_DELETE )
+        if (xmode & POST_DELETE)
             keep = 0;
         else
             keep = 1;

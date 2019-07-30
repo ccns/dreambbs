@@ -294,7 +294,7 @@ brd2gem(
     memset(gem, 0, sizeof(HDR));
     time(&gem->chrono);
     strcpy(gem->xname, brd->brdname);
-    sprintf(gem->title, "%-16s%s", brd->brdname, brd->title );
+    sprintf(gem->title, "%-16s%s", brd->brdname, brd->title);
     gem->xmode = GEM_BOARD | GEM_FOLDER;
 }
 
@@ -1408,7 +1408,7 @@ gem_cross(
             }
         } while (locus < tag);
 
-        if ( battr & BRD_NOCOUNT)
+        if (battr & BRD_NOCOUNT)
         {
             outs("轉錄完成，文章不列入紀錄，敬請包涵。");
         }

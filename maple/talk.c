@@ -303,7 +303,7 @@ can_message(
         return NA;
 #endif
 
-    if ( ufo & (UFO_MESSAGE))   /* 遠離塵囂 */
+    if (ufo & (UFO_MESSAGE))   /* 遠離塵囂 */
         return NA;
 
     if (!(ufo & UFO_QUIET))
@@ -442,7 +442,7 @@ pal_cache(void)
 
     cache = NULL;
     ship_total = count = 0;
-    ufo = cuser.ufo & ~( UFO_BIFF | UFO_BIFFN | UFO_REJECT | UFO_FCACHE);
+    ufo = cuser.ufo & ~( UFO_BIFF | UFO_BIFFN | UFO_REJECT | UFO_FCACHE );
     /* Thor.980805: 跟 BIFF好像沒有太大關係 */
 
     fsize = 0;
@@ -849,7 +849,7 @@ pal_add(
     }
 #endif
 
-    if ((userno > 0) /* && !pal_state(cutmp, userno, NULL) */ )
+    if ((userno > 0) /* && !pal_state(cutmp, userno, NULL) */)
     {
         PAL pal;
 
@@ -1186,7 +1186,7 @@ bmw_write(
         BMW *benz;
 
         benz = (BMW *) xo_pool + (xo->pos - xo->top);
-        if ( (benz->caller >= ushm->uslot && benz->caller < ushm->uslot + MAXACTIVE) && (benz->caller && benz->caller->userno == benz->sender) && can_message(benz->caller))
+        if ((benz->caller >= ushm->uslot && benz->caller < ushm->uslot + MAXACTIVE) && (benz->caller && benz->caller->userno == benz->sender) && can_message(benz->caller))
         {
             up = benz->caller;
         }
@@ -3151,7 +3151,7 @@ ulist_body(
         {
             up = pp->utmp;
 
-            if ((userno = up->userno) && (up->userid[0]) && !((up->ufo & UFO_CLOAK) && !HAS_PERM(PERM_SEECLOAK) && (up->userno != cuser.userno)) )
+            if ((userno = up->userno) && (up->userid[0]) && !((up->ufo & UFO_CLOAK) && !HAS_PERM(PERM_SEECLOAK) && (up->userno != cuser.userno)))
             {
                 if ((diff = up->idle_time))
                     if (diff <= 1440)
@@ -3815,7 +3815,7 @@ ulist_kick(
 {
     ACCT u;
     acct_load(&u, ulist_pool[xo->pos].utmp->userid);
-    if ((HAS_PERM(PERM_SYSOP)&& (!(u.userlevel & PERM_SYSOP) || !strcmp(cuser.userid, u.userid)) )||check_admin(cuser.userid))
+    if ((HAS_PERM(PERM_SYSOP)&& (!(u.userlevel & PERM_SYSOP) || !strcmp(cuser.userid, u.userid)))||check_admin(cuser.userid))
     {
         UTMP *up;
         pid_t pid;
@@ -3889,7 +3889,7 @@ ulist_nickchange(
     strcpy(buf, str = cuser.username);
     vget(b_lines, 0, "請輸入新的暱稱：", buf, sizeof(cuser.username), GCARRY);
 
-    if (strcmp(buf, str) && str_len(buf) > 0 )
+    if (strcmp(buf, str) && str_len(buf) > 0)
     {
         strcpy(str, buf);
         strcpy(cutmp->username, buf);
