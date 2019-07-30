@@ -77,7 +77,7 @@ POP3_Check(
 
     while (sock < 6)
     {
-        switch(sock)
+        switch (sock)
         {
             case 1:             /* Open Socket Fail */
                 prints("\n傳回錯誤值 [1]，請重試幾次看看\n");
@@ -157,7 +157,7 @@ Ext_POP3_Check(
             to.tv_usec = 0;
             nfds = sock;
 
-            switch(step)
+            switch (step)
             {
             case 1:
                 while (1)

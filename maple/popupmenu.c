@@ -370,7 +370,7 @@ do_menu(
     {
         c = vkey();
         old_cur = cur;
-        switch(c)
+        switch (c)
         {
             case KEY_LEFT:
                 return 1;
@@ -506,7 +506,7 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
     {
         c = vkey();
         old_cur = cur;
-        switch(c)
+        switch (c)
         {
             case KEY_LEFT:
 #ifdef M3_USE_PFTERM

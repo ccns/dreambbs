@@ -776,7 +776,7 @@ redrawwin(void)
 int
 typeahead(int fd)
 {
-    switch(fd)
+    switch (fd)
     {
         case TYPEAHEAD_NONE:
             ft.typeahead = 0;
@@ -864,7 +864,7 @@ doupdate(void)
             if (dbcs == 1)
             {
 #ifdef FTCONF_PREVENT_INVALID_DBCS
-                switch(fterm_DBCS_Big5(FTCMAP[y][x-1], FTCMAP[y][x]))
+                switch (fterm_DBCS_Big5(FTCMAP[y][x-1], FTCMAP[y][x]))
                 {
                     case FTDBCS_SAFE:
                         // safe to print
@@ -1566,7 +1566,7 @@ fterm_exec(void)
         // p points to next param now
     }
 
-    switch(cmd)
+    switch (cmd)
     {
         // Cursor Movement
 
@@ -1716,7 +1716,7 @@ fterm_exec(void)
                 // set background
                 attrsetbg(n - 40);
             }
-            else switch(n)
+            else switch (n)
             {
             case 0:
                 attrset(FTATTR_DEFAULT);
@@ -1876,7 +1876,7 @@ fterm_strdlen(const char *s)
     {
         if (!ansi) // ansi == 0
         {
-            switch(*s)
+            switch (*s)
             {
                 case ESC_CHR:
                     ansi++;

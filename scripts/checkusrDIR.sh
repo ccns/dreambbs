@@ -11,7 +11,7 @@ for i in a b c d e f g h i j k l m n o p q r s t u v w x y z; do
     cd "/home/bbs/usr/$i" || continue
     for usr in */; do
         cd "/home/bbs/usr/$i/$usr" || continue
-            if(! (test -d @)); then
+            if (! (test -d @)); then
                 mkdir @
             fi
         if (! (test -e .DIR) || ! (test -e .DIR.o)); then

@@ -1716,7 +1716,7 @@ xover(
             /* switch (vans(MSG_ZONE_SWITCH)) */
             /* Thor.980921: 少一個鍵試試 */
             outz(MSG_ZONE_SWITCH);
-            switch(vkey())
+            switch (vkey())
             {
             case 'a':
                 cmd = XZ_GEM;
@@ -1997,7 +1997,7 @@ every_Z_Orig(void)
     }
 #endif
 
-    switch(select)
+    switch (select)
     {
 #ifdef  HAVE_FAVORITE
         case 'f':

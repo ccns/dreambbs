@@ -3245,9 +3245,9 @@ post_recommend(
         if (brd->battr & BRD_PUSHSNEER)
         {
             //addscore = 0;
-            //switch(ans = vans("◎ 評論 1)推文 2)噓文 3)留言 ？[Q] "))
+            //switch (ans = vans("◎ 評論 1)推文 2)噓文 3)留言 ？[Q] "))
             //考量夢大已經習慣推文是箭頭符號
-            switch(ans = vans("◎ 評論 1)推文 2)噓文 ？[Q] "))
+            switch (ans = vans("◎ 評論 1)推文 2)噓文 ？[Q] "))
             {
                 case '1':
                     getans = vget(b_lines, 0, "推文：", msg, 53, DOECHO);
@@ -3269,7 +3269,7 @@ post_recommend(
         else if (brd->battr & BRD_PUSHDEFINE)
         {
             //addscore = 0;
-            switch(ans = vans("◎ 評論 1)推文 2)噓文 3)留言 4)自訂推文 5)自訂噓文 ？[Q] "))
+            switch (ans = vans("◎ 評論 1)推文 2)噓文 3)留言 4)自訂推文 5)自訂噓文 ？[Q] "))
             {
                 case '1':
                     getans = vget(b_lines, 0, "推文：", msg, 53, DOECHO);
