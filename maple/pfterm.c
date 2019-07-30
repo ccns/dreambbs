@@ -2321,8 +2321,6 @@ scr_dump(screen_backup_t *psb)
     }
 }
 
-void (*const scr_restore)(screen_backup_t *psb) = scr_restore_free;
-
 void
 scr_restore_free(screen_backup_t *psb)
 {

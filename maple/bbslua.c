@@ -162,7 +162,7 @@ extern time_t now;
 #endif
 
 #ifndef BBSLUA_FORCE_TIME4_T
-static char *(*const ctime4)(const time_t *clock) = ctime;
+static inline char *ctime4(const time_t *clock) { return ctime(clock); }
 #endif
 
 #ifdef BBSLUA_HAVE_STR_ANSI
@@ -174,7 +174,7 @@ static inline void strip_ansi(char *dst, const char *str, int mode)
 #endif
 
 #ifndef BBSLUA_HAVE_DOUPDATE
-static void (*const doupdate)(void) = refresh;
+static inline void doupdate(void) { refresh(); }
 #endif
 
 #ifndef BBSLUA_HAVE_GETYX
