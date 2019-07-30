@@ -1275,12 +1275,12 @@ ve_header(
             fprintf(fp, "%s %s (%s) %s %s\n", str_author1, cuser.userid,
 
 #if defined(REALINFO) && defined(POSTS_REALNAMES)
-                cuser.realname
+                cuser.realname,
 #else
-                HAS_PERM(PERM_DENYNICK) ? cutmp->username : cuser.username
+                HAS_PERM(PERM_DENYNICK) ? cutmp->username : cuser.username,
 #endif
 
-                , curredit & EDIT_OUTGO ? str_post1 : str_post2, currboard);
+                curredit & EDIT_OUTGO ? str_post1 : str_post2, currboard);
         }
     }
     fprintf(fp, "標題: %s\n時間: %s\n", title, ctime(&now));
