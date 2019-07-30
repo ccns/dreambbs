@@ -1061,6 +1061,7 @@ post_cross(
     char cbuf[128];
     HDR chdr;
 #endif
+    int success_count = 0;
 
     if (!cuser.userlevel)
         return XO_NONE;
@@ -1247,6 +1248,8 @@ post_cross(
                     if (rc == 's' && !(battr & BRD_NOTRAN))
 #endif
                         outgo_post(&xpost, xboard);
+
+                success_count++;
             }
         } while (locus < tag);
 
@@ -1273,7 +1276,8 @@ post_cross(
         else
         {
             /* cuser.numposts++; */
-            cuser.numposts += (tag == 0) ? 1 : tag; /* lkchu.981201: 要算 tag */
+            /* cuser.numposts += (tag == 0) ? 1 : tag; */ /* lkchu.981201: 要算 tag */
+            cuser.numposts += success_count; /* IID.20190730: Use the count of successful reposting */
             vmsg("轉錄完成");
         }
     }

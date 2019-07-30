@@ -871,6 +871,7 @@ XO *xo)
     HDR *hdr, xpost, *ghdr;
     int method = 1, rc, tag, locus, battr;
     FILE *xfp;
+    int success_count = 0;
 
     if (!cuser.userlevel)
         return XO_NONE;
@@ -950,6 +951,7 @@ XO *xo)
 
                 rec_add(xfolder, &xpost, sizeof(xpost));
 
+                success_count++;
             }
         }
         while (locus < tag);
@@ -960,7 +962,7 @@ XO *xo)
         }
         else
         {
-            cuser.numposts += (tag == 0) ? 1 : tag;
+            cuser.numposts += success_count; /* IID.20190730: Use the count of successful reposting */
             vmsg("Âà¿ý§¹¦¨");
         }
     }
