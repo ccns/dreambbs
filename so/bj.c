@@ -145,8 +145,8 @@ BlackJack(void)
                 move(3, 0); prints("\x1b[1;41;33m７７７ !!! 得獎金 %d 火車幣\x1b[m", money*seven);
                 cuser_money += (money * seven);
 //              inmoney(money*seven);
-                game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;31m  ７７７   \x1b[m"
-                         , money*seven);
+                game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;31m  ７７７   \x1b[m",
+                         money*seven);
                 pressanykey("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
                 flag = 1; m = 0;
             }
@@ -156,8 +156,8 @@ BlackJack(void)
                 move(18, 3); prints("\x1b[1;41;33m 超級正統 BLACK JACK  \x1b[m");
                 move(3, 0); prints("\x1b[1;41;33m超級正統 BLACK JACK !!! 得獎金 %d 金幣\x1b[m", money*super_jack);
                 cuser_money += (money * super_jack);
-                game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;41;33m 正統 ＡＪ \x1b[m"
-                         , money*super_jack);
+                game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;41;33m 正統 ＡＪ \x1b[m",
+                         money*super_jack);
                 pressanykey("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
                 flag = 1; m = 0;
             }

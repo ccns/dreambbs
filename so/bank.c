@@ -65,8 +65,8 @@ int point1_money(void)
     vs_bar("夢幣轉換");
 
     move(2, 0);
-    prints("你的身上有 %9d 夢幣\n\n           %9d 優良點數"
-           , acct.money, acct.point1);
+    prints("你的身上有 %9d 夢幣\n\n           %9d 優良點數",
+           acct.money, acct.point1);
     if (acct.point1 < 1)
     {
         pmsg2("優良點數不足");

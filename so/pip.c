@@ -929,9 +929,9 @@ int mode)
     else
         color1 = 37;
     sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
-    sprintf(buf
-            , " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m"
-            , yo[age], inbuf1, tm, color1, d.money);
+    sprintf(buf,
+            " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m",
+            yo[age], inbuf1, tm, color1, d.money);
     outs_centered(buf);
 
     move(2, 0);
@@ -958,9 +958,9 @@ int mode)
     else
         color3 = 37;
 
-    sprintf(buf
-            , " \x1b[1;32m[生  命]\x1b[%dm %-10d\x1b[32m[法  力]\x1b[%dm %-10d\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m "
-            , color1, d.hp, color2, d.mp, d.weight, color3, d.tired);
+    sprintf(buf,
+            " \x1b[1;32m[生  命]\x1b[%dm %-10d\x1b[32m[法  力]\x1b[%dm %-10d\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m ",
+            color1, d.hp, color2, d.mp, d.weight, color3, d.tired);
     outs_centered(buf);
 
     move(3, 0);
@@ -988,9 +988,9 @@ int mode)
         color4 = 33;
     else
         color4 = 37;
-    sprintf(buf
-            , " \x1b[1;32m[命 MAX]\x1b[37m %-10d\x1b[32m[法 MAX]\x1b[37m %-10d\x1b[32m[髒／病]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[快／滿]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m"
-            , d.maxhp, d.maxmp, color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
+    sprintf(buf,
+            " \x1b[1;32m[命 MAX]\x1b[37m %-10d\x1b[32m[法 MAX]\x1b[37m %-10d\x1b[32m[髒／病]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[快／滿]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m",
+            d.maxhp, d.maxmp, color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
     outs_centered(buf);
     if (mode == 0)  /*主要畫面*/
     {
@@ -1034,27 +1034,27 @@ int mode)
             color4 = 33;
         else
             color4 = 37;
-        sprintf(buf
-                , " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m"
-                , color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
+        sprintf(buf,
+                " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m",
+                color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
         outs_centered(buf);
 
     }
     else if (mode == 2)/*打工*/
     {
         move(4, 0);
-        sprintf(buf
-                , " \x1b[1;36m[愛心]\x1b[37m%-5d\x1b[36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[道德]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[家事]\x1b[37m%-5d\x1b[0m"
-                , d.love, d.wisdom, d.character, d.art, d.ethics, d.brave, d.homework);
+        sprintf(buf,
+                " \x1b[1;36m[愛心]\x1b[37m%-5d\x1b[36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[道德]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[家事]\x1b[37m%-5d\x1b[0m",
+                d.love, d.wisdom, d.character, d.art, d.ethics, d.brave, d.homework);
         outs_centered(buf);
 
     }
     else if (mode == 3)/*修行*/
     {
         move(4, 0);
-        sprintf(buf
-                , " \x1b[1;36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[攻擊]\x1b[37m%-5d\x1b[36m[防禦]\x1b[37m%-5d\x1b[36m[速度]\x1b[37m%-5d\x1b[0m"
-                , d.wisdom, d.character, d.art, d.brave, d.attack, d.resist, d.speed);
+        sprintf(buf,
+                " \x1b[1;36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[攻擊]\x1b[37m%-5d\x1b[36m[防禦]\x1b[37m%-5d\x1b[36m[速度]\x1b[37m%-5d\x1b[0m",
+                d.wisdom, d.character, d.art, d.brave, d.attack, d.resist, d.speed);
         outs_centered(buf);
 
     }
@@ -4956,8 +4956,8 @@ int first)
                     d.hskill += random() % 2 + 1;
                     sprintf(buf, "普通攻擊，對方體力減低%d", dinjure);
                     vmsg(buf);
-                    sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了普通攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
-                            , d.name, opponent->pip->name, dinjure);
+                    sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了普通攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m",
+                            d.name, opponent->pip->name, dinjure);
                 }
                 opponent->pip->resistmode = 0;
                 opponent->pip->msgcount++;
@@ -4991,8 +4991,8 @@ int first)
                         d.hskill += random() % 2 + 2;
                         sprintf(buf, "全力攻擊，對方體力減低%d", dinjure);
                         vmsg(buf);
-                        sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了全力攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
-                                , d.name, opponent->pip->name, dinjure);
+                        sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了全力攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m",
+                                d.name, opponent->pip->name, dinjure);
                     }
                     else
                     {
@@ -5053,8 +5053,8 @@ int first)
                             d.mskill += random() % 2 + 2;
                             sprintf(buf, "魔法攻擊，對方體力減低%d", dinjure);
                             vmsg(buf);
-                            sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了魔法攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
-                                    , d.name, opponent->pip->name, dinjure);
+                            sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了魔法攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m",
+                                    d.name, opponent->pip->name, dinjure);
                         }
                     }
 
@@ -8707,9 +8707,9 @@ int mode)
     else
         color1 = 37;
     sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
-    sprintf(buf
-            , " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m"
-            , yo[age], inbuf1, m, color1, d.money);
+    sprintf(buf,
+            " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m",
+            yo[age], inbuf1, m, color1, d.money);
     outs_centered(buf);
 
     move(2, 0);
@@ -8738,9 +8738,9 @@ int mode)
 
     sprintf(inbuf1, "%d/%d", d.hp, d.maxhp);
     sprintf(inbuf2, "%d/%d", d.mp, d.maxmp);
-    sprintf(buf
-            , " \x1b[1;32m[生  命]\x1b[%dm %-10s\x1b[32m[法  力]\x1b[%dm %-10s\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m "
-            , color1, inbuf1, color2, inbuf2, d.weight, color3, d.tired);
+    sprintf(buf,
+            " \x1b[1;32m[生  命]\x1b[%dm %-10s\x1b[32m[法  力]\x1b[%dm %-10s\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m ",
+            color1, inbuf1, color2, inbuf2, d.weight, color3, d.tired);
     outs_centered(buf);
 
     move(3, 0);
@@ -8768,9 +8768,9 @@ int mode)
         color4 = 33;
     else
         color4 = 37;
-    sprintf(buf
-            , " \x1b[1;32m[髒  髒]\x1b[%dm %-4d      \x1b[32m[病  氣]\x1b[%dm %-4d      \x1b[32m[快樂度]\x1b[%dm %-4d      \x1b[32m[滿意度]\x1b[%dm %-4d\x1b[0m"
-            , color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
+    sprintf(buf,
+            " \x1b[1;32m[髒  髒]\x1b[%dm %-4d      \x1b[32m[病  氣]\x1b[%dm %-4d      \x1b[32m[快樂度]\x1b[%dm %-4d      \x1b[32m[滿意度]\x1b[%dm %-4d\x1b[0m",
+            color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
     outs_centered(buf);
     if (mode == 1)/*餵食*/
     {
@@ -8799,9 +8799,9 @@ int mode)
             color4 = 33;
         else
             color4 = 37;
-        sprintf(buf
-                , " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m"
-                , color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
+        sprintf(buf,
+                " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m",
+                color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
         outs_centered(buf);
 
     }

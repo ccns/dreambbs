@@ -31,8 +31,8 @@ x_siteinfo(void)
     prints("     %s - %s\n", MYHOSTNAME, BBSIP);
     prints("祘Αセ %s [%s]\x1b[m\n", BBSVERNAME, BBSVERSION);
     prints("计 %d/%d\n", ushm->count, MAXACTIVE);
-    prints("╰参璽更 %.2f %.2f %.2f [%s]\n"
-        , load[0], load[1], load[2], load[0] > 10 ? "\x1b[1;41;37m筁蔼\x1b[m" : load[0] > 5 ?
+    prints("╰参璽更 %.2f %.2f %.2f [%s]\n",
+        load[0], load[1], load[2], load[0] > 10 ? "\x1b[1;41;37m筁蔼\x1b[m" : load[0] > 5 ?
         "\x1b[1;42;37m祔蔼\x1b[m" : "\x1b[1;44;37mタ盽\x1b[m");
     prints("ま戈 BRD %d KB, ACCT %d KB, HDR %d KB\n", sizeof(BRD), sizeof(ACCT), sizeof(HDR));
     prints("\n");
