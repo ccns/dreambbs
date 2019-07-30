@@ -728,10 +728,10 @@ tn_login(void)
                     }
 
                     if (utmp_count(cuser.userno, 0) > 2)
-            {
-                pmsg2_body("您已經達到多重登入上限");
-                login_abort("\n");
-            }
+                    {
+                        pmsg2_body("您已經達到多重登入上限");
+                        login_abort("\n");
+                    }
                 }
                 break;
             }

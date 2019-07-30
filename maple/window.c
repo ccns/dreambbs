@@ -464,7 +464,7 @@ pmsg2(const char *msg)
     int x;
 
     if (!msg)
-    return vmsg(NULL);
+        return vmsg(NULL);
 
 #ifdef M3_USE_PFTERM
     screen_backup_t old_screen = {0};
