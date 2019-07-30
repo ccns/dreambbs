@@ -254,12 +254,6 @@ brh_add(time_t prev, time_t chrono, time_t next)
                 return;
             }
 
-            if (next >= begin)
-            {
-                head[-1] = chrono;
-                return;
-            }
-
             break;
         }
 
