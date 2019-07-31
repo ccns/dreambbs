@@ -956,14 +956,28 @@ XO *xo)
         }
         while (locus < tag);
 
+        if (success_count == 0)
+        {
+            vmsg("轉錄失敗。");
+        }
         if (battr & BRD_NOCOUNT)
         {
-            outs("轉錄完成，文章不列入紀錄，敬請包涵。");
+            if (success_count == ((tag == 0) ? 1 : tag))
+                prints("轉錄 %d 篇成功\，文章不列入紀錄，敬請包涵。", success_count);
+            else
+                prints("轉錄 %d 篇成功\，%d 篇失敗，文章不列入紀錄，敬請包涵。",
+                    success_count, ((tag == 0) ? 1 : tag) - success_count);
         }
         else
         {
             cuser.numposts += success_count; /* IID.20190730: Use the count of successful reposting */
-            vmsg("轉錄完成");
+            if (success_count == ((tag == 0) ? 1 : tag))
+                sprintf(buf, "轉錄 %d 篇成功\，你的文章增為 %d 篇",
+                    success_count, cuser.numposts);
+            else
+                sprintf(buf, "轉錄 %d 篇成功\，%d 篇失敗，你的文章增為 %d 篇",
+                    success_count, ((tag == 0) ? 1 : tag) - success_count, cuser.numposts);
+            vmsg(buf);
         }
     }
     return XO_HEAD;
