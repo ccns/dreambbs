@@ -13,36 +13,36 @@
 /* Board Attribution : flags in BRD.battr                */
 /* ----------------------------------------------------- */
 
-#define BRD_NOZAP        0x000000001      /* 不可 zap */
-#define BRD_NOTRAN       0x000000002      /* 不轉信 */
-#define BRD_NOCOUNT      0x000000004      /* 不計文章發表篇數 */
-#define BRD_NOSTAT       0x000000008      /* 不納入熱門話題統計 */
-#define BRD_NOVOTE       0x000000010      /* 不公佈投票結果於 [sysop] 板 */
-#define BRD_ANONYMOUS    0x000000020      /* 匿名看板 */
-#define BRD_NOFORWARD    0x000000040      /* lkchu.981201: 不可轉寄 */
-#define BRD_LOGEMAIL     0x000000080      /* 自動附加e-mail */
-#define BRD_NOBAN        0x000000100      /* 不擋信 */
-#define BRD_NOLOG        0x000000200      /* 不紀錄站內違法 */
-#define BRD_NOCNTCROSS   0x000000400      /* 不紀錄 cross post */
-#define BRD_NOREPLY      0x000000800      /* 不能回文章 -- cache.090928: 禁止發表, 回推文 */
-#define BRD_NOLOGREAD    0x000001000      /* 不紀錄看版閱讀率 */
-#define BRD_CHECKWATER   0x000002000      /* 紀錄灌水次數 */
-#define BRD_CHANGETITLE  0x000004000      /* 板主修改版名 */
-#define BRD_MODIFY       0x000008000      /* 使用者不可修改文章 */
-#define BRD_PRH          0x000010000      /* 關閉推薦文章 */
-#define BRD_PUSHDISCON   0x000020000      /* 不可同ID連推 */
-#define BRD_PUSHTIME     0x000040000      /* 不可快速連推 */
-#define BRD_PUSHSNEER    0x000080000      /* 可以推噓文 */
-#define BRD_PUSHDEFINE   0x000100000      /* 可以自訂推文動詞 */
-#define BRD_NOTOTAL      0x000200000      /* 不統計看板使用紀錄 */
-#define BRD_USIES        0x000400000      /* 觀看進板紀錄 */
-#define BRD_BOTTOM       0x000800000      /* 置底功能 */
-#define BRD_VALUE        0x001000000      /* 優良點數看板 */
-#define BRD_26           0x002000000      /* 有問題勿使用 */
-#define BRD_NOPHONETIC   0x004000000      /* 注音文限制*/
-#define BRD_THRESHOLD    0x008000000      /* 發文限制看板 */
-#define BRD_POSTFIX      0x010000000      /* 板主可自訂發文類別 */
-#define BRD_RSS          0x020000000      /* RSS看板 */
+#define BRD_NOZAP        0x00000001       /* 不可 zap */
+#define BRD_NOTRAN       0x00000002       /* 不轉信 */
+#define BRD_NOCOUNT      0x00000004       /* 不計文章發表篇數 */
+#define BRD_NOSTAT       0x00000008       /* 不納入熱門話題統計 */
+#define BRD_NOVOTE       0x00000010       /* 不公佈投票結果於 [sysop] 板 */
+#define BRD_ANONYMOUS    0x00000020       /* 匿名看板 */
+#define BRD_NOFORWARD    0x00000040       /* lkchu.981201: 不可轉寄 */
+#define BRD_LOGEMAIL     0x00000080       /* 自動附加e-mail */
+#define BRD_NOBAN        0x00000100       /* 不擋信 */
+#define BRD_NOLOG        0x00000200       /* 不紀錄站內違法 */
+#define BRD_NOCNTCROSS   0x00000400       /* 不紀錄 cross post */
+#define BRD_NOREPLY      0x00000800       /* 不能回文章 -- cache.090928: 禁止發表, 回推文 */
+#define BRD_NOLOGREAD    0x00001000       /* 不紀錄看版閱讀率 */
+#define BRD_CHECKWATER   0x00002000       /* 紀錄灌水次數 */
+#define BRD_CHANGETITLE  0x00004000       /* 板主修改版名 */
+#define BRD_MODIFY       0x00008000       /* 使用者不可修改文章 */
+#define BRD_PRH          0x00010000       /* 關閉推薦文章 */
+#define BRD_PUSHDISCON   0x00020000       /* 不可同ID連推 */
+#define BRD_PUSHTIME     0x00040000       /* 不可快速連推 */
+#define BRD_PUSHSNEER    0x00080000       /* 可以推噓文 */
+#define BRD_PUSHDEFINE   0x00100000       /* 可以自訂推文動詞 */
+#define BRD_NOTOTAL      0x00200000       /* 不統計看板使用紀錄 */
+#define BRD_USIES        0x00400000       /* 觀看進板紀錄 */
+#define BRD_BOTTOM       0x00800000       /* 置底功能 */
+#define BRD_VALUE        0x01000000       /* 優良點數看板 */
+#define BRD_26           0x02000000       /* 有問題勿使用 */
+#define BRD_NOPHONETIC   0x04000000       /* 注音文限制*/
+#define BRD_THRESHOLD    0x08000000       /* 發文限制看板 */
+#define BRD_POSTFIX      0x10000000       /* 板主可自訂發文類別 */
+#define BRD_RSS          0x20000000       /* RSS看板 */
 
 /* ----------------------------------------------------- */
 /* 各種旗標的中文意義                                    */
