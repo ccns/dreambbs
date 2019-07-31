@@ -70,12 +70,10 @@ write_data(
     DATA *data,
     int mode)
 {
-    char buf[256];
     int i;
     const char *color;
 
-    sprintf(buf, "\x1b[1;32m%%%ds\x1b[m\n\n", 80);
-    printf(buf, "%s", title);
+    printf("\x1b[1;32m%*s\x1b[m\n\n", 80, title);
     if (mode == 0)
     {
         puts("\x1b[1;31m¦W¦¸\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34mNickname\x1b[m)  "
