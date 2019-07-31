@@ -835,9 +835,20 @@ xo_forward(
     if (userno > 0)
         m_biff(userno);
 
-    if (!(cc < 0) && success_count < ((tag == 0) ? 1 : tag))
-        cc = -1;
-    zmsg(cc < 0 ? "部份信件無法寄達" : "寄信完畢");
+    if (success_count == 0)
+    {
+        zmsg("轉寄失敗。");
+    }
+    else
+    {
+        char buf[80];
+        if (success_count == ((tag == 0) ? 1 : tag))
+            sprintf(buf, "轉寄 %d 篇成功\。", success_count);
+        else
+            sprintf(buf, "轉寄 %d 篇成功\，%d 篇失敗。",
+                success_count, ((tag == 0) ? 1 : tag) - success_count);
+        zmsg(buf);
+    }
 
     return XO_FOOT;
 }
