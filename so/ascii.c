@@ -68,7 +68,7 @@ input_tools(void)
         {"ˋ", "", "", "", "", "", "", "", "", ""}
     };
 
-    char buf[128] = "內碼輸入工具:", tmp[5];
+    char buf[128] = "內碼輸入工具:";
     char *show[5][10];
     int ch, i, page;
 
@@ -113,8 +113,7 @@ input_tools(void)
 
         for (i = 0; i < 10; i++)
         {
-            sprintf(tmp, "%d%s%s ", i, ".", show[page][i]);
-            strcat(buf, tmp);
+            sprintf(buf + strlen(buf), "%d%s%s ", i, ".", show[page][i]);
         }
         strcat(buf, "(P:上  N:下)[Q]");
         outz(buf);
