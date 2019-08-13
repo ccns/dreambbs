@@ -226,6 +226,7 @@ bsmtp(
     FILE *fp, *fr, *fw;
     char *str, buf[512], from[80], subject[80], msgid[80], keyfile[80], valid[10];
 #ifdef HAVE_SIGNED_MAIL
+    const char *signature = NULL;
     char prikey[PLAINPASSLEN];
     union {
         char str[PLAINPASSLEN];
@@ -408,9 +409,10 @@ bsmtp(
             sign.val.hash = str_hash(buf, stamp);
             sign.val.hash2 = str_hash2(buf, sign.val.hash);
             str_xor(sign.str, prikey);
+            explicit_zero_bytes(prikey, sizeof(prikey));
             /* Thor.990413: 不加()的話, 時間尾空白會被吃掉(驗證時) */
             fprintf(fw, "\x1b[1;32m※ X-Info: \x1b[33m%s\x1b[m\r\n\x1b[1;32m※ X-Sign: \x1b[36m%s%s \x1b[37m(%s)\x1b[m\r\n",
-                buf, msgid, genpasswd(sign.str), Btime(&stamp));
+                buf, msgid, signature = genpasswd(sign.str), Btime(&stamp));
         }
 #endif
         fputs("\r\n.\r\n", fw);
@@ -448,7 +450,7 @@ smtp_log:
     sprintf(buf, "%s%-13s%c> %s %s %s\n\t%s\n\t%s\n", Btime(&stamp), cuser.userid,
         ((method == MQ_JUSTIFY) ? '=' : '-'), rcpt, msgid,
 #ifdef HAVE_SIGNED_MAIL
-            *prikey ? genpasswd(sign.str): "NoPriKey",
+            signature? signature: "NoPriKey",
 #else
             "",
 #endif
@@ -718,6 +720,7 @@ m_verify(void)
     s.val.hash = str_hash(p, chrono);
     s.val.hash2 = str_hash2(p, s.val.hash);
     str_xor(s.str, prikey);
+    explicit_zero_bytes(prikey, sizeof(prikey));
 
     sprintf(buf, "(%s)", Btime(&chrono));
 

@@ -828,9 +828,10 @@ void explicit_zero_bytes(char *buf, size_t buflen)
 char *crypt(const char *key, const char *salt);
 static char pwbuf[PASSLEN];
 
+/* NOTE: The string pointed by `pw` will be wiped out. */
 char *genpasswd(char *pw)
 {
-    char saltc[2];
+    char saltc[2], *hash;
     int i, c;
 
     if (!*pw)
@@ -838,7 +839,10 @@ char *genpasswd(char *pw)
 
     /* IID.20190524: Get salt from the system PRNG device. */
     if (!getrandom_bytes(saltc, 2))
+    {
+        explicit_zero_bytes(pw, strlen(pw));
         return NULL;
+    }
 
     for (i = 0; i < 2; i++)
     {
@@ -850,18 +854,24 @@ char *genpasswd(char *pw)
         saltc[i] = c;
     }
     strcpy(pwbuf, pw);
-    return crypt(pwbuf, saltc);
+    explicit_zero_bytes(pw, strlen(pw));
+    hash = crypt(pwbuf, saltc);
+    explicit_zero_bytes(pwbuf, PLAINPASSLEN);
+    return hash;
 }
 
 
 /* Thor.990214: 註解: 合密碼時, 傳回0 */
+/* NOTE: The string pointed by `test` will be wiped out. */
 int chkpasswd(char *passwd, char *test)
 {
     char *pw;
 
     /* if (!*passwd) return -1 *//* Thor.990416: 怕有時passwd是空的 */
     str_ncpy(pwbuf, test, PLAINPASSLEN);
+    explicit_zero_bytes(test, strlen(test));
     pw = crypt(pwbuf, passwd);
+    explicit_zero_bytes(pwbuf, PLAINPASSLEN);
     return (strncmp(pw, passwd, PASSLEN));
 }
 
