@@ -12,9 +12,9 @@
 void
 input_tools(void)
 {
-    const char msg1[] = {"1.括符方塊  2.線條箭頭  3.數字標點？(N:下一頁)[Q]"};
-    const char msg2[] = {"4.圖案數字  5.希臘字母  6.注音符號？(P:上一頁)[Q]"};
-    const char *ansi1[5][10] =
+    const char msg1[] = "1.括符方塊  2.線條箭頭  3.數字標點？(N:下一頁)[Q]";
+    const char msg2[] = "4.圖案數字  5.希臘字母  6.注音符號？(P:上一頁)[Q]";
+    const char *const ansi1[5][10] =
     {
         {"▁", "▂", "▃", "▄", "▅", "▆", "▇", "█", "◢", "◣"},
         {"▏", "▎", "▍", "▌", "▋", "▊", "▉", "◥", "◤", "（"},
@@ -23,7 +23,7 @@ input_tools(void)
         {"︶", "︷", "︸", "︹", "︺", "﹁", "﹂", "﹃", "﹄", ""}
     };
 
-    const char *ansi2[5][10] =
+    const char *const ansi2[5][10] =
     {
         {"┌", "┬", "┐", "├", "┼", "┤", "└", "┴", "┘", "─"},
         {"│", "╭", "╮", "╰", "╯", "▔", "▕", "╱", "╲", "╳"},
@@ -32,7 +32,7 @@ input_tools(void)
         {"﹋", "︴", "﹏\", "–", "", "", "", "", "", ""}
     };
 
-    const char *ansi3[5][10] =
+    const char *const ansi3[5][10] =
     {
         {"，", "、", "。", "．", "‧", "；", "：", "？", "！", "…"},
         {"‘", "’", "“", "”", "〝", "〞", "＃", "＆", "＊", "※"},
@@ -41,7 +41,7 @@ input_tools(void)
         {"♂", "∵", "∴", "∩", "∪", "⊥", "∠", "∟", "⊿", ""}
     };
 
-    const char *ansi4[5][10] =
+    const char *const ansi4[5][10] =
     {
         {"○", "●", "△", "▲", "◎", "☆", "◇", "◆", "□", "■"},
         {"▽", "▼", "㊣", "⊕", "⊙", "０", "１", "２", "３", "４"},
@@ -50,7 +50,7 @@ input_tools(void)
         {"〦", "〧", "〨", "〩", "十", "卄", "卅", "", "", ""}
     };
 
-    const char *ansi5[5][10] =
+    const char *const ansi5[5][10] =
     {
         {"Α", "Β", "Γ", "Δ", "Ε", "Ζ", "Η", "Θ", "Ι", "Κ"},
         {"Λ", "Μ", "Ν", "Ξ", "Ο", "Π", "Ρ", "Σ", "Τ", "Υ"},
@@ -59,7 +59,7 @@ input_tools(void)
         {"ρ", "σ", "τ", "υ", "φ", "χ", "ψ", "ω", "", ""}
     };
 
-    const char *ansi6[5][10] =
+    const char *const ansi6[5][10] =
     {
         {"ㄅ", "ㄆ", "ㄇ", "ㄈ", "ㄉ", "ㄊ", "ㄋ", "ㄌ", "ㄍ", "ㄎ"},
         {"ㄏ", "ㄐ", "ㄑ", "ㄒ", "ㄓ", "ㄔ", "ㄕ", "ㄖ", "ㄗ", "ㄘ"},
@@ -69,7 +69,7 @@ input_tools(void)
     };
 
     char buf[128] = "內碼輸入工具:";
-    char *show[5][10];
+    const char *const (*show)[5][10];
     int ch, i, page;
 
     ch = 'p';
@@ -87,22 +87,22 @@ input_tools(void)
     switch (ch)
     {
     case '1':
-        memcpy(show, ansi1, sizeof(show));
+        show = &ansi1;
         break;
     case '2':
-        memcpy(show, ansi2, sizeof(show));
+        show = &ansi2;
         break;
     case '3':
-        memcpy(show, ansi3, sizeof(show));
+        show = &ansi3;
         break;
     case '4':
-        memcpy(show, ansi4, sizeof(show));
+        show = &ansi4;
         break;
     case '5':
-        memcpy(show, ansi5, sizeof(show));
+        show = &ansi5;
         break;
     case '6':
-        memcpy(show, ansi6, sizeof(show));
+        show = &ansi6;
         break;
     }
 
@@ -113,7 +113,7 @@ input_tools(void)
 
         for (i = 0; i < 10; i++)
         {
-            sprintf(buf + strlen(buf), "%d%s%s ", i, ".", show[page][i]);
+            sprintf(buf + strlen(buf), "%d%s%s ", i, ".", (*show)[page][i]);
         }
         strcat(buf, "(P:上  N:下)[Q]");
         outz(buf);
@@ -136,7 +136,7 @@ input_tools(void)
         }
         else
         {
-            ve_string(show[page][ch - '0']);
+            ve_string((*show)[page][ch - '0']);
             break;
         }
         buf[0] = '\0';
