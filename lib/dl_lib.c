@@ -23,11 +23,6 @@ int dl_size, dl_head;
 
 #define DL_ALLOC_MIN    5
 
-#if 1
-extern void blog(char *, char *);
-#define TRACE blog
-#endif
-
 void *DL_get(const char *name
              /* format: "Xmodule_path:Xname" */
     )

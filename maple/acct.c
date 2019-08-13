@@ -1398,7 +1398,7 @@ int ban_addr(char *addr)
     i = acl_has(FN_ETC_UNTRUST_ACL, foo, host + 1);
     /* *host = '@'; */
     if (i < 0)
-        TRACE("NOACL", host);
+        blog("NOACL", host);
     return i > 0;
 }
 
@@ -2861,7 +2861,7 @@ int m_register(void)
 
 
 /* ----------------------------------------------------- */
-/* 產生追蹤記錄：建議改用 log_usies()、TRACE()           */
+/* 產生追蹤記錄：建議改用 log_usies()、blog()            */
 /* ----------------------------------------------------- */
 
 

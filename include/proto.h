@@ -322,8 +322,6 @@ int class_add(XO *xo);
 /* macros                                                */
 /* ----------------------------------------------------- */
 
-#define TRACE   blog
-
 #define dashd(fpath)    S_ISDIR(f_mode(fpath))
 #define dashf(fpath)    S_ISREG(f_mode(fpath))
 
