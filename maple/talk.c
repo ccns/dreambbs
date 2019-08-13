@@ -4108,22 +4108,6 @@ ulist_changeship(
 
 #if 1
 static int
-ulist_test(
-    XO *xo)
-{
-    int fd;
-    char buf[128];
-    fd = open(FN_ETC_SYSOP, O_RDONLY);
-    sprintf(buf, "檔案編號 %d:%d:%d", fd, Ctrl('F'), '@');
-    if (fd >= 0)
-        close(fd);
-    pmsg(buf);
-/*  vget(b_lines, 0, "多少人:", buf, 6, DOECHO);
-    ushm->count = atoi(buf);*/
-    return XO_INIT;
-}
-
-static int
 ulist_state(
     XO *xo)
 {
@@ -4158,7 +4142,6 @@ KeyFunc ulist_cb[] =
     {XO_LOAD, ulist_body},
     {XO_NONE, ulist_init},
 #if 1
-    {'V', ulist_test},
     {'S', ulist_state},
 #endif
     {'y', ulist_readmail},
