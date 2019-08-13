@@ -844,6 +844,7 @@ static char pwbuf[PASSLEN + PASSHASHLEN];
     `GENPASSWD_SHA256` (5): SHA-256
     `GENPASSWD_DES` (0) / otherwise: DES
 */
+/* NOTE: The string pointed by `pw` will be wiped out. */
 char *genpasswd(char *pw, int mode)
 {
     char saltc[PASSLEN], *hash;
@@ -861,7 +862,10 @@ char *genpasswd(char *pw, int mode)
 
     /* IID.20190524: Get salt from the system PRNG device. */
     if (!getrandom_bytes(saltc + c, PASSLEN-1 - c))
+    {
+        explicit_zero_bytes(pw, strlen(pw));
         return NULL;
+    }
 
     saltc[PASSLEN-1] = '\0';
 
@@ -875,8 +879,11 @@ char *genpasswd(char *pw, int mode)
         saltc[i] = c;
     }
     strcpy(pwbuf, pw);
+    explicit_zero_bytes(pw, strlen(pw));
 
-    if (!(hash = crypt(pwbuf, saltc)))
+    hash = crypt(pwbuf, saltc);
+    explicit_zero_bytes(pwbuf, PLAINPASSLEN);
+    if (!hash)
     {
         if (mode)
             return genpasswd(pw, GENPASSWD_DES);  /* Fall back to DES encryption */
@@ -893,11 +900,13 @@ char *genpasswd(char *pw, int mode)
 }
 
 /* `genpasswd` for site signature */
+/* NOTE: The string pointed by `pw` will be wiped out. */
 char *gensignature(char *pw)
 {
     char *hash;
 
-    if (!(hash = genpasswd(pw, GENPASSWD_SHA256)))
+    hash = genpasswd(pw, GENPASSWD_SHA256);
+    if (!hash)
         return NULL;
 
     if (hash[PASSLEN])  /* `genpasswd()` is not falled back */
@@ -911,26 +920,32 @@ char *gensignature(char *pw)
 
 
 /* Thor.990214: 註解: 合密碼時, 傳回0 */
+/* NOTE: The string pointed by `test` will be wiped out. */
 int chkpasswd(char *passwd, char *passhash, char *test)
 {
     char *pw;
 
     /* if (!*passwd) return -1 *//* Thor.990416: 怕有時passwd是空的 */
+
+    str_ncpy(pwbuf, test, PLAINPASSLEN);
+    explicit_zero_bytes(test, strlen(test));
+
     if (*passwd == '$')   /* IID.20190522: `passhash` is the encrypted password. */
     {
-        str_ncpy(pwbuf, test, PLAINPASSLEN);
         pw = crypt(pwbuf, passwd) + PASSLEN;
+        explicit_zero_bytes(pwbuf, PLAINPASSLEN);
         return (strncmp(pw, passhash+1, PASSHASHLEN));  /* `passhash` is prefixed with `$` */
     }
     else  /* IID.20190522: `passwd` is the encrypted password; legacy/falled-back `passwd`. */
     {
-        str_ncpy(pwbuf, test, PLAINPASSLEN);
         pw = crypt(pwbuf, passwd);
+        explicit_zero_bytes(pwbuf, PLAINPASSLEN);
         return (strncmp(pw, passwd, PASSLEN));
     }
 }
 
 /* `chkpasswd` for site signature */
+/* NOTE: The string pointed by `test` will be wiped out. */
 int chksignature(char *passwd, char *test)
 {
     char saltc[PASSLEN], hashc[PASSHASHLEN];
