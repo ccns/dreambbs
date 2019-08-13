@@ -1,8 +1,10 @@
+#define __STDC_WANT_LIB_EXT1__  1
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "dao.h"
@@ -808,6 +810,19 @@ char *getrandom_bytes(char *buf, size_t buflen)
 #endif
 
     return buf;
+}
+
+/* IID.20190826: Write zeros to a buffer, not optimized away if possible. */
+void explicit_zero_bytes(char *buf, size_t buflen)
+{
+#ifdef __STDC_LIB_EXT1__
+    memset_s(buf, buflen, 0, buflen);
+#elif GLIBC_PREREQ(2, 25) || OpenBSD >= 201405 /* 5.5 */ || __FreeBSD_version >= 1100000 /* 11.0 */
+    explicit_bzero(buf, buflen);
+#else
+    /* Cannot do anything better */
+    memset(buf, 0, buflen);
+#endif
 }
 
 char *crypt(const char *key, const char *salt);
