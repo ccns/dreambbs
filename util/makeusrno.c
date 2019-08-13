@@ -118,7 +118,7 @@ resetbrd(void)
         ptr = de->d_name;
         if (ptr[0] > ' ' && ptr[0] != '.')
         {
-            sprintf(buf, "/home/bbs/brd/%s/friend", ptr);
+            sprintf(buf, BBSHOME "/brd/%s/friend", ptr);
             pal_sync(buf);
             bimage(ptr);
         }
