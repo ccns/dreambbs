@@ -1299,7 +1299,7 @@ m_setmboxdir(void)
 
         usr_fpath(upath, cuser.userid, NULL);
 
-        sprintf(fpath1, "/home/bbs/usr/%s/%s", id, cuser.userid);
+        sprintf(fpath1, BBSHOME "/usr/%s/%s", id, cuser.userid);
 
         sprintf(fpath2, "~/bin/redir");
 

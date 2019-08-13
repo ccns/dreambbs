@@ -49,7 +49,7 @@ main(void)
 
     strcpy(fpath, "/var/tape/brd");
 
-    chdir("/home/bbs/brd");
+    chdir(BBSHOME "/brd");
     traverse(fpath);
     return 0;
 }

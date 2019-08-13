@@ -1,10 +1,11 @@
 #!/bin/bash
+BBSHOME=${BBSHOME:-"/home/bbs"}
 declare -i a
 #declare -i b
 #declare -i c
-cd /home/bbs/brd || exit 1
+cd "${BBSHOME}/brd" || exit 1
 for file in */; do
-    cd "/home/bbs/brd/$file" || continue
+    cd "${BBSHOME}/brd/$file" || continue
     if (test -e usies); then
         rm -f usies
         let a++

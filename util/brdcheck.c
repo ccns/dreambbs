@@ -33,7 +33,7 @@ main(
 
         (void)buf2;
 
-        sprintf(buf, "/home/bbs/brd/%c", c);
+        sprintf(buf, BBSHOME "/brd/%c", c);
         chdir(buf);
 
         if (!(dirp = opendir(".")))
