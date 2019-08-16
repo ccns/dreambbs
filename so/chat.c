@@ -606,14 +606,10 @@ int
 t_chat(void)
 {
     int ch, cfd, cmdpos, cmdcol;
-    char *ptr = NULL, buf[80], chatid[9];
+    char *ptr = NULL, buf[128], chatid[9];
     struct sockaddr_in sin;
 #if     defined(__OpenBSD__)
     struct hostent *h;
-#endif
-
-#ifdef CHAT_SECURE
-    extern char passbuf[];
 #endif
 
 #ifdef EVERY_Z
@@ -695,14 +691,19 @@ t_chat(void)
 #ifdef CHAT_SECURE
         /* Thor.0729: secured chat room */
         /* sprintf(buf, "/! %d %s %s %s\n", */
-        sprintf(buf, "/! %s %s %s\n",
+        sprintf(buf, "/! %s %s %s%s\n",
                 /* cuser.userno, cuser.userid, chatid, cuser.passwd); */
                 /* cuser.userno, cuser.userid, chatid, passbuf); */
-                cuser.userid, chatid, passbuf);
+                /* cuser.userid, chatid, passbuf); */
+                cuser.userid, chatid, cuser.passwd,
+                /* (*cuser.passwd == '$') ? cuser.passhash : */ "");
+
         /* Thor.0819: 拿掉userno */
         /* Thor.0730: passwd 改為最後的參數 */
         /* Thor.0813: passwd 改為真正的password, for C/S bbs */
         /* Thor.0813: xchatd中, chatid 自動跳過空白, 所以有空白會 invalid login */
+        /* IID.20190926: Global array variable `passbuf` is removed;
+              change `<passwd>` to `cuser.passwd` + `cuser.passhash` */
 
         /*
          * 作者  opus (人生有味是清歡)                                站內

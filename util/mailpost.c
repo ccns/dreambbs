@@ -12,8 +12,6 @@
 
 #include "bbs.h"
 
-extern char *crypt(const char *key, const char *salt);
-
 //#define LOG_FILE        "run/mailog"
 #define LOG_FILE        FN_BBSMAILPOST_LOG
 
@@ -627,8 +625,7 @@ mailpost(void)
 
     /* check password */
 
-    key = crypt(mypasswd, myacct.passwd);
-    if (strncmp(key, myacct.passwd, PASSLEN))
+    if (chkpasswd(myacct.passwd, mypasswd))
     {
         close(fh);
         sprintf(buf, "BBS user <%s> password incorrect", myname);
