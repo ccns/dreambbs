@@ -114,7 +114,7 @@ struct ChatUser
     int retry;
 
     int isize;                  /* current size of ibuf */
-    char ibuf[80];              /* buffer for non-blocking receiving */
+    char ibuf[128];             /* buffer for non-blocking receiving */
     char userid[IDLEN + 1];     /* real userid */
     char chatid[9];             /* chat id */
     char rhost[30];             /* host address */
@@ -1860,7 +1860,10 @@ login_user(
 
     /* Thor.990214: 注意, daolib中 非0代表失敗 */
     /* if (!chkpasswd(acct.passwd, acct.passhash, passwd)) */
-    if (chkpasswd(acct.passwd, acct.passhash, passwd))
+    if ((strncmp(passwd, acct.passwd, PASSLEN-1)
+          || strlen(passwd) < PASSLEN
+          || strncmp(passwd + PASSLEN - 1, acct.passhash, sizeof(acct.passhash)))
+        && chkpasswd(acct.passwd, acct.passhash, passwd))
     {
 
 #ifdef  DEBUG

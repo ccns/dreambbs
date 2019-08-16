@@ -42,9 +42,6 @@ extern CHECKSUMCOUNT cksum;
 /* static int mport; */ /* Thor.990325: 不需要了:P */
 static u_long tn_addr;
 
-#ifdef CHAT_SECURE
-char passbuf[PLAINPASSLEN];
-#endif
 
 #ifdef  TREAT
 int treat=0;
@@ -575,9 +572,7 @@ tn_login(void)
     time_t start, check_deny;
     char fpath[80], uid[IDLEN + 1];
 
-#ifndef CHAT_SECURE
     char passbuf[PLAINPASSLEN];
-#endif
 
     /* 借 currtitle 一用 */
 
