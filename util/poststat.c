@@ -174,7 +174,7 @@ poststat(
         FILE *fpw;
 
         /* --------------------------------------- */
-        /* load .post and statictic processing     */
+        /* load .post and statistic processing     */
         /* --------------------------------------- */
 
         unlink(FN_POST_OLD_DB);
@@ -202,7 +202,7 @@ poststat(
     else
     {
         /* ---------------------------------------------- */
-        /* load previous results and statictic processing */
+        /* load previous results and statistic processing */
         /* ---------------------------------------------- */
 
         i = mycount[mytype];
