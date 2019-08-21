@@ -298,7 +298,8 @@ main(
     }
     else
     {
-        printf("syntax : rmbadmail [-a|-b] [account|board]\n");
+        fprintf(stderr, "syntax : %s {-a [account]|-b [board]}\n", argv[0]);
+        return 2;
     }
     printf("total unlink  %10d  unlink  size : %10d\n", ulink, u_size);
     printf("total reserve %10d  reserve size : %10d\n", reserve, r_size);

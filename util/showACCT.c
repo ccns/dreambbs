@@ -130,8 +130,8 @@ main(
 
     if (argc < 2)
     {
-        printf("Usage: %s UserID1 [UserID2] ...\n", argv[0]);
-        return -1;
+        fprintf(stderr, "Usage: %s <UserID1> [UserID2] ...\n", argv[0]);
+        return 2;
     }
 
     chdir(BBSHOME);

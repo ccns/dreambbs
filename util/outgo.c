@@ -67,7 +67,8 @@ main(
     }
     else
     {
-        printf("\nSYNOPSIS : outgo 看版 起點 終點\n");
+        fprintf(stderr, "\nSYNOPSIS : %s <看版> <起點> <終點>\n", argv[0]);
+        return 2;
     }
     return 0;
 }

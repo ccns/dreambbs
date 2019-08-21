@@ -983,12 +983,12 @@ static void
 usage(
     const char *argv)
 {
-    printf("Usage: %s [options]\n", argv);
-    printf("       -c  將 high-number 與伺服器上同步(不取信)\n");
-    printf("       -k  砍掉目前正在跑的 bbslink，並重新啟動 bbslink\n");
-    printf("       -v  顯示詳細的連線過程\n");
-    printf("       -a ######  指定每個群組最多取幾封信(預設 %d 封)\n", MAX_ARTS);
-    printf("       -s site    只取這個站台的文章\n");
+    fprintf(stderr, "Usage: %s [options]\n", argv);
+    fprintf(stderr, "       -c  將 high-number 與伺服器上同步(不取信)\n");
+    fprintf(stderr, "       -k  砍掉目前正在跑的 bbslink，並重新啟動 bbslink\n");
+    fprintf(stderr, "       -v  顯示詳細的連線過程\n");
+    fprintf(stderr, "       -a ######  指定每個群組最多取幾封信(預設 %d 封)\n", MAX_ARTS);
+    fprintf(stderr, "       -s site    只取這個站台的文章\n");
 }
 
 
@@ -1036,7 +1036,7 @@ main(
     if (errflag > 0)
     {
         usage(argv[0]);
-        return -1;
+        return 2;
     }
 
     /* 開始 bbslink，將 bbslink 鎖住 */

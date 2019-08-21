@@ -22,8 +22,8 @@ main(
 
     if (argc < 3)
     {
-        printf("Usage:\t%s <bmw file> <userid>\n", argv[0]);
-        exit(1);
+        fprintf(stderr, "Usage:\t%s <bmw file> <userid>\n", argv[0]);
+        exit(2);
     }
 
     strcpy(fpath, BBSHOME"/");

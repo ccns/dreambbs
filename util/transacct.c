@@ -281,8 +281,8 @@ main(
 
     if (argc > 2)
     {
-        printf("Usage: %s [userid]\n", argv[0]);
-        return -1;
+        fprintf(stderr, "Usage: %s [userid]\n", argv[0]);
+        return 2;
     }
 
     for (c = 'a'; c <= 'z'; c++)

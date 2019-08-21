@@ -97,11 +97,12 @@ main(
         }
         else
         {
-            printf(BINARY_PREFIX"counter w SML MR MHL MHD \n");
-            printf("SML = 同時在站內人數\n");
-            printf("MR = 總註冊人數\n");
-            printf("MHL = 單一小時上線人次\n");
-            printf("MHD = 單日上線人次\n");
+            fprintf(stderr, "%s w <SML> <MR> <MHL> <MHD> \n", argv[0]);
+            fprintf(stderr, "SML = 同時在站內人數\n");
+            fprintf(stderr, "MR = 總註冊人數\n");
+            fprintf(stderr, "MHL = 單一小時上線人次\n");
+            fprintf(stderr, "MHD = 單日上線人次\n");
+            return 2;
         }
     }
 

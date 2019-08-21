@@ -99,8 +99,8 @@ main(
     chdir(BBSHOME);
     if (argc < 2)
     {
-        printf("Usage: msgall <msg>\n");
-        exit(0);
+        fprintf(stderr, "Usage: %s <msg>\n", argv[0]);
+        exit(2);
     }
 
     ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));

@@ -6,7 +6,7 @@ int main(int argc, char **argv)
     unsigned int a;
 
     if (argc !=2)
-        return 1;
+        return 2;
 
     fp = fopen(argv[1], "r");
     if (fp)

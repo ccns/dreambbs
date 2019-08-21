@@ -3416,7 +3416,7 @@ main(
                 "\t-d  debug mode\n"
                 "\t-h  help\n",
                 argv[0]);
-            exit(0);
+            exit(2);
         }
     }
 

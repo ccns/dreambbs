@@ -125,11 +125,10 @@ main(
 {
     if (argc != 2)
     {
-        printf("Usage:\t%s file\n", argv[0]);
+        fprintf(stderr, "Usage:\t%s <file>\n", argv[0]);
+        exit(2);
     }
-    else
-    {
-        acl_sort(argv[1]);
-    }
+
+    acl_sort(argv[1]);
     exit(0);
 }

@@ -20,8 +20,8 @@ main(
 
     if (argc < 2)
     {
-        printf("Usage:\t%s .DIR\n", argv[0]);
-        exit(1);
+        fprintf(stderr, "Usage:\t%s <.DIR>\n", argv[0]);
+        exit(2);
     }
 
     inf = open(argv[1], O_RDONLY);

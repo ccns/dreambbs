@@ -4,7 +4,7 @@
 int main(int argc, char *argv[])
 {
     if (argc!=3) {
-        exit(1);
+        exit(2);
     }
     char *source = argv[1];
     char *destination = argv[2];

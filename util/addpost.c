@@ -62,8 +62,8 @@ main(
 
     if (argc != 6)
     {
-        printf("Usage: %s brdname userid username title filepath\n", argv[0]);
-        return -1;
+        fprintf(stderr, "Usage: %s <brdname> <userid> <username> <title> <filepath>\n", argv[0]);
+        return 2;
     }
 
     chdir(BBSHOME);

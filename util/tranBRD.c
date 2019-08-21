@@ -63,8 +63,8 @@ main(
 
     if (argc < 2)
     {
-        printf("Usage:\t%s <.BRD>\n", argv[0]);
-        exit(1);
+        fprintf(stderr, "Usage:\t%s <.BRD>\n", argv[0]);
+        exit(2);
     }
 
 

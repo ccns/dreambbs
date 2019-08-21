@@ -365,8 +365,8 @@ main(
 
     if (argc < 2)
     {
-        printf("Usage:\t%s <bbs_userid>\n", argv[0]);
-        exit(-1);
+        fprintf(stderr, "Usage:\t%s <bbs_userid>\n", argv[0]);
+        exit(2);
     }
 
     setgid(BBSGID);

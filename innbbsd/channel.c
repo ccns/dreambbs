@@ -834,8 +834,8 @@ static void
 usage(
     const char *argv)
 {
-    printf("Usage: %s [options]\n", argv);
-    printf("       -i        以 inetd wait option 啟動\n");
+    fprintf(stderr, "Usage: %s [options]\n", argv);
+    fprintf(stderr, "       -i        以 inetd wait option 啟動\n");
 }
 
 
@@ -868,7 +868,7 @@ main(
 
         default:
             usage(argv[0]);
-            exit(-1);
+            exit(2);
         }
     }
 
