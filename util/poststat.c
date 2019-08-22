@@ -315,8 +315,8 @@ poststat(
 
 static int
 pa_cmp(
-    void const *x,
-    void const *y)
+    const void *x,
+    const void *y)
 {
     int dif;
 
