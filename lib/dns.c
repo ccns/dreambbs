@@ -436,6 +436,7 @@ int dns_open(const char *host, int port)
         }
         if (n == 3)
         {
+            ancount = 0;  // IID.20190822: Prevent continuing the `while` loop after `goto`.
             cp = (unsigned char *)buf;
             goto ip;
         }
