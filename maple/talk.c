@@ -4142,7 +4142,7 @@ ulist_april1(
     XO *xo)
 {
     char buf[256];
-    more("gem/brd/Admin/J/A106LL7J", NULL);
+    more(FN_APRIL_FIRST, NULL);
     sprintf(buf, "您是第 %d 個被騙的使用者 ^^y ", ushm->avgload);
     if (!aprilfirst)
         ushm->avgload++;

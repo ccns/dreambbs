@@ -1017,7 +1017,7 @@ tn_login(void)
 #if 0
     if (cuser.ufo2 & UFO2_APRIL1)
     {
-        more("gem/brd/Admin/J/A106LL7J", NULL);
+        more(FN_APRIL_FIRST, NULL);
         bell();
         sleep(1);
         bell();
