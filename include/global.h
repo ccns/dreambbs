@@ -223,6 +223,8 @@
 /* ----------------------------------------------------- */
 #define FN_ERROR_CAMERA         "gem/@/@error-camera"   /* 錯誤的動態看版 */
 #define FN_HOTBOARD             "gem/@/@HotBoard"       /* 熱門看板 */
+#define FN_APRIL_FIRST          "gem/brd/Admin/J/A106LL7J"
+                                                        /* IID.20190822: The April first article (unused) */
 
 #define FN_GAME_BBSNET          "game/bbsnet/bbsdata.db"
                                                         /* BBSNET 站台 */
