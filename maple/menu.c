@@ -366,17 +366,18 @@ vs_head(
     else if ( spc > len )
     {
         spc = len;
+        memcpy(ttl, mid, spc);
+        ttl[spc] = '\0';
+        mid = ttl;
     }
-    memcpy(ttl, mid, spc);
-    ttl[spc] = '\0';
-    mid = ttl;
 
     spc = 2 + len - spc; /* 擺完 mid 以後，中間還有 spc 格空間，在 mid 左右各放 spc/2 長的空白 */
     len = (1 - spc) & 1;
 
     if (spc < 0)
     {
-        ttl[strlen(mid)+spc]= '\0';
+        if (mid == ttl)
+            ttl[strlen(ttl)+spc]= '\0';
         spc = 0;
     }
 
