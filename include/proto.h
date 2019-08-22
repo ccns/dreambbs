@@ -183,7 +183,7 @@ int post_edit(XO *xo);
 void header_replace(XO *xo, HDR *hdr);
 int post_title(XO *xo);
 int post_ban_mail(XO *xo);
-void record_recommend(const int chrono, const char *const text);
+void record_recommend(int chrono, const char *text);
 int post_resetscore(XO *xo);
 int post_recommend(XO *xo);
 int post_manage(XO *xo);
