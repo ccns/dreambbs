@@ -16,7 +16,7 @@
 #define COLOR_INDEX     /* Thor.980307: 加上顏色試試是否比較易找 */
 
 
-/* GINDEX_LOG  眸殿晶儭纁| */
+/* GINDEX_LOG 必須絕對路徑 */
 #define GINDEX_LOG      BBSHOME"/"FN_GINDEX_LOG
 
 
