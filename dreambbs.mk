@@ -52,7 +52,7 @@ USE_BBSLUA	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSLUA")) $(DEF_YES)'
 USE_BBSRUBY	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSRUBY")) $(DEF_YES)'
 USE_LUAJIT	!= sh -c '$(DEF_TEST$(conf::= "BBSLUA_USE_LUAJIT")) $(DEF_YES)'
 
-CLANG_MODERN != [ $$(${GETVALUE${conf::= "__clang_major__"}${default::= 0}${hdr::=}}) -ge 6 ] ${DEF_YES}
+CC_HASFLAGS = echo "" | $(CC) -o /dev/null -x c -E $(flags:M*) -Werror - >/dev/null 2>&1
 
 .if $(CC) == "clang"
 CFLAGS_WARN	+= -Wno-invalid-source-encoding
@@ -81,7 +81,8 @@ NO_SO		?=
 CFLAGS_MAPLE	+= -DNO_SO
 .endif
 
-.if $(CLANG_MODERN)
+CC_HAS_W_UNREACHABLE_CODE_AGGRESSIVE != $(CC_HASFLAGS$(flags::= -Wunreachable-code-aggressive)) $(DEF_YES)
+.if $(CC_HAS_W_UNREACHABLE_CODE_AGGRESSIVE)
 CFLAGS_COMPAT  += -Wunreachable-code-aggressive
 .else
 CFLAGS_COMPAT  += -Wunreachable-code
