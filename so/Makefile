@@ -12,11 +12,11 @@ SRCROOT	= ..
 .include "./so.mk"
 
 .if $(USE_BBSLUA)
-CFLAGS	+= ${LUA_CFLAGS}
+CFLAGS	+= $(LUA_CFLAGS)
 .endif
 
 .if $(USE_BBSRUBY)
-CFLAGS	+= ${RUBY_CFLAGS}
+CFLAGS	+= $(RUBY_CFLAGS)
 .endif
 
 .SUFFIXES: .o .c .ln .x .so
