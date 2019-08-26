@@ -15,11 +15,11 @@
 #define GLIBC_PREREQ(M, m) 0
 #endif
 
-#ifndef LINUX_HAVE_GETRANDOM
-#define LINUX_HAVE_GETRANDOM (GLIBC_PREREQ(2, 25) && __linux__)
+#ifndef LIB_STRING_LINUX_HAVE_GETRANDOM
+#define LIB_STRING_LINUX_HAVE_GETRANDOM (GLIBC_PREREQ(2, 25) && __linux__)
 #endif
 
-#if LINUX_HAVE_GETRANDOM
+#if LIB_STRING_LINUX_HAVE_GETRANDOM
   #include <sys/random.h>
 #endif
 
@@ -805,13 +805,22 @@ char *str_ndup(char *src, int len)
 /* password encryption                                   */
 /* ----------------------------------------------------- */
 
+#ifndef LIB_STRING_HAVE_ARC4RANDOM_CHACHA20
+#define LIB_STRING_HAVE_ARC4RANDOM_CHACHA20  \
+    (OpenBSD >= 201405 /* 5.5 */ || __FreeBSD_version >= 1200000 /* 12.0 */)
+#endif
+#ifndef LIB_STRING_HAVE_EXPLICIT_BZERO
+#define LIB_STRING_HAVE_EXPLICIT_BZERO \
+    (GLIBC_PREREQ(2, 25) || OpenBSD >= 201405 /* 5.5 */ || __FreeBSD_version >= 1100000 /* 11.0 */)
+#endif
+
 /* IID.20190524: Get bytes from the system PRNG device. */
 char *getrandom_bytes(char *buf, size_t buflen)
 {
-#if LINUX_HAVE_GETRANDOM
+#if LIB_STRING_LINUX_HAVE_GETRANDOM
     if (getrandom(buf, buflen, GRND_NONBLOCK) == -1)
         return NULL;
-#elif OpenBSD >= 201311 /* 5.4 */ || __FreeBSD_version >= 1200000 /* 12.0 */
+#elif BSD_HAVE_ARC4RANDOM_CHACHA20
     arc4random_buf(buf, buflen);
 #else
     int fd;
@@ -829,7 +838,7 @@ void explicit_zero_bytes(char *buf, size_t buflen)
 {
 #ifdef __STDC_LIB_EXT1__
     memset_s(buf, buflen, 0, buflen);
-#elif GLIBC_PREREQ(2, 25) || OpenBSD >= 201405 /* 5.5 */ || __FreeBSD_version >= 1100000 /* 11.0 */
+#elif LIB_STRING_HAVE_EXPLICIT_BZERO
     explicit_bzero(buf, buflen);
 #else
     /* Cannot do anything better */
