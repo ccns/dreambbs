@@ -211,7 +211,7 @@ more_line(
 
 static void
 outs_line(                      /* 印出一般內容 */
-    char *str)
+    const char *str)
 {
     int ch1, ch2, ansi;
 
@@ -244,7 +244,8 @@ outs_line(                      /* 印出一般內容 */
     {
         int len;
         char buf[ANSILINELEN];
-        char *ptr1, *ptr2;
+        char *ptr2;
+        const char *ptr1;
 
         len = strlen(hunt);
         ptr2 = buf;

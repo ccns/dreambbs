@@ -48,7 +48,7 @@ static BCACHE *bshm;
 static void
 attach_err(
     int shmkey,
-    char *name)
+    const char *name)
 {
     fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
     exit(1);
@@ -108,7 +108,7 @@ bshm_init(void)
 
 static void
 count_board(
-    BRD *brd,
+    const BRD *brd,
     time_t now)
 {
     BSTATCOUNT bcount;

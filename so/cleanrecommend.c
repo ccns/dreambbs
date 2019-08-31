@@ -32,7 +32,7 @@ char title[80], name[10];
 
 static int
 cleanrecommend_log(
-    RMSG *rmsg,
+    const RMSG *rmsg,
     int mode)   /* 0:partial 1:all */
 {
     FILE *fp;
@@ -56,7 +56,7 @@ cleanrecommend_log(
 static void
 cleanrecommend_item(
     int num,
-    RMSG *cleanrecommend)
+    const RMSG *cleanrecommend)
 {
 
         char tmp[10];

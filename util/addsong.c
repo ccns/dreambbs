@@ -16,7 +16,7 @@ static int num;
 
 void
 acct_save(
-    ACCT *acct)
+    const ACCT *acct)
 {
     int fd;
     char fpath[80];
@@ -33,8 +33,8 @@ acct_save(
 
 static void
 reaper(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
     int fd;
 

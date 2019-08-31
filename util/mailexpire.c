@@ -18,7 +18,7 @@ FILE *flog;
 
 static void
 expire(
-    char *userid)
+    const char *userid)
 {
     HDR hdr;
     char fpath[128], fnew[128], index[128], *fname;

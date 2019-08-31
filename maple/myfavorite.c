@@ -17,7 +17,7 @@ extern XZ xz[];
 extern char brd_bits[MAXBOARD];
 extern int ok;
 
-static void XoFavorite(char *folder, const char *title, int level);
+static void XoFavorite(const char *folder, const char *title, int level);
 static int myfavorite_add(XO *xo);
 static char currdir[64];
 
@@ -25,7 +25,7 @@ time_t brd_visit[MAXBOARD];     /* 最近瀏覽時間 */
 
 void
 brd2myfavorite(
-    BRD *brd,
+    const BRD *brd,
     HDR *gem)
 {
     memset(gem, 0, sizeof(HDR));
@@ -349,8 +349,8 @@ myfavorite_browse(
 
 static int
 myfavorite_find_same(
-    BRD *brd,
-    char *dir)
+    const BRD *brd,
+    const char *dir)
 {
     int max, i;
     HDR hdr;
@@ -453,7 +453,7 @@ myfavorite_add(
 
 static void
 remove_dir(
-    char *fpath)
+    const char *fpath)
 {
     HDR hdr;
     int max, i;
@@ -669,7 +669,7 @@ KeyFunc myfavorite_cb[] =
 
 static void
 XoFavorite(
-    char *folder,
+    const char *folder,
     const char *title,
     int level)
 {
@@ -713,7 +713,7 @@ MyFavorite(void)
 
 int
 myfavorite_find_chn(
-    char *brdname)
+    const char *brdname)
 {
     BRD *bp;
     int max, i;

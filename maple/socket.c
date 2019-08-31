@@ -2,7 +2,7 @@
 
 int
 Get_Socket(  /* site for hostname, sock for port & socket */
-    char *site,
+    const char *site,
     int *sock)
 {
     struct sockaddr_in sin;
@@ -55,7 +55,7 @@ Get_Socket(  /* site for hostname, sock for port & socket */
 
 int
 POP3_Check(
-    char *site, char *account, char *passwd)
+    const char *site, const char *account, const char *passwd)
 {
     FILE *fsock = NULL;
     int sock=110, old_sock = 0;
@@ -125,7 +125,7 @@ POP3_Check(
 
 int
 Ext_POP3_Check(
-    char *site, char *account, char *passwd)
+    const char *site, const char *account, const char *passwd)
 {
     FILE *fsock = NULL;
     int sock=110, step=1;

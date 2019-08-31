@@ -35,23 +35,23 @@ sort_compare(
 
 DATA *
 findmin(
-    DATA *src)
+    const DATA *src)
 {
     int i;
-    DATA *p;
+    const DATA *p;
 
     p = src;
     for (i = 0; i < TOPNUM; i++)
         if (src[i].num < p->num)
             p = src+i;
-    return (p);
+    return (DATA *)(p);
 }
 
 void
 merge_id_nick(
     char *dst,
-    char *userid,
-    char *nick)
+    const char *userid,
+    const char *nick)
 {
     if (*userid)
     {
@@ -67,7 +67,7 @@ merge_id_nick(
 void
 write_data(
     const char *title,
-    DATA *data,
+    const DATA *data,
     int mode)
 {
     int i;

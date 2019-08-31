@@ -62,7 +62,7 @@ struct posttop
 
 static int
 hash(
-    char *key)
+    const char *key)
 {
     int i, ch, value = 0;
 
@@ -82,7 +82,7 @@ hash(
 
 static void
 search(
-    struct posttop *t)
+    const struct posttop *t)
 {
     struct postrec *p, *q, *s;
     int i, found = 0;
@@ -121,7 +121,7 @@ search(
 
 static int
 sort(
-    struct postrec *pp,
+    const struct postrec *pp,
     int count)
 {
     int i, j;
@@ -145,7 +145,7 @@ sort(
 
 static void
 load_stat(
-    char *fname)
+    const char *fname)
 {
     FILE *fp;
 
@@ -329,11 +329,11 @@ pa_cmp(
 
 static void
 pa_out(
-    SplayNode *top,
+    const SplayNode *top,
     FILE *fp)
 {
-    PostAuthor *pa;
-    PostText *text;
+    const PostAuthor *pa;
+    const PostText *text;
 
     if (top == NULL)
         return;

@@ -46,8 +46,8 @@ TchoiceCompare(const void * i, const void * j)
 
 static int
 vote_seek(
-char *fpath,
-char *mail)
+const char *fpath,
+const char *mail)
 {
     LOG email;
     int pos = 0, fd;
@@ -95,7 +95,7 @@ XO *xo)
 static void
 vote_item(
 int num,
-VCH *vch)
+const VCH *vch)
 {
     prints("%6d %-9.8s%-12s %-*.*s\n",
            num, vch->cdate, vch->owner, d_cols + 48, d_cols + 48, vch->title);
@@ -197,7 +197,7 @@ VCH *vch)
 
 static void
 show_stud(
-char *path)
+const char *path)
 {
     VCHS stud;
     int pos = 0, fd;
@@ -224,8 +224,8 @@ char *path)
 
 static int
 check_stud(
-char *account,
-char *path)
+const char *account,
+const char *path)
 {
     VCHS stud, buf;
     int pos = 0, fd;
@@ -279,7 +279,7 @@ char *path)
 
 static int
 vlist_student(
-char *path)
+const char *path)
 {
     VCHS stud[MAX_BOOKS], tmp;
     int item, i, fd;
@@ -832,7 +832,7 @@ XO *xo)
 
 static int
 check_mail(
-char *account)
+const char *account)
 {
     //char validemail[3][20] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw", "nckualumni.org.tw"};
     char addr[20], buf[30], line[80], server[60], *ptr;
@@ -873,7 +873,7 @@ char *account)
 /*
 static int
 check_mail(
-char *mail)
+const char *mail)
 {
     char addr[20], buf[30], line[80], server[60], *ptr;
     int sock = 110;

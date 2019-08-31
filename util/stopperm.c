@@ -17,8 +17,8 @@ static FILE *flog;
 
 static void
 reaper(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
     int fd;
 
@@ -73,8 +73,8 @@ traverse(
 
 static int
 same_mail2(
-    char *mail,
-    char *file)
+    const char *mail,
+    const char *file)
 {
     int ch;
     char *fname, fpath[256];
@@ -160,7 +160,7 @@ keeplog(
 int
 acct_load(
     ACCT *acct,
-    char *userid)
+    const char *userid)
 {
     int fd;
 
@@ -177,7 +177,7 @@ acct_load(
 
 void
 acct_save(
-    ACCT *acct)
+    const ACCT *acct)
 {
     int fd;
     char fpath[80];
@@ -194,7 +194,7 @@ acct_save(
 
 int
 seek_log_email(
-    char *mail)
+    const char *mail)
 {
     EMAIL email;
     int pos=0, fd;
@@ -222,7 +222,7 @@ seek_log_email(
 
 void
 deny_log_email(
-    char *mail,
+    const char *mail,
     time_t deny)
 {
     EMAIL email;
@@ -248,7 +248,7 @@ deny_log_email(
 static void
 deny_add_email(
     ACCT *he,
-    char *exer)
+    const char *exer)
 {
     char buf[128];
     time_t now;
@@ -270,7 +270,7 @@ add_deny_exer(
     ACCT *u,
     int adm,
     int cross,
-    char *exer)
+    const char *exer)
 {
     FILE *fp;
     char buf[80];
@@ -375,11 +375,11 @@ add_deny_exer(
 
 static void
 setup(
-    char *id,
-    char *email,
+    const char *id,
+    const char *email,
     int mode,
-    char *exer,
-    char *file)
+    const char *exer,
+    const char *file)
 {
     ACCT x, *u;
     int i, num;

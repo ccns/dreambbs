@@ -13,8 +13,8 @@
 
 void
 outgo_post(
-    HDR *hdr,
-    char *board)
+    const HDR *hdr,
+    const char *board)
 {
 
     bntp_t bntp;

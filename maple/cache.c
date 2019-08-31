@@ -168,7 +168,7 @@ utmp_mode(
 
 int
 utmp_new(
-    UTMP *up)
+    const UTMP *up)
 {
     UCACHE *xshm;
     UTMP *uentp, *utail;

@@ -49,9 +49,9 @@ attach_shm(
 }
 
 static int
-check_in_memory(char *bm, char *id)
+check_in_memory(const char *bm, const char *id)
 {
-    char *i;
+    const char *i;
     for (i=bm; strlen(i); i=i+IDLEN+1)
     if (!strcmp(i, id))
         return 0;
@@ -60,9 +60,10 @@ check_in_memory(char *bm, char *id)
 
 
 static void
-send_to_all(char *title, char *fpath, char *bm)
+send_to_all(const char *title, const char *fpath, const char *bm)
 {
-    char buf[128], *ptr;
+    char buf[128];
+    const char *ptr;
     HDR mhdr;
 
     for (ptr=bm; strlen(ptr); ptr=ptr+IDLEN+1)
@@ -78,8 +79,8 @@ send_to_all(char *title, char *fpath, char *bm)
 
 static int
 to_bm(
-    char *fpath,
-    char *title)
+    const char *fpath,
+    const char *title)
 {
     BRD *bhdr, *head, *tail;
     char *ptr, *bm;
@@ -138,8 +139,8 @@ to_bm(
 static void
 traverse(
     char *fpath,
-    char *path,
-    char *title)
+    const char *path,
+    const char *title)
 {
     DIR *dirp;
     struct dirent *de;
@@ -173,8 +174,8 @@ traverse(
 
 static int
 open_mail(
-    char *path,
-    char *title)
+    const char *path,
+    const char *title)
 {
     int ch;
     char *fname, fpath[256];

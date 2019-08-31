@@ -46,8 +46,8 @@ static char errmsg[512] = "nothing";
 
 ncmperm_t *
 search_issuer(
-    char *issuer,
-    char *type)         /* 若 type == NULL 表示只比對 issuer */
+    const char *issuer,
+    const char *type)   /* 若 type == NULL 表示只比對 issuer */
 {
     ncmperm_t *find;
     int i;
@@ -65,7 +65,7 @@ search_issuer(
 
 static void
 NCMupdate(
-    char *issuer, char *type)
+    const char *issuer, const char *type)
 {
     ncmperm_t ncm;
 
@@ -86,7 +86,7 @@ NCMupdate(
 #ifdef PGP
 static int
 run_pgp(
-    char *cmd,
+    const char *cmd,
     FILE **in, **out)
 {
     int pin[2], pout[2], child_pid;
@@ -193,7 +193,7 @@ NCMverify(void)
 #ifdef GPG
 static int
 run_gpg(
-    char *cmd,
+    const char *cmd,
     FILE **in, FILE **out)
 {
     int pin[2], pout[2], child_pid;
@@ -297,7 +297,7 @@ NCMverify(void)
 
 static int
 readNCMheader(
-    char *line)
+    const char *line)
 {
     if (!str_ncmp(line, "Version", strlen("Version")))
     {
@@ -333,9 +333,10 @@ readNCMheader(
 
 static int
 readNCMbody(
-    char *line)
+    const char *line)
 {
-    char buf[LINELEN], *group;
+    char buf[LINELEN];
+    const char *group;
 
     strcpy(buf, line);
 

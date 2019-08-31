@@ -15,7 +15,7 @@
 
 void
 output_rfc2047_qp(FILE * fp,
-                  char *prefix, char *str, char *charset, char *suffix)
+                  const char *prefix, const char *str, const char *charset, const char *suffix)
 {
     int i, ch;
     int blank = 1;                /* 1:全由空白組成 */

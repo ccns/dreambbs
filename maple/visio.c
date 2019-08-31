@@ -43,7 +43,7 @@ static int vo_size;
 #ifdef  VERBOSE
 static void
 telnet_flush(
-    char *data,
+    const char *data,
     int size)
 {
     int oset;
@@ -307,10 +307,10 @@ getyx(
 #if 0
 static int
 ansicol(
-    screenline *slp,
+    const screenline *slp,
     int len)
 {
-    unsigned char *str;
+    const unsigned char *str;
     int ch, ansi, col;
 
     if (!len || !(slp->mode & SL_ANSICODE))
@@ -391,13 +391,13 @@ rel_move(
 
 static void
 standoutput(
-    screenline *slp,
+    const screenline *slp,
     int ds, int de)
 {
-    char *data;
+    const char *data;
     int sso, eso;
 
-    data = (char *) slp->data;
+    data = (const char *) slp->data;
     sso = slp->sso;
     eso = slp->eso;
 
@@ -904,7 +904,7 @@ expand_esc_star_visio(char *buf, const char *src, int szbuf)
 #ifdef SHOW_USER_IN_TEXT
 void
 outx(
-    char *str)
+    const char *str)
 {
 /*
     unsigned char *t_name = cuser.userid;
@@ -1008,7 +1008,7 @@ outf(
 
 #ifdef M3_USE_PFTERM
 
-void outl (int line, char *msg)   /* line output */
+void outl (int line, const char *msg)     /* line output */
 {
     move (line, 0);
     clrtoeol();
@@ -1021,7 +1021,7 @@ void outl (int line, char *msg)   /* line output */
 #define ANSI_COLOR_CODE            "[m;0123456789"
 #define ANSI_COLOR_END     "m"
 
-void outr (char *str)
+void outr (const char *str)
 /* restricted output (strip the ansiscreen contolling code only) */
 {
     char ch, buf[256], *p = NULL;
@@ -1167,7 +1167,7 @@ save_foot(
 
 void
 restore_foot(
-    screenline *slp)
+    const screenline *slp)
 {
     move(b_lines - 1, 0);
     memcpy(cur_slp, slp, sizeof(screenline) * 2);
@@ -1196,7 +1196,7 @@ vs_save(
 
 void
 vs_restore(
-    screenline *slp)
+    const screenline *slp)
 {
     memcpy(vbuf, slp, sizeof(screenline) * t_lines);
 #if 0
@@ -1430,9 +1430,9 @@ add_io(
 
 int
 iac_count(
-    unsigned char *current)
+    const unsigned char *current)
 {
-    unsigned char *const end = vi_pool + vi_size;
+    const unsigned char *const end = vi_pool + vi_size;
     if (current + 1 >= end) { return 1; }
 
     switch (*(current + 1))
@@ -1445,15 +1445,15 @@ iac_count(
 
     case SB:                    /* loop forever looking for the SE */
         {
-            unsigned char *look = current + 2;
+            const unsigned char *look = current + 2;
             if (look >= end) { return look + 1 - current; }
 
             /* fuse.030518: 線上調整畫面大小，重抓 b_lines */
             if ((*look) == TELOPT_NAWS)
             {
                 if (look + 4 >= end) { return look + 4 - current; }
-                b_lines = ntohs(* (short *) (look + 3)) - 1;
-                b_cols = ntohs(* (short *) (look + 1)) - 1;
+                b_lines = ntohs(* (const short *) (look + 3)) - 1;
+                b_cols = ntohs(* (const short *) (look + 1)) - 1;
 
                 /* b_lines 至少要 23，最多不能超過 T_LINES - 1 */
                 if (b_lines >= T_LINES)

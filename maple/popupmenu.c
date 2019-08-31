@@ -25,11 +25,11 @@ static int do_menu(MENU pmenu[], XO *xo, int x, int y);
 
 #ifndef M3_USE_PFTERM
 static int
-is_big5(char *src, int pos, int mode)
+is_big5(const char *src, int pos, int mode)
 {
     int wstate=0;
     int word=0;
-    char *str;
+    const char *str;
 
     for (str = src; word<pos; str++)
     {
@@ -110,10 +110,10 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
 /* verit . 計算扣掉色碼的實際長度 */
 static int
 count_len(
-    char *data)
+    const char *data)
 {
     int len;
-    char *ptr, *tmp;
+    const char *ptr, *tmp;
     ptr = data;
     len = strlen(data);
 
@@ -132,7 +132,7 @@ count_len(
 
 /* verit . 取得顏色 */
 static void
-get_color(char *s, int len, int *fc, int *bc, int *bbc)
+get_color(const char *s, int len, int *fc, int *bc, int *bbc)
 {
     char buf[32], *p, *e;
     int color;
@@ -197,7 +197,7 @@ get_color(char *s, int len, int *fc, int *bc, int *bbc)
 
 #ifndef M3_USE_PFTERM
 static void
-vs_line(char *msg, int y, int x)
+vs_line(const char *msg, int y, int x)
 {
     char buf[512], color[16], *str, *tmp, *cstr;
     int len = count_len(msg);
@@ -268,7 +268,7 @@ vs_line(char *msg, int y, int x)
 #else
 static void
 vs_line(
-    char *msg, int y, int x)
+    const char *msg, int y, int x)
 {
     move(y, x);
 
@@ -294,7 +294,7 @@ draw_item(const char *desc, int mode, int x, int y)
 
 
 static int
-draw_menu(MENU *pmenu[20], int num, const char *title, int x, int y, int cur)
+draw_menu(const MENU *const pmenu[20], int num, const char *title, int x, int y, int cur)
 {
     char buf[128];
     int i;
@@ -364,7 +364,7 @@ do_menu(
     }
 
 
-    draw_menu(table, num+1, title, x, y, cur);
+    draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
 
     while (1)  /* verit . user 選擇 */
     {
@@ -397,7 +397,7 @@ do_menu(
 #else
                 vs_restore(sl);
 #endif
-                draw_menu(table, num+1, title, x, y, cur);
+                draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
                 break;
             default:
                 for (tmp=0; tmp<=num; tmp++)
@@ -416,7 +416,7 @@ do_menu(
 #else
                             vs_restore(sl);
 #endif
-                            draw_menu(table, num+1, title, x, y, cur);
+                            draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
                         }
                         break;
                     }
@@ -437,7 +437,7 @@ do_menu(
 /* mode 代表加背景的顏色 */
 static void
 draw_ans_item(
-    char *desc,
+    const char *desc,
     int mode,
     int x,
     int y,
@@ -452,7 +452,7 @@ draw_ans_item(
 
 
 static int
-draw_menu_des(char *desc[], char *title, int x, int y, int cur)
+draw_menu_des(const char *const desc[], const char *title, int x, int y, int cur)
 {
     int num;
     char buf[128];
@@ -477,7 +477,7 @@ draw_menu_des(char *desc[], char *title, int x, int y, int cur)
 /*         desc 最後一個必須為 NULL                             */
 /*------------------------------------------------------------- */
 int
-popupmenu_ans(char *desc[], char *title, int x, int y)
+popupmenu_ans(const char *const desc[], const char *title, int x, int y)
 {
     int cur, old_cur, num, tmp;
     int c;

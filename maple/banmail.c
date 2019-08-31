@@ -21,7 +21,7 @@ extern XZ xz[];
 static int banmail_add(XO * xo);
 
 
-static void banmail_item(int num, BANMAIL * ban)
+static void banmail_item(int num, const BANMAIL * ban)
 {
     time_t now;
     char modes[7];

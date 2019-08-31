@@ -43,9 +43,9 @@ int hotcount;
 
 void
 keeplog(
-    char *fnlog,
-    char *board,
-    char *title,
+    const char *fnlog,
+    const char *board,
+    const char *title,
     int mode)           /* 0:load 1: rename  2:unlink 3:mark*/
 {
     HDR hdr;
@@ -105,7 +105,7 @@ static BCACHE *bshm;
 static void
 attach_err(
     int shmkey,
-    char *name)
+    const char *name)
 {
     fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
     exit(1);
@@ -165,7 +165,7 @@ bshm_init(void)
 static void
 add_log(
     BSTAT *des,
-    BSTAT *src)
+    const BSTAT *src)
 {
     des->n_reads += src->n_reads;
     des->n_posts += src->n_posts;
@@ -187,7 +187,7 @@ save_hot(void)
 
 static void
 count_hot(
-    BRD *brd)
+    const BRD *brd)
 {
     int i;
     for (i=0; i<hotcount; i++)
@@ -212,7 +212,7 @@ count_hot(
 
 static void
 count_board(
-    BRD *brd,
+    const BRD *brd,
     time_t now)
 {
     struct tm ntime, *xtime;

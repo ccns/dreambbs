@@ -71,7 +71,7 @@ header_cmp(
 
 static int
 header_value(
-    char *inputheader)
+    const char *inputheader)
 {
     header_t key, *findkey;
     static int already_init = 0;

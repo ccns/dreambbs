@@ -59,7 +59,7 @@ static int tail;
 
     static void
 mirror(
-    char *fpath)
+    const char *fpath)
 {
     int fd, size;
     char *ptr;

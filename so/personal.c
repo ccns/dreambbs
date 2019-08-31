@@ -18,7 +18,7 @@ char msg[60];
 
 static int
 personal_log(
-    PB *personal,
+    const PB *personal,
     int admin)          /* 0:¥Ó½Ð  1:¶}ªO  2:©Úµ´ */
 {
     FILE *fp;
@@ -45,7 +45,7 @@ personal_log(
 static int
 belong(
     const char *flist,
-    char *key)
+    const char *key)
 {
     int fd, rc;
     char *str;
@@ -74,10 +74,10 @@ belong(
 
 static int
 is_badid(
-    char *userid)
+    const char *userid)
 {
     int ch;
-    char *str;
+    const char *str;
 
     if (strlen(userid) < 2)
         return 1;
@@ -225,7 +225,7 @@ personal_attr(unsigned int state)
 static void
 personal_item(
     int num,
-    PB *personal)
+    const PB *personal)
 {
     if (!mode)
         prints("%6d %c %-12s %-12s %-*s\n", num, personal_attr(personal->state), personal->userid, personal->brdname, d_cols + 40, personal->email);
@@ -362,7 +362,7 @@ personal_switch(
 
 static int
 mail2usr(
-    PB *personal,
+    const PB *personal,
     int admin)          /* 0:open 1:deny */
 {
     HDR hdr;

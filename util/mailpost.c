@@ -27,7 +27,7 @@ static char myfrom[128], mysub[128], myname[128], mypasswd[128], myboard[128], m
 
 static int
 acct_fetch(
-    char *userid
+    const char *userid
 )
 {
     int fd;
@@ -54,7 +54,7 @@ acct_fetch(
 
 static int
 brd_fetch(
-    char* bname,
+    const char* bname,
     BRD* brd
 )
 {
@@ -134,7 +134,7 @@ readline(
 static void
 mailog(
     const char* mode,
-    char* msg
+    const char* msg
 )
 {
     FILE *fp;
@@ -156,8 +156,8 @@ mailog(
 #if 0  // Unused
 static int
 Link(
-    char* src,
-    char* dst
+    const char* src,
+    const char* dst
 )
 {
     int ret;
@@ -215,7 +215,7 @@ justify_user(void)
 
 static int
 valid_ident(
-    char *ident
+    const char *ident
 )
 {
     static const char *invalid[] = {"bbs@", "@bbs", "unknown@", "root@", "gopher@",

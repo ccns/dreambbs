@@ -23,7 +23,7 @@
   #include <sys/random.h>
 #endif
 
-char *str_add(char *dst, char *src)
+char *str_add(char *dst, const char *src)
 {
     while ((*dst = *src))
     {
@@ -95,7 +95,7 @@ int str_cmp(const char *s1, const char *s2)
     return 0;
 }
 
-void str_cut(char *dst, char *src)
+void str_cut(char *dst, const char *src)
 {
     int cc;
 
@@ -276,8 +276,8 @@ void mm_getcharset(const char *str, char *charset, int size    /* charset size *
  */
 
 /* 解 Header 的 mmdecode */
-static int mmdecode_header(char *src,    /* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
-                           char encode,    /* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
+static int mmdecode_header(const char *src,  /* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
+                           char encode,      /* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
                            char *dst)
 {
     char *t;
@@ -477,7 +477,7 @@ void str_decode(char *str)
     strcpy(str, buf);
 }
 
-char *str_dup(char *src, int pad)
+char *str_dup(const char *src, int pad)
 {
     char *dst;
 
@@ -486,7 +486,7 @@ char *str_dup(char *src, int pad)
     return dst;
 }
 
-void str_folder(char *fpath, char *folder, const char *fname)
+void str_folder(char *fpath, const char *folder, const char *fname)
 {
     int ch;
     char *token = NULL;
@@ -502,7 +502,7 @@ void str_folder(char *fpath, char *folder, const char *fname)
     strcpy(token, fname);
 }
 
-void setdirpath(char *fpath, char *direct, const char *fname)
+void setdirpath(char *fpath, const char *direct, const char *fname)
 {
     int ch;
     char *target = NULL;
@@ -605,7 +605,7 @@ int str_from(char *from, char *addr, char *nick)
     return 0;
 }
 
-int str_has(char *list, char *tag)
+int str_has(const char *list, const char *tag)
 {
     int cc, len;
 
@@ -628,7 +628,7 @@ int str_has(char *list, char *tag)
     }
 }
 
-int str_hash2(char *str, int seed)
+int str_hash2(const char *str, int seed)
 {
     int cc;
 
@@ -650,7 +650,7 @@ int str_hash(const char *str, int seed)
     return (seed & 0x7fffffff);
 }
 
-int str_len(char *str)
+int str_len(const char *str)
 {
     int cc, len;
 
@@ -677,7 +677,7 @@ void str_lower(char *dst, const char *src)
     while (ch);
 }
 
-void str_lowest(char *dst, char *src)
+void str_lowest(char *dst, const char *src)
 {
     int ch;
     int in_chi = 0;                /* 1: 前一碼是中文字 */
@@ -749,21 +749,22 @@ void str_ncpy(char *dst, const char *src, int n)
     while (n);
 }
 
-char *str_ndup(char *src, int len)
+char *str_ndup(const char *src, int len)
 {
-    char *dst, *str, *end;
+    char *dst, *str;
+    const char *str_src, *end;
 
-    str = src;
+    str_src = src;
     end = src + len;
     do
     {
-        if (!*str++)
+        if (!*str_src++)
         {
-            end = str;
+            end = str_src;
             break;
         }
     }
-    while (str < end);
+    while (str_src < end);
 
     dst = (char *)malloc(end - src);
 
@@ -930,7 +931,7 @@ char *gensignature(char *pw)
 
 /* Thor.990214: 註解: 合密碼時, 傳回0 */
 /* NOTE: The string pointed by `test` will be wiped out. */
-int chkpasswd(char *passwd, char *passhash, char *test)
+int chkpasswd(const char *passwd, const char *passhash, char *test)
 {
     char *pw;
 
@@ -955,7 +956,7 @@ int chkpasswd(char *passwd, char *passhash, char *test)
 
 /* `chkpasswd` for site signature */
 /* NOTE: The string pointed by `test` will be wiped out. */
-int chksignature(char *passwd, char *test)
+int chksignature(const char *passwd, char *test)
 {
     char saltc[PASSLEN], hashc[PASSHASHLEN];
 
@@ -1046,7 +1047,7 @@ int str_pat(const char *str, const char *pat)
 
 /* reverse the string */
 
-char *str_rev(char *dst, char *src)
+char *str_rev(char *dst, const char *src)
 {
     int cc;
 
@@ -1185,13 +1186,13 @@ char *str_sub(const char *str, const char *tag
     return NULL;
 }
 
-char *str_tail(char *str)
+char *str_tail(const char *str)
 {
     while (*str)
     {
         str++;
     }
-    return str;
+    return (char *)str;
 }
 
 void str_trim(                    /* remove trailing space */
@@ -1210,7 +1211,7 @@ void str_trim(                    /* remove trailing space */
     }
 }
 
-const char *str_ttl(const char *title)
+char *str_ttl(const char *title)
 {
     if (title[0] == 'R' && title[1] == 'e' && title[2] == ':')
     {
@@ -1219,7 +1220,7 @@ const char *str_ttl(const char *title)
             title++;
     }
 
-    return title;
+    return (char *)title;
 }
 
 /*-------------------------------------------------------*/

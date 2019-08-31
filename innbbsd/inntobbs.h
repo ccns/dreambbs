@@ -12,7 +12,7 @@ extern int readlines(char *data);
 
 /* history.c */
 extern void HISmaint(void);
-extern void HISadd(const char *msgid, char *board, char *xname);
+extern void HISadd(const char *msgid, const char *board, const char *xname);
 extern int HISfetch(const char *msgid, char *board, char *xname);
 
 #endif  /* INNTOBBS_H */

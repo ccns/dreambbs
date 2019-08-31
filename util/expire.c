@@ -63,12 +63,12 @@ sync_cmp(
 
 static void
 sync_init(
-    char *fname,
+    const char *fname,
     time_t uptime)
 {
     int ch, prefix;
     time_t chrono;
-    char *str, fpath[80];
+    char *str, *fname_str, fpath[80];
     struct dirent *de;
     DIR *dirp;
 
@@ -89,14 +89,14 @@ sync_init(
 
     ch = strlen(fname);
     memcpy(fpath, fname, ch);
-    fname = fpath + ch;
-    *fname++ = '/';
-    fname[1] = '\0';
+    fname_str = fpath + ch;
+    *fname_str++ = '/';
+    fname_str[1] = '\0';
 
     ch = '0';
     for (;;)
     {
-        *fname = ch++;
+        *fname_str = ch++;
 
         if ((dirp = opendir(fpath)))
         {
@@ -146,9 +146,9 @@ sync_init(
 static void
 sync_check(
     FILE *flog,
-    char *fname)
+    const char *fname)
 {
-    char *str, fpath[80];
+    char *str, *fname_str, fpath[80];
     SyncData *xpool, *xtail;
     time_t cc;
 
@@ -160,16 +160,16 @@ sync_check(
 
     sprintf(fpath, "%s/ /", fname);
     str = strchr(fpath, ' ');
-    fname = str + 3;
+    fname_str = str + 3;
 
     do
     {
         if (xtail->exotic)
         {
             cc = xtail->chrono;
-            fname[-1] = xtail->prefix;
+            fname_str[-1] = xtail->prefix;
             *str = radix32[cc & 31];
-            archiv32(cc, fname);
+            archiv32(cc, fname_str);
             unlink(fpath);
 
             fprintf(flog, "-\t%s\n", fpath);
@@ -181,12 +181,13 @@ sync_check(
 static void
 expire(
     FILE *flog,
-    life *brd,
+    const life *brd,
     int sync)
 {
     HDR hdr;
     struct stat st;
-    char fpath[128], fnew[128], index[128], *fname, *bname, *str;
+    char fpath[128], fnew[128], index[128], *fname, *str;
+    const char *bname;
     int done, keep, total, xmode;
     FILE *fpr, *fpw;
 
@@ -328,7 +329,7 @@ expire(
 
 static int
 brdbno(
-    char *bname,
+    const char *bname,
     int count)
 {
     BRD *brdp, *bend;

@@ -64,7 +64,7 @@ static const char *DefaultProcSite = NULL;  /* !=NULL: 只處理某特定站台 */
 
 static nodelist_t *
 search_nodelist_bynode(
-    char *name)
+    const char *name)
 {
     nodelist_t nl;
 
@@ -75,7 +75,7 @@ search_nodelist_bynode(
 
 static newsfeeds_t *
 search_newsfeeds_byboard(
-    char *board)
+    const char *board)
 {
     newsfeeds_t nf;
 
@@ -101,7 +101,7 @@ typedef struct
 static void
 queuefeed(
     nodelist_t *node,
-    soverview_t *sover)
+    const soverview_t *sover)
 {
     int fd;
 
@@ -147,14 +147,14 @@ Gtime(
 
 static void
 deal_sover(
-    bntp_t *bntp)
+    const bntp_t *bntp)
 {
     newsfeeds_t *nf;
     nodelist_t *nl;
     soverview_t sover;
     time_t mtime;
     char buf[80];
-    char *board, *filename;
+    const char *board, *filename;
 
     board = bntp->board;
 
@@ -243,7 +243,7 @@ deal_bntp(void)
 
 static int
 inetclient(
-    char *server,
+    const char *server,
     int port)
 {
     struct hostent *host;       /* host information entry */
@@ -305,9 +305,9 @@ tcpcommand(const char *fmt, ...)
 
 static int                      /* 200~202:成功 0:失敗 */
 open_connect(                   /* 連去這個站 */
-    nodelist_t *node)
+    const nodelist_t *node)
 {
-    char *host = node->host;
+    const char *host = node->host;
     int port = node->port;
 
     DEBUG(("╭<open_connect> 正在開啟連線\n"));
@@ -447,7 +447,7 @@ sover_post(
 
 static void
 fail_post(
-    char *msgid)
+    const char *msgid)
 {
     bbslog("<bbslink> :Warn: %s <%s>\n", SERVERbuffer, msgid);
     DEBUG(("│→:Warn: %s <%s>\n", SERVERbuffer, msgid));
@@ -456,7 +456,7 @@ fail_post(
 
 static void
 send_outgoing(
-    nodelist_t *node,
+    const nodelist_t *node,
     soverview_t *sover)
 {
     int cc, status;
@@ -556,7 +556,7 @@ send_outgoing(
 
 static int                      /* 1:成功 0:失敗 */
 NNRPgroup(                      /* 切換 group，並傳回 low-number 及 high-number */
-    char *newsgroup,
+    const char *newsgroup,
     int *low, int *high)
 {
     int i;
@@ -741,10 +741,10 @@ updaterc(
 
 static void
 readnews(
-    nodelist_t *node)
+    const nodelist_t *node)
 {
     int i, low, high, artcount, artno;
-    char *name, *newsgroup;
+    const char *name, *newsgroup;
     newsfeeds_t *nf;
 
     name = node->name;
@@ -875,7 +875,7 @@ bbslink_get_lock(void)
 
 static void
 visit_site(
-    nodelist_t *node)
+    const nodelist_t *node)
 {
     int status, response, fd, num;
     char linkfile[64];
@@ -981,7 +981,7 @@ bbslink(void)
 
 static void
 usage(
-    char *argv)
+    const char *argv)
 {
     printf("Usage: %s [options]\n", argv);
     printf("       -c  將 high-number 與伺服器上同步(不取信)\n");

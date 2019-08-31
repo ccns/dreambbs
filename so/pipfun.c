@@ -36,7 +36,7 @@ prints_centered(const char *fmt, ...)
 }
 
 static inline int
-show_file(char *filename, int y, int lines, int mode)
+show_file(const char *filename, int y, int lines, int mode)
 {
     FILE *fp;
     char buf[256];
@@ -65,7 +65,7 @@ const char *msg, char *buf)
 
 static inline char *
 Cdate(
-time_t *chrono)
+const time_t *chrono)
 {
     struct tm *ptime;
 

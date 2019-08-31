@@ -254,7 +254,7 @@ static int      /* 回傳總共有幾個選項 */
 draw_menu(
     int x, int y,
     const char *title,
-    const char *desc[],
+    const char *const desc[],
     char hotkey,
     int *cur)   /* 回傳預設值所在位置 */
 {
@@ -293,7 +293,7 @@ draw_menu(
 static int                      /* -1:找不到 >=0:第幾個選項 */
 find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
     int ch, int max,
-    const char *desc[])
+    const char *const desc[])
 {
     int i, cc;
 
@@ -328,7 +328,7 @@ find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
 /*------------------------------------------------------ */
 
 int             /* 傳回小寫字母或數字 */
-popupmenu_ans2(const char *desc[], const char *title, int x, int y)
+popupmenu_ans2(const char *const desc[], const char *title, int x, int y)
 {
     int cur, old_cur, max, ch;
     char hotkey;

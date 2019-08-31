@@ -48,7 +48,7 @@ ll_new(void)
 
 void
 ll_add(
-    char *name)
+    const char *name)
 {
     LinkList *node;
     int len;
@@ -68,7 +68,7 @@ ll_add(
 
 int
 ll_del(
-    char *name)
+    const char *name)
 {
     LinkList *list, *prev, *next;
 
@@ -97,7 +97,7 @@ ll_del(
 
 int
 ll_has(
-    char *name)
+    const char *name)
 {
     LinkList *list;
 
@@ -165,7 +165,7 @@ ll_out(
 #ifdef  BATCH_SMTP
 int
 bsmtp(
-    char *fpath, char *title, char *rcpt,
+    const char *fpath, const char *title, const char *rcpt,
     int method)
 {
     char buf[80];
@@ -464,7 +464,7 @@ smtp_log:
 #ifdef HAVE_DOWNLOAD
 int
 bsmtp_file(
-    char *fpath, char *title, char *rcpt)
+    const char *fpath, const char *title, const char *rcpt)
 {
     int sock;
     time_t chrono, stamp;
@@ -946,7 +946,7 @@ m_quota(void)
 
 static void
 packlog(
-    char *packmsg)
+    const char *packmsg)
 {
     FILE *fp;
 
@@ -972,7 +972,7 @@ packlog(
 
 static void
 do_forward(
-    char *title,
+    const char *title,
     int mode)
 {
     int rc;
@@ -1128,7 +1128,7 @@ m_zip(void)                     /* itoc.010228: 打包資料 */
 
 int
 m_query(
-    char *userid)
+    const char *userid)
 {
     int fd, ans, fsize;
     HDR *head, *tail;
@@ -1227,8 +1227,8 @@ m_count(void)
 
 static void
 mail_hold(
-    char *fpath,
-    char *rcpt)
+    const char *fpath,
+    const char *rcpt)
 {
     char *title, *folder, buf[256];
     HDR mhdr;
@@ -1336,7 +1336,7 @@ m_setmboxdir(void)
 int
 hdr_reply(
     int row,
-    HDR *hdr)
+    const HDR *hdr)
 {
     char *title, *str;
 
@@ -1355,7 +1355,7 @@ hdr_reply(
 
 /* static inline */ int
 mail_external(
-    char *addr)
+    const char *addr)
 {
     char *str;
 
@@ -1379,7 +1379,7 @@ mail_external(
 /* cuser.userid 將「標題 title、檔案在 fpath」的信件寄給 userid 的外部信箱 */
 static void
 forward_mail(
-    char *fpath, char *userid, char *title)
+    const char *fpath, const char *userid, const char *title)
 {
     FILE *fp;
     char ip[80];
@@ -1397,7 +1397,7 @@ forward_mail(
 
 int
 mail_send(
-    char *rcpt, char *title)
+    const char *rcpt, const char *title)
 {
     HDR mhdr;
     char fpath[80], folder[80], ckforward[80];
@@ -1595,7 +1595,7 @@ mail_reply(
 
 void
 my_send(
-    char *rcpt)
+    const char *rcpt)
 {
     int result;
     const char *msg;
@@ -1735,7 +1735,7 @@ mail_sysop(void)
 
 static int
 multi_send(
-    char *title)
+    const char *title)
 {
     FILE *fp;
     HDR mhdr;
@@ -1965,7 +1965,7 @@ tag_char(
 
 void
 hdr_outs(               /* print HDR's subject */
-    HDR *hdr,
+    const HDR *hdr,
     int cc)
 {
     static const char *type[4] =
@@ -2132,7 +2132,7 @@ hdr_outs(               /* print HDR's subject */
 static inline void
 mbox_item(
     int pos,                    /* sequence number */
-    HDR *hdr)
+    const HDR *hdr)
 {
 
 #if 0                           /* Thor.0508: 變色看看 */

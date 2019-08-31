@@ -55,7 +55,7 @@ xo_new(
 
 XO *
 xo_get(
-    char *path)
+    const char *path)
 {
     XO *xo;
 
@@ -140,7 +140,7 @@ xo_load(
 void
 xo_fpath(
     char *fpath,
-    char *dir,
+    const char *dir,
     HDR *hdr)
 {
     hdr_fpath(fpath, dir, hdr);
@@ -159,7 +159,7 @@ xo_fpath(
 
 int
 hdr_prune(
-    char *folder,
+    const char *folder,
     int nhead, int ntail,
     int post)
 {
@@ -397,7 +397,7 @@ Tagger(
 void
 EnumTagHdr(
     HDR *hdr,
-    char *dir,
+    const char *dir,
     int locus)
 {
     rec_get(dir, hdr, sizeof(HDR), TagList[locus].recno);

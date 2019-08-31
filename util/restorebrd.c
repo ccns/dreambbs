@@ -11,7 +11,7 @@
 
 static void
 reaper(
-    char *lowid)
+    const char *lowid)
 {
     char buf[256];
     sprintf(buf, "tar zxvf /var/tape/brd/%s ", lowid);

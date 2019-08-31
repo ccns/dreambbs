@@ -219,7 +219,7 @@ trans_ufo2(
 
 static void
 trans_acct(
-    OLD *old,
+    const OLD *old,
     NEW *new)
 {
     memset(new, 0, sizeof(NEW));

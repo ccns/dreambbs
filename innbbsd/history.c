@@ -75,8 +75,8 @@ HISmaint(void)                  /* 維護 history 檔，將過早的 history 刪除 */
 void
 HISadd(                         /* 將 (msgid, path, xname) 此配對記錄在 history 中 */
     const char *msgid,
-    char *board,
-    char *xname)
+    const char *board,
+    const char *xname)
 {
     HIS his;
     char fpath[64];
@@ -97,7 +97,7 @@ HISadd(                         /* 將 (msgid, path, xname) 此配對記錄在 history 
 
 int                             /* 1:在history中 0:不在history中 */
 HISfetch(                       /* 查詢 history 中，msgid 發表去了哪裡 */
-    char *msgid,
+    const char *msgid,
     char *board,                /* 傳出在 history 中的記錄的看板及檔名 */
     char *xname)
 {

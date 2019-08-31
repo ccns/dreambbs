@@ -15,7 +15,7 @@ static int memorandum_add(XO *xo);
 #if 0
 char *
 get_date(
-time_t *clock)
+const time_t *clock)
 {
     static char foo[24];
     static char myweek[] = "天一二三四五六";
@@ -81,7 +81,7 @@ get_sch_time(void)
 static void
 memorandum_item(
 int num,
-MEMORANDUM *memorandum)
+const MEMORANDUM *memorandum)
 {
     prints("%6d  %-8s  %-8s  %-*s\n", num, memorandum->date, memorandum->time, d_cols + 50, memorandum->work);
 }

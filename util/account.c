@@ -131,12 +131,13 @@ TchoiceCompare(const void * i, const void * j)
 
 static int
 draw_vote(
-    BRD *bdh,                   /* Thor: 傳入 BRD, 可查 battr */
-    char *fpath,
-    VCH *vch)
+    const BRD *bdh,             /* Thor: 傳入 BRD, 可查 battr */
+    const char *fpath,
+    const VCH *vch)
 {
     FILE *fp;
-    char *bid, *fname, buf[80], bpath[80];
+    char *fname, buf[80], bpath[80];
+    const char *bid;
     struct Tchoice choice[MAX_CHOICES];
     int total, items, num, fd, ticket, bollt, *list, *head, *tail;
     struct stat st;
@@ -654,7 +655,7 @@ gzip(
 #if 0  // Unused
 static void
 gtar(
-    char *source, char *target, char *stamp,
+    const char *source, const char *target, const char *stamp,
     int prune)
 {
     char buf[128];
@@ -671,7 +672,7 @@ gtar(
 
 static void
 error(
-    char *fpath)
+    const char *fpath)
 {
     printf("can not open [%s]\n", fpath);
     exit(1);

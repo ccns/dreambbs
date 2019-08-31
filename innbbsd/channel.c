@@ -143,7 +143,7 @@ static daemoncmd_t cmds[];
 
 static daemoncmd_t *
 searchcmd(
-    char *cmd)
+    const char *cmd)
 {
     daemoncmd_t *p;
     const char *name;
@@ -163,7 +163,7 @@ searchcmd(
 
 static int
 argify(
-    char *line, char ***argvp)
+    const char *line, char ***argvp)
 {
     static char *argvbuffer[MAX_ARG + 2];
     char **argv = argvbuffer;
@@ -279,7 +279,7 @@ static void
 channelcreate(
     ClientType *client,
     int sock,
-    char *nodename, char *hostname)
+    const char *nodename, const char *hostname)
 {
     buffer_t *in, *out;
 
@@ -597,9 +597,9 @@ static daemoncmd_t cmds[] =
 /* ----------------------------------------------------- */
 
 
-static char *                   /* 傳回是由哪一個站台餵信進來的 */
+static const char *             /* 傳回是由哪一個站台餵信進來的 */
 search_nodelist_byhost(
-    char *hostname)
+    const char *hostname)
 {
     nodelist_t *find;
     struct hostent *he;
@@ -640,7 +640,8 @@ static void
 inndchannel(void)
 {
     int i, fd, sock;
-    char *nodename, hostname[128];
+    char hostname[128];
+    const char *nodename;
     time_t uptime1;             /* time to maintain history */
     time_t uptime2;             /* time in initial_bbs */
     time_t now;
@@ -831,7 +832,7 @@ standaloneinit(void)
 
 static void
 usage(
-    char *argv)
+    const char *argv)
 {
     printf("Usage: %s [options]\n", argv);
     printf("       -i        以 inetd wait option 啟動\n");

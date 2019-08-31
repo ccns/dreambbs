@@ -347,7 +347,7 @@ force_board (void)
 
 static inline int
 is_bm(
-    char *list)                 /* ªO¥D¡GBM list */
+    const char *list)                 /* ªO¥D¡GBM list */
 {
     int cc, len;
     char *userid;
@@ -382,11 +382,11 @@ remove_perm(void)
 
 int
 Ben_Perm(
-    BRD *bhdr,
+    const BRD *bhdr,
     unsigned int ulevel)
 {
     unsigned int readlevel, postlevel, bits;
-    char *blist, *bname;
+    const char *blist, *bname;
 
     bname = bhdr->brdname;
     if (!*bname)

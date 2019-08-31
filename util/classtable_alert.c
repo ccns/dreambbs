@@ -212,7 +212,7 @@ utmp_find(
 
 void
 bcache(
-    char *fpath)
+    const char *fpath)
 {
     int fd, size=0;
     struct stat st;

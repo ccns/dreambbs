@@ -72,8 +72,8 @@ ve_abort(
 
 static void
 ve_position(
-    textline *cur,
-    textline *top)
+    const textline *cur,
+    const textline *top)
 {
     int row;
 
@@ -186,11 +186,11 @@ ve_goto(void)
 
 static inline char *
 ve_strim(
-    char *s)
+    const char *s)
 {
     while (*s == ' ')
         s++;
-    return s;
+    return (char *)s;
 }
 
 
@@ -222,9 +222,9 @@ ve_alloc(void)
 static int
 ansi2n(
     int ansix,
-    textline *line)
+    const textline *line)
 {
-    char *data, *tmp;
+    const char *data, *tmp;
     int ch;
 
     data = tmp = line->data;
@@ -258,9 +258,9 @@ ansi2n(
 static int
 n2ansi(
     int nx,
-    textline *line)
+    const textline *line)
 {
-    char *tmp, *nxp;
+    const char *tmp, *nxp;
     int ansix;
     int ch;
 
@@ -574,7 +574,7 @@ delete_char(
 
 void
 ve_string(
-    char *str)
+    const char *str)
 {
     int ch;
 
@@ -720,7 +720,7 @@ ve_line(
 /* ----------------------------------------------------- */
 
 
-char *
+const char *
 tbf_ask(int n)
 {
     static char fn_tbf[] = "buf.1";
@@ -918,7 +918,7 @@ is_quoted(
 
 static inline int
 quote_line(
-    char *str,
+    const char *str,
     int qlimit)                 /* 允許幾層引言？ */
 {
     int qlevel = 0;
@@ -1644,7 +1644,7 @@ select_title(
 int
 ve_subject(
     int row,
-    char *topic,
+    const char *topic,
     const char *dft)
 {
     char *title;

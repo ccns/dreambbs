@@ -288,7 +288,7 @@ gem_check(
 
 void
 brd2gem(
-    BRD *brd,
+    const BRD *brd,
     HDR *gem)
 {
     memset(gem, 0, sizeof(HDR));

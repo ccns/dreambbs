@@ -22,7 +22,7 @@ static ClassHeader *chx[2];
 
 static int
 favorite_parse(
-    char *key)
+    const char *key)
 {
     char *str, fpath[128];
     ClassHeader *chp;

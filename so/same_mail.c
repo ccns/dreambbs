@@ -7,8 +7,8 @@ static FILE *flog;
 
 static void
 reaper(
-char *fpath,
-char *lowid)
+const char *fpath,
+const char *lowid)
 {
     int fd;
 

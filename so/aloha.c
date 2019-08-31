@@ -28,8 +28,8 @@ const void *benz)
 
 static int
 aloha_find(
-char *fpath,
-ALOHA *aloha)
+const char *fpath,
+const ALOHA *aloha)
 {
     ALOHA new;
     int pos = 0, fd;
@@ -58,7 +58,7 @@ ALOHA *aloha)
 static void
 aloha_item(
 int num,
-ALOHA *aloha)
+const ALOHA *aloha)
 {
     prints("%6d     %s\n", num, aloha->userid);
 }

@@ -14,7 +14,7 @@ void syncnow(void);
 /* Output: fpath = full path;                 */
 /* ------------------------------------------ */
 
-void str_stamp(char *str, time_t * chrono)
+void str_stamp(char *str, const time_t * chrono)
 {
     struct tm *ptime;
 
@@ -24,7 +24,7 @@ void str_stamp(char *str, time_t * chrono)
             ptime->tm_year % 100, ptime->tm_mon + 1, ptime->tm_mday);
 }
 
-char *Btime(time_t * clock)
+char *Btime(const time_t * clock)
 {
     struct tm *t = localtime(clock);
 
@@ -38,7 +38,7 @@ char *Btime(time_t * clock)
 }
 
 
-char *Ctime(time_t * clock)
+char *Ctime(const time_t * clock)
 {
     struct tm *t = localtime(clock);
     static char week[] = "日一二三四五六";
@@ -49,14 +49,14 @@ char *Ctime(time_t * clock)
     return (datemsg);
 }
 
-char *Etime(time_t * clock)
+char *Etime(const time_t * clock)
 {
     strftime(datemsg, 22, "%D %T %a", localtime(clock));
     return (datemsg);
 }
 
 char *Atime(                    /* Thor.990125: 假裝ARPANET時間格式 */
-               time_t * clock)
+               const time_t * clock)
 {
     /* ARPANET format: Thu, 11 Feb 1999 06:00:37 +0800 (CST) */
     /* strftime(datemsg, 40, "%a, %d %b %Y %T %Z", localtime(clock)); */

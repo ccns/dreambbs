@@ -12,7 +12,7 @@ static char Bdate[20];
 
 static inline char *
 Cdate(
-time_t *chrono)
+const time_t *chrono)
 {
     struct tm *ptime;
 

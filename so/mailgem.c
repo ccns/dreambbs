@@ -31,12 +31,12 @@ static int mailgem_add(XO *xo);
 static int mailgem_paste(XO *xo);
 static int mailgem_anchor(XO *xo);
 static int mailgem_recycle(XO *xo);
-static void XoMailGem(char *folder, const char *title);
+static void XoMailGem(const char *folder, const char *title);
 
 static void
 mailgem_item(
 int num,
-HDR *ghdr)
+const HDR *ghdr)
 {
     int xmode, gtype;
 
@@ -424,8 +424,8 @@ int num)
 
 static void
 mailgem_buffer(
-char *dir,
-HDR *ghdr)                      /* NULL 代表放入 TagList, 否則將傳入的放入 */
+const char *dir,
+const HDR *ghdr)                /* NULL 代表放入 TagList, 否則將傳入的放入 */
 {
     int num, locus;
     HDR *gbuf;
@@ -1025,7 +1025,7 @@ static KeyFunc mailgem_cb[] =
 
 static void
 XoMailGem(
-char *folder,
+const char *folder,
 const char *title)
 {
     XO *xo, *last;
@@ -1109,11 +1109,11 @@ const void *s1, const void *s2)
 
 static void
 sync_init(
-char *fname)
+const char *fname)
 {
     int ch, prefix;
     time_t chrono;
-    char *str, fpath[80];
+    char *str, *fname_str, fpath[80];
     struct stat st;
     struct dirent *de;
     DIR *dirp;
@@ -1135,18 +1135,18 @@ char *fname)
 
     ch = strlen(fname);
     memcpy(fpath, fname, ch);
-    fname = fpath + ch;
-    *fname++ = '/';
+    fname_str = fpath + ch;
+    *fname_str++ = '/';
 
     ch = '0';
     for (;;)
     {
-        *fname = ch++;
-        fname[1] = '\0';
+        *fname_str = ch++;
+        fname_str[1] = '\0';
 
         if ((dirp = opendir(fpath)))
         {
-            fname[1] = '/';
+            fname_str[1] = '/';
             while ((de = readdir(dirp)))
             {
                 str = de->d_name;
@@ -1154,7 +1154,7 @@ char *fname)
                 if (prefix == '.')
                     continue;
 
-                strcpy(fname + 2, str);
+                strcpy(fname_str + 2, str);
                 if (stat(fpath, &st) || !st.st_size)
                 {
                     unlink(fpath);
@@ -1197,7 +1197,7 @@ char *fname)
 
 static void
 sync_check(
-char *fgem)
+const char *fgem)
 {
     int expire;
     char *str, *fname, fpath[128], fnew[128];

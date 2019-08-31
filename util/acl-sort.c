@@ -59,16 +59,16 @@ at_cmp(
 
 static void
 at_out(
-    SplayNode *top)
+    const SplayNode *top)
 {
-    AclText *at;
+    const AclText *at;
 
     if (top == NULL)
         return;
 
     at_out(top->left);
 
-    at = (AclText *) top->data;
+    at = (const AclText *) top->data;
     fputs(at->text + 1, stdout);
 
     at_out(top->right);
@@ -77,7 +77,7 @@ at_out(
 
 static void
 acl_sort(
-    char *fpath)
+    const char *fpath)
 {
     FILE *fp;
     int len, domain;

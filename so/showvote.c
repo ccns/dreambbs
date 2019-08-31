@@ -21,7 +21,7 @@ typedef struct
 static void
 show_item(
 int num,
-LOG *show)
+const LOG *show)
 {
     prints("%6d     %s\n", num, show->email);
 }

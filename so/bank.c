@@ -16,7 +16,7 @@ void log_bank(
     int mode,
     int a,
     int b,
-    char *who)
+    const char *who)
 {
     time_t now;
     char c_time[25], c_buf[100]={0};

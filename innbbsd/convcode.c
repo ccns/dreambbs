@@ -62,7 +62,7 @@ conv_init(void)
 
 static void
 b2g(
-    char *src, char *dst)
+    const char *src, char *dst)
 {
     int i;
 
@@ -90,7 +90,7 @@ b2g(
 
 static void
 g2b(
-    char *src, char *dst)
+    const char *src, char *dst)
 {
     int i;
 
@@ -118,12 +118,13 @@ g2b(
 
 static char *
 hzconvert(
-    char *src,                  /* source char buffer pointer */
+    const char *src,            /* source char buffer pointer */
     char *dst,                  /* destination char buffer pointer */
-    void (*dbcvrt) (char *src, char *dst))            /* º~¦r 2-byte conversion function */
+    void (*dbcvrt) (const char *src, char *dst))      /* º~¦r 2-byte conversion function */
 {
     int len;
-    char *end, *p;
+    char *p;
+    const char *end;
 
     conv_init();
 

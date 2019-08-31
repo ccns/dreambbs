@@ -244,7 +244,7 @@ static char chatbuf[256];       /* general purpose buffer */
 
 static void
 debug_list(
-    UserList *list)
+    const UserList *list)
 {
     char buf[80];
     int i = 0;
@@ -306,7 +306,7 @@ debug_room(void)
 
 static void
 log_user(
-    ChatUser *cu)
+    const ChatUser *cu)
 {
     static int log_num;
 
@@ -337,7 +337,7 @@ log_user(
 
 static int
 valid_chatid(
-    char *id)
+    const char *id)
 {
     int ch, len;
 
@@ -371,7 +371,7 @@ valid_chatid(
 
 static int
 str_match(
-    char *s1,                   /* lower-case (sub)string */
+    const char *s1,             /* lower-case (sub)string */
     const char *s2)
 {
     int c1, c2;
@@ -422,7 +422,7 @@ cuser_by_userid(
 
 static ChatUser *
 cuser_by_chatid(
-    char *chatid)
+    const char *chatid)
 {
     ChatUser *cu;
     char buf[80]; /* Thor.980727: 一次最長才80 */
@@ -512,10 +512,10 @@ list_free(
 static void
 list_add(
     UserList **list,
-    ChatUser *user)
+    const ChatUser *user)
 {
     UserList *node;
-    char *userid;
+    const char *userid;
     int len;
 
     len = strlen(userid = user->userid) + 1;
@@ -532,7 +532,7 @@ list_add(
 static int
 list_delete(
     UserList **list,
-    char *userid)
+    const char *userid)
 {
     UserList *node;
     char buf[80]; /* Thor.980727: 輸入一次最長才 80 */
@@ -556,7 +556,7 @@ list_delete(
 
 static int
 list_belong(
-    UserList *list,
+    const UserList *list,
     int userno)
 {
     while (list)
@@ -858,7 +858,7 @@ exit_room(
 int
 acct_load(
     ACCT *acct,
-    char *userid)
+    const char *userid)
 {
     int fd;
 

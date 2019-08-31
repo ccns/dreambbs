@@ -37,8 +37,8 @@ static int board_pals;
 extern UCACHE *ushm;
 extern XZ xz[];
 static PAL_SHIP *pal_ship;
-static int can_see(UTMP *up);
-static int can_banmsg(UTMP *up);
+static int can_see(const UTMP *up);
+static int can_banmsg(const UTMP *up);
 
 #ifdef EVERY_Z
 extern int vio_fd;              /* Thor.0725: 為talk, chat可用^z作準備 */
@@ -60,7 +60,7 @@ typedef struct
 }       PICKUP;
 
 
-void my_query(char *userid, int paling);
+void my_query(const char *userid, int paling);
 
 static void
 reset_utmp(void)
@@ -92,7 +92,7 @@ static char page_requestor[40];
 
 const char *
 bmode(
-    UTMP *up,
+    const UTMP *up,
     int simple)
 {
     static char modestr[32];
@@ -179,9 +179,10 @@ copyship(
 
 static int
 can_see(
-    UTMP *up)
+    const UTMP *up)
 {
-    int count, *cache, datum, mid;
+    int count, datum, mid;
+    const int *cache;
 
     if ((cache = up->pal_spool))
     {
@@ -253,9 +254,10 @@ is_bad(
 #ifdef  HAVE_BANMSG
 static int
 can_banmsg(
-    UTMP *up)
+    const UTMP *up)
 {
-    int count, *cache, datum, mid;
+    int count, datum, mid;
+    const int *cache;
 
     if ((cache = up->banmsg_spool))
     {
@@ -283,7 +285,7 @@ can_banmsg(
 
 int
 can_message(
-    UTMP *up)
+    const UTMP *up)
 {
     int self, ufo, can;
 
@@ -319,7 +321,7 @@ can_message(
 
 static int
 can_override(
-    UTMP *up)
+    const UTMP *up)
 {
     int self, ufo, can;
 
@@ -355,7 +357,7 @@ can_override(
 #ifdef  HAVE_BOARD_PAL
 int
 is_boardpal(
-    UTMP *up)
+    const UTMP *up)
 {
     return cutmp->board_pal == up->board_pal;
 }
@@ -595,7 +597,7 @@ aloha_sync(void)
 
 void
 pal_sync(
-    char *fpath)
+    const char *fpath)
 {
     int fd, size=0;
     struct stat st;
@@ -603,8 +605,8 @@ pal_sync(
 
     if (!fpath)
     {
+        usr_fpath(buf, cuser.userid, FN_PAL);
         fpath = buf;
-        usr_fpath(fpath, cuser.userid, FN_PAL);
     }
 
     if ((fd = open(fpath, O_RDWR, 0600)) < 0)
@@ -675,7 +677,7 @@ static int pal_add(XO *xo);
 static void
 pal_item(
     int num,
-    PAL *pal)
+    const PAL *pal)
 {
     prints("%6d %-3s%-14s%s\n", num, pal->ftype & PAL_BAD ? "Ｘ" : "",
         pal->userid, pal->ship);
@@ -1337,17 +1339,17 @@ bm_image(void)
 
 int
 bm_belong(
-    char *board)
+    const char *board)
 {
     int fsize, count, result, wcount;
-    char fpath[80];
+    char fpath[80], *board_img;
 
     result = 0;
 
     brd_fpath(fpath, board, FN_FIMAGE); /* Thor: fimage要先 sort過! */
-    board = f_img(fpath, &fsize);
+    board_img = f_img(fpath, &fsize);
 
-    if (board != NULL)
+    if (board_img != NULL)
     {
         wcount = count = fsize / sizeof(int);
 
@@ -1357,7 +1359,7 @@ bm_belong(
             int datum, mid;
 
             userno = cuser.userno;
-            up = (int *) board;
+            up = (int *) board_img;
 
             while (count > 0)
             {
@@ -1378,7 +1380,7 @@ bm_belong(
                 }
             }
 #ifdef HAVE_WATER_LIST
-            up = (int *) board;
+            up = (int *) board_img;
             while (wcount > 0)
             {
                 datum = up[mid = wcount >> 1];
@@ -1399,7 +1401,7 @@ bm_belong(
             }
 #endif
         }
-        free(board);
+        free(board_img);
     }
     return result;
 }
@@ -1444,7 +1446,7 @@ XoBM(
 
 static void
 showplans(
-    char *userid)
+    const char *userid)
 {
     int i;
     FILE *fp;
@@ -1473,12 +1475,12 @@ showplans(
 
 static void
 do_query(
-    ACCT *acct,
+    const ACCT *acct,
     int paling)                 /* 是否正在設定好友名單 */
 {
     UTMP *up;
     int userno, mail, rich;
-    char *userid;
+    const char *userid;
 
     utmp_mode(M_QUERY);
     userno = acct->userno;
@@ -1561,7 +1563,7 @@ do_query(
 
 void
 my_query(
-    char *userid,
+    const char *userid,
     int paling)                 /* 是否正在設定好友名單 */
 {
     ACCT acct;
@@ -3097,7 +3099,7 @@ static char
 ck_state(
     int in1,
     int in2,
-    UTMP *up,
+    const UTMP *up,
     int mode)
 {
     if (up->ufo & in2)
@@ -4488,7 +4490,7 @@ talk_main(void)
 int
 check_personal_note(
     int newflag,
-    char *userid)
+    const char *userid)
 {
     char fpath[256];
     int  fd, total = 0;
@@ -4575,7 +4577,7 @@ banmsg_cache(void)
 
 void
 banmsg_sync(
-    char *fpath)
+    const char *fpath)
 {
     int fd, size=0;
     struct stat st;
@@ -4583,8 +4585,8 @@ banmsg_sync(
 
     if (!fpath)
     {
+        usr_fpath(buf, cuser.userid, FN_BANMSG);
         fpath = buf;
-        usr_fpath(fpath, cuser.userid, FN_BANMSG);
     }
 
     if ((fd = open(fpath, O_RDWR, 0600)) < 0)
@@ -4651,7 +4653,7 @@ static int banmsg_add(XO *xo);
 static void
 banmsg_item(
     int num,
-    BANMSG *banmsg)
+    const BANMSG *banmsg)
 {
     prints("%6d    %-14s%s\n", num, banmsg->userid, banmsg->ship);
 }

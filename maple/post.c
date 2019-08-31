@@ -19,8 +19,8 @@ extern XZ xz[];
 extern LinkList *ll_head;
 #endif
 
-extern int can_message(UTMP *up);
-/*extern int xo_fpath(char *fpath, char *dir, HDR *hdr);*/          /* lkchu.981201 */
+extern int can_message(const UTMP *up);
+/*extern int xo_fpath(char *fpath, const char *dir, const HDR *hdr);*/    /* lkchu.981201 */
 
 #ifdef  HAVE_DETECT_CROSSPOST
 CHECKSUMCOUNT cksum;
@@ -41,7 +41,7 @@ static char zhangba_patterns[ZHANGBA_PATTERNS][25] = {
 
     static int
 zhangba_detect(
-    char *fpath)
+    const char *fpath)
 {
     char checked[ZHANGBA_PATTERNS+1];
     FILE *fp;
@@ -83,7 +83,7 @@ cmpchrono(
 #if 0  // Unused
     static void
 change_stamp(
-    char *folder,
+    const char *folder,
     HDR *hdr)
 {
     hdr->stamp = time(0);
@@ -98,11 +98,11 @@ change_stamp(
 #ifdef  HAVE_DETECT_CROSSPOST
     static int
 checksum_add(
-    char *title)
+    const char *title)
 {
     int sum=0, i, end;
-    int *ptr;
-    ptr = (int *)title;
+    const int *ptr;
+    ptr = (const int *)title;
     end = strlen(title)/4;
     for (i=0; i<end; i++)
     {
@@ -145,7 +145,7 @@ checksum_put(
 
     int
 checksum_find(
-    char *fpath,
+    const char *fpath,
     int check,
     int state)
 {
@@ -199,8 +199,8 @@ btime_update(
 
     void
 outgo_post(
-    HDR *hdr,
-    char *board)
+    const HDR *hdr,
+    const char *board)
 {
     bntp_t bntp;
 
@@ -244,7 +244,7 @@ outgo_post(
 
     void
 cancel_post(
-    HDR *hdr)
+    const HDR *hdr)
 {
     if ((hdr->xmode & POST_OUTGO) &&    /* 外轉信件 */
             (hdr->chrono > ap_start - 7 * 86400))       /* 7 天之內有效 */
@@ -298,7 +298,7 @@ move_post(      /* 將 hdr 從 currboard 搬到 board */
 /* Thor.980909: gc patch: log anonymous post filename */
     void
 log_anonymous(
-    char *fname)
+    const char *fname)
 {
     char buf[512];
     time_t now = time(0);
@@ -311,7 +311,7 @@ log_anonymous(
 #ifdef  HAVE_DETECT_VIOLATELAW
     int
 seek_log(
-    char *title,
+    const char *title,
     int state)
 {
     BANMAIL *head, *tail;
@@ -334,7 +334,7 @@ seek_log(
 
     static int
 do_post(
-    char *title)
+    const char *title)
 {
     /* Thor.1105: 進入前需設好 curredit */
     HDR post;
@@ -821,7 +821,7 @@ post_load(
 
     static int
 post_attr(
-    HDR *fhdr)
+    const HDR *fhdr)
 {
     int mode, attr;
 
@@ -861,7 +861,7 @@ post_attr(
     static void
 post_item(
     int num,
-    HDR *hdr)
+    const HDR *hdr)
 {
 #ifdef HAVE_RECOMMEND
 
@@ -1388,7 +1388,7 @@ post_xcross(
 void
 post_history(
     XO *xo,
-    HDR *fhdr)
+    const HDR *fhdr)
 {
     int prev, chrono, next, pos, top, push=0;
     char *dir;
@@ -1449,7 +1449,7 @@ post_history(
     void
 post_history(          /* 將 hdr 這篇加入 brh */
     XO *xo,
-    HDR *hdr)
+    const HDR *hdr)
 {
     int fd;
     time_t prev, chrono, next, this;
@@ -2766,7 +2766,7 @@ int post_edit(XO *xo)
 void
 header_replace(         /* 0911105.cache: 修改文章標題順便修改內文的標題 */
     XO *xo,
-    HDR *hdr)
+    const HDR *hdr)
 {
     FILE *fpr, *fpw;
     char srcfile[64], tmpfile[64], buf[ANSILINELEN];
@@ -3087,7 +3087,7 @@ record_recommend(const int chrono, const char * const text)
     void
 post_recommend_log(
     int mode,
-    HDR *hdr)
+    const HDR *hdr)
 {
     time_t now;
     char c_time[25], buf[300];

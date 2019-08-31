@@ -29,7 +29,7 @@ static int n_size, n_head;
 
     int
 pool_add(
-    FNAME fname)
+    const FNAME fname)
 {
     char *p;
 

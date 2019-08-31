@@ -33,9 +33,9 @@ use_io(void)
 }
 
 static int
-check_in_memory(char *bm, char *id)
+check_in_memory(const char *bm, const char *id)
 {
-    char *i;
+    const char *i;
     for (i = bm; strlen(i); i = i + IDLEN + 1)
         if (!strcmp(i, id))
             return 0;
@@ -67,9 +67,10 @@ m_expire(void)
 }
 
 static void
-send_to_all(char *title, char *fpath, char *bm)
+send_to_all(const char *title, const char *fpath, const char *bm)
 {
-    char buf[128], *ptr;
+    char buf[128];
+    const char *ptr;
     HDR mhdr;
 
     for (ptr = bm; strlen(ptr); ptr = ptr + IDLEN + 1)
@@ -184,8 +185,8 @@ mail_to_bm(void)
 static void
 traverse(
 char *fpath,
-char *path,
-char *title)
+const char *path,
+const char *title)
 {
     DIR *dirp;
     struct dirent *de;
@@ -219,8 +220,8 @@ char *title)
 
 static int
 open_mail(
-char *path,
-char *title)
+const char *path,
+const char *title)
 {
     int ch;
     char *fname, fpath[256];
@@ -282,8 +283,8 @@ mail_to_all(void)
 
 static int
 is_bms(
-char *list,                   /* 板主：BM list */
-char *userid)
+const char *list,             /* 板主：BM list */
+const char *userid)
 {
     int cc, len;
 
@@ -308,10 +309,10 @@ char *userid)
 
 static inline int
 is_bm(
-char *list)                   /* 板主：BM list */
+const char *list)             /* 板主：BM list */
 {
     int cc, len;
-    char *userid;
+    const char *userid;
 
     len = strlen(userid = cuser.userid);
     do
@@ -494,7 +495,7 @@ bm_check(void)
 static int
 find_bm(
 const char *fpath,
-char *id)
+const char *id)
 {
     BM bm;
     int fd;

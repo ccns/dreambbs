@@ -59,10 +59,11 @@ int dns_query(const char *name, /* domain name */
 /* get IP address by host name                           */
 /* ----------------------------------------------------- */
 
-unsigned long dns_addr(char *name)
+unsigned long dns_addr(const char *name)
 {
     ip_addr addr;
     unsigned char *cp, *eom;
+    const unsigned char *ccp;
     int cc, n, type, ancount, qdcount;
     querybuf ans;
     char hostbuf[MAXDNAME];
@@ -72,9 +73,9 @@ unsigned long dns_addr(char *name)
     cc = name[0];
     if (cc >= '0' && cc <= '9')
     {
-        for (cp = (unsigned char *)name;; ++cp)
+        for (ccp = (const unsigned char *)name;; ++ccp)
         {
-            cc = *cp;
+            cc = *ccp;
             if (!cc)
             {
                 /*
@@ -83,7 +84,7 @@ unsigned long dns_addr(char *name)
                  * The test below will succeed spuriously... ???
                  */
 
-                if (*--cp == '.')
+                if (*--ccp == '.')
                     break;
 
                 return inet_addr(name);
@@ -174,7 +175,7 @@ static void pseudo_handler(int signum)  /* Thor.991215: for timeout */
 
 void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½Tportªº®É­Ô.
                                    ¥Nªí Port, ¤£¹L¤£¤Ó¥i¯à¥Î¨ì */
-               struct sockaddr_in *from, char *rhost, char *ruser)
+               const struct sockaddr_in *from, char *rhost, char *ruser)
 {
     struct sockaddr_in rmt_sin;
     struct sockaddr_in our_sin;
@@ -192,7 +193,7 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
 
     /* get remote host name */
 
-    if (dns_name((unsigned char *)&from->sin_addr, rhost))
+    if (dns_name((const unsigned char *)&from->sin_addr, rhost))
         return;                    /* °²³]¨S¦³ FQDN ´N¨S¦³¶] identd */
 
     /*
@@ -314,7 +315,7 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
 /* get host name by IP address                           */
 /* ----------------------------------------------------- */
 
-int dns_name(unsigned char *addr, char *name)
+int dns_name(const unsigned char *addr, char *name)
 {
     querybuf ans;
     char qbuf[MAXDNAME];
@@ -414,7 +415,8 @@ int dns_open(const char *host, int port)
 {
     querybuf ans;
     int n, ancount, qdcount;
-    const unsigned char *cp, *eom;
+    unsigned char *cp, *eom;
+    const unsigned char *ccp;
     char buf[MAXDNAME];
     struct sockaddr_in sin;
     int type;
@@ -423,21 +425,21 @@ int dns_open(const char *host, int port)
     /* Thor.980707: ¦]gem.c©I¥s®É¥i¯à±Nhost¥Îip©ñ¤J¡A¬G§@¯S§O³B²z */
     if (*host >= '0' && *host <= '9')
     {
-        for (n = 0, cp = (const unsigned char *)host; n < 4; n++, cp++)
+        for (n = 0, ccp = (const unsigned char *)host; n < 4; n++, ccp++)
         {
             buf[n] = 0;
-            while (*cp >= '0' && *cp <= '9')
+            while (*ccp >= '0' && *ccp <= '9')
             {
                 buf[n] *= 10;
-                buf[n] += *cp++ - '0';
+                buf[n] += *ccp++ - '0';
             }
-            if (!*cp)
+            if (!*ccp)
                 break;
         }
         if (n == 3)
         {
             ancount = 0;  // IID.20190822: Prevent continuing the `while` loop after `goto`.
-            cp = (unsigned char *)buf;
+            ccp = cp = (unsigned char *)buf;
             goto ip;
         }
     }
@@ -476,6 +478,8 @@ int dns_open(const char *host, int port)
         {
             int sock;
             ip_addr *ip;
+
+            ccp = cp;
 #if 1
           ip:
 #endif
@@ -486,10 +490,10 @@ int dns_open(const char *host, int port)
 
             ip = (ip_addr *) & (sin.sin_addr.s_addr);
 
-            ip->d[0] = cp[0];
-            ip->d[1] = cp[1];
-            ip->d[2] = cp[2];
-            ip->d[3] = cp[3];
+            ip->d[0] = ccp[0];
+            ip->d[1] = ccp[1];
+            ip->d[2] = ccp[2];
+            ip->d[3] = ccp[3];
 
             sock = socket(AF_INET, SOCK_STREAM, 0);
             if (sock < 0)
@@ -515,7 +519,7 @@ int dns_open(const char *host, int port)
 /* update : 96/12/15                                     */
 /*-------------------------------------------------------*/
 
-static inline void dns_mx(char *domain, char *mxlist)
+static inline void dns_mx(const char *domain, char *mxlist)
 {
     querybuf ans;
     int n, ancount, qdcount;

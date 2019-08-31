@@ -8,7 +8,7 @@ extern BCACHE *bshm;
 extern XZ xz[];
 extern char xo_pool[];
 
-static void XoSong(char *folder, const char *title, int level);
+static void XoSong(const char *folder, const char *title, int level);
 static int song_order(XO *xo);
 
 #define GEM_READ        1       /* readable */
@@ -22,7 +22,7 @@ static int song_order(XO *xo);
 
 static void
 log_song(
-char *msg)
+const char *msg)
 {
     char buf[512];
     time_t now = time(0);
@@ -134,7 +134,7 @@ char *fpath)
 static void
 song_item(
 int num,
-HDR *ghdr)
+const HDR *ghdr)
 {
     int xmode, gtype;
 
@@ -570,7 +570,7 @@ static KeyFunc song_cb[] =
 
 static void
 XoSong(
-char *folder,
+const char *folder,
 const char *title,
 int level)
 {

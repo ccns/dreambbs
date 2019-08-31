@@ -22,7 +22,7 @@ static int mode;
 static void
 list_item(
 int num,
-LIST *list)
+const LIST *list)
 {
     prints("%6d     %s\n", num, list->userid);
 }
@@ -108,8 +108,8 @@ XO *xo)
 
 static int
 have_it(
-ACCT *acct,
-char *dir)
+const ACCT *acct,
+const char *dir)
 {
     LIST clist;
     int pos = 0, fd;

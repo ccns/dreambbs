@@ -247,7 +247,7 @@ login_abort(
 static int
 belong(
     const char *flist,
-    char *key
+    const char *key
 )
 {
     int fd, rc;
@@ -277,11 +277,11 @@ belong(
 
 static int
 is_badid(
-    char *userid
+    const char *userid
 )
 {
     int ch;
-    char *str;
+    const char *str;
 
     if (strlen(userid) < 2)
         return 1;

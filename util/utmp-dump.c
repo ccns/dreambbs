@@ -17,8 +17,8 @@ UTMP *cutmp, utmp;
 static int pal_count;
 static int *pal_pool;
 static UCACHE *ushm;
-static int can_see(UTMP *up);
-static int can_message(UTMP *up);
+static int can_see(const UTMP *up);
+static int can_message(const UTMP *up);
 typedef UTMP *pickup;
 
 static void *
@@ -46,7 +46,7 @@ static int pickup_way;
 
 const char *
 bmode(
-    UTMP *up,
+    const UTMP *up,
     int simple)
 {
     static char modestr[32];
@@ -87,9 +87,10 @@ bmode(
 
 static int
 can_see(
-    UTMP *up)
+    const UTMP *up)
 {
-    int count, *cache, datum, mid;
+    int count, datum, mid;
+    const int *cache;
 
     if ((cache = up->pal_spool))
     {
@@ -160,7 +161,7 @@ is_bad(
 
 static int
 can_message(
-    UTMP *up)
+    const UTMP *up)
 {
     int self, ufo, can;
 
@@ -188,7 +189,7 @@ can_message(
 
 static int
 can_override(
-    UTMP *up)
+    const UTMP *up)
 {
     int self, ufo, can;
 
@@ -348,7 +349,7 @@ static char
 ck_state(
     int in1,
     int in2,
-    UTMP *up,
+    const UTMP *up,
     int mode)
 {
     if (up->ufo & in2)

@@ -17,7 +17,7 @@ int total;
 
 static int
 check_in(
-    char *email)
+    const char *email)
 {
     int i;
     for (i=0; i<MAX_AC; i++)

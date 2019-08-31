@@ -76,7 +76,7 @@ int main_classtable(void);
 int clean(XO *xo);
 
 /* so/contact.c */
-void contact_send(CONTACT *contact);
+void contact_send(const CONTACT *contact);
 int Contact(void);
 
 /* so/gamef.c */

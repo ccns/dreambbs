@@ -75,7 +75,7 @@ void *DL_get(const char *name
     return dlsym(p->handle, t);
 }
 
-int DL_func(char *name, ...)
+int DL_func(const char *name, ...)
 {
     va_list args;
     int (*f) (va_list), ret;

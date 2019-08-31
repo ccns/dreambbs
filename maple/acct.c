@@ -39,7 +39,7 @@ void logitfile(const char *file, const char *key, const char *msg)
 /* 增加銀幣, 優良積分, 劣退                              */
 /* ----------------------------------------------------- */
 
-void addmoney(int addend, char *userid)
+void addmoney(int addend, const char *userid)
 {
     ACCT acct;
     if (acct_load(&acct, userid) >= 0)
@@ -55,7 +55,7 @@ void addmoney(int addend, char *userid)
     }
 }
 
-void addpoint1(int addend, char *userid)
+void addpoint1(int addend, const char *userid)
 {
     ACCT acct;
     if (acct_load(&acct, userid) >= 0)
@@ -67,7 +67,7 @@ void addpoint1(int addend, char *userid)
     }
 }
 
-void addpoint2(int addend, char *userid)
+void addpoint2(int addend, const char *userid)
 {
     ACCT acct;
     if (acct_load(&acct, userid) >= 0)
@@ -132,7 +132,7 @@ void keeplog(const char *fnlog, const char *board, const char *title, int mode  
 }
 
 
-int acct_load(ACCT * acct, char *userid)
+int acct_load(ACCT * acct, const char *userid)
 {
     int fd;
 
@@ -147,7 +147,7 @@ int acct_load(ACCT * acct, char *userid)
     return fd;
 }
 
-void acct_save(ACCT * acct)
+void acct_save(const ACCT * acct)
 {
     int fd;
     char fpath[80];
@@ -162,7 +162,7 @@ void acct_save(ACCT * acct)
 }
 
 
-int acct_userno(char *userid)
+int acct_userno(const char *userid)
 {
     int fd;
     int userno;
@@ -288,7 +288,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
     }
 }
 
-int check_admin(char *name)
+int check_admin(const char *name)
 {
     ADMIN admin;
     int pos = 0, fd;
@@ -413,7 +413,7 @@ static unsigned int setperm(unsigned int level)
 /* ----------------------------------------------------- */
 
 /* BLACK SU */
-static void acct_su(ACCT * u)
+static void acct_su(const ACCT * u)
 {
     XO *xo;
     char path[80], id[20];
@@ -450,7 +450,7 @@ static void acct_su(ACCT * u)
 /* BLACK SU */
 
 static void bm_list(            /* 顯示 userid 是哪些板的板主 */
-                       char *userid)
+                       const char *userid)
 {
     int len, ch;
     BRD *bhdr, *tail;
@@ -497,7 +497,7 @@ static void bm_list(            /* 顯示 userid 是哪些板的板主 */
 
 #ifdef LOG_ADMIN
 /* Thor.990405: log permission modify */
-static void perm_log(ACCT * u, int oldl)
+static void perm_log(const ACCT * u, int oldl)
 {
     int i;
     unsigned int level;
@@ -519,13 +519,14 @@ static void perm_log(ACCT * u, int oldl)
 }
 #endif
 
-void acct_show(ACCT * u, int adm    /* 1: admin 2: reg-form */
+void acct_show(const ACCT * u, int adm    /* 1: admin 2: reg-form */
     )
 {
     time_t now;
     int diff;
     unsigned int ulevel;
-    char *uid, buf[80];
+    const char *uid;
+    char buf[80];
 
     clrtobot();
 
@@ -659,7 +660,7 @@ void bm_setup(ACCT * u, int adm)
 }
 
 
-static int seek_log_email(char *mail, int mode)
+static int seek_log_email(const char *mail, int mode)
 {
     EMAIL email;
     int pos = 0, fd;
@@ -686,7 +687,7 @@ static int seek_log_email(char *mail, int mode)
     return -1;
 }
 
-void deny_log_email(char *mail, time_t deny)
+void deny_log_email(const char *mail, time_t deny)
 {
     EMAIL email;
     int pos;
@@ -1383,7 +1384,7 @@ int m_bmset(void)
 /* ----------------------------------------------------- */
 
 
-int ban_addr(char *addr)
+int ban_addr(const char *addr)
 {
     int i;
     char *host, *str;
@@ -1418,7 +1419,7 @@ int ban_addr(char *addr)
 }
 
 #ifdef HAVE_WRITE
-static int allow_addr(char *addr)
+static int allow_addr(const char *addr)
 {
     int i;
     char *host;
@@ -1447,7 +1448,7 @@ check_nckuemail(char *email)
 
 /* 找尋是否有註冊三個以上之 Email */
 int find_same_email(            /* mode : 1.find 2.add 3.del */
-                       char *mail, int mode)
+                       const char *mail, int mode)
 {
     int pos = 0, fd;
     const char *fpath;
@@ -2028,7 +2029,7 @@ int u_xfile(void)
 /* ----------------------------------------------------- */
 
 
-static int valid_brdname(char *brd)
+static int valid_brdname(const char *brd)
 {
     int ch;
 
@@ -2377,14 +2378,14 @@ int a_editbrd(void)                /* cache.100618: 修改看板選項 */
 /* ----------------------------------------------------- */
 
 
-static void getfield(int line, int len, char *buf, char *desc, char *hint)
+static void getfield(int line, int len, char *buf, const char *desc, const char *hint)
 {
     move(line, 0);
     prints("%s:%s\n", desc, hint);
     vget(line + 1, 0, "         ", buf, len, GCARRY);
 }
 
-int check_idno(char *s)
+int check_idno(const char *s)
 {
     char *p, *LEAD = "ABCDEFGHJKLMNPQRSTUVXYWZIO";
     int x, i;
@@ -2881,7 +2882,7 @@ int m_register(void)
 
 
 #ifdef  HAVE_REPORT
-void report(char *s)
+void report(const char *s)
 {
     static int disable = NA;
     int fd;

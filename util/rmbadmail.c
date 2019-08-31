@@ -17,8 +17,8 @@ static int reserve, r_size, ulink, u_size;
 
 static void
 reaper(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
     int fd, size, check;
     char buf[256], *fname, folder[128], *ptr;
@@ -110,8 +110,8 @@ reaper(
 
 static void
 expire(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
     int fd, size, check;
     char buf[256], *fname, folder[128], *ptr, *str;

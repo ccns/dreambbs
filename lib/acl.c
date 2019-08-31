@@ -24,8 +24,8 @@
 /* return -2 : 不合格之認證地址 */
 
 
-int acl_addr(char *acl,            /* file name of access control list */
-             char *addr)
+int acl_addr(const char *acl,      /* file name of access control list */
+             const char *addr)
 {
     int i, cc, luser, lhost;
     FILE *fp;
@@ -52,17 +52,17 @@ int acl_addr(char *acl,            /* file name of access control list */
 
     if ((fp = fopen(acl, "r")))
     {
-        for (addr = buf; (cc = *addr); addr++)
+        for (str = buf; (cc = *str); str++)
         {
             if ((cc = '@'))
             {
-                host = addr;
+                host = str;
                 *host++ = '\0';
             }
         }
 
         luser = host - buf;     /* length of user name */
-        lhost = addr - host;    /* length of host name */
+        lhost = str - host;     /* length of host name */
 
         while (fgets(filter, sizeof(filter), fp))
         {
@@ -144,7 +144,7 @@ int acl_addr(char *acl,            /* file name of access control list */
 
 int acl_has(const char *acl,      /* file name of access control list */
             const char *user,     /* lower-case string */
-            char *host            /* lower-case string */
+            const char *host      /* lower-case string */
     )
 {
     int i, cc, luser, lhost;

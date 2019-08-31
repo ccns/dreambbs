@@ -702,7 +702,7 @@ void sig_handler(int sig)
 }
 
 void run_ruby(
-    char* fpath)
+    const char* fpath)
 {
     static int ruby_inited = 0;
     ABORT_BBSRUBY = 0;

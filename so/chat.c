@@ -73,7 +73,7 @@ printchatline(
 #  else /* #ifdef M3_USE_PFTERM */
 static void
 printchatline(
-    char *msg)
+    const char *msg)
 {
     int line;
     extern screenline *cur_slp;
@@ -285,7 +285,7 @@ chat_clear(char *arg)
 
 static void
 print_chatid(
-char *chatid)
+const char *chatid)
 {
     move(b_lines - 1, 0);
     outs(chatid);
@@ -551,7 +551,7 @@ struct chat_command chat_cmdtbl[] =
 
 static inline int
 chat_cmd_match(
-char *buf,
+const char *buf,
 const char *str)
 {
     int c1, c2;

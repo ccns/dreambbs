@@ -43,28 +43,28 @@ static void pip_check_levelup(void);
 static void pip_check_level(void);
 static void pip_load_levelup(const char *fpath);
 static int twice(int x, int max, int min);
-static int pip_magic_menu(int mode, UTMP *opt);
-static int pip_magic_doing_menu(struct magicset *p);
-static int pip_data_list(char *userid);
-static void pip_read_file(char *userid);
+static int pip_magic_menu(int mode, const UTMP *opt);
+static int pip_magic_doing_menu(const struct magicset *p);
+static int pip_data_list(const char *userid);
+static void pip_read_file(const char *userid);
 static void pip_write_file(void);
 static void show_system_pic(int i);
 static void pip_new_game(void);
 static int pip_main_menu(void);
 static int pip_live_again(void);
 static void show_basic_pic(int i);
-static void pip_log_record(char *msg);
+static void pip_log_record(const char *msg);
 static void show_die_pic(int i);
 static int pip_mainmenu(int mode);
 static void pip_time_change(time_t cnow);
-static int pip_go_palace_screen(struct royalset *p);
+static int pip_go_palace_screen(const struct royalset *p);
 static int pip_ending_screen(void);
 static int pip_marriage_offer(void);
 static void show_usual_pic(int i);
 static void show_feed_pic(int i);
-static int pip_buy_goods_new(int mode, struct goodsofpip *p, int oldnum[]);
-static int pip_weapon_doing_menu(int variance, int type, struct weapon *p);
-static int pip_vs_man(int n, struct playrule *p, int mode);
+static int pip_buy_goods_new(int mode, const struct goodsofpip *p, int oldnum[]);
+static int pip_weapon_doing_menu(int variance, int type, const struct weapon *p);
+static int pip_vs_man(int n, const struct playrule *p, int mode);
 static int pip_results_show_ending(int winorlost, int mode, int a, int b, int c);
 static void pip_fight_bad(int n);
 static void tie(void);
@@ -75,7 +75,7 @@ static int pip_practice_function(int classnum, int classgrade, int pic1, int pic
 static int pip_ending_decide(char *eendbuf1, char *eendbuf2, char *eendbuf3, int *endmode, int *endgrade);
 static int pip_game_over(int endgrade);
 static int pip_practice_gradeup(int classnum, int classgrade, int data);
-static int pip_read(char *genbuf);
+static int pip_read(const char *userid);
 
 /*系統選單*/
 static int pip_data_list_cuser(void), pip_system_freepip(void), pip_system_service(void);
@@ -107,7 +107,7 @@ int money)
 
 static char *
 get_path(
-char *id, const char *file)
+const char *id, const char *file)
 {
     usr_fpath(pippath, id, file);
     return pippath;
@@ -619,7 +619,7 @@ static struct pipcommands pipsystemlist[] =
 static int
 pip_do_menu(
 int menunum, int menumode,
-struct pipcommands cmdtable[])
+const struct pipcommands cmdtable[])
 {
     time_t now;
     int key1, key2;
@@ -627,8 +627,8 @@ struct pipcommands cmdtable[])
     int goback = 0, ok = 0;
     int class1 = 0, class2 = 0, class3 = 0, class4 = 0, class5 = 0;
     int class6 = 0, class7 = 0, class8 = 0, class9 = 0, class10 = 0;
-    struct pipcommands *cmd1;
-    struct pipcommands *cmd2;
+    const struct pipcommands *cmd1;
+    const struct pipcommands *cmd2;
 
     do
     {
@@ -1604,7 +1604,7 @@ static void pip_write_file(void)
 }
 
 /*遊戲讀資料出檔案*/
-static void pip_read_file(char *userid)
+static void pip_read_file(const char *userid)
 {
     FILE *fs;
     char buf[200];
@@ -1654,7 +1654,7 @@ static void pip_read_file(char *userid)
 /*記錄到pip.log檔*/
 static void
 pip_log_record(
-char *msg)
+const char *msg)
 {
     FILE *fs;
 
@@ -2123,7 +2123,7 @@ static int pip_store_weapon_foot(void)         /*足部武器*/
 static int
 pip_buy_goods_new(
 int mode,
-struct goodsofpip *p,
+const struct goodsofpip *p,
 int oldnum[])
 {
     const char *shopname[4] = {"店名", "便利商店", NICKNAME "藥鋪", "夜裡書局"};
@@ -2295,7 +2295,7 @@ static int
 pip_weapon_doing_menu(             /* 武器購買畫面 */
 int variance,
 int type,
-struct weapon *p)
+const struct weapon *p)
 {
     time_t now;
     register int n = 0;
@@ -4507,7 +4507,7 @@ pip_go_palace(void)
 
 static int
 pip_go_palace_screen(
-struct royalset *p)
+const struct royalset *p)
 {
     int n;
     int a;
@@ -6525,7 +6525,7 @@ static int pip_query(void)  /*拜訪小雞*/
 
 static int
 pip_read(
-char *genbuf)
+const char *userid)
 {
     FILE *fs;
     char buf[200];
@@ -6558,9 +6558,9 @@ char *genbuf)
     int workP1, workQ1, workR1, workS1, workT1;
     int workU1, workV1, workW1, workX1, workY1, workZ1;
 
-    /* sprintf(buf, "home/%s/chicken", genbuf);*/
-    usr_fpath(buf, genbuf, "chicken");
-    /* currutmp->destuid = genbuf;*/
+    /* sprintf(buf, "home/%s/chicken", userid);*/
+    usr_fpath(buf, userid, "chicken");
+    /* currutmp->destuid = userid;*/
 
     if ( ( fs = fopen(buf, "r") ) )
     {
@@ -6620,7 +6620,7 @@ char *genbuf)
 
         move(1, 0);
         clrtobot();
-        prints("這是%s養的小雞：\n", genbuf);
+        prints("這是%s養的小雞：\n", userid);
 
         if (death1 == 0)
         {
@@ -6943,9 +6943,9 @@ pip_system_service(void)
 static void
 pip_data_list_va(va_list pvar)
 {
-    char *userid;
+    const char *userid;
 
-    userid = va_arg(pvar, char *);
+    userid = va_arg(pvar, const char *);
     pip_data_list(cuser.userid);
 }
 #endif  // #if 0  // Unused
@@ -6958,7 +6958,7 @@ pip_data_list_cuser(void)
 
 static int
 pip_data_list(  /*看小雞個人詳細資料*/
-char *userid)
+const char *userid)
 {
     char buf[256];
     char inbuf1[20];
@@ -7210,7 +7210,7 @@ char *userid)
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-static int pip_fight_main(int n, struct playrule list[], int mode);
+static int pip_fight_main(int n, const struct playrule list[], int mode);
 
 /*---------------------------------------------------------------------------*/
 /* 戰鬥人物決定函式                                                          */
@@ -7325,7 +7325,7 @@ int n)
 static int
 pip_fight_main(
 int n,
-struct playrule list[],
+const struct playrule list[],
 int mode)
 {
     pip_vs_man(n, list, mode);
@@ -7339,7 +7339,7 @@ int mode)
 static int
 pip_vs_man(
 int n,
-struct playrule *p,
+const struct playrule *p,
 int mode)
 {
     /* p[n].name hp mp speed attack resist money special map */
@@ -7967,7 +7967,7 @@ get_hurt(int hurt, int mexp)
 static int
 pip_magic_menu(  /*戰鬥中法術的應用*/
 int mode,
-UTMP *opt)
+const UTMP *opt)
 {
     char buf[256];
     int injure;         /*傷害力*/
@@ -8052,7 +8052,7 @@ UTMP *opt)
 /*魔法視窗*/
 static int
 pip_magic_doing_menu(   /*魔法畫面*/
-struct magicset *p)
+const struct magicset *p)
 {
     register int n = 1;
     register const char *s;
@@ -8151,15 +8151,15 @@ struct magicset *p)
 #ifdef  HAVE_PIP_FIGHT
 static int
 pip_magic_fight_menu(  /*魔法畫面*/
-struct magicset *p,
-UTMP *opt)
+const struct magicset *p,
+const UTMP *opt)
 {
     int n = 1, cur = 1, mg[16];
     char buf[256];
     char ans[5];
     int pipkey;
     int injure = 0;
-    struct magicset *s;
+    const struct magicset *s;
 
     s = p;
     d.nodone = 0;

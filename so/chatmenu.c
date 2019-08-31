@@ -20,7 +20,7 @@ static int kind = 0;
 static void
 chat_item(
 int num,
-ChatAction *chat)
+const ChatAction *chat)
 {
     if (!mode)
         prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->chinese, d_cols + 54, d_cols + 54, chat->part1_msg);

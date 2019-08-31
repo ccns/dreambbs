@@ -114,7 +114,7 @@ rebuild_pnote_ansi(int newflag)
 }
 
 static void
-do_pnote(char *userid)
+do_pnote(const char *userid)
 {
     int total = 0, i, collect, len;
     struct stat st;
@@ -266,7 +266,7 @@ del_pnote(notedata *pitem, int newflag)
 
 static void
 show_pnote_hint(
-char *uid)
+const char *uid)
 {
     FILE *hintfile;
     int i;
