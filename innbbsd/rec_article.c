@@ -149,7 +149,7 @@ bbspost_add(
     char *board, char *addr, char *nick)
 {
     int cc;
-    char *str;
+    const char *str;
     char folder[64], fpath[64];
     HDR hdr;
     FILE *fp;
@@ -326,7 +326,7 @@ bbspost_cancel(
 
 int                     /* 0:cancel success  -1:cancel fail */
 cancel_article(
-    char *msgid)
+    const char *msgid)
 {
     int fd;
     char fpath[64], cancelfrom[128], buffer[128];
@@ -394,7 +394,7 @@ is_spam(
 {
     spamrule_t *spam;
     int i, xmode;
-    char *compare, *detail;
+    const char *compare, *detail;
 
     for (i = 0; i < SPAMCOUNT; i++)
     {

@@ -2543,8 +2543,8 @@ int u_register(void)
 
 static int scan_register_form(int fd)
 {
-    static char logfile[] = FN_RFORM_LOG;
-    static char *reason[] = { "輸入真實姓名", "詳實填寫申請表",
+    static const char logfile[] = FN_RFORM_LOG;
+    static const char *reason[] = { "輸入真實姓名", "詳實填寫申請表",
         "詳填住址資料", "詳填連絡電話", "詳填服務單位、或學校系級",
         "用中文填寫申請單", "採用 E-mail 認證", "填寫身分證號碼", NULL
     };

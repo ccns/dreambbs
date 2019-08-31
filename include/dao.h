@@ -133,7 +133,7 @@ int str_pat(const char *str, const char *pat);
 char *str_rev(char *dst, char *src);
 int str_rle(char *str);
 char *str_str(const char *str, const char *tag);
-char *str_sub(char *str, char *tag);
+char *str_sub(const char *str, const char *tag);
 char *str_tail(char *str);
 void str_trim(char *buf);
 const char *str_ttl(const char *title);

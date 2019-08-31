@@ -26,7 +26,7 @@ static time_t lasttime;
 #define getdata(x1, x2, x3, x4, x5, x6, x7)  vget(x1, x2, x3, x4, x5, DOECHO)
 
 static int KEY_ESC_arg;
-static char *BoardName = currboard;
+static const char *BoardName = currboard;
 #ifdef  HAVE_PIP_FIGHT
 static UTMP *currutmp;
 #endif

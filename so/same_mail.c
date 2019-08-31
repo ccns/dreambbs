@@ -1,7 +1,7 @@
 
 #include "bbs.h"
 
-static char *kmail;
+static const char *kmail;
 static int total;
 static FILE *flog;
 

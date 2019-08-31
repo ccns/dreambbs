@@ -134,8 +134,8 @@ mread(
 
 
 static char *fimage;           /* file image begin */
-static char *fend;             /* file image end */
-static char *foff;             /* 目前讀到哪裡 */
+static const char *fend;       /* file image end */
+static const char *foff;       /* 目前讀到哪裡 */
 
 
 static int
@@ -418,7 +418,7 @@ more(
     char buf[ANSILINELEN];
     int i;
 
-    char *headend;             /* 檔頭結束 */
+    const char *headend;                /* 檔頭結束 */
 
     int shift;                          /* 還需要往下移動幾列 */
     int lino;                           /* 目前 line number */
@@ -666,8 +666,8 @@ re_key:
         {
             screenline slt[T_LINES];
             char *tmp_fimage;
-            char *tmp_fend;
-            char *tmp_foff;
+            const char *tmp_fend;
+            const char *tmp_foff;
             off_t tmp_block[MAXBLOCK];
 */
             /* itoc.060420: xo_help() 會進入第二次 more()，所以要把所有 static 宣告的都記錄下來 */

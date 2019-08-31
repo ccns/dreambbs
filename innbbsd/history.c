@@ -74,7 +74,7 @@ HISmaint(void)                  /* 維護 history 檔，將過早的 history 刪除 */
 
 void
 HISadd(                         /* 將 (msgid, path, xname) 此配對記錄在 history 中 */
-    char *msgid,
+    const char *msgid,
     char *board,
     char *xname)
 {

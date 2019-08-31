@@ -11,7 +11,7 @@
 #include "bbs.h"
 
 static int funo;
-static char *kmail;
+static const char *kmail;
 static int total;
 static FILE *flog;
 

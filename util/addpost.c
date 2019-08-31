@@ -10,8 +10,8 @@
 
 #include "bbs.h"
 
-static char *userid;
-static char *username;
+static const char *userid;
+static const char *username;
 
 static void
 out_post(

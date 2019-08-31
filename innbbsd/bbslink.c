@@ -51,7 +51,7 @@ static int Verbose = 0;                 /* 1: 顯示詳細訊息 */
 static int KillFormerProc = 0;          /* 1: 刪除上次執行失敗的 bbslink */
 static int ResetActive = 0;             /* 1: 將 high-number 更新到與 news server 上相同 */
 static int MaxArts = MAX_ARTS;          /* 對 news server 每個群組最多只抓幾封文章 */
-static char *DefaultProcSite = NULL;    /* !=NULL: 只處理某特定站台 */
+static const char *DefaultProcSite = NULL;  /* !=NULL: 只處理某特定站台 */
 
 
 #define DEBUG(arg)      if (Verbose) printf arg
@@ -633,7 +633,8 @@ static void
 my_post(void)
 {
     int rel, size;
-    char *ptr, *data;
+    char *data;
+    const char *ptr;
     struct stat st;
 
     if ((rel = open(tempfile, O_RDONLY)) >= 0)

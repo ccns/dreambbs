@@ -3595,7 +3595,7 @@ mf_movieFrameHeader(unsigned char *p, unsigned char *end)
     // So let's go back to fixed format...
     static const char *patHeader = "==" ESC_STR "[30;40m^L";
     static const char *patHeader2= ESC_STR "[30;40m^L"; // patHeader + 2; // "=="
-    // static char *patHeader3= ESC_STR "[m^L";
+    // static const char *patHeader3= ESC_STR "[m^L";
     static size_t szPatHeader   = 12; // strlen(patHeader);
     static size_t szPatHeader2  = 10; // strlen(patHeader2);
     // static size_t szPatHeader3  = 5;  // strlen(patHeader3);

@@ -447,7 +447,7 @@ NCMparse(void)
 }
 
 
-extern int cancel_article(char *msgid);
+extern int cancel_article(const char *msgid);
 
 
 static void

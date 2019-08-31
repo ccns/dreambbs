@@ -55,9 +55,10 @@ static header_t headertable[LASTHEADER] =
 };
 
 
-char *NODENAME;
+const char *NODENAME;
 char *BODY;
-char *SUBJECT, *FROM, *DATE, *PATH, *GROUP, *MSGID, *POSTHOST, *SITE, *CONTROL;
+const char *DATE, *PATH, *MSGID, *POSTHOST, *CONTROL;
+char *SUBJECT, *FROM, *GROUP, *SITE;
 
 
 static int
@@ -92,7 +93,7 @@ header_value(
 
 static int
 is_loopback(
-    char *path, const char *token,
+    const char *path, const char *token,
     int len)
 {
     int cc;

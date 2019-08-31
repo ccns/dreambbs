@@ -28,7 +28,7 @@ extern void gb2b5(char *str);
 
 /* rec_article.c */
 extern void init_bshm(void);
-extern int cancel_article(char *msgid);
+extern int cancel_article(const char *msgid);
 extern int receive_article(void);
 #ifdef NoCeM
 extern int receive_nocem(void);

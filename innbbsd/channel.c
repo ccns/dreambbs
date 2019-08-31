@@ -87,7 +87,7 @@ my_recv(
 {
     FILE *fout;
     int rel;
-    char *ptr;
+    const char *ptr;
 
     fout = client->Argv.out;
 
