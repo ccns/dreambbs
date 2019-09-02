@@ -275,7 +275,7 @@ void grayout(int y, int end, int level);
 void add_io(int fd, int timeout);
 int iac_count(unsigned char *current);
 int igetch(void);
-BRD *ask_board(char *board, int perm, const char *msg);
+BRD *ask_board(char *board, unsigned int perm, const char *msg);
 int vget(int line, int col, const char *prompt, char *data, int max, int echo);
 int vans(const char *prompt);
 int vkey(void);

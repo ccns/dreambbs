@@ -11,7 +11,7 @@
 /*-------------------------------------------------------*/
 #include "bbs.h"
 
-static int perm;
+static unsigned int perm;
 static int num;
 
 void

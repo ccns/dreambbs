@@ -1706,7 +1706,7 @@ static BRD *xbrd;
 BRD *
 ask_board(
     char *board,
-    int perm,
+    unsigned int perm,
     const char *msg)
 {
     if (msg)
