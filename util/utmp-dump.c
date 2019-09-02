@@ -596,19 +596,56 @@ main(
     XO xo;
     char fpath[128];
     int fd;
+    const char *userid = NULL;
 
     chdir(BBSHOME);
 
+    pickup_way = -1;
+    while (optind < argc)
+    {
+        switch (getopt(argc, argv, "+" "u:e:m:x:f:"))
+        {
+        case -1:  // Position arguments
+            if (!(optarg = argv[optind++]))
+                break;
+            if (!userid)
+        case 'u':
+                userid = optarg;
+            else if (!(pickup_way >= 0))
+            {
+        case 'p':
+                if ((pickup_way = atoi(optarg)) >= 0 && pickup_way < PICKUP_WAYS)
+                    break;
+            }
+            else
+                break;
+            // Falls through
+            // to handle invalid argument values
+        default:
+            userid = NULL;  // Invalidate arguments
+            optind = argc;  // Ignore remaining arguments
+            break;
+        }
+    }
+
+    if (!(userid && pickup_way >= 0))
+    {
+        fprintf(stderr, "Usage: %s [-u] <userid> [-p] <pickup_way>\n", argv[0]);
+        fprintf(stderr, "pickup_ways:\n");
+        for (pickup_way = 0; pickup_way < PICKUP_WAYS; pickup_way++)
+            fprintf(stderr, "\t%d: Sorted by %s\n", pickup_way, msg_pickup_way[pickup_way]);
+        return 2;
+    }
+
     ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
     cutmp = &utmp;
-    usr_fpath(fpath, argv[1], FN_ACCT);
+    usr_fpath(fpath, userid, FN_ACCT);
     fd = open(fpath, O_RDONLY);
     if (fd>=0)
     {
         if (read(fd, &cuser, sizeof(ACCT)) == sizeof(ACCT))
         {
             reset_utmp();
-            pickup_way = atoi(argv[2]);
             pal_cache();
             ulist_init(&xo);
         }

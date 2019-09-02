@@ -200,24 +200,51 @@ main(
     char *argv[])
 {
     int mode;
+    char *path = NULL, *title = NULL;
 
     bshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
 
-    if (argc>3)
+    mode = (argc > 1) ? atoi(argv[1]) : 0;
+    optind++;
+    while (optind < argc)
     {
-        mode = atoi(argv[1]);
-        switch (mode)
+        switch (getopt(argc, argv, "+" "f:t:"))
         {
-            case 1:
-                open_mail(argv[2], argv[3]);
+        case -1:  // Position arguments
+            if (!(optarg = argv[optind++]))
                 break;
-            case 2:
-                to_bm(argv[2], argv[3]);
-                break;
-        }
+            if (!path)
+        case 'f':
+                path = optarg;
+            else if (!title)
+        case 't':
+                title = optarg;
+            break;
 
+        default:
+            path = title = NULL;  // Invalidate arguments
+            optind = argc;  // Ignore remaining arguments
+            break;
+        }
     }
-    unlink(argv[2]);
+
+    if (!(path && title))
+        mode = 0;
+
+    switch (mode)
+    {
+    case 1:
+        open_mail(path, title);
+        break;
+    case 2:
+        to_bm(path, title);
+        break;
+
+    default:
+        fprintf(stderr, "Usage: %s {1|2} [-f] <path> [-t] <title>\n", argv[0]);
+        return 2;
+    }
+    unlink(path);
 
     return 0;
 }

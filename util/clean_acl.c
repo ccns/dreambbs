@@ -33,35 +33,62 @@ main(
 {
     FILE *fp, *fd;
     char buf[256], tmp[256], *ptr;
+    const char *infile = NULL, *outfile = NULL;
 
-    if (argc > 2)
+    while (optind < argc)
     {
-        fp = fopen(argv[1], "r");
-        if (fp)
+        switch (getopt(argc, argv, "+" "i:o:"))
         {
-            fd = fopen(argv[2], "w");
-            if (fd)
-            {
-                while (fgets(buf, 256, fp))
-                {
-                    if (strstr(buf, ".epaper.com.tw"))
-                        continue;
-                    if (strstr(buf, MYHOSTNAME))
-                        continue;
-                    strcpy(tmp, buf);
-                    ptr = (char *)strchr(buf, '#');
-                    if (ptr)
-                        *ptr = '\0';
-                    if (!check_in(buf))
-                    {
-                        fprintf(fd, "%s", tmp);
-                        strcpy(map[total++], buf);
-                    }
-                }
-                fclose(fd);
-            }
-            fclose(fp);
+        case -1:  // Position arguments
+            if (!(optarg = argv[optind++]))
+                break;
+            if (!infile)
+        case 'i':
+                infile = optarg;
+            else if (!outfile)
+        case 'o':
+                outfile = optarg;
+            break;
+
+        default:
+            infile = outfile = NULL;  // Invalidate arguments
+            optind = argc;  // Ignore remaining arguments
+            break;
         }
+    }
+
+    if (!(infile && outfile))
+    {
+        printf("Usage: %s [-i] <acl_file_in> [-o] <acl_file_out>\n", argv[0]);
+        return 2;
+    }
+
+
+    fp = fopen(infile, "r");
+    if (fp)
+    {
+        fd = fopen(outfile, "w");
+        if (fd)
+        {
+            while (fgets(buf, 256, fp))
+            {
+                if (strstr(buf, ".epaper.com.tw"))
+                    continue;
+                if (strstr(buf, MYHOSTNAME))
+                    continue;
+                strcpy(tmp, buf);
+                ptr = (char *)strchr(buf, '#');
+                if (ptr)
+                    *ptr = '\0';
+                if (!check_in(buf))
+                {
+                    fprintf(fd, "%s", tmp);
+                    strcpy(map[total++], buf);
+                }
+            }
+            fclose(fd);
+        }
+        fclose(fp);
     }
     return 0;
 }

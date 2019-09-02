@@ -246,15 +246,20 @@ main(
     char *argv[])
 {
     int ch;
-    char *fname, fpath[256], buf[32];
+    char *fname, fpath[256], buf[32] = {0};
 
     chdir(BBSHOME);
 
-    if (argc > 1 && !strncmp(argv[1], "-a", 2))
+    ch = getopt(argc, argv, "+" "ab");
+    if (optind < argc) {
+        str_lower(buf, argv[optind++]);
+    }
+
+    switch (ch)
     {
-        if (argc > 2)
+    case 'a':
+        if (*buf)
         {
-            str_lower(buf, argv[2]);
             sprintf(fpath, "usr/%c/%s", *buf, buf);
             if (!access(fpath, 0))
                 reaper(fpath, buf);
@@ -278,12 +283,11 @@ main(
                 traverse(fpath, 1);
             }
         }
-    }
-    else if (argc > 1 && !strncmp(argv[1], "-b", 2))
-    {
-        if (argc > 2)
+        break;
+
+    case 'b':
+        if (*buf)
         {
-            strcpy(buf, argv[2]);
             sprintf(fpath, "brd/%s", buf);
             if (!access(fpath, 0))
                 expire(fpath, buf);
@@ -295,9 +299,9 @@ main(
             strcpy(fpath, "brd");
             traverse(fpath, 2);
         }
-    }
-    else
-    {
+        break;
+
+    default:
         fprintf(stderr, "syntax : %s {-a [account]|-b [board]}\n", argv[0]);
         return 2;
     }

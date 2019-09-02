@@ -15,19 +15,42 @@ main(
     int argc,
     char *argv[])
 {
+    const char *bmw_file = NULL, *userid = NULL;
     int inf, count;
     BMW bmw;
     ACCT acct;
     char fpath[80];
 
-    if (argc < 3)
+    while (optind < argc)
     {
-        fprintf(stderr, "Usage:\t%s <bmw file> <userid>\n", argv[0]);
+        switch (getopt(argc, argv, "+" "b:u:"))
+        {
+        case -1:  // Position arguments
+            if (!(optarg = argv[optind++]))
+                break;
+            if (!bmw_file)
+        case 'b':
+                bmw_file = optarg;
+            else if (!userid)
+        case 'u':
+                userid = optarg;
+            break;
+
+        default:
+            bmw_file = userid = NULL;  // Invalidate arguments
+            optind = argc;  // Ignore remaining arguments
+            break;
+        }
+    }
+
+    if (!(bmw_file && userid))
+    {
+        fprintf(stderr, "Usage:\t%s [-b] <bmw file> [-u] <userid>\n", argv[0]);
         exit(2);
     }
 
     strcpy(fpath, BBSHOME"/");
-    usr_fpath(fpath + strlen(BBSHOME) + 1, argv[2], FN_ACCT);
+    usr_fpath(fpath + strlen(BBSHOME) + 1, userid, FN_ACCT);
     inf = open(fpath, O_RDONLY);
     if (inf == -1)
     {
@@ -43,7 +66,7 @@ main(
     close(inf);
 
 
-    inf = open(argv[1], O_RDONLY);
+    inf = open(bmw_file, O_RDONLY);
     if (inf == -1)
     {
         printf("error open bmw file\n");

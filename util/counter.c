@@ -48,34 +48,14 @@ main(
     time_t now;
     struct tm ntime, *xtime, ptime;
     FILE *fp;
-    char ymd[80], flag;
-
-    if (argc > 1)
-    {
-        if (*argv[1] == 'r')  flag = 1;
-        else if (*argv[1] == 'w')  flag = 2;
-        else flag = 0;
-    }
-    else
-        flag = 0;
-
-    now = time(NULL);
-    xtime = localtime(&now);
-    ntime = *xtime;
-
-    sprintf(ymd, "%02d/%02d/%02d",
-        ntime.tm_year % 100, ntime.tm_mon + 1, ntime.tm_mday);
-
-    fp = fopen(FN_ETC_COUNTER, "a+");
+    char ymd[80];
 
     count = attach_shm(COUNT_KEY, sizeof(COUNTER));
 
-    now = count->samehour_max_time;
-    xtime = localtime(&now);
-    ptime = *xtime;
-
-    if (flag == 1)
+    optind++;
+    switch ((argc > 1) ? *argv[1] : 0)
     {
+    case 'r':
         printf("\nhour_max_login = %d \n", count->hour_max_login);
         printf("day_max_login = %d \n", count->day_max_login);
         printf("samehour_max_login = %d \n", count->samehour_max_login);
@@ -85,29 +65,81 @@ main(
         printf("samehour_max_time = %d \n", (int) count->samehour_max_time);
         printf("samehour_max_login_old = %d \n", count->samehour_max_login_old);
         printf("max_regist_old = %d \n", count->max_regist_old);
-    }
-    if (flag == 2)
-    {
-        if (argc > 5)
-        {
-            count->samehour_max_login = atoi(argv[2]);
-            count->max_regist = atoi(argv[3]);
-            count->hour_max_login = atoi(argv[4]);
-            count->day_max_login = atoi(argv[5]);
-        }
-        else
-        {
-            fprintf(stderr, "%s w <SML> <MR> <MHL> <MHD> \n", argv[0]);
-            fprintf(stderr, "SML = 同時在站內人數\n");
-            fprintf(stderr, "MR = 總註冊人數\n");
-            fprintf(stderr, "MHL = 單一小時上線人次\n");
-            fprintf(stderr, "MHD = 單日上線人次\n");
-            return 2;
-        }
-    }
+        break;
 
-    if (flag == 0)
-    {
+    case 'w':
+        {
+            int opt, arg_r = 4;  // Need 4 arguments when only position arguments are given
+            int sml = -1, mr = -1, mhl = -1, mdl = -1;
+            while (optind < argc)
+            {
+                switch (opt = getopt(argc, argv, "+" "s:r:h:d"))
+                {
+                case -1:  // Position arguments
+                    if (!(optarg = argv[optind++]))
+                        break;
+                    arg_r--;
+                    if (!(sml >= 0))
+                case 's':
+                        sml = atoi(optarg);
+                    else if (!(mr >= 0))
+                case 'r':
+                        mr = atoi(optarg);
+                    else if (!(mhl >= 0))
+                case 'h':
+                        mhl = atoi(optarg);
+                    else if (!(mdl >= 0))
+                case 'd':
+                        mdl = atoi(optarg);
+
+                    if (opt != -1) arg_r = 0;  // Allow skipped arguments
+                    if (atoi(optarg) >= 0)  // Arguments must >= 0
+                        break;
+                    // Else falls through
+                default:
+                    arg_r = sml = mr = mhl = mdl = -1;
+                    optind = argc;  // Ignore remaining arguments
+                    break;
+                }
+            }
+
+            if (arg_r <= 0)
+            {
+                if (sml >= 0)
+                    count->samehour_max_login = sml;
+                if (mr >= 0)
+                    count->max_regist = mr;
+                if (mhl >= 0)
+                    count->hour_max_login = mhl;
+                if (mdl >= 0)
+                    count->day_max_login = mdl;
+            }
+            else
+            {
+                fprintf(stderr, "%s w [[-s] <SML>] [[-r] <MR>] [[-h] <MHL>] [[-d] <MHD>] \n", argv[0]);
+                fprintf(stderr, "SML >= 0: 同時在站內人數\n");
+                fprintf(stderr, "MR >= 0: 總註冊人數\n");
+                fprintf(stderr, "MHL >= 0: 單一小時上線人次\n");
+                fprintf(stderr, "MHD >= 0: 單日上線人次\n");
+                return 2;
+            }
+            break;
+        }
+
+    default:
+        fp = fopen(FN_ETC_COUNTER, "a+");
+
+        now = time(NULL);
+        xtime = localtime(&now);
+        ntime = *xtime;
+
+        sprintf(ymd, "%02d/%02d/%02d",
+            ntime.tm_year % 100, ntime.tm_mon + 1, ntime.tm_mday);
+
+        now = count->samehour_max_time;
+        xtime = localtime(&now);
+        ptime = *xtime;
+
         if (count->max_regist > count->max_regist_old)
         {
             fprintf(fp, "★ 【%s】\x1b[1;32m總註冊人數\x1b[m提升到 \x1b[31;1m%d\x1b[m 人\n", ymd, count->max_regist);
@@ -141,7 +173,9 @@ main(
             write(fd, count, sizeof(COUNTER));
             close(fd);
         }
+
+        fclose(fp);
+        break;
     }
-    fclose(fp);
     return 0;
 }

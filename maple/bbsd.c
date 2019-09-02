@@ -1594,12 +1594,31 @@ main_signals(void)
     /* sigblock(sigmask(SIGPIPE)); */
 }
 
+static void usage(char *argv0)
+{
+    fprintf(stderr,
+            "Usage: %s\n"
+            "Listen on pre-defined ports\n"
+            "\n",
+            argv0);
+    fprintf(stderr,
+            "       %s -i\n"
+            "Listen on inetd port when run by inetd\n"
+            "\n",
+            argv0);
+    fprintf(stderr,
+            "       %s <listen_spec>\n"
+            "listen_specs:\n"
+            "\t[-p] <port>        listen on port; -p can be omitted (port > 0)\n"
+            "\n",
+            argv0);
+}
 
 int main(int argc, char *argv[])
 {
     int csock;                  /* socket for Master and Child */
     int *totaluser;
-    int value;
+    int value = 0;
     struct sockaddr_in sin;
 
     /* --------------------------------------------------- */
@@ -1608,7 +1627,31 @@ int main(int argc, char *argv[])
 
     /* Thor.990325: usage, bbsd, or bbsd -i, or bbsd 1234 */
     /* Thor.981206: 取 0 代表 *沒有參數*, -1 代表 -i */
-    start_daemon(argc > 1 ? strcmp("-i", argv[1]) ? atoi(argv[1]) : -1 : 0);
+
+    switch (getopt(argc, argv, "p:i"))
+    {
+    case -1:
+        if (!(optarg = argv[optind++]))
+            break;
+        // Falls through
+        // to handle omitted `-p`
+    case 'p':  /* IID.20190902: `bbsd [-p] 3456`. */
+        if ((value = atoi(optarg)) > 0)
+            break;
+
+        if (0)  // Falls over the case
+        {
+    case 'i':
+            value = -1;
+            break;
+        }
+
+    default:
+        usage(argv[0]);
+        return 2;
+    }
+
+    start_daemon(value);
 
     main_signals();
 

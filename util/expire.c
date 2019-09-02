@@ -364,10 +364,55 @@ main(
     char *ptr;
     int fd;
     BRD *brd;
+    const char *board = NULL;
 
-    db.days = ((argc > 1) && (number = atoi(argv[1])) > 0) ? number : DEF_DAYS;
-    db.maxp = ((argc > 2) && (number = atoi(argv[2])) > 0) ? number : DEF_MAXP;
-    db.minp = ((argc > 3) && (number = atoi(argv[3])) > 0) ? number : DEF_MINP;
+    db.days = db.maxp = db.minp = -2;
+    number = 1;
+    while (optind < argc)
+    {
+        switch ((isdigit(argv[optind][1])) ? -1 : getopt(argc, argv, "+" "d:M:m:b:"))
+        {
+        case -1:  // Position arguments, including negative numbers
+            if (!(optarg = argv[optind++]))
+                break;
+
+            // Test whether `optarg` is a decimal integer number
+            errno = 0;
+            strtol(optarg, NULL, 10);
+            if ((number = atoi(optarg)) < -1)
+                number = -1;
+
+            // Number arguments
+            if (!errno && !(db.days >= -1))
+        case 'd':
+                db.days = number;
+            else if (!errno && !(db.maxp >= -1))
+        case 'M':
+                db.maxp = number;
+            else if (!errno && !(db.minp >= -1))
+        case 'm':
+                db.minp = number;
+            else if (!board)
+        case 'b':
+                board = optarg;
+            break;
+
+        default:
+            number = -2;
+            optind = argc;  // Ignore remaining arguments
+            break;
+        }
+    }
+
+    if (!(number >= -1))
+    {
+        fprintf(stderr, "Usage: %s [[-d] <day>] [[-M] <max_post>] [[-m] <min_post>] [[-b] <board>]\n", argv[0]);
+        return 2;
+    }
+
+    db.days = (db.days > 0) ? db.days : DEF_DAYS;
+    db.maxp = (db.maxp > 0) ? db.maxp : DEF_MAXP;
+    db.minp = (db.minp > 0) ? db.minp : DEF_MINP;
 
     memset(&key, 0, sizeof(key));
 
@@ -409,9 +454,9 @@ main(
     {
         ptr = de->d_name;
         /* Thor.981027: 加上 board時, 可sync 某一board. 加得很醜, 有空再改 */
-        if (argc > 4)
+        if (board)
         {
-            if (str_cmp(argv[4], ptr))
+            if (str_cmp(board, ptr))
                 continue;
             else
                 number=0;

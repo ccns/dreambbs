@@ -426,10 +426,52 @@ main(
     char *argv[])
 {
     char buf[256];
-    if (argc > 5)
+    const char *userid = NULL, *email = NULL, *mode = NULL, *exer = NULL, *file = NULL;
+
+    while (optind < argc)
     {
-        setup(argv[1], argv[2], atoi(argv[3]), argv[4], argv[5]);
-        sprintf(buf, "mail %s.bbs@" MYHOSTNAME " < " FN_STOPPERM_MAIL, argv[4]);
+        switch (getopt(argc, argv, "+" "u:e:m:x:f:"))
+        {
+        case -1:  // Position arguments
+            if (!(optarg = argv[optind++]))
+                break;
+            if (!userid)
+        case 'u':
+                userid = optarg;
+            else if (!email)
+        case 'e':
+                email = optarg;
+            else if (!mode)
+        case 'm':
+                mode = optarg;
+            else if (!exer)
+        case 'x':
+                exer = optarg;
+            else if (!file)
+        case 'f':
+                file = optarg;
+            break;
+
+        default:
+            userid = email = mode = exer = file = NULL;  // Invalidate arguments
+            optind = argc;  // Ignore remaining arguments
+            break;
+        }
+    }
+
+    if (userid || email || mode || exer || file)
+    {
+        if (!(userid && email && mode && exer && file))
+        {
+            fprintf(stderr, "Usage: %s\n", argv[0]);
+            fprintf(stderr, "Do nothing but send a stopperm notification to bbs@" MYHOSTNAME "\n");
+            fprintf(stderr, "Usage: %s [-u] <userid> [-e] <email> [-m] <deny_mode> [-x] <executor_userid> [-f] <tmpfile_suffix>\n", argv[0]);
+            fprintf(stderr, "Remove permissions for users with mail <email> and then send a notification to the executor\n");
+            return 2;
+        }
+
+        setup(userid, email, atoi(mode), exer, file);
+        sprintf(buf, "mail %s.bbs@" MYHOSTNAME " < " FN_STOPPERM_MAIL, exer);
         system(buf);
     }
     else
