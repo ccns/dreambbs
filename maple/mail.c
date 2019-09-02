@@ -754,7 +754,8 @@ static union
 {
     XO mail_xo;
     char bytes[SIZEOF_FLEX(XO, 32)];
-}      cmbox;
+}      cmbox_union;
+static XO *const cmbox = &cmbox_union.mail_xo;
 
 int
 m_total_size(void)
@@ -765,7 +766,7 @@ m_total_size(void)
     char *base, *folder, fpath[80];
     int changed;
 
-    if ((fd = open(folder = cmbox.mail_xo.dir, O_RDWR)) < 0)
+    if ((fd = open(folder = cmbox->dir, O_RDWR)) < 0)
         return 0;
 
     fsize = 0;
@@ -828,7 +829,7 @@ m_quota(void)
     HDR *head, *tail;
     char *base, *folder, date[9];
 
-    if ((fd = open(folder = cmbox.mail_xo.dir, O_RDWR)) < 0)
+    if ((fd = open(folder = cmbox->dir, O_RDWR)) < 0)
         return 0;
 
     ufo = 0;
@@ -1203,7 +1204,7 @@ m_count(void)
         return 1;
     }
 
-    if (stat(cmbox.mail_xo.dir, &st))
+    if (stat(cmbox->dir, &st))
         return 0;
 
     if (ulevel & (PERM_SYSOP | PERM_ACCOUNTS | PERM_MBOX))
@@ -1232,7 +1233,7 @@ mail_hold(
     if (vans("¬O§_¦Û¦s©³½Z(Y/N)¡H[N] ") != 'y')
         return;
 
-    folder = cmbox.mail_xo.dir;
+    folder = cmbox->dir;
     hdr_stamp(folder, HDR_LINK, &mhdr, fpath);
 
     mhdr.xmode = MAIL_READ | MAIL_HOLD /* | MAIL_NOREPLY */;
@@ -2486,7 +2487,7 @@ static int
 mbox_sysop(
     XO *xo)
 {
-    if (/*(xo == & cmbox.mail_xo) &&*/ (HAS_PERM(PERM_SYSOP)))
+    if (/*(xo == cmbox) &&*/ (HAS_PERM(PERM_SYSOP)))
     {
         XO *xx;
 
@@ -2521,14 +2522,14 @@ mbox_other(
         //sprintf(path, "usr/%c/%s/.DIR", *id, id);
 
         usr_fpath(path, acct.userid, fn_dir);
-        usr_fpath(cmbox.mail_xo.dir, acct.userid, fn_dir);
+        usr_fpath(cmbox->dir, acct.userid, fn_dir);
 
         xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new(path);
         xx->pos = 0;
         xover(XZ_MBOX);
         free(xx);
 
-        usr_fpath(cmbox.mail_xo.dir, cuser.userid, fn_dir);
+        usr_fpath(cmbox->dir, cuser.userid, fn_dir);
 
         xz[XZ_MBOX - XO_ZONE].xo = xo;
         mbox_init(xo);
@@ -2796,9 +2797,9 @@ static KeyFunc mbox_cb[] =
 void
 mbox_main(void)
 {
-    cmbox.mail_xo.pos = XO_TAIL;
-    usr_fpath(cmbox.mail_xo.dir, cuser.userid, fn_dir);
-    xz[XZ_MBOX - XO_ZONE].xo = & cmbox.mail_xo;
+    cmbox->pos = XO_TAIL;
+    usr_fpath(cmbox->dir, cuser.userid, fn_dir);
+    xz[XZ_MBOX - XO_ZONE].xo = cmbox;
     xz[XZ_MBOX - XO_ZONE].cb = mbox_cb;
 }
 
