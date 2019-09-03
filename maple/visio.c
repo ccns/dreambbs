@@ -1566,7 +1566,7 @@ igetch(void)
 
                     if (idle >= 5 && !cutmp)  /* 登入時 idle 超過 5 分鐘就斷線 */
                     {
-                        outs("登入逾時，請重新上站");
+                        pmsg2("登入逾時，請重新上站");
                         refresh();
                         abort_bbs();
                     }
