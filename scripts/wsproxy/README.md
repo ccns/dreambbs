@@ -4,19 +4,21 @@ This is the websocket to telnet bbs proxy.
 
 ## Dependency
 
-- [robertabcd/openresty-debian](https://github.com/robertabcd/openresty-debian) -- Forked version to build [OpenResty](https://openresty.org) with patch.
-- [Docker](https://www.docker.com/) -- Used to build OpenResty.
+- [OpenResty](https://openresty.org) (>= 1.15.8.1) -- Official version of OpenResty, needs no patches.
 - [vstruct](https://github.com/toxicfrog/vstruct/) -- Lua library for binary manipulation.
 
 ## Install
 
-- Build OpenResty with patch.
+- [Install OpenResty](https://openresty.org/en/linux-packages.html) (example for Debian/Ubuntu).
 ```
-$ git clone https://github.com/robertabcd/openresty-debian
-$ cd openresty-debian
-$ git checkout ptt
-$ ./build
-# dpkg -i artifacts/*.deb
+# systemctl disable nginx
+# systemctl stop nginx
+
+$ wget -qO - https://openresty.org/package/pubkey.gpg | sudo apt-key add -
+# apt-get -y install software-properties-common
+# add-apt-repository -y "deb http://openresty.org/package/$(lsb_release -sic | tr '[:upper:]' '[:lower:]') openresty"
+# apt-get update
+# apt-get install --no-install-recommends openresty
 ```
 
 - Download vstruct

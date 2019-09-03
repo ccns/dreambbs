@@ -118,10 +118,7 @@ end
 function sock2ws(sock, ws)
     while true do
         sock:settimeout(30*60*1000)
-        data, err, partial = sock:receiveatmost(1024)
-        if partial then
-            data = partial
-        end
+        data, err = sock:receiveany(1024)
 
         if not data then
             ws:send_close(1000, "bbs died")
