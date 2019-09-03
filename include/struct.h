@@ -1178,4 +1178,19 @@ typedef struct {
     void *raw_memory;
 } screen_backup_t;
 
+/* ----------------------------------------------------- */
+/* Data structure for passing connection data            */
+/* ----------------------------------------------------- */
+
+typedef struct
+{
+    unsigned int cb;            /* size of current structure */
+    unsigned int encoding;
+    unsigned int raddr_len;
+    unsigned char raddr[16];
+    unsigned short int rport;
+    unsigned short int lport;
+    unsigned int flags;
+} conn_data_t;
+
 #endif                          /* STRUCT_H */

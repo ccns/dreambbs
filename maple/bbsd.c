@@ -14,6 +14,7 @@
 
 #include <sys/wait.h>
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -41,6 +42,9 @@ extern CHECKSUMCOUNT cksum;
 
 /* static int mport; */ /* Thor.990325: ぃ惠璶:P */
 static u_long tn_addr;
+
+/* IID.20190903: The unix socket path for listening proxy connections */
+static const char *unix_path;
 
 
 #ifdef  TREAT
@@ -1356,11 +1360,15 @@ term_init(void)
 
 static void
 start_daemon(
-    int port /* Thor.981206:  0  *⊿Τ把计*, -1  -i (inetd) */ )
+    int port /* Thor.981206:  0  *⊿Τ把计*, -1  -i (inetd) */
+             /* IID.20190903: `-2` represents `-u` <unix_socket>`. */ )
 {
     int n;
     struct linger ld;
+    struct sockaddr_un sun;
     struct sockaddr_in sin;
+    struct sockaddr *psock;
+    size_t sock_size;
 #ifdef RLIMIT
     struct rlimit rl;
 #endif
@@ -1446,6 +1454,7 @@ start_daemon(
     /* fork daemon process                                 */
     /* --------------------------------------------------- */
 
+    sun.sun_family = AF_UNIX;
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = INADDR_ANY;
 
@@ -1463,7 +1472,10 @@ start_daemon(
         port = myports[n];
     }
 
-    n = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (port == -2)
+        n = socket(PF_UNIX, SOCK_STREAM, 0);
+    else
+        n = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
     val = 1;
     setsockopt(n, SOL_SOCKET, SO_REUSEADDR, (char *) &val, sizeof(val));
@@ -1478,9 +1490,31 @@ start_daemon(
     setsockopt(n, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
 
     /* mport = port; */ /* Thor.990325: ぃ惠璶:P */
-    sin.sin_port = htons(port);
-    if ((bind(n, (struct sockaddr *) &sin, sizeof(sin)) < 0) || (listen(n, QLEN) < 0))
+
+    if (port == -2)
+    {
+        psock = (struct sockaddr *) &sun;
+        sock_size = sizeof(sun);
+
+        strlcpy(sun.sun_path, unix_path, sizeof(sun.sun_path));
+        // remove the file first if it exists.
+        unlink(sun.sun_path);
+    }
+    else
+    {
+        psock = (struct sockaddr *) &sin;
+        sock_size = sizeof(sin);
+
+        sin.sin_port = htons(port);
+    }
+    if ((bind(n, psock, sock_size) < 0) || (listen(n, QLEN) < 0))
         exit(1);
+
+    if (port == -2)
+    {
+        chown(unix_path, BBSUID, BBSGID);
+        chmod(unix_path, 0600);
+    }
 
     /* --------------------------------------------------- */
     /* Give up root privileges: no way back from here      */
@@ -1610,6 +1644,7 @@ static void usage(char *argv0)
             "       %s <listen_spec>\n"
             "listen_specs:\n"
             "\t[-p] <port>        listen on port; -p can be omitted (port > 0)\n"
+            "\t-u <unix_socket>   listen on unix_socket, with connection data passing enabled\n"
             "\n",
             argv0);
 }
@@ -1619,6 +1654,7 @@ int main(int argc, char *argv[])
     int csock;                  /* socket for Master and Child */
     int *totaluser;
     int value = 0;
+    int is_proxy = 0;           /* Whether connection data passing is enabled */
     struct sockaddr_in sin;
 
     /* --------------------------------------------------- */
@@ -1628,7 +1664,7 @@ int main(int argc, char *argv[])
     /* Thor.990325: usage, bbsd, or bbsd -i, or bbsd 1234 */
     /* Thor.981206:  0  *⊿Τ把计*, -1  -i */
 
-    switch (getopt(argc, argv, "p:i"))
+    switch (getopt(argc, argv, "p:u:i"))
     {
     case -1:
         if (!(optarg = argv[optind++]))
@@ -1640,6 +1676,14 @@ int main(int argc, char *argv[])
             break;
 
         if (0)  // Falls over the case
+        {
+    case 'u':  /* IID.20190903: `bbsd -u <unix_socket>` */
+            unix_path = optarg;
+            is_proxy = 1;
+            value = -2;
+            break;
+        }
+        else if (0)
         {
     case 'i':
             value = -1;
@@ -1688,6 +1732,20 @@ int main(int argc, char *argv[])
         {
             reaper(0);
             continue;
+        }
+
+        if (is_proxy)
+        {
+            conn_data_t cdata;
+            if (read(csock, &cdata, sizeof(cdata)) != sizeof(cdata)
+                || cdata.cb != sizeof(cdata) || cdata.raddr_len != 4)
+            {
+                close(csock);
+                continue;
+            }
+
+            sin.sin_addr.s_addr = *(u_long *)&cdata.raddr;
+            sin.sin_port = cdata.rport;
         }
 
         time(&ap_start);
