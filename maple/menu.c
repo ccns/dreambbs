@@ -125,12 +125,14 @@ resetbrd(void)
 static int
 x_sysload(void)
 {
+    long nproc;
     double load[3];
     char buf[80];
 
     /*load = ushm->sysload;*/
+    nproc = sysconf(_SC_NPROCESSORS_ONLN);
     getloadavg(load, 3);
-    sprintf(buf, "╰参璽更 %.2f %.2f %.2f", load[0], load[1], load[2]);
+    sprintf(buf, "╰参璽更 %.2f %.2f %.2f / %ld", load[0], load[1], load[2], nproc);
     vmsg(buf);
     return XEASY;
 }

@@ -1104,7 +1104,8 @@ tn_signals(void)
 static inline void
 tn_main(void)
 {
-    double load[3];
+    long nproc;
+    double load[3], load_norm;
     char buf[128], buf2[40];
     unsigned char *addr = (unsigned char*) &tn_addr;
 
@@ -1142,10 +1143,12 @@ tn_main(void)
 
 
     //負載提到前面取得
+    nproc = sysconf(_SC_NPROCESSORS_ONLN);
     getloadavg(load, 3);
+    load_norm = load[0] / ((nproc > 0) ? nproc : 2);
 
     //負載過高禁止login
-    if (load[0]>20)
+    if (load_norm>5)
     {
         prints("\n對不起...\n\n由於目前負載過高，請稍後再來...");
         //pcman會自動重連時間設太短會變成 DOS 很可怕 :P
@@ -1158,8 +1161,8 @@ tn_main(void)
 
     //getloadavg(load, 3);
     prints( MYHOSTNAME " ⊙ " OWNER " ⊙ " BBSIP " [" BBSVERNAME " " BBSVERSION "]\n"
-"歡迎光臨【\x1b[1;33;46m %s \x1b[m】。系統負載：%.2f %.2f %.2f - [%s] 線上人數 [%d/%d]",
-        str_site, load[0], load[1], load[2], load[0]>16?"\x1b[1;37;41m過高\x1b[m":load[0]>8?"\x1b[1;37;42m偏高\x1b[m":"\x1b[1;37;44m正常\x1b[m", ushm->count, MAXACTIVE);
+"歡迎光臨【\x1b[1;33;46m %s \x1b[m】。系統負載：%.2f %.2f %.2f / %ld - [%s] 線上人數 [%d/%d]",
+        str_site, load[0], load[1], load[2], nproc, load_norm>5?"\x1b[1;37;41m過高\x1b[m":load_norm>1?"\x1b[1;37;42m偏高\x1b[m":"\x1b[1;37;44m正常\x1b[m", ushm->count, MAXACTIVE);
 
     film_out(FILM_INCOME, 2);
 
