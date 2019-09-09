@@ -256,6 +256,7 @@ void outf(const char *str);
 void prints(const char *fmt, ...);
 void cursor_save(void);
 void cursor_restore(void);
+void vmsg_body(const char *msg);
 int vmsg(const char *msg);
 void zmsg(const char *msg);
 void vs_bar(const char *title);
@@ -302,10 +303,12 @@ int pmore(const char *fpath, int promptend);
 /* popupmenu.c */
 int popupmenu_ans(char *desc[], char *title, int x, int y);
 void popupmenu(MENU pmenu[], XO *xo, int x, int y);
+void pmsg_body(const char *msg);
 int pmsg(const char *msg);
 int Every_Z_Screen(void);
 /* window.c */
 int popupmenu_ans2(const char *desc[], const char *title, int x, int y);
+void pmsg2_body(const char *msg);
 int pmsg2(const char *msg);
 /* myfavorite.c */
 void brd2myfavorite(BRD *brd, HDR *gem);

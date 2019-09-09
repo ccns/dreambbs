@@ -1211,8 +1211,9 @@ vs_restore(
 
 #define VMSG_NULL "\x1b[1;37;45m%*s● 請按任意鍵繼續 ●%*s\x1b[m"
 
-int
-vmsg(
+// IID.20190909: `vmsg()` without blocking.
+void
+vmsg_body(
     const char *msg)             /* length <= 54 */
 {
     move(b_lines, 0);
@@ -1234,6 +1235,13 @@ vmsg(
         move(b_lines, 0);
 #endif
     }
+}
+
+int
+vmsg(
+    const char *msg)             /* length <= 54 */
+{
+    vmsg_body(msg);
     return vkey();
 }
 

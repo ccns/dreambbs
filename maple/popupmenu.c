@@ -585,20 +585,18 @@ static void pcopy(char *buf, const char *patten, int len)
     }
 }
 
-int pmsg(const char *msg)
+// IID.20190909: `pmsg()` without blocking and without screen restoring.
+void pmsg_body(const char *msg)
 {
     char buf[ANSILINELEN];
     char patten[ANSILINELEN];
     int len, plen, cc;
 
     if (cuser.ufo2 & UFO2_ORIGUI)
-        return vmsg(msg);
-
-#ifdef M3_USE_PFTERM
-    scr_dump(&old_screen);
-#else
-    vs_save(sl);
-#endif
+    {
+        vmsg_body(msg);
+        return;
+    }
 
     len = (msg ? strlen(msg) : 0 );
     if (len > 30)
@@ -641,8 +639,24 @@ int pmsg(const char *msg)
         sprintf(buf, " \x1b[0;47;30m¢h\x1b[30;1m¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h\x1b[40;30;1m¢p\x1b[m ");
         vs_line(buf, (b_lines >> 1) + 1, (d_cols >> 1) + 18);
     }
+}
 
+int pmsg(const char *msg)
+{
+    int cc;
+
+    if (cuser.ufo2 & UFO2_ORIGUI)
+        return vmsg(msg);
+
+#ifdef M3_USE_PFTERM
+    scr_dump(&old_screen);
+#else
+    vs_save(sl);
+#endif
+
+    pmsg_body(msg);
     cc = vkey();
+
 #ifdef M3_USE_PFTERM
     scr_restore_free(&old_screen); // restore foot
 #else
