@@ -415,10 +415,12 @@ pmsg2(const char *msg)
 
 #ifdef M3_USE_PFTERM
     screen_backup_t old_screen = {0};
+#endif
 
     if (!msg)
     return vmsg(NULL);
 
+#ifdef M3_USE_PFTERM
     scr_dump(&old_screen);
 #else
     x_roll = vs_save(slt);
