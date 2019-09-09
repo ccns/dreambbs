@@ -9,11 +9,11 @@
 #define MAX_PNOTE        (10)            /* 答錄機保留通數 */
 #define MAXHINTLINES     (10)            /* 答錄機主人留言長度 */
 
-static const char *fn_note_tmp      = FN_PNOTE_TMP;
-static const char *fn_note_dat      = FN_PNOTE_DAT;
-static const char *fn_note_dat_save = FN_PNOTE_DAT_SAVE;
-static const char *fn_pnote_ans      = FN_PNOTE_ANS;
-static const char *fn_pnote_ans_save = FN_PNOTE_ANS_SAVE;
+static const char *const fn_note_tmp      = FN_PNOTE_TMP;
+static const char *const fn_note_dat      = FN_PNOTE_DAT;
+static const char *const fn_note_dat_save = FN_PNOTE_DAT_SAVE;
+static const char *const fn_pnote_ans      = FN_PNOTE_ANS;
+static const char *const fn_pnote_ans_save = FN_PNOTE_ANS_SAVE;
 
 const char *fn_pnote_hint = FN_PNOTE_HINT;    /* 答錄機主人留言 */
 

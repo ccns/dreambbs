@@ -588,7 +588,7 @@ NNRPgroup(                      /* 切換 group，並傳回 low-number 及 high-number 
 }
 
 
-static const char *tempfile = "innd/bbslinktmp";
+static const char *const tempfile = "innd/bbslinktmp";
 
 static int                      /* 1:成功 0:失敗 */
 NNRParticle(                    /* 取回第 artno 篇的全文 */
@@ -820,7 +820,7 @@ readnews(
 /*-------------------------------------------------------*/
 
 
-static const char *lockfile = "innd/bbslinking";
+static const char *const lockfile = "innd/bbslinking";
 
 static void
 bbslink_un_lock(void)
