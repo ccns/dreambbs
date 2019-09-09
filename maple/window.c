@@ -337,10 +337,11 @@ popupmenu_ans2(const char *desc[], const char *title, int x, int y)
     screen_backup_t old_screen = {0};
 
     scr_dump(&old_screen);
-    grayout(0, b_lines, GRAYOUT_DARK);
 #else
     x_roll = vs_save(slt);
 #endif
+
+    grayout(0, b_lines, GRAYOUT_DARK);
 
     hotkey = desc[0][0];
 
@@ -419,10 +420,11 @@ pmsg2(const char *msg)
     return vmsg(NULL);
 
     scr_dump(&old_screen);
-    grayout(0, b_lines, GRAYOUT_DARK);
 #else
     x_roll = vs_save(slt);
 #endif
+
+    grayout(0, b_lines, GRAYOUT_DARK);
 
     len = strlen(msg);
     if (len < 16)               /* 取 msg title 其中較長者為 len */
