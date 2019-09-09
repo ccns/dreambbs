@@ -716,7 +716,7 @@ tn_login(void)
 
                     if (utmp_count(cuser.userno, 0) > 2)
             {
-                pmsg2("您已經達到多重登入上限");
+                pmsg2_body("您已經達到多重登入上限");
                 login_abort("\n");
             }
                 }
@@ -733,7 +733,7 @@ tn_login(void)
             cuser.ufo2 = UFO2_COLOR | UFO2_BNOTE | UFO2_MOVIE;
             if (utmp_count(cuser.userno, 0) > MAXGUEST)
             {
-                pmsg2("目前在線上的guest過多");
+                pmsg2_body("目前在線上的guest過多");
                 login_abort("\n");
             }
             break;

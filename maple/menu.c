@@ -314,8 +314,9 @@ goodbye(void)
         "以下是您在站內的註冊資料:\n",
         cuser.userid, cuser.username, str_site);
     acct_show(&cuser, 3);
-    vmsg(NULL);
+    vmsg_body(NULL);
     u_exit("EXIT ");
+    vkey();
     exit(0);
 }
 
