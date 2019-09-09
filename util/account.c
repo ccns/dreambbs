@@ -16,8 +16,8 @@
 #define MAX_LINE        16
 #define ADJUST_M        60      /* adjust back 1 hour */
 
-static char fn_today[] = "gem/@/@-act"; /* さらΩ参璸 */
-static char fn_yesterday[] = "gem/@/@=act";     /* 琎らΩ参璸 */
+static const char fn_today[] = "gem/@/@-act"; /* さらΩ参璸 */
+static const char fn_yesterday[] = "gem/@/@=act";     /* 琎らΩ参璸 */
 
 /* ----------------------------------------------------- */
 /* 秨布shm 场斗籔 cache.c 甧                       */
@@ -686,11 +686,11 @@ main(void)
     char date[16];
     char title[80];
 
-    static char act_file[] = "run/var/act";
-    static char run_file[] = FN_USIES;
-    static char tmp_file[] = "run/tmp";
-    static char log_file[] = "run/usies=";
-//  static char brd_file[] = FN_BRD_USIES;
+    static const char act_file[] = "run/var/act";
+    static const char run_file[] = FN_USIES;
+    static const char tmp_file[] = "run/tmp";
+    static const char log_file[] = "run/usies=";
+//  static const char brd_file[] = FN_BRD_USIES;
 
     char buf[256], ymd[16];
     FILE *fp, *fpw;

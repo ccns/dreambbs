@@ -28,7 +28,7 @@
 
 
 #define MAXPORTS        3
-static int myports[MAXPORTS] = {23, 3456, 3001, /* 3002, 3003 */};
+static const int myports[MAXPORTS] = {23, 3456, 3001, /* 3002, 3003 */};
 
 extern BCACHE *bshm;
 extern UCACHE *ushm;
@@ -94,7 +94,7 @@ typedef struct
     unsigned int new;
 }       TABLE;
 
-TABLE table[] = {
+const TABLE table[] = {
 //  {UFO_COLOR, UFO2_COLOR},
 //  {UFO_MOVIE, UFO2_MOVIE},
 //  {UFO_BRDNEW, UFO2_BRDNEW},
@@ -189,7 +189,7 @@ u_exit(
             strcpy(cuser.vmail, tuser.vmail);
 #ifdef  TRANUFO
             {
-                TABLE *ptr;
+                const TABLE *ptr;
                 cuser.ufo2 = 0;
                 for (ptr = table; ptr->old; ptr++)
                 {
@@ -513,7 +513,7 @@ utmp_setup(
 )
 {
     UTMP utmp;
-    const char *guestname[GUESTNAME]={GUEST_NAMES};
+    const char *const guestname[GUESTNAME]={GUEST_NAMES};
 
     cutmp = NULL; /* Thor.980805: pal_cache¤¤·| check cutmp  */
     /*pal_cache();*/  /* by visor */
@@ -1219,7 +1219,7 @@ tn_main(void)
 static void
 telnet_init(void)
 {
-    static char svr[] = {
+    static const char svr[] = {
         IAC, DO, TELOPT_TTYPE,
         IAC, SB, TELOPT_TTYPE, TELQUAL_SEND, IAC, SE,
         IAC, WILL, TELOPT_ECHO,
@@ -1228,7 +1228,7 @@ telnet_init(void)
     };
 
     int n, len;
-    char *cmd;
+    const char *cmd;
     int rset;
     struct timeval to;
     char buf[64];

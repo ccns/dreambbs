@@ -335,7 +335,7 @@ static int ulist_head(XO *xo);
 static int ulist_init(XO *xo);
 
 
-static const char *msg_pickup_way[PICKUP_WAYS] =
+static const char *const msg_pickup_way[PICKUP_WAYS] =
 {
     "任意",
     "代號",
@@ -375,7 +375,7 @@ ulist_body(
     UTMP *up;
     int cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor, colortmp;
     char buf[16], color[20], ship[80];
-    const char *wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
+    const char *const wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 
 //  pal = cuser.ufo;
 
@@ -475,7 +475,7 @@ ulist_cmp_nick(
     return str_cmp((*(const UTMP *const *)i) -> username, (*(const UTMP *const *)j) -> username);
 }
 
-static int (*ulist_cmp[]) (const void *i, const void *j) =
+static int (*const ulist_cmp[]) (const void *i, const void *j) =
 {
     ulist_cmp_userid,
     ulist_cmp_host,

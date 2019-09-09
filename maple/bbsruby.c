@@ -122,7 +122,7 @@ typedef rb_event_t rb_event_flag_t;
 int ABORT_BBSRUBY = 0;
 
 #define BBSRUBY_TOC_HEADERS (6)
-const char* TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"interface", "title", "notes", "author", "version", "date"};
+const char* const TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"interface", "title", "notes", "author", "version", "date"};
 char* TOCs_DATA[BBSRUBY_TOC_HEADERS] = {0};
 VALUE TOCs_rubyhash;
 double KBHIT_TMIN = 0.001;
@@ -329,7 +329,7 @@ VALUE brb_ansi_color(VALUE self, VALUE args)
     char *p = buf + strlen(buf);
 
     int count = RARRAY_LEN(args);
-    char sep[2] = ";";
+    const char sep[2] = ";";
     int i;
     for (i=0; i<count; i++)
     {

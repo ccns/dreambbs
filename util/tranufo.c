@@ -17,7 +17,7 @@ typedef struct
     unsigned int new;
 }       TABLE;
 
-TABLE table[] = {
+const TABLE table[] = {
     {UFO_COLOR, UFO2_COLOR},
     {UFO_MOVIE, UFO2_MOVIE},
     {UFO_BRDNEW, UFO2_BRDNEW},
@@ -61,7 +61,7 @@ reaper(
 
     char buf[256];
     ACCT acct;
-    TABLE *ptr;
+    const TABLE *ptr;
 
     sprintf(buf, "%s/.ACCT", fpath);
     fd = open(buf, O_RDWR, 0);

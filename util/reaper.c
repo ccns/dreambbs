@@ -174,9 +174,9 @@ levelmsg(
     char *str,
     int level)
 {
-    static char perm[] = "bctpjm#x--------PTCMSNL*B#KGACBS";
+    static const char perm[] = "bctpjm#x--------PTCMSNL*B#KGACBS";
     int len = 32;
-    char *p = perm;
+    const char *p = perm;
 
     do
     {

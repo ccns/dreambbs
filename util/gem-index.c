@@ -24,8 +24,8 @@
 #define CHRONO_LOG      2
 
 
-static char fn_index[] = "@/@index";
-static char fn_log[] = "@/@log";
+static const char fn_index[] = "@/@index";
+static const char fn_log[] = "@/@log";
 
 
 static int gem_default;

@@ -18,7 +18,7 @@ get_date(
 const time_t *clock)
 {
     static char foo[24];
-    static char myweek[] = "天一二三四五六";
+    static const char myweek[] = "天一二三四五六";
     struct tm *mytm = localtime(clock);
     sprintf(foo, "[%d/%d]星期%c%c[%d:%02d]",
             mytm->tm_mon + 1, mytm->tm_mday, myweek[mytm->tm_wday<<1],

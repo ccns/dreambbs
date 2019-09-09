@@ -41,7 +41,7 @@ char *Btime(const time_t * clock)
 char *Ctime(const time_t * clock)
 {
     struct tm *t = localtime(clock);
-    static char week[] = "日一二三四五六";
+    static const char week[] = "日一二三四五六";
 
     sprintf(datemsg, "%d年%2d月%2d日%3d:%02d:%02d 星期%.2s",
             t->tm_year - 11, t->tm_mon + 1, t->tm_mday,

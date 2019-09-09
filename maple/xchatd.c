@@ -162,9 +162,9 @@ static int userno_inc = 0;      /* userno auto-incrementer */
 #endif
 
 
-static char msg_not_op[] = "◆ 您不是這間" CHATROOMNAME "的 Op";
-static char msg_no_such_id[] = "◆ 目前沒有人使用 [%s] 這個聊天代號";
-static char msg_not_here[] = "◆ [%s] 不在這間" CHATROOMNAME "。";
+static const char msg_not_op[] = "◆ 您不是這間" CHATROOMNAME "的 Op";
+static const char msg_no_such_id[] = "◆ 目前沒有人使用 [%s] 這個聊天代號";
+static const char msg_not_here[] = "◆ [%s] 不在這間" CHATROOMNAME "。";
 
 
 #define FUZZY_USER      ((ChatUser *) -1)
@@ -1440,7 +1440,7 @@ chat_setroom(
 }
 
 
-static const char *chat_msg[] =
+static const char *const chat_msg[] =
 {
     "[//]help", "MUD-like 社交動詞",
     "[/h]elp op", CHATROOMNAME "管理員專用指令",
@@ -1474,7 +1474,7 @@ static const char *chat_msg[] =
 };
 
 
-static const char *room_msg[] =
+static const char *const room_msg[] =
 {
     "[/f]lag [+-][lst]", "設定鎖定、秘密、開放話題",
     "[/i]nvite <id>", "邀請 <id> 加入" CHATROOMNAME,
@@ -1493,7 +1493,7 @@ chat_help(
     char *msg)
 {
     char buf[128];
-    const char **table, *str;
+    const char *const *table, *str;
 
     if (str_equal("op", nextword(&msg)))
     {
@@ -2572,7 +2572,7 @@ person_action(
 /* --------------------------------------------- */
 
 
-static const char *dscrb[] =
+static const char *const dscrb[] =
 {
     "\x1b[1;37m【 Verb + Nick：   動詞 + 對方名字 】\x1b[36m  例：//kick piggy\x1b[m",
     "\x1b[1;37m【 Verb + Message：動詞 + 要說的話 】\x1b[36m  例：//sing 天天天藍\x1b[m",

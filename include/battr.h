@@ -52,7 +52,7 @@
 
 #define NUMATTRS        30
 
-static const char *battrs[NUMATTRS] =
+static const char *const battrs[NUMATTRS] =
 {
       "不可 Zap",
       "不轉信",

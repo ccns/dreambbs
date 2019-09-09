@@ -218,7 +218,7 @@ valid_ident(
     const char *ident
 )
 {
-    static const char *invalid[] = {"bbs@", "@bbs", "unknown@", "root@", "gopher@",
+    static const char *const invalid[] = {"bbs@", "@bbs", "unknown@", "root@", "gopher@",
         "guest@", "@ppp", "@slip", NULL};
     char buf[128];
     const char *str;

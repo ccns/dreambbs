@@ -32,7 +32,7 @@ int acl_addr(const char *acl,      /* file name of access control list */
     char buf[128], filter[256], *host, *str;
     const char *str_invalid;
 
-    const char *invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
+    const char *const invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
         "guest@", "@ppp", "@slip", "@dial", "unknown@", "@anon.penet.fi",
         "193.64.202.3", NULL
     };

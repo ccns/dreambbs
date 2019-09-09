@@ -207,8 +207,8 @@ int acct_get(const char *msg, ACCT * acct)
 /* ----------------------------------------------------- */
 
 void x_file(int mode,            /* M_XFILES / M_UFILES */
-            const char *xlist[], /* description list */
-            const char *flist[]  /* filename list */
+            const char *const xlist[], /* description list */
+            const char *const flist[]  /* filename list */
     )
 {
     int n, i;
@@ -340,11 +340,11 @@ void bitmsg(const char *msg, const char *str, int level)
 
 unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
                     int maxon,    /* 最多可以 enable 幾項 */
-                    const char *msg, const char *perms[])
+                    const char *msg, const char *const perms[])
 {
     int i, j, on;
 
-    extern char radix32[32];
+    extern const char radix32[32];
 
     move(2, 0);
     clrtobot();
@@ -1391,7 +1391,7 @@ int ban_addr(const char *addr)
     char foo[64];                /* SoC: 放置待檢查的 email address */
     const char* str_invalid;
 
-    static const char *invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
+    static const char *const invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
         "guest@", "@ppp", "@slip", "@dial", "unknown@", "@anon.penet.fi",
         "193.64.202.3", "brd@", NULL
     };
@@ -1731,7 +1731,7 @@ int u_addr(void)
     return 0;
 }
 
-static const char *UFO_FLAGS[] = {
+static const char *const UFO_FLAGS[] = {
     "【保留】",
     "【保留】",
     "【保留】",
@@ -1761,7 +1761,7 @@ static const char *UFO_FLAGS[] = {
     "【保留】"
 };
 
-static const char *UFO2_FLAGS[] = {
+static const char *const UFO2_FLAGS[] = {
     /* COLOR */ "彩色模式",
     /* MOVIE */ "動畫顯示",
     /* BRDNEW */ "新推文",
@@ -1810,7 +1810,7 @@ void su_setup(ACCT * u)
     int ufo, nflag, len;
     char fpath[80];
     UTMP *up;
-    const char **flags = UFO_FLAGS;
+    const char *const *flags = UFO_FLAGS;
 
     up = utmp_find(u->userno);
     len = 21;
@@ -1845,7 +1845,7 @@ int u_setup(void)
     int ufo, nflag, len;
     char fpath[80];
 
-    const char **flags = UFO_FLAGS;
+    const char *const *flags = UFO_FLAGS;
 
     nflag = cuser.userlevel;
     if (!nflag)
@@ -1888,7 +1888,7 @@ int ue_setup(void)
 {
     int ufo2, nflag, len;
 
-    const char **flags = UFO2_FLAGS;
+    const char *const *flags = UFO2_FLAGS;
 
     nflag = cuser.userlevel;
     if (!nflag)
@@ -1915,7 +1915,7 @@ int u_lock(void)
 {
     char buf[PLAINPASSLEN];
     char swapmateid[IDLEN + 1] = "";
-    char IdleState[][IDLEN] = {
+    const char IdleState[][IDLEN] = {
         "自強觀星",
         "勝後放閃",
         "光復打球",
@@ -1995,7 +1995,7 @@ int u_xfile(void)
 {
     int i;
 
-    static const char *desc[] = {
+    static const char *const desc[] = {
         "上站地點設定檔",
         "名片檔",
         "簽名檔 (每個 6 行，共 3 個)",
@@ -2007,7 +2007,7 @@ int u_xfile(void)
         NULL
     };
 
-    static const char *path[] = {
+    static const char *const path[] = {
         "acl",
         FN_PLANS,
         FN_SIGN,
@@ -2545,7 +2545,7 @@ int u_register(void)
 static int scan_register_form(int fd)
 {
     static const char logfile[] = FN_RFORM_LOG;
-    static const char *reason[] = { "輸入真實姓名", "詳實填寫申請表",
+    static const char *const reason[] = { "輸入真實姓名", "詳實填寫申請表",
         "詳填住址資料", "詳填連絡電話", "詳填服務單位、或學校系級",
         "用中文填寫申請單", "採用 E-mail 認證", "填寫身分證號碼", NULL
     };

@@ -610,8 +610,10 @@ static void
 ve_ansi(void)
 {
     int fg, bg, mode;
-    char ans[4], buf[16], *apos, *color, *tmp;
-    static char t[] = "BRGYLPCW";
+    char ans[4], buf[16], *apos;
+    const char *color;
+    const char *tmp;
+    static const char t[] = "BRGYLPCW";
 
     mode = ve_mode | VE_REDRAW;
     color = str_ransi;
@@ -623,13 +625,12 @@ ve_ansi(void)
         if ((fg = vget(b_lines, 0, "請輸入  亮度/前景/背景[正常白字黑底][0wb]：",
                 apos = ans, 4, LCECHO)))
         {
-            color = buf;
-            strcpy(color, "\x1b[");
+            strcpy(buf, "\x1b[");
             if (isdigit(fg))
             {
-                sprintf(color + strlen(color), "%c", *(apos++));
+                sprintf(buf + strlen(buf), "%c", *(apos++));
                 if (*apos)
-                    strcat(color, ";");
+                    strcat(buf, ";");
             }
             if (*apos)
             {
@@ -637,7 +638,7 @@ ve_ansi(void)
                     fg = tmp - t + 30;
                 else
                     fg = 37;
-                sprintf(color + strlen(color), "%d", fg);
+                sprintf(buf + strlen(buf), "%d", fg);
             }
             if (*apos)
             {
@@ -645,9 +646,10 @@ ve_ansi(void)
                     bg = tmp - t + 40;
                 else
                     bg = 40;
-                sprintf(color + strlen(color), ";%d", bg);
+                sprintf(buf + strlen(buf), ";%d", bg);
             }
-            strcat(color, "m");
+            strcat(buf, "m");
+            color = buf;
         }
     }
 
@@ -1392,13 +1394,13 @@ ve_filer(
     const char *msg;
 
 #ifdef  HAVE_INPUT_TOOLS
-    const char *menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
-    const char *menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
-    const char *menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *const menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *const menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *const menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
 #else
-    const char *menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
-    const char *menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
-    const char *menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *const menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *const menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *const menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
 #endif
 
 
@@ -1626,7 +1628,7 @@ static int
 select_title(
     char *title)
 {
-    char *objs[] = {"[公告]", "[新聞]", "[閒聊]", "[文件]", "[問題]", "[測試]"};
+    const char *const objs[] = {"[公告]", "[新聞]", "[閒聊]", "[文件]", "[問題]", "[測試]"};
     int select;
     outs("\n\n1.【公告】2.【新聞】3.【閒聊】4.【文件】5.【問題】6.【測試】7.【其他】\n");
     select = vans("請選擇文章類別或按 Enter 跳過：") - '1';
@@ -2180,7 +2182,7 @@ ve_key:
 */
 
 /* cache.090922: 控制碼 */
-                    const char *menu[] =
+                    const char *const menu[] =
                     {
                         "IQ",
                         "Id     userＩＤ(**s)",

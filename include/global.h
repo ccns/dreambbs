@@ -432,7 +432,7 @@ VAR char ve_title[80];
 VAR char currboard[IDLEN + 2];          /* name of currently selected board */
 VAR char currBM[BMLEN + 7];             /* BM of currently selected board */
 VAR int  currbno        INI(-1);
-VAR char str_ransi[4]   INI("\x1b[m");
+VAR const char str_ransi[4]   INI("\x1b[m");
 VAR unsigned int currbattr;            /* currently selected board battr */
 VAR char ipv4addr[16];                 /* MAX_LEN: sizeof("aaa.bbb.ccc.ddd") => 16 */
 

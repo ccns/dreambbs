@@ -19,10 +19,10 @@
 #include "cppdef.h"
 
 
-static const char *myfile[] = {"day", "week", "month", "year"};
-static int mycount[4] = {7, 4, 12};
-static int mytop[] = {10, 50, 100, 100};
-static const char *mytitle[] = {"日十", "週五十", "月百", "年度百"};
+static const char *const myfile[] = {"day", "week", "month", "year"};
+static const int mycount[4] = {7, 4, 12};
+static const int mytop[] = {10, 50, 100, 100};
+static const char *const mytitle[] = {"日十", "週五十", "月百", "年度百"};
 
 
 #define FN_POST_DB      "post.db"

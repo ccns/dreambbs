@@ -17,7 +17,7 @@
 #endif
 
 /* Thor.981206: lkchu patch */
-extern char radix32[32];
+extern const char radix32[32];
 
 #include "hdr.h"                        /* prototype */
 #include "dns.h"                        /* dns type */

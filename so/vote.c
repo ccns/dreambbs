@@ -22,7 +22,7 @@
 
 extern BCACHE *bshm;
 extern XZ xz[];
-extern char radix32[32];
+extern const char radix32[32];
 
 
 static int vote_add(XO *xo);

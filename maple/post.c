@@ -3925,7 +3925,7 @@ post_manage(
 {
     char re;
 
-    const char *menu[] =
+    const char *const menu[] =
     {
         "BQ",
         "Title   修改看板主題",

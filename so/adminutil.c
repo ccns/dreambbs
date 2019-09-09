@@ -723,7 +723,7 @@ special_search(void)
 int
 m_xfile(void)
 {
-    static const char *desc[] =
+    static const char *const desc[] =
     {
         "重要公告",             /* lkchu.990510: edit ~/etc/announce online */
         "不雅名單",
@@ -752,7 +752,7 @@ m_xfile(void)
         NULL
     };
 
-    static const char *path[] =
+    static const char *const path[] =
     {
         FN_ETC_ANNOUNCE,
         FN_ETC_BADID,
@@ -787,7 +787,7 @@ m_xfile(void)
 int
 m_xhlp(void)
 {
-    static const char *desc[] =
+    static const char *const desc[] =
     {
         "進站廣告",
         "註冊提示畫面",
@@ -818,7 +818,7 @@ m_xhlp(void)
         NULL
     };
 
-    static const char *path[] =
+    static const char *const path[] =
     {
         "gem/@/@AD",
         "gem/@/@apply",

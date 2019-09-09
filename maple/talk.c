@@ -97,7 +97,7 @@ bmode(
 {
     static char modestr[32];
 #ifdef  HAVE_SHOWNUMMSG
-    const char *nums[9] = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
+    const char *const nums[9] = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
 #endif
     int mode;
     const char *word;
@@ -2844,7 +2844,7 @@ talk_hangup(
 }
 
 
-static const char *talk_reason[] =
+static const char *const talk_reason[] =
 {
     "對不起，我有事情不能跟你 talk",
     "我現在很忙，請等一會兒再 call 我",
@@ -3082,7 +3082,7 @@ static int ulist_init(XO *xo);
 static XO ulist_xo;
 
 
-static const char *msg_pickup_way[PICKUP_WAYS] =
+static const char *const msg_pickup_way[PICKUP_WAYS] =
 {
     "任意",
     "代號",
@@ -3126,7 +3126,7 @@ ulist_body(
     int paltmp;
     int n, cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor, colortmp;
     char buf[16], color[20], ship[80];
-    const char *wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
+    const char *const wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 
 #ifdef HAVE_BOARD_PAL
     int isbpal;
@@ -3276,7 +3276,7 @@ ulist_cmp_board(
 }
 #endif
 
-static int (*ulist_cmp[]) (const void *i, const void *j) =
+static int (*const ulist_cmp[]) (const void *i, const void *j) =
 {
     ulist_cmp_userid,
     ulist_cmp_host,

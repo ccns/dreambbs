@@ -12,7 +12,7 @@
 
 extern XZ xz[];
 extern char xo_pool[];
-extern char radix32[];
+extern const char radix32[];
 extern char brd_bits[];
 
 extern BCACHE *bshm;

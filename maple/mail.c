@@ -274,7 +274,7 @@ bsmtp(
 #ifdef HAVE_SMTP_SERVER
     {
         int i;
-        const char *alias[] = SMTP_SERVER, *str_alias;
+        const char *const alias[] = SMTP_SERVER, *str_alias;
         sock = -1;
         for (i=0; (str_alias = alias[i]); i++)
         {
@@ -492,7 +492,7 @@ bsmtp_file(
 #ifdef HAVE_SMTP_SERVER
     {
         int i;
-        const char *alias[] = SMTP_SERVER, *str_alias;
+        const char *const alias[] = SMTP_SERVER, *str_alias;
         for (i=0; (str_alias = alias[i]); i++)
         {
             sock = dns_open(str_alias, 25);
@@ -1968,7 +1968,7 @@ hdr_outs(               /* print HDR's subject */
     const HDR *hdr,
     int cc)
 {
-    static const char *type[4] =
+    static const char *const type[4] =
     {"Re", "¡º", "\x1b[1;33m=>", "\x1b[1;32m¡»"};
     const char *title, *mark;
     int ch, len;

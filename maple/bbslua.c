@@ -2144,7 +2144,7 @@ bbslua_detect_range(char **pbs, char **pbe, int *lineshift)
 // BBSLUA TOC Processing
 //////////////////////////////////////////////////////////////////////////
 
-static const char *bbsluaTocTags[] =
+static const char *const bbsluaTocTags[] =
 {
     "interface",
     "latestref",
@@ -2158,7 +2158,7 @@ static const char *bbsluaTocTags[] =
     NULL
 };
 
-static const char *bbsluaTocPrompts[] =
+static const char *const bbsluaTocPrompts[] =
 {
     "界面版本",
     "最新版本",
