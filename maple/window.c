@@ -406,25 +406,19 @@ popupmenu_ans2(const char *desc[], const char *title, int x, int y)
 /* 蹦出式視窗訊息，可用來取代 vmsg()                     */
 /*------------------------------------------------------ */
 
-int
-pmsg2(const char *msg)
+// IID.20190909: `pmsg2()` without blocking and without screen restoring.
+void
+pmsg2_body(const char *msg)
 /* 不可為 NULL */
 {
     int len, x, y, i;
     char buf[80];
 
-#ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
-#endif
-
     if (!msg)
-    return vmsg(NULL);
-
-#ifdef M3_USE_PFTERM
-    scr_dump(&old_screen);
-#else
-    x_roll = vs_save(slt);
-#endif
+    {
+        vmsg_body(NULL);
+        return;
+    }
 
     grayout(0, b_lines, GRAYOUT_DARK);
 
@@ -461,6 +455,26 @@ pmsg2(const char *msg)
     draw_line(x++, y, buf);
 
     move(b_lines, 0);
+}
+
+int
+pmsg2(const char *msg)
+/* 不可為 NULL */
+{
+    int x;
+
+    if (!msg)
+    return vmsg(NULL);
+
+#ifdef M3_USE_PFTERM
+    screen_backup_t old_screen = {0};
+
+    scr_dump(&old_screen);
+#else
+    x_roll = vs_save(slt);
+#endif
+
+    pmsg2_body(msg);
 
     x = vkey();
 #ifdef M3_USE_PFTERM
