@@ -761,9 +761,9 @@ inndchannel(void)
             }
             if (i == MAXCLIENT)
             {
-                static const char *msg_no_desc = "502 目前連線人數過多，請稍後再試\r\n";
+                static const char msg_no_desc[] = "502 目前連線人數過多，請稍後再試\r\n";
 
-                write(fd, msg_no_desc, sizeof(msg_no_desc));
+                write(fd, msg_no_desc, sizeof(msg_no_desc)-1);
                 close(fd);
                 continue;
             }
