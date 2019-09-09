@@ -2352,9 +2352,9 @@ bbslua_logo(lua_State *L)
     {
         int sz = t_columns -1;
         const char
-            *prompt1 = "    提醒您執行中隨時可按 ",
-            *prompt2 = "[Ctrl-C]",
-            *prompt3 = " 強制中斷 BBS-Lua 程式";
+            *const prompt1 = "    提醒您執行中隨時可按 ",
+            *const prompt2 = "[Ctrl-C]",
+            *const prompt3 = " 強制中斷 BBS-Lua 程式";
         sz -= strlen(prompt1);
         sz -= strlen(prompt2);
         sz -= strlen(prompt3);
@@ -2383,7 +2383,7 @@ static const char* bbslua_reader(lua_State *L, void *ud, size_t *size)
     (void)L;
     if (ls->size == 0) return NULL;
     if (ls->lineshift > 0) {
-        const char *linefeed = "\n";
+        const char *const linefeed = "\n";
         *size = 1;
         ls->lineshift--;
         return linefeed;

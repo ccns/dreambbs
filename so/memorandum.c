@@ -30,7 +30,7 @@ const time_t *clock)
 time_t
 get_sch_time(void)
 {
-    char *t_max = "19392959";
+    const char *const t_max = "19392959";
     char ch, buf[8];
     time_t sch_time;
     struct tm ptime;

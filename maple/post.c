@@ -151,7 +151,7 @@ checksum_find(
 {
     char buf[256];
     FILE *fp;
-    const char *star = "¡°";
+    const char *const star = "¡°";
 
     int sum, i, count=0;
 

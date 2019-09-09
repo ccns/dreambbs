@@ -2387,7 +2387,7 @@ static void getfield(int line, int len, char *buf, const char *desc, const char 
 
 int check_idno(const char *s)
 {
-    char *p, *LEAD = "ABCDEFGHJKLMNPQRSTUVXYWZIO";
+    const char *p, *const LEAD = "ABCDEFGHJKLMNPQRSTUVXYWZIO";
     int x, i;
 
     if (strlen(s) != 10 || (p = strchr(LEAD, toupper(*s))) == NULL)

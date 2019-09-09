@@ -201,7 +201,7 @@ deal_sover(
 static void
 deal_bntp(void)
 {
-    const char *OUTING = "innd/.outing";        /* 處理時暫存的檔 */
+    const char *const OUTING = "innd/.outing";  /* 處理時暫存的檔 */
     int fd, i;
     nodelist_t *node;
     bntp_t bntp;

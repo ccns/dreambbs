@@ -151,9 +151,9 @@ int countNeighbor(int y, int x, int bitmask)
     return sum;
 }
 
-const char *symTag = "\x1b[1;40;31m£Z\x1b[m";
-const char *symWrong = "\x1b[1;41;37m¢Æ\x1b[m";
-const char *symBlank = "¡½";
+const char *const symTag = "\x1b[1;40;31m£Z\x1b[m";
+const char *const symWrong = "\x1b[1;41;37m¢Æ\x1b[m";
+const char *const symBlank = "¡½";
 const char *const strMines[] = {"¡@", "¢°", "¢±", "¢²", "¢³", "¢´",
                                 "¢µ", "¢¶", "¢·", NULL
                                };
