@@ -27,6 +27,18 @@
   #endif
 #endif
 
+#ifndef GCC_NORETURN
+  #if __STDC_VERSION__ >= 201112L  /* C11 */
+    #define GCC_NORETURN  _Noreturn
+  #elif __cplusplus >= 201103L  /* C++11 */
+    #define GCC_NORETURN  [[noreturn]]
+  #elif defined __GNUC__
+    #define GCC_NORETURN  __attribute__((__noreturn__))
+  #else
+    #define GCC_NORETURN  /* Ignored */
+  #endif
+#endif
+
 /* ----------------------------------------------------- */
 /* External function declarations                        */
 /* ----------------------------------------------------- */
@@ -76,7 +88,7 @@ int u_verify(void);
 /* bbsd.c */
 void blog(const char *mode, const char *msg);
 void u_exit(const char *mode);
-void abort_bbs(void);
+GCC_NORETURN void abort_bbs(void);
 /* board.c */
 void brh_get(time_t bstamp, int bhno);
 int brh_unread(time_t chrono);
@@ -170,7 +182,7 @@ void vs_head(const char *title, const char *mid);
 void clear_notification(void);
 void movie(void);
 const char *check_info(const char *input);
-void menu(void);
+GCC_NORETURN void menu(void);
 /* more.c */
 char *mgets(int fd);
 void *mread(int fd, int len);
