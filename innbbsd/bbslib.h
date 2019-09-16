@@ -1,6 +1,16 @@
 #ifndef BBSLIB_H
 #define BBSLIB_H
 
+/* Macros for implementation-defined attributes */
+
+#ifndef GCC_CHECK_FORMAT
+  #ifndef __GNUC__
+    #define GCC_CHECK_FORMAT(ifmt, iarg)  __attribute__((format(printf, ifmt, iarg)))
+  #else
+    #define GCC_CHECK_FORMAT(ifmt, iarg)  /* Ignored */
+  #endif
+#endif
+
 /* bbslib.c */
 extern int NLCOUNT;
 extern nodelist_t *NODELIST;
@@ -20,7 +30,7 @@ extern spamrule_t *SPAMRULE;
 
 /* bbslib.c */
 extern int initial_bbs(void);
-extern void bbslog(const char *fmt, ...);
+GCC_CHECK_FORMAT(1, 2) extern void bbslog(const char *fmt, ...);
 
 /* convcode.c */
 extern void b52gb(char *str);

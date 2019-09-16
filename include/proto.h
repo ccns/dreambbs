@@ -17,6 +17,16 @@
 #include "pfterm.h"
 #endif
 
+/* Macros for implementation-defined attributes */
+
+#ifndef GCC_CHECK_FORMAT
+  #ifdef __GNUC__
+    #define GCC_CHECK_FORMAT(ifmt, iarg)  __attribute__((format(printf, ifmt, iarg)))
+  #else
+    #define GCC_CHECK_FORMAT(ifmt, iarg)  /* Ignored */
+  #endif
+#endif
+
 /* ----------------------------------------------------- */
 /* External function declarations                        */
 /* ----------------------------------------------------- */
@@ -262,7 +272,7 @@ int expand_esc_star_visio(char *buf, const char *src, int szbuf);
 void outx(const char *str);
 void outz(const char *msg);
 void outf(const char *str);
-void prints(const char *fmt, ...);
+GCC_CHECK_FORMAT(1, 2) void prints(const char *fmt, ...);
 void cursor_save(void);
 void cursor_restore(void);
 void vmsg_body(const char *msg);

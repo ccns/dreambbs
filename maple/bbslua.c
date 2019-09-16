@@ -240,7 +240,7 @@ OpenCreate(const char *path, int flags)
 #ifndef VBUFLEN
 #define VBUFLEN     (ANSILINELEN)
 #endif
-static int
+GCC_CHECK_FORMAT(1, 2) static int
 vmsgf(const char *fmt, ...)
 {
     char msg[VBUFLEN];

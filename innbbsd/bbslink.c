@@ -279,7 +279,7 @@ inetclient(
 }
 
 
-static int
+GCC_CHECK_FORMAT(1, 2) static int
 tcpcommand(const char *fmt, ...)
 {
     va_list args;

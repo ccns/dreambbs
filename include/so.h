@@ -9,6 +9,16 @@
 #ifndef PROTO_SO_H
 #define PROTO_SO_H
 
+/* Macros for implementation-defined attributes */
+
+#ifndef GCC_CHECK_FORMAT
+  #ifdef __GNUC__
+    #define GCC_CHECK_FORMAT(ifmt, iarg)  __attribute__((format(printf, ifmt, iarg)))
+  #else
+    #define GCC_CHECK_FORMAT(ifmt, iarg)  /* Ignored */
+  #endif
+#endif
+
 /* ----------------------------------------------------- */
 /* prototypes                                            */
 /* ----------------------------------------------------- */
