@@ -39,6 +39,15 @@
   #endif
 #endif
 
+#ifndef GCC_UNUSED
+  #if defined __GNUC__
+    #define GCC_UNUSED    __attribute__((__unused__))
+  #else
+    #define GCC_UNUSED    /* Ignored */
+  #endif
+#endif
+
+
 /* ----------------------------------------------------- */
 /* External function declarations                        */
 /* ----------------------------------------------------- */

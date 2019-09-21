@@ -27,11 +27,9 @@ main(
     for (c = 'a'; c <= 'z'; c++)
     {
         char buf[64];
-        char buf2[64];
+        GCC_UNUSED char buf2[64];
         struct dirent *de;
         DIR *dirp;
-
-        (void)buf2;
 
         sprintf(buf, BBSHOME "/brd/%c", c);
         chdir(buf);

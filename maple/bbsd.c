@@ -1051,19 +1051,16 @@ tn_login(void)
 /* trap signals                                          */
 /* ----------------------------------------------------- */
 
-static void abort_bbs_signal(int signum)
+static void abort_bbs_signal(GCC_UNUSED int signum)
 {
-    (void)signum;
     abort_bbs();
 }
-void talk_rqst_signal(int signum)
+void talk_rqst_signal(GCC_UNUSED int signum)
 {
-    (void)signum;
     talk_rqst();
 }
-static void bmw_rqst_signal(int signum)
+static void bmw_rqst_signal(GCC_UNUSED int signum)
 {
-    (void)signum;
     bmw_rqst();
 }
 
@@ -1540,21 +1537,18 @@ start_daemon(
 
 
 static inline void
-reaper(int signum)
+reaper(GCC_UNUSED int signum)
 {
-    (void)signum;
     while (waitpid(-1, NULL, WNOHANG | WUNTRACED) > 0);
 }
 
 
 #ifdef  SERVER_USAGE
 static void
-servo_usage(int signum)
+servo_usage(GCC_UNUSED int signum)
 {
     struct rusage ru;
     FILE *fp;
-
-    (void)signum;
 
     fp = fopen("run/bbs.usage", "a");
 
@@ -1599,9 +1593,8 @@ servo_usage(int signum)
 
 
 static void
-main_term(int signum)
+main_term(GCC_UNUSED int signum)
 {
-    (void)signum;
 #ifdef  SERVER_USAGE
     servo_usage();
 #endif

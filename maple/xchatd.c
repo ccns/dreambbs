@@ -3110,11 +3110,9 @@ servo_daemon(
 
 #ifdef  SERVER_USAGE
 static void
-server_usage(int signum)
+server_usage(GCC_UNUSED int signum)
 {
     struct rusage ru;
-
-    (void)signum;
 
     if (getrusage(RUSAGE_SELF, &ru))
         return;
@@ -3158,9 +3156,8 @@ server_usage(int signum)
 
 
 static void
-reaper(int signum)
+reaper(GCC_UNUSED int signum)
 {
-    (void)signum;
     while (waitpid(-1, NULL, WNOHANG | WUNTRACED) > 0);
 }
 
@@ -3192,11 +3189,9 @@ sig_over(int signum)
 }
 
 static void
-sig_log(int signum)
+sig_log(GCC_UNUSED int signum)
 {
     char buf[128];
-
-    (void)signum;
 
     logit("OVER", "");
     fclose(flog);

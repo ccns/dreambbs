@@ -635,8 +635,7 @@ void bm_setup(ACCT * u, int adm)
         pmsg2("板主異動不加入日誌");
     else
     {
-        char tmp[80], why[80], buf[80];
-        (void)buf;
+        char tmp[80], why[80], buf[80] GCC_UNUSED;
         pmsg2("板主異動已加入站長日誌");
         if (!vget(b_lines, 0, "請輸入異動理由：", why, 40, DOECHO))
         {

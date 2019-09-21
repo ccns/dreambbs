@@ -164,9 +164,8 @@ unsigned long dns_addr(const char *name)
 #ifdef RFC931_TIMEOUT
 static const int timeout = 1;    /* 若 1 秒後連線未完成，則放棄 */
 
-static void pseudo_handler(int signum)  /* Thor.991215: for timeout */
+static void pseudo_handler(GCC_UNUSED int signum) /* Thor.991215: for timeout */
 {
-    (void)signum;
     /* connect time out */
 }
 #endif

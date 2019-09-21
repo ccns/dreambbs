@@ -556,12 +556,9 @@ gem_state(
     XO *xo)
 {
     HDR *ghdr;
-    char *dir, fpath[80], site[64], path[512], *str;
+    char *dir, fpath[80], site[64] GCC_UNUSED, path[512] GCC_UNUSED, *str;
     struct stat st;
     int bno;
-
-    (void)site;
-    (void)path;
 
     /* Thor.990107: Ernie patch:
       gem.c gem_browse() 在進入 路)的 folder 時一律 op = GEM_VISIT

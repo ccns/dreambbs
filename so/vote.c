@@ -227,12 +227,10 @@ check_stud(
 const char *account,
 const char *path)
 {
-    VCHS stud, buf;
+    VCHS stud, buf GCC_UNUSED;
     int pos = 0, fd;
     /* char buf1[3], buf2[2], buf3[4]; */
     char buf1[3], buf2[2], buf3[3], buf4[5];
-
-    (void)buf;
 
     /*
     buf1[0] = account[0];

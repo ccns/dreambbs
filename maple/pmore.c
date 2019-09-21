@@ -814,7 +814,7 @@ MFPROTO void mf_determinemaxdisps(int, int);
 #include <sys/wait.h>
 
 MFPROTO int
-mf_gunzip(const char *fn GCC_UNUSED, int fd)
+mf_gunzip(GCC_UNUSED const char *fn, int fd)
 {
     char magic[2] = {0};
     const char gzip_magic[2] = {0x1f, 0x8b};

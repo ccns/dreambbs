@@ -143,13 +143,11 @@ const char *msg)
 #endif  /* #ifdef M3_CHAT_SCROLL_MODE */
 
 static void
-chat_record(char *arg)
+chat_record(GCC_UNUSED char *arg)
 {
     FILE *fp;
     time_t now;
     char buf[80];
-
-    (void)arg;
 
     if (!cuser.userlevel)
         return;
@@ -265,11 +263,9 @@ int mode)
 
 
 static void
-chat_clear(char *arg)
+chat_clear(GCC_UNUSED char *arg)
 {
     int line;
-
-    (void)arg;
 
     for (line = 2; line < stop_line; line++)
     {
@@ -509,10 +505,8 @@ user_info *uentp)
 
 
 static void
-chat_users(char *arg)
+chat_users(GCC_UNUSED char *arg)
 {
-    (void)arg;
-
     /* 因為人數動輒上百，意義不大 */
     printchatline("");
     printchatline("【 " BOARDNAME "遊客列表 】");

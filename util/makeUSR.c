@@ -81,10 +81,8 @@ traverse(
 int
 main(void)
 {
-    int ch, mode = 0;
+    int ch, mode GCC_UNUSED = 0;
     char *fname, fpath[256];
-
-    (void)mode;
 
     setgid(BBSGID);
     setuid(BBSUID);
