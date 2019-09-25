@@ -20,7 +20,7 @@
 
 DATA toplogins[TOPNUM], topposts[TOPNUM], topstay[TOPNUM];
 
-int
+GCC_PURE int
 sort_compare(
     const void *p1,
     const void *p2)
@@ -33,7 +33,7 @@ sort_compare(
     return (a2->num-a1->num);
 }
 
-DATA *
+GCC_PURE DATA *
 findmin(
     const DATA *src)
 {

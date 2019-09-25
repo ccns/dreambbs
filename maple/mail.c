@@ -95,7 +95,7 @@ ll_del(
 }
 
 
-int
+GCC_PURE int
 ll_has(
     const char *name)
 {

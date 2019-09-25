@@ -401,7 +401,7 @@ VALUE brb_pause(VALUE self, VALUE msg)
     return brb_keyToString(k);
 }
 
-VALUE brb_toc(VALUE self)
+GCC_PURE VALUE brb_toc(VALUE self)
 {
     return TOCs_rubyhash;
 }

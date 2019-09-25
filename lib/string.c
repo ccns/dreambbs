@@ -76,7 +76,7 @@ void str_cat(char *dst, const char *s1, const char *s2)
         ;
 }
 
-int str_cmp(const char *s1, const char *s2)
+GCC_PURE int str_cmp(const char *s1, const char *s2)
 {
     int c1, c2, diff;
 
@@ -139,7 +139,7 @@ void str_cut(char *dst, const char *src)
 /* ----------------------------------------------------- */
 
 
-int qp_code(register int x)
+GCC_CONSTEXPR int qp_code(register int x)
 {
     if (x >= '0' && x <= '9')
         return x - '0';
@@ -157,7 +157,7 @@ int qp_code(register int x)
 /* ------------------------------------------------------------------ */
 
 
-int base64_code(register int x)
+GCC_CONSTEXPR int base64_code(register int x)
 {
     if (x >= 'A' && x <= 'Z')
         return x - 'A';
@@ -605,7 +605,7 @@ int str_from(char *from, char *addr, char *nick)
     return 0;
 }
 
-int str_has(const char *list, const char *tag)
+GCC_PURE int str_has(const char *list, const char *tag)
 {
     int cc, len;
 
@@ -628,7 +628,7 @@ int str_has(const char *list, const char *tag)
     }
 }
 
-int str_hash2(const char *str, int seed)
+GCC_PURE int str_hash2(const char *str, int seed)
 {
     int cc;
 
@@ -639,7 +639,7 @@ int str_hash2(const char *str, int seed)
     return (seed & 0x7fffffff);
 }
 
-int str_hash(const char *str, int seed)
+GCC_PURE int str_hash(const char *str, int seed)
 {
     int cc;
 
@@ -650,7 +650,7 @@ int str_hash(const char *str, int seed)
     return (seed & 0x7fffffff);
 }
 
-int str_len(const char *str)
+GCC_PURE int str_len(const char *str)
 {
     int cc, len;
 
@@ -694,7 +694,7 @@ void str_lowest(char *dst, const char *src)
     while (ch);
 }
 
-int str_ncmp(const char *s1, const char *s2, int n)
+GCC_PURE int str_ncmp(const char *s1, const char *s2, int n)
 {
     int c1, c2;
 
@@ -977,7 +977,7 @@ int chksignature(const char *passwd, char *test)
 
 /* str_pat : wild card string pattern match support ? * \ */
 
-int str_pat(const char *str, const char *pat)
+GCC_PURE int str_pat(const char *str, const char *pat)
 {
     const char *xstr = NULL, *xpat;
     int cs, cp;
@@ -1095,7 +1095,7 @@ int str_rle(                    /* run-length encoding */
 #define NULL    (char*) 0
 #endif
 
-char *str_str(const char *str, const char *tag      /* non-empty lower case pattern */
+GCC_PURE char *str_str(const char *str, const char *tag      /* non-empty lower case pattern */
     )
 {
     int cc, c1, c2;
@@ -1133,7 +1133,7 @@ char *str_str(const char *str, const char *tag      /* non-empty lower case patt
     return NULL;
 }
 
-char *str_sub(const char *str, const char *tag
+GCC_PURE char *str_sub(const char *str, const char *tag
                                         /* non-empty lowest case pattern */
     )
 {
@@ -1186,7 +1186,7 @@ char *str_sub(const char *str, const char *tag
     return NULL;
 }
 
-char *str_tail(const char *str)
+GCC_PURE char *str_tail(const char *str)
 {
     while (*str)
     {
@@ -1211,7 +1211,7 @@ void str_trim(                    /* remove trailing space */
     }
 }
 
-char *str_ttl(const char *title)
+GCC_PURE char *str_ttl(const char *title)
 {
     if (title[0] == 'R' && title[1] == 'e' && title[2] == ':')
     {
@@ -1321,7 +1321,7 @@ size_t strlcpy(char *dst, const char *src, size_t siz)
     return (s - src - 1);       /* count does not include NUL */
 }
 
-int hash32(const char *str)
+GCC_PURE int hash32(const char *str)
 {
     int xo, cc;
 

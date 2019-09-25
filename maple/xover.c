@@ -1110,7 +1110,7 @@ static KeyMap keymap[] =
 };
 
 
-static int
+GCC_PURE static int
 xo_keymap(
     int key)
 {

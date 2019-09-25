@@ -403,7 +403,7 @@ mail2usr(
 
 }
 
-int
+GCC_PURE int
 sort_compare(
     const void *p1,
     const void *p2)

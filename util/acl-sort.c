@@ -16,6 +16,7 @@
 #include <string.h>
 #include "splay.h"
 #include "cppdef.h"
+#include "attrdef.h"
 
 
 typedef struct
@@ -26,7 +27,7 @@ typedef struct
 #define AclText_FLEX_MEMBER    text
 
 
-static int
+GCC_PURE static int
 at_cmp(
     const void *x,
     const void *y)

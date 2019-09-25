@@ -136,7 +136,7 @@ change_fasttime(int n, int t)
     return 0;
 }
 
-int countNeighbor(int y, int x, int bitmask)
+GCC_PURE int countNeighbor(int y, int x, int bitmask)
 {
     int sum = 0;
     if (MineMap[y-1][x+1] & bitmask) ++sum;

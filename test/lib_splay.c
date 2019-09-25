@@ -34,7 +34,7 @@ typedef struct
     int i;
 }      intnode;
 
-int
+GCC_PURE int
 compareint(const void *a, const void *b)
 {
     const intnode *A = (const intnode *)a;

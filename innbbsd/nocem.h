@@ -35,7 +35,7 @@ extern int NCMCOUNT;
 extern newsfeeds_t *search_newsfeeds_bygroup(const char *newsgroup);
 
 /* nocem.c */
-extern ncmperm_t *search_issuer(const char *issuer, const char *type);
+GCC_PURE extern ncmperm_t *search_issuer(const char *issuer, const char *type);
 extern int receive_nocem(void);
 
 #endif  /* NOCEM_H */

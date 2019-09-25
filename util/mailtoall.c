@@ -48,7 +48,7 @@ attach_shm(
     return shmptr;
 }
 
-static int
+GCC_PURE static int
 check_in_memory(const char *bm, const char *id)
 {
     const char *i;

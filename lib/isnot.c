@@ -1,18 +1,18 @@
 #include <string.h>
 #include "dao.h"
 
-int is_alnum(int ch)
+GCC_CONSTEXPR int is_alnum(int ch)
 {
     return ((ch >= '0' && ch <= '9') ||
             (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
 }
 
-int is_alpha(int ch)
+GCC_CONSTEXPR int is_alpha(int ch)
 {
     return ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
 }
 
-int is_fname(const char *str)
+GCC_PURE int is_fname(const char *str)
 {
     int ch;
 
@@ -99,7 +99,7 @@ int is_fpath(char *path)
 
 #define STRICT_FQDN_EMAIL
 
-int not_addr(const char *addr)
+GCC_PURE int not_addr(const char *addr)
 {
     int ch, mode;
 

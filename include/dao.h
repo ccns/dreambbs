@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <sys/types.h>
 
+/* Macros for implementation-defined attributes */
+#include "attrdef.h"
+
 #ifndef NULL
 #define NULL            0               /* ((char *) 0) */
 #endif
@@ -27,7 +30,7 @@ extern const char radix32[32];
 int acl_addr(const char *acl, const char *addr);
 int acl_has(const char *acl, const char *user, const char *host);
 /* chrono32.c */
-time_t chrono32(const char *str);
+GCC_PURE time_t chrono32(const char *str);
 /* file.c */
 void f_cat(const char *fpath, const char *msg);
 int f_cp(const char *src, const char *dst, int mode);
@@ -47,11 +50,11 @@ int f_rm(const char *fpath);
 void f_suck(FILE *fp, const char *fpath);
 void mak_dirs(char *fpath);
 /* isnot.c */
-int is_alnum(int ch);
-int is_alpha(int ch);
-int is_fname(const char *str);
+GCC_CONSTEXPR int is_alnum(int ch);
+GCC_CONSTEXPR int is_alpha(int ch);
+GCC_PURE int is_fname(const char *str);
 int is_fpath(char *path);
-int not_addr(const char *addr);
+GCC_PURE int not_addr(const char *addr);
 /* radix32.c */
 /* shm.c */
 void *shm_new(int shmkey, int shmsize);
@@ -101,10 +104,10 @@ void output_rfc2047_qp(FILE *fp, const char *prefix, const char *str, const char
 char *str_add(char *dst, const char *src);
 void str_ansi(char *dst, const char *str, int max);
 void str_cat(char *dst, const char *s1, const char *s2);
-int str_cmp(const char *s1, const char *s2);
+GCC_PURE int str_cmp(const char *s1, const char *s2);
 void str_cut(char *dst, const char *src);
-int qp_code(int x);
-int base64_code(int x);
+GCC_CONSTEXPR int qp_code(int x);
+GCC_CONSTEXPR int base64_code(int x);
 char *mm_getencode(char *str, char *code);
 void mm_getcharset(const char *str, char *charset, int size);
 int mmdecode(const char *src, char encode, char *dst);
@@ -113,13 +116,13 @@ char *str_dup(const char *src, int pad);
 void str_folder(char *fpath, const char *folder, const char *fname);
 void setdirpath(char *fpath, const char *direct, const char *fname);
 int str_from(char *from, char *addr, char *nick);
-int str_has(const char *list, const char *tag);
-int str_hash2(const char *str, int seed);
-int str_hash(const char *str, int seed);
-int str_len(const char *str);
+GCC_PURE int str_has(const char *list, const char *tag);
+GCC_PURE int str_hash2(const char *str, int seed);
+GCC_PURE int str_hash(const char *str, int seed);
+GCC_PURE int str_len(const char *str);
 void str_lower(char *dst, const char *src);
 void str_lowest(char *dst, const char *src);
-int str_ncmp(const char *s1, const char *s2, int n);
+GCC_PURE int str_ncmp(const char *s1, const char *s2, int n);
 void str_strip(char *str);
 void str_ncpy(char *dst, const char *src, int n);
 char *str_ndup(const char *src, int len);
@@ -129,18 +132,18 @@ char *genpasswd(char *pw, int mode);
 char *gensignature(char *pw);
 int chkpasswd(const char *passwd, const char *passhash, char *test);
 int chksignature(const char *passwd, char *test);
-int str_pat(const char *str, const char *pat);
+GCC_PURE int str_pat(const char *str, const char *pat);
 char *str_rev(char *dst, const char *src);
 int str_rle(char *str);
-char *str_str(const char *str, const char *tag);
-char *str_sub(const char *str, const char *tag);
-char *str_tail(const char *str);
+GCC_PURE char *str_str(const char *str, const char *tag);
+GCC_PURE char *str_sub(const char *str, const char *tag);
+GCC_PURE char *str_tail(const char *str);
 void str_trim(char *buf);
-char *str_ttl(const char *title);
+GCC_PURE char *str_ttl(const char *title);
 void str_xor(char *dst, const char *src);
 size_t strlcat(char *dst, const char *src, size_t siz);
 size_t strlcpy(char *dst, const char *src, size_t siz);
-int hash32(const char *str);
+GCC_PURE int hash32(const char *str);
 /* date_str.c */
 void str_stamp(char *str, const time_t *chrono);
 char *Btime(const time_t *clock);

@@ -19,7 +19,7 @@ extern XZ xz[];
 extern LinkList *ll_head;
 #endif
 
-extern int can_message(const UTMP *up);
+GCC_PURE extern int can_message(const UTMP *up);
 /*extern int xo_fpath(char *fpath, const char *dir, const HDR *hdr);*/    /* lkchu.981201 */
 
 #ifdef  HAVE_DETECT_CROSSPOST
@@ -72,7 +72,7 @@ extern char brd_bits[];
 extern char rusername[];
 static char delete_reason[30] = {0};
 
-    int
+GCC_PURE int
 cmpchrono(
     const void *hdr)
 {
@@ -309,7 +309,7 @@ log_anonymous(
 #endif
 
 #ifdef  HAVE_DETECT_VIOLATELAW
-    int
+GCC_PURE int
 seek_log(
     const char *title,
     int state)

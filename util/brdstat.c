@@ -420,7 +420,7 @@ main(void)
 }
 #else
 
-int main(void)
+GCC_CONSTEXPR int main(void)
 {
     return 0;
 }

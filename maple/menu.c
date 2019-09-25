@@ -1147,7 +1147,7 @@ static MENU menu_treat[] =
 };
 #endif  /* #ifdef  TREAT */
 
-static
+GCC_PURE static
 int count_len(
     const char *data)
 {

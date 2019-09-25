@@ -369,7 +369,7 @@ valid_chatid(
 /* ----------------------------------------------------- */
 
 
-static int
+GCC_PURE static int
 str_match(
     const char *s1,             /* lower-case (sub)string */
     const char *s2)
@@ -554,7 +554,7 @@ list_delete(
 }
 
 
-static int
+GCC_PURE static int
 list_belong(
     const UserList *list,
     int userno)

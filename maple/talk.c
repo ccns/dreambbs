@@ -37,7 +37,7 @@ static int board_pals;
 extern UCACHE *ushm;
 extern XZ xz[];
 static PAL_SHIP *pal_ship;
-static int can_see(const UTMP *up);
+GCC_PURE static int can_see(const UTMP *up);
 static int can_banmsg(const UTMP *up);
 
 #ifdef EVERY_Z
@@ -177,7 +177,7 @@ copyship(
 
 }
 
-static int
+GCC_PURE static int
 can_see(
     const UTMP *up)
 {
@@ -224,7 +224,7 @@ can_see(
 
 }
 
-static int
+GCC_PURE static int
 is_bad(
     int userno)
 {
@@ -252,7 +252,7 @@ is_bad(
 }
 
 #ifdef  HAVE_BANMSG
-static int
+GCC_PURE static int
 can_banmsg(
     const UTMP *up)
 {
@@ -283,7 +283,7 @@ can_banmsg(
 #endif
 
 
-int
+GCC_PURE int
 can_message(
     const UTMP *up)
 {
@@ -319,7 +319,7 @@ can_message(
 }
 
 
-static int
+GCC_PURE static int
 can_override(
     const UTMP *up)
 {
@@ -355,7 +355,7 @@ can_override(
 /* ----------------------------------------------------- */
 
 #ifdef  HAVE_BOARD_PAL
-int
+GCC_PURE int
 is_boardpal(
     const UTMP *up)
 {
@@ -363,7 +363,7 @@ is_boardpal(
 }
 #endif
 
-int
+GCC_PURE int
 is_pal(
     int userno)
 {
@@ -391,7 +391,7 @@ is_pal(
 }
 
 #ifdef  HAVE_BANMSG
-int
+GCC_PURE int
 is_banmsg(
     int userno)
 {

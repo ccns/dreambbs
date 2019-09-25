@@ -24,7 +24,7 @@ static int do_menu(MENU pmenu[], XO *xo, int x, int y);
 /* ----------------------------------------- */
 
 #ifndef M3_USE_PFTERM
-static int
+GCC_PURE static int
 is_big5(const char *src, int pos, int mode)
 {
     int wstate=0;
@@ -108,7 +108,7 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
 
 #ifndef M3_USE_PFTERM
 /* verit . 計算扣掉色碼的實際長度 */
-static int
+GCC_PURE static int
 count_len(
     const char *data)
 {

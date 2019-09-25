@@ -141,7 +141,7 @@ my_recv(
 static daemoncmd_t cmds[];
 
 
-static daemoncmd_t *
+GCC_PURE static daemoncmd_t *
 searchcmd(
     const char *cmd)
 {

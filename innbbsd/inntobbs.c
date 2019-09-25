@@ -91,7 +91,7 @@ header_value(
 }
 
 
-static int
+GCC_PURE static int
 is_loopback(
     const char *path, const char *token,
     int len)

@@ -184,7 +184,7 @@ ve_goto(void)
 #endif  /* #if 0 */
 
 
-static inline char *
+GCC_PURE static inline char *
 ve_strim(
     const char *s)
 {
@@ -219,7 +219,7 @@ ve_alloc(void)
 /* ----------------------------------------------------- */
 
 
-static int
+GCC_PURE static int
 ansi2n(
     int ansix,
     const textline *line)
@@ -255,7 +255,7 @@ ansi2n(
 }
 
 
-static int
+GCC_PURE static int
 n2ansi(
     int nx,
     const textline *line)
@@ -918,7 +918,7 @@ is_quoted(
 }
 
 
-static inline int
+GCC_PURE static inline int
 quote_line(
     const char *str,
     int qlimit)                 /* 允許幾層引言？ */

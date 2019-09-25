@@ -35,6 +35,26 @@
   #endif
 #endif
 
+/* Attributes about the side-effects of a function */
+
+/* Denotes that the function does not write to any non-local objects or static local objects */
+#ifndef GCC_PURE
+  #if defined __GNUC__
+    #define GCC_PURE  __attribute__((__pure__))
+  #else
+    #define GCC_PURE  /* Ignored */
+  #endif
+#endif
+
+/* Denotes that the function does not read or write to any non-local objects or static local objects */
+#ifndef GCC_CONSTEXPR
+  #if defined __GNUC__
+    #define GCC_CONSTEXPR  __attribute__((__const__))
+  #else
+    #define GCC_CONSTEXPR  /* Ignored */
+  #endif
+#endif
+
 /* General/other attributes */
 
 #ifndef GCC_UNUSED

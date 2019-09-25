@@ -172,7 +172,7 @@ brh_get(
 }
 
 
-int
+GCC_PURE int
 brh_unread(
     time_t chrono)
 {
@@ -345,7 +345,7 @@ force_board (void)
 /* ----------------------------------------------------- */
 
 
-static inline int
+GCC_PURE static inline int
 is_bm(
     const char *list)                 /* 板主：BM list */
 {
@@ -467,7 +467,7 @@ Ben_Perm(
 /* 載入 currboard 進行若干設定                           */
 /* ----------------------------------------------------- */
 
-int
+GCC_PURE int
 bstamp2bno(
     time_t stamp)
 {

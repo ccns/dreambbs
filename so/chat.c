@@ -543,7 +543,7 @@ struct chat_command chat_cmdtbl[] =
 };
 
 
-static inline int
+GCC_PURE static inline int
 chat_cmd_match(
 const char *buf,
 const char *str)

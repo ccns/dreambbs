@@ -44,7 +44,7 @@ static char errmsg[512] = "nothing";
 /* ----------------------------------------------------- */
 
 
-ncmperm_t *
+GCC_PURE ncmperm_t *
 search_issuer(
     const char *issuer,
     const char *type)   /* 若 type == NULL 表示只比對 issuer */

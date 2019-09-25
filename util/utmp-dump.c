@@ -85,7 +85,7 @@ bmode(
 /* ----------------------------------------------------- */
 
 
-static int
+GCC_PURE static int
 can_see(
     const UTMP *up)
 {
@@ -132,7 +132,7 @@ can_see(
 
 }
 
-static int
+GCC_PURE static int
 is_bad(
     int userno)
 {
@@ -159,7 +159,7 @@ is_bad(
     return 0;
 }
 
-static int
+GCC_PURE static int
 can_message(
     const UTMP *up)
 {
@@ -187,7 +187,7 @@ can_message(
 }
 
 
-static int
+GCC_PURE static int
 can_override(
     const UTMP *up)
 {
@@ -345,7 +345,7 @@ static const char *const msg_pickup_way[PICKUP_WAYS] =
     "¶¢¸m"
 };
 
-static char
+GCC_PURE static char
 ck_state(
     int in1,
     int in2,

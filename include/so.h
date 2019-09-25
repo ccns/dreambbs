@@ -38,7 +38,7 @@ int reset6(void);
 int reset7(void);
 
 /* so/aloha.c */
-int cmpbmw(const void *benz);
+GCC_PURE int cmpbmw(const void *benz);
 int t_aloha(void);
 
 /* so/ascii.c */
@@ -108,7 +108,7 @@ void initMap(void);
 int show_fasttime(void);
 int load_fasttime(void);
 int change_fasttime(int n, int t);
-int countNeighbor(int y, int x, int bitmask);
+GCC_PURE int countNeighbor(int y, int x, int bitmask);
 void drawInfo(void);
 void drawPrompt(void);
 void drawMapLine(int y, int flShow);
@@ -129,7 +129,7 @@ int new_passwd(void);
 
 /* so/personal.c */
 int personal_apply(void);
-int sort_compare(const void *p1, const void *p2);
+GCC_PURE int sort_compare(const void *p1, const void *p2);
 int personal_admin(void);
 
 /* so/pip.c */

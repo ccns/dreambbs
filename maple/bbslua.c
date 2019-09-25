@@ -190,7 +190,7 @@ static inline void getyx(int *y, int *x)
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef BBSLUA_HAVE_STRLEN_NOANSI
-static int
+GCC_PURE static int
 strlen_noansi(const char *str)        /* String length after stripping ANSI code */
 {
     int count, ch, ansi;

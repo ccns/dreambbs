@@ -254,7 +254,7 @@ utmp_free(void)
 }
 
 
-UTMP *
+GCC_PURE UTMP *
 utmp_find(
     int userno)
 {
@@ -271,7 +271,7 @@ utmp_find(
     return NULL;
 }
 
-UTMP *
+GCC_PURE UTMP *
 pid_find(
     int pid)
 {
@@ -357,7 +357,7 @@ utmp_count(
 }
 
 #if 1 && defined(HAVE_CLASSTABLEALERT)
-int
+GCC_PURE int
 cmpclasstable(
     const void *ptr)
 {
@@ -503,7 +503,7 @@ apply_boards(
 #endif
 
 
-int
+GCC_PURE int
 brd_bno(
     const char *bname)
 {
@@ -559,7 +559,7 @@ int_cmp(
 }
 
 
-int
+GCC_PURE int
 observeshm_find(
     int userno)
 {
@@ -897,7 +897,7 @@ film_out(
     return tag;
 }
 
-UTMP *
+GCC_PURE UTMP *
 utmp_check(        /* 檢查使用者是否在站上 */
     const char *userid)
 {

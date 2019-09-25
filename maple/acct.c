@@ -2028,7 +2028,7 @@ int u_xfile(void)
 /* ----------------------------------------------------- */
 
 
-static int valid_brdname(const char *brd)
+GCC_PURE static int valid_brdname(const char *brd)
 {
     int ch;
 

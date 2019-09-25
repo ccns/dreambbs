@@ -11,18 +11,34 @@
   #endif
 #endif
 
+#ifndef GCC_PURE
+  #if defined __GNUC__
+    #define GCC_PURE  __attribute__((__pure__))
+  #else
+    #define GCC_PURE  /* Ignored */
+  #endif
+#endif
+
+#ifndef GCC_CONSTEXPR
+  #if defined __GNUC__
+    #define GCC_CONSTEXPR  __attribute__((__const__))
+  #else
+    #define GCC_CONSTEXPR  /* Ignored */
+  #endif
+#endif
+
 /* bbslib.c */
 extern int NLCOUNT;
 extern nodelist_t *NODELIST;
-extern int nl_bynamecmp(const void *a, const void *b);
+GCC_PURE extern int nl_bynamecmp(const void *a, const void *b);
 
 /* bbslib.c */
 extern int NFCOUNT;
 extern newsfeeds_t *NEWSFEEDS;
 extern newsfeeds_t *NEWSFEEDS_B;
 extern newsfeeds_t *NEWSFEEDS_G;
-extern int nf_byboardcmp(const void *a, const void *b);
-extern int nf_bygroupcmp(const void *a, const void *b);
+GCC_PURE extern int nf_byboardcmp(const void *a, const void *b);
+GCC_PURE extern int nf_bygroupcmp(const void *a, const void *b);
 
 /* bbslib.c */
 extern int SPAMCOUNT;

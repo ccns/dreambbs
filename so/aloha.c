@@ -19,7 +19,7 @@ extern XZ xz[];
 /* 上站通知名單                            Jerics 2k.01  */
 /* ----------------------------------------------------- */
 
-int
+GCC_PURE int
 cmpbmw(
 const void *benz)
 {

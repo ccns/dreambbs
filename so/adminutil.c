@@ -32,7 +32,7 @@ use_io(void)
         return 1;
 }
 
-static int
+GCC_PURE static int
 check_in_memory(const char *bm, const char *id)
 {
     const char *i;
@@ -281,7 +281,7 @@ mail_to_all(void)
     return 0;
 }
 
-static int
+GCC_PURE static int
 is_bms(
 const char *list,             /* ªO¥D¡GBM list */
 const char *userid)
@@ -307,7 +307,7 @@ const char *userid)
     return 0;
 }
 
-static inline int
+GCC_PURE static inline int
 is_bm(
 const char *list)             /* ªO¥D¡GBM list */
 {
