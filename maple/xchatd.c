@@ -1969,7 +1969,10 @@ login_user(
 
     /* Xshadow: 取得 client 的來源 */
 
-    str_ncpy(cu->rhost, cu->ibuf, sizeof(cu->rhost));
+    str_ncpy(cu->rhost, inet_ntoa(*(struct in_addr *)cu->rhost), sizeof(cu->rhost));
+
+    /* dns_name(cu->rhost, cu->ibuf); */
+    /* str_ncpy(cu->rhost, cu->ibuf, sizeof(cu->rhost)); */
 #if 0
     hp = gethostbyaddr(cu->rhost, sizeof(struct in_addr), AF_INET);
     str_ncpy(cu->rhost,
