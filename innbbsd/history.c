@@ -9,6 +9,7 @@
 
 
 #include "innbbsconf.h"
+#include "inntobbs.h"
 
 
 typedef struct
