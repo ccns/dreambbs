@@ -9,6 +9,9 @@
 #ifndef PROTO_H
 #define PROTO_H
 
+/* Macros for implementation-defined attributes */
+#include "attrdef.h"
+
 #ifdef NO_SO
 #include "so.h"
 #endif
@@ -16,37 +19,6 @@
 #ifdef M3_USE_PFTERM
 #include "pfterm.h"
 #endif
-
-/* Macros for implementation-defined attributes */
-
-#ifndef GCC_CHECK_FORMAT
-  #ifdef __GNUC__
-    #define GCC_CHECK_FORMAT(ifmt, iarg)  __attribute__((format(printf, ifmt, iarg)))
-  #else
-    #define GCC_CHECK_FORMAT(ifmt, iarg)  /* Ignored */
-  #endif
-#endif
-
-#ifndef GCC_NORETURN
-  #if __STDC_VERSION__ >= 201112L  /* C11 */
-    #define GCC_NORETURN  _Noreturn
-  #elif __cplusplus >= 201103L  /* C++11 */
-    #define GCC_NORETURN  [[noreturn]]
-  #elif defined __GNUC__
-    #define GCC_NORETURN  __attribute__((__noreturn__))
-  #else
-    #define GCC_NORETURN  /* Ignored */
-  #endif
-#endif
-
-#ifndef GCC_UNUSED
-  #if defined __GNUC__
-    #define GCC_UNUSED    __attribute__((__unused__))
-  #else
-    #define GCC_UNUSED    /* Ignored */
-  #endif
-#endif
-
 
 /* ----------------------------------------------------- */
 /* External function declarations                        */
