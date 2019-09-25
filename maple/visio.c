@@ -421,8 +421,8 @@ standoutput(
 }
 
 
-#define STANDOUT        cur_slp->sso = cur_pos; cur_slp->mode |= SL_STANDOUT;
-#define STANDEND        cur_slp->eso = cur_pos;
+#define STANDOUT   (void) ( cur_slp->sso = cur_pos, cur_slp->mode |= SL_STANDOUT )
+#define STANDEND   (void) ( cur_slp->eso = cur_pos )
 
 
 #if 0
