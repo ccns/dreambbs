@@ -12,6 +12,6 @@ extern int readlines(char *data);
 /* history.c */
 extern void HISmaint(void);
 extern void HISadd(char *msgid, char *board, char *xname);
-extern int *HISfetch(char *msgid, char *board, char *xname);
+extern int HISfetch(char *msgid, char *board, char *xname);
 
 #endif  /* INNTOBBS_H */
