@@ -9,6 +9,7 @@
 
 
 #include "innbbsconf.h"
+#include "bbslib.h"
 
 
 #define BtoG_count      13973
