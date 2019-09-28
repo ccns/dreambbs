@@ -835,7 +835,7 @@ check_mail(
 const char *account)
 {
     //char validemail[3][20] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw", "nckualumni.org.tw"};
-    char addr[20], buf[30], line[80], server[60], *ptr;
+    char addr[20], buf[40], line[80], server[60], *ptr;
     char year[3];
     int sock = 110;
 
@@ -859,7 +859,7 @@ const char *account)
     if (!Get_Socket(server, &sock))
     {
         close(sock);
-        vget(b_lines - 3, 0, line, buf, 20, NOECHO);
+        vget(b_lines - 3, 0, line, buf, PLAINPASSLEN, NOECHO);
         if (strlen(buf) < 1)
             return 0;
         if (!POP3_Check(server, addr, buf))
@@ -875,7 +875,7 @@ static int
 check_mail(
 const char *mail)
 {
-    char addr[20], buf[30], line[80], server[60], *ptr;
+    char addr[20], buf[40], line[80], server[60], *ptr;
     int sock = 110;
 
     sprintf(line, "s%s@%s", mail, DEFAULTSERVER);
@@ -898,7 +898,7 @@ const char *mail)
     if (!Get_Socket(server, &sock))
     {
         close(sock);
-        vget(b_lines - 3, 0, line, buf, 20, NOECHO);
+        vget(b_lines - 3, 0, line, buf, PLAINPASSLEN, NOECHO);
         if (strlen(buf) < 1)
             return 0;
         if (!POP3_Check(server, addr, buf))

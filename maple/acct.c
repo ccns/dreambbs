@@ -1523,7 +1523,7 @@ int find_same_email(            /* mode : 1.find 2.add 3.del */
 int u_addr(void)
 {
     const char *msg;
-    char addr[60], buf[30], agent[128], temp[60];
+    char addr[60], buf[40], agent[128], temp[60];
     HDR fhdr;
     FILE *fout;
     int vtime;
@@ -1607,7 +1607,7 @@ int u_addr(void)
                     move(15, 0);
                     clrtobot();
                     vget(15, 0, "請輸入以上所列出之工作站帳號的密碼: ", buf,
-                         20, NOECHO);
+                         PLAINPASSLEN, NOECHO);
                     move(16, 0);
                     prints("\x1b[5;37m身份確認中...請稍候\x1b[m\n\n");
                     refresh();
