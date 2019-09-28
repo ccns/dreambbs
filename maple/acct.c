@@ -1607,7 +1607,7 @@ int u_addr(void)
                     move(15, 0);
                     clrtobot();
                     vget(15, 0, "請輸入以上所列出之工作站帳號的密碼: ", buf,
-                         PLAINPASSLEN, NOECHO);
+                         PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
                     move(16, 0);
                     prints("\x1b[5;37m身份確認中...請稍候\x1b[m\n\n");
                     refresh();
