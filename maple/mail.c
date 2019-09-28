@@ -2633,7 +2633,7 @@ mbox_size(
         outs(fpath);
 
         if (!stat(fpath, &st))
-            prints("\nTime: %s\nSize: %d", Ctime(&st.st_mtime), st.st_size);
+            prints("\nTime: %s\nSize: %ld", Ctime(&st.st_mtime), st.st_size);
         vmsg(NULL);
     }
     else

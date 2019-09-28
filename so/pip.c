@@ -916,11 +916,11 @@ int mode)
     /*vs_head("電子養小雞", BoardName);*/
     move(0, 0);
     if (d.sex == 1)
-        sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[32m♂ \x1b[37m%-15s     %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+        sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[32m♂ \x1b[37m%-15s     %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
     else if (d.sex == 2)
-        sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[33m♀ \x1b[37m%-15s     %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+        sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[33m♀ \x1b[37m%-15s     %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
     else
-        sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[34m？ \x1b[37m%-15s     %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+        sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[34m？ \x1b[37m%-15s     %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
     outs(buf);
 
     move(1, 0);
@@ -1560,7 +1560,7 @@ static void pip_write_file(void)
 
     if ((ff = fopen(buf, "w")))
     {
-        fprintf(ff, "%lu\n", d.bbtime);
+        fprintf(ff, "%ld\n", d.bbtime);
         fprintf(ff,
                 "%d %d %d %d %d %d %d %d %d \n"
                 "%d %d %d %d %d %d %d %d %d %d \n"
@@ -2148,7 +2148,7 @@ int oldnum[])
         }
         clrchyiuan(b_lines - 4, b_lines);
         move(b_lines, 0);
-        sprintf(inbuf, "\x1b[1;44;37m  %8s選單  \x1b[46m  [B]買入物品  [S]賣出物品  [Q]跳出     %*s\x1b[m", shopname[mode], 30 + d_cols - strlen(shopname[mode]), "");
+        sprintf(inbuf, "\x1b[1;44;37m  %8s選單  \x1b[46m  [B]買入物品  [S]賣出物品  [Q]跳出     %*s\x1b[m", shopname[mode], 30 + d_cols - (int)(unsigned int)strlen(shopname[mode]), "");
         outs(inbuf);
         pipkey = vkey();
         switch (pipkey)
@@ -4586,7 +4586,7 @@ struct royalset *p)
         clrtoeol();
         move(b_lines, 0);
         prints(
-            "\x1b[1;37;46m  參見選單  \x1b[44m [字母]選擇欲拜訪的人物  [Q]離開" NICKNAME "總司令部      %*s\x1b[0m", 20 + d_cols - (sizeof(NICKNAME) - 1), "");
+            "\x1b[1;37;46m  參見選單  \x1b[44m [字母]選擇欲拜訪的人物  [Q]離開" NICKNAME "總司令部      %*s\x1b[0m", 20 + d_cols - ((int)(unsigned int)sizeof(NICKNAME) - 1), "");
         pipkey = vkey();
         choice = pipkey - 64;
         if (choice < 1 || choice > 10)
@@ -6394,7 +6394,7 @@ int endgrade)
     move(10, (d_cols>>1) + 17);
     outs("\x1b[1;37m經過系統計算的結果：\x1b[0m");
     move(12, (d_cols>>1) + 17);
-    prints("\x1b[1;36m您的小雞 \x1b[37m%s \x1b[36m總得分＝ \x1b[1;5;33m%d \x1b[0m", d.name, gradeall);
+    prints("\x1b[1;36m您的小雞 \x1b[37m%s \x1b[36m總得分＝ \x1b[1;5;33m%ld \x1b[0m", d.name, gradeall);
     return gradeall;
 }
 
@@ -7431,11 +7431,11 @@ int mode)
         /*vs_head("電子養小雞", BoardName);*/
         move(0, 0);
         if (d.sex == 1)
-            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
         else if (d.sex == 2)
-            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
         else
-            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
         outs(buf);
         move(6, 0);
         if (mode == 1)
@@ -7671,11 +7671,11 @@ int mode)
         clear();
         move(0, 0);
         if (d.sex == 1)
-            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
         else if (d.sex == 2)
-            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
         else
-            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
         outs(buf);
         move(1, 0);
         sprintf(buf, "\x1b[1;31m┌─────────────────────────────────────┐\x1b[m");

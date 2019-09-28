@@ -581,7 +581,7 @@ void acct_show(ACCT * u, int adm    /* 1: admin 2: reg-form */
         {
             outs(Ctime(&u->deny));
             outs("\x1b[m");
-            prints("  距今還剩 %d 天 %d 時 \n", (u->deny - now) / 86400,
+            prints("  距今還剩 %ld 天 %ld 時 \n", (u->deny - now) / 86400,
                    (u->deny - now) / 3600 - ((u->deny - now) / 86400) * 24);
         }
     }
@@ -1955,7 +1955,7 @@ int u_lock(void)
 
     clear();
     prints("\x1b[1;44;33m%*s" BOARDNAME "    閒置/鎖定狀態%*s\x1b[m",
-           (d_cols >> 1) + 36 - sizeof(BOARDNAME), "", ((d_cols+1) >> 1) + 26, "");
+           (d_cols >> 1) + 36 - (int)(unsigned int)sizeof(BOARDNAME), "", ((d_cols+1) >> 1) + 26, "");
     move(4, 6);
     prints("閒置中：%s", cutmp->mateid);
     if (buf[0] == 'y' || buf[0] == 'Y')
@@ -2275,7 +2275,7 @@ void brd_edit(int bno)
     prints("看板名稱：%s\n看板說明：%s\n板主名單：%s\n",
            newbh.brdname, newbh.title, newbh.BM);
     prints("看板類別：[%4s] 類別顏色：%d\n", newbh.class, newbh.color);
-    prints("文章數目：[最大] %d [最小] %d [天數] %d\n", newbh.expiremax,
+    prints("文章數目：[最大] %u [最小] %u [天數] %u\n", newbh.expiremax,
            newbh.expiremin, newbh.expireday);
 
     bitmsg(MSG_READPERM, STR_PERM, newbh.readlevel);

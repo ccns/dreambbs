@@ -30,7 +30,7 @@ attach_err(
 {
     char buf[80];
 
-    sprintf(buf, "key = %x", shmkey);
+    sprintf(buf, "key = %lx", (unsigned long)shmkey);
     blog(name, buf);
     exit(1);
 }
