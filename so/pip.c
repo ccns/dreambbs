@@ -1753,7 +1753,7 @@ pip_read_backup(void)
         if (num > 0)
         {
             usr_fpath(buf, cuser.userid, "chicken.bak");
-            sprintf(buf, "%s%d", buf, num);
+            sprintf(buf + strlen(buf), "%d", num);
             if ((fs = fopen(buf, "r")) == NULL)
             {
                 sprintf(buf, "檔案 [%s] 不存在", files[num]);

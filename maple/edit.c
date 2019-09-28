@@ -627,7 +627,7 @@ ve_ansi(void)
             strcpy(color, "\x1b[");
             if (isdigit(fg))
             {
-                sprintf(color, "%s%c", color, *(apos++));
+                sprintf(color + strlen(color), "%c", *(apos++));
                 if (*apos)
                     strcat(color, ";");
             }
@@ -637,7 +637,7 @@ ve_ansi(void)
                     fg = tmp - t + 30;
                 else
                     fg = 37;
-                sprintf(color, "%s%d", color, fg);
+                sprintf(color + strlen(color), "%d", fg);
             }
             if (*apos)
             {
@@ -645,7 +645,7 @@ ve_ansi(void)
                     bg = tmp - t + 40;
                 else
                     bg = 40;
-                sprintf(color, "%s;%d", color, bg);
+                sprintf(color + strlen(color), ";%d", bg);
             }
             strcat(color, "m");
         }
