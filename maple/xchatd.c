@@ -1081,7 +1081,7 @@ chat_list_rooms(
     char *msg)
 {
     ChatRoom *cr, *room;
-    char buf[128], from[128];
+    char buf[128];
     int mode;
 
     if (RESTRICTED(cuser))
@@ -1113,8 +1113,8 @@ chat_list_rooms(
             }
             else
             {
-                sprintf(from, "%%-%ds¢x%%4d¢x%%s", (int)(unsigned int)strlen(CHATROOMNAME)-6+12);
-                sprintf(buf, from, cr->name, cr->occupants, cr->topic);
+                sprintf(buf, "%-*s¢x%4d¢x%s", (int)(unsigned int)strlen(CHATROOMNAME)-6+12,
+                    cr->name, cr->occupants, cr->topic);
                 if (LOCKED(cr))
                     strcat(buf, " [Âê¦í]");
                 if (SECRET(cr))
