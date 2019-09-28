@@ -1112,7 +1112,7 @@ chat_list_rooms(
             }
             else
             {
-                sprintf(from, "%%-%ds¢x%%4d¢x%%s", strlen(CHATROOMNAME)-6+12);
+                sprintf(from, "%%-%ds¢x%%4d¢x%%s", (int)(unsigned int)strlen(CHATROOMNAME)-6+12);
                 sprintf(buf, from, cr->name, cr->occupants, cr->topic);
                 if (LOCKED(cr))
                     strcat(buf, " [Âê¦í]");
@@ -3118,8 +3118,8 @@ server_usage(int signum)
     fprintf(flog, "\n[Server Usage]\n\n"
         "user time: %.6f\n"
         "system time: %.6f\n"
-        "maximum resident set size: %lu P\n"
-        "integral resident set size: %lu\n"
+        "maximum resident set size: %ld P\n"
+        "integral resident set size: %ld\n"
         "page faults not requiring physical I/O: %d\n"
         "page faults requiring physical I/O: %d\n"
         "swaps: %d\n"

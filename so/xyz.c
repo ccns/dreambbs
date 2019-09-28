@@ -33,7 +33,7 @@ x_siteinfo(void)
     prints("系統負載： %.2f %.2f %.2f [%s]\n",
         load[0], load[1], load[2], load[0] > 10 ? "\x1b[1;41;37m過高\x1b[m" : load[0] > 5 ?
         "\x1b[1;42;37m稍高\x1b[m" : "\x1b[1;44;37m正常\x1b[m");
-    prints("索引資料： BRD %d bytes, ACCT %d bytes, HDR %d bytes\n", sizeof(BRD), sizeof(ACCT), sizeof(HDR));
+    prints("索引資料： BRD %zu bytes, ACCT %zu bytes, HDR %zu bytes\n", sizeof(BRD), sizeof(ACCT), sizeof(HDR));
     prints("\n");
     prints("\x1b[1m本 BBS 版本是由 WindTop BBS 為起始，\x1b[m\n");
     prints("\x1b[1m並參考諸位前輩的智慧結晶改版而來，所有智慧財產均屬於原作者。\x1b[m\n");

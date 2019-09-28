@@ -2157,7 +2157,7 @@ post_state(
             l=2;
 */
         if (!stat(fpath, &st))
-            prints("\n \x1b[1;37m★\x1b[m 最後編輯: %s\n \x1b[1;37m★\x1b[m 檔案大小: \x1b[1;32m%d\x1b[m bytes", Ctime(&st.st_mtime), st.st_size);
+            prints("\n \x1b[1;37m★\x1b[m 最後編輯: %s\n \x1b[1;37m★\x1b[m 檔案大小: \x1b[1;32m%ld\x1b[m bytes", Ctime(&st.st_mtime), st.st_size);
 
     }
     else if (!(cuser.userlevel))
@@ -2191,7 +2191,7 @@ post_state(
             outs("\x1b[m");
         }
         if (!stat(fpath, &st))
-            prints("\n \x1b[1;37m★\x1b[m 最後存取: %s\n \x1b[1;37m★\x1b[m 檔案大小: \x1b[1;32m%d\x1b[m bytes", Ctime(&st.st_mtime), st.st_size);
+            prints("\n \x1b[1;37m★\x1b[m 最後存取: %s\n \x1b[1;37m★\x1b[m 檔案大小: \x1b[1;32m%ld\x1b[m bytes", Ctime(&st.st_mtime), st.st_size);
 
     }
 

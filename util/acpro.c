@@ -24,7 +24,7 @@ attach_err(
     int shmkey,
     const char *name)
 {
-    fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
+    fprintf(stderr, "[%s error] key = %lx\n", name, (unsigned long)shmkey);
     exit(1);
 }
 
