@@ -275,13 +275,13 @@ char *uid)
     usr_fpath(genbuf, uid, fn_pnote_hint);
     if ((hintfile = fopen(genbuf, "r")))
     {
-        prints_centered("\x1b[1;34m¡´¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¡´\x1b[m\n", uid);
+        outs_centered("\x1b[1;34m¡´¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¡´\x1b[m\n");
         i = 0;
         while (i++ < MAXHINTLINES && fgets(genbuf, 256, hintfile))
         {
             outs_centered(genbuf);
         }
-        prints_centered("\x1b[1;34m¡´¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¡´\x1b[m\n", uid);
+        outs_centered("\x1b[1;34m¡´¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¡´\x1b[m\n");
         fclose(hintfile);
     }
     else
