@@ -880,7 +880,7 @@ re_key:
             {
                 FILE *fp;
 
-                if ((fp = tbf_open()))
+                if ((fp = tbf_open(-1)))
                 {
                     f_suck(fp, fpath);
                     fclose(fp);

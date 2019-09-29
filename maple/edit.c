@@ -721,26 +721,33 @@ ve_line(
 
 
 char *
-tbf_ask(void)
+tbf_ask(int n)
 {
     static char fn_tbf[] = "buf.1";
-    int ch;
+    int ch = '0' + n;
 
-    do
+    if (ch < '1' || ch > '5')
     {
-        ch = vget(b_lines, 0, "請選擇暫存檔(1-5)：", fn_tbf + 4, 2, GCARRY);
-    } while (ch < '1' || ch > '5');
+        do
+        {
+            ch = vget(b_lines, 0, "請選擇暫存檔(1-5)：", fn_tbf + 4, 2, GCARRY);
+        } while (ch < '1' || ch > '5');
+    }
+    else
+    {
+        fn_tbf[4] = ch;
+    }
     return fn_tbf;
 }
 
 
 FILE *
-tbf_open(void)
+tbf_open(int n)
 {
     int ans;
     char fpath[64], op[4];
 
-    usr_fpath(fpath, cuser.userid, tbf_ask());
+    usr_fpath(fpath, cuser.userid, tbf_ask(-1));
     ans = 'a';
 
     if (dashf(fpath))
@@ -785,12 +792,12 @@ ve_load(
 
 
 static inline void
-tbf_read(void)
+tbf_read(int n)
 {
     int fd;
     char fpath[80];
 
-    usr_fpath(fpath, cuser.userid, tbf_ask());
+    usr_fpath(fpath, cuser.userid, tbf_ask(n));
 
     fd = open(fpath, O_RDONLY);
     if (fd >= 0)
@@ -802,13 +809,13 @@ tbf_read(void)
 
 
 static inline void
-tbf_write(void)
+tbf_write(int n)
 {
     FILE *fp;
     textline *p;
     char *data;
 
-    if ((fp = tbf_open()))
+    if ((fp = tbf_open(n)))
     {
         for (p = vx_ini; p;)
         {
@@ -823,11 +830,11 @@ tbf_write(void)
 
 
 static inline void
-tbf_erase(void)
+tbf_erase(int n)
 {
     char fpath[80];
 
-    usr_fpath(fpath, cuser.userid, tbf_ask());
+    usr_fpath(fpath, cuser.userid, tbf_ask(n));
     unlink(fpath);
 }
 
@@ -877,7 +884,7 @@ ve_recover(void)
         }
         else
         {
-            usr_fpath(fpath, cuser.userid, tbf_ask());
+            usr_fpath(fpath, cuser.userid, tbf_ask(-1));
             rename(fpbak, fpath);
         }
     }
@@ -1452,18 +1459,18 @@ ve_filer(
         break;
 
     case 'r':
-        tbf_read();
+        tbf_read(-1);
         return VE_REDRAW;
 
     case 'e':
         return VE_FOOTER;
 
     case 'w':
-        tbf_write();
+        tbf_write(-1);
         return VE_FOOTER;
 
     case 'd':
-        tbf_erase();
+        tbf_erase(-1);
         return VE_FOOTER;
 
     case 't':
