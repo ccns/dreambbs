@@ -21,6 +21,30 @@
   #endif
 #endif
 
+/* Checks whether the `ri_nul`-th-to-last argument (`0`-th for the last) is NULL */
+#ifndef GCC_CHECK_SENTINEL
+  #if defined __GNUC__
+    #define GCC_CHECK_SENTINEL(ri_nul)  __attribute__((sentinel(ri_nul)))
+  #else
+    #define GCC_CHECK_SENTINEL(ri_nul)  /* Ignored */
+  #endif
+#endif
+
+/* For functions with pointer parameters */
+
+/* Checks whether the arguments (`1`-st for the first) is not NULL */
+#if !defined GCC_CHECK_NONNULL_ALL || !defined GCC_CHECK_NONNULL
+  #undef GCC_CHECK_NONNULL_ALL
+  #undef GCC_CHECK_NONNULL
+  #if defined __GNUC__
+    #define GCC_CHECK_NONNULL_ALL   __attribute__((nonnull))
+    #define GCC_CHECK_NONNULL(...)  __attribute__((nonnull(__VA_ARGS__)))
+  #else
+    #define GCC_CHECK_NONNULL_ALL   /* Ignored */
+    #define GCC_CHECK_NONNULL(...)  /* Ignored */
+  #endif
+#endif
+
 /* Attributes about the return value of a function */
 
 #ifndef GCC_NORETURN
@@ -32,6 +56,33 @@
     #define GCC_NORETURN  __attribute__((__noreturn__))
   #else
     #define GCC_NORETURN  /* Ignored */
+  #endif
+#endif
+
+#ifndef GCC_NODISCARD
+  #if __cplusplus >= 201703L  /* C++17 */
+    #define GCC_NODISCARD  [[nodiscard]]
+  #elif defined __GNUC__
+    #define GCC_NODISCARD  __attribute__((warn_unused_result))
+  #else
+    #define GCC_NODISCARD  /* Ignored */
+  #endif
+#endif
+
+/* Denotes whether the arguments is not NULL (`1` for the first) */
+#ifndef GCC_MALLOC
+  #if defined __GNUC__
+    #define GCC_MALLOC  __attribute__((malloc))
+  #else
+    #define GCC_MALLOC  /* Ignored */
+  #endif
+#endif
+
+#ifndef GCC_RETURNS_NONNULL
+  #if defined __GNUC__
+    #define GCC_RETURNS_NONNULL  __attribute__((returns_nonnull))
+  #else
+    #define GCC_RETURNS_NONNULL  /* Ignored */
   #endif
 #endif
 
@@ -62,6 +113,26 @@
     #define GCC_UNUSED    __attribute__((__unused__))
   #else
     #define GCC_UNUSED    /* Ignored */
+  #endif
+#endif
+
+#ifndef GCC_DEPRECATED
+  #if __cplusplus >= 201402L  /* C++14 */
+    #define GCC_DEPRECATED(msg_str)  [[deprecated(msg_str)]]
+  #elif defined __GNUC__
+    #define GCC_DEPRECATED(msg_str)  __attribute__((__deprecated__(msg_str)))
+  #else
+    #define GCC_DEPRECATED(msg_str)  /* Ignored */
+  #endif
+#endif
+
+#ifndef GCC_FALLTHROUGH
+  #if __cplusplus >= 201703L  /* C++17 */
+    #define GCC_FALLTHROUGH  [[fallthrough]]
+  #elif defined __GNUC__
+    #define GCC_FALLTHROUGH  __attribute__((__fallthrough__))
+  #else
+    #define GCC_FALLTHROUGH  /* Ignored */
   #endif
 #endif
 
