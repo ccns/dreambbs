@@ -1391,7 +1391,7 @@ ve_filer(
     FILE *fp=NULL;
     textline *p, *v;
     char buf[80], *str, re;
-    const char *msg;
+    GCC_UNUSED const char *msg;
 
 #ifdef  HAVE_INPUT_TOOLS
     const char *const menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};

@@ -46,7 +46,7 @@ int point1_money(void)
 {
     int num;
     char buf[10];
-    int money;
+    GCC_UNUSED int money;
     ACCT acct;
 
     if (acct_load(&acct, cuser.userid) >= 0)
@@ -121,7 +121,7 @@ TransferAccount(void)
     char folder[128], date[9], fpath[128];
     char userid[13];
     char str[128];
-    int selfmoney, pay;
+    int selfmoney GCC_UNUSED, pay;
     double temp;
 
 #ifdef M3_USE_PFTERM
@@ -262,7 +262,7 @@ money_back(void)
     int fd;
     double m1 = 0;
     double m2 = 0;
-    double m3 = 0;
+    GCC_UNUSED double m3 = 0;
     MONEY oldwealth;
 
     //if (acct_get("要送誰點歌次數：", &acct) < 1)

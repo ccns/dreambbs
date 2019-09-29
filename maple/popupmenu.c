@@ -61,7 +61,7 @@ is_big5(const char *src, int pos, int mode)
 static int
 do_cmd(MENU *mptr, XO *xo, int x, int y)
 {
-    unsigned int mode;
+    GCC_UNUSED unsigned int mode;
     const void *p;
     int (*func) (void);
     int (*func_unary) (XO *xo);
@@ -590,7 +590,7 @@ void pmsg_body(const char *msg)
 {
     char buf[ANSILINELEN];
     char patten[ANSILINELEN];
-    int len, plen, cc;
+    int len, plen, cc GCC_UNUSED;
 
     if (cuser.ufo2 & UFO2_ORIGUI)
     {

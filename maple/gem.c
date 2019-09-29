@@ -1305,7 +1305,7 @@ gem_cross(
 #ifdef  HAVE_DETECT_CROSSPOST
     HDR bpost;
 #endif
-    int method=1, rc, tag, locus, battr;
+    int method=1, rc GCC_UNUSED, tag, locus, battr;
     FILE *xfp;
     int success_count = 0;
 

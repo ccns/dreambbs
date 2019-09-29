@@ -373,7 +373,7 @@ ulist_body(
 {
     pickup *pp;
     UTMP *up;
-    int cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor, colortmp;
+    int cnt, max, ufo, self, userno, sysop GCC_UNUSED, diff, diffmsg, fcolor, colortmp;
     char buf[16], color[20], ship[80];
     const char *const wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 

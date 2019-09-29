@@ -25,7 +25,7 @@ static time_t lasttime;
 
 #define getdata(x1, x2, x3, x4, x5, x6, x7)  vget(x1, x2, x3, x4, x5, DOECHO)
 
-static int KEY_ESC_arg;
+GCC_UNUSED static int KEY_ESC_arg;
 static const char *const BoardName = currboard;
 #ifdef  HAVE_PIP_FIGHT
 static UTMP *currutmp;
@@ -821,7 +821,7 @@ int mode)
     char buf[256];
     time_t now;
 
-    int tm, m, color, tm1, m1;
+    int tm, m, color, tm1 GCC_UNUSED, m1 GCC_UNUSED;
     int age;
     int color1, color2, color3, color4;
     int anynum;
@@ -3154,7 +3154,7 @@ static int pip_job_workM(void)
     /*  ├────┼──────────────────────┤*/
     /*  │家庭教師│道德 + 1, 母性 + N, 魅力 - 1, 疲勞 + 7      │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    GCC_UNUSED float class;
     long workmoney;
 
     if ((d.bbtime / 60 / 30) < 4)
@@ -3702,7 +3702,7 @@ static int pip_play_guess(void)   /* 猜拳程式 */
 {
     int com;
     int pipkey;
-    struct tm *qtime;
+    GCC_UNUSED struct tm *qtime;
     time_t now;
 
     time(&now);
@@ -6943,7 +6943,7 @@ pip_system_service(void)
 static void
 pip_data_list_va(va_list pvar)
 {
-    const char *userid;
+    GCC_UNUSED const char *userid;
 
     userid = va_arg(pvar, const char *);
     pip_data_list(cuser.userid);
@@ -7359,7 +7359,7 @@ int mode)
     int oldbrave;               /*未戰鬥前勇敢*/
     int oldhskill;              /*未戰鬥前戰鬥技術*/
     int oldmskill;              /*未戰鬥前魔法技術*/
-    int oldethics;      /*未戰鬥前道德*/
+    GCC_UNUSED int oldethics;   /*未戰鬥前道德*/
     int oldmoney;               /*未戰鬥前金錢*/
     int oldtired;
     int oldhp;

@@ -826,8 +826,8 @@ unsigned int
 m_quota(void)
 {
     unsigned int ufo;
-    int fd, count, fsize, limit, xmode;
-    time_t mail_due, mark_due;
+    int fd, count GCC_UNUSED, fsize, limit, xmode;
+    GCC_UNUSED time_t mail_due, mark_due;
     struct stat st;
     HDR *head, *tail;
     char *base, *folder, date[9];

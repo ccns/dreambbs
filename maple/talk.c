@@ -769,7 +769,7 @@ pal_search(
 
     if (vget(b_lines, 0, msg_uid, buf, IDLEN + 1, GCARRY))
     {
-        int buflen;
+        GCC_UNUSED int buflen;
         char bufl[IDLEN + 1];
 
         usr_fpath(fpath, cuser.userid, FN_PAL);
@@ -3124,7 +3124,7 @@ ulist_body(
     PICKUP *pp;
     UTMP *up;
     int paltmp;
-    int n, cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor, colortmp;
+    int n, cnt, max, ufo, self, userno, sysop GCC_UNUSED, diff, diffmsg, fcolor, colortmp;
     char buf[16], color[20], ship[80];
     const char *const wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 
@@ -3486,7 +3486,7 @@ ulist_search(
 
     if (vget(b_lines, 0, msg_uid, buf, IDLEN + 1, GCARRY))
     {
-        int buflen;
+        GCC_UNUSED int buflen;
         char bufl[IDLEN + 1];
 
         str_lower(bufl, buf);
@@ -3997,7 +3997,7 @@ static int
 ulist_mp(
     XO *xo)
 {
-    int tmp;
+    GCC_UNUSED int tmp;
 
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;

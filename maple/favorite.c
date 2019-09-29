@@ -184,7 +184,7 @@ favorite_sort(void)
     ClassHeader *chp;
     int i, j, max;
     BRD *bp;
-    BRD *bhead, *btail;
+    GCC_UNUSED BRD *bhead, *btail;
 
     max = bshm->number;
     bhead = bp = bshm->bcache;

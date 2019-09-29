@@ -577,7 +577,7 @@ int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
     char *tStart, *tEnd;
     tStart = cStart;
     VALUE hashTOC = rb_hash_new();
-    int TOCfound = 0;
+    GCC_UNUSED int TOCfound = 0;
     // In this implement, we only allow TOC to be put BEFORE the actual script code
     while (tStart < cEnd)
     {

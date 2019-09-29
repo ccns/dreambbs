@@ -416,7 +416,7 @@ static unsigned int setperm(unsigned int level)
 static void acct_su(const ACCT * u)
 {
     XO *xo;
-    char path[80], id[20];
+    char path[80], id[20] GCC_UNUSED;
     int level, ufo;
 
     if (!supervisor)
@@ -1386,7 +1386,7 @@ int m_bmset(void)
 int ban_addr(const char *addr)
 {
     int i;
-    char *host, *str;
+    char *host, *str GCC_UNUSED;
     char foo[64];                /* SoC: ©ñ¸m«ÝÀË¬dªº email address */
     const char* str_invalid;
 

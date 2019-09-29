@@ -492,7 +492,7 @@ brh_load(void)
 {
     BRD *brdp, *bend;
     unsigned int ulevel;
-    int n, cbno;
+    int n, cbno GCC_UNUSED;
     char *bits;
 
     int size, *base;
@@ -1770,7 +1770,7 @@ class_add2(          /* gaod: 我的最愛中直接新增新看板 */
     short *chp;
     BRD *brd;
     HDR hdr;
-    int chn, fasize;
+    int chn GCC_UNUSED, fasize;
     char fpath[128];
     char bname[IDLEN + 1];
 

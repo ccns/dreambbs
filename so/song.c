@@ -289,7 +289,7 @@ XO *xo)
     char xboard[20], fpath[80], xfolder[80], xtitle[80], *dir, buf[128];
     char tmp[256], idwho[20], want_say[32];
     HDR *hdr, xpost;
-    int method, battr, flag;
+    int method, battr GCC_UNUSED, flag;
     FILE *xfp, *fp;
     ACCT acct;
     time_t token, now;
@@ -403,7 +403,7 @@ static int
 song_send(
 XO *xo)
 {
-    char fpath[128], folder[128], *dir, title[80], buf[128], want_say[32], date[9];
+    char fpath[128], folder[128], *dir GCC_UNUSED, title[80], buf[128], want_say[32], date[9];
     char tmp[300];
     HDR *hdr, xhdr;
     ACCT acct, cacct;

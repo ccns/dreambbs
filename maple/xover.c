@@ -163,7 +163,7 @@ hdr_prune(
     int nhead, int ntail,
     int post)
 {
-    int count, fdr, fsize, xmode, cancel, dmode;
+    int count, fdr, fsize, xmode, cancel, dmode GCC_UNUSED;
     HDR *hdr;
     FILE *fpw;
     char fnew[80], fold[80];

@@ -156,7 +156,7 @@ XO *xo,
 char *fpath)
 {
     HDR *ghdr;
-    int gtype, level;
+    GCC_UNUSED int gtype, level;
     char *folder;
 
     level = xo->key;
@@ -181,7 +181,7 @@ static int
 mailgem_add(
 XO *xo)
 {
-    int gtype, level, fd, ans;
+    int gtype, level GCC_UNUSED, fd, ans;
     char title[80], fpath[80], *dir;
     HDR ghdr;
 
@@ -869,7 +869,7 @@ XO *xo)
 {
     char xboard[20], fpath[80], xfolder[80], xtitle[80], buf[80], *dir;
     HDR *hdr, xpost, *ghdr;
-    int method = 1, rc, tag, locus, battr;
+    int method = 1, rc GCC_UNUSED, tag, locus, battr;
     FILE *xfp;
     int success_count = 0;
 

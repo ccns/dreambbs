@@ -58,7 +58,7 @@ POP3_Check(
     const char *site, const char *account, const char *passwd)
 {
     FILE *fsock = NULL;
-    int sock=110, old_sock = 0;
+    int sock=110, old_sock GCC_UNUSED = 0;
     char buf[512];
 
     if (Get_Socket(site, &sock))

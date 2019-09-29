@@ -806,7 +806,7 @@ t_chat(void)
         {
 #ifdef EVERY_BIFF
             /* Thor.980805: 有人在旁邊按enter才需要check biff */
-            static int old_biff1, old_biff2;
+            static int old_biff1, old_biff2 GCC_UNUSED;
             int biff1 = cutmp->ufo & UFO_BIFF;
             int biff2 = cutmp->ufo & UFO_BIFFN;
             if (biff1 && !old_biff1)

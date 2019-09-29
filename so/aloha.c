@@ -134,7 +134,7 @@ static int
 aloha_loadpal(
 XO *xo)
 {
-    int pos, i, max;
+    int pos GCC_UNUSED, i, max;
     char fpath[64], path[64];
     BMW bmw;
     PAL pal;

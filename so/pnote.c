@@ -116,7 +116,7 @@ rebuild_pnote_ansi(int newflag)
 static void
 do_pnote(const char *userid)
 {
-    int total = 0, i, collect, len;
+    int total = 0, i, collect GCC_UNUSED, len;
     struct stat st;
     char buf[256], buf2[80];
     char fname[MAXPATHLEN], fname2[MAXPATHLEN];

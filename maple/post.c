@@ -1256,7 +1256,7 @@ post_cross(
         if (!HAS_PERM(PERM_ADMIN))
         {
             time_t now;
-            struct tm *ptime;
+            GCC_UNUSED struct tm *ptime;
             char add[180], tgt[30];
 
             time(&now);
@@ -1495,8 +1495,8 @@ post_browse(
     XO *xo)
 {
     HDR *hdr;
-    int cmd, xmode, pos;
-    char *dir, fpath[64], *board;
+    int cmd GCC_UNUSED, xmode, pos;
+    char *dir, fpath[64], *board GCC_UNUSED;
 
     char poolbuf[sizeof(HDR)*20];
 
@@ -3109,7 +3109,7 @@ post_resetscore(
     {
         HDR *hdr;
         BRD *brd;
-        int pos, cur, xmode, recommend, pm;
+        int pos, cur, xmode GCC_UNUSED, recommend, pm;
         char ans[3];
 
         pos = xo->pos;
@@ -3199,7 +3199,7 @@ post_recommend(
     int pos, cur, addscore, eof, point=0;
     BRD *brd;
     char fpath[80], msg[53], add[128], lastrecommend[IDLEN+1], verb[3];
-    char ans, getans, pushverb;
+    char ans, getans, pushverb GCC_UNUSED;
 
     /* 081122.cache: 推文時間限制 */
     static time_t next = 0;
@@ -4600,7 +4600,7 @@ xpost_browse(
 {
     HDR *hdr;
     int cmd, chrono, xmode;
-    char *dir, fpath[64], *board;
+    char *dir, fpath[64], *board GCC_UNUSED;
 
     int key;
 
