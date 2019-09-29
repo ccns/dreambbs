@@ -2130,7 +2130,6 @@ ve_key:
                 ve_mode = mode | VE_REDRAW;
                 break;
 
-            case Ctrl('U'):
             case Meta('U'):
             case KEY_F8:
 
@@ -2138,6 +2137,7 @@ ve_key:
                 /*ve_char(27);*/
                 break;
 
+            case Ctrl('U'):
             case KEY_ESC:
 
                 ve_char(27);
