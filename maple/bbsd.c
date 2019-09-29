@@ -368,7 +368,7 @@ acct_apply(void)
             login_abort("\n您嘗試錯誤的輸入太多，請下次再來吧");
     }
 
-    /* IID.20190530: For forward compatibility with older versions */
+    /* IID.20190530: For the forward compatibility of older versions */
     if (vget(18, 0, "是否使用新式密碼加密(Y/N)？[N]", buf, 3, LCECHO) == 'y')
     {
         try = GENPASSWD_SHA256;
