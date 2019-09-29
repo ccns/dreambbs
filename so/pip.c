@@ -27,7 +27,9 @@ static time_t lasttime;
 
 static int KEY_ESC_arg;
 static char *BoardName = currboard;
+#ifdef  HAVE_PIP_FIGHT
 static UTMP *currutmp;
+#endif
 static char Bdate[128];
 static char pippath[128];
 static levelup ml[2];
@@ -585,7 +587,7 @@ static struct pipcommands pipjoblist[] =
 
 /*¯S®í¿ï³æ*/
 static int pip_see_doctor(void), pip_change_weight(void), pip_meet_vs_man(void), pip_query(void), pip_go_palace(void);
-static int pip_vs_fight(void);
+/* static int pip_vs_fight(void); */
 static struct pipcommands pipspeciallist[] =
 {
     {pip_see_doctor,            '1',    '1'},
@@ -6936,6 +6938,7 @@ pip_system_service(void)
     return 0;
 }
 
+#if 0  // Unused
 #include<stdarg.h>
 static void
 pip_data_list_va(va_list pvar)
@@ -6945,6 +6948,7 @@ pip_data_list_va(va_list pvar)
     userid = va_arg(pvar, char *);
     pip_data_list(cuser.userid);
 }
+#endif  // #if 0  // Unused
 
 static int
 pip_data_list_cuser(void)
