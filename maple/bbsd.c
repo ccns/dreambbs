@@ -1215,7 +1215,8 @@ tn_main(void)
 #endif
 
     menu();
-    abort_bbs();                        /* to make sure it will terminate */
+    /* IID.20190929: `menu()` never returns. */
+    /* abort_bbs(); */                  /* to make sure it will terminate */
 }
 
 
