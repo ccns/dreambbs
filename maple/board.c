@@ -768,6 +768,17 @@ XoPost(
     const char *str;
     static int LastBno = -1;
 
+    str_bit = &brd_bits[bno];
+    bits = *str_bit;
+
+    /* cache.081206: 對好友看版重新判斷是不是也具有 R 權限 */
+    if (!(bits & BRD_R_BIT)/* && (bits & BRD_F_BIT)*/)
+    {
+        vmsg("請聯絡板主將您加入看板好友");
+        ok=0;
+        return;
+    }
+
     /* 090823.cache: 看板人氣 */
     if (LastBno != bno)
     {
@@ -795,60 +806,47 @@ XoPost(
     bbstate = /* (bbstate & STAT_DIRTY) | */ STAT_STARTED | brd->battr;
     bbstate &= ~STAT_POST;
 
-    str_bit = &brd_bits[bno];
-    bits = *str_bit;
-
-    /* cache.081206: 對好友看版重新判斷是不是也具有 R 權限 */
-    if (!(bits & BRD_R_BIT)/* && (bits & BRD_F_BIT)*/)
-    {
-        vmsg("請聯絡板主將您加入看板好友");
-        ok=0;
-    }
-    else
-    {
-        if (bits & BRD_X_BIT)
-            bbstate |= (STAT_BOARD | STAT_POST);
-        else if (bits & BRD_W_BIT)
-            bbstate |= STAT_POST;
+    if (bits & BRD_X_BIT)
+        bbstate |= (STAT_BOARD | STAT_POST);
+    else if (bits & BRD_W_BIT)
+        bbstate |= STAT_POST;
 
 #ifdef  HAVE_MODERATED_BOARD
-        if (brd->readlevel == PERM_SYSOP)
-            bbstate |= STAT_MODERATED;
+    if (brd->readlevel == PERM_SYSOP)
+        bbstate |= STAT_MODERATED;
 #endif
 
-        if (/*!(bits & BRD_V_BIT) && */(cuser.ufo2 & UFO2_BNOTE))
-        {
-            *str_bit = bits | BRD_V_BIT;
-            brd_fpath(fpath, currboard, FN_NOTE);
-            more(fpath, NULL);
-        }
+    if (/*!(bits & BRD_V_BIT) && */(cuser.ufo2 & UFO2_BNOTE))
+    {
+        *str_bit = bits | BRD_V_BIT;
+        brd_fpath(fpath, currboard, FN_NOTE);
+        more(fpath, NULL);
+    }
 
-        brd_fpath(fpath, currboard, fn_dir);
-        xz[XZ_POST - XO_ZONE].xo = xo = xo_get(fpath);
-        xo->key = XZ_POST;
-        xo->xyz = brd->bvote > 0 ? "本看板進行投票中" : brd->title + 3;
-        str = brd->BM;
-        if (*str <= ' ')
-            str = "徵求中";
-        sprintf(currBM, "板主：%s", str);
+    brd_fpath(fpath, currboard, fn_dir);
+    xz[XZ_POST - XO_ZONE].xo = xo = xo_get(fpath);
+    xo->key = XZ_POST;
+    xo->xyz = brd->bvote > 0 ? "本看板進行投票中" : brd->title + 3;
+    str = brd->BM;
+    if (*str <= ' ')
+        str = "徵求中";
+    sprintf(currBM, "板主：%s", str);
 
 #ifdef LOG_BRD_USIES
-        /* lkchu.981201: 閱讀看版記錄 */
-        if (!(bbstate & BRD_NOLOGREAD))
-            brd_usies();
+    /* lkchu.981201: 閱讀看版記錄 */
+    if (!(bbstate & BRD_NOLOGREAD))
+        brd_usies();
 #endif
 
-        if (!(brd->battr & BRD_ANONYMOUS))
-            brd_usies_BMlog();
+    if (!(brd->battr & BRD_ANONYMOUS))
+        brd_usies_BMlog();
 
 #ifdef  HAVE_COUNT_BOARD
 //      if (!(strcmp(brd->brdname, "Test")))
-        if (!(bbstate & BRD_NOTOTAL) && !(bits & BRD_V_BIT))
-            brd->n_reads++;
+    if (!(bbstate & BRD_NOTOTAL) && !(bits & BRD_V_BIT))
+        brd->n_reads++;
 #endif
-        ok=1;
-    }
-
+    ok=1;
 }
 
 
