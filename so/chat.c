@@ -173,7 +173,7 @@ chat_record(char *arg)
         holdon_fd = vio_fd;
         vio_fd = 0;
 
-        usr_fpath(buf, cuser.userid, tbf_ask());
+        usr_fpath(buf, cuser.userid, tbf_ask(-1));
 
         /* Thor.980602: ¡Ÿ≠Ï vio_fd */
         vio_fd = holdon_fd;

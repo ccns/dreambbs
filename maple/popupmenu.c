@@ -678,7 +678,7 @@ Every_Z_Screen(void)
     getyx(&oy, &ox);
 #endif
 
-    fp = tbf_open();
+    fp = tbf_open(-1);
     if (!fp)
     {
         vmsg("ÀÉ®×¶}±Ò¿ù»~ !!");

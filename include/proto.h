@@ -108,8 +108,8 @@ int film_out(int tag, int row);
 UTMP *utmp_check(const char *userid);
 /* edit.c */
 void ve_string(char *str);
-char *tbf_ask(void);
-FILE *tbf_open(void);
+char *tbf_ask(int n);
+FILE *tbf_open(int n);
 void ve_backup(void);
 void ve_recover(void);
 void ve_header(FILE *fp);

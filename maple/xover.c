@@ -554,7 +554,7 @@ xo_copy(
     if (tag < 0)
         return XO_FOOT;
 
-    fp = tbf_open();
+    fp = tbf_open(-1);
     if (fp == NULL)
         return XO_FOOT;
 
