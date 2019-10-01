@@ -1989,7 +1989,7 @@ every_Z_Orig(void)
     int cmd;
     char select;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[2];
 #endif
@@ -2172,7 +2172,7 @@ every_Z(void)
 {
     int tmpmode, savemode;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[T_LINES];
 #endif
@@ -2240,7 +2240,7 @@ every_U(void)
 {
     int cmd, tmpmode;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2293,7 +2293,7 @@ void
 every_B(void)
 {
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2325,7 +2325,7 @@ every_S(void)
 {
     int tmpmode;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[b_lines + 1];
 #endif

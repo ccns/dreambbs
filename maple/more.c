@@ -704,7 +704,7 @@ re_key:
         else if ((key == 'L' || key == 'l') && HAS_PERM(PERM_BBSLUA))
         {
 #ifdef M3_USE_PFTERM
-            screen_backup_t old_screen = {0};
+            screen_backup_t old_screen;
             scr_dump(&old_screen);
 #else
             screenline slt[T_LINES];
@@ -723,7 +723,7 @@ re_key:
         else if (key == '!' && HAS_PERM(PERM_BBSRUBY))
         {
 #ifdef M3_USE_PFTERM
-            screen_backup_t old_screen = {0};
+            screen_backup_t old_screen;
             scr_dump(&old_screen);
 #else
             screenline slt[T_LINES];

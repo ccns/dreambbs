@@ -2302,6 +2302,13 @@ grayout(int y, int end, int level)
 void
 scr_dump(screen_backup_t *psb)
 {
+    psb->raw_memory = NULL;
+    scr_redump(psb);
+}
+
+void
+scr_redump(screen_backup_t *psb)
+{
     int y = 0;
     char *p = NULL;
 
