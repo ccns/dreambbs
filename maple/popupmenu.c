@@ -484,7 +484,7 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
     char t[64];
     char hotkey;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 
     scr_dump(&old_screen);
 #else
@@ -559,7 +559,7 @@ void
 popupmenu(MENU pmenu[], XO *xo, int x, int y)
 {
 #ifdef M3_USE_PFTERM
-    scr_dump(&old_screen);
+    scr_redump(&old_screen);
 #else
     vs_save(sl);
 #endif
@@ -649,7 +649,7 @@ int pmsg(const char *msg)
         return vmsg(msg);
 
 #ifdef M3_USE_PFTERM
-    scr_dump(&old_screen);
+    scr_redump(&old_screen);
 #else
     vs_save(sl);
 #endif

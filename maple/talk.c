@@ -1662,7 +1662,7 @@ bmw_edit(
 {
     char *str;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[2];
 #endif
@@ -1797,7 +1797,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
     UTMP *up, *uhead;
     BMW bmw;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[2], slt[b_lines + 1];
 #endif
@@ -1824,7 +1824,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 
     if (cuser.ufo2 & UFO2_REPLY || replymode)
 #ifdef M3_USE_PFTERM
-        scr_dump(&old_screen);
+        scr_redump(&old_screen);
 #else
         vs_save(slt);         /* 記錄 bmd_display 之前的 screen */
 #endif
@@ -2643,7 +2643,7 @@ talk_speak(
         if (ch == Ctrl('Z'))
         {
 #ifdef M3_USE_PFTERM
-            screen_backup_t old_screen = {0};
+            screen_backup_t old_screen;
 #else
             screenline sl[b_lines + 1];
 #endif
@@ -4283,7 +4283,7 @@ talk_rqst(void)
     char buf[80];
     struct sockaddr_in sin;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[b_lines + 1];
 #endif
