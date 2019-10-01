@@ -2068,6 +2068,15 @@ ve_key:
                 ve_mode = mode | cc;
                 continue;
 
+            case Meta('1'):
+            case Meta('2'):
+            case Meta('3'):
+            case Meta('4'):
+            case Meta('5'):
+                tbf_read(cc - '0');
+                ve_mode = mode | VE_REDRAW;
+                continue;
+
             case Ctrl('Z'):
             case KEY_F1:
 
