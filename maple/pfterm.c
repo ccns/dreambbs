@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////////
 #ifdef PFTERM_TEST_MAIN
 
+#define USE_PFTERM
 #define EXP_PFTERM
 #define DBCSAWARE
 #define FT_DBCS_NOINTRESC 1
@@ -30,7 +31,9 @@
 #endif
 
 #ifdef M3_USE_PFTERM
-#include <assert.h>
+ #include <assert.h>
+ #define USE_PFTERM
+ #undef PFTERM_HAVE_VKEY
 #endif //M3_USE_PFTERM
 
 #endif  /* #ifdef PFTERM_TEST_MAIN */
@@ -159,7 +162,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 // Experimental now
-#if defined(EXP_PFTERM) || defined(M3_USE_PFTERM)
+#if defined(EXP_PFTERM) || defined(USE_PFTERM)
 
 //////////////////////////////////////////////////////////////////////////
 // pfterm Configurations
@@ -233,9 +236,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 typedef unsigned char ftchar;   // primitive character type
-#ifndef PFTERM_H
 typedef unsigned char ftattr;   // primitive attribute type
-#endif
 
 //////////////////////////////////////////////////////////////////////////
 // Flat Terminal Structure
@@ -2557,6 +2558,6 @@ int main(int argc, char* argv[])
 }
 #endif // PFTERM_TEST_MAIN
 
-#endif // defined(EXP_PFTERM) || defined(M3_USE_PFTERM)
+#endif // defined(EXP_PFTERM) || defined(USE_PFTERM)
 
 // vim:ts=4:sw=4:expandtab
