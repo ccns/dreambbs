@@ -34,7 +34,21 @@
  #include <assert.h>
  #define USE_PFTERM
  #undef PFTERM_HAVE_VKEY
+ #define PFTERM_EXPOSED_VISIO_VI
 #endif //M3_USE_PFTERM
+
+#ifndef PFTERM_HAVE_VKEY
+ #ifdef PFTERM_EXPOSED_VISIO_VI
+// Use visio internal variables
+extern int vi_size;
+extern int vi_head;
+
+static int vkey_is_typeahead(void)
+{
+    return vi_head < vi_size;
+}
+ #endif
+#endif  /* #ifndef PFTERM_HAVE_VKEY */
 
 #endif  /* #ifdef PFTERM_TEST_MAIN */
 
@@ -2423,7 +2437,7 @@ region_scroll_up(int top, int bottom)
 int
 fterm_typeahead(void)
 {
-#if defined (PFTERM_TEST_MAIN) || !defined (PFTERM_HAVE_VKEY)
+#if defined (PFTERM_TEST_MAIN) || !(defined (PFTERM_HAVE_VKEY) || defined (PFTERM_EXPOSED_VISIO_VI))
     return 0;
 #else
     return vkey_is_typeahead();
