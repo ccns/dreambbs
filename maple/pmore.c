@@ -123,6 +123,7 @@
 #define PMORE_USE_REPLYKEY_HINTS        // prompt user the keys to reply/commenting
 #define PMORE_HAVE_SYNCNOW              // system needs calling sync API
 #define PMORE_HAVE_VKEY                 // input system is vkey compatible
+//#define PMORE_EXPOSED_VISIO_VI        // pmore has access to visio internal variables
 #define PMORE_IGNORE_UNKNOWN_NAVKEYS    // does not return for all unknown keys
 //#define PMORE_AUTONEXT_ON_PAGEFLIP    // change file when page up/down reaches end
 //#define PMORE_AUTONEXT_ON_RIGHTKEY    // change file to next for right key
@@ -289,6 +290,7 @@
  #undef PMORE_USE_REPLYKEY_HINTS
  #undef PMORE_HAVE_SYNCNOW
  #undef PMORE_HAVE_VKEY
+ #define PMORE_EXPOSED_VISIO_VI
  #undef PMORE_IGNORE_UNKNOWN_NAVKEYS
  #undef PMORE_AUTOEXIT_FIRSTPAGE
  #define PMORE_AUTONEXT_ON_PAGEFLIP  /*r2.170810: try different style for easy to read*/
@@ -320,6 +322,19 @@
  #define PMORE_COLOR_FOOTER3_KEY  ""
  #define PMORE_COLOR_FOOTER3_TEXT ""
  #define PMORE_COLOR_FOOTER3 COLOR2
+
+ #ifndef PMORE_HAVE_VKEY
+  #ifdef PMORE_EXPOSED_VISIO_VI
+// Use visio internal variables
+extern int vi_size;
+extern int vi_head;
+
+static int vkey_is_typeahead(void)
+{
+    return vi_head < vi_size;
+}
+  #endif
+ #endif  /* #ifndef PMORE_HAVE_VKEY */
 #endif // M3_USE_PMORE
 // --------------------------------------------------------------- </PORTING>
 
@@ -3345,7 +3360,7 @@ mf_movieWaitKey(struct timeval *ptv, int dorefresh)
     do {
         // Check if something already in input queue,
         // determine if ok to break.
-#ifdef PMORE_HAVE_VKEY
+#if defined(PMORE_HAVE_VKEY) || defined(PMORE_EXPOSED_VISIO_VI)
         while (vkey_is_typeahead())
         {
             if (!mf_movieMaskedInput((c = vkey())))
