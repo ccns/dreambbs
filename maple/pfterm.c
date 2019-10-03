@@ -169,7 +169,7 @@
 // Prevent invalid DBCS characters
 #define FTCONF_PREVENT_INVALID_DBCS
 
-// Force to clear brefore drawing unsafe DBCS characters
+// Force to clear before drawing unsafe DBCS characters
 #define FTCONF_CLEAR_UNSAFE_DBCS
 
 // Some terminals use current attribute to erase background
@@ -2178,7 +2178,7 @@ fterm_rawscroll (int dy)
     //
     // Elder BBS systems works in a mixed way:
     // \n at (rows-1) as scroll()
-    // and ESC-M at(0) as rscoll().
+    // and ESC-M at(0) as rscroll().
     //
     // SCP: CSI s / RCP: CSI u
     // Warning: cannot use SCP/RCP here, because on Win/DOS telnet
