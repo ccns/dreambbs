@@ -1646,11 +1646,14 @@ fterm_exec(void)
         break;
 
     case 'G':   // CHA: CSI n G
-        // Moves the cursor to column n.
+    case 'd':   // VPA: CSI n d
+        // Moves the cursor to column/row n.
         if (n < 1)
             n = 1;
         getyx(&y, &x);
-        move(y, n-1);
+        if      (cmd == 'G') { x = n-1; }
+        else if (cmd == 'd') { y = n-1; }
+        move(y, x);
         break;
 
     case 'H':   // CUP: CSI n ; m H
