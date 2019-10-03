@@ -165,8 +165,10 @@ static int vkey_is_typeahead(void)
 //
 //////////////////////////////////////////////////////////////////////////
 // Reference:
-// http://en.wikipedia.org/wiki/ANSI_escape_code
+// https://en.wikipedia.org/wiki/ANSI_escape_code
 // http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-048.pdf
+// https://www.itu.int/rec/T-REC-T.416-199303-I/en
+// https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences
 //////////////////////////////////////////////////////////////////////////
 // The supported escapes are based on 'cons25' termcap and
 // Windows 2000/XP/Vista built-in telnet.
