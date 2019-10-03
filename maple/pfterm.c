@@ -174,6 +174,31 @@ static int vkey_is_typeahead(void)
 // Underline is only supported by vt100 (and monochrome) so we drop it.
 // Blink is supported by vt100/cons25 and we keep it.
 //////////////////////////////////////////////////////////////////////////
+// Additional remarks by IID on 2019-10-02:
+// About `cons25`:
+// `cons25` is the termcap/terminfo for the older console driver `syscons` of FreeBSD.
+// `vt` replaced `syscons` as the default system console driver in FreeBSD 9.3,
+//    whose terminals have their terminfo type `$TERM` default to `xterm`.
+//
+// About the Windows OS versions:
+// Windows 2000/XP/Vista were the dominant Windows versions in 2008,
+//    which occupied 99.35% of the market share of Windows OSs in 2009-1,
+//    but occupied only 3.47% of the market share from 2018-9 to 2019-9.
+// The dominant Windows versions from 2018-9 to 2019-9
+//    were Windows 7/8.1/10, which occupied 95.62% of the market share of Windows OSs,
+//    while the officially unsupported Windows XP
+//       still occupied 3.25% of the market share.
+//
+// The supported escape sequences should be now based on `xterm` terminfo
+//    and the built-in terminal of Windows XP/7/8.1/10.
+//
+// The built-in terminal of Windows 10 supports many `xterm`-based escape sequences
+//    under the name of 'virtual terminal sequences'.
+//
+// About the support for underlines and blinks, as for 2019-10:
+// Support for underlines was added in the built-in terminal of Windows 10.
+// Support for blinks has not hitherto happened on the built-in terminal of Windows.
+//////////////////////////////////////////////////////////////////////////
 
 // Experimental now
 #if defined(EXP_PFTERM) || defined(USE_PFTERM)
