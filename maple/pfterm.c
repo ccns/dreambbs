@@ -1740,18 +1740,23 @@ fterm_exec(void)
         //  SGR 4 (underline: single)   is not supported.
         //  SGR 5 (blink: slow)         is supported.
         //  SGR 6 (blink: rapid)        is converted to (blink: slow)
-        //  SGR 7 (image: negative)     is partially supported (not a really attribute).
-        //  SGR 8 (conceal)             is not supported.
+        //  SGR 7 (inverse: on)         is partially supported (not a really attribute).
+        //  SGR 8 (conceal: on)         is not supported.
         //  SGR 21(underline: double)   is not supported.
         //  SGR 22(intensity: normal)   is supported.
+        //  SGR 23(italic: off)         is not supported.
         //  SGR 24(underline: none)     is not supported.
         //  SGR 25(blink: off)          is supported.
-        //  SGR 27(image: positive)     is not supported.
-        //  SGR 28(reveal)              is not supported.
+        //  SGR 27(inverse: off)        is not supported.
+        //  SGR 28(conceal: off)        is not supported.
         //  SGR 30-37 (FG)              is supported.
+        //  SGR 38 (FG-extended)        is not supported.
         //  SGR 39 (FG-reset)           is supported.
         //  SGR 40-47 (BG)              is supported.
+        //  SGR 48 (BG-extended)        is not supported.
         //  SGR 49 (BG-reset)           is supported.
+        //  SGR 90-97   (FG-bright) (aixterm; non-standard)   is not supported.
+        //  SGR 100-107 (BG-bright) (aixterm; non-standard)   is not supported.
         if (n == -1)    // first param
             n = 0;
         while (n > -1)
