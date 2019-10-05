@@ -251,6 +251,7 @@ static int vkey_is_typeahead(void)
 #define FTATTR_DEFAULT   (FTATTR_ERASE)
 #define FTCHAR_INVALID_DBCS ('?')
 // #define FTATTR_TRANSPARENT (0x80)
+#define FTVATTR_DEFAULT  (0x00)
 
 #define FTDIRTY_CHAR    (0x01)
 #define FTDIRTY_ATTR    (0x02)
@@ -278,6 +279,7 @@ static int vkey_is_typeahead(void)
 
 typedef unsigned char ftchar;   // primitive character type
 typedef unsigned char ftattr;   // primitive attribute type
+typedef unsigned char ftvattr;  // primitive type for virtual attributes
 
 //////////////////////////////////////////////////////////////////////////
 // Flat Terminal Structure
@@ -306,6 +308,9 @@ typedef struct
 
     // typeahead
     char    typeahead;
+
+    // virtual attributes for processing escape commands
+    ftvattr vattr;
 
     // escape command
     ftchar  cmd[FTCMD_MAXLEN+1];
@@ -340,6 +345,8 @@ static FlatTerm ft;
 #define FTATTR_DEFAULT_BG   (FTATTR_GETBG(FTATTR_DEFAULT))
 #define FTATTR_MAKE(f, b)   (((f)<<FTATTR_FGSHIFT)|((b)<<FTATTR_BGSHIFT))
 #define FTCHAR_ISBLANK(x)   ((x) == (FTCHAR_BLANK))
+
+// ftvattr: 0| UNUSED(8) |8
 
 #define FTCMAP  ft.cmap[ft.mi]
 #define FTAMAP  ft.amap[ft.mi]
@@ -509,6 +516,7 @@ initscr(void)
 
     memset(&ft, 0, sizeof(ft));
     ft.attr = ft.rattr = FTATTR_DEFAULT;
+    ft.vattr = FTVATTR_DEFAULT;
     resizeterm(FTSZ_DEFAULT_ROW, FTSZ_DEFAULT_COL);
 
     // clear both pages
@@ -1775,6 +1783,7 @@ fterm_exec(void)
             {
             case 0:
                 attrset(FTATTR_DEFAULT);
+                ft.vattr = FTVATTR_DEFAULT;
                 break;
             case 1:
                 attrset(attrget() | FTATTR_BOLD);
