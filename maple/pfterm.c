@@ -1550,7 +1550,7 @@ void
 fterm_exec(void)
 {
     ftchar cmd = ft.cmd[ft.szcmd-1];
-    char    *p = (char*)ft.cmd + 2; // ESC [
+    char    *p = (char*)ft.cmd + 2; // For ESC [
     int n = -1, x = -1, y;
 
     ft.cmd[ft.szcmd] = 0;
@@ -1567,7 +1567,8 @@ fterm_exec(void)
         // p points to next param now
     }
 
-    switch (cmd)
+#define EXEC_ESCSEQ  (0x0100)   // For ESC cmd
+    switch ((ft.szcmd) > 2 ? cmd : EXEC_ESCSEQ | cmd)
     {
         // Cursor Movement
 
@@ -1575,6 +1576,10 @@ fterm_exec(void)
     case 'B':   // CUD: CSI n B
     case 'C':   // CUF: CSI n C
     case 'D':   // CUB: CSI n D
+    case EXEC_ESCSEQ | 'A': // CUU: ESC A (VT52; non-standard)
+    case EXEC_ESCSEQ | 'B': // CUD: ESC B (VT52; non-standard)
+    case EXEC_ESCSEQ | 'C': // CUF: ESC C (VT52; non-standard)
+    case EXEC_ESCSEQ | 'D': // CUB: ESC D (VT52; non-standard)
         // Moves the cursor n (default 1) cells in the given direction.
         // If the cursor is already at the edge of the screen, this has no effect.
         if (n < 1)
@@ -1771,6 +1776,7 @@ fterm_exec(void)
     default:    // unknown command.
         break;
     }
+#undef EXEC_ESCSEQ
 }
 
 int
