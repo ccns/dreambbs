@@ -346,7 +346,8 @@ static FlatTerm ft;
 #define FTATTR_MAKE(f, b)   (((f)<<FTATTR_FGSHIFT)|((b)<<FTATTR_BGSHIFT))
 #define FTCHAR_ISBLANK(x)   ((x) == (FTCHAR_BLANK))
 
-// ftvattr: 0| UNUSED(8) |8
+// ftvattr: 0| UNUSED(7) | REVERSE(1) |8
+#define FTVATTR_REVERSE    (0x80)
 
 #define FTCMAP  ft.cmap[ft.mi]
 #define FTAMAP  ft.amap[ft.mi]
@@ -1744,18 +1745,18 @@ fterm_exec(void)
         //  SGR 0 (reset/normal)        is supported.
         //  SGR 1 (intensity: bold)     is supported.
         //  SGR 2 (intensity: faint)    is not supported.
-        //  SGR 3 (italic: on)          is not supported. (converted to inverse?)
+        //  SGR 3 (italic: on)          is converted to (inverse (virtual): toggle)
         //  SGR 4 (underline: single)   is not supported.
         //  SGR 5 (blink: slow)         is supported.
         //  SGR 6 (blink: rapid)        is converted to (blink: slow)
-        //  SGR 7 (inverse: on)         is partially supported (not a really attribute).
+        //  SGR 7 (inverse: on)         is partially supported. (converted to inverse (virtual): toggle)
         //  SGR 8 (conceal: on)         is not supported.
         //  SGR 21(underline: double)   is not supported.
         //  SGR 22(intensity: normal)   is supported.
         //  SGR 23(italic: off)         is not supported.
         //  SGR 24(underline: none)     is not supported.
         //  SGR 25(blink: off)          is supported.
-        //  SGR 27(inverse: off)        is not supported.
+        //  SGR 27(inverse: off)        is partially supported (as a virtual attribute).
         //  SGR 28(conceal: off)        is not supported.
         //  SGR 30-37 (FG)              is supported.
         //  SGR 38 (FG-extended)        is not supported.
@@ -1798,12 +1799,17 @@ fterm_exec(void)
             case 25:
                 attrset(attrget() & ~FTATTR_BLINK);
                 break;
+            case 27:
+                if (!(ft.vattr & FTVATTR_REVERSE))
+                    break;
+                // Falls through
             case 3:
             case 7:
                 {
                     ftattr a = attrget();
                     attrsetfg(FTATTR_GETBG(a));
                     attrsetbg(FTATTR_GETFG(a));
+                    ft.vattr ^= FTVATTR_REVERSE;
                 }
                 break;
             case 39:
