@@ -1975,7 +1975,7 @@ static KeyFunc class_cb[] =
     {'s', class_switch},
 
     {'y', class_yank},
-    {'i', class_yank2}, //列出所有有閱讀權限的秘密/好有看板
+    {'i', class_yank2}, //列出所有有閱讀權限的秘密/好友看板
     {'z', class_zap},
     {'E', class_edit},
     {'v', class_visit},
