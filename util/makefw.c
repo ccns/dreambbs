@@ -50,7 +50,7 @@ attach_shm(
 
 static void
 expire(
-    char *brd)
+    const char *brd)
 {
     char buf[256];
     int fd;

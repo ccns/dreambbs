@@ -8,7 +8,7 @@ extern BCACHE *bshm;
 extern XZ xz[];
 extern char xo_pool[];
 
-static void XoSong(char *folder, const char *title, int level);
+static void XoSong(const char *folder, const char *title, int level);
 static int song_order(XO *xo);
 
 #define GEM_READ        1       /* readable */
@@ -22,7 +22,7 @@ static int song_order(XO *xo);
 
 static void
 log_song(
-char *msg)
+const char *msg)
 {
     char buf[512];
     time_t now = time(0);
@@ -134,7 +134,7 @@ char *fpath)
 static void
 song_item(
 int num,
-HDR *ghdr)
+const HDR *ghdr)
 {
     int xmode, gtype;
 
@@ -289,7 +289,7 @@ XO *xo)
     char xboard[20], fpath[80], xfolder[80], xtitle[80], *dir, buf[128];
     char tmp[256], idwho[20], want_say[32];
     HDR *hdr, xpost;
-    int method, battr, flag;
+    int method, battr GCC_UNUSED, flag;
     FILE *xfp, *fp;
     ACCT acct;
     time_t token, now;
@@ -320,7 +320,7 @@ XO *xo)
     else
         flag = 0;
 
-    if (vans("確定點歌嗎 [y/N]：") != 'y' )
+    if (vans("確定點歌嗎 [y/N]：") != 'y')
         return XO_HEAD;
 
     strcpy(xboard, BRD_ORDERSONGS);
@@ -403,7 +403,7 @@ static int
 song_send(
 XO *xo)
 {
-    char fpath[128], folder[128], *dir, title[80], buf[128], want_say[32], date[9];
+    char fpath[128], folder[128], *dir GCC_UNUSED, title[80], buf[128], want_say[32], date[9];
     char tmp[300];
     HDR *hdr, xhdr;
     ACCT acct, cacct;
@@ -570,7 +570,7 @@ static KeyFunc song_cb[] =
 
 static void
 XoSong(
-char *folder,
+const char *folder,
 const char *title,
 int level)
 {

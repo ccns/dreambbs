@@ -30,7 +30,7 @@ int NLCOUNT;
 nodelist_t *NODELIST = NULL;
 
 
-int
+GCC_PURE int
 nl_bynamecmp(
     const void *a, const void *b)
 {
@@ -79,7 +79,7 @@ newsfeeds_t *NEWSFEEDS_B = NULL;
 newsfeeds_t *NEWSFEEDS_G = NULL;
 
 
-int
+GCC_PURE int
 nf_byboardcmp(
     const void *a, const void *b)
 {
@@ -87,7 +87,7 @@ nf_byboardcmp(
 }
 
 
-int
+GCC_PURE int
 nf_bygroupcmp(
     const void *a, const void *b)
 {

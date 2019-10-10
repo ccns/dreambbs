@@ -74,7 +74,7 @@ static int gline;
 #define CHATSYSOP(usr)  (usr->uflag & (PERM_SYSOP | PERM_CHATROOM))
 #define PERM_ROOMOP     PERM_CHAT       /* Thor: 借 PERM_CHAT為 PERM_ROOMOP */
 #define PERM_CHATOP     PERM_DENYCHAT   /* Thor: 借 PERM_DENYCHAT為 PERM_CHATOP */
-/* #define ROOMOP(usr)     (usr->uflag & ( PERM_ROOMOP | PERM_SYSOP | PERM_CHATROOM)) */
+/* #define ROOMOP(usr)     (usr->uflag & ( PERM_ROOMOP | PERM_SYSOP | PERM_CHATROOM )) */
 /* Thor.980603: PERM_CHATROOM改為 default 沒有 roomop, 但可以自己取得 chatop*/
 #define ROOMOP(usr)     (usr->uflag & (PERM_ROOMOP|PERM_CHATOP))
 #define CLOAK(usr)      (usr->uflag & PERM_CLOAK)
@@ -114,7 +114,7 @@ struct ChatUser
     int retry;
 
     int isize;                  /* current size of ibuf */
-    char ibuf[80];              /* buffer for non-blocking receiving */
+    char ibuf[128];             /* buffer for non-blocking receiving */
     char userid[IDLEN + 1];     /* real userid */
     char chatid[9];             /* chat id */
     char rhost[30];             /* host address */
@@ -162,9 +162,9 @@ static int userno_inc = 0;      /* userno auto-incrementer */
 #endif
 
 
-static char msg_not_op[] = "◆ 您不是這間" CHATROOMNAME "的 Op";
-static char msg_no_such_id[] = "◆ 目前沒有人使用 [%s] 這個聊天代號";
-static char msg_not_here[] = "◆ [%s] 不在這間" CHATROOMNAME "。";
+static const char msg_not_op[] = "◆ 您不是這間" CHATROOMNAME "的 Op";
+static const char msg_no_such_id[] = "◆ 目前沒有人使用 [%s] 這個聊天代號";
+static const char msg_not_here[] = "◆ [%s] 不在這間" CHATROOMNAME "。";
 
 
 #define FUZZY_USER      ((ChatUser *) -1)
@@ -244,7 +244,7 @@ static char chatbuf[256];       /* general purpose buffer */
 
 static void
 debug_list(
-    UserList *list)
+    const UserList *list)
 {
     char buf[80];
     int i = 0;
@@ -306,7 +306,7 @@ debug_room(void)
 
 static void
 log_user(
-    ChatUser *cu)
+    const ChatUser *cu)
 {
     static int log_num;
 
@@ -337,7 +337,7 @@ log_user(
 
 static int
 valid_chatid(
-    char *id)
+    const char *id)
 {
     int ch, len;
 
@@ -369,9 +369,9 @@ valid_chatid(
 /* ----------------------------------------------------- */
 
 
-static int
+GCC_PURE static int
 str_match(
-    char *s1,                   /* lower-case (sub)string */
+    const char *s1,             /* lower-case (sub)string */
     const char *s2)
 {
     int c1, c2;
@@ -422,7 +422,7 @@ cuser_by_userid(
 
 static ChatUser *
 cuser_by_chatid(
-    char *chatid)
+    const char *chatid)
 {
     ChatUser *cu;
     char buf[80]; /* Thor.980727: 一次最長才80 */
@@ -512,10 +512,10 @@ list_free(
 static void
 list_add(
     UserList **list,
-    ChatUser *user)
+    const ChatUser *user)
 {
     UserList *node;
-    char *userid;
+    const char *userid;
     int len;
 
     len = strlen(userid = user->userid) + 1;
@@ -532,7 +532,7 @@ list_add(
 static int
 list_delete(
     UserList **list,
-    char *userid)
+    const char *userid)
 {
     UserList *node;
     char buf[80]; /* Thor.980727: 輸入一次最長才 80 */
@@ -554,9 +554,9 @@ list_delete(
 }
 
 
-static int
+GCC_PURE static int
 list_belong(
-    UserList *list,
+    const UserList *list,
     int userno)
 {
     while (list)
@@ -858,7 +858,7 @@ exit_room(
 int
 acct_load(
     ACCT *acct,
-    char *userid)
+    const char *userid)
 {
     int fd;
 
@@ -1081,7 +1081,7 @@ chat_list_rooms(
     char *msg)
 {
     ChatRoom *cr, *room;
-    char buf[128], from[128];
+    char buf[128];
     int mode;
 
     if (RESTRICTED(cuser))
@@ -1113,8 +1113,8 @@ chat_list_rooms(
             }
             else
             {
-                sprintf(from, "%%-%ds│%%4d│%%s", strlen(CHATROOMNAME)-6+12);
-                sprintf(buf, from, cr->name, cr->occupants, cr->topic);
+                sprintf(buf, "%-*s│%4d│%s", (int)(unsigned int)strlen(CHATROOMNAME)-6+12,
+                    cr->name, cr->occupants, cr->topic);
                 if (LOCKED(cr))
                     strcat(buf, " [鎖住]");
                 if (SECRET(cr))
@@ -1440,7 +1440,7 @@ chat_setroom(
 }
 
 
-static const char *chat_msg[] =
+static const char *const chat_msg[] =
 {
     "[//]help", "MUD-like 社交動詞",
     "[/h]elp op", CHATROOMNAME "管理員專用指令",
@@ -1474,7 +1474,7 @@ static const char *chat_msg[] =
 };
 
 
-static const char *room_msg[] =
+static const char *const room_msg[] =
 {
     "[/f]lag [+-][lst]", "設定鎖定、秘密、開放話題",
     "[/i]nvite <id>", "邀請 <id> 加入" CHATROOMNAME,
@@ -1493,7 +1493,7 @@ chat_help(
     char *msg)
 {
     char buf[128];
-    const char **table, *str;
+    const char *const *table, *str;
 
     if (str_equal("op", nextword(&msg)))
     {
@@ -1860,7 +1860,10 @@ login_user(
 
     /* Thor.990214: 注意, daolib中 非0代表失敗 */
     /* if (!chkpasswd(acct.passwd, acct.passhash, passwd)) */
-    if (chkpasswd(acct.passwd, acct.passhash, passwd))
+    if ((strncmp(passwd, acct.passwd, PASSLEN-1)
+          || strlen(passwd) < PASSLEN
+          || strncmp(passwd + PASSLEN - 1, acct.passhash, sizeof(acct.passhash)))
+        && chkpasswd(acct.passwd, acct.passhash, passwd))
     {
 
 #ifdef  DEBUG
@@ -1969,7 +1972,10 @@ login_user(
 
     /* Xshadow: 取得 client 的來源 */
 
-    str_ncpy(cu->rhost, cu->ibuf, sizeof(cu->rhost));
+    str_ncpy(cu->rhost, inet_ntoa(*(struct in_addr *)cu->rhost), sizeof(cu->rhost));
+
+    /* dns_name(cu->rhost, cu->ibuf); */
+    /* str_ncpy(cu->rhost, cu->ibuf, sizeof(cu->rhost)); */
 #if 0
     hp = gethostbyaddr(cu->rhost, sizeof(struct in_addr), AF_INET);
     str_ncpy(cu->rhost,
@@ -2566,7 +2572,7 @@ person_action(
 /* --------------------------------------------- */
 
 
-static const char *dscrb[] =
+static const char *const dscrb[] =
 {
     "\x1b[1;37m【 Verb + Nick：   動詞 + 對方名字 】\x1b[36m  例：//kick piggy\x1b[m",
     "\x1b[1;37m【 Verb + Message：動詞 + 要說的話 】\x1b[36m  例：//sing 天天天藍\x1b[m",
@@ -3104,11 +3110,9 @@ servo_daemon(
 
 #ifdef  SERVER_USAGE
 static void
-server_usage(int signum)
+server_usage(GCC_UNUSED int signum)
 {
     struct rusage ru;
-
-    (void)signum;
 
     if (getrusage(RUSAGE_SELF, &ru))
         return;
@@ -3116,8 +3120,8 @@ server_usage(int signum)
     fprintf(flog, "\n[Server Usage]\n\n"
         "user time: %.6f\n"
         "system time: %.6f\n"
-        "maximum resident set size: %lu P\n"
-        "integral resident set size: %lu\n"
+        "maximum resident set size: %ld P\n"
+        "integral resident set size: %ld\n"
         "page faults not requiring physical I/O: %d\n"
         "page faults requiring physical I/O: %d\n"
         "swaps: %d\n"
@@ -3152,9 +3156,8 @@ server_usage(int signum)
 
 
 static void
-reaper(int signum)
+reaper(GCC_UNUSED int signum)
 {
-    (void)signum;
     while (waitpid(-1, NULL, WNOHANG | WUNTRACED) > 0);
 }
 
@@ -3186,11 +3189,9 @@ sig_over(int signum)
 }
 
 static void
-sig_log(int signum)
+sig_log(GCC_UNUSED int signum)
 {
     char buf[128];
-
-    (void)signum;
 
     logit("OVER", "");
     fclose(flog);
@@ -3410,7 +3411,7 @@ main(
                 "\t-d  debug mode\n"
                 "\t-h  help\n",
                 argv[0]);
-            exit(0);
+            exit(2);
         }
     }
 

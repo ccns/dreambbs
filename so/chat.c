@@ -73,7 +73,7 @@ printchatline(
 #  else /* #ifdef M3_USE_PFTERM */
 static void
 printchatline(
-    char *msg)
+    const char *msg)
 {
     int line;
     extern screenline *cur_slp;
@@ -143,13 +143,11 @@ const char *msg)
 #endif  /* #ifdef M3_CHAT_SCROLL_MODE */
 
 static void
-chat_record(char *arg)
+chat_record(GCC_UNUSED char *arg)
 {
     FILE *fp;
     time_t now;
     char buf[80];
-
-    (void)arg;
 
     if (!cuser.userlevel)
         return;
@@ -173,7 +171,7 @@ chat_record(char *arg)
         holdon_fd = vio_fd;
         vio_fd = 0;
 
-        usr_fpath(buf, cuser.userid, tbf_ask());
+        usr_fpath(buf, cuser.userid, tbf_ask(-1));
 
         /* Thor.980602: 還原 vio_fd */
         vio_fd = holdon_fd;
@@ -265,11 +263,9 @@ int mode)
 
 
 static void
-chat_clear(char *arg)
+chat_clear(GCC_UNUSED char *arg)
 {
     int line;
-
-    (void)arg;
 
     for (line = 2; line < stop_line; line++)
     {
@@ -285,7 +281,7 @@ chat_clear(char *arg)
 
 static void
 print_chatid(
-char *chatid)
+const char *chatid)
 {
     move(b_lines - 1, 0);
     outs(chatid);
@@ -509,10 +505,8 @@ user_info *uentp)
 
 
 static void
-chat_users(char *arg)
+chat_users(GCC_UNUSED char *arg)
 {
-    (void)arg;
-
     /* 因為人數動輒上百，意義不大 */
     printchatline("");
     printchatline("【 " BOARDNAME "遊客列表 】");
@@ -549,9 +543,9 @@ struct chat_command chat_cmdtbl[] =
 };
 
 
-static inline int
+GCC_PURE static inline int
 chat_cmd_match(
-char *buf,
+const char *buf,
 const char *str)
 {
     int c1, c2;
@@ -606,14 +600,10 @@ int
 t_chat(void)
 {
     int ch, cfd, cmdpos, cmdcol;
-    char *ptr = NULL, buf[80], chatid[9];
+    char *ptr = NULL, buf[128], chatid[9];
     struct sockaddr_in sin;
 #if     defined(__OpenBSD__)
     struct hostent *h;
-#endif
-
-#ifdef CHAT_SECURE
-    extern char passbuf[];
 #endif
 
 #ifdef EVERY_Z
@@ -695,14 +685,19 @@ t_chat(void)
 #ifdef CHAT_SECURE
         /* Thor.0729: secured chat room */
         /* sprintf(buf, "/! %d %s %s %s\n", */
-        sprintf(buf, "/! %s %s %s\n",
+        sprintf(buf, "/! %s %s %s%s\n",
                 /* cuser.userno, cuser.userid, chatid, cuser.passwd); */
                 /* cuser.userno, cuser.userid, chatid, passbuf); */
-                cuser.userid, chatid, passbuf);
+                /* cuser.userid, chatid, passbuf); */
+                cuser.userid, chatid, cuser.passwd,
+                (*cuser.passwd == '$') ? cuser.passhash : "");
+
         /* Thor.0819: 拿掉userno */
         /* Thor.0730: passwd 改為最後的參數 */
         /* Thor.0813: passwd 改為真正的password, for C/S bbs */
         /* Thor.0813: xchatd中, chatid 自動跳過空白, 所以有空白會 invalid login */
+        /* IID.20190926: Global array variable `passbuf` is removed;
+              change `<passwd>` to `cuser.passwd` + `cuser.passhash` */
 
         /*
          * 作者  opus (人生有味是清歡)                                站內
@@ -811,7 +806,7 @@ t_chat(void)
         {
 #ifdef EVERY_BIFF
             /* Thor.980805: 有人在旁邊按enter才需要check biff */
-            static int old_biff1, old_biff2;
+            static int old_biff1, old_biff2 GCC_UNUSED;
             int biff1 = cutmp->ufo & UFO_BIFF;
             int biff2 = cutmp->ufo & UFO_BIFFN;
             if (biff1 && !old_biff1)
@@ -925,7 +920,7 @@ t_chat(void)
         if (ch == Ctrl('Z'))
         {
             char buf[IDLEN + 1];
-            screen_backup_t old_screen = {0};
+            screen_backup_t old_screen;
             scr_dump(&old_screen);
 
             /* Thor.0731: 暫存 mateid, 因為出去時可能會用掉 mateid(like query) */

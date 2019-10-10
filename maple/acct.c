@@ -39,7 +39,7 @@ void logitfile(const char *file, const char *key, const char *msg)
 /* 增加銀幣, 優良積分, 劣退                              */
 /* ----------------------------------------------------- */
 
-void addmoney(int addend, char *userid)
+void addmoney(int addend, const char *userid)
 {
     ACCT acct;
     if (acct_load(&acct, userid) >= 0)
@@ -55,7 +55,7 @@ void addmoney(int addend, char *userid)
     }
 }
 
-void addpoint1(int addend, char *userid)
+void addpoint1(int addend, const char *userid)
 {
     ACCT acct;
     if (acct_load(&acct, userid) >= 0)
@@ -67,7 +67,7 @@ void addpoint1(int addend, char *userid)
     }
 }
 
-void addpoint2(int addend, char *userid)
+void addpoint2(int addend, const char *userid)
 {
     ACCT acct;
     if (acct_load(&acct, userid) >= 0)
@@ -132,7 +132,7 @@ void keeplog(const char *fnlog, const char *board, const char *title, int mode  
 }
 
 
-int acct_load(ACCT * acct, char *userid)
+int acct_load(ACCT * acct, const char *userid)
 {
     int fd;
 
@@ -147,7 +147,7 @@ int acct_load(ACCT * acct, char *userid)
     return fd;
 }
 
-void acct_save(ACCT * acct)
+void acct_save(const ACCT * acct)
 {
     int fd;
     char fpath[80];
@@ -162,7 +162,7 @@ void acct_save(ACCT * acct)
 }
 
 
-int acct_userno(char *userid)
+int acct_userno(const char *userid)
 {
     int fd;
     int userno;
@@ -207,8 +207,8 @@ int acct_get(const char *msg, ACCT * acct)
 /* ----------------------------------------------------- */
 
 void x_file(int mode,            /* M_XFILES / M_UFILES */
-            const char *xlist[], /* description list */
-            const char *flist[]  /* filename list */
+            const char *const xlist[], /* description list */
+            const char *const flist[]  /* filename list */
     )
 {
     int n, i;
@@ -288,7 +288,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
     }
 }
 
-int check_admin(char *name)
+int check_admin(const char *name)
 {
     ADMIN admin;
     int pos = 0, fd;
@@ -340,11 +340,11 @@ void bitmsg(const char *msg, const char *str, int level)
 
 unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
                     int maxon,    /* 最多可以 enable 幾項 */
-                    const char *msg, const char *perms[])
+                    const char *msg, const char *const perms[])
 {
     int i, j, on;
 
-    extern char radix32[32];
+    extern const char radix32[32];
 
     move(2, 0);
     clrtobot();
@@ -413,10 +413,10 @@ static unsigned int setperm(unsigned int level)
 /* ----------------------------------------------------- */
 
 /* BLACK SU */
-static void acct_su(ACCT * u)
+static void acct_su(const ACCT * u)
 {
     XO *xo;
-    char path[80], id[20];
+    char path[80], id[20] GCC_UNUSED;
     int level, ufo;
 
     if (!supervisor)
@@ -450,7 +450,7 @@ static void acct_su(ACCT * u)
 /* BLACK SU */
 
 static void bm_list(            /* 顯示 userid 是哪些板的板主 */
-                       char *userid)
+                       const char *userid)
 {
     int len, ch;
     BRD *bhdr, *tail;
@@ -497,7 +497,7 @@ static void bm_list(            /* 顯示 userid 是哪些板的板主 */
 
 #ifdef LOG_ADMIN
 /* Thor.990405: log permission modify */
-static void perm_log(ACCT * u, int oldl)
+static void perm_log(const ACCT * u, int oldl)
 {
     int i;
     unsigned int level;
@@ -519,13 +519,14 @@ static void perm_log(ACCT * u, int oldl)
 }
 #endif
 
-void acct_show(ACCT * u, int adm    /* 1: admin 2: reg-form */
+void acct_show(const ACCT * u, int adm    /* 1: admin 2: reg-form */
     )
 {
     time_t now;
     int diff;
     unsigned int ulevel;
-    char *uid, buf[80];
+    const char *uid;
+    char buf[80];
 
     clrtobot();
 
@@ -581,7 +582,7 @@ void acct_show(ACCT * u, int adm    /* 1: admin 2: reg-form */
         {
             outs(Ctime(&u->deny));
             outs("\x1b[m");
-            prints("  距今還剩 %d 天 %d 時 \n", (u->deny - now) / 86400,
+            prints("  距今還剩 %ld 天 %ld 時 \n", (u->deny - now) / 86400,
                    (u->deny - now) / 3600 - ((u->deny - now) / 86400) * 24);
         }
     }
@@ -634,8 +635,7 @@ void bm_setup(ACCT * u, int adm)
         pmsg2("板主異動不加入日誌");
     else
     {
-        char tmp[80], why[80], buf[80];
-        (void)buf;
+        char tmp[80], why[80], buf[80] GCC_UNUSED;
         pmsg2("板主異動已加入站長日誌");
         if (!vget(b_lines, 0, "請輸入異動理由：", why, 40, DOECHO))
         {
@@ -659,7 +659,7 @@ void bm_setup(ACCT * u, int adm)
 }
 
 
-static int seek_log_email(char *mail, int mode)
+static int seek_log_email(const char *mail, int mode)
 {
     EMAIL email;
     int pos = 0, fd;
@@ -686,7 +686,7 @@ static int seek_log_email(char *mail, int mode)
     return -1;
 }
 
-void deny_log_email(char *mail, time_t deny)
+void deny_log_email(const char *mail, time_t deny)
 {
     EMAIL email;
     int pos;
@@ -1383,14 +1383,14 @@ int m_bmset(void)
 /* ----------------------------------------------------- */
 
 
-int ban_addr(char *addr)
+int ban_addr(const char *addr)
 {
     int i;
-    char *host, *str;
+    char *host, *str GCC_UNUSED;
     char foo[64];                /* SoC: 放置待檢查的 email address */
     const char* str_invalid;
 
-    static const char *invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
+    static const char *const invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
         "guest@", "@ppp", "@slip", "@dial", "unknown@", "@anon.penet.fi",
         "193.64.202.3", "brd@", NULL
     };
@@ -1413,12 +1413,12 @@ int ban_addr(char *addr)
     i = acl_has(FN_ETC_UNTRUST_ACL, foo, host + 1);
     /* *host = '@'; */
     if (i < 0)
-        TRACE("NOACL", host);
+        blog("NOACL", host);
     return i > 0;
 }
 
 #ifdef HAVE_WRITE
-static int allow_addr(char *addr)
+static int allow_addr(const char *addr)
 {
     int i;
     char *host;
@@ -1447,7 +1447,7 @@ check_nckuemail(char *email)
 
 /* 找尋是否有註冊三個以上之 Email */
 int find_same_email(            /* mode : 1.find 2.add 3.del */
-                       char *mail, int mode)
+                       const char *mail, int mode)
 {
     int pos = 0, fd;
     const char *fpath;
@@ -1522,7 +1522,7 @@ int find_same_email(            /* mode : 1.find 2.add 3.del */
 int u_addr(void)
 {
     const char *msg;
-    char addr[60], buf[30], agent[128], temp[60];
+    char addr[60], buf[40], agent[128], temp[60];
     HDR fhdr;
     FILE *fout;
     int vtime;
@@ -1606,7 +1606,7 @@ int u_addr(void)
                     move(15, 0);
                     clrtobot();
                     vget(15, 0, "請輸入以上所列出之工作站帳號的密碼: ", buf,
-                         20, NOECHO);
+                         PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
                     move(16, 0);
                     prints("\x1b[5;37m身份確認中...請稍候\x1b[m\n\n");
                     refresh();
@@ -1730,7 +1730,7 @@ int u_addr(void)
     return 0;
 }
 
-static const char *UFO_FLAGS[] = {
+static const char *const UFO_FLAGS[] = {
     "【保留】",
     "【保留】",
     "【保留】",
@@ -1760,7 +1760,7 @@ static const char *UFO_FLAGS[] = {
     "【保留】"
 };
 
-static const char *UFO2_FLAGS[] = {
+static const char *const UFO2_FLAGS[] = {
     /* COLOR */ "彩色模式",
     /* MOVIE */ "動畫顯示",
     /* BRDNEW */ "新推文",
@@ -1809,7 +1809,7 @@ void su_setup(ACCT * u)
     int ufo, nflag, len;
     char fpath[80];
     UTMP *up;
-    const char **flags = UFO_FLAGS;
+    const char *const *flags = UFO_FLAGS;
 
     up = utmp_find(u->userno);
     len = 21;
@@ -1844,7 +1844,7 @@ int u_setup(void)
     int ufo, nflag, len;
     char fpath[80];
 
-    const char **flags = UFO_FLAGS;
+    const char *const *flags = UFO_FLAGS;
 
     nflag = cuser.userlevel;
     if (!nflag)
@@ -1887,7 +1887,7 @@ int ue_setup(void)
 {
     int ufo2, nflag, len;
 
-    const char **flags = UFO2_FLAGS;
+    const char *const *flags = UFO2_FLAGS;
 
     nflag = cuser.userlevel;
     if (!nflag)
@@ -1914,7 +1914,7 @@ int u_lock(void)
 {
     char buf[PLAINPASSLEN];
     char swapmateid[IDLEN + 1] = "";
-    char IdleState[][IDLEN] = {
+    const char IdleState[][IDLEN] = {
         "自強觀星",
         "勝後放閃",
         "光復打球",
@@ -1955,7 +1955,7 @@ int u_lock(void)
 
     clear();
     prints("\x1b[1;44;33m%*s" BOARDNAME "    閒置/鎖定狀態%*s\x1b[m",
-           (d_cols >> 1) + 36 - sizeof(BOARDNAME), "", ((d_cols+1) >> 1) + 26, "");
+           (d_cols >> 1) + 36 - (int)(unsigned int)sizeof(BOARDNAME), "", ((d_cols+1) >> 1) + 26, "");
     move(4, 6);
     prints("閒置中：%s", cutmp->mateid);
     if (buf[0] == 'y' || buf[0] == 'Y')
@@ -1994,7 +1994,7 @@ int u_xfile(void)
 {
     int i;
 
-    static const char *desc[] = {
+    static const char *const desc[] = {
         "上站地點設定檔",
         "名片檔",
         "簽名檔 (每個 6 行，共 3 個)",
@@ -2006,7 +2006,7 @@ int u_xfile(void)
         NULL
     };
 
-    static const char *path[] = {
+    static const char *const path[] = {
         "acl",
         FN_PLANS,
         FN_SIGN,
@@ -2028,7 +2028,7 @@ int u_xfile(void)
 /* ----------------------------------------------------- */
 
 
-static int valid_brdname(char *brd)
+GCC_PURE static int valid_brdname(const char *brd)
 {
     int ch;
 
@@ -2275,7 +2275,7 @@ void brd_edit(int bno)
     prints("看板名稱：%s\n看板說明：%s\n板主名單：%s\n",
            newbh.brdname, newbh.title, newbh.BM);
     prints("看板類別：[%4s] 類別顏色：%d\n", newbh.class, newbh.color);
-    prints("文章數目：[最大] %d [最小] %d [天數] %d\n", newbh.expiremax,
+    prints("文章數目：[最大] %u [最小] %u [天數] %u\n", newbh.expiremax,
            newbh.expiremin, newbh.expireday);
 
     bitmsg(MSG_READPERM, STR_PERM, newbh.readlevel);
@@ -2377,16 +2377,16 @@ int a_editbrd(void)                /* cache.100618: 修改看板選項 */
 /* ----------------------------------------------------- */
 
 
-static void getfield(int line, int len, char *buf, char *desc, char *hint)
+static void getfield(int line, int len, char *buf, const char *desc, const char *hint)
 {
     move(line, 0);
     prints("%s:%s\n", desc, hint);
     vget(line + 1, 0, "         ", buf, len, GCARRY);
 }
 
-int check_idno(char *s)
+int check_idno(const char *s)
 {
-    char *p, *LEAD = "ABCDEFGHJKLMNPQRSTUVXYWZIO";
+    const char *p, *const LEAD = "ABCDEFGHJKLMNPQRSTUVXYWZIO";
     int x, i;
 
     if (strlen(s) != 10 || (p = strchr(LEAD, toupper(*s))) == NULL)
@@ -2543,8 +2543,8 @@ int u_register(void)
 
 static int scan_register_form(int fd)
 {
-    static char logfile[] = FN_RFORM_LOG;
-    static char *reason[] = { "輸入真實姓名", "詳實填寫申請表",
+    static const char logfile[] = FN_RFORM_LOG;
+    static const char *const reason[] = { "輸入真實姓名", "詳實填寫申請表",
         "詳填住址資料", "詳填連絡電話", "詳填服務單位、或學校系級",
         "用中文填寫申請單", "採用 E-mail 認證", "填寫身分證號碼", NULL
     };
@@ -2876,12 +2876,12 @@ int m_register(void)
 
 
 /* ----------------------------------------------------- */
-/* 產生追蹤記錄：建議改用 log_usies()、TRACE()           */
+/* 產生追蹤記錄：建議改用 log_usies()、blog()            */
 /* ----------------------------------------------------- */
 
 
 #ifdef  HAVE_REPORT
-void report(char *s)
+void report(const char *s)
 {
     static int disable = NA;
     int fd;
@@ -2967,7 +2967,7 @@ int m_trace(void)
             else
             {
                 report("closed report log");
-                f_mv("trace","trace.old");
+                f_mv("trace", "trace.old");
                 msg = "BBS   tracing disabled; log is in trace.old";
             }
             break;
@@ -2981,7 +2981,7 @@ int m_trace(void)
             }
             else
             {
-                f_mv("trace.chatd","trace.chatd.old");
+                f_mv("trace.chatd", "trace.chatd.old");
                 msg = "Chat  tracing disabled; log is in trace.chatd.old";
                 report("chatd trace log closed");
             }
@@ -2996,7 +2996,7 @@ int m_trace(void)
             }
             else
             {
-                f_mv("trace.bvote","trace.bvote.old");
+                f_mv("trace.bvote", "trace.bvote.old");
                 msg = "BVote tracing disabled; log is in trace.bvote.old";
                 report("BoardVote trace log closed");
             }

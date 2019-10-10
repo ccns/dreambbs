@@ -11,12 +11,12 @@
 /*-------------------------------------------------------*/
 #include "bbs.h"
 
-static int perm;
+static unsigned int perm;
 static int num;
 
 void
 acct_save(
-    ACCT *acct)
+    const ACCT *acct)
 {
     int fd;
     char fpath[80];
@@ -33,8 +33,8 @@ acct_save(
 
 static void
 reaper(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
     int fd;
 
@@ -104,23 +104,54 @@ main(
     strcpy(fname = fpath, "usr/@");
     fname = (char *) strchr(fname, '@');
 
-    if (argc > 2)
+    while (optind < argc)
     {
-        perm = atoi(argv[1]);
-        num  = atoi(argv[2]);
+        switch (getopt(argc, argv, "+" "p:t:"))
+        {
+        case -1:  // Position arguments
+            if (!(optarg = argv[optind++]))
+                break;
+            if (!perm)
+            {
+        case 'p':
+                if ((perm = strtoll(optarg, NULL, 0)))
+                    break;
+            }
+            else if (!(num > 0))
+            {
+        case 't':
+                if ((num = atoi(optarg)) > 0)
+                    break;
+            }
+            else
+                break;
+            // Falls through
+            // to handle invalid argument values
+        default:
+            perm = num = 0;  // Invalidate arguments
+            optind = argc;  // Ignore remaining arguments
+            break;
+        }
+    }
 
-        for (ch = 'a'; ch <= 'z'; ch++)
-        {
-            fname[0] = ch;
-            fname[1] = '\0';
-            traverse(fpath);
-        }
-        for (ch = '0'; ch <= '9'; ch++)
-        {
-            fname[0] = ch;
-            fname[1] = '\0';
-            traverse(fpath);
-        }
+    if (!(perm && num > 0))
+    {
+        printf("Usage: %s [-p] perm [-t] times\n", argv[0]);
+        printf("(perm != 0, times > 0)\n");
+        return -1;
+    }
+
+    for (ch = 'a'; ch <= 'z'; ch++)
+    {
+        fname[0] = ch;
+        fname[1] = '\0';
+        traverse(fpath);
+    }
+    for (ch = '0'; ch <= '9'; ch++)
+    {
+        fname[0] = ch;
+        fname[1] = '\0';
+        traverse(fpath);
     }
     return 0;
 }

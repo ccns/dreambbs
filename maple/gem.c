@@ -11,7 +11,7 @@
 
 extern XZ xz[];
 extern char xo_pool[];
-extern char radix32[];
+extern const char radix32[];
 extern char brd_bits[];
 
 extern BCACHE *bshm;
@@ -133,7 +133,7 @@ gem_body(
         if (xo->key >= GEM_LMANAGER)
         {
             max = vans("(A)新增資料 (G)海錨功\能 (W)資源回收筒 [N]無所事事 ");
-            switch(max)
+            switch (max)
             {
                 case 'a':
                     max = gem_add(xo);
@@ -288,13 +288,13 @@ gem_check(
 
 void
 brd2gem(
-    BRD *brd,
+    const BRD *brd,
     HDR *gem)
 {
     memset(gem, 0, sizeof(HDR));
     time(&gem->chrono);
     strcpy(gem->xname, brd->brdname);
-    sprintf(gem->title, "%-16s%s", brd->brdname, brd->title );
+    sprintf(gem->title, "%-16s%s", brd->brdname, brd->title);
     gem->xmode = GEM_BOARD | GEM_FOLDER;
 }
 
@@ -556,12 +556,9 @@ gem_state(
     XO *xo)
 {
     HDR *ghdr;
-    char *dir, fpath[80], site[64], path[512], *str;
+    char *dir, fpath[80], site[64] GCC_UNUSED, path[512] GCC_UNUSED, *str;
     struct stat st;
     int bno;
-
-    (void)site;
-    (void)path;
 
     /* Thor.990107: Ernie patch:
       gem.c gem_browse() 在進入 路)的 folder 時一律 op = GEM_VISIT
@@ -610,7 +607,7 @@ gem_state(
     outs(fpath);
 
     if (!stat(fpath, &st))
-        prints("\nTime: %s\nSize: %d", Ctime(&st.st_mtime), st.st_size);
+        prints("\nTime: %s\nSize: %ld", Ctime(&st.st_mtime), st.st_size);
 
     vmsg(NULL);
 
@@ -1308,8 +1305,9 @@ gem_cross(
 #ifdef  HAVE_DETECT_CROSSPOST
     HDR bpost;
 #endif
-    int method=1, rc, tag, locus, battr;
+    int method=1, rc GCC_UNUSED, tag, locus, battr;
     FILE *xfp;
+    int success_count = 0;
 
     if (!cuser.userlevel)
         return XO_NONE;
@@ -1405,17 +1403,32 @@ gem_cross(
                     board_main();
                 }
 #endif
+                success_count++;
             }
         } while (locus < tag);
 
-        if ( battr & BRD_NOCOUNT)
+        if (success_count == 0)
         {
-            outs("轉錄完成，文章不列入紀錄，敬請包涵。");
+            vmsg("轉錄失敗。");
+        }
+        else if (battr & BRD_NOCOUNT)
+        {
+            if (success_count == ((tag == 0) ? 1 : tag))
+                prints("轉錄 %d 篇成功\，文章不列入紀錄，敬請包涵。", success_count);
+            else
+                prints("轉錄 %d 篇成功\，%d 篇失敗，文章不列入紀錄，敬請包涵。",
+                    success_count, ((tag == 0) ? 1 : tag) - success_count);
         }
         else
         {
-            cuser.numposts += (tag == 0) ? 1 : tag;
-            vmsg("轉錄完成");
+            cuser.numposts += success_count; /* IID.20190730: Use the count of successful reposting */
+            if (success_count == ((tag == 0) ? 1 : tag))
+                sprintf(buf, "轉錄 %d 篇成功\，你的文章增為 %d 篇",
+                    success_count, cuser.numposts);
+            else
+                sprintf(buf, "轉錄 %d 篇成功\，%d 篇失敗，你的文章增為 %d 篇",
+                    success_count, ((tag == 0) ? 1 : tag) - success_count, cuser.numposts);
+            vmsg(buf);
         }
     }
     return XO_HEAD;

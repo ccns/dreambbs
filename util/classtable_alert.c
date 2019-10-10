@@ -135,7 +135,7 @@ static void
 init(void)
 {
     UTMP *up, *uceil;
-    int userno;
+    GCC_UNUSED int userno;
     BMW bmw;
     CLASS_TABLE_ALERT *ptr;
     time_t now;
@@ -212,7 +212,7 @@ utmp_find(
 
 void
 bcache(
-    char *fpath)
+    const char *fpath)
 {
     int fd, size=0;
     struct stat st;

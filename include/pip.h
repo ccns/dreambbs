@@ -272,7 +272,7 @@ typedef struct playrule playrule;
 /* 11000 一二系的魔法傷害較大 */
 /* 以下類推                   */
 /* 雷系 冰系 火系 土系 風系 */
-/*struct playrule goodmanlist[] = {
+/*const struct playrule goodmanlist[] = {
 }*/
 
 #define PIP_BADMAN       (3)            /* 怪物整體個數  */
@@ -325,7 +325,7 @@ struct goodsofpip
 };
 typedef struct goodsofpip goodsofpip;
 
-struct goodsofpip pipfoodlist[] =
+const struct goodsofpip pipfoodlist[] =
 {
     {0, "物品名",       "說明buy",      "說明feed",                         0,      0,      0, 0},
     {1, "好吃的食物",   "體力恢復50",   "每吃一次食物會恢復體力50喔!",     50,     50,      1, 1},
@@ -333,7 +333,7 @@ struct goodsofpip pipfoodlist[] =
     {0, NULL,           NULL,           NULL,                               0,      0,      0, 0}
 };
 
-struct goodsofpip pipmedicinelist[] =
+const struct goodsofpip pipmedicinelist[] =
 {
     {0, "物品名",       "說明buy",      "說明feed",                         0,      0,      0, 0},
     {1, "好用大補丸",   "體力恢復600",  "恢復大量流失體力的良方",         500,    600,      4, 4},
@@ -343,7 +343,7 @@ struct goodsofpip pipmedicinelist[] =
     {0, NULL,           NULL,           NULL,                               0,      0,      0, 0}
 };
 
-struct goodsofpip pipotherlist[] = {
+const struct goodsofpip pipotherlist[] = {
     {0, "物品名",       "說明buy",      "說明feed",                         0,      0,      0, 0},
     {1, "樂高玩具組",   "快樂滿意度",   "玩具讓小雞更快樂啦...",           50,      0,      5, 5},
     {2, "百科全書",     "知識的來源",   "書本讓小雞更聰明更有氣質啦...",  100,      0,      6, 6},
@@ -371,7 +371,7 @@ struct weapon
 typedef struct weapon weapon;
 
 /*名字, 需hp, 需mp, 需speed, 攻擊, 防護, 速度, 買價, 賣價, 特別, 圖檔*/
-struct weapon headlist[] =
+const struct weapon headlist[] =
 {
     {"不買裝備",   0,   0,   0,  0,   0,  0,      0,      0, 0, 0},
     {"塑膠帽子",   0,   0,   0,  0,   5,  0,    500,    300, 0, 0},
@@ -384,7 +384,7 @@ struct weapon headlist[] =
 };
 
 /*名字, 需hp, 需mp, 需speed, 攻擊, 防護, 速度, 買價, 賣價, 特別, 圖檔*/
-struct weapon rhandlist[] =
+const struct weapon rhandlist[] =
 {
     {"不買裝備",   0,   0,   0,   0,   0,  0,      0,      0, 0, 0},
     {"大木棒",     0,   0,   0,   5,   0,  0,   1000,    700, 0, 0},
@@ -400,7 +400,7 @@ struct weapon rhandlist[] =
 };
 
 /*名字, 需hp, 需mp, 需speed, 攻擊, 防護, 速度, 買價, 賣價, 特別, 圖檔*/
-struct weapon lhandlist[] =
+const struct weapon lhandlist[] =
 {
     {"不買裝備",   0,   0,   0,  0,   0,  0,      0,      0, 0, 0},
     {"大木棒",     0,   0,   0,  5,   0,  0,   1000,    700, 0, 0},
@@ -414,7 +414,7 @@ struct weapon lhandlist[] =
 };
 
 /*名字, 需hp, 需mp, 需speed, 攻擊, 防護, 速度, 買價, 賣價, 特別, 圖檔*/
-struct weapon bodylist[] =
+const struct weapon bodylist[] =
 {
     {"不買裝備",   0,   0,   0,  0,   0,  0,      0,      0, 0, 0},
     {"塑膠冑甲",  40,   0,   0,  0,   5,  0,   1000,    700, 0, 0},
@@ -427,7 +427,7 @@ struct weapon bodylist[] =
 };
 
 /*名字, 需hp, 需mp, 需speed, 攻擊, 防護, 速度, 買價, 賣價, 特別, 圖檔*/
-struct weapon footlist[] =
+const struct weapon footlist[] =
 {
     {"不買裝備",    0,   0,   0,  0,   0,   0,      0,      0, 0, 0},
     {"塑膠拖鞋",    0,   0,   0,  0,   0,  10,    800,    500, 0, 0},
@@ -440,7 +440,7 @@ struct weapon footlist[] =
     {NULL,          0,   0,   0,  0,   0,   0,      0,      0, 0, 0}
 };
 
-struct royalset royallist[] =
+const struct royalset royallist[] =
 {
     {"T",       "拜訪對象",       0,     0,      0,       0, NULL,                                     NULL},
     {"A",       "皇城騎兵連",     1,    10,     15,     100, "你真好，來陪我聊天..",                   "守衛星空的安全是很辛苦的.."},
@@ -459,7 +459,7 @@ struct royalset royallist[] =
 #if 1
 struct playrule *badmanlist;
 #else
-struct playrule badmanlist[] = {
+const struct playrule badmanlist[] = {
     "布丁怪",        40, 0,    10, 0,    10,     10,      10,    100, "11101",    1, 0,
     "毛蟲怪",        50, 0,    10, 0,    10,     10,      10,    100, "11101",    2, 0,
     "史萊姆",        55, 0,    10, 0,    15,     40,      10,    150, "11000",    3, 0,
@@ -543,7 +543,7 @@ struct playrule badmanlist[] = {
 };
 #endif  /* #if 1 */
 
-struct magicset treatmagiclist[] =
+const struct magicset treatmagiclist[] =
 {
     {"治療法術",      0,      0,      0,      0,      0,      0},
     {"氣療術",        5,      1,     20,      0,     10,      0},
@@ -554,7 +554,7 @@ struct magicset treatmagiclist[] =
     {NULL,            0,      0,      0,      0,      0,      0}
 };
 
-struct magicset thundermagiclist[] =
+const struct magicset thundermagiclist[] =
 {
     {"雷系法術",        0,      0,      0,      0,      0,      0},
     {"雷咒",           10,      0,     20,      1,      5,      0},
@@ -567,7 +567,7 @@ struct magicset thundermagiclist[] =
     {NULL,              0,      0,      0,      0,      0,      0}
 };
 
-struct magicset icemagiclist[] =
+const struct magicset icemagiclist[] =
 {
     {"冰系法術",        0,      0,      0,      0,      0,      0},
     {"冰咒",           10,      0,     20,      1,      5,      0},
@@ -580,7 +580,7 @@ struct magicset icemagiclist[] =
     {NULL,              0,      0,      0,      0,      0,      0}
 };
 
-struct magicset firemagiclist[] =
+const struct magicset firemagiclist[] =
 {
     {"炎系法術",        0,      0,      0,      0,      0,      0},
     {"火術",            5,      0,     10,      1,      5,      0},
@@ -595,7 +595,7 @@ struct magicset firemagiclist[] =
     {NULL,              0,      0,      0,      0,      0,      0}
 };
 
-struct magicset earthmagiclist[] =
+const struct magicset earthmagiclist[] =
 {
     {"土系法術",        0,      0,      0,      0,      0,      0},
     {"土咒",           10,      0,     20,      1,      5,      0},
@@ -608,7 +608,7 @@ struct magicset earthmagiclist[] =
     {NULL,              0,      0,      0,      0,      0,      0}
 };
 
-struct magicset windmagiclist[] =
+const struct magicset windmagiclist[] =
 {
     {"風系法術",        0,      0,      0,      0,      0,      0},
     {"風咒",           10,      0,     20,      1,      5,      0},
@@ -621,7 +621,7 @@ struct magicset windmagiclist[] =
     {NULL,              0,      0,      0,      0,      0,      0}
 };
 
-struct magicset specialmagiclist[] =
+const struct magicset specialmagiclist[] =
 {
     {"特殊法術",           0,   0,      0,     0,      0,      0x00000000},
     {"爆靈地獄",        2000,   0,     80,     1,     20,      0x00000001},
@@ -633,7 +633,7 @@ struct magicset specialmagiclist[] =
 };
 
 /*    名字        體力MAX法力MAX  攻擊   防護     速度    財寶   特別   圖檔*/
-struct playrule resultmanlist[] =
+const struct playrule resultmanlist[] =
 {
     {"茱麗葉塔",     60,    0,     20,    0,       20,     20,    20,    150, "11101",   0, 0},
     {"菲歐利娜",     60,    0,     20,    0,       30,     30,    30,    200, "01111",   0, 0},
@@ -653,7 +653,7 @@ struct newendingset
 typedef struct newendingset newendingset;
 
 /*萬能*/
-struct newendingset endmodeall_purpose[] =
+const struct newendingset endmodeall_purpose[] =
 {
     {"女性職業",                "男生職業",               0},
     {"成為這個國家新女王",      "成為這個國家新國王",   500},
@@ -700,7 +700,7 @@ struct newendingset endmodeall_purpose[] =
 };
 
 /*戰鬥*/
-struct newendingset endmodecombat[] =
+const struct newendingset endmodecombat[] =
 {
     {"女性職業",                "男生職業",                     0},
     {"被封為勇者 戰士型",       "被封為勇者 戰士型",          420},
@@ -715,7 +715,7 @@ struct newendingset endmodecombat[] =
 };
 
 /*魔法*/
-struct newendingset endmodemagic[] =
+const struct newendingset endmodemagic[] =
 {
     {"女性職業",                "男生職業",               0},
     {"被封為勇者 魔法型",       "被封為勇者 魔法型",    420},
@@ -730,7 +730,7 @@ struct newendingset endmodemagic[] =
 };
 
 /*社交*/
-struct newendingset endmodesocial[] =
+const struct newendingset endmodesocial[] =
 {
     {"女性職業",                "男生職業",             0},
     {"成為國王的寵妃",          "成為女王的駙馬爺",   170},
@@ -744,7 +744,7 @@ struct newendingset endmodesocial[] =
 };
 
 /*藝術*/
-struct newendingset endmodeart[] =
+const struct newendingset endmodeart[] =
 {
     {"女性職業",                "男生職業",       0},
     {"成為了小丑",              "成為了小丑",   100},
@@ -755,7 +755,7 @@ struct newendingset endmodeart[] =
 };
 
 /*暗黑*/
-struct newendingset endmodeblack[] =
+const struct newendingset endmodeblack[] =
 {
     {"女性職業",                "男生職業",                  0},
     {"變成了魔王",              "變成了魔王",            -1000},
@@ -769,7 +769,7 @@ struct newendingset endmodeblack[] =
 };
 
 /*家事*/
-struct newendingset endmodefamily[] =
+const struct newendingset endmodefamily[] =
 {
     {"女性職業",                "男生職業",             0},
     {"正在新娘修行",            "正在新郎修行",        50},

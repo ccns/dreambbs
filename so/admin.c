@@ -18,7 +18,7 @@ static int admin_add(XO *xo);
 static void
 admin_item(
 int num,
-ADMIN *admin)
+const ADMIN *admin)
 {
     prints("%6d     %s\n", num, admin->name);
 }

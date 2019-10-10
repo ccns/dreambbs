@@ -17,8 +17,8 @@ UTMP *cutmp, utmp;
 static int pal_count;
 static int *pal_pool;
 static UCACHE *ushm;
-static int can_see(UTMP *up);
-static int can_message(UTMP *up);
+static int can_see(const UTMP *up);
+static int can_message(const UTMP *up);
 typedef UTMP *pickup;
 
 static void *
@@ -46,7 +46,7 @@ static int pickup_way;
 
 const char *
 bmode(
-    UTMP *up,
+    const UTMP *up,
     int simple)
 {
     static char modestr[32];
@@ -85,11 +85,12 @@ bmode(
 /* ----------------------------------------------------- */
 
 
-static int
+GCC_PURE static int
 can_see(
-    UTMP *up)
+    const UTMP *up)
 {
-    int count, *cache, datum, mid;
+    int count, datum, mid;
+    const int *cache;
 
     if ((cache = up->pal_spool))
     {
@@ -131,7 +132,7 @@ can_see(
 
 }
 
-static int
+GCC_PURE static int
 is_bad(
     int userno)
 {
@@ -158,9 +159,9 @@ is_bad(
     return 0;
 }
 
-static int
+GCC_PURE static int
 can_message(
-    UTMP *up)
+    const UTMP *up)
 {
     int self, ufo, can;
 
@@ -172,7 +173,7 @@ can_message(
 
     ufo = up->ufo;
 
-    if ( ufo & (UFO_MESSAGE))           /* 遠離塵囂 */
+    if (ufo & (UFO_MESSAGE))           /* 遠離塵囂 */
         return NA;
 
     if (!(ufo & UFO_QUIET))
@@ -186,9 +187,9 @@ can_message(
 }
 
 
-static int
+GCC_PURE static int
 can_override(
-    UTMP *up)
+    const UTMP *up)
 {
     int self, ufo, can;
 
@@ -270,7 +271,7 @@ pal_cache(void)
 
     cache = NULL;
     count = 0;
-    ufo = cuser.ufo & ~( UFO_BIFF | UFO_BIFFN | UFO_REJECT | UFO_FCACHE);
+    ufo = cuser.ufo & ~( UFO_BIFF | UFO_BIFFN | UFO_REJECT | UFO_FCACHE );
 
     fsize = 0;
     usr_fpath(fpath, cuser.userid, FN_PAL);
@@ -334,7 +335,7 @@ static int ulist_head(XO *xo);
 static int ulist_init(XO *xo);
 
 
-static const char *msg_pickup_way[PICKUP_WAYS] =
+static const char *const msg_pickup_way[PICKUP_WAYS] =
 {
     "任意",
     "代號",
@@ -344,11 +345,11 @@ static const char *msg_pickup_way[PICKUP_WAYS] =
     "閒置"
 };
 
-static char
+GCC_PURE static char
 ck_state(
     int in1,
     int in2,
-    UTMP *up,
+    const UTMP *up,
     int mode)
 {
     if (up->ufo & in2)
@@ -372,9 +373,9 @@ ulist_body(
 {
     pickup *pp;
     UTMP *up;
-    int cnt, max, ufo, self, userno, sysop, diff, diffmsg, fcolor, colortmp;
+    int cnt, max, ufo, self, userno, sysop GCC_UNUSED, diff, diffmsg, fcolor, colortmp;
     char buf[16], color[20], ship[80];
-    const char *wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
+    const char *const wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 
 //  pal = cuser.ufo;
 
@@ -474,7 +475,7 @@ ulist_cmp_nick(
     return str_cmp((*(const UTMP *const *)i) -> username, (*(const UTMP *const *)j) -> username);
 }
 
-static int (*ulist_cmp[]) (const void *i, const void *j) =
+static int (*const ulist_cmp[]) (const void *i, const void *j) =
 {
     ulist_cmp_userid,
     ulist_cmp_host,
@@ -595,19 +596,56 @@ main(
     XO xo;
     char fpath[128];
     int fd;
+    const char *userid = NULL;
 
     chdir(BBSHOME);
 
+    pickup_way = -1;
+    while (optind < argc)
+    {
+        switch (getopt(argc, argv, "+" "u:e:m:x:f:"))
+        {
+        case -1:  // Position arguments
+            if (!(optarg = argv[optind++]))
+                break;
+            if (!userid)
+        case 'u':
+                userid = optarg;
+            else if (!(pickup_way >= 0))
+            {
+        case 'p':
+                if ((pickup_way = atoi(optarg)) >= 0 && pickup_way < PICKUP_WAYS)
+                    break;
+            }
+            else
+                break;
+            // Falls through
+            // to handle invalid argument values
+        default:
+            userid = NULL;  // Invalidate arguments
+            optind = argc;  // Ignore remaining arguments
+            break;
+        }
+    }
+
+    if (!(userid && pickup_way >= 0))
+    {
+        fprintf(stderr, "Usage: %s [-u] <userid> [-p] <pickup_way>\n", argv[0]);
+        fprintf(stderr, "pickup_ways:\n");
+        for (pickup_way = 0; pickup_way < PICKUP_WAYS; pickup_way++)
+            fprintf(stderr, "\t%d: Sorted by %s\n", pickup_way, msg_pickup_way[pickup_way]);
+        return 2;
+    }
+
     ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
     cutmp = &utmp;
-    usr_fpath(fpath, argv[1], FN_ACCT);
+    usr_fpath(fpath, userid, FN_ACCT);
     fd = open(fpath, O_RDONLY);
     if (fd>=0)
     {
         if (read(fd, &cuser, sizeof(ACCT)) == sizeof(ACCT))
         {
             reset_utmp();
-            pickup_way = atoi(argv[2]);
             pal_cache();
             ulist_init(&xo);
         }

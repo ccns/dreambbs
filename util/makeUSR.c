@@ -24,8 +24,8 @@ int total;
 
 static void
 reaper(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
     int fd;
 
@@ -81,10 +81,8 @@ traverse(
 int
 main(void)
 {
-    int ch, mode = 0;
+    int ch, mode GCC_UNUSED = 0;
     char *fname, fpath[256];
-
-    (void)mode;
 
     setgid(BBSGID);
     setuid(BBSUID);

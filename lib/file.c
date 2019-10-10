@@ -10,7 +10,7 @@
 #include <sys/stat.h>
 #include <time.h>
 
-static int rm_dir(char *fpath);
+static int rm_dir(const char *fpath);
 
 void f_cat(const char *fpath, const char *msg)
 {
@@ -108,7 +108,7 @@ int f_exlock(int fd)
     /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
     fl.l_type = F_WRLCK;
     /* Thor.990309: with blocking */
-    return fcntl(fd, F_SETLKW /*F_SETLK */ , &fl);
+    return fcntl(fd, F_SETLKW /*F_SETLK */, &fl);
 }
 
 int f_unlock(int fd)
@@ -118,7 +118,7 @@ int f_unlock(int fd)
 #endif
     /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
     fl.l_type = F_UNLCK;
-    return fcntl(fd, F_SETLKW /*F_SETLK */ , &fl);
+    return fcntl(fd, F_SETLKW /*F_SETLK */, &fl);
 }
 
 #ifdef MAP_FILE                    /* 44BSD defines this & requires it to mmap files */
@@ -127,10 +127,11 @@ int f_unlock(int fd)
 #define DAO_MAP       (MAP_SHARED)
 #endif
 
-char *f_map(char *fpath, int *fsize)
+char *f_map(const char *fpath, int *fsize)
 {
     int fd, size;
     struct stat st;
+    char *data;
 
     if ((fd = open(fpath, O_RDONLY)) < 0)
         return (char *)-1;
@@ -141,10 +142,10 @@ char *f_map(char *fpath, int *fsize)
         return (char *)-1;
     }
 
-    fpath = (char *)mmap(NULL, size, PROT_READ, DAO_MAP, fd, 0);
+    data = (char *)mmap(NULL, size, PROT_READ, DAO_MAP, fd, 0);
     close(fd);
     *fsize = size;
-    return fpath;
+    return data;
 }
 
 
@@ -175,7 +176,7 @@ int f_mv(const char *src, const char *dst)
 /* exclusively create file [*.n]                         */
 /* ----------------------------------------------------- */
 
-FILE *f_new(char *fold, char *fnew)
+FILE *f_new(const char *fold, char *fnew)
 {
     int fd, try;
 
@@ -211,7 +212,7 @@ FILE *f_new(char *fold, char *fnew)
     return NULL;
 }
 
-int f_open(char *fpath)
+int f_open(const char *fpath)
 {
     int fd;
     struct stat st;
@@ -269,7 +270,7 @@ void brd_fpath(char *fpath, const char *board, const char *fname)
 }
 
 
-void gem_fpath(char *fpath, char *board, char *fname)
+void gem_fpath(char *fpath, const char *board, const char *fname)
 {
     *fpath++ = 'g';
     *fpath++ = 'e';
@@ -310,7 +311,7 @@ void usr_fpath(char *fpath, const char *user, const char *fname)
 }
 
 
-int f_rm(char *fpath)
+int f_rm(const char *fpath)
 {
     struct stat st;
 
@@ -323,7 +324,7 @@ int f_rm(char *fpath)
     return rm_dir(fpath);
 }
 
-static int rm_dir(char *fpath)
+static int rm_dir(const char *fpath)
 {
     struct stat st;
     DIR *dirp;

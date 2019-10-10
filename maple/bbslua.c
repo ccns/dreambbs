@@ -162,7 +162,7 @@ extern time_t now;
 #endif
 
 #ifndef BBSLUA_FORCE_TIME4_T
-static char *(*const ctime4)(const time_t *clock) = ctime;
+static inline char *ctime4(const time_t *clock) { return ctime(clock); }
 #endif
 
 #ifdef BBSLUA_HAVE_STR_ANSI
@@ -174,7 +174,7 @@ static inline void strip_ansi(char *dst, const char *str, int mode)
 #endif
 
 #ifndef BBSLUA_HAVE_DOUPDATE
-static void (*const doupdate)(void) = refresh;
+static inline void doupdate(void) { refresh(); }
 #endif
 
 #ifndef BBSLUA_HAVE_GETYX
@@ -190,7 +190,7 @@ static inline void getyx(int *y, int *x)
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef BBSLUA_HAVE_STRLEN_NOANSI
-static int
+GCC_PURE static int
 strlen_noansi(const char *str)        /* String length after stripping ANSI code */
 {
     int count, ch, ansi;
@@ -240,7 +240,7 @@ OpenCreate(const char *path, int flags)
 #ifndef VBUFLEN
 #define VBUFLEN     (ANSILINELEN)
 #endif
-static int
+GCC_CHECK_FORMAT(1, 2) static int
 vmsgf(const char *fmt, ...)
 {
     char msg[VBUFLEN];
@@ -1043,7 +1043,7 @@ bl_k2s(lua_State* L, int v)
         lua_pushfstring(L, "F%d", KEY_F1 - v +1);
   #endif
 #endif
-    else switch(v)
+    else switch (v)
     {
         case KEY_UP:    lua_pushstring(L, "UP");    break;
         case KEY_DOWN:  lua_pushstring(L, "DOWN");  break;
@@ -1641,7 +1641,7 @@ bls_getcat(const char *s)
 static int
 bls_getlimit(const char *p)
 {
-    switch(bls_getcat(p))
+    switch (bls_getcat(p))
     {
         case BLS_GLOBAL:
             return  BLSCONF_GMAXSIZE;
@@ -1655,7 +1655,7 @@ static int
 bls_setfn(char *fn, size_t sz, const char *p)
 {
     *fn = 0;
-    switch(bls_getcat(p))
+    switch (bls_getcat(p))
     {
         case BLS_GLOBAL:
             snprintf(fn, sz, "%s/" BLSCONF_PREFIX "U%08x",
@@ -1831,7 +1831,7 @@ static const struct luaL_Reg lib_bbslua [] = {
     { "color",      bl_attrset },
     { "attrset",    bl_attrset },
     { "strip_ansi", bl_strip_ansi },
-    { NULL, NULL},
+    { NULL, NULL },
 };
 
 #ifdef BLSCONF_ENABLED
@@ -1840,7 +1840,7 @@ static const struct luaL_Reg lib_store [] = {
     { "save",       bls_save },
     { "limit",      bls_limit },
     { "iolimit",    bls_iolimit },
-    { NULL, NULL},
+    { NULL, NULL },
 };
 #endif
 
@@ -2144,7 +2144,7 @@ bbslua_detect_range(char **pbs, char **pbe, int *lineshift)
 // BBSLUA TOC Processing
 //////////////////////////////////////////////////////////////////////////
 
-static const char *bbsluaTocTags[] =
+static const char *const bbsluaTocTags[] =
 {
     "interface",
     "latestref",
@@ -2158,7 +2158,7 @@ static const char *bbsluaTocTags[] =
     NULL
 };
 
-static const char *bbsluaTocPrompts[] =
+static const char *const bbsluaTocPrompts[] =
 {
     "界面版本",
     "最新版本",
@@ -2352,9 +2352,9 @@ bbslua_logo(lua_State *L)
     {
         int sz = t_columns -1;
         const char
-            *prompt1 = "    提醒您執行中隨時可按 ",
-            *prompt2 = "[Ctrl-C]",
-            *prompt3 = " 強制中斷 BBS-Lua 程式";
+            *const prompt1 = "    提醒您執行中隨時可按 ",
+            *const prompt2 = "[Ctrl-C]",
+            *const prompt3 = " 強制中斷 BBS-Lua 程式";
         sz -= strlen(prompt1);
         sz -= strlen(prompt2);
         sz -= strlen(prompt3);
@@ -2383,7 +2383,7 @@ static const char* bbslua_reader(lua_State *L, void *ud, size_t *size)
     (void)L;
     if (ls->size == 0) return NULL;
     if (ls->lineshift > 0) {
-        const char *linefeed = "\n";
+        const char *const linefeed = "\n";
         *size = 1;
         ls->lineshift--;
         return linefeed;
@@ -2718,7 +2718,7 @@ bbslua(const char *fpath)
     // ready for running
     clear();
     blrt.running =1;
-    lua_sethook(L, bbsluaHook, LUA_MASKCOUNT, BLCONF_EXEC_COUNT );
+    lua_sethook(L, bbsluaHook, LUA_MASKCOUNT, BLCONF_EXEC_COUNT);
 
     refresh();
     // check is now done inside hook

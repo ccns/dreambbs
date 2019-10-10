@@ -39,20 +39,20 @@ GETVALUE = echo $(VALUEIF$(conf::= $(conf:M*:$(UNQUOTE)))$(default::= $(default:
 
 ## BBS Release Version Prefix
 BBSCONF_ORIGIN		:= $(REALSRCROOT)/include/config.h
-BBSVER != ${GETVALUE${conf::= "BBSVER_PREFIX"}${default::= ""}${hdr::= ${BBSCONF_ORIGIN}}}
+BBSVER != $(GETVALUE$(conf::= "BBSVER_PREFIX")$(default::= "")$(hdr::= $(BBSCONF_ORIGIN)))
 
 # rules ref: PttBBS: mbbsd/Makefile
 BBSCONF		:= $(REALSRCROOT)/dreambbs.conf
-DEF_LIST	!= sh -c '${GETCONFS${hdr::= ${BBSCONF}}}'
-DEF_TEST	 = [ ${DEF_LIST:M${conf:M*:S/"//g:N"}} ]  # Balance the quotes
+DEF_LIST	!= sh -c '$(GETCONFS$(hdr::= $(BBSCONF)))'
+DEF_TEST	 = [ $(DEF_LIST:M$(conf:M*:S/"//g:N")) ]  # Balance the quotes
 DEF_YES		:= && echo "YES" || echo ""
-USE_PMORE	!= sh -c '${DEF_TEST${conf::= "M3_USE_PMORE"}} ${DEF_YES}'
-USE_PFTERM	!= sh -c '${DEF_TEST${conf::= "M3_USE_PFTERM"}} ${DEF_YES}'
-USE_BBSLUA	!= sh -c '${DEF_TEST${conf::= "M3_USE_BBSLUA"}} ${DEF_YES}'
-USE_BBSRUBY	!= sh -c '${DEF_TEST${conf::= "M3_USE_BBSRUBY"}} ${DEF_YES}'
-USE_LUAJIT	!= sh -c '${DEF_TEST${conf::= "BBSLUA_USE_LUAJIT"}} ${DEF_YES}'
+USE_PMORE	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_PMORE")) $(DEF_YES)'
+USE_PFTERM	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_PFTERM")) $(DEF_YES)'
+USE_BBSLUA	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSLUA")) $(DEF_YES)'
+USE_BBSRUBY	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSRUBY")) $(DEF_YES)'
+USE_LUAJIT	!= sh -c '$(DEF_TEST$(conf::= "BBSLUA_USE_LUAJIT")) $(DEF_YES)'
 
-CLANG_MODERN != [ $$(${GETVALUE${conf::= "__clang_major__"}${default::= 0}${hdr::=}}) -ge 6 ] ${DEF_YES}
+CC_HASFLAGS = echo "" | $(CC) -o /dev/null -x c -E $(flags:M*) -Werror - >/dev/null 2>&1
 
 .if $(CC) == "clang"
 CFLAGS_WARN	+= -Wno-invalid-source-encoding
@@ -81,7 +81,8 @@ NO_SO		?=
 CFLAGS_MAPLE	+= -DNO_SO
 .endif
 
-.if $(CLANG_MODERN)
+CC_HAS_W_UNREACHABLE_CODE_AGGRESSIVE != $(CC_HASFLAGS$(flags::= -Wunreachable-code-aggressive)) $(DEF_YES)
+.if $(CC_HAS_W_UNREACHABLE_CODE_AGGRESSIVE)
 CFLAGS_COMPAT  += -Wunreachable-code-aggressive
 .else
 CFLAGS_COMPAT  += -Wunreachable-code
@@ -104,8 +105,8 @@ CFLAGS_COMPAT  += -Wunreachable-code
 .endif
 .endif
 
-LUA_CFLAGS	!= pkg-config --cflags ${LUA_PKG_NAME}
-LUA_LDFLAGS	!= pkg-config --libs ${LUA_PKG_NAME}
+LUA_CFLAGS	!= pkg-config --cflags $(LUA_PKG_NAME)
+LUA_LDFLAGS	!= pkg-config --libs $(LUA_PKG_NAME)
 .endif
 
 
@@ -117,7 +118,7 @@ LUA_LDFLAGS	!= pkg-config --libs ${LUA_PKG_NAME}
     RUBY_CFLAGS_CMD	= | sed 's/x86_64/i386/'
 .endif
 
-RUBY_CFLAGS	!= pkg-config --cflags ruby-2.2 ${RUBY_CFLAGS_CMD}
+RUBY_CFLAGS	!= pkg-config --cflags ruby-2.2 $(RUBY_CFLAGS_CMD)
 RUBY_LDFLAGS	!= pkg-config --libs ruby-2.2
 .endif
 

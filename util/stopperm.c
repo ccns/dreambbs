@@ -11,14 +11,14 @@
 #include "bbs.h"
 
 static int funo;
-static char *kmail;
+static const char *kmail;
 static int total;
 static FILE *flog;
 
 static void
 reaper(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
     int fd;
 
@@ -73,8 +73,8 @@ traverse(
 
 static int
 same_mail2(
-    char *mail,
-    char *file)
+    const char *mail,
+    const char *file)
 {
     int ch;
     char *fname, fpath[256];
@@ -160,7 +160,7 @@ keeplog(
 int
 acct_load(
     ACCT *acct,
-    char *userid)
+    const char *userid)
 {
     int fd;
 
@@ -177,7 +177,7 @@ acct_load(
 
 void
 acct_save(
-    ACCT *acct)
+    const ACCT *acct)
 {
     int fd;
     char fpath[80];
@@ -194,7 +194,7 @@ acct_save(
 
 int
 seek_log_email(
-    char *mail)
+    const char *mail)
 {
     EMAIL email;
     int pos=0, fd;
@@ -222,7 +222,7 @@ seek_log_email(
 
 void
 deny_log_email(
-    char *mail,
+    const char *mail,
     time_t deny)
 {
     EMAIL email;
@@ -248,7 +248,7 @@ deny_log_email(
 static void
 deny_add_email(
     ACCT *he,
-    char *exer)
+    const char *exer)
 {
     char buf[128];
     time_t now;
@@ -270,7 +270,7 @@ add_deny_exer(
     ACCT *u,
     int adm,
     int cross,
-    char *exer)
+    const char *exer)
 {
     FILE *fp;
     char buf[80];
@@ -344,11 +344,11 @@ add_deny_exer(
     }
     if ((adm & DENY_DAYS) && !(adm & DENY_MODE_GUEST))
     {
-        if (adm & DENY_DAYS_1) { cdays = "一星期"; x.deny = now + 86400 * 7;}
-        else if (adm & DENY_DAYS_2) { cdays = "兩星期"; x.deny = now + 86400 * 14;}
-        else if (adm & DENY_DAYS_3) { cdays = "參星期"; x.deny = now + 86400 * 21;}
-        else if (adm & DENY_DAYS_4) { cdays = "一個月"; x.deny = now + 86400 * 31;}
-        else if (adm & DENY_DAYS_5) { cdays = ""; x.deny = now + 86400 * 31; x.userlevel |= PERM_DENYSTOP;}
+        if (adm & DENY_DAYS_1) { cdays = "一星期"; x.deny = now + 86400 * 7; }
+        else if (adm & DENY_DAYS_2) { cdays = "兩星期"; x.deny = now + 86400 * 14; }
+        else if (adm & DENY_DAYS_3) { cdays = "參星期"; x.deny = now + 86400 * 21; }
+        else if (adm & DENY_DAYS_4) { cdays = "一個月"; x.deny = now + 86400 * 31; }
+        else if (adm & DENY_DAYS_5) { cdays = ""; x.deny = now + 86400 * 31; x.userlevel |= PERM_DENYSTOP; }
         fprintf(fp, "%s\n", cdays);
         if (adm & DENY_DAYS_5)
             fprintf(fp, "期間: 永不復權。\n\n");
@@ -375,11 +375,11 @@ add_deny_exer(
 
 static void
 setup(
-    char *id,
-    char *email,
+    const char *id,
+    const char *email,
     int mode,
-    char *exer,
-    char *file)
+    const char *exer,
+    const char *file)
 {
     ACCT x, *u;
     int i, num;
@@ -426,10 +426,52 @@ main(
     char *argv[])
 {
     char buf[256];
-    if (argc > 5 )
+    const char *userid = NULL, *email = NULL, *mode = NULL, *exer = NULL, *file = NULL;
+
+    while (optind < argc)
     {
-        setup(argv[1], argv[2], atoi(argv[3]), argv[4], argv[5]);
-        sprintf(buf, "mail %s.bbs@" MYHOSTNAME " < " FN_STOPPERM_MAIL, argv[4]);
+        switch (getopt(argc, argv, "+" "u:e:m:x:f:"))
+        {
+        case -1:  // Position arguments
+            if (!(optarg = argv[optind++]))
+                break;
+            if (!userid)
+        case 'u':
+                userid = optarg;
+            else if (!email)
+        case 'e':
+                email = optarg;
+            else if (!mode)
+        case 'm':
+                mode = optarg;
+            else if (!exer)
+        case 'x':
+                exer = optarg;
+            else if (!file)
+        case 'f':
+                file = optarg;
+            break;
+
+        default:
+            userid = email = mode = exer = file = NULL;  // Invalidate arguments
+            optind = argc;  // Ignore remaining arguments
+            break;
+        }
+    }
+
+    if (userid || email || mode || exer || file)
+    {
+        if (!(userid && email && mode && exer && file))
+        {
+            fprintf(stderr, "Usage: %s\n", argv[0]);
+            fprintf(stderr, "Do nothing but send a stopperm notification to bbs@" MYHOSTNAME "\n");
+            fprintf(stderr, "Usage: %s [-u] <userid> [-e] <email> [-m] <deny_mode> [-x] <executor_userid> [-f] <tmpfile_suffix>\n", argv[0]);
+            fprintf(stderr, "Remove permissions for users with mail <email> and then send a notification to the executor\n");
+            return 2;
+        }
+
+        setup(userid, email, atoi(mode), exer, file);
+        sprintf(buf, "mail %s.bbs@" MYHOSTNAME " < " FN_STOPPERM_MAIL, exer);
         system(buf);
     }
     else

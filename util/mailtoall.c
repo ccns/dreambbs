@@ -48,10 +48,10 @@ attach_shm(
     return shmptr;
 }
 
-static int
-check_in_memory(char *bm, char *id)
+GCC_PURE static int
+check_in_memory(const char *bm, const char *id)
 {
-    char *i;
+    const char *i;
     for (i=bm; strlen(i); i=i+IDLEN+1)
     if (!strcmp(i, id))
         return 0;
@@ -60,9 +60,10 @@ check_in_memory(char *bm, char *id)
 
 
 static void
-send_to_all(char *title, char *fpath, char *bm)
+send_to_all(const char *title, const char *fpath, const char *bm)
 {
-    char buf[128], *ptr;
+    char buf[128];
+    const char *ptr;
     HDR mhdr;
 
     for (ptr=bm; strlen(ptr); ptr=ptr+IDLEN+1)
@@ -78,8 +79,8 @@ send_to_all(char *title, char *fpath, char *bm)
 
 static int
 to_bm(
-    char *fpath,
-    char *title)
+    const char *fpath,
+    const char *title)
 {
     BRD *bhdr, *head, *tail;
     char *ptr, *bm;
@@ -138,8 +139,8 @@ to_bm(
 static void
 traverse(
     char *fpath,
-    char *path,
-    char *title)
+    const char *path,
+    const char *title)
 {
     DIR *dirp;
     struct dirent *de;
@@ -173,8 +174,8 @@ traverse(
 
 static int
 open_mail(
-    char *path,
-    char *title)
+    const char *path,
+    const char *title)
 {
     int ch;
     char *fname, fpath[256];
@@ -199,24 +200,51 @@ main(
     char *argv[])
 {
     int mode;
+    char *path = NULL, *title = NULL;
 
     bshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
 
-    if (argc>3)
+    mode = (argc > 1) ? atoi(argv[1]) : 0;
+    optind++;
+    while (optind < argc)
     {
-        mode = atoi(argv[1]);
-        switch(mode)
+        switch (getopt(argc, argv, "+" "f:t:"))
         {
-            case 1:
-                open_mail(argv[2], argv[3]);
+        case -1:  // Position arguments
+            if (!(optarg = argv[optind++]))
                 break;
-            case 2:
-                to_bm(argv[2], argv[3]);
-                break;
-        }
+            if (!path)
+        case 'f':
+                path = optarg;
+            else if (!title)
+        case 't':
+                title = optarg;
+            break;
 
+        default:
+            path = title = NULL;  // Invalidate arguments
+            optind = argc;  // Ignore remaining arguments
+            break;
+        }
     }
-    unlink(argv[2]);
+
+    if (!(path && title))
+        mode = 0;
+
+    switch (mode)
+    {
+    case 1:
+        open_mail(path, title);
+        break;
+    case 2:
+        to_bm(path, title);
+        break;
+
+    default:
+        fprintf(stderr, "Usage: %s {1|2} [-f] <path> [-t] <title>\n", argv[0]);
+        return 2;
+    }
+    unlink(path);
 
     return 0;
 }

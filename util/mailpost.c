@@ -12,8 +12,6 @@
 
 #include "bbs.h"
 
-extern char *crypt(const char *key, const char *salt);
-
 //#define LOG_FILE        "run/mailog"
 #define LOG_FILE        FN_BBSMAILPOST_LOG
 
@@ -29,7 +27,7 @@ static char myfrom[128], mysub[128], myname[128], mypasswd[128], myboard[128], m
 
 static int
 acct_fetch(
-    char *userid
+    const char *userid
 )
 {
     int fd;
@@ -56,7 +54,7 @@ acct_fetch(
 
 static int
 brd_fetch(
-    char* bname,
+    const char* bname,
     BRD* brd
 )
 {
@@ -136,7 +134,7 @@ readline(
 static void
 mailog(
     const char* mode,
-    char* msg
+    const char* msg
 )
 {
     FILE *fp;
@@ -158,8 +156,8 @@ mailog(
 #if 0  // Unused
 static int
 Link(
-    char* src,
-    char* dst
+    const char* src,
+    const char* dst
 )
 {
     int ret;
@@ -217,10 +215,10 @@ justify_user(void)
 
 static int
 valid_ident(
-    char *ident
+    const char *ident
 )
 {
-    static const char *invalid[] = {"bbs@", "@bbs", "unknown@", "root@", "gopher@",
+    static const char *const invalid[] = {"bbs@", "@bbs", "unknown@", "root@", "gopher@",
         "guest@", "@ppp", "@slip", NULL};
     char buf[128];
     const char *str;
@@ -627,8 +625,7 @@ mailpost(void)
 
     /* check password */
 
-    key = crypt(mypasswd, myacct.passwd);
-    if (strncmp(key, myacct.passwd, PASSLEN))
+    if (chkpasswd(myacct.passwd, myacct.passhash, mypasswd))
     {
         close(fh);
         sprintf(buf, "BBS user <%s> password incorrect", myname);

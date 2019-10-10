@@ -32,7 +32,7 @@ char title[80], name[10];
 
 static int
 cleanrecommend_log(
-    RMSG *rmsg,
+    const RMSG *rmsg,
     int mode)   /* 0:partial 1:all */
 {
     FILE *fp;
@@ -56,7 +56,7 @@ cleanrecommend_log(
 static void
 cleanrecommend_item(
     int num,
-    RMSG *cleanrecommend)
+    const RMSG *cleanrecommend)
 {
 
         char tmp[10];
@@ -304,9 +304,9 @@ clean(
         else if (brd->battr & BRD_PUSHDEFINE)
         {
             if (addscore == 1)
-                sprintf(            add, "[[1;33m%02.2s %12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                sprintf(add, "[[1;33m%02.2s %12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
             else if (addscore == -1)
-                sprintf(  add, "[[1;31m%02.2s[[m [[1;33m%12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                sprintf(add, "[[1;31m%02.2s[[m [[1;33m%12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
             else
                 sprintf(add,                "[[1;33m¡÷ %12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
         }
@@ -399,7 +399,7 @@ clean(
 
     if (dashf(tmp))
     {
-        f_mv(tmp,fpath);
+        f_mv(tmp, fpath);
     }
 
     if ((fd = open(xo->dir, O_RDWR, 0600)) == -1)

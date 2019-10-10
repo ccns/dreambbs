@@ -55,7 +55,7 @@ xo_new(
 
 XO *
 xo_get(
-    char *path)
+    const char *path)
 {
     XO *xo;
 
@@ -140,7 +140,7 @@ xo_load(
 void
 xo_fpath(
     char *fpath,
-    char *dir,
+    const char *dir,
     HDR *hdr)
 {
     hdr_fpath(fpath, dir, hdr);
@@ -159,11 +159,11 @@ xo_fpath(
 
 int
 hdr_prune(
-    char *folder,
+    const char *folder,
     int nhead, int ntail,
     int post)
 {
-    int count, fdr, fsize, xmode, cancel, dmode;
+    int count, fdr, fsize, xmode, cancel, dmode GCC_UNUSED;
     HDR *hdr;
     FILE *fpw;
     char fnew[80], fold[80];
@@ -397,7 +397,7 @@ Tagger(
 void
 EnumTagHdr(
     HDR *hdr,
-    char *dir,
+    const char *dir,
     int locus)
 {
     rec_get(dir, hdr, sizeof(HDR), TagList[locus].recno);
@@ -554,7 +554,7 @@ xo_copy(
     if (tag < 0)
         return XO_FOOT;
 
-    fp = tbf_open();
+    fp = tbf_open(-1);
     if (fp == NULL)
         return XO_FOOT;
 
@@ -667,6 +667,7 @@ xo_forward(
     int tag, locus, userno, cc, check;
     unsigned int method;                        /* 是否 uuencode */
     ACCT acct;
+    int success_count = 0;
 
     if (deny_forward())
         return XO_NONE;
@@ -821,6 +822,7 @@ xo_forward(
                 if ((cc = bsmtp(fpath, title, rcpt, method)) < 0)
                     break;
             }
+            success_count++;
         }
     } while (locus < tag);
 
@@ -833,7 +835,20 @@ xo_forward(
     if (userno > 0)
         m_biff(userno);
 
-    zmsg(cc < 0 ? "部份信件無法寄達" : "寄信完畢");
+    if (success_count == 0)
+    {
+        zmsg("轉寄失敗。");
+    }
+    else
+    {
+        char buf[80];
+        if (success_count == ((tag == 0) ? 1 : tag))
+            sprintf(buf, "轉寄 %d 篇成功\。", success_count);
+        else
+            sprintf(buf, "轉寄 %d 篇成功\，%d 篇失敗。",
+                success_count, ((tag == 0) ? 1 : tag) - success_count);
+        zmsg(buf);
+    }
 
     return XO_FOOT;
 }
@@ -1095,7 +1110,7 @@ static KeyMap keymap[] =
 };
 
 
-static int
+GCC_PURE static int
 xo_keymap(
     int key)
 {
@@ -1718,7 +1733,7 @@ xover(
             /* switch (vans(MSG_ZONE_SWITCH)) */
             /* Thor.980921: 少一個鍵試試 */
             outz(MSG_ZONE_SWITCH);
-            switch(vkey())
+            switch (vkey())
             {
             case 'a':
                 cmd = XZ_GEM;
@@ -1849,7 +1864,7 @@ xover(
                     cmd = 'r';
             }
 #ifdef XZ_XPOST
-            else if (zone >= XZ_XPOST && zone < XZ_BANMAIL/* XZ_MBOX */ )
+            else if (zone >= XZ_XPOST && zone < XZ_BANMAIL/* XZ_MBOX */)
 #else
             else if (zone >= XZ_MBOX && zone < XZ_BANMAIL)
 #endif
@@ -1974,7 +1989,7 @@ every_Z_Orig(void)
     int cmd;
     char select;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[2];
 #endif
@@ -1999,7 +2014,7 @@ every_Z_Orig(void)
     }
 #endif
 
-    switch(select)
+    switch (select)
     {
 #ifdef  HAVE_FAVORITE
         case 'f':
@@ -2157,7 +2172,7 @@ every_Z(void)
 {
     int tmpmode, savemode;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[T_LINES];
 #endif
@@ -2196,7 +2211,7 @@ every_Z(void)
     savemode = boardmode;
     tmpmode = bbsmode;
 
-    if ( cuser.ufo2 & UFO2_ORIGUI)
+    if (cuser.ufo2 & UFO2_ORIGUI)
         every_Z_Orig();
     else
         popupmenu(menu_everyz, NULL, (b_lines >> 1) - 4, (d_cols >> 1) + 20);
@@ -2225,7 +2240,7 @@ every_U(void)
 {
     int cmd, tmpmode;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2278,7 +2293,7 @@ void
 every_B(void)
 {
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[b_lines + 1];
 #endif
@@ -2310,7 +2325,7 @@ every_S(void)
 {
     int tmpmode;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 #else
     screenline sl[b_lines + 1];
 #endif

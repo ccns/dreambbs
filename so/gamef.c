@@ -12,7 +12,7 @@ static char Bdate[20];
 
 static inline char *
 Cdate(
-time_t *chrono)
+const time_t *chrono)
 {
     struct tm *ptime;
 
@@ -23,7 +23,7 @@ time_t *chrono)
     return Bdate;
 }
 
-static inline void
+GCC_CHECK_FORMAT(1, 2) static inline void
 pressanykey(const char *fmt, ...)
 {
     va_list args;
@@ -47,7 +47,7 @@ pressanykey(const char *fmt, ...)
     refresh();
 }
 
-static inline void
+GCC_CHECK_FORMAT(2, 3) static inline void
 game_log(int file, const char *fmt, ...)
 {
     va_list args;

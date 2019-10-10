@@ -125,12 +125,14 @@ resetbrd(void)
 static int
 x_sysload(void)
 {
+    long nproc;
     double load[3];
     char buf[80];
 
     /*load = ushm->sysload;*/
+    nproc = sysconf(_SC_NPROCESSORS_ONLN);
     getloadavg(load, 3);
-    sprintf(buf, "系統負載 %.2f %.2f %.2f", load[0], load[1], load[2]);
+    sprintf(buf, "系統負載 %.2f %.2f %.2f / %ld", load[0], load[1], load[2], nproc);
     vmsg(buf);
     return XEASY;
 }
@@ -314,8 +316,9 @@ goodbye(void)
         "以下是您在站內的註冊資料:\n",
         cuser.userid, cuser.username, str_site);
     acct_show(&cuser, 3);
-    vmsg(NULL);
+    vmsg_body(NULL);
     u_exit("EXIT ");
+    vkey();
     exit(0);
 }
 
@@ -365,17 +368,18 @@ vs_head(
     else if ( spc > len )
     {
         spc = len;
+        memcpy(ttl, mid, spc);
+        ttl[spc] = '\0';
+        mid = ttl;
     }
-    memcpy(ttl, mid, spc);
-    ttl[spc] = '\0';
-    mid = ttl;
 
     spc = 2 + len - spc; /* 擺完 mid 以後，中間還有 spc 格空間，在 mid 左右各放 spc/2 長的空白 */
     len = (1 - spc) & 1;
 
     if (spc < 0)
     {
-        ttl[strlen(mid)+spc]= '\0';
+        if (mid == ttl)
+            ttl[strlen(ttl)+spc]= '\0';
         spc = 0;
     }
 
@@ -1143,7 +1147,7 @@ static MENU menu_treat[] =
 };
 #endif  /* #ifdef  TREAT */
 
-static
+GCC_PURE static
 int count_len(
     const char *data)
 {

@@ -22,7 +22,7 @@ static ClassHeader *chx[2];
 
 static int
 favorite_parse(
-    char *key)
+    const char *key)
 {
     char *str, fpath[128];
     ClassHeader *chp;
@@ -184,7 +184,7 @@ favorite_sort(void)
     ClassHeader *chp;
     int i, j, max;
     BRD *bp;
-    BRD *bhead, *btail;
+    GCC_UNUSED BRD *bhead, *btail;
 
     max = bshm->number;
     bhead = bp = bshm->bcache;

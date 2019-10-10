@@ -32,7 +32,7 @@
 #endif
 
 /* return value if exist, else no change (it can set to default value) */
-int attr_get(char *userid, int key, void *value)
+int attr_get(const char *userid, int key, void *value)
 {
     char fpath[64];
     int k;
@@ -57,7 +57,7 @@ int attr_get(char *userid, int key, void *value)
 }
 
 /* set value if exist, else append new entry */
-int attr_put(char *userid, int key, void *value)
+int attr_put(const char *userid, int key, const void *value)
 {
     char fpath[64];
     int k, fd;
@@ -108,7 +108,7 @@ int attr_put(char *userid, int key, void *value)
 /* failed(-1) if value < 0, and no change to value */
 /* no attr(-2) if set no default */
 /* file fail or err key(-3) */
-int attr_step(char *userid, int key, int dflt, int step)
+int attr_step(const char *userid, int key, int dflt, int step)
 {
     char fpath[64];
     int fd, ret;

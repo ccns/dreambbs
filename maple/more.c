@@ -134,8 +134,8 @@ mread(
 
 
 static char *fimage;           /* file image begin */
-static char *fend;             /* file image end */
-static char *foff;             /* 目前讀到哪裡 */
+static const char *fend;       /* file image end */
+static const char *foff;       /* 目前讀到哪裡 */
 
 
 static int
@@ -211,7 +211,7 @@ more_line(
 
 static void
 outs_line(                      /* 印出一般內容 */
-    char *str)
+    const char *str)
 {
     int ch1, ch2, ansi;
 
@@ -244,7 +244,8 @@ outs_line(                      /* 印出一般內容 */
     {
         int len;
         char buf[ANSILINELEN];
-        char *ptr1, *ptr2;
+        char *ptr2;
+        const char *ptr1;
 
         len = strlen(hunt);
         ptr2 = buf;
@@ -418,7 +419,7 @@ more(
     char buf[ANSILINELEN];
     int i;
 
-    char *headend;             /* 檔頭結束 */
+    const char *headend;                /* 檔頭結束 */
 
     int shift;                          /* 還需要往下移動幾列 */
     int lino;                           /* 目前 line number */
@@ -666,8 +667,8 @@ re_key:
         {
             screenline slt[T_LINES];
             char *tmp_fimage;
-            char *tmp_fend;
-            char *tmp_foff;
+            const char *tmp_fend;
+            const char *tmp_foff;
             off_t tmp_block[MAXBLOCK];
 */
             /* itoc.060420: xo_help() 會進入第二次 more()，所以要把所有 static 宣告的都記錄下來 */
@@ -704,7 +705,7 @@ re_key:
         else if ((key == 'L' || key == 'l') && HAS_PERM(PERM_BBSLUA))
         {
 #ifdef M3_USE_PFTERM
-            screen_backup_t old_screen = {0};
+            screen_backup_t old_screen;
             scr_dump(&old_screen);
 #else
             screenline slt[T_LINES];
@@ -723,7 +724,7 @@ re_key:
         else if (key == '!' && HAS_PERM(PERM_BBSRUBY))
         {
 #ifdef M3_USE_PFTERM
-            screen_backup_t old_screen = {0};
+            screen_backup_t old_screen;
             scr_dump(&old_screen);
 #else
             screenline slt[T_LINES];
@@ -880,7 +881,7 @@ re_key:
             {
                 FILE *fp;
 
-                if ((fp = tbf_open()))
+                if ((fp = tbf_open(-1)))
                 {
                     f_suck(fp, fpath);
                     fclose(fp);

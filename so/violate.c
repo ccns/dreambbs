@@ -18,7 +18,7 @@ static int viol_add(XO *xo);
 static void
 viol_item(
 int num,
-EMAIL *viol)
+const EMAIL *viol)
 {
     char buf[5];
     int now;

@@ -18,7 +18,7 @@ FILE *flog;
 
 static void
 expire(
-    char *userid)
+    const char *userid)
 {
     HDR hdr;
     char fpath[128], fnew[128], index[128], *fname;
@@ -52,7 +52,7 @@ expire(
     while (fread(&hdr, sizeof(hdr), 1, fpr) == 1)
     {
         xmode = hdr.xmode;
-        if (xmode & POST_DELETE )
+        if (xmode & POST_DELETE)
             keep = 0;
         else
             keep = 1;

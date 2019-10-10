@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* util/template.c      ( YZU WindTop 2000)              */
+/* util/template.c      ( YZU WindTop 2000 )             */
 /*-------------------------------------------------------*/
 /* author : visor.bbs@bbs.yzu.edu.tw                     */
 /* target : ¼Ð¥»¥Î                                       */
@@ -17,7 +17,7 @@ typedef struct
     unsigned int new;
 }       TABLE;
 
-TABLE table[] = {
+const TABLE table[] = {
     {UFO_COLOR, UFO2_COLOR},
     {UFO_MOVIE, UFO2_MOVIE},
     {UFO_BRDNEW, UFO2_BRDNEW},
@@ -38,7 +38,7 @@ TABLE table[] = {
 
 void
 acct_save(
-    ACCT *acct)
+    const ACCT *acct)
 {
     int fd;
     char fpath[80];
@@ -54,14 +54,14 @@ acct_save(
 
 static void
 reaper(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
     int fd;
 
     char buf[256];
     ACCT acct;
-    TABLE *ptr;
+    const TABLE *ptr;
 
     sprintf(buf, "%s/.ACCT", fpath);
     fd = open(buf, O_RDWR, 0);

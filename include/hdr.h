@@ -39,25 +39,25 @@ typedef struct
 /* post.xmode 的定義                                     */
 /* ----------------------------------------------------- */
 
-#define POST_READ               0x000000001      /* already read */
-#define POST_MARKED             0x000000002      /* marked */
-#define POST_GEM                0x000000004      /* gemmed */
-#define POST_CANCEL             0x000000040      /* canceled */
-#define POST_DELETE             0x000000080      /* deleted */
-#define POST_INCOME             0x000000100      /* 轉信進來的 */
-#define POST_EMAIL              0x000000200      /* E-mail post 進來的 */
-#define POST_OUTGO              0x000000400      /* 須轉信出去 */
-#define POST_RESTRICT           0x000000800      /* 限制級文章，須 manager 才能看 */
-#define POST_MDELETE            0x000100000      /* 版主或站長刪除 */
-#define POST_LOCK               0x000200000      /* 文章鎖定 */
-#define POST_COMPLETE           0x000400000      /* 完成處理 */
-#define POST_MODIFY             0x000800000      /* 修改過了 */
-#define POST_CURMODIFY          0x001000000      /* 正在修改中 */
-#define POST_EXPIRE             0x002000000      /* 一個禮拜後自動刪除 */
-#define POST_BOTTOM             0x004000000      /* 置底文 */
-//#define POST_BOTTOM_ORIG        0x008000000      /* 置底本文 */
-#define POST_RECOMMEND          0x008000000      /* 推過的文 */
-#define POST_RECOMMEND_ING      0x010000000      /* 正在推文*/
+#define POST_READ               0x00000001       /* already read */
+#define POST_MARKED             0x00000002       /* marked */
+#define POST_GEM                0x00000004       /* gemmed */
+#define POST_CANCEL             0x00000040       /* canceled */
+#define POST_DELETE             0x00000080       /* deleted */
+#define POST_INCOME             0x00000100       /* 轉信進來的 */
+#define POST_EMAIL              0x00000200       /* E-mail post 進來的 */
+#define POST_OUTGO              0x00000400       /* 須轉信出去 */
+#define POST_RESTRICT           0x00000800       /* 限制級文章，須 manager 才能看 */
+#define POST_MDELETE            0x00100000       /* 版主或站長刪除 */
+#define POST_LOCK               0x00200000       /* 文章鎖定 */
+#define POST_COMPLETE           0x00400000       /* 完成處理 */
+#define POST_MODIFY             0x00800000       /* 修改過了 */
+#define POST_CURMODIFY          0x01000000       /* 正在修改中 */
+#define POST_EXPIRE             0x02000000       /* 一個禮拜後自動刪除 */
+#define POST_BOTTOM             0x04000000       /* 置底文 */
+//#define POST_BOTTOM_ORIG        0x08000000       /* 置底本文 */
+#define POST_RECOMMEND          0x08000000       /* 推過的文 */
+#define POST_RECOMMEND_ING      0x10000000       /* 正在推文*/
 
 /* ----------------------------------------------------- */
 /* mail.xmode 的定義                                     */

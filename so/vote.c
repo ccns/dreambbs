@@ -22,7 +22,7 @@
 
 extern BCACHE *bshm;
 extern XZ xz[];
-extern char radix32[32];
+extern const char radix32[32];
 
 
 static int vote_add(XO *xo);
@@ -46,8 +46,8 @@ TchoiceCompare(const void * i, const void * j)
 
 static int
 vote_seek(
-char *fpath,
-char *mail)
+const char *fpath,
+const char *mail)
 {
     LOG email;
     int pos = 0, fd;
@@ -95,7 +95,7 @@ XO *xo)
 static void
 vote_item(
 int num,
-VCH *vch)
+const VCH *vch)
 {
     prints("%6d %-9.8s%-12s %-*.*s\n",
            num, vch->cdate, vch->owner, d_cols + 48, d_cols + 48, vch->title);
@@ -197,7 +197,7 @@ VCH *vch)
 
 static void
 show_stud(
-char *path)
+const char *path)
 {
     VCHS stud;
     int pos = 0, fd;
@@ -224,15 +224,13 @@ char *path)
 
 static int
 check_stud(
-char *account,
-char *path)
+const char *account,
+const char *path)
 {
-    VCHS stud, buf;
+    VCHS stud, buf GCC_UNUSED;
     int pos = 0, fd;
     /* char buf1[3], buf2[2], buf3[4]; */
     char buf1[3], buf2[2], buf3[3], buf4[5];
-
-    (void)buf;
 
     /*
     buf1[0] = account[0];
@@ -279,7 +277,7 @@ char *path)
 
 static int
 vlist_student(
-char *path)
+const char *path)
 {
     VCHS stud[MAX_BOOKS], tmp;
     int item, i, fd;
@@ -832,10 +830,10 @@ XO *xo)
 
 static int
 check_mail(
-char *account)
+const char *account)
 {
     //char validemail[3][20] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw", "nckualumni.org.tw"};
-    char addr[20], buf[30], line[80], server[60], *ptr;
+    char addr[20], buf[40], line[80], server[60], *ptr;
     char year[3];
     int sock = 110;
 
@@ -859,7 +857,7 @@ char *account)
     if (!Get_Socket(server, &sock))
     {
         close(sock);
-        vget(b_lines - 3, 0, line, buf, 20, NOECHO);
+        vget(b_lines - 3, 0, line, buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
         if (strlen(buf) < 1)
             return 0;
         if (!POP3_Check(server, addr, buf))
@@ -873,9 +871,9 @@ char *account)
 /*
 static int
 check_mail(
-char *mail)
+const char *mail)
 {
-    char addr[20], buf[30], line[80], server[60], *ptr;
+    char addr[20], buf[40], line[80], server[60], *ptr;
     int sock = 110;
 
     sprintf(line, "s%s@%s", mail, DEFAULTSERVER);
@@ -898,7 +896,7 @@ char *mail)
     if (!Get_Socket(server, &sock))
     {
         close(sock);
-        vget(b_lines - 3, 0, line, buf, 20, NOECHO);
+        vget(b_lines - 3, 0, line, buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
         if (strlen(buf) < 1)
             return 0;
         if (!POP3_Check(server, addr, buf))

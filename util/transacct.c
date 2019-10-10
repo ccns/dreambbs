@@ -219,7 +219,7 @@ trans_ufo2(
 
 static void
 trans_acct(
-    OLD *old,
+    const OLD *old,
     NEW *new)
 {
     memset(new, 0, sizeof(NEW));
@@ -281,8 +281,8 @@ main(
 
     if (argc > 2)
     {
-        printf("Usage: %s [userid]\n", argv[0]);
-        return -1;
+        fprintf(stderr, "Usage: %s [userid]\n", argv[0]);
+        return 2;
     }
 
     for (c = 'a'; c <= 'z'; c++)
@@ -325,7 +325,7 @@ main(
 
             m1 = ((m1+m2)/100000);  //請自行修改
 
-            if (m1 >= INT_MAX )
+            if (m1 >= INT_MAX)
                 m1 = INT_MAX;
 
             sprintf(buf, "%s/" FN_ACCT, str);

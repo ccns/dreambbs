@@ -1,6 +1,6 @@
 #include "bbs.h"
 #include "gamef.c"
-#define SWAP(x, y) do {int temp=(x); (x)=(y); (y)=temp;} while (0)
+#define SWAP(x, y) do { int temp=(x); (x)=(y); (y)=temp; } while (0)
 
 /* 黑傑克遊戲 */
 
@@ -16,13 +16,13 @@ void show_money(int m)
 
 int print_card(int card, int x, int y)
 {
-    const char *flower[4] = {"Ｓ", "Ｈ", "Ｄ", "Ｃ"};
-    const char *poker[52] = {"Ａ", "Ａ", "Ａ", "Ａ", "２", "２", "２", "２", "３", "３", "３", "３",
-                             "４", "４", "４", "４", "５", "５", "５", "５", "６", "６", "６", "６",
-                             "７", "７", "７", "７", "８", "８", "８", "８", "９", "９", "９", "９",
-                             "10", "10", "10", "10", "Ｊ", "Ｊ", "Ｊ", "Ｊ", "Ｑ", "Ｑ", "Ｑ", "Ｑ",
-                             "Ｋ", "Ｋ", "Ｋ", "Ｋ"
-                            };
+    const char *const flower[4] = {"Ｓ", "Ｈ", "Ｄ", "Ｃ"};
+    const char *const poker[52] = {"Ａ", "Ａ", "Ａ", "Ａ", "２", "２", "２", "２", "３", "３", "３", "３",
+                                   "４", "４", "４", "４", "５", "５", "５", "５", "６", "６", "６", "６",
+                                   "７", "７", "７", "７", "８", "８", "８", "８", "９", "９", "９", "９",
+                                   "10", "10", "10", "10", "Ｊ", "Ｊ", "Ｊ", "Ｊ", "Ｑ", "Ｑ", "Ｑ", "Ｑ",
+                                   "Ｋ", "Ｋ", "Ｋ", "Ｋ"
+                                  };
 
     move(x, y);     prints("╭───╮");
     move(x + 1, y); prints("│%s    │", poker[card]);
@@ -39,10 +39,10 @@ int
 BlackJack(void)
 {
     char buf[20];
-    int  num[52] = {11, 11, 11, 11, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6,
-                     7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10,
-                     10, 10, 10, 10, 10, 10, 10, 10
-                   };
+    const int num[52] = {11, 11, 11, 11, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6,
+                         7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10,
+                         10, 10, 10, 10, 10, 10, 10, 10
+                        };
     int cardlist[52];
     int i, m, tmp = 0, ch = 0, flag;
     int win = 2, win_jack = 5; /* win 為贏時的倍率, win_jack 為前兩張就 21 點倍率 */
@@ -104,8 +104,8 @@ BlackJack(void)
 #endif
 
     /*  if (money>=20000) CHEAT=1;
-        if (CHEAT==1){
-            if (cardlist[1]<=3){
+        if (CHEAT==1) {
+            if (cardlist[1]<=3) {
                 SWAP(cardlist[50], cardlist[1]);
             }
         } */                            /* 作弊碼 */
@@ -145,8 +145,8 @@ BlackJack(void)
                 move(3, 0); prints("\x1b[1;41;33m７７７ !!! 得獎金 %d 火車幣\x1b[m", money*seven);
                 cuser_money += (money * seven);
 //              inmoney(money*seven);
-                game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;31m  ７７７   \x1b[m"
-                         , money*seven);
+                game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;31m  ７７７   \x1b[m",
+                         money*seven);
                 pressanykey("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
                 flag = 1; m = 0;
             }
@@ -156,8 +156,8 @@ BlackJack(void)
                 move(18, 3); prints("\x1b[1;41;33m 超級正統 BLACK JACK  \x1b[m");
                 move(3, 0); prints("\x1b[1;41;33m超級正統 BLACK JACK !!! 得獎金 %d 金幣\x1b[m", money*super_jack);
                 cuser_money += (money * super_jack);
-                game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;41;33m 正統 ＡＪ \x1b[m"
-                         , money*super_jack);
+                game_log(2, "中了 \x1b[1;33m%d\x1b[m 金幣的 \x1b[1;41;33m 正統 ＡＪ \x1b[m",
+                         money*super_jack);
                 pressanykey("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
                 flag = 1; m = 0;
             }
@@ -193,7 +193,7 @@ BlackJack(void)
 
             if (guest_point > 21)
             {
-                if (A_count > 0){guest_point -= 10; A_count--;}
+                if (A_count > 0) { guest_point -= 10; A_count--; }
             }
             move(12, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", host_point);
             move(14, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", guest_point);
@@ -261,7 +261,7 @@ BlackJack(void)
                 }
                 if (host_point > 21)
                 {
-                    if (AA_count > 0){host_point -= 10; AA_count--;}
+                    if (AA_count > 0) { host_point -= 10; AA_count--; }
                 }
                 move(12, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", host_point);
                 move(14, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", guest_point);

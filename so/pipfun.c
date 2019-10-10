@@ -19,7 +19,7 @@ outs_centered(const char *str)
     outs(str);
 }
 
-static inline void
+GCC_CHECK_FORMAT(1, 2) static inline void
 prints_centered(const char *fmt, ...)
 {
     va_list args;
@@ -36,7 +36,7 @@ prints_centered(const char *fmt, ...)
 }
 
 static inline int
-show_file(char *filename, int y, int lines, int mode)
+show_file(const char *filename, int y, int lines, int mode)
 {
     FILE *fp;
     char buf[256];
@@ -65,7 +65,7 @@ const char *msg, char *buf)
 
 static inline char *
 Cdate(
-time_t *chrono)
+const time_t *chrono)
 {
     struct tm *ptime;
 

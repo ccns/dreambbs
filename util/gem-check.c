@@ -160,7 +160,7 @@ sync_init(
 
 static void
 sync_check(
-    char *fgem)
+    const char *fgem)
 {
     int fback, aback, expire;
     char *str, *fname, fpath[128], fnew[128];

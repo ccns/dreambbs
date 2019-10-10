@@ -48,7 +48,7 @@ ll_new(void)
 
 void
 ll_add(
-    char *name)
+    const char *name)
 {
     LinkList *node;
     int len;
@@ -68,7 +68,7 @@ ll_add(
 
 int
 ll_del(
-    char *name)
+    const char *name)
 {
     LinkList *list, *prev, *next;
 
@@ -95,9 +95,9 @@ ll_del(
 }
 
 
-int
+GCC_PURE int
 ll_has(
-    char *name)
+    const char *name)
 {
     LinkList *list;
 
@@ -165,7 +165,7 @@ ll_out(
 #ifdef  BATCH_SMTP
 int
 bsmtp(
-    char *fpath, char *title, char *rcpt,
+    const char *fpath, const char *title, const char *rcpt,
     int method)
 {
     char buf[80];
@@ -226,8 +226,9 @@ bsmtp(
     FILE *fp, *fr, *fw;
     char *str, buf[512], from[80], subject[80], msgid[80], keyfile[80], valid[10];
 #ifdef HAVE_SIGNED_MAIL
+    const char *signature = NULL;
     char prikey[PLAINPASSLEN];
-    union{
+    union {
         char str[PLAINPASSLEN];
         struct {
             unsigned int hash, hash2;
@@ -273,9 +274,9 @@ bsmtp(
 #ifdef HAVE_SMTP_SERVER
     {
         int i;
-        const char *alias[] = SMTP_SERVER, *str_alias;
+        const char *const alias[] = SMTP_SERVER, *str_alias;
         sock = -1;
-        for ( i=0; (str_alias = alias[i]); i++)
+        for (i=0; (str_alias = alias[i]); i++)
         {
             sock = dns_open(str_alias, 25);
             if (sock >= 0)
@@ -408,9 +409,10 @@ bsmtp(
             sign.val.hash = str_hash(buf, stamp);
             sign.val.hash2 = str_hash2(buf, sign.val.hash);
             str_xor(sign.str, prikey);
+            explicit_zero_bytes(prikey, sizeof(prikey));
             /* Thor.990413: 不加()的話, 時間尾空白會被吃掉(驗證時) */
             fprintf(fw, "\x1b[1;32m※ X-Info: \x1b[33m%s\x1b[m\r\n\x1b[1;32m※ X-Sign: \x1b[36m%s%s \x1b[37m(%s)\x1b[m\r\n",
-                buf, msgid, gensignature(sign.str), Btime(&stamp));
+                buf, msgid, signature = gensignature(sign.str), Btime(&stamp));
         }
 #endif
         fputs("\r\n.\r\n", fw);
@@ -448,7 +450,7 @@ smtp_log:
     sprintf(buf, "%s%-13s%c> %s %s %s\n\t%s\n\t%s\n", Btime(&stamp), cuser.userid,
         ((method == MQ_JUSTIFY) ? '=' : '-'), rcpt, msgid,
 #ifdef HAVE_SIGNED_MAIL
-            *prikey ? gensignature(sign.str): "NoPriKey",
+            signature? signature: "NoPriKey",
 #else
             "",
 #endif
@@ -462,7 +464,7 @@ smtp_log:
 #ifdef HAVE_DOWNLOAD
 int
 bsmtp_file(
-    char *fpath, char *title, char *rcpt)
+    const char *fpath, const char *title, const char *rcpt)
 {
     int sock;
     time_t chrono, stamp;
@@ -490,8 +492,8 @@ bsmtp_file(
 #ifdef HAVE_SMTP_SERVER
     {
         int i;
-        const char *alias[] = SMTP_SERVER, *str_alias;
-        for ( i=0; (str_alias = alias[i]); i++)
+        const char *const alias[] = SMTP_SERVER, *str_alias;
+        for (i=0; (str_alias = alias[i]); i++)
         {
             sock = dns_open(str_alias, 25);
             if (sock >= 0)
@@ -670,7 +672,7 @@ m_verify(void)
     char buf[160];
 
     char prikey[PLAINPASSLEN];
-    union{
+    union {
         char str[PLAINPASSLEN];
         struct {
             unsigned int hash, hash2;
@@ -723,6 +725,7 @@ m_verify(void)
     s.val.hash = str_hash(p, chrono);
     s.val.hash2 = str_hash2(p, s.val.hash);
     str_xor(s.str, prikey);
+    explicit_zero_bytes(prikey, sizeof(prikey));
 
     sprintf(buf, "(%s)", Btime(&chrono));
 
@@ -754,7 +757,8 @@ static union
 {
     XO mail_xo;
     char bytes[SIZEOF_FLEX(XO, 32)];
-}      cmbox;
+}      cmbox_union;
+static XO *const cmbox = &cmbox_union.mail_xo;
 
 int
 m_total_size(void)
@@ -765,7 +769,7 @@ m_total_size(void)
     char *base, *folder, fpath[80];
     int changed;
 
-    if ((fd = open(folder = cmbox.mail_xo.dir, O_RDWR)) < 0)
+    if ((fd = open(folder = cmbox->dir, O_RDWR)) < 0)
         return 0;
 
     fsize = 0;
@@ -822,13 +826,13 @@ unsigned int
 m_quota(void)
 {
     unsigned int ufo;
-    int fd, count, fsize, limit, xmode;
-    time_t mail_due, mark_due;
+    int fd, count GCC_UNUSED, fsize, limit, xmode;
+    GCC_UNUSED time_t mail_due, mark_due;
     struct stat st;
     HDR *head, *tail;
     char *base, *folder, date[9];
 
-    if ((fd = open(folder = cmbox.mail_xo.dir, O_RDWR)) < 0)
+    if ((fd = open(folder = cmbox->dir, O_RDWR)) < 0)
         return 0;
 
     ufo = 0;
@@ -942,7 +946,7 @@ m_quota(void)
 
 static void
 packlog(
-    char *packmsg)
+    const char *packmsg)
 {
     FILE *fp;
 
@@ -968,7 +972,7 @@ packlog(
 
 static void
 do_forward(
-    char *title,
+    const char *title,
     int mode)
 {
     int rc;
@@ -1124,7 +1128,7 @@ m_zip(void)                     /* itoc.010228: 打包資料 */
 
 int
 m_query(
-    char *userid)
+    const char *userid)
 {
     int fd, ans, fsize;
     HDR *head, *tail;
@@ -1203,7 +1207,7 @@ m_count(void)
         return 1;
     }
 
-    if (stat(cmbox.mail_xo.dir, &st))
+    if (stat(cmbox->dir, &st))
         return 0;
 
     if (ulevel & (PERM_SYSOP | PERM_ACCOUNTS | PERM_MBOX))
@@ -1223,8 +1227,8 @@ m_count(void)
 
 static void
 mail_hold(
-    char *fpath,
-    char *rcpt)
+    const char *fpath,
+    const char *rcpt)
 {
     char *title, *folder, buf[256];
     HDR mhdr;
@@ -1232,7 +1236,7 @@ mail_hold(
     if (vans("是否自存底稿(Y/N)？[N] ") != 'y')
         return;
 
-    folder = cmbox.mail_xo.dir;
+    folder = cmbox->dir;
     hdr_stamp(folder, HDR_LINK, &mhdr, fpath);
 
     mhdr.xmode = MAIL_READ | MAIL_HOLD /* | MAIL_NOREPLY */;
@@ -1304,7 +1308,7 @@ m_setmboxdir(void)
 
         usr_fpath(upath, cuser.userid, NULL);
 
-        sprintf(fpath1, "/home/bbs/usr/%s/%s", id, cuser.userid);
+        sprintf(fpath1, BBSHOME "/usr/%s/%s", id, cuser.userid);
 
         sprintf(fpath2, "~/bin/redir");
 
@@ -1312,7 +1316,7 @@ m_setmboxdir(void)
 
         chdir(fpath1);
         system(fpath2);
-        f_mv(".DIR.@",FN_DIR);
+        f_mv(".DIR.@", FN_DIR);
         chdir(BBSHOME);
 
         pmsg2("重建完成");
@@ -1332,7 +1336,7 @@ m_setmboxdir(void)
 int
 hdr_reply(
     int row,
-    HDR *hdr)
+    const HDR *hdr)
 {
     char *title, *str;
 
@@ -1351,7 +1355,7 @@ hdr_reply(
 
 /* static inline */ int
 mail_external(
-    char *addr)
+    const char *addr)
 {
     char *str;
 
@@ -1375,7 +1379,7 @@ mail_external(
 /* cuser.userid 將「標題 title、檔案在 fpath」的信件寄給 userid 的外部信箱 */
 static void
 forward_mail(
-    char *fpath, char *userid, char *title)
+    const char *fpath, const char *userid, const char *title)
 {
     FILE *fp;
     char ip[80];
@@ -1393,7 +1397,7 @@ forward_mail(
 
 int
 mail_send(
-    char *rcpt, char *title)
+    const char *rcpt, const char *title)
 {
     HDR mhdr;
     char fpath[80], folder[80], ckforward[80];
@@ -1591,7 +1595,7 @@ mail_reply(
 
 void
 my_send(
-    char *rcpt)
+    const char *rcpt)
 {
     int result;
     const char *msg;
@@ -1731,7 +1735,7 @@ mail_sysop(void)
 
 static int
 multi_send(
-    char *title)
+    const char *title)
 {
     FILE *fp;
     HDR mhdr;
@@ -1961,10 +1965,10 @@ tag_char(
 
 void
 hdr_outs(               /* print HDR's subject */
-    HDR *hdr,
+    const HDR *hdr,
     int cc)
 {
-    static const char *type[4] =
+    static const char *const type[4] =
     {"Re", "◇", "\x1b[1;33m=>", "\x1b[1;32m◆"};
     const char *title, *mark;
     int ch, len;
@@ -2128,7 +2132,7 @@ hdr_outs(               /* print HDR's subject */
 static inline void
 mbox_item(
     int pos,                    /* sequence number */
-    HDR *hdr)
+    const HDR *hdr)
 {
 
 #if 0                           /* Thor.0508: 變色看看 */
@@ -2486,7 +2490,7 @@ static int
 mbox_sysop(
     XO *xo)
 {
-    if (/*(xo == & cmbox.mail_xo) &&*/ (HAS_PERM(PERM_SYSOP)))
+    if (/*(xo == cmbox) &&*/ (HAS_PERM(PERM_SYSOP)))
     {
         XO *xx;
 
@@ -2521,14 +2525,14 @@ mbox_other(
         //sprintf(path, "usr/%c/%s/.DIR", *id, id);
 
         usr_fpath(path, acct.userid, fn_dir);
-        usr_fpath(cmbox.mail_xo.dir, acct.userid, fn_dir);
+        usr_fpath(cmbox->dir, acct.userid, fn_dir);
 
         xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new(path);
         xx->pos = 0;
         xover(XZ_MBOX);
         free(xx);
 
-        usr_fpath(cmbox.mail_xo.dir, cuser.userid, fn_dir);
+        usr_fpath(cmbox->dir, cuser.userid, fn_dir);
 
         xz[XZ_MBOX - XO_ZONE].xo = xo;
         mbox_init(xo);
@@ -2632,7 +2636,7 @@ mbox_size(
         outs(fpath);
 
         if (!stat(fpath, &st))
-            prints("\nTime: %s\nSize: %d", Ctime(&st.st_mtime), st.st_size);
+            prints("\nTime: %s\nSize: %ld", Ctime(&st.st_mtime), st.st_size);
         vmsg(NULL);
     }
     else
@@ -2796,9 +2800,9 @@ static KeyFunc mbox_cb[] =
 void
 mbox_main(void)
 {
-    cmbox.mail_xo.pos = XO_TAIL;
-    usr_fpath(cmbox.mail_xo.dir, cuser.userid, fn_dir);
-    xz[XZ_MBOX - XO_ZONE].xo = & cmbox.mail_xo;
+    cmbox->pos = XO_TAIL;
+    usr_fpath(cmbox->dir, cuser.userid, fn_dir);
+    xz[XZ_MBOX - XO_ZONE].xo = cmbox;
     xz[XZ_MBOX - XO_ZONE].cb = mbox_cb;
 }
 

@@ -25,9 +25,11 @@ static time_t lasttime;
 
 #define getdata(x1, x2, x3, x4, x5, x6, x7)  vget(x1, x2, x3, x4, x5, DOECHO)
 
-static int KEY_ESC_arg;
-static char *BoardName = currboard;
+GCC_UNUSED static int KEY_ESC_arg;
+static const char *const BoardName = currboard;
+#ifdef  HAVE_PIP_FIGHT
 static UTMP *currutmp;
+#endif
 static char Bdate[128];
 static char pippath[128];
 static levelup ml[2];
@@ -41,28 +43,28 @@ static void pip_check_levelup(void);
 static void pip_check_level(void);
 static void pip_load_levelup(const char *fpath);
 static int twice(int x, int max, int min);
-static int pip_magic_menu(int mode, UTMP *opt);
-static int pip_magic_doing_menu(struct magicset *p);
-static int pip_data_list(char *userid);
-static void pip_read_file(char *userid);
+static int pip_magic_menu(int mode, const UTMP *opt);
+static int pip_magic_doing_menu(const struct magicset *p);
+static int pip_data_list(const char *userid);
+static void pip_read_file(const char *userid);
 static void pip_write_file(void);
 static void show_system_pic(int i);
 static void pip_new_game(void);
 static int pip_main_menu(void);
 static int pip_live_again(void);
 static void show_basic_pic(int i);
-static void pip_log_record(char *msg);
+static void pip_log_record(const char *msg);
 static void show_die_pic(int i);
 static int pip_mainmenu(int mode);
 static void pip_time_change(time_t cnow);
-static int pip_go_palace_screen(struct royalset *p);
+static int pip_go_palace_screen(const struct royalset *p);
 static int pip_ending_screen(void);
 static int pip_marriage_offer(void);
 static void show_usual_pic(int i);
 static void show_feed_pic(int i);
-static int pip_buy_goods_new(int mode, struct goodsofpip *p, int oldnum[]);
-static int pip_weapon_doing_menu(int variance, int type, struct weapon *p);
-static int pip_vs_man(int n, struct playrule *p, int mode);
+static int pip_buy_goods_new(int mode, const struct goodsofpip *p, int oldnum[]);
+static int pip_weapon_doing_menu(int variance, int type, const struct weapon *p);
+static int pip_vs_man(int n, const struct playrule *p, int mode);
 static int pip_results_show_ending(int winorlost, int mode, int a, int b, int c);
 static void pip_fight_bad(int n);
 static void tie(void);
@@ -73,7 +75,7 @@ static int pip_practice_function(int classnum, int classgrade, int pic1, int pic
 static int pip_ending_decide(char *eendbuf1, char *eendbuf2, char *eendbuf3, int *endmode, int *endgrade);
 static int pip_game_over(int endgrade);
 static int pip_practice_gradeup(int classnum, int classgrade, int data);
-static int pip_read(char *genbuf);
+static int pip_read(const char *userid);
 
 /*系統選單*/
 static int pip_data_list_cuser(void), pip_system_freepip(void), pip_system_service(void);
@@ -105,7 +107,7 @@ int money)
 
 static char *
 get_path(
-char *id, const char *file)
+const char *id, const char *file)
 {
     usr_fpath(pippath, id, file);
     return pippath;
@@ -189,7 +191,7 @@ static void pip_new_game(void)
 {
     char buf[256];
     time_t now;
-    const char *pipsex[3] = {"？", "♂", "♀"};
+    const char *const pipsex[3] = {"？", "♂", "♀"};
     struct tm *ptime;
     ptime = localtime(&now);
 
@@ -437,7 +439,7 @@ int cal)
     {
         d.tired = d.tired - tiredvary;
         if (d.tired <= 0)
-            {d.tired = 0;}
+            { d.tired = 0; }
     }
     tiredvary = 0;
     return;
@@ -447,7 +449,7 @@ int cal)
 /*主畫面和選單                                                               */
 /*---------------------------------------------------------------------------*/
 
-static const char *menuname[8][2] =
+static const char *const menuname[8][2] =
 {
     {"             ",
      "\x1b[1;44;37m 選單 \x1b[46m[1]基本 [2]逛街 [3]修行 [4]玩樂 [5]打工 [6]特殊 [7]系統 [Q]離開         %*s\x1b[m"},
@@ -585,7 +587,7 @@ static struct pipcommands pipjoblist[] =
 
 /*特殊選單*/
 static int pip_see_doctor(void), pip_change_weight(void), pip_meet_vs_man(void), pip_query(void), pip_go_palace(void);
-static int pip_vs_fight(void);
+/* static int pip_vs_fight(void); */
 static struct pipcommands pipspeciallist[] =
 {
     {pip_see_doctor,            '1',    '1'},
@@ -617,7 +619,7 @@ static struct pipcommands pipsystemlist[] =
 static int
 pip_do_menu(
 int menunum, int menumode,
-struct pipcommands cmdtable[])
+const struct pipcommands cmdtable[])
 {
     time_t now;
     int key1, key2;
@@ -625,8 +627,8 @@ struct pipcommands cmdtable[])
     int goback = 0, ok = 0;
     int class1 = 0, class2 = 0, class3 = 0, class4 = 0, class5 = 0;
     int class6 = 0, class7 = 0, class8 = 0, class9 = 0, class10 = 0;
-    struct pipcommands *cmd1;
-    struct pipcommands *cmd2;
+    const struct pipcommands *cmd1;
+    const struct pipcommands *cmd2;
 
     do
     {
@@ -819,14 +821,14 @@ int mode)
     char buf[256];
     time_t now;
 
-    int tm, m, color, tm1, m1;
+    int tm, m, color, tm1 GCC_UNUSED, m1 GCC_UNUSED;
     int age;
     int color1, color2, color3, color4;
     int anynum;
     float pc;
-    char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
-                      "成年", "壯年", "更年", "老年", "古稀", "神仙"
-                     };
+    const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
+                            "成年", "壯年", "更年", "老年", "古稀", "神仙"
+                           };
 
     color1 = color2 = color3 = color4 = 37;
     move(1, 0);
@@ -914,11 +916,11 @@ int mode)
     /*vs_head("電子養小雞", BoardName);*/
     move(0, 0);
     if (d.sex == 1)
-        sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[32m♂ \x1b[37m%-15s     %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+        sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[32m♂ \x1b[37m%-15s     %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
     else if (d.sex == 2)
-        sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[33m♀ \x1b[37m%-15s     %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+        sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[33m♀ \x1b[37m%-15s     %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
     else
-        sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[34m？ \x1b[37m%-15s     %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+        sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[34m？ \x1b[37m%-15s     %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
     outs(buf);
 
     move(1, 0);
@@ -929,9 +931,9 @@ int mode)
     else
         color1 = 37;
     sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
-    sprintf(buf
-            , " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m"
-            , yo[age], inbuf1, tm, color1, d.money);
+    sprintf(buf,
+            " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m",
+            yo[age], inbuf1, tm, color1, d.money);
     outs_centered(buf);
 
     move(2, 0);
@@ -958,9 +960,9 @@ int mode)
     else
         color3 = 37;
 
-    sprintf(buf
-            , " \x1b[1;32m[生  命]\x1b[%dm %-10d\x1b[32m[法  力]\x1b[%dm %-10d\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m "
-            , color1, d.hp, color2, d.mp, d.weight, color3, d.tired);
+    sprintf(buf,
+            " \x1b[1;32m[生  命]\x1b[%dm %-10d\x1b[32m[法  力]\x1b[%dm %-10d\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m ",
+            color1, d.hp, color2, d.mp, d.weight, color3, d.tired);
     outs_centered(buf);
 
     move(3, 0);
@@ -988,9 +990,9 @@ int mode)
         color4 = 33;
     else
         color4 = 37;
-    sprintf(buf
-            , " \x1b[1;32m[命 MAX]\x1b[37m %-10d\x1b[32m[法 MAX]\x1b[37m %-10d\x1b[32m[髒／病]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[快／滿]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m"
-            , d.maxhp, d.maxmp, color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
+    sprintf(buf,
+            " \x1b[1;32m[命 MAX]\x1b[37m %-10d\x1b[32m[法 MAX]\x1b[37m %-10d\x1b[32m[髒／病]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[快／滿]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m",
+            d.maxhp, d.maxmp, color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
     outs_centered(buf);
     if (mode == 0)  /*主要畫面*/
     {
@@ -1034,27 +1036,27 @@ int mode)
             color4 = 33;
         else
             color4 = 37;
-        sprintf(buf
-                , " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m"
-                , color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
+        sprintf(buf,
+                " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m",
+                color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
         outs_centered(buf);
 
     }
     else if (mode == 2)/*打工*/
     {
         move(4, 0);
-        sprintf(buf
-                , " \x1b[1;36m[愛心]\x1b[37m%-5d\x1b[36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[道德]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[家事]\x1b[37m%-5d\x1b[0m"
-                , d.love, d.wisdom, d.character, d.art, d.ethics, d.brave, d.homework);
+        sprintf(buf,
+                " \x1b[1;36m[愛心]\x1b[37m%-5d\x1b[36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[道德]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[家事]\x1b[37m%-5d\x1b[0m",
+                d.love, d.wisdom, d.character, d.art, d.ethics, d.brave, d.homework);
         outs_centered(buf);
 
     }
     else if (mode == 3)/*修行*/
     {
         move(4, 0);
-        sprintf(buf
-                , " \x1b[1;36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[攻擊]\x1b[37m%-5d\x1b[36m[防禦]\x1b[37m%-5d\x1b[36m[速度]\x1b[37m%-5d\x1b[0m"
-                , d.wisdom, d.character, d.art, d.brave, d.attack, d.resist, d.speed);
+        sprintf(buf,
+                " \x1b[1;36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[攻擊]\x1b[37m%-5d\x1b[36m[防禦]\x1b[37m%-5d\x1b[36m[速度]\x1b[37m%-5d\x1b[0m",
+                d.wisdom, d.character, d.art, d.brave, d.attack, d.resist, d.speed);
         outs_centered(buf);
 
     }
@@ -1558,7 +1560,7 @@ static void pip_write_file(void)
 
     if ((ff = fopen(buf, "w")))
     {
-        fprintf(ff, "%lu\n", d.bbtime);
+        fprintf(ff, "%ld\n", d.bbtime);
         fprintf(ff,
                 "%d %d %d %d %d %d %d %d %d \n"
                 "%d %d %d %d %d %d %d %d %d %d \n"
@@ -1602,7 +1604,7 @@ static void pip_write_file(void)
 }
 
 /*遊戲讀資料出檔案*/
-static void pip_read_file(char *userid)
+static void pip_read_file(const char *userid)
 {
     FILE *fs;
     char buf[200];
@@ -1652,7 +1654,7 @@ static void pip_read_file(char *userid)
 /*記錄到pip.log檔*/
 static void
 pip_log_record(
-char *msg)
+const char *msg)
 {
     FILE *fs;
 
@@ -1665,7 +1667,7 @@ char *msg)
 static int
 pip_write_backup(void)
 {
-    const char *files[4] = {"沒有", "進度一", "進度二", "進度三"};
+    const char *const files[4] = {"沒有", "進度一", "進度二", "進度三"};
     char buf[200], buf1[200];
     char ans[3];
     int num = 0;
@@ -1722,7 +1724,7 @@ static int
 pip_read_backup(void)
 {
     char buf[200], buf1[200], buf2[200];
-    const char *files[4] = {"沒有", "進度一", "進度二", "進度三"};
+    const char *const files[4] = {"沒有", "進度一", "進度二", "進度三"};
     char ans[3];
     int pipkey;
     int num = 0;
@@ -1751,7 +1753,7 @@ pip_read_backup(void)
         if (num > 0)
         {
             usr_fpath(buf, cuser.userid, "chicken.bak");
-            sprintf(buf, "%s%d", buf, num);
+            sprintf(buf + strlen(buf), "%d", num);
             if ((fs = fopen(buf, "r")) == NULL)
             {
                 sprintf(buf, "檔案 [%s] 不存在", files[num]);
@@ -2121,10 +2123,10 @@ static int pip_store_weapon_foot(void)         /*足部武器*/
 static int
 pip_buy_goods_new(
 int mode,
-struct goodsofpip *p,
+const struct goodsofpip *p,
 int oldnum[])
 {
-    const char *shopname[4] = {"店名", "便利商店", NICKNAME "藥鋪", "夜裡書局"};
+    const char *const shopname[4] = {"店名", "便利商店", NICKNAME "藥鋪", "夜裡書局"};
     char inbuf[256];
     char genbuf[20];
     long smoney;
@@ -2146,7 +2148,7 @@ int oldnum[])
         }
         clrchyiuan(b_lines - 4, b_lines);
         move(b_lines, 0);
-        sprintf(inbuf, "\x1b[1;44;37m  %8s選單  \x1b[46m  [B]買入物品  [S]賣出物品  [Q]跳出     %*s\x1b[m", shopname[mode], 30 + d_cols - strlen(shopname[mode]), "");
+        sprintf(inbuf, "\x1b[1;44;37m  %8s選單  \x1b[46m  [B]買入物品  [S]賣出物品  [Q]跳出     %*s\x1b[m", shopname[mode], 30 + d_cols - (int)(unsigned int)strlen(shopname[mode]), "");
         outs(inbuf);
         pipkey = vkey();
         switch (pipkey)
@@ -2293,7 +2295,7 @@ static int
 pip_weapon_doing_menu(             /* 武器購買畫面 */
 int variance,
 int type,
-struct weapon *p)
+const struct weapon *p)
 {
     time_t now;
     register int n = 0;
@@ -3152,7 +3154,7 @@ static int pip_job_workM(void)
     /*  ├────┼──────────────────────┤*/
     /*  │家庭教師│道德 + 1, 母性 + N, 魅力 - 1, 疲勞 + 7      │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    GCC_UNUSED float class;
     long workmoney;
 
     if ((d.bbtime / 60 / 30) < 4)
@@ -3700,7 +3702,7 @@ static int pip_play_guess(void)   /* 猜拳程式 */
 {
     int com;
     int pipkey;
-    struct tm *qtime;
+    GCC_UNUSED struct tm *qtime;
     time_t now;
 
     time(&now);
@@ -3847,7 +3849,7 @@ static void situ(void)
 /*---------------------------------------------------------------------------*/
 /* 資料庫                                                                    */
 /*---------------------------------------------------------------------------*/
-static const char *classrank[6] = {"沒有", "初級", "中級", "高級", "進階", "專業"};
+static const char *const classrank[6] = {"沒有", "初級", "中級", "高級", "進階", "專業"};
 static int classmoney[11][2] = {{ 0,  0},
     {60, 110}, {70, 120}, {70, 120}, {80, 130}, {70, 120},
     {60, 110}, {90, 140}, {70, 120}, {70, 120}, {80, 130}
@@ -3860,7 +3862,7 @@ static int classvariable[11][4] =
 };
 
 
-static const char *classword[11][5] =
+static const char *const classword[11][5] =
 {
     {"課名", "成功\一", "成功\二", "失敗一", "失敗二"},
 
@@ -4505,7 +4507,7 @@ pip_go_palace(void)
 
 static int
 pip_go_palace_screen(
-struct royalset *p)
+const struct royalset *p)
 {
     int n;
     int a;
@@ -4516,7 +4518,7 @@ struct royalset *p)
     char buf[256];
     char inbuf1[20];
     char inbuf2[20];
-    const char *needmode[3] = {"      ", "禮儀表現＞", "談吐技巧＞"};
+    const char *const needmode[3] = {"      ", "禮儀表現＞", "談吐技巧＞"};
     int save[11] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     d.nodone = 0;
@@ -4584,7 +4586,7 @@ struct royalset *p)
         clrtoeol();
         move(b_lines, 0);
         prints(
-            "\x1b[1;37;46m  參見選單  \x1b[44m [字母]選擇欲拜訪的人物  [Q]離開" NICKNAME "總司令部      %*s\x1b[0m", 20 + d_cols - (sizeof(NICKNAME) - 1), "");
+            "\x1b[1;37;46m  參見選單  \x1b[44m [字母]選擇欲拜訪的人物  [Q]離開" NICKNAME "總司令部      %*s\x1b[0m", 20 + d_cols - ((int)(unsigned int)sizeof(NICKNAME) - 1), "");
         pipkey = vkey();
         choice = pipkey - 64;
         if (choice < 1 || choice > 10)
@@ -4956,8 +4958,8 @@ int first)
                     d.hskill += random() % 2 + 1;
                     sprintf(buf, "普通攻擊，對方體力減低%d", dinjure);
                     vmsg(buf);
-                    sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了普通攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
-                            , d.name, opponent->pip->name, dinjure);
+                    sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了普通攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m",
+                            d.name, opponent->pip->name, dinjure);
                 }
                 opponent->pip->resistmode = 0;
                 opponent->pip->msgcount++;
@@ -4991,8 +4993,8 @@ int first)
                         d.hskill += random() % 2 + 2;
                         sprintf(buf, "全力攻擊，對方體力減低%d", dinjure);
                         vmsg(buf);
-                        sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了全力攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
-                                , d.name, opponent->pip->name, dinjure);
+                        sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了全力攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m",
+                                d.name, opponent->pip->name, dinjure);
                     }
                     else
                     {
@@ -5053,8 +5055,8 @@ int first)
                             d.mskill += random() % 2 + 2;
                             sprintf(buf, "魔法攻擊，對方體力減低%d", dinjure);
                             vmsg(buf);
-                            sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了魔法攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m"
-                                    , d.name, opponent->pip->name, dinjure);
+                            sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了魔法攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m",
+                                    d.name, opponent->pip->name, dinjure);
                         }
                     }
 
@@ -5297,7 +5299,7 @@ pip_ending_decide(
 char *endbuf1, char *endbuf2, char *endbuf3,
 int *endmode, int *endgrade)
 {
-    const char *name[8][2] = {{"男的", "女的"},
+    const char *const name[8][2] = {{"男的", "女的"},
         {"嫁給王子",   "娶了公主"},
         {"嫁給你",     "娶了你"},
         {"嫁給商人Ａ", "娶了女商人Ａ"},
@@ -6392,7 +6394,7 @@ int endgrade)
     move(10, (d_cols>>1) + 17);
     outs("\x1b[1;37m經過系統計算的結果：\x1b[0m");
     move(12, (d_cols>>1) + 17);
-    prints("\x1b[1;36m您的小雞 \x1b[37m%s \x1b[36m總得分＝ \x1b[1;5;33m%d \x1b[0m", d.name, gradeall);
+    prints("\x1b[1;36m您的小雞 \x1b[37m%s \x1b[36m總得分＝ \x1b[1;5;33m%ld \x1b[0m", d.name, gradeall);
     return gradeall;
 }
 
@@ -6523,15 +6525,15 @@ static int pip_query(void)  /*拜訪小雞*/
 
 static int
 pip_read(
-char *genbuf)
+const char *userid)
 {
     FILE *fs;
     char buf[200];
-    /*char yo[14][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
-                      "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
-    char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
-                      "成年", "壯年", "更年", "老年", "古稀", "神仙"
-                     };
+    /*cosnt char yo[14][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
+                            "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
+    const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
+                            "成年", "壯年", "更年", "老年", "古稀", "神仙"
+                           };
     int pc1, age1, age = 0;
 
     int year1, month1, day1, sex1, death1, nodone1, relation1, liveagain1, chickenmode1, level1, exp1, dataE1;
@@ -6556,9 +6558,9 @@ char *genbuf)
     int workP1, workQ1, workR1, workS1, workT1;
     int workU1, workV1, workW1, workX1, workY1, workZ1;
 
-    /* sprintf(buf, "home/%s/chicken", genbuf);*/
-    usr_fpath(buf, genbuf, "chicken");
-    /* currutmp->destuid = genbuf;*/
+    /* sprintf(buf, "home/%s/chicken", userid);*/
+    usr_fpath(buf, userid, "chicken");
+    /* currutmp->destuid = userid;*/
 
     if ( ( fs = fopen(buf, "r") ) )
     {
@@ -6618,7 +6620,7 @@ char *genbuf)
 
         move(1, 0);
         clrtobot();
-        prints("這是%s養的小雞：\n", genbuf);
+        prints("這是%s養的小雞：\n", userid);
 
         if (death1 == 0)
         {
@@ -6682,10 +6684,10 @@ char *genbuf)
             if (shit1 > 40 && shit1 < 60) outs("臭臭的..");
             if (shit1 >= 60 && shit1 < 80) outs("好臭喔..");
             if (shit1 >= 80 && shit1 < 100) outs("\x1b[1;34m快臭死了..\x1b[m");
-            if (shit1 >= 100) {outs("\x1b[1;31m臭死了..\x1b[m"); return -1;}
+            if (shit1 >= 100) { outs("\x1b[1;31m臭死了..\x1b[m"); return -1; }
 
             pc1 = hp1 * 100 / maxhp1;
-            if (pc1 == 0) {outs("餓死了.."); return -1;}
+            if (pc1 == 0) { outs("餓死了.."); return -1; }
             if (pc1 < 20) outs("\x1b[1;35m全身無力中.快餓死了.\x1b[m");
             if (pc1 < 40 && pc1 >= 20) outs("體力不太夠..想吃點東西..");
             if (pc1 < 100 && pc1 >= 80) outs("嗯～肚子飽飽有體力..");
@@ -6694,21 +6696,21 @@ char *genbuf)
             pc1 = tired1;
             if (pc1 < 20) outs("精神抖擻中..");
             if (pc1 < 80 && pc1 >= 60) outs("\x1b[1;34m有點小累..\x1b[m");
-            if (pc1 < 100 && pc1 >= 80) {outs("\x1b[1;31m好累喔，快不行了..\x1b[m"); }
-            if (pc1 >= 100) {outs("累死了..."); return -1;}
+            if (pc1 < 100 && pc1 >= 80) { outs("\x1b[1;31m好累喔，快不行了..\x1b[m"); }
+            if (pc1 >= 100) { outs("累死了..."); return -1; }
 
             pc1 = 60 + 10 * age;
             if (weight1 < (pc1 + 30) && weight1 >= (pc1 + 10)) outs("有點小胖..");
             if (weight1 < (pc1 + 50) && weight1 >= (pc1 + 30)) outs("太胖了..");
-            if (weight1 > (pc1 + 50)) {outs("胖死了..."); return -1;}
+            if (weight1 > (pc1 + 50)) { outs("胖死了..."); return -1; }
 
-            if (weight1 < (pc1 - 50)) {outs("瘦死了.."); return -1;}
+            if (weight1 < (pc1 - 50)) { outs("瘦死了.."); return -1; }
             if (weight1 > (pc1 - 30) && weight1 <= (pc1 - 10)) outs("有點小瘦..");
             if (weight1 > (pc1 - 50) && weight1 <= (pc1 - 30)) outs("太瘦了..");
 
             if (sick1 < 75 && sick1 >= 50) outs("\x1b[1;34m生病了..\x1b[m");
-            if (sick1 < 100 && sick1 >= 75) {outs("\x1b[1;31m病重!!..\x1b[m"); }
-            if (sick1 >= 100) {outs("病死了.!."); return -1;}
+            if (sick1 < 100 && sick1 >= 75) { outs("\x1b[1;31m病重!!..\x1b[m"); }
+            if (sick1 >= 100) { outs("病死了.!."); return -1; }
 
             pc1 = happy1;
             if (pc1 < 20) outs("\x1b[1;31m很不快樂..\x1b[m");
@@ -6936,15 +6938,17 @@ pip_system_service(void)
     return 0;
 }
 
+#if 0  // Unused
 #include<stdarg.h>
 static void
 pip_data_list_va(va_list pvar)
 {
-    char *userid;
+    GCC_UNUSED const char *userid;
 
-    userid = va_arg(pvar, char *);
+    userid = va_arg(pvar, const char *);
     pip_data_list(cuser.userid);
 }
+#endif  // #if 0  // Unused
 
 static int
 pip_data_list_cuser(void)
@@ -6954,7 +6958,7 @@ pip_data_list_cuser(void)
 
 static int
 pip_data_list(  /*看小雞個人詳細資料*/
-char *userid)
+const char *userid)
 {
     char buf[256];
     char inbuf1[20];
@@ -7206,7 +7210,7 @@ char *userid)
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-static int pip_fight_main(int n, struct playrule list[], int mode);
+static int pip_fight_main(int n, const struct playrule list[], int mode);
 
 /*---------------------------------------------------------------------------*/
 /* 戰鬥人物決定函式                                                          */
@@ -7321,7 +7325,7 @@ int n)
 static int
 pip_fight_main(
 int n,
-struct playrule list[],
+const struct playrule list[],
 int mode)
 {
     pip_vs_man(n, list, mode);
@@ -7335,7 +7339,7 @@ int mode)
 static int
 pip_vs_man(
 int n,
-struct playrule *p,
+const struct playrule *p,
 int mode)
 {
     /* p[n].name hp mp speed attack resist money special map */
@@ -7355,7 +7359,7 @@ int mode)
     int oldbrave;               /*未戰鬥前勇敢*/
     int oldhskill;              /*未戰鬥前戰鬥技術*/
     int oldmskill;              /*未戰鬥前魔法技術*/
-    int oldethics;      /*未戰鬥前道德*/
+    GCC_UNUSED int oldethics;   /*未戰鬥前道德*/
     int oldmoney;               /*未戰鬥前金錢*/
     int oldtired;
     int oldhp;
@@ -7427,11 +7431,11 @@ int mode)
         /*vs_head("電子養小雞", BoardName);*/
         move(0, 0);
         if (d.sex == 1)
-            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
         else if (d.sex == 2)
-            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
         else
-            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
         outs(buf);
         move(6, 0);
         if (mode == 1)
@@ -7667,11 +7671,11 @@ int mode)
         clear();
         move(0, 0);
         if (d.sex == 1)
-            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
         else if (d.sex == 2)
-            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
         else
-            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+            sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s        %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
         outs(buf);
         move(1, 0);
         sprintf(buf, "\x1b[1;31m┌─────────────────────────────────────┐\x1b[m");
@@ -7963,7 +7967,7 @@ get_hurt(int hurt, int mexp)
 static int
 pip_magic_menu(  /*戰鬥中法術的應用*/
 int mode,
-UTMP *opt)
+const UTMP *opt)
 {
     char buf[256];
     int injure;         /*傷害力*/
@@ -8048,7 +8052,7 @@ UTMP *opt)
 /*魔法視窗*/
 static int
 pip_magic_doing_menu(   /*魔法畫面*/
-struct magicset *p)
+const struct magicset *p)
 {
     register int n = 1;
     register const char *s;
@@ -8147,15 +8151,15 @@ struct magicset *p)
 #ifdef  HAVE_PIP_FIGHT
 static int
 pip_magic_fight_menu(  /*魔法畫面*/
-struct magicset *p,
-UTMP *opt)
+const struct magicset *p,
+const UTMP *opt)
 {
     int n = 1, cur = 1, mg[16];
     char buf[256];
     char ans[5];
     int pipkey;
     int injure = 0;
-    struct magicset *s;
+    const struct magicset *s;
 
     s = p;
     d.nodone = 0;
@@ -8231,7 +8235,7 @@ pip_marriage_offer(void)
     char ans[4];
     int money;
     int who;
-    const char *name[5][2] = {{"女商人Ａ", "商人Ａ"},
+    const char *const name[5][2] = {{"女商人Ａ", "商人Ａ"},
         {"女商人Ｂ", "商人Ｂ"},
         {"女商人Ｃ", "商人Ｃ"},
         {"女商人Ｄ", "商人Ｄ"},
@@ -8289,7 +8293,7 @@ pip_marriage_offer(void)
 
 static int pip_results_show(void)  /*收穫季*/
 {
-    const char *showname[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
+    const char *const showname[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
     char buf[256];
     int pipkey, i = 0;
     int winorlost = 0;
@@ -8481,7 +8485,7 @@ static int pip_results_show(void)  /*收穫季*/
 static int pip_results_show_ending(
 int winorlost, int mode, int a, int b, int c)
 {
-    const char *gamename[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
+    const char *const gamename[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
     int resultmoney[4] = {0, 3000, 5000, 8000};
     char name1[25], name2[25], name3[25], name4[25];
     char buf[256];
@@ -8655,9 +8659,9 @@ int mode)
     int m, color;
     int age;
     int color1, color2, color3, color4;
-    char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
-                      "成年", "壯年", "更年", "老年", "古稀", "神仙"
-                     };
+    const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
+                            "成年", "壯年", "更年", "老年", "古稀", "神仙"
+                           };
 
     color1 = color2 = color3 = color4 = 37;
     move(1, 0);
@@ -8707,9 +8711,9 @@ int mode)
     else
         color1 = 37;
     sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
-    sprintf(buf
-            , " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m"
-            , yo[age], inbuf1, m, color1, d.money);
+    sprintf(buf,
+            " \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m",
+            yo[age], inbuf1, m, color1, d.money);
     outs_centered(buf);
 
     move(2, 0);
@@ -8738,9 +8742,9 @@ int mode)
 
     sprintf(inbuf1, "%d/%d", d.hp, d.maxhp);
     sprintf(inbuf2, "%d/%d", d.mp, d.maxmp);
-    sprintf(buf
-            , " \x1b[1;32m[生  命]\x1b[%dm %-10s\x1b[32m[法  力]\x1b[%dm %-10s\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m "
-            , color1, inbuf1, color2, inbuf2, d.weight, color3, d.tired);
+    sprintf(buf,
+            " \x1b[1;32m[生  命]\x1b[%dm %-10s\x1b[32m[法  力]\x1b[%dm %-10s\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m ",
+            color1, inbuf1, color2, inbuf2, d.weight, color3, d.tired);
     outs_centered(buf);
 
     move(3, 0);
@@ -8768,9 +8772,9 @@ int mode)
         color4 = 33;
     else
         color4 = 37;
-    sprintf(buf
-            , " \x1b[1;32m[髒  髒]\x1b[%dm %-4d      \x1b[32m[病  氣]\x1b[%dm %-4d      \x1b[32m[快樂度]\x1b[%dm %-4d      \x1b[32m[滿意度]\x1b[%dm %-4d\x1b[0m"
-            , color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
+    sprintf(buf,
+            " \x1b[1;32m[髒  髒]\x1b[%dm %-4d      \x1b[32m[病  氣]\x1b[%dm %-4d      \x1b[32m[快樂度]\x1b[%dm %-4d      \x1b[32m[滿意度]\x1b[%dm %-4d\x1b[0m",
+            color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
     outs_centered(buf);
     if (mode == 1)/*餵食*/
     {
@@ -8799,9 +8803,9 @@ int mode)
             color4 = 33;
         else
             color4 = 37;
-        sprintf(buf
-                , " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m"
-                , color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
+        sprintf(buf,
+                " \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m",
+                color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
         outs_centered(buf);
 
     }

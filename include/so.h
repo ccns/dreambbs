@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* so.h         ( NCKU CCNS WindTop-DreamBBS 2.0)        */
+/* so.h         ( NCKU CCNS WindTop-DreamBBS 2.0 )       */
 /*-------------------------------------------------------*/
 /* Author: 37586669+IepIweidieng@users.noreply.github.com*/
 /* Target: Prototype for shared object library           */
@@ -8,6 +8,9 @@
 
 #ifndef PROTO_SO_H
 #define PROTO_SO_H
+
+/* Macros for implementation-defined attributes */
+#include "attrdef.h"
 
 /* ----------------------------------------------------- */
 /* prototypes                                            */
@@ -35,7 +38,7 @@ int reset6(void);
 int reset7(void);
 
 /* so/aloha.c */
-int cmpbmw(const void *benz);
+GCC_PURE int cmpbmw(const void *benz);
 int t_aloha(void);
 
 /* so/ascii.c */
@@ -76,7 +79,7 @@ int main_classtable(void);
 int clean(XO *xo);
 
 /* so/contact.c */
-void contact_send(CONTACT *contact);
+void contact_send(const CONTACT *contact);
 int Contact(void);
 
 /* so/gamef.c */
@@ -105,7 +108,7 @@ void initMap(void);
 int show_fasttime(void);
 int load_fasttime(void);
 int change_fasttime(int n, int t);
-int countNeighbor(int y, int x, int bitmask);
+GCC_PURE int countNeighbor(int y, int x, int bitmask);
 void drawInfo(void);
 void drawPrompt(void);
 void drawMapLine(int y, int flShow);
@@ -126,7 +129,7 @@ int new_passwd(void);
 
 /* so/personal.c */
 int personal_apply(void);
-int sort_compare(const void *p1, const void *p2);
+GCC_PURE int sort_compare(const void *p1, const void *p2);
 int personal_admin(void);
 
 /* so/pip.c */

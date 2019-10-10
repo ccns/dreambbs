@@ -66,7 +66,7 @@
 
 #define PERM_ADMIN      (PERM_BOARD | PERM_ACCOUNTS | PERM_SYSOP | PERM_CHATROOM | PERM_KTV)
 #define PERM_ALLBOARD   (PERM_SYSOP | PERM_BOARD)
-#define PERM_LOGINCLOAK (PERM_SYSOP | PERM_ACCOUNTS | PERM_BOARD | PERM_CHATROOM )
+#define PERM_LOGINCLOAK (PERM_SYSOP | PERM_ACCOUNTS | PERM_BOARD | PERM_CHATROOM)
 #define PERM_SEEULEVELS PERM_SYSOP
 #define PERM_SEEBLEVELS (PERM_SYSOP | PERM_BM)
 
@@ -102,7 +102,7 @@
 #ifdef ADMIN_C
 
 
-static const char *perm_tbl[] = {
+static const char *const perm_tbl[] = {
   "基本權力",                   /* PERM_BASIC */
   "進入聊天室",                 /* PERM_CHAT */
   "找人聊天",                   /* PERM_PAGE */

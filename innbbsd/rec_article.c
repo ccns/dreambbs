@@ -127,7 +127,7 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
 
 static void
 update_btime(
-    char *brdname)
+    const char *brdname)
 {
     BRD *brdp, *bend;
 
@@ -146,10 +146,10 @@ update_btime(
 
 static void
 bbspost_add(
-    char *board, char *addr, char *nick)
+    const char *board, const char *addr, const char *nick)
 {
     int cc;
-    char *str;
+    const char *str;
     char folder[64], fpath[64];
     HDR hdr;
     FILE *fp;
@@ -212,7 +212,7 @@ bbspost_add(
 static inline void
 move_post(
     HDR *hdr,
-    char *board, char *filename)
+    const char *board, const char *filename)
 {
     HDR post;
     char folder[64];
@@ -234,15 +234,15 @@ move_post(
 
 static void
 bbspost_cancel(
-    char *board,
+    const char *board,
     time_t chrono,
-    char *fpath)
+    const char *fpath)
 {
     HDR hdr;
     struct stat st;
     long size;
     int fd, ent;
-    char folder[64];
+    char folder[64], *data;
     off_t off, len;
 
     /* XLOG("cancel [%s] %d\n", board, time); */
@@ -296,14 +296,14 @@ bbspost_cancel(
                     off = lseek(fd, 0, SEEK_CUR);
                     len = st.st_size - off;
 
-                    board = (char *) malloc(len);
-                    read(fd, board, len);
+                    data = (char *) malloc(len);
+                    read(fd, data, len);
 
                     lseek(fd, off - size, SEEK_SET);
-                    write(fd, board, len);
+                    write(fd, data, len);
                     ftruncate(fd, st.st_size - size);
 
-                    free(board);
+                    free(data);
                     break;
                 }
 
@@ -326,7 +326,7 @@ bbspost_cancel(
 
 int                     /* 0:cancel success  -1:cancel fail */
 cancel_article(
-    char *msgid)
+    const char *msgid)
 {
     int fd;
     char fpath[64], cancelfrom[128], buffer[128];
@@ -390,11 +390,11 @@ cancel_article(
 
 static int              /* 1: 符合擋信規則 */
 is_spam(
-    char *board, char *addr, char *nick)
+    const char *board, const char *addr, const char *nick)
 {
     spamrule_t *spam;
     int i, xmode;
-    char *compare, *detail;
+    const char *compare, *detail;
 
     for (i = 0; i < SPAMCOUNT; i++)
     {
@@ -447,7 +447,7 @@ static
 #endif
 newsfeeds_t *
 search_newsfeeds_bygroup(
-    char *newsgroup)
+    const char *newsgroup)
 {
     newsfeeds_t nf, *find;
 

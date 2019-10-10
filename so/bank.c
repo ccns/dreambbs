@@ -16,7 +16,7 @@ void log_bank(
     int mode,
     int a,
     int b,
-    char *who)
+    const char *who)
 {
     time_t now;
     char c_time[25], c_buf[100]={0};
@@ -46,7 +46,7 @@ int point1_money(void)
 {
     int num;
     char buf[10];
-    int money;
+    GCC_UNUSED int money;
     ACCT acct;
 
     if (acct_load(&acct, cuser.userid) >= 0)
@@ -65,8 +65,8 @@ int point1_money(void)
     vs_bar("夢幣轉換");
 
     move(2, 0);
-    prints("你的身上有 %9d 夢幣\n\n           %9d 優良點數"
-           , acct.money, acct.point1);
+    prints("你的身上有 %9d 夢幣\n\n           %9d 優良點數",
+           acct.money, acct.point1);
     if (acct.point1 < 1)
     {
         pmsg2("優良點數不足");
@@ -121,7 +121,7 @@ TransferAccount(void)
     char folder[128], date[9], fpath[128];
     char userid[13];
     char str[128];
-    int selfmoney, pay;
+    int selfmoney GCC_UNUSED, pay;
     double temp;
 
 #ifdef M3_USE_PFTERM
@@ -262,7 +262,7 @@ money_back(void)
     int fd;
     double m1 = 0;
     double m2 = 0;
-    double m3 = 0;
+    GCC_UNUSED double m3 = 0;
     MONEY oldwealth;
 
     //if (acct_get("要送誰點歌次數：", &acct) < 1)
@@ -293,9 +293,9 @@ money_back(void)
 
         m1 = ((m1+m2)/2) - 1;  //請自行修改
 
-        if (m1 >= INT_MAX )
+        if (m1 >= INT_MAX)
             m1 = INT_MAX;
-        if (m2 >= INT_MAX )
+        if (m2 >= INT_MAX)
             m2 = INT_MAX;
 
         //為了方便所以沒有砍掉舊記錄, 對方可能洗錢
@@ -360,7 +360,7 @@ int bank_main(void)
 
     move(0, 0);
     prints("\x1b[1;33;42m%*s" BOARDNAME "    銀行%*s\x1b[m\n\n",
-           (d_cols >> 1) + 36 - sizeof(BOARDNAME), "", ((d_cols+1) >> 1) + 35, "");
+           (d_cols >> 1) + 36 - (int)(unsigned int)sizeof(BOARDNAME), "", ((d_cols+1) >> 1) + 35, "");
     move(10, 0);
     prints("  您的帳號資訊如下    １. 用優良點數換取夢幣\n\n");
     prints("                      ２. 用夢幣換取優良點數\n\n");

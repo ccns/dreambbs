@@ -87,7 +87,7 @@ my_recv(
 {
     FILE *fout;
     int rel;
-    char *ptr;
+    const char *ptr;
 
     fout = client->Argv.out;
 
@@ -141,9 +141,9 @@ my_recv(
 static daemoncmd_t cmds[];
 
 
-static daemoncmd_t *
+GCC_PURE static daemoncmd_t *
 searchcmd(
-    char *cmd)
+    const char *cmd)
 {
     daemoncmd_t *p;
     const char *name;
@@ -163,7 +163,7 @@ searchcmd(
 
 static int
 argify(
-    char *line, char ***argvp)
+    const char *line, char ***argvp)
 {
     static char *argvbuffer[MAX_ARG + 2];
     char **argv = argvbuffer;
@@ -279,7 +279,7 @@ static void
 channelcreate(
     ClientType *client,
     int sock,
-    char *nodename, char *hostname)
+    const char *nodename, const char *hostname)
 {
     buffer_t *in, *out;
 
@@ -597,9 +597,9 @@ static daemoncmd_t cmds[] =
 /* ----------------------------------------------------- */
 
 
-static char *                   /* 傳回是由哪一個站台餵信進來的 */
+static const char *             /* 傳回是由哪一個站台餵信進來的 */
 search_nodelist_byhost(
-    char *hostname)
+    const char *hostname)
 {
     nodelist_t *find;
     struct hostent *he;
@@ -640,7 +640,8 @@ static void
 inndchannel(void)
 {
     int i, fd, sock;
-    char *nodename, hostname[128];
+    char hostname[128];
+    const char *nodename;
     time_t uptime1;             /* time to maintain history */
     time_t uptime2;             /* time in initial_bbs */
     time_t now;
@@ -761,9 +762,9 @@ inndchannel(void)
             }
             if (i == MAXCLIENT)
             {
-                static const char *msg_no_desc = "502 目前連線人數過多，請稍後再試\r\n";
+                static const char msg_no_desc[] = "502 目前連線人數過多，請稍後再試\r\n";
 
-                write(fd, msg_no_desc, sizeof(msg_no_desc));
+                write(fd, msg_no_desc, sizeof(msg_no_desc)-1);
                 close(fd);
                 continue;
             }
@@ -831,10 +832,10 @@ standaloneinit(void)
 
 static void
 usage(
-    char *argv)
+    const char *argv)
 {
-    printf("Usage: %s [options]\n", argv);
-    printf("       -i        以 inetd wait option 啟動\n");
+    fprintf(stderr, "Usage: %s [options]\n", argv);
+    fprintf(stderr, "       -i        以 inetd wait option 啟動\n");
 }
 
 
@@ -867,7 +868,7 @@ main(
 
         default:
             usage(argv[0]);
-            exit(-1);
+            exit(2);
         }
     }
 

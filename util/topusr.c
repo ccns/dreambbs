@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* util/topuser.c         (MapleBBS Ver 3.00 )           */
+/* util/topuser.c       ( MapleBBS Ver 3.00 )            */
 /*-------------------------------------------------------*/
 /* author : gslin@abpe.org                               */
 /*          mat.bbs@fall.twbbs.org                       */
@@ -20,7 +20,7 @@
 
 DATA toplogins[TOPNUM], topposts[TOPNUM], topstay[TOPNUM];
 
-int
+GCC_PURE int
 sort_compare(
     const void *p1,
     const void *p2)
@@ -33,25 +33,25 @@ sort_compare(
     return (a2->num-a1->num);
 }
 
-DATA *
+GCC_PURE DATA *
 findmin(
-    DATA *src)
+    const DATA *src)
 {
     int i;
-    DATA *p;
+    const DATA *p;
 
     p = src;
     for (i = 0; i < TOPNUM; i++)
         if (src[i].num < p->num)
             p = src+i;
-    return (p);
+    return (DATA *)(p);
 }
 
 void
 merge_id_nick(
     char *dst,
-    char *userid,
-    char *nick)
+    const char *userid,
+    const char *nick)
 {
     if (*userid)
     {
@@ -67,15 +67,13 @@ merge_id_nick(
 void
 write_data(
     const char *title,
-    DATA *data,
+    const DATA *data,
     int mode)
 {
-    char buf[256];
     int i;
     const char *color;
 
-    sprintf(buf, "\x1b[1;32m%%%ds\x1b[m\n\n", 80);
-    printf(buf, "%s", title);
+    printf("\x1b[1;32m%*s\x1b[m\n\n", 80, title);
     if (mode == 0)
     {
         puts("\x1b[1;31m¦W¦¸\x1b[m  \x1b[1;33mID\x1b[m (\x1b[1;34mNickname\x1b[m)  "
@@ -98,7 +96,7 @@ write_data(
         merge_id_nick(buf1, data[i].userid, data[i].username);
         merge_id_nick(buf2, data[i+TOPNUM_HALF].userid,
                       data[i+TOPNUM_HALF].username);
-        switch(i)
+        switch (i)
         {
             case 0:
                 color = "\x1b[1;31m";

@@ -51,7 +51,7 @@ static int Verbose = 0;                 /* 1: 顯示詳細訊息 */
 static int KillFormerProc = 0;          /* 1: 刪除上次執行失敗的 bbslink */
 static int ResetActive = 0;             /* 1: 將 high-number 更新到與 news server 上相同 */
 static int MaxArts = MAX_ARTS;          /* 對 news server 每個群組最多只抓幾封文章 */
-static char *DefaultProcSite = NULL;    /* !=NULL: 只處理某特定站台 */
+static const char *DefaultProcSite = NULL;  /* !=NULL: 只處理某特定站台 */
 
 
 #define DEBUG(arg)      if (Verbose) printf arg
@@ -64,7 +64,7 @@ static char *DefaultProcSite = NULL;    /* !=NULL: 只處理某特定站台 */
 
 static nodelist_t *
 search_nodelist_bynode(
-    char *name)
+    const char *name)
 {
     nodelist_t nl;
 
@@ -75,7 +75,7 @@ search_nodelist_bynode(
 
 static newsfeeds_t *
 search_newsfeeds_byboard(
-    char *board)
+    const char *board)
 {
     newsfeeds_t nf;
 
@@ -101,7 +101,7 @@ typedef struct
 static void
 queuefeed(
     nodelist_t *node,
-    soverview_t *sover)
+    const soverview_t *sover)
 {
     int fd;
 
@@ -147,14 +147,14 @@ Gtime(
 
 static void
 deal_sover(
-    bntp_t *bntp)
+    const bntp_t *bntp)
 {
     newsfeeds_t *nf;
     nodelist_t *nl;
     soverview_t sover;
     time_t mtime;
     char buf[80];
-    char *board, *filename;
+    const char *board, *filename;
 
     board = bntp->board;
 
@@ -201,7 +201,7 @@ deal_sover(
 static void
 deal_bntp(void)
 {
-    const char *OUTING = "innd/.outing";        /* 處理時暫存的檔 */
+    const char *const OUTING = "innd/.outing";  /* 處理時暫存的檔 */
     int fd, i;
     nodelist_t *node;
     bntp_t bntp;
@@ -243,7 +243,7 @@ deal_bntp(void)
 
 static int
 inetclient(
-    char *server,
+    const char *server,
     int port)
 {
     struct hostent *host;       /* host information entry */
@@ -279,7 +279,7 @@ inetclient(
 }
 
 
-static int
+GCC_CHECK_FORMAT(1, 2) static int
 tcpcommand(const char *fmt, ...)
 {
     va_list args;
@@ -305,9 +305,9 @@ tcpcommand(const char *fmt, ...)
 
 static int                      /* 200~202:成功 0:失敗 */
 open_connect(                   /* 連去這個站 */
-    nodelist_t *node)
+    const nodelist_t *node)
 {
-    char *host = node->host;
+    const char *host = node->host;
     int port = node->port;
 
     DEBUG(("╭<open_connect> 正在開啟連線\n"));
@@ -447,7 +447,7 @@ sover_post(
 
 static void
 fail_post(
-    char *msgid)
+    const char *msgid)
 {
     bbslog("<bbslink> :Warn: %s <%s>\n", SERVERbuffer, msgid);
     DEBUG(("│→:Warn: %s <%s>\n", SERVERbuffer, msgid));
@@ -456,7 +456,7 @@ fail_post(
 
 static void
 send_outgoing(
-    nodelist_t *node,
+    const nodelist_t *node,
     soverview_t *sover)
 {
     int cc, status;
@@ -556,7 +556,7 @@ send_outgoing(
 
 static int                      /* 1:成功 0:失敗 */
 NNRPgroup(                      /* 切換 group，並傳回 low-number 及 high-number */
-    char *newsgroup,
+    const char *newsgroup,
     int *low, int *high)
 {
     int i;
@@ -588,7 +588,7 @@ NNRPgroup(                      /* 切換 group，並傳回 low-number 及 high-number 
 }
 
 
-static const char *tempfile = "innd/bbslinktmp";
+static const char *const tempfile = "innd/bbslinktmp";
 
 static int                      /* 1:成功 0:失敗 */
 NNRParticle(                    /* 取回第 artno 篇的全文 */
@@ -633,7 +633,8 @@ static void
 my_post(void)
 {
     int rel, size;
-    char *ptr, *data;
+    char *data;
+    const char *ptr;
     struct stat st;
 
     if ((rel = open(tempfile, O_RDONLY)) >= 0)
@@ -740,10 +741,10 @@ updaterc(
 
 static void
 readnews(
-    nodelist_t *node)
+    const nodelist_t *node)
 {
     int i, low, high, artcount, artno;
-    char *name, *newsgroup;
+    const char *name, *newsgroup;
     newsfeeds_t *nf;
 
     name = node->name;
@@ -819,7 +820,7 @@ readnews(
 /*-------------------------------------------------------*/
 
 
-static const char *lockfile = "innd/bbslinking";
+static const char *const lockfile = "innd/bbslinking";
 
 static void
 bbslink_un_lock(void)
@@ -874,7 +875,7 @@ bbslink_get_lock(void)
 
 static void
 visit_site(
-    nodelist_t *node)
+    const nodelist_t *node)
 {
     int status, response, fd, num;
     char linkfile[64];
@@ -980,14 +981,14 @@ bbslink(void)
 
 static void
 usage(
-    char *argv)
+    const char *argv)
 {
-    printf("Usage: %s [options]\n", argv);
-    printf("       -c  將 high-number 與伺服器上同步(不取信)\n");
-    printf("       -k  砍掉目前正在跑的 bbslink，並重新啟動 bbslink\n");
-    printf("       -v  顯示詳細的連線過程\n");
-    printf("       -a ######  指定每個群組最多取幾封信(預設 %d 封)\n", MAX_ARTS);
-    printf("       -s site    只取這個站台的文章\n");
+    fprintf(stderr, "Usage: %s [options]\n", argv);
+    fprintf(stderr, "       -c  將 high-number 與伺服器上同步(不取信)\n");
+    fprintf(stderr, "       -k  砍掉目前正在跑的 bbslink，並重新啟動 bbslink\n");
+    fprintf(stderr, "       -v  顯示詳細的連線過程\n");
+    fprintf(stderr, "       -a ######  指定每個群組最多取幾封信(預設 %d 封)\n", MAX_ARTS);
+    fprintf(stderr, "       -s site    只取這個站台的文章\n");
 }
 
 
@@ -1035,7 +1036,7 @@ main(
     if (errflag > 0)
     {
         usage(argv[0]);
-        return -1;
+        return 2;
     }
 
     /* 開始 bbslink，將 bbslink 鎖住 */

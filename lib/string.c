@@ -1,8 +1,10 @@
+#define __STDC_WANT_LIB_EXT1__  1
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "dao.h"
@@ -13,15 +15,15 @@
 #define GLIBC_PREREQ(M, m) 0
 #endif
 
-#ifndef LINUX_HAVE_GETRANDOM
-#define LINUX_HAVE_GETRANDOM (GLIBC_PREREQ(2, 25) && __linux__)
+#ifndef LIB_STRING_LINUX_HAVE_GETRANDOM
+#define LIB_STRING_LINUX_HAVE_GETRANDOM (GLIBC_PREREQ(2, 25) && __linux__)
 #endif
 
-#if LINUX_HAVE_GETRANDOM
+#if LIB_STRING_LINUX_HAVE_GETRANDOM
   #include <sys/random.h>
 #endif
 
-char *str_add(char *dst, char *src)
+char *str_add(char *dst, const char *src)
 {
     while ((*dst = *src))
     {
@@ -74,7 +76,7 @@ void str_cat(char *dst, const char *s1, const char *s2)
         ;
 }
 
-int str_cmp(const char *s1, const char *s2)
+GCC_PURE int str_cmp(const char *s1, const char *s2)
 {
     int c1, c2, diff;
 
@@ -93,7 +95,7 @@ int str_cmp(const char *s1, const char *s2)
     return 0;
 }
 
-void str_cut(char *dst, char *src)
+void str_cut(char *dst, const char *src)
 {
     int cc;
 
@@ -137,7 +139,7 @@ void str_cut(char *dst, char *src)
 /* ----------------------------------------------------- */
 
 
-int qp_code(register int x)
+GCC_CONSTEXPR int qp_code(register int x)
 {
     if (x >= '0' && x <= '9')
         return x - '0';
@@ -155,7 +157,7 @@ int qp_code(register int x)
 /* ------------------------------------------------------------------ */
 
 
-int base64_code(register int x)
+GCC_CONSTEXPR int base64_code(register int x)
 {
     if (x >= 'A' && x <= 'Z')
         return x - 'A';
@@ -274,8 +276,8 @@ void mm_getcharset(const char *str, char *charset, int size    /* charset size *
  */
 
 /* 解 Header 的 mmdecode */
-static int mmdecode_header(char *src,    /* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
-                           char encode,    /* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
+static int mmdecode_header(const char *src,  /* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
+                           char encode,      /* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
                            char *dst)
 {
     char *t;
@@ -475,7 +477,7 @@ void str_decode(char *str)
     strcpy(str, buf);
 }
 
-char *str_dup(char *src, int pad)
+char *str_dup(const char *src, int pad)
 {
     char *dst;
 
@@ -484,7 +486,7 @@ char *str_dup(char *src, int pad)
     return dst;
 }
 
-void str_folder(char *fpath, char *folder, const char *fname)
+void str_folder(char *fpath, const char *folder, const char *fname)
 {
     int ch;
     char *token = NULL;
@@ -500,7 +502,7 @@ void str_folder(char *fpath, char *folder, const char *fname)
     strcpy(token, fname);
 }
 
-void setdirpath(char *fpath, char *direct, const char *fname)
+void setdirpath(char *fpath, const char *direct, const char *fname)
 {
     int ch;
     char *target = NULL;
@@ -603,7 +605,7 @@ int str_from(char *from, char *addr, char *nick)
     return 0;
 }
 
-int str_has(char *list, char *tag)
+GCC_PURE int str_has(const char *list, const char *tag)
 {
     int cc, len;
 
@@ -626,7 +628,7 @@ int str_has(char *list, char *tag)
     }
 }
 
-int str_hash2(char *str, int seed)
+GCC_PURE int str_hash2(const char *str, int seed)
 {
     int cc;
 
@@ -637,7 +639,7 @@ int str_hash2(char *str, int seed)
     return (seed & 0x7fffffff);
 }
 
-int str_hash(const char *str, int seed)
+GCC_PURE int str_hash(const char *str, int seed)
 {
     int cc;
 
@@ -648,7 +650,7 @@ int str_hash(const char *str, int seed)
     return (seed & 0x7fffffff);
 }
 
-int str_len(char *str)
+GCC_PURE int str_len(const char *str)
 {
     int cc, len;
 
@@ -675,7 +677,7 @@ void str_lower(char *dst, const char *src)
     while (ch);
 }
 
-void str_lowest(char *dst, char *src)
+void str_lowest(char *dst, const char *src)
 {
     int ch;
     int in_chi = 0;                /* 1: 前一碼是中文字 */
@@ -692,7 +694,7 @@ void str_lowest(char *dst, char *src)
     while (ch);
 }
 
-int str_ncmp(const char *s1, const char *s2, int n)
+GCC_PURE int str_ncmp(const char *s1, const char *s2, int n)
 {
     int c1, c2;
 
@@ -747,21 +749,22 @@ void str_ncpy(char *dst, const char *src, int n)
     while (n);
 }
 
-char *str_ndup(char *src, int len)
+char *str_ndup(const char *src, int len)
 {
-    char *dst, *str, *end;
+    char *dst, *str;
+    const char *str_src, *end;
 
-    str = src;
+    str_src = src;
     end = src + len;
     do
     {
-        if (!*str++)
+        if (!*str_src++)
         {
-            end = str;
+            end = str_src;
             break;
         }
     }
-    while (str < end);
+    while (str_src < end);
 
     dst = (char *)malloc(end - src);
 
@@ -803,13 +806,22 @@ char *str_ndup(char *src, int len)
 /* password encryption                                   */
 /* ----------------------------------------------------- */
 
+#ifndef LIB_STRING_HAVE_ARC4RANDOM_CHACHA20
+#define LIB_STRING_HAVE_ARC4RANDOM_CHACHA20  \
+    (OpenBSD >= 201405 /* 5.5 */ || __FreeBSD_version >= 1200000 /* 12.0 */)
+#endif
+#ifndef LIB_STRING_HAVE_EXPLICIT_BZERO
+#define LIB_STRING_HAVE_EXPLICIT_BZERO \
+    (GLIBC_PREREQ(2, 25) || OpenBSD >= 201405 /* 5.5 */ || __FreeBSD_version >= 1100000 /* 11.0 */)
+#endif
+
 /* IID.20190524: Get bytes from the system PRNG device. */
 char *getrandom_bytes(char *buf, size_t buflen)
 {
-#if LINUX_HAVE_GETRANDOM
+#if LIB_STRING_LINUX_HAVE_GETRANDOM
     if (getrandom(buf, buflen, GRND_NONBLOCK) == -1)
         return NULL;
-#elif OpenBSD >= 201311 /* 5.4 */ || __FreeBSD_version >= 1200000 /* 12.0 */
+#elif BSD_HAVE_ARC4RANDOM_CHACHA20
     arc4random_buf(buf, buflen);
 #else
     int fd;
@@ -822,6 +834,19 @@ char *getrandom_bytes(char *buf, size_t buflen)
     return buf;
 }
 
+/* IID.20190826: Write zeros to a buffer, not optimized away if possible. */
+void explicit_zero_bytes(char *buf, size_t buflen)
+{
+#ifdef __STDC_LIB_EXT1__
+    memset_s(buf, buflen, 0, buflen);
+#elif LIB_STRING_HAVE_EXPLICIT_BZERO
+    explicit_bzero(buf, buflen);
+#else
+    /* Cannot do anything better */
+    memset(buf, 0, buflen);
+#endif
+}
+
 char *crypt(const char *key, const char *salt);
 static char pwbuf[PASSLEN + PASSHASHLEN];
 
@@ -829,6 +854,7 @@ static char pwbuf[PASSLEN + PASSHASHLEN];
     `GENPASSWD_SHA256` (5): SHA-256
     `GENPASSWD_DES` (0) / otherwise: DES
 */
+/* NOTE: The string pointed by `pw` will be wiped out. */
 char *genpasswd(char *pw, int mode)
 {
     char saltc[PASSLEN], *hash;
@@ -846,7 +872,10 @@ char *genpasswd(char *pw, int mode)
 
     /* IID.20190524: Get salt from the system PRNG device. */
     if (!getrandom_bytes(saltc + c, PASSLEN-1 - c))
+    {
+        explicit_zero_bytes(pw, strlen(pw));
         return NULL;
+    }
 
     saltc[PASSLEN-1] = '\0';
 
@@ -860,8 +889,11 @@ char *genpasswd(char *pw, int mode)
         saltc[i] = c;
     }
     strcpy(pwbuf, pw);
+    explicit_zero_bytes(pw, strlen(pw));
 
-    if (!(hash = crypt(pwbuf, saltc)))
+    hash = crypt(pwbuf, saltc);
+    explicit_zero_bytes(pwbuf, PLAINPASSLEN);
+    if (!hash)
     {
         if (mode)
             return genpasswd(pw, GENPASSWD_DES);  /* Fall back to DES encryption */
@@ -878,11 +910,13 @@ char *genpasswd(char *pw, int mode)
 }
 
 /* `genpasswd` for site signature */
+/* NOTE: The string pointed by `pw` will be wiped out. */
 char *gensignature(char *pw)
 {
     char *hash;
 
-    if (!(hash = genpasswd(pw, GENPASSWD_SHA256)))
+    hash = genpasswd(pw, GENPASSWD_SHA256);
+    if (!hash)
         return NULL;
 
     if (hash[PASSLEN])  /* `genpasswd()` is not falled back */
@@ -896,27 +930,33 @@ char *gensignature(char *pw)
 
 
 /* Thor.990214: 註解: 合密碼時, 傳回0 */
-int chkpasswd(char *passwd, char *passhash, char *test)
+/* NOTE: The string pointed by `test` will be wiped out. */
+int chkpasswd(const char *passwd, const char *passhash, char *test)
 {
     char *pw;
 
     /* if (!*passwd) return -1 *//* Thor.990416: 怕有時passwd是空的 */
+
+    str_ncpy(pwbuf, test, PLAINPASSLEN);
+    explicit_zero_bytes(test, strlen(test));
+
     if (*passwd == '$')   /* IID.20190522: `passhash` is the encrypted password. */
     {
-        str_ncpy(pwbuf, test, PLAINPASSLEN);
         pw = crypt(pwbuf, passwd) + PASSLEN;
+        explicit_zero_bytes(pwbuf, PLAINPASSLEN);
         return (strncmp(pw, passhash+1, PASSHASHLEN));  /* `passhash` is prefixed with `$` */
     }
     else  /* IID.20190522: `passwd` is the encrypted password; legacy/falled-back `passwd`. */
     {
-        str_ncpy(pwbuf, test, PLAINPASSLEN);
         pw = crypt(pwbuf, passwd);
+        explicit_zero_bytes(pwbuf, PLAINPASSLEN);
         return (strncmp(pw, passwd, PASSLEN));
     }
 }
 
 /* `chkpasswd` for site signature */
-int chksignature(char *passwd, char *test)
+/* NOTE: The string pointed by `test` will be wiped out. */
+int chksignature(const char *passwd, char *test)
 {
     char saltc[PASSLEN], hashc[PASSHASHLEN];
 
@@ -937,7 +977,7 @@ int chksignature(char *passwd, char *test)
 
 /* str_pat : wild card string pattern match support ? * \ */
 
-int str_pat(const char *str, const char *pat)
+GCC_PURE int str_pat(const char *str, const char *pat)
 {
     const char *xstr = NULL, *xpat;
     int cs, cp;
@@ -1007,7 +1047,7 @@ int str_pat(const char *str, const char *pat)
 
 /* reverse the string */
 
-char *str_rev(char *dst, char *src)
+char *str_rev(char *dst, const char *src)
 {
     int cc;
 
@@ -1052,10 +1092,10 @@ int str_rle(                    /* run-length encoding */
 }
 
 #ifndef NULL
-#define NULL    (char* ) 0
+#define NULL    (char*) 0
 #endif
 
-char *str_str(const char *str, const char *tag      /* non-empty lower case pattern */
+GCC_PURE char *str_str(const char *str, const char *tag      /* non-empty lower case pattern */
     )
 {
     int cc, c1, c2;
@@ -1093,11 +1133,12 @@ char *str_str(const char *str, const char *tag      /* non-empty lower case patt
     return NULL;
 }
 
-char *str_sub(char *str, char *tag      /* non-empty lowest case pattern */
+GCC_PURE char *str_sub(const char *str, const char *tag
+                                        /* non-empty lowest case pattern */
     )
 {
     int cc, c1, c2;
-    char *p1, *p2;
+    const char *p1, *p2;
     int in_chi = 0;                     /* 1: 前一碼是中文字 */
     int in_chii;                        /* 1: 前一碼是中文字 */
 
@@ -1126,7 +1167,7 @@ char *str_sub(char *str, char *tag      /* non-empty lowest case pattern */
                 {
                     c2 = *p2;
                     if (!c2)
-                        return str;
+                        return (char *)str;
 
                     p2++;
                     c1 = *++p1;
@@ -1145,13 +1186,13 @@ char *str_sub(char *str, char *tag      /* non-empty lowest case pattern */
     return NULL;
 }
 
-char *str_tail(char *str)
+GCC_PURE char *str_tail(const char *str)
 {
     while (*str)
     {
         str++;
     }
-    return str;
+    return (char *)str;
 }
 
 void str_trim(                    /* remove trailing space */
@@ -1170,7 +1211,7 @@ void str_trim(                    /* remove trailing space */
     }
 }
 
-const char *str_ttl(const char *title)
+GCC_PURE char *str_ttl(const char *title)
 {
     if (title[0] == 'R' && title[1] == 'e' && title[2] == ':')
     {
@@ -1179,7 +1220,7 @@ const char *str_ttl(const char *title)
             title++;
     }
 
-    return title;
+    return (char *)title;
 }
 
 /*-------------------------------------------------------*/
@@ -1280,7 +1321,7 @@ size_t strlcpy(char *dst, const char *src, size_t siz)
     return (s - src - 1);       /* count does not include NUL */
 }
 
-int hash32(const char *str)
+GCC_PURE int hash32(const char *str)
 {
     int xo, cc;
 

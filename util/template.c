@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* util/template.c      ( YZU WindTop 2000)              */
+/* util/template.c      ( YZU WindTop 2000 )             */
 /*-------------------------------------------------------*/
 /* author : visor.bbs@bbs.yzu.edu.tw                     */
 /* target : ¼Ð¥»¥Î                                       */
@@ -13,7 +13,7 @@
 
 void
 acct_save(
-    ACCT *acct)
+    const ACCT *acct)
 {
     int fd;
     char fpath[80];
@@ -29,8 +29,8 @@ acct_save(
 
 static void
 reaper(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
     int fd;
 

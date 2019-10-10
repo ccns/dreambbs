@@ -11,7 +11,7 @@
 
 static void
 reaper(
-    char *lowid)
+    const char *lowid)
 {
     char buf[256];
     sprintf(buf, "tar zxvf /var/tape/gem/%s ", lowid);
@@ -49,7 +49,7 @@ main(void)
 
     strcpy(fpath, "/var/tape/gem");
 
-    chdir("/home/bbs/gem/brd");
+    chdir(BBSHOME "/gem/brd");
     traverse(fpath);
     return 0;
 }

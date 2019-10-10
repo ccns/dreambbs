@@ -84,7 +84,7 @@ show_fasttime(void)
     int i;
     FILE *fp;
     char buf[40];
-    const char *buf1[4] = {"入門級:", "進階級:", "高  級:", "變態級:"};
+    const char *const buf1[4] = {"入門級:", "進階級:", "高  級:", "變態級:"};
     fp = fopen("game/mine/mine_fasttime", "r");
     clear();
     for (i = 0; i < 4; i++)
@@ -136,7 +136,7 @@ change_fasttime(int n, int t)
     return 0;
 }
 
-int countNeighbor(int y, int x, int bitmask)
+GCC_PURE int countNeighbor(int y, int x, int bitmask)
 {
     int sum = 0;
     if (MineMap[y-1][x+1] & bitmask) ++sum;
@@ -151,12 +151,12 @@ int countNeighbor(int y, int x, int bitmask)
     return sum;
 }
 
-const char *symTag = "\x1b[1;40;31mΨ\x1b[m";
-const char *symWrong = "\x1b[1;41;37m〤\x1b[m";
-const char *symBlank = "■";
-const char *strMines[] = {"　", "１", "２", "３", "４", "５",
-                          "６", "７", "８", NULL
-                         };
+const char *const symTag = "\x1b[1;40;31mΨ\x1b[m";
+const char *const symWrong = "\x1b[1;41;37m〤\x1b[m";
+const char *const symBlank = "■";
+const char *const strMines[] = {"　", "１", "２", "３", "４", "５",
+                                "６", "７", "８", NULL
+                               };
 
 enum {  MAP_START_X = 16 };             // Must be > Prompts
 

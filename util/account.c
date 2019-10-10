@@ -16,8 +16,8 @@
 #define MAX_LINE        16
 #define ADJUST_M        60      /* adjust back 1 hour */
 
-static char fn_today[] = "gem/@/@-act"; /* さらΩ参璸 */
-static char fn_yesterday[] = "gem/@/@=act";     /* 琎らΩ参璸 */
+static const char fn_today[] = "gem/@/@-act"; /* さらΩ参璸 */
+static const char fn_yesterday[] = "gem/@/@=act";     /* 琎らΩ参璸 */
 
 /* ----------------------------------------------------- */
 /* 秨布shm 场斗籔 cache.c 甧                       */
@@ -30,7 +30,7 @@ attach_err(
     int shmkey,
     const char *name)
 {
-    fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
+    fprintf(stderr, "[%s error] key = %lx\n", name, (unsigned long)shmkey);
     exit(1);
 }
 
@@ -131,12 +131,13 @@ TchoiceCompare(const void * i, const void * j)
 
 static int
 draw_vote(
-    BRD *bdh,                   /* Thor: 肚 BRD, 琩 battr */
-    char *fpath,
-    VCH *vch)
+    const BRD *bdh,             /* Thor: 肚 BRD, 琩 battr */
+    const char *fpath,
+    const VCH *vch)
 {
     FILE *fp;
-    char *bid, *fname, buf[80], bpath[80];
+    char *fname, buf[80], bpath[80];
+    const char *bid;
     struct Tchoice choice[MAX_CHOICES];
     int total, items, num, fd, ticket, bollt, *list, *head, *tail;
     struct stat st;
@@ -654,7 +655,7 @@ gzip(
 #if 0  // Unused
 static void
 gtar(
-    char *source, char *target, char *stamp,
+    const char *source, const char *target, const char *stamp,
     int prune)
 {
     char buf[128];
@@ -671,7 +672,7 @@ gtar(
 
 static void
 error(
-    char *fpath)
+    const char *fpath)
 {
     printf("can not open [%s]\n", fpath);
     exit(1);
@@ -685,11 +686,11 @@ main(void)
     char date[16];
     char title[80];
 
-    static char act_file[] = "run/var/act";
-    static char run_file[] = FN_USIES;
-    static char tmp_file[] = "run/tmp";
-    static char log_file[] = "run/usies=";
-//  static char brd_file[] = FN_BRD_USIES;
+    static const char act_file[] = "run/var/act";
+    static const char run_file[] = FN_USIES;
+    static const char tmp_file[] = "run/tmp";
+    static const char log_file[] = "run/usies=";
+//  static const char brd_file[] = FN_BRD_USIES;
 
     char buf[256], ymd[16];
     FILE *fp, *fpw;

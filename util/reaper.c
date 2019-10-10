@@ -114,7 +114,7 @@ BCACHE *bshm;
 #ifdef DEBUG
 static void
 logit(
-    char *msg)
+    const char *msg)
 {
     FILE *fp;
     fp = fopen("reaper.debug.log", "a+");
@@ -174,9 +174,9 @@ levelmsg(
     char *str,
     int level)
 {
-    static char perm[] = "bctpjm#x--------PTCMSNL*B#KGACBS";
+    static const char perm[] = "bctpjm#x--------PTCMSNL*B#KGACBS";
     int len = 32;
-    char *p = perm;
+    const char *p = perm;
 
     do
     {
@@ -192,7 +192,7 @@ levelmsg(
 static void
 datemsg(
     char *str,
-    time_t *chrono)
+    const time_t *chrono)
 {
     struct tm *t;
 
@@ -233,7 +233,7 @@ static int numC;
 static void
 eaddr_group(
     int userno,
-    char *eaddr)
+    const char *eaddr)
 {
     int left, right, mid, i;
     int hash = str_hash(eaddr, 0);
@@ -342,7 +342,7 @@ report_eaddr_group(void)
 
 static int
 bm_list(                 /* 顯示 userid 是哪些板的板主 */
-    char *userid,
+    const char *userid,
     char *msg)
 {
     int len, ch;
@@ -391,8 +391,8 @@ bm_list(                 /* 顯示 userid 是哪些板的板主 */
 
 static void
 reaper(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
     int fd, login;
     unsigned int ulevel;

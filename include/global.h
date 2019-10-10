@@ -223,6 +223,8 @@
 /* ----------------------------------------------------- */
 #define FN_ERROR_CAMERA         "gem/@/@error-camera"   /* 錯誤的動態看版 */
 #define FN_HOTBOARD             "gem/@/@HotBoard"       /* 熱門看板 */
+#define FN_APRIL_FIRST          "gem/brd/Admin/J/A106LL7J"
+                                                        /* IID.20190822: The April first article (unused) */
 
 #define FN_GAME_BBSNET          "game/bbsnet/bbsdata.db"
                                                         /* BBSNET 站台 */
@@ -430,37 +432,37 @@ VAR char ve_title[80];
 VAR char currboard[IDLEN + 2];          /* name of currently selected board */
 VAR char currBM[BMLEN + 7];             /* BM of currently selected board */
 VAR int  currbno        INI(-1);
-VAR char str_ransi[4]   INI("\x1b[m");
+VAR const char str_ransi[4]   INI("\x1b[m");
 VAR unsigned int currbattr;            /* currently selected board battr */
-VAR char ipv4addr[15];                 /* MAX_LEN: strlen(aaa.bbb.ccc.ddd) => 15 */
+VAR char ipv4addr[16];                 /* MAX_LEN: sizeof("aaa.bbb.ccc.ddd") => 16 */
 
 VAR int  chk_mailstat   INI(0);
 
 /* filename */
-VAR const char *fn_dir          INI(FN_DIR);
+VAR const char *const fn_dir          INI(FN_DIR);
 
 /* message */
-VAR const char *msg_separator   INI(MSG_SEPARATOR);
+VAR const char *const msg_separator   INI(MSG_SEPARATOR);
 
-VAR const char *msg_cancel      INI(MSG_CANCEL);
+VAR const char *const msg_cancel      INI(MSG_CANCEL);
 
-VAR const char *msg_sure_ny     INI(MSG_SURE_NY);
+VAR const char *const msg_sure_ny     INI(MSG_SURE_NY);
 
-VAR const char *msg_uid         INI(MSG_UID);
+VAR const char *const msg_uid         INI(MSG_UID);
 
-VAR const char *msg_del_ny      INI(MSG_DEL_NY);
+VAR const char *const msg_del_ny      INI(MSG_DEL_NY);
 
-VAR const char *err_bid         INI(ERR_BID);
-VAR const char *err_uid         INI(ERR_UID);
+VAR const char *const err_bid         INI(ERR_BID);
+VAR const char *const err_uid         INI(ERR_UID);
 
-VAR const char *str_sysop       INI("sysop");
-VAR const char *brd_sysop       INI("SYSOP");
-VAR const char *str_author1     INI(STR_AUTHOR1);
-VAR const char *str_author2     INI(STR_AUTHOR2);
-VAR const char *str_post1       INI(STR_POST1);
-VAR const char *str_post2       INI(STR_POST2);
-VAR const char *str_host        INI(MYHOSTNAME);
-VAR const char *str_site        INI(BOARDNAME);
+VAR const char *const str_sysop       INI("sysop");
+VAR const char *const brd_sysop       INI("SYSOP");
+VAR const char *const str_author1     INI(STR_AUTHOR1);
+VAR const char *const str_author2     INI(STR_AUTHOR2);
+VAR const char *const str_post1       INI(STR_POST1);
+VAR const char *const str_post2       INI(STR_POST2);
+VAR const char *const str_host        INI(MYHOSTNAME);
+VAR const char *const str_site        INI(BOARDNAME);
 
 #ifdef  HAVE_RECOMMEND
 VAR int recommend_time  INI(0);

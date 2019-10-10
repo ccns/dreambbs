@@ -34,7 +34,7 @@ $(targets): $(targets).o
 runtest: noargtest scripttest
 
 noargtest:
-	@(>&2 printf "\n"); for i in $(LIBSTR) $(LIBOTHER); do ./$$i && (>&2 printf "\033[1;32m$$i test done!\033[0m\n") || ( (>&2 printf "\033[1;31m$$i test failed!\n\033[0m" ) && exit 1 ); done
+	@(>&2 printf "\n"); for i in $(LIBSTR) $(LIBOTHER); do ./$$i && (>&2 printf "\033[1;32m$$i test done!\033[0m\n") || ( (>&2 printf "\033[1;31m$$i test failed!\n\033[0m") && exit 1 ); done
 
 scripttest:
 	@(>&2 printf "\n\033[1;33mrunning testing script...\033[0m\n"); sh testscript.sh

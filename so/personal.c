@@ -18,7 +18,7 @@ char msg[60];
 
 static int
 personal_log(
-    PB *personal,
+    const PB *personal,
     int admin)          /* 0:申請  1:開板  2:拒絕 */
 {
     FILE *fp;
@@ -45,7 +45,7 @@ personal_log(
 static int
 belong(
     const char *flist,
-    char *key)
+    const char *key)
 {
     int fd, rc;
     char *str;
@@ -74,10 +74,10 @@ belong(
 
 static int
 is_badid(
-    char *userid)
+    const char *userid)
 {
     int ch;
-    char *str;
+    const char *str;
 
     if (strlen(userid) < 2)
         return 1;
@@ -131,7 +131,7 @@ personal_apply(void)
     enteryear = (cuser.email[3]-'0') * 10 + (cuser.email[4]-'0');
 
     //百年蟲 ecchi float 2012/4/25
-    if ( (thisyear - enteryear)%100 > 5)
+    if ((thisyear - enteryear)%100 > 5)
     {
         vmsg("您的身份不合格!");
         return 0;
@@ -225,7 +225,7 @@ personal_attr(unsigned int state)
 static void
 personal_item(
     int num,
-    PB *personal)
+    const PB *personal)
 {
     if (!mode)
         prints("%6d %c %-12s %-12s %-*s\n", num, personal_attr(personal->state), personal->userid, personal->brdname, d_cols + 40, personal->email);
@@ -362,7 +362,7 @@ personal_switch(
 
 static int
 mail2usr(
-    PB *personal,
+    const PB *personal,
     int admin)          /* 0:open 1:deny */
 {
     HDR hdr;
@@ -403,7 +403,7 @@ mail2usr(
 
 }
 
-int
+GCC_PURE int
 sort_compare(
     const void *p1,
     const void *p2)
@@ -478,7 +478,7 @@ personal_open(
         return XO_NONE;
     }
 
-    if ( bshm->number >= MAXBOARD)
+    if (bshm->number >= MAXBOARD)
     {
         vmsg("超過系統所能容納看版個數，請調整系統參數");
         return XO_NONE;

@@ -23,7 +23,7 @@ MAP map[60000];
 
 
 int total;
-void pal_sync(char *fpath);
+void pal_sync(const char *fpath);
 
 static int
 int_cmp(
@@ -35,7 +35,7 @@ int_cmp(
 
 static void
 bimage(
-    char *brd)
+    const char *brd)
 {
     int fd;
     char fpath[128];
@@ -118,7 +118,7 @@ resetbrd(void)
         ptr = de->d_name;
         if (ptr[0] > ' ' && ptr[0] != '.')
         {
-            sprintf(buf, "/home/bbs/brd/%s/friend", ptr);
+            sprintf(buf, BBSHOME "/brd/%s/friend", ptr);
             pal_sync(buf);
             bimage(ptr);
         }
@@ -128,7 +128,7 @@ resetbrd(void)
 
 static int
 finduserno(
-    char *userid)
+    const char *userid)
 {
     int i;
     for (i=1; i<=total; i++)
@@ -141,7 +141,7 @@ finduserno(
 
 void
 bmw_sync(
-    char *userid,
+    const char *userid,
     int userno)
 {
     int fd;
@@ -184,7 +184,7 @@ bmw_sync(
 
 void
 pal_sync(
-    char *fpath)
+    const char *fpath)
 {
     int fd, size=0;
     struct stat st;
@@ -242,8 +242,8 @@ pal_sync(
 
 static void
 reaper(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
     int fd;
 
@@ -276,8 +276,8 @@ reaper(
 
 static void
 optimize(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
 
     char buf[256];

@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* cppdef.h     ( NCKU CCNS WindTop-DreamBBS 2.0)        */
+/* cppdef.h     ( NCKU CCNS WindTop-DreamBBS 2.0 )       */
 /*-------------------------------------------------------*/
 /* Author: 37586669+IepIweidieng@users.noreply.github.com*/
 /* Target: C preprocessor utility macros                 */
@@ -33,7 +33,7 @@
 // Stringfy the argument without macro expansions
 #define CPP_STR_PRIME(x)  #x
 
-// Expand macros in the argument and then stringfy it
+// Expand macros in the argument and then stringify it
 #define CPP_STR(x)  CPP_STR_PRIME(x)
 
 

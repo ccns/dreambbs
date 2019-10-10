@@ -254,7 +254,7 @@ static int      /* 回傳總共有幾個選項 */
 draw_menu(
     int x, int y,
     const char *title,
-    const char *desc[],
+    const char *const desc[],
     char hotkey,
     int *cur)   /* 回傳預設值所在位置 */
 {
@@ -293,7 +293,7 @@ draw_menu(
 static int                      /* -1:找不到 >=0:第幾個選項 */
 find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
     int ch, int max,
-    const char *desc[])
+    const char *const desc[])
 {
     int i, cc;
 
@@ -328,19 +328,20 @@ find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
 /*------------------------------------------------------ */
 
 int             /* 傳回小寫字母或數字 */
-popupmenu_ans2(const char *desc[], const char *title, int x, int y)
+popupmenu_ans2(const char *const desc[], const char *title, int x, int y)
 {
     int cur, old_cur, max, ch;
     char hotkey;
 
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 
     scr_dump(&old_screen);
-    grayout(0, b_lines, GRAYOUT_DARK);
 #else
     x_roll = vs_save(slt);
 #endif
+
+    grayout(0, b_lines, GRAYOUT_DARK);
 
     hotkey = desc[0][0];
 
@@ -405,24 +406,21 @@ popupmenu_ans2(const char *desc[], const char *title, int x, int y)
 /* 蹦出式視窗訊息，可用來取代 vmsg()                     */
 /*------------------------------------------------------ */
 
-int
-pmsg2(const char *msg)
+// IID.20190909: `pmsg2()` without blocking and without screen restoring.
+void
+pmsg2_body(const char *msg)
 /* 不可為 NULL */
 {
     int len, x, y, i;
     char buf[80];
 
-#ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
-
     if (!msg)
-    return vmsg(NULL);
+    {
+        vmsg_body(NULL);
+        return;
+    }
 
-    scr_dump(&old_screen);
     grayout(0, b_lines, GRAYOUT_DARK);
-#else
-    x_roll = vs_save(slt);
-#endif
 
     len = strlen(msg);
     if (len < 16)               /* 取 msg title 其中較長者為 len */
@@ -457,6 +455,26 @@ pmsg2(const char *msg)
     draw_line(x++, y, buf);
 
     move(b_lines, 0);
+}
+
+int
+pmsg2(const char *msg)
+/* 不可為 NULL */
+{
+    int x;
+
+    if (!msg)
+        return vmsg(NULL);
+
+#ifdef M3_USE_PFTERM
+    screen_backup_t old_screen;
+
+    scr_dump(&old_screen);
+#else
+    x_roll = vs_save(slt);
+#endif
+
+    pmsg2_body(msg);
 
     x = vkey();
 #ifdef M3_USE_PFTERM

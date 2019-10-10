@@ -63,12 +63,12 @@ sync_cmp(
 
 static void
 sync_init(
-    char *fname,
+    const char *fname,
     time_t uptime)
 {
     int ch, prefix;
     time_t chrono;
-    char *str, fpath[80];
+    char *str, *fname_str, fpath[80];
     struct dirent *de;
     DIR *dirp;
 
@@ -89,14 +89,14 @@ sync_init(
 
     ch = strlen(fname);
     memcpy(fpath, fname, ch);
-    fname = fpath + ch;
-    *fname++ = '/';
-    fname[1] = '\0';
+    fname_str = fpath + ch;
+    *fname_str++ = '/';
+    fname_str[1] = '\0';
 
     ch = '0';
     for (;;)
     {
-        *fname = ch++;
+        *fname_str = ch++;
 
         if ((dirp = opendir(fpath)))
         {
@@ -146,9 +146,9 @@ sync_init(
 static void
 sync_check(
     FILE *flog,
-    char *fname)
+    const char *fname)
 {
-    char *str, fpath[80];
+    char *str, *fname_str, fpath[80];
     SyncData *xpool, *xtail;
     time_t cc;
 
@@ -160,16 +160,16 @@ sync_check(
 
     sprintf(fpath, "%s/ /", fname);
     str = strchr(fpath, ' ');
-    fname = str + 3;
+    fname_str = str + 3;
 
     do
     {
         if (xtail->exotic)
         {
             cc = xtail->chrono;
-            fname[-1] = xtail->prefix;
+            fname_str[-1] = xtail->prefix;
             *str = radix32[cc & 31];
-            archiv32(cc, fname);
+            archiv32(cc, fname_str);
             unlink(fpath);
 
             fprintf(flog, "-\t%s\n", fpath);
@@ -181,12 +181,13 @@ sync_check(
 static void
 expire(
     FILE *flog,
-    life *brd,
+    const life *brd,
     int sync)
 {
     HDR hdr;
     struct stat st;
-    char fpath[128], fnew[128], index[128], *fname, *bname, *str;
+    char fpath[128], fnew[128], index[128], *fname, *str;
+    const char *bname;
     int done, keep, total, xmode;
     FILE *fpr, *fpw;
 
@@ -328,7 +329,7 @@ expire(
 
 static int
 brdbno(
-    char *bname,
+    const char *bname,
     int count)
 {
     BRD *brdp, *bend;
@@ -363,10 +364,55 @@ main(
     char *ptr;
     int fd;
     BRD *brd;
+    const char *board = NULL;
 
-    db.days = ((argc > 1) && (number = atoi(argv[1])) > 0) ? number : DEF_DAYS;
-    db.maxp = ((argc > 2) && (number = atoi(argv[2])) > 0) ? number : DEF_MAXP;
-    db.minp = ((argc > 3) && (number = atoi(argv[3])) > 0) ? number : DEF_MINP;
+    db.days = db.maxp = db.minp = -2;
+    number = 1;
+    while (optind < argc)
+    {
+        switch ((isdigit(argv[optind][1])) ? -1 : getopt(argc, argv, "+" "d:M:m:b:"))
+        {
+        case -1:  // Position arguments, including negative numbers
+            if (!(optarg = argv[optind++]))
+                break;
+
+            // Test whether `optarg` is a decimal integer number
+            errno = 0;
+            strtol(optarg, NULL, 10);
+            if ((number = atoi(optarg)) < -1)
+                number = -1;
+
+            // Number arguments
+            if (!errno && !(db.days >= -1))
+        case 'd':
+                db.days = number;
+            else if (!errno && !(db.maxp >= -1))
+        case 'M':
+                db.maxp = number;
+            else if (!errno && !(db.minp >= -1))
+        case 'm':
+                db.minp = number;
+            else if (!board)
+        case 'b':
+                board = optarg;
+            break;
+
+        default:
+            number = -2;
+            optind = argc;  // Ignore remaining arguments
+            break;
+        }
+    }
+
+    if (!(number >= -1))
+    {
+        fprintf(stderr, "Usage: %s [[-d] <day>] [[-M] <max_post>] [[-m] <min_post>] [[-b] <board>]\n", argv[0]);
+        return 2;
+    }
+
+    db.days = (db.days > 0) ? db.days : DEF_DAYS;
+    db.maxp = (db.maxp > 0) ? db.maxp : DEF_MAXP;
+    db.minp = (db.minp > 0) ? db.minp : DEF_MINP;
 
     memset(&key, 0, sizeof(key));
 
@@ -408,9 +454,9 @@ main(
     {
         ptr = de->d_name;
         /* Thor.981027: 加上 board時, 可sync 某一board. 加得很醜, 有空再改 */
-        if (argc > 4)
+        if (board)
         {
-            if (str_cmp(argv[4], ptr))
+            if (str_cmp(board, ptr))
                 continue;
             else
                 number=0;

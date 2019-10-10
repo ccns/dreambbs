@@ -43,7 +43,7 @@ static int vo_size;
 #ifdef  VERBOSE
 static void
 telnet_flush(
-    char *data,
+    const char *data,
     int size)
 {
     int oset;
@@ -307,10 +307,10 @@ getyx(
 #if 0
 static int
 ansicol(
-    screenline *slp,
+    const screenline *slp,
     int len)
 {
-    unsigned char *str;
+    const unsigned char *str;
     int ch, ansi, col;
 
     if (!len || !(slp->mode & SL_ANSICODE))
@@ -391,13 +391,13 @@ rel_move(
 
 static void
 standoutput(
-    screenline *slp,
+    const screenline *slp,
     int ds, int de)
 {
-    char *data;
+    const char *data;
     int sso, eso;
 
-    data = (char *) slp->data;
+    data = (const char *) slp->data;
     sso = slp->sso;
     eso = slp->eso;
 
@@ -421,8 +421,8 @@ standoutput(
 }
 
 
-#define STANDOUT        cur_slp->sso = cur_pos; cur_slp->mode |= SL_STANDOUT;
-#define STANDEND        cur_slp->eso = cur_pos;
+#define STANDOUT   (void) ( cur_slp->sso = cur_pos, cur_slp->mode |= SL_STANDOUT )
+#define STANDEND   (void) ( cur_slp->eso = cur_pos )
 
 
 #if 0
@@ -656,8 +656,8 @@ clrtoeol(void)
 
     if ((len = cur_pos))
     {
-        if ( len > slp->len)
-            for ( len = slp->len; len < cur_pos; len++)
+        if (len > slp->len)
+            for (len = slp->len; len < cur_pos; len++)
                 slp->data[len] = ' ';
         slp->len = len;
         slp->width = cur_col;
@@ -811,7 +811,7 @@ new_line:
     /* 判定哪些文字需要重新送出螢幕 */
     /* ---------------------------- */
 
-    if ( /* !(slp->mode & SL_ANSICODE) && */ (ch != cx))
+    if ( /* !(slp->mode & SL_ANSICODE) && */ (ch != cx) )
     {
         *data = ch;
         cx = slp->mode;
@@ -876,7 +876,7 @@ expand_esc_star_visio(char *buf, const char *src, int szbuf)
         return 0;
     }
 
-    switch(*++src)
+    switch (*++src)
     {
         // insecure content
         case 's':   // current user id
@@ -904,7 +904,7 @@ expand_esc_star_visio(char *buf, const char *src, int szbuf)
 #ifdef SHOW_USER_IN_TEXT
 void
 outx(
-    char *str)
+    const char *str)
 {
 /*
     unsigned char *t_name = cuser.userid;
@@ -1008,7 +1008,7 @@ outf(
 
 #ifdef M3_USE_PFTERM
 
-void outl (int line, char *msg)   /* line output */
+void outl (int line, const char *msg)     /* line output */
 {
     move (line, 0);
     clrtoeol();
@@ -1021,7 +1021,7 @@ void outl (int line, char *msg)   /* line output */
 #define ANSI_COLOR_CODE            "[m;0123456789"
 #define ANSI_COLOR_END     "m"
 
-void outr (char *str)
+void outr (const char *str)
 /* restricted output (strip the ansiscreen contolling code only) */
 {
     char ch, buf[256], *p = NULL;
@@ -1167,7 +1167,7 @@ save_foot(
 
 void
 restore_foot(
-    screenline *slp)
+    const screenline *slp)
 {
     move(b_lines - 1, 0);
     memcpy(cur_slp, slp, sizeof(screenline) * 2);
@@ -1196,7 +1196,7 @@ vs_save(
 
 void
 vs_restore(
-    screenline *slp)
+    const screenline *slp)
 {
     memcpy(vbuf, slp, sizeof(screenline) * t_lines);
 #if 0
@@ -1211,8 +1211,9 @@ vs_restore(
 
 #define VMSG_NULL "\x1b[1;37;45m%*s● 請按任意鍵繼續 ●%*s\x1b[m"
 
-int
-vmsg(
+// IID.20190909: `vmsg()` without blocking.
+void
+vmsg_body(
     const char *msg)             /* length <= 54 */
 {
     move(b_lines, 0);
@@ -1234,6 +1235,13 @@ vmsg(
         move(b_lines, 0);
 #endif
     }
+}
+
+int
+vmsg(
+    const char *msg)             /* length <= 54 */
+{
+    vmsg_body(msg);
     return vkey();
 }
 
@@ -1360,7 +1368,7 @@ grayout(int y, int end, int level)
 // GRAYOUT_DARK(0): dark, GRAYOUT_BOLD(1): bold, GRAYOUR_NORMAL(2): normal
 {
     screenline slp[T_LINES], newslp[T_LINES];
-    const char *prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
+    const char *const prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
     char buf[ANSILINELEN];
     register int i;
 
@@ -1422,9 +1430,9 @@ add_io(
 
 int
 iac_count(
-    unsigned char *current)
+    const unsigned char *current)
 {
-    unsigned char *const end = vi_pool + vi_size;
+    const unsigned char *const end = vi_pool + vi_size;
     if (current + 1 >= end) { return 1; }
 
     switch (*(current + 1))
@@ -1437,15 +1445,15 @@ iac_count(
 
     case SB:                    /* loop forever looking for the SE */
         {
-            unsigned char *look = current + 2;
+            const unsigned char *look = current + 2;
             if (look >= end) { return look + 1 - current; }
 
             /* fuse.030518: 線上調整畫面大小，重抓 b_lines */
             if ((*look) == TELOPT_NAWS)
             {
                 if (look + 4 >= end) { return look + 4 - current; }
-                b_lines = ntohs(* (short *) (look + 3)) - 1;
-                b_cols = ntohs(* (short *) (look + 1)) - 1;
+                b_lines = ntohs(* (const short *) (look + 3)) - 1;
+                b_cols = ntohs(* (const short *) (look + 1)) - 1;
 
                 /* b_lines 至少要 23，最多不能超過 T_LINES - 1 */
                 if (b_lines >= T_LINES)
@@ -1566,13 +1574,13 @@ igetch(void)
 
                     if (idle >= 5 && !cutmp)  /* 登入時 idle 超過 5 分鐘就斷線 */
                     {
-                        outs("登入逾時，請重新上站");
+                        pmsg2_body("登入逾時，請重新上站");
                         refresh();
                         abort_bbs();
                     }
 
                     cc = bbsmode;
-                    if ( (idle > (cc ? IDLE_TIMEOUT : 4) ) && ( strcmp(cuser.userid, STR_GUEST ) == 0 ) )
+                    if ( (idle > (cc ? IDLE_TIMEOUT : 4)) && ( strcmp(cuser.userid, STR_GUEST) == 0 ) )
                     {
                         clear();
                         outs("超過閒置時間！");
@@ -1580,7 +1588,7 @@ igetch(void)
                         refresh();
                         abort_bbs();
                     }
-                    else if ( (idle > (cc ? (IDLE_TIMEOUT-4) : 4) ) && ( strcmp(cuser.userid, STR_GUEST ) == 0 ) )
+                    else if ( (idle > (cc ? (IDLE_TIMEOUT-4) : 4)) && ( strcmp(cuser.userid, STR_GUEST) == 0 ) )
                     {
                         outz("\x1b[41;5;1;37m警告！你已經閒置過久，系統將在三分後將你踢除！\x1b[m");
                         bell();
@@ -1647,7 +1655,7 @@ igetch(void)
              * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
              * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
              */
-            extern void (*talk_rqst_signal)(int signum);
+            extern void talk_rqst_signal(int signum);
             signal(SIGUSR1, talk_rqst_signal);
 
             continue;
@@ -1698,7 +1706,7 @@ static BRD *xbrd;
 BRD *
 ask_board(
     char *board,
-    int perm,
+    unsigned int perm,
     const char *msg)
 {
     if (msg)
@@ -2305,17 +2313,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
     outc('\n');
 
     if (echo & LCECHO)
-    {
-        for (col = 0; col < len; col++)
-        {
-            ch = (unsigned char) data[col];
-            if (ch >= 0x81 && ch <= 0xFE)
-                /* The first byte of double-byte char of Big5 */
-                col++;  /* Skip the next byte */
-            else if (ch >= 'A' && ch <= 'Z')
-                data[col] += 32;
-        }
-    }
+        str_lowest(data, data);
     ch = (unsigned char) data[0];
 
 #ifdef M3_USE_PFTERM

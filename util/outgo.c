@@ -13,8 +13,8 @@
 
 void
 outgo_post(
-    HDR *hdr,
-    char *board)
+    const HDR *hdr,
+    const char *board)
 {
 
     bntp_t bntp;
@@ -44,15 +44,48 @@ main(
     char *argv[])
 {
     char fpath[128];
-    int start, end, fd;
-    char *board;
+    int start = -1, end = -1, fd;
+    char *board = NULL;
     HDR hdr;
 
-    if (argc > 3)
+    while (optind < argc)
     {
-        board = argv[1];
-        start = atoi(argv[2]);
-        end = atoi(argv[3]);
+        switch (getopt(argc, argv, "+" "b:f:t:"))
+        {
+        case -1:  // Position arguments
+            if (!(optarg = argv[optind++]))
+                break;
+            if (!board)
+            {
+        case 'b':
+                board = optarg;
+                break;
+            }
+            else if (!start)
+            {
+        case 'f':
+                if ((start = atoi(optarg)) > 0)
+                    break;
+            }
+            else if (!end)
+            {
+        case 't':
+                if ((end = atoi(optarg)) > 0)
+                    break;
+            }
+            else
+                break;
+            // Falls through
+            // to handle invalid argument values
+        default:
+            board = NULL;  // Invalidate arguments
+            optind = argc;  // Ignore remaining arguments
+            break;
+        }
+    }
+
+    if (board && start > 0 && end > 0)
+    {
         brd_fpath(fpath, board, FN_DIR);
         if ((fd = open(fpath, O_RDONLY)) >= 0)
         {
@@ -67,7 +100,9 @@ main(
     }
     else
     {
-        printf("\nSYNOPSIS : outgo 看版 起點 終點\n");
+        fprintf(stderr, "\nSYNOPSIS : %s [-b] <看版> [-f] <起點> [-t] <終點>\n", argv[0]);
+        fprintf(stderr, "(起點, 終點 > 0)\n");
+        return 2;
     }
     return 0;
 }

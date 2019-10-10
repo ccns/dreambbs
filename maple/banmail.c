@@ -21,7 +21,7 @@ extern XZ xz[];
 static int banmail_add(XO * xo);
 
 
-static void banmail_item(int num, BANMAIL * ban)
+static void banmail_item(int num, const BANMAIL * ban)
 {
     time_t now;
     char modes[7];
@@ -33,7 +33,7 @@ static void banmail_item(int num, BANMAIL * ban)
             (ban->mode & FW_CANCEL) ? '1' : '0');
 
     now = ((ban->time - time(0) + BANMAIL_EXPIRE * 86400) / 3600);
-    prints("%6d  %6d %6d %s  %-*.*s\n", num, ban->usage, now < 0 ? 0 : now,
+    prints("%6d  %6d %6ld %s  %-*.*s\n", num, ban->usage, now < 0 ? 0 : now,
            modes, d_cols + 48, d_cols + 48, ban->data);
 }
 

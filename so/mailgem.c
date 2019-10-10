@@ -12,7 +12,7 @@
 
 extern XZ xz[];
 extern char xo_pool[];
-extern char radix32[];
+extern const char radix32[];
 extern char brd_bits[];
 
 extern BCACHE *bshm;
@@ -31,12 +31,12 @@ static int mailgem_add(XO *xo);
 static int mailgem_paste(XO *xo);
 static int mailgem_anchor(XO *xo);
 static int mailgem_recycle(XO *xo);
-static void XoMailGem(char *folder, const char *title);
+static void XoMailGem(const char *folder, const char *title);
 
 static void
 mailgem_item(
 int num,
-HDR *ghdr)
+const HDR *ghdr)
 {
     int xmode, gtype;
 
@@ -156,7 +156,7 @@ XO *xo,
 char *fpath)
 {
     HDR *ghdr;
-    int gtype, level;
+    GCC_UNUSED int gtype, level;
     char *folder;
 
     level = xo->key;
@@ -181,7 +181,7 @@ static int
 mailgem_add(
 XO *xo)
 {
-    int gtype, level, fd, ans;
+    int gtype, level GCC_UNUSED, fd, ans;
     char title[80], fpath[80], *dir;
     HDR ghdr;
 
@@ -328,7 +328,7 @@ XO *xo)
     outs(fpath);
 
     if (!stat(fpath, &st))
-        prints("\nTime: %s\nSize: %d", Ctime(&st.st_mtime), st.st_size);
+        prints("\nTime: %s\nSize: %ld", Ctime(&st.st_mtime), st.st_size);
 
     vmsg(NULL);
 
@@ -424,8 +424,8 @@ int num)
 
 static void
 mailgem_buffer(
-char *dir,
-HDR *ghdr)                      /* NULL 代表放入 TagList, 否則將傳入的放入 */
+const char *dir,
+const HDR *ghdr)                /* NULL 代表放入 TagList, 否則將傳入的放入 */
 {
     int num, locus;
     HDR *gbuf;
@@ -869,8 +869,9 @@ XO *xo)
 {
     char xboard[20], fpath[80], xfolder[80], xtitle[80], buf[80], *dir;
     HDR *hdr, xpost, *ghdr;
-    int method = 1, rc, tag, locus, battr;
+    int method = 1, rc GCC_UNUSED, tag, locus, battr;
     FILE *xfp;
+    int success_count = 0;
 
     if (!cuser.userlevel)
         return XO_NONE;
@@ -950,18 +951,33 @@ XO *xo)
 
                 rec_add(xfolder, &xpost, sizeof(xpost));
 
+                success_count++;
             }
         }
         while (locus < tag);
 
+        if (success_count == 0)
+        {
+            vmsg("轉錄失敗。");
+        }
         if (battr & BRD_NOCOUNT)
         {
-            outs("轉錄完成，文章不列入紀錄，敬請包涵。");
+            if (success_count == ((tag == 0) ? 1 : tag))
+                prints("轉錄 %d 篇成功\，文章不列入紀錄，敬請包涵。", success_count);
+            else
+                prints("轉錄 %d 篇成功\，%d 篇失敗，文章不列入紀錄，敬請包涵。",
+                    success_count, ((tag == 0) ? 1 : tag) - success_count);
         }
         else
         {
-            cuser.numposts += (tag == 0) ? 1 : tag;
-            vmsg("轉錄完成");
+            cuser.numposts += success_count; /* IID.20190730: Use the count of successful reposting */
+            if (success_count == ((tag == 0) ? 1 : tag))
+                sprintf(buf, "轉錄 %d 篇成功\，你的文章增為 %d 篇",
+                    success_count, cuser.numposts);
+            else
+                sprintf(buf, "轉錄 %d 篇成功\，%d 篇失敗，你的文章增為 %d 篇",
+                    success_count, ((tag == 0) ? 1 : tag) - success_count, cuser.numposts);
+            vmsg(buf);
         }
     }
     return XO_HEAD;
@@ -1009,7 +1025,7 @@ static KeyFunc mailgem_cb[] =
 
 static void
 XoMailGem(
-char *folder,
+const char *folder,
 const char *title)
 {
     XO *xo, *last;
@@ -1093,11 +1109,11 @@ const void *s1, const void *s2)
 
 static void
 sync_init(
-char *fname)
+const char *fname)
 {
     int ch, prefix;
     time_t chrono;
-    char *str, fpath[80];
+    char *str, *fname_str, fpath[80];
     struct stat st;
     struct dirent *de;
     DIR *dirp;
@@ -1119,18 +1135,18 @@ char *fname)
 
     ch = strlen(fname);
     memcpy(fpath, fname, ch);
-    fname = fpath + ch;
-    *fname++ = '/';
+    fname_str = fpath + ch;
+    *fname_str++ = '/';
 
     ch = '0';
     for (;;)
     {
-        *fname = ch++;
-        fname[1] = '\0';
+        *fname_str = ch++;
+        fname_str[1] = '\0';
 
         if ((dirp = opendir(fpath)))
         {
-            fname[1] = '/';
+            fname_str[1] = '/';
             while ((de = readdir(dirp)))
             {
                 str = de->d_name;
@@ -1138,7 +1154,7 @@ char *fname)
                 if (prefix == '.')
                     continue;
 
-                strcpy(fname + 2, str);
+                strcpy(fname_str + 2, str);
                 if (stat(fpath, &st) || !st.st_size)
                 {
                     unlink(fpath);
@@ -1181,7 +1197,7 @@ char *fname)
 
 static void
 sync_check(
-char *fgem)
+const char *fgem)
 {
     int expire;
     char *str, *fname, fpath[128], fnew[128];

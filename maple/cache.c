@@ -30,7 +30,7 @@ attach_err(
 {
     char buf[80];
 
-    sprintf(buf, "key = %x", shmkey);
+    sprintf(buf, "key = %lx", (unsigned long)shmkey);
     blog(name, buf);
     exit(1);
 }
@@ -168,7 +168,7 @@ utmp_mode(
 
 int
 utmp_new(
-    UTMP *up)
+    const UTMP *up)
 {
     UCACHE *xshm;
     UTMP *uentp, *utail;
@@ -202,7 +202,7 @@ utmp_new(
 
     do
     {
-        if (!uentp->pid && !uentp->userno )
+        if (!uentp->pid && !uentp->userno)
         {
             unsigned int offset;
 
@@ -254,7 +254,7 @@ utmp_free(void)
 }
 
 
-UTMP *
+GCC_PURE UTMP *
 utmp_find(
     int userno)
 {
@@ -271,7 +271,7 @@ utmp_find(
     return NULL;
 }
 
-UTMP *
+GCC_PURE UTMP *
 pid_find(
     int pid)
 {
@@ -357,7 +357,7 @@ utmp_count(
 }
 
 #if 1 && defined(HAVE_CLASSTABLEALERT)
-int
+GCC_PURE int
 cmpclasstable(
     const void *ptr)
 {
@@ -368,7 +368,7 @@ void
 classtable_free(void)
 {
     int pos;
-    while ( (pos = rec_loc(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), cmpclasstable)) >= 0)
+    while ((pos = rec_loc(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), cmpclasstable)) >= 0)
         rec_del(FN_CLASSTABLE_DB, sizeof(CLASS_TABLE_ALERT), pos, cmpclasstable, NULL);
 }
 
@@ -503,7 +503,7 @@ apply_boards(
 #endif
 
 
-int
+GCC_PURE int
 brd_bno(
     const char *bname)
 {
@@ -559,7 +559,7 @@ int_cmp(
 }
 
 
-int
+GCC_PURE int
 observeshm_find(
     int userno)
 {
@@ -897,7 +897,7 @@ film_out(
     return tag;
 }
 
-UTMP *
+GCC_PURE UTMP *
 utmp_check(        /* 檢查使用者是否在站上 */
     const char *userid)
 {

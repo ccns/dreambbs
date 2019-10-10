@@ -18,7 +18,7 @@
 
 static void
 mailog(
-    char *msg)
+    const char *msg)
 {
     FILE *fp;
 
@@ -82,7 +82,7 @@ my_biff(char *userid)
 #if 1
 static inline void
 bbs_biff(
-    char *userid)
+    const char *userid)
 {
     UTMP *utmp, *uceil;
     unsigned int offset;
@@ -109,7 +109,7 @@ bbs_biff(
 int
 acct_load(
     ACCT *acct,
-    char *userid)
+    const char *userid)
 {
     int fd;
 
@@ -126,7 +126,7 @@ acct_load(
 
 static int
 mail2bbs(
-    char *userid)
+    const char *userid)
 {
     HDR hdr;
     char buf[512], title[256], sender[256], owner[256], nick[256], folder[64];
@@ -365,8 +365,8 @@ main(
 
     if (argc < 2)
     {
-        printf("Usage:\t%s <bbs_userid>\n", argv[0]);
-        exit(-1);
+        fprintf(stderr, "Usage:\t%s <bbs_userid>\n", argv[0]);
+        exit(2);
     }
 
     setgid(BBSGID);

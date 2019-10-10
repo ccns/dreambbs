@@ -24,7 +24,7 @@ static int observe_add(XO *xo);
 static void
 observe_item(
 int num,
-OBSERVE *observe)
+const OBSERVE *observe)
 {
     prints("%6d %-13.13s %-*.*s\n", num, observe->userid, d_cols + 55, d_cols + 55, observe->title);
 }

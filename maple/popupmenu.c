@@ -24,12 +24,12 @@ static int do_menu(MENU pmenu[], XO *xo, int x, int y);
 /* ----------------------------------------- */
 
 #ifndef M3_USE_PFTERM
-static int
-is_big5(char *src, int pos, int mode)
+GCC_PURE static int
+is_big5(const char *src, int pos, int mode)
 {
     int wstate=0;
     int word=0;
-    char *str;
+    const char *str;
 
     for (str = src; word<pos; str++)
     {
@@ -61,7 +61,7 @@ is_big5(char *src, int pos, int mode)
 static int
 do_cmd(MENU *mptr, XO *xo, int x, int y)
 {
-    unsigned int mode;
+    GCC_UNUSED unsigned int mode;
     const void *p;
     int (*func) (void);
     int (*func_unary) (XO *xo);
@@ -108,12 +108,12 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
 
 #ifndef M3_USE_PFTERM
 /* verit . 計算扣掉色碼的實際長度 */
-static int
+GCC_PURE static int
 count_len(
-    char *data)
+    const char *data)
 {
     int len;
-    char *ptr, *tmp;
+    const char *ptr, *tmp;
     ptr = data;
     len = strlen(data);
 
@@ -132,7 +132,7 @@ count_len(
 
 /* verit . 取得顏色 */
 static void
-get_color(char *s, int len, int *fc, int *bc, int *bbc)
+get_color(const char *s, int len, int *fc, int *bc, int *bbc)
 {
     char buf[32], *p, *e;
     int color;
@@ -141,7 +141,7 @@ get_color(char *s, int len, int *fc, int *bc, int *bbc)
     memset(buf, 0, sizeof(buf));
     strncpy(buf, s+2, len-1);
 
-    for ( p = e = &buf[0]; exit == 0; ++p)
+    for (p = e = &buf[0]; exit == 0; ++p)
     {
         if (*p == ';' || *p == 'm')
         {
@@ -197,7 +197,7 @@ get_color(char *s, int len, int *fc, int *bc, int *bbc)
 
 #ifndef M3_USE_PFTERM
 static void
-vs_line(char *msg, int y, int x)
+vs_line(const char *msg, int y, int x)
 {
     char buf[512], color[16], *str, *tmp, *cstr;
     int len = count_len(msg);
@@ -268,7 +268,7 @@ vs_line(char *msg, int y, int x)
 #else
 static void
 vs_line(
-    char *msg, int y, int x)
+    const char *msg, int y, int x)
 {
     move(y, x);
 
@@ -294,7 +294,7 @@ draw_item(const char *desc, int mode, int x, int y)
 
 
 static int
-draw_menu(MENU *pmenu[20], int num, const char *title, int x, int y, int cur)
+draw_menu(const MENU *const pmenu[20], int num, const char *title, int x, int y, int cur)
 {
     char buf[128];
     int i;
@@ -364,13 +364,13 @@ do_menu(
     }
 
 
-    draw_menu(table, num+1, title, x, y, cur);
+    draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
 
     while (1)  /* verit . user 選擇 */
     {
         c = vkey();
         old_cur = cur;
-        switch(c)
+        switch (c)
         {
             case KEY_LEFT:
                 return 1;
@@ -397,12 +397,12 @@ do_menu(
 #else
                 vs_restore(sl);
 #endif
-                draw_menu(table, num+1, title, x, y, cur);
+                draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
                 break;
             default:
                 for (tmp=0; tmp<=num; tmp++)
                 {
-                    if ( (c | 0x20) == (table[tmp]->desc[0] | 0x20 ))
+                    if ((c | 0x20) == (table[tmp]->desc[0] | 0x20))
                     {
                         cur = tmp;
                         if (table_title->level & POPUP_DO_INSTANT)
@@ -416,7 +416,7 @@ do_menu(
 #else
                             vs_restore(sl);
 #endif
-                            draw_menu(table, num+1, title, x, y, cur);
+                            draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
                         }
                         break;
                     }
@@ -437,7 +437,7 @@ do_menu(
 /* mode 代表加背景的顏色 */
 static void
 draw_ans_item(
-    char *desc,
+    const char *desc,
     int mode,
     int x,
     int y,
@@ -452,7 +452,7 @@ draw_ans_item(
 
 
 static int
-draw_menu_des(char *desc[], char *title, int x, int y, int cur)
+draw_menu_des(const char *const desc[], const char *title, int x, int y, int cur)
 {
     int num;
     char buf[128];
@@ -477,14 +477,14 @@ draw_menu_des(char *desc[], char *title, int x, int y, int cur)
 /*         desc 最後一個必須為 NULL                             */
 /*------------------------------------------------------------- */
 int
-popupmenu_ans(char *desc[], char *title, int x, int y)
+popupmenu_ans(const char *const desc[], const char *title, int x, int y)
 {
     int cur, old_cur, num, tmp;
     int c;
     char t[64];
     char hotkey;
 #ifdef M3_USE_PFTERM
-    screen_backup_t old_screen = {0};
+    screen_backup_t old_screen;
 
     scr_dump(&old_screen);
 #else
@@ -506,7 +506,7 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
     {
         c = vkey();
         old_cur = cur;
-        switch(c)
+        switch (c)
         {
             case KEY_LEFT:
 #ifdef M3_USE_PFTERM
@@ -538,7 +538,7 @@ popupmenu_ans(char *desc[], char *title, int x, int y)
             default:
                 for (tmp=0; tmp<=num; tmp++)
                 {
-                    if ( (c | 0x20) == (desc[tmp+1][0] | 0x20 ))
+                    if ((c | 0x20) == (desc[tmp+1][0] | 0x20))
                     {
                         cur = tmp;
                         break;
@@ -559,7 +559,7 @@ void
 popupmenu(MENU pmenu[], XO *xo, int x, int y)
 {
 #ifdef M3_USE_PFTERM
-    scr_dump(&old_screen);
+    scr_redump(&old_screen);
 #else
     vs_save(sl);
 #endif
@@ -585,22 +585,20 @@ static void pcopy(char *buf, const char *patten, int len)
     }
 }
 
-int pmsg(const char *msg)
+// IID.20190909: `pmsg()` without blocking and without screen restoring.
+void pmsg_body(const char *msg)
 {
     char buf[ANSILINELEN];
     char patten[ANSILINELEN];
-    int len, plen, cc;
+    int len, plen, cc GCC_UNUSED;
 
     if (cuser.ufo2 & UFO2_ORIGUI)
-        return vmsg(msg);
+    {
+        vmsg_body(msg);
+        return;
+    }
 
-#ifdef M3_USE_PFTERM
-    scr_dump(&old_screen);
-#else
-    vs_save(sl);
-#endif
-
-    len = (msg ? strlen(msg) : 0 );
+    len = (msg ? strlen(msg) : 0);
     if (len > 30)
     {
         plen = (len - 29) / 2;
@@ -641,8 +639,24 @@ int pmsg(const char *msg)
         sprintf(buf, " \x1b[0;47;30m▇\x1b[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\x1b[40;30;1m▉\x1b[m ");
         vs_line(buf, (b_lines >> 1) + 1, (d_cols >> 1) + 18);
     }
+}
 
+int pmsg(const char *msg)
+{
+    int cc;
+
+    if (cuser.ufo2 & UFO2_ORIGUI)
+        return vmsg(msg);
+
+#ifdef M3_USE_PFTERM
+    scr_redump(&old_screen);
+#else
+    vs_save(sl);
+#endif
+
+    pmsg_body(msg);
     cc = vkey();
+
 #ifdef M3_USE_PFTERM
     scr_restore_free(&old_screen); // restore foot
 #else
@@ -664,7 +678,7 @@ Every_Z_Screen(void)
     getyx(&oy, &ox);
 #endif
 
-    fp = tbf_open();
+    fp = tbf_open(-1);
     if (!fp)
     {
         vmsg("檔案開啟錯誤 !!");

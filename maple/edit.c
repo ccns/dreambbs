@@ -72,8 +72,8 @@ ve_abort(
 
 static void
 ve_position(
-    textline *cur,
-    textline *top)
+    const textline *cur,
+    const textline *top)
 {
     int row;
 
@@ -160,7 +160,7 @@ ve_goto(void)
     char buf[8];
 
     if (vget(b_lines, 0, "跳至第幾行：", buf, sizeof(buf), DOECHO) &&
-        (lno = atoi(buf)) > 0 )
+        (lno = atoi(buf)) > 0)
     {
         textline *vln, *tmp, *top;
 
@@ -184,13 +184,13 @@ ve_goto(void)
 #endif  /* #if 0 */
 
 
-static inline char *
+GCC_PURE static inline char *
 ve_strim(
-    char *s)
+    const char *s)
 {
     while (*s == ' ')
         s++;
-    return s;
+    return (char *)s;
 }
 
 
@@ -219,12 +219,12 @@ ve_alloc(void)
 /* ----------------------------------------------------- */
 
 
-static int
+GCC_PURE static int
 ansi2n(
     int ansix,
-    textline *line)
+    const textline *line)
 {
-    char *data, *tmp;
+    const char *data, *tmp;
     int ch;
 
     data = tmp = line->data;
@@ -236,7 +236,7 @@ ansi2n(
             for (;;)
             {
                 ch = (unsigned char) *++tmp;
-                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */ )
+                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */)
                 {
                     tmp++;
                     break;
@@ -255,12 +255,12 @@ ansi2n(
 }
 
 
-static int
+GCC_PURE static int
 n2ansi(
     int nx,
-    textline *line)
+    const textline *line)
 {
-    char *tmp, *nxp;
+    const char *tmp, *nxp;
     int ansix;
     int ch;
 
@@ -275,7 +275,7 @@ n2ansi(
             for (;;)
             {
                 ch = (unsigned char) *++tmp;
-                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */ )
+                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */)
                 {
                     tmp++;
                     break;
@@ -574,7 +574,7 @@ delete_char(
 
 void
 ve_string(
-    char *str)
+    const char *str)
 {
     int ch;
 
@@ -610,8 +610,10 @@ static void
 ve_ansi(void)
 {
     int fg, bg, mode;
-    char ans[4], buf[16], *apos, *color, *tmp;
-    static char t[] = "BRGYLPCW";
+    char ans[4], buf[16], *apos;
+    const char *color;
+    const char *tmp;
+    static const char t[] = "BRGYLPCW";
 
     mode = ve_mode | VE_REDRAW;
     color = str_ransi;
@@ -623,13 +625,12 @@ ve_ansi(void)
         if ((fg = vget(b_lines, 0, "請輸入  亮度/前景/背景[正常白字黑底][0wb]：",
                 apos = ans, 4, LCECHO)))
         {
-            color = buf;
-            strcpy(color, "\x1b[");
+            strcpy(buf, "\x1b[");
             if (isdigit(fg))
             {
-                sprintf(color, "%s%c", color, *(apos++));
+                sprintf(buf + strlen(buf), "%c", *(apos++));
                 if (*apos)
-                    strcat(color, ";");
+                    strcat(buf, ";");
             }
             if (*apos)
             {
@@ -637,7 +638,7 @@ ve_ansi(void)
                     fg = tmp - t + 30;
                 else
                     fg = 37;
-                sprintf(color, "%s%d", color, fg);
+                sprintf(buf + strlen(buf), "%d", fg);
             }
             if (*apos)
             {
@@ -645,9 +646,10 @@ ve_ansi(void)
                     bg = tmp - t + 40;
                 else
                     bg = 40;
-                sprintf(color, "%s;%d", color, bg);
+                sprintf(buf + strlen(buf), ";%d", bg);
             }
-            strcat(color, "m");
+            strcat(buf, "m");
+            color = buf;
         }
     }
 
@@ -720,27 +722,34 @@ ve_line(
 /* ----------------------------------------------------- */
 
 
-char *
-tbf_ask(void)
+const char *
+tbf_ask(int n)
 {
     static char fn_tbf[] = "buf.1";
-    int ch;
+    int ch = '0' + n;
 
-    do
+    if (ch < '1' || ch > '5')
     {
-        ch = vget(b_lines, 0, "請選擇暫存檔(1-5)：", fn_tbf + 4, 2, GCARRY);
-    } while (ch < '1' || ch > '5');
+        do
+        {
+            ch = vget(b_lines, 0, "請選擇暫存檔(1-5)：", fn_tbf + 4, 2, GCARRY);
+        } while (ch < '1' || ch > '5');
+    }
+    else
+    {
+        fn_tbf[4] = ch;
+    }
     return fn_tbf;
 }
 
 
 FILE *
-tbf_open(void)
+tbf_open(int n)
 {
     int ans;
     char fpath[64], op[4];
 
-    usr_fpath(fpath, cuser.userid, tbf_ask());
+    usr_fpath(fpath, cuser.userid, tbf_ask(-1));
     ans = 'a';
 
     if (dashf(fpath))
@@ -785,12 +794,12 @@ ve_load(
 
 
 static inline void
-tbf_read(void)
+tbf_read(int n)
 {
     int fd;
     char fpath[80];
 
-    usr_fpath(fpath, cuser.userid, tbf_ask());
+    usr_fpath(fpath, cuser.userid, tbf_ask(n));
 
     fd = open(fpath, O_RDONLY);
     if (fd >= 0)
@@ -802,13 +811,13 @@ tbf_read(void)
 
 
 static inline void
-tbf_write(void)
+tbf_write(int n)
 {
     FILE *fp;
     textline *p;
     char *data;
 
-    if ((fp = tbf_open()))
+    if ((fp = tbf_open(n)))
     {
         for (p = vx_ini; p;)
         {
@@ -823,11 +832,11 @@ tbf_write(void)
 
 
 static inline void
-tbf_erase(void)
+tbf_erase(int n)
 {
     char fpath[80];
 
-    usr_fpath(fpath, cuser.userid, tbf_ask());
+    usr_fpath(fpath, cuser.userid, tbf_ask(n));
     unlink(fpath);
 }
 
@@ -877,7 +886,7 @@ ve_recover(void)
         }
         else
         {
-            usr_fpath(fpath, cuser.userid, tbf_ask());
+            usr_fpath(fpath, cuser.userid, tbf_ask(-1));
             rename(fpbak, fpath);
         }
     }
@@ -909,9 +918,9 @@ is_quoted(
 }
 
 
-static inline int
+GCC_PURE static inline int
 quote_line(
-    char *str,
+    const char *str,
     int qlimit)                 /* 允許幾層引言？ */
 {
     int qlevel = 0;
@@ -1275,12 +1284,12 @@ ve_header(
             fprintf(fp, "%s %s (%s) %s %s\n", str_author1, cuser.userid,
 
 #if defined(REALINFO) && defined(POSTS_REALNAMES)
-                cuser.realname
+                cuser.realname,
 #else
-                HAS_PERM(PERM_DENYNICK) ? cutmp->username : cuser.username
+                HAS_PERM(PERM_DENYNICK) ? cutmp->username : cuser.username,
 #endif
 
-                , curredit & EDIT_OUTGO ? str_post1 : str_post2, currboard);
+                curredit & EDIT_OUTGO ? str_post1 : str_post2, currboard);
         }
     }
     fprintf(fp, "標題: %s\n時間: %s\n", title, ctime(&now));
@@ -1382,16 +1391,16 @@ ve_filer(
     FILE *fp=NULL;
     textline *p, *v;
     char buf[80], *str, re;
-    const char *msg;
+    GCC_UNUSED const char *msg;
 
 #ifdef  HAVE_INPUT_TOOLS
-    const char *menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
-    const char *menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
-    const char *menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *const menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *const menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *const menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Input    符號輸入工具", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
 #else
-    const char *menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
-    const char *menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
-    const char *menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *const menu1[] = {"SE", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *const menu2[] = {"SE", "Save     存檔", "Local    存為站內檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
+    const char *const menu3[] = {"LE", "Local    存為站內檔", "Save     存檔", "Abort    放棄", "Title    改標題", "Edit     繼續編輯", "Read     讀取暫存檔", "Write    寫入暫存檔", "Delete   刪除暫存檔", "Quit     離開選單", NULL};
 #endif
 
 
@@ -1452,18 +1461,18 @@ ve_filer(
         break;
 
     case 'r':
-        tbf_read();
+        tbf_read(-1);
         return VE_REDRAW;
 
     case 'e':
         return VE_FOOTER;
 
     case 'w':
-        tbf_write();
+        tbf_write(-1);
         return VE_FOOTER;
 
     case 'd':
-        tbf_erase();
+        tbf_erase(-1);
         return VE_FOOTER;
 
     case 't':
@@ -1619,7 +1628,7 @@ static int
 select_title(
     char *title)
 {
-    char *objs[] = {"[公告]", "[新聞]", "[閒聊]", "[文件]", "[問題]", "[測試]"};
+    const char *const objs[] = {"[公告]", "[新聞]", "[閒聊]", "[文件]", "[問題]", "[測試]"};
     int select;
     outs("\n\n1.【公告】2.【新聞】3.【閒聊】4.【文件】5.【問題】6.【測試】7.【其他】\n");
     select = vans("請選擇文章類別或按 Enter 跳過：") - '1';
@@ -1637,7 +1646,7 @@ select_title(
 int
 ve_subject(
     int row,
-    char *topic,
+    const char *topic,
     const char *dft)
 {
     char *title;
@@ -2061,6 +2070,15 @@ ve_key:
                 ve_mode = mode | cc;
                 continue;
 
+            case Meta('1'):
+            case Meta('2'):
+            case Meta('3'):
+            case Meta('4'):
+            case Meta('5'):
+                tbf_read(cc - '0');
+                ve_mode = mode | VE_REDRAW;
+                continue;
+
             case Ctrl('Z'):
             case KEY_F1:
 
@@ -2130,7 +2148,6 @@ ve_key:
                 ve_mode = mode | VE_REDRAW;
                 break;
 
-            case Ctrl('U'):
             case Meta('U'):
             case KEY_F8:
 
@@ -2138,6 +2155,7 @@ ve_key:
                 /*ve_char(27);*/
                 break;
 
+            case Ctrl('U'):
             case KEY_ESC:
 
                 ve_char(27);
@@ -2164,7 +2182,7 @@ ve_key:
 */
 
 /* cache.090922: 控制碼 */
-                    const char *menu[] =
+                    const char *const menu[] =
                     {
                         "IQ",
                         "Id     userＩＤ(**s)",

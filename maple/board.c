@@ -172,7 +172,7 @@ brh_get(
 }
 
 
-int
+GCC_PURE int
 brh_unread(
     time_t chrono)
 {
@@ -251,12 +251,6 @@ brh_add(time_t prev, time_t chrono, time_t next)
                         *base++ = *++head;
                     } while (head < tail);
                 }
-                return;
-            }
-
-            if (next >= begin)
-            {
-                head[-1] = chrono;
                 return;
             }
 
@@ -351,9 +345,9 @@ force_board (void)
 /* ----------------------------------------------------- */
 
 
-static inline int
+GCC_PURE static inline int
 is_bm(
-    char *list)                 /* 板主：BM list */
+    const char *list)                 /* 板主：BM list */
 {
     int cc, len;
     char *userid;
@@ -388,11 +382,11 @@ remove_perm(void)
 
 int
 Ben_Perm(
-    BRD *bhdr,
+    const BRD *bhdr,
     unsigned int ulevel)
 {
     unsigned int readlevel, postlevel, bits;
-    char *blist, *bname;
+    const char *blist, *bname;
 
     bname = bhdr->brdname;
     if (!*bname)
@@ -435,13 +429,13 @@ Ben_Perm(
 
         bits = bm_belong(bname);  /* Thor.980813: 對秘密看版而言, 是重新判斷的 */
 
-            if (readlevel & PERM_SYSOP)
-            {
-                if (readlevel & PERM_BOARD)
-                    ;
-                else
-                    bits |= BRD_F_BIT;
-            }
+        if (readlevel & PERM_SYSOP)
+        {
+            if (readlevel & PERM_BOARD)
+                ;
+            else
+                bits |= BRD_F_BIT;
+        }
 
     }
 #ifdef HAVE_WATER_LIST
@@ -473,7 +467,7 @@ Ben_Perm(
 /* 載入 currboard 進行若干設定                           */
 /* ----------------------------------------------------- */
 
-int
+GCC_PURE int
 bstamp2bno(
     time_t stamp)
 {
@@ -498,7 +492,7 @@ brh_load(void)
 {
     BRD *brdp, *bend;
     unsigned int ulevel;
-    int n, cbno;
+    int n, cbno GCC_UNUSED;
     char *bits;
 
     int size, *base;
@@ -774,12 +768,23 @@ XoPost(
     const char *str;
     static int LastBno = -1;
 
+    str_bit = &brd_bits[bno];
+    bits = *str_bit;
+
+    /* cache.081206: 對好友看版重新判斷是不是也具有 R 權限 */
+    if (!(bits & BRD_R_BIT)/* && (bits & BRD_F_BIT)*/)
+    {
+        vmsg("請聯絡板主將您加入看板好友");
+        ok=0;
+        return;
+    }
+
     /* 090823.cache: 看板人氣 */
     if (LastBno != bno)
     {
         if (LastBno >= 0)
         {
-            if (bshm->mantime[LastBno] > 0 )//防止人氣變成負數
+            if (bshm->mantime[LastBno] > 0)//防止人氣變成負數
                 bshm->mantime[LastBno]--; /* 退出上一個板 */
             else
                 bshm->mantime[LastBno] = 0;//負數的話歸零
@@ -801,60 +806,47 @@ XoPost(
     bbstate = /* (bbstate & STAT_DIRTY) | */ STAT_STARTED | brd->battr;
     bbstate &= ~STAT_POST;
 
-    str_bit = &brd_bits[bno];
-    bits = *str_bit;
-
-/* cache.081206: 對好友看版重新判斷是不是也具有 R 權限 */
-    if (!(bits & BRD_R_BIT)/* && (bits & BRD_F_BIT)*/)
-    {
-        vmsg("請聯絡板主將您加入看板好友");
-        ok=0;
-    }
-    else
-    {
-        if (bits & BRD_X_BIT)
-            bbstate |= (STAT_BOARD | STAT_POST);
-        else if (bits & BRD_W_BIT)
-            bbstate |= STAT_POST;
+    if (bits & BRD_X_BIT)
+        bbstate |= (STAT_BOARD | STAT_POST);
+    else if (bits & BRD_W_BIT)
+        bbstate |= STAT_POST;
 
 #ifdef  HAVE_MODERATED_BOARD
-        if (brd->readlevel == PERM_SYSOP)
-            bbstate |= STAT_MODERATED;
+    if (brd->readlevel == PERM_SYSOP)
+        bbstate |= STAT_MODERATED;
 #endif
 
-        if (/*!(bits & BRD_V_BIT) && */(cuser.ufo2 & UFO2_BNOTE))
-        {
-            *str_bit = bits | BRD_V_BIT;
-            brd_fpath(fpath, currboard, FN_NOTE);
-            more(fpath, NULL);
-        }
+    if (/*!(bits & BRD_V_BIT) && */(cuser.ufo2 & UFO2_BNOTE))
+    {
+        *str_bit = bits | BRD_V_BIT;
+        brd_fpath(fpath, currboard, FN_NOTE);
+        more(fpath, NULL);
+    }
 
-        brd_fpath(fpath, currboard, fn_dir);
-        xz[XZ_POST - XO_ZONE].xo = xo = xo_get(fpath);
-        xo->key = XZ_POST;
-        xo->xyz = brd->bvote > 0 ? "本看板進行投票中" : brd->title + 3;
-        str = brd->BM;
-        if (*str <= ' ')
-            str = "徵求中";
-        sprintf(currBM, "板主：%s", str);
+    brd_fpath(fpath, currboard, fn_dir);
+    xz[XZ_POST - XO_ZONE].xo = xo = xo_get(fpath);
+    xo->key = XZ_POST;
+    xo->xyz = brd->bvote > 0 ? "本看板進行投票中" : brd->title + 3;
+    str = brd->BM;
+    if (*str <= ' ')
+        str = "徵求中";
+    sprintf(currBM, "板主：%s", str);
 
 #ifdef LOG_BRD_USIES
-        /* lkchu.981201: 閱讀看版記錄 */
-        if (!(bbstate & BRD_NOLOGREAD))
-            brd_usies();
+    /* lkchu.981201: 閱讀看版記錄 */
+    if (!(bbstate & BRD_NOLOGREAD))
+        brd_usies();
 #endif
 
-        if (!(brd->battr & BRD_ANONYMOUS))
-            brd_usies_BMlog();
+    if (!(brd->battr & BRD_ANONYMOUS))
+        brd_usies_BMlog();
 
 #ifdef  HAVE_COUNT_BOARD
 //      if (!(strcmp(brd->brdname, "Test")))
-        if (!(bbstate & BRD_NOTOTAL) && !(bits & BRD_V_BIT))
-            brd->n_reads++;
+    if (!(bbstate & BRD_NOTOTAL) && !(bits & BRD_V_BIT))
+        brd->n_reads++;
 #endif
-        ok=1;
-    }
-
+    ok=1;
 }
 
 
@@ -892,7 +884,7 @@ class_check(
         return 0;
 
     chn = CH_END - chn;
-    switch(boardmode)
+    switch (boardmode)
     {
         case 0:
             cbase = (short *) class_img;
@@ -939,8 +931,7 @@ class_check(
             {
                 if (class_flag2 &&
                     (!(val & BRD_R_BIT) || !(brd[chn].brdname[0]) ||
-                    (brd[chn].readlevel != PERM_BOARD &&
-                    brd[chn].readlevel != PERM_SYSOP )))
+                    (brd[chn].readlevel & ~(PERM_SYSOP | PERM_BOARD)) ))
                         continue;
 
                 if ((val & BRD_F_BIT) && !(val & zap))
@@ -984,7 +975,7 @@ class_load(
 
     chn = CH_END - xo->key;
 
-    switch(boardmode)
+    switch (boardmode)
     {
         case 0:
             cbase = (short *) class_img;
@@ -1035,8 +1026,7 @@ class_load(
             {
                 if (class_flag2 &&
                     (!(val & BRD_R_BIT) || !(brd[chn].brdname[0]) ||
-                    (brd[chn].readlevel != PERM_BOARD &&
-                    brd[chn].readlevel != PERM_SYSOP )))
+                    (brd[chn].readlevel & ~(PERM_SYSOP | PERM_BOARD)) ))
                         continue;
 
                 if ((val & BRD_F_BIT) && !(val & zap))
@@ -1050,7 +1040,7 @@ class_load(
             // 即時熱門看板臨界值自定
             if (class_hot)
             {
-                if ( ( bshm->mantime[chn] < CLASS_HOT ) && ( strcmp(brd[chn].brdname, "SYSOP") ) ) /* 只列出人氣超過 CLASS_HOT 的看板 */
+                if ( ( bshm->mantime[chn] < CLASS_HOT ) && ( !strcmp(brd[chn].brdname, "SYSOP") ) ) /* 只列出人氣超過 CLASS_HOT 的看板 */
                     continue;
                 bnum++;
             }
@@ -1112,7 +1102,7 @@ class_body(
     int n, cnt, max, brdnew, bno;
 
 
-    switch(boardmode)
+    switch (boardmode)
     {
         case 0:
             img = class_img;
@@ -1448,7 +1438,7 @@ class_zap(
     if (chn >= 0)
     {
         brd = bshm->bcache + chn;
-        if (!(brd->battr & BRD_NOZAP) || ( brd_bits[chn] & BRD_Z_BIT))
+        if (!(brd->battr & BRD_NOZAP) || (brd_bits[chn] & BRD_Z_BIT))
         {
             move(3 + num - xo->top, 8);
             num = brd_bits[chn] ^= BRD_Z_BIT;
@@ -1754,7 +1744,7 @@ class_add(xo)
     brd = bshm->bcache + chn;
     memset(&hdr, 0, sizeof(HDR));
     brd2gem(brd, &hdr);
-    if (class_find_same(&hdr) < 0 )
+    if (class_find_same(&hdr) < 0)
     {
         rec_add(fpath, &hdr, sizeof(HDR));
         favorite_main();
@@ -1780,7 +1770,7 @@ class_add2(          /* gaod: 我的最愛中直接新增新看板 */
     short *chp;
     BRD *brd;
     HDR hdr;
-    int chn, fasize;
+    int chn GCC_UNUSED, fasize;
     char fpath[128];
     char bname[IDLEN + 1];
 
@@ -1804,7 +1794,7 @@ class_add2(          /* gaod: 我的最愛中直接新增新看板 */
     chn = *chp;
     memset(&hdr, 0, sizeof(HDR));
     brd2gem(brd, &hdr);
-    if (class_find_same(&hdr) < 0 )
+    if (class_find_same(&hdr) < 0)
     {
         rec_add(fpath, &hdr, sizeof(HDR));
         favorite_main();
@@ -1981,7 +1971,7 @@ static KeyFunc class_cb[] =
     {'s', class_switch},
 
     {'y', class_yank},
-    {'i', class_yank2}, //列出所有有閱讀權限的秘密/好有看板
+    {'i', class_yank2}, //列出所有有閱讀權限的秘密/好友看板
     {'z', class_zap},
     {'E', class_edit},
     {'v', class_visit},

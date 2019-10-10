@@ -18,7 +18,7 @@
 #include "dao.h"
 
 
-static const char *list[] = {
+static const char *const list[] = {
     "welcome",
     "bye",
     "apply",
@@ -59,7 +59,7 @@ static int tail;
 
     static void
 mirror(
-    char *fpath)
+    const char *fpath)
 {
     int fd, size;
     char *ptr;

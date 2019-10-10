@@ -16,6 +16,7 @@
 #include <string.h>
 #include "splay.h"
 #include "cppdef.h"
+#include "attrdef.h"
 
 
 typedef struct
@@ -26,7 +27,7 @@ typedef struct
 #define AclText_FLEX_MEMBER    text
 
 
-static int
+GCC_PURE static int
 at_cmp(
     const void *x,
     const void *y)
@@ -59,16 +60,16 @@ at_cmp(
 
 static void
 at_out(
-    SplayNode *top)
+    const SplayNode *top)
 {
-    AclText *at;
+    const AclText *at;
 
     if (top == NULL)
         return;
 
     at_out(top->left);
 
-    at = (AclText *) top->data;
+    at = (const AclText *) top->data;
     fputs(at->text + 1, stdout);
 
     at_out(top->right);
@@ -77,7 +78,7 @@ at_out(
 
 static void
 acl_sort(
-    char *fpath)
+    const char *fpath)
 {
     FILE *fp;
     int len, domain;
@@ -125,11 +126,10 @@ main(
 {
     if (argc != 2)
     {
-        printf("Usage:\t%s file\n", argv[0]);
+        fprintf(stderr, "Usage:\t%s <file>\n", argv[0]);
+        exit(2);
     }
-    else
-    {
-        acl_sort(argv[1]);
-    }
+
+    acl_sort(argv[1]);
     exit(0);
 }

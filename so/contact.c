@@ -13,12 +13,12 @@
 extern XZ xz[];
 
 static int contact_add(XO *xo);
-void contact_send(CONTACT *contact);
+void contact_send(const CONTACT *contact);
 
 static void
 contact_item(
 int num,
-CONTACT *contact)
+const CONTACT *contact)
 {
     prints("%6d     %-13s      %-*s\n", num, contact->name, d_cols + 48, contact->email);
 }
@@ -179,7 +179,7 @@ XO *xo)
 
 void
 contact_send(
-CONTACT *contact)
+const CONTACT *contact)
 {
     if (bbsothermode & OTHERSTAT_EDITING)
     {

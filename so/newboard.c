@@ -38,7 +38,7 @@ typedef struct
 
 static char
 nbrd_attr(
-NBRD *nbrd)
+const NBRD *nbrd)
 {
     if (nbrd->mode & (NBRD_REJECT | NBRD_STOP))
         return 'R';
@@ -56,7 +56,7 @@ NBRD *nbrd)
 
 static int
 nbrd_stamp(
-char *folder,
+const char *folder,
 NBRD *nbrd,
 char *fpath)
 {
@@ -89,8 +89,8 @@ char *fpath)
 static void
 nbrd_fpath(
 char *fpath,
-char *folder,
-NBRD *nbrd)
+const char *folder,
+const NBRD *nbrd)
 {
     char *str = NULL;
     int cc;
@@ -125,7 +125,7 @@ XO *xo)
 static void
 nbrd_item(
 int num,
-NBRD *nbrd)
+const NBRD *nbrd)
 {
     if (nbrd->mode & NBRD_NBRD)
         prints("%6d %c %-5s %-13s %-13s:%-*.*s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, nbrd->brdname, d_cols + 22, d_cols + 22, nbrd->title);
@@ -189,7 +189,7 @@ XO *xo)
 static int
 nbrd_find(
 XO *xo,
-char *ptr,
+const char *ptr,
 int mode)
 {
     int pos = 0, fd;
@@ -436,8 +436,8 @@ XO *xo)
 
 static int
 nbrd_seek(
-char *fpath,
-char *mail)
+const char *fpath,
+const char *mail)
 {
     LOG email;
     int pos = 0, fd;

@@ -19,7 +19,7 @@ splay_free(SplayNode * top, void (*data_free) (void *))
 }
 
 void
-splay_out(SplayNode * top, void (*data_out) (void *))
+splay_out(const SplayNode * top, void (*data_out) (const void *))
 {
     if (top == NULL)
         return;
@@ -34,7 +34,7 @@ typedef struct
     int i;
 }      intnode;
 
-int
+GCC_PURE int
 compareint(const void *a, const void *b)
 {
     const intnode *A = (const intnode *)a;
@@ -44,9 +44,9 @@ compareint(const void *a, const void *b)
 
 
 void
-printint(void *a)
+printint(const void *a)
 {
-    intnode *A = a;
+    const intnode *A = a;
     printf("%d ", A->i);
 }
 

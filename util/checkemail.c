@@ -26,7 +26,7 @@ int total;
 
 static int
 check_in(
-    char *email)
+    const char *email)
 {
     int i;
     for (i=0; i<MAX_AC; i++)
@@ -41,8 +41,8 @@ check_in(
 
 static void
 reaper(
-    char *fpath,
-    char *lowid)
+    const char *fpath,
+    const char *lowid)
 {
     int fd;
 

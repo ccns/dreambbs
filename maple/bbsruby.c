@@ -122,7 +122,7 @@ typedef rb_event_t rb_event_flag_t;
 int ABORT_BBSRUBY = 0;
 
 #define BBSRUBY_TOC_HEADERS (6)
-const char* TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"interface", "title", "notes", "author", "version", "date"};
+const char* const TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"interface", "title", "notes", "author", "version", "date"};
 char* TOCs_DATA[BBSRUBY_TOC_HEADERS] = {0};
 VALUE TOCs_rubyhash;
 double KBHIT_TMIN = 0.001;
@@ -329,7 +329,7 @@ VALUE brb_ansi_color(VALUE self, VALUE args)
     char *p = buf + strlen(buf);
 
     int count = RARRAY_LEN(args);
-    char sep[2] = ";";
+    const char sep[2] = ";";
     int i;
     for (i=0; i<count; i++)
     {
@@ -401,7 +401,7 @@ VALUE brb_pause(VALUE self, VALUE msg)
     return brb_keyToString(k);
 }
 
-VALUE brb_toc(VALUE self)
+GCC_PURE VALUE brb_toc(VALUE self)
 {
     return TOCs_rubyhash;
 }
@@ -577,7 +577,7 @@ int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
     char *tStart, *tEnd;
     tStart = cStart;
     VALUE hashTOC = rb_hash_new();
-    int TOCfound = 0;
+    GCC_UNUSED int TOCfound = 0;
     // In this implement, we only allow TOC to be put BEFORE the actual script code
     while (tStart < cEnd)
     {
@@ -702,7 +702,7 @@ void sig_handler(int sig)
 }
 
 void run_ruby(
-    char* fpath)
+    const char* fpath)
 {
     static int ruby_inited = 0;
     ABORT_BBSRUBY = 0;

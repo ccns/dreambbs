@@ -20,8 +20,8 @@
 
 static inline void
 showpasswd(
-    char *passwd,
-    char *passhash)
+    const char *passwd,
+    const char *passhash)
 {
     int i;
     char guess[PLAINPASSLEN];
@@ -63,7 +63,7 @@ showpasswd(
 #if 0
 static char *
 _bitmsg(
-    char *str,
+    const char *str,
     int level)
 {
     int cc;
@@ -86,7 +86,7 @@ _bitmsg(
 
 static inline void
 showACCT(
-    ACCT *acct)
+    const ACCT *acct)
 {
     char /*msg1[40], msg2[40], */ msg3[40], msg4[40], msg5[40], msg6[40];
 
@@ -130,8 +130,8 @@ main(
 
     if (argc < 2)
     {
-        printf("Usage: %s UserID1 [UserID2] ...\n", argv[0]);
-        return -1;
+        fprintf(stderr, "Usage: %s <UserID1> [UserID2] ...\n", argv[0]);
+        return 2;
     }
 
     chdir(BBSHOME);

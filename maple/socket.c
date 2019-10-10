@@ -2,7 +2,7 @@
 
 int
 Get_Socket(  /* site for hostname, sock for port & socket */
-    char *site,
+    const char *site,
     int *sock)
 {
     struct sockaddr_in sin;
@@ -55,10 +55,10 @@ Get_Socket(  /* site for hostname, sock for port & socket */
 
 int
 POP3_Check(
-    char *site, char *account, char *passwd)
+    const char *site, const char *account, const char *passwd)
 {
     FILE *fsock = NULL;
-    int sock=110, old_sock = 0;
+    int sock=110, old_sock GCC_UNUSED = 0;
     char buf[512];
 
     if (Get_Socket(site, &sock))
@@ -77,7 +77,7 @@ POP3_Check(
 
     while (sock < 6)
     {
-        switch(sock)
+        switch (sock)
         {
             case 1:             /* Open Socket Fail */
                 prints("\n傳回錯誤值 [1]，請重試幾次看看\n");
@@ -125,7 +125,7 @@ POP3_Check(
 
 int
 Ext_POP3_Check(
-    char *site, char *account, char *passwd)
+    const char *site, const char *account, const char *passwd)
 {
     FILE *fsock = NULL;
     int sock=110, step=1;
@@ -157,7 +157,7 @@ Ext_POP3_Check(
             to.tv_usec = 0;
             nfds = sock;
 
-            switch(step)
+            switch (step)
             {
             case 1:
                 while (1)
@@ -184,7 +184,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;
@@ -209,7 +209,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;
@@ -234,7 +234,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;
@@ -265,7 +265,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;
@@ -296,7 +296,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;
@@ -322,7 +322,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;
@@ -347,7 +347,7 @@ Ext_POP3_Check(
                     FD_ZERO(&rd);
                     FD_SET(sock, &rd);
                     nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0 )
+                    if (nfds == 0)
                         break;
                 }
                 break;

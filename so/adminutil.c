@@ -32,10 +32,10 @@ use_io(void)
         return 1;
 }
 
-static int
-check_in_memory(char *bm, char *id)
+GCC_PURE static int
+check_in_memory(const char *bm, const char *id)
 {
-    char *i;
+    const char *i;
     for (i = bm; strlen(i); i = i + IDLEN + 1)
         if (!strcmp(i, id))
             return 0;
@@ -67,9 +67,10 @@ m_expire(void)
 }
 
 static void
-send_to_all(char *title, char *fpath, char *bm)
+send_to_all(const char *title, const char *fpath, const char *bm)
 {
-    char buf[128], *ptr;
+    char buf[128];
+    const char *ptr;
     HDR mhdr;
 
     for (ptr = bm; strlen(ptr); ptr = ptr + IDLEN + 1)
@@ -184,8 +185,8 @@ mail_to_bm(void)
 static void
 traverse(
 char *fpath,
-char *path,
-char *title)
+const char *path,
+const char *title)
 {
     DIR *dirp;
     struct dirent *de;
@@ -219,8 +220,8 @@ char *title)
 
 static int
 open_mail(
-char *path,
-char *title)
+const char *path,
+const char *title)
 {
     int ch;
     char *fname, fpath[256];
@@ -280,10 +281,10 @@ mail_to_all(void)
     return 0;
 }
 
-static int
+GCC_PURE static int
 is_bms(
-char *list,                   /* 板主：BM list */
-char *userid)
+const char *list,             /* 板主：BM list */
+const char *userid)
 {
     int cc, len;
 
@@ -306,12 +307,12 @@ char *userid)
     return 0;
 }
 
-static inline int
+GCC_PURE static inline int
 is_bm(
-char *list)                   /* 板主：BM list */
+const char *list)             /* 板主：BM list */
 {
     int cc, len;
-    char *userid;
+    const char *userid;
 
     len = strlen(userid = cuser.userid);
     do
@@ -494,7 +495,7 @@ bm_check(void)
 static int
 find_bm(
 const char *fpath,
-char *id)
+const char *id)
 {
     BM bm;
     int fd;
@@ -722,7 +723,7 @@ special_search(void)
 int
 m_xfile(void)
 {
-    static const char *desc[] =
+    static const char *const desc[] =
     {
         "重要公告",             /* lkchu.990510: edit ~/etc/announce online */
         "不雅名單",
@@ -751,7 +752,7 @@ m_xfile(void)
         NULL
     };
 
-    static const char *path[] =
+    static const char *const path[] =
     {
         FN_ETC_ANNOUNCE,
         FN_ETC_BADID,
@@ -786,7 +787,7 @@ m_xfile(void)
 int
 m_xhlp(void)
 {
-    static const char *desc[] =
+    static const char *const desc[] =
     {
         "進站廣告",
         "註冊提示畫面",
@@ -817,7 +818,7 @@ m_xhlp(void)
         NULL
     };
 
-    static const char *path[] =
+    static const char *const path[] =
     {
         "gem/@/@AD",
         "gem/@/@apply",

@@ -19,10 +19,10 @@
 #include "cppdef.h"
 
 
-static const char *myfile[] = {"day", "week", "month", "year"};
-static int mycount[4] = {7, 4, 12};
-static int mytop[] = {10, 50, 100, 100};
-static const char *mytitle[] = {"日十", "週五十", "月百", "年度百"};
+static const char *const myfile[] = {"day", "week", "month", "year"};
+static const int mycount[4] = {7, 4, 12};
+static const int mytop[] = {10, 50, 100, 100};
+static const char *const mytitle[] = {"日十", "週五十", "月百", "年度百"};
 
 
 #define FN_POST_DB      "post.db"
@@ -62,7 +62,7 @@ struct posttop
 
 static int
 hash(
-    char *key)
+    const char *key)
 {
     int i, ch, value = 0;
 
@@ -82,7 +82,7 @@ hash(
 
 static void
 search(
-    struct posttop *t)
+    const struct posttop *t)
 {
     struct postrec *p, *q, *s;
     int i, found = 0;
@@ -121,7 +121,7 @@ search(
 
 static int
 sort(
-    struct postrec *pp,
+    const struct postrec *pp,
     int count)
 {
     int i, j;
@@ -145,7 +145,7 @@ sort(
 
 static void
 load_stat(
-    char *fname)
+    const char *fname)
 {
     FILE *fp;
 
@@ -174,7 +174,7 @@ poststat(
         FILE *fpw;
 
         /* --------------------------------------- */
-        /* load .post and statictic processing     */
+        /* load .post and statistic processing     */
         /* --------------------------------------- */
 
         unlink(FN_POST_OLD_DB);
@@ -202,7 +202,7 @@ poststat(
     else
     {
         /* ---------------------------------------------- */
-        /* load previous results and statictic processing */
+        /* load previous results and statistic processing */
         /* ---------------------------------------------- */
 
         i = mycount[mytype];
@@ -228,11 +228,11 @@ poststat(
         {
 
 #ifdef  DEBUG
-            printf("Title : %s, Board: %s\nPostNo : %d, Author: %s\n"
-                , pp->title
-                , pp->board
-                , pp->number
-                , pp->author);
+            printf("Title : %s, Board: %s\nPostNo : %d, Author: %s\n",
+                pp->title,
+                pp->board,
+                pp->number,
+                pp->author);
 #endif
 
             j = sort(pp, j);
@@ -268,8 +268,8 @@ poststat(
             buf[20] = '\0';
             fprintf(fp,
                 "\x1b[1;31m%3d. \x1b[33m看板 : \x1b[32m%-16s\x1b[35m《 %s》\x1b[36m%4d 篇\x1b[33m%16s\n"
-                "     \x1b[33m標題 : \x1b[0;44;37m%-60.60s\x1b[40m\n"
-                , ++cnt, tp->board, p, tp->number, tp->author, tp->title);
+                "     \x1b[33m標題 : \x1b[0;44;37m%-60.60s\x1b[40m\n",
+                ++cnt, tp->board, p, tp->number, tp->author, tp->title);
         }
         fclose(fp);
     }
@@ -315,8 +315,8 @@ poststat(
 
 static int
 pa_cmp(
-    void const *x,
-    void const *y)
+    const void *x,
+    const void *y)
 {
     int dif;
 
@@ -329,11 +329,11 @@ pa_cmp(
 
 static void
 pa_out(
-    SplayNode *top,
+    const SplayNode *top,
     FILE *fp)
 {
-    PostAuthor *pa;
-    PostText *text;
+    const PostAuthor *pa;
+    const PostText *text;
 
     if (top == NULL)
         return;
@@ -459,13 +459,27 @@ main(
 
     chdir(BBSHOME "/run");
 
-    if (argc == 2)
+    if (argc > 1)
     {
-        argc = atoi(argv[1]);
-        if (argc == 100)
+        switch (argc = atoi(argv[1]))
+        {
+        case 100:
             post_author();
-        else
+            break;
+
+        default:
+            if (!(argc >= -1 && argc < sizeof(myfile)/sizeof(*myfile) - 1))
+            {
+                fprintf(stderr, "Usage: %s [action]\n", argv[0]);
+                fprintf(stderr, "actions:\n");
+                for (argc = 0; argc < sizeof(myfile)/sizeof(*myfile); argc++)
+                    fprintf(stderr, "\t%d: Generate top %d of the %s\n", argc-1, mytop[argc], myfile[argc]);
+                fprintf(stderr, "\t100: Generate post.log of the %s\n", myfile[0]);
+                return 2;
+            }
             poststat(argc);
+            break;
+        }
         exit(0);
     }
 

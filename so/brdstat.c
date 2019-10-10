@@ -18,7 +18,7 @@ extern BCACHE *bshm;
 static void
 bstat_item(
 int num,
-BSTAT *bstat)
+const BSTAT *bstat)
 {
     prints("%6d   %-8.8s    %6d    %6d    %6d    %6d\n", num,
            bstat->type, bstat->n_reads, bstat->n_posts, bstat->n_news, bstat->n_bans);

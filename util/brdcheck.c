@@ -20,20 +20,18 @@ main(
 
     if (argc > 2)
     {
-        printf("Usage: %s [brdname]\n", argv[0]);
-        return -1;
+        fprintf(stderr, "Usage: %s [brdname]\n", argv[0]);
+        return 2;
     }
 
     for (c = 'a'; c <= 'z'; c++)
     {
         char buf[64];
-        char buf2[64];
+        GCC_UNUSED char buf2[64];
         struct dirent *de;
         DIR *dirp;
 
-        (void)buf2;
-
-        sprintf(buf, "/home/bbs/brd/%c", c);
+        sprintf(buf, BBSHOME "/brd/%c", c);
         chdir(buf);
 
         if (!(dirp = opendir(".")))

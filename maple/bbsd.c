@@ -14,6 +14,7 @@
 
 #include <sys/wait.h>
 #include <sys/socket.h>
+#include <sys/un.h>
 #include <netdb.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
@@ -28,7 +29,7 @@
 
 
 #define MAXPORTS        3
-static int myports[MAXPORTS] = {23, 3456, 3001 /*, 3002, 3003 */ };
+static const int myports[MAXPORTS] = {23, 3456, 3001, /* 3002, 3003 */};
 
 extern BCACHE *bshm;
 extern UCACHE *ushm;
@@ -42,9 +43,9 @@ extern CHECKSUMCOUNT cksum;
 /* static int mport; */ /* Thor.990325: 不需要了:P */
 static u_long tn_addr;
 
-#ifdef CHAT_SECURE
-char passbuf[PLAINPASSLEN];
-#endif
+/* IID.20190903: The unix socket path for listening proxy connections */
+static const char *unix_path;
+
 
 #ifdef  TREAT
 int treat=0;
@@ -97,7 +98,7 @@ typedef struct
     unsigned int new;
 }       TABLE;
 
-TABLE table[] = {
+const TABLE table[] = {
 //  {UFO_COLOR, UFO2_COLOR},
 //  {UFO_MOVIE, UFO2_MOVIE},
 //  {UFO_BRDNEW, UFO2_BRDNEW},
@@ -192,7 +193,7 @@ u_exit(
             strcpy(cuser.vmail, tuser.vmail);
 #ifdef  TRANUFO
             {
-                TABLE *ptr;
+                const TABLE *ptr;
                 cuser.ufo2 = 0;
                 for (ptr = table; ptr->old; ptr++)
                 {
@@ -250,7 +251,7 @@ login_abort(
 static int
 belong(
     const char *flist,
-    char *key
+    const char *key
 )
 {
     int fd, rc;
@@ -280,11 +281,11 @@ belong(
 
 static int
 is_badid(
-    char *userid
+    const char *userid
 )
 {
     int ch;
-    char *str;
+    const char *str;
 
     if (strlen(userid) < 2)
         return 1;
@@ -371,7 +372,7 @@ acct_apply(void)
             login_abort("\n您嘗試錯誤的輸入太多，請下次再來吧");
     }
 
-    /* IID.20190530: For forward compatibility with older versions */
+    /* IID.20190530: For the forward compatibility of older versions */
     if (vget(18, 0, "是否使用新式密碼加密(Y/N)？[N]", buf, 3, LCECHO) == 'y')
     {
         try = GENPASSWD_SHA256;
@@ -516,7 +517,7 @@ utmp_setup(
 )
 {
     UTMP utmp;
-    const char *guestname[GUESTNAME]={GUEST_NAMES};
+    const char *const guestname[GUESTNAME]={GUEST_NAMES};
 
     cutmp = NULL; /* Thor.980805: pal_cache中會 check cutmp  */
     /*pal_cache();*/  /* by visor */
@@ -575,15 +576,13 @@ tn_login(void)
     time_t start, check_deny;
     char fpath[80], uid[IDLEN + 1];
 
-#ifndef CHAT_SECURE
     char passbuf[PLAINPASSLEN];
-#endif
 
     /* 借 currtitle 一用 */
 
     /* sprintf(currtitle, "%s@%s", rusername, fromhost); */
     /* Thor.990415: 紀錄ip, 怕正查不到 */
-    sprintf(currtitle, "%s@%s ip:%08x (%d)", rusername, fromhost, (int) tn_addr, currpid);
+    sprintf(currtitle, "%s@%s ip:%08lx (%d)", rusername, fromhost, tn_addr, currpid);
 
 
 /* by visor */
@@ -728,10 +727,10 @@ tn_login(void)
                     }
 
                     if (utmp_count(cuser.userno, 0) > 2)
-            {
-                pmsg2("您已經達到多重登入上限");
-                login_abort("\n");
-            }
+                    {
+                        pmsg2_body("您已經達到多重登入上限");
+                        login_abort("\n");
+                    }
                 }
                 break;
             }
@@ -746,7 +745,7 @@ tn_login(void)
             cuser.ufo2 = UFO2_COLOR | UFO2_BNOTE | UFO2_MOVIE;
             if (utmp_count(cuser.userno, 0) > MAXGUEST)
             {
-                pmsg2("目前在線上的guest過多");
+                pmsg2_body("目前在線上的guest過多");
                 login_abort("\n");
             }
             break;
@@ -1031,7 +1030,7 @@ tn_login(void)
 #if 0
     if (cuser.ufo2 & UFO2_APRIL1)
     {
-        more("gem/brd/Admin/J/A106LL7J", NULL);
+        more(FN_APRIL_FIRST, NULL);
         bell();
         sleep(1);
         bell();
@@ -1052,19 +1051,16 @@ tn_login(void)
 /* trap signals                                          */
 /* ----------------------------------------------------- */
 
-static void abort_bbs_signal(int signum)
+static void abort_bbs_signal(GCC_UNUSED int signum)
 {
-    (void)signum;
     abort_bbs();
 }
-void talk_rqst_signal(int signum)
+void talk_rqst_signal(GCC_UNUSED int signum)
 {
-    (void)signum;
     talk_rqst();
 }
-static void bmw_rqst_signal(int signum)
+static void bmw_rqst_signal(GCC_UNUSED int signum)
 {
-    (void)signum;
     bmw_rqst();
 }
 
@@ -1105,7 +1101,8 @@ tn_signals(void)
 static inline void
 tn_main(void)
 {
-    double load[3];
+    long nproc;
+    double load[3], load_norm;
     char buf[128], buf2[40];
     unsigned char *addr = (unsigned char*) &tn_addr;
 
@@ -1143,10 +1140,12 @@ tn_main(void)
 
 
     //負載提到前面取得
+    nproc = sysconf(_SC_NPROCESSORS_ONLN);
     getloadavg(load, 3);
+    load_norm = load[0] / ((nproc > 0) ? nproc : 2);
 
     //負載過高禁止login
-    if (load[0]>20)
+    if (load_norm>5)
     {
         prints("\n對不起...\n\n由於目前負載過高，請稍後再來...");
         //pcman會自動重連時間設太短會變成 DOS 很可怕 :P
@@ -1159,8 +1158,8 @@ tn_main(void)
 
     //getloadavg(load, 3);
     prints( MYHOSTNAME " ⊙ " OWNER " ⊙ " BBSIP " [" BBSVERNAME " " BBSVERSION "]\n"
-"歡迎光臨【\x1b[1;33;46m %s \x1b[m】。系統負載：%.2f %.2f %.2f - [%s] 線上人數 [%d/%d]",
-        str_site, load[0], load[1], load[2], load[0]>16?"\x1b[1;37;41m過高\x1b[m":load[0]>8?"\x1b[1;37;42m偏高\x1b[m":"\x1b[1;37;44m正常\x1b[m", ushm->count, MAXACTIVE);
+"歡迎光臨【\x1b[1;33;46m %s \x1b[m】。系統負載：%.2f %.2f %.2f / %ld - [%s] 線上人數 [%d/%d]",
+        str_site, load[0], load[1], load[2], nproc, load_norm>5?"\x1b[1;37;41m過高\x1b[m":load_norm>1?"\x1b[1;37;42m偏高\x1b[m":"\x1b[1;37;44m正常\x1b[m", ushm->count, MAXACTIVE);
 
     film_out(FILM_INCOME, 2);
 
@@ -1213,7 +1212,8 @@ tn_main(void)
 #endif
 
     menu();
-    abort_bbs();                        /* to make sure it will terminate */
+    /* IID.20190929: `menu()` never returns. */
+    /* abort_bbs(); */                  /* to make sure it will terminate */
 }
 
 
@@ -1224,7 +1224,7 @@ tn_main(void)
 static void
 telnet_init(void)
 {
-    static char svr[] = {
+    static const char svr[] = {
         IAC, DO, TELOPT_TTYPE,
         IAC, SB, TELOPT_TTYPE, TELQUAL_SEND, IAC, SE,
         IAC, WILL, TELOPT_ECHO,
@@ -1233,7 +1233,7 @@ telnet_init(void)
     };
 
     int n, len;
-    char *cmd;
+    const char *cmd;
     int rset;
     struct timeval to;
     char buf[64];
@@ -1361,11 +1361,15 @@ term_init(void)
 
 static void
 start_daemon(
-    int port /* Thor.981206: 取 0 代表 *沒有參數*, -1 代表 -i (inetd) */ )
+    int port /* Thor.981206: 取 0 代表 *沒有參數*, -1 代表 -i (inetd) */
+             /* IID.20190903: `-2` represents `-u` <unix_socket>`. */ )
 {
     int n;
     struct linger ld;
+    struct sockaddr_un sun;
     struct sockaddr_in sin;
+    struct sockaddr *psock;
+    size_t sock_size;
 #ifdef RLIMIT
     struct rlimit rl;
 #endif
@@ -1451,6 +1455,7 @@ start_daemon(
     /* fork daemon process                                 */
     /* --------------------------------------------------- */
 
+    sun.sun_family = AF_UNIX;
     sin.sin_family = AF_INET;
     sin.sin_addr.s_addr = INADDR_ANY;
 
@@ -1468,7 +1473,10 @@ start_daemon(
         port = myports[n];
     }
 
-    n = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (port == -2)
+        n = socket(PF_UNIX, SOCK_STREAM, 0);
+    else
+        n = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
     val = 1;
     setsockopt(n, SOL_SOCKET, SO_REUSEADDR, (char *) &val, sizeof(val));
@@ -1483,9 +1491,31 @@ start_daemon(
     setsockopt(n, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
 
     /* mport = port; */ /* Thor.990325: 不需要了:P */
-    sin.sin_port = htons(port);
-    if ((bind(n, (struct sockaddr *) &sin, sizeof(sin)) < 0) || (listen(n, QLEN) < 0))
+
+    if (port == -2)
+    {
+        psock = (struct sockaddr *) &sun;
+        sock_size = sizeof(sun);
+
+        strlcpy(sun.sun_path, unix_path, sizeof(sun.sun_path));
+        // remove the file first if it exists.
+        unlink(sun.sun_path);
+    }
+    else
+    {
+        psock = (struct sockaddr *) &sin;
+        sock_size = sizeof(sin);
+
+        sin.sin_port = htons(port);
+    }
+    if ((bind(n, psock, sock_size) < 0) || (listen(n, QLEN) < 0))
         exit(1);
+
+    if (port == -2)
+    {
+        chown(unix_path, BBSUID, BBSGID);
+        chmod(unix_path, 0600);
+    }
 
     /* --------------------------------------------------- */
     /* Give up root privileges: no way back from here      */
@@ -1507,21 +1537,18 @@ start_daemon(
 
 
 static inline void
-reaper(int signum)
+reaper(GCC_UNUSED int signum)
 {
-    (void)signum;
     while (waitpid(-1, NULL, WNOHANG | WUNTRACED) > 0);
 }
 
 
 #ifdef  SERVER_USAGE
 static void
-servo_usage(int signum)
+servo_usage(GCC_UNUSED int signum)
 {
     struct rusage ru;
     FILE *fp;
-
-    (void)signum;
 
     fp = fopen("run/bbs.usage", "a");
 
@@ -1566,9 +1593,8 @@ servo_usage(int signum)
 
 
 static void
-main_term(int signum)
+main_term(GCC_UNUSED int signum)
 {
-    (void)signum;
 #ifdef  SERVER_USAGE
     servo_usage();
 #endif
@@ -1599,12 +1625,33 @@ main_signals(void)
     /* sigblock(sigmask(SIGPIPE)); */
 }
 
+static void usage(char *argv0)
+{
+    fprintf(stderr,
+            "Usage: %s\n"
+            "Listen on pre-defined ports\n"
+            "\n",
+            argv0);
+    fprintf(stderr,
+            "       %s -i\n"
+            "Listen on inetd port when run by inetd\n"
+            "\n",
+            argv0);
+    fprintf(stderr,
+            "       %s <listen_spec>\n"
+            "listen_specs:\n"
+            "\t[-p] <port>        listen on port; -p can be omitted (port > 0)\n"
+            "\t-u <unix_socket>   listen on unix_socket, with connection data passing enabled\n"
+            "\n",
+            argv0);
+}
 
 int main(int argc, char *argv[])
 {
     int csock;                  /* socket for Master and Child */
     int *totaluser;
-    int value;
+    int value = 0;
+    int is_proxy = 0;           /* Whether connection data passing is enabled */
     struct sockaddr_in sin;
 
     /* --------------------------------------------------- */
@@ -1613,7 +1660,39 @@ int main(int argc, char *argv[])
 
     /* Thor.990325: usage, bbsd, or bbsd -i, or bbsd 1234 */
     /* Thor.981206: 取 0 代表 *沒有參數*, -1 代表 -i */
-    start_daemon(argc > 1 ? strcmp("-i", argv[1]) ? atoi(argv[1]) : -1 : 0);
+
+    switch (getopt(argc, argv, "p:u:i"))
+    {
+    case -1:
+        if (!(optarg = argv[optind++]))
+            break;
+        // Falls through
+        // to handle omitted `-p`
+    case 'p':  /* IID.20190902: `bbsd [-p] 3456`. */
+        if ((value = atoi(optarg)) > 0)
+            break;
+
+        if (0)  // Falls over the case
+        {
+    case 'u':  /* IID.20190903: `bbsd -u <unix_socket>` */
+            unix_path = optarg;
+            is_proxy = 1;
+            value = -2;
+            break;
+        }
+        else if (0)
+        {
+    case 'i':
+            value = -1;
+            break;
+        }
+
+    default:
+        usage(argv[0]);
+        return 2;
+    }
+
+    start_daemon(value);
 
     main_signals();
 
@@ -1652,9 +1731,23 @@ int main(int argc, char *argv[])
             continue;
         }
 
+        if (is_proxy)
+        {
+            conn_data_t cdata;
+            if (read(csock, &cdata, sizeof(cdata)) != sizeof(cdata)
+                || cdata.cb != sizeof(cdata) || cdata.raddr_len != 4)
+            {
+                close(csock);
+                continue;
+            }
+
+            sin.sin_addr.s_addr = *(u_long *)&cdata.raddr;
+            sin.sin_port = cdata.rport;
+        }
+
         time(&ap_start);
         argc = *totaluser;
-        if (argc >= MAXACTIVE - 5 /* || *avgload > THRESHOLD */ )
+        if (argc >= MAXACTIVE - 5 /* || *avgload > THRESHOLD */)
         {
             sprintf(currtitle,
                 "目前線上人數 [%d] 人，系統滿載，請稍後再來\n", argc);

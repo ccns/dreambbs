@@ -18,7 +18,7 @@
 
 static void
 mailog(
-    char *msg)
+    const char *msg)
 {
     FILE *fp;
     if ( ( fp = fopen(LOG_FILE, "a") ) )
@@ -60,7 +60,7 @@ init_bshm(void)
 
 static BRD *
 brd_get(
-    char *bname)
+    const char *bname)
 {
     BRD *bhdr, *tail;
 
@@ -283,8 +283,8 @@ main(
 
     if (argc < 2)
     {
-        printf("Usage:\t%s <bbs_brdname>\n", argv[0]);
-        exit(-1);
+        fprintf(stderr, "Usage:\t%s <bbs_brdname>\n", argv[0]);
+        exit(2);
     }
 
     setgid(BBSGID);

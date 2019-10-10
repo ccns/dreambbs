@@ -16,7 +16,7 @@
 #define COLOR_INDEX     /* Thor.980307: 加上顏色試試是否比較易找 */
 
 
-/* GINDEX_LOG  眸殿晶儭纁| */
+/* GINDEX_LOG 必須絕對路徑 */
 #define GINDEX_LOG      BBSHOME"/"FN_GINDEX_LOG
 
 
@@ -24,8 +24,8 @@
 #define CHRONO_LOG      2
 
 
-static char fn_index[] = "@/@index";
-static char fn_log[] = "@/@log";
+static const char fn_index[] = "@/@index";
+static const char fn_log[] = "@/@log";
 
 
 static int gem_default;

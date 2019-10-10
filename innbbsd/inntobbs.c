@@ -55,9 +55,10 @@ static header_t headertable[LASTHEADER] =
 };
 
 
-char *NODENAME;
+const char *NODENAME;
 char *BODY;
-char *SUBJECT, *FROM, *DATE, *PATH, *GROUP, *MSGID, *POSTHOST, *SITE, *CONTROL;
+const char *DATE, *PATH, *MSGID, *POSTHOST, *CONTROL;
+char *SUBJECT, *FROM, *GROUP, *SITE;
 
 
 static int
@@ -70,7 +71,7 @@ header_cmp(
 
 static int
 header_value(
-    char *inputheader)
+    const char *inputheader)
 {
     header_t key, *findkey;
     static int already_init = 0;
@@ -90,9 +91,9 @@ header_value(
 }
 
 
-static int
+GCC_PURE static int
 is_loopback(
-    char *path, const char *token,
+    const char *path, const char *token,
     int len)
 {
     int cc;

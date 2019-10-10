@@ -5,6 +5,7 @@
 
 #ifdef PFTERM_TEST_MAIN
 
+#define USE_PFTERM
 #define EXP_PFTERM
 #define DBCSAWARE
 #define FT_DBCS_NOINTRESC 1
@@ -31,8 +32,23 @@
 
 #ifdef M3_USE_PFTERM
  #include <assert.h>
+ #define USE_PFTERM
  #undef PFTERM_HAVE_VKEY
+ #define PFTERM_EXPOSED_VISIO_VI
 #endif //M3_USE_PFTERM
+
+#ifndef PFTERM_HAVE_VKEY
+ #ifdef PFTERM_EXPOSED_VISIO_VI
+// Use visio internal variables
+extern int vi_size;
+extern int vi_head;
+
+static int vkey_is_typeahead(void)
+{
+    return vi_head < vi_size;
+}
+ #endif
+#endif  /* #ifndef PFTERM_HAVE_VKEY */
 
 #endif  /* #ifdef PFTERM_TEST_MAIN */
 
@@ -149,8 +165,10 @@
 //
 //////////////////////////////////////////////////////////////////////////
 // Reference:
-// http://en.wikipedia.org/wiki/ANSI_escape_code
+// https://en.wikipedia.org/wiki/ANSI_escape_code
 // http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-048.pdf
+// https://www.itu.int/rec/T-REC-T.416-199303-I/en
+// https://docs.microsoft.com/en-us/windows/console/console-virtual-terminal-sequences
 //////////////////////////////////////////////////////////////////////////
 // The supported escapes are based on 'cons25' termcap and
 // Windows 2000/XP/Vista built-in telnet.
@@ -158,9 +176,34 @@
 // Underline is only supported by vt100 (and monochrome) so we drop it.
 // Blink is supported by vt100/cons25 and we keep it.
 //////////////////////////////////////////////////////////////////////////
+// Additional remarks by IID on 2019-10-02:
+// About `cons25`:
+// `cons25` is the termcap/terminfo for the older console driver `syscons` of FreeBSD.
+// `vt` replaced `syscons` as the default system console driver in FreeBSD 9.3,
+//    whose terminals have their terminfo type `$TERM` default to `xterm`.
+//
+// About the Windows OS versions:
+// Windows 2000/XP/Vista were the dominant Windows versions in 2008,
+//    which occupied 99.35% of the market share of Windows OSs in 2009-1,
+//    but occupied only 3.47% of the market share from 2018-9 to 2019-9.
+// The dominant Windows versions from 2018-9 to 2019-9
+//    were Windows 7/8.1/10, which occupied 95.62% of the market share of Windows OSs,
+//    while the officially unsupported Windows XP
+//       still occupied 3.25% of the market share.
+//
+// The supported escape sequences should be now based on `xterm` terminfo
+//    and the built-in terminal of Windows XP/7/8.1/10.
+//
+// The built-in terminal of Windows 10 supports many `xterm`-based escape sequences
+//    under the name of 'virtual terminal sequences'.
+//
+// About the support for underlines and blinks, as for 2019-10:
+// Support for underlines was added in the built-in terminal of Windows 10.
+// Support for blinks has not hitherto happened on the built-in terminal of Windows.
+//////////////////////////////////////////////////////////////////////////
 
 // Experimental now
-#if defined(EXP_PFTERM) || defined(M3_USE_PFTERM)
+#if defined(EXP_PFTERM) || defined(USE_PFTERM)
 
 //////////////////////////////////////////////////////////////////////////
 // pfterm Configurations
@@ -169,7 +212,7 @@
 // Prevent invalid DBCS characters
 #define FTCONF_PREVENT_INVALID_DBCS
 
-// Force to clear brefore drawing unsafe DBCS characters
+// Force to clear before drawing unsafe DBCS characters
 #define FTCONF_CLEAR_UNSAFE_DBCS
 
 // Some terminals use current attribute to erase background
@@ -185,48 +228,49 @@
 // Few poor terminals do not have relative move (ABCD).
 #undef  FTCONF_USE_ANSI_RELMOVE
 
-// Handling ANSI commands with 2 parameters (ex, ESC[m; nH)
-// 2: Good terminals can accept any omit format (ESC[; nH)
+// Handling ANSI commands with 2 parameters (ex, ESC[m;nH)
+// 2: Good terminals can accept any omit format (ESC[;nH)
 // 1: Poor terminals (eg, Win/DOS telnet) can only omit 2nd (ESC[mH)
 // 0: Very few poor terminals (eg, CrazyTerm/BBMan) cannot omit any parameters
-#define FTCONF_ANSICMD2_OMIT    (0)
+#define FTCONF_ANSICMD2_OMIT (0)
 
 //////////////////////////////////////////////////////////////////////////
 // Flat Terminal Definition
 //////////////////////////////////////////////////////////////////////////
 
-#define FTSZ_DEFAULT_ROW        (24)
-#define FTSZ_DEFAULT_COL        (80)
-#define FTSZ_MIN_ROW            (24)
-#define FTSZ_MAX_ROW            (100)
-#define FTSZ_MIN_COL            (80)
-#define FTSZ_MAX_COL            (320)
+#define FTSZ_DEFAULT_ROW (24)
+#define FTSZ_DEFAULT_COL (80)
+#define FTSZ_MIN_ROW     (24)
+#define FTSZ_MAX_ROW     (100)
+#define FTSZ_MIN_COL     (80)
+#define FTSZ_MAX_COL     (320)
 
-#define FTCHAR_ERASE            (' ')
-#define FTATTR_ERASE            (0x07)
-#define FTCHAR_BLANK            (' ')
-#define FTATTR_DEFAULT          (FTATTR_ERASE)
-#define FTCHAR_INVALID_DBCS     ('?')
+#define FTCHAR_ERASE     (' ')
+#define FTATTR_ERASE     (0x07)
+#define FTCHAR_BLANK     (' ')
+#define FTATTR_DEFAULT   (FTATTR_ERASE)
+#define FTCHAR_INVALID_DBCS ('?')
 // #define FTATTR_TRANSPARENT (0x80)
+#define FTVATTR_DEFAULT  (0x00)
 
-#define FTDIRTY_CHAR            (0x01)
-#define FTDIRTY_ATTR            (0x02)
-#define FTDIRTY_DBCS            (0x04)
-#define FTDIRTY_INVALID_DBCS    (0x08)
-#define FTDIRTY_RAWMOVE         (0x10)
-#define FTDIRTY_CLEAR_DBCS      (0x20)
+#define FTDIRTY_CHAR    (0x01)
+#define FTDIRTY_ATTR    (0x02)
+#define FTDIRTY_DBCS    (0x04)
+#define FTDIRTY_INVALID_DBCS (0x08)
+#define FTDIRTY_RAWMOVE (0x10)
+#define FTDIRTY_CLEAR_DBCS (0x20)
 
-#define FTDBCS_SAFE             (0)     // standard DBCS
-#define FTDBCS_UNSAFE           (1)     // not on all systems (better do rawmove)
-#define FTDBCS_INVALID          (2)     // invalid
+#define FTDBCS_SAFE     (0)     // standard DBCS
+#define FTDBCS_UNSAFE   (1)     // not on all systems (better do rawmove)
+#define FTDBCS_INVALID  (2)     // invalid
 
-#define FTCMD_MAXLEN            (63)    // max escape command sequence length
-#define FTATTR_MINCMD           (16)
+#define FTCMD_MAXLEN    (63)    // max escape command sequence length
+#define FTATTR_MINCMD   (16)
 
 #ifndef FTCONF_USE_ANSI_RELMOVE
-# define FTMV_COST              (8)     // always ESC[m; nH will costs avg 8 bytes
+# define FTMV_COST      (8)     // always ESC[m;nH will costs avg 8 bytes
 #else
-# define FTMV_COST              (5)     // ESC[ABCD with ESC[m; nH costs avg 4+ bytes
+# define FTMV_COST      (5)     // ESC[ABCD with ESC[m;nH costs avg 4+ bytes
 #endif
 
 //////////////////////////////////////////////////////////////////////////
@@ -234,9 +278,8 @@
 //////////////////////////////////////////////////////////////////////////
 
 typedef unsigned char ftchar;   // primitive character type
-#ifndef PFTERM_H
 typedef unsigned char ftattr;   // primitive attribute type
-#endif
+typedef unsigned char ftvattr;  // primitive type for virtual attributes
 
 //////////////////////////////////////////////////////////////////////////
 // Flat Terminal Structure
@@ -266,6 +309,9 @@ typedef struct
     // typeahead
     char    typeahead;
 
+    // virtual attributes for processing escape commands
+    ftvattr vattr;
+
     // escape command
     ftchar  cmd[FTCMD_MAXLEN+1];
     int     szcmd;
@@ -287,18 +333,21 @@ static FlatTerm ft;
 //////////////////////////////////////////////////////////////////////////
 
 // ftattr: 0| FG(3) | BOLD(1) | BG(3) | BLINK(1) |8
-#define FTATTR_FGSHIFT      (0)
-#define FTATTR_BGSHIFT      (4)
-#define FTATTR_GETFG(x)     ((x >> FTATTR_FGSHIFT) & 0x7)
-#define FTATTR_GETBG(x)     ((x >> FTATTR_BGSHIFT) & 0x7)
-#define FTATTR_FGMASK       ((ftattr)(0x7 << FTATTR_FGSHIFT))
-#define FTATTR_BGMASK       ((ftattr)(0x7 << FTATTR_BGSHIFT))
-#define FTATTR_BOLD         (0x08)
-#define FTATTR_BLINK        (0x80)
+#define FTATTR_FGSHIFT  (0)
+#define FTATTR_BGSHIFT  (4)
+#define FTATTR_GETFG(x) ((x >> FTATTR_FGSHIFT) & 0x7)
+#define FTATTR_GETBG(x) ((x >> FTATTR_BGSHIFT) & 0x7)
+#define FTATTR_FGMASK   ((ftattr)(0x7 << FTATTR_FGSHIFT))
+#define FTATTR_BGMASK   ((ftattr)(0x7 << FTATTR_BGSHIFT))
+#define FTATTR_BOLD     (0x08)
+#define FTATTR_BLINK    (0x80)
 #define FTATTR_DEFAULT_FG   (FTATTR_GETFG(FTATTR_DEFAULT))
 #define FTATTR_DEFAULT_BG   (FTATTR_GETBG(FTATTR_DEFAULT))
 #define FTATTR_MAKE(f, b)   (((f)<<FTATTR_FGSHIFT)|((b)<<FTATTR_BGSHIFT))
 #define FTCHAR_ISBLANK(x)   ((x) == (FTCHAR_BLANK))
+
+// ftvattr: 0| UNUSED(7) | REVERSE(1) |8
+#define FTVATTR_REVERSE    (0x80)
 
 #define FTCMAP  ft.cmap[ft.mi]
 #define FTAMAP  ft.amap[ft.mi]
@@ -368,29 +417,29 @@ void    getmaxyx    (int *y, int *x);
 void    move        (int y, int x);
 
 // clear
-void    clear       (void);             // clrscr + move(0, 0)
-void    clrtoeol    (void);             // end of line
+void    clear       (void); // clrscr + move(0, 0)
+void    clrtoeol    (void); // end of line
 void    clrtobot    (void);
 // clear (non-ncurses)
-void    clrtoln     (int ln);           // clear down to ln ( excluding ln, as [y, ln) )
-void    clrcurln    (void);             // whole line
-void    clrtobeg    (void);             // begin of line
+void    clrtoln     (int ln); // clear down to ln ( excluding ln, as [y, ln) )
+void    clrcurln    (void); // whole line
+void    clrtobeg    (void); // begin of line
 void    clrtohome   (void);
-void    clrscr      (void);             // clear and keep cursor untouched
-void    clrregion   (int r1, int r2);   // clear [r1, r2], bi-directional.
+void    clrscr      (void); // clear and keep cursor untouched
+void    clrregion   (int r1, int r2); // clear [r1, r2], bi-directional.
 
 // window control
 void    newwin      (int nlines, int ncols, int y, int x);
 
 // flushing
-void    refresh     (void);             // optimized refresh
-void    doupdate    (void);             // optimized refresh, ignore input queue
-void    redrawwin   (void);             // invalidate whole screen
-int     typeahead   (int fd);           // prevent refresh if input queue is not empty
+void    refresh     (void); // optimized refresh
+void    doupdate    (void); // optimized refresh, ignore input queue
+void    redrawwin   (void); // invalidate whole screen
+int     typeahead   (int fd);// prevent refresh if input queue is not empty
 
 // scrolling
-void    scroll      (void);             // scroll up
-void    rscroll     (void);             // scroll down
+void    scroll      (void);     // scroll up
+void    rscroll     (void);     // scroll down
 void    scrl        (int rows);
 
 // output (ncurses flavor)
@@ -419,32 +468,32 @@ void    grayout     (int y, int end, int level);
 
 //// flat-term internal processor
 
-int     fterm_typeahead   (void);         // raw input  adapter
-void    fterm_rawc        (int c);        // raw output adapter
-void    fterm_rawnewline  (void);         // raw output adapter
-void    fterm_rawflush    (void);         // raw output adapter
-void    fterm_raws        (const char *s);
-void    fterm_rawnc       (int c, int n);
-void    fterm_rawnum      (int arg);
-void    fterm_rawcmd      (int arg, int defval, char c);
-void    fterm_rawcmd2     (int arg1, int arg2, int defval, char c);
-void    fterm_rawattr     (ftattr attr);  // optimized changing attribute
-void    fterm_rawclear    (void);
-void    fterm_rawclreol   (void);
-void    fterm_rawhome     (void);
-void    fterm_rawscroll   (int dy);
-void    fterm_rawcursor   (void);
-void    fterm_rawmove     (int y, int x);
-void    fterm_rawmove_opt (int y, int x);
-void    fterm_rawmove_rel (int dy, int dx);
+int     fterm_typeahead (void);         // raw input  adapter
+void    fterm_rawc      (int c);        // raw output adapter
+void    fterm_rawnewline(void);         // raw output adapter
+void    fterm_rawflush  (void);         // raw output adapter
+void    fterm_raws      (const char *s);
+void    fterm_rawnc     (int c, int n);
+void    fterm_rawnum    (int arg);
+void    fterm_rawcmd    (int arg, int defval, char c);
+void    fterm_rawcmd2   (int arg1, int arg2, int defval, char c);
+void    fterm_rawattr   (ftattr attr);  // optimized changing attribute
+void    fterm_rawclear  (void);
+void    fterm_rawclreol (void);
+void    fterm_rawhome   (void);
+void    fterm_rawscroll (int dy);
+void    fterm_rawcursor (void);
+void    fterm_rawmove   (int y, int x);
+void    fterm_rawmove_opt(int y, int x);
+void    fterm_rawmove_rel(int dy, int dx);
 
-int     fterm_chattr      (char *s, ftattr oa, ftattr na); // size(s) > FTATTR_MINCMD
-void    fterm_exec        (void);             // execute ft.cmd
-void    fterm_flippage    (void);
-void    fterm_dupe2bk     (void);
-void    fterm_markdirty   (void);             // mark as dirty
-int     fterm_strdlen     (const char *s);    // length of string for display
-int     fterm_prepare_str (int len);
+int     fterm_chattr    (char *s, ftattr oa, ftattr na); // size(s) > FTATTR_MINCMD
+void    fterm_exec      (void);             // execute ft.cmd
+void    fterm_flippage  (void);
+void    fterm_dupe2bk   (void);
+void    fterm_markdirty (void);             // mark as dirty
+int     fterm_strdlen   (const char *s);    // length of string for display
+int     fterm_prepare_str(int len);
 
 // DBCS supporting
 int     fterm_DBCS_Big5(unsigned char c1, unsigned char c2);
@@ -468,6 +517,7 @@ initscr(void)
 
     memset(&ft, 0, sizeof(ft));
     ft.attr = ft.rattr = FTATTR_DEFAULT;
+    ft.vattr = FTVATTR_DEFAULT;
     resizeterm(FTSZ_DEFAULT_ROW, FTSZ_DEFAULT_COL);
 
     // clear both pages
@@ -777,7 +827,7 @@ redrawwin(void)
 int
 typeahead(int fd)
 {
-    switch(fd)
+    switch (fd)
     {
         case TYPEAHEAD_NONE:
             ft.typeahead = 0;
@@ -850,7 +900,7 @@ doupdate(void)
 
         // reset dirty and display map
         memset(FTD, 0,          ft.cols * sizeof(ftchar));
-        memcpy(FTDC, FTCMAP[y],  ft.cols * sizeof(ftchar));
+        memcpy(FTDC, FTCMAP[y], ft.cols * sizeof(ftchar));
 
         // first run: character diff
         for (x = 0; x < len; x++)
@@ -865,7 +915,7 @@ doupdate(void)
             if (dbcs == 1)
             {
 #ifdef FTCONF_PREVENT_INVALID_DBCS
-                switch(fterm_DBCS_Big5(FTCMAP[y][x-1], FTCMAP[y][x]))
+                switch (fterm_DBCS_Big5(FTCMAP[y][x-1], FTCMAP[y][x]))
                 {
                     case FTDBCS_SAFE:
                         // safe to print
@@ -1550,7 +1600,7 @@ void
 fterm_exec(void)
 {
     ftchar cmd = ft.cmd[ft.szcmd-1];
-    char    *p = (char*)ft.cmd + 2; // ESC [
+    char    *p = (char*)ft.cmd + 2; // For ESC [
     int n = -1, x = -1, y;
 
     ft.cmd[ft.szcmd] = 0;
@@ -1567,7 +1617,8 @@ fterm_exec(void)
         // p points to next param now
     }
 
-    switch(cmd)
+#define EXEC_ESCSEQ  (0x0100)   // For ESC cmd
+    switch ((ft.szcmd) > 2 ? cmd : EXEC_ESCSEQ | cmd)
     {
         // Cursor Movement
 
@@ -1575,6 +1626,10 @@ fterm_exec(void)
     case 'B':   // CUD: CSI n B
     case 'C':   // CUF: CSI n C
     case 'D':   // CUB: CSI n D
+    case EXEC_ESCSEQ | 'A': // CUU: ESC A (VT52; non-standard)
+    case EXEC_ESCSEQ | 'B': // CUD: ESC B (VT52; non-standard)
+    case EXEC_ESCSEQ | 'C': // CUF: ESC C (VT52; non-standard)
+    case EXEC_ESCSEQ | 'D': // CUB: ESC D (VT52; non-standard)
         // Moves the cursor n (default 1) cells in the given direction.
         // If the cursor is already at the edge of the screen, this has no effect.
         if (n < 1)
@@ -1600,19 +1655,22 @@ fterm_exec(void)
         break;
 
     case 'G':   // CHA: CSI n G
-        // Moves the cursor to column n.
+    case 'd':   // VPA: CSI n d
+        // Moves the cursor to column/row n.
         if (n < 1)
             n = 1;
         getyx(&y, &x);
-        move(y, n-1);
+        if      (cmd == 'G') { x = n-1; }
+        else if (cmd == 'd') { y = n-1; }
+        move(y, x);
         break;
 
     case 'H':   // CUP: CSI n ; m H
     case 'f':   // HVP: CSI n ; m f
         // Moves the cursor to row n, column m.
         // The values are 1-based, and default to 1 (top left corner) if omitted.
-        // A sequence such as CSI ; 5H is a synonym for CSI 1; 5H as well as
-        // CSI 17; H is the same as CSI 17H and CSI 17; 1H
+        // A sequence such as CSI ;5H is a synonym for CSI 1;5H as well as
+        // CSI 17;H is the same as CSI 17H and CSI 17;1H
         y = n;
         if (y >= 0 && isdigit(*p))
             x = atoi((char*)p);
@@ -1677,7 +1735,7 @@ fterm_exec(void)
         scrl(-n);
         break;
 
-    case 'm':   // SGR: CSI n [; k] m
+    case 'm':   // SGR: CSI n [;k] m
         // Sets SGR (Select Graphic Rendition) parameters.
         // After CSI can be zero or more parameters separated with ;.
         // With no parameters, CSI m is treated as CSI 0 m (reset / normal),
@@ -1687,22 +1745,27 @@ fterm_exec(void)
         //  SGR 0 (reset/normal)        is supported.
         //  SGR 1 (intensity: bold)     is supported.
         //  SGR 2 (intensity: faint)    is not supported.
-        //  SGR 3 (italic: on)          is not supported. (converted to inverse?)
+        //  SGR 3 (italic: on)          is converted to (inverse (virtual): toggle)
         //  SGR 4 (underline: single)   is not supported.
         //  SGR 5 (blink: slow)         is supported.
         //  SGR 6 (blink: rapid)        is converted to (blink: slow)
-        //  SGR 7 (image: negative)     is partially supported (not a really attribute).
-        //  SGR 8 (conceal)             is not supported.
+        //  SGR 7 (inverse: on)         is partially supported. (converted to inverse (virtual): toggle)
+        //  SGR 8 (conceal: on)         is not supported.
         //  SGR 21(underline: double)   is not supported.
         //  SGR 22(intensity: normal)   is supported.
+        //  SGR 23(italic: off)         is not supported.
         //  SGR 24(underline: none)     is not supported.
         //  SGR 25(blink: off)          is supported.
-        //  SGR 27(image: positive)     is not supported.
-        //  SGR 28(reveal)              is not supported.
+        //  SGR 27(inverse: off)        is partially supported (as a virtual attribute).
+        //  SGR 28(conceal: off)        is not supported.
         //  SGR 30-37 (FG)              is supported.
+        //  SGR 38 (FG-extended)        is not supported.
         //  SGR 39 (FG-reset)           is supported.
         //  SGR 40-47 (BG)              is supported.
+        //  SGR 48 (BG-extended)        is not supported.
         //  SGR 49 (BG-reset)           is supported.
+        //  SGR 90-97   (FG-bright) (aixterm; non-standard)   is not supported.
+        //  SGR 100-107 (BG-bright) (aixterm; non-standard)   is not supported.
         if (n == -1)    // first param
             n = 0;
         while (n > -1)
@@ -1717,10 +1780,11 @@ fterm_exec(void)
                 // set background
                 attrsetbg(n - 40);
             }
-            else switch(n)
+            else switch (n)
             {
             case 0:
                 attrset(FTATTR_DEFAULT);
+                ft.vattr = FTVATTR_DEFAULT;
                 break;
             case 1:
                 attrset(attrget() | FTATTR_BOLD);
@@ -1735,12 +1799,17 @@ fterm_exec(void)
             case 25:
                 attrset(attrget() & ~FTATTR_BLINK);
                 break;
+            case 27:
+                if (!(ft.vattr & FTVATTR_REVERSE))
+                    break;
+                // Falls through
             case 3:
             case 7:
                 {
                     ftattr a = attrget();
                     attrsetfg(FTATTR_GETBG(a));
                     attrsetbg(FTATTR_GETFG(a));
+                    ft.vattr ^= FTVATTR_REVERSE;
                 }
                 break;
             case 39:
@@ -1771,6 +1840,7 @@ fterm_exec(void)
     default:    // unknown command.
         break;
     }
+#undef EXEC_ESCSEQ
 }
 
 int
@@ -1835,9 +1905,9 @@ fterm_chattr(char *s, ftattr oattr, ftattr nattr)
 
 #ifdef FTCONF_WORKAROUND_BOLD
         // Issue here:
-        // PacketSite does not understand ESC[1m. It needs ESC[1; 37m
+        // PacketSite does not understand ESC[1m. It needs ESC[1;37m
         // NetTerm defaults bold color to yellow.
-        // As a result, we use ESC[1; 37m for the case.
+        // As a result, we use ESC[1;37m for the case.
         if (fg == FTATTR_DEFAULT_FG)
             ofg = ~ofg;
 #endif // FTCONF_WORKAROUND_BOLD
@@ -1877,7 +1947,7 @@ fterm_strdlen(const char *s)
     {
         if (!ansi) // ansi == 0
         {
-            switch(*s)
+            switch (*s)
             {
                 case ESC_CHR:
                     ansi++;
@@ -1965,7 +2035,7 @@ fterm_rawcmd2(int arg1, int arg2, int defval, char c)
 
     // See FTCONF_ANSICMD2_OMIT
     // XXX Win/DOS telnet does now accept omitting first value
-    // ESC[nX and ESC[n; X works, but ESC[; mX does not work.
+    // ESC[nX and ESC[n;X works, but ESC[;mX does not work.
     if (arg1 != defval || arg2 != defval)
     {
 #if (FTCONF_ANSICMD2_OMIT >= 2)
@@ -2110,7 +2180,7 @@ fterm_rawmove_opt(int y, int x)
 
 #endif // !DBG_TEXT_FD
 
-    // x--: compare with FTMV_COST: ESC[m; nH costs 5-8 bytes
+    // x--: compare with FTMV_COST: ESC[m;nH costs 5-8 bytes
     // in order to prevent wrap, don't use bs when rx exceed boundary (ft.cols)
     if (x < ft.rx && y >= ft.ry && (adx+ady) < FTMV_COST && ft.rx < ft.cols)
     {
@@ -2178,7 +2248,7 @@ fterm_rawscroll (int dy)
     //
     // Elder BBS systems works in a mixed way:
     // \n at (rows-1) as scroll()
-    // and ESC-M at(0) as rscoll().
+    // and ESC-M at(0) as rscroll().
     //
     // SCP: CSI s / RCP: CSI u
     // Warning: cannot use SCP/RCP here, because on Win/DOS telnet
@@ -2302,6 +2372,13 @@ grayout(int y, int end, int level)
 void
 scr_dump(screen_backup_t *psb)
 {
+    psb->raw_memory = NULL;
+    scr_redump(psb);
+}
+
+void
+scr_redump(screen_backup_t *psb)
+{
     int y = 0;
     char *p = NULL;
 
@@ -2320,8 +2397,6 @@ scr_dump(screen_backup_t *psb)
         p += ft.cols * sizeof(ftattr);
     }
 }
-
-void (*const scr_restore)(screen_backup_t *psb) = scr_restore_free;
 
 void
 scr_restore_free(screen_backup_t *psb)
@@ -2412,7 +2487,7 @@ region_scroll_up(int top, int bottom)
 int
 fterm_typeahead(void)
 {
-#if defined (PFTERM_TEST_MAIN) || !defined (PFTERM_HAVE_VKEY)
+#if defined (PFTERM_TEST_MAIN) || !(defined (PFTERM_HAVE_VKEY) || defined (PFTERM_EXPOSED_VISIO_VI))
     return 0;
 #else
     return vkey_is_typeahead();
@@ -2560,6 +2635,6 @@ int main(int argc, char* argv[])
 }
 #endif // PFTERM_TEST_MAIN
 
-#endif // defined(EXP_PFTERM) || defined(M3_USE_PFTERM)
+#endif // defined(EXP_PFTERM) || defined(USE_PFTERM)
 
 // vim:ts=4:sw=4:expandtab

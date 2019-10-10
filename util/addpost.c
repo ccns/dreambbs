@@ -10,8 +10,8 @@
 
 #include "bbs.h"
 
-static char *userid;
-static char *username;
+static const char *userid;
+static const char *username;
 
 static void
 out_post(
@@ -56,24 +56,50 @@ main(
     int argc,
     char *argv[])
 {
-    const char *fpath;
-    const char *brdname, *title, *fname;
+    const char *fpath = NULL;
+    const char *brdname = NULL, *title = NULL, *fname = NULL;
     FILE *fp;
 
-    if (argc != 6)
+    while (optind < argc)
     {
-        printf("Usage: %s brdname userid username title filepath\n", argv[0]);
-        return -1;
+        switch (getopt(argc, argv, "+" "b:u:n:t:f:"))
+        {
+        case -1:  // Position arguments
+            if (!(optarg = argv[optind++]))
+                break;
+            if (!brdname)
+        case 'b':
+                brdname = optarg;
+            else if (!userid)
+        case 'u':
+                userid = optarg;
+            else if (!username)
+        case 'n':
+                username = optarg;
+            else if (!title)
+        case 't':
+                title = optarg;
+            else if (!fname)
+        case 'f':
+                fname = optarg;
+            break;
+
+        default:
+            brdname = userid = username = title = fname = NULL;  // Invalidate arguments
+            optind = argc;  // Ignore remaining arguments
+            break;
+        }
+    }
+
+    if (!(brdname && userid && username && title && fname))
+    {
+        fprintf(stderr, "Usage: %s [-b] <brdname> [-u] <userid> [-n] <username> [-t] <title> [-f] <filepath>\n", argv[0]);
+        return 2;
     }
 
     chdir(BBSHOME);
 
     fpath = "tmp/addpost.tmp";    /* º»¶s¿… */
-    brdname = argv[1];
-    userid = argv[2];
-    username = argv[3];
-    title = argv[4];
-    fname = argv[5];
 
     if ( ( fp = fopen(fpath, "w") ) )
     {

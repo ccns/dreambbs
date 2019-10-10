@@ -23,11 +23,6 @@ int dl_size, dl_head;
 
 #define DL_ALLOC_MIN    5
 
-#if 1
-extern void blog(char *, char *);
-#define TRACE blog
-#endif
-
 void *DL_get(const char *name
              /* format: "Xmodule_path:Xname" */
     )
@@ -80,7 +75,7 @@ void *DL_get(const char *name
     return dlsym(p->handle, t);
 }
 
-int DL_func(char *name, ...)
+int DL_func(const char *name, ...)
 {
     va_list args;
     int (*f) (va_list), ret;

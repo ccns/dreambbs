@@ -6,7 +6,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-int rec_add(const char *fpath, void *data, int size)
+int rec_add(const char *fpath, const void *data, int size)
 {
     int fd;
 
@@ -28,7 +28,7 @@ static int is_bottompost(HDR * hdr)
 
 
 int rec_bot(                    /* amaki.040715: 嵌入式寫檔 */
-               char *fpath, void *data, int size)
+               const char *fpath, const void *data, int size)
 {
     int fd, fsize, count;
     void *pool = NULL, *set;
@@ -208,11 +208,12 @@ int rec_get(const char *fpath, void *data, int size, int pos)
 }
 
 
-int rec_ins(char *fpath, void *data, int size, int pos, int num)
+int rec_ins(const char *fpath, const void *data, int size, int pos, int num)
 {
     int fd;
     off_t off, len;
     struct stat st;
+    char *data_ins = NULL;
 
     if ((fd = open(fpath, O_RDWR | O_CREAT, 0600)) < 0)
         return -1;
@@ -233,11 +234,11 @@ int rec_ins(char *fpath, void *data, int size, int pos, int num)
     len -= off;
     if (len > 0)
     {
-        fpath = (char *)malloc(pos = len + size);
-        memcpy(fpath, data, size);
-        read(fd, fpath + size, len);
+        data_ins = (char *)malloc(pos = len + size);
+        memcpy(data_ins, data, size);
+        read(fd, data_ins + size, len);
         lseek(fd, off, SEEK_SET);
-        data = fpath;
+        data = data_ins;
         size = pos;
     }
 
@@ -250,7 +251,7 @@ int rec_ins(char *fpath, void *data, int size, int pos, int num)
     close(fd);
 
     if (len > 0)
-        free(data);
+        free(data_ins);
 
     return 0;
 }
@@ -292,14 +293,14 @@ int rec_loc(const char *fpath, int size, int (*fchk) (const void *obj))
     return tmp ? pos : -1;
 }
 
-int rec_mov(char *data, int size, int from, int to)
+int rec_mov(const char *fpath, int size, int from, int to)
 {
     int fd, backward;
     off_t off, len;
-    char *pool;
+    char *pool, *data;
     struct stat st;
 
-    if ((fd = open(data, O_RDWR)) < 0)
+    if ((fd = open(fpath, O_RDWR)) < 0)
         return -1;
 
     /* flock(fd, LOCK_EX); */
@@ -367,7 +368,7 @@ int rec_num(const char *fpath, int size)
     return (st.st_size / size);
 }
 
-int rec_put(const char *fpath, void *data, int size, int pos)
+int rec_put(const char *fpath, const void *data, int size, int pos)
 {
     int fd;
 
@@ -391,12 +392,13 @@ int rec_put(const char *fpath, void *data, int size, int pos)
 }
 
 int
-rec_put2(char *fpath, void *data, int size, int pos, int (*fchk) (const void *obj))
+rec_put2(const char *fpath, const void *data, int size, int pos, int (*fchk) (const void *obj))
 {
     int fd;
     off_t off, len;
     char pool[REC_SIZ];
     struct stat st;
+    char* data_chk;
 
     if ((fd = open(fpath, O_RDWR | O_CREAT, 0600)) < 0)
         return -1;
@@ -408,7 +410,7 @@ rec_put2(char *fpath, void *data, int size, int pos, int (*fchk) (const void *ob
     fstat(fd, &st);
     len = st.st_size;
 
-    fpath = pool;
+    data_chk = pool;
     off = size * pos;
 
     /* 驗證 pos 位置資料的正確性 */
@@ -418,8 +420,8 @@ rec_put2(char *fpath, void *data, int size, int pos, int (*fchk) (const void *ob
         if (fchk)
         {
             lseek(fd, off, SEEK_SET);
-            read(fd, fpath, size);
-            pos = (*fchk) (fpath);
+            read(fd, data_chk, size);
+            pos = (*fchk) (data_chk);
         }
         else
         {
@@ -446,9 +448,9 @@ rec_put2(char *fpath, void *data, int size, int pos, int (*fchk) (const void *ob
     {
         off = 0;
         lseek(fd, off, SEEK_SET);
-        while (read(fd, fpath, size) == size)
+        while (read(fd, data_chk, size) == size)
         {
-            if ((pos = (*fchk) (fpath)))
+            if ((pos = (*fchk) (data_chk)))
                 break;
 
             off += size;
@@ -474,7 +476,7 @@ rec_put2(char *fpath, void *data, int size, int pos, int (*fchk) (const void *ob
 
 int
 rec_ref(const char *fpath,
-        void *data,
+        const void *data,
         int size,
         int pos, int (*fchk) (const void *obj), void (*fref) (void *obj, const void *ref))
 {
@@ -618,7 +620,7 @@ rec_sync(const char *fpath,
     return fsize;
 }
 
-int rec_append(char *fpath, void *data, int size)
+int rec_append(const char *fpath, const void *data, int size)
 {
     register int fd;
 

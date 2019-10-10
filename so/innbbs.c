@@ -116,7 +116,7 @@ nl_cmp(
 static int
 nl_search(
     const void *nl,
-    char *key)
+    const char *key)
 {
     return (int) (str_str(((const nodelist_t *)nl) -> name, key) || str_str(((const nodelist_t *)nl) -> host, key));
 }
@@ -284,7 +284,7 @@ nf_cmp(
 static int
 nf_search(
     const void *nf,
-    char *key)
+    const char *key)
 {
     return (int) (str_str(((const newsfeeds_t *)nf) -> newsgroup, key) || str_str(((const newsfeeds_t *)nf) -> board, key));
 }
@@ -362,7 +362,7 @@ ncm_cmp(
 static int
 ncm_search(
     const void *ncm,
-    char *key)
+    const char *key)
 {
     return (int) (str_str(((const ncmperm_t *)ncm) -> issuer, key) || str_str(((const ncmperm_t *)ncm) -> type, key));
 }
@@ -507,7 +507,7 @@ spam_cmp(
 static int
 spam_search(
     const void *spam,
-    char *key)
+    const char *key)
 {
     return (int) (str_str(((const spamrule_t *)spam) -> detail, key));
 }
@@ -529,7 +529,7 @@ a_innbbs(void)
     const char *fpath;
     char buf[40];
     void (*item_func)(int num, const void *obj), (*query_func)(const void *obj);
-    int (*add_func)(const char *fpath, const void *old, int pos), (*sync_func)(const void *lhs, const void *rhs), (*search_func)(const void *obj, char *key);
+    int (*add_func)(const char *fpath, const void *old, int pos), (*sync_func)(const void *lhs, const void *rhs), (*search_func)(const void *obj, const char *key);
 
     vs_bar("轉信設定");
     more("etc/innbbs.hlp", (char *) -1);
