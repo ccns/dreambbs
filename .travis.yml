@@ -1,0 +1,15 @@
+dist: bionic
+
+git:
+  depth: 1
+
+before_install:
+    - sudo apt-get update
+    - sudo apt-get upgrade -y
+    - sudo dpkg --add-architecture i386
+    - sudo apt update
+    - sudo apt-get install bmake clang libgcc-8-dev:i386 libncurses5-dev:i386
+
+script:
+    - cp sample/dreambbs.conf ./dreanbbs.conf
+    - bmake all install clean
