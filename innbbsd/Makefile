@@ -26,6 +26,7 @@ innbbsd: $(INNOBJS)
 	$(CC) -o innbbsd $(INNOBJS) $(OPT) $(LDFLAGS)
 
 install: $(EXE)
+	install -d "$(BBSHOME)/innd"
 	install -m 0700 $? $(BBSHOME)/innd
 
 update:
