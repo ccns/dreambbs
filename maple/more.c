@@ -652,7 +652,7 @@ re_key:
         else if (key == 'C')    /* Thor.980405: more 時可存入暫存檔 */
         {
             FILE *fp;
-            if ((fp = tbf_open()))
+            if ((fp = tbf_open(-1)))
             {
                 f_suck(fp, fpath);
                 fclose(fp);
