@@ -1,6 +1,6 @@
 # Dreamland-BBS
 
-Travis CI status: [![](https://travis-ci.com/ccns/dreambbs.svg?branch=master)](https://travis-ci.com/ccns/dreambbs)
+Travis CI status: [![](https://travis-ci.com/ccns/dreambbs.svg?branch=v2.0-artoria)](https://travis-ci.com/ccns/dreambbs)
 
 [![](https://i.imgur.com/0EpI7Fa.png)](https://github.com/ccns/dreambbs)
 
