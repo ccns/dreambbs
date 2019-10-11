@@ -1,0 +1,29 @@
+language: c
+
+matrix:
+  include:
+  - compiler: clang
+    env:
+      - UBUNTU_CC_PACKAGE=clang-8
+      - UPDATE_ALTER="sudo update-alternatives --install /usr/bin/clang clang /usr/bin/clang-8 0"
+  - compiler: gcc
+    env:
+      - UBUNTU_CC_PACKAGE=gcc-8
+      - UPDATE_ALTER="sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 0"
+
+dist: bionic
+
+git:
+  depth: 1
+
+before_install:
+    - sudo apt-get update
+    - sudo apt-get upgrade -y
+    - sudo dpkg --add-architecture i386
+    - sudo apt update
+    - sudo apt-get install bmake "$UBUNTU_CC_PACKAGE" lib32gcc-8-dev libncurses5-dev:i386
+    - test -z "$UPDATE_ALTER" || sh -c "$UPDATE_ALTER"
+
+script:
+    - cp sample/dreambbs.conf dreambbs.conf
+    - bmake CC="$CC" all install clean
