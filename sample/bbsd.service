@@ -5,7 +5,7 @@ After=syslog.target network.target remote-fs.target nss-lookup.target
 [Service]
 Type=forking
 PIDFile=/home/bbs/run/bbs.pid
-ExecStart=/home/bbs/bin/bbsd 23 &
+ExecStart=/home/bbs/bin-1.3/bbsd 23 &
 ExecStop=/bin/kill -s QUIT $MAINPID
 Restart=on-failure
 RestartSec=42s
