@@ -1,6 +1,6 @@
 # Dreamland-BBS
 
-Travis CI status: [![](https://travis-ci.org/holishing/dreambbs.svg?branch=master)](https://travis-ci.org/holishing/dreambbs) (Not real time for now)
+Travis CI status: [![](https://travis-ci.org/ccns/dreambbs.svg?branch=master)](https://travis-ci.org/ccns/dreambbs)
 
 [![](https://i.imgur.com/0EpI7Fa.png)](https://github.com/ccns/dreambbs)
 
