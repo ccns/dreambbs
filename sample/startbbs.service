@@ -7,10 +7,10 @@ User=bbs
 Group=bbs
 Type=oneshot
 ## if set User and Group as bbs, then we don't need sudo commands
-ExecStart=/home/bbs/bin/camera
-ExecStart=/home/bbs/bin/account
-ExecStart=/home/bbs/bin/acpro
-ExecStart=/home/bbs/bin/makefw
+ExecStart=/home/bbs/bin-2.0/camera
+ExecStart=/home/bbs/bin-2.0/account
+ExecStart=/home/bbs/bin-2.0/acpro
+ExecStart=/home/bbs/bin-2.0/makefw
 PrivateTmp=true
 
 [Install]

@@ -1,4 +1,4 @@
-"$HOME/bin/camera"
-"$HOME/bin/account"
-"$HOME/bin/acpro"
-"$HOME/bin/makefw"
+"$HOME/bin-2.0/camera"
+"$HOME/bin-2.0/account"
+"$HOME/bin-2.0/acpro"
+"$HOME/bin-2.0/makefw"
