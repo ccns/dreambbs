@@ -1,5 +1,7 @@
 # Dreamland-BBS
 
+Travis CI status: [![](https://travis-ci.org/holishing/dreambbs.svg?branch=v1.0-rimuru)](https://travis-ci.org/holishing/dreambbs) (Not real time for now)
+
 [![](https://i.imgur.com/c7XQP7k.png)](https://github.com/ccns/dreambbs)
 
 This repository is the ***current code*** of Dreamland-bbs ( telnet://ccns.cc ) at NCKU. (under re-construction)
