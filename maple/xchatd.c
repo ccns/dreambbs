@@ -3185,7 +3185,7 @@ sig_over(int signum)
     fclose(flog);
     for (fd = 0; fd < 64; fd++)
         close(fd);
-    execl(BINARY_PREFIX"xchatd", BINARY_PREFIX"xchatd", (const char *)NULL);
+    execl(BINARY_SUFFIX"xchatd", BINARY_SUFFIX"xchatd", (const char *)NULL);
 }
 
 static void

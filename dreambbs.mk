@@ -39,7 +39,7 @@ GETVALUE = echo $(VALUEIF$(conf::= $(conf:M*:$(UNQUOTE)))$(default::= $(default:
 
 ## BBS Release Version Prefix
 BBSCONF_ORIGIN		:= $(REALSRCROOT)/include/config.h
-BBSVER != $(GETVALUE$(conf::= "BBSVER_PREFIX")$(default::= "")$(hdr::= $(BBSCONF_ORIGIN)))
+BBSVER != $(GETVALUE$(conf::= "BBSVER_SUFFIX")$(default::= "")$(hdr::= $(BBSCONF_ORIGIN)))
 
 # rules ref: PttBBS: mbbsd/Makefile
 BBSCONF		:= $(REALSRCROOT)/dreambbs.conf
