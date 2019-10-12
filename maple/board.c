@@ -938,7 +938,8 @@ class_check(
             {
                 if (class_flag2 &&
                     (!(val & BRD_R_BIT) || !(brd[chn].brdname[0]) ||
-                    (brd[chn].readlevel & ~(PERM_SYSOP | PERM_BOARD)) ))
+                    !(brd[chn].readlevel) || (brd[chn].readlevel & ~(PERM_SYSOP | PERM_BOARD)) ))
+
                         continue;
 
                 if ((val & BRD_F_BIT) && !(val & zap))
@@ -1041,7 +1042,7 @@ class_load(
             {
                 if (class_flag2 &&
                     (!(val & BRD_R_BIT) || !(brd[chn].brdname[0]) ||
-                    (brd[chn].readlevel & ~(PERM_SYSOP | PERM_BOARD)) ))
+                    !(brd[chn].readlevel) || (brd[chn].readlevel & ~(PERM_SYSOP | PERM_BOARD)) ))
                         continue;
 
                 if ((val & BRD_F_BIT) && !(val & zap))
