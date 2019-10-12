@@ -864,7 +864,6 @@ mantime_cmp(
     return bshm->mantime[* (const short *)b] - bshm->mantime[* (const short *)a];
 }
 
-static int class_hot = 0;
 static int class_flag2 = 0;  /* 1:列出好友/秘密板，且自己又有閱讀權限的 */
 static int class_flag;
 
@@ -877,6 +876,7 @@ class_check(
     short *cbase, *chead, *ctail;
     int pos, max, val, zap;
     int bnum = 0;
+    int class_hot = 0;
     BRD *brd;
     char *bits;
 
@@ -901,6 +901,13 @@ class_check(
 #endif
         default:
             cbase = (short *) class_img;
+    }
+
+    // "HOT/" 名稱可自定，若改名也要順便改後面的長度 4
+    if (!strncmp((char *)cbase + cbase[chn], "HOT/", 4))
+    {
+        class_hot = 1;
+        chn = 0;
     }
 
     chead = cbase + chn;
@@ -970,6 +977,7 @@ class_load(
     int chn;                    /* ClassHeader number */
     int pos, max, val, zap;
     int bnum = 0;
+    int class_hot = 0;
     BRD *brd;
     char *bits;
 
@@ -992,6 +1000,13 @@ class_load(
 #endif
         default:
             cbase = (short *) class_img;
+    }
+
+    // "HOT/" 名稱可自定，若改名也要順便改後面的長度 4
+    if (!strncmp((char *)cbase + cbase[chn], "HOT/", 4))
+    {
+        class_hot = 1;
+        chn = 0;
     }
 
     chead = cbase + chn;
@@ -1490,19 +1505,8 @@ class_browse(
         chx = (short *) img + (CH_END - chn);
         str = img + *chx;
 
-        // "HOT/" 名稱可自定，若改名也要順便改後面的長度 4
-        if (!strncmp(str, "HOT/", 4))
-        {
-            class_hot = 1;
-            chn = CH_END;
-        }
-
         if (XoClass(chn) == XO_NONE)
             return XO_NONE;
-
-        if (class_hot)
-            class_hot = 0;      /* 離開 HOT Class 再清除 class_hot 標記 */
-
     }
     else
     {
