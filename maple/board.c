@@ -1093,8 +1093,22 @@ XoClass(
     xo.xyz = NULL;
     if (!class_load(&xo))
     {
-        free(xo.xyz);
-        return XO_NONE;
+        int ret = 0;
+        if (!ret && (class_flag2 & 0x01))
+        {
+            class_flag2 ^= 0x01;
+            ret = class_load(&xo);
+        }
+        if (!ret && !(class_flag & BFO_YANK))
+        {
+            class_flag |= BFO_YANK;
+            ret = class_load(&xo);
+        }
+        if (!ret)
+        {
+            free(xo.xyz);
+            return XO_NONE;
+        }
     }
 
     xt = xz[XZ_CLASS - XO_ZONE].xo;
@@ -1142,7 +1156,24 @@ class_body(
 
     max = xo->max;
     if (max <= 0)
-        return XO_QUIT;
+    {
+        int ret = class_load(xo);
+        if (!ret && (class_flag2 & 0x01))
+        {
+            class_flag2 ^= 0x01;
+            ret = class_load(xo);
+        }
+        if (!ret && !(class_flag & BFO_YANK))
+        {
+            class_flag |= BFO_YANK;
+            ret = class_load(xo);
+        }
+        if (!ret)
+        {
+            return XO_QUIT;
+        }
+        return XO_BODY;
+    }
 
 
     cnt = xo->top;
