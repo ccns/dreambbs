@@ -1410,19 +1410,40 @@ static int
 class_yank2(
     XO *xo)
 {
+    int pos = xo->pos;
     if (xo->key >= 0)
         return XO_NONE;
 
     class_flag2 ^= 0x01;
-    return class_init(xo);
+    if (!class_load(xo) && (class_flag2 & 0x01))
+    {
+        zmsg("找不到可讀的秘密/好友看板");
+        class_flag2 ^= 0x01;
+        class_load(xo);
+        xo->pos = pos;
+        return XO_NONE;
+    }
+    return class_head(xo);
 }
 
 static int
 class_yank(
     XO *xo)
 {
+    int pos = xo->pos;
+    if (xo->key >= 0)
+        return XO_NONE;
+
     class_flag ^= BFO_YANK;
-    return class_init(xo);
+    if (!class_load(xo) && !(class_flag & BFO_YANK))
+    {
+        zmsg("找不到未被 zap 掉的看板");
+        class_flag |= BFO_YANK;
+        class_load(xo);
+        xo->pos = pos;
+        return XO_NONE;
+    }
+    return class_head(xo);
 }
 
 static int
