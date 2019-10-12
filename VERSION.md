@@ -53,6 +53,8 @@
         - Features:
           * ~~`pfterm`, which is ported in this release version.~~
           * Others: Please see <https://github.com/ccns/dreambbs/releases/tag/v1.1.0>.
+        - `v1.2.0`: Codename `shizu`
+        - `v1.3.0`: Codename `veldora`
     + `v2.0`: Version 2.X
         - Features in plan:
           * ~~Screen resizing feature.~~
@@ -60,13 +62,13 @@
           * BBS-Lua/BBS-Ruby.
     + `v3.0 ~`: Version 3.X or later
         - Features in plan:
-          * WebSocket support, preliminarily patched from Maple3.
+          * ~~Preliminary WebSocket support, based on relevant patches to Maple3 and PttBBS.~~
           * Support forcing use 32-bit int type variables in 64-bit environment when BBS is compiled natively.
 
 * Planned version names for `current` (`master` branch):
     + `v1.0-CURRENT`
-    + `v2.0-CURRENT` ( **We are HERE** )
-    + `v3.0-CURRENT`
+    + `v2.0-CURRENT`
+    + `v3.0-CURRENT` ( **We are HERE** )
     + `vX.0-CURRENT`
 
 
@@ -78,7 +80,7 @@
     * vtuikit port test (2-BSD)
     * nios port test (2-BSD)
     * logind port test (2-BSD)
-    * WSProxy port test
+    * WSProxy ~port~ test (**Testing**)
 - Other (improved) features from other Maple3 versions
     * BBS-Ruby ~port~ test (**Testing**)
     * ~Screen resizing feature~
