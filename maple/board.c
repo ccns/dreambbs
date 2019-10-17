@@ -956,7 +956,7 @@ class_check(
         max++;
     } while (chead < ctail);
 
-    if (bnum > 0)
+    if (class_hot && bnum > 0)
         qsort(cbase - bnum, bnum, sizeof(short), mantime_cmp);
 
     return max;
