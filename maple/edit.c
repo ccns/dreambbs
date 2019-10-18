@@ -2073,7 +2073,7 @@ ve_key:
             case Meta('3'):
             case Meta('4'):
             case Meta('5'):
-                tbf_read(cc - '0');
+                tbf_read(cc - Meta('0'));
                 ve_mode = mode | VE_REDRAW;
                 continue;
 
