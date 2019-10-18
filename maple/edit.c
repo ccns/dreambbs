@@ -747,7 +747,7 @@ tbf_open(int n)
     int ans;
     char fpath[64], op[4];
 
-    usr_fpath(fpath, cuser.userid, tbf_ask(-1));
+    usr_fpath(fpath, cuser.userid, tbf_ask(n));
     ans = 'a';
 
     if (dashf(fpath))
