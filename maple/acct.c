@@ -1106,7 +1106,7 @@ void acct_setup(ACCT * u, int adm)
                 {
                     char command[256];
                     mode = select_mode(0);
-                    sprintf(command, BINARY_PREFIX"stopperm %s %s %d %s %d &",
+                    sprintf(command, BINARY_SUFFIX"stopperm %s %s %d %s %d &",
                             u->userid, u->vmail, mode, cuser.userid,
                             (int)time(0));
                     system(command);

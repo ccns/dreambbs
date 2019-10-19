@@ -864,7 +864,6 @@ mantime_cmp(
     return bshm->mantime[* (const short *)b] - bshm->mantime[* (const short *)a];
 }
 
-static int class_hot = 0;
 static int class_flag2 = 0;  /* 1:列出好友/秘密板，且自己又有閱讀權限的 */
 static int class_flag;
 
@@ -877,6 +876,7 @@ class_check(
     short *cbase, *chead, *ctail;
     int pos, max, val, zap;
     int bnum = 0;
+    int class_hot = 0;
     BRD *brd;
     char *bits;
 
@@ -901,6 +901,13 @@ class_check(
 #endif
         default:
             cbase = (short *) class_img;
+    }
+
+    // "HOT/" 名稱可自定，若改名也要順便改後面的長度 4
+    if (!strncmp((char *)cbase + cbase[chn], "HOT/", 4))
+    {
+        class_hot = 1;
+        chn = 0;
     }
 
     chead = cbase + chn;
@@ -931,7 +938,8 @@ class_check(
             {
                 if (class_flag2 &&
                     (!(val & BRD_R_BIT) || !(brd[chn].brdname[0]) ||
-                    (brd[chn].readlevel & ~(PERM_SYSOP | PERM_BOARD)) ))
+                    !(brd[chn].readlevel) || (brd[chn].readlevel & ~(PERM_SYSOP | PERM_BOARD)) ))
+
                         continue;
 
                 if ((val & BRD_F_BIT) && !(val & zap))
@@ -956,7 +964,7 @@ class_check(
         max++;
     } while (chead < ctail);
 
-    if (bnum > 0)
+    if (class_hot && bnum > 0)
         qsort(cbase - bnum, bnum, sizeof(short), mantime_cmp);
 
     return max;
@@ -970,6 +978,7 @@ class_load(
     int chn;                    /* ClassHeader number */
     int pos, max, val, zap;
     int bnum = 0;
+    int class_hot = 0;
     BRD *brd;
     char *bits;
 
@@ -992,6 +1001,13 @@ class_load(
 #endif
         default:
             cbase = (short *) class_img;
+    }
+
+    // "HOT/" 名稱可自定，若改名也要順便改後面的長度 4
+    if (!strncmp((char *)cbase + cbase[chn], "HOT/", 4))
+    {
+        class_hot = 1;
+        chn = 0;
     }
 
     chead = cbase + chn;
@@ -1026,7 +1042,7 @@ class_load(
             {
                 if (class_flag2 &&
                     (!(val & BRD_R_BIT) || !(brd[chn].brdname[0]) ||
-                    (brd[chn].readlevel & ~(PERM_SYSOP | PERM_BOARD)) ))
+                    !(brd[chn].readlevel) || (brd[chn].readlevel & ~(PERM_SYSOP | PERM_BOARD)) ))
                         continue;
 
                 if ((val & BRD_F_BIT) && !(val & zap))
@@ -1040,7 +1056,7 @@ class_load(
             // 即時熱門看板臨界值自定
             if (class_hot)
             {
-                if ( ( bshm->mantime[chn] < CLASS_HOT ) && ( !strcmp(brd[chn].brdname, "SYSOP") ) ) /* 只列出人氣超過 CLASS_HOT 的看板 */
+                if (bshm->mantime[chn] < CLASS_HOT) /* 只列出人氣超過 CLASS_HOT 的看板 */
                     continue;
                 bnum++;
             }
@@ -1078,8 +1094,22 @@ XoClass(
     xo.xyz = NULL;
     if (!class_load(&xo))
     {
-        free(xo.xyz);
-        return XO_NONE;
+        int ret = 0;
+        if (!ret && (class_flag2 & 0x01))
+        {
+            class_flag2 ^= 0x01;
+            ret = class_load(&xo);
+        }
+        if (!ret && !(class_flag & BFO_YANK))
+        {
+            class_flag |= BFO_YANK;
+            ret = class_load(&xo);
+        }
+        if (!ret)
+        {
+            free(xo.xyz);
+            return XO_NONE;
+        }
     }
 
     xt = xz[XZ_CLASS - XO_ZONE].xo;
@@ -1127,7 +1157,24 @@ class_body(
 
     max = xo->max;
     if (max <= 0)
-        return XO_QUIT;
+    {
+        int ret = class_load(xo);
+        if (!ret && (class_flag2 & 0x01))
+        {
+            class_flag2 ^= 0x01;
+            ret = class_load(xo);
+        }
+        if (!ret && !(class_flag & BFO_YANK))
+        {
+            class_flag |= BFO_YANK;
+            ret = class_load(xo);
+        }
+        if (!ret)
+        {
+            return XO_QUIT;
+        }
+        return XO_BODY;
+    }
 
 
     cnt = xo->top;
@@ -1409,19 +1456,40 @@ static int
 class_yank2(
     XO *xo)
 {
+    int pos = xo->pos;
     if (xo->key >= 0)
         return XO_NONE;
 
     class_flag2 ^= 0x01;
-    return class_init(xo);
+    if (!class_load(xo) && (class_flag2 & 0x01))
+    {
+        zmsg("找不到可讀的秘密/好友看板");
+        class_flag2 ^= 0x01;
+        class_load(xo);
+        xo->pos = pos;
+        return XO_NONE;
+    }
+    return class_head(xo);
 }
 
 static int
 class_yank(
     XO *xo)
 {
+    int pos = xo->pos;
+    if (xo->key >= 0)
+        return XO_NONE;
+
     class_flag ^= BFO_YANK;
-    return class_init(xo);
+    if (!class_load(xo) && !(class_flag & BFO_YANK))
+    {
+        zmsg("找不到未被 zap 掉的看板");
+        class_flag |= BFO_YANK;
+        class_load(xo);
+        xo->pos = pos;
+        return XO_NONE;
+    }
+    return class_head(xo);
 }
 
 static int
@@ -1490,19 +1558,8 @@ class_browse(
         chx = (short *) img + (CH_END - chn);
         str = img + *chx;
 
-        // "HOT/" 名稱可自定，若改名也要順便改後面的長度 4
-        if (!strncmp(str, "HOT/", 4))
-        {
-            class_hot = 1;
-            chn = CH_END;
-        }
-
         if (XoClass(chn) == XO_NONE)
             return XO_NONE;
-
-        if (class_hot)
-            class_hot = 0;      /* 離開 HOT Class 再清除 class_hot 標記 */
-
     }
     else
     {

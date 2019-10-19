@@ -7,7 +7,11 @@
 # ------------------------------------------------------- #
 
 OPSYS	!= uname -o
-NPROC	!= nproc
+.if $(OPSYS) == "GNU/Linux"
+NPROC	!= getconf _NPROCESSORS_ONLN
+.else
+NPROC	!= sysctl -n hw.ncpu
+.endif
 
 REALSRCROOT	:= .
 .include "$(REALSRCROOT)/dreambbs.mk"

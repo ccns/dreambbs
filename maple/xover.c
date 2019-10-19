@@ -877,7 +877,7 @@ z_download(
         waitpid(pid, &status, 0);
     else
     {
-        execl(BINARY_PREFIX"sz", "-a", buf, NULL);
+        execl(BINARY_SUFFIX"sz", "-a", buf, NULL);
         exit(0);
     }
     unlink(buf);
