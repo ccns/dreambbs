@@ -749,7 +749,7 @@ tbf_open(int n)
     int ans;
     char fpath[64], op[4];
 
-    usr_fpath(fpath, cuser.userid, tbf_ask(-1));
+    usr_fpath(fpath, cuser.userid, tbf_ask(n));
     ans = 'a';
 
     if (dashf(fpath))
@@ -2075,7 +2075,7 @@ ve_key:
             case Meta('3'):
             case Meta('4'):
             case Meta('5'):
-                tbf_read(cc - '0');
+                tbf_read(cc - Meta('0'));
                 ve_mode = mode | VE_REDRAW;
                 continue;
 
