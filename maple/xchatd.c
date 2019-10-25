@@ -1417,7 +1417,7 @@ chat_setroom(
             if (!CLOAK(cu))
             {
                 sprintf(buf, "※ 本" CHATROOMNAME "被 %s %s [%s] 狀態",
-                    chatid, sign ? "設定為" : "取消", fstr);
+                    chatid, sign ? "設定為" : MSG_CANCEL, fstr);
                 send_to_room(room, buf, 0, MSG_MESSAGE);
             }
         }
@@ -1849,7 +1849,7 @@ login_user(
 #endif
 
         if (cu->clitype)
-            send_to_user(cu, "錯誤的使用者代號", 0, ERR_LOGIN_NOSUCHUSER);
+            send_to_user(cu, ERR_UID, 0, ERR_LOGIN_NOSUCHUSER);
         else
             send_to_user(cu, CHAT_LOGIN_INVALID, 0, MSG_MESSAGE);
 

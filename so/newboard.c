@@ -737,7 +737,7 @@ XO *xo)
         if (fd)
         {
             unlink(path);
-            vmsg("¨ú®ø");
+            vmsg(MSG_CANCEL);
             return XO_HEAD;
         }
 

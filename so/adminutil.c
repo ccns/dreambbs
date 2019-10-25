@@ -77,7 +77,7 @@ send_to_all(const char *title, const char *fpath, const char *bm)
     {
         usr_fpath(buf, ptr, fn_dir);
         hdr_stamp(buf, HDR_LINK, &mhdr, fpath);
-        strcpy(mhdr.owner, "sysop");
+        strcpy(mhdr.owner, STR_SYSOP);
         strcpy(mhdr.title, title);
         mhdr.xmode = MAIL_MULTI;
         rec_add(buf, &mhdr, sizeof(HDR));

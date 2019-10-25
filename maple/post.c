@@ -462,7 +462,7 @@ do_post(
     if (vedit(fpath, YEA) < 0)
     {
         unlink(fpath);
-        pmsg2("取消");
+        pmsg2(MSG_CANCEL);
         return XO_HEAD;
     }
 
@@ -3477,7 +3477,7 @@ post_recommend(
         {
             strcpy(hdr->lastrecommend, lastrecommend);
             rec_put(xo->dir, hdr, sizeof(HDR), pos);
-            zmsg("取消");
+            zmsg(MSG_CANCEL);
         }
     }
     return XO_FOOT;

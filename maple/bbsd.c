@@ -293,7 +293,7 @@ is_badid(
     if (!is_alpha(*userid))
         return 1;
 
-    if (!str_cmp(userid, "new"))
+    if (!str_cmp(userid, STR_NEW))
         return 1;
 
     str = userid;
@@ -540,7 +540,7 @@ utmp_setup(
     strcpy(utmp.userid, cuser.userid);
     srand(time(0));
     srandom(time(0));
-    strcpy(utmp.username, ((!str_cmp(cuser.userid, "guest")||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
+    strcpy(utmp.username, ((!str_cmp(cuser.userid, STR_GUEST)||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
     strcpy(utmp.realname, cuser.realname);
     /* str_ncpy(utmp.from, fromhost, sizeof(utmp.from) - 1); */
     str_ncpy(utmp.from, fromhost, sizeof(utmp.from));
@@ -628,7 +628,7 @@ tn_login(void)
 
         vget(21, 0, msg_uid, uid, IDLEN + 1, DOECHO);
 
-        if (str_cmp(uid, "new") == 0)
+        if (str_cmp(uid, STR_NEW) == 0)
         {
 
 #ifdef LOGINASNEW

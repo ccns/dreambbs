@@ -455,7 +455,7 @@ VAR const char *const msg_del_ny      INI(MSG_DEL_NY);
 VAR const char *const err_bid         INI(ERR_BID);
 VAR const char *const err_uid         INI(ERR_UID);
 
-VAR const char *const str_sysop       INI("sysop");
+VAR const char *const str_sysop       INI(STR_SYSOP);
 VAR const char *const brd_sysop       INI("SYSOP");
 VAR const char *const str_author1     INI(STR_AUTHOR1);
 VAR const char *const str_author2     INI(STR_AUTHOR2);

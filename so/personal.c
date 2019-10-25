@@ -85,7 +85,7 @@ is_badid(
     if (!is_alpha(*userid))
         return 1;
 
-    if (!str_cmp(userid, "new"))
+    if (!str_cmp(userid, STR_NEW))
         return 1;
 
     str = userid;

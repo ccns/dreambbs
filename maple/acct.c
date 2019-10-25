@@ -1949,7 +1949,7 @@ int u_lock(void)
     utmp_mode(M_IDLE);
 
     buf[0] = 'n';
-    if (str_cmp(cutmp->userid, "guest"))
+    if (str_cmp(cutmp->userid, STR_GUEST))
         vget(b_lines - 1, 0, "是否要進入螢幕鎖定狀態(Y/N)?[N]", buf, 2,
              DOECHO);
 
