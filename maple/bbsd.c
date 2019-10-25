@@ -129,7 +129,12 @@ u_exit(
     char fpath[80];
 
     if (currbno >= 0)
-        bshm->mantime[currbno]--;        /* 癶程ê狾 */
+    {
+        if (bshm->mantime[currbno] > 0)//ňゎ跑Θ璽计
+            bshm->mantime[currbno]--; /* 癶程ê狾 */
+        else
+            bshm->mantime[currbno] = 0;//璽计杠耴箂
+    }
 
     utmp_free();                        /* 睦 UTMP shm */
     blog(mode, NULL);
