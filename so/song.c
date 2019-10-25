@@ -530,7 +530,7 @@ XO *xo)
     }
 
     if (memcmp(ghdr, &xhdr, sizeof(HDR)) &&
-        vans("確定要修改嗎(Y/N)？[N]") == 'y')
+        vans("確定要修改嗎(y/N)？[N]") == 'y')
     {
         *ghdr = xhdr;
         num = xo->pos;

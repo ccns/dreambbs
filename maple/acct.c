@@ -1128,7 +1128,7 @@ void acct_setup(ACCT * u, int adm)
     }
     else
     {
-        if (vans("修改資料(Y/N)?[N] ") != 'y')
+        if (vans("修改資料(y/N)?[N] ") != 'y')
             return;
     }
 
@@ -1162,7 +1162,7 @@ void acct_setup(ACCT * u, int adm)
     for (;;)
     {
         /* IID.20190530: For forward compatibility with older versions */
-        if (vget(++i, 0, "是否使用新式密碼加密(Y/N)？[N]", buf, 3, LCECHO) == 'y')
+        if (vget(++i, 0, "是否使用新式密碼加密(y/N)？[N]", buf, 3, LCECHO) == 'y')
         {
             mode = GENPASSWD_SHA256;
             num = PLAINPASSLEN;
@@ -1285,7 +1285,7 @@ void acct_setup(ACCT * u, int adm)
         // IID.20190521: Currently unused; disabled for now.
         // vget(++i, 0, "RFC 931 ：", x.ident, 44, GCARRY);
 
-        if (vans("設定權限(Y/N)?[N] ") == 'y')
+        if (vans("設定權限(y/N)?[N] ") == 'y')
         {
           set_perm:
 
@@ -1657,7 +1657,7 @@ int u_addr(void)
                         logitfile(FN_VERIFY_LOG, "-POP3 Verify ERR-", addr);
                         if (popreturn != 8)
                             vget(17, 0,
-                                 "身份確認失敗，是否重新確認 (Y/N) ? [Y]", buf,
+                                 "身份確認失敗，是否重新確認 (Y/n) ? [Y]", buf,
                                  3, LCECHO);
 
                         if (buf[0] == 'n' || buf[0] == 'N' || popreturn == 8)
@@ -1950,7 +1950,7 @@ int u_lock(void)
 
     buf[0] = 'n';
     if (str_cmp(cutmp->userid, STR_GUEST))
-        vget(b_lines - 1, 0, "是否要進入螢幕鎖定狀態(Y/N)?[N]", buf, 2,
+        vget(b_lines - 1, 0, "是否要進入螢幕鎖定狀態(y/N)?[N]", buf, 2,
              DOECHO);
 
     clear();
@@ -2151,7 +2151,7 @@ static int m_setbrd(BRD * brd)
         break;
 
     case 'b':
-        if (vget(++i, 0, "閱\讀權限(Y/N)？[N] ", buf, 3, LCECHO) == 'y')
+        if (vget(++i, 0, "閱\讀權限(y/N)？[N] ", buf, 3, LCECHO) == 'y')
         {
             brd->readlevel =
                 bitset(brd->readlevel, NUMPERMS, NUMPERMS, MSG_READPERM,
@@ -2161,7 +2161,7 @@ static int m_setbrd(BRD * brd)
             i = 1;
         }
 
-        if (vget(++i, 0, "發表權限(Y/N)？[N] ", buf, 3, LCECHO) == 'y')
+        if (vget(++i, 0, "發表權限(y/N)？[N] ", buf, 3, LCECHO) == 'y')
         {
             brd->postlevel =
                 bitset(brd->postlevel, NUMPERMS, NUMPERMS, MSG_POSTPERM,
@@ -2176,7 +2176,7 @@ static int m_setbrd(BRD * brd)
         break;
     }
 
-    if (vget(++i, 0, "設定屬性(Y/N)？[N] ", data, 3, LCECHO) == 'y')
+    if (vget(++i, 0, "設定屬性(y/N)？[N] ", data, 3, LCECHO) == 'y')
     {
         brd->battr =
             bitset(brd->battr, NUMATTRS, NUMATTRS, MSG_BRDATTR, battrs);
@@ -2254,7 +2254,7 @@ int m_newbrd(void)
 
     /* 順便加進 NewBoard */
 
-    if (vans("是否加入 [NewBoard] 群組(Y/N)?[Y] ") != 'n')
+    if (vans("是否加入 [NewBoard] 群組(Y/n)?[Y] ") != 'n')
     {
         brd2gem(&newboard, &hdr);
         rec_add("gem/@/@NewBoard", &hdr, sizeof(HDR));
@@ -2489,7 +2489,7 @@ int u_register(void)
         fclose(fn);
     }
 
-    if (vans("您確定要填寫註冊單嗎(Y/N)？[N] ") != 'y')
+    if (vans("您確定要填寫註冊單嗎(y/N)？[N] ") != 'y')
         return XEASY;
 
     clear();
@@ -2519,7 +2519,7 @@ int u_register(void)
         getfield(9, 60, rform.address, "目前住址", "包括寢室或門牌號碼");
         getfield(11, 20, rform.phone, "連絡電話", "包括長途撥號區域碼");
         getfield(13, 11, rform.idno, "身分證號碼", "請詳細填寫");
-        ans = vans("以上資料是否正確(Y/N)？(Q)取消 [N] ");
+        ans = vans("以上資料是否正確(y/N)？(q)取消 [N] ");
         if (ans == 'q')
             return 0;
         if (ans == 'y')
@@ -2829,7 +2829,7 @@ int m_register(void)
         return XEASY;
     }
 
-    sprintf(buf, "共有 %d 筆資料，開始審核嗎(Y/N)？[N] ", num);
+    sprintf(buf, "共有 %d 筆資料，開始審核嗎(y/N)？[N] ", num);
     num = XEASY;
 
     if (vans(buf) == 'y')

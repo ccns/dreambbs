@@ -997,10 +997,10 @@ do_forward(
  *      return;
  *  }
  *
- *  sprintf(fpath, "確定寄給 [%s] 嗎(Y/N)？[N] ", addr);
+ *  sprintf(fpath, "確定寄給 [%s] 嗎(y/N)？[N] ", addr);
  */
 
-    sprintf(fpath, "確定寄給 [%s] 嗎(Y/N)？[N] ", cuser.email);
+    sprintf(fpath, "確定寄給 [%s] 嗎(y/N)？[N] ", cuser.email);
     if (vans(fpath) != 'y')
         return;
 
@@ -1114,7 +1114,7 @@ m_zip(void)                     /* itoc.010228: 打包資料 */
         return XEASY;
     }
 
-    sprintf(buf, "確定要打包 %s %s嗎(Y/N)？[N] ", name, item);
+    sprintf(buf, "確定要打包 %s %s嗎(y/N)？[N] ", name, item);
     if (vans(buf) == 'y')
     {
         sprintf(buf, "【" BOARDNAME "】%s %s", name, item);
@@ -1233,7 +1233,7 @@ mail_hold(
     char *title, *folder, buf[256];
     HDR mhdr;
 
-    if (vans("是否自存底稿(Y/N)？[N] ") != 'y')
+    if (vans("是否自存底稿(y/N)？[N] ") != 'y')
         return;
 
     folder = cmbox->dir;
@@ -1274,7 +1274,7 @@ m_setforward(void)
     vget(b_lines - 1, 0, "請輸入信件自動轉寄的 E-mail：", ip, 50, GCARRY);
 
     if (ip[0] && !not_addr(ip) &&
-        vans("確定開啟信件轉寄功\能(Y/N)？[N] ") == 'y')
+        vans("確定開啟信件轉寄功\能(y/N)？[N] ") == 'y')
     {
         if ( ( fp = fopen(fpath, "w") ) )
         {
@@ -1301,7 +1301,7 @@ m_setmboxdir(void)
     pmsg2("警告：重建索引並不能保證信箱的完整");
 
 
-    if (vans("確定重建索引(Y/N)？[N] ") == 'y')
+    if (vans("確定重建索引(y/N)？[N] ") == 'y')
     {
 
         vget(b_lines - 1, 0, "請輸入帳號的第一個英文字母(小寫)：", id, 5, GCARRY);
@@ -1431,7 +1431,7 @@ mail_send(
     if (internet_mail)
     {
         clear();
-        prints("信件即將寄給 %s\n標題為：%s\n確定要寄出嗎? (Y/N) [Y]",
+        prints("信件即將寄給 %s\n標題為：%s\n確定要寄出嗎? (Y/n) [Y]",
             rcpt, title);
         switch (vkey())
         {

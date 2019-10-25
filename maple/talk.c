@@ -694,7 +694,7 @@ pal_body(
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要交新朋友嗎(Y/N)？[N] ") == 'y')
+        if (vans("要交新朋友嗎(y/N)？[N] ") == 'y')
             return pal_add(xo);
         return XO_QUIT;
     }
@@ -752,7 +752,7 @@ pal_edit(
     if (echo == DOECHO)
         memset(pal, 0, sizeof(PAL));
     vget(b_lines, 0, "友誼：", pal->ship, sizeof(pal->ship), echo);
-    pal->ftype = vans("損友(Y/N)？[N] ") == 'y' ? PAL_BAD : 0;
+    pal->ftype = vans("損友(y/N)？[N] ") == 'y' ? PAL_BAD : 0;
 }
 
 
@@ -1688,7 +1688,7 @@ bmw_edit(
 
     if (vget(b_lines - 1, 0, hint, str, 58, GCARRY) &&
                                         /* lkchu.990103: 新介面只允許 48 個字元 */
-        vans("確定要送出《熱訊》嗎(Y/N)？[Y] ") != 'n')
+        vans("確定要送出《熱訊》嗎(Y/n)？[Y] ") != 'n')
     {
         //FILE *fp;
         char *userid, fpath[64];
@@ -2900,9 +2900,9 @@ talk_page(
 
     /* showplans(up->userid); */
 #ifdef  HAVE_PIP_FIGHT
-    myans = vans("要和他/她談天(Y)或對戰小雞(C)嗎 (Y/N/C)?[N] ");
+    myans = vans("要和他/她談天(y)或對戰小雞(c)嗎 (y/N/c)?[N] ");
 #else
-    myans = vans("確定要和他/她談天嗎 (Y/N)?[N] ");
+    myans = vans("確定要和他/她談天嗎 (y/N)?[N] ");
 #endif
 
 #ifdef  HAVE_PIP_FIGHT
@@ -4671,7 +4671,7 @@ banmsg_body(
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增嗎(Y/N)？[N] ") == 'y')
+        if (vans("要新增嗎(y/N)？[N] ") == 'y')
             return banmsg_add(xo);
         return XO_QUIT;
     }

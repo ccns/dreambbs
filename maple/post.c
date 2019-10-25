@@ -447,10 +447,10 @@ do_post(
     {
         if (cuser.ufo2 & UFO2_DEF_ANONY)
         {
-            if (vans("你(妳)想要匿名嗎(Y/N)?[N]") == 'y')
+            if (vans("你(妳)想要匿名嗎(y/N)?[N]") == 'y')
                 curredit |= EDIT_ANONYMOUS;
         }
-        else if (vans("你(妳)想要匿名嗎(Y/N)?[Y]") != 'n')
+        else if (vans("你(妳)想要匿名嗎(Y/n)?[Y]") != 'n')
             curredit |= EDIT_ANONYMOUS;
     }
 #endif
@@ -934,7 +934,7 @@ post_body(
     {
         if (bbstate & STAT_POST)
         {
-            if (vans("要新增資料嗎？(Y/N) [N] ") == 'y')
+            if (vans("要新增資料嗎？(y/N) [N] ") == 'y')
                 return post_add(xo);
         }
         else
@@ -3910,7 +3910,7 @@ post_usies_BMlog(
     {
         brd_fpath(fpath, currboard, "usies");
         if (more(fpath, (char *) -1) >= 0 &&
-                vans("請問是否刪除這些看板閱\讀記錄(Y/N)？[N] ") == 'y')
+                vans("請問是否刪除這些看板閱\讀記錄(y/N)？[N] ") == 'y')
             unlink(fpath);
     }
     else

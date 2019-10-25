@@ -289,7 +289,7 @@ XO *xo)
     dir = xo->dir;
 
     if (memcmp(ghdr, &xhdr, sizeof(HDR)) &&
-        vans("確定要修改嗎(Y/N)？[N]") == 'y')
+        vans("確定要修改嗎(y/N)？[N]") == 'y')
     {
         *ghdr = xhdr;
         num = xo->pos;
@@ -478,7 +478,7 @@ XO *xo)
 
     if (tag > 0)
     {
-        sprintf(buf, "確定要刪除 %d 篇標籤精華嗎(Y/N)？[N] ", tag);
+        sprintf(buf, "確定要刪除 %d 篇標籤精華嗎(y/N)？[N] ", tag);
         if (vans(buf) != 'y')
             return XO_FOOT;
     }

@@ -75,7 +75,7 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(Y/N)？[N] ") == 'y')
+        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
         {
             if (vans("新增單人或引入好友名單(A/F)？[A] ") == 'f')
                 return aloha_loadpal(xo);
@@ -141,7 +141,7 @@ XO *xo)
     ALOHA aloha;
     pos = xo->pos;
     max = xo->max;
-    if (vans("要引入好友名單嗎(Y/N)？[N] ") == 'y')
+    if (vans("要引入好友名單嗎(y/N)？[N] ") == 'y')
     {
         usr_fpath(fpath, cuser.userid, FN_PAL);
         for (i = 0; max < MAX_ALOHA; i++)

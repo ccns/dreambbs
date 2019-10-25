@@ -373,7 +373,7 @@ acct_apply(void)
     }
 
     /* IID.20190530: For the forward compatibility of older versions */
-    if (vget(18, 0, "是否使用新式密碼加密(Y/N)？[N]", buf, 3, LCECHO) == 'y')
+    if (vget(18, 0, "是否使用新式密碼加密(y/N)？[N]", buf, 3, LCECHO) == 'y')
     {
         try = GENPASSWD_SHA256;
         fd = PLAINPASSLEN;
@@ -719,7 +719,7 @@ tn_login(void)
                         break;          /* stale entry in utmp file */
                     }
 
-                    if (vans("偵測到多重登入，您想刪除其他重複的 login (Y/N)嗎？[Y] ") != 'n')
+                    if (vans("偵測到多重登入，您想刪除其他重複的 login (Y/n)嗎？[Y] ") != 'n')
                     {
                         kill(pid, SIGTERM);
                         blog("MULTI", cuser.username);
@@ -934,7 +934,7 @@ tn_login(void)
 #if 1
         usr_fpath(fpath, cuser.userid, FN_LOGINS_BAD);
         /* Thor.990204: 為考慮more 傳回值 */
-        if (more(fpath, (char *)-1) >= 0 && vans("偵測到登入失敗的記錄，您要刪除上述資訊嗎(Y/N)?[Y]") != 'n')
+        if (more(fpath, (char *)-1) >= 0 && vans("偵測到登入失敗的記錄，您要刪除上述資訊嗎(Y/n)?[Y]") != 'n')
             unlink(fpath);
 #endif
 

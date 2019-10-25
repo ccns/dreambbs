@@ -148,7 +148,7 @@ XO *xo)
     {
         if (HAS_PERM(PERM_VALID))
         {
-            if (vans("要新增連署項目嗎？(Y/N) [N] ") == 'y')
+            if (vans("要新增連署項目嗎？(y/N) [N] ") == 'y')
                 return nbrd_add(xo);
         }
         else
