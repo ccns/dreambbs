@@ -766,7 +766,6 @@ XoPost(
     int bits;
     char *str_bit, fpath[64];
     const char *str;
-    static int LastBno = -1;
 
     str_bit = &brd_bits[bno];
     bits = *str_bit;
@@ -780,19 +779,19 @@ XoPost(
     }
 
     /* 090823.cache: 狾 */
-    if (LastBno != bno)
+    if (currbno != bno)
     {
-        if (LastBno >= 0)
+        if (currbno >= 0)
         {
-            if (bshm->mantime[LastBno] > 0)//ňゎ跑Θ璽计
-                bshm->mantime[LastBno]--; /* 癶狾 */
+            if (bshm->mantime[currbno] > 0)//ňゎ跑Θ璽计
+                bshm->mantime[currbno]--; /* 癶狾 */
             else
-                bshm->mantime[LastBno] = 0;//璽计杠耴箂
+                bshm->mantime[currbno] = 0;//璽计杠耴箂
         }
 
         bshm->mantime[bno]++;       /* 秈穝狾 */
 
-        LastBno = bno;
+        currbno = bno;
     }
 
     brd = bshm->bcache + bno;
@@ -800,7 +799,6 @@ XoPost(
 #ifdef HAVE_BOARD_PAL
     cutmp->board_pal = bno;
 #endif
-    currbno = bno;
     brh_get(brd->bstamp, bno);
 
     bbstate = /* (bbstate & STAT_DIRTY) | */ STAT_STARTED | brd->battr;
