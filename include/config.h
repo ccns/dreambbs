@@ -36,7 +36,7 @@
 
 #define BBSVERNAME      "DreamBBS"                  /* 版本名稱 */
 #define BBSVERSION      "v3.0-CURRENT"              /* 版本編號, 最多 <= 14 字 */
-#define BBSVER_SUFFIX   ""                          /* Version prefix for naming */
+#define BBSVER_SUFFIX   ""                          /* A version string for the path suffix */
 #define BINARY_SUFFIX   "bin"BBSVER_SUFFIX"/"       /* todo: move it to global.h, or merge global.h to here */
 
 #ifndef SYSOPNICK
