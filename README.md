@@ -4,33 +4,33 @@ Travis CI status: [![](https://travis-ci.com/ccns/dreambbs.svg?branch=master)](h
 
 [![](https://i.imgur.com/0EpI7Fa.png)](https://github.com/ccns/dreambbs)
 
-This repository is the ***current code*** of Dreamland-bbs ( telnet://ccns.cc ) at NCKU. (under re-construction)
+This repository contains the ***current code*** of Dreamland BBS ( telnet://ccns.cc ) at NCKU. (under re-construction)
 
-Dreamland BBS source code is modified from [Wind's Top BBS version](http://windtop.yzu.edu.tw/)
-by cache@ccns and other volunteer developer from
-The Campus Computer & Network Society ( [CCNS](https://ccns.github.io) ) of NCKU in Taiwan.
+The source code of Dreamland BBS is modified from [Wind's Top BBS](http://windtop.yzu.edu.tw/)
+by cache@ccns and other volunteer developers
+at the Campus Computer & Network Society ( [CCNS](https://ccns.github.io) ) at NCKU in Taiwan.
 
-Copyright information for this repo, please view document in `COPYRIGHT`.
+For the copyright information of this repo, please view the document `COPYRIGHT`.
 
-LICENSE for **piaip's more**, **piaip's flat terminal system** module, please view `maple/pmore.c`, `maple/pfterm.c` instead.
+For the licenses for **pmore (piaip's more)** and **pfterm (piaip's flat terminal system)** modules, please view `maple/pmore.c` and `maple/pfterm.c`, respectively.
 
-## Build New BBS
+## To Build a New BBS
 
-* Please pull [dreambbs_snap](https://github.com/ccns/dreambbs_snap) repository to add the essential files.
+* Please pull the repository [dreambbs_snap](https://github.com/ccns/dreambbs_snap) for the essential files.
 
 ## Directory Structure
 
-+ **include**  : Some definition data and headers for compiling.
++ **include**  : Data definitions and headers for compiling.
 
-+ **innbbsd**  : [Internet News Daemon or Usenet Newsgroup](https://en.wikipedia.org/wiki/Usenet) Client for Eagle BBS Series (patched for Maple 3.x Series by itoc)
++ **innbbsd**  : An [Internet News Daemon or Usenet Newsgroup](https://en.wikipedia.org/wiki/Usenet) client for Eagles BBS series. (patched for Maple 3.x series by itoc)
 
-+ **lib**      : Common Libraries of this BBS program
++ **lib**      : Static libraries for the BBS program.
 
-+ **maple**    : Main BBS program is **here**.
++ **maple**    : The **main** BBS program.
 
-+ **so**       : Dynamic Shared Object of this BBS program
++ **so**       : Shared libraries for the BBS program.
 
 + **util**     : Tool programs for this BBS.
 
-+ **test**     : Internal Test Tools for BBS functions or structures.
++ **test**     : Internal test tools for functions and data structures of this BBS.
 
