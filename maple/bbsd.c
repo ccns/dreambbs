@@ -128,8 +128,8 @@ u_exit(
     ACCT tuser;
     char fpath[80];
 
-    if ((fd = brd_bno(currboard)) >= 0)
-        bshm->mantime[fd]--;        /* 退出最後看的那個板 */
+    if (currbno >= 0)
+        bshm->mantime[currbno]--;        /* 退出最後看的那個板 */
 
     utmp_free();                        /* 釋放 UTMP shm */
     blog(mode, NULL);

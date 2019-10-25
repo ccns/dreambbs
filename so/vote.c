@@ -515,7 +515,7 @@ XO *xo)
 
     strcpy(vch.owner, cuser.userid);
 
-    brd = bshm->bcache + brd_bno(currboard);
+    brd = bshm->bcache + currbno;
     brd->bvote++;
     vch.bstamp = brd->bstamp;
     if (check == 1)

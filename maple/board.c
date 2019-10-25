@@ -652,7 +652,7 @@ brh_load(void)
 
     strcpy(currboard, "©|¥¼¿ï©w");
 #ifdef HAVE_BOARD_PAL
-    cutmp->board_pal = brd_bno(currboard);
+    cutmp->board_pal = currbno;
 #endif
 #ifdef  HAVE_RESIST_WATER
     if (checkqt > CHECK_QUOT_MAX)

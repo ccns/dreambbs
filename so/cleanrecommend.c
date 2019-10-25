@@ -287,7 +287,7 @@ clean(
     unlink(tmp);
     unlink(recommenddb);
 
-    brd = bshm->bcache + brd_bno(currboard);
+    brd = bshm->bcache + currbno;
     battr = brd->battr;
 
     if ((fp = fopen(fpath, "r")))
