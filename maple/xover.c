@@ -542,7 +542,7 @@ xo_copy(
     if (bbsmode == M_READA)
     {
         /* lkchu.981205: 借用 tag 存放看版屬性 */
-        tag = (bshm->bcache + brd_bno(currboard))->battr;
+        tag = (bshm->bcache + currbno)->battr;
         if (!HAS_PERM(PERM_SYSOP) && (tag & BRD_NOFORWARD))
         {
             outz("★ 此板文章不可轉貼");
@@ -676,7 +676,7 @@ xo_forward(
     if (bbsmode == M_READA)
     {
         /* lkchu.981205: 借用 method 存放看版屬性 */
-        method = (bshm->bcache + brd_bno(currboard))->battr;
+        method = (bshm->bcache + currbno)->battr;
         if (!HAS_PERM(PERM_SYSOP) && (method & BRD_NOFORWARD))
         {
             outz("★ 此板文章不可轉貼");
@@ -2033,7 +2033,7 @@ every_Z_Orig(void)
         case 'b':
             if (xz[XZ_POST - XO_ZONE].xo)
             {
-                cmd = brd_bno(currboard);
+                cmd = currbno;
                 XoPost(cmd);
                 cmd = XZ_POST;
                 break;

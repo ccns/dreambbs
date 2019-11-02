@@ -601,7 +601,7 @@ XoSongMain(void)
 
     strcpy(currboard, BRD_REQUEST);
 #ifdef HAVE_BOARD_PAL
-    cutmp->board_pal = brd_bno(currboard);
+    cutmp->board_pal = currbno;
 #endif
     bbstate = STAT_STARTED;
 

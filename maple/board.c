@@ -652,7 +652,7 @@ brh_load(void)
 
     strcpy(currboard, "尚未選定");
 #ifdef HAVE_BOARD_PAL
-    cutmp->board_pal = brd_bno(currboard);
+    cutmp->board_pal = currbno;
 #endif
 #ifdef  HAVE_RESIST_WATER
     if (checkqt > CHECK_QUOT_MAX)
@@ -766,7 +766,6 @@ XoPost(
     int bits;
     char *str_bit, fpath[64];
     const char *str;
-    static int LastBno = -1;
 
     str_bit = &brd_bits[bno];
     bits = *str_bit;
@@ -780,19 +779,19 @@ XoPost(
     }
 
     /* 090823.cache: 看板人氣 */
-    if (LastBno != bno)
+    if (currbno != bno)
     {
-        if (LastBno >= 0)
+        if (currbno >= 0)
         {
-            if (bshm->mantime[LastBno] > 0)//防止人氣變成負數
-                bshm->mantime[LastBno]--; /* 退出上一個板 */
+            if (bshm->mantime[currbno] > 0)//防止人氣變成負數
+                bshm->mantime[currbno]--; /* 退出上一個板 */
             else
-                bshm->mantime[LastBno] = 0;//負數的話歸零
+                bshm->mantime[currbno] = 0;//負數的話歸零
         }
 
         bshm->mantime[bno]++;       /* 進入新的板 */
 
-        LastBno = bno;
+        currbno = bno;
     }
 
     brd = bshm->bcache + bno;
@@ -800,7 +799,6 @@ XoPost(
 #ifdef HAVE_BOARD_PAL
     cutmp->board_pal = bno;
 #endif
-    currbno = bno;
     brh_get(brd->bstamp, bno);
 
     bbstate = /* (bbstate & STAT_DIRTY) | */ STAT_STARTED | brd->battr;

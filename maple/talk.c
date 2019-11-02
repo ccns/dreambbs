@@ -3408,8 +3408,8 @@ ulist_init(
     ushm->count = total_num;
 
     extern BCACHE *bshm;
-    if ((fd = brd_bno(currboard)) >= 0)
-        bshm->mantime[fd] =   board_pals;       /* 程ê狾计穝 */
+    if (currbno >= 0)
+        bshm->mantime[currbno] = board_pals;    /* 程ê狾计穝 */
 #endif
 
     return ulist_head(xo);

@@ -128,8 +128,13 @@ u_exit(
     ACCT tuser;
     char fpath[80];
 
-    if ((fd = brd_bno(currboard)) >= 0)
-        bshm->mantime[fd]--;        /* 癶程ê狾 */
+    if (currbno >= 0)
+    {
+        if (bshm->mantime[currbno] > 0)//ňゎ跑Θ璽计
+            bshm->mantime[currbno]--; /* 癶程ê狾 */
+        else
+            bshm->mantime[currbno] = 0;//璽计杠耴箂
+    }
 
     utmp_free();                        /* 睦 UTMP shm */
     blog(mode, NULL);

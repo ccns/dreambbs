@@ -344,7 +344,7 @@ do_post(
     BRD *brd;
     time_t spendtime;
 
-    bno = brd_bno(currboard);
+    bno = currbno;
     brd = bshm->bcache + bno;
 
 #ifdef  HAVE_DETECT_VIOLATELAW
@@ -468,7 +468,7 @@ do_post(
 
     spendtime = time(0) - spendtime;    /* itoc.010712: 總共花的時間(秒數) */
 
-    //bno = brd_bno(currboard);
+    //bno = currbno;
     brd = bshm->bcache + currbno;
     brh_get(brd->bstamp, bno);
 
@@ -1069,7 +1069,7 @@ post_cross(
     /* lkchu.990428: mat patch 當看板尚未選定時，修正cross post會斷線的問題 */
     if (bbsmode == M_READA)
     {
-        battr = (bshm->bcache + brd_bno(currboard))->battr;
+        battr = (bshm->bcache + currbno)->battr;
         if (!HAS_PERM(PERM_SYSOP) && (battr & BRD_NOFORWARD))
         {
             outz("★ 此板文章不可轉錄");
@@ -2404,7 +2404,7 @@ post_edit(
     time_t now;
     FILE *fp, *xfp;
 
-    bno = brd_bno(currboard);
+    bno = currbno;
     brd = bshm->bcache + bno;
 
 #endif
@@ -2611,7 +2611,7 @@ int post_edit(XO *xo)
     time_t now;
     FILE *fp, *xfp;
 
-    bno = brd_bno(currboard);
+    bno = currbno;
     brd = bshm->bcache + bno;
 
 
@@ -3044,7 +3044,7 @@ post_brdtitle(
     if ( !(bbstate & STAT_BOARD) ) /* 感謝 visor@YZU */
         return XO_NONE;
 
-    bno = brd_bno(currboard);
+    bno = currbno;
     oldbrd = bshm->bcache + bno;
 
     memcpy(&newbrd, oldbrd, sizeof(BRD));
@@ -3117,7 +3117,7 @@ post_resetscore(
         hdr = (HDR *) xo_pool + cur;
 
         xmode = hdr->xmode;
-        brd = bshm->bcache + brd_bno(currboard);
+        brd = bshm->bcache + currbno;
 
         if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
             return XO_FOOT;
@@ -3204,7 +3204,7 @@ post_recommend(
     /* 081122.cache: 推文時間限制 */
     static time_t next = 0;
 
-    brd = bshm->bcache + brd_bno(currboard);
+    brd = bshm->bcache + currbno;
 
     if (HAS_PERM(PERM_VALID) && (!(brd->battr & BRD_PRH)) && (bbstate & STAT_POST))
     {
@@ -3493,7 +3493,7 @@ post_showBRD_setting(
     const char *str;
     BRD *brd;
 
-    brd = bshm->bcache + brd_bno(currboard);
+    brd = bshm->bcache + currbno;
 
     str = brd->BM;
     if (*str <= ' ')
@@ -3570,7 +3570,7 @@ post_FriendSet(
 
     BRD *oldbrd, newbrd;
     int bno;
-    bno = brd_bno(currboard);
+    bno = currbno;
 
     oldbrd = bshm->bcache + bno;
     memcpy(&newbrd, oldbrd, sizeof(BRD));
@@ -3607,7 +3607,7 @@ post_battr_score(
 
     BRD *oldbrd, newbrd;
     int bno;
-    bno = brd_bno(currboard);
+    bno = currbno;
 
     oldbrd = bshm->bcache + bno;
     memcpy(&newbrd, oldbrd, sizeof(BRD));
@@ -3719,7 +3719,7 @@ post_rule(
 
     BRD *oldbrd, newbrd;
     int bno;
-    bno = brd_bno(currboard);
+    bno = currbno;
 
     oldbrd = bshm->bcache + bno;
     memcpy(&newbrd, oldbrd, sizeof(BRD));
@@ -3826,7 +3826,7 @@ post_battr_threshold(
     char fpath[64], buf[80];
 
     int bno;
-    bno = brd_bno(currboard);
+    bno = currbno;
 
     oldbrd = bshm->bcache + bno;
     memcpy(&newbrd, oldbrd, sizeof(BRD));
