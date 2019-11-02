@@ -35,7 +35,7 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(Y/N)？[N] ") == 'y')
+        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
             return contact_add(xo);
         return XO_QUIT;
     }

@@ -383,10 +383,10 @@
 #define MSG_DEL_OK      "刪除完畢"
 #define MSG_DEL_CANCEL  "取消刪除"
 #define MSG_DEL_ERROR   "刪除錯誤"
-#define MSG_DEL_NY      "請確定刪除(Y/N)?[N] "
+#define MSG_DEL_NY      "請確定刪除(y/N)?[N] "
 
-#define MSG_SURE_NY     "請您確定(Y/N)？[N] "
-#define MSG_SURE_YN     "請您確定(Y/N)？[Y] "
+#define MSG_SURE_NY     "請您確定(y/N)？[N] "
+#define MSG_SURE_YN     "請您確定(Y/n)？[Y] "
 
 #define MSG_BID         "請輸入看板名稱："
 #define MSG_UID         "請輸入代號："
@@ -455,7 +455,7 @@ VAR const char *const msg_del_ny      INI(MSG_DEL_NY);
 VAR const char *const err_bid         INI(ERR_BID);
 VAR const char *const err_uid         INI(ERR_UID);
 
-VAR const char *const str_sysop       INI("sysop");
+VAR const char *const str_sysop       INI(STR_SYSOP);
 VAR const char *const brd_sysop       INI("SYSOP");
 VAR const char *const str_author1     INI(STR_AUTHOR1);
 VAR const char *const str_author2     INI(STR_AUTHOR2);

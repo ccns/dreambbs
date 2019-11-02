@@ -489,7 +489,7 @@ gem_title(
     }
 
     if (memcmp(ghdr, &xhdr, sizeof(HDR)) &&
-        vans("確定要修改嗎(Y/N)？[N]") == 'y')
+        vans("確定要修改嗎(y/N)？[N]") == 'y')
     {
         *ghdr = xhdr;
         num = xo->pos;
@@ -802,7 +802,7 @@ gem_delete(
 
     if (tag > 0)
     {
-        sprintf(buf, "確定要刪除 %d 篇標籤精華嗎(Y/N)？[N] ", tag);
+        sprintf(buf, "確定要刪除 %d 篇標籤精華嗎(y/N)？[N] ", tag);
         if (vans(buf) != 'y')
             return XO_FOOT;
     }
@@ -812,7 +812,7 @@ gem_delete(
     gem_buffer(dir, tag ? NULL : ghdr);
 
     if (xo->key > GEM_RECYCLE &&
-        vans("是否放進資源回收筒(Y/N)？[N] ") == 'y')
+        vans("是否放進資源回收筒(y/N)？[N] ") == 'y')
         gem_store();
 
     /* 只刪除 HDR 並不刪除檔案 */
@@ -1045,7 +1045,7 @@ gem_recycle(
 
     if (level == GEM_RECYCLE)
     {
-        if (vans("確定要清理資源回收筒嗎[Y/N]?(N) ") == 'y')
+        if (vans("確定要清理資源回收筒嗎[y/N]?(N) ") == 'y')
         {
             unlink(xo->dir);
             return XO_QUIT;

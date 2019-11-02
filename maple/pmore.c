@@ -164,7 +164,7 @@
 #define PMORE_MSG_SEARCH_KEYWORD \
     "[搜尋]關鍵字:"
 #define PMORE_MSG_SEARCH_LETTERCASE \
-    "區分大小寫(Y/N/Q)? "
+    "區分大小寫(y/N/q)? "
 #define PMORE_MSG_GOTO_PAGE \
     "跳至此頁(若要改指定行數請在結尾加.): "
 #define PMORE_MSG_GOTO_LINE \

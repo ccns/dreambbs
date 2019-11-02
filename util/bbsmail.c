@@ -210,8 +210,8 @@ mail2bbs(
             }
             else
             {
-                strtok(buf, " \t\n\r");
-                strcpy(sender, (char *) strtok(NULL, " \t\n\r"));
+                strtok(buf, STR_SPACE);
+                strcpy(sender, (char *) strtok(NULL, STR_SPACE));
 
                 if (!strchr(sender, '@'))       /* ¥Ñ local host ±H«H */
                     strcat(sender, "@" MYHOSTNAME);

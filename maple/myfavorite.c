@@ -388,7 +388,7 @@ myfavorite_add(
         brd = ask_board(buf, BRD_R_BIT, NULL);
         if (brd == NULL)
         {
-            vmsg("錯誤的看板名稱");
+            vmsg(ERR_BID);
             return XO_HEAD;
         }
         brd2myfavorite(brd, &hdr);
@@ -415,7 +415,7 @@ myfavorite_add(
         brd = ask_board(buf, BRD_R_BIT, NULL);
         if (brd == NULL)
         {
-            vmsg("錯誤的看板名稱");
+            vmsg(ERR_BID);
             return XO_HEAD;
         }
         brd2myfavorite(brd, &hdr);

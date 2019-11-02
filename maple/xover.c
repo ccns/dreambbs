@@ -494,7 +494,7 @@ xo_prune(
     if (!(num = TagNum) || ((bbsmode == M_READA) && !(bbstate & STAT_BOARD)))
         return XO_NONE;
 
-    sprintf(buf, "確定要刪除 %d 篇標籤嗎(Y/N)？[N] ", num);
+    sprintf(buf, "確定要刪除 %d 篇標籤嗎(y/N)？[N] ", num);
     if (vans(buf) != 'y')
         return XO_FOOT;
 
@@ -766,7 +766,7 @@ xo_forward(
         method = 0;
 
 #if 0
-        method = vans("是否需要 uuencode(Y/N)？[N] ") == 'y' ?
+        method = vans("是否需要 uuencode(y/N)？[N] ") == 'y' ?
             MQ_UUENCODE : 0;
 #endif
     }

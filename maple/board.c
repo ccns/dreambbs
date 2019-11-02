@@ -1419,7 +1419,7 @@ class_search(
     char buf[IDLEN + 1];
 
     ptr = buf;
-    pos = vget(b_lines, 0, "請輸入看板名稱：", ptr, IDLEN + 1, DOECHO);
+    pos = vget(b_lines, 0, MSG_BID, ptr, IDLEN + 1, DOECHO);
     move(b_lines, 0);
     clrtoeol();
 

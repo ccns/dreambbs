@@ -55,7 +55,7 @@ nl_add(
     int ch, port;
     char ans[8];
     char msg1[] = "協定：(1)IHAVE (2)POST [1] ";
-    char msg2[] = "此站台會主動餵信給本站嗎(Y/N)？[N] ";
+    char msg2[] = "此站台會主動餵信給本站嗎(y/N)？[N] ";
 
     if (old)
         memcpy(&nl, old, sizeof(nodelist_t));
@@ -242,9 +242,9 @@ nf_add(
     {
         if (!vget(b_lines, 0, "字集 [big5]：", nf.charset, sizeof(nf.charset), GCARRY))
             str_ncpy(nf.charset, "big5", sizeof(nf.charset));
-        nf.xmode = (vans("是否轉進(Y/N)？[Y] ") == 'n') ? INN_NOINCOME : 0;
+        nf.xmode = (vans("是否轉進(Y/n)？[Y] ") == 'n') ? INN_NOINCOME : 0;
 
-        if (vans("是否更改轉信的 high-number 設定，這設定對被餵信的群組無效(Y/N)？[N] ") == 'y')
+        if (vans("是否更改轉信的 high-number 設定，這設定對被餵信的群組無效(y/N)？[N] ") == 'y')
         {
             sprintf(ans, "%d", nf.high);
             vget(b_lines, 0, "目前篇數：", ans, 11, GCARRY);
@@ -258,7 +258,7 @@ nf_add(
         else
             rec_add(fpath, &nf, sizeof(newsfeeds_t));
 
-        if ((brd->battr & BRD_NOTRAN) && vans("本板屬性目前為不轉出，是否改為轉出(Y/N)？[Y] ") != 'n')
+        if ((brd->battr & BRD_NOTRAN) && vans("本板屬性目前為不轉出，是否改為轉出(Y/n)？[Y] ") != 'n')
         {
             high = brd - bshm->bcache;
             brd->battr &= ~BRD_NOTRAN;
@@ -337,7 +337,7 @@ ncm_add(
     if (vget(b_lines, 0, "發行：", ncm.issuer, /* sizeof(ncm.issuer) */ 70, GCARRY) &&
         vget(b_lines, 0, "種類：", ncm.type, sizeof(ncm.type), GCARRY))
     {
-        ncm.perm = (vans("允許\此 NCM message 砍信(Y/N)？[N] ") == 'y');
+        ncm.perm = (vans("允許\此 NCM message 砍信(y/N)？[N] ") == 'y');
 
         if (old)
             rec_put(fpath, &ncm, sizeof(ncmperm_t), pos);

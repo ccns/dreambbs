@@ -293,7 +293,7 @@ is_badid(
     if (!is_alpha(*userid))
         return 1;
 
-    if (!str_cmp(userid, "new"))
+    if (!str_cmp(userid, STR_NEW))
         return 1;
 
     str = userid;
@@ -373,7 +373,7 @@ acct_apply(void)
     }
 
     /* IID.20190530: For the forward compatibility of older versions */
-    if (vget(18, 0, "是否使用新式密碼加密(Y/N)？[N]", buf, 3, LCECHO) == 'y')
+    if (vget(18, 0, "是否使用新式密碼加密(y/N)？[N]", buf, 3, LCECHO) == 'y')
     {
         try = GENPASSWD_SHA256;
         fd = PLAINPASSLEN;
@@ -540,7 +540,7 @@ utmp_setup(
     strcpy(utmp.userid, cuser.userid);
     srand(time(0));
     srandom(time(0));
-    strcpy(utmp.username, ((!str_cmp(cuser.userid, "guest")||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
+    strcpy(utmp.username, ((!str_cmp(cuser.userid, STR_GUEST)||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
     strcpy(utmp.realname, cuser.realname);
     /* str_ncpy(utmp.from, fromhost, sizeof(utmp.from) - 1); */
     str_ncpy(utmp.from, fromhost, sizeof(utmp.from));
@@ -628,7 +628,7 @@ tn_login(void)
 
         vget(21, 0, msg_uid, uid, IDLEN + 1, DOECHO);
 
-        if (str_cmp(uid, "new") == 0)
+        if (str_cmp(uid, STR_NEW) == 0)
         {
 
 #ifdef LOGINASNEW
@@ -719,7 +719,7 @@ tn_login(void)
                         break;          /* stale entry in utmp file */
                     }
 
-                    if (vans("偵測到多重登入，您想刪除其他重複的 login (Y/N)嗎？[Y] ") != 'n')
+                    if (vans("偵測到多重登入，您想刪除其他重複的 login (Y/n)嗎？[Y] ") != 'n')
                     {
                         kill(pid, SIGTERM);
                         blog("MULTI", cuser.username);
@@ -934,7 +934,7 @@ tn_login(void)
 #if 1
         usr_fpath(fpath, cuser.userid, FN_LOGINS_BAD);
         /* Thor.990204: 為考慮more 傳回值 */
-        if (more(fpath, (char *)-1) >= 0 && vans("偵測到登入失敗的記錄，您要刪除上述資訊嗎(Y/N)?[Y]") != 'n')
+        if (more(fpath, (char *)-1) >= 0 && vans("偵測到登入失敗的記錄，您要刪除上述資訊嗎(Y/n)?[Y]") != 'n')
             unlink(fpath);
 #endif
 

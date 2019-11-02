@@ -114,7 +114,7 @@ XO *xo)
     {
         if (bbstate & STAT_BOARD)
         {
-            if (vans("要舉辦投票嗎？(Y/N)[N] ") == 'y')
+            if (vans("要舉辦投票嗎？(y/N)[N] ") == 'y')
                 return vote_add(xo);
         }
         else
@@ -185,12 +185,12 @@ VCH *vch)
     str_stamp(vch->cdate, &vch->vclose);
 
     vch->vsort =
-        (vget(22, 0, "開票結果是否排序(Y/N)[N] ", buf, 3, LCECHO) == 'y')
+        (vget(22, 0, "開票結果是否排序(y/N)[N] ", buf, 3, LCECHO) == 'y')
         ? 's'
         : ' ';
 
     vch->vpercent =
-        (vget(23, 0, "開票結果是否顯示百分比例(Y/N)[N] ", buf, 3, LCECHO) == 'y')
+        (vget(23, 0, "開票結果是否顯示百分比例(y/N)[N] ", buf, 3, LCECHO) == 'y')
         ? '%'
         : ' ';
 }
@@ -380,7 +380,7 @@ const char *path)
             if ((++item >= MAX_CHOICES))
                 break;
         }
-        if (vans("是否重新輸入選項(Y/N)[N] ") != 'y')
+        if (vans("是否重新輸入選項(y/N)[N] ") != 'y')
             break;
     }
     if (item == 0)
@@ -418,7 +418,7 @@ vitem_t vlist[])
                       buf, vlist[item], sizeof(vitem_t), GCARRY) || (++item >= MAX_CHOICES))
                 break;
         }
-        if (vans("是否重新輸入選項(Y/N)[N] ") != 'y')
+        if (vans("是否重新輸入選項(y/N)[N] ") != 'y')
             break;
     }
     return item;
@@ -622,7 +622,7 @@ XO *xo)
     vch_edit(&vxx);
     if (memcmp(&vxx, vch, sizeof(VCH)))
     {
-        if (vans("確定要修改這項投票嗎？(Y/N)[N]") == 'y')
+        if (vans("確定要修改這項投票嗎？(y/N)[N]") == 'y')
         {
             *vch = vxx;
             rec_put(dir, vch, sizeof(VCH), pos);

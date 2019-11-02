@@ -25,11 +25,11 @@ new_passwd(void)
                     break;
                 }
 
-                vget(22, 0, "Email 正確，請確認是否產生新密碼？(Y/N)[N] ", Email, 2, LCECHO);
+                vget(22, 0, "Email 正確，請確認是否產生新密碼？(y/N)[N] ", Email, 2, LCECHO);
                 if (Email[0] != 'y')
                     break;
                 /* IID.20190530: For forward compatibility with older versions */
-                if (vget(22, 0, "是否使用新式密碼加密(Y/N)？[N]", Email, 3, LCECHO) == 'y')
+                if (vget(22, 0, "是否使用新式密碼加密(y/N)？[N]", Email, 3, LCECHO) == 'y')
                 {
                     ans = GENPASSWD_SHA256;
                     len = PLAINPASSLEN;
