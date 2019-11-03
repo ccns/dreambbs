@@ -138,7 +138,21 @@ my_recv(
 /* ----------------------------------------------------- */
 
 
-static daemoncmd_t cmds[];
+#ifdef __cplusplus
+  #define INTERNAL extern  /* Used inside an anonymous namespace */
+  #define INTERNAL_INIT /* Empty */
+#else
+  #define INTERNAL static
+  #define INTERNAL_INIT static
+#endif
+
+#ifdef __cplusplus
+namespace {
+#endif
+INTERNAL daemoncmd_t cmds[];
+#ifdef __cplusplus
+}  // namespace
+#endif
 
 
 GCC_PURE static daemoncmd_t *
@@ -581,7 +595,10 @@ CMDquit(
 }
 
 
-static daemoncmd_t cmds[] =
+#ifdef __cplusplus
+namespace {
+#endif
+INTERNAL_INIT daemoncmd_t cmds[] =
 {
     /* cmd-name, cmd-usage, min-argc, max-argc, mode, errorcode,             normalcode,           cmd-func */
     {"help",     "help [cmd]",            1, 2, 2, 0,                        NNTP_HELPOK_VAL,      CMDhelp},
@@ -590,6 +607,9 @@ static daemoncmd_t cmds[] =
     {"stat",     "stat <mid>",            2, 2, 0, NNTP_NOTHING_FOLLOWS_VAL, NNTP_DONTHAVEIT_VAL,  CMDstat},
     {NULL,       NULL,                    0, 0, 2, 0,                        0,                    NULL}
 };
+#ifdef __cplusplus
+}  // namespace
+#endif
 
 
 /* ----------------------------------------------------- */

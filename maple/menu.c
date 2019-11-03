@@ -481,19 +481,31 @@ movie(void)
 #define PERM_MENU       PERM_PURGE
 
 
-static MENU menu_main[];
-static MENU menu_service[];
-static MENU menu_xyz[];
-static MENU menu_user[];
-static MENU menu_song[];
+#ifdef __cplusplus
+  #define INTERNAL extern  /* Used inside an anonymous namespace */
+  #define INTERNAL_INIT /* Empty */
+#else
+  #define INTERNAL static
+  #define INTERNAL_INIT static
+#endif
+
+#ifdef __cplusplus
+namespace {
+#endif
+
+INTERNAL MENU menu_main[];
+INTERNAL MENU menu_service[];
+INTERNAL MENU menu_xyz[];
+INTERNAL MENU menu_user[];
+INTERNAL MENU menu_song[];
 
 
 /* ----------------------------------------------------- */
 /* load menu                                             */
 /* ----------------------------------------------------- */
-static MENU menu_admin[];
+INTERNAL MENU menu_admin[];
 
-static MENU menu_boardadm[] =
+INTERNAL_INIT MENU menu_boardadm[] =
 {
     {{m_newbrd}, PERM_BOARD, M_SYSTEM,
     "NewBoard   開闢新看板"},
@@ -526,7 +538,7 @@ static MENU menu_boardadm[] =
     "看板總管"}
 };
 
-static MENU menu_accadm[] =
+INTERNAL_INIT MENU menu_accadm[] =
 {
     {{m_user}, PERM_ACCOUNTS, M_SYSTEM,
     "User       使用者資料"},
@@ -556,7 +568,7 @@ static MENU menu_accadm[] =
     "註冊總管"}
 };
 
-static MENU menu_settingadm[] =
+INTERNAL_INIT MENU menu_settingadm[] =
 {
 
     {{.dlfunc = DL_NAME("adminutil.so", m_xfile)}, PERM_SYSOP, M_DL(M_XFILES),
@@ -587,7 +599,7 @@ static MENU menu_settingadm[] =
 /* ----------------------------------------------------- */
 /* reset menu                                            */
 /* ----------------------------------------------------- */
-static MENU menu_reset[] =
+INTERNAL_INIT MENU menu_reset[] =
 {
     {{.dlfunc = DL_NAME("adminutil.so", reset1)}, PERM_BOARD, M_DL(M_XMODE),
     "Camera     動態看板"},
@@ -620,7 +632,7 @@ static MENU menu_reset[] =
 /* ----------------------------------------------------- */
 
 
-static MENU menu_admin[] =
+INTERNAL_INIT MENU menu_admin[] =
 {
 
     {{.menu = menu_accadm}, PERM_ADMIN, M_ADMIN,
@@ -652,6 +664,10 @@ static MENU menu_admin[] =
     "系統維護"}
 };
 
+#ifdef __cplusplus
+}  // namespace
+#endif
+
 
 /* ----------------------------------------------------- */
 /* mail menu                                             */
@@ -673,8 +689,10 @@ int m_verify(void);
 #endif
 int m_setmboxdir(void);
 
-
-static MENU menu_mail[] =
+#ifdef __cplusplus
+namespace {
+#endif
+INTERNAL_INIT MENU menu_mail[] =
 {
     {{XoMbox}, PERM_READMAIL, M_RMAIL,
     "Read       閱\讀信件"},
@@ -712,6 +730,9 @@ static MENU menu_mail[] =
     {{.menu = menu_main}, PERM_MENU + 'R', M_MMENU,       /* itoc.020829: 怕 guest 沒選項 */
     "電子郵件"}
 };
+#ifdef __cplusplus
+}  // namespace
+#endif
 
 
 /* ----------------------------------------------------- */
@@ -726,7 +747,11 @@ XoUlist(void)
 }
 
 
-static MENU menu_talk[] =
+#ifdef __cplusplus
+namespace {
+#endif
+
+INTERNAL_INIT MENU menu_talk[] =
 {
     {{XoUlist}, 0, M_LUSERS,
     "Users      完全聊天手冊"},
@@ -774,7 +799,7 @@ static MENU menu_talk[] =
 /* System menu                                           */
 /* ----------------------------------------------------- */
 
-static MENU menu_information[] =
+INTERNAL_INIT MENU menu_information[] =
 {
 
     {{popmax}, 0, M_READA,
@@ -803,7 +828,7 @@ static MENU menu_information[] =
 };
 
 
-static MENU menu_xyz[] =
+INTERNAL_INIT MENU menu_xyz[] =
 {
     {{.menu = menu_information}, 0, M_XMENU,
     "Tops       " NICKNAME "排行榜"},
@@ -831,7 +856,7 @@ static MENU menu_xyz[] =
 /* User menu                                             */
 /* ----------------------------------------------------- */
 
-static MENU menu_reg[] =
+INTERNAL_INIT MENU menu_reg[] =
 {
 
     {{u_info}, PERM_BASIC, M_XMODE,
@@ -865,7 +890,7 @@ static MENU menu_reg[] =
 };
 
 
-static MENU menu_user[] =
+INTERNAL_INIT MENU menu_user[] =
 {
     {{.menu = menu_reg}, 0, M_XMENU,
     "Configure  註冊及設定個人資訊"},
@@ -896,13 +921,13 @@ static MENU menu_user[] =
 /* tool menu                                             */
 /* ----------------------------------------------------- */
 
-static MENU menu_service[];
+INTERNAL MENU menu_service[];
 
 /* ----------------------------------------------------- */
 /* game menu                                             */
 /* ----------------------------------------------------- */
 
-static MENU menu_game[] =
+INTERNAL_INIT MENU menu_game[] =
 {
     {{.dlfunc = DL_NAME("bj.so", BlackJack)}, PERM_VALID, M_DL(M_XMODE),
     "BlackJack  " NICKNAME "黑傑克"},
@@ -928,7 +953,7 @@ static MENU menu_game[] =
 /* yzu menu                                              */
 /* ----------------------------------------------------- */
 
-static MENU menu_special[] =
+INTERNAL_INIT MENU menu_special[] =
 {
 
     {{.dlfunc = DL_NAME("personal.so", personal_apply)}, PERM_VALID, M_DL(M_XMODE),
@@ -959,7 +984,7 @@ static MENU menu_special[] =
 /* ----------------------------------------------------- */
 
 #ifdef HAVE_SONG
-static MENU menu_song[] =
+INTERNAL_INIT MENU menu_song[] =
 {
     {{.dlfunc = DL_NAME("song.so", XoSongMain)}, PERM_VALID, M_DL(M_XMODE),
     "Request       點歌歌本"},
@@ -981,7 +1006,7 @@ static MENU menu_song[] =
 /* ----------------------------------------------------- */
 
 /* Thor.990224: 開放外掛界面 */
-static MENU menu_service[] =
+INTERNAL_INIT MENU menu_service[] =
 {
 
     {{.menu = menu_user}, 0, M_UMENU,
@@ -1024,6 +1049,10 @@ static MENU menu_service[] =
      NICKNAME "服務"}
 };
 
+#ifdef __cplusplus
+}  // namespace
+#endif
+
 /* ----------------------------------------------------- */
 /* main menu                                             */
 /* ----------------------------------------------------- */
@@ -1038,7 +1067,10 @@ sk_windtop_init(void)
     return 0;
 }
 
-MENU skin_main[] =
+#ifdef __cplusplus
+namespace {
+#endif
+INTERNAL_INIT MENU skin_main[] =
 {
     {{sk_windtop_init}, PERM_SYSOP, M_XMODE,
     "DreamBBS   預設的系統"},
@@ -1046,6 +1078,9 @@ MENU skin_main[] =
     {{.menu = menu_main}, PERM_MENU + 'W', M_MMENU,
     "介面選單"}
 };
+#ifdef __cplusplus
+}  // namespace
+#endif
 #endif  /* #ifdef  HAVE_CHANGE_SKIN */
 
 static int
@@ -1055,7 +1090,11 @@ Gem(void)
     return 0;
 }
 
-static MENU menu_main[] =
+#ifdef __cplusplus
+namespace {
+#endif
+
+INTERNAL_INIT MENU menu_main[] =
 {
     {{.menu = menu_admin}, PERM_ADMIN, M_ADMIN,
     "0Admin    【 系統維護區 】"},
@@ -1109,6 +1148,10 @@ static MENU menu_main[] =
     "主功\能表"}
 };
 
+#ifdef __cplusplus
+}  // namespace
+#endif
+
 #ifdef  TREAT
 static int
 goodbye1(void)
@@ -1136,8 +1179,10 @@ goodbye1(void)
 }
 
 
-
-static MENU menu_treat[] =
+#ifdef __cplusplus
+namespace {
+#endif
+INTERNAL_INIT MENU menu_treat[] =
 {
     {{goodbye1}, 0, M_XMODE,
     "Goodbye   【再別" NICKNAME "】"},
@@ -1145,6 +1190,9 @@ static MENU menu_treat[] =
     {{NULL}, PERM_MENU + 'G', M_MMENU,
     "主功\能表"}
 };
+#ifdef __cplusplus
+}  // namespace
+#endif
 #endif  /* #ifdef  TREAT */
 
 GCC_PURE static
