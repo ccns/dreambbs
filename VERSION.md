@@ -80,7 +80,7 @@
     * vtuikit port test (2-BSD)
     * nios port test (2-BSD)
     * logind port test (2-BSD)
-    * WSProxy ~port~ test (**Testing**)
+    * WSProxy ~port~ test (MIT; **Testing**)
 - Other (improved) features from other Maple3 versions
     * BBS-Ruby ~port~ test (**Testing**)
     * ~Screen resizing feature~
