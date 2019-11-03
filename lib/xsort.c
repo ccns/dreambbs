@@ -70,7 +70,7 @@ void xsort(void *a, size_t n, size_t es, int (*cmp) (const void *lhs, const void
 
     if (n > 7)
     {
-        pl = a;
+        pl = (char *)a;
         pn = (char *)a + (n - 1) * es;
         if (n > 40)
         {
@@ -81,7 +81,7 @@ void xsort(void *a, size_t n, size_t es, int (*cmp) (const void *lhs, const void
         }
         pm = med3(pl, pm, pn, cmp);
     }
-    swap(a, pm);
+    swap((char *)a, pm);
     pa = pb = (char *)a + es;
 
     pc = pd = (char *)a + (n - 1) * es;
@@ -125,7 +125,7 @@ void xsort(void *a, size_t n, size_t es, int (*cmp) (const void *lhs, const void
 
     pn = (char *)a + n * es;
     r = min(pa - (char *)a, pb - pa);
-    vecswap(a, pb - r, r);
+    vecswap((char *)a, pb - r, r);
 
     r = min(pd - pc, pn - pd - es);
     vecswap(pb, pn - r, r);

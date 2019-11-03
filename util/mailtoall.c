@@ -202,7 +202,7 @@ main(
     int mode;
     char *path = NULL, *title = NULL;
 
-    bshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
+    bshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
 
     mode = (argc > 1) ? atoi(argv[1]) : 0;
     optind++;

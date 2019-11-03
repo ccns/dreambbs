@@ -613,7 +613,7 @@ main(void)
     setgid(BBSGID);
     chdir(BBSHOME);
 
-    bshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
+    bshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
 
     if (bshm->uptime < 0)
         bshm = NULL;
@@ -745,7 +745,7 @@ main(void)
 #ifdef DEBUG
     logit("counter");
 #endif
-    counter = attach_shm(COUNT_KEY, sizeof(COUNTER));
+    counter = (COUNTER *) attach_shm(COUNT_KEY, sizeof(COUNTER));
     if (counter)
         counter->max_regist = visit;
 

@@ -131,7 +131,7 @@ ushm_init(void)
 {
     UCACHE *xshm;
 
-    ushm = xshm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
+    ushm = xshm = (UCACHE *) attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
 
 #if 0
     if (xshm->mbase < xshm->mpool)
@@ -443,7 +443,7 @@ bshm_init(void)
     xshm = bshm;
     if (xshm == NULL)
     {
-        bshm = xshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
+        bshm = xshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
     }
 
     uptime = &(xshm->uptime);
@@ -620,7 +620,7 @@ observeshm_load(void)
 void
 observeshm_init(void)
 {
-    oshm = attach_shm(OBSERVE_KEY, sizeof(OCACHE));
+    oshm = (OCACHE *) attach_shm(OBSERVE_KEY, sizeof(OCACHE));
     observeshm_load();
 }
 #endif  /* #ifdef  HAVE_OBSERVE_LIST */
@@ -666,7 +666,7 @@ count_init(void)
 {
     if (curcount == NULL)
     {
-        curcount = attach_shm(COUNT_KEY, sizeof(COUNTER));
+        curcount = (COUNTER *) attach_shm(COUNT_KEY, sizeof(COUNTER));
         if (curcount->hour_max_login == 0)
             count_load();
     }
@@ -729,7 +729,7 @@ fwshm_init(void)
 {
     if (fwshm == NULL)
     {
-        fwshm = attach_shm(FWSHM_KEY, sizeof(FWCACHE));
+        fwshm = (FWCACHE *) attach_shm(FWSHM_KEY, sizeof(FWCACHE));
         if (fwshm->number == 0)
             fwshm_load();
     }
@@ -747,7 +747,7 @@ void
 fshm_init(void)
 {
     if (fshm == NULL)
-        fshm = attach_shm(FILMSHM_KEY, sizeof(FCACHE));
+        fshm = (FCACHE *) attach_shm(FILMSHM_KEY, sizeof(FCACHE));
 }
 
 

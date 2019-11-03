@@ -51,7 +51,7 @@ init_bshm(void)
     /* itoc.030727: 在開啟 bbsd 之前，應該就要執行過 account，
        所以 bshm 應該已設定好 */
 
-    bshm = shm_new(BRDSHM_KEY, sizeof(BCACHE));
+    bshm = (BCACHE *) shm_new(BRDSHM_KEY, sizeof(BCACHE));
 
     if (bshm->uptime <= 0)      /* bshm 未設定完成 */
         exit(0);

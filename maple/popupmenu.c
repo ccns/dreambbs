@@ -340,7 +340,7 @@ do_menu(
     /* verit. §ó·s°ÊºA */
     if (pmenu[tmp].func)
     {
-        strcpy(cutmp->mateid, pmenu[tmp].func);
+        strcpy(cutmp->mateid, (const char *) pmenu[tmp].func);
         utmp_mode(M_IDLE);
     }
 

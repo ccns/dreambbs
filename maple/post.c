@@ -2948,7 +2948,7 @@ post_cross_terminator(  /* Thor.0521: ²×·¥¤å³¹¤jªk */
 
             fsize = 0;
             mgets(-1);
-            while ((hdr = mread(fdr, sizeof(HDR))))
+            while ((hdr = (HDR *) mread(fdr, sizeof(HDR))))
             {
                 int check_mode;
                 xmode = hdr->xmode;

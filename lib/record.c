@@ -31,7 +31,7 @@ int rec_bot(                    /* amaki.040715: 嵌入式寫檔 */
                const char *fpath, const void *data, int size)
 {
     int fd, fsize, count;
-    void *pool = NULL, *set;
+    HDR *pool = NULL, *set;
     char set_pool[REC_SIZ];
     struct stat st;
 
@@ -45,7 +45,7 @@ int rec_bot(                    /* amaki.040715: 嵌入式寫檔 */
     fstat(fd, &st);
 
     count = 0;
-    set = (void *)set_pool;
+    set = (HDR *)set_pool;
 
     if ((fsize = st.st_size))
     {
@@ -57,8 +57,7 @@ int rec_bot(                    /* amaki.040715: 嵌入式寫檔 */
             {
                 if (count)
                 {
-                    pool = (void *)malloc(count * size);
-
+                    pool = (HDR *)malloc(count * size);
                     read(fd, pool, count * size);
                     lseek(fd, -size * count, SEEK_CUR);
                 }
@@ -67,7 +66,7 @@ int rec_bot(                    /* amaki.040715: 嵌入式寫檔 */
             else if (fsize <= 0)    /* amaki.040715: 全部都是置底的東西 */
             {
                 count++;
-                pool = (void *)malloc(count * size);
+                pool = (HDR *)malloc(count * size);
 
                 lseek(fd, -size, SEEK_CUR);
                 read(fd, pool, count * size);

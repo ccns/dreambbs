@@ -287,7 +287,7 @@ main(
 
     chdir(BBSHOME);
 
-    ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
+    ushm = (UCACHE *) attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
 
     if (!ushm)
     {

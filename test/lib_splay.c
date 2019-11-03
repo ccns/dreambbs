@@ -46,7 +46,7 @@ compareint(const void *a, const void *b)
 void
 printint(const void *a)
 {
-    const intnode *A = a;
+    const intnode *A = (const intnode *) a;
     printf("%d ", A->i);
 }
 

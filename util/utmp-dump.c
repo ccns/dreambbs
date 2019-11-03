@@ -637,7 +637,7 @@ main(
         return 2;
     }
 
-    ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
+    ushm = (UCACHE *) attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
     cutmp = &utmp;
     usr_fpath(fpath, userid, FN_ACCT);
     fd = open(fpath, O_RDONLY);

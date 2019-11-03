@@ -2092,7 +2092,7 @@ pal_list(
                 char *userid;
 
                 mgets(-1);
-                while ((pal = mread(fd, sizeof(PAL))))
+                while ((pal = (PAL *) mread(fd, sizeof(PAL))))
                 {
                     userid = pal->userid;
                     if (!ll_has(userid) && (pal->userno != cuser.userno) &&
@@ -2150,7 +2150,7 @@ aloha(void)
         uceil = (UTMP *) ((char *) ubase + ushm->offset);
 
         mgets(-1);
-        while ((bmw = mread(fd, sizeof(BMW))))
+        while ((bmw = (BMW *) mread(fd, sizeof(BMW))))
         {
             /* Thor.1030:只通知朋友 */
 
@@ -2246,7 +2246,7 @@ loginNotify(void)
         uceil = (UTMP *) ((char *) ubase + ushm->offset);
 
         mgets(-1);
-        while ((bmw = mread(fd, sizeof(BMW))))
+        while ((bmw = (BMW *) mread(fd, sizeof(BMW))))
         {
             /* Thor.1030:只通知朋友 */
 
@@ -4042,7 +4042,7 @@ ulist_del(
         if ((fd = open(fpath, O_RDONLY)) >= 0)
         {
             mgets(-1);
-            while ((pal = mread(fd, sizeof(PAL))))
+            while ((pal = (PAL *) mread(fd, sizeof(PAL))))
             {
                 if (pal->userno!=userno)
                     tmp = tmp + 1;
@@ -4088,7 +4088,7 @@ ulist_changeship(
         if ((fd = open(fpath, O_RDONLY)) >= 0)
         {
             mgets(-1);
-            while ((pal = mread(fd, sizeof(PAL))))
+            while ((pal = (PAL *) mread(fd, sizeof(PAL))))
             {
                 if (pal->userno!=userno)
                     tmp = tmp + 1;

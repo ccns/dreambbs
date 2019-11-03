@@ -834,7 +834,7 @@ gem_delete(
         mgets(-1);
         tag = 0;
 
-        while ((ghdr = mread(fd, sizeof(HDR))))
+        while ((ghdr = (HDR *) mread(fd, sizeof(HDR))))
         {
             if (Tagger(ghdr->chrono, tag, TAG_NIN))
             {

@@ -82,7 +82,7 @@ int DL_func(const char *name, ...)
 
     va_start(args, name);
 
-    if (!(f = DL_get(name)))
+    if (!(f = (int (*)(va_list)) DL_get(args)))
     {                            /* not get func */
         va_end(args);
         return -1;

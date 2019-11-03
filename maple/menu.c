@@ -175,7 +175,7 @@ pad_view(void)
 
     for (;;)
     {
-        pad = mread(fd, sizeof(Pad));
+        pad = (Pad *) mread(fd, sizeof(Pad));
         if (!pad)
         {
             vmsg(NULL);
@@ -253,7 +253,7 @@ pad_draw(void)
         i = 0;
         cc = pad.tpad - NOTE_DUE * 60 * 60;
         mgets(-1);
-        while ((pp = mread(fdr, sizeof(Pad))))
+        while ((pp = (Pad *) mread(fdr, sizeof(Pad))))
         {
             fwrite(pp, sizeof(Pad), 1, fpw);
             if ((++i > NOTE_MAX) || (pp->tpad < cc))

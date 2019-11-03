@@ -103,7 +103,7 @@ main(
         exit(2);
     }
 
-    ushm = attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
+    ushm = (UCACHE *) attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
     strcpy(bmw.msg, argv[1]);
 
     up = ushm->uslot;

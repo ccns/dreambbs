@@ -183,7 +183,7 @@ hdr_prune(
 
     fsize = count = 0;
     mgets(-1);
-    while ((hdr = mread(fdr, sizeof(HDR))))
+    while ((hdr = (HDR *) mread(fdr, sizeof(HDR))))
     {
         xmode = hdr->xmode;
         count++;
@@ -1639,7 +1639,7 @@ xover(
                     void *p = DL_GET(cb->dlfunc);
                     if (p)
                     {
-                        cb->func = p;
+                        cb->func = (int (*)(XO *xo))p;
                         pos = cb->key = cmd;
                     }
                     else
@@ -1920,7 +1920,7 @@ xover(
                     static int (*mgp)(XO *xo);
                     if (!mgp)
                     {
-                        mgp = DL_GET(DL_NAME("mailgem.so", mailgem_gather));
+                        mgp = (int (*)(XO *xo)) DL_GET(DL_NAME("mailgem.so", mailgem_gather));
                         if (mgp)
                             cmd = (*mgp)(xo);
                         else

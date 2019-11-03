@@ -18,7 +18,7 @@ int main(void)
 {
     int *x, *y, *z, n;
 
-    x = malloc(MMM * sizeof(int));
+    x = (int *) malloc(MMM * sizeof(int));
     if (!x)
         return 0;
 

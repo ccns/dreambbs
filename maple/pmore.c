@@ -903,7 +903,7 @@ mf_attach_file(void *fnptr)
     lseek(fd, 0, SEEK_SET);
     */
 
-    mf.start = mmap(NULL, mf.len, PROT_READ, MF_MMAP_OPTION, fd, 0);
+    mf.start = (unsigned char *)mmap(NULL, mf.len, PROT_READ, MF_MMAP_OPTION, fd, 0);
     close(fd);
 
     if (mf.start == MAP_FAILED) {
@@ -927,7 +927,7 @@ mf_attach_buffer(void *buf)
     struct SimpleBuffer *buffer = (struct SimpleBuffer *)buf;
     if (!buffer || !buffer->data || !buffer->len)
         return 0;
-    mf.start = buffer->data;
+    mf.start = (unsigned char *)buffer->data;
     mf.len = buffer->len;
     mf.detachHandler = mf_detach_nounmap;
     return mf_postattach();

@@ -50,7 +50,7 @@ main(
     FILE *fp;
     char ymd[80];
 
-    count = attach_shm(COUNT_KEY, sizeof(COUNTER));
+    count = (COUNTER *) attach_shm(COUNT_KEY, sizeof(COUNTER));
 
     optind++;
     switch ((argc > 1) ? *argv[1] : 0)

@@ -126,7 +126,7 @@ main(
     setuid(BBSUID);
     chdir(BBSHOME);
 
-    fwoshm = attach_shm(FWOSHM_KEY, sizeof(FWOCACHE));
+    fwoshm = (FWOCACHE *) attach_shm(FWOSHM_KEY, sizeof(FWOCACHE));
 
     rewrite();
 

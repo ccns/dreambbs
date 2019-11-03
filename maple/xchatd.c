@@ -3289,7 +3289,7 @@ load_mud_like(void)
 {
     if (mud == NULL)
     {
-        //mud = attach_shm(MUD_KEY, sizeof(MUD));
+        //mud = (MUD *) attach_shm(MUD_KEY, sizeof(MUD));
         mud = (MUD *)malloc(sizeof(MUD));
         mudshm_init();
     }

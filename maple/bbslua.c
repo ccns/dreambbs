@@ -2032,7 +2032,7 @@ bbslua_attach(const char *fpath, size_t *plen)
     }
     *plen = *plen +1;
 
-    buf = mmap(NULL, *plen, PROT_READ, MAP_SHARED, fd, 0);
+    buf = (char *) mmap(NULL, *plen, PROT_READ, MAP_SHARED, fd, 0);
     close(fd);
 
     if (buf == NULL || buf == MAP_FAILED)

@@ -500,7 +500,7 @@ ruby_script_attach(const char *fpath, int *plen)
         return buf;
     }
 
-    buf = mmap(NULL, *plen, PROT_READ, MAP_SHARED, fd, 0);
+    buf = (char *) mmap(NULL, *plen, PROT_READ, MAP_SHARED, fd, 0);
     close(fd);
 
     if (buf == NULL || buf == MAP_FAILED)
@@ -607,7 +607,7 @@ int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
                     tStart++;
 
                     while (*tStart == ' ') tStart++;
-                    char *data = malloc(sizeof(char) * (tEnd - tStart) + 1);
+                    char *data = (char *) malloc(sizeof(char) * (tEnd - tStart) + 1);
                     strncpy(data, tStart, tEnd - tStart);
                     data[tEnd - tStart] ='\0';
                     free(TOCs_DATA[i]);
@@ -659,31 +659,31 @@ static void bbsruby_init_bbs_class(void)
 
     // Prepare BBS wrapper class
     VALUE rb_cBBS = rb_define_class("BBS", rb_cObject);
-    rb_define_singleton_method(rb_cBBS, "outs", brb_outs, -2);
-    rb_define_singleton_method(rb_cBBS, "title", brb_title, 1);
-    rb_define_singleton_method(rb_cBBS, "print", brb_print, -2);
-    rb_define_singleton_method(rb_cBBS, "getyx", brb_getyx, 0);
-    rb_define_singleton_method(rb_cBBS, "getmaxyx", brb_getmaxyx, 0);
-    rb_define_singleton_method(rb_cBBS, "move", brb_move, 2);
-    rb_define_singleton_method(rb_cBBS, "moverel", brb_moverel, 2);
-    rb_define_singleton_method(rb_cBBS, "clear", brb_clear, 0);
-    rb_define_singleton_method(rb_cBBS, "clrtoeol", brb_clrtoeol, 0);
-    rb_define_singleton_method(rb_cBBS, "clrtobot", brb_clrtobot, 0);
-    rb_define_singleton_method(rb_cBBS, "refresh", brb_refresh, 0);
-    rb_define_singleton_method(rb_cBBS, "vmsg", brb_vmsg, 1);
-    rb_define_singleton_method(rb_cBBS, "pause", brb_pause, 1);
-    rb_define_singleton_method(rb_cBBS, "sitename", brb_name, 0);
-    rb_define_singleton_method(rb_cBBS, "interface", brb_interface, 0);
-    rb_define_singleton_method(rb_cBBS, "toc", brb_toc, 0);
-    rb_define_singleton_method(rb_cBBS, "ansi_color", brb_ansi_color, -2);
-    rb_define_singleton_method(rb_cBBS, "color", brb_color, -2);
-    rb_define_singleton_method(rb_cBBS, "ANSI_RESET", brb_ansi_reset, 0);
-    rb_define_singleton_method(rb_cBBS, "ESC", brb_esc, 0);
-    rb_define_singleton_method(rb_cBBS, "userid", brb_userid, 0);
-    rb_define_singleton_method(rb_cBBS, "getdata", brb_getdata, -2);
-    rb_define_singleton_method(rb_cBBS, "clock", brb_clock, 0);
-    rb_define_singleton_method(rb_cBBS, "getch", brb_getch, 0);
-    rb_define_singleton_method(rb_cBBS, "kbhit", brb_kbhit, 1);
+    rb_define_singleton_method(rb_cBBS, "outs", (VALUE (*)(ANYARGS)) brb_outs, -2);
+    rb_define_singleton_method(rb_cBBS, "title", (VALUE (*)(ANYARGS)) brb_title, 1);
+    rb_define_singleton_method(rb_cBBS, "print", (VALUE (*)(ANYARGS)) brb_print, -2);
+    rb_define_singleton_method(rb_cBBS, "getyx", (VALUE (*)(ANYARGS)) brb_getyx, 0);
+    rb_define_singleton_method(rb_cBBS, "getmaxyx", (VALUE (*)(ANYARGS)) brb_getmaxyx, 0);
+    rb_define_singleton_method(rb_cBBS, "move", (VALUE (*)(ANYARGS)) brb_move, 2);
+    rb_define_singleton_method(rb_cBBS, "moverel", (VALUE (*)(ANYARGS)) brb_moverel, 2);
+    rb_define_singleton_method(rb_cBBS, "clear", (VALUE (*)(ANYARGS)) brb_clear, 0);
+    rb_define_singleton_method(rb_cBBS, "clrtoeol", (VALUE (*)(ANYARGS)) brb_clrtoeol, 0);
+    rb_define_singleton_method(rb_cBBS, "clrtobot", (VALUE (*)(ANYARGS)) brb_clrtobot, 0);
+    rb_define_singleton_method(rb_cBBS, "refresh", (VALUE (*)(ANYARGS)) brb_refresh, 0);
+    rb_define_singleton_method(rb_cBBS, "vmsg", (VALUE (*)(ANYARGS)) brb_vmsg, 1);
+    rb_define_singleton_method(rb_cBBS, "pause", (VALUE (*)(ANYARGS)) brb_pause, 1);
+    rb_define_singleton_method(rb_cBBS, "sitename", (VALUE (*)(ANYARGS)) brb_name, 0);
+    rb_define_singleton_method(rb_cBBS, "interface", (VALUE (*)(ANYARGS)) brb_interface, 0);
+    rb_define_singleton_method(rb_cBBS, "toc", (VALUE (*)(ANYARGS)) brb_toc, 0);
+    rb_define_singleton_method(rb_cBBS, "ansi_color", (VALUE (*)(ANYARGS)) brb_ansi_color, -2);
+    rb_define_singleton_method(rb_cBBS, "color", (VALUE (*)(ANYARGS)) brb_color, -2);
+    rb_define_singleton_method(rb_cBBS, "ANSI_RESET", (VALUE (*)(ANYARGS)) brb_ansi_reset, 0);
+    rb_define_singleton_method(rb_cBBS, "ESC", (VALUE (*)(ANYARGS)) brb_esc, 0);
+    rb_define_singleton_method(rb_cBBS, "userid", (VALUE (*)(ANYARGS)) brb_userid, 0);
+    rb_define_singleton_method(rb_cBBS, "getdata", (VALUE (*)(ANYARGS)) brb_getdata, -2);
+    rb_define_singleton_method(rb_cBBS, "clock", (VALUE (*)(ANYARGS)) brb_clock, 0);
+    rb_define_singleton_method(rb_cBBS, "getch", (VALUE (*)(ANYARGS)) brb_getch, 0);
+    rb_define_singleton_method(rb_cBBS, "kbhit", (VALUE (*)(ANYARGS)) brb_kbhit, 1);
 }
 
 static VALUE bbsruby_eval_code(VALUE eval_args)
@@ -794,8 +794,8 @@ void run_ruby(
         TOCs_DATA[i] = NULL;
     }
 
-    char *cpBuf = malloc(sizeof(char) * (cEnd - cStart) + 1);
-    // char *evalBuf = malloc(sizeof(char) * (cEnd - cStart) + 1 + 10);
+    char *cpBuf = (char *)malloc(sizeof(char) * (cEnd - cStart) + 1);
+    // char *evalBuf = (char *)malloc(sizeof(char) * (cEnd - cStart) + 1 + 10);
     strncpy(cpBuf, cStart, cEnd - cStart);
     cpBuf[cEnd - cStart] = '\0';
     ruby_script_detach(post, pLen);

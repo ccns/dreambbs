@@ -49,7 +49,7 @@ static UCACHE *ushm;
 static inline void
 init_ushm(void)
 {
-    ushm = shm_new(UTMPSHM_KEY, sizeof(UCACHE));
+    ushm = (UCACHE *) shm_new(UTMPSHM_KEY, sizeof(UCACHE));
 }
 
 #if 0  // Unused

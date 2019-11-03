@@ -2386,8 +2386,8 @@ scr_redump(screen_backup_t *psb)
     psb->col= ft.cols;
     psb->y   = ft.y;
     psb->x   = ft.x;
-    p = psb->raw_memory =
-        realloc (psb->raw_memory, ft.rows * ft.cols * (sizeof(ftchar) + sizeof(ftattr)));
+    p = (char *)(psb->raw_memory =
+        realloc (psb->raw_memory, ft.rows * ft.cols * (sizeof(ftchar) + sizeof(ftattr))));
 
     for (y = 0; y < ft.rows; y++)
     {
@@ -2415,7 +2415,7 @@ scr_restore_keep(const screen_backup_t *psb)
     if (!psb || !psb->raw_memory)
         return;
 
-    p = psb->raw_memory;
+    p = (char *)psb->raw_memory;
     c = ranged(c, 0, psb->col);
     r = ranged(r, 0, psb->row);
 

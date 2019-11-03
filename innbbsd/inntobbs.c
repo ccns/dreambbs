@@ -83,7 +83,7 @@ header_value(
     }
 
     key.name = inputheader;
-    findkey = bsearch(&key, (char *) headertable, sizeof(headertable) / sizeof(header_t), sizeof(key), header_cmp);
+    findkey = (header_t *) bsearch(&key, (char *) headertable, sizeof(headertable) / sizeof(header_t), sizeof(key), header_cmp);
     if (findkey != NULL)
         return findkey->id;
 

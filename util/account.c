@@ -77,7 +77,7 @@ bshm_init(void)
     xshm = bshm;
     if (xshm == NULL)
     {
-        bshm = xshm = attach_shm(BRDSHM_KEY, sizeof(BCACHE));
+        bshm = xshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
     }
 
     uptime = &(xshm->uptime);

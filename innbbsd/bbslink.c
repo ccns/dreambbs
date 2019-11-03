@@ -69,7 +69,7 @@ search_nodelist_bynode(
     nodelist_t nl;
 
     str_ncpy(nl.name, name, sizeof(nl.name));
-    return bsearch(&nl, NODELIST, NLCOUNT, sizeof(nodelist_t), nl_bynamecmp);
+    return (nodelist_t *) bsearch(&nl, NODELIST, NLCOUNT, sizeof(nodelist_t), nl_bynamecmp);
 }
 
 
@@ -80,7 +80,7 @@ search_newsfeeds_byboard(
     newsfeeds_t nf;
 
     str_ncpy(nf.board, board, sizeof(nf.board));
-    return bsearch(&nf, NEWSFEEDS_B, NFCOUNT, sizeof(newsfeeds_t), nf_byboardcmp);
+    return (newsfeeds_t *) bsearch(&nf, NEWSFEEDS_B, NFCOUNT, sizeof(newsfeeds_t), nf_byboardcmp);
 }
 
 
