@@ -956,7 +956,7 @@ xo_uquery_lite(
     move(b_lines - 8, 0);
     clrtobot();  /* 避免畫面殘留 */
 
-    prints("\x1b[1;34m"MSG_BLINE"\x1b[m");
+    prints("\x1b[1;34m" MSG_BLINE "\x1b[m");
     prints("\n\x1b[1;33;44m \x1b[37m文章作者及資訊查詢： %*s \x1b[m\n", 55, "");
     prints("\n");
 //  clrtobot();

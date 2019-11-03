@@ -14,7 +14,7 @@
 
 
 /* GCHECK_LOG 必須絕對路徑 */
-#define GCHECK_LOG      BBSHOME"/"FN_GCHECK_LOG
+#define GCHECK_LOG      BBSHOME "/" FN_GCHECK_LOG
 #define GEM_DROP        0x0080
 
 

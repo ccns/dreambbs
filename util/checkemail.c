@@ -146,7 +146,7 @@ main(
     rename(FN_ETC_EMAILADDR_ACL".new", bpath);
     if (argc > 1)
     {
-        sprintf(fpath, "mail %s.bbs@"MYHOSTNAME" < " FN_CHECKMAIL_MAIL, argv[1]);
+        sprintf(fpath, "mail %s.bbs@" MYHOSTNAME " < " FN_CHECKMAIL_MAIL, argv[1]);
         system("mail SYSOP.bbs@" MYHOSTNAME " < " FN_CHECKMAIL_MAIL);
         system("mail Dream_log.brd@" MYHOSTNAME " < " FN_CHECKMAIL_MAIL);
         system(fpath);

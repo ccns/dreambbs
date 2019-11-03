@@ -874,7 +874,7 @@ int select)
     case 2:
         if (ntime.tm_hour != 0 && ntime.tm_hour != 1)
         {
-            system(BINARY_SUFFIX"account; "BINARY_SUFFIX"acpro");
+            system(BINARY_SUFFIX"account; " BINARY_SUFFIX"acpro");
             board_main();
             logitfile(FN_RESET_LOG, "< ¤ÀÃþ¬ÝªO >", NULL);
         }

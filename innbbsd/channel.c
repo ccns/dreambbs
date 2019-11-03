@@ -509,7 +509,7 @@ CMDhelp(
     fprintf(out, "%d Available Commands\r\n", p->normalcode);
     for (p = cmds; p->name; p++)
         fprintf(out, "  %s\r\n", p->usage);
-    fprintf(out, "Report problems to "STR_SYSOP".bbs@"MYHOSTNAME"\r\n");
+    fprintf(out, "Report problems to " STR_SYSOP ".bbs@" MYHOSTNAME "\r\n");
     fputs(".\r\n", out);
     fflush(out);
 }

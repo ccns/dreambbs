@@ -17,7 +17,7 @@
 
 
 /* GINDEX_LOG 必須絕對路徑 */
-#define GINDEX_LOG      BBSHOME"/"FN_GINDEX_LOG
+#define GINDEX_LOG      BBSHOME "/" FN_GINDEX_LOG
 
 
 #define CHRONO_INDEX    1
