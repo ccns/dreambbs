@@ -16,6 +16,10 @@
 /* prototypes                                            */
 /* ----------------------------------------------------- */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* so/admin.c */
 int Admin(void);
 
@@ -167,5 +171,9 @@ int SystemVote(void);
 
 /* so/xyz.c */
 int x_siteinfo(void);
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
 
 #endif  /* #define PROTO_SO_H */

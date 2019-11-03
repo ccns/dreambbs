@@ -7,6 +7,10 @@
 
 typedef unsigned char ftattr;   // primitive attribute type
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 //////////////////////////////////////////////////////////////////////////
 // Flat Terminal API
 //////////////////////////////////////////////////////////////////////////
@@ -89,6 +93,10 @@ void    scr_restore_keep   (const screen_backup_t *psb);
 static inline void  scr_restore   (screen_backup_t *psb) { scr_restore_free(psb); }
 
 void move_ansi(int y, int x);
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
 
 
 #endif // PFTERM_H

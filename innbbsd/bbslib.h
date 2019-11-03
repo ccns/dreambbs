@@ -27,6 +27,10 @@
   #endif
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* bbslib.c */
 extern int NLCOUNT;
 extern nodelist_t *NODELIST;
@@ -59,6 +63,10 @@ extern int receive_article(void);
 #ifdef NoCeM
 extern int receive_nocem(void);
 extern int read_ncmperm(void);
+#endif
+
+#ifdef __cplusplus
+}  /* extern "C" */
 #endif
 
 #endif  /* BBSLIB_H */

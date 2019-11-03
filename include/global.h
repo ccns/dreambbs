@@ -401,6 +401,11 @@
 /* ----------------------------------------------------- */
 /* GLOBAL VARIABLE                                       */
 /* ----------------------------------------------------- */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 VAR pid_t currpid;              /* current process ID */
 VAR unsigned int bbsmode;       /* bbs operating mode, see modes.h */
 VAR int bbstate;                /* bbs operating state */
@@ -478,5 +483,9 @@ VAR int total_num;                  /* 重設 站上人數*/
 #undef  INI
 
 extern char xo_pool[];          /* XO's data I/O pool */
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif
 
 #endif                          /* GLOBAL_H */

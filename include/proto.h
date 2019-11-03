@@ -20,6 +20,10 @@
 #include "pfterm.h"
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* ----------------------------------------------------- */
 /* External function declarations                        */
 /* ----------------------------------------------------- */
@@ -330,6 +334,10 @@ int myfavorite_find_chn(const char *brdname);
 void myfavorite_parse(char *fpath);
 void myfavorite_main(void);
 int class_add(XO *xo);
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
 
 /* ----------------------------------------------------- */
 /* macros                                                */

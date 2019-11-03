@@ -143,10 +143,16 @@
 //////////////////////////////////////////////////////////////////////////
 
 #ifdef BBSLUA_HAVE_SYNCNOW
+ #ifdef __cplusplus
+extern "C" {
+ #endif
  #ifdef BBSLUA_FORCE_TIME4_T
 extern time4_t now;
  #else
 extern time_t now;
+ #endif
+ #ifdef __cplusplus
+}  /* extern "C" */
  #endif
 #endif
 
@@ -379,6 +385,9 @@ newwin(int nlines, int ncols, int y, int x)
 //                  give it a simplified one.
 
 #ifdef BBSLUA_EXPOSED_VISIO_VI
+#ifdef __cplusplus
+extern "C" {
+#endif
 // IID.20190502: Using visio internal variables.
 extern const int vi_max;
 extern unsigned char vi_pool[];
@@ -387,6 +396,10 @@ extern int vi_head;
 #ifdef BBSLUA_EXPOSED_VISIO_IDLE
 extern int idle;
 #endif
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
+
 
 static int vin_is_empty(void)
 {

@@ -26,6 +26,10 @@ extern const char radix32[32];
 #include "dns.h"                        /* dns type */
 #include "splay.h"                      /* splay type */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* acl.c */
 int acl_addr(const char *acl, const char *addr);
 int acl_has(const char *acl, const char *user, const char *host);
@@ -154,5 +158,9 @@ char *Now(void);
 void syncnow(void);
 /* xwrite.c */
 int xwrite(int fd, const char *data, int size);
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
 
 #endif  /* DAO_H */

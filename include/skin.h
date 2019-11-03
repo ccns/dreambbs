@@ -17,8 +17,16 @@
 # define INI(x)
 #endif
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 VAR void (*s_menu)(void);
 VAR int skin INI(1);
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
 
 #undef  VAR
 #undef  INI

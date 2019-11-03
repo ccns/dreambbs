@@ -1400,11 +1400,18 @@ grayout(int y, int end, int level)
 /* ----------------------------------------------------- */
 
 // IID.20190502: Exposed to BBS-Lua/BBS-Ruby.
+#ifdef __cplusplus
+extern "C" {
+#endif
+extern const int vi_max;
 const int vi_max = VI_MAX;
 unsigned char vi_pool[VI_MAX];
 int vi_size;
 int vi_head;
 int idle;
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
 
 
 /* static int vio_fd; */

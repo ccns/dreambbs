@@ -39,9 +39,15 @@
 
 #ifndef PFTERM_HAVE_VKEY
  #ifdef PFTERM_EXPOSED_VISIO_VI
+  #ifdef __cplusplus
+extern "C" {
+  #endif
 // Use visio internal variables
 extern int vi_size;
 extern int vi_head;
+  #ifdef __cplusplus
+}  /* extern "C" */
+  #endif
 
 static int vkey_is_typeahead(void)
 {

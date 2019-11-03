@@ -26,6 +26,9 @@
 #define MAXSPAMMID      10000
 #define LINELEN         512
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /* bbslib.c */
 extern ncmperm_t *NCMPERM;
@@ -37,5 +40,9 @@ extern newsfeeds_t *search_newsfeeds_bygroup(const char *newsgroup);
 /* nocem.c */
 GCC_PURE extern ncmperm_t *search_issuer(const char *issuer, const char *type);
 extern int receive_nocem(void);
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
 
 #endif  /* NOCEM_H */
