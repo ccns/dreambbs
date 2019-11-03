@@ -492,7 +492,7 @@ personal_open(
     strcpy(newboard.brdname, personal->brdname);
     sprintf(newboard.title, "○ %s", personal->brdtitle);
     newboard.color = 7;
-    strcpy(newboard.class, "個人");
+    strcpy(newboard.class_, "個人");
     strcpy(newboard.BM, personal->userid);
     time(&newboard.bstamp);
 //  newboard.readlevel |= PERM_SYSOP;

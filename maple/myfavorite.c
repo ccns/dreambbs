@@ -195,11 +195,11 @@ myfavorite_item(
 
             //sprintf(buf, "%d;3%d", brd->color/10, brd->color%10);
             prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-*.*s%s%.13s\n", num, str,
-                brdtype, brd->brdname, buf, brd->class, d_cols + 33, d_cols + 32, brd->title, brd->bvote ? "\x1b[1;33m  зы\x1b[m " : str2, brd->BM);
+                brdtype, brd->brdname, buf, brd->class_, d_cols + 33, d_cols + 32, brd->title, brd->bvote ? "\x1b[1;33m  зы\x1b[m " : str2, brd->BM);
 
             //prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-*.*s%c %.13s\n", num, str,
                 //bits[chn] & BRD_Z_BIT ? '-' : ' ', brd->brdname,
-                //buf, brd->class, d_cols + 36, d_cols + 36, brd->title, brd->bvote ? 'V' : ' ', brd->BM);
+                //buf, brd->class_, d_cols + 36, d_cols + 36, brd->title, brd->bvote ? 'V' : ' ', brd->BM);
 
         }
     }
@@ -789,10 +789,10 @@ myfavorite_main(void)
     usr_fpath(fpath, cuser.userid, "MF");
     if (!mkdir(fpath, 0700))
     {
-        char old[80], new[80];
+        char old[80], new_[80];
         usr_fpath(old, cuser.userid, FN_FAVORITE);
-        usr_fpath(new, cuser.userid, FN_MYFAVORITE);
-        f_cp(old, new, 0600);
+        usr_fpath(new_, cuser.userid, FN_MYFAVORITE);
+        f_cp(old, new_, 0600);
     }
 
     usr_fpath(fpath, cuser.userid, FN_MYFAVORITE);

@@ -14,7 +14,7 @@
 typedef struct
 {
     unsigned int old;
-    unsigned int new;
+    unsigned int new_;
 }       TABLE;
 
 const TABLE table[] = {
@@ -78,9 +78,9 @@ reaper(
     for (ptr = table; ptr->old; ptr++)
     {
         if (acct.ufo & ptr->old)
-            acct.ufo2 |= ptr->new;
+            acct.ufo2 |= ptr->new_;
         else
-            acct.ufo2 &= ~ptr->new;
+            acct.ufo2 &= ~ptr->new_;
     }
     printf("%-14.14s : ufo) %#18.18x ufo2) %#18.18x\n", acct.userid, acct.ufo, acct.ufo2);
     acct_save(&acct);

@@ -220,46 +220,46 @@ trans_ufo2(
 static void
 trans_acct(
     const OLD *old,
-    NEW *new)
+    NEW *new_)
 {
-    memset(new, 0, sizeof(NEW));
+    memset(new_, 0, sizeof(NEW));
 
-    new->userno = old->userno;
+    new_->userno = old->userno;
 
-    str_ncpy(new->userid, old->userid, sizeof(new->userid));
-    str_ncpy(new->passwd, old->passwd, sizeof(new->passwd));
-    str_ncpy(new->realname, old->realname, sizeof(new->realname));
-    str_ncpy(new->username, old->username, sizeof(new->username));
+    str_ncpy(new_->userid, old->userid, sizeof(new_->userid));
+    str_ncpy(new_->passwd, old->passwd, sizeof(new_->passwd));
+    str_ncpy(new_->realname, old->realname, sizeof(new_->realname));
+    str_ncpy(new_->username, old->username, sizeof(new_->username));
 
-    new->userlevel = old->userlevel;
-    new->ufo = old->ufo;
-    new->signature = old->signature;
-    new->ufo2 = trans_ufo2(old->ufo2);
+    new_->userlevel = old->userlevel;
+    new_->ufo = old->ufo;
+    new_->signature = old->signature;
+    new_->ufo2 = trans_ufo2(old->ufo2);
 
-    new->numlogins = old->numlogins;
-    new->numposts = old->numposts;
-    new->numemail = old->numemail;
+    new_->numlogins = old->numlogins;
+    new_->numposts = old->numposts;
+    new_->numemail = old->numemail;
 
-    new->firstlogin = old->firstlogin;
-    new->lastlogin = old->lastlogin;
-    new->tcheck = old->tcheck;
-    new->staytime = old->staytime;
-    new->tvalid = old->tvalid;
-    new->deny = old->deny;
-    new->vtime = old->vtime;
+    new_->firstlogin = old->firstlogin;
+    new_->lastlogin = old->lastlogin;
+    new_->tcheck = old->tcheck;
+    new_->staytime = old->staytime;
+    new_->tvalid = old->tvalid;
+    new_->deny = old->deny;
+    new_->vtime = old->vtime;
 
-    str_ncpy(new->lasthost, old->lasthost, sizeof(new->lasthost));
-    str_ncpy(new->email, old->email, sizeof(new->email));
-    str_ncpy(new->address, old->address, sizeof(new->address));
-    str_ncpy(new->justify, old->justify, sizeof(new->justify));
-    str_ncpy(new->vmail, old->vmail, sizeof(new->vmail));
-    str_ncpy(new->ident, old->ident, sizeof(new->ident));
+    str_ncpy(new_->lasthost, old->lasthost, sizeof(new_->lasthost));
+    str_ncpy(new_->email, old->email, sizeof(new_->email));
+    str_ncpy(new_->address, old->address, sizeof(new_->address));
+    str_ncpy(new_->justify, old->justify, sizeof(new_->justify));
+    str_ncpy(new_->vmail, old->vmail, sizeof(new_->vmail));
+    str_ncpy(new_->ident, old->ident, sizeof(new_->ident));
 
-    new->request = (int)m3;
-    new->money  = (int)m1;
+    new_->request = (int)m3;
+    new_->money  = (int)m1;
 
-    new->point1 =0;           /* 優良積分 */
-    new->point2 =0;           /* 劣文 */
+    new_->point1 =0;           /* 優良積分 */
+    new_->point2 =0;           /* 劣文 */
 
 }
 
@@ -275,7 +275,7 @@ main(
     int argc,
     char *argv[])
 {
-    NEW new;
+    NEW new_;
     MONEY oldwealth;
     char c;
 
@@ -336,10 +336,10 @@ main(
             close(fd);
             unlink(buf);                    /* itoc.010831: 砍掉原來的 FN_ACCT */
 
-            trans_acct(&old, &new);
+            trans_acct(&old, &new_);
 
             fd = open(buf, O_WRONLY | O_CREAT, 0600);       /* itoc.010831: 重建新的 FN_ACCT */
-            write(fd, &new, sizeof(NEW));
+            write(fd, &new_, sizeof(NEW));
             close(fd);
 
         }

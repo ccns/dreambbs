@@ -22,7 +22,7 @@ typedef struct BoardHeaderOld
     char brdname[IDLEN + 1];      /* board ID */
     char title[BTLEN + 1];
     char color;
-    char class[5];
+    char class_[5];
     char BM[BMLEN + 1];           /* BMs' uid, token '/' */
 
     unsigned char bvote;          /* 共有幾項投票舉行中 */
@@ -140,7 +140,7 @@ main(
             brd.expireday = key->days;
         }
 
-        printf("%04d %-13s %-5s %-40s %-20s %5u %5u %5u\n", num, brd.brdname, brd.class, brd.title, brd.BM, brd.expiremax, brd.expiremin, brd.expireday);
+        printf("%04d %-13s %-5s %-40s %-20s %5u %5u %5u\n", num, brd.brdname, brd.class_, brd.title, brd.BM, brd.expiremax, brd.expiremin, brd.expireday);
 
         write(outf, &brd, sizeof(BRD));
     }

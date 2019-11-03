@@ -178,9 +178,9 @@ int f_mv(const char *src, const char *dst)
 
 FILE *f_new(const char *fold, char *fnew)
 {
-    int fd, try;
+    int fd, try_;
 
-    try = 0;
+    try_ = 0;
     str_cat(fnew, fold, ".n");
 
     for (;;)
@@ -193,7 +193,7 @@ FILE *f_new(const char *fold, char *fnew)
         if (errno != EEXIST)
             break;
 
-        if (!try++)
+        if (!try_++)
         {
             struct stat st;
 
@@ -204,7 +204,7 @@ FILE *f_new(const char *fold, char *fnew)
         }
         else
         {
-            if (try > 24)        /* 데ポ 120 ы컨 */
+            if (try_ > 24)        /* 데ポ 120 ы컨 */
                 break;
             sleep(5);
         }

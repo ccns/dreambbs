@@ -97,7 +97,7 @@ log_modes(void)
 typedef struct
 {
     unsigned int old;
-    unsigned int new;
+    unsigned int new_;
 }       TABLE;
 
 const TABLE table[] = {
@@ -205,9 +205,9 @@ u_exit(
                 for (ptr = table; ptr->old; ptr++)
                 {
                     if (cuser.ufo & ptr->old)
-                        cuser.ufo2 |= ptr->new;
+                        cuser.ufo2 |= ptr->new_;
                     else
-                        cuser.ufo2 &= ~ptr->new;
+                        cuser.ufo2 &= ~ptr->new_;
                 }
             }
 #endif
@@ -350,13 +350,13 @@ acct_apply(void)
     SCHEMA slot;
     char buf[80];
     char *userid, *pw;
-    int try, fd;
+    int try_, fd;
 
     film_out(FILM_APPLY, 0);
 
     memset(&cuser, 0, sizeof(cuser));
     userid = cuser.userid;
-    try = 0;
+    try_ = 0;
     for (;;)
     {
         if (!vget(17, 0, msg_uid, userid, IDLEN + 1, DOECHO))
@@ -375,19 +375,19 @@ acct_apply(void)
                 break;
         }
 
-        if (++try >= 10)
+        if (++try_ >= 10)
             login_abort("\n您嘗試錯誤的輸入太多，請下次再來吧");
     }
 
     /* IID.20190530: For the forward compatibility of older versions */
     if (vget(18, 0, "是否使用新式密碼加密(y/N)？[N]", buf, 3, LCECHO) == 'y')
     {
-        try = GENPASSWD_SHA256;
+        try_ = GENPASSWD_SHA256;
         fd = PLAINPASSLEN;
     }
     else
     {
-        try = GENPASSWD_DES;
+        try_ = GENPASSWD_DES;
         fd = OLDPLAINPASSLEN;
     }
 
@@ -407,7 +407,7 @@ acct_apply(void)
         vmsg("密碼輸入錯誤，請重新輸入密碼");
     }
 
-    str_ncpy(cuser.passwd, pw = genpasswd(buf, try), PASSLEN);
+    str_ncpy(cuser.passwd, pw = genpasswd(buf, try_), PASSLEN);
     str_ncpy(cuser.passhash, pw + PASSLEN, sizeof(cuser.passhash));
 
     do
@@ -446,7 +446,7 @@ acct_apply(void)
         /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
         f_exlock(fd);
 
-        cuser.userno = try = uniq_userno(fd);
+        cuser.userno = try_ = uniq_userno(fd);
         write(fd, &slot, sizeof(slot));
         /* flock(fd, LOCK_UN); */
         /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
@@ -467,7 +467,7 @@ acct_apply(void)
     close(fd);
     /* Thor.990416: 注意: 怎麼會有 .ACCT長度是0的, 而且只有 @目錄, 持續觀察中 */
 
-    sprintf(buf, "%d", try);
+    sprintf(buf, "%d", try_);
     blog("APPLY", buf);
 }
 

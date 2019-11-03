@@ -510,7 +510,7 @@ typedef struct BoardHeader
     char brdname[IDLEN + 1];    /* board ID */
     char title[BTLEN + 1];
     char color;
-    char class[5];
+    char class_[5];
     char BM[BMLEN + 1];         /* BMs' uid, token '/' */
 
     unsigned char bvote;        /* 共有幾項投票舉行中 */
@@ -862,7 +862,7 @@ typedef struct
     int lost;
     char name[9];
     char teacher[9];
-    char class[5];
+    char class_[5];
     char obj_id[7];
 }   CLASS;
 

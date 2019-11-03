@@ -2100,7 +2100,7 @@ static int m_setbrd(BRD * brd)
 
     data = buf;
     vget(++i, 0, "看板主題：", brd->title, BTLEN + 1, GCARRY);
-    vget(++i, 0, "類別：", brd->class, 5, GCARRY);
+    vget(++i, 0, "類別：", brd->class_, 5, GCARRY);
     sprintf(data, "%02d", brd->color);
     vget(++i, 0, "顏色格式 X.亮度(0~1) Y.顏色(0~7) [XY]：", data, 3, GCARRY);
     if (data[0] < '0' || data[0] > '1')
@@ -2274,7 +2274,7 @@ void brd_edit(int bno)
     memcpy(&newbh, bhdr, sizeof(BRD));
     prints("看板名稱：%s\n看板說明：%s\n板主名單：%s\n",
            newbh.brdname, newbh.title, newbh.BM);
-    prints("看板類別：[%4s] 類別顏色：%d\n", newbh.class, newbh.color);
+    prints("看板類別：[%4s] 類別顏色：%d\n", newbh.class_, newbh.color);
     prints("文章數目：[最大] %u [最小] %u [天數] %u\n", newbh.expiremax,
            newbh.expiremin, newbh.expireday);
 

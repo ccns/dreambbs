@@ -31,15 +31,15 @@ aloha_find(
 const char *fpath,
 const ALOHA *aloha)
 {
-    ALOHA new;
+    ALOHA new_;
     int pos = 0, fd;
     fd = open(fpath, O_RDONLY);
     while (fd >= 0)
     {
         lseek(fd, (off_t)(sizeof(ALOHA) * pos), SEEK_SET);
-        if (read(fd, &new, sizeof(ALOHA)) == sizeof(ALOHA))
+        if (read(fd, &new_, sizeof(ALOHA)) == sizeof(ALOHA))
         {
-            if (aloha->userno == new.userno)
+            if (aloha->userno == new_.userno)
             {
                 close(fd);
                 return 1;

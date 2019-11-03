@@ -661,7 +661,7 @@ ve_ansi(void)
 
 static textline *
 ve_line(
-    textline *this,
+    textline *this_,
     const char *str)
 {
     int cc, len;
@@ -708,12 +708,12 @@ ve_line(
 
         *data = '\0';
         line->len = len;
-        line->prev = this;
-        this = this->next = line;
+        line->prev = this_;
+        this_ = this_->next = line;
 
     } while (cc);
 
-    return this;
+    return this_;
 }
 
 
@@ -771,25 +771,25 @@ tbf_open(int n)
 
 static textline *
 ve_load(
-    textline *this,
+    textline *this_,
     int fd)
 {
     char *str;
     textline *next;
 
-    next = this->next;
+    next = this_->next;
 
     mgets(-1);
     while ((str = mgets(fd)))
     {
-        this = ve_line(this, str);
+        this_ = ve_line(this_, str);
     }
 
-    this->next = next;
+    this_->next = next;
     if (next)
-        next->prev = this;
+        next->prev = this_;
 
-    return this;
+    return this_;
 }
 
 
@@ -1011,7 +1011,7 @@ words_check(void)
 
 static void
 ve_quote(
-    textline *this)
+    textline *this_)
 {
     int fd, op;
     FILE *fp;
@@ -1019,7 +1019,7 @@ ve_quote(
     char *str, buf[256];
     static char msg[] = "選擇簽名檔 (1/2/3, 0=不加)[0]：";
 
-    next = this->next;
+    next = this_->next;
 
     /* --------------------------------------------------- */
     /* 引言                                                */
@@ -1049,7 +1049,7 @@ ve_quote(
 
                     sprintf(str, "※ 引述《%s%s》之銘言：", quote_user, buf + 128);
 
-                    this = ve_line(this, str);
+                    this_ = ve_line(this_, str);
 
                     while (fgets(str, 256, fp) && *str != '\n');
 
@@ -1072,7 +1072,7 @@ ve_quote(
                 if (op == 'a')
                 {
                     while (fgets(str, 254, fp))
-                        this = ve_line(this, buf);
+                        this_ = ve_line(this_, buf);
                 }
                 else
                 {
@@ -1081,7 +1081,7 @@ ve_quote(
                         if (is_quoted(str))     /* "--\n" */
                             break;
                         if (quote_line(str, op))
-                            this = ve_line(this, buf);
+                            this_ = ve_line(this_, buf);
                     }
                 }
                 fclose(fp);
@@ -1090,7 +1090,7 @@ ve_quote(
         *quote_file = '\0';
     }
 
-    this = ve_line(this, "");
+    this_ = ve_line(this_, "");
 
     /* --------------------------------------------------- */
     /* 簽名檔                                              */
@@ -1128,10 +1128,10 @@ ve_quote(
 
                 if (op == -1)
                 {
-                    this = ve_line(this, "--");
+                    this_ = ve_line(this_, "--");
                 }
 
-                this = ve_line(this, str);
+                this_ = ve_line(this_, str);
 
                 if (op <= -MAXSIGLINES)
                     break;
@@ -1144,9 +1144,9 @@ ve_quote(
 OUT_ve_quote:
 #endif
 
-    this->next = next;
+    this_->next = next;
     if (next)
-        next->prev = this;
+        next->prev = this_;
 }
 
 

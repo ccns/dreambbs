@@ -2484,11 +2484,11 @@ static int pip_job_workA(void)
     /*  ├────┼──────────────────────┤*/
     /*  │家庭管理│若 體    力 - RND (疲勞) >=   5 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     long workmoney;
 
     workmoney = 0;
-    class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     d.maxhp += random() % 2 * LEARN_LEVEL;
     d.shit += random() % 3 + 5;
     count_tired(3, 7, "Y", 100, 1);
@@ -2499,7 +2499,7 @@ static int pip_job_workA(void)
     if (d.affect <= 0)
         d.affect = 0;
     show_job_pic(11);
-    if (class >= 75)
+    if (class_ >= 75)
     {
         d.cookskill += random() % 2 + 7;
         d.homework += random() % 2 + 7;
@@ -2508,7 +2508,7 @@ static int pip_job_workA(void)
         workmoney = 80 + (d.cookskill * 2 + d.homework + d.family) / 40;
         vmsg("家事很成功\喔..多一點錢給你..");
     }
-    else if (class < 75 && class >= 50)
+    else if (class_ < 75 && class_ >= 50)
     {
         d.cookskill += random() % 2 + 5;
         d.homework += random() % 2 + 5;
@@ -2517,7 +2517,7 @@ static int pip_job_workA(void)
         workmoney = 60 + (d.cookskill * 2 + d.homework + d.family) / 45;
         vmsg("家事還蠻順利的唷..嗯嗯..");
     }
-    else if (class < 50 && class >= 25)
+    else if (class_ < 50 && class_ >= 25)
     {
         d.cookskill += random() % 3 + 3;
         d.homework += random() % 3 + 3;
@@ -2526,7 +2526,7 @@ static int pip_job_workA(void)
         workmoney = 40 + (d.cookskill * 2 + d.homework + d.family) / 50;
         vmsg("家事普普通通啦..可以更好的..加油..");
     }
-    else if (class < 25)
+    else if (class_ < 25)
     {
         d.cookskill += random() % 3 + 1;
         d.homework += random() % 3 + 1;
@@ -2547,11 +2547,11 @@ static int pip_job_workB(void)
     /*  ├────┼──────────────────────┤*/
     /*  │育幼院  │若 體    力 - RND (疲勞) >=  20 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     long workmoney;
 
     workmoney = 0;
-    class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     d.maxhp += (random() % 2 + 1) * LEARN_LEVEL;
     d.shit += random() % 3 + 5;
     d.affect += random() % 3 + 4;
@@ -2564,28 +2564,28 @@ static int pip_job_workB(void)
     if (d.charm <= 0)
         d.charm = 0;
     show_job_pic(21);
-    if (class >= 90)
+    if (class_ >= 90)
     {
         d.love += random() % 2 + 7;
         d.toman += random() % 2 + 2;
         workmoney = 150 + (d.love + d.toman) / 50;
         vmsg("當保姆很成功\喔..下次再來喔..");
     }
-    else if (class < 90 && class >= 75)
+    else if (class_ < 90 && class_ >= 75)
     {
         d.love += random() % 2 + 5;
         d.toman += random() % 2 + 2;
         workmoney = 120 + (d.love + d.toman) / 50;
         vmsg("保姆還當的不錯唷..嗯嗯..");
     }
-    else if (class < 75 && class >= 50)
+    else if (class_ < 75 && class_ >= 50)
     {
         d.love += random() % 2 + 3;
         d.toman += random() % 2 + 1;
         workmoney = 100 + (d.love + d.toman) / 50;
         vmsg("小朋友很皮喔..加油..");
     }
-    else if (class < 50)
+    else if (class_ < 50)
     {
         d.love += random() % 2 + 1;
         d.toman += random() % 2 + 1;
@@ -2604,11 +2604,11 @@ static int pip_job_workC(void)
     /*  ├────┼──────────────────────┤*/
     /*  │旅館    │若 體    力 - RND (疲勞) >=  30 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     long workmoney;
 
     workmoney = 0;
-    class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     d.maxhp += (random() % 2 + 2) * LEARN_LEVEL;
     d.shit += random() % 3 + 5;
     count_tired(5, 12, "Y", 100, 1);
@@ -2616,7 +2616,7 @@ static int pip_job_workC(void)
     d.happy -= (random() % 3 + 4);
     d.satisfy -= random() % 3 + 4;
     show_job_pic(31);
-    if (class >= 95)
+    if (class_ >= 95)
     {
         d.homework += random() % 2 + 7;
         d.family += random() % 2 + 4;
@@ -2626,7 +2626,7 @@ static int pip_job_workC(void)
         workmoney = 250 + (d.cookskill * 2 + d.homework * 2) / 40;
         vmsg("旅館事業蒸蒸日上..希望你再過來...");
     }
-    else if (class < 95 && class >= 80)
+    else if (class_ < 95 && class_ >= 80)
     {
         d.homework += random() % 2 + 5;
         d.family += random() % 2 + 3;
@@ -2636,7 +2636,7 @@ static int pip_job_workC(void)
         workmoney = 200 + (d.cookskill * 2 + d.homework * 2) / 50;
         vmsg("旅館還蠻順利的唷..嗯嗯..");
     }
-    else if (class < 80 && class >= 60)
+    else if (class_ < 80 && class_ >= 60)
     {
         d.homework += random() % 2 + 3;
         d.family += random() % 2 + 3;
@@ -2646,7 +2646,7 @@ static int pip_job_workC(void)
         workmoney = 150 + (d.cookskill * 2 + d.homework * 2) / 50;
         vmsg("普普通通啦..可以更好的..加油..");
     }
-    else if (class < 60)
+    else if (class_ < 60)
     {
         d.homework += random() % 2 + 1;
         d.family += random() % 2 + 1;
@@ -2668,11 +2668,11 @@ static int pip_job_workD(void)
     /*  ├────┼──────────────────────┤*/
     /*  │農場    │若 體    力 - RND (疲勞) >=  30 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     long workmoney;
 
     workmoney = 0;
-    class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     d.maxhp += (random() % 3 + 2) * LEARN_LEVEL;
     d.wrist += random() % 2 + 2;
     d.shit += random() % 5 + 10;
@@ -2684,22 +2684,22 @@ static int pip_job_workD(void)
     if (d.character < 0)
         d.character = 0;
     show_job_pic(41);
-    if (class >= 95)
+    if (class_ >= 95)
     {
         workmoney = 250 + (d.wrist * 2 + d.hp * 2) / 80;
         vmsg("牛羊長的好好喔..希望你再來幫忙...");
     }
-    else if (class < 95 && class >= 80)
+    else if (class_ < 95 && class_ >= 80)
     {
         workmoney = 210 + (d.wrist * 2 + d.hp * 2) / 80;
         vmsg("呵呵..還不錯喔..:)");
     }
-    else if (class < 80 && class >= 60)
+    else if (class_ < 80 && class_ >= 60)
     {
         workmoney = 160 + (d.wrist * 2 + d.hp * 2) / 80;
         vmsg("普普通通啦..可以更好的..");
     }
-    else if (class < 60)
+    else if (class_ < 60)
     {
         workmoney = 120 + (d.wrist * 2 + d.hp * 2) / 80;
         vmsg("你不太適合農場的工作  -_-...");
@@ -2716,11 +2716,11 @@ static int pip_job_workE(void)
     /*  ├────┼──────────────────────┤*/
     /*  │餐廳    │若 烹飪技術 - RND (疲勞) >=  50 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     long workmoney;
 
     workmoney = 0;
-    class = (d.cookskill - d.tired) * LEARN_LEVEL;
+    class_ = (d.cookskill - d.tired) * LEARN_LEVEL;
     d.maxhp += (random() % 2 + 1) * LEARN_LEVEL;
     d.shit += random() % 4 + 12;
     count_tired(5, 9, "Y", 100, 1);
@@ -2728,7 +2728,7 @@ static int pip_job_workE(void)
     d.happy -= (random() % 3 + 4);
     d.satisfy -= random() % 3 + 4;
     show_job_pic(51);
-    if (class >= 80)
+    if (class_ >= 80)
     {
         d.homework += random() % 2 + 1;
         d.family += random() % 2 + 1;
@@ -2739,7 +2739,7 @@ static int pip_job_workE(void)
         workmoney = 250 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
         vmsg("客人都說太好吃了..再來一盤吧...");
     }
-    else if (class < 80 && class >= 60)
+    else if (class_ < 80 && class_ >= 60)
     {
         d.homework += random() % 2 + 1;
         d.family += random() % 2 + 1;
@@ -2750,7 +2750,7 @@ static int pip_job_workE(void)
         workmoney = 200 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
         vmsg("煮的還不錯吃唷..:)");
     }
-    else if (class < 60 && class >= 30)
+    else if (class_ < 60 && class_ >= 30)
     {
         d.homework += random() % 2 + 1;
         d.family += random() % 2 + 1;
@@ -2761,7 +2761,7 @@ static int pip_job_workE(void)
         workmoney = 150 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
         vmsg("普普通通啦..可以更好的..");
     }
-    else if (class < 30)
+    else if (class_ < 30)
     {
         d.homework += random() % 2 + 1;
         d.family += random() % 2 + 1;
@@ -2782,11 +2782,11 @@ static int pip_job_workF(void)
     /*  ├────┼──────────────────────┤*/
     /*  │教堂    │信仰 + 2, 道德 + 1, 罪孽 - 2, 疲勞 + 1      │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     long workmoney;
 
     workmoney = 0;
-    class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     count_tired(5, 7, "Y", 100, 1);
     d.love += (random() % 3 + 4) * LEARN_LEVEL;
     d.belief += (random() % 4 + 7) * LEARN_LEVEL;
@@ -2797,22 +2797,22 @@ static int pip_job_workF(void)
     if (d.offense < 0)
         d.offense = 0;
     show_job_pic(61);
-    if (class >= 75)
+    if (class_ >= 75)
     {
         workmoney = 100 + (d.belief + d.ethics - d.offense) / 20;
         vmsg("錢很少 但看你這麼認真 給你多一點...");
     }
-    else if (class < 75 && class >= 50)
+    else if (class_ < 75 && class_ >= 50)
     {
         workmoney = 75 + (d.belief + d.ethics - d.offense) / 20;
         vmsg("謝謝你的熱心幫忙..:)");
     }
-    else if (class < 50 && class >= 25)
+    else if (class_ < 50 && class_ >= 25)
     {
         workmoney = 50 + (d.belief + d.ethics - d.offense) / 20;
         vmsg("你真的很有愛心啦..不過有點小累的樣子...");
     }
-    else if (class < 25)
+    else if (class_ < 25)
     {
         workmoney = 25 + (d.belief + d.ethics - d.offense) / 20;
         vmsg("來奉獻不錯..但也不能打混ㄚ....:(");
@@ -2856,7 +2856,7 @@ static int pip_job_workH(void)
     /*  ├────┼──────────────────────┤*/
     /*  │伐木場  │若 腕    力 - RND (疲勞) >=  80 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     long workmoney;
 
     if ((d.bbtime / 60 / 30) < 1) /*一歲才行*/
@@ -2865,7 +2865,7 @@ static int pip_job_workH(void)
         return 0;
     }
     workmoney = 0;
-    class = (d.wrist - d.tired) * LEARN_LEVEL;
+    class_ = (d.wrist - d.tired) * LEARN_LEVEL;
     d.maxhp += (random() % 2 + 3) * LEARN_LEVEL;
     d.shit += random() % 7 + 15;
     d.wrist += (random() % 3 + 4) * LEARN_LEVEL;
@@ -2877,22 +2877,22 @@ static int pip_job_workH(void)
     if (d.character < 0)
         d.character = 0;
     show_job_pic(81);
-    if (class >= 70)
+    if (class_ >= 70)
     {
         workmoney = 350 + d.wrist / 20 + d.maxhp / 80;
         vmsg("你腕力很好唷..:)");
     }
-    else if (class < 70 && class >= 50)
+    else if (class_ < 70 && class_ >= 50)
     {
         workmoney = 300 + d.wrist / 20 + d.maxhp / 80;
         vmsg("砍了不少樹喔.....:)");
     }
-    else if (class < 50 && class >= 20)
+    else if (class_ < 50 && class_ >= 20)
     {
         workmoney = 250 + d.wrist / 20 + d.maxhp / 80;
         vmsg("普普通通啦..可以更好的..");
     }
-    else if (class < 20)
+    else if (class_ < 20)
     {
         workmoney = 200 + d.wrist / 20 + d.maxhp / 80;
         vmsg("待加強喔..鍛鍊再來吧....");
@@ -2909,7 +2909,7 @@ static int pip_job_workI(void)
     /*  ├────┼──────────────────────┤*/
     /*  │美容院  │若 藝術修養 - RND (疲勞) >=  40 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     long workmoney;
 
     if ((d.bbtime / 60 / 30) < 1) /*一歲才行*/
@@ -2918,7 +2918,7 @@ static int pip_job_workI(void)
         return 0;
     }
     workmoney = 0;
-    class = (d.art - d.tired) * LEARN_LEVEL;
+    class_ = (d.art - d.tired) * LEARN_LEVEL;
     d.maxhp += (random() % 2) * LEARN_LEVEL;
     d.affect += (random() % 2 + 3) * LEARN_LEVEL;
     count_tired(3, 11, "Y", 100, 1);
@@ -2930,22 +2930,22 @@ static int pip_job_workI(void)
     if (d.wrist < 0)
         d.wrist = 0;
     /*show_job_pic(4);*/
-    if (class >= 80)
+    if (class_ >= 80)
     {
         workmoney = 400 + d.art / 10 + d.affect / 20;
         vmsg("客人都很喜歡讓你做造型唷..:)");
     }
-    else if (class < 80 && class >= 60)
+    else if (class_ < 80 && class_ >= 60)
     {
         workmoney = 360 + d.art / 10 + d.affect / 20;
         vmsg("做的不錯喔..頗有天份...:)");
     }
-    else if (class < 60 && class >= 40)
+    else if (class_ < 60 && class_ >= 40)
     {
         workmoney = 320 + d.art / 10 + d.affect / 20;
         vmsg("馬馬虎虎啦..再加油一點..");
     }
-    else if (class < 40)
+    else if (class_ < 40)
     {
         workmoney = 250 + d.art / 10 + d.affect / 20;
         vmsg("待加強喔..以後再來吧....");
@@ -2964,7 +2964,7 @@ static int pip_job_workJ(void)
     /*  │狩獵區  │若 體    力 - RND (疲勞) >=  80 ＆          │*/
     /*  │        │若 智    力 - RND (疲勞) >=  40 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     float class1;
     long workmoney;
 
@@ -2975,7 +2975,7 @@ static int pip_job_workJ(void)
         return 0;
     }
     workmoney = 0;
-    class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     class1 = (d.wisdom - d.tired) * LEARN_LEVEL;
     count_tired(5, 15, "Y", 100, 1);
     d.shit += random() % 4 + 13;
@@ -2993,31 +2993,31 @@ static int pip_job_workJ(void)
         d.love = 0;
     move(4, 0);
     show_job_pic(101);
-    if (class >= 80 && class1 >= 80)
+    if (class_ >= 80 && class1 >= 80)
     {
         d.hskill += random() % 2 + 7;
         workmoney = 300 + d.maxhp / 50 + d.hskill / 20;
         vmsg("你是完美的獵人..");
     }
-    else if ((class < 75 && class >= 50) && class1 >= 60)
+    else if ((class_ < 75 && class_ >= 50) && class1 >= 60)
     {
         d.hskill += random() % 2 + 5;
         workmoney = 270 + d.maxhp / 45 + d.hskill / 20;
         vmsg("收獲還不錯喔..可以飽餐\一頓了..:)");
     }
-    else if ((class < 50 && class >= 25) && class1 >= 40)
+    else if ((class_ < 50 && class_ >= 25) && class1 >= 40)
     {
         d.hskill += random() % 2 + 3;
         workmoney = 240 + d.maxhp / 40 + d.hskill / 20;
         vmsg("技術差強人意  再加油喔..");
     }
-    else if ((class < 25 && class >= 0) && class1 >= 20)
+    else if ((class_ < 25 && class_ >= 0) && class1 >= 20)
     {
         d.hskill += random() % 2 + 1;
         workmoney = 210 + d.maxhp / 30 + d.hskill / 20;
         vmsg("狩獵是體力與智力的結合....");
     }
-    else if (class < 0)
+    else if (class_ < 0)
     {
         d.hskill += random() % 2;
         workmoney = 190 + d.hskill / 20;
@@ -3033,7 +3033,7 @@ static int pip_job_workK(void)
     /* ├────┼──────────────────────┤*/
     /* │工地    │體力 + 2, 魅力 - 1, 疲勞 + 3                │*/
     /* ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     long workmoney;
 
     /*兩歲以上才行*/
@@ -3043,7 +3043,7 @@ static int pip_job_workK(void)
         return 0;
     }
     workmoney = 0;
-    class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     count_tired(5, 15, "Y", 100, 1);
     d.shit += random() % 4 + 16;
     d.weight -= (random() % 2 + 2);
@@ -3057,22 +3057,22 @@ static int pip_job_workK(void)
         d.charm = 0;
     move(4, 0);
     show_job_pic(111);
-    if (class >= 75)
+    if (class_ >= 75)
     {
         workmoney = 250 + d.maxhp / 50;
         vmsg("工程很完美  謝謝你了..");
     }
-    else if (class < 75 && class >= 50)
+    else if (class_ < 75 && class_ >= 50)
     {
         workmoney = 220 + d.maxhp / 45;
         vmsg("工程尚稱順利  辛苦你了..");
     }
-    else if (class < 50 && class >= 25)
+    else if (class_ < 50 && class_ >= 25)
     {
         workmoney = 200 + d.maxhp / 40;
         vmsg("工程差強人意  再加油喔..");
     }
-    else if (class < 25 && class >= 0)
+    else if (class_ < 25 && class_ >= 0)
     {
         workmoney = 180 + d.maxhp / 30;
         vmsg("ㄜ  待加強待加強....");
@@ -3094,7 +3094,7 @@ static int pip_job_workL(void)
     /*  │墓園    │抗魔能力 + N, 感受 + 1, 魅力 - 1            │*/
     /*  │        │疲勞 + 2                                    │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     float class1;
     long workmoney;
 
@@ -3105,7 +3105,7 @@ static int pip_job_workL(void)
         return 0;
     }
     workmoney = 0;
-    class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     class1 = (d.belief - d.tired) * LEARN_LEVEL;
     d.shit += random() % 5 + 8;
     d.maxmp += (random() % 2) * LEARN_LEVEL;
@@ -3119,19 +3119,19 @@ static int pip_job_workL(void)
     if (d.charm < 0)
         d.charm = 0;
     show_job_pic(121);
-    if (class >= 75 && class1 >= 75)
+    if (class_ >= 75 && class1 >= 75)
     {
         d.mresist += random() % 2 + 7;
         workmoney = 200 + (d.affect + d.brave) / 40;
         vmsg("守墓成功\喔  給你多點錢");
     }
-    else if ((class < 75 && class >= 50) && class1 >= 50)
+    else if ((class_ < 75 && class_ >= 50) && class1 >= 50)
     {
         d.mresist += random() % 2 + 5;
         workmoney = 150 + (d.affect + d.brave) / 50;
         vmsg("守墓還算成功\喔..謝啦..");
     }
-    else if ((class < 50 && class >= 25) && class1 >= 25)
+    else if ((class_ < 50 && class_ >= 25) && class1 >= 25)
     {
         d.mresist += random() % 2 + 3;
         workmoney = 120 + (d.affect + d.brave) / 60;
@@ -3154,7 +3154,7 @@ static int pip_job_workM(void)
     /*  ├────┼──────────────────────┤*/
     /*  │家庭教師│道德 + 1, 母性 + N, 魅力 - 1, 疲勞 + 7      │*/
     /*  ├────┼──────────────────────┤*/
-    GCC_UNUSED float class;
+    GCC_UNUSED float class_;
     long workmoney;
 
     if ((d.bbtime / 60 / 30) < 4)
@@ -3163,7 +3163,7 @@ static int pip_job_workM(void)
         return 0;
     }
     workmoney = 0;
-    class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     workmoney = 50 + d.wisdom / 20 + d.character / 20;
     count_tired(5, 10, "Y", 100, 1);
     d.shit += random() % 3 + 8;
@@ -3189,7 +3189,7 @@ static int pip_job_workN(void)
     /*  │酒店    │若 體    力 - RND (疲勞) >=  60 ＆          │*/
     /*  │        │若 魅    力 - RND (疲勞) >=  50 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     float class1;
     long workmoney;
 
@@ -3199,7 +3199,7 @@ static int pip_job_workN(void)
         return 0;
     }
     workmoney = 0;
-    class = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     class1 = (d.charm - d.tired) * LEARN_LEVEL;
     d.shit += random() % 5 + 5;
     count_tired(5, 14, "Y", 100, 1);
@@ -3211,21 +3211,21 @@ static int pip_job_workN(void)
     if (d.wisdom < 0)
         d.wisdom = 0;
     /*show_job_pic(6);*/
-    if (class >= 75 && class1 >= 75)
+    if (class_ >= 75 && class1 >= 75)
     {
         d.cookskill += random() % 2 + 7;
         d.speech += random() % 2 + 5;
         workmoney = 500 + (d.charm) / 5;
         vmsg("你很紅唷  :)");
     }
-    else if ((class < 75 && class >= 50) && class1 >= 50)
+    else if ((class_ < 75 && class_ >= 50) && class1 >= 50)
     {
         d.cookskill += random() % 2 + 5;
         d.speech += random() % 2 + 5;
         workmoney = 400 + (d.charm) / 5;
         vmsg("蠻受歡迎的耶....");
     }
-    else if ((class < 50 && class >= 25) && class1 >= 25)
+    else if ((class_ < 50 && class_ >= 25) && class1 >= 25)
     {
         d.cookskill += random() % 2 + 4;
         d.speech += random() % 2 + 3;
@@ -3252,7 +3252,7 @@ static int pip_job_workO(void)
     /*  ├────┼──────────────────────┤*/
     /*  │酒家    │若 魅    力 - RND (疲勞) >=  70 則工作成功  │*/
     /*  ├────┼──────────────────────┤*/
-    float class;
+    float class_;
     long workmoney;
 
     if ((d.bbtime / 60 / 30) < 4)
@@ -3261,7 +3261,7 @@ static int pip_job_workO(void)
         return 0;
     }
     workmoney = 0;
-    class = (d.charm - d.tired) * LEARN_LEVEL;
+    class_ = (d.charm - d.tired) * LEARN_LEVEL;
     d.shit += random() % 5 + 14;
     d.charm += (random() % 3 + 8) * LEARN_LEVEL;
     d.offense += (random() % 3 + 8) * LEARN_LEVEL;
@@ -3278,21 +3278,21 @@ static int pip_job_workO(void)
         d.belief = 0;
 
     /*show_job_pic(6);*/
-    if (class >= 75)
+    if (class_ >= 75)
     {
         d.relation -= random() % 5 + 12;
         d.toman -= random() % 5 + 12;
         workmoney = 600 + (d.charm) / 5;
         vmsg("你是本店的紅牌唷  :)");
     }
-    else if (class < 75 && class >= 50)
+    else if (class_ < 75 && class_ >= 50)
     {
         d.relation -= random() % 5 + 8;
         d.toman -= random() % 5 + 8;
         workmoney = 500 + (d.charm) / 5;
         vmsg("你蠻受歡迎的耶..:)");
     }
-    else if (class < 50 && class >= 25)
+    else if (class_ < 50 && class_ >= 25)
     {
         d.relation -= random() % 5 + 5;
         d.toman -= random() % 5 + 5;
@@ -3324,7 +3324,7 @@ static int pip_job_workP(void)
     /*  │大夜總會│若 魅    力 - RND (疲勞) >=  70 ＆          │*/
     /*  │        │若 藝術修養 - RND (疲勞) >=  30 則工作成功  │*/
     /*  └────┴──────────────────────┘*/
-    float class;
+    float class_;
     float class1;
     long workmoney;
 
@@ -3334,7 +3334,7 @@ static int pip_job_workP(void)
         return 0;
     }
     workmoney = 0;
-    class = (d.charm - d.tired) * LEARN_LEVEL;
+    class_ = (d.charm - d.tired) * LEARN_LEVEL;
     class1 = (d.art - d.tired) * LEARN_LEVEL;
     d.shit += random() % 5 + 7;
     d.charm += (random() % 3 + 8) * LEARN_LEVEL;
@@ -3351,21 +3351,21 @@ static int pip_job_workP(void)
     if (d.wisdom < 0)
         d.wisdom = 0;
     /*show_job_pic(6);*/
-    if (class >= 75 && class1 > 30)
+    if (class_ >= 75 && class1 > 30)
     {
         d.speech += random() % 5 + 12;
         d.toman -= random() % 5 + 12;
         workmoney = 1000 + (d.charm) / 5;
         vmsg("你是夜總會最閃亮的星星唷  :)");
     }
-    else if ((class < 75 && class >= 50) && class1 > 20)
+    else if ((class_ < 75 && class_ >= 50) && class1 > 20)
     {
         d.speech += random() % 5 + 8;
         d.toman -= random() % 5 + 8;
         workmoney = 800 + (d.charm) / 5;
         vmsg("嗯嗯..你蠻受歡迎的耶..:)");
     }
-    else if ((class < 50 && class >= 25) && class1 > 10)
+    else if ((class_ < 50 && class_ >= 25) && class1 > 10)
     {
         d.speech += random() % 5 + 5;
         d.toman -= random() % 5 + 5;
@@ -3912,26 +3912,26 @@ static int pip_practice_classA(void)
     /*  │        ├──────────────────────┤*/
     /*  │        │智力 + 4~12, 信仰 - 1~3, 抗魔能力 - 0~1     │*/
     /*  ├────┼──────────────────────┤*/
-    int body, class;
+    int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class = d.wisdom / 200 + 1; /*科學*/
-    if (class > 5) class = 5;
+    class_ = d.wisdom / 200 + 1; /*科學*/
+    if (class_ > 5) class_ = 5;
 
-    body = pip_practice_function(1, class, 11, 12, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(1, class_, 11, 12, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.wisdom += change4 * LEARN_LEVEL;
     if (body == 1)
     {
-        d.belief -= random() % (2 + class * 2);
+        d.belief -= random() % (2 + class_ * 2);
         d.mresist -= random() % 4;
     }
     else
     {
-        d.belief -= random() % (2 + class * 2);
+        d.belief -= random() % (2 + class_ * 2);
         d.mresist -= random() % 3;
     }
-    pip_practice_gradeup(1, class, d.wisdom / 200 + 1);
+    pip_practice_gradeup(1, class_, d.wisdom / 200 + 1);
     if (d.belief < 0)  d.belief = 0;
     if (d.mresist < 0) d.mresist = 0;
     d.classA += 1;
@@ -3953,29 +3953,29 @@ static int pip_practice_classB(void)
     /*  │        │感受 + 2~5, 智力 + 0~4, 藝術修養 + 0~1      │*/
     /*  │        │氣質 + 0~1                                  │*/
     /*  ├────┼──────────────────────┤*/
-    int body, class;
+    int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class = (d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400 + 1; /*詩詞*/
-    if (class > 5) class = 5;
+    class_ = (d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400 + 1; /*詩詞*/
+    if (class_ > 5) class_ = 5;
 
-    body = pip_practice_function(2, class, 21, 21, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(2, class_, 21, 21, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.affect += change3 * LEARN_LEVEL;
     if (body == 1)
     {
-        d.wisdom += random() % (class + 3) * LEARN_LEVEL;
-        d.character += random() % (class + 3) * LEARN_LEVEL;
-        d.art += random() % (class + 3) * LEARN_LEVEL;
+        d.wisdom += random() % (class_ + 3) * LEARN_LEVEL;
+        d.character += random() % (class_ + 3) * LEARN_LEVEL;
+        d.art += random() % (class_ + 3) * LEARN_LEVEL;
     }
     else
     {
-        d.wisdom += random() % (class + 2) * LEARN_LEVEL;
-        d.character += random() % (class + 2) * LEARN_LEVEL;
-        d.art += random() % (class + 2) * LEARN_LEVEL;
+        d.wisdom += random() % (class_ + 2) * LEARN_LEVEL;
+        d.character += random() % (class_ + 2) * LEARN_LEVEL;
+        d.art += random() % (class_ + 2) * LEARN_LEVEL;
     }
     body = (d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400 + 1;
-    pip_practice_gradeup(2, class, body);
+    pip_practice_gradeup(2, class_, body);
     d.classB += 1;
     return 0;
 }
@@ -3991,13 +3991,13 @@ static int pip_practice_classC(void)
     /*  │        ├──────────────────────┤*/
     /*  │        │智力 + 1~3, 信仰 + 1~5, 抗魔能力 + 0~1      │*/
     /*  ├────┼──────────────────────┤*/
-    int body, class;
+    int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class = (d.belief * 2 + d.wisdom) / 400 + 1; /*神學*/
-    if (class > 5) class = 5;
+    class_ = (d.belief * 2 + d.wisdom) / 400 + 1; /*神學*/
+    if (class_ > 5) class_ = 5;
 
-    body = pip_practice_function(3, class, 31, 31, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(3, class_, 31, 31, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.wisdom += change2 * LEARN_LEVEL;
     d.belief += change3 * LEARN_LEVEL;
@@ -4010,7 +4010,7 @@ static int pip_practice_classC(void)
         d.mresist += random() % 3 * LEARN_LEVEL;
     }
     body = (d.belief * 2 + d.wisdom) / 400 + 1;
-    pip_practice_gradeup(3, class, body);
+    pip_practice_gradeup(3, class_, body);
     d.classC += 1;
     return 0;
 }
@@ -4026,12 +4026,12 @@ static int pip_practice_classD(void)
     /*  │        ├──────────────────────┤*/
     /*  │        │智力 + 4~5, 戰鬥技術 + 0~1, 感受 - 0~1      │*/
     /*  ├────┼──────────────────────┤*/
-    int body, class;
+    int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class = (d.hskill * 2 + d.wisdom) / 400 + 1;
-    if (class > 5) class = 5;
-    body = pip_practice_function(4, class, 41, 41, &change1, &change2, &change3, &change4, &change5);
+    class_ = (d.hskill * 2 + d.wisdom) / 400 + 1;
+    if (class_ > 5) class_ = 5;
+    body = pip_practice_function(4, class_, 41, 41, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.wisdom += change2 * LEARN_LEVEL;
     if (body == 1)
@@ -4045,7 +4045,7 @@ static int pip_practice_classD(void)
         d.affect -= random() % 3 + 6;
     }
     body = (d.hskill * 2 + d.wisdom) / 400 + 1;
-    pip_practice_gradeup(4, class, body);
+    pip_practice_gradeup(4, class_, body);
     if (d.affect < 0)  d.affect = 0;
     d.classD += 1;
     return 0;
@@ -4062,13 +4062,13 @@ static int pip_practice_classE(void)
     /*  │        ├──────────────────────┤*/
     /*  │        │戰鬥技術 + 0~1, 攻擊能力 + 1~4              │*/
     /*  ├────┼──────────────────────┤*/
-    int body, class;
+    int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class = (d.hskill + d.attack) / 400 + 1;
-    if (class > 5) class = 5;
+    class_ = (d.hskill + d.attack) / 400 + 1;
+    if (class_ > 5) class_ = 5;
 
-    body = pip_practice_function(5, class, 51, 51, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(5, class_, 51, 51, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.speed += (random() % 3 + 2) * LEARN_LEVEL;
     d.hexp += (random() % 2 + 2) * LEARN_LEVEL;
@@ -4082,7 +4082,7 @@ static int pip_practice_classE(void)
         d.hskill += (random() % 3 + 3) * LEARN_LEVEL;
     }
     body = (d.hskill + d.attack) / 400 + 1;
-    pip_practice_gradeup(5, class, body);
+    pip_practice_gradeup(5, class_, body);
     d.classE += 1;
     return 0;
 }
@@ -4098,13 +4098,13 @@ static int pip_practice_classF(void)
     /*  │        ├──────────────────────┤*/
     /*  │        │戰鬥技術 + 1~3, 防禦能力 + 0~1              │*/
     /*  ├────┼──────────────────────┤*/
-    int body, class;
+    int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class = (d.hskill + d.resist) / 400 + 1;
-    if (class > 5) class = 5;
+    class_ = (d.hskill + d.resist) / 400 + 1;
+    if (class_ > 5) class_ = 5;
 
-    body = pip_practice_function(6, class, 61, 61, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(6, class_, 61, 61, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.hexp += (random() % 2 + 2) * LEARN_LEVEL;
     d.speed += (random() % 3 + 2) * LEARN_LEVEL;
@@ -4118,7 +4118,7 @@ static int pip_practice_classF(void)
         d.hskill += (random() % 3 + 3) * LEARN_LEVEL;
     }
     body = (d.hskill + d.resist) / 400 + 1;
-    pip_practice_gradeup(6, class, body);
+    pip_practice_gradeup(6, class_, body);
     d.classF += 1;
     return 0;
 }
@@ -4134,13 +4134,13 @@ static int pip_practice_classG(void)
     /*  │        ├──────────────────────┤*/
     /*  │        │魔法技術 + 2~4, 魔法能力 + 0~5              │*/
     /*  ├────┼──────────────────────┤*/
-    int body, class;
+    int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class = (d.mskill + d.maxmp) / 400 + 1;
-    if (class > 5) class = 5;
+    class_ = (d.mskill + d.maxmp) / 400 + 1;
+    if (class_ > 5) class_ = 5;
 
-    body = pip_practice_function(7, class, 71, 72, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(7, class_, 71, 72, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.maxmp += change3 * LEARN_LEVEL;
     d.mexp += (random() % 2 + 2) * LEARN_LEVEL;
@@ -4154,7 +4154,7 @@ static int pip_practice_classG(void)
     }
 
     body = (d.mskill + d.maxmp) / 400 + 1;
-    pip_practice_gradeup(7, class, body);
+    pip_practice_gradeup(7, class_, body);
     d.classG += 1;
     return 0;
 }
@@ -4170,19 +4170,19 @@ static int pip_practice_classH(void)
     /*  │        ├──────────────────────┤*/
     /*  │        │禮儀表現 + 2~4, 氣質 + 1~4                  │*/
     /*  ├────┼──────────────────────┤*/
-    int body, class;
+    int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class = (d.manners * 2 + d.character) / 400 + 1;
-    if (class > 5) class = 5;
+    class_ = (d.manners * 2 + d.character) / 400 + 1;
+    if (class_ > 5) class_ = 5;
 
-    body = pip_practice_function(8, class, 0, 0, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(8, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.social += (random() % 2 + 2) * LEARN_LEVEL;
     d.manners += (change1 + random() % 2) * LEARN_LEVEL;
     d.character += (change1 + random() % 2) * LEARN_LEVEL;
     body = (d.character + d.manners) / 400 + 1;
-    pip_practice_gradeup(8, class, body);
+    pip_practice_gradeup(8, class_, body);
     d.classH += 1;
     return 0;
 }
@@ -4198,18 +4198,18 @@ static int pip_practice_classI(void)
     /*  │        ├──────────────────────┤*/
     /*  │        │藝術修養 + 2~4, 感受 + 0~1                  │*/
     /*  ├────┼──────────────────────┤*/
-    int body, class;
+    int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class = (d.art * 2 + d.character) / 400 + 1;
-    if (class > 5) class = 5;
+    class_ = (d.art * 2 + d.character) / 400 + 1;
+    if (class_ > 5) class_ = 5;
 
-    body = pip_practice_function(9, class, 91, 91, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(9, class_, 91, 91, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.art += change4 * LEARN_LEVEL;
     d.affect += change2 * LEARN_LEVEL;
     body = (d.affect + d.art) / 400 + 1;
-    pip_practice_gradeup(9, class, body);
+    pip_practice_gradeup(9, class_, body);
     d.classI += 1;
     return 0;
 }
@@ -4225,26 +4225,26 @@ static int pip_practice_classJ(void)
     /*  │        ├──────────────────────┤*/
     /*  │        │藝術修養 + 1~3, 魅力 + 1~2, 體力 + 1~1      │*/
     /*  └────┴──────────────────────┘*/
-    int body, class;
+    int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class = (d.art * 2 + d.charm) / 400 + 1;
-    if (class > 5) class = 5;
+    class_ = (d.art * 2 + d.charm) / 400 + 1;
+    if (class_ > 5) class_ = 5;
 
-    body = pip_practice_function(10, class, 0, 0, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(10, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.art += change2 * LEARN_LEVEL;
     d.maxhp += (random() % 3 + 2) * LEARN_LEVEL;
     if (body == 1)
     {
-        d.charm += random() % (4 + class) * LEARN_LEVEL;
+        d.charm += random() % (4 + class_) * LEARN_LEVEL;
     }
     else if (body == 2)
     {
-        d.charm += random() % (2 + class) * LEARN_LEVEL;
+        d.charm += random() % (2 + class_) * LEARN_LEVEL;
     }
     body = (d.art * 2 + d.charm) / 400 + 1;
-    pip_practice_gradeup(10, class, body);
+    pip_practice_gradeup(10, class_, body);
     d.classJ += 1;
     return 0;
 }
@@ -5555,14 +5555,14 @@ pip_endingsocial( /*社交*/
 char *buf,
 int *m, int *n, int *grade)
 {
-    int class;
-    if (d.social > 600) class = 1;
-    else if (d.social > 450) class = 2;
-    else if (d.social > 380) class = 3;
-    else if (d.social > 250) class = 4;
-    else class = 5;
+    int class_;
+    if (d.social > 600) class_ = 1;
+    else if (d.social > 450) class_ = 2;
+    else if (d.social > 380) class_ = 3;
+    else if (d.social > 250) class_ = 4;
+    else class_ = 5;
 
-    switch (class)
+    switch (class_)
     {
     case 1:
         if (d.charm > 500)
@@ -5674,14 +5674,14 @@ pip_endingmagic( /*魔法*/
 char *buf,
 int *m, int *n, int *grade)
 {
-    int class;
-    if (d.mexp > 800) class = 1;
-    else if (d.mexp > 600) class = 2;
-    else if (d.mexp > 500) class = 3;
-    else if (d.mexp > 300) class = 4;
-    else class = 5;
+    int class_;
+    if (d.mexp > 800) class_ = 1;
+    else if (d.mexp > 600) class_ = 2;
+    else if (d.mexp > 500) class_ = 3;
+    else if (d.mexp > 300) class_ = 4;
+    else class_ = 5;
 
-    switch (class)
+    switch (class_)
     {
     case 1:
         if (d.affect > d.wisdom && d.affect > d.belief && d.ethics > 100)
@@ -5797,13 +5797,13 @@ pip_endingcombat( /*戰鬥*/
 char *buf,
 int *m, int *n, int *grade)
 {
-    int class;
-    if (d.hexp > 1500) class = 1;
-    else if (d.hexp > 1000) class = 2;
-    else if (d.hexp > 800) class = 3;
-    else class = 4;
+    int class_;
+    if (d.hexp > 1500) class_ = 1;
+    else if (d.hexp > 1000) class_ = 2;
+    else if (d.hexp > 800) class_ = 3;
+    else class_ = 4;
 
-    switch (class)
+    switch (class_)
     {
     case 1:
         if (d.affect > d.wisdom && d.affect > d.belief && d.ethics > 100)
@@ -5954,7 +5954,7 @@ int *m, int *n, int *grade,
 int mode)
 {
     int data;
-    int class;
+    int class_;
     int num = 0;
 
     if (mode == 1)
@@ -5965,14 +5965,14 @@ int mode)
         data = d.social;
     else  // mode == 4
         data = d.family;
-    if (data > 1000) class = 1;
-    else if (data > 800) class = 2;
-    else if (data > 500) class = 3;
-    else if (data > 300) class = 4;
-    else class = 5;
+    if (data > 1000) class_ = 1;
+    else if (data > 800) class_ = 2;
+    else if (data > 500) class_ = 3;
+    else if (data > 300) class_ = 4;
+    else class_ = 5;
 
     data = pip_max_worktime(&num);
-    switch (class)
+    switch (class_)
     {
     case 1:
         if (d.character >= 1000)
@@ -7229,15 +7229,15 @@ static int pip_fight_main(int n, const struct playrule list[], int mode);
 */
 static int
 get_man(
-int class, int mob, int plus)
+int class_, int mob, int plus)
 {
     int lucky, man;
-    lucky = random() % (class * 5);
-    if (lucky <= (class*2))
+    lucky = random() % (class_ * 5);
+    if (lucky <= (class_*2))
     {
         man = random() % mob + plus;
     }
-    else if (lucky <= (class*4) && lucky > (class*2))
+    else if (lucky <= (class_*4) && lucky > (class_*2))
     {
         man = random() % (mob + plus / 2) + (plus / 2);
     }
@@ -7251,10 +7251,10 @@ int class, int mob, int plus)
 static int
 pip_meet_vs_man(void)
 {
-    int class;
+    int class_;
     int man, lucky;
     char ans;
-    class = (d.maxhp * 30 + d.maxmp * 20 + d.attack * 20 + d.resist * 15 + d.mexp * 5 + d.hexp * 5 + d.speed * 10) / 8500 + 1;
+    class_ = (d.maxhp * 30 + d.maxmp * 20 + d.attack * 20 + d.resist * 15 + d.mexp * 5 + d.hexp * 5 + d.speed * 10) / 8500 + 1;
 
     move(b_lines - 1, 0);
     prints("\x1b[1;44;37m 區域 \x1b[46m[1]炎之洞窟  [2]北方冰原  [3]古代遺跡  [4]人工島  [5]地獄之門           %*s\x1b[m\n", d_cols, "");
@@ -7297,13 +7297,13 @@ pip_meet_vs_man(void)
         }
         else if (lucky < 1000)
         {
-            if (class >= 1 && class <= 20)
+            if (class_ >= 1 && class_ <= 20)
             {
-                man = get_man(class, mob[class][0], mob[class][1]);
+                man = get_man(class_, mob[class_][0], mob[class_][1]);
             }
-            else if (class > 20)
+            else if (class_ > 20)
             {
-                man = get_man(class, mob[21][0], mob[21][1]);
+                man = get_man(class_, mob[21][0], mob[21][1]);
             }
             pip_fight_bad(man);
         }

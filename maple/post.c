@@ -1452,7 +1452,7 @@ post_history(          /* 將 hdr 這篇加入 brh */
     const HDR *hdr)
 {
     int fd;
-    time_t prev, chrono, next, this;
+    time_t prev, chrono, next, this_;
     HDR buf;
 
 
@@ -1471,12 +1471,12 @@ post_history(          /* 將 hdr 這篇加入 brh */
 
         while (read(fd, &buf, sizeof(HDR)) == sizeof(HDR))
         {
-            this = BMAX(buf.chrono, buf.stamp);
+            this_ = BMAX(buf.chrono, buf.stamp);
 
-            if (chrono - this < chrono - prev)
-                prev = this;
-            else if (this - chrono < next - chrono)
-                next = this;
+            if (chrono - this_ < chrono - prev)
+                prev = this_;
+            else if (this_ - chrono < next - chrono)
+                next = this_;
         }
         close(fd);
 
