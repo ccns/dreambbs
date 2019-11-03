@@ -826,7 +826,7 @@ XoPost(
     brd_fpath(fpath, currboard, fn_dir);
     xz[XZ_POST - XO_ZONE].xo = xo = xo_get(fpath);
     xo->key = XZ_POST;
-    xo->xyz = brd->bvote > 0 ? "本看板進行投票中" : brd->title + 3;
+    xo->xyz = brd->bvote > 0 ? (char *) "本看板進行投票中" : brd->title + 3;
     str = brd->BM;
     if (*str <= ' ')
         str = "徵求中";

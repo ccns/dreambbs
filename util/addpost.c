@@ -40,7 +40,7 @@ add_post(           /* 發文到看板 */
     char folder[64];
 
     brd_fpath(folder, brdname, FN_DIR);
-    hdr_stamp(folder, HDR_LINK | 'A', &hdr, fpath);
+    hdr_stamp(folder, HDR_LINK | 'A', &hdr, (char *)fpath);
     strcpy(hdr.owner, userid);
     strcpy(hdr.nick, username);
     strcpy(hdr.title, title);

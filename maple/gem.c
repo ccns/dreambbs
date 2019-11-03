@@ -1482,7 +1482,7 @@ XoGem(
     xz[XZ_GEM - XO_ZONE].xo = xo = xo_new(folder);
     xo->pos = 0;
     xo->key = level;
-    xo->xyz = title;
+    xo->xyz = (char *)title;
 
     xover(XZ_GEM);
 

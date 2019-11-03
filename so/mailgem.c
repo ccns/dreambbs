@@ -1035,7 +1035,7 @@ const char *title)
     xz[XZ_MAILGEM - XO_ZONE].xo = xo = xo_new(folder);
     xo->pos = 0;
     xo->key = 0;
-    xo->xyz = title;
+    xo->xyz = (char *)title;
 
     xover(XZ_MAILGEM);
 

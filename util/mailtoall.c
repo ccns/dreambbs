@@ -69,7 +69,7 @@ send_to_all(const char *title, const char *fpath, const char *bm)
     for (ptr=bm; strlen(ptr); ptr=ptr+IDLEN+1)
     {
         usr_fpath(buf, ptr, FN_DIR);
-        hdr_stamp(buf, HDR_LINK, &mhdr, fpath);
+        hdr_stamp(buf, HDR_LINK, &mhdr, (char *)fpath);
         strcpy(mhdr.owner, "SYSOP");
         strcpy(mhdr.title, title);
         mhdr.xmode = MAIL_MULTI;
@@ -161,7 +161,7 @@ traverse(
         {
             strcpy(str, fname);
             strcat(str, "/.DIR");
-            hdr_stamp(fpath, HDR_LINK, &mhdr, path);
+            hdr_stamp(fpath, HDR_LINK, &mhdr, (char *)path);
             strcpy(mhdr.owner, "SYSOP");
             strcpy(mhdr.title, title);
             mhdr.xmode = MAIL_MULTI;

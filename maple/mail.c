@@ -1237,7 +1237,7 @@ mail_hold(
         return;
 
     folder = cmbox->dir;
-    hdr_stamp(folder, HDR_LINK, &mhdr, fpath);
+    hdr_stamp(folder, HDR_LINK, &mhdr, (char *)fpath);
 
     mhdr.xmode = MAIL_READ | MAIL_HOLD /* | MAIL_NOREPLY */;
     strcpy(mhdr.owner, "[³Æ §Ñ ¿ý]");
