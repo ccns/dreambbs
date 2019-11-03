@@ -771,7 +771,7 @@ typedef struct OverView
 
 typedef struct
 {
-    int key;
+    unsigned int key;
     union {  /* IID.20191106: The field to be used is determined by the value of `key` */
         int (*func)(XO *xo);  /* Default */
 #ifdef NO_SO

@@ -1231,7 +1231,7 @@ tn_main(void)
 static void
 telnet_init(void)
 {
-    static const char svr[] = {
+    static const unsigned char svr[] = {
         IAC, DO, TELOPT_TTYPE,
         IAC, SB, TELOPT_TTYPE, TELQUAL_SEND, IAC, SE,
         IAC, WILL, TELOPT_ECHO,
@@ -1240,7 +1240,7 @@ telnet_init(void)
     };
 
     int n, len;
-    const char *cmd;
+    const unsigned char *cmd;
     int rset;
     struct timeval to;
     char buf[64];
@@ -1286,7 +1286,7 @@ term_init(void)
 //  TNCH_IAC + TNCH_SB + TN_NAWS + ¦æ¼Æ¦C¼Æ + TNCH_IAC + TNCH_SE;
 
     /* ask client to report it's term size */
-    static char svr[] =       /* server */
+    static unsigned char svr[] =      /* server */
     {
         IAC, DO, TELOPT_NAWS
     };
