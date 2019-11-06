@@ -59,7 +59,7 @@ CFLAGS_WARN	+= -Wno-invalid-source-encoding
 .endif
 
 .if $(ARCHI)=="64"
-CFLAGS_ARCHI	+= -m32
+CFLAGS_ARCHI	+= -m32 -D_FILE_OFFSET_BITS=64
 LDFLAGS_ARCHI	+= -m32
 .endif
 

@@ -2636,13 +2636,13 @@ mbox_size(
         outs(fpath);
 
         if (!stat(fpath, &st))
-            prints("\nTime: %s\nSize: %ld", Ctime(&st.st_mtime), st.st_size);
+            prints("\nTime: %s\nSize: %lld", Ctime(&st.st_mtime), (long long)st.st_size);
         vmsg(NULL);
     }
     else
     {
         stat(fpath, &st);
-        sprintf(buf, "容量大小: %d K", (int)st.st_size/1024);
+        sprintf(buf, "容量大小: %lld K", (long long)st.st_size/1024);
         vmsg(buf);
     }
 
