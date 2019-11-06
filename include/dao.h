@@ -19,9 +19,6 @@
 #define REC_SIZ         4096            /* disk I/O record size */
 #endif
 
-/* Thor.981206: lkchu patch */
-extern const char radix32[32];
-
 #include "hdr.h"                        /* prototype */
 #include "dns.h"                        /* dns type */
 #include "splay.h"                      /* splay type */
@@ -29,6 +26,9 @@ extern const char radix32[32];
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/* Thor.981206: lkchu patch */
+extern const char radix32[32];
 
 /* acl.c */
 int acl_addr(const char *acl, const char *addr);
