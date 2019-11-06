@@ -62,10 +62,13 @@ static int
 do_cmd(MENU *mptr, XO *xo, int x, int y)
 {
     GCC_UNUSED unsigned int mode;
+#ifndef NO_SO
     const void *p;
+#endif
     int (*func) (void);
     int (*func_unary) (XO *xo);
 
+#ifndef NO_SO
     if (mptr->umode < 0)
     {
         p = DL_GET(mptr->func);
@@ -74,9 +77,11 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
         mptr->func = p;
         mptr->umode = - (mptr->umode);
     }
+#endif
 
     switch (mptr->umode)
     {
+#ifndef NO_SO
         case POPUP_SO :
             p = DL_GET(mptr->func);
             if (!p) return 0;
@@ -85,6 +90,7 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
             func = p;
             mode = (*func) ();
             return -1;
+#endif
         case POPUP_MENU :
 //          sprintf(t, "¡i%s¡j", mptr->desc);
 #ifdef M3_USE_PFTERM

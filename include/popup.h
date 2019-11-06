@@ -15,7 +15,11 @@
 #define POPUP_XO                0x02
 #define POPUP_MENU              0x04
 #define POPUP_MENUTITLE         0x08
-#define POPUP_SO                0x10
+#ifdef NO_SO
+  #define POPUP_SO              POPUP_FUN
+#else
+  #define POPUP_SO              0x10  /* For dynamic library loading */
+#endif
 
 #define POPUP_DO_INSTANT        0x01000000
 
