@@ -8,7 +8,7 @@ This page describes the indentation style for the DreamBBS project.
     - No tabs
 
 **Good:**
-``c
+```c
 {
     sth
 }
