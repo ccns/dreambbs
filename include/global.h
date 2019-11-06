@@ -9,6 +9,10 @@
 #define GLOBAL_H
 
 #ifdef  MAIN_C
+# undef MAIN_C          /* For including declarations */
+# undef GLOBAL_H        /* Temporarily disable the header guard */
+# include __FILE__      /* Include the declarations */
+# define MAIN_C         /* Restore `MAIN_C` */
 # define VAR
 # define INI(x)         = x
 #else
