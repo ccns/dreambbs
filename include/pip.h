@@ -260,7 +260,7 @@ struct playrule
     int resist;         /*防護*/
     int speed;          /*速度*/
     int money;          /*財寶*/
-    char special[5];    /*特別*/  /*1:怕火 2:怕冰 */
+    char special[6];    /*特別*/  /*1:怕火 2:怕冰 */
     int map;            /*圖檔*/
     int death;          /*死活*/
 };
