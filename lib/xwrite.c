@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include "dao.h"
 
 int xwrite(int fd, const char *data, int size)
 {

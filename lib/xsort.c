@@ -1,5 +1,6 @@
 #include <sys/types.h>
 #include <stdlib.h>
+#include "dao.h"
 
 #define min(a, b)       ((a) < (b) ? (a) : (b))
 #undef  TEST

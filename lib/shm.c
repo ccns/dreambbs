@@ -4,6 +4,7 @@
 #include <sys/shm.h>
 #include <stdlib.h>
 #include <string.h>
+#include "dao.h"
 
 void *shm_new(int shmkey, int shmsize)
 {

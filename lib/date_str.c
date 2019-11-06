@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <time.h>
+#include "dao.h"
 
 /* static char datemsg[32]; */
 static char datemsg[40];
