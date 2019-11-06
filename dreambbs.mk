@@ -81,6 +81,10 @@ NO_SO		?=
 CFLAGS_MAPLE	+= -DNO_SO
 .endif
 
+.if $(CC:M*++) || $(CC:M*++-*)
+CFLAGS_COMPAT	+= -x c++
+.endif
+
 CC_HAS_W_UNREACHABLE_CODE_AGGRESSIVE != $(CC_HASFLAGS$(flags::= -Wunreachable-code-aggressive)) $(DEF_YES)
 .if $(CC_HAS_W_UNREACHABLE_CODE_AGGRESSIVE)
 CFLAGS_COMPAT  += -Wunreachable-code-aggressive
