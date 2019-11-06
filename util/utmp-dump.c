@@ -13,6 +13,7 @@
 
 ACCT cuser;
 UTMP *cutmp, utmp;
+int total_num;
 
 static int pal_count;
 static int *pal_pool;

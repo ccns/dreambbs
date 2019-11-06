@@ -472,10 +472,11 @@ VAR int recommend_time  INI(0);
 VAR int aprilfirst      INI(0);
 #endif
 
+VAR int total_num;                  /* 重設 站上人數*/
+
 #undef  VAR
 #undef  INI
 
 extern char xo_pool[];          /* XO's data I/O pool */
-int total_num;                  /* 重設 站上人數*/
 
 #endif                          /* GLOBAL_H */
