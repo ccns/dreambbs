@@ -291,21 +291,21 @@ XO *xo)
 
 KeyFunc aloha_cb[] =
 {
-    {XO_INIT, aloha_init},
-    {XO_LOAD, aloha_load},
-    {XO_HEAD, aloha_head},
-    {XO_BODY, aloha_body},
+    {XO_INIT, {aloha_init}},
+    {XO_LOAD, {aloha_load}},
+    {XO_HEAD, {aloha_head}},
+    {XO_BODY, {aloha_body}},
 
-    {'a', aloha_add},
-    {'D', aloha_rangedel},
-    {'f', aloha_loadpal},
+    {'a', {aloha_add}},
+    {'D', {aloha_rangedel}},
+    {'f', {aloha_loadpal}},
 #if 0
-    {'r', aloha_change},
-    {'c', aloha_change},
+    {'r', {aloha_change}},
+    {'c', {aloha_change}},
 #endif
-    {'s', aloha_init},
-    {'d', aloha_delete},
-    {'h', aloha_help}
+    {'s', {aloha_init}},
+    {'d', {aloha_delete}},
+    {'h', {aloha_help}}
 };
 
 

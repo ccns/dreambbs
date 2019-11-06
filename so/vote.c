@@ -1106,21 +1106,21 @@ XO *xo)
 
 static KeyFunc vote_cb[] =
 {
-    {XO_INIT, vote_init},
-    {XO_LOAD, vote_load},
-    {XO_HEAD, vote_head},
-    {XO_BODY, vote_body},
+    {XO_INIT, {vote_init}},
+    {XO_LOAD, {vote_load}},
+    {XO_HEAD, {vote_head}},
+    {XO_BODY, {vote_body}},
 
-    {'r', vote_join},
-    {'v', vote_join},
-    {'R', vote_result},
-    {'m', vote_browse},
-    {'S' | XO_DL, (int (*)(XO *xo))DL_NAME("showvote.so", Showvote)},
-    {'E', vote_edit},
-    {Ctrl('P'), vote_add},
-    {Ctrl('Q'), vote_query},
+    {'r', {vote_join}},
+    {'v', {vote_join}},
+    {'R', {vote_result}},
+    {'m', {vote_browse}},
+    {'S' | XO_DL, {.dlfunc = DL_NAME("showvote.so", Showvote)}},
+    {'E', {vote_edit}},
+    {Ctrl('P'), {vote_add}},
+    {Ctrl('Q'), {vote_query}},
 
-    {'h', vote_help}
+    {'h', {vote_help}}
 };
 
 

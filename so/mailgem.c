@@ -995,31 +995,31 @@ XO *xo)
 
 static KeyFunc mailgem_cb[] =
 {
-    {XO_INIT, mailgem_init},
-    {XO_LOAD, mailgem_load},
-    {XO_HEAD, mailgem_head},
-    {XO_BODY, mailgem_body},
+    {XO_INIT, {mailgem_init}},
+    {XO_LOAD, {mailgem_load}},
+    {XO_HEAD, {mailgem_head}},
+    {XO_BODY, {mailgem_body}},
 
-    {'r', mailgem_browse},
+    {'r', {mailgem_browse}},
 
-    {Ctrl('P'), mailgem_add},
-    {'E', mailgem_edit},
-    {'T', mailgem_title},
-    {'x', mailgem_cross},
-    {'M', mailgem_move},
-    {'d', mailgem_delete},
-    {'c', mailgem_copy},
-    {'W', mailgem_recycle},
+    {Ctrl('P'), {mailgem_add}},
+    {'E', {mailgem_edit}},
+    {'T', {mailgem_title}},
+    {'x', {mailgem_cross}},
+    {'M', {mailgem_move}},
+    {'d', {mailgem_delete}},
+    {'c', {mailgem_copy}},
+    {'W', {mailgem_recycle}},
 
-    {Ctrl('G'), mailgem_anchor},
-    {Ctrl('V'), mailgem_paste},
+    {Ctrl('G'), {mailgem_anchor}},
+    {Ctrl('V'), {mailgem_paste}},
 
-    {'t', mailgem_tag},
-    {'f', mailgem_toggle},
+    {'t', {mailgem_tag}},
+    {'f', {mailgem_toggle}},
 
-    {'S', mailgem_state},
+    {'S', {mailgem_state}},
 
-    {'h', mailgem_help}
+    {'h', {mailgem_help}}
 };
 
 

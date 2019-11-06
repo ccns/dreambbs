@@ -2758,42 +2758,42 @@ mbox_gem(
 
 static KeyFunc mbox_cb[] =
 {
-    {XO_INIT, mbox_init},
-    {XO_LOAD, mbox_load},
-    {XO_HEAD, mbox_head},
-    {XO_BODY, mbox_body},
+    {XO_INIT, {mbox_init}},
+    {XO_LOAD, {mbox_load}},
+    {XO_HEAD, {mbox_head}},
+    {XO_BODY, {mbox_body}},
 
 #ifdef  HAVE_MAIL_FIX
-    {'T', mbox_title},
+    {'T', {mbox_title}},
 #endif
-    {'r', mbox_browse},
-    {'E', mbox_edit},
-    {'s', mbox_send},
-    {'d', mbox_delete},
-    {Ctrl('X'), mbox_forward},
-    {'m', mbox_mark},
+    {'r', {mbox_browse}},
+    {'E', {mbox_edit}},
+    {'s', {mbox_send}},
+    {'d', {mbox_delete}},
+    {Ctrl('X'), {mbox_forward}},
+    {'m', {mbox_mark}},
 #ifdef  HAVE_MAILGEM
-    {'z', mbox_gem},
+    {'z', {mbox_gem}},
 #endif
-    {'R', mbox_reply},
-    {'y', mbox_reply},
-    {'c', mbox_stat},
+    {'R', {mbox_reply}},
+    {'y', {mbox_reply}},
+    {'c', {mbox_stat}},
 #ifdef HAVE_MAILUNDELETE
-    {'U', mbox_clean},
-    {'u', mbox_undelete},
+    {'U', {mbox_clean}},
+    {'u', {mbox_undelete}},
 #endif
 
-    {KEY_TAB, mbox_sysop},
-    {'I', mbox_other},
-    {'t', mbox_tag},
-    {'S', mbox_size},
-    {'D', xo_delete},
+    {KEY_TAB, {mbox_sysop}},
+    {'I', {mbox_other}},
+    {'t', {mbox_tag}},
+    {'S', {mbox_size}},
+    {'D', {xo_delete}},
 
-    {Ctrl('Q'), xo_uquery},
-    {'X', xo_usetup},
-    {'x', post_cross},
+    {Ctrl('Q'), {xo_uquery}},
+    {'X', {xo_usetup}},
+    {'x', {post_cross}},
 
-    {'h', mbox_help}
+    {'h', {mbox_help}}
 };
 
 

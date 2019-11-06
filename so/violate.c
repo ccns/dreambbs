@@ -210,18 +210,18 @@ XO *xo)
 
 KeyFunc viol_cb[] =
 {
-    {XO_INIT, viol_init},
-    {XO_LOAD, viol_load},
-    {XO_HEAD, viol_head},
-    {XO_BODY, viol_body},
+    {XO_INIT, {viol_init}},
+    {XO_LOAD, {viol_load}},
+    {XO_HEAD, {viol_head}},
+    {XO_BODY, {viol_body}},
 
-    {Ctrl('P'), viol_add},
-    {'r', viol_change},
-    {'f', viol_find},
-    {'c', viol_change},
-    {'s', viol_init},
-    {'d', viol_delete},
-    {'h', viol_help}
+    {Ctrl('P'), {viol_add}},
+    {'r', {viol_change}},
+    {'f', {viol_find}},
+    {'c', {viol_change}},
+    {'s', {viol_init}},
+    {'d', {viol_delete}},
+    {'h', {viol_help}}
 };
 
 

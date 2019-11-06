@@ -918,24 +918,24 @@ XO *xo)
 
 KeyFunc nbrd_cb[] =
 {
-    {XO_INIT, nbrd_init},
-    {XO_LOAD, nbrd_load},
-    {XO_HEAD, nbrd_head},
-    {XO_BODY, nbrd_body},
+    {XO_INIT, {nbrd_init}},
+    {XO_LOAD, {nbrd_load}},
+    {XO_HEAD, {nbrd_head}},
+    {XO_BODY, {nbrd_body}},
 
-    {'j', nbrd_join},
-    {'r', nbrd_browse},
-    {'o', nbrd_open},
-    {'s', nbrd_start},
-    {'R', nbrd_reject},
-    {'c', nbrd_close},
-    {'d', nbrd_delete},
-    {'x', nbrd_cross},
+    {'j', {nbrd_join}},
+    {'r', {nbrd_browse}},
+    {'o', {nbrd_open}},
+    {'s', {nbrd_start}},
+    {'R', {nbrd_reject}},
+    {'c', {nbrd_close}},
+    {'d', {nbrd_delete}},
+    {'x', {nbrd_cross}},
 #ifdef  TEST_COSIGN
-    {'z', nbrd_zero},
+    {'z', {nbrd_zero}},
 #endif
-    {Ctrl('P'), nbrd_add},
-    {'h', nbrd_help}
+    {Ctrl('P'), {nbrd_add}},
+    {'h', {nbrd_help}}
 };
 
 int

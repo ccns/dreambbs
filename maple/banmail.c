@@ -232,18 +232,18 @@ static int banmail_help(XO * xo)
 
 
 KeyFunc banmail_cb[] = {
-    {XO_INIT, banmail_init},
-    {XO_LOAD, banmail_load},
-    {XO_HEAD, banmail_head},
-    {XO_BODY, banmail_body},
+    {XO_INIT, {banmail_init}},
+    {XO_LOAD, {banmail_load}},
+    {XO_HEAD, {banmail_head}},
+    {XO_BODY, {banmail_body}},
 
-    {Ctrl('P'), banmail_add},
-    {'S', banmail_sync},
-    {'r', banmail_change},
-    {'c', banmail_change},
-    {'s', banmail_init},
-    {'d', banmail_delete},
-    {'h', banmail_help}
+    {Ctrl('P'), {banmail_add}},
+    {'S', {banmail_sync}},
+    {'r', {banmail_change}},
+    {'c', {banmail_change}},
+    {'s', {banmail_init}},
+    {'d', {banmail_delete}},
+    {'h', {banmail_help}}
 };
 
 

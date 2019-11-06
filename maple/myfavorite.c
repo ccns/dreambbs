@@ -648,23 +648,23 @@ myfavorite_search(
 KeyFunc myfavorite_cb[] =
 {
 #ifdef  HAVE_LIGHTBAR
-    {XO_ITEM, myfavorite_item_bar},
+    {XO_ITEM, {myfavorite_item_bar}},
 #endif
-    {XO_INIT, myfavorite_init},
-    {XO_LOAD, myfavorite_load},
-    {XO_HEAD, myfavorite_head},
-    {XO_BODY, myfavorite_body},
+    {XO_INIT, {myfavorite_init}},
+    {XO_LOAD, {myfavorite_load}},
+    {XO_HEAD, {myfavorite_head}},
+    {XO_BODY, {myfavorite_body}},
 
-    {Ctrl('P'), myfavorite_add},
-    {'a', myfavorite_add},
-    {'r', myfavorite_browse},
-    {'s', myfavorite_switch},
-    {'c', myfavorite_newmode},
-    {'d', myfavorite_delete},
-    {'M', myfavorite_mov},
-    {'E', myfavorite_edit},
-    {'/', myfavorite_search},
-    {'h', myfavorite_help}
+    {Ctrl('P'), {myfavorite_add}},
+    {'a', {myfavorite_add}},
+    {'r', {myfavorite_browse}},
+    {'s', {myfavorite_switch}},
+    {'c', {myfavorite_newmode}},
+    {'d', {myfavorite_delete}},
+    {'M', {myfavorite_mov}},
+    {'E', {myfavorite_edit}},
+    {'/', {myfavorite_search}},
+    {'h', {myfavorite_help}}
 };
 
 static void

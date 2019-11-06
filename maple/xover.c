@@ -1636,7 +1636,7 @@ xover(
                 /* Thor.990220: dynamic load, with key | XO_DL */
                 if (pos == num)
                 {
-                    void *p = DL_GET((char *) cb->func);
+                    void *p = DL_GET(cb->dlfunc);
                     if (p)
                     {
                         cb->func = p;

@@ -165,17 +165,17 @@ XO *xo)
 
 KeyFunc show_cb[] =
 {
-    {XO_INIT, show_init},
-    {XO_LOAD, show_load},
-    {XO_HEAD, show_head},
-    {XO_BODY, show_body},
+    {XO_INIT, {show_init}},
+    {XO_LOAD, {show_load}},
+    {XO_HEAD, {show_head}},
+    {XO_BODY, {show_body}},
 
-    {Ctrl('P'), show_add},
-    {'r', show_change},
-    {'c', show_change},
-    {'s', show_init},
-    {'d', show_delete},
-    {'h', show_help}
+    {Ctrl('P'), {show_add}},
+    {'r', {show_change}},
+    {'c', {show_change}},
+    {'s', {show_init}},
+    {'d', {show_delete}},
+    {'h', {show_help}}
 };
 
 

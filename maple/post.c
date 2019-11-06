@@ -4105,79 +4105,79 @@ post_spam(
 
 KeyFunc post_cb[] =
 {
-    {XO_INIT, post_init},
-    {XO_LOAD, post_load},
-    {XO_HEAD, post_head},
-    {XO_BODY, post_body},
+    {XO_INIT, {post_init}},
+    {XO_LOAD, {post_load}},
+    {XO_HEAD, {post_head}},
+    {XO_BODY, {post_body}},
 
-    {'B', post_manage},
-    {'r', post_browse},
-    {'s', post_switch},
-    {KEY_TAB, post_gem},
-    {'z', post_gem},
-    {'u', post_undelete},
-    {'y', post_reply},
-    {'d', post_delete},
-    {'v', post_visit},
-    {'q', post_state},
-    {'S', post_complete}, //板主處理標記
-    {'w', post_write},
-    {Ctrl('W'), post_spam},
-    {'e', post_expire},
-    {'U', post_unexpire},
-    {'#', post_aid},              /* cache.090612: 以文章代碼(AID)快速尋文 */
-    {'i', post_showBRD_setting},  /* cache.081122:看板資訊顯示 */
-    {Ctrl('P'), post_add},
-    {Ctrl('N'), post_clean_delete},
+    {'B', {post_manage}},
+    {'r', {post_browse}},
+    {'s', {post_switch}},
+    {KEY_TAB, {post_gem}},
+    {'z', {post_gem}},
+    {'u', {post_undelete}},
+    {'y', {post_reply}},
+    {'d', {post_delete}},
+    {'v', {post_visit}},
+    {'q', {post_state}},
+    {'S', {post_complete}}, //板主處理標記
+    {'w', {post_write}},
+    {Ctrl('W'), {post_spam}},
+    {'e', {post_expire}},
+    {'U', {post_unexpire}},
+    {'#', {post_aid}},              /* cache.090612: 以文章代碼(AID)快速尋文 */
+    {'i', {post_showBRD_setting}},  /* cache.081122:看板資訊顯示 */
+    {Ctrl('P'), {post_add}},
+    {Ctrl('N'), {post_clean_delete}},
 #ifdef HAVE_MULTI_CROSSPOST
-    {Ctrl('X'), post_xcross},
+    {Ctrl('X'), {post_xcross}},
 #endif
-    {'x', post_cross},
-    {Ctrl('Q'), xo_uquery_lite},
-    //  {'I', xo_usetup}, /* cache.081122: 有些人會忘記設禁止查詢資料, 建議關閉保護隱私 */
+    {'x', {post_cross}},
+    {Ctrl('Q'), {xo_uquery_lite}},
+    //  {'I', {xo_usetup}}, /* cache.081122: 有些人會忘記設禁止查詢資料, 建議關閉保護隱私 */
 #if 1 /* Thor.981120: 暫時取消, 防誤用 */
     /* lkchu.981201: 沒有 'D' 很不習慣 :p */
-    {'D', xo_delete},
+    {'D', {xo_delete}},
 #endif
 
 #ifdef HAVE_TERMINATOR
-    {'Z', post_cross_terminator},
+    {'Z', {post_cross_terminator}},
 #endif
 
-    {'t', post_tag},
-    {'l', post_lock},
+    {'t', {post_tag}},
+    {'l', {post_lock}},
 
-    {'E', post_edit},
-    {'T', post_title},
-    {'m', post_mark},
+    {'E', {post_edit}},
+    {'T', {post_title}},
+    {'m', {post_mark}},
 
 #ifdef  HAVE_RECOMMEND
-    {'X', post_recommend},
-    {'%', post_recommend},           /* r2.20170802: 與 itoc 版熱鍵通用 */
-    //  {'o', post_recommend_options},
-    {'o' | XO_DL, (int (*)(XO *xo))DL_NAME("cleanrecommend.so", clean)},
-    {Ctrl('S'), post_resetscore},         /* cache.090416: 推文設定 */
+    {'X', {post_recommend}},
+    {'%', {post_recommend}},           /* r2.20170802: 與 itoc 版熱鍵通用 */
+    //  {'o', {post_recommend_options}},
+    {'o' | XO_DL, {.dlfunc = DL_NAME("cleanrecommend.so", clean)}},
+    {Ctrl('S'), {post_resetscore}},         /* cache.090416: 推文設定 */
 #endif
 
-    {'R' | XO_DL, (int (*)(XO *xo))DL_NAME("vote.so", vote_result)},
-    {'V' | XO_DL, (int (*)(XO *xo))DL_NAME("vote.so", XoVote)},
+    {'R' | XO_DL, {.dlfunc = DL_NAME("vote.so", vote_result)}},
+    {'V' | XO_DL, {.dlfunc = DL_NAME("vote.so", XoVote)}},
 
-    {'b', post_memo},
+    {'b', {post_memo}},
 
 #ifdef HAVE_MODERATED_BOARD
-    {Ctrl('G'), XoBM},
+    {Ctrl('G'), {XoBM}},
 #endif
 
 #ifdef XZ_XPOST
-    {'/', XoXpost},                     /* Thor: for XoXpost */
-    {'~', XoXpost},                     /* Thor: for XoXpost */
+    {'/', {XoXpost}},                     /* Thor: for XoXpost */
+    {'~', {XoXpost}},                     /* Thor: for XoXpost */
 #endif
 
 #ifdef HAVE_POST_BOTTOM
-    {'_', post_bottom},
+    {'_', {post_bottom}},
 #endif
 
-    {'h', post_help}
+    {'h', {post_help}}
 };
 
 
@@ -4754,31 +4754,31 @@ xpost_browse(
 
 KeyFunc xpost_cb[] =
 {
-    {XO_INIT, xpost_init},
-    {XO_LOAD, xpost_load},
-    {XO_HEAD, xpost_head},
+    {XO_INIT, {xpost_init}},
+    {XO_LOAD, {xpost_load}},
+    {XO_HEAD, {xpost_head}},
 #if 0
-    {XO_BODY, xpost_body},
+    {XO_BODY, {xpost_body}},
 #endif
-    {XO_BODY, post_body}, /* Thor.980911: 共用即可 */
+    {XO_BODY, {post_body}}, /* Thor.980911: 共用即可 */
 
-    {'r', xpost_browse},
-    {'y', post_reply},
-    {'t', post_tag},
-    {'m', post_mark},
+    {'r', {xpost_browse}},
+    {'y', {post_reply}},
+    {'t', {post_tag}},
+    {'m', {post_mark}},
 
-    {'d', post_delete},  /* Thor.980911: 方便版主*/
+    {'d', {post_delete}},  /* Thor.980911: 方便版主*/
 
-    {Ctrl('P'), post_add},
-    {Ctrl('Q'), xo_uquery},
-    {'q', post_spam},
-    {'I', xo_usetup},
+    {Ctrl('P'), {post_add}},
+    {Ctrl('Q'), {xo_uquery}},
+    {'q', {post_spam}},
+    {'I', {xo_usetup}},
 #ifdef HAVE_MULTI_CROSSPOST
-    {Ctrl('X'), post_xcross},
+    {Ctrl('X'), {post_xcross}},
 #endif
-    {'x', post_cross},
+    {'x', {post_cross}},
 
-    {'h', xpost_help}
+    {'h', {xpost_help}}
 };
 #endif  /* #ifdef XZ_XPOST */
 

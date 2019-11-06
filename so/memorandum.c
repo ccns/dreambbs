@@ -228,17 +228,17 @@ XO *xo)
 
 KeyFunc memorandum_cb[] =
 {
-    {XO_INIT, memorandum_init},
-    {XO_LOAD, memorandum_load},
-    {XO_HEAD, memorandum_head},
-    {XO_BODY, memorandum_body},
+    {XO_INIT, {memorandum_init}},
+    {XO_LOAD, {memorandum_load}},
+    {XO_HEAD, {memorandum_head}},
+    {XO_BODY, {memorandum_body}},
 
-    {Ctrl('P'), memorandum_add},
-    {'r', memorandum_change},
-    {'c', memorandum_change},
-    {'s', memorandum_init},
-    {'d', memorandum_delete},
-    {'h', memorandum_help}
+    {Ctrl('P'), {memorandum_add}},
+    {'r', {memorandum_change}},
+    {'c', {memorandum_change}},
+    {'s', {memorandum_init}},
+    {'d', {memorandum_delete}},
+    {'h', {memorandum_help}}
 };
 
 int

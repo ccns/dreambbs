@@ -328,23 +328,23 @@ XO *xo)
 
 KeyFunc list_cb[] =
 {
-    {XO_INIT, list_init},
-    {XO_LOAD, list_load},
-    {XO_HEAD, list_head},
-    {XO_BODY, list_body},
+    {XO_INIT, {list_init}},
+    {XO_LOAD, {list_load}},
+    {XO_HEAD, {list_head}},
+    {XO_BODY, {list_body}},
 
-    {'r', list_browse},
-    {'T', list_title},
-    {'a', list_add},
-    {'r', list_help},
+    {'r', {list_browse}},
+    {'T', {list_title}},
+    {'a', {list_add}},
+    {'r', {list_help}},
 #ifdef HAVE_MULTI_CROSSPOST
-    {'F', list_board},
+    {'F', {list_board}},
 #endif
-    {'s', list_init},
-    {'d', list_delete},
-    {KEY_TAB, list_mode},
-    {'/', list_search},
-    {'h', list_help}
+    {'s', {list_init}},
+    {'d', {list_delete}},
+    {KEY_TAB, {list_mode}},
+    {'/', {list_search}},
+    {'h', {list_help}}
 };
 
 

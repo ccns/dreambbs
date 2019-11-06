@@ -772,7 +772,14 @@ typedef struct OverView
 typedef struct
 {
     int key;
-    int (*func) (XO *xo);
+    union {  /* IID.20191106: The field to be used is determined by the value of `key` */
+        int (*func)(XO *xo);  /* Default */
+#ifdef NO_SO
+        int (*dlfunc)(XO *xo);  /* `key | XO_DL` */
+#else
+        const char *dlfunc;
+#endif
+    };
 } KeyFunc;
 
 

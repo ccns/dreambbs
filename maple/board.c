@@ -2016,38 +2016,38 @@ class_visit(
 
 static KeyFunc class_cb[] =
 {
-    {XO_INIT, class_head},
-    {XO_LOAD, class_body},
-    {XO_HEAD, class_head},
-    {XO_BODY, class_body},
+    {XO_INIT, {class_head}},
+    {XO_LOAD, {class_body}},
+    {XO_HEAD, {class_head}},
+    {XO_BODY, {class_body}},
 
-    {'r', class_browse},
-    {'/', class_search},
-    {'c', class_newmode},
+    {'r', {class_browse}},
+    {'/', {class_search}},
+    {'c', {class_newmode}},
 
-    {'s', class_switch},
+    {'s', {class_switch}},
 
-    {'y', class_yank},
-    {'i', class_yank2}, //列出所有有閱讀權限的秘密/好友看板
-    {'z', class_zap},
-    {'E', class_edit},
-    {'v', class_visit},
+    {'y', {class_yank}},
+    {'i', {class_yank2}}, //列出所有有閱讀權限的秘密/好友看板
+    {'z', {class_zap}},
+    {'E', {class_edit}},
+    {'v', {class_visit}},
 #ifdef  HAVE_COUNT_BOARD
-    {'S' | XO_DL, (int (*)(XO *xo))DL_NAME("brdstat.so", main_bstat)},
+    {'S' | XO_DL, {.dlfunc = DL_NAME("brdstat.so", main_bstat)}},
 #endif
 
 #ifdef  HAVE_FAVORITE
-    {'a', class_add},
-    {Ctrl('P'), class_add2},
-    {'d', class_del},
-    {'M', class_mov},
+    {'a', {class_add}},
+    {Ctrl('P'), {class_add2}},
+    {'d', {class_del}},
+    {'M', {class_mov}},
 #endif
 
 #ifdef AUTHOR_EXTRACTION
-    //{'A', XoAuthor},
+    //{'A', {XoAuthor}},
 #endif
 
-    {'h', class_help}
+    {'h', {class_help}}
 };
 
 int

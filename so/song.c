@@ -553,18 +553,18 @@ XO *xo)
 
 static KeyFunc song_cb[] =
 {
-    {XO_INIT, song_init},
-    {XO_LOAD, song_load},
-    {XO_HEAD, song_head},
-    {XO_BODY, song_body},
+    {XO_INIT, {song_init}},
+    {XO_LOAD, {song_load}},
+    {XO_HEAD, {song_head}},
+    {XO_BODY, {song_body}},
 
-    {'r', song_browse},
-    {'o', song_order},
-    {'E', song_edit},
-    {'T', song_title},
-    {'q', song_query},
-    {'m', song_send},
-    {'h', song_help}
+    {'r', {song_browse}},
+    {'o', {song_order}},
+    {'E', {song_edit}},
+    {'T', {song_title}},
+    {'q', {song_query}},
+    {'m', {song_send}},
+    {'h', {song_help}}
 };
 
 

@@ -219,18 +219,18 @@ const CONTACT *contact)
 
 KeyFunc contact_cb[] =
 {
-    {XO_INIT, contact_init},
-    {XO_LOAD, contact_load},
-    {XO_HEAD, contact_head},
-    {XO_BODY, contact_body},
+    {XO_INIT, {contact_init}},
+    {XO_LOAD, {contact_load}},
+    {XO_HEAD, {contact_head}},
+    {XO_BODY, {contact_body}},
 
-    {Ctrl('P'), contact_add},
-    {'m', contact_mail},
-    {'r', contact_mail},
-    {'c', contact_change},
-    {'s', contact_init},
-    {'d', contact_delete},
-    {'h', contact_help}
+    {Ctrl('P'), {contact_add}},
+    {'m', {contact_mail}},
+    {'r', {contact_mail}},
+    {'c', {contact_change}},
+    {'s', {contact_init}},
+    {'d', {contact_delete}},
+    {'h', {contact_help}}
 };
 
 int

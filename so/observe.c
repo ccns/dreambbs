@@ -255,18 +255,18 @@ XO *xo)
 
 KeyFunc observe_cb[] =
 {
-    {XO_INIT, observe_init},
-    {XO_LOAD, observe_load},
-    {XO_HEAD, observe_head},
-    {XO_BODY, observe_body},
+    {XO_INIT, {observe_init}},
+    {XO_LOAD, {observe_load}},
+    {XO_HEAD, {observe_head}},
+    {XO_BODY, {observe_body}},
 
-    {Ctrl('P'), observe_add},
-    {'S', observe_sync},
-    {'r', observe_change},
-    {'c', observe_change},
-    {'s', observe_init},
-    {'d', observe_delete},
-    {'h', observe_help}
+    {Ctrl('P'), {observe_add}},
+    {'S', {observe_sync}},
+    {'r', {observe_change}},
+    {'c', {observe_change}},
+    {'s', {observe_init}},
+    {'d', {observe_delete}},
+    {'h', {observe_help}}
 };
 
 

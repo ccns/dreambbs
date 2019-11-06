@@ -152,15 +152,15 @@ XO *xo)
 
 KeyFunc bstat_cb[] =
 {
-    {XO_INIT, bstat_init},
-    {XO_LOAD, bstat_load},
-    {XO_HEAD, bstat_head},
-    {XO_BODY, bstat_body},
+    {XO_INIT, {bstat_init}},
+    {XO_LOAD, {bstat_load}},
+    {XO_HEAD, {bstat_head}},
+    {XO_BODY, {bstat_body}},
 
-    {'s', bstat_init},
-    {'S', bstat_stat},
-    {'c', bstat_clear},
-    {'h', bstat_help}
+    {'s', {bstat_init}},
+    {'S', {bstat_stat}},
+    {'c', {bstat_clear}},
+    {'h', {bstat_help}}
 };
 
 

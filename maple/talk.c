@@ -973,20 +973,20 @@ pal_help(
 
 KeyFunc pal_cb[] =
 {
-    {XO_INIT, pal_init},
-    {XO_LOAD, pal_load},
-    {XO_HEAD, pal_head},
-    {XO_BODY, pal_body},
+    {XO_INIT, {pal_init}},
+    {XO_LOAD, {pal_load}},
+    {XO_HEAD, {pal_head}},
+    {XO_BODY, {pal_body}},
 
-    {'a', pal_add},
-    {'c', pal_change},
-    {'d', pal_delete},
-    {'m', pal_mail},
-    {'q', pal_query},
-    {'s', pal_sort},
-    {'/', pal_search_forward},
-    {'?', pal_search_backward},
-    {'h', pal_help}
+    {'a', {pal_add}},
+    {'c', {pal_change}},
+    {'d', {pal_delete}},
+    {'m', {pal_mail}},
+    {'q', {pal_query}},
+    {'s', {pal_sort}},
+    {'/', {pal_search_forward}},
+    {'?', {pal_search_backward}},
+    {'h', {pal_help}}
 };
 
 
@@ -1246,19 +1246,19 @@ bmw_help(
 
 KeyFunc bmw_cb[] =
 {
-    {XO_INIT, bmw_init},
-    {XO_LOAD, bmw_load},
-    {XO_HEAD, bmw_head},
-    {XO_BODY, bmw_body},
+    {XO_INIT, {bmw_init}},
+    {XO_LOAD, {bmw_load}},
+    {XO_HEAD, {bmw_head}},
+    {XO_BODY, {bmw_body}},
 
-    {'d', bmw_delete},
-    {'m', bmw_mail},
-    {'w', bmw_write},
-    {'q', bmw_query},
-    {Ctrl('Q'), bmw_query},
-    {'s', bmw_init},
-    {KEY_TAB, bmw_mode},
-    {'h', bmw_help}
+    {'d', {bmw_delete}},
+    {'m', {bmw_mail}},
+    {'w', {bmw_write}},
+    {'q', {bmw_query}},
+    {Ctrl('Q'), {bmw_query}},
+    {'s', {bmw_init}},
+    {KEY_TAB, {bmw_mode}},
+    {'h', {bmw_help}}
 };
 
 
@@ -4140,52 +4140,52 @@ ulist_april1(
 
 KeyFunc ulist_cb[] =
 {
-    {XO_INIT, ulist_init},
-    {XO_LOAD, ulist_body},
-    {XO_NONE, ulist_init},
+    {XO_INIT, {ulist_init}},
+    {XO_LOAD, {ulist_body}},
+    {XO_NONE, {ulist_init}},
 #if 1
-    {'S', ulist_state},
+    {'S', {ulist_state}},
 #endif
-    {'y', ulist_readmail},
+    {'y', {ulist_readmail}},
 /* BLACK SU */
-    {'u', ulist_su},
+    {'u', {ulist_su}},
 /* BLACK SU */
-    {'m', ulist_message},
-    {'Z', ulist_ship},
-    {'f', ulist_pal},
-    {'a', ulist_makepal},
-    {'A', ulist_makebad},
-    {'t', ulist_talk},
-    {'w', ulist_write},
-    {'l', ulist_recall},                /* Thor: 熱訊回顧 */
-    {'j', ulist_changeship},
-    {'q', ulist_query},
-    {'b', ulist_broadcast},
-    {'s', ulist_init},          /* refresh status Thor: 應user要求 */
-    {'c', t_cloak},
-    {'R', ulist_realname},
-    {'o', ulist_mp},
-    {'d', ulist_del},
-    {'p', ulist_pager},
-    {Ctrl('Q'), ulist_query},
-    {Ctrl('K'), ulist_kick},
-    {Ctrl('X'), ulist_edit},
-    {'g', ulist_nickchange},
+    {'m', {ulist_message}},
+    {'Z', {ulist_ship}},
+    {'f', {ulist_pal}},
+    {'a', {ulist_makepal}},
+    {'A', {ulist_makebad}},
+    {'t', {ulist_talk}},
+    {'w', {ulist_write}},
+    {'l', {ulist_recall}},                /* Thor: 熱訊回顧 */
+    {'j', {ulist_changeship}},
+    {'q', {ulist_query}},
+    {'b', {ulist_broadcast}},
+    {'s', {ulist_init}},          /* refresh status Thor: 應user要求 */
+    {'c', {t_cloak}},
+    {'R', {ulist_realname}},
+    {'o', {ulist_mp}},
+    {'d', {ulist_del}},
+    {'p', {ulist_pager}},
+    {Ctrl('Q'), {ulist_query}},
+    {Ctrl('K'), {ulist_kick}},
+    {Ctrl('X'), {ulist_edit}},
+    {'g', {ulist_nickchange}},
 #ifdef HAVE_CHANGE_FROM
-    {Ctrl('F'), ulist_fromchange},
+    {Ctrl('F'), {ulist_fromchange}},
 #endif
 
     /* Thor.990125: 可前後搜尋, id or nickname */
-    {'/', ulist_search_forward},
-    {'?', ulist_search_backward},
+    {'/', {ulist_search_forward}},
+    {'?', {ulist_search_backward}},
 
 #ifdef  APRIL_FIRST
-    {'X', ulist_april1},
+    {'X', {ulist_april1}},
 #endif
 
-    {'M', ulist_mail},
-    {KEY_TAB, ulist_toggle},
-    {'h', ulist_help}
+    {'M', {ulist_mail}},
+    {KEY_TAB, {ulist_toggle}},
+    {'h', {ulist_help}}
 };
 
 
@@ -4871,18 +4871,18 @@ banmsg_help(
 
 KeyFunc banmsg_cb[] =
 {
-    {XO_INIT, banmsg_init},
-    {XO_LOAD, banmsg_load},
-    {XO_HEAD, banmsg_head},
-    {XO_BODY, banmsg_body},
+    {XO_INIT, {banmsg_init}},
+    {XO_LOAD, {banmsg_load}},
+    {XO_HEAD, {banmsg_head}},
+    {XO_BODY, {banmsg_body}},
 
-    {'a', banmsg_add},
-    {'c', banmsg_change},
-    {'d', banmsg_delete},
-    {'m', banmsg_mail},
-    {'q', banmsg_query},
-    {'s', banmsg_sort},
-    {'h', banmsg_help}
+    {'a', {banmsg_add}},
+    {'c', {banmsg_change}},
+    {'d', {banmsg_delete}},
+    {'m', {banmsg_mail}},
+    {'q', {banmsg_query}},
+    {'s', {banmsg_sort}},
+    {'h', {banmsg_help}}
 };
 
 

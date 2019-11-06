@@ -163,17 +163,17 @@ XO *xo)
 
 KeyFunc admin_cb[] =
 {
-    {XO_INIT, admin_init},
-    {XO_LOAD, admin_load},
-    {XO_HEAD, admin_head},
-    {XO_BODY, admin_body},
+    {XO_INIT, {admin_init}},
+    {XO_LOAD, {admin_load}},
+    {XO_HEAD, {admin_head}},
+    {XO_BODY, {admin_body}},
 
-    {Ctrl('P'), admin_add},
-    {'r', admin_change},
-    {'c', admin_change},
-    {'s', admin_init},
-    {'d', admin_delete},
-    {'h', admin_help}
+    {Ctrl('P'), {admin_add}},
+    {'r', {admin_change}},
+    {'c', {admin_change}},
+    {'s', {admin_init}},
+    {'d', {admin_delete}},
+    {'h', {admin_help}}
 };
 
 

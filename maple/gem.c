@@ -1436,36 +1436,36 @@ gem_cross(
 
 static KeyFunc gem_cb[] =
 {
-    {XO_INIT, gem_init},
-    {XO_LOAD, gem_load},
-    {XO_HEAD, gem_head},
-    {XO_BODY, gem_body},
+    {XO_INIT, {gem_init}},
+    {XO_LOAD, {gem_load}},
+    {XO_HEAD, {gem_head}},
+    {XO_BODY, {gem_body}},
 
-    {'r', gem_browse},
+    {'r', {gem_browse}},
 
-    {Ctrl('P'), gem_add},
-    {'E', gem_edit},
-    {'T', gem_title},
-    {'m', gem_mark},
-    {'x', gem_cross},
-    {'l', gem_lock},
+    {Ctrl('P'), {gem_add}},
+    {'E', {gem_edit}},
+    {'T', {gem_title}},
+    {'m', {gem_mark}},
+    {'x', {gem_cross}},
+    {'l', {gem_lock}},
 
-    {'d', gem_delete},
-    {'c', gem_copy},
+    {'d', {gem_delete}},
+    {'c', {gem_copy}},
 
-    {Ctrl('G'), gem_anchor},
-    {Ctrl('V'), gem_paste},
+    {Ctrl('G'), {gem_anchor}},
+    {Ctrl('V'), {gem_paste}},
 
-    {'t', gem_tag},
-    {'f', gem_toggle},
-    {'M', gem_move},
+    {'t', {gem_tag}},
+    {'f', {gem_toggle}},
+    {'M', {gem_move}},
 
-    {'S', gem_state},
+    {'S', {gem_state}},
 
-    {Ctrl('W'), gem_recycle},
+    {Ctrl('W'), {gem_recycle}},
 
 
-    {'h', gem_help}
+    {'h', {gem_help}}
 };
 
 

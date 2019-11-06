@@ -299,22 +299,22 @@ XO *xo)
 
 KeyFunc chat_cb[] =
 {
-    {XO_INIT, chat_init},
-    {XO_LOAD, chat_load},
-    {XO_HEAD, chat_head},
-    {XO_BODY, chat_body},
+    {XO_INIT, {chat_init}},
+    {XO_LOAD, {chat_load}},
+    {XO_HEAD, {chat_head}},
+    {XO_BODY, {chat_body}},
 
-    {Ctrl('P'), chat_add},
-    {'a', chat_add},
-    {'r', chat_change},
-    {'c', chat_change},
-    {'s', chat_init},
-    {'S', chat_sync},
-    {'f', chat_mode},
-    {'M', chat_move},
-    {KEY_TAB, chat_kind},
-    {'d', chat_delete},
-    {'h', chat_help}
+    {Ctrl('P'), {chat_add}},
+    {'a', {chat_add}},
+    {'r', {chat_change}},
+    {'c', {chat_change}},
+    {'s', {chat_init}},
+    {'S', {chat_sync}},
+    {'f', {chat_mode}},
+    {'M', {chat_move}},
+    {KEY_TAB, {chat_kind}},
+    {'d', {chat_delete}},
+    {'h', {chat_help}}
 };
 
 
