@@ -54,7 +54,7 @@ USE_LUAJIT	!= sh -c '$(DEF_TEST$(conf::= "BBSLUA_USE_LUAJIT")) $(DEF_YES)'
 
 CC_HASFLAGS = echo "" | $(CC) -x c -E $(flags:M*) -Werror - >/dev/null 2>&1
 
-.if $(CC) == "clang"
+.if $(CC:Mclang*)
 CFLAGS_WARN	+= -Wno-invalid-source-encoding
 .endif
 
