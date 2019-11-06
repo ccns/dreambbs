@@ -2135,35 +2135,35 @@ Every_Z_BMW(void)
 static MENU menu_everyz[] =
 {
 #ifdef HAVE_FAVORITE
-    {Every_Z_Favorite, PERM_VALID, POPUP_FUN,
+    {{Every_Z_Favorite}, PERM_VALID, POPUP_FUN,
     "Favorite 我的最愛"},
 #endif
 
-    {Every_Z_Gem, 0, POPUP_FUN,
+    {{Every_Z_Gem}, 0, POPUP_FUN,
     "Gem      精華區"},
 
-    {Every_Z_Ulist, 0, POPUP_FUN,
+    {{Every_Z_Ulist}, 0, POPUP_FUN,
     "Ulist    使用者名單"},
 
-    {Every_Z_Board, 0, POPUP_FUN,
+    {{Every_Z_Board}, 0, POPUP_FUN,
     "Post     文章列表"},
 
-    {Every_Z_Class, 0, POPUP_FUN,
+    {{Every_Z_Class}, 0, POPUP_FUN,
     "Class    看板列表"},
 
-    {Every_Z_MBox, PERM_BASIC, POPUP_FUN,
+    {{Every_Z_MBox}, PERM_BASIC, POPUP_FUN,
     "Mail     信箱"},
 
-    {Every_Z_BMW, 0, POPUP_FUN,
+    {{Every_Z_BMW}, 0, POPUP_FUN,
     "Bmw      熱訊紀錄"},
 
-    {Every_Z_Screen, 0, POPUP_FUN,
+    {{Every_Z_Screen}, 0, POPUP_FUN,
     "Screen   螢幕擷取"},
 
-    {NULL, 0, POPUP_QUIT,
+    {{NULL}, 0, POPUP_QUIT,
     "Quit     離開"},
 
-    {"快速選單", POPUP_DO_INSTANT + 'U', POPUP_MENUTITLE,
+    {{.title = "快速選單"}, POPUP_DO_INSTANT + 'U', POPUP_MENUTITLE,
     "快速選單切換"}
 };
 

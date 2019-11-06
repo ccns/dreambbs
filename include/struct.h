@@ -1014,10 +1014,19 @@ typedef struct PostRecommendHistory
 #endif
 #endif  /* #if 0 */
 
-typedef struct
+typedef struct MENU
 {
-    const void *func;
-    /* int (*func) (void); */
+    union {  /* The field to be used is determined by the value of `umode` */
+        int (*func) (void);  /* Default (menu) or `POPUP_FUN` (popupmenu) */
+        int (*xofunc) (XO *xo);  /* `POPUP_XO` (popupmenu) */
+#ifdef NO_SO
+        int (*dlfunc) (void);  /* `M_DL(umode)` (menu & popupmenu) or `POPUP_SO` (popupmenu) */
+#else
+        const char *dlfunc;
+#endif
+        const char *title;  /* `POPUP_MENUTITLE` (popupmenu) */
+        struct MENU *menu;  /* `<= M_XMENU` (menu) or `POPUP_MENU` (popupmenu) */
+    };
     unsigned int level;
     int umode;
     const char *desc;

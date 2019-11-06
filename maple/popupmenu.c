@@ -62,19 +62,16 @@ static int
 do_cmd(MENU *mptr, XO *xo, int x, int y)
 {
     GCC_UNUSED unsigned int mode;
-#ifndef NO_SO
-    const void *p;
-#endif
-    int (*func) (void);
-    int (*func_unary) (XO *xo);
 
 #ifndef NO_SO
+    void *p;
+
     if (mptr->umode < 0)
     {
-        p = DL_GET(mptr->func);
+        p = DL_GET(mptr->dlfunc);
         if (!p)
             return 0;
-        mptr->func = p;
+        mptr->xofunc = (int (*)(XO *xo))p;
         mptr->umode = - (mptr->umode);
     }
 #endif
@@ -83,12 +80,11 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
     {
 #ifndef NO_SO
         case POPUP_SO :
-            p = DL_GET(mptr->func);
+            p = DL_GET(mptr->dlfunc);
             if (!p) return 0;
-            mptr->func = p;
+            mptr->func = (int (*)(void))p;
             mptr->umode = POPUP_FUN;
-            func = p;
-            mode = (*func) ();
+            mode = (*mptr->func) ();
             return -1;
 #endif
         case POPUP_MENU :
@@ -98,14 +94,12 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
 #else
             vs_restore(sl);
 #endif
-            return do_menu((MENU *)mptr->func, xo, x, y);
+            return do_menu(mptr->menu, xo, x, y);
         case POPUP_XO :
-            func_unary = mptr->func;
-            mode = (*func_unary) (xo);
+            mode = (*mptr->xofunc) (xo);
             return -1;
         case POPUP_FUN :
-            func = mptr->func;
-            mode = (*func) ();
+            mode = (*mptr->func) ();
             return -1;
     }
 
