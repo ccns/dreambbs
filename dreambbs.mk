@@ -52,7 +52,7 @@ USE_BBSLUA	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSLUA")) $(DEF_YES)'
 USE_BBSRUBY	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSRUBY")) $(DEF_YES)'
 USE_LUAJIT	!= sh -c '$(DEF_TEST$(conf::= "BBSLUA_USE_LUAJIT")) $(DEF_YES)'
 
-CC_HASFLAGS = echo "" | $(CC) -o /dev/null -x c -E $(flags:M*) -Werror - >/dev/null 2>&1
+CC_HASFLAGS = echo "" | $(CC) -x c -E $(flags:M*) -Werror - >/dev/null 2>&1
 
 .if $(CC) == "clang"
 CFLAGS_WARN	+= -Wno-invalid-source-encoding
