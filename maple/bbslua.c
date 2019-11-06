@@ -758,12 +758,17 @@ vkey_purge(void)
 
 // #include <sys/time.h>  // Included
 
-#include <lua.h>
-#include <lualib.h>
-#include <lauxlib.h>
-
-#ifdef BBSLUA_USE_LUAJIT
-  #include <luajit.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
+  #include <lua.h>
+  #include <lualib.h>
+  #include <lauxlib.h>
+  #ifdef BBSLUA_USE_LUAJIT
+    #include <luajit.h>
+  #endif
+#ifdef __cplusplus
+}  // extern "C"
 #endif
 
 //////////////////////////////////////////////////////////////////////////

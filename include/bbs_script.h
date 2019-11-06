@@ -6,10 +6,16 @@
 /* BBS-Lua */
 
 #ifdef M3_USE_BBSLUA
+  #ifdef __cplusplus
+extern "C" {
+  #endif
   #include <lua.h>
 
   #ifdef BBSLUA_USE_LUAJIT
     #include <luajit.h>
+  #endif
+  #ifdef __cplusplus
+}  // extern "C"
   #endif
 #endif
 

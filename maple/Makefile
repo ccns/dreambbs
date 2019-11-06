@@ -19,8 +19,12 @@ CFLAGS	+= $(CFLAGS_MAPLE)
 .if $(USE_BBSLUA)
 CFLAGS	+= $(LUA_CFLAGS)
 LDFLAGS	+= $(LUA_LDFLAGS) $(LUA_LDFLAGS_ARCHI)
-SRC	+= bbslua.c bbsluaext.c
-OBJ	+= bbslua.o bbsluaext.o
+SRC	+= bbslua.c
+OBJ	+= bbslua.o
+.if !$(USE_LUAJIT)
+SRC	+= bbsluaext.c
+OBJ	+= bbsluaext.o
+.endif
 .endif
 
 .if $(USE_BBSRUBY)
