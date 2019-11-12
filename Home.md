@@ -3,7 +3,10 @@
 This wiki has been created to gathers information about how to use & how to install the DreamBBS system. :)
 
 ## Latest Release
-  + [Version 1.1.1 (codename: Milim)](https://github.com/ccns/dreambbs/releases/tag/v1.1.1)
+  + [Version 1.3.1 (codename: Veldora)](https://github.com/ccns/dreambbs/releases/tag/v1.3.1)
+
+## Testing Version
+  + [Version 2.0rc4 (codename: Artoria)](https://github.com/ccns/dreambbs/releases/tag/v2.0rc4)
 
 ## Installation Guide (程式安裝手冊)
 
