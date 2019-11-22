@@ -276,12 +276,12 @@ add_deny_exer(
     char buf[80];
     ACCT x;
     time_t now;
-    int check_time;
+    bool check_time;
     const char *cselect=NULL, *cdays=NULL, *cmode=NULL;
 
     memcpy(&x, u, sizeof(ACCT));
     time(&now);
-    check_time = (x.deny > now) ? 1 : 0;
+    check_time = (x.deny > now) ? true : false;
 
     if (!strncmp(u->justify, "reg:", 4))
         adm = (adm & ~DENY_MODE_ALL)|DENY_MODE_GUEST;

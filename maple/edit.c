@@ -381,7 +381,7 @@ ve_split(
 /* ----------------------------------------------------- */
 
 
-static int
+static bool
 ve_join(
     textline *line)
 {
@@ -390,10 +390,10 @@ ve_join(
     int sum, len;
 
     if (!(n = line->next))
-        return YEA;
+        return true;
 
     if (!*ve_strim(data = n->data))
-        return YEA;
+        return true;
 
     len = line->len;
     sum = len + n->len;
@@ -402,7 +402,7 @@ ve_join(
         strcpy(line->data + len, data);
         line->len = sum;
         delete_line(n);
-        return YEA;
+        return true;
     }
 
     s = data - len + VE_WIDTH - 1;
@@ -411,13 +411,13 @@ ve_join(
     while (*s != ' ' && s != data)
         s--;
     if (s == data)
-        return YEA;
+        return true;
 
     ve_split(n, (s - data) + 1);
     if (len + n->len >= VE_WIDTH)
     {
         ve_abort(0);
-        return YEA;
+        return true;
     }
 
     ve_join(line);
@@ -433,7 +433,7 @@ ve_join(
             n->len = len + 2;
         }
     }
-    return NA;
+    return false;
 }
 
 
@@ -898,7 +898,7 @@ ve_recover(void)
 /* ----------------------------------------------------- */
 
 
-static int
+static bool
 is_quoted(
     char *str)                  /* "--\n", "-- \n", "--", "-- " */
 {
@@ -911,10 +911,10 @@ is_quoted(
             if (*str == '\n')
                 str++;
             if (!*str)
-                return 1;
+                return true;
         }
     }
-    return 0;
+    return false;
 }
 
 

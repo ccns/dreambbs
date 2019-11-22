@@ -9,6 +9,8 @@
 #ifndef PROTO_H
 #define PROTO_H
 
+#include <stdbool.h>
+
 /* Macros for implementation-defined attributes */
 #include "attrdef.h"
 
@@ -200,9 +202,9 @@ int BanMail(void);
 void post_mail(void);
 /* talk.c */
 const char *bmode(const UTMP *up, int simple);
-GCC_PURE int is_boardpal(const UTMP *up);
-GCC_PURE int is_pal(int userno);
-GCC_PURE int is_banmsg(int userno);
+GCC_PURE bool is_boardpal(const UTMP *up);
+GCC_PURE bool is_pal(int userno);
+GCC_PURE bool is_banmsg(int userno);
 void pal_cache(void);
 void aloha_sync(void);
 void pal_sync(const char *fpath);

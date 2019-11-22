@@ -178,13 +178,13 @@ GCC_CONSTEXPR int base64_code(register int x)
 /* ----------------------------------------------------- */
 
 
-static inline int isreturn(const char c)
+static inline bool isreturn(const char c)
 {
     return c == '\r' || c == '\n';
 }
 
 
-static inline int is_space(const char c)
+static inline bool is_space(const char c)
 {
     return c == ' ' || c == '\t' || isreturn(c);
 }

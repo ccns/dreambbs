@@ -19,7 +19,7 @@ extern XZ xz[];
 extern LinkList *ll_head;
 #endif
 
-GCC_PURE extern int can_message(const UTMP *up);
+GCC_PURE extern bool can_message(const UTMP *up);
 /*extern int xo_fpath(char *fpath, const char *dir, const HDR *hdr);*/    /* lkchu.981201 */
 
 #ifdef  HAVE_DETECT_CROSSPOST
@@ -459,7 +459,7 @@ do_post(
     fpath[0] = 0;
     time(&spendtime);
 
-    if (vedit(fpath, YEA) < 0)
+    if (vedit(fpath, true) < 0)
     {
         unlink(fpath);
         pmsg2(MSG_CANCEL);
@@ -1673,7 +1673,7 @@ post_post(
             }
             else
             {
-                if (vedit(fpath, NA))
+                if (vedit(fpath, false))
                     vmsg(msg_cancel);
                 return post_head(xo);
             }
@@ -1708,7 +1708,7 @@ post_memo_edit(
             }
             else
             {
-                if (vedit(fpath, NA))
+                if (vedit(fpath, false))
                     vmsg(msg_cancel);
                 return post_head(xo);
             }
@@ -1837,7 +1837,8 @@ lazy_delete(
 post_delete(
     XO *xo)
 {
-    int pos, cur, by_BM;
+    int pos, cur;
+    bool by_BM;
     HDR *fhdr, phdr;
     char buf[80], fpath[80];
 
@@ -1888,7 +1889,7 @@ post_delete(
         return XO_NONE;
     }
 
-    by_BM = (strcmp(fhdr->owner, cuser.userid) ? 1 : 0);
+    by_BM = (strcmp(fhdr->owner, cuser.userid) ? true : false);
     if (!(bbstate & STAT_BOARD) && by_BM)
         return XO_NONE;
 
@@ -1983,14 +1984,15 @@ static int
 post_clean_delete(
     XO *xo)
 {
-    int pos, cur, by_BM;
+    int pos, cur;
+    bool by_BM;
     HDR *hdr;
 
     pos = xo->pos;
     cur = pos - xo->top;
     hdr = (HDR *) xo_pool + cur;
 
-    by_BM = (strcmp(hdr->owner, cuser.userid) ? 1 : 0);
+    by_BM = (strcmp(hdr->owner, cuser.userid) ? true : false);
 
     if ((hdr->xmode & POST_MARKED) || (hdr->xmode & POST_LOCK) || !(bbstate & STAT_BOARD))
     {
@@ -2428,7 +2430,7 @@ post_edit(
     {
         /*hdr = (HDR *) xo_pool + (xo->pos - xo->top);
         hdr_fpath(fpath, xo->dir, hdr);*/
-        vedit(fpath, NA); /* Thor.981020: 注意被talk的問題 */
+        vedit(fpath, false); /* Thor.981020: 注意被talk的問題 */
         post_head(xo);
     }
 #ifdef  HAVE_USER_MODIFY
@@ -2524,7 +2526,7 @@ post_edit(
 
         sprintf(buf, "tmp/%s.edit", cuser.userid);
 
-        if ((temp = vedit(buf, NA)) < 0)
+        if ((temp = vedit(buf, false)) < 0)
         {
             sprintf(buf, "tmp/%s.header", cuser.userid);
             unlink(buf);
@@ -2633,7 +2635,7 @@ int post_edit(XO *xo)
         {
             /*hdr = (HDR *) xo_pool + (xo->pos - xo->top);
                 hdr_fpath(fpath, xo->dir, hdr);*/
-            vedit(fpath, NA); /* Thor.981020: 注意被talk的問題 */
+            vedit(fpath, false); /* Thor.981020: 注意被talk的問題 */
             post_head(xo);
         }
 #ifdef  HAVE_USER_MODIFY
@@ -2694,7 +2696,7 @@ int post_edit(XO *xo)
 
             sprintf(buf, "tmp/%s.edit", cuser.userid);
 
-            if (vedit(buf, NA)<0)
+            if (vedit(buf, false)<0)
             {
                 sprintf(buf, "tmp/%s.header", cuser.userid);
                 unlink(buf);

@@ -237,7 +237,7 @@ void drawMap(int flShow)
 
 static int flLoseMine = 0;
 
-static void loseMine(int is_cheat)
+static void loseMine(bool is_cheat)
 {
     drawMap(1);
     game_log(1, "\x1b[31;1m在 %.01f 秒時%s啦!!!", difftime(time(0), init_time), (is_cheat) ? "自爆" : "踩到地雷");

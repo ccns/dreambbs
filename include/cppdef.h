@@ -122,7 +122,11 @@
 
 /* Macros for booleans */
 
-#define YEA     (1)             /* Booleans  (Yep, for true and false) */
-#define NA      (0)
+/* Standard boolean type and values */
+#include <stdbool.h>
+
+/* Booleans  (Yep, for true and false) (Deprecated) */
+#define YEA     CPP_MACRO_DEPRECATED(use 'true' instead)  (1)
+#define NA      CPP_MACRO_DEPRECATED(use 'false' instead) (0)
 
 #endif  // #ifndef CPPDEF_H

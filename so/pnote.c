@@ -314,7 +314,7 @@ p_edithint(void)
 
         utmp_mode(M_XMODE);
         setuserfile(genbuf, fn_pnote_hint);
-        aborted = vedit(genbuf, NA);
+        aborted = vedit(genbuf, false);
         if (!aborted)
             outs("¯d¨¥¿ý»s§¹²¦");
         vmsg(NULL);

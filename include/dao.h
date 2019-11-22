@@ -2,6 +2,7 @@
 #define DAO_H
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <sys/types.h>
 
 /* Macros for implementation-defined attributes */
@@ -54,9 +55,9 @@ int f_rm(const char *fpath);
 void f_suck(FILE *fp, const char *fpath);
 void mak_dirs(char *fpath);
 /* isnot.c */
-GCC_CONSTEXPR int is_alnum(int ch);
-GCC_CONSTEXPR int is_alpha(int ch);
-GCC_PURE int is_fname(const char *str);
+GCC_CONSTEXPR bool is_alnum(int ch);
+GCC_CONSTEXPR bool is_alpha(int ch);
+GCC_PURE bool is_fname(const char *str);
 int is_fpath(char *path);
 GCC_PURE int not_addr(const char *addr);
 /* radix32.c */

@@ -21,7 +21,7 @@ int rec_add(const char *fpath, const void *data, int size)
     return 0;
 }
 
-static int is_bottompost(HDR * hdr)
+static bool is_bottompost(HDR * hdr)
 {
     return (hdr->xmode & POST_BOTTOM);
 }

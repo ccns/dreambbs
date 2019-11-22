@@ -280,7 +280,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
         if (bbsothermode & OTHERSTAT_EDITING)
             vmsg("你還有檔案還沒編完哦！");
         else
-            vmsg(vedit(buf, NA) ? "原封不動" : "更新完畢");
+            vmsg(vedit(buf, false) ? "原封不動" : "更新完畢");
     }                            /* Thor.981020: 注意被talk的問題  */
     else if (n == 'v')
     {
@@ -827,12 +827,12 @@ int add_deny(ACCT * u, int adm, int cross)
     char buf[80];
     ACCT x;
     time_t now;
-    int check_time;
+    bool check_time;
     const char *cselect = NULL, *cdays = NULL, *cmode = NULL;
 
     memcpy(&x, u, sizeof(ACCT));
     time(&now);
-    check_time = (x.deny > now) ? 1 : 0;
+    check_time = (x.deny > now);
 
 
     fp = fopen(FN_STOP_LOG, "w");
@@ -2028,19 +2028,19 @@ int u_xfile(void)
 /* ----------------------------------------------------- */
 
 
-GCC_PURE static int valid_brdname(const char *brd)
+GCC_PURE static bool valid_brdname(const char *brd)
 {
     int ch;
 
     if (!is_alnum(*brd))
-        return 0;
+        return false;
 
     while ((ch = *++brd))
     {
         if (!is_alnum(ch) && ch != '.' && ch != '-' && ch != '_')
-            return 0;
+            return false;
     }
-    return 1;
+    return true;
 }
 
 static int m_setbrd(BRD * brd)
@@ -2883,7 +2883,7 @@ int m_register(void)
 #ifdef  HAVE_REPORT
 void report(const char *s)
 {
-    static int disable = NA;
+    static bool disable = false;
     int fd;
 
     if (disable)
@@ -2913,7 +2913,7 @@ void report(const char *s)
         close(fd);
     }
     else
-        disable = YEA;
+        disable = true;
 }
 
 

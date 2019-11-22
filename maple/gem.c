@@ -399,7 +399,7 @@ gem_add(
                     vmsg("你還有檔案還沒編完哦！");
                     return XO_FOOT;
                 }
-                else if (vedit(fpath, NA))
+                else if (vedit(fpath, false))
                 {
                     unlink(fpath);
                     zmsg(msg_cancel);
@@ -460,7 +460,7 @@ gem_edit(
         return XO_NONE;
     if ((hdr->xmode & GEM_RESERVED) && (xo->key < GEM_SYSOP))
         return XO_NONE;
-    if (vedit(fpath, NA) >= 0) /* Thor.981020: 注意被talk的問題 */
+    if (vedit(fpath, false) >= 0) /* Thor.981020: 注意被talk的問題 */
         gem_log(xo->dir, "修改", hdr);
     return gem_head(xo);
 }

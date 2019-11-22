@@ -388,7 +388,7 @@ cancel_article(
 /* ----------------------------------------------------- */
 
 
-static int              /* 1: 符合擋信規則 */
+static bool             /* 1: 符合擋信規則 */
 is_spam(
     const char *board, const char *addr, const char *nick)
 {
@@ -431,9 +431,9 @@ is_spam(
             continue;
 
         if (str_sub(compare, detail))
-            return 1;
+            return true;
     }
-    return 0;
+    return false;
 }
 
 

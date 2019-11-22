@@ -19,7 +19,7 @@ static int pal_count;
 static int *pal_pool;
 static UCACHE *ushm;
 static int can_see(const UTMP *up);
-static int can_message(const UTMP *up);
+static bool can_message(const UTMP *up);
 typedef UTMP *pickup;
 
 static void *
@@ -133,7 +133,7 @@ can_see(
 
 }
 
-GCC_PURE static int
+GCC_PURE static bool
 is_bad(
     int userno)
 {
@@ -145,7 +145,7 @@ is_bad(
         {
             datum = cache[mid = count >> 1];
             if ((-userno) == datum)
-                return 1;
+                return true;
             if ((-userno) > datum)
             {
                 cache += (++mid);
@@ -157,28 +157,28 @@ is_bad(
             }
         }
     }
-    return 0;
+    return false;
 }
 
-GCC_PURE static int
+GCC_PURE static bool
 can_message(
     const UTMP *up)
 {
     int self, ufo, can;
 
     if (up->userno == (self = cuser.userno))
-        return NA;
+        return false;
 
     if (HAS_PERM(PERM_SYSOP | PERM_ACCOUNTS | PERM_CHATROOM))   /* 站長、帳號、聊天室 */
-        return YEA;
+        return true;
 
     ufo = up->ufo;
 
     if (ufo & (UFO_MESSAGE))           /* 遠離塵囂 */
-        return NA;
+        return false;
 
     if (!(ufo & UFO_QUIET))
-        return YEA;                     /* 呼叫器沒關掉，亦無損友 */
+        return true;                     /* 呼叫器沒關掉，亦無損友 */
 
     can = 0;                    /* 找不到為 normal */
     can = can_see(up);
@@ -188,25 +188,25 @@ can_message(
 }
 
 
-GCC_PURE static int
+GCC_PURE static bool
 can_override(
     const UTMP *up)
 {
     int self, ufo, can;
 
     if (up->userno == (self = cuser.userno))
-        return NA;
+        return false;
 
     if (HAS_PERM(PERM_SYSOP | PERM_ACCOUNTS | PERM_CHATROOM))   /* 站長、帳號、聊天室 */
-        return YEA;
+        return true;
 
     ufo = up->ufo;
 
     if (ufo & (UFO_PAGER1 | UFO_REJECT))                /* 遠離塵囂 */
-        return NA;
+        return false;
 
     if (!(ufo & UFO_PAGER))
-        return YEA;                     /* 呼叫器沒關掉，亦無損友 */
+        return true;                     /* 呼叫器沒關掉，亦無損友 */
 
     can = 0;                    /* 找不到為 normal */
 
@@ -221,7 +221,7 @@ can_override(
 /* ----------------------------------------------------- */
 
 
-int
+bool
 is_pal(
     int userno)
 {
@@ -233,7 +233,7 @@ is_pal(
         {
             datum = cache[mid = count >> 1];
             if (userno == datum)
-                return 1;
+                return true;
             if (userno > datum)
             {
                 cache += (++mid);
@@ -245,7 +245,7 @@ is_pal(
             }
         }
     }
-    return 0;
+    return false;
 }
 
 

@@ -38,7 +38,7 @@ extern UCACHE *ushm;
 extern XZ xz[];
 static PAL_SHIP *pal_ship;
 GCC_PURE static int can_see(const UTMP *up);
-static int can_banmsg(const UTMP *up);
+static bool can_banmsg(const UTMP *up);
 
 #ifdef EVERY_Z
 extern int vio_fd;              /* Thor.0725: 為talk, chat可用^z作準備 */
@@ -224,7 +224,7 @@ can_see(
 
 }
 
-GCC_PURE static int
+GCC_PURE static bool
 is_bad(
     int userno)
 {
@@ -236,7 +236,7 @@ is_bad(
         {
             datum = cache[mid = count >> 1];
             if ((-userno) == datum)
-                return 1;
+                return true;
             if ((-userno) > datum)
             {
                 cache += (++mid);
@@ -248,11 +248,11 @@ is_bad(
             }
         }
     }
-    return 0;
+    return false;
 }
 
 #ifdef  HAVE_BANMSG
-GCC_PURE static int
+GCC_PURE static bool
 can_banmsg(
     const UTMP *up)
 {
@@ -265,7 +265,7 @@ can_banmsg(
         {
             datum = cache[mid = count >> 1];
             if (cuser.userno == datum)
-                return 1;
+                return true;
             if (cuser.userno > datum)
             {
                 cache += (++mid);
@@ -277,39 +277,39 @@ can_banmsg(
             }
         }
     }
-    return 0;
+    return false;
 
 }
 #endif
 
 
-GCC_PURE int
+GCC_PURE bool
 can_message(
     const UTMP *up)
 {
     int self, ufo, can;
 
     if (up->userno == (self = cuser.userno))
-        return NA;
+        return false;
 
     ufo = up->ufo;
 
 //  if (ufo & UFO_REJECT)
-//      return NA;
+//      return false;
 
     if (HAS_PERM(PERM_SYSOP | PERM_ACCOUNTS|PERM_CHATROOM))     /* 站長、帳號 */
-        return YEA;
+        return true;
 
 #ifdef  HAVE_BANMSG
     if (can_banmsg(up))         /* 拒收訊息 */
-        return NA;
+        return false;
 #endif
 
     if (ufo & (UFO_MESSAGE))   /* 遠離塵囂 */
-        return NA;
+        return false;
 
     if (!(ufo & UFO_QUIET))
-        return YEA;                     /* 呼叫器沒關掉，亦無損友 */
+        return true;                     /* 呼叫器沒關掉，亦無損友 */
 
     can = 0;                    /* 找不到為 normal */
     can = can_see(up);
@@ -319,28 +319,28 @@ can_message(
 }
 
 
-GCC_PURE static int
+GCC_PURE static bool
 can_override(
     const UTMP *up)
 {
     int self, ufo, can;
 
     if (up->userno == (self = cuser.userno))
-        return NA;
+        return false;
 
     ufo = up->ufo;
 
     if (ufo & (UFO_REJECT|UFO_NET))
-        return NA;
+        return false;
 
     if (HAS_PERM(PERM_SYSOP | PERM_ACCOUNTS|PERM_CHATROOM))     /* 站長、帳號 */
-        return YEA;
+        return true;
 
     if (ufo & UFO_PAGER1)               /* 遠離塵囂 */
-        return NA;
+        return false;
 
     if (!(ufo & UFO_PAGER))
-        return YEA;                     /* 呼叫器沒關掉，亦無損友 */
+        return true;                     /* 呼叫器沒關掉，亦無損友 */
 
     can = 0;                    /* 找不到為 normal */
 
@@ -355,7 +355,7 @@ can_override(
 /* ----------------------------------------------------- */
 
 #ifdef  HAVE_BOARD_PAL
-GCC_PURE int
+GCC_PURE bool
 is_boardpal(
     const UTMP *up)
 {
@@ -363,7 +363,7 @@ is_boardpal(
 }
 #endif
 
-GCC_PURE int
+GCC_PURE bool
 is_pal(
     int userno)
 {
@@ -375,7 +375,7 @@ is_pal(
         {
             datum = cache[mid = count >> 1];
             if (userno == datum)
-                return 1;
+                return true;
             if (userno > datum)
             {
                 cache += (++mid);
@@ -387,11 +387,11 @@ is_pal(
             }
         }
     }
-    return 0;
+    return false;
 }
 
 #ifdef  HAVE_BANMSG
-GCC_PURE int
+GCC_PURE bool
 is_banmsg(
     int userno)
 {
@@ -403,7 +403,7 @@ is_banmsg(
         {
             datum = cache[mid = count >> 1];
             if (userno == datum)
-                return 1;
+                return true;
             if (userno > datum)
             {
                 cache += (++mid);
@@ -415,7 +415,7 @@ is_banmsg(
             }
         }
     }
-    return 0;
+    return false;
 }
 #endif
 
@@ -3129,7 +3129,7 @@ ulist_body(
     const char *const wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
 
 #ifdef HAVE_BOARD_PAL
-    int isbpal;
+    bool isbpal;
 
     isbpal = (cutmp->board_pal != -1);
 #endif
@@ -3296,9 +3296,9 @@ ulist_init(
     UTMP *up, *uceil;
     PICKUP *pp;
     int max, filter, seecloak, userno, self, nf_num, tmp;
-    int ispal, bad;
+    bool ispal, bad;
 #ifdef HAVE_BOARD_PAL
-    int isbpal;
+    bool isbpal;
 #endif
 
     pp = ulist_pool;
@@ -3315,7 +3315,7 @@ ulist_init(
     uceil = (UTMP *) ((char *) up + ushm->offset);
 
     max = 0;
-    bad = 0;
+    bad = false;
 #ifdef HAVE_BOARD_PAL
     board_pals = 0;
     isbpal = (cutmp->board_pal != -1);
@@ -3335,10 +3335,10 @@ ulist_init(
         if (is_bad(userno))
         {
             bfriend_num++;
-            bad = 1;
+            bad = true;
         }
         else
-            bad = 0;
+            bad = true;
 
         if (((seecloak || !(up->ufo & UFO_CLOAK)) && (tmp != 2)) || HAS_PERM(PERM_SYSOP|PERM_SEECLOAK) || up->userno == cuser.userno)
         {

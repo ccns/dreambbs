@@ -158,7 +158,7 @@ mail_to_bm(void)
     utmp_mode(M_SMAIL);
     curredit = EDIT_MAIL | EDIT_LIST;
 
-    if (vedit(fpath, YEA) == -1)
+    if (vedit(fpath, true) == -1)
     {
         vmsg(msg_cancel);
         free(bm);
@@ -259,7 +259,7 @@ mail_to_all(void)
     usr_fpath(fpath, cuser.userid, buf);
     utmp_mode(M_SMAIL);
     curredit = EDIT_MAIL | EDIT_LIST;
-    if (vedit(fpath, YEA) == -1)
+    if (vedit(fpath, true) == -1)
     {
         vmsg(msg_cancel);
         return -1;
@@ -281,7 +281,7 @@ mail_to_all(void)
     return 0;
 }
 
-GCC_PURE static int
+GCC_PURE static bool
 is_bms(
 const char *list,             /* 板主：BM list */
 const char *userid)
@@ -294,7 +294,7 @@ const char *userid)
         cc = list[len];
         if ((!cc || cc == '/') && !str_ncmp(list, userid, len))
         {
-            return 1;
+            return true;
         }
         while ((cc = *list++))
         {
@@ -304,10 +304,10 @@ const char *userid)
     }
     while (cc);
 
-    return 0;
+    return false;
 }
 
-GCC_PURE static inline int
+GCC_PURE static inline bool
 is_bm(
 const char *list)             /* 板主：BM list */
 {
@@ -320,7 +320,7 @@ const char *list)             /* 板主：BM list */
         cc = list[len];
         if ((!cc || cc == '/') && !str_ncmp(list, userid, len))
         {
-            return 1;
+            return true;
         }
         while ((cc = *list++))
         {
@@ -330,7 +330,7 @@ const char *list)             /* 板主：BM list */
     }
     while (cc);
 
-    return 0;
+    return false;
 }
 
 

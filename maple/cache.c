@@ -754,7 +754,7 @@ fshm_init(void)
 static inline void
 out_rle(
     char *str,
-    int film)
+    bool film)
 {
 #ifdef SHOW_USER_IN_TEXT
     char *t_name = cuser.userid;

@@ -91,7 +91,7 @@ header_value(
 }
 
 
-GCC_PURE static int
+GCC_PURE static bool
 is_loopback(
     const char *path, const char *token,
     int len)
@@ -99,26 +99,26 @@ is_loopback(
     int cc;
 
     if (!path)          /* 若沒有 PATH 則不檢查 */
-        return 0;
+        return false;
 
     for (;;)
     {
         cc = path[len];
         if ((!cc || cc == '!') && !str_ncmp(path, token, len))
-            return 1;
+            return true;
 
         for (;;)
         {
             cc = *path;
             if (!cc)
-                return 0;
+                return false;
             path++;
             if (cc == '!')
                 break;
         }
     }
 
-    // return 0;
+    // return false;
 }
 
 

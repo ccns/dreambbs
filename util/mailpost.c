@@ -644,7 +644,7 @@ mailpost(void)
 
         str_lower(myname, myname);
         justify_user();
-        dirty = YEA;
+        dirty = true;
     }
 #endif
 
@@ -673,7 +673,7 @@ mailpost(void)
         if (!(brd.battr & BRD_NOCOUNT))
         {
             myacct.numposts++;
-            dirty = YEA;
+            dirty = true;
         }
     }
 

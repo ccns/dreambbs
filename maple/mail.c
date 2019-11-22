@@ -1843,7 +1843,7 @@ multi_send(
         utmp_mode(M_SMAIL);
         curredit = EDIT_MAIL | EDIT_LIST;
 
-        if (vedit(fpath, YEA) == -1)
+        if (vedit(fpath, true) == -1)
         {
             outs(msg_cancel);
         }
@@ -2606,7 +2606,7 @@ mbox_edit(
     hdr_fpath(fpath, xo->dir, hdr);
     if (HAS_PERM(PERM_SYSOP))
     {
-        vedit(fpath, NA);
+        vedit(fpath, false);
         return mbox_head(xo);
     }
     return XO_NONE;

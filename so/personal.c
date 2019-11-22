@@ -42,15 +42,16 @@ personal_log(
     return 0;
 }
 
-static int
+static bool
 belong(
     const char *flist,
     const char *key)
 {
-    int fd, rc;
+    int fd;
+    bool rc;
     char *str;
 
-    rc = 0;
+    rc = false;
     fd = open(flist, O_RDONLY);
     if (fd >= 0)
     {
@@ -61,7 +62,7 @@ belong(
             str_lower(str, str);
             if (str_str(key, str))
             {
-                rc = 1;
+                rc = true;
                 break;
             }
         }
@@ -72,7 +73,7 @@ belong(
 }
 
 
-static int
+static bool
 is_badid(
     const char *userid)
 {
@@ -80,19 +81,19 @@ is_badid(
     const char *str;
 
     if (strlen(userid) < 2)
-        return 1;
+        return true;
 
     if (!is_alpha(*userid))
-        return 1;
+        return true;
 
     if (!str_cmp(userid, STR_NEW))
-        return 1;
+        return true;
 
     str = userid;
     while ((ch = *(++str)))
     {
         if (!is_alnum(ch))
-            return 1;
+            return true;
     }
     return (belong(FN_ETC_BADID, userid));
 }

@@ -366,7 +366,7 @@ Tagger(
     if (!cmp)
     {
         if (op != TAG_TOGGLE)
-            return NA;
+            return false;
 
         TagNum = --tail;
         memcpy(&tagp[pos], &tagp[pos + 1], (tail - pos) * sizeof(TagItem));
@@ -384,7 +384,7 @@ Tagger(
         tagp->chrono = chrono;
         tagp->recno = recno;
         memcpy(++tagp, buf, tail);
-        return YEA;
+        return true;
     }
 
     /* TagList is full */

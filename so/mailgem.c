@@ -213,7 +213,7 @@ XO *xo)
             vmsg("你還有檔案還沒編完哦！");
             return XO_FOOT;
         }
-        else if (vedit(fpath, NA))
+        else if (vedit(fpath, false))
         {
             unlink(fpath);
             zmsg(msg_cancel);
@@ -266,7 +266,7 @@ XO *xo)
 
     if (!(hdr = mailgem_check(xo, fpath)))
         return XO_NONE;
-    vedit(fpath, NA);
+    vedit(fpath, false);
     return mailgem_head(xo);
 }
 

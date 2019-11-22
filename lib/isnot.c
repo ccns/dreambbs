@@ -1,32 +1,32 @@
 #include <string.h>
 #include "dao.h"
 
-GCC_CONSTEXPR int is_alnum(int ch)
+GCC_CONSTEXPR bool is_alnum(int ch)
 {
     return ((ch >= '0' && ch <= '9') ||
             (ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
 }
 
-GCC_CONSTEXPR int is_alpha(int ch)
+GCC_CONSTEXPR bool is_alpha(int ch)
 {
     return ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z'));
 }
 
-GCC_PURE int is_fname(const char *str)
+GCC_PURE bool is_fname(const char *str)
 {
     int ch;
 
     ch = *str;
     if (ch == '/')
-        return 0;
+        return false;
 
     do
     {
         if (!is_alnum(ch) && !strchr("-._/+@", ch))
-            return 0;
+            return false;
     }
     while ((ch = *++str));
-    return 1;
+    return true;
 }
 
 /* ----------------------------------------------------- */

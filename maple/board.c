@@ -345,7 +345,7 @@ force_board (void)
 /* ----------------------------------------------------- */
 
 
-GCC_PURE static inline int
+GCC_PURE static inline bool
 is_bm(
     const char *list)                 /* ªO¥D¡GBM list */
 {
@@ -358,7 +358,7 @@ is_bm(
         cc = list[len];
         if ((!cc || cc == '/') && !str_ncmp(list, userid, len))
         {
-            return 1;
+            return true;
         }
         while ((cc = *list++))
         {
@@ -367,7 +367,7 @@ is_bm(
         }
     } while (cc);
 
-    return 0;
+    return false;
 }
 
 #if     defined(HAVE_RESIST_WATER) || defined(HAVE_DETECT_CROSSPOST)

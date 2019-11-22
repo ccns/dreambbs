@@ -502,7 +502,7 @@ XO *xo)
         return XO_NONE;
     hdr = song_get(xo, fpath);
     if (hdr)
-        vedit(fpath, NA);
+        vedit(fpath, false);
     return song_head(xo);
 }
 

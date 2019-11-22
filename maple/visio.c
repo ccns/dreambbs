@@ -161,7 +161,7 @@ bell(void)
 #define o_standdown()   o_ansi("\x1b[m")
 
 
-static int docls;
+static bool docls;
 static int roll;
 static int scrollcnt, tc_col, tc_row;
 
@@ -197,10 +197,11 @@ move(
 #if 0
     if (x && (cslp->mode & SL_ANSICODE))
     {
-        int ch, ansi;
+        int ch;
+        bool ansi;
         unsigned char *str;
 
-        ansi = 0;
+        ansi = false;
         y = x;
         str = cslp->data;
         while (x && (ch = *str))
@@ -208,7 +209,7 @@ move(
             str++;
             if (ch == KEY_ESC)
             {
-                ansi = YEA;
+                ansi = true;
                 y++;
                 continue;
             }
@@ -217,7 +218,7 @@ move(
                 y++;
                 if (ch == 'm')          /* (!strchr(str_ansicode, ch)) */
                 {
-                    ansi = NA;
+                    ansi = false;
                 }
                 continue;
             }
@@ -252,11 +253,12 @@ move_ansi(
 
     if (x)
     {
-        int ch, ansi;
+        int ch;
+        bool ansi;
         int len;
         unsigned char *str;
 
-        ansi = 0;
+        ansi = false;
         y = x;
         str = cslp->data;
         str[(len = cslp->len)] = '\0';
@@ -266,7 +268,7 @@ move_ansi(
             len--;
             if (ch == KEY_ESC)
             {
-                ansi = YEA;
+                ansi = true;
                 y++;
                 continue;
             }
@@ -275,12 +277,12 @@ move_ansi(
                 y++;
                 if (ch == 'm')          /* (!strchr(str_ansicode, ch)) */
                 {
-                    ansi = NA;
+                    ansi = false;
                 }
                 continue;
             }
             x--;
-            if (x<=0 && (ansi==NA))
+            if (x<=0 && (ansi==false))
                 break;
         }
         x = y;
@@ -311,25 +313,27 @@ ansicol(
     int len)
 {
     const unsigned char *str;
-    int ch, ansi, col;
+    int ch, col;
+    bool ansi;
 
     if (!len || !(slp->mode & SL_ANSICODE))
         return len;
 
-    ansi = col = 0;
+    col = 0;
+    ansi = false;
     str = slp->data;
 
     while (len-- && (ch = *str++))
     {
         if (ch == KEY_ESC && *str == '[')
         {
-            ansi = YEA;
+            ansi = true;
             continue;
         }
         if (ansi)
         {
             if (ch == 'm')
-                ansi = NA;
+                ansi = false;
             continue;
         }
         col++;
@@ -426,7 +430,7 @@ standoutput(
 
 
 #if 0
-static int standing;
+static bool standing;
 
 
 static void
@@ -434,7 +438,7 @@ standout(void)
 {
     if (!standing)
     {
-        standing = YEA;
+        standing = true;
         cur_slp->sso = cur_slp->eso = cur_pos;
         cur_slp->mode |= SL_STANDOUT;
     }
@@ -446,7 +450,7 @@ standend(void)
 {
     if (standing)
     {
-        standing = NA;
+        standing = false;
         if (cur_slp->eso < cur_pos)
             cur_slp->eso = cur_pos;
     }
@@ -467,7 +471,8 @@ vs_redraw(void)
     screenline *slp;
     int i, j, len, mode, width;
 
-    tc_col = tc_row = docls = scrollcnt = vo_size = i = 0;
+    tc_col = tc_row = scrollcnt = vo_size = i = 0;
+    docls = false;
     o_clear();
     for (slp = &vbuf[j = roll]; i < t_lines; i++, j++, slp++)
     {
@@ -622,7 +627,7 @@ clear(void)
     int i;
     screenline *slp;
 
-    docls = YEA;
+    docls = true;
     cur_pos = cur_col = cur_row = roll = i = 0;
     cur_slp = slp = vbuf;
     while (i++ < t_lines)
@@ -638,7 +643,7 @@ clearange(
     int i;
     screenline *slp;
 
-    docls = YEA;
+    docls = true;
     cur_pos = cur_col = roll = 0;
     i = cur_row = from;
     cur_slp = slp = &vbuf[from];
@@ -727,7 +732,7 @@ new_line:
 #if 0
             if (standing)
             {
-                standing = NA;
+                standing = false;
                 if (pos <= slp->sso)
                     slp->mode &= ~SL_STANDOUT;
                 else if (slp->eso < pos)
