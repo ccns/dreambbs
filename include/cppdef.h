@@ -106,4 +106,11 @@
 
 #endif  // #ifdef NO_SO
 
+/* Macros for emitting warnings */
+
+#define CPP_PRAGMA(arg)  _Pragma(CPP_STR(arg))
+
+#define CPP_MACRO_DEPRECATED(msg) \
+    CPP_PRAGMA(GCC warning CPP_STR(deprecated macro: msg))
+
 #endif  // #ifndef CPPDEF_H
