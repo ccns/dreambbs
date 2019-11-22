@@ -28,7 +28,7 @@ local vstruct = require "vstruct"
 local timeout_ms = 7*24*60*60*1000
 local bbs_receive_size = 1024
 
-local check_origin = function ()
+local function check_origin()
     local checked = tonumber(ngx.var.bbs_origin_checked)
     if checked ~= 1 then
         ngx.log(ngx.ERR, "origin checked failed: ", ngx.req.get_headers().origin)
@@ -36,7 +36,7 @@ local check_origin = function ()
     end
 end
 
-local build_conn_data = function ()
+local function build_conn_data()
     local fmt = vstruct.compile("< u4 u4 u4 s16 u2 u2 u4")
     local flags = 0
     local secure = tonumber(ngx.var.bbs_secure) or 0
@@ -54,7 +54,7 @@ local build_conn_data = function ()
     })
 end
 
-local connect_mbbsd = function ()
+local function connect_mbbsd()
     local addr = ngx.var.bbs_logind_addr
     if not addr then
         ngx.log(ngx.ERR, "bbs_logind_addr not set")
@@ -77,7 +77,7 @@ local connect_mbbsd = function ()
     return mbbsd
 end
 
-local start_websocket_server = function ()
+local function start_websocket_server()
     local ws, err = server:new({
         timeout = timeout_ms,
         max_payload_len = 65535,
@@ -89,7 +89,7 @@ local start_websocket_server = function ()
     return ws
 end
 
-local ws2sock = function (ws, sock)
+local function ws2sock(ws, sock)
     local last_typ = ""
     while true do
         local data, typ, err = ws:recv_frame()
@@ -134,7 +134,7 @@ local ws2sock = function (ws, sock)
     end
 end
 
-local sock2ws = function (sock, ws)
+local function sock2ws(sock, ws)
     while true do
         sock:settimeout(timeout_ms)
         local data, err = sock:receiveany(bbs_receive_size)
