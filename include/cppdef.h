@@ -117,8 +117,25 @@
 
 /* Macros for limiting the value range */
 
-#define BMIN(a, b)      ((a<b)?a:b)
-#define BMAX(a, b)      ((a>b)?a:b)
+#ifdef __cplusplus
+  #define BMIN(a, b)      std::min(a, b)
+  #define BMAX(a, b)      std::max(a, b)
+#else
+  #define CPP_MIN(a, b)   (((a) < (b)) ? (a) : (b))
+  #define CPP_MAX(a, b)   (((a) > (b)) ? (a) : (b))
+  #ifdef __GNUC__
+    #define BMIN(a, b)  __extension__ \
+        ({ __typeof__(a) _a = (a); __typeof__(b) _b = (b); CPP_MIN(_a, _b); })
+    #define BMAX(a, b)  __extension__ \
+        ({ __typeof__(a) _a = (a); __typeof__(b) _b = (b); CPP_MAX(_a, _b); })
+  #else
+/* `long double` can hold the value of all the standard scale types */
+static inline long double ld_min(long double a, long double b) { return CPP_MIN(a, b); }
+static inline long double ld_max(long double a, long double b) { return CPP_MAX(a, b); }
+    #define BMIN(a, b)      ld_min(a, b)
+    #define BMAX(a, b)      ld_max(a, b)
+  #endif
+#endif
 
 /* Macros for booleans */
 

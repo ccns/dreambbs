@@ -39,6 +39,10 @@
 #include "battr.h"              /* board attribution */
 #include "theme.h"              /* custom theme */
 
+#ifdef __cplusplus
+    #include <algorithm>
+#endif
+
 #ifdef __linux__
     #include <time.h>
 #else
