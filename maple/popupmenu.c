@@ -44,14 +44,14 @@ is_big5(const char *src, int pos, int mode)
             }
         }
 
-        wstate = (*str<0)?((wstate==true)?false:true):false;
+        wstate = (*str<0) && !wstate;
         word++;
     }
 
     if (wstate)
         return -1;
 
-    if (*str<0 && wstate==false)
+    if (*str<0 && !wstate)
         return 1;
     else
         return 0;
@@ -308,7 +308,7 @@ draw_menu(const MENU *const pmenu[20], int num, const char *title, int x, int y,
     vs_line(buf, x-1, y);
     for (i=0; i<num; ++i, ++x)
     {
-        draw_item(pmenu[i]->desc, (i==cur)?true:false, x, y);
+        draw_item(pmenu[i]->desc, (i==cur), x, y);
     }
     sprintf(buf, " \x1b[0;47;30m¢h\x1b[30;1m¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h\x1b[40;30;1m¢p\x1b[m ");
     vs_line(buf, x, y);
@@ -464,7 +464,7 @@ draw_menu_des(const char *const desc[], const char *title, int x, int y, int cur
     sprintf(buf, " \x1b[0;37;44m¢j%-31s \x1b[0;47;34m¢p\x1b[m   ", title);
     vs_line(buf, x-1, y);
     for (num=1; desc[num]; num++)
-        draw_ans_item(desc[num], (num==cur)?true:false, x++, y, hotkey);
+        draw_ans_item(desc[num], (num==cur), x++, y, hotkey);
     sprintf(buf, " \x1b[0;47;30m¢h\x1b[30;1m¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h¢h\x1b[40;30;1m¢p\x1b[m ");
     vs_line(buf, x, y);
     return num-2;

@@ -281,7 +281,7 @@ add_deny_exer(
 
     memcpy(&x, u, sizeof(ACCT));
     time(&now);
-    check_time = (x.deny > now) ? true : false;
+    check_time = (x.deny > now);
 
     if (!strncmp(u->justify, "reg:", 4))
         adm = (adm & ~DENY_MODE_ALL)|DENY_MODE_GUEST;

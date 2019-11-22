@@ -1889,7 +1889,7 @@ post_delete(
         return XO_NONE;
     }
 
-    by_BM = (strcmp(fhdr->owner, cuser.userid) ? true : false);
+    by_BM = strcmp(fhdr->owner, cuser.userid);
     if (!(bbstate & STAT_BOARD) && by_BM)
         return XO_NONE;
 
@@ -1992,7 +1992,7 @@ post_clean_delete(
     cur = pos - xo->top;
     hdr = (HDR *) xo_pool + cur;
 
-    by_BM = (strcmp(hdr->owner, cuser.userid) ? true : false);
+    by_BM = strcmp(hdr->owner, cuser.userid);
 
     if ((hdr->xmode & POST_MARKED) || (hdr->xmode & POST_LOCK) || !(bbstate & STAT_BOARD))
     {

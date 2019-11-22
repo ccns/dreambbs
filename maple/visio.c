@@ -282,7 +282,7 @@ move_ansi(
                 continue;
             }
             x--;
-            if (x<=0 && (ansi==false))
+            if (x<=0 && !ansi)
                 break;
         }
         x = y;
