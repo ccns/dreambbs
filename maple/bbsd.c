@@ -1511,8 +1511,8 @@ start_daemon(
 
     if (port == -2)
     {
-        chown(unix_path, BBSUID, BBSGID);
-        chmod(unix_path, 0600);
+        chown(unix_path, BBSUID, WWWGID);
+        chmod(unix_path, 0660);
     }
 
     /* --------------------------------------------------- */

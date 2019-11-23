@@ -55,6 +55,10 @@
 #define BBSGID          9999
 #endif
 
+#ifndef WWWGID
+#define WWWGID          9999
+#endif
+
 #ifndef TAG_VALID
 #define TAG_VALID       "[DreamBBS]To "             /* 身分認證函token */
 #endif
