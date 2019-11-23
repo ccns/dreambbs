@@ -41,6 +41,7 @@
 
 #ifdef __cplusplus
     #include <algorithm>
+    #include <cmath>
 #endif
 
 #ifdef __linux__

@@ -120,20 +120,38 @@
 #ifdef __cplusplus
   #define BMIN(a, b)      std::min(a, b)
   #define BMAX(a, b)      std::max(a, b)
+  #define UABS(a)         std::abs(a)
+  #if __cplusplus >= 201703L  /* C++17 */
+    #define TCLAMP(x, low, high)  std::clamp(x, low, high)
+  #else
+    #define TCLAMP(x, low, high)  std::min(std::max(x, low), high)
+  #endif
 #else
   #define CPP_MIN(a, b)   (((a) < (b)) ? (a) : (b))
   #define CPP_MAX(a, b)   (((a) > (b)) ? (a) : (b))
+  #define CPP_ABS(a)      (((a) < 0) ? -(a) : (a))
+  #define CPP_CLAMP(x, low, high)  (((x) > (high)) ? (high) : (((x) < (low)) ? (low) : (x)))
   #ifdef __GNUC__
     #define BMIN(a, b)  __extension__ \
         ({ __typeof__(a) _a = (a); __typeof__(b) _b = (b); CPP_MIN(_a, _b); })
     #define BMAX(a, b)  __extension__ \
         ({ __typeof__(a) _a = (a); __typeof__(b) _b = (b); CPP_MAX(_a, _b); })
+    #define UABS(a)  __extension__ ({ __typeof__(a) _a = (a); CPP_ABS(_a); })
+    #define TCLAMP(x, low, high)  __extension__ \
+        ({ __typeof__(x) _x = (x); \
+          __typeof__(low) _low = (low); __typeof__(high) _high = (high); \
+          CPP_CLAMP(_x, _low, _high); })
   #else
 /* `long double` can hold the value of all the standard scale types */
 static inline long double ld_min(long double a, long double b) { return CPP_MIN(a, b); }
 static inline long double ld_max(long double a, long double b) { return CPP_MAX(a, b); }
-    #define BMIN(a, b)      ld_min(a, b)
-    #define BMAX(a, b)      ld_max(a, b)
+static inline long double ld_abs(long double a) { return CPP_ABS(a); }
+static inline long double ld_clamp(long double x, long double low, long double high)
+    { return CPP_CLAMP(x, low, high); }
+    #define BMIN(a, b)    ld_min(a, b)
+    #define BMAX(a, b)    ld_max(a, b)
+    #define UABS(a)       ld_abs(a)
+    #define TCLAMP(x, low, high)  ld_clamp(x, low, high)
   #endif
 #endif
 
