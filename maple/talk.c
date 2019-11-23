@@ -702,8 +702,7 @@ pal_body(
     pal = (PAL *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
-    if (max > tail)
-        max = tail;
+    max = BMIN(max, tail);
 
     move(3, 0);
     do
@@ -1084,8 +1083,7 @@ bmw_body(
     bmw = (BMW *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
-    if (max > tail)
-        max = tail;
+    max = BMIN(max, tail);
 
     do
     {
@@ -1632,9 +1630,7 @@ bmw_send(
     texpire = time(&bmw->btime) - BMW_EXPIRE;
 
     mpool = ushm->mpool;
-    mhead = ushm->mbase;
-    if (mhead < mpool)
-        mhead = mpool;
+    mhead = BMAX(ushm->mbase, mpool);
     mtail = mpool + BMW_MAX;
 
     do

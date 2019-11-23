@@ -783,13 +783,10 @@ seek_rec(
     if ((fd = open(xo->dir, O_RDWR, 0600)) == -1)
         return -1;
 
-    pos = xo->pos;
-
     fstat(fd, &st);
 
     total = st.st_size / sizeof(HDR);
-    if (pos >= total)
-        pos = total-1;
+    pos = BMIN(xo->pos, total-1);
 
     memcpy(&thdr, hdr, sizeof(HDR));
 
@@ -947,8 +944,7 @@ post_body(
     fhdr = (HDR *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
-    if (max > tail)
-        max = tail;
+    max = BMIN(max, tail);
 
     move(3, 0);
     do
@@ -984,9 +980,7 @@ post_visit(
         brh_visit(ans = ans == 'u');
 
         row = xo->top;
-        max = xo->max - xo->top + 3;
-        if (max > b_lines)
-            max = b_lines;
+        max = BMIN(xo->max - xo->top + 3, b_lines);
 
         fhdr = (HDR *) xo_pool;
         row = 3;
@@ -1480,10 +1474,8 @@ post_history(          /* 將 hdr 這篇加入 brh */
         }
         close(fd);
 
-        if (prev > chrono)      /* 沒有下一篇 */
-            prev = chrono;
-        if (next < chrono)      /* 沒有上一篇 */
-            next = chrono;
+        prev = BMIN(prev, chrono);  /* 沒有下一篇 */
+        next = BMAX(next, chrono);  /* 沒有上一篇 */
 
         brh_add(prev, chrono, next);
     }
@@ -4494,8 +4486,7 @@ xpost_body(
     fhdr = (HDR *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
-    if (max > tail)
-        max = tail;
+    max = BMIN(max, tail);
 
     move(3, 0);
     do
@@ -4544,8 +4535,7 @@ xypost_pick(
     xo->top = top = (pos / XO_TALL) * XO_TALL;
     max = xo->max;
     pos = top + XO_TALL;
-    if (max > pos)
-        max = pos;
+    max = BMIN(max, pos);
 
     do
     {

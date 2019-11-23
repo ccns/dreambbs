@@ -49,8 +49,7 @@ XO *xo)
     observe = (OBSERVE *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
-    if (max > tail)
-        max = tail;
+    max = BMIN(max, tail);
 
     do
     {

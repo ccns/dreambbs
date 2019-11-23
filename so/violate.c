@@ -27,7 +27,7 @@ const EMAIL *viol)
     if (viol->deny == -1)
         sprintf(buf, "%s", "¥Ã¤[");
     else
-        sprintf(buf, "%4d", now > 0 ? now : 0);
+        sprintf(buf, "%4d", BMAX(now, 0));
     prints("%6d %4d %4s %-*.*s\n", num, viol->times, buf, d_cols + 56, d_cols + 56, viol->email);
 }
 
@@ -51,8 +51,7 @@ XO *xo)
     viol = (EMAIL *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
-    if (max > tail)
-        max = tail;
+    max = BMIN(max, tail);
 
     do
     {

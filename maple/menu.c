@@ -1304,8 +1304,7 @@ menu(void)
                 table[++max] = menu;
             }
 
-            if (mmx < max)
-                mmx = max;
+            mmx = BMAX(mmx, max);
 
 #ifndef TREAT
             if ((depth == 0) && (cutmp->ufo & UFO_BIFF))

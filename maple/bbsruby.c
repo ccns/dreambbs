@@ -10,6 +10,7 @@
 #define BBSRUBY_HAVE_GETYX                // The BBS has `getyx()`
 //#define BBSRUBY_HAVE_STR_RANSI            // The BBS has `str_ransi` variable
 //#define BBSRUBY_VER_INFO_FILE             // The file with version information for BBS-Ruby
+#define BBSRUBY_HAVE_BMIN_BMAX            // The BBS has macros `BMIN` and `BMAX`
 
 #include "bbs.h"
 #include <sys/time.h>
@@ -85,6 +86,11 @@ static inline void getyx(int *y, int *x)
 #else
   #define BRB_COOR_ROW  "y"
   #define BRB_COOR_COL  "x"
+#endif
+
+#ifndef BBSRUBY_HAVE_BMIN_BMAX          // The BBS has macros `MIN` and `MAX` instead
+  #define BMIN(a, b)  MIN(a, b)
+  #define BMAX(a, b)  MAX(a, b)
 #endif
 
 //-------------------------------------------------------
@@ -222,7 +228,7 @@ VALUE brb_getdata(VALUE self, VALUE args)
 #endif
 
     int maxsize = NUM2INT(rb_ary_entry(args, 0));
-    if (maxsize > 511) maxsize = 511;
+    maxsize = BMIN(maxsize, 511);
     char data[512] = "";
     int cur_row, cur_col;
     getyx(&cur_row, &cur_col);
@@ -249,9 +255,7 @@ VALUE brb_getdata(VALUE self, VALUE args)
 VALUE brb_kbhit(VALUE self, VALUE wait)
 {
     double data = NUM2DBL(wait);
-
-    if (data < KBHIT_TMIN) data = KBHIT_TMIN;
-    if (data > KBHIT_TMAX) data = KBHIT_TMAX;
+    data = BMIN(BMAX(data, KBHIT_TMIN), KBHIT_TMAX);
 
     if (getkey(data) != 0)
     {

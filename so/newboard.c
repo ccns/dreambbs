@@ -161,8 +161,7 @@ XO *xo)
     nbrd = (NBRD *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
-    if (max > tail)
-        max = tail;
+    max = BMIN(max, tail);
 
     move(3, 0);
     do

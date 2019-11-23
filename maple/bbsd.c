@@ -130,12 +130,11 @@ u_exit(
     ACCT tuser;
     char fpath[80];
 
+    /* 癶程ê狾 */
     if (currbno >= 0)
     {
-        if (bshm->mantime[currbno] > 0)//ňゎ跑Θ璽计
-            bshm->mantime[currbno]--; /* 癶程ê狾 */
-        else
-            bshm->mantime[currbno] = 0;//璽计杠耴箂
+        //ňゎ跑Θ璽计璽计杠耴箂
+        bshm->mantime[currbno] = BMAX(bshm->mantime[currbno]-1, 0);
     }
 
     utmp_free();                        /* 睦 UTMP shm */
@@ -1340,15 +1339,9 @@ term_init(void)
         b_cols = ntohs(* (short *) rcv) - 1;
 
         /* b_lines ぶ璶 23程ぃ禬筁 T_LINES - 1 */
-        if (b_lines >= T_LINES)
-            b_lines = T_LINES - 1;
-        else if (b_lines < 23)
-            b_lines = 23;
+        b_lines = TCLAMP(b_lines, 23, T_LINES - 1);
         /* b_cols ぶ璶 79程ぃ禬筁 T_COLS - 1 */
-        if (b_cols >= T_COLS)
-            b_cols = T_COLS - 1;
-        else if (b_cols < 79)
-            b_cols = 79;
+        b_cols = TCLAMP(b_cols, 79, T_COLS - 1);
     }
     else
     {

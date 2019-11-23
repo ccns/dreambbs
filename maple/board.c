@@ -605,8 +605,7 @@ brh_load(void)
                 {
 
 #if 0
-                    if (n > BRH_MAX)
-                        n = BRH_MAX;
+                    n = BMIN(n, BRH_MAX);
 #endif
 
                     list += n;   /* Thor.980904: 註解: 最後一個tag */
@@ -783,12 +782,11 @@ XoPost(
     /* 090823.cache: 看板人氣 */
     if (currbno != bno)
     {
+        /* 退出上一個板 */
         if (currbno >= 0)
         {
-            if (bshm->mantime[currbno] > 0)//防止人氣變成負數
-                bshm->mantime[currbno]--; /* 退出上一個板 */
-            else
-                bshm->mantime[currbno] = 0;//負數的話歸零
+            //防止人氣變成負數；負數的話歸零
+            bshm->mantime[currbno] = BMAX(bshm->mantime[currbno]-1, 0);
         }
 
         bshm->mantime[bno]++;       /* 進入新的板 */
@@ -1258,7 +1256,7 @@ class_body(
                                     if (!(hdr.xmode & (POST_LOCK | POST_BOTTOM)))
                                         break;
                                 }
-                                brd->blast = (hdr.chrono > brd->blast) ? hdr.chrono : brd->blast;
+                                brd->blast = BMAX(hdr.chrono, brd->blast);
                             }
                             else
                                 brd->blast = brd->bpost = 0;
@@ -1932,11 +1930,7 @@ class_mov(
     if (!vget(b_lines, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
 
-    newOrder = atoi(buf) - 1;
-    if (newOrder < 0)
-        newOrder = 0;
-    else if (newOrder >= xo->max)
-        newOrder = xo->max - 1;
+    newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);
 
     if ((pos = class_find_same(&hdr)) >= 0)
     {

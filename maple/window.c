@@ -422,9 +422,7 @@ pmsg2_body(const char *msg)
 
     grayout(0, b_lines, GRAYOUT_DARK);
 
-    len = strlen(msg);
-    if (len < 16)               /* 取 msg title 其中較長者為 len */
-        len = 16;
+    len = BMAX(strlen(msg), 16);  /* 取 msg title 其中較長者為 len */
     if (len % 2)                /* 變成偶數 */
         len++;
     x = (b_lines - 4) >> 1;     /* 置中 */

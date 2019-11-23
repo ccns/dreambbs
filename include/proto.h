@@ -14,6 +14,8 @@
 /* Macros for implementation-defined attributes */
 #include "attrdef.h"
 
+#include "cppdef.h"
+
 #ifdef NO_SO
 #include "so.h"
 #endif

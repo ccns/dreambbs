@@ -83,9 +83,7 @@ rebuild_pnote_ansi(int newflag)
     }
     else if (fstat(fd, &st) != -1)
     {
-        total = st.st_size / sizeof(notedata);
-        if (total > MAX_PNOTE)
-            total = MAX_PNOTE;
+        total = BMIN(st.st_size / sizeof(notedata), MAX_PNOTE);
     }
     fputs("\t\t\t\x1b[1;32m ★ \x1b[37m答 錄 機 中 的 留 言\x1b[32m★ \n\n", fp);
 
@@ -174,9 +172,7 @@ do_pnote(const char *userid)
     }
     else if (fstat(fd, &st) != -1)
     {
-        total = st.st_size / sizeof(notedata) + 1;
-        if (total > MAX_PNOTE)
-            total = MAX_PNOTE;
+        total = BMIN(st.st_size / sizeof(notedata) + 1, MAX_PNOTE);
     }
 
     fputs("\t\t\t\x1b[1;32m ★ \x1b[37m您 的 答 錄 機 !!! \x1b[32m★ \n\n", fp);
@@ -389,8 +385,7 @@ Pnote(int newflag)
         }
         else if (ans[0] == 'p' || ans[0] == 'P')
         {
-            if (offset <= 1) offset = 1;
-            else offset--;
+            offset = BMAX(offset-1, 1);
         }
 #if 0
         else if (ans[0] == 'q' || ans[0] == 'Q')
@@ -418,8 +413,7 @@ Pnote(int newflag)
             num--;
             if (num == 0)
                 break;
-            if (offset > num)
-                offset = num;
+            offset = BMIN(offset, num);
         }
         else if ((ans[0] == 's' || ans[0] == 'S') && newflag)
         {
@@ -450,8 +444,7 @@ Pnote(int newflag)
             num--;
             if (num == 0)
                 break;
-            if (offset > num)
-                offset = num;
+            offset = BMIN(offset, num);
 
         }
 #if 0
@@ -490,8 +483,7 @@ Pnote(int newflag)
         {
             offset++;
         }
-        if (offset > num)
-            offset = num;
+        offset = BMIN(offset, num);
     }
 
     if (newflag)

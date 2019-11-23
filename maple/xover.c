@@ -118,9 +118,7 @@ xo_load(
             }
             else
             {
-                top = max - 1;
-                if (pos > top)
-                    pos = top;
+                pos = BMIN(pos, max - 1);
                 top = (pos / XO_TALL) * XO_TALL;
             }
             xo->pos = pos;
@@ -1222,10 +1220,8 @@ xo_thread(
 
     fd = -1;
     len = sizeof(HDR) * XO_TALL;
-    bottom = top + XO_TALL;
     max = xo->max;
-    if (bottom > max)
-        bottom = max;
+    bottom = BMIN(top + XO_TALL, max);
 
     for (;;)
     {
@@ -1254,9 +1250,7 @@ xo_thread(
             if (step > 0)
             {
                 top += XO_TALL;
-                bottom = top + XO_TALL;
-                if (bottom > max)
-                    bottom = max;
+                bottom = BMIN(top + XO_TALL, max);
             }
             else
             {
@@ -2484,9 +2478,7 @@ xo_cursor(
 
             if (pos > 0)
             {
-                pos--;
-                if (pos >num)
-                    pos = num;
+                pos = BMIN(pos-1, num);
                 *pageno = pos / XO_TALL;
                 *cur = pos % XO_TALL;
             }

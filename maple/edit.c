@@ -77,9 +77,7 @@ ve_position(
 {
     int row;
 
-    row = cur->len;
-    if (ve_col > row)
-        ve_col = row;
+    ve_col = BMIN(ve_col, cur->len);
 
     row = 0;
     while (cur != top)
@@ -1978,9 +1976,7 @@ ve_key:
                 }
                 else
                 {
-                    cc = tmp->len;
-                    if (col > cc)
-                        ve_col = cc;
+                    ve_col = BMIN(col, tmp->len);
                 }
                 vx_cur = tmp;
                 break;
@@ -2000,9 +1996,7 @@ ve_key:
                 }
                 else
                 {
-                    cc = tmp->len;
-                    if (col > cc)
-                        ve_col = cc;
+                    ve_col = BMIN(col, tmp->len);
                 }
                 vx_cur = tmp;
                 break;

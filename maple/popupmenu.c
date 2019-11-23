@@ -599,12 +599,7 @@ void pmsg_body(const char *msg)
     }
 
     len = (msg ? strlen(msg) : 0);
-    if (len > 30)
-    {
-        plen = (len - 29) / 2;
-    }
-    else
-        plen = 0;
+    plen = BMAX(len - 29, 0) / 2;
 
     if (len > 0)
     {

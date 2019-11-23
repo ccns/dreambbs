@@ -48,8 +48,7 @@ XO *xo)
     chat = (ChatAction *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
-    if (max > tail)
-        max = tail;
+    max = BMIN(max, tail);
 
     do
     {
@@ -252,11 +251,7 @@ XO *xo)
     if (!vget(b_lines, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
 
-    newOrder = atoi(buf) - 1;
-    if (newOrder < 0)
-        newOrder = 0;
-    else if (newOrder >= xo->max)
-        newOrder = xo->max - 1;
+    newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);
     if (newOrder != pos)
     {
         dir = xo->dir;

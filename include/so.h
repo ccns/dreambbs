@@ -12,6 +12,8 @@
 /* Macros for implementation-defined attributes */
 #include "attrdef.h"
 
+#include "cppdef.h"
+
 /* ----------------------------------------------------- */
 /* prototypes                                            */
 /* ----------------------------------------------------- */

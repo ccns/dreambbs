@@ -643,26 +643,16 @@ const struct pipcommands cmdtable[])
         clrchyiuan(b_lines - 1, b_lines);
         if (menunum == 3)                                           /*修行*/
         {
-            class1 = d.wisdom / 200 + 1;                            /*科學*/
-            if (class1 > 5)  class1 = 5;
-            class2 = (d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400 + 1; /*詩詞*/
-            if (class2 > 5)  class2 = 5;
-            class3 = (d.belief * 2 + d.wisdom) / 400 + 1;           /*神學*/
-            if (class3 > 5)  class3 = 5;
-            class4 = (d.hskill * 2 + d.wisdom) / 400 + 1;           /*軍學*/
-            if (class4 > 5)  class4 = 5;
-            class5 = (d.hskill + d.attack) / 400 + 1;               /*劍術*/
-            if (class5 > 5)  class5 = 5;
-            class6 = (d.hskill + d.resist) / 400 + 1;               /*格鬥*/
-            if (class6 > 5)  class6 = 5;
-            class7 = (d.mskill + d.maxmp) / 400 + 1;                /*魔法*/
-            if (class7 > 5)  class7 = 5;
-            class8 = (d.manners * 2 + d.character) / 400 + 1;       /*禮儀*/
-            if (class8 > 5)  class8 = 5;
-            class9 = (d.art * 2 + d.character) / 400 + 1;           /*繪畫*/
-            if (class9 > 5)  class9 = 5;
-            class10 = (d.art * 2 + d.charm) / 400 + 1;              /*舞蹈*/
-            if (class10 > 5) class10 = 5;
+            class1 = BMIN(d.wisdom / 200 + 1, 5);                   /*科學*/
+            class2 = BMIN((d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400 + 1, 5); /*詩詞*/
+            class3 = BMIN((d.belief * 2 + d.wisdom) / 400 + 1, 5);  /*神學*/
+            class4 = BMIN((d.hskill * 2 + d.wisdom) / 400 + 1, 5);  /*軍學*/
+            class5 = BMIN((d.hskill + d.attack) / 400 + 1, 5);      /*劍術*/
+            class6 = BMIN((d.hskill + d.resist) / 400 + 1, 5);      /*格鬥*/
+            class7 = BMIN((d.mskill + d.maxmp) / 400 + 1, 5);       /*魔法*/
+            class8 = BMIN((d.manners * 2 + d.character) / 400 + 1, 5); /*禮儀*/
+            class9 = BMIN((d.art * 2 + d.character) / 400 + 1, 5);  /*繪畫*/
+            class10 = BMIN((d.art * 2 + d.charm) / 400 + 1, 5);     /*舞蹈*/
 
             move(b_lines - 1, 0);
             prints(menuname[menunum][0], class1, class2, class3, class4, class5, d_cols, "");
@@ -3915,8 +3905,7 @@ static int pip_practice_classA(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = d.wisdom / 200 + 1; /*科學*/
-    if (class_ > 5) class_ = 5;
+    class_ = BMIN(d.wisdom / 200 + 1, 5); /*科學*/
 
     body = pip_practice_function(1, class_, 11, 12, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
@@ -3956,8 +3945,7 @@ static int pip_practice_classB(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = (d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400 + 1; /*詩詞*/
-    if (class_ > 5) class_ = 5;
+    class_ = BMIN((d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400 + 1, 5); /*詩詞*/
 
     body = pip_practice_function(2, class_, 21, 21, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
@@ -3994,8 +3982,7 @@ static int pip_practice_classC(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = (d.belief * 2 + d.wisdom) / 400 + 1; /*神學*/
-    if (class_ > 5) class_ = 5;
+    class_ = BMIN((d.belief * 2 + d.wisdom) / 400 + 1, 5); /*神學*/
 
     body = pip_practice_function(3, class_, 31, 31, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
@@ -4029,8 +4016,7 @@ static int pip_practice_classD(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = (d.hskill * 2 + d.wisdom) / 400 + 1;
-    if (class_ > 5) class_ = 5;
+    class_ = BMIN((d.hskill * 2 + d.wisdom) / 400 + 1, 5);
     body = pip_practice_function(4, class_, 41, 41, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
     d.wisdom += change2 * LEARN_LEVEL;
@@ -4065,8 +4051,7 @@ static int pip_practice_classE(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = (d.hskill + d.attack) / 400 + 1;
-    if (class_ > 5) class_ = 5;
+    class_ = BMIN((d.hskill + d.attack) / 400 + 1, 5);
 
     body = pip_practice_function(5, class_, 51, 51, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
@@ -4101,8 +4086,7 @@ static int pip_practice_classF(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = (d.hskill + d.resist) / 400 + 1;
-    if (class_ > 5) class_ = 5;
+    class_ = BMIN((d.hskill + d.resist) / 400 + 1, 5);
 
     body = pip_practice_function(6, class_, 61, 61, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
@@ -4137,8 +4121,7 @@ static int pip_practice_classG(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = (d.mskill + d.maxmp) / 400 + 1;
-    if (class_ > 5) class_ = 5;
+    class_ = BMIN((d.mskill + d.maxmp) / 400 + 1, 5);
 
     body = pip_practice_function(7, class_, 71, 72, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
@@ -4173,8 +4156,7 @@ static int pip_practice_classH(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = (d.manners * 2 + d.character) / 400 + 1;
-    if (class_ > 5) class_ = 5;
+    class_ = BMIN((d.manners * 2 + d.character) / 400 + 1, 5);
 
     body = pip_practice_function(8, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
@@ -4201,8 +4183,7 @@ static int pip_practice_classI(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = (d.art * 2 + d.character) / 400 + 1;
-    if (class_ > 5) class_ = 5;
+    class_ = BMIN((d.art * 2 + d.character) / 400 + 1, 5);
 
     body = pip_practice_function(9, class_, 91, 91, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
@@ -4228,8 +4209,7 @@ static int pip_practice_classJ(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = (d.art * 2 + d.charm) / 400 + 1;
-    if (class_ > 5) class_ = 5;
+    class_ = BMIN((d.art * 2 + d.charm) / 400 + 1, 5);
 
     body = pip_practice_function(10, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == 0) return 0;
@@ -4952,7 +4932,7 @@ int first)
                         dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - opponent->pip->resist / 12 + random() % 20 - opponent->pip->speed / 30 + d.speed / 30);
                     else
                         dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - opponent->pip->resist / 6 + random() % 20 - opponent->pip->speed / 10 + d.speed / 30);
-                    if (dinjure <= 10)  dinjure = 10;
+                    dinjure = BMAX(dinjure, 10);
                     opponent->pip->hp -= dinjure;
                     d.hexp += random() % 2 + 2;
                     d.hskill += random() % 2 + 1;
@@ -4984,7 +4964,7 @@ int first)
                         dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - opponent->pip->resist / 12 + random() % 30 - opponent->pip->speed / 50 + d.speed / 30);
                     else
                         dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - opponent->pip->resist / 6 + random() % 30 - opponent->pip->speed / 30 + d.speed / 30);
-                    if (dinjure <= 20) dinjure = 20;
+                    dinjure = BMAX(dinjure, 20);
                     if (d.hp > 5)
                     {
                         opponent->pip->hp -= dinjure;
@@ -5042,13 +5022,7 @@ int first)
                         else
                         {
                             dinjure = get_hurt(dinjure, d.mexp);
-
-                            mresist = (d.mexp) / (opponent->pip->mresist + 1);
-                            if (mresist > 3)
-                                mresist = 3;
-                            if (mresist < 0.3)
-                                mresist = 0.3;
-
+                            mresist = TCLAMP((d.mexp) / (opponent->pip->mresist + 1), 0.3, 3);
                             dinjure = (int)dinjure * mresist;
 
                             opponent->pip->hp -= dinjure;
@@ -7952,9 +7926,7 @@ static int
 get_hurt(int hurt, int mexp)
 {
     int dinjure;
-    if (mexp > 14000)
-        mexp = 14000;
-    mexp = (int)mexp / 100;
+    mexp = (int)BMIN(mexp, 14000) / 100;
     if (random() % 5 > 0)
         dinjure = (int)hurt * (60 + mexp) / 100;
     else

@@ -512,7 +512,7 @@ refresh(void)
 
     i = scrollcnt;
 
-    if ((docls) || ((i < 0 ? -i : i) >= p_lines))
+    if ((docls) || (UABS(i) >= p_lines))
     {
         vs_redraw();
         return;
@@ -559,9 +559,7 @@ refresh(void)
 
             if ((smod = slp->smod) < len)
             {
-                emod = slp->emod + 1;
-                if (emod >= len)
-                    emod = len;
+                emod = BMIN(slp->emod + 1, len);
 
                 rel_move(smod, i);
 
@@ -1380,10 +1378,8 @@ grayout(int y, int end, int level)
     vs_save(slp);
     memcpy(newslp, slp, sizeof(newslp));
 
-    if (y < 0)
-        y = 0;
-    if (end > T_LINES)
-        end = T_LINES;
+    y = BMAX(y, 0);
+    end = BMIN(end, T_LINES);
 
     for (i = y; i < end; i++)
     {
@@ -1468,15 +1464,9 @@ iac_count(
                 b_cols = ntohs(* (const short *) (look + 1)) - 1;
 
                 /* b_lines 至少要 23，最多不能超過 T_LINES - 1 */
-                if (b_lines >= T_LINES)
-                    b_lines = T_LINES - 1;
-                else if (b_lines < 23)
-                    b_lines = 23;
+                b_lines = TCLAMP(b_lines, 23, T_LINES - 1);
                 /* b_cols 至少要 79，最多不能超過 T_COLS - 1 */
-                if (b_cols >= T_COLS)
-                    b_cols = T_COLS - 1;
-                else if (b_cols < 79)
-                    b_cols = 79;
+                b_cols = TCLAMP(b_cols, 79, T_COLS - 1);
 #ifdef M3_USE_PFTERM
                 resizeterm(b_lines + 1, b_cols + 1);
 #endif

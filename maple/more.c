@@ -605,8 +605,7 @@ re_key:
                 break;
             }
             /* 最多只能上捲到一開始 */
-            i = b_lines - lino;
-            shift = BMAX(-PAGE_SCROLL, i);
+            shift = BMAX(-PAGE_SCROLL, b_lines - lino);
         }
 
         else if (key == KEY_UP)
@@ -779,9 +778,7 @@ re_key:
                     }
 
                     /* 先位移到上一個 block 的尾端 */
-                    i = (totallino - b_lines) >> 5;
-                    if (i >= MAXBLOCK)
-                        i = MAXBLOCK - 1;
+                    i = BMIN((totallino - b_lines) >> 5, MAXBLOCK - 1);
                     foff = fimage + block[i];
                     i = i << 5;
 
@@ -815,9 +812,7 @@ re_key:
                 */
 
                 /* 先位移到上一個 block 的尾端 */
-                i = (lino - b_lines) >> 5;
-                if (i >= MAXBLOCK)
-                    i = MAXBLOCK - 1;
+                i = BMIN((lino - b_lines) >> 5, MAXBLOCK - 1);
                 foff = fimage + block[i];
                 i = i << 5;
 

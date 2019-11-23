@@ -656,8 +656,7 @@ send_to_room(
 
                 FD_SET(sock, &wset);
 
-                if (max < sock)
-                    max = sock;
+                max = BMAX(max, sock);
             }
         }
 
@@ -3474,8 +3473,7 @@ main(
                     nfds++;
                     sock = cu->sock;
                     FD_SET(sock, &mainfset);
-                    if (maxfds < sock)
-                        maxfds = sock;
+                    maxfds = BMAX(maxfds, sock);
 
                     FBI = &(cu->unext);
 #ifdef CHATROOM_KICK_TIMEOUT_USER
@@ -3635,8 +3633,7 @@ main(
                     totaluser++;
 
                     FD_SET(sock, &mainfset);
-                    if (sock >= maxfds)
-                        maxfds = sock + 1;
+                    maxfds = BMAX(maxfds, sock + 1);
 
                     {
                         int value;

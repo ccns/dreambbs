@@ -2166,8 +2166,7 @@ mbox_body(
     num = xo->top;
     mhdr = (HDR *) xo_pool;
     tail = num + XO_TALL;
-    if (max > tail)
-        max = tail;
+    max = BMIN(max, tail);
 
     move(3, 0);
     do

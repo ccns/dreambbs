@@ -8,6 +8,8 @@
 /* Macros for implementation-defined attributes */
 #include "attrdef.h"
 
+#include "cppdef.h"
+
 #ifndef NULL
 #define NULL            0               /* ((char *) 0) */
 #endif

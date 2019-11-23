@@ -101,14 +101,9 @@ cleanrecommend_body(
     num = xo->top;
     tail = num + XO_TALL;
 /*
-    if ((counter = max) > 127)
-        counter = 127;
-
-    if (counter < -127)
-        counter = -127;
+    counter = TCLAMP(max, -127, 127);
 */
-    if (max > tail)
-        max = tail;
+    max = BMIN(max, tail);
 
     do
     {
@@ -407,8 +402,7 @@ clean(
 
     fstat(fd, &st);
     total = st.st_size / sizeof(HDR);
-    if (pos > total)
-        pos = total;
+    pos = BMIN(pos, total);
 
     f_exlock(fd);
     while (pos >= -1)
