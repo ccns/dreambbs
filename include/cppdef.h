@@ -67,7 +67,7 @@
     VERSION_STR_DL_PATCH_STR(VER_PATCH_STR(major, minor, patch), dl_patch)
 
 
-/* Macros for manipulating structs with flexible array member */
+/* Macros for manipulating structs */
 
 #include <stddef.h>
 
@@ -80,6 +80,8 @@
 #define SIZEOF_FLEX(Type, n) \
     (offsetof(Type, Type##_FLEX_MEMBER) \
       + (n) * sizeof(((Type *)NULL)->Type##_FLEX_MEMBER[0]))
+
+/* #define countof(x)      (sizeof(x)/sizeof(x[0])) */
 
 /* Macros for managing loading of dynamic libraries */
 
@@ -112,5 +114,15 @@
 
 #define CPP_MACRO_DEPRECATED(msg) \
     CPP_PRAGMA(GCC warning CPP_STR(deprecated macro: msg))
+
+/* Macros for limiting the value range */
+
+#define BMIN(a, b)      ((a<b)?a:b)
+#define BMAX(a, b)      ((a>b)?a:b)
+
+/* Macros for booleans */
+
+#define YEA     (1)             /* Booleans  (Yep, for true and false) */
+#define NA      (0)
 
 #endif  // #ifndef CPPDEF_H

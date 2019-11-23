@@ -70,15 +70,6 @@
 
 #endif  /* SYSV */
 
-
-#define BMIN(a, b)      ((a<b)?a:b)
-#define BMAX(a, b)      ((a>b)?a:b)
-
-/* #define countof(x)      (sizeof(x)/sizeof(x[0])) */
-
-#define YEA     (1)             /* Booleans  (Yep, for true and false) */
-#define NA      (0)
-
 #ifndef _BBTP_
 
 #define NOECHO          0x0000          /* Flags to getdata input function */
