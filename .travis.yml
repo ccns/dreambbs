@@ -26,4 +26,5 @@ before_install:
 
 script:
     - cp sample/dreambbs.conf dreambbs.conf
+    - bmake configure
     - bmake CC="$CC" all install clean
