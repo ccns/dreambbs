@@ -58,7 +58,7 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
     GCC_UNUSED unsigned int mode;
     screen_backup_t old_screen;
 
-#ifndef NO_SO
+#if !NO_SO
     void *p;
 
     if (mptr->umode < 0)
@@ -75,7 +75,7 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
 
     switch (mptr->umode)
     {
-#ifndef NO_SO
+#if !NO_SO
         case POPUP_SO :
             p = DL_GET(mptr->dlfunc);
             if (!p)

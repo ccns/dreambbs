@@ -21,7 +21,7 @@ enum
 /* user ¾Þ§@ª¬ºA»P¼Ò¦¡                                   */
 /* ----------------------------------------------------- */
 
-#ifdef NO_SO
+#if NO_SO
 #define M_DL(umode)     (umode)
 #else
 #define M_DL(umode)     (-(umode))  /* For dynamic library loading */

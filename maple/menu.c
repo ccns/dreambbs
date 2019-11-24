@@ -1392,7 +1392,7 @@ menu(void)
         case KEY_RIGHT:
             mptr = table[cc];
             cmd = mptr->umode;
-#ifndef NO_SO
+#if !NO_SO
             /* Thor.990212: dynamic load, with negative umode */
             if (cmd < 0)
             {

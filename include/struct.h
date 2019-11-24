@@ -774,7 +774,7 @@ typedef struct
     unsigned int key;
     union {  /* IID.20191106: The field to be used is determined by the value of `key` */
         int (*func)(XO *xo);  /* Default */
-#ifdef NO_SO
+#if NO_SO
         int (*dlfunc)(XO *xo);  /* `key | XO_DL` */
 #else
         const char *dlfunc;
@@ -1026,7 +1026,7 @@ typedef struct MENU
     union {  /* The field to be used is determined by the value of `umode` */
         int (*func) (void);  /* Default (menu) or `POPUP_FUN` (popupmenu) */
         int (*xofunc) (XO *xo);  /* `POPUP_XO` (popupmenu) */
-#ifdef NO_SO
+#if NO_SO
         int (*dlfunc) (void);  /* `M_DL(umode)` (menu & popupmenu) or `POPUP_SO` (popupmenu) */
 #else
         const char *dlfunc;

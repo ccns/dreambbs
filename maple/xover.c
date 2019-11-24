@@ -1642,13 +1642,13 @@ xover(
             /* ----------------------------------------------- */
 
             cb = xcmd;
-#ifndef NO_SO
+#if !NO_SO
             num = cmd | XO_DL; /* Thor.990220: for dynamic load */
 #endif
             for (;;)
             {
                 pos = cb->key;
-#ifndef NO_SO
+#if !NO_SO
                 /* Thor.990220: dynamic load, with key | XO_DL */
                 if (pos == num)
                 {

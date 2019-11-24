@@ -101,6 +101,8 @@ NO_SO		 = YES
 
 .if $(NO_SO)
 CFLAGS_MAPLE	+= -DNO_SO
+.else
+CFLAGS_MAPLE	+= -DNO_SO=0
 .endif
 
 .if $(CC:M*++) || $(CC:M*++-*)

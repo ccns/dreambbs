@@ -85,13 +85,13 @@
 
 /* Macros for managing loading of dynamic libraries */
 
-#ifdef NO_SO
+#if NO_SO
 
 #define DL_NAME(module_str, func)   func
 #define DL_GET(dl_name)   dl_name
 #define DL_CALL(dl_name)  dl_name
 
-#else  // #ifdef NO_SO
+#else  // #if NO_SO
 
 #define DL_NAME(module_str, func) \
     BINARY_SUFFIX module_str ":" CPP_STR(CPP_UNPAREN_OPT(func))
@@ -106,7 +106,7 @@
 
 #define DL_CALL(dl_name)  DL_func((dl_name), CPP_APPEND_CLOSEPAREN
 
-#endif  // #ifdef NO_SO
+#endif  // #if NO_SO
 
 /* Macros for emitting warnings */
 
