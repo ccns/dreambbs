@@ -1,6 +1,8 @@
 #ifndef DAO_H
 #define DAO_H
 
+#include "config.h"
+
 #include <stdio.h>
 #include <stdbool.h>
 #include <sys/types.h>

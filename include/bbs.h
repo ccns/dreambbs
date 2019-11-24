@@ -9,6 +9,8 @@
 #ifndef BBS_H
 #define BBS_H
 
+#include "config.h"             /* User-configurable stuff */
+
 #include <stdio.h>
 #include <setjmp.h>
 #include <signal.h>
@@ -26,7 +28,6 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include "cppdef.h"             /* Preprocessor utility macros */
-#include "config.h"             /* User-configurable stuff */
 #include "struct.h"             /* data structure */
 #include "dao.h"                /* common library */
 #include "perm.h"               /* user/board permission */
