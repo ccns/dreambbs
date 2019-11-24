@@ -47,6 +47,8 @@ EXPORTCONF = echo $(DEFCONF$(exconf::= $(exconf:M*))$(exvalue::= $(exvalue:M*)))
 
 BBSCONF		:= $(REALSRCROOT)/dreambbs.conf
 BBSCONF_ORIGIN		:= $(REALSRCROOT)/include/config.h
+EXPORT_MAPLE	:= $(REALSRCROOT)/maple/make_export.conf
+!= touch $(EXPORT_MAPLE)
 
 # UIDs and GIDs
 ID_FALLBACK = 2>/dev/null || echo 9999
@@ -67,6 +69,12 @@ USE_PFTERM	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_PFTERM")) $(DEF_YES)'
 USE_BBSLUA	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSLUA")) $(DEF_YES)'
 USE_BBSRUBY	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSRUBY")) $(DEF_YES)'
 USE_LUAJIT	!= sh -c '$(DEF_TEST$(conf::= "BBSLUA_USE_LUAJIT")) $(DEF_YES)'
+
+# Flags for disabling shared objects
+DEF_LIST	!= sh -c '$(GETCONFS$(hdr::= $(EXPORT_MAPLE)))'
+NO_SO_CLI	:= $("$(NO_SO_CLI)" != "" :? $(NO_SO_CLI) : $(NO_SO:DYES:UNO))
+NO_SO_CONF	!= sh -c '$(DEF_TEST$(conf::= "NO_SO")) $(DEF_YES)'
+NO_SO		= $(NO_SO_CLI:S/NO//g)$(NO_SO_CONF)
 
 CC_HASFLAGS = echo "" | $(CC) -x c -E $(flags:M*) -Werror - >/dev/null 2>&1
 
@@ -89,8 +97,6 @@ LDFLAGS_ARCHI	+= -Wl,-export-dynamic
 
 .if $(OPSYS) == "Cygwin"
 NO_SO		 = YES
-.else
-NO_SO		?=
 .endif
 
 .if $(NO_SO)

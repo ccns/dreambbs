@@ -47,7 +47,6 @@ export:
 	@$(EXPORTVAR$(exconf::= WWWGID))
 	@$(EXPORTCONF$(exconf::= BBSHOME)$(exvalue::= \"$(BBSHOME)\"))
 	@$("$(ARCHI)" == "64" :? $(EXPORTCONF$(exconf::= _FILE_OFFSET_BITS)$(exvalue::= 64)) :)
-	@$("$(NO_SO)" != "" :? $(EXPORTCONF$(exconf::= NO_SO)$(exvalue::= 1)) :)
 
 configure:
 	@printf "\033[1;36mGenerating '$(EXPORT_FILE)'...\033[0m\n" >&2
@@ -56,6 +55,7 @@ configure:
 	@printf "\033[1;33m"
 	@cat $(EXPORT_FILE)
 	@printf "\033[m"
+	@(cd maple; $(MAKE) configure $(MAKEFLAGS))
 	@$(TARGETS_REST::=$(.TARGETS:tW:C/^ *configure *//))
 	# Continue execution with a new `bmake` instace and stop current `bmake` instance
 	@if [ "$(TARGETS_REST)" ]; then sh -c "$(MAKE) $(TARGETS_REST) $(MAKEFLAGS)"; printf "\033[1;36mJob done. Force stop.\033[m\n" >&2; false; fi

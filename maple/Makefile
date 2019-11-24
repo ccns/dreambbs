@@ -8,6 +8,7 @@
 # ------------------------------------------------------ #
 
 SRCROOT	= $(.CURDIR)/..
+EXPORT_FILE	= $(.CURDIR)/make_export.conf
 .include "$(SRCROOT)/dreambbs.mk"
 
 .if $(NO_SO)
@@ -82,6 +83,21 @@ bbsd: $(OBJ)
 
 maple.p: $(SRC)
 	$(CPROTO) -o $@ $?
+
+export:
+	@> $(EXPORT_FILE)
+	@$("$(NO_SO_CLI:M*YES*)" != "" :? $(EXPORTCONF$(exconf::= NO_SO)$(exvalue::= 1)) :)
+
+configure:
+	@printf "\033[1;36mGenerating '$(EXPORT_FILE)'...\033[0m\n" >&2
+	@$(DREAMBBS_MK::=)
+	@sh -c "$(MAKE) export $(MAKEFLAGS)"
+	@printf "\033[1;33m"
+	@cat $(EXPORT_FILE)
+	@printf "\033[m"
+	@$(TARGETS_REST::=$(.TARGETS:tW:C/^ *configure *//))
+	# Continue execution with a new `bmake` instace and stop current `bmake` instance
+	@if [ "$(TARGETS_REST)" ]; then sh -c "$(MAKE) $(TARGETS_REST) $(MAKEFLAGS)"; printf "\033[1;36mJob done. Force stop.\033[m\n" >&2; false; fi
 
 install: $(EXE)
 	install -d "$(BBSHOME)/bin$(BBSVER)"
