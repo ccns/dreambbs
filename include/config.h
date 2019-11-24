@@ -10,6 +10,7 @@
 #define CONFIG_H
 
 #include "../dreambbs.conf"
+#include "../make_export.conf"  /* If not found, run `bmake configure` to fix */
 
 #undef  TREAT
 #undef  TRANUFO
@@ -41,10 +42,6 @@
 
 #ifndef SYSOPNICK
 #define SYSOPNICK       "夢之精靈"                  /* SYSOP 暱稱 */
-#endif
-
-#ifndef BBSHOME
-#define BBSHOME         "/home/bbs"                 /* BBS 的家 */
 #endif
 
 #ifndef BBSUID

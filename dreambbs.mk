@@ -9,7 +9,7 @@ RANLIB	= ranlib
 CPROTO	= cproto -E"$(CC) -pipe -E" -I$$(SRCROOT)/include
 
 
-.ifndef DREAMBBS_MK
+.if "$(DREAMBBS_MK)" == ""
 DREAMBBS_MK	:= 1
 
 REALSRCROOT	?= $(SRCROOT)
@@ -30,19 +30,29 @@ LDFLAGS_MK = -L$$(SRCROOT)/lib -ldao -lcrypt $(LDFLAGS_ARCHI)
 
 ## Tool functions
 ## Called with $(function$(para1::=arg1)$(para2::=arg2)...)
+
 UNQUOTE = S/^"//:S/"$$//
+
 VALUEIF = "\#ifdef $(conf)$(.newline)$(conf:M*)$(.newline)\#else$(.newline)$(default:M*)$(.newline)\#endif"
+DEFVAR = "\#undef $(exconf:M*)$(.newline)\#define $(exconf:M*) $($(exconf:M*):M*)"
+DEFCONF = "\#undef $(exconf:M*)$(.newline)\#define $(exconf:M*) $(exvalue:M*)"
+
 GETVAR = [ "$(var:M*:$(UNQUOTE))" ] && echo "$(var:M*:UNQUOTE)" || $(else_var)
 GETCONFS = echo "" | $(CC) -x c -dM -E -P $(hdr:@v@-imacros "$v"@) - 2>/dev/null
 GETVALUE = { echo $(VALUEIF$(conf::= $(conf:M*:$(UNQUOTE)))$(default::= $(default:M*))) | $(CC) -x c -E -P $(hdr:@v@-imacros "$v"@) - | xargs; } 2>/dev/null
+EXPORTVAR = echo $(DEFVAR$(exconf::= $(exconf:M*))) >> $(EXPORT_FILE)
+EXPORTCONF = echo $(DEFCONF$(exconf::= $(exconf:M*))$(exvalue::= $(exvalue:M*))) >> $(EXPORT_FILE)
+
+# Read variables from the configuration C files
+
+BBSCONF		:= $(REALSRCROOT)/dreambbs.conf
+BBSCONF_ORIGIN		:= $(REALSRCROOT)/include/config.h
 
 ## BBS path prefixes and suffixes
-BBSCONF_ORIGIN		:= $(REALSRCROOT)/include/config.h
 BBSVER != $(GETVALUE$(conf::= "BBSVER_SUFFIX")$(default::= "")$(hdr::= $(BBSCONF_ORIGIN)))
-BBSHOME != $(GETVAR$(var::= "$(BBSHOME)")$(else_var::= $(GETVALUE$(conf::= "BBSHOME")$(default::= "$(HOME)")$(hdr::= $(BBSCONF_ORIGIN)))))
+BBSHOME != $(GETVAR$(var::= "$(BBSHOME)")$(else_var::= $(GETVALUE$(conf::= "BBSHOME")$(default::= "$(HOME)")$(hdr::= $(BBSCONF)))))
 
 # rules ref: PttBBS: mbbsd/Makefile
-BBSCONF		:= $(REALSRCROOT)/dreambbs.conf
 DEF_LIST	!= sh -c '$(GETCONFS$(hdr::= $(BBSCONF)))'
 DEF_TEST	 = [ $(DEF_LIST:M$(conf:M*:S/"//g:N")) ]  # Balance the quotes
 DEF_YES		:= && echo "YES" || echo ""
@@ -59,7 +69,7 @@ CFLAGS_WARN	+= -Wno-invalid-source-encoding
 .endif
 
 .if $(ARCHI)=="64"
-CFLAGS_ARCHI	+= -m32 -D_FILE_OFFSET_BITS=64
+CFLAGS_ARCHI	+= -m32
 LDFLAGS_ARCHI	+= -m32
 .endif
 

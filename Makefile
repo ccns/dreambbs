@@ -10,8 +10,12 @@ OPSYS	!= uname -o
 NPROC	!= getconf _NPROCESSORS_ONLN
 
 REALSRCROOT	:= $(.CURDIR)
+EXPORT_FILE	:= "$(REALSRCROOT)/make_export.conf"
+
+!= touch $(EXPORT_FILE)  # Needed by `include/config.h`
 .include "$(REALSRCROOT)/dreambbs.mk"
 .export
+!= [ -s $(EXPORT_FILE) ] || rm $(EXPORT_FILE)  # Empty
 
 # some directories need to be compiled:
 # lib innbbsd maple so util test
@@ -35,6 +39,23 @@ njob:
 	@(cd so; $(MAKE) -j$(NPROC) all)
 .endif
 	@(cd test; $(MAKE) -j$(NPROC) all)
+
+export:
+	@> $(EXPORT_FILE)
+	@$(EXPORTCONF$(exconf::= BBSHOME)$(exvalue::= \"$(BBSHOME)\"))
+	@$("$(ARCHI)" == "64" :? $(EXPORTCONF$(exconf::= _FILE_OFFSET_BITS)$(exvalue::= 64)) :)
+	@$("$(NO_SO)" != "" :? $(EXPORTCONF$(exconf::= NO_SO)$(exvalue::= 1)) :)
+
+configure:
+	@printf "\033[1;36mGenerating '$(EXPORT_FILE)'...\033[0m\n" >&2
+	@$(DREAMBBS_MK::=)
+	@sh -c "$(MAKE) export $(MAKEFLAGS)"
+	@printf "\033[1;33m"
+	@cat $(EXPORT_FILE)
+	@printf "\033[m"
+	@$(TARGETS_REST::=$(.TARGETS:tW:C/^ *configure *//))
+	# Continue execution with a new `bmake` instace and stop current `bmake` instance
+	@if [ "$(TARGETS_REST)" ]; then sh -c "$(MAKE) $(TARGETS_REST) $(MAKEFLAGS)"; printf "\033[1;36mJob done. Force stop.\033[m\n" >&2; false; fi
 
 runtest:
 	@(cd test; $(MAKE) runtest)
