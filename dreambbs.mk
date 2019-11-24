@@ -34,8 +34,8 @@ LDFLAGS_MK = -L$$(SRCROOT)/lib -ldao -lcrypt $(LDFLAGS_ARCHI)
 ## Called with $(function$(para1::=arg1)$(para2::=arg2)...)
 UNQUOTE = S/^"//:S/"$$//
 VALUEIF = "\#ifdef $(conf)$(.newline)$(conf:M*)$(.newline)\#else$(.newline)$(default:M*)$(.newline)\#endif"
-GETCONFS = echo "" | $(CC) -x c -dM -E -P $(hdr:@v@-imacros "$v"@) -
-GETVALUE = echo $(VALUEIF$(conf::= $(conf:M*:$(UNQUOTE)))$(default::= $(default:M*))) | $(CC) -x c -E -P $(hdr:@v@-imacros "$v"@) - | xargs
+GETCONFS = echo "" | $(CC) -x c -dM -E -P $(hdr:@v@-imacros "$v"@) - 2>/dev/null
+GETVALUE = { echo $(VALUEIF$(conf::= $(conf:M*:$(UNQUOTE)))$(default::= $(default:M*))) | $(CC) -x c -E -P $(hdr:@v@-imacros "$v"@) - | xargs; } 2>/dev/null
 
 ## BBS Release Version Prefix
 BBSCONF_ORIGIN		:= $(REALSRCROOT)/include/config.h
