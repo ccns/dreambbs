@@ -48,6 +48,12 @@ EXPORTCONF = echo $(DEFCONF$(exconf::= $(exconf:M*))$(exvalue::= $(exvalue:M*)))
 BBSCONF		:= $(REALSRCROOT)/dreambbs.conf
 BBSCONF_ORIGIN		:= $(REALSRCROOT)/include/config.h
 
+# UIDs and GIDs
+ID_FALLBACK = 2>/dev/null || echo 9999
+BBSUID != $(GETVAR$(var::= "$(BBSUID)")$(else_var::= $(GETVALUE$(conf::= "BBSUID")$(default::= "$(:!id -u bbs $(ID_FALLBACK)!)")$(hdr::= $(BBSCONF)))))
+BBSGID != $(GETVAR$(var::= "$(BBSGID)")$(else_var::= $(GETVALUE$(conf::= "BBSGID")$(default::= "$(:!id -g bbs $(ID_FALLBACK)!)")$(hdr::= $(BBSCONF)))))
+WWWGID != $(GETVAR$(var::= "$(WWWGID)")$(else_var::= $(GETVALUE$(conf::= "WWWGID")$(default::= "$(:!id -g www-data $(ID_FALLBACK)!)")$(hdr::= $(BBSCONF)))))
+
 ## BBS path prefixes and suffixes
 BBSVER != $(GETVALUE$(conf::= "BBSVER_SUFFIX")$(default::= "")$(hdr::= $(BBSCONF_ORIGIN)))
 BBSHOME != $(GETVAR$(var::= "$(BBSHOME)")$(else_var::= $(GETVALUE$(conf::= "BBSHOME")$(default::= "$(HOME)")$(hdr::= $(BBSCONF)))))

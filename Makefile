@@ -42,6 +42,9 @@ njob:
 
 export:
 	@> $(EXPORT_FILE)
+	@$(EXPORTVAR$(exconf::= BBSUID))
+	@$(EXPORTVAR$(exconf::= BBSGID))
+	@$(EXPORTVAR$(exconf::= WWWGID))
 	@$(EXPORTCONF$(exconf::= BBSHOME)$(exvalue::= \"$(BBSHOME)\"))
 	@$("$(ARCHI)" == "64" :? $(EXPORTCONF$(exconf::= _FILE_OFFSET_BITS)$(exvalue::= 64)) :)
 	@$("$(NO_SO)" != "" :? $(EXPORTCONF$(exconf::= NO_SO)$(exvalue::= 1)) :)

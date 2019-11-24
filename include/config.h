@@ -44,18 +44,6 @@
 #define SYSOPNICK       "夢之精靈"                  /* SYSOP 暱稱 */
 #endif
 
-#ifndef BBSUID
-#define BBSUID          9999
-#endif
-
-#ifndef BBSGID
-#define BBSGID          9999
-#endif
-
-#ifndef WWWGID
-#define WWWGID          9999
-#endif
-
 #ifndef TAG_VALID
 #define TAG_VALID       "[DreamBBS]To "             /* 身分認證函token */
 #endif
