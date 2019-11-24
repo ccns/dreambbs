@@ -1,4 +1,4 @@
-SRCROOT = ..
+SRCROOT = $(.CURDIR)/..
 .include "$(SRCROOT)/dreambbs.mk"
 
 SH = checkACCT.sh  checkbrdDIR.sh  checkusrDIR.sh  clean.sh  start.sh  top.sh

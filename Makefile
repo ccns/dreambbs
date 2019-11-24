@@ -9,7 +9,7 @@
 OPSYS	!= uname -o
 NPROC	!= getconf _NPROCESSORS_ONLN
 
-REALSRCROOT	:= .
+REALSRCROOT	:= $(.CURDIR)
 .include "$(REALSRCROOT)/dreambbs.mk"
 .export
 

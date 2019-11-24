@@ -7,7 +7,7 @@
 #  update : 18/03/28                                     #
 # ------------------------------------------------------ #
 
-SRCROOT	= ..
+SRCROOT	= $(.CURDIR)/..
 .include "$(SRCROOT)/dreambbs.mk"
 .include "./so.mk"
 

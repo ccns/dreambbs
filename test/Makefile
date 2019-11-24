@@ -9,7 +9,7 @@
 # TODO: make variable size test utils.
 #
 
-SRCROOT	= ..
+SRCROOT	= $(.CURDIR)/..
 .include "$(SRCROOT)/dreambbs.mk"
 
 .SUFFIXES: .o .c

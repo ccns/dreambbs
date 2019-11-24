@@ -7,7 +7,7 @@
 #  update : 95/12/15                                     #
 # ------------------------------------------------------ #
 
-SRCROOT	= ..
+SRCROOT	= $(.CURDIR)/..
 .include "$(SRCROOT)/dreambbs.mk"
 
 HDR 	= dao.h dao.p

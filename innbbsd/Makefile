@@ -7,7 +7,7 @@
 #  author : skhuang                                      #
 # ------------------------------------------------------ #
 
-SRCROOT	= ..
+SRCROOT	= $(.CURDIR)/..
 .include "$(SRCROOT)/dreambbs.mk"
 
 INNOBJS	= channel.o bbslib.o convcode.o inntobbs.o rec_article.o nocem.o history.o
