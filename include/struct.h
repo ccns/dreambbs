@@ -1178,7 +1178,7 @@ typedef struct
 
 typedef struct
 {
-    time_t tissue;
+    time_t tissue;              /* 開支票時間 */
     int money;
     int gold;
     char reason[20];
