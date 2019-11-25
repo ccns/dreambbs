@@ -8,6 +8,9 @@
 
 ### 直接影響使用者操作及介面的改變
 
+- 支援更多不同 terminals 的特殊按鍵
+- 支援 Ctrl/Meta/Shift 與特殊按鍵的組合
+- 從 PttBBS 增加了編輯器介面的 `F*` 和 `ESC-*` 快速鍵
 - 移除使用者名單介面的無用的大 V 功能
 - 現在系統踢出使用者時，使用者端顯示出斷線訊息後會立刻斷線
 - 現在使用者登出時會先進行登出作業，再顯示登出訊息
@@ -16,6 +19,13 @@
 - 編輯器增加快速鍵 `ESC-1` ~ `ESC-5`，分別會讀入 1 ~ 5 號暫存檔的內容
 
 ### 直接影響使用者操作及介面的錯誤修正
+
+- 修正多層 popupmenu 的內層在進入時不會被重畫的問題
+- 修正 `base64encode` 工具會產生錯誤結果的問題
+- 修正 `checkemail` 工具傳入參數時，會 `mail` 兩次到相同目的地的問題
+- 修正在精華區轉貼沒有讀取權限的文章時會 crash 的問題
+- 修正 `u_register()`（填寫註冊單）在用 `getfield()` 讀取輸入時，
+   使用者的輸入會被寫入到程式的唯讀記憶體而 crash 的問題
 
 - 修正 `x_siteinfo()` (系統程式資訊) 中的資料大小單位 `bytes` 誤植為 `KB` 的問題
 - 修正文章轉貼失敗也能增加個人文章數的問題
@@ -47,12 +57,25 @@
 
 #### 密碼安全修正
 
+- 調整偽隨機亂數產生器 (pseudorandom number generators) 的 seeding
+- 使用密碼學安全偽隨機亂數產生器
+   (cryptographically secure pseudorandom number generator; CSPRNG)
+   來提升新隨機產生或加密的密碼的安全
 - 修正造成 `xchatd` 將使用者帳號與密碼明碼當作使用者連線來源的邏輯錯誤
 - 現在處理完使用者輸入的密碼後，會立刻抹除密碼明碼
 - 發站外信時使用的 BBS 站簽章：在處理完 BBS 站的私鑰後，會立刻抹除私鑰
 
 #### 其它系統安全修正
 
+- 修正 38 處存取未初始化或內容為垃圾的變數的問題
+- 修正 3 處將未初始化或垃圾的 bytes 寫入到硬碟檔案中的問題
+- 修正 8 處 buffer overflows 以及越界存取
+- 修正 9 處 unreachable memory leaks
+- 修正 4 處會毀壞程式記憶體結構的操作
+- 修正 7 處 file resource leaks
+- 修正 25 處的無效 `fclose()/close()` 函數呼叫
+- 修正 30 處 `open()` 回傳值的誤用，以及其所造成的問題
+- 修正一些 undefined behaviors
 - 修正當使用者的 IPv4 address 長度為 15 時，
    會造成全域變數 `ipv4addr` 發生 buffer overflow 的問題
 - 修正 format string 的參數型別不合，而造成潛藏的 buffer overflow 的問題
@@ -72,15 +95,21 @@
 
 #### 其它修正與改進
 
+- 消除大部分的 `-Wall` 警告
+- 消除由超過 438 處的程式碼引起的大部分的 `-Wwrite-strings` 警告
 - 修正不正確的縮排
 - 微調程式排版
 - 其它較小的 refactor 和 bug 修正
-
 
 ## v2.0.0 的新增功能與變動
 
 ### 直接影響使用者操作與介面的修正
 
+- 支援使用 SHA-256 加密密碼
+- 支援使用 SHA-256 產生的發站外信時所使用的 BBS 站簽章
+- 加大最大密碼長度到 36 位
+- 將密碼欄位隱形
+- 設定或產生新密碼時，讓使用者可以選擇要使用新的或舊的密碼加密方法
 - 現在使用 POP3 認證時的密碼欄位的長度增加到 36 個字元
 - 現在使用 POP3 認證時的密碼欄位會隱形
 - 使用處理器數量作為系統負載高低的判斷基準
@@ -112,6 +141,11 @@
    最大每小時上線數、及最大每天上線數為負數的問題
 - 接受兩個以上參數的 BBS 工具，現在可以使用 `-?` 語法指定參數以及跳過某些參數
 
+### 與 BBS-Lua 有關的改進
+
+- 重新實作 BBS-Lua 在 Maple3 上的鍵盤輸入支援
+- 更新 BBS-Lua 的版本號為 `0.119-DlPatch-1`
+
 #### WebSocket proxy 的支援
 
 - `bbsd` 支援透過 unix socket 傳送連線資料；相容於 PttBBS 的 WebSocket proxy 模組
@@ -127,8 +161,13 @@
 - 增加 pfterm 對 ANSI escape sequence `ESC [ 27` (反色屬性關) 的支援
    (`ESC [ 7` 的作用是開啟或關閉反色屬性)
 
-#### 其它改進
+#### 與編譯工具有關的改進
 
+- Refactor Makefiles
+- 消除在 makefiles 中進行 `.include` 時不必要的載入
+- 支援不使用 dynamic library 載入機制來編譯及使用 BBS 系統的各個程式模組
+
+#### 其它改進
 - 引入 PttBBS 對 GCC attribute 定義的一些有用 macros
 - 定義一些有用的 GCC attribute macros
 - 其它較小的 refactor
