@@ -197,27 +197,27 @@
 
 #### BBS-Lua 的支援
 
-- 增加編譯設定的 macros
-- 現在執行 BBS-Lua 前會先檢查使用者有無相關權限
-- 改善特殊按鍵的按鍵對應值的處理過程對其它 BBS 系統的相容度
+- 增加編譯設定 macros
+- 現在執行 BBS-Lua 前會先檢查使用者有無足夠權限
+- 改善特殊按鍵的處理過程與其它 BBS 系統的相容度
 - 支援 `shift-tab`
 - 實作 `bl_getdata()` 的 `Ctrl-C` 偵測
-- 增加對 Maple3 的 `bl_getdata()` 的 `HIDEECHO` (32) flag，以開啟 `NOECHO` 的效果而可與其它 `echo` flags 自由組合
+- 增加 `HIDEECHO` (32) flag 給 Maple3 版的 `bl_getdata()`，以讓 `NOECHO` 效果能與其它 `echo` flags 自由組合
 - 將 deprecated 的 bitlib library 以 BitOp <http://bitop.luajit.org/> 取代
 - 支援 LuaJIT
-- 修正用 `Ctrl-C` 終止程式時會印出隨機字串
+- 修正用 `Ctrl-C` 結束程式時會印出隨機字串的問題
 - 重新實作 BBS-Lua 在 Maple3 上的鍵盤輸入支援
 - 更新 BBS-Lua 的版本號為 `0.119-DlPatch-1`
 - 其它較小的 refactoring
 
 #### BBS-Ruby support
 
-- 現在執行 BBS-Ruby 前會先檢查使用者有無相關權限
+- 現在執行 BBS-Ruby 前會先檢查使用者有無足夠權限
 - 移除沒用到的函數 `run_ruby_test()`
-- 增加編譯設定的 macros
+- 增加編譯設定 macros
 - 讓 BBS-Ruby 能在 PttBBS 上通過編譯
 - 如果可能，讓 `getdata()` 在 `NOECHO` echo mode 中把輸入欄位隱形
-- 如果可能，讓 BBS-Ruby 可用 `Ctrl-C` 終止
+- 如果可能，讓 BBS-Ruby 可用 `Ctrl-C` 結束
 - 其它較小的 refactoring
 
 #### WebSocket proxy 的支援
