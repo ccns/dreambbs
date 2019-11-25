@@ -4,6 +4,9 @@
 
 ### Changes which directly affect the UI
 
+- Support special keys for more terminals
+- Support Ctrl-/Meta-/Shift- key modifiers for special keys
+- Add some `F*` and `ESC-*` key shortcuts from PttBBS for editor
 - Remove the useless `V` function of the user list UI
 - Now the client will disconnect right after the disconnection message displays
 - Now the client will perform the logout works
@@ -16,6 +19,14 @@
 
 ### Fixes which directly affect the UI
 
+- Fix nested popupmenus not being redrawn when entered
+- Fix `base64encode` tool yields wrong results
+- Fix `checkemail` `mail`s to the same destination twice
+   whenever any arguments are passed
+- Fix crashes when the user repost a gem item
+   which the user has no read permission
+- Fix crashes due to writing to read-only program memory
+   when calling `getfield()` in `u_register()`
 - Fix misusing `KB` instead of `bytes` as the data size unit in `x_siteinfo()`
 - Fix the issue that failed reposts and forwarding posts
    increase the personal post count
@@ -53,6 +64,9 @@
 
 #### Fixes for the password security
 
+- Refine the seeding of pseudorandom number generators
+- Improve the security of newly generated/encrypted passwords
+   by using a cryptographically secure pseudorandom number generator (CSPRNG)
 - Fix a logical error which causes the user's the ID and plaintext password
    being mistaken as the user's origin of connection
 - Now the plaintext password input by the user will be wiped out after processed
@@ -61,6 +75,15 @@
 
 #### Other fixes for the system security
 
+- Fix accessing uninitialized/garbage variable in 38 places
+- Fix writing uninitialized/garbage bytes to disk files in 3 places
+- Fix buffer overflows / out-of-bound accesses in 8 places
+- Fix unreachable memory leaks in 9 places
+- Fix memory corruptions in 4 places
+- Fix file resource leaks in 7 places
+- Fix invalid `fclose()/close()` calls in 25 places
+- Fix 30 misuses of `open()` return value and bugs/errors introduced by them
+- Fix some undefined behaviors
 - Fix the global buffer `ipv4addr` being overflowed
    by IPv4 addresses with 15 characters
 - Fix potential buffer overflow
@@ -84,6 +107,8 @@
 
 #### Other fixes and improvements
 
+- Eliminate most of `-Wall` warnings
+- Eliminate most of `-Wwrite-strings` warnings, caused by over 438 places of code
 - Fix incorrect indentation
 - Tweak the code layout
 - Other minor refactoring and bug fixes
@@ -93,6 +118,12 @@
 
 ### Fixes which directly affects the UI
 
+- Support SHA-256-encrypted passwords
+- Support SHA-256 site signature for inter-site mail
+- Increase the maximum password length to 36 characters
+- Make the password fields invisible
+- Allow the user to choose between the old and new password encryption methods
+   when setting/generating new passwords
 - Now the password field for POP3 authorization accepts up to 36 characters
 - Now the password field for POP3 authorization is invisible
 - Now the number of processors accounts for the seriousness
@@ -131,6 +162,11 @@
 - The tools which accept more than 2 arguments
    now allow parameter designation and omitting with the `-?` syntax
 
+#### Improvements about BBS-Lua
+
+- Rework current BBS-Lua keyboard support implement for Maple3
+- Update BBS-Lua version to `0.119-DlPatch-1`
+
 #### WebSocket proxy support
 
 - `bbsd` now allows the connection data to be passed via unix sockets,
@@ -148,6 +184,11 @@
    (move to `<n>`-th line) for pfterm
 - Add support for ANSI escape sequence `ESC [ 27` (reverse off) for pfterm
    (`ESC [ 7` either turns on or turns off the reverse attribute)
+
+#### Improvement about the build tools
+- Refactor Makefiles
+- Eliminate unnecessary loading of `.include` for makefiles
+- Support disabling dynamic library loading
 
 #### Other improvements
 
