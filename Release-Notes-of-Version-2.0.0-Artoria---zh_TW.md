@@ -1,5 +1,9 @@
 # Version 2.0.0 Artoria 發行說明 (草稿)
 
+## 發行代號：Artoria
+
+* 靈感來源：Fate Stay/Night 系列作品的登場角色，職階 Saber。
+
 ## 新增功能與變動
 
 ### 直接影響使用者操作與介面的修正
@@ -8,16 +12,6 @@
 - 現在使用 POP3 認證時的密碼欄位會隱形
 - 使用處理器數量作為系統負載高低的判斷基準
 - 將處理器數量與系統負載一同顯示
-- 解決：開啟 `CHAT_SECURE` 編譯選項時，
-         會造成程式將使用者密碼明碼儲存在全域變數中的問題。
-- 解決：因檢查密碼後會抹除密碼明碼，
-         造成存儲密碼明碼的全域變數無法用以登入 xchatd 的問題。
-- 移除在函數宣告中無效的 top-level cvr-qualifier 以及 `register` 關鍵字
-- 將 14 個 static storage 的指標的指向型別加上 `const`
-- 將超過 374 個函數參數及回傳值的指標的指向型別加上 `const`
-- 將超過 26 個 static storage 的指標的型別加上 `const`
-- 將超過 90 個陣列的元素型別加上 `const`
-- 將超過 11 個指向字串的變數的型別加上 `const`
 
 #### 命令列管理工具介面的改進
 
@@ -45,6 +39,16 @@
 
 #### 其它改進
 
+- 解決：開啟 `CHAT_SECURE` 編譯選項時，
+         會造成程式將使用者密碼明碼儲存在全域變數中的問題。
+- 解決：因檢查密碼後會抹除密碼明碼，
+         造成存儲密碼明碼的全域變數無法用以登入 xchatd 的問題。
+- 移除在函數宣告中無效的 top-level cvr-qualifier 以及 `register` 關鍵字
+- 將 14 個 static storage 的指標的指向型別加上 `const`
+- 將超過 374 個函數參數及回傳值的指標的指向型別加上 `const`
+- 將超過 26 個 static storage 的指標的型別加上 `const`
+- 將超過 90 個陣列的元素型別加上 `const`
+- 將超過 11 個指向字串的變數的型別加上 `const`
 - 引入 PttBBS 對 GCC attribute 定義的一些有用 macros
 - 定義一些有用的 GCC attribute macros
 - 其它較小的 refactor
@@ -69,20 +73,11 @@
 - 修正進入好友看板被拒絕時，目前進入的看板的顯示名稱會變成該好友看板的名稱的問題
 - 修正 `class_yank2()` (只顯示好友板、秘密板) 無法列出所有好友板和秘密板的問題
 - 修正熱門看板只列出看板 SYSOP 的問題；改為僅不列出看板 SYSOP
-
-### 針對 Stage 4 的修正
-
 - 修正：`VGET_*` flags 的值與 `BRD_*_BIT` flags 衝突，造成無法搜尋看板的問題
 - 修正 header 上的新信件與新留言的訊息 `NEW[MAIL|PASS]MSG` 被截斷的問題
-
-### 針對先前版本的修正
-
 - 將餘下的 hardcoded 的程式執行路徑 `/home/bbs` 取代為 macro `BBSHOME`
 - 修正 `dns_open()` 的 `host` 參數為 IPv4 address 而連線失敗時，
    會存取未初始化的變數當作 `while` 條件，而導致程式當住甚至 crash 的問題
-
-#### 其它介面修正
-
 - 修正 `innbbsd` 的 `連線人數過多` 的訊息 `msg_no_desc` 被截斷的問題
 - 修正 `innbbsd/inntobbs.h` 中的函數 `HISfetch()` 宣告錯誤的問題
 
