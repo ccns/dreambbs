@@ -11,6 +11,9 @@
 - 支援更多不同 terminals 的特殊按鍵
 - 支援 Ctrl/Meta/Shift 與特殊按鍵的組合
 - 從 PttBBS 增加了編輯器介面的 `F*` 和 `ESC-*` 快速鍵
+- 將閒置時間的格式由 `mmmm` 改為 `hh:mm`
+- 現在會踢出閒置過久的 guest
+- 現在閒置警告會附帶 bell
 - 移除使用者名單介面的無用的大 V 功能
 - 現在系統踢出使用者時，使用者端顯示出斷線訊息後會立刻斷線
 - 現在使用者登出時會先進行登出作業，再顯示登出訊息
@@ -95,6 +98,9 @@
 - 修正 pfterm 將 ANSI escape sequence `ESC <ch>` 誤當作 `ESC [ <ch>` 處理的問題
    (如將 `ESC m` 誤當作 `ESC [ m`)
 
+#### 與編譯工具有關的改進
+- 使用 Travis CI 進行 Build Verification Test
+
 #### 其它修正與改進
 
 - 消除大部分的 `-Wall` 警告
@@ -116,6 +122,7 @@
 - 現在使用 POP3 認證時的密碼欄位會隱形
 - 使用處理器數量作為系統負載高低的判斷基準
 - 將處理器數量與系統負載一同顯示
+- 將 yes/no 提示框的非預設選項的字母變為小寫
 - 移除登入畫面的系統負載資訊後的破折號
 
 ### 針對 Stage 4 的修正
@@ -173,4 +180,5 @@
 #### 其它改進
 - 引入 PttBBS 對 GCC attribute 定義的一些有用 macros
 - 定義一些有用的 GCC attribute macros
+- 改善 `README.md` 的語法與用詞
 - 其它較小的 refactor
