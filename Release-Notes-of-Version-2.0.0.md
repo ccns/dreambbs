@@ -4,6 +4,9 @@
 
 ### Changes which directly affect the UI
 
+- Make the layout of `vs_bar()` consistent with `vs_head()`.
+- Support on-the-fly terminal resizing.
+- Invalid inputs or operations on input fields will now bell
 - Fix typoes and refine word usage in UI strings.
 - Most UI elements now support widescreen display
 - Re-enable MyFavorite option in Ctrl-Z menu
@@ -27,6 +30,11 @@
 
 ### Fixes which directly affect the UI
 
+- Fix `blog()` generating misaligned log files, which makes the total online duration of users incorrect
+- Use user mode `M_ADMIN` for system maintenance menu instead of `M_XMENU` for better description of the user status.
+- Change the misleading description of user mode `M_XMENU` `"網路連線選單"` to `"工具選單"`
+- Fix MyFavorite status being displayed wrong.
+- Fix reversed type sometimes not being turned off after drawing the input field when pfterm is enabled
 - Fix nested popupmenus not being redrawn when entered
 - Fix crashes when the user repost a gem item
    which the user has no read permission
@@ -55,6 +63,8 @@
 
 ### Fixes for previous versions
 
+- Allow `bin/account` to be executed at 10-59 minutes after the hour every hour.
+- Fix login count never being reset if `bin/account` is never executed at 1 am.
 - scripts/checkusrDIR.sh: Fix 'run/NOUSRDIR.log' never being cleaned.
 - Fix `base64encode` tool yields wrong results
 - Fix `checkemail` `mail`s to the same destination twice
@@ -153,6 +163,7 @@
 
 ### Fixes which directly affects the UI
 
+- Now the key `KEY_DEL` deletes the character on the cursor in the input fields.
 - Support SHA-256-encrypted passwords
 - Support SHA-256 site signature for inter-site mail
 - Increase the maximum password length to 36 characters
@@ -201,12 +212,35 @@
 
 #### Other UI fixes and improvements
 
+- Add `echo` flags `VGET_STRICT_DOECHO`, `VGET_STEALTH_NOECHO`, `PASSECHO`, `VGET_BREAKABLE`, & `NUMECHO` for `vget()`
+- Make `vget()` convert the whole input string to lowercase if `LCECHO` is set
+- Site information: Show the version information for LuaJIT if enabled.
 - Remove adminutil tools which invoke shell commands
 
-#### Improvements about BBS-Lua
+#### BBS-Lua support
 
+- Add configuration macros
+- Now the user permission will be checked before executing BBS-Lua
+- Improve the compatibility of key value handling of special keys
+- Add support for `shift-tab`
+- Implement `Ctrl-C` detection for `bl_getdata()`
+- Add `HIDEECHO` (32) flag for `bl_getdata()` for Maple3 to allow combining `NOECHO` effect with other `echo` flags
+- Replace deprecated bitlib library with BitOp <http://bitop.luajit.org/>
+- Support LuaJIT
+- Fix printing random string when aborting using 'Ctrl-C'
 - Rework current BBS-Lua keyboard support implement for Maple3
 - Update BBS-Lua version to `0.119-DlPatch-1`
+- Other minor refactoring
+
+#### BBS-Ruby support
+
+- Now the user permission will be checked before executing BBS-Ruby
+- Remove unused function `run_ruby_test()`
+- Add configuration macros
+- Make BBS-Ruby able to be compiled on PttBBS
+- Draw nothing in the `NOECHO` echo mode of `getdata()` if possible
+- Allow aborting BBS-Ruby with `Ctrl-C` if possible
+- Other minor refactoring
 
 #### WebSocket proxy support
 
@@ -228,6 +262,7 @@
 
 #### Improvements about build and employment process
 
+- maple/: Avoid defining `M3_USE_*` or similar macros in non-configuration files.
 - Add tests for `libdao` functions `f_mv()` and `f_cp()`
 - Replace shell command `cp` with `libdao` function `f_cp()`
 - Replace shell command `mv` with `libdao` function `f_mv()`
