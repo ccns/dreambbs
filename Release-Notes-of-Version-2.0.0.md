@@ -5,7 +5,7 @@
 ### Changes which directly affect the UI
 
 - Make the layout of `vs_bar()` consistent with `vs_head()`.
-- Support on-the-fly terminal resizing.
+- Support on-the-fly terminal resizing detecting.
 - Invalid inputs or operations on input fields will now bell
 - Fix typoes and refine word usage in UI strings.
 - Most UI elements now support widescreen display
@@ -30,7 +30,7 @@
 
 ### Fixes which directly affect the UI
 
-- Fix `blog()` generating misaligned log files, which makes the total online duration of users incorrect
+- Fix `blog()` generating misaligned log files, which makes the calculated average session duration incorrect
 - Use user mode `M_ADMIN` for system maintenance menu instead of `M_XMENU` for better description of the user status.
 - Change the misleading description of user mode `M_XMENU` `"網路連線選單"` to `"工具選單"`
 - Fix MyFavorite status being displayed wrong.
