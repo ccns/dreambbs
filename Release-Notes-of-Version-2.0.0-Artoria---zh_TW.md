@@ -8,6 +8,10 @@
 
 ### 直接影響使用者操作及介面的改變
 
+- 現在在輸入欄位中，可以用按鍵 `KEY_DEL` 刪除目前游標上的字元
+- 現在在輸入欄位中的錯誤輸入或操作會產生 bell 提示
+- 支援即時偵測 terminal 的大小調整
+- 讓 `vs_bar()` 的樣式與 `vs_head()` 一致
 - 修正使用者介面中的錯字，並改善部分用字
 - 現在大部分的使用者介面中的元素都支援寬螢幕顯示了
 - 重新開放 Ctrl-Z 選單中的 `我的最愛` 選項
@@ -28,6 +32,11 @@
 
 ### 直接影響使用者操作及介面的錯誤修正
 
+- 修正 `blog()` 產生格式對齊錯誤的 log files，而造成使用者平均使用時間計算錯誤的問題
+- 將系統維護選單的使用者模式從 `M_XMENU` 改為 `M_ADMIN` 以更好地說明使用者狀態
+- 將使用者模式 `M_XMENU` 的有誤導之嫌的說明 `"網路連線選單"` 改為 `"工具選單"`
+- 修正 `我的最愛` 的使用者狀態顯示錯誤的問題
+- 修正使用 pfterm 時，有時畫完輸入欄位後，反色屬性沒有關掉的問題
 - 修正多層 popupmenu 的內層在進入時不會被重畫的問題
 - 修正在精華區轉貼沒有讀取權限的文章時會 crash 的問題
 - 修正 `u_register()`（填寫註冊單）在用 `getfield()` 讀取輸入時，
@@ -50,6 +59,8 @@
 
 ### 針對先前版本的修正
 
+- 讓 `bin/account` 可以正常地在每小時整點後的 10-59 分鐘執行
+- 修正當 `bin/account` 不在上午 1 點執行時，登入次數不會重設的問題
 - `scripts/checkusrDIR.sh`: 修正 `run/NOUSRDIR.log` 永不被清除的問題。
 - 修正 `base64encode` 工具會產生錯誤結果的問題
 - 修正 `checkemail` 工具傳入參數時，會 `mail` 兩次到相同目的地的問題
@@ -65,7 +76,7 @@
 - `brh_load()`: 避免 `memcpy()` 0 個或更少的 bytes。
 - `brh_get()`: 修正使用 `memcpy()` 在重疊的範圍間移動資料，而導致 BRH 損壞的問題。
 
-#### 其它介面修正
+#### 其它介面修正與改進
 
 - `so/adminutil.c`: `top()`: 修正 shell 指令 `top` 不能正常執行的問題。
 - 移除函數 `clrtohol()`
@@ -179,12 +190,35 @@
 
 #### 其它 UI 修正及改進
 
+- 增加 `vget()` 的 `echo` flags `VGET_STRICT_DOECHO`, `VGET_STEALTH_NOECHO`, `PASSECHO`, `VGET_BREAKABLE`, & `NUMECHO`
+- 現在使用 `LCECHO` 時，`vget()` 會將整個數入字串轉成小寫
+- 系統程式資訊: 如果 LuaJIT 有啟用的話，就顯示出它的版本資訊
 - 移除會呼叫 shell 指令的一部分 adminutil 工具
 
-#### 與 BBS-Lua 有關的改進
+#### BBS-Lua 的支援
 
+- 增加編譯設定的 macros
+- 現在執行 BBS-Lua 前會先檢查使用者有無相關權限
+- 改善特殊按鍵的按鍵對應值的處理過程對其它 BBS 系統的相容度
+- 支援 `shift-tab`
+- 實作 `bl_getdata()` 的 `Ctrl-C` 偵測
+- 增加對 Maple3 的 `bl_getdata()` 的 `HIDEECHO` (32) flag，以開啟 `NOECHO` 的效果而可與其它 `echo` flags 自由組合
+- 將 deprecated 的 bitlib library 以 BitOp <http://bitop.luajit.org/> 取代
+- 支援 LuaJIT
+- 修正用 `Ctrl-C` 終止程式時會印出隨機字串
 - 重新實作 BBS-Lua 在 Maple3 上的鍵盤輸入支援
 - 更新 BBS-Lua 的版本號為 `0.119-DlPatch-1`
+- 其它較小的 refactoring
+
+#### BBS-Ruby support
+
+- 現在執行 BBS-Ruby 前會先檢查使用者有無相關權限
+- 移除沒用到的函數 `run_ruby_test()`
+- 增加編譯設定的 macros
+- 讓 BBS-Ruby 能在 PttBBS 上通過編譯
+- 如果可能，讓 `getdata()` 在 `NOECHO` echo mode 中把輸入欄位隱形
+- 如果可能，讓 BBS-Ruby 可用 `Ctrl-C` 終止
+- 其它較小的 refactoring
 
 #### WebSocket proxy 的支援
 
@@ -203,6 +237,7 @@
 
 #### 與編譯及架站過程有關的改進
 
+- 避免在非設定檔中定義 `M3_USE_*` 之類的 `macro`
 - 增加 `libdao` 函數 `f_mv()` and `f_cp()` 的測試
 - 將 shell 指令 `cp` 取代為 `libdao` 函數 `f_cp()`
 - 將 shell 指令 `mv` 取代為 `libdao` 函數 `f_mv()`
