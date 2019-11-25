@@ -4,9 +4,10 @@
 
 ### Changes which directly affect the UI
 
-- Make the layout of `vs_bar()` consistent with `vs_head()`.
-- Support on-the-fly terminal resizing detecting.
+- Now the key `KEY_DEL` deletes the character on the cursor in the input fields.
 - Invalid inputs or operations on input fields will now bell
+- Support on-the-fly terminal resizing detecting.
+- Make the layout of `vs_bar()` consistent with `vs_head()`.
 - Fix typoes and refine word usage in UI strings.
 - Most UI elements now support widescreen display
 - Re-enable MyFavorite option in Ctrl-Z menu
@@ -163,7 +164,6 @@
 
 ### Fixes which directly affects the UI
 
-- Now the key `KEY_DEL` deletes the character on the cursor in the input fields.
 - Support SHA-256-encrypted passwords
 - Support SHA-256 site signature for inter-site mail
 - Increase the maximum password length to 36 characters
@@ -272,7 +272,7 @@
 
 #### Other improvements
 
-- Move generic macros from 'include/bbs_script.h' to 'include/cppdef.h'
+- Move generic macros from `include/bbs_script.h` to `include/cppdef.h`
 - Refine code and fix minor over allocation for flexible array members
 - Introduce some useful macros for GCC attributes from PttBBS
 - Define some useful GCC attribute macros
