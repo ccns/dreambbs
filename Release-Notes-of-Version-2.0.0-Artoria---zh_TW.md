@@ -4,7 +4,7 @@
 
 * 靈感來源：Fate Stay/Night 系列作品的登場角色，職階 Saber。
 
-## 新增功能與變動
+## 反向移植到 v1.x 版本的新增功能與變動
 
 ### 直接影響使用者操作與介面的修正
 
@@ -52,6 +52,8 @@
 - 引入 PttBBS 對 GCC attribute 定義的一些有用 macros
 - 定義一些有用的 GCC attribute macros
 - 其它較小的 refactor
+
+## v2.0.0 的新增功能與變動
 
 ### 直接影響使用者操作及介面的改變
 
