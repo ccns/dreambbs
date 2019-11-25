@@ -8,6 +8,11 @@
 
 ### 直接影響使用者操作及介面的改變
 
+- 修正使用者介面中的錯字，並改善部分用字
+- 現在大部分的使用者介面中的元素都支援寬螢幕顯示了
+- 重新開放 Ctrl-Z 選單中的 `我的最愛` 選項
+- 現在 Ctrl-Z 選單中的 `螢幕擷取` 功能支援寬螢幕了
+- 開放當 pfterm 啟用時，Ctrl-Z 選單中的 `螢幕擷取` 功能
 - 支援更多不同 terminals 的特殊按鍵
 - 支援 Ctrl/Meta/Shift 與特殊按鍵的組合
 - 從 PttBBS 增加了編輯器介面的 `F*` 和 `ESC-*` 快速鍵
@@ -24,8 +29,6 @@
 ### 直接影響使用者操作及介面的錯誤修正
 
 - 修正多層 popupmenu 的內層在進入時不會被重畫的問題
-- 修正 `base64encode` 工具會產生錯誤結果的問題
-- 修正 `checkemail` 工具傳入參數時，會 `mail` 兩次到相同目的地的問題
 - 修正在精華區轉貼沒有讀取權限的文章時會 crash 的問題
 - 修正 `u_register()`（填寫註冊單）在用 `getfield()` 讀取輸入時，
    使用者的輸入會被寫入到程式的唯讀記憶體而 crash 的問題
@@ -47,12 +50,25 @@
 
 ### 針對先前版本的修正
 
+- `scripts/checkusrDIR.sh`: 修正 `run/NOUSRDIR.log` 永不被清除的問題。
+- 修正 `base64encode` 工具會產生錯誤結果的問題
+- 修正 `checkemail` 工具傳入參數時，會 `mail` 兩次到相同目的地的問題
 - 將餘下的 hardcoded 的程式執行路徑 `/home/bbs` 取代為 macro `BBSHOME`
 - 修正 `dns_open()` 的 `host` 參數為 IPv4 address 而連線失敗時，
    會存取未初始化的變數當作 `while` 條件，而導致程式當住甚至 crash 的問題
 
+#### BRH（閱讀紀錄）修正
+
+- `brh_get()`: 修正會多 `memcpy()` 不必要的 3 個 `time_t` 大小的空間的問題。
+- `brh_add()`: 修正當 BRH 滿時，閱讀比最舊的已讀文章還舊的文章時會發生越界寫入的問題。
+- `brh_add()`: 修正閱讀比最舊的已讀文章還舊的文章時，必定導致時間區間數增加的問題。
+- `brh_load()`: 避免 `memcpy()` 0 個或更少的 bytes。
+- `brh_get()`: 修正使用 `memcpy()` 在重疊的範圍間移動資料，而導致 BRH 損壞的問題。
+
 #### 其它介面修正
 
+- `so/adminutil.c`: `top()`: 修正 shell 指令 `top` 不能正常執行的問題。
+- 移除函數 `clrtohol()`
 - 修正 `innbbsd` 的 `連線人數過多` 的訊息 `msg_no_desc` 被截斷的問題
 - 修正 `innbbsd/inntobbs.h` 中的函數 `HISfetch()` 宣告錯誤的問題
 
@@ -98,11 +114,21 @@
 - 修正 pfterm 將 ANSI escape sequence `ESC <ch>` 誤當作 `ESC [ <ch>` 處理的問題
    (如將 `ESC m` 誤當作 `ESC [ m`)
 
-#### 與編譯工具有關的改進
+#### 與編譯及架站過程有關的改進
+
+- 增加 systemd unit 設定檔
+- 修正在 64-bit 作業系統上編譯 dynamic libraries 時所需的 32-bit glibc 的 library 路徑
 - 使用 Travis CI 進行 Build Verification Test
 
 #### 其它修正與改進
 
+- 修正程式註解中的錯字，並改善部分用字
+- 改善部分 variables 與 struct members 的名稱
+- 修正與程式碼不符的註解
+- 消除型別轉換式中的 K&R-style 函數指標
+- 消除 variable-length arrays
+- 修正 shell scripts 中不正確的 shebang
+- 修正 shell scripts 用 `shellcheck` 檢查時發出的警告
 - 消除大部分的 `-Wall` 警告
 - 消除由超過 438 處的程式碼引起的大部分的 `-Wwrite-strings` 警告
 - 修正不正確的縮排
@@ -151,6 +177,10 @@
    最大每小時上線數、及最大每天上線數為負數的問題
 - 接受兩個以上參數的 BBS 工具，現在可以使用 `-?` 語法指定參數以及跳過某些參數
 
+#### 其它 UI 修正及改進
+
+- 移除會呼叫 shell 指令的一部分 adminutil 工具
+
 #### 與 BBS-Lua 有關的改進
 
 - 重新實作 BBS-Lua 在 Maple3 上的鍵盤輸入支援
@@ -171,13 +201,19 @@
 - 增加 pfterm 對 ANSI escape sequence `ESC [ 27` (反色屬性關) 的支援
    (`ESC [ 7` 的作用是開啟或關閉反色屬性)
 
-#### 與編譯工具有關的改進
+#### 與編譯及架站過程有關的改進
 
+- 增加 `libdao` 函數 `f_mv()` and `f_cp()` 的測試
+- 將 shell 指令 `cp` 取代為 `libdao` 函數 `f_cp()`
+- 將 shell 指令 `mv` 取代為 `libdao` 函數 `f_mv()`
 - Refactor Makefiles
 - 消除在 makefiles 中進行 `.include` 時不必要的載入
 - 支援不使用 dynamic library 載入機制來編譯及使用 BBS 系統的各個程式模組
 
 #### 其它改進
+
+- 將沒有專門功能的 macros 從 'include/bbs_script.h' 移到 'include/cppdef.h'
+- 改善與 flexible array member 相關的程式碼，並修正 allocate 時微小的 over allocation
 - 引入 PttBBS 對 GCC attribute 定義的一些有用 macros
 - 定義一些有用的 GCC attribute macros
 - 改善 `README.md` 的語法與用詞
