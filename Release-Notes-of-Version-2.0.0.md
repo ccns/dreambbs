@@ -1,3 +1,5 @@
+# Release Notes of Version 2.0.0 (Drafts)
+
 ## Features
 
 #### Type safety improvements
