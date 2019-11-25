@@ -7,6 +7,9 @@
 - Support special keys for more terminals
 - Support Ctrl-/Meta-/Shift- key modifiers for special keys
 - Add some `F*` and `ESC-*` key shortcuts from PttBBS for editor
+- The format of idle time is changed from `mmmm` to `hh:mm`
+- Now the guest who idles for too long will be kicked out
+- Now the idle alert will bell
 - Remove the useless `V` function of the user list UI
 - Now the client will disconnect right after the disconnection message displays
 - Now the client will perform the logout works
@@ -108,6 +111,9 @@
 - Fix pfterm misinterpreting the ANSI escape sequence `ESC <ch>` as `ESC [ <ch>`
    (e.g., `ESC m` was misinterpreted as `ESC [ m`)
 
+#### Improvement about the build tools
+- Use Travis CI for Build Verification Test
+
 #### Other fixes and improvements
 
 - Eliminate most of `-Wall` warnings
@@ -132,6 +138,7 @@
 - Now the number of processors accounts for the seriousness
    of the heaviness of system load
 - Now the number of processors is displayed together with the system load
+- Make non-default options of yes/no questions lower-case
 - Remove the dash after the system load information on the login screen
 
 ### Fixes for Stage 4
@@ -198,4 +205,5 @@
 
 - Introduce some useful macros for GCC attributes from PttBBS
 - Define some useful GCC attribute macros
+- Refine grammar and wording of `README.md`
 - Other minor refactoring
