@@ -45,8 +45,6 @@
 
 ### Fixes for Stage 4
 
-- Fix: `VGET_*` flag values conflicting with `BRD_*_BIT` flag values,
-   which breaks the board-searching function.
 - Fix the notification message of new mails and new personal messages
    `NEW[MAIL|PASS]MSG` being truncated when displayed on the header
 
@@ -72,6 +70,11 @@
 - Now the plaintext password input by the user will be wiped out after processed
 - Now the plaintext site private key for inter-site mails
    will be wiped out after processed
+- Fix: The user's plaintext password is stored in a global variable
+        whenever the compile option `CHAT_SECURE` is enabled
+- Fix: The global variable storing the plaintext password cannot be used
+        to login xchatd,
+        because the variable is wiped out after verified.
 
 #### Other fixes for the system security
 
@@ -129,14 +132,15 @@
 - Now the number of processors accounts for the seriousness
    of the heaviness of system load
 - Now the number of processors is displayed together with the system load
+- Remove the dash after the system load information on the login screen
+
+### Fixes for Stage 4
+
+- Fix: `VGET_*` flag values conflicting with `BRD_*_BIT` flag values,
+   which breaks the board-searching function.
 
 ### Fixes for Stage 5 and previous versions
 
-- Fix: The user's plaintext password is stored in a global variable
-        whenever the compile option `CHAT_SECURE` is enabled
-- Fix: The global variable storing the plaintext password cannot be used
-        to login xchatd,
-        because the variable is wiped out after verified.
 - Fix the issue that DES-encrypted passwords cannot be used to login xchatd
 
 #### Type safety improvements
