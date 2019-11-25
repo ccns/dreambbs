@@ -4,6 +4,11 @@
 
 ### Changes which directly affect the UI
 
+- Fix typoes and refine word usage in UI strings.
+- Most UI elements now support widescreen display
+- Re-enable MyFavorite option in Ctrl-Z menu
+- The screenshot function in Ctrl-Z menu now supports widescreen
+- The screenshot function in Ctrl-Z menu is now enabled with pfterm enabled
 - Support special keys for more terminals
 - Support Ctrl-/Meta-/Shift- key modifiers for special keys
 - Add some `F*` and `ESC-*` key shortcuts from PttBBS for editor
@@ -23,9 +28,6 @@
 ### Fixes which directly affect the UI
 
 - Fix nested popupmenus not being redrawn when entered
-- Fix `base64encode` tool yields wrong results
-- Fix `checkemail` `mail`s to the same destination twice
-   whenever any arguments are passed
 - Fix crashes when the user repost a gem item
    which the user has no read permission
 - Fix crashes due to writing to read-only program memory
@@ -53,13 +55,27 @@
 
 ### Fixes for previous versions
 
+- scripts/checkusrDIR.sh: Fix 'run/NOUSRDIR.log' never being cleaned.
+- Fix `base64encode` tool yields wrong results
+- Fix `checkemail` `mail`s to the same destination twice
+   whenever any arguments are passed
 - Replace the hardcoded path `/home/bbs` with the macro `BBSHOME`
 - Fix: Accessing uninitialized variables for a `while` condition
       whenever the argument `host` of `dns_open()` is a IPv4 address,
    which causes halts and even crashes
 
+#### BRH fixes
+
+- `brh_get()`: Fix `memcpy()`ing unnecessary 3 `time_t`s.
+- `brh_add()`: Fix out-of-range writing when adding oldest read article while BRH is full.
+- `brh_add()`: Fix adding oldest read article always introducing new time tags.
+- `brh_load()`: Avoid `memcpy()`ing 0 or less bytes.
+- `brh_get()`: Fix using `memcpy()` to move data between overlapped ranges.
+
 #### Other UI fixes
 
+- so/adminutil.c: `top()`: Fix shell command `top` not working.
+- Remove function `clrtohol()`
 - Fix the connection overload message `msg_no_desc` of `innbbsd` being truncated
 - Fix the function `HISfetch()` being declared wrong in `innbbsd/inntobbs.h`
 
@@ -111,11 +127,21 @@
 - Fix pfterm misinterpreting the ANSI escape sequence `ESC <ch>` as `ESC [ <ch>`
    (e.g., `ESC m` was misinterpreted as `ESC [ m`)
 
-#### Improvement about the build tools
+#### Improvements about build and employment process
+
+- Add systemd unit files
+- Fix the library path of 32-bit glibc for building dynamic libraries on 64-bit OSs
 - Use Travis CI for Build Verification Test
 
 #### Other fixes and improvements
 
+- Fix typoes and refine word usage in comments.
+- Refine the name of some variables and struct members
+- Fix comments which conflict with the code
+- Eliminate K&R-style function pointer casts
+- Eliminate variable-length arrays
+- Fix invalid shebang in shell scripts.
+- Fix shellcheck warnings for shell scripts.
 - Eliminate most of `-Wall` warnings
 - Eliminate most of `-Wwrite-strings` warnings, caused by over 438 places of code
 - Fix incorrect indentation
@@ -173,6 +199,10 @@
 - The tools which accept more than 2 arguments
    now allow parameter designation and omitting with the `-?` syntax
 
+#### Other UI fixes and improvements
+
+- Remove adminutil tools which invoke shell commands
+
 #### Improvements about BBS-Lua
 
 - Rework current BBS-Lua keyboard support implement for Maple3
@@ -196,13 +226,19 @@
 - Add support for ANSI escape sequence `ESC [ 27` (reverse off) for pfterm
    (`ESC [ 7` either turns on or turns off the reverse attribute)
 
-#### Improvement about the build tools
+#### Improvements about build and employment process
+
+- Add tests for `libdao` functions `f_mv()` and `f_cp()`
+- Replace shell command `cp` with `libdao` function `f_cp()`
+- Replace shell command `mv` with `libdao` function `f_mv()`
 - Refactor Makefiles
 - Eliminate unnecessary loading of `.include` for makefiles
 - Support disabling dynamic library loading
 
 #### Other improvements
 
+- Move generic macros from 'include/bbs_script.h' to 'include/cppdef.h'
+- Refine code and fix minor over allocation for flexible array members
 - Introduce some useful macros for GCC attributes from PttBBS
 - Define some useful GCC attribute macros
 - Refine grammar and wording of `README.md`
