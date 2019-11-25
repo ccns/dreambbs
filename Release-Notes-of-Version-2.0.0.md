@@ -2,53 +2,6 @@
 
 ## Features and fixes backported to v1.x
 
-#### Type safety improvements
-
-- Remove ignored top-level cvr-qualifiers and keyword `register`
-   from function declarations
-- Make 14 static storage pointers point to `const`
-- Make 374 more function result and parameter pointers point to `const`
-- Make 26 more static storage pointers `const`
-- Make the elements of 90 more arrays `const`
-- Make 11 more point-to-string variables `const`
-
-#### Improvements of the UI of the command-line tools
-
-- Refine reports of invalid command-line usages of the tools
-- Fix out-of-bound accesses when the argument for `poststat`
-   is a positive integer other than 1, 2, and 100
-- Fix users' song request point decreasing
-   when the argument for `addsong` is negative
-- Fix the maximum online user count, the maximum registered user count,
-   the maximum login count per hour, and the maximum login count per day
-   can be set to negative by passing negative arguments to `counter w`
-- The tools which accept more than 2 arguments
-   now allow parameter designation and omitting with the `-?` syntax
-
-#### WebSocket proxy support
-
-- `bbsd` now allows the connection data to be passed via unix sockets,
-   which is compatible with the WebSocket proxy module used in PttBBS
-- Introduce the `wsproxy` module from PttBBS
-- `wsproxy`: Replace the custom method `receiveatmost()` made by patching,
-   with the official OpenResty method `receiveany()`.
-
-#### Improvements about pfterm
-
-- Preliminary implement of the function `vkey_is_typeahead()`,
-   which is used by pfterm and pmore, is now done
-- Update the comments and the references of pfterm
-- Add support for ANSI escape sequence `ESC [ <n> d`
-   (move to `<n>`-th line) for pfterm
-- Add support for ANSI escape sequence `ESC [ 27` (reverse off) for pfterm
-   (`ESC [ 7` either turns on or turns off the reverse attribute)
-
-#### Other improvements
-
-- Introduce some useful macros for GCC attributes from PttBBS
-- Define some useful GCC attribute macros
-- Other minor refactoring
-
 ### Changes which directly affect the UI
 
 - Remove the useless `V` function of the user list UI
@@ -60,8 +13,6 @@
    please use `ESC-U` to bring out the user list instead
 - Add key shortcuts `ESC-1` - `ESC-5` for pasting the text
    from 1-5th temporary buffer file in the editor
-
-## Features and fixes for v2.0.0
 
 ### Fixes which directly affect the UI
 
@@ -75,12 +26,21 @@
    of the currently entered board become the name of the board to be changed to
 - Fix the issue that `class_yank2()` (the `i` function)
    is not able to list all the friend-only and hidden boards
-- Fix the hottest board listing only the board 'SYSOP';
-   now it lists all boards expect the board 'SYSOP'
+- Fix the issue that using `class_yank()` (the `y` function) or `class_yank2()` (the `i` function) causes the user to be kicked out of the board list when there are no corresponding boards 
+- Fix the issue that the user cannot enter the board list if `class_yank()` or `class_yank2()` is activated and there are no corresponding boards
+- Fix the hottest board listing only the board 'SYSOP'; now it lists all hot boards
+- Fix the issue that an empty hottest board list prevents the user from entering the board category list
+- Editor: Fix redundant prompts for file selection when using key shortcuts `ESC-1`-`ESC-5`. 
+
+### Fixes for Stage 4
+
 - Fix: `VGET_*` flag values conflicting with `BRD_*_BIT` flag values,
    which breaks the board-searching function.
 - Fix the notification message of new mails and new personal messages
    `NEW[MAIL|PASS]MSG` being truncated when displayed on the header
+
+### Fixes for previous versions
+
 - Replace the hardcoded path `/home/bbs` with the macro `BBSHOME`
 - Fix: Accessing uninitialized variables for a `while` condition
       whenever the argument `host` of `dns_open()` is a IPv4 address,
@@ -128,6 +88,9 @@
 - Tweak the code layout
 - Other minor refactoring and bug fixes
 
+
+## Features and fixes for v2.0.0
+
 ### Fixes which directly affects the UI
 
 - Now the password field for POP3 authorization accepts up to 36 characters
@@ -143,13 +106,51 @@
 - Fix: The global variable storing the plaintext password cannot be used
         to login xchatd,
         because the variable is wiped out after verified.
-- Fix the hottest board listing all the boards except the board 'SYSOP'
-      as well as the board 'SYSOP' when it is hot;
-      now it lists all hot boards
-- Fix the issue that `class_yank2()` (the `i` function)
-   always list all boards of which the user has the read permission
-- Fix the issue that using `class_yank()` (the `y` function) or `class_yank2()` (the `i` function) causes the user to be kicked out of the board list when there are no corresponding boards 
-- Fix the issue that the user cannot enter the board list if `class_yank()` or `class_yank2()` is activated and there are no corresponding boards
-- Fix the issue that an empty hottest board list prevents the user from entering the board category list
-- Editor: Fix redundant prompts for file selection when using key shortcuts `ESC-1`-`ESC-5`. 
 - Fix the issue that DES-encrypted passwords cannot be used to login xchatd
+
+#### Type safety improvements
+
+- Remove ignored top-level cvr-qualifiers and keyword `register`
+   from function declarations
+- Make 14 static storage pointers point to `const`
+- Make 374 more function result and parameter pointers point to `const`
+- Make 26 more static storage pointers `const`
+- Make the elements of 90 more arrays `const`
+- Make 11 more point-to-string variables `const`
+
+#### Improvements of the UI of the command-line tools
+
+- Refine reports of invalid command-line usages of the tools
+- Fix out-of-bound accesses when the argument for `poststat`
+   is a positive integer other than 1, 2, and 100
+- Fix users' song request point decreasing
+   when the argument for `addsong` is negative
+- Fix the maximum online user count, the maximum registered user count,
+   the maximum login count per hour, and the maximum login count per day
+   can be set to negative by passing negative arguments to `counter w`
+- The tools which accept more than 2 arguments
+   now allow parameter designation and omitting with the `-?` syntax
+
+#### WebSocket proxy support
+
+- `bbsd` now allows the connection data to be passed via unix sockets,
+   which is compatible with the WebSocket proxy module used in PttBBS
+- Introduce the `wsproxy` module from PttBBS
+- `wsproxy`: Replace the custom method `receiveatmost()` made by patching,
+   with the official OpenResty method `receiveany()`.
+
+#### Improvements about pfterm
+
+- Preliminary implement of the function `vkey_is_typeahead()`,
+   which is used by pfterm and pmore, is now done
+- Update the comments and the references of pfterm
+- Add support for ANSI escape sequence `ESC [ <n> d`
+   (move to `<n>`-th line) for pfterm
+- Add support for ANSI escape sequence `ESC [ 27` (reverse off) for pfterm
+   (`ESC [ 7` either turns on or turns off the reverse attribute)
+
+#### Other improvements
+
+- Introduce some useful macros for GCC attributes from PttBBS
+- Define some useful GCC attribute macros
+- Other minor refactoring
