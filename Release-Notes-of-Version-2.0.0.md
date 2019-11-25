@@ -1,6 +1,6 @@
 # Release Notes of Version 2.0.0 (Drafts)
 
-## Features
+## Features and fixes backported to v1.x
 
 #### Type safety improvements
 
@@ -61,7 +61,7 @@
 - Add key shortcuts `ESC-1` - `ESC-5` for pasting the text
    from 1-5th temporary buffer file in the editor
 
-## Fixes from Version 1.0
+## Features and fixes for v2.0.0
 
 ### Fixes which directly affect the UI
 
