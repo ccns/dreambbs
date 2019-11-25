@@ -70,11 +70,11 @@
 - `brh_add()`: Fix out-of-range writing when adding oldest read article while BRH is full.
 - `brh_add()`: Fix adding oldest read article always introducing new time tags.
 - `brh_load()`: Avoid `memcpy()`ing 0 or less bytes.
-- `brh_get()`: Fix using `memcpy()` to move data between overlapped ranges.
+- `brh_get()`: Fix using `memcpy()` to move data between overlapped ranges, which corrupts BRH sometimes.
 
 #### Other UI fixes
 
-- so/adminutil.c: `top()`: Fix shell command `top` not working.
+- `so/adminutil.c`: `top()`: Fix shell command `top` not working.
 - Remove function `clrtohol()`
 - Fix the connection overload message `msg_no_desc` of `innbbsd` being truncated
 - Fix the function `HISfetch()` being declared wrong in `innbbsd/inntobbs.h`
