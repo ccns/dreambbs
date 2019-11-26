@@ -4,7 +4,7 @@
 
 ### Changes which directly affect the UI
 
-- Key `H` and `F1` now both open the help page of pmore/more.
+- Key `H` and `F1` now both open the help page of pmore/more
 - Now the key `KEY_DEL` deletes the character on the cursor in the input fields.
 - Invalid inputs or operations on input fields will now bell
 - Support on-the-fly terminal resizing detecting.
@@ -86,11 +86,11 @@
 
 #### Other UI fixes
 
-- maple/visio.c: Make `igetch()` always return positive value for normal characters.
-- Use `int` instead of `char` to store the result of `vkey()`.
-- Reassign special key values and add support for function keys 'F1' - 'F12'.
-- Add support for the key combination 'Shift-Tab'.
-- maple/visio.c: Re-enable `ansi_move()`, and rename it to `move_ansi()` to be consistent with pfterm.
+- Use `int` instead of `char` to store the result of `vkey()`
+- Reassign special key values
+- Add support for function keys `F1` - `F12`
+- Add support for the key combination `Shift-Tab`
+- `maple/visio.c`: Re-enable `ansi_move()`, and rename it to `move_ansi()` to be consistent with pfterm.
 - Make the parameters of `maple/visio.c` `grayout()` to be consistent with pfterm
 - `so/adminutil.c`: `top()`: Fix shell command `top` not working.
 - Remove function `clrtohol()`
