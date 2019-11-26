@@ -248,12 +248,12 @@
 - Introduce the bbsruby module from itszero/bbs-ruby
 - Do not load `"empty.rb"`
 - Make BBS-Ruby compatible with Ruby 1.9 - 2.2
-- Change the BBS-Ruby C API function name prefix: `bbs_` -> `brb_`
+- Change the BBS-Ruby C API function name prefix from `bbs_` to `brb_`
 - Refine the usage of `row`/`line`/`y` and `column`/`x`
 - Re-enable and fix interface version checking.
 - Improve exception handling and debugging
 - Make the line number of the code consistent with the post
-- Do `clear()` before executing the Ruby code
+- Clear the screen before executing
 - Make the grammar of TOC tags laxer
 - Now the user permission will be checked before executing BBS-Ruby
 - Add configuration macros
