@@ -140,6 +140,7 @@
 
 #### Improvements about build and employment process
 
+- Scripts are now installed with `bmake install`
 - Add systemd unit files
 - Fix the library path of 32-bit glibc for building dynamic libraries on 64-bit OSs
 - Use Travis CI for Build Verification Test
@@ -212,6 +213,7 @@
 
 #### Other UI fixes and improvements
 
+- Site information: Always show all the modules
 - Add `echo` flags `VGET_STRICT_DOECHO`, `VGET_STEALTH_NOECHO`, `PASSECHO`, `VGET_BREAKABLE`, & `NUMECHO` for `vget()`
 - Make `vget()` convert the whole input string to lowercase if `LCECHO` is set
 - Site information: Show the version information for LuaJIT if enabled.
@@ -234,6 +236,24 @@
 
 #### BBS-Ruby support
 
+- Introduce the bbsruby module from itszero/bbs-ruby
+- Do not load `"empty.rb"`
+- Make BBS-Ruby compatible with Ruby 1.9 - 2.2
+- Fix memory leaks
+- Fix accessing uninitialized values
+- Fix Ruby interpreter randomly reporting parsing errors due to the parser getting garbage bytes
+- Fix `rb_compile_string()` + `ruby_exec_node()` not working
+- Change the BBS-Ruby C API function name prefix: `bbs_` -> `brb_`
+- Fix segmentation fault when BBS-Ruby encounter run-time errors
+- Fix all signal handlers being overriden permanently in `run_ruby()`
+- Work around the issue that class `BBS` and variables are never reset
+- Refine the usage of `row`/`line`/`y` and `column`/`x`
+- Fix incorrect `move()` and `moverel()` due to missing parameter casts.
+- Re-enable and fix interface version checking.
+- Improve exception handling and debugging
+- Make the line number of the code consistent with the post
+- Do `clear()` before executing the Ruby code
+- Make the grammar of TOC tags laxer
 - Now the user permission will be checked before executing BBS-Ruby
 - Remove unused function `run_ruby_test()`
 - Add configuration macros
@@ -262,7 +282,8 @@
 
 #### Improvements about build and employment process
 
-- maple/: Avoid defining `M3_USE_*` or similar macros in non-configuration files.
+- Use `-ggdb3 -O0` compiler flags for easier debugging
+- Avoid defining `M3_USE_*` or similar macros in non-configuration files.
 - Add tests for `libdao` functions `f_mv()` and `f_cp()`
 - Replace shell command `cp` with `libdao` function `f_cp()`
 - Replace shell command `mv` with `libdao` function `f_mv()`
