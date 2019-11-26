@@ -5,11 +5,11 @@
 ### Changes which directly affect the UI
 
 - Key `H` and `F1` now both open the help page of pmore/more
-- Now the key `KEY_DEL` deletes the character on the cursor in the input fields.
+- Now the key `KEY_DEL` deletes the character on the cursor in the input fields
 - Invalid inputs or operations on input fields will now bell
-- Support on-the-fly terminal resizing detecting.
-- Make the layout of `vs_bar()` consistent with `vs_head()`.
-- Fix typoes and refine word usage in UI strings.
+- Support on-the-fly terminal resizing detecting
+- Make the layout of `vs_bar()` consistent with `vs_head()`
+- Fix typoes and refine word usage in UI strings
 - Most UI elements now support widescreen display
 - Re-enable MyFavorite option in Ctrl-Z menu
 - The screenshot function in Ctrl-Z menu now supports widescreen
@@ -33,9 +33,9 @@
 ### Fixes which directly affect the UI
 
 - Fix `blog()` generating misaligned log files, which makes the calculated average session duration incorrect
-- Use user mode `M_ADMIN` for system maintenance menu instead of `M_XMENU` for better description of the user status.
+- Use user mode `M_ADMIN` for system maintenance menu instead of `M_XMENU` for better description of the user status
 - Change the misleading description of user mode `M_XMENU` `"網路連線選單"` to `"工具選單"`
-- Fix MyFavorite status being displayed wrong.
+- Fix MyFavorite status being displayed wrong
 - Fix reversed type sometimes not being turned off after drawing the input field when pfterm is enabled
 - Fix nested popupmenus not being redrawn when entered
 - Fix crashes when the user repost a gem item
@@ -65,8 +65,8 @@
 
 ### Fixes for previous versions
 
-- Allow `bin/account` to be executed at 10-59 minutes after the hour every hour.
-- Fix login count never being reset if `bin/account` is never executed at 1 am.
+- Allow `bin/account` to be executed at 10-59 minutes after the hour every hour
+- Fix login count never being reset if `bin/account` is never executed at 1 am
 - scripts/checkusrDIR.sh: Fix 'run/NOUSRDIR.log' never being cleaned.
 - Fix `base64encode` tool yields wrong results
 - Fix `checkemail` `mail`s to the same destination twice
@@ -138,16 +138,14 @@
    not fading out when pfterm is disabled
 - Fix `pmsg2()` not using `vmsg()` to display the pausing message
    when the argument is `NULL` while pfterm is disabled
-- Fix: Macros `STANDOUT` and `STANDEND` expand to multiple statements
-   when pfterm is disabled,
-   which causes display issues in `STEALTH_NOECHO` mode of `vget()`
-      on the "Current" version.
+- Fix: Macros `STANDOUT` and `STANDEND` expand to multiple statements when pfterm is disabled,
+   which causes display issues in `STEALTH_NOECHO` mode of `vget()` on the "Current" version.
 - Fix pfterm misinterpreting the ANSI escape sequence `ESC <ch>` as `ESC [ <ch>`
    (e.g., `ESC m` was misinterpreted as `ESC [ m`)
 
 #### Improvements about build and employment process
 
-- Define macro `USE_*` if `M3_USE_*` is defined.
+- Define macro `USE_*` if `M3_USE_*` is defined
 - Scripts are now installed with `bmake install`
 - Add systemd unit files
 - Fix the library path of 32-bit glibc for building dynamic libraries on 64-bit OSs
@@ -155,13 +153,13 @@
 
 #### Other fixes and improvements
 
-- Fix typoes and refine word usage in comments.
+- Fix typoes and refine word usage in comments
 - Refine the name of some variables and struct members
 - Fix comments which conflict with the code
 - Eliminate K&R-style function pointer casts
 - Eliminate variable-length arrays
-- Fix invalid shebang in shell scripts.
-- Fix shellcheck warnings for shell scripts.
+- Fix invalid shebang in shell scripts
+- Fix shellcheck warnings for shell scripts
 - Eliminate most of `-Wall` warnings
 - Eliminate most of `-Wwrite-strings` warnings, caused by over 438 places of code
 - Fix incorrect indentation
@@ -276,11 +274,11 @@
 - Fix memory leaks
 - Fix accessing uninitialized values
 - Fix Ruby interpreter randomly reporting parsing errors due to the parser getting garbage bytes
-- Fix `rb_compile_string()` + `ruby_exec_node()` not working
+- Work around the issue that `rb_compile_string()` + `ruby_exec_node()` do not work
 - Fix segmentation fault when BBS-Ruby encounter run-time errors
 - Fix all signal handlers being overriden permanently in `run_ruby()`
 - Work around the issue that class `BBS` and variables are never reset
-- Fix incorrect `move()` and `moverel()` due to missing parameter casts.
+- Fix incorrect `move()` and `moverel()` due to missing parameter casts
 - Other minor fixes
 
 #### WebSocket proxy support
@@ -304,7 +302,7 @@
 #### Improvements about build and employment process
 
 - Use `-ggdb3 -O0` compiler flags for easier debugging
-- Avoid defining `M3_USE_*` or similar macros in non-configuration files.
+- Avoid defining `M3_USE_*` or similar macros in non-configuration files
 - Add tests for `libdao` functions `f_mv()` and `f_cp()`
 - Replace shell command `cp` with `libdao` function `f_cp()`
 - Replace shell command `mv` with `libdao` function `f_mv()`
