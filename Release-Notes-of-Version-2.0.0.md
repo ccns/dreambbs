@@ -4,6 +4,7 @@
 
 ### Changes which directly affect the UI
 
+- Key `H` and `F1` now both open the help page of pmore/more.
 - Now the key `KEY_DEL` deletes the character on the cursor in the input fields.
 - Invalid inputs or operations on input fields will now bell
 - Support on-the-fly terminal resizing detecting.
@@ -85,6 +86,12 @@
 
 #### Other UI fixes
 
+- maple/visio.c: Make `igetch()` always return positive value for normal characters.
+- Use `int` instead of `char` to store the result of `vkey()`.
+- Reassign special key values and add support for function keys 'F1' - 'F12'.
+- Add support for the key combination 'Shift-Tab'.
+- maple/visio.c: Re-enable `ansi_move()`, and rename it to `move_ansi()` to be consistent with pfterm.
+- Make the parameters of `maple/visio.c` `grayout()` to be consistent with pfterm
 - `so/adminutil.c`: `top()`: Fix shell command `top` not working.
 - Remove function `clrtohol()`
 - Fix the connection overload message `msg_no_desc` of `innbbsd` being truncated
@@ -140,6 +147,7 @@
 
 #### Improvements about build and employment process
 
+- Define macro `USE_*` if `M3_USE_*` is defined.
 - Scripts are now installed with `bmake install`
 - Add systemd unit files
 - Fix the library path of 32-bit glibc for building dynamic libraries on 64-bit OSs
@@ -223,7 +231,9 @@
 
 ##### Improvements
 
+- Introduce the bbslua module from PttBBS
 - Add configuration macros
+- Implement adapter macros and functions
 - Now the user permission will be checked before executing BBS-Lua
 - Improve the compatibility of key value handling of special keys
 - Add support for `shift-tab`
