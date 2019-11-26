@@ -8,6 +8,7 @@
 
 ### 直接影響使用者操作及介面的改變
 
+- 現在按鍵 `H` 和 `F1` 都可以用來打開 pmore/more 的 help 頁面
 - 現在在輸入欄位中，可以用按鍵 `KEY_DEL` 刪除目前游標上的字元
 - 現在在輸入欄位中的錯誤輸入或操作會產生 bell 提示
 - 支援即時偵測 terminal 的大小調整
@@ -78,6 +79,12 @@
 
 #### 其它介面修正與改進
 
+- 用 `int` 取代 `char` 來儲存 `vkey()` 的回傳值
+- 重新指定特殊按鍵的值
+- 支援功能鍵 `F1` - `F12`
+- 支援按鍵組合 `Shift-Tab`
+- `maple/visio.c`: 重新啟用 `ansi_move()`，並重命名為 `move_ansi()` 以和 pfterm 一致。
+- 讓 `maple/visio.c` `grayout()` 的參數和 pfterm 一致
 - `so/adminutil.c`: `top()`: 修正 shell 指令 `top` 不能正常執行的問題。
 - 移除函數 `clrtohol()`
 - 修正 `innbbsd` 的 `連線人數過多` 的訊息 `msg_no_desc` 被截斷的問題
