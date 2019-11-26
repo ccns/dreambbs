@@ -13,9 +13,7 @@
 - Most UI elements now support widescreen display
 - Re-enable MyFavorite option in Ctrl-Z menu
 - The screenshot function in Ctrl-Z menu now supports widescreen
-- The screenshot function in Ctrl-Z menu is now enabled with pfterm enabled
-- Support special keys for more terminals
-- Support Ctrl-/Meta-/Shift- key modifiers for special keys
+- The screenshot function in Ctrl-Z menu is now enabled when pfterm is enabled
 - Add some `F*` and `ESC-*` key shortcuts from PttBBS for editor
 - The format of idle time is changed from `mmmm` to `hh:mm`
 - Now the guest who idles for too long will be kicked out
@@ -52,39 +50,11 @@
    of the currently entered board become the name of the board to be changed to
 - Fix the issue that `class_yank2()` (the `i` function)
    is not able to list all the friend-only and hidden boards
-- Fix the issue that using `class_yank()` (the `y` function) or `class_yank2()` (the `i` function) causes the user to be kicked out of the board list when there are no corresponding boards 
-- Fix the issue that the user cannot enter the board list if `class_yank()` or `class_yank2()` is activated and there are no corresponding boards
+- Fix the issue that using `class_yank()` (the `y` function) or `class_yank2()` (the `i` function) causes the user to be kicked out of or to be not able to enter the board list when there are no corresponding boards 
 - Fix the hottest board listing only the board 'SYSOP'; now it lists all hot boards
 - Fix the issue that an empty hottest board list prevents the user from entering the board category list
-- Editor: Fix redundant prompts for file selection when using key shortcuts `ESC-1`-`ESC-5`. 
 
-### Fixes for Stage 4
-
-- Fix the notification message of new mails and new personal messages
-   `NEW[MAIL|PASS]MSG` being truncated when displayed on the header
-
-### Fixes for previous versions
-
-- Allow `bin/account` to be executed at 10-59 minutes after the hour every hour
-- Fix login count never being reset if `bin/account` is never executed at 1 am
-- scripts/checkusrDIR.sh: Fix 'run/NOUSRDIR.log' never being cleaned.
-- Fix `base64encode` tool yields wrong results
-- Fix `checkemail` `mail`s to the same destination twice
-   whenever any arguments are passed
-- Replace the hardcoded path `/home/bbs` with the macro `BBSHOME`
-- Fix: Accessing uninitialized variables for a `while` condition
-      whenever the argument `host` of `dns_open()` is a IPv4 address,
-   which causes halts and even crashes
-
-#### BRH fixes
-
-- `brh_get()`: Fix `memcpy()`ing unnecessary 3 `time_t`s.
-- `brh_add()`: Fix out-of-range writing when adding oldest read article while BRH is full.
-- `brh_add()`: Fix adding oldest read article always introducing new time tags.
-- `brh_load()`: Avoid `memcpy()`ing 0 or less bytes.
-- `brh_get()`: Fix using `memcpy()` to move data between overlapped ranges, which corrupts BRH sometimes.
-
-#### Other UI fixes
+### Other UI fixes
 
 - Use `int` instead of `char` to store the result of `vkey()`
 - Reassign special key values
@@ -94,10 +64,23 @@
 - Make the parameters of `maple/visio.c` `grayout()` to be consistent with pfterm
 - `so/adminutil.c`: `top()`: Fix shell command `top` not working.
 - Remove function `clrtohol()`
+- Support special keys for more terminals
+- Support Ctrl-/Meta-/Shift- key modifiers for special keys
 - Fix the connection overload message `msg_no_desc` of `innbbsd` being truncated
 - Fix the function `HISfetch()` being declared wrong in `innbbsd/inntobbs.h`
 
-#### Fixes for the password security
+### Fixes about pfterm
+
+- Fix the background for `popupmenu_ans2()` & `pmsg2()`
+   not fading out when pfterm is disabled
+- Fix `pmsg2()` not using `vmsg()` to display the pausing message
+   when the argument is `NULL` while pfterm is disabled
+- Fix: Macros `STANDOUT` and `STANDEND` expand to multiple statements when pfterm is disabled,
+   which causes display issues in `STEALTH_NOECHO` mode of `vget()` on the "Current" version.
+- Fix pfterm misinterpreting the ANSI escape sequence `ESC <ch>` as `ESC [ <ch>`
+   (e.g., `ESC m` was misinterpreted as `ESC [ m`)
+
+### Fixes for the password security
 
 - Refine the seeding of pseudorandom number generators
 - Improve the security of newly generated/encrypted passwords
@@ -113,7 +96,7 @@
         to login xchatd,
         because the variable is wiped out after verified.
 
-#### Other fixes for the system security
+### Other fixes for the system security
 
 - Fix accessing uninitialized/garbage variable in 38 places
 - Fix writing uninitialized/garbage bytes to disk files in 3 places
@@ -132,18 +115,28 @@
    overlapping each other
 - Minor security fixes
 
-#### Fixes about pfterm
+### BRH fixes
 
-- Fix the background for `popupmenu_ans2()` & `pmsg2()`
-   not fading out when pfterm is disabled
-- Fix `pmsg2()` not using `vmsg()` to display the pausing message
-   when the argument is `NULL` while pfterm is disabled
-- Fix: Macros `STANDOUT` and `STANDEND` expand to multiple statements when pfterm is disabled,
-   which causes display issues in `STEALTH_NOECHO` mode of `vget()` on the "Current" version.
-- Fix pfterm misinterpreting the ANSI escape sequence `ESC <ch>` as `ESC [ <ch>`
-   (e.g., `ESC m` was misinterpreted as `ESC [ m`)
+- `brh_get()`: Fix `memcpy()`ing unnecessary 3 `time_t`s.
+- `brh_add()`: Fix out-of-range writing when adding oldest read article while BRH is full.
+- `brh_add()`: Fix adding oldest read article always introducing new time tags.
+- `brh_load()`: Avoid `memcpy()`ing 0 or less bytes.
+- `brh_get()`: Fix using `memcpy()` to move data between overlapped ranges, which corrupts BRH sometimes.
 
-#### Improvements about build and employment process
+### Uncategorized fixes
+
+- Allow `bin/account` to be executed at 10-59 minutes after the hour every hour
+- Fix login count never being reset if `bin/account` is never executed at 1 am
+- scripts/checkusrDIR.sh: Fix 'run/NOUSRDIR.log' never being cleaned.
+- Fix `base64encode` tool yields wrong results
+- Fix `checkemail` `mail`s to the same destination twice
+   whenever any arguments are passed
+- Replace the hardcoded path `/home/bbs` with the macro `BBSHOME`
+- Fix: Accessing uninitialized variables for a `while` condition
+      whenever the argument `host` of `dns_open()` is a IPv4 address,
+   which causes halts and even crashes
+
+### Improvements about build and employment process
 
 - Define macro `USE_*` if `M3_USE_*` is defined
 - Scripts are now installed with `bmake install`
@@ -151,7 +144,7 @@
 - Fix the library path of 32-bit glibc for building dynamic libraries on 64-bit OSs
 - Use Travis CI for Build Verification Test
 
-#### Other fixes and improvements
+### Other fixes and improvements
 
 - Fix typoes and refine word usage in comments
 - Refine the name of some variables and struct members
@@ -185,26 +178,7 @@
 - Make non-default options of yes/no questions lower-case
 - Remove the dash after the system load information on the login screen
 
-### Fixes for Stage 4
-
-- Fix: `VGET_*` flag values conflicting with `BRD_*_BIT` flag values,
-   which breaks the board-searching function.
-
-### Fixes for Stage 5 and previous versions
-
-- Fix the issue that DES-encrypted passwords cannot be used to login xchatd
-
-#### Type safety improvements
-
-- Remove ignored top-level cvr-qualifiers and keyword `register`
-   from function declarations
-- Make 14 static storage pointers point to `const`
-- Make 374 more function result and parameter pointers point to `const`
-- Make 26 more static storage pointers `const`
-- Make the elements of 90 more arrays `const`
-- Make 11 more point-to-string variables `const`
-
-#### Improvements of the UI of the command-line tools
+### Improvements of the UI of the command-line tools
 
 - Refine reports of invalid command-line usages of the tools
 - Fix out-of-bound accesses when the argument for `poststat`
@@ -217,7 +191,7 @@
 - The tools which accept more than 2 arguments
    now allow parameter designation and omitting with the `-?` syntax
 
-#### Other UI fixes and improvements
+### Other UI fixes and improvements
 
 - Site information: Always show all the modules
 - Add `echo` flags `VGET_STRICT_DOECHO`, `VGET_STEALTH_NOECHO`, `PASSECHO`, `VGET_BREAKABLE`, & `NUMECHO` for `vget()`
@@ -225,16 +199,26 @@
 - Site information: Show the version information for LuaJIT if enabled.
 - Remove adminutil tools which invoke shell commands
 
-#### BBS-Lua support
+### Improvements about pfterm
 
-##### Improvements
+- Preliminary implement of the function `vkey_is_typeahead()`,
+   which is used by pfterm and pmore, is now done
+- Update the comments and the references of pfterm
+- Add support for ANSI escape sequence `ESC [ <n> d`
+   (move to `<n>`-th line) for pfterm
+- Add support for ANSI escape sequence `ESC [ 27` (reverse off) for pfterm
+   (`ESC [ 7` either turns on or turns off the reverse attribute)
+
+### BBS-Lua support
+
+#### Improvements
 
 - Introduce the bbslua module from PttBBS
 - Add configuration macros
 - Implement adapter macros and functions
 - Now the user permission will be checked before executing BBS-Lua
 - Improve the compatibility of key value handling of special keys
-- Add support for `shift-tab`
+- Add support for `Shift-Tab`
 - Implement `Ctrl-C` detection for `bl_getdata()`
 - Add `HIDEECHO` (32) flag for `bl_getdata()` for Maple3 to allow combining `NOECHO` effect with other `echo` flags
 - Replace deprecated bitlib library with BitOp <http://bitop.luajit.org/>
@@ -243,15 +227,15 @@
 - Update BBS-Lua version to `0.119-DlPatch-1`
 - Other minor refactoring
 
-##### Fixes
+#### Fixes
 
 - Fix printing random string when aborting using 'Ctrl-C'
 - `getdata/getstr()`: Fix crash when `echo` == 8 on PttBBS
 - `getch()`/`kball()`: Fix `ESC-` keys being mistaken as `ESC` on PttBBS
 
-#### BBS-Ruby support
+### BBS-Ruby support
 
-##### Improvements
+#### Improvements
 
 - Introduce the bbsruby module from itszero/bbs-ruby
 - Do not load `"empty.rb"`
@@ -270,7 +254,7 @@
 - Allow aborting BBS-Ruby with `Ctrl-C` if possible
 - Other minor refactoring
 
-##### Fixes
+#### Fixes
 - Fix memory leaks
 - Fix accessing uninitialized values
 - Fix Ruby interpreter randomly reporting parsing errors due to the parser getting garbage bytes
@@ -281,7 +265,7 @@
 - Fix incorrect `move()` and `moverel()` due to missing parameter casts
 - Other minor fixes
 
-#### WebSocket proxy support
+### WebSocket proxy support
 
 - `bbsd` now allows the connection data to be passed via unix sockets,
    which is compatible with the WebSocket proxy module used in PttBBS
@@ -289,28 +273,26 @@
 - `wsproxy`: Replace the custom method `receiveatmost()` made by patching,
    with the official OpenResty method `receiveany()`.
 
-#### Improvements about pfterm
+### Type safety improvements
 
-- Preliminary implement of the function `vkey_is_typeahead()`,
-   which is used by pfterm and pmore, is now done
-- Update the comments and the references of pfterm
-- Add support for ANSI escape sequence `ESC [ <n> d`
-   (move to `<n>`-th line) for pfterm
-- Add support for ANSI escape sequence `ESC [ 27` (reverse off) for pfterm
-   (`ESC [ 7` either turns on or turns off the reverse attribute)
+- Remove ignored top-level cvr-qualifiers and keyword `register`
+   from function declarations
+- Make 14 static storage pointers point to `const`
+- Make 374 more function result and parameter pointers point to `const`
+- Make 26 more static storage pointers `const`
+- Make the elements of 90 more arrays `const`
+- Make 11 more point-to-string variables `const`
 
-#### Improvements about build and employment process
+### Improvements about build and employment process
 
 - Use `-ggdb3 -O0` compiler flags for easier debugging
 - Avoid defining `M3_USE_*` or similar macros in non-configuration files
 - Add tests for `libdao` functions `f_mv()` and `f_cp()`
-- Replace shell command `cp` with `libdao` function `f_cp()`
-- Replace shell command `mv` with `libdao` function `f_mv()`
 - Refactor Makefiles
 - Eliminate unnecessary loading of `.include` for makefiles
 - Support disabling dynamic library loading
 
-#### Other improvements
+### Other improvements
 
 - Move generic macros from `include/bbs_script.h` to `include/cppdef.h`
 - Refine code and fix minor over allocation for flexible array members
