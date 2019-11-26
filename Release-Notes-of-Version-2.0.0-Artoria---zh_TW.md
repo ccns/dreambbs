@@ -127,6 +127,7 @@
 
 #### 與編譯及架站過程有關的改進
 
+- 現在 scripts 會隨者 `bmake install` 一起被安裝
 - 增加 systemd unit 設定檔
 - 修正在 64-bit 作業系統上編譯 dynamic libraries 時所需的 32-bit glibc 的 library 路徑
 - 使用 Travis CI 進行 Build Verification Test
@@ -190,12 +191,15 @@
 
 #### 其它 UI 修正及改進
 
+- 系統程式資訊: 一律顯示所有模組
 - 增加 `vget()` 的 `echo` flags `VGET_STRICT_DOECHO`, `VGET_STEALTH_NOECHO`, `PASSECHO`, `VGET_BREAKABLE`, & `NUMECHO`
 - 現在使用 `LCECHO` 時，`vget()` 會將整個數入字串轉成小寫
 - 系統程式資訊: 如果 LuaJIT 有啟用的話，就顯示出它的版本資訊
 - 移除會呼叫 shell 指令的一部分 adminutil 工具
 
 #### BBS-Lua 的支援
+
+##### 改進
 
 - 增加編譯設定 macros
 - 現在執行 BBS-Lua 前會先檢查使用者有無足夠權限
@@ -205,20 +209,46 @@
 - 增加 `HIDEECHO` (32) flag 給 Maple3 版的 `bl_getdata()`，以讓 `NOECHO` 效果能與其它 `echo` flags 自由組合
 - 將 deprecated 的 bitlib library 以 BitOp <http://bitop.luajit.org/> 取代
 - 支援 LuaJIT
-- 修正用 `Ctrl-C` 結束程式時會印出隨機字串的問題
 - 重新實作 BBS-Lua 在 Maple3 上的鍵盤輸入支援
 - 更新 BBS-Lua 的版本號為 `0.119-DlPatch-1`
 - 其它較小的 refactoring
 
+##### 修正
+
+- 修正使用 `Ctrl-C` 結束程式時會輸出無意義字串的問題。
+- `getdata/getstr()`: 修正在 PttBBS 上當 `echo` == 8 時會斷線的問題。
+- `getch()`/`kball()`: 修正在 PttBBS 上 `ESC-` 組合鍵會被誤當作 `ESC` 建的問題。
+
 #### BBS-Ruby support
 
+- 從 itszero/bbs-ruby 引進 bbsruby 模組
+- 不載入 `"empty.rb"`
+- 讓 BBS-Ruby 和 Ruby 1.9 - 2.2 相容
+- 將 BBS-Ruby C API 函數名前綴由 `bbs_` 改成 `brb_`
+- 重新整理 `row`/`line`/`y` 和 `column`/`x` 的用法
+- 重新啟用和修復 interface 版本的檢查.
+- 改進 exception 處理以及 debug 訊息
+- 讓程式行號和文章行號一致
+- 現在在執行前會清除畫面
+- 放寬 TOC tags 的語法
 - 現在執行 BBS-Ruby 前會先檢查使用者有無足夠權限
-- 移除沒用到的函數 `run_ruby_test()`
 - 增加編譯設定 macros
 - 讓 BBS-Ruby 能在 PttBBS 上通過編譯
 - 如果可能，讓 `getdata()` 在 `NOECHO` echo mode 中把輸入欄位隱形
 - 如果可能，讓 BBS-Ruby 可用 `Ctrl-C` 結束
 - 其它較小的 refactoring
+
+##### Fixes
+
+- 修正 memory leaks
+- 修正存取未初始化變數的問題
+- 修正 Ruby interpreter 會因為取到垃圾值而隨機回報 parsing 錯誤的問題
+- 繞過不能使用 `rb_compile_string()` + `ruby_exec_node()` 的問題
+- 修正 BBS-Ruby 遇到錯誤會直接造成 segmentation fault 的問題
+- 修正執行時會導致所有的 signal handlers 被取代的問題
+- 部份解決 class `BBS` 和 variables 不會重設的問題
+- 修正 Fix `move()` and `moverel()` 因為沒有轉換到函數參數而造成結果不正確的問題
+- 其它較小修正
 
 #### WebSocket proxy 的支援
 
