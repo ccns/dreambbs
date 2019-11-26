@@ -18,8 +18,6 @@
 - 重新開放 Ctrl-Z 選單中的 `我的最愛` 選項
 - 現在 Ctrl-Z 選單中的 `螢幕擷取` 功能支援寬螢幕了
 - 開放當 pfterm 啟用時，Ctrl-Z 選單中的 `螢幕擷取` 功能
-- 支援更多不同 terminals 的特殊按鍵
-- 支援 Ctrl/Meta/Shift 與特殊按鍵的組合
 - 從 PttBBS 增加了編輯器介面的 `F*` 和 `ESC-*` 快速鍵
 - 將閒置時間的格式由 `mmmm` 改為 `hh:mm`
 - 現在會踢出閒置過久的 guest
@@ -48,34 +46,9 @@
 - 修正編輯器的符號輸入工具因為 buffer overflow 而造成界面損壞，甚至 crash 的問題
 - 修正進入好友看板被拒絕時，目前進入的看板的顯示名稱會變成該好友看板的名稱的問題
 - 修正 `class_yank2()` (只顯示好友板、秘密板) 無法列出所有好友板和秘密板的問題
-- 修正：使用 `class_yank()` (顯示被 zap 掉的板) 或是 `class_yank2()` (只顯示好友板、秘密板) 時，如果沒有相符的看板，就會造成使用者被踢出看板列表的問題。 
-- 修正：`class_yank()` 或是 `class_yank2()` 作用中時，如果沒有相符的看板，就會導致使用者無法進入看板列表的問題。
+- 修正：使用 `class_yank()` (顯示被 zap 掉的板) 或是 `class_yank2()` (只顯示好友板、秘密板) 時，如果沒有相符的看板，就會造成使用者被踢出或是無法進入看板列表的問題。 
 - 修正熱門看板只列出看板 SYSOP 的問題；應為列出所有熱門看板
 - 修正空的熱門看板列表會造成使用者無法進入分類看板列表的問題
-- 編輯器：修正使用快速鍵 `ESC-1`~`ESC-5` 會出現多餘的檔案選擇訊息的問題。
-
-### 針對 Stage 4 的修正
-
-- 修正 header 上的新信件與新留言的訊息 `NEW[MAIL|PASS]MSG` 被截斷的問題
-
-### 針對先前版本的修正
-
-- 讓 `bin/account` 可以正常地在每小時整點後的 10-59 分鐘執行
-- 修正當 `bin/account` 不在上午 1 點執行時，登入次數不會重設的問題
-- `scripts/checkusrDIR.sh`: 修正 `run/NOUSRDIR.log` 永不被清除的問題。
-- 修正 `base64encode` 工具會產生錯誤結果的問題
-- 修正 `checkemail` 工具傳入參數時，會 `mail` 兩次到相同目的地的問題
-- 將餘下的 hardcoded 的程式執行路徑 `/home/bbs` 取代為 macro `BBSHOME`
-- 修正 `dns_open()` 的 `host` 參數為 IPv4 address 而連線失敗時，
-   會存取未初始化的變數當作 `while` 條件，而導致程式當住甚至 crash 的問題
-
-#### BRH（閱讀紀錄）修正
-
-- `brh_get()`: 修正會多 `memcpy()` 不必要的 3 個 `time_t` 大小的空間的問題。
-- `brh_add()`: 修正當 BRH 滿時，閱讀比最舊的已讀文章還舊的文章時會發生越界寫入的問題。
-- `brh_add()`: 修正閱讀比最舊的已讀文章還舊的文章時，必定導致時間區間數增加的問題。
-- `brh_load()`: 避免 `memcpy()` 0 個或更少的 bytes。
-- `brh_get()`: 修正使用 `memcpy()` 在重疊的範圍間移動資料，而導致 BRH 損壞的問題。
 
 #### 其它介面修正與改進
 
@@ -87,10 +60,23 @@
 - 讓 `maple/visio.c` `grayout()` 的參數和 pfterm 一致
 - `so/adminutil.c`: `top()`: 修正 shell 指令 `top` 不能正常執行的問題。
 - 移除函數 `clrtohol()`
+- 支援更多不同 terminals 的特殊按鍵
+- 支援 Ctrl/Meta/Shift 與特殊按鍵的組合
 - 修正 `innbbsd` 的 `連線人數過多` 的訊息 `msg_no_desc` 被截斷的問題
 - 修正 `innbbsd/inntobbs.h` 中的函數 `HISfetch()` 宣告錯誤的問題
 
-#### 密碼安全修正
+#### 有關 pfterm 的修正
+
+- 修正不使用 pfterm 時，`popupmenu_ans2()` 及 `pmsg2()` 不會讓背景變按的問題
+- 修正不使用 pfterm 時，
+   如果參數為 `NULL`，`pmsg2()` 不會使用 `vmsg()` 顯示暫停訊息的問題
+- 修正：不使用 pfterm 時，
+         macros `STANDOUT` 及 `STANDEND` 會展開成多個 statements，
+         造成 current 版本的 `vget()` 的 `STEALTH_NOECHO` 模式顯示不正常的問題。
+- 修正 pfterm 將 ANSI escape sequence `ESC <ch>` 誤當作 `ESC [ <ch>` 處理的問題
+   (如將 `ESC m` 誤當作 `ESC [ m`)
+
+### 密碼安全修正
 
 - 調整偽隨機亂數產生器 (pseudorandom number generators) 的 seeding
 - 使用密碼學安全偽隨機亂數產生器
@@ -104,7 +90,7 @@
 - 解決：因檢查密碼後會抹除密碼明碼，
          造成存儲密碼明碼的全域變數無法用以登入 xchatd 的問題。
 
-#### 其它系統安全修正
+### 其它系統安全修正
 
 - 修正 38 處存取未初始化或內容為垃圾的變數的問題
 - 修正 3 處將未初始化或垃圾的 bytes 寫入到硬碟檔案中的問題
@@ -121,18 +107,26 @@
 - 修正 `sprintf()` 的輸入與輸出的 buffer 重疊，而造成 undefined behavior 的問題
 - 其它雜項安全修正
 
-#### 有關 pfterm 的修正
+#### BRH（閱讀紀錄）修正
 
-- 修正不使用 pfterm 時，`popupmenu_ans2()` 及 `pmsg2()` 不會讓背景變按的問題
-- 修正不使用 pfterm 時，
-   如果參數為 `NULL`，`pmsg2()` 不會使用 `vmsg()` 顯示暫停訊息的問題
-- 修正：不使用 pfterm 時，
-         macros `STANDOUT` 及 `STANDEND` 會展開成多個 statements，
-         造成 current 版本的 `vget()` 的 `STEALTH_NOECHO` 模式顯示不正常的問題。
-- 修正 pfterm 將 ANSI escape sequence `ESC <ch>` 誤當作 `ESC [ <ch>` 處理的問題
-   (如將 `ESC m` 誤當作 `ESC [ m`)
+- `brh_get()`: 修正會多 `memcpy()` 不必要的 3 個 `time_t` 大小的空間的問題。
+- `brh_add()`: 修正當 BRH 滿時，閱讀比最舊的已讀文章還舊的文章時會發生越界寫入的問題。
+- `brh_add()`: 修正閱讀比最舊的已讀文章還舊的文章時，必定導致時間區間數增加的問題。
+- `brh_load()`: 避免 `memcpy()` 0 個或更少的 bytes。
+- `brh_get()`: 修正使用 `memcpy()` 在重疊的範圍間移動資料，而導致 BRH 損壞的問題。
 
-#### 與編譯及架站過程有關的改進
+### 未分類的修正
+
+- 讓 `bin/account` 可以正常地在每小時整點後的 10-59 分鐘執行
+- 修正當 `bin/account` 不在上午 1 點執行時，登入次數不會重設的問題
+- `scripts/checkusrDIR.sh`: 修正 `run/NOUSRDIR.log` 永不被清除的問題。
+- 修正 `base64encode` 工具會產生錯誤結果的問題
+- 修正 `checkemail` 工具傳入參數時，會 `mail` 兩次到相同目的地的問題
+- 將餘下的 hardcoded 的程式執行路徑 `/home/bbs` 取代為 macro `BBSHOME`
+- 修正 `dns_open()` 的 `host` 參數為 IPv4 address 而連線失敗時，
+   會存取未初始化的變數當作 `while` 條件，而導致程式當住甚至 crash 的問題
+
+### 與編譯及架站過程有關的改進
 
 - 如果 macro `M3_USE_*` 被定義，就連 `USE_*` 也一起定義
 - 現在 scripts 會隨著 `bmake install` 一起被安裝
@@ -140,7 +134,7 @@
 - 修正在 64-bit 作業系統上編譯 dynamic libraries 時所需的 32-bit glibc 的 library 路徑
 - 使用 Travis CI 進行 Build Verification Test
 
-#### 其它修正與改進
+### 其它修正與改進
 
 - 修正程式註解中的錯字，並改善部分用字
 - 改善部分 variables 與 struct members 的名稱
@@ -171,24 +165,7 @@
 - 將 yes/no 提示框的非預設選項的字母變為小寫
 - 移除登入畫面的系統負載資訊後的破折號
 
-### 針對 Stage 4 的修正
-
-- 修正：`VGET_*` flags 的值與 `BRD_*_BIT` flags 衝突，造成無法搜尋看板的問題
-
-### 針對 Stage 5 與先前版本的修正
-
-- 解決使用 DES 加密的密碼無法用以登入 xchatd 的問題
-
-#### 程式變數型別的改善
-
-- 移除在函數宣告中無效的 top-level cvr-qualifier 以及 `register` 關鍵字
-- 將 14 個 static storage 的指標的指向型別加上 `const`
-- 將超過 374 個函數參數及回傳值的指標的指向型別加上 `const`
-- 將超過 26 個 static storage 的指標的型別加上 `const`
-- 將超過 90 個陣列的元素型別加上 `const`
-- 將超過 11 個指向字串的變數的型別加上 `const`
-
-#### Command line 工具介面的改進
+### Command line 工具介面的改進
 
 - 改善 BBS 工具的不正確 command-line 用法的回報
 - 修正當 `poststat` 的參數為 1、2、或 100 以外的正數時，會造成越界存取的問題
@@ -197,7 +174,7 @@
    最大每小時上線數、及最大每天上線數為負數的問題
 - 接受兩個以上參數的 BBS 工具，現在可以使用 `-?` 語法指定參數以及跳過某些參數
 
-#### 其它 UI 修正及改進
+### 其它 UI 修正及改進
 
 - 系統程式資訊: 一律顯示所有模組
 - 增加 `vget()` 的 `echo` flags `VGET_STRICT_DOECHO`, `VGET_STEALTH_NOECHO`, `PASSECHO`, `VGET_BREAKABLE`, & `NUMECHO`
@@ -205,16 +182,24 @@
 - 系統程式資訊: 如果 LuaJIT 有啟用的話，就顯示出它的版本資訊
 - 移除會呼叫 shell 指令的一部分 adminutil 工具
 
-#### BBS-Lua 的支援
+### 與 pfterm 有關的改進
 
-##### 改進
+- 初步實作 pfterm 與 pmore 所使用的 `vkey_is_typeahead()` 函數
+- 更新 pfterm 的註解與參考資料
+- 增加 pfterm 對 ANSI escape sequence `ESC [ <n> d` (移動到第 `<n>` 行) 的支援
+- 增加 pfterm 對 ANSI escape sequence `ESC [ 27` (反色屬性關) 的支援
+   (`ESC [ 7` 的作用是開啟或關閉反色屬性)
+
+### BBS-Lua 的支援
+
+#### 改進
 
 - 從 PttBBS 引進 bbslua 模組
 - 增加編譯設定 macros
 - 實作轉接 macros 和函數
 - 現在執行 BBS-Lua 前會先檢查使用者有無足夠權限
 - 改善特殊按鍵的處理過程與其它 BBS 系統的相容度
-- 支援 `shift-tab`
+- 支援 `Shift-Tab`
 - 實作 `bl_getdata()` 的 `Ctrl-C` 偵測
 - 增加 `HIDEECHO` (32) flag 給 Maple3 版的 `bl_getdata()`，以讓 `NOECHO` 效果能與其它 `echo` flags 自由組合
 - 將 deprecated 的 bitlib library 以 BitOp <http://bitop.luajit.org/> 取代
@@ -223,13 +208,13 @@
 - 更新 BBS-Lua 的版本號為 `0.119-DlPatch-1`
 - 其它較小的 refactoring
 
-##### 修正
+#### 修正
 
 - 修正使用 `Ctrl-C` 結束程式時會輸出無意義字串的問題。
 - `getdata/getstr()`: 修正在 PttBBS 上當 `echo` == 8 時會斷線的問題。
 - `getch()`/`kball()`: 修正在 PttBBS 上 `ESC-` 組合鍵會被誤當作 `ESC` 建的問題。
 
-#### BBS-Ruby support
+### BBS-Ruby support
 
 - 從 itszero/bbs-ruby 引進 bbsruby 模組
 - 不載入 `"empty.rb"`
@@ -248,7 +233,7 @@
 - 如果可能，讓 BBS-Ruby 可用 `Ctrl-C` 結束
 - 其它較小的 refactoring
 
-##### Fixes
+#### Fixes
 
 - 修正 memory leaks
 - 修正存取未初始化變數的問題
@@ -260,33 +245,32 @@
 - 修正 Fix `move()` and `moverel()` 因為沒有轉換到函數參數而造成結果不正確的問題
 - 其它較小修正
 
-#### WebSocket proxy 的支援
+### WebSocket proxy 的支援
 
 - `bbsd` 支援透過 unix socket 傳送連線資料；相容於 PttBBS 的 WebSocket proxy 模組
 - 從 PttBBS 引進 `wsproxy` 模組
 - `wsproxy`: 使用新版本的官方 OpenResty 提供的 method `receiveany()`
    取代須自行 patch 出的 method `receiveatmost()`
 
-#### 與 pfterm 有關的改進
+### 程式變數型別的改善
 
-- 初步實作 pfterm 與 pmore 所使用的 `vkey_is_typeahead()` 函數
-- 更新 pfterm 的註解與參考資料
-- 增加 pfterm 對 ANSI escape sequence `ESC [ <n> d` (移動到第 `<n>` 行) 的支援
-- 增加 pfterm 對 ANSI escape sequence `ESC [ 27` (反色屬性關) 的支援
-   (`ESC [ 7` 的作用是開啟或關閉反色屬性)
+- 移除在函數宣告中無效的 top-level cvr-qualifier 以及 `register` 關鍵字
+- 將 14 個 static storage 的指標的指向型別加上 `const`
+- 將超過 374 個函數參數及回傳值的指標的指向型別加上 `const`
+- 將超過 26 個 static storage 的指標的型別加上 `const`
+- 將超過 90 個陣列的元素型別加上 `const`
+- 將超過 11 個指向字串的變數的型別加上 `const`
 
-#### 與編譯及架站過程有關的改進
+### 與編譯及架站過程有關的改進
 
 - 編譯時使用 `-ggdb3 -O0` 以方便 debug
 - 避免在非設定檔中定義 `M3_USE_*` 之類的 `macro`
 - 增加 `libdao` 函數 `f_mv()` and `f_cp()` 的測試
-- 將 shell 指令 `cp` 取代為 `libdao` 函數 `f_cp()`
-- 將 shell 指令 `mv` 取代為 `libdao` 函數 `f_mv()`
 - Refactor Makefiles
 - 消除在 makefiles 中進行 `.include` 時不必要的載入
 - 支援不使用 dynamic library 載入機制來編譯及使用 BBS 系統的各個程式模組
 
-#### 其它改進
+### 其它改進
 
 - 將沒有專門功能的 macros 從 'include/bbs_script.h' 移到 'include/cppdef.h'
 - 改善與 flexible array member 相關的程式碼，並修正 allocate 時微小的 over allocation
