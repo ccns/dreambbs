@@ -134,7 +134,8 @@
 
 #### 與編譯及架站過程有關的改進
 
-- 現在 scripts 會隨者 `bmake install` 一起被安裝
+- 如果 macro `M3_USE_*` 被定義，就連 `USE_*` 也一起定義
+- 現在 scripts 會隨著 `bmake install` 一起被安裝
 - 增加 systemd unit 設定檔
 - 修正在 64-bit 作業系統上編譯 dynamic libraries 時所需的 32-bit glibc 的 library 路徑
 - 使用 Travis CI 進行 Build Verification Test
@@ -208,7 +209,9 @@
 
 ##### 改進
 
+- 從 PttBBS 引進 bbslua 模組
 - 增加編譯設定 macros
+- 實作轉接 macros 和函數
 - 現在執行 BBS-Lua 前會先檢查使用者有無足夠權限
 - 改善特殊按鍵的處理過程與其它 BBS 系統的相容度
 - 支援 `shift-tab`
@@ -274,6 +277,7 @@
 
 #### 與編譯及架站過程有關的改進
 
+- 編譯時使用 `-ggdb3 -O0` 以方便 debug
 - 避免在非設定檔中定義 `M3_USE_*` 之類的 `macro`
 - 增加 `libdao` 函數 `f_mv()` and `f_cp()` 的測試
 - 將 shell 指令 `cp` 取代為 `libdao` 函數 `f_cp()`
