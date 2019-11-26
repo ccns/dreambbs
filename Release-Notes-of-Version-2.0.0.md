@@ -221,6 +221,8 @@
 
 #### BBS-Lua support
 
+##### Improvements
+
 - Add configuration macros
 - Now the user permission will be checked before executing BBS-Lua
 - Improve the compatibility of key value handling of special keys
@@ -229,38 +231,47 @@
 - Add `HIDEECHO` (32) flag for `bl_getdata()` for Maple3 to allow combining `NOECHO` effect with other `echo` flags
 - Replace deprecated bitlib library with BitOp <http://bitop.luajit.org/>
 - Support LuaJIT
-- Fix printing random string when aborting using 'Ctrl-C'
 - Rework current BBS-Lua keyboard support implement for Maple3
 - Update BBS-Lua version to `0.119-DlPatch-1`
 - Other minor refactoring
 
+##### Fixes
+
+- Fix printing random string when aborting using 'Ctrl-C'
+- `getdata/getstr()`: Fix crash when `echo` == 8 on PttBBS
+- `getch()`/`kball()`: Fix `ESC-` keys being mistaken as `ESC` on PttBBS
+
 #### BBS-Ruby support
+
+##### Improvements
 
 - Introduce the bbsruby module from itszero/bbs-ruby
 - Do not load `"empty.rb"`
 - Make BBS-Ruby compatible with Ruby 1.9 - 2.2
-- Fix memory leaks
-- Fix accessing uninitialized values
-- Fix Ruby interpreter randomly reporting parsing errors due to the parser getting garbage bytes
-- Fix `rb_compile_string()` + `ruby_exec_node()` not working
 - Change the BBS-Ruby C API function name prefix: `bbs_` -> `brb_`
-- Fix segmentation fault when BBS-Ruby encounter run-time errors
-- Fix all signal handlers being overriden permanently in `run_ruby()`
-- Work around the issue that class `BBS` and variables are never reset
 - Refine the usage of `row`/`line`/`y` and `column`/`x`
-- Fix incorrect `move()` and `moverel()` due to missing parameter casts.
 - Re-enable and fix interface version checking.
 - Improve exception handling and debugging
 - Make the line number of the code consistent with the post
 - Do `clear()` before executing the Ruby code
 - Make the grammar of TOC tags laxer
 - Now the user permission will be checked before executing BBS-Ruby
-- Remove unused function `run_ruby_test()`
 - Add configuration macros
 - Make BBS-Ruby able to be compiled on PttBBS
 - Draw nothing in the `NOECHO` echo mode of `getdata()` if possible
 - Allow aborting BBS-Ruby with `Ctrl-C` if possible
 - Other minor refactoring
+
+##### Fixes
+- Fix memory leaks
+- Fix accessing uninitialized values
+- Fix Ruby interpreter randomly reporting parsing errors due to the parser getting garbage bytes
+- Fix `rb_compile_string()` + `ruby_exec_node()` not working
+- Fix segmentation fault when BBS-Ruby encounter run-time errors
+- Fix all signal handlers being overriden permanently in `run_ruby()`
+- Work around the issue that class `BBS` and variables are never reset
+- Fix incorrect `move()` and `moverel()` due to missing parameter casts.
+- Other minor fixes
 
 #### WebSocket proxy support
 
