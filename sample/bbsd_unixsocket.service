@@ -1,12 +1,14 @@
 [Unit]
-Description=DreamBBS Telnet server
+Description=DreamBBS Unixsocket server
 After=syslog.target network.target remote-fs.target nss-lookup.target
 Requires=startbbs.service
 
 [Service]
+User=bbs
+Group=bbs
 Type=forking
-PIDFile=/home/bbs/run/bbs.pid
-ExecStart=/home/bbs/bin/bbsd 23 &
+PIDFile=/home/bbs/run/bbs_unixsocket.pid
+ExecStart=/home/bbs/bin/bbsd -u run/bbsd.socket &
 ExecStop=/bin/kill -s TERM $MAINPID
 Restart=on-failure
 RestartSec=42s
@@ -15,4 +17,3 @@ PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target
-WantedBy=xchatd.service
