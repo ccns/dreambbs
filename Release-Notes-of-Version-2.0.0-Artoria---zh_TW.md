@@ -179,7 +179,7 @@
 - 系統程式資訊: 一律顯示所有模組
 - 增加 `vget()` 的 `echo` flags `VGET_STRICT_DOECHO`, `VGET_STEALTH_NOECHO`, `PASSECHO`, `VGET_BREAKABLE`, & `NUMECHO`
 - 現在使用 `LCECHO` 時，`vget()` 會將整個數入字串轉成小寫
-- 系統程式資訊: 如果 LuaJIT 有啟用的話，就顯示出它的版本資訊
+- 系統程式資訊: 啟用部分系統模組時，顯示其使用的外部函數庫的版本資訊
 - 移除會呼叫 shell 指令的一部分 adminutil 工具
 
 ### 與 pfterm 有關的改進
