@@ -1532,16 +1532,14 @@ start_daemon(
     setuid(BBSUID);
 
     //sprintf(data, "%d\t%s\t%d\n", getpid(), buf, port);
-    //f_cat(PID_FILE, data);
+    sprintf(data, "%d\n", getpid());
 
     if (port == -2)
     {
-        sprintf(data, "%d\n", getpid());
         f_cat(PID_FILE_UNIXSOCKET, data);
     }
     else
     {
-        sprintf(data, "%d\n", getpid());
         f_cat(PID_FILE, data);
     }
 }
