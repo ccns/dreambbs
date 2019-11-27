@@ -2058,7 +2058,7 @@ hdr_outs(               /* print HDR's subject */
         int square = 0;         /* 0為無方括,
                                  * 1為第一字為方括"["未out, 2為已out"["未out"]"
                                  * , 3為均out, 不再處理 */
-        int angle = 0;          /* 0為normal未變色, 1為遇到angle, 已變色 */
+        /* int angle = 0; */    /* 0為normal未變色, 1為遇到angle, 已變色 */
         if (ch < 2)
         {
             if (*title == '[')
@@ -2092,24 +2092,12 @@ hdr_outs(               /* print HDR's subject */
                         continue;
                     }
                 }
-#if 0
-                if (angle)
+
+                if (square != 2 && (cc == '<' || cc == '>'))
                 {
-                    if (cc != '<' && cc != '>')
-                    {
-                        outs("\x1b[m");
-                        angle = 0;
-                    }
+                    prints("\x1b[1;37m%c\x1b[m", cc);
+                    continue;
                 }
-                else
-                {
-                    if (cc == '<' || cc == '>')
-                    {
-                        outs("\x1b[1;37m");
-                        angle = 1;
-                    }
-                }
-#endif
             }
 #endif  /* #ifdef  HAVE_DECLARE */
 
@@ -2117,7 +2105,7 @@ hdr_outs(               /* print HDR's subject */
         } while ((cc = (unsigned char) *title++) && (title < mark));
 
 #ifdef  HAVE_DECLARE
-        if (angle || square == 2)       /* Thor.0508: 變色還原用 */
+        if (/* angle || */ square == 2) /* Thor.0508: 變色還原用 */
             outs("\x1b[m");
 #endif
     }
