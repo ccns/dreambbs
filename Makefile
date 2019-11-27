@@ -42,6 +42,9 @@ njob:
 
 export:
 	@> $(EXPORT_FILE)
+	@$(EXPORTVAR$(exconf::= BBSUSR))
+	@$(EXPORTVAR$(exconf::= BBSGROUP))
+	@$(EXPORTVAR$(exconf::= WWWGROUP))
 	@$(EXPORTVAR$(exconf::= BBSUID))
 	@$(EXPORTVAR$(exconf::= BBSGID))
 	@$(EXPORTVAR$(exconf::= WWWGID))

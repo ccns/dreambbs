@@ -1,7 +1,5 @@
 ## Common BSD make rules for DreamBBS Project
 
-BBSUSR_HOME	!= getent passwd bbs | cut -d: -f6
-
 ## Toolchain settings
 
 CC	= clang
@@ -10,7 +8,7 @@ RANLIB	= ranlib
 
 CPROTO	= cproto -E"$(CC) -pipe -E" -I$$(SRCROOT)/include
 
-INSTALL	= install -o bbs
+INSTALL	= install -o $(BBSUSR)
 
 
 .if "$(DREAMBBS_MK)" == ""
@@ -54,14 +52,20 @@ BBSCONF_ORIGIN		:= $(REALSRCROOT)/include/config.h
 EXPORT_MAPLE	:= $(REALSRCROOT)/maple/make_export.conf
 != touch $(EXPORT_MAPLE)
 
+# User names and group names
+BBSUSR != $(GETVAR$(var::= "$(BBSUSR)")$(else_var::= $(GETVALUE$(conf::= "BBSUSR")$(default::= "$(:!id -un!)")$(hdr::= $(BBSCONF_ORIGIN)))))
+BBSGROUP != $(GETVAR$(var::= "$(BBSGROUP)")$(else_var::= $(GETVALUE$(conf::= "BBSGROUP")$(default::= "$(:!id -gn!)")$(hdr::= $(BBSCONF_ORIGIN)))))
+WWWGROUP != $(GETVAR$(var::= "$(WWWGROUP)")$(else_var::= $(GETVALUE$(conf::= "WWWGROUP")$(default::= "www-data")$(hdr::= $(BBSCONF_ORIGIN)))))
+
 # UIDs and GIDs
 ID_FALLBACK = 2>/dev/null || echo 9999
-BBSUID != $(GETVAR$(var::= "$(BBSUID)")$(else_var::= $(GETVALUE$(conf::= "BBSUID")$(default::= "$(:!id -u bbs $(ID_FALLBACK)!)")$(hdr::= $(BBSCONF)))))
-BBSGID != $(GETVAR$(var::= "$(BBSGID)")$(else_var::= $(GETVALUE$(conf::= "BBSGID")$(default::= "$(:!id -g bbs $(ID_FALLBACK)!)")$(hdr::= $(BBSCONF)))))
-WWWGID != $(GETVAR$(var::= "$(WWWGID)")$(else_var::= $(GETVALUE$(conf::= "WWWGID")$(default::= "$(:!id -g www-data $(ID_FALLBACK)!)")$(hdr::= $(BBSCONF)))))
+BBSUID != $(GETVAR$(var::= "$(BBSUID)")$(else_var::= $(GETVALUE$(conf::= "BBSUID")$(default::= "$(:!id -u $(BBSUSR) $(ID_FALLBACK)!)")$(hdr::= $(BBSCONF)))))
+BBSGID != $(GETVAR$(var::= "$(BBSGID)")$(else_var::= $(GETVALUE$(conf::= "BBSGID")$(default::= "$(:!id -g $(BBSGROUP) $(ID_FALLBACK)!)")$(hdr::= $(BBSCONF)))))
+WWWGID != $(GETVAR$(var::= "$(WWWGID)")$(else_var::= $(GETVALUE$(conf::= "WWWGID")$(default::= "$(:!id -g $(WWWGROUP) $(ID_FALLBACK)!)")$(hdr::= $(BBSCONF)))))
 
 ## BBS path prefixes and suffixes
 BBSVER != $(GETVALUE$(conf::= "BBSVER_SUFFIX")$(default::= "")$(hdr::= $(BBSCONF_ORIGIN)))
+BBSUSR_HOME != getent passwd $(BBSUSR) | cut -d: -f6
 BBSHOME != $(GETVAR$(var::= "$(BBSHOME)")$(else_var::= $(GETVALUE$(conf::= "BBSHOME")$(default::= "$(BBSUSR_HOME)")$(hdr::= $(BBSCONF)))))
 
 # rules ref: PttBBS: mbbsd/Makefile
