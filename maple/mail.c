@@ -1969,7 +1969,13 @@ hdr_outs(               /* print HDR's subject */
     int cc)
 {
     static const char *const type[4] =
-    {"Re", "◇", "\x1b[1;33m=>", "\x1b[1;32m◆"};
+    {"Re", "◇", "=>", "◆"};
+    static const char *const type_reset[4] =
+    {"\x1b[m", "\x1b[m", "\x1b[1;33m", "\x1b[1;32m"};
+#ifdef  HAVE_DECLARE
+    static const char *const type_dec[4] =
+    {"\x1b[1;37m", "\x1b[1;37m", "\x1b[1;37m", "\x1b[1;33m"};
+#endif
     const char *title, *mark;
     int ch, len;
     UTMP *online;
@@ -2039,6 +2045,7 @@ hdr_outs(               /* print HDR's subject */
     ch = title == mark;
     if (!strcmp(currtitle, title))
         ch += 2;
+    outs(type_reset[ch]);
     outs(type[ch]);
 
     mark = title + cc;
@@ -2059,12 +2066,9 @@ hdr_outs(               /* print HDR's subject */
                                  * 1為第一字為方括"["未out, 2為已out"["未out"]"
                                  * , 3為均out, 不再處理 */
         /* int angle = 0; */    /* 0為normal未變色, 1為遇到angle, 已變色 */
-        if (ch < 2)
+        if (*title == '[')
         {
-            if (*title == '[')
-            {
-                square = 1;
-            }
+            square = 1;
         }
 #endif
 
@@ -2072,46 +2076,46 @@ hdr_outs(               /* print HDR's subject */
         {
 
 #ifdef  HAVE_DECLARE
-            if (ch < 2)
+            switch (square)
             {
-                switch (square)
+            case 1:
+                if (cc == '[')
                 {
-                case 1:
-                    if (cc == '[')
-                    {
-                        outs("\x1b[1;37m[");
-                        square = 2;
-                        continue;
-                    }
-                    break;  // cc == ' '
-                case 2:
-                    if (cc == ']')
-                    {
-                        outs("]\x1b[m");
-                        square = 3;
-                        continue;
-                    }
-                }
-
-                if (square != 2 && (cc == '<' || cc == '>'))
-                {
-                    prints("\x1b[1;37m%c\x1b[m", cc);
+                    outs(type_dec[ch]);
+                    outc('[');
+                    square = 2;
                     continue;
                 }
+                break;  // cc == ' '
+            case 2:
+                if (cc == ']')
+                {
+                    outc(']');
+                    outs(type_reset[ch]);
+                    square = 3;
+                    continue;
+                }
+            }
+
+            if (square != 2 && (cc == '<' || cc == '>'))
+            {
+                outs(type_dec[ch]);
+                outc(cc);
+                outs(type_reset[ch]);
+                continue;
             }
 #endif  /* #ifdef  HAVE_DECLARE */
 
             outc(cc);
         } while ((cc = (unsigned char) *title++) && (title < mark));
 
+        if (ch >= 2
 #ifdef  HAVE_DECLARE
-        if (/* angle || */ square == 2) /* Thor.0508: 變色還原用 */
-            outs("\x1b[m");
+          || (/* angle || */ square == 2) /* Thor.0508: 變色還原用 */
 #endif
+        )
+            outs("\x1b[m");
     }
-
-    if (ch >= 2)
-        outs("\x1b[m");
 
     outc('\n');
 }
