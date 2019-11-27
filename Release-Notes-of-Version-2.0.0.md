@@ -196,7 +196,7 @@
 - Site information: Always show all the modules
 - Add `echo` flags `VGET_STRICT_DOECHO`, `VGET_STEALTH_NOECHO`, `PASSECHO`, `VGET_BREAKABLE`, & `NUMECHO` for `vget()`
 - Make `vget()` convert the whole input string to lowercase if `LCECHO` is set
-- Site information: Show the version information for LuaJIT if enabled.
+- Site information: Show the version information of external libraries used by enabled modules.
 - Remove adminutil tools which invoke shell commands
 
 ### Improvements about pfterm
