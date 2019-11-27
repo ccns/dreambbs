@@ -83,7 +83,7 @@ rebuild_pnote_ansi(int newflag)
     }
     else if (fstat(fd, &st) != -1)
     {
-        total = BMIN(st.st_size / sizeof(notedata), MAX_PNOTE);
+        total = BMIN(st.st_size / sizeof(notedata), (off_t)MAX_PNOTE);
     }
     fputs("\t\t\t\x1b[1;32m ★ \x1b[37m答 錄 機 中 的 留 言\x1b[32m★ \n\n", fp);
 
@@ -172,7 +172,7 @@ do_pnote(const char *userid)
     }
     else if (fstat(fd, &st) != -1)
     {
-        total = BMIN(st.st_size / sizeof(notedata) + 1, MAX_PNOTE);
+        total = BMIN(st.st_size / sizeof(notedata) + 1, (off_t)MAX_PNOTE);
     }
 
     fputs("\t\t\t\x1b[1;32m ★ \x1b[37m您 的 答 錄 機 !!! \x1b[32m★ \n\n", fp);

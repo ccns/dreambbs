@@ -293,8 +293,8 @@ money_back(void)
 
         m1 = ((m1+m2)/2) - 1;  //請自行修改
 
-        m1 = BMIN(m1, INT_MAX);
-        m2 = BMIN(m2, INT_MAX);
+        m1 = BMIN(m1, (double)INT_MAX);
+        m2 = BMIN(m2, (double)INT_MAX);
 
         //為了方便所以沒有砍掉舊記錄, 對方可能洗錢
         //if (acct.money > 65535)

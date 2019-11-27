@@ -736,7 +736,7 @@ XO *xo)
         qsort(choice, items, sizeof(struct Tchoice), (int (*)(const void *lhs, const void *rhs))TchoiceCompare);
 
     if (vch->vpercent == '%')
-        fd = BMAX(1, total / sizeof(int));
+        fd = BMAX((size_t)1, total / sizeof(int));
     else
         fd = 0;
 

@@ -604,7 +604,7 @@ do_post(
           }
           else
           {
-            mode = BMIN(keysnum, spendtime) / 10;       /* 每十字/秒 一元 */
+            mode = BMIN((time_t)keysnum, spendtime) / 10;  /* 每十字/秒 一元 */
             sprintf(buf, "這是您的第 %d 篇文章，獲得 %d 夢幣。", ++cuser.numposts, mode);
             pmsg2(buf);
             brd->blast = time(0);

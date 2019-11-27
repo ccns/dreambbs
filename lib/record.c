@@ -321,7 +321,7 @@ int rec_mov(const char *fpath, int size, int from, int to)
         backward = 0;
     }
 
-    to = BMIN(to, len);
+    to = BMIN((off_t)to, len);
 
     off = size * from;
     lseek(fd, off, SEEK_SET);
