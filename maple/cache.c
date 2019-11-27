@@ -754,7 +754,7 @@ fshm_init(void)
 static inline void
 out_rle(
     char *str,
-    bool film)
+    bool is_movie)
 {
 #ifdef SHOW_USER_IN_TEXT
     char *t_name = cuser.userid;
@@ -763,7 +763,7 @@ out_rle(
     int x, y/*, count=0*/;
     int cc, rl;
 
-    if (film)
+    if (is_movie)
         y = 1;
         //move(3, 36+item_length[count++]);
     else
@@ -783,7 +783,7 @@ out_rle(
             {
                 if (cc=='\n')
                 {
-                    if (film)
+                    if (is_movie)
                     {
                         outs("\x1b[m");
                         clrtoeol();
@@ -814,7 +814,7 @@ out_rle(
         if (cc=='\n')
         {
             getyx(&y, &x);
-            if (film)
+            if (is_movie)
             {
                 outs("\x1b[m");
                 clrtoeol();
@@ -841,6 +841,7 @@ film_out(
 {
     int fmax, len, *shot;
     char *film, buf[FILM_SIZ];
+    bool is_movie = (tag >= FILM_MOVIE);
 
     if (row <= 0)
         clear();
@@ -858,7 +859,7 @@ film_out(
             return FILM_MOVIE;
     }
 
-    if (tag >= FILM_MOVIE)      /* random select */
+    if (is_movie)               /* random select */
     {
         tag += (time(0) & 7);   /* 7 steps forward */
         if (tag >= fmax)
@@ -882,14 +883,7 @@ film_out(
     memcpy(buf, film, len);
     buf[len] = '\0';
 
-    if (tag > FILM_MOVIE)         /* FILM_MOVIE */
-    {
-        out_rle(buf, 1);
-    }
-    else
-    {
-        out_rle(buf, 0);
-    }
+    out_rle(buf, is_movie);
 
     if (row < 0)                  /* help screen */
         vmsg(NULL);
