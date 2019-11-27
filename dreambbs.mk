@@ -1,5 +1,7 @@
 ## Common BSD make rules for DreamBBS Project
 
+BBSUSR_HOME	!= getent passwd bbs | cut -d: -f6
+
 ## Toolchain settings
 
 CC	= clang
@@ -58,7 +60,7 @@ WWWGID != $(GETVAR$(var::= "$(WWWGID)")$(else_var::= $(GETVALUE$(conf::= "WWWGID
 
 ## BBS path prefixes and suffixes
 BBSVER != $(GETVALUE$(conf::= "BBSVER_SUFFIX")$(default::= "")$(hdr::= $(BBSCONF_ORIGIN)))
-BBSHOME != $(GETVAR$(var::= "$(BBSHOME)")$(else_var::= $(GETVALUE$(conf::= "BBSHOME")$(default::= "$(HOME)")$(hdr::= $(BBSCONF)))))
+BBSHOME != $(GETVAR$(var::= "$(BBSHOME)")$(else_var::= $(GETVALUE$(conf::= "BBSHOME")$(default::= "$(BBSUSR_HOME)")$(hdr::= $(BBSCONF)))))
 
 # rules ref: PttBBS: mbbsd/Makefile
 DEF_LIST	!= sh -c '$(GETCONFS$(hdr::= $(BBSCONF)))'
