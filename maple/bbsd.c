@@ -24,6 +24,8 @@
 
 #define QLEN            3
 #define PID_FILE        "run/bbs.pid"
+#define PID_FILE_INET   "run/bbs_inet.pid"
+#define PID_FILE_UNIXSOCKET "run/bbs_unixsocket.pid"
 #define LOG_FILE        "run/bbs.log"
 #undef  SERVER_USAGE
 
@@ -1442,7 +1444,7 @@ start_daemon(
         /* mport = port; */ /* Thor.990325: 不需要了:P */
 
         sprintf(data, "%d\t%s\t%d\tinetd -i\n", getpid(), buf, port);
-        f_cat(PID_FILE, data);
+        f_cat(PID_FILE_INET, data);
         return;
     }
 
@@ -1530,9 +1532,16 @@ start_daemon(
     setuid(BBSUID);
 
     //sprintf(data, "%d\t%s\t%d\n", getpid(), buf, port);
-    //f_cat(PID_FILE, data);
     sprintf(data, "%d\n", getpid());
-    f_cat(PID_FILE, data);
+
+    if (port == -2)
+    {
+        f_cat(PID_FILE_UNIXSOCKET, data);
+    }
+    else
+    {
+        f_cat(PID_FILE, data);
+    }
 }
 
 
