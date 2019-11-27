@@ -25,8 +25,8 @@ innbbsd: $(INNOBJS)
 	$(CC) -o innbbsd $(INNOBJS) $(OPT) $(LDFLAGS)
 
 install: $(EXE)
-	install -d "$(BBSHOME)/innd$(BBSVER)"
-	install -m 0700 $? $(BBSHOME)/innd
+	$(INSTALL) -d "$(BBSHOME)/innd$(BBSVER)"
+	$(INSTALL) -m 0700 $? $(BBSHOME)/innd
 
 clean:
 	rm -f $(EXE) *.o *~

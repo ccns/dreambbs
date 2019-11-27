@@ -38,7 +38,7 @@ CFLAGS	+= $(RUBY_CFLAGS)
 all: $(SO)
 
 install: $(SO)
-	install -m 0700 $(SO) "$(BBSHOME)/bin$(BBSVER)"
+	$(INSTALL) -m 0700 $(SO) "$(BBSHOME)/bin$(BBSVER)"
 
 clean: /tmp
 	rm -fr $(SO) *~ *.o

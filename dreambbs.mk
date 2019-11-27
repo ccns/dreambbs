@@ -10,6 +10,8 @@ RANLIB	= ranlib
 
 CPROTO	= cproto -E"$(CC) -pipe -E" -I$$(SRCROOT)/include
 
+INSTALL	= install -o bbs
+
 
 .if "$(DREAMBBS_MK)" == ""
 DREAMBBS_MK	:= 1

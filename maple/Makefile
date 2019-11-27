@@ -100,8 +100,8 @@ configure:
 	@if [ "$(TARGETS_REST)" ]; then sh -c "$(MAKE) $(TARGETS_REST) $(MAKEFLAGS)"; printf "\033[1;36mJob done. Force stop.\033[m\n" >&2; false; fi
 
 install: $(EXE)
-	install -d "$(BBSHOME)/bin$(BBSVER)"
-	install -m 0755 $? "$(BBSHOME)/bin$(BBSVER)"
+	$(INSTALL) -d "$(BBSHOME)/bin$(BBSVER)"
+	$(INSTALL) -m 0755 $? "$(BBSHOME)/bin$(BBSVER)"
 	mv -f "$(BBSHOME)/bin$(BBSVER)/bbsd" "$(BBSHOME)/bin$(BBSVER)/bbsd.$(BUILDTIME)"
 	ln -sv "$(BBSHOME)/bin$(BBSVER)/bbsd.$(BUILDTIME)" "$(BBSHOME)/bin$(BBSVER)/bbsd"
 
