@@ -11,6 +11,9 @@ int main(void)
 #if 0
     char c;
 
+    setgid(BBSGID);
+    setuid(BBSUID);
+
     for (c = 'a'; c <= 'z'; c++)
     {
 #endif

@@ -285,6 +285,8 @@ main(
 {
     char fpath[128];
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME);
 
     ushm = (UCACHE *) attach_shm(UTMPSHM_KEY, sizeof(UCACHE));

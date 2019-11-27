@@ -131,6 +131,8 @@ main(void)
 {
     BRD *bcache, *head, *tail;
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME);
     umask(077);
 

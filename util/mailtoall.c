@@ -202,6 +202,10 @@ main(
     int mode;
     char *path = NULL, *title = NULL;
 
+    setgid(BBSGID);
+    setuid(BBSUID);
+    chdir(BBSHOME);
+
     bshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
 
     mode = (argc > 1) ? atoi(argv[1]) : 0;

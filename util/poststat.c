@@ -457,6 +457,8 @@ main(
     time_t now;
     struct tm *ptime;
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME "/run");
 
     if (argc > 1)

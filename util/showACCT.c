@@ -134,6 +134,8 @@ main(
         return 2;
     }
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME);
 
     for (i = 1; i < argc; i++)

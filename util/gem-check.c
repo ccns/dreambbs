@@ -573,6 +573,8 @@ main(
     /* 整理精華區 gem/                                    */
     /* -------------------------------------------------- */
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     umask(077);
     chdir(BBSHOME "/gem");
 

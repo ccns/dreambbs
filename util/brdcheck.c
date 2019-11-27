@@ -24,6 +24,9 @@ main(
         return 2;
     }
 
+    setgid(BBSGID);
+    setuid(BBSUID);
+
     for (c = 'a'; c <= 'z'; c++)
     {
         char buf[64];

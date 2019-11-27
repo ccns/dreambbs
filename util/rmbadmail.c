@@ -248,6 +248,8 @@ main(
     int ch;
     char *fname, fpath[256], buf[32] = {0};
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME);
 
     ch = getopt(argc, argv, "+" "ab");

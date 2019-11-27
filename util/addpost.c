@@ -97,6 +97,8 @@ main(
         return 2;
     }
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME);
 
     fpath = "tmp/addpost.tmp";    /* º»¶s¿… */

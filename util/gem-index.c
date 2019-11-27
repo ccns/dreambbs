@@ -222,6 +222,8 @@ main(
     struct dirent *de;
     char *fname, fpath[80];
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     umask(077);
     chdir(BBSHOME "/gem");
 

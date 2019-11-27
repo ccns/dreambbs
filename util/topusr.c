@@ -127,6 +127,9 @@ main(void)
     memset(topposts, 0, sizeof(topposts));
     memset(topstay, 0, sizeof(topstay));
 
+    setgid(BBSGID);
+    setuid(BBSUID);
+
     for (c = 'a'; c <= 'z'; c++)
     {
         char buf[512];
@@ -182,6 +185,8 @@ main(void)
     qsort(topposts, TOPNUM, sizeof(DATA), sort_compare);
     qsort(topstay, TOPNUM, sizeof(DATA), sort_compare);
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME);
 
     write_data("\x1b[33;1m===========\x1b[44m    上站次數排行榜    \x1b[40m============\x1b[m", toplogins, 0);

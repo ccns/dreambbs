@@ -367,6 +367,8 @@ main(void)
     xtime = localtime(&now);
     ntime = *xtime;
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME);
     umask(077);
 

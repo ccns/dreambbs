@@ -49,6 +49,8 @@ main(void)
 
     strcpy(fpath, "/var/tape/gem");
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME "/gem/brd");
     traverse(fpath);
     return 0;

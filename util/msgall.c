@@ -97,6 +97,8 @@ main(
     BMW bmw;
 
     chdir(BBSHOME);
+    setgid(BBSGID);
+    setuid(BBSUID);
     if (argc < 2)
     {
         fprintf(stderr, "Usage: %s <msg>\n", argv[0]);

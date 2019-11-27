@@ -50,6 +50,10 @@ main(
     FILE *fp;
     char ymd[80];
 
+    setgid(BBSGID);
+    setuid(BBSUID);
+    chdir(BBSHOME);
+
     count = (COUNTER *) attach_shm(COUNT_KEY, sizeof(COUNTER));
 
     optind++;

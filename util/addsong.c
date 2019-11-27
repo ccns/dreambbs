@@ -99,6 +99,8 @@ main(
     int ch;
     char *fname, fpath[256];
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME);
 
     strcpy(fname = fpath, "usr/@");

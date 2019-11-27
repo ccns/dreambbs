@@ -49,6 +49,8 @@ main(void)
 
     strcpy(fpath, "/var/tape/brd");
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME "/brd");
     traverse(fpath);
     return 0;

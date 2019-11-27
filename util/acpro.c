@@ -303,6 +303,8 @@ profess_image(void)
 int
 main(void)
 {
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME);
     umask(077);
     /* --------------------------------------------------- */

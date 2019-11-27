@@ -610,6 +610,8 @@ main(
     int fd;
     const char *userid = NULL;
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME);
 
     pickup_way = -1;

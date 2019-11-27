@@ -27,6 +27,8 @@ main(
     else
         show_allbrd = 0;
 
+    setgid(BBSGID);
+    setuid(BBSUID);
     chdir(BBSHOME);
 
     if (!(fp = fopen(FN_BRD, "r")))
