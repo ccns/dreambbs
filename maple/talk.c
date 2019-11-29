@@ -3095,11 +3095,21 @@ ulist_body(
 
             if ((userno = up->userno) && (up->userid[0]) && !((up->ufo & UFO_CLOAK) && !HAS_PERM(PERM_SEECLOAK) && (up->userno != cuser.userno)))
             {
-                if ((diff = (now - up->idle_time) / 60))
-                    if (diff <= 1440)
-                        sprintf(buf, "%2d:%02d", diff / 60, diff % 60);
-                    else
-                        sprintf(buf, "--:--");
+                if ((diff = now - up->idle_time))
+                {
+                    if (diff < 60 * 60)
+                        sprintf(buf, "%2d'%02d", diff / 60, diff % 60);
+                    else if ((diff /= 60) < 24 * 60)
+                        sprintf(buf, "%2dh%02d", diff / 60, diff % 60);
+                    else if ((diff /= 60) < 100 * 24)
+                        sprintf(buf, "%2dd%02d", diff / 24, diff % 24);
+                    else if ((diff /= 24) < 10000)
+                        sprintf(buf, "%4dd", diff);
+                    else if ((diff /= 10000) < 1000)
+                        sprintf(buf, "%3dkd", diff);
+                    else  /* Not possible for 32-bit integer `time_t` */
+                        sprintf(buf, "---Md");
+                }
                 else
                     buf[0] = '\0';
 
