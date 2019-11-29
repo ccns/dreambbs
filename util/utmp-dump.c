@@ -391,13 +391,14 @@ ulist_body(
     pp = &ulist_pool[0];
     self = cuser.userno;
     sysop = HAS_PERM(PERM_SYSOP | PERM_ACCOUNTS);
+    time(&now);
 
     while (cnt++ < max)
     {
         up = *pp++;
         if ((userno = up->userno) && !((up->ufo & UFO_CLOAK) && !HAS_PERM(PERM_SEECLOAK) && (up->userno != cuser.userno)) )
         {
-            if ((diff = up->idle_time))
+            if ((diff = (now - up->idle_time) / 60))
                 if (diff <= 9999)
                     sprintf(buf, "%4d", diff);
                 else

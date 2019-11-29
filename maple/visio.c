@@ -1591,10 +1591,11 @@ igetch(void)
 
                         vi_size = cc;
 
-                        if (idle && cutmp)
+                        if (cutmp)
                         {
 
-                            cutmp->idle_time = idle = 0;
+                            idle = 0;
+                            time(&cutmp->idle_time);
                         }
 #ifdef  HAVE_SHOWNUMMSG
                         if (cutmp)
@@ -1611,13 +1612,14 @@ igetch(void)
                     if (cc < 60)                /* paging timeout */
                         return I_TIMEOUT;
 
-                    idle += cc / 60;
+                    time(&now);
+                    idle = (now - cutmp->idle_time);
                     vio_to.tv_sec = cc + 60;  /* Thor.980806: 每次 timeout都增加60秒,
                                                               所以片子愈換愈慢, 好懶:p */
                     /* Thor.990201: 註解: 除了talk_rqst, chat之外, 需要在動一動之後
                                           重設 tv_sec為 60秒嗎? (預設值) */
 
-                    if (idle >= 5 && !cutmp)  /* 登入時 idle 超過 5 分鐘就斷線 */
+                    if (idle >= 5 * 60 && !cutmp)  /* 登入時 idle 超過 5 分鐘就斷線 */
                     {
                         pmsg2_body("登入逾時，請重新上站");
                         refresh();
@@ -1625,7 +1627,7 @@ igetch(void)
                     }
 
                     cc = bbsmode;
-                    if ( (idle > (cc ? IDLE_TIMEOUT : 4)) && ( strcmp(cuser.userid, STR_GUEST) == 0 ) )
+                    if ( (idle > (cc ? IDLE_TIMEOUT : 4) * 60) && ( strcmp(cuser.userid, STR_GUEST) == 0 ) )
                     {
                         clear();
                         outs("超過閒置時間！");
@@ -1633,7 +1635,7 @@ igetch(void)
                         refresh();
                         abort_bbs();
                     }
-                    else if ( (idle > (cc ? (IDLE_TIMEOUT-4) : 4)) && ( strcmp(cuser.userid, STR_GUEST) == 0 ) )
+                    else if ( (idle > (cc ? (IDLE_TIMEOUT-4) : 4) * 60) && ( strcmp(cuser.userid, STR_GUEST) == 0 ) )
                     {
                         outz("\x1b[41;5;1;37m警告！你已經閒置過久，系統將在三分後將你踢除！\x1b[m");
                         bell();
@@ -1642,7 +1644,6 @@ igetch(void)
 
                     if (cc)
                     {
-                        cutmp->idle_time = idle;
                         /*if (cc < M_CLASS)
                         {
                             movie();

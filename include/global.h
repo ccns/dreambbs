@@ -494,6 +494,7 @@ VAR int total_num;                  /* 重設 站上人數*/
 #undef  INI
 
 extern char xo_pool[];          /* XO's data I/O pool */
+extern time_t now;
 
 #ifdef __cplusplus
 }  // extern "C"

@@ -545,6 +545,7 @@ utmp_setup(
 #endif
 
     strcpy(utmp.userid, cuser.userid);
+    time(&utmp.idle_time);
     srand(time(0));
     srandom(time(0));
     strcpy(utmp.username, ((!str_cmp(cuser.userid, STR_GUEST)||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
