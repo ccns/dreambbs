@@ -47,7 +47,7 @@
     + Drop plans for `v0.98`~`v0.99` due to big changes which will be tested for a long time.
         - Alternative planned names:
           * ~`v1.0-alpha1`~, ~`v1.0-alpha2`~, ~`v1.0-alpha3`~, ~`v1.0-beta1`~, ~`v1.0-RC1`~, ~`v1.0-RC2`~, ~`v1.0-RC3`~
-    + `v1.0`: Version 1.X; codename `rimuru` ( **Latest Release Branch** )
+    + `v1.0`: Version 1.X; codename `rimuru`
         - `v1.1.0`: Backports and improvement from `current`; codename `milim`
         - Features:
           * ~~Screen resizing feature.~~
@@ -57,7 +57,7 @@
           * Others: Please see <https://github.com/ccns/dreambbs/releases/tag/v1.1.0>.
         - `v1.2.0`: Codename `shizu`
         - `v1.3.0`: Codename `veldora`
-    + `v2.0`: Version 2.X
+    + `v2.0`: Version 2.X; codename `artoria` ( **Latest Release Branch** )
         - Features in plan:
           * ~~Option for disabling DSO.~~
           * BBS-Lua/BBS-Ruby.
