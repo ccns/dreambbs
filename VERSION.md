@@ -49,6 +49,8 @@
           * ~`v1.0-alpha1`~, ~`v1.0-alpha2`~, ~`v1.0-alpha3`~, ~`v1.0-beta1`~, ~`v1.0-RC1`~, ~`v1.0-RC2`~, ~`v1.0-RC3`~
     + `v1.0`: Version 1.X; codename `rimuru` ( **Latest Release Branch** )
         - `v1.1.0`: Backports and improvement from `current`; codename `milim`
+        - Features:
+          * ~~Screen resizing feature.~~
         - `v1.1.1`
         - Features:
           * ~~`pfterm`, which is ported in this release version.~~
@@ -57,14 +59,13 @@
         - `v1.3.0`: Codename `veldora`
     + `v2.0`: Version 2.X
         - Features in plan:
-          * ~~Screen resizing feature.~~
-          * ~~Workaround option for disabling DSO.~~
+          * ~~Option for disabling DSO.~~
           * BBS-Lua/BBS-Ruby.
+          * ~~SHA-256-encrypted password support.~~
+          * ~~Preliminary WebSocket support, based on relevant patches to Maple3 and PttBBS.~~
     + `v3.0 ~`: Version 3.X or later
         - Features in plan:
-          * ~~Preliminary WebSocket support, based on relevant patches to Maple3 and PttBBS.~~
           * Support forcing use 32-bit int type variables in 64-bit environment when BBS is compiled natively.
-
 * Planned version names for `current` (`master` branch):
     + `v1.0-CURRENT`
     + `v2.0-CURRENT`
