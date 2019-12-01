@@ -11,10 +11,6 @@ cmake_minimum_required(VERSION 3.1)
 # set the project name
 project(DreamBBS LANGUAGES C CXX VERSION 3.0)
 
-# specify the C standard
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_STANDARD_REQUIRED TRUE)
-
 # For debugging `CMakeLists.txt`
 # set(CMAKE_VERBOSE_MAKEFILE ON)
 
@@ -24,6 +20,16 @@ include(CheckSymbolExists)
 include(FindPkgConfig)
 
 ## Toolchain settings
+
+if(NOT USE_CXX)
+    # specify the C standard
+    add_compile_options(-x c --std=gnu99)
+    set(USE_CXX ON CACHE BOOL "Compile C code using C++ mode")
+else()
+    # specify the C++ standard
+    add_compile_options(-x c++ --std=gnu++14)
+    set(USE_CXX OFF CACHE BOOL "Compile C code using C++ mode")
+endif()
 
 add_compile_options(-ggdb3 -O0 -pipe -fomit-frame-pointer)
 add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Wstrict-prototypes)
@@ -138,8 +144,6 @@ endif()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-invalid-source-encoding")
 endif()
-
-add_compile_options($<$<COMPILE_LANGUAGE:CXX>:-xc++>)
 
 check_c_compiler_flag(-Wunreachable-code-aggressive CC_HAS_W_UNREACHABLE_CODE_AGGRESSIVE)
 if(CC_HAS_W_UNREACHABLE_CODE_AGGRESSIVE)
