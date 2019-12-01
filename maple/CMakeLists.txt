@@ -8,6 +8,8 @@
 
 include(${PROJECT_SOURCE_DIR}/so/so.cmake)
 
+EXPORT_CONF(${CMAKE_CURRENT_SOURCE_DIR}/make_export.conf)
+
 add_compile_options(-imacros${EXPORT_MAPLE})
 
 if(USE_BBSLUA)

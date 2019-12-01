@@ -151,6 +151,7 @@ endif()
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     add_compile_options(-m32)
     link_libraries(-m32)
+    set(_FILE_OFFSET_BITS 64)
 endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -188,6 +189,21 @@ if(USE_BBSRUBY)
         )
     endif()
 endif()
+
+## Generate configure file
+function(EXPORT_CONF export_file)
+    execute_process(COMMAND printf "\\033[1;36mGenerating '${export_file}'...\\033[0m\n")
+    configure_file(
+        ${export_file}.in ${export_file}
+        NEWLINE_STYLE LF
+    )
+    file(READ ${export_file} EXPORT_FILE_CONTENT)
+    execute_process(COMMAND printf "\\033[1;33m${EXPORT_FILE_CONTENT}\\033[0m")
+endfunction()
+
+EXPORT_CONF(${CMAKE_CURRENT_SOURCE_DIR}/make_export.conf)
+
+set(CMAKE_INSTALL_PREFIX ${BBSHOME})
 
 add_subdirectory(lib)
 add_subdirectory(maple)

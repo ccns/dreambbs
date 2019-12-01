@@ -1,0 +1,15 @@
+#undef BBSUSR
+#define BBSUSR "@BBSUSR@"
+#undef BBSGROUP
+#define BBSGROUP "@BBSGROUP@"
+#undef WWWGROUP
+#define WWWGROUP "@WWWGROUP@"
+#undef BBSUID
+#define BBSUID @BBSUID@
+#undef BBSGID
+#define BBSGID @BBSGID@
+#undef WWWGID
+#define WWWGID @WWWGID@
+#undef BBSHOME
+#define BBSHOME "@BBSHOME@"
+#cmakedefine _FILE_OFFSET_BITS @_FILE_OFFSET_BITS@
