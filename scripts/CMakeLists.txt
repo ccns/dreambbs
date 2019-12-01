@@ -12,3 +12,20 @@ set(SH
 set(WSPROXY
     wsproxy/wsproxy.lua
 )
+
+install(
+    PROGRAMS ${SH}
+    DESTINATION sh${BBSVER}
+    PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+)
+install(
+    CODE "execute_process(COMMAND chown -R ${BBSUSR}:${BBSGROUP} ${CMAKE_INSTALL_PREFIX}/sh${BBSVER})"
+)
+
+install(
+    PROGRAMS ${WSPROXY}
+    DESTINATION wsproxy${BBSVER}
+)
+install(
+    CODE "execute_process(COMMAND chown -R ${BBSUSR}:${BBSGROUP} ${CMAKE_INSTALL_PREFIX}/wsproxy${BBSVER})"
+)

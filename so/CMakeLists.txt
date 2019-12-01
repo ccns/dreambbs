@@ -34,8 +34,19 @@ foreach(module IN LISTS SO)
         set_target_properties(so_${module}
             PROPERTIES PREFIX ""
         )
+        install(
+            TARGETS so_${module}
+            DESTINATION bin${BBSVER}
+            PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+        )
     endif()
     set_target_properties(so_${module}
         PROPERTIES OUTPUT_NAME ${module}
     )
 endforeach(module)
+
+if(NOT NO_SO)
+    install(
+        CODE "execute_process(COMMAND chown -R ${BBSUSR}:${BBSGROUP} ${CMAKE_INSTALL_PREFIX}/bin${BBSVER})"
+    )
+endif()

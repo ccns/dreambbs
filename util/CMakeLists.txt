@@ -21,4 +21,13 @@ set(EXE
 
 foreach(target IN LISTS EXE)
     add_executable(${target} ${target}.c)
+    install(
+        TARGETS ${target}
+        DESTINATION bin${BBSVER}
+        PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE
+    )
 endforeach(target)
+
+install(
+    CODE "execute_process(COMMAND chown -R ${BBSUSR}:${BBSGROUP} ${CMAKE_INSTALL_PREFIX}/bin${BBSVER})"
+)
