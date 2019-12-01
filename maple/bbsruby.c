@@ -104,7 +104,7 @@ static inline void getyx(int *y, int *x)
 // This program is licensed under MIT License.
 //-------------------------------------------------------
 
-//#include "bbs.h"
+#include "bbs.h"
 #include <ruby.h>
 
 #ifndef RUBY_VM

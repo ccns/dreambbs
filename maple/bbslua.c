@@ -750,7 +750,7 @@ vkey_purge(void)
 //  1. n people communication
 //////////////////////////////////////////////////////////////////////////
 
-// #include "bbs.h"  // Included
+#include "bbs.h"
 
 #ifdef BLSCONF_ENABLED
   #include "fnv_hash.h"
