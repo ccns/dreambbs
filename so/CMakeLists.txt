@@ -27,6 +27,7 @@ endif()
 
 foreach(module IN LISTS SO)
     if(NO_SO)
+        unset(so_${module}_LIB_DEPENDS CACHE)
         add_library(so_${module} OBJECT ${module}.c)
     else()
         add_library(so_${module} MODULE ${module}.c)

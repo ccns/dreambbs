@@ -35,6 +35,7 @@ endif()
 
 if(NO_SO)
     foreach(module IN LISTS SO)
+        unset(so_${module}_LIB_DEPENDS CACHE)
         list(APPEND SRC_EXTRA $<TARGET_OBJECTS:so_${module}>)
     endforeach()
 endif()
