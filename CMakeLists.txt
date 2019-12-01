@@ -210,8 +210,10 @@ add_subdirectory(maple)
 add_subdirectory(util)
 add_subdirectory(innbbsd)
 add_subdirectory(so)
-add_subdirectory(test)
 add_subdirectory(scripts)
+
+enable_testing()
+add_subdirectory(test)
 
 # Mark the cache file as up-to-date
 if(CMAKE_CACHEFILE_DIR)

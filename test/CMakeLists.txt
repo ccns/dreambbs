@@ -18,6 +18,14 @@ set(LIBOTHER
     lib_xsort lib_splay testsize
 )
 
-foreach(target IN LISTS LIBSTR LIBFILE LIBOTHER)
+enable_testing()
+
+foreach(target IN LISTS LIBSTR LIBOTHER)
+    add_executable(${target} ${target}.c)
+    add_test(NAME test_${target} COMMAND ${target})
+endforeach(target)
+
+foreach(target IN LISTS LIBFILE)
     add_executable(${target} ${target}.c)
 endforeach(target)
+add_test(NAME scripttest COMMAND sh ${CMAKE_CURRENT_SOURCE_DIR}/testscript.sh)
