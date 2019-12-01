@@ -25,5 +25,5 @@ rm before_cp.txt after_cp.txt
 ################### test f_rm()
 printf "thisfileshouldbedeleted" > before_rm.txt
 ./lib_f_rm before_rm.txt
-test -e before_rm.txt && (>&2 printf "\033[1;31mtest f_rm failed!\033[0m\n" && false) || true
+test ! -e before_rm.txt || (>&2 printf "\033[1;31mtest f_rm failed!\033[0m\n"; false)
 (>&2 printf "\033[1;32mtest f_rm (for single file) ok!\033[0m\n")
