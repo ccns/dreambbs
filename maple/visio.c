@@ -1370,29 +1370,25 @@ void
 grayout(int y, int end, int level)
 // GRAYOUT_DARK(0): dark, GRAYOUT_BOLD(1): bold, GRAYOUR_NORMAL(2): normal
 {
-    screenline slp[T_LINES], newslp[T_LINES];
     const char *const prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
     char buf[ANSILINELEN];
     register int i;
-
-    vs_save(slp);
-    memcpy(newslp, slp, sizeof(newslp));
 
     y = BMAX(y, 0);
     end = BMIN(end, T_LINES);
 
     for (i = y; i < end; i++)
     {
-        if (!newslp[i].width)
+        if (!vbuf[i].width)
             continue;
 
-        newslp[i].oldlen = newslp[i].len;
-        newslp[i].len = newslp[i].width + 7 + 3;
+        vbuf[i].oldlen = vbuf[i].len;
+        vbuf[i].len = vbuf[i].width + 7 + 3;
 
-        str_ansi(buf, (char *) slp[i].data, slp[i].width + 1);
-        sprintf((char *) newslp[i].data, "%s%s\x1b[m", prefix[level], buf);
+        str_ansi(buf, (char *) vbuf[i].data, vbuf[i].width + 1);
+        sprintf((char *) vbuf[i].data, "%s%s\x1b[m", prefix[level], buf);
     }
-    vs_restore(newslp);
+    vs_redraw();
 }
 #endif //#ifndef M3_USE_PFTERM
 
