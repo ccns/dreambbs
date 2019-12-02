@@ -11,7 +11,7 @@
 #ifdef M3_USE_PFTERM
 screen_backup_t old_screen;
 #else
-static screenline sl[24];
+static screenline sl[T_LINES];
 #endif
 
 static int do_menu(MENU pmenu[], XO *xo, int x, int y);
