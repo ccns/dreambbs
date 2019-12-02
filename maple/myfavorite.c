@@ -46,123 +46,13 @@ myfavorite_item(
         else
         {
             BRD *brd;
-            char str[20], buf[10], *bits, buf2[20], brdtype;
-            const char *str2;
-            int chn, brdnew, bno;
+            int chn;
 
             chn = myfavorite->recommend;
             brd = bshm->bcache + chn;
-
             brh_get(brd->bstamp, chn);
 
-//          if (cuser.ufo2 & UFO2_ENHANCE)
-//              sprintf(str, "%c\x1b[1;32m%c\x1b[m", (brd->readlevel & PERM_SYSOP) ? ')' : ' ', brd->blast > brd_visit[chn] ? '+' : ' ');
-//          else
-//              sprintf(str, "%c\x1b[1;32m%c\x1b[m", (brd->readlevel & PERM_SYSOP) ? ')' : ' ', brh_unread(brd->blast) ? '+' : ' ');
-            brdnew = cuser.ufo2 & UFO2_BRDNEW;
-            bits = brd_bits;
-
-            sprintf(buf, "%d;3%d", brd->color/10, brd->color%10);
-
-            {
-                int fd, fsize;
-                char folder[64];
-                struct stat st;
-
-                brd_fpath(folder, brd->brdname, fn_dir);
-                if ((fd = open(folder, O_RDONLY)) >= 0)
-                {
-                    fstat(fd, &st);
-
-                    if (st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
-                    {
-                        if ((fsize = st.st_size) >= sizeof(HDR))
-                        {
-                            HDR hdr;
-
-                            brd->bpost = fsize / sizeof(HDR);
-                            while ((fsize -= sizeof(HDR)) >= 0)
-                            {
-                                lseek(fd, fsize, SEEK_SET);
-                                read(fd, &hdr, sizeof(HDR));
-                                if (!(hdr.xmode & (POST_LOCK | POST_BOTTOM)))
-                                    break;
-                            }
-                            brd->blast = (brdnew) ? BMAX(hdr.chrono, brd->blast) : hdr.chrono;
-                        }
-                        else
-                            brd->blast = brd->bpost = 0;
-                    }
-
-                    close(fd);
-                }
-                if (brdnew)
-                    num = brd->bpost;
-            }
-
-            sprintf(str, "%s", brd->blast > brd_visit[chn] ? "\x1b[1;31m★\x1b[m" : "☆");
-
-/* 081122.cache:看板性質, 不訂閱, 秘密, 好友, 一般 */
-            if (bits[chn] & BRD_Z_BIT)
-                brdtype = '-';
-#ifdef HAVE_MODERATED_BOARD
-            else if (brd->readlevel & PERM_BOARD)
-                brdtype = '.';
-            else if (brd->readlevel & PERM_SYSOP)
-                brdtype = ')';
-#endif
-            else
-                brdtype = ' ';
-
-/* 處理 人氣 */ /* cache.20090416: 仿ptt變色*/
-            bno = bshm->mantime[chn];
-
-            if (bno > 4999)
-                str2 = "\x1b[1;32m TOP \x1b[m";
-            else if (bno > 999)
-                str2 = "\x1b[1;32m  夯 \x1b[m";
-            else if (bno > 799)
-                str2 = "\x1b[1;35m  夯 \x1b[m";
-            else if (bno > 699)
-                str2 = "\x1b[1;33m  夯 \x1b[m";
-            else if (bno > 599)
-                str2 = "\x1b[1;42m  爆 \x1b[m";
-            else if (bno > 499)
-                str2 = "\x1b[1;45m  爆 \x1b[m";
-            else if (bno > 449)
-                str2 = "\x1b[1;44m  爆 \x1b[m";
-            else if (bno > 399)
-                str2 = "\x1b[1;32m  爆 \x1b[m";
-            else if (bno > 349)
-                str2 = "\x1b[1;35m  爆 \x1b[m";
-            else if (bno > 299)
-                str2 = "\x1b[1;33m  爆 \x1b[m";
-            else if (bno > 249)
-                str2 = "\x1b[1;36m  爆 \x1b[m";
-            else if (bno > 199)
-                str2 = "\x1b[1;31m  爆 \x1b[m";
-            else if (bno > 149)
-                str2 = "\x1b[1;37m  爆 \x1b[m";
-            else if (bno > 99)
-                str2 = "\x1b[1;31m HOT \x1b[m";
-            else if (bno > 49)
-                str2 = "\x1b[1;37m HOT \x1b[m";
-            else if (bno > 1) { /* r2.170810: let somebody know which board is still "alive" :P */
-                sprintf(buf2, "  %2d ", bno);
-                str2 = buf2;
-            }
-            else
-                str2 = "     ";
-//注意有三格空白, 因為 HOT 是三個 char 故更改排版
-
-            //sprintf(buf, "%d;3%d", brd->color/10, brd->color%10);
-            prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-*.*s%s%.13s\n", num, str,
-                brdtype, brd->brdname, buf, brd->class_, d_cols + 33, d_cols + 32, brd->title, brd->bvote ? "\x1b[1;33m  投\x1b[m " : str2, brd->BM);
-
-            //prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-*.*s%c %.13s\n", num, str,
-                //bits[chn] & BRD_Z_BIT ? '-' : ' ', brd->brdname,
-                //buf, brd->class_, d_cols + 36, d_cols + 36, brd->title, brd->bvote ? 'V' : ' ', brd->BM);
-
+            board_outs(chn, num);
         }
     }
     else if (myfavorite->xmode & GEM_GOPHER)
@@ -175,7 +65,7 @@ myfavorite_item(
     }
     else
     {
-        prints("%6d   %s\n", num, myfavorite->title);
+        class_outs(myfavorite->title, num);
     }
 }
 

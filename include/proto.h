@@ -89,6 +89,8 @@ GCC_PURE int bstamp2bno(time_t stamp);
 void brh_load(void);
 void brh_save(void);
 bool XoPost(int bno);
+void board_outs(int chn, int num);
+void class_outs(const char *title, int num);
 int Select(void);
 int Class(void);
 void check_new(BRD *brd);
