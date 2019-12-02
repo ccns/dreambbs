@@ -650,23 +650,16 @@ t_chat(void)
         const char *msg;
 
         move(b_lines - 1, 0);
-        outs("若不進入聊天室，則暱稱請使用 \x1b[1;33;45m * \x1b[0m \n");
-        ch = vget(b_lines, 0, "請輸入聊天代號：", chatid, 9, DOECHO);
+        outs("若不進入聊天室，則暱稱請留空\n");
+        str_ncpy(chatid, cuser.userid, sizeof(chatid));
+        /* Thor.980921: 愛用 dao lib */
+        ch = vget(b_lines, 0, "請輸入聊天代號：", chatid, 9, GCARRY);
         if (ch == '/')
             continue;
-        else if (ch == '*')
+        else if (ch == '*' || !ch)
         {
             close(cfd);
             return -1;
-        }
-        else if (!ch)
-        {
-#if 0
-            memcpy(chatid, cuser.userid, 8);
-            chatid[8] = '\0';
-#endif
-            str_ncpy(chatid, cuser.userid, sizeof(chatid));
-            /* Thor.980921: 愛用 dao lib */
         }
         else
         {
