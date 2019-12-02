@@ -1119,7 +1119,7 @@ cursor_restore(void)
     move(save_y, save_x);
 }
 #else
-static int old_col, old_row, old_roll;
+static int old_col, old_row;
 static int old_pos; /* Thor.990401: 多存一個 */
 
 
@@ -1203,28 +1203,54 @@ vs_restore_line(
 
 int
 vs_save(
-    screenline *slp)
+    screen_backup_t *psb)
+{
+    psb->slp = NULL;
+    return vs_resave(psb);
+}
+
+int
+vs_resave(
+    screen_backup_t *psb)
 {
 #if 0
     cursor_save();
     /* Thor.980827: 所有用到 vs_save的時機都會重新定位, 故不用存游標位置 */
 #endif
-    old_roll = roll;
-    memcpy(slp, vbuf, sizeof(screenline) * t_lines);
-    return old_roll;    /* itoc.030723: 傳回目前的 roll */
+    psb->old_t_lines = t_lines;
+    psb->old_roll = roll;
+    psb->slp = (screenline *)realloc(psb->slp, sizeof(screenline) * t_lines);
+    memcpy(psb->slp, vbuf, sizeof(screenline) * t_lines);
+    return psb->old_roll;   /* itoc.030723: 傳回目前的 roll */
 }
 
 
 void
-vs_restore(
-    const screenline *slp)
+vs_free(
+    screen_backup_t *psb)
 {
-    memcpy(vbuf, slp, sizeof(screenline) * t_lines);
+    free(psb->slp);
+    psb->slp = NULL;
+}
+
+void
+vs_restore_free(
+    screen_backup_t *psb)
+{
+    vs_restore(psb);
+    vs_free(psb);
+}
+
+void
+vs_restore(
+    const screen_backup_t *psb)
+{
+    memcpy(vbuf, psb->slp, sizeof(screenline) * psb->old_t_lines);
 #if 0
     cursor_restore();
     /* Thor.980827: 所有用到 vs_restore的時機都會重新定位, 故不用存游標位置 */
 #endif
-    roll = old_roll;
+    roll = psb->old_roll;
     vs_redraw();
 }
 

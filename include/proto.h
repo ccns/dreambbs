@@ -266,8 +266,11 @@ void save_foot(screenline *slp);
 void restore_foot(const screenline *slp);
 void vs_save_line(screenline *slp, int y);
 void vs_restore_line(const screenline *slp, int y);
-int vs_save(screenline *slp);
-void vs_restore(const screenline *slp);
+int vs_save(screen_backup_t *psb);
+int vs_resave(screen_backup_t *psb);
+void vs_free(screen_backup_t *psb);
+void vs_restore_free(screen_backup_t *psb);
+void vs_restore(const screen_backup_t *psb);
 void clearange(int from, int to);
 #endif  /* #ifdef M3_USE_PFTERM */
 
@@ -362,12 +365,12 @@ int class_add(XO *xo);
   #define foot_restore_free(pfoot)  scr_restore_free(pfoot)
   #define foot_restore_keep(pfoot)  scr_restore_keep(pfoot)
 #else
-  #define scr_dump(pscr)  vs_save(*(pscr))
-  #define scr_redump(pscr)  vs_save(*(pscr))
-  #define scr_free(pscr)  (void)0
-  #define scr_restore(pscr)  vs_restore(*(pscr))
-  #define scr_restore_free(pscr)  vs_restore(*(pscr))
-  #define scr_restore_keep(pscr)  vs_restore(*(pscr))
+  #define scr_dump(pscr)  vs_save(pscr)
+  #define scr_redump(pscr)  vs_resave(pscr)
+  #define scr_free(pscr)  vs_free(pscr)
+  #define scr_restore(pscr)  vs_restore_free(pscr)
+  #define scr_restore_free(pscr)  vs_restore_free(pscr)
+  #define scr_restore_keep(pscr)  vs_restore(pscr)
 
   #define foot_dump(pfoot)  save_foot(*(pfoot))
   #define foot_redump(pfoot)  save_foot(*(pfoot))

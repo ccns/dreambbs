@@ -1195,7 +1195,11 @@ typedef struct {
     void *raw_memory;
 } screen_backup_t, footer_backup_t;
 #else
-typedef screenline screen_backup_t[T_LINES];
+typedef struct {
+    int old_t_lines;
+    int old_roll;
+    screenline *slp;
+} screen_backup_t;
 typedef screenline footer_backup_t[2];
 #endif
 
