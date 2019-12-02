@@ -14,6 +14,9 @@ project(DreamBBS LANGUAGES C CXX VERSION 3.0)
 # For debugging `CMakeLists.txt`
 # set(CMAKE_VERBOSE_MAKEFILE ON)
 
+# Mark `CMakeCache.txt` as up-to-date if necessary
+set(MARK_CACHE_UPDATED OFF)
+
 # Required cmake modules
 include(CheckCCompilerFlag)
 include(CheckSymbolExists)
@@ -73,6 +76,7 @@ endfunction(GETID)
 
 function(DEF_TEST conf hdr output)
     if("${hdr}" IS_NEWER_THAN ${CMAKE_CACHEFILE_DIR}/CMakeCache.txt)
+        set(MARK_CACHE_UPDATED ON)
         unset("${output}" CACHE)
         check_symbol_exists("${conf}" "${hdr}" "${output}")
     endif()
@@ -220,6 +224,6 @@ enable_testing()
 add_subdirectory(test)
 
 # Mark the cache file as up-to-date
-if(CMAKE_CACHEFILE_DIR)
+if(MARK_CACHE_UPDATED AND CMAKE_CACHEFILE_DIR)
     execute_process(COMMAND touch ${CMAKE_CACHEFILE_DIR}/CMakeCache.txt)
 endif()
