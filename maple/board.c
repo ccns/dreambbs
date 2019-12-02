@@ -1237,8 +1237,7 @@ class_body(
                     brdtype = ' ';
 
 /* 處理 人氣 */ /* cache.20090416: 仿ptt變色*/
-                bno = brd - bshm->bcache;
-                bno = bshm->mantime[bno];
+                bno = bshm->mantime[chn];
                 if (brd->bvote)
                     str2 = "\x1b[1;33m  投 \x1b[m";
                 else if (bno > 999)

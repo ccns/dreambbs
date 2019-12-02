@@ -115,8 +115,7 @@ myfavorite_item(
                 brdtype = ' ';
 
 /* 處理 人氣 */ /* cache.20090416: 仿ptt變色*/
-            bno = brd - bshm->bcache;
-            bno = bshm->mantime[bno];
+            bno = bshm->mantime[chn];
 
             if (bno > 4999)
                 str2 = "\x1b[1;32m TOP \x1b[m";
