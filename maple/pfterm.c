@@ -2405,11 +2405,17 @@ scr_redump(screen_backup_t *psb)
 }
 
 void
+scr_free(screen_backup_t *psb)
+{
+    free(psb->raw_memory);
+    psb->raw_memory = NULL;
+}
+
+void
 scr_restore_free(screen_backup_t *psb)
 {
     scr_restore_keep(psb);
-    free(psb->raw_memory);
-    psb->raw_memory = NULL;
+    scr_free(psb);
 }
 
 void

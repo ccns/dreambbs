@@ -8,11 +8,7 @@
 
 #include "bbs.h"
 
-#ifdef M3_USE_PFTERM
 screen_backup_t old_screen;
-#else
-static screenline sl[T_LINES];
-#endif
 
 static int do_menu(MENU pmenu[], XO *xo, int x, int y);
 
@@ -89,11 +85,7 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
 #endif
         case POPUP_MENU :
 //          sprintf(t, "¡i%s¡j", mptr->desc);
-#ifdef M3_USE_PFTERM
-            scr_restore_keep(&old_screen); // restore foot
-#else
-            vs_restore(sl);
-#endif
+            scr_restore_keep(&old_screen);
             return do_menu(mptr->menu, xo, x, y);
         case POPUP_XO :
             mode = (*mptr->xofunc) (xo);
@@ -394,11 +386,7 @@ do_menu(
                     return 1;
                 if (do_cmd(table[cur], xo, x, y)<0)
                     return -1;
-#ifdef M3_USE_PFTERM
-                scr_restore_keep(&old_screen); // restore foot
-#else
-                vs_restore(sl);
-#endif
+                scr_restore_keep(&old_screen);
                 draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
                 break;
             default:
@@ -413,11 +401,7 @@ do_menu(
                                 return 1;
                             if (do_cmd(table[cur], xo, x, y)<0)
                                 return -1;
-#ifdef M3_USE_PFTERM
-                            scr_restore_keep(&old_screen); // restore foot
-#else
-                            vs_restore(sl);
-#endif
+                            scr_restore_keep(&old_screen);
                             draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
                         }
                         break;
@@ -485,13 +469,9 @@ popupmenu_ans(const char *const desc[], const char *title, int x, int y)
     int c;
     char t[64];
     char hotkey;
-#ifdef M3_USE_PFTERM
     screen_backup_t old_screen;
 
     scr_dump(&old_screen);
-#else
-    vs_save(sl);
-#endif
     hotkey = desc[0][0];
 
     sprintf(t, "¡i%s¡j", title);
@@ -511,11 +491,7 @@ popupmenu_ans(const char *const desc[], const char *title, int x, int y)
         switch (c)
         {
             case KEY_LEFT:
-#ifdef M3_USE_PFTERM
-                scr_restore_free(&old_screen); // restore foot
-#else
-                vs_restore(sl);
-#endif
+                scr_restore_free(&old_screen);
                 return (desc[0][1] | 0x20);
             case KEY_UP:
                 cur = (cur==0)?num:cur-1;
@@ -531,11 +507,7 @@ popupmenu_ans(const char *const desc[], const char *title, int x, int y)
                 break;
             case KEY_RIGHT:
             case '\n':
-#ifdef M3_USE_PFTERM
-                scr_restore_free(&old_screen); // restore foot
-#else
-                vs_restore(sl);
-#endif
+                scr_restore_free(&old_screen);
                 return (desc[cur+1][0] | 0x20);
             default:
                 for (tmp=0; tmp<=num; tmp++)
@@ -560,17 +532,9 @@ popupmenu_ans(const char *const desc[], const char *title, int x, int y)
 void
 popupmenu(MENU pmenu[], XO *xo, int x, int y)
 {
-#ifdef M3_USE_PFTERM
     scr_redump(&old_screen);
-#else
-    vs_save(sl);
-#endif
     do_menu(pmenu, xo, x, y);
-#ifdef M3_USE_PFTERM
-    scr_restore_free(&old_screen); // restore foot
-#else
-    vs_restore(sl);
-#endif
+    scr_restore_free(&old_screen);
 }
 
 static void pcopy(char *buf, const char *patten, int len)
@@ -645,20 +609,12 @@ int pmsg(const char *msg)
     if (cuser.ufo2 & UFO2_ORIGUI)
         return vmsg(msg);
 
-#ifdef M3_USE_PFTERM
     scr_redump(&old_screen);
-#else
-    vs_save(sl);
-#endif
 
     pmsg_body(msg);
     cc = vkey();
 
-#ifdef M3_USE_PFTERM
-    scr_restore_free(&old_screen); // restore foot
-#else
-    vs_restore(sl);
-#endif
+    scr_restore_free(&old_screen);
     return cc;
 }
 

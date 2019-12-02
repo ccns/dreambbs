@@ -664,7 +664,7 @@ re_key:
 /*
         else if (key == 'h')
         {
-            screenline slt[T_LINES];
+            screen_backup_t old_screen;
             char *tmp_fimage;
             const char *tmp_fend;
             const char *tmp_foff;
@@ -677,9 +677,9 @@ re_key:
             tmp_foff = foff;
             memcpy(tmp_block, block, sizeof(tmp_block));
 
-            vs_save(slt);
+            scr_dump(&old_screen);
             xo_help("post");
-            vs_restore(slt);
+            scr_restore_free(&old_screen);
 
             fimage = tmp_fimage;
             fend = tmp_fend;
@@ -703,38 +703,20 @@ re_key:
 #ifdef M3_USE_BBSLUA
         else if ((key == 'L' || key == 'l') && HAS_PERM(PERM_BBSLUA))
         {
-#ifdef M3_USE_PFTERM
             screen_backup_t old_screen;
             scr_dump(&old_screen);
-#else
-            screenline slt[T_LINES];
-            vs_save(slt);
-#endif
             bbslua(fpath);
-#ifdef M3_USE_PFTERM
             scr_restore_free(&old_screen);
-#else
-            vs_restore(slt);
-#endif
         }
 #endif  /* #ifdef M3_USE_BBSLUA */
 #ifdef M3_USE_BBSRUBY
 /* 081229.cache: BBSRuby */
         else if (key == '!' && HAS_PERM(PERM_BBSRUBY))
         {
-#ifdef M3_USE_PFTERM
             screen_backup_t old_screen;
             scr_dump(&old_screen);
-#else
-            screenline slt[T_LINES];
-            vs_save(slt);
-#endif
             run_ruby(fpath);
-#ifdef M3_USE_PFTERM
             scr_restore_free(&old_screen);
-#else
-            vs_restore(slt);
-#endif
         }
 #endif  /* #ifdef M3_USE_BBSRUBY */
 

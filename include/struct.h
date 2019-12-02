@@ -1185,14 +1185,19 @@ typedef struct
 } PAYCHECK;
 
 /* ----------------------------------------------------- */
-/* M3_USE_PFTERM                                         */
+/* Data structure for screen backup                      */
 /* ----------------------------------------------------- */
 
+#ifdef M3_USE_PFTERM
 typedef struct {
     int row, col;
     int y, x;
     void *raw_memory;
-} screen_backup_t;
+} screen_backup_t, footer_backup_t;
+#else
+typedef screenline screen_backup_t[T_LINES];
+typedef screenline footer_backup_t[2];
+#endif
 
 /* ----------------------------------------------------- */
 /* Data structure for passing connection data            */

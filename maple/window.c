@@ -30,7 +30,6 @@ draw_line(
 
 #else
 
-static screenline slt[T_LINES];
 static int x_roll;
 
 /* ----------------------------------------------------- */
@@ -335,13 +334,12 @@ popupmenu_ans2(const char *const desc[], const char *title, int x, int y)
     int cur, old_cur, max, ch;
     char hotkey;
 
-#ifdef M3_USE_PFTERM
     screen_backup_t old_screen;
 
-    scr_dump(&old_screen);
-#else
-    x_roll = vs_save(slt);
+#ifndef M3_USE_PFTERM
+    x_roll =
 #endif
+    scr_dump(&old_screen);
 
     grayout(0, b_lines, GRAYOUT_DARK);
 
@@ -361,11 +359,7 @@ popupmenu_ans2(const char *const desc[], const char *title, int x, int y)
         case KEY_LEFT:
         case KEY_RIGHT:
         case '\n':
-#ifdef M3_USE_PFTERM
             scr_restore_free(&old_screen);
-#else
-            vs_restore(slt);
-#endif
             ch = (ch == KEY_LEFT) ? desc[0][1] : desc[cur][0];
             if (ch >= 'A' && ch <= 'Z')
                 ch |= 0x20;             /* ¦^¶Ç¤p¼g */
@@ -466,21 +460,16 @@ pmsg2(const char *msg)
     if (!msg)
         return vmsg(NULL);
 
-#ifdef M3_USE_PFTERM
     screen_backup_t old_screen;
 
-    scr_dump(&old_screen);
-#else
-    x_roll = vs_save(slt);
+#ifndef M3_USE_PFTERM
+    x_roll =
 #endif
+    scr_dump(&old_screen);
 
     pmsg2_body(msg);
 
     x = vkey();
-#ifdef M3_USE_PFTERM
     scr_restore_free(&old_screen);
-#else
-    vs_restore(slt);
-#endif
     return x;
 }

@@ -354,4 +354,27 @@ int class_add(XO *xo);
 #define STR4(x)         ((x[0] << 24) + (x[1] << 16) + (x[2] << 8) + x[3])
                         /* Thor.980913: «OÃÒprecedence */
 
+#ifdef M3_USE_PFTERM
+  #define foot_dump(pfoot)  scr_dump(pfoot)
+  #define foot_redump(pfoot)  scr_redump(pfoot)
+  #define foot_free(pfoot)  scr_free(pfoot)
+  #define foot_restore(pfoot)  scr_restore(pfoot)
+  #define foot_restore_free(pfoot)  scr_restore_free(pfoot)
+  #define foot_restore_keep(pfoot)  scr_restore_keep(pfoot)
+#else
+  #define scr_dump(pscr)  vs_save(*(pscr))
+  #define scr_redump(pscr)  vs_save(*(pscr))
+  #define scr_free(pscr)  (void)0
+  #define scr_restore(pscr)  vs_restore(*(pscr))
+  #define scr_restore_free(pscr)  vs_restore(*(pscr))
+  #define scr_restore_keep(pscr)  vs_restore(*(pscr))
+
+  #define foot_dump(pfoot)  save_foot(*(pfoot))
+  #define foot_redump(pfoot)  save_foot(*(pfoot))
+  #define foot_free(pfoot)  (void)0
+  #define foot_restore(pfoot)  restore_foot(*(pfoot))
+  #define foot_restore_free(pfoot)  restore_foot(*(pfoot))
+  #define foot_restore_keep(pfoot)  restore_foot(*(pfoot))
+#endif
+
 #endif                          /* PROTO_H */

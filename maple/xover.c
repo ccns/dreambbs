@@ -2004,17 +2004,9 @@ every_Z_Orig(void)
 {
     int cmd;
     char select;
-#ifdef M3_USE_PFTERM
-    screen_backup_t old_screen;
-#else
-    screenline sl[2];
-#endif
+    footer_backup_t old_footer;
 
-#ifdef M3_USE_PFTERM
-    scr_dump(&old_screen);
-#else
-    save_foot(sl);
-#endif
+    foot_dump(&old_footer);
     cmd = 0;
 
     outz(MSG_ZONE_SWITCH);
@@ -2034,11 +2026,7 @@ every_Z_Orig(void)
     {
 #ifdef  HAVE_FAVORITE
         case 'f':
-#ifdef M3_USE_PFTERM
-            scr_restore_keep(&old_screen);
-#else
-            restore_foot(sl);
-#endif
+            foot_restore_keep(&old_footer);
             MyFavorite();
             break;
 #endif  /* #ifdef  HAVE_FAVORITE */
@@ -2078,11 +2066,7 @@ every_Z_Orig(void)
             break;
     }
 
-#ifdef M3_USE_PFTERM
-    scr_restore_free(&old_screen);
-#else
-    restore_foot(sl);
-#endif
+    foot_restore_free(&old_footer);
 
     if (cmd)
         xover(cmd);
@@ -2187,11 +2171,7 @@ void
 every_Z(void)
 {
     int tmpmode, savemode;
-#ifdef M3_USE_PFTERM
     screen_backup_t old_screen;
-#else
-    screenline sl[T_LINES];
-#endif
     int tmpbno;
     XZ xy;
 
@@ -2214,11 +2194,7 @@ every_Z(void)
 
     if (xo_stack_level < XO_STACK) {
         xo_stack_level++;
-#ifdef M3_USE_PFTERM
         scr_dump(&old_screen);
-#else
-        vs_save(sl);
-#endif
     } else {
         vmsg("已達到最大上限堆疊空間！");
         return;
@@ -2237,11 +2213,7 @@ every_Z(void)
     if (tmpbno >= 0)
         XoPost(tmpbno);
 
-#ifdef M3_USE_PFTERM
     scr_restore_free(&old_screen);
-#else
-    vs_restore(sl);
-#endif
     utmp_mode(tmpmode);
 
     xo_stack_level--;
@@ -2255,11 +2227,7 @@ void
 every_U(void)
 {
     int cmd, tmpmode;
-#ifdef M3_USE_PFTERM
     screen_backup_t old_screen;
-#else
-    screenline sl[b_lines + 1];
-#endif
     XZ xy;
 
 #ifdef  HAVE_CHK_MAILSIZE
@@ -2284,17 +2252,9 @@ every_U(void)
 
     cmd = XZ_ULIST;
     tmpmode = bbsmode;
-#ifdef M3_USE_PFTERM
     scr_dump(&old_screen);
-#else
-    vs_save(sl);
-#endif
     xover(cmd);
-#ifdef M3_USE_PFTERM
     scr_restore_free(&old_screen);
-#else
-    vs_restore(sl);
-#endif
 
     memcpy(&(xz[XZ_OTHER - XO_ZONE]), &xy, sizeof(XZ));
 
@@ -2308,28 +2268,16 @@ every_U(void)
 void
 every_B(void)
 {
-#ifdef M3_USE_PFTERM
     screen_backup_t old_screen;
-#else
-    screenline sl[b_lines + 1];
-#endif
     int tmpmode, stat;
 
     stat = bbstate;
     tmpmode = bbsmode;
-#ifdef M3_USE_PFTERM
     scr_dump(&old_screen);
-#else
-    vs_save(sl);
-#endif
 
     u_lock();
 
-#ifdef M3_USE_PFTERM
     scr_restore_free(&old_screen);
-#else
-    vs_restore(sl);
-#endif
     bbstate = stat;
 
     utmp_mode(tmpmode);
@@ -2340,24 +2288,12 @@ void
 every_S(void)
 {
     int tmpmode;
-#ifdef M3_USE_PFTERM
     screen_backup_t old_screen;
-#else
-    screenline sl[b_lines + 1];
-#endif
 
     tmpmode = bbsmode;
-#ifdef M3_USE_PFTERM
     scr_dump(&old_screen);
-#else
-    vs_save(sl);
-#endif
     Select();
-#ifdef M3_USE_PFTERM
     scr_restore_free(&old_screen);
-#else
-    vs_restore(sl);
-#endif
     utmp_mode(tmpmode);
 
     return;
