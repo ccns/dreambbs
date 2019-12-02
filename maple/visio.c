@@ -1080,9 +1080,7 @@ prints(const char *fmt, ...)
         outc(cc);
 }
 
-#ifdef M3_USE_PFTERM
-static int save_y, save_x;
-#else
+#ifndef M3_USE_PFTERM
 void
 scroll(void)
 {
@@ -1107,6 +1105,8 @@ rscroll(void)
 /* ----------------------------------------------------- */
 
 #ifdef M3_USE_PFTERM
+static int save_y, save_x;
+
 void
 cursor_save(void)
 {
