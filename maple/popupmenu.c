@@ -8,8 +8,6 @@
 
 #include "bbs.h"
 
-screen_backup_t old_screen;
-
 static int do_menu(MENU pmenu[], XO *xo, int x, int y);
 
 /* ----------------------------------------- */
@@ -58,6 +56,7 @@ static int
 do_cmd(MENU *mptr, XO *xo, int x, int y)
 {
     GCC_UNUSED unsigned int mode;
+    screen_backup_t old_screen;
 
 #ifndef NO_SO
     void *p;
@@ -72,29 +71,36 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
     }
 #endif
 
+    scr_dump(&old_screen);
+
     switch (mptr->umode)
     {
 #ifndef NO_SO
         case POPUP_SO :
             p = DL_GET(mptr->dlfunc);
-            if (!p) return 0;
+            if (!p)
+            {
+                scr_free(&old_screen);
+                return 0;
+            }
             mptr->func = (int (*)(void))p;
             mptr->umode = POPUP_FUN;
             mode = (*mptr->func) ();
-            return -1;
+            break;
 #endif
         case POPUP_MENU :
 //          sprintf(t, "¡i%s¡j", mptr->desc);
-            scr_restore_keep(&old_screen);
+            scr_restore_free(&old_screen);
             return do_menu(mptr->menu, xo, x, y);
         case POPUP_XO :
             mode = (*mptr->xofunc) (xo);
-            return -1;
+            break;
         case POPUP_FUN :
             mode = (*mptr->func) ();
-            return -1;
+            break;
     }
 
+    scr_free(&old_screen);
     return -1;
 }
 
@@ -321,6 +327,7 @@ do_menu(
     MENU *table[20];
     const char *title;
     MENU *table_title;
+    screen_backup_t old_screen;
 
     memset(table, 0, sizeof(table));
     /* verit. menu Åv­­ÀË¬d */
@@ -358,6 +365,7 @@ do_menu(
     }
 
 
+    scr_dump(&old_screen);
     draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
 
     while (1)  /* verit . user ¿ï¾Ü */
@@ -367,6 +375,7 @@ do_menu(
         switch (c)
         {
             case KEY_LEFT:
+                scr_restore_free(&old_screen);
                 return 1;
             case KEY_UP:
                 cur = (cur==0)?num:cur-1;
@@ -383,9 +392,15 @@ do_menu(
             case KEY_RIGHT:
             case '\n':
                 if (table[cur]->umode == POPUP_QUIT)
+                {
+                    scr_restore_free(&old_screen);
                     return 1;
+                }
                 if (do_cmd(table[cur], xo, x, y)<0)
+                {
+                    scr_restore_free(&old_screen);
                     return -1;
+                }
                 scr_restore_keep(&old_screen);
                 draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
                 break;
@@ -398,9 +413,15 @@ do_menu(
                         if (table_title->level & POPUP_DO_INSTANT)
                         {
                             if (table[cur]->umode == POPUP_QUIT)
+                            {
+                                scr_restore_free(&old_screen);
                                 return 1;
+                            }
                             if (do_cmd(table[cur], xo, x, y)<0)
+                            {
+                                scr_restore_free(&old_screen);
                                 return -1;
+                            }
                             scr_restore_keep(&old_screen);
                             draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
                         }
@@ -532,7 +553,8 @@ popupmenu_ans(const char *const desc[], const char *title, int x, int y)
 void
 popupmenu(MENU pmenu[], XO *xo, int x, int y)
 {
-    scr_redump(&old_screen);
+    screen_backup_t old_screen;
+    scr_dump(&old_screen);
     do_menu(pmenu, xo, x, y);
     scr_restore_free(&old_screen);
 }
@@ -605,11 +627,12 @@ void pmsg_body(const char *msg)
 int pmsg(const char *msg)
 {
     int cc;
+    screen_backup_t old_screen;
 
     if (cuser.ufo2 & UFO2_ORIGUI)
         return vmsg(msg);
 
-    scr_redump(&old_screen);
+    scr_dump(&old_screen);
 
     pmsg_body(msg);
     cc = vkey();
