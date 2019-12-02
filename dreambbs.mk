@@ -124,6 +124,11 @@ CFLAGS_COMPAT  += -Wunreachable-code-aggressive
 CFLAGS_COMPAT  += -Wunreachable-code
 .endif
 
+CC_HAS_F_COLOR_DIAGNOSTICS != $(CC_HASFLAGS$(flags::= -fcolor-diagnostics)) $(DEF_YES)
+.if $(CC_HAS_F_COLOR_DIAGNOSTICS)
+CFLAGS_COMPAT  += -fcolor-diagnostics
+.endif
+
 # BBS-Lua & BBS-Ruby make rule definitions
 
 .if $(USE_BBSLUA)

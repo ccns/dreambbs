@@ -156,6 +156,11 @@ else()
     add_compile_options(-Wunreachable-code)
 endif()
 
+check_c_compiler_flag(-fcolor-diagnostics CC_HAS_F_COLOR_DIAGNOSTICS)
+if(CC_HAS_F_COLOR_DIAGNOSTICS)
+    add_compile_options(-fcolor-diagnostics)
+endif()
+
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     add_compile_options(-m32)
     link_libraries(-m32)
