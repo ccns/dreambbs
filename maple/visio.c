@@ -1183,6 +1183,24 @@ restore_foot(
 }
 
 
+void
+vs_save_line(
+    screenline *slp,
+    int y)
+{
+    memcpy(slp, &vbuf[y], sizeof(screenline));
+}
+
+
+void
+vs_restore_line(
+    const screenline *slp,
+    int y)
+{
+    memcpy(&vbuf[y], slp, sizeof(screenline));
+}
+
+
 int
 vs_save(
     screenline *slp)

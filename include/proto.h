@@ -264,6 +264,8 @@ void scroll(void);
 void rscroll(void);
 void save_foot(screenline *slp);
 void restore_foot(const screenline *slp);
+void vs_save_line(screenline *slp, int y);
+void vs_restore_line(const screenline *slp, int y);
 int vs_save(screenline *slp);
 void vs_restore(const screenline *slp);
 void clearange(int from, int to);
