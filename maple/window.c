@@ -52,6 +52,7 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
     int ansi;           /* 1: 在 ANSI 中 */
     int in_chi = 0;     /* 1: 在中文字中 */
     int fg, bg, hl;     /* 前景/背景/高彩 */
+    screenline slt;
 
     hl = 0;
     fg = 37;
@@ -62,7 +63,8 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
         i -= b_lines + 1;
 
     memset(data, 0, sizeof(data));
-    strncpy(data, (char *) slt[i].data, slt[i].len);
+    vs_save_line(&slt, i);
+    strncpy(data, (char *) slt.data, slt.len);
     str = data;
 
     move(x, 0);

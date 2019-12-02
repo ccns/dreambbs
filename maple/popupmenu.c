@@ -202,11 +202,13 @@ vs_line(const char *msg, int y, int x)
     char buf[512], color[16], *str, *tmp, *cstr;
     int len = count_len(msg);
     int word, slen, fc=37, bc=40, bbc=0;
+    screenline sl;
 
     memset(buf, 0, sizeof(buf));
 
-    sl[y].data[sl[y].len] = '\0';
-    str = tmp = (char *) sl[y].data;
+    vs_save_line(&sl, y);
+    sl.data[sl.len] = '\0';
+    str = tmp = (char *) sl.data;
 
     for (word=0; word<x && *str; ++str)
     {
@@ -220,7 +222,7 @@ vs_line(const char *msg, int y, int x)
         word++;
     }
 
-    strncpy(buf, (char *) sl[y].data, str - tmp);
+    strncpy(buf, (char *) sl.data, str - tmp);
 
     while (word++<x)
         strcat(buf, " ");
@@ -686,7 +688,11 @@ Every_Z_Screen(void)
         move(i, 0);
         inansistr(buf, 512);
 #else
-        strncpy(buf, (char *) sl[i].data, sl[i].len);
+        {
+            screenline sl;
+            vs_save_line(&sl, i);
+            strncpy(buf, (char *) sl.data, sl.len);
+        }
 #endif
         fprintf(fp, "%s\n", buf);
     }
