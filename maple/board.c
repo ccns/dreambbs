@@ -1173,7 +1173,6 @@ class_body(
 
                 brd = bcache + chn;
 
-                if (!brdnew)
                 {
                     int fd, fsize;
                     char folder[64];
@@ -1198,7 +1197,7 @@ class_body(
                                     if (!(hdr.xmode & (POST_LOCK | POST_BOTTOM)))
                                         break;
                                 }
-                                brd->blast = hdr.chrono;
+                                brd->blast = (brdnew) ? BMAX(hdr.chrono, brd->blast) : hdr.chrono;
                             }
                             else
                                 brd->blast = brd->bpost = 0;
@@ -1207,43 +1206,10 @@ class_body(
                         close(fd);
                     }
 
-                    num = cnt;
-                }
-                else
-                {
-                    int fd, fsize;
-                    char folder[64];
-                    struct stat st;
-
-                    brd_fpath(folder, brd->brdname, fn_dir);
-                    if ((fd = open(folder, O_RDONLY)) >= 0)
-                    {
-                        fstat(fd, &st);
-
-                        if (st.st_mtime > brd->btime)  // 上次統計後，檔案有修改過
-                        {
-                            if ((fsize = st.st_size) >= sizeof(HDR))
-                            {
-                                HDR hdr;
-
-                                brd->bpost = fsize / sizeof(HDR);
-                                while ((fsize -= sizeof(HDR)) >= 0)
-                                {
-                                    lseek(fd, fsize, SEEK_SET);
-                                    read(fd, &hdr, sizeof(HDR));
-                                    if (!(hdr.xmode & (POST_LOCK | POST_BOTTOM)))
-                                        break;
-                                }
-                                brd->blast = BMAX(hdr.chrono, brd->blast);
-                            }
-                            else
-                                brd->blast = brd->bpost = 0;
-                        }
-
-                        close(fd);
-                    }
-
-                    num = brd->bpost;
+                    if (brdnew)
+                        num = brd->bpost;
+                    else
+                        num = cnt;
                 }
 
                 str = brd->blast > brd_visit[chn] ? "\x1b[1;31m★\x1b[m" : "☆";
