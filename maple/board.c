@@ -24,10 +24,6 @@ static char *class_img;
 static char *profess_img = NULL;
 #endif
 
-#ifdef  HAVE_FAVORITE
-static char *favorite_img = NULL;
-#endif
-
 static XO board_xo;
 BRD *xbrd;
 int boardmode=0;
@@ -892,11 +888,6 @@ class_check(
             cbase = (short *) profess_img;
             break;
 #endif
-#ifdef  HAVE_FAVORITE
-        case 2:
-            cbase = (short *) favorite_img;
-            break;
-#endif
         default:
             cbase = (short *) class_img;
     }
@@ -990,11 +981,6 @@ class_load(
 #ifdef  HAVE_PROFESS
         case 1:
             cbase = (short *) profess_img;
-            break;
-#endif
-#ifdef  HAVE_FAVORITE
-        case 2:
-            cbase = (short *) favorite_img;
             break;
 #endif
         default:
@@ -1138,11 +1124,6 @@ class_body(
 #ifdef  HAVE_PROFESS
         case 1:
             img = profess_img;
-            break;
-#endif
-#ifdef  HAVE_FAVORITE
-        case 2:
-            img = favorite_img;
             break;
 #endif
         default:
@@ -1749,221 +1730,6 @@ XoAuthor(
 #endif  // #if 0  // Unused
 #endif  /* #ifdef AUTHOR_EXTRACTION */
 
-#ifdef  HAVE_FAVORITE
-static int
-class_find_same(
-    HDR *src)
-{
-    char fpath[128];
-    int fd, i;
-    HDR hdr;
-
-    i = 0;
-    usr_fpath(fpath, cuser.userid, FN_FAVORITE);
-    if ((fd = open(fpath, O_RDONLY)) >= 0)
-    {
-        while ((read(fd, &hdr, sizeof(HDR)) == sizeof(HDR)))
-        {
-            if (!str_cmp(hdr.xname, src->xname))
-            {
-                close(fd);
-                return i;
-            }
-            i++;
-        }
-        close(fd);
-    }
-    return -1;
-}
-
-#if 0
-static int
-class_add(xo)
-    XO *xo;
-{
-    short *chp;
-    BRD *brd;
-    HDR hdr;
-    int chn, fasize;
-    char fpath[128];
-    if (boardmode == 2 || !HAS_PERM(PERM_VALID))
-        return XO_NONE;
-
-    usr_fpath(fpath, cuser.userid, FN_FAVORITE);
-    chp = (short *) xo->xyz + xo->pos;
-    chn = *chp;
-    if (chn < 0)
-    {
-        return XO_NONE;
-    }
-    brd = bshm->bcache + chn;
-    memset(&hdr, 0, sizeof(HDR));
-    brd2gem(brd, &hdr);
-    if (class_find_same(&hdr) < 0)
-    {
-        rec_add(fpath, &hdr, sizeof(HDR));
-        favorite_main();
-        usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
-        free(favorite_img);
-        favorite_img = f_img(fpath, &fasize);
-        logitfile(FN_FAVORITE_LOG, "< ADD >", hdr.xname);
-        vmsg("Θ\и程稲");
-    }
-    else
-    {
-        vmsg("и程稲Τ狾");
-    }
-
-    return XO_FOOT;
-}
-#endif  /* #if 0 */
-
-static int
-class_add2(          /* gaod: и程稲い钡穝糤穝狾 */
-    XO *xo)
-{
-    short *chp;
-    BRD *brd;
-    HDR hdr;
-    int chn GCC_UNUSED, fasize;
-    char fpath[128];
-    char bname[IDLEN + 1];
-
-    if (boardmode != 2 || !HAS_PERM(PERM_VALID))
-        return XO_NONE;
-
-    if (!(brd = ask_board(bname, BRD_R_BIT, NULL)))
-    {
-        vmsg(err_bid);
-        return XO_HEAD;
-    }
-
-    if (!(brd->brdname[0]))
-    {
-        vmsg(err_bid);
-        return XO_HEAD;
-    }
-
-    usr_fpath(fpath, cuser.userid, FN_FAVORITE);
-    chp = (short *) xo->xyz + xo->pos;
-    chn = *chp;
-    memset(&hdr, 0, sizeof(HDR));
-    brd2gem(brd, &hdr);
-    if (class_find_same(&hdr) < 0)
-    {
-        rec_add(fpath, &hdr, sizeof(HDR));
-        favorite_main();
-        usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
-        free(favorite_img);
-        favorite_img = f_img(fpath, &fasize);
-        logitfile(FN_FAVORITE_LOG, "< ADD >", hdr.xname);
-        vmsg("Θ\и程稲");
-    }
-    else
-    {
-        vmsg("и程稲Τ狾");
-    }
-    return class_init(xo);
-}
-
-static int
-class_del(
-    XO *xo)
-{
-    short *chp;
-    BRD *brd;
-    HDR hdr;
-    int chn, fasize, pos;
-    char fpath[128];
-    if (boardmode != 2 || !HAS_PERM(PERM_VALID))
-        return XO_NONE;
-
-    usr_fpath(fpath, cuser.userid, FN_FAVORITE);
-    chp = (short *) xo->xyz + xo->pos;
-    chn = *chp;
-    brd = bshm->bcache + chn;
-    memset(&hdr, 0, sizeof(HDR));
-    brd2gem(brd, &hdr);
-    if ((pos = class_find_same(&hdr)) >= 0)
-    {
-        rec_del(fpath, sizeof(HDR), pos, NULL, NULL);
-        favorite_main();
-        usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
-        free(favorite_img);
-        favorite_img = f_img(fpath, &fasize);
-
-        logitfile(FN_FAVORITE_LOG, "< DEL >", hdr.xname);
-        vmsg("Θ\眖и程稲簿埃");
-        if (!favorite_img)
-            return XO_QUIT;
-    }
-    else
-    {
-        vmsg("и程稲礚狾");
-        return XO_FOOT;
-    }
-
-    return class_init(xo);
-}
-
-static int
-class_mov(
-    XO *xo)
-{
-    short *chp;
-    BRD *brd;
-    HDR hdr;
-    int chn, fasize, pos, newOrder;
-    char fpath[128], buf[128];
-    if (boardmode != 2 || !HAS_PERM(PERM_VALID))
-        return XO_NONE;
-
-    usr_fpath(fpath, cuser.userid, FN_FAVORITE);
-    chp = (short *) xo->xyz + xo->pos;
-    chn = *chp;
-    brd = bshm->bcache + chn;
-    memset(&hdr, 0, sizeof(HDR));
-    brd2gem(brd, &hdr);
-
-    pos = xo->pos;
-    sprintf(buf + 5, "叫块材 %d 匡兜穝竚", pos + 1);
-    if (!vget(b_lines, 0, buf + 5, buf, 5, DOECHO))
-        return XO_FOOT;
-
-    newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);
-
-    if ((pos = class_find_same(&hdr)) >= 0)
-    {
-        if (newOrder != pos)
-        {
-            if (!rec_del(fpath, sizeof(HDR), pos, NULL, NULL))
-            {
-                rec_ins(fpath, &hdr, sizeof(HDR), newOrder, 1);
-                xo->pos = newOrder;
-            }
-
-
-            favorite_main();
-            usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
-            free(favorite_img);
-            favorite_img = f_img(fpath, &fasize);
-
-            logitfile(FN_FAVORITE_LOG, "< MOV >", hdr.xname);
-        }
-        else
-            return XO_FOOT;
-    }
-    else
-    {
-        vmsg("и程稲礚狾");
-        return XO_FOOT;
-    }
-
-    return class_init(xo);
-}
-
-#endif  /* #ifdef  HAVE_FAVORITE */
-
 #if defined(HAVE_COUNT_BOARD) && 0
 static int
 class_stat(xo)
@@ -2123,20 +1889,6 @@ Profess(void)
 }
 #endif
 
-#ifdef  HAVE_FAVORITE
-int
-Favorite(void)
-{
-    boardmode = 2;
-    if (!favorite_img || XoClass(CH_END-1) == XO_NONE)
-    {
-        vmsg("и程稲﹟礚ヴ狾叫狾玡 a 穝糤");
-        return XEASY;
-    }
-    return 0;
-}
-#endif
-
 void
 board_main(void)
 {
@@ -2165,15 +1917,6 @@ board_main(void)
 #ifdef  HAVE_PROFESS
     free(profess_img);
     profess_img = f_img(PROFESS_IMGFILE, &psize);
-#endif
-
-#ifdef  HAVE_FAVORITE
-    if (HAS_PERM(PERM_VALID))
-    {
-        usr_fpath(fpath, cuser.userid, FN_FAVORITE_IMG);
-        free(favorite_img);
-        favorite_img = f_img(fpath, &fasize);
-    }
 #endif
 
     if (class_img == NULL)

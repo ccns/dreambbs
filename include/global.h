@@ -42,7 +42,6 @@
 #define FN_CHICKEN              "chieken"               /* 小雞紀錄檔 (N) */
 #define FN_EMAIL                "email"                 /* email reply認證記錄 (N) */
 #define FN_FAVORITE             "favorite"              /* 我的最愛看版 */
-#define FN_FAVORITE_IMG         "favorite.img"          /* 我的最愛看版 影像檔 */
 #define FN_MYFAVORITE           "MF/favorite"           /* 我的最愛看版 */
 #define FN_PAL                  "friend"                /* 好友名單 */
 #define FN_FRIEND_BENZ          "frienz"                /* lkchu.981201: benz for friend */

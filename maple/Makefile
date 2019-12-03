@@ -41,12 +41,12 @@ OBJ	+= pfterm.o
 
 SRC 	+= acct.c bbsd.c board.c cache.c edit.c \
 	  gem.c mail.c menu.c more.c post.c banmail.c \
-	  talk.c visio.c xover.c favorite.c socket.c popupmenu.c \
+	  talk.c visio.c xover.c socket.c popupmenu.c \
 	  window.c myfavorite.c
 
 OBJ	+= acct.o bbsd.o board.o cache.o edit.o \
 	  gem.o mail.o menu.o more.o post.o banmail.o \
-	  talk.o visio.o xover.o favorite.o socket.o popupmenu.o \
+	  talk.o visio.o xover.o socket.o popupmenu.o \
 	  window.o myfavorite.o
 
 .if $(USE_PMORE)

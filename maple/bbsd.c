@@ -1184,10 +1184,6 @@ tn_main(void)
 
     /*tn_signals(); */
     brh_load();
-#ifdef  HAVE_FAVORITE
-    if (HAS_PERM(PERM_VALID))
-        favorite_main();
-#endif
 
 #ifdef  HAVE_DETECT_CROSSPOST
     if (attr_get(cuser.userid, ATTR_CROSS_KEY, &cksum)<0)

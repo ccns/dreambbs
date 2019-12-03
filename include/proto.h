@@ -92,7 +92,6 @@ void XoPost(int bno);
 int Select(void);
 int Class(void);
 void check_new(BRD *brd);
-int Favorite(void);
 void board_main(void);
 int Boards(void);
 int brd_list(int reciper);
@@ -311,8 +310,6 @@ void every_U(void);
 void every_B(void);
 void every_S(void);
 int xo_cursor(int ch, int pagemax, int num, int *pageno, int *cur, int *redraw);
-/* favorite.c */
-void favorite_main(void);
 /* socket.c */
 int Get_Socket(const char *site, int *sock);
 int POP3_Check(const char *site, const char *account, const char *passwd);
