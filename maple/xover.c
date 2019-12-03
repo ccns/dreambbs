@@ -2004,9 +2004,9 @@ every_Z_Orig(void)
 {
     int cmd;
     char select;
-    footer_backup_t old_footer;
+    screen_backup_t old_screen;
 
-    foot_dump(&old_footer);
+    scr_dump(&old_screen);
     cmd = 0;
 
     outz(MSG_ZONE_SWITCH);
@@ -2026,7 +2026,7 @@ every_Z_Orig(void)
     {
 #ifdef  HAVE_FAVORITE
         case 'f':
-            foot_restore_keep(&old_footer);
+            scr_restore_keep(&old_screen);
             MyFavorite();
             break;
 #endif  /* #ifdef  HAVE_FAVORITE */
@@ -2066,10 +2066,10 @@ every_Z_Orig(void)
             break;
     }
 
-    foot_restore_free(&old_footer);
-
     if (cmd)
         xover(cmd);
+
+    scr_restore_free(&old_screen);
 }
 
 #ifdef HAVE_FAVORITE
@@ -2171,7 +2171,6 @@ void
 every_Z(void)
 {
     int tmpmode, savemode;
-    screen_backup_t old_screen;
     int tmpbno;
     XZ xy;
 
@@ -2194,7 +2193,6 @@ every_Z(void)
 
     if (xo_stack_level < XO_STACK) {
         xo_stack_level++;
-        scr_dump(&old_screen);
     } else {
         vmsg("已達到最大上限堆疊空間！");
         return;
@@ -2213,7 +2211,6 @@ every_Z(void)
     if (tmpbno >= 0)
         XoPost(tmpbno);
 
-    scr_restore_free(&old_screen);
     utmp_mode(tmpmode);
 
     xo_stack_level--;

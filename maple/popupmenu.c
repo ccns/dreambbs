@@ -553,10 +553,7 @@ popupmenu_ans(const char *const desc[], const char *title, int x, int y)
 void
 popupmenu(MENU pmenu[], XO *xo, int x, int y)
 {
-    screen_backup_t old_screen;
-    scr_dump(&old_screen);
     do_menu(pmenu, xo, x, y);
-    scr_restore_free(&old_screen);
 }
 
 static void pcopy(char *buf, const char *patten, int len)
