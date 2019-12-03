@@ -719,7 +719,7 @@ main(void)
     fclose(flst);
     fprintf(fcri, "\nヘ玡╰参氨舦计: %d\n\n", criminal);
     fclose(fcri);
-    fprintf(fbml, "\nヘ玡踞ヴ冠ぇ狾计: %d\n\n", bms);
+    fprintf(fbml, "\nヘ玡踞ヴ" BOARDNAME "狾计: %d\n\n", bms);
     fclose(fbml);
 
     fclose(fmah);
@@ -737,7 +737,7 @@ main(void)
     fclose(flog);
 
 #ifdef CHECK_LAZYBM
-    fprintf(fbm, "\n冠ぇ %d らずゼ祅狾计: %d\n\n", DAY_LAZYBM, lazybm);
+    fprintf(fbm, "\n" BOARDNAME " %d らずゼ祅狾计: %d\n\n", DAY_LAZYBM, lazybm);
     fclose(fbm);
 #endif
 
