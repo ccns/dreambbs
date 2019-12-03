@@ -2032,9 +2032,6 @@ static KeyFunc class_cb[] =
 
 #ifdef  HAVE_FAVORITE
     {'a', {class_add}},
-    {Ctrl('P'), {class_add2}},
-    {'d', {class_del}},
-    {'M', {class_mov}},
 #endif
 
 #ifdef AUTHOR_EXTRACTION
