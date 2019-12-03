@@ -1875,14 +1875,11 @@ ve_key:
 
             case Ctrl('H'):             /* backspace */
 
-                /* Thor: 在 ANSI 編輯模式下, 不可以按倒退, 不然會很可怕.... */
-
-                if (mode & VE_ANSI)
-                    goto ve_key;
 
                 if (col)
                 {
-                    delete_char(vln, ve_col = --col);
+                    ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : col - 1;
+                    delete_char(vln, ve_col);
                     continue;
                 }
 
@@ -1912,9 +1909,9 @@ ve_key:
                 {
                     if (cc == 0)
                         goto ve_key;
-                    delete_char(vln, col);
-                    if (mode & VE_ANSI) /* Thor: 雖然增加 load, 不過edit 時會比較好看 */
-                        ve_col = ansi2n(n2ansi(col, vln), vln);
+                    /* Thor: 雖然增加 load, 不過edit 時會比較好看 */
+                    ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : pos;
+                    delete_char(vln, ve_col);
                 }
                 continue;
 
