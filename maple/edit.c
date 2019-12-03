@@ -1893,10 +1893,9 @@ ve_key:
                 ve_lno--;
                 vx_cur = tmp;
                 ve_col = tmp->len;
-                if (*ve_strim(vln->data))
-                    join_up(tmp);
-                else
-                    delete_line(vln);
+                if (vln == vx_top)
+                    vx_top = vln->next;
+                join_up(tmp);
                 ve_mode = mode | VE_REDRAW;
                 break;
 
