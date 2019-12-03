@@ -752,9 +752,7 @@ brd_usies_BMlog(void)
 }
 
 /* 081206.cache: 好友板修正 */
-int ok=1;
-
-void
+bool
 XoPost(
     int bno)
 {
@@ -771,8 +769,7 @@ XoPost(
     if (!(bits & BRD_R_BIT)/* && (bits & BRD_F_BIT)*/)
     {
         vmsg("請聯絡板主將您加入看板好友");
-        ok=0;
-        return;
+        return false;
     }
 
     /* 090823.cache: 看板人氣 */
@@ -840,7 +837,7 @@ XoPost(
     if (!(bbstate & BRD_NOTOTAL) && !(bits & BRD_V_BIT))
         brd->n_reads++;
 #endif
-    ok=1;
+    return true;
 }
 
 
@@ -1542,8 +1539,7 @@ class_browse(
     }
     else
     {
-        XoPost(chn);
-        if (ok==1)
+        if (XoPost(chn))
         {
             xover(XZ_POST);
             time(&brd_visit[chn]);

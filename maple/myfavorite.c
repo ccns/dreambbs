@@ -15,7 +15,6 @@ extern BCACHE *bshm;
 
 extern XZ xz[];
 extern char brd_bits[MAXBOARD];
-extern int ok;
 
 static void XoFavorite(const char *folder, const char *title, int level);
 static int myfavorite_add(XO *xo);
@@ -312,8 +311,7 @@ myfavorite_browse(
         if (ghdr->recommend == -1)
             return XO_NONE;
         chn = brd_bno(ghdr->xname);
-        XoPost(chn);
-        if (ok == 1)
+        if (XoPost(chn))
         {
             xover(XZ_POST);
             time(&brd_visit[chn]);
