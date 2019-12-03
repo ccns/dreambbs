@@ -391,7 +391,10 @@ ve_join(
         return true;
 
     if (!*ve_strim(data = n->data))
+    {
+        delete_line(n);
         return true;
+    }
 
     len = line->len;
     sum = len + n->len;
