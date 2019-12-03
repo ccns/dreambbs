@@ -2062,13 +2062,16 @@ hdr_outs(               /* print HDR's subject */
     {
 
 #ifdef  HAVE_DECLARE            /* Thor.0508: Declaration, 嘗試使某些title更明顯 */
-        int square = 0;         /* 0為無方括,
-                                 * 1為第一字為方括"["未out, 2為已out"["未out"]"
-                                 * , 3為均out, 不再處理 */
-        /* int angle = 0; */    /* 0為normal未變色, 1為遇到angle, 已變色 */
+                                /* IID.20191204: Match balanced brackets. */
+        int square = -1;        /* -1: No square brackets / no more processing.
+                                 * 0: The first character is `[` and has not been output
+                                 *       or all `[` are closed.
+                                 * N: N non-closed `[`s are meeted. */
+        int angle = 0;
+        int curly = 0;
         if (*title == '[')
         {
-            square = 1;
+            square = 0;
         }
 #endif
 
@@ -2076,34 +2079,53 @@ hdr_outs(               /* print HDR's subject */
         {
 
 #ifdef  HAVE_DECLARE
-            switch (square)
+            int *pcnt = NULL;
+            switch (cc)
             {
-            case 1:
-                if (cc == '[')
+            case '[':
+            case ']':
+                if (square >= 0)
+                    pcnt = &square;
+                break;
+            case '<':
+            case '>':
+                if (angle >= 0)
+                    pcnt = &angle;
+                break;
+            case '{':
+            case '}':
+                if (curly >= 0)
+                    pcnt = &curly;
+            }
+            if (pcnt && *pcnt < 1 && (square >= 1 || angle >= 1 || curly >= 1))
+                pcnt = NULL;
+
+            switch ((pcnt) ? cc : '\0')
+            {
+            case '[':
+            case '<':
+            case '{':
+                if (++*pcnt == 1)
                 {
                     outs(type_dec[ch]);
-                    outc('[');
-                    square = 2;
+                    outc(cc);
                     continue;
                 }
-                break;  // cc == ' '
-            case 2:
-                if (cc == ']')
+                break;
+
+            case ']':
+            case '>':
+            case '}':
+                if (--*pcnt == 0)
                 {
-                    outc(']');
+                    if (pcnt == &square)
+                        square = -1;
+                    outc(cc);
                     outs(type_reset[ch]);
-                    square = 3;
                     continue;
                 }
             }
 
-            if (square != 2 && (cc == '<' || cc == '>'))
-            {
-                outs(type_dec[ch]);
-                outc(cc);
-                outs(type_reset[ch]);
-                continue;
-            }
 #endif  /* #ifdef  HAVE_DECLARE */
 
             outc(cc);
@@ -2111,7 +2133,7 @@ hdr_outs(               /* print HDR's subject */
 
         if (ch >= 2
 #ifdef  HAVE_DECLARE
-          || (/* angle || */ square == 2) /* Thor.0508: 變色還原用 */
+          || (square >= 1 || angle >= 1 || curly >= 1)
 #endif
         )
             outs("\x1b[m");
