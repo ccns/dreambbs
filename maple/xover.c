@@ -2023,7 +2023,7 @@ every_Z_Orig(void)
 #else
             restore_foot(sl);
 #endif
-            Favorite();
+            MyFavorite();
             break;
 #endif  /* #ifdef  HAVE_FAVORITE */
         case 'a':
