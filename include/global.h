@@ -333,11 +333,19 @@
 /* ----------------------------------------------------- */
 /* Grayout Levels                                        */
 /* ----------------------------------------------------- */
+#ifdef M3_USE_PFTERM
 #define GRAYOUT_COLORBOLD      (-2)
 #define GRAYOUT_BOLD           (-1)
 #define GRAYOUT_DARK           (0)
 #define GRAYOUT_NORM           (1)
 #define GRAYOUT_COLORNORM      (+2)
+#else  // #ifdef M3_USE_PFTERM
+#define GRAYOUT_COLORBOLD      (-1)
+#define GRAYOUT_BOLD           (1)
+#define GRAYOUT_DARK           (0)
+#define GRAYOUT_NORM           (2)
+#define GRAYOUT_COLORNORM      (-2)
+#endif  // #ifdef M3_USE_PFTERM
 
 /* ----------------------------------------------------- */
 /* 訊息字串：獨立出來，以利支援各種語言                  */

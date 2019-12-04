@@ -1374,6 +1374,9 @@ grayout(int y, int end, int level)
     char buf[ANSILINELEN];
     register int i;
 
+    if (level < 0 || level > 2)
+        return;
+
     y = BMAX(y, 0);
     end = BMIN(end, T_LINES);
 
