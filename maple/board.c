@@ -163,6 +163,10 @@ brh_get(
             *++list = item;
         } while (--size);
     }
+    else if (brd_bits[bhno] & BRD_Z_BIT)
+    {
+        brh_visit(0);
+    }
 
     *tail = bcnt;
 }
@@ -568,6 +572,7 @@ brh_load(void)
                 if (bhno >= 0)
                 {
                     bits[bhno] |= BRD_Z_BIT;
+                    time(&brd_visit[bhno]);
                 }
                 head++;
                 continue;
@@ -1153,7 +1158,7 @@ board_outs(
             num = brd->bpost;
     }
 
-    str = brd->blast > brd_visit[chn] ? "\x1b[1;31m¡¹\x1b[m" : "¡¸";
+    str = (!(bits[chn] & BRD_Z_BIT) && brd->blast > brd_visit[chn]) ? "\x1b[1;31m¡¹\x1b[m" : "¡¸";
 
     char tmp[BTLEN + 1] = {0};
     int e_cols = (d_cols + 32 > BTLEN) ? BTLEN - 32 : d_cols;

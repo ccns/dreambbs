@@ -821,9 +821,10 @@ post_attr(
     const HDR *fhdr)
 {
     int mode, attr;
+    bool zap = (brd_bits[currbno] & BRD_Z_BIT);
 
     mode = fhdr->xmode;
-    attr = (brh_unread(BMAX(fhdr->chrono, fhdr->stamp))) ? 0 : 0x20;
+    attr = (!zap && brh_unread(BMAX(fhdr->chrono, fhdr->stamp))) ? 0 : 0x20;
     //attr = brh_unread(fhdr->chrono) ? 0 : 0x20;
 
     if (mode & POST_CANCEL)
@@ -845,7 +846,7 @@ post_attr(
         return attr | 'S';
 
     if (fhdr->pushtime)
-        attr = (brh_unread(fhdr->pushtime)) ? 0 : 0x20;
+        attr = (!zap && brh_unread(fhdr->pushtime)) ? 0 : 0x20;
     mode &= ~((bbstate & STAT_BOARD) ? 0 : POST_GEM);    /* Thor:一般user看不到G */
 
     if (mode &= (POST_MARKED | POST_GEM))
