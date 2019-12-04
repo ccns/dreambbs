@@ -1573,17 +1573,39 @@ xover(
                 /* fix cursor's range */
 
                 num = xo->max - 1;
-                pos = (cmd | XO_WRAP) - (XO_MOVE + XO_WRAP);
-                cmd &= XO_WRAP;
+
+                /* pos = (cmd | XO_WRAP) - (XO_MOVE + XO_WRAP); */
+                /* cmd &= XO_WRAP; */
+                /* itoc.020124: 修正在第一頁按 PGUP、最後一頁按 PGDN、第一項按 UP、
+                   最後一項按 DOWN 會把 XO_WRAP 旗標消失 */
+                /* IID.20191205: Correction:
+                      Fix `XO_WRAP` judged to be cleared and `pos > xo->max - 1` happening
+                         when user presses `UP` on the first item;
+                      fix `XO_WRAP` judged to be set
+                         when user presses `PGUP` on the first page. */
+
+                if (cmd > XO_MOVE + (XO_WRAP >> 1))    /* XO_WRAP >> 1 遠大過文章數 */
+                {
+                    pos = cmd - (XO_MOVE + XO_WRAP);
+                    cmd = 1;              /* 按 KEY_UP 或 KEY_DOWN */
+                }
+                else
+                {
+                    pos = cmd - XO_MOVE;
+                    cmd = 0;
+                }
 
                 if (pos < 0)
                 {
-                    pos = cmd ? num : 0;
+                    if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
+                        pos = 0;
+                    else
+                        pos = cmd ? num : 0;
                     /* pos = 0; :chuan: */
                 }
                 else if (pos > num)
                 {
-                    if (!(cuser.ufo2 & UFO2_CIRCLE) && (zone == XZ_POST || zone == XZ_XPOST))
+                    if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
                         pos = num;
                     else
                         pos = cmd ? 0 : num;
@@ -1837,8 +1859,8 @@ xover(
         }
         else if (cmd == KEY_END || cmd == '$')
         {
-            /* cmd = xo->max + XO_MOVE; */
-            cmd = XO_MOVE + XO_WRAP - 1;        /* force re-load */
+            /* TODO(IID.20191206): Make this hotkey reload the list */
+            cmd = xo->max - 1 + XO_MOVE;        /* force re-load */
         }
         else if (cmd >= '1' && cmd <= '9')
         {
