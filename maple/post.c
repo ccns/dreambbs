@@ -823,6 +823,8 @@ post_attr(
     int mode, attr;
 
     mode = fhdr->xmode;
+    attr = (brh_unread(BMAX(fhdr->chrono, fhdr->stamp))) ? 0 : 0x20;
+    //attr = brh_unread(fhdr->chrono) ? 0 : 0x20;
 
     if (mode & POST_CANCEL)
         return 'c';
@@ -834,24 +836,22 @@ post_attr(
         return 'D';
 
     if (mode & POST_EXPIRE)
-        return (brh_unread(BMAX(fhdr->chrono, fhdr->stamp)) ? 0 : 0x20) | 'E';
+        return attr | 'E';
 
     if (mode & POST_LOCK)
         return 'L';
 
     if (mode & POST_COMPLETE)
-        return (brh_unread(BMAX(fhdr->chrono, fhdr->stamp)) ? 0 : 0x20) | 'S';
+        return attr | 'S';
 
-    attr = brh_unread(BMAX(fhdr->chrono, fhdr->stamp)) ? 0 : 0x20;
-    //attr = brh_unread(fhdr->chrono) ? 0 : 0x20;
     if (fhdr->pushtime)
-        attr = brh_unread(fhdr->pushtime) ? 0 : 0x20;
-    mode &= (bbstate & STAT_BOARD) ? ~0 : ~POST_GEM;    /* Thor:一般user看不到G */
+        attr = (brh_unread(fhdr->pushtime)) ? 0 : 0x20;
+    mode &= ~((bbstate & STAT_BOARD) ? 0 : POST_GEM);    /* Thor:一般user看不到G */
 
     if (mode &= (POST_MARKED | POST_GEM))
-        attr |= (mode == POST_MARKED ? 'M' : (mode == POST_GEM ? 'G' : 'B'));
-    else if (!attr)
-        attr = '+';
+        return attr | ((mode == POST_MARKED) ? 'M' : (mode == POST_GEM) ? 'G' : 'B');
+    if (!attr)
+        return '+';
     return attr;
 }
 
