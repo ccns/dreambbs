@@ -636,7 +636,7 @@ brh_load(void)
 
                 n = n * sizeof(time_t) + sizeof(BRH);
                 if (base != head)
-                    memcpy(base, head, n);
+                    memmove(base, head, n);
                 base = (int *) ((char *) base + n);
             }
             head += size;
@@ -689,7 +689,7 @@ brh_save(void)
         if (bhno >= 0 && !(bits[bhno] & BRD_Z_BIT))
         {
             if (base != head)
-                memcpy(base, head, size);
+                memmove(base, head, size);
             base = (int *) ((char *) base + size);
         }
         head = (int *) ((char *) head + size);
