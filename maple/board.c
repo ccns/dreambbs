@@ -728,6 +728,8 @@ brh_save(void)
     // Unload
     free(brh_base);
     brh_base = NULL;
+    brh_tail = NULL;
+    brh_size = 0;
 }
 
 /*-------------------------------------------------------*/
