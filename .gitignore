@@ -32,6 +32,8 @@
 
 # config for any BBS sites
 /dreambbs.conf
+make_export.conf
+maple/make_export.conf
 
 innbbsd/bbslink
 innbbsd/innbbsd
