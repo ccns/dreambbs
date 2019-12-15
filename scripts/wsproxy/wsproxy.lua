@@ -56,8 +56,9 @@ local function build_conn_data()
     } __attribute__ ((packed)) conn_data;
     ]]
     local flags = 0
-    local secure = tonumber(ngx.var.bbs_secure) or 0
-    if secure == 1 then
+    local bbs_lport = tonumber(ngx.var.bbs_lport)
+    local bbs_secure = tonumber(ngx.var.bbs_secure)
+    if bbs_secure == 1 then
         flags = flags + 1 -- CONN_FLAG_SECURE
     end
     return ffi.string(ffi.new("conn_data", {
@@ -66,7 +67,7 @@ local function build_conn_data()
         raddr_len = ngx.var.binary_remote_addr:len(),
         raddr = ngx.var.binary_remote_addr,
         rport = tonumber(ngx.var.remote_port) or 0,
-        lport = tonumber(ngx.var.server_port) or 0,
+        lport = bbs_lport or tonumber(ngx.var.server_port) or 0,
         flags = flags,
     }), ffi.sizeof("conn_data"))
 end
