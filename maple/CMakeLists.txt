@@ -62,4 +62,7 @@ install(
 )
 install(
     CODE "execute_process(COMMAND chown -R ${BBSUSR}:${BBSGROUP} ${CMAKE_INSTALL_PREFIX}/bin${BBSVER})"
+    CODE "string(TIMESTAMP BUILDTIME %s)"
+    CODE "execute_process(COMMAND mv -f ${CMAKE_INSTALL_PREFIX}/bin${BBSVER}/bbsd ${CMAKE_INSTALL_PREFIX}/bin${BBSVER}/bbsd.\${BUILDTIME})"
+    CODE "execute_process(COMMAND ln -sv ${CMAKE_INSTALL_PREFIX}/bin${BBSVER}/bbsd.\${BUILDTIME} ${CMAKE_INSTALL_PREFIX}/bin${BBSVER}/bbsd)"
 )
