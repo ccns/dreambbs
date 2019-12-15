@@ -27,11 +27,11 @@ include(FindPkgConfig)
 if(NOT USE_CXX)
     # specify the C standard
     add_compile_options(-x c --std=gnu99)
-    set(USE_CXX ON CACHE BOOL "Compile C code using C++ mode")
+    set(USE_CXX OFF CACHE BOOL "Compile C code using C++ mode")
 else()
     # specify the C++ standard
     add_compile_options(-x c++ --std=gnu++14)
-    set(USE_CXX OFF CACHE BOOL "Compile C code using C++ mode")
+    set(USE_CXX ON CACHE BOOL "Compile C code using C++ mode")
 endif()
 
 add_compile_options(-ggdb3 -O0 -pipe -fomit-frame-pointer)
