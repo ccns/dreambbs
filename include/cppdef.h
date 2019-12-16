@@ -118,6 +118,9 @@
 /* Macros for limiting the value range */
 
 #ifdef __cplusplus
+  #include <algorithm>
+  #include <cmath>
+
   #define BMIN(a, b)      std::min(a, b)
   #define BMAX(a, b)      std::max(a, b)
   #define UABS(a)         std::abs(a)
