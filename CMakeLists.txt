@@ -35,7 +35,7 @@ else()
 endif()
 
 add_compile_options(-ggdb3 -O0 -pipe -fomit-frame-pointer)
-add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Wstrict-prototypes)
+add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings)
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/include)
 
 link_libraries(-L${PROJECT_BINARY_DIR}/lib dao crypt)
@@ -153,6 +153,10 @@ if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
 endif()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-invalid-source-encoding")
+endif()
+
+if(NOT USE_CXX)
+    add_compile_options(-Wstrict-prototypes)
 endif()
 
 check_c_compiler_flag(-Wunreachable-code-aggressive CC_HAS_W_UNREACHABLE_CODE_AGGRESSIVE)

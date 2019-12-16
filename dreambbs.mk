@@ -24,7 +24,7 @@ BUILDTIME	!= date '+%s'
 
 ## To be expanded
 
-CFLAGS_WARN	= -Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Wstrict-prototypes
+CFLAGS_WARN	= -Wall -Wpointer-arith -Wcast-qual -Wwrite-strings
 CFLAGS_MK	= -ggdb3 -O0 -pipe -fomit-frame-pointer $(CFLAGS_WARN) -I$$(SRCROOT)/include $(CFLAGS_ARCHI) $(CFLAGS_COMPAT)
 
 LDFLAGS_MK = -L$$(SRCROOT)/lib -ldao -lcrypt $(LDFLAGS_ARCHI)
@@ -127,6 +127,8 @@ CFLAGS_MAPLE	+= -DNO_SO=0
 
 .if $(CC:M*++) || $(CC:M*++-*)
 CFLAGS_COMPAT	+= -x c++
+.else
+CFLAGS_WARN	+= -Wstrict-prototypes
 .endif
 
 CC_HAS_W_UNREACHABLE_CODE_AGGRESSIVE != $(CC_HASFLAGS$(flags::= -Wunreachable-code-aggressive)) $(DEF_YES)
