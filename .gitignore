@@ -35,6 +35,9 @@
 make_export.conf
 maple/make_export.conf
 
+# add split-out build directory for cmake
+build/
+
 innbbsd/bbslink
 innbbsd/innbbsd
 
