@@ -37,6 +37,7 @@ before_install:
 
 script:
     - if [ "$BUILD_METHOD" = "cmake" ]; then
+        cp sample/dreambbs.conf dreambbs.conf;
         mkdir build;
         cd build;
         cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON -DCMAKE_C_COMPILER="$CC" ..;
