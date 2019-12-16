@@ -24,20 +24,6 @@ static His *hisList;
 static int numNum;
 static char *numSet;
 
-#if !NO_SO
-void _init(void)
-{
-    hisList = (His *)malloc(sizeof(His)); /* pseudo */
-    numSet = (char *)malloc(10 * 9 * 8 * 7 * sizeof(char));
-}
-
-void _fini(void)
-{
-    free(hisList);
-    free(numSet);
-}
-#endif  /* #if 1 */
-
 static void AB(Num p, Num q, int *A, int *B)
 {
     /* compare p and q, return ?A?B */
@@ -102,16 +88,6 @@ static int matchHis(Num n)
 int mainNum(int fighting /* Thor.990317: 對戰模式 */)
 {
     Num myNumber;
-    /* initialize variables */
-#if 0
-    if (!hisList) hisList = (His *)malloc(sizeof(His)); /* pseudo */
-    if (!numSet) numSet = (char *)malloc(10 * 9 * 8 * 7 * sizeof(char));
-#endif
-
-    hisNum = 0;
-
-    numNum = 10 * 9 * 8 * 7;
-    memset(numSet, 0, 10*9*8*7*sizeof(char));
 
     srand(time(NULL));
 
@@ -124,6 +100,17 @@ int mainNum(int fighting /* Thor.990317: 對戰模式 */)
         vmsg("不玩了啊? 下次再來哦! ^_^");
         return 0;
     }
+
+    /* initialize variables */
+#if 1
+    hisList = (His *)malloc(sizeof(His)); /* pseudo */
+    numSet = (char *)malloc(10 * 9 * 8 * 7 * sizeof(char));
+#endif
+
+    hisNum = 0;
+
+    numNum = 10 * 9 * 8 * 7;
+    memset(numSet, 0, 10*9*8*7*sizeof(char));
 
     if (fighting)
         ord2Num(rand() % numNum, myNumber); /* Thor.990317:對戰模式 */
@@ -156,7 +143,7 @@ int mainNum(int fighting /* Thor.990317: 對戰模式 */)
                 sprintf(tmp, "HisNum:%d, user win game!", hisNum);
                 blog(fighting ? "FIGHTNUM" : "GUESSNUM", tmp);
 #endif
-                return 0;
+                goto cleanup;
             }
         }
 
@@ -198,7 +185,7 @@ abort_game:
                 sprintf(msg, "HisNum:%d, abort game!", hisNum);
                 blog(fighting ? "FIGHTNUM" : "GUESSNUM", msg);
 #endif
-                return 0;
+                goto cleanup;
             }
             if (isdigit(buf[0]) && (buf[1] | 0x20) == 'a'
                 && isdigit(buf[2]) && (buf[3] | 0x20) == 'b')
@@ -220,7 +207,7 @@ abort_game:
                         sprintf(msg, "HisNum:%d, win game!", hisNum);
                         blog(fighting ? "FIGHTNUM" : "GUESSNUM", msg);
 #endif
-                        return 0;
+                        goto cleanup;
                     }
                     else
                         break;
@@ -252,6 +239,13 @@ foolme:
         blog(fighting ? "FIGHTNUM" : "GUESSNUM", msg);
     }
 #endif
+
+cleanup:
+    free(hisList);
+    hisList = NULL;
+    free(numSet);
+    numSet = NULL;
+
     return 0;
 }
 
