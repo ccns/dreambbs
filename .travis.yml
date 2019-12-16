@@ -44,12 +44,10 @@ script:
         mkdir build;
         cd build;
         cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..;
-        make;
-        make test;
-        make install;
+        make all test install;
       fi
     - if [ "$BUILD_METHOD" = "bmake" ]; then
         bmake configure;
-        bmake CC="$CC" all install clean;
+        bmake CC="$CC" all runtest install clean;
       fi
     - ldd ${HOME}/bin/bbsd
