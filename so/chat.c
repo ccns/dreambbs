@@ -39,7 +39,6 @@ chat_topic(void)
            (frec ? " ¿ý­µ«Ç " : CHATROOMNAME), chatroom, chattopic);
 }
 
-#ifdef M3_CHAT_SCROLL_MODE
 #  ifdef M3_USE_PFTERM
 static void
 printchatline(
@@ -115,32 +114,6 @@ printchatline(
     chatline = line;
 }
 #  endif /* #ifdef M3_USE_PFTERM */
-#else /* #ifdef M3_CHAT_SCROLL_MODE */
-static void
-printchatline(
-const char *msg)
-{
-    int line;
-
-    line = chatline;
-    move(line, 0);
-    outs(msg);
-    outc('\n');
-
-    if (frec)
-        fprintf(frec, "%s\n", msg);
-
-    if (fmail)
-        fprintf(fmail, "%s\n", msg);
-
-    if (++line == stop_line)
-        line = 2;
-    move(line, 0);
-    outs("¡÷");
-    clrtoeol();
-    chatline = line;
-}
-#endif  /* #ifdef M3_CHAT_SCROLL_MODE */
 
 static void
 chat_record(GCC_UNUSED char *arg)
