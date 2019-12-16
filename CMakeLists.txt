@@ -87,8 +87,12 @@ endfunction(DEF_TEST)
 
 set(BBSCONF "${PROJECT_SOURCE_DIR}/dreambbs.conf")
 set(BBSCONF_ORIGIN "${PROJECT_SOURCE_DIR}/include/config.h")
+set(EXPORT_PROJECT "${PROJECT_SOURCE_DIR}/make_export.conf")
 set(EXPORT_MAPLE "${PROJECT_SOURCE_DIR}/maple/make_export.conf")
 
+if(NOT EXISTS ${EXPORT_PROJECT})
+    execute_process(COMMAND touch ${EXPORT_PROJECT})
+endif()
 if(NOT EXISTS ${EXPORT_MAPLE})
     execute_process(COMMAND touch ${EXPORT_MAPLE})
 endif()
