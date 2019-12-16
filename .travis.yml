@@ -39,16 +39,17 @@ before_install:
     - test -z ${UPDATE_CXX_ALTER} || sh -c "${UPDATE_CXX_ALTER}"
 
 script:
+    - cp sample/dreambbs.conf dreambbs.conf;
     - if [ "$BUILD_METHOD" = "cmake" ]; then
-        cp sample/dreambbs.conf dreambbs.conf;
         mkdir build;
         cd build;
         cmake -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON ..;
         make;
+        make test;
         make install;
       fi
     - if [ "$BUILD_METHOD" = "bmake" ]; then
-        cp sample/dreambbs.conf dreambbs.conf;
         bmake configure;
         bmake CC="$CC" all install clean;
       fi
+    - ldd ${HOME}/bin/bbsd
