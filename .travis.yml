@@ -29,10 +29,9 @@ git:
   depth: 1
 
 before_install:
+    - sudo dpkg --add-architecture i386
     - sudo apt-get update
     - sudo apt-get upgrade -y
-    - sudo dpkg --add-architecture i386
-    - sudo apt update
     - sudo apt-get install bmake "$UBUNTU_CC_PACKAGE" lib32gcc-8-dev libncurses5-dev:i386
     - test -z "$UPDATE_ALTER" || sh -c "$UPDATE_ALTER"
 
