@@ -13,7 +13,7 @@
 extern XZ xz[];
 
 static int contact_add(XO *xo);
-void contact_send(const CONTACT *contact);
+void contact_send(CONTACT *contact);
 
 static void
 contact_item(
@@ -178,7 +178,7 @@ XO *xo)
 
 void
 contact_send(
-const CONTACT *contact)
+CONTACT *contact)
 {
     if (bbsothermode & OTHERSTAT_EDITING)
     {

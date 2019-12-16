@@ -132,7 +132,7 @@ TchoiceCompare(const void * i, const void * j)
 static int
 draw_vote(
     const BRD *bdh,             /* Thor: 傳入 BRD, 可查 battr */
-    const char *fpath,
+    char *fpath,
     const VCH *vch)
 {
     FILE *fp;

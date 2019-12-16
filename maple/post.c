@@ -619,7 +619,7 @@ do_post(
             const char *msg = "作者無法收信";
 #define MSG_OK                "回應至作者信箱"
 
-            rcpt = quote_user;
+            char *const rcpt = quote_user;
             if (strchr(rcpt, '@'))
             {
                 if (bsmtp(fpath, title, rcpt, 0) >= 0)

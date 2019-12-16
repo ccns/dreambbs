@@ -218,7 +218,7 @@ bsmtp(
 
 int
 bsmtp(
-    const char *fpath, const char *title, const char *rcpt,
+    const char *fpath, const char *title, char *rcpt,
     int method)
 {
     int sock;
@@ -464,7 +464,7 @@ smtp_log:
 #ifdef HAVE_DOWNLOAD
 int
 bsmtp_file(
-    const char *fpath, const char *title, const char *rcpt)
+    const char *fpath, const char *title, char *rcpt)
 {
     int sock;
     time_t chrono, stamp;
@@ -1355,7 +1355,7 @@ hdr_reply(
 
 /* static inline */ int
 mail_external(
-    const char *addr)
+    char *addr)
 {
     char *str;
 
@@ -1397,7 +1397,7 @@ forward_mail(
 
 int
 mail_send(
-    const char *rcpt, const char *title)
+    char *rcpt, const char *title)
 {
     HDR mhdr;
     char fpath[80], folder[80], ckforward[80];
@@ -1595,7 +1595,7 @@ mail_reply(
 
 void
 my_send(
-    const char *rcpt)
+    char *rcpt)
 {
     int result;
     const char *msg;
