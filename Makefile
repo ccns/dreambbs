@@ -67,7 +67,6 @@ runtest:
 	@(cd test; $(MAKE) runtest)
 
 install:
-	@(cd test; $(MAKE) runtest)
 	@(cd maple; $(MAKE) install)
 	@(cd innbbsd; $(MAKE) install)
 	@(cd util; $(MAKE) install)
