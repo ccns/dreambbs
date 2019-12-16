@@ -775,13 +775,9 @@ INTERNAL_INIT MENU menu_talk[] =
     {{t_query}, 0, M_QUERY,
     "Query      查詢網友"},
 
-#ifdef HAVE_CHATROOM_CLIENT     /* r2.20180405: still fixing chatroom..... */
-
     /* Thor.990220: chatroom client 改採外掛 */
     {{.dlfunc = DL_NAME("chat.so", t_chat)}, PERM_CHAT, M_DL(M_CHAT),
     "ChatRoom   " NICKNAME CHATROOMNAME},
-
-#endif
 
     {{t_recall}, PERM_BASIC, M_XMODE,
     "Write      回顧前幾次熱訊"},
