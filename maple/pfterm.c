@@ -399,6 +399,9 @@ static FlatTerm ft;
 
 #define ranged(x, vmin, vmax) (max(min(x, vmax), vmin))
 
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 // Flat Terminal API
@@ -503,6 +506,10 @@ int     fterm_prepare_str(int len);
 
 // DBCS supporting
 int     fterm_DBCS_Big5(unsigned char c1, unsigned char c2);
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
 
 //////////////////////////////////////////////////////////////////////////
 // Flat Terminal Implementation
@@ -2374,6 +2381,24 @@ grayout(int y, int end, int level)
 //////////////////////////////////////////////////////////////////////////
 
 #ifndef PFTERM_TEST_MAIN
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void    scr_dump    (screen_backup_t *psb);
+void    scr_redump  (screen_backup_t *psb);
+void    scr_free    (screen_backup_t *psb);
+void    scr_restore_free   (screen_backup_t *psb);
+void    scr_restore_keep   (const screen_backup_t *psb);
+
+void move_ansi(int y, int x);
+void getyx_ansi(int *y, int *x);
+void region_scroll_up(int top, int bottom);
+
+#ifdef __cplusplus
+}  /* extern "C" */
+#endif
 
 void
 scr_dump(screen_backup_t *psb)
