@@ -166,7 +166,7 @@ static int roll;
 static int scrollcnt, tc_col, tc_row;
 
 
-static screenline vbuf[100];  //r2: maximum totel lines (t_lines)
+static screenline vbuf[T_LINES];  //r2: maximum totel lines (t_lines)
 //static
 screenline *cur_slp;    /* current screen line pointer */
 
