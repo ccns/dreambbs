@@ -20,6 +20,7 @@
 //#define BLSCONF_ENABLED                  // Enable `store.*` BBS-Lua API
 //#define BBSLUA_EXPOSED_VISIO_VI          // `vi_*` variables of visio input is exposed
 //#define BBSLUA_EXPOSED_VISIO_IDLE        // Idle handling of visio is exposed
+//#define BBSLUA_USE_LUAJIT                // Use LuaJIT instead of vanilla Lua
 
 #include "bbs.h"
 #include <sys/time.h>
@@ -45,6 +46,7 @@
  #undef BLSCONF_ENABLED
  #define BBSLUA_EXPOSED_VISIO_VI
  #define BBSLUA_EXPOSED_VISIO_IDLE
+ //#define BBSLUA_USE_LUAJIT
 #endif //M3_USE_BBSLUA
 
 #ifdef PTT_USE_BBSLUA    // For compiling on PttBBS
@@ -65,6 +67,7 @@
  #undef BLSCONF_ENABLED
  #undef BBSLUA_EXPOSED_VISIO_VI
  #undef BBSLUA_EXPOSED_VISIO_IDLE
+ #undef BBSLUA_USE_LUAJIT
 #endif //PTT_USE_BBSLUA
 
 /* Inferred settings */
