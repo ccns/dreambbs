@@ -783,21 +783,12 @@ void run_ruby(
         TOCs_DATA[i] = NULL;
     }
 
-    char *cpBuf = (char *)malloc(sizeof(char) * (cEnd - cStart) + 1);
-    // char *evalBuf = (char *)malloc(sizeof(char) * (cEnd - cStart) + 1 + 10);
-    strncpy(cpBuf, cStart, cEnd - cStart);
-    cpBuf[cEnd - cStart] = '\0';
-    ruby_script_detach(post, pLen);
-
-    // sprintf(evalBuf, "begin\n%s\nend", cpBuf);
-    out_footer("", "按任意鍵開始執行");
-
     //Before execution, prepare keyboard buffer
     //KB_QUEUE = rb_ary_new();
-    VALUE eval_args[] = {rb_str_new_cstr(cpBuf), rb_str_new_cstr("BBSRuby"), INT2FIX(lineshift + 1)};
-    free(cpBuf);
-    // free(evalBuf);
+    VALUE eval_args[] = {rb_str_new(cStart, cEnd - cStart), rb_str_new_cstr("BBSRuby"), INT2FIX(lineshift + 1)};
+    ruby_script_detach(post, pLen);
 
+    out_footer("", "按任意鍵開始執行");
     clear();
 
     rb_protect(bbsruby_eval_code, (VALUE)eval_args, &error);
