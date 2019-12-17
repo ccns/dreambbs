@@ -51,52 +51,21 @@ x_siteinfo(void)
 //家舱て硂娩
 #define ONLINE_STR(module)  "\x1b[1;32m  online \x1b[1;30m  " module "\x1b[m\n"
 #define OFFLINE_STR(module) "\x1b[1;31m  offline\x1b[1;30m  " module "\x1b[m\n"
+#define STATUS_STR(conf, module)  IF_ON(conf, ONLINE_STR, OFFLINE_STR)(module)
 
-#ifdef MultiRecommend
-    prints(ONLINE_STR("Multi Recommend Control 妓て崩ゅ北╰参"));
-#else
-    prints(OFFLINE_STR("Multi Recommend Control 妓て崩ゅ北╰参"));
-#endif
-#ifdef M3_USE_PMORE
-    prints(ONLINE_STR("pmore (piaip's more) 2007+ w/Movie"));
-#else
-    prints(OFFLINE_STR("pmore (piaip's more) 2007+ w/Movie"));
-#endif
-#ifdef M3_USE_PFTERM
-    prints(ONLINE_STR("pfterm (piaip's flat terminal, Perfect Term)"));
-#else
-    prints(OFFLINE_STR("pfterm (piaip's flat terminal, Perfect Term)"));
-#endif
-#ifdef GRAYOUT
-    prints(ONLINE_STR("Grayout Advanced Control 睭睭疭╰参"));
-#else
-    prints(OFFLINE_STR("Grayout Advanced Control 睭睭疭╰参"));
-#endif
+    prints(STATUS_STR(MultiRecommend, "Multi Recommend Control 妓て崩ゅ北╰参"));
+    prints(STATUS_STR(M3_USE_PMORE, "pmore (piaip's more) 2007+ w/Movie"));
+    prints(STATUS_STR(M3_USE_PFTERM, "pfterm (piaip's flat terminal, Perfect Term)"));
+    prints(STATUS_STR(GRAYOUT, "Grayout Advanced Control 睭睭疭╰参"));
+
 #ifdef HAVE_BBSLUA
-  #ifdef M3_USE_BBSLUA
-    #ifdef BBSLUA_USE_LUAJIT
-    prints(ONLINE_STR("BBS-Lua " BBSLUA_VERSION_STR " / " LUA_RELEASE " / " LUAJIT_VERSION));
-    #else
-    prints(ONLINE_STR("BBS-Lua " BBSLUA_VERSION_STR " / " LUA_RELEASE));
-    #endif
-  #else
-    prints(OFFLINE_STR("BBS-Lua " BBSLUA_VERSION_STR));
-  #endif
-#endif  // #ifdef HAVE_BBSLUA
-
-/*
-#ifdef SMerge
-    prints(ONLINE_STR("Smart Merge ゅ笆ㄖ));
-#else
-    prints(OFFLINE_STR("Smart Merge ゅ笆ㄖ));
+    prints(STATUS_STR(M3_USE_BBSLUA, "BBS-Lua " BBSLUA_VERSION_STR IF_ON(M3_USE_BBSLUA, " / " LUA_RELEASE IF_ON(BBSLUA_USE_LUAJIT, " / " LUAJIT_VERSION))));
 #endif
-*/
+
+//    prints(STATUS_STR(SMerge, "Smart Merge ゅ笆ㄖ));
+
 #ifdef HAVE_BBSRUBY
-  #ifdef M3_USE_BBSRUBY
-    prints(ONLINE_STR("(EXP) BBSRuby " BBSRUBY_VERSION_STR " Interface: " BBSRUBY_INTERFACE_VER_STR " / Ruby " RUBY_RELEASE_STR));
-  #else
-    prints(OFFLINE_STR("(EXP) BBSRuby " BBSRUBY_VERSION_STR " Interface: " BBSRUBY_INTERFACE_VER_STR));
-  #endif
+    prints(STATUS_STR(M3_USE_BBSRUBY, "(EXP) BBSRuby " BBSRUBY_VERSION_STR " Interface: " BBSRUBY_INTERFACE_VER_STR IF_ON(M3_USE_BBSRUBY, " / Ruby " RUBY_RELEASE_STR)));
 #endif
 
 #else

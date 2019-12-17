@@ -36,6 +36,11 @@
 // Expand macros in the argument and then stringify it
 #define CPP_STR(x)  CPP_STR_PRIME(x)
 
+// Choose the 2nd arguments without macro expansions
+#define CPP_SELECT_2_PRIME(_0, _1, _2, ...)  _2
+
+// Expand macros in the arguments and then choose the 2nd
+#define CPP_SELECT_2(...)  CPP_SELECT_2_PRIME(__VA_ARGS__)
 
 /* Macros for acquiring version strings from number literals */
 
@@ -65,6 +70,20 @@
 // major . minor . patch -DlPatch- dl_patch
 #define VER_PATCH_DL_STR(major, minor, patch, dl_patch) \
     VERSION_STR_DL_PATCH_STR(VER_PATCH_STR(major, minor, patch), dl_patch)
+
+/* Macros for conditional macro expansion */
+
+// If `conf` without expansion is ON, then expand to the 1st item of `__VA_ARGS__`,
+//    else expand to the 2nd item of `__VA_ARGS__`
+#define IF_ON_PRIME(conf, ...)  CPP_SELECT_2(CPP_IF_ON_TEST_ ## conf, __VA_ARGS__,,)
+
+// Expand `conf` and then test whether `conf` is ON
+#define IF_ON(conf, ...)  IF_ON_PRIME(conf, __VA_ARGS__)
+
+// These values are treated as ON
+#define CPP_IF_ON_TEST_  ,
+#define CPP_IF_ON_TEST_1  ,
+#define CPP_IF_ON_TEST_true  ,
 
 
 /* Macros for manipulating structs */
