@@ -113,8 +113,6 @@ static inline void getyx(int *y, int *x)
 typedef rb_event_t rb_event_flag_t;
 #endif
 
-#include <signal.h>
-
 #define BBSRUBY_MAJOR_VERSION (0)
 #define BBSRUBY_MINOR_VERSION (3)
 
@@ -698,21 +696,11 @@ static VALUE bbsruby_eval_code(VALUE eval_args)
     return Qnil;
 }
 
-void sig_handler(int sig)
-{
-    vmsg("嚴重錯誤！無法繼續執行！");
-    // print_exception();
-    rb_thread_kill(rb_thread_current());
-}
-
 void run_ruby(
     const char* fpath)
 {
     static int ruby_inited = 0;
     ABORT_BBSRUBY = 0;
-
-    void (*old_sig_handler)(int);
-    old_sig_handler = signal(SIGSEGV, sig_handler);
 
     // Initialize Ruby interpreter first.
     if (!ruby_inited)
@@ -722,7 +710,6 @@ void run_ruby(
         {
             print_exception();
             out_footer(" (內部錯誤)",  "按任意鍵返回");
-            signal(SIGSEGV, old_sig_handler);
             return;
         }
 
@@ -760,7 +747,6 @@ void run_ruby(
     if (!post)
     {
         out_footer(" (內部錯誤)",  "按任意鍵返回");
-        signal(SIGSEGV, old_sig_handler);
         return;
     }
 
@@ -772,7 +758,6 @@ void run_ruby(
     {
         ruby_script_detach(post, pLen);
         out_footer(" (找不到程式區段)",  "按任意鍵返回");
-        signal(SIGSEGV, old_sig_handler);
         return;
     }
 
@@ -823,5 +808,4 @@ void run_ruby(
     {
         print_exception();
     }
-    signal(SIGSEGV, old_sig_handler);
 }
