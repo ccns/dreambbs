@@ -660,43 +660,43 @@ void print_exception(void)
     out_footer(" (發生錯誤)", "按任意鍵返回");
 }
 
-static void bbsruby_init_bbs_class(void)
+static void bbsruby_init_bbs_module(void)
 {
     // Remove former definition
     rb_define_global_const("BBS", Qundef);
 
-    // Prepare BBS wrapper class
-    VALUE rb_cBBS = rb_define_class("BBS", rb_cObject);
-    rb_define_singleton_method(rb_cBBS, "outs", (rb_func_t) brb_outs, -2);
-    rb_define_singleton_method(rb_cBBS, "title", (rb_func_t) brb_title, 1);
-    rb_define_singleton_method(rb_cBBS, "print", (rb_func_t) brb_print, -2);
-    rb_define_singleton_method(rb_cBBS, "getyx", (rb_func_t) brb_getyx, 0);
-    rb_define_singleton_method(rb_cBBS, "getmaxyx", (rb_func_t) brb_getmaxyx, 0);
-    rb_define_singleton_method(rb_cBBS, "move", (rb_func_t) brb_move, 2);
-    rb_define_singleton_method(rb_cBBS, "moverel", (rb_func_t) brb_moverel, 2);
-    rb_define_singleton_method(rb_cBBS, "clear", (rb_func_t) brb_clear, 0);
-    rb_define_singleton_method(rb_cBBS, "clrtoeol", (rb_func_t) brb_clrtoeol, 0);
-    rb_define_singleton_method(rb_cBBS, "clrtobot", (rb_func_t) brb_clrtobot, 0);
-    rb_define_singleton_method(rb_cBBS, "refresh", (rb_func_t) brb_refresh, 0);
-    rb_define_singleton_method(rb_cBBS, "vmsg", (rb_func_t) brb_vmsg, 1);
-    rb_define_singleton_method(rb_cBBS, "pause", (rb_func_t) brb_pause, 1);
-    rb_define_singleton_method(rb_cBBS, "sitename", (rb_func_t) brb_name, 0);
-    rb_define_singleton_method(rb_cBBS, "interface", (rb_func_t) brb_interface, 0);
-    rb_define_singleton_method(rb_cBBS, "toc", (rb_func_t) brb_toc, 0);
-    rb_define_singleton_method(rb_cBBS, "ansi_color", (rb_func_t) brb_ansi_color, -2);
-    rb_define_singleton_method(rb_cBBS, "color", (rb_func_t) brb_color, -2);
-    rb_define_singleton_method(rb_cBBS, "ANSI_RESET", (rb_func_t) brb_ansi_reset, 0);
-    rb_define_singleton_method(rb_cBBS, "ESC", (rb_func_t) brb_esc, 0);
-    rb_define_singleton_method(rb_cBBS, "userid", (rb_func_t) brb_userid, 0);
-    rb_define_singleton_method(rb_cBBS, "getdata", (rb_func_t) brb_getdata, -2);
-    rb_define_singleton_method(rb_cBBS, "clock", (rb_func_t) brb_clock, 0);
-    rb_define_singleton_method(rb_cBBS, "getch", (rb_func_t) brb_getch, 0);
-    rb_define_singleton_method(rb_cBBS, "kbhit", (rb_func_t) brb_kbhit, 1);
+    // Prepare BBS wrapper module
+    VALUE brb_mBBS = rb_define_module("BBS");
+    rb_define_module_function(brb_mBBS, "outs", (rb_func_t) brb_outs, -2);
+    rb_define_module_function(brb_mBBS, "title", (rb_func_t) brb_title, 1);
+    rb_define_module_function(brb_mBBS, "print", (rb_func_t) brb_print, -2);
+    rb_define_module_function(brb_mBBS, "getyx", (rb_func_t) brb_getyx, 0);
+    rb_define_module_function(brb_mBBS, "getmaxyx", (rb_func_t) brb_getmaxyx, 0);
+    rb_define_module_function(brb_mBBS, "move", (rb_func_t) brb_move, 2);
+    rb_define_module_function(brb_mBBS, "moverel", (rb_func_t) brb_moverel, 2);
+    rb_define_module_function(brb_mBBS, "clear", (rb_func_t) brb_clear, 0);
+    rb_define_module_function(brb_mBBS, "clrtoeol", (rb_func_t) brb_clrtoeol, 0);
+    rb_define_module_function(brb_mBBS, "clrtobot", (rb_func_t) brb_clrtobot, 0);
+    rb_define_module_function(brb_mBBS, "refresh", (rb_func_t) brb_refresh, 0);
+    rb_define_module_function(brb_mBBS, "vmsg", (rb_func_t) brb_vmsg, 1);
+    rb_define_module_function(brb_mBBS, "pause", (rb_func_t) brb_pause, 1);
+    rb_define_module_function(brb_mBBS, "sitename", (rb_func_t) brb_name, 0);
+    rb_define_module_function(brb_mBBS, "interface", (rb_func_t) brb_interface, 0);
+    rb_define_module_function(brb_mBBS, "toc", (rb_func_t) brb_toc, 0);
+    rb_define_module_function(brb_mBBS, "ansi_color", (rb_func_t) brb_ansi_color, -2);
+    rb_define_module_function(brb_mBBS, "color", (rb_func_t) brb_color, -2);
+    rb_define_module_function(brb_mBBS, "ANSI_RESET", (rb_func_t) brb_ansi_reset, 0);
+    rb_define_module_function(brb_mBBS, "ESC", (rb_func_t) brb_esc, 0);
+    rb_define_module_function(brb_mBBS, "userid", (rb_func_t) brb_userid, 0);
+    rb_define_module_function(brb_mBBS, "getdata", (rb_func_t) brb_getdata, -2);
+    rb_define_module_function(brb_mBBS, "clock", (rb_func_t) brb_clock, 0);
+    rb_define_module_function(brb_mBBS, "getch", (rb_func_t) brb_getch, 0);
+    rb_define_module_function(brb_mBBS, "kbhit", (rb_func_t) brb_kbhit, 1);
 }
 
 static VALUE bbsruby_eval_code(VALUE eval_args)
 {
-    bbsruby_init_bbs_class();
+    bbsruby_init_bbs_module();
 
     rb_obj_instance_eval(3, (VALUE *)eval_args, rb_class_new_instance(0, NULL, rb_cObject));
     return Qnil;
