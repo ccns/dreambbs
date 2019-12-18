@@ -576,9 +576,13 @@ int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
     while (cEnd > cStart && !*cEnd)
         cEnd--;
     *pEnd = cEnd;
+    return 1;
+}
 
+void bbsruby_load_TOC(const char *cStart, const char *cEnd)
+{
     // Create TOC class wrapping these information
-    char *tStart, *tEnd;
+    const char *tStart, *tEnd;
     tStart = cStart;
     VALUE hashTOC = rb_hash_new();
     GCC_UNUSED int TOCfound = 0;
@@ -629,7 +633,6 @@ int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
     }
 
     TOCs_rubyhash = hashTOC;
-    return 1;
 }
 
 void print_exception(void)
@@ -763,6 +766,7 @@ void run_ruby(
         return;
     }
 
+    bbsruby_load_TOC(cStart, cEnd);
     // Check interface version
     float d = 0;
     if (TOCs_DATA[4])
