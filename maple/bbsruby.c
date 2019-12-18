@@ -796,6 +796,7 @@ void run_ruby(
 
     out_footer("", "按任意鍵開始執行");
     clear();
+    refresh();
 
     rb_protect(bbsruby_eval_code, (VALUE)eval_args, &error);
 
