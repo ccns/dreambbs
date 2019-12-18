@@ -28,7 +28,7 @@
  #include <assert.h>
  #include <stdarg.h>
  #include <sys/file.h>
- #define BBSLUA_HAVE_SYNCNOW
+ #undef BBSLUA_HAVE_SYNCNOW
  #undef BBSLUA_HAVE_VKEY
  #undef BBSLUA_HAVE_VTUIKIT
  #undef BBSLUA_HAVE_OPENCREATE

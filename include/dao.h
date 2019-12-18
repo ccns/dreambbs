@@ -160,7 +160,6 @@ char *Ctime(const time_t *clock);
 char *Etime(const time_t *clock);
 char *Atime(const time_t *clock);
 char *Now(void);
-void syncnow(void);
 /* xwrite.c */
 int xwrite(int fd, const char *data, int size);
 

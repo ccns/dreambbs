@@ -1612,8 +1612,7 @@ igetch(void)
                     if (cc < 60)                /* paging timeout */
                         return I_TIMEOUT;
 
-                    time(&now);
-                    idle = (now - cutmp->idle_time);
+                    idle = (time(NULL) - cutmp->idle_time);
                     vio_to.tv_sec = cc + 60;  /* Thor.980806: 每次 timeout都增加60秒,
                                                               所以片子愈換愈慢, 好懶:p */
                     /* Thor.990201: 註解: 除了talk_rqst, chat之外, 需要在動一動之後
