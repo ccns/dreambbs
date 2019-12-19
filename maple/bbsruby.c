@@ -621,7 +621,7 @@ void bbsruby_load_TOC(const char *cStart, const char *cEnd)
                     free(TOCs_DATA[i]);
                     TOCs_DATA[i] = data;
                     rb_hash_aset(hashTOC, rb_str_new_cstr(TOCs_HEADER[i]), rb_str_new_cstr(data));
-                    rb_hash_aset(hashTOC, rb_funcall(rb_str_new_cstr(TOCs_HEADER[i]), rb_intern("capitalize!"), 0), rb_str_new_cstr(data));
+                    rb_hash_aset(hashTOC, rb_funcallv(rb_str_new_cstr(TOCs_HEADER[i]), rb_intern("capitalize!"), 0, NULL), rb_str_new_cstr(data));
                     TOCfound = 1;
                     break;
                 }
@@ -649,7 +649,7 @@ void print_exception(void)
     outs("程式發生錯誤，無法繼續執行。請通知原作者。\n錯誤資訊：\n");
     outs(buffer);
     outs("\n");
-    VALUE ary = rb_funcall(exception, rb_intern("backtrace"), 0);
+    VALUE ary = rb_funcallv(exception, rb_intern("backtrace"), 0, NULL);
     int c;
     for (c=0; c < RARRAY_LEN(ary); c++)
     {
