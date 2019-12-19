@@ -209,11 +209,10 @@ VALUE brb_getch(VALUE self)
 
 #define MACRO_NONZERO(macro)  ((macro-0) != 0)
 
-VALUE brb_getdata(VALUE self, VALUE args)
+VALUE brb_getdata(int argc, VALUE *argv, VALUE self)
 {
-    int count = RARRAY_LEN(args);
     int echo = DOECHO;
-    if (count > 1 && NUM2INT(rb_ary_entry(args, 1)) == 0)
+    if (argc > 1 && NUM2INT(argv[1]) == 0)
 #if MACRO_NONZERO(VGET_STEALTH_NOECHO)
         echo = NOECHO | VGET_STEALTH_NOECHO;
 #else
@@ -227,7 +226,7 @@ VALUE brb_getdata(VALUE self, VALUE args)
     echo |= VGET_BREAKABLE;
 #endif
 
-    int maxsize = NUM2INT(rb_ary_entry(args, 0));
+    int maxsize = NUM2INT(argv[0]);
     maxsize = BMIN(maxsize, 511);
     char data[512] = "";
     int cur_row, cur_col;
@@ -266,12 +265,12 @@ VALUE brb_kbhit(VALUE self, VALUE wait)
         return INT2NUM(0);
 }
 
-VALUE brb_outs(VALUE self, VALUE args)
+VALUE brb_outs(int argc, VALUE *argv, VALUE self)
 {
-    int i, count = RARRAY_LEN(args);
-    for (i=0; i<count; i++)
+    int i;
+    for (i=0; i<argc; i++)
     {
-        outs(StringValueCStr(RARRAY_PTR(args)[i]));
+        outs(StringValueCStr(argv[i]));
     }
     return Qnil;
 }
@@ -282,9 +281,9 @@ VALUE brb_title(VALUE self, VALUE msg)
     return Qnil;
 }
 
-VALUE brb_print(VALUE self, VALUE args)
+VALUE brb_print(int argc, VALUE *argv, VALUE self)
 {
-    brb_outs(self, args);
+    brb_outs(argc, argv, self);
     outs("\n");
     return Qnil;
 }
@@ -327,18 +326,17 @@ VALUE brb_vmsg(VALUE self, VALUE msg) { vmsg(StringValueCStr(msg)); return Qnil;
 VALUE brb_name(VALUE self) { return rb_str_new_cstr(BBSNAME); }
 VALUE brb_interface(VALUE self) { return rb_float_new(BBSRUBY_INTERFACE_VER); }
 
-VALUE brb_ansi_color(VALUE self, VALUE args)
+VALUE brb_ansi_color(int argc, VALUE *argv, VALUE self)
 {
     char buf[50] = "\033[";
     char *p = buf + strlen(buf);
 
-    int count = RARRAY_LEN(args);
     const char sep[2] = ";";
     int i;
-    for (i=0; i<count; i++)
+    for (i=0; i<argc; i++)
     {
-        int ansi = NUM2INT(rb_ary_entry(args, i));
-        sprintf(p, "%d%s", ansi, (i == count - 1) ? "" : sep);
+        int ansi = NUM2INT(argv[i]);
+        sprintf(p, "%d%s", ansi, (i == argc - 1) ? "" : sep);
         p += strlen(p);
     }
 
@@ -357,18 +355,15 @@ VALUE brb_esc(VALUE self)
     return rb_str_new_cstr("\033");
 }
 
-VALUE brb_color(VALUE self, VALUE args)
+VALUE brb_color(int argc, VALUE *argv, VALUE self)
 {
-    int count = RARRAY_LEN(args);
     VALUE str;
-    if (count == 0)
+    if (argc == 0)
         str = brb_ansi_reset(self);
     else
-        str = brb_ansi_color(self, args);
+        str = brb_ansi_color(argc, argv, self);
 
-    VALUE arr = rb_ary_new();
-    rb_ary_push(arr, str);
-    brb_outs(self, arr);
+    brb_outs(1, &str, self);
     return Qnil;
 }
 
@@ -667,9 +662,9 @@ static void bbsruby_init_bbs_module(void)
 
     // Prepare BBS wrapper module
     VALUE brb_mBBS = rb_define_module("BBS");
-    rb_define_module_function(brb_mBBS, "outs", (rb_func_t) brb_outs, -2);
+    rb_define_module_function(brb_mBBS, "outs", (rb_func_t) brb_outs, -1);
     rb_define_module_function(brb_mBBS, "title", (rb_func_t) brb_title, 1);
-    rb_define_module_function(brb_mBBS, "print", (rb_func_t) brb_print, -2);
+    rb_define_module_function(brb_mBBS, "print", (rb_func_t) brb_print, -1);
     rb_define_module_function(brb_mBBS, "getyx", (rb_func_t) brb_getyx, 0);
     rb_define_module_function(brb_mBBS, "getmaxyx", (rb_func_t) brb_getmaxyx, 0);
     rb_define_module_function(brb_mBBS, "move", (rb_func_t) brb_move, 2);
@@ -683,12 +678,12 @@ static void bbsruby_init_bbs_module(void)
     rb_define_module_function(brb_mBBS, "sitename", (rb_func_t) brb_name, 0);
     rb_define_module_function(brb_mBBS, "interface", (rb_func_t) brb_interface, 0);
     rb_define_module_function(brb_mBBS, "toc", (rb_func_t) brb_toc, 0);
-    rb_define_module_function(brb_mBBS, "ansi_color", (rb_func_t) brb_ansi_color, -2);
-    rb_define_module_function(brb_mBBS, "color", (rb_func_t) brb_color, -2);
+    rb_define_module_function(brb_mBBS, "ansi_color", (rb_func_t) brb_ansi_color, -1);
+    rb_define_module_function(brb_mBBS, "color", (rb_func_t) brb_color, -1);
     rb_define_module_function(brb_mBBS, "ANSI_RESET", (rb_func_t) brb_ansi_reset, 0);
     rb_define_module_function(brb_mBBS, "ESC", (rb_func_t) brb_esc, 0);
     rb_define_module_function(brb_mBBS, "userid", (rb_func_t) brb_userid, 0);
-    rb_define_module_function(brb_mBBS, "getdata", (rb_func_t) brb_getdata, -2);
+    rb_define_module_function(brb_mBBS, "getdata", (rb_func_t) brb_getdata, -1);
     rb_define_module_function(brb_mBBS, "clock", (rb_func_t) brb_clock, 0);
     rb_define_module_function(brb_mBBS, "getch", (rb_func_t) brb_getch, 0);
     rb_define_module_function(brb_mBBS, "kbhit", (rb_func_t) brb_kbhit, 1);
