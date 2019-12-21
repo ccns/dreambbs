@@ -146,6 +146,7 @@ DEF_TEST(M3_USE_PFTERM ${BBSCONF} USE_PFTERM)
 DEF_TEST(M3_USE_BBSLUA ${BBSCONF} USE_BBSLUA)
 DEF_TEST(M3_USE_BBSRUBY ${BBSCONF} USE_BBSRUBY)
 DEF_TEST(BBSLUA_USE_LUAJIT ${BBSCONF} USE_LUAJIT)
+DEF_TEST(BBSRUBY_USE_MRUBY ${BBSCONF} USE_MRUBY)
 
 # Flags for disabling shared objects
 if(DEFINED ENV{NO_SO})
@@ -239,7 +240,12 @@ if(USE_BBSRUBY)
     if(CMAKE_SYSTEM_NAME STREQUAL "FreeBSD")
         link_libraries(-Wl,--no-as-needed)
     endif()
+    if(USE_MRUBY)
+        set(RUBY_CFLAGS)
+        set(RUBY_LDFLAGS mruby m)
+    else()
     pkg_search_module(RUBY REQUIRED ruby<=2.2 ruby-2.2)
+    endif()
 endif()
 
 ## Generate configure file

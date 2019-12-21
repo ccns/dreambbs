@@ -82,6 +82,7 @@ USE_PFTERM	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_PFTERM")) $(DEF_YES)'
 USE_BBSLUA	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSLUA")) $(DEF_YES)'
 USE_BBSRUBY	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSRUBY")) $(DEF_YES)'
 USE_LUAJIT	!= sh -c '$(DEF_TEST$(conf::= "BBSLUA_USE_LUAJIT")) $(DEF_YES)'
+USE_MRUBY	!= sh -c '$(DEF_TEST$(conf::= "BBSRUBY_USE_MRUBY")) $(DEF_YES)'
 
 # Flags for disabling shared objects
 NO_SO_CLI	:= $("$(NO_SO_CLI)" != "" :? $(NO_SO_CLI) : $(NO_SO:DYES:UNO))
@@ -177,8 +178,13 @@ LUA_LDFLAGS	!= pkg-config --libs $(LUA_PKG_NAME)
     RUBY_LDFLAGS_ARCHI	= -Wl,--no-as-needed
 .endif
 
+.if $(USE_MRUBY)
+RUBY_CFLAGS	=
+RUBY_LDFLAGS	= -lmruby -lm
+.else
 RUBY_CFLAGS	!= pkg-config --cflags ruby-2.2
 RUBY_LDFLAGS	!= pkg-config --libs ruby-2.2
+.endif
 .endif
 
 .endif  # .ifndef DREAMBBS_MK
