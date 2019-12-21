@@ -709,7 +709,6 @@ void run_ruby(
         RUBY_INIT_STACK;
         if (ruby_setup())
         {
-            print_exception();
             out_footer(" (內部錯誤)",  "按任意鍵返回");
             return;
         }
