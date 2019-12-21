@@ -803,12 +803,18 @@ void print_exception RB_PV((void))
     outs(buffer);
     outs("\n");
     VALUE ary = CMRB_C(rb_funcallv, mrb_funcall_argv)(exception, CMRB_C(rb_intern, mrb_intern_cstr)("backtrace"), 0, NULL);
-    int c;
-    for (c=0; c < RARRAY_LEN(ary); c++)
+#ifdef BBSRUBY_USE_MRUBY
+    // Some `Exception` objects have theirs `backtrace` unset in mruby
+    if (mrb_array_p(ary))
+#endif
     {
-        outs("  from: ");
-        outs(StringValueCStr(RARRAY_PTR(ary)[c]));
-        outs("\n");
+        int c;
+        for (c=0; c < RARRAY_LEN(ary); c++)
+        {
+            outs("  from: ");
+            outs(StringValueCStr(RARRAY_PTR(ary)[c]));
+            outs("\n");
+        }
     }
     out_footer(" (發生錯誤)", "按任意鍵返回");
 }
