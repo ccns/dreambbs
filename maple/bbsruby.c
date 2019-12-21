@@ -119,6 +119,7 @@ static inline void getyx(int *y, int *x)
   #include <mruby/proc.h>
   #include <mruby/string.h>
   #include <mruby/variable.h>
+  #include <mruby/version.h>
 
   #define BRBCPP_EVAL(...) __VA_ARGS__
   #define RBF_P(paras)  (mrb_state *mrb, mrb_value self)    // `rb_func_t` parameter
@@ -808,6 +809,107 @@ void print_exception RB_PV((void))
     out_footer(" (發生錯誤)", "按任意鍵返回");
 }
 
+#ifdef BBSRUBY_USE_MRUBY
+
+#define BRBCPP_APPENDTO_NOEVAL(x, ...)  __VA_ARGS__ ## x
+#define BRBCPP_APPENDTO(...)  BRBCPP_APPENDTO_NOEVAL(__VA_ARGS__)
+
+#define BRBCPP_EXPAND_LIST(list)  \
+    BRBCPP_APPENDTO(_END, BRBCPP_EXPAND_LIST_OP1 list)
+
+#define BRBCPP_EXPAND_LIST_OP1(elem)  \
+    BRBCPP_LIST_TRANSFORM(elem) BRBCPP_EXPAND_LIST_OP2
+#define BRBCPP_EXPAND_LIST_OP2(elem)  \
+    BRBCPP_LIST_TRANSFORM(elem) BRBCPP_EXPAND_LIST_OP1
+
+#define BRBCPP_EXPAND_LIST_OP1_END
+#define BRBCPP_EXPAND_LIST_OP2_END
+
+#define BRB_MRB10400_GEMBOX_DEFAULT  \
+    (mruby_sprintf) \
+    /* (mruby_print) */ \
+    (mruby_math) \
+    (mruby_time) \
+    (mruby_struct) \
+    (mruby_compar_ext) \
+    (mruby_enum_ext) \
+    (mruby_string_ext) \
+    (mruby_numeric_ext) \
+    (mruby_array_ext) \
+    (mruby_hash_ext) \
+    (mruby_range_ext) \
+    (mruby_proc_ext) \
+    (mruby_symbol_ext) \
+    (mruby_random) \
+    (mruby_object_ext) \
+    (mruby_objectspace) \
+    (mruby_fiber) \
+    (mruby_enumerator) \
+    (mruby_enum_lazy) \
+    (mruby_toplevel_ext) \
+    (mruby_kernel_ext) \
+    (mruby_class_ext) \
+    (mruby_error)
+
+#define BRB_MRB10400_GEMBOX_FULLCORE  \
+    /* (mruby_exit) */ \
+    (mruby_eval) \
+    /* (mruby_socket) */
+
+#if MRUBY_RELEASE_NO >= 20000
+  #define BRB_MRB20000_GEMBOX_DEFAULT  \
+    (mruby_metaprog) \
+    /* (mruby_io) */ \
+    (mruby_pack) \
+    (mruby_method)
+
+  #define BRB_MRB20000_GEMBOX_FULLCORE  \
+    (mruby_complex) \
+    (mruby_rational) \
+    /* (mruby_sleep) */
+#else
+  #define BRB_MRB20000_GEMBOX_DEFAULT
+  #define BRB_MRB20000_GEMBOX_FULLCORE
+#endif
+
+#define BRB_MRBGEM_LIST  \
+    BRB_MRB10400_GEMBOX_DEFAULT \
+    /* BRB_MRB10400_GEMBOX_FULLCORE */ \
+    BRB_MRB20000_GEMBOX_DEFAULT \
+    /* BRB_MRB20000_GEMBOX_FULLCORE */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#undef BRBCPP_LIST_TRANSFORM
+#define BRBCPP_LIST_TRANSFORM(elem)  \
+    void GENERATED_TMP_mrb_ ## elem ## _gem_init(mrb_state *mrb); \
+    void GENERATED_TMP_mrb_ ## elem ## _gem_final(mrb_state *mrb);
+BRBCPP_EXPAND_LIST(BRB_MRBGEM_LIST)
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif
+
+static void bbsruby_final_mrbgems(mrb_state *mrb)
+{
+#undef BRBCPP_LIST_TRANSFORM
+#define BRBCPP_LIST_TRANSFORM(elem)  \
+    GENERATED_TMP_mrb_ ## elem ## _gem_final(mrb);
+    BRBCPP_EXPAND_LIST(BRB_MRBGEM_LIST)
+}
+
+static void bbsruby_init_mrbgems(mrb_state *mrb)
+{
+#undef BRBCPP_LIST_TRANSFORM
+#define BRBCPP_LIST_TRANSFORM(elem)  \
+    GENERATED_TMP_mrb_ ## elem ## _gem_init(mrb);
+    BRBCPP_EXPAND_LIST(BRB_MRBGEM_LIST)
+    mrb_state_atexit(mrb, bbsruby_final_mrbgems);
+}
+#endif
+
 static void bbsruby_init_bbs_module RB_PV((void))
 {
 #ifdef BBSRUBY_USE_MRUBY
@@ -910,7 +1012,7 @@ void run_ruby(
 #endif
     {
 #ifdef BBSRUBY_USE_MRUBY
-        if (!(mrb = mrb_open_allocf(mrb_default_allocf, NULL)))
+        if (!(mrb = mrb_open_core(mrb_default_allocf, NULL)))
 #else
         RUBY_INIT_STACK;
         if (ruby_setup())
@@ -920,7 +1022,9 @@ void run_ruby(
             return;
         }
 
-#ifndef BBSRUBY_USE_MRUBY
+#ifdef BBSRUBY_USE_MRUBY
+        bbsruby_init_mrbgems(mrb);
+#else
         ruby_init_loadpath();
         ruby_inited = 1;
 
