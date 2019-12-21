@@ -33,10 +33,16 @@ extern "C" {
 /* BBS-Ruby */
 
 #ifdef M3_USE_BBSRUBY
-  #include <ruby/version.h>
+  #ifdef BBSRUBY_USE_MRUBY
+    #include <mruby/version.h>
 
-  #define RUBY_RELEASE_STR \
-      VER_PATCH_STR(RUBY_API_VERSION_MAJOR, RUBY_API_VERSION_MINOR, RUBY_API_VERSION_TEENY)
+    #define RUBY_RELEASE_STR  MRUBY_RUBY_VERSION
+  #else
+    #include <ruby/version.h>
+
+    #define RUBY_RELEASE_STR \
+        VER_PATCH_STR(RUBY_API_VERSION_MAJOR, RUBY_API_VERSION_MINOR, RUBY_API_VERSION_TEENY)
+  #endif
 #endif
 
 #define HAVE_BBSRUBY
