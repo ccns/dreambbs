@@ -591,7 +591,11 @@ void BBSRubyHook(
 #ifdef BBSRUBY_USE_MRUBY
     mrb_state *mrb,
     mrb_irep *irep,
+  #if MRUBY_RELEASE_NO >= 20100
+    const mrb_code *pc,
+  #else
     mrb_code *pc,
+  #endif
     mrb_value *regs
 #else
    rb_event_flag_t event,
