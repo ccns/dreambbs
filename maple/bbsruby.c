@@ -11,6 +11,7 @@
 //#define BBSRUBY_HAVE_STR_RANSI            // The BBS has `str_ransi` variable
 //#define BBSRUBY_VER_INFO_FILE             // The file with version information for BBS-Ruby
 #define BBSRUBY_HAVE_BMIN_BMAX            // The BBS has macros `BMIN` and `BMAX`
+//#define BBSRUBY_USE_MRUBY                 // Use mruby instead of CRuby
 
 #include "bbs.h"
 #include <sys/time.h>
@@ -23,6 +24,7 @@
  #define BBSRUBY_HAVE_GETYX
  #define BBSRUBY_HAVE_STR_RANSI
  #define BBSRUBY_VER_INFO_FILE "bbs_script.h"
+ //#define BBSRUBY_USE_MRUBY
 #endif //M3_USE_BBSRUBY
 
 #ifdef PTT_USE_BBSRUBY    // For compiling on PttBBS
@@ -33,6 +35,7 @@
  #define BBSRUBY_HAVE_GETYX
  #undef BBSRUBY_HAVE_STR_RANSI
  #undef BBSRUBY_VER_INFO_FILE
+ #define BBSRUBY_USE_MRUBY
 #endif //PTT_USE_BBSRUBY
 
 /* Inferred settings */
@@ -105,15 +108,79 @@ static inline void getyx(int *y, int *x)
 //-------------------------------------------------------
 
 #include "bbs.h"
-#include <ruby.h>
 
-#ifndef RUBY_VM
-#include <rubysig.h>
-#include <node.h>
+#ifdef BBSRUBY_USE_MRUBY
+  #include <mruby.h>
+  #include <mruby/array.h>
+  #include <mruby/compile.h>
+  #include <mruby/error.h>
+  #include <mruby/hash.h>
+  #include <mruby/numeric.h>
+  #include <mruby/proc.h>
+  #include <mruby/string.h>
+  #include <mruby/variable.h>
+
+  #define BRBCPP_EVAL(...) __VA_ARGS__
+  #define RBF_P(paras)  (mrb_state *mrb, mrb_value self)    // `rb_func_t` parameter
+  #define RB_P(paras)  (mrb_state *mrb, BRBCPP_EVAL paras)  // parameter
+  #define RB_PV(paras)  (mrb_state *mrb)                    // parameter void
+  #define RBF_ARG(...)  (mrb, self)                         // `rb_func_t` arguments
+  #define RB_ARG(...)  (mrb, __VA_ARGS__)                   // arguments
+  #define RB_VARG()  (mrb)                                  // void argument
+  #define RBF_C(func)  func RBF_ARG                         // `rb_func_t` call
+  #define RB_C(func)  m##func RB_ARG                        // Ruby API call
+  #define RB_CV(func)  m##func RB_VARG                      // Ruby API call void
+  #define BRB_C(func)  func RB_ARG                          // normal ruby call
+  #define BRB_CV(func)  func RB_VARG                        // normal ruby call void
+  #define CMRB_C(crbfunc, mrbfunc)  mrbfunc RB_ARG          // (CRuby, mruby) API call
+  #define CMRB_CV(crbfunc, mrbfunc)  mrbfunc RB_VARG        // (CRuby, mruby) API call void
+
+typedef mrb_value VALUE;
+typedef struct RClass *rb_class_t;
+typedef mrb_func_t rb_func_t;
+
+  #define RB_ARGS_REQ(n)  MRB_ARGS_REQ(n)
+  #define RB_ARGS_REST()  MRB_ARGS_REST()
+
+  #define rb_cObject  (mrb->object_class)
+  #define Qnil  mrb_nil_value()
+  #define Qundef  mrb_undef_value()
+  #define INT2FIX(i)  mrb_fixnum_value(i)
+  #define INT2NUM(i)  mrb_fixnum_value(i)
+  #define NUM2INT(o)  mrb_int(mrb, o)
+  #define NUM2DBL(o)  mrb_to_flo(mrb, o)
+  #define StringValueCStr(v)  mrb_string_value_cstr(mrb, &(v))
+  #define RTEST(o)  mrb_test(o)
+
+  #define BRB_HOOK_COUNT_FACTOR  100
+#else
+  #include <ruby.h>
+
+  #ifndef RUBY_VM
+    #include <rubysig.h>
+    #include <node.h>
 typedef rb_event_t rb_event_flag_t;
-#endif
+  #endif
+
+  #define RBF_P(paras)  paras                 // `rb_func_t` parameter
+  #define RB_P(paras)  paras                  // parameter
+  #define RB_PV(paras)  (void)                // parameter void
+  #define RBF_C(func)  func                   // `rb_func_t` call
+  #define RB_C(func)  func                    // Ruby API call
+  #define RB_CV(func)  func                   // Ruby API call void
+  #define BRB_C(func)  func                   // normal ruby call
+  #define BRB_CV(func)  func                  // normal ruby call void
+  #define CMRB_C(crbfunc, mrbfunc)  crbfunc   // (CRuby, mruby) API call
+  #define CMRB_CV(crbfunc, mrbfunc)  crbfunc  // (CRuby, mruby) API call void
 
 typedef VALUE (*rb_func_t)(ANYARGS);
+typedef VALUE rb_class_t;
+
+  #define RB_ARGS_REQ(n)  n
+  #define RB_ARGS_REST()  -1
+
+  #define BRB_HOOK_COUNT_FACTOR  1
+#endif
 
 #define BBSRUBY_MAJOR_VERSION (0)
 #define BBSRUBY_MINOR_VERSION (3)
@@ -138,56 +205,56 @@ VALUE KB_QUEUE;
 int getkey(double wait);
 
 /* BBS helper class : following BBSLua SDK */
-VALUE brb_keyToString(int key)
+VALUE brb_keyToString RB_P((int key))
 {
     if (key == Ctrl('C')) // System-wide Abort
         ABORT_BBSRUBY = 1;
 
     if (key == KEY_UP)
-        return rb_str_new_cstr("UP");
+        return RB_C(rb_str_new_cstr)("UP");
     else if (key == KEY_DOWN)
-        return rb_str_new_cstr("DOWN");
+        return RB_C(rb_str_new_cstr)("DOWN");
     else if (key == KEY_LEFT)
-        return rb_str_new_cstr("LEFT");
+        return RB_C(rb_str_new_cstr)("LEFT");
     else if (key == KEY_RIGHT)
-        return rb_str_new_cstr("RIGHT");
+        return RB_C(rb_str_new_cstr)("RIGHT");
     else if (key == KEY_HOME)
-        return rb_str_new_cstr("HOME");
+        return RB_C(rb_str_new_cstr)("HOME");
     else if (key == KEY_INS)
-        return rb_str_new_cstr("INS");
+        return RB_C(rb_str_new_cstr)("INS");
     else if (key == KEY_DEL)
-        return rb_str_new_cstr("DEL");
+        return RB_C(rb_str_new_cstr)("DEL");
     else if (key == KEY_END)
-        return rb_str_new_cstr("END");
+        return RB_C(rb_str_new_cstr)("END");
     else if (key == KEY_PGUP)
-        return rb_str_new_cstr("PGUP");
+        return RB_C(rb_str_new_cstr)("PGUP");
     else if (key == KEY_PGDN)
-        return rb_str_new_cstr("PGDN");
+        return RB_C(rb_str_new_cstr)("PGDN");
 #ifdef KEY_BKSP
     else if (key == KEY_BKSP)
 #else
     else if (key == '\b' || key == 0x7F)
 #endif
-        return rb_str_new_cstr("BKSP");
+        return RB_C(rb_str_new_cstr)("BKSP");
     else if (key == KEY_TAB)
-        return rb_str_new_cstr("TAB");
+        return RB_C(rb_str_new_cstr)("TAB");
     else if (key == KEY_ENTER)
-        return rb_str_new_cstr("ENTER");
+        return RB_C(rb_str_new_cstr)("ENTER");
     else if (key > 0x00 && key < 0x1b) // Ctrl()
     {
         char buf[3];
         sprintf(buf, "^%c", key + 'A' - 1);
-        return rb_str_new_cstr(buf);
+        return RB_C(rb_str_new_cstr)(buf);
     }
     else // Normal characters
     {
         char buf[2];
         sprintf(buf, "%c", key);
-        return rb_str_new_cstr(buf);
+        return RB_C(rb_str_new_cstr)(buf);
     }
 }
 
-VALUE brb_clock(VALUE self)
+VALUE brb_clock RBF_P((VALUE self))
 {
     struct timeval tv;
     struct timezone tz;
@@ -195,22 +262,28 @@ VALUE brb_clock(VALUE self)
     memset(&tz, 0, sizeof(tz));
     gettimeofday(&tv, &tz);
     d = tv.tv_sec + tv.tv_usec / 1000000;
-    return rb_float_new(d);
+    return CMRB_C(rb_float_new, mrb_float_value)(d);
 }
 
-VALUE brb_getch(VALUE self)
+VALUE brb_getch RBF_P((VALUE self))
 {
     //if (RARRAY_LEN(KB_QUEUE) == 0)
         int c = vkey();
-        return brb_keyToString(c);
+        return BRB_C(brb_keyToString)(c);
     //else
-        //return rb_ary_pop(KB_QUEUE);
+        //return RB_C(rb_ary_pop)(KB_QUEUE);
 }
 
 #define MACRO_NONZERO(macro)  ((macro-0) != 0)
 
-VALUE brb_getdata(int argc, VALUE *argv, VALUE self)
+VALUE brb_getdata RBF_P((int argc, VALUE *argv, VALUE self))
 {
+#ifdef BBSRUBY_USE_MRUBY
+    mrb_int argc;
+    VALUE *argv;
+    mrb_get_args(mrb, "*", &argv, &argc);
+#endif
+
     int echo = DOECHO;
     if (argc > 1 && NUM2INT(argv[1]) == 0)
 #if MACRO_NONZERO(VGET_STEALTH_NOECHO)
@@ -243,30 +316,41 @@ VALUE brb_getdata(int argc, VALUE *argv, VALUE self)
         {
             ABORT_BBSRUBY = 1;
         }
-        return rb_str_new_cstr("");
+        return RB_C(rb_str_new_cstr)("");
     }
     else
     {
-        return rb_str_new_cstr(data);
+        return RB_C(rb_str_new_cstr)(data);
     }
 }
 
-VALUE brb_kbhit(VALUE self, VALUE wait)
+VALUE brb_kbhit RBF_P((VALUE self, VALUE wait))
 {
+#ifdef BBSRUBY_USE_MRUBY
+    VALUE wait;
+    mrb_get_args(mrb, "o", &wait);
+#endif
+
     double data = NUM2DBL(wait);
     data = BMIN(BMAX(data, KBHIT_TMIN), KBHIT_TMAX);
 
     if (getkey(data) != 0)
     {
-        //rb_ary_push(KB_QUEUE, brb_keyToString(data));
+        //RB_C(rb_ary_push)(KB_QUEUE, BRB_C(brb_keyToString)(data));
         return INT2NUM(1);
     }
     else
         return INT2NUM(0);
 }
 
-VALUE brb_outs(int argc, VALUE *argv, VALUE self)
+VALUE brb_outs RBF_P((int argc, VALUE *argv, VALUE self))
 {
+#ifdef BBSRUBY_USE_MRUBY
+    mrb_int argc;
+    VALUE *argv;
+    mrb_get_args(mrb, "*", &argv, &argc);
+#endif
+
     int i;
     for (i=0; i<argc; i++)
     {
@@ -275,59 +359,95 @@ VALUE brb_outs(int argc, VALUE *argv, VALUE self)
     return Qnil;
 }
 
-VALUE brb_title(VALUE self, VALUE msg)
+VALUE brb_title RBF_P((VALUE self, VALUE msg))
 {
+#ifdef BBSRUBY_USE_MRUBY
+    VALUE msg;
+    mrb_get_args(mrb, "o", &msg);
+#endif
+
     vs_bar(StringValueCStr(msg));
     return Qnil;
 }
 
-VALUE brb_print(int argc, VALUE *argv, VALUE self)
+VALUE brb_print RBF_P((int argc, VALUE *argv, VALUE self))
 {
-    brb_outs(argc, argv, self);
+    RBF_C(brb_outs)(argc, argv, self);
     outs("\n");
     return Qnil;
 }
 
-VALUE brb_getmaxyx(VALUE self)
+VALUE brb_getmaxyx RBF_P((VALUE self))
 {
-    VALUE rethash = rb_hash_new();
-    rb_hash_aset(rethash, rb_str_new_cstr(BRB_COOR_ROW), INT2NUM(b_lines + 1));
-    rb_hash_aset(rethash, rb_str_new_cstr(BRB_COOR_COL), INT2NUM(b_cols + 1));
+    VALUE rethash = RB_CV(rb_hash_new)();
+    CMRB_C(rb_hash_aset, mrb_hash_set)(rethash, RB_C(rb_str_new_cstr)(BRB_COOR_ROW), INT2NUM(b_lines + 1));
+    CMRB_C(rb_hash_aset, mrb_hash_set)(rethash, RB_C(rb_str_new_cstr)(BRB_COOR_COL), INT2NUM(b_cols + 1));
     return rethash;
 }
 
-VALUE brb_getyx(VALUE self)
+VALUE brb_getyx RBF_P((VALUE self))
 {
-    VALUE rethash = rb_hash_new();
+    VALUE rethash = RB_CV(rb_hash_new)();
     int cur_row, cur_col;
     getyx(&cur_row, &cur_col);
-    rb_hash_aset(rethash, rb_str_new_cstr(BRB_COOR_ROW), INT2NUM(cur_row));
-    rb_hash_aset(rethash, rb_str_new_cstr(BRB_COOR_COL), INT2NUM(cur_col));
+    CMRB_C(rb_hash_aset, mrb_hash_set)(rethash, RB_C(rb_str_new_cstr)(BRB_COOR_ROW), INT2NUM(cur_row));
+    CMRB_C(rb_hash_aset, mrb_hash_set)(rethash, RB_C(rb_str_new_cstr)(BRB_COOR_COL), INT2NUM(cur_col));
     return rethash;
 }
 
-VALUE brb_move(VALUE self, VALUE y, VALUE x) { move(NUM2INT(y), NUM2INT(x)); return Qnil; }
-VALUE brb_moverel(VALUE self, VALUE dy, VALUE dx) {
+VALUE brb_move RBF_P((VALUE self, VALUE y, VALUE x))
+{
+#ifdef BBSRUBY_USE_MRUBY
+    VALUE y, x;
+    mrb_get_args(mrb, "oo", &y, &x);
+#endif
+
+    move(NUM2INT(y), NUM2INT(x));
+    return Qnil;
+}
+
+VALUE brb_moverel RBF_P((VALUE self, VALUE dy, VALUE dx))
+{
+#ifdef BBSRUBY_USE_MRUBY
+    VALUE dy, dx;
+    mrb_get_args(mrb, "oo", &dy, &dx);
+#endif
+
     int cur_row, cur_col;
     getyx(&cur_row, &cur_col);
     move(cur_row + NUM2INT(dy), cur_col + NUM2INT(dx));
     return Qnil;
 }
 
-VALUE brb_clear(VALUE self) { clear(); return Qnil; }
+VALUE brb_clear RBF_P((VALUE self)) { clear(); return Qnil; }
 
-VALUE brb_clrtoeol(VALUE self) { clrtoeol(); return Qnil; }
-VALUE brb_clrtobot(VALUE self) { clrtobot(); return Qnil; }
+VALUE brb_clrtoeol RBF_P((VALUE self)) { clrtoeol(); return Qnil; }
+VALUE brb_clrtobot RBF_P((VALUE self)) { clrtobot(); return Qnil; }
 
-VALUE brb_refresh(VALUE self) { refresh(); return Qnil; }
+VALUE brb_refresh RBF_P((VALUE self)) { refresh(); return Qnil; }
 
-VALUE brb_vmsg(VALUE self, VALUE msg) { vmsg(StringValueCStr(msg)); return Qnil; }
-
-VALUE brb_name(VALUE self) { return rb_str_new_cstr(BBSNAME); }
-VALUE brb_interface(VALUE self) { return rb_float_new(BBSRUBY_INTERFACE_VER); }
-
-VALUE brb_ansi_color(int argc, VALUE *argv, VALUE self)
+VALUE brb_vmsg RBF_P((VALUE self, VALUE msg))
 {
+#ifdef BBSRUBY_USE_MRUBY
+    VALUE msg;
+    mrb_get_args(mrb, "o", &msg);
+#endif
+
+    vmsg(StringValueCStr(msg));
+    return Qnil;
+}
+
+VALUE brb_name RBF_P((VALUE self)) { return RB_C(rb_str_new_cstr)(BBSNAME); }
+VALUE brb_interface RBF_P((VALUE self)) { return CMRB_C(rb_float_new, mrb_float_value)(BBSRUBY_INTERFACE_VER); }
+
+VALUE brb_ansi_color RBF_P((int argc, VALUE *argv, VALUE self))
+{
+#ifdef BBSRUBY_USE_MRUBY
+    mrb_int argc;
+    VALUE *argv;
+    mrb_get_args(mrb, "*", &argv, &argc);
+#endif
+
     char buf[50] = "\033[";
     char *p = buf + strlen(buf);
 
@@ -342,38 +462,53 @@ VALUE brb_ansi_color(int argc, VALUE *argv, VALUE self)
 
     *p++ = 'm'; *p = '\0';
 
-    return rb_str_new_cstr(buf);
+    return RB_C(rb_str_new_cstr)(buf);
 }
 
-VALUE brb_ansi_reset(VALUE self)
+VALUE brb_ansi_reset RBF_P((VALUE self))
 {
-    return rb_str_new_cstr("\033[m");
+    return RB_C(rb_str_new_cstr)("\033[m");
 }
 
-VALUE brb_esc(VALUE self)
+VALUE brb_esc RBF_P((VALUE self))
 {
-    return rb_str_new_cstr("\033");
+    return RB_C(rb_str_new_cstr)("\033");
 }
 
-VALUE brb_color(int argc, VALUE *argv, VALUE self)
+VALUE brb_color RBF_P((int argc, VALUE *argv, VALUE self))
 {
+#ifdef BBSRUBY_USE_MRUBY
+    mrb_int argc;
+    VALUE *argv;
+    mrb_get_args(mrb, "*", &argv, &argc);
+#endif
+
     VALUE str;
     if (argc == 0)
-        str = brb_ansi_reset(self);
+        str = RBF_C(brb_ansi_reset)(self);
     else
-        str = brb_ansi_color(argc, argv, self);
+        str = RBF_C(brb_ansi_color)(argc, argv, self);
 
+#ifdef BBSRUBY_USE_MRUBY
+    mrb_funcall_argv(mrb, self, mrb_intern_cstr(mrb, "outs"), 1, &str);
+#else
     brb_outs(1, &str, self);
+#endif
     return Qnil;
 }
 
-VALUE brb_userid(VALUE self)
+VALUE brb_userid RBF_P((VALUE self))
 {
-    return rb_str_new_cstr(cuser.userid);
+    return RB_C(rb_str_new_cstr)(cuser.userid);
 }
 
-VALUE brb_pause(VALUE self, VALUE msg)
+VALUE brb_pause RBF_P((VALUE self, VALUE msg))
 {
+#ifdef BBSRUBY_USE_MRUBY
+    VALUE msg;
+    mrb_get_args(mrb, "o", &msg);
+#endif
+
     char buf[200];
     move(b_lines, 0);
 
@@ -397,10 +532,10 @@ VALUE brb_pause(VALUE self, VALUE msg)
     move(b_lines, 0);
     clrtoeol();
 
-    return brb_keyToString(k);
+    return BRB_C(brb_keyToString)(k);
 }
 
-GCC_PURE VALUE brb_toc(VALUE self)
+GCC_PURE VALUE brb_toc RBF_P((VALUE self))
 {
     return TOCs_rubyhash;
 }
@@ -452,32 +587,45 @@ int getkey(double wait)
 }
 
 void BBSRubyHook(
-    rb_event_flag_t event,
-#ifdef RUBY_VM
-    VALUE data,
+#ifdef BBSRUBY_USE_MRUBY
+    mrb_state *mrb,
+    mrb_irep *irep,
+    mrb_code *pc,
+    mrb_value *regs
 #else
-    NODE *node,
+   rb_event_flag_t event,
+  #ifdef RUBY_VM
+   VALUE data,
+  #else
+   NODE *node,
+  #endif
+   VALUE self,
+   ID mid,
+   VALUE klass
 #endif
-    VALUE self,
-    ID mid,
-    VALUE klass)
+)
 {
     static int hook_count = 0;
     hook_count++;
-    if (hook_count == 1000)
+    if (hook_count == BRB_HOOK_COUNT_FACTOR * 1000)
     {
         int key = getkey(KBHIT_TMIN);
         if (key == Ctrl('C'))
             ABORT_BBSRUBY = 1;
         // else
-            // rb_ary_push(KB_QUEUE, INT2NUM(key));
+            // RB_C(rb_ary_push)(KB_QUEUE, INT2NUM(key));
         hook_count = 0;
     }
 
     if (ABORT_BBSRUBY)
     {
+#ifdef BBSRUBY_USE_MRUBY
+        // Raise an exception to terminate execution
+        mrb_raise(mrb, mrb_exc_get(mrb, "Exception"), "User Interrupt");
+#else
         rb_thread_kill(rb_thread_current());
         // TODO: Ensure all thread cleanup.
+#endif
     }
 
     return;
@@ -574,12 +722,12 @@ int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
     return 1;
 }
 
-void bbsruby_load_TOC(const char *cStart, const char *cEnd)
+void bbsruby_load_TOC RB_P((const char *cStart, const char *cEnd))
 {
     // Create TOC class wrapping these information
     const char *tStart, *tEnd;
     tStart = cStart;
-    VALUE hashTOC = rb_hash_new();
+    VALUE hashTOC = RB_CV(rb_hash_new)();
     GCC_UNUSED int TOCfound = 0;
     // In this implement, we only allow TOC to be put BEFORE the actual script code
     while (tStart < cEnd)
@@ -615,8 +763,8 @@ void bbsruby_load_TOC(const char *cStart, const char *cEnd)
                     data[tEnd - tStart] ='\0';
                     free(TOCs_DATA[i]);
                     TOCs_DATA[i] = data;
-                    rb_hash_aset(hashTOC, rb_str_new_cstr(TOCs_HEADER[i]), rb_str_new_cstr(data));
-                    rb_hash_aset(hashTOC, rb_funcallv(rb_str_new_cstr(TOCs_HEADER[i]), rb_intern("capitalize!"), 0, NULL), rb_str_new_cstr(data));
+                    CMRB_C(rb_hash_aset, mrb_hash_set)(hashTOC, RB_C(rb_str_new_cstr)(TOCs_HEADER[i]), RB_C(rb_str_new_cstr)(data));
+                    CMRB_C(rb_hash_aset, mrb_hash_set)(hashTOC, CMRB_C(rb_funcallv, mrb_funcall_argv)(RB_C(rb_str_new_cstr)(TOCs_HEADER[i]), CMRB_C(rb_intern, mrb_intern_cstr)("capitalize!"), 0, NULL), RB_C(rb_str_new_cstr)(data));
                     TOCfound = 1;
                     break;
                 }
@@ -630,21 +778,26 @@ void bbsruby_load_TOC(const char *cStart, const char *cEnd)
     TOCs_rubyhash = hashTOC;
 }
 
-void print_exception(void)
+void print_exception RB_PV((void))
 {
     clear();
+#ifdef BBSRUBY_USE_MRUBY
+    VALUE exception = mrb_obj_value(mrb->exc);
+    mrb->exc = mrb_obj_ptr(Qnil);
+#else
     VALUE exception = rb_errinfo();
     rb_set_errinfo(Qnil);
+#endif
     if (!RTEST(exception)) return;
 
-    char* buffer = RSTRING_PTR(rb_obj_as_string(exception));
+    char* buffer = RSTRING_PTR(RB_C(rb_obj_as_string)(exception));
     outs("\033[m");
     clear();
     move(0, 0);
     outs("程式發生錯誤，無法繼續執行。請通知原作者。\n錯誤資訊：\n");
     outs(buffer);
     outs("\n");
-    VALUE ary = rb_funcallv(exception, rb_intern("backtrace"), 0, NULL);
+    VALUE ary = CMRB_C(rb_funcallv, mrb_funcall_argv)(exception, CMRB_C(rb_intern, mrb_intern_cstr)("backtrace"), 0, NULL);
     int c;
     for (c=0; c < RARRAY_LEN(ary); c++)
     {
@@ -655,92 +808,82 @@ void print_exception(void)
     out_footer(" (發生錯誤)", "按任意鍵返回");
 }
 
-static void bbsruby_init_bbs_module(void)
+static void bbsruby_init_bbs_module RB_PV((void))
 {
+#ifdef BBSRUBY_USE_MRUBY
+    // Remove former definition
+    mrb_const_remove(mrb, mrb_obj_value(mrb->object_class), mrb_intern_cstr(mrb, "BBS"));
+#else
     // Remove former definition
     rb_define_global_const("BBS", Qundef);
+#endif
 
     // Prepare BBS wrapper module
-    VALUE brb_mBBS = rb_define_module("BBS");
-    rb_define_module_function(brb_mBBS, "outs", (rb_func_t) brb_outs, -1);
-    rb_define_module_function(brb_mBBS, "title", (rb_func_t) brb_title, 1);
-    rb_define_module_function(brb_mBBS, "print", (rb_func_t) brb_print, -1);
-    rb_define_module_function(brb_mBBS, "getyx", (rb_func_t) brb_getyx, 0);
-    rb_define_module_function(brb_mBBS, "getmaxyx", (rb_func_t) brb_getmaxyx, 0);
-    rb_define_module_function(brb_mBBS, "move", (rb_func_t) brb_move, 2);
-    rb_define_module_function(brb_mBBS, "moverel", (rb_func_t) brb_moverel, 2);
-    rb_define_module_function(brb_mBBS, "clear", (rb_func_t) brb_clear, 0);
-    rb_define_module_function(brb_mBBS, "clrtoeol", (rb_func_t) brb_clrtoeol, 0);
-    rb_define_module_function(brb_mBBS, "clrtobot", (rb_func_t) brb_clrtobot, 0);
-    rb_define_module_function(brb_mBBS, "refresh", (rb_func_t) brb_refresh, 0);
-    rb_define_module_function(brb_mBBS, "vmsg", (rb_func_t) brb_vmsg, 1);
-    rb_define_module_function(brb_mBBS, "pause", (rb_func_t) brb_pause, 1);
-    rb_define_module_function(brb_mBBS, "sitename", (rb_func_t) brb_name, 0);
-    rb_define_module_function(brb_mBBS, "interface", (rb_func_t) brb_interface, 0);
-    rb_define_module_function(brb_mBBS, "toc", (rb_func_t) brb_toc, 0);
-    rb_define_module_function(brb_mBBS, "ansi_color", (rb_func_t) brb_ansi_color, -1);
-    rb_define_module_function(brb_mBBS, "color", (rb_func_t) brb_color, -1);
-    rb_define_module_function(brb_mBBS, "ANSI_RESET", (rb_func_t) brb_ansi_reset, 0);
-    rb_define_module_function(brb_mBBS, "ESC", (rb_func_t) brb_esc, 0);
-    rb_define_module_function(brb_mBBS, "userid", (rb_func_t) brb_userid, 0);
-    rb_define_module_function(brb_mBBS, "getdata", (rb_func_t) brb_getdata, -1);
-    rb_define_module_function(brb_mBBS, "clock", (rb_func_t) brb_clock, 0);
-    rb_define_module_function(brb_mBBS, "getch", (rb_func_t) brb_getch, 0);
-    rb_define_module_function(brb_mBBS, "kbhit", (rb_func_t) brb_kbhit, 1);
+    rb_class_t brb_mBBS = RB_C(rb_define_module)("BBS");
+    RB_C(rb_define_module_function)(brb_mBBS, "outs", (rb_func_t) brb_outs, RB_ARGS_REST());
+    RB_C(rb_define_module_function)(brb_mBBS, "title", (rb_func_t) brb_title, RB_ARGS_REQ(1));
+    RB_C(rb_define_module_function)(brb_mBBS, "print", (rb_func_t) brb_print, RB_ARGS_REST());
+    RB_C(rb_define_module_function)(brb_mBBS, "getyx", (rb_func_t) brb_getyx, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "getmaxyx", (rb_func_t) brb_getmaxyx, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "move", (rb_func_t) brb_move, RB_ARGS_REQ(2));
+    RB_C(rb_define_module_function)(brb_mBBS, "moverel", (rb_func_t) brb_moverel, RB_ARGS_REQ(2));
+    RB_C(rb_define_module_function)(brb_mBBS, "clear", (rb_func_t) brb_clear, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "clrtoeol", (rb_func_t) brb_clrtoeol, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "clrtobot", (rb_func_t) brb_clrtobot, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "refresh", (rb_func_t) brb_refresh, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "vmsg", (rb_func_t) brb_vmsg, RB_ARGS_REQ(1));
+    RB_C(rb_define_module_function)(brb_mBBS, "pause", (rb_func_t) brb_pause, RB_ARGS_REQ(1));
+    RB_C(rb_define_module_function)(brb_mBBS, "sitename", (rb_func_t) brb_name, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "interface", (rb_func_t) brb_interface, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "toc", (rb_func_t) brb_toc, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "ansi_color", (rb_func_t) brb_ansi_color, RB_ARGS_REST());
+    RB_C(rb_define_module_function)(brb_mBBS, "color", (rb_func_t) brb_color, RB_ARGS_REST());
+    RB_C(rb_define_module_function)(brb_mBBS, "ANSI_RESET", (rb_func_t) brb_ansi_reset, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "ESC", (rb_func_t) brb_esc, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "userid", (rb_func_t) brb_userid, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "getdata", (rb_func_t) brb_getdata, RB_ARGS_REST());
+    RB_C(rb_define_module_function)(brb_mBBS, "clock", (rb_func_t) brb_clock, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "getch", (rb_func_t) brb_getch, RB_ARGS_REQ(0));
+    RB_C(rb_define_module_function)(brb_mBBS, "kbhit", (rb_func_t) brb_kbhit, RB_ARGS_REQ(1));
 }
 
-static VALUE bbsruby_eval_code(VALUE eval_args)
+static VALUE bbsruby_eval_code RB_P((VALUE eval_args))
 {
-    bbsruby_init_bbs_module();
+#ifdef BBSRUBY_USE_MRUBY
+    VALUE codestr = ((VALUE *)mrb_cptr(eval_args))[0];
+    VALUE filename = ((VALUE *)mrb_cptr(eval_args))[1];
+    VALUE lineno = ((VALUE *)mrb_cptr(eval_args))[2];
+    mrbc_context *cxt = mrbc_context_new(mrb);
 
+    mrbc_filename(mrb, cxt, StringValueCStr(filename));
+    cxt->lineno = NUM2INT(lineno);
+    cxt->capture_errors = 1;
+#endif
+
+    BRB_CV(bbsruby_init_bbs_module)();
+
+#ifdef BBSRUBY_USE_MRUBY
+    mrb_load_nstring_cxt(mrb, RSTRING_PTR(codestr), RSTRING_LEN(codestr), cxt);
+    mrbc_context_free(mrb, cxt);
+#else
     rb_obj_instance_eval(3, (VALUE *)eval_args, rb_class_new_instance(0, NULL, rb_cObject));
+#endif
     return Qnil;
 }
 
 void run_ruby(
     const char* fpath)
 {
+#ifdef BBSRUBY_USE_MRUBY
+    mrb_state *mrb;
+    mrb_bool error = 0;
+#else
     static int ruby_inited = 0;
+    int error = 0;
+#endif
     ABORT_BBSRUBY = 0;
 
-    // Initialize Ruby interpreter first.
-    if (!ruby_inited)
-    {
-        RUBY_INIT_STACK;
-        if (ruby_setup())
-        {
-            out_footer(" (內部錯誤)",  "按任意鍵返回");
-            return;
-        }
-
-        ruby_init_loadpath();
-        ruby_inited = 1;
-
-        // Set safe level to 2
-        // We cannot have protection if the safe level < 2
-#if defined(RUBY_SAFE_LEVEL_MAX) && RUBY_SAFE_LEVEL_MAX < 2
-        // IID.20190129: Set to 1 to be compatible with Ruby 2.3+
-        rb_set_safe_level(1);
-
-        // IID.20190211: Vanilla Ruby with safe level < 2 is not safe;
-        //    temporarily disable compiling BBS-Ruby against Ruby 2.3+
-        //    where safe levels 2 to 4 are obsoleted
-        #error  BBS-Ruby: Ruby 2.3+ is not supported by now for security reasons.
-#else
-        rb_set_safe_level(2);
-#endif
-
-        // Hook Ruby
-#ifdef RUBY_VM
-        rb_add_event_hook(BBSRubyHook, RUBY_EVENT_LINE, Qnil);
-#else
-        rb_add_event_hook(BBSRubyHook, RUBY_EVENT_LINE);
-#endif
-    }
-
     // Run
-    int error=0;
-    ruby_script("BBSRUBY");
     int pLen = 0;
     char *post;
     post = ruby_script_attach(fpath, &pLen);
@@ -761,7 +904,56 @@ void run_ruby(
         return;
     }
 
-    bbsruby_load_TOC(cStart, cEnd);
+    // Initialize Ruby interpreter now.
+#ifndef BBSRUBY_USE_MRUBY
+    if (!ruby_inited)
+#endif
+    {
+#ifdef BBSRUBY_USE_MRUBY
+        if (!(mrb = mrb_open_allocf(mrb_default_allocf, NULL)))
+#else
+        RUBY_INIT_STACK;
+        if (ruby_setup())
+#endif
+        {
+            out_footer(" (內部錯誤)",  "按任意鍵返回");
+            return;
+        }
+
+#ifndef BBSRUBY_USE_MRUBY
+        ruby_init_loadpath();
+        ruby_inited = 1;
+
+        // Set safe level to 2
+        // We cannot have protection if the safe level < 2
+  #if defined(RUBY_SAFE_LEVEL_MAX) && RUBY_SAFE_LEVEL_MAX < 2
+        // IID.20190129: Set to 1 to be compatible with Ruby 2.3+
+        rb_set_safe_level(1);
+
+        // IID.20190211: Vanilla Ruby with safe level < 2 is not safe;
+        //    temporarily disable compiling BBS-Ruby against Ruby 2.3+
+        //    where safe levels 2 to 4 are obsoleted
+        #error  BBS-Ruby: Ruby 2.3+ is not supported by now for security reasons.
+  #else
+        rb_set_safe_level(2);
+  #endif
+#endif
+
+        // Hook Ruby
+#ifdef BBSRUBY_USE_MRUBY
+  #ifdef MRB_ENABLE_DEBUG_HOOK
+        mrb->code_fetch_hook = BBSRubyHook;
+  #endif
+#else
+  #ifdef RUBY_VM
+        rb_add_event_hook(BBSRubyHook, RUBY_EVENT_LINE, Qnil);
+  #else
+        rb_add_event_hook(BBSRubyHook, RUBY_EVENT_LINE);
+  #endif
+#endif
+    }
+
+    BRB_C(bbsruby_load_TOC)(cStart, cEnd);
     // Check interface version
     float d = 0;
     if (TOCs_DATA[4])
@@ -785,20 +977,34 @@ void run_ruby(
     }
 
     //Before execution, prepare keyboard buffer
-    //KB_QUEUE = rb_ary_new();
-    VALUE eval_args[] = {rb_str_new(cStart, cEnd - cStart), rb_str_new_cstr("BBSRuby"), INT2FIX(lineshift + 1)};
-    ruby_script_detach(post, pLen);
+    //KB_QUEUE = RB_CV(rb_ary_new)();
 
     out_footer("", "按任意鍵開始執行");
     clear();
     refresh();
 
-    rb_protect(bbsruby_eval_code, (VALUE)eval_args, &error);
+    VALUE eval_args[] = {RB_C(rb_str_new)(cStart, cEnd - cStart), RB_C(rb_str_new_cstr)("BBSRuby"), INT2FIX(lineshift + 1)};
+    ruby_script_detach(post, pLen);
 
-    if (error == 0 || ABORT_BBSRUBY)
+#ifdef BBSRUBY_USE_MRUBY
+    mrb_protect(mrb, bbsruby_eval_code, mrb_cptr_value(mrb, eval_args), &error);
+#else
+    rb_protect(bbsruby_eval_code, (VALUE)eval_args, &error);
+#endif
+
+#ifdef BBSRUBY_USE_MRUBY
+    if (mrb->exc)
+        error = 1;
+#endif
+
+    if (!error || ABORT_BBSRUBY)
         out_footer(ABORT_BBSRUBY ? " (使用者中斷)" : " (程式結束)", "按任意鍵返回");
     else
     {
-        print_exception();
+        BRB_CV(print_exception)();
     }
+
+#ifdef BBSRUBY_USE_MRUBY
+    mrb_close(mrb);
+#endif
 }
