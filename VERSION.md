@@ -63,6 +63,9 @@
           * BBS-Lua/BBS-Ruby.
           * ~~SHA-256-encrypted password support.~~
           * ~~Preliminary WebSocket support, based on relevant patches to Maple3 and PttBBS.~~
+        - `v2.1.0`: Codename `gilgamesh`
+        - Features:
+          * Support building with CMake
     + `v3.0 ~`: Version 3.X or later
         - Features in plan:
           * Support forcing use 32-bit int type variables in 64-bit environment when BBS is compiled natively.
