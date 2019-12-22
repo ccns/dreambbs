@@ -61,8 +61,11 @@ mgets(
     {
         if (head >= tail)
         {
+            /* IID.20191222:
+             *    Read little and then run out of chars in the middle of a long line
+             *       => head - base > base - pool => overlap */
             if ((ch = head - base))
-                memcpy(pool, base, ch);
+                memmove(pool, base, ch);
 
             head = pool + ch;
             ch = read(fd, head, MORE_BUFSIZE - ch);
@@ -105,8 +108,11 @@ mread(
 
     if (size < len)
     {
+        /* IID.20191222:
+         *    Read little and then run out of chars for large `len`
+         *       => size > base => overlap */
         if (size)
-            memcpy(pool, pool + base, size);
+            memmove(pool, pool + base, size);
 
         base = read(fd, pool + size, MORE_BUFSIZE - size);
 

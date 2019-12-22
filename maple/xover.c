@@ -367,7 +367,7 @@ Tagger(
             return false;
 
         TagNum = --tail;
-        memcpy(&tagp[pos], &tagp[pos + 1], (tail - pos) * sizeof(TagItem));
+        memmove(&tagp[pos], &tagp[pos + 1], (tail - pos) * sizeof(TagItem));
         return -1;
     }
 

@@ -851,7 +851,7 @@ t_chat(void)
             if (cmdcol)
             {
                 ch = cmdcol--;
-                memcpy(&ptr[cmdcol], &ptr[ch], 69 - cmdcol);
+                memmove(&ptr[cmdcol], &ptr[ch], 69 - cmdcol);
                 move(b_lines - 1, cmdcol + 10);
                 outs(&ptr[cmdcol]);
                 clrtoeol();

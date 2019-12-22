@@ -2394,7 +2394,8 @@ bmw_rqst(void)
         if (i >= 0)
         {
             locus -= i;
-            memcpy(bmw_lslot, bmw_lslot + i, locus * sizeof(BMW));
+            /* IID.20191222: Large `locus` && small `j` => `locus` > `i` => overlap */
+            memmove(bmw_lslot, bmw_lslot + i, locus * sizeof(BMW));
         }
 
         i = 0;
