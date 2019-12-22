@@ -93,6 +93,10 @@
 
 /* ulist_neck() 及 xpost_head() 的第一行比較特別，不在此定義 */
 
+#define NECK_BANMAIL \
+                   "  [←]離開 ^P)新增 c)修改 d)刪除 S)重整 [h]elp\n" \
+            COLOR3 "  編號  使用率 更新期 模  式  擋  信  內  容%*s                                  \x1b[m"
+
 #define NECK_MYFAVORITE \
                    "  [←]主選單 [→]閱\讀 [a]新增 [d]刪除 [c]篇數 [/]搜尋 [s]看板 [h]說明\n" \
             COLOR0 "  %-7s看  板            %-*s人氣 板    主     \x1b[m"
@@ -122,6 +126,18 @@
 #define NECK_ADMIN \
                    "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 [h]elp\n" \
             COLOR3 "  編號     站  務  名  單%*s                                                     \x1b[m"
+
+#define NECK_ALOHA \
+                   "  [←]離開 a)新增 d)刪除 s)重整 f)引入好友名單 [h]elp\n" \
+            COLOR5 "  編號     上 站 通 知 名 單%*s                                                  \x1b[m"
+
+#define NECK_BRDSTAT \
+                   "  [←]離開 s)重整 S)目前資訊 [h]elp\n" \
+            COLOR3 "  編號   型    態  閱\讀次數  發文次數  轉信次數  擋信次數%*s                     \x1b[m"
+
+#define NECK_CHATMENU \
+                   "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 M)搬移 TAB)動詞 f)訊息 [h]elp\n" \
+            COLOR3 "  編號 動詞      中文   %*s                                                \x1b[m"
 
 #define NECK_CLEANRECOMMEND \
                    "  [←]離開 c)修改[站長專用] d)刪除 D)清除全部 s)重整 [h]elp\n" \

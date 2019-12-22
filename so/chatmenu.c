@@ -85,14 +85,7 @@ XO *xo)
     }
 
     vs_head(title, str_site);
-    if (mode == 0)
-        outs(
-            "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 M)搬移 TAB)動詞 f)訊息 [h]elp\n"
-            "\x1b[30;47m  編號 動詞      中文   訊息一                                                \x1b[m");
-    else
-        outs(
-            "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 M)搬移 TAB)動詞 f)訊息 [h]elp\n"
-            "\x1b[30;47m  編號 動詞      中文   訊息二                                                \x1b[m");
+    prints(NECK_CHATMENU, d_cols, (mode == 0) ? "訊息一" : "訊息二");
     return chat_body(xo);
 }
 
