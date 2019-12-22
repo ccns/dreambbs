@@ -1910,7 +1910,7 @@ ve_key:
                     if (cc == 0)
                         goto ve_key;
                     /* Thor: 雖然增加 load, 不過edit 時會比較好看 */
-                    ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : pos;
+                    ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : col;
                     delete_char(vln, ve_col);
                 }
                 continue;
