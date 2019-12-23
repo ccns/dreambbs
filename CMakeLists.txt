@@ -66,15 +66,30 @@ function(LOADVALUE conf default hdr output)
     set("${output}" "${${output}}" PARENT_SCOPE)
 endfunction(LOADVALUE)
 
-function(GETID options name output)
+set(ID_DEFAULT 9999)
+
+function(GETUID name output)
     execute_process(
-        COMMAND sh -c "id ${options} ${name} || echo 9999"
+        COMMAND sh -c "id -u ${name} || echo ${ID_DEFAULT}"
         OUTPUT_VARIABLE "${output}"
         OUTPUT_STRIP_TRAILING_WHITESPACE
         ERROR_QUIET
     )
     set("${output}" "${${output}}" PARENT_SCOPE)
-endfunction(GETID)
+endfunction(GETUID)
+
+function(GETGID name output)
+    execute_process(
+        COMMAND getent group ${name}
+        COMMAND cut -d: -f3 -
+        OUTPUT_VARIABLE "${output}"
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    if ("${${output}}" STREQUAL "")
+        set("${output}" ${ID_DEFAULT})
+    endif()
+    set("${output}" "${${output}}" PARENT_SCOPE)
+endfunction(GETGID)
 
 function(DEF_TEST conf hdr output)
     if("${hdr}" IS_NEWER_THAN ${CMAKE_CACHEFILE_DIR}/CMakeCache.txt)
@@ -107,9 +122,9 @@ LOADVALUE(BBSGROUP "${BBSGROUP_DEFAULT}" ${BBSCONF_ORIGIN} BBSGROUP)
 LOADVALUE(WWWGROUP "www-data" ${BBSCONF_ORIGIN} WWWGROUP)
 
 # UIDs and GIDs
-GETID(-u "${BBSUSR}" BBSUID_DEFAULT)
-GETID(-g "${BBSGROUP}" BBSGID_DEFAULT)
-GETID(-g "${WWWGROUP}" WWWGID_DEFAULT)
+GETUID("${BBSUSR}" BBSUID_DEFAULT)
+GETGID("${BBSGROUP}" BBSGID_DEFAULT)
+GETGID("${WWWGROUP}" WWWGID_DEFAULT)
 LOADVALUE(BBSUID "${BBSUID_DEFAULT}" ${BBSCONF_ORIGIN} BBSUID)
 LOADVALUE(BBSGID "${BBSGID_DEFAULT}" ${BBSCONF_ORIGIN} BBSGID)
 LOADVALUE(WWWGID "${WWWGID_DEFAULT}" ${BBSCONF_ORIGIN} WWWGID)

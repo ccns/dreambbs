@@ -58,10 +58,15 @@ BBSGROUP != $(GETVAR$(var::= "$(BBSGROUP)")$(else_var::= $(GETVALUE$(conf::= "BB
 WWWGROUP != $(GETVAR$(var::= "$(WWWGROUP)")$(else_var::= $(GETVALUE$(conf::= "WWWGROUP")$(default::= "www-data")$(hdr::= $(BBSCONF_ORIGIN)))))
 
 # UIDs and GIDs
-ID_FALLBACK = 2>/dev/null || echo 9999
+ID_DEFAULT = 9999
+ID_FALLBACK = 2>/dev/null || echo $(ID_DEFAULT)
 BBSUID != $(GETVAR$(var::= "$(BBSUID)")$(else_var::= $(GETVALUE$(conf::= "BBSUID")$(default::= "$(:!id -u $(BBSUSR) $(ID_FALLBACK)!)")$(hdr::= $(BBSCONF)))))
-BBSGID != $(GETVAR$(var::= "$(BBSGID)")$(else_var::= $(GETVALUE$(conf::= "BBSGID")$(default::= "$(:!id -g $(BBSGROUP) $(ID_FALLBACK)!)")$(hdr::= $(BBSCONF)))))
-WWWGID != $(GETVAR$(var::= "$(WWWGID)")$(else_var::= $(GETVALUE$(conf::= "WWWGID")$(default::= "$(:!id -g $(WWWGROUP) $(ID_FALLBACK)!)")$(hdr::= $(BBSCONF)))))
+BBSGROUP_GID != getent group $(BBSGROUP) | cut -d: -f3
+BBSGROUP_GID != $(GETVAR$(var::= "$(BBSGROUP_GID)")$(else_var::= echo $(ID_DEFAULT)))
+BBSGID != $(GETVAR$(var::= "$(BBSGID)")$(else_var::= $(GETVALUE$(conf::= "BBSGID")$(default::= "$(BBSGROUP_GID)")$(hdr::= $(BBSCONF)))))
+WWWGROUP_GID != getent group $(WWWGROUP) | cut -d: -f3
+WWWGROUP_GID != $(GETVAR$(var::= "$(WWWGROUP_GID)")$(else_var::= echo $(ID_DEFAULT)))
+WWWGID != $(GETVAR$(var::= "$(WWWGID)")$(else_var::= $(GETVALUE$(conf::= "WWWGID")$(default::= "$(WWWGROUP_GID)")$(hdr::= $(BBSCONF)))))
 
 ## BBS path prefixes and suffixes
 BBSVER != $(GETVALUE$(conf::= "BBSVER_SUFFIX")$(default::= "")$(hdr::= $(BBSCONF_ORIGIN)))
