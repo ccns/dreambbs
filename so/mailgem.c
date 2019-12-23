@@ -609,7 +609,7 @@ XO *xo)
     if (!(num = MailGemBufferNum))
     {
         zmsg("請先執行 copy 命令後再 paste");
-        return XO_NONE;
+        return XO_FOOT;
     }
 
     dir = xo->dir;
@@ -622,7 +622,7 @@ XO *xo)
         if (mailgem_extend(xo, num))
         {
             zmsg("[Extend 檔案附加] 動作並未完全成功\");
-            return XO_NONE;
+            return XO_FOOT;
         }
         return XO_FOOT;
 
@@ -708,6 +708,7 @@ XO *xo)
         }
 
         zmsg("錨動作完成");
+        return XO_FOOT;
     }
 
     return XO_NONE;

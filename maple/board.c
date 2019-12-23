@@ -1427,7 +1427,7 @@ class_yank2(
         class_flag2 ^= 0x01;
         class_load(xo);
         xo->pos = pos;
-        return XO_NONE;
+        return XO_FOOT;
     }
     return class_head(xo);
 }
@@ -1447,7 +1447,7 @@ class_yank(
         class_flag |= BFO_YANK;
         class_load(xo);
         xo->pos = pos;
-        return XO_NONE;
+        return XO_FOOT;
     }
     return class_head(xo);
 }

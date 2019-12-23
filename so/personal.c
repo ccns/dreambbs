@@ -475,17 +475,17 @@ personal_open(
     if (brd_bno(personal->brdname) >= 0)
     {
         vmsg("板名雷同");
-        return XO_NONE;
+        return XO_FOOT;
     }
 
     if (bshm->number >= MAXBOARD)
     {
         vmsg("超過系統所能容納看版個數，請調整系統參數");
-        return XO_NONE;
+        return XO_FOOT;
     }
 
     if (vans("確定要開設此看板嗎？[y/N]") != 'y')
-        return XO_NONE;
+        return XO_FOOT;
 
     memset(&newboard, 0, sizeof(newboard));
 
@@ -508,7 +508,7 @@ personal_open(
     else if (rec_add(FN_BRD, &newboard, sizeof(newboard)) < 0)
     {
         vmsg("無法建立新板");
-        return XO_NONE;
+        return XO_FOOT;
     }
 
     sprintf(fpath, "gem/brd/%s", newboard.brdname);
@@ -568,10 +568,10 @@ personal_deny(
         return XO_NONE;
 
     if (!vget(b_lines, 0, "拒絕開板理由: ", msg, sizeof(msg), DOECHO))
-        return XO_NONE;
+        return XO_FOOT;
 
     if (vans("確定拒絕此申請嗎？[y/N]") != 'y')
-        return XO_NONE;
+        return XO_FOOT;
 
     mail2usr(personal, 1);
 

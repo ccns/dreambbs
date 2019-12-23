@@ -374,7 +374,7 @@ gem_add(
             if (strchr(fpath, '/'))
             {
                 zmsg("不合法的檔案名稱");
-                return XO_NONE;
+                return XO_FOOT;
             }
 
             time(&ghdr.chrono);
@@ -895,7 +895,7 @@ gem_copy(
     gem_buffer(xo->dir, tag ? NULL : ghdr);
 
     zmsg("拷貝完成");
-    /* return XO_NONE; */
+    /* return XO_FOOT; */
     return XO_HEAD; /* Thor.990414: 讓剪貼篇數更新 */
 }
 
@@ -949,7 +949,7 @@ gem_paste(
     if (!(num = GemBufferNum))
     {
         zmsg("請先執行 copy 命令後再 paste");
-        return XO_NONE;
+        return XO_FOOT;
     }
 
     str_folder(srcDir, GemFolder, FN_GEM);
@@ -958,7 +958,7 @@ gem_paste(
     if (strcmp(srcDir, dstDir))
     {
         zmsg("目前不支援[跨區拷貝]");
-        return XO_NONE;
+        return XO_FOOT;
     }
 
     switch (ans = vans("存放位置 A)ppend I)nsert N)ext E)xtend Q)uit [A] "))
@@ -970,7 +970,7 @@ gem_paste(
         if (gem_extend(xo, num))
         {
             zmsg("[Extend 檔案附加] 動作並未完全成功\");
-            return XO_NONE;
+            return XO_FOOT;
         }
         /* Thor.990105: 成功則清除訊息 */
         return XO_FOOT;
@@ -1043,7 +1043,7 @@ gem_recycle(
     if (level == GEM_LMANAGER)
     {
         vmsg("小板主不能進入回收筒！");
-        return XO_NONE;
+        return XO_FOOT;
     }
 
     if (level == GEM_RECYCLE)
@@ -1060,7 +1060,7 @@ gem_recycle(
     if (rec_num(fpath, sizeof(HDR)) <= 0)
     {
         zmsg("資源回收筒並無資料");
-        return XO_NONE;
+        return XO_FOOT;
     }
 
     XoGem(fpath, "● 資源回收筒 ●", GEM_RECYCLE);

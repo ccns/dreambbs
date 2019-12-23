@@ -223,7 +223,7 @@ XO *xo)
     max=xo->max;
 
     if (!vget(b_lines, 0, "√ˆ¡‰¶r°G", buf, sizeof(buf), DOECHO))
-        return XO_NONE;
+        return XO_FOOT;
 
     str_lower(buf, buf);
 
@@ -241,7 +241,7 @@ XO *xo)
 
 
 
-    return XO_NONE;
+    return XO_FOOT;
 }
 
 static int

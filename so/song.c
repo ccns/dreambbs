@@ -313,7 +313,7 @@ XO *xo)
     if (acct.request < 1)
     {
         vmsg("點歌次數已用完！");
-        return XO_NONE;
+        return XO_FOOT;
     }
 
 
@@ -433,7 +433,7 @@ XO *xo)
     if (cacct.request < 1)
     {
         vmsg("點歌次數已用完！");
-        return XO_NONE;
+        return XO_FOOT;
     }
     method = 0;
     if (acct_get("要點歌給誰：", &acct) < 1)

@@ -1076,7 +1076,7 @@ post_cross(
         if (!HAS_PERM(PERM_SYSOP) && (battr & BRD_NOFORWARD))
         {
             outz("★ 此板文章不可轉錄");
-            return -1;
+            return XO_FOOT;
         }
     }
 
@@ -1087,7 +1087,7 @@ post_cross(
     if ((hdr->xmode & POST_LOCK) && !HAS_PERM(PERM_SYSOP))
     {
         vmsg("Access Deny!");
-        return XO_NONE;
+        return XO_FOOT;
     }
 
     /* verit 021113 : 解決在 po 文章然後用 ctrl+u 然後換到看板去轉錄的重複標題問題 */
@@ -1854,7 +1854,7 @@ post_delete(
     if (HAS_PERM(PERM_DENYPOST))
     {
         vmsg("你正被停權中，無法刪除任何文章！");
-        return XO_NONE;
+        return XO_FOOT;
     }
 
     pos = xo->pos;
@@ -1880,14 +1880,14 @@ post_delete(
         else
         {
             vmsg("其他使用者正在編輯推薦文章留言，請稍候。");
-            return XO_NONE;
+            return XO_FOOT;
         }
     }
 
     if (phdr.xmode & POST_CURMODIFY)
     {
         vmsg("文章正在被修改，請稍候。");
-        return XO_NONE;
+        return XO_FOOT;
     }
 
     by_BM = strcmp(fhdr->owner, cuser.userid);
@@ -2446,7 +2446,7 @@ post_edit(
             else
             {
                 vmsg("有人在推薦您的文章，請稍候。");
-                return XO_NONE;
+                return XO_FOOT;
             }
         }
 

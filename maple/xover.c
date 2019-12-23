@@ -544,7 +544,7 @@ xo_copy(
         if (!HAS_PERM(PERM_SYSOP) && (tag & BRD_NOFORWARD))
         {
             outz("★ 此板文章不可轉貼");
-            return XO_NONE;
+            return XO_FOOT;
         }
     }
 
@@ -668,7 +668,7 @@ xo_forward(
     int success_count = 0;
 
     if (deny_forward())
-        return XO_NONE;
+        return XO_FOOT;
 
     /* lkchu.990428: mat patch 當看版尚末選定，修正forward會斷線的問題 */
     if (bbsmode == M_READA)
@@ -678,7 +678,7 @@ xo_forward(
         if (!HAS_PERM(PERM_SYSOP) && (method & BRD_NOFORWARD))
         {
             outz("★ 此板文章不可轉貼");
-            return XO_NONE;
+            return XO_FOOT;
         }
     }
 
@@ -686,7 +686,7 @@ xo_forward(
     if ((hdr->xmode & POST_LOCK) && !HAS_PERM(PERM_SYSOP))
     {
         vmsg("Access Deny!");
-        return XO_NONE;
+        return XO_FOOT;
     }
 */
 
