@@ -1543,7 +1543,7 @@ xover(
                 /* Thor.0613: 輔助訊息清除 */
                 msg = 0;
 
-                break;
+                /* IID.20191223: Continue to invoke the callback function */
             }
 
             if (cmd >= XO_ZONE)
