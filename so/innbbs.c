@@ -12,6 +12,17 @@
 
 
 extern BCACHE *bshm;
+extern XZ xz[];
+
+typedef struct {
+    int recsiz;
+    void (*item_func)(int num, const void *obj);
+    void (*query_func)(const void *obj);
+    int (*add_func)(const char *fpath, const void *old, int pos);
+    int (*sync_func)(const void *lhs, const void *rhs);
+    int (*search_func)(const void *obj, const char *key);
+    bool dirty;
+} InnbbsXyz;
 
 
 /* ----------------------------------------------------- */
@@ -517,213 +528,259 @@ spam_search(
 /* 轉信設定主函式                                        */
 /* ----------------------------------------------------- */
 
+/* IID.20191223: Rewrite with `xover()` */
+
+static int
+innbbs_foot(
+    XO *xo)
+{
+    outf(FEETER_INNBBS);
+    return XO_NONE;
+}
+
+static int
+innbbs_body(
+    XO *xo)
+{
+    InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
+    char *rec;
+    int num, max, tail;
+
+    max = xo->max;
+    if (max <= 0)
+    {
+        if (vans("要新增資料嗎？(y/N) [N] ") == 'y')
+        {
+            if (xyz->add_func(xo->dir, NULL, -1))
+            {
+                xyz->dirty = true;
+                return XO_INIT;
+            }
+        }
+        return XO_QUIT;
+    }
+
+    rec = xo_pool;
+    num = xo->top;
+    tail = num + XO_TALL;
+    max = BMIN(max, tail);
+
+    move(3, 0);
+    do
+    {
+        xyz->item_func(++num, rec);
+        rec += xyz->recsiz;
+    } while (num < max);
+
+    clrtobot();
+    return innbbs_foot(xo);
+}
+
+static int
+innbbs_head(
+    XO *xo)
+{
+    vs_head("轉信設定", str_site);
+    prints(NECKINNBBS, d_cols, "");
+    return innbbs_body(xo);
+}
+
+static int
+innbbs_init(
+    XO *xo)
+{
+    xo_load(xo, ((InnbbsXyz *)xo->xyz)->recsiz);
+    return innbbs_head(xo);
+}
+
+static int
+innbbs_load(
+    XO *xo)
+{
+    xo_load(xo, ((InnbbsXyz *)xo->xyz)->recsiz);
+    return innbbs_body(xo);
+}
+
+static int
+innbbs_query(
+    XO *xo)
+{
+    InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
+    int cur = xo->pos - xo->top;
+    xyz->query_func(xo_pool + cur * xyz->recsiz);
+    return XO_BODY;
+}
+
+static int
+innbbs_add(
+    XO *xo)
+{
+    InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
+    if (xyz->add_func(xo->dir, NULL, -1))
+    {
+        xyz->dirty = true;
+        return XO_INIT;
+    }
+    return XO_HEAD;
+}
+
+static int
+innbbs_del(
+    XO *xo)
+{
+    InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
+    if (vans(msg_del_ny) == 'y')
+    {
+        rec_del(xo->dir, xyz->recsiz, xo->pos, NULL, NULL);
+        xyz->dirty = true;
+        return XO_LOAD;
+    }
+    return XO_FOOT;
+}
+
+static int
+innbbs_edit(
+    XO *xo)
+{
+    InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
+    int cur = xo->pos - xo->top;
+    if (xyz->add_func(xo->dir, xo_pool + cur * xyz->recsiz, xo->pos))
+    {
+        xyz->dirty = true;
+        return XO_INIT;
+    }
+    return XO_HEAD;
+}
+
+static int
+innbbs_search(
+    XO *xo)
+{
+    InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
+    char buf[40];
+    int i, num = xo->max;
+
+    if (vget(b_lines, 0, "關鍵字：", buf, sizeof(buf), DOECHO))
+    {
+        str_lower(buf, buf);
+        for (i = xo->pos + 1; i <= num; i++)
+        {
+            int cur = i - xo->top;
+            if (xyz->search_func(xo_pool + cur * xyz->recsiz, buf))
+            {
+                return i + XO_MOVE;
+            }
+        }
+    }
+    return XO_FOOT;
+}
+
+static int
+innbbs_help(
+    XO *xo)
+{
+    more("etc/innbbs.hlp", (char *) -1);
+    return innbbs_head(xo);
+}
+
+static KeyFunc innbbs_cb[] =
+{
+    {XO_INIT, {innbbs_init}},
+    {XO_LOAD, {innbbs_load}},
+    {XO_HEAD, {innbbs_head}},
+    {XO_BODY, {innbbs_body}},
+    {XO_FOOT, {innbbs_foot}},
+
+
+    {' ', {innbbs_query}},
+    {'r', {innbbs_query}},
+
+    {Ctrl('P'), {innbbs_add}},
+    {'d', {innbbs_del}},
+    {'E', {innbbs_edit}},
+
+    {'/', {innbbs_search}},
+
+    {'h', {innbbs_help}}
+};
 
 int
 a_innbbs(void)
 {
-    int num, pageno, pagemax, redraw, reload;
-    int ch, cur, i, dirty;
-    struct stat st;
-    char *data;
-    int recsiz;
+    XO *xo;
+    InnbbsXyz xyz;
     const char *fpath;
-    char buf[40];
-    void (*item_func)(int num, const void *obj), (*query_func)(const void *obj);
-    int (*add_func)(const char *fpath, const void *old, int pos), (*sync_func)(const void *lhs, const void *rhs), (*search_func)(const void *obj, const char *key);
+
+    if (!check_admin(cuser.userid) && str_cmp(cuser.userid, SYSOPNAME))
+    {
+        vmsg("◎ 你不是系統管理員！");
+        return 0;
+    }
+
 
     vs_bar("轉信設定");
+
     more("etc/innbbs.hlp", (char *) -1);
 
     switch (vans("請選擇 1)轉文站台列表 2)轉文看板列表 3)NoCeM擋文規則 4)廣告文名單：[Q] "))
     {
     case '1':
         fpath = "innd/nodelist.bbs";
-        recsiz = sizeof(nodelist_t);
-        item_func = nl_item;
-        query_func = nl_query;
-        add_func = nl_add;
-        sync_func = nl_cmp;
-        search_func = nl_search;
+        xyz.recsiz = sizeof(nodelist_t);
+        xyz.item_func = nl_item;
+        xyz.query_func = nl_query;
+        xyz.add_func = nl_add;
+        xyz.sync_func = nl_cmp;
+        xyz.search_func = nl_search;
         break;
 
     case '2':
         fpath = "innd/newsfeeds.bbs";
-        recsiz = sizeof(newsfeeds_t);
-        item_func = nf_item;
-        query_func = nf_query;
-        add_func = nf_add;
-        sync_func = nf_cmp;
-        search_func = nf_search;
+        xyz.recsiz = sizeof(newsfeeds_t);
+        xyz.item_func = nf_item;
+        xyz.query_func = nf_query;
+        xyz.add_func = nf_add;
+        xyz.sync_func = nf_cmp;
+        xyz.search_func = nf_search;
         break;
 
     case '3':
         fpath = "innd/ncmperm.bbs";
-        recsiz = sizeof(ncmperm_t);
-        item_func = ncm_item;
-        query_func = ncm_query;
-        add_func = ncm_add;
-        sync_func = ncm_cmp;
-        search_func = ncm_search;
+        xyz.recsiz = sizeof(ncmperm_t);
+        xyz.item_func = ncm_item;
+        xyz.query_func = ncm_query;
+        xyz.add_func = ncm_add;
+        xyz.sync_func = ncm_cmp;
+        xyz.search_func = ncm_search;
         break;
 
     case '4':
         fpath = "innd/spamrule.bbs";
-        recsiz = sizeof(spamrule_t);
-        item_func = spam_item;
-        query_func = spam_query;
-        add_func = spam_add;
-        sync_func = spam_cmp;
-        search_func = spam_search;
+        xyz.recsiz = sizeof(spamrule_t);
+        xyz.item_func = spam_item;
+        xyz.query_func = spam_query;
+        xyz.add_func = spam_add;
+        xyz.sync_func = spam_cmp;
+        xyz.search_func = spam_search;
         break;
 
     default:
         return 0;
     }
 
+    utmp_mode(M_OMENU);
+    xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
+    xz[XZ_OTHER - XO_ZONE].cb = innbbs_cb;
+    xo->xyz = &xyz;
+    xo->pos = 0;
 
+    xyz.dirty = false;
 
+    xover(XZ_OTHER);
 
-    dirty = 0;
-    reload = 1;
-    pageno = 0;
-    cur = 0;
-    data = NULL;
+    if (xyz.dirty)
+        rec_sync(fpath, xyz.recsiz, xyz.sync_func, NULL);
 
-
-
-    do
-    {
-        if (reload)
-        {
-            if (stat(fpath, &st) == -1)
-            {
-                if (!add_func(fpath, NULL, -1))
-                    return 0;
-                dirty = 1;
-                continue;
-            }
-
-            i = st.st_size;
-            num = (i / recsiz) - 1;
-            if (num < 0)
-            {
-                if (!add_func(fpath, NULL, -1))
-                    return 0;
-                dirty = 1;
-                continue;
-            }
-
-            if ((ch = open(fpath, O_RDONLY)) >= 0)
-            {
-                data = (char *) realloc(data, i);
-                read(ch, data, i);
-                close(ch);
-            }
-
-            pagemax = num / XO_TALL;
-            reload = 0;
-            redraw = 1;
-        }
-
-        if (redraw)
-        {
-
-            vs_head("轉信設定", str_site);
-            prints(NECKINNBBS, d_cols, "");
-
-            i = pageno * XO_TALL;
-            ch = BMIN(num, i + XO_TALL - 1);
-            move(3, 0);
-            do
-            {
-                item_func(i + 1, data + i * recsiz);
-                i++;
-            } while (i <= ch);
-
-            outf(FEETER_INNBBS);
-            move(3 + cur, 0);
-            outc('>');
-            redraw = 0;
-        }
-
-
-        ch = vkey();
-
-        switch (ch)
-        {
-        case KEY_RIGHT:
-        case '\n':
-        case ' ':
-        case 'r':
-            i = cur + pageno * XO_TALL;
-            query_func(data + i * recsiz);
-            redraw = 1;
-            break;
-
-        case Ctrl('P'):
-            if (add_func(fpath, NULL, -1))
-            {
-                dirty = 1;
-                num++;
-                cur = num % XO_TALL;
-                pageno = num / XO_TALL;
-                reload = 1;
-            }
-            redraw = 1;
-            break;
-
-        case 'd':
-            if (vans(msg_del_ny) == 'y')
-            {
-                dirty = 1;
-                i = cur + pageno * XO_TALL;
-                rec_del(fpath, recsiz, i, NULL, NULL);
-                cur = i ? ((i - 1) % XO_TALL) : 0;
-                reload = 1;
-            }
-            redraw = 1;
-            break;
-
-        case 'E':
-            i = cur + pageno * XO_TALL;
-            if (add_func(fpath, data + i * recsiz, i))
-            {
-                dirty = 1;
-                reload = 1;
-            }
-            redraw = 1;
-            break;
-
-        case '/':
-            if (vget(b_lines, 0, "關鍵字：", buf, sizeof(buf), DOECHO))
-            {
-                str_lower(buf, buf);
-                for (i = pageno * XO_TALL + cur + 1; i <= num; i++)
-                {
-                    if (search_func(data + i * recsiz, buf))
-                    {
-                        pageno = i / XO_TALL;
-                        cur = i % XO_TALL;
-                        break;
-                    }
-                }
-            }
-            redraw = 1;
-            break;
-
-        default:
-            ch = xo_cursor(ch, pagemax, num, &pageno, &cur, &redraw);
-            break;
-        }
-
-    } while (ch != 'q');
-
-
-
-    free(data);
-
-    if (dirty)
-        rec_sync(fpath, recsiz, sync_func, NULL);
-
+    free(xo);
     return 0;
 }
