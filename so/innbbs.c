@@ -156,7 +156,7 @@ nf_item(
     }
 
     prints("%6d %-13s%-*.*s %c-%c %-13s %.7s\n", num,
-        nf->path, d_cols + 32, d_cols + 32, nf->newsgroup, outgo, income, nf->board, nf->charset);
+        nf->path, d_cols + 33, d_cols + 33, nf->newsgroup, outgo, income, nf->board, nf->charset);
 }
 
 
@@ -302,7 +302,7 @@ ncm_item(
 {
     const ncmperm_t *ncm = (const ncmperm_t *)ncm_obj;
     prints("%6d %-*.*s%-23.23s %s\n", num,
-        d_cols + 44, d_cols + 44, ncm->issuer, ncm->type, ncm->perm ? "○" : "╳");
+        d_cols + 46, d_cols + 46, ncm->issuer, ncm->type, ncm->perm ? "○" : "╳");
 }
 
 
@@ -409,7 +409,7 @@ spam_item(
     board = spam->board;
     prints("%6d %-13s%-13s[%s] 包含 %.*s\n",
         num, *path ? path : "所有站台", *board ? board : "所有看板",
-        spam_compare(spam->xmode), d_cols + 30, spam->detail);
+        spam_compare(spam->xmode), d_cols + 31, spam->detail);
 }
 
 

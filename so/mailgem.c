@@ -49,7 +49,7 @@ const HDR *ghdr)
 
     gtype = HAS_PERM(PERM_SYSOP) ? mailgem_way : 0;
 
-    prints("%-*.*s%-13s%s\n", d_cols + 46, d_cols + 45, ghdr->title,
+    prints("%-*.*s%-13s%s\n", d_cols + 47, d_cols + 46, ghdr->title,
            (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
 }
 

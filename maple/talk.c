@@ -1032,16 +1032,16 @@ bmw_item(
             if (!(*bmw->userid))
                 strcpy(bmw->userid, "眾家好友");
 
-            prints("%5d %02d:%02d %-13s☆%-*.*s\n", num, ptime->tm_hour, ptime->tm_min,
+            prints("%6d %02d:%02d %-13s☆%-*.*s\n", num, ptime->tm_hour, ptime->tm_min,
                 bmw->userid, d_cols + 50, d_cols + 50, bmw->msg);
         }
         else
         {
             if (strstr(bmw->msg, "★廣播"))
-                prints("%5d \x1b[36;1m%02d:%02d %-13s★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
+                prints("%6d \x1b[36;1m%02d:%02d %-13s★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
                     bmw->userid, d_cols + 50, d_cols + 50, (bmw->msg)+8);
             else
-                prints("%5d \x1b[32m%02d:%02d %-13s★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
+                prints("%6d \x1b[32m%02d:%02d %-13s★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
                     bmw->userid, d_cols + 50, d_cols + 50, bmw->msg);
         }
     }
@@ -1052,15 +1052,15 @@ bmw_item(
             if (!(*bmw->userid))
                 strcpy(bmw->userid, "眾家好友");
 
-            prints("%5d %-13s☆%-*.*s\n", num, bmw->userid, d_cols + 57, d_cols + 57, bmw->msg);
+            prints("%6d %-13s☆%-*.*s\n", num, bmw->userid, d_cols + 57, d_cols + 57, bmw->msg);
         }
         else
         {
             if (strstr(bmw->msg, "★廣播"))
-                prints("%5d \x1b[36;1m%-13s★%-*.*s\x1b[m\n", num,
+                prints("%6d \x1b[36;1m%-13s★%-*.*s\x1b[m\n", num,
                     bmw->userid, d_cols + 57, d_cols + 57, (bmw->msg)+8);
             else
-                prints("%5d \x1b[32m%-13s★%-*.*s\x1b[m\n", num,
+                prints("%6d \x1b[32m%-13s★%-*.*s\x1b[m\n", num,
                     bmw->userid, d_cols + 57, d_cols + 57, bmw->msg);
         }
     }
@@ -2548,7 +2548,7 @@ talk_speak(
 
     utmp_mode(M_TALK);
 
-    ch = 59 + d_cols - strlen(page_requestor);
+    ch = 60 + d_cols - strlen(page_requestor);
 
     sprintf(buf, "%s【%s", cuser.userid, cuser.username);
 
@@ -3160,7 +3160,7 @@ ulist_body(
 
                 strcpy(color, wcolor[fcolor]);
 
-                prints("%5d%c%s%-13s%-*.*s%s%-16.15s%c%c %-12.12s %5.5s",
+                prints("%6d%c%s%-13s%-*.*s%s%-16.15s%c%c %-12.12s %5.5s",
                     cnt, (up->ufo & UFO_WEB)?'*':' ',
                     color, up->userid,
                     d_cols + 22, d_cols + 21, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,

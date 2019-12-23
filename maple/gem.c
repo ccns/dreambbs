@@ -111,10 +111,10 @@ gem_item(
         if (xmode & GEM_BOARD)
         {
             sprintf(fpath, "gem/brd/%s/", ghdr->xname);
-            prints("%-*.*s%-13s%s\n", d_cols + 46, d_cols + 45, ghdr->title, (gtype == 1 ? ghdr->xname : ghdr->owner), access(fpath, R_OK) ? "[deleted]" : ghdr->date);
+            prints("%-*.*s%-13s%s\n", d_cols + 47, d_cols + 46, ghdr->title, (gtype == 1 ? ghdr->xname : ghdr->owner), access(fpath, R_OK) ? "[deleted]" : ghdr->date);
         }
         else
-            prints("%-*.*s%-13s%s\n", d_cols + 46, d_cols + 45, ghdr->title, (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
+            prints("%-*.*s%-13s%s\n", d_cols + 47, d_cols + 46, ghdr->title, (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
     }
 }
 

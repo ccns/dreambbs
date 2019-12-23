@@ -34,7 +34,7 @@ static void banmail_item(int num, const BANMAIL * ban)
 
     now = ((ban->time - time(0) + BANMAIL_EXPIRE * 86400) / 3600);
     prints("%6d  %6d %6ld %s  %-*.*s\n", num, ban->usage, BMAX(now, (time_t)0),
-           modes, d_cols + 48, d_cols + 48, ban->data);
+           modes, d_cols + 49, d_cols + 49, ban->data);
 }
 
 static int banmail_body(XO * xo)

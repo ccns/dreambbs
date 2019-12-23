@@ -1162,14 +1162,14 @@ board_outs(
     str = (!(bits[chn] & BRD_Z_BIT) && brd->blast > brd_visit[chn]) ? "\x1b[1;31m★\x1b[m" : "☆";
 
     char tmp[BTLEN + 1] = {0};
-    int e_cols = (d_cols + 32 > BTLEN) ? BTLEN - 32 : d_cols;
+    int e_cols = (d_cols + 33 > BTLEN) ? BTLEN - 33 : d_cols;
 
     strcpy(tmp, brd->title);
-    if (tmp[e_cols + 31] & 0x80)
+    if (tmp[e_cols + 32] & 0x80)
 //      tmp[e_cols + 33] = '\0';
 //  else
-        tmp[e_cols + 31] = ' ';
-    tmp[e_cols + 32] = '\0';
+        tmp[e_cols + 32] = ' ';
+    tmp[e_cols + 33] = '\0';
 
 /* 081122.cache:看板性質, 不訂閱, 秘密, 好友, 一般 */
     if (bits[chn] & BRD_Z_BIT)
@@ -1231,15 +1231,15 @@ board_outs(
 //      prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-36s%c %.13s", num, str,
 //      prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%s%c %.13s", num, str,
 
-    prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-*s %s", num, str, brdtype, brd->brdname, buf, brd->class_, d_cols + 32, tmp, str2);
+    prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-*s%s", num, str, brdtype, brd->brdname, buf, brd->class_, d_cols + 33, tmp, str2);
 
     strcpy(tmp, brd->BM);
-    if (tmp[13] & 0x80)
-        tmp[12] = '\0';
-    else
+    if (tmp[14] & 0x80)
         tmp[13] = '\0';
+    else
+        tmp[14] = '\0';
 
-    prints("%-13s\n", tmp);
+    prints("%-14s\n", tmp);
 }
 
 void
@@ -1247,7 +1247,7 @@ class_outs(
     const char *title,
     int num)
 {
-    prints("%6d   %s\n", num, title);
+    prints("%6d   %-13.13s    %.*s\n", num, title, d_cols + 53, title + 13);
 }
 
 static void

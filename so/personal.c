@@ -229,9 +229,9 @@ personal_item(
     const PB *personal)
 {
     if (!mode)
-        prints("%6d %c %-12s %-12s %-*s\n", num, personal_attr(personal->state), personal->userid, personal->brdname, d_cols + 40, personal->email);
+        prints("%6d %c %-12s %-12s %-*s\n", num, personal_attr(personal->state), personal->userid, personal->brdname, d_cols + 44, personal->email);
     else
-        prints("%6d %c %-12s %-12s %-*s\n", num, personal_attr(personal->state), personal->userid, personal->brdname, d_cols + 40, personal->brdtitle);
+        prints("%6d %c %-12s %-12s %-*s\n", num, personal_attr(personal->state), personal->userid, personal->brdname, d_cols + 44, personal->brdtitle);
 }
 
 static int

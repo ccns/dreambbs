@@ -1267,16 +1267,16 @@ vmsg_body(
     clrtoeol();
     if (msg)
     {
-        prints(COLOR1 " ★ %-*s " COLOR2 " [請按任意鍵繼續] \x1b[m", d_cols + 55, msg);
+        prints(COLOR1 " ★ %-*s " COLOR2 " [請按任意鍵繼續] \x1b[m", d_cols + 56, msg);
     }
     else
     {
 #ifdef HAVE_COLOR_VMSG
         int color;
         color =time(0)%6+31;
-        prints("\x1b[1;%dm%*s▏▎▍▌▋▊▉ \x1b[1;37m請按任意鍵繼續 \x1b[1;%dm▉\x1b[m ", color, d_cols + 45, "", color);
+        prints("\x1b[1;%dm%*s▏▎▍▌▋▊▉ \x1b[1;37m請按任意鍵繼續 \x1b[1;%dm▉\x1b[m ", color, d_cols + 47, "", color);
 #else
-        outs(VMSG_NULL, (d_cols >> 1) + 30, "", (d_cols+1 >> 1) + 27, "");
+        outs(VMSG_NULL, (d_cols >> 1) + 30, "", (d_cols+1 >> 1) + 29, "");
 #endif
 #ifdef M3_USE_PFTERM
         move(b_lines, 0);

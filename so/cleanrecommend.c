@@ -76,7 +76,7 @@ cleanrecommend_item(
         }
         else
         {
-            pn = "   ";
+            pn = " ";
             prints("%4d%s%2s\x1b[m%-12s %-*s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
         }
 }

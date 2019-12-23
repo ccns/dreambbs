@@ -331,8 +331,8 @@ void
 vs_head(
     const char *title, const char *mid)
 {
-    char buf[(T_COLS - 1) - 79 + 69 + 1];     /* d_cols 最大可能是 (T_COLS - 1) */
-    char ttl[(T_COLS - 1) - 79 + 69 + 1];
+    char buf[(T_COLS - 1) - 79 + 66 + 29 + 1];     /* d_cols 最大可能是 (T_COLS - 1) */
+    char ttl[(T_COLS - 1) - 79 + 66 + 29 + 1];
     int spc, len;
     unsigned int ufo;
 #ifdef  COLOR_HEADER
@@ -354,7 +354,7 @@ vs_head(
     spc = strlen(mid);
     ufo = cutmp->ufo;
 
-    len = d_cols + 65 - strlen(title) - strlen(currboard); /* len: 中間還剩下多長的空間 */
+    len = d_cols + 66 - strlen(title) - strlen(currboard); /* len: 中間還剩下多長的空間 */
     if (ufo & UFO_BIFF)
     {
         mid = NEWMAILMSG; // 你有新情書

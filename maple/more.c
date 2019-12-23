@@ -302,13 +302,13 @@ outs_header(    /* 印出檔頭 */
         {
             ptr[-1] = ptr[4] = '\0';
             prints(COLOR5 " %s " COLOR6 "%-*.*s" COLOR5 " %s " COLOR6 "%-13s\x1b[m",
-                header1[0], d_cols + 53, d_cols + 53, word, ptr, ptr + 5);
+                header1[0], d_cols + 54, d_cols + 54, word, ptr, ptr + 5);
         }
         else
         {
             /* 少看板這欄 */
             prints(COLOR5 " %s " COLOR6 "%-*.*s\x1b[m",
-                header1[0], d_cols + 72, d_cols + 72, word);
+                header1[0], d_cols + 73, d_cols + 73, word);
         }
         return;
     }
@@ -321,7 +321,7 @@ outs_header(    /* 印出檔頭 */
             /* 其他檔頭都只有一欄 */
             word = str + header_len;
             prints(COLOR5 " %s " COLOR6 "%-*.*s\x1b[m",
-                header1[i], d_cols + 72, d_cols + 72, word);
+                header1[i], d_cols + 73, d_cols + 73, word);
             return;
         }
     }
@@ -450,7 +450,8 @@ more(
     fend = fimage + fsize;
 
     /* more_width = b_cols - 1; */      /* itoc.070517.註解: 若用這個，每列最大字數會和 header 及 footer 對齊 (即會有留白二格) */
-    more_width = b_cols + 1;            /* itoc.070517.註解: 若用這個，每列最大字數與螢幕同寬 */
+    /* more_width = b_cols + 1; */      /* itoc.070517.註解: 若用這個，每列最大字數與螢幕同寬 */
+    more_width = b_cols;  /* IID.20191223: Leave one space */
 
     /* 找檔頭結束的地方 */
     for (i = 0; i < LINE_HEADER; i++)

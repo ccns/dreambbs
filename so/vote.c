@@ -98,7 +98,7 @@ int num,
 const VCH *vch)
 {
     prints("%6d %-9.8s%-12s %-*.*s\n",
-           num, vch->cdate, vch->owner, d_cols + 48, d_cols + 48, vch->title);
+           num, vch->cdate, vch->owner, d_cols + 50, d_cols + 50, vch->title);
 }
 
 

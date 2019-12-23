@@ -28,7 +28,7 @@ const EMAIL *viol)
         sprintf(buf, "%s", "¥Ã¤[");
     else
         sprintf(buf, "%4d", BMAX(now, 0));
-    prints("%6d %4d %4s %-*.*s\n", num, viol->times, buf, d_cols + 56, d_cols + 56, viol->email);
+    prints("%6d %4d %4s %-*.*s\n", num, viol->times, buf, d_cols + 62, d_cols + 62, viol->email);
 }
 
 static int
