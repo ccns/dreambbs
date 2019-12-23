@@ -877,8 +877,7 @@ int select)
         logitfile(FN_RESET_LOG, "< 分類看板 >", NULL);
         break;
     case 3:
-        system("kill -9 `cat run/bmta.pid`; "
-               "kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`; "
+        system("kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`; "
                "kill -9 `ps -auxwww | grep bbslink | awk '{print $2}'`; "
                "kill -9 `ps -auxwww | grep bbsnnrp | awk '{print $2}'`");
         logitfile(FN_RESET_LOG, "< 轉信收信 >", NULL);
@@ -896,8 +895,7 @@ int select)
         logitfile(FN_RESET_LOG, "< 主聊天室 >", NULL);
         break;
     case 7:
-        system("kill -9 `cat run/bmta.pid`; "
-               BINARY_SUFFIX"camera; "
+        system(BINARY_SUFFIX"camera; "
                BINARY_SUFFIX"acpro; "
                "kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`; "
                "kill -9 `ps -auxwww | grep bbslink | awk '{print $2}'`; "
