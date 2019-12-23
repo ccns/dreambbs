@@ -19,7 +19,6 @@
 //char *tm_zone;          /* abbreviation of timezone name */
 long tm_gmtoff;         /* offset from UTC in seconds */
 
-#include <sys/shm.h>
 #include "bbs.h"
 
 static UCACHE *ushm;

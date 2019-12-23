@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <sys/types.h>
 #include "bbs.h"
 
 int main(void)

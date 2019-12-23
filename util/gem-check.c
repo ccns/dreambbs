@@ -10,7 +10,6 @@
 
 
 #include "bbs.h"
-#include <sys/stat.h>
 
 
 /* GCHECK_LOG 必須絕對路徑 */

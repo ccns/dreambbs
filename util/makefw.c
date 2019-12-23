@@ -7,9 +7,7 @@
 /* update : 95/12/15                                     */
 /*-------------------------------------------------------*/
 
-#include <strings.h>
 #include "bbs.h"
-#include <sys/shm.h>
 
 FWOCACHE *fwoshm;
 int total;

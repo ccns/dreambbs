@@ -9,7 +9,6 @@
 #define MODES_C
 
 #include "bbs.h"
-#include <sys/shm.h>
 
 ACCT cuser;
 UTMP *cutmp, utmp;

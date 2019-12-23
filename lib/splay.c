@@ -7,6 +7,8 @@
 /* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
 
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "splay.h"

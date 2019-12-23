@@ -7,6 +7,8 @@
 /* author : PaulLiu.bbs@bbs.cis.nctu.edu.tw              */
 /*-------------------------------------------------------*/
 
+#include "config.h"
+
 #include <stdio.h>
 #include "dao.h"
 

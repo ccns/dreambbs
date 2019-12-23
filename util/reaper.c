@@ -14,31 +14,6 @@
 /*          run/emailaddr.log - list of same email addr  */
 /*-------------------------------------------------------*/
 
-
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/file.h>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <time.h>
-#include <dirent.h>
-#include <errno.h>
-#include <string.h>
-#include <fcntl.h>
-
-#ifdef __linux__
-    #include <sys/param.h>
-#else
-    #include <machine/param.h>
-#endif // #ifdef __linux__
-
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-
-#include "config.h"
-#include "struct.h"
-#include "perm.h"
 #include "bbs.h"
 
 #define BANREGIST       "etc/banregist.acl"

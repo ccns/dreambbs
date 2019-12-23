@@ -1,6 +1,8 @@
 #ifndef HDR_H
 #define HDR_H
 
+#include "config.h"
+
 #include <sys/types.h>
 
 /* ----------------------------------------------------- */

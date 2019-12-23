@@ -9,7 +9,6 @@
 
 
 #include "bbs.h"
-#include <sys/shm.h>
 
 BCACHE *bshm;
 

@@ -7,6 +7,9 @@
 
 /* Thor.990311: 之所以用暴力而簡單的方式, 是為了考慮讓一般util也能用到此attr
                 特別要注意, working directory必須為 BBSHOME */
+
+#include "config.h"
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/stat.h>

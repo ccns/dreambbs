@@ -10,12 +10,6 @@
 /* syntax : topuser                                      */
 /*-------------------------------------------------------*/
 
-#include <sys/types.h>
-#include <dirent.h>
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include "bbs.h"
 
 DATA toplogins[TOPNUM], topposts[TOPNUM], topstay[TOPNUM];

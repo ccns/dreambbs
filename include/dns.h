@@ -11,6 +11,8 @@
 
 #define _DEFAULT_SOURCE 1
 
+#include "config.h"
+
 #include <sys/types.h>
 #include <sys/param.h>
 #include <sys/socket.h>

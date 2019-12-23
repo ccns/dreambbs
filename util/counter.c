@@ -10,7 +10,6 @@
 /*-------------------------------------------------------*/
 
 #include "bbs.h"
-#include <sys/shm.h>
 
 COUNTER *count;
 

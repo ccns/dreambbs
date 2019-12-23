@@ -1,4 +1,6 @@
 #define __STDC_WANT_LIB_EXT1__  1
+#include "config.h"
+
 #include <stdio.h>
 #include <unistd.h>
 #include <sys/types.h>

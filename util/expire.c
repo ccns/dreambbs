@@ -11,8 +11,6 @@
 
 /* Thor.981027: 加上 board時, 可sync 某一board */
 
-#include <strings.h>
-
 #include "bbs.h"
 
 #define DEF_DAYS        9999

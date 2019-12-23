@@ -6,7 +6,6 @@
 /* update :                                              */
 /*-------------------------------------------------------*/
 
-#include <sys/shm.h>
 #include "bbs.h"
 
 static UCACHE *ushm;

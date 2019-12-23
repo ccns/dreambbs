@@ -6,6 +6,8 @@
 /* update : 98/03/29                                     */
 /*-------------------------------------------------------*/
 
+#include "config.h"
+
 #include <stdio.h>
 #include <string.h>
 #include "dao.h"

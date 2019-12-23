@@ -7,14 +7,6 @@
 /* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
 
-#include <stdio.h>
-#include <ctype.h>
-#include <fcntl.h>
-#include <time.h>
-#include <sys/stat.h>
-#include <sys/file.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
 #include "bbs.h"
 
 static BCACHE *bshm;

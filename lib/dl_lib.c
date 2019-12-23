@@ -5,6 +5,8 @@
 /* update :   /  /                                       */
 /* ----------------------------------------------------- */
 
+#include "config.h"
+
 #include <dlfcn.h>
 #include <stdarg.h>
 #include <strings.h>

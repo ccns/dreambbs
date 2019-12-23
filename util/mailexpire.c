@@ -9,8 +9,6 @@
 /* NOTICE : clean user's mbox                            */
 /*-------------------------------------------------------*/
 
-#include <strings.h>
-
 #include "bbs.h"
 
 FILE *flog;

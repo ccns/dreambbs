@@ -6,8 +6,9 @@
 /* update : 96/12/15                                     */
 /*-------------------------------------------------------*/
 
+#include "config.h"             /* lkchu.981201: 是否有 define HAVE_ETC_HOSTS */
+
 #include "dns.h"
-#include "bbs.h"                /* lkchu.981201: 是否有 define HAVE_ETC_HOSTS */
 #include <signal.h>
 #include <unistd.h>
 #include <string.h>

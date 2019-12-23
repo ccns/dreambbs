@@ -8,17 +8,6 @@
 /* syntax : brdstat                                      */
 /*-------------------------------------------------------*/
 
-
-#include <stdio.h>
-#include <ctype.h>
-#include <fcntl.h>
-#include <time.h>
-#include <sys/stat.h>
-#include <sys/file.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-
-
 #include "bbs.h"
 
 #ifdef  HAVE_COUNT_BOARD

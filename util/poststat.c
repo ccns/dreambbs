@@ -8,6 +8,7 @@
 /* syntax : poststat [day]                               */
 /*-------------------------------------------------------*/
 
+#include "config.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,7 +16,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <sys/stat.h>   /* lkchu.981201 */
-#include "config.h"
 #include "cppdef.h"
 
 

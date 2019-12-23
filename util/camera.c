@@ -6,16 +6,7 @@
 /* update : 97/03/29                                     */
 /*-------------------------------------------------------*/
 
-
-#include <stdio.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/uio.h>
-#include <strings.h>
-
-
 #include "bbs.h"
-#include "dao.h"
 
 
 static const char *const list[] = {
