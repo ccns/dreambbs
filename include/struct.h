@@ -251,6 +251,16 @@ typedef struct
 #define UFO2_REALNAME           BFLAG(28)       /* visor.991030: ¯u¹ê©m¦W */
 
 
+/* IID.20191224: Macros for checking config-dependent ufo2 flags */
+
+#define HAVE_UFO2_CONF(ufo2_flag)  IF_ON(CONF_ ## ufo2_flag, ((bool)(cuser.ufo2 & ufo2_flag)), CONF_DEFAULT_ ## ufo2_flag)
+
+#define CONF_UFO2_MIME  HAVE_MIME_TRANSFER
+#define CONF_DEFAULT_UFO2_MIME  false
+#define CONF_UFO2_PRH  HAVE_RECOMMEND
+#define CONF_DEFAULT_UFO2_PRH  true
+
+
 #include "hdr.h"
 
 

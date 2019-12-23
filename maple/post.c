@@ -887,7 +887,7 @@ post_item(
                 hdr->xmode & POST_MARKED ? "\x1b[m" : "");
 
     /* 考量到舊版本相容性先註解掉, 加此判斷可以快一點點 */
-    if (/*hdr->xmode & POST_RECOMMEND &&*/ !(hdr->xmode & POST_BOTTOM) && !(cuser.ufo2 & UFO2_PRH))
+    if (/*hdr->xmode & POST_RECOMMEND &&*/ !(hdr->xmode & POST_BOTTOM) && !HAVE_UFO2_CONF(UFO2_PRH))
     {
         num = hdr->recommend;
 
