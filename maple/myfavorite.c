@@ -495,9 +495,6 @@ myfavorite_search(
 
 KeyFunc myfavorite_cb[] =
 {
-#ifdef  HAVE_LIGHTBAR
-    {XO_ITEM, {myfavorite_item_bar}},
-#endif
     {XO_INIT, {myfavorite_init}},
     {XO_LOAD, {myfavorite_load}},
     {XO_HEAD, {myfavorite_head}},

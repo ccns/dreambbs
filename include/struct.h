@@ -247,6 +247,8 @@ typedef struct
 #define UFO2_REPLY              BFLAG(18)       /* 記錄水球資訊 */
 #define UFO2_DEF_LOCALMAIL      BFLAG(19)       /* 只收站內信 */
 
+#define UFO2_MENU_LIGHTBAR      BFLAG(20)       /* IID.20191223: 使用光棒選單系統 */
+
 #define UFO2_ACL                BFLAG(24)       /* true if ACL was ON */
 #define UFO2_REALNAME           BFLAG(28)       /* visor.991030: 真實姓名 */
 
@@ -259,6 +261,8 @@ typedef struct
 #define CONF_DEFAULT_UFO2_MIME  false
 #define CONF_UFO2_PRH  HAVE_RECOMMEND
 #define CONF_DEFAULT_UFO2_PRH  true
+#define CONF_UFO2_MENU_LIGHTBAR  HAVE_MENU_LIGHTBAR
+#define CONF_DEFAULT_UFO2_MENU_LIGHTBAR  false
 
 
 #include "hdr.h"

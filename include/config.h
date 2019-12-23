@@ -358,6 +358,10 @@
 
 #define HAVE_POST_BOTTOM        /* 文章置底 */
 
+#ifdef USE_PFTERM
+#define HAVE_MENU_LIGHTBAR      /* IID.20191223: Enable menu lightbar system */
+#endif
+
 
 /* ----------------------------------------------------- */
 /* 其他系統上限參數                                      */

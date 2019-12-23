@@ -1822,7 +1822,11 @@ static const char *const UFO2_FLAGS[] = {
     /* DEF_LEAVE */ "預設不離站",
     /* REPLY */ "記錄水球資訊",
     /* DEF_LOCALMAIL */ "只收站內信",
-    /* RESERVE */ NULL,
+#ifdef HAVE_MENU_LIGHTBAR
+    /* LIGHTBAR */ "使用光棒選單系統",
+#else
+    /* LIGHTBAR */ "使用光棒選單系統(系統功\能尚未開啟)",
+#endif
     /* RESERVE */ NULL,
     /* RESERVE */ NULL,
     /* RESERVE */ NULL,
