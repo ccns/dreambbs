@@ -1407,10 +1407,8 @@ cursor_show(
     int row, int column)
 {
     move(row, column);
-#ifdef HAVE_MENU_LIGHTBAR
-    if (cuser.ufo2 & UFO2_MENU_LIGHTBAR)
+    if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
         grayout(row, row + 1, GRAYOUT_COLORBOLD);
-#endif
     outs(STR_CURSOR);
     move(row, column + 1);
 }
@@ -1421,10 +1419,8 @@ cursor_clear(
     int row, int column)
 {
     move(row, column);
-#ifdef HAVE_MENU_LIGHTBAR
-    if (cuser.ufo2 & UFO2_MENU_LIGHTBAR)
+    if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
         grayout(row, row + 1, GRAYOUT_COLORNORM);
-#endif
     outs(STR_UNCUR);
 }
 

@@ -16,12 +16,12 @@ extern time_t brd_visit[MAXBOARD];
 
 #ifdef  HAVE_INFO
 #define INFO_EMPTY      "Info      【 \x1b[1;36m校方公告區\x1b[m 】"
-#define INFO_HAVE       "Info      【 \x1b[41;33;1m快進來看看\x1b[m 】"
+#define INFO_HAVE       "Info      【 \x1b[41;33;1;5m快進來看看\x1b[m 】"
 #endif
 
 #ifdef  HAVE_STUDENT
 #define STUDENT_EMPTY   "1Student  【 \x1b[1;36m學生公告區\x1b[m 】"
-#define STUDENT_HAVE    "1Student  【 \x1b[41;33;1m快進來看看\x1b[m 】"
+#define STUDENT_HAVE    "1Student  【 \x1b[41;33;1;5m快進來看看\x1b[m 】"
 #endif
 
 static int
@@ -1346,6 +1346,8 @@ menu(void)
                     str = check_info(mptr->desc);
                     sprintf(item, "\x1b[m(\x1b[1;36m%c\x1b[m)%s", *str, str+1);
                     outs(item);
+                    if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
+                        grayout(MENU_YPOS + mode, MENU_YPOS + mode + 1, GRAYOUT_COLORNORM);
                     item_length[mode]=(cuser.ufo2 & UFO2_COLOR) ? strlen(item)-count_len(str)-2 : 0;
                     /*outs("(\x1b[1;36m");
                     outc(*str++);

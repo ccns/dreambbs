@@ -879,11 +879,15 @@ post_item(
             attr = ' ';
         else if (attr == 'M')
             attr |= 0x20;
-        prints("  \x1b[1;33m  ★\x1b[m%c%s%c%s", tag_char(hdr->chrono), hdr->xmode & POST_MARKED ? "\x1b[1;36m" : "", attr, hdr->xmode & POST_MARKED ? "\x1b[m" : "");
+        prints("  \x1b[%s33m  ★\x1b[m%c%s%c%s",
+                HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) ? "" : "1;", tag_char(hdr->chrono),
+                hdr->xmode & POST_MARKED ? (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) ? "\x1b[36m" : "\x1b[1;36m") : "",
+                attr, hdr->xmode & POST_MARKED ? "\x1b[m" : "");
     }
     else
         prints("%6d%c%s%c%s", num, tag_char(hdr->chrono),
-                hdr->xmode & POST_MARKED ? "\x1b[1;36m" : "", post_attr(hdr),
+                hdr->xmode & POST_MARKED ? (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) ? "\x1b[36m" : "\x1b[1;36m") : "",
+                post_attr(hdr),
                 hdr->xmode & POST_MARKED ? "\x1b[m" : "");
 
     /* 考量到舊版本相容性先註解掉, 加此判斷可以快一點點 */
@@ -898,9 +902,9 @@ post_item(
             else if (num > 99)                /* 推爆 */
                 prints("\x1b[1;31m爆\x1b[m");
             else if (num > 4)
-                prints("\x1b[1;31m%02d\x1b[m", num);
+                prints("\x1b[%s31m%02d\x1b[m", HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) ? "" : "1;", num);
             else
-                prints("\x1b[1;31m%02d\x1b[m", num);
+                prints("\x1b[%s31m%02d\x1b[m", HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) ? "" : "1;", num);
         }
         else if (num<0)
         {

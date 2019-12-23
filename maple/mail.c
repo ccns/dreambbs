@@ -1972,8 +1972,12 @@ hdr_outs(               /* print HDR's subject */
 {
     static const char *const type[4] =
     {"Re", "¡º", "=>", "¡»"};
-    static const char *const type_reset[4] =
-    {"\x1b[m", "\x1b[m", "\x1b[1;33m", "\x1b[1;32m"};
+    static const char *const type_reset[][4] = {
+        {"\x1b[m", "\x1b[m", "\x1b[1;33m", "\x1b[1;32m"},
+#ifdef HAVE_MENU_LIGHTBAR
+        {"\x1b[m", "\x1b[m", "\x1b[0;33m", "\x1b[0;32m"},
+#endif
+    };
 #ifdef  HAVE_DECLARE
     static const char *const type_dec[4] =
     {"\x1b[1;37m", "\x1b[1;37m", "\x1b[1;37m", "\x1b[1;33m"};
@@ -2047,7 +2051,7 @@ hdr_outs(               /* print HDR's subject */
     ch = title == mark;
     if (!strcmp(currtitle, title))
         ch += 2;
-    outs(type_reset[ch]);
+    outs(type_reset[HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR)][ch]);
     outs(type[ch]);
 
     mark = title + cc;
@@ -2123,7 +2127,7 @@ hdr_outs(               /* print HDR's subject */
                     if (pcnt == &square)
                         square = -1;
                     outc(cc);
-                    outs(type_reset[ch]);
+                    outs(type_reset[HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR)][ch]);
                     continue;
                 }
             }
@@ -2164,9 +2168,13 @@ mbox_item(
 #endif
 
     int xmode = hdr->xmode;
-    prints(xmode & MAIL_DELETE ? "%6d \x1b[1;5;37;41m%c\x1b[m"
-        : xmode & MAIL_MARKED ? "%6d \x1b[1;36m%c\x1b[m"
-        : "%6d %c", pos, mbox_attr(hdr->xmode));
+    prints("%6d %s%c%s",
+        pos,
+        (xmode & MAIL_DELETE) ? (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) ? "\x1b[1;37;41m" : "\x1b[1;5;37;41m")
+            : (xmode & MAIL_MARKED) ? (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) ? "\x1b[36m" : "\x1b[1;36m")
+            : "",
+        mbox_attr(hdr->xmode),
+        (xmode & (MAIL_DELETE | MAIL_MARKED)) ? "\x1b[m" : "");
 
     hdr_outs(hdr, d_cols + 47);
 }
