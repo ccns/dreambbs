@@ -318,7 +318,6 @@ void every_Z(void);
 void every_U(void);
 void every_B(void);
 void every_S(void);
-int xo_cursor(int ch, int pagemax, int num, int *pageno, int *cur, int *redraw);
 /* socket.c */
 int Get_Socket(const char *site, int *sock);
 int POP3_Check(const char *site, const char *account, const char *passwd);
