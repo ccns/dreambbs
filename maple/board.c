@@ -176,7 +176,8 @@ GCC_PURE int
 brh_unread(
     time_t chrono)
 {
-    int *head, *tail, item;
+    const int *head, *tail;
+    int item;
 
     if (chrono <= brh_expire)
         return 0;
@@ -350,7 +351,7 @@ is_bm(
     const char *list)                 /* ªO¥D¡GBM list */
 {
     int cc, len;
-    char *userid;
+    const char *userid;
 
     len = strlen(userid = cuser.userid);
     do
@@ -471,7 +472,7 @@ GCC_PURE int
 bstamp2bno(
     time_t stamp)
 {
-    BRD *brd;
+    const BRD *brd;
     int bno, max;
 
     bno = 0;

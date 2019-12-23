@@ -1218,7 +1218,7 @@ const char *
 check_info(const char *input)
 {
 #if defined(HAVE_INFO) || defined(HAVE_STUDENT)
-    BRD *brd;
+    const BRD *brd;
 #endif
     const char *name = NULL;
     name = input;

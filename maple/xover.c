@@ -1112,7 +1112,7 @@ GCC_PURE static int
 xo_keymap(
     int key)
 {
-    KeyMap *km;
+    const KeyMap *km;
     int ch;
 
     km = keymap;

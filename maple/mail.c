@@ -99,7 +99,7 @@ GCC_PURE int
 ll_has(
     const char *name)
 {
-    LinkList *list;
+    const LinkList *list;
 
     for (list = ll_head; list; list = list->next)
     {

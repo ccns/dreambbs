@@ -314,7 +314,7 @@ seek_log(
     const char *title,
     int state)
 {
-    BANMAIL *head, *tail;
+    const BANMAIL *head, *tail;
     if (state & BRD_NOLOG)
         return 0;
 

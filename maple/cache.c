@@ -507,7 +507,7 @@ GCC_PURE int
 brd_bno(
     const char *bname)
 {
-    BRD *brdp, *bend;
+    const BRD *brdp, *bend;
     int bno;
 
     brdp = bshm->bcache;

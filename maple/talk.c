@@ -228,7 +228,8 @@ GCC_PURE static bool
 is_bad(
     int userno)
 {
-    int count, *cache, datum, mid;
+    int count, datum, mid;
+    const int *cache;
 
     if ((cache = pal_pool))
     {
@@ -367,7 +368,8 @@ GCC_PURE bool
 is_pal(
     int userno)
 {
-    int count, *cache, datum, mid;
+    int count, datum, mid;
+    const int *cache;
 
     if ((cache = pal_pool))
     {
@@ -395,7 +397,8 @@ GCC_PURE bool
 is_banmsg(
     int userno)
 {
-    int count, *cache, datum, mid;
+    int count, datum, mid;
+    const int *cache;
 
     if ((cache = cutmp->banmsg_spool))
     {
