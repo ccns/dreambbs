@@ -33,6 +33,14 @@ static int mailgem_anchor(XO *xo);
 static int mailgem_recycle(XO *xo);
 static void XoMailGem(const char *folder, const char *title);
 
+static int
+mailgem_foot(
+    XO *xo)
+{
+    outf(MSG_GEM);
+    return XO_NONE;
+}
+
 static void
 mailgem_item(
 int num,
@@ -96,7 +104,7 @@ XO *xo)
     while (num < max);
     clrtobot();
 
-    return XO_NONE;
+    return mailgem_foot(xo);
 }
 
 
@@ -994,6 +1002,7 @@ static KeyFunc mailgem_cb[] =
     {XO_LOAD, {mailgem_load}},
     {XO_HEAD, {mailgem_head}},
     {XO_BODY, {mailgem_body}},
+    {XO_FOOT, {mailgem_foot}},
 
     {'r', {mailgem_browse}},
 

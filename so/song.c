@@ -131,6 +131,14 @@ char *fpath)
     return ghdr;
 }
 
+static int
+song_foot(
+    XO *xo)
+{
+    outf(MSG_GEM);
+    return XO_NONE;
+}
+
 static void
 song_item(
 int num,
@@ -183,7 +191,7 @@ XO *xo)
     while (num < max);
     clrtobot();
 
-    return XO_NONE;
+    return song_foot(xo);
 }
 
 
@@ -556,6 +564,7 @@ static KeyFunc song_cb[] =
     {XO_LOAD, {song_load}},
     {XO_HEAD, {song_head}},
     {XO_BODY, {song_body}},
+    {XO_FOOT, {song_foot}},
 
     {'r', {song_browse}},
     {'o', {song_order}},

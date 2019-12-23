@@ -856,6 +856,14 @@ post_attr(
     return attr;
 }
 
+static int
+post_foot(
+    XO *xo)
+{
+    outf(MSG_POST);
+    return XO_NONE;
+}
+
     static void
 post_item(
     int num,
@@ -954,7 +962,7 @@ post_body(
     } while (num < max);
 
     clrtobot();
-    return XO_NONE;
+    return post_foot(xo);
 }
 
 
@@ -4107,6 +4115,7 @@ KeyFunc post_cb[] =
     {XO_LOAD, {post_load}},
     {XO_HEAD, {post_head}},
     {XO_BODY, {post_body}},
+    {XO_FOOT, {post_foot}},
 
     {'B', {post_manage}},
     {'r', {post_browse}},

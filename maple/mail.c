@@ -2145,6 +2145,14 @@ hdr_outs(               /* print HDR's subject */
 }
 
 
+static int
+mbox_foot(
+    XO* xo)
+{
+    outf(MSG_MAILER);
+    return XO_NONE;
+}
+
 static inline void
 mbox_item(
     int pos,                    /* sequence number */
@@ -2191,7 +2199,7 @@ mbox_body(
     } while (num < max);
     clrtobot();
 
-    return XO_NONE;
+    return mbox_foot(xo);
 }
 
 
@@ -2777,6 +2785,7 @@ static KeyFunc mbox_cb[] =
     {XO_LOAD, {mbox_load}},
     {XO_HEAD, {mbox_head}},
     {XO_BODY, {mbox_body}},
+    {XO_FOOT, {mbox_foot}},
 
 #ifdef  HAVE_MAIL_FIX
     {'T', {mbox_title}},

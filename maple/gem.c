@@ -80,6 +80,14 @@ gem_manage(
     return 0;
 }
 
+static int
+gem_foot(
+    XO *xo)
+{
+    outf(MSG_GEM);
+    return XO_NONE;
+}
+
 static void
 gem_item(
     int num,
@@ -168,7 +176,7 @@ gem_body(
     } while (num < max);
     clrtobot();
 
-    return XO_NONE;
+    return gem_foot(xo);
 }
 
 
@@ -1435,6 +1443,7 @@ static KeyFunc gem_cb[] =
     {XO_LOAD, {gem_load}},
     {XO_HEAD, {gem_head}},
     {XO_BODY, {gem_body}},
+    {XO_FOOT, {gem_foot}},
 
     {'r', {gem_browse}},
 
