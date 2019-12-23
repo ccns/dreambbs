@@ -1227,7 +1227,7 @@ board_outs(
 //      prints("\x1b[%d;4%d;37m%6d%s%s%c%-13s\x1b[%sm%-4s %s%-33.32s%s%s%.13s", mode, mode?cuser.barcolor:0, num, str, mode ? "\x1b[37m" : "\x1b[m",
 //          brdtype, brd->brdname, buf, brd->class_, mode ? "\x1b[37m" : "\x1b[m", brd->title, brd->bvote ? "\x1b[1;33m  зы " : str2, mode ? "\x1b[37m" : "\x1b[m", brd->BM);
 
-    sprintf(buf, "%d;3%d", brd->color/10, brd->color%10);
+    sprintf(buf, "%d;3%d", (!brd->color) ? 1 : brd->color/10, brd->color%10);
 //      prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-36s%c %.13s", num, str,
 //      prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%s%c %.13s", num, str,
 
