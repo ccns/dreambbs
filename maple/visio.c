@@ -1402,7 +1402,6 @@ vs_bar(
 }
 
 
-#if 0
 void
 cursor_show(
     int row, int column)
@@ -1430,11 +1429,9 @@ cursor_key(
 
     cursor_show(row, column);
     ch = vkey();
-    move(row, column);
-    outs(STR_UNCUR);
+    cursor_clear(row, column);
     return ch;
 }
-#endif  /* #if 0 */
 
 static void
 vs_line(
