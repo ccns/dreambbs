@@ -89,6 +89,9 @@ util/match
 util/msgall
 util/outgo
 util/poststat
+util/readBENZ
+util/readFRIENZ
+util/readUSR
 util/reaper
 util/redir
 util/resetvmail

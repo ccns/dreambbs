@@ -22,6 +22,7 @@ EXE	= account acl-sort camera expire gem-check gem-index makeUSR \
 	  classtable_alert bmw-dump tranBRD \
 	  brdstat brdcheck dump-brdstat base64encode \
 	  msgall transacct showACCT showBRD \
+	  readBENZ readFRIENZ readUSR \
 	  backup brdmail addpost
 
 all: $(EXE)

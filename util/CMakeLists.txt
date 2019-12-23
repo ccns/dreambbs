@@ -16,6 +16,7 @@ set(EXE
     classtable_alert bmw-dump tranBRD
     brdstat brdcheck dump-brdstat base64encode
     msgall transacct showACCT showBRD
+    readBENZ readFRIENZ readUSR
     backup brdmail addpost
 )
 

@@ -8,7 +8,6 @@
 
 int main(void)
 {
-#if 0
     char c;
 
     setgid(BBSGID);
@@ -16,10 +15,8 @@ int main(void)
 
     for (c = 'a'; c <= 'z'; c++)
     {
-#endif
         char buf[64]/*, rmbuf[64]*/;
         struct dirent *de;
-#if 0
         DIR *dirp;
 
         sprintf(buf, BBSHOME "/usr/%c", c);
@@ -28,30 +25,21 @@ int main(void)
         if (!(dirp = opendir(".")))
             continue;
 
-        while (de = readdir(dirp))
+        while ((de = readdir(dirp)))
         {
-#endif
-            int fd, max;
+            int fd;
             BMW bmw;
-#if 0
             if (de->d_name[0] <= ' ' || de->d_name[0] == '.')
                 continue;
-            sprintf(buf, "%s/friend", de->d_name);
-#endif
-            strcpy(buf, BBSHOME "/usr/p/pcbug/benz");
+            sprintf(buf, "%.*s/%s", IDLEN, de->d_name, FN_BENZ);
             if ((fd = open(buf, O_RDWR)) < 0)
-/*              continue; */exit(1);
+                continue;
 
             while (read(fd, &bmw, sizeof(bmw)))
             {
                 printf("ID:%-13s sender:%-4d recver:%-4d msg:%s\n",
                        bmw.userid, bmw.sender, bmw.recver, bmw.msg);
             }
-
-
-
-#if 0
         }
     }
-#endif
 }
