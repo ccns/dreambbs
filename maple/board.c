@@ -823,7 +823,7 @@ XoPost(
     brd_fpath(fpath, currboard, fn_dir);
     xz[XZ_POST - XO_ZONE].xo = xo = xo_get(fpath);
     xo->key = XZ_POST;
-    xo->xyz = brd->bvote > 0 ? (char *) "本看板進行投票中" : brd->title + 3;
+    xo->xyz = (void *) (brd->bvote > 0 ? (char *) "本看板進行投票中" : brd->title + 3);
     str = brd->BM;
     if (*str <= ' ')
         str = "徵求中";
@@ -1008,7 +1008,7 @@ class_load(
     max -= pos;
 
     cbase = (short *) realloc(xo->xyz, max);
-    xo->xyz = (char *) cbase;
+    xo->xyz = cbase;
 
     max = 0;
     brd = bshm->bcache;
@@ -1696,7 +1696,7 @@ XoAuthor(
     xo_a.pos = xo_a.top = 0;
     xo_a.max = tag;
     xo_a.key = 1;                       /* all boards */
-    xo_a.xyz = (char *) chp;
+    xo_a.xyz = chp;
 
     xoTmp = xz[XZ_CLASS - XO_ZONE].xo;  /* Thor.0701: 記下原來的class_xo */
 

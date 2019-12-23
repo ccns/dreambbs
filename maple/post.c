@@ -962,7 +962,7 @@ post_body(
 post_head(
     XO *xo)
 {
-    vs_head(currBM, xo->xyz);
+    vs_head(currBM, (const char *) xo->xyz);
     prints(NECKPOST, d_cols, "");
     return post_body(xo);
 }
@@ -4508,7 +4508,7 @@ xpost_body(
 xpost_head(
     XO *xo)
 {
-    vs_head("主題串列" /* currBM */, xo->xyz);
+    vs_head("主題串列" /* currBM */, (const char *) xo->xyz);
     outs(MSG_XYPOST);
     if (*xypostKeyword)
         outs(xypostKeyword);

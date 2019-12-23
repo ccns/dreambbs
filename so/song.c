@@ -192,7 +192,7 @@ song_head(
 XO *xo)
 {
 
-    vs_head("弘地ゅ彻", xo->xyz);
+    vs_head("弘地ゅ彻", (const char *) xo->xyz);
     prints(NECK_SONG, d_cols, "");
     return song_body(xo);
 }
@@ -582,7 +582,7 @@ int level)
     xz[XZ_OTHER - XO_ZONE].cb = song_cb;
     xo->pos = 0;
     xo->key = XZ_OTHER;
-    xo->xyz = "翴簈╰参";
+    xo->xyz = (void *) "翴簈╰参";
     str = "╰参恨瞶";
     sprintf(currBM, "狾%s", str);
 

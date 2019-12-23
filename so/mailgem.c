@@ -106,7 +106,7 @@ XO *xo)
 {
     char buf[20];
 
-    vs_head("精華文章", xo->xyz);
+    vs_head("精華文章", (const char *) xo->xyz);
 
     sprintf(buf, "(剪貼版 %d 篇)\n", MailGemBufferNum);
 
@@ -681,7 +681,7 @@ XO *xo)
         if (ans == 'a')
         {
             strcpy(folder, xo->dir);
-            str_ncpy(MailGemSailor, xo->xyz, sizeof(MailGemSailor));
+            str_ncpy(MailGemSailor, (const char *) xo->xyz, sizeof(MailGemSailor));
         }
         else if (ans == 'd')
         {
@@ -1030,7 +1030,7 @@ const char *title)
     xz[XZ_MAILGEM - XO_ZONE].xo = xo = xo_new(folder);
     xo->pos = 0;
     xo->key = 0;
-    xo->xyz = (char *)title;
+    xo->xyz = (void *)title;
 
     xover(XZ_MAILGEM);
 
@@ -1056,7 +1056,7 @@ mailgem_main(void)
     xz[XZ_MAILGEM - XO_ZONE].cb = mailgem_cb;
     xo->pos = 0;
     xo->key = 0;
-    xo->xyz = "我的精華區";
+    xo->xyz = (void *)"我的精華區";
     xover(XZ_MAILGEM);
     free(xo);
 }

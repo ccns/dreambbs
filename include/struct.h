@@ -761,7 +761,7 @@ typedef struct OverView
     int top;                    /* top */
     int max;                    /* max */
     int key;                    /* key */
-    char *xyz;                  /* staff */
+    void *xyz;                  /* staff */
     struct OverView *nxt;       /* next */
     char dir[FLEX_SIZE];        /* data path */
 } XO;

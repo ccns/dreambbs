@@ -178,7 +178,7 @@ gem_head(
 {
     char buf[20];
 
-    vs_head("精華文章", xo->xyz);
+    vs_head("精華文章", (const char *) xo->xyz);
 
     if (xo->key > GEM_USER && GemBufferNum > 0)
     {
@@ -1080,7 +1080,7 @@ gem_anchor(
         if (ans == 'a')
         {
             strcpy(folder, xo->dir);
-            str_ncpy(GemSailor, xo->xyz, sizeof(GemSailor));
+            str_ncpy(GemSailor, (const char *) xo->xyz, sizeof(GemSailor));
         }
         else if (ans == 'd')
         {
@@ -1477,7 +1477,7 @@ XoGem(
     xz[XZ_GEM - XO_ZONE].xo = xo = xo_new(folder);
     xo->pos = 0;
     xo->key = level;
-    xo->xyz = (char *)title;
+    xo->xyz = (void *)title;
 
     xover(XZ_GEM);
 
@@ -1497,5 +1497,5 @@ gem_main(void)
     xz[XZ_GEM - XO_ZONE].cb = gem_cb;
     xo->pos = 0;
     xo->key = ((HAS_PERM(PERM_SYSOP|PERM_BOARD|PERM_GEM)) ? GEM_SYSOP : GEM_USER);
-    xo->xyz = "";
+    xo->xyz = (void *)"";
 }
