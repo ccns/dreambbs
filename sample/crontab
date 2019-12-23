@@ -40,7 +40,7 @@ BBSHOME=/home/bbs
 #10 5 * * * exec bin/bquota > /dev/null 2>&1
 
 # 每小時更新一次動態看版
-5 * * * * exec bin/acpro > /dev/null 2>&1
+5 */3 * * * exec bin/acpro > /dev/null 2>&1
 43 * * * * exec bin/camera > /dev/null 2>&1
 
 # 每小時作一次話題統計, 特別注意是在 account執行之前

@@ -112,9 +112,10 @@ bshm_init(void)
 /* ----------------------------------------------------- */
 
 
+#define CLASS_RUNFILE   "run/class.run"
 #define PROFESS_RUNFILE "run/profess.run"
 
-#define CH_MAX  100
+#define CH_MAX  5000
 
 
 static ClassHeader *chx[CH_MAX];
@@ -265,7 +266,10 @@ class_sort(void)
 
 
 static void
-profess_image(void)
+class_image(
+    const char *inifile,
+    const char *runfile,
+    const char *imgfile)
 {
     int i;
     FILE *fp;
@@ -273,10 +277,10 @@ profess_image(void)
     ClassHeader *chp;
 
     class_sort();
-    class_parse(PROFESS_INIFILE);
+    class_parse(inifile);
 
     if (chn < 2)  /* lkchu.990106: 尚沒有分類 */
-        return;
+        goto cleanup;
 
     len = sizeof(short) * (chn + 1);
 
@@ -286,7 +290,7 @@ profess_image(void)
         len += CH_TTLEN + chx[i]->count * sizeof(short);
     }
     pos[i++] = len;
-    if ((fp = fopen(PROFESS_RUNFILE, "w")))
+    if ((fp = fopen(runfile, "w")))
     {
         fwrite(pos, sizeof(short), i, fp);
         for (i = 0; i < chn; i++)
@@ -296,8 +300,17 @@ profess_image(void)
             free(chp);
         }
         fclose(fp);
-        rename(PROFESS_RUNFILE, PROFESS_IMGFILE);
+        rename(runfile, imgfile);
     }
+    else
+    {
+cleanup:
+        for (i = 0; i < chn; i++)
+        {
+            free(chx[i]);
+        }
+    }
+    chn = 0;
 }
 
 int
@@ -311,6 +324,7 @@ main(void)
     /* build Class image                                   */
     /* --------------------------------------------------- */
     bshm_init();
-    profess_image();
+    class_image(CLASS_INIFILE, CLASS_RUNFILE, CLASS_IMGFILE);
+    class_image(PROFESS_INIFILE, PROFESS_RUNFILE, PROFESS_IMGFILE);
     exit(0);
 }

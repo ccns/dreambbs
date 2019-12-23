@@ -872,16 +872,9 @@ int select)
         logitfile(FN_RESET_LOG, "< 笆篈狾 >", NULL);
         break;
     case 2:
-        if (ntime.tm_hour != 0 && ntime.tm_hour != 1)
-        {
-            system(BINARY_SUFFIX"account; " BINARY_SUFFIX"acpro");
-            board_main();
-            logitfile(FN_RESET_LOG, "< だ摸狾 >", NULL);
-        }
-        else
-        {
-            vmsg("瞷窽ゎㄏノだ摸狾竚!!");
-        }
+        system(BINARY_SUFFIX"acpro");
+        board_main();
+        logitfile(FN_RESET_LOG, "< だ摸狾 >", NULL);
         break;
     case 3:
         system("kill -9 `cat run/bmta.pid`; "
@@ -903,23 +896,15 @@ int select)
         logitfile(FN_RESET_LOG, "< 册ぱ >", NULL);
         break;
     case 7:
-        if (ntime.tm_hour != 0 && ntime.tm_hour != 1)
-        {
-            system("kill -9 `cat run/bmta.pid`; "
-                   BINARY_SUFFIX"camera; "
-                   BINARY_SUFFIX"account; "
-                   BINARY_SUFFIX"acpro; "
-                   "kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`; "
-                   "kill -9 `ps -auxwww | grep bbslink | awk '{print $2}'`; "
-                   "kill -9 `ps -auxwww | grep bbsnnrp | awk '{print $2}'`; "
-                   "kill -9 `ps -auxwww | grep xchatd  | awk '{print $2}'`");
-            board_main();
-            logitfile(FN_RESET_LOG, "< 场╰参 >", NULL);
-        }
-        else
-        {
-            vmsg("瞷窽ゎ竚┮Τ╰参!!");
-        }
+        system("kill -9 `cat run/bmta.pid`; "
+               BINARY_SUFFIX"camera; "
+               BINARY_SUFFIX"acpro; "
+               "kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`; "
+               "kill -9 `ps -auxwww | grep bbslink | awk '{print $2}'`; "
+               "kill -9 `ps -auxwww | grep bbsnnrp | awk '{print $2}'`; "
+               "kill -9 `ps -auxwww | grep xchatd  | awk '{print $2}'`");
+        board_main();
+        logitfile(FN_RESET_LOG, "< 场╰参 >", NULL);
         break;
     }
 
