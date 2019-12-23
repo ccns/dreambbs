@@ -1631,8 +1631,7 @@ xover(
                 {
 
 
-                    move(3 + cmd - num, 0);
-                    outc(' ');
+                    cursor_clear(3 + cmd - num, 0);
 
                     break;              /* ¥u²¾°Ê´å¼Ð */
                 }
@@ -1718,8 +1717,7 @@ xover(
             num = 3 + pos - xo->top;
 
 
-            move(num, 0);
-            outc('>');
+            cursor_show(num, 0);
         }
 
         cmd = vkey();
@@ -1979,8 +1977,7 @@ xover(
                     {
 
 
-                        move(num, 0);
-                        outc(' ');
+                        cursor_clear(num, 0);
                         cmd = XO_NONE;
                     }
                 }

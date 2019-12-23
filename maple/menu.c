@@ -1519,11 +1519,9 @@ menu(void)
         {
             if (cx >= 0)
             {
-                move(MENU_YPOS + cx, MENU_XPOS);
-                outc(' ');
+                cursor_clear(MENU_YPOS + cx, MENU_XPOS);
             }
-            move(MENU_YPOS + cc, MENU_XPOS);
-            outc('>');
+            cursor_show(MENU_YPOS + cc, MENU_XPOS);
             cx = cc;
         }
         else

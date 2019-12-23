@@ -355,7 +355,8 @@
 #define QUOTE_CHAR2     ':'
 
 
-#define STR_CURSOR      "¡´"
+//#define STR_CURSOR      "¡´"
+#define STR_CURSOR      "> "
 #define STR_UNCUR       "  "
 #define STR_SPACE       " \t\n\r"
 
