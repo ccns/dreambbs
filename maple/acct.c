@@ -2569,7 +2569,9 @@ static int scan_register_form(int fd)
                rform.idno, check_idno(rform.idno) ? "正確" : "錯誤");
         prints("服務單位: %s\n", rform.career);
         prints("目前住址: %s\n", rform.address);
-        prints("連絡電話: %s\n%s\n", rform.phone, msg_separator);
+        prints("連絡電話: %s\n", rform.phone);
+        outsep(b_cols, msg_separator);
+        outc('\n');
         clrtobot();
 
         if ((acct_load(&muser, userid) < 0) || (muser.userno != rform.userno))
@@ -2713,7 +2715,9 @@ static int ans_request(void)
         {
             move(2, 0);
             prints("申請代號: %s\n", form.userid);
-            prints("申請理由: %s\n%s\n", form.msg, msg_separator);
+            prints("申請理由: %s\n", form.msg);
+            outsep(b_cols, msg_separator);
+            outc('\n');
             clrtobot();
             if ((acct_load(&muser, form.userid) < 0)
                 || (muser.userno != form.userno))

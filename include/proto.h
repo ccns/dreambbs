@@ -279,6 +279,7 @@ int expand_esc_star_visio(char *buf, const char *src, int szbuf);
 void outx(const char *str);
 void outz(const char *msg);
 void outf(const char *str);
+void outsep(int xend, const char *pat);
 GCC_CHECK_FORMAT(1, 2) void prints(const char *fmt, ...);
 void cursor_save(void);
 void cursor_restore(void);

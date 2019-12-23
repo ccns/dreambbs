@@ -368,7 +368,9 @@ List(void)
 
     move(11, 0);
     clrtobot();
-    prints("\n      %4s   %-18s\n%s\n", "編號", "群組名稱", msg_separator);
+    prints("\n      %4s   %-18s\n", "編號", "群組名稱");
+    outsep(b_cols, msg_separator);
+    outc('\n');
     for (i = 1; i <= MAX_LIST; i++)
     {
         get_title(msg, i - 1);

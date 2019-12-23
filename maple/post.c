@@ -2118,8 +2118,9 @@ post_state(
         move(b_lines - 10, 0);
         clrtobot();
 
-        prints("\x1b[1;34m" MSG_BLINE "\x1b[m");
-        prints("\n\x1b[1;33;44m \x1b[37m文章代碼及資訊查詢： %*s \x1b[m", 55, "");
+        prints("\x1b[1;34m");
+        outsep(b_cols, MSG_BLINE);
+        prints("\n\x1b[1;33;44m \x1b[37m文章代碼及資訊查詢： %*s \x1b[m", d_cols + 56, "");
         outs("\n\n \x1b[1;37m★\x1b[m 文章索引: ");
         outs(dir);
         outs("\n \x1b[1;37m★\x1b[m 文章代碼: #");
@@ -2164,8 +2165,9 @@ post_state(
         move(b_lines - 8, 0);
         clrtobot();
 
-        prints("\x1b[1;34m" MSG_BLINE "\x1b[m");
-        prints("\n\x1b[1;33;44m \x1b[37m文章代碼及資訊查詢： %*s \x1b[m", 55, "");
+        prints("\x1b[1;34m");
+        outsep(b_cols, MSG_BLINE);
+        prints("\n\x1b[1;33;44m \x1b[37m文章代碼及資訊查詢： %*s \x1b[m", d_cols + 56, "");
         if (ghdr->xmode & (POST_EXPIRE | POST_MDELETE | POST_DELETE | POST_CANCEL | POST_LOCK | POST_CURMODIFY))
         {
             outs("\n\n \x1b[1;37m★\x1b[m 文章被鎖定、編輯或者刪除中");
@@ -3499,8 +3501,9 @@ post_showBRD_setting(
     move(b_lines - 14, 0);
     clrtobot();  /* 避免畫面殘留 */
 
-    prints("\x1b[1;34m" MSG_BLINE "\x1b[m");
-    prints("\n\x1b[1;33;44m \x1b[37m看板設定及資訊查詢： %*s \x1b[m\n", 55, "");
+    prints("\x1b[1;34m");
+    outsep(b_cols, MSG_BLINE);
+    prints("\n\x1b[1;33;44m \x1b[37m看板設定及資訊查詢： %*s \x1b[m\n", d_cols + 56, "");
 
     prints("\n看板:[%s]  板主:[%s] \n", brd->brdname, str);
 

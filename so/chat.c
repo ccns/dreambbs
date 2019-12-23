@@ -34,9 +34,10 @@ extern int vio_fd, holdon_fd;
 static void
 chat_topic(void)
 {
+    const char *title = (frec ? " 錄音室 " : CHATROOMNAME);
     move(0, 0);
-    prints("\x1b[1;37;46m %s：%-12s\x1b[45m 話題：%-48s\x1b[m",
-           (frec ? " 錄音室 " : CHATROOMNAME), chatroom, chattopic);
+    prints("\x1b[1;37;46m %s：%-12s\x1b[45m 話題：%-*s\x1b[m",
+           title, chatroom, d_cols + 57 - strlen(title), chattopic);
 }
 
 #  ifdef M3_USE_PFTERM
@@ -714,9 +715,9 @@ t_chat(void)
 
     clear();
     move(1, 0);
-    outs(msg_separator);
+    outsep(b_cols, msg_separator);
     move(stop_line, 0);
-    outs(msg_separator);
+    outsep(b_cols, msg_separator);
     print_chatid(chatid);
     memset(ptr = buf, 0, sizeof(buf));
     chatline = 2;

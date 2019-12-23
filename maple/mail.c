@@ -1703,7 +1703,9 @@ mail_sysop(void)
 
         move(11, 0);
         clrtobot();
-        prints("%16s   %-18s權責劃分\n%s\n", "編號", "站長 ID", msg_separator);
+        prints("%16s   %-16s權責劃分\n", "編號", "站長 ID");
+        outsep(b_cols, msg_separator);
+        outc('\n');
 
         for (i = 0; i < j; i++)
         {

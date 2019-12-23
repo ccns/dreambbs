@@ -1065,6 +1065,62 @@ void outr (const char *str)
 
 #endif //M3_USE_PFTERM
 
+/* IID.20191224: Output a repeated pattern as a separator */
+void
+outsep(
+    int xend, const char *pat)
+{
+    const char *str = pat;
+    int y, x;
+    bool dbcs_hi = false;
+    char hi;
+
+    getyx(&y, &x);
+
+    if (!str || !*str)
+    {
+        prints("%*s\x1b[m", BMAX(xend - x, 0), "");
+        return;  /* Prevent infinity loops */
+    }
+
+    while (x < xend)
+    {
+        int ch;
+        if (!(ch = *str++))
+        {
+            str = pat;
+            if (dbcs_hi)
+            {
+                dbcs_hi = false;
+                outc(' ');
+            }
+            continue;
+        }
+        if (dbcs_hi)
+        {
+            dbcs_hi = false;
+            outc(hi);
+        }
+        else if (ch & 0x80)
+        {
+            dbcs_hi = true;
+            hi = ch;
+            x++;
+            continue;
+        }
+        outc(ch);
+        x++;
+    }
+
+    if (dbcs_hi)
+    {
+        dbcs_hi = false;
+        outc(' ');
+    }
+
+    outs("\x1b[m");
+}
+
 void
 prints(const char *fmt, ...)
 {
