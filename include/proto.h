@@ -168,6 +168,7 @@ int mbox_check(void);
 void mbox_main(void);
 /* menu.c */
 int pad_view(void);
+void vs_mid(const char *mid);
 void vs_head(const char *title, const char *mid);
 void clear_notification(void);
 void movie(void);

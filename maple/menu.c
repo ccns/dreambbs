@@ -328,6 +328,35 @@ goodbye(void)
 /* ----------------------------------------------------- */
 
 void
+vs_mid(
+    const char *mid)
+{
+    int spc, len, pad;
+    unsigned int ufo;
+
+    if (mid == NULL)
+        mid = str_site;
+
+    len = strlen(mid);
+    ufo = cutmp->ufo;
+    if (ufo & UFO_BIFF)
+    {
+        mid = NEWMAILMSG; // 你有新情書
+        len = 15;
+    }
+    else if (ufo & UFO_BIFFN)
+    {
+        mid = NEWPASSMSG; // 你有新留言
+        len = 15;
+    }
+
+    spc = b_cols - len; /* spc: 中間還剩下多長的空間 */
+    pad = spc >> 1; /* pad: Spaces needed to center `mid` */
+
+    prints("%*s%s%*s\x1b[m\n", pad, "", mid, spc - pad, "");
+}
+
+void
 vs_head(
     const char *title, const char *mid)
 {

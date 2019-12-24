@@ -156,8 +156,9 @@ int shop_main(void)
     clear();
 
     move(0, 0);
-    prints("\x1b[1;33;42m%*s" BOARDNAME "    商店街%*s\x1b[m\n\n",
-           (d_cols >> 1) + 36 - (int)(unsigned int)sizeof(BOARDNAME), "", ((d_cols+1) >> 1) + 33, "");
+    prints("\x1b[1;33;42m");
+    vs_mid(BOARDNAME "    商店街");
+    prints("\n");
     prints("                     您的現金如下：\n\n                     夢幣：%d 元", money);
     move(10, 0);
 

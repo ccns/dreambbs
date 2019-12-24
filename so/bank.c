@@ -357,8 +357,9 @@ int bank_main(void)
     clear();
 
     move(0, 0);
-    prints("\x1b[1;33;42m%*s" BOARDNAME "    銀行%*s\x1b[m\n\n",
-           (d_cols >> 1) + 36 - (int)(unsigned int)sizeof(BOARDNAME), "", ((d_cols+1) >> 1) + 35, "");
+    prints("\x1b[1;33;42m");
+    vs_mid(BOARDNAME "    銀行");
+    prints("\n");
     move(10, 0);
     prints("  您的帳號資訊如下    １. 用優良點數換取夢幣\n\n");
     prints("                      ２. 用夢幣換取優良點數\n\n");
