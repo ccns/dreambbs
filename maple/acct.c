@@ -355,11 +355,19 @@ unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
         msg = "□";
         if (pbits & j)
         {
-            on++;
-            msg = "■";
+            if (perms[i])
+            {
+                on++;
+                msg = "■";
+            }
+            else
+                pbits ^= j;
         }
         move(5 + (i & 15), (i < 16 ? 0 : 40));
-        prints("%c %s %s", radix32[i], msg, perms[i]);
+        if (perms[i])
+            prints("%c %s %s", radix32[i], msg, perms[i]);
+        else
+            prints("\x1b[1;30m%c\x1b[m", radix32[i]);
         j <<= 1;
     }
 
@@ -369,7 +377,7 @@ unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
         if (i >= 10)
             i -= 'a' - '0' - 10;
 
-        if (i >= 0 && i < count)
+        if (i >= 0 && i < count && perms[i])
         {
             j = 1 << i;
             if (pbits & j)
@@ -1731,11 +1739,11 @@ int u_addr(void)
 }
 
 static const char *const UFO_FLAGS[] = {
-    "【保留】",
-    "【保留】",
-    "【保留】",
-    "【保留】",
-    "【保留】",
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
 
     /* PAGER */ "關閉呼叫器",
     /* QUITE */ "關閉訊息",
@@ -1747,17 +1755,17 @@ static const char *const UFO_FLAGS[] = {
     /* CLASSTABLE */ "課表時刻通知(系統功\能尚未開啟)",
 #endif
     /* MPAGER */ "電子郵件傳呼",
-    "【保留】",
-    "【保留】",
-    "【保留】",
+    NULL,
+    NULL,
+    NULL,
     /* REJECT */ "拒收廣播",
-    "【保留】",
-    "【保留】",
-    "【保留】",
+    NULL,
+    NULL,
+    NULL,
     /* HIDDEN */ "隱藏來源",
 
     /* CLOAK */ "隱身術",
-    "【保留】"
+    NULL
 };
 
 static const char *const UFO2_FLAGS[] = {
@@ -1789,18 +1797,18 @@ static const char *const UFO2_FLAGS[] = {
     /* DEF_LEAVE */ "預設不離站",
     /* REPLY */ "記錄水球資訊",
     /* DEF_LOCALMAIL */ "只收站內信",
-    /* RESERVE */ "【保留】",
-    /* RESERVE */ "【保留】",
-    /* RESERVE */ "【保留】",
-    /* RESERVE */ "【保留】",
+    /* RESERVE */ NULL,
+    /* RESERVE */ NULL,
+    /* RESERVE */ NULL,
+    /* RESERVE */ NULL,
     /* ACL */ "ACL",
-    /* RESERVE */ "【保留】",
-    /* RESERVE */ "【保留】",
-    /* RESERVE */ "【保留】",
+    /* RESERVE */ NULL,
+    /* RESERVE */ NULL,
+    /* RESERVE */ NULL,
     /* REALNAME */ "真實姓名",
-    /* RESERVE */ "【保留】",
-    /* RESERVE */ "【保留】",
-    /* REALNAME */ "【保留】"
+    /* RESERVE */ NULL,
+    /* RESERVE */ NULL,
+    /* RESERVE */ NULL
 };
 
 

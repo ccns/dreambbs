@@ -113,12 +113,12 @@ static const char *const perm_tbl[] = {
   "永久保留帳號",               /* PERM_XEMPT */
 
   "公告看板發文權限",           /* PERM_9 */
-  "保留",                       /* PERM_10 */
-  "保留",                       /* PERM_11 */
-  "保留",                       /* PERM_12 */
-  "保留",                       /* PERM_13 */
-  "保留",                       /* PERM_14 */
-  "保留",                       /* PERM_15 */
+  NULL,                         /* PERM_10 */
+  NULL,                         /* PERM_11 */
+  NULL,                         /* PERM_12 */
+  NULL,                         /* PERM_13 */
+  NULL,                         /* PERM_14 */
+  NULL,                         /* PERM_15 */
   "特殊標記",                   /* PERM_16 */
 
   "禁止發表文章",               /* PERM_DENYPOST */
