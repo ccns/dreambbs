@@ -149,7 +149,7 @@ XO *xo)
 }
 
 
-KeyFunc bstat_cb[] =
+KeyFuncList bstat_cb =
 {
     {XO_INIT, {bstat_init}},
     {XO_LOAD, {bstat_load}},

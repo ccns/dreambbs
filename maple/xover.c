@@ -1470,9 +1470,9 @@ xo_jump(                        /* 移動游標到 number 所在的特定位置 */
 
 #ifdef XZ_XPOST
 /* Thor.990303: 如果有 XZ_XPOST的話 */
-extern KeyFunc xpost_cb[];
+extern KeyFuncList xpost_cb;
 #endif
-extern KeyFunc post_cb[];
+extern KeyFuncList post_cb;
 
 
 XZ xz[] =
@@ -1514,8 +1514,8 @@ xover(
     int zone=0;
     int sysmode=0;
     XO *xo=NULL;
-    KeyFunc *xcmd=NULL;
-    KeyFunc *cb;
+    KeyFuncListRef xcmd=NULL;
+    KeyFuncIter cb;
 
 
 #if 1

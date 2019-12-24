@@ -593,7 +593,7 @@ personal_help(
     return XO_HEAD;
 }
 
-KeyFunc personal_cb[] =
+KeyFuncList personal_cb =
 {
     {XO_INIT, {personal_init}},
     {XO_LOAD, {personal_load}},

@@ -2787,7 +2787,7 @@ mbox_gem(
 }
 #endif
 
-static KeyFunc mbox_cb[] =
+static KeyFuncList mbox_cb =
 {
     {XO_INIT, {mbox_init}},
     {XO_LOAD, {mbox_load}},

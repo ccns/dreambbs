@@ -225,7 +225,7 @@ XO *xo)
     return XO_HEAD;
 }
 
-KeyFunc memorandum_cb[] =
+KeyFuncList memorandum_cb =
 {
     {XO_INIT, {memorandum_init}},
     {XO_LOAD, {memorandum_load}},

@@ -795,12 +795,15 @@ typedef struct
 #endif
     };
 } KeyFunc;
+typedef KeyFunc KeyFuncList[];
+typedef KeyFunc *KeyFuncIter;
+typedef KeyFunc *KeyFuncListRef;
 
 
 typedef struct
 {
     XO *xo;
-    KeyFunc *cb;
+    KeyFuncListRef cb;
     int mode;
 } XZ;
 

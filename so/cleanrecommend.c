@@ -229,7 +229,7 @@ cleanrecommend_help(
     return XO_HEAD;
 }
 
-KeyFunc cleanrecommend_cb[] =
+KeyFuncList cleanrecommend_cb =
 {
     {XO_INIT, {cleanrecommend_init}},
     {XO_LOAD, {cleanrecommend_load}},

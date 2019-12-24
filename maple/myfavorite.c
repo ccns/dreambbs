@@ -493,7 +493,7 @@ myfavorite_search(
 }
 
 
-KeyFunc myfavorite_cb[] =
+KeyFuncList myfavorite_cb =
 {
     {XO_INIT, {myfavorite_init}},
     {XO_LOAD, {myfavorite_load}},

@@ -1750,7 +1750,7 @@ class_visit(
     return XO_BODY;
 }
 
-static KeyFunc class_cb[] =
+static KeyFuncList class_cb =
 {
     {XO_INIT, {class_head}},
     {XO_LOAD, {class_body}},

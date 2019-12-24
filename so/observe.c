@@ -252,7 +252,7 @@ XO *xo)
 }
 
 
-KeyFunc observe_cb[] =
+KeyFuncList observe_cb =
 {
     {XO_INIT, {observe_init}},
     {XO_LOAD, {observe_load}},

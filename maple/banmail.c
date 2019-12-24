@@ -228,7 +228,7 @@ static int banmail_help(XO * xo)
 }
 
 
-KeyFunc banmail_cb[] = {
+KeyFuncList banmail_cb = {
     {XO_INIT, {banmail_init}},
     {XO_LOAD, {banmail_load}},
     {XO_HEAD, {banmail_head}},

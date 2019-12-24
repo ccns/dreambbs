@@ -1437,7 +1437,7 @@ gem_cross(
     return XO_HEAD;
 }
 
-static KeyFunc gem_cb[] =
+static KeyFuncList gem_cb =
 {
     {XO_INIT, {gem_init}},
     {XO_LOAD, {gem_load}},

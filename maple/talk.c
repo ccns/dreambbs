@@ -973,7 +973,7 @@ pal_help(
 }
 
 
-KeyFunc pal_cb[] =
+KeyFuncList pal_cb =
 {
     {XO_INIT, {pal_init}},
     {XO_LOAD, {pal_load}},
@@ -1245,7 +1245,7 @@ bmw_help(
 }
 
 
-KeyFunc bmw_cb[] =
+KeyFuncList bmw_cb =
 {
     {XO_INIT, {bmw_init}},
     {XO_LOAD, {bmw_load}},
@@ -4093,7 +4093,7 @@ ulist_april1(
 }
 #endif
 
-KeyFunc ulist_cb[] =
+KeyFuncList ulist_cb =
 {
     {XO_INIT, {ulist_init}},
     {XO_LOAD, {ulist_body}},
@@ -4812,7 +4812,7 @@ banmsg_help(
 }
 
 
-KeyFunc banmsg_cb[] =
+KeyFuncList banmsg_cb =
 {
     {XO_INIT, {banmsg_init}},
     {XO_LOAD, {banmsg_load}},

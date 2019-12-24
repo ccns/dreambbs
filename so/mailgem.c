@@ -997,7 +997,7 @@ XO *xo)
     return XO_INIT;
 }
 
-static KeyFunc mailgem_cb[] =
+static KeyFuncList mailgem_cb =
 {
     {XO_INIT, {mailgem_init}},
     {XO_LOAD, {mailgem_load}},

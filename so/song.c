@@ -558,7 +558,7 @@ XO *xo)
     return XO_HEAD;
 }
 
-static KeyFunc song_cb[] =
+static KeyFuncList song_cb =
 {
     {XO_INIT, {song_init}},
     {XO_LOAD, {song_load}},

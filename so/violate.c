@@ -207,7 +207,7 @@ XO *xo)
 }
 
 
-KeyFunc viol_cb[] =
+KeyFuncList viol_cb =
 {
     {XO_INIT, {viol_init}},
     {XO_LOAD, {viol_load}},

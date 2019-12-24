@@ -915,7 +915,7 @@ XO *xo)
     return XO_HEAD;
 }
 
-KeyFunc nbrd_cb[] =
+KeyFuncList nbrd_cb =
 {
     {XO_INIT, {nbrd_init}},
     {XO_LOAD, {nbrd_load}},

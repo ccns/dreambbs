@@ -160,7 +160,7 @@ XO *xo)
 }
 
 
-KeyFunc admin_cb[] =
+KeyFuncList admin_cb =
 {
     {XO_INIT, {admin_init}},
     {XO_LOAD, {admin_load}},

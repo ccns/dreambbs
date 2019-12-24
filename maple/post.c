@@ -4113,7 +4113,7 @@ post_spam(
 
 
 
-KeyFunc post_cb[] =
+KeyFuncList post_cb =
 {
     {XO_INIT, {post_init}},
     {XO_LOAD, {post_load}},
@@ -4761,7 +4761,7 @@ xpost_browse(
 }
 
 
-KeyFunc xpost_cb[] =
+KeyFuncList xpost_cb =
 {
     {XO_INIT, {xpost_init}},
     {XO_LOAD, {xpost_load}},

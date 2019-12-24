@@ -286,7 +286,7 @@ XO *xo)
 }
 
 
-KeyFunc aloha_cb[] =
+KeyFuncList aloha_cb =
 {
     {XO_INIT, {aloha_init}},
     {XO_LOAD, {aloha_load}},

@@ -216,7 +216,7 @@ CONTACT *contact)
 }
 
 
-KeyFunc contact_cb[] =
+KeyFuncList contact_cb =
 {
     {XO_INIT, {contact_init}},
     {XO_LOAD, {contact_load}},

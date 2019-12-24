@@ -1104,7 +1104,7 @@ XO *xo)
 }
 
 
-static KeyFunc vote_cb[] =
+static KeyFuncList vote_cb =
 {
     {XO_INIT, {vote_init}},
     {XO_LOAD, {vote_load}},

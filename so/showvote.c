@@ -162,7 +162,7 @@ XO *xo)
 }
 
 
-KeyFunc show_cb[] =
+KeyFuncList show_cb =
 {
     {XO_INIT, {show_init}},
     {XO_LOAD, {show_load}},

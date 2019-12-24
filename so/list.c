@@ -325,7 +325,7 @@ XO *xo)
 }
 
 
-KeyFunc list_cb[] =
+KeyFuncList list_cb =
 {
     {XO_INIT, {list_init}},
     {XO_LOAD, {list_load}},

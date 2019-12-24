@@ -683,7 +683,7 @@ innbbs_help(
     return XO_HEAD;
 }
 
-static KeyFunc innbbs_cb[] =
+static KeyFuncList innbbs_cb =
 {
     {XO_INIT, {innbbs_init}},
     {XO_LOAD, {innbbs_load}},

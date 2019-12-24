@@ -285,7 +285,7 @@ XO *xo)
 }
 
 
-KeyFunc chat_cb[] =
+KeyFuncList chat_cb =
 {
     {XO_INIT, {chat_init}},
     {XO_LOAD, {chat_load}},
