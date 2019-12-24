@@ -11,6 +11,11 @@
 
 #include "cppdef.h"
 
+#ifdef __cplusplus
+  #include <unordered_map>
+  #include <utility>
+#endif
+
 /* screen control */
 
 #define STRLEN          80             /* Length of most string data */
@@ -783,21 +788,40 @@ typedef struct OverView
 #define XO_FLEX_MEMBER          dir
 
 
+typedef union {  /* IID.20191106: The field to be used is determined by the value of `key` */
+    int (*func)(XO *xo);  /* Default */
+#if NO_SO
+    int (*dlfunc)(XO *xo);  /* `key | XO_DL` */
+#else
+    const char *dlfunc;
+#endif
+} XoFunc;
+
+#ifdef __cplusplus
+/* IID.20191225: Use hash table for xover callback function list */
+typedef std::unordered_map<unsigned int, XoFunc> KeyFuncList;
+typedef KeyFuncList::iterator KeyFuncIter;
+struct KeyFuncListRef {
+    KeyFuncList *ptr_;
+
+    constexpr KeyFuncListRef(KeyFuncList *ptr = NULL): ptr_ (ptr) { }
+    constexpr KeyFuncList *&operator=(KeyFuncList *ptr) { return ptr_ = ptr; }
+    constexpr KeyFuncListRef(KeyFuncList& ref): ptr_ (&ref) { }
+    constexpr KeyFuncList *&operator=(KeyFuncList& ref) { return ptr_ = &ref; }
+    constexpr KeyFuncList *operator->(void) const { return ptr_; }
+};
+
+#else
+
 typedef struct
 {
-    unsigned int key;
-    union {  /* IID.20191106: The field to be used is determined by the value of `key` */
-        int (*func)(XO *xo);  /* Default */
-#if NO_SO
-        int (*dlfunc)(XO *xo);  /* `key | XO_DL` */
-#else
-        const char *dlfunc;
-#endif
-    };
+    unsigned int first;
+    XoFunc second;
 } KeyFunc;
 typedef KeyFunc KeyFuncList[];
 typedef KeyFunc *KeyFuncIter;
 typedef KeyFunc *KeyFuncListRef;
+#endif
 
 
 typedef struct

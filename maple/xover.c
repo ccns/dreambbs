@@ -1644,53 +1644,80 @@ xover(
             /* °õ¦æ call-back routines                         */
             /* ----------------------------------------------- */
 
-            cb = xcmd;
+            /* IID.20191225: In C++ mode, use hash table for xover callback function list */
 #if !NO_SO
             num = cmd | XO_DL; /* Thor.990220: for dynamic load */
 #endif
+#ifndef __cplusplus  /* Callback function fetching loop */
+            cb = xcmd;
             for (;;)
             {
-                pos = cb->key;
+                pos = cb->first;
+#endif
 #if !NO_SO
                 /* Thor.990220: dynamic load, with key | XO_DL */
+  #ifdef __cplusplus
+                cb = xcmd->find(num);
+                if (cb != xcmd->end())
+  #else
                 if (pos == num)
+  #endif
                 {
-                    void *p = DL_GET(cb->dlfunc);
+                    int (*p)(XO *xo) = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
                     if (p)
                     {
-                        cb->func = (int (*)(XO *xo))p;
-                        pos = cb->key = cmd;
+  #ifdef __cplusplus
+                        xcmd->erase(num);
+                        cb = xcmd->insert({cmd, {p}}).first;
+  #else
+                        cb->second.func = p;
+                        pos = cb->first = cmd;
+  #endif
                     }
                     else
                     {
                         cmd = XO_NONE;
-                        break;
+                        goto xover_callback_end;
                     }
                 }
 #endif
+#ifdef __cplusplus
+  #if !NO_SO
+                else
+  #endif
+                    cb = xcmd->find(cmd);
+                if (cb != xcmd->end())
+#else
                 if (pos == cmd)
+#endif
                 {
                     if (cmd >= XO_INIT && cmd < XO_FOOT)
                         pos_prev = -1;  /* Item will be redrawn; redraw cursor */
 
-                    cmd = (*(cb->func)) (xo);
+                    cmd = (*(cb->second.func)) (xo);
 
                     if (cmd == XO_QUIT)
                     {
                         xo_user_level--;
                         return;
                     }
-
-                    break;
+                    goto xover_callback_end;
                 }
-                else if (pos == 'h')
+                else  /* Callback function not found */
+#ifndef __cplusplus
+                if (pos == 'h')
+#endif
                 {
                     cmd = XO_NONE;
-                    break;
+                    goto xover_callback_end;
                 }
 
+#ifndef __cplusplus  /* Continue callback function fetching loop */
                 cb++;
             }
+#endif
+xover_callback_end:
+            ;
 
 #if 0
             if (pos >= XO_INIT && pos <= XO_BODY)
