@@ -527,7 +527,8 @@ static void perm_log(const ACCT * u, int oldl)
 }
 #endif
 
-void acct_show(const ACCT * u, int adm    /* 1: admin 2: reg-form */
+/* 0: user config 1: admin 2: reg-form 3: normal user 4: bm setting */
+void acct_show(const ACCT * u, int adm
     )
 {
     time_t now;
@@ -631,13 +632,15 @@ void acct_show(const ACCT * u, int adm    /* 1: admin 2: reg-form */
 
 void bm_setup(ACCT * u, int adm)
 {
+    int y, x;
 
-    acct_show(u, adm);
+    getyx(&y, &x);
+    acct_show(u, 3);
 
     if ((u->userlevel & PERM_SYSOP) && !(cuser.userlevel & PERM_SYSOP))
     {
         outs("此帳號為本站的站長，無法更改權限！");
-        return;
+        goto cleanup;
     }
     if (!str_cmp(cuser.userid, ELDER))
         pmsg2("板主異動不加入日誌");
@@ -649,21 +652,29 @@ void bm_setup(ACCT * u, int adm)
         {
             sprintf(why, "未輸入理由，禁止異動");
             pmsg2("請輸入異動理由");
-            return;
+            goto cleanup;
         }
         sprintf(tmp, "\n\n%s %-12s 對使用者 %-12s 執行板主異動\n理由: ", Now(),
                 cuser.userid, u->userid);
         f_cat(FN_BLACKSU_LOG, tmp);
         f_cat(FN_BLACKSU_LOG, why);
     }
+
+    move(y, x);
+    acct_show(u, adm);
+
     adm = vans("設定版主權限 Y)確定 N)取消 Q)離開 [Q] ");
     if (adm == 'y' || adm == 'Y')
         u->userlevel = u->userlevel | PERM_BM;
     else if (adm == 'n' || adm == 'N')
         u->userlevel = u->userlevel & (~PERM_BM);
     else
-        return;
+        goto cleanup;
     acct_save(u);
+
+cleanup:
+    move(1, 0);
+    clrtobot();
 }
 
 
@@ -980,6 +991,7 @@ int add_deny(ACCT * u, int adm, int cross)
 void acct_setup(ACCT * u, int adm)
 {
     ACCT x;
+    int y, c;
 
     int (*sm) (char *mail);
 
@@ -989,7 +1001,8 @@ void acct_setup(ACCT * u, int adm)
     char id[13];
     tmp = 0;
 
-    acct_show(u, adm);
+    getyx(&y, &c);
+    acct_show(u, (adm) ? 3 : 0);
 
     memcpy(&x, u, sizeof(ACCT));
     sm = NULL;
@@ -998,7 +1011,7 @@ void acct_setup(ACCT * u, int adm)
         && !check_admin(cuser.userid))
     {
         outs("此帳號為本站的站長，無法更改！");
-        return;
+        goto cleanup;
     }
 
     if (adm)
@@ -1015,7 +1028,7 @@ void acct_setup(ACCT * u, int adm)
                 {
                     sprintf(why, "未輸入理由，禁止查詢");
                     pmsg2("請輸入查詢理由");
-                    return;
+                    goto cleanup;
                 }
                 sprintf(tmp,
                         "\n\n%s %-12s 對使用者 %-12s 執行查詢動作\n理由: ",
@@ -1023,6 +1036,10 @@ void acct_setup(ACCT * u, int adm)
                 f_cat(FN_BLACKSU_LOG, tmp);
                 f_cat(FN_BLACKSU_LOG, why);
             }
+
+            move(y, c);
+            acct_show(u, adm);
+
             adm =
                 vans
                 ("設定 1)資料 2)權限 3)連坐處罰 4)單人處罰 5)基本權限 6)旗標 7)SU Q)取消 [Q] ");
@@ -1039,7 +1056,7 @@ void acct_setup(ACCT * u, int adm)
                 {
                     sprintf(why, "未輸入理由，禁止查詢");
                     pmsg2("請輸入查詢理由");
-                    return;
+                    goto cleanup;
                 }
                 sprintf(tmp,
                         "\n\n%s %-12s 對使用者 %-12s 執行查詢動作\n理由: ",
@@ -1047,6 +1064,10 @@ void acct_setup(ACCT * u, int adm)
                 f_cat(FN_BLACKSU_LOG, tmp);
                 f_cat(FN_BLACKSU_LOG, why);
             }
+
+            move(y, c);
+            acct_show(u, adm);
+
             adm =
                 vans
                 ("設定 1)資料 2)權限 3)連坐處罰 4)單人處罰 5)基本權限 6)旗標 Q)取消 [Q] ");
@@ -1087,7 +1108,7 @@ void acct_setup(ACCT * u, int adm)
                 flog = fopen(FN_SAMEEMAIL_LOG, "r");
                 tmp = 0;
                 if (flog == NULL)
-                    return;
+                    goto cleanup;
 
                 for (i = 1; i <= num; i++)
                 {
@@ -1126,18 +1147,18 @@ void acct_setup(ACCT * u, int adm)
         {
             u->userlevel = PERM_BASIC;
             acct_save(u);
-            return;
+            goto cleanup;
         }
         if (adm == '2')
             goto set_perm;
 
         if (adm != '1')
-            return;
+            goto cleanup;
     }
     else
     {
         if (vans("修改資料(y/N)?[N] ") != 'y')
-            return;
+            goto cleanup;
     }
 
     move(i = 3, 0);
@@ -1162,7 +1183,7 @@ void acct_setup(ACCT * u, int adm)
         if (chkpasswd(u->passwd, u->passhash, buf))
         {
             vmsg("密碼錯誤");
-            return;
+            goto cleanup;
         }
     }
 
@@ -1303,7 +1324,7 @@ void acct_setup(ACCT * u, int adm)
             {
                 vmsg("取消修改");
                 if (adm == '2')
-                    return;
+                    goto cleanup;
             }
             else
             {
@@ -1313,7 +1334,7 @@ void acct_setup(ACCT * u, int adm)
     }
 
     if (vans(msg_sure_ny) != 'y')
-        return;
+        goto cleanup;
 
     if (adm)
     {
@@ -1341,6 +1362,10 @@ void acct_setup(ACCT * u, int adm)
 
     memcpy(u, &x, sizeof(x));
     acct_save(u);
+
+cleanup:
+    move(1, 0);
+    clrtobot();
 }
 
 
