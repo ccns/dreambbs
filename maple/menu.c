@@ -331,9 +331,7 @@ void
 vs_head(
     const char *title, const char *mid)
 {
-    char buf[(T_COLS - 1) - 79 + 66 + 29 + 1];     /* d_cols 最大可能是 (T_COLS - 1) */
-    char ttl[(T_COLS - 1) - 79 + 66 + 29 + 1];
-    int spc, len;
+    int spc, len, len_ttl, pad;
     unsigned int ufo;
 #ifdef  COLOR_HEADER
 /*  int color = (time(0) % 7) + 41;        lkchu.981201: random color */
@@ -351,47 +349,31 @@ vs_head(
         clear();
     }
 
-    spc = strlen(mid);
+    len_ttl = strlen(title);
+    len = strlen(mid);
     ufo = cutmp->ufo;
-
-    len = d_cols + 66 - strlen(title) - strlen(currboard); /* len: 中間還剩下多長的空間 */
     if (ufo & UFO_BIFF)
     {
         mid = NEWMAILMSG; // 你有新情書
-        spc = 15;
+        len = 15;
     }
     else if (ufo & UFO_BIFFN)
     {
         mid = NEWPASSMSG; // 你有新留言
-        spc = 15;
-    }
-    else if ( spc > len )
-    {
-        spc = len;
-        memcpy(ttl, mid, spc);
-        ttl[spc] = '\0';
-        mid = ttl;
+        len = 15;
     }
 
-    spc = 2 + len - spc; /* 擺完 mid 以後，中間還有 spc 格空間，在 mid 左右各放 spc/2 長的空白 */
-    len = (1 - spc) & 1;
-
-    if (spc < 0)
-    {
-        if (mid == ttl)
-            ttl[strlen(ttl)+spc]= '\0';
-        spc = 0;
-    }
-
-    memset(buf, ' ', spc >>= 1);
-    buf[spc] = '\0';
+    spc = b_cols - 14 - len - strlen(currboard); /* spc: 中間還剩下多長的空間 */
+    len_ttl = BMIN(len_ttl, spc); /* Truncate `title` if too long */
+    spc -= len_ttl; /* 擺完 title 以後，中間還有 spc 格空間 */
+    pad = BMAX(((b_cols - len) >> 1) - (len_ttl + 5), 0); /* pad: Spaces needed to center `mid` */
 
 #ifdef  COLOR_HEADER
-    prints("\x1b[1;%2d;37m【%s】%s\x1b[33m%s\x1b[1;%2d;37m%s\x1b[37m看板《%s》\x1b[m\n",
-        color, title, buf, mid, color, buf + len, currboard);
+    prints("\x1b[1;%2d;37m【%.*s】%*s \x1b[33m%s\x1b[1;%2d;37m%*s \x1b[37m看板《%s》\x1b[m\n",
+        color, len_ttl, title, pad, "", mid, color, spc - pad, "", currboard);
 #else
-    prints("\x1b[1;46;37m【%s】%s\x1b[33m%s\x1b[46m%s\x1b[37m看板《%s》\x1b[m\n",
-        title, buf, mid, buf + len, currboard);
+    prints("\x1b[1;46;37m【%.*s】%*s \x1b[33m%s\x1b[46m%*s \x1b[37m看板《%s》\x1b[m\n",
+        len_ttl, title, pad, "", mid, spc - pad, "", currboard);
 #endif
 }
 
