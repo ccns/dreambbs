@@ -1683,7 +1683,7 @@ igetch(void)
                     }
 
                     cc = bbsmode;
-                    if ( (idle > (cc ? IDLE_TIMEOUT : 4) * 60) && ( strcmp(cuser.userid, STR_GUEST) == 0 ) )
+                    if ( (idle > (cc ? IDLE_TIMEOUT : 4) * 60) && (!cuser.userlevel) )
                     {
                         clear();
                         outs("超過閒置時間！");
@@ -1691,7 +1691,7 @@ igetch(void)
                         refresh();
                         abort_bbs();
                     }
-                    else if ( (idle > (cc ? (IDLE_TIMEOUT-4) : 4) * 60) && ( strcmp(cuser.userid, STR_GUEST) == 0 ) )
+                    else if ( (idle > (cc ? (IDLE_TIMEOUT-4) : 4) * 60) && (!cuser.userlevel) )
                     {
                         outz("\x1b[41;5;1;37m警告！你已經閒置過久，系統將在三分後將你踢除！\x1b[m");
                         bell();
