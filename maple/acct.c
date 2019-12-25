@@ -1095,7 +1095,7 @@ void acct_setup(ACCT * u, int adm)
             case 'i':
                 if (!sm)
                 {
-                    sm = (int (*) (char *mail)) DL_GET(DL_NAME("same_mail.so", same_mail));
+                    sm = (int (*) (char *mail)) DL_NAME_GET("same_mail.so", same_mail);
                 }
                 strcpy(id, u->userid);
                 if (sm)

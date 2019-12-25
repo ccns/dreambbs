@@ -42,6 +42,8 @@
 // Expand macros in the arguments and then choose the 2nd
 #define CPP_SELECT_2(...)  CPP_SELECT_2_PRIME(__VA_ARGS__)
 
+#define CPP_APPEND_CLOSEPAREN(...)  __VA_ARGS__)
+
 /* Macros for acquiring version strings from number literals */
 
 #define DL_PATCH_STR  "DlPatch"
@@ -124,16 +126,18 @@
 #define DL_GET(dl_name)   dl_name
 #define DL_CALL(dl_name)  dl_name
 
+#define DL_NAME_GET(module_str, func)  func
+#define DL_NAME_CALL(module_str, func)  func
+
 #else  // #if NO_SO
 
 #define DL_NAME(module_str, func) \
     BINARY_SUFFIX module_str ":" CPP_STR(CPP_UNPAREN_OPT(func))
-
 #define DL_GET(dl_name)  DL_get(dl_name)
-
-#define CPP_APPEND_CLOSEPAREN(...)  __VA_ARGS__)
-
 #define DL_CALL(dl_name)  DL_func((dl_name), CPP_APPEND_CLOSEPAREN
+
+#define DL_NAME_GET(module_str, func)  DL_GET(DL_NAME(module_str, func))
+#define DL_NAME_CALL(module_str, func)   DL_CALL(DL_NAME(module_str, va ## func))
 
 #endif  // #if NO_SO
 
