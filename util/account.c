@@ -37,10 +37,10 @@ attach_err(
 
 static void *
 attach_shm(
-    register int shmkey, register int shmsize)
+    int shmkey, int shmsize)
 {
-    register void *shmptr;
-    register int shmid;
+    void *shmptr;
+    int shmid;
 
     shmid = shmget(shmkey, shmsize, 0);
     if (shmid < 0)
@@ -69,9 +69,9 @@ attach_shm(
 void
 bshm_init(void)
 {
-    register BCACHE *xshm;
-    register time_t *uptime;
-    register int n, turn;
+    BCACHE *xshm;
+    time_t *uptime;
+    int n, turn;
 
     turn = 0;
     xshm = bshm;

@@ -94,8 +94,8 @@ readline(
     char *buf
 )
 {
-    register int ch;
-    register int len, bytes;
+    int ch;
+    int len, bytes;
 
     len = bytes = 0;
     do

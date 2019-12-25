@@ -24,10 +24,10 @@ cmpfw(
 
 static void *
 attach_shm(
-    register int shmkey, register int shmsize)
+    int shmkey, int shmsize)
 {
-    register void *shmptr;
-    register int shmid;
+    void *shmptr;
+    int shmid;
 
     shmid = shmget(shmkey, shmsize, 0);
     if (shmid < 0)

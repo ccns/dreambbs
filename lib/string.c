@@ -139,7 +139,7 @@ void str_cut(char *dst, const char *src)
 /* ----------------------------------------------------- */
 
 
-GCC_CONSTEXPR int qp_code(register int x)
+GCC_CONSTEXPR int qp_code(int x)
 {
     if (x >= '0' && x <= '9')
         return x - '0';
@@ -157,7 +157,7 @@ GCC_CONSTEXPR int qp_code(register int x)
 /* ------------------------------------------------------------------ */
 
 
-GCC_CONSTEXPR int base64_code(register int x)
+GCC_CONSTEXPR int base64_code(int x)
 {
     if (x >= 'A' && x <= 'Z')
         return x - 'A';
@@ -1239,7 +1239,7 @@ void str_xor(char *dst,         /* Thor.990409: 任意長度任意binary seq, 至少要 s
                       所以dst長度必大於等於 src(以字串而言) */
     )
 {
-    register int cc;
+    int cc;
     for (; *src; src++, dst++)
     {
         if ((cc = *src ^ *dst))

@@ -2288,8 +2288,8 @@ int type,
 const struct weapon *p)
 {
     time_t now;
-    register int n = 0;
-    register const char *s;
+    int n = 0;
+    const char *s;
     char buf[256];
     char ans[5];
     char shortbuf[100];
@@ -8026,8 +8026,8 @@ static int
 pip_magic_doing_menu(   /*Å]ªkµe­±*/
 const struct magicset *p)
 {
-    register int n = 1;
-    register const char *s;
+    int n = 1;
+    const char *s;
     char buf[256];
     char ans[5];
     int pipkey;

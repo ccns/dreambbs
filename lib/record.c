@@ -620,7 +620,7 @@ rec_sync(const char *fpath,
 
 int rec_append(const char *fpath, const void *data, int size)
 {
-    register int fd;
+    int fd;
 
     if ((fd = open(fpath, O_WRONLY | O_CREAT | O_APPEND, 0600)) < 0)
         return -1;
