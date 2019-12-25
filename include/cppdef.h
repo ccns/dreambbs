@@ -128,26 +128,26 @@
 
 #if NO_SO
 
-#define DL_NAME(module_str, func)   func
-#define DL_GET(dl_name)   dl_name
+#define DL_NAME(module_str, obj)   (&obj)
+#define DL_GET(dl_name)   (&dl_name)
 #define DL_CALL(dl_name)  dl_name
 
-#define DL_NAME_GET(module_str, func)  func
+#define DL_NAME_GET(module_str, obj)  (&obj)
 #define DL_NAME_CALL(module_str, func)  func
 
 #else  // #if NO_SO
 
-#define DL_NAME(module_str, func) \
-    BINARY_SUFFIX module_str ":" CPP_STR(CPP_UNPAREN_OPT(func))
+#define DL_NAME(module_str, obj) \
+    BINARY_SUFFIX module_str ":" CPP_STR(CPP_UNPAREN_OPT(obj))
 #define DL_GET(dl_name)  DL_get(dl_name)
 #define DL_CALL(dl_name)  DL_func((dl_name), CPP_APPEND_CLOSEPAREN
 
 #ifdef CPP_TYPEOF
-  #define DL_NAME_GET(module_str, func)  \
-      ((CPP_TYPEOF(func) *) DL_GET(DL_NAME(module_str, func)))
-  #define DL_NAME_CALL(module_str, func)  DL_NAME_GET(module_str, func)
+  #define DL_NAME_GET(module_str, obj)  \
+      ((CPP_TYPEOF(obj) *) DL_GET(DL_NAME(module_str, obj)))
+  #define DL_NAME_CALL(module_str, func)  (*DL_NAME_GET(module_str, func))
 #else
-  #define DL_NAME_GET(module_str, func)  DL_GET(DL_NAME(module_str, func))
+  #define DL_NAME_GET(module_str, obj)  DL_GET(DL_NAME(module_str, obj))
   #define DL_NAME_CALL(module_str, func)   DL_CALL(DL_NAME(module_str, va ## func))
 #endif
 
