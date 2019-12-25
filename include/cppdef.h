@@ -106,6 +106,12 @@
   #define CXX_CONSTEXPR_TRY_ASM  /* Empty */
 #endif
 
+#if __cplusplus >= 201103L  /* C++11 */
+  #define CPP_TYPEOF(...) decltype(__VA_ARGS__)
+#elif defined __GNUC__
+  #define CPP_TYPEOF(...) __typeof__(__VA_ARGS__)
+#endif
+
 /* Macros for manipulating structs */
 
 #include <stddef.h>
@@ -136,8 +142,14 @@
 #define DL_GET(dl_name)  DL_get(dl_name)
 #define DL_CALL(dl_name)  DL_func((dl_name), CPP_APPEND_CLOSEPAREN
 
-#define DL_NAME_GET(module_str, func)  DL_GET(DL_NAME(module_str, func))
-#define DL_NAME_CALL(module_str, func)   DL_CALL(DL_NAME(module_str, va ## func))
+#ifdef CPP_TYPEOF
+  #define DL_NAME_GET(module_str, func)  \
+      ((CPP_TYPEOF(func) *) DL_GET(DL_NAME(module_str, func)))
+  #define DL_NAME_CALL(module_str, func)  DL_NAME_GET(module_str, func)
+#else
+  #define DL_NAME_GET(module_str, func)  DL_GET(DL_NAME(module_str, func))
+  #define DL_NAME_CALL(module_str, func)   DL_CALL(DL_NAME(module_str, va ## func))
+#endif
 
 #endif  // #if NO_SO
 

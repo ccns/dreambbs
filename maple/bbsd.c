@@ -890,7 +890,7 @@ tn_login(void)
                 char fpath[128];
                 usr_fpath(fpath, cuser.userid, "gem");
 
-                p = (int (*)(int level, char *fpath)) DL_NAME_GET("mailgem.so", gcheck);
+                p = DL_NAME_GET("mailgem.so", gcheck);
                 if (p)
                     (*p)(0, fpath);
             }

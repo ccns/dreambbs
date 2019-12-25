@@ -1970,7 +1970,7 @@ xover_callback_end:
                     static int (*mgp)(XO *xo);
                     if (!mgp)
                     {
-                        mgp = (int (*)(XO *xo)) DL_NAME_GET("mailgem.so", mailgem_gather);
+                        mgp = DL_NAME_GET("mailgem.so", mailgem_gather);
                         if (mgp)
                             cmd = (*mgp)(xo);
                         else
