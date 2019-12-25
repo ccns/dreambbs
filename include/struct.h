@@ -10,6 +10,7 @@
 #define STRUCT_H
 
 #include "cppdef.h"
+#include "attrdef.h"
 
 #ifdef __cplusplus
   #include <unordered_map>
@@ -125,6 +126,7 @@ typedef struct
     int money;                  /* 夢幣 */
     unsigned int ufo2;          /* 延伸的個人設定 */
     char passhash[66];          /* user password, encrypted using SHA-256 (extra bytes reserved for SHA-512) */
+    GCC_DEPRECATED("see FN_USIES log file for ident info instead")
     char ident[30];             /* user remote host ident */
     int point1;                 /* 優良積分 */
     int point2;                 /* 劣文 */
