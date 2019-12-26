@@ -88,6 +88,10 @@
 #define CPP_IF_ON_TEST_true  ,
 
 
+/* Macros for config-dependent attributes for user or board */
+
+#define ATTR_CONF_STR(attr_str, conf)  attr_str IF_ON(conf, "", "(系統功\能未開啟)")
+
 /* Macros for standard-dependent constructs */
 
 #if __cplusplus >= 201103L  /* C++11 */

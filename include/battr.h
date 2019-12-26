@@ -9,6 +9,8 @@
 #ifndef BATTR_H
 #define BATTR_H
 
+#include "cppdef.h"
+
 /* ----------------------------------------------------- */
 /* Board Attribution : flags in BRD.battr                */
 /* ----------------------------------------------------- */
@@ -63,67 +65,24 @@ static const char *const battrs[NUMATTRS] =
       "不可轉寄轉貼文章",
       "自動附加e-mail",
       "不擋信",
-#ifdef  HAVE_DETECT_VIOLATELAW
-      "不紀錄站內違法",
-#else
-      "不紀錄站內違法(系統功\能未開啟)",
-#endif
-#ifdef  HAVE_DETECT_CROSSPOST
-      "不紀錄 cross post",
-#else
-      "不紀錄 cross post(系統功\能未開啟)",
-#endif
+      ATTR_CONF_STR("不紀錄站內違法", HAVE_DETECT_VIOLATELAW),
+      ATTR_CONF_STR("不紀錄 cross post", HAVE_DETECT_CROSSPOST),
       "看板唯讀禁止發表回推",
       "不紀錄看版閱\讀率",
-#ifdef  HAVE_RESIST_WATER
-      "紀錄看版灌水次數",
-#else
-      "紀錄看版灌水次數(系統功\能未開啟)",
-#endif
-#ifdef  HAVE_BRDTITLE_CHANGE
-      "板主修改版名",
-#else
-      "板主修改版名(系統功\能未開啟)",
-#endif
-#ifdef  HAVE_USER_MODIFY
-      "使用者不可修改文章",
-#else
-      "使用者不可修改文章(系統功\能未開啟)",
-#endif
-#ifdef  HAVE_RECOMMEND
-      "禁止推薦文章",
-#else
-      "禁止推薦文章(系統功\能未開啟)",
-#endif
-#ifdef MultiRecommend
-      "不可同ID連推",
-      "不可快速連推",
-      "可以推噓文",
-      "可以自訂推文動詞",
-#else
-      "不可同ID連推(系統功\能未開啟)",
-      "不可快速連推(系統功\能未開啟)",
-      "可以推噓文(系統功\能未開啟)",
-      "可以自訂推文動詞(系統功\能未開啟)",
-#endif
-#ifdef HAVE_COUNT_BOARD
-      "不紀錄看板資訊統計",
-#else
-      "不紀錄看板資訊統計(系統功\能未開啟)",
-#endif
+      ATTR_CONF_STR("紀錄看版灌水次數", HAVE_RESIST_WATER),
+      ATTR_CONF_STR("板主修改版名", HAVE_BRDTITLE_CHANGE),
+      ATTR_CONF_STR("使用者不可修改文章", HAVE_USER_MODIFY),
+      ATTR_CONF_STR("禁止推薦文章", HAVE_RECOMMEND),
+      ATTR_CONF_STR("不可同ID連推", MultiRecommend),
+      ATTR_CONF_STR("不可快速連推", MultiRecommend),
+      ATTR_CONF_STR("可以推噓文", MultiRecommend),
+      ATTR_CONF_STR("可以自訂推文動詞", MultiRecommend),
+      ATTR_CONF_STR("不紀錄看板資訊統計", HAVE_COUNT_BOARD),
       "觀看進板紀錄",
-#ifdef HAVE_POST_BOTTOM
-      "文章置底",
-#else
-      "文章置底(系統功\能未開啟)",
-#endif
+      ATTR_CONF_STR("文章置底", HAVE_POST_BOTTOM),
       "優良點數看板",
       "未使用",
-#ifdef ANTI_PHONETIC
-      "禁止注音文",
-#else
-      "禁止注音文(系統功\能未開啟)",
-#endif
+      ATTR_CONF_STR("禁止注音文", ANTI_PHONETIC),
       "發文限制看板",
       "板主可自訂發文類別",
       "RSS看板"

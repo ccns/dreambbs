@@ -1774,11 +1774,7 @@ static const char *const UFO_FLAGS[] = {
     /* QUITE */ "關閉訊息",
     /* MAXMSG */ "訊息上限拒收訊息",
     /* FORWARD */ "自動轉寄",
-#ifdef HAVE_CLASSTABLEALERT
-    /* CLASSTABLE */ "課表時刻通知",
-#else
-    /* CLASSTABLE */ "課表時刻通知(系統功\能尚未開啟)",
-#endif
+    /* CLASSTABLE */ ATTR_CONF_STR("課表時刻通知", HAVE_CLASSTABLEALERT),
     /* MPAGER */ "電子郵件傳呼",
     NULL,
     NULL,
@@ -1801,18 +1797,10 @@ static const char *const UFO2_FLAGS[] = {
     /* VEDIT */ "簡化編輯器",
     /* PAL */ "只顯示好友",
     /* MOTD */ "簡化進站畫面",
-#ifdef HAVE_MIME_TRANSFER
-    /* MIME */ "MIME 解碼",
-#else
-    /* MIME */ "MIME 解碼(系統功\能尚未開啟)",
-#endif
+    /* MIME */ ATTR_CONF_STR("MIME 解碼", HAVE_MIME_TRANSFER),
     /* SIGN */ "選擇簽名檔 開啟:後 關閉:前",
     /* SHOWUSER */ "顯示自己 ID 和暱稱",
-#ifdef HAVE_RECOMMEND
-    /* PRH */ "關閉推薦文章分數",
-#else
-    /* PRH */ "關閉推薦文章分數(系統功\能尚未開啟)",
-#endif
+    /* PRH */ ATTR_CONF_STR("關閉推薦文章分數", HAVE_RECOMMEND),
     /* SHIP */ "好友描述",
     /* NWLOG */ "不儲存熱訊紀錄",
     /* NTLOG */ "不儲存聊天紀錄",
@@ -1822,11 +1810,7 @@ static const char *const UFO2_FLAGS[] = {
     /* DEF_LEAVE */ "預設不離站",
     /* REPLY */ "記錄水球資訊",
     /* DEF_LOCALMAIL */ "只收站內信",
-#ifdef HAVE_MENU_LIGHTBAR
-    /* LIGHTBAR */ "使用光棒選單系統",
-#else
-    /* LIGHTBAR */ "使用光棒選單系統(系統功\能尚未開啟)",
-#endif
+    /* LIGHTBAR */ ATTR_CONF_STR("使用光棒選單系統", HAVE_MENU_LIGHTBAR),
     /* RESERVE */ NULL,
     /* RESERVE */ NULL,
     /* RESERVE */ NULL,
