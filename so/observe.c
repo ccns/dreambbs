@@ -200,7 +200,7 @@ XO *xo)
             xo_load(xo, sizeof(OBSERVE));
         }
     }
-    return observe_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -212,7 +212,7 @@ XO *xo)
     {
         if (!rec_del(xo->dir, sizeof(OBSERVE), xo->pos, NULL, NULL))
         {
-            return observe_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -248,7 +248,7 @@ observe_help(
 XO *xo)
 {
 //  film_out(FILM_OBSERVE, -1);
-    return observe_head(xo);
+    return XO_HEAD;
 }
 
 

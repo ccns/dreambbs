@@ -117,7 +117,7 @@ XO *xo)
         xo->pos = XO_TAIL;
         xo_load(xo, sizeof(EMAIL));
     }
-    return viol_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -129,7 +129,7 @@ XO *xo)
     {
         if (!rec_del(xo->dir, sizeof(EMAIL), xo->pos, NULL, NULL))
         {
-            return viol_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -183,7 +183,7 @@ XO *xo)
             {
                 xo->pos = pos;
                 close(fd);
-                return viol_init(xo);
+                return XO_INIT;
             }
             pos++;
         }
@@ -194,7 +194,7 @@ XO *xo)
         }
     }
 
-    return viol_init(xo);
+    return XO_INIT;
 }
 
 
@@ -203,7 +203,7 @@ viol_help(
 XO *xo)
 {
     /*film_out(FILM_EMAIL, -1);*/
-    return viol_head(xo);
+    return XO_HEAD;
 }
 
 

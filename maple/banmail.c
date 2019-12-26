@@ -182,7 +182,7 @@ static int banmail_add(XO * xo)
         xo->pos = XO_TAIL /* xo->max */ ;
         xo_load(xo, sizeof(BANMAIL));
     }
-    return banmail_head(xo);
+    return XO_HEAD;
 }
 
 static int banmail_delete(XO * xo)
@@ -192,7 +192,7 @@ static int banmail_delete(XO * xo)
     {
         if (!rec_del(xo->dir, sizeof(BANMAIL), xo->pos, NULL, NULL))
         {
-            return banmail_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -224,7 +224,7 @@ static int banmail_change(XO * xo)
 static int banmail_help(XO * xo)
 {
     film_out(FILM_BANMAIL, -1);
-    return banmail_head(xo);
+    return XO_HEAD;
 }
 
 

@@ -2269,14 +2269,14 @@ mbox_delete(
         hdr->xmode |= POST_DELETE;
         if (!rec_put(dir, hdr, sizeof(HDR), pos))
         {
-            return mbox_load(xo);
+            return XO_LOAD;
         }
 #else
         if (!rec_del(dir, sizeof(HDR), pos, cmpchrono, NULL))
         {
             hdr_fpath(fpath, dir, hdr);
             unlink(fpath);
-            return mbox_load(xo);
+            return XO_LOAD;
         }
 #endif
     }
@@ -2335,7 +2335,7 @@ mbox_forward(
         *quote_file = '\0';
         vmsg(NULL);
     }
-    return mbox_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -2394,7 +2394,7 @@ mbox_browse(
         if (mbox_delete(xo) != XO_FOOT)
         {
             *fpath = '\0';
-            return mbox_init(xo);
+            return XO_INIT;
         }
     }
     else if (nmode == 'y' || nmode == 'r')
@@ -2436,7 +2436,7 @@ mbox_reply(
     HDR *mhdr, hdr;
 
 //  if (m_count())
-//      return mbox_head(xo);
+//      return XO_HEAD;
 
     if (mail_stat(CHK_MAIL_NOMSG))
     {
@@ -2513,7 +2513,7 @@ mbox_send(
     XO *xo)
 {
     m_send();
-    return mbox_head(xo);
+    return XO_HEAD;
 }
 
 /*by visor*/
@@ -2531,7 +2531,7 @@ mbox_sysop(
         free(xx);
 
         xz[XZ_MBOX - XO_ZONE].xo = xo;
-        mbox_init(xo);
+        return XO_INIT;
     }
 
     return XO_NONE;
@@ -2566,7 +2566,7 @@ mbox_other(
         usr_fpath(cmbox->dir, cuser.userid, fn_dir);
 
         xz[XZ_MBOX - XO_ZONE].xo = xo;
-        mbox_init(xo);
+        return XO_INIT;
 
  }
     return XO_HEAD;
@@ -2577,7 +2577,7 @@ mbox_help(
     XO *xo)
 {
     film_out(FILM_MAIL, -1);
-    return mbox_head(xo);
+    return XO_HEAD;
 }
 
 int
@@ -2638,7 +2638,7 @@ mbox_edit(
     if (HAS_PERM(PERM_SYSOP))
     {
         vedit(fpath, false);
-        return mbox_head(xo);
+        return XO_HEAD;
     }
     return XO_NONE;
 }

@@ -130,7 +130,7 @@ mailgem_toggle(
 XO *xo)
 {
     mailgem_way = (mailgem_way + 1) % GEM_WAY;
-    return mailgem_body(xo);
+    return XO_BODY;
 }
 
 
@@ -224,7 +224,7 @@ XO *xo)
         {
             unlink(fpath);
             zmsg(msg_cancel);
-            return mailgem_head(xo);
+            return XO_HEAD;
         }
         gtype = 0;
     }
@@ -241,7 +241,7 @@ XO *xo)
     {
         if (fd >= 0)
             unlink(fpath);
-        return (gtype ? XO_FOOT : mailgem_head(xo));
+        return (gtype ? XO_FOOT : XO_HEAD);
     }
 
     if (ans == 'i' || ans == 'n')
@@ -249,7 +249,7 @@ XO *xo)
     else
         rec_add(dir, &ghdr, sizeof(HDR));
 
-    return (gtype ? mailgem_load(xo) : mailgem_init(xo));
+    return (gtype ? XO_LOAD : XO_INIT);
 }
 
 
@@ -274,7 +274,7 @@ XO *xo)
     if (!(hdr = mailgem_check(xo, fpath)))
         return XO_NONE;
     vedit(fpath, false);
-    return mailgem_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -339,7 +339,7 @@ XO *xo)
 
     vmsg(NULL);
 
-    return mailgem_body(xo);
+    return XO_BODY;
 }
 
 
@@ -370,7 +370,7 @@ XO *xo)
         {
             strcpy(title, ghdr->title);
             XoMailGem(fpath, title);
-            return mailgem_init(xo);
+            return XO_INIT;
         }
 
         /* browse article */
@@ -385,7 +385,7 @@ XO *xo)
     }
     while (xmode == XO_BODY);
 
-    return mailgem_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -538,7 +538,7 @@ XO *xo)
         rec_del(dir, sizeof(HDR), xo->pos, cmpchrono, NULL);
     }
 
-    return mailgem_init(xo);
+    return XO_INIT;
 }
 
 
@@ -635,7 +635,7 @@ XO *xo)
         rec_add(dir, MailGemBuffer, sizeof(HDR) * num);
     }
 
-    return mailgem_load(xo);
+    return XO_LOAD;
 }
 
 
@@ -864,7 +864,7 @@ XO *xo)
 {
     /*  film_out(FILM_GEM, -1);*/
     vmsg("尚未編輯使用說明");
-    return mailgem_head(xo);
+    return XO_HEAD;
 }
 
 static int

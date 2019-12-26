@@ -145,7 +145,7 @@ bstat_help(
 XO *xo)
 {
     //film_out(FILM_BSTAT, -1);
-    return bstat_head(xo);
+    return XO_HEAD;
 }
 
 

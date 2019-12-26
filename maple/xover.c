@@ -1683,15 +1683,14 @@ xover(
 
                     break;
                 }
-                if (pos == 'h')
+                else if (pos == 'h')
+                {
+                    cmd = XO_NONE;
                     break;
+                }
 
                 cb++;
             }
-
-            if (pos == 'h')
-                break;
-
 
 #if 0
             if (pos >= XO_INIT && pos <= XO_BODY)

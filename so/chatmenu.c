@@ -139,7 +139,7 @@ XO *xo)
         xo->pos = XO_TAIL;
         xo_load(xo, sizeof(ChatAction));
     }
-    return chat_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -151,7 +151,7 @@ XO *xo)
     {
         if (!rec_del(xo->dir, sizeof(ChatAction), xo->pos, NULL, NULL))
         {
-            return chat_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -193,7 +193,7 @@ chat_mode(
 XO *xo)
 {
     mode ^= 1;
-    return chat_head(xo);
+    return XO_HEAD;
 }
 
 static int

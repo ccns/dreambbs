@@ -524,7 +524,7 @@ XO *xo)
     rec_add(dir, &vch, sizeof(vch));
 
     vmsg("開始投票了！");
-    return vote_init(xo);
+    return XO_INIT;
 }
 
 
@@ -629,7 +629,7 @@ XO *xo)
         }
     }
 
-    return vote_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -820,11 +820,11 @@ XO *xo)
             currchrono = vch->chrono;
             rec_del(dir, sizeof(VCH), pos, cmpchrono, NULL);
             currchrono = cc;
-            return vote_init(xo);
+            return XO_INIT;
         }
     }
 
-    return vote_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -990,21 +990,21 @@ XO *xo)
                 f_unlock(fv);
                 close(fv);
                 vmsg("你的學號錯誤！");
-                return vote_head(xo);
+                return XO_HEAD;
             }
             if (!check_stud(account, fpath))
             {
                 f_unlock(fv);
                 close(fv);
                 vmsg("你不在名冊裡！");
-                return vote_head(xo);
+                return XO_HEAD;
             }
             if (!check_mail(account))
             {
                 f_unlock(fv);
                 close(fv);
                 vmsg("你的密碼不正確！");
-                return vote_head(xo);
+                return XO_HEAD;
             }
         }
         else
@@ -1012,7 +1012,7 @@ XO *xo)
             f_unlock(fv);
             close(fv);
             vmsg("你不在名冊裡！");
-            return vote_head(xo);
+            return XO_HEAD;
         }
     }
 
@@ -1091,7 +1091,7 @@ XO *xo)
 
     close(fv);
 
-    return vote_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -1100,7 +1100,7 @@ vote_help(
 XO *xo)
 {
     film_out(FILM_VOTE, -1);
-    return vote_head(xo);
+    return XO_HEAD;
 }
 
 

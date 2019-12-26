@@ -162,7 +162,7 @@ XO *xo)
         }
         xo_load(xo, sizeof(ALOHA));
     }
-    return aloha_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -199,7 +199,7 @@ XO *xo)
     xo->pos = XO_TAIL /* xo->max */ ;
     xo_load(xo, sizeof(ALOHA));
 
-    return aloha_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -253,7 +253,7 @@ XO *xo)
             rec_del(xo->dir, sizeof(ALOHA), head - 1, NULL, NULL);
         }
         free(abase);
-        return aloha_init(xo);
+        return XO_INIT;
     }
     return XO_FOOT;
 }
@@ -272,7 +272,7 @@ XO *xo)
         while (rec_loc(fpath, sizeof(BMW), cmpbmw) >= 0)
             rec_del(fpath, sizeof(BMW), 0, cmpbmw, NULL);
         rec_del(xo->dir, sizeof(ALOHA), xo->pos, NULL, NULL);
-        return aloha_init(xo);
+        return XO_INIT;
     }
     return XO_FOOT;
 }
@@ -282,7 +282,7 @@ aloha_help(
 XO *xo)
 {
     film_out(FILM_ALOHA, -1);
-    return aloha_head(xo);
+    return XO_HEAD;
 }
 
 

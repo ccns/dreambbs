@@ -321,7 +321,7 @@ personal_delete(
     {
         if (!rec_del(xo->dir, sizeof(PB), xo->pos, NULL, NULL))
         {
-            return personal_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -578,7 +578,7 @@ personal_deny(
     if (!rec_del(xo->dir, sizeof(PB), xo->pos, NULL, NULL))
     {
         personal_log(personal, 2);
-        return personal_load(xo);
+        return XO_LOAD;
     }
 
 
@@ -590,7 +590,7 @@ personal_help(
     XO *xo)
 {
 //  film_out(FILM_PB, -1);
-    return personal_head(xo);
+    return XO_HEAD;
 }
 
 KeyFunc personal_cb[] =

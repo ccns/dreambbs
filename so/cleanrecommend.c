@@ -176,7 +176,7 @@ cleanrecommend_delete(
         if (!rec_del(xo->dir, sizeof(RMSG), xo->pos, NULL, NULL))
         {
             cleanrecommend_log(rmsg, 0);
-            return cleanrecommend_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -216,7 +216,7 @@ cleanrecommend_cleanall(
     {
         unlink(xo->dir);
         cleanrecommend_log(NULL, 1);
-        return cleanrecommend_load(xo);
+        return XO_LOAD;
     }
     return XO_FOOT;
 }
@@ -226,7 +226,7 @@ cleanrecommend_help(
     XO *xo)
 {
 //  film_out(FILM_RMSG, -1);
-    return cleanrecommend_head(xo);
+    return XO_HEAD;
 }
 
 KeyFunc cleanrecommend_cb[] =

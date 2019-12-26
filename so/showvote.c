@@ -112,7 +112,7 @@ XO *xo)
         xo->pos = XO_TAIL;
         xo_load(xo, sizeof(LOG));
     }
-    return show_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -124,7 +124,7 @@ XO *xo)
     {
         if (!rec_del(xo->dir, sizeof(LOG), xo->pos, NULL, NULL))
         {
-            return show_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;

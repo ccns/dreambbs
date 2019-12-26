@@ -1582,7 +1582,7 @@ post_browse(
                 {
                     strcpy(quote_file, fpath);
                     if (do_reply(hdr) == XO_INIT)       /* 有成功地 post 出去了 */
-                        return post_init(xo);
+                        return XO_INIT;
                 }
                 break;
 
@@ -1604,7 +1604,7 @@ post_browse(
         break;
     }
 
-    return post_init(xo);
+    return XO_INIT;
 }
 
 
@@ -1626,7 +1626,7 @@ post_gem(
     XoGem(fpath, "", (HAS_PERM(PERM_SYSOP|PERM_BOARD|PERM_GEM)) ? GEM_SYSOP :
             (bbstate & STAT_BOARD ? GEM_MANAGER : GEM_USER));
 
-    return post_init(xo);
+    return XO_INIT;
 }
 
 
@@ -1649,7 +1649,7 @@ post_memo(
         return XO_FOOT;
     }
 
-    return post_head(xo);
+    return XO_HEAD;
 }
 
     static int
@@ -1680,7 +1680,7 @@ post_post(
             {
                 if (vedit(fpath, false))
                     vmsg(msg_cancel);
-                return post_head(xo);
+                return XO_HEAD;
             }
         }
     }
@@ -1715,7 +1715,7 @@ post_memo_edit(
             {
                 if (vedit(fpath, false))
                     vmsg(msg_cancel);
-                return post_head(xo);
+                return XO_HEAD;
             }
         }
     }
@@ -1743,7 +1743,7 @@ post_switch(
     {
         vmsg(err_bid);
     }
-    return post_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -2049,7 +2049,7 @@ post_bottom(
         rec_add(xo->dir, &post, sizeof(HDR));
         btime_update(currbno);
 
-        return post_load(xo);       /* 立刻顯示置底文章 */
+        return XO_LOAD;     /* 立刻顯示置底文章 */
     }
     return XO_NONE;
 }
@@ -2242,7 +2242,7 @@ post_state(
 
     vmsg(NULL);
 
-    return post_body(xo);
+    return XO_BODY;
 }
 #endif  /* #if 0 */
 
@@ -2438,10 +2438,10 @@ post_edit(
         /*hdr = (HDR *) xo_pool + (xo->pos - xo->top);
         hdr_fpath(fpath, xo->dir, hdr);*/
         vedit(fpath, false); /* Thor.981020: 注意被talk的問題 */
-        post_head(xo);
+        return XO_HEAD;
     }
 #ifdef  HAVE_USER_MODIFY
-    else if ((!(brd->battr & BRD_MODIFY)) && HAS_PERM(PERM_VALID) && !strcmp(hdr->owner, cuser.userid) && !(hdr->xmode & (/*POST_MODIFY|*/POST_CANCEL|POST_DELETE|POST_LOCK|POST_MARKED|POST_MDELETE|POST_CURMODIFY)))
+    if ((!(brd->battr & BRD_MODIFY)) && HAS_PERM(PERM_VALID) && !strcmp(hdr->owner, cuser.userid) && !(hdr->xmode & (/*POST_MODIFY|*/POST_CANCEL|POST_DELETE|POST_LOCK|POST_MARKED|POST_MDELETE|POST_CURMODIFY)))
     {
         if (hdr->xmode & POST_RECOMMEND)
         {
@@ -2587,7 +2587,7 @@ post_edit(
                 brd->blast = time(0);
                 vmsg("修改完成");
             }
-            post_init(xo);
+            return XO_INIT;
         }
     }
     else if (brd->battr & BRD_MODIFY)
@@ -2643,10 +2643,10 @@ int post_edit(XO *xo)
             /*hdr = (HDR *) xo_pool + (xo->pos - xo->top);
                 hdr_fpath(fpath, xo->dir, hdr);*/
             vedit(fpath, false); /* Thor.981020: 注意被talk的問題 */
-            post_head(xo);
+            return XO_HEAD;
         }
 #ifdef  HAVE_USER_MODIFY
-        else if ((brd->battr & BRD_MODIFY) && HAS_PERM(PERM_VALID) /*&& ((hdr->modifytimes)<MAX_MODIFY)*/ && !strcmp(hdr->owner, cuser.userid) && !(hdr->xmode & (/*POST_MODIFY|*/POST_CANCEL|POST_DELETE|POST_LOCK|POST_MARKED|POST_MDELETE/*|POST_CURMODIFY*/)))
+        if ((brd->battr & BRD_MODIFY) && HAS_PERM(PERM_VALID) /*&& ((hdr->modifytimes)<MAX_MODIFY)*/ && !strcmp(hdr->owner, cuser.userid) && !(hdr->xmode & (/*POST_MODIFY|*/POST_CANCEL|POST_DELETE|POST_LOCK|POST_MARKED|POST_MDELETE/*|POST_CURMODIFY*/)))
         {
             //    move_post(hdr, BRD_MODIFIED, -3);
 
@@ -2751,7 +2751,7 @@ int post_edit(XO *xo)
                  */
                 vmsg("修改完成");
             }
-            post_init(xo);
+            return XO_INIT;
         }
         else if (!(brd->battr & BRD_MODIFY))
         {
@@ -3021,7 +3021,7 @@ contWhileOuter:
         } while (++head < tail);
 
         strcpy(currboard, buf);
-        post_load(xo);
+        return XO_LOAD;
     }
 
     return XO_FOOT;
@@ -3036,7 +3036,7 @@ post_ban_mail(
     if ((bbstate & STAT_BOARD)||HAS_PERM(PERM_ALLBOARD))
     {
         post_mail();
-        return post_init(xo);
+        return XO_INIT;
     }
     else
         return XO_NONE;
@@ -4050,7 +4050,7 @@ post_aid(
         xo->pos = currpos;  /* 恢復xo->pos紀錄 */
     }
 
-    return post_load(xo);
+    return XO_LOAD;
 }
 
 int
@@ -4083,7 +4083,7 @@ post_help(
     XO *xo)
 {
     film_out(FILM_BOARD, -1);
-    return post_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -4596,7 +4596,7 @@ xpost_help(
     XO *xo)
 {
     film_out(FILM_BOARD, -1);
-    return xpost_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -4735,7 +4735,7 @@ xpost_browse(
                 {
                     strcpy(quote_file, fpath);
                     if (do_reply(hdr) == XO_INIT)       /* 有成功地 post 出去了 */
-                        return xpost_init(xo);
+                        return XO_INIT;
                 }
                 break;
 
@@ -4750,7 +4750,7 @@ xpost_browse(
 #ifdef HAVE_RECOMMEND
             case 'p':
                 post_recommend(xo);
-                return xpost_init(xo);
+                return XO_INIT;
 #endif
 
         }

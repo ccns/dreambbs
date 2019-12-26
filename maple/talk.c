@@ -869,7 +869,7 @@ pal_add(
     pal_cache();
 #endif
 
-    return pal_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -889,7 +889,7 @@ pal_delete(
             pal_cache();
 #endif
 
-            return pal_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -935,7 +935,7 @@ pal_mail(
         prints("收信人：%s", userid);
         my_send(userid);
     }
-    return pal_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -944,7 +944,7 @@ pal_sort(
     XO *xo)
 {
     pal_sync(xo->dir);
-    return pal_load(xo);
+    return XO_LOAD;
 }
 
 
@@ -960,7 +960,7 @@ pal_query(
     /* move(2, 0); *//* Thor.0810: 可以不加嗎? */
     /* if (*pal->userid) *//* Thor.0806:偶爾好玩一下, 應該沒差 */
     my_query(pal->userid, 1);
-    return pal_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -969,7 +969,7 @@ pal_help(
     XO *xo)
 {
     film_out(FILM_PAL, -1);
-    return pal_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -1138,7 +1138,7 @@ bmw_delete(
 {
     if (vans(msg_del_ny) == 'y')
         if (!rec_del(xo->dir, sizeof(BMW), xo->pos, NULL, NULL))
-            return bmw_load(xo);
+            return XO_LOAD;
 
     return XO_FOOT;
 }
@@ -1159,7 +1159,7 @@ bmw_mail(
         prints("收信人：%s", userid);
         my_send(userid);
     }
-    return bmw_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -1175,7 +1175,7 @@ bmw_query(
     /* move(2, 0); *//* Thor.0810: 可以不加嗎? */
     /* if (*pal->userid) *//* Thor.0806:偶爾好玩一下, 應該沒差 */
     my_query(bmw->userid, 1);
-    return bmw_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -1232,7 +1232,7 @@ bmw_mode(
     XO *xo)
 {
     bmw_modetype ^= BMW_MODE;
-    return bmw_init(xo);
+    return XO_INIT;
 }
 
 
@@ -1241,7 +1241,7 @@ bmw_help(
     XO *xo)
 {
     film_out(FILM_BMW, -1);
-    return bmw_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -3416,7 +3416,7 @@ ulist_toggle(
     max = xo->max;
     if (max <= 1)
         return XO_FOOT;
-    return ulist_init(xo);
+    return XO_INIT;
 }
 
 
@@ -3426,7 +3426,7 @@ ulist_pal(
 {
     cuser.ufo2 ^= UFO2_PAL;
     /* Thor.980805: 注意 ufo 同步問題 */
-    return ulist_init(xo);
+    return XO_INIT;
 }
 
 
@@ -3520,7 +3520,7 @@ ulist_makepal(
             {
                 rec_add(buf, &pal, sizeof(PAL));
                 pal_cache();
-                return ulist_init(xo);
+                return XO_INIT;
             }
             else
             {
@@ -3560,7 +3560,7 @@ ulist_makebad(
             {
                 rec_add(buf, &pal, sizeof(PAL));
                 pal_cache();
-                return ulist_init(xo);
+                return XO_INIT;
             }
             else
                 vmsg("您的好友名單太多，請善加整理");
@@ -3586,7 +3586,7 @@ ulist_mail(
         vs_bar("寄  信");
         prints("收信人：%s", userid);
         my_send(userid);
-        return ulist_init(xo);
+        return XO_INIT;
     }
 
     vmsg(MSG_USR_LEFT);
@@ -3601,7 +3601,7 @@ ulist_query(
     move(1, 0);
     clrtobot();
     my_query(ulist_pool[xo->pos].utmp->userid, 0);
-    /*ulist_neck(xo);*/
+    /*return XO_NECK;*/
     return XO_INIT;
 }
 
@@ -3670,7 +3670,7 @@ ulist_talk(
 
         up = ulist_pool[xo->pos].utmp;
         if (can_override(up))
-            return talk_page(up) ? ulist_init(xo) : XO_FOOT;
+            return talk_page(up) ? XO_INIT : XO_FOOT;
     }
     return XO_NONE;
 }
@@ -3725,7 +3725,7 @@ ulist_edit(                     /* Thor: 可線上查看及修改使用者 */
 
     vs_bar("使用者設定");
     acct_setup(&acct, 1);
-    return ulist_head(xo);
+    return XO_LOAD;
 }
 
 /* BLACK SU */
@@ -3762,7 +3762,7 @@ ulist_su(
     xz[XZ_BMW - XO_ZONE].xo->pos = 0;
     free(tmp);
     pal_cache();
-    return ulist_init(xo);
+    return XO_INIT;
 }
 /* BLACK SU */
 
@@ -3795,14 +3795,14 @@ ulist_kick(
             else
                 sleep(3);               /* 被踢的人這時候正在自我了斷 */
             blog("KICK", buf);
-            return ulist_init(xo);
+            return XO_INIT;
         }
         else
         {
             if (vans(msg_sure_ny) != 'y')
                 return XO_FOOT;
             memset(up, 0, sizeof(UTMP));
-            return ulist_init(xo);
+            return XO_INIT;
         }
     }
     return XO_NONE;
@@ -3826,7 +3826,7 @@ ulist_fromchange(
         strcpy(str, buf);
         strcpy(cutmp->from, buf);
         return XO_INIT;
-        /*ulist_body(xo);*/
+        /*return XO_LOAD;*/
     }
 
     return XO_FOOT;
@@ -3851,7 +3851,7 @@ ulist_nickchange(
         strcpy(str, buf);
         strcpy(cutmp->username, buf);
         return XO_INIT;
-        /*ulist_body(xo);*/
+        /*return XO_BODY;*/
     }
     return XO_FOOT;
 }
@@ -3862,7 +3862,7 @@ ulist_help(
     XO *xo)
 {
     film_out(FILM_ULIST, -1);
-    return ulist_init(xo);
+    return XO_INIT;
 }
 
 
@@ -3889,7 +3889,7 @@ ulist_pager(
         cuser.ufo ^= UFO_PAGER;
         cutmp->ufo ^= UFO_PAGER;
     }
-    return ulist_init(xo);
+    return XO_INIT;
 }
 
 static int
@@ -3916,7 +3916,7 @@ ulist_message(
         cuser.ufo ^= UFO_QUIET;
         cutmp->ufo ^= UFO_QUIET;
     }
-    return ulist_init(xo);
+    return XO_INIT;
 }
 
 static int
@@ -3924,7 +3924,7 @@ ulist_recall(
     XO *xo)
 {
     t_recall();
-    return ulist_init(xo);
+    return XO_INIT;
 }
 
 static int
@@ -3936,7 +3936,7 @@ ulist_realname(
         cuser.ufo2 ^= UFO2_REALNAME;
 //      cutmp->ufo ^= UFO_REALNAME;
     }
-    return ulist_init(xo);
+    return XO_INIT;
 }
 
 static int
@@ -3945,7 +3945,7 @@ ulist_ship(
 {
     cuser.ufo2 ^= UFO2_SHIP;
 //  cutmp->ufo ^= UFO_SHIP;
-    return ulist_init(xo);
+    return XO_INIT;
 }
 
 static int
@@ -3957,7 +3957,7 @@ ulist_mp(
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
     tmp = t_pal();
-    return ulist_init(xo);
+    return XO_INIT;
 }
 
 static int
@@ -3970,7 +3970,7 @@ ulist_readmail(
             vmsg("您的信箱被鎖了！");
         else
             xover(XZ_MBOX);
-        return ulist_init(xo);
+        return XO_INIT;
     }
     else
         return XO_NONE;
@@ -4010,7 +4010,7 @@ ulist_del(
             close(fd);
         }
         pal_cache();
-        return ulist_init(xo);
+        return XO_INIT;
     }
     else
         return XO_FOOT;
@@ -4057,7 +4057,7 @@ ulist_changeship(
             close(fd);
         }
         pal_cache();
-        return ulist_init(xo);
+        return XO_INIT;
     }
     else
         return XO_HEAD;
@@ -4205,7 +4205,7 @@ t_cloak(
         cuser.ufo ^= UFO_CLOAK;
         cutmp->ufo ^= UFO_CLOAK;
     } /* Thor.980805: 解決 ufo不同步問題 */
-    return ulist_init(xo);
+    return XO_INIT;
 }
 
 
@@ -4715,7 +4715,7 @@ banmsg_add(
 
     banmsg_cache();
 
-    return banmsg_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -4730,7 +4730,7 @@ banmsg_delete(
         {
 
             banmsg_cache();
-            return banmsg_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -4776,7 +4776,7 @@ banmsg_mail(
         prints("收信人：%s", userid);
         my_send(userid);
     }
-    return banmsg_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -4785,7 +4785,7 @@ banmsg_sort(
     XO *xo)
 {
     banmsg_sync(xo->dir);
-    return banmsg_load(xo);
+    return XO_LOAD;
 }
 
 
@@ -4799,7 +4799,7 @@ banmsg_query(
     move(1, 0);
     clrtobot();
     my_query(banmsg->userid, 1);
-    return banmsg_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -4808,7 +4808,7 @@ banmsg_help(
     XO *xo)
 {
 //  film_out(FILM_BANMSG, -1);
-    return banmsg_head(xo);
+    return XO_HEAD;
 }
 
 

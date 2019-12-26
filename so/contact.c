@@ -109,9 +109,9 @@ XO *xo)
     {
         rec_add(xo->dir, &contact, sizeof(CONTACT));
         xo->pos = XO_TAIL /* xo->max */ ;
-        return contact_init(xo);
+        return XO_INIT;
     }
-    return contact_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -123,7 +123,7 @@ XO *xo)
     {
         if (!rec_del(xo->dir, sizeof(CONTACT), xo->pos, NULL, NULL))
         {
-            return contact_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -158,7 +158,7 @@ contact_help(
 XO *xo)
 {
     film_out(FILM_CONTACT, -1);
-    return contact_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -173,7 +173,7 @@ XO *xo)
     cur = pos - xo->top;
     contact = (CONTACT *) xo_pool + cur;
     contact_send(contact);
-    return contact_init(xo);
+    return XO_INIT;
 }
 
 void

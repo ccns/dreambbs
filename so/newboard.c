@@ -430,7 +430,7 @@ XO *xo)
     rec_add(dir, &nbrd, sizeof(NBRD));
     fclose(fp);
 
-    return nbrd_init(xo);
+    return XO_INIT;
 }
 
 static int
@@ -665,7 +665,7 @@ XO *xo)
     unlink(flocks);
     f_unlock(fv);
     close(fv);
-    return nbrd_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -703,7 +703,7 @@ XO *xo)
         rec_put(xo->dir, nbrd, sizeof(NBRD), xo->pos);
         vmsg("申請通過");
     }
-    return nbrd_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -751,7 +751,7 @@ XO *xo)
         vmsg("拒絕申請");
         unlink(path);
     }
-    return nbrd_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -775,7 +775,7 @@ XO *xo)
         rec_put(xo->dir, nbrd, sizeof(NBRD), xo->pos);
         vmsg("關閉完成");
     }
-    return nbrd_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -798,7 +798,7 @@ XO *xo)
         rec_put(xo->dir, nbrd, sizeof(NBRD), xo->pos);
         vmsg("開版完成");
     }
-    return nbrd_head(xo);
+    return XO_HEAD;
 }
 
 #ifdef  TEST_COSIGN
@@ -814,7 +814,7 @@ XO *xo)
 
     nbrd->mode |= NBRD_START;
     rec_put(xo->dir, nbrd, sizeof(NBRD), xo->pos);
-    return nbrd_head(xo);
+    return XO_HEAD;
 }
 #endif
 
@@ -828,7 +828,7 @@ XO *xo)
     nbrd = (NBRD *) xo_pool + (xo->pos - xo->top);
     nbrd_fpath(fpath, xo->dir, nbrd);
     more(fpath, NULL);
-    return nbrd_init(xo);
+    return XO_INIT;
 }
 
 static int
@@ -850,7 +850,7 @@ XO *xo)
     strcat(fpath, ".log");
     unlink(fpath);
     rec_del(xo->dir, sizeof(NBRD), xo->pos, NULL, NULL);
-    return nbrd_init(xo);
+    return XO_INIT;
 }
 
 static int
@@ -912,7 +912,7 @@ nbrd_help(
 XO *xo)
 {
     film_out(FILM_SIGNUP, -1);
-    return nbrd_head(xo);
+    return XO_HEAD;
 }
 
 KeyFunc nbrd_cb[] =

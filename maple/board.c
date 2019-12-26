@@ -1346,20 +1346,12 @@ class_head(
 }
 
 static int
-class_init(                     /* re-init */
-    XO *xo)
-{
-    class_load(xo);
-    return class_head(xo);
-}
-
-static int
 class_newmode(
     XO *xo)
 {
     cuser.ufo2 ^= UFO2_BRDNEW;  /* Thor.980805: 特別注意 utmp.ufo的同步問題 */
     class_flag ^= UFO2_BRDNEW;
-    return class_neck(xo);
+    return XO_NECK;
 }
 
 static int
@@ -1367,7 +1359,7 @@ class_help(
     XO *xo)
 {
     film_out(FILM_CLASS, -1);
-    return class_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -1430,7 +1422,7 @@ class_yank2(
         xo->pos = pos;
         return XO_FOOT;
     }
-    return class_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -1450,7 +1442,7 @@ class_yank(
         xo->pos = pos;
         return XO_FOOT;
     }
-    return class_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -1497,7 +1489,8 @@ class_edit(
         if (chn >= 0)
         {
             brd_edit(chn);
-            return class_init(xo);
+            class_load(xo);
+            return XO_BODY;
         }
     }
     return XO_NONE;
@@ -1533,7 +1526,7 @@ class_browse(
         }
     }
 
-    return class_head(xo);      /* Thor.0701: 無法清少一點, 因為 XoPost */
+    return XO_HEAD;     /* Thor.0701: 無法清少一點, 因為 XoPost */
 }
 
 int
@@ -1566,7 +1559,7 @@ class_switch(
     XO *xo)
 {
     Select();
-    return class_head(xo);
+    return XO_HEAD;
 }
 
 #ifdef AUTHOR_EXTRACTION
@@ -1708,7 +1701,7 @@ XoAuthor(
 
     xz[XZ_CLASS - XO_ZONE].xo = xoTmp;          /* Thor.0701: 還原 class_xo */
 
-    return class_body(xo);
+    return XO_BODY;
 }
 #endif  // #if 0  // Unused
 #endif  /* #ifdef AUTHOR_EXTRACTION */
@@ -1754,7 +1747,7 @@ class_visit(
         brh_visit(0);
         time(&brd_visit[chn]);
     }
-    return class_body(xo);
+    return XO_BODY;
 }
 
 static KeyFunc class_cb[] =
@@ -1762,6 +1755,7 @@ static KeyFunc class_cb[] =
     {XO_INIT, {class_head}},
     {XO_LOAD, {class_body}},
     {XO_HEAD, {class_head}},
+    {XO_NECK, {class_neck}},
     {XO_BODY, {class_body}},
 
     {'r', {class_browse}},

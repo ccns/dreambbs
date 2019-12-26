@@ -680,7 +680,7 @@ innbbs_help(
     XO *xo)
 {
     more("etc/innbbs.hlp", (char *) -1);
-    return innbbs_head(xo);
+    return XO_HEAD;
 }
 
 static KeyFunc innbbs_cb[] =

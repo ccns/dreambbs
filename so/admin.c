@@ -109,7 +109,7 @@ XO *xo)
         xo->pos = XO_TAIL /* xo->max */ ;
         xo_load(xo, sizeof(ADMIN));
     }
-    return admin_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -121,7 +121,7 @@ XO *xo)
     {
         if (!rec_del(xo->dir, sizeof(ADMIN), xo->pos, NULL, NULL))
         {
-            return admin_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -156,7 +156,7 @@ admin_help(
 XO *xo)
 {
     film_out(FILM_ADMIN, -1);
-    return admin_head(xo);
+    return XO_HEAD;
 }
 
 

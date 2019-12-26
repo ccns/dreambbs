@@ -192,7 +192,7 @@ XO *xo)
         xo->pos = XO_TAIL;
         xo_load(xo, sizeof(LIST));
     }
-    return list_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -234,7 +234,7 @@ XO *xo)
         if (str_str(list.userid, buf))
         {
             xo->pos = xo->top + cur;
-            return list_init(xo);
+            return XO_INIT;
 
         }
     }
@@ -253,7 +253,7 @@ XO *xo)
     {
         if (!rec_del(xo->dir, sizeof(LIST), xo->pos, NULL, NULL))
         {
-            return list_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -293,7 +293,7 @@ XO *xo)
 {
     /*film_out(FILM_LIST, -1);*/
     more(FN_HELP_LIST, NULL);
-    return list_head(xo);
+    return XO_HEAD;
 }
 
 #ifdef HAVE_MULTI_CROSSPOST
@@ -313,7 +313,7 @@ XO *xo)
     free(xo);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->pos = 0;
-    return list_init(xo);
+    return XO_INIT;
 }
 #endif
 

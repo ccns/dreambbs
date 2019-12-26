@@ -115,7 +115,7 @@ myfavorite_newmode(
     XO *xo)
 {
     cuser.ufo2 ^= UFO2_BRDNEW;  /* Thor.980805: 特別注意 utmp.ufo的同步問題 */
-    return myfavorite_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -142,7 +142,7 @@ myfavorite_switch(
     XO *xo)
 {
     Select();
-    return myfavorite_load(xo);
+    return XO_LOAD;
 }
 
 static int
@@ -182,7 +182,7 @@ myfavorite_browse(
         op = HAS_PERM(PERM_ALLBOARD) ? GEM_SYSOP : (bbstate & STAT_BOARD ? GEM_MANAGER : GEM_USER);
         strcpy(title, ghdr->title);
         XoGem(fpath, title, op);
-        return myfavorite_init(xo);
+        return XO_INIT;
     }
     else
     {
@@ -194,9 +194,9 @@ myfavorite_browse(
         usr_fpath(fpath, cuser.userid, buf);
         strcpy(title, ghdr->title);
         XoFavorite(fpath, title, op);
-        return myfavorite_init(xo);
+        return XO_INIT;
     }
-    return myfavorite_init(xo);
+    return XO_INIT;
 }
 
 static int
@@ -300,7 +300,7 @@ myfavorite_add(
 
     logitfile(FN_FAVORITE_LOG, "< ADD >", hdr.xname);
 
-    return myfavorite_load(xo);
+    return XO_LOAD;
 }
 
 static void
@@ -351,7 +351,7 @@ myfavorite_delete(
         if (!rec_del(currdir, sizeof(HDR), xo->pos, NULL, NULL))
         {
             logitfile(FN_FAVORITE_LOG, "< DEL >", hdr->xname);
-            return myfavorite_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -409,7 +409,7 @@ myfavorite_edit(
         if (chn >= 0)
         {
             brd_edit(chn);
-            return myfavorite_init(xo);
+            return XO_INIT;
         }
 
     }
@@ -418,7 +418,7 @@ myfavorite_edit(
         if (!vget(b_lines, 0, "請輸入標題: ", hdr->title, 64, GCARRY))
             return XO_FOOT;
         rec_put(currdir, hdr, sizeof(HDR), xo->pos);
-        return myfavorite_load(xo);
+        return XO_LOAD;
     }
     return XO_NONE;
 
@@ -430,7 +430,7 @@ myfavorite_help(
     XO *xo)
 {
     film_out(FILM_FAVORITE, -1);
-    return myfavorite_head(xo);
+    return XO_HEAD;
 }
 
 static int

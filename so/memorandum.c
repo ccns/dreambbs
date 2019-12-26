@@ -173,9 +173,9 @@ XO *xo)
     {
         rec_add(xo->dir, &memorandum, sizeof(MEMORANDUM));
         xo->pos = XO_TAIL /* xo->max */ ;
-        return memorandum_init(xo);
+        return XO_INIT;
     }
-    return memorandum_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -187,7 +187,7 @@ XO *xo)
     {
         if (!rec_del(xo->dir, sizeof(MEMORANDUM), xo->pos, NULL, NULL))
         {
-            return memorandum_load(xo);
+            return XO_LOAD;
         }
     }
     return XO_FOOT;
@@ -222,7 +222,7 @@ memorandum_help(
 XO *xo)
 {
     film_out(FILM_MEMORANDUM, -1);
-    return memorandum_head(xo);
+    return XO_HEAD;
 }
 
 KeyFunc memorandum_cb[] =

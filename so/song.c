@@ -265,7 +265,7 @@ XO *xo)
 
             strcpy(title, ghdr->title);
             XoSong(fpath, title, op);
-            return song_init(xo);
+            return XO_INIT;
         }
 
         /* browse article */
@@ -284,7 +284,7 @@ XO *xo)
     while (xmode == XO_BODY);
 
     if (op != GEM_READ)
-        song_head(xo);
+        return XO_HEAD;
     return XO_NONE;
 }
 
@@ -510,7 +510,7 @@ XO *xo)
     hdr = song_get(xo, fpath);
     if (hdr)
         vedit(fpath, false);
-    return song_head(xo);
+    return XO_HEAD;
 }
 
 static int
@@ -555,7 +555,7 @@ song_help(
 XO *xo)
 {
     film_out(FILM_SONG, -1);
-    return song_head(xo);
+    return XO_HEAD;
 }
 
 static KeyFunc song_cb[] =

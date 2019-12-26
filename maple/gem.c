@@ -212,7 +212,7 @@ gem_toggle(
     gem_way = (gem_way + 1) % GEM_WAY;
     if (!HAS_PERM(PERM_SYSOP) && (gem_way ==1))
         gem_way = 2;
-    return gem_body(xo);
+    return XO_BODY;
 }
 
 
@@ -356,7 +356,7 @@ gem_add(
         BRD *brd;
 
         if (!(brd = ask_board(fpath, BRD_R_BIT, NULL)))
-            return gem_head(xo);
+            return XO_HEAD;
 
         brd2gem(brd, &ghdr);
         gtype = 0;
@@ -410,7 +410,7 @@ gem_add(
                 {
                     unlink(fpath);
                     zmsg(msg_cancel);
-                    return gem_head(xo);
+                    return XO_HEAD;
                 }
                 gtype = 0;
             }
@@ -431,7 +431,7 @@ gem_add(
     {
         if (fd >= 0)
             unlink(fpath);
-        return (gtype ? XO_FOOT : gem_head(xo));
+        return (gtype ? XO_FOOT : XO_HEAD);
     }
 
     if (ans == 'i' || ans == 'n')
@@ -441,7 +441,7 @@ gem_add(
 
     gem_log(dir, "新增", &ghdr);
 
-    return (gtype ? gem_load(xo) : gem_init(xo));
+    return (gtype ? XO_LOAD : XO_INIT);
 }
 
 
@@ -469,7 +469,7 @@ gem_edit(
         return XO_NONE;
     if (vedit(fpath, false) >= 0) /* Thor.981020: 注意被talk的問題 */
         gem_log(xo->dir, "修改", hdr);
-    return gem_head(xo);
+    return XO_HEAD;
 }
 
 
@@ -618,7 +618,7 @@ gem_state(
 
     vmsg(NULL);
 
-    return gem_body(xo);
+    return XO_BODY;
 }
 
 
@@ -673,7 +673,7 @@ gem_browse(
                 op = GEM_LMANAGER;
 
             XoGem(fpath, title, op);
-            return gem_init(xo);
+            return XO_INIT;
         }
 
         /* browse article */
@@ -691,7 +691,7 @@ gem_browse(
     } while (xmode == XO_BODY);
 
     if (op != GEM_READ)
-        gem_head(xo);
+        return XO_HEAD;
     return XO_NONE;
 }
 
@@ -871,8 +871,8 @@ gem_delete(
         gem_log(dir, "刪除", ghdr);
     }
 
-    /* return gem_load(xo); */
-    return gem_init(xo); /* Thor.990414: 為了將剪貼簿篇數一併反應 */
+    /* return XO_LOAD; */
+    return XO_INIT; /* Thor.990414: 為了將剪貼簿篇數一併反應 */
 }
 
 
@@ -984,7 +984,7 @@ gem_paste(
         rec_add(dir, GemBuffer, sizeof(HDR) * num);
     }
 
-    return gem_load(xo);
+    return XO_LOAD;
 }
 
 
@@ -1296,7 +1296,7 @@ gem_help(
     XO *xo)
 {
     film_out(FILM_GEM, -1);
-    return gem_head(xo);
+    return XO_HEAD;
 }
 
 static int
