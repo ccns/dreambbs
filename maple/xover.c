@@ -1509,6 +1509,7 @@ xover(
     int cmd)
 {
     int pos;
+    int pos_prev = -1;  /* Draw cursor on entry */
     int num=0;
     int zone=0;
     int sysmode=0;
@@ -1560,6 +1561,7 @@ xover(
                 sysmode = xz[cmd].mode;
 
                 TagNum = 0;             /* clear TagList */
+                pos_prev = -1;  /* Redraw cursor */
                 cmd = XO_INIT;
                 utmp_mode(sysmode);
             }
@@ -1632,6 +1634,7 @@ xover(
 
 
                     cursor_clear(3 + cmd - num, 0);
+                    pos_prev = -1;  /* Redraw cursor */
 
                     break;              /* ¥u²¾°Ê´å¼Ð */
                 }
@@ -1667,6 +1670,9 @@ xover(
 #endif
                 if (pos == cmd)
                 {
+                    if (cmd >= XO_INIT && cmd < XO_FOOT)
+                        pos_prev = -1;  /* Item will be redrawn; redraw cursor */
+
                     cmd = (*(cb->func)) (xo);
 
                     if (cmd == XO_QUIT)
@@ -1716,8 +1722,11 @@ xover(
         {
             num = 3 + pos - xo->top;
 
-
-            cursor_show(num, 0);
+            if (num != pos_prev)
+            {
+                cursor_show(num, 0);
+                pos_prev = num;
+            }
         }
 
         cmd = vkey();
@@ -1978,6 +1987,7 @@ xover(
 
 
                         cursor_clear(num, 0);
+                        pos_prev = -1;  /* Redraw cursor */
                         cmd = XO_NONE;
                     }
                 }
