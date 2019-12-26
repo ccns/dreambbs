@@ -31,6 +31,7 @@ if(NOT USE_CXX)
 else()
     # specify the C++ standard
     add_compile_options(-x c++ --std=gnu++14)
+    link_libraries(stdc++)
     set(USE_CXX ON CACHE BOOL "Compile C code using C++ mode")
 endif()
 
