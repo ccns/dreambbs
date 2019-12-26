@@ -49,8 +49,8 @@ x_siteinfo(void)
     prints("\x1b[1;30mModules & Plug-in: \x1b[m\n\n");
 
 //模組化的放在這邊
-#define ONLINE_STR(module)  "\x1b[1;32m  online \x1b[1;30m  " module "\x1b[m\n"
-#define OFFLINE_STR(module) "\x1b[1;31m  offline\x1b[1;30m  " module "\x1b[m\n"
+#define ONLINE_STR(module)  "\x1b[1;32monline \x1b[1;30m " module "\x1b[m\n"
+#define OFFLINE_STR(module) "\x1b[1;31moffline\x1b[1;30m " module "\x1b[m\n"
 #define STATUS_STR(conf, module)  IF_ON(conf, ONLINE_STR, OFFLINE_STR)(module)
 
     prints(STATUS_STR(MultiRecommend, "Multi Recommend Control 多樣化推文控制系統"));
