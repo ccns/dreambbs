@@ -21,19 +21,25 @@ CFLAGS	+= $(RUBY_CFLAGS)
 
 .SUFFIXES: .o .c .ln .x .so
 
-.c.o:	;   $(CC) $(MAKEFLAG) $(CFLAGS) -c $*.c
+CFLAGS_SO += -fPIC
+
+.c.o:	;   $(CC) $(MAKEFLAG) $(CFLAGS) $(CFLAGS_SO) -c $*.c
 .c.x:	;   $(CPROTO) -o $*.x $*.c
 .c.ln:	;   lint -abhi $*.c
 
-.if    $(ARCHI)=="64"
-.if      $(OPSYS) == "FreeBSD"
-.o.so:	;   ld -G $*.o -o $*.so -L$(SRCROOT)/lib -ldao -L/usr/lib32 -L/lib32 -lc -melf_i386_fbsd
+LDFLAGS_SO = -fPIC -shared -Wl,-G
+
+.if $(ARCHI)=="64"
+.if $(OPSYS) == "FreeBSD"
+    LDFLAGS_SO_ARCHI += -m32
 .else
-.o.so:	;   ld -G $*.o -o $*.so -L$(SRCROOT)/lib -ldao -L/usr/lib32 -L/lib32 -lc -melf_i386
-.endif   #OPSYS
-.else
-.o.so:  ;   ld -G $*.o -o $*.so -L$(SRCROOT)/lib -ldao -lc
+    LDFLAGS_SO_ARCHI += -m32
+.endif #OPSYS
 .endif #ARCHI
+
+LDFLAGS_SO += -L$(SRCROOT)/lib -ldao
+
+.o.so:  ;   $(CC) $*.o -o $*.so $(LDFLAGS_SO) $(LDFLAGS_SO_ARCHI)
 
 all: $(SO)
 

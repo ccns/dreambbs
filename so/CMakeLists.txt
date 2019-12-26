@@ -17,9 +17,9 @@ foreach(module IN LISTS SO)
     else()
         add_library(so_${module} MODULE ${module}.c)
         if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-            target_link_libraries(so_${module} PRIVATE -nostdlib dao c -m32)
+            target_link_libraries(so_${module} PRIVATE dao -m32)
         else()
-            target_link_libraries(so_${module} PRIVATE -nostdlib dao c)
+            target_link_libraries(so_${module} PRIVATE dao)
         endif()
         set_target_properties(so_${module}
             PROPERTIES PREFIX ""
