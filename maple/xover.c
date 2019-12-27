@@ -1648,7 +1648,7 @@ xover(
 #if !NO_SO
             num = cmd | XO_DL; /* Thor.990220: for dynamic load */
 #endif
-#ifndef __cplusplus  /* Callback function fetching loop */
+#ifndef HAVE_HASH_KEYFUNCLIST  /* Callback function fetching loop */
             cb = xcmd;
             for (;;)
             {
@@ -1656,7 +1656,7 @@ xover(
 #endif
 #if !NO_SO
                 /* Thor.990220: dynamic load, with key | XO_DL */
-  #ifdef __cplusplus
+  #ifdef HAVE_HASH_KEYFUNCLIST
                 cb = xcmd->find(num);
                 if (cb != xcmd->end())
   #else
@@ -1666,7 +1666,7 @@ xover(
                     int (*p)(XO *xo) = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
                     if (p)
                     {
-  #ifdef __cplusplus
+  #ifdef HAVE_HASH_KEYFUNCLIST
                         xcmd->erase(num);
                         cb = xcmd->insert({cmd, {p}}).first;
   #else
@@ -1681,7 +1681,7 @@ xover(
                     }
                 }
 #endif
-#ifdef __cplusplus
+#ifdef HAVE_HASH_KEYFUNCLIST
   #if !NO_SO
                 else
   #endif
@@ -1704,7 +1704,7 @@ xover(
                     goto xover_callback_end;
                 }
                 else  /* Callback function not found */
-#ifndef __cplusplus
+#ifndef HAVE_HASH_KEYFUNCLIST
                 if (pos == 'h')
 #endif
                 {
@@ -1712,7 +1712,7 @@ xover(
                     goto xover_callback_end;
                 }
 
-#ifndef __cplusplus  /* Continue callback function fetching loop */
+#ifndef HAVE_HASH_KEYFUNCLIST  /* Continue callback function fetching loop */
                 cb++;
             }
 #endif

@@ -797,8 +797,13 @@ typedef union {  /* IID.20191106: The field to be used is determined by the valu
 #endif
 } XoFunc;
 
-#ifdef __cplusplus
+/* XXX(IID.20191227): Workaround for g++ not currently supporting
+ *    function overload resolution for designated initializer */
+#if defined __cplusplus && defined __clang__
 /* IID.20191225: Use hash table for xover callback function list */
+
+#define HAVE_HASH_KEYFUNCLIST
+
 typedef std::unordered_map<unsigned int, XoFunc> KeyFuncList;
 typedef KeyFuncList::iterator KeyFuncIter;
 struct KeyFuncListRef {
