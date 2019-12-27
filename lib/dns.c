@@ -128,10 +128,7 @@ unsigned long dns_addr(const char *name)
         if (type == T_A)
         {
             ip_addr addr;
-            addr.d[0] = cp[0];
-            addr.d[1] = cp[1];
-            addr.d[2] = cp[2];
-            addr.d[3] = cp[3];
+            addr = *(const ip_addr *) cp;
             return addr.addr;
         }
 
