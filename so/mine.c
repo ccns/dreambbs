@@ -47,8 +47,8 @@ int fasttime[4];
 void clrtokol(void)
 {
     int n;
-    int y, x;
-    getyx(&y, &x);
+    int x;
+    getyx(&SINKVAL(int), &x);
     for (n = x; n < 17; n++)
         outc(' ');
 }

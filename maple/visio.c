@@ -1071,11 +1071,11 @@ outsep(
     int xend, const char *pat)
 {
     const char *str = pat;
-    int y, x;
+    int x;
     bool dbcs_hi = false;
     char hi;
 
-    getyx(&y, &x);
+    getyx(&SINKVAL(int), &x);
 
     if (!str || !*str)
     {

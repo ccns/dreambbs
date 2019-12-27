@@ -760,14 +760,14 @@ out_rle(
     char *t_name = cuser.userid;
     char *t_nick = cuser.username;
 #endif
-    int x, y/*, count=0*/;
+    int y/*, count=0*/;
     int cc, rl;
 
     if (is_movie)
         y = 1;
         //move(3, 36+item_length[count++]);
     else
-        getyx(&y, &x);
+        getyx(&y, &SINKVAL(int));
 
     move(y, d_cols >> 1/*item_length[count++]*/);
     while ((cc = (unsigned char) *str))
@@ -813,7 +813,7 @@ out_rle(
         }
         if (cc=='\n')
         {
-            getyx(&y, &x);
+            getyx(&y, &SINKVAL(int));
             if (is_movie)
             {
                 outs("\x1b[m");
