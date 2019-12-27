@@ -8,10 +8,12 @@
 void
 splay_free(SplayNode * top, void (*data_free) (void *))
 {
-    SplayNode *node;
+    SplayNode *node = top->left;
 
-    if ( (node = top->left) )
+    if (node)
         splay_free(node, data_free);
+
+    node = top->right;
 
     if (node)
         splay_free(node, data_free);
@@ -65,6 +67,7 @@ int main(int argc, char *argv[])
         top = splay_in(top, I, compareint);
     }
     splay_out(top, printint);
+    splay_free(top, free);
     printf("\n");
     return 0;
 }
