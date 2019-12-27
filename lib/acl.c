@@ -29,10 +29,9 @@
 int acl_addr(const char *acl,      /* file name of access control list */
              const char *addr)
 {
-    int i, cc, luser, lhost;
+    int i;
     FILE *fp;
-    char buf[128], filter[256], *host, *str;
-    const char *str_invalid;
+    char buf[128], *host;
 
     const char *const invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
         "guest@", "@ppp", "@slip", "@dial", "unknown@", "@anon.penet.fi",
@@ -42,10 +41,13 @@ int acl_addr(const char *acl,      /* file name of access control list */
     str_lower(buf, addr);
     host = (char *)strchr(buf, '@');
 
-    for (i = 0; (str_invalid = invalid[i]); i++)
     {
-        if (strstr(buf, str_invalid))
-            return -2;
+        const char *str_invalid;
+        for (int i = 0; (str_invalid = invalid[i]); i++)
+        {
+            if (strstr(buf, str_invalid))
+                return -2;
+        }
     }
 
     /* check for mail.acl (lower case filter) */
@@ -54,7 +56,9 @@ int acl_addr(const char *acl,      /* file name of access control list */
 
     if ((fp = fopen(acl, "r")))
     {
-        for (str = buf; (cc = *str); str++)
+        int luser, lhost;
+        char filter[256], *str = buf;
+        for (int cc; (cc = *str); str++)
         {
             if ((cc = '@'))
             {
@@ -73,7 +77,7 @@ int acl_addr(const char *acl,      /* file name of access control list */
 
             for (;;)
             {
-                cc = *str;
+                int cc = *str;
                 if (cc <= ' ')
                 {
                     break;
@@ -104,14 +108,16 @@ int acl_addr(const char *acl,      /* file name of access control list */
 
             /* match host name */
 
-            cc = str - addr;
-
-            if (((cc == lhost) && !strcmp(addr, host)) ||
-                ((cc < lhost) && (*addr == '.')
-                 && !strcmp(addr, host + lhost - cc)))
             {
-                i = -2;
-                break;
+                int cc = str - addr;
+
+                if (((cc == lhost) && !strcmp(addr, host)) ||
+                    ((cc < lhost) && (*addr == '.')
+                     && !strcmp(addr, host + lhost - cc)))
+                {
+                    i = -2;
+                    break;
+                }
             }
         }
 
@@ -149,9 +155,9 @@ int acl_has(const char *acl,      /* file name of access control list */
             const char *host      /* lower-case string */
     )
 {
-    int i, cc, luser, lhost;
+    int i, luser, lhost;
     FILE *fp;
-    char filter[256], *addr, *str;
+    char filter[256];
 
     if (!(fp = fopen(acl, "r")))
         return -1;
@@ -162,9 +168,9 @@ int acl_has(const char *acl,      /* file name of access control list */
 
     while (fgets(filter, sizeof(filter), fp))
     {
-        addr = NULL;
+        char *addr = NULL, *str = filter;
 
-        for (str = filter; (cc = *str) > ' '; str++)
+        for (int cc; (cc = *str) > ' '; str++)
         {                        /* Thor.980825: 註解: 遇到 空白 就算此行結束 */
             if (cc == '@')
                 addr = str;
@@ -194,21 +200,23 @@ int acl_has(const char *acl,      /* file name of access control list */
 
         /* match host name */
 
-        cc = str - addr;
-
-        if (cc > lhost)
-            continue;
-
-        if (cc == lhost)
         {
-            if (memcmp(addr, host, lhost))
+            int cc = str - addr;
+
+            if (cc > lhost)
                 continue;
-        }
-        else
-        {
-            if (((*addr != '.') || memcmp(addr, host + lhost - cc, cc)) &&
-                ((addr[cc - 1] != '.') || memcmp(addr, host, cc)))
-                continue;
+
+            if (cc == lhost)
+            {
+                if (memcmp(addr, host, lhost))
+                    continue;
+            }
+            else
+            {
+                if (((*addr != '.') || memcmp(addr, host + lhost - cc, cc)) &&
+                    ((addr[cc - 1] != '.') || memcmp(addr, host, cc)))
+                    continue;
+            }
         }
 
         i = 1;

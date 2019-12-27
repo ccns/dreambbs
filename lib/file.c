@@ -26,13 +26,14 @@ void f_cat(const char *fpath, const char *msg)
 int f_cp(const char *src, const char *dst, int mode    /* O_EXCL / O_APPEND / O_TRUNC */
     )
 {
-    int fsrc, fdst, ret;
+    int fsrc, ret;
 
     ret = -1;
 
     if ((fsrc = open(src, O_RDONLY)) >= 0)
     {
-        if ((fdst = open(dst, O_WRONLY | O_CREAT | mode, 0600)) >= 0)
+        int fdst = open(dst, O_WRONLY | O_CREAT | mode, 0600);
+        if (fdst >= 0)
         {
             char pool[BLK_SIZ];
 
@@ -178,14 +179,14 @@ int f_mv(const char *src, const char *dst)
 
 FILE *f_new(const char *fold, char *fnew)
 {
-    int fd, try_;
+    int try_;
 
     try_ = 0;
     str_cat(fnew, fold, ".n");
 
     for (;;)
     {
-        fd = open(fnew, O_WRONLY | O_CREAT | O_EXCL, 0600);
+        int fd = open(fnew, O_WRONLY | O_CREAT | O_EXCL, 0600);
 
         if (fd >= 0)
             return fdopen(fd, "w");

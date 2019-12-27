@@ -39,11 +39,11 @@ static inline int
 show_file(const char *filename, int y, int lines, int mode)
 {
     FILE *fp;
-    char buf[256];
     clrchyiuan(y, y + lines);
     move(y, d_cols>>1);
     if ((fp = fopen(filename, "r")))
     {
+        char buf[256];
         while (fgets(buf, 256, fp) && lines--) {
             move(++y, d_cols>>1);
             outs(buf);

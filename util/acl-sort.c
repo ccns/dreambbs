@@ -34,13 +34,14 @@ at_cmp(
     const void *y)
 {
     const char *tail1, *tail2;
-    int c1, c2, diff;
 
     tail1 = ((const AclText *)x)->text + ((const AclText *)x)->domain;
     tail2 = ((const AclText *)y)->text + ((const AclText *)y)->domain;
 
     for (;;)
     {
+        int c1, c2, diff;
+
         c1 = *tail1--;
         if (c1 == '@')
             c1 = 0;
@@ -82,10 +83,8 @@ acl_sort(
     const char *fpath)
 {
     FILE *fp;
-    int len, domain;
-    AclText *at;
     SplayNode *top;
-    char *str, buf[256];
+    char buf[256];
 
     if (!(fp = fopen(fpath, "r")))
         return;
@@ -94,7 +93,9 @@ acl_sort(
 
     while (fgets(buf, sizeof(buf) - 2, fp))
     {
-        str = buf;
+        int len, domain;
+        AclText *at;
+        char *str = buf;
         if (*str <= '#')
             continue;
 

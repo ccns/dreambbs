@@ -5,11 +5,9 @@
 
 int xwrite(int fd, const char *data, int size)
 {
-    int cc;
-
     while (size > 0)
     {
-        cc = write(fd, data, size);
+        int cc = write(fd, data, size);
         if (cc < 0)
             return cc;
         data += cc;

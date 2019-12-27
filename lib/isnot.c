@@ -37,7 +37,7 @@ GCC_PURE bool is_fname(const char *str)
 
 int is_fpath(char *path)
 {
-    int ch, level;
+    int level;
     char *source, *target;
 
     level = 0;
@@ -46,7 +46,7 @@ int is_fpath(char *path)
 
     for (;;)
     {
-        ch = *source;
+        int ch = *source;
 
         if (ch == '/')
         {

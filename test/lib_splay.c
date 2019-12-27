@@ -57,12 +57,11 @@ printint(const void *a)
 int main(int argc, char *argv[])
 {
     int i;
-    intnode *I;
     SplayNode *top = NULL;
     srandom(time(NULL));
     for (i = 0; i < 100; i++)
     {
-        I = (intnode *) malloc(sizeof(intnode));
+        intnode *I = (intnode *) malloc(sizeof(intnode));
         I->i = random() % 1000;
         top = splay_in(top, I, compareint);
     }

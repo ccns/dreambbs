@@ -64,9 +64,9 @@ static int
 hash(
     const char *key)
 {
-    int i, ch, value = 0;
+    int ch, value = 0;
 
-    for (i = 0; (ch = key[i]) && i < 80; i++)
+    for (int i = 0; (ch = key[i]) && i < 80; i++)
     {
         value = (value << 5) - value + ch;
     }
@@ -84,7 +84,7 @@ static void
 search(
     const struct posttop *t)
 {
-    struct postrec *p, *q, *s;
+    struct postrec *p, *q;
     int i, found = 0;
 
     i = hash(t->title) & (HASHSIZE - 1);
@@ -108,7 +108,7 @@ search(
     }
     else
     {
-        s = (struct postrec *) malloc(sizeof(struct postrec));
+        struct postrec *s = (struct postrec *) malloc(sizeof(struct postrec));
         memcpy(s, t, sizeof(struct posttop));
         s->next = NULL;
         if (q == NULL)
@@ -124,15 +124,13 @@ sort(
     const struct postrec *pp,
     int count)
 {
-    int i, j;
-
-    for (i = 0; i <= count; i++)
+    for (int i = 0; i <= count; i++)
     {
         if (pp->number > top[i].number)
         {
             if (count < TOPCOUNT - 1)
                 count++;
-            for (j = count - 1; j >= i; j--)
+            for (int j = count - 1; j >= i; j--)
                 memcpy(&top[j + 1], &top[j], sizeof(struct posttop));
 
             memcpy(&top[i], pp, sizeof(struct posttop));
@@ -147,9 +145,9 @@ static void
 load_stat(
     const char *fname)
 {
-    FILE *fp;
+    FILE *fp = fopen(fname, "r");
 
-    if ((fp = fopen(fname, "r")))
+    if (fp)
     {
         int count = fread(top, sizeof(struct posttop), TOPCOUNT, fp);
         fclose(fp);
@@ -166,8 +164,7 @@ poststat(
     FILE *fp;
     char buf[40], curfile[80] = "var/day.0";
     const char *p;
-    struct postrec *pp;
-    int i, j;
+    int j;
 
     if (mytype < 0)
     {
@@ -205,8 +202,8 @@ poststat(
         /* load previous results and statistic processing */
         /* ---------------------------------------------- */
 
-        i = mycount[mytype];
-        p = myfile[mytype];
+        int i = mycount[mytype];
+        const char *p = myfile[mytype];
         while (i)
         {
             sprintf(buf, "var/%s.%d", p, i);
@@ -222,9 +219,9 @@ poststat(
     /* ---------------------------------------------- */
 
     memset(top, 0, sizeof(top));
-    for (i = j = 0; i < HASHSIZE; i++)
+    for (int i = j = 0; i < HASHSIZE; i++)
     {
-        for (pp = bucket[i]; pp; pp = pp->next)
+        for (struct postrec *pp = bucket[i]; pp; pp = pp->next)
         {
 
 #ifdef  DEBUG
@@ -260,7 +257,7 @@ poststat(
 
         max = mytop[mytype];
         p = buf + 4;
-        for (i = cnt = 0; (cnt < max) && (i < j); i++)
+        for (int i = cnt = 0; (cnt < max) && (i < j); i++)
         {
             tp = &top[i];
             strcpy(buf, ctime(&(tp->date)));
@@ -276,11 +273,11 @@ poststat(
 
     /* free statistics */
 
-    for (i = 0; i < HASHSIZE; i++)
+    for (int i = 0; i < HASHSIZE; i++)
     {
         struct postrec *next;
 
-        for (pp = bucket[i]; pp; pp = next)
+        for (struct postrec *pp = bucket[i]; pp; pp = next)
         {
             next = pp->next;
             free(pp);
@@ -318,9 +315,7 @@ pa_cmp(
     const void *x,
     const void *y)
 {
-    int dif;
-
-    dif = ((const PostAuthor *)y)->count - ((const PostAuthor *)x)->count;
+    int dif = ((const PostAuthor *)y)->count - ((const PostAuthor *)x)->count;
     if (dif)
         return dif;
     return strcmp(((const PostAuthor *)x) -> author, ((const PostAuthor *)y) -> author);
@@ -333,7 +328,6 @@ pa_out(
     FILE *fp)
 {
     const PostAuthor *pa;
-    const PostText *text;
 
     if (top == NULL)
         return;
@@ -345,7 +339,7 @@ pa_out(
         return;
 
     fprintf(fp, "\n>%6d %s\n", pa->count, pa->author);
-    for (text = pa->text; text; text = text->ptnext)
+    for (const PostText *text = pa->text; text; text = text->ptnext)
     {
         fprintf(fp, "%7d %.70s\n", text->count, text->title);
     }
@@ -357,12 +351,9 @@ pa_out(
 static void
 post_author(void)
 {
-    int cc, i, len;
-    char *str;
     FILE *fp;
     struct posttop post;
-    PostAuthor **paht, *pahe;
-    PostText *text;
+    PostAuthor **paht;
     SplayNode *patop;
 
     unlink(FN_POST_OLD_DB);
@@ -374,14 +365,17 @@ post_author(void)
 
     while (fread(&post, sizeof(post), 1, fp) == 1)
     {
-        cc = hash(str = post.author);
-        pahe = paht[i = cc & (HASHSIZE - 1)];
+        char *str = post.author;
+        int cc = hash(str);
+        int i = cc & (HASHSIZE - 1);
+        PostAuthor *pahe = paht[i];
+        PostText *text;
 
         for (;;)
         {
             if (pahe == NULL)
             {
-                len = strlen(str) + 1;
+                int len = strlen(str) + 1;
                 pahe = (PostAuthor *) malloc(SIZEOF_FLEX(PostAuthor, len));
                 pahe->panext = paht[i];
                 pahe->text = NULL;
@@ -407,7 +401,7 @@ post_author(void)
         {
             if (text == NULL)
             {
-                len = strlen(str) + 1;
+                int len = strlen(str) + 1;
                 text = (PostText *) malloc(SIZEOF_FLEX(PostText, len + 13));
                 text->ptnext = pahe->text;
                 text->count = 1;
@@ -432,9 +426,9 @@ post_author(void)
 
     patop = NULL;
 
-    for (i = 0; i < HASHSIZE; i++)
+    for (int i = 0; i < HASHSIZE; i++)
     {
-        for (pahe = paht[i]; pahe; pahe = pahe->panext)
+        for (PostAuthor *pahe = paht[i]; pahe; pahe = pahe->panext)
         {
             patop = splay_in(patop, pahe, pa_cmp);
         }

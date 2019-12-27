@@ -99,11 +99,9 @@ GCC_PURE int str_cmp(const char *s1, const char *s2)
 
 void str_cut(char *dst, const char *src)
 {
-    int cc;
-
     for (;;)
     {
-        cc = *src++;
+        int cc = *src++;
         if (!cc)
         {
             *dst = '\0';
@@ -609,12 +607,10 @@ int str_from(char *from, char *addr, char *nick)
 
 GCC_PURE int str_has(const char *list, const char *tag)
 {
-    int cc, len;
-
-    len = strlen(tag);
+    int len = strlen(tag);
     for (;;)
     {
-        cc = list[len];
+        int cc = list[len];
         if ((!cc || cc == '/') && !str_ncmp(list, tag, len))
             return 1;
 
@@ -698,10 +694,10 @@ void str_lowest(char *dst, const char *src)
 
 GCC_PURE int str_ncmp(const char *s1, const char *s2, int n)
 {
-    int c1, c2;
-
     while (n--)
     {
+        int c1, c2;
+
         c1 = *s1++;
         if (c1 >= 'A' && c1 <= 'Z')
             c1 |= 32;
@@ -1241,9 +1237,9 @@ void str_xor(char *dst,         /* Thor.990409: 任意長度任意binary seq, 至少要 s
                       所以dst長度必大於等於 src(以字串而言) */
     )
 {
-    int cc;
     for (; *src; src++, dst++)
     {
+        int cc;
         if ((cc = *src ^ *dst))
             *dst = cc;
     }

@@ -569,7 +569,7 @@ endwin(void)
 int
 resizeterm(int rows, int cols)
 {
-    int dirty = 0, mi = 0, i = 0;
+    int dirty = 0, i = 0;
 
     rows = ranged(rows, FTSZ_MIN_ROW, FTSZ_MAX_ROW);
     cols = ranged(cols, FTSZ_MIN_COL, FTSZ_MAX_COL);
@@ -577,6 +577,7 @@ resizeterm(int rows, int cols)
     // adjust memory only for increasing buffer
     if (rows > ft.mrows || cols > ft.mcols)
     {
+        int mi;
         for (mi = 0; mi < 2; mi++)
         {
             // allocate rows

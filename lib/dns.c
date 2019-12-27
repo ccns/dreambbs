@@ -62,59 +62,62 @@ int dns_query(const char *name, /* domain name */
 
 unsigned long dns_addr(const char *name)
 {
-    ip_addr addr;
     unsigned char *cp, *eom;
-    const unsigned char *ccp;
-    int cc, n, type, ancount, qdcount;
     querybuf ans;
-    char hostbuf[MAXDNAME];
 
     /* disallow names consisting only of digits/dots, unless they end in a dot. */
 
-    cc = name[0];
-    if (cc >= '0' && cc <= '9')
     {
-        for (ccp = (const unsigned char *)name;; ++ccp)
+        int cc = name[0];
+        if (cc >= '0' && cc <= '9')
         {
-            cc = *ccp;
-            if (!cc)
+            for (const unsigned char *ccp = (const unsigned char *)name;; ++ccp)
             {
-                /*
-                 * All-numeric, no dot at the end. Fake up a hostent as if we'd
-                 * actually done a lookup.  What if someone types 255.255.255.255?
-                 * The test below will succeed spuriously... ???
-                 */
+                cc = *ccp;
+                if (!cc)
+                {
+                    /*
+                     * All-numeric, no dot at the end. Fake up a hostent as if we'd
+                     * actually done a lookup.  What if someone types 255.255.255.255?
+                     * The test below will succeed spuriously... ???
+                     */
 
-                if (*--ccp == '.')
+                    if (*--ccp == '.')
+                        break;
+
+                    return inet_addr(name);
+                }
+                if ((cc < '0' || cc > '9') && cc != '.')
                     break;
-
-                return inet_addr(name);
             }
-            if ((cc < '0' || cc > '9') && cc != '.')
-                break;
         }
     }
 
-    n = dns_query(name, T_A, &ans);
-    if (n < 0)
-        return INADDR_NONE;
-
-    /* find first satisfactory answer */
-
-    cp = (unsigned char *)&ans + sizeof(HEADER);
-    eom = (unsigned char *)&ans + n;
-
-    for (qdcount = ntohs(ans.hdr.qdcount); qdcount--; cp += n + QFIXEDSZ)
     {
-        if ((n = dn_skipname(cp, eom)) < 0)
+        int n = dns_query(name, T_A, &ans);
+        if (n < 0)
             return INADDR_NONE;
+
+        /* find first satisfactory answer */
+
+        cp = (unsigned char *)&ans + sizeof(HEADER);
+        eom = (unsigned char *)&ans + n;
     }
 
-    ancount = ntohs(ans.hdr.ancount);
-    while (--ancount >= 0 && cp < eom)
+    for (int qdcount = ntohs(ans.hdr.qdcount); qdcount--;)
     {
-        if ((n =
-             dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME)) < 0)
+        int n = dn_skipname(cp, eom);
+        if (n < 0)
+            return INADDR_NONE;
+        cp += n + QFIXEDSZ;
+    }
+
+    for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
+    {
+        char hostbuf[MAXDNAME];
+        int type;
+        int n = dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME);
+        if (n < 0)
             return INADDR_NONE;
 
         cp += n;
@@ -124,7 +127,7 @@ unsigned long dns_addr(const char *name)
 
         if (type == T_A)
         {
-
+            ip_addr addr;
             addr.d[0] = cp[0];
             addr.d[1] = cp[1];
             addr.d[2] = cp[2];
@@ -179,14 +182,13 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
 {
     struct sockaddr_in rmt_sin;
     struct sockaddr_in our_sin;
-    unsigned rmt_port, rmt_pt;
-    unsigned our_port, our_pt;
-    int s, cc;
-    char buf[512];
+    unsigned rmt_pt;
+    unsigned our_pt;
+    int s;
 
 #ifdef RFC931_TIMEOUT
     unsigned old_alarm;            /* Thor.991215: for timeout */
-    struct sigaction act, oact;
+    struct sigaction oact;
 #endif
 
     *ruser = '\0';
@@ -209,9 +211,9 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
     /* Thor.990330: ­t¼Æ«O¯dµ¹¡A¥ÎgetsockµLªk§ì¥X¥¿½Tportªº®É­Ô¡A¤£¤Ó¥i¯à */
     if (sock >= 0)
     {
-        s = sizeof(our_sin);
+        int sz = sizeof(our_sin);
 
-        if (getsockname(sock, (struct sockaddr *)&our_sin, (socklen_t *) &s) < 0)
+        if (getsockname(sock, (struct sockaddr *)&our_sin, (socklen_t *) &sz) < 0)
             return;
 
         /* Thor.990325: ¬°¤FÅý¤Ï¬d®É¯à½T©w¬d¥X¡A¨Ó¦Û­þ­Óinterface´N±q¨º³s¦^ */
@@ -235,13 +237,16 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
      */
 
 #ifdef RFC931_TIMEOUT
-    /* Thor.991215: set for timeout */
-    sigemptyset(&act.sa_mask);
-    act.sa_flags = 0;
-    act.sa_handler = pseudo_handler;    /* SIG_IGN; */
-    sigaction(SIGALRM, &act, &oact);
+    {
+        struct sigaction act;
+        /* Thor.991215: set for timeout */
+        sigemptyset(&act.sa_mask);
+        act.sa_flags = 0;
+        act.sa_handler = pseudo_handler;    /* SIG_IGN; */
+        sigaction(SIGALRM, &act, &oact);
 
-    old_alarm = alarm(timeout);
+        old_alarm = alarm(timeout);
+    }
 #endif
 
     rmt_sin = *from;
@@ -258,12 +263,17 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
          * System V stdio libraries.
          */
 
+        char buf[512];
+        int cc;
         sprintf(buf, "%u,%u\r\n", rmt_pt, our_pt);
         write(s, buf, strlen(buf));
 
         cc = read(s, buf, sizeof(buf));
         if (cc > 0)
         {
+            unsigned rmt_port;
+            unsigned our_port;
+
             buf[cc] = '\0';
 
             if (sscanf
@@ -318,12 +328,8 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
 int dns_name(const unsigned char *addr, char *name)
 {
     querybuf ans;
-    char qbuf[MAXDNAME];
-    char hostbuf[MAXDNAME];
-    int n, type, ancount, qdcount;
     unsigned char *cp, *eom;
 #ifdef  HAVE_ETC_HOSTS
-    char abuf[256];
     FILE *fp;
 #endif
 
@@ -334,6 +340,7 @@ int dns_name(const unsigned char *addr, char *name)
 
     if ((fp = fopen("etc/hosts", "r")))
     {
+        char abuf[256];
         while (fgets(abuf, sizeof(abuf), fp))
         {
             if (abuf[0] != '#')
@@ -351,28 +358,36 @@ int dns_name(const unsigned char *addr, char *name)
     }
 #endif
 
-    sprintf(qbuf, INADDR_FMT ".in-addr.arpa",
-            addr[3], addr[2], addr[1], addr[0]);
-
-    n = dns_query(qbuf, T_PTR, &ans);
-    if (n < 0)
-        return n;
-
-    /* find first satisfactory answer */
-
-    cp = (unsigned char *)&ans + sizeof(HEADER);
-    eom = (unsigned char *)&ans + n;
-
-    for (qdcount = ntohs(ans.hdr.qdcount); qdcount--; cp += n + QFIXEDSZ)
     {
-        if ((n = dn_skipname(cp, eom)) < 0)
+        char qbuf[MAXDNAME];
+        int n;
+        sprintf(qbuf, INADDR_FMT ".in-addr.arpa",
+                addr[3], addr[2], addr[1], addr[0]);
+
+        n = dns_query(qbuf, T_PTR, &ans);
+        if (n < 0)
             return n;
+
+        /* find first satisfactory answer */
+
+        cp = (unsigned char *)&ans + sizeof(HEADER);
+        eom = (unsigned char *)&ans + n;
     }
 
-    for (ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom; cp += n)
+    for (int qdcount = ntohs(ans.hdr.qdcount); qdcount--;)
     {
-        if ((n =
-             dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME)) < 0)
+        int n = dn_skipname(cp, eom);
+        if (n < 0)
+            return n;
+        cp += n + QFIXEDSZ;
+    }
+
+    for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
+    {
+        char hostbuf[MAXDNAME];
+        int type;
+        int n = dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME);
+        if (n < 0)
             return n;
 
         cp += n;
@@ -382,9 +397,8 @@ int dns_name(const unsigned char *addr, char *name)
 
         if (type == T_PTR)
         {
-            if ((n =
-                 dn_expand((unsigned char *)&ans, eom, cp, hostbuf,
-                           MAXDNAME)) >= 0)
+            int n = dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME);
+            if (n >= 0)
             {
                 strcpy(name, hostbuf);
                 return 0;
@@ -398,6 +412,7 @@ int dns_name(const unsigned char *addr, char *name)
             return 0;
         }
 #endif
+        cp += n;
     }
 
     return -1;
@@ -523,35 +538,37 @@ int dns_open(const char *host, int port)
 static inline void dns_mx(const char *domain, char *mxlist)
 {
     querybuf ans;
-    int n, ancount, qdcount;
     unsigned char *cp, *eom;
-    int type;
 
     *mxlist = 0;
 
-    n = dns_query(domain, T_MX, &ans);
-
-    if (n < 0)
-        return;
-
-    /* find first satisfactory answer */
-
-    cp = (unsigned char *)&ans + sizeof(HEADER);
-    eom = (unsigned char *)&ans + n;
-
-    for (qdcount = ntohs(ans.hdr.qdcount); qdcount--; cp += n + QFIXEDSZ)
     {
-        if ((n = dn_skipname(cp, eom)) < 0)
+        int n = dns_query(domain, T_MX, &ans);
+
+        if (n < 0)
             return;
+
+        /* find first satisfactory answer */
+
+        cp = (unsigned char *)&ans + sizeof(HEADER);
+        eom = (unsigned char *)&ans + n;
     }
 
-    ancount = ntohs(ans.hdr.ancount);
+    for (int qdcount = ntohs(ans.hdr.qdcount); qdcount--;)
+    {
+        int n = dn_skipname(cp, eom);
+        if (n < 0)
+            return;
+        cp += n + QFIXEDSZ;
+    }
+
     domain = mxlist + MAX_MXLIST - MAXDNAME - 2;
 
-    while (--ancount >= 0 && cp < eom)
+    for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
     {
-        if ((n =
-             dn_expand((unsigned char *)&ans, eom, cp, mxlist, MAXDNAME)) < 0)
+        int type;
+        int n = dn_expand((unsigned char *)&ans, eom, cp, mxlist, MAXDNAME);
+        if (n < 0)
             break;
 
         cp += n;
@@ -589,19 +606,19 @@ static inline void dns_mx(const char *domain, char *mxlist)
 
 int dns_smtp(char *host)
 {
-    int sock;
-    char *str, *ptr, mxlist[MAX_MXLIST];
+    char mxlist[MAX_MXLIST], *str = mxlist;
 
-    dns_mx(host, str = mxlist);
+    dns_mx(host, str);
     if (!*str)
         str = host;
 
     for (;;)
     {                            /* Thor.980820: µù¸Ñ: ¸U¤@host®æ¦¡¬° xxx:yyy:zzz, «h¥ý¸Õ xxx, ¤£¦æ¦A¸Õ yyy */
-        ptr = str;
-        while ((sock = *ptr))
+        char *ptr = str, ch;
+        int sock;
+        while ((ch = *ptr))
         {
-            if (sock == ':')
+            if (ch == ':')
             {
                 *ptr++ = '\0';
                 break;

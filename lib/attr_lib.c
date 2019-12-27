@@ -38,12 +38,12 @@
 int attr_get(const char *userid, int key, void *value)
 {
     char fpath[64];
-    int k;
     FILE *fp;
 
     usr_fpath(fpath, userid, ".ATTR");
     if ((fp = fopen(fpath, "rb")))
     {
+        int k;
         while (fread(&k, sizeof k, 1, fp))
         {
             if (k == key)
