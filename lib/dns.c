@@ -8,7 +8,7 @@
 
 #include "config.h"             /* lkchu.981201: ¬O§_¦³ define HAVE_ETC_HOSTS */
 
-#include "dns.h"
+#include "dao.h"
 #include <signal.h>
 #include <unistd.h>
 #include <string.h>
