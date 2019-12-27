@@ -810,9 +810,9 @@ struct KeyFuncListRef {
     KeyFuncList *ptr_;
 
     constexpr KeyFuncListRef(KeyFuncList *ptr = NULL): ptr_ (ptr) { }
-    constexpr KeyFuncList *&operator=(KeyFuncList *ptr) { return ptr_ = ptr; }
+    CXX_CONSTEXPR_RELAXED KeyFuncList *&operator=(KeyFuncList *ptr) { return ptr_ = ptr; }
     constexpr KeyFuncListRef(KeyFuncList& ref): ptr_ (&ref) { }
-    constexpr KeyFuncList *&operator=(KeyFuncList& ref) { return ptr_ = &ref; }
+    CXX_CONSTEXPR_RELAXED KeyFuncList *&operator=(KeyFuncList& ref) { return ptr_ = &ref; }
     constexpr KeyFuncList *operator->(void) const { return ptr_; }
 };
 

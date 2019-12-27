@@ -86,6 +86,24 @@
 #define CPP_IF_ON_TEST_true  ,
 
 
+/* Macros for standard-dependent constructs */
+
+#if __cplusplus >= 201103L  /* C++11 */
+  #define CXX_CONSTEXPR_STRICT  constexpr
+#else
+  #define CXX_CONSTEXPR_STRICT  /* Empty */
+#endif
+#if __cplusplus >= 201402L  /* C++14 */
+  #define CXX_CONSTEXPR_RELAXED  constexpr
+#else
+  #define CXX_CONSTEXPR_RELAXED  /* Empty */
+#endif
+#if __cplusplus >= 201907L
+  #define CXX_CONSTEXPR_TRY_ASM  constexpr
+#else
+  #define CXX_CONSTEXPR_TRY_ASM  /* Empty */
+#endif
+
 /* Macros for manipulating structs */
 
 #include <stddef.h>
