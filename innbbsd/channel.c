@@ -237,7 +237,7 @@ initinetserver(void)
     struct linger foobar;
 
     /* Allocate a socket */
-    fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (fd < 0)
     {
         printf("inet socket ¶}±Ò¥¢±Ñ\n");

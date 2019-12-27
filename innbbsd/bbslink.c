@@ -264,7 +264,7 @@ inetclient(
     sin.sin_port = htons(port);
 
     /* Allocate a socket */
-    fd = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
+    fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (fd < 0)
         return -1;
 

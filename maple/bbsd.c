@@ -1472,7 +1472,7 @@ start_daemon(
     }
 
     if (port == -2)
-        n = socket(PF_UNIX, SOCK_STREAM, 0);
+        n = socket(AF_UNIX, SOCK_STREAM, 0);
     else
         n = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
