@@ -2059,12 +2059,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
     if (!(echo & VGET_STEALTH_NOECHO))
         STANDOUT;
 
-#ifdef M3_USE_PFTERM
-    getyx (&y, &x);
-#else
-    y = cur_row;
-    x = cur_col;
-#endif
+    getyx(&y, &x);
 
     if (echo & GCARRY)
     {
