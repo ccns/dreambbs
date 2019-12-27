@@ -1121,7 +1121,7 @@ outsep(
     outs("\x1b[m");
 }
 
-void
+GCC_CHECK_FORMAT(1, 2) void
 prints(const char *fmt, ...)
 {
     va_list args;

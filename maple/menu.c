@@ -1262,7 +1262,7 @@ check_info(const char *input)
 }
 
 
-void
+GCC_NORETURN void
 menu(void)
 {
     MENU *menu, *mptr, *table[17];

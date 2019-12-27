@@ -223,7 +223,7 @@ u_exit(
 }
 
 
-void
+GCC_NORETURN void
 abort_bbs(void)
 {
     if (bbstate)
