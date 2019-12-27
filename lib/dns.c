@@ -411,21 +411,44 @@ int dns_name(const unsigned char *addr, char *name)
 /* update : 96/12/15                                     */
 /*-------------------------------------------------------*/
 
+int dns_openip(const ip_addr *addr, int port)
+{
+    int sock;
+    ip_addr *ip;
+    struct sockaddr_in sin;
+
+    sin.sin_family = AF_INET;
+    sin.sin_port = htons(port);
+    memset(sin.sin_zero, 0, sizeof(sin.sin_zero));
+
+    ip = (ip_addr *) & (sin.sin_addr.s_addr);
+    *ip = *addr;
+
+    sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock < 0)
+        return sock;
+
+    if (!connect(sock, (struct sockaddr *)&sin, sizeof(sin)))
+        return sock;
+
+    close(sock);
+
+    return -1;
+}
+
 int dns_open(const char *host, int port)
 {
     querybuf ans;
-    int n, ancount, qdcount;
     unsigned char *cp, *eom;
-    const unsigned char *ccp;
     char buf[MAXDNAME];
-    struct sockaddr_in sin;
-    int type;
 
 #if 1
     /* Thor.980707: 因gem.c呼叫時可能將host用ip放入，故作特別處理 */
     if (*host >= '0' && *host <= '9')
     {
-        for (n = 0, ccp = (const unsigned char *)host; n < 4; n++, ccp++)
+        int n;
+        const unsigned char *ccp = (const unsigned char *)host;
+        for (n = 0; n < 4; n++, ccp++)
         {
             buf[n] = 0;
             while (*ccp >= '0' && *ccp <= '9')
@@ -438,34 +461,36 @@ int dns_open(const char *host, int port)
         }
         if (n == 3)
         {
-            ancount = 0;  // IID.20190822: Prevent continuing the `while` loop after `goto`.
-            ccp = cp = (unsigned char *)buf;
-            goto ip;
+            return dns_openip((ip_addr *)buf, port);
         }
     }
     /* Thor.980707: 隨便寫寫，要講究完全match再說:p */
 #endif
 
-    n = dns_query(host, T_A, &ans);
-    if (n < 0)
-        return n;
-
-    /* find first satisfactory answer */
-
-    cp = (unsigned char *)&ans + sizeof(HEADER);
-    eom = (unsigned char *)&ans + n;
-
-    for (qdcount = ntohs(ans.hdr.qdcount); qdcount--; cp += n + QFIXEDSZ)
     {
-        if ((n = dn_skipname(cp, eom)) < 0)
+        int n = dns_query(host, T_A, &ans);
+        if (n < 0)
             return n;
+
+        /* find first satisfactory answer */
+
+        cp = (unsigned char *)&ans + sizeof(HEADER);
+        eom = (unsigned char *)&ans + n;
     }
 
-    ancount = ntohs(ans.hdr.ancount);
-
-    while (--ancount >= 0 && cp < eom)
+    for (int qdcount = ntohs(ans.hdr.qdcount); qdcount--;)
     {
-        if ((n = dn_expand((unsigned char *)&ans, eom, cp, buf, MAXDNAME)) < 0)
+        int n = dn_skipname(cp, eom);
+        if (n < 0)
+            return n;
+        cp += n + QFIXEDSZ;
+    }
+
+    for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
+    {
+        int type;
+        int n = dn_expand((unsigned char *)&ans, eom, cp, buf, MAXDNAME);
+        if (n < 0)
             return -1;
 
         cp += n;
@@ -476,33 +501,9 @@ int dns_open(const char *host, int port)
 
         if (type == T_A)
         {
-            int sock;
-            ip_addr *ip;
-
-            ccp = cp;
-#if 1
-          ip:
-#endif
-
-            sin.sin_family = AF_INET;
-            sin.sin_port = htons(port);
-            memset(sin.sin_zero, 0, sizeof(sin.sin_zero));
-
-            ip = (ip_addr *) & (sin.sin_addr.s_addr);
-
-            ip->d[0] = ccp[0];
-            ip->d[1] = ccp[1];
-            ip->d[2] = ccp[2];
-            ip->d[3] = ccp[3];
-
-            sock = socket(AF_INET, SOCK_STREAM, 0);
-            if (sock < 0)
+            int sock = dns_openip((const ip_addr *)cp, port);
+            if (sock >= 0)
                 return sock;
-
-            if (!connect(sock, (struct sockaddr *)&sin, sizeof(sin)))
-                return sock;
-
-            close(sock);
         }
 
         cp += n;

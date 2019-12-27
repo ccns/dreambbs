@@ -105,6 +105,7 @@ void dns_init(void);
 unsigned long dns_addr(const char *name);
 void dns_ident(int sock, const struct sockaddr_in *from, char *rhost, char *ruser);
 int dns_name(const unsigned char *addr, char *name);
+int dns_openip(const ip_addr *addr, int port);
 int dns_open(const char *host, int port);
 int dns_smtp(char *host);
 /* rfc2047.c */
