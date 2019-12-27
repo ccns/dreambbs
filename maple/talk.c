@@ -2810,13 +2810,12 @@ talk_page(
     UTMP *up)
 {
     int sock, msgsock;
-    struct sockaddr_in sin;
     pid_t pid;
+    struct sockaddr_storage sin;
     int ans, length, myans;
     char buf[60];
-#if     defined(__OpenBSD__)
-    struct hostent *h;
-#endif
+    struct addrinfo hints = {0};
+    struct addrinfo *hs;
 
 #ifdef EVERY_Z
     /* Thor.0725: 為 talk & chat 可用 ^z 作準備 */
@@ -2867,36 +2866,39 @@ talk_page(
     }
 #endif
 
-    sock = socket(AF_INET, SOCK_STREAM, 0);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV;
+    hints.ai_flags |= AI_PASSIVE;
+    if (getaddrinfo(NULL, "0", &hints, &hs))
+        return -1;
+
+    for (struct addrinfo *h = hs; h; h = h ->ai_next)
+    {
+        sock = socket(h->ai_family, h->ai_socktype, 0);
+        if (sock < 0)
+            continue;
+
+        length = sizeof(sin);
+        if (bind(sock, h->ai_addr, h->ai_addrlen) < 0 || getsockname(sock, (struct sockaddr *) &sin, (socklen_t *) &length) < 0)
+        {
+            close(sock);
+            sock = -1;
+            continue;
+        }
+
+        /* Success */
+        break;
+    }
+    freeaddrinfo(hs);
     if (sock < 0)
         return 0;
 
-#if     defined(__OpenBSD__)                    /* lkchu */
-
-    if (!(h = gethostbyname(MYHOSTNAME)))
-        return -1;
-    memset(&sin, 0, sizeof(sin));
-    sin.sin_family = AF_INET;
-    sin.sin_port = 0;
-    memcpy(&sin.sin_addr, h->h_addr, h->h_length);
-
-#else
-
-    sin.sin_family = AF_INET;
-    sin.sin_port = 0;
-    sin.sin_addr.s_addr = INADDR_ANY;
-    memset(sin.sin_zero, 0, sizeof(sin.sin_zero));
-
-#endif
-
-    length = sizeof(sin);
-    if (bind(sock, (struct sockaddr *) &sin, length) < 0 || getsockname(sock, (struct sockaddr *) &sin, (socklen_t *) &length) < 0)
     {
-        close(sock);
-        return 0;
+        char port_str[12];
+        getnameinfo((struct sockaddr *)&sin, (socklen_t)length, NULL, NI_MAXHOST, port_str, sizeof(port_str), NI_NUMERICSERV);
+        cutmp->sockport = atoi(port_str);
     }
-
-    cutmp->sockport = sin.sin_port;
     strcpy(cutmp->mateid, up->userid);
     up->talker = cutmp;
 #ifdef  HAVE_PIP_FIGHT
@@ -4238,11 +4240,9 @@ talk_rqst(void)
     UTMP *up;
     int mode, sock, ans, len, port;
     char buf[80];
-    struct sockaddr_in sin;
     screen_backup_t old_screen;
-#if     defined(__OpenBSD__)
-    struct hostent *h;
-#endif
+    struct addrinfo hints = {0};
+    struct addrinfo *hs;
 
     up = cutmp->talker;
     if (!up)
@@ -4354,55 +4354,55 @@ talk_rqst(void)
 over_for:
 #endif
 
-    sock = socket(AF_INET, SOCK_STREAM, 0);
-
-#if     defined(__OpenBSD__)                    /* lkchu */
-
-    if (!(h = gethostbyname(MYHOSTNAME)))
-        return;
-    memset(&sin, 0, sizeof(sin));
-    sin.sin_family = AF_INET;
-    sin.sin_port = port;
-    memcpy(&sin.sin_addr, h->h_addr, h->h_length);
-
-#else
-
-    sin.sin_family = AF_INET;
-    sin.sin_port = port;
-    sin.sin_addr.s_addr = INADDR_ANY /* INADDR_LOOPBACK */;
-    memset(sin.sin_zero, 0, sizeof(sin.sin_zero));
-
-#endif
-
-    if (!connect(sock, (struct sockaddr *) & sin, sizeof(sin)))
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV;
     {
-        send(sock, buf, len, 0);
-
-        if (ans == 'y')
-        {
-            strcpy(cutmp->mateid, up->userid);
-            talk_speak(sock);
-        }
-#ifdef  HAVE_PIP_FIGHT
-        else if (ans == 'c')
-        {
-            if (!p)
-                p = DL_NAME_GET("pip.so", pip_vf_fight);
-            strcpy(cutmp->mateid, up->userid);
-            if (p)
-            {
-                cutmp->pip = NULL;
-                (*p)(sock, 1);
-                cutmp->pip = NULL;
-
-            }
-            add_io(0, 60);
-/*          pip_vf_fight(sock, 2);*/
-        }
-#endif
+        char port_str[12];
+        sprintf(port_str, "%d", port);
+        if (getaddrinfo(NULL, port_str, &hints, &hs))
+            return;
     }
 
-    close(sock);
+    for (struct addrinfo *h = hs; h; h = h->ai_next)
+    {
+        sock = socket(h->ai_family, h->ai_socktype, 0);
+        if (sock < 0)
+            continue;
+
+        if (!connect(sock, h->ai_addr, h->ai_addrlen))
+        {
+            send(sock, buf, len, 0);
+
+            if (ans == 'y')
+            {
+                strcpy(cutmp->mateid, up->userid);
+                talk_speak(sock);
+            }
+#ifdef  HAVE_PIP_FIGHT
+            else if (ans == 'c')
+            {
+                if (!p)
+                    p = DL_NAME_GET("pip.so", pip_vf_fight);
+                strcpy(cutmp->mateid, up->userid);
+                if (p)
+                {
+                    cutmp->pip = NULL;
+                    (*p)(sock, 1);
+                    cutmp->pip = NULL;
+
+                }
+                add_io(0, 60);
+/*              pip_vf_fight(sock, 2);*/
+            }
+#endif
+            close(sock);
+            break;
+        }
+        close(sock);
+    }
+    freeaddrinfo(hs);
+
 #ifdef  LOG_TALK
     if (ans == 'y' && up->mode != M_CHICKEN) /* mat.991011: 防止Talk拒絕時，產生聊天記錄的record */
         talk_save();          /* lkchu.981201: talk 記錄處理 */

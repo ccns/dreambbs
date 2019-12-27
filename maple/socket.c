@@ -5,50 +5,61 @@ Get_Socket(  /* site for hostname, sock for port & socket */
     const char *site,
     int *sock)
 {
-    struct sockaddr_in sin;
-    struct hostent *host;
+    struct addrinfo hints = {0};
+    struct addrinfo *hosts;
+    char port_str[12];
 
     /* Getting remote-site data */
 
-    (void) memset((char *) &sin, 0, sizeof(sin));
-    sin.sin_family = AF_INET;
-    sin.sin_port = htons(*sock);
-    if ((host = gethostbyname(site)) == NULL)
-        sin.sin_addr.s_addr = inet_addr(site);
-
-    else
-        (void) memcpy(&sin.sin_addr.s_addr, host->h_addr, host->h_length);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV;
+    sprintf(port_str, "%d", *sock);
+    if (getaddrinfo(site, port_str, &hints, &hosts))
+        return -1;
 
     /* Getting a socket */
 
-    if ((*sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    for (struct addrinfo *host = hosts; host; host = host->ai_next)
     {
-        return -1;
-    }
+        if ((*sock = socket(host->ai_family, host->ai_socktype, 0)) < 0)
+        {
+            continue;
+        }
 
 #ifdef  SET_ALARM
-    signal(SIGALRM, timeout);
-    alarm(SET_ALARM);
+        signal(SIGALRM, timeout);
+        alarm(SET_ALARM);
 #endif
 
-    /* perform connecting */
+        /* perform connecting */
 
-    if (connect(*sock, (struct sockaddr *) & sin, sizeof(sin)) < 0)
-    {
-        close(*sock);
+        if (connect(*sock, host->ai_addr, host->ai_addrlen) < 0)
+        {
+            close(*sock);
+
+#ifdef  SET_ALARM
+            init_alarm();
+#endif
+
+            continue;
+        }
+
+        /* Success */
 
 #ifdef  SET_ALARM
         init_alarm();
 #endif
 
-        return -3;
+        freeaddrinfo(hosts);
+        return 0;
     }
 
 #ifdef  SET_ALARM
     init_alarm();
 #endif
 
-    return 0;
+    freeaddrinfo(hosts);
+    return -1;
 }
 
 

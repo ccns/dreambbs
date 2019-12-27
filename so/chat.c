@@ -575,10 +575,8 @@ t_chat(void)
 {
     int ch, cfd, cmdpos, cmdcol;
     char *ptr = NULL, buf[128], chatid[9];
-    struct sockaddr_in sin;
-#if     defined(__OpenBSD__)
-    struct hostent *h;
-#endif
+    struct addrinfo hints = {0};
+    struct addrinfo *hs;
 
 #ifdef EVERY_Z
     /* Thor.0725: 為 talk & chat 可用 ^z 作準備 */
@@ -589,35 +587,33 @@ t_chat(void)
     }
 #endif
 
-#if     defined(__OpenBSD__)
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV;
+    {
+        char port_str[12];
+        sprintf(port_str, "%d", CHAT_PORT);
+        if (getaddrinfo(NULL, port_str, &hints, &hs))
+            return -1;
+    }
 
-    if (!(h = gethostbyname(MYHOSTNAME)))
-        return -1;
+    for (struct addrinfo *h = hs; h; h = h->ai_next)
+    {
+        cfd = socket(h->ai_family, h->ai_socktype, 0);
+        if (cfd < 0)
+            continue;
 
-    memset(&sin, 0, sizeof(sin));
-    sin.sin_family = AF_INET;
-    sin.sin_port = htons(CHAT_PORT);
-    memcpy(&sin.sin_addr, h->h_addr, h->h_length);
-
-#else
-
-    sin.sin_family = AF_INET;
-    sin.sin_port = htons(CHAT_PORT);
-    sin.sin_addr.s_addr = INADDR_ANY /* htonl(INADDR_LOOPBACK) */;
-    memset(sin.sin_zero, 0, sizeof(sin.sin_zero));
-
-#endif
-
-    cfd = socket(AF_INET, SOCK_STREAM, 0);
+        if (connect(cfd, h->ai_addr, h->ai_addrlen))
+        {
+            close(cfd);
+            blog("CHAT", "connect");
+            cfd = -1;
+            continue;
+        }
+    }
+    freeaddrinfo(hs);
     if (cfd < 0)
         return -1;
-
-    if (connect(cfd, (struct sockaddr *) & sin, sizeof sin))
-    {
-        close(cfd);
-        blog("CHAT", "connect");
-        return -1;
-    }
 
     for (;;)
     {

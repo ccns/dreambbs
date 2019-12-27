@@ -246,34 +246,42 @@ inetclient(
     const char *server,
     int port)
 {
-    struct hostent *host;       /* host information entry */
-    struct sockaddr_in sin;     /* Internet endpoint address */
+    struct addrinfo *hosts;      /* host information entries */
+    struct addrinfo hints = {0}; /* Internet endpoint hints */
+    char port_str[12];
     int fd;
 
     if (!*server || !port)
         return -1;
 
-    memset(&sin, 0, sizeof(sin));
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV;
 
-    if (!(host = gethostbyname(server)))
-        sin.sin_addr.s_addr = inet_addr(server);
-    else
-        memcpy(&sin.sin_addr.s_addr, host->h_addr, host->h_length);
+    sprintf(port_str, "%d", port);
 
-    sin.sin_family = AF_INET;
-    sin.sin_port = htons(port);
-
-    /* Allocate a socket */
-    fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-    if (fd < 0)
+    if (getaddrinfo(server, port_str, &hints, &hosts))
         return -1;
 
-    /* Connect the socket to the server */
-    if (connect(fd, (struct sockaddr *) & sin, sizeof(sin)) < 0)
+    for (struct addrinfo *host = hosts; host; host = host->ai_next)
     {
-        close(fd);
-        return -1;
+        /* Allocate a socket */
+        fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
+        if (fd < 0)
+            continue;
+
+        /* Connect the socket to the server */
+        if (connect(fd, host->ai_addr, host->ai_addrlen) < 0)
+        {
+            close(fd);
+            fd = -1;
+            continue;
+        }
+
+        break;  /* Success */
     }
+    freeaddrinfo(hosts);
 
     return fd;
 }

@@ -622,8 +622,7 @@ search_nodelist_byhost(
     const char *hostname)
 {
     nodelist_t *find;
-    struct hostent *he;
-    char client[128];
+    struct addrinfo *hes;
     int i;
 
     /* itoc.021216: 把 NODELIST 都換成 host，這樣的話，
@@ -632,11 +631,19 @@ search_nodelist_byhost(
     for (i = 0; i < NLCOUNT; i++)
     {
         find = NODELIST + i;
-        if ((he = gethostbyname(find->host)))
+        if (!getaddrinfo(find->host, NULL, NULL, &hes))
         {
-            str_ncpy(client, inet_ntoa(*(struct in_addr *) he->h_addr_list[0]), sizeof(client));
-            if (!strcmp(hostname, client))
-                return find->name;
+            for (struct addrinfo *he = hes; he; he = he->ai_next)
+            {
+                char client[128];
+                getnameinfo(he->ai_addr, he->ai_addrlen, client, sizeof(client), NULL, NI_MAXSERV, NI_NUMERICHOST);
+                if (!strcmp(hostname, client))
+                {
+                    freeaddrinfo(hes);
+                    return find->name;
+                }
+            }
+            freeaddrinfo(hes);
         }
     }
 
@@ -660,7 +667,6 @@ static void
 inndchannel(void)
 {
     int i, fd, sock;
-    char hostname[128];
     const char *nodename;
     time_t uptime1;             /* time to maintain history */
     time_t uptime2;             /* time in initial_bbs */
@@ -668,7 +674,7 @@ inndchannel(void)
     struct tm *ptime;
     struct timeval to;
     fd_set orfd;                /* temp read fd_set */
-    struct sockaddr_in sin;
+    struct sockaddr_storage sin;
     ClientType *clientp;
     ClientType Channel[MAXCLIENT];
 
@@ -751,6 +757,7 @@ inndchannel(void)
 
         if (FD_ISSET(sock, &orfd))              /* 剛上站 */
         {
+            char hostname[256];
             if ((fd = tryaccept(sock)) < 0)
                 continue;
 
@@ -761,7 +768,7 @@ inndchannel(void)
                 close(fd);
                 continue;
             }
-            str_ncpy(hostname, inet_ntoa(sin.sin_addr), sizeof(hostname));
+            getnameinfo((struct sockaddr *) &sin, i, hostname, sizeof(hostname), NULL, NI_MAXSERV, NI_NUMERICHOST);
             if (!(nodename = search_nodelist_byhost(hostname)))
             {
                 char buf[256];
