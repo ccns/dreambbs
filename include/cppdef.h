@@ -110,6 +110,25 @@
   #define CXX_CONSTEXPR_TRY_ASM  /* Empty */
 #endif
 
+#ifdef __cplusplus
+template <class T>
+    using Identity_T = T;
+  /* List literal (C: compound literal / C++: list-initialization of unnamed temporary) */
+  #define LISTLIT(Type)  Identity_T<Type>
+
+  /* Temporary lvalue */
+  /* Usage: `TEMPLVAL(Type, {init_values...})` (preferred) */
+  /*        `TEMPLVAL(Type, (init_value))` */
+  #define TEMPLVAL(Type, ...)  \
+    ((void)0, const_cast<Identity_T<Type> &>((const Identity_T<Type> &)LISTLIT(Type) __VA_ARGS__))
+#else
+  #define LISTLIT(Type)  (Type)
+  #define TEMPLVAL(Type, ...)  LISTLIT(Type) __VA_ARGS__
+#endif
+
+/* Temporary lvalue whose value is not important */
+#define SINKVAL(Type)  TEMPLVAL(Type, {0})
+
 #if __cplusplus >= 201103L  /* C++11 */
   #define CPP_TYPEOF(...) decltype(__VA_ARGS__)
 #elif defined __GNUC__
