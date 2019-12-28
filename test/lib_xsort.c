@@ -35,5 +35,7 @@ int main(void)
     } while (++x < z);
 
     xsort(y, MMM, sizeof(int), int_cmp);
+
+    free(y);
     return 0;
 }
