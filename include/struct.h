@@ -492,7 +492,7 @@ struct UTMP
     char          username[24];
     char          realname[20];
     unsigned int  userlevel;
-    char          from[30];                     /* remote host */
+    char          from[48];                     /* remote host */
 #ifdef  HAVE_SHOWNUMMSG
     int           num_msg;                      /* receive messages */
 #endif
