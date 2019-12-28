@@ -618,7 +618,7 @@ main(
     pickup_way = -1;
     while (optind < argc)
     {
-        switch (getopt(argc, argv, "+" "u:e:m:x:f:"))
+        switch (getopt(argc, argv, "+" "u:p:"))
         {
         case -1:  // Position arguments
             if (!(optarg = argv[optind++]))
