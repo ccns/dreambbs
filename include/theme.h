@@ -105,7 +105,7 @@
             COLOR3 "  編號    日 期 作  者       文  章  標  題%*s                                    \x1b[m"
 
 #define NECK_ULIST "\n" \
-            COLOR3 "  No.  代號         %-*s%-13s   PM %-14s閒置\x1b[m"
+            COLOR3 "  No.  代號         %-*s%-*s   PM %-14s閒置\x1b[m"
 
 #define NECK_PAL   "  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [/?]搜尋 [q]查詢 [h]elp\n" \
             COLOR3 "  編號    代 號         友       誼%*s                                            \x1b[m"
