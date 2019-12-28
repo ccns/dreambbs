@@ -110,3 +110,32 @@ SplayNode *splay_in(SplayNode * top,
     free(node);
     return top;
 }
+
+void
+splay_out(const SplayNode * top, void (*data_out) (const void *data, FILE *fp), FILE *fp)
+{
+    if (top == NULL)
+        return;
+
+    splay_out(top->left, data_out, fp);
+    data_out(top->data, fp);
+    splay_out(top->right, data_out, fp);
+}
+
+void
+splay_free(SplayNode * top, void (*data_free) (void *data))
+{
+    SplayNode *node;
+
+    if (top == NULL)
+        return;
+
+    if ((node = top->left))
+        splay_free(node, data_free);
+
+    if ((node = top->right))
+        splay_free(node, data_free);
+
+    data_free(top->data);
+    free(top);
+}
