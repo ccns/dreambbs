@@ -1972,7 +1972,7 @@ login_user(
 
     getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->rhost, sizeof(cu->rhost), NULL, NI_MAXSERV, NI_NUMERICHOST);
 
-    /* dns_name(cu->rhost, cu->ibuf); */
+    /* dns_name((ip_addr *)cu->rhost, cu->ibuf); */
     /* str_ncpy(cu->rhost, cu->ibuf, sizeof(cu->rhost)); */
 #if 0
     getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->rhost, sizeof(cu->rhost), NULL, NI_MAXSERV, 0);

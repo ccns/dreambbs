@@ -1838,7 +1838,7 @@ int main(int argc, char *argv[])
 
         tn_addr = *(struct sockaddr_in6 *)&sin;
         /* Thor.990325: 修改dns_ident定義, 來自哪if連那 */
-        /* dns_ident(mport, (struct sockaddr_in *)&sin, fromhost, rusername); */
+        /* dns_ident(mport, (ip_addr *)&sin, fromhost, rusername); */
 
         /* cache.090728: 連線不反查, 增加速度 */
         getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), fromhost, sizeof(fromhost), NULL, NI_MAXSERV, NI_NUMERICHOST);

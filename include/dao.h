@@ -103,9 +103,9 @@ int hdr_stamp(const char *folder, int token, HDR *hdr, char *fpath);
 /* dns.c */
 void dns_init(void);
 int dns_query(const char *name, int qtype, querybuf *ans);
-unsigned long dns_addr(const char *name);
-void dns_ident(int sock, const struct sockaddr_in *from, char *rhost, char *ruser);
-int dns_name(const unsigned char *addr, char *name);
+ip_addr dns_addr(const char *name);
+void dns_ident(int sock, const ip_addr *from, char *rhost, char *ruser);
+int dns_name(const ip_addr *addr, char *name);
 int dns_openip(const ip_addr *addr, int port);
 int dns_open(const char *host, int port);
 int dns_smtp(char *host);

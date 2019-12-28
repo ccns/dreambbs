@@ -23,16 +23,22 @@
 #include <arpa/nameser.h>
 #include <resolv.h>
 
+#include "cppdef.h"
+
 #ifndef INADDR_NONE
 #define INADDR_NONE     0xffffffff
 #endif
 #define INADDR_FMT      "%u.%u.%u.%u"
+#define INADDR6_FMT     "%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x.%x"
 
 typedef union
 {
-    unsigned char d[4];
-    unsigned long addr;
+    sa_family_t family;
+    struct sockaddr_in v4;
+    struct sockaddr_in6 v6;
 }     ip_addr;
+
+#define IPADDR_NONE     TEMPLVAL(ip_addr, {0})
 
 /*
  * The standard udp packet size PACKETSZ (512) is not sufficient for some
