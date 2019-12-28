@@ -324,17 +324,10 @@ pa_cmp(
 
 static void
 pa_out(
-    const SplayNode *top,
+    const void *pa_obj,
     FILE *fp)
 {
-    const PostAuthor *pa;
-
-    if (top == NULL)
-        return;
-
-    pa_out(top->left, fp);
-
-    pa = (PostAuthor *) top->data;
+    const PostAuthor *pa = (const PostAuthor *) pa_obj;
     if (pa->count <= LOWER_BOUND)
         return;
 
@@ -343,8 +336,18 @@ pa_out(
     {
         fprintf(fp, "%7d %.70s\n", text->count, text->title);
     }
+}
 
-    pa_out(top->right, fp);
+static void
+pa_free(
+    void *pa_obj)
+{
+    PostAuthor *pa = (PostAuthor *) pa_obj;
+    for (PostText *text = pa->text; text; text = text->ptnext)
+    {
+        free(text);
+    }
+    free(pa);
 }
 
 
@@ -438,9 +441,10 @@ post_author(void)
 
     if ((fp = fopen(FN_POST_LOG, "w")))
     {
-        pa_out(patop, fp);
+        splay_out(patop, pa_out, fp);
         fclose(fp);
     }
+    splay_free(patop, pa_free);
 }
 
 int

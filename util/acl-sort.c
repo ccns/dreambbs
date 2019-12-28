@@ -62,19 +62,10 @@ at_cmp(
 
 static void
 at_out(
-    const SplayNode *top)
+    const void *at_obj, FILE *fp)
 {
-    const AclText *at;
-
-    if (top == NULL)
-        return;
-
-    at_out(top->left);
-
-    at = (const AclText *) top->data;
-    fputs(at->text + 1, stdout);
-
-    at_out(top->right);
+    const AclText *at = (const AclText *)at_obj;
+    fputs(at->text + 1, fp);
 }
 
 
@@ -118,7 +109,8 @@ acl_sort(
         top = splay_in(top, at, at_cmp);
     }
 
-    at_out(top);
+    splay_out(top, at_out, stdout);
+    splay_free(top, free);
 }
 
 int
