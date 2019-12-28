@@ -624,8 +624,11 @@ main(
             if (!(optarg = argv[optind++]))
                 break;
             if (!userid)
+            {
         case 'u':
                 userid = optarg;
+                break;
+            }
             else if (!(pickup_way >= 0))
             {
         case 'p':
