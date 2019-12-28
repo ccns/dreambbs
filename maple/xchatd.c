@@ -3613,7 +3613,7 @@ main(
             for (;;)
             {
                 int value;
-                struct sockaddr_storage sin;
+                ip_addr sin;
 
                 value = sizeof(sin);
                 sock = accept(0, (struct sockaddr *) &sin, (socklen_t *) &value);
@@ -3640,7 +3640,7 @@ main(
                     cu->sno = ++servo_sno;
                     cu->xdata = 0;
                     cu->retry = 0;
-                    memcpy(cu->rhost, &sin, sizeof(struct sockaddr_in6));
+                    memcpy(cu->rhost, &sin, sizeof(ip_addr));
 
                     totaluser++;
 

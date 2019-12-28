@@ -43,7 +43,7 @@ extern CHECKSUMCOUNT cksum;
 /* static */ char rusername[40];
 
 /* static int mport; */ /* Thor.990325: 不需要了:P */
-static struct sockaddr_in6 tn_addr;
+static ip_addr tn_addr;
 
 /* IID.20190903: The unix socket path for listening proxy connections */
 static const char *unix_path;
@@ -1836,9 +1836,9 @@ int main(int argc, char *argv[])
 
         /* rfc931((struct sockaddr *)&sin, fromhost, rusername); */
 
-        tn_addr = *(struct sockaddr_in6 *)&sin;
+        tn_addr = *(ip_addr *)&sin;
         /* Thor.990325: 修改dns_ident定義, 來自哪if連那 */
-        /* dns_ident(mport, (ip_addr *)&sin, fromhost, rusername); */
+        /* dns_ident(mport, &tn_addr, fromhost, rusername); */
 
         /* cache.090728: 連線不反查, 增加速度 */
         getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), fromhost, sizeof(fromhost), NULL, NI_MAXSERV, NI_NUMERICHOST);
