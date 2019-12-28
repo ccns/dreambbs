@@ -43,7 +43,7 @@ extern CHECKSUMCOUNT cksum;
 /* static */ char rusername[40];
 
 /* static int mport; */ /* Thor.990325: 不需要了:P */
-static u_long tn_addr;
+static struct sockaddr_in6 tn_addr;
 
 /* IID.20190903: The unix socket path for listening proxy connections */
 static const char *unix_path;
@@ -555,9 +555,8 @@ utmp_setup(
     /* Thor.980921: str_ncpy 含 0 */
 
     /* cache.20130407 保存使用者登入IP位置(IPv4) */
-    unsigned char *addr;
-    addr = (unsigned char *) &tn_addr;
-    sprintf(ipv4addr, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
+    /* IID.20191228: Or IPv6 */
+    getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), ipv6addr, sizeof(ipv6addr), NULL, NI_MAXSERV, NI_NUMERICHOST);
 
     /* Thor: 告訴User已經滿了放不下... */
 
@@ -590,7 +589,8 @@ tn_login(void)
 
     /* sprintf(currtitle, "%s@%s", rusername, fromhost); */
     /* Thor.990415: 紀錄ip, 怕正查不到 */
-    sprintf(currtitle, "%s@%s ip:%08lx (%d)", rusername, fromhost, tn_addr, currpid);
+    getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), fpath, sizeof(fpath), NULL, NI_MAXSERV, NI_NUMERICHOST);
+    sprintf(currtitle, "%s@%s ip:%s (%d)", rusername, fromhost, fpath, currpid);
 
 
 /* by visor */
@@ -689,9 +689,8 @@ tn_login(void)
 
                 if ((level & PERM_ADMIN) && (cuser.ufo2 & UFO2_ACL))
                 {
-                    char buf[40]; /* check ip */
-                    unsigned char *addr = (unsigned char*) &tn_addr;
-                    sprintf(buf, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
+                    char buf[256]; /* check ip */
+                    getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), buf, sizeof(buf), NULL, NI_MAXSERV, NI_NUMERICHOST);
                     usr_fpath(fpath, cuser.userid, "acl");
                     str_lower(rusername, rusername);      /* lkchu.981201: 換小寫 */
                     str_lower(fromhost, fromhost);
@@ -1111,10 +1110,9 @@ tn_main(void)
 {
     long nproc;
     double load[3], load_norm;
-    char buf[128], buf2[40];
-    unsigned char *addr = (unsigned char*) &tn_addr;
+    char buf[128], buf2[128];
 
-    sprintf(buf2, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
+    getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), buf2, sizeof(buf2), NULL, NI_MAXSERV, NI_NUMERICHOST);
     str_lower(buf, fromhost);
 
     if (acl_has(FN_ETC_BANIP_ACL, "", buf) > 0
@@ -1362,27 +1360,28 @@ start_daemon(
     int port /* Thor.981206: 取 0 代表 *沒有參數*, -1 代表 -i (inetd) */
              /* IID.20190903: `-2` represents `-u` <unix_socket>`. */ )
 {
-    int n;
-    struct linger ld;
-    struct sockaddr_un sun;
-    struct sockaddr_in sin;
-    struct sockaddr *psock;
-    size_t sock_size;
+    struct addrinfo hints = {0};
+    struct addrinfo *hosts;
+    struct sockaddr_un sun = {0};
 #ifdef RLIMIT
     struct rlimit rl;
 #endif
     char buf[80], data[80];
-    time_t val;
+    int fd;
+    bool listen_success = false;
 
-    /*
-     * More idiot speed-hacking --- the first time conversion makes the C
-     * library open the files containing the locale definition and time zone.
-     * If this hasn't happened in the parent process, it happens in the
-     * children, once per connection --- and it does add up.
-     */
+    {
+        /*
+         * More idiot speed-hacking --- the first time conversion makes the C
+         * library open the files containing the locale definition and time zone.
+         * If this hasn't happened in the parent process, it happens in the
+         * children, once per connection --- and it does add up.
+         */
 
-    time(&val);
-    strftime(buf, 80, "%d/%b/%Y %H:%M:%S", localtime(&val));
+        time_t val;
+        time(&val);
+        strftime(buf, 80, "%d/%b/%Y %H:%M:%S", localtime(&val));
+    }
 
 #ifdef RLIMIT
     /* --------------------------------------------------- */
@@ -1424,13 +1423,19 @@ start_daemon(
 
     if (port == -1) /* Thor.981206: inetd -i */
     {
+        int n;
+        struct sockaddr_storage sin;
         /* Give up root privileges: no way back from here        */
         setgid(BBSGID);
         setuid(BBSUID);
 #if 1
         n = sizeof(sin);
         if (getsockname(0, (struct sockaddr *) &sin, (socklen_t *) &n) >= 0)
-            /* mport = */ port = ntohs(sin.sin_port);
+        {
+            char port_str[NI_MAXSERV];
+            getnameinfo((struct sockaddr *) &sin, n, NULL, NI_MAXHOST, port_str, sizeof(port_str), NI_NUMERICSERV);
+            /* mport = */ port = atoi(port_str);
+        }
 #endif
         /* mport = port; */ /* Thor.990325: 不需要了:P */
 
@@ -1453,13 +1458,26 @@ start_daemon(
     /* fork daemon process                                 */
     /* --------------------------------------------------- */
 
-    sun.sun_family = AF_UNIX;
-    sin.sin_family = AF_INET;
-    sin.sin_addr.s_addr = INADDR_ANY;
+    if (port == -2)
+    {
+        hints.ai_family = sun.sun_family = AF_UNIX;
+        hints.ai_socktype = SOCK_STREAM;
+        hints.ai_addr = (struct sockaddr *)&sun;
+        hints.ai_addrlen = sizeof(sun);
+        hints.ai_next = NULL;
+        hosts = &hints;
+    }
+    else
+    {
+        hints.ai_family = AF_UNSPEC;
+        hints.ai_socktype = SOCK_STREAM;
+        hints.ai_protocol = IPPROTO_TCP;
+        hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
+    }
 
     if (port == 0) /* Thor.981206: port 0 代表沒有參數 */
     {
-        n = MAXPORTS - 1;
+        int n = MAXPORTS - 1;
         while (n)
         {
             if (fork() == 0)
@@ -1472,48 +1490,57 @@ start_daemon(
     }
 
     if (port == -2)
-        n = socket(AF_UNIX, SOCK_STREAM, 0);
-    else
-        n = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-
-    val = 1;
-    setsockopt(n, SOL_SOCKET, SO_REUSEADDR, (char *) &val, sizeof(val));
-
-#if 0
-    setsockopt(n, SOL_SOCKET, SO_KEEPALIVE, (char *) &val, sizeof(val));
-
-    setsockopt(n, IPPROTO_TCP, TCP_NODELAY, (char *) &val, sizeof(val));
-#endif
-
-    ld.l_onoff = ld.l_linger = 0;
-    setsockopt(n, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
-
-    /* mport = port; */ /* Thor.990325: 不需要了:P */
-
-    if (port == -2)
     {
-        psock = (struct sockaddr *) &sun;
-        sock_size = sizeof(sun);
-
         strlcpy(sun.sun_path, unix_path, sizeof(sun.sun_path));
         // remove the file first if it exists.
         unlink(sun.sun_path);
     }
     else
     {
-        psock = (struct sockaddr *) &sin;
-        sock_size = sizeof(sin);
-
-        sin.sin_port = htons(port);
+        char port_str[12];
+        sprintf(port_str, "%d", port);
+        if (getaddrinfo(NULL, port_str, &hints, &hosts))
+            exit(1);
     }
-    if ((bind(n, psock, sock_size) < 0) || (listen(n, QLEN) < 0))
-        exit(1);
 
-    if (port == -2)
+    for (struct addrinfo *host = hosts; host; host = host->ai_next)
     {
-        chown(unix_path, BBSUID, WWWGID);
-        chmod(unix_path, 0660);
+        struct linger ld;
+        int val;
+
+        fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
+        if (fd < 0)
+            continue;
+
+        val = 1;
+        setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &val, sizeof(val));
+
+#if 0
+        setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (char *) &val, sizeof(val));
+
+        if (port != -2)
+            setsockopt(fd, host->ai_socktype, TCP_NODELAY, (char *) &val, sizeof(val));
+#endif
+
+        ld.l_onoff = ld.l_linger = 0;
+        setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
+
+        /* mport = port; */ /* Thor.990325: 不需要了:P */
+
+        if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) || (listen(fd, QLEN) < 0))
+            continue;
+
+        if (port == -2)
+        {
+            chown(unix_path, BBSUID, WWWGID);
+            chmod(unix_path, 0660);
+        }
+        listen_success = true;
     }
+    if (port != -2)
+        freeaddrinfo(hosts);
+    if (!listen_success)
+        exit(1);
 
     /* --------------------------------------------------- */
     /* Give up root privileges: no way back from here      */
@@ -1657,7 +1684,6 @@ int main(int argc, char *argv[])
     int *totaluser;
     int value = 0;
     bool is_proxy = false;      /* Whether connection data passing is enabled */
-    struct sockaddr_in sin;
 
     /* --------------------------------------------------- */
     /* setup standalone daemon                             */
@@ -1725,7 +1751,8 @@ int main(int argc, char *argv[])
 
     for (;;)
     {
-        value = 1;
+        struct sockaddr_storage sin;
+        int value = 1;
         if (select(1, (fd_set *) & value, NULL, NULL, NULL) < 0)
             continue;
         value = sizeof(sin);
@@ -1740,14 +1767,38 @@ int main(int argc, char *argv[])
         {
             conn_data_t cdata;
             if (read(csock, &cdata, sizeof(cdata)) != sizeof(cdata)
-                || cdata.cb != sizeof(cdata) || cdata.raddr_len != 4)
+                || cdata.cb != sizeof(cdata))
             {
                 close(csock);
                 continue;
             }
 
-            sin.sin_addr.s_addr = *(u_long *)&cdata.raddr;
-            sin.sin_port = cdata.rport;
+            switch (value = cdata.raddr_len)
+            {
+            case 4:
+                sin.ss_family = AF_INET;
+                ((struct sockaddr_in *)&sin)->sin_addr = *(struct in_addr *)&cdata.raddr;
+                ((struct sockaddr_in *)&sin)->sin_port = cdata.rport;
+                break;
+            case 16:
+                sin.ss_family = AF_INET6;
+                ((struct sockaddr_in6 *)&sin)->sin6_addr = *(struct in6_addr *)&cdata.raddr;
+                ((struct sockaddr_in6 *)&sin)->sin6_port = cdata.rport;
+                break;
+            default:;
+            }
+        }
+
+        switch (sin.ss_family)
+        {
+        case AF_INET:
+        case AF_INET6:
+            break;
+
+        case AF_UNIX:
+        default:
+            close(csock);
+            continue;
         }
 
         time(&ap_start);
@@ -1783,16 +1834,14 @@ int main(int argc, char *argv[])
         /* ident remote host / user name via RFC931          */
         /* ------------------------------------------------- */
 
-        /* rfc931(&sin, fromhost, rusername); */
+        /* rfc931((struct sockaddr *)&sin, fromhost, rusername); */
 
-        tn_addr = sin.sin_addr.s_addr;
+        tn_addr = *(struct sockaddr_in6 *)&sin;
         /* Thor.990325: 修改dns_ident定義, 來自哪if連那 */
-        /* dns_ident(mport, &sin, fromhost, rusername); */
+        /* dns_ident(mport, (struct sockaddr_in *)&sin, fromhost, rusername); */
 
         /* cache.090728: 連線不反查, 增加速度 */
-        unsigned char *addr;
-        addr = (unsigned char *) &tn_addr;
-        sprintf(fromhost, "%d.%d.%d.%d", addr[0], addr[1], addr[2], addr[3]);
+        getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), fromhost, sizeof(fromhost), NULL, NI_MAXSERV, NI_NUMERICHOST);
 
         telnet_init();
         term_init();

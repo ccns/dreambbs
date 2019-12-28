@@ -1545,7 +1545,7 @@ post_browse(
         time_t now;
         time(&now);
 
-        snprintf(desc, sizeof(desc), "%s %s %s %lld %s\n", Atime(&now), cuser.userid, currboard, (long long)hdr->chrono, ipv4addr);
+        snprintf(desc, sizeof(desc), "%s %s %s %lld %s\n", Atime(&now), cuser.userid, currboard, (long long)hdr->chrono, ipv6addr);
         f_cat(FN_BROWSE_LOG, desc);
 
         hdr_fpath(fpath, dir, hdr);
@@ -4640,7 +4640,7 @@ xpost_browse(
         time_t now;
         time(&now);
 
-        snprintf(desc, sizeof(desc), "%s %s %s %lld %s\n", Atime(&now), cuser.userid, currboard, (long long)hdr->chrono, ipv4addr);
+        snprintf(desc, sizeof(desc), "%s %s %s %lld %s\n", Atime(&now), cuser.userid, currboard, (long long)hdr->chrono, ipv6addr);
         f_cat(FN_BROWSE_LOG, desc);
 
         hdr_fpath(fpath, dir, hdr);

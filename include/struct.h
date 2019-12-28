@@ -12,6 +12,8 @@
 #include "cppdef.h"
 #include "attrdef.h"
 
+#include <netinet/in.h>
+
 #ifdef __cplusplus
   #include <unordered_map>
   #include <utility>
@@ -479,7 +481,7 @@ struct UTMP
     unsigned int  mode;                         /* bbsmode */
     unsigned int  ufo;                          /* the same as userec.ufo */
     unsigned int  flag;                         /* user flag */
-    unsigned long in_addr;                      /* Internet address */
+    struct sockaddr_in6   in_addr;              /* Internet address */
     int           sockport;                     /* socket port for talk */
     UTMP          *talker;                      /* who talk-to me ? */
 
