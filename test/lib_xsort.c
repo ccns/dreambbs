@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <assert.h>
 #include "dao.h"
 
 #define MMM     (0x40000)
@@ -35,6 +36,11 @@ int main(void)
     } while (++x < z);
 
     xsort(y, MMM, sizeof(int), int_cmp);
+
+    for (int i = 1; i < MMM; ++i)
+    {
+        assert(int_cmp(&y[i-1], &y[i]) <= 0);
+    }
 
     free(y);
     return 0;
