@@ -232,28 +232,47 @@ dokill(
 static int                      /* -1:失敗 */
 initinetserver(void)
 {
-    struct sockaddr_in sin;     /* Internet endpoint address */
+    struct addrinfo *hosts;      /* host information entries */
+    struct addrinfo hints = {0}; /* Internet endpoint hints */
     int fd, value;
     struct linger foobar;
+    char port_str[12];
 
-    /* Allocate a socket */
-    fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
+
+    sprintf(port_str, "%d", INNBBS_PORT);
+
+    if (getaddrinfo(NULL, port_str, &hints, &hosts))
+        return -1;
+
+    for (struct addrinfo *host = hosts; host; host = host->ai_next)
+    {
+        /* Allocate a socket */
+        fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
+        if (fd < 0)
+            continue;
+
+        if (bind(fd, host->ai_addr, host->ai_addrlen) < 0)
+        {
+            printf("innbbsd 已由 inetd 啟動了，無需再手動執行\n");
+            close(fd);
+            freeaddrinfo(hosts);
+            return -1;
+        }
+
+        /* Success */
+        listen(fd, 10);
+        break;
+    }
+    freeaddrinfo(hosts);
     if (fd < 0)
     {
         printf("inet socket 開啟失敗\n");
         return -1;
     }
-
-    memset(&sin, 0, sizeof(sin));
-    sin.sin_family = AF_INET;
-    sin.sin_port = htons(INNBBS_PORT);
-
-    if (bind(fd, (struct sockaddr *) &sin, sizeof(sin)) < 0)
-    {
-        printf("innbbsd 已由 inetd 啟動了，無需再手動執行\n");
-        return -1;
-    }
-    listen(fd, 10);
 
     if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &value, sizeof(value)) < 0)
         bbslog("setsockopt (SO_REUSEADDR)");
@@ -277,12 +296,12 @@ tryaccept(
     int s)
 {
     int ns;
-    socklen_t fromlen = sizeof(struct sockaddr_in);
-    struct sockaddr sockaddr;   /* Internet endpoint address */
+    socklen_t fromlen = sizeof(struct sockaddr_storage);
+    struct sockaddr_storage sockaddr;   /* Internet endpoint address */
 
     do
     {
-        ns = accept(s, &sockaddr, &fromlen);
+        ns = accept(s, (struct sockaddr *)&sockaddr, &fromlen);
         errno = 0;
     } while (ns < 0 && errno == EINTR);
     return ns;
@@ -872,7 +891,7 @@ main(
     char *argv[])
 {
     int c;
-    struct sockaddr_in sin;
+    struct sockaddr_storage sin;
 
     setgid(BBSGID);
     setuid(BBSUID);

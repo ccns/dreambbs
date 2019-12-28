@@ -1807,7 +1807,6 @@ login_user(
     char *chatid, *passwd;
     ChatUser *xuser;
     int level;
-/*   struct hostent *hp; */
 
 #ifndef STAND_ALONE
     ACCT acct;
@@ -1971,15 +1970,12 @@ login_user(
 
     /* Xshadow: 取得 client 的來源 */
 
-    str_ncpy(cu->rhost, inet_ntoa(*(struct in_addr *)cu->rhost), sizeof(cu->rhost));
+    getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->rhost, sizeof(cu->rhost), NULL, NI_MAXSERV, NI_NUMERICHOST);
 
     /* dns_name(cu->rhost, cu->ibuf); */
     /* str_ncpy(cu->rhost, cu->ibuf, sizeof(cu->rhost)); */
 #if 0
-    hp = gethostbyaddr(cu->rhost, sizeof(struct in_addr), AF_INET);
-    str_ncpy(cu->rhost,
-        hp ? hp->h_name : inet_ntoa((struct in_addr *) cu->rhost),
-        sizeof(cu->rhost) - 1);
+    getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->rhost, sizeof(cu->rhost), NULL, NI_MAXSERV, 0);
 #endif
 
     cu->userno = utent;
@@ -3002,11 +2998,14 @@ servo_daemon(
 {
     int fd, value;
     char buf[80];
-    struct sockaddr_in sin;
+    struct addrinfo hints = {0};
+    struct addrinfo *hosts;
+    char port_str[12];
     struct linger ld;
 #ifdef RLIMIT
     struct rlimit limit;
 #endif //RLIMIT
+    bool listen_success = false;
 
     /*
      * More idiot speed-hacking --- the first time conversion makes the C
@@ -3073,34 +3072,47 @@ servo_daemon(
     /* bind the service port                               */
     /* --------------------------------------------------- */
 
-    fd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    hints.ai_protocol = IPPROTO_TCP;
+    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
+    sprintf(port_str, "%d", CHAT_PORT);
+    if (getaddrinfo(NULL, port_str, &hints, &hosts))
+        exit(1);
 
-    /*
-     * timeout 方面, 將 socket 改成 O_NDELAY (no delay, non-blocking),
-     * 如果能順利送出資料就送出, 不能送出就算了, 不再等待 TCP_TIMEOUT 時間。
-     * (default 是 120 秒, 並且有 3-way handshaking 機制, 有可能一等再等)。
-     */
+    for (struct addrinfo *host = hosts; host; host = host->ai_next)
+    {
+        fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
+        if (fd < 0)
+            continue;
+
+        /*
+         * timeout 方面, 將 socket 改成 O_NDELAY (no delay, non-blocking),
+         * 如果能順利送出資料就送出, 不能送出就算了, 不再等待 TCP_TIMEOUT 時間。
+         * (default 是 120 秒, 並且有 3-way handshaking 機制, 有可能一等再等)。
+         */
 
 #if 1
-    fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NDELAY);
+        fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NDELAY);
 #endif
 
-    value = 1;
-    setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &value, sizeof(value));
+        value = 1;
+        setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &value, sizeof(value));
 
-    value = 1;
-    setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &value, sizeof(value));
+        value = 1;
+        setsockopt(fd, host->ai_protocol, TCP_NODELAY, (char *) &value, sizeof(value));
 
-    ld.l_onoff = ld.l_linger = 0;
-    setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
+        ld.l_onoff = ld.l_linger = 0;
+        setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
 
-    sin.sin_family = AF_INET;
-    sin.sin_port = htons(CHAT_PORT);
-    sin.sin_addr.s_addr = htonl(INADDR_ANY);
-    memset(sin.sin_zero, 0, sizeof(sin.sin_zero));
+        if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) ||
+            (listen(fd, SOCK_QLEN) < 0))
+            continue;
 
-    if ((bind(fd, (struct sockaddr *) & sin, sizeof(sin)) < 0) ||
-        (listen(fd, SOCK_QLEN) < 0))
+        listen_success = true;
+    }
+    freeaddrinfo(hosts);
+    if (!listen_success)
         exit(1);
 
     return fd;
@@ -3601,7 +3613,7 @@ main(
             for (;;)
             {
                 int value;
-                struct sockaddr_in sin;
+                struct sockaddr_storage sin;
 
                 value = sizeof(sin);
                 sock = accept(0, (struct sockaddr *) &sin, (socklen_t *) &value);
@@ -3628,7 +3640,7 @@ main(
                     cu->sno = ++servo_sno;
                     cu->xdata = 0;
                     cu->retry = 0;
-                    memcpy(cu->rhost, &sin.sin_addr, sizeof(struct in_addr));
+                    memcpy(cu->rhost, &sin, sizeof(struct sockaddr_in6));
 
                     totaluser++;
 
