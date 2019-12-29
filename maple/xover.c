@@ -1048,14 +1048,23 @@ xo_usetup(
 #define MARK_PREV       (RS_MARKED | RS_CURRENT)
 
 
+#if defined __cplusplus
+/* IID.20191230: Use hash table for xover thread mode op-code list */
+#define HAVE_HASH_KEYMAPLIST
+typedef std::unordered_map<int, int> KeyMapList;
+typedef KeyMapList::const_iterator KeyMapConstIter;
+#else
 typedef struct
 {
-    int key;                    /* key stroke */
-    int map;                    /* the mapped threading op-code */
+    int first;                  /* key stroke */
+    int second;                 /* the mapped threading op-code */
 }      KeyMap;
+typedef KeyMap KeyMapList[];
+typedef const KeyMap *KeyMapConstIter;
+#endif
 
 
-static KeyMap keymap[] =
+static const KeyMapList keymap =
 {
     /* search title / author */
 
@@ -1113,17 +1122,25 @@ GCC_PURE static int
 xo_keymap(
     int key)
 {
-    const KeyMap *km;
+    KeyMapConstIter km;
+
+#ifdef HAVE_HASH_KEYMAPLIST
+    km = keymap.find(key);
+    if (km == keymap.end())
+        return -1;
+#else
     int ch;
 
     km = keymap;
-    while ((ch = km->key))
+    while ((ch = km->first))
     {
         if (ch == key)
             break;
         km++;
     }
-    return km->map;
+#endif
+
+    return km->second;
 }
 
 
