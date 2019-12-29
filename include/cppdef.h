@@ -112,6 +112,17 @@
   #define CPP_TYPEOF(...) __typeof__(__VA_ARGS__)
 #endif
 
+/* Block in expressions */
+#if defined __cplusplus
+  #define EXPR_BLOCK_BEGIN  [&](void) {
+  #define EXPR_BLOCK_END  }()
+  #define EXPR_BLOCK_RETURN  return
+#elif defined __GNUC__
+  #define EXPR_BLOCK_BEGIN  __extension__ ({
+  #define EXPR_BLOCK_END  })
+  #define EXPR_BLOCK_RETURN  /* Empty */
+#endif
+
 /* Macros for manipulating structs */
 
 #include <stddef.h>
@@ -145,7 +156,11 @@
 #ifdef CPP_TYPEOF
   #define DL_NAME_GET(module_str, obj)  \
       ((CPP_TYPEOF(obj) *) DL_GET(DL_NAME(module_str, obj)))
-  #define DL_NAME_CALL(module_str, func)  (*DL_NAME_GET(module_str, func))
+
+  #define DL_NAME_CALL(module_str, func)  EXPR_BLOCK_BEGIN \
+    CPP_TYPEOF(obj) *pfunc = DL_NAME_GET(module_str, func); \
+    EXPR_BLOCK_RETURN (pfunc) ? pfunc DL_APPEND_ELSE_VAL
+  #define DL_APPEND_ELSE_VAL(...)  (__VA_ARGS__) : -1; EXPR_BLOCK_END
 #else
   #define DL_NAME_GET(module_str, obj)  DL_GET(DL_NAME(module_str, obj))
   #define DL_NAME_CALL(module_str, func)   DL_CALL(DL_NAME(module_str, va ## func))
