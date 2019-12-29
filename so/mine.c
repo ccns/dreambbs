@@ -190,7 +190,7 @@ void drawPrompt(void)
     move(7, 0);
     outs("±½¹p       ¢ü"); clrtokol();
     move(9, 0);
-    outs("Â÷¶}    Esc / q"); clrtokol();
+    outs("Â÷¶}  ESC-Esc/q"); clrtokol();
 }
 
 void drawMapLine(int y, int flShow)
@@ -299,7 +299,7 @@ void playMine(void)
 
         switch (ch)
         {
-        case KEY_ESC:
+        case Meta(KEY_ESC):
             return;
 
         case KEY_UP:

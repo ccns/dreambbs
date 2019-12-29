@@ -2150,6 +2150,7 @@ ve_key:
 
             case Ctrl('U'):
             case KEY_ESC:
+            case Meta(KEY_ESC):
 
                 ve_char(27);
                 break;
