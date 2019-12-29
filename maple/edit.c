@@ -2010,9 +2010,10 @@ ve_key:
             case KEY_PGDN:
             case Ctrl('F'):
             case Ctrl('T'):             /* tail of file */
+            case Meta('T'):
             case Meta('.'):
 
-                ve_forward((cc == Ctrl('T') || cc == Meta('.')) ? 0 : 22);
+                ve_forward((cc == Ctrl('T') || cc == Meta('T') || cc == Meta('.')) ? 0 : 22);
                 continue;
 
             case Ctrl('S'):             /* start of file */
@@ -2035,6 +2036,7 @@ ve_key:
 
             case Ctrl('X'):             /* Save and exit */
             case Ctrl('W'):
+            case Meta('W'):
             case Meta('X'):
             case KEY_F10:
 

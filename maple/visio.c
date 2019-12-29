@@ -1741,7 +1741,7 @@ igetch(void)
             continue;
         }
 
-        if ((cc == Ctrl('R')) && (bbstate & STAT_STARTED)
+        if ((cc == Ctrl('R') || cc == Meta('R')) && (bbstate & STAT_STARTED)
                 && !(bbstate & STAT_LOCK)       /* lkchu.990513: 鎖定時不可回訊 */
                 && !(vi_mode & (IM_REPLY | IM_VKEY_ESC)))
         {

@@ -4888,7 +4888,7 @@ int first)
             }
 
         }
-        else if (ch == Ctrl('T'))
+        else if (ch == Ctrl('T') || ch == Meta('T'))
         {
             add_io(fd, 30);
             clrchyiuan(7, b_lines - 4);

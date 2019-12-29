@@ -4134,6 +4134,7 @@ KeyFuncList post_cb =
     {'S', {post_complete}}, //板主處理標記
     {'w', {post_write}},
     {Ctrl('W'), {post_spam}},
+    {Meta('W'), {post_spam}},
     {'e', {post_expire}},
     {'U', {post_unexpire}},
     {'#', {post_aid}},              /* cache.090612: 以文章代碼(AID)快速尋文 */

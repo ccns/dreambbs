@@ -1949,7 +1949,7 @@ xover_callback_end:
                     else
                         cmd = XO_NONE;
                 }
-                else if (cmd == Ctrl('A') || cmd == Ctrl('T'))
+                else if (cmd == Ctrl('A') || cmd == Ctrl('T') || cmd == Meta('T'))
                 {
                     cmd = xo_tag(xo, cmd);
                 }

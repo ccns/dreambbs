@@ -1467,6 +1467,7 @@ static KeyFuncList gem_cb =
     {'S', {gem_state}},
 
     {Ctrl('W'), {gem_recycle}},
+    {Meta('W'), {gem_recycle}},
 
 
     {'h', {gem_help}}

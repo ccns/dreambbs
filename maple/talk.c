@@ -1846,7 +1846,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
             return;
         }
 
-        if (cc == Ctrl('R') && !replymode)
+        if ((cc == Ctrl('R') || cc == Meta('R')) && !replymode)
         {
             bmw_reply(1);
             break;
