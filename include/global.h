@@ -308,6 +308,8 @@
 #define KEY_F11         0x035B
 #define KEY_F12         0x035C
 
+#define KEY_INVALID     0x04FE
+
 #define I_TIMEOUT       0x05FD
 #define I_OTHERDATA     0x05FE
 
