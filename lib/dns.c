@@ -189,7 +189,7 @@ static void pseudo_handler(GCC_UNUSED int signum) /* Thor.991215: for timeout */
 
 void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½Tportªº®É­Ô.
                                    ¥Nªí Port, ¤£¹L¤£¤Ó¥i¯à¥Î¨ì */
-               const ip_addr *from, char *rhost, char *ruser)
+               const ip_addr *from, char *rhost, int rhost_sz, char *ruser, int ruser_sz)
 {
     struct addrinfo rmt_hints, *rmt_hosts;
     struct addrinfo our_hints, *our_hosts;
@@ -205,7 +205,7 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
 
     /* get remote host name */
 
-    if (dns_name(from, rhost))
+    if (dns_name(from, rhost, rhost_sz))
         return;                    /* °²³]¨S¦³ FQDN ´N¨S¦³¶] identd */
 
 #ifdef RFC931_TIMEOUT
@@ -305,13 +305,16 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
                 {
                     char rmt_port[NI_MAXSERV];
                     char our_port[NI_MAXSERV];
+                    char ruser_buf[80];
 
                     buf[cc] = '\0';
 
                     if (sscanf
                         (buf, "%s , %s : USERID :%*[^:]:%79s", rmt_port, our_port,
-                         ruser) == 3 && !strcmp(rmt_pt, rmt_port) && !strcmp(our_pt, our_port))
+                         ruser_buf) == 3 && !strcmp(rmt_pt, rmt_port) && !strcmp(our_pt, our_port))
                     {
+                        str_ncpy(ruser, ruser_buf, ruser_sz);
+
                         /*
                          * Strip trailing carriage return. It is part of the protocol, not
                          * part of the data.
@@ -371,7 +374,7 @@ cleanup_alarm:
 /* get host name by IP address                           */
 /* ----------------------------------------------------- */
 
-int dns_name(const ip_addr *addr, char *name)
+int dns_name(const ip_addr *addr, char *name, int name_sz)
 {
     querybuf ans;
     unsigned char *cp, *eom;
@@ -379,7 +382,7 @@ int dns_name(const ip_addr *addr, char *name)
     FILE *fp;
 #endif
 
-    if (getnameinfo((const struct sockaddr *)addr, sizeof(*addr), name, NI_MAXHOST, NULL, NI_MAXSERV, NI_NUMERICHOST))
+    if (getnameinfo((const struct sockaddr *)addr, sizeof(*addr), name, name_sz, NULL, NI_MAXSERV, NI_NUMERICHOST))
         return -1;
 
 #ifdef  HAVE_ETC_HOSTS
@@ -395,7 +398,7 @@ int dns_name(const ip_addr *addr, char *name)
                 /* if (!strcmp(name, (char *) strtok(abuf, " \t\r\n"))) */
                 if (strstr(name, (char *)strtok(abuf, " \t\r\n")))
                 {
-                    strcpy(name, (char *)strtok(NULL, " \t\r\n"));
+                    str_ncpy(name, (char *)strtok(NULL, " \t\r\n"), name_sz);
                     fclose(fp);
                     return 0;
                 }
@@ -469,7 +472,7 @@ int dns_name(const ip_addr *addr, char *name)
             int n = dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME);
             if (n >= 0)
             {
-                strcpy(name, hostbuf);
+                str_ncpy(name, hostbuf, name_sz);
                 return 0;
             }
         }
@@ -477,7 +480,7 @@ int dns_name(const ip_addr *addr, char *name)
 #if 0
         if (type == T_CNAME)
         {
-            strcpy(name, hostbuf);
+            str_ncpy(name, hostbuf, name_sz);
             return 0;
         }
 #endif
