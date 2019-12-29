@@ -2505,6 +2505,12 @@ vkey(void)
         {                               /* Escape sequence */
             if (ch == '[' || ch == 'O')       /* "<Esc> <[O>" */
                 mode = 2;
+#ifdef  TRAP_ESC
+            else if (ch == KEY_ESC) /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
+            {
+                mod = META_CODE;    /* Make the key Meta-ed */
+            }
+#endif
             else
             {
                 return Meta(ch);
