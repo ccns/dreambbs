@@ -637,6 +637,8 @@ int dns_open(const char *host, int port)
 /* update : 96/12/15                                     */
 /*-------------------------------------------------------*/
 
+#define DNS_MXLIST_DELIMITER  ';'
+
 static inline void dns_mx(const char *domain, char *mxlist)
 {
     querybuf ans;
@@ -691,9 +693,11 @@ static inline void dns_mx(const char *domain, char *mxlist)
                 return;
 
             /* Thor.980820: 將數個 MX entry 用 : 串起來以便一個一個試 */
+            /* IID.20191229: `:` is valid in IPv6 address; change the delimiter to ';' */
+
             while (*mxlist)
                 mxlist++;
-            *mxlist++ = ':';
+            *mxlist++ = DNS_MXLIST_DELIMITER;
 
             if (mxlist >= domain)
                 break;
@@ -716,11 +720,12 @@ int dns_smtp(char *host)
 
     for (;;)
     {                            /* Thor.980820: 註解: 萬一host格式為 xxx:yyy:zzz, 則先試 xxx, 不行再試 yyy */
+        /* IID.20191229: `:` is valid in IPv6 address; change the delimiter to ';' */
         char *ptr = str, ch;
         int sock;
         while ((ch = *ptr))
         {
-            if (ch == ':')
+            if (ch == DNS_MXLIST_DELIMITER)
             {
                 *ptr++ = '\0';
                 break;
