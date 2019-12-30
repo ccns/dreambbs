@@ -32,11 +32,24 @@ x_siteinfo(void)
 
     move(1, 0);
     prints("     %s - %s\n", MYHOSTNAME, BBSIP);
-    prints("祘Αセ %s [%s]\x1b[m\n", BBSVERNAME, BBSVERSION);
-    prints("计 %d/%d\n", ushm->count, MAXACTIVE);
-    prints("╰参璽更 %.2f %.2f %.2f / %ld [%s]\n",
+    prints("祘Αセ %s [%s] %s\n", BBSVERNAME, BBSVERSION, BUILD_HEAD);
+    prints("だやセ %s %s %s\n", BUILD_REMOTE_URL, BUILD_BRANCH_REMOTE, BUILD_HEAD_REMOTE);
+    prints("絪亩吏挂 %s %s %s %s%ld\n", BUILD_MAKE, BUILD_ARCH,
+#ifdef __clang__
+        "Clang-" VER_PATCH_STR(__clang_major__, __clang_minor__, __clang_patchlevel__),
+#else
+        "GCC-" VER_PATCH_STR(__GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__),
+#endif
+#ifdef __cplusplus
+        "GNU-C++", __cplusplus
+#else
+        "GNU-C", __STDC_VERSION__
+#endif
+        / 100L % 100);
+    prints("╰参璽更 %.2f %.2f %.2f / %ld [%s] ",
         load[0], load[1], load[2], nproc, load_norm > 5 ? "\x1b[1;41;37m筁蔼\x1b[m" : load_norm > 1 ?
         "\x1b[1;42;37m祔蔼\x1b[m" : "\x1b[1;44;37mタ盽\x1b[m");
+    prints("计 %d/%d\n", ushm->count, MAXACTIVE);
     prints("ま戈 BRD %zu bytes, ACCT %zu bytes, HDR %zu bytes\n", sizeof(BRD), sizeof(ACCT), sizeof(HDR));
     prints("\n");
     prints("\x1b[1mセ BBS セ琌パ WindTop BBS 癬﹍\x1b[m\n");
