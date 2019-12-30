@@ -49,7 +49,6 @@ if(NO_SO)
 endif()
 
 add_executable(xchatd xchatd.c)
-target_compile_options(xchatd PRIVATE -imacros${EXPORT_MAPLE})
 
 install(
     TARGETS bbsd xchatd

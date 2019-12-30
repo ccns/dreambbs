@@ -31,21 +31,11 @@ x_siteinfo(void)
     clear();
 
     move(1, 0);
-    prints("站    名： %s - %s\n", MYHOSTNAME, BBSIP);
-    prints("程式版本： %s [%s] %s\n", BBSVERNAME, BBSVERSION, BUILD_HEAD);
-    prints("分支版本： %s %s %s\n", BUILD_REMOTE_URL, BUILD_BRANCH_REMOTE, BUILD_HEAD_REMOTE);
-    prints("編譯環境： %s %s %s %s%ld\n", BUILD_MAKE, BUILD_ARCH,
-#ifdef __clang__
-        "Clang-" VER_PATCH_STR(__clang_major__, __clang_minor__, __clang_patchlevel__),
-#else
-        "GCC-" VER_PATCH_STR(__GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__),
-#endif
-#ifdef __cplusplus
-        "GNU-C++", __cplusplus
-#else
-        "GNU-C", __STDC_VERSION__
-#endif
-        / 100L % 100);
+    prints("站    名： %s - %s\n", str_host, BBSIP);
+    prints("程式版本： %s [%s] %s\n", bbsvername, bbsversion, build_head);
+    prints("分支版本： %s %s %s\n", build_remote_url, build_branch_remote, build_head_remote);
+    prints("編譯環境： %s %s %s %s%d\n",
+        build_make, build_arch, build_compiler, build_lang, build_langver / 100 % 100);
     prints("系統負載： %.2f %.2f %.2f / %ld [%s] ",
         load[0], load[1], load[2], nproc, load_norm > 5 ? "\x1b[1;41;37m過高\x1b[m" : load_norm > 1 ?
         "\x1b[1;42;37m稍高\x1b[m" : "\x1b[1;44;37m正常\x1b[m");
@@ -62,23 +52,21 @@ x_siteinfo(void)
     prints("\x1b[1;30mModules & Plug-in: \x1b[m\n\n");
 
 //模組化的放在這邊
-#define ONLINE_STR(module)  "\x1b[1;32monline \x1b[1;30m " module "\x1b[m\n"
-#define OFFLINE_STR(module) "\x1b[1;31moffline\x1b[1;30m " module "\x1b[m\n"
-#define STATUS_STR(conf, module)  IF_ON(conf, ONLINE_STR, OFFLINE_STR)(module)
+#define ONLINE_STR  "\x1b[1;32monline \x1b[1;30m"
+#define OFFLINE_STR "\x1b[1;31moffline\x1b[1;30m"
+#define STATUS_STR(conf)  ((module_flags & (MODULE_ ## conf)) ? ONLINE_STR : OFFLINE_STR)
+#define STATUS_FMT  "%s %s %s\x1b[m\n"  /* status, name, version */
 
-    prints(STATUS_STR(MultiRecommend, "Multi Recommend Control 多樣化推文控制系統"));
-    prints(STATUS_STR(M3_USE_PMORE, "pmore (piaip's more) 2007+ w/Movie"));
-    prints(STATUS_STR(M3_USE_PFTERM, "pfterm (piaip's flat terminal, Perfect Term)"));
-    prints(STATUS_STR(GRAYOUT, "Grayout Advanced Control 淡入淡出特效系統"));
-
+    prints(STATUS_FMT, STATUS_STR(MultiRecommend), "Multi Recommend Control 多樣化推文控制系統", "");
+    prints(STATUS_FMT, STATUS_STR(M3_USE_PMORE), "pmore (piaip's more)", "2007+ w/Movie");
+    prints(STATUS_FMT, STATUS_STR(M3_USE_PFTERM), "pfterm (piaip's flat terminal, Perfect Term)", "");
+    prints(STATUS_FMT, STATUS_STR(GRAYOUT), "Grayout Advanced Control 淡入淡出特效系統", "");
 #ifdef HAVE_BBSLUA
-    prints(STATUS_STR(M3_USE_BBSLUA, "BBS-Lua " BBSLUA_VERSION_STR IF_ON(M3_USE_BBSLUA, " / " LUA_RELEASE IF_ON(BBSLUA_USE_LUAJIT, " / " LUAJIT_VERSION))));
+    prints(STATUS_FMT, STATUS_STR(M3_USE_BBSLUA), "BBS-Lua", bbslua_version_str);
 #endif
-
-//    prints(STATUS_STR(SMerge, "Smart Merge 修文自動合併));
-
+//    prints(STATUS_FMT, STATUS_STR(SMerge), "Smart Merge 修文自動合併", "");
 #ifdef HAVE_BBSRUBY
-    prints(STATUS_STR(M3_USE_BBSRUBY, "(EXP) BBSRuby " BBSRUBY_VERSION_STR " Interface: " BBSRUBY_INTERFACE_VER_STR IF_ON(M3_USE_BBSRUBY, " / Ruby " RUBY_RELEASE_STR IF_ON(BBSRUBY_USE_MRUBY, " / " MRUBY_RUBY_ENGINE " " MRUBY_VERSION))));
+    prints(STATUS_FMT, STATUS_STR(M3_USE_BBSRUBY), "(EXP) BBSRuby", bbsruby_version_str);
 #endif
 
 #else

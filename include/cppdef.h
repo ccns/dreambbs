@@ -36,10 +36,14 @@
 // Expand macros in the argument and then stringify it
 #define CPP_STR(x)  CPP_STR_PRIME(x)
 
-// Choose the 2nd arguments without macro expansions
+// Choose the nth argument without macro expansions
+#define CPP_SELECT_0_PRIME(_0, ...)  _0
+#define CPP_SELECT_1_PRIME(_0, _1, ...)  _1
 #define CPP_SELECT_2_PRIME(_0, _1, _2, ...)  _2
 
-// Expand macros in the arguments and then choose the 2nd
+// Expand macros in the arguments and then choose the nth
+#define CPP_SELECT_0(...)  CPP_SELECT_0_PRIME(__VA_ARGS__)
+#define CPP_SELECT_1(...)  CPP_SELECT_1_PRIME(__VA_ARGS__)
 #define CPP_SELECT_2(...)  CPP_SELECT_2_PRIME(__VA_ARGS__)
 
 #define CPP_APPEND_CLOSEPAREN(...)  __VA_ARGS__)
@@ -86,6 +90,18 @@
 #define CPP_IF_ON_TEST_  ,
 #define CPP_IF_ON_TEST_1  ,
 #define CPP_IF_ON_TEST_true  ,
+
+
+// Test if `conf` is expanded, then select the 0th item of `__VA_ARGS__`,
+//    else select the 1st item of `__VA_ARGS__`
+#define IF_DEF_PRIME(conf, ...)  CPP_SELECT_2(conf ## _IS_DEF, CPP_SELECT_1, CPP_SELECT_0,)(__VA_ARGS__)
+
+// Try to expand `conf` and then test whether `conf` is expanded
+#define IF_DEF(conf, ...)  IF_DEF_PRIME(conf, __VA_ARGS__)
+
+// Usage: `#define <conf>_IS_DEF  IS_DEF_TEST`
+// Not expanded => not defined
+#define IS_DEF_TEST  ,
 
 
 /* Macros for config-dependent attributes for user or board */
