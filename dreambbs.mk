@@ -50,7 +50,9 @@ EXPORTCONF = echo $(DEFCONF$(exconf::= $(exconf:M*))$(exvalue::= $(exvalue:M*)))
 BBSCONF		:= $(REALSRCROOT)/dreambbs.conf
 BBSCONF_ORIGIN		:= $(REALSRCROOT)/include/config.h
 EXPORT_MAPLE	:= $(REALSRCROOT)/maple/make_export.conf
+EXPORT_VERINFO	:= $(REALSRCROOT)/verinfo_export.conf
 != touch $(EXPORT_MAPLE)
+CFLAGS_MK	+= -imacros "$(EXPORT_VERINFO)"
 
 # User names and group names
 BBSUSR != $(GETVAR$(var::= "$(BBSUSR)")$(else_var::= $(GETVALUE$(conf::= "BBSUSR")$(default::= "$(:!id -un!)")$(hdr::= $(BBSCONF_ORIGIN)))))

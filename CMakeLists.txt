@@ -107,6 +107,7 @@ set(BBSCONF "${PROJECT_SOURCE_DIR}/dreambbs.conf")
 set(BBSCONF_ORIGIN "${PROJECT_SOURCE_DIR}/include/config.h")
 set(EXPORT_PROJECT "${PROJECT_SOURCE_DIR}/make_export.conf")
 set(EXPORT_MAPLE "${PROJECT_SOURCE_DIR}/maple/make_export.conf")
+set(EXPORT_VERINFO "${PROJECT_SOURCE_DIR}/verinfo_export.conf")
 
 if(NOT EXISTS ${EXPORT_PROJECT})
     execute_process(COMMAND touch ${EXPORT_PROJECT})
@@ -260,6 +261,13 @@ function(EXPORT_CONF export_file)
 endfunction()
 
 EXPORT_CONF(${CMAKE_CURRENT_SOURCE_DIR}/make_export.conf)
+
+add_custom_target(verinfo
+    ALL
+    sh scripts/verinfo.sh CMake ${MULTIARCH}
+    WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+)
+add_compile_options(-imacros "${EXPORT_VERINFO}")
 
 set(CMAKE_INSTALL_PREFIX ${BBSHOME})
 

@@ -20,7 +20,7 @@ EXPORT_FILE	:= "$(REALSRCROOT)/make_export.conf"
 # some directories need to be compiled:
 # lib innbbsd maple so util test
 
-all:
+all: verinfo
 	@(cd lib; $(MAKE) all)
 	@(cd maple; $(MAKE) all)
 	@(cd util; $(MAKE) all)
@@ -30,7 +30,7 @@ all:
 .endif
 	@(cd test; $(MAKE) all)
 
-njob:
+njob: verinfo
 	@(cd lib; $(MAKE) -j$(NPROC) all)
 	@(cd maple; $(MAKE) -j$(NPROC) all)
 	@(cd util; $(MAKE) -j$(NPROC) all)
@@ -62,6 +62,9 @@ configure:
 	@$(TARGETS_REST::=$(.TARGETS:tW:C/^ *configure *//))
 	# Continue execution with a new `bmake` instace and stop current `bmake` instance
 	@if [ "$(TARGETS_REST)" ]; then sh -c "$(MAKE) $(TARGETS_REST) $(MAKEFLAGS)"; printf "\033[1;36mJob done. Force stop.\033[m\n" >&2; false; fi
+
+verinfo: .PHONY
+	@sh scripts/verinfo.sh "BSD-make" "$(MULTIARCH)"
 
 runtest:
 	@(cd test; $(MAKE) runtest)
