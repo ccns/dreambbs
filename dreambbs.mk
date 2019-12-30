@@ -84,10 +84,10 @@ USE_BBSRUBY	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSRUBY")) $(DEF_YES)'
 USE_LUAJIT	!= sh -c '$(DEF_TEST$(conf::= "BBSLUA_USE_LUAJIT")) $(DEF_YES)'
 
 # Flags for disabling shared objects
-DEF_LIST	!= sh -c '$(GETCONFS$(hdr::= $(EXPORT_MAPLE)))'
 NO_SO_CLI	:= $("$(NO_SO_CLI)" != "" :? $(NO_SO_CLI) : $(NO_SO:DYES:UNO))
 NO_SO_CONF	!= sh -c '$(DEF_TEST$(conf::= "NO_SO")) $(DEF_YES)'
-NO_SO		= $(NO_SO_CLI:S/NO//g)$(NO_SO_CONF)
+NO_SO_CONF	!= $(GETVALUE$(conf::= "NO_SO")$(default::= "0")$(hdr::= $(EXPORT_MAPLE)))
+NO_SO		= $(NO_SO_CLI:S/NO//g)$(NO_SO_CONF:S/0//g)
 
 CC_HASFLAGS = echo "" | $(CC) -x c -E $(flags:M*) -Werror - >/dev/null 2>&1
 
