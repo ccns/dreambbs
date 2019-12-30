@@ -218,7 +218,7 @@ KeyFuncList viol_cb =
     {'r', {viol_change}},
     {'f', {viol_find}},
     {'c', {viol_change}},
-    {'s', {viol_init}},
+    {'s', {xo_cb_init}},
     {'d', {viol_delete}},
     {'h', {viol_help}}
 };

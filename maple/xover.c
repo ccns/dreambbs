@@ -1483,6 +1483,19 @@ xo_jump(                        /* 移動游標到 number 所在的特定位置 */
 
 
 /* ----------------------------------------------------- */
+/* Callback functions for returning special xover keys   */
+/* ----------------------------------------------------- */
+
+int xo_cb_init(XO *xo) { return XO_INIT; }
+int xo_cb_load(XO *xo) { return XO_LOAD; }
+int xo_cb_head(XO *xo) { return XO_HEAD; }
+int xo_cb_neck(XO *xo) { return XO_NECK; }
+int xo_cb_body(XO *xo) { return XO_BODY; }
+int xo_cb_foot(XO *xo) { return XO_FOOT; }
+int xo_cb_last(XO *xo) { return XO_LAST; }
+int xo_cb_quit(XO *xo) { return XO_QUIT; }
+
+/* ----------------------------------------------------- */
 /* ----------------------------------------------------- */
 
 #ifdef XZ_XPOST

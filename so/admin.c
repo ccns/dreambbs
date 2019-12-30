@@ -170,7 +170,7 @@ KeyFuncList admin_cb =
     {Ctrl('P'), {admin_add}},
     {'r', {admin_change}},
     {'c', {admin_change}},
-    {'s', {admin_init}},
+    {'s', {xo_cb_init}},
     {'d', {admin_delete}},
     {'h', {admin_help}}
 };

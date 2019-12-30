@@ -601,7 +601,7 @@ KeyFuncList personal_cb =
     {XO_BODY, {personal_body}},
 
     {'c', {personal_change}},
-    {'s', {personal_init}},
+    {'s', {xo_cb_init}},
     {'d', {personal_delete}},
     {KEY_TAB, {personal_switch}},
     {'O', {personal_open}},

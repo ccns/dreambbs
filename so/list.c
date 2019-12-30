@@ -339,7 +339,7 @@ KeyFuncList list_cb =
 #ifdef HAVE_MULTI_CROSSPOST
     {'F', {list_board}},
 #endif
-    {'s', {list_init}},
+    {'s', {xo_cb_init}},
     {'d', {list_delete}},
     {KEY_TAB, {list_mode}},
     {'/', {list_search}},

@@ -172,7 +172,7 @@ KeyFuncList show_cb =
     {Ctrl('P'), {show_add}},
     {'r', {show_change}},
     {'c', {show_change}},
-    {'s', {show_init}},
+    {'s', {xo_cb_init}},
     {'d', {show_delete}},
     {'h', {show_help}}
 };

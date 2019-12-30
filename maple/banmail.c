@@ -238,7 +238,7 @@ KeyFuncList banmail_cb = {
     {'S', {banmail_sync}},
     {'r', {banmail_change}},
     {'c', {banmail_change}},
-    {'s', {banmail_init}},
+    {'s', {xo_cb_init}},
     {'d', {banmail_delete}},
     {'h', {banmail_help}}
 };

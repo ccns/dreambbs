@@ -263,7 +263,7 @@ KeyFuncList observe_cb =
     {'S', {observe_sync}},
     {'r', {observe_change}},
     {'c', {observe_change}},
-    {'s', {observe_init}},
+    {'s', {xo_cb_init}},
     {'d', {observe_delete}},
     {'h', {observe_help}}
 };

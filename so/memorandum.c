@@ -235,7 +235,7 @@ KeyFuncList memorandum_cb =
     {Ctrl('P'), {memorandum_add}},
     {'r', {memorandum_change}},
     {'c', {memorandum_change}},
-    {'s', {memorandum_init}},
+    {'s', {xo_cb_init}},
     {'d', {memorandum_delete}},
     {'h', {memorandum_help}}
 };

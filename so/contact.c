@@ -227,7 +227,7 @@ KeyFuncList contact_cb =
     {'m', {contact_mail}},
     {'r', {contact_mail}},
     {'c', {contact_change}},
-    {'s', {contact_init}},
+    {'s', {xo_cb_init}},
     {'d', {contact_delete}},
     {'h', {contact_help}}
 };

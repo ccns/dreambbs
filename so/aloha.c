@@ -300,7 +300,7 @@ KeyFuncList aloha_cb =
     {'r', {aloha_change}},
     {'c', {aloha_change}},
 #endif
-    {'s', {aloha_init}},
+    {'s', {xo_cb_init}},
     {'d', {aloha_delete}},
     {'h', {aloha_help}}
 };

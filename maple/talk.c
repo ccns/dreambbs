@@ -1257,7 +1257,7 @@ KeyFuncList bmw_cb =
     {'w', {bmw_write}},
     {'q', {bmw_query}},
     {Ctrl('Q'), {bmw_query}},
-    {'s', {bmw_init}},
+    {'s', {xo_cb_init}},
     {KEY_TAB, {bmw_mode}},
     {'h', {bmw_help}}
 };
@@ -4119,7 +4119,7 @@ KeyFuncList ulist_cb =
     {'j', {ulist_changeship}},
     {'q', {ulist_query}},
     {'b', {ulist_broadcast}},
-    {'s', {ulist_init}},          /* refresh status Thor: 應user要求 */
+    {'s', {xo_cb_init}},          /* refresh status Thor: 應user要求 */
     {'c', {t_cloak}},
     {'R', {ulist_realname}},
     {'o', {ulist_mp}},

@@ -237,7 +237,7 @@ KeyFuncList cleanrecommend_cb =
     {XO_BODY, {cleanrecommend_body}},
 
     {'c', {cleanrecommend_change}},
-    {'s', {cleanrecommend_init}},
+    {'s', {xo_cb_init}},
     {'d', {cleanrecommend_delete}},
     {'D', {cleanrecommend_cleanall}},
     {'h', {cleanrecommend_help}}

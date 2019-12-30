@@ -296,7 +296,7 @@ KeyFuncList chat_cb =
     {'a', {chat_add}},
     {'r', {chat_change}},
     {'c', {chat_change}},
-    {'s', {chat_init}},
+    {'s', {xo_cb_init}},
     {'S', {chat_sync}},
     {'f', {chat_mode}},
     {'M', {chat_move}},
