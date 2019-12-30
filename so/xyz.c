@@ -49,24 +49,24 @@ x_siteinfo(void)
     prints("\x1b[1;33mInternet Technology Lab\x1b[37m, Institute of CCE, National Cheng Kung University.\x1b[m\n");
     prints("\n");
 #ifdef Modules
-    prints("\x1b[1;30mModules & Plug-in: \x1b[m\n\n");
+    prints("Modules & Plug-in: \x1b[m\n\n");
 
 //模組化的放在這邊
-#define ONLINE_STR  "\x1b[1;32monline \x1b[1;30m"
+#define ONLINE_STR  "\x1b[1;32monline \x1b[m"
 #define OFFLINE_STR "\x1b[1;31moffline\x1b[1;30m"
 #define STATUS_STR(conf)  ((module_flags & (MODULE_ ## conf)) ? ONLINE_STR : OFFLINE_STR)
-#define STATUS_FMT  "%s %s %s\x1b[m\n"  /* status, name, version */
+#define STATUS_FMT  "%s %s \x1b[1;30m%s %s\x1b[m\n"  /* status, name, version, author */
 
-    prints(STATUS_FMT, STATUS_STR(MultiRecommend), "Multi Recommend Control 多樣化推文控制系統", "");
-    prints(STATUS_FMT, STATUS_STR(M3_USE_PMORE), "pmore (piaip's more)", "2007+ w/Movie");
-    prints(STATUS_FMT, STATUS_STR(M3_USE_PFTERM), "pfterm (piaip's flat terminal, Perfect Term)", "");
-    prints(STATUS_FMT, STATUS_STR(GRAYOUT), "Grayout Advanced Control 淡入淡出特效系統", "");
+    prints(STATUS_FMT, STATUS_STR(MultiRecommend), "Multi Recommend Control 多樣化推文控制系統", "\b", "\b");
+    prints(STATUS_FMT, STATUS_STR(M3_USE_PMORE), "pmore (piaip's more)", "2007+ w/Movie", "by piaip");
+    prints(STATUS_FMT, STATUS_STR(M3_USE_PFTERM), "pfterm (piaip's flat terminal, Perfect Term)", "\b", "by piaip");
+    prints(STATUS_FMT, STATUS_STR(GRAYOUT), "Grayout Advanced Control 淡入淡出特效系統", "\b", "by hrs113355");
 #ifdef HAVE_BBSLUA
-    prints(STATUS_FMT, STATUS_STR(M3_USE_BBSLUA), "BBS-Lua", bbslua_version_str);
+    prints(STATUS_FMT, STATUS_STR(M3_USE_BBSLUA), "BBS-Lua", bbslua_version_str, "by piaip");
 #endif
-//    prints(STATUS_FMT, STATUS_STR(SMerge), "Smart Merge 修文自動合併", "");
+//    prints(STATUS_FMT, STATUS_STR(SMerge), "Smart Merge 修文自動合併", "", "by hrs113355 & cache");
 #ifdef HAVE_BBSRUBY
-    prints(STATUS_FMT, STATUS_STR(M3_USE_BBSRUBY), "(EXP) BBSRuby", bbsruby_version_str);
+    prints(STATUS_FMT, STATUS_STR(M3_USE_BBSRUBY), "(EXP) BBSRuby", bbsruby_version_str, "by zero");
 #endif
 
 #else
