@@ -35,6 +35,7 @@
  #define USE_PFTERM
  #undef PFTERM_HAVE_VKEY
  #define PFTERM_EXPOSED_VISIO_VI
+ #define PFTERM_SUPPORT_IAC   /* `ochar()` handles `'\xFF'` correctly */
 #endif //M3_USE_PFTERM
 
 #ifndef PFTERM_HAVE_VKEY
@@ -374,9 +375,13 @@ static FlatTerm ft;
 #define FTDBCS_ISLEAD(x) (((unsigned char)(x))>=(0x80))
 #define FTDBCS_ISTAIL(x) (((unsigned char)(x))>=(0x40))
 
-//  - 0xFF is used as telnet IAC, don't use it!
+#ifdef PFTERM_SUPPORT_IAC
 //  - 0x80 is invalid for Big5.
+#define FTDBCS_ISBADLEAD(x) (((unsigned char)(x)) == 0x80)
+#else
+//  - 0xFF is used as telnet IAC, don't use it!
 #define FTDBCS_ISBADLEAD(x) ((((unsigned char)(x)) == 0x80) || (((unsigned char)(x)) == 0xFF))
+#endif
 
 // even faster:
 // #define FTDBCS_ISLEAD(x) (((unsigned char)(x)) & 0x80)
@@ -1327,8 +1332,12 @@ outstr(const char *str)
 void
 outc(unsigned char c)
 {
+#ifndef PFTERM_SUPPORT_IAC
     // 0xFF is invalid for most cases (even DBCS),
-    if (c == 0xFF || c == 0x00)
+    if (c == 0xFF)
+        return;
+#endif
+    if (c == 0x00)
         return;
 
     fterm_markdirty();

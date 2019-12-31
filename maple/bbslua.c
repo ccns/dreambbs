@@ -1041,7 +1041,7 @@ bl_k2s(lua_State* L, int v)
 #endif
 
 #if IS_NORMAL_KEY(-1)  /* Negative key values are ignored */
-    if (v <= 0)
+    if (v < 0)
         lua_pushnil(L);
     else
 #endif

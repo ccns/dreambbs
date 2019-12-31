@@ -91,7 +91,7 @@ output(
 
     size = vo_size;
     data = vo_pool;
-    if (size + len > VO_MAX - 8)
+    if (size + len >= VO_MAX - 8)
     {
         telnet_flush(data, size);
         size = len;
@@ -129,12 +129,16 @@ ochar(
 
     data = vo_pool;
     size = vo_size;
-    if (size > VO_MAX - 2)
+    if (size >= VO_MAX - 2)
     {
         telnet_flush(data, size);
         size = 0;
     }
     data[size++] = ch;
+    if (ch == IAC)  /* `'\xff'` => `IAC` `IAC` */
+    {
+        data[size++] = ch;
+    }
     vo_size = size;
 }
 
@@ -1586,6 +1590,8 @@ iac_count(
                 }
             }
         }
+    case IAC:  /* `IAC` `IAC` => `'\xff'` */
+    default:;
     }
     return 1;
 }
