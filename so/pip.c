@@ -8473,7 +8473,7 @@ const char *fpath)
     if ( ( fp = fopen(fpath, "r") ) )
     {
         fscanf(fp, "%s", buf);
-        for (i = 0; i <= 1; i++)
+        for (i = 0; i < COUNTOF(ml); i++)
         {
             fscanf(fp, "%d%d%d%d%d%d%d%d%d", &temp, &ml[i].maxhp, &ml[i].wrist,
                    &ml[i].maxmp, &ml[i].attack, &ml[i].resist, &ml[i].speed,
