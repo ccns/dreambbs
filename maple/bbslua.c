@@ -483,7 +483,7 @@ read_vin(void)
         }
         vi_size -= iac_len;
 
-        memmove(vi_tail, vi_tail + iac_len, iac_len);
+        memmove(vi_tail, vi_tail + iac_len, len - iac_len);
         total_len += len - iac_len;
 
 #ifdef BBSLUA_EXPOSED_VISIO_IDLE
