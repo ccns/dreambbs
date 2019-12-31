@@ -172,7 +172,7 @@ template <class T>
     (offsetof(Type, Type##_FLEX_MEMBER) \
       + (n) * sizeof(((Type *)NULL)->Type##_FLEX_MEMBER[0]))
 
-/* #define countof(x)      (sizeof(x)/sizeof(x[0])) */
+#define COUNTOF(x)      (sizeof(x)/sizeof(x[0]))
 
 /* Macros for managing loading of dynamic libraries */
 

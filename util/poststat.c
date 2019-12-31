@@ -468,11 +468,11 @@ main(
             break;
 
         default:
-            if (!(argc >= -1 && argc < sizeof(myfile)/sizeof(*myfile) - 1))
+            if (!(argc >= -1 && argc < COUNTOF(myfile) - 1))
             {
                 fprintf(stderr, "Usage: %s [action]\n", argv[0]);
                 fprintf(stderr, "actions:\n");
-                for (argc = 0; argc < sizeof(myfile)/sizeof(*myfile); argc++)
+                for (argc = 0; argc < COUNTOF(myfile); argc++)
                     fprintf(stderr, "\t%d: Generate top %d of the %s\n", argc-1, mytop[argc], myfile[argc]);
                 fprintf(stderr, "\t100: Generate post.log of the %s\n", myfile[0]);
                 return 2;

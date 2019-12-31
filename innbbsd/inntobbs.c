@@ -78,12 +78,12 @@ header_value(
 
     if (!already_init)
     {
-        qsort(headertable, sizeof(headertable) / sizeof(header_t), sizeof(header_t), header_cmp);
+        qsort(headertable, COUNTOF(headertable), sizeof(header_t), header_cmp);
         already_init = 1;
     }
 
     key.name = inputheader;
-    findkey = (header_t *) bsearch(&key, (char *) headertable, sizeof(headertable) / sizeof(header_t), sizeof(key), header_cmp);
+    findkey = (header_t *) bsearch(&key, (char *) headertable, COUNTOF(headertable), sizeof(key), header_cmp);
     if (findkey != NULL)
         return findkey->id;
 

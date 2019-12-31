@@ -91,7 +91,7 @@ ip_addr dns_addr(const char *name)
             return IPADDR_NONE;
     }
 
-    for (int i = 0; i < sizeof(qtypes)/sizeof(qtypes[0]); ++i)
+    for (int i = 0; i < COUNTOF(qtypes); ++i)
     {
         querybuf ans;
         unsigned char *cp, *eom;
@@ -566,7 +566,7 @@ int dns_open(const char *host, int port)
     /* Thor.980707: 隨便寫寫，要講究完全match再說:p */
 #endif
 
-    for (int i = 0; i < sizeof(qtypes)/sizeof(qtypes[0]); ++i)
+    for (int i = 0; i < COUNTOF(qtypes); ++i)
     {
         {
             int n = dns_query(host, qtypes[i], &ans);
