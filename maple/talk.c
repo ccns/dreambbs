@@ -188,7 +188,7 @@ can_see(
     {
         for (count = up->pal_max; count > 0;)
         {
-            datum = cache[mid = count >> 1];
+            datum = cache[mid = count / 2U];
             if ((-cuser.userno) == datum)
                 return 2;
             if ((-cuser.userno) > datum)
@@ -206,7 +206,7 @@ can_see(
     {
         for (count = up->pal_max; count > 0;)
         {
-            datum = cache[mid = count >> 1];
+            datum = cache[mid = count / 2U];
             if (cuser.userno == datum)
                 return 1;
             if (cuser.userno > datum)
@@ -235,7 +235,7 @@ is_bad(
     {
         for (count = pal_count; count > 0;)
         {
-            datum = cache[mid = count >> 1];
+            datum = cache[mid = count / 2U];
             if ((-userno) == datum)
                 return true;
             if ((-userno) > datum)
@@ -264,7 +264,7 @@ can_banmsg(
     {
         for (count = up->banmsg_max; count > 0;)
         {
-            datum = cache[mid = count >> 1];
+            datum = cache[mid = count / 2U];
             if (cuser.userno == datum)
                 return true;
             if (cuser.userno > datum)
@@ -375,7 +375,7 @@ is_pal(
     {
         for (count = pal_count; count > 0;)
         {
-            datum = cache[mid = count >> 1];
+            datum = cache[mid = count / 2U];
             if (userno == datum)
                 return true;
             if (userno > datum)
@@ -404,7 +404,7 @@ is_banmsg(
     {
         for (count = cutmp->banmsg_max; count > 0;)
         {
-            datum = cache[mid = count >> 1];
+            datum = cache[mid = count / 2U];
             if (userno == datum)
                 return true;
             if (userno > datum)
@@ -1364,7 +1364,7 @@ bm_belong(
 
             while (count > 0)
             {
-                datum = up[mid = count >> 1];
+                datum = up[mid = count / 2U];
                 if (userno == datum)
                 {
                     result = BRD_R_BIT | BRD_W_BIT;
@@ -1384,7 +1384,7 @@ bm_belong(
             up = (int *) board_img;
             while (wcount > 0)
             {
-                datum = up[mid = wcount >> 1];
+                datum = up[mid = wcount / 2U];
                 if (-userno == datum)
                 {
                     result = BRD_R_BIT;
@@ -2562,7 +2562,7 @@ talk_speak(
     memset(&mywin, 0, sizeof(mywin));
     memset(&itswin, 0, sizeof(itswin));
 
-    ch = b_lines >> 1;
+    ch = b_lines / 2U;
     mywin.eline = ch - 1;
     itswin.curln = itswin.sline = ch + 1;
     itswin.eline = b_lines - 1;
@@ -2570,7 +2570,7 @@ talk_speak(
     clear();
     move(ch, 0);
     prints("\x1b[1;46;37m  談天說地  \x1b[45m%*s%s】 ◆  %s%*s\x1b[m",
-        i>>1, "", buf, page_requestor, (i+1)>>1, "");
+        i/2U, "", buf, page_requestor, (i+1)/2U, "");
 #if 1
     outf(FOOTER_TALK);
 #endif
@@ -3165,9 +3165,9 @@ ulist_body(
                 prints("%6d%c%s%-13s%-*.*s%s%-*.*s%c%c %-12.12s %5.5s",
                     cnt, (up->ufo & UFO_WEB)?'*':' ',
                     color, up->userid,
-                    (d_cols >> 1) + 22, (d_cols >> 1) + 21, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
+                    d_cols/2U + 22, d_cols/2U + 21, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
                     colortmp > 0 ? "\x1b[m" : "",
-                    ((d_cols+1) >> 1) + 16, ((d_cols+1) >> 1) + 15,
+                    (d_cols+1)/2U + 16, (d_cols+1)/2U + 15,
                     (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
                     HIDDEN_SRC : up->from, diff, diffmsg,
                     bmode(up, 0), buf);
@@ -3384,14 +3384,14 @@ ulist_neck(
     prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d \x1b[0;36m板友：%d\x1b[m",
         msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num, board_pals);
     prints(NECK_ULIST,
-        (d_cols >> 1) + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
-        ((d_cols+1) >> 1) + 13, (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
+        d_cols/2U + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
+        (d_cols+1)/2U + 13, (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
 #else
     prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\x1b[m",
         msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num);
     prints(NECK_ULIST,
-        (d_cols >> 1) + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo & UFO_REALNAME)) ? "真實姓名" : "暱  稱",
-        ((d_cols+1) >> 1) + 13, (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
+        d_cols/2U + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo & UFO_REALNAME)) ? "真實姓名" : "暱  稱",
+        (d_cols+1)/2U + 13, (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
 #endif
 
     return ulist_body(xo);

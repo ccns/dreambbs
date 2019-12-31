@@ -233,7 +233,7 @@ eaddr_group(
             break;
         }
 
-        mid = (left + right) >> 1;
+        mid = (left + right) / 2U;
         cptr = &chain[mid];
         cmp = hash - cptr->hash;
 

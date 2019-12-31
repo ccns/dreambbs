@@ -15,7 +15,7 @@ int i, int j)
 static inline void
 outs_centered(const char *str)
 {
-    prints("%*s", d_cols>>1, "");
+    prints("%*s", d_cols/2U, "");
     outs(str);
 }
 
@@ -26,7 +26,7 @@ prints_centered(const char *fmt, ...)
     char buf[512], *str;
     int cc;
 
-    prints("%*s", d_cols>>1, "");
+    prints("%*s", d_cols/2U, "");
 
     va_start(args, fmt);
     vsprintf(buf, fmt, args);
@@ -40,12 +40,12 @@ show_file(const char *filename, int y, int lines, int mode)
 {
     FILE *fp;
     clrchyiuan(y, y + lines);
-    move(y, d_cols>>1);
+    move(y, d_cols/2U);
     if ((fp = fopen(filename, "r")))
     {
         char buf[256];
         while (fgets(buf, 256, fp) && lines--) {
-            move(++y, d_cols>>1);
+            move(++y, d_cols/2U);
             outs(buf);
         }
         fclose(fp);

@@ -1953,7 +1953,7 @@ mbox_attr(
     if (type & MAIL_REPLIED)
         return (type & MAIL_MARKED) ? 'R' : 'r';
 
-    return "+ Mm"[type & 3];
+    return "+ Mm"[type % 4U];
 }
 
 

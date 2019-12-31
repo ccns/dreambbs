@@ -3555,7 +3555,7 @@ main(
 
                 nfds = cuser_serve(cu);
 
-                if ((++xxx & 511) == 0)
+                if ((++xxx % 512U) == 0)
                 {
                     int sno;
 
@@ -3606,7 +3606,7 @@ main(
             {
                 static int yyy;
 
-                if ((++yyy & 2047) == 0)
+                if ((++yyy % 2048U) == 0)
                     fprintf(flog, "conn\t%d\n", yyy);
             }
 

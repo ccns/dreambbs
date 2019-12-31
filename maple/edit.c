@@ -596,7 +596,7 @@ ve_string(
             do
             {
                 ve_char(' ');
-            } while (ve_col & TAB_WIDTH);
+            } while (ve_col % TAB_STOP);
         }
         else if (ch == '\n')
         {
@@ -692,7 +692,7 @@ ve_line(
                 {
                     *data++ = ' ';
                     len++;
-                } while ((len & TAB_WIDTH) && (len < VE_WIDTH));
+                } while ((len % TAB_STOP) && (len < VE_WIDTH));
             }
             else if (cc > 2 && cc < ' ' && cc != 27)
             {
@@ -1190,7 +1190,7 @@ quote_check(void)
         checkqt--;
 #endif
 
-    if ((quot_line >> 2) <= post_line)
+    if ((quot_line / 4U) <= post_line)
         return 0;
 
 /*  if (HAS_PERM(PERM_SYSOP))*/
@@ -1427,11 +1427,11 @@ ve_filer(
 //  else
 //  {
         if (bbsmode != M_POST)
-            re = popupmenu_ans2(menu1, "存檔選項", (b_lines >> 1) - 7, (d_cols >> 1) + 20);
+            re = popupmenu_ans2(menu1, "存檔選項", b_lines/2U - 7, d_cols/2U + 20);
         else if (curredit & EDIT_OUTGO)
-            re = popupmenu_ans2(menu2, "存檔選項", (b_lines >> 1) - 7, (d_cols >> 1) + 20);
+            re = popupmenu_ans2(menu2, "存檔選項", b_lines/2U - 7, d_cols/2U + 20);
         else
-            re = popupmenu_ans2(menu3, "存檔選項", (b_lines >> 1) - 7, (d_cols >> 1) + 20);
+            re = popupmenu_ans2(menu3, "存檔選項", b_lines/2U - 7, d_cols/2U + 20);
 
 //  }
 
@@ -1863,7 +1863,7 @@ ve_key:
                 do
                 {
                     ve_char(' ');
-                } while (ve_col & (TAB_STOP - 1));
+                } while (ve_col % TAB_STOP);
                 break;
 
             case KEY_INS:               /* Toggle insert/overwrite */
@@ -2190,7 +2190,7 @@ ve_key:
                         NULL
                     };
 
-                    switch (cc = popupmenu_ans2(menu, "控制碼選擇", (b_lines >> 1) - 4, (d_cols >> 1) + 20))
+                    switch (cc = popupmenu_ans2(menu, "控制碼選擇", b_lines/2U - 4, d_cols/2U + 20))
                     {
                     case 'i':
                         ve_char(KEY_ESC);

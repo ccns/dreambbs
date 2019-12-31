@@ -870,7 +870,7 @@ tn_login(void)
                 level &= ~PERM_CHAT;
 
 /*
-            if ((cuser.numemail >> 4) > (cuser.numlogins + cuser.numposts))
+            if ((cuser.numemail / 16U) > (cuser.numlogins + cuser.numposts))
                 level |= PERM_DENYMAIL;*/
         }
 

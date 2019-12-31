@@ -1408,8 +1408,7 @@ MFDISP_PREDICT_LINEWIDTH(const unsigned char *p)
 MFFPROTO int
 MFDISP_DBCS_HEADERWIDTH(int originalw)
 {
-    return originalw - (originalw %2);
-//    return (originalw >> 1) << 1;
+    return originalw - (originalw % 2U);
 }
 
 #define MFDISP_FORCEUPDATE2TOP() (void) ( startline = 0 )

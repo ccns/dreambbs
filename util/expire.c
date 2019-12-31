@@ -112,7 +112,7 @@ sync_init(
 
                 if (xhead >= xsize)
                 {
-                    xsize += (xsize >> 1);
+                    xsize += (xsize / 2U);
                     xpool = (SyncData *) realloc(xpool, xsize * sizeof(SyncData));
                 }
 
@@ -166,7 +166,7 @@ sync_check(
         {
             cc = xtail->chrono;
             fname_str[-1] = xtail->prefix;
-            *str = radix32[cc & 31];
+            *str = radix32[cc % 32U];
             archiv32(cc, fname_str);
             unlink(fpath);
 
@@ -487,7 +487,7 @@ main(
             }
             strcpy(key.bname, ptr);
 //          printf("Expire Board: %s\n", ptr);
-            expire(fp, &key, !(number & 31));   /* 每隔 32 天 sync 一次 */
+            expire(fp, &key, !(number % 32U));  /* 每隔 32 天 sync 一次 */
             ++number;
         }
     }

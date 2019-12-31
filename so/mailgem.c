@@ -414,7 +414,7 @@ int num)
     {
         if (MailGemBufferSiz < num)
         {
-            num += (num >> 1);
+            num += (num / 2U);
             MailGemBufferSiz = num;
             MailGemBuffer = gbuf = (HDR *) realloc(gbuf, sizeof(HDR) * num);
         }
@@ -1170,7 +1170,7 @@ const char *fname)
 
                 if (xhead >= xsize)
                 {
-                    xsize += (xsize >> 1);
+                    xsize += (xsize / 2U);
                     xpool = (SyncData *) realloc(xpool, xsize * sizeof(SyncData));
                 }
 
@@ -1254,7 +1254,7 @@ const char *fgem)
 
                         xsync->exotic = 0;
                         cc = xsync->chrono;
-                        *str = radix32[cc & 31];
+                        *str = radix32[cc % 32U];
                         archiv32m(cc, fname);
                         fname[0] = xsync->prefix;
                         unlink(fpath);
@@ -1299,7 +1299,7 @@ const char *fgem)
         {
             xsync->exotic = 0;
             cc = xsync->chrono;
-            *str = radix32[cc & 31];
+            *str = radix32[cc % 32U];
             archiv32m(cc, fname);
             fname[0] = xsync->prefix;
             if (gcheck(1, fpath))
@@ -1327,7 +1327,7 @@ const char *fgem)
         if (xpool->exotic)
         {
             cc = xpool->chrono;
-            *str = radix32[cc & 31];
+            *str = radix32[cc % 32U];
             archiv32m(cc, fname);
             fname[0] = xpool->prefix;
 

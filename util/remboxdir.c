@@ -43,7 +43,7 @@ pool_add(
 
     if (n_head >= n_size)
     {
-        n_size += (n_size >> 1);
+        n_size += (n_size / 2U);
         n_pool = (FNAME *) realloc(n_pool, n_size * sizeof(FNAME));
     }
 

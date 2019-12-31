@@ -10,10 +10,10 @@ void archiv32(time_t chrono,    /* 32 bits */
     *str = '\0';
     for (;;)
     {
-        *(--str) = radix32[chrono & 31];
+        *(--str) = radix32[chrono % 32U];
         if (str == fname)
             return;
-        chrono >>= 5;
+        chrono /= 32U;
     }
 }
 
@@ -27,9 +27,9 @@ void archiv32m(time_t chrono,    /* 32 bits */
     *str = '\0';
     for (;;)
     {
-        *(--str) = radix32[chrono & 31];
+        *(--str) = radix32[chrono % 32U];
         if (str == fname)
             return;
-        chrono >>= 5;
+        chrono /= 32U;
     }
 }

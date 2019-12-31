@@ -632,7 +632,7 @@ GCC_PURE int str_hash2(const char *str, int seed)
 
     while ((cc = *str++))
     {
-        seed = (seed << 7) - seed + cc;    /* 127 * seed + cc */
+        seed = 127 * seed + cc;
     }
     return (seed & 0x7fffffff);
 }
@@ -643,7 +643,7 @@ GCC_PURE int str_hash(const char *str, int seed)
 
     while ((cc = *str++))
     {
-        seed = (seed << 5) - seed + cc;    /* 31 * seed + cc */
+        seed = 31 * seed + cc;
     }
     return (seed & 0x7fffffff);
 }
@@ -1326,7 +1326,7 @@ GCC_PURE int hash32(const char *str)
     xo = 1048583;               /* a big prime number */
     while ((cc = *str++))
     {
-        xo = (xo << 5) - xo + cc;    /* 31 * xo + cc */
+        xo = 31 * xo + cc;
     }
     return (xo & 0x7fffffff);
 }

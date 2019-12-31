@@ -36,8 +36,7 @@
 
 #define T_LINES         50             /* maximum total lines */
 #define T_COLS          120            /* maximum total columns，要比 ANSILINELEN 小 */
-#define TAB_STOP        4              /* 按 TAB 換成幾格空白 (要是 2 的次方) */
-#define TAB_WIDTH       (TAB_STOP - 1)
+#define TAB_STOP        4U             /* 按 TAB 換成幾格空白 (建議是 2 的次方，可免去除法) */
 
 #define SCR_WIDTH       80
 /* #define VE_WIDTH        (ANSILINELEN - 1) */

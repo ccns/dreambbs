@@ -236,9 +236,9 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
         else
         {
             if (n < 21)            /* statue.000703: 註解: 一個畫面只能 show 20 個資料 */
-                move_ansi(n + ((b_lines-21) >> 1), 2);
+                move_ansi(n + (b_lines-21)/2U, 2);
             else
-                move_ansi(n + ((b_lines-21) >> 1) - 20, 2 + ((b_cols+1) >> 1));
+                move_ansi(n + (b_lines-21)/2U - 20, 2 + (b_cols+1)/2U);
 
             prints("(\x1b[1;36m%2d\x1b[m) %s", n, desc);
 
@@ -246,9 +246,9 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
             if (mode == M_XFILES)
             {
                 if (n < 21)
-                    move_ansi(n + ((b_lines-21) >> 1), 24 + (d_cols >> 2));    /* Thor.980806: 註解: 印出檔名 */
+                    move_ansi(n + (b_lines-21)/2U, 24 + d_cols/4U);    /* Thor.980806: 註解: 印出檔名 */
                 else
-                    move_ansi(n + ((b_lines-21) >> 1) - 20, 24 + (d_cols >> 2) + ((b_cols+1) >> 1));
+                    move_ansi(n + (b_lines-21)/2U - 20, 24 + d_cols/4U + (b_cols+1)/2U);
                 outs(flist[n - 1] + 4);    /* statue.000703: 註解: +4 去掉目錄 */
                 clrtoeol();
             }
@@ -363,7 +363,7 @@ unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
             else
                 pbits ^= j;
         }
-        move(5 + (i & 15), (i < 16 ? 0 : 40));
+        move(5 + (i % 16U), (i < 16 ? 0 : 40));
         if (perms[i])
             prints("%c %s %s", radix32[i], msg, perms[i]);
         else
@@ -394,7 +394,7 @@ unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
             }
 
             pbits ^= j;
-            move(5 + (i & 15), (i < 16 ? 2 : 42));
+            move(5 + (i % 16U), (i < 16 ? 2 : 42));
             outs(msg);
         }
     }

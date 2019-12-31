@@ -28,11 +28,11 @@ int main(void)
     y = x;
     z = x + MMM;
 
-    n = time(0) & (0x40000 -1) /* 16387 */;
+    n = time(0) % 0x40000U /* 16387 */;
 
     do
     {
-        *x = n = (n * 10001) & (0x100000 - 1);
+        *x = n = (n * 10001) % 0x100000U;
     } while (++x < z);
 
     xsort(y, MMM, sizeof(int), int_cmp);

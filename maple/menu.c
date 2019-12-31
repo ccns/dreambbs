@@ -228,9 +228,9 @@ pad_draw(void)
 
     sprintf(str, "\x1b[1;37;46mΥ\x1b[34;47m %s \x1b[33m(%s)", cuser.userid, cuser.username);
     len = strlen(str);
-    strcat(str, & " \x1b[30;46m"[len & 1]);
+    strcat(str, & " \x1b[30;46m"[len % 2U]);
 
-    for (i = len >> 1; i < 41; i++)
+    for (i = len / 2U; i < 41; i++)
         strcat(str, "▄");
     sprintf(str2, "\x1b[34;47m %.14s \x1b[37;46mΥ\x1b[m\n%-70.70s\n%-70.70s\n%-70.70s\n",
         Etime(&(pad.tpad)), buf[0], buf[1], buf[2]);
@@ -351,7 +351,7 @@ vs_mid(
     }
 
     spc = b_cols - len; /* spc: 中間還剩下多長的空間 */
-    pad = spc >> 1; /* pad: Spaces needed to center `mid` */
+    pad = spc / 2U; /* pad: Spaces needed to center `mid` */
 
     prints("%*s%s%*s\x1b[m\n", pad, "", mid, spc - pad, "");
 }
@@ -395,7 +395,7 @@ vs_head(
     spc = b_cols - 14 - len - strlen(currboard); /* spc: 中間還剩下多長的空間 */
     len_ttl = BMIN(len_ttl, spc); /* Truncate `title` if too long */
     spc -= len_ttl; /* 擺完 title 以後，中間還有 spc 格空間 */
-    pad = BMAX(((b_cols - len) >> 1) - (len_ttl + 5), 0); /* pad: Spaces needed to center `mid` */
+    pad = BMAX((b_cols - len)/2U - (len_ttl + 5), 0U); /* pad: Spaces needed to center `mid` */
 
 #ifdef  COLOR_HEADER
     prints("\x1b[1;%2d;37m【%.*s】%*s \x1b[33m%s\x1b[1;%2d;37m%*s \x1b[37m看板《%s》\x1b[m\n",
@@ -469,7 +469,7 @@ movie(void)
         ptime = localtime(&now);
         sprintf(datemsg, "[%d/%d 星期%.2s ",
             ptime->tm_mon + 1, ptime->tm_mday,
-            & "天一二三四五六"[ptime->tm_wday << 1]);
+            & "天一二三四五六"[2 * ptime->tm_wday]);
 
         uptime = now + 86400 - ptime->tm_hour * 3600 -
             ptime->tm_min * 60 - ptime->tm_sec;

@@ -1332,7 +1332,7 @@ vmsg_body(
         color =time(0)%6+31;
         prints("\x1b[1;%dm%*s▏▎▍▌▋▊▉ \x1b[1;37m請按任意鍵繼續 \x1b[1;%dm▉\x1b[m ", color, d_cols + 47, "", color);
 #else
-        outs(VMSG_NULL, (d_cols >> 1) + 30, "", (d_cols+1 >> 1) + 29, "");
+        outs(VMSG_NULL, d_cols/2U + 30, "", (d_cols+1)/2U + 29, "");
 #endif
 #ifdef M3_USE_PFTERM
         move(b_lines, 0);
@@ -1444,7 +1444,7 @@ vs_line(
     int head, tail;
 
     if (msg)
-        head = (strlen(msg) + 1) >> 1;
+        head = (strlen(msg) + 1) / 2U;
     else
         head = 0;
 
@@ -2534,7 +2534,7 @@ vkey(void)
             else
             {
                 vio_to = seq_tv;
-                seq_tv.tv_usec >>= 1;  /* Prevent infinity escape sequences */
+                seq_tv.tv_usec /= 2U;  /* Prevent infinity escape sequences */
             }
 
             mode = 1;
@@ -2552,7 +2552,7 @@ vkey(void)
 #ifdef  TRAP_ESC
             else if (ch == KEY_ESC) /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
             {
-                seq_tv.tv_usec >>= 1;  /* Prevent infinity "<Esc>..." */
+                seq_tv.tv_usec /= 2U;  /* Prevent infinity "<Esc>..." */
                 mod = META_CODE;       /* Make the key Meta-ed */
             }
 #endif

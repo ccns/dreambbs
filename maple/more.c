@@ -410,7 +410,7 @@ more_slideshow(void)
 #define HUNT_FOUND      0x002   /* 按 / 開始搜尋，且已經找到 match 的字串 */
 #define HUNT_START      0x004   /* 按 / 開始搜尋，且尚未找到 match 的字串 */
 
-#define MAXBLOCK        256     /* 記錄幾個 block 的 offset。可加速 MAXBLOCK*32 列以內的長文在上捲/翻時的速度 */
+#define MAXBLOCK        256U    /* 記錄幾個 block 的 offset。可加速 MAXBLOCK*32 列以內的長文在上捲/翻時的速度 */
 #endif  /* #ifndef M3_USE_PMORE */
 
 /* Thor.990204: 傳回值 -1 為無法show出
@@ -525,7 +525,7 @@ more(
 
             lino++;
 
-            if ((lino % 32 == 0) && ((i = lino >> 5) < MAXBLOCK))
+            if ((lino % 32U == 0) && ((i = lino / 32U) < MAXBLOCK))
                 block[i] = foff - fimage;
 
 
@@ -762,14 +762,14 @@ re_key:
                     while (more_line(buf))
                     {
                         totallino++;
-                        if ((totallino % 32 == 0) && ((i = totallino >> 5) < MAXBLOCK))
+                        if ((totallino % 32U == 0) && ((i = totallino / 32U) < MAXBLOCK))
                             block[i] = foff - fimage;
                     }
 
                     /* 先位移到上一個 block 的尾端 */
-                    i = BMIN((totallino - b_lines) >> 5, MAXBLOCK - 1);
+                    i = BMIN((totallino - b_lines) / 32U, MAXBLOCK - 1);
                     foff = fimage + block[i];
-                    i = i << 5;
+                    i = i * 32;
 
                     /* 再從上一個 block 的尾端位移到 totallino-b_lines+1 列 */
                     for (i = totallino - b_lines - i; i > 0; i--)
@@ -801,9 +801,9 @@ re_key:
                 */
 
                 /* 先位移到上一個 block 的尾端 */
-                i = BMIN((lino - b_lines) >> 5, MAXBLOCK - 1);
+                i = BMIN((lino - b_lines) / 32U, MAXBLOCK - 1);
                 foff = fimage + block[i];
-                i = i << 5;
+                i = i * 32;
 
                 /* 再從上一個 block 的尾端位移到 lino-b_lines+1 列 */
                 for (i = lino - b_lines - i; i > 0; i--)

@@ -126,7 +126,7 @@ sync_init(
 
                 if (xhead >= xsize)
                 {
-                    xsize += (xsize >> 1);
+                    xsize += (xsize / 2U);
                     xpool = (SyncData *) realloc(xpool, xsize * sizeof(SyncData));
                 }
 
@@ -226,7 +226,7 @@ sync_check(
                         /* Thor.981218: unlink file */
                         xsync->exotic = 0; /* Thor.981218: 被丟掉了, 別檢回來 */
                         cc = xsync->chrono;
-                         *str = radix32[cc & 31];
+                         *str = radix32[cc % 32U];
                         archiv32m(cc, fname);
                         fname[0] = xsync->prefix;
                         fprintf(flog, "\texpire: %s\n", fpath);
@@ -280,7 +280,7 @@ sync_check(
         {
             xsync->exotic = 0;
             cc = xsync->chrono;
-            *str = radix32[cc & 31];
+            *str = radix32[cc % 32];
             archiv32m(cc, fname);
             fname[0] = xsync->prefix;
 
@@ -310,7 +310,7 @@ sync_check(
         if (xpool->exotic)
         {
             cc = xpool->chrono;
-            *str = radix32[cc & 31];
+            *str = radix32[cc % 32U];
             archiv32m(cc, fname);
             fname[0] = xpool->prefix;
 
@@ -350,7 +350,7 @@ check_log(
         fpw = NULL;
         if (!fstat(fileno(fpr), &st) && st.st_size > 32768)
         {
-            fseek(fpr, st.st_size >> 1, 0);
+            fseek(fpr, st.st_size / 2U, 0);
 
             while (fgets(buf, sizeof(buf), fpr))
             {

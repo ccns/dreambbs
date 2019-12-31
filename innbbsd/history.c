@@ -90,7 +90,7 @@ HISadd(                         /* 將 (msgid, path, xname) 此配對記錄在 history 
     str_ncpy(his.xname, xname, sizeof(his.xname));
 
     /* 依 msgid 將 history 打散至 32 個檔案 */
-    sprintf(fpath, "innd/history/%02d", his.hash & 31);
+    sprintf(fpath, "innd/history/%02d", his.hash % 32U);
     rec_add(fpath, &his, sizeof(HIS));
 }
 
@@ -110,7 +110,7 @@ HISfetch(                       /* 查詢 history 中，msgid 發表去了哪裡 */
 
     /* 依 msgid 找出在哪一份 history 檔案中 */
     hash = str_hash(msgid, 1);
-    sprintf(fpath, "innd/history/%02d", hash & 31);
+    sprintf(fpath, "innd/history/%02d", hash % 32U);
 
     /* 去該份 history 檔案中找看看有沒有 */
     if ((fd = open(fpath, O_RDONLY)) >= 0)

@@ -34,8 +34,8 @@ conv_init(void)
     if (BtoG != NULL)
         return;
 
-    BGsize = BtoG_count << 1;   /* 每個漢字 2-byte */
-    GBsize = GtoB_count << 1;
+    BGsize = 2 * BtoG_count;    /* 每個漢字 2-byte */
+    GBsize = 2 * GtoB_count;
     BtoG = (unsigned char *) malloc(BGsize + GBsize);
     GtoB = BtoG + BGsize;
 

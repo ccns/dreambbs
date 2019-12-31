@@ -414,7 +414,7 @@ vitem_t vlist[])
         for (;;)
         {
             buf[0] = radix32[item];
-            if (!vget((item & 15) + 3, (item / 16) * 40,
+            if (!vget((item % 16U) + 3, (item / 16U) * 40,
                       buf, vlist[item], sizeof(vitem_t), GCARRY) || (++item >= MAX_CHOICES))
                 break;
         }

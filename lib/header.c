@@ -22,7 +22,7 @@ void hdr_fpath(char *fpath, const char *folder, const HDR * hdr)
     folder = hdr->xname;
     cc = *folder;
     if (cc != '@')
-        cc = radix32[chrono & 31];
+        cc = radix32[chrono % 32U];
 
     if (*str == '.')
     {
@@ -98,7 +98,7 @@ int hdr_stamp(const char *folder, int token, HDR * hdr, char *fpath)
 
     for (;;)
     {
-        *family = radix32[chrono & 31];
+        *family = radix32[chrono % 32U];
         archiv32(chrono, fname);
 
         if (flink)

@@ -359,7 +359,7 @@ int mode)
         clear();
         vs_head("電子養小雞", BoardName);
         show_die_pic(2);
-        move(14, (d_cols>>1) + 20);
+        move(14, d_cols/2U + 20);
         prints("可憐的小雞\x1b[1;31m%s\x1b[m", msg);
         vmsg(NICKNAME "哀悼中....");
     }
@@ -3588,13 +3588,13 @@ static int pip_play_outing(void)       /*郊遊*/
             clear();
             sprintf(buf, "\x1b[1;41m  " NICKNAME PIPNAME " ～ %-10s                                                  \x1b[0m", d.name);
             show_play_pic(0);
-            move(b_lines - 6, (d_cols>>1) + 10);
+            move(b_lines - 6, d_cols/2U + 10);
             prints("\x1b[1;36m親愛的 \x1b[1;33m%s ～\x1b[0m", d.name);
-            move(b_lines - 5, (d_cols>>1) + 10);
+            move(b_lines - 5, d_cols/2U + 10);
             outs("\x1b[1;37m看到你這樣努力的培養自己的能力  讓我心中十分的高興喔..\x1b[m");
-            move(b_lines - 4, (d_cols>>1) + 10);
+            move(b_lines - 4, d_cols/2U + 10);
             outs("\x1b[1;36m小天使我決定給你獎賞鼓勵鼓勵  偷偷地幫助你一下....^_^\x1b[0m");
-            move(b_lines - 3, (d_cols>>1) + 10);
+            move(b_lines - 3, d_cols/2U + 10);
             lucky = random() % 7;
             if (lucky == 6)
             {
@@ -5197,45 +5197,45 @@ pip_ending_screen(void)
     int endmode = 0;
     clear();
     pip_ending_decide(endbuf1, endbuf2, endbuf3, &endmode, &endgrade);
-    move(1, (d_cols>>1) + 9);
+    move(1, d_cols/2U + 9);
     outs("\x1b[1;33m╔═══╗╔══╮╗╔═══╮╔═══╗╔══╮╗╭═══╮\x1b[0m");
-    move(2, (d_cols>>1) + 9);
+    move(2, d_cols/2U + 9);
     outs("\x1b[1;37m║      ║║    ║║║      ║║      ║║    ║║║      ║\x1b[0m");
-    move(3, (d_cols>>1) + 9);
+    move(3, d_cols/2U + 9);
     outs("\x1b[0;37m║    ═╣║    ║║║  ╭╮║╚═╗╔╝║    ║║║  ╔═╗\x1b[0m");
-    move(4, (d_cols>>1) + 9);
+    move(4, d_cols/2U + 9);
     outs("\x1b[0;37m║    ═╣║  ║  ║║  ╰╯║╔═╝╚╗║  ║  ║║  ╰╯║\x1b[0m");
-    move(5, (d_cols>>1) + 9);
+    move(5, d_cols/2U + 9);
     outs("\x1b[1;37m║      ║║  ║  ║║      ║║      ║║  ║  ║║      ║\x1b[0m");
-    move(6, (d_cols>>1) + 9);
+    move(6, d_cols/2U + 9);
     outs("\x1b[1;35m╚═══╝╚═╰═╝╚═══╯╚═══╝╚═╰═╝╰═══╯\x1b[0m");
-    move(b_lines - 16, (d_cols>>1) + 8);
+    move(b_lines - 16, d_cols/2U + 8);
     outs("\x1b[1;31m──────────\x1b[41;37m " NICKNAME PIPNAME "結局報告 \x1b[0;1;31m──────────\x1b[0m");
-    move(b_lines - 14, (d_cols>>1) + 10);
+    move(b_lines - 14, d_cols/2U + 10);
     outs("\x1b[1;36m這個時間不知不覺地還是到臨了...\x1b[0m");
-    move(b_lines - 12, (d_cols>>1) + 10);
+    move(b_lines - 12, d_cols/2U + 10);
     prints("\x1b[1;37m\x1b[33m%s\x1b[37m 得離開你的溫暖懷抱，自己一隻雞在外面求生存了.....\x1b[0m", d.name);
-    move(b_lines - 10, (d_cols>>1) + 10);
+    move(b_lines - 10, d_cols/2U + 10);
     outs("\x1b[1;36m在你照顧教導他的這段時光，讓他接觸了很多領域，培養了很多的能力....\x1b[0m");
-    move(b_lines - 8, (d_cols>>1) + 10);
+    move(b_lines - 8, d_cols/2U + 10);
     prints("\x1b[1;37m因為這些，讓小雞 \x1b[33m%s\x1b[37m 之後的生活，變得更多采多姿了........\x1b[0m", d.name);
-    move(b_lines - 6, (d_cols>>1) + 10);
+    move(b_lines - 6, d_cols/2U + 10);
     outs("\x1b[1;36m對於你的關心，你的付出，你所有的愛......\x1b[0m");
-    move(b_lines - 4, (d_cols>>1) + 10);
+    move(b_lines - 4, d_cols/2U + 10);
     prints("\x1b[1;37m\x1b[33m%s\x1b[37m 會永遠都銘記在心的....\x1b[0m", d.name);
     vmsg("接下來看未來發展");
     clrchyiuan(b_lines - 16, b_lines - 4);
-    move(b_lines - 16, (d_cols>>1) + 8);
+    move(b_lines - 16, d_cols/2U + 8);
     outs("\x1b[1;34m──────────\x1b[44;37m " NICKNAME PIPNAME "未來發展 \x1b[0;1;34m──────────\x1b[0m");
-    move(b_lines - 14, (d_cols>>1) + 10);
+    move(b_lines - 14, d_cols/2U + 10);
     prints("\x1b[1;36m透過水晶球，讓我們一起來看 \x1b[33m%s\x1b[36m 的未來發展吧.....\x1b[0m", d.name);
-    move(b_lines - 12, (d_cols>>1) + 10);
+    move(b_lines - 12, d_cols/2U + 10);
     prints("\x1b[1;37m小雞 \x1b[33m%s\x1b[37m 後來%s....\x1b[0m", d.name, endbuf1);
-    move(b_lines - 10, (d_cols>>1) + 10);
+    move(b_lines - 10, d_cols/2U + 10);
     prints("\x1b[1;36m因為他的之前的努力，使得他在這一方面%s....\x1b[0m", endbuf2);
-    move(b_lines - 8, (d_cols>>1) + 10);
+    move(b_lines - 8, d_cols/2U + 10);
     prints("\x1b[1;37m至於小雞的婚姻狀況，他後來%s，婚姻算是很美滿.....\x1b[0m", endbuf3);
-    move(b_lines - 6, (d_cols>>1) + 10);
+    move(b_lines - 6, d_cols/2U + 10);
     outs("\x1b[1;36m嗯..這是一個不錯的結局唷..........\x1b[0m");
     vmsg("我想  你一定很感動吧.....");
     show_ending_pic(0);
@@ -6363,11 +6363,11 @@ int endgrade)
     gradebasic = (d.maxhp + d.wrist + d.wisdom + d.character + d.charm + d.ethics + d.belief + d.affect) / 10 - d.offense;
     clrchyiuan(1, b_lines);
     gradeall = gradebasic + endgrade;
-    move(8, (d_cols>>1) + 17);
+    move(8, d_cols/2U + 17);
     outs("\x1b[1;36m感謝您玩完整個" NICKNAME "小雞的遊戲.....\x1b[0m");
-    move(10, (d_cols>>1) + 17);
+    move(10, d_cols/2U + 17);
     outs("\x1b[1;37m經過系統計算的結果：\x1b[0m");
-    move(12, (d_cols>>1) + 17);
+    move(12, d_cols/2U + 17);
     prints("\x1b[1;36m您的小雞 \x1b[37m%s \x1b[36m總得分＝ \x1b[1;5;33m%ld \x1b[0m", d.name, gradeall);
     return gradeall;
 }
@@ -6389,11 +6389,11 @@ static int pip_divine(void) /*占卜師來訪*/
     move(b_lines - 2, 0);
     money = 300 * (tm + 1);
     clrchyiuan(6, b_lines - 6);
-    move(10, (d_cols>>1) + 14);
+    move(10, d_cols/2U + 14);
     outs("\x1b[1;33;5m叩叩叩...\x1b[0;1;37m突然傳來陣陣的敲門聲.........\x1b[0m");
     vmsg("去瞧瞧是誰吧......");
     clrchyiuan(6, b_lines - 6);
-    move(10, (d_cols>>1) + 14);
+    move(10, d_cols/2U + 14);
     outs("\x1b[1;37;46m    原來是雲遊四海的占卜師來訪了.......    \x1b[0m");
     vmsg("開門讓他進來吧....");
     if (d.money >= money)
@@ -6416,9 +6416,9 @@ static int pip_divine(void) /*占卜師來訪*/
                 sprintf(buf, "\x1b[1;37m  你的小雞%s以後可能的身份是%s  \x1b[m", d.name, endbuf1);
             d.money -= money;
             clrchyiuan(6, b_lines - 6);
-            move(10, (d_cols>>1) + 14);
+            move(10, d_cols/2U + 14);
             outs("\x1b[1;33m在我占卜結果看來....\x1b[m");
-            move(12, (d_cols>>1) + 14);
+            move(12, d_cols/2U + 14);
             outs(buf);
             vmsg("謝謝惠顧，有緣再見面了.(不準不能怪我喔)");
         }
@@ -6700,7 +6700,7 @@ const char *userid)
         else if (death1 == 1)
         {
             show_die_pic(2);
-            move(14, (d_cols>>1) + 20);
+            move(14, d_cols/2U + 20);
             outs("可憐的小雞嗚呼哀哉了");
         }
         else if (death1 == 2)
@@ -8272,7 +8272,7 @@ static int pip_results_show(void)  /*收穫季*/
     int a, b[3][2], c[3] = {0, 0, 0};
 
     clear();
-    move(10, (d_cols>>1) + 14);
+    move(10, d_cols/2U + 14);
     outs("\x1b[1;33m叮咚叮咚～ 辛苦的郵差幫我們送信來了喔...\x1b[0m");
     vmsg("嗯  把信打開看看吧...");
     clear();
@@ -8491,15 +8491,15 @@ int winorlost, int mode, int a, int b, int c)
         strcpy(name4, d.name);
     }
     clear();
-    move(6, (d_cols>>1) + 13);
+    move(6, d_cols/2U + 13);
     prints("\x1b[1;37m～～～ \x1b[32m本屆 %s 結果揭曉 \x1b[37m～～～\x1b[0m", gamename[mode]);
-    move(8, (d_cols>>1) + 15);
+    move(8, d_cols/2U + 15);
     prints("\x1b[1;41m 冠軍 \x1b[0;1m～ \x1b[1;33m%-10s\x1b[36m  獎金 %d\x1b[0m", name1, resultmoney[3]);
-    move(10, (d_cols>>1) + 15);
+    move(10, d_cols/2U + 15);
     prints("\x1b[1;41m 亞軍 \x1b[0;1m～ \x1b[1;33m%-10s\x1b[36m  獎金 %d\x1b[0m", name2, resultmoney[2]);
-    move(12, (d_cols>>1) + 15);
+    move(12, d_cols/2U + 15);
     prints("\x1b[1;41m 季軍 \x1b[0;1m～ \x1b[1;33m%-10s\x1b[36m  獎金 %d\x1b[0m", name3, resultmoney[1]);
-    move(14, (d_cols>>1) + 15);
+    move(14, d_cols/2U + 15);
     prints("\x1b[1;41m 最後 \x1b[0;1m～ \x1b[1;33m%-10s\x1b[36m \x1b[0m", name4);
     sprintf(buf, "今年的%s結束囉 後年再來吧..", gamename[mode]);
     d.money += resultmoney[winorlost];

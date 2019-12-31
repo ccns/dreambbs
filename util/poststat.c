@@ -29,7 +29,7 @@ static const char *const mytitle[] = {"日十", "週五十", "月百", "年度百"};
 #define FN_POST_AUTHOR  "var/post.author"
 #define FN_POST_LOG     "post.log"
 #define FN_POST_OLD_DB  "var/post.old.db"
-#define HASHSIZE        1024            /* 2's power */
+#define HASHSIZE        1024U           /* Use 2's power to prevent division */
 #define TOPCOUNT        200
 #define LOWER_BOUND     4
 
@@ -68,7 +68,7 @@ hash(
 
     for (int i = 0; (ch = key[i]) && i < 80; i++)
     {
-        value = (value << 5) - value + ch;
+        value = 31 * value + ch;
     }
 
     return value;
@@ -87,7 +87,7 @@ search(
     struct postrec *p, *q;
     int i, found = 0;
 
-    i = hash(t->title) & (HASHSIZE - 1);
+    i = hash(t->title) % HASHSIZE;
     q = NULL;
     p = bucket[i];
     while (p && (!found))
@@ -370,7 +370,7 @@ post_author(void)
     {
         char *str = post.author;
         int cc = hash(str);
-        int i = cc & (HASHSIZE - 1);
+        int i = cc % HASHSIZE;
         PostAuthor *pahe = paht[i];
         PostText *text;
 

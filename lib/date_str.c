@@ -47,7 +47,7 @@ char *Ctime(const time_t * clock)
 
     sprintf(datemsg, "%d年%2d月%2d日%3d:%02d:%02d 星期%.2s",
             t->tm_year - 11, t->tm_mon + 1, t->tm_mday,
-            t->tm_hour, t->tm_min, t->tm_sec, &week[t->tm_wday << 1]);
+            t->tm_hour, t->tm_min, t->tm_sec, &week[2 * t->tm_wday]);
     return (datemsg);
 }
 

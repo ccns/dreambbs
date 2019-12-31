@@ -21,8 +21,8 @@ const time_t *clock)
     static const char myweek[] = "天一二三四五六";
     struct tm *mytm = localtime(clock);
     sprintf(foo, "[%d/%d]星期%c%c[%d:%02d]",
-            mytm->tm_mon + 1, mytm->tm_mday, myweek[mytm->tm_wday<<1],
-            myweek[(mytm->tm_wday<<1)+1], mytm->tm_hour, mytm->tm_min);
+            mytm->tm_mon + 1, mytm->tm_mday, myweek[2 * mytm->tm_wday],
+            myweek[2 * mytm->tm_wday + 1], mytm->tm_hour, mytm->tm_min);
 
     return (foo);
 }

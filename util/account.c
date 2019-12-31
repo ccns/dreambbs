@@ -869,7 +869,7 @@ main(void)
         i = PLAINPASSLEN-1;
         for (;;)
         {
-            j = random() & 0xff;
+            j = random() % 0x100U;
             if (!j) continue;
             title[--i] = j;
             if (i == 0) break;
