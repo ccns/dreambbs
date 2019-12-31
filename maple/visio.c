@@ -1639,15 +1639,10 @@ igetch(void)
                     cc = recv(0, data, VI_MAX, 0);
                     if (cc > 0)
                     {
-                        vi_size += cc;
+                        vi_size = cc;
                         vi_head = (*data) == IAC ? iac_count(data) : 0;
                         if (vi_head >= cc)
-                        {
-                            vi_size -= cc;
                             continue;
-                        }
-
-                        vi_size = cc;
 
                         if (cutmp)
                         {
