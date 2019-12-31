@@ -47,7 +47,7 @@ void hdr_fpath(char *fpath, const char *folder, const HDR * hdr)
 /* hdr_stamp - create unique HDR based on timestamp      */
 /* ----------------------------------------------------- */
 /* fpath - directory                                     */
-/* token - A / F / 0                                     */
+/* token - 'A' / 'F' / 0                                 */
 /* ----------------------------------------------------- */
 /* return : open() fd (not close yet) or link() result   */
 /* ----------------------------------------------------- */
