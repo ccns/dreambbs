@@ -54,7 +54,7 @@ at_cmp(
         else if (c2 >= 'A' && c2 <= 'Z')
             c2 |= 32;
 
-        if ((diff = c1 - c2))
+        if ((diff = c1 - c2) || !c1)
             return (diff);
     }
 }
