@@ -626,9 +626,9 @@ GCC_PURE int str_has(const char *list, const char *tag)
     }
 }
 
-GCC_PURE int str_hash2(const char *str, int seed)
+GCC_PURE int str_hash2(const char *str, unsigned int seed)
 {
-    int cc;
+    unsigned int cc;
 
     while ((cc = *str++))
     {
@@ -637,9 +637,9 @@ GCC_PURE int str_hash2(const char *str, int seed)
     return (seed & 0x7fffffff);
 }
 
-GCC_PURE int str_hash(const char *str, int seed)
+GCC_PURE int str_hash(const char *str, unsigned int seed)
 {
-    int cc;
+    unsigned int cc;
 
     while ((cc = *str++))
     {
@@ -1321,7 +1321,7 @@ size_t strlcpy(char *dst, const char *src, size_t siz)
 
 GCC_PURE int hash32(const char *str)
 {
-    int xo, cc;
+    unsigned int xo, cc;
 
     xo = 1048583;               /* a big prime number */
     while ((cc = *str++))

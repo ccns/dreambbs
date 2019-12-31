@@ -3,8 +3,8 @@
 GCC_PURE time_t chrono32(const char *str  /* M0123456 */
     )
 {
-    time_t chrono;
-    int ch;
+    unsigned long chrono;
+    unsigned int ch;
 
     chrono = 0;
     while ((ch = *++str))
