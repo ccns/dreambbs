@@ -357,7 +357,7 @@ do_menu(
     /* 跳到預設選項 */
     for ( tmp=0; tmp<= num; tmp++ )
     {
-        if ((table[tmp]->desc[0] | 0x20) == ((table_title->level & POPUP_MASK) | 0x20))
+        if (tolower(table[tmp]->desc[0]) == tolower(table_title->level & POPUP_MASK))
         {
             cur = old_cur = tmp;
             break;
@@ -407,7 +407,7 @@ do_menu(
             default:
                 for (tmp=0; tmp<=num; tmp++)
                 {
-                    if ((c | 0x20) == (table[tmp]->desc[0] | 0x20))
+                    if (tolower(c) == tolower(table[tmp]->desc[0]))
                     {
                         cur = tmp;
                         if (table_title->level & POPUP_DO_INSTANT)
@@ -513,7 +513,7 @@ popupmenu_ans(const char *const desc[], const char *title, int x, int y)
         {
             case KEY_LEFT:
                 scr_restore_free(&old_screen);
-                return (desc[0][1] | 0x20);
+                return tolower(desc[0][1]);
             case KEY_UP:
                 cur = (cur==0)?num:cur-1;
                 break;
@@ -529,11 +529,11 @@ popupmenu_ans(const char *const desc[], const char *title, int x, int y)
             case KEY_RIGHT:
             case '\n':
                 scr_restore_free(&old_screen);
-                return (desc[cur+1][0] | 0x20);
+                return tolower(desc[cur+1][0]);
             default:
                 for (tmp=0; tmp<=num; tmp++)
                 {
-                    if ((c | 0x20) == (desc[tmp+1][0] | 0x20))
+                    if (tolower(c) == tolower(desc[tmp+1][0]))
                     {
                         cur = tmp;
                         break;

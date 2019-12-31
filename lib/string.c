@@ -700,11 +700,11 @@ GCC_PURE int str_ncmp(const char *s1, const char *s2, int n)
 
         c1 = *s1++;
         if (c1 >= 'A' && c1 <= 'Z')
-            c1 |= 32;
+            c1 |= 0x20;
 
         c2 = *s2++;
         if (c2 >= 'A' && c2 <= 'Z')
-            c2 |= 32;
+            c2 |= 0x20;
 
         if (c1 -= c2)
             return (c1);
