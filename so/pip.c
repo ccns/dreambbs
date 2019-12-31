@@ -386,7 +386,7 @@ int mode)
 static void
 count_tired(
 int prob, int base,
-const char *mode,
+bool mode,
 int mul,
 int cal)
 {
@@ -394,7 +394,7 @@ int cal)
     int tm;
     /*time_t now;*/
     tm = (time(0) - start_time + d.bbtime) / 60 / 30;
-    if (!strcmp(mode, "Y"))
+    if (mode)
     {
         if (tm >= 0 && tm <= 3)
         {
@@ -425,7 +425,7 @@ int cal)
                 tiredvary = (random() % prob + base) * 1;
         }
     }
-    else if (!strcmp(mode, "N"))
+    else
     {
         tiredvary = random() % prob + base;
     }
@@ -839,7 +839,7 @@ int mode)
         d.character += random() % 5;
         d.money += 500;
         d.seeroyalJ = 1;
-        count_tired(1, 7, "N", 100, 0);
+        count_tired(1, 7, false, 100, 0);
         d.bbtime += time(0) - start_time;
         start_time = time(0);
         pip_write_file();
@@ -1186,13 +1186,13 @@ int mode)
     if (d.sick < 75 && d.sick >= 50)
     {
         outs("\x1b[1;33m生病了啦\x1b[m  ");
-        count_tired(1, 8, "Y", 100, 1);
+        count_tired(1, 8, true, 100, 1);
     }
     if (d.sick < 100 && d.sick >= 75)
     {
         outs("\x1b[1;35m正病重中\x1b[m  ");
         d.sick += 5;
-        count_tired(1, 15, "Y", 100, 1);
+        count_tired(1, 15, true, 100, 1);
     }
     if (d.sick >= 100)
     {
@@ -1326,7 +1326,7 @@ static int pip_basic_takeshower(void) /*洗澡*/
 
 static int pip_basic_takerest(void) /*休息*/
 {
-    count_tired(5, 20, "Y", 100, 0);
+    count_tired(5, 20, true, 100, 0);
     if (d.hp > d.maxhp)
         d.hp = d.maxhp;
     d.shit += 1;
@@ -1350,7 +1350,7 @@ static int pip_basic_kiss(void)/*親親*/
         d.happy += random() % 2 + 1;
         d.satisfy += random() % 3 + 4;
     }
-    count_tired(1, 2, "N", 100, 1);
+    count_tired(1, 2, false, 100, 1);
     d.shit += random() % 5 + 4;
     d.relation += random() % 2;
     move(4, 0);
@@ -2450,7 +2450,7 @@ static int pip_job_workA(void)
     class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     d.maxhp += random() % 2 * LEARN_LEVEL;
     d.shit += random() % 3 + 5;
-    count_tired(3, 7, "Y", 100, 1);
+    count_tired(3, 7, true, 100, 1);
     d.hp -= (random() % 2 + 4);
     d.happy -= (random() % 3 + 4);
     d.satisfy -= random() % 3 + 4;
@@ -2515,7 +2515,7 @@ static int pip_job_workB(void)
     d.shit += random() % 3 + 5;
     d.affect += random() % 3 + 4;
 
-    count_tired(3, 9, "Y", 100, 1);
+    count_tired(3, 9, true, 100, 1);
     d.hp -= (random() % 3 + 6);
     d.happy -= (random() % 3 + 4);
     d.satisfy -= random() % 3 + 4;
@@ -2570,7 +2570,7 @@ static int pip_job_workC(void)
     class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     d.maxhp += (random() % 2 + 2) * LEARN_LEVEL;
     d.shit += random() % 3 + 5;
-    count_tired(5, 12, "Y", 100, 1);
+    count_tired(5, 12, true, 100, 1);
     d.hp -= (random() % 4 + 8);
     d.happy -= (random() % 3 + 4);
     d.satisfy -= random() % 3 + 4;
@@ -2635,7 +2635,7 @@ static int pip_job_workD(void)
     d.maxhp += (random() % 3 + 2) * LEARN_LEVEL;
     d.wrist += random() % 2 + 2;
     d.shit += random() % 5 + 10;
-    count_tired(5, 15, "Y", 100, 1);
+    count_tired(5, 15, true, 100, 1);
     d.hp -= (random() % 4 + 10);
     d.happy -= (random() % 3 + 4);
     d.satisfy -= random() % 3 + 4;
@@ -2682,7 +2682,7 @@ static int pip_job_workE(void)
     class_ = (d.cookskill - d.tired) * LEARN_LEVEL;
     d.maxhp += (random() % 2 + 1) * LEARN_LEVEL;
     d.shit += random() % 4 + 12;
-    count_tired(5, 9, "Y", 100, 1);
+    count_tired(5, 9, true, 100, 1);
     d.hp -= (random() % 4 + 8);
     d.happy -= (random() % 3 + 4);
     d.satisfy -= random() % 3 + 4;
@@ -2746,7 +2746,7 @@ static int pip_job_workF(void)
 
     workmoney = 0;
     class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    count_tired(5, 7, "Y", 100, 1);
+    count_tired(5, 7, true, 100, 1);
     d.love += (random() % 3 + 4) * LEARN_LEVEL;
     d.belief += (random() % 4 + 7) * LEARN_LEVEL;
     d.ethics += (random() % 3 + 7) * LEARN_LEVEL;
@@ -2790,7 +2790,7 @@ static int pip_job_workG(void)
 
     workmoney = 0;
     workmoney = 200 + (d.charm * 3 + d.speech * 2 + d.toman) / 50;
-    count_tired(3, 12, "Y", 100, 1);
+    count_tired(3, 12, true, 100, 1);
     d.shit += random() % 3 + 8;
     d.speed += (random() % 2) * LEARN_LEVEL;
     d.weight -= random() % 2;
@@ -2828,7 +2828,7 @@ static int pip_job_workH(void)
     d.maxhp += (random() % 2 + 3) * LEARN_LEVEL;
     d.shit += random() % 7 + 15;
     d.wrist += (random() % 3 + 4) * LEARN_LEVEL;
-    count_tired(5, 15, "Y", 100, 1);
+    count_tired(5, 15, true, 100, 1);
     d.hp -= (random() % 4 + 10);
     d.happy -= (random() % 3 + 4);
     d.satisfy -= random() % 3 + 4;
@@ -2880,7 +2880,7 @@ static int pip_job_workI(void)
     class_ = (d.art - d.tired) * LEARN_LEVEL;
     d.maxhp += (random() % 2) * LEARN_LEVEL;
     d.affect += (random() % 2 + 3) * LEARN_LEVEL;
-    count_tired(3, 11, "Y", 100, 1);
+    count_tired(3, 11, true, 100, 1);
     d.shit += random() % 4 + 8;
     d.hp -= (random() % 4 + 10);
     d.happy -= (random() % 3 + 4);
@@ -2936,7 +2936,7 @@ static int pip_job_workJ(void)
     workmoney = 0;
     class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     class1 = (d.wisdom - d.tired) * LEARN_LEVEL;
-    count_tired(5, 15, "Y", 100, 1);
+    count_tired(5, 15, true, 100, 1);
     d.shit += random() % 4 + 13;
     d.weight -= (random() % 2 + 1);
     d.maxhp += (random() % 2 + 3) * LEARN_LEVEL;
@@ -3003,7 +3003,7 @@ static int pip_job_workK(void)
     }
     workmoney = 0;
     class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    count_tired(5, 15, "Y", 100, 1);
+    count_tired(5, 15, true, 100, 1);
     d.shit += random() % 4 + 16;
     d.weight -= (random() % 2 + 2);
     d.maxhp += (random() % 2 + 1) * LEARN_LEVEL;
@@ -3070,7 +3070,7 @@ static int pip_job_workL(void)
     d.maxmp += (random() % 2) * LEARN_LEVEL;
     d.affect += (random() % 2 + 2) * LEARN_LEVEL;
     d.brave += (random() % 2 + 2) * LEARN_LEVEL;
-    count_tired(5, 12, "Y", 100, 1);
+    count_tired(5, 12, true, 100, 1);
     d.hp -= (random() % 3 + 7);
     d.happy -= (random() % 4 + 6);
     d.satisfy -= random() % 3 + 5;
@@ -3124,7 +3124,7 @@ static int pip_job_workM(void)
     workmoney = 0;
     class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     workmoney = 50 + d.wisdom / 20 + d.character / 20;
-    count_tired(5, 10, "Y", 100, 1);
+    count_tired(5, 10, true, 100, 1);
     d.shit += random() % 3 + 8;
     d.character += (random() % 2) * LEARN_LEVEL;
     d.wisdom += (random() % 2) * LEARN_LEVEL;
@@ -3161,7 +3161,7 @@ static int pip_job_workN(void)
     class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
     class1 = (d.charm - d.tired) * LEARN_LEVEL;
     d.shit += random() % 5 + 5;
-    count_tired(5, 14, "Y", 100, 1);
+    count_tired(5, 14, true, 100, 1);
     d.hp -= (random() % 3 + 5);
     d.social -= random() % 5 + 6;
     d.happy -= (random() % 4 + 6);
@@ -3224,7 +3224,7 @@ static int pip_job_workO(void)
     d.shit += random() % 5 + 14;
     d.charm += (random() % 3 + 8) * LEARN_LEVEL;
     d.offense += (random() % 3 + 8) * LEARN_LEVEL;
-    count_tired(5, 22, "Y", 100, 1);
+    count_tired(5, 22, true, 100, 1);
     d.hp -= (random() % 3 + 8);
     d.social -= random() % 6 + 12;
     d.happy -= (random() % 4 + 8);
@@ -3298,7 +3298,7 @@ static int pip_job_workP(void)
     d.shit += random() % 5 + 7;
     d.charm += (random() % 3 + 8) * LEARN_LEVEL;
     d.offense += (random() % 3 + 8) * LEARN_LEVEL;
-    count_tired(5, 22, "Y", 100, 1);
+    count_tired(5, 22, true, 100, 1);
     d.hp -= (random() % 3 + 8);
     d.social -= random() % 6 + 12;
     d.happy -= (random() % 4 + 8);
@@ -3353,7 +3353,7 @@ static int pip_job_workP(void)
 static int pip_play_stroll(void)       /*散步*/
 {
     int lucky;
-    count_tired(3, 3, "Y", 100, 0);
+    count_tired(3, 3, true, 100, 0);
     lucky = random() % 7;
     if (lucky == 2)
     {
@@ -3456,7 +3456,7 @@ static int pip_play_stroll(void)       /*散步*/
 
 static int pip_play_sport(void)        /*運動*/
 {
-    count_tired(3, 8, "Y", 100, 1);
+    count_tired(3, 8, true, 100, 1);
     d.weight -= (random() % 3 + 2);
     d.satisfy += random() % 2 + 3;
     if (d.satisfy > 100)
@@ -3479,7 +3479,7 @@ static int pip_play_date(void) /*約會*/
     }
     else
     {
-        count_tired(3, 6, "Y", 100, 1);
+        count_tired(3, 6, true, 100, 1);
         d.happy += random() % 5 + 12;
         d.shit += random() % 3 + 5;
         d.hp -= random() % 4 + 8;
@@ -3504,7 +3504,7 @@ static int pip_play_outing(void)       /*郊遊*/
     {
         d.weight += random() % 2 + 1;
         d.money -= 250;
-        count_tired(10, 45, "N", 100, 0);
+        count_tired(10, 45, false, 100, 0);
         d.hp -= random() % 10 + 20;
         if (d.hp >= d.maxhp)
             d.hp = d.maxhp;
@@ -3617,7 +3617,7 @@ static int pip_play_outing(void)       /*郊遊*/
 
 static int pip_play_kite(void) /*風箏*/
 {
-    count_tired(4, 4, "Y", 100, 0);
+    count_tired(4, 4, true, 100, 0);
     d.weight += (random() % 2 + 2);
     d.satisfy += random() % 3 + 12;
     if (d.satisfy > 100)
@@ -3640,7 +3640,7 @@ static int pip_play_KTV(void)  /*KTV*/
     }
     else
     {
-        count_tired(10, 10, "Y", 100, 0);
+        count_tired(10, 10, true, 100, 0);
         d.satisfy += random() % 2 + 20;
         if (d.satisfy > 100)
             d.satisfy = 100;
@@ -3666,7 +3666,7 @@ static int pip_play_guess(void)   /* 猜拳程式 */
     time(&now);
     qtime = localtime(&now);
     d.satisfy += (random() % 3 + 2);
-    count_tired(2, 2, "Y", 100, 1);
+    count_tired(2, 2, true, 100, 1);
     d.shit += random() % 3 + 2;
     do
     {
@@ -4219,7 +4219,7 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
         vmsg("很抱歉喔...你的錢不夠喔");
         return 0;
     }
-    count_tired(4, 5, "Y", 100, 1);
+    count_tired(4, 5, true, 100, 1);
     d.money = d.money - smoney;
     /*成功與否的判斷*/
     health = d.hp * 1 / 2 + random() % 20 - d.tired;
@@ -4356,7 +4356,7 @@ static int pip_change_weight(void)
                     d.money -= weightmp * 30;
                     d.weight += weightmp;
                     d.maxhp -= (random() % 2 + 2);
-                    count_tired(5, 8, "N", 100, 1);
+                    count_tired(5, 8, false, 100, 1);
                     d.hp -= (random() % 2 + 3);
                     d.sick += random() % 10 + 5;
                     show_special_pic(3);
@@ -4421,7 +4421,7 @@ static int pip_change_weight(void)
                     d.money -= weightmp * 30;
                     d.weight -= weightmp;
                     d.maxhp -= (random() % 2 + 2);
-                    count_tired(5, 8, "N", 100, 1);
+                    count_tired(5, 8, false, 100, 1);
                     d.hp -= (random() % 2 + 3);
                     d.sick += random() % 10 + 5;
                     show_special_pic(4);
