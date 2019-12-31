@@ -2027,41 +2027,30 @@ show_resultshow_pic(int i)      /*收穫季*/
 
 static int pip_store_food(void)
 {
-    int num[3];
-    num[0] = 2;
-    num[1] = d.food;
-    num[2] = d.cookie;
+    int num[COUNTOF(pipfoodlist)] = {d.food, d.cookie};
     pip_buy_goods_new(1, pipfoodlist, num);
-    d.food = num[1];
-    d.cookie = num[2];
+    d.food = num[0];
+    d.cookie = num[1];
     return 0;
 }
 
 static int pip_store_medicine(void)
 {
-    int num[5];
-    num[0] = 4;
-    num[1] = d.bighp;
-    num[2] = d.medicine;
-    num[3] = d.ginseng;
-    num[4] = d.snowgrass;
+    int num[COUNTOF(pipmedicinelist)] = {d.bighp, d.medicine, d.ginseng, d.snowgrass};
     pip_buy_goods_new(2, pipmedicinelist, num);
-    d.bighp = num[1];
-    d.medicine = num[2];
-    d.ginseng = num[3];
-    d.snowgrass = num[4];
+    d.bighp = num[0];
+    d.medicine = num[1];
+    d.ginseng = num[2];
+    d.snowgrass = num[3];
     return 0;
 }
 
 static int pip_store_other(void)
 {
-    int num[3];
-    num[0] = 2;
-    num[1] = d.playtool;
-    num[2] = d.book;
+    int num[COUNTOF(pipotherlist)] = {d.playtool, d.book};
     pip_buy_goods_new(3, pipotherlist, num);
-    d.playtool = num[1];
-    d.book = num[2];
+    d.playtool = num[0];
+    d.book = num[1];
     return 0;
 }
 
@@ -2104,18 +2093,20 @@ int oldnum[])
     long smoney;
     int oldmoney;
     int i, pipkey, choice;
+    int numlen;
     oldmoney = d.money;
     do
     {
         clrchyiuan(6, b_lines - 6);
         move(6, 0);
         prints_centered("\x1b[1;31m  ─\x1b[41;37m 編號 \x1b[0;1;31m─\x1b[41;37m 商      品 \x1b[0;1;31m──\x1b[41;37m 效            能 \x1b[0;1;31m──\x1b[41;37m 價     格 \x1b[0;1;31m─\x1b[37;41m 擁有數量 \x1b[0;1;31m─\x1b[0m  ");
-        for (i = 1; i <= oldnum[0]; i++)
+        for (i = 0; p[i].name; i++)
         {
             move(7 + i, 0);
             prints_centered("     \x1b[1;35m[\x1b[37m%2d\x1b[35m]     \x1b[36m%-10s      \x1b[37m%-14s        \x1b[1;33m%-10d   \x1b[1;32m%-9d    \x1b[0m",
-                    p[i].num, p[i].name, p[i].msgbuy, p[i].money, oldnum[i]);
+                    i+1, p[i].name, p[i].msgbuy, p[i].money, oldnum[i]);
         }
+        numlen = i;
         clrchyiuan(b_lines - 4, b_lines);
         move(b_lines, 0);
         prints("\x1b[1;44;37m  %8s選單  \x1b[46m  [B]買入物品  [S]賣出物品  [Q]跳出      %*s\x1b[m", shopname[mode], 30 + d_cols - (int)(unsigned int)strlen(shopname[mode]), "");
@@ -2125,10 +2116,10 @@ int oldnum[])
         case 'B':
         case 'b':
             move(b_lines - 1, 1);
-            sprintf(inbuf, "想要買入啥呢? [0]放棄買入 [1～%d]物品商號: ", oldnum[0]);
+            sprintf(inbuf, "想要買入啥呢? [0]放棄買入 [1～%d]物品商號: ", numlen);
             getdata(b_lines - 1, 1, inbuf, genbuf, 3, LCECHO, "0");
-            choice = atoi(genbuf);
-            if (choice >= 1 && choice <= oldnum[0])
+            choice = atoi(genbuf)-1;
+            if (choice >= 0 && choice < numlen)
             {
                 clrchyiuan(6, b_lines - 6);
                 if (random() % 2 > 0)
@@ -2200,10 +2191,10 @@ int oldnum[])
                 break;
             }
             move(b_lines - 1, 1);
-            sprintf(inbuf, "想要賣出啥呢? [0]放棄賣出 [1～%d]物品商號: ", oldnum[0]);
+            sprintf(inbuf, "想要賣出啥呢? [0]放棄賣出 [1～%d]物品商號: ", numlen);
             getdata(b_lines - 1, 1, inbuf, genbuf, 3, LCECHO, "0");
-            choice = atoi(genbuf);
-            if (choice >= 1 && choice <= oldnum[0])
+            choice = atoi(genbuf)-1;
+            if (choice >= 0 && choice < numlen)
             {
                 clrchyiuan(6, b_lines - 6);
                 if (random() % 2 > 0)
@@ -4467,7 +4458,7 @@ const struct royalset *p)
     char inbuf1[20];
     char inbuf2[20];
     static const char *const needmode[3] = {"      ", "禮儀表現＞", "談吐技巧＞"};
-    int save[11] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    int save[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     d.nodone = 0;
     do
@@ -4481,8 +4472,8 @@ const struct royalset *p)
 
         for (n = 0; n < 5; n++)
         {
-            a = 2 * n + 1;
-            b = 2 * n + 2;
+            a = 2 * n;
+            b = 2 * n + 1;
             move(15 + n, 4);
             sprintf(inbuf1, "%-10s%3d", needmode[p[a].needmode], p[a].needvalue);
             if (n == 4)
@@ -4494,10 +4485,10 @@ const struct royalset *p)
                 sprintf(inbuf2, "%-10s%3d", needmode[p[b].needmode], p[b].needvalue);
             }
             if ((d.seeroyalJ == 1 && n == 4) || (n != 4))
-                prints_centered("\x1b[1;31m│ \x1b[36m(\x1b[37m%s\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s     \x1b[36m(\x1b[37m%s\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s\x1b[31m│\x1b[0m",
+                prints_centered("\x1b[1;31m│ \x1b[36m(\x1b[37m%c\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s     \x1b[36m(\x1b[37m%c\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s\x1b[31m│\x1b[0m",
                         p[a].num, p[a].name, inbuf1, p[b].num, p[b].name, inbuf2);
             else
-                prints_centered("\x1b[1;31m│ \x1b[36m(\x1b[37m%s\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s                                   \x1b[31m│\x1b[0m",
+                prints_centered("\x1b[1;31m│ \x1b[36m(\x1b[37m%c\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s                                   \x1b[31m│\x1b[0m",
                         p[a].num, p[a].name, inbuf1);
         }
         move(20, 4);
@@ -4509,16 +4500,16 @@ const struct royalset *p)
         if (d.death == 1 || d.death == 2 || d.death == 3)
             return 0;
         /*將各人物已經給與的數值叫回來*/
-        save[1] = d.royalA;          /*from守衛*/
-        save[2] = d.royalB;          /*from近衛*/
-        save[3] = d.royalC;          /*from將軍*/
-        save[4] = d.royalD;          /*from大臣*/
-        save[5] = d.royalE;          /*from祭司*/
-        save[6] = d.royalF;          /*from寵妃*/
-        save[7] = d.royalG;          /*from王妃*/
-        save[8] = d.royalH;          /*from國王*/
-        save[9] = d.royalI;          /*from小丑*/
-        save[10] = d.royalJ;         /*from王子*/
+        save[0] = d.royalA;          /*from守衛*/
+        save[1] = d.royalB;          /*from近衛*/
+        save[2] = d.royalC;          /*from將軍*/
+        save[3] = d.royalD;          /*from大臣*/
+        save[4] = d.royalE;          /*from祭司*/
+        save[5] = d.royalF;          /*from寵妃*/
+        save[6] = d.royalG;          /*from王妃*/
+        save[7] = d.royalH;          /*from國王*/
+        save[8] = d.royalI;          /*from小丑*/
+        save[9] = d.royalJ;          /*from王子*/
 
         move(b_lines - 1, 0);
         clrtoeol();
@@ -4531,11 +4522,11 @@ const struct royalset *p)
         prints(
             "\x1b[1;37;46m  參見選單  \x1b[44m [字母]選擇欲拜訪的人物  [Q]離開" NICKNAME "總司令部       %*s\x1b[0m", 20 + d_cols - ((int)(unsigned int)sizeof(NICKNAME) - 1), "");
         pipkey = vkey();
-        choice = pipkey - 64;
-        if (choice < 1 || choice > 10)
-            choice = pipkey - 96;
+        choice = pipkey - 'A';
+        if (choice < 0 || choice >= 10)
+            choice = pipkey - 'a';
 
-        if ((choice >= 1 && choice <= 10 && d.seeroyalJ == 1) || (choice >= 1 && choice <= 9 && d.seeroyalJ == 0))
+        if ((choice >= 0 && choice < 10 && d.seeroyalJ == 1) || (choice >= 0 && choice < 9 && d.seeroyalJ == 0))
         {
             d.social += random() % 3 + 3;
             d.hp -= random() % 5 + 6;
@@ -4560,7 +4551,7 @@ const struct royalset *p)
                     (p[choice].needmode == 1 && d.manners >= p[choice].needvalue) ||
                     (p[choice].needmode == 2 && d.speech >= p[choice].needvalue))
                 {
-                    if (choice >= 1 && choice <= 9 && save[choice] >= p[choice].maxtoman)
+                    if (choice >= 0 && choice < 9 && save[choice] >= p[choice].maxtoman)
                     {
                         if (random() % 2 > 0)
                             sprintf(buf, "能和這麼偉大的你講話真是榮幸ㄚ...");
@@ -4570,7 +4561,7 @@ const struct royalset *p)
                     else
                     {
                         change = 0;
-                        if (choice >= 1 && choice <= 8)
+                        if (choice >= 0 && choice < 8)
                         {
                             switch (choice)
                             {
@@ -4608,15 +4599,15 @@ const struct royalset *p)
                             save[choice] += change;
                             d.toman += change;
                         }
-                        else if (choice == 9)
+                        else if (choice == 8)
                         {
-                            save[9] = 0;
+                            save[8] = 0;
                             d.social -= 13 + random() % 4;
                             d.affect += 13 + random() % 4;
                         }
-                        else if (choice == 10 && d.seeroyalJ == 1)
+                        else if (choice == 9 && d.seeroyalJ == 1)
                         {
-                            save[10] += 15 + random() % 4;
+                            save[9] += 15 + random() % 4;
                             d.seeroyalJ = 0;
                         }
                         if (random() % 2 > 0)
@@ -4636,16 +4627,16 @@ const struct royalset *p)
             }
             vmsg(buf);
         }
-        d.royalA = save[1];
-        d.royalB = save[2];
-        d.royalC = save[3];
-        d.royalD = save[4];
-        d.royalE = save[5];
-        d.royalF = save[6];
-        d.royalG = save[7];
-        d.royalH = save[8];
-        d.royalI = save[9];
-        d.royalJ = save[10];
+        d.royalA = save[0];
+        d.royalB = save[1];
+        d.royalC = save[2];
+        d.royalD = save[3];
+        d.royalE = save[4];
+        d.royalF = save[5];
+        d.royalG = save[6];
+        d.royalH = save[7];
+        d.royalI = save[8];
+        d.royalJ = save[9];
     }
     while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
 
