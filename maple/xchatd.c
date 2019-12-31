@@ -2711,7 +2711,7 @@ view_action_verb(       /* Thor.0726: 新加動詞分類顯示 */
 /* ----------------------------------------------------- */
 
 
-static ChatCmd chatcmdlist[] =
+static const ChatCmd chatcmdlist[] =
 {
     {"act", chat_act, 0},
     {"bye", chat_bye, 0},
@@ -2760,7 +2760,7 @@ command_execute(
 {
     char *cmd, *msg, buf[128];
     /* Thor.981108: lkchu patch: chatid + msg 只用 80 bytes 不夠, 改為 128 */
-    ChatCmd *cmdrec;
+    const ChatCmd *cmdrec;
     int match, ch, check;
 
     msg = cu->ibuf;

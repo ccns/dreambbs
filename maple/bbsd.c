@@ -1281,7 +1281,7 @@ term_init(void)
 //  TNCH_IAC + TNCH_SB + TN_NAWS + ¦æ¼Æ¦C¼Æ + TNCH_IAC + TNCH_SE;
 
     /* ask client to report it's term size */
-    static unsigned char svr[] =      /* server */
+    static const unsigned char svr[] =      /* server */
     {
         IAC, DO, TELOPT_NAWS
     };

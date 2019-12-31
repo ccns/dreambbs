@@ -463,7 +463,7 @@ personal_open(
     HDR hdr;
     int bno;
     ACCT acct;
-    char gem[5][20] = {"gem/@/@Person_A_E", "gem/@/@Person_F_J", "gem/@/@Person_K_O", "gem/@/@Person_P_T", "gem/@/@Person_U_Z"};
+    static const char gem[5][20] = {"gem/@/@Person_A_E", "gem/@/@Person_F_J", "gem/@/@Person_K_O", "gem/@/@Person_P_T", "gem/@/@Person_U_Z"};
 
     pos = xo->pos;
     cur = pos - xo->top;

@@ -191,7 +191,7 @@ static void pip_new_game(void)
 {
     char buf[256];
     time_t now;
-    const char *const pipsex[3] = {"？", "♂", "♀"};
+    static const char *const pipsex[3] = {"？", "♂", "♀"};
     struct tm *ptime;
     ptime = localtime(&now);
 
@@ -480,7 +480,7 @@ static const char *const menuname[8][2] =
 static int pip_basic_menu(void), pip_store_menu(void), pip_practice_menu(void);
 static int pip_play_menu(void), pip_job_menu(void), pip_special_menu(void), pip_system_menu(void);
 
-static struct pipcommands pipmainlist[] =
+static const struct pipcommands pipmainlist[] =
 {
     {pip_basic_menu,            '1',    '1'},
     {pip_store_menu,            '2',    '2'},
@@ -494,7 +494,7 @@ static struct pipcommands pipmainlist[] =
 
 /*基本選單*/
 static int pip_basic_feed(void), pip_basic_takeshower(void), pip_basic_takerest(void), pip_basic_kiss(void);
-static struct pipcommands pipbasiclist[] =
+static const struct pipcommands pipbasiclist[] =
 {
     {pip_basic_feed,            '1',    '1'},
     {pip_basic_takeshower,      '2',    '2'},
@@ -509,7 +509,7 @@ static int pip_store_food(void), pip_store_medicine(void), pip_store_other(void)
 static int pip_store_weapon_head(void), pip_store_weapon_rhand(void), pip_store_weapon_lhand(void);
 static int pip_store_weapon_body(void), pip_store_weapon_foot(void);
 
-static struct pipcommands pipstorelist[] =
+static const struct pipcommands pipstorelist[] =
 {
     {pip_store_food,            '1',    '1'},
     {pip_store_medicine,        '2',    '2'},
@@ -528,7 +528,7 @@ static int pip_practice_classD(void), pip_practice_classE(void), pip_practice_cl
 static int pip_practice_classG(void), pip_practice_classH(void), pip_practice_classI(void);
 static int pip_practice_classJ(void);
 
-static struct pipcommands pippracticelist[] =
+static const struct pipcommands pippracticelist[] =
 {
     {pip_practice_classA,       'a',    'A'},
     {pip_practice_classB,       'b',    'B'},
@@ -547,7 +547,7 @@ static struct pipcommands pippracticelist[] =
 static int pip_play_stroll(void), pip_play_sport(void), pip_play_date(void), pip_play_guess(void);
 static int pip_play_outing(void), pip_play_kite(void), pip_play_KTV(void);
 
-static struct pipcommands pipplaylist[] =
+static const struct pipcommands pipplaylist[] =
 {
     {pip_play_stroll,           '1',    '1'},
     {pip_play_sport,            '2',    '2'},
@@ -564,7 +564,7 @@ static int pip_job_workA(void), pip_job_workB(void), pip_job_workC(void), pip_jo
 static int pip_job_workE(void), pip_job_workF(void), pip_job_workG(void), pip_job_workH(void);
 static int pip_job_workI(void), pip_job_workJ(void), pip_job_workK(void), pip_job_workL(void);
 static int pip_job_workM(void), pip_job_workN(void), pip_job_workO(void), pip_job_workP(void);
-static struct pipcommands pipjoblist[] =
+static const struct pipcommands pipjoblist[] =
 {
     {pip_job_workA,             'a',    'A'},
     {pip_job_workB,             'b',    'B'},
@@ -588,7 +588,7 @@ static struct pipcommands pipjoblist[] =
 /*特殊選單*/
 static int pip_see_doctor(void), pip_change_weight(void), pip_meet_vs_man(void), pip_query(void), pip_go_palace(void);
 /* static int pip_vs_fight(void); */
-static struct pipcommands pipspeciallist[] =
+static const struct pipcommands pipspeciallist[] =
 {
     {pip_see_doctor,            '1',    '1'},
     {pip_change_weight,         '2',    '2'},
@@ -599,7 +599,7 @@ static struct pipcommands pipspeciallist[] =
     {NULL,                     '\0',   '\0'}
 };
 
-static struct pipcommands pipsystemlist[] =
+static const struct pipcommands pipsystemlist[] =
 {
     {pip_data_list_cuser,       '1',    '1'},
     {pip_system_freepip,        '2',    '2'},
@@ -816,9 +816,9 @@ int mode)
     int color1, color2, color3, color4;
     int anynum;
     float pc;
-    const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
-                            "成年", "壯年", "更年", "老年", "古稀", "神仙"
-                           };
+    static const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
+                                   "成年", "壯年", "更年", "老年", "古稀", "神仙"
+                                  };
 
     color1 = color2 = color3 = color4 = 37;
     move(1, 0);
@@ -1657,7 +1657,7 @@ const char *msg)
 static int
 pip_write_backup(void)
 {
-    const char *const files[4] = {"沒有", "進度一", "進度二", "進度三"};
+    static const char *const files[4] = {"沒有", "進度一", "進度二", "進度三"};
     char buf[200], buf1[200];
     char ans[3];
     int num = 0;
@@ -1714,7 +1714,7 @@ static int
 pip_read_backup(void)
 {
     char buf[200], buf1[200], buf2[200];
-    const char *const files[4] = {"沒有", "進度一", "進度二", "進度三"};
+    static const char *const files[4] = {"沒有", "進度一", "進度二", "進度三"};
     char ans[3];
     int pipkey;
     int num = 0;
@@ -2116,7 +2116,7 @@ int mode,
 const struct goodsofpip *p,
 int oldnum[])
 {
-    const char *const shopname[4] = {"店名", "便利商店", NICKNAME "藥鋪", "夜裡書局"};
+    static const char *const shopname[4] = {"店名", "便利商店", NICKNAME "藥鋪", "夜裡書局"};
     char inbuf[256];
     char genbuf[20];
     long smoney;
@@ -2293,7 +2293,7 @@ const struct weapon *p)
     char buf[256];
     char ans[5];
     char shortbuf[100];
-    char menutitle[5][11] = {"頭部裝備區", "右手裝備區", "左手裝備區", "身體裝備區", "足部裝備區"};
+    static const char menutitle[5][11] = {"頭部裝備區", "右手裝備區", "左手裝備區", "身體裝備區", "足部裝備區"};
     int pipkey;
     char choicekey[5];
     int choice;
@@ -3840,11 +3840,11 @@ static void situ(void)
 /* 資料庫                                                                    */
 /*---------------------------------------------------------------------------*/
 static const char *const classrank[6] = {"沒有", "初級", "中級", "高級", "進階", "專業"};
-static int classmoney[11][2] = {{ 0,  0},
+static const int classmoney[11][2] = {{ 0,  0},
     {60, 110}, {70, 120}, {70, 120}, {80, 130}, {70, 120},
     {60, 110}, {90, 140}, {70, 120}, {70, 120}, {80, 130}
 };
-static int classvariable[11][4] =
+static const int classvariable[11][4] =
 {
     {0, 0, 0, 0},
     {5, 5, 4, 4}, {5, 7, 6, 4}, {5, 7, 6, 4}, {5, 6, 5, 4}, {7, 5, 4, 6},
@@ -4498,7 +4498,7 @@ const struct royalset *p)
     char buf[256];
     char inbuf1[20];
     char inbuf2[20];
-    const char *const needmode[3] = {"      ", "禮儀表現＞", "談吐技巧＞"};
+    static const char *const needmode[3] = {"      ", "禮儀表現＞", "談吐技巧＞"};
     int save[11] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     d.nodone = 0;
@@ -5273,7 +5273,8 @@ pip_ending_decide(
 char *endbuf1, char *endbuf2, char *endbuf3,
 int *endmode, int *endgrade)
 {
-    const char *const name[8][2] = {{"男的", "女的"},
+    static const char *const name[8][2] = {
+        {"男的", "女的"},
         {"嫁給王子",   "娶了公主"},
         {"嫁給你",     "娶了你"},
         {"嫁給商人Ａ", "娶了女商人Ａ"},
@@ -6503,11 +6504,11 @@ const char *userid)
 {
     FILE *fs;
     char buf[200];
-    /*cosnt char yo[14][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
-                            "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
-    const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
-                            "成年", "壯年", "更年", "老年", "古稀", "神仙"
-                           };
+    /*static cosnt char yo[14][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
+                                   "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
+    static const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
+                                   "成年", "壯年", "更年", "老年", "古稀", "神仙"
+                                  };
     int pc1, age1, age = 0;
 
     int year1, month1, day1, sex1, death1, nodone1, relation1, liveagain1, chickenmode1, level1, exp1, dataE1;
@@ -6732,7 +6733,7 @@ const char *userid)
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-static char weaponhead[7][10] =
+static const char weaponhead[7][10] =
 {
     "沒有裝備",
     "塑膠帽子",
@@ -6744,7 +6745,7 @@ static char weaponhead[7][10] =
 };
 
 
-static char weaponrhand[10][10] =
+static const char weaponrhand[10][10] =
 {
     "沒有裝備",
     "大木棒",
@@ -6758,7 +6759,7 @@ static char weaponrhand[10][10] =
     "黃金聖杖"
 };
 
-static char weaponlhand[8][10] =
+static const char weaponlhand[8][10] =
 {
     "沒有裝備",
     "大木棒",
@@ -6771,7 +6772,7 @@ static char weaponlhand[8][10] =
 };
 
 
-static char weaponbody[7][10] =
+static const char weaponbody[7][10] =
 {
     "沒有裝備",
     "塑膠冑甲",
@@ -6782,7 +6783,7 @@ static char weaponbody[7][10] =
     "黃金聖衣"
 };
 
-static char weaponfoot[8][12] =
+static const char weaponfoot[8][12] =
 {
     "沒有裝備",
     "塑膠拖鞋",
@@ -8207,7 +8208,8 @@ pip_marriage_offer(void)
     char ans[4];
     int money;
     int who;
-    const char *const name[5][2] = {{"女商人Ａ", "商人Ａ"},
+    static const char *const name[5][2] = {
+        {"女商人Ａ", "商人Ａ"},
         {"女商人Ｂ", "商人Ｂ"},
         {"女商人Ｃ", "商人Ｃ"},
         {"女商人Ｄ", "商人Ｄ"},
@@ -8265,7 +8267,7 @@ pip_marriage_offer(void)
 
 static int pip_results_show(void)  /*收穫季*/
 {
-    const char *const showname[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
+    static const char *const showname[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
     char buf[256];
     int pipkey, i = 0;
     int winorlost = 0;
@@ -8457,8 +8459,8 @@ static int pip_results_show(void)  /*收穫季*/
 static int pip_results_show_ending(
 int winorlost, int mode, int a, int b, int c)
 {
-    const char *const gamename[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
-    int resultmoney[4] = {0, 3000, 5000, 8000};
+    static const char *const gamename[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
+    static const int resultmoney[4] = {0, 3000, 5000, 8000};
     char name1[25], name2[25], name3[25], name4[25];
     char buf[256];
 
@@ -8631,9 +8633,9 @@ int mode)
     int m, color;
     int age;
     int color1, color2, color3, color4;
-    const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
-                            "成年", "壯年", "更年", "老年", "古稀", "神仙"
-                           };
+    static const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
+                                   "成年", "壯年", "更年", "老年", "古稀", "神仙"
+                                  };
 
     color1 = color2 = color3 = color4 = 37;
     move(1, 0);

@@ -32,7 +32,7 @@ static int zhangba_currentsession = 0;
 
 #define ZHANGBA_PATTERNS 5
 
-static char zhangba_patterns[ZHANGBA_PATTERNS][25] = {
+static const char zhangba_patterns[ZHANGBA_PATTERNS][25] = {
     "±i®¶Án",
     "Án¥J",
     "taconet.com.tw/jscha",
