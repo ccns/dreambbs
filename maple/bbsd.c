@@ -482,13 +482,14 @@ logattempt(
 )
 {
     char buf[128], fpath[80];
+    const char *const conn_type = (unix_path) ? "WSP" : "BBS";
 
 //  time_t now = time(0);
     struct tm *p;
     p = localtime(&ap_start);
-    sprintf(buf, "%02d/%02d/%02d %02d:%02d:%02d %cBBS\t%s\n",
+    sprintf(buf, "%02d/%02d/%02d %02d:%02d:%02d %c%s\t%s\n",
         p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
-        p->tm_hour, p->tm_min, p->tm_sec, type, currtitle);
+        p->tm_hour, p->tm_min, p->tm_sec, type, conn_type, currtitle);
 
 #if 0
     sprintf(buf, "%c%-12s[%s] %s\n", type, cuser.userid,
@@ -507,7 +508,7 @@ logattempt(
     if (type != ' ')
     {
         usr_fpath(fpath, cuser.userid, FN_LOGINS_BAD);
-        sprintf(buf, "[%s] BBS %s\n", Ctime(&ap_start),
+        sprintf(buf, "[%s] %s %s\n", Ctime(&ap_start), conn_type,
             (type == '*' ? currtitle : fromhost));
         f_cat(fpath, buf);
     }
@@ -1721,7 +1722,10 @@ int main(int argc, char *argv[])
         // to handle omitted `-p`
     case 'p':  /* IID.20190902: `bbsd [-p] 3456`. */
         if ((value = atoi(optarg)) > 0)
+        {
+            unix_path = NULL;
             break;
+        }
 
         if (0)  // Falls over the case
         {
