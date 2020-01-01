@@ -173,7 +173,8 @@ void vs_head(const char *title, const char *mid);
 void clear_notification(void);
 void movie(void);
 const char *check_info(const char *input);
-GCC_NORETURN void menu(void);
+void main_menu(void);
+void domenu(MENU *menu);
 /* more.c */
 char *mgets(int fd);
 void *mread(int fd, int len);

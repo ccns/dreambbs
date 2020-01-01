@@ -26,7 +26,6 @@ extern "C" {
 #endif
 
 VAR void (*s_menu)(void);
-VAR int skin INI(1);
 
 #ifdef __cplusplus
 }  /* extern "C" */

@@ -10,7 +10,6 @@
 
 extern BCACHE *bshm;
 extern UCACHE *ushm;
-int item_length[20]={0};
 
 extern time_t brd_visit[MAXBOARD];
 
@@ -1069,9 +1068,8 @@ static int
 sk_windtop_init(void)
 {
     s_menu = menu_windtop;
-    skin = 1;
     vmsg("DEBUG:DreamBBS");
-    return 0;
+    return SKIN;
 }
 
 #ifdef __cplusplus
@@ -1167,7 +1165,7 @@ goodbye1(void)
     {
     case 'g':
     case 'y':
-        return KEY_NONE;
+        return QUIT:
         break;
 
     case 'q':
@@ -1182,7 +1180,7 @@ goodbye1(void)
     outs("※ 哈哈  騙你的啦  ^O^ ，" BOARDNAME "祝您愚人節快樂 ※\n");
     bell();
     vkey();
-    return KEY_NONE;
+    return QUIT:
 }
 
 
@@ -1262,105 +1260,105 @@ check_info(const char *input)
 }
 
 
-GCC_NORETURN void
-menu(void)
+void
+main_menu(void)
 {
-    MENU *menu, *mptr, *table[17];
-    unsigned int level, mode;
-    int cc=0, cx=0, refilm=0;   /* current / previous cursor position */
-    int max=0, mmx;                     /* current / previous menu max */
-    int cmd=0, depth, count;
-    char item[60];
-    const char *str;
-
-    mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
 #ifdef  TREAT
-    menu = menu_treat;
-#else
-    menu = menu_main;
+    domenu(menu_treat);
 #endif
-    depth = mmx = 0;
+    domenu(menu_main);
+}
+
+void
+domenu(
+    MENU *menu)
+{
+    MENU *mtail, *table[17];
+    int cc=0, cx=0;     /* current / previous cursor position */
+    int max=0, mmx=0;   /* current / previous menu max */
+    int cmd=0;
+    unsigned int mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
 
     for (;;)
     {
-        level = cuser.userlevel;
+        if (!menu)
+        {
+            return;
+        }
 
         if (mode & MENU_LOAD)
         {
-            for (max = -1;; menu++)
+            unsigned int level = cuser.userlevel;
+            unsigned int mlevel;
+            max = -1;
+            for (mtail = menu;; mtail++)
             {
-                cc = menu->level;
-                if (cc & PERM_MENU)
+                mlevel = mtail->level;
+                if (mlevel & PERM_MENU)
                 {
 
 #ifdef  MENU_VERBOSE
                     if (max < 0)                /* 找不到適合權限之功能，回上一層功能表 */
                     {
-                        menu = menu->menu;
+                        menu = mtail->menu;
                         continue;
                     }
 #endif
 
                     break;
                 }
-                if (cc && !(cc & level))
+                if (mlevel && !(mlevel & level))
                     continue;
-                if (!strncmp(menu->desc, OPT_OPERATOR, strlen(OPT_OPERATOR)) && !(supervisor || !str_cmp(cuser.userid, ELDER) || !str_cmp(cuser.userid, STR_SYSOP)))
+                if (!strncmp(mtail->desc, OPT_OPERATOR, strlen(OPT_OPERATOR)) && !(supervisor || !str_cmp(cuser.userid, ELDER) || !str_cmp(cuser.userid, STR_SYSOP)))
                     continue;
 
-                table[++max] = menu;
+                table[++max] = mtail;
             }
 
             mmx = BMAX(mmx, max);
 
-#ifndef TREAT
-            if ((depth == 0) && (cutmp->ufo & UFO_BIFF))
+            if ((menu == menu_main) && (cutmp->ufo & UFO_BIFF))
                 cmd = 'M';
-            else if ((depth == 0) && (cutmp->ufo & UFO_BIFFN))
+            else if ((menu == menu_main) && (cutmp->ufo & UFO_BIFFN))
                 cmd = 'U';
             else
-#endif
-                cmd = cc ^ PERM_MENU;   /* default command */
-            utmp_mode(menu->umode);
+                cmd = mlevel ^ PERM_MENU;  /* default command */
+            utmp_mode(mtail->umode);
         }
 
         if (mode & MENU_DRAW)
         {
+            int item_length[20]={0};
+
             if (mode & MENU_FILM)
             {
                 clear();
-                refilm = 1;
             }
-            vs_head(menu->desc, NULL);
+            vs_head(mtail->desc, NULL);
             //prints("\n\x1b[30;47m     選項         選項說明                         動態看板                   \x1b[m\n");
-            mode = 0;
-            count = 0;
-            while (count<20)
-                item_length[count++] = 0;
-            do
+            for (int i = 0; i <= mmx; i++)
             {
-                move(MENU_YPOS + mode, MENU_XPOS + 2);
-                if (mode <= max)
+                move(MENU_YPOS + i, MENU_XPOS + 2);
+                if (i <= max)
                 {
-                    mptr = table[mode];
-                    str = check_info(mptr->desc);
+                    char item[60];
+                    const MENU *const mptr = table[i];
+                    const char *const str = check_info(mptr->desc);
+
                     sprintf(item, "\x1b[m(\x1b[1;36m%c\x1b[m)%s", *str, str+1);
                     outs(item);
+
                     if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
-                        grayout(MENU_YPOS + mode, MENU_YPOS + mode + 1, GRAYOUT_COLORNORM);
-                    item_length[mode]=(cuser.ufo2 & UFO2_COLOR) ? strlen(item)-count_len(str)-2 : 0;
-                    /*outs("(\x1b[1;36m");
-                    outc(*str++);
-                    outs("\x1b[m)");
-                    outs(str);*/
+                        grayout(MENU_YPOS + i, MENU_YPOS + i + 1, GRAYOUT_COLORNORM);
+
+                    item_length[i]=(cuser.ufo2 & UFO2_COLOR) ? strlen(item)-count_len(str)-2 : 0;
                 }
                 clrtoeol();
-            } while (++mode <= mmx);
-            if (refilm)
+            }
+            if (mode & MENU_FILM)
             {
                 movie();
                 cx = -1;
-                refilm = 0;
             }
 
             mmx = max;
@@ -1399,72 +1397,65 @@ menu(void)
 
         case '\n':
         case KEY_RIGHT:
-            mptr = table[cc];
-            cmd = mptr->umode;
+            {
+                MENU *const mptr = table[cc];
+                int mmode = mptr->umode;
+                int res;
 #if !NO_SO
-            /* Thor.990212: dynamic load, with negative umode */
-            if (cmd < 0)
-            {
-                void *p = DL_GET(mptr->dlfunc);
-                if (!p) break;
-                mptr->func = (int (*)(void))p;
-                cmd = -cmd;
-                mptr->umode = cmd;
-            }
+                /* Thor.990212: dynamic load, with negative umode */
+                if (mmode < 0)
+                {
+                    void *p = DL_GET(mptr->dlfunc);
+                    if (!p) break;
+                    mptr->func = (int (*)(void))p;
+                    mmode = -mmode;
+                    mptr->umode = mmode;
+                }
 #endif
-            utmp_mode(cmd /* = mptr->umode*/);
+                utmp_mode(mmode /* = mptr->umode*/);
 
-            if (cmd <= M_XMENU)
-            {
-                menu->level = PERM_MENU + mptr->desc[0];
-                menu = mptr->menu;
-                mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
-                depth++;
-                continue;
-            }
+                if (mmode <= M_XMENU)
+                {
+                    mtail->level = PERM_MENU + mptr->desc[0];
+                    menu = mptr->menu;
+                    mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
+                    continue;
+                }
 
-            mode = (*mptr->func) ();
+                res = (*mptr->func) ();
+
+                utmp_mode(mtail->umode);
+
+                switch (res)
+                {
+                case XEASY:
+#if 1
+                    /* Thor.980826: 用 outz 就不用 move + clrtoeol了 */
+                    outf(footer);
+#endif
+                    mode = 0;
+                    break;
+
+                case QUIT:
+                    return;
 
 #ifdef  HAVE_CHANGE_SKIN
-            if (skin)
-            {
-                vmsg("DEBUG:SKIN");
-                vmsg("123");
-                //(*s_menu)();
-                return;
-                vmsg("1234");
-            }
-
+                case SKIN:
+                    vmsg("DEBUG:SKIN");
+                    vmsg("123");
+                    //(*s_menu)();
+                    return;
+                    vmsg("1234");
+                    break;
 #endif
 
-#ifdef  TREAT
-            if (mode == KEY_NONE)
-            {
-                menu = menu_main;
-                mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
+                default:
+                    mode = MENU_DRAW | MENU_FILM;
+                }
+
+                cmd = mptr->desc[0];
                 continue;
             }
-#endif
-
-            utmp_mode(menu->umode);
-
-
-            if (mode == XEASY)
-            {
-#if 1
-                /* Thor.980826: 用 outz 就不用 move + clrtoeol了 */
-                outf(footer);
-#endif
-
-                mode = 0;
-            }
-            else
-            {
-                mode = MENU_DRAW | MENU_FILM;
-            }
-
-            cmd = mptr->desc[0];
-            continue;
 
 #ifdef EVERY_Z
         case Ctrl('Z'):
@@ -1485,12 +1476,11 @@ menu(void)
             break;
         case KEY_LEFT:
         case 'e':
-            if (depth > 0)
+            if (menu != menu_main)
             {
-                menu->level = PERM_MENU + table[cc]->desc[0];
-                menu = menu->menu;
+                mtail->level = PERM_MENU + table[cc]->desc[0];
+                menu = mtail->menu;
                 mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
-                depth--;
                 continue;
             }
 
@@ -1504,15 +1494,12 @@ menu(void)
             if (cmd >= 'a' && cmd <= 'z')
                 cmd -= 0x20;
 
-            cc = 0;
-            for (;;)
+            for (int i = 0; i <= max; i++)
             {
-                if (table[cc]->desc[0] == cmd)
-                    break;
-                if (++cc > max)
+                if (table[i]->desc[0] == cmd)
                 {
-                    cc = cx;
-                    goto menu_key;
+                    cc = i;
+                    break;
                 }
             }
         }
