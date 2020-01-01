@@ -1478,9 +1478,9 @@ menu(void)
             every_B();
             break;
         case Ctrl('S'):
-            every_S();
-            break;
+        case 'S':
         case 's':
+        case '/':
             every_S();
             break;
         case KEY_LEFT:
