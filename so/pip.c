@@ -5236,8 +5236,9 @@ pip_ending_decide(
 char *endbuf1, char *endbuf2, char *endbuf3,
 int *endmode, int *endgrade)
 {
+    //   男的, 女的
     static const char *const name[8][2] = {
-        {"男的", "女的"},
+        {"嫁給了同行的男生", "娶了同行的女孩"},
         {"嫁給王子",   "娶了公主"},
         {"嫁給你",     "娶了你"},
         {"嫁給商人Ａ", "娶了女商人Ａ"},
@@ -5254,43 +5255,43 @@ int *endmode, int *endgrade)
     *endmode = pip_future_decide(&modeall_purpose);
     switch (*endmode)
     {
-        /*1:暗黑 2:藝術 3:萬能 4:戰士 5:魔法 6:社交 7:家事*/
-    case 1:
+        /*0:暗黑 1:藝術 2:萬能 3:戰士 4:魔法 5:社交 6:家事*/
+    case 0:
         pip_endingblack(buf1, &m, &n, &grade);
         break;
-    case 2:
+    case 1:
         pip_endingart(buf1, &m, &n, &grade);
         break;
-    case 3:
+    case 2:
         pip_endingall_purpose(buf1, &m, &n, &grade, modeall_purpose);
         break;
-    case 4:
+    case 3:
         pip_endingcombat(buf1, &m, &n, &grade);
         break;
-    case 5:
+    case 4:
         pip_endingmagic(buf1, &m, &n, &grade);
         break;
-    case 6:
+    case 5:
         pip_endingsocial(buf1, &m, &n, &grade);
         break;
-    case 7:
+    case 6:
         pip_endingfamily(buf1, &m, &n, &grade);
         break;
     }
 
     grade += pip_marry_decide();
     strcpy(endbuf1, buf1);
-    if (n == 1)
+    if (n == 0)
     {
         *endgrade = grade + 300;
         sprintf(buf2, "非常的順利..");
     }
-    else if (n == 2)
+    else if (n == 1)
     {
         *endgrade = grade + 100;
         sprintf(buf2, "表現還不錯..");
     }
-    else if (n == 3)
+    else if (n == 2)
     {
         *endgrade = grade - 10;
         sprintf(buf2, "常遇到很多問題....");
@@ -5308,15 +5309,15 @@ int *endmode, int *endgrade)
     else if (d.lover == 0)
     {
         if (d.sex == 1)
-            sprintf(buf2, "娶了同行的女孩");
+            sprintf(buf2, "%s", name[0][1]);
         else
-            sprintf(buf2, "嫁給了同行的男生");
+            sprintf(buf2, "%s", name[0][0]);
     }
     strcpy(endbuf3, buf2);
     return 0;
 }
 /*結局判斷*/
-/*1:暗黑 2:藝術 3:萬能 4:戰士 5:魔法 6:社交 7:家事*/
+/*0:暗黑 1:藝術 2:萬能 3:戰士 4:魔法 5:社交 6:家事*/
 static int
 pip_future_decide(
 int *modeall_purpose)
@@ -5324,47 +5325,47 @@ int *modeall_purpose)
     int endmode;
     /*暗黑*/
     if ((d.ethics == 0 && d.offense >= 100) || (d.ethics > 0 && d.ethics < 50 && d.offense >= 250))
-        endmode = 1;
+        endmode = 0;
     /*藝術*/
     else if (d.art > d.hexp && d.art > d.mexp && d.art > d.hskill && d.art > d.mskill &&
              d.art > d.social && d.art > d.family && d.art > d.homework && d.art > d.wisdom &&
              d.art > d.charm && d.art > d.belief && d.art > d.manners && d.art > d.speech &&
              d.art > d.cookskill && d.art > d.love)
-        endmode = 2;
+        endmode = 1;
     /*戰鬥*/
     else if (d.hexp >= d.social && d.hexp >= d.mexp && d.hexp >= d.family)
     {
-        *modeall_purpose = 1;
+        *modeall_purpose = 0;
         if (d.hexp > d.social + 50 || d.hexp > d.mexp + 50 || d.hexp > d.family + 50)
-            endmode = 4;
-        else
             endmode = 3;
+        else
+            endmode = 2;
     }
     /*魔法*/
     else if (d.mexp >= d.hexp && d.mexp >= d.social && d.mexp >= d.family)
     {
-        *modeall_purpose = 2;
+        *modeall_purpose = 1;
         if (d.mexp > d.hexp || d.mexp > d.social || d.mexp > d.family)
-            endmode = 5;
+            endmode = 4;
         else
-            endmode = 3;
+            endmode = 2;
     }
     else if (d.social >= d.hexp && d.social >= d.mexp && d.social >= d.family)
     {
-        *modeall_purpose = 3;
+        *modeall_purpose = 2;
         if (d.social > d.hexp + 50 || d.social > d.mexp + 50 || d.social > d.family + 50)
-            endmode = 6;
+            endmode = 5;
         else
-            endmode = 3;
+            endmode = 2;
     }
 
     else
     {
-        *modeall_purpose = 4;
+        *modeall_purpose = 3;
         if (d.family > d.hexp + 50 || d.family > d.mexp + 50 || d.family > d.social + 50)
-            endmode = 7;
+            endmode = 6;
         else
-            endmode = 3;
+            endmode = 2;
     }
     return endmode;
 }
@@ -5408,76 +5409,76 @@ int *m, int *n, int *grade)
 {
     if (d.offense >= 500 && d.mexp >= 500) /*魔王*/
     {
-        *m = 1;
+        *m = 0;
         if (d.mexp >= 1000)
-            *n = 1;
+            *n = 0;
         else if (d.mexp < 1000 && d.mexp >= 800)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
     }
 
     else if (d.hexp >= 600)  /*流氓*/
     {
-        *m = 2;
+        *m = 1;
         if (d.wisdom >= 350)
-            *n = 1;
+            *n = 0;
         else if (d.wisdom < 350 && d.wisdom >= 300)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
     }
     else if (d.speech >= 100 && d.art >= 80) /*SM*/
     {
-        *m = 3;
+        *m = 2;
         if (d.speech > 150 && d.art >= 120)
-            *n = 1;
+            *n = 0;
         else if (d.speech > 120 && d.art >= 100)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
     }
     else if (d.hexp >= 320 && d.character > 200 && d.charm < 200)       /*黑街老大*/
     {
-        *m = 4;
+        *m = 3;
         if (d.hexp >= 400)
-            *n = 1;
+            *n = 0;
         else if (d.hexp < 400 && d.hexp >= 360)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
     }
     else if (d.character >= 200 && d.charm >= 200 && d.speech > 70 && d.toman > 70)  /*高級娼婦*/
     {
-        *m = 5;
+        *m = 4;
         if (d.charm >= 300)
-            *n = 1;
+            *n = 0;
         else if (d.charm < 300 && d.charm >= 250)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
     }
 
     else if (d.wisdom >= 450)  /*詐騙師*/
     {
-        *m = 6;
+        *m = 5;
         if (d.wisdom >= 550)
-            *n = 1;
+            *n = 0;
         else if (d.wisdom < 550 && d.wisdom >= 500)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
     }
 
     else /*流鶯*/
     {
-        *m = 7;
+        *m = 6;
         if (d.charm >= 350)
-            *n = 1;
+            *n = 0;
         else if (d.charm < 350 && d.charm >= 300)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
     }
     if (d.sex == 1)
         strcpy(buf, endmodeblack[*m].boy);
@@ -5494,109 +5495,109 @@ char *buf,
 int *m, int *n, int *grade)
 {
     int class_;
-    if (d.social > 600) class_ = 1;
-    else if (d.social > 450) class_ = 2;
-    else if (d.social > 380) class_ = 3;
-    else if (d.social > 250) class_ = 4;
-    else class_ = 5;
+    if (d.social > 600) class_ = 0;
+    else if (d.social > 450) class_ = 1;
+    else if (d.social > 380) class_ = 2;
+    else if (d.social > 250) class_ = 3;
+    else class_ = 4;
 
     switch (class_)
     {
-    case 1:
+    case 0:
         if (d.charm > 500)
+        {
+            *m = 0;
+            d.lover = 10;
+            if (d.character >= 700)
+                *n = 0;
+            else if (d.character < 700 && d.character >= 500)
+                *n = 1;
+            else
+                *n = 2;
+        }
+        else
         {
             *m = 1;
             d.lover = 10;
             if (d.character >= 700)
-                *n = 1;
+                *n = 0;
             else if (d.character < 700 && d.character >= 500)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
         }
+        break;
+
+    case 1:
+        *m = 0;
+        d.lover = 10;
+        if (d.character >= 700)
+            *n = 0;
+        else if (d.character < 700 && d.character >= 500)
+            *n = 1;
         else
-        {
-            *m = 2;
-            d.lover = 10;
-            if (d.character >= 700)
-                *n = 1;
-            else if (d.character < 700 && d.character >= 500)
-                *n = 2;
-            else
-                *n = 3;
-        }
+            *n = 2;
         break;
 
     case 2:
-        *m = 1;
-        d.lover = 10;
-        if (d.character >= 700)
-            *n = 1;
-        else if (d.character < 700 && d.character >= 500)
-            *n = 2;
-        else
-            *n = 3;
-        break;
-
-    case 3:
         if (d.character >= d.charm)
         {
-            *m = 3;
+            *m = 2;
             d.lover = 10;
             if (d.toman >= 250)
-                *n = 1;
+                *n = 0;
             else if (d.toman < 250 && d.toman >= 200)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
         }
         else
         {
-            *m = 4;
+            *m = 3;
             d.lover = 10;
             if (d.character >= 400)
-                *n = 1;
+                *n = 0;
             else if (d.character < 400 && d.character >= 300)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
+        }
+        break;
+
+    case 3:
+        if (d.wisdom >= d.affect)
+        {
+            *m = 4;
+            d.lover = 10;
+            if (d.toman > 120 && d.cookskill > 300 && d.homework > 300)
+                *n = 0;
+            else if (d.toman < 120 && d.cookskill < 300 && d.homework < 300 && d.toman > 100 && d.cookskill > 250 && d.homework > 250)
+                *n = 1;
+            else
+                *n = 2;
+        }
+        else
+        {
+            *m = 5;
+            d.lover = 10;
+            if (d.hp >= 400)
+                *n = 0;
+            else if (d.hp < 400 && d.hp >= 300)
+                *n = 1;
+            else
+                *n = 2;
         }
         break;
 
     case 4:
-        if (d.wisdom >= d.affect)
-        {
-            *m = 5;
-            d.lover = 10;
-            if (d.toman > 120 && d.cookskill > 300 && d.homework > 300)
-                *n = 1;
-            else if (d.toman < 120 && d.cookskill < 300 && d.homework < 300 && d.toman > 100 && d.cookskill > 250 && d.homework > 250)
-                *n = 2;
-            else
-                *n = 3;
-        }
-        else
-        {
-            *m = 6;
-            d.lover = 10;
-            if (d.hp >= 400)
-                *n = 1;
-            else if (d.hp < 400 && d.hp >= 300)
-                *n = 2;
-            else
-                *n = 3;
-        }
-        break;
-
-    case 5:
-        *m = 7;
+        *m = 6;
         d.lover = 10;
         if (d.charm >= 200)
-            *n = 1;
+            *n = 0;
         else if (d.charm < 200 && d.charm >= 100)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
         break;
     }
     if (d.sex == 1)
@@ -5613,110 +5614,110 @@ char *buf,
 int *m, int *n, int *grade)
 {
     int class_;
-    if (d.mexp > 800) class_ = 1;
-    else if (d.mexp > 600) class_ = 2;
-    else if (d.mexp > 500) class_ = 3;
-    else if (d.mexp > 300) class_ = 4;
-    else class_ = 5;
+    if (d.mexp > 800) class_ = 0;
+    else if (d.mexp > 600) class_ = 1;
+    else if (d.mexp > 500) class_ = 2;
+    else if (d.mexp > 300) class_ = 3;
+    else class_ = 4;
 
     switch (class_)
     {
-    case 1:
+    case 0:
         if (d.affect > d.wisdom && d.affect > d.belief && d.ethics > 100)
         {
-            *m = 1;
+            *m = 0;
             if (d.ethics >= 800)
-                *n = 1;
+                *n = 0;
             else if (d.ethics < 800 && d.ethics >= 400)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
         }
         else if (d.ethics < 50)
         {
-            *m = 4;
+            *m = 3;
             if (d.hp >= 400)
-                *n = 1;
+                *n = 0;
             else if (d.hp < 400 && d.hp >= 200)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
         }
         else
         {
-            *m = 2;
+            *m = 1;
             if (d.wisdom >= 800)
-                *n = 1;
+                *n = 0;
             else if (d.wisdom < 800 && d.wisdom >= 400)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
+        }
+        break;
+
+    case 1:
+        if (d.ethics >= 50)
+        {
+            *m = 2;
+            if (d.wisdom >= 500)
+                *n = 0;
+            else if (d.wisdom < 500 && d.wisdom >= 200)
+                *n = 1;
+            else
+                *n = 2;
+        }
+        else
+        {
+            *m = 3;
+            if (d.hp >= 400)
+                *n = 0;
+            else if (d.hp < 400 && d.hp >= 200)
+                *n = 1;
+            else
+                *n = 2;
         }
         break;
 
     case 2:
-        if (d.ethics >= 50)
-        {
-            *m = 3;
-            if (d.wisdom >= 500)
-                *n = 1;
-            else if (d.wisdom < 500 && d.wisdom >= 200)
-                *n = 2;
-            else
-                *n = 3;
-        }
+        *m = 4;
+        if (d.mskill >= 300)
+            *n = 0;
+        else if (d.mskill < 300 && d.mskill >= 150)
+            *n = 1;
         else
-        {
-            *m = 4;
-            if (d.hp >= 400)
-                *n = 1;
-            else if (d.hp < 400 && d.hp >= 200)
-                *n = 2;
-            else
-                *n = 3;
-        }
+            *n = 2;
         break;
 
     case 3:
         *m = 5;
-        if (d.mskill >= 300)
+        if (d.speech >= 150)
+            *n = 0;
+        else if (d.speech < 150 && d.speech >= 60)
             *n = 1;
-        else if (d.mskill < 300 && d.mskill >= 150)
-            *n = 2;
         else
-            *n = 3;
+            *n = 2;
         break;
 
     case 4:
-        *m = 6;
-        if (d.speech >= 150)
-            *n = 1;
-        else if (d.speech < 150 && d.speech >= 60)
-            *n = 2;
-        else
-            *n = 3;
-        break;
-
-    case 5:
         if (d.character >= 200)
         {
-            *m = 7;
+            *m = 6;
             if (d.speech >= 150)
-                *n = 1;
+                *n = 0;
             else if (d.speech < 150 && d.speech >= 60)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
         }
         else
         {
-            *m = 8;
+            *m = 7;
             if (d.speech >= 150)
-                *n = 1;
+                *n = 0;
             else if (d.speech < 150 && d.speech >= 60)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
         }
         break;
 
@@ -5736,121 +5737,127 @@ char *buf,
 int *m, int *n, int *grade)
 {
     int class_;
-    if (d.hexp > 1500) class_ = 1;
-    else if (d.hexp > 1000) class_ = 2;
-    else if (d.hexp > 800) class_ = 3;
-    else class_ = 4;
+    if (d.hexp > 1500) class_ = 0;
+    else if (d.hexp > 1000) class_ = 1;
+    else if (d.hexp > 800) class_ = 2;
+    else class_ = 3;
 
     switch (class_)
     {
-    case 1:
+    case 0:
         if (d.affect > d.wisdom && d.affect > d.belief && d.ethics > 100)
         {
-            *m = 1;
+            *m = 0;
             if (d.ethics >= 800)
-                *n = 1;
+                *n = 0;
             else if (d.ethics < 800 && d.ethics >= 400)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
         }
         else if (d.ethics < 50)
         {
-
+            *m = 3;
+            if (d.hp >= 400)
+                *n = 0;
+            else if (d.hp >= 200)
+                *n = 1;
+            else
+                *n = 2;
         }
         else
         {
-            *m = 2;
+            *m = 1;
             if (d.wisdom >= 800)
-                *n = 1;
+                *n = 0;
             else if (d.wisdom < 800 && d.wisdom >= 400)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
+        }
+        break;
+
+    case 1:
+        if (d.character >= 300 && d.ethics > 50)
+        {
+            *m = 2;
+            if (d.ethics >= 300 && d.charm >= 300)
+                *n = 0;
+            else if (d.ethics < 300 && d.charm < 300 && d.ethics >= 250 && d.charm >= 250)
+                *n = 1;
+            else
+                *n = 2;
+        }
+        else if (d.character < 300 && d.ethics > 50)
+        {
+            *m = 3;
+            if (d.speech >= 200)
+                *n = 0;
+            else if (d.speech < 150 && d.speech >= 80)
+                *n = 1;
+            else
+                *n = 2;
+        }
+        else
+        {
+            *m = 6;
+            if (d.hp >= 400)
+                *n = 0;
+            else if (d.hp < 400 && d.hp >= 200)
+                *n = 1;
+            else
+                *n = 2;
         }
         break;
 
     case 2:
-        if (d.character >= 300 && d.ethics > 50)
-        {
-            *m = 3;
-            if (d.ethics >= 300 && d.charm >= 300)
-                *n = 1;
-            else if (d.ethics < 300 && d.charm < 300 && d.ethics >= 250 && d.charm >= 250)
-                *n = 2;
-            else
-                *n = 3;
-        }
-        else if (d.character < 300 && d.ethics > 50)
+        if (d.character >= 400 && d.ethics > 50)
         {
             *m = 4;
-            if (d.speech >= 200)
+            if (d.ethics >= 300)
+                *n = 0;
+            else if (d.ethics < 300 && d.ethics >= 150)
                 *n = 1;
-            else if (d.speech < 150 && d.speech >= 80)
-                *n = 2;
             else
-                *n = 3;
+                *n = 2;
+        }
+        else if (d.character < 400 && d.ethics > 50)
+        {
+            *m = 3;
+            if (d.speech >= 200)
+                *n = 0;
+            else if (d.speech < 150 && d.speech >= 80)
+                *n = 1;
+            else
+                *n = 2;
         }
         else
         {
-            *m = 7;
+            *m = 6;
             if (d.hp >= 400)
-                *n = 1;
+                *n = 0;
             else if (d.hp < 400 && d.hp >= 200)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
         }
         break;
 
     case 3:
-        if (d.character >= 400 && d.ethics > 50)
+        if (d.ethics >= 50)
         {
             *m = 5;
-            if (d.ethics >= 300)
-                *n = 1;
-            else if (d.ethics < 300 && d.ethics >= 150)
-                *n = 2;
-            else
-                *n = 3;
-        }
-        else if (d.character < 400 && d.ethics > 50)
-        {
-            *m = 4;
-            if (d.speech >= 200)
-                *n = 1;
-            else if (d.speech < 150 && d.speech >= 80)
-                *n = 2;
-            else
-                *n = 3;
         }
         else
         {
             *m = 7;
-            if (d.hp >= 400)
-                *n = 1;
-            else if (d.hp < 400 && d.hp >= 200)
-                *n = 2;
-            else
-                *n = 3;
-        }
-        break;
-
-    case 4:
-        if (d.ethics >= 50)
-        {
-            *m = 6;
-        }
-        else
-        {
-            *m = 8;
         }
         if (d.hskill >= 100)
-            *n = 1;
+            *n = 0;
         else if (d.hskill < 100 && d.hskill >= 80)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
         break;
     }
 
@@ -5868,13 +5875,13 @@ pip_endingfamily( /*家事*/
 char *buf,
 int *m, int *n, int *grade)
 {
-    *m = 1;
+    *m = 0;
     if (d.charm >= 200)
-        *n = 1;
+        *n = 0;
     else if (d.charm < 200 && d.charm > 100)
-        *n = 2;
+        *n = 1;
     else
-        *n = 3;
+        *n = 2;
 
     if (d.sex == 1)
         strcpy(buf, endmodefamily[*m].boy);
@@ -5895,274 +5902,262 @@ int mode)
     int class_;
     int num = 0;
 
-    if (mode == 1)
+    if (mode == 0)
         data = d.hexp;
-    else if (mode == 2)
+    else if (mode == 1)
         data = d.mexp;
-    else if (mode == 3)
+    else if (mode == 2)
         data = d.social;
-    else  // mode == 4
+    else  // mode == 3
         data = d.family;
-    if (data > 1000) class_ = 1;
-    else if (data > 800) class_ = 2;
-    else if (data > 500) class_ = 3;
-    else if (data > 300) class_ = 4;
-    else class_ = 5;
+    if (data > 1000) class_ = 0;
+    else if (data > 800) class_ = 1;
+    else if (data > 500) class_ = 2;
+    else if (data > 300) class_ = 3;
+    else class_ = 4;
 
     data = pip_max_worktime(&num);
     switch (class_)
     {
-    case 1:
+    case 0:
         if (d.character >= 1000)
         {
-            *m = 1;
+            *m = 0;
             if (d.ethics >= 900)
-                *n = 1;
+                *n = 0;
             else if (d.ethics < 900 && d.ethics >= 600)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
         }
         else
         {
-            *m = 2;
+            *m = 1;
             if (d.ethics >= 650)
-                *n = 1;
+                *n = 0;
             else if (d.ethics < 650 && d.ethics >= 400)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
+        }
+        break;
+
+    case 1:
+        if (d.belief > d.ethics && d.belief > d.wisdom)
+        {
+            *m = 2;
+            if (d.ethics >= 500)
+                *n = 0;
+            else if (d.ethics < 500 && d.ethics >= 250)
+                *n = 1;
+            else
+                *n = 2;
+        }
+        else if (d.ethics > d.belief && d.ethics > d.wisdom)
+        {
+            *m = 3;
+            if (d.wisdom >= 800)
+                *n = 0;
+            else if (d.wisdom < 800 && d.wisdom >= 600)
+                *n = 1;
+            else
+                *n = 2;
+        }
+        else
+        {
+            *m = 4;
+            if (d.affect >= 800)
+                *n = 0;
+            else if (d.affect < 800 && d.affect >= 400)
+                *n = 1;
+            else
+                *n = 2;
         }
         break;
 
     case 2:
         if (d.belief > d.ethics && d.belief > d.wisdom)
         {
-            *m = 3;
-            if (d.ethics >= 500)
+            *m = 5;
+            if (d.belief >= 400)
+                *n = 0;
+            else if (d.belief < 400 && d.belief >= 150)
                 *n = 1;
-            else if (d.ethics < 500 && d.ethics >= 250)
-                *n = 2;
             else
-                *n = 3;
+                *n = 2;
         }
         else if (d.ethics > d.belief && d.ethics > d.wisdom)
         {
-            *m = 4;
-            if (d.wisdom >= 800)
+            *m = 6;
+            if (d.wisdom >= 700)
+                *n = 0;
+            else if (d.wisdom < 700 && d.wisdom >= 400)
                 *n = 1;
-            else if (d.wisdom < 800 && d.wisdom >= 600)
-                *n = 2;
             else
-                *n = 3;
+                *n = 2;
         }
         else
         {
-            *m = 5;
+            *m = 7;
             if (d.affect >= 800)
-                *n = 1;
+                *n = 0;
             else if (d.affect < 800 && d.affect >= 400)
-                *n = 2;
+                *n = 1;
             else
-                *n = 3;
+                *n = 2;
         }
         break;
 
     case 3:
-        if (d.belief > d.ethics && d.belief > d.wisdom)
+        *m = 8 + num;
+        switch (num)
         {
-            *m = 6;
-            if (d.belief >= 400)
-                *n = 1;
-            else if (d.belief < 400 && d.belief >= 150)
-                *n = 2;
-            else
-                *n = 3;
-        }
-        else if (d.ethics > d.belief && d.ethics > d.wisdom)
-        {
-            *m = 7;
-            if (d.wisdom >= 700)
-                *n = 1;
-            else if (d.wisdom < 700 && d.wisdom >= 400)
-                *n = 2;
-            else
-                *n = 3;
-        }
-        else
-        {
+        default:
             *m = 8;
-            if (d.affect >= 800)
-                *n = 1;
-            else if (d.affect < 800 && d.affect >= 400)
-                *n = 2;
-            else
-                *n = 3;
+        case 0:
+            if (d.ethics > 400) *n = 0;
+            else if (d.ethics > 200) *n = 1;
+            else *n = 2;
+            break;
+        case 1:
+            if (d.love > 100) *n = 0;
+            else if (d.love > 50) *n = 1;
+            else *n = 2;
+            break;
+        case 2:
+            if (d.homework > 100) *n = 0;
+            else if (d.homework > 50) *n = 1;
+            else *n = 2;
+            break;
+        case 3:
+            if (d.hp > 600) *n = 0;
+            else if (d.hp > 300) *n = 1;
+            else *n = 2;
+            break;
+        case 4:
+            if (d.cookskill > 200) *n = 0;
+            else if (d.cookskill > 100) *n = 1;
+            else *n = 2;
+            break;
+        case 5:
+            if ((d.belief + d.ethics) > 600) *n = 0;
+            else if ((d.belief + d.ethics) > 200) *n = 1;
+            else *n = 2;
+            break;
+        case 6:
+            if (d.speech > 150) *n = 0;
+            else if (d.speech > 50) *n = 1;
+            else *n = 2;
+            break;
+        case 7:
+            if ((d.hp + d.wrist) > 900) *n = 0;
+            else if ((d.hp + d.wrist) > 600) *n = 1;
+            else *n = 2;
+            break;
+        case 8:
+        case 10:
+            if (d.art > 250) *n = 0;
+            else if (d.art > 100) *n = 1;
+            else *n = 2;
+            break;
+        case 9:
+            if (d.hskill > 250) *n = 0;
+            else if (d.hskill > 100) *n = 1;
+            else *n = 2;
+            break;
+        case 11:
+            if (d.belief > 500) *n = 0;
+            else if (d.belief > 200) *n = 1;
+            else *n = 2;
+            break;
+        case 12:
+            if (d.wisdom > 500) *n = 0;
+            else if (d.wisdom > 200) *n = 1;
+            else *n = 2;
+            break;
+        case 13:
+        case 15:
+            if (d.charm > 1000) *n = 0;
+            else if (d.charm > 500) *n = 1;
+            else *n = 2;
+            break;
+        case 14:
+            if (d.charm > 700) *n = 0;
+            else if (d.charm > 300) *n = 1;
+            else *n = 2;
+            break;
         }
         break;
-
     case 4:
-        if (num >= 2)
+        *m = 24 + num;
+        switch (num)
         {
-            *m = 8 + num;
-            switch (num)
-            {
-            case 2:
-                if (d.love > 100)       *n = 1;
-                else if (d.love > 50) *n = 2;
-                else *n = 3;
-                break;
-            case 3:
-                if (d.homework > 100) *n = 1;
-                else if (d.homework > 50) *n = 2;
-                else *n = 3;
-                break;
-            case 4:
-                if (d.hp > 600) *n = 1;
-                else if (d.hp > 300) *n = 2;
-                else *n = 3;
-                break;
-            case 5:
-                if (d.cookskill > 200) *n = 1;
-                else if (d.cookskill > 100) *n = 2;
-                else *n = 3;
-                break;
-            case 6:
-                if ((d.belief + d.ethics) > 600) *n = 1;
-                else if ((d.belief + d.ethics) > 200) *n = 2;
-                else *n = 3;
-                break;
-            case 7:
-                if (d.speech > 150) *n = 1;
-                else if (d.speech > 50) *n = 2;
-                else *n = 3;
-                break;
-            case 8:
-                if ((d.hp + d.wrist) > 900) *n = 1;
-                else if ((d.hp + d.wrist) > 600) *n = 2;
-                else *n = 3;
-                break;
-            case 9:
-            case 11:
-                if (d.art > 250) *n = 1;
-                else if (d.art > 100) *n = 2;
-                else *n = 3;
-                break;
-            case 10:
-                if (d.hskill > 250) *n = 1;
-                else if (d.hskill > 100) *n = 2;
-                else *n = 3;
-                break;
-            case 12:
-                if (d.belief > 500) *n = 1;
-                else if (d.belief > 200) *n = 2;
-                else *n = 3;
-                break;
-            case 13:
-                if (d.wisdom > 500) *n = 1;
-                else if (d.wisdom > 200) *n = 2;
-                else *n = 3;
-                break;
-            case 14:
-            case 16:
-                if (d.charm > 1000) *n = 1;
-                else if (d.charm > 500) *n = 2;
-                else *n = 3;
-                break;
-            case 15:
-                if (d.charm > 700) *n = 1;
-                else if (d.charm > 300) *n = 2;
-                else *n = 3;
-                break;
-            }
-        }
-        else
-        {
-            *m = 9;
-            if (d.ethics > 400)
-                *n = 1;
-            else if (d.ethics > 200)
-                *n = 2;
-            else
-                *n = 3;
-        }
-        break;
-    case 5:
-        if (num >= 2)
-        {
-            *m = 24 + num;
-            switch (num)
-            {
-            case 2:
-            case 3:
-                if (d.hp > 400) *n = 1;
-                else if (d.hp > 150) *n = 2;
-                else *n = 3;
-                break;
-            case 4:
-            case 10:
-            case 11:
-                if (d.hp > 600) *n = 1;
-                else if (d.hp > 300) *n = 2;
-                else *n = 3;
-                break;
-            case 5:
-                if (d.cookskill > 150) *n = 1;
-                else if (d.cookskill > 80) *n = 2;
-                else *n = 3;
-                break;
-            case 6:
-                if ((d.belief + d.ethics) > 600) *n = 1;
-                else if ((d.belief + d.ethics) > 200) *n = 2;
-                else *n = 3;
-                break;
-            case 7:
-                if (d.speech > 150) *n = 1;
-                else if (d.speech > 50) *n = 2;
-                else *n = 3;
-                break;
-            case 8:
-                if ((d.hp + d.wrist) > 700) *n = 1;
-                else if ((d.hp + d.wrist) > 300) *n = 2;
-                else *n = 3;
-                break;
-            case 9:
-                if (d.art > 100) *n = 1;
-                else if (d.art > 50) *n = 2;
-                else *n = 3;
-                break;
-            case 12:
-                if (d.hp > 300) *n = 1;
-                else if (d.hp > 150) *n = 2;
-                else *n = 3;
-                break;
-            case 13:
-                if (d.speech > 100) *n = 1;
-                else if (d.speech > 40) *n = 2;
-                else *n = 3;
-                break;
-            case 14:
-            case 16:
-                if (d.charm > 1000) *n = 1;
-                else if (d.charm > 500) *n = 2;
-                else *n = 3;
-                break;
-            case 15:
-                if (d.charm > 700) *n = 1;
-                else if (d.charm > 300) *n = 2;
-                else *n = 3;
-                break;
-            }
-        }
-        else
-        {
-            *m = 25;
-            if (d.relation > 100)
-                *n = 1;
-            else if (d.relation > 50)
-                *n = 2;
-            else
-                *n = 3;
+        default:
+            *m = 24;
+        case 0:
+            if (d.relation > 100) *n = 0;
+            else if (d.relation > 50) *n = 1;
+            else *n = 2;
+            break;
+        case 1:
+        case 2:
+            if (d.hp > 400) *n = 0;
+            else if (d.hp > 150) *n = 1;
+            else *n = 2;
+            break;
+        case 3:
+        case 9:
+        case 10:
+            if (d.hp > 600) *n = 0;
+            else if (d.hp > 300) *n = 1;
+            else *n = 2;
+            break;
+        case 4:
+            if (d.cookskill > 150) *n = 0;
+            else if (d.cookskill > 80) *n = 1;
+            else *n = 2;
+            break;
+        case 5:
+            if ((d.belief + d.ethics) > 600) *n = 0;
+            else if ((d.belief + d.ethics) > 200) *n = 1;
+            else *n = 2;
+            break;
+        case 6:
+            if (d.speech > 150) *n = 0;
+            else if (d.speech > 50) *n = 1;
+            else *n = 2;
+            break;
+        case 7:
+            if ((d.hp + d.wrist) > 700) *n = 0;
+            else if ((d.hp + d.wrist) > 300) *n = 1;
+            else *n = 2;
+            break;
+        case 8:
+            if (d.art > 100) *n = 0;
+            else if (d.art > 50) *n = 1;
+            else *n = 2;
+            break;
+        case 11:
+            if (d.hp > 300) *n = 0;
+            else if (d.hp > 150) *n = 1;
+            else *n = 2;
+            break;
+        case 12:
+            if (d.speech > 100) *n = 0;
+            else if (d.speech > 40) *n = 1;
+            else *n = 2;
+            break;
+        case 13:
+        case 15:
+            if (d.charm > 1000) *n = 0;
+            else if (d.charm > 500) *n = 1;
+            else *n = 2;
+            break;
+        case 14:
+            if (d.charm > 700) *n = 0;
+            else if (d.charm > 300) *n = 1;
+            else *n = 2;
+            break;
         }
         break;
     }
@@ -6182,43 +6177,43 @@ int *m, int *n, int *grade)
 {
     if (d.speech >= 100)
     {
-        *m = 1;
+        *m = 0;
         if (d.hp >= 300 && d.affect >= 350)
-            *n = 1;
+            *n = 0;
         else if (d.hp < 300 && d.affect < 350 && d.hp >= 250 && d.affect >= 300)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
     }
     else if (d.wisdom >= 400)
     {
-        *m = 2;
+        *m = 1;
         if (d.affect >= 500)
-            *n = 1;
+            *n = 0;
         else if (d.affect < 500 && d.affect >= 450)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
     }
     else if (d.classI >= d.classJ)
     {
-        *m = 3;
+        *m = 2;
         if (d.affect >= 350)
-            *n = 1;
+            *n = 0;
         else if (d.affect < 350 && d.affect >= 300)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
     }
     else
     {
-        *m = 4;
+        *m = 3;
         if (d.affect >= 200 && d.hp > 150)
-            *n = 1;
+            *n = 0;
         else if (d.affect < 200 && d.affect >= 180 && d.hp > 150)
-            *n = 2;
+            *n = 1;
         else
-            *n = 3;
+            *n = 2;
     }
     if (d.sex == 1)
         strcpy(buf, endmodeart[*m].boy);
@@ -6233,86 +6228,87 @@ pip_max_worktime(
 int *num)
 {
     int data = 20;
+    *num = -1;
     if (d.workA > data)
     {
         data = d.workA;
-        *num = 1;
+        *num = 0;
     }
     if (d.workB > data)
     {
         data = d.workB;
-        *num = 2;
+        *num = 1;
     }
     if (d.workC > data)
     {
         data = d.workC;
-        *num = 3;
+        *num = 2;
     }
     if (d.workD > data)
     {
         data = d.workD;
-        *num = 4;
+        *num = 3;
     }
     if (d.workE > data)
     {
         data = d.workE;
-        *num = 5;
+        *num = 4;
     }
 
     if (d.workF > data)
     {
         data = d.workF;
-        *num = 6;
+        *num = 5;
     }
     if (d.workG > data)
     {
         data = d.workG;
-        *num = 7;
+        *num = 6;
     }
     if (d.workH > data)
     {
         data = d.workH;
-        *num = 8;
+        *num = 7;
     }
     if (d.workI > data)
     {
         data = d.workI;
-        *num = 9;
+        *num = 8;
     }
     if (d.workJ > data)
     {
         data = d.workJ;
-        *num = 10;
+        *num = 9;
     }
     if (d.workK > data)
     {
         data = d.workK;
-        *num = 11;
+        *num = 10;
     }
     if (d.workL > data)
     {
         data = d.workL;
-        *num = 12;
+        *num = 11;
     }
     if (d.workM > data)
     {
         data = d.workM;
-        *num = 13;
+        *num = 12;
     }
     if (d.workN > data)
     {
         data = d.workN;
-        *num = 14;
+        *num = 13;
     }
     if (d.workO > data)
     {
         data = d.workO;
-        *num = 16;
+        *num = 14;
     }
     if (d.workP > data)
     {
         data = d.workP;
-        *num = 16;
+        *num = 15;
     }
 
     return data;

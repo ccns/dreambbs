@@ -653,9 +653,9 @@ struct newendingset
 typedef struct newendingset newendingset;
 
 /*萬能*/
+//   女性職業,                   男生職業
 const struct newendingset endmodeall_purpose[] =
 {
-    {"女性職業",                "男生職業",               0},
     {"成為這個國家新女王",      "成為這個國家新國王",   500},
     {"成為國家的宰相",          "成為國家的宰相",       400},
     {"成為教會中的大主教",      "成為教會中的大主教",   350},
@@ -700,9 +700,9 @@ const struct newendingset endmodeall_purpose[] =
 };
 
 /*戰鬥*/
+//   女性職業                   男生職業
 const struct newendingset endmodecombat[] =
 {
-    {"女性職業",                "男生職業",                     0},
     {"被封為勇者 戰士型",       "被封為勇者 戰士型",          420},
     {"被拔擢成為一國的將軍",    "被拔擢成為一國的將軍",       300},
     {"當上了國家近衛隊隊長",    "當上了國家近衛隊隊長",       200},
@@ -715,9 +715,9 @@ const struct newendingset endmodecombat[] =
 };
 
 /*魔法*/
+//   女性職業,                  男生職業
 const struct newendingset endmodemagic[] =
 {
-    {"女性職業",                "男生職業",               0},
     {"被封為勇者 魔法型",       "被封為勇者 魔法型",    420},
     {"被聘為王宮魔法師",        "被聘為王官魔法師",     280},
     {"當了魔法老師",            "當了魔法老師",         160},
@@ -730,9 +730,9 @@ const struct newendingset endmodemagic[] =
 };
 
 /*社交*/
+//   女性職業,                  男生職業
 const struct newendingset endmodesocial[] =
 {
-    {"女性職業",                "男生職業",             0},
     {"成為國王的寵妃",          "成為女王的駙馬爺",   170},
     {"被挑選成為王妃",          "被選中當女王的夫婿", 260},
     {"被伯爵看中，成為夫人",    "成為了女伯爵的夫婿", 130},
@@ -744,9 +744,9 @@ const struct newendingset endmodesocial[] =
 };
 
 /*藝術*/
+//   女性職業,                  男生職業
 const struct newendingset endmodeart[] =
 {
-    {"女性職業",                "男生職業",       0},
     {"成為了小丑",              "成為了小丑",   100},
     {"成為了作家",              "成為了作家",   100},
     {"成為了畫家",              "成為了畫家",   100},
@@ -755,9 +755,9 @@ const struct newendingset endmodeart[] =
 };
 
 /*暗黑*/
+//   女性職業,                  男生職業
 const struct newendingset endmodeblack[] =
 {
-    {"女性職業",                "男生職業",                  0},
     {"變成了魔王",              "變成了魔王",            -1000},
     {"混成了太妹",              "混成了流氓",             -350},
     {"做了[ＳＭ女王]的工作",    "做了[ＳＭ國王]的工作",   -150},
@@ -769,9 +769,9 @@ const struct newendingset endmodeblack[] =
 };
 
 /*家事*/
+//   女性職業,                  男生職業
 const struct newendingset endmodefamily[] =
 {
-    {"女性職業",                "男生職業",             0},
     {"正在新娘修行",            "正在新郎修行",        50},
     {NULL,                      NULL,                   0}
 };
