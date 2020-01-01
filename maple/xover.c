@@ -1790,70 +1790,19 @@ xover_callback_end:
             cmd = XO_INIT;
             continue;
         }
-
-
         if (cmd == Ctrl('Z'))
         {
             every_Z();
             cmd = XO_INIT;
             /* cmd = XO_FOOT;*/            /* by visor : 修正 版主 bug */
-#if 0
-            /* switch (vans(MSG_ZONE_SWITCH)) */
-            /* Thor.980921: 少一個鍵試試 */
-            outz(MSG_ZONE_SWITCH);
-            switch (vkey())
-            {
-            case 'a':
-                cmd = XZ_GEM;
-                break;
-
-            case 'b':
-                if (xz[XZ_POST - XO_ZONE].xo)
-                {
-                    cmd = XZ_POST;
-                    break;
-                }
-
-            case 'c':
-                cmd = XZ_CLASS;
-                break;
-
-            case 'm':
-                /* Thor.981022: 不給沒基本權的進信箱 */
-                if (HAS_PERM(PERM_BASIC) /*cuser.userlevel*/)
-                    cmd = XZ_MBOX;
-                else
-                    cmd = zone;
-                break;
-
-            case 'u':
-                cmd = XZ_ULIST;
-                break;
-
-#if 1
-            /* lkchu.981230: 利用 xover 整合 bmw */
-            case 'w':
-                cmd = XZ_BMW;
-                break;
-#endif
-
-            default:
-                cmd = XO_FOOT;
-                continue;
-            }
-
-            if (zone == cmd)            /* 跟原來的一樣 */
-            {
-                cmd = XO_FOOT;
-            }
-#endif  /* #if 0 */
-
+            continue;
         }
+
         /* ------------------------------------------------- */
         /* 基本的游標移動 routines                           */
         /* ------------------------------------------------- */
 
-        else if (cmd == KEY_LEFT || cmd == 'e')
+        if (cmd == KEY_LEFT || cmd == 'e')
         {
             /* cmd = XO_LAST; *//* try to load the last XO in future */
             if (zone == XZ_MBOX)
