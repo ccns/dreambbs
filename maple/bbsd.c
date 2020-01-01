@@ -1399,6 +1399,9 @@ start_daemon(
         time(&val);
         strftime(buf, 80, "%d/%b/%Y %H:%M:%S", localtime(&val));
     }
+#ifndef NOIDENT
+    dns_init();
+#endif
 
 #ifdef RLIMIT
     /* --------------------------------------------------- */
@@ -1804,6 +1807,7 @@ int main(int argc, char *argv[])
                 break;
             default:;
             }
+            /* mport = cdata.lport; */
         }
 
         switch (sin.ss_family)
@@ -1854,11 +1858,14 @@ int main(int argc, char *argv[])
         /* rfc931((struct sockaddr *)&sin, fromhost, rusername); */
 
         tn_addr = *(ip_addr *)&sin;
-        /* Thor.990325: 修改dns_ident定義, 來自哪if連那 */
-        /* dns_ident(mport, &tn_addr, fromhost, sizeof(fromhost), rusername, sizeof(rusername)); */
 
+#ifdef NOIDENT
         /* cache.090728: 連線不反查, 增加速度 */
-        getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), fromhost, sizeof(fromhost), NULL, NI_MAXSERV, NI_NUMERICHOST);
+        getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), fromhost, sizeof(fromhost), NULL, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV);
+#else
+        /* Thor.990325: 修改dns_ident定義, 來自哪if連那 */
+        dns_ident(0 /* listen fd */, &tn_addr, fromhost, sizeof(fromhost), rusername, sizeof(rusername));
+#endif
 
         telnet_init();
         term_init();

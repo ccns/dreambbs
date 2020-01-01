@@ -1970,12 +1970,14 @@ login_user(
 
     /* Xshadow: 取得 client 的來源 */
 
+#ifdef NOIDENT
     getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->rhost, sizeof(cu->rhost), NULL, NI_MAXSERV, NI_NUMERICHOST);
-
-    /* dns_name((ip_addr *)cu->rhost, cu->ibuf, sizeof(cu->ibuf)); */
-    /* str_ncpy(cu->rhost, cu->ibuf, sizeof(cu->rhost)); */
-#if 0
+#else
+    dns_name((ip_addr *)cu->rhost, cu->ibuf, sizeof(cu->ibuf));
+    str_ncpy(cu->rhost, cu->ibuf, sizeof(cu->rhost));
+  #if 0
     getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->rhost, sizeof(cu->rhost), NULL, NI_MAXSERV, 0);
+  #endif
 #endif
 
     cu->userno = utent;
@@ -3017,6 +3019,10 @@ servo_daemon(
     time((time_t *) &value);
     gmtime((time_t *) &value);
     strftime(buf, 80, "%d/%b/%Y:%H:%M:%S", localtime((time_t *) &value));
+
+#ifndef NOIDENT
+    dns_init();
+#endif
 
 #ifdef RLIMIT
     /* --------------------------------------------------- */
