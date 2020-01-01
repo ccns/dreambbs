@@ -1829,6 +1829,7 @@ vget_match(
     int len,
     int op)
 {
+    char fpath[16];
     char *data, *hit=NULL;
     int row, col, match;
 
@@ -1884,11 +1885,9 @@ vget_match(
                     col = 0;
                     if (++row >= b_lines)
                     {
-                        if (match_getch() == 'q')
-                            break;
-
-                        move(row = 3, 0);
-                        clrtobot();
+                        if (match_getch())
+                            return 0;
+                        row = 3;
                     }
                 }
             }
@@ -1896,11 +1895,8 @@ vget_match(
     }
     else if (op & GET_USER)
     {
-        struct dirent *de;
-        DIR *dirp;
         int cc;
         int cd;
-        char fpath[16];
 
         /* Thor.981203: USER name至少打一字, 用"<="會比較好嗎? */
 //      if (len == 0)
@@ -1924,6 +1920,8 @@ vget_match(
 
         for (; cc <= cd; cc++)
         {
+            struct dirent *de;
+            DIR *dirp;
             sprintf(fpath, "usr/%c", cc);
             dirp = opendir(fpath);
             while ((de = readdir(dirp)))
@@ -1936,11 +1934,15 @@ vget_match(
                 if (len && str_ncmp(prefix, data, len))
                     continue;
 
-                if (!match++)
-                {
-                    match_title();
+                match++;
+                if (match == 1)
                     strcpy(hit = fpath, data);  /* 第一筆符合的資料 */
-                }
+
+                if (op & MATCH_END)
+                    continue;
+
+                if (match == 1)
+                    match_title();
 
                 move(row, col);
                 outs(data);
@@ -1952,10 +1954,7 @@ vget_match(
                     if (++row >= b_lines)
                     {
                         if (match_getch())
-                        {
-                            cc = 'z';     /* 離開 for 迴圈 */
-                            break;
-                        }
+                            return 0;
                         row = 3;
                     }
                 }
@@ -2001,7 +2000,7 @@ vget_match(
                 if (++row >= b_lines)
                 {
                     if (match_getch())
-                        break;
+                        return 0;
                     row = 3;
                 }
             }
@@ -2023,10 +2022,8 @@ char lastcmd[MAXLASTCMD][80];
 
 int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 {
-    char *data_prompt;
     int ch, len;
     int x, y;
-    int i, next;
 
     /* Adjust flags */
     if (!(echo & VGET_STRICT_DOECHO))
@@ -2060,8 +2057,8 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         if ((len = strlen(data)) && (echo & NUMECHO))
         {
             /* Remove non-digit characters */
-            col = 0;
-            for (ch = 0; ch < len; ch++)
+            int col = 0;
+            for (int ch = 0; ch < len; ch++)
                 if (isdigit(data[ch]))
                     data[col++] = data[ch];
             data[col] = '\0';
@@ -2072,7 +2069,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
                 outs(data);
             else
             {
-                for (ch = 0; ch < len; ch++)
+                for (int ch = 0; ch < len; ch++)
                     outc('*');
             }
         }
@@ -2082,19 +2079,16 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         len = 0;
     }
 
-    /* --------------------------------------------------- */
-    /* 取得 board / userid / on-line user                  */
-    /* --------------------------------------------------- */
-
-    ch = len;
     if (!(echo & VGET_STEALTH_NOECHO))
+    {
+        int ch = len;
         do
         {
             outc(' ');
         } while (++ch < max);
 
-    if (!(echo & VGET_STEALTH_NOECHO))
         STANDEND;
+    }
 
     line = -1;
     col = len;
@@ -2106,18 +2100,23 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             move(y, x + col);
 
         ch = vkey();
+
+        /* --------------------------------------------------- */
+        /* 取得 board / userid / on-line user                  */
+        /* --------------------------------------------------- */
+
         if (ch == '\n')
         {
             data[len] = '\0';
             if ((echo & (GET_BRD | GET_LIST)) && len > 0)
             /* Thor.990204:要求輸入任一字才代表自動 match, 否則算cancel */
             {
-                ch = len;
+                int len_prev = len;
                 len = vget_match(data, len, echo | MATCH_END);
 #ifdef M3_USE_PFTERM
                 STANDOUT;
 #endif
-                if (len > ch)
+                if (len > len_prev)
                 {
                     move(y, x);
                     outs(data);
@@ -2133,6 +2132,24 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             break;
         }
 
+        if (ch == ' ' && (echo & (GET_USER | GET_BRD | GET_LIST)))
+        {
+            int len_match = vget_match(data, len, echo);
+#ifdef M3_USE_PFTERM
+            STANDOUT;
+#endif
+            if (len_match > len)
+            {
+                move(y, x);
+                outs(data);
+                col = len = len_match;
+            }
+#ifdef M3_USE_PFTERM
+            STANDEND;
+#endif
+            continue;
+        }
+
         if (ch == Ctrl('C') && (echo & VGET_BREAKABLE))
         {
             data[0] = '\0';
@@ -2146,24 +2163,6 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
         if (isprint2(ch))
         {
-            if (ch == ' ' && (echo & (GET_USER | GET_BRD | GET_LIST)))
-            {
-                ch = vget_match(data, len, echo);
-#ifdef M3_USE_PFTERM
-                STANDOUT;
-#endif
-                if (ch > len)
-                {
-                    move(y, x);
-                    outs(data);
-                    col = len = ch;
-                }
-#ifdef M3_USE_PFTERM
-                STANDEND;
-#endif
-                continue;
-            }
-
             if (!isdigit(ch) && (echo & NUMECHO))
             {
                 bell();
@@ -2180,9 +2179,6 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             /* insert data and display it                      */
             /* ----------------------------------------------- */
 
-            data_prompt = &data[col];
-            i = col;
-
             if (!(echo & VGET_STEALTH_NOECHO))
             {
                 move(y, x + col);
@@ -2191,16 +2187,14 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 #endif
             }
 
-            for (;;)
+            for (int i = col; i <= len; i++)
             {
+                int next = (unsigned char)data[i];
+
                 if (!(echo & VGET_STEALTH_NOECHO))
                     outc((echo & DOECHO) ? ch : '*');
 
-                next = (unsigned char) *data_prompt;
-                *data_prompt++ = ch;
-                if (i >= len)
-                    break;
-                i++;
+                data[i] = ch;
                 ch = next;
             }
 #ifdef M3_USE_PFTERM
@@ -2260,19 +2254,18 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             /* remove data and display it                      */
             /* ----------------------------------------------- */
 
-            i = col--;
+            col--;
             len--;
 
             if (!(echo & VGET_STEALTH_NOECHO))
                 move(y, x + col);
 
-            while (i <= len)
+            for (int i = col+1; i <= len; i++)
             {
                 data[i - 1] = ch = (unsigned char) data[i];
 
                 if (!(echo & VGET_STEALTH_NOECHO))
                     outc((echo & DOECHO) ? ch : '*');
-                i++;
             }
             if (!(echo & VGET_STEALTH_NOECHO))
                 outc(' ');
@@ -2309,7 +2302,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             if (len)
             {
                 move(y, x);
-                for (ch = 0; ch < len; ch++)
+                for (int ch = 0; ch < len; ch++)
                     outc(' ');
                 col = len = 0;
             }
@@ -2319,7 +2312,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             if (col < len)
             {
                 move(y, x + col);
-                for (ch = col; ch < len; ch++)
+                for (int ch = col; ch < len; ch++)
                     outc(' ');
                 len = col;
             }
@@ -2362,24 +2355,23 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         case Ctrl('P'):
 
             line = (line + 1) % MAXLASTCMD;
-            data_prompt = lastcmd[line];
-            col = 0;
             move(y, x);
 
-            do
+            for (col = 0; col < max; ++col)
             {
-                if (!(ch = (unsigned char) *data_prompt++))
+                int ch = (unsigned char) lastcmd[line][col];
+                if (!ch)
                 {
                     /* clrtoeol */
 
-                    for (ch = col; ch < len; ch++)
+                    for (int ch = col; ch < len; ch++)
                         outc(' ');
                     break;
                 }
 
                 outc(ch);
                 data[col] = ch;
-            } while (++col < max);
+            }
 
             len = col;
             break;
@@ -2396,7 +2388,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
     if (len > 2 && (echo & DOECHO) && !(echo & NUMECHO))
     {
-        for (line = MAXLASTCMD - 1; line; line--)
+        for (int line = MAXLASTCMD - 1; line; line--)
             strcpy(lastcmd[line], lastcmd[line - 1]);
         strcpy(lastcmd[0], data);
     }
