@@ -1449,7 +1449,7 @@ vs_line(
 
     tail = head;
 
-    while (head++ < 38)
+    while (head++ < b_cols / 2U - 1)
         outc('-');
 
     if (tail)
@@ -1459,7 +1459,7 @@ vs_line(
         outc(' ');
     }
 
-    while (tail++ < 38)
+    while (tail++ < (b_cols+1) / 2U - 1)
         outc('-');
     outc('\n');
 }
@@ -1884,7 +1884,7 @@ vget_match(
                 outs(data);
 
                 col += IDLEN + 1;
-                if (col >= 77)
+                if (col + IDLEN >= b_cols)
                 {
                     col = 0;
                     if (++row >= b_lines)
@@ -1949,24 +1949,24 @@ vget_match(
 
                 move(row, col);
                 outs(data);
-                col += IDLEN + 1;
 
-                if (col >= 72)
+                col += IDLEN + 1;
+                if (col + IDLEN >= b_cols)
                 {
                     col = 0;
                     if (++row >= b_lines)
                     {
                         if (match_getch())
-                    {
-                        cc = 'z';     /* Â÷¶} for °j°é */
-                        break;
+                        {
+                            cc = 'z';     /* Â÷¶} for °j°é */
+                            break;
+                        }
+                        row = 3;
                     }
-                    row = 3;
                 }
             }
-        }
 
-        closedir(dirp);
+            closedir(dirp);
         }
     }
     else /* Thor.990203: µù¸Ñ, GET_LIST */
@@ -2000,7 +2000,7 @@ vget_match(
             outs(data);
 
             col += IDLEN + 1;
-            if (col >= 77)
+            if (col + IDLEN >= b_cols)
             {
                 col = 0;
                 if (++row >= b_lines)
