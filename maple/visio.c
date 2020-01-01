@@ -994,15 +994,9 @@ outz(
     const char *msg)
 //  const char *msg)
 {
-    int ch;
-
     move(b_lines, 0);
     clrtoeol();
-    while ((ch = (unsigned char) *msg))
-    {
-        outc(ch);
-        msg++;
-    }
+    outs(msg);
 }
 
 void
@@ -1129,15 +1123,12 @@ GCC_CHECK_FORMAT(1, 2) void
 prints(const char *fmt, ...)
 {
     va_list args;
-    char buf[512], *str;
-//  char buf[512], *str;
-    int cc;
+    char buf[512];
 
     va_start(args, fmt);
     vsprintf(buf, fmt, args);
     va_end(args);
-    for (str = buf; (cc = (unsigned char) *str); str++)
-        outc(cc);
+    outs(buf);
 }
 
 #ifndef M3_USE_PFTERM
