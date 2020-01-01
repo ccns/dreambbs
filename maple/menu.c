@@ -303,22 +303,7 @@ goodbye(void)
         return XEASY; /* 090911.cache: 不小心按錯不要趕走人家 ;( */
     }
 
-#ifdef  LOG_BMW
-    /*bmw_save();*/                   /* lkchu.981201: 熱訊記錄處理 */
-#endif
-
-    clear();
-    prints("       \x1b[1;31m ●       \x1b[1;36m ┌─┐┌─┐┌─┐┌─╮ ┌─╮┌╮┐┌─┐\n"
-        "      \x1b[1;31m●\x1b[1;37m○\x1b[1;33m●\x1b[1;37m═══\x1b[1;36m│  ┬│  ││  ││  │ │ ═ └  ┘│═╡\x1b[1;37m════\n"
-        "       \x1b[1;33m ●        \x1b[1;34m└─┤└─┘└─┘└─╯ └─╯ └┘ └─┘\x1b[m\n");
-    prints("Dear \x1b[32m%s(%s)\x1b[m，別忘了再度光臨【 %s 】\n"
-        "以下是您在站內的註冊資料:\n",
-        cuser.userid, cuser.username, str_site);
-    acct_show(&cuser, 3);
-    vmsg_body(NULL);
-    u_exit("EXIT ");
-    vkey();
-    exit(0);
+    return QUIT;
 }
 
 
