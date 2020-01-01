@@ -363,7 +363,7 @@ unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
             else
                 pbits ^= j;
         }
-        move(5 + (i % 16U), (i < 16 ? 0 : 40));
+        move(5 + (i % 16U), (i < 16 ? 0 : (b_cols+1) / 2U));
         if (perms[i])
             prints("%c %s %s", radix32[i], msg, perms[i]);
         else
@@ -394,7 +394,7 @@ unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
             }
 
             pbits ^= j;
-            move(5 + (i % 16U), (i < 16 ? 2 : 42));
+            move(5 + (i % 16U), (i < 16 ? 0 : (b_cols+1) / 2U) + 2);
             outs(msg);
         }
     }
