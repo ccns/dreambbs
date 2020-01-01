@@ -1780,14 +1780,14 @@ match_getch(void)
 {
     int ch;
 
-    outs("\n★ 列表(C)繼續 (Q)結束 ? [C] ");
+    outs("\n★ 列表 (Enter)(Space)(Tab) 繼續 (Q)結束 ? [Q] ");
     ch = vkey();
-    if (ch == 'q' || ch == 'Q')
+    if (ch != '\n' && ch != ' ' && ch != '\t')
         return ch;
 
     move(3, 0);
     clrtobot();
-    return 0;
+    return -1;
 }
 
 
@@ -1811,7 +1811,7 @@ ask_board(
         outs(msg);
     }
 
-    if (vget(1, 0, "請輸入看板名稱(按空白鍵自動搜尋)：",
+    if (vget(1, 0, "請輸入看板名稱 (按 SPACE 或 TAB 自動搜尋)：",
             board, IDLEN + 1, GET_BRD | perm))
     {
         if (!str_cmp(board, currboard))
@@ -1823,6 +1823,7 @@ ask_board(
 }
 
 
+/* IID.20200101: Return `-key` for key. */
 static int
 vget_match(
     char *prefix,
@@ -1885,8 +1886,9 @@ vget_match(
                     col = 0;
                     if (++row >= b_lines)
                     {
-                        if (match_getch())
-                            return 0;
+                        int ch = match_getch();
+                        if (ch >= 0)
+                            return -ch;
                         row = 3;
                     }
                 }
@@ -1953,13 +1955,13 @@ vget_match(
                     col = 0;
                     if (++row >= b_lines)
                     {
-                        if (match_getch())
-                            return 0;
+                        int ch = match_getch();
+                        if (ch >= 0)
+                            return -ch;
                         row = 3;
                     }
                 }
             }
-
             closedir(dirp);
         }
     }
@@ -1999,8 +2001,9 @@ vget_match(
                 col = 0;
                 if (++row >= b_lines)
                 {
-                    if (match_getch())
-                        return 0;
+                    int ch = match_getch();
+                    if (ch >= 0)
+                        return -ch;
                     row = 3;
                 }
             }
@@ -2132,7 +2135,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             break;
         }
 
-        if (ch == ' ' && (echo & (GET_USER | GET_BRD | GET_LIST)))
+        if ((ch == ' ' || ch == '\t') && (echo & (GET_USER | GET_BRD | GET_LIST)))
         {
             int len_match = vget_match(data, len, echo);
 #ifdef M3_USE_PFTERM
@@ -2147,7 +2150,10 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 #ifdef M3_USE_PFTERM
             STANDEND;
 #endif
-            continue;
+            if (len_match >= 0)
+                continue;
+            else
+                ch = -len_match;
         }
 
         if (ch == Ctrl('C') && (echo & VGET_BREAKABLE))
