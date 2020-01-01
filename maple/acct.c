@@ -2002,7 +2002,7 @@ int u_lock(void)
     }
     else
     {
-        igetch();
+        vkey();
     }
 
     strcpy(cutmp->mateid, swapmateid);

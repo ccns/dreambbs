@@ -2586,14 +2586,7 @@ talk_speak(
 
     for (;;)
     {
-        ch = igetch();
-
-        if (ch == KEY_ESC)
-        {
-            igetch();
-            igetch();
-            continue;
-        }
+        ch = vkey();
 
 #ifdef EVERY_Z
         /* Thor.0725: talk¤¤, ctrl-z */
@@ -2916,7 +2909,7 @@ talk_page(
     add_io(sock, 20);
     do
     {
-        msgsock = igetch();
+        msgsock = vkey();
 
         if (msgsock == Ctrl('D'))
         {
