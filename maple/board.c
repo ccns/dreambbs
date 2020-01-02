@@ -1508,9 +1508,6 @@ XoAuthor(
     BRD *brd;
     char author[IDLEN + 1];
     XO xo_a, *xoTmp;
-#ifndef HAVE_MMAP
-    XO *xo_t;
-#endif
 
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
@@ -1535,10 +1532,8 @@ XoAuthor(
         {
             /* Thor.0701: 尋找指定作者文章, 有則移位置, 並放入 */
 
-#ifdef HAVE_MMAP
             int fsize;
             char *fimage;
-#endif
             char folder[80];
             HDR *head, *tail;
 
@@ -1548,7 +1543,6 @@ XoAuthor(
             refresh();
             brd_fpath(folder, brd[chn].brdname, fn_dir);
 
-#ifdef HAVE_MMAP
             fimage = f_map(folder, &fsize);
 
             if (fimage == (char *) -1)
@@ -1576,41 +1570,6 @@ XoAuthor(
             }
 
             munmap(fimage, fsize);
-
-#else
-            xo_t = xo_new(folder);
-            xo_t->pos = XO_TAIL;        /* 第一次進入時，將游標放在最後面 */
-            xo_load(xo_t, sizeof(HDR));
-            if (xo_t->max <= 0)
-                continue;
-            head = (HDR *) xo_pool;
-            tail = (HDR *) xo_pool + (xo_t->pos - xo_t->top);
-            for (;;)
-            {
-                if (!(tail->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK)))
-                {
-                    /* check condition */
-                    if (!str_ncmp(tail->owner, author, len))    /* Thor.0818:希望比較快 */
-                    {
-                        xo_get(folder)->pos = tail - head;
-                        chp[tag++] = chn;
-                        break;
-                    }
-                }
-                tail--;
-                if (tail < head)
-                {
-                    if (xo_t->top <= 0)
-                        break;
-                    xo_t->pos -= XO_TALL;
-                    xo_load(xo_t, sizeof(HDR));
-                    tail = (HDR *) xo_pool + XO_TALL - 1;
-                }
-            }
-
-            free(xo_t);
-#endif  /* #ifdef HAVE_MMAP */
-
         }
     } while (chead < ctail);
 

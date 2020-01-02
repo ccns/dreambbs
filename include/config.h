@@ -177,20 +177,14 @@
 
 #define HAVE_RECOMMEND                 /* 推薦文章 */
 
-//#ifdef __FreeBSD__
-#define HAVE_MMAP               /* 採用 mmap(): memory mapped I/O */
-                                /* 在 SunOS、FreeBSD 上可以加速 30 倍 */
-                                /* Linux 的 mmap() 有問題，請暫時不要用 */
-//endif //#ifdef __FreeBSD__
-
-#ifdef  HAVE_MMAP
+/* 採用 mmap(): memory mapped I/O */
+/* 在 SunOS、FreeBSD 上可以加速 30 倍 */
 #include <sys/mman.h>
 #ifdef MAP_FILE                 /* 44BSD defines this & requires it to mmap files */
 #  define BBS_MAP       (MAP_SHARED | MAP_FILE)
 #else
 #  define BBS_MAP       (MAP_SHARED)
 #endif
-#endif  /* #ifdef  HAVE_MMAP */
 
 #define HAVE_INPUT_TOOLS        /* 符號輸入工具 */
 
