@@ -256,7 +256,7 @@ static const char *const ModeTypeTable[] =
 
 #define XO_MOVE         0x00100000      /* cursor movement bias */
 #define XO_WRAP         0x00800000      /* cursor wrap in movement */
-#define XO_MOVE_UNUSED1 0x00400000
+#define XO_SCRL         0x00400000      /* Scroll list instead */
 #define XO_REL          0x00200000      /* Relative movement */
 
 #define XO_MOVE_MAX     (XO_POS_MASK - XO_MOVE)  /* The maximum value of cursor position */

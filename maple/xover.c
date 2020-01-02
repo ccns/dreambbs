@@ -1534,6 +1534,7 @@ xover(
 
                 const bool zone_op = cmd & XZ_ZONE;
                 const bool wrap = cmd & XO_WRAP;
+                const bool scrl = cmd & XO_SCRL;
                 const bool rel = cmd & XO_REL;
                 int cur;
                 int diff;
@@ -1547,7 +1548,7 @@ xover(
                 /* fix cursor's range */
 
                 num = ((zone_op) ? XZ_COUNT : xo->max) - 1;
-                cur = (zone_op) ? zone : xo->pos;
+                cur = (zone_op) ? zone : (scrl) ? xo->top : xo->pos;
 
                 if (rel)
                     pos += cur;
@@ -1596,17 +1597,27 @@ xover(
                 }
                 else if (pos != cur)        /* check cursor's range */
                 {
-                    xo->pos = pos;
-                    num = xo->top;
-                    if ((pos < num) || (pos >= num + XO_TALL))
+                    if (scrl)
                     {
-                        xo->top = (pos / XO_TALL) * XO_TALL;
-                        cmd |= XR_BODY;     /* IID.20200103: Redraw list; do not reload. */
+                        xo->top = pos;
+                        num = xo->top;
+                        xo->pos = TCLAMP(xo->pos, num, num + XO_TALL - 1);
+                        cmd |= XR_BODY;      /* IID.20200103: Redraw list; do not reload. */
                     }
                     else
                     {
-                        cursor_clear(3 + cur - num, 0);
-                        pos_prev = -1;  /* Redraw cursor */
+                        xo->pos = pos;
+                        num = xo->top;
+                        if ((pos < num) || (pos >= num + XO_TALL))
+                        {
+                            xo->top = (pos / XO_TALL) * XO_TALL;
+                            cmd |= XR_BODY;     /* IID.20200103: Redraw list; do not reload. */
+                        }
+                        else
+                        {
+                            cursor_clear(3 + cur - num, 0);
+                            pos_prev = -1;  /* Redraw cursor */
+                        }
                     }
                 }
             }
@@ -1891,6 +1902,14 @@ xover_callback_end:
         else if (cmd == KEY_END || cmd == '$')
         {
             cmd = XR_LOAD + XO_MOVE + XO_TAIL;  /* force re-load */
+        }
+        else if (cmd == Meta(KEY_UP) || cmd == 'K')
+        {
+            cmd = XO_MOVE + wrap_flag + XO_SCRL + XO_REL - 1;
+        }
+        else if (cmd == Meta(KEY_DOWN) || cmd == 'J')
+        {
+            cmd = XO_MOVE + wrap_flag + XO_SCRL + XO_REL + 1;
         }
         else if (cmd >= '1' && cmd <= '9')
         {
