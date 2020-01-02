@@ -1598,8 +1598,6 @@ igetch(void)
 #define IM_TALK         0x04
 #define IM_VKEY_ESC     0x08    /* `vkey()` is processing a escape sequence */
 
-    extern int idle;
-
     int cc, fd=0, nfds, rset;
     unsigned char *data;
 
@@ -1751,7 +1749,6 @@ igetch(void)
              * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
              * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
              */
-            extern void talk_rqst_signal(int signum);
             signal(SIGUSR1, talk_rqst_signal);
 
             continue;
@@ -1842,9 +1839,6 @@ vget_match(
         unsigned int perm;
         char *bits;
         BRD *head, *tail;
-
-        extern BCACHE *bshm;
-        extern char brd_bits[];
 
         perm = op & (BRD_R_BIT | BRD_W_BIT);
         bits = brd_bits;
@@ -1968,7 +1962,6 @@ vget_match(
     else /* Thor.990203: 註解, GET_LIST */
     {
         LinkList *list;
-        extern LinkList *ll_head;
 
         for (list = ll_head; list; list = list->next)
         {

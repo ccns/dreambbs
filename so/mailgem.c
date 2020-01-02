@@ -10,15 +10,6 @@
 
 #include "bbs.h"
 
-extern XZ xz[];
-extern char xo_pool[];
-extern const char radix32[];
-extern char brd_bits[];
-
-extern BCACHE *bshm;
-extern int TagNum;
-extern TagItem TagList[];
-
 /* definitions of MailGem Mode */
 
 
@@ -1080,9 +1071,6 @@ mailgem_main(void)
 #define GEM_EXPIRE      45      /* gem 至多存 45 天 */
 
 static char pgem[128], pool[128];
-
-int gcheck(int level, char *fpath);
-
 
 /* ----------------------------------------------------- */
 /* synchronize folder & files                            */

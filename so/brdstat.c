@@ -12,9 +12,6 @@
 
 #ifdef  HAVE_COUNT_BOARD
 
-extern XZ xz[];
-extern BCACHE *bshm;
-
 static void
 bstat_item(
 int num,

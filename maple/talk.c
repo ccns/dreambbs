@@ -34,16 +34,9 @@ static int bmw_modetype;
 #ifdef HAVE_BOARD_PAL
 static int board_pals;
 #endif
-extern UCACHE *ushm;
-extern XZ xz[];
 static PAL_SHIP *pal_ship;
 GCC_PURE static int can_see(const UTMP *up);
 static bool can_banmsg(const UTMP *up);
-
-#ifdef EVERY_Z
-extern int vio_fd;              /* Thor.0725: 為talk, chat可用^z作準備 */
-extern int holdon_fd;
-#endif
 
 
 typedef struct
@@ -59,8 +52,6 @@ typedef struct
     int type;
 }       PICKUP;
 
-
-void my_query(const char *userid, int paling);
 
 static void
 reset_utmp(void)
@@ -2136,9 +2127,6 @@ aloha(void)
 
 
 #ifdef LOGIN_NOTIFY
-extern LinkList *ll_head;
-
-
 int
 t_loginNotify(void)
 {
@@ -3358,7 +3346,6 @@ ulist_init(
 #ifdef AUTO_FIX_INFO
     ushm->count = total_num;
 
-    extern BCACHE *bshm;
     if (currbno >= 0)
         bshm->mantime[currbno] = board_pals;    /* 最後看的那個板人數更新 */
 #endif

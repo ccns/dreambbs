@@ -10,10 +10,7 @@
 #undef  MODES_C
 #include "bbs.h"
 
-extern XZ xz[];
-
 static int contact_add(XO *xo);
-void contact_send(CONTACT *contact);
 
 static void
 contact_item(

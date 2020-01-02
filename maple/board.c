@@ -8,9 +8,6 @@
 
 #include "bbs.h"
 
-extern BCACHE *bshm;
-extern XZ xz[];
-
 static int *brh_base;           /* allocated memory */
 static int *brh_tail;           /* allocated memory */
 static int brh_size;            /* allocated memory size */

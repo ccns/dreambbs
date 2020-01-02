@@ -8,10 +8,6 @@
 
 #include "bbs.h"
 
-extern XZ xz[];
-
-extern int TagNum;
-extern UCACHE *ushm;
 //static int m_count(void);
 
 
@@ -25,7 +21,6 @@ extern UCACHE *ushm;
 
 LinkList *ll_head;              /* head of link list */
 static LinkList *ll_tail;       /* tail of link list */
-extern BCACHE *bshm;
 
 
 void
@@ -665,7 +660,6 @@ smtp_file_log:
 int
 m_verify(void)
 {
-    extern char rusername[]; /* Thor: °O¿ý RFC931, ©Èguest verify */
     time_t chrono;
     char info[79], *p;
     char sign[79], *q;

@@ -13,7 +13,6 @@
 
 static int aloha_add(XO *xo);
 static int aloha_loadpal(XO *xo);
-extern XZ xz[];
 
 /* ----------------------------------------------------- */
 /* 上站通知名單                            Jerics 2k.01  */

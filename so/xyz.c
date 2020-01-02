@@ -15,8 +15,6 @@
 #include <sys/wait.h>
 #include <sys/resource.h>
 
-extern UCACHE *ushm;
-
 /* cache.081017:系統資訊 */
 
 int

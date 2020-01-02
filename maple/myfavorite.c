@@ -11,16 +11,10 @@
 #include "bbs.h"
 
 #ifdef  HAVE_FAVORITE
-extern BCACHE *bshm;
-
-extern XZ xz[];
-extern char brd_bits[MAXBOARD];
 
 static void XoFavorite(const char *folder, const char *title, int level);
 static int myfavorite_add(XO *xo);
 static char currdir[64];
-
-extern time_t brd_visit[MAXBOARD];     /* 最近瀏覽時間 */
 
 void
 brd2myfavorite(

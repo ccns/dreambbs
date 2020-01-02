@@ -20,10 +20,6 @@
 #include "get_socket.c"
 #include "pop3_check.c"*/
 
-extern BCACHE *bshm;
-extern XZ xz[];
-extern const char radix32[32];
-
 
 static int vote_add(XO *xo);
 struct Tchoice

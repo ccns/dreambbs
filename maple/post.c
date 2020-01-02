@@ -10,17 +10,6 @@
 #define xlog(x)         f_cat("/tmp/b.log", x)
 
 #include "bbs.h"
-extern int wordsnum;            /* itoc.010408: ­pºâ¤å³¹¦r¼Æ */
-extern int keysnum;
-extern FWCACHE *fwshm;
-extern BCACHE *bshm;
-extern XZ xz[];
-#ifdef HAVE_MULTI_CROSSPOST
-extern LinkList *ll_head;
-#endif
-
-GCC_PURE extern bool can_message(const UTMP *up);
-/*extern int xo_fpath(char *fpath, const char *dir, const HDR *hdr);*/    /* lkchu.981201 */
 
 #ifdef  HAVE_DETECT_CROSSPOST
 CHECKSUMCOUNT cksum;
@@ -64,12 +53,7 @@ zhangba_detect(
 
 #endif  /* #ifdef HAVE_DETECT_ZHANGBA */
 
-extern int TagNum;
-extern char xo_pool[];
-extern char brd_bits[];
-
 /* Thor.990113: imports for anonymous log */
-extern char rusername[];
 static char delete_reason[30] = {0};
 
 GCC_PURE int

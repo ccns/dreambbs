@@ -11,9 +11,6 @@
 #include "bbs.h"
 
 
-extern BCACHE *bshm;
-extern XZ xz[];
-
 typedef struct {
     int recsiz;
     void (*item_func)(int num, const void *obj);

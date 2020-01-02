@@ -8,11 +8,6 @@
 
 #include "bbs.h"
 
-extern BCACHE *bshm;
-extern UCACHE *ushm;
-
-extern time_t brd_visit[MAXBOARD];
-
 #ifdef  HAVE_INFO
 #define INFO_EMPTY      "Info      【 \x1b[1;36m校方公告區\x1b[m 】"
 #define INFO_HAVE       "Info      【 \x1b[41;33;1;5m快進來看看\x1b[m 】"

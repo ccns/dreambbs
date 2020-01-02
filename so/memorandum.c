@@ -10,7 +10,6 @@
 #undef  MODES_C
 #include "bbs.h"
 
-extern XZ xz[];
 static int memorandum_add(XO *xo);
 #if 0
 char *

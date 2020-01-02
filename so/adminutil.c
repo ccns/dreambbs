@@ -11,8 +11,6 @@
 
 #define BM_CHECK_FILE   FN_CHECKBM_LOG
 
-extern BCACHE *bshm;
-
 typedef struct
 {
     char id[IDLEN+1];

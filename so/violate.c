@@ -10,8 +10,6 @@
 #undef  MODES_C
 #include "bbs.h"
 
-extern XZ xz[];
-
 static int viol_add(XO *xo);
 
 

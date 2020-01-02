@@ -1,4 +1,5 @@
 #define __STDC_WANT_LIB_EXT1__  1
+#define _GNU_SOURCE  /* For `crypy()` & `explicit_bzero()` */
 #include "config.h"
 
 #include <stdio.h>
@@ -845,7 +846,6 @@ void explicit_zero_bytes(char *buf, size_t buflen)
 #endif
 }
 
-char *crypt(const char *key, const char *salt);
 static char pwbuf[PASSLEN + PASSHASHLEN];
 
 /* `mode`: Encryption method

@@ -10,8 +10,6 @@
 #undef  MODES_C
 #include "bbs.h"
 
-extern XZ xz[];
-
 static int ways;
 
 static int list_add(XO *xo);

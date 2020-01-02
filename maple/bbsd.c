@@ -33,12 +33,6 @@
 #define MAXPORTS        3
 static const int myports[MAXPORTS] = {23, 3456, 3001, /* 3002, 3003 */};
 
-extern BCACHE *bshm;
-extern UCACHE *ushm;
-#ifdef  HAVE_DETECT_CROSSPOST
-extern CHECKSUMCOUNT cksum;
-#endif
-
 /* Thor.990113: exports for anonymous log */
 /* static */ char rusername[40];
 
@@ -51,12 +45,6 @@ static const char *unix_path;
 
 #ifdef  TREAT
 int treat=0;
-#endif
-
-
-#ifdef MODE_STAT
-extern UMODELOG modelog;
-extern time_t mode_lastchange;
 #endif
 
 /* ----------------------------------------------------- */

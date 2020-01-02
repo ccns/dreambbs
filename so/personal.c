@@ -11,8 +11,6 @@
 #include "bbs.h"
 
 
-extern XZ xz[];
-extern BCACHE *bshm;
 static int mode = 0;    /* 0:email 1:brdtitle */
 char msg[60];
 

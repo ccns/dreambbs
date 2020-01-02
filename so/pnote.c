@@ -23,8 +23,6 @@ char Bdate[128];
 #define getdata(x1, x2, x3, x4, x5, x6, x7)  vget(x1, x2, x3, x4, x5, DOECHO)
 #define setuserfile(x1, x2)  usr_fpath(x1, cuser.userid, x2)
 
-extern UCACHE *ushm;
-
 static void
 m_biffn(
 int userno)

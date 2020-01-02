@@ -78,6 +78,7 @@ int u_verify(void);
 void blog(const char *mode, const char *msg);
 void u_exit(const char *mode);
 GCC_NORETURN void abort_bbs(void);
+void talk_rqst_signal(int signum);
 /* board.c */
 void brh_get(time_t bstamp, int bhno);
 GCC_PURE int brh_unread(time_t chrono);
@@ -207,6 +208,9 @@ int BanMail(void);
 void post_mail(void);
 /* talk.c */
 const char *bmode(const UTMP *up, int simple);
+#ifdef NO_SO  /* For the main program and the modules of `bbsd` */
+GCC_PURE bool can_message(const UTMP *up);
+#endif
 GCC_PURE bool is_boardpal(const UTMP *up);
 GCC_PURE bool is_pal(int userno);
 GCC_PURE bool is_banmsg(int userno);

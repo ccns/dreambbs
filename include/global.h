@@ -12,6 +12,7 @@
 #include "cppdef.h"
 #ifdef NO_SO
   #include "bbs_script.h"
+  #include "struct.h"
 #endif
 
 
@@ -568,7 +569,59 @@ VAR const unsigned int module_flags   INI(
 #undef  VAR
 #undef  INI
 
+#ifdef NO_SO  /* For the main program and the modules of `bbsd` */
+/* maple/bbsd.c */
+extern char rusername[];     /* Thor: 記錄 RFC931, 怕guest verify */
+
+/* maple/board.c */
+extern int boardmode;
+extern char brd_bits[];
+extern time_t brd_visit[MAXBOARD];     /* 最近瀏覽時間 */
+
+/* maple/cache.c */
+extern BCACHE *bshm;
+extern UCACHE *ushm;
+extern FWCACHE *fwshm;
+
+/* maple/edit.c */
+extern int wordsnum;            /* itoc.010408: 計算文章字數 */
+extern int keysnum;
+
+/* maple/mail.c */
+extern LinkList *ll_head;
+
+/* maple/post.c */
+#ifdef XZ_XPOST
+/* Thor.990303: 如果有 XZ_XPOST的話 */
+extern KeyFuncList xpost_cb;
+#endif
+extern KeyFuncList post_cb;
+#ifdef  HAVE_DETECT_CROSSPOST
+extern CHECKSUMCOUNT cksum;
+#endif
+
+/* maple/talk.c */
+extern int pickup_way;
+
+/* maple/visio.c */
+extern screenline *cur_slp;
+#ifdef EVERY_Z
+extern int vio_fd;              /* Thor.0725: 為talk, chat可用^z作準備 */
+extern int holdon_fd;
+#endif
+extern char lastcmd[MAXLASTCMD][80];
+
+/* maple/xover.c */
+extern XZ xz[];
 extern char xo_pool[];          /* XO's data I/O pool */
+extern int TagNum;              /* Thor.0724: For tag_char */
+extern TagItem TagList[];
+
+#ifdef MODE_STAT
+extern UMODELOG modelog;
+extern time_t mode_lastchange;
+#endif
+#endif  /* #ifdef NO_SO */
 
 #ifdef __cplusplus
 }  // extern "C"

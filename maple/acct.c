@@ -10,10 +10,6 @@
 
 #include "bbs.h"
 
-extern XZ xz[];
-extern BCACHE *bshm;
-
-
 #undef  CHANGE_USERNO
 #undef  CHANGE_SECOND
 
@@ -344,8 +340,6 @@ unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
 {
     int i, j, on;
 
-    extern const char radix32[32];
-
     move(2, 0);
     clrtobot();
     outs(msg);
@@ -463,7 +457,6 @@ static void bm_list(            /* 顯示 userid 是哪些板的板主 */
     int len, ch;
     BRD *bhdr, *tail;
     char *list;
-    extern BCACHE *bshm;
 
     len = strlen(userid);
     outs("擔任板主：");

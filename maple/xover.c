@@ -13,8 +13,6 @@
 static int xo_stack_level;
 static int xo_user_level;
 
-extern int boardmode;
-
 #ifdef  HAVE_FAVORITE
 #define MSG_ZONE_SWITCH \
     "快速切換：A)精華區 B)文章列表 C)看板列表 M)信件 F)我的最愛 P)進階功\能："
@@ -519,9 +517,6 @@ xo_prune(
 /* ----------------------------------------------------- */
 /* Tag's batch operation routines                        */
 /* ----------------------------------------------------- */
-
-
-extern BCACHE *bshm;    /* lkchu.981229 */
 
 
 static int
@@ -1498,13 +1493,6 @@ int xo_cb_quit(XO *xo) { return XO_QUIT; }
 /* ----------------------------------------------------- */
 /* ----------------------------------------------------- */
 
-#ifdef XZ_XPOST
-/* Thor.990303: 如果有 XZ_XPOST的話 */
-extern KeyFuncList xpost_cb;
-#endif
-extern KeyFuncList post_cb;
-
-
 XZ xz[] =
 {
     {NULL, NULL, M_BOARD},      /* XZ_CLASS */
@@ -1969,8 +1957,6 @@ xover_callback_end:
 #endif
                 else if (cmd == Ctrl('C'))
                 {
-                    extern int TagNum;
-
                     if (TagNum)
                     {
                         TagNum = 0;
@@ -2304,7 +2290,6 @@ every_U(void)
  }
 #endif
 
-    extern int pickup_way;
     int tmpway = pickup_way;
     if (bbsmode == M_READA)  /* guessi.061218: 進入看板後 ^U 預設排列 */
         pickup_way = 1;

@@ -11,15 +11,9 @@
 #undef  TEST_COSIGN
 
 
-extern XZ xz[];
-
-extern char xo_pool[];
-
 static int nbrd_add(XO *xo);
 static int nbrd_body(XO *xo);
 static int nbrd_head(XO *xo);
-
-extern BCACHE *bshm;
 
 #define S_PART          "-----------------------------------------------------------\n"
 #define S_AGREE_START   ">------------------- [   √Ÿ¶®∂}©l   ] --------------------<\n"

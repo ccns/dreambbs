@@ -26,11 +26,6 @@ static FILE *fmail;
 #define stop_line       (b_lines - 2)
 
 
-#ifdef EVERY_Z
-extern int vio_fd, holdon_fd;
-#endif
-
-
 static void
 chat_topic(void)
 {
@@ -75,10 +70,7 @@ static void
 printchatline(
     const char *msg)
 {
-    int line;
-    extern screenline *cur_slp;
-
-    line = chatline;
+    int line = chatline;
     move(line, 0);
     clrtoeol();
     outs(msg);
@@ -565,9 +557,6 @@ char *buf)
 
     return 0;
 }
-
-
-extern char lastcmd[MAXLASTCMD][80];
 
 
 int

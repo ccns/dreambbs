@@ -25,8 +25,6 @@ typedef struct RecommendMessage
 }       RMSG;
 
 
-extern BCACHE *bshm;
-extern XZ xz[];
 int counter;
 char title[80], name[10];
 

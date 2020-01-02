@@ -4,10 +4,6 @@
 
 #ifdef HAVE_SONG
 
-extern BCACHE *bshm;
-extern XZ xz[];
-extern char xo_pool[];
-
 static void XoSong(const char *folder, const char *title, int level);
 static int song_order(XO *xo);
 

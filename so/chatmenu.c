@@ -10,9 +10,6 @@
 #undef  MODES_C
 #include "bbs.h"
 
-extern XZ xz[];
-
-
 static int chat_add(XO *xo);
 static int mode = 0;
 static int kind = 0;

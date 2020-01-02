@@ -8,16 +8,6 @@
 
 #include "bbs.h"
 
-
-extern XZ xz[];
-extern char xo_pool[];
-extern const char radix32[];
-extern char brd_bits[];
-
-extern BCACHE *bshm;
-extern int TagNum;              /* Thor.0724: For tag_char */
-extern TagItem TagList[];
-
 /* definitions of Gem Mode */
 
 

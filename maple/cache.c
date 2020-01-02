@@ -16,13 +16,6 @@
 #include <sys/sem.h>
 #endif
 
-
-#ifdef MODE_STAT
-UMODELOG modelog;
-time_t mode_lastchange;
-#endif
-extern int item_length[20];
-
 static void
 attach_err(
     int shmkey,
@@ -486,7 +479,6 @@ int
 apply_boards(
     int (*func) (BRD *bhdr))
 {
-    extern char brd_bits[];
     BRD *bhdr;
     int i;
 
