@@ -9,6 +9,7 @@
 #define EXP_PFTERM
 #define DBCSAWARE
 #define FT_DBCS_NOINTRESC 1
+#define FT_COLOR_NOCOLOR 0
 #define DBG_TEXT_FD
 
 #include <stdio.h>
@@ -27,6 +28,14 @@
 #  define FT_DBCS_NOINTRESC (cuser.uflag & UF_DBCS_NOINTRESC)
 # else
 #  define FT_DBCS_NOINTRESC (0)
+# endif
+#endif
+
+#ifndef FT_COLOR_NOCOLOR
+# ifdef  UF_COLOR_NOCOLOR
+#  define FT_COLOR_NOCOLOR (cuser.uflag & UF_COLOR_NOCOLOR)
+# else
+#  define FT_COLOR_NOCOLOR (0)
 # endif
 #endif
 
@@ -2016,7 +2025,7 @@ void
 fterm_rawattr(ftattr rattr)
 {
     static char cmd[FTATTR_MINCMD*2];
-    if (!fterm_chattr(cmd, ft.rattr, rattr))
+    if (!fterm_chattr(cmd, ft.rattr, rattr) || (FT_COLOR_NOCOLOR))
         return;
 
     fterm_raws(cmd);

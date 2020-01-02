@@ -1040,6 +1040,10 @@ tn_login(void)
 //#endif
 
     showansi = cuser.ufo2 & UFO2_COLOR;
+#ifdef M3_USE_PFTERM
+    redrawwin();
+    refresh();
+#endif
 }
 
 

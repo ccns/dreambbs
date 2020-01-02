@@ -437,6 +437,7 @@ VAR UTMP *cutmp;
 VAR int curredit;
 VAR int checkqt;
 VAR int showansi INI(1);
+#define FT_COLOR_NOCOLOR  (!showansi)  /* For pfterm */
 VAR time_t ap_start;
 VAR ACCT cuser;                 /* current user structure */
 VAR time_t currchrono;          /* current file timestamp @ bbs.c mail.c */

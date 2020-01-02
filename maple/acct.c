@@ -1920,6 +1920,10 @@ int ue_setup(void)
         cuser.ufo2 = nflag;
         showansi = nflag & UFO2_COLOR;
         outs(str_ransi);
+#ifdef M3_USE_PFTERM
+        redrawwin();
+        refresh();
+#endif
     }
     return 0;
 }
