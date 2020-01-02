@@ -623,7 +623,10 @@ extern char lastcmd[MAXLASTCMD][80];
 
 /* maple/xover.c */
 extern XZ xz[];
-extern char xo_pool[];          /* XO's data I/O pool */
+/* XO's data pool */
+extern char *xo_pool;           /* The `xo->top`-st item of the pool */
+extern char *xo_pool_base;      /* The beginning of the pool */
+/* Tags */
 extern int TagNum;              /* Thor.0724: For tag_char */
 extern TagItem TagList[];
 

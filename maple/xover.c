@@ -91,20 +91,29 @@ xo_free(
 /* ----------------------------------------------------- */
 
 
-char xo_pool[(T_LINES - 4) * XO_RSIZ];  /* XO's data I/O pool */
-
+/* XO's data I/O pool */
+static int xo_pool_size;
+char *xo_pool_base;
+char *xo_pool;
 
 void
 xo_load(
     XO *xo,
     int recsiz)
 {
-    int fd, max;
+    int fd, max = 0, top = 0;
 
-    max = 0;
+    /* Unload first */
+    if (xo_pool_base)
+    {
+        munmap(xo_pool_base, xo_pool_size);
+    }
+    xo_pool_base = NULL;
+    xo_pool_size = 0;
+
     if ((fd = open(xo->dir, O_RDONLY)) >= 0)
     {
-        int pos, top;
+        int pos;
         struct stat st;
 
         fstat(fd, &st);
@@ -124,12 +133,18 @@ xo_load(
             xo->pos = pos;
             xo->top = top;
 
-            lseek(fd, (off_t) (recsiz * top), SEEK_SET);
-            read(fd, xo_pool, recsiz * XO_TALL);
+            xo_pool_size = st.st_size;
+            xo_pool_base = (char *) mmap(NULL, xo_pool_size, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);
         }
         close(fd);
     }
+    if (!xo_pool_base || xo_pool_base == MAP_FAILED)
+    {
+        xo_pool_base = NULL;
+        max = 0;
+    }
 
+    xo_pool = xo_pool_base + top * recsiz;
     xo->max = max;
 }
 

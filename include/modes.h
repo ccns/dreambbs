@@ -246,7 +246,7 @@ static const char *const ModeTypeTable[] =
 
 /* Special values */
 
-#define XO_RSIZ         256             /* max record length */
+//#define XO_RSIZ         256             /* max record length */ /* IID.20200102: Unlimited. */
 #define XO_TALL         (b_lines - 3)   /* page size = b_lines - 3 (扣去 head/neck/foot 共三行) */
 
 /* Cursor movements */
