@@ -186,7 +186,7 @@ int checksum_find(const char *fpath, int check, int state);
 void btime_update(int bno);
 void outgo_post(const HDR *hdr, const char *board);
 void cancel_post(const HDR *hdr);
-void move_post(HDR *hdr, const char *board, int by_bm);
+void move_post(const HDR *hdr, const char *board, int by_bm);
 void log_anonymous(const char *fname);
 GCC_PURE int seek_log(const char *title, int state);
 int getsubject(int row, int reply);

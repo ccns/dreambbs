@@ -2178,7 +2178,7 @@ static int
 mbox_body(
     XO *xo)
 {
-    HDR *mhdr;
+    const HDR *mhdr;
     int num, max, tail;
 
     max = xo->max;
@@ -2190,7 +2190,7 @@ mbox_body(
     }
 
     num = xo->top;
-    mhdr = (HDR *) xo_pool;
+    mhdr = (const HDR *) xo_pool;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -2283,7 +2283,7 @@ mbox_forward(
 {
     ACCT muser;
     int pos;
-    HDR *hdr;
+    const HDR *hdr;
     if (bbsothermode & OTHERSTAT_EDITING)
     {
         vmsg("你還有檔案還沒編完哦！");
@@ -2303,7 +2303,7 @@ mbox_forward(
     if (acct_get("轉達信件給：", &muser) > 0)
     {
         pos = xo->pos;
-        hdr = (HDR *) xo_pool + (pos - xo->top);
+        hdr = (const HDR *) xo_pool + (pos - xo->top);
 
         strcpy(quote_user, hdr->owner);
         hdr_fpath(quote_file, xo->dir, hdr);
@@ -2484,12 +2484,12 @@ static int
 mbox_tag(
     XO *xo)
 {
-    HDR *hdr;
+    const HDR *hdr;
     int tag, pos, cur;
 
     pos = xo->pos;
     cur = pos - xo->top;
-    hdr = (HDR *) xo_pool + cur;
+    hdr = (const HDR *) xo_pool + cur;
 
     if ((tag = Tagger(hdr->chrono, pos, TAG_TOGGLE)))
     {
@@ -2641,12 +2641,12 @@ static int
 mbox_size(
     XO *xo)
 {
-    HDR *hdr;
+    const HDR *hdr;
     char *dir, fpath[80], buf[128];
     struct stat st;
 
     dir = xo->dir;
-    hdr = (HDR *) xo_pool + xo->pos - xo->top;
+    hdr = (const HDR *) xo_pool + xo->pos - xo->top;
     hdr_fpath(fpath, dir, hdr);
 
     if (HAS_PERM(PERM_SYSOP))

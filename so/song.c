@@ -163,7 +163,7 @@ static int
 song_body(
 XO *xo)
 {
-    HDR *ghdr;
+    const HDR *ghdr;
     int num, max, tail;
 
     max = xo->max;
@@ -174,7 +174,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    ghdr = (HDR *) xo_pool;
+    ghdr = (const HDR *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);

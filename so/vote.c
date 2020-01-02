@@ -102,7 +102,7 @@ static int
 vote_body(
 XO *xo)
 {
-    VCH *vch;
+    const VCH *vch;
     int num, max, tail;
 
     max = xo->max;
@@ -120,7 +120,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    vch = (VCH *) xo_pool;
+    vch = (const VCH *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     if (max > tail)
@@ -632,7 +632,7 @@ static int
 vote_browse(
 XO *xo)
 {
-    VCH *vch;
+    const VCH *vch;
     FILE *fp;
     char *fname, buf[80], fpath[80];
     struct Tchoice choice[MAX_CHOICES];
@@ -642,8 +642,8 @@ XO *xo)
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    vch = (VCH *) xo_pool + (xo->pos - xo->top);
-    hdr_fpath(fpath, xo->dir, (HDR *) vch);
+    vch = (const VCH *) xo_pool + (xo->pos - xo->top);
+    hdr_fpath(fpath, xo->dir, (const HDR *) vch);
 
 
     fname = strrchr(fpath, '@');

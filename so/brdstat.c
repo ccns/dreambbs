@@ -25,7 +25,7 @@ static int
 bstat_body(
 XO *xo)
 {
-    BSTAT *bstat;
+    const BSTAT *bstat;
     int num, max, tail;
 
     move(3, 0);
@@ -37,7 +37,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    bstat = (BSTAT *) xo_pool;
+    bstat = (const BSTAT *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);

@@ -134,7 +134,7 @@ static int
 nbrd_body(
 XO *xo)
 {
-    NBRD *nbrd;
+    const NBRD *nbrd;
     int num, max, tail;
 
     max = xo->max;
@@ -152,7 +152,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    nbrd = (NBRD *) xo_pool;
+    nbrd = (const NBRD *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
@@ -816,10 +816,10 @@ static int
 nbrd_browse(
 XO *xo)
 {
-    NBRD *nbrd;
+    const NBRD *nbrd;
     char fpath[80];
 
-    nbrd = (NBRD *) xo_pool + (xo->pos - xo->top);
+    nbrd = (const NBRD *) xo_pool + (xo->pos - xo->top);
     nbrd_fpath(fpath, xo->dir, nbrd);
     more(fpath, NULL);
     return XO_INIT;
@@ -829,11 +829,11 @@ static int
 nbrd_delete(
 XO *xo)
 {
-    NBRD *nbrd;
+    const NBRD *nbrd;
     char fpath[80];
 
 
-    nbrd = (NBRD *) xo_pool + (xo->pos - xo->top);
+    nbrd = (const NBRD *) xo_pool + (xo->pos - xo->top);
     if (strcmp(cuser.userid, nbrd->owner) && !HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
 
@@ -855,12 +855,12 @@ XO *xo)
     HDR xpost;
     int rc;
     FILE *fd;
-    NBRD *nbrd;
+    const NBRD *nbrd;
 
     if (!HAS_PERM(PERM_ADMIN))
         return XO_NONE;
 
-    nbrd = (NBRD *) xo_pool + (xo->pos - xo->top);
+    nbrd = (const NBRD *) xo_pool + (xo->pos - xo->top);
 
     if (ask_board(xboard, BRD_W_BIT,
                   "\n\n\x1b[1;33m請挑選適當的看板，切勿轉貼超過三板。\x1b[m\n\n")

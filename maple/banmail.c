@@ -37,7 +37,7 @@ static void banmail_item(int num, const BANMAIL * ban)
 
 static int banmail_body(XO * xo)
 {
-    BANMAIL *banmail = NULL;
+    const BANMAIL *banmail = NULL;
     int num, max, tail;
 
     max = xo->max;
@@ -48,7 +48,7 @@ static int banmail_body(XO * xo)
         return XO_QUIT;
     }
 
-    banmail = (BANMAIL *) xo_pool;
+    banmail = (const BANMAIL *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);

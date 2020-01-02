@@ -29,7 +29,7 @@ static int
 chat_body(
 XO *xo)
 {
-    ChatAction *chat;
+    const ChatAction *chat;
     int num, max, tail;
 
     move(3, 0);
@@ -42,7 +42,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    chat = (ChatAction *) xo_pool;
+    chat = (const ChatAction *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
@@ -229,13 +229,13 @@ static int
 chat_move(
 XO *xo)
 {
-    ChatAction *ghdr;
-    char *dir, buf[80];
+    const ChatAction *ghdr;
+    char buf[80];
     int pos, newOrder, cur;
 
     pos = xo->pos;
     cur = pos - xo->top;
-    ghdr = (ChatAction *) xo_pool + cur;
+    ghdr = (const ChatAction *) xo_pool + cur;
 
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
     if (!vget(b_lines, 0, buf + 5, buf, 5, DOECHO))
@@ -244,7 +244,7 @@ XO *xo)
     newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);
     if (newOrder != pos)
     {
-        dir = xo->dir;
+        const char *dir = xo->dir;
         if (!rec_del(dir, sizeof(ChatAction), pos, NULL, NULL))
         {
             rec_ins(dir, ghdr, sizeof(ChatAction), newOrder, 1);

@@ -28,7 +28,7 @@ static int
 show_body(
 XO *xo)
 {
-    LOG *show;
+    const LOG *show;
     int num, max, tail;
 
     move(3, 0);
@@ -41,7 +41,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    show = (LOG *) xo_pool;
+    show = (const LOG *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
@@ -180,12 +180,12 @@ int
 Showvote(
 XO *xo)
 {
-    VCH *vch;
+    const VCH *vch;
     char fpath[128], *fname;
     if (!HAS_PERM(PERM_SYSOP))
         return XO_NONE;
-    vch = (VCH *) xo_pool + (xo->pos - xo->top);
-    hdr_fpath(fpath, xo->dir, (HDR *) vch);
+    vch = (const VCH *) xo_pool + (xo->pos - xo->top);
+    hdr_fpath(fpath, xo->dir, (const HDR *) vch);
     fname = strrchr(fpath, '@');
     *fname = 'E';
 

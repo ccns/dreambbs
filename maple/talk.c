@@ -682,7 +682,7 @@ static int
 pal_body(
     XO *xo)
 {
-    PAL *pal;
+    const PAL *pal;
     int num, max, tail;
 
     max = xo->max;
@@ -693,7 +693,7 @@ pal_body(
         return XO_QUIT;
     }
 
-    pal = (PAL *) xo_pool;
+    pal = (const PAL *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
@@ -943,9 +943,9 @@ static int
 pal_query(
     XO *xo)
 {
-    PAL *pal;
+    const PAL *pal;
 
-    pal = (PAL *) xo_pool + (xo->pos - xo->top);
+    pal = (const PAL *) xo_pool + (xo->pos - xo->top);
     move(1, 0);
     clrtobot();
     /* move(2, 0); *//* Thor.0810: 可以不加嗎? */
@@ -1011,7 +1011,7 @@ t_pal(void)
 static void
 bmw_item(
     int num,
-    BMW *bmw)
+    const BMW *bmw)
 {
     struct tm *ptime = localtime(&bmw->btime);
 
@@ -1020,11 +1020,12 @@ bmw_item(
         if (bmw->sender == cuser.userno)
         {
             /* lkchu.990206: 好友廣播 */
-            if (!(*bmw->userid))
-                strcpy(bmw->userid, "眾家好友");
+            const char *userid = bmw->userid;
+            if (!*userid)
+                userid = "眾家好友";
 
             prints("%6d %02d:%02d %-13s☆%-*.*s\n", num, ptime->tm_hour, ptime->tm_min,
-                bmw->userid, d_cols + 50, d_cols + 50, bmw->msg);
+                userid, d_cols + 50, d_cols + 50, bmw->msg);
         }
         else
         {
@@ -1040,10 +1041,12 @@ bmw_item(
     {
         if (bmw->sender == cuser.userno)
         {
-            if (!(*bmw->userid))
-                strcpy(bmw->userid, "眾家好友");
+            /* lkchu.990206: 好友廣播 */
+            const char *userid = bmw->userid;
+            if (!*userid)
+                userid = "眾家好友";
 
-            prints("%6d %-13s☆%-*.*s\n", num, bmw->userid, d_cols + 57, d_cols + 57, bmw->msg);
+            prints("%6d %-13s☆%-*.*s\n", num, userid, d_cols + 57, d_cols + 57, bmw->msg);
         }
         else
         {
@@ -1062,7 +1065,7 @@ static int
 bmw_body(
     XO *xo)
 {
-    BMW *bmw;
+    const BMW *bmw;
     int num, max, tail;
 
     move(3, 0);
@@ -1074,7 +1077,7 @@ bmw_body(
         return XO_QUIT;
     }
 
-    bmw = (BMW *) xo_pool;
+    bmw = (const BMW *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
@@ -1158,9 +1161,9 @@ static int
 bmw_query(
     XO *xo)
 {
-    BMW *bmw;
+    const BMW *bmw;
 
-    bmw = (BMW *) xo_pool + (xo->pos - xo->top);
+    bmw = (const BMW *) xo_pool + (xo->pos - xo->top);
     move(1, 0);
     clrtobot();
     /* move(2, 0); *//* Thor.0810: 可以不加嗎? */
@@ -1177,9 +1180,9 @@ bmw_write(
     if (HAS_PERM(PERM_PAGE))
     {
         UTMP *up = NULL;
-        BMW *benz;
+        const BMW *benz;
 
-        benz = (BMW *) xo_pool + (xo->pos - xo->top);
+        benz = (const BMW *) xo_pool + (xo->pos - xo->top);
         if ((benz->caller >= ushm->uslot && benz->caller < ushm->uslot + MAXACTIVE) && (benz->caller && benz->caller->userno == benz->sender) && can_message(benz->caller))
         {
             up = benz->caller;
@@ -4587,7 +4590,7 @@ static int
 banmsg_body(
     XO *xo)
 {
-    BANMSG *banmsg;
+    const BANMSG *banmsg;
     int num, max, tail;
 
     move(3, 0);
@@ -4600,7 +4603,7 @@ banmsg_body(
         return XO_QUIT;
     }
 
-    banmsg = (BANMSG *) xo_pool;
+    banmsg = (const BANMSG *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     if (max > tail)
@@ -4774,9 +4777,9 @@ static int
 banmsg_query(
     XO *xo)
 {
-    BANMSG *banmsg;
+    const BANMSG *banmsg;
 
-    banmsg = (BANMSG *) xo_pool + (xo->pos - xo->top);
+    banmsg = (const BANMSG *) xo_pool + (xo->pos - xo->top);
     move(1, 0);
     clrtobot();
     my_query(banmsg->userid, 1);

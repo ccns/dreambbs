@@ -29,7 +29,7 @@ static int
 list_body(
 XO *xo)
 {
-    LIST *list;
+    const LIST *list;
     int num, max, tail;
 
     move(3, 0);
@@ -42,7 +42,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    list = (LIST *) xo_pool;
+    list = (const LIST *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);

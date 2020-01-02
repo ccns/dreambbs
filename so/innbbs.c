@@ -540,7 +540,7 @@ innbbs_body(
     XO *xo)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
-    char *rec;
+    const char *rec;
     int num, max, tail;
 
     max = xo->max;

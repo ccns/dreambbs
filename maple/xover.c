@@ -442,13 +442,13 @@ xo_tag(
     int fsize, count;
     char *fimage;
     const char *token;
-    HDR *head, *tail;
+    const HDR *head, *tail;
 
     fimage = f_map(xo->dir, &fsize);
     if (fimage == (char *) -1)
         return XO_NONE;
 
-    head = (HDR *) xo_pool + (xo->pos - xo->top);
+    head = (const HDR *) xo_pool + (xo->pos - xo->top);
     if (op == Ctrl('A'))
     {
         token = head->owner;
@@ -460,8 +460,8 @@ xo_tag(
         op = 1;
     }
 
-    head = (HDR *) fimage;
-    tail = (HDR *) (fimage + fsize);
+    head = (const HDR *) fimage;
+    tail = (const HDR *) (fimage + fsize);
 
     count = 0;
 
@@ -933,10 +933,10 @@ int
 xo_uquery_lite(
     XO *xo)
 {
-    HDR *hdr;
-    char *userid;
+    const HDR *hdr;
+    const char *userid;
 
-    hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (const HDR *) xo_pool + (xo->pos - xo->top);
     if (hdr->xmode & (GEM_GOPHER | POST_INCOME | MAIL_INCOME))
         return XO_NONE;
 
@@ -970,10 +970,10 @@ int
 xo_uquery(
     XO *xo)
 {
-    HDR *hdr;
-    char *userid;
+    const HDR *hdr;
+    const char *userid;
 
-    hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (const HDR *) xo_pool + (xo->pos - xo->top);
     if (hdr->xmode & (GEM_GOPHER | POST_INCOME | MAIL_INCOME))
         return XO_NONE;
 
@@ -995,14 +995,14 @@ int
 xo_usetup(
     XO *xo)
 {
-    HDR *hdr;
-    char *userid;
+    const HDR *hdr;
+    const char *userid;
     ACCT xuser;
 
     if (!HAVE_PERM(PERM_SYSOP | PERM_ACCOUNTS))
         return XO_NONE;
 
-    hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (const HDR *) xo_pool + (xo->pos - xo->top);
     userid = hdr->owner;
     if (strchr(userid, '.') || (acct_load(&xuser, userid) < 0))
         return XO_NONE;
@@ -1147,12 +1147,13 @@ xo_thread(
     static char s_author[16], s_title[32], s_unread[2]="0";
     char buf[80];
 
-    char *query=NULL;
+    const char *query=NULL;
     const char *tag, *title=NULL;
     int pos, match, near=0, neartop=0, max;     /* Thor: neartop與near成對用 */
 
     int fd, top, bottom, step, len;
-    HDR *pool, *fhdr;
+    HDR *pool;
+    const HDR *fhdr;
 
     match = XO_NONE;
     pos = xo->pos;
@@ -1184,8 +1185,8 @@ xo_thread(
                     return XO_NONE;
                 near = -1;
             }
+            strcpy(buf, title);
             query = buf;
-            strcpy(query, title);
         }
     }
     else if (op & RS_UNREAD)    /* Thor: 向前找尋第一篇未讀文章, 清 near */
@@ -1221,14 +1222,14 @@ xo_thread(
             tag_query = s_author;
             len = sizeof(s_author);
         }
-        query = buf;
-        sprintf(query, "搜尋%s(%s)：", title, (step > 0) ? "↓" : "↑");
-        if (!vget(b_lines, 0, query, tag_query, len, GCARRY))
+        sprintf(buf, "搜尋%s(%s)：", title, (step > 0) ? "↓" : "↑");
+        if (!vget(b_lines, 0, buf, tag_query, len, GCARRY))
             return XO_FOOT;
         /* Thor.980911: 要注意, 如果沒找到, "搜尋"的訊息會被清,
                         如果找到了, 則沒被清, 因傳回值為match, 沒法帶 XO_FOOT */
 
-        str_lower(query, tag_query);
+        str_lower(buf, tag_query);
+        query = buf;
     }
 
     fd = -1;

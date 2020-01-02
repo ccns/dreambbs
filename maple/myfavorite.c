@@ -31,7 +31,7 @@ brd2myfavorite(
 static void
 myfavorite_item(
     int num,
-    HDR *myfavorite)
+    const HDR *myfavorite)
 {
     if (myfavorite->xmode & GEM_BOARD)
     {
@@ -69,7 +69,7 @@ static int
 myfavorite_body(
     XO *xo)
 {
-    HDR *myfavorite;
+    const HDR *myfavorite;
     int num, max, tail;
 
     move(3, 0);
@@ -80,7 +80,7 @@ myfavorite_body(
         return myfavorite_add(xo);
     }
 
-    myfavorite = (HDR *) xo_pool;
+    myfavorite = (const HDR *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
@@ -143,11 +143,11 @@ static int
 myfavorite_browse(
     XO *xo)
 {
-    HDR *ghdr;
+    const HDR *ghdr;
     int xmode, op=0, chn;
     char fpath[80], title[TTLEN + 1];
 
-    ghdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    ghdr = (const HDR *) xo_pool + (xo->pos - xo->top);
 
     xmode = ghdr->xmode;
     /* browse folder */
@@ -328,9 +328,9 @@ myfavorite_delete(
 
     if (vans(msg_del_ny) == 'y')
     {
-        HDR *hdr;
+        const HDR *hdr;
 
-        hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+        hdr = (const HDR *) xo_pool + (xo->pos - xo->top);
 
         if (hdr->xmode & GEM_FOLDER)
         {
@@ -355,13 +355,13 @@ static int
 myfavorite_mov(
     XO *xo)
 {
-    HDR *ghdr;
+    const HDR *ghdr;
     char buf[80];
     int pos, newOrder;
 
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
-    ghdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    ghdr = (const HDR *) xo_pool + (xo->pos - xo->top);
 
     pos = xo->pos;
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
@@ -434,7 +434,7 @@ myfavorite_search(
     int num, pos, max;
     char *ptr;
     char buf[IDLEN + 1];
-    HDR *hdr;
+    const HDR *hdr;
 
     ptr = buf;
     pos = vget(b_lines, 0, "請輸入搜尋關鍵字：", ptr, IDLEN + 1, DOECHO);
@@ -444,7 +444,7 @@ myfavorite_search(
     if (pos)
     {
         int chn;
-        BRD *brd;
+        const BRD *brd;
 
         //bcache = bshm->bcache;
 
@@ -457,7 +457,7 @@ myfavorite_search(
             if (++pos >= max)
                 pos = 0;
 
-            hdr = (HDR *) xo_pool + (pos - xo->top);
+            hdr = (const HDR *) xo_pool + (pos - xo->top);
 
             if (hdr->xmode & GEM_BOARD)
             {

@@ -89,7 +89,7 @@ static int
 memorandum_body(
 XO *xo)
 {
-    MEMORANDUM *memorandum;
+    const MEMORANDUM *memorandum;
     int num, max, tail;
 
     move(3, 0);
@@ -102,7 +102,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    memorandum = (MEMORANDUM *) xo_pool;
+    memorandum = (const MEMORANDUM *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);

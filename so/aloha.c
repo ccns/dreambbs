@@ -66,7 +66,7 @@ static int
 aloha_body(
 XO *xo)
 {
-    ALOHA *aloha;
+    const ALOHA *aloha;
     int num, max, tail;
 
     move(3, 0);
@@ -84,7 +84,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    aloha = (ALOHA *) xo_pool;
+    aloha = (const ALOHA *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
@@ -264,8 +264,8 @@ XO *xo)
     if (vans(msg_del_ny) == 'y')
     {
         char fpath[64];
-        ALOHA *aloha;
-        aloha = (ALOHA *) xo_pool + (xo->pos - xo->top);
+        const ALOHA *aloha;
+        aloha = (const ALOHA *) xo_pool + (xo->pos - xo->top);
 
         usr_fpath(fpath, aloha->userid, FN_FRIEND_BENZ);
         while (rec_loc(fpath, sizeof(BMW), cmpbmw) >= 0)

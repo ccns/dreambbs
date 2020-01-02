@@ -57,7 +57,7 @@ static int
 mailgem_body(
 XO *xo)
 {
-    HDR *ghdr;
+    const HDR *ghdr;
     int num, max, tail;
 
     max = xo->max;
@@ -82,7 +82,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    ghdr = (HDR *) xo_pool;
+    ghdr = (const HDR *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
@@ -832,12 +832,12 @@ static int
 mailgem_tag(
 XO *xo)
 {
-    HDR *ghdr;
+    const HDR *ghdr;
     int pos, tag, cur;
 
     pos = xo->pos;
     cur = pos - xo->top;
-    ghdr = (HDR *) xo_pool + cur;
+    ghdr = (const HDR *) xo_pool + cur;
 
     if ((tag = Tagger(ghdr->chrono, pos, TAG_TOGGLE)))
     {

@@ -236,7 +236,7 @@ static int
 personal_body(
     XO *xo)
 {
-    PB *personal;
+    const PB *personal;
     int num, max, tail;
 
     move(3, 0);
@@ -247,7 +247,7 @@ personal_body(
         vmsg("目前沒有資料");
         return XO_QUIT;
     }
-    personal = (PB *) xo_pool;
+    personal = (const PB *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
@@ -555,12 +555,12 @@ static int
 personal_deny(
     XO *xo)
 {
-    PB *personal;
+    const PB *personal;
     int pos, cur;
 
     pos = xo->pos;
     cur = pos - xo->top;
-    personal = (PB *) xo_pool + cur;
+    personal = (const PB *) xo_pool + cur;
 
     if (personal->state & PB_OPEN)
         return XO_NONE;

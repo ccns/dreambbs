@@ -83,7 +83,7 @@ static int
 cleanrecommend_body(
     XO *xo)
 {
-    RMSG *cleanrecommend;
+    const RMSG *cleanrecommend;
     int num, max, tail;
 
     move(3, 0);
@@ -95,7 +95,7 @@ cleanrecommend_body(
         vmsg("¨S¦³¯d¨¥");
         return XO_QUIT;
     }
-    cleanrecommend = (RMSG *) xo_pool;
+    cleanrecommend = (const RMSG *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
 /*
@@ -164,12 +164,12 @@ cleanrecommend_delete(
 
     if (vans(msg_del_ny) == 'y')
     {
-        RMSG *rmsg;
+        const RMSG *rmsg;
         int pos, cur;
 
         pos = xo->pos;
         cur = pos - xo->top;
-        rmsg = (RMSG *) xo_pool + cur;
+        rmsg = (const RMSG *) xo_pool + cur;
 
         if (!rec_del(xo->dir, sizeof(RMSG), xo->pos, NULL, NULL))
         {
@@ -246,15 +246,16 @@ clean(
     XO *xo)
 {
     XO *xoo;
-    HDR *hdr, phdr;
+    const HDR *hdr;
+    HDR phdr;
     int pos, cur;
-    char fpath[128], buf[256], tmp[128], recommenddb[128], *c2;
+    char fpath[128], buf[256], tmp[128], recommenddb[128];
     FILE *fp;
     RMSG rmsg;
     int i, chrono, pushstart;
     struct stat st;
     int total, fd;
-    BRD *brd;
+    const BRD *brd;
     unsigned int battr;
 
     counter = 0;
@@ -265,7 +266,7 @@ clean(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    hdr = (HDR *) xo_pool + cur;
+    hdr = (const HDR *) xo_pool + cur;
 
     if (!hdr->recommend || hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
         return XO_NONE;
@@ -314,6 +315,7 @@ clean(
 
             if (pushstart)
             {
+                const char *c2;
                 if (!strncmp(buf, "\x1b[1;32m¡°", 9))
                 {
                     f_cat(tmp, buf);

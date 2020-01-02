@@ -31,7 +31,7 @@ static int
 observe_body(
 XO *xo)
 {
-    OBSERVE *observe;
+    const OBSERVE *observe;
     int num, max, tail;
 
     move(3, 0);
@@ -44,7 +44,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    observe = (OBSERVE *) xo_pool;
+    observe = (const OBSERVE *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);

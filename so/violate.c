@@ -33,7 +33,7 @@ static int
 viol_body(
 XO *xo)
 {
-    EMAIL *viol;
+    const EMAIL *viol;
     int num, max, tail;
 
     move(3, 0);
@@ -46,7 +46,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    viol = (EMAIL *) xo_pool;
+    viol = (const EMAIL *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);

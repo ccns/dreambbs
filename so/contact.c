@@ -24,7 +24,7 @@ static int
 contact_body(
 XO *xo)
 {
-    CONTACT *contact;
+    const CONTACT *contact;
     int num, max, tail;
 
     move(3, 0);
@@ -37,7 +37,7 @@ XO *xo)
         return XO_QUIT;
     }
 
-    contact = (CONTACT *) xo_pool;
+    contact = (const CONTACT *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);

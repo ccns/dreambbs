@@ -81,7 +81,7 @@ gem_foot(
 static void
 gem_item(
     int num,
-    HDR *ghdr)
+    const HDR *ghdr)
 {
     int xmode, gtype;
     char fpath[64];
@@ -121,7 +121,7 @@ static int
 gem_body(
     XO *xo)
 {
-    HDR *ghdr;
+    const HDR *ghdr;
     int num, max, tail;
 
     max = xo->max;
@@ -154,7 +154,7 @@ gem_body(
         return XO_QUIT;
     }
 
-    ghdr = (HDR *) xo_pool;
+    ghdr = (const HDR *) xo_pool;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
