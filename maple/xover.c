@@ -1164,15 +1164,13 @@ xo_thread(
     const char *tag, *title=NULL;
     int pos, match, near=0, neartop=0, max;     /* Thor: neartop與near成對用 */
 
-    int fd, top, bottom, step, len;
-    HDR *pool;
+    int top, bottom, step, len;
     const HDR *fhdr;
 
     match = 0;
     pos = xo->pos;
     top = xo->top;
-    pool = (HDR *) xo_pool;
-    fhdr = pool + (pos - top);
+    fhdr = (HDR *) xo_pool + (pos - top);
     step = (op & RS_FORWARD) ? 1 : - 1;
 
     if (op & RS_RELATED)
@@ -1247,7 +1245,6 @@ xo_thread(
         query = buf;
     }
 
-    fd = -1;
     len = sizeof(HDR) * XO_TALL;
     max = xo->max;
     bottom = BMIN(top + XO_TALL, max);
@@ -1269,13 +1266,7 @@ xo_thread(
 
         if ((pos < top) || (pos >= bottom))
         {
-            if (fd < 0)
-            {
-                fd = open(xo->dir, O_RDONLY);
-                if (fd < 0)
-                    return XO_QUIT;
-            }
-
+            const HDR *pool;
             if (step > 0)
             {
                 top += XO_TALL;
@@ -1287,8 +1278,8 @@ xo_thread(
                 top -= XO_TALL;
             }
 
-            lseek(fd, (off_t) (sizeof(HDR) * top), SEEK_SET);
-            read(fd, pool, len);
+            xo_pool = xo_pool_base + sizeof(HDR) * top;
+            pool = (HDR *)xo_pool;
 
             fhdr = (step > 0) ? pool : pool + XO_TALL - 1;
         }
@@ -1422,8 +1413,7 @@ xo_thread(
         xo->pos = near;
         if (top != neartop)             /* Thor.0609: top 為目前的buffer之top */
         {
-            lseek(fd, (off_t) (sizeof(HDR) * neartop), SEEK_SET);
-            read(fd, pool, len);
+            xo_pool = xo_pool_base + sizeof(HDR) * neartop;
         }
         if (bottom != neartop)  /* Thor.0609: bottom為畫面之top */
         {
@@ -1433,12 +1423,8 @@ xo_thread(
     }
     else if (bottom != top)
     {
-        lseek(fd, (off_t) (sizeof(HDR) * bottom), SEEK_SET);
-        read(fd, pool, len);
+        xo_pool = xo_pool_base + sizeof(HDR) * bottom;
     }
-
-    if (fd >= 0)
-        close(fd);
 
     return (match & XO_POS_MASK) ? match : match + XO_NONE;
 }
