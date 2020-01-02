@@ -1601,7 +1601,7 @@ xover(
                     if ((pos < num) || (pos >= num + XO_TALL))
                     {
                         xo->top = (pos / XO_TALL) * XO_TALL;
-                        cmd |= XR_LOAD;     /* 載入資料並予以顯示 */
+                        cmd |= XR_BODY;     /* IID.20200103: Redraw list; do not reload. */
                     }
                     else
                     {
@@ -1870,7 +1870,7 @@ xover_callback_end:
                 if (wrap_flag)
                 {
                     xo->top = 0;  /* Reset list top on screen */
-                    cmd |= XR_LOAD;  /* Needs to reload */
+                    cmd |= XR_BODY;  /* Needs to redraw */
                 }
             }
             else
