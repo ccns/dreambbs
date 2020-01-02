@@ -23,7 +23,7 @@ MAP map[60000];
 
 
 int total;
-void pal_sync(const char *fpath);
+static void pal_sync(const char *fpath);
 
 static int
 int_cmp(

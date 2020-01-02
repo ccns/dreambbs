@@ -212,7 +212,9 @@ GCC_PURE bool is_pal(int userno);
 GCC_PURE bool is_banmsg(int userno);
 void pal_cache(void);
 void aloha_sync(void);
+#ifdef NO_SO  /* For the main program and the modules of `bbsd` */
 void pal_sync(const char *fpath);
+#endif
 int t_pal(void);
 int t_bmw(void);
 int bm_belong(const char *board);
