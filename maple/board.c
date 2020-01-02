@@ -1163,7 +1163,7 @@ board_outs(
     int e_cols = (d_cols + 33 > BTLEN) ? BTLEN - 33 : d_cols;
 
     strcpy(tmp, brd->title);
-    if (tmp[e_cols + 32] & 0x80)
+    if (IS_DBCS_HI(tmp[e_cols + 32]))
 //      tmp[e_cols + 33] = '\0';
 //  else
         tmp[e_cols + 32] = ' ';
@@ -1232,7 +1232,7 @@ board_outs(
     prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-*s%s", num, str, brdtype, brd->brdname, buf, brd->class_, d_cols + 33, tmp, str2);
 
     strcpy(tmp, brd->BM);
-    if (tmp[14] & 0x80)
+    if (IS_DBCS_HI(tmp[14]))
         tmp[13] = '\0';
     else
         tmp[14] = '\0';

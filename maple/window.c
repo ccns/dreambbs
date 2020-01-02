@@ -119,7 +119,7 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
             if (++len >= y)
             {
                 /* 最後一字若是中文字的首碼，就不印 */
-                if (!in_chi && IS_ZHC_HI(ch))
+                if (!in_chi && IS_DBCS_HI(ch))
                 {
                     outc(' ');
                     in_chi ^= 1;
@@ -133,7 +133,7 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
                 break;
             }
 
-            if (in_chi || IS_ZHC_HI(ch))
+            if (in_chi || IS_DBCS_HI(ch))
                 in_chi ^= 1;
         }
 
@@ -212,7 +212,7 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
             if (--len < 0)      /* 跳過 strip_ansi_len(msg) 的長度 */
                 break;
 
-            if (in_chi || IS_ZHC_HI(ch))
+            if (in_chi || IS_DBCS_HI(ch))
                 in_chi ^= 1;
         }
     }

@@ -684,7 +684,7 @@ void str_lowest(char *dst, const char *src)
     do
     {
         ch = *src++;
-        if (in_chi || ch & 0x80)
+        if (in_chi || IS_DBCS_HI(ch))
             in_chi ^= 1;
         else if (ch >= 'A' && ch <= 'Z')
             ch |= 0x20;
@@ -1150,7 +1150,7 @@ GCC_PURE char *str_sub(const char *str, const char *tag
         }
         else
         {
-            if (c1 & 0x80)
+            if (IS_DBCS_HI(c1))
                 in_chi ^= 1;
             else if (c1 >= 'A' && c1 <= 'Z')
                 c1 |= 0x20;
@@ -1169,7 +1169,7 @@ GCC_PURE char *str_sub(const char *str, const char *tag
 
                     p2++;
                     c1 = *++p1;
-                    if (in_chii || c1 & 0x80)
+                    if (in_chii || IS_DBCS_HI(c1))
                         in_chii ^= 1;
                     else if (c1 >= 'A' && c1 <= 'Z')
                         c1 |= 0x20;

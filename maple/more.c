@@ -160,7 +160,7 @@ more_line(
         ch = (unsigned char) *foff;
 
         /* weiyu.040802: 如果這碼是中文字的首碼，但是只剩下一碼的空間可以印，那麼不要印這碼 */
-        if (in_chi || IS_ZHC_HI(ch))
+        if (in_chi || IS_DBCS_HI(ch))
             in_chi ^= 1;
         if (in_chi && (len >= more_width - 1 || bytes >= ANSILINELEN - 2))
             break;

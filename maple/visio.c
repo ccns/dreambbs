@@ -1099,7 +1099,7 @@ outsep(
             dbcs_hi = false;
             outc(hi);
         }
-        else if (ch & 0x80)
+        else if (IS_DBCS_HI(ch))
         {
             dbcs_hi = true;
             hi = ch;

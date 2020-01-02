@@ -133,7 +133,7 @@ hzconvert(
     end = src + len;
     while (src < end)
     {
-        if ((unsigned char)*src & 0x80)        /* hi-bit on 表示是漢字 */
+        if (IS_DBCS_HI((unsigned char)*src))   /* hi-bit on 表示是漢字 */
         {
             dbcvrt(src, p);
             src += 2;           /* 一次轉二碼 */

@@ -506,7 +506,7 @@
 #define MAX_CHOICES     32              /* vote.c 投票時最多有 32 種選擇 */
 #define TAG_MAX         256             /* xover.c TagList 標籤數目之上限 */
 #define LINE_HEADER     4               /* more.c bhttpd.c 檔頭有三列 */
-#define IS_ZHC_HI(x)    (x & 0x80)
+#define IS_DBCS_HI(x)   (x >= 0x80U)
 
 /* 動態看板 & menu 位置 */
 
