@@ -1487,8 +1487,6 @@ post_browse(
     int cmd GCC_UNUSED, xmode, pos;
     char *dir, fpath[64], *board GCC_UNUSED;
 
-    char poolbuf[sizeof(HDR)*20];
-
     int key;
 
     dir = xo->dir;
@@ -1553,9 +1551,8 @@ post_browse(
             case XO_BODY:
                 continue;
             case Ctrl('U'):
-                memcpy(poolbuf, xo_pool, sizeof(HDR)*20);
                 every_U();
-                memcpy(xo_pool, poolbuf, sizeof(HDR)*20);
+                xo_load(xo, sizeof(HDR));
                 continue;
             case Ctrl('B'):
                 every_B();
