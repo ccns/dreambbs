@@ -315,7 +315,7 @@ brh_add(time_t prev, time_t chrono, time_t next)
 
 /* cdchen.bbs@bbs.ntcic.edu.tw add by statue.000725 */
 #ifdef  HAVE_FORCE_BOARD
-extern void
+void
 force_board (void)
 {
     BRD *brd;

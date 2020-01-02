@@ -12,12 +12,12 @@ extern const char *DATE, *PATH, *MSGID, *POSTHOST, *CONTROL;
 extern char *SUBJECT, *FROM, *GROUP, *SITE;
 
 /* inntobbs.c */
-extern int readlines(char *data);
+int readlines(char *data);
 
 /* history.c */
-extern void HISmaint(void);
-extern void HISadd(const char *msgid, const char *board, const char *xname);
-extern int HISfetch(const char *msgid, char *board, char *xname);
+void HISmaint(void);
+void HISadd(const char *msgid, const char *board, const char *xname);
+int HISfetch(const char *msgid, char *board, char *xname);
 
 #ifdef __cplusplus
 }  /* extern "C" */

@@ -35,11 +35,11 @@ extern ncmperm_t *NCMPERM;
 extern int NCMCOUNT;
 
 /* receive_article.c */
-extern newsfeeds_t *search_newsfeeds_bygroup(const char *newsgroup);
+newsfeeds_t *search_newsfeeds_bygroup(const char *newsgroup);
 
 /* nocem.c */
-GCC_PURE extern ncmperm_t *search_issuer(const char *issuer, const char *type);
-extern int receive_nocem(void);
+GCC_PURE ncmperm_t *search_issuer(const char *issuer, const char *type);
+int receive_nocem(void);
 
 #ifdef __cplusplus
 }  /* extern "C" */

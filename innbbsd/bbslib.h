@@ -34,35 +34,35 @@ extern "C" {
 /* bbslib.c */
 extern int NLCOUNT;
 extern nodelist_t *NODELIST;
-GCC_PURE extern int nl_bynamecmp(const void *a, const void *b);
+GCC_PURE int nl_bynamecmp(const void *a, const void *b);
 
 /* bbslib.c */
 extern int NFCOUNT;
 extern newsfeeds_t *NEWSFEEDS;
 extern newsfeeds_t *NEWSFEEDS_B;
 extern newsfeeds_t *NEWSFEEDS_G;
-GCC_PURE extern int nf_byboardcmp(const void *a, const void *b);
-GCC_PURE extern int nf_bygroupcmp(const void *a, const void *b);
+GCC_PURE int nf_byboardcmp(const void *a, const void *b);
+GCC_PURE int nf_bygroupcmp(const void *a, const void *b);
 
 /* bbslib.c */
 extern int SPAMCOUNT;
 extern spamrule_t *SPAMRULE;
 
 /* bbslib.c */
-extern int initial_bbs(void);
-GCC_CHECK_FORMAT(1, 2) extern void bbslog(const char *fmt, ...);
+int initial_bbs(void);
+GCC_CHECK_FORMAT(1, 2) void bbslog(const char *fmt, ...);
 
 /* convcode.c */
-extern void b52gb(char *str);
-extern void gb2b5(char *str);
+void b52gb(char *str);
+void gb2b5(char *str);
 
 /* rec_article.c */
-extern void init_bshm(void);
-extern int cancel_article(const char *msgid);
-extern int receive_article(void);
+void init_bshm(void);
+int cancel_article(const char *msgid);
+int receive_article(void);
 #ifdef NoCeM
-extern int receive_nocem(void);
-extern int read_ncmperm(void);
+int receive_nocem(void);
+int read_ncmperm(void);
 #endif
 
 #ifdef __cplusplus

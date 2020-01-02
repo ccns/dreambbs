@@ -2686,7 +2686,7 @@ talk_speak(
 #if 0   // IID.20190508: `bwboard.so` and `chess.so` do not exist anymore.
         else if (ch == Ctrl('A'))
         { /* Thor.990219: ©I¥s¥~±¾´Ñ½L */
-            /* extern int BWboard(int sock, int later); */
+            /* int BWboard(int sock, int later); */
             data[0] = ch;
             if (send(fd, data, 1, 0) != 1)
                 break;
@@ -2696,7 +2696,7 @@ talk_speak(
         }
         else if (ch == Ctrl('B'))
         { /* Thor.990219: ©I¥s¥~±¾´Ñ½L */
-            /* extern int BWboard(int sock, int later); */
+            /* int BWboard(int sock, int later); */
             data[0] = ch;
             if (send(fd, data, 1, 0) != 1)
                 break;
