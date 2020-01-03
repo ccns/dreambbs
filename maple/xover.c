@@ -1682,11 +1682,16 @@ xover(
                     if (p)
                     {
   #ifdef HAVE_HASH_KEYFUNCLIST
+    #ifdef DL_HOTSWAP
                         xcmd->erase(num);
                         cb = xcmd->insert({cmd, {p}}).first;
+    #endif
   #else
+    #ifdef DL_HOTSWAP
                         cb->second.func = p;
-                        pos = cb->first = cmd;
+                        cb->first = cmd;
+    #endif
+                        pos = cmd;
   #endif
                     }
                     else
@@ -1929,7 +1934,7 @@ xover_callback_end:
 #ifdef  HAVE_MAILGEM
                 else if (cmd == 'G' && HAS_PERM(PERM_MBOX))
                 {
-                    static int (*mgp)(XO *xo);
+                    DL_HOTSWAP_SCOPE int (*mgp)(XO *xo) = NULL;
                     if (!mgp)
                     {
                         mgp = DL_NAME_GET("mailgem.so", mailgem_gather);

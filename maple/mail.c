@@ -2764,7 +2764,7 @@ static int
 mbox_gem(
     XO *xo)
 {
-    static void (*mgp)(void);
+    DL_HOTSWAP_SCOPE void (*mgp)(void) = NULL;
     if (!HAS_PERM(PERM_MBOX))
         return XO_NONE;
     if (!mgp)

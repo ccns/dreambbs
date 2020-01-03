@@ -67,8 +67,10 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
         if (!mitem.xofunc)
             return 0;
         mmode = -mmode;
+  #ifndef DL_HOTSWAP
         mptr->item = mitem;
         mptr->umode = mmode;
+  #endif
     }
 #endif
 
@@ -84,8 +86,10 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
                 scr_free(&old_screen);
                 return 0;
             }
+  #ifndef DL_HOTSWAP
             mptr->item = mitem;
             mptr->umode = POPUP_FUN;
+  #endif
             mode = (*mitem.func) ();
             break;
 #endif

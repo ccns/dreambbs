@@ -541,6 +541,7 @@ VAR const int build_langver       INI(IF_DEF(__cplusplus, (int)__cplusplus, (int
 #define MODULE_GRAYOUT            (1U << 3)
 #define MODULE_M3_USE_BBSLUA      (1U << 4)
 #define MODULE_M3_USE_BBSRUBY     (1U << 5)
+#define MODULE_DL_HOTSWAP         (1U << 6)
 
 #ifdef  HAVE_BBSLUA
 VAR const char bbslua_version_str[]   INI(
@@ -564,6 +565,7 @@ VAR const unsigned int module_flags   INI(
     | MODULE_STATUS(GRAYOUT)
     | MODULE_STATUS(M3_USE_BBSLUA)
     | MODULE_STATUS(M3_USE_BBSRUBY)
+    | MODULE_STATUS(DL_HOTSWAP)
 );
 #undef MODULE_STATUS
 

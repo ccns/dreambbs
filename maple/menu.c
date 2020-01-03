@@ -1389,8 +1389,10 @@ domenu(
                     mitem.func = (int (*)(void)) DL_GET(mitem.dlfunc);
                     if (!mitem.func) break;
                     mmode = -mmode;
+  #ifndef DL_HOTSWAP
                     mptr->item = mitem;
                     mptr->umode = mmode;
+  #endif
                 }
 #endif
                 utmp_mode(mmode /* = mptr->umode*/);

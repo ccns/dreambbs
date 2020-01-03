@@ -176,6 +176,8 @@ template <class T>
 
 /* Macros for managing loading of dynamic libraries */
 
+#include "config.h"
+
 #if NO_SO
 
 #define DL_NAME(module_str, obj)   (&obj)
@@ -185,12 +187,20 @@ template <class T>
 #define DL_NAME_GET(module_str, obj)  (&obj)
 #define DL_NAME_CALL(module_str, func)  func
 
+#undef DL_HOTSWAP
+
 #else  // #if NO_SO
 
 #define DL_NAME(module_str, obj) \
     BINARY_SUFFIX module_str ":" CPP_STR(CPP_UNPAREN_OPT(obj))
-#define DL_GET(dl_name)  DL_get(dl_name)
-#define DL_CALL(dl_name)  DL_func((dl_name), CPP_APPEND_CLOSEPAREN
+
+#ifdef DL_HOTSWAP
+  #define DL_GET(dl_name)  DL_get_hotswap(dl_name)
+  #define DL_CALL(dl_name)  DL_func_hotswap((dl_name), CPP_APPEND_CLOSEPAREN
+#else
+  #define DL_GET(dl_name)  DL_get(dl_name)
+  #define DL_CALL(dl_name)  DL_func((dl_name), CPP_APPEND_CLOSEPAREN
+#endif
 
 #ifdef CPP_TYPEOF
   #define DL_NAME_GET(module_str, obj)  \
@@ -206,6 +216,14 @@ template <class T>
 #endif
 
 #endif  // #if NO_SO
+
+/* IID.20200103: For making dynamic libraries hot-swappable. */
+#ifdef DL_HOTSWAP
+  #define DL_HOTSWAP_SCOPE  /* Function local */
+#else
+  #define DL_HOTSWAP_SCOPE  static
+#endif
+
 
 /* Macros for emitting warnings */
 

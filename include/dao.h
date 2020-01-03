@@ -74,7 +74,9 @@ void archiv32(time_t chrono, char *fname);
 void archiv32m(time_t chrono, char *fname);
 /* dl_lib.c */
 void *DL_get(const char *name);
+void *DL_get_hotswap(const char *name);
 int DL_func(const char *name, ...);
+int DL_func_hotswap(const char *name, ...);
 /* record.c */
 int rec_add(const char *fpath, const void *data, int size);
 int rec_bot(const char *fpath, const void *data, int size);

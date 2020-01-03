@@ -47,7 +47,9 @@ x_siteinfo(void)
     prints("\x1b[1;33mInternet Technology Lab\x1b[37m, Institute of CCE, National Cheng Kung University.\x1b[m\n");
     prints("\n");
 #ifdef Modules
-    prints("Modules & Plug-in: \x1b[m\n\n");
+#define CHECK_CONF(conf)  ((bool)(module_flags & (MODULE_ ## conf)))
+    prints("Modules & Plug-in: %s\x1b[m\n\n",
+        CHECK_CONF(DL_HOTSWAP) ? "[\x1b[1;32mHotswap enabled\x1b[m]" : "[\x1b[1;31mHotswap disabled\x1b[m]");
 
 //模組化的放在這邊
 #define ONLINE_STR  "\x1b[1;32monline \x1b[m"

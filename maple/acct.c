@@ -986,8 +986,6 @@ void acct_setup(ACCT * u, int adm)
     ACCT x;
     int y, c;
 
-    int (*sm) (char *mail);
-
     int i, num, tmp, mode;
     FILE *flog;
     char *str, buf[80], pass[PLAINPASSLEN];
@@ -998,7 +996,6 @@ void acct_setup(ACCT * u, int adm)
     acct_show(u, (adm) ? 3 : 0);
 
     memcpy(&x, u, sizeof(ACCT));
-    sm = NULL;
 
     if (((u->userlevel & PERM_SYSOP) && strcmp(cuser.userid, u->userid))
         && !check_admin(cuser.userid))
@@ -1083,6 +1080,7 @@ void acct_setup(ACCT * u, int adm)
         }
         if (adm == '3')
         {
+            DL_HOTSWAP_SCOPE int (*sm) (char *mail) = NULL;
             switch (vans("使用程序 i)內部 o)外部 q)取消：[q]"))
             {
             case 'i':

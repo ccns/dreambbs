@@ -1689,7 +1689,6 @@ vedit(
 {
     textline *vln, *tmp;
     int cc, col, mode, margin, pos;
-    static void (*input_tool)(void);
 
     /* --------------------------------------------------- */
     /* 初始設定：載入檔案、引用文章、設定編輯模式          */
@@ -2044,6 +2043,7 @@ ve_key:
 #ifdef  HAVE_INPUT_TOOLS
                 if (cc == VE_INPUTOOL)
                 {
+                    DL_HOTSWAP_SCOPE void (*input_tool)(void) = NULL;
                     if (!input_tool)
                     {
                         input_tool = DL_NAME_GET("ascii.so", input_tools);

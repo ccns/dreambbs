@@ -92,10 +92,29 @@ void *DL_get(const char *name)
     return dlsym(p->handle, t+1);
 }
 
-int DL_func(const char *name, ...)
+void *DL_get_hotswap(const char *name)
+{
+    const char *t = DL_name_delim(name);
+    DL_list *p;
+    if (!t)
+        return NULL;
+
+    p = DL_insert(name, t - name);
+    if (p->handle)              /* Unload the library to load a updated one */
+        dlclose(p->handle);
+
+    p->handle = dlopen(p->path, DL_OPEN_FLAGS);
+    if (!p->handle)
+        return NULL;
+
+    return dlsym(p->handle, t+1);
+}
+
+/* Dynamic library function invokers */
+
+static int DL_invoke(int (*f)(va_list), ...)
 {
     va_list args;
-    int (*f)(va_list) = (int (*)(va_list)) DL_get(name);
     int ret;
 
     if (!f)                      /* not get func */
@@ -106,4 +125,13 @@ int DL_func(const char *name, ...)
     va_end(args);
 
     return ret;
+}
+
+int DL_func(const char *name, ...)
+{
+    return DL_invoke((int (*)(va_list)) DL_get(name));
+}
+int DL_func_hotswap(const char *name, ...)
+{
+    return DL_invoke((int (*)(va_list)) DL_get_hotswap(name));
 }

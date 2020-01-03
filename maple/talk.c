@@ -22,12 +22,6 @@ typedef struct
     char ship[46];
 }  PAL_SHIP;
 
-#ifdef  HAVE_PIP_FIGHT
-    void (*p)(void);
-#endif
-
-
-
 static int pal_count;
 static int *pal_pool;
 static int bmw_modetype;
@@ -2953,6 +2947,7 @@ talk_page(
 #ifdef  HAVE_PIP_FIGHT
     else if (ans == 'c')
     {
+        DL_HOTSWAP_SCOPE void (*p)(void) = NULL;
         if (!p)
             p = DL_NAME_GET("pip.so", pip_vf_fight);
         if (p)
@@ -4366,6 +4361,7 @@ over_for:
 #ifdef  HAVE_PIP_FIGHT
             else if (ans == 'c')
             {
+                DL_HOTSWAP_SCOPE void (*p)(void) = NULL;
                 if (!p)
                     p = DL_NAME_GET("pip.so", pip_vf_fight);
                 strcpy(cutmp->mateid, up->userid);
