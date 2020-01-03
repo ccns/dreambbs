@@ -36,7 +36,7 @@ typedef union
     sa_family_t family;
     struct sockaddr_in v4;
     struct sockaddr_in6 v6;
-}     ip_addr;
+}     ip_addr;  /* SHMDATA(raw); dependency(UTMP) */
 
 #define IPADDR_NONE     TEMPLVAL(ip_addr, {0})
 

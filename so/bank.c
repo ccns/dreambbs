@@ -242,7 +242,7 @@ typedef struct
     int money;          /* ¹Ú¹ô */
     int save;           /* ¦s´Ú */
     int request;        /* ¤pÂûÂI¨é */
-}       MONEY;
+}       MONEY;  /* DISKDATA(raw) */
 
 /*
 int

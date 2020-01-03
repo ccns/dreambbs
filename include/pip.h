@@ -33,7 +33,7 @@ typedef struct
 } levelup;
 
 
-struct chicken {
+struct chicken {  /* DISKDATA(format) */
     /*---基本的資料---*/ //14
     char name[20];      /*姓    名*/
     char birth[21];     /*生    日*/
@@ -238,7 +238,7 @@ typedef struct chicken chicken;
 /*--------------------------------------------------------------------------*/
 /*  選單的設定                                                              */
 /*--------------------------------------------------------------------------*/
-struct pipcommands
+struct pipcommands  /* Hashable */
 {
     int (*fptr) (void);
     int key1;
@@ -249,7 +249,7 @@ typedef struct pipcommands pipcommands;
 /*--------------------------------------------------------------------------*/
 /*  怪物參數設定                                                            */
 /*--------------------------------------------------------------------------*/
-struct playrule
+struct playrule  /* DISKDATA(format) */
 {
     char name[20];      /*名字*/
     int hp;             /*體力*/

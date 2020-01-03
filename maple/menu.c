@@ -148,7 +148,7 @@ typedef struct
 {
     time_t tpad;
     char msg[356];
-}      Pad;
+}      Pad;  /* DISKDATA(raw) */
 
 
 int

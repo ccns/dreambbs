@@ -15,7 +15,7 @@
 #include <string.h>
 #include "dao.h"
 
-typedef struct
+typedef struct  /* Hashable */
 {
     char *path;
     void *handle;

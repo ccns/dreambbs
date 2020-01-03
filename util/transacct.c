@@ -60,7 +60,7 @@ typedef struct
     int point1;                 /* 優良積分 */
     int point2;                 /* 劣文 */
     time_t vtime;               /* validate time */
-}       NEW;
+}       NEW;  /* DISKDATA(raw) */
 
 
 /* ----------------------------------------------------- */
@@ -98,7 +98,7 @@ typedef struct
     char ident[103];            /* user remote host ident */
     char barcolor;              /* 光棒顏色 */
     time_t vtime;               /* validate time */
-}       OLD;
+}       OLD;  /* DISKDATA(raw) */
 
 
 #define OLDUFO2_COLOR      BFLAG(0)        /* true if the ANSI color mode open */
@@ -268,7 +268,7 @@ typedef struct
     int money;                /* 夢幣 */
     int save;                 /* 存款 */
     int request;              /* 小雞點券 */
-}       MONEY;
+}       MONEY;  /* DISKDATA(raw) */
 
 int
 main(

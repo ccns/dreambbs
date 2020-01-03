@@ -34,7 +34,7 @@ typedef struct BoardHeaderOld
     time_t btime;                 /* .DIR 的 st_mtime */
     int bpost;                    /* 共有幾篇 post */
     time_t blast;                 /* 最後一篇 post 的時間 */
-}           BRDOLD;
+}           BRDOLD;  /* DISKDATA(raw) */
 
 
 typedef struct

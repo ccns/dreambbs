@@ -17,7 +17,7 @@ typedef struct
 {
     char email[60];
     int num;
-}       MAP;
+}       MAP;  /* DISKDATA(raw) */
 MAP map[MAX_AC];
 
 

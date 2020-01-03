@@ -95,7 +95,7 @@ typedef struct
     char msgid[80];
     char control[80];
     char charset[20];
-}       soverview_t;
+}       soverview_t;  /* DISKDATA(raw) */
 
 
 static void

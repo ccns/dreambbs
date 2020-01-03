@@ -1668,7 +1668,7 @@ mail_sysop(void)
         int i, j;
         char *ptr, *str;
 
-        struct SYSOPLIST
+        struct SYSOPLIST  /* DISKDATA(format) */
         {
             char userid[IDLEN + 1];
             char duty[40];

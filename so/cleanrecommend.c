@@ -22,7 +22,7 @@ typedef struct RecommendMessage
     int  pn;
     char msg[55];
     char rtime[6];
-}       RMSG;
+}       RMSG;  /* DISKDATA(raw); runtime */
 
 
 int counter;

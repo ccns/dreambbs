@@ -19,7 +19,7 @@ typedef struct
     char msgid[256];            /* message id (°²³] 256 ¤w°÷ªø) */
     char board[IDLEN + 1];
     char xname[9];
-}       HIS;
+}       HIS;  /* DISKDATA(raw) */
 
 
 void

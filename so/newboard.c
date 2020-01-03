@@ -27,7 +27,7 @@ static int nbrd_head(XO *xo);
 typedef struct
 {
     char email[60];
-} LOG;
+} LOG;  /* DISKDATA(raw) */
 
 
 static char

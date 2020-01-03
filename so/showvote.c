@@ -14,7 +14,7 @@ static int show_add(XO *xo);
 typedef struct
 {
     char email[60];
-} LOG;
+} LOG;  /* DISKDATA(raw) */
 
 static void
 show_item(

@@ -1244,7 +1244,7 @@ ve_header(
                 char title[66];
                 time_t date;            /* last post's date */
                 int number;             /* post number */
-            }      postlog = {{0}, {0}, {0}, 0, 0};
+            }      postlog = {{0}, {0}, {0}, 0, 0};  /* DISKDATA(raw) */
 
 #ifdef HAVE_ANONYMOUS
             /* Thor.980909: anonymous post mode */

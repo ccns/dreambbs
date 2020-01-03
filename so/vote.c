@@ -31,7 +31,7 @@ struct Tchoice
 typedef struct
 {
     char email[60];
-} LOG;
+} LOG;  /* DISKDATA(raw) */
 
 static int
 TchoiceCompare(const void * i, const void * j)

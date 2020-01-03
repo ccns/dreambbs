@@ -50,7 +50,7 @@ struct postrec
 
 
 static
-struct posttop
+struct posttop  /* DISKDATA(raw) */
 {
     char author[13];            /* author name */
     char board[13];             /* board name */
