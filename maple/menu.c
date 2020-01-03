@@ -1379,16 +1379,17 @@ domenu(
         case KEY_RIGHT:
             {
                 MENU *const mptr = table[cc];
+                MenuItem mitem = mptr->item;
                 int mmode = mptr->umode;
                 int res;
 #if !NO_SO
                 /* Thor.990212: dynamic load, with negative umode */
                 if (mmode < 0)
                 {
-                    void *p = DL_GET(mptr->dlfunc);
-                    if (!p) break;
-                    mptr->func = (int (*)(void))p;
+                    mitem.func = (int (*)(void)) DL_GET(mitem.dlfunc);
+                    if (!mitem.func) break;
                     mmode = -mmode;
+                    mptr->item = mitem;
                     mptr->umode = mmode;
                 }
 #endif
@@ -1397,12 +1398,12 @@ domenu(
                 if (mmode <= M_XMENU)
                 {
                     mtail->level = PERM_MENU + mptr->desc[0];
-                    menu = mptr->menu;
+                    menu = mitem.menu;
                     mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
                     continue;
                 }
 
-                res = (*mptr->func) ();
+                res = (*mitem.func) ();
 
                 utmp_mode(mtail->umode);
 
@@ -1459,7 +1460,7 @@ domenu(
             if (menu != menu_main)
             {
                 mtail->level = PERM_MENU + table[cc]->desc[0];
-                menu = mtail->menu;
+                menu = mtail->item.menu;
                 mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
                 continue;
             }

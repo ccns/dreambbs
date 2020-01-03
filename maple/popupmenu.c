@@ -57,46 +57,47 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
 {
     GCC_UNUSED unsigned int mode;
     screen_backup_t old_screen;
+    MenuItem mitem = mptr->item;
+    int mmode = mptr->umode;
 
 #if !NO_SO
-    void *p;
-
-    if (mptr->umode < 0)
+    if (mmode < 0)
     {
-        p = DL_GET(mptr->dlfunc);
-        if (!p)
+        mitem.xofunc = (int (*)(XO *xo)) DL_GET(mitem.dlfunc);
+        if (!mitem.xofunc)
             return 0;
-        mptr->xofunc = (int (*)(XO *xo))p;
-        mptr->umode = - (mptr->umode);
+        mmode = -mmode;
+        mptr->item = mitem;
+        mptr->umode = mmode;
     }
 #endif
 
     scr_dump(&old_screen);
 
-    switch (mptr->umode)
+    switch (mmode)
     {
 #if !NO_SO
         case POPUP_SO :
-            p = DL_GET(mptr->dlfunc);
-            if (!p)
+            mitem.func = (int (*)(void)) DL_GET(mitem.dlfunc);
+            if (!mitem.func)
             {
                 scr_free(&old_screen);
                 return 0;
             }
-            mptr->func = (int (*)(void))p;
+            mptr->item = mitem;
             mptr->umode = POPUP_FUN;
-            mode = (*mptr->func) ();
+            mode = (*mitem.func) ();
             break;
 #endif
         case POPUP_MENU :
 //          sprintf(t, "¡i%s¡j", mptr->desc);
             scr_restore_free(&old_screen);
-            return do_menu(mptr->menu, xo, x, y);
+            return do_menu(mitem.menu, xo, x, y);
         case POPUP_XO :
-            mode = (*mptr->xofunc) (xo);
+            mode = (*mitem.xofunc) (xo);
             break;
         case POPUP_FUN :
-            mode = (*mptr->func) ();
+            mode = (*mitem.func) ();
             break;
     }
 
@@ -339,9 +340,9 @@ do_menu(
     }
 
     /* verit. §ó·s°ÊºA */
-    if (pmenu[tmp].func)
+    if (pmenu[tmp].item.title)
     {
-        strcpy(cutmp->mateid, (const char *) pmenu[tmp].func);
+        strcpy(cutmp->mateid, pmenu[tmp].item.title);
         utmp_mode(M_IDLE);
     }
 
