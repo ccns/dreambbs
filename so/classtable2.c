@@ -16,7 +16,7 @@ static CLASS_TABLE2 tmp_table[78];
 static char fpath_classtable[80];
 
 
-int show_classtable(int x, int y, const char *msg)
+static int show_classtable(int x, int y, const char *msg)
 {
     y--;
     move(x + 3, 7 + y*12);
@@ -24,7 +24,7 @@ int show_classtable(int x, int y, const char *msg)
     return 0;
 }
 
-void show_icon_classtable(int x, int y, int mode)
+static void show_icon_classtable(int x, int y, int mode)
 {
     int p;
     p = (x - 1) + (y - 1) * 13;
@@ -58,12 +58,12 @@ void show_icon_classtable(int x, int y, int mode)
     return;
 }
 
-void help_classtable(void)
+static void help_classtable(void)
 {
     outz("\x1b[1;37;42m 【操作說明】a)新增 e)修改 d)刪除 q)離開 c)清除 \x1b[1;30mCopyRight By Verit@yzu \x1b[m");
 }
 
-int show_table(void)
+static int show_table(void)
 {
     int i;
     int x = 1;
@@ -97,7 +97,7 @@ int show_table(void)
     return 0;
 }
 
-int load_table(void)
+static int load_table(void)
 {
     int i;
     int fd;
@@ -122,7 +122,7 @@ int load_table(void)
     return 0;
 }
 
-int add_classtable(int x, int y)
+static int add_classtable(int x, int y)
 {
     CLASS_TABLE2 classtable;
     int p;
@@ -151,7 +151,7 @@ int add_classtable(int x, int y)
     return 0;
 }
 
-int del_classtable(int x, int y)
+static int del_classtable(int x, int y)
 {
     int p;
     p = (x - 1) + (y - 1) * 13;
@@ -170,7 +170,7 @@ int del_classtable(int x, int y)
     return 0;
 }
 
-int edit_classtable(int x, int y)
+static int edit_classtable(int x, int y)
 {
     int p;
     CLASS_TABLE2 classtable;
@@ -201,11 +201,10 @@ int edit_classtable(int x, int y)
 #define CGI_stage1        "/logincheck.asp"
 #define CGI_stage2        "/"
 #define CGI_stage3        "/VC/classLeft.asp"
-#define CGI_stage4        "/VC/Login_Student.asp"
+#define CGI_stage4        "/VC/Login_Student.asp" 
 
 
-
-int init_classtable(void)
+static int init_classtable(void)
 {
     show_table();
     load_table();

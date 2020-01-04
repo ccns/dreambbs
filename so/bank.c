@@ -42,7 +42,7 @@ void log_bank(
 }
 */
 
-int point1_money(void)
+static int point1_money(void)
 {
     int num;
     char buf[10];
@@ -110,7 +110,7 @@ int point1_money(void)
 }
 
 
-int
+static int
 TransferAccount(void)
 {
     ACCT acct, selfacct;

@@ -44,24 +44,20 @@ int reset6(void);
 int reset7(void);
 
 /* so/aloha.c */
-GCC_PURE int cmpbmw(const void *benz);
 int t_aloha(void);
 
 /* so/ascii.c */
 void input_tools(void);
 
 /* so/bank.c */
-int point1_money(void);
-int TransferAccount(void);
 int money_back(void);
 int bank_main(void);
 
 /* so/bj.c */
-void show_money(int m);
-int print_card(int card, int x, int y);
 int BlackJack(void);
 
 /* so/brdstat.c */
+int main_bstat(XO *xo);
 
 /* so/chat.c */
 int t_chat(void);
@@ -70,22 +66,12 @@ int t_chat(void);
 int Chatmenu(void);
 
 /* so/classtable2.c */
-int show_classtable(int x, int y, const char *msg);
-void show_icon_classtable(int x, int y, int mode);
-void help_classtable(void);
-int show_table(void);
-int load_table(void);
-int add_classtable(int x, int y);
-int del_classtable(int x, int y);
-int edit_classtable(int x, int y);
-int init_classtable(void);
 int main_classtable(void);
 
 /* so/cleanrecommend.c */
 int clean(XO *xo);
 
 /* so/contact.c */
-void contact_send(CONTACT *contact);
 int Contact(void);
 
 /* so/gamef.c */
@@ -97,6 +83,7 @@ int fightNum(void);
 
 /* so/innbbs.c */
 int a_innbbs(void);
+
 /* so/list.c */
 int List(void);
 
@@ -109,19 +96,6 @@ int gcheck(int level, char *fpath);
 int Memorandum(void);
 
 /* so/mine.c */
-void clrtokol(void);
-void initMap(void);
-int show_fasttime(void);
-int load_fasttime(void);
-int change_fasttime(int n, int t);
-GCC_PURE int countNeighbor(int y, int x, int bitmask);
-void drawInfo(void);
-void drawPrompt(void);
-void drawMapLine(int y, int flShow);
-void drawMap(int flShow);
-void ExpandMap(int y, int x, int flTrace);
-void TraceMap(int y, int x);
-void playMine(void);
 int Mine(void);
 
 /* so/newboard.c */
@@ -135,13 +109,13 @@ int new_passwd(void);
 
 /* so/personal.c */
 int personal_apply(void);
-GCC_PURE int sort_compare(const void *p1, const void *p2);
 int personal_admin(void);
 
 /* so/pip.c */
 int p_pipple(void);
 
 /* so/pipfun.c */
+
 /* so/pnote.c */
 int main_note(void);
 
@@ -149,9 +123,6 @@ int main_note(void);
 int same_mail(char *mail);
 
 /* so/shop.c */
-int cloak_temp(void);
-int hidefrom_temp(void);
-int sysop(void);
 int shop_main(void);
 
 /* so/showvote.c */

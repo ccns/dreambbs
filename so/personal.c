@@ -12,7 +12,7 @@
 
 
 static int mode = 0;    /* 0:email 1:brdtitle */
-char msg[60];
+static char msg[60];
 
 static int
 personal_log(
@@ -401,7 +401,7 @@ mail2usr(
 
 }
 
-GCC_PURE int
+GCC_PURE static int
 sort_compare(
     const void *p1,
     const void *p2)

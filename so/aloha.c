@@ -18,7 +18,7 @@ static int aloha_loadpal(XO *xo);
 /* 上站通知名單                            Jerics 2k.01  */
 /* ----------------------------------------------------- */
 
-GCC_PURE int
+GCC_PURE static int
 cmpbmw(
 const void *benz)
 {

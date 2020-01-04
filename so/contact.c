@@ -10,6 +10,7 @@
 #undef  MODES_C
 #include "bbs.h"
 
+static void contact_send(CONTACT *contact);
 static int contact_add(XO *xo);
 
 static void
@@ -173,7 +174,7 @@ XO *xo)
     return XO_INIT;
 }
 
-void
+static void
 contact_send(
 CONTACT *contact)
 {

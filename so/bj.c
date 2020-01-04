@@ -6,7 +6,7 @@
 
 int cuser_money = 1000; //一開始每人1000元現金
 
-void show_money(int m)
+static void show_money(int m)
 {
     move(19, 0);
     clrtoeol();
@@ -14,7 +14,7 @@ void show_money(int m)
            cuser_money, m);
 }
 
-int print_card(int card, int x, int y)
+static int print_card(int card, int x, int y)
 {
     const char *const flower[4] = {"Ｓ", "Ｈ", "Ｄ", "Ｃ"};
     const char *const poker[52] = {"Ａ", "Ａ", "Ａ", "Ａ", "２", "２", "２", "２", "３", "３", "３", "３",

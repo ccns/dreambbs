@@ -25,7 +25,7 @@
 #include "bbs.h"
 #include "gamef.c"
 #define random(x) (rand() % x)
-char *BoardName = currboard;
+static char *BoardName = currboard;
 
 enum {  MAP_MAXY = 20,
         MAP_MAXX = 30,
@@ -42,9 +42,9 @@ enum {  MAP_MAXY = 20,
 static int MAP_Y = MAP_MAXY, MAP_X = MAP_MAXX;
 static int TotalMines = 0, TaggedMines = 0, currx = 0, curry = 0;
 static char MineMap[ MAP_MAXY+2 ][ MAP_MAXX+2 ];
-int fasttime[4];
+static int fasttime[4];
 
-void clrtokol(void)
+static void clrtokol(void)
 {
     int n;
     int x;
@@ -53,7 +53,7 @@ void clrtokol(void)
         outc(' ');
 }
 
-void initMap(void)
+static void initMap(void)
 {
     int x, y, i;
     for (y = 0; y < MAP_Y + 2; y++)
@@ -78,7 +78,7 @@ void initMap(void)
     }
 }
 
-int
+static int
 show_fasttime(void)
 {
     int i;
@@ -97,7 +97,7 @@ show_fasttime(void)
     return 0;
 }
 
-int
+static int
 load_fasttime(void)
 {
     int i;
@@ -112,7 +112,7 @@ load_fasttime(void)
     return 0;
 }
 
-int
+static int
 change_fasttime(int n, int t)
 {
     int i;
@@ -136,7 +136,7 @@ change_fasttime(int n, int t)
     return 0;
 }
 
-GCC_PURE int countNeighbor(int y, int x, int bitmask)
+GCC_PURE static int countNeighbor(int y, int x, int bitmask)
 {
     int sum = 0;
     if (MineMap[y-1][x+1] & bitmask) ++sum;
@@ -162,7 +162,7 @@ enum {  MAP_START_X = 16 };             // Must be > Prompts
 
 static time_t init_time = 0;
 
-void drawInfo(void)
+static void drawInfo(void)
 {
     move(b_lines - 1, 0);
     clrtoeol();
@@ -170,7 +170,7 @@ void drawInfo(void)
            difftime(time(0), init_time), TotalMines - TaggedMines);
 }
 
-void drawPrompt(void)
+static void drawPrompt(void)
 {
     int i;
     for (i = 1; i <= 20; i++)
@@ -193,7 +193,7 @@ void drawPrompt(void)
     outs("Â÷¶}  ESC-Esc/q"); clrtokol();
 }
 
-void drawMapLine(int y, int flShow)
+static void drawMapLine(int y, int flShow)
 {
     int x = 0;
     drawInfo();
@@ -223,7 +223,7 @@ void drawMapLine(int y, int flShow)
     move(curry + 1, currx*2 + MAP_START_X - 1);
 }
 
-void drawMap(int flShow)
+static void drawMap(int flShow)
 {
     int y;
 
@@ -245,7 +245,7 @@ static void loseMine(bool is_cheat)
     flLoseMine = 1;
 }
 
-void ExpandMap(int y, int x, int flTrace)
+static void ExpandMap(int y, int x, int flTrace)
 {
     if (!flTrace)
     {
@@ -276,7 +276,7 @@ void ExpandMap(int y, int x, int flTrace)
     }
 }
 
-void TraceMap(int y, int x)
+static void TraceMap(int y, int x)
 {
     if (!(MineMap[y][x] & TILE_EXPAND)) return;
     if (countNeighbor(y, x, TILE_MINE) == countNeighbor(y, x, TILE_TAGGED))
@@ -285,7 +285,7 @@ void TraceMap(int y, int x)
     }
 }
 
-void playMine(void)
+static void playMine(void)
 {
     int ch;
     currx = MAP_X / 2 + 1, curry = MAP_Y / 2 + 1;
