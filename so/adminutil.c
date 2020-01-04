@@ -704,7 +704,7 @@ int
 special_search(void)
 {
     int ans;
-    move(22, 0);
+    move(b_lines - 1, 0);
     outs("特殊搜尋為 ID、真實姓名、認證信箱的對映資料，用於處理違法事務之查詢。");
     ans = vans("特殊搜尋： 1)更新資料 2)搜尋 0)結束 [0]");
     switch (ans)
