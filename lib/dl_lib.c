@@ -84,7 +84,9 @@ void *DL_get(const char *name)
         return NULL;
 
     p = DL_insert(name, t - name);
-    if (!p->handle)
+    if (!p->handle)              /* IID.20200104: Failed to load the last time; try again */
+        p->handle = dlopen(p->path, DL_OPEN_FLAGS);
+    if (!p->handle)              /* Still failed; continue */
         return NULL;
 
     return dlsym(p->handle, t+1);
