@@ -3798,23 +3798,21 @@ static void situ(void)
 /*---------------------------------------------------------------------------*/
 /* 資料庫                                                                    */
 /*---------------------------------------------------------------------------*/
-static const char *const classrank[6] = {"沒有", "初級", "中級", "高級", "進階", "專業"};
-static const int classmoney[11][2] = {{ 0,  0},
-    {60, 110}, {70, 120}, {70, 120}, {80, 130}, {70, 120},
-    {60, 110}, {90, 140}, {70, 120}, {70, 120}, {80, 130}
+static const char *const classrank[5] = {"初級", "中級", "高級", "進階", "專業"};
+static const int classmoney[10][2] = {
+    {60, 170}, {70, 190}, {70, 190}, {80, 210}, {70, 190},
+    {60, 170}, {90, 230}, {70, 190}, {70, 190}, {80, 210}
 };
-static const int classvariable[11][4] =
+static const int classvariable[10][4] =
 {
-    {0, 0, 0, 0},
     {5, 5, 4, 4}, {5, 7, 6, 4}, {5, 7, 6, 4}, {5, 6, 5, 4}, {7, 5, 4, 6},
     {7, 5, 4, 6}, {6, 5, 4, 6}, {6, 6, 5, 4}, {5, 5, 4, 7}, {7, 5, 4, 7}
 };
 
 
-static const char *const classword[11][5] =
+//   課名, 成功一, 成功二, 失敗一, 失敗二
+static const char *const classword[10][5] =
 {
-    {"課名", "成功\一", "成功\二", "失敗一", "失敗二"},
-
     {"自然科學", "正在用功\讀書中..", "我是聰明雞 cccc...",
      "這題怎麼看不懂咧..怪了", "唸不完了 :~~~~~~"},
 
@@ -3864,22 +3862,22 @@ static int pip_practice_classA(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN(d.wisdom / 200 + 1, 5); /*科學*/
+    class_ = BMIN(d.wisdom / 200, 4); /*科學*/
 
-    body = pip_practice_function(1, class_, 11, 12, &change1, &change2, &change3, &change4, &change5);
-    if (body == 0) return 0;
+    body = pip_practice_function(0, class_, 11, 12, &change1, &change2, &change3, &change4, &change5);
+    if (body == -1) return 0;
     d.wisdom += change4 * LEARN_LEVEL;
-    if (body == 1)
+    if (body == 0)
     {
-        d.belief -= random() % (2 + class_ * 2);
+        d.belief -= random() % (4 + class_ * 2);
         d.mresist -= random() % 4;
     }
     else
     {
-        d.belief -= random() % (2 + class_ * 2);
+        d.belief -= random() % (4 + class_ * 2);
         d.mresist -= random() % 3;
     }
-    pip_practice_gradeup(1, class_, d.wisdom / 200 + 1);
+    pip_practice_gradeup(0, class_, d.wisdom / 200);
     if (d.belief < 0)  d.belief = 0;
     if (d.mresist < 0) d.mresist = 0;
     d.classA += 1;
@@ -3904,25 +3902,25 @@ static int pip_practice_classB(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400 + 1, 5); /*詩詞*/
+    class_ = BMIN((d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400, 4); /*詩詞*/
 
-    body = pip_practice_function(2, class_, 21, 21, &change1, &change2, &change3, &change4, &change5);
-    if (body == 0) return 0;
+    body = pip_practice_function(1, class_, 21, 21, &change1, &change2, &change3, &change4, &change5);
+    if (body == -1) return 0;
     d.affect += change3 * LEARN_LEVEL;
-    if (body == 1)
+    if (body == 0)
+    {
+        d.wisdom += random() % (class_ + 4) * LEARN_LEVEL;
+        d.character += random() % (class_ + 4) * LEARN_LEVEL;
+        d.art += random() % (class_ + 4) * LEARN_LEVEL;
+    }
+    else
     {
         d.wisdom += random() % (class_ + 3) * LEARN_LEVEL;
         d.character += random() % (class_ + 3) * LEARN_LEVEL;
         d.art += random() % (class_ + 3) * LEARN_LEVEL;
     }
-    else
-    {
-        d.wisdom += random() % (class_ + 2) * LEARN_LEVEL;
-        d.character += random() % (class_ + 2) * LEARN_LEVEL;
-        d.art += random() % (class_ + 2) * LEARN_LEVEL;
-    }
-    body = (d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400 + 1;
-    pip_practice_gradeup(2, class_, body);
+    body = (d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400;
+    pip_practice_gradeup(1, class_, body);
     d.classB += 1;
     return 0;
 }
@@ -3941,13 +3939,13 @@ static int pip_practice_classC(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.belief * 2 + d.wisdom) / 400 + 1, 5); /*神學*/
+    class_ = BMIN((d.belief * 2 + d.wisdom) / 400, 4); /*神學*/
 
-    body = pip_practice_function(3, class_, 31, 31, &change1, &change2, &change3, &change4, &change5);
-    if (body == 0) return 0;
+    body = pip_practice_function(2, class_, 31, 31, &change1, &change2, &change3, &change4, &change5);
+    if (body == -1) return 0;
     d.wisdom += change2 * LEARN_LEVEL;
     d.belief += change3 * LEARN_LEVEL;
-    if (body == 1)
+    if (body == 0)
     {
         d.mresist += random() % 5 * LEARN_LEVEL;
     }
@@ -3955,8 +3953,8 @@ static int pip_practice_classC(void)
     {
         d.mresist += random() % 3 * LEARN_LEVEL;
     }
-    body = (d.belief * 2 + d.wisdom) / 400 + 1;
-    pip_practice_gradeup(3, class_, body);
+    body = (d.belief * 2 + d.wisdom) / 400;
+    pip_practice_gradeup(2, class_, body);
     d.classC += 1;
     return 0;
 }
@@ -3975,11 +3973,11 @@ static int pip_practice_classD(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.hskill * 2 + d.wisdom) / 400 + 1, 5);
-    body = pip_practice_function(4, class_, 41, 41, &change1, &change2, &change3, &change4, &change5);
-    if (body == 0) return 0;
+    class_ = BMIN((d.hskill * 2 + d.wisdom) / 400, 4);
+    body = pip_practice_function(3, class_, 41, 41, &change1, &change2, &change3, &change4, &change5);
+    if (body == -1) return 0;
     d.wisdom += change2 * LEARN_LEVEL;
-    if (body == 1)
+    if (body == 0)
     {
         d.hskill += (random() % 3 + 4) * LEARN_LEVEL;
         d.affect -= random() % 3 + 6;
@@ -3989,8 +3987,8 @@ static int pip_practice_classD(void)
         d.hskill += (random() % 3 + 2) * LEARN_LEVEL;
         d.affect -= random() % 3 + 6;
     }
-    body = (d.hskill * 2 + d.wisdom) / 400 + 1;
-    pip_practice_gradeup(4, class_, body);
+    body = (d.hskill * 2 + d.wisdom) / 400;
+    pip_practice_gradeup(3, class_, body);
     if (d.affect < 0)  d.affect = 0;
     d.classD += 1;
     return 0;
@@ -4010,14 +4008,14 @@ static int pip_practice_classE(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.hskill + d.attack) / 400 + 1, 5);
+    class_ = BMIN((d.hskill + d.attack) / 400, 4);
 
-    body = pip_practice_function(5, class_, 51, 51, &change1, &change2, &change3, &change4, &change5);
-    if (body == 0) return 0;
+    body = pip_practice_function(4, class_, 51, 51, &change1, &change2, &change3, &change4, &change5);
+    if (body == -1) return 0;
     d.speed += (random() % 3 + 2) * LEARN_LEVEL;
     d.hexp += (random() % 2 + 2) * LEARN_LEVEL;
     d.attack += change4 * LEARN_LEVEL;
-    if (body == 1)
+    if (body == 0)
     {
         d.hskill += (random() % 3 + 5) * LEARN_LEVEL;
     }
@@ -4025,8 +4023,8 @@ static int pip_practice_classE(void)
     {
         d.hskill += (random() % 3 + 3) * LEARN_LEVEL;
     }
-    body = (d.hskill + d.attack) / 400 + 1;
-    pip_practice_gradeup(5, class_, body);
+    body = (d.hskill + d.attack) / 400;
+    pip_practice_gradeup(4, class_, body);
     d.classE += 1;
     return 0;
 }
@@ -4045,14 +4043,14 @@ static int pip_practice_classF(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.hskill + d.resist) / 400 + 1, 5);
+    class_ = BMIN((d.hskill + d.resist) / 400, 4);
 
-    body = pip_practice_function(6, class_, 61, 61, &change1, &change2, &change3, &change4, &change5);
-    if (body == 0) return 0;
+    body = pip_practice_function(5, class_, 61, 61, &change1, &change2, &change3, &change4, &change5);
+    if (body == -1) return 0;
     d.hexp += (random() % 2 + 2) * LEARN_LEVEL;
     d.speed += (random() % 3 + 2) * LEARN_LEVEL;
     d.resist += change2 * LEARN_LEVEL;
-    if (body == 1)
+    if (body == 0)
     {
         d.hskill += (random() % 3 + 5) * LEARN_LEVEL;
     }
@@ -4060,8 +4058,8 @@ static int pip_practice_classF(void)
     {
         d.hskill += (random() % 3 + 3) * LEARN_LEVEL;
     }
-    body = (d.hskill + d.resist) / 400 + 1;
-    pip_practice_gradeup(6, class_, body);
+    body = (d.hskill + d.resist) / 400;
+    pip_practice_gradeup(5, class_, body);
     d.classF += 1;
     return 0;
 }
@@ -4080,13 +4078,13 @@ static int pip_practice_classG(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.mskill + d.maxmp) / 400 + 1, 5);
+    class_ = BMIN((d.mskill + d.maxmp) / 400, 4);
 
-    body = pip_practice_function(7, class_, 71, 72, &change1, &change2, &change3, &change4, &change5);
-    if (body == 0) return 0;
+    body = pip_practice_function(6, class_, 71, 72, &change1, &change2, &change3, &change4, &change5);
+    if (body == -1) return 0;
     d.maxmp += change3 * LEARN_LEVEL;
     d.mexp += (random() % 2 + 2) * LEARN_LEVEL;
-    if (body == 1)
+    if (body == 0)
     {
         d.mskill += (random() % 3 + 7) * LEARN_LEVEL;
     }
@@ -4095,8 +4093,8 @@ static int pip_practice_classG(void)
         d.mskill += (random() % 3 + 4) * LEARN_LEVEL;
     }
 
-    body = (d.mskill + d.maxmp) / 400 + 1;
-    pip_practice_gradeup(7, class_, body);
+    body = (d.mskill + d.maxmp) / 400;
+    pip_practice_gradeup(6, class_, body);
     d.classG += 1;
     return 0;
 }
@@ -4115,15 +4113,15 @@ static int pip_practice_classH(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.manners * 2 + d.character) / 400 + 1, 5);
+    class_ = BMIN((d.manners * 2 + d.character) / 400, 4);
 
-    body = pip_practice_function(8, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
-    if (body == 0) return 0;
+    body = pip_practice_function(7, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
+    if (body == -1) return 0;
     d.social += (random() % 2 + 2) * LEARN_LEVEL;
     d.manners += (change1 + random() % 2) * LEARN_LEVEL;
     d.character += (change1 + random() % 2) * LEARN_LEVEL;
-    body = (d.character + d.manners) / 400 + 1;
-    pip_practice_gradeup(8, class_, body);
+    body = (d.character + d.manners) / 400;
+    pip_practice_gradeup(7, class_, body);
     d.classH += 1;
     return 0;
 }
@@ -4142,14 +4140,14 @@ static int pip_practice_classI(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.art * 2 + d.character) / 400 + 1, 5);
+    class_ = BMIN((d.art * 2 + d.character) / 400, 4);
 
-    body = pip_practice_function(9, class_, 91, 91, &change1, &change2, &change3, &change4, &change5);
-    if (body == 0) return 0;
+    body = pip_practice_function(8, class_, 91, 91, &change1, &change2, &change3, &change4, &change5);
+    if (body == -1) return 0;
     d.art += change4 * LEARN_LEVEL;
     d.affect += change2 * LEARN_LEVEL;
-    body = (d.affect + d.art) / 400 + 1;
-    pip_practice_gradeup(9, class_, body);
+    body = (d.affect + d.art) / 400;
+    pip_practice_gradeup(8, class_, body);
     d.classI += 1;
     return 0;
 }
@@ -4168,27 +4166,27 @@ static int pip_practice_classJ(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.art * 2 + d.charm) / 400 + 1, 5);
+    class_ = BMIN((d.art * 2 + d.charm) / 400, 4);
 
-    body = pip_practice_function(10, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
-    if (body == 0) return 0;
+    body = pip_practice_function(9, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
+    if (body == -1) return 0;
     d.art += change2 * LEARN_LEVEL;
     d.maxhp += (random() % 3 + 2) * LEARN_LEVEL;
-    if (body == 1)
+    if (body == 0)
     {
-        d.charm += random() % (4 + class_) * LEARN_LEVEL;
+        d.charm += random() % (5 + class_) * LEARN_LEVEL;
     }
-    else if (body == 2)
+    else if (body == 1)
     {
-        d.charm += random() % (2 + class_) * LEARN_LEVEL;
+        d.charm += random() % (3 + class_) * LEARN_LEVEL;
     }
-    body = (d.art * 2 + d.charm) / 400 + 1;
-    pip_practice_gradeup(10, class_, body);
+    body = (d.art * 2 + d.charm) / 400;
+    pip_practice_gradeup(9, class_, body);
     d.classJ += 1;
     return 0;
 }
 
-/*傳入:課號 等級 生命 快樂 滿足 髒髒 傳回:變數12345 return:body*/
+/*傳入:課號 等級 生命 快樂 滿足 髒髒 傳回:變數12345 return:body(-1~1)*/
 static int
 pip_practice_function(
 int classnum, int classgrade, int pic1, int pic2,
@@ -4204,18 +4202,18 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
     clrtoeol();
     sprintf(inbuf, "[%8s%4s課程]要花 $%ld，確定要嗎??[y/N]: ", classword[classnum][0], classrank[classgrade], smoney);
     getdata(b_lines - 2, 1, inbuf, ans, 2, DOECHO, 0);
-    if (ans[0] != 'y' && ans[0] != 'Y')  return 0;
+    if (ans[0] != 'y' && ans[0] != 'Y')  return -1;
     if (d.money < smoney)
     {
         vmsg("很抱歉喔...你的錢不夠喔");
-        return 0;
+        return -1;
     }
     count_tired(4, 5, true, 100, 1);
     d.money = d.money - smoney;
     /*成功與否的判斷*/
     health = d.hp * 1 / 2 + random() % 20 - d.tired;
-    if (health > 0) body = 1;
-    else body = 2;
+    if (health > 0) body = 0;
+    else body = 1;
 
     a = random() % 3 + 2;
     b = (random() % 12 + random() % 13) % 2;
@@ -4223,16 +4221,16 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
     d.happy -= random() % (3 + random() % 3) + classvariable[classnum][1];
     d.satisfy -= random() % (3 + random() % 3) + classvariable[classnum][2];
     d.shit += random() % (3 + random() % 3) + classvariable[classnum][3];
-    *change1 = random() % a + 2 + classgrade * 2 / (body + 1);    /* random()%3+3 */
-    *change2 = random() % a + 4 + classgrade * 2 / (body + 1);    /* random()%3+5 */
-    *change3 = random() % a + 5 + classgrade * 3 / (body + 1);    /* random()%3+7 */
-    *change4 = random() % a + 7 + classgrade * 3 / (body + 1);    /* random()%3+9 */
-    *change5 = random() % a + 9 + classgrade * 3 / (body + 1);    /* random()%3+11 */
+    *change1 = random() % a + 4 + classgrade * 2 / (body + 2);    /* random()%3+3 */
+    *change2 = random() % a + 6 + classgrade * 2 / (body + 2);    /* random()%3+5 */
+    *change3 = random() % a + 8 + classgrade * 3 / (body + 2);    /* random()%3+7 */
+    *change4 = random() % a + 10 + classgrade * 3 / (body + 2);   /* random()%3+9 */
+    *change5 = random() % a + 12 + classgrade * 3 / (body + 2);   /* random()%3+11 */
     if (random() % 2 > 0 && pic1 > 0)
         show_practice_pic(pic1);
     else if (pic2 > 0)
         show_practice_pic(pic2);
-    vmsg(classword[classnum][body+b]);
+    vmsg(classword[classnum][1+body+b]);
     return body;
 }
 
@@ -4241,7 +4239,7 @@ int classnum, int classgrade, int data)
 {
     char inbuf[256];
 
-    if ((data == (classgrade + 1)) && classgrade < 5)
+    if ((data == (classgrade + 1)) && classgrade + 1 < 5)
     {
         sprintf(inbuf, "下次換上 [%8s%4s課程]",
                 classword[classnum][0], classrank[classgrade+1]);
