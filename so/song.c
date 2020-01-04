@@ -601,6 +601,7 @@ int level)
 int
 XoSongMain(void)
 {
+    DL_HOLD;
     char fpath[64];
 
     strcpy(currboard, BRD_REQUEST);
@@ -611,46 +612,49 @@ XoSongMain(void)
 
     sprintf(fpath, "gem/brd/%s/@/@SongBook", currboard);
     XoSong(fpath, "點歌系統", XZ_OTHER);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 int
 XoSongSub(void)
 {
+    DL_HOLD;
     int chn;
     chn = brd_bno(BRD_REQUEST);
     XoPost(chn);
     xover(XZ_POST);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 int
 XoSongLog(void)
 {
+    DL_HOLD;
     int chn;
     chn = brd_bno(BRD_ORDERSONGS);
     XoPost(chn);
     xover(XZ_POST);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 int
 AddRequestTimes(void)
 {
+    DL_HOLD;
     ACCT acct;
     char buf[128];
     int n, times;
 
     if (!vget(b_lines, 0, "請選擇：1)增加單人 2)條件增加 0)取消 [0]", buf, 3, DOECHO))
-        return 0;
+        return DL_RELEASE(0);
     if (*buf == '1')
     {
         if (acct_get("要送誰點歌次數：", &acct) < 1)
-            return 0;
+            return DL_RELEASE(0);
         clrtobot();
         prints("剩餘點歌次數：%d 次。", acct.request);
         if (!vget(3, 0, "加幾次：", buf, 5, DOECHO))
-            return 0;
+            return DL_RELEASE(0);
         if (vans("確定增加嗎？ [y/N]") == 'y')
         {
             acct.request += atoi(buf);
@@ -662,13 +666,13 @@ AddRequestTimes(void)
         n = 0;
         n = bitset(n, NUMPERMS, NUMPERMS, MSG_USERPERM, perm_tbl);
         if (!vget(b_lines, 0, "加幾次：", buf, 5, DOECHO))
-            return 0;
+            return DL_RELEASE(0);
         times = atoi(buf);
         sprintf(buf, BINARY_SUFFIX"addsong %d %d &", n, times);
         if (vans("確定增加嗎？ [y/N]") == 'y')
             system(buf);
     }
-    return 0;
+    return DL_RELEASE(0);
 }
 
 

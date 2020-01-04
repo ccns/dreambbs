@@ -38,6 +38,7 @@ static int print_card(int card, int x, int y)
 int
 BlackJack(void)
 {
+    DL_HOLD;
     char buf[20];
     const int num[52] = {11, 11, 11, 11, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6,
                          7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10,
@@ -71,8 +72,8 @@ BlackJack(void)
             show_money(money = 0);
             getdata(21, 0, "要下注多少呢(上限250000)? 按 Enter 離開>", buf, 7, DOECHO, 0);
             money = atoi(buf);
-            if (!buf[0]) return 0;
-            if (money > cuser_money) return 0;
+            if (!buf[0]) return DL_RELEASE(0);
+            if (money > cuser_money) return DL_RELEASE(0);
         }
         while ((money < 1) || (money > 250000));
         cuser_money = cuser_money - money;
@@ -213,7 +214,7 @@ BlackJack(void)
                 game_log(2, "中了 \x1b[1;33m%d\x1b[m 元的 \x1b[1;44;33m  過六關   \x1b[m", money*six);
                 pressanykey("您還有 %d 金幣", cuser_money);
                 flag = 1; m = 0;
-//              return 0;
+//              return DL_RELEASE(0);
             }
 
             guest_count++;

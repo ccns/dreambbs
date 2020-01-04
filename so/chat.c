@@ -562,6 +562,7 @@ char *buf)
 int
 t_chat(void)
 {
+    DL_HOLD;
     int ch, cfd, cmdpos, cmdcol;
     char *ptr = NULL, buf[128], chatid[9];
     struct addrinfo hints = {0};
@@ -572,7 +573,7 @@ t_chat(void)
     if (holdon_fd)
     {
         vmsg("您講話講一半還沒講完耶");
-        return -1;
+        return DL_RELEASE(-1);
     }
 #endif
 
@@ -583,7 +584,7 @@ t_chat(void)
         char port_str[12];
         sprintf(port_str, "%d", CHAT_PORT);
         if (getaddrinfo(NULL, port_str, &hints, &hs))
-            return -1;
+            return DL_RELEASE(-1);
     }
 
     for (struct addrinfo *h = hs; h; h = h->ai_next)
@@ -602,7 +603,7 @@ t_chat(void)
     }
     freeaddrinfo(hs);
     if (cfd < 0)
-        return -1;
+        return DL_RELEASE(-1);
 
     for (;;)
     {
@@ -618,7 +619,7 @@ t_chat(void)
         else if (ch == '*' || !ch)
         {
             close(cfd);
-            return -1;
+            return DL_RELEASE(-1);
         }
         else
         {
@@ -677,7 +678,7 @@ t_chat(void)
 
         chat_send(cfd, buf);
         if (recv(cfd, buf, 3, 0) != 3)
-            return 0;
+            return DL_RELEASE(0);
 
         if (!strcmp(buf, CHAT_LOGIN_OK))
             break;
@@ -690,7 +691,7 @@ t_chat(void)
             /* Thor: 禁止相同二人進入 */
             close(cfd);
             vmsg("請勿派遣「分身」進入談天室");
-            return 0;
+            return DL_RELEASE(0);
         }
         move(b_lines - 1, 0);
         outs(msg);
@@ -953,5 +954,5 @@ t_chat(void)
     close(cfd);
     add_io(0, 60);
     cutmp->mateid[0] = 0;
-    return 0;
+    return DL_RELEASE(0);
 }

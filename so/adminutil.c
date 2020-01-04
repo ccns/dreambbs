@@ -44,6 +44,7 @@ check_in_memory(const char *bm, const char *id)
 int
 m_expire(void)
 {
+    DL_HOLD;
     BRD *brd;
     char bname[16];
     char buf[80];
@@ -61,7 +62,7 @@ m_expire(void)
         vmsg(err_bid);
     }
 
-    return 0;
+    return DL_RELEASE(0);
 }
 
 static void
@@ -85,6 +86,7 @@ send_to_all(const char *title, const char *fpath, const char *bm)
 int
 mail_to_bm(void)
 {
+    DL_HOLD;
     BRD *bhdr, *head, *tail;
     char *ptr, *bm;
     char fpath[256], *title, buf[128];
@@ -93,7 +95,7 @@ mail_to_bm(void)
     if (bbsothermode & OTHERSTAT_EDITING)
     {
         vmsg("你還有檔案還沒編完哦！");
-        return -1;
+        return DL_RELEASE(-1);
     }
 
 
@@ -160,7 +162,7 @@ mail_to_bm(void)
     {
         vmsg(msg_cancel);
         free(bm);
-        return -1;
+        return DL_RELEASE(-1);
     }
     else
     {
@@ -177,7 +179,7 @@ mail_to_bm(void)
         }
     }
     free(bm);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 static void
@@ -239,6 +241,7 @@ const char *title)
 int
 mail_to_all(void)
 {
+    DL_HOLD;
     char *title;
     char fpath[256];
     char buf[128];
@@ -246,7 +249,7 @@ mail_to_all(void)
     if (bbsothermode & OTHERSTAT_EDITING)
     {
         vmsg("你還有檔案還沒編完哦！");
-        return -1;
+        return DL_RELEASE(-1);
     }
 
 
@@ -260,7 +263,7 @@ mail_to_all(void)
     if (vedit(fpath, true) == -1)
     {
         vmsg(msg_cancel);
-        return -1;
+        return DL_RELEASE(-1);
     }
     else
     {
@@ -276,7 +279,7 @@ mail_to_all(void)
             system(command);
         }
     }
-    return 0;
+    return DL_RELEASE(0);
 }
 
 GCC_PURE static bool
@@ -335,6 +338,7 @@ const char *list)             /* 板主：BM list */
 int
 bm_check(void)
 {
+    DL_HOLD;
     BRD *bhdr, *head, *tail;
     BM *bm, *ptr;
     char fpath[80], ans;
@@ -376,7 +380,7 @@ bm_check(void)
             }
         }
         unlink(fpath);
-        return 0;
+        return DL_RELEASE(0);
     }
     else if (ans == 's')
     {
@@ -400,21 +404,21 @@ bm_check(void)
                 break;
             }
         }
-        return 0;
+        return DL_RELEASE(0);
     }
     else if (ans == 'd')
     {
         unlink(fpath);
-        return 0;
+        return DL_RELEASE(0);
     }
     else if (ans != 'y')
     {
-        return 0;
+        return DL_RELEASE(0);
     }
     if (!access(fpath, 0))
     {
         vmsg("正在確認中！");
-        return 0;
+        return DL_RELEASE(0);
     }
 
     bm = (BM *)malloc(sizeof(BM) * MAXBOARD * 3);
@@ -487,7 +491,7 @@ bm_check(void)
 
     close(fd);
     free(bm);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 static int
@@ -524,6 +528,7 @@ const char *id)
 int
 user_check_bm(void)
 {
+    DL_HOLD;
     char buf[128], temp[3];
     int ans, i;
     const char *fpath;
@@ -537,18 +542,18 @@ user_check_bm(void)
     if (utmp_count(cuser.userno, 0) > 1)
     {
         vmsg("請先登出其他帳號！");
-        return 0;
+        return DL_RELEASE(0);
     }
 
     if (access(fpath, 0))
     {
         vmsg("現在沒有版主確認功\能！");
-        return 0;
+        return DL_RELEASE(0);
     }
     if (!stat(fpath, &st) && (st.st_mtime + CHECK_BM_TIME) < time(0))
     {
         vmsg("超過認證時間，請重新申請！");
-        return 0;
+        return DL_RELEASE(0);
     }
 
 
@@ -561,7 +566,7 @@ user_check_bm(void)
         sprintf(buf, "你要繼續接任 %s 版版主嗎 [Y/n/q]:", bm.brd);
         vget(i++, 0, buf, temp, 3, DOECHO);
         if (*temp == 'q')
-            return 0;
+            return DL_RELEASE(0);
         if (*temp != 'n' && !is_bm(head->BM))
         {
             if (*(head->BM))
@@ -579,7 +584,7 @@ user_check_bm(void)
         rec_put(fpath, &bm, sizeof(BM), ans);
     }
     vmsg("你已經做完所有的版主確認了！");
-    return 0;
+    return DL_RELEASE(0);
 }
 
 static void
@@ -677,6 +682,7 @@ update_untrust_acl(void)
 int
 update_all(void)
 {
+    DL_HOLD;
     int ans;
     ans = vans("更新項目： 1)特殊搜尋 2)註冊信箱個數 3)SPAM名單 4)不信任名單 0)結束 [0]");
     switch (ans)
@@ -694,13 +700,14 @@ update_all(void)
         update_untrust_acl();
         break;
     }
-    return 0;
+    return DL_RELEASE(0);
 }
 
 
 int
 special_search(void)
 {
+    DL_HOLD;
     int ans;
     move(b_lines - 1, 0);
     outs("特殊搜尋為 ID、真實姓名、認證信箱的對映資料，用於處理違法事務之查詢。");
@@ -715,12 +722,14 @@ special_search(void)
         break;
     }
 
-    return 1;
+    return DL_RELEASE(1);
 }
 
 int
 m_xfile(void)
 {
+    DL_HOLD;
+
     static const char *const desc[] =
     {
         "重要公告",             /* lkchu.990510: edit ~/etc/announce online */
@@ -779,12 +788,14 @@ m_xfile(void)
     };
 
     x_file(M_XFILES, desc, path);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 int
 m_xhlp(void)
 {
+    DL_HOLD;
+
     static const char *const desc[] =
     {
         "進站廣告",
@@ -847,7 +858,7 @@ m_xhlp(void)
     };
 
     x_file(M_XFILES, desc, path);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 /* pcbug.990620: 懶得login...:p */
@@ -909,48 +920,55 @@ int select)
 int
 reset1(void)
 {
+    DL_HOLD;
     m_resetsys(1);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 int
 reset2(void)
 {
+    DL_HOLD;
     m_resetsys(2);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 int
 reset3(void)
 {
+    DL_HOLD;
     m_resetsys(3);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 int
 reset4(void)
 {
+    DL_HOLD;
     m_resetsys(4);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 int
 reset5(void)
 {
+    DL_HOLD;
     m_resetsys(5);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 int
 reset6(void)
 {
+    DL_HOLD;
     m_resetsys(6);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 int
 reset7(void)
 {
+    DL_HOLD;
     m_resetsys(7);
-    return 0;
+    return DL_RELEASE(0);
 }

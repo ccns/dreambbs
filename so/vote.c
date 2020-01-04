@@ -74,6 +74,7 @@ int
 vote_result(
 XO *xo)
 {
+    DL_HOLD;
     char fpath[80];
 
     setdirpath(fpath, xo->dir, "@/@vote");
@@ -81,10 +82,10 @@ XO *xo)
     if (more(fpath, NULL) == -1)
     {
         vmsg("ヘ玡⊿Τヴ秨布挡狦");
-        return XO_FOOT;
+        return DL_RELEASE(XO_FOOT);
     }
 
-    return XO_HEAD;
+    return DL_RELEASE(XO_HEAD);
 }
 
 
@@ -1124,18 +1125,19 @@ int
 XoVote(
 XO *xo)
 {
+    DL_HOLD;
     char fpath[32];
 
     /* Τ post 舦把щ布 */
 
     if (!(bbstate & STAT_POST) || !cuser.userlevel)
-        return XO_NONE;
+        return DL_RELEASE(XO_NONE);
 
     setdirpath(fpath, xo->dir, FN_VCH);
     if (!(bbstate & STAT_BOARD) && !rec_num(fpath, sizeof(VCH)))
     {
         vmsg("ヘ玡⊿Τщ布羭︽");
-        return XO_FOOT;
+        return DL_RELEASE(XO_FOOT);
     }
 
     xz[XZ_VOTE - XO_ZONE].xo = xo = xo_new(fpath);
@@ -1144,12 +1146,13 @@ XO *xo)
     xover(XZ_VOTE);
     free(xo);
 
-    return XO_INIT;
+    return DL_RELEASE(XO_INIT);
 }
 
 int
 SystemVote(void)
 {
+    DL_HOLD;
     char fpath[80];
     XO *xo;
 
@@ -1160,7 +1163,7 @@ SystemVote(void)
     if (!(bbstate & STAT_BOARD) && !rec_num(fpath, sizeof(VCH)))
     {
         vmsg("ヘ玡⊿Τщ布羭︽");
-        return 0;
+        return DL_RELEASE(0);
     }
 
     xz[XZ_VOTE - XO_ZONE].xo = xo = xo_new(fpath);
@@ -1169,7 +1172,7 @@ SystemVote(void)
     xover(XZ_VOTE);
     free(xo);
 
-    return 0;
+    return DL_RELEASE(0);
 }
 
 

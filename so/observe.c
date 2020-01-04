@@ -270,6 +270,7 @@ KeyFuncList observe_cb =
 int
 Observe_list(void)
 {
+    DL_HOLD;
     XO *xo;
     char fpath[64];
     sprintf(fpath, FN_ETC_OBSERVE);
@@ -279,6 +280,6 @@ Observe_list(void)
     xover(XZ_OTHER);
     observeshm_load();
     free(xo);
-    return 0;
+    return DL_RELEASE(0);
 }
 

@@ -372,6 +372,7 @@ static void playMine(void)
 
 int Mine(void)
 {
+    DL_HOLD;
     int x, y, ti;
     char ans[5], buf[10];
     srand(time(0));
@@ -407,7 +408,7 @@ start:
         show_fasttime();
         break;
     default:
-        return 0;
+        return DL_RELEASE(0);
     }
     if (atoi(ans) == 5) goto start;
     load_fasttime();

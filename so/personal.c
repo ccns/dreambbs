@@ -100,6 +100,7 @@ is_badid(
 int
 personal_apply(void)
 {
+    DL_HOLD;
     char validemail[2][20] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw"};
     int i, num;
     char *c, /*buf[60], */brdname[IDLEN + 1];
@@ -116,14 +117,14 @@ personal_apply(void)
     if (cuser.numposts < 20 || cuser.numlogins < 500)
     {
         vmsg("資格不符無法申請個人板");
-        return 0;
+        return DL_RELEASE(0);
     }
 
     c = strchr(cuser.email, '@');
     if (c == NULL || (strcmp(c+1, validemail[0]) && strcmp(c+1, validemail[1])))
     {
         vmsg("您的 E-mail 不合格!");
-        return 0;
+        return DL_RELEASE(0);
     }
 
     thisyear = t->tm_year - 11;
@@ -133,7 +134,7 @@ personal_apply(void)
     if ((thisyear - enteryear)%100 > 5)
     {
         vmsg("您的身份不合格!");
-        return 0;
+        return DL_RELEASE(0);
     }
 
     num = rec_num(FN_ETC_PERSONAL, sizeof(PB));
@@ -149,7 +150,7 @@ personal_apply(void)
                 vmsg("您已經申請過個人板！");
             else
                 vmsg("您的申請書正在審核中！");
-            return 0;
+            return DL_RELEASE(0);
         }
     }
 
@@ -173,7 +174,7 @@ personal_apply(void)
         while (1)
         {
             if (!vget(7, 0, "看板英文名稱： ", brdname, IDLEN - 1, num))
-                return 0;
+                return DL_RELEASE(0);
 
             if (is_badid(brdname))
                 vmsg("無法接受這個板名，請使用英文字母，並且不要包含空格");
@@ -205,7 +206,7 @@ personal_apply(void)
     personal_log(&pb, 0);
 
     vmsg("申請書填寫完成，請等待站務審核");
-    return 0;
+    return DL_RELEASE(0);
 
 }
 
@@ -610,6 +611,7 @@ KeyFuncList personal_cb =
 int
 personal_admin(void)
 {
+    DL_HOLD;
     XO *xo;
     utmp_mode(M_OMENU);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(FN_ETC_PERSONAL);
@@ -617,6 +619,6 @@ personal_admin(void)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
-    return 0;
+    return DL_RELEASE(0);
 }
 

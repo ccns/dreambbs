@@ -220,8 +220,13 @@ template <class T>
 /* IID.20200103: For making dynamic libraries hot-swappable. */
 #ifdef DL_HOTSWAP
   #define DL_HOTSWAP_SCOPE  /* Function local */
+  #define DL_HOLD  \
+    struct DL_handle *const _dl_handle = {DL_hold(DL_CURRENT_MODULE_STR)}
+  #define DL_RELEASE(ret)  ((void)DL_release(DL_CURRENT_MODULE_STR, _dl_handle), ret)
 #else
   #define DL_HOTSWAP_SCOPE  static
+  #define DL_HOLD  void *const _dl_dummy = {NULL}
+  #define DL_RELEASE(ret)  ((void)_dl_dummy, ret)
 #endif
 
 

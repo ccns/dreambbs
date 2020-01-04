@@ -561,6 +561,7 @@ p_read(void)
 int
 main_note(void)
 {
+    DL_HOLD;
     char ans;
     ans = vans("個人答錄機：R)閱\讀留言 C)錄製留言 E)更改問候語 Q)離開 [Q]：");
     switch (ans)
@@ -576,5 +577,5 @@ case 'e': case 'E':
         p_edithint();
         break;
     }
-    return 0;
+    return DL_RELEASE(0);
 }

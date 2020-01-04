@@ -65,6 +65,7 @@ int
 same_mail(
 char *mail)
 {
+    DL_HOLD;
     int ch;
     char *fname, fpath[256];
     kmail = mail;
@@ -72,7 +73,7 @@ char *mail)
 
     flog = fopen(FN_SAMEEMAIL_LOG, "w");
     if (flog == NULL)
-        return 0;
+        return DL_RELEASE(0);
 
     strcpy(fname = fpath, BBSHOME"/usr/@");
     fname = (char *) strchr(fname, '@');
@@ -84,5 +85,5 @@ char *mail)
         traverse(fpath);
     }
     fclose(flog);
-    return total;
+    return DL_RELEASE(total);
 }

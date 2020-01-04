@@ -704,6 +704,7 @@ static KeyFuncList innbbs_cb =
 int
 a_innbbs(void)
 {
+    DL_HOLD;
     XO *xo;
     InnbbsXyz xyz;
     const char *fpath;
@@ -711,7 +712,7 @@ a_innbbs(void)
     if (!check_admin(cuser.userid) && str_cmp(cuser.userid, SYSOPNAME))
     {
         vmsg("◎ 你不是系統管理員！");
-        return 0;
+        return DL_RELEASE(0);
     }
 
 
@@ -762,7 +763,7 @@ a_innbbs(void)
         break;
 
     default:
-        return 0;
+        return DL_RELEASE(0);
     }
 
     utmp_mode(M_OMENU);
@@ -779,5 +780,5 @@ a_innbbs(void)
         rec_sync(fpath, xyz.recsiz, xyz.sync_func, NULL);
 
     free(xo);
-    return 0;
+    return DL_RELEASE(0);
 }

@@ -308,6 +308,7 @@ KeyFuncList aloha_cb =
 int
 t_aloha(void)
 {
+    DL_HOLD;
     XO *xo;
     char fpath[64];
 
@@ -318,6 +319,6 @@ t_aloha(void)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
-    return 0;
+    return DL_RELEASE(0);
 }
 

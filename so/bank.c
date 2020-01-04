@@ -248,14 +248,16 @@ typedef struct
 int
 money_back(void)
 {
+    DL_HOLD;
     pmsg2("此活動已截止");
-    return 0;
+    return DL_RELEASE(0);
 }
 */
 
     int
 money_back(void)
 {
+    DL_HOLD;
     ACCT acct;
     char buf[128];
     char fpath[80];
@@ -272,7 +274,7 @@ money_back(void)
     if (acct_get("請輸入ID：", &acct) < 1)
     {
         pmsg2("查無此 ID 的帳戶資訊...");
-            return 0;
+        return DL_RELEASE(0);
     }
     {
         clrtobot();
@@ -282,7 +284,7 @@ money_back(void)
         if ((fd = open(fpath, O_RDONLY)) < 0)
         {
             pmsg2("查無此 ID 的舊夢幣資料...");
-            return 0;
+            return DL_RELEASE(0);
         }
 
         read(fd, &oldwealth, sizeof(MONEY));
@@ -327,17 +329,18 @@ money_back(void)
         unlink(buf);
         close(fd);
 
-        return 0;
+        return DL_RELEASE(0);
 
     }
 
-    // return 0;
+    // return DL_RELEASE(0);
 
 }
 
 
 int bank_main(void)
 {
+    DL_HOLD;
     char buf[2];
     int money;
     int point1;
@@ -351,7 +354,7 @@ int bank_main(void)
     else
     {
         pmsg2("查無您的帳戶資訊...");
-        return 0;
+        return DL_RELEASE(0);
     }
 
     clear();
@@ -372,7 +375,7 @@ int bank_main(void)
     move (6, 2);
     prints("優良積分 %d ", point1);
     if (!vget(b_lines, 0, "請選擇您要的服務： [Q] 離開 ", buf, 2, DOECHO))
-        return 0;
+        return DL_RELEASE(0);
 
     if (*buf == '1')
         point1_money();
@@ -385,5 +388,5 @@ int bank_main(void)
     else
         pmsg2("離開銀行");
 
-    return 0;
+    return DL_RELEASE(0);
 }

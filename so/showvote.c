@@ -180,10 +180,11 @@ int
 Showvote(
 XO *xo)
 {
+    DL_HOLD;
     const VCH *vch;
     char fpath[128], *fname;
     if (!HAS_PERM(PERM_SYSOP))
-        return XO_NONE;
+        return DL_RELEASE(XO_NONE);
     vch = (const VCH *) xo_pool + (xo->pos - xo->top);
     hdr_fpath(fpath, xo->dir, (const HDR *) vch);
     fname = strrchr(fpath, '@');
@@ -196,7 +197,7 @@ XO *xo)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
-    return XO_INIT;
+    return DL_RELEASE(XO_INIT);
 }
 
 

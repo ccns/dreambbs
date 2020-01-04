@@ -139,6 +139,7 @@ static int sysop(void)
 
 int shop_main(void)
 {
+    DL_HOLD;
     char buf[5];
     int money;
 
@@ -150,7 +151,7 @@ int shop_main(void)
     else
     {
         pmsg2("查無您的帳戶資訊...");
-        return 0;
+        return DL_RELEASE(0);
     }
 
     clear();
@@ -170,7 +171,7 @@ int shop_main(void)
         "            (4) 購買站長權限\x1b[1;31m HOT\x1b[m (需要夢幣 10000000 元)\n");
 
     if (!vget(b_lines, 0, "請選擇您要的服務： [Q] 離開 ", buf, 2, DOECHO))
-        return 0;
+        return DL_RELEASE(0);
 
     if (*buf == '1')
         cloak_temp();
@@ -183,5 +184,5 @@ int shop_main(void)
         sysop();
     else
         pmsg2("謝謝光臨");
-    return 0;
+    return DL_RELEASE(0);
 }

@@ -116,6 +116,7 @@ const char *id, const char *file)
 /*遊戲主程式*/
 int p_pipple(void)
 {
+    DL_HOLD;
     FILE *fs;
     int pipkey;
     char genbuf[200];
@@ -134,7 +135,7 @@ int p_pipple(void)
         move(b_lines, 0);
         pipkey = vkey();
         if (pipkey == 'Q' || pipkey == 'q')
-            return 0;
+            return DL_RELEASE(0);
         if (d.death != 0 || !d.name[0])
         {
             pip_new_game();
@@ -150,7 +151,7 @@ int p_pipple(void)
         else if (pipkey == 'Q' || pipkey == 'q')
         {
             fclose(fs);
-            return 0;
+            return DL_RELEASE(0);
         }
         if (d.death != 0 || !d.name[0])
         {
@@ -162,7 +163,7 @@ int p_pipple(void)
     lasttime = time(0);
     start_time = time(0);
     /*pip_do_menu(0, 0, pipmainlist);*/
-    if (d.death != 0 || !d.name[0])  return 0;
+    if (d.death != 0 || !d.name[0])  return DL_RELEASE(0);
     pip_load_mob("game/pipdata/pipmob.dat");
     pip_load_mobset("game/pipdata/pipmobset.dat");
     pip_main_menu();
@@ -171,7 +172,7 @@ int p_pipple(void)
     d.bbtime += time(0) - start_time;
     pip_write_file();
     logit(d.money);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 /*時間表示法*/

@@ -12,6 +12,8 @@
 void
 input_tools(void)
 {
+    DL_HOLD;
+
     const char *const msg[] = {"1.括符方塊  2.線條箭頭  3.數字標點？(N:下一頁)[Q]",
                                "4.圖案數字  5.希臘字母  6.注音符號？(P:上一頁)[Q]"};
     const char *const ansi[][5][10] =
@@ -73,7 +75,10 @@ input_tools(void)
     while (ch == 'p' || ch == 'n');
 
     if (ch < '1' || ch > '6')
+    {
+        DL_RELEASE(0);
         return;
+    }
 
     group = ch - '1';
     page = 0;
@@ -106,4 +111,5 @@ input_tools(void)
             break;
         }
     }
+    DL_RELEASE(0);
 }

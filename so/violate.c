@@ -225,6 +225,7 @@ KeyFuncList viol_cb =
 int
 Violate(void)
 {
+    DL_HOLD;
     XO *xo;
     char fpath[64];
 
@@ -235,7 +236,7 @@ Violate(void)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 

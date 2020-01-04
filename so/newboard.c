@@ -934,6 +934,7 @@ KeyFuncList nbrd_cb =
 int
 XoNewBoard(void)
 {
+    DL_HOLD;
     XO *xo;
     char fpath[64];
     clear();
@@ -944,5 +945,5 @@ XoNewBoard(void)
     xo->key = XZ_OTHER;
     xover(XZ_OTHER);
     free(xo);
-    return 0;
+    return DL_RELEASE(0);
 }

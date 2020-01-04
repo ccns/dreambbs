@@ -68,6 +68,32 @@ static DL_list *DL_insert(const char *path, int path_len)
     return p;
 }
 
+/* For preventing unloading a library in use */
+/* `struct DL_handle *`: A opaque pointer for preventing misusage. */
+
+#define DL_HANDLE_INUSE  ((struct DL_handle *) -1)
+
+static struct DL_handle *DL_exchange_handle(const char *path, struct DL_handle *handle)
+{
+    DL_list *const p = DL_find(path, strnlen(path, PATH_MAX));
+    const DL_list *const tail = dl_pool + dl_head;
+    struct DL_handle *handle_prev = NULL;
+    if (p < tail)   /* Exchange if found */
+    {
+        handle_prev = (struct DL_handle *)p->handle;
+        p->handle = handle;
+    }
+    return handle_prev;
+}
+GCC_NODISCARD struct DL_handle *DL_hold(const char *path)
+{
+    return DL_exchange_handle(path, DL_HANDLE_INUSE);
+}
+int DL_release(const char *path, struct DL_handle *handle)
+{
+    return (bool)DL_exchange_handle(path, handle);
+}
+
 /* Dynamic library object getters */
 
 /* format: "Xmodule_path:Xname" */
@@ -100,10 +126,14 @@ void *DL_get_hotswap(const char *name)
         return NULL;
 
     p = DL_insert(name, t - name);
-    if (p->handle)              /* Unload the library to load a updated one */
+    if (p->handle && p->handle != DL_HANDLE_INUSE)
+    {
+        /* Unload the library to load a updated one */
         dlclose(p->handle);
-
-    p->handle = dlopen(p->path, DL_OPEN_FLAGS);
+        p->handle = NULL;
+    }
+    if (!p->handle)
+        p->handle = dlopen(p->path, DL_OPEN_FLAGS);
     if (!p->handle)
         return NULL;
 

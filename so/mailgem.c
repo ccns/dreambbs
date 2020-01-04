@@ -710,6 +710,7 @@ int
 mailgem_gather(
 XO *xo)
 {
+    DL_HOLD;
     HDR *hdr, *gbuf, ghdr, xhdr;
     int tag, locus, rc, xmode, anchor;
     char *dir, *folder, fpath[80], buf[80];
@@ -734,7 +735,7 @@ XO *xo)
     tag = AskTag(msg);
 
     if (tag < 0)
-        return XO_FOOT;
+        return DL_RELEASE(XO_FOOT);
 
     if (!anchor)
     {
@@ -748,12 +749,12 @@ XO *xo)
         switch (vans("串列文章 1)合成一篇 2)分別建檔 Q)取消 [2] "))
         {
         case 'q':
-            return XO_FOOT;
+            return DL_RELEASE(XO_FOOT);
 
         case '1':
             strcpy(xhdr.title, currtitle);
             if (!vget(b_lines, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY))
-                return XO_FOOT;
+                return DL_RELEASE(XO_FOOT);
             fp = fdopen(hdr_stamp(folder, 'A', &ghdr, fpath), "w");
             strcpy(ghdr.owner, cuser.userid);
             strcpy(ghdr.title, xhdr.title);
@@ -824,7 +825,7 @@ XO *xo)
 
     zmsg("收錄完成");
 
-    return rc;
+    return DL_RELEASE(rc);
 }
 
 
@@ -1044,6 +1045,7 @@ const char *title)
 void
 mailgem_main(void)
 {
+    DL_HOLD;
     XO *xo;
     char fpath[128];
 
@@ -1060,6 +1062,7 @@ mailgem_main(void)
     xo->xyz = (void *)"我的精華區";
     xover(XZ_MAILGEM);
     free(xo);
+    DL_RELEASE(0);
 }
 
 
@@ -1345,6 +1348,7 @@ gcheck(
 int level,
 char *fpath)
 {
+    DL_HOLD;
     int count, xmode, xhead;
     char *fname, *ptr = NULL, buf[80];
     FILE *fp;
@@ -1360,14 +1364,14 @@ char *fpath)
     }
     else if (level > GCHECK_DEPTH)
     {
-        return 1;
+        return DL_RELEASE(1);
     }
 
     /* open the folder */
 
     fp = fopen(fpath, "r");
     if (!fp)
-        return 0;
+        return DL_RELEASE(0);
 
     strcpy(buf, fpath);
 
@@ -1424,7 +1428,7 @@ char *fpath)
         sync_check(pgem);
     }
 
-    return count;
+    return DL_RELEASE(count);
 }
 
 

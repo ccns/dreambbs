@@ -245,6 +245,7 @@ int
 clean(
     XO *xo)
 {
+    DL_HOLD;
     XO *xoo;
     const HDR *hdr;
     HDR phdr;
@@ -262,14 +263,14 @@ clean(
     pushstart = 0;
 
     if (!(bbstate & STAT_BOARD))
-        return 0;
+        return DL_RELEASE(0);
 
     pos = xo->pos;
     cur = pos - xo->top;
     hdr = (const HDR *) xo_pool + cur;
 
     if (!hdr->recommend || hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
-        return XO_NONE;
+        return DL_RELEASE(XO_NONE);
 
     chrono = hdr->chrono;
     strcpy(title, hdr->title);
@@ -398,7 +399,7 @@ clean(
     }
 
     if ((fd = open(xo->dir, O_RDWR, 0600)) == -1)
-        return XO_NONE;
+        return DL_RELEASE(XO_NONE);
 
     fstat(fd, &st);
     total = st.st_size / sizeof(HDR);
@@ -426,6 +427,6 @@ clean(
     f_unlock(fd);
     close(fd);
 
-    return XO_INIT;
+    return DL_RELEASE(XO_INIT);
 }
 #endif  /* #ifdef  HAVE_RECOMMEND */

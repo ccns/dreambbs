@@ -20,6 +20,7 @@
 int
 x_siteinfo(void)
 {
+    DL_HOLD;
     long nproc;
     double load[3], load_norm;
     nproc = sysconf(_SC_NPROCESSORS_ONLN);
@@ -73,5 +74,5 @@ x_siteinfo(void)
 //    prints("\x1b[1;30mModules & Plug-in: None\x1b[m\n");
 #endif  /* #ifdef Modules */
     vmsg(NULL);
-    return 0;
+    return DL_RELEASE(0);
 }

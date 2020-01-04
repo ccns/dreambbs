@@ -306,6 +306,7 @@ KeyFuncList chat_cb =
 int
 Chatmenu(void)
 {
+    DL_HOLD;
     char fpath[64];
     XO *xx;
 
@@ -317,7 +318,7 @@ Chatmenu(void)
     xx->pos = 0;
     xover(XZ_OTHER);
     free(xx);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 

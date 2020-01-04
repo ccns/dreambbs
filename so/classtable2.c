@@ -213,6 +213,7 @@ static int init_classtable(void)
 
 int main_classtable(void)
 {
+    DL_HOLD;
     int c;
     int x = 1, y = 1;
     int fd;
@@ -293,5 +294,5 @@ int main_classtable(void)
 #endif
 
     vmsg(NULL);
-    return 0;
+    return DL_RELEASE(0);
 }

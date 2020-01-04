@@ -348,6 +348,7 @@ KeyFuncList list_cb =
 int
 List(void)
 {
+    DL_HOLD;
     XO *xo;
     char fpath[128], msg[100];
     char buf[10];
@@ -379,10 +380,10 @@ List(void)
 
     sprintf(msg, "第幾個群組名單 [1~%d]：", MAX_LIST);
     if (!vget(b_lines, 0, msg, buf, 3, DOECHO))
-        return 0;
+        return DL_RELEASE(0);
     ways = atoi(buf);
     if (ways > MAX_LIST || ways < 1)
-        return 0;
+        return DL_RELEASE(0);
     utmp_mode(M_OMENU);
     sprintf(buf, mode ? "board.%d" : "list.%d", ways);
     usr_fpath(fpath, cuser.userid, buf);
@@ -391,7 +392,7 @@ List(void)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 

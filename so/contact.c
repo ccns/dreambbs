@@ -233,6 +233,7 @@ KeyFuncList contact_cb =
 int
 Contact(void)
 {
+    DL_HOLD;
     XO *xo;
     char fpath[80];
     utmp_mode(M_OMENU);
@@ -242,7 +243,7 @@ Contact(void)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 

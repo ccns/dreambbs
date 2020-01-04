@@ -164,6 +164,7 @@ int
 main_bstat(
 XO *xo)
 {
+    DL_HOLD;
     XO *xx;
     char fpath[64];
     BRD *brd;
@@ -187,7 +188,7 @@ XO *xo)
         free(xx);
     }
 
-    return XO_HEAD;
+    return DL_RELEASE(XO_HEAD);
 }
 
 

@@ -3,6 +3,7 @@
 int
 new_passwd(void)
 {
+    DL_HOLD;
     ACCT acct;
     FILE *fp;
     int ans, fd, len;
@@ -78,5 +79,5 @@ new_passwd(void)
             }
         }
     }
-    return 0;
+    return DL_RELEASE(0);
 }

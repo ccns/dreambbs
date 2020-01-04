@@ -73,6 +73,8 @@ void url_encode(char *dst, const char *src);
 void archiv32(time_t chrono, char *fname);
 void archiv32m(time_t chrono, char *fname);
 /* dl_lib.c */
+GCC_NODISCARD struct DL_handle* DL_hold(const char *path);
+int DL_release(const char *path, struct DL_handle *handle);
 void *DL_get(const char *name);
 void *DL_get_hotswap(const char *name);
 int DL_func(const char *name, ...);

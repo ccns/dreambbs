@@ -23,7 +23,7 @@ CFLAGS	+= $(RUBY_CFLAGS)
 
 CFLAGS_SO += -fPIC
 
-.c.o:	;   $(CC) $(MAKEFLAG) $(CFLAGS) $(CFLAGS_SO) -c $*.c
+.c.o:	;   $(CC) $(MAKEFLAG) $(CFLAGS) $(CFLAGS_SO) -DDL_CURRENT_MODULE_STR="\"$*.so\"" -c $*.c
 .c.x:	;   $(CPROTO) -o $*.x $*.c
 .c.ln:	;   lint -abhi $*.c
 

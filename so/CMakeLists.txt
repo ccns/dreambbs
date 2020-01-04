@@ -21,6 +21,9 @@ foreach(module IN LISTS SO)
         else()
             target_link_libraries(so_${module} PRIVATE dao)
         endif()
+        target_compile_definitions(so_${module} PRIVATE
+            DL_CURRENT_MODULE_STR="$<TARGET_FILE_NAME:so_${module}>"
+        )
         set_target_properties(so_${module}
             PROPERTIES PREFIX ""
         )

@@ -87,6 +87,7 @@ static int matchHis(Num n)
 
 int mainNum(int fighting /* Thor.990317: 對戰模式 */)
 {
+    DL_HOLD;
     Num myNumber;
 
     srand(time(NULL));
@@ -98,7 +99,7 @@ int mainNum(int fighting /* Thor.990317: 對戰模式 */)
     if (vans("想好您的數字了嗎?[y/N]") != 'y')
     {
         vmsg("不玩了啊? 下次再來哦! ^_^");
-        return 0;
+        return DL_RELEASE(0);
     }
 
     /* initialize variables */
@@ -246,17 +247,19 @@ cleanup:
     free(numSet);
     numSet = NULL;
 
-    return 0;
+    return DL_RELEASE(0);
 }
 
 int guessNum(void)
 {
-    return mainNum(0);
-//    return 0;
+    DL_HOLD;
+    return DL_RELEASE(mainNum(0));
+//    return DL_RELEASE(0);
 }
 
 int fightNum(void)
 {
-    return mainNum(1);
-//    return 0;
+    DL_HOLD;
+    return DL_RELEASE(mainNum(1));
+//    return DL_RELEASE(0);
 }

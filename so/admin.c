@@ -177,12 +177,13 @@ KeyFuncList admin_cb =
 int
 Admin(void)
 {
+    DL_HOLD;
     XO *xo;
     char fpath[64];
     if (!check_admin(cuser.userid) && str_cmp(cuser.userid, SYSOPNAME))
     {
         vmsg("◎ 你不是系統管理員！");
-        return 0;
+        return DL_RELEASE(0);
     }
 
     utmp_mode(M_OMENU);
@@ -192,7 +193,7 @@ Admin(void)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
-    return 0;
+    return DL_RELEASE(0);
 }
 
 
