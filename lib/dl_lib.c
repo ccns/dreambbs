@@ -8,6 +8,7 @@
 #include "config.h"
 
 #include <dlfcn.h>
+#include <limits.h>
 #include <stdarg.h>
 #include <strings.h>
 #include <stdlib.h>
@@ -26,72 +27,80 @@ int dl_size, dl_head;
 
 #define DL_ALLOC_MIN    5
 
-void *DL_get(const char *name
-             /* format: "Xmodule_path:Xname" */
-    )
-{
-    char buf[512], *t;
-    DL_list *p, *tail;
-
-    strcpy(buf, name);
-    if (!(t = (char *)strchr(buf, ':')))
-        return NULL;
-
-    *t++ = 0;
-
-    if (!dl_pool)
-    {
-        /* Initialize DL entries */
-        dl_size = DL_ALLOC_MIN;
-        /* dl_head = 0 */
-        dl_pool = (DL_list *) malloc(dl_size * sizeof(DL_list));
-    }
-
-    p = dl_pool;
-    tail = p + dl_head;
-    while (p < tail)
-    {
-        if (!strcmp(buf, p->path))
-            break;
-        p++;
-    }
-
-    if (p >= tail)
-    {                            /* not found */
-        if (dl_head >= dl_size)
-        {                        /* not enough space */
-            dl_size += DL_ALLOC_MIN;
-            dl_pool = (DL_list *) realloc(dl_pool, dl_size * sizeof(DL_list));
-            p = dl_pool + dl_head;    /* visor.20000718: to a new place */
-        }
 #if defined(__OpenBSD__)
-        p->handle = dlopen(p->path = (char *)strdup(buf), RTLD_LAZY);
+  #define DL_OPEN_FLAGS  RTLD_LAZY
 #else
-        p->handle = dlopen(p->path = (char *)strdup(buf), RTLD_NOW);
+  #define DL_OPEN_FLAGS  RTLD_NOW
 #endif
+
+/* `DL_list` manipulations */
+
+static DL_list *DL_find(const char *path, int path_len)
+{
+    const DL_list *const tail = dl_pool + dl_head;
+    DL_list *p;
+    for (p = dl_pool; p < tail; p++)
+    {
+        if (!strncmp(path, p->path, path_len))
+            break;
+    }
+    return p;
+}
+
+static DL_list *DL_insert(const char *path, int path_len)
+{
+    DL_list *p;
+
+    if (dl_head >= dl_size)
+    {                            /* not enough space or not initialized */
+        dl_size += DL_ALLOC_MIN;
+        dl_pool = (DL_list *) realloc(dl_pool, dl_size * sizeof(DL_list));
+    }
+
+    p = DL_find(path, path_len);
+    if (p >= dl_pool + dl_head)
+    {                            /* not found */
+        p->path = strndup(path, path_len);
+        p->handle = dlopen(p->path, DL_OPEN_FLAGS);
         dl_head++;
     }
 
+    return p;
+}
+
+/* Dynamic library object getters */
+
+/* format: "Xmodule_path:Xname" */
+static inline char *DL_name_delim(const char *name)
+{
+    return (char *)memchr(name, ':', strnlen(name, PATH_MAX));
+}
+
+void *DL_get(const char *name)
+{
+    const char *t = DL_name_delim(name);
+    DL_list *p;
+    if (!t)
+        return NULL;
+
+    p = DL_insert(name, t - name);
     if (!p->handle)
         return NULL;
 
-    return dlsym(p->handle, t);
+    return dlsym(p->handle, t+1);
 }
 
 int DL_func(const char *name, ...)
 {
     va_list args;
-    int (*f) (va_list), ret;
+    int (*f)(va_list) = (int (*)(va_list)) DL_get(name);
+    int ret;
 
-    va_start(args, name);
-
-    if (!(f = (int (*)(va_list)) DL_get(args)))
-    {                            /* not get func */
-        va_end(args);
+    if (!f)                      /* not get func */
         return -1;
-    }
 
-    ret = (*f) (args);
+    va_start(args, f);
+    ret = (*f)(args);
     va_end(args);
 
     return ret;
