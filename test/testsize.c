@@ -1,9 +1,16 @@
 #include "bbs.h"
 #include <assert.h>
 
+#if __STDC_VERSION__ >= 201112L  /* C11 */ || __cplusplus >= 201103L  /* C++11 */
+  #define EXPECT_SIZE(Type, expect) \
+    static_assert(sizeof(Type) == expect, #Type " check failed!")
+#else
+  #define EXPECT_SIZE(Type, expect)  assert(sizeof(Type) == expect)
+#endif
+
 #define CHECK_SIZE(Type, expect)  do { \
     printf("sizeof(" #Type "): %zu\n", sizeof(Type)); \
-    static_assert(sizeof(Type) == expect, #Type " check failed!"); \
+    EXPECT_SIZE(Type, expect); \
 } while (0)
 
 int main(void)
