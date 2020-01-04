@@ -807,7 +807,13 @@ typedef union {  /* IID.20191106: The field to be used is determined by the valu
 
 #define HAVE_HASH_KEYFUNCLIST
 
-typedef std::unordered_map<unsigned int, XoFunc> KeyFuncList;
+#define PAIR_T(first_type, second_type)  \
+    std::pair<first_type, second_type>
+template <class PairT>
+using UnorderedMapPair = std::unordered_map<typename PairT::first_type, typename PairT::second_type>;
+
+typedef PAIR_T(unsigned int, XoFunc) KeyFunc;
+typedef UnorderedMapPair<KeyFunc> KeyFuncList;
 typedef KeyFuncList::iterator KeyFuncIter;
 struct KeyFuncListRef {
     KeyFuncList *ptr_;
@@ -821,11 +827,13 @@ struct KeyFuncListRef {
 
 #else
 
-typedef struct
-{
-    unsigned int first;
-    XoFunc second;
-} KeyFunc;
+#define PAIR_T(first_type, second_type)  \
+    struct { \
+        first_type first; \
+        second_type second; \
+    }
+
+typedef PAIR_T(unsigned int, XoFunc) KeyFunc;
 typedef KeyFunc KeyFuncList[];
 typedef KeyFunc *KeyFuncIter;
 typedef KeyFunc *KeyFuncListRef;

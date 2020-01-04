@@ -1042,18 +1042,14 @@ xo_usetup(
 #define MARK_NEXT       (RS_MARKED | RS_FORWARD | RS_CURRENT)
 #define MARK_PREV       (RS_MARKED | RS_CURRENT)
 
+typedef PAIR_T(int /* key stroke */, int /* the mapped threading op-code */) KeyMap;
 
 #if defined __cplusplus
 /* IID.20191230: Use hash table for xover thread mode op-code list */
 #define HAVE_HASH_KEYMAPLIST
-typedef std::unordered_map<int, int> KeyMapList;
+typedef UnorderedMapPair<KeyMap> KeyMapList;
 typedef KeyMapList::const_iterator KeyMapConstIter;
 #else
-typedef struct
-{
-    int first;                  /* key stroke */
-    int second;                 /* the mapped threading op-code */
-}      KeyMap;
 typedef KeyMap KeyMapList[];
 typedef const KeyMap *KeyMapConstIter;
 #endif
