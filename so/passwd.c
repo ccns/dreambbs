@@ -9,13 +9,13 @@ new_passwd(void)
     char Email[61], passwd[PLAINPASSLEN], *pw;
 
     srand(time(0));
-    move(22, 0);
+    move(b_lines-1, 0);
     outs("當使用者忘記密碼時，重送新密碼至該使用者的註冊信箱。");
     while ((ans = acct_get(msg_uid, &acct)))
     {
         if (ans > 0)
         {
-            vget(21, 0, "請輸入認證時的 Email：", Email, 40, DOECHO);
+            vget(b_lines-2, 0, "請輸入認證時的 Email：", Email, 40, DOECHO);
 
             if (strcmp(acct.email, Email) == 0 || strcmp(acct.vmail, Email) == 0)
             {
@@ -25,11 +25,11 @@ new_passwd(void)
                     break;
                 }
 
-                vget(22, 0, "Email 正確，請確認是否產生新密碼？(y/N)[N] ", Email, 2, LCECHO);
+                vget(b_lines-3, 0, "Email 正確，請確認是否產生新密碼？(y/N)[N] ", Email, 2, LCECHO);
                 if (Email[0] != 'y')
                     break;
                 /* IID.20190530: For forward compatibility with older versions */
-                if (vget(22, 0, "是否使用新式密碼加密(y/N)？[N]", Email, 3, LCECHO) == 'y')
+                if (vget(b_lines-3, 0, "是否使用新式密碼加密(y/N)？[N]", Email, 3, LCECHO) == 'y')
                 {
                     ans = GENPASSWD_SHA256;
                     len = PLAINPASSLEN;
