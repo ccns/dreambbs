@@ -1162,15 +1162,14 @@ xo_thread(
 
     const char *query=NULL;
     const char *tag, *title=NULL;
-    int pos, match, near=0, neartop=0, max;     /* Thor: neartop與near成對用 */
+    int pos, match, near=0, max;
 
-    int top, bottom, step, len;
+    int step, len;
     const HDR *fhdr;
 
     match = 0;
     pos = xo->pos;
-    top = xo->top;
-    fhdr = (HDR *) xo_pool + (pos - top);
+    fhdr = (HDR *) xo_pool_base + pos;
     step = (op & RS_FORWARD) ? 1 : - 1;
 
     if (op & RS_RELATED)
@@ -1247,7 +1246,6 @@ xo_thread(
 
     len = sizeof(HDR) * XO_TALL;
     max = xo->max;
-    bottom = BMIN(top + XO_TALL, max);
 
     for (;;)
     {
@@ -1262,31 +1260,7 @@ xo_thread(
                 break;
         }
 
-        /* buffer I/O : shift sliding window scope */
-
-        if ((pos < top) || (pos >= bottom))
-        {
-            const HDR *pool;
-            if (step > 0)
-            {
-                top += XO_TALL;
-                bottom = BMIN(top + XO_TALL, max);
-            }
-            else
-            {
-                bottom = top;
-                top -= XO_TALL;
-            }
-
-            xo_pool = xo_pool_base + sizeof(HDR) * top;
-            pool = (HDR *)xo_pool;
-
-            fhdr = (step > 0) ? pool : pool + XO_TALL - 1;
-        }
-        else
-        {
-            fhdr += step;
-        }
+        fhdr += step;
 
         /* 跳過已刪除 or lock 文章 */
         if (fhdr->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
@@ -1338,7 +1312,6 @@ xo_thread(
             }
 
             near = pos;         /* Thor:記下最接近起點的位置 */
-            neartop = top;
             continue;
         }
 
@@ -1374,7 +1347,6 @@ xo_thread(
                 if (tag != title)
                 {
                     near = pos;         /* 記下最接近起點的位置 */
-                    neartop = top;
                     continue;
                 }
             }
@@ -1394,36 +1366,22 @@ xo_thread(
         }
     }
 
-    bottom = xo->top;
-
+    if ((op & RS_FIRST) && near >= 0)   /* Thor: 加上 RS_FIRST功能 */
+    {
+        pos = near;
+        match = (match & ~XO_MOVE_MASK) + XO_MOVE + XO_REL;
+    }
     if ((match & XO_POS_MASK) > XO_NONE)
     {
         /* A thread article is found */
+        int top = (pos / XO_TALL) * XO_TALL;
         xo->pos = pos;
-        if (bottom != top)
+        if (top != xo->top)
         {
             xo->top = top;
             match |= XR_BODY;           /* 找到了，並且需要更新畫面 */
+            xo_pool = xo_pool_base + sizeof(HDR) * top;
         }
-    }                           /* Thor: 加上 RS_FIRST功能 */
-    else if ((op & RS_FIRST) && near >= 0)
-    {
-        /* A thread article is found */
-        match += XO_MOVE + XO_REL;
-        xo->pos = near;
-        if (top != neartop)             /* Thor.0609: top 為目前的buffer之top */
-        {
-            xo_pool = xo_pool_base + sizeof(HDR) * neartop;
-        }
-        if (bottom != neartop)  /* Thor.0609: bottom為畫面之top */
-        {
-            xo->top = neartop;
-            match |= XR_BODY;           /* 找到了，並且需要更新畫面 */
-        }
-    }
-    else if (bottom != top)
-    {
-        xo_pool = xo_pool_base + sizeof(HDR) * bottom;
     }
 
     return (match & XO_POS_MASK) ? match : match + XO_NONE;
