@@ -2027,6 +2027,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 {
     int ch, len;
     int x, y;
+    bool dirty;
 
     /* Adjust flags */
     if (!(echo & VGET_STRICT_DOECHO))
@@ -2093,7 +2094,8 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         STANDEND;
     }
 
-    line = -1;
+    dirty = len > 2;  /* Store default string */
+    line = MAXLASTCMD - 1;  /* Obsolete the oldest entry */
     col = len;
     max--;
 
@@ -2146,6 +2148,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
                 move(y, x);
                 outs(data);
                 col = len = len_match;
+                dirty = true;
             }
 #ifdef M3_USE_PFTERM
             STANDEND;
@@ -2209,6 +2212,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 #endif
             col++;
             len++;
+            dirty = true;
             continue;
         }
 
@@ -2262,6 +2266,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
             col--;
             len--;
+            dirty = true;
 
             if (!(echo & VGET_STEALTH_NOECHO))
                 move(y, x + col);
@@ -2311,6 +2316,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
                 for (int ch = 0; ch < len; ch++)
                     outc(' ');
                 col = len = 0;
+                dirty = true;
             }
             break;
 
@@ -2321,6 +2327,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
                 for (int ch = col; ch < len; ch++)
                     outc(' ');
                 len = col;
+                dirty = true;
             }
             break;
 
@@ -2348,44 +2355,62 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         STANDOUT;
 #endif
 
-        ch ^= KEY_NONE;
-        switch (ch)
+        /* Seek history */
         {
-        case KEY_DOWN:
-        case Ctrl('N'):
-
-            line += MAXLASTCMD - 2;
-            // Falls through
-
-        case KEY_UP:
-        case Ctrl('P'):
-
-            line = (line + 1) % MAXLASTCMD;
-            move(y, x);
-
-            for (col = 0; col < max; ++col)
+            int line_prev = line;
+            ch ^= KEY_NONE;
+            switch (ch)
             {
-                int ch = (unsigned char) lastcmd[line][col];
-                if (!ch)
-                {
-                    /* clrtoeol */
+            case KEY_DOWN:
+            case Ctrl('N'):
 
-                    for (int ch = col; ch < len; ch++)
-                        outc(' ');
+                /* IID.20200106: Prevent jumping to the oldest entry. */
+                if (line == MAXLASTCMD - 1)
                     break;
+                line = line - 2 + MAXLASTCMD;
+                // Falls through
+
+            case KEY_UP:
+            case Ctrl('P'):
+
+                {
+                    /* IID.20200123: Prevent getting into empty entries. */
+                    int line_next = (line + 1) % MAXLASTCMD;
+                    if (line_next < MAXLASTCMD - 1 && !*lastcmd[line_next])
+                        break;
+                    line = line_next;
+                }
+                if (dirty && len > 2)
+                {
+                    str_ncpy(lastcmd[line_prev], data, len+1);  /* Save changes */
+                    dirty = 0;
+                }
+                move(y, x);
+
+                for (col = 0; col < max; ++col)
+                {
+                    int ch = (unsigned char) lastcmd[line][col];
+                    if (!ch)
+                    {
+                        /* clrtoeol */
+
+                        for (int ch = col; ch < len; ch++)
+                            outc(' ');
+                        break;
+                    }
+
+                    outc(ch);
+                    data[col] = ch;
                 }
 
-                outc(ch);
-                data[col] = ch;
+                len = col;
+                break;
+
+            default:
+                /* Invalid key */
+                bell();
+                break;
             }
-
-            len = col;
-            break;
-
-        default:
-            /* Invalid key */
-            bell();
-            break;
         }
 #ifdef M3_USE_PFTERM
         STANDEND;
@@ -2394,8 +2419,9 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
     if (len > 2 && (echo & DOECHO) && !(echo & NUMECHO))
     {
-        for (int line = MAXLASTCMD - 1; line; line--)
-            strcpy(lastcmd[line], lastcmd[line - 1]);
+        /* Move current history entry to the front */
+        for (int ln = line; ln; ln--)
+            strcpy(lastcmd[ln], lastcmd[ln - 1]);
         strcpy(lastcmd[0], data);
     }
 
