@@ -214,7 +214,7 @@ static void pip_new_game(void)
                 pip_live_again();
             }
         }
-        else if (d.liveagain >= 4)
+        else
         {
             outs("可是你復活手術太多次了  小雞身上都是開刀痕跡");
             move(10, 6);
@@ -396,32 +396,32 @@ int cal)
     tm = (time(0) - start_time + d.bbtime) / 60 / 30;
     if (mode)
     {
-        if (tm >= 0 && tm <= 3)
+        if (tm <= 3)
         {
-            if (cal == 1)
+            if (cal)
                 tiredvary = (random() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp) * 120 / 100;
-            else if (cal == 0)
+            else
                 tiredvary = (random() % prob + base) * 4 / 3;
         }
-        else if (tm >= 4 && tm <= 7)
+        else if (tm <= 7)
         {
-            if (cal == 1)
+            if (cal)
                 tiredvary = (random() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp);
-            else if (cal == 0)
+            else
                 tiredvary = (random() % prob + base) * 3 / 2;
         }
-        else if (tm >= 8 && tm <= 10)
+        else if (tm <= 10)
         {
-            if (cal == 1)
+            if (cal)
                 tiredvary = (random() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp) * 110 / 100;
-            else if (cal == 0)
+            else
                 tiredvary = (random() % prob + base) * 5 / 4;
         }
-        else if (tm >= 11)
+        else
         {
-            if (cal == 1)
+            if (cal)
                 tiredvary = (random() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp) * 150 / 100;
-            else if (cal == 0)
+            else
                 tiredvary = (random() % prob + base) * 1;
         }
     }
@@ -430,13 +430,13 @@ int cal)
         tiredvary = random() % prob + base;
     }
 
-    if (cal == 1)
+    if (cal)
     {
         d.tired += (tiredvary * mul / 100);
         if (d.tired > 100)
             d.tired = 100;
     }
-    else if (cal == 0)
+    else
     {
         d.tired = d.tired - tiredvary;
         if (d.tired <= 0)
@@ -877,29 +877,29 @@ int mode)
         d.seeroyalJ = 0;
     }
 
-    if (m == 0)                   /*誕生*/
+    if (m <= 0)         /*誕生*/
         age = 0;
-    else if (m == 1)              /*嬰兒*/
+    else if (m <= 1)    /*嬰兒*/
         age = 1;
-    else if (m >= 2 && m <= 5)    /*幼兒*/
+    else if (m <= 5)    /*幼兒*/
         age = 2;
-    else if (m >= 6 && m <= 12)   /*兒童*/
+    else if (m <= 12)   /*兒童*/
         age = 3;
-    else if (m >= 13 && m <= 15)  /*少年*/
+    else if (m <= 15)   /*少年*/
         age = 4;
-    else if (m >= 16 && m <= 18)  /*青年*/
+    else if (m <= 18)   /*青年*/
         age = 5;
-    else if (m >= 19 && m <= 35)  /*成年*/
+    else if (m <= 35)   /*成年*/
         age = 6;
-    else if (m >= 36 && m <= 45)  /*壯年*/
+    else if (m <= 45)   /*壯年*/
         age = 7;
-    else if (m >= 45 && m <= 60)  /*更年*/
+    else if (m <= 60)   /*更年*/
         age = 8;
-    else if (m >= 60 && m <= 70)  /*老年*/
+    else if (m <= 70)   /*老年*/
         age = 9;
-    else if (m >= 70 && m <= 100) /*古稀*/
+    else if (m <= 100)  /*古稀*/
         age = 10;
-    else  // m > 100              /*神仙*/
+    else                /*神仙*/
         age = 11;
     clear();
     /*vs_head("電子養小雞", BoardName);*/
@@ -914,7 +914,7 @@ int mode)
     move(1, 0);
     if (d.money <= 100)
         color1 = 31;
-    else if (d.money > 100 && d.money <= 500)
+    else if (d.money <= 500)
         color1 = 33;
     else
         color1 = 37;
@@ -925,22 +925,23 @@ int mode)
 
     if ((d.hp*100 / d.maxhp) <= 20)
         color1 = 31;
-    else if ((d.hp*100 / d.maxhp) <= 40 && (d.hp*100 / d.maxhp) > 20)
+    else if ((d.hp*100 / d.maxhp) <= 40)
         color1 = 33;
     else
         color1 = 37;
-    if (d.maxmp == 0)
+
+    if (d.maxmp <= 0)
         color2 = 37;
     else if ((d.mp*100 / d.maxmp) <= 20)
         color2 = 31;
-    else if ((d.mp*100 / d.maxmp) <= 40 && (d.mp*100 / d.maxmp) > 20)
+    else if ((d.mp*100 / d.maxmp) <= 40)
         color2 = 33;
     else
         color2 = 37;
 
     if (d.tired >= 80)
         color3 = 31;
-    else if (d.tired < 80 && d.tired >= 60)
+    else if (d.tired >= 60)
         color3 = 33;
     else
         color3 = 37;
@@ -951,25 +952,25 @@ int mode)
     move(3, 0);
     if (d.shit >= 80)
         color1 = 31;
-    else if (d.shit < 80 && d.shit >= 60)
+    else if (d.shit >= 60)
         color1 = 33;
     else
         color1 = 37;
     if (d.sick >= 75)
         color2 = 31;
-    else if (d.sick < 75 && d.sick >= 50)
+    else if (d.sick >= 50)
         color2 = 33;
     else
         color2 = 37;
     if (d.happy <= 20)
         color3 = 31;
-    else if (d.happy > 20 && d.happy <= 40)
+    else if (d.happy <= 40)
         color3 = 33;
     else
         color3 = 37;
     if (d.satisfy <= 20)
         color4 = 31;
-    else if (d.satisfy > 20 && d.satisfy <= 40)
+    else if (d.satisfy <= 40)
         color4 = 33;
     else
         color4 = 37;
@@ -992,27 +993,27 @@ int mode)
     else if (mode == 1)/*餵食*/
     {
         move(4, 0);
-        if (d.food == 0)
+        if (d.food <= 0)
             color1 = 31;
-        else if (d.food <= 5 && d.food > 0)
+        else if (d.food <= 5)
             color1 = 33;
         else
             color1 = 37;
-        if (d.cookie == 0)
+        if (d.cookie <= 0)
             color2 = 31;
-        else if (d.cookie <= 5 && d.cookie > 0)
+        else if (d.cookie <= 5)
             color2 = 33;
         else
             color2 = 37;
-        if (d.bighp == 0)
+        if (d.bighp <= 0)
             color3 = 31;
-        else if (d.bighp <= 2 && d.bighp > 0)
+        else if (d.bighp <= 2)
             color3 = 33;
         else
             color3 = 37;
-        if (d.medicine == 0)
+        if (d.medicine <= 0)
             color4 = 31;
-        else if (d.medicine <= 5 && d.medicine > 0)
+        else if (d.medicine <= 5)
             color4 = 33;
         else
             color4 = 37;
@@ -1044,36 +1045,36 @@ int mode)
     case 2:
         if (d.weight <= (60 + 10*tm - 30))
             show_basic_pic(1);
-        else if (d.weight > (60 + 10*tm - 30) && d.weight < (60 + 10*tm + 30))
+        else if (d.weight < (60 + 10*tm + 30))
             show_basic_pic(2);
-        else if (d.weight >= (60 + 10*tm + 30))
+        else
             show_basic_pic(3);
         break;
     case 3:
     case 4:
         if (d.weight <= (60 + 10*tm - 30))
             show_basic_pic(4);
-        else if (d.weight > (60 + 10*tm - 30) && d.weight < (60 + 10*tm + 30))
+        else if (d.weight < (60 + 10*tm + 30))
             show_basic_pic(5);
-        else if (d.weight >= (60 + 10*tm + 30))
+        else
             show_basic_pic(6);
         break;
     case 5:
     case 6:
         if (d.weight <= (60 + 10*tm - 30))
             show_basic_pic(7);
-        else if (d.weight > (60 + 10*tm - 30) && d.weight < (60 + 10*tm + 30))
+        else if (d.weight < (60 + 10*tm + 30))
             show_basic_pic(8);
-        else if (d.weight >= (60 + 10*tm + 30))
+        else
             show_basic_pic(9);
         break;
     case 7:
     case 8:
         if (d.weight <= (60 + 10*tm - 30))
             show_basic_pic(10);
-        else if (d.weight > (60 + 10*tm - 30) && d.weight < (60 + 10*tm + 30))
+        else if (d.weight < (60 + 10*tm + 30))
             show_basic_pic(11);
-        else if (d.weight >= (60 + 10*tm + 30))
+        else
             show_basic_pic(12);
         break;
     case 9:
@@ -1092,19 +1093,22 @@ int mode)
     outs_centered(" \x1b[1;34m─\x1b[37;44m  狀 態  \x1b[0;1;34m─\x1b[0m");
     move(b_lines - 3, 0);
     outs_centered(" ");
-    if (d.shit == 0)
+
+    if (d.shit <= 0)
         outs("乾淨小雞  ");
-    if (d.shit > 40 && d.shit < 60)
+    else if (d.shit <= 40)
+        ;
+    else if (d.shit < 60)
         outs("有點臭臭  ");
-    if (d.shit >= 60 && d.shit < 80)
+    else if (d.shit < 80)
         outs("\x1b[1;33m很臭了說\x1b[m  ");
-    if (d.shit >= 80 && d.shit < 100)
+    else if (d.shit < 100)
     {
         outs("\x1b[1;35m快臭死了\x1b[m  ");
         d.sick += 4;
         d.character -= (random() % 3 + 3);
     }
-    if (d.shit >= 100)
+    else
     {
         d.death = 1;
         pipdie("\x1b[1;31m哇～臭死了\x1b[m  ", 1);
@@ -1115,37 +1119,41 @@ int mode)
         pc = 0;
     else
         pc = d.hp * 100 / d.maxhp;
-    if (pc == 0)
+    if (pc <= 0)
     {
         d.death = 1;
         pipdie("\x1b[1;31m嗚～餓死了\x1b[m  ", 1);
         return -1;
     }
-    if (pc < 20)
+    else if (pc < 20)
     {
         outs("\x1b[1;35m快餓昏了\x1b[m  ");
         d.sick += 3;
         d.happy -= 5;
         d.satisfy -= 3;
     }
-    if (pc < 40 && pc >= 20)
+    else if (pc < 40)
         outs("\x1b[1;33m想吃東西\x1b[m  ");
-    if (pc <= 100 && pc >= 90)
+    else if (pc < 90)
+        ;
+    else if (pc <= 100)
         outs("肚子飽飽  ");
-    if (pc < 110 && pc > 100)
+    else
         outs("\x1b[1;33m撐撐的說\x1b[m  ");
 
     pc = d.tired;
     if (pc < 20)
         outs("精神很好  ");
-    if (pc < 80 && pc >= 60)
+    else if (pc < 60)
+        ;
+    else if (pc < 80)
         outs("\x1b[1;33m有點小累\x1b[m  ");
-    if (pc < 100 && pc >= 80)
+    else if (pc < 100)
     {
         outs("\x1b[1;35m真的很累\x1b[m  ");
         d.sick += 5;
     }
-    if (pc >= 100)
+    else
     {
         d.death = 1;
         pipdie("\x1b[1;31mㄚ～累死了\x1b[m  ", 1);
@@ -1153,9 +1161,21 @@ int mode)
     }
 
     pc = 60 + 10 * tm;
-    if (d.weight < (pc + 30) && d.weight >= (pc + 10))
+    if (d.weight < (pc - 50))
+    {
+        d.death = 1;
+        pipdie("\x1b[1;31m:~~ 瘦死了\x1b[m  ", 1);
+        return -1;
+    }
+    else if (d.weight <= (pc - 30))
+        outs("\x1b[1;35m太瘦了喔\x1b[m ");
+    else if (d.weight <= (pc - 10))
+        outs("\x1b[1;33m有點小瘦\x1b[m  ");
+    else if (d.weight < (pc + 10))
+        ;
+    else if (d.weight < (pc + 30))
         outs("\x1b[1;33m有點小胖\x1b[m  ");
-    if (d.weight < (pc + 50) && d.weight >= (pc + 30))
+    else if (d.weight < (pc + 50))
     {
         outs("\x1b[1;35m太胖了啦\x1b[m  ");
         d.sick += 3;
@@ -1165,36 +1185,27 @@ int mode)
             d.speed = 0;
 
     }
-    if (d.weight > (pc + 50))
+    else
     {
         d.death = 1;
         pipdie("\x1b[1;31m嗚～肥死了\x1b[m  ", 1);
         return -1;
     }
 
-    if (d.weight < (pc - 50))
-    {
-        d.death = 1;
-        pipdie("\x1b[1;31m:~~ 瘦死了\x1b[m  ", 1);
-        return -1;
-    }
-    if (d.weight > (pc - 30) && d.weight <= (pc - 10))
-        outs("\x1b[1;33m有點小瘦\x1b[m  ");
-    if (d.weight > (pc - 50) && d.weight <= (pc - 30))
-        outs("\x1b[1;35m太瘦了喔\x1b[m ");
-
-    if (d.sick < 75 && d.sick >= 50)
+    if (d.sick < 50)
+        ;
+    else if (d.sick < 75)
     {
         outs("\x1b[1;33m生病了啦\x1b[m  ");
         count_tired(1, 8, true, 100, 1);
     }
-    if (d.sick < 100 && d.sick >= 75)
+    else if (d.sick < 100)
     {
         outs("\x1b[1;35m正病重中\x1b[m  ");
         d.sick += 5;
         count_tired(1, 15, true, 100, 1);
     }
-    if (d.sick >= 100)
+    else
     {
         d.death = 1;
         pipdie("\x1b[1;31m病死了啦 :~~\x1b[m  ", 1);
@@ -1204,18 +1215,26 @@ int mode)
     pc = d.happy;
     if (pc < 20)
         outs("\x1b[1;35m很不快樂\x1b[m  ");
-    if (pc < 40 && pc >= 20)
+    else if (pc < 40)
         outs("\x1b[1;33m不太快樂\x1b[m  ");
-    if (pc < 95 && pc >= 80)
+    else if (pc < 80)
+        ;
+    else if (pc < 95)
         outs("快樂啦..  ");
-    if (pc <= 100 && pc >= 95)
+    else
         outs("很快樂..  ");
 
     pc = d.satisfy;
-    if (pc < 20) outs("\x1b[1;35m很不滿足..\x1b[m  ");
-    if (pc < 40 && pc >= 20) outs("\x1b[1;33m不太滿足\x1b[m  ");
-    if (pc < 95 && pc >= 80) outs("滿足啦..  ");
-    if (pc <= 100 && pc >= 95) outs("很滿足..  ");
+    if (pc < 20)
+        outs("\x1b[1;35m很不滿足..\x1b[m  ");
+    else if (pc < 40)
+        outs("\x1b[1;33m不太滿足\x1b[m  ");
+    else if (pc < 80)
+        ;
+    else if (pc < 95)
+        outs("滿足啦..  ");
+    else
+        outs("很滿足..  ");
 
     outs("\n");
 
@@ -2162,7 +2181,7 @@ int oldnum[])
                             d.happy += random() % 10 + 20 * smoney;
                             d.satisfy += random() % 10 + 20 * smoney;
                         }
-                        if (mode == 3 && choice == 2)
+                        else if (mode == 3 && choice == 2)
                         {
                             d.happy += (random() % 2 + 2) * smoney;
                             d.wisdom += (2 + 10 / (d.wisdom / 100 + 1)) * smoney;
@@ -2458,7 +2477,7 @@ static int pip_job_workA(void)
         workmoney = 80 + (d.cookskill * 2 + d.homework + d.family) / 40;
         vmsg("家事很成功\喔..多一點錢給你..");
     }
-    else if (class_ < 75 && class_ >= 50)
+    else if (class_ >= 50)
     {
         d.cookskill += random() % 2 + 5;
         d.homework += random() % 2 + 5;
@@ -2467,7 +2486,7 @@ static int pip_job_workA(void)
         workmoney = 60 + (d.cookskill * 2 + d.homework + d.family) / 45;
         vmsg("家事還蠻順利的唷..嗯嗯..");
     }
-    else if (class_ < 50 && class_ >= 25)
+    else if (class_ >= 25)
     {
         d.cookskill += random() % 3 + 3;
         d.homework += random() % 3 + 3;
@@ -2476,7 +2495,7 @@ static int pip_job_workA(void)
         workmoney = 40 + (d.cookskill * 2 + d.homework + d.family) / 50;
         vmsg("家事普普通通啦..可以更好的..加油..");
     }
-    else if (class_ < 25)
+    else
     {
         d.cookskill += random() % 3 + 1;
         d.homework += random() % 3 + 1;
@@ -2521,21 +2540,21 @@ static int pip_job_workB(void)
         workmoney = 150 + (d.love + d.toman) / 50;
         vmsg("當保姆很成功\喔..下次再來喔..");
     }
-    else if (class_ < 90 && class_ >= 75)
+    else if (class_ >= 75)
     {
         d.love += random() % 2 + 5;
         d.toman += random() % 2 + 2;
         workmoney = 120 + (d.love + d.toman) / 50;
         vmsg("保姆還當的不錯唷..嗯嗯..");
     }
-    else if (class_ < 75 && class_ >= 50)
+    else if (class_ >= 50)
     {
         d.love += random() % 2 + 3;
         d.toman += random() % 2 + 1;
         workmoney = 100 + (d.love + d.toman) / 50;
         vmsg("小朋友很皮喔..加油..");
     }
-    else if (class_ < 50)
+    else
     {
         d.love += random() % 2 + 1;
         d.toman += random() % 2 + 1;
@@ -2576,7 +2595,7 @@ static int pip_job_workC(void)
         workmoney = 250 + (d.cookskill * 2 + d.homework * 2) / 40;
         vmsg("旅館事業蒸蒸日上..希望你再過來...");
     }
-    else if (class_ < 95 && class_ >= 80)
+    else if (class_ >= 80)
     {
         d.homework += random() % 2 + 5;
         d.family += random() % 2 + 3;
@@ -2586,7 +2605,7 @@ static int pip_job_workC(void)
         workmoney = 200 + (d.cookskill * 2 + d.homework * 2) / 50;
         vmsg("旅館還蠻順利的唷..嗯嗯..");
     }
-    else if (class_ < 80 && class_ >= 60)
+    else if (class_ >= 60)
     {
         d.homework += random() % 2 + 3;
         d.family += random() % 2 + 3;
@@ -2596,7 +2615,7 @@ static int pip_job_workC(void)
         workmoney = 150 + (d.cookskill * 2 + d.homework * 2) / 50;
         vmsg("普普通通啦..可以更好的..加油..");
     }
-    else if (class_ < 60)
+    else
     {
         d.homework += random() % 2 + 1;
         d.family += random() % 2 + 1;
@@ -2639,17 +2658,17 @@ static int pip_job_workD(void)
         workmoney = 250 + (d.wrist * 2 + d.hp * 2) / 80;
         vmsg("牛羊長的好好喔..希望你再來幫忙...");
     }
-    else if (class_ < 95 && class_ >= 80)
+    else if (class_ >= 80)
     {
         workmoney = 210 + (d.wrist * 2 + d.hp * 2) / 80;
         vmsg("呵呵..還不錯喔..:)");
     }
-    else if (class_ < 80 && class_ >= 60)
+    else if (class_ >= 60)
     {
         workmoney = 160 + (d.wrist * 2 + d.hp * 2) / 80;
         vmsg("普普通通啦..可以更好的..");
     }
-    else if (class_ < 60)
+    else
     {
         workmoney = 120 + (d.wrist * 2 + d.hp * 2) / 80;
         vmsg("你不太適合農場的工作  -_-...");
@@ -2689,7 +2708,7 @@ static int pip_job_workE(void)
         workmoney = 250 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
         vmsg("客人都說太好吃了..再來一盤吧...");
     }
-    else if (class_ < 80 && class_ >= 60)
+    else if (class_ >= 60)
     {
         d.homework += random() % 2 + 1;
         d.family += random() % 2 + 1;
@@ -2700,7 +2719,7 @@ static int pip_job_workE(void)
         workmoney = 200 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
         vmsg("煮的還不錯吃唷..:)");
     }
-    else if (class_ < 60 && class_ >= 30)
+    else if (class_ >= 30)
     {
         d.homework += random() % 2 + 1;
         d.family += random() % 2 + 1;
@@ -2711,7 +2730,7 @@ static int pip_job_workE(void)
         workmoney = 150 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
         vmsg("普普通通啦..可以更好的..");
     }
-    else if (class_ < 30)
+    else
     {
         d.homework += random() % 2 + 1;
         d.family += random() % 2 + 1;
@@ -2752,17 +2771,17 @@ static int pip_job_workF(void)
         workmoney = 100 + (d.belief + d.ethics - d.offense) / 20;
         vmsg("錢很少 但看你這麼認真 給你多一點...");
     }
-    else if (class_ < 75 && class_ >= 50)
+    else if (class_ >= 50)
     {
         workmoney = 75 + (d.belief + d.ethics - d.offense) / 20;
         vmsg("謝謝你的熱心幫忙..:)");
     }
-    else if (class_ < 50 && class_ >= 25)
+    else if (class_ >= 25)
     {
         workmoney = 50 + (d.belief + d.ethics - d.offense) / 20;
         vmsg("你真的很有愛心啦..不過有點小累的樣子...");
     }
-    else if (class_ < 25)
+    else
     {
         workmoney = 25 + (d.belief + d.ethics - d.offense) / 20;
         vmsg("來奉獻不錯..但也不能打混ㄚ....:(");
@@ -2832,17 +2851,17 @@ static int pip_job_workH(void)
         workmoney = 350 + d.wrist / 20 + d.maxhp / 80;
         vmsg("你腕力很好唷..:)");
     }
-    else if (class_ < 70 && class_ >= 50)
+    else if (class_ >= 50)
     {
         workmoney = 300 + d.wrist / 20 + d.maxhp / 80;
         vmsg("砍了不少樹喔.....:)");
     }
-    else if (class_ < 50 && class_ >= 20)
+    else if (class_ >= 20)
     {
         workmoney = 250 + d.wrist / 20 + d.maxhp / 80;
         vmsg("普普通通啦..可以更好的..");
     }
-    else if (class_ < 20)
+    else
     {
         workmoney = 200 + d.wrist / 20 + d.maxhp / 80;
         vmsg("待加強喔..鍛鍊再來吧....");
@@ -2885,17 +2904,17 @@ static int pip_job_workI(void)
         workmoney = 400 + d.art / 10 + d.affect / 20;
         vmsg("客人都很喜歡讓你做造型唷..:)");
     }
-    else if (class_ < 80 && class_ >= 60)
+    else if (class_ >= 60)
     {
         workmoney = 360 + d.art / 10 + d.affect / 20;
         vmsg("做的不錯喔..頗有天份...:)");
     }
-    else if (class_ < 60 && class_ >= 40)
+    else if (class_ >= 40)
     {
         workmoney = 320 + d.art / 10 + d.affect / 20;
         vmsg("馬馬虎虎啦..再加油一點..");
     }
-    else if (class_ < 40)
+    else
     {
         workmoney = 250 + d.art / 10 + d.affect / 20;
         vmsg("待加強喔..以後再來吧....");
@@ -2949,25 +2968,25 @@ static int pip_job_workJ(void)
         workmoney = 300 + d.maxhp / 50 + d.hskill / 20;
         vmsg("你是完美的獵人..");
     }
-    else if ((class_ < 75 && class_ >= 50) && class1 >= 60)
+    else if (class_ >= 50 && class1 >= 60)
     {
         d.hskill += random() % 2 + 5;
         workmoney = 270 + d.maxhp / 45 + d.hskill / 20;
         vmsg("收獲還不錯喔..可以飽餐\一頓了..:)");
     }
-    else if ((class_ < 50 && class_ >= 25) && class1 >= 40)
+    else if (class_ >= 25 && class1 >= 40)
     {
         d.hskill += random() % 2 + 3;
         workmoney = 240 + d.maxhp / 40 + d.hskill / 20;
         vmsg("技術差強人意  再加油喔..");
     }
-    else if ((class_ < 25 && class_ >= 0) && class1 >= 20)
+    else if (class_ >= 0 && class1 >= 20)
     {
         d.hskill += random() % 2 + 1;
         workmoney = 210 + d.maxhp / 30 + d.hskill / 20;
         vmsg("狩獵是體力與智力的結合....");
     }
-    else if (class_ < 0)
+    else
     {
         d.hskill += random() % 2;
         workmoney = 190 + d.hskill / 20;
@@ -3012,17 +3031,17 @@ static int pip_job_workK(void)
         workmoney = 250 + d.maxhp / 50;
         vmsg("工程很完美  謝謝你了..");
     }
-    else if (class_ < 75 && class_ >= 50)
+    else if (class_ >= 50)
     {
         workmoney = 220 + d.maxhp / 45;
         vmsg("工程尚稱順利  辛苦你了..");
     }
-    else if (class_ < 50 && class_ >= 25)
+    else if (class_ >= 25)
     {
         workmoney = 200 + d.maxhp / 40;
         vmsg("工程差強人意  再加油喔..");
     }
-    else if (class_ < 25 && class_ >= 0)
+    else if (class_ >= 0)
     {
         workmoney = 180 + d.maxhp / 30;
         vmsg("ㄜ  待加強待加強....");
@@ -3075,13 +3094,13 @@ static int pip_job_workL(void)
         workmoney = 200 + (d.affect + d.brave) / 40;
         vmsg("守墓成功\喔  給你多點錢");
     }
-    else if ((class_ < 75 && class_ >= 50) && class1 >= 50)
+    else if (class_ >= 50 && class1 >= 50)
     {
         d.mresist += random() % 2 + 5;
         workmoney = 150 + (d.affect + d.brave) / 50;
         vmsg("守墓還算成功\喔..謝啦..");
     }
-    else if ((class_ < 50 && class_ >= 25) && class1 >= 25)
+    else if (class_ >= 25 && class1 >= 25)
     {
         d.mresist += random() % 2 + 3;
         workmoney = 120 + (d.affect + d.brave) / 60;
@@ -3168,14 +3187,14 @@ static int pip_job_workN(void)
         workmoney = 500 + (d.charm) / 5;
         vmsg("你很紅唷  :)");
     }
-    else if ((class_ < 75 && class_ >= 50) && class1 >= 50)
+    else if (class_ >= 50 && class1 >= 50)
     {
         d.cookskill += random() % 2 + 5;
         d.speech += random() % 2 + 5;
         workmoney = 400 + (d.charm) / 5;
         vmsg("蠻受歡迎的耶....");
     }
-    else if ((class_ < 50 && class_ >= 25) && class1 >= 25)
+    else if (class_ >= 25 && class1 >= 25)
     {
         d.cookskill += random() % 2 + 4;
         d.speech += random() % 2 + 3;
@@ -3235,14 +3254,14 @@ static int pip_job_workO(void)
         workmoney = 600 + (d.charm) / 5;
         vmsg("你是本店的紅牌唷  :)");
     }
-    else if (class_ < 75 && class_ >= 50)
+    else if (class_ >= 50)
     {
         d.relation -= random() % 5 + 8;
         d.toman -= random() % 5 + 8;
         workmoney = 500 + (d.charm) / 5;
         vmsg("你蠻受歡迎的耶..:)");
     }
-    else if (class_ < 50 && class_ >= 25)
+    else if (class_ >= 25)
     {
         d.relation -= random() % 5 + 5;
         d.toman -= random() % 5 + 5;
@@ -3308,14 +3327,14 @@ static int pip_job_workP(void)
         workmoney = 1000 + (d.charm) / 5;
         vmsg("你是夜總會最閃亮的星星唷  :)");
     }
-    else if ((class_ < 75 && class_ >= 50) && class1 > 20)
+    else if (class_ >= 50 && class1 > 20)
     {
         d.speech += random() % 5 + 8;
         d.toman -= random() % 5 + 8;
         workmoney = 800 + (d.charm) / 5;
         vmsg("嗯嗯..你蠻受歡迎的耶..:)");
     }
-    else if ((class_ < 50 && class_ >= 25) && class1 > 10)
+    else if (class_ >= 25 && class1 > 10)
     {
         d.speech += random() % 5 + 5;
         d.toman -= random() % 5 + 5;
@@ -3555,7 +3574,7 @@ static int pip_play_outing(void)       /*郊遊*/
             outs("\x1b[1;36m小天使我決定給你獎賞鼓勵鼓勵  偷偷地幫助你一下....^_^\x1b[0m");
             move(b_lines - 3, d_cols/2U + 10);
             lucky = random() % 7;
-            if (lucky == 6)
+            if (lucky >= 6)
             {
                 outs("\x1b[1;33m我將幫你的各項能力全部提升百分之五喔......\x1b[0m");
                 d.maxhp = d.maxhp * 105 / 100;
@@ -3573,7 +3592,7 @@ static int pip_play_outing(void)       /*郊遊*/
                 d.homework = d.homework * 105 / 100;
             }
 
-            else if (lucky <= 5 && lucky >= 4)
+            else if (lucky >= 4)
             {
                 outs("\x1b[1;33m我將幫你的戰鬥能力全部提升百分之十喔.......\x1b[0m");
                 d.attack = d.attack * 110 / 100;
@@ -3582,7 +3601,7 @@ static int pip_play_outing(void)       /*郊遊*/
                 d.brave = d.brave * 110 / 100;
             }
 
-            else if (lucky <= 3 && lucky >= 2)
+            else if (lucky >= 2)
             {
                 outs("\x1b[1;33m我將幫你的魔法能力和生命力全部提升百分之十喔.......\x1b[0m");
                 d.maxhp = d.maxhp * 110 / 100;
@@ -3590,7 +3609,7 @@ static int pip_play_outing(void)       /*郊遊*/
                 d.maxmp = d.maxmp * 110 / 100;
                 d.mp = d.maxmp;
             }
-            else if (lucky <= 1 && lucky >= 0)
+            else
             {
                 outs("\x1b[1;33m我將幫你的感受能力全部提升百分之二十喔....\x1b[0m");
                 d.character = d.character * 110 / 100;
@@ -5082,7 +5101,7 @@ int first)
             add_io(fd, 60);
             if (opponent->pip->hp <= 0)
                 vmsg("對方死掉囉..所以你贏囉..");
-            else if (opponent->pip->hp > 0)
+            else
                 vmsg("對方落跑囉..所以算你贏囉.....");
         }
         if (gameover != 1 && (opponent->pip->pipmode == 2 || currutmp->pip->pipmode == 1))
@@ -5295,7 +5314,7 @@ int *endmode, int *endgrade)
     }
     else if (d.lover == 10)
         sprintf(buf2, "%s", buf1);
-    else if (d.lover == 0)
+    else
     {
         if (d.sex == 1)
             sprintf(buf2, "%s", name[0][1]);
@@ -5499,7 +5518,7 @@ int *m, int *n, int *grade)
             d.lover = 10;
             if (d.character >= 700)
                 *n = 0;
-            else if (d.character < 700 && d.character >= 500)
+            else if (d.character >= 500)
                 *n = 1;
             else
                 *n = 2;
@@ -5510,7 +5529,7 @@ int *m, int *n, int *grade)
             d.lover = 10;
             if (d.character >= 700)
                 *n = 0;
-            else if (d.character < 700 && d.character >= 500)
+            else if (d.character >= 500)
                 *n = 1;
             else
                 *n = 2;
@@ -5522,7 +5541,7 @@ int *m, int *n, int *grade)
         d.lover = 10;
         if (d.character >= 700)
             *n = 0;
-        else if (d.character < 700 && d.character >= 500)
+        else if (d.character >= 500)
             *n = 1;
         else
             *n = 2;
@@ -5535,7 +5554,7 @@ int *m, int *n, int *grade)
             d.lover = 10;
             if (d.toman >= 250)
                 *n = 0;
-            else if (d.toman < 250 && d.toman >= 200)
+            else if (d.toman >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5546,7 +5565,7 @@ int *m, int *n, int *grade)
             d.lover = 10;
             if (d.character >= 400)
                 *n = 0;
-            else if (d.character < 400 && d.character >= 300)
+            else if (d.character >= 300)
                 *n = 1;
             else
                 *n = 2;
@@ -5560,7 +5579,7 @@ int *m, int *n, int *grade)
             d.lover = 10;
             if (d.toman > 120 && d.cookskill > 300 && d.homework > 300)
                 *n = 0;
-            else if (d.toman < 120 && d.cookskill < 300 && d.homework < 300 && d.toman > 100 && d.cookskill > 250 && d.homework > 250)
+            else if (d.toman > 100 && d.cookskill > 250 && d.homework > 250)
                 *n = 1;
             else
                 *n = 2;
@@ -5571,7 +5590,7 @@ int *m, int *n, int *grade)
             d.lover = 10;
             if (d.hp >= 400)
                 *n = 0;
-            else if (d.hp < 400 && d.hp >= 300)
+            else if (d.hp >= 300)
                 *n = 1;
             else
                 *n = 2;
@@ -5583,7 +5602,7 @@ int *m, int *n, int *grade)
         d.lover = 10;
         if (d.charm >= 200)
             *n = 0;
-        else if (d.charm < 200 && d.charm >= 100)
+        else if (d.charm >= 100)
             *n = 1;
         else
             *n = 2;
@@ -5617,7 +5636,7 @@ int *m, int *n, int *grade)
             *m = 0;
             if (d.ethics >= 800)
                 *n = 0;
-            else if (d.ethics < 800 && d.ethics >= 400)
+            else if (d.ethics >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -5627,7 +5646,7 @@ int *m, int *n, int *grade)
             *m = 3;
             if (d.hp >= 400)
                 *n = 0;
-            else if (d.hp < 400 && d.hp >= 200)
+            else if (d.hp >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5637,7 +5656,7 @@ int *m, int *n, int *grade)
             *m = 1;
             if (d.wisdom >= 800)
                 *n = 0;
-            else if (d.wisdom < 800 && d.wisdom >= 400)
+            else if (d.wisdom >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -5650,7 +5669,7 @@ int *m, int *n, int *grade)
             *m = 2;
             if (d.wisdom >= 500)
                 *n = 0;
-            else if (d.wisdom < 500 && d.wisdom >= 200)
+            else if (d.wisdom >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5660,7 +5679,7 @@ int *m, int *n, int *grade)
             *m = 3;
             if (d.hp >= 400)
                 *n = 0;
-            else if (d.hp < 400 && d.hp >= 200)
+            else if (d.hp >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5671,7 +5690,7 @@ int *m, int *n, int *grade)
         *m = 4;
         if (d.mskill >= 300)
             *n = 0;
-        else if (d.mskill < 300 && d.mskill >= 150)
+        else if (d.mskill >= 150)
             *n = 1;
         else
             *n = 2;
@@ -5681,7 +5700,7 @@ int *m, int *n, int *grade)
         *m = 5;
         if (d.speech >= 150)
             *n = 0;
-        else if (d.speech < 150 && d.speech >= 60)
+        else if (d.speech >= 60)
             *n = 1;
         else
             *n = 2;
@@ -5693,7 +5712,7 @@ int *m, int *n, int *grade)
             *m = 6;
             if (d.speech >= 150)
                 *n = 0;
-            else if (d.speech < 150 && d.speech >= 60)
+            else if (d.speech >= 60)
                 *n = 1;
             else
                 *n = 2;
@@ -5703,7 +5722,7 @@ int *m, int *n, int *grade)
             *m = 7;
             if (d.speech >= 150)
                 *n = 0;
-            else if (d.speech < 150 && d.speech >= 60)
+            else if (d.speech >= 60)
                 *n = 1;
             else
                 *n = 2;
@@ -5739,7 +5758,7 @@ int *m, int *n, int *grade)
             *m = 0;
             if (d.ethics >= 800)
                 *n = 0;
-            else if (d.ethics < 800 && d.ethics >= 400)
+            else if (d.ethics >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -5759,7 +5778,7 @@ int *m, int *n, int *grade)
             *m = 1;
             if (d.wisdom >= 800)
                 *n = 0;
-            else if (d.wisdom < 800 && d.wisdom >= 400)
+            else if (d.wisdom >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -5772,17 +5791,17 @@ int *m, int *n, int *grade)
             *m = 2;
             if (d.ethics >= 300 && d.charm >= 300)
                 *n = 0;
-            else if (d.ethics < 300 && d.charm < 300 && d.ethics >= 250 && d.charm >= 250)
+            else if (d.ethics >= 250 && d.charm >= 250)
                 *n = 1;
             else
                 *n = 2;
         }
-        else if (d.character < 300 && d.ethics > 50)
+        else if (d.ethics > 50)
         {
             *m = 3;
             if (d.speech >= 200)
                 *n = 0;
-            else if (d.speech < 150 && d.speech >= 80)
+            else if (d.speech >= 80)
                 *n = 1;
             else
                 *n = 2;
@@ -5792,7 +5811,7 @@ int *m, int *n, int *grade)
             *m = 6;
             if (d.hp >= 400)
                 *n = 0;
-            else if (d.hp < 400 && d.hp >= 200)
+            else if (d.hp >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5805,17 +5824,17 @@ int *m, int *n, int *grade)
             *m = 4;
             if (d.ethics >= 300)
                 *n = 0;
-            else if (d.ethics < 300 && d.ethics >= 150)
+            else if (d.ethics >= 150)
                 *n = 1;
             else
                 *n = 2;
         }
-        else if (d.character < 400 && d.ethics > 50)
+        else if (d.ethics > 50)
         {
             *m = 3;
             if (d.speech >= 200)
                 *n = 0;
-            else if (d.speech < 150 && d.speech >= 80)
+            else if (d.speech >= 80)
                 *n = 1;
             else
                 *n = 2;
@@ -5825,7 +5844,7 @@ int *m, int *n, int *grade)
             *m = 6;
             if (d.hp >= 400)
                 *n = 0;
-            else if (d.hp < 400 && d.hp >= 200)
+            else if (d.hp >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5843,7 +5862,7 @@ int *m, int *n, int *grade)
         }
         if (d.hskill >= 100)
             *n = 0;
-        else if (d.hskill < 100 && d.hskill >= 80)
+        else if (d.hskill >= 80)
             *n = 1;
         else
             *n = 2;
@@ -5867,7 +5886,7 @@ int *m, int *n, int *grade)
     *m = 0;
     if (d.charm >= 200)
         *n = 0;
-    else if (d.charm < 200 && d.charm > 100)
+    else if (d.charm > 100)
         *n = 1;
     else
         *n = 2;
@@ -5914,7 +5933,7 @@ int mode)
             *m = 0;
             if (d.ethics >= 900)
                 *n = 0;
-            else if (d.ethics < 900 && d.ethics >= 600)
+            else if (d.ethics >= 600)
                 *n = 1;
             else
                 *n = 2;
@@ -5924,7 +5943,7 @@ int mode)
             *m = 1;
             if (d.ethics >= 650)
                 *n = 0;
-            else if (d.ethics < 650 && d.ethics >= 400)
+            else if (d.ethics >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -5937,7 +5956,7 @@ int mode)
             *m = 2;
             if (d.ethics >= 500)
                 *n = 0;
-            else if (d.ethics < 500 && d.ethics >= 250)
+            else if (d.ethics >= 250)
                 *n = 1;
             else
                 *n = 2;
@@ -5947,7 +5966,7 @@ int mode)
             *m = 3;
             if (d.wisdom >= 800)
                 *n = 0;
-            else if (d.wisdom < 800 && d.wisdom >= 600)
+            else if (d.wisdom >= 600)
                 *n = 1;
             else
                 *n = 2;
@@ -5957,7 +5976,7 @@ int mode)
             *m = 4;
             if (d.affect >= 800)
                 *n = 0;
-            else if (d.affect < 800 && d.affect >= 400)
+            else if (d.affect >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -5970,7 +5989,7 @@ int mode)
             *m = 5;
             if (d.belief >= 400)
                 *n = 0;
-            else if (d.belief < 400 && d.belief >= 150)
+            else if (d.belief >= 150)
                 *n = 1;
             else
                 *n = 2;
@@ -5980,7 +5999,7 @@ int mode)
             *m = 6;
             if (d.wisdom >= 700)
                 *n = 0;
-            else if (d.wisdom < 700 && d.wisdom >= 400)
+            else if (d.wisdom >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -5990,7 +6009,7 @@ int mode)
             *m = 7;
             if (d.affect >= 800)
                 *n = 0;
-            else if (d.affect < 800 && d.affect >= 400)
+            else if (d.affect >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -6169,7 +6188,7 @@ int *m, int *n, int *grade)
         *m = 0;
         if (d.hp >= 300 && d.affect >= 350)
             *n = 0;
-        else if (d.hp < 300 && d.affect < 350 && d.hp >= 250 && d.affect >= 300)
+        else if (d.hp >= 250 && d.affect >= 300)
             *n = 1;
         else
             *n = 2;
@@ -6179,7 +6198,7 @@ int *m, int *n, int *grade)
         *m = 1;
         if (d.affect >= 500)
             *n = 0;
-        else if (d.affect < 500 && d.affect >= 450)
+        else if (d.affect >= 450)
             *n = 1;
         else
             *n = 2;
@@ -6189,7 +6208,7 @@ int *m, int *n, int *grade)
         *m = 2;
         if (d.affect >= 350)
             *n = 0;
-        else if (d.affect < 350 && d.affect >= 300)
+        else if (d.affect >= 300)
             *n = 1;
         else
             *n = 2;
@@ -6199,7 +6218,7 @@ int *m, int *n, int *grade)
         *m = 3;
         if (d.affect >= 200 && d.hp > 150)
             *n = 0;
-        else if (d.affect < 200 && d.affect >= 180 && d.hp > 150)
+        else if (d.affect >= 180 && d.hp > 150)
             *n = 1;
         else
             *n = 2;
@@ -6490,29 +6509,29 @@ const char *userid)
         fgets(buf, 80, fs);
         age = ((time_t) atol(buf)) / 60 / 30;
 
-        if (age == 0)                     /*誕生*/
+        if (age <= 0)        /*誕生*/
             age1 = 0;
-        else if (age == 1)                /*嬰兒*/
+        else if (age <= 1)   /*嬰兒*/
             age1 = 1;
-        else if (age >= 2 && age <= 5)    /*幼兒*/
+        else if (age <= 5)   /*幼兒*/
             age1 = 2;
-        else if (age >= 6 && age <= 12)   /*兒童*/
+        else if (age <= 12)  /*兒童*/
             age1 = 3;
-        else if (age >= 13 && age <= 15)  /*少年*/
+        else if (age <= 15)  /*少年*/
             age1 = 4;
-        else if (age >= 16 && age <= 18)  /*青年*/
+        else if (age <= 18)  /*青年*/
             age1 = 5;
-        else if (age >= 19 && age <= 35)  /*成年*/
+        else if (age <= 35)  /*成年*/
             age1 = 6;
-        else if (age >= 36 && age <= 45)  /*壯年*/
+        else if (age <= 45)  /*壯年*/
             age1 = 7;
-        else if (age >= 45 && age <= 60)  /*更年*/
+        else if (age <= 60)  /*更年*/
             age1 = 8;
-        else if (age >= 60 && age <= 70)  /*老年*/
+        else if (age <= 70)  /*老年*/
             age1 = 9;
-        else if (age >= 70 && age <= 100) /*古稀*/
+        else if (age <= 100) /*古稀*/
             age1 = 10;
-        else if (age > 100)               /*神仙*/
+        else                 /*神仙*/
             age1 = 11;
 
         fscanf(fs,
@@ -6562,36 +6581,36 @@ const char *userid)
             case 2:
                 if (weight1 <= (60 + 10*age - 30))
                     show_basic_pic(1);
-                else if (weight1 > (60 + 10*age - 30) && weight1 < (60 + 10*age + 30))
+                else if (weight1 < (60 + 10*age + 30))
                     show_basic_pic(2);
-                else if (weight1 >= (60 + 10*age + 30))
+                else
                     show_basic_pic(3);
                 break;
             case 3:
             case 4:
                 if (weight1 <= (60 + 10*age - 30))
                     show_basic_pic(4);
-                else if (weight1 > (60 + 10*age - 30) && weight1 < (60 + 10*age + 30))
+                else if (weight1 < (60 + 10*age + 30))
                     show_basic_pic(5);
-                else if (weight1 >= (60 + 10*age + 30))
+                else
                     show_basic_pic(6);
                 break;
             case 5:
             case 6:
                 if (weight1 <= (60 + 10*age - 30))
                     show_basic_pic(7);
-                else if (weight1 > (60 + 10*age - 30) && weight1 < (60 + 10*age + 30))
+                else if (weight1 < (60 + 10*age + 30))
                     show_basic_pic(8);
-                else if (weight1 >= (60 + 10*age + 30))
+                else
                     show_basic_pic(9);
                 break;
             case 7:
             case 8:
                 if (weight1 <= (60 + 10*age - 30))
                     show_basic_pic(10);
-                else if (weight1 > (60 + 10*age - 30) && weight1 < (60 + 10*age + 30))
+                else if (weight1 < (60 + 10*age + 30))
                     show_basic_pic(11);
-                else if (weight1 >= (60 + 10*age + 30))
+                else
                     show_basic_pic(12);
                 break;
             case 9:
@@ -6603,48 +6622,54 @@ const char *userid)
                 break;
             }
             move(b_lines - 5, 0);
-            if (shit1 == 0) outs("很乾淨..");
-            if (shit1 > 40 && shit1 < 60) outs("臭臭的..");
-            if (shit1 >= 60 && shit1 < 80) outs("好臭喔..");
-            if (shit1 >= 80 && shit1 < 100) outs("\x1b[1;34m快臭死了..\x1b[m");
-            if (shit1 >= 100) { outs("\x1b[1;31m臭死了..\x1b[m"); return -1; }
+            if (shit1 <= 0) outs("很乾淨..");
+            else if (shit1 <= 40) { }
+            else if (shit1 < 60) outs("臭臭的..");
+            else if (shit1 < 80) outs("好臭喔..");
+            else if (shit1 < 100) outs("\x1b[1;34m快臭死了..\x1b[m");
+            else { outs("\x1b[1;31m臭死了..\x1b[m"); return -1; }
 
             pc1 = hp1 * 100 / maxhp1;
-            if (pc1 == 0) { outs("餓死了.."); return -1; }
-            if (pc1 < 20) outs("\x1b[1;35m全身無力中.快餓死了.\x1b[m");
-            if (pc1 < 40 && pc1 >= 20) outs("體力不太夠..想吃點東西..");
-            if (pc1 < 100 && pc1 >= 80) outs("嗯～肚子飽飽有體力..");
-            if (pc1 >= 100) outs("\x1b[1;34m快撐死了..\x1b[m");
+            if (pc1 <= 0) { outs("餓死了.."); return -1; }
+            else if (pc1 < 20) outs("\x1b[1;35m全身無力中.快餓死了.\x1b[m");
+            else if (pc1 < 40) outs("體力不太夠..想吃點東西..");
+            else if (pc1 < 80) { }
+            else if (pc1 < 100) outs("嗯～肚子飽飽有體力..");
+            else outs("\x1b[1;34m快撐死了..\x1b[m");
 
             pc1 = tired1;
             if (pc1 < 20) outs("精神抖擻中..");
-            if (pc1 < 80 && pc1 >= 60) outs("\x1b[1;34m有點小累..\x1b[m");
-            if (pc1 < 100 && pc1 >= 80) { outs("\x1b[1;31m好累喔，快不行了..\x1b[m"); }
-            if (pc1 >= 100) { outs("累死了..."); return -1; }
+            else if (pc1 < 60) { }
+            else if (pc1 < 80) outs("\x1b[1;34m有點小累..\x1b[m");
+            else if (pc1 < 100) { outs("\x1b[1;31m好累喔，快不行了..\x1b[m"); }
+            else { outs("累死了..."); return -1; }
 
             pc1 = 60 + 10 * age;
-            if (weight1 < (pc1 + 30) && weight1 >= (pc1 + 10)) outs("有點小胖..");
-            if (weight1 < (pc1 + 50) && weight1 >= (pc1 + 30)) outs("太胖了..");
-            if (weight1 > (pc1 + 50)) { outs("胖死了..."); return -1; }
-
             if (weight1 < (pc1 - 50)) { outs("瘦死了.."); return -1; }
-            if (weight1 > (pc1 - 30) && weight1 <= (pc1 - 10)) outs("有點小瘦..");
-            if (weight1 > (pc1 - 50) && weight1 <= (pc1 - 30)) outs("太瘦了..");
+            else if (weight1 <= (pc1 - 30)) outs("太瘦了..");
+            else if (weight1 <= (pc1 - 10)) outs("有點小瘦..");
+            else if (weight1 < (pc1 + 10)) { }
+            else if (weight1 < (pc1 + 30)) outs("有點小胖..");
+            else if (weight1 < (pc1 + 50)) outs("太胖了..");
+            else { outs("胖死了..."); return -1; }
 
-            if (sick1 < 75 && sick1 >= 50) outs("\x1b[1;34m生病了..\x1b[m");
-            if (sick1 < 100 && sick1 >= 75) { outs("\x1b[1;31m病重!!..\x1b[m"); }
-            if (sick1 >= 100) { outs("病死了.!."); return -1; }
+            if (sick1 < 50) { }
+            else if (sick1 < 75) outs("\x1b[1;34m生病了..\x1b[m");
+            else if (sick1 < 100) { outs("\x1b[1;31m病重!!..\x1b[m"); }
+            else { outs("病死了.!."); return -1; }
 
             pc1 = happy1;
             if (pc1 < 20) outs("\x1b[1;31m很不快樂..\x1b[m");
-            if (pc1 < 40 && pc1 >= 20) outs("不快樂..");
-            if (pc1 < 95 && pc1 >= 80) outs("快樂..");
-            if (pc1 <= 100 && pc1 >= 95) outs("很快樂..");
+            else if (pc1 < 40) outs("不快樂..");
+            else if (pc1 < 80) { }
+            else if (pc1 < 95) outs("快樂..");
+            else outs("很快樂..");
 
             pc1 = satisfy1;
             if (pc1 < 40) outs("\x1b[31;1m不滿足..\x1b[m");
-            if (pc1 < 95 && pc1 >= 80) outs("滿足..");
-            if (pc1 <= 100 && pc1 >= 95) outs("很滿足..");
+            else if (pc1 < 80) { }
+            else if (pc1 < 95) outs("滿足..");
+            else outs("很滿足..");
         }
         else if (death1 == 1)
         {
@@ -7033,7 +7058,7 @@ int class_, int mob, int plus)
     {
         man = random() % mob + plus;
     }
-    else if (lucky <= (class_*4 + 4) && lucky > (class_*2 + 2))
+    else if (lucky <= (class_*4 + 4))
     {
         man = random() % (mob + plus / 2) + (plus / 2);
     }
@@ -7087,24 +7112,26 @@ pip_meet_vs_man(void)
             continue;
         if (ans == 'f' || ans == 'F')
             pip_basic_feed();
-        else if (lucky == 1999)
+        else if (lucky >= 1999)
         {
             vmsg("遇到大魔王啦！");
         }
-        else if (lucky < 1000)
+        else if (lucky >= 1000)
+        {
+            vmsg("沒發生任何事！");
+        }
+        else
         {
             if (class_ < 20)
             {
                 man = get_man(class_, mob[1+class_][0], mob[1+class_][1]);
             }
-            else if (class_ >= 20)
+            else
             {
                 man = get_man(class_, mob[21][0], mob[21][1]);
             }
             pip_fight_bad(man);
         }
-        else
-            vmsg("沒發生任何事！");
     }
     return 0;
 }
@@ -7508,13 +7535,13 @@ int mode)
         {
             mresistmode = 0;
             lucky = random() % 100;
-            if (lucky >= 0 && lucky <= 50)
+            if (lucky <= 50)
                 mankey = 1;
-            else if (lucky >= 51 && lucky <= 84)
+            else if (lucky <= 84)
                 mankey = 2;
-            else if (lucky >= 85 && lucky <= 97)
+            else if (lucky <= 97)
                 mankey = 3;
-            else if (lucky >= 98)
+            else
                 mankey = 4;
             switch (mankey)
             {
@@ -7589,7 +7616,7 @@ int mode)
                             else
                                 sprintf(inbuf1, "寒氣鬼");
                         }
-                        else if (m.mp < (m.maxmp / 2) && m.mp >= (m.maxmp / 4))
+                        else if (m.mp >= (m.maxmp / 4))
                         {
                             minjure = m.maxmp / 5;
                             m.mp -= (300 + random() % 200);
@@ -7598,7 +7625,7 @@ int mode)
                             else
                                 sprintf(inbuf1, "怒土虫");
                         }
-                        else if (m.mp < (m.maxmp / 4) && m.mp >= (m.maxmp / 6))
+                        else if (m.mp >= (m.maxmp / 6))
                         {
                             minjure = m.maxmp / 6;
                             m.mp -= (100 + random() % 100);
@@ -7607,7 +7634,7 @@ int mode)
                             else
                                 sprintf(inbuf1, "石怪");
                         }
-                        else if (m.mp < (m.maxmp / 6) && m.mp >= 0)
+                        else
                         {
                             minjure = m.maxmp / 8;
                             m.mp -= 50;
@@ -8428,29 +8455,29 @@ int mode)
     /*長大一歲時的增加改變值*/
     color = 37;
 
-    if (m == 0)                   /*誕生*/
+    if (m <= 0)         /*誕生*/
         age = 0;
-    else if (m == 1)              /*嬰兒*/
+    else if (m <= 1)    /*嬰兒*/
         age = 1;
-    else if (m >= 2 && m <= 5)    /*幼兒*/
+    else if (m <= 5)    /*幼兒*/
         age = 2;
-    else if (m >= 6 && m <= 12)   /*兒童*/
+    else if (m <= 12)   /*兒童*/
         age = 3;
-    else if (m >= 13 && m <= 15)  /*少年*/
+    else if (m <= 15)   /*少年*/
         age = 4;
-    else if (m >= 16 && m <= 18)  /*青年*/
+    else if (m <= 18)   /*青年*/
         age = 5;
-    else if (m >= 19 && m <= 35)  /*成年*/
+    else if (m <= 35)   /*成年*/
         age = 6;
-    else if (m >= 36 && m <= 45)  /*壯年*/
+    else if (m <= 45)   /*壯年*/
         age = 7;
-    else if (m >= 45 && m <= 60)  /*更年*/
+    else if (m <= 60)   /*更年*/
         age = 8;
-    else if (m >= 60 && m <= 70)  /*老年*/
+    else if (m <= 70)   /*老年*/
         age = 9;
-    else if (m >= 70 && m <= 100) /*古稀*/
+    else if (m <= 100)  /*古稀*/
         age = 10;
-    else if (m > 100)             /*神仙*/
+    else                /*神仙*/
         age = 11;
     clear();
     move(0, 0);
@@ -8464,7 +8491,7 @@ int mode)
     move(1, 0);
     if (d.money <= 100)
         color1 = 31;
-    else if (d.money > 100 && d.money <= 500)
+    else if (d.money <= 500)
         color1 = 33;
     else
         color1 = 37;
@@ -8476,7 +8503,7 @@ int mode)
 
     if ((d.hp*100 / d.maxhp) <= 20)
         color1 = 31;
-    else if ((d.hp*100 / d.maxhp) <= 40 && (d.hp*100 / d.maxhp) > 20)
+    else if ((d.hp*100 / d.maxhp) <= 40)
         color1 = 33;
     else
         color1 = 37;
@@ -8484,14 +8511,14 @@ int mode)
         color2 = 37;
     else if ((d.mp*100 / d.maxmp) <= 20)
         color2 = 31;
-    else if ((d.mp*100 / d.maxmp) <= 40 && (d.mp*100 / d.maxmp) > 20)
+    else if ((d.mp*100 / d.maxmp) <= 40)
         color2 = 33;
     else
         color2 = 37;
 
     if (d.tired >= 80)
         color3 = 31;
-    else if (d.tired < 80 && d.tired >= 60)
+    else if (d.tired >= 60)
         color3 = 33;
     else
         color3 = 37;
@@ -8504,25 +8531,25 @@ int mode)
     move(3, 0);
     if (d.shit >= 80)
         color1 = 31;
-    else if (d.shit < 80 && d.shit >= 60)
+    else if (d.shit >= 60)
         color1 = 33;
     else
         color1 = 37;
     if (d.sick >= 75)
         color2 = 31;
-    else if (d.sick < 75 && d.sick >= 50)
+    else if (d.sick >= 50)
         color2 = 33;
     else
         color2 = 37;
     if (d.happy <= 20)
         color3 = 31;
-    else if (d.happy > 20 && d.happy <= 40)
+    else if (d.happy <= 40)
         color3 = 33;
     else
         color3 = 37;
     if (d.satisfy <= 20)
         color4 = 31;
-    else if (d.satisfy > 20 && d.satisfy <= 40)
+    else if (d.satisfy <= 40)
         color4 = 33;
     else
         color4 = 37;
@@ -8531,27 +8558,27 @@ int mode)
     if (mode == 1)/*餵食*/
     {
         move(4, 0);
-        if (d.food == 0)
+        if (d.food <= 0)
             color1 = 31;
-        else if (d.food <= 5 && d.food > 0)
+        else if (d.food <= 5)
             color1 = 33;
         else
             color1 = 37;
-        if (d.cookie == 0)
+        if (d.cookie <= 0)
             color2 = 31;
-        else if (d.cookie <= 5 && d.cookie > 0)
+        else if (d.cookie <= 5)
             color2 = 33;
         else
             color2 = 37;
-        if (d.bighp == 0)
+        if (d.bighp <= 0)
             color3 = 31;
-        else if (d.bighp <= 2 && d.bighp > 0)
+        else if (d.bighp <= 2)
             color3 = 33;
         else
             color3 = 37;
-        if (d.medicine == 0)
+        if (d.medicine <= 0)
             color4 = 31;
-        else if (d.medicine <= 5 && d.medicine > 0)
+        else if (d.medicine <= 5)
             color4 = 33;
         else
             color4 = 37;
@@ -8569,36 +8596,36 @@ int mode)
     case 2:
         if (d.weight <= (60 + 10*m - 30))
             show_basic_pic(1);
-        else if (d.weight > (60 + 10*m - 30) && d.weight < (60 + 10*m + 30))
+        else if (d.weight < (60 + 10*m + 30))
             show_basic_pic(2);
-        else if (d.weight >= (60 + 10*m + 30))
+        else
             show_basic_pic(3);
         break;
     case 3:
     case 4:
         if (d.weight <= (60 + 10*m - 30))
             show_basic_pic(4);
-        else if (d.weight > (60 + 10*m - 30) && d.weight < (60 + 10*m + 30))
+        else if (d.weight < (60 + 10*m + 30))
             show_basic_pic(5);
-        else if (d.weight >= (60 + 10*m + 30))
+        else
             show_basic_pic(6);
         break;
     case 5:
     case 6:
         if (d.weight <= (60 + 10*m - 30))
             show_basic_pic(7);
-        else if (d.weight > (60 + 10*m - 30) && d.weight < (60 + 10*m + 30))
+        else if (d.weight < (60 + 10*m + 30))
             show_basic_pic(8);
-        else if (d.weight >= (60 + 10*m + 30))
+        else
             show_basic_pic(9);
         break;
     case 7:
     case 8:
         if (d.weight <= (60 + 10*m - 30))
             show_basic_pic(10);
-        else if (d.weight > (60 + 10*m - 30) && d.weight < (60 + 10*m + 30))
+        else if (d.weight < (60 + 10*m + 30))
             show_basic_pic(11);
-        else if (d.weight >= (60 + 10*m + 30))
+        else
             show_basic_pic(12);
         break;
     case 9:
