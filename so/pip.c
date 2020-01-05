@@ -264,7 +264,6 @@ static void pip_new_game(void)
 
         /*開頭設定*/
         now = time(0);
-        strcpy(d.birth, dsyan_time(&now));
         d.bbtime = 0;
 
         /*基本資料*/

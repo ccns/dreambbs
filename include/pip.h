@@ -34,9 +34,8 @@ typedef struct
 
 
 struct chicken {  /* DISKDATA(format) */
-    /*---基本的資料---*/ //14
+    /*---基本的資料---*/ //13
     char name[20];      /*姓    名*/
-    char birth[21];     /*生    日*/
     int year;           /*生日  年*/
     int month;          /*生日  月*/
     int day;            /*生日  日*/
