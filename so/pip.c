@@ -7090,12 +7090,12 @@ get_man(
 int class_, int mob, int plus)
 {
     int lucky, man;
-    lucky = random() % (class_ * 5);
-    if (lucky <= (class_*2))
+    lucky = random() % (class_ * 5 + 5);
+    if (lucky <= (class_*2 + 2))
     {
         man = random() % mob + plus;
     }
-    else if (lucky <= (class_*4) && lucky > (class_*2))
+    else if (lucky <= (class_*4 + 4) && lucky > (class_*2 + 2))
     {
         man = random() % (mob + plus / 2) + (plus / 2);
     }
@@ -7112,7 +7112,7 @@ pip_meet_vs_man(void)
     int class_;
     int man, lucky;
     char ans;
-    class_ = (d.maxhp * 30 + d.maxmp * 20 + d.attack * 20 + d.resist * 15 + d.mexp * 5 + d.hexp * 5 + d.speed * 10) / 8500 + 1;
+    class_ = BMAX((d.maxhp * 30 + d.maxmp * 20 + d.attack * 20 + d.resist * 15 + d.mexp * 5 + d.hexp * 5 + d.speed * 10) / 8500, 0);
 
     move(b_lines - 1, 0);
     prints("\x1b[1;44;37m 區域 \x1b[46m[1]炎之洞窟  [2]北方冰原  [3]古代遺跡  [4]人工島  [5]地獄之門            %*s\x1b[m\n", d_cols, "");
@@ -7155,11 +7155,11 @@ pip_meet_vs_man(void)
         }
         else if (lucky < 1000)
         {
-            if (class_ >= 1 && class_ <= 20)
+            if (class_ < 20)
             {
-                man = get_man(class_, mob[class_][0], mob[class_][1]);
+                man = get_man(class_, mob[1+class_][0], mob[1+class_][1]);
             }
-            else if (class_ > 20)
+            else if (class_ >= 20)
             {
                 man = get_man(class_, mob[21][0], mob[21][1]);
             }
