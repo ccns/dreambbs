@@ -2069,6 +2069,8 @@ hdr_outs(               /* print HDR's subject */
                                  * N: N non-closed `[`s are meeted. */
         int angle = 0;
         int curly = 0;
+        bool dbcs_hi = false;
+
         if (*title == '[')
         {
             square = 0;
@@ -2080,7 +2082,7 @@ hdr_outs(               /* print HDR's subject */
 
 #ifdef  HAVE_DECLARE
             int *pcnt = NULL;
-            switch (cc)
+            switch ((dbcs_hi) ? '\0' : cc)
             {
             case '[':
             case ']':
@@ -2099,6 +2101,11 @@ hdr_outs(               /* print HDR's subject */
             }
             if (pcnt && *pcnt < 1 && (square >= 1 || angle >= 1 || curly >= 1))
                 pcnt = NULL;
+
+            if (dbcs_hi)
+                dbcs_hi = false;
+            else if (IS_DBCS_HI(cc))
+                dbcs_hi = true;
 
             switch ((pcnt) ? cc : '\0')
             {
