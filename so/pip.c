@@ -484,26 +484,26 @@ static int pip_play_menu(void), pip_job_menu(void), pip_special_menu(void), pip_
 
 static const struct pipcommands pipmainlist[] =
 {
-    {pip_basic_menu,            '1',    '1'},
-    {pip_store_menu,            '2',    '2'},
-    {pip_practice_menu,         '3',    '3'},
-    {pip_play_menu,             '4',    '4'},
-    {pip_job_menu,              '5',    '5'},
-    {pip_special_menu,          '6',    '6'},
-    {pip_system_menu,           '7',    '7'},
-    {NULL,                     '\0',   '\0'}
+    { '1', pip_basic_menu   },
+    { '2', pip_store_menu   },
+    { '3', pip_practice_menu},
+    { '4', pip_play_menu    },
+    { '5', pip_job_menu     },
+    { '6', pip_special_menu },
+    { '7', pip_system_menu  },
+    {'\0', NULL             }
 };
 
 /*基本選單*/
 static int pip_basic_feed(void), pip_basic_takeshower(void), pip_basic_takerest(void), pip_basic_kiss(void);
 static const struct pipcommands pipbasiclist[] =
 {
-    {pip_basic_feed,            '1',    '1'},
-    {pip_basic_takeshower,      '2',    '2'},
-    {pip_basic_takerest,        '3',    '3'},
-    {pip_basic_kiss,            '4',    '4'},
-    {pip_money,                 '5',    '5'},
-    {NULL,                     '\0',   '\0'}
+    { '1', pip_basic_feed      },
+    { '2', pip_basic_takeshower},
+    { '3', pip_basic_takerest  },
+    { '4', pip_basic_kiss      },
+    { '5', pip_money           },
+    {'\0', NULL                }
 };
 
 /*商店選單*/
@@ -513,15 +513,15 @@ static int pip_store_weapon_body(void), pip_store_weapon_foot(void);
 
 static const struct pipcommands pipstorelist[] =
 {
-    {pip_store_food,            '1',    '1'},
-    {pip_store_medicine,        '2',    '2'},
-    {pip_store_other,           '3',    '3'},
-    {pip_store_weapon_head,     'a',    'A'},
-    {pip_store_weapon_rhand,    'b',    'B'},
-    {pip_store_weapon_lhand,    'c',    'C'},
-    {pip_store_weapon_body,     'd',    'D'},
-    {pip_store_weapon_foot,     'e',    'E'},
-    {NULL,                     '\0',   '\0'}
+    { '1', pip_store_food        },
+    { '2', pip_store_medicine    },
+    { '3', pip_store_other       },
+    { 'a', pip_store_weapon_head },
+    { 'b', pip_store_weapon_rhand},
+    { 'c', pip_store_weapon_lhand},
+    { 'd', pip_store_weapon_body },
+    { 'e', pip_store_weapon_foot },
+    {'\0', NULL                  }
 };
 
 /*修行選單*/
@@ -532,17 +532,17 @@ static int pip_practice_classJ(void);
 
 static const struct pipcommands pippracticelist[] =
 {
-    {pip_practice_classA,       'a',    'A'},
-    {pip_practice_classB,       'b',    'B'},
-    {pip_practice_classC,       'c',    'C'},
-    {pip_practice_classD,       'd',    'D'},
-    {pip_practice_classE,       'e',    'E'},
-    {pip_practice_classF,       'f',    'F'},
-    {pip_practice_classG,       'g',    'G'},
-    {pip_practice_classH,       'h',    'H'},
-    {pip_practice_classI,       'i',    'I'},
-    {pip_practice_classJ,       'j',    'J'},
-    {NULL,                     '\0',   '\0'}
+    { 'a', pip_practice_classA},
+    { 'b', pip_practice_classB},
+    { 'c', pip_practice_classC},
+    { 'd', pip_practice_classD},
+    { 'e', pip_practice_classE},
+    { 'f', pip_practice_classF},
+    { 'g', pip_practice_classG},
+    { 'h', pip_practice_classH},
+    { 'i', pip_practice_classI},
+    { 'j', pip_practice_classJ},
+    {'\0', NULL               }
 };
 
 /*玩樂選單*/
@@ -551,14 +551,14 @@ static int pip_play_outing(void), pip_play_kite(void), pip_play_KTV(void);
 
 static const struct pipcommands pipplaylist[] =
 {
-    {pip_play_stroll,           '1',    '1'},
-    {pip_play_sport,            '2',    '2'},
-    {pip_play_date,             '3',    '3'},
-    {pip_play_guess,            '4',    '4'},
-    {pip_play_outing,           '5',    '5'},
-    {pip_play_kite,             '6',    '6'},
-    {pip_play_KTV,              '7',    '7'},
-    {NULL,                     '\0',   '\0'}
+    { '1', pip_play_stroll},
+    { '2', pip_play_sport },
+    { '3', pip_play_date  },
+    { '4', pip_play_guess },
+    { '5', pip_play_outing},
+    { '6', pip_play_kite  },
+    { '7', pip_play_KTV   },
+    {'\0', NULL           }
 };
 
 /*打工選單*/
@@ -568,23 +568,23 @@ static int pip_job_workI(void), pip_job_workJ(void), pip_job_workK(void), pip_jo
 static int pip_job_workM(void), pip_job_workN(void), pip_job_workO(void), pip_job_workP(void);
 static const struct pipcommands pipjoblist[] =
 {
-    {pip_job_workA,             'a',    'A'},
-    {pip_job_workB,             'b',    'B'},
-    {pip_job_workC,             'c',    'C'},
-    {pip_job_workD,             'd',    'D'},
-    {pip_job_workE,             'e',    'E'},
-    {pip_job_workF,             'f',    'F'},
-    {pip_job_workG,             'g',    'G'},
-    {pip_job_workH,             'h',    'H'},
-    {pip_job_workI,             'i',    'I'},
-    {pip_job_workJ,             'j',    'J'},
-    {pip_job_workK,             'k',    'K'},
-    {pip_job_workL,             'l',    'L'},
-    {pip_job_workM,             'm',    'M'},
-    {pip_job_workN,             'n',    'N'},
-    {pip_job_workO,             'o',    'O'},
-    {pip_job_workP,             'p',    'P'},
-    {NULL,                     '\0',   '\0'}
+    { 'a', pip_job_workA},
+    { 'b', pip_job_workB},
+    { 'c', pip_job_workC},
+    { 'd', pip_job_workD},
+    { 'e', pip_job_workE},
+    { 'f', pip_job_workF},
+    { 'g', pip_job_workG},
+    { 'h', pip_job_workH},
+    { 'i', pip_job_workI},
+    { 'j', pip_job_workJ},
+    { 'k', pip_job_workK},
+    { 'l', pip_job_workL},
+    { 'm', pip_job_workM},
+    { 'n', pip_job_workN},
+    { 'o', pip_job_workO},
+    { 'p', pip_job_workP},
+    {'\0', NULL         }
 };
 
 /*特殊選單*/
@@ -592,27 +592,27 @@ static int pip_see_doctor(void), pip_change_weight(void), pip_meet_vs_man(void),
 /* static int pip_vs_fight(void); */
 static const struct pipcommands pipspeciallist[] =
 {
-    {pip_see_doctor,            '1',    '1'},
-    {pip_change_weight,         '2',    '2'},
-    {pip_meet_vs_man,           '3',    '3'},
-    {pip_query,                 '4',    '4'},
-    {pip_go_palace,             '5',    '5'},
-    /*{pip_vs_fight,              'z',    'z'}, */
-    {NULL,                     '\0',   '\0'}
+    { '1', pip_see_doctor   },
+    { '2', pip_change_weight},
+    { '3', pip_meet_vs_man  },
+    { '4', pip_query        },
+    { '5', pip_go_palace    },
+    /*{ 'z', pip_vs_fight     }, */
+    {'\0', NULL             }
 };
 
 static const struct pipcommands pipsystemlist[] =
 {
-    {pip_data_list_cuser,       '1',    '1'},
-    {pip_system_freepip,        '2',    '2'},
-    {pip_system_service,        '3',    '3'},
-    {pip_write_backup,          '4',    '4'},
-    {pip_read_backup,           '5',    '5'},
+    { '1', pip_data_list_cuser},
+    { '2', pip_system_freepip },
+    { '3', pip_system_service },
+    { '4', pip_write_backup   },
+    { '5', pip_read_backup    },
     /*
-    {pip_divine,                'o',    'O'},
-    {pip_results_show,          's',    'S'},
+    { 'o', pip_divine         },
+    { 's', pip_results_show   },
     */
-    {NULL,                     '\0',   '\0'}
+    {'\0', NULL               }
 };
 
 
@@ -624,17 +624,13 @@ int menunum, int menumode,
 const struct pipcommands cmdtable[])
 {
     time_t now;
-    int key1, key2;
     int pipkey;
-    int goback = 0, ok = 0;
+    int goback = 0;
     int class1 = 0, class2 = 0, class3 = 0, class4 = 0, class5 = 0;
     int class6 = 0, class7 = 0, class8 = 0, class9 = 0, class10 = 0;
-    const struct pipcommands *cmd1;
-    const struct pipcommands *cmd2;
 
     do
     {
-        ok = 0;
         /*判斷是否死亡  死掉即跳回上一層*/
         if (d.death == 1 || d.death == 2 || d.death == 3)
             return 0;
@@ -689,8 +685,6 @@ const struct pipcommands cmdtable[])
         now = time(0);
         pip_time_change(now);
 
-        cmd1 = cmdtable;
-        cmd2 = cmdtable;
         switch (pipkey)
         {
         case KEY_LEFT:
@@ -700,20 +694,20 @@ const struct pipcommands cmdtable[])
             break;
 
         default:
-            for (; (key1 = cmd1->key1); cmd1++)
-                /*if (key == tolower(pipkey))*/
-                if (key1 == pipkey)
+            {
+                int key;
+                for (const struct pipcommands *cmd = cmdtable; (key = cmd->key); cmd++)
                 {
-                    cmd1->fptr();
-                    ok = 1;
+                    if (key == pipkey
+                        || (key >= 0 && key <= 0xff && (key == tolower(pipkey))))
+                    {
+                        cmd->fptr();
+                        break;
+                    }
                 }
-            for (; (key2 = cmd2->key2); cmd2++)
-                if (ok == 0 && key2 == pipkey)
-                {
-                    cmd2->fptr();
-                }
-            pip_check_levelup();
-            break;
+                pip_check_levelup();
+                break;
+            }
         }
     }
     while (goback == 0);

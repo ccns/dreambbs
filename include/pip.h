@@ -240,9 +240,8 @@ typedef struct chicken chicken;
 /*--------------------------------------------------------------------------*/
 struct pipcommands  /* Hashable */
 {
+    int key ;
     int (*fptr) (void);
-    int key1;
-    int key2;
 };
 typedef struct pipcommands pipcommands;
 
