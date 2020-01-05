@@ -783,6 +783,84 @@ static int pip_system_menu(void)
     return 0;
 }
 
+static int pip_age_grade(int age)
+{
+    if (age <= 0)
+        return 0;   /*誕生*/
+    if (age <= 1)
+        return 1;   /*嬰兒*/
+    if (age <= 5)
+        return 2;   /*幼兒*/
+    if (age <= 12)
+        return 3;   /*兒童*/
+    if (age <= 15)
+        return 4;   /*少年*/
+    if (age <= 18)
+        return 5;   /*青年*/
+    if (age <= 35)
+        return 6;   /*成年*/
+    if (age <= 45)
+        return 7;   /*壯年*/
+    if (age <= 60)
+        return 8;   /*更年*/
+    if (age <= 70)
+        return 9;   /*老年*/
+    if (age <= 100)
+        return 10;  /*古稀*/
+    return 11;      /*神仙*/
+}
+
+static const char *pip_age_name(int age)
+{
+    /*static cosnt char yo[14][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
+                                   "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
+    static const char age_name[12][5] = {
+        "誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
+        "成年", "壯年", "更年", "老年", "古稀", "神仙",
+    };
+
+    return age_name[pip_age_grade(age)];
+}
+
+static void pip_show_age_pic(int age, int weight)
+{
+    int weight_grade;
+    int weight_std = 60 + 10 * age;
+    if (weight <= (weight_std - 30))
+        weight_grade = 0;
+    else if (weight < (weight_std + 30))
+        weight_grade = 1;
+    else
+        weight_grade = 2;
+
+    switch (pip_age_grade(age))
+    {
+    case 0:
+    case 1:
+    case 2:
+        show_basic_pic(1 + weight_grade);
+        break;
+    case 3:
+    case 4:
+        show_basic_pic(4 + weight_grade);
+        break;
+    case 5:
+    case 6:
+        show_basic_pic(7 + weight_grade);
+        break;
+    case 7:
+    case 8:
+        show_basic_pic(10 + weight_grade);
+        break;
+    case 9:
+        show_basic_pic(13);
+        break;
+    case 10:
+    case 11:
+        show_basic_pic(16);
+        break;
+    }
+}
 
 static int
 pip_mainmenu(
@@ -792,13 +870,9 @@ int mode)
     time_t now;
 
     int tm, m, color, tm1 GCC_UNUSED, m1 GCC_UNUSED;
-    int age;
     int color1, color2, color3, color4;
     int anynum;
     float pc;
-    static const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
-                                   "成年", "壯年", "更年", "老年", "古稀", "神仙"
-                                  };
 
     color1 = color2 = color3 = color4 = 37;
     move(1, 0);
@@ -858,30 +932,6 @@ int mode)
         d.see[SEE_ROYAL_J] = 0;
     }
 
-    if (m <= 0)         /*誕生*/
-        age = 0;
-    else if (m <= 1)    /*嬰兒*/
-        age = 1;
-    else if (m <= 5)    /*幼兒*/
-        age = 2;
-    else if (m <= 12)   /*兒童*/
-        age = 3;
-    else if (m <= 15)   /*少年*/
-        age = 4;
-    else if (m <= 18)   /*青年*/
-        age = 5;
-    else if (m <= 35)   /*成年*/
-        age = 6;
-    else if (m <= 45)   /*壯年*/
-        age = 7;
-    else if (m <= 60)   /*更年*/
-        age = 8;
-    else if (m <= 70)   /*老年*/
-        age = 9;
-    else if (m <= 100)  /*古稀*/
-        age = 10;
-    else                /*神仙*/
-        age = 11;
     clear();
     /*vs_head("電子養小雞", BoardName);*/
     move(0, 0);
@@ -900,7 +950,7 @@ int mode)
     else
         color1 = 37;
     prints_centered(" \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %02d/%02d/%02d  \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m",
-            yo[age], (d.year - 11) % 100, d.month, d.day, tm, color1, d.thing[THING_MONEY]);
+            pip_age_name(m), (d.year - 11) % 100, d.month, d.day, tm, color1, d.thing[THING_MONEY]);
 
     move(2, 0);
 
@@ -1017,55 +1067,9 @@ int mode)
     }
     move(5, 0);
     prints_centered("\x1b[1;%dm┌─────────────────────────────────────┐\x1b[m", color);
-    move(6, 0);
-    switch (age)
-    {
-    case 0:
-    case 1:
-    case 2:
-        if (d.body[BODY_WEIGHT] <= (60 + 10*tm - 30))
-            show_basic_pic(1);
-        else if (d.body[BODY_WEIGHT] < (60 + 10*tm + 30))
-            show_basic_pic(2);
-        else
-            show_basic_pic(3);
-        break;
-    case 3:
-    case 4:
-        if (d.body[BODY_WEIGHT] <= (60 + 10*tm - 30))
-            show_basic_pic(4);
-        else if (d.body[BODY_WEIGHT] < (60 + 10*tm + 30))
-            show_basic_pic(5);
-        else
-            show_basic_pic(6);
-        break;
-    case 5:
-    case 6:
-        if (d.body[BODY_WEIGHT] <= (60 + 10*tm - 30))
-            show_basic_pic(7);
-        else if (d.body[BODY_WEIGHT] < (60 + 10*tm + 30))
-            show_basic_pic(8);
-        else
-            show_basic_pic(9);
-        break;
-    case 7:
-    case 8:
-        if (d.body[BODY_WEIGHT] <= (60 + 10*tm - 30))
-            show_basic_pic(10);
-        else if (d.body[BODY_WEIGHT] < (60 + 10*tm + 30))
-            show_basic_pic(11);
-        else
-            show_basic_pic(12);
-        break;
-    case 9:
-        show_basic_pic(13);
-        break;
-    case 10:
-    case 11:
-        show_basic_pic(16);
-        break;
-    }
 
+    move(6, 0);
+    pip_show_age_pic(tm, d.body[BODY_WEIGHT]);
 
     move(b_lines - 5, 0);
     prints_centered("\x1b[1;%dm└─────────────────────────────────────┘\x1b[m", color);
@@ -6358,42 +6362,12 @@ static int
 pip_read(
 const char *userid)
 {
-    /*static cosnt char yo[14][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
-                                   "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
-    static const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
-                                   "成年", "壯年", "更年", "老年", "古稀", "神仙"
-                                  };
-    int pc1, age1, age = 0;
+    int pc1, age = 0;
     struct chicken ck;
 
     if (pip_read_file(&ck, userid))
     {
         age = ck.bbtime / 60 / 30;
-
-        if (age <= 0)        /*誕生*/
-            age1 = 0;
-        else if (age <= 1)   /*嬰兒*/
-            age1 = 1;
-        else if (age <= 5)   /*幼兒*/
-            age1 = 2;
-        else if (age <= 12)  /*兒童*/
-            age1 = 3;
-        else if (age <= 15)  /*少年*/
-            age1 = 4;
-        else if (age <= 18)  /*青年*/
-            age1 = 5;
-        else if (age <= 35)  /*成年*/
-            age1 = 6;
-        else if (age <= 45)  /*壯年*/
-            age1 = 7;
-        else if (age <= 60)  /*更年*/
-            age1 = 8;
-        else if (age <= 70)  /*老年*/
-            age1 = 9;
-        else if (age <= 100) /*古稀*/
-            age1 = 10;
-        else                 /*神仙*/
-            age1 = 11;
 
         move(1, 0);
         clrtobot();
@@ -6404,58 +6378,13 @@ const char *userid)
             prints("\x1b[1;32mName：%-10s\x1b[m  生日：%2d年%2d月%2d日   年齡：%2d歲  狀態：%s  錢錢：%d\n"
                    "生命：%3d/%-3d  快樂：%-4d  滿意：%-4d  氣質：%-4d  智慧：%-4d  體重：%-4d\n"
                    "大補丸：%-4d   食物：%-4d  零食：%-4d  疲勞：%-4d  髒髒：%-4d  病氣：%-4d\n",
-                   ck.name, ck.year - 11, ck.month, ck.day, age, yo[age1], ck.thing[THING_MONEY],
+                   ck.name, ck.year - 11, ck.month, ck.day, age, pip_age_name(age), ck.thing[THING_MONEY],
                    ck.body[BODY_HP], ck.body[BODY_MAXHP], ck.state[STATE_HAPPY], ck.state[STATE_SATISFY], ck.learn[LEARN_CHARACTER], ck.learn[LEARN_WISDOM], ck.body[BODY_WEIGHT],
                    ck.eat[EAT_BIGHP], ck.eat[EAT_FOOD], ck.eat[EAT_COOKIE], ck.body[BODY_TIRED], ck.body[BODY_SHIT], ck.body[BODY_SICK]);
 
             move(5, 0);
-            switch (age1)
-            {
-            case 0:
-            case 1:
-            case 2:
-                if (ck.body[BODY_WEIGHT] <= (60 + 10*age - 30))
-                    show_basic_pic(1);
-                else if (ck.body[BODY_WEIGHT] < (60 + 10*age + 30))
-                    show_basic_pic(2);
-                else
-                    show_basic_pic(3);
-                break;
-            case 3:
-            case 4:
-                if (ck.body[BODY_WEIGHT] <= (60 + 10*age - 30))
-                    show_basic_pic(4);
-                else if (ck.body[BODY_WEIGHT] < (60 + 10*age + 30))
-                    show_basic_pic(5);
-                else
-                    show_basic_pic(6);
-                break;
-            case 5:
-            case 6:
-                if (ck.body[BODY_WEIGHT] <= (60 + 10*age - 30))
-                    show_basic_pic(7);
-                else if (ck.body[BODY_WEIGHT] < (60 + 10*age + 30))
-                    show_basic_pic(8);
-                else
-                    show_basic_pic(9);
-                break;
-            case 7:
-            case 8:
-                if (ck.body[BODY_WEIGHT] <= (60 + 10*age - 30))
-                    show_basic_pic(10);
-                else if (ck.body[BODY_WEIGHT] < (60 + 10*age + 30))
-                    show_basic_pic(11);
-                else
-                    show_basic_pic(12);
-                break;
-            case 9:
-                show_basic_pic(13);
-                break;
-            case 10:
-            case 11:
-                show_basic_pic(13);
-                break;
-            }
+            pip_show_age_pic(age, ck.body[BODY_WEIGHT]);
+
             move(b_lines - 5, 0);
             if (ck.body[BODY_SHIT] <= 0) outs("很乾淨..");
             else if (ck.body[BODY_SHIT] <= 40) { }
@@ -8240,11 +8169,7 @@ int mode)
     char buf[256];
 
     int m, color;
-    int age;
     int color1, color2, color3, color4;
-    static const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
-                                   "成年", "壯年", "更年", "老年", "古稀", "神仙"
-                                  };
 
     color1 = color2 = color3 = color4 = 37;
     move(1, 0);
@@ -8252,30 +8177,6 @@ int mode)
     /*長大一歲時的增加改變值*/
     color = 37;
 
-    if (m <= 0)         /*誕生*/
-        age = 0;
-    else if (m <= 1)    /*嬰兒*/
-        age = 1;
-    else if (m <= 5)    /*幼兒*/
-        age = 2;
-    else if (m <= 12)   /*兒童*/
-        age = 3;
-    else if (m <= 15)   /*少年*/
-        age = 4;
-    else if (m <= 18)   /*青年*/
-        age = 5;
-    else if (m <= 35)   /*成年*/
-        age = 6;
-    else if (m <= 45)   /*壯年*/
-        age = 7;
-    else if (m <= 60)   /*更年*/
-        age = 8;
-    else if (m <= 70)   /*老年*/
-        age = 9;
-    else if (m <= 100)  /*古稀*/
-        age = 10;
-    else                /*神仙*/
-        age = 11;
     clear();
     move(0, 0);
     if (d.sex == 1)
@@ -8294,7 +8195,7 @@ int mode)
         color1 = 37;
     sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
     prints_centered(" \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m",
-            yo[age], inbuf1, m, color1, d.thing[THING_MONEY]);
+            pip_age_name(m), inbuf1, m, color1, d.thing[THING_MONEY]);
 
     move(2, 0);
 
@@ -8386,54 +8287,7 @@ int mode)
     move(5, 0);
     prints_centered("\x1b[1;%dm┌─────────────────────────────────────┐\x1b[m", color);
     move(6, 0);
-    switch (age)
-    {
-    case 0:
-    case 1:
-    case 2:
-        if (d.body[BODY_WEIGHT] <= (60 + 10*m - 30))
-            show_basic_pic(1);
-        else if (d.body[BODY_WEIGHT] < (60 + 10*m + 30))
-            show_basic_pic(2);
-        else
-            show_basic_pic(3);
-        break;
-    case 3:
-    case 4:
-        if (d.body[BODY_WEIGHT] <= (60 + 10*m - 30))
-            show_basic_pic(4);
-        else if (d.body[BODY_WEIGHT] < (60 + 10*m + 30))
-            show_basic_pic(5);
-        else
-            show_basic_pic(6);
-        break;
-    case 5:
-    case 6:
-        if (d.body[BODY_WEIGHT] <= (60 + 10*m - 30))
-            show_basic_pic(7);
-        else if (d.body[BODY_WEIGHT] < (60 + 10*m + 30))
-            show_basic_pic(8);
-        else
-            show_basic_pic(9);
-        break;
-    case 7:
-    case 8:
-        if (d.body[BODY_WEIGHT] <= (60 + 10*m - 30))
-            show_basic_pic(10);
-        else if (d.body[BODY_WEIGHT] < (60 + 10*m + 30))
-            show_basic_pic(11);
-        else
-            show_basic_pic(12);
-        break;
-    case 9:
-        show_basic_pic(13);
-        break;
-    case 10:
-    case 11:
-        show_basic_pic(16);
-        break;
-    }
-
+    pip_show_age_pic(m, d.body[BODY_WEIGHT]);
 
     move(b_lines - 5, 0);
     prints_centered("\x1b[1;%dm└─────────────────────────────────────┘\x1b[m", color);
