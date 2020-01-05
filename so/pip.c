@@ -978,7 +978,6 @@ int mode)
             d.maxhp, d.maxmp, color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
     if (mode == 0)  /*主要畫面*/
     {
-        anynum = 0;
         anynum = random() % 4;
         move(4, 0);
         if (anynum == 0)
