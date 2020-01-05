@@ -7806,7 +7806,7 @@ pip_marriage_offer(void)
 
 static int pip_results_show(void)  /*收穫季*/
 {
-    static const char *const showname[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
+    static const char *const showname[4] = {"武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
     char buf[256];
     int pipkey, i = 0;
     int winorlost = 0;
@@ -7819,7 +7819,7 @@ static int pip_results_show(void)  /*收穫季*/
     clear();
     show_resultshow_pic(0);
     move(b_lines, 0);
-    prints("[A]%s [B]%s [C]%s [D]%s [Q]放棄:", showname[1], showname[2], showname[3], showname[4]);
+    prints("[A]%s [B]%s [C]%s [D]%s [Q]放棄:", showname[0], showname[1], showname[2], showname[3]);
     do
     {
         pipkey = vkey();
@@ -7851,7 +7851,7 @@ static int pip_results_show(void)  /*收穫季*/
         switch (winorlost)
         {
         case 3:
-            pip_results_show_ending(3, 1, b[1][0], b[0][0], b[2][0]);
+            pip_results_show_ending(3, 0, b[1][0], b[0][0], b[2][0]);
             d.tmp[TMP_HEXP] += random() % 10 + 50;
             break;
         case 2:
@@ -7873,7 +7873,7 @@ static int pip_results_show(void)  /*收穫季*/
                 c[1] = b[0][0];
                 c[2] = b[1][0];
             }
-            pip_results_show_ending(2, 1, c[0], c[1], c[2]);
+            pip_results_show_ending(2, 0, c[0], c[1], c[2]);
             d.tmp[TMP_HEXP] += random() % 10 + 30;
             break;
         case 1:
@@ -7895,11 +7895,11 @@ static int pip_results_show(void)  /*收穫季*/
                 c[1] = b[0][0];
                 c[2] = b[2][0];
             }
-            pip_results_show_ending(1, 1, c[0], c[1], c[2]);
+            pip_results_show_ending(1, 0, c[0], c[1], c[2]);
             d.tmp[TMP_HEXP] += random() % 10 + 10;
             break;
         case 0:
-            pip_results_show_ending(0, 1, b[0][0], b[1][0], b[2][0]);
+            pip_results_show_ending(0, 0, b[0][0], b[1][0], b[2][0]);
             d.tmp[TMP_HEXP] -= random() % 10 + 10;
             break;
         }
@@ -7925,7 +7925,7 @@ static int pip_results_show(void)  /*收穫季*/
         {
             winorlost = 0;
         }
-        pip_results_show_ending(winorlost, 2, random() % 2, random() % 2 + 2, random() % 2 + 4);
+        pip_results_show_ending(winorlost, 1, random() % 2, random() % 2 + 2, random() % 2 + 4);
         d.learn[LEARN_ART] += random() % 10 + 20 * winorlost;
         d.learn[LEARN_CHARACTER] += random() % 10 + 20 * winorlost;
         break;
@@ -7950,7 +7950,7 @@ static int pip_results_show(void)  /*收穫季*/
         }
         d.learn[LEARN_ART] += random() % 10 + 20 * winorlost;
         d.learn[LEARN_CHARM] += random() % 10 + 20 * winorlost;
-        pip_results_show_ending(winorlost, 3, random() % 2, random() % 2 + 4, random() % 2 + 2);
+        pip_results_show_ending(winorlost, 2, random() % 2, random() % 2 + 4, random() % 2 + 2);
         break;
     case 'D':
     case 'd':
@@ -7973,7 +7973,7 @@ static int pip_results_show(void)  /*收穫季*/
         }
         d.learn[LEARN_COOKSKILL] += random() % 10 + 20 * winorlost;
         d.tmp[TMP_FAMILY] += random() % 10 + 20 * winorlost;
-        pip_results_show_ending(winorlost, 4, random() % 2 + 2, random() % 2, random() % 2 + 4);
+        pip_results_show_ending(winorlost, 3, random() % 2 + 2, random() % 2, random() % 2 + 4);
         break;
     case 'Q':
     case 'q':
@@ -7997,7 +7997,7 @@ static int pip_results_show(void)  /*收穫季*/
 static int pip_results_show_ending(
 int winorlost, int mode, int a, int b, int c)
 {
-    static const char *const gamename[5] = {"  ", "武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
+    static const char *const gamename[4] = {"武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
     static const int resultmoney[4] = {0, 3000, 5000, 8000};
     char name1[25], name2[25], name3[25], name4[25];
     char buf[256];
