@@ -46,8 +46,8 @@ static int twice(int x, int max, int min);
 static int pip_magic_menu(int mode, const UTMP *opt);
 static int pip_magic_doing_menu(const struct magicset *p);
 static int pip_data_list(const char *userid);
-static void pip_read_file(const char *userid);
-static void pip_write_file(void);
+static bool pip_read_file(struct chicken *ck, const char *userid);
+static bool pip_write_file(const struct chicken *ck, const char *userid);
 static void show_system_pic(int i);
 static void pip_new_game(void);
 static int pip_main_menu(void);
@@ -128,7 +128,8 @@ int p_pipple(void)
     /* sprintf(genbuf, "home/%s/chicken", cuser.userid);*/
     usr_fpath(genbuf, cuser.userid, "chicken");
     pip_load_levelup("game/pipdata/piplevel.dat");
-    pip_read_file(cuser.userid);
+    if (!pip_read_file(&d, cuser.userid))
+        vmsg("我沒有養小雞啦 !");
     if ((fs = fopen(genbuf, "r")) == NULL)
     {
         show_system_pic(11);
@@ -170,7 +171,7 @@ int p_pipple(void)
     free(badmanlist);
     badmanlist = NULL;
     d.bbtime += time(0) - start_time;
-    pip_write_file();
+    pip_write_file(&d, cuser.userid);
     logit(d.money);
     return DL_RELEASE(0);
 }
@@ -340,7 +341,7 @@ static void pip_new_game(void)
         sprintf(buf, "\x1b[1;36m%s %-11s養了一隻叫 [%s] 的 %s 小雞 \x1b[0m\n", Cdate(&now), cuser.userid, d.name, pipsex[d.sex]);
         pip_log_record(buf);
     }
-    pip_write_file();
+    pip_write_file(&d, cuser.userid);
 }
 
 /*小雞死亡函式*/
@@ -378,7 +379,7 @@ int mode)
     now = time(0);
     sprintf(genbuf, "\x1b[1;31m%s %-11s的小雞 [%s] %s\x1b[m\n", Cdate(&now), cuser.userid, d.name, msg);
     pip_log_record(genbuf);
-    pip_write_file();
+    pip_write_file(&d, cuser.userid);
 }
 
 
@@ -842,7 +843,7 @@ int mode)
         count_tired(1, 7, false, 100, 0);
         d.bbtime += time(0) - start_time;
         start_time = time(0);
-        pip_write_file();
+        pip_write_file(&d, cuser.userid);
 
         /*記錄開始*/
         now = time(0);
@@ -1237,7 +1238,7 @@ int mode)
 
     outs("\n");
 
-    pip_write_file();
+    pip_write_file(&d, cuser.userid);
     return 0;
 }
 
@@ -1541,16 +1542,16 @@ static int pip_basic_feed(void)     /* 餵食*/
 }
 
 /*遊戲寫資料入檔案*/
-static void pip_write_file(void)
+static bool pip_write_file(const struct chicken *ck, const char *userid)
 {
     FILE *ff;
     char buf[200];
-    /* sprintf(buf, "home/%s/chicken", cuser.userid);*/
-    usr_fpath(buf, cuser.userid, "chicken");
+    /* sprintf(buf, "home/%s/chicken", userid);*/
+    usr_fpath(buf, userid, "chicken");
 
     if ((ff = fopen(buf, "w")))
     {
-        fprintf(ff, "%ld\n", d.bbtime);
+        fprintf(ff, "%ld\n", ck->bbtime);
         fprintf(ff,
                 "%d %d %d %d %d %d %d %d %d \n"
                 "%d %d %d %d %d %d %d %d %d %d \n"
@@ -1568,33 +1569,35 @@ static void pip_write_file(void)
                 "%d %d %d %d %d %d %d %d %d %d \n"
                 "%d %d %d %d %d %d %d %d %d %d \n"
                 "%d %d %d %d %d %d %d %d %d %d %d %d %d %d",
-                d.year, d.month, d.day, d.sex, d.death, d.nodone, d.relation, d.liveagain, d.chickenmode, d.level, d.exp, d.dataE,
-                d.hp, d.maxhp, d.weight, d.tired, d.sick, d.shit, d.wrist, d.bodyA, d.bodyB, d.bodyC, d.bodyD, d.bodyE,
-                d.social, d.family, d.hexp, d.mexp, d.tmpA, d.tmpB, d.tmpC, d.tmpD, d.tmpE,
-                d.mp, d.maxmp, d.attack, d.resist, d.speed, d.hskill, d.mskill, d.mresist, d.magicmode, d.specialmagic, d.fightC, d.fightD, d.fightE,
-                d.weaponhead, d.weaponrhand, d.weaponlhand, d.weaponbody, d.weaponfoot, d.weaponA, d.weaponB, d.weaponC, d.weaponD, d.weaponE,
-                d.toman, d.character, d.love, d.wisdom, d.art, d.ethics, d.brave, d.homework, d.charm, d.manners, d.speech, d.cookskill, d.learnA, d.learnB, d.learnC, d.learnD, d.learnE,
-                d.happy, d.satisfy, d.fallinlove, d.belief, d.offense, d.affect, d.stateA, d.stateB, d.stateC, d.stateD, d.stateE,
-                d.food, d.medicine, d.bighp, d.cookie, d.ginseng, d.snowgrass, d.eatC, d.eatD, d.eatE,
-                d.book, d.playtool, d.money, d.thingA, d.thingB, d.thingC, d.thingD, d.thingE,
-                d.winn, d.losee,
-                d.royalA, d.royalB, d.royalC, d.royalD, d.royalE, d.royalF, d.royalG, d.royalH, d.royalI, d.royalJ, d.seeroyalJ, d.seeA, d.seeB, d.seeC, d.seeD, d.seeE,
-                d.wantend, d.lover, d.name,
-                d.classA, d.classB, d.classC, d.classD, d.classE,
-                d.classF, d.classG, d.classH, d.classI, d.classJ,
-                d.classK, d.classL, d.classM, d.classN, d.classO,
-                d.workA, d.workB, d.workC, d.workD, d.workE,
-                d.workF, d.workG, d.workH, d.workI, d.workJ,
-                d.workK, d.workL, d.workM, d.workN, d.workO,
-                d.workP, d.workQ, d.workR, d.workS, d.workT,
-                d.workU, d.workV, d.workW, d.workX, d.workY, d.workZ
+                ck->year, ck->month, ck->day, ck->sex, ck->death, ck->nodone, ck->relation, ck->liveagain, ck->chickenmode, ck->level, ck->exp, ck->dataE,
+                ck->hp, ck->maxhp, ck->weight, ck->tired, ck->sick, ck->shit, ck->wrist, ck->bodyA, ck->bodyB, ck->bodyC, ck->bodyD, ck->bodyE,
+                ck->social, ck->family, ck->hexp, ck->mexp, ck->tmpA, ck->tmpB, ck->tmpC, ck->tmpD, ck->tmpE,
+                ck->mp, ck->maxmp, ck->attack, ck->resist, ck->speed, ck->hskill, ck->mskill, ck->mresist, ck->magicmode, ck->specialmagic, ck->fightC, ck->fightD, ck->fightE,
+                ck->weaponhead, ck->weaponrhand, ck->weaponlhand, ck->weaponbody, ck->weaponfoot, ck->weaponA, ck->weaponB, ck->weaponC, ck->weaponD, ck->weaponE,
+                ck->toman, ck->character, ck->love, ck->wisdom, ck->art, ck->ethics, ck->brave, ck->homework, ck->charm, ck->manners, ck->speech, ck->cookskill, ck->learnA, ck->learnB, ck->learnC, ck->learnD, ck->learnE,
+                ck->happy, ck->satisfy, ck->fallinlove, ck->belief, ck->offense, ck->affect, ck->stateA, ck->stateB, ck->stateC, ck->stateD, ck->stateE,
+                ck->food, ck->medicine, ck->bighp, ck->cookie, ck->ginseng, ck->snowgrass, ck->eatC, ck->eatD, ck->eatE,
+                ck->book, ck->playtool, ck->money, ck->thingA, ck->thingB, ck->thingC, ck->thingD, ck->thingE,
+                ck->winn, ck->losee,
+                ck->royalA, ck->royalB, ck->royalC, ck->royalD, ck->royalE, ck->royalF, ck->royalG, ck->royalH, ck->royalI, ck->royalJ, ck->seeroyalJ, ck->seeA, ck->seeB, ck->seeC, ck->seeD, ck->seeE,
+                ck->wantend, ck->lover, ck->name,
+                ck->classA, ck->classB, ck->classC, ck->classD, ck->classE,
+                ck->classF, ck->classG, ck->classH, ck->classI, ck->classJ,
+                ck->classK, ck->classL, ck->classM, ck->classN, ck->classO,
+                ck->workA, ck->workB, ck->workC, ck->workD, ck->workE,
+                ck->workF, ck->workG, ck->workH, ck->workI, ck->workJ,
+                ck->workK, ck->workL, ck->workM, ck->workN, ck->workO,
+                ck->workP, ck->workQ, ck->workR, ck->workS, ck->workT,
+                ck->workU, ck->workV, ck->workW, ck->workX, ck->workY, ck->workZ
                );
         fclose(ff);
+        return true;
     }
+    return false;
 }
 
 /*遊戲讀資料出檔案*/
-static void pip_read_file(const char *userid)
+static bool pip_read_file(struct chicken *ck, const char *userid)
 {
     FILE *fs;
     char buf[200];
@@ -1604,41 +1607,36 @@ static void pip_read_file(const char *userid)
     if ((fs = fopen(buf, "r")))
     {
         fgets(buf, 80, fs);
-        d.bbtime = (time_t) atol(buf);
+        ck->bbtime = (time_t) atol(buf);
 
         fscanf(fs,
                "%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
-               &(d.year), &(d.month), &(d.day), &(d.sex), &(d.death), &(d.nodone), &(d.relation), &(d.liveagain), &(d.chickenmode), &(d.level), &(d.exp), &(d.dataE),
-               &(d.hp), &(d.maxhp), &(d.weight), &(d.tired), &(d.sick), &(d.shit), &(d.wrist), &(d.bodyA), &(d.bodyB), &(d.bodyC), &(d.bodyD), &(d.bodyE),
-               &(d.social), &(d.family), &(d.hexp), &(d.mexp), &(d.tmpA), &(d.tmpB), &(d.tmpC), &(d.tmpD), &(d.tmpE),
-               &(d.mp), &(d.maxmp), &(d.attack), &(d.resist), &(d.speed), &(d.hskill), &(d.mskill), &(d.mresist), &(d.magicmode), &(d.specialmagic), &(d.fightC), &(d.fightD), &(d.fightE),
-               &(d.weaponhead), &(d.weaponrhand), &(d.weaponlhand), &(d.weaponbody), &(d.weaponfoot), &(d.weaponA), &(d.weaponB), &(d.weaponC), &(d.weaponD), &(d.weaponE),
-               &(d.toman), &(d.character), &(d.love), &(d.wisdom), &(d.art), &(d.ethics), &(d.brave), &(d.homework), &(d.charm), &(d.manners), &(d.speech), &(d.cookskill), &(d.learnA), &(d.learnB), &(d.learnC), &(d.learnD), &(d.learnE),
-               &(d.happy), &(d.satisfy), &(d.fallinlove), &(d.belief), &(d.offense), &(d.affect), &(d.stateA), &(d.stateB), &(d.stateC), &(d.stateD), &(d.stateE),
-               &(d.food), &(d.medicine), &(d.bighp), &(d.cookie), &(d.ginseng), &(d.snowgrass), &(d.eatC), &(d.eatD), &(d.eatE),
-               &(d.book), &(d.playtool), &(d.money), &(d.thingA), &(d.thingB), &(d.thingC), &(d.thingD), &(d.thingE),
-               &(d.winn), &(d.losee),
-               &(d.royalA), &(d.royalB), &(d.royalC), &(d.royalD), &(d.royalE), &(d.royalF), &(d.royalG), &(d.royalH), &(d.royalI), &(d.royalJ), &(d.seeroyalJ), &(d.seeA), &(d.seeB), &(d.seeC), &(d.seeD), &(d.seeE),
-               &(d.wantend), &(d.lover), d.name,
-               &(d.classA), &(d.classB), &(d.classC), &(d.classD), &(d.classE),
-               &(d.classF), &(d.classG), &(d.classH), &(d.classI), &(d.classJ),
-               &(d.classK), &(d.classL), &(d.classM), &(d.classN), &(d.classO),
-               &(d.workA), &(d.workB), &(d.workC), &(d.workD), &(d.workE),
-               &(d.workF), &(d.workG), &(d.workH), &(d.workI), &(d.workJ),
-               &(d.workK), &(d.workL), &(d.workM), &(d.workN), &(d.workO),
-               &(d.workP), &(d.workQ), &(d.workR), &(d.workS), &(d.workT),
-               &(d.workU), &(d.workV), &(d.workW), &(d.workX), &(d.workY), &(d.workZ)
+               &ck->year, &ck->month, &ck->day, &ck->sex, &ck->death, &ck->nodone, &ck->relation, &ck->liveagain, &ck->chickenmode, &ck->level, &ck->exp, &ck->dataE,
+               &ck->hp, &ck->maxhp, &ck->weight, &ck->tired, &ck->sick, &ck->shit, &ck->wrist, &ck->bodyA, &ck->bodyB, &ck->bodyC, &ck->bodyD, &ck->bodyE,
+               &ck->social, &ck->family, &ck->hexp, &ck->mexp, &ck->tmpA, &ck->tmpB, &ck->tmpC, &ck->tmpD, &ck->tmpE,
+               &ck->mp, &ck->maxmp, &ck->attack, &ck->resist, &ck->speed, &ck->hskill, &ck->mskill, &ck->mresist, &ck->magicmode, &ck->specialmagic, &ck->fightC, &ck->fightD, &ck->fightE,
+               &ck->weaponhead, &ck->weaponrhand, &ck->weaponlhand, &ck->weaponbody, &ck->weaponfoot, &ck->weaponA, &ck->weaponB, &ck->weaponC, &ck->weaponD, &ck->weaponE,
+               &ck->toman, &ck->character, &ck->love, &ck->wisdom, &ck->art, &ck->ethics, &ck->brave, &ck->homework, &ck->charm, &ck->manners, &ck->speech, &ck->cookskill, &ck->learnA, &ck->learnB, &ck->learnC, &ck->learnD, &ck->learnE,
+               &ck->happy, &ck->satisfy, &ck->fallinlove, &ck->belief, &ck->offense, &ck->affect, &ck->stateA, &ck->stateB, &ck->stateC, &ck->stateD, &ck->stateE,
+               &ck->food, &ck->medicine, &ck->bighp, &ck->cookie, &ck->ginseng, &ck->snowgrass, &ck->eatC, &ck->eatD, &ck->eatE,
+               &ck->book, &ck->playtool, &ck->money, &ck->thingA, &ck->thingB, &ck->thingC, &ck->thingD, &ck->thingE,
+               &ck->winn, &ck->losee,
+               &ck->royalA, &ck->royalB, &ck->royalC, &ck->royalD, &ck->royalE, &ck->royalF, &ck->royalG, &ck->royalH, &ck->royalI, &ck->royalJ, &ck->seeroyalJ, &ck->seeA, &ck->seeB, &ck->seeC, &ck->seeD, &ck->seeE,
+               &ck->wantend, &ck->lover, ck->name,
+               &ck->classA, &ck->classB, &ck->classC, &ck->classD, &ck->classE,
+               &ck->classF, &ck->classG, &ck->classH, &ck->classI, &ck->classJ,
+               &ck->classK, &ck->classL, &ck->classM, &ck->classN, &ck->classO,
+               &ck->workA, &ck->workB, &ck->workC, &ck->workD, &ck->workE,
+               &ck->workF, &ck->workG, &ck->workH, &ck->workI, &ck->workJ,
+               &ck->workK, &ck->workL, &ck->workM, &ck->workN, &ck->workO,
+               &ck->workP, &ck->workQ, &ck->workR, &ck->workS, &ck->workT,
+               &ck->workU, &ck->workV, &ck->workW, &ck->workX, &ck->workY, &ck->workZ
               );
 
         fclose(fs);
+        return true;
     }
-    else
-    {
-        vmsg("我沒有養小雞啦 !");
-        return;
-    }
-
-    return;
+    return false;
 }
 
 /*記錄到pip.log檔*/
@@ -1664,7 +1662,7 @@ pip_write_backup(void)
     int pipkey;
 
     show_system_pic(21);
-    pip_write_file();
+    pip_write_file(&d, cuser.userid);
     do
     {
         move(b_lines - 2, 0);
@@ -1780,7 +1778,7 @@ pip_read_backup(void)
     sprintf(buf2, "/bin/cp %s.bak%d %s", get_path(cuser.userid, "chicken"), num, get_path(cuser.userid, "chicken"));
     system(buf1);
     system(buf2);
-    pip_read_file(cuser.userid);
+    pip_read_file(&d, cuser.userid);
     return 0;
 }
 
@@ -1850,7 +1848,7 @@ pip_live_again(void)
     vmsg("小雞體質恢復中！");
     vmsg("小雞能力調整中！");
     vmsg("恭喜您，你的小雞又復活囉！");
-    pip_write_file();
+    pip_write_file(&d, cuser.userid);
     return 0;
 }
 
@@ -4707,7 +4705,7 @@ int first)
     currutmp = cutmp;
     utmp_mode(M_CHICKEN);
     clear();
-    pip_read_file(cuser.userid);
+    pip_read_file(&d, cuser.userid);
     currutmp->pip->pipmode = 0; /*1:輸了 2:贏了 3:不玩了 */
     currutmp->pip->leaving = 1;
     currutmp->pip->mode = d.chickenmode;
@@ -6430,7 +6428,7 @@ pip_money(void)
         cuser.request -= money;
         acct.request = cuser.request;
         acct_save(&acct);
-        pip_write_file();
+        pip_write_file(&d, cuser.userid);
         sprintf(buf, "你身上有 %d 次點歌次數，雞金 %d 元", cuser.request, d.money);
     }
     else
@@ -6468,45 +6466,17 @@ static int
 pip_read(
 const char *userid)
 {
-    FILE *fs;
-    char buf[200];
     /*static cosnt char yo[14][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
                                    "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
     static const char yo[12][5] = {"誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
                                    "成年", "壯年", "更年", "老年", "古稀", "神仙"
                                   };
     int pc1, age1, age = 0;
+    struct chicken ck;
 
-    int year1, month1, day1, sex1, death1, nodone1, relation1, liveagain1, chickenmode1, level1, exp1, dataE1;
-    int hp1, maxhp1, weight1, tired1, sick1, shit1, wrist1, bodyA1, bodyB1, bodyC1, bodyD1, bodyE1;
-    int social1, family1, hexp1, mexp1, tmpA1, tmpB1, tmpC1, tmpD1, tmpE1;
-    int mp1, maxmp1, attack1, resist1, speed1, hskill1, mskill1, mresist1, magicmode1, specialmagic1, fightC1, fightD1, fightE1;
-    int weaponhead1, weaponrhand1, weaponlhand1, weaponbody1, weaponfoot1, weaponA1, weaponB1, weaponC1, weaponD1, weaponE1;
-    int toman1, character1, love1, wisdom1, art1, ethics1, brave1, homework1, charm1, manners1, speech1, cookskill1, learnA1, learnB1, learnC1, learnD1, learnE1;
-    int happy1, satisfy1, fallinlove1, belief1, offense1, affect1, stateA1, stateB1, stateC1, stateD1, stateE1;
-    int food1, medicine1, bighp1, cookie1, ginseng1, snowgrass1, eatC1, eatD1, eatE1;
-    int book1, playtool1, money1, thingA1, thingB1, thingC1, thingD1, thingE1;
-    int winn1, losee1;
-    int royalA1, royalB1, royalC1, royalD1, royalE1, royalF1, royalG1, royalH1, royalI1, royalJ1, seeroyalJ1, seeA1, seeB1, seeC1, seeD1, seeE1;
-    int wantend1, lover1;
-    char name1[200];
-    int classA1, classB1, classC1, classD1, classE1;
-    int classF1, classG1, classH1, classI1, classJ1;
-    int classK1, classL1, classM1, classN1, classO1;
-    int workA1, workB1, workC1, workD1, workE1;
-    int workF1, workG1, workH1, workI1, workJ1;
-    int workK1, workL1, workM1, workN1, workO1;
-    int workP1, workQ1, workR1, workS1, workT1;
-    int workU1, workV1, workW1, workX1, workY1, workZ1;
-
-    /* sprintf(buf, "home/%s/chicken", userid);*/
-    usr_fpath(buf, userid, "chicken");
-    /* currutmp->destuid = userid;*/
-
-    if ( ( fs = fopen(buf, "r") ) )
+    if (pip_read_file(&ck, userid))
     {
-        fgets(buf, 80, fs);
-        age = ((time_t) atol(buf)) / 60 / 30;
+        age = ck.bbtime / 60 / 30;
 
         if (age <= 0)        /*誕生*/
             age1 = 0;
@@ -6533,44 +6503,18 @@ const char *userid)
         else                 /*神仙*/
             age1 = 11;
 
-        fscanf(fs,
-               "%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
-               &(year1), &(month1), &(day1), &(sex1), &(death1), &(nodone1), &(relation1), &(liveagain1), &(chickenmode1), &(level1), &(exp1), &(dataE1),
-               &(hp1), &(maxhp1), &(weight1), &(tired1), &(sick1), &(shit1), &(wrist1), &(bodyA1), &(bodyB1), &(bodyC1), &(bodyD1), &(bodyE1),
-               &(social1), &(family1), &(hexp1), &(mexp1), &(tmpA1), &(tmpB1), &(tmpC1), &(tmpD1), &(tmpE1),
-               &(mp1), &(maxmp1), &(attack1), &(resist1), &(speed1), &(hskill1), &(mskill1), &(mresist1), &(magicmode1), &(specialmagic1), &(fightC1), &(fightD1), &(fightE1),
-               &(weaponhead1), &(weaponrhand1), &(weaponlhand1), &(weaponbody1), &(weaponfoot1), &(weaponA1), &(weaponB1), &(weaponC1), &(weaponD1), &(weaponE1),
-               &(toman1), &(character1), &(love1), &(wisdom1), &(art1), &(ethics1), &(brave1), &(homework1), &(charm1), &(manners1), &(speech1), &(cookskill1), &(learnA1), &(learnB1), &(learnC1), &(learnD1), &(learnE1),
-               &(happy1), &(satisfy1), &(fallinlove1), &(belief1), &(offense1), &(affect1), &(stateA1), &(stateB1), &(stateC1), &(stateD1), &(stateE1),
-               &(food1), &(medicine1), &(bighp1), &(cookie1), &(ginseng1), &(snowgrass1), &(eatC1), &(eatD1), &(eatE1),
-               &(book1), &(playtool1), &(money1), &(thingA1), &(thingB1), &(thingC1), &(thingD1), &(thingE1),
-               &(winn1), &(losee1),
-               &(royalA1), &(royalB1), &(royalC1), &(royalD1), &(royalE1), &(royalF1), &(royalG1), &(royalH1), &(royalI1), &(royalJ1), &(seeroyalJ1), &(seeA1), &(seeB1), &(seeC1), &(seeD1), &(seeE1),
-               &(wantend1), &(lover1),
-               name1,
-               &(classA1), &(classB1), &(classC1), &(classD1), &(classE1),
-               &(classF1), &(classG1), &(classH1), &(classI1), &(classJ1),
-               &(classK1), &(classL1), &(classM1), &(classN1), &(classO1),
-               &(workA1), &(workB1), &(workC1), &(workD1), &(workE1),
-               &(workF1), &(workG1), &(workH1), &(workI1), &(workJ1),
-               &(workK1), &(workL1), &(workM1), &(workN1), &(workO1),
-               &(workP1), &(workQ1), &(workR1), &(workS1), &(workT1),
-               &(workU1), &(workV1), &(workW1), &(workX1), &(workY1), &(workZ1)
-              );
-        fclose(fs);
-
         move(1, 0);
         clrtobot();
         prints("這是%s養的小雞：\n", userid);
 
-        if (death1 == 0)
+        if (ck.death == 0)
         {
             prints("\x1b[1;32mName：%-10s\x1b[m  生日：%2d年%2d月%2d日   年齡：%2d歲  狀態：%s  錢錢：%d\n"
                    "生命：%3d/%-3d  快樂：%-4d  滿意：%-4d  氣質：%-4d  智慧：%-4d  體重：%-4d\n"
                    "大補丸：%-4d   食物：%-4d  零食：%-4d  疲勞：%-4d  髒髒：%-4d  病氣：%-4d\n",
-                   name1, year1 - 11, month1, day1, age, yo[age1], money1,
-                   hp1, maxhp1, happy1, satisfy1, character1, wisdom1, weight1,
-                   bighp1, food1, cookie1, tired1, shit1, sick1);
+                   ck.name, ck.year - 11, ck.month, ck.day, age, yo[age1], ck.money,
+                   ck.hp, ck.maxhp, ck.happy, ck.satisfy, ck.character, ck.wisdom, ck.weight,
+                   ck.bighp, ck.food, ck.cookie, ck.tired, ck.shit, ck.sick);
 
             move(5, 0);
             switch (age1)
@@ -6578,36 +6522,36 @@ const char *userid)
             case 0:
             case 1:
             case 2:
-                if (weight1 <= (60 + 10*age - 30))
+                if (ck.weight <= (60 + 10*age - 30))
                     show_basic_pic(1);
-                else if (weight1 < (60 + 10*age + 30))
+                else if (ck.weight < (60 + 10*age + 30))
                     show_basic_pic(2);
                 else
                     show_basic_pic(3);
                 break;
             case 3:
             case 4:
-                if (weight1 <= (60 + 10*age - 30))
+                if (ck.weight <= (60 + 10*age - 30))
                     show_basic_pic(4);
-                else if (weight1 < (60 + 10*age + 30))
+                else if (ck.weight < (60 + 10*age + 30))
                     show_basic_pic(5);
                 else
                     show_basic_pic(6);
                 break;
             case 5:
             case 6:
-                if (weight1 <= (60 + 10*age - 30))
+                if (ck.weight <= (60 + 10*age - 30))
                     show_basic_pic(7);
-                else if (weight1 < (60 + 10*age + 30))
+                else if (ck.weight < (60 + 10*age + 30))
                     show_basic_pic(8);
                 else
                     show_basic_pic(9);
                 break;
             case 7:
             case 8:
-                if (weight1 <= (60 + 10*age - 30))
+                if (ck.weight <= (60 + 10*age - 30))
                     show_basic_pic(10);
-                else if (weight1 < (60 + 10*age + 30))
+                else if (ck.weight < (60 + 10*age + 30))
                     show_basic_pic(11);
                 else
                     show_basic_pic(12);
@@ -6621,14 +6565,14 @@ const char *userid)
                 break;
             }
             move(b_lines - 5, 0);
-            if (shit1 <= 0) outs("很乾淨..");
-            else if (shit1 <= 40) { }
-            else if (shit1 < 60) outs("臭臭的..");
-            else if (shit1 < 80) outs("好臭喔..");
-            else if (shit1 < 100) outs("\x1b[1;34m快臭死了..\x1b[m");
+            if (ck.shit <= 0) outs("很乾淨..");
+            else if (ck.shit <= 40) { }
+            else if (ck.shit < 60) outs("臭臭的..");
+            else if (ck.shit < 80) outs("好臭喔..");
+            else if (ck.shit < 100) outs("\x1b[1;34m快臭死了..\x1b[m");
             else { outs("\x1b[1;31m臭死了..\x1b[m"); return -1; }
 
-            pc1 = hp1 * 100 / maxhp1;
+            pc1 = ck.hp * 100 / ck.maxhp;
             if (pc1 <= 0) { outs("餓死了.."); return -1; }
             else if (pc1 < 20) outs("\x1b[1;35m全身無力中.快餓死了.\x1b[m");
             else if (pc1 < 40) outs("體力不太夠..想吃點東西..");
@@ -6636,7 +6580,7 @@ const char *userid)
             else if (pc1 < 100) outs("嗯～肚子飽飽有體力..");
             else outs("\x1b[1;34m快撐死了..\x1b[m");
 
-            pc1 = tired1;
+            pc1 = ck.tired;
             if (pc1 < 20) outs("精神抖擻中..");
             else if (pc1 < 60) { }
             else if (pc1 < 80) outs("\x1b[1;34m有點小累..\x1b[m");
@@ -6644,43 +6588,43 @@ const char *userid)
             else { outs("累死了..."); return -1; }
 
             pc1 = 60 + 10 * age;
-            if (weight1 < (pc1 - 50)) { outs("瘦死了.."); return -1; }
-            else if (weight1 <= (pc1 - 30)) outs("太瘦了..");
-            else if (weight1 <= (pc1 - 10)) outs("有點小瘦..");
-            else if (weight1 < (pc1 + 10)) { }
-            else if (weight1 < (pc1 + 30)) outs("有點小胖..");
-            else if (weight1 < (pc1 + 50)) outs("太胖了..");
+            if (ck.weight < (pc1 - 50)) { outs("瘦死了.."); return -1; }
+            else if (ck.weight <= (pc1 - 30)) outs("太瘦了..");
+            else if (ck.weight <= (pc1 - 10)) outs("有點小瘦..");
+            else if (ck.weight < (pc1 + 10)) { }
+            else if (ck.weight < (pc1 + 30)) outs("有點小胖..");
+            else if (ck.weight < (pc1 + 50)) outs("太胖了..");
             else { outs("胖死了..."); return -1; }
 
-            if (sick1 < 50) { }
-            else if (sick1 < 75) outs("\x1b[1;34m生病了..\x1b[m");
-            else if (sick1 < 100) { outs("\x1b[1;31m病重!!..\x1b[m"); }
+            if (ck.sick < 50) { }
+            else if (ck.sick < 75) outs("\x1b[1;34m生病了..\x1b[m");
+            else if (ck.sick < 100) { outs("\x1b[1;31m病重!!..\x1b[m"); }
             else { outs("病死了.!."); return -1; }
 
-            pc1 = happy1;
+            pc1 = ck.happy;
             if (pc1 < 20) outs("\x1b[1;31m很不快樂..\x1b[m");
             else if (pc1 < 40) outs("不快樂..");
             else if (pc1 < 80) { }
             else if (pc1 < 95) outs("快樂..");
             else outs("很快樂..");
 
-            pc1 = satisfy1;
-            if (pc1 < 40) outs("\x1b[31;1m不滿足..\x1b[m");
+            pc1 = ck.satisfy;
+            if (pc1 < 40) outs("\x1b[ck.3;1m不滿足..\x1b[m");
             else if (pc1 < 80) { }
             else if (pc1 < 95) outs("滿足..");
             else outs("很滿足..");
         }
-        else if (death1 == 1)
+        else if (ck.death == 1)
         {
             show_die_pic(2);
             move(14, d_cols/2U + 20);
             outs("可憐的小雞嗚呼哀哉了");
         }
-        else if (death1 == 2)
+        else if (ck.death == 2)
         {
             show_die_pic(3);
         }
-        else if (death1 == 3)
+        else if (ck.death == 3)
         {
             move(5, 0);
             outs("遊戲已經玩到結局囉....");
@@ -6845,52 +6789,14 @@ static int
 pip_data_list(  /*看小雞個人詳細資料*/
 const char *userid)
 {
-    char buf[256];
     char inbuf1[20];
     char inbuf2[20];
     int tm;
     int pipkey;
     int page = 1;
     struct chicken chicken;
-    FILE *fs;
 
-    /* if (!isprint(userid[0]))*/
-        usr_fpath(buf, cuser.userid, "chicken");
-    /* else
-        usr_fpath(buf, userid, "chicken");*/
-
-    if ( ( fs = fopen(buf, "r") ) )
-    {
-        fgets(buf, 80, fs);
-        chicken.bbtime = (time_t) atol(buf);
-
-        fscanf(fs,
-               "%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
-               &(chicken.year), &(chicken.month), &(chicken.day), &(chicken.sex), &(chicken.death), &(chicken.nodone), &(chicken.relation), &(chicken.liveagain), &(chicken.chickenmode), &(chicken.level), &(chicken.exp), &(chicken.dataE),
-               &(chicken.hp), &(chicken.maxhp), &(chicken.weight), &(chicken.tired), &(chicken.sick), &(chicken.shit), &(chicken.wrist), &(chicken.bodyA), &(chicken.bodyB), &(chicken.bodyC), &(chicken.bodyD), &(chicken.bodyE),
-               &(chicken.social), &(chicken.family), &(chicken.hexp), &(chicken.mexp), &(chicken.tmpA), &(chicken.tmpB), &(chicken.tmpC), &(chicken.tmpD), &(chicken.tmpE),
-               &(chicken.mp), &(chicken.maxmp), &(chicken.attack), &(chicken.resist), &(chicken.speed), &(chicken.hskill), &(chicken.mskill), &(chicken.mresist), &(chicken.magicmode), &(chicken.specialmagic), &(chicken.fightC), &(chicken.fightD), &(chicken.fightE),
-               &(chicken.weaponhead), &(chicken.weaponrhand), &(chicken.weaponlhand), &(chicken.weaponbody), &(chicken.weaponfoot), &(chicken.weaponA), &(chicken.weaponB), &(chicken.weaponC), &(chicken.weaponD), &(chicken.weaponE),
-               &(chicken.toman), &(chicken.character), &(chicken.love), &(chicken.wisdom), &(chicken.art), &(chicken.ethics), &(chicken.brave), &(chicken.homework), &(chicken.charm), &(chicken.manners), &(chicken.speech), &(chicken.cookskill), &(chicken.learnA), &(chicken.learnB), &(chicken.learnC), &(chicken.learnD), &(chicken.learnE),
-               &(chicken.happy), &(chicken.satisfy), &(chicken.fallinlove), &(chicken.belief), &(chicken.offense), &(chicken.affect), &(chicken.stateA), &(chicken.stateB), &(chicken.stateC), &(chicken.stateD), &(chicken.stateE),
-               &(chicken.food), &(chicken.medicine), &(chicken.bighp), &(chicken.cookie), &(chicken.ginseng), &(chicken.snowgrass), &(chicken.eatC), &(chicken.eatD), &(chicken.eatE),
-               &(chicken.book), &(chicken.playtool), &(chicken.money), &(chicken.thingA), &(chicken.thingB), &(chicken.thingC), &(chicken.thingD), &(chicken.thingE),
-               &(chicken.winn), &(chicken.losee),
-               &(chicken.royalA), &(chicken.royalB), &(chicken.royalC), &(chicken.royalD), &(chicken.royalE), &(chicken.royalF), &(chicken.royalG), &(chicken.royalH), &(chicken.royalI), &(chicken.royalJ), &(chicken.seeroyalJ), &(chicken.seeA), &(chicken.seeB), &(chicken.seeC), &(chicken.seeD), &(chicken.seeE),
-               &(chicken.wantend), &(chicken.lover), chicken.name,
-               &(chicken.classA), &(chicken.classB), &(chicken.classC), &(chicken.classD), &(chicken.classE),
-               &(chicken.classF), &(chicken.classG), &(chicken.classH), &(chicken.classI), &(chicken.classJ),
-               &(chicken.classK), &(chicken.classL), &(chicken.classM), &(chicken.classN), &(chicken.classO),
-               &(chicken.workA), &(chicken.workB), &(chicken.workC), &(chicken.workD), &(chicken.workE),
-               &(chicken.workF), &(chicken.workG), &(chicken.workH), &(chicken.workI), &(chicken.workJ),
-               &(chicken.workK), &(chicken.workL), &(chicken.workM), &(chicken.workN), &(chicken.workO),
-               &(chicken.workP), &(chicken.workQ), &(chicken.workR), &(chicken.workS), &(chicken.workT),
-               &(chicken.workU), &(chicken.workV), &(chicken.workW), &(chicken.workX), &(chicken.workY), &(chicken.workZ)
-              );
-
-        fclose(fs);
-    }
-    else
+    if (!pip_read_file(&chicken, userid))
     {
         vmsg("我沒有養小雞啦 !");
         return 0;
