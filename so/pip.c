@@ -8008,7 +8008,7 @@ pip_marriage_offer(void)
     while (d.lover == (who + 3));
 
     money = random() % 2000 + random() % 3000 + 4000;
-    sprintf(buf, "%s帶來了金錢%d，要向你的小雞求婚，您願意嗎？[y/N]: ", name[who][d.sex-1], money);
+    sprintf(buf, "%s帶來了金錢%d，要向你的小雞求婚，您願意嗎？[y/N]: ", name[who][d.sex != 1], money);
     getdata(b_lines - 1, 1, buf, ans, 2, 1, 0);
     if (ans[0] == 'y' || ans[0] == 'Y')
     {
@@ -8035,7 +8035,7 @@ pip_marriage_offer(void)
             d.wantend = 5;
         vmsg("我想對方是一個很好的伴侶..");
         now = time(0);
-        sprintf(buf, "\x1b[1;37m%s %-11s的小雞 [%s] 接受了 %s 的求婚\x1b[0m\n", Cdate(&now), cuser.userid, d.name, name[who][d.sex-1]);
+        sprintf(buf, "\x1b[1;37m%s %-11s的小雞 [%s] 接受了 %s 的求婚\x1b[0m\n", Cdate(&now), cuser.userid, d.name, name[who][d.sex != 1]);
         pip_log_record(buf);
     }
     else
