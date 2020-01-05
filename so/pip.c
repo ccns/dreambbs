@@ -10,7 +10,7 @@
 #define START_HAPPY     (20)
 #define START_SATISFY   (20)
 
-#define LEARN_LEVEL     ((d.happy+d.satisfy)/100)
+#define LEARN_LEVEL     ((d.state[STATE_HAPPY]+d.state[STATE_SATISFY])/100)
 
 #include "bbs.h"
 #include "pipstruct.h"
@@ -172,7 +172,7 @@ int p_pipple(void)
     badmanlist = NULL;
     d.bbtime += time(0) - start_time;
     pip_write_file(&d, cuser.userid);
-    logit(d.money);
+    logit(d.thing[THING_MONEY]);
     return DL_RELEASE(0);
 }
 
@@ -271,70 +271,57 @@ static void pip_new_game(void)
         d.month = ptime->tm_mon + 1;
         d.day = ptime->tm_mday;
         d.death = d.nodone = d.relation = 0;
-        d.liveagain = d.level = d.exp = d.dataE = 0;
+        d.liveagain = d.level = d.exp = d.dataL = 0;
         d.chickenmode = 1;
 
         /*身體參數*/
-        d.hp = random() % 15 + START_HP;
-        d.maxhp = random() % 20 + START_HP;
-        if (d.hp > d.maxhp) d.hp = d.maxhp;
-        d.weight = random() % 10 + 50;
-        d.tired = d.sick = d.shit = d.wrist = 0;
-        d.bodyA = d.bodyB = d.bodyC = d.bodyD = d.bodyE = 0;
+        memset(d.body, 0, sizeof(d.body));
+        d.body[BODY_HP] = random() % 15 + START_HP;
+        d.body[BODY_MAXHP] = random() % 20 + START_HP;
+        if (d.body[BODY_HP] > d.body[BODY_MAXHP]) d.body[BODY_HP] = d.body[BODY_MAXHP];
+        d.body[BODY_WEIGHT] = random() % 10 + 50;
 
         /*評價參數*/
-        d.social = d.family = d.hexp = d.mexp = 0;
-        d.tmpA = d.tmpB = d.tmpC = d.tmpD = d.tmpE = 0;
+        memset(d.tmp, 0, sizeof(d.tmp));
 
         /*戰鬥參數*/
-        d.mp = d.maxmp = d.attack = d.resist = d.speed = d.hskill = d.mskill = d.mresist = 0;
-        d.magicmode = d.specialmagic = d.fightC = d.fightD = d.fightE = 0;
+        memset(d.fight, 0, sizeof(d.fight));
 
         /*武器參數*/
-        d.weaponhead = d.weaponrhand = d.weaponlhand = d.weaponbody = d.weaponfoot = 0;
-        d.weaponA = d.weaponB = d.weaponC = d.weaponD = d.weaponE = 0;
+        memset(d.weapon, 0, sizeof(d.weapon));
 
         /*能力參數*/
-        d.toman = d.character = d.love = d.wisdom = d.art = d.ethics = 0;
-        d.brave = d.homework = d.charm = d.manners = d.speech = d.cookskill = 0;
-        d.learnA = d.learnB = d.learnC = d.learnD = d.learnE = 0;
+        memset(d.learn, 0, sizeof(d.learn));
 
         /*狀態數值*/
-        d.happy = random() % 10 + START_HAPPY;
-        d.satisfy = random() % 10 + START_SATISFY;
-        d.fallinlove = d.belief = d.offense = d.affect = 0;
-        d.stateA = d.stateB = d.stateC = d.stateD = d.stateE = 0;
+        memset(d.state, 0, sizeof(d.state));
+        d.state[STATE_HAPPY] = random() % 10 + START_HAPPY;
+        d.state[STATE_SATISFY] = random() % 10 + START_SATISFY;
 
         /*食物參數:食物 零食 藥品 大補丸*/
-        d.food = START_FOOD;
-        d.medicine = d.cookie = d.bighp = 2;
-        d.ginseng = d.snowgrass = d.eatC = d.eatD = d.eatE = 0;
+        memset(d.eat, 0, sizeof(d.eat));
+        d.eat[EAT_FOOD] = START_FOOD;
+        d.eat[EAT_MEDICINE] = d.eat[EAT_COOKIE] = d.eat[EAT_BIGHP] = 2;
 
         /*物品參數:書 玩具*/
-        d.book = d.playtool = 0;
-        d.money = START_MONEY;
-        d.thingA = d.thingB = d.thingC = d.thingD = d.thingE = 0;
+        memset(d.thing, 0, sizeof(d.thing));
+        d.thing[THING_MONEY] = START_MONEY;
 
         /*猜拳參數:贏 負*/
         d.winn = d.losee = 0;
 
         /*參見王臣*/
-        d.royalA = d.royalB = d.royalC = d.royalD = d.royalE = 0;
-        d.royalF = d.royalG = d.royalH = d.royalI = d.royalJ = 0;
-        d.seeroyalJ = 1;
-        d.seeA = d.seeB = d.seeC = d.seeD = d.seeE;
+        memset(d.royal, 0, sizeof(d.royal));
+        memset(d.see, 0, sizeof(d.see));
+        d.see[SEE_ROYAL_J] = 1;
+
         /*接受求婚愛人*/
         d.lover = 0;
         /*0:沒有 1:魔王 2:龍族 3:A 4:B 5:C 6:D 7:E */
-        d.classA = d.classB = d.classC = d.classD = d.classE = 0;
-        d.classF = d.classG = d.classH = d.classI = d.classJ = 0;
-        d.classK = d.classL = d.classM = d.classN = d.classO = 0;
 
-        d.workA = d.workB = d.workC = d.workD = d.workE = 0;
-        d.workF = d.workG = d.workH = d.workI = d.workJ = 0;
-        d.workK = d.workL = d.workM = d.workN = d.workO = 0;
-        d.workP = d.workQ = d.workR = d.workS = d.workT = 0;
-        d.workU = d.workV = d.workW = d.workX = d.workY = d.workZ = 0;
+        memset(d.class_, 0, sizeof(d.class_));
+        memset(d.work, 0, sizeof(d.work));
+
         /*養雞記錄*/
         now = time(0);
         sprintf(buf, "\x1b[1;36m%s %-11s養了一隻叫 [%s] 的 %s 小雞 \x1b[0m\n", Cdate(&now), cuser.userid, d.name, pipsex[d.sex]);
@@ -399,28 +386,28 @@ int cal)
         if (tm <= 3)
         {
             if (cal)
-                tiredvary = (random() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp) * 120 / 100;
+                tiredvary = (random() % prob + base) * d.body[BODY_MAXHP] / (d.body[BODY_HP] + 0.8 * d.body[BODY_HP]) * 120 / 100;
             else
                 tiredvary = (random() % prob + base) * 4 / 3;
         }
         else if (tm <= 7)
         {
             if (cal)
-                tiredvary = (random() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp);
+                tiredvary = (random() % prob + base) * d.body[BODY_MAXHP] / (d.body[BODY_HP] + 0.8 * d.body[BODY_HP]);
             else
                 tiredvary = (random() % prob + base) * 3 / 2;
         }
         else if (tm <= 10)
         {
             if (cal)
-                tiredvary = (random() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp) * 110 / 100;
+                tiredvary = (random() % prob + base) * d.body[BODY_MAXHP] / (d.body[BODY_HP] + 0.8 * d.body[BODY_HP]) * 110 / 100;
             else
                 tiredvary = (random() % prob + base) * 5 / 4;
         }
         else
         {
             if (cal)
-                tiredvary = (random() % prob + base) * d.maxhp / (d.hp + 0.8 * d.hp) * 150 / 100;
+                tiredvary = (random() % prob + base) * d.body[BODY_MAXHP] / (d.body[BODY_HP] + 0.8 * d.body[BODY_HP]) * 150 / 100;
             else
                 tiredvary = (random() % prob + base) * 1;
         }
@@ -432,15 +419,15 @@ int cal)
 
     if (cal)
     {
-        d.tired += (tiredvary * mul / 100);
-        if (d.tired > 100)
-            d.tired = 100;
+        d.body[BODY_TIRED] += (tiredvary * mul / 100);
+        if (d.body[BODY_TIRED] > 100)
+            d.body[BODY_TIRED] = 100;
     }
     else
     {
-        d.tired = d.tired - tiredvary;
-        if (d.tired <= 0)
-            { d.tired = 0; }
+        d.body[BODY_TIRED] = d.body[BODY_TIRED] - tiredvary;
+        if (d.body[BODY_TIRED] <= 0)
+            { d.body[BODY_TIRED] = 0; }
     }
     tiredvary = 0;
     return;
@@ -640,16 +627,16 @@ const struct pipcommands cmdtable[])
         clrchyiuan(b_lines - 1, b_lines);
         if (menunum == 3)                                           /*修行*/
         {
-            class1 = BMIN(d.wisdom / 200 + 1, 5);                   /*科學*/
-            class2 = BMIN((d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400 + 1, 5); /*詩詞*/
-            class3 = BMIN((d.belief * 2 + d.wisdom) / 400 + 1, 5);  /*神學*/
-            class4 = BMIN((d.hskill * 2 + d.wisdom) / 400 + 1, 5);  /*軍學*/
-            class5 = BMIN((d.hskill + d.attack) / 400 + 1, 5);      /*劍術*/
-            class6 = BMIN((d.hskill + d.resist) / 400 + 1, 5);      /*格鬥*/
-            class7 = BMIN((d.mskill + d.maxmp) / 400 + 1, 5);       /*魔法*/
-            class8 = BMIN((d.manners * 2 + d.character) / 400 + 1, 5); /*禮儀*/
-            class9 = BMIN((d.art * 2 + d.character) / 400 + 1, 5);  /*繪畫*/
-            class10 = BMIN((d.art * 2 + d.charm) / 400 + 1, 5);     /*舞蹈*/
+            class1 = BMIN(d.learn[LEARN_WISDOM] / 200 + 1, 5);                   /*科學*/
+            class2 = BMIN((d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400 + 1, 5); /*詩詞*/
+            class3 = BMIN((d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400 + 1, 5);  /*神學*/
+            class4 = BMIN((d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400 + 1, 5);  /*軍學*/
+            class5 = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400 + 1, 5);      /*劍術*/
+            class6 = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400 + 1, 5);      /*格鬥*/
+            class7 = BMIN((d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400 + 1, 5);       /*魔法*/
+            class8 = BMIN((d.learn[LEARN_MANNERS] * 2 + d.learn[LEARN_CHARACTER]) / 400 + 1, 5); /*禮儀*/
+            class9 = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400 + 1, 5);  /*繪畫*/
+            class10 = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400 + 1, 5);     /*舞蹈*/
 
             move(b_lines - 1, 0);
             prints(menuname[menunum][0], class1, class2, class3, class4, class5, d_cols, "");
@@ -822,17 +809,17 @@ int mode)
     /*長大一歲時的增加改變值*/
     if (m != tm)
     {
-        d.wisdom += 10;
-        d.happy += random() % 5 + 5;
-        if (d.happy > 100)
-            d.happy = 100;
-        d.satisfy += random() % 5;
-        if (d.satisfy > 100)
-            d.satisfy = 100;
-        if (tm < 13) d.maxhp += random() % 5 + 5; else d.maxhp -= random() % 15;
-        d.character += random() % 5;
-        d.money += 500;
-        d.seeroyalJ = 1;
+        d.learn[LEARN_WISDOM] += 10;
+        d.state[STATE_HAPPY] += random() % 5 + 5;
+        if (d.state[STATE_HAPPY] > 100)
+            d.state[STATE_HAPPY] = 100;
+        d.state[STATE_SATISFY] += random() % 5;
+        if (d.state[STATE_SATISFY] > 100)
+            d.state[STATE_SATISFY] = 100;
+        if (tm < 13) d.body[BODY_MAXHP] += random() % 5 + 5; else d.body[BODY_MAXHP] -= random() % 15;
+        d.learn[LEARN_CHARACTER] += random() % 5;
+        d.thing[THING_MONEY] += 500;
+        d.see[SEE_ROYAL_J] = 1;
         count_tired(1, 7, false, 100, 0);
         d.bbtime += time(0) - start_time;
         start_time = time(0);
@@ -859,7 +846,7 @@ int mode)
     color = 37;
     m = tm;
 
-    if ((random() % 3000 == 29) && tm >= 15 && d.charm >= 300 && d.character >= 300)
+    if ((random() % 3000 == 29) && tm >= 15 && d.learn[LEARN_CHARM] >= 300 && d.learn[LEARN_CHARACTER] >= 300)
         pip_marriage_offer();
 
     if (mode != 1 && random() % 4000 == 69)
@@ -868,7 +855,7 @@ int mode)
     /*武官*/
     if ((time(0) - start_time) >= 900)
     {
-        d.seeroyalJ = 0;
+        d.see[SEE_ROYAL_J] = 0;
     }
 
     if (m <= 0)         /*誕生*/
@@ -906,70 +893,70 @@ int mode)
         prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[34m？ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
 
     move(1, 0);
-    if (d.money <= 100)
+    if (d.thing[THING_MONEY] <= 100)
         color1 = 31;
-    else if (d.money <= 500)
+    else if (d.thing[THING_MONEY] <= 500)
         color1 = 33;
     else
         color1 = 37;
     prints_centered(" \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %02d/%02d/%02d  \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m",
-            yo[age], (d.year - 11) % 100, d.month, d.day, tm, color1, d.money);
+            yo[age], (d.year - 11) % 100, d.month, d.day, tm, color1, d.thing[THING_MONEY]);
 
     move(2, 0);
 
-    if ((d.hp*100 / d.maxhp) <= 20)
+    if ((d.body[BODY_HP]*100 / d.body[BODY_MAXHP]) <= 20)
         color1 = 31;
-    else if ((d.hp*100 / d.maxhp) <= 40)
+    else if ((d.body[BODY_HP]*100 / d.body[BODY_MAXHP]) <= 40)
         color1 = 33;
     else
         color1 = 37;
 
-    if (d.maxmp <= 0)
+    if (d.fight[FIGHT_MAXMP] <= 0)
         color2 = 37;
-    else if ((d.mp*100 / d.maxmp) <= 20)
+    else if ((d.fight[FIGHT_MP]*100 / d.fight[FIGHT_MAXMP]) <= 20)
         color2 = 31;
-    else if ((d.mp*100 / d.maxmp) <= 40)
+    else if ((d.fight[FIGHT_MP]*100 / d.fight[FIGHT_MAXMP]) <= 40)
         color2 = 33;
     else
         color2 = 37;
 
-    if (d.tired >= 80)
+    if (d.body[BODY_TIRED] >= 80)
         color3 = 31;
-    else if (d.tired >= 60)
+    else if (d.body[BODY_TIRED] >= 60)
         color3 = 33;
     else
         color3 = 37;
 
     prints_centered(" \x1b[1;32m[生  命]\x1b[%dm %-10d\x1b[32m[法  力]\x1b[%dm %-10d\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m ",
-            color1, d.hp, color2, d.mp, d.weight, color3, d.tired);
+            color1, d.body[BODY_HP], color2, d.fight[FIGHT_MP], d.body[BODY_WEIGHT], color3, d.body[BODY_TIRED]);
 
     move(3, 0);
-    if (d.shit >= 80)
+    if (d.body[BODY_SHIT] >= 80)
         color1 = 31;
-    else if (d.shit >= 60)
+    else if (d.body[BODY_SHIT] >= 60)
         color1 = 33;
     else
         color1 = 37;
-    if (d.sick >= 75)
+    if (d.body[BODY_SICK] >= 75)
         color2 = 31;
-    else if (d.sick >= 50)
+    else if (d.body[BODY_SICK] >= 50)
         color2 = 33;
     else
         color2 = 37;
-    if (d.happy <= 20)
+    if (d.state[STATE_HAPPY] <= 20)
         color3 = 31;
-    else if (d.happy <= 40)
+    else if (d.state[STATE_HAPPY] <= 40)
         color3 = 33;
     else
         color3 = 37;
-    if (d.satisfy <= 20)
+    if (d.state[STATE_SATISFY] <= 20)
         color4 = 31;
-    else if (d.satisfy <= 40)
+    else if (d.state[STATE_SATISFY] <= 40)
         color4 = 33;
     else
         color4 = 37;
     prints_centered(" \x1b[1;32m[命 MAX]\x1b[37m %-10d\x1b[32m[法 MAX]\x1b[37m %-10d\x1b[32m[髒／病]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[快／滿]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m",
-            d.maxhp, d.maxmp, color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
+            d.body[BODY_MAXHP], d.fight[FIGHT_MAXMP], color1, d.body[BODY_SHIT], color2, d.body[BODY_SICK], color3, d.state[STATE_HAPPY], color4, d.state[STATE_SATISFY]);
     if (mode == 0)  /*主要畫面*/
     {
         anynum = random() % 4;
@@ -986,46 +973,46 @@ int mode)
     else if (mode == 1)/*餵食*/
     {
         move(4, 0);
-        if (d.food <= 0)
+        if (d.eat[EAT_FOOD] <= 0)
             color1 = 31;
-        else if (d.food <= 5)
+        else if (d.eat[EAT_FOOD] <= 5)
             color1 = 33;
         else
             color1 = 37;
-        if (d.cookie <= 0)
+        if (d.eat[EAT_COOKIE] <= 0)
             color2 = 31;
-        else if (d.cookie <= 5)
+        else if (d.eat[EAT_COOKIE] <= 5)
             color2 = 33;
         else
             color2 = 37;
-        if (d.bighp <= 0)
+        if (d.eat[EAT_BIGHP] <= 0)
             color3 = 31;
-        else if (d.bighp <= 2)
+        else if (d.eat[EAT_BIGHP] <= 2)
             color3 = 33;
         else
             color3 = 37;
-        if (d.medicine <= 0)
+        if (d.eat[EAT_MEDICINE] <= 0)
             color4 = 31;
-        else if (d.medicine <= 5)
+        else if (d.eat[EAT_MEDICINE] <= 5)
             color4 = 33;
         else
             color4 = 37;
         prints_centered(" \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m",
-                color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
+                color1, d.eat[EAT_FOOD], color2, d.eat[EAT_COOKIE], color3, d.eat[EAT_BIGHP], color4, d.eat[EAT_MEDICINE], d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS]);
 
     }
     else if (mode == 2)/*打工*/
     {
         move(4, 0);
         prints_centered(" \x1b[1;36m[愛心]\x1b[37m%-5d\x1b[36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[道德]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[家事]\x1b[37m%-5d\x1b[0m",
-                d.love, d.wisdom, d.character, d.art, d.ethics, d.brave, d.homework);
+                d.learn[LEARN_LOVE], d.learn[LEARN_WISDOM], d.learn[LEARN_CHARACTER], d.learn[LEARN_ART], d.learn[LEARN_ETHICS], d.learn[LEARN_BRAVE], d.learn[LEARN_HOMEWORK]);
 
     }
     else if (mode == 3)/*修行*/
     {
         move(4, 0);
         prints_centered(" \x1b[1;36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[攻擊]\x1b[37m%-5d\x1b[36m[防禦]\x1b[37m%-5d\x1b[36m[速度]\x1b[37m%-5d\x1b[0m",
-                d.wisdom, d.character, d.art, d.brave, d.attack, d.resist, d.speed);
+                d.learn[LEARN_WISDOM], d.learn[LEARN_CHARACTER], d.learn[LEARN_ART], d.learn[LEARN_BRAVE], d.fight[FIGHT_ATTACK], d.fight[FIGHT_RESIST], d.fight[FIGHT_SPEED]);
 
     }
     move(5, 0);
@@ -1036,36 +1023,36 @@ int mode)
     case 0:
     case 1:
     case 2:
-        if (d.weight <= (60 + 10*tm - 30))
+        if (d.body[BODY_WEIGHT] <= (60 + 10*tm - 30))
             show_basic_pic(1);
-        else if (d.weight < (60 + 10*tm + 30))
+        else if (d.body[BODY_WEIGHT] < (60 + 10*tm + 30))
             show_basic_pic(2);
         else
             show_basic_pic(3);
         break;
     case 3:
     case 4:
-        if (d.weight <= (60 + 10*tm - 30))
+        if (d.body[BODY_WEIGHT] <= (60 + 10*tm - 30))
             show_basic_pic(4);
-        else if (d.weight < (60 + 10*tm + 30))
+        else if (d.body[BODY_WEIGHT] < (60 + 10*tm + 30))
             show_basic_pic(5);
         else
             show_basic_pic(6);
         break;
     case 5:
     case 6:
-        if (d.weight <= (60 + 10*tm - 30))
+        if (d.body[BODY_WEIGHT] <= (60 + 10*tm - 30))
             show_basic_pic(7);
-        else if (d.weight < (60 + 10*tm + 30))
+        else if (d.body[BODY_WEIGHT] < (60 + 10*tm + 30))
             show_basic_pic(8);
         else
             show_basic_pic(9);
         break;
     case 7:
     case 8:
-        if (d.weight <= (60 + 10*tm - 30))
+        if (d.body[BODY_WEIGHT] <= (60 + 10*tm - 30))
             show_basic_pic(10);
-        else if (d.weight < (60 + 10*tm + 30))
+        else if (d.body[BODY_WEIGHT] < (60 + 10*tm + 30))
             show_basic_pic(11);
         else
             show_basic_pic(12);
@@ -1087,19 +1074,19 @@ int mode)
     move(b_lines - 3, 0);
     outs_centered(" ");
 
-    if (d.shit <= 0)
+    if (d.body[BODY_SHIT] <= 0)
         outs("乾淨小雞  ");
-    else if (d.shit <= 40)
+    else if (d.body[BODY_SHIT] <= 40)
         ;
-    else if (d.shit < 60)
+    else if (d.body[BODY_SHIT] < 60)
         outs("有點臭臭  ");
-    else if (d.shit < 80)
+    else if (d.body[BODY_SHIT] < 80)
         outs("\x1b[1;33m很臭了說\x1b[m  ");
-    else if (d.shit < 100)
+    else if (d.body[BODY_SHIT] < 100)
     {
         outs("\x1b[1;35m快臭死了\x1b[m  ");
-        d.sick += 4;
-        d.character -= (random() % 3 + 3);
+        d.body[BODY_SICK] += 4;
+        d.learn[LEARN_CHARACTER] -= (random() % 3 + 3);
     }
     else
     {
@@ -1108,10 +1095,10 @@ int mode)
         return -1;
     }
 
-    if (d.hp <= 0)
+    if (d.body[BODY_HP] <= 0)
         pc = 0;
     else
-        pc = d.hp * 100 / d.maxhp;
+        pc = d.body[BODY_HP] * 100 / d.body[BODY_MAXHP];
     if (pc <= 0)
     {
         d.death = 1;
@@ -1121,9 +1108,9 @@ int mode)
     else if (pc < 20)
     {
         outs("\x1b[1;35m快餓昏了\x1b[m  ");
-        d.sick += 3;
-        d.happy -= 5;
-        d.satisfy -= 3;
+        d.body[BODY_SICK] += 3;
+        d.state[STATE_HAPPY] -= 5;
+        d.state[STATE_SATISFY] -= 3;
     }
     else if (pc < 40)
         outs("\x1b[1;33m想吃東西\x1b[m  ");
@@ -1134,7 +1121,7 @@ int mode)
     else
         outs("\x1b[1;33m撐撐的說\x1b[m  ");
 
-    pc = d.tired;
+    pc = d.body[BODY_TIRED];
     if (pc < 20)
         outs("精神很好  ");
     else if (pc < 60)
@@ -1144,7 +1131,7 @@ int mode)
     else if (pc < 100)
     {
         outs("\x1b[1;35m真的很累\x1b[m  ");
-        d.sick += 5;
+        d.body[BODY_SICK] += 5;
     }
     else
     {
@@ -1154,28 +1141,28 @@ int mode)
     }
 
     pc = 60 + 10 * tm;
-    if (d.weight < (pc - 50))
+    if (d.body[BODY_WEIGHT] < (pc - 50))
     {
         d.death = 1;
         pipdie("\x1b[1;31m:~~ 瘦死了\x1b[m  ", 1);
         return -1;
     }
-    else if (d.weight <= (pc - 30))
+    else if (d.body[BODY_WEIGHT] <= (pc - 30))
         outs("\x1b[1;35m太瘦了喔\x1b[m ");
-    else if (d.weight <= (pc - 10))
+    else if (d.body[BODY_WEIGHT] <= (pc - 10))
         outs("\x1b[1;33m有點小瘦\x1b[m  ");
-    else if (d.weight < (pc + 10))
+    else if (d.body[BODY_WEIGHT] < (pc + 10))
         ;
-    else if (d.weight < (pc + 30))
+    else if (d.body[BODY_WEIGHT] < (pc + 30))
         outs("\x1b[1;33m有點小胖\x1b[m  ");
-    else if (d.weight < (pc + 50))
+    else if (d.body[BODY_WEIGHT] < (pc + 50))
     {
         outs("\x1b[1;35m太胖了啦\x1b[m  ");
-        d.sick += 3;
-        if (d.speed >= 2)
-            d.speed -= 2;
+        d.body[BODY_SICK] += 3;
+        if (d.fight[FIGHT_SPEED] >= 2)
+            d.fight[FIGHT_SPEED] -= 2;
         else
-            d.speed = 0;
+            d.fight[FIGHT_SPEED] = 0;
 
     }
     else
@@ -1185,17 +1172,17 @@ int mode)
         return -1;
     }
 
-    if (d.sick < 50)
+    if (d.body[BODY_SICK] < 50)
         ;
-    else if (d.sick < 75)
+    else if (d.body[BODY_SICK] < 75)
     {
         outs("\x1b[1;33m生病了啦\x1b[m  ");
         count_tired(1, 8, true, 100, 1);
     }
-    else if (d.sick < 100)
+    else if (d.body[BODY_SICK] < 100)
     {
         outs("\x1b[1;35m正病重中\x1b[m  ");
-        d.sick += 5;
+        d.body[BODY_SICK] += 5;
         count_tired(1, 15, true, 100, 1);
     }
     else
@@ -1205,7 +1192,7 @@ int mode)
         return -1;
     }
 
-    pc = d.happy;
+    pc = d.state[STATE_HAPPY];
     if (pc < 20)
         outs("\x1b[1;35m很不快樂\x1b[m  ");
     else if (pc < 40)
@@ -1217,7 +1204,7 @@ int mode)
     else
         outs("很快樂..  ");
 
-    pc = d.satisfy;
+    pc = d.state[STATE_SATISFY];
     if (pc < 20)
         outs("\x1b[1;35m很不滿足..\x1b[m  ");
     else if (pc < 40)
@@ -1246,63 +1233,63 @@ time_t cnow)
     {
         /*不做事  還是會變髒的*/
         if ((time(0) - cnow) >= stime)
-            d.shit += (random() % 3 + 3);
+            d.body[BODY_SHIT] += (random() % 3 + 3);
         /*不做事  疲勞當然減低啦*/
-        if (d.tired >= stired) d.tired -= stired; else d.tired = 0;
+        if (d.body[BODY_TIRED] >= stired) d.body[BODY_TIRED] -= stired; else d.body[BODY_TIRED] = 0;
         /*不做事  肚子也會餓咩 */
-        d.hp -= random() % 2 + 2;
-        if (d.mexp < 0)
-            d.mexp = 0;
-        if (d.hexp < 0)
-            d.hexp = 0;
+        d.body[BODY_HP] -= random() % 2 + 2;
+        if (d.tmp[TMP_MEXP] < 0)
+            d.tmp[TMP_MEXP] = 0;
+        if (d.tmp[TMP_HEXP] < 0)
+            d.tmp[TMP_HEXP] = 0;
         /*體力會因生病降低一點*/
-        d.hp -= d.sick / 10;
+        d.body[BODY_HP] -= d.body[BODY_SICK] / 10;
         /*病氣會隨機率增加減少少許*/
         if (random() % 3 > 0)
         {
-            d.sick -= random() % 2;
-            if (d.sick < 0)
-                d.sick = 0;
+            d.body[BODY_SICK] -= random() % 2;
+            if (d.body[BODY_SICK] < 0)
+                d.body[BODY_SICK] = 0;
         }
         else
-            d.sick += random() % 2;
+            d.body[BODY_SICK] += random() % 2;
         /*隨機減快樂度*/
         if (random() % 4 > 0)
         {
-            d.happy -= random() % 2 + 2;
+            d.state[STATE_HAPPY] -= random() % 2 + 2;
         }
         else
-            d.happy += 2;
+            d.state[STATE_HAPPY] += 2;
         if (random() % 4 > 0)
         {
-            d.satisfy -= (random() % 4 + 5);
+            d.state[STATE_SATISFY] -= (random() % 4 + 5);
         }
         else
-            d.satisfy += 2;
+            d.state[STATE_SATISFY] += 2;
         lasttime += stime;
     }
     /*快樂度滿意度最大值設定*/
-    if (d.happy > 100)
-        d.happy = 100;
-    else if (d.happy < 0)
-        d.happy = 0;
-    if (d.satisfy > 100)
-        d.satisfy = 100;
-    else if (d.satisfy < 0)
-        d.satisfy = 0;
+    if (d.state[STATE_HAPPY] > 100)
+        d.state[STATE_HAPPY] = 100;
+    else if (d.state[STATE_HAPPY] < 0)
+        d.state[STATE_HAPPY] = 0;
+    if (d.state[STATE_SATISFY] > 100)
+        d.state[STATE_SATISFY] = 100;
+    else if (d.state[STATE_SATISFY] < 0)
+        d.state[STATE_SATISFY] = 0;
     /*評價*/
-    if (d.social < 0)
-        d.social = 0;
-    if (d.tired < 0)
-        d.tired = 0;
-    if (d.hp > d.maxhp)
-        d.hp = d.maxhp;
-    if (d.mp > d.maxmp)
-        d.mp = d.maxmp;
-    if (d.money < 0)
-        d.money = 0;
-    if (d.charm < 0)
-        d.charm = 0;
+    if (d.tmp[TMP_SOCIAL] < 0)
+        d.tmp[TMP_SOCIAL] = 0;
+    if (d.body[BODY_TIRED] < 0)
+        d.body[BODY_TIRED] = 0;
+    if (d.body[BODY_HP] > d.body[BODY_MAXHP])
+        d.body[BODY_HP] = d.body[BODY_MAXHP];
+    if (d.fight[FIGHT_MP] > d.fight[FIGHT_MAXMP])
+        d.fight[FIGHT_MP] = d.fight[FIGHT_MAXMP];
+    if (d.thing[THING_MONEY] < 0)
+        d.thing[THING_MONEY] = 0;
+    if (d.learn[LEARN_CHARM] < 0)
+        d.learn[LEARN_CHARM] = 0;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -1313,9 +1300,9 @@ time_t cnow)
 static int pip_basic_takeshower(void) /*洗澡*/
 {
     int lucky;
-    d.shit -= 20;
-    if (d.shit < 0) d.shit = 0;
-    d.hp -= random() % 2 + 3;
+    d.body[BODY_SHIT] -= 20;
+    if (d.body[BODY_SHIT] < 0) d.body[BODY_SHIT] = 0;
+    d.body[BODY_HP] -= random() % 2 + 3;
     move(4, 0);
     lucky = random() % 3;
     if (lucky == 0)
@@ -1339,9 +1326,9 @@ static int pip_basic_takeshower(void) /*洗澡*/
 static int pip_basic_takerest(void) /*休息*/
 {
     count_tired(5, 20, true, 100, 0);
-    if (d.hp > d.maxhp)
-        d.hp = d.maxhp;
-    d.shit += 1;
+    if (d.body[BODY_HP] > d.body[BODY_MAXHP])
+        d.body[BODY_HP] = d.body[BODY_MAXHP];
+    d.body[BODY_SHIT] += 1;
     move(4, 0);
     show_usual_pic(5);
     vmsg("再按一下我就起床囉....");
@@ -1354,20 +1341,20 @@ static int pip_basic_kiss(void)/*親親*/
 {
     if (random() % 2 > 0)
     {
-        d.happy += random() % 3 + 4;
-        d.satisfy += random() % 2 + 1;
+        d.state[STATE_HAPPY] += random() % 3 + 4;
+        d.state[STATE_SATISFY] += random() % 2 + 1;
     }
     else
     {
-        d.happy += random() % 2 + 1;
-        d.satisfy += random() % 3 + 4;
+        d.state[STATE_HAPPY] += random() % 2 + 1;
+        d.state[STATE_SATISFY] += random() % 3 + 4;
     }
     count_tired(1, 2, false, 100, 1);
-    d.shit += random() % 5 + 4;
+    d.body[BODY_SHIT] += random() % 5 + 4;
     d.relation += random() % 2;
     move(4, 0);
     show_usual_pic(3);
-    if (d.shit < 60)
+    if (d.body[BODY_SHIT] < 60)
     {
         vmsg("來嘛! 啵一個.....");
     }
@@ -1406,7 +1393,7 @@ static int pip_basic_feed(void)     /* 餵食*/
         switch (pipkey)
         {
         case '1':
-            if (d.food <= 0)
+            if (d.eat[EAT_FOOD] <= 0)
             {
                 move(b_lines, 0);
                 vmsg("沒有食物囉..快去買吧！");
@@ -1417,57 +1404,57 @@ static int pip_basic_feed(void)     /* 餵食*/
                 show_feed_pic(0);
             else
                 show_feed_pic(1);
-            d.food--;
-            d.hp += 50;
-            if (d.hp >= d.maxhp)
+            d.eat[EAT_FOOD]--;
+            d.body[BODY_HP] += 50;
+            if (d.body[BODY_HP] >= d.body[BODY_MAXHP])
             {
-                d.hp = d.maxhp;
-                d.weight += random() % 2;
+                d.body[BODY_HP] = d.body[BODY_MAXHP];
+                d.body[BODY_WEIGHT] += random() % 2;
             }
             d.nodone = 0;
             vmsg("每吃一次食物會恢復體力50喔!");
             break;
 
         case '2':
-            if (d.cookie <= 0)
+            if (d.eat[EAT_COOKIE] <= 0)
             {
                 move(b_lines, 0);
                 vmsg("零食吃光囉..快去買吧！");
                 break;
             }
             move(4, 0);
-            d.cookie--;
-            d.hp += 100;
-            if (d.hp >= d.maxhp)
+            d.eat[EAT_COOKIE]--;
+            d.body[BODY_HP] += 100;
+            if (d.body[BODY_HP] >= d.body[BODY_MAXHP])
             {
-                d.hp = d.maxhp;
-                d.weight += (random() % 2 + 2);
+                d.body[BODY_HP] = d.body[BODY_MAXHP];
+                d.body[BODY_WEIGHT] += (random() % 2 + 2);
             }
             else
             {
-                d.weight += (random() % 2 + 1);
+                d.body[BODY_WEIGHT] += (random() % 2 + 1);
             }
             if (random() % 2 > 0)
                 show_feed_pic(2);
             else
                 show_feed_pic(3);
-            d.happy += (random() % 3 + 4);
-            d.satisfy += random() % 3 + 2;
+            d.state[STATE_HAPPY] += (random() % 3 + 4);
+            d.state[STATE_SATISFY] += random() % 3 + 2;
             d.nodone = 0;
             vmsg("吃零食容易胖喔...");
             break;
 
         case '3':
-            if (d.bighp <= 0)
+            if (d.eat[EAT_BIGHP] <= 0)
             {
                 move(b_lines, 0);
                 vmsg("沒有大補丸了耶! 快買吧..");
                 break;
             }
-            d.bighp--;
-            d.hp += 600;
-            d.tired -= 20;
-            d.weight += random() % 2;
+            d.eat[EAT_BIGHP]--;
+            d.body[BODY_HP] += 600;
+            d.body[BODY_TIRED] -= 20;
+            d.body[BODY_WEIGHT] += random() % 2;
             move(4, 0);
             show_feed_pic(4);
             d.nodone = 0;
@@ -1475,7 +1462,7 @@ static int pip_basic_feed(void)     /* 餵食*/
             break;
 
         case '4':
-            if (d.medicine <= 0)
+            if (d.eat[EAT_MEDICINE] <= 0)
             {
                 move(b_lines, 0);
                 vmsg("沒有靈芝囉..快去買吧！");
@@ -1483,26 +1470,26 @@ static int pip_basic_feed(void)     /* 餵食*/
             }
             move(4, 0);
             show_feed_pic(1);
-            d.medicine--;
-            d.mp += 50;
-            if (d.mp >= d.maxmp)
+            d.eat[EAT_MEDICINE]--;
+            d.fight[FIGHT_MP] += 50;
+            if (d.fight[FIGHT_MP] >= d.fight[FIGHT_MAXMP])
             {
-                d.mp = d.maxmp;
+                d.fight[FIGHT_MP] = d.fight[FIGHT_MAXMP];
             }
             d.nodone = 0;
             vmsg("每吃一次靈芝會恢復法力50喔!");
             break;
 
         case '5':
-            if (d.ginseng <= 0)
+            if (d.eat[EAT_GINSENG] <= 0)
             {
                 move(b_lines, 0);
                 vmsg("沒有千年人蔘耶! 快買吧..");
                 break;
             }
-            d.ginseng--;
-            d.mp += 500;
-            d.tired -= 20;
+            d.eat[EAT_GINSENG]--;
+            d.fight[FIGHT_MP] += 500;
+            d.body[BODY_TIRED] -= 20;
             move(4, 0);
             show_feed_pic(1);
             d.nodone = 0;
@@ -1510,17 +1497,17 @@ static int pip_basic_feed(void)     /* 餵食*/
             break;
 
         case '6':
-            if (d.snowgrass <= 0)
+            if (d.eat[EAT_SNOWGRASS] <= 0)
             {
                 move(b_lines, 0);
                 vmsg("沒有天山雪蓮耶! 快買吧..");
                 break;
             }
-            d.snowgrass--;
-            d.mp = d.maxmp;
-            d.hp = d.maxhp;
-            d.tired -= 0;
-            d.sick = 0;
+            d.eat[EAT_SNOWGRASS]--;
+            d.fight[FIGHT_MP] = d.fight[FIGHT_MAXMP];
+            d.body[BODY_HP] = d.body[BODY_MAXHP];
+            d.body[BODY_TIRED] -= 0;
+            d.body[BODY_SICK] = 0;
             move(4, 0);
             show_feed_pic(1);
             d.nodone = 0;
@@ -1535,6 +1522,13 @@ static int pip_basic_feed(void)     /* 餵食*/
 }
 
 /*遊戲寫資料入檔案*/
+static void pip_save_array(FILE *ff, const int *arr, int count)
+{
+    for (int i = 0; i < count; i++)
+        fprintf(ff, "%d ", arr[i]);
+    fprintf(ff, "\n");
+}
+
 static bool pip_write_file(const struct chicken *ck, const char *userid)
 {
     FILE *ff;
@@ -1546,43 +1540,30 @@ static bool pip_write_file(const struct chicken *ck, const char *userid)
     {
         fprintf(ff, "%ld\n", ck->bbtime);
         fprintf(ff,
-                "%d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %s %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d \n"
-                "%d %d %d %d %d %d %d %d %d %d %d %d %d %d",
-                ck->year, ck->month, ck->day, ck->sex, ck->death, ck->nodone, ck->relation, ck->liveagain, ck->chickenmode, ck->level, ck->exp, ck->dataE,
-                ck->hp, ck->maxhp, ck->weight, ck->tired, ck->sick, ck->shit, ck->wrist, ck->bodyA, ck->bodyB, ck->bodyC, ck->bodyD, ck->bodyE,
-                ck->social, ck->family, ck->hexp, ck->mexp, ck->tmpA, ck->tmpB, ck->tmpC, ck->tmpD, ck->tmpE,
-                ck->mp, ck->maxmp, ck->attack, ck->resist, ck->speed, ck->hskill, ck->mskill, ck->mresist, ck->magicmode, ck->specialmagic, ck->fightC, ck->fightD, ck->fightE,
-                ck->weaponhead, ck->weaponrhand, ck->weaponlhand, ck->weaponbody, ck->weaponfoot, ck->weaponA, ck->weaponB, ck->weaponC, ck->weaponD, ck->weaponE,
-                ck->toman, ck->character, ck->love, ck->wisdom, ck->art, ck->ethics, ck->brave, ck->homework, ck->charm, ck->manners, ck->speech, ck->cookskill, ck->learnA, ck->learnB, ck->learnC, ck->learnD, ck->learnE,
-                ck->happy, ck->satisfy, ck->fallinlove, ck->belief, ck->offense, ck->affect, ck->stateA, ck->stateB, ck->stateC, ck->stateD, ck->stateE,
-                ck->food, ck->medicine, ck->bighp, ck->cookie, ck->ginseng, ck->snowgrass, ck->eatC, ck->eatD, ck->eatE,
-                ck->book, ck->playtool, ck->money, ck->thingA, ck->thingB, ck->thingC, ck->thingD, ck->thingE,
-                ck->winn, ck->losee,
-                ck->royalA, ck->royalB, ck->royalC, ck->royalD, ck->royalE, ck->royalF, ck->royalG, ck->royalH, ck->royalI, ck->royalJ, ck->seeroyalJ, ck->seeA, ck->seeB, ck->seeC, ck->seeD, ck->seeE,
-                ck->wantend, ck->lover, ck->name,
-                ck->classA, ck->classB, ck->classC, ck->classD, ck->classE,
-                ck->classF, ck->classG, ck->classH, ck->classI, ck->classJ,
-                ck->classK, ck->classL, ck->classM, ck->classN, ck->classO,
-                ck->workA, ck->workB, ck->workC, ck->workD, ck->workE,
-                ck->workF, ck->workG, ck->workH, ck->workI, ck->workJ,
-                ck->workK, ck->workL, ck->workM, ck->workN, ck->workO,
-                ck->workP, ck->workQ, ck->workR, ck->workS, ck->workT,
-                ck->workU, ck->workV, ck->workW, ck->workX, ck->workY, ck->workZ
-               );
+            "%d %d %d %d \n" "%d %d %d %d \n" "%d %d %d %d \n",
+            ck->year, ck->month, ck->day, ck->sex,
+            ck->death, ck->nodone, ck->relation, ck->liveagain,
+            ck->chickenmode, ck->level, ck->exp, ck->dataL);
+
+        pip_save_array(ff, ck->body, COUNTOF(ck->body));
+        pip_save_array(ff, ck->tmp, COUNTOF(ck->tmp));
+        pip_save_array(ff, ck->fight, COUNTOF(ck->fight));
+        pip_save_array(ff, ck->weapon, COUNTOF(ck->weapon));
+        pip_save_array(ff, ck->learn, COUNTOF(ck->learn));
+        pip_save_array(ff, ck->state, COUNTOF(ck->state));
+        pip_save_array(ff, ck->eat, COUNTOF(ck->eat));
+        pip_save_array(ff, ck->thing, COUNTOF(ck->thing));
+
+        fprintf(ff, "%d %d \n", ck->winn, ck->losee);
+
+        pip_save_array(ff, ck->royal, COUNTOF(ck->royal));
+        pip_save_array(ff, ck->see, COUNTOF(ck->see));
+
+        fprintf(ff, "%d %d %s\n", ck->wantend, ck->lover, ck->name);
+
+        pip_save_array(ff, ck->class_, COUNTOF(ck->class_));
+        pip_save_array(ff, ck->work, COUNTOF(ck->work));
+
         fclose(ff);
         return true;
     }
@@ -1590,6 +1571,12 @@ static bool pip_write_file(const struct chicken *ck, const char *userid)
 }
 
 /*遊戲讀資料出檔案*/
+static void pip_read_array(FILE *fs, int *arr, int count)
+{
+    for (int i = 0; i < count; i++)
+        fscanf(fs, "%d", &arr[i]);
+}
+
 static bool pip_read_file(struct chicken *ck, const char *userid)
 {
     FILE *fs;
@@ -1603,28 +1590,29 @@ static bool pip_read_file(struct chicken *ck, const char *userid)
         ck->bbtime = (time_t) atol(buf);
 
         fscanf(fs,
-               "%d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %s %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d %d",
-               &ck->year, &ck->month, &ck->day, &ck->sex, &ck->death, &ck->nodone, &ck->relation, &ck->liveagain, &ck->chickenmode, &ck->level, &ck->exp, &ck->dataE,
-               &ck->hp, &ck->maxhp, &ck->weight, &ck->tired, &ck->sick, &ck->shit, &ck->wrist, &ck->bodyA, &ck->bodyB, &ck->bodyC, &ck->bodyD, &ck->bodyE,
-               &ck->social, &ck->family, &ck->hexp, &ck->mexp, &ck->tmpA, &ck->tmpB, &ck->tmpC, &ck->tmpD, &ck->tmpE,
-               &ck->mp, &ck->maxmp, &ck->attack, &ck->resist, &ck->speed, &ck->hskill, &ck->mskill, &ck->mresist, &ck->magicmode, &ck->specialmagic, &ck->fightC, &ck->fightD, &ck->fightE,
-               &ck->weaponhead, &ck->weaponrhand, &ck->weaponlhand, &ck->weaponbody, &ck->weaponfoot, &ck->weaponA, &ck->weaponB, &ck->weaponC, &ck->weaponD, &ck->weaponE,
-               &ck->toman, &ck->character, &ck->love, &ck->wisdom, &ck->art, &ck->ethics, &ck->brave, &ck->homework, &ck->charm, &ck->manners, &ck->speech, &ck->cookskill, &ck->learnA, &ck->learnB, &ck->learnC, &ck->learnD, &ck->learnE,
-               &ck->happy, &ck->satisfy, &ck->fallinlove, &ck->belief, &ck->offense, &ck->affect, &ck->stateA, &ck->stateB, &ck->stateC, &ck->stateD, &ck->stateE,
-               &ck->food, &ck->medicine, &ck->bighp, &ck->cookie, &ck->ginseng, &ck->snowgrass, &ck->eatC, &ck->eatD, &ck->eatE,
-               &ck->book, &ck->playtool, &ck->money, &ck->thingA, &ck->thingB, &ck->thingC, &ck->thingD, &ck->thingE,
-               &ck->winn, &ck->losee,
-               &ck->royalA, &ck->royalB, &ck->royalC, &ck->royalD, &ck->royalE, &ck->royalF, &ck->royalG, &ck->royalH, &ck->royalI, &ck->royalJ, &ck->seeroyalJ, &ck->seeA, &ck->seeB, &ck->seeC, &ck->seeD, &ck->seeE,
-               &ck->wantend, &ck->lover, ck->name,
-               &ck->classA, &ck->classB, &ck->classC, &ck->classD, &ck->classE,
-               &ck->classF, &ck->classG, &ck->classH, &ck->classI, &ck->classJ,
-               &ck->classK, &ck->classL, &ck->classM, &ck->classN, &ck->classO,
-               &ck->workA, &ck->workB, &ck->workC, &ck->workD, &ck->workE,
-               &ck->workF, &ck->workG, &ck->workH, &ck->workI, &ck->workJ,
-               &ck->workK, &ck->workL, &ck->workM, &ck->workN, &ck->workO,
-               &ck->workP, &ck->workQ, &ck->workR, &ck->workS, &ck->workT,
-               &ck->workU, &ck->workV, &ck->workW, &ck->workX, &ck->workY, &ck->workZ
-              );
+            "%d%d%d%d" "%d%d%d%d" "%d%d%d%d",
+            &ck->year, &ck->month, &ck->day, &ck->sex,
+            &ck->death, &ck->nodone, &ck->relation, &ck->liveagain,
+            &ck->chickenmode, &ck->level, &ck->exp, &ck->dataL);
+
+        pip_read_array(fs, ck->body, COUNTOF(ck->body));
+        pip_read_array(fs, ck->tmp, COUNTOF(ck->tmp));
+        pip_read_array(fs, ck->fight, COUNTOF(ck->fight));
+        pip_read_array(fs, ck->weapon, COUNTOF(ck->weapon));
+        pip_read_array(fs, ck->learn, COUNTOF(ck->learn));
+        pip_read_array(fs, ck->state, COUNTOF(ck->state));
+        pip_read_array(fs, ck->eat, COUNTOF(ck->eat));
+        pip_read_array(fs, ck->thing, COUNTOF(ck->thing));
+
+        fscanf(fs, "%d%d", &ck->winn, &ck->losee);
+
+        pip_read_array(fs, ck->royal, COUNTOF(ck->royal));
+        pip_read_array(fs, ck->see, COUNTOF(ck->see));
+
+        fscanf(fs, "%d%d%s", &ck->wantend, &ck->lover, ck->name);
+
+        pip_save_array(fs, ck->class_, COUNTOF(ck->class_));
+        pip_save_array(fs, ck->work, COUNTOF(ck->work));
 
         fclose(fs);
         return true;
@@ -1795,45 +1783,45 @@ pip_live_again(void)
 
     /*身體上的設定*/
     d.death = 0;
-    d.maxhp = d.maxhp * ALIVE + 1;
-    d.hp = d.maxhp;
-    d.tired = 20;
-    d.shit = 20;
-    d.sick = 20;
-    d.wrist = d.wrist * ALIVE;
-    d.weight = 45 + 10 * tm;
+    d.body[BODY_MAXHP] = d.body[BODY_MAXHP] * ALIVE + 1;
+    d.body[BODY_HP] = d.body[BODY_MAXHP];
+    d.body[BODY_TIRED] = 20;
+    d.body[BODY_SHIT] = 20;
+    d.body[BODY_SICK] = 20;
+    d.body[BODY_WRIST] = d.body[BODY_WRIST] * ALIVE;
+    d.body[BODY_WEIGHT] = 45 + 10 * tm;
 
     /*錢減到五分之一*/
-    d.money = d.money * ALIVE;
+    d.thing[THING_MONEY] = d.thing[THING_MONEY] * ALIVE;
 
     /*戰鬥能力降一半*/
-    d.attack = d.attack * ALIVE;
-    d.resist = d.resist * ALIVE;
-    d.maxmp = d.maxmp * ALIVE;
-    d.mp = d.maxmp;
+    d.fight[FIGHT_ATTACK] = d.fight[FIGHT_ATTACK] * ALIVE;
+    d.fight[FIGHT_RESIST] = d.fight[FIGHT_RESIST] * ALIVE;
+    d.fight[FIGHT_MAXMP] = d.fight[FIGHT_MAXMP] * ALIVE;
+    d.fight[FIGHT_MP] = d.fight[FIGHT_MAXMP];
 
     /*變得不快樂*/
-    d.happy = 0;
-    d.satisfy = 0;
+    d.state[STATE_HAPPY] = 0;
+    d.state[STATE_SATISFY] = 0;
 
     /*評價減半*/
-    d.social = d.social * ALIVE;
-    d.family = d.family * ALIVE;
-    d.hexp = d.hexp * ALIVE;
-    d.mexp = d.mexp * ALIVE;
+    d.tmp[TMP_SOCIAL] = d.tmp[TMP_SOCIAL] * ALIVE;
+    d.tmp[TMP_FAMILY] = d.tmp[TMP_FAMILY] * ALIVE;
+    d.tmp[TMP_HEXP] = d.tmp[TMP_HEXP] * ALIVE;
+    d.tmp[TMP_MEXP] = d.tmp[TMP_MEXP] * ALIVE;
 
     /*武器掉光光*/
-    d.weaponhead = 0;
-    d.weaponrhand = 0;
-    d.weaponlhand = 0;
-    d.weaponbody = 0;
-    d.weaponfoot = 0;
+    d.weapon[WEAPON_HEAD] = 0;
+    d.weapon[WEAPON_RHAND] = 0;
+    d.weapon[WEAPON_LHAND] = 0;
+    d.weapon[WEAPON_BODY] = 0;
+    d.weapon[WEAPON_FOOT] = 0;
 
     /*食物剩一半*/
-    d.food = d.food * ALIVE;
-    d.medicine = d.medicine * ALIVE;
-    d.bighp = d.bighp * ALIVE;
-    d.cookie = d.cookie * ALIVE;
+    d.eat[EAT_FOOD] = d.eat[EAT_FOOD] * ALIVE;
+    d.eat[EAT_MEDICINE] = d.eat[EAT_MEDICINE] * ALIVE;
+    d.eat[EAT_BIGHP] = d.eat[EAT_BIGHP] * ALIVE;
+    d.eat[EAT_COOKIE] = d.eat[EAT_COOKIE] * ALIVE;
 
     d.liveagain += 1;
 
@@ -2036,56 +2024,56 @@ show_resultshow_pic(int i)      /*收穫季*/
 
 static int pip_store_food(void)
 {
-    int num[COUNTOF(pipfoodlist)] = {d.food, d.cookie};
+    int num[COUNTOF(pipfoodlist)] = {d.eat[EAT_FOOD], d.eat[EAT_COOKIE]};
     pip_buy_goods_new(1, pipfoodlist, num);
-    d.food = num[0];
-    d.cookie = num[1];
+    d.eat[EAT_FOOD] = num[0];
+    d.eat[EAT_COOKIE] = num[1];
     return 0;
 }
 
 static int pip_store_medicine(void)
 {
-    int num[COUNTOF(pipmedicinelist)] = {d.bighp, d.medicine, d.ginseng, d.snowgrass};
+    int num[COUNTOF(pipmedicinelist)] = {d.eat[EAT_BIGHP], d.eat[EAT_MEDICINE], d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS]};
     pip_buy_goods_new(2, pipmedicinelist, num);
-    d.bighp = num[0];
-    d.medicine = num[1];
-    d.ginseng = num[2];
-    d.snowgrass = num[3];
+    d.eat[EAT_BIGHP] = num[0];
+    d.eat[EAT_MEDICINE] = num[1];
+    d.eat[EAT_GINSENG] = num[2];
+    d.eat[EAT_SNOWGRASS] = num[3];
     return 0;
 }
 
 static int pip_store_other(void)
 {
-    int num[COUNTOF(pipotherlist)] = {d.playtool, d.book};
+    int num[COUNTOF(pipotherlist)] = {d.thing[THING_PLAYTOOL], d.thing[THING_BOOK]};
     pip_buy_goods_new(3, pipotherlist, num);
-    d.playtool = num[0];
-    d.book = num[1];
+    d.thing[THING_PLAYTOOL] = num[0];
+    d.thing[THING_BOOK] = num[1];
     return 0;
 }
 
 static int pip_store_weapon_head(void)         /*頭部武器*/
 {
-    d.weaponhead = pip_weapon_doing_menu(d.weaponhead, 0, headlist);
+    d.weapon[WEAPON_HEAD] = pip_weapon_doing_menu(d.weapon[WEAPON_HEAD], 0, headlist);
     return 0;
 }
 static int pip_store_weapon_rhand(void)        /*右手武器*/
 {
-    d.weaponrhand = pip_weapon_doing_menu(d.weaponrhand, 1, rhandlist);
+    d.weapon[WEAPON_RHAND] = pip_weapon_doing_menu(d.weapon[WEAPON_RHAND], 1, rhandlist);
     return 0;
 }
 static int pip_store_weapon_lhand(void)        /*左手武器*/
 {
-    d.weaponlhand = pip_weapon_doing_menu(d.weaponlhand, 2, lhandlist);
+    d.weapon[WEAPON_LHAND] = pip_weapon_doing_menu(d.weapon[WEAPON_LHAND], 2, lhandlist);
     return 0;
 }
 static int pip_store_weapon_body(void)         /*身體武器*/
 {
-    d.weaponbody = pip_weapon_doing_menu(d.weaponbody, 3, bodylist);
+    d.weapon[WEAPON_BODY] = pip_weapon_doing_menu(d.weapon[WEAPON_BODY], 3, bodylist);
     return 0;
 }
 static int pip_store_weapon_foot(void)         /*足部武器*/
 {
-    d.weaponfoot = pip_weapon_doing_menu(d.weaponfoot, 4, footlist);
+    d.weapon[WEAPON_FOOT] = pip_weapon_doing_menu(d.weapon[WEAPON_FOOT], 4, footlist);
     return 0;
 }
 
@@ -2103,7 +2091,7 @@ int oldnum[])
     int oldmoney;
     int i, pipkey, choice;
     int numlen;
-    oldmoney = d.money;
+    oldmoney = d.thing[THING_MONEY];
     do
     {
         clrchyiuan(6, b_lines - 6);
@@ -2143,7 +2131,7 @@ int oldnum[])
                     smoney = 1;
                 else
                 {
-                    sprintf(inbuf, "你要買入物品 [%s] 多少個呢?(上限 %d): ", p[choice].name, d.money / p[choice].money);
+                    sprintf(inbuf, "你要買入物品 [%s] 多少個呢?(上限 %d): ", p[choice].name, d.thing[THING_MONEY] / p[choice].money);
                     getdata(b_lines - 1, 1, inbuf, genbuf, 6, DOECHO, 0);
                     smoney = atoi(genbuf);
                 }
@@ -2151,7 +2139,7 @@ int oldnum[])
                 {
                     vmsg("放棄買入...");
                 }
-                else if (d.money < smoney*p[choice].money)
+                else if (d.thing[THING_MONEY] < smoney*p[choice].money)
                 {
                     vmsg("你的錢沒有那麼多喔..");
                 }
@@ -2162,21 +2150,21 @@ int oldnum[])
                     if (genbuf[0] == 'y' || genbuf[0] == 'Y')
                     {
                         oldnum[choice] += smoney;
-                        d.money -= smoney * p[choice].money;
+                        d.thing[THING_MONEY] -= smoney * p[choice].money;
                         sprintf(inbuf, "老闆給了你%ld個%s", smoney, p[choice].name);
                         vmsg(inbuf);
                         vmsg(p[choice].msguse);
                         if (mode == 3 && choice == 1)
                         {
-                            d.happy += random() % 10 + 20 * smoney;
-                            d.satisfy += random() % 10 + 20 * smoney;
+                            d.state[STATE_HAPPY] += random() % 10 + 20 * smoney;
+                            d.state[STATE_SATISFY] += random() % 10 + 20 * smoney;
                         }
                         else if (mode == 3 && choice == 2)
                         {
-                            d.happy += (random() % 2 + 2) * smoney;
-                            d.wisdom += (2 + 10 / (d.wisdom / 100 + 1)) * smoney;
-                            d.character += (random() % 4 + 2) * smoney;
-                            d.art += (random() % 2 + 1) * smoney;
+                            d.state[STATE_HAPPY] += (random() % 2 + 2) * smoney;
+                            d.learn[LEARN_WISDOM] += (2 + 10 / (d.learn[LEARN_WISDOM] / 100 + 1)) * smoney;
+                            d.learn[LEARN_CHARACTER] += (random() % 4 + 2) * smoney;
+                            d.learn[LEARN_ART] += (random() % 2 + 1) * smoney;
                         }
                     }
                     else
@@ -2233,7 +2221,7 @@ int oldnum[])
                     if (genbuf[0] == 'y' || genbuf[0] == 'Y')
                     {
                         oldnum[choice] -= smoney;
-                        d.money += smoney * p[choice].money * 8 / 10;
+                        d.thing[THING_MONEY] += smoney * p[choice].money * 8 / 10;
                         sprintf(inbuf, "老闆拿走了你的%ld個%s", smoney, p[choice].name);
                         vmsg(inbuf);
                     }
@@ -2251,7 +2239,7 @@ int oldnum[])
             break;
         case 'Q':
         case 'q':
-            sprintf(inbuf, "金錢交易共 %d 元，離開 %s ", oldmoney - d.money, shopname[mode]);
+            sprintf(inbuf, "金錢交易共 %d 元，離開 %s ", oldmoney - d.thing[THING_MONEY], shopname[mode]);
             vmsg(inbuf);
             break;
         }
@@ -2283,7 +2271,7 @@ const struct weapon *p)
         show_weapon_pic(0);
    /*   move(10, 2);
         prints_centered("\x1b[1;37m現今能力:體力Max:\x1b[36m%-5d\x1b[37m  法力Max:\x1b[36m%-5d\x1b[37m  攻擊:\x1b[36m%-5d\x1b[37m  防禦:\x1b[36m%-5d\x1b[37m  速度:\x1b[36m%-5d \x1b[m",
-                d.maxhp, d.maxmp, d.attack, d.resist, d.speed);
+                d.body[BODY_MAXHP], d.fight[FIGHT_MAXMP], d.fight[FIGHT_ATTACK], d.fight[FIGHT_RESIST], d.fight[FIGHT_SPEED]);
    */
         move(11, 2);
         prints_centered("\x1b[1;37;41m [NO]  [器具名]  [體力]  [法力]  [速度]  [攻擊]  [防禦]  [速度]  [售  價] \x1b[m");
@@ -2300,14 +2288,14 @@ const struct weapon *p)
                         n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
                         p[n].attack, p[n].resist, p[n].speed, p[n].cost);
             }
-            else if (d.maxhp < p[n].needmaxhp || d.maxmp < p[n].needmaxmp || d.speed < p[n].needspeed)/*能力不足*/
+            else if (d.body[BODY_MAXHP] < p[n].needmaxhp || d.fight[FIGHT_MAXMP] < p[n].needmaxmp || d.fight[FIGHT_SPEED] < p[n].needspeed)/*能力不足*/
             {
                 prints_centered("\x1b[1;35m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
                         n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
                         p[n].attack, p[n].resist, p[n].speed, p[n].cost);
             }
 
-            else if (d.money < p[n].cost) /*錢不夠的*/
+            else if (d.thing[THING_MONEY] < p[n].cost) /*錢不夠的*/
             {
                 prints_centered("\x1b[1;33m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
                         n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
@@ -2333,7 +2321,7 @@ const struct weapon *p)
         case 'B':
         case 'b':
             move(b_lines - 1, 1);
-            sprintf(shortbuf, "想要購買啥呢? 你的錢錢[%d]元:[數字]: ", d.money);
+            sprintf(shortbuf, "想要購買啥呢? 你的錢錢[%d]元:[數字]: ", d.thing[THING_MONEY]);
             getdata(b_lines - 1, 1, shortbuf, choicekey, 4, LCECHO, "0");
             choice = atoi(choicekey);
             if (choice >= 0 && choice <= n)
@@ -2353,14 +2341,14 @@ const struct weapon *p)
                     vmsg(shortbuf);
                 }
 
-                else if (p[choice].cost >= (d.money + p[variance].sell))  /*錢不夠*/
+                else if (p[choice].cost >= (d.thing[THING_MONEY] + p[variance].sell))  /*錢不夠*/
                 {
                     sprintf(shortbuf, "這個要 %d 元，你的錢不夠啦!", p[choice].cost);
                     vmsg(shortbuf);
                 }
 
-                else if (d.maxhp < p[choice].needmaxhp || d.maxmp < p[choice].needmaxmp
-                          || d.speed < p[choice].needspeed)  /*能力不足*/
+                else if (d.body[BODY_MAXHP] < p[choice].needmaxhp || d.fight[FIGHT_MAXMP] < p[choice].needmaxmp
+                          || d.fight[FIGHT_SPEED] < p[choice].needspeed)  /*能力不足*/
                 {
                     sprintf(shortbuf, "需要HP %d MP %d SPEED %d 喔",
                             p[choice].needmaxhp, p[choice].needmaxmp, p[choice].needspeed);
@@ -2374,10 +2362,10 @@ const struct weapon *p)
                     {
                         sprintf(shortbuf, "小雞已經裝備上 %s 了", p[choice].name);
                         vmsg(shortbuf);
-                        d.attack += (p[choice].attack - p[variance].attack);
-                        d.resist += (p[choice].resist - p[variance].resist);
-                        d.speed += (p[choice].speed - p[variance].speed);
-                        d.money -= (p[choice].cost - p[variance].sell);
+                        d.fight[FIGHT_ATTACK] += (p[choice].attack - p[variance].attack);
+                        d.fight[FIGHT_RESIST] += (p[choice].resist - p[variance].resist);
+                        d.fight[FIGHT_SPEED] += (p[choice].speed - p[variance].speed);
+                        d.thing[THING_MONEY] -= (p[choice].cost - p[variance].sell);
                         variance = choice;
                     }
                     else
@@ -2398,10 +2386,10 @@ const struct weapon *p)
                 if (ans[0] == 'y' || ans[0] == 'Y')
                 {
                     sprintf(shortbuf, "裝備 %s 賣了 %d", p[variance].name, p[variance].sell);
-                    d.attack -= p[variance].attack;
-                    d.resist -= p[variance].resist;
-                    d.speed -= p[variance].speed;
-                    d.money += p[variance].sell;
+                    d.fight[FIGHT_ATTACK] -= p[variance].attack;
+                    d.fight[FIGHT_RESIST] -= p[variance].resist;
+                    d.fight[FIGHT_SPEED] -= p[variance].speed;
+                    d.thing[THING_MONEY] += p[variance].sell;
                     vmsg(shortbuf);
                     variance = 0;
                 }
@@ -2447,55 +2435,55 @@ static int pip_job_workA(void)
     long workmoney;
 
     workmoney = 0;
-    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    d.maxhp += random() % 2 * LEARN_LEVEL;
-    d.shit += random() % 3 + 5;
+    class_ = ((d.body[BODY_HP] * 100 / d.body[BODY_MAXHP]) - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    d.body[BODY_MAXHP] += random() % 2 * LEARN_LEVEL;
+    d.body[BODY_SHIT] += random() % 3 + 5;
     count_tired(3, 7, true, 100, 1);
-    d.hp -= (random() % 2 + 4);
-    d.happy -= (random() % 3 + 4);
-    d.satisfy -= random() % 3 + 4;
-    d.affect -= 7 + random() % 7;
-    if (d.affect <= 0)
-        d.affect = 0;
+    d.body[BODY_HP] -= (random() % 2 + 4);
+    d.state[STATE_HAPPY] -= (random() % 3 + 4);
+    d.state[STATE_SATISFY] -= random() % 3 + 4;
+    d.state[STATE_AFFECT] -= 7 + random() % 7;
+    if (d.state[STATE_AFFECT] <= 0)
+        d.state[STATE_AFFECT] = 0;
     show_job_pic(11);
     if (class_ >= 75)
     {
-        d.cookskill += random() % 2 + 7;
-        d.homework += random() % 2 + 7;
-        d.family += random() % 3 + 4;
+        d.learn[LEARN_COOKSKILL] += random() % 2 + 7;
+        d.learn[LEARN_HOMEWORK] += random() % 2 + 7;
+        d.tmp[TMP_FAMILY] += random() % 3 + 4;
         d.relation += random() % 3 + 4;
-        workmoney = 80 + (d.cookskill * 2 + d.homework + d.family) / 40;
+        workmoney = 80 + (d.learn[LEARN_COOKSKILL] * 2 + d.learn[LEARN_HOMEWORK] + d.tmp[TMP_FAMILY]) / 40;
         vmsg("家事很成功\喔..多一點錢給你..");
     }
     else if (class_ >= 50)
     {
-        d.cookskill += random() % 2 + 5;
-        d.homework += random() % 2 + 5;
-        d.family += random() % 3 + 3;
+        d.learn[LEARN_COOKSKILL] += random() % 2 + 5;
+        d.learn[LEARN_HOMEWORK] += random() % 2 + 5;
+        d.tmp[TMP_FAMILY] += random() % 3 + 3;
         d.relation += random() % 3 + 3;
-        workmoney = 60 + (d.cookskill * 2 + d.homework + d.family) / 45;
+        workmoney = 60 + (d.learn[LEARN_COOKSKILL] * 2 + d.learn[LEARN_HOMEWORK] + d.tmp[TMP_FAMILY]) / 45;
         vmsg("家事還蠻順利的唷..嗯嗯..");
     }
     else if (class_ >= 25)
     {
-        d.cookskill += random() % 3 + 3;
-        d.homework += random() % 3 + 3;
-        d.family += random() % 3 + 2;
+        d.learn[LEARN_COOKSKILL] += random() % 3 + 3;
+        d.learn[LEARN_HOMEWORK] += random() % 3 + 3;
+        d.tmp[TMP_FAMILY] += random() % 3 + 2;
         d.relation += random() % 3 + 2;
-        workmoney = 40 + (d.cookskill * 2 + d.homework + d.family) / 50;
+        workmoney = 40 + (d.learn[LEARN_COOKSKILL] * 2 + d.learn[LEARN_HOMEWORK] + d.tmp[TMP_FAMILY]) / 50;
         vmsg("家事普普通通啦..可以更好的..加油..");
     }
     else
     {
-        d.cookskill += random() % 3 + 1;
-        d.homework += random() % 3 + 1;
-        d.family += random() % 3 + 1;
+        d.learn[LEARN_COOKSKILL] += random() % 3 + 1;
+        d.learn[LEARN_HOMEWORK] += random() % 3 + 1;
+        d.tmp[TMP_FAMILY] += random() % 3 + 1;
         d.relation += random() % 3 + 1;
-        workmoney = 20 + (d.cookskill * 2 + d.homework + d.family) / 60;
+        workmoney = 20 + (d.learn[LEARN_COOKSKILL] * 2 + d.learn[LEARN_HOMEWORK] + d.tmp[TMP_FAMILY]) / 60;
         vmsg("家事很糟糕喔..這樣不行啦..");
     }
-    d.money += workmoney * LEARN_LEVEL;
-    d.workA += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[A] += 1;
     return 0;
 }
 
@@ -2510,49 +2498,49 @@ static int pip_job_workB(void)
     long workmoney;
 
     workmoney = 0;
-    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    d.maxhp += (random() % 2 + 1) * LEARN_LEVEL;
-    d.shit += random() % 3 + 5;
-    d.affect += random() % 3 + 4;
+    class_ = ((d.body[BODY_HP] * 100 / d.body[BODY_MAXHP]) - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    d.body[BODY_MAXHP] += (random() % 2 + 1) * LEARN_LEVEL;
+    d.body[BODY_SHIT] += random() % 3 + 5;
+    d.state[STATE_AFFECT] += random() % 3 + 4;
 
     count_tired(3, 9, true, 100, 1);
-    d.hp -= (random() % 3 + 6);
-    d.happy -= (random() % 3 + 4);
-    d.satisfy -= random() % 3 + 4;
-    d.charm -= random() % 3 + 4;
-    if (d.charm <= 0)
-        d.charm = 0;
+    d.body[BODY_HP] -= (random() % 3 + 6);
+    d.state[STATE_HAPPY] -= (random() % 3 + 4);
+    d.state[STATE_SATISFY] -= random() % 3 + 4;
+    d.learn[LEARN_CHARM] -= random() % 3 + 4;
+    if (d.learn[LEARN_CHARM] <= 0)
+        d.learn[LEARN_CHARM] = 0;
     show_job_pic(21);
     if (class_ >= 90)
     {
-        d.love += random() % 2 + 7;
-        d.toman += random() % 2 + 2;
-        workmoney = 150 + (d.love + d.toman) / 50;
+        d.learn[LEARN_LOVE] += random() % 2 + 7;
+        d.learn[LEARN_TOMAN] += random() % 2 + 2;
+        workmoney = 150 + (d.learn[LEARN_LOVE] + d.learn[LEARN_TOMAN]) / 50;
         vmsg("當保姆很成功\喔..下次再來喔..");
     }
     else if (class_ >= 75)
     {
-        d.love += random() % 2 + 5;
-        d.toman += random() % 2 + 2;
-        workmoney = 120 + (d.love + d.toman) / 50;
+        d.learn[LEARN_LOVE] += random() % 2 + 5;
+        d.learn[LEARN_TOMAN] += random() % 2 + 2;
+        workmoney = 120 + (d.learn[LEARN_LOVE] + d.learn[LEARN_TOMAN]) / 50;
         vmsg("保姆還當的不錯唷..嗯嗯..");
     }
     else if (class_ >= 50)
     {
-        d.love += random() % 2 + 3;
-        d.toman += random() % 2 + 1;
-        workmoney = 100 + (d.love + d.toman) / 50;
+        d.learn[LEARN_LOVE] += random() % 2 + 3;
+        d.learn[LEARN_TOMAN] += random() % 2 + 1;
+        workmoney = 100 + (d.learn[LEARN_LOVE] + d.learn[LEARN_TOMAN]) / 50;
         vmsg("小朋友很皮喔..加油..");
     }
     else
     {
-        d.love += random() % 2 + 1;
-        d.toman += random() % 2 + 1;
-        workmoney = 80 + (d.love + d.toman) / 50;
+        d.learn[LEARN_LOVE] += random() % 2 + 1;
+        d.learn[LEARN_TOMAN] += random() % 2 + 1;
+        workmoney = 80 + (d.learn[LEARN_LOVE] + d.learn[LEARN_TOMAN]) / 50;
         vmsg("很糟糕喔..你罩不住小朋友耶...");
     }
-    d.money += workmoney * LEARN_LEVEL;
-    d.workB += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[B] += 1;
     return 0;
 }
 
@@ -2567,56 +2555,56 @@ static int pip_job_workC(void)
     long workmoney;
 
     workmoney = 0;
-    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    d.maxhp += (random() % 2 + 2) * LEARN_LEVEL;
-    d.shit += random() % 3 + 5;
+    class_ = ((d.body[BODY_HP] * 100 / d.body[BODY_MAXHP]) - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    d.body[BODY_MAXHP] += (random() % 2 + 2) * LEARN_LEVEL;
+    d.body[BODY_SHIT] += random() % 3 + 5;
     count_tired(5, 12, true, 100, 1);
-    d.hp -= (random() % 4 + 8);
-    d.happy -= (random() % 3 + 4);
-    d.satisfy -= random() % 3 + 4;
+    d.body[BODY_HP] -= (random() % 4 + 8);
+    d.state[STATE_HAPPY] -= (random() % 3 + 4);
+    d.state[STATE_SATISFY] -= random() % 3 + 4;
     show_job_pic(31);
     if (class_ >= 95)
     {
-        d.homework += random() % 2 + 7;
-        d.family += random() % 2 + 4;
-        d.hskill -= random() % 2 + 7;
-        if (d.hskill < 0)
-            d.hskill = 0;
-        workmoney = 250 + (d.cookskill * 2 + d.homework * 2) / 40;
+        d.learn[LEARN_HOMEWORK] += random() % 2 + 7;
+        d.tmp[TMP_FAMILY] += random() % 2 + 4;
+        d.fight[FIGHT_HSKILL] -= random() % 2 + 7;
+        if (d.fight[FIGHT_HSKILL] < 0)
+            d.fight[FIGHT_HSKILL] = 0;
+        workmoney = 250 + (d.learn[LEARN_COOKSKILL] * 2 + d.learn[LEARN_HOMEWORK] * 2) / 40;
         vmsg("旅館事業蒸蒸日上..希望你再過來...");
     }
     else if (class_ >= 80)
     {
-        d.homework += random() % 2 + 5;
-        d.family += random() % 2 + 3;
-        d.hskill -= random() % 2 + 5;
-        if (d.hskill < 0)
-            d.hskill = 0;
-        workmoney = 200 + (d.cookskill * 2 + d.homework * 2) / 50;
+        d.learn[LEARN_HOMEWORK] += random() % 2 + 5;
+        d.tmp[TMP_FAMILY] += random() % 2 + 3;
+        d.fight[FIGHT_HSKILL] -= random() % 2 + 5;
+        if (d.fight[FIGHT_HSKILL] < 0)
+            d.fight[FIGHT_HSKILL] = 0;
+        workmoney = 200 + (d.learn[LEARN_COOKSKILL] * 2 + d.learn[LEARN_HOMEWORK] * 2) / 50;
         vmsg("旅館還蠻順利的唷..嗯嗯..");
     }
     else if (class_ >= 60)
     {
-        d.homework += random() % 2 + 3;
-        d.family += random() % 2 + 3;
-        d.hskill -= random() % 2 + 5;
-        if (d.hskill < 0)
-            d.hskill = 0;
-        workmoney = 150 + (d.cookskill * 2 + d.homework * 2) / 50;
+        d.learn[LEARN_HOMEWORK] += random() % 2 + 3;
+        d.tmp[TMP_FAMILY] += random() % 2 + 3;
+        d.fight[FIGHT_HSKILL] -= random() % 2 + 5;
+        if (d.fight[FIGHT_HSKILL] < 0)
+            d.fight[FIGHT_HSKILL] = 0;
+        workmoney = 150 + (d.learn[LEARN_COOKSKILL] * 2 + d.learn[LEARN_HOMEWORK] * 2) / 50;
         vmsg("普普通通啦..可以更好的..加油..");
     }
     else
     {
-        d.homework += random() % 2 + 1;
-        d.family += random() % 2 + 1;
-        d.hskill -= random() % 2 + 1;
-        if (d.hskill < 0)
-            d.hskill = 0;
-        workmoney = 100 + (d.cookskill * 2 + d.homework * 2) / 50;
+        d.learn[LEARN_HOMEWORK] += random() % 2 + 1;
+        d.tmp[TMP_FAMILY] += random() % 2 + 1;
+        d.fight[FIGHT_HSKILL] -= random() % 2 + 1;
+        if (d.fight[FIGHT_HSKILL] < 0)
+            d.fight[FIGHT_HSKILL] = 0;
+        workmoney = 100 + (d.learn[LEARN_COOKSKILL] * 2 + d.learn[LEARN_HOMEWORK] * 2) / 50;
         vmsg("這個很糟糕喔..你這樣不行啦..");
     }
-    d.money += workmoney * LEARN_LEVEL;
-    d.workC += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[C] += 1;
     return 0;
 }
 
@@ -2631,40 +2619,40 @@ static int pip_job_workD(void)
     long workmoney;
 
     workmoney = 0;
-    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    d.maxhp += (random() % 3 + 2) * LEARN_LEVEL;
-    d.wrist += random() % 2 + 2;
-    d.shit += random() % 5 + 10;
+    class_ = ((d.body[BODY_HP] * 100 / d.body[BODY_MAXHP]) - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    d.body[BODY_MAXHP] += (random() % 3 + 2) * LEARN_LEVEL;
+    d.body[BODY_WRIST] += random() % 2 + 2;
+    d.body[BODY_SHIT] += random() % 5 + 10;
     count_tired(5, 15, true, 100, 1);
-    d.hp -= (random() % 4 + 10);
-    d.happy -= (random() % 3 + 4);
-    d.satisfy -= random() % 3 + 4;
-    d.character -= random() % 3 + 4;
-    if (d.character < 0)
-        d.character = 0;
+    d.body[BODY_HP] -= (random() % 4 + 10);
+    d.state[STATE_HAPPY] -= (random() % 3 + 4);
+    d.state[STATE_SATISFY] -= random() % 3 + 4;
+    d.learn[LEARN_CHARACTER] -= random() % 3 + 4;
+    if (d.learn[LEARN_CHARACTER] < 0)
+        d.learn[LEARN_CHARACTER] = 0;
     show_job_pic(41);
     if (class_ >= 95)
     {
-        workmoney = 250 + (d.wrist * 2 + d.hp * 2) / 80;
+        workmoney = 250 + (d.body[BODY_WRIST] * 2 + d.body[BODY_HP] * 2) / 80;
         vmsg("牛羊長的好好喔..希望你再來幫忙...");
     }
     else if (class_ >= 80)
     {
-        workmoney = 210 + (d.wrist * 2 + d.hp * 2) / 80;
+        workmoney = 210 + (d.body[BODY_WRIST] * 2 + d.body[BODY_HP] * 2) / 80;
         vmsg("呵呵..還不錯喔..:)");
     }
     else if (class_ >= 60)
     {
-        workmoney = 160 + (d.wrist * 2 + d.hp * 2) / 80;
+        workmoney = 160 + (d.body[BODY_WRIST] * 2 + d.body[BODY_HP] * 2) / 80;
         vmsg("普普通通啦..可以更好的..");
     }
     else
     {
-        workmoney = 120 + (d.wrist * 2 + d.hp * 2) / 80;
+        workmoney = 120 + (d.body[BODY_WRIST] * 2 + d.body[BODY_HP] * 2) / 80;
         vmsg("你不太適合農場的工作  -_-...");
     }
-    d.money += workmoney * LEARN_LEVEL;
-    d.workD += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[D] += 1;
     return 0;
 }
 
@@ -2679,60 +2667,60 @@ static int pip_job_workE(void)
     long workmoney;
 
     workmoney = 0;
-    class_ = (d.cookskill - d.tired) * LEARN_LEVEL;
-    d.maxhp += (random() % 2 + 1) * LEARN_LEVEL;
-    d.shit += random() % 4 + 12;
+    class_ = (d.learn[LEARN_COOKSKILL] - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    d.body[BODY_MAXHP] += (random() % 2 + 1) * LEARN_LEVEL;
+    d.body[BODY_SHIT] += random() % 4 + 12;
     count_tired(5, 9, true, 100, 1);
-    d.hp -= (random() % 4 + 8);
-    d.happy -= (random() % 3 + 4);
-    d.satisfy -= random() % 3 + 4;
+    d.body[BODY_HP] -= (random() % 4 + 8);
+    d.state[STATE_HAPPY] -= (random() % 3 + 4);
+    d.state[STATE_SATISFY] -= random() % 3 + 4;
     show_job_pic(51);
     if (class_ >= 80)
     {
-        d.homework += random() % 2 + 1;
-        d.family += random() % 2 + 1;
-        d.hskill -= random() % 2 + 5;
-        if (d.hskill < 0)
-            d.hskill = 0;
-        d.cookskill += random() % 2 + 6;
-        workmoney = 250 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
+        d.learn[LEARN_HOMEWORK] += random() % 2 + 1;
+        d.tmp[TMP_FAMILY] += random() % 2 + 1;
+        d.fight[FIGHT_HSKILL] -= random() % 2 + 5;
+        if (d.fight[FIGHT_HSKILL] < 0)
+            d.fight[FIGHT_HSKILL] = 0;
+        d.learn[LEARN_COOKSKILL] += random() % 2 + 6;
+        workmoney = 250 + (d.learn[LEARN_COOKSKILL] * 2 + d.learn[LEARN_HOMEWORK] * 2 + d.tmp[TMP_FAMILY] * 2) / 80;
         vmsg("客人都說太好吃了..再來一盤吧...");
     }
     else if (class_ >= 60)
     {
-        d.homework += random() % 2 + 1;
-        d.family += random() % 2 + 1;
-        d.hskill -= random() % 2 + 5;
-        if (d.hskill < 0)
-            d.hskill = 0;
-        d.cookskill += random() % 2 + 4;
-        workmoney = 200 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
+        d.learn[LEARN_HOMEWORK] += random() % 2 + 1;
+        d.tmp[TMP_FAMILY] += random() % 2 + 1;
+        d.fight[FIGHT_HSKILL] -= random() % 2 + 5;
+        if (d.fight[FIGHT_HSKILL] < 0)
+            d.fight[FIGHT_HSKILL] = 0;
+        d.learn[LEARN_COOKSKILL] += random() % 2 + 4;
+        workmoney = 200 + (d.learn[LEARN_COOKSKILL] * 2 + d.learn[LEARN_HOMEWORK] * 2 + d.tmp[TMP_FAMILY] * 2) / 80;
         vmsg("煮的還不錯吃唷..:)");
     }
     else if (class_ >= 30)
     {
-        d.homework += random() % 2 + 1;
-        d.family += random() % 2 + 1;
-        d.hskill -= random() % 2 + 5;
-        if (d.hskill < 0)
-            d.hskill = 0;
-        d.cookskill += random() % 2 + 2;
-        workmoney = 150 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
+        d.learn[LEARN_HOMEWORK] += random() % 2 + 1;
+        d.tmp[TMP_FAMILY] += random() % 2 + 1;
+        d.fight[FIGHT_HSKILL] -= random() % 2 + 5;
+        if (d.fight[FIGHT_HSKILL] < 0)
+            d.fight[FIGHT_HSKILL] = 0;
+        d.learn[LEARN_COOKSKILL] += random() % 2 + 2;
+        workmoney = 150 + (d.learn[LEARN_COOKSKILL] * 2 + d.learn[LEARN_HOMEWORK] * 2 + d.tmp[TMP_FAMILY] * 2) / 80;
         vmsg("普普通通啦..可以更好的..");
     }
     else
     {
-        d.homework += random() % 2 + 1;
-        d.family += random() % 2 + 1;
-        d.hskill -= random() % 2 + 5;
-        if (d.hskill < 0)
-            d.hskill = 0;
-        d.cookskill += random() % 2 + 1;
-        workmoney = 100 + (d.cookskill * 2 + d.homework * 2 + d.family * 2) / 80;
+        d.learn[LEARN_HOMEWORK] += random() % 2 + 1;
+        d.tmp[TMP_FAMILY] += random() % 2 + 1;
+        d.fight[FIGHT_HSKILL] -= random() % 2 + 5;
+        if (d.fight[FIGHT_HSKILL] < 0)
+            d.fight[FIGHT_HSKILL] = 0;
+        d.learn[LEARN_COOKSKILL] += random() % 2 + 1;
+        workmoney = 100 + (d.learn[LEARN_COOKSKILL] * 2 + d.learn[LEARN_HOMEWORK] * 2 + d.tmp[TMP_FAMILY] * 2) / 80;
         vmsg("你的廚藝待加強喔...");
     }
-    d.money += workmoney * LEARN_LEVEL;
-    d.workE += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[E] += 1;
     return 0;
 }
 
@@ -2745,39 +2733,39 @@ static int pip_job_workF(void)
     long workmoney;
 
     workmoney = 0;
-    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+    class_ = ((d.body[BODY_HP] * 100 / d.body[BODY_MAXHP]) - d.body[BODY_TIRED]) * LEARN_LEVEL;
     count_tired(5, 7, true, 100, 1);
-    d.love += (random() % 3 + 4) * LEARN_LEVEL;
-    d.belief += (random() % 4 + 7) * LEARN_LEVEL;
-    d.ethics += (random() % 3 + 7) * LEARN_LEVEL;
-    d.shit += random() % 3 + 3;
-    d.hp -= random() % 3 + 5;
-    d.offense -= random() % 4 + 7;
-    if (d.offense < 0)
-        d.offense = 0;
+    d.learn[LEARN_LOVE] += (random() % 3 + 4) * LEARN_LEVEL;
+    d.state[STATE_BELIEF] += (random() % 4 + 7) * LEARN_LEVEL;
+    d.learn[LEARN_ETHICS] += (random() % 3 + 7) * LEARN_LEVEL;
+    d.body[BODY_SHIT] += random() % 3 + 3;
+    d.body[BODY_HP] -= random() % 3 + 5;
+    d.state[STATE_OFFENSE] -= random() % 4 + 7;
+    if (d.state[STATE_OFFENSE] < 0)
+        d.state[STATE_OFFENSE] = 0;
     show_job_pic(61);
     if (class_ >= 75)
     {
-        workmoney = 100 + (d.belief + d.ethics - d.offense) / 20;
+        workmoney = 100 + (d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS] - d.state[STATE_OFFENSE]) / 20;
         vmsg("錢很少 但看你這麼認真 給你多一點...");
     }
     else if (class_ >= 50)
     {
-        workmoney = 75 + (d.belief + d.ethics - d.offense) / 20;
+        workmoney = 75 + (d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS] - d.state[STATE_OFFENSE]) / 20;
         vmsg("謝謝你的熱心幫忙..:)");
     }
     else if (class_ >= 25)
     {
-        workmoney = 50 + (d.belief + d.ethics - d.offense) / 20;
+        workmoney = 50 + (d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS] - d.state[STATE_OFFENSE]) / 20;
         vmsg("你真的很有愛心啦..不過有點小累的樣子...");
     }
     else
     {
-        workmoney = 25 + (d.belief + d.ethics - d.offense) / 20;
+        workmoney = 25 + (d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS] - d.state[STATE_OFFENSE]) / 20;
         vmsg("來奉獻不錯..但也不能打混ㄚ....:(");
     }
-    d.money += workmoney * LEARN_LEVEL;
-    d.workF += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[F] += 1;
     return 0;
 }
 
@@ -2789,22 +2777,22 @@ static int pip_job_workG(void)
     long workmoney;
 
     workmoney = 0;
-    workmoney = 200 + (d.charm * 3 + d.speech * 2 + d.toman) / 50;
+    workmoney = 200 + (d.learn[LEARN_CHARM] * 3 + d.learn[LEARN_SPEECH] * 2 + d.learn[LEARN_TOMAN]) / 50;
     count_tired(3, 12, true, 100, 1);
-    d.shit += random() % 3 + 8;
-    d.speed += (random() % 2) * LEARN_LEVEL;
-    d.weight -= random() % 2;
-    d.happy -= (random() % 3 + 7);
-    d.satisfy -= random() % 3 + 5;
-    d.hp -= (random() % 6 + 6);
-    d.charm += (random() % 2 + 3) * LEARN_LEVEL;
-    d.speech += (random() % 2 + 3) * LEARN_LEVEL;
-    d.toman += (random() % 2 + 3) * LEARN_LEVEL;
+    d.body[BODY_SHIT] += random() % 3 + 8;
+    d.fight[FIGHT_SPEED] += (random() % 2) * LEARN_LEVEL;
+    d.body[BODY_WEIGHT] -= random() % 2;
+    d.state[STATE_HAPPY] -= (random() % 3 + 7);
+    d.state[STATE_SATISFY] -= random() % 3 + 5;
+    d.body[BODY_HP] -= (random() % 6 + 6);
+    d.learn[LEARN_CHARM] += (random() % 2 + 3) * LEARN_LEVEL;
+    d.learn[LEARN_SPEECH] += (random() % 2 + 3) * LEARN_LEVEL;
+    d.learn[LEARN_TOMAN] += (random() % 2 + 3) * LEARN_LEVEL;
     move(4, 0);
     show_job_pic(71);
     vmsg("擺\地攤要躲警察啦..:p");
-    d.money += workmoney * LEARN_LEVEL;
-    d.workG += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[G] += 1;
     return 0;
 }
 
@@ -2824,40 +2812,40 @@ static int pip_job_workH(void)
         return 0;
     }
     workmoney = 0;
-    class_ = (d.wrist - d.tired) * LEARN_LEVEL;
-    d.maxhp += (random() % 2 + 3) * LEARN_LEVEL;
-    d.shit += random() % 7 + 15;
-    d.wrist += (random() % 3 + 4) * LEARN_LEVEL;
+    class_ = (d.body[BODY_WRIST] - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    d.body[BODY_MAXHP] += (random() % 2 + 3) * LEARN_LEVEL;
+    d.body[BODY_SHIT] += random() % 7 + 15;
+    d.body[BODY_WRIST] += (random() % 3 + 4) * LEARN_LEVEL;
     count_tired(5, 15, true, 100, 1);
-    d.hp -= (random() % 4 + 10);
-    d.happy -= (random() % 3 + 4);
-    d.satisfy -= random() % 3 + 4;
-    d.character -= random() % 3 + 7;
-    if (d.character < 0)
-        d.character = 0;
+    d.body[BODY_HP] -= (random() % 4 + 10);
+    d.state[STATE_HAPPY] -= (random() % 3 + 4);
+    d.state[STATE_SATISFY] -= random() % 3 + 4;
+    d.learn[LEARN_CHARACTER] -= random() % 3 + 7;
+    if (d.learn[LEARN_CHARACTER] < 0)
+        d.learn[LEARN_CHARACTER] = 0;
     show_job_pic(81);
     if (class_ >= 70)
     {
-        workmoney = 350 + d.wrist / 20 + d.maxhp / 80;
+        workmoney = 350 + d.body[BODY_WRIST] / 20 + d.body[BODY_MAXHP] / 80;
         vmsg("你腕力很好唷..:)");
     }
     else if (class_ >= 50)
     {
-        workmoney = 300 + d.wrist / 20 + d.maxhp / 80;
+        workmoney = 300 + d.body[BODY_WRIST] / 20 + d.body[BODY_MAXHP] / 80;
         vmsg("砍了不少樹喔.....:)");
     }
     else if (class_ >= 20)
     {
-        workmoney = 250 + d.wrist / 20 + d.maxhp / 80;
+        workmoney = 250 + d.body[BODY_WRIST] / 20 + d.body[BODY_MAXHP] / 80;
         vmsg("普普通通啦..可以更好的..");
     }
     else
     {
-        workmoney = 200 + d.wrist / 20 + d.maxhp / 80;
+        workmoney = 200 + d.body[BODY_WRIST] / 20 + d.body[BODY_MAXHP] / 80;
         vmsg("待加強喔..鍛鍊再來吧....");
     }
-    d.money += workmoney * LEARN_LEVEL;
-    d.workH += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[H] += 1;
     return 0;
 }
 
@@ -2877,40 +2865,40 @@ static int pip_job_workI(void)
         return 0;
     }
     workmoney = 0;
-    class_ = (d.art - d.tired) * LEARN_LEVEL;
-    d.maxhp += (random() % 2) * LEARN_LEVEL;
-    d.affect += (random() % 2 + 3) * LEARN_LEVEL;
+    class_ = (d.learn[LEARN_ART] - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    d.body[BODY_MAXHP] += (random() % 2) * LEARN_LEVEL;
+    d.state[STATE_AFFECT] += (random() % 2 + 3) * LEARN_LEVEL;
     count_tired(3, 11, true, 100, 1);
-    d.shit += random() % 4 + 8;
-    d.hp -= (random() % 4 + 10);
-    d.happy -= (random() % 3 + 4);
-    d.satisfy -= random() % 3 + 4;
-    d.wrist -= random() % + 3;
-    if (d.wrist < 0)
-        d.wrist = 0;
+    d.body[BODY_SHIT] += random() % 4 + 8;
+    d.body[BODY_HP] -= (random() % 4 + 10);
+    d.state[STATE_HAPPY] -= (random() % 3 + 4);
+    d.state[STATE_SATISFY] -= random() % 3 + 4;
+    d.body[BODY_WRIST] -= random() % + 3;
+    if (d.body[BODY_WRIST] < 0)
+        d.body[BODY_WRIST] = 0;
     /*show_job_pic(4);*/
     if (class_ >= 80)
     {
-        workmoney = 400 + d.art / 10 + d.affect / 20;
+        workmoney = 400 + d.learn[LEARN_ART] / 10 + d.state[STATE_AFFECT] / 20;
         vmsg("客人都很喜歡讓你做造型唷..:)");
     }
     else if (class_ >= 60)
     {
-        workmoney = 360 + d.art / 10 + d.affect / 20;
+        workmoney = 360 + d.learn[LEARN_ART] / 10 + d.state[STATE_AFFECT] / 20;
         vmsg("做的不錯喔..頗有天份...:)");
     }
     else if (class_ >= 40)
     {
-        workmoney = 320 + d.art / 10 + d.affect / 20;
+        workmoney = 320 + d.learn[LEARN_ART] / 10 + d.state[STATE_AFFECT] / 20;
         vmsg("馬馬虎虎啦..再加油一點..");
     }
     else
     {
-        workmoney = 250 + d.art / 10 + d.affect / 20;
+        workmoney = 250 + d.learn[LEARN_ART] / 10 + d.state[STATE_AFFECT] / 20;
         vmsg("待加強喔..以後再來吧....");
     }
-    d.money += workmoney * LEARN_LEVEL;
-    d.workI += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[I] += 1;
     return 0;
 }
 
@@ -2934,56 +2922,56 @@ static int pip_job_workJ(void)
         return 0;
     }
     workmoney = 0;
-    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    class1 = (d.wisdom - d.tired) * LEARN_LEVEL;
+    class_ = ((d.body[BODY_HP] * 100 / d.body[BODY_MAXHP]) - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    class1 = (d.learn[LEARN_WISDOM] - d.body[BODY_TIRED]) * LEARN_LEVEL;
     count_tired(5, 15, true, 100, 1);
-    d.shit += random() % 4 + 13;
-    d.weight -= (random() % 2 + 1);
-    d.maxhp += (random() % 2 + 3) * LEARN_LEVEL;
-    d.speed += (random() % 2 + 3) * LEARN_LEVEL;
-    d.hp -= (random() % 6 + 8);
-    d.character -= random() % 3 + 4;
-    d.happy -= random() % 5 + 8;
-    d.satisfy -= random() % 5 + 6;
-    d.love -= random() % 3 + 4;
-    if (d.character < 0)
-        d.character = 0;
-    if (d.love < 0)
-        d.love = 0;
+    d.body[BODY_SHIT] += random() % 4 + 13;
+    d.body[BODY_WEIGHT] -= (random() % 2 + 1);
+    d.body[BODY_MAXHP] += (random() % 2 + 3) * LEARN_LEVEL;
+    d.fight[FIGHT_SPEED] += (random() % 2 + 3) * LEARN_LEVEL;
+    d.body[BODY_HP] -= (random() % 6 + 8);
+    d.learn[LEARN_CHARACTER] -= random() % 3 + 4;
+    d.state[STATE_HAPPY] -= random() % 5 + 8;
+    d.state[STATE_SATISFY] -= random() % 5 + 6;
+    d.learn[LEARN_LOVE] -= random() % 3 + 4;
+    if (d.learn[LEARN_CHARACTER] < 0)
+        d.learn[LEARN_CHARACTER] = 0;
+    if (d.learn[LEARN_LOVE] < 0)
+        d.learn[LEARN_LOVE] = 0;
     move(4, 0);
     show_job_pic(101);
     if (class_ >= 80 && class1 >= 80)
     {
-        d.hskill += random() % 2 + 7;
-        workmoney = 300 + d.maxhp / 50 + d.hskill / 20;
+        d.fight[FIGHT_HSKILL] += random() % 2 + 7;
+        workmoney = 300 + d.body[BODY_MAXHP] / 50 + d.fight[FIGHT_HSKILL] / 20;
         vmsg("你是完美的獵人..");
     }
     else if (class_ >= 50 && class1 >= 60)
     {
-        d.hskill += random() % 2 + 5;
-        workmoney = 270 + d.maxhp / 45 + d.hskill / 20;
+        d.fight[FIGHT_HSKILL] += random() % 2 + 5;
+        workmoney = 270 + d.body[BODY_MAXHP] / 45 + d.fight[FIGHT_HSKILL] / 20;
         vmsg("收獲還不錯喔..可以飽餐\一頓了..:)");
     }
     else if (class_ >= 25 && class1 >= 40)
     {
-        d.hskill += random() % 2 + 3;
-        workmoney = 240 + d.maxhp / 40 + d.hskill / 20;
+        d.fight[FIGHT_HSKILL] += random() % 2 + 3;
+        workmoney = 240 + d.body[BODY_MAXHP] / 40 + d.fight[FIGHT_HSKILL] / 20;
         vmsg("技術差強人意  再加油喔..");
     }
     else if (class_ >= 0 && class1 >= 20)
     {
-        d.hskill += random() % 2 + 1;
-        workmoney = 210 + d.maxhp / 30 + d.hskill / 20;
+        d.fight[FIGHT_HSKILL] += random() % 2 + 1;
+        workmoney = 210 + d.body[BODY_MAXHP] / 30 + d.fight[FIGHT_HSKILL] / 20;
         vmsg("狩獵是體力與智力的結合....");
     }
     else
     {
-        d.hskill += random() % 2;
-        workmoney = 190 + d.hskill / 20;
+        d.fight[FIGHT_HSKILL] += random() % 2;
+        workmoney = 190 + d.fight[FIGHT_HSKILL] / 20;
         vmsg("要多多鍛鍊和增進智慧啦....");
     }
-    d.money += workmoney * LEARN_LEVEL;
-    d.workJ += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[J] += 1;
     return 0;
 }
 
@@ -3002,38 +2990,38 @@ static int pip_job_workK(void)
         return 0;
     }
     workmoney = 0;
-    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
+    class_ = ((d.body[BODY_HP] * 100 / d.body[BODY_MAXHP]) - d.body[BODY_TIRED]) * LEARN_LEVEL;
     count_tired(5, 15, true, 100, 1);
-    d.shit += random() % 4 + 16;
-    d.weight -= (random() % 2 + 2);
-    d.maxhp += (random() % 2 + 1) * LEARN_LEVEL;
-    d.speed += (random() % 2 + 2) * LEARN_LEVEL;
-    d.hp -= (random() % 6 + 10);
-    d.charm -= random() % 3 + 6;
-    d.happy -= (random() % 5 + 10);
-    d.satisfy -= random() % 5 + 6;
-    if (d.charm < 0)
-        d.charm = 0;
+    d.body[BODY_SHIT] += random() % 4 + 16;
+    d.body[BODY_WEIGHT] -= (random() % 2 + 2);
+    d.body[BODY_MAXHP] += (random() % 2 + 1) * LEARN_LEVEL;
+    d.fight[FIGHT_SPEED] += (random() % 2 + 2) * LEARN_LEVEL;
+    d.body[BODY_HP] -= (random() % 6 + 10);
+    d.learn[LEARN_CHARM] -= random() % 3 + 6;
+    d.state[STATE_HAPPY] -= (random() % 5 + 10);
+    d.state[STATE_SATISFY] -= random() % 5 + 6;
+    if (d.learn[LEARN_CHARM] < 0)
+        d.learn[LEARN_CHARM] = 0;
     move(4, 0);
     show_job_pic(111);
     if (class_ >= 75)
     {
-        workmoney = 250 + d.maxhp / 50;
+        workmoney = 250 + d.body[BODY_MAXHP] / 50;
         vmsg("工程很完美  謝謝你了..");
     }
     else if (class_ >= 50)
     {
-        workmoney = 220 + d.maxhp / 45;
+        workmoney = 220 + d.body[BODY_MAXHP] / 45;
         vmsg("工程尚稱順利  辛苦你了..");
     }
     else if (class_ >= 25)
     {
-        workmoney = 200 + d.maxhp / 40;
+        workmoney = 200 + d.body[BODY_MAXHP] / 40;
         vmsg("工程差強人意  再加油喔..");
     }
     else if (class_ >= 0)
     {
-        workmoney = 180 + d.maxhp / 30;
+        workmoney = 180 + d.body[BODY_MAXHP] / 30;
         vmsg("ㄜ  待加強待加強....");
     }
     else
@@ -3042,8 +3030,8 @@ static int pip_job_workK(void)
         vmsg("下次體力好一點..疲勞度低一點再來....");
     }
 
-    d.money += workmoney * LEARN_LEVEL;
-    d.workK += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[K] += 1;
     return 0;
 }
 
@@ -3064,47 +3052,47 @@ static int pip_job_workL(void)
         return 0;
     }
     workmoney = 0;
-    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    class1 = (d.belief - d.tired) * LEARN_LEVEL;
-    d.shit += random() % 5 + 8;
-    d.maxmp += (random() % 2) * LEARN_LEVEL;
-    d.affect += (random() % 2 + 2) * LEARN_LEVEL;
-    d.brave += (random() % 2 + 2) * LEARN_LEVEL;
+    class_ = ((d.body[BODY_HP] * 100 / d.body[BODY_MAXHP]) - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    class1 = (d.state[STATE_BELIEF] - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    d.body[BODY_SHIT] += random() % 5 + 8;
+    d.fight[FIGHT_MAXMP] += (random() % 2) * LEARN_LEVEL;
+    d.state[STATE_AFFECT] += (random() % 2 + 2) * LEARN_LEVEL;
+    d.learn[LEARN_BRAVE] += (random() % 2 + 2) * LEARN_LEVEL;
     count_tired(5, 12, true, 100, 1);
-    d.hp -= (random() % 3 + 7);
-    d.happy -= (random() % 4 + 6);
-    d.satisfy -= random() % 3 + 5;
-    d.charm -= random() % 3 + 6;
-    if (d.charm < 0)
-        d.charm = 0;
+    d.body[BODY_HP] -= (random() % 3 + 7);
+    d.state[STATE_HAPPY] -= (random() % 4 + 6);
+    d.state[STATE_SATISFY] -= random() % 3 + 5;
+    d.learn[LEARN_CHARM] -= random() % 3 + 6;
+    if (d.learn[LEARN_CHARM] < 0)
+        d.learn[LEARN_CHARM] = 0;
     show_job_pic(121);
     if (class_ >= 75 && class1 >= 75)
     {
-        d.mresist += random() % 2 + 7;
-        workmoney = 200 + (d.affect + d.brave) / 40;
+        d.fight[FIGHT_MRESIST] += random() % 2 + 7;
+        workmoney = 200 + (d.state[STATE_AFFECT] + d.learn[LEARN_BRAVE]) / 40;
         vmsg("守墓成功\喔  給你多點錢");
     }
     else if (class_ >= 50 && class1 >= 50)
     {
-        d.mresist += random() % 2 + 5;
-        workmoney = 150 + (d.affect + d.brave) / 50;
+        d.fight[FIGHT_MRESIST] += random() % 2 + 5;
+        workmoney = 150 + (d.state[STATE_AFFECT] + d.learn[LEARN_BRAVE]) / 50;
         vmsg("守墓還算成功\喔..謝啦..");
     }
     else if (class_ >= 25 && class1 >= 25)
     {
-        d.mresist += random() % 2 + 3;
-        workmoney = 120 + (d.affect + d.brave) / 60;
+        d.fight[FIGHT_MRESIST] += random() % 2 + 3;
+        workmoney = 120 + (d.state[STATE_AFFECT] + d.learn[LEARN_BRAVE]) / 60;
         vmsg("守墓還算差強人意喔..加油..");
     }
     else
     {
-        d.mresist += random() % 2 + 1;
-        workmoney = 80 + (d.affect + d.brave) / 70;
+        d.fight[FIGHT_MRESIST] += random() % 2 + 1;
+        workmoney = 80 + (d.state[STATE_AFFECT] + d.learn[LEARN_BRAVE]) / 70;
         vmsg("我也不方便說啥了..請再加油..");
     }
 
-    d.money += workmoney * LEARN_LEVEL;
-    d.workL += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[L] += 1;
     return 0;
 }
 
@@ -3122,20 +3110,20 @@ static int pip_job_workM(void)
         return 0;
     }
     workmoney = 0;
-    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    workmoney = 50 + d.wisdom / 20 + d.character / 20;
+    class_ = ((d.body[BODY_HP] * 100 / d.body[BODY_MAXHP]) - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    workmoney = 50 + d.learn[LEARN_WISDOM] / 20 + d.learn[LEARN_CHARACTER] / 20;
     count_tired(5, 10, true, 100, 1);
-    d.shit += random() % 3 + 8;
-    d.character += (random() % 2) * LEARN_LEVEL;
-    d.wisdom += (random() % 2) * LEARN_LEVEL;
-    d.happy -= (random() % 3 + 6);
-    d.satisfy -= random() % 3 + 5;
-    d.hp -= (random() % 3 + 8);
-    d.money += workmoney * LEARN_LEVEL;
+    d.body[BODY_SHIT] += random() % 3 + 8;
+    d.learn[LEARN_CHARACTER] += (random() % 2) * LEARN_LEVEL;
+    d.learn[LEARN_WISDOM] += (random() % 2) * LEARN_LEVEL;
+    d.state[STATE_HAPPY] -= (random() % 3 + 6);
+    d.state[STATE_SATISFY] -= random() % 3 + 5;
+    d.body[BODY_HP] -= (random() % 3 + 8);
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
     move(4, 0);
     show_job_pic(131);
     vmsg("家教輕鬆 當然錢就少一點囉");
-    d.workM += 1;
+    d.work[M] += 1;
     return 0;
 }
 
@@ -3158,48 +3146,48 @@ static int pip_job_workN(void)
         return 0;
     }
     workmoney = 0;
-    class_ = ((d.hp * 100 / d.maxhp) - d.tired) * LEARN_LEVEL;
-    class1 = (d.charm - d.tired) * LEARN_LEVEL;
-    d.shit += random() % 5 + 5;
+    class_ = ((d.body[BODY_HP] * 100 / d.body[BODY_MAXHP]) - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    class1 = (d.learn[LEARN_CHARM] - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    d.body[BODY_SHIT] += random() % 5 + 5;
     count_tired(5, 14, true, 100, 1);
-    d.hp -= (random() % 3 + 5);
-    d.social -= random() % 5 + 6;
-    d.happy -= (random() % 4 + 6);
-    d.satisfy -= random() % 3 + 5;
-    d.wisdom -= random() % 3 + 4;
-    if (d.wisdom < 0)
-        d.wisdom = 0;
+    d.body[BODY_HP] -= (random() % 3 + 5);
+    d.tmp[TMP_SOCIAL] -= random() % 5 + 6;
+    d.state[STATE_HAPPY] -= (random() % 4 + 6);
+    d.state[STATE_SATISFY] -= random() % 3 + 5;
+    d.learn[LEARN_WISDOM] -= random() % 3 + 4;
+    if (d.learn[LEARN_WISDOM] < 0)
+        d.learn[LEARN_WISDOM] = 0;
     /*show_job_pic(6);*/
     if (class_ >= 75 && class1 >= 75)
     {
-        d.cookskill += random() % 2 + 7;
-        d.speech += random() % 2 + 5;
-        workmoney = 500 + (d.charm) / 5;
+        d.learn[LEARN_COOKSKILL] += random() % 2 + 7;
+        d.learn[LEARN_SPEECH] += random() % 2 + 5;
+        workmoney = 500 + (d.learn[LEARN_CHARM]) / 5;
         vmsg("你很紅唷  :)");
     }
     else if (class_ >= 50 && class1 >= 50)
     {
-        d.cookskill += random() % 2 + 5;
-        d.speech += random() % 2 + 5;
-        workmoney = 400 + (d.charm) / 5;
+        d.learn[LEARN_COOKSKILL] += random() % 2 + 5;
+        d.learn[LEARN_SPEECH] += random() % 2 + 5;
+        workmoney = 400 + (d.learn[LEARN_CHARM]) / 5;
         vmsg("蠻受歡迎的耶....");
     }
     else if (class_ >= 25 && class1 >= 25)
     {
-        d.cookskill += random() % 2 + 4;
-        d.speech += random() % 2 + 3;
-        workmoney = 300 + (d.charm) / 5;
+        d.learn[LEARN_COOKSKILL] += random() % 2 + 4;
+        d.learn[LEARN_SPEECH] += random() % 2 + 3;
+        workmoney = 300 + (d.learn[LEARN_CHARM]) / 5;
         vmsg("很平凡啦..但馬馬虎虎...");
     }
     else
     {
-        d.cookskill += random() % 2 + 2;
-        d.speech += random() % 2 + 2;
-        workmoney = 200 + (d.charm) / 5;
+        d.learn[LEARN_COOKSKILL] += random() % 2 + 2;
+        d.learn[LEARN_SPEECH] += random() % 2 + 2;
+        workmoney = 200 + (d.learn[LEARN_CHARM]) / 5;
         vmsg("你的魅力不夠啦..請加油....");
     }
-    d.money += workmoney * LEARN_LEVEL;
-    d.workN += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    d.work[N] += 1;
     return 0;
 }
 
@@ -3220,57 +3208,57 @@ static int pip_job_workO(void)
         return 0;
     }
     workmoney = 0;
-    class_ = (d.charm - d.tired) * LEARN_LEVEL;
-    d.shit += random() % 5 + 14;
-    d.charm += (random() % 3 + 8) * LEARN_LEVEL;
-    d.offense += (random() % 3 + 8) * LEARN_LEVEL;
+    class_ = (d.learn[LEARN_CHARM] - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    d.body[BODY_SHIT] += random() % 5 + 14;
+    d.learn[LEARN_CHARM] += (random() % 3 + 8) * LEARN_LEVEL;
+    d.state[STATE_OFFENSE] += (random() % 3 + 8) * LEARN_LEVEL;
     count_tired(5, 22, true, 100, 1);
-    d.hp -= (random() % 3 + 8);
-    d.social -= random() % 6 + 12;
-    d.happy -= (random() % 4 + 8);
-    d.satisfy -= random() % 3 + 8;
-    d.ethics -= random() % 6 + 10;
-    d.belief -= random() % 6 + 10;
-    if (d.ethics < 0)
-        d.ethics = 0;
-    if (d.belief < 0)
-        d.belief = 0;
+    d.body[BODY_HP] -= (random() % 3 + 8);
+    d.tmp[TMP_SOCIAL] -= random() % 6 + 12;
+    d.state[STATE_HAPPY] -= (random() % 4 + 8);
+    d.state[STATE_SATISFY] -= random() % 3 + 8;
+    d.learn[LEARN_ETHICS] -= random() % 6 + 10;
+    d.state[STATE_BELIEF] -= random() % 6 + 10;
+    if (d.learn[LEARN_ETHICS] < 0)
+        d.learn[LEARN_ETHICS] = 0;
+    if (d.state[STATE_BELIEF] < 0)
+        d.state[STATE_BELIEF] = 0;
 
     /*show_job_pic(6);*/
     if (class_ >= 75)
     {
         d.relation -= random() % 5 + 12;
-        d.toman -= random() % 5 + 12;
-        workmoney = 600 + (d.charm) / 5;
+        d.learn[LEARN_TOMAN] -= random() % 5 + 12;
+        workmoney = 600 + (d.learn[LEARN_CHARM]) / 5;
         vmsg("你是本店的紅牌唷  :)");
     }
     else if (class_ >= 50)
     {
         d.relation -= random() % 5 + 8;
-        d.toman -= random() % 5 + 8;
-        workmoney = 500 + (d.charm) / 5;
+        d.learn[LEARN_TOMAN] -= random() % 5 + 8;
+        workmoney = 500 + (d.learn[LEARN_CHARM]) / 5;
         vmsg("你蠻受歡迎的耶..:)");
     }
     else if (class_ >= 25)
     {
         d.relation -= random() % 5 + 5;
-        d.toman -= random() % 5 + 5;
-        workmoney = 400 + (d.charm) / 5;
+        d.learn[LEARN_TOMAN] -= random() % 5 + 5;
+        workmoney = 400 + (d.learn[LEARN_CHARM]) / 5;
         vmsg("你很平凡..但馬馬虎虎啦...");
     }
     else
     {
         d.relation -= random() % 5 + 1;
-        d.toman -= random() % 5 + 1;
-        workmoney = 300 + (d.charm) / 5;
+        d.learn[LEARN_TOMAN] -= random() % 5 + 1;
+        workmoney = 300 + (d.learn[LEARN_CHARM]) / 5;
         vmsg("唉..你的魅力不夠啦....");
     }
-    d.money += workmoney * LEARN_LEVEL;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
     if (d.relation < 0)
         d.relation = 0;
-    if (d.toman < 0)
-        d.toman = 0;
-    d.workO += 1;
+    if (d.learn[LEARN_TOMAN] < 0)
+        d.learn[LEARN_TOMAN] = 0;
+    d.work[O] += 1;
     return 0;
 }
 
@@ -3293,55 +3281,55 @@ static int pip_job_workP(void)
         return 0;
     }
     workmoney = 0;
-    class_ = (d.charm - d.tired) * LEARN_LEVEL;
-    class1 = (d.art - d.tired) * LEARN_LEVEL;
-    d.shit += random() % 5 + 7;
-    d.charm += (random() % 3 + 8) * LEARN_LEVEL;
-    d.offense += (random() % 3 + 8) * LEARN_LEVEL;
+    class_ = (d.learn[LEARN_CHARM] - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    class1 = (d.learn[LEARN_ART] - d.body[BODY_TIRED]) * LEARN_LEVEL;
+    d.body[BODY_SHIT] += random() % 5 + 7;
+    d.learn[LEARN_CHARM] += (random() % 3 + 8) * LEARN_LEVEL;
+    d.state[STATE_OFFENSE] += (random() % 3 + 8) * LEARN_LEVEL;
     count_tired(5, 22, true, 100, 1);
-    d.hp -= (random() % 3 + 8);
-    d.social -= random() % 6 + 12;
-    d.happy -= (random() % 4 + 8);
-    d.satisfy -= random() % 3 + 8;
-    d.character -= random() % 3 + 8;
-    d.wisdom -= random() % 3 + 5;
-    if (d.character < 0)
-        d.character = 0;
-    if (d.wisdom < 0)
-        d.wisdom = 0;
+    d.body[BODY_HP] -= (random() % 3 + 8);
+    d.tmp[TMP_SOCIAL] -= random() % 6 + 12;
+    d.state[STATE_HAPPY] -= (random() % 4 + 8);
+    d.state[STATE_SATISFY] -= random() % 3 + 8;
+    d.learn[LEARN_CHARACTER] -= random() % 3 + 8;
+    d.learn[LEARN_WISDOM] -= random() % 3 + 5;
+    if (d.learn[LEARN_CHARACTER] < 0)
+        d.learn[LEARN_CHARACTER] = 0;
+    if (d.learn[LEARN_WISDOM] < 0)
+        d.learn[LEARN_WISDOM] = 0;
     /*show_job_pic(6);*/
     if (class_ >= 75 && class1 > 30)
     {
-        d.speech += random() % 5 + 12;
-        d.toman -= random() % 5 + 12;
-        workmoney = 1000 + (d.charm) / 5;
+        d.learn[LEARN_SPEECH] += random() % 5 + 12;
+        d.learn[LEARN_TOMAN] -= random() % 5 + 12;
+        workmoney = 1000 + (d.learn[LEARN_CHARM]) / 5;
         vmsg("你是夜總會最閃亮的星星唷  :)");
     }
     else if (class_ >= 50 && class1 > 20)
     {
-        d.speech += random() % 5 + 8;
-        d.toman -= random() % 5 + 8;
-        workmoney = 800 + (d.charm) / 5;
+        d.learn[LEARN_SPEECH] += random() % 5 + 8;
+        d.learn[LEARN_TOMAN] -= random() % 5 + 8;
+        workmoney = 800 + (d.learn[LEARN_CHARM]) / 5;
         vmsg("嗯嗯..你蠻受歡迎的耶..:)");
     }
     else if (class_ >= 25 && class1 > 10)
     {
-        d.speech += random() % 5 + 5;
-        d.toman -= random() % 5 + 5;
-        workmoney = 600 + (d.charm) / 5;
+        d.learn[LEARN_SPEECH] += random() % 5 + 5;
+        d.learn[LEARN_TOMAN] -= random() % 5 + 5;
+        workmoney = 600 + (d.learn[LEARN_CHARM]) / 5;
         vmsg("你要加油了啦..但普普啦...");
     }
     else
     {
-        d.speech += random() % 5 + 1;
-        d.toman -= random() % 5 + 1;
-        workmoney = 400 + (d.charm) / 5;
+        d.learn[LEARN_SPEECH] += random() % 5 + 1;
+        d.learn[LEARN_TOMAN] -= random() % 5 + 1;
+        workmoney = 400 + (d.learn[LEARN_CHARM]) / 5;
         vmsg("唉..你不行啦....");
     }
-    d.money += workmoney * LEARN_LEVEL;
-    if (d.toman < 0)
-        d.toman = 0;
-    d.workP += 1;
+    d.thing[THING_MONEY] += workmoney * LEARN_LEVEL;
+    if (d.learn[LEARN_TOMAN] < 0)
+        d.learn[LEARN_TOMAN] = 0;
+    d.work[P] += 1;
     return 1;
 }
 
@@ -3357,10 +3345,10 @@ static int pip_play_stroll(void)       /*散步*/
     lucky = random() % 7;
     if (lucky == 2)
     {
-        d.happy += random() % 3 + random() % 3 + 9;
-        d.satisfy += random() % 3 + random() % 3 + 3;
-        d.shit += random() % 3 + 3;
-        d.hp -= (random() % 3 + 5);
+        d.state[STATE_HAPPY] += random() % 3 + random() % 3 + 9;
+        d.state[STATE_SATISFY] += random() % 3 + random() % 3 + 3;
+        d.body[BODY_SHIT] += random() % 3 + 3;
+        d.body[BODY_HP] -= (random() % 3 + 5);
         move(4, 0);
         if (random() % 2 > 0)
             show_play_pic(1);
@@ -3370,11 +3358,11 @@ static int pip_play_stroll(void)       /*散步*/
     }
     else if (lucky == 3)
     {
-        d.money += 100;
-        d.happy += random() % 3 + 6;
-        d.satisfy += random() % 3 + 4;
-        d.shit += random() % 3 + 3;
-        d.hp -= (random() % 3 + 4);
+        d.thing[THING_MONEY] += 100;
+        d.state[STATE_HAPPY] += random() % 3 + 6;
+        d.state[STATE_SATISFY] += random() % 3 + 4;
+        d.body[BODY_SHIT] += random() % 3 + 3;
+        d.body[BODY_HP] -= (random() % 3 + 4);
         move(4, 0);
         show_play_pic(3);
         vmsg("撿到了100元了..耶耶耶....");
@@ -3384,48 +3372,48 @@ static int pip_play_stroll(void)       /*散步*/
     {
         if (random() % 2 > 0)
         {
-            d.happy -= (random() % 2 + 5);
+            d.state[STATE_HAPPY] -= (random() % 2 + 5);
             move(4, 0);
-            d.hp -= (random() % 3 + 3);
+            d.body[BODY_HP] -= (random() % 3 + 3);
             show_play_pic(4);
-            if (d.money >= 50)
+            if (d.thing[THING_MONEY] >= 50)
             {
-                d.money -= 50;
+                d.thing[THING_MONEY] -= 50;
                 vmsg("掉了50元了..嗚嗚嗚....");
             }
             else
             {
-                d.money = 0;
-                d.hp -= (random() % 3 + 3);
+                d.thing[THING_MONEY] = 0;
+                d.body[BODY_HP] -= (random() % 3 + 3);
                 vmsg("錢掉光光了..嗚嗚嗚....");
             }
-            d.shit += random() % 3 + 2;
+            d.body[BODY_SHIT] += random() % 3 + 2;
         }
         else
         {
-            d.happy += random() % 3 + 5;
+            d.state[STATE_HAPPY] += random() % 3 + 5;
             move(4, 0);
             show_play_pic(5);
-            if (d.money >= 50)
+            if (d.thing[THING_MONEY] >= 50)
             {
-                d.money -= 50;
-                d.hp -= (random() % 3 + 3);
+                d.thing[THING_MONEY] -= 50;
+                d.body[BODY_HP] -= (random() % 3 + 3);
                 vmsg("用了50元了..不可以罵我喔....");
             }
             else
             {
-                d.money = 0;
-                d.hp -= (random() % 3 + 3);
+                d.thing[THING_MONEY] = 0;
+                d.body[BODY_HP] -= (random() % 3 + 3);
                 vmsg("錢被我偷用光光了..:p");
             }
-            d.shit += random() % 3 + 2;
+            d.body[BODY_SHIT] += random() % 3 + 2;
         }
     }
     else if (lucky == 5)
     {
-        d.happy += random() % 3 + 6;
-        d.satisfy += random() % 3 + 5;
-        d.shit += 2;
+        d.state[STATE_HAPPY] += random() % 3 + 6;
+        d.state[STATE_SATISFY] += random() % 3 + 5;
+        d.body[BODY_SHIT] += 2;
         move(4, 0);
         if (random() % 2 > 0)
             show_play_pic(6);
@@ -3435,18 +3423,18 @@ static int pip_play_stroll(void)       /*散步*/
     }
     else if (lucky == 6)
     {
-        d.happy -= (random() % 3 + 10);
-        d.shit += (random() % 3 + 20);
+        d.state[STATE_HAPPY] -= (random() % 3 + 10);
+        d.body[BODY_SHIT] += (random() % 3 + 20);
         move(4, 0);
         show_play_pic(9);
         vmsg("真是倒楣  可以去買愛國獎券");
     }
     else
     {
-        d.happy += random() % 3 + 3;
-        d.satisfy += random() % 2 + 1;
-        d.shit += random() % 3 + 2;
-        d.hp -= (random() % 3 + 2);
+        d.state[STATE_HAPPY] += random() % 3 + 3;
+        d.state[STATE_SATISFY] += random() % 2 + 1;
+        d.body[BODY_SHIT] += random() % 3 + 2;
+        d.body[BODY_HP] -= (random() % 3 + 2);
         move(4, 0);
         show_play_pic(8);
         vmsg("沒有特別的事發生啦.....");
@@ -3457,14 +3445,14 @@ static int pip_play_stroll(void)       /*散步*/
 static int pip_play_sport(void)        /*運動*/
 {
     count_tired(3, 8, true, 100, 1);
-    d.weight -= (random() % 3 + 2);
-    d.satisfy += random() % 2 + 3;
-    if (d.satisfy > 100)
-        d.satisfy = 100;
-    d.shit += random() % 5 + 10;
-    d.hp -= (random() % 2 + 8);
-    d.maxhp += random() % 2;
-    d.speed += (2 + random() % 3);
+    d.body[BODY_WEIGHT] -= (random() % 3 + 2);
+    d.state[STATE_SATISFY] += random() % 2 + 3;
+    if (d.state[STATE_SATISFY] > 100)
+        d.state[STATE_SATISFY] = 100;
+    d.body[BODY_SHIT] += random() % 5 + 10;
+    d.body[BODY_HP] -= (random() % 2 + 8);
+    d.body[BODY_MAXHP] += random() % 2;
+    d.fight[FIGHT_SPEED] += (2 + random() % 3);
     move(4, 0);
     show_play_pic(10);
     vmsg("運動好處多多啦...");
@@ -3473,19 +3461,19 @@ static int pip_play_sport(void)        /*運動*/
 
 static int pip_play_date(void) /*約會*/
 {
-    if (d.money < 150)
+    if (d.thing[THING_MONEY] < 150)
     {
         vmsg("你錢不夠多啦! 約會總得花點錢錢");
     }
     else
     {
         count_tired(3, 6, true, 100, 1);
-        d.happy += random() % 5 + 12;
-        d.shit += random() % 3 + 5;
-        d.hp -= random() % 4 + 8;
-        d.satisfy += random() % 5 + 7;
-        d.character += random() % 3 + 1;
-        d.money = d.money - 150;
+        d.state[STATE_HAPPY] += random() % 5 + 12;
+        d.body[BODY_SHIT] += random() % 3 + 5;
+        d.body[BODY_HP] -= random() % 4 + 8;
+        d.state[STATE_SATISFY] += random() % 5 + 7;
+        d.learn[LEARN_CHARACTER] += random() % 3 + 1;
+        d.thing[THING_MONEY] = d.thing[THING_MONEY] - 150;
         move(4, 0);
         show_play_pic(11);
         vmsg("約會去  呼呼");
@@ -3496,26 +3484,26 @@ static int pip_play_outing(void)       /*郊遊*/
 {
     int lucky;
 
-    if (d.money < 250)
+    if (d.thing[THING_MONEY] < 250)
     {
         vmsg("你錢不夠多啦! 旅遊總得花點錢錢");
     }
     else
     {
-        d.weight += random() % 2 + 1;
-        d.money -= 250;
+        d.body[BODY_WEIGHT] += random() % 2 + 1;
+        d.thing[THING_MONEY] -= 250;
         count_tired(10, 45, false, 100, 0);
-        d.hp -= random() % 10 + 20;
-        if (d.hp >= d.maxhp)
-            d.hp = d.maxhp;
-        d.happy += random() % 10 + 12;
-        d.character += random() % 5 + 5;
-        d.satisfy += random() % 10 + 10;
+        d.body[BODY_HP] -= random() % 10 + 20;
+        if (d.body[BODY_HP] >= d.body[BODY_MAXHP])
+            d.body[BODY_HP] = d.body[BODY_MAXHP];
+        d.state[STATE_HAPPY] += random() % 10 + 12;
+        d.learn[LEARN_CHARACTER] += random() % 5 + 5;
+        d.state[STATE_SATISFY] += random() % 10 + 10;
         lucky = random() % 4;
         if (lucky == 0)
         {
-            d.maxmp += random() % 3;
-            d.art += random() % 2;
+            d.fight[FIGHT_MAXMP] += random() % 3;
+            d.learn[LEARN_ART] += random() % 2;
             show_play_pic(12);
             if (random() % 2 > 0)
                 vmsg("心中有一股淡淡的感覺  好舒服喔....");
@@ -3524,8 +3512,8 @@ static int pip_play_outing(void)       /*郊遊*/
         }
         else if (lucky == 1)
         {
-            d.art += random() % 3;
-            d.maxmp += random() % 2;
+            d.learn[LEARN_ART] += random() % 3;
+            d.fight[FIGHT_MAXMP] += random() % 2;
             show_play_pic(13);
             if (random() % 2 > 0)
                 vmsg("有山有水有落日  形成一幅美麗的畫..");
@@ -3534,7 +3522,7 @@ static int pip_play_outing(void)       /*郊遊*/
         }
         else if (lucky == 2)
         {
-            d.love += random() % 3;
+            d.learn[LEARN_LOVE] += random() % 3;
             show_play_pic(14);
             if (random() % 2 > 0)
                 vmsg("看  太陽快沒入水中囉...");
@@ -3543,7 +3531,7 @@ static int pip_play_outing(void)       /*郊遊*/
         }
         else if (lucky == 3)
         {
-            d.maxhp += random() % 3;
+            d.body[BODY_MAXHP] += random() % 3;
             show_play_pic(15);
             if (random() % 2 > 0)
                 vmsg("讓我們瘋狂在夜裡的海灘吧....呼呼..");
@@ -3567,46 +3555,46 @@ static int pip_play_outing(void)       /*郊遊*/
             if (lucky >= 6)
             {
                 outs("\x1b[1;33m我將幫你的各項能力全部提升百分之五喔......\x1b[0m");
-                d.maxhp = d.maxhp * 105 / 100;
-                d.hp = d.maxhp;
-                d.maxmp = d.maxmp * 105 / 100;
-                d.mp = d.maxmp;
-                d.attack = d.attack * 105 / 100;
-                d.resist = d.resist * 105 / 100;
-                d.speed = d.speed * 105 / 100;
-                d.character = d.character * 105 / 100;
-                d.love = d.love * 105 / 100;
-                d.wisdom = d.wisdom * 105 / 100;
-                d.art = d.art * 105 / 100;
-                d.brave = d.brave * 105 / 100;
-                d.homework = d.homework * 105 / 100;
+                d.body[BODY_MAXHP] = d.body[BODY_MAXHP] * 105 / 100;
+                d.body[BODY_HP] = d.body[BODY_MAXHP];
+                d.fight[FIGHT_MAXMP] = d.fight[FIGHT_MAXMP] * 105 / 100;
+                d.fight[FIGHT_MP] = d.fight[FIGHT_MAXMP];
+                d.fight[FIGHT_ATTACK] = d.fight[FIGHT_ATTACK] * 105 / 100;
+                d.fight[FIGHT_RESIST] = d.fight[FIGHT_RESIST] * 105 / 100;
+                d.fight[FIGHT_SPEED] = d.fight[FIGHT_SPEED] * 105 / 100;
+                d.learn[LEARN_CHARACTER] = d.learn[LEARN_CHARACTER] * 105 / 100;
+                d.learn[LEARN_LOVE] = d.learn[LEARN_LOVE] * 105 / 100;
+                d.learn[LEARN_WISDOM] = d.learn[LEARN_WISDOM] * 105 / 100;
+                d.learn[LEARN_ART] = d.learn[LEARN_ART] * 105 / 100;
+                d.learn[LEARN_BRAVE] = d.learn[LEARN_BRAVE] * 105 / 100;
+                d.learn[LEARN_HOMEWORK] = d.learn[LEARN_HOMEWORK] * 105 / 100;
             }
 
             else if (lucky >= 4)
             {
                 outs("\x1b[1;33m我將幫你的戰鬥能力全部提升百分之十喔.......\x1b[0m");
-                d.attack = d.attack * 110 / 100;
-                d.resist = d.resist * 110 / 100;
-                d.speed = d.speed * 110 / 100;
-                d.brave = d.brave * 110 / 100;
+                d.fight[FIGHT_ATTACK] = d.fight[FIGHT_ATTACK] * 110 / 100;
+                d.fight[FIGHT_RESIST] = d.fight[FIGHT_RESIST] * 110 / 100;
+                d.fight[FIGHT_SPEED] = d.fight[FIGHT_SPEED] * 110 / 100;
+                d.learn[LEARN_BRAVE] = d.learn[LEARN_BRAVE] * 110 / 100;
             }
 
             else if (lucky >= 2)
             {
                 outs("\x1b[1;33m我將幫你的魔法能力和生命力全部提升百分之十喔.......\x1b[0m");
-                d.maxhp = d.maxhp * 110 / 100;
-                d.hp = d.maxhp;
-                d.maxmp = d.maxmp * 110 / 100;
-                d.mp = d.maxmp;
+                d.body[BODY_MAXHP] = d.body[BODY_MAXHP] * 110 / 100;
+                d.body[BODY_HP] = d.body[BODY_MAXHP];
+                d.fight[FIGHT_MAXMP] = d.fight[FIGHT_MAXMP] * 110 / 100;
+                d.fight[FIGHT_MP] = d.fight[FIGHT_MAXMP];
             }
             else
             {
                 outs("\x1b[1;33m我將幫你的感受能力全部提升百分之二十喔....\x1b[0m");
-                d.character = d.character * 110 / 100;
-                d.love = d.love * 110 / 100;
-                d.wisdom = d.wisdom * 110 / 100;
-                d.art = d.art * 110 / 100;
-                d.homework = d.homework * 110 / 100;
+                d.learn[LEARN_CHARACTER] = d.learn[LEARN_CHARACTER] * 110 / 100;
+                d.learn[LEARN_LOVE] = d.learn[LEARN_LOVE] * 110 / 100;
+                d.learn[LEARN_WISDOM] = d.learn[LEARN_WISDOM] * 110 / 100;
+                d.learn[LEARN_ART] = d.learn[LEARN_ART] * 110 / 100;
+                d.learn[LEARN_HOMEWORK] = d.learn[LEARN_HOMEWORK] * 110 / 100;
             }
 
             vmsg("請繼續加油喔...");
@@ -3618,14 +3606,14 @@ static int pip_play_outing(void)       /*郊遊*/
 static int pip_play_kite(void) /*風箏*/
 {
     count_tired(4, 4, true, 100, 0);
-    d.weight += (random() % 2 + 2);
-    d.satisfy += random() % 3 + 12;
-    if (d.satisfy > 100)
-        d.satisfy = 100;
-    d.happy += random() % 5 + 10;
-    d.shit += random() % 5 + 6;
-    d.hp -= (random() % 2 + 7);
-    d.affect += random() % 4 + 6;
+    d.body[BODY_WEIGHT] += (random() % 2 + 2);
+    d.state[STATE_SATISFY] += random() % 3 + 12;
+    if (d.state[STATE_SATISFY] > 100)
+        d.state[STATE_SATISFY] = 100;
+    d.state[STATE_HAPPY] += random() % 5 + 10;
+    d.body[BODY_SHIT] += random() % 5 + 6;
+    d.body[BODY_HP] -= (random() % 2 + 7);
+    d.state[STATE_AFFECT] += random() % 4 + 6;
     move(4, 0);
     show_play_pic(16);
     vmsg("放風箏真好玩啦...");
@@ -3634,21 +3622,21 @@ static int pip_play_kite(void) /*風箏*/
 
 static int pip_play_KTV(void)  /*KTV*/
 {
-    if (d.money < 250)
+    if (d.thing[THING_MONEY] < 250)
     {
         vmsg("你錢不夠多啦! 唱歌總得花點錢錢");
     }
     else
     {
         count_tired(10, 10, true, 100, 0);
-        d.satisfy += random() % 2 + 20;
-        if (d.satisfy > 100)
-            d.satisfy = 100;
-        d.happy += random() % 3 + 20;
-        d.shit += random() % 5 + 6;
-        d.money -= 250;
-        d.hp += (random() % 2 + 6);
-        d.art += random() % 4 + 3;
+        d.state[STATE_SATISFY] += random() % 2 + 20;
+        if (d.state[STATE_SATISFY] > 100)
+            d.state[STATE_SATISFY] = 100;
+        d.state[STATE_HAPPY] += random() % 3 + 20;
+        d.body[BODY_SHIT] += random() % 5 + 6;
+        d.thing[THING_MONEY] -= 250;
+        d.body[BODY_HP] += (random() % 2 + 6);
+        d.learn[LEARN_ART] += random() % 4 + 3;
         move(4, 0);
         show_play_pic(17);
         vmsg("你說你  想要逃...");
@@ -3665,9 +3653,9 @@ static int pip_play_guess(void)   /* 猜拳程式 */
 
     time(&now);
     qtime = localtime(&now);
-    d.satisfy += (random() % 3 + 2);
+    d.state[STATE_SATISFY] += (random() % 3 + 2);
     count_tired(2, 2, true, 100, 1);
-    d.shit += random() % 3 + 2;
+    d.body[BODY_SHIT] += random() % 3 + 2;
     do
     {
         if (d.death == 1 || d.death == 2 || d.death == 3)
@@ -3748,7 +3736,7 @@ static int pip_play_guess(void)   /* 猜拳程式 */
 static void win(void)
 {
     d.winn++;
-    d.hp -= random() % 2 + 3;
+    d.body[BODY_HP] -= random() % 2 + 3;
     move(4, 0);
     show_guess_pic(2);
     move(b_lines, 0);
@@ -3758,8 +3746,8 @@ static void win(void)
 
 static void tie(void)
 {
-    d.hp -= random() % 2 + 3;
-    d.happy += random() % 3 + 5;
+    d.body[BODY_HP] -= random() % 2 + 3;
+    d.state[STATE_HAPPY] += random() % 3 + 5;
     move(4, 0);
     show_guess_pic(3);
     move(b_lines, 0);
@@ -3770,8 +3758,8 @@ static void tie(void)
 static void lose(void)
 {
     d.losee++;
-    d.happy += random() % 3 + 5;
-    d.hp -= random() % 2 + 3;
+    d.state[STATE_HAPPY] += random() % 3 + 5;
+    d.body[BODY_HP] -= random() % 2 + 3;
     move(4, 0);
     show_guess_pic(1);
     move(b_lines, 0);
@@ -3871,25 +3859,25 @@ static int pip_practice_classA(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN(d.wisdom / 200, 4); /*科學*/
+    class_ = BMIN(d.learn[LEARN_WISDOM] / 200, 4); /*科學*/
 
     body = pip_practice_function(0, class_, 11, 12, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
-    d.wisdom += change4 * LEARN_LEVEL;
+    d.learn[LEARN_WISDOM] += change4 * LEARN_LEVEL;
     if (body == 0)
     {
-        d.belief -= random() % (4 + class_ * 2);
-        d.mresist -= random() % 4;
+        d.state[STATE_BELIEF] -= random() % (4 + class_ * 2);
+        d.fight[FIGHT_MRESIST] -= random() % 4;
     }
     else
     {
-        d.belief -= random() % (4 + class_ * 2);
-        d.mresist -= random() % 3;
+        d.state[STATE_BELIEF] -= random() % (4 + class_ * 2);
+        d.fight[FIGHT_MRESIST] -= random() % 3;
     }
-    pip_practice_gradeup(0, class_, d.wisdom / 200);
-    if (d.belief < 0)  d.belief = 0;
-    if (d.mresist < 0) d.mresist = 0;
-    d.classA += 1;
+    pip_practice_gradeup(0, class_, d.learn[LEARN_WISDOM] / 200);
+    if (d.state[STATE_BELIEF] < 0)  d.state[STATE_BELIEF] = 0;
+    if (d.fight[FIGHT_MRESIST] < 0) d.fight[FIGHT_MRESIST] = 0;
+    d.class_[A] += 1;
     return 0;
 }
 
@@ -3911,26 +3899,26 @@ static int pip_practice_classB(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400, 4); /*詩詞*/
+    class_ = BMIN((d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, 4); /*詩詞*/
 
     body = pip_practice_function(1, class_, 21, 21, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
-    d.affect += change3 * LEARN_LEVEL;
+    d.state[STATE_AFFECT] += change3 * LEARN_LEVEL;
     if (body == 0)
     {
-        d.wisdom += random() % (class_ + 4) * LEARN_LEVEL;
-        d.character += random() % (class_ + 4) * LEARN_LEVEL;
-        d.art += random() % (class_ + 4) * LEARN_LEVEL;
+        d.learn[LEARN_WISDOM] += random() % (class_ + 4) * LEARN_LEVEL;
+        d.learn[LEARN_CHARACTER] += random() % (class_ + 4) * LEARN_LEVEL;
+        d.learn[LEARN_ART] += random() % (class_ + 4) * LEARN_LEVEL;
     }
     else
     {
-        d.wisdom += random() % (class_ + 3) * LEARN_LEVEL;
-        d.character += random() % (class_ + 3) * LEARN_LEVEL;
-        d.art += random() % (class_ + 3) * LEARN_LEVEL;
+        d.learn[LEARN_WISDOM] += random() % (class_ + 3) * LEARN_LEVEL;
+        d.learn[LEARN_CHARACTER] += random() % (class_ + 3) * LEARN_LEVEL;
+        d.learn[LEARN_ART] += random() % (class_ + 3) * LEARN_LEVEL;
     }
-    body = (d.affect * 2 + d.wisdom + d.art * 2 + d.character) / 400;
+    body = (d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400;
     pip_practice_gradeup(1, class_, body);
-    d.classB += 1;
+    d.class_[B] += 1;
     return 0;
 }
 
@@ -3948,23 +3936,23 @@ static int pip_practice_classC(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.belief * 2 + d.wisdom) / 400, 4); /*神學*/
+    class_ = BMIN((d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400, 4); /*神學*/
 
     body = pip_practice_function(2, class_, 31, 31, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
-    d.wisdom += change2 * LEARN_LEVEL;
-    d.belief += change3 * LEARN_LEVEL;
+    d.learn[LEARN_WISDOM] += change2 * LEARN_LEVEL;
+    d.state[STATE_BELIEF] += change3 * LEARN_LEVEL;
     if (body == 0)
     {
-        d.mresist += random() % 5 * LEARN_LEVEL;
+        d.fight[FIGHT_MRESIST] += random() % 5 * LEARN_LEVEL;
     }
     else
     {
-        d.mresist += random() % 3 * LEARN_LEVEL;
+        d.fight[FIGHT_MRESIST] += random() % 3 * LEARN_LEVEL;
     }
-    body = (d.belief * 2 + d.wisdom) / 400;
+    body = (d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400;
     pip_practice_gradeup(2, class_, body);
-    d.classC += 1;
+    d.class_[C] += 1;
     return 0;
 }
 
@@ -3982,24 +3970,24 @@ static int pip_practice_classD(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.hskill * 2 + d.wisdom) / 400, 4);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400, 4);
     body = pip_practice_function(3, class_, 41, 41, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
-    d.wisdom += change2 * LEARN_LEVEL;
+    d.learn[LEARN_WISDOM] += change2 * LEARN_LEVEL;
     if (body == 0)
     {
-        d.hskill += (random() % 3 + 4) * LEARN_LEVEL;
-        d.affect -= random() % 3 + 6;
+        d.fight[FIGHT_HSKILL] += (random() % 3 + 4) * LEARN_LEVEL;
+        d.state[STATE_AFFECT] -= random() % 3 + 6;
     }
     else
     {
-        d.hskill += (random() % 3 + 2) * LEARN_LEVEL;
-        d.affect -= random() % 3 + 6;
+        d.fight[FIGHT_HSKILL] += (random() % 3 + 2) * LEARN_LEVEL;
+        d.state[STATE_AFFECT] -= random() % 3 + 6;
     }
-    body = (d.hskill * 2 + d.wisdom) / 400;
+    body = (d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400;
     pip_practice_gradeup(3, class_, body);
-    if (d.affect < 0)  d.affect = 0;
-    d.classD += 1;
+    if (d.state[STATE_AFFECT] < 0)  d.state[STATE_AFFECT] = 0;
+    d.class_[D] += 1;
     return 0;
 }
 
@@ -4017,24 +4005,24 @@ static int pip_practice_classE(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.hskill + d.attack) / 400, 4);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400, 4);
 
     body = pip_practice_function(4, class_, 51, 51, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
-    d.speed += (random() % 3 + 2) * LEARN_LEVEL;
-    d.hexp += (random() % 2 + 2) * LEARN_LEVEL;
-    d.attack += change4 * LEARN_LEVEL;
+    d.fight[FIGHT_SPEED] += (random() % 3 + 2) * LEARN_LEVEL;
+    d.tmp[TMP_HEXP] += (random() % 2 + 2) * LEARN_LEVEL;
+    d.fight[FIGHT_ATTACK] += change4 * LEARN_LEVEL;
     if (body == 0)
     {
-        d.hskill += (random() % 3 + 5) * LEARN_LEVEL;
+        d.fight[FIGHT_HSKILL] += (random() % 3 + 5) * LEARN_LEVEL;
     }
     else
     {
-        d.hskill += (random() % 3 + 3) * LEARN_LEVEL;
+        d.fight[FIGHT_HSKILL] += (random() % 3 + 3) * LEARN_LEVEL;
     }
-    body = (d.hskill + d.attack) / 400;
+    body = (d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400;
     pip_practice_gradeup(4, class_, body);
-    d.classE += 1;
+    d.class_[E] += 1;
     return 0;
 }
 
@@ -4052,24 +4040,24 @@ static int pip_practice_classF(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.hskill + d.resist) / 400, 4);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400, 4);
 
     body = pip_practice_function(5, class_, 61, 61, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
-    d.hexp += (random() % 2 + 2) * LEARN_LEVEL;
-    d.speed += (random() % 3 + 2) * LEARN_LEVEL;
-    d.resist += change2 * LEARN_LEVEL;
+    d.tmp[TMP_HEXP] += (random() % 2 + 2) * LEARN_LEVEL;
+    d.fight[FIGHT_SPEED] += (random() % 3 + 2) * LEARN_LEVEL;
+    d.fight[FIGHT_RESIST] += change2 * LEARN_LEVEL;
     if (body == 0)
     {
-        d.hskill += (random() % 3 + 5) * LEARN_LEVEL;
+        d.fight[FIGHT_HSKILL] += (random() % 3 + 5) * LEARN_LEVEL;
     }
     else
     {
-        d.hskill += (random() % 3 + 3) * LEARN_LEVEL;
+        d.fight[FIGHT_HSKILL] += (random() % 3 + 3) * LEARN_LEVEL;
     }
-    body = (d.hskill + d.resist) / 400;
+    body = (d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400;
     pip_practice_gradeup(5, class_, body);
-    d.classF += 1;
+    d.class_[F] += 1;
     return 0;
 }
 
@@ -4087,24 +4075,24 @@ static int pip_practice_classG(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.mskill + d.maxmp) / 400, 4);
+    class_ = BMIN((d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400, 4);
 
     body = pip_practice_function(6, class_, 71, 72, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
-    d.maxmp += change3 * LEARN_LEVEL;
-    d.mexp += (random() % 2 + 2) * LEARN_LEVEL;
+    d.fight[FIGHT_MAXMP] += change3 * LEARN_LEVEL;
+    d.tmp[TMP_MEXP] += (random() % 2 + 2) * LEARN_LEVEL;
     if (body == 0)
     {
-        d.mskill += (random() % 3 + 7) * LEARN_LEVEL;
+        d.fight[FIGHT_MSKILL] += (random() % 3 + 7) * LEARN_LEVEL;
     }
     else
     {
-        d.mskill += (random() % 3 + 4) * LEARN_LEVEL;
+        d.fight[FIGHT_MSKILL] += (random() % 3 + 4) * LEARN_LEVEL;
     }
 
-    body = (d.mskill + d.maxmp) / 400;
+    body = (d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400;
     pip_practice_gradeup(6, class_, body);
-    d.classG += 1;
+    d.class_[G] += 1;
     return 0;
 }
 
@@ -4122,16 +4110,16 @@ static int pip_practice_classH(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.manners * 2 + d.character) / 400, 4);
+    class_ = BMIN((d.learn[LEARN_MANNERS] * 2 + d.learn[LEARN_CHARACTER]) / 400, 4);
 
     body = pip_practice_function(7, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
-    d.social += (random() % 2 + 2) * LEARN_LEVEL;
-    d.manners += (change1 + random() % 2) * LEARN_LEVEL;
-    d.character += (change1 + random() % 2) * LEARN_LEVEL;
-    body = (d.character + d.manners) / 400;
+    d.tmp[TMP_SOCIAL] += (random() % 2 + 2) * LEARN_LEVEL;
+    d.learn[LEARN_MANNERS] += (change1 + random() % 2) * LEARN_LEVEL;
+    d.learn[LEARN_CHARACTER] += (change1 + random() % 2) * LEARN_LEVEL;
+    body = (d.learn[LEARN_CHARACTER] + d.learn[LEARN_MANNERS]) / 400;
     pip_practice_gradeup(7, class_, body);
-    d.classH += 1;
+    d.class_[H] += 1;
     return 0;
 }
 
@@ -4149,15 +4137,15 @@ static int pip_practice_classI(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.art * 2 + d.character) / 400, 4);
+    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, 4);
 
     body = pip_practice_function(8, class_, 91, 91, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
-    d.art += change4 * LEARN_LEVEL;
-    d.affect += change2 * LEARN_LEVEL;
-    body = (d.affect + d.art) / 400;
+    d.learn[LEARN_ART] += change4 * LEARN_LEVEL;
+    d.state[STATE_AFFECT] += change2 * LEARN_LEVEL;
+    body = (d.state[STATE_AFFECT] + d.learn[LEARN_ART]) / 400;
     pip_practice_gradeup(8, class_, body);
-    d.classI += 1;
+    d.class_[I] += 1;
     return 0;
 }
 
@@ -4175,23 +4163,23 @@ static int pip_practice_classJ(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.art * 2 + d.charm) / 400, 4);
+    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400, 4);
 
     body = pip_practice_function(9, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
-    d.art += change2 * LEARN_LEVEL;
-    d.maxhp += (random() % 3 + 2) * LEARN_LEVEL;
+    d.learn[LEARN_ART] += change2 * LEARN_LEVEL;
+    d.body[BODY_MAXHP] += (random() % 3 + 2) * LEARN_LEVEL;
     if (body == 0)
     {
-        d.charm += random() % (5 + class_) * LEARN_LEVEL;
+        d.learn[LEARN_CHARM] += random() % (5 + class_) * LEARN_LEVEL;
     }
     else if (body == 1)
     {
-        d.charm += random() % (3 + class_) * LEARN_LEVEL;
+        d.learn[LEARN_CHARM] += random() % (3 + class_) * LEARN_LEVEL;
     }
-    body = (d.art * 2 + d.charm) / 400;
+    body = (d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400;
     pip_practice_gradeup(9, class_, body);
-    d.classJ += 1;
+    d.class_[J] += 1;
     return 0;
 }
 
@@ -4212,24 +4200,24 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
     sprintf(inbuf, "[%8s%4s課程]要花 $%ld，確定要嗎??[y/N]: ", classword[classnum][0], classrank[classgrade], smoney);
     getdata(b_lines - 2, 1, inbuf, ans, 2, DOECHO, 0);
     if (ans[0] != 'y' && ans[0] != 'Y')  return -1;
-    if (d.money < smoney)
+    if (d.thing[THING_MONEY] < smoney)
     {
         vmsg("很抱歉喔...你的錢不夠喔");
         return -1;
     }
     count_tired(4, 5, true, 100, 1);
-    d.money = d.money - smoney;
+    d.thing[THING_MONEY] = d.thing[THING_MONEY] - smoney;
     /*成功與否的判斷*/
-    health = d.hp * 1 / 2 + random() % 20 - d.tired;
+    health = d.body[BODY_HP] * 1 / 2 + random() % 20 - d.body[BODY_TIRED];
     if (health > 0) body = 0;
     else body = 1;
 
     a = random() % 3 + 2;
     b = (random() % 12 + random() % 13) % 2;
-    d.hp -= random() % (3 + random() % 3) + classvariable[classnum][0];
-    d.happy -= random() % (3 + random() % 3) + classvariable[classnum][1];
-    d.satisfy -= random() % (3 + random() % 3) + classvariable[classnum][2];
-    d.shit += random() % (3 + random() % 3) + classvariable[classnum][3];
+    d.body[BODY_HP] -= random() % (3 + random() % 3) + classvariable[classnum][0];
+    d.state[STATE_HAPPY] -= random() % (3 + random() % 3) + classvariable[classnum][1];
+    d.state[STATE_SATISFY] -= random() % (3 + random() % 3) + classvariable[classnum][2];
+    d.body[BODY_SHIT] += random() % (3 + random() % 3) + classvariable[classnum][3];
     *change1 = random() % a + 4 + classgrade * 2 / (body + 2);    /* random()%3+3 */
     *change2 = random() % a + 6 + classgrade * 2 / (body + 2);    /* random()%3+5 */
     *change3 = random() % a + 8 + classgrade * 3 / (body + 2);    /* random()%3+7 */
@@ -4268,28 +4256,28 @@ static int pip_see_doctor(void)        /*看醫生*/
     char buf[256];
     long savemoney;
     clrchyiuan(b_lines - 2, b_lines);
-    savemoney = d.sick * 25;
-    if (d.sick <= 0)
+    savemoney = d.body[BODY_SICK] * 25;
+    if (d.body[BODY_SICK] <= 0)
     {
         vmsg("哇哩..沒病來醫院幹嘛..被罵了..嗚~~");
-        d.character -= (random() % 3 + 1);
-        if (d.character < 0)
-            d.character = 0;
-        d.happy -= (random() % 3 + 3);
-        d.satisfy -= random() % 3 + 2;
+        d.learn[LEARN_CHARACTER] -= (random() % 3 + 1);
+        if (d.learn[LEARN_CHARACTER] < 0)
+            d.learn[LEARN_CHARACTER] = 0;
+        d.state[STATE_HAPPY] -= (random() % 3 + 3);
+        d.state[STATE_SATISFY] -= random() % 3 + 2;
     }
-    else if (d.money < savemoney)
+    else if (d.thing[THING_MONEY] < savemoney)
     {
         sprintf(buf, "你的病要花 %ld 元喔....你不夠錢啦...", savemoney);
         vmsg(buf);
     }
-    else if (d.sick > 0 && d.money >= savemoney)
+    else if (d.body[BODY_SICK] > 0 && d.thing[THING_MONEY] >= savemoney)
     {
-        d.tired -= random() % 10 + 20;
-        if (d.tired < 0)
-            d.tired = 0;
-        d.sick = 0;
-        d.money = d.money - savemoney;
+        d.body[BODY_TIRED] -= random() % 10 + 20;
+        if (d.body[BODY_TIRED] < 0)
+            d.body[BODY_TIRED] = 0;
+        d.body[BODY_SICK] = 0;
+        d.thing[THING_MONEY] = d.thing[THING_MONEY] - savemoney;
         move(4, 0);
         show_special_pic(1);
         vmsg("藥到病除..沒有副作用!!");
@@ -4313,7 +4301,7 @@ static int pip_change_weight(void)
         switch (genbuf[0])
         {
         case '1':
-            if (d.money < 80)
+            if (d.thing[THING_MONEY] < 80)
             {
                 vmsg("傳統增胖要80元喔....你不夠錢啦...");
             }
@@ -4323,10 +4311,10 @@ static int pip_change_weight(void)
                 if (genbuf[0] == 'Y' || genbuf[0] == 'y')
                 {
                     weightmp = 3 + random() % 3;
-                    d.weight += weightmp;
-                    d.money -= 80;
-                    d.maxhp -= random() % 2;
-                    d.hp -= random() % 2 + 3;
+                    d.body[BODY_WEIGHT] += weightmp;
+                    d.thing[THING_MONEY] -= 80;
+                    d.body[BODY_MAXHP] -= random() % 2;
+                    d.body[BODY_HP] -= random() % 2 + 3;
                     show_special_pic(3);
                     sprintf(inbuf, "總共增加了%d公斤", weightmp);
                     vmsg(inbuf);
@@ -4345,18 +4333,18 @@ static int pip_change_weight(void)
             {
                 vmsg("輸入有誤..放棄囉...");
             }
-            else if (d.money > (weightmp*30))
+            else if (d.thing[THING_MONEY] > (weightmp*30))
             {
                 sprintf(inbuf, "增加%d公斤，總共需花費%d元，確定嗎? [y/N]: ", weightmp, weightmp*30);
                 getdata(b_lines - 1, 1, inbuf, genbuf, 2, 1, 0);
                 if (genbuf[0] == 'Y' || genbuf[0] == 'y')
                 {
-                    d.money -= weightmp * 30;
-                    d.weight += weightmp;
-                    d.maxhp -= (random() % 2 + 2);
+                    d.thing[THING_MONEY] -= weightmp * 30;
+                    d.body[BODY_WEIGHT] += weightmp;
+                    d.body[BODY_MAXHP] -= (random() % 2 + 2);
                     count_tired(5, 8, false, 100, 1);
-                    d.hp -= (random() % 2 + 3);
-                    d.sick += random() % 10 + 5;
+                    d.body[BODY_HP] -= (random() % 2 + 3);
+                    d.body[BODY_SICK] += random() % 10 + 5;
                     show_special_pic(3);
                     sprintf(inbuf, "總共增加了%d公斤", weightmp);
                     vmsg(inbuf);
@@ -4373,7 +4361,7 @@ static int pip_change_weight(void)
             break;
 
         case '3':
-            if (d.money < 80)
+            if (d.thing[THING_MONEY] < 80)
             {
                 vmsg("傳統減肥要80元喔....你不夠錢啦...");
             }
@@ -4383,12 +4371,12 @@ static int pip_change_weight(void)
                 if (genbuf[0] == 'Y' || genbuf[0] == 'y')
                 {
                     weightmp = 3 + random() % 3;
-                    d.weight -= weightmp;
-                    if (d.weight < 0)
-                        d.weight = 0;
-                    d.money -= 100;
-                    d.maxhp += random() % 2;
-                    d.hp -= random() % 2 + 3;
+                    d.body[BODY_WEIGHT] -= weightmp;
+                    if (d.body[BODY_WEIGHT] < 0)
+                        d.body[BODY_WEIGHT] = 0;
+                    d.thing[THING_MONEY] -= 100;
+                    d.body[BODY_MAXHP] += random() % 2;
+                    d.body[BODY_HP] -= random() % 2 + 3;
                     show_special_pic(4);
                     sprintf(inbuf, "總共減少了%d公斤", weightmp);
                     vmsg(inbuf);
@@ -4406,22 +4394,22 @@ static int pip_change_weight(void)
             {
                 vmsg("輸入有誤..放棄囉...");
             }
-            else if (d.weight <= weightmp)
+            else if (d.body[BODY_WEIGHT] <= weightmp)
             {
                 vmsg("你沒那麼重喔.....");
             }
-            else if (d.money > (weightmp*30))
+            else if (d.thing[THING_MONEY] > (weightmp*30))
             {
                 sprintf(inbuf, "減少%d公斤，總共需花費%d元，確定嗎? [y/N]: ", weightmp, weightmp*30);
                 getdata(b_lines - 1, 1, inbuf, genbuf, 2, 1, 0);
                 if (genbuf[0] == 'Y' || genbuf[0] == 'y')
                 {
-                    d.money -= weightmp * 30;
-                    d.weight -= weightmp;
-                    d.maxhp -= (random() % 2 + 2);
+                    d.thing[THING_MONEY] -= weightmp * 30;
+                    d.body[BODY_WEIGHT] -= weightmp;
+                    d.body[BODY_MAXHP] -= (random() % 2 + 2);
                     count_tired(5, 8, false, 100, 1);
-                    d.hp -= (random() % 2 + 3);
-                    d.sick += random() % 10 + 5;
+                    d.body[BODY_HP] -= (random() % 2 + 3);
+                    d.body[BODY_SICK] += random() % 10 + 5;
                     show_special_pic(4);
                     sprintf(inbuf, "總共減少了%d公斤", weightmp);
                     vmsg(inbuf);
@@ -4491,7 +4479,7 @@ const struct royalset *p)
             {
                 sprintf(inbuf2, "%-10s%3d", needmode[p[b].needmode], p[b].needvalue);
             }
-            if ((d.seeroyalJ == 1 && n == 4) || (n != 4))
+            if ((d.see[SEE_ROYAL_J] == 1 && n == 4) || (n != 4))
                 prints_centered("\x1b[1;31m│ \x1b[36m(\x1b[37m%c\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s     \x1b[36m(\x1b[37m%c\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s\x1b[31m│\x1b[0m",
                         p[a].num, p[a].name, inbuf1, p[b].num, p[b].name, inbuf2);
             else
@@ -4507,21 +4495,14 @@ const struct royalset *p)
         if (d.death == 1 || d.death == 2 || d.death == 3)
             return 0;
         /*將各人物已經給與的數值叫回來*/
-        save[0] = d.royalA;          /*from守衛*/
-        save[1] = d.royalB;          /*from近衛*/
-        save[2] = d.royalC;          /*from將軍*/
-        save[3] = d.royalD;          /*from大臣*/
-        save[4] = d.royalE;          /*from祭司*/
-        save[5] = d.royalF;          /*from寵妃*/
-        save[6] = d.royalG;          /*from王妃*/
-        save[7] = d.royalH;          /*from國王*/
-        save[8] = d.royalI;          /*from小丑*/
-        save[9] = d.royalJ;          /*from王子*/
+        /*from {守衛, 近衛, 將軍, 大臣, 祭司, 寵妃, 王妃, 國王, 小丑, 王子}*/
+        for (int i = 0; i < COUNTOF(d.royal); i++)
+            save[i] = d.royal[i];
 
         move(b_lines - 1, 0);
         clrtoeol();
         move(b_lines - 1, 0);
-        prints("\x1b[1;33m [生命力] %d/%d  [疲勞度] %d \x1b[0m", d.hp, d.maxhp, d.tired);
+        prints("\x1b[1;33m [生命力] %d/%d  [疲勞度] %d \x1b[0m", d.body[BODY_HP], d.body[BODY_MAXHP], d.body[BODY_TIRED]);
 
         move(b_lines, 0);
         clrtoeol();
@@ -4533,17 +4514,17 @@ const struct royalset *p)
         if (choice < 0 || choice >= 10)
             choice = pipkey - 'a';
 
-        if ((choice >= 0 && choice < 10 && d.seeroyalJ == 1) || (choice >= 0 && choice < 9 && d.seeroyalJ == 0))
+        if ((choice >= 0 && choice < 10 && d.see[SEE_ROYAL_J] == 1) || (choice >= 0 && choice < 9 && d.see[SEE_ROYAL_J] == 0))
         {
-            d.social += random() % 3 + 3;
-            d.hp -= random() % 5 + 6;
-            d.tired += random() % 5 + 8;
-            if (d.tired >= 100)
+            d.tmp[TMP_SOCIAL] += random() % 3 + 3;
+            d.body[BODY_HP] -= random() % 5 + 6;
+            d.body[BODY_TIRED] += random() % 5 + 8;
+            if (d.body[BODY_TIRED] >= 100)
             {
                 d.death = 1;
                 pipdie("\x1b[1;31m累死了...\x1b[m  ", 1);
             }
-            if (d.hp < 0)
+            if (d.body[BODY_HP] < 0)
             {
                 d.death = 1;
                 pipdie("\x1b[1;31m餓死了...\x1b[m  ", 1);
@@ -4555,8 +4536,8 @@ const struct royalset *p)
             else
             {
                 if ((p[choice].needmode == 0) ||
-                    (p[choice].needmode == 1 && d.manners >= p[choice].needvalue) ||
-                    (p[choice].needmode == 2 && d.speech >= p[choice].needvalue))
+                    (p[choice].needmode == 1 && d.learn[LEARN_MANNERS] >= p[choice].needvalue) ||
+                    (p[choice].needmode == 2 && d.learn[LEARN_SPEECH] >= p[choice].needvalue))
                 {
                     if (choice >= 0 && choice < 9 && save[choice] >= p[choice].maxtoman)
                     {
@@ -4573,28 +4554,28 @@ const struct royalset *p)
                             switch (choice)
                             {
                             case 1:
-                                change = d.character / 5;
+                                change = d.learn[LEARN_CHARACTER] / 5;
                                 break;
                             case 2:
-                                change = d.character / 8;
+                                change = d.learn[LEARN_CHARACTER] / 8;
                                 break;
                             case 3:
-                                change = d.charm / 5;
+                                change = d.learn[LEARN_CHARM] / 5;
                                 break;
                             case 4:
-                                change = d.wisdom / 10;
+                                change = d.learn[LEARN_WISDOM] / 10;
                                 break;
                             case 5:
-                                change = d.belief / 10;
+                                change = d.state[STATE_BELIEF] / 10;
                                 break;
                             case 6:
-                                change = d.speech / 10;
+                                change = d.learn[LEARN_SPEECH] / 10;
                                 break;
                             case 7:
-                                change = d.social / 10;
+                                change = d.tmp[TMP_SOCIAL] / 10;
                                 break;
                             case 8:
-                                change = d.hexp / 10;
+                                change = d.tmp[TMP_HEXP] / 10;
                                 break;
                             }
                             /*如果大於每次的增加最大量*/
@@ -4604,18 +4585,18 @@ const struct royalset *p)
                             if ((change + save[choice]) >= p[choice].maxtoman)
                                 change = p[choice].maxtoman - save[choice];
                             save[choice] += change;
-                            d.toman += change;
+                            d.learn[LEARN_TOMAN] += change;
                         }
                         else if (choice == 8)
                         {
                             save[8] = 0;
-                            d.social -= 13 + random() % 4;
-                            d.affect += 13 + random() % 4;
+                            d.tmp[TMP_SOCIAL] -= 13 + random() % 4;
+                            d.state[STATE_AFFECT] += 13 + random() % 4;
                         }
-                        else if (choice == 9 && d.seeroyalJ == 1)
+                        else if (choice == 9 && d.see[SEE_ROYAL_J] == 1)
                         {
                             save[9] += 15 + random() % 4;
-                            d.seeroyalJ = 0;
+                            d.see[SEE_ROYAL_J] = 0;
                         }
                         if (random() % 2 > 0)
                             sprintf(buf, "%s", p[choice].words1);
@@ -4634,16 +4615,8 @@ const struct royalset *p)
             }
             vmsg(buf);
         }
-        d.royalA = save[0];
-        d.royalB = save[1];
-        d.royalC = save[2];
-        d.royalD = save[3];
-        d.royalE = save[4];
-        d.royalF = save[5];
-        d.royalG = save[6];
-        d.royalH = save[7];
-        d.royalI = save[8];
-        d.royalJ = save[9];
+        for (int i = 0; i < COUNTOF(d.royal); i++)
+            d.royal[i] = save[i];
     }
     while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
 
@@ -4658,21 +4631,21 @@ const struct royalset *p)
 static int
 pip_set_currutmp(void)
 {
-    currutmp->pip->hp = d.hp;
-    currutmp->pip->mp = d.mp;
-    currutmp->pip->maxhp = d.maxhp;
-    currutmp->pip->maxmp = d.maxmp;
-    currutmp->pip->attack = d.attack;
-    currutmp->pip->resist = d.resist;
-    currutmp->pip->mresist = d.mresist;
-    currutmp->pip->speed = d.speed;
+    currutmp->pip->hp = d.body[BODY_HP];
+    currutmp->pip->mp = d.fight[FIGHT_MP];
+    currutmp->pip->maxhp = d.body[BODY_MAXHP];
+    currutmp->pip->maxmp = d.fight[FIGHT_MAXMP];
+    currutmp->pip->attack = d.fight[FIGHT_ATTACK];
+    currutmp->pip->resist = d.fight[FIGHT_RESIST];
+    currutmp->pip->mresist = d.fight[FIGHT_MRESIST];
+    currutmp->pip->speed = d.fight[FIGHT_SPEED];
 }
 
 static int
 pip_get_currutmp(void)
 {
-    d.hp = currutmp->pip->hp;
-    d.mp = currutmp->pip->mp;
+    d.body[BODY_HP] = currutmp->pip->hp;
+    d.fight[FIGHT_MP] = currutmp->pip->mp;
 }
 
 int
@@ -4711,11 +4684,11 @@ int first)
 
 
     /*存下舊小雞data*/
-    oldmexp = d.mexp;
-    oldhexp = d.hexp;
-    oldbrave = d.brave;
-    oldhskill = d.hskill;
-    oldmskill = d.mskill;
+    oldmexp = d.tmp[TMP_MEXP];
+    oldhexp = d.tmp[TMP_HEXP];
+    oldbrave = d.learn[LEARN_BRAVE];
+    oldhskill = d.fight[FIGHT_HSKILL];
+    oldmskill = d.fight[FIGHT_MSKILL];
     opponent = cutmp->talker;
     add_io(fd, 2);
     /*對方未準備妥當  先等一下  為了防止當機 */
@@ -4756,18 +4729,18 @@ int first)
         outs_centered("\x1b[1;34m═╣\x1b[44;37m 自己資料 \x1b[0;1;34m╠═══════════════════════════════\x1b[m\n");
         prints_centered("\x1b[1m   \x1b[33m姓  名:\x1b[37m%-20s                                              \x1b[31m  \x1b[m\n",
                d.name);
-        sprintf(buf1, "%d/%d", d.hp, d.maxhp);
-        sprintf(buf2, "%d/%d", d.mp, d.maxmp);
+        sprintf(buf1, "%d/%d", d.body[BODY_HP], d.body[BODY_MAXHP]);
+        sprintf(buf2, "%d/%d", d.fight[FIGHT_MP], d.fight[FIGHT_MAXMP]);
         prints_centered("\x1b[1m   \x1b[33m體  力:\x1b[37m%-24s       \x1b[33m法  力:\x1b[37m%-24s\x1b[33m\x1b[m\n",
                buf1, buf2);
         prints_centered("\x1b[1m   \x1b[33m攻  擊:\x1b[37m%-12d\x1b[33m防  禦:\x1b[37m%-12d\x1b[33m速  度:\x1b[37m%-12d\x1b[33m抗  魔:\x1b[37m%-9d  \x1b[m\n",
-               d.attack, d.resist, d.speed, d.mresist);
+               d.fight[FIGHT_ATTACK], d.fight[FIGHT_RESIST], d.fight[FIGHT_SPEED], d.fight[FIGHT_MRESIST]);
         prints_centered("\x1b[1m   \x1b[33m戰鬥技:\x1b[37m%-12d\x1b[33m魔法技:\x1b[37m%-12d\x1b[33m魔評價:\x1b[37m%-12d\x1b[33m武評價:\x1b[37m%-9d  \x1b[m\n",
-               d.hskill, d.mskill, d.mexp, d.hexp);
+               d.fight[FIGHT_HSKILL], d.fight[FIGHT_MSKILL], d.tmp[TMP_MEXP], d.tmp[TMP_HEXP]);
         prints_centered("\x1b[1m   \x1b[33m食  物:\x1b[37m%-12d\x1b[33m補  丸:\x1b[37m%-12d\x1b[33m零  食:\x1b[37m%-12d\x1b[33m靈  芝:\x1b[37m%-9d  \x1b[m\n",
-               d.food, d.bighp, d.cookie, d.medicine);
+               d.eat[EAT_FOOD], d.eat[EAT_BIGHP], d.eat[EAT_COOKIE], d.eat[EAT_MEDICINE]);
         prints_centered("\x1b[1m   \x1b[33m人  蔘:\x1b[37m%-12d\x1b[33m雪  蓮:\x1b[37m%-12d\x1b[33m疲  勞:\x1b[37m%-15d               \x1b[m\n",
-               d.ginseng, d.snowgrass, d.tired);
+               d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS], d.body[BODY_TIRED]);
         move(7, 0);
         outs_centered("\x1b[1;34m═╣\x1b[44;37m 戰鬥訊息 \x1b[0;1;34m╠═══════════════════════════════\x1b[m\n");
         for (i = 0; i < 8; i++)
@@ -4890,13 +4863,13 @@ int first)
                 else
                 {
                     if (opponent->pip->resistmode == 0)
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - opponent->pip->resist / 12 + random() % 20 - opponent->pip->speed / 30 + d.speed / 30);
+                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 9 - opponent->pip->resist / 12 + random() % 20 - opponent->pip->speed / 30 + d.fight[FIGHT_SPEED] / 30);
                     else
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - opponent->pip->resist / 6 + random() % 20 - opponent->pip->speed / 10 + d.speed / 30);
+                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 9 - opponent->pip->resist / 6 + random() % 20 - opponent->pip->speed / 10 + d.fight[FIGHT_SPEED] / 30);
                     dinjure = BMAX(dinjure, 10);
                     opponent->pip->hp -= dinjure;
-                    d.hexp += random() % 2 + 2;
-                    d.hskill += random() % 2 + 1;
+                    d.tmp[TMP_HEXP] += random() % 2 + 2;
+                    d.fight[FIGHT_HSKILL] += random() % 2 + 1;
                     sprintf(buf, "普通攻擊，對方體力減低%d", dinjure);
                     vmsg(buf);
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了普通攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m",
@@ -4922,16 +4895,16 @@ int first)
                 else
                 {
                     if (opponent->pip->resistmode == 0)
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - opponent->pip->resist / 12 + random() % 30 - opponent->pip->speed / 50 + d.speed / 30);
+                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - opponent->pip->resist / 12 + random() % 30 - opponent->pip->speed / 50 + d.fight[FIGHT_SPEED] / 30);
                     else
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - opponent->pip->resist / 6 + random() % 30 - opponent->pip->speed / 30 + d.speed / 30);
+                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - opponent->pip->resist / 6 + random() % 30 - opponent->pip->speed / 30 + d.fight[FIGHT_SPEED] / 30);
                     dinjure = BMAX(dinjure, 20);
-                    if (d.hp > 5)
+                    if (d.body[BODY_HP] > 5)
                     {
                         opponent->pip->hp -= dinjure;
-                        d.hp -= 5;
-                        d.hexp += random() % 3 + 3;
-                        d.hskill += random() % 2 + 2;
+                        d.body[BODY_HP] -= 5;
+                        d.tmp[TMP_HEXP] += random() % 3 + 3;
+                        d.fight[FIGHT_HSKILL] += random() % 2 + 2;
                         sprintf(buf, "全力攻擊，對方體力減低%d", dinjure);
                         vmsg(buf);
                         sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了全力攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m",
@@ -4954,9 +4927,9 @@ int first)
 
             case '3':
                 clrchyiuan(8, b_lines - 4);
-                oldtired = d.tired;
-                oldhp = d.hp;
-                d.magicmode = 0;
+                oldtired = d.body[BODY_TIRED];
+                oldhp = d.body[BODY_HP];
+                d.fight[FIGHT_MAGICMODE] = 0;
                 add_io(fd, 60);
                 dinjure = pip_magic_menu(1, opponent);
                 add_io(fd, 1);
@@ -4964,10 +4937,10 @@ int first)
                     dinjure = 5;
                 if (d.nodone == 0)
                 {
-                    if (d.magicmode == 1)
+                    if (d.fight[FIGHT_MAGICMODE] == 1)
                     {
-                        oldtired = oldtired - d.tired;
-                        oldhp = d.hp - oldhp;
+                        oldtired = oldtired - d.body[BODY_TIRED];
+                        oldhp = d.body[BODY_HP] - oldhp;
                         sprintf(buf, "治療後，體力提高%d，疲勞降低%d", oldhp, oldtired);
                         vmsg(buf);
                         sprintf(buf, "\x1b[1;33m%s \x1b[37m使用魔法治療之後，體力提高 \x1b[36m%d \x1b[37m點，疲勞降低 \x1b[36m%d \x1b[37m點\x1b[m", d.name, oldhp, oldtired);
@@ -4982,12 +4955,12 @@ int first)
                         }
                         else
                         {
-                            dinjure = get_hurt(dinjure, d.mexp);
-                            mresist = TCLAMP((d.mexp) / (opponent->pip->mresist + 1), 0.3, 3);
+                            dinjure = get_hurt(dinjure, d.tmp[TMP_MEXP]);
+                            mresist = TCLAMP((d.tmp[TMP_MEXP]) / (opponent->pip->mresist + 1), 0.3, 3);
                             dinjure = (int)dinjure * mresist;
 
                             opponent->pip->hp -= dinjure;
-                            d.mskill += random() % 2 + 2;
+                            d.fight[FIGHT_MSKILL] += random() % 2 + 2;
                             sprintf(buf, "魔法攻擊，對方體力減低%d", dinjure);
                             vmsg(buf);
                             sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了魔法攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m",
@@ -4999,9 +4972,9 @@ int first)
                     currutmp->pip->msgcount++;
                     strcpy(opponent->pip->msg, buf);
                     strcpy(mymsg[currutmp->pip->msgcount%8], buf);
-                    /*恢復體力是用d.hp和d.maxhp去 所以得更新*/
-                    currutmp->pip->hp = d.hp;
-                    currutmp->pip->mp = d.mp;
+                    /*恢復體力是用d.body[BODY_HP]和d.body[BODY_MAXHP]去 所以得更新*/
+                    currutmp->pip->hp = d.body[BODY_HP];
+                    currutmp->pip->mp = d.fight[FIGHT_MP];
                     currutmp->pip->nodone = 2;  /*做完*/
                     opponent->pip->nodone = 1;
                     pip_set_currutmp();
@@ -5031,9 +5004,9 @@ int first)
                     currutmp->pip->msgcount++;
                     strcpy(opponent->pip->msg, buf);
                     strcpy(mymsg[currutmp->pip->msgcount%8], buf);
-                    /*恢復體力是用d.hp和d.maxhp去 所以得更新*/
-                    currutmp->pip->hp = d.hp;
-                    currutmp->pip->mp = d.mp;
+                    /*恢復體力是用d.body[BODY_HP]和d.body[BODY_MAXHP]去 所以得更新*/
+                    currutmp->pip->hp = d.body[BODY_HP];
+                    currutmp->pip->mp = d.fight[FIGHT_MP];
                     currutmp->pip->nodone = 2;  /*做完*/
                     opponent->pip->nodone = 1;
                     pip_set_currutmp();
@@ -5042,7 +5015,7 @@ int first)
             case '6':
                 opponent->pip->msgcount++;
                 currutmp->pip->msgcount++;
-                if (random() % 20 >= 18 || (random() % 20 > 13 && d.speed <= opponent->pip->speed))
+                if (random() % 20 >= 18 || (random() % 20 > 13 && d.fight[FIGHT_SPEED] <= opponent->pip->speed))
                 {
                     vmsg("想逃跑，卻失敗了...");
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m想先逃跑再說...但卻失敗了...\x1b[m", d.name);
@@ -5322,36 +5295,36 @@ int *modeall_purpose)
 {
     int endmode;
     /*暗黑*/
-    if ((d.ethics == 0 && d.offense >= 100) || (d.ethics > 0 && d.ethics < 50 && d.offense >= 250))
+    if ((d.learn[LEARN_ETHICS] == 0 && d.state[STATE_OFFENSE] >= 100) || (d.learn[LEARN_ETHICS] > 0 && d.learn[LEARN_ETHICS] < 50 && d.state[STATE_OFFENSE] >= 250))
         endmode = 0;
     /*藝術*/
-    else if (d.art > d.hexp && d.art > d.mexp && d.art > d.hskill && d.art > d.mskill &&
-             d.art > d.social && d.art > d.family && d.art > d.homework && d.art > d.wisdom &&
-             d.art > d.charm && d.art > d.belief && d.art > d.manners && d.art > d.speech &&
-             d.art > d.cookskill && d.art > d.love)
+    else if (d.learn[LEARN_ART] > d.tmp[TMP_HEXP] && d.learn[LEARN_ART] > d.tmp[TMP_MEXP] && d.learn[LEARN_ART] > d.fight[FIGHT_HSKILL] && d.learn[LEARN_ART] > d.fight[FIGHT_MSKILL] &&
+             d.learn[LEARN_ART] > d.tmp[TMP_SOCIAL] && d.learn[LEARN_ART] > d.tmp[TMP_FAMILY] && d.learn[LEARN_ART] > d.learn[LEARN_HOMEWORK] && d.learn[LEARN_ART] > d.learn[LEARN_WISDOM] &&
+             d.learn[LEARN_ART] > d.learn[LEARN_CHARM] && d.learn[LEARN_ART] > d.state[STATE_BELIEF] && d.learn[LEARN_ART] > d.learn[LEARN_MANNERS] && d.learn[LEARN_ART] > d.learn[LEARN_SPEECH] &&
+             d.learn[LEARN_ART] > d.learn[LEARN_COOKSKILL] && d.learn[LEARN_ART] > d.learn[LEARN_LOVE])
         endmode = 1;
     /*戰鬥*/
-    else if (d.hexp >= d.social && d.hexp >= d.mexp && d.hexp >= d.family)
+    else if (d.tmp[TMP_HEXP] >= d.tmp[TMP_SOCIAL] && d.tmp[TMP_HEXP] >= d.tmp[TMP_MEXP] && d.tmp[TMP_HEXP] >= d.tmp[TMP_FAMILY])
     {
         *modeall_purpose = 0;
-        if (d.hexp > d.social + 50 || d.hexp > d.mexp + 50 || d.hexp > d.family + 50)
+        if (d.tmp[TMP_HEXP] > d.tmp[TMP_SOCIAL] + 50 || d.tmp[TMP_HEXP] > d.tmp[TMP_MEXP] + 50 || d.tmp[TMP_HEXP] > d.tmp[TMP_FAMILY] + 50)
             endmode = 3;
         else
             endmode = 2;
     }
     /*魔法*/
-    else if (d.mexp >= d.hexp && d.mexp >= d.social && d.mexp >= d.family)
+    else if (d.tmp[TMP_MEXP] >= d.tmp[TMP_HEXP] && d.tmp[TMP_MEXP] >= d.tmp[TMP_SOCIAL] && d.tmp[TMP_MEXP] >= d.tmp[TMP_FAMILY])
     {
         *modeall_purpose = 1;
-        if (d.mexp > d.hexp || d.mexp > d.social || d.mexp > d.family)
+        if (d.tmp[TMP_MEXP] > d.tmp[TMP_HEXP] || d.tmp[TMP_MEXP] > d.tmp[TMP_SOCIAL] || d.tmp[TMP_MEXP] > d.tmp[TMP_FAMILY])
             endmode = 4;
         else
             endmode = 2;
     }
-    else if (d.social >= d.hexp && d.social >= d.mexp && d.social >= d.family)
+    else if (d.tmp[TMP_SOCIAL] >= d.tmp[TMP_HEXP] && d.tmp[TMP_SOCIAL] >= d.tmp[TMP_MEXP] && d.tmp[TMP_SOCIAL] >= d.tmp[TMP_FAMILY])
     {
         *modeall_purpose = 2;
-        if (d.social > d.hexp + 50 || d.social > d.mexp + 50 || d.social > d.family + 50)
+        if (d.tmp[TMP_SOCIAL] > d.tmp[TMP_HEXP] + 50 || d.tmp[TMP_SOCIAL] > d.tmp[TMP_MEXP] + 50 || d.tmp[TMP_SOCIAL] > d.tmp[TMP_FAMILY] + 50)
             endmode = 5;
         else
             endmode = 2;
@@ -5360,7 +5333,7 @@ int *modeall_purpose)
     else
     {
         *modeall_purpose = 3;
-        if (d.family > d.hexp + 50 || d.family > d.mexp + 50 || d.family > d.social + 50)
+        if (d.tmp[TMP_FAMILY] > d.tmp[TMP_HEXP] + 50 || d.tmp[TMP_FAMILY] > d.tmp[TMP_MEXP] + 50 || d.tmp[TMP_FAMILY] > d.tmp[TMP_SOCIAL] + 50)
             endmode = 6;
         else
             endmode = 2;
@@ -5380,12 +5353,12 @@ pip_marry_decide(void)
     }
     else
     {
-        if (d.royalJ >= d.relation && d.royalJ >= 100)
+        if (d.royal[J] >= d.relation && d.royal[J] >= 100)
         {
             d.lover = 1;  /*王子*/
             grade = 200;
         }
-        else if (d.relation > d.royalJ && d.relation >= 100)
+        else if (d.relation > d.royal[J] && d.relation >= 100)
         {
             d.lover = 2;  /*父親或母親*/
             grade = 0;
@@ -5405,64 +5378,64 @@ pip_endingblack( /*暗黑*/
 char *buf,
 int *m, int *n, int *grade)
 {
-    if (d.offense >= 500 && d.mexp >= 500) /*魔王*/
+    if (d.state[STATE_OFFENSE] >= 500 && d.tmp[TMP_MEXP] >= 500) /*魔王*/
     {
         *m = 0;
-        if (d.mexp >= 1000)
+        if (d.tmp[TMP_MEXP] >= 1000)
             *n = 0;
-        else if (d.mexp < 1000 && d.mexp >= 800)
+        else if (d.tmp[TMP_MEXP] < 1000 && d.tmp[TMP_MEXP] >= 800)
             *n = 1;
         else
             *n = 2;
     }
 
-    else if (d.hexp >= 600)  /*流氓*/
+    else if (d.tmp[TMP_HEXP] >= 600)  /*流氓*/
     {
         *m = 1;
-        if (d.wisdom >= 350)
+        if (d.learn[LEARN_WISDOM] >= 350)
             *n = 0;
-        else if (d.wisdom < 350 && d.wisdom >= 300)
+        else if (d.learn[LEARN_WISDOM] < 350 && d.learn[LEARN_WISDOM] >= 300)
             *n = 1;
         else
             *n = 2;
     }
-    else if (d.speech >= 100 && d.art >= 80) /*SM*/
+    else if (d.learn[LEARN_SPEECH] >= 100 && d.learn[LEARN_ART] >= 80) /*SM*/
     {
         *m = 2;
-        if (d.speech > 150 && d.art >= 120)
+        if (d.learn[LEARN_SPEECH] > 150 && d.learn[LEARN_ART] >= 120)
             *n = 0;
-        else if (d.speech > 120 && d.art >= 100)
+        else if (d.learn[LEARN_SPEECH] > 120 && d.learn[LEARN_ART] >= 100)
             *n = 1;
         else
             *n = 2;
     }
-    else if (d.hexp >= 320 && d.character > 200 && d.charm < 200)       /*黑街老大*/
+    else if (d.tmp[TMP_HEXP] >= 320 && d.learn[LEARN_CHARACTER] > 200 && d.learn[LEARN_CHARM] < 200)       /*黑街老大*/
     {
         *m = 3;
-        if (d.hexp >= 400)
+        if (d.tmp[TMP_HEXP] >= 400)
             *n = 0;
-        else if (d.hexp < 400 && d.hexp >= 360)
+        else if (d.tmp[TMP_HEXP] < 400 && d.tmp[TMP_HEXP] >= 360)
             *n = 1;
         else
             *n = 2;
     }
-    else if (d.character >= 200 && d.charm >= 200 && d.speech > 70 && d.toman > 70)  /*高級娼婦*/
+    else if (d.learn[LEARN_CHARACTER] >= 200 && d.learn[LEARN_CHARM] >= 200 && d.learn[LEARN_SPEECH] > 70 && d.learn[LEARN_TOMAN] > 70)  /*高級娼婦*/
     {
         *m = 4;
-        if (d.charm >= 300)
+        if (d.learn[LEARN_CHARM] >= 300)
             *n = 0;
-        else if (d.charm < 300 && d.charm >= 250)
+        else if (d.learn[LEARN_CHARM] < 300 && d.learn[LEARN_CHARM] >= 250)
             *n = 1;
         else
             *n = 2;
     }
 
-    else if (d.wisdom >= 450)  /*詐騙師*/
+    else if (d.learn[LEARN_WISDOM] >= 450)  /*詐騙師*/
     {
         *m = 5;
-        if (d.wisdom >= 550)
+        if (d.learn[LEARN_WISDOM] >= 550)
             *n = 0;
-        else if (d.wisdom < 550 && d.wisdom >= 500)
+        else if (d.learn[LEARN_WISDOM] < 550 && d.learn[LEARN_WISDOM] >= 500)
             *n = 1;
         else
             *n = 2;
@@ -5471,9 +5444,9 @@ int *m, int *n, int *grade)
     else /*流鶯*/
     {
         *m = 6;
-        if (d.charm >= 350)
+        if (d.learn[LEARN_CHARM] >= 350)
             *n = 0;
-        else if (d.charm < 350 && d.charm >= 300)
+        else if (d.learn[LEARN_CHARM] < 350 && d.learn[LEARN_CHARM] >= 300)
             *n = 1;
         else
             *n = 2;
@@ -5493,22 +5466,22 @@ char *buf,
 int *m, int *n, int *grade)
 {
     int class_;
-    if (d.social > 600) class_ = 0;
-    else if (d.social > 450) class_ = 1;
-    else if (d.social > 380) class_ = 2;
-    else if (d.social > 250) class_ = 3;
+    if (d.tmp[TMP_SOCIAL] > 600) class_ = 0;
+    else if (d.tmp[TMP_SOCIAL] > 450) class_ = 1;
+    else if (d.tmp[TMP_SOCIAL] > 380) class_ = 2;
+    else if (d.tmp[TMP_SOCIAL] > 250) class_ = 3;
     else class_ = 4;
 
     switch (class_)
     {
     case 0:
-        if (d.charm > 500)
+        if (d.learn[LEARN_CHARM] > 500)
         {
             *m = 0;
             d.lover = 10;
-            if (d.character >= 700)
+            if (d.learn[LEARN_CHARACTER] >= 700)
                 *n = 0;
-            else if (d.character >= 500)
+            else if (d.learn[LEARN_CHARACTER] >= 500)
                 *n = 1;
             else
                 *n = 2;
@@ -5517,9 +5490,9 @@ int *m, int *n, int *grade)
         {
             *m = 1;
             d.lover = 10;
-            if (d.character >= 700)
+            if (d.learn[LEARN_CHARACTER] >= 700)
                 *n = 0;
-            else if (d.character >= 500)
+            else if (d.learn[LEARN_CHARACTER] >= 500)
                 *n = 1;
             else
                 *n = 2;
@@ -5529,22 +5502,22 @@ int *m, int *n, int *grade)
     case 1:
         *m = 0;
         d.lover = 10;
-        if (d.character >= 700)
+        if (d.learn[LEARN_CHARACTER] >= 700)
             *n = 0;
-        else if (d.character >= 500)
+        else if (d.learn[LEARN_CHARACTER] >= 500)
             *n = 1;
         else
             *n = 2;
         break;
 
     case 2:
-        if (d.character >= d.charm)
+        if (d.learn[LEARN_CHARACTER] >= d.learn[LEARN_CHARM])
         {
             *m = 2;
             d.lover = 10;
-            if (d.toman >= 250)
+            if (d.learn[LEARN_TOMAN] >= 250)
                 *n = 0;
-            else if (d.toman >= 200)
+            else if (d.learn[LEARN_TOMAN] >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5553,9 +5526,9 @@ int *m, int *n, int *grade)
         {
             *m = 3;
             d.lover = 10;
-            if (d.character >= 400)
+            if (d.learn[LEARN_CHARACTER] >= 400)
                 *n = 0;
-            else if (d.character >= 300)
+            else if (d.learn[LEARN_CHARACTER] >= 300)
                 *n = 1;
             else
                 *n = 2;
@@ -5563,13 +5536,13 @@ int *m, int *n, int *grade)
         break;
 
     case 3:
-        if (d.wisdom >= d.affect)
+        if (d.learn[LEARN_WISDOM] >= d.state[STATE_AFFECT])
         {
             *m = 4;
             d.lover = 10;
-            if (d.toman > 120 && d.cookskill > 300 && d.homework > 300)
+            if (d.learn[LEARN_TOMAN] > 120 && d.learn[LEARN_COOKSKILL] > 300 && d.learn[LEARN_HOMEWORK] > 300)
                 *n = 0;
-            else if (d.toman > 100 && d.cookskill > 250 && d.homework > 250)
+            else if (d.learn[LEARN_TOMAN] > 100 && d.learn[LEARN_COOKSKILL] > 250 && d.learn[LEARN_HOMEWORK] > 250)
                 *n = 1;
             else
                 *n = 2;
@@ -5578,9 +5551,9 @@ int *m, int *n, int *grade)
         {
             *m = 5;
             d.lover = 10;
-            if (d.hp >= 400)
+            if (d.body[BODY_HP] >= 400)
                 *n = 0;
-            else if (d.hp >= 300)
+            else if (d.body[BODY_HP] >= 300)
                 *n = 1;
             else
                 *n = 2;
@@ -5590,9 +5563,9 @@ int *m, int *n, int *grade)
     case 4:
         *m = 6;
         d.lover = 10;
-        if (d.charm >= 200)
+        if (d.learn[LEARN_CHARM] >= 200)
             *n = 0;
-        else if (d.charm >= 100)
+        else if (d.learn[LEARN_CHARM] >= 100)
             *n = 1;
         else
             *n = 2;
@@ -5612,31 +5585,31 @@ char *buf,
 int *m, int *n, int *grade)
 {
     int class_;
-    if (d.mexp > 800) class_ = 0;
-    else if (d.mexp > 600) class_ = 1;
-    else if (d.mexp > 500) class_ = 2;
-    else if (d.mexp > 300) class_ = 3;
+    if (d.tmp[TMP_MEXP] > 800) class_ = 0;
+    else if (d.tmp[TMP_MEXP] > 600) class_ = 1;
+    else if (d.tmp[TMP_MEXP] > 500) class_ = 2;
+    else if (d.tmp[TMP_MEXP] > 300) class_ = 3;
     else class_ = 4;
 
     switch (class_)
     {
     case 0:
-        if (d.affect > d.wisdom && d.affect > d.belief && d.ethics > 100)
+        if (d.state[STATE_AFFECT] > d.learn[LEARN_WISDOM] && d.state[STATE_AFFECT] > d.state[STATE_BELIEF] && d.learn[LEARN_ETHICS] > 100)
         {
             *m = 0;
-            if (d.ethics >= 800)
+            if (d.learn[LEARN_ETHICS] >= 800)
                 *n = 0;
-            else if (d.ethics >= 400)
+            else if (d.learn[LEARN_ETHICS] >= 400)
                 *n = 1;
             else
                 *n = 2;
         }
-        else if (d.ethics < 50)
+        else if (d.learn[LEARN_ETHICS] < 50)
         {
             *m = 3;
-            if (d.hp >= 400)
+            if (d.body[BODY_HP] >= 400)
                 *n = 0;
-            else if (d.hp >= 200)
+            else if (d.body[BODY_HP] >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5644,9 +5617,9 @@ int *m, int *n, int *grade)
         else
         {
             *m = 1;
-            if (d.wisdom >= 800)
+            if (d.learn[LEARN_WISDOM] >= 800)
                 *n = 0;
-            else if (d.wisdom >= 400)
+            else if (d.learn[LEARN_WISDOM] >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -5654,12 +5627,12 @@ int *m, int *n, int *grade)
         break;
 
     case 1:
-        if (d.ethics >= 50)
+        if (d.learn[LEARN_ETHICS] >= 50)
         {
             *m = 2;
-            if (d.wisdom >= 500)
+            if (d.learn[LEARN_WISDOM] >= 500)
                 *n = 0;
-            else if (d.wisdom >= 200)
+            else if (d.learn[LEARN_WISDOM] >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5667,9 +5640,9 @@ int *m, int *n, int *grade)
         else
         {
             *m = 3;
-            if (d.hp >= 400)
+            if (d.body[BODY_HP] >= 400)
                 *n = 0;
-            else if (d.hp >= 200)
+            else if (d.body[BODY_HP] >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5678,9 +5651,9 @@ int *m, int *n, int *grade)
 
     case 2:
         *m = 4;
-        if (d.mskill >= 300)
+        if (d.fight[FIGHT_MSKILL] >= 300)
             *n = 0;
-        else if (d.mskill >= 150)
+        else if (d.fight[FIGHT_MSKILL] >= 150)
             *n = 1;
         else
             *n = 2;
@@ -5688,21 +5661,21 @@ int *m, int *n, int *grade)
 
     case 3:
         *m = 5;
-        if (d.speech >= 150)
+        if (d.learn[LEARN_SPEECH] >= 150)
             *n = 0;
-        else if (d.speech >= 60)
+        else if (d.learn[LEARN_SPEECH] >= 60)
             *n = 1;
         else
             *n = 2;
         break;
 
     case 4:
-        if (d.character >= 200)
+        if (d.learn[LEARN_CHARACTER] >= 200)
         {
             *m = 6;
-            if (d.speech >= 150)
+            if (d.learn[LEARN_SPEECH] >= 150)
                 *n = 0;
-            else if (d.speech >= 60)
+            else if (d.learn[LEARN_SPEECH] >= 60)
                 *n = 1;
             else
                 *n = 2;
@@ -5710,9 +5683,9 @@ int *m, int *n, int *grade)
         else
         {
             *m = 7;
-            if (d.speech >= 150)
+            if (d.learn[LEARN_SPEECH] >= 150)
                 *n = 0;
-            else if (d.speech >= 60)
+            else if (d.learn[LEARN_SPEECH] >= 60)
                 *n = 1;
             else
                 *n = 2;
@@ -5735,30 +5708,30 @@ char *buf,
 int *m, int *n, int *grade)
 {
     int class_;
-    if (d.hexp > 1500) class_ = 0;
-    else if (d.hexp > 1000) class_ = 1;
-    else if (d.hexp > 800) class_ = 2;
+    if (d.tmp[TMP_HEXP] > 1500) class_ = 0;
+    else if (d.tmp[TMP_HEXP] > 1000) class_ = 1;
+    else if (d.tmp[TMP_HEXP] > 800) class_ = 2;
     else class_ = 3;
 
     switch (class_)
     {
     case 0:
-        if (d.affect > d.wisdom && d.affect > d.belief && d.ethics > 100)
+        if (d.state[STATE_AFFECT] > d.learn[LEARN_WISDOM] && d.state[STATE_AFFECT] > d.state[STATE_BELIEF] && d.learn[LEARN_ETHICS] > 100)
         {
             *m = 0;
-            if (d.ethics >= 800)
+            if (d.learn[LEARN_ETHICS] >= 800)
                 *n = 0;
-            else if (d.ethics >= 400)
+            else if (d.learn[LEARN_ETHICS] >= 400)
                 *n = 1;
             else
                 *n = 2;
         }
-        else if (d.ethics < 50)
+        else if (d.learn[LEARN_ETHICS] < 50)
         {
             *m = 3;
-            if (d.hp >= 400)
+            if (d.body[BODY_HP] >= 400)
                 *n = 0;
-            else if (d.hp >= 200)
+            else if (d.body[BODY_HP] >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5766,9 +5739,9 @@ int *m, int *n, int *grade)
         else
         {
             *m = 1;
-            if (d.wisdom >= 800)
+            if (d.learn[LEARN_WISDOM] >= 800)
                 *n = 0;
-            else if (d.wisdom >= 400)
+            else if (d.learn[LEARN_WISDOM] >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -5776,22 +5749,22 @@ int *m, int *n, int *grade)
         break;
 
     case 1:
-        if (d.character >= 300 && d.ethics > 50)
+        if (d.learn[LEARN_CHARACTER] >= 300 && d.learn[LEARN_ETHICS] > 50)
         {
             *m = 2;
-            if (d.ethics >= 300 && d.charm >= 300)
+            if (d.learn[LEARN_ETHICS] >= 300 && d.learn[LEARN_CHARM] >= 300)
                 *n = 0;
-            else if (d.ethics >= 250 && d.charm >= 250)
+            else if (d.learn[LEARN_ETHICS] >= 250 && d.learn[LEARN_CHARM] >= 250)
                 *n = 1;
             else
                 *n = 2;
         }
-        else if (d.ethics > 50)
+        else if (d.learn[LEARN_ETHICS] > 50)
         {
             *m = 3;
-            if (d.speech >= 200)
+            if (d.learn[LEARN_SPEECH] >= 200)
                 *n = 0;
-            else if (d.speech >= 80)
+            else if (d.learn[LEARN_SPEECH] >= 80)
                 *n = 1;
             else
                 *n = 2;
@@ -5799,9 +5772,9 @@ int *m, int *n, int *grade)
         else
         {
             *m = 6;
-            if (d.hp >= 400)
+            if (d.body[BODY_HP] >= 400)
                 *n = 0;
-            else if (d.hp >= 200)
+            else if (d.body[BODY_HP] >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5809,22 +5782,22 @@ int *m, int *n, int *grade)
         break;
 
     case 2:
-        if (d.character >= 400 && d.ethics > 50)
+        if (d.learn[LEARN_CHARACTER] >= 400 && d.learn[LEARN_ETHICS] > 50)
         {
             *m = 4;
-            if (d.ethics >= 300)
+            if (d.learn[LEARN_ETHICS] >= 300)
                 *n = 0;
-            else if (d.ethics >= 150)
+            else if (d.learn[LEARN_ETHICS] >= 150)
                 *n = 1;
             else
                 *n = 2;
         }
-        else if (d.ethics > 50)
+        else if (d.learn[LEARN_ETHICS] > 50)
         {
             *m = 3;
-            if (d.speech >= 200)
+            if (d.learn[LEARN_SPEECH] >= 200)
                 *n = 0;
-            else if (d.speech >= 80)
+            else if (d.learn[LEARN_SPEECH] >= 80)
                 *n = 1;
             else
                 *n = 2;
@@ -5832,9 +5805,9 @@ int *m, int *n, int *grade)
         else
         {
             *m = 6;
-            if (d.hp >= 400)
+            if (d.body[BODY_HP] >= 400)
                 *n = 0;
-            else if (d.hp >= 200)
+            else if (d.body[BODY_HP] >= 200)
                 *n = 1;
             else
                 *n = 2;
@@ -5842,7 +5815,7 @@ int *m, int *n, int *grade)
         break;
 
     case 3:
-        if (d.ethics >= 50)
+        if (d.learn[LEARN_ETHICS] >= 50)
         {
             *m = 5;
         }
@@ -5850,9 +5823,9 @@ int *m, int *n, int *grade)
         {
             *m = 7;
         }
-        if (d.hskill >= 100)
+        if (d.fight[FIGHT_HSKILL] >= 100)
             *n = 0;
-        else if (d.hskill >= 80)
+        else if (d.fight[FIGHT_HSKILL] >= 80)
             *n = 1;
         else
             *n = 2;
@@ -5874,9 +5847,9 @@ char *buf,
 int *m, int *n, int *grade)
 {
     *m = 0;
-    if (d.charm >= 200)
+    if (d.learn[LEARN_CHARM] >= 200)
         *n = 0;
-    else if (d.charm > 100)
+    else if (d.learn[LEARN_CHARM] > 100)
         *n = 1;
     else
         *n = 2;
@@ -5901,13 +5874,13 @@ int mode)
     int num = 0;
 
     if (mode == 0)
-        data = d.hexp;
+        data = d.tmp[TMP_HEXP];
     else if (mode == 1)
-        data = d.mexp;
+        data = d.tmp[TMP_MEXP];
     else if (mode == 2)
-        data = d.social;
+        data = d.tmp[TMP_SOCIAL];
     else  // mode == 3
-        data = d.family;
+        data = d.tmp[TMP_FAMILY];
     if (data > 1000) class_ = 0;
     else if (data > 800) class_ = 1;
     else if (data > 500) class_ = 2;
@@ -5918,12 +5891,12 @@ int mode)
     switch (class_)
     {
     case 0:
-        if (d.character >= 1000)
+        if (d.learn[LEARN_CHARACTER] >= 1000)
         {
             *m = 0;
-            if (d.ethics >= 900)
+            if (d.learn[LEARN_ETHICS] >= 900)
                 *n = 0;
-            else if (d.ethics >= 600)
+            else if (d.learn[LEARN_ETHICS] >= 600)
                 *n = 1;
             else
                 *n = 2;
@@ -5931,9 +5904,9 @@ int mode)
         else
         {
             *m = 1;
-            if (d.ethics >= 650)
+            if (d.learn[LEARN_ETHICS] >= 650)
                 *n = 0;
-            else if (d.ethics >= 400)
+            else if (d.learn[LEARN_ETHICS] >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -5941,22 +5914,22 @@ int mode)
         break;
 
     case 1:
-        if (d.belief > d.ethics && d.belief > d.wisdom)
+        if (d.state[STATE_BELIEF] > d.learn[LEARN_ETHICS] && d.state[STATE_BELIEF] > d.learn[LEARN_WISDOM])
         {
             *m = 2;
-            if (d.ethics >= 500)
+            if (d.learn[LEARN_ETHICS] >= 500)
                 *n = 0;
-            else if (d.ethics >= 250)
+            else if (d.learn[LEARN_ETHICS] >= 250)
                 *n = 1;
             else
                 *n = 2;
         }
-        else if (d.ethics > d.belief && d.ethics > d.wisdom)
+        else if (d.learn[LEARN_ETHICS] > d.state[STATE_BELIEF] && d.learn[LEARN_ETHICS] > d.learn[LEARN_WISDOM])
         {
             *m = 3;
-            if (d.wisdom >= 800)
+            if (d.learn[LEARN_WISDOM] >= 800)
                 *n = 0;
-            else if (d.wisdom >= 600)
+            else if (d.learn[LEARN_WISDOM] >= 600)
                 *n = 1;
             else
                 *n = 2;
@@ -5964,9 +5937,9 @@ int mode)
         else
         {
             *m = 4;
-            if (d.affect >= 800)
+            if (d.state[STATE_AFFECT] >= 800)
                 *n = 0;
-            else if (d.affect >= 400)
+            else if (d.state[STATE_AFFECT] >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -5974,22 +5947,22 @@ int mode)
         break;
 
     case 2:
-        if (d.belief > d.ethics && d.belief > d.wisdom)
+        if (d.state[STATE_BELIEF] > d.learn[LEARN_ETHICS] && d.state[STATE_BELIEF] > d.learn[LEARN_WISDOM])
         {
             *m = 5;
-            if (d.belief >= 400)
+            if (d.state[STATE_BELIEF] >= 400)
                 *n = 0;
-            else if (d.belief >= 150)
+            else if (d.state[STATE_BELIEF] >= 150)
                 *n = 1;
             else
                 *n = 2;
         }
-        else if (d.ethics > d.belief && d.ethics > d.wisdom)
+        else if (d.learn[LEARN_ETHICS] > d.state[STATE_BELIEF] && d.learn[LEARN_ETHICS] > d.learn[LEARN_WISDOM])
         {
             *m = 6;
-            if (d.wisdom >= 700)
+            if (d.learn[LEARN_WISDOM] >= 700)
                 *n = 0;
-            else if (d.wisdom >= 400)
+            else if (d.learn[LEARN_WISDOM] >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -5997,9 +5970,9 @@ int mode)
         else
         {
             *m = 7;
-            if (d.affect >= 800)
+            if (d.state[STATE_AFFECT] >= 800)
                 *n = 0;
-            else if (d.affect >= 400)
+            else if (d.state[STATE_AFFECT] >= 400)
                 *n = 1;
             else
                 *n = 2;
@@ -6013,75 +5986,75 @@ int mode)
         default:
             *m = 8;
         case 0:
-            if (d.ethics > 400) *n = 0;
-            else if (d.ethics > 200) *n = 1;
+            if (d.learn[LEARN_ETHICS] > 400) *n = 0;
+            else if (d.learn[LEARN_ETHICS] > 200) *n = 1;
             else *n = 2;
             break;
         case 1:
-            if (d.love > 100) *n = 0;
-            else if (d.love > 50) *n = 1;
+            if (d.learn[LEARN_LOVE] > 100) *n = 0;
+            else if (d.learn[LEARN_LOVE] > 50) *n = 1;
             else *n = 2;
             break;
         case 2:
-            if (d.homework > 100) *n = 0;
-            else if (d.homework > 50) *n = 1;
+            if (d.learn[LEARN_HOMEWORK] > 100) *n = 0;
+            else if (d.learn[LEARN_HOMEWORK] > 50) *n = 1;
             else *n = 2;
             break;
         case 3:
-            if (d.hp > 600) *n = 0;
-            else if (d.hp > 300) *n = 1;
+            if (d.body[BODY_HP] > 600) *n = 0;
+            else if (d.body[BODY_HP] > 300) *n = 1;
             else *n = 2;
             break;
         case 4:
-            if (d.cookskill > 200) *n = 0;
-            else if (d.cookskill > 100) *n = 1;
+            if (d.learn[LEARN_COOKSKILL] > 200) *n = 0;
+            else if (d.learn[LEARN_COOKSKILL] > 100) *n = 1;
             else *n = 2;
             break;
         case 5:
-            if ((d.belief + d.ethics) > 600) *n = 0;
-            else if ((d.belief + d.ethics) > 200) *n = 1;
+            if ((d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS]) > 600) *n = 0;
+            else if ((d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS]) > 200) *n = 1;
             else *n = 2;
             break;
         case 6:
-            if (d.speech > 150) *n = 0;
-            else if (d.speech > 50) *n = 1;
+            if (d.learn[LEARN_SPEECH] > 150) *n = 0;
+            else if (d.learn[LEARN_SPEECH] > 50) *n = 1;
             else *n = 2;
             break;
         case 7:
-            if ((d.hp + d.wrist) > 900) *n = 0;
-            else if ((d.hp + d.wrist) > 600) *n = 1;
+            if ((d.body[BODY_HP] + d.body[BODY_WRIST]) > 900) *n = 0;
+            else if ((d.body[BODY_HP] + d.body[BODY_WRIST]) > 600) *n = 1;
             else *n = 2;
             break;
         case 8:
         case 10:
-            if (d.art > 250) *n = 0;
-            else if (d.art > 100) *n = 1;
+            if (d.learn[LEARN_ART] > 250) *n = 0;
+            else if (d.learn[LEARN_ART] > 100) *n = 1;
             else *n = 2;
             break;
         case 9:
-            if (d.hskill > 250) *n = 0;
-            else if (d.hskill > 100) *n = 1;
+            if (d.fight[FIGHT_HSKILL] > 250) *n = 0;
+            else if (d.fight[FIGHT_HSKILL] > 100) *n = 1;
             else *n = 2;
             break;
         case 11:
-            if (d.belief > 500) *n = 0;
-            else if (d.belief > 200) *n = 1;
+            if (d.state[STATE_BELIEF] > 500) *n = 0;
+            else if (d.state[STATE_BELIEF] > 200) *n = 1;
             else *n = 2;
             break;
         case 12:
-            if (d.wisdom > 500) *n = 0;
-            else if (d.wisdom > 200) *n = 1;
+            if (d.learn[LEARN_WISDOM] > 500) *n = 0;
+            else if (d.learn[LEARN_WISDOM] > 200) *n = 1;
             else *n = 2;
             break;
         case 13:
         case 15:
-            if (d.charm > 1000) *n = 0;
-            else if (d.charm > 500) *n = 1;
+            if (d.learn[LEARN_CHARM] > 1000) *n = 0;
+            else if (d.learn[LEARN_CHARM] > 500) *n = 1;
             else *n = 2;
             break;
         case 14:
-            if (d.charm > 700) *n = 0;
-            else if (d.charm > 300) *n = 1;
+            if (d.learn[LEARN_CHARM] > 700) *n = 0;
+            else if (d.learn[LEARN_CHARM] > 300) *n = 1;
             else *n = 2;
             break;
         }
@@ -6099,61 +6072,61 @@ int mode)
             break;
         case 1:
         case 2:
-            if (d.hp > 400) *n = 0;
-            else if (d.hp > 150) *n = 1;
+            if (d.body[BODY_HP] > 400) *n = 0;
+            else if (d.body[BODY_HP] > 150) *n = 1;
             else *n = 2;
             break;
         case 3:
         case 9:
         case 10:
-            if (d.hp > 600) *n = 0;
-            else if (d.hp > 300) *n = 1;
+            if (d.body[BODY_HP] > 600) *n = 0;
+            else if (d.body[BODY_HP] > 300) *n = 1;
             else *n = 2;
             break;
         case 4:
-            if (d.cookskill > 150) *n = 0;
-            else if (d.cookskill > 80) *n = 1;
+            if (d.learn[LEARN_COOKSKILL] > 150) *n = 0;
+            else if (d.learn[LEARN_COOKSKILL] > 80) *n = 1;
             else *n = 2;
             break;
         case 5:
-            if ((d.belief + d.ethics) > 600) *n = 0;
-            else if ((d.belief + d.ethics) > 200) *n = 1;
+            if ((d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS]) > 600) *n = 0;
+            else if ((d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS]) > 200) *n = 1;
             else *n = 2;
             break;
         case 6:
-            if (d.speech > 150) *n = 0;
-            else if (d.speech > 50) *n = 1;
+            if (d.learn[LEARN_SPEECH] > 150) *n = 0;
+            else if (d.learn[LEARN_SPEECH] > 50) *n = 1;
             else *n = 2;
             break;
         case 7:
-            if ((d.hp + d.wrist) > 700) *n = 0;
-            else if ((d.hp + d.wrist) > 300) *n = 1;
+            if ((d.body[BODY_HP] + d.body[BODY_WRIST]) > 700) *n = 0;
+            else if ((d.body[BODY_HP] + d.body[BODY_WRIST]) > 300) *n = 1;
             else *n = 2;
             break;
         case 8:
-            if (d.art > 100) *n = 0;
-            else if (d.art > 50) *n = 1;
+            if (d.learn[LEARN_ART] > 100) *n = 0;
+            else if (d.learn[LEARN_ART] > 50) *n = 1;
             else *n = 2;
             break;
         case 11:
-            if (d.hp > 300) *n = 0;
-            else if (d.hp > 150) *n = 1;
+            if (d.body[BODY_HP] > 300) *n = 0;
+            else if (d.body[BODY_HP] > 150) *n = 1;
             else *n = 2;
             break;
         case 12:
-            if (d.speech > 100) *n = 0;
-            else if (d.speech > 40) *n = 1;
+            if (d.learn[LEARN_SPEECH] > 100) *n = 0;
+            else if (d.learn[LEARN_SPEECH] > 40) *n = 1;
             else *n = 2;
             break;
         case 13:
         case 15:
-            if (d.charm > 1000) *n = 0;
-            else if (d.charm > 500) *n = 1;
+            if (d.learn[LEARN_CHARM] > 1000) *n = 0;
+            else if (d.learn[LEARN_CHARM] > 500) *n = 1;
             else *n = 2;
             break;
         case 14:
-            if (d.charm > 700) *n = 0;
-            else if (d.charm > 300) *n = 1;
+            if (d.learn[LEARN_CHARM] > 700) *n = 0;
+            else if (d.learn[LEARN_CHARM] > 300) *n = 1;
             else *n = 2;
             break;
         }
@@ -6173,32 +6146,32 @@ pip_endingart( /*藝術*/
 char *buf,
 int *m, int *n, int *grade)
 {
-    if (d.speech >= 100)
+    if (d.learn[LEARN_SPEECH] >= 100)
     {
         *m = 0;
-        if (d.hp >= 300 && d.affect >= 350)
+        if (d.body[BODY_HP] >= 300 && d.state[STATE_AFFECT] >= 350)
             *n = 0;
-        else if (d.hp >= 250 && d.affect >= 300)
+        else if (d.body[BODY_HP] >= 250 && d.state[STATE_AFFECT] >= 300)
             *n = 1;
         else
             *n = 2;
     }
-    else if (d.wisdom >= 400)
+    else if (d.learn[LEARN_WISDOM] >= 400)
     {
         *m = 1;
-        if (d.affect >= 500)
+        if (d.state[STATE_AFFECT] >= 500)
             *n = 0;
-        else if (d.affect >= 450)
+        else if (d.state[STATE_AFFECT] >= 450)
             *n = 1;
         else
             *n = 2;
     }
-    else if (d.classI >= d.classJ)
+    else if (d.class_[I] >= d.class_[J])
     {
         *m = 2;
-        if (d.affect >= 350)
+        if (d.state[STATE_AFFECT] >= 350)
             *n = 0;
-        else if (d.affect >= 300)
+        else if (d.state[STATE_AFFECT] >= 300)
             *n = 1;
         else
             *n = 2;
@@ -6206,9 +6179,9 @@ int *m, int *n, int *grade)
     else
     {
         *m = 3;
-        if (d.affect >= 200 && d.hp > 150)
+        if (d.state[STATE_AFFECT] >= 200 && d.body[BODY_HP] > 150)
             *n = 0;
-        else if (d.affect >= 180 && d.hp > 150)
+        else if (d.state[STATE_AFFECT] >= 180 && d.body[BODY_HP] > 150)
             *n = 1;
         else
             *n = 2;
@@ -6227,88 +6200,14 @@ int *num)
 {
     int data = 20;
     *num = -1;
-    if (d.workA > data)
+    for (int i = 0; i < COUNTOF(d.work); i++)
     {
-        data = d.workA;
-        *num = 0;
+        if (d.work[i] > data)
+        {
+            data = d.work[i];
+            *num = i;
+        }
     }
-    if (d.workB > data)
-    {
-        data = d.workB;
-        *num = 1;
-    }
-    if (d.workC > data)
-    {
-        data = d.workC;
-        *num = 2;
-    }
-    if (d.workD > data)
-    {
-        data = d.workD;
-        *num = 3;
-    }
-    if (d.workE > data)
-    {
-        data = d.workE;
-        *num = 4;
-    }
-
-    if (d.workF > data)
-    {
-        data = d.workF;
-        *num = 5;
-    }
-    if (d.workG > data)
-    {
-        data = d.workG;
-        *num = 6;
-    }
-    if (d.workH > data)
-    {
-        data = d.workH;
-        *num = 7;
-    }
-    if (d.workI > data)
-    {
-        data = d.workI;
-        *num = 8;
-    }
-    if (d.workJ > data)
-    {
-        data = d.workJ;
-        *num = 9;
-    }
-    if (d.workK > data)
-    {
-        data = d.workK;
-        *num = 10;
-    }
-    if (d.workL > data)
-    {
-        data = d.workL;
-        *num = 11;
-    }
-    if (d.workM > data)
-    {
-        data = d.workM;
-        *num = 12;
-    }
-    if (d.workN > data)
-    {
-        data = d.workN;
-        *num = 13;
-    }
-    if (d.workO > data)
-    {
-        data = d.workO;
-        *num = 14;
-    }
-    if (d.workP > data)
-    {
-        data = d.workP;
-        *num = 15;
-    }
-
     return data;
 }
 
@@ -6318,7 +6217,7 @@ int endgrade)
     long gradebasic;
     long gradeall;
 
-    gradebasic = (d.maxhp + d.wrist + d.wisdom + d.character + d.charm + d.ethics + d.belief + d.affect) / 10 - d.offense;
+    gradebasic = (d.body[BODY_MAXHP] + d.body[BODY_WRIST] + d.learn[LEARN_WISDOM] + d.learn[LEARN_CHARACTER] + d.learn[LEARN_CHARM] + d.learn[LEARN_ETHICS] + d.state[STATE_BELIEF] + d.state[STATE_AFFECT]) / 10 - d.state[STATE_OFFENSE];
     clrchyiuan(1, b_lines);
     gradeall = gradebasic + endgrade;
     move(8, d_cols/2U + 17);
@@ -6354,7 +6253,7 @@ static int pip_divine(void) /*占卜師來訪*/
     move(10, d_cols/2U + 14);
     outs("\x1b[1;37;46m    原來是雲遊四海的占卜師來訪了.......    \x1b[0m");
     vmsg("開門讓他進來吧....");
-    if (d.money >= money)
+    if (d.thing[THING_MONEY] >= money)
     {
         randvalue = random() % 5;
         sprintf(buf, "你要占卜嗎? 要花%ld元喔...[y/N]: ", money);
@@ -6372,7 +6271,7 @@ static int pip_divine(void) /*占卜師來訪*/
                 sprintf(buf, "\x1b[1;37m  你的小雞%s以後可能的身份是%s  \x1b[m", d.name, endmodeart[2+random()%6].girl);
             else if (randvalue == 4)
                 sprintf(buf, "\x1b[1;37m  你的小雞%s以後可能的身份是%s  \x1b[m", d.name, endbuf1);
-            d.money -= money;
+            d.thing[THING_MONEY] -= money;
             clrchyiuan(6, b_lines - 6);
             move(10, d_cols/2U + 14);
             outs("\x1b[1;33m在我占卜結果看來....\x1b[m");
@@ -6402,7 +6301,7 @@ pip_money(void)
     clrchyiuan(6, b_lines - 6);
     /* move(12, 0);
     clrtobot();*/
-    prints("你身上有 %d 次點歌次數，雞金 %d 元\n", cuser.request, d.money);
+    prints("你身上有 %d 次點歌次數，雞金 %d 元\n", cuser.request, d.thing[THING_MONEY]);
     outs("\n一次換一千雞金唷!!\n");
     while (money < 0 || money > cuser.request)
     {
@@ -6417,12 +6316,12 @@ pip_money(void)
         ACCT acct;
         acct_load(&acct, cuser.userid);
         /* demoney(money);*/
-        d.money += (money * 1000);
+        d.thing[THING_MONEY] += (money * 1000);
         cuser.request -= money;
         acct.request = cuser.request;
         acct_save(&acct);
         pip_write_file(&d, cuser.userid);
-        sprintf(buf, "你身上有 %d 次點歌次數，雞金 %d 元", cuser.request, d.money);
+        sprintf(buf, "你身上有 %d 次點歌次數，雞金 %d 元", cuser.request, d.thing[THING_MONEY]);
     }
     else
         sprintf(buf, "取消.....");
@@ -6505,9 +6404,9 @@ const char *userid)
             prints("\x1b[1;32mName：%-10s\x1b[m  生日：%2d年%2d月%2d日   年齡：%2d歲  狀態：%s  錢錢：%d\n"
                    "生命：%3d/%-3d  快樂：%-4d  滿意：%-4d  氣質：%-4d  智慧：%-4d  體重：%-4d\n"
                    "大補丸：%-4d   食物：%-4d  零食：%-4d  疲勞：%-4d  髒髒：%-4d  病氣：%-4d\n",
-                   ck.name, ck.year - 11, ck.month, ck.day, age, yo[age1], ck.money,
-                   ck.hp, ck.maxhp, ck.happy, ck.satisfy, ck.character, ck.wisdom, ck.weight,
-                   ck.bighp, ck.food, ck.cookie, ck.tired, ck.shit, ck.sick);
+                   ck.name, ck.year - 11, ck.month, ck.day, age, yo[age1], ck.thing[THING_MONEY],
+                   ck.body[BODY_HP], ck.body[BODY_MAXHP], ck.state[STATE_HAPPY], ck.state[STATE_SATISFY], ck.learn[LEARN_CHARACTER], ck.learn[LEARN_WISDOM], ck.body[BODY_WEIGHT],
+                   ck.eat[EAT_BIGHP], ck.eat[EAT_FOOD], ck.eat[EAT_COOKIE], ck.body[BODY_TIRED], ck.body[BODY_SHIT], ck.body[BODY_SICK]);
 
             move(5, 0);
             switch (age1)
@@ -6515,36 +6414,36 @@ const char *userid)
             case 0:
             case 1:
             case 2:
-                if (ck.weight <= (60 + 10*age - 30))
+                if (ck.body[BODY_WEIGHT] <= (60 + 10*age - 30))
                     show_basic_pic(1);
-                else if (ck.weight < (60 + 10*age + 30))
+                else if (ck.body[BODY_WEIGHT] < (60 + 10*age + 30))
                     show_basic_pic(2);
                 else
                     show_basic_pic(3);
                 break;
             case 3:
             case 4:
-                if (ck.weight <= (60 + 10*age - 30))
+                if (ck.body[BODY_WEIGHT] <= (60 + 10*age - 30))
                     show_basic_pic(4);
-                else if (ck.weight < (60 + 10*age + 30))
+                else if (ck.body[BODY_WEIGHT] < (60 + 10*age + 30))
                     show_basic_pic(5);
                 else
                     show_basic_pic(6);
                 break;
             case 5:
             case 6:
-                if (ck.weight <= (60 + 10*age - 30))
+                if (ck.body[BODY_WEIGHT] <= (60 + 10*age - 30))
                     show_basic_pic(7);
-                else if (ck.weight < (60 + 10*age + 30))
+                else if (ck.body[BODY_WEIGHT] < (60 + 10*age + 30))
                     show_basic_pic(8);
                 else
                     show_basic_pic(9);
                 break;
             case 7:
             case 8:
-                if (ck.weight <= (60 + 10*age - 30))
+                if (ck.body[BODY_WEIGHT] <= (60 + 10*age - 30))
                     show_basic_pic(10);
-                else if (ck.weight < (60 + 10*age + 30))
+                else if (ck.body[BODY_WEIGHT] < (60 + 10*age + 30))
                     show_basic_pic(11);
                 else
                     show_basic_pic(12);
@@ -6558,14 +6457,14 @@ const char *userid)
                 break;
             }
             move(b_lines - 5, 0);
-            if (ck.shit <= 0) outs("很乾淨..");
-            else if (ck.shit <= 40) { }
-            else if (ck.shit < 60) outs("臭臭的..");
-            else if (ck.shit < 80) outs("好臭喔..");
-            else if (ck.shit < 100) outs("\x1b[1;34m快臭死了..\x1b[m");
+            if (ck.body[BODY_SHIT] <= 0) outs("很乾淨..");
+            else if (ck.body[BODY_SHIT] <= 40) { }
+            else if (ck.body[BODY_SHIT] < 60) outs("臭臭的..");
+            else if (ck.body[BODY_SHIT] < 80) outs("好臭喔..");
+            else if (ck.body[BODY_SHIT] < 100) outs("\x1b[1;34m快臭死了..\x1b[m");
             else { outs("\x1b[1;31m臭死了..\x1b[m"); return -1; }
 
-            pc1 = ck.hp * 100 / ck.maxhp;
+            pc1 = ck.body[BODY_HP] * 100 / ck.body[BODY_MAXHP];
             if (pc1 <= 0) { outs("餓死了.."); return -1; }
             else if (pc1 < 20) outs("\x1b[1;35m全身無力中.快餓死了.\x1b[m");
             else if (pc1 < 40) outs("體力不太夠..想吃點東西..");
@@ -6573,7 +6472,7 @@ const char *userid)
             else if (pc1 < 100) outs("嗯～肚子飽飽有體力..");
             else outs("\x1b[1;34m快撐死了..\x1b[m");
 
-            pc1 = ck.tired;
+            pc1 = ck.body[BODY_TIRED];
             if (pc1 < 20) outs("精神抖擻中..");
             else if (pc1 < 60) { }
             else if (pc1 < 80) outs("\x1b[1;34m有點小累..\x1b[m");
@@ -6581,27 +6480,27 @@ const char *userid)
             else { outs("累死了..."); return -1; }
 
             pc1 = 60 + 10 * age;
-            if (ck.weight < (pc1 - 50)) { outs("瘦死了.."); return -1; }
-            else if (ck.weight <= (pc1 - 30)) outs("太瘦了..");
-            else if (ck.weight <= (pc1 - 10)) outs("有點小瘦..");
-            else if (ck.weight < (pc1 + 10)) { }
-            else if (ck.weight < (pc1 + 30)) outs("有點小胖..");
-            else if (ck.weight < (pc1 + 50)) outs("太胖了..");
+            if (ck.body[BODY_WEIGHT] < (pc1 - 50)) { outs("瘦死了.."); return -1; }
+            else if (ck.body[BODY_WEIGHT] <= (pc1 - 30)) outs("太瘦了..");
+            else if (ck.body[BODY_WEIGHT] <= (pc1 - 10)) outs("有點小瘦..");
+            else if (ck.body[BODY_WEIGHT] < (pc1 + 10)) { }
+            else if (ck.body[BODY_WEIGHT] < (pc1 + 30)) outs("有點小胖..");
+            else if (ck.body[BODY_WEIGHT] < (pc1 + 50)) outs("太胖了..");
             else { outs("胖死了..."); return -1; }
 
-            if (ck.sick < 50) { }
-            else if (ck.sick < 75) outs("\x1b[1;34m生病了..\x1b[m");
-            else if (ck.sick < 100) { outs("\x1b[1;31m病重!!..\x1b[m"); }
+            if (ck.body[BODY_SICK] < 50) { }
+            else if (ck.body[BODY_SICK] < 75) outs("\x1b[1;34m生病了..\x1b[m");
+            else if (ck.body[BODY_SICK] < 100) { outs("\x1b[1;31m病重!!..\x1b[m"); }
             else { outs("病死了.!."); return -1; }
 
-            pc1 = ck.happy;
+            pc1 = ck.state[STATE_HAPPY];
             if (pc1 < 20) outs("\x1b[1;31m很不快樂..\x1b[m");
             else if (pc1 < 40) outs("不快樂..");
             else if (pc1 < 80) { }
             else if (pc1 < 95) outs("快樂..");
             else outs("很快樂..");
 
-            pc1 = ck.satisfy;
+            pc1 = ck.state[STATE_SATISFY];
             if (pc1 < 40) outs("\x1b[ck.3;1m不滿足..\x1b[m");
             else if (pc1 < 80) { }
             else if (pc1 < 95) outs("滿足..");
@@ -6817,47 +6716,47 @@ const char *userid)
             prints_centered("\x1b[1;31m │\x1b[33m﹟姓    名 :\x1b[37m %-10s \x1b[33m﹟生    日 :\x1b[37m %02d/%02d/%02d   \x1b[33m﹟年    紀 :\x1b[37m %-2d         \x1b[31m│\x1b[m\n",
                     chicken.name, (chicken.year) % 100, chicken.month, chicken.day, tm);
 
-            sprintf(inbuf1, "%d%s/%d%s", chicken.hp > 1000 ? chicken.hp / 1000 : chicken.hp, chicken.hp > 1000 ? "K" : "", chicken.maxhp > 1000 ? chicken.maxhp / 1000 : chicken.maxhp, chicken.maxhp > 1000 ? "K" : "");
-            sprintf(inbuf2, "%d%s/%d%s", chicken.mp > 1000 ? chicken.mp / 1000 : chicken.mp, chicken.mp > 1000 ? "K" : "", chicken.maxmp > 1000 ? chicken.maxmp / 1000 : chicken.maxmp, chicken.maxmp > 1000 ? "K" : "");
+            sprintf(inbuf1, "%d%s/%d%s", chicken.body[BODY_HP] > 1000 ? chicken.body[BODY_HP] / 1000 : chicken.body[BODY_HP], chicken.body[BODY_HP] > 1000 ? "K" : "", chicken.body[BODY_MAXHP] > 1000 ? chicken.body[BODY_MAXHP] / 1000 : chicken.body[BODY_MAXHP], chicken.body[BODY_MAXHP] > 1000 ? "K" : "");
+            sprintf(inbuf2, "%d%s/%d%s", chicken.fight[FIGHT_MP] > 1000 ? chicken.fight[FIGHT_MP] / 1000 : chicken.fight[FIGHT_MP], chicken.fight[FIGHT_MP] > 1000 ? "K" : "", chicken.fight[FIGHT_MAXMP] > 1000 ? chicken.fight[FIGHT_MAXMP] / 1000 : chicken.fight[FIGHT_MAXMP], chicken.fight[FIGHT_MAXMP] > 1000 ? "K" : "");
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟體    重 :\x1b[37m %-5d(米克)\x1b[33m﹟體    力 :\x1b[37m %-11s\x1b[33m﹟法    力 :\x1b[37m %-11s\x1b[31m│\x1b[m\n",
-                    chicken.weight, inbuf1, inbuf2);
+                    chicken.body[BODY_WEIGHT], inbuf1, inbuf2);
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟疲    勞 :\x1b[37m %-3d        \x1b[33m﹟病    氣 :\x1b[37m %-3d        \x1b[33m﹟髒    髒 :\x1b[37m %-3d        \x1b[31m│\x1b[m\n",
-                    chicken.tired, chicken.sick, chicken.shit);
+                    chicken.body[BODY_TIRED], chicken.body[BODY_SICK], chicken.body[BODY_SHIT]);
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟腕    力 :\x1b[37m %-7d    \x1b[33m﹟親子關係 :\x1b[37m %-7d    \x1b[33m﹟金    錢 :\x1b[37m %-11d\x1b[31m│\x1b[m\n",
-                    chicken.wrist, chicken.relation, chicken.money);
+                    chicken.body[BODY_WRIST], chicken.relation, chicken.thing[THING_MONEY]);
 
             prints_centered("\x1b[1;31m ├┤\x1b[41;37m 能力資料 \x1b[0;1;31m├─────────────────────────────┤\x1b[m\n");
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟氣    質 :\x1b[37m %-10d \x1b[33m﹟智    力 :\x1b[37m %-10d \x1b[33m﹟愛    心 :\x1b[37m %-10d \x1b[31m│\x1b[m\n",
-                    chicken.character, chicken.wisdom, chicken.love);
+                    chicken.learn[LEARN_CHARACTER], chicken.learn[LEARN_WISDOM], chicken.learn[LEARN_LOVE]);
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟藝    術 :\x1b[37m %-10d \x1b[33m﹟道    德 :\x1b[37m %-10d \x1b[33m﹟家    事 :\x1b[37m %-10d \x1b[31m│\x1b[m\n",
-                    chicken.art, chicken.ethics, chicken.homework);
+                    chicken.learn[LEARN_ART], chicken.learn[LEARN_ETHICS], chicken.learn[LEARN_HOMEWORK]);
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟禮    儀 :\x1b[37m %-10d \x1b[33m﹟應    對 :\x1b[37m %-10d \x1b[33m﹟烹    飪 :\x1b[37m %-10d \x1b[31m│\x1b[m\n",
-                    chicken.manners, chicken.speech, chicken.cookskill);
+                    chicken.learn[LEARN_MANNERS], chicken.learn[LEARN_SPEECH], chicken.learn[LEARN_COOKSKILL]);
 
             prints_centered("\x1b[1;31m ├┤\x1b[41;37m 狀態資料 \x1b[0;1;31m├─────────────────────────────┤\x1b[m\n");
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟快    樂 :\x1b[37m %-10d \x1b[33m﹟滿    意 :\x1b[37m %-10d \x1b[33m﹟人    際 :\x1b[37m %-10d \x1b[31m│\x1b[m\n",
-                    chicken.happy, chicken.satisfy, chicken.toman);
+                    chicken.state[STATE_HAPPY], chicken.state[STATE_SATISFY], chicken.learn[LEARN_TOMAN]);
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟魅    力 :\x1b[37m %-10d \x1b[33m﹟勇    敢 :\x1b[37m %-10d \x1b[33m﹟信    仰 :\x1b[37m %-10d \x1b[31m│\x1b[m\n",
-                    chicken.charm, chicken.brave, chicken.belief);
+                    chicken.learn[LEARN_CHARM], chicken.learn[LEARN_BRAVE], chicken.state[STATE_BELIEF]);
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟罪    孽 :\x1b[37m %-10d \x1b[33m﹟感    受 :\x1b[37m %-10d \x1b[33m            \x1b[37m            \x1b[31m│\x1b[m\n",
-                    chicken.offense, chicken.affect);
+                    chicken.state[STATE_OFFENSE], chicken.state[STATE_AFFECT]);
 
             prints_centered("\x1b[1;31m ├┤\x1b[41;37m 評價資料 \x1b[0;1;31m├─────────────────────────────┤\x1b[m\n");
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟社交評價 :\x1b[37m %-10d \x1b[33m﹟戰鬥評價 :\x1b[37m %-10d \x1b[33m﹟魔法評價 :\x1b[37m %-10d \x1b[31m│\x1b[m\n",
-                    chicken.social, chicken.hexp, chicken.mexp);
+                    chicken.tmp[TMP_SOCIAL], chicken.tmp[TMP_HEXP], chicken.tmp[TMP_MEXP]);
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟家事評價 :\x1b[37m %-10d                                                 \x1b[31m│\x1b[m\n",
-                    chicken.family);
+                    chicken.tmp[TMP_FAMILY]);
 
             prints_centered("\x1b[1;31m ╰────────────────────────────────────╯\x1b[m\n");
 
@@ -6870,10 +6769,10 @@ const char *userid)
             prints_centered("\x1b[1;31m ╭┤\x1b[41;37m 物品資料 \x1b[0;1;31m├─────────────────────────────╮\x1b[m\n");
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟食    物 :\x1b[37m %-10d \x1b[33m﹟零    食 :\x1b[37m %-10d \x1b[33m﹟大 補 丸 :\x1b[37m %-10d \x1b[31m│\x1b[m\n",
-                    chicken.food, chicken.cookie, chicken.bighp);
+                    chicken.eat[EAT_FOOD], chicken.eat[EAT_COOKIE], chicken.eat[EAT_BIGHP]);
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟靈    芝 :\x1b[37m %-10d \x1b[33m﹟書    本 :\x1b[37m %-10d \x1b[33m﹟玩    具 :\x1b[37m %-10d \x1b[31m│\x1b[m\n",
-                    chicken.medicine, chicken.book, chicken.playtool);
+                    chicken.eat[EAT_MEDICINE], chicken.thing[THING_BOOK], chicken.thing[THING_PLAYTOOL]);
 
             prints_centered("\x1b[1;31m ├┤\x1b[41;37m 遊戲資料 \x1b[0;1;31m├─────────────────────────────┤\x1b[m\n");
 
@@ -6883,15 +6782,15 @@ const char *userid)
             prints_centered("\x1b[1;31m ├┤\x1b[41;37m 武力資料 \x1b[0;1;31m├─────────────────────────────┤\x1b[m\n");
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟攻 擊 力 :\x1b[37m %-10d \x1b[33m﹟防 禦 力 :\x1b[37m %-10d \x1b[33m﹟速 度 值 :\x1b[37m %-10d \x1b[31m│\x1b[m\n",
-                    chicken.attack, chicken.resist, chicken.speed);
+                    chicken.fight[FIGHT_ATTACK], chicken.fight[FIGHT_RESIST], chicken.fight[FIGHT_SPEED]);
             prints_centered("\x1b[1;31m │\x1b[33m﹟抗魔能力 :\x1b[37m %-10d \x1b[33m﹟戰鬥技術 :\x1b[37m %-10d \x1b[33m﹟魔法技術 :\x1b[37m %-10d \x1b[31m│\x1b[m\n",
-                    chicken.mresist, chicken.hskill, chicken.mskill);
+                    chicken.fight[FIGHT_MRESIST], chicken.fight[FIGHT_HSKILL], chicken.fight[FIGHT_MSKILL]);
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟頭部裝備 :\x1b[37m %-10s \x1b[33m﹟右手裝備 :\x1b[37m %-10s \x1b[33m﹟左手裝備 :\x1b[37m %-10s \x1b[31m│\x1b[m\n",
-                    headlist[chicken.weaponhead].name, rhandlist[chicken.weaponrhand].name, lhandlist[chicken.weaponlhand].name);
+                    headlist[chicken.weapon[WEAPON_HEAD]].name, rhandlist[chicken.weapon[WEAPON_RHAND]].name, lhandlist[chicken.weapon[WEAPON_LHAND]].name);
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟身體裝備 :\x1b[37m %-10s \x1b[33m﹟腳部裝備 :\x1b[37m %-10s \x1b[33m            \x1b[37m            \x1b[31m│\x1b[m\n",
-                    bodylist[chicken.weaponbody].name, footlist[chicken.weaponfoot].name);
+                    bodylist[chicken.weapon[WEAPON_BODY]].name, footlist[chicken.weapon[WEAPON_FOOT]].name);
 
             prints_centered("\x1b[1;31m ├┤\x1b[41;37m 等級資料 \x1b[0;1;31m├─────────────────────────────┤\x1b[m\n");
 
@@ -6973,7 +6872,7 @@ pip_meet_vs_man(void)
     int class_;
     int man, lucky;
     char ans;
-    class_ = BMAX((d.maxhp * 30 + d.maxmp * 20 + d.attack * 20 + d.resist * 15 + d.mexp * 5 + d.hexp * 5 + d.speed * 10) / 8500, 0);
+    class_ = BMAX((d.body[BODY_MAXHP] * 30 + d.fight[FIGHT_MAXMP] * 20 + d.fight[FIGHT_ATTACK] * 20 + d.fight[FIGHT_RESIST] * 15 + d.tmp[TMP_MEXP] * 5 + d.tmp[TMP_HEXP] * 5 + d.fight[FIGHT_SPEED] * 10) / 8500, 0);
 
     move(b_lines - 1, 0);
     prints("\x1b[1;44;37m 區域 \x1b[46m[1]炎之洞窟  [2]北方冰原  [3]古代遺跡  [4]人工島  [5]地獄之門            %*s\x1b[m\n", d_cols, "");
@@ -6994,7 +6893,7 @@ pip_meet_vs_man(void)
         }
     }
 
-    while (d.hp > 0)
+    while (d.body[BODY_HP] > 0)
     {
         move(b_lines - 1, 0);
         clrtoeol();
@@ -7088,13 +6987,13 @@ int mode)
     int winorlose = 0;          /*1:you win 0:you loss*/
 
     /*隨機產生人物 並且存好戰鬥前的一些數值*/
-    oldhexp = d.hexp;
-    oldmexp = d.mexp;
-    oldbrave = d.brave;
-    oldhskill = d.hskill;
-    oldmskill = d.mskill;
-    oldethics = d.ethics;
-    oldmoney = d.money;
+    oldhexp = d.tmp[TMP_HEXP];
+    oldmexp = d.tmp[TMP_MEXP];
+    oldbrave = d.learn[LEARN_BRAVE];
+    oldhskill = d.fight[FIGHT_HSKILL];
+    oldmskill = d.fight[FIGHT_MSKILL];
+    oldethics = d.learn[LEARN_ETHICS];
+    oldmoney = d.thing[THING_MONEY];
     if (mode == 1)
     {
         m.hp = p[n].hp - random() % 10;
@@ -7110,41 +7009,41 @@ int mode)
     }
     else
     {
-        m.maxhp = d.maxhp * (80 + random() % 50) / 100 + 20;;
+        m.maxhp = d.body[BODY_MAXHP] * (80 + random() % 50) / 100 + 20;;
         m.hp = m.maxhp - random() % 10 + 20;
-        m.maxmp = d.maxmp * (80 + random() % 50) / 100 + 10;
+        m.maxmp = d.fight[FIGHT_MAXMP] * (80 + random() % 50) / 100 + 10;
         m.mp = m.maxmp - random() % 20 + 10;
-        m.speed = d.speed * (80 + random() % 50) / 100 + 10;
-        m.attack = d.attack * (80 + random() % 50) / 100 + 10;
-        m.resist = d.resist * (80 + random() % 50) / 100 + 10;
+        m.speed = d.fight[FIGHT_SPEED] * (80 + random() % 50) / 100 + 10;
+        m.attack = d.fight[FIGHT_ATTACK] * (80 + random() % 50) / 100 + 10;
+        m.resist = d.fight[FIGHT_RESIST] * (80 + random() % 50) / 100 + 10;
         m.money = 0;
         m.death = 0;
     }
-    /*d.tired+=random()%(n+1)/4+2;*/
-    /*d.shit+=random()%(n+1)/4+2;*/
+    /*d.body[BODY_TIRED]+=random()%(n+1)/4+2;*/
+    /*d.body[BODY_SHIT]+=random()%(n+1)/4+2;*/
     do
     {
         if (m.hp <= 0) /*敵人死掉了*/
         {
             m.hp = 0;
-            d.money += m.money;
+            d.thing[THING_MONEY] += m.money;
             m.death = 1;
-            d.brave += random() % 4 + 3;
+            d.learn[LEARN_BRAVE] += random() % 4 + 3;
         }
-        if (d.hp <= 0 || d.tired >= 100)  /*小雞陣亡*/
+        if (d.body[BODY_HP] <= 0 || d.body[BODY_TIRED] >= 100)  /*小雞陣亡*/
         {
             if (mode == 1)
             {
-                d.hp = 0;
-                d.tired = 0;
+                d.body[BODY_HP] = 0;
+                d.body[BODY_TIRED] = 0;
                 d.death = 1;
             }
             else
             {
-                d.hp = d.maxhp / 3 + 10;
-                d.hexp -= random() % 3 + 2;
-                d.mexp -= random() % 3 + 2;
-                d.tired = 50;
+                d.body[BODY_HP] = d.body[BODY_MAXHP] / 3 + 10;
+                d.tmp[TMP_HEXP] -= random() % 3 + 2;
+                d.tmp[TMP_MEXP] -= random() % 3 + 2;
+                d.body[BODY_TIRED] = 50;
                 d.death = 1;
             }
         }
@@ -7164,23 +7063,23 @@ int mode)
         prints_centered("\x1b[1;31m┌─────────────────────────────────────┐\x1b[m");
         move(2, 0);
         /* lucky拿來當color用*/
-        if (d.tired >= 80)
+        if (d.body[BODY_TIRED] >= 80)
             lucky = 31;
-        else if (d.tired >= 60 && d.tired < 80)
+        else if (d.body[BODY_TIRED] >= 60 && d.body[BODY_TIRED] < 80)
             lucky = 33;
         else
             lucky = 37;
-        sprintf(inbuf1, "%d%s/%d%s", d.hp > 1000 ? d.hp / 1000 : d.hp, d.hp > 1000 ? "K" : "", d.maxhp > 1000 ? d.maxhp / 1000 : d.maxhp, d.maxhp > 1000 ? "K" : "");
-        sprintf(inbuf2, "%d%s/%d%s", d.mp > 1000 ? d.mp / 1000 : d.mp, d.mp > 1000 ? "K" : "", d.maxmp > 1000 ? d.maxmp / 1000 : d.maxmp, d.maxmp > 1000 ? "K" : "");
+        sprintf(inbuf1, "%d%s/%d%s", d.body[BODY_HP] > 1000 ? d.body[BODY_HP] / 1000 : d.body[BODY_HP], d.body[BODY_HP] > 1000 ? "K" : "", d.body[BODY_MAXHP] > 1000 ? d.body[BODY_MAXHP] / 1000 : d.body[BODY_MAXHP], d.body[BODY_MAXHP] > 1000 ? "K" : "");
+        sprintf(inbuf2, "%d%s/%d%s", d.fight[FIGHT_MP] > 1000 ? d.fight[FIGHT_MP] / 1000 : d.fight[FIGHT_MP], d.fight[FIGHT_MP] > 1000 ? "K" : "", d.fight[FIGHT_MAXMP] > 1000 ? d.fight[FIGHT_MAXMP] / 1000 : d.fight[FIGHT_MAXMP], d.fight[FIGHT_MAXMP] > 1000 ? "K" : "");
 
         prints_centered("\x1b[1;31m│\x1b[33m生  命:\x1b[37m%-12s\x1b[33m法  力:\x1b[37m%-12s\x1b[33m疲  勞:\x1b[%dm%-12d\x1b[33m金  錢:\x1b[37m%-10d\x1b[31m│\x1b[m",
-                inbuf1, inbuf2, lucky, d.tired, d.money);
+                inbuf1, inbuf2, lucky, d.body[BODY_TIRED], d.thing[THING_MONEY]);
         move(3, 0);
         prints_centered("\x1b[1;31m│\x1b[33m攻  擊:\x1b[37m%-10d  \x1b[33m防  禦:\x1b[37m%-10d  \x1b[33m速  度:\x1b[37m%-10d  \x1b[33m經  驗:\x1b[37m%-10d\x1b[31m│\x1b[m",
-                d.attack, d.resist, d.speed, d.exp);
+                d.fight[FIGHT_ATTACK], d.fight[FIGHT_RESIST], d.fight[FIGHT_SPEED], d.exp);
         move(4, 0);
         prints_centered("\x1b[1;31m│\x1b[33m食  物:\x1b[37m%-5d       \x1b[33m大補丸:\x1b[37m%-5d       \x1b[33m零  食:\x1b[37m%-5d       \x1b[33m靈  芝:\x1b[37m%-5d     \x1b[31m│\x1b[m",
-                d.food, d.bighp, d.cookie, d.medicine);
+                d.eat[EAT_FOOD], d.eat[EAT_BIGHP], d.eat[EAT_COOKIE], d.eat[EAT_MEDICINE]);
         move(5, 0);
         prints_centered("\x1b[1;31m└─────────────────────────────────────┘\x1b[m");
         move(b_lines - 4, 0);
@@ -7214,18 +7113,18 @@ int mode)
                 else
                 {
                     if (mresistmode == 0)
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - m.resist / 8 + random() % 12 + 2 - m.speed / 30 + d.speed / 30);
+                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 9 - m.resist / 8 + random() % 12 + 2 - m.speed / 30 + d.fight[FIGHT_SPEED] / 30);
                     else
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 9 - m.resist / 6 + random() % 12 + 2 - m.speed / 30 + d.speed / 30);
+                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 9 - m.resist / 6 + random() % 12 + 2 - m.speed / 30 + d.fight[FIGHT_SPEED] / 30);
                     if (dinjure <= 0)
                         dinjure = 9;
                     m.hp -= dinjure;
-                    d.hexp += random() % 2 + 2;
-                    d.hskill += random() % 2 + 1;
+                    d.tmp[TMP_HEXP] += random() % 2 + 2;
+                    d.fight[FIGHT_HSKILL] += random() % 2 + 1;
                     sprintf(buf, "普通攻擊，對方生命力減低%d", dinjure);
                     vmsg(buf);
                 }
-                d.tired += random() % (n + 1) / 15 + 2;
+                d.body[BODY_TIRED] += random() % (n + 1) / 15 + 2;
                 break;
 
             case '2':
@@ -7237,18 +7136,18 @@ int mode)
                 else
                 {
                     if (mresistmode == 0)
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - m.resist / 12 + random() % 12 + 6 - m.speed / 50 + d.speed / 30);
+                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - m.resist / 12 + random() % 12 + 6 - m.speed / 50 + d.fight[FIGHT_SPEED] / 30);
                     else
-                        dinjure = (d.hskill / 100 + d.hexp / 100 + d.attack / 5 - m.resist / 8 + random() % 12 + 6 - m.speed / 40 + d.speed / 30);
+                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - m.resist / 8 + random() % 12 + 6 - m.speed / 40 + d.fight[FIGHT_SPEED] / 30);
                     if (dinjure <= 15)
                         dinjure = 20;
-                    if (d.hp > 5)
+                    if (d.body[BODY_HP] > 5)
                     {
                         m.hp -= dinjure;
-                        d.hp -= 5;
-                        d.hexp += random() % 3 + 3;
-                        d.hskill += random() % 2 + 2;
-                        d.tired += random() % (n + 1) / 10 + 3;
+                        d.body[BODY_HP] -= 5;
+                        d.tmp[TMP_HEXP] += random() % 3 + 3;
+                        d.fight[FIGHT_HSKILL] += random() % 2 + 2;
+                        d.body[BODY_TIRED] += random() % (n + 1) / 10 + 3;
                         sprintf(buf, "全力攻擊，對方生命力減低%d", dinjure);
                         vmsg(buf);
                     }
@@ -7261,18 +7160,18 @@ int mode)
                 break;
 
             case '3':
-                oldtired = d.tired;
-                oldhp = d.hp;
-                d.magicmode = 0;
+                oldtired = d.body[BODY_TIRED];
+                oldhp = d.body[BODY_HP];
+                d.fight[FIGHT_MAGICMODE] = 0;
                 dinjure = pip_magic_menu(0, NULL);
                 if (dinjure < 0)
                     dinjure = 5;
                 if (d.nodone == 0)
                 {
-                    if (d.magicmode == 1)
+                    if (d.fight[FIGHT_MAGICMODE] == 1)
                     {
-                        oldtired = oldtired - d.tired;
-                        oldhp = d.hp - oldhp;
+                        oldtired = oldtired - d.body[BODY_TIRED];
+                        oldhp = d.body[BODY_HP] - oldhp;
                         sprintf(buf, "治療後，生命力提高%d，疲勞降低%d", oldhp, oldtired);
                         vmsg(buf);
                     }
@@ -7282,35 +7181,35 @@ int mode)
                             vmsg("竟然沒打中..:~~~");
                         else
                         {
-                            if (d.mexp <= 100)
+                            if (d.tmp[TMP_MEXP] <= 100)
                             {
                                 if (random() % 4 > 0)
                                     dinjure = dinjure * 60 / 100;
                                 else
                                     dinjure = dinjure * 80 / 100;
                             }
-                            else if (d.mexp <= 250 && d.mexp > 100)
+                            else if (d.tmp[TMP_MEXP] <= 250 && d.tmp[TMP_MEXP] > 100)
                             {
                                 if (random() % 4 > 0)
                                     dinjure = dinjure * 70 / 100;
                                 else
                                     dinjure = dinjure * 85 / 100;
                             }
-                            else if (d.mexp <= 500 && d.mexp > 250)
+                            else if (d.tmp[TMP_MEXP] <= 500 && d.tmp[TMP_MEXP] > 250)
                             {
                                 if (random() % 4 > 0)
                                     dinjure = dinjure * 85 / 100;
                                 else
                                     dinjure = dinjure * 95 / 100;
                             }
-                            else if (d.mexp > 500)
+                            else if (d.tmp[TMP_MEXP] > 500)
                             {
                                 if (random() % 10 > 0)
                                     dinjure = dinjure * 90 / 100;
                                 else
                                     dinjure = dinjure * 99 / 100;
                             }
-                            if ((p[n].special[d.magicmode-2] - 48) == 1)
+                            if ((p[n].special[d.fight[FIGHT_MAGICMODE]-2] - 48) == 1)
                             {
                                 if (random() % 2 > 0)
                                 {
@@ -7332,10 +7231,10 @@ int mode)
                                     dinjure = dinjure * 75 / 100;
                                 }
                             }
-                            d.tired += random() % (n + 1) / 12 + 2;
+                            d.body[BODY_TIRED] += random() % (n + 1) / 12 + 2;
                             m.hp -= dinjure;
-                            /*d.mexp+=random()%2+2;*/
-                            d.mskill += random() % 2 + 2;
+                            /*d.tmp[TMP_MEXP]+=random()%2+2;*/
+                            d.fight[FIGHT_MSKILL] += random() % 2 + 2;
                             sprintf(buf, "魔法攻擊，對方生命力減低%d", dinjure);
                             vmsg(buf);
                         }
@@ -7344,7 +7243,7 @@ int mode)
                 break;
             case '4':
                 dresistmode = 1;
-                d.tired += random() % (n + 1) / 20 + 1;
+                d.body[BODY_TIRED] += random() % (n + 1) / 20 + 1;
                 vmsg("小雞加強防禦啦....");
                 break;
 
@@ -7354,24 +7253,24 @@ int mode)
                 break;
 
             case '6':
-                d.money -= (random() % 100 + 30);
-                d.brave -= (random() % 3 + 2);
-                if (d.money < 0)
-                    d.money = 0;
-                if (d.hskill < 0)
-                    d.hskill = 0;
-                if (d.brave < 0)
-                    d.brave = 0;
+                d.thing[THING_MONEY] -= (random() % 100 + 30);
+                d.learn[LEARN_BRAVE] -= (random() % 3 + 2);
+                if (d.thing[THING_MONEY] < 0)
+                    d.thing[THING_MONEY] = 0;
+                if (d.fight[FIGHT_HSKILL] < 0)
+                    d.fight[FIGHT_HSKILL] = 0;
+                if (d.learn[LEARN_BRAVE] < 0)
+                    d.learn[LEARN_BRAVE] = 0;
                 clear();
                 vs_head("電子養小雞", BoardName);
                 move(10, 0);
                 outs_centered("            \x1b[1;31m┌──────────────────────┐\x1b[m\n");
                 prints_centered("            \x1b[1;31m│  \x1b[37m實力不強的小雞 \x1b[33m%-10s                 \x1b[31m│\x1b[m\n", d.name);
                 prints_centered("            \x1b[1;31m│  \x1b[37m在與對手 \x1b[32m%-10s \x1b[37m戰鬥後落跑啦          \x1b[31m│\x1b[m\n", p[n].name);
-                sprintf(inbuf1, "%d/%d", d.hexp - oldhexp, d.mexp - oldmexp);
-                prints_centered("            \x1b[1;31m│  \x1b[37m評價增加了 \x1b[36m%-5s \x1b[37m點  技術增加了 \x1b[36m%-2d/%-2d \x1b[37m點  \x1b[31m│\x1b[m\n", inbuf1, d.hskill - oldhskill, d.mskill - oldmskill);
-                sprintf(inbuf1, "%d \x1b[37m元", oldmoney - d.money);
-                prints_centered("            \x1b[1;31m│  \x1b[37m勇敢降低了 \x1b[36m%-5d \x1b[37m點  金錢減少了 \x1b[36m%-13s  \x1b[31m│\x1b[m\n", oldbrave - d.brave, inbuf1);
+                sprintf(inbuf1, "%d/%d", d.tmp[TMP_HEXP] - oldhexp, d.tmp[TMP_MEXP] - oldmexp);
+                prints_centered("            \x1b[1;31m│  \x1b[37m評價增加了 \x1b[36m%-5s \x1b[37m點  技術增加了 \x1b[36m%-2d/%-2d \x1b[37m點  \x1b[31m│\x1b[m\n", inbuf1, d.fight[FIGHT_HSKILL] - oldhskill, d.fight[FIGHT_MSKILL] - oldmskill);
+                sprintf(inbuf1, "%d \x1b[37m元", oldmoney - d.thing[THING_MONEY]);
+                prints_centered("            \x1b[1;31m│  \x1b[37m勇敢降低了 \x1b[36m%-5d \x1b[37m點  金錢減少了 \x1b[36m%-13s  \x1b[31m│\x1b[m\n", oldbrave - d.learn[LEARN_BRAVE], inbuf1);
                 outs_centered("            \x1b[1;31m└──────────────────────┘\x1b[m");
                 vmsg("三十六計 走為上策...");
                 winorlose = 0;
@@ -7390,25 +7289,25 @@ int mode)
         prints_centered("\x1b[1;31m┌─────────────────────────────────────┐\x1b[m");
         move(2, 0);
         /* lucky拿來當color用*/
-        if (d.tired >= 80)
+        if (d.body[BODY_TIRED] >= 80)
             lucky = 31;
-        else if (d.tired >= 60 && d.tired < 80)
+        else if (d.body[BODY_TIRED] >= 60 && d.body[BODY_TIRED] < 80)
             lucky = 33;
         else
             lucky = 37;
 
-        sprintf(inbuf1, "%d%s/%d%s", d.hp > 1000 ? d.hp / 1000 : d.hp, d.hp > 1000 ? "K" : "", d.maxhp > 1000 ? d.maxhp / 1000 : d.maxhp, d.maxhp > 1000 ? "K" : "");
-        sprintf(inbuf2, "%d%s/%d%s", d.mp > 1000 ? d.mp / 1000 : d.mp, d.mp > 1000 ? "K" : "", d.maxmp > 1000 ? d.maxmp / 1000 : d.maxmp, d.maxmp > 1000 ? "K" : "");
+        sprintf(inbuf1, "%d%s/%d%s", d.body[BODY_HP] > 1000 ? d.body[BODY_HP] / 1000 : d.body[BODY_HP], d.body[BODY_HP] > 1000 ? "K" : "", d.body[BODY_MAXHP] > 1000 ? d.body[BODY_MAXHP] / 1000 : d.body[BODY_MAXHP], d.body[BODY_MAXHP] > 1000 ? "K" : "");
+        sprintf(inbuf2, "%d%s/%d%s", d.fight[FIGHT_MP] > 1000 ? d.fight[FIGHT_MP] / 1000 : d.fight[FIGHT_MP], d.fight[FIGHT_MP] > 1000 ? "K" : "", d.fight[FIGHT_MAXMP] > 1000 ? d.fight[FIGHT_MAXMP] / 1000 : d.fight[FIGHT_MAXMP], d.fight[FIGHT_MAXMP] > 1000 ? "K" : "");
 
         prints_centered("\x1b[1;31m│\x1b[33m生  命:\x1b[37m%-12s\x1b[33m法  力:\x1b[37m%-12s\x1b[33m疲  勞:\x1b[%dm%-12d\x1b[33m金  錢:\x1b[37m%-10d\x1b[31m│\x1b[m",
-                inbuf1, inbuf2, lucky, d.tired, d.money);
+                inbuf1, inbuf2, lucky, d.body[BODY_TIRED], d.thing[THING_MONEY]);
 
         move(3, 0);
         prints_centered("\x1b[1;31m│\x1b[33m攻  擊:\x1b[37m%-10d  \x1b[33m防  禦:\x1b[37m%-10d  \x1b[33m速  度:\x1b[37m%-10d  \x1b[33m經  驗:\x1b[37m%-10d\x1b[31m│\x1b[m",
-                d.attack, d.resist, d.speed, d.exp);
+                d.fight[FIGHT_ATTACK], d.fight[FIGHT_RESIST], d.fight[FIGHT_SPEED], d.exp);
         move(4, 0);
         prints_centered("\x1b[1;31m│\x1b[33m食  物:\x1b[37m%-5d       \x1b[33m大補丸:\x1b[37m%-5d       \x1b[33m零  食:\x1b[37m%-5d       \x1b[33m靈  芝:\x1b[37m%-5d     \x1b[31m│\x1b[m",
-                d.food, d.bighp, d.cookie, d.medicine);
+                d.eat[EAT_FOOD], d.eat[EAT_BIGHP], d.eat[EAT_COOKIE], d.eat[EAT_MEDICINE]);
         move(5, 0);
         prints_centered("\x1b[1;31m└─────────────────────────────────────┘\x1b[m");
         move(6, 0);
@@ -7451,13 +7350,13 @@ int mode)
                 else
                 {
                     if (dresistmode == 0)
-                        minjure = (m.attack / 9 - d.resist / 12 + random() % 15 + 4 - d.speed / 30 + m.speed / 30 - d.hskill / 200 - d.hexp / 200);
+                        minjure = (m.attack / 9 - d.fight[FIGHT_RESIST] / 12 + random() % 15 + 4 - d.fight[FIGHT_SPEED] / 30 + m.speed / 30 - d.fight[FIGHT_HSKILL] / 200 - d.tmp[TMP_HEXP] / 200);
                     else
-                        minjure = (m.attack / 9 - d.resist / 8 + random() % 12 + 4 - d.speed / 50 + m.speed / 20 - d.hskill / 200 - d.hexp / 200);
+                        minjure = (m.attack / 9 - d.fight[FIGHT_RESIST] / 8 + random() % 12 + 4 - d.fight[FIGHT_SPEED] / 50 + m.speed / 20 - d.fight[FIGHT_HSKILL] / 200 - d.tmp[TMP_HEXP] / 200);
                     if (minjure <= 0)
                         minjure = 8;
-                    d.hp -= minjure;
-                    d.tired += random() % 3 + 2;
+                    d.body[BODY_HP] -= minjure;
+                    d.body[BODY_TIRED] += random() % 3 + 2;
                     sprintf(buf, "對方普通攻擊，生命力減低%d", minjure);
                     vmsg(buf);
                 }
@@ -7473,27 +7372,27 @@ int mode)
                     if (m.hp > 5)
                     {
                         if (dresistmode == 0)
-                            minjure = (m.attack / 5 - d.resist / 12 + random() % 12 + 6 - d.speed / 30 + m.speed / 30 - d.hskill / 200 - d.hexp / 200);
+                            minjure = (m.attack / 5 - d.fight[FIGHT_RESIST] / 12 + random() % 12 + 6 - d.fight[FIGHT_SPEED] / 30 + m.speed / 30 - d.fight[FIGHT_HSKILL] / 200 - d.tmp[TMP_HEXP] / 200);
                         else
-                            minjure = (m.attack / 5 - d.resist / 8 + random() % 12 + 6 - d.speed / 30 + m.speed / 30 - d.hskill / 200 - d.hexp / 200);
+                            minjure = (m.attack / 5 - d.fight[FIGHT_RESIST] / 8 + random() % 12 + 6 - d.fight[FIGHT_SPEED] / 30 + m.speed / 30 - d.fight[FIGHT_HSKILL] / 200 - d.tmp[TMP_HEXP] / 200);
                         if (minjure <= 15)
                             minjure = 20;
-                        d.hp -= minjure;
+                        d.body[BODY_HP] -= minjure;
                         m.hp -= 5;
                         sprintf(buf, "對方全力攻擊，生命力減低%d", minjure);
-                        d.tired += random() % 4 + 4;
+                        d.body[BODY_TIRED] += random() % 4 + 4;
                         vmsg(buf);
                     }
                     else
                     {
                         if (dresistmode == 0)
-                            minjure = (m.attack / 9 - d.resist / 12 + random() % 12 + 4 - d.speed / 30 + m.speed / 25 - d.hexp / 200 - d.hskill / 200);
+                            minjure = (m.attack / 9 - d.fight[FIGHT_RESIST] / 12 + random() % 12 + 4 - d.fight[FIGHT_SPEED] / 30 + m.speed / 25 - d.tmp[TMP_HEXP] / 200 - d.fight[FIGHT_HSKILL] / 200);
                         else
-                            minjure = (m.attack / 9 - d.resist / 8 + random() % 12 + 3 - d.speed / 30 + m.speed / 25 - d.hexp / 200 - d.hskill / 200);
+                            minjure = (m.attack / 9 - d.fight[FIGHT_RESIST] / 8 + random() % 12 + 3 - d.fight[FIGHT_SPEED] / 30 + m.speed / 25 - d.tmp[TMP_HEXP] / 200 - d.fight[FIGHT_HSKILL] / 200);
                         if (minjure <= 0)
                             minjure = 4;
-                        d.hp -= minjure;
-                        d.tired += random() % 3 + 2;
+                        d.body[BODY_HP] -= minjure;
+                        d.body[BODY_TIRED] += random() % 3 + 2;
                         sprintf(buf, "對方普通攻擊，生命力減低%d", minjure);
                         vmsg(buf);
                     }
@@ -7541,12 +7440,12 @@ int mode)
                             else
                                 sprintf(inbuf1, "風妖");
                         }
-                        minjure = minjure - d.resist / 50 - d.mresist / 10 - d.mskill / 200 - d.mexp / 200 + random() % 10;
+                        minjure = minjure - d.fight[FIGHT_RESIST] / 50 - d.fight[FIGHT_MRESIST] / 10 - d.fight[FIGHT_MSKILL] / 200 - d.tmp[TMP_MEXP] / 200 + random() % 10;
                         if (minjure < 0)
                             minjure = 15;
-                        d.hp -= minjure;
+                        d.body[BODY_HP] -= minjure;
                         if (m.mp < 0) m.mp = 0;
-                        d.mresist += random() % 2 + 1;
+                        d.fight[FIGHT_MRESIST] += random() % 2 + 1;
                         sprintf(buf, "對方召喚了%s，你受傷了%d點", inbuf1, minjure);
                         vmsg(buf);
                     }
@@ -7567,9 +7466,9 @@ int mode)
                 break;
 
             case 4:
-                d.money += (m.money + m.money / 2) / 3 + random() % 10;
-                d.hskill += random() % 4 + 3;
-                d.brave += random() % 3 + 2;
+                d.thing[THING_MONEY] += (m.money + m.money / 2) / 3 + random() % 10;
+                d.fight[FIGHT_HSKILL] += random() % 4 + 3;
+                d.learn[LEARN_BRAVE] += random() % 3 + 2;
                 m.death = 1;
                 sprintf(buf, "對方先閃了..但掉了一些錢給你...");
                 vmsg(buf);
@@ -7580,7 +7479,7 @@ int mode)
         if (m.death == 1)
         {
             clear();
-            oldexp = ((d.hexp - oldhexp) + (d.mexp - oldmexp) + random() % 10) * (d.level + 1) + random() % (d.level + 1);
+            oldexp = ((d.tmp[TMP_HEXP] - oldhexp) + (d.tmp[TMP_MEXP] - oldmexp) + random() % 10) * (d.level + 1) + random() % (d.level + 1);
             d.exp += oldexp;
             vs_head("電子養小雞", BoardName);
             if (mode == 1)
@@ -7597,10 +7496,10 @@ int mode)
                 prints_centered("            \x1b[1;31m│  \x1b[37m武術大會的小雞 \x1b[33m%-10s                 \x1b[31m│\x1b[m\n", d.name);
                 prints_centered("            \x1b[1;31m│  \x1b[37m打敗了強勁的對手 \x1b[32m%-10s               \x1b[31m│\x1b[m\n", p[n].name);
             }
-            sprintf(inbuf1, "%d/%d", d.hexp - oldhexp, d.mexp - oldmexp);
-            prints_centered("            \x1b[1;31m│  \x1b[37m評價提升了 %-5s 點  技術增加了 %-2d/%-2d 點  \x1b[31m│\x1b[m\n", inbuf1, d.hskill - oldhskill, d.mskill - oldmskill);
-            sprintf(inbuf1, "%d 元", d.money - oldmoney);
-            prints_centered("            \x1b[1;31m│  \x1b[37m勇敢提升了 %-5d 點  金錢增加了 %-9s \x1b[31m│\x1b[m\n", d.brave - oldbrave, inbuf1);
+            sprintf(inbuf1, "%d/%d", d.tmp[TMP_HEXP] - oldhexp, d.tmp[TMP_MEXP] - oldmexp);
+            prints_centered("            \x1b[1;31m│  \x1b[37m評價提升了 %-5s 點  技術增加了 %-2d/%-2d 點  \x1b[31m│\x1b[m\n", inbuf1, d.fight[FIGHT_HSKILL] - oldhskill, d.fight[FIGHT_MSKILL] - oldmskill);
+            sprintf(inbuf1, "%d 元", d.thing[THING_MONEY] - oldmoney);
+            prints_centered("            \x1b[1;31m│  \x1b[37m勇敢提升了 %-5d 點  金錢增加了 %-9s \x1b[31m│\x1b[m\n", d.learn[LEARN_BRAVE] - oldbrave, inbuf1);
             prints_centered("            \x1b[1;31m│  \x1b[37m經驗值增加了 %-6d 點  升級尚需 %-6d 點\x1b[31m│\x1b[m\n", oldexp, twice(d.level, 10000, 100) - d.exp);
             outs_centered("            \x1b[1;31m└──────────────────────┘\x1b[m\n");
 
@@ -7686,34 +7585,34 @@ const UTMP *opt)
         switch (pipkey)
         {
         case '1':  /*治療法術*/
-            d.magicmode = 1;
+            d.fight[FIGHT_MAGICMODE] = 1;
             injure = pip_magic_doing_menu(treatmagiclist);
             break;
 
         case '2':  /*雷系法術*/
-            d.magicmode = 2;
+            d.fight[FIGHT_MAGICMODE] = 2;
             injure = pip_magic_doing_menu(thundermagiclist);
             break;
 
         case '3': /*冰系法術*/
-            d.magicmode = 3;
+            d.fight[FIGHT_MAGICMODE] = 3;
             injure = pip_magic_doing_menu(icemagiclist);
             break;
 
         case '4': /*炎系法術*/
-            d.magicmode = 4;
+            d.fight[FIGHT_MAGICMODE] = 4;
             injure = pip_magic_doing_menu(firemagiclist);
             show_fight_pic(341);
             vmsg("小雞使用了炎系法術");
             break;
 
         case '5': /*土系法術*/
-            d.magicmode = 5;
+            d.fight[FIGHT_MAGICMODE] = 5;
             injure = pip_magic_doing_menu(earthmagiclist);
             break;
 
         case '6': /*風系法術*/
-            d.magicmode = 6;
+            d.fight[FIGHT_MAGICMODE] = 6;
             injure = pip_magic_doing_menu(windmagiclist);
             break;
 #ifdef HAVE_PIP_FIGHT
@@ -7725,7 +7624,7 @@ const UTMP *opt)
             }
             else
             {
-                d.magicmode = 7;
+                d.fight[FIGHT_MAGICMODE] = 7;
                 injure = pip_magic_fight_menu(specialmagiclist, opt);
                 break;
             }
@@ -7758,7 +7657,7 @@ const struct magicset *p)
     clrchyiuan(6, b_lines - 6);
     move(7, 0);
     prints_centered("\x1b[1;31m┤\x1b[37;41m   可用[%s]一覽表   \x1b[0;1;31m├────────────\x1b[m", p[0].name);
-    while ((s = p[n].name) && (p[n].needmp <= d.mp))
+    while ((s = p[n].name) && (p[n].needmp <= d.fight[FIGHT_MP]))
     {
         move(7 + n, 4);
         if (p[n].hpmode == 1)
@@ -7796,28 +7695,28 @@ const struct magicset *p)
         {
             if (p[pipkey].hpmode == 1)
             {
-                d.hp += p[pipkey].hp;
-                d.tired -= p[pipkey].tired;
-                d.mp -= p[pipkey].needmp;
-                if (d.hp > d.maxhp)
-                    d.hp = d.maxhp;
-                if (d.tired < 0)
-                    d.tired = 0;
+                d.body[BODY_HP] += p[pipkey].hp;
+                d.body[BODY_TIRED] -= p[pipkey].tired;
+                d.fight[FIGHT_MP] -= p[pipkey].needmp;
+                if (d.body[BODY_HP] > d.body[BODY_MAXHP])
+                    d.body[BODY_HP] = d.body[BODY_MAXHP];
+                if (d.body[BODY_TIRED] < 0)
+                    d.body[BODY_TIRED] = 0;
                 injure = 0;
             }
             else if (p[pipkey].hpmode == 2)
             {
-                d.hp = d.maxhp;
-                d.mp -= p[pipkey].needmp;
-                d.tired = 0;
+                d.body[BODY_HP] = d.body[BODY_MAXHP];
+                d.fight[FIGHT_MP] -= p[pipkey].needmp;
+                d.body[BODY_TIRED] = 0;
                 injure = 0;
             }
             else
             {
-                injure = (p[pipkey].hp + (d.maxmp / 8) - random() % 5);
-                d.mp -= p[pipkey].needmp;
+                injure = (p[pipkey].hp + (d.fight[FIGHT_MAXMP] / 8) - random() % 5);
+                d.fight[FIGHT_MP] -= p[pipkey].needmp;
             }
-            d.mexp += random() % 3 + pipkey;
+            d.tmp[TMP_MEXP] += random() % 3 + pipkey;
         }
         else
         {
@@ -7856,7 +7755,7 @@ const UTMP *opt)
     while (s->name)
     {
         move(7 + n, 4);
-        if ((d.specialmagic & s->map) && (s->needmp <= d.mp))
+        if ((d.fight[FIGHT_SPECIALMAGIC] & s->map) && (s->needmp <= d.fight[FIGHT_MP]))
         {
             sprintf(buf,
                     "\x1b[1;37m[\x1b[36m%d\x1b[37m] \x1b[33m%-12s  \x1b[37m需要法力: \x1b[32m%-6d \x1b[m             ", n, s->name, s->needmp);
@@ -7887,8 +7786,8 @@ const UTMP *opt)
         if (ans[0] != 'n' && ans[0] != 'N')
         {
             injure = (opt->pip->hp * p[mg[pipkey]].hp / 100 - random() % 300);
-            d.mp -= p[mg[pipkey]].needmp;
-            d.mexp += random() % 30 + pipkey + 100;
+            d.fight[FIGHT_MP] -= p[mg[pipkey]].needmp;
+            d.tmp[TMP_MEXP] += random() % 30 + pipkey + 100;
             cutmp->pip->mode = - mg[pipkey];
         }
         else
@@ -7943,13 +7842,13 @@ pip_marriage_offer(void)
             getdata(b_lines - 1, 1, buf, ans, 2, 1, 0);
             if (ans[0] != 'y' && ans[0] != 'Y')
             {
-                d.social += 10;
+                d.tmp[TMP_SOCIAL] += 10;
                 vmsg("還是維持舊婚約好了..");
                 return 0;
             }
-            d.social -= random() % 50 + 100;
+            d.tmp[TMP_SOCIAL] -= random() % 50 + 100;
         }
-        d.charm -= random() % 5 + 20;
+        d.learn[LEARN_CHARM] -= random() % 5 + 20;
         d.lover = who + 3;
         d.relation -= 20;
         if (d.relation < 0)
@@ -7965,14 +7864,14 @@ pip_marriage_offer(void)
     }
     else
     {
-        d.charm += random() % 5 + 20;
+        d.learn[LEARN_CHARM] += random() % 5 + 20;
         d.relation += 20;
         if (d.wantend == 1 || d.wantend == 4)
             vmsg("我還年輕  心情還不定...");
         else
             vmsg("我早已有婚約了..對不起...");
     }
-    d.money += money;
+    d.thing[THING_MONEY] += money;
     return 0;
 }
 
@@ -8024,7 +7923,7 @@ static int pip_results_show(void)  /*收穫季*/
         {
         case 3:
             pip_results_show_ending(3, 1, b[1][0], b[0][0], b[2][0]);
-            d.hexp += random() % 10 + 50;
+            d.tmp[TMP_HEXP] += random() % 10 + 50;
             break;
         case 2:
             if (b[0][1] != 1)
@@ -8046,7 +7945,7 @@ static int pip_results_show(void)  /*收穫季*/
                 c[2] = b[1][0];
             }
             pip_results_show_ending(2, 1, c[0], c[1], c[2]);
-            d.hexp += random() % 10 + 30;
+            d.tmp[TMP_HEXP] += random() % 10 + 30;
             break;
         case 1:
             if (b[0][1] == 1)
@@ -8068,11 +7967,11 @@ static int pip_results_show(void)  /*收穫季*/
                 c[2] = b[2][0];
             }
             pip_results_show_ending(1, 1, c[0], c[1], c[2]);
-            d.hexp += random() % 10 + 10;
+            d.tmp[TMP_HEXP] += random() % 10 + 10;
             break;
         case 0:
             pip_results_show_ending(0, 1, b[0][0], b[1][0], b[2][0]);
-            d.hexp -= random() % 10 + 10;
+            d.tmp[TMP_HEXP] -= random() % 10 + 10;
             break;
         }
         break;
@@ -8081,15 +7980,15 @@ static int pip_results_show(void)  /*收穫季*/
         vmsg("今年共有四人參賽～現在比賽開始");
         show_resultshow_pic(21);
         vmsg("比賽情形");
-        if ((d.art*2 + d.character) / 400 >= 5)
+        if ((d.learn[LEARN_ART]*2 + d.learn[LEARN_CHARACTER]) / 400 >= 5)
         {
             winorlost = 3;
         }
-        else if ((d.art*2 + d.character) / 400 >= 4)
+        else if ((d.learn[LEARN_ART]*2 + d.learn[LEARN_CHARACTER]) / 400 >= 4)
         {
             winorlost = 2;
         }
-        else if ((d.art*2 + d.character) / 400 >= 3)
+        else if ((d.learn[LEARN_ART]*2 + d.learn[LEARN_CHARACTER]) / 400 >= 3)
         {
             winorlost = 1;
         }
@@ -8098,21 +7997,21 @@ static int pip_results_show(void)  /*收穫季*/
             winorlost = 0;
         }
         pip_results_show_ending(winorlost, 2, random() % 2, random() % 2 + 2, random() % 2 + 4);
-        d.art += random() % 10 + 20 * winorlost;
-        d.character += random() % 10 + 20 * winorlost;
+        d.learn[LEARN_ART] += random() % 10 + 20 * winorlost;
+        d.learn[LEARN_CHARACTER] += random() % 10 + 20 * winorlost;
         break;
     case 'C':
     case 'c':
         vmsg("今年共有四人參賽～現在比賽開始");
-        if ((d.art*2 + d.charm) / 400 >= 5)
+        if ((d.learn[LEARN_ART]*2 + d.learn[LEARN_CHARM]) / 400 >= 5)
         {
             winorlost = 3;
         }
-        else if ((d.art*2 + d.charm) / 400 >= 4)
+        else if ((d.learn[LEARN_ART]*2 + d.learn[LEARN_CHARM]) / 400 >= 4)
         {
             winorlost = 2;
         }
-        else if ((d.art*2 + d.charm) / 400 >= 3)
+        else if ((d.learn[LEARN_ART]*2 + d.learn[LEARN_CHARM]) / 400 >= 3)
         {
             winorlost = 1;
         }
@@ -8120,22 +8019,22 @@ static int pip_results_show(void)  /*收穫季*/
         {
             winorlost = 0;
         }
-        d.art += random() % 10 + 20 * winorlost;
-        d.charm += random() % 10 + 20 * winorlost;
+        d.learn[LEARN_ART] += random() % 10 + 20 * winorlost;
+        d.learn[LEARN_CHARM] += random() % 10 + 20 * winorlost;
         pip_results_show_ending(winorlost, 3, random() % 2, random() % 2 + 4, random() % 2 + 2);
         break;
     case 'D':
     case 'd':
         vmsg("今年共有四人參賽～現在比賽開始");
-        if ((d.affect + d.cookskill*2) / 200 >= 4)
+        if ((d.state[STATE_AFFECT] + d.learn[LEARN_COOKSKILL]*2) / 200 >= 4)
         {
             winorlost = 3;
         }
-        else if ((d.affect + d.cookskill*2) / 200 >= 3)
+        else if ((d.state[STATE_AFFECT] + d.learn[LEARN_COOKSKILL]*2) / 200 >= 3)
         {
             winorlost = 2;
         }
-        else if ((d.affect + d.cookskill*2) / 200 >= 2)
+        else if ((d.state[STATE_AFFECT] + d.learn[LEARN_COOKSKILL]*2) / 200 >= 2)
         {
             winorlost = 1;
         }
@@ -8143,24 +8042,24 @@ static int pip_results_show(void)  /*收穫季*/
         {
             winorlost = 0;
         }
-        d.cookskill += random() % 10 + 20 * winorlost;
-        d.family += random() % 10 + 20 * winorlost;
+        d.learn[LEARN_COOKSKILL] += random() % 10 + 20 * winorlost;
+        d.tmp[TMP_FAMILY] += random() % 10 + 20 * winorlost;
         pip_results_show_ending(winorlost, 4, random() % 2 + 2, random() % 2, random() % 2 + 4);
         break;
     case 'Q':
     case 'q':
         vmsg("今年不參加啦.....:(");
-        d.happy -= random() % 10 + 10;
-        d.satisfy -= random() % 10 + 10;
+        d.state[STATE_HAPPY] -= random() % 10 + 10;
+        d.state[STATE_SATISFY] -= random() % 10 + 10;
         d.relation -= random() % 10;
         break;
     }
     if (pipkey != 'Q' && pipkey != 'q')
     {
-        d.tired = 0;
-        d.hp = d.maxhp;
-        d.happy += random() % 20;
-        d.satisfy += random() % 20;
+        d.body[BODY_TIRED] = 0;
+        d.body[BODY_HP] = d.body[BODY_MAXHP];
+        d.state[STATE_HAPPY] += random() % 20;
+        d.state[STATE_SATISFY] += random() % 20;
         d.relation += random() % 10;
     }
     return 0;
@@ -8214,7 +8113,7 @@ int winorlost, int mode, int a, int b, int c)
     move(14, d_cols/2U + 15);
     prints("\x1b[1;41m 最後 \x1b[0;1m～ \x1b[1;33m%-10s\x1b[36m \x1b[0m", name4);
     sprintf(buf, "今年的%s結束囉 後年再來吧..", gamename[mode]);
-    d.money += resultmoney[winorlost];
+    d.thing[THING_MONEY] += resultmoney[winorlost];
     vmsg(buf);
     return 0;
 }
@@ -8288,14 +8187,14 @@ pip_check_levelup(void)
     if (d.chickenmode == 1)
     {
         lv = d.level;
-        levelswap(&d.maxhp, twice(lv, ml[1].maxhp, ml[0].maxhp));
-        levelswap(&d.wrist, twice(lv, ml[1].wrist, ml[0].wrist));
-        levelswap(&d.attack, twice(lv, ml[1].attack, ml[0].attack));
-        levelswap(&d.resist, twice(lv, ml[1].resist, ml[0].resist));
-        levelswap(&d.speed, twice(lv, ml[1].speed, ml[0].speed));
-        levelswap(&d.maxmp, twice(lv, ml[1].maxmp, ml[0].maxmp));
-        levelswap(&d.hskill, twice(lv, ml[1].hskill, ml[0].hskill));
-        levelswap(&d.mskill, twice(lv, ml[1].mskill, ml[0].mskill));
+        levelswap(&d.body[BODY_MAXHP], twice(lv, ml[1].maxhp, ml[0].maxhp));
+        levelswap(&d.body[BODY_WRIST], twice(lv, ml[1].wrist, ml[0].wrist));
+        levelswap(&d.fight[FIGHT_ATTACK], twice(lv, ml[1].attack, ml[0].attack));
+        levelswap(&d.fight[FIGHT_RESIST], twice(lv, ml[1].resist, ml[0].resist));
+        levelswap(&d.fight[FIGHT_SPEED], twice(lv, ml[1].speed, ml[0].speed));
+        levelswap(&d.fight[FIGHT_MAXMP], twice(lv, ml[1].maxmp, ml[0].maxmp));
+        levelswap(&d.fight[FIGHT_HSKILL], twice(lv, ml[1].hskill, ml[0].hskill));
+        levelswap(&d.fight[FIGHT_MSKILL], twice(lv, ml[1].mskill, ml[0].mskill));
     }
 }
 
@@ -8387,101 +8286,101 @@ int mode)
         prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
 
     move(1, 0);
-    if (d.money <= 100)
+    if (d.thing[THING_MONEY] <= 100)
         color1 = 31;
-    else if (d.money <= 500)
+    else if (d.thing[THING_MONEY] <= 500)
         color1 = 33;
     else
         color1 = 37;
     sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
     prints_centered(" \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m",
-            yo[age], inbuf1, m, color1, d.money);
+            yo[age], inbuf1, m, color1, d.thing[THING_MONEY]);
 
     move(2, 0);
 
-    if ((d.hp*100 / d.maxhp) <= 20)
+    if ((d.body[BODY_HP]*100 / d.body[BODY_MAXHP]) <= 20)
         color1 = 31;
-    else if ((d.hp*100 / d.maxhp) <= 40)
+    else if ((d.body[BODY_HP]*100 / d.body[BODY_MAXHP]) <= 40)
         color1 = 33;
     else
         color1 = 37;
-    if (d.maxmp == 0)
+    if (d.fight[FIGHT_MAXMP] == 0)
         color2 = 37;
-    else if ((d.mp*100 / d.maxmp) <= 20)
+    else if ((d.fight[FIGHT_MP]*100 / d.fight[FIGHT_MAXMP]) <= 20)
         color2 = 31;
-    else if ((d.mp*100 / d.maxmp) <= 40)
+    else if ((d.fight[FIGHT_MP]*100 / d.fight[FIGHT_MAXMP]) <= 40)
         color2 = 33;
     else
         color2 = 37;
 
-    if (d.tired >= 80)
+    if (d.body[BODY_TIRED] >= 80)
         color3 = 31;
-    else if (d.tired >= 60)
+    else if (d.body[BODY_TIRED] >= 60)
         color3 = 33;
     else
         color3 = 37;
 
-    sprintf(inbuf1, "%d/%d", d.hp, d.maxhp);
-    sprintf(inbuf2, "%d/%d", d.mp, d.maxmp);
+    sprintf(inbuf1, "%d/%d", d.body[BODY_HP], d.body[BODY_MAXHP]);
+    sprintf(inbuf2, "%d/%d", d.fight[FIGHT_MP], d.fight[FIGHT_MAXMP]);
     prints_centered(" \x1b[1;32m[生  命]\x1b[%dm %-10s\x1b[32m[法  力]\x1b[%dm %-10s\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m ",
-            color1, inbuf1, color2, inbuf2, d.weight, color3, d.tired);
+            color1, inbuf1, color2, inbuf2, d.body[BODY_WEIGHT], color3, d.body[BODY_TIRED]);
 
     move(3, 0);
-    if (d.shit >= 80)
+    if (d.body[BODY_SHIT] >= 80)
         color1 = 31;
-    else if (d.shit >= 60)
+    else if (d.body[BODY_SHIT] >= 60)
         color1 = 33;
     else
         color1 = 37;
-    if (d.sick >= 75)
+    if (d.body[BODY_SICK] >= 75)
         color2 = 31;
-    else if (d.sick >= 50)
+    else if (d.body[BODY_SICK] >= 50)
         color2 = 33;
     else
         color2 = 37;
-    if (d.happy <= 20)
+    if (d.state[STATE_HAPPY] <= 20)
         color3 = 31;
-    else if (d.happy <= 40)
+    else if (d.state[STATE_HAPPY] <= 40)
         color3 = 33;
     else
         color3 = 37;
-    if (d.satisfy <= 20)
+    if (d.state[STATE_SATISFY] <= 20)
         color4 = 31;
-    else if (d.satisfy <= 40)
+    else if (d.state[STATE_SATISFY] <= 40)
         color4 = 33;
     else
         color4 = 37;
     prints_centered(" \x1b[1;32m[髒  髒]\x1b[%dm %-4d      \x1b[32m[病  氣]\x1b[%dm %-4d      \x1b[32m[快樂度]\x1b[%dm %-4d      \x1b[32m[滿意度]\x1b[%dm %-4d\x1b[0m",
-            color1, d.shit, color2, d.sick, color3, d.happy, color4, d.satisfy);
+            color1, d.body[BODY_SHIT], color2, d.body[BODY_SICK], color3, d.state[STATE_HAPPY], color4, d.state[STATE_SATISFY]);
     if (mode == 1)/*餵食*/
     {
         move(4, 0);
-        if (d.food <= 0)
+        if (d.eat[EAT_FOOD] <= 0)
             color1 = 31;
-        else if (d.food <= 5)
+        else if (d.eat[EAT_FOOD] <= 5)
             color1 = 33;
         else
             color1 = 37;
-        if (d.cookie <= 0)
+        if (d.eat[EAT_COOKIE] <= 0)
             color2 = 31;
-        else if (d.cookie <= 5)
+        else if (d.eat[EAT_COOKIE] <= 5)
             color2 = 33;
         else
             color2 = 37;
-        if (d.bighp <= 0)
+        if (d.eat[EAT_BIGHP] <= 0)
             color3 = 31;
-        else if (d.bighp <= 2)
+        else if (d.eat[EAT_BIGHP] <= 2)
             color3 = 33;
         else
             color3 = 37;
-        if (d.medicine <= 0)
+        if (d.eat[EAT_MEDICINE] <= 0)
             color4 = 31;
-        else if (d.medicine <= 5)
+        else if (d.eat[EAT_MEDICINE] <= 5)
             color4 = 33;
         else
             color4 = 37;
         prints_centered(" \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m",
-                color1, d.food, color2, d.cookie, color3, d.bighp, color4, d.medicine, d.ginseng, d.snowgrass);
+                color1, d.eat[EAT_FOOD], color2, d.eat[EAT_COOKIE], color3, d.eat[EAT_BIGHP], color4, d.eat[EAT_MEDICINE], d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS]);
 
     }
     move(5, 0);
@@ -8492,36 +8391,36 @@ int mode)
     case 0:
     case 1:
     case 2:
-        if (d.weight <= (60 + 10*m - 30))
+        if (d.body[BODY_WEIGHT] <= (60 + 10*m - 30))
             show_basic_pic(1);
-        else if (d.weight < (60 + 10*m + 30))
+        else if (d.body[BODY_WEIGHT] < (60 + 10*m + 30))
             show_basic_pic(2);
         else
             show_basic_pic(3);
         break;
     case 3:
     case 4:
-        if (d.weight <= (60 + 10*m - 30))
+        if (d.body[BODY_WEIGHT] <= (60 + 10*m - 30))
             show_basic_pic(4);
-        else if (d.weight < (60 + 10*m + 30))
+        else if (d.body[BODY_WEIGHT] < (60 + 10*m + 30))
             show_basic_pic(5);
         else
             show_basic_pic(6);
         break;
     case 5:
     case 6:
-        if (d.weight <= (60 + 10*m - 30))
+        if (d.body[BODY_WEIGHT] <= (60 + 10*m - 30))
             show_basic_pic(7);
-        else if (d.weight < (60 + 10*m + 30))
+        else if (d.body[BODY_WEIGHT] < (60 + 10*m + 30))
             show_basic_pic(8);
         else
             show_basic_pic(9);
         break;
     case 7:
     case 8:
-        if (d.weight <= (60 + 10*m - 30))
+        if (d.body[BODY_WEIGHT] <= (60 + 10*m - 30))
             show_basic_pic(10);
-        else if (d.weight < (60 + 10*m + 30))
+        else if (d.body[BODY_WEIGHT] < (60 + 10*m + 30))
             show_basic_pic(11);
         else
             show_basic_pic(12);
@@ -8573,7 +8472,7 @@ static int pip_fight_feed(void)     /* 餵食*/
         switch (pipkey)
         {
         case '1':
-            if (d.food <= 0)
+            if (d.eat[EAT_FOOD] <= 0)
             {
                 move(b_lines, 0);
                 vmsg("沒有食物囉..快去買吧！");
@@ -8584,57 +8483,57 @@ static int pip_fight_feed(void)     /* 餵食*/
                 show_feed_pic(0);
             else
                 show_feed_pic(1);
-            d.food--;
-            d.hp += 50;
-            if (d.hp >= d.maxhp)
+            d.eat[EAT_FOOD]--;
+            d.body[BODY_HP] += 50;
+            if (d.body[BODY_HP] >= d.body[BODY_MAXHP])
             {
-                d.hp = d.maxhp;
-                d.weight += random() % 2;
+                d.body[BODY_HP] = d.body[BODY_MAXHP];
+                d.body[BODY_WEIGHT] += random() % 2;
             }
             d.nodone = 0;
             vmsg("每吃一次食物會恢復體力50喔!");
             break;
 
         case '2':
-            if (d.cookie <= 0)
+            if (d.eat[EAT_COOKIE] <= 0)
             {
                 move(b_lines, 0);
                 vmsg("零食吃光囉..快去買吧！");
                 break;
             }
             move(4, 0);
-            d.cookie--;
-            d.hp += 100;
-            if (d.hp >= d.maxhp)
+            d.eat[EAT_COOKIE]--;
+            d.body[BODY_HP] += 100;
+            if (d.body[BODY_HP] >= d.body[BODY_MAXHP])
             {
-                d.hp = d.maxhp;
-                d.weight += (random() % 2 + 2);
+                d.body[BODY_HP] = d.body[BODY_MAXHP];
+                d.body[BODY_WEIGHT] += (random() % 2 + 2);
             }
             else
             {
-                d.weight += (random() % 2 + 1);
+                d.body[BODY_WEIGHT] += (random() % 2 + 1);
             }
             if (random() % 2 > 0)
                 show_feed_pic(2);
             else
                 show_feed_pic(3);
-            d.happy += (random() % 3 + 4);
-            d.satisfy += random() % 3 + 2;
+            d.state[STATE_HAPPY] += (random() % 3 + 4);
+            d.state[STATE_SATISFY] += random() % 3 + 2;
             d.nodone = 0;
             vmsg("吃零食容易胖喔...");
             break;
 
         case '3':
-            if (d.bighp <= 0)
+            if (d.eat[EAT_BIGHP] <= 0)
             {
                 move(b_lines, 0);
                 vmsg("沒有大補丸了耶! 快買吧..");
                 break;
             }
-            d.bighp--;
-            d.hp += 600;
-            d.tired -= 20;
-            d.weight += random() % 2;
+            d.eat[EAT_BIGHP]--;
+            d.body[BODY_HP] += 600;
+            d.body[BODY_TIRED] -= 20;
+            d.body[BODY_WEIGHT] += random() % 2;
             move(4, 0);
             show_feed_pic(4);
             d.nodone = 0;
@@ -8642,7 +8541,7 @@ static int pip_fight_feed(void)     /* 餵食*/
             break;
 
         case '4':
-            if (d.medicine <= 0)
+            if (d.eat[EAT_MEDICINE] <= 0)
             {
                 move(b_lines, 0);
                 vmsg("沒有靈芝囉..快去買吧！");
@@ -8650,26 +8549,26 @@ static int pip_fight_feed(void)     /* 餵食*/
             }
             move(4, 0);
             show_feed_pic(1);
-            d.medicine--;
-            d.mp += 50;
-            if (d.mp >= d.maxmp)
+            d.eat[EAT_MEDICINE]--;
+            d.fight[FIGHT_MP] += 50;
+            if (d.fight[FIGHT_MP] >= d.fight[FIGHT_MAXMP])
             {
-                d.mp = d.maxmp;
+                d.fight[FIGHT_MP] = d.fight[FIGHT_MAXMP];
             }
             d.nodone = 0;
             vmsg("每吃一次靈芝會恢復法力50喔!");
             break;
 
         case '5':
-            if (d.ginseng <= 0)
+            if (d.eat[EAT_GINSENG] <= 0)
             {
                 move(b_lines, 0);
                 vmsg("沒有千年人蔘耶! 快買吧..");
                 break;
             }
-            d.ginseng--;
-            d.mp += 500;
-            d.tired -= 20;
+            d.eat[EAT_GINSENG]--;
+            d.fight[FIGHT_MP] += 500;
+            d.body[BODY_TIRED] -= 20;
             move(4, 0);
             show_feed_pic(1);
             d.nodone = 0;
@@ -8677,17 +8576,17 @@ static int pip_fight_feed(void)     /* 餵食*/
             break;
 
         case '6':
-            if (d.snowgrass <= 0)
+            if (d.eat[EAT_SNOWGRASS] <= 0)
             {
                 move(b_lines, 0);
                 vmsg("沒有天山雪蓮耶! 快買吧..");
                 break;
             }
-            d.snowgrass--;
-            d.mp = d.maxmp;
-            d.hp = d.maxhp;
-            d.tired -= 0;
-            d.sick = 0;
+            d.eat[EAT_SNOWGRASS]--;
+            d.fight[FIGHT_MP] = d.fight[FIGHT_MAXMP];
+            d.body[BODY_HP] = d.body[BODY_MAXHP];
+            d.body[BODY_TIRED] -= 0;
+            d.body[BODY_SICK] = 0;
             move(4, 0);
             show_feed_pic(1);
             d.nodone = 0;

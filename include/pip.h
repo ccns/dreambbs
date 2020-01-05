@@ -32,6 +32,146 @@ typedef struct
     int mskill;         /*魔法技術*/
 } levelup;
 
+/* General indexes */
+enum pipindex {
+    A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
+};
+
+/*---身體的參數---*/ //12
+enum pipbody {
+    BODY_HP,              /*體    力*/
+    BODY_MAXHP,           /*最大體力*/
+    BODY_WEIGHT,          /*體    重*/
+    BODY_TIRED,           /*疲 勞 度*/
+    BODY_SICK,            /*病    氣*/
+    BODY_SHIT,            /*清 潔 度*/
+    BODY_WRIST,           /*腕    力*/
+};
+
+/*---評價的參數---*/ //9
+enum piptmp {
+    TMP_SOCIAL,           /*社交評價*/
+    TMP_FAMILY,           /*家事評價*/
+    TMP_HEXP,             /*戰鬥評價*/
+    TMP_MEXP,             /*魔法評價*/
+};
+
+/*---戰鬥用參數---*/ //13
+enum pipfight {
+    FIGHT_MP,             /*法    力*/
+    FIGHT_MAXMP,          /*最大法力*/
+    FIGHT_ATTACK,         /*攻 擊 力*/
+    FIGHT_RESIST,         /*防 禦 力*/
+    FIGHT_SPEED,          /*速    度*/
+    FIGHT_HSKILL,         /*戰鬥技術*/
+    FIGHT_MSKILL,         /*魔法技術*/
+    FIGHT_MRESIST,        /*抗魔能力*/
+    FIGHT_MAGICMODE,      /*魔法型態*/
+    FIGHT_SPECIALMAGIC,   /*特殊魔法*/
+};
+
+/*---武器的參數---*/ //10
+enum pipweapon{
+    WEAPON_HEAD,        /*頭部武器*/
+    WEAPON_RHAND,       /*右手武器*/
+    WEAPON_LHAND,       /*左手武器*/
+    WEAPON_BODY,        /*身體武器*/
+    WEAPON_FOOT,        /*腳的武器*/
+};
+
+/*---各能力參數---*/ //17
+enum piplearn {
+    LEARN_TOMAN,        /*待人接物*/
+    LEARN_CHARACTER,    /*氣 質 度*/
+    LEARN_LOVE,         /*愛    心*/
+    LEARN_WISDOM,       /*智    慧*/
+    LEARN_ART,          /*藝術能力*/
+    LEARN_ETHICS,       /*道    德*/
+    LEARN_BRAVE,        /*勇    敢*/
+    LEARN_HOMEWORK,     /*掃地洗衣*/
+    LEARN_CHARM,        /*魅    力*/
+    LEARN_MANNERS,      /*禮    儀*/
+    LEARN_SPEECH,       /*談    吐*/
+    LEARN_COOKSKILL,    /*烹    飪*/
+};
+
+/*---各狀態數值---*/ //11
+enum pipstate {
+    STATE_HAPPY,        /*快 樂 度*/
+    STATE_SATISFY,      /*滿 意 度*/
+    STATE_FALLINLOVE,   /*戀愛指數*/
+    STATE_BELIEF,       /*信    仰*/
+    STATE_OFFENSE,      /*罪    孽*/
+    STATE_AFFECT,       /*感    受*/
+};
+
+/*---吃的東西啦---*/ //9
+enum pipeat {
+    EAT_FOOD,           /*食    物*/
+    EAT_MEDICINE,       /*靈    芝*/
+    EAT_BIGHP,          /*大 補 丸*/
+    EAT_COOKIE,         /*零    食*/
+    EAT_GINSENG,        /*千年人蔘*/
+    EAT_SNOWGRASS,      /*天山雪蓮*/
+};
+
+/*---擁有的東西---*/ //8
+enum pipthing {
+    THING_BOOK,         /*書    本*/
+    THING_PLAYTOOL,     /*玩    具*/
+    THING_MONEY,        /*金    錢*/
+};
+
+/*---參見王臣--*/
+enum piproyal { //10
+    ROYAL_A,            /*from 守衛*/
+    ROYAL_B,            /*from 近衛*/
+    ROYAL_C,            /*from 將軍*/
+    ROYAL_D,            /*from 大臣*/
+    ROYAL_E,            /*from 祭司*/
+    ROYAL_F,            /*from 寵妃*/
+    ROYAL_G,            /*from 王妃*/
+    ROYAL_H,            /*from 國王*/
+    ROYAL_I,            /*from 小丑*/
+    ROYAL_J,            /*from 王子*/
+};
+enum pipsee {   //6
+    SEE_ROYAL_J = 0,    /*是否已經看過王子了*/
+};
+
+/*-------工作次數--------*/ //26
+enum pipwork {
+     WORK_A,            /*家事*/
+     WORK_B,            /*保姆*/
+     WORK_C,            /*旅店*/
+     WORK_D,            /*農場*/
+     WORK_E,            /*餐廳*/
+     WORK_F,            /*教堂*/
+     WORK_G,            /*地攤*/
+     WORK_H,            /*伐木*/
+     WORK_I,            /*美髮*/
+     WORK_J,            /*獵人*/
+     WORK_K,            /*工地*/
+     WORK_L,            /*守墓*/
+     WORK_M,            /*家教*/
+     WORK_N,            /*酒家*/
+     WORK_O,            /*酒店*/
+     WORK_P,            /*夜總會*/
+};
+
+/*-------上課次數--------*/ //15
+enum pipclass {
+    CLASS_A,            /*科學*/
+    CLASS_B,            /*詩詞*/
+    CLASS_C,            /*神學*/
+    CLASS_D,            /*軍學*/
+    CLASS_E,            /*劍術*/
+    CLASS_F,            /*格鬥*/
+    CLASS_G,            /*魔法*/
+    CLASS_H,            /*禮儀*/
+    CLASS_I,            /*繪畫*/
+    CLASS_J,            /*舞蹈*/
+};
 
 struct chicken {  /* DISKDATA(format) */
     /*---基本的資料---*/ //13
@@ -47,136 +187,39 @@ struct chicken {  /* DISKDATA(format) */
     int chickenmode;    /*幾 代 雞*/
     int level;          /*等    級*/
     int exp;            /*經 驗 值*/
-    int dataE;
+    int dataL;
 
     /*---身體的參數---*/ //12
-    int hp;             /*體    力*/
-    int maxhp;          /*最大體力*/
-    int weight;         /*體    重*/
-    int tired;          /*疲 勞 度*/
-    int sick;           /*病    氣*/
-    int shit;           /*清 潔 度*/
-    int wrist;          /*腕    力*/
-    int bodyA;
-    int bodyB;
-    int bodyC;
-    int bodyD;
-    int bodyE;
+    int body[12];       /*{體力, 最大體力, 體重, 疲勞度, 病氣, 清潔度, 腕力}*/
 
     /*---評價的參數---*/ //9
-    int social;         /*社交評價*/
-    int family;         /*家事評價*/
-    int hexp;           /*戰鬥評價*/
-    int mexp;           /*魔法評價*/
-    int tmpA;
-    int tmpB;
-    int tmpC;
-    int tmpD;
-    int tmpE;
+    int tmp[9];         /*{社交評價, 家事評價, 戰鬥評價, 魔法評價}*/
 
     /*---戰鬥用參數---*/ //13
-    int mp;             /*法    力*/
-    int maxmp;          /*最大法力*/
-    int attack;         /*攻 擊 力*/
-    int resist;         /*防 禦 力*/
-    int speed;          /*速    度*/
-    int hskill;         /*戰鬥技術*/
-    int mskill;         /*魔法技術*/
-    int mresist;        /*抗魔能力*/
-    int magicmode;      /*魔法型態*/
-    int specialmagic;   /*特殊魔法*/
-    int fightC;
-    int fightD;
-    int fightE;
+    int fight[13];      /*{法力, 最大法力, 攻擊力, 防禦力, 速度, 戰鬥技術, 魔法技術, 抗魔能力, 魔法型態, 特殊魔法}*/
 
+    /*---武器的參數---*/
+    int weapon[10];     /*{頭部武器, 右手武器, 左手武器, 身體武器, 腳的武器}*/
 
-    /*---武器的參數---*/ //10
-    int weaponhead;     /*頭部武器*/
-    int weaponrhand;    /*右手武器*/
-    int weaponlhand;    /*左手武器*/
-    int weaponbody;     /*身體武器*/
-    int weaponfoot;     /*腳的武器*/
-    int weaponA;
-    int weaponB;
-    int weaponC;
-    int weaponD;
-    int weaponE;
+    /*---各能力參數---*/
+    int learn[17];      /*{待人接物, 氣質度, 愛心, 智慧, 藝術能力, 道德, 勇敢, 掃地洗衣, 魅力, 禮儀, 談吐, 烹飪}*/
 
-    /*---各能力參數---*/ //17
-    int toman;          /*待人接物*/
-    int character;      /*氣 質 度*/
-    int love;           /*愛    心*/
-    int wisdom;         /*智    慧*/
-    int art;            /*藝術能力*/
-    int ethics;         /*道    德*/
-    int brave;          /*勇    敢*/
-    int homework;       /*掃地洗衣*/
-    int charm;          /*魅    力*/
-    int manners;        /*禮    儀*/
-    int speech;         /*談    吐*/
-    int cookskill;      /*烹    飪*/
-    int learnA;
-    int learnB;
-    int learnC;
-    int learnD;
-    int learnE;
+    /*---各狀態數值---*/
+    int state[11];      /*{快樂度, 滿意度, 戀愛指數, 信仰, 罪孽, 感受}*/
 
+    /*---吃的東西啦---*/
+    int eat[9];         /*{食物, 靈芝, 大補丸, 零食, 千年人蔘, 天山雪蓮}*/
 
-    /*---各狀態數值---*/ //11
-    int happy;          /*快 樂 度*/
-    int satisfy;        /*滿 意 度*/
-    int fallinlove;     /*戀愛指數*/
-    int belief;         /*信    仰*/
-    int offense;        /*罪    孽*/
-    int affect;         /*感    受*/
-    int stateA;
-    int stateB;
-    int stateC;
-    int stateD;
-    int stateE;
-
-    /*---吃的東西啦---*/ //9
-    int food;           /*食    物*/
-    int medicine;       /*靈    芝*/
-    int bighp;          /*大 補 丸*/
-    int cookie;         /*零    食*/
-    int ginseng;        /*千年人蔘*/
-    int snowgrass;      /*天山雪蓮*/
-    int eatC;
-    int eatD;
-    int eatE;
-
-    /*---擁有的東西---*/ //8
-    int book;           /*書    本*/
-    int playtool;       /*玩    具*/
-    int money;          /*金    錢*/
-    int thingA;
-    int thingB;
-    int thingC;
-    int thingD;
-    int thingE;
+    /*---擁有的東西---*/
+    int thing[8];       /*{書本, 玩具, 金錢}*/
 
     /*---猜拳的參數---*/ //2
     int winn;
     int losee;
 
-    /*---參見王臣--*/ //16
-    int royalA;         /*from守衛*/
-    int royalB;         /*from近衛*/
-    int royalC;         /*from將軍*/
-    int royalD;         /*from大臣*/
-    int royalE;         /*from祭司*/
-    int royalF;         /*from寵妃*/
-    int royalG;         /*from王妃*/
-    int royalH;         /*from國王*/
-    int royalI;         /*from小丑*/
-    int royalJ;         /*from王子*/
-    int seeroyalJ;      /*是否已經看過王子了*/
-    int seeA;
-    int seeB;
-    int seeC;
-    int seeD;
-    int seeE;
+    /*---參見王臣--*/
+    int royal[10];      /*from {守衛, 近衛, 將軍, 大臣, 祭司, 寵妃, 王妃, 國王, 小丑, 王子}*/
+    int see[6];         /*是否已經看過{王子}了*/
 
     /*---結局----*///2
     int wantend;        /*20歲結局*/
@@ -185,49 +228,10 @@ struct chicken {  /* DISKDATA(format) */
     /*0:沒有 1:魔王 2:龍族 3:A 4:B 5:C 6:D 7:E */
 
     /*-------工作次數--------*/
-    int workA;          /*家事*/
-    int workB;          /*保姆*/
-    int workC;          /*旅店*/
-    int workD;          /*農場*/
-    int workE;          /*餐廳*/
-    int workF;          /*教堂*/
-    int workG;          /*地攤*/
-    int workH;          /*伐木*/
-    int workI;          /*美髮*/
-    int workJ;          /*獵人*/
-    int workK;          /*工地*/
-    int workL;          /*守墓*/
-    int workM;          /*家教*/
-    int workN;          /*酒家*/
-    int workO;          /*酒店*/
-    int workP;          /*夜*/
-    int workQ;
-    int workR;
-    int workS;
-    int workT;
-    int workU;
-    int workV;
-    int workW;
-    int workX;
-    int workY;
-    int workZ;
+    int work[26];       /*{家事, 保姆, 旅店, 農場, 餐廳, 教堂, 地攤, 伐木, 美髮, 獵人, 工地, 守墓, 家教, 酒家, 酒店, 夜總會}*/
 
     /*-------上課次數--------*/
-    int classA;
-    int classB;
-    int classC;
-    int classD;
-    int classE;
-    int classF;
-    int classG;
-    int classH;
-    int classI;
-    int classJ;
-    int classK;
-    int classL;
-    int classM;
-    int classN;
-    int classO;
+    int class_[15];     /*{科學, 詩詞. 神學, 軍學. 劍術, 格鬥, 魔法, 禮儀, 繪畫, 舞蹈}*/
 
     /*---小雞的時間---*/ //1
     time_t bbtime;
