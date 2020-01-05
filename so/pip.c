@@ -8330,8 +8330,8 @@ int x, int max, int min)
 {
     float a, b;
     int y;
-    a = (2 * max + 3 * min) / 21000;
-    b = (max - min - 10000 * a) / 100;
+    a = (2 * max + 3 * min) / 21000.0;
+    b = (max - min - 10000 * a) / 100.0;
     y = (int) a * x * x + b * x + min;
     return y;
 }
