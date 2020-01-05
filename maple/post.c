@@ -4288,6 +4288,7 @@ xypost_pick(
     XO *xo)
 {
     int *xyp, fsize, pos, max, top;
+    bool scrl_up;
     HDR *fimage, *hdr;
 
     fimage = (HDR *) f_map(xo->dir, &fsize);
@@ -4297,7 +4298,9 @@ xypost_pick(
     xyp = xypostI;
 
     pos = xo->pos;
-    xo->top = top = (pos / XO_TALL) * XO_TALL;
+    top = xo->top;
+    scrl_up = (pos < top);
+    xo->top = BMAX(top + ((pos - top + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
     hdr = (HDR *) xo_pool_base;
     top = 0;
     max = xo->max;

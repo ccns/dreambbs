@@ -69,6 +69,7 @@ xo_get(
     xo->nxt = xo_root;
     xo_root = xo;
     xo->xyz = NULL;
+    xo->top = 0;                /* Initialize the list top position to a multiple of `XO_TALL` */
     xo->pos = XO_TAIL;          /* 第一次進入時，將游標放在最後面 */
 
     return xo;
@@ -121,14 +122,16 @@ xo_load(
         if (max > 0)
         {
             pos = xo->pos;
+            top = xo->top;
             if (pos <= 0)
             {
                 pos = top = 0;
             }
             else
             {
+                bool scrl_up = (pos < top);
                 pos = BMIN(pos, max - 1);
-                top = (pos / XO_TALL) * XO_TALL;
+                top = BMAX(top + ((pos - top + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
             }
             xo->pos = pos;
             xo->top = top;
@@ -1374,8 +1377,11 @@ xo_thread(
     if ((match & XO_POS_MASK) > XO_NONE)
     {
         /* A thread article is found */
-        int top = (pos / XO_TALL) * XO_TALL;
+        int top = xo->top;
+        bool scrl_up;
         xo->pos = pos;
+        scrl_up = (pos < top);
+        top = BMAX(top + ((pos - top + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
         if (top != xo->top)
         {
             xo->top = top;
@@ -1610,7 +1616,8 @@ xover(
                         num = xo->top;
                         if ((pos < num) || (pos >= num + XO_TALL))
                         {
-                            xo->top = (pos / XO_TALL) * XO_TALL;
+                            bool scrl_up = (pos < num);
+                            xo->top = BMAX(num + ((pos - num + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
                             cmd |= XR_BODY;     /* IID.20200103: Redraw list; do not reload. */
                         }
                         else
