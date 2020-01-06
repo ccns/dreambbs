@@ -46,6 +46,7 @@ xo_new(
     xo = (XO *) malloc(SIZEOF_FLEX(XO, len));
 
     memcpy(xo->dir, path, len);
+    xo->cb = NULL;
 
     return (xo);
 }
@@ -1492,24 +1493,24 @@ int xo_cb_quit(XO *xo) { return XO_QUIT; }
 
 XZ xz[] =
 {
-    {NULL, NULL, M_BOARD},      /* XZ_CLASS */
-    {NULL, NULL, M_LUSERS},     /* XZ_ULIST */
-    {NULL, NULL, M_PAL},        /* XZ_PAL */
-    {NULL, NULL, M_VOTE},       /* XZ_VOTE */
-    {NULL, NULL, M_BMW},        /* XZ_BMW */    /* lkchu.981230: BMW 新介面 */
+    {NULL, M_BOARD},      /* XZ_CLASS */
+    {NULL, M_LUSERS},     /* XZ_ULIST */
+    {NULL, M_PAL},        /* XZ_PAL */
+    {NULL, M_VOTE},       /* XZ_VOTE */
+    {NULL, M_BMW},        /* XZ_BMW */    /* lkchu.981230: BMW 新介面 */
 #ifdef XZ_XPOST /* Thor.990303: 如果有 XZ_XPOST的話 */
-    {NULL, xpost_cb, M_READA},  /* XZ_XPOST */
+    {NULL, M_READA},  /* XZ_XPOST */
 #else
-    {NULL, NULL, M_READA},      /* skip XZ_XPOST */
+    {NULL, M_READA},      /* skip XZ_XPOST */
 #endif
-    {NULL, NULL, M_RMAIL},      /* XZ_MBOX */
-    {NULL, post_cb, M_READA},   /* XZ_BOARD / XZ_POST */
-    {NULL, NULL, M_GEM},        /* XZ_GEM */
-    {NULL, NULL, M_RMAIL},      /* XZ_MAILGEM */
-    {NULL, NULL, M_BANMAIL},    /* XZ_BANMAIL */
-    {NULL, NULL, M_OMENU},      /* XZ_OTHER */
+    {NULL, M_RMAIL},      /* XZ_MBOX */
+    {NULL, M_READA},   /* XZ_BOARD / XZ_POST */
+    {NULL, M_GEM},        /* XZ_GEM */
+    {NULL, M_RMAIL},      /* XZ_MAILGEM */
+    {NULL, M_BANMAIL},    /* XZ_BANMAIL */
+    {NULL, M_OMENU},      /* XZ_OTHER */
 #ifdef HAVE_FAVORITE
-    {NULL, NULL, M_MYFAVORITE}, /* XZ_MYFAVORITE */
+    {NULL, M_MYFAVORITE}, /* XZ_MYFAVORITE */
 #endif
 };
 
@@ -1572,8 +1573,8 @@ xover(
                 zone = cmd;
                 cmd -= XO_ZONE;
                 xo = xz[cmd].xo;
-                xcmd = xz[cmd].cb;
                 sysmode = xz[cmd].mode;
+                xcmd = xo->cb;
 
                 TagNum = 0;             /* clear TagList */
                 pos_prev = -1;  /* Redraw cursor */

@@ -791,19 +791,7 @@ typedef struct LinkList
 /* ----------------------------------------------------- */
 
 
-typedef struct OverView
-{
-    int pos;                    /* current position */
-    int top;                    /* top */
-    int max;                    /* max */
-    int key;                    /* key */
-    void *xyz;                  /* staff */
-    struct OverView *nxt;       /* next */
-    char dir[FLEX_SIZE];        /* data path */
-} XO;
-#define OverView_FLEX_MEMBER    dir
-#define XO_FLEX_MEMBER          dir
-
+typedef struct OverView XO;
 
 typedef union {  /* IID.20191106: The field to be used is determined by the value of `key` */
     int (*func)(XO *xo);  /* Default */
@@ -854,10 +842,24 @@ typedef KeyFunc *KeyFuncListRef;
 #endif
 
 
+typedef struct OverView
+{
+    int pos;                    /* current position */
+    int top;                    /* top */
+    int max;                    /* max */
+    int key;                    /* key */
+    void *xyz;                  /* staff */
+    struct OverView *nxt;       /* next */
+    KeyFuncListRef cb;          /* Callback functions */
+    char dir[FLEX_SIZE];        /* data path */
+} XO;
+#define OverView_FLEX_MEMBER    dir
+#define XO_FLEX_MEMBER          dir
+
+
 typedef struct
 {
     XO *xo;
-    KeyFuncListRef cb;
     int mode;
 } XZ;
 

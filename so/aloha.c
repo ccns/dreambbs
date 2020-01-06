@@ -315,7 +315,7 @@ t_aloha(void)
     utmp_mode(M_OMENU);
     usr_fpath(fpath, cuser.userid, FN_ALOHA);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_OTHER - XO_ZONE].cb = aloha_cb;
+    xo->cb = aloha_cb;
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);

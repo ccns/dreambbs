@@ -1032,6 +1032,7 @@ const char *title)
     last = xz[XZ_MAILGEM - XO_ZONE].xo; /* record */
 
     xz[XZ_MAILGEM - XO_ZONE].xo = xo = xo_new(folder);
+    xo->cb = mailgem_cb;
     xo->pos = 0;
     xo->key = 0;
     xo->xyz = (void *)title;
@@ -1058,7 +1059,7 @@ mailgem_main(void)
 
     usr_fpath(fpath, cuser.userid, "gem/.DIR");
     xz[XZ_MAILGEM - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_MAILGEM - XO_ZONE].cb = mailgem_cb;
+    xo->cb = mailgem_cb;
     xo->pos = 0;
     xo->key = 0;
     xo->xyz = (void *)"我的精華區";

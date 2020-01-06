@@ -194,7 +194,7 @@ XO *xo)
     utmp_mode(M_OMENU);
 
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_OTHER - XO_ZONE].cb = show_cb;
+    xo->cb = show_cb;
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);

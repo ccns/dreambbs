@@ -2523,62 +2523,6 @@ mbox_send(
     return XO_HEAD;
 }
 
-/*by visor*/
-static int
-mbox_sysop(
-    XO *xo)
-{
-    if (/*(xo == cmbox) &&*/ (HAS_PERM(PERM_SYSOP)))
-    {
-        XO *xx;
-
-        xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new("usr/s/sysop/.DIR");
-        xx->pos = 0;
-        xover(XZ_MBOX);
-        free(xx);
-
-        xz[XZ_MBOX - XO_ZONE].xo = xo;
-        return XO_INIT;
-    }
-
-    return XO_NONE;
-}
-
-static int
-mbox_other(
-    XO *xo)
-{
-
-    ACCT acct;
-    char path[80];
-
-    if (!supervisor)
-        return XO_NONE;
-
-    while (acct_get(msg_uid, &acct) > 0)
-    {
-        XO *xx;
-
-        //str_lower(id, acct.userid);
-        //sprintf(path, "usr/%c/%s/.DIR", *id, id);
-
-        usr_fpath(path, acct.userid, fn_dir);
-        usr_fpath(cmbox->dir, acct.userid, fn_dir);
-
-        xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new(path);
-        xx->pos = 0;
-        xover(XZ_MBOX);
-        free(xx);
-
-        usr_fpath(cmbox->dir, cuser.userid, fn_dir);
-
-        xz[XZ_MBOX - XO_ZONE].xo = xo;
-        return XO_INIT;
-
- }
-    return XO_HEAD;
-}
-
 static int
 mbox_help(
     XO *xo)
@@ -2794,6 +2738,9 @@ mbox_gem(
 }
 #endif
 
+static int mbox_sysop(XO *xo);
+static int mbox_other(XO *xo);
+
 static KeyFuncList mbox_cb =
 {
     {XO_INIT, {mbox_init}},
@@ -2836,12 +2783,70 @@ static KeyFuncList mbox_cb =
 };
 
 
+/*by visor*/
+static int
+mbox_sysop(
+    XO *xo)
+{
+    if (/*(xo == cmbox) &&*/ (HAS_PERM(PERM_SYSOP)))
+    {
+        XO *xx;
+
+        xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new("usr/s/sysop/.DIR");
+        xx->cb = mbox_cb;
+        xx->pos = 0;
+        xover(XZ_MBOX);
+        free(xx);
+
+        xz[XZ_MBOX - XO_ZONE].xo = xo;
+        return XO_INIT;
+    }
+
+    return XO_NONE;
+}
+
+static int
+mbox_other(
+    XO *xo)
+{
+
+    ACCT acct;
+    char path[80];
+
+    if (!supervisor)
+        return XO_NONE;
+
+    while (acct_get(msg_uid, &acct) > 0)
+    {
+        XO *xx;
+
+        //str_lower(id, acct.userid);
+        //sprintf(path, "usr/%c/%s/.DIR", *id, id);
+
+        usr_fpath(path, acct.userid, fn_dir);
+        usr_fpath(cmbox->dir, acct.userid, fn_dir);
+
+        xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new(path);
+        xx->cb = mbox_cb;
+        xx->pos = 0;
+        xover(XZ_MBOX);
+        free(xx);
+
+        usr_fpath(cmbox->dir, cuser.userid, fn_dir);
+
+        xz[XZ_MBOX - XO_ZONE].xo = xo;
+        return XO_INIT;
+
+    }
+    return XO_HEAD;
+}
+
 void
 mbox_main(void)
 {
     cmbox->pos = XO_TAIL;
     usr_fpath(cmbox->dir, cuser.userid, fn_dir);
     xz[XZ_MBOX - XO_ZONE].xo = cmbox;
-    xz[XZ_MBOX - XO_ZONE].cb = mbox_cb;
+    cmbox->cb = mbox_cb;
 }
 

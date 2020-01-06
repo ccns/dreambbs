@@ -940,7 +940,7 @@ XoNewBoard(void)
     clear();
     sprintf(fpath, "newboard/%s", fn_dir);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_OTHER - XO_ZONE].cb = nbrd_cb;
+    xo->cb = nbrd_cb;
     xo->pos = 0;
     xo->key = XZ_OTHER;
     xover(XZ_OTHER);

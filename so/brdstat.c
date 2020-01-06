@@ -181,7 +181,7 @@ XO *xo)
         utmp_mode(M_OMENU);
         brd_fpath(fpath, brd->brdname, FN_BRD_STATCOUNT);
         xz[XZ_OTHER - XO_ZONE].xo = xx = xo_new(fpath);
-        xz[XZ_OTHER - XO_ZONE].cb = bstat_cb;
+        xx->cb = bstat_cb;
         xx->pos = 0;
         xx->key = chn;
         xover(XZ_OTHER);

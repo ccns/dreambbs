@@ -4244,224 +4244,6 @@ static int comebackPos;
 
 static char xypostKeyword[30];
 
-
-/* -1 to find length, otherwise return index */
-
-
-    static int
-XoXpost(                        /* Thor: call from post_cb */
-    XO *xo)
-{
-    int *plist, *xlist, fsize, max, locus, sum, i, m, n;
-    Chain *chain;
-    char *fimage, *key=NULL, author[30], buf[30];
-    HDR *head, *tail;
-    int filter_author=0, filter_title=0, mode;
-    XO *xt;
-
-    if ((max = xo->max) <= 0) /* Thor.980911: 註解: 以防萬一 */
-        return XO_FOOT;
-
-    if (xz[XZ_XPOST - XO_ZONE].xo)
-    {
-        vmsg("你已經使用了串接模式");
-        return XO_FOOT;
-    }
-
-    /* input condition */
-    /* 090928.cache: 直接進入串接模式 */
-    //  mode = vans("◎ 0)串接 1)新文章 2)LocalPost [0]：") - '0';
-    //  if (mode > 2 || mode < 0)
-    mode = 0;
-
-    if (!mode)
-    {
-        key = xypostKeyword;
-        filter_title = vget(b_lines, 0, MSG_XYPOST, key, sizeof(xypostKeyword), GCARRY);
-        str_lower(buf, key);
-        key = buf;
-
-        if ((filter_author = vget(b_lines, 0, "[串接模式]作者：", author, 30, DOECHO)))
-        {
-            filter_author = strlen(author);
-            str_lower(author, author);
-        }
-    }
-
-    if (!(filter_title || filter_author || mode))
-        return XO_HEAD;
-
-    /* build index according to input condition */
-
-    fimage = f_map(xo->dir, &fsize);
-
-    if (fimage == (char *) -1)
-    {
-        vmsg("目前無法開啟索引檔");
-        return XO_FOOT;
-    }
-
-    free(xypostI); /* Thor.980911: 註解: 怕重覆進入時, 浪費記憶體 */
-
-    /* allocate index memory, remember free first */
-
-    /* Thor.990113: 怕問title, author的瞬間又有人post */
-    max = fsize / sizeof(HDR);
-
-    plist = (int *) malloc(sizeof(int) * max);
-    chain = (Chain *) malloc(sizeof(Chain) * max);
-
-    max = sum = 0;
-
-    head = (HDR *) fimage;
-    tail = (HDR *) (fimage + fsize);
-
-    locus = -1;
-    do
-    {
-        int left, right, mid;
-        char *title = NULL;
-
-        locus++;
-        if (head->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE))
-            continue;                   /* Thor.0701: 跳過看不到的文章 */
-
-        if ((head->xmode & POST_LOCK) && !(HAS_PERM(PERM_SYSOP| PERM_BOARD)||bbstate & STAT_BOARD))
-            continue;
-
-        /* check author */
-
-        /* Thor.981109: 特別注意, author是從頭match, 不是substr match, 為降低load */
-        if (!mode)
-        {
-            if (filter_author && str_ncmp(head->owner, author, filter_author))
-                continue;
-
-            /* check condition */
-
-            title = head->title;
-
-            if (STR4(title) == STR4(STR_REPLY)) /* Thor.980911: 先把 Re: 除外 */
-                title += 4;
-
-            if (*key && !str_str(title, key))
-                continue;
-        }
-        else if (mode == 1)
-        {
-            title = head->title;
-            if (STR4(title) == STR4(STR_REPLY))
-                continue;
-        }
-        else
-        {
-            if (strchr(head->owner, '.'))
-                continue;
-        }
-
-        sum++;
-
-        /* check if in table, binary check */
-
-        left = 0;
-        right = max - 1;
-        for (;;)
-        {
-            int cmp;
-            Chain *cptr;
-
-            if (left > right)
-            {
-                for (i = max; i > left; i--)
-                    chain[i] = chain[i - 1];
-
-                cptr = &chain[left];
-                cptr->subject = title;
-                cptr->first = cptr->last = locus;
-                cptr->chrono = head->chrono;
-                max++;
-                break;
-            }
-
-            mid = (left + right) / 2U;
-            cptr = &chain[mid];
-            cmp = strcmp(title, cptr->subject);
-
-            if (!cmp)
-            {
-                plist[cptr->last] = locus;
-                cptr->last = locus;
-                break;
-            }
-
-            if (cmp < 0)
-                right = mid - 1;
-            else
-                left = mid + 1;
-        }
-    } while (++head < tail);
-    munmap(fimage, fsize);
-
-    if (max <= 0)
-    {
-        free(chain);
-        free(plist);
-        vmsg(MSG_XY_NONE);
-        return XO_FOOT;
-    }
-
-    if (max > 1)
-        xsort(chain, max, sizeof(Chain), chain_cmp);
-
-    xypostI = xlist = (int *) malloc(sizeof(int) * sum);
-
-    i = locus = 0;
-    do
-    {
-        xlist[locus++] = n = chain[i].first;
-        m = chain[i].last;
-
-        while (n != m)
-        {
-            xlist[locus++] = n = plist[n];
-        }
-
-    } while (++i < max);
-
-    free(chain);
-    free(plist);
-
-    /* build XO for xpost_xo */
-
-    free(xz[XZ_XPOST - XO_ZONE].xo);
-
-    comebackPos = xo->pos;      /* Thor: record pos, future use */
-    xz[XZ_XPOST - XO_ZONE].xo = xt = xo_new(xo->dir);
-    xt->pos = 0;
-    xt->max = sum;
-    xt->xyz = xo->xyz;
-    xt->key = XZ_XPOST;
-
-    xover(XZ_XPOST);
-
-    /* set xo->pos for new location */
-
-    xo->pos = comebackPos;
-
-    /* free xpost_xo */
-
-    free(xz[XZ_XPOST - XO_ZONE].xo);
-    xz[XZ_XPOST - XO_ZONE].xo = NULL;
-
-    /* free index memory, remember check free pointer */
-
-    free(xypostI);
-    xypostI = NULL;
-
-    return XO_INIT;
-}
-
-
 #if 0
 /* Thor.980911: 共用 post_body() 即可*/
     static int
@@ -4741,7 +4523,7 @@ xpost_browse(
 }
 
 
-KeyFuncList xpost_cb =
+static KeyFuncList xpost_cb =
 {
     {XO_INIT, {xpost_init}},
     {XO_LOAD, {xpost_load}},
@@ -4771,3 +4553,220 @@ KeyFuncList xpost_cb =
 };
 #endif  /* #ifdef XZ_XPOST */
 
+
+/* -1 to find length, otherwise return index */
+
+
+    static int
+XoXpost(                        /* Thor: call from post_cb */
+    XO *xo)
+{
+    int *plist, *xlist, fsize, max, locus, sum, i, m, n;
+    Chain *chain;
+    char *fimage, *key=NULL, author[30], buf[30];
+    HDR *head, *tail;
+    int filter_author=0, filter_title=0, mode;
+    XO *xt;
+
+    if ((max = xo->max) <= 0) /* Thor.980911: 註解: 以防萬一 */
+        return XO_FOOT;
+
+    if (xz[XZ_XPOST - XO_ZONE].xo)
+    {
+        vmsg("你已經使用了串接模式");
+        return XO_FOOT;
+    }
+
+    /* input condition */
+    /* 090928.cache: 直接進入串接模式 */
+    //  mode = vans("◎ 0)串接 1)新文章 2)LocalPost [0]：") - '0';
+    //  if (mode > 2 || mode < 0)
+    mode = 0;
+
+    if (!mode)
+    {
+        key = xypostKeyword;
+        filter_title = vget(b_lines, 0, MSG_XYPOST, key, sizeof(xypostKeyword), GCARRY);
+        str_lower(buf, key);
+        key = buf;
+
+        if ((filter_author = vget(b_lines, 0, "[串接模式]作者：", author, 30, DOECHO)))
+        {
+            filter_author = strlen(author);
+            str_lower(author, author);
+        }
+    }
+
+    if (!(filter_title || filter_author || mode))
+        return XO_HEAD;
+
+    /* build index according to input condition */
+
+    fimage = f_map(xo->dir, &fsize);
+
+    if (fimage == (char *) -1)
+    {
+        vmsg("目前無法開啟索引檔");
+        return XO_FOOT;
+    }
+
+    free(xypostI); /* Thor.980911: 註解: 怕重覆進入時, 浪費記憶體 */
+
+    /* allocate index memory, remember free first */
+
+    /* Thor.990113: 怕問title, author的瞬間又有人post */
+    max = fsize / sizeof(HDR);
+
+    plist = (int *) malloc(sizeof(int) * max);
+    chain = (Chain *) malloc(sizeof(Chain) * max);
+
+    max = sum = 0;
+
+    head = (HDR *) fimage;
+    tail = (HDR *) (fimage + fsize);
+
+    locus = -1;
+    do
+    {
+        int left, right, mid;
+        char *title = NULL;
+
+        locus++;
+        if (head->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE))
+            continue;                   /* Thor.0701: 跳過看不到的文章 */
+
+        if ((head->xmode & POST_LOCK) && !(HAS_PERM(PERM_SYSOP| PERM_BOARD)||bbstate & STAT_BOARD))
+            continue;
+
+        /* check author */
+
+        /* Thor.981109: 特別注意, author是從頭match, 不是substr match, 為降低load */
+        if (!mode)
+        {
+            if (filter_author && str_ncmp(head->owner, author, filter_author))
+                continue;
+
+            /* check condition */
+
+            title = head->title;
+
+            if (STR4(title) == STR4(STR_REPLY)) /* Thor.980911: 先把 Re: 除外 */
+                title += 4;
+
+            if (*key && !str_str(title, key))
+                continue;
+        }
+        else if (mode == 1)
+        {
+            title = head->title;
+            if (STR4(title) == STR4(STR_REPLY))
+                continue;
+        }
+        else
+        {
+            if (strchr(head->owner, '.'))
+                continue;
+        }
+
+        sum++;
+
+        /* check if in table, binary check */
+
+        left = 0;
+        right = max - 1;
+        for (;;)
+        {
+            int cmp;
+            Chain *cptr;
+
+            if (left > right)
+            {
+                for (i = max; i > left; i--)
+                    chain[i] = chain[i - 1];
+
+                cptr = &chain[left];
+                cptr->subject = title;
+                cptr->first = cptr->last = locus;
+                cptr->chrono = head->chrono;
+                max++;
+                break;
+            }
+
+            mid = (left + right) / 2U;
+            cptr = &chain[mid];
+            cmp = strcmp(title, cptr->subject);
+
+            if (!cmp)
+            {
+                plist[cptr->last] = locus;
+                cptr->last = locus;
+                break;
+            }
+
+            if (cmp < 0)
+                right = mid - 1;
+            else
+                left = mid + 1;
+        }
+    } while (++head < tail);
+    munmap(fimage, fsize);
+
+    if (max <= 0)
+    {
+        free(chain);
+        free(plist);
+        vmsg(MSG_XY_NONE);
+        return XO_FOOT;
+    }
+
+    if (max > 1)
+        xsort(chain, max, sizeof(Chain), chain_cmp);
+
+    xypostI = xlist = (int *) malloc(sizeof(int) * sum);
+
+    i = locus = 0;
+    do
+    {
+        xlist[locus++] = n = chain[i].first;
+        m = chain[i].last;
+
+        while (n != m)
+        {
+            xlist[locus++] = n = plist[n];
+        }
+
+    } while (++i < max);
+
+    free(chain);
+    free(plist);
+
+    /* build XO for xpost_xo */
+
+    free(xz[XZ_XPOST - XO_ZONE].xo);
+
+    comebackPos = xo->pos;      /* Thor: record pos, future use */
+    xz[XZ_XPOST - XO_ZONE].xo = xt = xo_new(xo->dir);
+    xt->cb = xpost_cb;
+    xt->pos = 0;
+    xt->max = sum;
+    xt->xyz = xo->xyz;
+    xt->key = XZ_XPOST;
+
+    xover(XZ_XPOST);
+
+    /* set xo->pos for new location */
+
+    xo->pos = comebackPos;
+
+    /* free xpost_xo */
+
+    free(xz[XZ_XPOST - XO_ZONE].xo);
+    xz[XZ_XPOST - XO_ZONE].xo = NULL;
+
+    /* free index memory, remember check free pointer */
+
+    free(xypostI);
+    xypostI = NULL;
+
+    return XO_INIT;
+}

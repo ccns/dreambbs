@@ -369,7 +369,7 @@ clean(
     }
 
     xz[XZ_OTHER - XO_ZONE].xo = xoo = xo_new(recommenddb);
-    xz[XZ_OTHER - XO_ZONE].cb = cleanrecommend_cb;
+    xoo->cb = cleanrecommend_cb;
     xoo->pos = 0;
     xover(XZ_OTHER);
     free(xoo);

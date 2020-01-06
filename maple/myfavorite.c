@@ -522,7 +522,7 @@ XoFavorite(
     strcpy(currdir, folder);
 
     xz[XZ_MYFAVORITE - XO_ZONE].xo = xo = xo_new(folder);
-    xz[XZ_MYFAVORITE - XO_ZONE].cb = myfavorite_cb;
+    xo->cb = myfavorite_cb;
     xo->pos = 0;
     xo->key = XZ_MYFAVORITE;
 

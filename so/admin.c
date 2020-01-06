@@ -190,7 +190,7 @@ Admin(void)
     utmp_mode(M_OMENU);
     sprintf(fpath, FN_ETC_ADMIN_DB);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_OTHER - XO_ZONE].cb = admin_cb;
+    xo->cb = admin_cb;
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);

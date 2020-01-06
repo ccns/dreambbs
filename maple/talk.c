@@ -986,6 +986,7 @@ t_pal(void)
 
     usr_fpath(fpath, cuser.userid, FN_PAL);
     xz[XZ_PAL - XO_ZONE].xo = xo = xo_new(fpath);
+    xo->cb = pal_cb;
     xo->pos = 0;
     xover(XZ_PAL);
     pal_cache();
@@ -1413,6 +1414,7 @@ XoBM(
 
         brd_fpath(fpath, currboard, FN_PAL);
         xz[XZ_PAL - XO_ZONE].xo = xt = xo_new(fpath);
+        xt->cb = pal_cb;
         xt->pos = 0;
         xover(XZ_PAL);          /* Thor: 進xover前, pal_xo 一定要 ready */
 
@@ -3735,6 +3737,7 @@ ulist_su(
 /*
     tmp = xz[XZ_MBOX - XO_ZONE].xo;
     xz[XZ_MBOX - XO_ZONE].xo =  xo_new(path);
+    xz[XZ_MBOX - XO_ZONE].xo->cb = mbox_cb;
     xz[XZ_MBOX - XO_ZONE].xo->pos = 0;
     free(tmp);
 */
@@ -3743,6 +3746,7 @@ ulist_su(
     usr_fpath(path, acct.userid, FN_BMW);
     tmp = xz[XZ_BMW - XO_ZONE].xo;
     xz[XZ_BMW - XO_ZONE].xo =  xo_new(path);
+    xz[XZ_BMW - XO_ZONE].xo->cb = bmw_cb;
     xz[XZ_BMW - XO_ZONE].xo->pos = 0;
     free(tmp);
     pal_cache();
@@ -4401,15 +4405,13 @@ talk_main(void)
     char fpath[64];
 
     xz[XZ_ULIST - XO_ZONE].xo = &ulist_xo;
-    xz[XZ_ULIST - XO_ZONE].cb = ulist_cb;
-
-    xz[XZ_PAL - XO_ZONE].cb = pal_cb;
+    ulist_xo.cb = ulist_cb;
 
     /* lkchu.981230: 利用 xover 整合 bmw */
     usr_fpath(fpath, cuser.userid, FN_BMW);
     free(xz[XZ_BMW - XO_ZONE].xo);
     xz[XZ_BMW - XO_ZONE].xo = xo_new(fpath);
-    xz[XZ_BMW - XO_ZONE].cb = bmw_cb;
+    xz[XZ_BMW - XO_ZONE].xo->cb = bmw_cb;
     xz[XZ_BMW - XO_ZONE].xo->pos = 0;
 }
 
@@ -4821,7 +4823,7 @@ t_banmsg(void)
 
     usr_fpath(fpath, cuser.userid, FN_BANMSG);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_OTHER - XO_ZONE].cb = banmsg_cb;
+    xo->cb = banmsg_cb;
     xo->pos = 0;
     xover(XZ_OTHER);
     banmsg_cache();

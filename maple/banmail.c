@@ -249,7 +249,7 @@ int BanMail(void)
     char fpath[64];
     sprintf(fpath, FN_ETC_BANMAIL_ACL);
     xz[XZ_BANMAIL - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_BANMAIL - XO_ZONE].cb = banmail_cb;
+    xo->cb = banmail_cb;
     xo->pos = 0;
     xover(XZ_BANMAIL);
     fwshm_load();
@@ -264,7 +264,7 @@ void post_mail(void)
 
     sprintf(fpath, "brd/%s/banmail.acl", currboard);
     xz[XZ_BANMAIL - XO_ZONE].xo = xx = xo_new(fpath);
-    xz[XZ_BANMAIL - XO_ZONE].cb = banmail_cb;
+    xx->cb = banmail_cb;
     xx->pos = 0;
     xover(XZ_BANMAIL);
     free(xx);

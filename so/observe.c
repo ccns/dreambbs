@@ -276,7 +276,7 @@ Observe_list(void)
     char fpath[64];
     sprintf(fpath, FN_ETC_OBSERVE);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_OTHER - XO_ZONE].cb = observe_cb;
+    xo->cb = observe_cb;
     xo->pos = 0;
     xover(XZ_OTHER);
     observeshm_load();

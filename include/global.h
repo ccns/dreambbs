@@ -604,10 +604,6 @@ extern int keysnum;
 extern LinkList *ll_head;
 
 /* maple/post.c */
-#ifdef XZ_XPOST
-/* Thor.990303: 如果有 XZ_XPOST的話 */
-extern KeyFuncList xpost_cb;
-#endif
 extern KeyFuncList post_cb;
 #ifdef  HAVE_DETECT_CROSSPOST
 extern CHECKSUMCOUNT cksum;
@@ -615,6 +611,7 @@ extern CHECKSUMCOUNT cksum;
 
 /* maple/talk.c */
 extern int pickup_way;
+extern KeyFuncList bmw_cb;
 
 /* maple/visio.c */
 extern screenline *cur_slp;

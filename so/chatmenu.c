@@ -195,38 +195,6 @@ XO *xo)
 }
 
 static int
-chat_kind(
-XO *xo)
-{
-    char fpath[80];
-
-    kind++;
-    if (kind > 4) kind = 0;
-    switch (kind)
-    {
-    case 0:
-        sprintf(fpath, FN_CHAT_PARTY_DB);
-        break;
-    case 1:
-        sprintf(fpath, FN_CHAT_SPEAK_DB);
-        break;
-    case 2:
-        sprintf(fpath, FN_CHAT_CONDITION_DB);
-        break;
-    case 3:
-        sprintf(fpath, FN_CHAT_PARTY2_DB);
-        break;
-    case 4:
-        sprintf(fpath, FN_CHAT_PERSON_DB);
-        break;
-    }
-    free(xz[XZ_OTHER - XO_ZONE].xo);
-    xz[XZ_OTHER - XO_ZONE].xo = xo_new(fpath);
-    xz[XZ_OTHER - XO_ZONE].xo->pos = 0;
-    return XO_INIT;
-}
-
-static int
 chat_move(
 XO *xo)
 {
@@ -283,6 +251,8 @@ XO *xo)
 }
 
 
+static int chat_kind(XO *xo);
+
 KeyFuncList chat_cb =
 {
     {XO_INIT, {chat_init}},
@@ -304,6 +274,39 @@ KeyFuncList chat_cb =
 };
 
 
+static int
+chat_kind(
+XO *xo)
+{
+    char fpath[80];
+
+    kind++;
+    if (kind > 4) kind = 0;
+    switch (kind)
+    {
+    case 0:
+        sprintf(fpath, FN_CHAT_PARTY_DB);
+        break;
+    case 1:
+        sprintf(fpath, FN_CHAT_SPEAK_DB);
+        break;
+    case 2:
+        sprintf(fpath, FN_CHAT_CONDITION_DB);
+        break;
+    case 3:
+        sprintf(fpath, FN_CHAT_PARTY2_DB);
+        break;
+    case 4:
+        sprintf(fpath, FN_CHAT_PERSON_DB);
+        break;
+    }
+    free(xz[XZ_OTHER - XO_ZONE].xo);
+    xz[XZ_OTHER - XO_ZONE].xo = xo_new(fpath);
+    xz[XZ_OTHER - XO_ZONE].xo->cb = chat_cb;
+    xz[XZ_OTHER - XO_ZONE].xo->pos = 0;
+    return XO_INIT;
+}
+
 int
 Chatmenu(void)
 {
@@ -315,7 +318,7 @@ Chatmenu(void)
     sprintf(fpath, FN_CHAT_PARTY_DB);
     kind = 0;
     xz[XZ_OTHER - XO_ZONE].xo = xx = xo_new(fpath);
-    xz[XZ_OTHER - XO_ZONE].cb = chat_cb;
+    xx->cb = chat_cb;
     xx->pos = 0;
     xover(XZ_OTHER);
     free(xx);

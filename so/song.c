@@ -585,7 +585,7 @@ int level)
     last = xz[XZ_OTHER - XO_ZONE].xo;   /* record */
 
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(folder);
-    xz[XZ_OTHER - XO_ZONE].cb = song_cb;
+    xo->cb = song_cb;
     xo->pos = 0;
     xo->key = XZ_OTHER;
     xo->xyz = (void *) "ÂIºq¨t²Î";

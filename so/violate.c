@@ -233,7 +233,7 @@ Violate(void)
     utmp_mode(M_OMENU);
     sprintf(fpath, FN_VIOLATELAW_DB);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_OTHER - XO_ZONE].cb = viol_cb;
+    xo->cb = viol_cb;
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);

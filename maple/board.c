@@ -826,6 +826,7 @@ XoPost(
 
     brd_fpath(fpath, currboard, fn_dir);
     xz[XZ_POST - XO_ZONE].xo = xo = xo_get(fpath);
+    xo->cb = post_cb;
     xo->key = XZ_POST;
     xo->xyz = (void *) (brd->bvote > 0 ? (char *) "本看板進行投票中" : brd->title + 3);
     str = brd->BM;
@@ -1069,47 +1070,6 @@ class_load(
         xo->pos = xo->top = 0;
 
     return max;
-}
-
-static int
-XoClass(
-    int chn)
-{
-    XO xo, *xt;
-
-    /* Thor.980727: 解決 XO xo的不確定性,
-                    class_load內部會 initial xo.max, 其他不確定 */
-    xo.pos = xo.top = 0;
-
-    xo.key = chn;
-    xo.xyz = NULL;
-    if (!class_load(&xo))
-    {
-        int ret = 0;
-        if (!ret && (class_flag2 & 0x01))
-        {
-            class_flag2 ^= 0x01;
-            ret = class_load(&xo);
-        }
-        if (!ret && !(class_flag & BFO_YANK))
-        {
-            class_flag |= BFO_YANK;
-            ret = class_load(&xo);
-        }
-        if (!ret)
-        {
-            free(xo.xyz);
-            return XO_NONE;
-        }
-    }
-
-    xt = xz[XZ_CLASS - XO_ZONE].xo;
-    xz[XZ_CLASS - XO_ZONE].xo = &xo;
-    xover(XZ_CLASS);
-    free(xo.xyz);
-    xz[XZ_CLASS - XO_ZONE].xo = xt;
-
-    return XO_BODY;
 }
 
 void
@@ -1499,39 +1459,6 @@ class_edit(
     return XO_NONE;
 }
 
-static int
-class_browse(
-    XO *xo)
-{
-    short *chp;
-    int chn;
-
-    chp = (short *) xo->xyz + xo->pos;
-    chn = *chp;
-    if (chn < 0)
-    {
-        short *chx;
-        char *img, *str;
-
-        img = class_img;
-        chx = (short *) img + (CH_END - chn);
-        str = img + *chx;
-
-        if (XoClass(chn) == XO_NONE)
-            return XO_NONE;
-    }
-    else
-    {
-        if (XoPost(chn))
-        {
-            xover(XZ_POST);
-            time(&brd_visit[chn]);
-        }
-    }
-
-    return XO_HEAD;     /* Thor.0701: 無法清少一點, 因為 XoPost */
-}
-
 int
 Select(void)
 {
@@ -1638,7 +1565,9 @@ XoAuthor(
 
                 if (!str_ncmp(tail->owner, author, len))
                 {
-                    xo_get(folder)->pos = tail - head;
+                    XO *xt = xo_get(folder);
+                    xt->pos = tail - head;
+                    xt->cb = post_cb;
                     chp[tag++] = chn;
                     break;
                 }
@@ -1690,6 +1619,7 @@ XoAuthor(
         return XO_FOOT;
     }
 
+    xo_a.cb = class_cb;
     xo_a.pos = xo_a.top = 0;
     xo_a.max = tag;
     xo_a.key = 1;                       /* all boards */
@@ -1753,6 +1683,8 @@ class_visit(
     return XO_BODY;
 }
 
+static int class_browse(XO *xo);
+
 static KeyFuncList class_cb =
 {
     {XO_INIT, {class_head}},
@@ -1786,6 +1718,82 @@ static KeyFuncList class_cb =
 
     {'h', {class_help}}
 };
+
+
+static int
+XoClass(
+    int chn)
+{
+    XO xo, *xt;
+
+    /* Thor.980727: 解決 XO xo的不確定性,
+                    class_load內部會 initial xo.max, 其他不確定 */
+    xo.cb = class_cb;
+    xo.pos = xo.top = 0;
+
+    xo.key = chn;
+    xo.xyz = NULL;
+    if (!class_load(&xo))
+    {
+        int ret = 0;
+        if (!ret && (class_flag2 & 0x01))
+        {
+            class_flag2 ^= 0x01;
+            ret = class_load(&xo);
+        }
+        if (!ret && !(class_flag & BFO_YANK))
+        {
+            class_flag |= BFO_YANK;
+            ret = class_load(&xo);
+        }
+        if (!ret)
+        {
+            free(xo.xyz);
+            return XO_NONE;
+        }
+    }
+
+    xt = xz[XZ_CLASS - XO_ZONE].xo;
+    xz[XZ_CLASS - XO_ZONE].xo = &xo;
+    xover(XZ_CLASS);
+    free(xo.xyz);
+    xz[XZ_CLASS - XO_ZONE].xo = xt;
+
+    return XO_BODY;
+}
+
+static int
+class_browse(
+    XO *xo)
+{
+    short *chp;
+    int chn;
+
+    chp = (short *) xo->xyz + xo->pos;
+    chn = *chp;
+    if (chn < 0)
+    {
+        short *chx;
+        char *img, *str;
+
+        img = class_img;
+        chx = (short *) img + (CH_END - chn);
+        str = img + *chx;
+
+        if (XoClass(chn) == XO_NONE)
+            return XO_NONE;
+    }
+    else
+    {
+        if (XoPost(chn))
+        {
+            xover(XZ_POST);
+            time(&brd_visit[chn]);
+        }
+    }
+
+    return XO_HEAD;     /* Thor.0701: 無法清少一點, 因為 XoPost */
+}
 
 int
 Class(void)
@@ -1924,12 +1932,12 @@ board_main(void)
         class_flag = cuser.ufo2 & UFO2_BRDNEW;
     }
 
+    board_xo.cb = class_cb;
     board_xo.key = CH_END;
     if (class_img)
         class_load(&board_xo);
 
     xz[XZ_CLASS - XO_ZONE].xo = &board_xo;      /* Thor: default class_xo */
-    xz[XZ_CLASS - XO_ZONE].cb = class_cb;               /* Thor: default class_xo */
 }
 
 int

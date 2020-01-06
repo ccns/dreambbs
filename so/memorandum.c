@@ -249,7 +249,7 @@ Memorandum(void)
     utmp_mode(M_OMENU);
     usr_fpath(fpath, cuser.userid, "memorandum");
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_OTHER - XO_ZONE].cb = memorandum_cb;
+    xo->cb = memorandum_cb;
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);

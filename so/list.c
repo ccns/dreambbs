@@ -194,22 +194,6 @@ XO *xo)
 }
 
 static int
-list_mode(
-XO *xo)
-{
-    char fpath[128];
-    char buf[32];
-    if (++ways > MAX_LIST)
-        ways = 1;
-    sprintf(buf, mode ? "board.%d" : "list.%d", ways);
-    usr_fpath(fpath, cuser.userid, buf);
-    free(xo);
-    xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
-    xo->pos = 0;
-    return XO_INIT;
-}
-
-static int
 list_search(
 XO *xo)
 {
@@ -294,27 +278,6 @@ XO *xo)
     return XO_HEAD;
 }
 
-#ifdef HAVE_MULTI_CROSSPOST
-static int
-list_board(
-XO *xo)
-{
-    char buf[32], fpath[128];
-    if (!HAS_PERM(PERM_ALLBOARD))
-        return XO_NONE;
-    if (mode)
-        mode = 0;
-    else
-        mode = 1;
-    sprintf(buf, mode ? "board.%d" : "list.%d", ways);
-    usr_fpath(fpath, cuser.userid, buf);
-    free(xo);
-    xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
-    xo->pos = 0;
-    return XO_INIT;
-}
-#endif
-
 static int
 list_browse(
 XO *xo)
@@ -322,6 +285,10 @@ XO *xo)
     return XO_NONE;
 }
 
+static int list_mode(XO *xo);
+#ifdef HAVE_MULTI_CROSSPOST
+static int list_board(XO *xo);
+#endif
 
 KeyFuncList list_cb =
 {
@@ -344,6 +311,45 @@ KeyFuncList list_cb =
     {'h', {list_help}}
 };
 
+
+static int
+list_mode(
+XO *xo)
+{
+    char fpath[128];
+    char buf[32];
+    if (++ways > MAX_LIST)
+        ways = 1;
+    sprintf(buf, mode ? "board.%d" : "list.%d", ways);
+    usr_fpath(fpath, cuser.userid, buf);
+    free(xo);
+    xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
+    xo->cb = list_cb;
+    xo->pos = 0;
+    return XO_INIT;
+}
+
+#ifdef HAVE_MULTI_CROSSPOST
+static int
+list_board(
+XO *xo)
+{
+    char buf[32], fpath[128];
+    if (!HAS_PERM(PERM_ALLBOARD))
+        return XO_NONE;
+    if (mode)
+        mode = 0;
+    else
+        mode = 1;
+    sprintf(buf, mode ? "board.%d" : "list.%d", ways);
+    usr_fpath(fpath, cuser.userid, buf);
+    free(xo);
+    xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
+    xo->cb = list_cb;
+    xo->pos = 0;
+    return XO_INIT;
+}
+#endif
 
 int
 List(void)
@@ -388,7 +394,7 @@ List(void)
     sprintf(buf, mode ? "board.%d" : "list.%d", ways);
     usr_fpath(fpath, cuser.userid, buf);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_OTHER - XO_ZONE].cb = list_cb;
+    xo->cb = list_cb;
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);

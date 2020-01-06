@@ -768,7 +768,7 @@ a_innbbs(void)
 
     utmp_mode(M_OMENU);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_OTHER - XO_ZONE].cb = innbbs_cb;
+    xo->cb = innbbs_cb;
     xo->xyz = &xyz;
     xo->pos = 0;
 

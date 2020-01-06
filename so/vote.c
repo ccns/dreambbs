@@ -1141,7 +1141,7 @@ XO *xo)
     }
 
     xz[XZ_VOTE - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_VOTE - XO_ZONE].cb = vote_cb;
+    xo->cb = vote_cb;
     xo->pos = 0;
     xover(XZ_VOTE);
     free(xo);
@@ -1167,7 +1167,7 @@ SystemVote(void)
     }
 
     xz[XZ_VOTE - XO_ZONE].xo = xo = xo_new(fpath);
-    xz[XZ_VOTE - XO_ZONE].cb = vote_cb;
+    xo->cb = vote_cb;
     xo->pos = 0;
     xover(XZ_VOTE);
     free(xo);
