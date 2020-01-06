@@ -4307,14 +4307,13 @@ xypost_pick(
     if (fimage == (HDR *) - 1)
         return;
 
-    hdr = (HDR *) xo_pool;
     xyp = xypostI;
 
     pos = xo->pos;
     xo->top = top = (pos / XO_TALL) * XO_TALL;
+    hdr = (HDR *) xo_pool_base;
+    top = 0;
     max = xo->max;
-    pos = top + XO_TALL;
-    max = BMIN(max, pos);
 
     do
     {
@@ -4476,6 +4475,7 @@ xpost_browse(
             case 'j':  /* Thor.990204: 有時想用j看後面的文章 */
             case ' ':
                 {
+                    int top = xo->top;
                     int pos = xo->pos + 1;
 
                     /* Thor.980727: 修正看過頭的bug */
@@ -4486,7 +4486,7 @@ xpost_browse(
                     xo->pos = pos;
 
                     if (pos >= xo->top + XO_TALL)
-                        xypost_pick(xo);
+                        xo->top = BMAX(top + ((pos - top) / XO_TALL) * XO_TALL, 0);
 
                     continue;
                 }
