@@ -176,7 +176,7 @@ void movie(void);
 GCC_PURE int strip_ansi_len(const char *str);
 const char *check_info(const char *input);
 void main_menu(void);
-void domenu(MENU *menu);
+void domenu(MENU *menu, int y, int x);
 /* more.c */
 char *mgets(int fd);
 void *mread(int fd, int len);

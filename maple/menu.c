@@ -1188,14 +1188,14 @@ void
 main_menu(void)
 {
 #ifdef  TREAT
-    domenu(menu_treat);
+    domenu(menu_treat, MENU_YPOS, MENU_XPOS);
 #endif
-    domenu(menu_main);
+    domenu(menu_main, MENU_YPOS, MENU_XPOS);
 }
 
 void
 domenu(
-    MENU *menu)
+    MENU *menu, int y, int x)
 {
     MENU *mtail, *table[17];
     int cc=0, cx=0;     /* current / previous cursor position */
@@ -1262,7 +1262,7 @@ domenu(
             //prints("\n\x1b[30;47m     選項         選項說明                         動態看板                   \x1b[m\n");
             for (int i = 0; i <= mmx; i++)
             {
-                move(MENU_YPOS + i, MENU_XPOS + 2);
+                move(y + i, x + 2);
                 if (i <= max)
                 {
                     char item[60];
@@ -1273,7 +1273,7 @@ domenu(
                     outs(item);
 
                     if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
-                        grayout(MENU_YPOS + i, MENU_YPOS + i + 1, GRAYOUT_COLORNORM);
+                        grayout(y + i, y + i + 1, GRAYOUT_COLORNORM);
 
                     item_length[i]=(cuser.ufo2 & UFO2_COLOR) ? strlen(item)-strip_ansi_len(str)-2 : 0;
                 }
@@ -1438,14 +1438,14 @@ domenu(
         {
             if (cx >= 0)
             {
-                cursor_clear(MENU_YPOS + cx, MENU_XPOS);
+                cursor_clear(y + cx, x);
             }
-            cursor_show(MENU_YPOS + cc, MENU_XPOS);
+            cursor_show(y + cc, x);
             cx = cc;
         }
         else
         {
-            move(MENU_YPOS + cc, MENU_XPOS + 1);
+            move(y + cc, x + 1);
         }
 
 menu_key:
