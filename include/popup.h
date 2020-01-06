@@ -23,6 +23,8 @@
 
 #define POPUP_DO_INSTANT        0x01000000
 
+#define POPUP_ARG               0x40000000  /* `item` is a function and a `void *` argument */
+
 #define POPUP_MASK              0x000000FF
 
 #endif  /* #ifndef POPUP_H */

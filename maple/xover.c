@@ -2083,16 +2083,9 @@ Every_Z_Favorite(void)
 #endif
 
 static int
-Every_Z_Gem(void)
+Every_Z_Xover(const void *arg)
 {
-    xover(XZ_GEM);
-    return 0;
-}
-
-static int
-Every_Z_Ulist(void)
-{
-    xover(XZ_ULIST);
+    xover((int)arg);
     return 0;
 }
 
@@ -2110,26 +2103,12 @@ Every_Z_Board(void)
 }
 
 static int
-Every_Z_Class(void)
-{
-    xover(XZ_CLASS);
-    return 0;
-}
-
-static int
 Every_Z_MBox(void)
 {
     if (HAS_PERM(PERM_BASIC) && !HAS_PERM(PERM_DENYMAIL))
         xover(XZ_MBOX);
     else
         vmsg("權限不足或是被停權中");
-    return 0;
-}
-
-static int
-Every_Z_BMW(void)
-{
-    xover(XZ_BMW);
     return 0;
 }
 
@@ -2140,22 +2119,22 @@ static MENU menu_everyz[] =
     "Favorite 我的最愛"},
 #endif
 
-    {{Every_Z_Gem}, 0, POPUP_FUN,
+    {{.funcarg = {Every_Z_Xover, (const void *)XZ_GEM}}, 0, POPUP_FUN | POPUP_ARG,
     "Gem      精華區"},
 
-    {{Every_Z_Ulist}, 0, POPUP_FUN,
+    {{.funcarg = {Every_Z_Xover, (const void *)XZ_ULIST}}, 0, POPUP_FUN | POPUP_ARG,
     "Ulist    使用者名單"},
 
     {{Every_Z_Board}, 0, POPUP_FUN,
     "Post     文章列表"},
 
-    {{Every_Z_Class}, 0, POPUP_FUN,
+    {{.funcarg = {Every_Z_Xover, (const void *)XZ_CLASS}}, 0, POPUP_FUN | POPUP_ARG,
     "Class    看板列表"},
 
     {{Every_Z_MBox}, PERM_BASIC, POPUP_FUN,
     "Mail     信箱"},
 
-    {{Every_Z_BMW}, 0, POPUP_FUN,
+    {{.funcarg = {Every_Z_Xover, (const void *)XZ_BMW}}, 0, POPUP_FUN | POPUP_ARG,
     "Bmw      熱訊紀錄"},
 
     {{Every_Z_Screen}, 0, POPUP_FUN,

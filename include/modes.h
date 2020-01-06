@@ -27,6 +27,10 @@ enum
 #define M_DL(umode)     (-(umode))  /* For dynamic library loading */
 #endif
 
+#define M_ARG           0x40000000  /* `item` is a function and a `void *` argument */
+
+#define M_MASK          0x0000FFFF  /* Mask for valid user modes */
+
 #define M_IDLE          0
 #define M_MMENU         1       /* menu mode */
 #define M_ADMIN         2

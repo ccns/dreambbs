@@ -1078,14 +1078,34 @@ typedef struct PostRecommendHistory
 #endif
 #endif  /* #if 0 */
 
+typedef struct {
+    int (*func)(const void *arg);
+    const void *arg;
+} FuncArg;
+
+typedef struct {
+#if NO_SO
+    int (*func)(const void *arg);
+#else
+    const char *func;
+#endif
+    const void *arg;
+} DlFuncArg;
+
 typedef union {  /* The field to be used is determined by the value of `umode` */
     int (*func) (void);  /* Default (menu) or `POPUP_FUN` (popupmenu) */
+    FuncArg funcarg;  /* `umode | M_ARG` (menu) or `umode | POPUP_FUN` (popupmenu) */
+
     int (*xofunc) (XO *xo);  /* `POPUP_XO` (popupmenu) */
+
+
 #if NO_SO
     int (*dlfunc) (void);  /* `M_DL(umode)` (menu & popupmenu) or `POPUP_SO` (popupmenu) */
 #else
     const char *dlfunc;
 #endif
+    DlFuncArg dlfuncarg;  /* `M_DL(umode | M_ARG)` (menu) or `POPUP_SO | POPUP_ARG)` (popupmenu) */
+
     const char *title;  /* `POPUP_MENUTITLE` (popupmenu) */
     struct MENU *menu;  /* `<= M_XMENU` (menu) or `POPUP_MENU` (popupmenu) */
 } MenuItem;

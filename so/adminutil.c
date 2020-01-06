@@ -862,18 +862,20 @@ m_xhlp(void)
 }
 
 /* pcbug.990620: 懶得login...:p */
-static void
+int
 m_resetsys(
-int select)
+const void *arg)
 {
+    DL_HOLD;
     time_t now;
     struct tm ntime, *xtime;
+    int select = (int)arg;
     now = time(NULL);
     xtime = localtime(&now);
     ntime = *xtime;
 
     if (vans("您確定要重置系統嗎？[y/N]") != 'y')
-        return;
+        return DL_RELEASE(0);
     switch (select)
     {
     case 1:
@@ -914,61 +916,5 @@ int select)
         logitfile(FN_RESET_LOG, "< 全部系統 >", NULL);
         break;
     }
-
-}
-
-int
-reset1(void)
-{
-    DL_HOLD;
-    m_resetsys(1);
-    return DL_RELEASE(0);
-}
-
-int
-reset2(void)
-{
-    DL_HOLD;
-    m_resetsys(2);
-    return DL_RELEASE(0);
-}
-
-int
-reset3(void)
-{
-    DL_HOLD;
-    m_resetsys(3);
-    return DL_RELEASE(0);
-}
-
-int
-reset4(void)
-{
-    DL_HOLD;
-    m_resetsys(4);
-    return DL_RELEASE(0);
-}
-
-int
-reset5(void)
-{
-    DL_HOLD;
-    m_resetsys(5);
-    return DL_RELEASE(0);
-}
-
-int
-reset6(void)
-{
-    DL_HOLD;
-    m_resetsys(6);
-    return DL_RELEASE(0);
-}
-
-int
-reset7(void)
-{
-    DL_HOLD;
-    m_resetsys(7);
     return DL_RELEASE(0);
 }

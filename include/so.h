@@ -35,13 +35,7 @@ int update_all(void);
 int special_search(void);
 int m_xfile(void);
 int m_xhlp(void);
-int reset1(void);
-int reset2(void);
-int reset3(void);
-int reset4(void);
-int reset5(void);
-int reset6(void);
-int reset7(void);
+int m_resetsys(const void *arg);
 
 /* so/aloha.c */
 int t_aloha(void);

@@ -69,14 +69,14 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
         mmode = -mmode;
   #ifndef DL_HOTSWAP
         mptr->item = mitem;
-        mptr->umode = mmode;
+        mptr->umode = POPUP_FUN | (mmode &~ POPUP_MASK);
   #endif
     }
 #endif
 
     scr_dump(&old_screen);
 
-    switch (mmode)
+    switch (mmode & POPUP_MASK)
     {
 #if !NO_SO
         case POPUP_SO :
@@ -88,21 +88,21 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
             }
   #ifndef DL_HOTSWAP
             mptr->item = mitem;
-            mptr->umode = POPUP_FUN;
+            mptr->umode = POPUP_FUN | (mmode &~ POPUP_MASK);
   #endif
-            mode = (*mitem.func) ();
-            break;
 #endif
+            // Falls through
+            //   to call the function
+        case POPUP_FUN :
+            if (mmode & POPUP_ARG)
+                mode = (*mitem.funcarg.func)(mitem.funcarg.arg);
+            else
+                mode = (*mitem.func)();
+            break;
         case POPUP_MENU :
 //          sprintf(t, "¡i%s¡j", mptr->desc);
             scr_restore_free(&old_screen);
             return do_menu(mitem.menu, xo, x, y);
-        case POPUP_XO :
-            mode = (*mitem.xofunc) (xo);
-            break;
-        case POPUP_FUN :
-            mode = (*mitem.func) ();
-            break;
     }
 
     scr_free(&old_screen);

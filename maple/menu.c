@@ -37,69 +37,13 @@ view_login_log(void)
     return 0;
 }
 
-
 static int
-history(void)
+menumore(const void *arg)
 {
-    more(FN_ETC_COUNTER, 0);
+    more((const char *)arg, 0);
     return 0;
 }
 
-static int
-version(void)
-{
-    more(FN_ETC_VERSION, 0);
-    return 0;
-}
-
-static int
-today(void)
-{
-    more("gem/@/@-act", 0);
-    return 0;
-}
-
-static int
-popmax(void)
-{
-    more("gem/@/@pop", 0);
-    return 0;
-}
-
-static int
-yesterday(void)
-{
-    more("gem/@/@=act", 0);
-    return 0;
-}
-
-static int
-day(void)
-{
-    more("gem/@/@-day", 0);
-    return 0;
-}
-
-static int
-week(void)
-{
-    more("gem/@/@-week", 0);
-    return 0;
-}
-
-static int
-month(void)
-{
-    more("gem/@/@-month", 0);
-    return 0;
-}
-
-static int
-year(void)
-{
-    more("gem/@/@-year", 0);
-    return 0;
-}
 
 static int
 welcome(void)
@@ -591,25 +535,25 @@ INTERNAL_INIT MENU menu_settingadm[] =
 /* ----------------------------------------------------- */
 INTERNAL_INIT MENU menu_reset[] =
 {
-    {{.dlfunc = DL_NAME("adminutil.so", reset1)}, PERM_BOARD, M_DL(M_XMODE),
+    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)1}}, PERM_BOARD, M_DL(M_XMODE | M_ARG),
     "Camera     動態看板"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", reset2)}, PERM_BOARD, M_DL(M_XMODE),
+    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)2}}, PERM_BOARD, M_DL(M_XMODE | M_ARG),
     "Group      分類群組"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", reset3)}, PERM_SYSOP, M_DL(M_XMODE),
+    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)3}}, PERM_SYSOP, M_DL(M_XMODE | M_ARG),
     "Mail       寄信收信轉信"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", reset4)}, PERM_ADMIN, M_DL(M_XMODE),
+    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)4}}, PERM_ADMIN, M_DL(M_XMODE | M_ARG),
     "Killbbs    清除不正常 BBS"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", reset5)}, PERM_BOARD, M_DL(M_XMODE),
+    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)5}}, PERM_BOARD, M_DL(M_XMODE | M_ARG),
     "Firewall   擋信列表"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", reset6)}, PERM_CHATROOM, M_DL(M_XMODE),
+    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)6}}, PERM_CHATROOM, M_DL(M_XMODE | M_ARG),
     "Xchatd     重開聊天室"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", reset7)}, PERM_SYSOP, M_DL(M_XMODE),
+    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)7}}, PERM_SYSOP, M_DL(M_XMODE | M_ARG),
     "All        全部"},
 
     {{.menu = menu_admin}, PERM_MENU + 'K', M_ADMIN,
@@ -788,25 +732,25 @@ INTERNAL_INIT MENU menu_talk[] =
 INTERNAL_INIT MENU menu_information[] =
 {
 
-    {{popmax}, 0, M_READA,
+    {{.funcarg = {menumore, "gem/@/@pop"}}, 0, M_READA | M_ARG,
     "Login      上站次數排行榜"},
 
-    {{today}, 0, M_READA,
+    {{.funcarg = {menumore, "gem/@/@-act"}}, 0, M_READA | M_ARG,
     "Today      今日上線人次統計"},
 
-    {{yesterday}, 0, M_READA,
+    {{.funcarg = {menumore, "gem/@/@=act"}}, 0, M_READA | M_ARG,
     "Yesterday  昨日上線人次統計"},
 
-    {{day}, 0, M_READA,
+    {{.funcarg = {menumore, "gem/@/@-day"}}, 0, M_READA | M_ARG,
     "0Day       本日十大熱門話題"},
 
-    {{week}, 0, M_READA,
+    {{.funcarg = {menumore, "gem/@/@-week"}}, 0, M_READA | M_ARG,
     "1Week      本週五十大熱門話題"},
 
-    {{month}, 0, M_READA,
+    {{.funcarg = {menumore, "gem/@/@-month"}}, 0, M_READA | M_ARG,
     "2Month     本月百大熱門話題"},
 
-    {{year}, 0, M_READA,
+    {{.funcarg = {menumore, "gem/@/@-year"}}, 0, M_READA | M_ARG,
     "3Year      本年度百大熱門話題"},
 
     {{.menu = menu_xyz}, PERM_MENU + 'L', M_MMENU,
@@ -819,7 +763,7 @@ INTERNAL_INIT MENU menu_xyz[] =
     {{.menu = menu_information}, 0, M_XMENU,
     "Tops       " NICKNAME "排行榜"},
 
-    {{version}, 0, M_READA,
+    {{.funcarg = {menumore, FN_ETC_VERSION}}, 0, M_READA | M_ARG,
     "Version    源碼發展資訊"},
 
     {{.dlfunc = DL_NAME("xyz.so", x_siteinfo)}, 0, M_DL(M_READA),
@@ -831,7 +775,7 @@ INTERNAL_INIT MENU menu_xyz[] =
     {{welcome}, 0, M_READA,
     "Welcome    觀看歡迎畫面"},
 
-    {{history}, 0, M_READA,
+    {{.funcarg = {menumore, FN_ETC_COUNTER}}, 0, M_READA | M_ARG,
     "History    本站歷史軌跡"},
 
     {{.menu = menu_main}, PERM_MENU + 'T', M_SMENU,
@@ -1395,9 +1339,9 @@ domenu(
   #endif
                 }
 #endif
-                utmp_mode(mmode /* = mptr->umode*/);
+                utmp_mode(mmode & M_MASK /* = mptr->umode*/);
 
-                if (mmode <= M_XMENU)
+                if ((mmode & M_MASK) <= M_XMENU)
                 {
                     mtail->level = PERM_MENU + mptr->desc[0];
                     menu = mitem.menu;
@@ -1405,7 +1349,10 @@ domenu(
                     continue;
                 }
 
-                res = (*mitem.func) ();
+                if (mmode & M_ARG)
+                    res = (*mitem.funcarg.func)(mitem.funcarg.arg);
+                else
+                    res = (*mitem.func)();
 
                 utmp_mode(mtail->umode);
 
