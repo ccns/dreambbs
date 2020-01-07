@@ -1188,14 +1188,14 @@ void
 main_menu(void)
 {
 #ifdef  TREAT
-    domenu(menu_treat, MENU_YPOS, MENU_XPOS);
+    domenu(menu_treat, MENU_YPOS, MENU_XPOS, 1);
 #endif
-    domenu(menu_main, MENU_YPOS, MENU_XPOS);
+    domenu(menu_main, MENU_YPOS, MENU_XPOS, 1);
 }
 
 void
 domenu(
-    MENU *menu, int y, int x)
+    MENU *menu, int y, int x, int cmdcur_max)
 {
     MENU *mtail, *table[17];
     int cc=0, cx=0;     /* current / previous cursor position */
@@ -1203,12 +1203,24 @@ domenu(
     int cmd=0;
     unsigned int mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
 
+    /* IID.20200107: Match input sequence. */
+    int cmdcur[COUNTOF(table)];  /* Command matching cursor */
+    int cmdlen[COUNTOF(table)];  /* Command matching length (no spaces) */
+    bool keep_cmd = false;
+    bool keyboard_cmd = true;
+
     for (;;)
     {
         if (!menu)
         {
             return;
         }
+        if (!keep_cmd)
+        {
+            memset(cmdcur, 0, sizeof(cmdcur));
+            memset(cmdlen, 0, sizeof(cmdlen));
+        }
+        keep_cmd = false;
 
         if (mode & MENU_LOAD)
         {
@@ -1247,6 +1259,7 @@ domenu(
                 cmd = 'U';
             else
                 cmd = mlevel ^ PERM_MENU;  /* default command */
+            keyboard_cmd = false;
             utmp_mode(mtail->umode);
         }
 
@@ -1268,8 +1281,8 @@ domenu(
                     char item[60];
                     const MENU *const mptr = table[i];
                     const char *const str = check_info(mptr->desc);
-
-                    sprintf(item, "\x1b[m(\x1b[1;36m%c\x1b[m)%s", *str, str+1);
+                    int match_max = BMIN(cmdcur_max, strlen(str));
+                    sprintf(item, "\x1b[m(\x1b[1;36m%-*.*s\x1b[m)%s", cmdcur_max, match_max, str, str + match_max);
                     outs(item);
 
                     if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
@@ -1383,7 +1396,8 @@ domenu(
                     mode = MENU_DRAW | MENU_FILM;
                 }
 
-                cmd = mptr->desc[0];
+                cmd = ' ';
+                keyboard_cmd = false;
                 continue;
             }
 
@@ -1415,23 +1429,53 @@ domenu(
             }
 
             cmd = 'G';
+            keyboard_cmd = false;
 
             // Falls through
             //    to move the cursor to option 'G' ('Goodbye'; exiting BBS)
 
         default:
-
-            if (cmd >= 'a' && cmd <= 'z')
-                cmd -= 0x20;
-
-            for (int i = 0; i <= max; i++)
             {
-                if (table[i]->desc[0] == cmd)
+                int maxlen = 0;
+
+                cmd = tolower(cmd);
+
+                /* IID.20200107: Match input sequence. */
+                for (int i = 0; i <= max; i++)
                 {
-                    cc = i;
-                    break;
+                    const char *const mdesc = table[i]->desc;
+                    int match_max = BMIN(cmdcur_max, strlen(mdesc));
+                    /* Skip spaces */
+                    cmdcur[i] += strspn(mdesc + cmdcur[i], " ");
+                    /* Not matched or cursor reached the end */
+                    if (cmdcur[i] >= match_max
+                        || tolower(mdesc[cmdcur[i]]) != cmd)
+                    {
+                        /* Reset and skip spaces */
+                        cmdcur[i] = strspn(mdesc + cmdcur[0], " ");
+                        cmdlen[i] = 0;
+                    }
+                    if (tolower(mdesc[cmdcur[i]]) == cmd)
+                    {
+                        cmdcur[i]++;
+                        cmdlen[i]++;
+                    }
+                    if (cmdlen[i] > maxlen)
+                    {
+                        maxlen = cmdlen[i];
+                        cc = i;
+                    }
+                    move(y+i, x-12);
+                    prints("%2d/%2d", cmdcur[i], cmdlen[i]);
                 }
             }
+
+            // Falls through
+            //    to keep the input
+
+        case ' ':  /* Ignore space for matching */
+            if (keyboard_cmd)  /* `cmd` is from keyboard */
+                keep_cmd = true;
         }
 
         if (cc != cx)
@@ -1451,6 +1495,7 @@ domenu(
 menu_key:
 
         cmd = vkey();
+        keyboard_cmd = true;
     }
 }
 
