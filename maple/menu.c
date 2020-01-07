@@ -1180,14 +1180,14 @@ INTERNAL_INIT MENU menu_treat[] =
 #endif
 #endif  /* #ifdef  TREAT */
 
-GCC_PURE static
-int count_len(
-    const char *data)
+GCC_PURE
+int strip_ansi_len(
+    const char *str)
 {
     int len;
     const char *ptr, *tmp;
-    ptr = data;
-    len = strlen(data);
+    ptr = str;
+    len = strlen(str);
 
     while (ptr)
     {
@@ -1331,7 +1331,7 @@ domenu(
                     if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
                         grayout(MENU_YPOS + i, MENU_YPOS + i + 1, GRAYOUT_COLORNORM);
 
-                    item_length[i]=(cuser.ufo2 & UFO2_COLOR) ? strlen(item)-count_len(str)-2 : 0;
+                    item_length[i]=(cuser.ufo2 & UFO2_COLOR) ? strlen(item)-strip_ansi_len(str)-2 : 0;
                 }
                 clrtoeol();
             }
