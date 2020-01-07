@@ -352,6 +352,17 @@ static char footer[160];
 void
 movie(void)
 {
+    if (cuser.ufo2 & UFO2_MOVIE)
+    {
+        static int tag = FILM_MOVIE;
+
+        tag = film_out(tag, 2);
+    }
+}
+
+static void
+menu_foot(void)
+{
     static int orig_flag = -1;
     static time_t uptime = -1;
     static char flagmsg[16];
@@ -362,16 +373,6 @@ movie(void)
 
     ufo = cuser.ufo;
     time(&now);
-
-    /* Thor: it is depend on which state */
-
-    if ((bbsmode < M_CLASS) && (cuser.ufo2 & UFO2_MOVIE))
-    {
-        static int tag = FILM_MOVIE;
-
-        tag = film_out(tag, 2);
-    }
-
 
     /* Thor: 同時 顯示 呼叫器 好友上站 隱身 */
 
@@ -1294,7 +1295,9 @@ domenu(
             }
             if (mode & MENU_FILM)
             {
-                movie();
+                if (!MENU_NOMOVIE_POS(y, x))
+                    movie();
+                menu_foot();
                 cx = -1;
             }
 
@@ -1465,8 +1468,6 @@ domenu(
                         maxlen = cmdlen[i];
                         cc = i;
                     }
-                    move(y+i, x-12);
-                    prints("%2d/%2d", cmdcur[i], cmdlen[i]);
                 }
             }
 
