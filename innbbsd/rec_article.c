@@ -50,15 +50,32 @@ init_bshm(void)
 
 
 #if 0   /* itoc.030303.註解: RFC 822 的 DATE 欄位；RFC 1123 將 year 改成 4-DIGIT */
+/* https://tools.ietf.org/html/rfc822  5.  DATE AND TIME SPECIFICATION*/
+/* https://tools.ietf.org/html/rfc1123 5.2.14  RFC-822 Date and Time Specification */
 
-date-time := [ wday "," ] date time ; dd mm yy, hh:mm:ss zzz
-wday      :=  "Mon" / "Tue" / "Wed" / "Thu" / "Fri" / "Sat" / "Sun"
-date      :=  1*2DIGIT month 4DIGIT ; mday month year
-month     :=  "Jan" / "Feb" / "Mar" / "Apr" / "May" / "Jun" / "Jul" / "Aug" / "Sep" / "Oct" / "Nov" / "Dec"
-time      :=  hour zone ; ANSI and Military
-hour      :=  2DIGIT ":" 2DIGIT [":" 2DIGIT] ; 00:00:00 - 23:59:59
-zone      :=  "UT" / "GMT" / "EST" / "EDT" / "CST" / "CDT" / "MST" / "MDT" / "PST" / "PDT" / 1ALPHA / ( ("+" / "-") 4DIGIT )
+date-time = [ day "," ] date time           ; dd mm yy hh:mm:ss zzz
+day       = "Mon" / "Tue" / "Wed" / "Thu" / "Fri" / "Sat" / "Sun"
 
+/* RFC-1123: All mail software SHOULD use 4-digit years in dates, [...] */
+date      = 1*2DIGIT month 2*4DIGIT         ; day month year e.g. 20 Jun 82
+
+month     = "Jan" / "Feb" / "Mar" / "Apr" / "May" / "Jun" / "Jul" / "Aug" / "Sep" / "Oct" / "Nov" / "Dec"
+time      = hour zone                       ; ANSI and Military
+hour      = 2DIGIT ":" 2DIGIT [":" 2DIGIT]  ; 00:00:00 - 23:59:59
+zone      = "UT"  / "GMT"                   ; Universal Time
+
+                                            ; North American : UT  /* zone: offset */
+          / "EST" / "EDT"                   ;  Eastern:  - 5/ - 4
+          / "CST" / "CDT"                   ;  Central:  - 6/ - 5
+          / "MST" / "MDT"                   ;  Mountain: - 7/ - 6
+          / "PST" / "PDT"                   ;  Pacific:  - 8/ - 7
+
+          /* RFC-1123: [...], military time zones in RFC-822 headers carry no information. */
+          / 1ALPHA                          ; Military: Z = UT; A:-1; (J not used); M:-12; N:+1; Y:+12
+
+          /* RFC-1123: [...], and implementations SHOULD use numeric timezone instead of timezone names.
+                 However, all implementations MUST accept either notation. */
+          / ( ("+" / "-") 4DIGIT )          ; Local differential hours+min. (HHMM)
 #endif
 
 static time_t datevalue;
