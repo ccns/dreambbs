@@ -29,6 +29,8 @@
 
 #define INNBBS_PORT     (7777)
 
+#define INNBBS_UTCZONE  BBSUTCZONE              /* Numeric local timezone */
+
 /* ----------------------------------------------------- */
 /* innbbsd ªº³]©w                                        */
 /* ----------------------------------------------------- */

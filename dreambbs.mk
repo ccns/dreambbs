@@ -75,6 +75,9 @@ BBSVER != $(GETVALUE$(conf::= "BBSVER_SUFFIX")$(default::= "")$(hdr::= $(BBSCONF
 BBSUSR_HOME != getent passwd $(BBSUSR) | cut -d: -f6
 BBSHOME != $(GETVAR$(var::= "$(BBSHOME)")$(else_var::= $(GETVALUE$(conf::= "BBSHOME")$(default::= "$(BBSUSR_HOME)")$(hdr::= $(BBSCONF)))))
 
+## Numeric local timezone
+BBSUTCZONE != $(GETVAR$(var::= "$(BBSUTCZONE)")$(else_var::= $(GETVALUE$(conf::= "BBSUTCZONE")$(default::= "$(:!date +%z!)")$(hdr::= $(BBSCONF)))))
+
 # rules ref: PttBBS: mbbsd/Makefile
 DEF_LIST	!= sh -c '$(GETCONFS$(hdr::= $(BBSCONF)))'
 DEF_TEST	 = [ $(DEF_LIST:M$(conf:M*:S/"//g:N")) ]  # Balance the quotes

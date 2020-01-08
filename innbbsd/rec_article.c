@@ -141,7 +141,11 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
         zone += strcspn(zone, "+-");  /* Seek `'+'` or `'-'` */
         if (*zone)
             datevalue -= ((*zone == '-') ? -1 : 1) * ((strtol(zone+1, NULL, 10) / 100) * 3600 + (strtol(zone+1, NULL, 10) % 100) * 60);
-        datevalue += 28800;             /* 台灣所在的 CST 時區比 GMT 快八小時 */
+        /* Convert it to the local timezone */
+        zone = INNBBS_UTCZONE;
+        zone += strcspn(zone, "+-");  /* Seek `'+'` or `'-'` */
+        if (*zone)
+            datevalue += ((*zone == '-') ? -1 : 1) * ((strtol(zone+1, NULL, 10) / 100) * 3600 + (strtol(zone+1, NULL, 10) % 100) * 60);
     }
     else
     {

@@ -66,7 +66,7 @@ char *Atime(                    /* Thor.990125: 假裝ARPANET時間格式 */
     /* ARPANET format: Thu, 11 Feb 1999 06:00:37 +0800 */
     /* strftime(datemsg, 40, "%a, %d %b %Y %T %Z", localtime(clock)); */
     /* Thor.990125: time zone的傳回值不知和ARPANET格式是否一樣, 先硬給, 同sendmail */
-    strftime(datemsg, 40, "%a, %d %b %Y %T +0800", localtime(clock));
+    strftime(datemsg, 40, "%a, %d %b %Y %T " BBSUTCZONE, localtime(clock));
     return (datemsg);
 }
 

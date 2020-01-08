@@ -12,4 +12,6 @@
 #define WWWGID @WWWGID@
 #undef BBSHOME
 #define BBSHOME "@BBSHOME@"
+#undef BBSUTCZONE
+#define BBSUTCZONE "@BBSUTCZONE@"
 #cmakedefine _FILE_OFFSET_BITS @_FILE_OFFSET_BITS@

@@ -49,6 +49,7 @@ export:
 	@$(EXPORTVAR$(exconf::= BBSGID))
 	@$(EXPORTVAR$(exconf::= WWWGID))
 	@$(EXPORTCONF$(exconf::= BBSHOME)$(exvalue::= \"$(BBSHOME)\"))
+	@$(EXPORTCONF$(exconf::= BBSUTCZONE)$(exvalue::= \"$(BBSUTCZONE)\"))
 	@$("$(ARCHI)" == "64" :? $(EXPORTCONF$(exconf::= _FILE_OFFSET_BITS)$(exvalue::= 64)) :)
 
 configure:
