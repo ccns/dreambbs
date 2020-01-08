@@ -60,10 +60,13 @@ char *Etime(const time_t * clock)
 char *Atime(                    /* Thor.990125: 假裝ARPANET時間格式 */
                const time_t * clock)
 {
-    /* ARPANET format: Thu, 11 Feb 1999 06:00:37 +0800 (CST) */
+    /* https://tools.ietf.org/html/rfc822  5.  DATE AND TIME SPECIFICATION*/
+    /* https://tools.ietf.org/html/rfc1123 5.2.14  RFC-822 Date and Time Specification */
+
+    /* ARPANET format: Thu, 11 Feb 1999 06:00:37 +0800 */
     /* strftime(datemsg, 40, "%a, %d %b %Y %T %Z", localtime(clock)); */
     /* Thor.990125: time zone的傳回值不知和ARPANET格式是否一樣, 先硬給, 同sendmail */
-    strftime(datemsg, 40, "%a, %d %b %Y %T +0800 (CST)", localtime(clock));
+    strftime(datemsg, 40, "%a, %d %b %Y %T +0800", localtime(clock));
     return (datemsg);
 }
 

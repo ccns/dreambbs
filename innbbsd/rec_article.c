@@ -137,13 +137,13 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
         datevalue = mktime(&ptime);
         if ((ptr = strchr(str, '+')))
         {
-            /* 如果有 +0100 (MET) 等註明時區，先調回 GMT 時區 */
+            /* 如果有 +0100 等註明時區，先調回 GMT 時區 */
             ptr += strspn(ptr+1, " ");  /* Skip spaces */
             datevalue -= ((ptr[1] - '0') * 10 + (ptr[2] - '0')) * 3600 + ((ptr[3] - '0') * 10 + (ptr[4] - '0')) * 60;
         }
         else if ((ptr = strchr(str, '-')))
         {
-            /* 如果有 -1000 (HST) 等註明時區，先調回 GMT 時區 */
+            /* 如果有 -1000 等註明時區，先調回 GMT 時區 */
             ptr += strspn(ptr+1, " ");  /* Skip spaces */
             datevalue += ((ptr[1] - '0') * 10 + (ptr[2] - '0')) * 3600 + ((ptr[3] - '0') * 10 + (ptr[4] - '0')) * 60;
         }
