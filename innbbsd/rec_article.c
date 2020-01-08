@@ -109,6 +109,7 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
         /*    Find the comma and then let `atoi()` skip the initial spaces */
         const char *const wday_comma = memchr(buf, ',', ptr-buf);
         const char *const mday_start = (wday_comma) ? wday_comma+1 : buf;
+        const char *zone;
 
         /* IID.20200108: `year` can also be 2-digit in RFC-1123 */
         char *year_end;
@@ -135,18 +136,11 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
 #endif
 
         datevalue = mktime(&ptime);
-        if ((ptr = strchr(str, '+')))
-        {
-            /* 如果有 +0100 等註明時區，先調回 GMT 時區 */
-            ptr += strspn(ptr+1, " ");  /* Skip spaces */
-            datevalue -= ((ptr[1] - '0') * 10 + (ptr[2] - '0')) * 3600 + ((ptr[3] - '0') * 10 + (ptr[4] - '0')) * 60;
-        }
-        else if ((ptr = strchr(str, '-')))
-        {
-            /* 如果有 -1000 等註明時區，先調回 GMT 時區 */
-            ptr += strspn(ptr+1, " ");  /* Skip spaces */
-            datevalue += ((ptr[1] - '0') * 10 + (ptr[2] - '0')) * 3600 + ((ptr[3] - '0') * 10 + (ptr[4] - '0')) * 60;
-        }
+        /* 如果有 +0100 或 -1000 等註明時區，先調回 GMT 時區 */
+        zone = str;
+        zone += strcspn(zone, "+-");  /* Seek `'+'` or `'-'` */
+        if (*zone)
+            datevalue -= ((*zone == '-') ? -1 : 1) * ((strtol(zone+1, NULL, 10) / 100) * 3600 + (strtol(zone+1, NULL, 10) % 100) * 60);
         datevalue += 28800;             /* 台灣所在的 CST 時區比 GMT 快八小時 */
     }
     else
