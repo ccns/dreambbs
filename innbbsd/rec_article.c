@@ -91,7 +91,7 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
     str_ncpy(buf, DATE, sizeof(buf));
     str_lower(buf, buf);                        /* 通通換小寫，因為 Dec DEC dec 各種都有人用 */
 
-    str = buf + 2;
+    str = buf + 2;  /* Skip `mday` (assume no `wday`) */
     for (i = 0; i < 12; i++)
     {
         if ((ptr = strstr(str, months[i])))
@@ -100,14 +100,34 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
 
     if (ptr)
     {
-        ptr[-1] = ptr[3] = ptr[8] = ptr[11] = ptr[14] = ptr[17] = '\0';
+        /* buf,  buf2,  ,ptr ,ptr+4                      */
+        /*   [Thu , ]11 Feb [19]99 06 : 00 [: 37] + 0800 */
+        /*       ^ ^ optional spaces ^ ^  ^  ^     ^     */
 
-        ptime.tm_sec = atoi(ptr + 15);
-        ptime.tm_min = atoi(ptr + 12);
-        ptime.tm_hour = atoi(ptr + 9);
-        ptime.tm_mday = (ptr == buf + 2 || ptr == buf + 7) ? atoi(ptr - 2) : atoi(ptr - 3);     /* RFC 822 允許 mday 是 1- 或 2- DIGIT */
+        /* RFC 822 允許 mday 是 1- 或 2- DIGIT */
+        /* IID.20200108: Spaces may not present after the comma; */
+        /*    Find the comma and then let `atoi()` skip the initial spaces */
+        const char *const wday_comma = memchr(buf, ',', ptr-buf);
+        const char *const mday_start = (wday_comma) ? wday_comma+1 : buf;
+
+        /* IID.20200108: `year` can also be 2-digit in RFC-1123 */
+        char *year_end;
+        str = ptr + 4 + strspn(ptr + 4, " ");  /* Skip spaces */
+        ptime.tm_year = strtol(str, &year_end, 10);
+        if (year_end - str >= 4)
+            ptime.tm_year -= 1900;
+        str = year_end;
+
+        ptime.tm_hour = strtol(str+1, &str, 10);
+        str += strcspn(str, ":");  /* Seek the next `':'` */
+        ptime.tm_min = strtol(str+1, &str, 10);
+
+        /* IID.20200108: `second` is optional */
+        str += strspn(str, " ");  /* Skip spaces */
+        ptime.tm_sec = (*str == ':') ? strtol(str+1, &str, 10) : 0;
+
+        ptime.tm_mday = atoi(mday_start);
         ptime.tm_mon = i;
-        ptime.tm_year = atoi(ptr + 4) - 1900;
         ptime.tm_isdst = 0;
 #ifndef CYGWIN
         ptime.tm_zone = "GMT";
@@ -115,15 +135,16 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
 #endif
 
         datevalue = mktime(&ptime);
-        str = ptr + 18;
         if ((ptr = strchr(str, '+')))
         {
             /* 如果有 +0100 (MET) 等註明時區，先調回 GMT 時區 */
+            ptr += strspn(ptr+1, " ");  /* Skip spaces */
             datevalue -= ((ptr[1] - '0') * 10 + (ptr[2] - '0')) * 3600 + ((ptr[3] - '0') * 10 + (ptr[4] - '0')) * 60;
         }
         else if ((ptr = strchr(str, '-')))
         {
             /* 如果有 -1000 (HST) 等註明時區，先調回 GMT 時區 */
+            ptr += strspn(ptr+1, " ");  /* Skip spaces */
             datevalue += ((ptr[1] - '0') * 10 + (ptr[2] - '0')) * 3600 + ((ptr[3] - '0') * 10 + (ptr[4] - '0')) * 60;
         }
         datevalue += 28800;             /* 台灣所在的 CST 時區比 GMT 快八小時 */
