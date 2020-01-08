@@ -51,7 +51,7 @@ build_branch_remote="${build_branch_remote##*/}"
 
 build_remote_url="$(format_url "$(git config --get "remote.${build_remote}.url" 2>/dev/null)")"
 
-build_date="$(date)"
+build_date="$(date "+%Y-%m-%d %T %z")"
 build_time="$(date -d"${build_date}" "+%s")"
 
 export_file="${source_dir}/verinfo_export.conf"
