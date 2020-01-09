@@ -1462,31 +1462,48 @@ vs_line(
 #ifndef M3_USE_PFTERM
 /* 090127.cache 淡入淡出特效 */
 void
-grayout(int y, int end, int level)
+grayoutrect(int y, int yend, int x, int xend, int level)
 // GRAYOUT_DARK(0): dark, GRAYOUT_BOLD(1): bold, GRAYOUR_NORMAL(2): normal
 {
     const char *const prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
     char buf[ANSILINELEN];
-    int i;
+    int yprev, xprev;
+    getyx(&yprev, &xprev);
 
     if (level < 0 || level > 2)
         return;
 
     y = BMAX(y, 0);
-    end = BMIN(end, T_LINES);
+    yend = BMIN(yend, t_lines);
+    x = BMAX(x, 0);
+    xend = TCLAMP(xend, x, t_columns);
 
-    for (i = y; i < end; i++)
+    for (int i = y; i < yend; i++)
     {
-        if (!vbuf[i].width)
+        int ibegin, iend;
+        move_ansi(i, x);
+        getyx(&SINKVAL(int), &ibegin);
+
+        move_ansi(i, xend);
+        getyx(&SINKVAL(int), &iend);
+
+        if (!(iend - ibegin))
             continue;
 
         vbuf[i].oldlen = vbuf[i].len;
         vbuf[i].len = vbuf[i].width + 7 + 3;
 
-        str_ansi(buf, (char *) vbuf[i].data, vbuf[i].width + 1);
-        sprintf((char *) vbuf[i].data, "%s%s\x1b[m", prefix[level], buf);
+        str_ansi(buf, (char *) vbuf[i].data + ibegin, (iend - ibegin) + 1);
+        sprintf((char *) vbuf[i].data + ibegin, "%s%s\x1b[m", prefix[level], buf);
     }
+    move(yprev, xprev);
     vs_redraw();
+}
+
+void
+grayout(int y, int end, int level)
+{
+    grayoutrect(y, end, 0, t_columns, level);
 }
 #endif //#ifndef M3_USE_PFTERM
 

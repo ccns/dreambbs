@@ -487,6 +487,7 @@ void    standout    (void);
 void    standend    (void);
 
 // grayout advanced control
+void    grayoutrect (int y, int yend, int x, int xend, int level);
 void    grayout     (int y, int end, int level);
 
 //// flat-term internal processor
@@ -2342,31 +2343,33 @@ fterm_rawnc(int c, int n)
 // grayout advanced control
 //////////////////////////////////////////////////////////////////////////
 void
-grayout(int y, int end, int level)
+grayoutrect(int y, int yend, int x, int xend, int level)
 {
     char grattr = FTATTR_DEFAULT;
-    int x;
+    int rx;
 
-    y   = ranged(y,   0, ft.rows-1);
-    end = ranged(end, 0, ft.rows-1);
+    y    = ranged(y,   0, ft.rows-1);
+    yend = ranged(yend, 0, ft.rows-1);
+    x    = ranged(x,   0, ft.cols-1);
+    xend = ranged(xend, x, ft.cols);
 
     // modify attribute based on existing data.
     switch (level) {
         case GRAYOUT_COLORBOLD:
-            for (; y < end; y++) {
-                for (x = 0; x < ft.cols-1; x++) {
-                    grattr = ((FTAMAP[y][x] & FTATTR_BOLD) ? FTATTR_BLINK :
+            for (; y < yend; y++) {
+                for (rx = x; rx < xend; rx++) {
+                    grattr = ((FTAMAP[y][rx] & FTATTR_BOLD) ? FTATTR_BLINK :
                               FTATTR_BOLD);
-                    FTAMAP[y][x] |= grattr;
+                    FTAMAP[y][rx] |= grattr;
                 }
             }
             return;
 
         case GRAYOUT_COLORNORM:
-            for (; y < end; y++) {
-                for (x = 0; x < ft.cols-1; x++) {
-                    grattr = (FTAMAP[y][x] & FTATTR_BLINK) ? FTATTR_BOLD : 0;
-                    FTAMAP[y][x] = (FTAMAP[y][x] & ~(FTATTR_BLINK |
+            for (; y < yend; y++) {
+                for (rx = x; rx < xend; rx++) {
+                    grattr = (FTAMAP[y][rx] & FTATTR_BLINK) ? FTATTR_BOLD : 0;
+                    FTAMAP[y][rx] = (FTAMAP[y][rx] & ~(FTATTR_BLINK |
                                                      FTATTR_BOLD)) | grattr;
                 }
             }
@@ -2389,10 +2392,16 @@ grayout(int y, int end, int level)
             break;
     }
 
-    for (; y <= end; y++)
+    for (; y <= yend; y++)
     {
-        memset(FTAMAP[y], grattr, ft.cols);
+        memset(FTAMAP[y] + x, grattr, xend - x);
     }
+}
+
+void
+grayout(int y, int end, int level)
+{
+    grayoutrect(y, end, 0, ft.cols, level);
 }
 
 //////////////////////////////////////////////////////////////////////////

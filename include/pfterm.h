@@ -81,6 +81,7 @@ void    standout    (void);
 void    standend    (void);
 
 // grayout advanced control
+void    grayoutrect (int y, int yend, int x, int xend, int level);
 void    grayout     (int y, int end, int level);
 
 //////////////////////////////////////////////////////////////////////////

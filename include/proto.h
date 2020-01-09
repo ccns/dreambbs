@@ -300,6 +300,7 @@ void cursor_show(int row, int column);
 void cursor_clear(int row, int column);
 int cursor_key(int row, int column);
 #ifndef M3_USE_PFTERM
+void grayoutrect(int y, int yend, int x, int xend, int level);
 void grayout(int y, int end, int level);
 #endif  /* #ifndef M3_USE_PFTERM */
 void add_io(int fd, int timeout);
