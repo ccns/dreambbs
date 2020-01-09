@@ -1189,14 +1189,14 @@ void
 main_menu(void)
 {
 #ifdef  TREAT
-    domenu(menu_treat, MENU_YPOS, MENU_XPOS, 1);
+    domenu(menu_treat, MENU_YPOS, MENU_XPOS, 0, 0, 1);
 #endif
-    domenu(menu_main, MENU_YPOS, MENU_XPOS, 1);
+    domenu(menu_main, MENU_YPOS, MENU_XPOS, 0, 0, 1);
 }
 
 void
 domenu(
-    MENU *menu, int y, int x, int cmdcur_max)
+    MENU *menu, int y, int x, int height, int width, int cmdcur_max)
 {
     MENU *mtail, *table[17];
     int cc=0, cx=0;     /* current / previous cursor position */
@@ -1276,7 +1276,18 @@ domenu(
             //prints("\n\x1b[30;47m     選項         選項說明                         動態看板                   \x1b[m\n");
             for (int i = 0; i <= mmx; i++)
             {
-                move(y + i, x + 2);
+                int yi, xi;
+                if (height > 0 && width > 0)
+                {
+                    yi = y + (i % height);
+                    xi = x + (i / height * width);
+                }
+                else
+                {
+                    yi = y + i;
+                    xi = x;
+                }
+                move_ansi(yi, xi + 2);
                 if (i <= max)
                 {
                     char item[60];
@@ -1287,7 +1298,7 @@ domenu(
                     outs(item);
 
                     if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
-                        grayout(y + i, y + i + 1, GRAYOUT_COLORNORM);
+                        grayout(yi, yi + 1, GRAYOUT_COLORNORM);
 
                     item_length[i]=(cuser.ufo2 & UFO2_COLOR) ? strlen(item)-strip_ansi_len(str)-2 : 0;
                 }
@@ -1336,8 +1347,16 @@ domenu(
             cc = max;
             break;
 
-        case '\n':
         case KEY_RIGHT:
+            if (height > 0 && cc + height <= max)
+            {
+                cc += height;
+                break;
+            }
+            // Else falls through
+            //    to execute the function
+
+        case '\n':
             {
                 MENU *const mptr = table[cc];
                 MenuItem mitem = mptr->item;
@@ -1424,6 +1443,14 @@ domenu(
             every_S();
             break;
         case KEY_LEFT:
+            if (height > 0 && cc - height >= 0)
+            {
+                cc -= height;
+                break;
+            }
+            // Else falls through
+            //    to enter the parent menu
+
         case KEY_ESC:
         case Meta(KEY_ESC):
         case 'e':
@@ -1488,18 +1515,35 @@ domenu(
             }
         }
 
-        if (cc != cx)
         {
-            if (cx >= 0)
+            int ycc, xcc, ycx, xcx;
+            if (height > 0 && width > 0)
             {
-                cursor_clear(y + cx, x);
+                ycc = y + (cc % height);
+                xcc = x + (cc / height * width);
+                ycx = y + (cx % height);
+                xcx = x + (cx / height * width);
             }
-            cursor_show(y + cc, x);
-            cx = cc;
-        }
-        else
-        {
-            move(y + cc, x + 1);
+            else
+            {
+                ycc = y + cc;
+                xcc = x;
+                ycx = y + cx;
+                xcx = x;
+            }
+            if (cc != cx)
+            {
+                if (cx >= 0)
+                {
+                    cursor_bar_clear(ycx, xcx, width);
+                }
+                cursor_bar_show(ycc, xcc, width);
+                cx = cc;
+            }
+            else
+            {
+                move(ycc, xcc + 1);
+            }
         }
 
 menu_key:
