@@ -1359,7 +1359,8 @@ domenu(
 
                 if ((mmode & M_MASK) <= M_XMENU)
                 {
-                    mtail->level = PERM_MENU + mptr->desc[0];
+                    if (cmdcur_max == 1)
+                        mtail->level = PERM_MENU + mptr->desc[0];
                     menu = mitem.menu;
                     mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
                     continue;
