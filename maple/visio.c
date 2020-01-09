@@ -1397,38 +1397,69 @@ vs_bar(
 
 
 void
-cursor_show(
-    int row, int column)
+cursor_bar_show(
+    int row, int column, int width)
 {
     move(row, column);
     if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
-        grayout(row, row + 1, GRAYOUT_COLORBOLD);
+    {
+        if (width > 0)
+            grayoutrect(row, row + 1, column, column + width + 2, GRAYOUT_COLORBOLD);
+        else
+            grayout(row, row + 1, GRAYOUT_COLORBOLD);
+    }
     outs(STR_CURSOR);
     move(row, column + 1);
 }
 
 
 void
-cursor_clear(
-    int row, int column)
+cursor_bar_clear(
+    int row, int column, int width)
 {
     move(row, column);
     if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
-        grayout(row, row + 1, GRAYOUT_COLORNORM);
+    {
+        if (width > 0)
+            grayoutrect(row, row + 1, column, column + width + 2, GRAYOUT_COLORNORM);
+        else
+            grayout(row, row + 1, GRAYOUT_COLORNORM);
+    }
     outs(STR_UNCUR);
 }
 
 
 int
-cursor_key(
-    int row, int column)
+cursor_bar_key(
+    int row, int column, int width)
 {
     int ch;
 
-    cursor_show(row, column);
+    cursor_bar_show(row, column, width);
     ch = vkey();
-    cursor_clear(row, column);
+    cursor_bar_clear(row, column, width);
     return ch;
+}
+
+
+void
+cursor_show(
+    int row, int column)
+{
+    cursor_bar_show(row, column, 0);
+}
+
+
+void
+cursor_clear(int row, int column)
+{
+    cursor_bar_clear(row, column, 0);
+}
+
+int
+cursor_key(int row, int column)
+{
+    return cursor_bar_key(row, column, 0);
 }
 
 static void
