@@ -1876,7 +1876,7 @@ ve_key:
             case Ctrl('H'):             /* backspace */
 
 
-                if (col)
+                if ((mode & VE_ANSI) ? pos : col)
                 {
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : col - 1;
                     delete_char(vln, ve_col);
@@ -1899,8 +1899,8 @@ ve_key:
             case Ctrl('D'):
             case KEY_DEL:               /* delete current character */
 
-                cc = vln->len;
-                if (cc == col)
+                cc = (mode & VE_ANSI) ? n2ansi(vln->len, vln) : vln->len;
+                if (cc == ((mode & VE_ANSI) ? pos : col))
                 {
                     join_up(vln);
                     ve_mode = mode | VE_REDRAW;
