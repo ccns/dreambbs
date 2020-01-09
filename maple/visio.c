@@ -182,11 +182,8 @@ move(
 {
     screenline *cslp;
 
-    if (y > b_lines)
-        return;
-
-    if (x >= t_columns)
-        x = 0;
+    y = BMIN(y, b_lines);
+    x = BMIN(x, b_cols);
 
     cur_row = y;
     if ((y += roll) >= t_lines)
@@ -243,16 +240,18 @@ move_ansi(
 {
     screenline *cslp;
 
-    if (y > b_lines)
-        return;
-
-    if (x >= t_columns)
-        x = 0;
+    y = BMIN(y, b_lines);
 
     cur_row = y;
     if ((y += roll) >= t_lines)
         y -= t_lines;
     cur_slp = cslp = &vbuf[y];
+    if (x >= t_columns)
+    {
+        cur_col = cslp->len - 1;
+        cur_pos = t_columns - 1;
+        return;
+    }
     cur_col = x;
 
     if (x)
@@ -354,8 +353,8 @@ rel_move(
     int was_col, was_row;
     char buf[16];
 
-    if (new_row >= t_lines || new_col >= t_columns)
-        return;
+    new_row = BMIN(new_row, b_lines);
+    new_col = BMIN(new_col, b_cols);
 
     was_col = tc_col;
     was_row = tc_row;
