@@ -202,67 +202,17 @@ int acct_get(const char *msg, ACCT * acct)
 /* 設定系統檔案                                          */
 /* ----------------------------------------------------- */
 
-void x_file(int mode,            /* M_XFILES / M_UFILES */
-            const char *const xlist[], /* description list */
-            const char *const flist[]  /* filename list */
-    )
+static int x_edit_file(const void *arg)
 {
-    int n, i;
-    const char *fpath, *desc;
+    const char *fpath = (const char *)arg;
+    int n;
     char buf[80];
 
-    n = 0;
-    if (mode == M_UFILES)
-        move(MENU_YPOS, 0);
-    else
-        move(1, 0);
-    clrtobot();
-
-    while ((desc = xlist[n]))
-    {
-        n++;
-
-        if (mode == M_UFILES)
-        {
-            move(n + MENU_YPOS - 1, MENU_XPOS + 2);
-            clrtoeol();
-            move(n + MENU_YPOS - 1, MENU_XPOS + 2);
-            prints("(\x1b[1;36m%d\x1b[m) %s", n, desc);
-        }
-        else
-        {
-            if (n < 21)            /* statue.000703: 註解: 一個畫面只能 show 20 個資料 */
-                move_ansi(n + (b_lines-21)/2U, 2);
-            else
-                move_ansi(n + (b_lines-21)/2U - 20, 2 + (b_cols+1)/2U);
-
-            prints("(\x1b[1;36m%2d\x1b[m) %s", n, desc);
-
-
-            if (mode == M_XFILES)
-            {
-                if (n < 21)
-                    move_ansi(n + (b_lines-21)/2U, 24 + d_cols/4U);    /* Thor.980806: 註解: 印出檔名 */
-                else
-                    move_ansi(n + (b_lines-21)/2U - 20, 24 + d_cols/4U + (b_cols+1)/2U);
-                outs(flist[n - 1] + 4);    /* statue.000703: 註解: +4 去掉目錄 */
-                clrtoeol();
-            }
-
-        }
-    }
-
-    vget(b_lines, 0, "請選擇檔案編號，或按 [0] 取消：", buf, 3, DOECHO);
-    i = atoi(buf);
-    if (i <= 0 || i > n)
-        return;
-
-    n = vget(b_lines, 36, "(D)刪除 (E)編輯 (V)瀏覽 [Q]取消？", buf, 3, LCECHO);
+    n = vget(b_lines, 0, "(D)刪除 (E)編輯 (V)瀏覽 [Q]取消？", buf, 3, LCECHO);
     if (n != 'd' && n != 'e' && n != 'v')
-        return;
+        return 0;
 
-    fpath = flist[--i];
-    if (mode == M_UFILES)
+    if (bbsmode == M_UFILES)
         usr_fpath(buf, cuser.userid, fpath);
     else                        /* M_XFILES */
         sprintf(buf, "%s", fpath);
@@ -282,6 +232,46 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
     {
         more(buf, NULL);
     }
+    return 0;
+}
+
+#define PERM_MENU       PERM_PURGE
+void x_file(int mode,            /* M_XFILES / M_UFILES */
+            const char *const xlist[], /* description list */
+            const char *const flist[]  /* filename list */
+    )
+{
+    const char *desc;
+    char buf[ANSILINELEN];
+
+    MENU list[41];
+
+    int n = 0;
+    while ((desc = xlist[n]))
+    {
+        sprintf(buf, "%*d %s", (mode == M_UFILES) ? 1 : 2, n+1, desc);
+        if (mode == M_XFILES)          /* Thor.980806: 註解: 印出檔名 */
+        {
+            int len_strip = strip_ansi_len(buf);
+            sprintf(buf + len_strip,
+                "%*s%s", BMAX((b_cols+1)/4U - len_strip - 4, 0), "", flist[n] + 4);
+                                       /* statue.000703: 註解: +4 去掉目錄 */
+        }
+        list[n] = TEMPLVAL(MENU,
+                {{.funcarg = {x_edit_file, flist[n]}}, 0, mode | M_ARG, strdup(buf)});
+        n++;
+    }
+    sprintf(buf, "%s\n%s", (mode == M_XFILES) ? "編系統檔案" : "編個人檔案",
+            "輸入檔案編號可跳至該項；按 (Enter)(→) 確定；按 (Esc)(e)(←) 回去");
+    list[n] = TEMPLVAL(MENU, {{NULL}, PERM_MENU, mode, buf});
+
+    if (mode == M_UFILES)
+        domenu(list, MENU_YPOS, MENU_XPOS, 0, 0, 1);
+    else
+        domenu(list, (b_lines-19)/2U, 0, 20, (b_cols+1)/2U, 2);
+
+    for (MENU *mptr = list; mptr->item.func; mptr++)
+        free((char *)mptr->desc);
 }
 
 int check_admin(const char *name)

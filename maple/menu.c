@@ -1198,7 +1198,7 @@ void
 domenu(
     MENU *menu, int y, int x, int height, int width, int cmdcur_max)
 {
-    MENU *mtail, *table[17];
+    MENU *mtail, *table[41];
     int cc=0, cx=0;     /* current / previous cursor position */
     int max=0, mmx=0;   /* current / previous menu max */
     int cmd=0;
@@ -1266,7 +1266,7 @@ domenu(
 
         if (mode & MENU_DRAW)
         {
-            int item_length[20]={0};
+            int item_length[COUNTOF(table)]={0};
 
             if (mode & MENU_FILM)
             {
@@ -1290,7 +1290,7 @@ domenu(
                 move_ansi(yi, xi + 2);
                 if (i <= max)
                 {
-                    char item[60];
+                    char item[ANSILINELEN];
                     const MENU *const mptr = table[i];
                     const char *const str = check_info(mptr->desc);
                     int match_max = BMIN(cmdcur_max, strcspn(str, "\n"));
