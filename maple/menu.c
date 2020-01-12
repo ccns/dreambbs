@@ -1423,6 +1423,8 @@ domenu(
             every_S();
             break;
         case KEY_LEFT:
+        case KEY_ESC:
+        case Meta(KEY_ESC):
         case 'e':
             if (menu != menu_main)
             {
