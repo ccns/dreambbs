@@ -403,9 +403,11 @@ menu_foot(void)
     /* Thor.980913: 註解: 最常見呼叫 movie()的時機是每次更新 film, 在 60秒以上,
                           故不需針對 xx:yy 來特別作一字串儲存以加速 */
 
-    sprintf(footer, "\x1b[0;34;46m%s%d:%02d] \x1b[30;47m 目前站上有\x1b[31m%4d\x1b[30m 人，我是 \x1b[31m%-12s\x1b[30m [呼叫/訊息]\x1b[31m%s",
+    sprintf(footer, "\x1b[0;34;46m%s%d:%02d] \x1b[30;47m 目前站上有\x1b[31m%4d\x1b[30m 人，我是 \x1b[31m%-*s\t\x1b[30m [呼叫/訊息]\x1b[31m%s",
         datemsg, ufo / 60, ufo % 60,
-        /*ushm->count*/total_num, cuser.userid, flagmsg);
+        /*ushm->count*/total_num,
+        12 + 14 - strlen(datemsg) + (ufo / 60 < 10),
+        cuser.userid, flagmsg);
     outf(footer);
 }
 
