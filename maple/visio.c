@@ -847,16 +847,23 @@ new_line:
 
 
 void
-outs(
-    const char *str)
+outns(
+    const char *str, int n)
 {
     int ch;
 
-    while ((ch = (unsigned char) *str))
+    while (n-- > 0 && (ch = (unsigned char) *str))
     {
         outc(ch);
         str++;
     }
+}
+
+void
+outs(
+    const char *str)
+{
+    outns(str, strlen(str));
 }
 
 #endif // #ifdef M3_USE_PFTERM
@@ -989,21 +996,28 @@ outx(
 
 
 void
-outz(
-    const char *msg)
-//  const char *msg)
+outnz(
+    const char *msg, int n)
 {
     move(b_lines, 0);
     clrtoeol();
-    outs(msg);
+    outns(msg, n);
+}
+
+void
+outz(
+    const char *msg)
+{
+    outnz(msg, strlen(msg));
 }
 
 void
 outf(
     const char *str)
 {
-    outz(str);
-    prints("%*s\x1b[m", d_cols, "");
+    const int lstr_len = strcspn(str, "\t");
+    outnz(str, lstr_len);
+    prints("%*s%s\x1b[m", d_cols, "", str + BMIN(lstr_len + 1, strlen(str)));
 }
 
 #ifdef M3_USE_PFTERM
