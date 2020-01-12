@@ -301,7 +301,7 @@ vs_head(
         clear();
     }
 
-    len_ttl = strlen(title);
+    len_ttl = strcspn(title, "\n");
     len = strlen(mid);
     ufo = cutmp->ufo;
     if (ufo & UFO_BIFF)
@@ -1293,8 +1293,9 @@ domenu(
                     char item[60];
                     const MENU *const mptr = table[i];
                     const char *const str = check_info(mptr->desc);
-                    int match_max = BMIN(cmdcur_max, strlen(str));
-                    sprintf(item, "\x1b[m(\x1b[1;36m%-*.*s\x1b[m)%s", cmdcur_max, match_max, str, str + match_max);
+                    int match_max = BMIN(cmdcur_max, strcspn(str, "\n"));
+                    sprintf(item, "\x1b[m(\x1b[1;36m%-*.*s\x1b[m)%.*s",
+                            cmdcur_max, match_max, str, strcspn(str + match_max, "\n"), str + match_max);
                     outs(item);
 
                     if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
@@ -1533,6 +1534,15 @@ domenu(
             }
             if (cc != cx)
             {
+                const char *explan = strchr(table[cc]->desc, '\n');
+                if (!explan)
+                    explan = strchr(mtail->desc, '\n');
+                if (explan)
+                {
+                    move(b_lines - 1, b_cols - strip_ansi_len(explan + 1));
+                    outs(explan + 1);
+                }
+
                 if (cx >= 0)
                 {
                     cursor_bar_clear(ycx, xcx, width);
