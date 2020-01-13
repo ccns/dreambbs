@@ -263,6 +263,7 @@ void oflush(void);
 #else
 void move(int y, int x);
 void move_ansi(int y, int x);
+void move_ref(int y, int x);
 void refresh(void);
 void clear(void);
 void clrtoeol(void);
@@ -285,6 +286,9 @@ void clearange(int from, int to);
 #endif  /* #ifdef M3_USE_PFTERM */
 
 void getyx(int *y, int *x);
+GCC_PURE int gety_ref(int y_ref);
+GCC_PURE int getx_ref(int x_ref);
+void move_ref(int y, int x);
 int expand_esc_star_visio(char *buf, const char *src, int szbuf);
 void outx(const char *str);
 void outnz(const char *msg, int n);

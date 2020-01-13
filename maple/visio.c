@@ -868,6 +868,53 @@ outs(
 
 #endif // #ifdef M3_USE_PFTERM
 
+/* Screen size referencing coordinate mapping */
+
+/* IID.20200113: Map a cursor referencing to screen size to real position */
+/* `(T_LINES_REF/a + b, T_COLS_REF/c + d)` is mapped to `(t_lines/a + b, t_columns/c + d)`
+      if `a` divides `T_LINES_DIV_RES` and `abs(b) < T_LINES_OFF_MAX`
+         and `c` divides `T_COLS_DIV_RES` and `abs(d) < T_COLS_OFF_MAX` */
+/* Useful for functions which use fixed `y` and `x` and need to handle screen resizing */
+GCC_PURE int
+gety_ref(
+    int y_ref)
+{
+    /* Substitute `T_LINES` with `t_lines` */
+    const int y_clipped = TCLAMP(y_ref, 0, T_LINES_REF - 1);
+    /* Calculate the multiplier/divisor (`n*`, `/n`) */
+    const int y_segment = y_clipped / (2*T_LINES_OFF_MAX);
+    /*    and then substitute the multiplicand/dividend with `t_lines` */
+    const int y_base = y_segment * t_lines / T_LINES_DIV_RES;
+    /* Division truncation compensation, for making segments continuous */
+    const int y_compensate = (y_segment * t_lines % T_LINES_DIV_RES != 0);
+    /* Get offset (`+n`, `-n`) (with range `[0, 2*T_LINES_OFF_MAX)`) */
+    /*    `[0, T_LINES_OFF_MAX)` => positive (`[0, T_LINES_OFF_MAX)`);
+          `[T_LINES_OFF_MAX, 2*T_LINES_OFF_MAX)` => negative (`[-T_LINES_OFF_MAX, 0)`) */
+    const int y_offset = y_clipped % (2*T_LINES_OFF_MAX);
+    return y_base + y_compensate + y_offset - ((y_offset >= T_LINES_OFF_MAX) ? 2*T_LINES_OFF_MAX : 0);
+}
+GCC_PURE int
+getx_ref(
+    int x_ref)
+{
+    /* Substitute `T_COLS` with `t_columns` */
+    /* Do the same with `x` */
+    const int x_clipped = TCLAMP(x_ref, 0, T_COLS_REF - 1);
+    const int x_segment = x_clipped / (2*T_COLS_OFF_MAX);
+    const int x_base = x_segment * t_columns / T_COLS_DIV_RES;
+    const int x_compensate = (x_segment * t_columns % T_COLS_DIV_RES != 0);
+    const int x_offset = x_clipped % (2*T_COLS_OFF_MAX);
+    return x_base + x_compensate + x_offset - ((x_offset >= T_COLS_OFF_MAX) ? 2*T_COLS_OFF_MAX : 0);
+}
+
+void
+move_ref(
+    int y,
+    int x)
+{
+    move_ansi(gety_ref(y), getx_ref(x));
+}
+
 /* ----------------------------------------------------- */
 /* eXtended output: ¨q¥X user ªº name ©M nick            */
 /* ----------------------------------------------------- */

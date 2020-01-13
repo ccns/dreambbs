@@ -45,6 +45,20 @@
 
 #define BFLAG(n)        (1U << n)       /* 32 bit-wise flag */
 
+/* IID.20200113: For `get[y|x]_ref()` & `move_ref()` */
+/* Use 2's power to prevent division */
+#define T_LINES_REF  (T_LINES_DIV_RES * 2*T_LINES_OFF_MAX)
+#define T_LINES_DIV_RES  128U  /* Divisor resolution */
+#define T_LINES_OFF_MAX  512U  /* Maximum offset; >= T_LINES */
+#define T_COLS_REF   (T_COLS_DIV_RES * 2*T_COLS_OFF_MAX)
+#define T_COLS_DIV_RES   128U
+#define T_COLS_OFF_MAX   512U  /* >= T_COLS */
+
+#define B_LINES_REF  (T_LINES_REF - 1)  /* Mapped to `b_lines` */
+#define P_LINES_REF  (B_LINES_REF - 5)  /* Mapped to `p_lines` */
+#define B_COLS_REF   (T_COLS_REF - 1)   /* Mapped to `b_cols` */
+#define D_COLS_REF   (B_COLS_REF - 79)  /* Mapped to `d_cols` */
+
 
 typedef char const *STRING;
 typedef struct UTMP UTMP;
