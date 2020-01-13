@@ -267,7 +267,7 @@ static int vkey_is_typeahead(void)
 #define FTATTR_DEFAULT   (FTATTR_ERASE)
 #define FTCHAR_INVALID_DBCS ('?')
 // #define FTATTR_TRANSPARENT (0x80)
-#define FTVATTR_DEFAULT  (0x00)
+#define FTCATTR_DEFAULT  (0x00)
 
 #define FTDIRTY_CHAR    (0x01)
 #define FTDIRTY_ATTR    (0x02)
@@ -295,7 +295,7 @@ static int vkey_is_typeahead(void)
 
 typedef unsigned char ftchar;   // primitive character type
 typedef unsigned char ftattr;   // primitive attribute type
-typedef unsigned char ftvattr;  // primitive type for virtual attributes
+typedef unsigned char ftcattr;  // primitive type for cursor attributes
 
 //////////////////////////////////////////////////////////////////////////
 // Flat Terminal Structure
@@ -325,8 +325,8 @@ typedef struct
     // typeahead
     char    typeahead;
 
-    // virtual attributes for processing escape commands
-    ftvattr vattr;
+    // extra attributes for the cursor
+    ftcattr cattr;
 
     // escape command
     ftchar  cmd[FTCMD_MAXLEN+1];
@@ -362,8 +362,8 @@ static FlatTerm ft;
 #define FTATTR_MAKE(f, b)   (((f)<<FTATTR_FGSHIFT)|((b)<<FTATTR_BGSHIFT))
 #define FTCHAR_ISBLANK(x)   ((x) == (FTCHAR_BLANK))
 
-// ftvattr: 0| UNUSED(7) | REVERSE(1) |8
-#define FTVATTR_REVERSE    (0x80)
+// ftcattr: 0| UNUSED(7) | REVERSE(1) |8
+#define FTCATTR_REVERSE    (0x80)
 
 #define FTCMAP  ft.cmap[ft.mi]
 #define FTAMAP  ft.amap[ft.mi]
@@ -545,7 +545,7 @@ initscr(void)
 
     memset(&ft, 0, sizeof(ft));
     ft.attr = ft.rattr = FTATTR_DEFAULT;
-    ft.vattr = FTVATTR_DEFAULT;
+    ft.cattr = FTCATTR_DEFAULT;
     resizeterm(FTSZ_DEFAULT_ROW, FTSZ_DEFAULT_COL);
 
     // clear both pages
@@ -1778,18 +1778,18 @@ fterm_exec(void)
         //  SGR 0 (reset/normal)        is supported.
         //  SGR 1 (intensity: bold)     is supported.
         //  SGR 2 (intensity: faint)    is not supported.
-        //  SGR 3 (italic: on)          is converted to (inverse (virtual): toggle)
+        //  SGR 3 (italic: on)          is converted to (inverse (cursor): toggle)
         //  SGR 4 (underline: single)   is not supported.
         //  SGR 5 (blink: slow)         is supported.
         //  SGR 6 (blink: rapid)        is converted to (blink: slow)
-        //  SGR 7 (inverse: on)         is partially supported. (converted to inverse (virtual): toggle)
+        //  SGR 7 (inverse: on)         is partially supported. (converted to inverse (cursor): toggle)
         //  SGR 8 (conceal: on)         is not supported.
         //  SGR 21(underline: double)   is not supported.
         //  SGR 22(intensity: normal)   is supported.
         //  SGR 23(italic: off)         is not supported.
         //  SGR 24(underline: none)     is not supported.
         //  SGR 25(blink: off)          is supported.
-        //  SGR 27(inverse: off)        is partially supported (as a virtual attribute).
+        //  SGR 27(inverse: off)        is partially supported (as a cursor attribute).
         //  SGR 28(conceal: off)        is not supported.
         //  SGR 30-37 (FG)              is supported.
         //  SGR 38 (FG-extended)        is not supported.
@@ -1817,7 +1817,7 @@ fterm_exec(void)
             {
             case 0:
                 attrset(FTATTR_DEFAULT);
-                ft.vattr = FTVATTR_DEFAULT;
+                ft.cattr = FTCATTR_DEFAULT;
                 break;
             case 1:
                 attrset(attrget() | FTATTR_BOLD);
@@ -1833,7 +1833,7 @@ fterm_exec(void)
                 attrset(attrget() & ~FTATTR_BLINK);
                 break;
             case 27:
-                if (!(ft.vattr & FTVATTR_REVERSE))
+                if (!(ft.cattr & FTCATTR_REVERSE))
                     break;
                 // Falls through
             case 3:
@@ -1842,7 +1842,7 @@ fterm_exec(void)
                     ftattr a = attrget();
                     attrsetfg(FTATTR_GETBG(a));
                     attrsetbg(FTATTR_GETFG(a));
-                    ft.vattr ^= FTVATTR_REVERSE;
+                    ft.cattr ^= FTCATTR_REVERSE;
                 }
                 break;
             case 39:
