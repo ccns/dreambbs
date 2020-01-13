@@ -254,7 +254,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
         {
             int len_strip = strip_ansi_len(buf);
             sprintf(buf + len_strip,
-                "%*s%s", BMAX((b_cols+1)/4U - len_strip - 4, 0), "", flist[n] + 4);
+                "%*s%s", BMAX(24 - len_strip - 4, 0), "", flist[n] + 4);
                                        /* statue.000703: µù¸Ñ: +4 ¥h±¼¥Ø¿ý */
         }
         list[n] = TEMPLVAL(MENU,
