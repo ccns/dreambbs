@@ -522,6 +522,10 @@ int     fterm_prepare_str(int len);
 // DBCS supporting
 int     fterm_DBCS_Big5(unsigned char c1, unsigned char c2);
 
+// internal attribute processing
+ftattr  fterm_attrget_raw(void);
+ftattr  fterm_apply_cattr(ftattr attr, ftcattr cattr);  // Apply `cattr` to `attr`
+
 #ifdef __cplusplus
 }  /* extern "C" */
 #endif
@@ -689,9 +693,21 @@ resizeterm(int rows, int cols)
 // attributes
 
 ftattr
-attrget(void)
+fterm_attrget_raw(void)
 {
     return ft.attr;
+}
+
+ftattr
+fterm_apply_cattr(ftattr attr, ftcattr cattr)
+{
+    return attr;
+}
+
+ftattr
+attrget(void)
+{
+    return fterm_apply_cattr(ft.attr, ft.cattr);
 }
 
 void
@@ -1416,7 +1432,7 @@ outc(unsigned char c)
 #ifdef FTATTR_TRANSPARENT
         if (ft.attr != FTATTR_TRANSPARENT)
 #endif // FTATTR_TRANSPARENT
-        FTA = ft.attr;
+        FTA = attrget();
 
         // normal characters
         FTC = c;
@@ -1820,17 +1836,17 @@ fterm_exec(void)
                 ft.cattr = FTCATTR_DEFAULT;
                 break;
             case 1:
-                attrset(attrget() | FTATTR_BOLD);
+                attrset(fterm_attrget_raw() | FTATTR_BOLD);
                 break;
             case 22:
-                attrset(attrget() & ~FTATTR_BOLD);
+                attrset(fterm_attrget_raw() & ~FTATTR_BOLD);
                 break;
             case 5:
             case 6:
-                attrset(attrget() | FTATTR_BLINK);
+                attrset(fterm_attrget_raw() | FTATTR_BLINK);
                 break;
             case 25:
-                attrset(attrget() & ~FTATTR_BLINK);
+                attrset(fterm_attrget_raw() & ~FTATTR_BLINK);
                 break;
             case 27:
                 if (!(ft.cattr & FTCATTR_REVERSE))
@@ -1839,7 +1855,7 @@ fterm_exec(void)
             case 3:
             case 7:
                 {
-                    ftattr a = attrget();
+                    ftattr a = fterm_attrget_raw();
                     attrsetfg(FTATTR_GETBG(a));
                     attrsetbg(FTATTR_GETFG(a));
                     ft.cattr ^= FTCATTR_REVERSE;
