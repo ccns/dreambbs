@@ -234,6 +234,7 @@ Violate(void)
     sprintf(fpath, FN_VIOLATELAW_DB);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = viol_cb;
+    xo->recsiz = sizeof(EMAIL);
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);

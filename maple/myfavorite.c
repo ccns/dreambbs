@@ -523,6 +523,7 @@ XoFavorite(
 
     xz[XZ_MYFAVORITE - XO_ZONE].xo = xo = xo_new(folder);
     xo->cb = myfavorite_cb;
+    xo->recsiz = sizeof(HDR);
     xo->pos = 0;
     xo->key = XZ_MYFAVORITE;
 

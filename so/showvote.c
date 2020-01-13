@@ -195,6 +195,7 @@ XO *xo)
 
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = show_cb;
+    xo->recsiz = sizeof(LOG);
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);

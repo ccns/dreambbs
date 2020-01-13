@@ -12,7 +12,6 @@
 
 
 typedef struct {
-    int recsiz;
     void (*item_func)(int num, const void *obj);
     void (*query_func)(const void *obj);
     int (*add_func)(const char *fpath, const void *old, int pos);
@@ -566,7 +565,7 @@ innbbs_body(
     do
     {
         xyz->item_func(++num, rec);
-        rec += xyz->recsiz;
+        rec += xo->recsiz;
     } while (num < max);
 
     clrtobot();
@@ -586,7 +585,7 @@ static int
 innbbs_init(
     XO *xo)
 {
-    xo_load(xo, ((InnbbsXyz *)xo->xyz)->recsiz);
+    xo_load(xo, xo->recsiz);
     return innbbs_head(xo);
 }
 
@@ -594,7 +593,7 @@ static int
 innbbs_load(
     XO *xo)
 {
-    xo_load(xo, ((InnbbsXyz *)xo->xyz)->recsiz);
+    xo_load(xo, xo->recsiz);
     return innbbs_body(xo);
 }
 
@@ -604,7 +603,7 @@ innbbs_query(
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
     int cur = xo->pos - xo->top;
-    xyz->query_func(xo_pool + cur * xyz->recsiz);
+    xyz->query_func(xo_pool + cur * xo->recsiz);
     return XO_BODY;
 }
 
@@ -628,7 +627,7 @@ innbbs_del(
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
     if (vans(msg_del_ny) == 'y')
     {
-        rec_del(xo->dir, xyz->recsiz, xo->pos, NULL, NULL);
+        rec_del(xo->dir, xo->recsiz, xo->pos, NULL, NULL);
         xyz->dirty = true;
         return XO_LOAD;
     }
@@ -641,7 +640,7 @@ innbbs_edit(
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
     int cur = xo->pos - xo->top;
-    if (xyz->add_func(xo->dir, xo_pool + cur * xyz->recsiz, xo->pos))
+    if (xyz->add_func(xo->dir, xo_pool + cur * xo->recsiz, xo->pos))
     {
         xyz->dirty = true;
         return XO_INIT;
@@ -663,7 +662,7 @@ innbbs_search(
         for (i = xo->pos + 1; i <= num; i++)
         {
             int cur = i - xo->top;
-            if (xyz->search_func(xo_pool + cur * xyz->recsiz, buf))
+            if (xyz->search_func(xo_pool + cur * xo->recsiz, buf))
             {
                 return i + XO_MOVE;
             }
@@ -708,6 +707,7 @@ a_innbbs(void)
     XO *xo;
     InnbbsXyz xyz;
     const char *fpath;
+    int recsiz;
 
     if (!check_admin(cuser.userid) && str_cmp(cuser.userid, SYSOPNAME))
     {
@@ -724,7 +724,7 @@ a_innbbs(void)
     {
     case '1':
         fpath = "innd/nodelist.bbs";
-        xyz.recsiz = sizeof(nodelist_t);
+        recsiz = sizeof(nodelist_t);
         xyz.item_func = nl_item;
         xyz.query_func = nl_query;
         xyz.add_func = nl_add;
@@ -734,7 +734,7 @@ a_innbbs(void)
 
     case '2':
         fpath = "innd/newsfeeds.bbs";
-        xyz.recsiz = sizeof(newsfeeds_t);
+        recsiz = sizeof(newsfeeds_t);
         xyz.item_func = nf_item;
         xyz.query_func = nf_query;
         xyz.add_func = nf_add;
@@ -744,7 +744,7 @@ a_innbbs(void)
 
     case '3':
         fpath = "innd/ncmperm.bbs";
-        xyz.recsiz = sizeof(ncmperm_t);
+        recsiz = sizeof(ncmperm_t);
         xyz.item_func = ncm_item;
         xyz.query_func = ncm_query;
         xyz.add_func = ncm_add;
@@ -754,7 +754,7 @@ a_innbbs(void)
 
     case '4':
         fpath = "innd/spamrule.bbs";
-        xyz.recsiz = sizeof(spamrule_t);
+        recsiz = sizeof(spamrule_t);
         xyz.item_func = spam_item;
         xyz.query_func = spam_query;
         xyz.add_func = spam_add;
@@ -769,6 +769,7 @@ a_innbbs(void)
     utmp_mode(M_OMENU);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = innbbs_cb;
+    xo->recsiz = recsiz;
     xo->xyz = &xyz;
     xo->pos = 0;
 
@@ -777,7 +778,7 @@ a_innbbs(void)
     xover(XZ_OTHER);
 
     if (xyz.dirty)
-        rec_sync(fpath, xyz.recsiz, xyz.sync_func, NULL);
+        rec_sync(fpath, recsiz, xyz.sync_func, NULL);
 
     free(xo);
     return DL_RELEASE(0);

@@ -1480,6 +1480,7 @@ XoGem(
 
     xz[XZ_GEM - XO_ZONE].xo = xo = xo_new(folder);
     xo->cb = gem_cb;
+    xo->recsiz = sizeof(HDR);
     xo->pos = 0;
     xo->key = level;
     xo->xyz = (void *)title;
@@ -1500,6 +1501,7 @@ gem_main(void)
     free(xz[XZ_GEM - XO_ZONE].xo);
     xz[XZ_GEM - XO_ZONE].xo = xo = xo_new("gem/.DIR");
     xo->cb = gem_cb;
+    xo->recsiz = sizeof(HDR);
     xo->pos = 0;
     xo->key = ((HAS_PERM(PERM_SYSOP|PERM_BOARD|PERM_GEM)) ? GEM_SYSOP : GEM_USER);
     xo->xyz = (void *)"";

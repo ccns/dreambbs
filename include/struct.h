@@ -851,6 +851,7 @@ typedef struct OverView
     void *xyz;                  /* staff */
     struct OverView *nxt;       /* next */
     KeyFuncListRef cb;          /* Callback functions */
+    int recsiz;                 /* Record size */
     char dir[FLEX_SIZE];        /* data path */
 } XO;
 #define OverView_FLEX_MEMBER    dir

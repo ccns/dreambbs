@@ -827,6 +827,7 @@ XoPost(
     brd_fpath(fpath, currboard, fn_dir);
     xz[XZ_POST - XO_ZONE].xo = xo = xo_get(fpath);
     xo->cb = post_cb;
+    xo->recsiz = sizeof(HDR);
     xo->key = XZ_POST;
     xo->xyz = (void *) (brd->bvote > 0 ? (char *) "本看板進行投票中" : brd->title + 3);
     str = brd->BM;
@@ -1568,6 +1569,7 @@ XoAuthor(
                     XO *xt = xo_get(folder);
                     xt->pos = tail - head;
                     xt->cb = post_cb;
+                    xt->recsiz = sizeof(HDR);
                     chp[tag++] = chn;
                     break;
                 }
@@ -1620,6 +1622,7 @@ XoAuthor(
     }
 
     xo_a.cb = class_cb;
+    xo_a.recsiz = sizeof(short);
     xo_a.pos = xo_a.top = 0;
     xo_a.max = tag;
     xo_a.key = 1;                       /* all boards */
@@ -1729,6 +1732,7 @@ XoClass(
     /* Thor.980727: 解決 XO xo的不確定性,
                     class_load內部會 initial xo.max, 其他不確定 */
     xo.cb = class_cb;
+    xo.recsiz = sizeof(short);
     xo.pos = xo.top = 0;
 
     xo.key = chn;
@@ -1933,6 +1937,7 @@ board_main(void)
     }
 
     board_xo.cb = class_cb;
+    board_xo.recsiz = sizeof(short);
     board_xo.key = CH_END;
     if (class_img)
         class_load(&board_xo);

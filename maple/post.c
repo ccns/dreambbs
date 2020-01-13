@@ -4747,6 +4747,7 @@ XoXpost(                        /* Thor: call from post_cb */
     comebackPos = xo->pos;      /* Thor: record pos, future use */
     xz[XZ_XPOST - XO_ZONE].xo = xt = xo_new(xo->dir);
     xt->cb = xpost_cb;
+    xt->recsiz = sizeof(HDR);
     xt->pos = 0;
     xt->max = sum;
     xt->xyz = xo->xyz;

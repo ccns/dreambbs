@@ -370,6 +370,7 @@ clean(
 
     xz[XZ_OTHER - XO_ZONE].xo = xoo = xo_new(recommenddb);
     xoo->cb = cleanrecommend_cb;
+    xoo->recsiz = sizeof(RMSG);
     xoo->pos = 0;
     xover(XZ_OTHER);
     free(xoo);

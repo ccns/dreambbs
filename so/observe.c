@@ -277,6 +277,7 @@ Observe_list(void)
     sprintf(fpath, FN_ETC_OBSERVE);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = observe_cb;
+    xo->recsiz = sizeof(OBSERVE);
     xo->pos = 0;
     xover(XZ_OTHER);
     observeshm_load();

@@ -941,6 +941,7 @@ XoNewBoard(void)
     sprintf(fpath, "newboard/%s", fn_dir);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = nbrd_cb;
+    xo->recsiz = sizeof(NBRD);
     xo->pos = 0;
     xo->key = XZ_OTHER;
     xover(XZ_OTHER);

@@ -325,6 +325,7 @@ XO *xo)
     free(xo);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = list_cb;
+    xo->recsiz = sizeof(LIST);
     xo->pos = 0;
     return XO_INIT;
 }
@@ -346,6 +347,7 @@ XO *xo)
     free(xo);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = list_cb;
+    xo->recsiz = sizeof(LIST);
     xo->pos = 0;
     return XO_INIT;
 }
@@ -395,6 +397,7 @@ List(void)
     usr_fpath(fpath, cuser.userid, buf);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = list_cb;
+    xo->recsiz = sizeof(LIST);
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);

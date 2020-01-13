@@ -586,6 +586,7 @@ int level)
 
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(folder);
     xo->cb = song_cb;
+    xo->recsiz = sizeof(HDR);
     xo->pos = 0;
     xo->key = XZ_OTHER;
     xo->xyz = (void *) "ÂIºq¨t²Î";

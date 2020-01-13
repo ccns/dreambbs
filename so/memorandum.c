@@ -250,6 +250,7 @@ Memorandum(void)
     usr_fpath(fpath, cuser.userid, "memorandum");
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = memorandum_cb;
+    xo->recsiz = sizeof(MEMORANDUM);
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
