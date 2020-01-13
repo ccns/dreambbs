@@ -1191,15 +1191,16 @@ void
 main_menu(void)
 {
 #ifdef  TREAT
-    domenu(menu_treat, MENU_YPOS, MENU_XPOS, 0, 0, 1);
+    domenu(menu_treat, MENU_YPOS_REF, MENU_XPOS_REF, 0, 0, 1);
 #endif
-    domenu(menu_main, MENU_YPOS, MENU_XPOS, 0, 0, 1);
+    domenu(menu_main, MENU_YPOS_REF, MENU_XPOS_REF, 0, 0, 1);
 }
 
 void
 domenu(
-    MENU *menu, int y, int x, int height, int width, int cmdcur_max)
+    MENU *menu, int y_ref, int x_ref, int height_ref, int width_ref, int cmdcur_max)
 {
+    int y, x, height, width;
     MENU *mtail, *table[41];
     int cc=0, cx=0;     /* current / previous cursor position */
     int max=0, mmx=0;   /* current / previous menu max */
@@ -1211,6 +1212,11 @@ domenu(
     int cmdlen[COUNTOF(table)];  /* Command matching length (no spaces) */
     bool keep_cmd = false;
     bool keyboard_cmd = true;
+
+    y = gety_ref(y_ref);
+    x = getx_ref(x_ref);
+    height = gety_ref(height_ref);
+    width = getx_ref(width_ref);
 
     for (;;)
     {
@@ -1562,6 +1568,16 @@ menu_key:
 
         cmd = vkey();
         keyboard_cmd = true;
+
+        if (gety_ref(y_ref) != y || getx_ref(x_ref) != x || gety_ref(height_ref) != height || getx_ref(width_ref) != width)
+        {
+            y = gety_ref(y_ref);
+            x = getx_ref(x_ref);
+            height = gety_ref(height_ref);
+            width = getx_ref(width_ref);
+
+            mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
+        }
     }
 }
 

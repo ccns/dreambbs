@@ -515,6 +515,8 @@
 #define MENU_NOMOVIE_POS(y, x)  (y < (MOVIE_LINES + 2))  /* Suppress movie display when menu starts at (x, y) */
 #define MENU_XPOS       (d_cols / 2U + 23)    /* 選單開始的 (y, x) 座標 */
 #define MENU_YPOS       13
+#define MENU_XPOS_REF   (D_COLS_REF / 2U + 23)  /* For `get[y|x]_ref()` & `move_ref()` */
+#define MENU_YPOS_REF   13
 #define MENU_LOAD       1
 #define MENU_DRAW       2
 #define MENU_FILM       4

@@ -266,9 +266,9 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
     list[n] = TEMPLVAL(MENU, {{NULL}, PERM_MENU, mode, buf});
 
     if (mode == M_UFILES)
-        domenu(list, MENU_YPOS, MENU_XPOS, 0, 0, 1);
+        domenu(list, MENU_YPOS_REF, MENU_XPOS_REF, 0, 0, 1);
     else
-        domenu(list, (b_lines-19)/2U, 0, 20, (b_cols+1)/2U, 2);
+        domenu(list, (B_LINES_REF-19)/2U, 0, 20, T_COLS_REF/2U, 2);
 
     for (MENU *mptr = list; mptr->item.func; mptr++)
         free((char *)mptr->desc);
