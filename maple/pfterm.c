@@ -362,7 +362,8 @@ static FlatTerm ft;
 #define FTATTR_MAKE(f, b)   (((f)<<FTATTR_FGSHIFT)|((b)<<FTATTR_BGSHIFT))
 #define FTCHAR_ISBLANK(x)   ((x) == (FTCHAR_BLANK))
 
-// ftcattr: 0| UNUSED(5) | ITALIC(1) | REVERSE(1) | CONCEAL(1) |8
+// ftcattr: 0| UNUSED(4) | FGBRIGHT(1) | ITALIC(1) | REVERSE(1) | CONCEAL(1) |8
+#define FTCATTR_FGBRIGHT   (0x10)
 #define FTCATTR_ITALIC     (0x20)
 #define FTCATTR_REVERSE    (0x40)
 #define FTCATTR_CONCEAL    (0x80)
@@ -703,6 +704,8 @@ fterm_attrget_raw(void)
 ftattr
 fterm_apply_cattr(ftattr attr, ftcattr cattr)
 {
+    if (cattr & FTCATTR_FGBRIGHT)
+        attr |= FTATTR_BOLD;
     if (cattr & (FTCATTR_ITALIC | FTCATTR_REVERSE))
         attr = (attr & ~(FTATTR_FGMASK | FTATTR_BGMASK))
             | FTATTR_MAKE(FTATTR_GETBG(attr), FTATTR_GETFG(attr));
@@ -1821,21 +1824,33 @@ fterm_exec(void)
         //  SGR 40-47 (BG)              is supported.
         //  SGR 48 (BG-extended)        is not supported.
         //  SGR 49 (BG-reset)           is supported.
-        //  SGR 90-97   (FG-bright) (aixterm; non-standard)   is not supported.
-        //  SGR 100-107 (BG-bright) (aixterm; non-standard)   is not supported.
+        //  SGR 90-97   (FG-bright) (aixterm; non-standard)   is supported (cursor attribute; intensity: bold).
+        //  SGR 100-107 (BG-bright) (aixterm; non-standard)   is converted to (BG-normal)
         if (n == -1)    // first param
             n = 0;
         while (n > -1)
         {
             if (n >= 30 && n <= 37)
             {
-                // set foreground
+                // set foreground (normal)
                 attrsetfg(n - 30);
+                ft.cattr &= ~FTCATTR_FGBRIGHT;
+            }
+            else if (n >= 90 && n <= 97)
+            {
+                // set foreground (bright)
+                attrsetfg(n - 90);
+                ft.cattr |= FTCATTR_FGBRIGHT;
             }
             else if (n >= 40 && n <= 47)
             {
-                // set background
+                // set background (normal)
                 attrsetbg(n - 40);
+            }
+            else if (n >= 100 && n <= 107)
+            {
+                // set background (bright; converted to normal)
+                attrsetbg(n - 100);
             }
             else switch (n)
             {
