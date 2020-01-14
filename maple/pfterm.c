@@ -1671,13 +1671,7 @@ fterm_exec(void)
     ft.cmd[ft.szcmd] = 0;
 
     if (isdigit(*p))
-    {
-        n = atoi(p);
-
-        while (*p && isdigit(*p))
-            p++;
-    }
-
+        n = strtol(p, &p, 10);
     if (*p == ';')
         p++;
     // p points to next param now
@@ -1914,8 +1908,7 @@ fterm_exec(void)
             }
             else if (isdigit(*p))
             {
-                n = atoi(p);
-                while (isdigit(*p)) p++;
+                n = strtol(p, &p, 10);
                 if (*p == ';')
                     p++;
             }
