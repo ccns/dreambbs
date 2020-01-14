@@ -362,8 +362,9 @@ static FlatTerm ft;
 #define FTATTR_MAKE(f, b)   (((f)<<FTATTR_FGSHIFT)|((b)<<FTATTR_BGSHIFT))
 #define FTCHAR_ISBLANK(x)   ((x) == (FTCHAR_BLANK))
 
-// ftcattr: 0| UNUSED(4) | FGBRIGHT(1) | ITALIC(1) | REVERSE(1) | CONCEAL(1) |8
-#define FTCATTR_FGBRIGHT   (0x10)
+// ftcattr: 0| UNUSED(3) | BGBRIGHT(1) | FGBRIGHT(1) | ITALIC(1) | REVERSE(1) | CONCEAL(1) |8
+#define FTCATTR_FGBRIGHT   (0x08)
+#define FTCATTR_BGBRIGHT   (0x10)
 #define FTCATTR_ITALIC     (0x20)
 #define FTCATTR_REVERSE    (0x40)
 #define FTCATTR_CONCEAL    (0x80)
@@ -704,11 +705,15 @@ fterm_attrget_raw(void)
 ftattr
 fterm_apply_cattr(ftattr attr, ftcattr cattr)
 {
-    if (cattr & FTCATTR_FGBRIGHT)
-        attr |= FTATTR_BOLD;
     if (cattr & (FTCATTR_ITALIC | FTCATTR_REVERSE))
-        attr = (attr & ~(FTATTR_FGMASK | FTATTR_BGMASK))
+    {
+        attr = (attr & ~(FTATTR_FGMASK | FTATTR_BOLD | FTATTR_BGMASK))
             | FTATTR_MAKE(FTATTR_GETBG(attr), FTATTR_GETFG(attr));
+        if (cattr & FTCATTR_BGBRIGHT)
+            attr |= FTATTR_BOLD;
+    }
+    else if (cattr & FTCATTR_FGBRIGHT)
+        attr |= FTATTR_BOLD;
     if (cattr & FTCATTR_CONCEAL)
         attr = (attr & ~(FTATTR_FGMASK | FTATTR_BOLD))
             | FTATTR_MAKE(FTATTR_GETBG(attr), 0);
@@ -1846,11 +1851,13 @@ fterm_exec(void)
             {
                 // set background (normal)
                 attrsetbg(n - 40);
+                ft.cattr &= ~FTCATTR_BGBRIGHT;
             }
             else if (n >= 100 && n <= 107)
             {
                 // set background (bright; converted to normal)
                 attrsetbg(n - 100);
+                ft.cattr |= FTCATTR_BGBRIGHT;
             }
             else switch (n)
             {
