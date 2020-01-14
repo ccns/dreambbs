@@ -1676,11 +1676,11 @@ fterm_exec(void)
 
         while (*p && isdigit(*p))
             p++;
-
-        if (*p == ';')
-            p++;
-        // p points to next param now
     }
+
+    if (*p == ';')
+        p++;
+    // p points to next param now
 
 #define EXEC_ESCSEQ  (0x0100)   // For ESC cmd
     switch ((ft.szcmd) > 2 ? cmd : EXEC_ESCSEQ | cmd)
@@ -1737,7 +1737,7 @@ fterm_exec(void)
         // A sequence such as CSI ;5H is a synonym for CSI 1;5H as well as
         // CSI 17;H is the same as CSI 17H and CSI 17;1H
         y = n;
-        if (y >= 0 && isdigit(*p))
+        if (isdigit(*p))  // `p` points to the second param or letter `H`/`f`
             x = atoi((char*)p);
         if (y < 0) y = 1;
         if (x < 0) x = 1;
