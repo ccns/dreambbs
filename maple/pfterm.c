@@ -1809,7 +1809,7 @@ fterm_exec(void)
         // SGR implementation:
         //  SGR 0 (reset/normal)        is supported.
         //  SGR 1 (intensity: bold)     is supported.
-        //  SGR 2 (intensity: faint)    is not supported.
+        //  SGR 2 (intensity: faint)    is converted to (intensity: normal).
         //  SGR 3 (italic: on)          is converted to (italic (cursor): toggle; converted to inverse)
         //  SGR 4 (underline: single)   is not supported.
         //  SGR 5 (blink: slow)         is supported.
@@ -1868,6 +1868,7 @@ fterm_exec(void)
             case 1:
                 attrset(fterm_attrget_raw() | FTATTR_BOLD);
                 break;
+            case 2:
             case 22:
                 attrset(fterm_attrget_raw() & ~FTATTR_BOLD);
                 break;
