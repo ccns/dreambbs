@@ -362,8 +362,10 @@ static FlatTerm ft;
 #define FTATTR_MAKE(f, b)   (((f)<<FTATTR_FGSHIFT)|((b)<<FTATTR_BGSHIFT))
 #define FTCHAR_ISBLANK(x)   ((x) == (FTCHAR_BLANK))
 
-// ftcattr: 0| UNUSED(7) | REVERSE(1) |8
-#define FTCATTR_REVERSE    (0x80)
+// ftcattr: 0| UNUSED(5) | ITALIC(1) | REVERSE(1) | CONCEAL(1) |8
+#define FTCATTR_ITALIC     (0x20)
+#define FTCATTR_REVERSE    (0x40)
+#define FTCATTR_CONCEAL    (0x80)
 
 #define FTCMAP  ft.cmap[ft.mi]
 #define FTAMAP  ft.amap[ft.mi]
@@ -701,9 +703,12 @@ fterm_attrget_raw(void)
 ftattr
 fterm_apply_cattr(ftattr attr, ftcattr cattr)
 {
-    if (cattr & FTCATTR_REVERSE)
+    if (cattr & (FTCATTR_ITALIC | FTCATTR_REVERSE))
         attr = (attr & ~(FTATTR_FGMASK | FTATTR_BGMASK))
             | FTATTR_MAKE(FTATTR_GETBG(attr), FTATTR_GETFG(attr));
+    if (cattr & FTCATTR_CONCEAL)
+        attr = (attr & ~(FTATTR_FGMASK | FTATTR_BOLD))
+            | FTATTR_MAKE(FTATTR_GETBG(attr), 0);
     return attr;
 }
 
@@ -1797,19 +1802,19 @@ fterm_exec(void)
         //  SGR 0 (reset/normal)        is supported.
         //  SGR 1 (intensity: bold)     is supported.
         //  SGR 2 (intensity: faint)    is not supported.
-        //  SGR 3 (italic: on)          is converted to (inverse (cursor): toggle)
+        //  SGR 3 (italic: on)          is converted to (italic (cursor): toggle; converted to inverse)
         //  SGR 4 (underline: single)   is not supported.
         //  SGR 5 (blink: slow)         is supported.
         //  SGR 6 (blink: rapid)        is converted to (blink: slow)
-        //  SGR 7 (inverse: on)         is supported. (converted to inverse (cursor): toggle)
-        //  SGR 8 (conceal: on)         is not supported.
+        //  SGR 7 (inverse: on)         is supported. (converted to inverse (cursor): toggle; swap fg & bg)
+        //  SGR 8 (conceal: on)         is supported (cursor attribute).
         //  SGR 21(underline: double)   is not supported.
         //  SGR 22(intensity: normal)   is supported.
-        //  SGR 23(italic: off)         is not supported.
+        //  SGR 23(italic: off)         is supported (cursor attribute).
         //  SGR 24(underline: none)     is not supported.
         //  SGR 25(blink: off)          is supported.
-        //  SGR 27(inverse: off)        is supported (as a cursor attribute).
-        //  SGR 28(conceal: off)        is not supported.
+        //  SGR 27(inverse: off)        is supported (cursor attribute).
+        //  SGR 28(conceal: off)        is supported (cursor attribute).
         //  SGR 30-37 (FG)              is supported.
         //  SGR 38 (FG-extended)        is not supported.
         //  SGR 39 (FG-reset)           is supported.
@@ -1844,6 +1849,12 @@ fterm_exec(void)
             case 22:
                 attrset(fterm_attrget_raw() & ~FTATTR_BOLD);
                 break;
+            case 3:
+                ft.cattr ^= FTCATTR_ITALIC;
+                break;
+            case 23:
+                ft.cattr &= ~FTCATTR_ITALIC;
+                break;
             case 5:
             case 6:
                 attrset(fterm_attrget_raw() | FTATTR_BLINK);
@@ -1851,12 +1862,17 @@ fterm_exec(void)
             case 25:
                 attrset(fterm_attrget_raw() & ~FTATTR_BLINK);
                 break;
+            case 7:
+                ft.cattr ^= FTCATTR_REVERSE;
+                break;
             case 27:
                 ft.cattr &= ~FTCATTR_REVERSE;
                 break;
-            case 3:
-            case 7:
-                ft.cattr ^= FTCATTR_REVERSE;
+            case 8:
+                ft.cattr |= FTCATTR_CONCEAL;
+                break;
+            case 28:
+                ft.cattr &= ~FTCATTR_CONCEAL;
                 break;
             case 39:
                 attrsetfg(FTATTR_DEFAULT_FG);
