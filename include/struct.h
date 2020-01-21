@@ -624,7 +624,7 @@ typedef struct BoardReadingHistory
 #define BRH_PAGE        2048         /* Thor.980902:註解:每次多配量, 用不到了 */
 #define BRH_MASK        0x7fffffff   /* Thor.980902:註解:最大量為2038年1月中*/
 #define BRH_SIGN        0x80000000   /* Thor.980902:註解:zap及壓final專用 */
-#define BRH_WINDOW      (sizeof(BRH) + sizeof(time_t) * BRH_MAX * 2)
+#define BRH_WINDOW      (sizeof(BRH) + sizeof(time_t) * BRH_MAX)
 
 /* ----------------------------------------------------- */
 /* Class image                                           */
