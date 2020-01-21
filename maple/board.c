@@ -259,7 +259,7 @@ brh_add(time_t prev, time_t chrono, time_t next)
         head++;
     }
 
-    if (next >= begin)
+    if (next >= begin && item > 0)
     {
         head[-1] = chrono;
         return;
