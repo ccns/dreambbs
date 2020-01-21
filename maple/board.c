@@ -261,7 +261,8 @@ brh_add(time_t prev, time_t chrono, time_t next)
 
     if (next >= begin && item > 0)
     {
-        head[-1] = chrono;
+        if (chrono < begin)
+            head[-1] = chrono;
         return;
     }
 
