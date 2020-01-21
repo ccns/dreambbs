@@ -125,7 +125,7 @@ brh_get(
             if (bstamp == *head)
             {
                 bcnt = item;
-                memcpy(buf, head + 3, size - 3 * sizeof(time_t));
+                memcpy(buf, head + 3, size - sizeof(BRH));
                 tail = (int *) ((char *) tail - size);
                 if ((item = (char *) tail - (char *) head))
                     memmove(head, (char *) head + size, item);
