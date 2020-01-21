@@ -279,12 +279,18 @@ brh_add(time_t prev, time_t chrono, time_t next)
     }
     else
     {
-        /* [32, 30] [22, 10] */  /* Thor.980923: how about [6, 7, 8] ? [15, 7]? */
+        /* [32, 30] [22, 10] */
 
         tail--;
 
+        /* Thor.980923: how about [6, 7, 8] ? [15, 7]? */
+        /* [6, 7, 8] ==> [32, 30] [15, 10] */  /* [32, 30] [15, 7] */
         if (head >= tail)
+        {
+            if (chrono < begin)
+                head[-1] = chrono;
             return;
+        }
     }
 
     prev = chrono;
