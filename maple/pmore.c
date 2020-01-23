@@ -18,6 +18,7 @@
  * 20091014 - support help file
  * 20170810 - upgrade to pmore 2007+ (by r2)
  *            enable vmsg("PMORE_MSG_MOVIE_PAUSE") by ^LP again
+ * 20200123 - Remove the [K (CSI K) problem workaround because pmore 2007+ already handles it (by IID)
  */
 
 /*
@@ -455,8 +456,7 @@ static int debug = 0;
 // Common ANSI commands.
 #define ANSI_RESET      ESC_STR "[m"
 #define ANSI_COLOR(x)   ESC_STR "[" #x "m"
-//#define ANSI_CLRTOEND   ESC_STR "[K" /* cache.080920 (by hpo14's fix): M3 is not support [K, it might be dangerous */
-#define ANSI_CLRTOEND   ""
+#define ANSI_CLRTOEND   ESC_STR "[K"
 #define ANSI_MOVETO(y, x) ESC_STR "[" #y ";" #x "H"
 #define ANSI_REVERSE    ANSI_COLOR(7)
 
