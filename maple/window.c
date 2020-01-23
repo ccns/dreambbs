@@ -357,10 +357,12 @@ popupmenu_ans2(const char *const desc[], const char *title, int x, int y)
         switch (ch = vkey())
         {
         case KEY_LEFT:
+        case KEY_ESC:
+        case Meta(KEY_ESC):
         case KEY_RIGHT:
         case '\n':
             scr_restore_free(&old_screen);
-            ch = (ch == KEY_LEFT) ? desc[0][1] : desc[cur][0];
+            ch = (ch == KEY_RIGHT || ch == '\n') ? desc[cur][0] : desc[0][1];
             if (ch >= 'A' && ch <= 'Z')
                 ch |= 0x20;             /* ¦^¶Ç¤p¼g */
             return ch;

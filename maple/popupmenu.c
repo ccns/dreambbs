@@ -380,6 +380,8 @@ do_menu(
         switch (c)
         {
             case KEY_LEFT:
+            case KEY_ESC:
+            case Meta(KEY_ESC):
                 scr_restore_free(&old_screen);
                 return 1;
             case KEY_UP:
@@ -517,6 +519,8 @@ popupmenu_ans(const char *const desc[], const char *title, int x, int y)
         switch (c)
         {
             case KEY_LEFT:
+            case KEY_ESC:
+            case Meta(KEY_ESC):
                 scr_restore_free(&old_screen);
                 return tolower(desc[0][1]);
             case KEY_UP:
