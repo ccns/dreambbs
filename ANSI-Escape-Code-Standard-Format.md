@@ -44,19 +44,18 @@ C1 set 的具體功能表與 independent control functions 一起整理到了下
             - `'\x68'('h')` 是 final byte
 
 #### ECMA-48 parameter string 格式:
-- 由 parameter sub-strings 組成
-    - parameter sub-string:
-        1. 是用十進位表示的數字
-        2. 由 `'\x30'('0')-'\x3a'(':')` (`0123456789:`) 組成；`':'` 可被用作分隔符號，例如用作小數點
-        3. 由 `'\x3b'(';')` 分開
-        4. `'\x3c'('<')-'\x3f'('?')` (`<=>?`) 的使用，留待未來標準定義
-        5. 空的 parameter sub-string 表示預設值
-        6. `'\x30'('0')` 開頭不重要；全由 `'0'` 組成則代表 0
+- 由 parameter sub-strings 組成，而 parameter sub-string:
+    - a) 是用十進位表示的數字
+    - b) 由 `'\x30'('0')-'\x3a'(':')` (`0123456789:`) 組成；`':'` 可被用作分隔符號，例如用作小數點
+    - c) 由 `'\x3b'(';')` 分開
+    - d) `'\x3c'('<')-'\x3f'('?')` (`<=>?`) 的使用，留待未來標準定義
+    - e) 空的 parameter sub-string 表示預設值
+    - f) `'\x30'('0')` 開頭不重要；全由 `'0'` 組成則代表 0
 - 整個 parameter string:
-    1. 以 `'\x3b'(';')` 開頭的話，視為在 `';'` 前有個空的 parameter sub-string；
-       以 `';'` 結束的話，視為在 `';'` 後有個空的 parameter sub-string；
+    - g) 以 `'\x3b'(';')` 開頭的話，視為在 `';'` 前有個空的 parameter sub-string；\
+       以 `';'` 結束的話，視為在 `';'` 後有個空的 parameter sub-string；\
        含有連續的 `';'` 的話，視為每個 `';'` 之間都有一個空的 parameter sub-strings
-    2. (譯自原文) `如果這個 control function 含有超過一個 parameter，並且某些 parameter sub-strings 是空的，分隔符號 (bit combination 03/11` (譯按：也就是 `'\x3b'(';')`)`) 還是得存在。`\
+    - h) (譯自原文) `如果這個 control function 含有超過一個 parameter，並且某些 parameter sub-strings 是空的，分隔符號 (bit combination 03/11` (譯按：也就是 `'\x3b'(';')`)`) 還是得存在。`\
        `不過，如果最後幾個 parameter sub-string 都是空的，在這之前的分隔符號可被省略，見 B.2 in annex B.`
 - 表示法:
     - `(NP)`: 沒有 parameter
