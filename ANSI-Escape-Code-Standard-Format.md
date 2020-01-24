@@ -4,6 +4,9 @@
 
 ## ECMA-48 中的各種 control function（「ANSI 控制碼」）的標準格式
 (參考資料: [ECMA-48](http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-048.pdf) chapter 5 `Coded representation`, chapter 8 `Control functions`)
+
+注意原文中使用 `xx/yy` (`xx` 和 `yy` 是十進制數字) 的表示法表示字元 `'\xXY'` (`X` 和 `Y` 分別是 `xx` 和 `yy` 的十六進制)。
+
 ### a) elements of the C0 set (表示法: `(C0)`): `'\x00'-'\x1f'`
 C0 set 的功能表請見 ECMA-48 Table 1，或[直接查維基百科](https://zh.wikipedia.org/wiki/C0%E4%B8%8EC1%E6%8E%A7%E5%88%B6%E5%AD%97%E7%AC%A6)
 
