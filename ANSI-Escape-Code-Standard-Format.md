@@ -113,7 +113,7 @@ Parameter String | 編碼 | 解釋
 
 - 沒有 intermediate bytes 時的功能表 (取自 ECMA-48 Table 3)
 
-Final byte	|	0x40	|	0x50	|	0x60	|	0x70
+`F`	|	0x40	|	0x50	|	0x60	|	0x70
 ---:	|	---	|	---	|	---	|	---
 0	|	`'@'` ICH 插字	|	`'P'` DCH 刪字	|	``'`'`` HPA 字定位	|	`'p'` Private Use
 1	|	`'A'` CUU 游標上	|	`'Q'` SEE 選編輯範圍	|	`'a'` HPR 到下字	|	`'q'` Private Use
@@ -136,7 +136,7 @@ f	|	`'O'` EA 清區域	|	`'_'` -- 	|	`'o'` DAQ 定區域	|	`DEL` Private Use
 
 - Intermediate bytes 為 `'\x20'` (`SPACE`) 時的功能表 (取自 ECMA-48 Table 4)
 
-Final byte	|	0x40	|	0x50	|	0x60	|	0x70	
+`F`	|	0x40	|	0x50	|	0x60	|	0x70	
 ---:	|	---	|	---	|	---	|	---
 0	|	`'@'` SL 捲左	|	`'P'` PPA 頁定位	|	``'`'`` TATE 縮排靠尾邊	|	`'p'` Private Use
 1	|	`'A'` SR 捲右	|	`'Q'` PPR 到下頁	|	`'a'` TALE 縮排靠頭邊	|	`'q'` Private Use
@@ -167,7 +167,7 @@ f	|	`'O'` IDCS 認裝控字串	|	`'_'` GCC 繪字字組合	|	`'o'` -- 	|	`DEL` P
 
 #### `C1` 以及 `(Fs)` 的功能表 (整理自 ECMA-48 Table 2a, Table 2b, Table 5)
 
-Final byte	|	0x40 / 0x80 `(C1)`	|	0x50 / 0x90 `(C1)`	|	0x60 `(Fs)`	|	0x70 `(Fs)`
+`Fe`/`Fs`	|	0x40 / 0x80 `(C1)`	|	0x50 / 0x90 `(C1)`	|	0x60 `(Fs)`	|	0x70 `(Fs)`
 ---:	|	---	|	---	|	---	|	---
 0	|	`'@' `--	|	`'P'` DCS 裝置控字串	|	``'`'`` DMI 禁鍵盤輸入	|	`'p'` --
 1	|	`'A'` --	|	`'Q'` PU1 Private Use	|	`'a'` INT 中斷	|	`'q'` --
