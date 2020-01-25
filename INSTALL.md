@@ -100,7 +100,7 @@ cp -r bbs /home/
 ```
 
 此範例目錄是使用 WindTopBBS-3.02-20040420-SNAP 的架構為基礎，加以修改而來的。
-（參考連結：http://ftp.isu.edu.tw/pub/Unix/BBS/WindTop/WindTopBBS-3.02-20040420-SNAP.tgz）
+（參考連結：https://github.com/bbsmirror/BBSmirror/blob/master/WindTop/WindTopBBS-3.02-20040420-SNAP.tgz）
 
 若發現仍有不合之處，請於編譯完成，確認程式可成功執行後，再自行對目錄調整修改。
 
