@@ -135,6 +135,7 @@ e	|	`'N'` EF 清欄位	|	`'^'` SIMD 設隱含移向	|	`'n'` DSR 裝置態報	|	`
 f	|	`'O'` EA 清區域	|	`'_'` -- 	|	`'o'` DAQ 定區域	|	`DEL` Private Use
 
 註: 游標定位功能不受文字方向 (轉向 (`orientation`; 文字旋轉角度) 與徑向 (`character path`; 文字從左到右，還是從右到左)) 的影響，而行字定位功能會受到文字方向的影響
+註: `0x51` 一項應為 `SEE`，原表格中寫為 `SSE` 應為編輯錯誤
 
 - Intermediate bytes 為 `'\x20'` (`SPACE`) 時的功能表 (取自 ECMA-48 Table 4)
 
@@ -156,6 +157,9 @@ c	|	`'L'` SVS 選行間距	|	`'\'` SACS 設增字隔間	|	`'l'` --	|	`'\|'` Priv
 d	|	`'M'` IGS 認繪字字表	|	`']'` SAPV 設文體變體	|	`'m'` --	|	`'}'` Private Use
 e	|	`'N'` --	|	`'^'` STAB 選擇縮排	|	`'n'` --	|	`'~'` Private Use
 f	|	`'O'` IDCS 認裝控字串	|	`'_'` GCC 繪字字組合	|	`'o'` -- 	|	`DEL` Private Use
+
+註: `0x55` 一項應為 `SLH`，原表格中寫為 `SHL` 應為編輯錯誤
+註: 原表格中的 `0x69`(`SPH`) 及 `0x6a`(`SPL`) 兩項為空，應為編輯上的遺漏
 
 - 目前 ECMA-48 沒有指派 intermediate bytes 為其它組合時的功能
 - 標準中未被指派功能的字元組合 (上述列表中以 `--` 表示者，或者其 intermediate bytes 不為上述組合) 保留給未來標準，不應被私自使用
