@@ -27,7 +27,7 @@ v2.0 以後的版本，可以不用 `bmake`，改用 `cmake`。
 
 以下方法僅為參考，可用 `useradd`、`groupadd` 等指令替代。
 
-註：v2.0 以後的版本，不再假設使用者名稱為 `bbs`，可自行取名。
+(註：v2.0 以後的版本，不再假設使用者名稱為 `bbs`，可自行取名)
 
 
 **== 以下用 root 權限 !! ==**
@@ -46,7 +46,7 @@ v2.0 以後的版本，可以不用 `bmake`，改用 `cmake`。
 
 接下來編輯 `/etc/group` 來增加名為 `bbs` 的群組。這裡使用 `vim` 編輯，
 
-註：v2.0 以後的版本，不再假設群組名稱為 `bbs`，可自行取名。
+(註：v2.0 以後的版本，不再假設群組名稱為 `bbs`，可自行取名)
 
 若對類似編輯器介面不熟，也可用 `nano` 或其他更簡易的編輯器介面來編輯，
 
@@ -137,7 +137,7 @@ cp -r bbs /home/
 
 如果 `dreambbs.conf` 中的相關變數都有定義到，應該可以順利編譯完成。
 
-註：v2.0 以後的版本，即使 `dreambbs.conf` 中未定義任何變數，也可順利編譯完成。
+(註：v2.0 以後的版本，即使 `dreambbs.conf` 中未定義任何變數，也可順利編譯完成)
 
 ## 7. 系統環境調校與設定
 
@@ -156,7 +156,7 @@ cp -r bbs /home/
     $ /home/bbs/bin/acpro
     $ /home/bbs/bin/makefw
 
-註：v2.1 以後的版本，將 `account` 中建立分類看板的工作移到 `acpro` 中，不須執行 `account`。
+(註：v2.1 以後的版本，將 `account` 中建立分類看板的工作移到了 `acpro` 中，不須執行 `account`)
 
 或者是拿 `scripts` 裡面的 `start.sh` 這個 shell script 去執行。
 
@@ -168,7 +168,8 @@ cp -r bbs /home/
 
     $ /home/bbs/bin/bbsd 3456
 
-註：v2.0 後額外支援 `/home/bbs/bin/bbsd -p 3456` 的語法。
+(註：v2.0 後額外支援 `/home/bbs/bin/bbsd -p 3456` 的語法)
+
 之後開機自動執行的設定部分，可以參考 `sample/bbs/sh/start.sh` 的內容，
 
 或自己建立 `/etc/rc.d/rc.local` 檔案，寫進以下內容：
@@ -185,7 +186,7 @@ su bbs -c '/home/bbs/bin/makefw'
 
 ```
 
-註：v2.1 後不須 `su bbs` 也可正常運作。
+(註：v2.1 後不須 `su bbs` 也可正常運作)
 
 並確認已將 `rc.local` 的權限設定為「可執行」(`+x`)。
 
