@@ -186,7 +186,7 @@ su bbs -c '/home/bbs/bin/makefw'
 
 ```
 
-(註：v2.1 後不須 `su bbs` 也可正常運作)
+(註：v2.1 後不需 `su bbs` 也可正常運作)
 
 並確認已將 `rc.local` 的權限設定為「可執行」(`+x`)。
 
