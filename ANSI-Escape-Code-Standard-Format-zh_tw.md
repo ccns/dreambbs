@@ -197,7 +197,9 @@ f	|	`'O'` SS3 單移三	|	`'_'` APC 應用指令	|	`'o'` LS3 鎖移三	|	`DEL` -
 ### e) control strings: `opening-delimiter command-string/character-string ST`
 - `opening-delimiter`: 在 ECMA-48 中有定義的有: (C1 set) `APC`, `DCS`, `OSC`, `PM`, `SOS`
 - `command-string`: 由 `'\x08'-'\x0d'` 和 `'\x20'-'\x7e'` 組成的 sequence (由實作決定格式)
+    - 接在 `APC`, `DCS`, `OSC`, `PM` 後
 - `character-string`: 不包含 `SOS`, `ST` 的任何 sequence (由實作決定格式)
+    - 接在 `SOS` 後
 - `ST`: (7-bit mode) `'\x1b' '\x5c'` (`ESC '\'`) / (8-bit mode) `'\x9c'`
 
 ## 使用注意
