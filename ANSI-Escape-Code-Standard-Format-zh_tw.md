@@ -154,7 +154,7 @@ a	|	`'J'` PFS 頁格式選擇	|	`'Z'` PEC 設文體寬縮	|	`'j'` SPL 設頁尾	
 b	|	`'K'` SHS 選字間距	|	`'['` SSW 設空格寬	|	`'k'` SCP 設字徑向	|	`'{'` Private Use
 c	|	`'L'` SVS 選行間距	|	`'\'` SACS 設增字隔間	|	`'l'` --	|	`'\|'` Private Use
 d	|	`'M'` IGS 認繪字字表	|	`']'` SAPV 設文體變體	|	`'m'` --	|	`'}'` Private Use
-e	|	`'N'` --	|	`'^'` STAB 挑剔縮排	|	`'n'` --	|	`'~'` Private Use
+e	|	`'N'` --	|	`'^'` STAB 選擇縮排	|	`'n'` --	|	`'~'` Private Use
 f	|	`'O'` IDCS 認裝控字串	|	`'_'` GCC 繪字字組合	|	`'o'` -- 	|	`DEL` Private Use
 
 - 目前 ECMA-48 沒有指派 intermediate bytes 為其它組合時的功能
