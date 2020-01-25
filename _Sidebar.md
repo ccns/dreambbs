@@ -1,5 +1,6 @@
 - [Home](https://github.com/ccns/dreamlandbbs/wiki)
   - [Install | 安裝說明](https://github.com/ccns/dreamlandbbs/wiki/INSTALL)
+  - [Install (v2.0) | 安裝說明 (v2.0)](https://github.com/ccns/dreambbs/wiki/Install-(v2.0))
   - [Version](https://github.com/ccns/dreambbs/wiki/VERSION)
   - Project Documentations | 專案資料
     - [Coding style | 程式碼撰寫風格](https://github.com/ccns/dreambbs/wiki/CODING-STYLE-zh_tw)
