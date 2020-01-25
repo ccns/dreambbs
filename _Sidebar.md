@@ -1,4 +1,14 @@
 - [Home](https://github.com/ccns/dreamlandbbs/wiki)
-  - [INSTALL](https://github.com/ccns/dreamlandbbs/wiki/INSTALL)
-  - [Release Notes of Version 2.0.0 Artoria](https://github.com/ccns/dreamlandbbs/wiki/Release-Notes-of-Version-2.0.0)
-  - [Version 2.0.0 Artoria 發行說明](https://github.com/ccns/dreamlandbbs/wiki/Release-Notes-of-Version-2.0.0-Artoria---zh_TW)
+  - [Install | 安裝說明](https://github.com/ccns/dreamlandbbs/wiki/INSTALL)
+  - [Version](https://github.com/ccns/dreambbs/wiki/VERSION)
+  - Project Documentations | 專案資料
+    - [Coding style | 程式碼撰寫風格](https://github.com/ccns/dreambbs/wiki/CODING-STYLE-zh_tw)
+    - [Indentation](https://github.com/ccns/dreambbs/wiki/INDENT)
+  - References | 參考資料
+    - [ANSI Escape Code Standard Format | ANSI 控制碼標準格式](https://github.com/ccns/dreambbs/wiki/ANSI-Escape-Code-Standard-Format-zh_tw)
+  - Changelog
+    - [Unsorted Changelog](https://github.com/ccns/dreambbs/wiki/CHANGELOG)
+    - [Release Notes of Version 2.0.0 Artoria](https://github.com/ccns/dreamlandbbs/wiki/Release-Notes-of-Version-2.0.0)
+    - [Version 2.0.0 Artoria 發行說明](https://github.com/ccns/dreamlandbbs/wiki/Release-Notes-of-Version-2.0.0-Artoria---zh_TW)
+    - [Release Notes of Version 1.0.0 Rimuru](https://github.com/ccns/dreambbs/wiki/v1.0-rimuru)
+    - [Version 1.0.0 Rimuru 發行說明](https://github.com/ccns/dreambbs/wiki/v1.0-rimuru-zh_tw)
