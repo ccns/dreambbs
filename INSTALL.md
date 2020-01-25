@@ -18,6 +18,7 @@ Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurse
 作業系統部分前面提過了，套件部分則建議先裝好 
 
 `git`, `bmake` (BSD-like 使用原生的 `make` 即可), `clang` 等程式。
+
 v2.0 以後的版本，可以不用 `bmake`，改用 `cmake`。
 
 ## 2. 建立 BBS 帳號
@@ -25,6 +26,7 @@ v2.0 以後的版本，可以不用 `bmake`，改用 `cmake`。
 這裡先把相關的帳號建立好，以避免之後權限問題。
 
 以下方法僅為參考，可用 `useradd`、`groupadd` 等指令替代。
+
 註：v2.0 以後的版本，不再假設使用者名稱為 `bbs`，可自行取名。
 
 
@@ -43,6 +45,7 @@ v2.0 以後的版本，可以不用 `bmake`，改用 `cmake`。
 
 
 接下來編輯 `/etc/group` 來增加名為 `bbs` 的群組。這裡使用 `vim` 編輯，
+
 註：v2.0 以後的版本，不再假設群組名稱為 `bbs`，可自行取名。
 
 若對類似編輯器介面不熟，也可用 `nano` 或其他更簡易的編輯器介面來編輯，
@@ -89,6 +92,7 @@ v2.0 以後的版本，可以不用 `bmake`，改用 `cmake`。
     $ vim -c 'set fenc=big5 enc=big5 tenc=utf8' -c 'e!' dreambbs.conf
 
 在 v2.0 後的版本，還需要使用 `bmake` 或 `cmake` 產生自動設定檔：
+
 若您的作業系統有安裝 `bmake` 套件 (在BSD-like系統中，改用 `make` 指令即可)，請執行以下指令：
 
     $ bmake configure
@@ -132,6 +136,7 @@ cp -r bbs /home/
     $ make all install
 
 如果 `dreambbs.conf` 中的相關變數都有定義到，應該可以順利編譯完成。
+
 註：v2.0 以後的版本，即使 `dreambbs.conf` 中未定義任何變數，也可順利編譯完成。
 
 ## 7. 系統環境調校與設定
@@ -151,7 +156,8 @@ cp -r bbs /home/
     $ /home/bbs/bin/acpro
     $ /home/bbs/bin/makefw
 
-註：v2.1 以後的版本，將 `account` 中建立分類看板的工作移到 `acpro` 中，不須執行 `account`
+註：v2.1 以後的版本，將 `account` 中建立分類看板的工作移到 `acpro` 中，不須執行 `account`。
+
 或者是拿 `scripts` 裡面的 `start.sh` 這個 shell script 去執行。
 
 之後若要提供 port 23 的 telnet 連線的話，以 root 權限執行即可，如：
@@ -180,6 +186,7 @@ su bbs -c '/home/bbs/bin/makefw'
 ```
 
 註：v2.1 後不須 `su bbs` 也可正常運作。
+
 並確認已將 `rc.local` 的權限設定為「可執行」(`+x`)。
 
 若要裝 xinetd 提供 telnet 連線至 BBS 主程式，可參考以下設定：
