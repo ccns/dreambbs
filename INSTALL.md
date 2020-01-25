@@ -91,7 +91,7 @@ v2.0 以後的版本，可以不用 `bmake`，改用 `cmake`。
 
     $ vim -c 'set fenc=big5 enc=big5 tenc=utf8' -c 'e!' dreambbs.conf
 
-在 v2.0 後的版本，將部分設定改成可以自動產生，需要使用 `bmake` 或 `cmake` 產生自動設定檔：
+v2.0 後的版本，支援自動產生部分設定，需要使用 `bmake` 或 `cmake` 產生自動設定檔：
 
 若您的作業系統有安裝 `bmake` 套件 (在BSD-like系統中，改用 `make` 指令即可)，請執行以下指令：
 
