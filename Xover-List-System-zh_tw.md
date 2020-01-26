@@ -95,7 +95,7 @@ xo_cursor(
 Callback 列表資料結構   | `struct one_key[]`  | `onekey_t[126]`    | `KeyFunc[]`
 　                      | 　                  | 　                 | `std::unordered_map<unsigned int, XoFunc>` (DreamBBS v3; C++)
 Callback 列表結尾或條件 | `!one_key::fptr`    | (固定長度)          | `KeyFunc::key == 'h'`
-　                     | 　                   | 　                  | `KeyFunc::first == 'h' (DreamBBS v3; C)`
+　                     | 　                   | 　                  | `KeyFunc::first == 'h'` (DreamBBS v3; C)
 　                     | 　                   | 　                  | `std::unordered_map::end()` (DreamBBS v3; C++)
 Callback 取得方法　　 　| Loop/O(n)            | Direct index/O(1)  | Loop/O(n)
 　                     | 　                   | 　                  | Hash table/O(1) (DreamBBS v3; C++)
