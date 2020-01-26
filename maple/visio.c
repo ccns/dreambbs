@@ -633,7 +633,7 @@ clear(void)
     cur_slp = slp = vbuf;
     while (i++ < t_lines)
     {
-        memset(slp++, 0, 9);
+        memset(slp++, 0, offsetof(screenline, data) + 1);
     }
 }
 
@@ -650,7 +650,7 @@ clearange(
     cur_slp = slp = &vbuf[from];
     while (i++ < to)
     {
-        memset(slp++, 0, 9);
+        memset(slp++, 0, offsetof(screenline, data) + 1);
     }
 }
 
@@ -670,7 +670,7 @@ clrtoeol(void)
     }
     else
     {
-        memset((char *) slp + 1, 0, 8);
+        memset((char *) slp + sizeof(slp->oldlen), 0, offsetof(screenline, data) + 1 - sizeof(slp->oldlen));
     }
 }
 
@@ -691,7 +691,7 @@ clrtobot(void)
             j = 0;
             slp = vbuf;
         }
-        memset((char *) slp + 1, 0, 8);
+        memset((char *) slp + sizeof(slp->oldlen), 0, offsetof(screenline, data) + 1 - sizeof(slp->oldlen));
 
 #if 0
         if (slp->oldlen)
@@ -743,7 +743,7 @@ new_line:
         }
         else
         {
-            memset((char *) slp + 1, 0, 8);
+            memset((char *) slp + sizeof(slp->oldlen), 0, offsetof(screenline, data) + 1 - sizeof(slp->oldlen));
         }
 
         move(cur_row + 1, 0);
