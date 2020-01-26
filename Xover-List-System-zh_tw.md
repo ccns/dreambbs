@@ -143,9 +143,21 @@ Callback 取得方法　　 　| Loop/O(n)            | Direct index/O(1)  | Loo
 　                       | 　                  | 　                 | MapleBBS-itoc: 在螢幕底部畫出 `XZ::feeter`
 　                       | 　                  | 　                 | DreamBBS v3: 呼叫 callback 列表對應 `XO_FOOT` 的函數
 重繪畫面頂部              | (`FULLUPDATE`)     | `TITLE_REDRAW`     | (`XO_HEAD`)
-重新載入資料但不重繪      | (`PARTUPDATE`)      | `HEADERS_RELOAD`   | (手動重新載入)
+重新載入資料但不重繪      | (`PARTUPDATE`)      | `HEADERS_RELOAD`   | (直接操作資料結構重新載入)
 
 ### 列表操作的相關 macros (括號：無直接對應，替代的處理方式)
-使用場合                 | Pirate BBS          | PttBBS             | MapleBBS 3
- :---                    | ---                 | ---                | ---
-離開列表                 | `DOQUIT`            | `DOQUIT`           | `XO_QUIT`
+使用場合                 | Pirate BBS          | PttBBS                    | MapleBBS 3
+ :---                    | ---                 | ---                       | ---
+指定某功能需要動態載入    | (無)                | (無)　                     | `cmd \| XO_DL`
+將游標放到最尾項          | (直接操作)          | (直接操作)                 | (直接操作: `xo->pos = XO_TAIL`)
+移動游標                 | (直接操作)           | `READ_NEXT` & `READ_PREV` | `XO_MOVE + pos`
+移動游標（頭尾循環）      | (無)                | (無)                      | `XO_MOVE + XO_WRAP + pos`
+　                       | 　                  | 　                        | `XO_WRAP + pos` 要大於等於 `XO_WRAP_MIN` (DreamBBS v3 新增)
+翻頁                     | (直接操作)          | (直接操作)                 | `XO_MOVE + pos ± XO_TALL`
+翻頁（頭尾循環）          | (無)                | (無)                      | `XO_MOVE + XO_WRAP + pos ± XO_TALL`
+捲動列表                 | (無)                | (無)                      | `XO_MOVE + XO_SCRL + pos` (DreamBBS v3 新增)
+　                       | 　                  | 　                        | `XO_SCRL + pos` 要大於等於 `XO_SCRL_MIN` (DreamBBS v3 新增)
+捲動列表（頭尾循環）      | (無)                | (無)                      | `XO_MOVE + XO_SCRL + XO_WRAP + pos` (DreamBBS v3 新增)
+切換列表                 | (無)                | (無)                      | `XZ_<ZONE>` = `XO_ZONE + zone`
+回到上層列表             | (無)                | (無)                      | (無；有 `XO_LAST`，但未實作)
+離開列表                 | `DOQUIT`            | `DOQUIT`                  | `XO_QUIT`
