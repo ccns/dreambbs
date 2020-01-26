@@ -1388,10 +1388,13 @@ outc(unsigned char c)
         // collecting commands
         ft.cmd[ft.szcmd++] = c;
 
-        if ((ft.szcmd == 2 && c == '[') ||
-            (ANSI_IS_PARAM(c) && ft.szcmd < FTCMD_MAXLEN))
+        // control sequence
+        if ((ft.szcmd == 2 && c == '[') ||  // Control Sequence Introducer (CSI)
+            (ANSI_IS_PARAM(c) && ft.szcmd < FTCMD_MAXLEN))  // a control sequence parameter byte
             return;
 
+        // command is a C1 set element or an independent control function
+        // or either a control sequence final byte or an invalid character is reached
         // process as command
         fterm_exec();
         ft.szcmd = 0;
@@ -1664,8 +1667,8 @@ fterm_prepare_str(int len)
 void
 fterm_exec(void)
 {
-    ftchar cmd = ft.cmd[ft.szcmd-1];
-    char    *p = (char*)ft.cmd + 2; // For ESC [
+    ftchar cmd = ft.cmd[ft.szcmd-1];  // The control function final byte
+    char    *p = (char*)ft.cmd + 2;  // For ESC [ (followed by a control sequence parameter string)
     int n = -1, x = -1, y;
 
     ft.cmd[ft.szcmd] = 0;
@@ -1674,10 +1677,10 @@ fterm_exec(void)
         n = strtol(p, &p, 10);
     if (*p == ';')
         p++;
-    // p points to next param now
+    // p now points to the next parameter sub-string or the final byte
 
-#define EXEC_ESCSEQ  (0x0100)   // For ESC cmd
-    switch ((ft.szcmd) > 2 ? cmd : EXEC_ESCSEQ | cmd)
+#define EXEC_C1_FS  (0x0100)   // For ESC cmd (a C1 set element or an independent control function)
+    switch ((ft.szcmd) > 2 ? cmd : EXEC_C1_FS | cmd)
     {
         // Cursor Movement
 
@@ -1685,12 +1688,12 @@ fterm_exec(void)
     case 'B':   // CUD: CSI n B
     case 'C':   // CUF: CSI n C
     case 'D':   // CUB: CSI n D
-    case EXEC_ESCSEQ | 'A': // CUU: ESC A (VT52; non-standard)
-    case EXEC_ESCSEQ | 'B': // CUD: ESC B (VT52; non-standard)
-    case EXEC_ESCSEQ | 'C': // CUF: ESC C (VT52; non-standard)
-    case EXEC_ESCSEQ | 'D': // CUB: ESC D (VT52; non-standard)
+    case EXEC_C1_FS | 'A': // CUU: ESC A (VT52; non-ECMA-48)
+    case EXEC_C1_FS | 'B': // CUD: ESC B (VT52; non-ECMA-48)
+    case EXEC_C1_FS | 'C': // CUF: ESC C (VT52; non-ECMA-48)
+    case EXEC_C1_FS | 'D': // CUB: ESC D (VT52; non-ECMA-48)
         // Moves the cursor n (default 1) cells in the given direction.
-        // If the cursor is already at the edge of the screen, this has no effect.
+        // In this implementation, if the cursor is already at the edge of the screen, this has no effect.
         if (n < 1)
             n = 1;
         getyx(&y, &x);
@@ -1716,6 +1719,7 @@ fterm_exec(void)
     case 'G':   // CHA: CSI n G
     case 'd':   // VPA: CSI n d
         // Moves the cursor to column/row n.
+        // VPA is affected by text orientation and character path
         if (n < 1)
             n = 1;
         getyx(&y, &x);
@@ -1727,6 +1731,7 @@ fterm_exec(void)
     case 'H':   // CUP: CSI n ; m H
     case 'f':   // HVP: CSI n ; m f
         // Moves the cursor to row n, column m.
+        // HVP is affected by text orientation and character path
         // The values are 1-based, and default to 1 (top left corner) if omitted.
         // A sequence such as CSI ;5H is a synonym for CSI 1;5H as well as
         // CSI 17;H is the same as CSI 17H and CSI 17;1H
@@ -1768,12 +1773,12 @@ fterm_exec(void)
             clrcurrline();
         break;
 
-    case 's':   // SCP: CSI s
+    case 's':   // SCP: CSI s (VT100; private use)
         // Saves the cursor position.
         getyx(&ft.sy, &ft.sx);
         break;
 
-    case 'u':   // RCP: CSI u
+    case 'u':   // RCP: CSI u (VT100; private use)
         // Restores the cursor position.
         move(ft.sy, ft.sx);
         break;
@@ -1796,9 +1801,9 @@ fterm_exec(void)
 
     case 'm':   // SGR: CSI n [;k] m
         // Sets SGR (Select Graphic Rendition) parameters.
-        // After CSI can be zero or more parameters separated with ;.
+        // After CSI, there can be zero or more parameters separated with ;.
         // With no parameters, CSI m is treated as CSI 0 m (reset / normal),
-        // which is typical of most of the ANSI codes.
+        // which is typical of most of the ANSI code usages.
         // ---------------------------------------------------------
         // SGR implementation:
         //  SGR 0 (reset/normal)        is supported.
@@ -1823,9 +1828,9 @@ fterm_exec(void)
         //  SGR 40-47 (BG)              is supported.
         //  SGR 48 (BG-extended)        is not supported.
         //  SGR 49 (BG-reset)           is supported.
-        //  SGR 90-97   (FG-bright) (aixterm; non-standard)   is supported (cursor attribute; intensity: bold).
-        //  SGR 100-107 (BG-bright) (aixterm; non-standard)   is converted to (BG-normal)
-        if (n == -1)    // first param
+        //  SGR 90-97   (FG-bright) (aixterm; non-ECMA-48)   is supported (cursor attribute; intensity: bold).
+        //  SGR 100-107 (BG-bright) (aixterm; non-ECMA-48)   is converted to (BG-normal)
+        if (n == -1)    // the first parameter sub-string
             n = 0;
         while (n > -1)
         {
@@ -1918,7 +1923,7 @@ fterm_exec(void)
     default:    // unknown command.
         break;
     }
-#undef EXEC_ESCSEQ
+#undef EXEC_C1_FS
 }
 
 int
