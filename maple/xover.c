@@ -1529,6 +1529,7 @@ xover(
     int zone_flags = 0;  /* Collected zone operation flags */
     int pos;
     int pos_prev = -1;  /* Draw cursor on entry */
+    int wrap_flag;
     int num=0;
     int zone=-1;
     int sysmode=0;
@@ -1583,21 +1584,9 @@ xover(
                 diff = pos - cur;
 
                 if (pos < 0)
-                {
-                    if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
-                        pos = 0;
-                    else
-                        pos = (wrap) ? num : 0;
-                    /* pos = 0; :chuan: */
-                }
+                    pos = (wrap) ? num - (-pos-1) % BMAX(num, 1) : 0;
                 else if (pos > num)
-                {
-                    if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
-                        pos = num;
-                    else
-                        pos = (wrap) ? 0 : num;
-                    /* pos = num; :chuan: */
-                }
+                    pos = (wrap) ? (pos-1) % BMAX(num, 1) : num;
 
                 /* IID.20200129: Switch zone using cursor movement semantic */
                 if (zone_op)
@@ -1831,6 +1820,10 @@ xover_callback_end:
         }
 
         cmd = vkey();
+        if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
+            wrap_flag = 0;
+        else
+            wrap_flag = XO_WRAP;
 
         /* ------------------------------------------------- */
         /* switch Zone                                       */
@@ -1897,19 +1890,34 @@ xover_callback_end:
         }
         else if (cmd == KEY_UP || cmd == 'p' || cmd == 'k')
         {
-            cmd = XO_MOVE + XO_WRAP + XO_REL - 1;
+            cmd = XO_MOVE + wrap_flag + XO_REL - 1;
         }
         else if (cmd == KEY_DOWN || cmd == 'n' || cmd == 'j')
         {
-            cmd = XO_MOVE + XO_WRAP + XO_REL + 1;
+            cmd = XO_MOVE + wrap_flag + XO_REL + 1;
         }
         else if (cmd == ' ' || cmd == KEY_PGDN || cmd == 'N'  /*|| cmd == Ctrl('F') */)
         {                                   /* lkchu.990428: 給「暫時更改來源」用 */
-            cmd = XO_MOVE + XO_REL + XO_TALL;
+            if (pos == xo->max - 1)
+            {
+                /* Make the cursor snap to the list bottom on screen */
+                cmd = XO_MOVE + wrap_flag + XO_REL + BMIN(xo->max, XO_TALL);
+                if (wrap_flag)
+                {
+                    xo->top = 0;  /* Reset list top on screen */
+                    cmd |= XR_LOAD;  /* Needs to reload */
+                }
+            }
+            else
+                cmd = XO_MOVE + XO_REL + XO_TALL;  /* Stop at the last item */
         }
         else if (cmd == KEY_PGUP || cmd == 'P' /*|| cmd == Ctrl('B')*/)
         {
-            cmd = XO_MOVE + XO_REL - XO_TALL;
+            if (pos == 0)
+                /* Make the cursor snap to the list top on screen */
+                cmd = XO_MOVE + wrap_flag + XO_REL - ((xo->max-1) % XO_TALL + 1);
+            else
+                cmd = XO_MOVE + XO_REL - XO_TALL;  /* Stop at the first item */
         }
         else if (cmd == KEY_HOME || cmd == '0')
         {
