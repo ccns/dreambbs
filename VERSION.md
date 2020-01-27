@@ -44,9 +44,11 @@
         - Features:
           - Simple code test utilities.
           - Refined layout: Trailing whitespaces are removed.
+
     - Drop plans for `v0.98`~`v0.99` due to big changes which will be tested for a long time.
         - Alternative planned names:
           - ~`v1.0-alpha1`~, ~`v1.0-alpha2`~, ~`v1.0-alpha3`~, ~`v1.0-beta1`~, ~`v1.0-RC1`~, ~`v1.0-RC2`~, ~`v1.0-RC3`~
+
     - `v1.0`: Version 1.X; codename `rimuru`
         - `v1.1.0`: Backports and improvement from `current`; codename `milim`
         - Features:
@@ -57,6 +59,7 @@
           - Others: Please see <https://github.com/ccns/dreambbs/releases/tag/v1.1.0>.
         - `v1.2.0`: Codename `shizu`
         - `v1.3.0`: Codename `veldora`
+
     - `v2.0`: Version 2.X; codename `artoria` ( **Latest Release Branch** )
         - Features in plan:
           - ~~Option for disabling DSO.~~
@@ -66,15 +69,27 @@
         - `v2.1.0`: Codename `gilgamesh`
         - Features:
           - Support building with CMake
+
     - `v3.0 ~`: Version 3.X or later
         - Features in plan:
+          - ~~Hot-swapping of DSO.~~
+          - Built-in Big5-UAO/UTF-8 conversion support.
+          - Data races prevention using atomic variables and `pthread` mutexes.
+          - Replace System V shared memory API calls with POSIX shared memory API.
           - Support forcing use 32-bit int type variables in 64-bit environment when BBS is compiled natively.
+          - Support using 64-bit `time_t` to make the BBS system to be immune to the 2038 problem.
+              - **48** different structs need to be transformed
+                  - Not feasible in short-term
+          - ~~IPv6 support.~~
+          - Refactor out boilerplate code in xover list system
+          - Merge popup menu systems into main menu system
+          - Merge main menu system into xover list system
+
 - Planned version names for `current` (`master` branch):
     - `v1.0-CURRENT`
     - `v2.0-CURRENT`
     - `v3.0-CURRENT` ( **We are HERE** )
     - `vX.0-CURRENT`
-
 
 ## TODO
 - To port and test from PttBBS
@@ -85,6 +100,7 @@
     - nios port test (2-BSD)
     - logind port test (2-BSD)
     - WSProxy ~port~ test (MIT; **Testing**)
+    - Note: (Maple3) visio = (Maple2.36/Ptt) term + screen/pfterm + io/(io + nios + vtkbd + vtuikit)
 - Other (improved) features from other Maple3 versions
     - BBS-Ruby ~port~ test (**Testing**)
     - ~Screen resizing feature~
