@@ -210,7 +210,7 @@ Callback 取得方法　　 　| Loop/O(n)            | Direct index/O(1) | Loop
 `0x00004001` - `0x001fffff`         | `XO_MOVE + pos`                               | 單純設定游標位置             | 這限制了游標的移動範圍為 `-0x0000bfff` (-49151) - `0x001effff` (2031615)
 `0x**000000` - `0x**1fffff`         | `XR_* + XO_MOVE + pos`                        | 設定游標位置                 | `XO_MOVE` 是游標位置的 bias，設定為 `0x00010000`
 `0x**200000` - `0x**3fffff`         | `XR_* + XO_MOVE + XO_SCRL + pos`              | 設定畫面中列表首項            |
-`0x**400000` - `0x**5fffff`         | `XR_* + XO_MOVE + XO_WRAP`                    | 設定游標位置 (頭尾循環)       |
+`0x**400000` - `0x**5fffff`         | `XR_* + XO_MOVE + XO_WRAP + pos`              | 設定游標位置 (頭尾循環)       |
 `0x**600000` - `0x**7fffff`         | `XR_* + XO_MOVE + XO_WRAP + XO_SCRL + pos`    | 設定畫面中列表首項 (頭尾循環) |
 `0x3f000000` (mask)                 | `XO_REDO_MASK`     | 畫面重繪、資料載入相關        | 把 `XR_*` macros `or` 起來的值
 `0x01000000` (mask)                 | `XR_LOAD`          | 重新載入列表資料             | `XO_INIT` = `XR_LOAD + XO_HEAD`, `XO_LOAD` = `XR_LOAD + XO_BODY`
@@ -230,7 +230,7 @@ Callback 取得方法　　 　| Loop/O(n)            | Direct index/O(1) | Loop
 `0x80000000` (mask)                 | `key \| XO_DL`     | 動態載入功能                 |
 #### 新的 key value 分配的特點
 - 將 `XO_MOVE` 重新定義為游標位置的 bias，讓 key value 區間變為整數，解決須特別處理游標位置為負數的狀況的不便
-- 除了 `XO_MOVE` 因為重新定義而變小，其它各個 `XO_*` macros 之間的相對大小不變
+- 重繪畫面的各個 `XO_*` macros 之間的相對大小不變
 - 允許畫面重繪/重新載入 (`XR_*`) 的各個部分自由組合 (尚未實作)
 - 允許畫面重繪/重新載入 (`XR_*`) 的同時移動游標 (尚未實作)
 - 使用與游標移動相同的方法切換 zone (尚未實作)
