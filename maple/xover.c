@@ -1494,24 +1494,24 @@ int xo_cb_quit(XO *xo) { return XO_QUIT; }
 
 XZ xz[] =
 {
-    {NULL, M_BOARD},      /* XZ_CLASS */
-    {NULL, M_LUSERS},     /* XZ_ULIST */
-    {NULL, M_PAL},        /* XZ_PAL */
-    {NULL, M_VOTE},       /* XZ_VOTE */
-    {NULL, M_BMW},        /* XZ_BMW */    /* lkchu.981230: BMW 新介面 */
-#ifdef XZ_XPOST /* Thor.990303: 如果有 XZ_XPOST的話 */
-    {NULL, M_READA},  /* XZ_XPOST */
+    {NULL, M_BOARD},      /* XZ_INDEX_CLASS */
+    {NULL, M_LUSERS},     /* XZ_INDEX_ULIST */
+    {NULL, M_PAL},        /* XZ_INDEX_PAL */
+    {NULL, M_VOTE},       /* XZ_INDEX_VOTE */
+    {NULL, M_BMW},        /* XZ_INDEX_BMW */    /* lkchu.981230: BMW 新介面 */
+#ifdef XZ_INDEX_XPOST /* Thor.990303: 如果有 XZ_INDEX_XPOST的話 */
+    {NULL, M_READA},  /* XZ_INDEX_XPOST */
 #else
-    {NULL, M_READA},      /* skip XZ_XPOST */
+    {NULL, M_READA},      /* skip XZ_INDEX_XPOST */
 #endif
-    {NULL, M_RMAIL},      /* XZ_MBOX */
-    {NULL, M_READA},   /* XZ_BOARD / XZ_POST */
-    {NULL, M_GEM},        /* XZ_GEM */
-    {NULL, M_RMAIL},      /* XZ_MAILGEM */
-    {NULL, M_BANMAIL},    /* XZ_BANMAIL */
-    {NULL, M_OMENU},      /* XZ_OTHER */
+    {NULL, M_RMAIL},      /* XZ_INDEX_MBOX */
+    {NULL, M_READA},   /* XZ_INDEX_BOARD / XZ_INDEX_POST */
+    {NULL, M_GEM},        /* XZ_INDEX_GEM */
+    {NULL, M_RMAIL},      /* XZ_INDEX_MAILGEM */
+    {NULL, M_BANMAIL},    /* XZ_INDEX_BANMAIL */
+    {NULL, M_OMENU},      /* XZ_INDEX_OTHER */
 #ifdef HAVE_FAVORITE
-    {NULL, M_MYFAVORITE}, /* XZ_MYFAVORITE */
+    {NULL, M_MYFAVORITE}, /* XZ_INDEX_MYFAVORITE */
 #endif
 };
 
@@ -1553,26 +1553,15 @@ xover(
     {
         while ((cmd != XO_NONE))
         {
-            if (cmd == XO_FOOT)
-            {
-                move(b_lines, 0);
-                clrtoeol();
-
-                /* Thor.0613: 輔助訊息清除 */
-                msg = 0;
-
-                /* IID.20191223: Continue to invoke the callback function */
-            }
-
-            if (cmd >= XO_ZONE)
+            if ((cmd & XZ_ZONE) && (cmd & XO_POS_MASK) > XO_NONE)
             {
                 /* --------------------------------------------- */
                 /* switch zone                                   */
                 /* --------------------------------------------- */
 
+                cmd = (cmd & XO_POS_MASK) - XO_MOVE;
 
                 zone = cmd;
-                cmd -= XO_ZONE;
                 xo = xz[cmd].xo;
                 sysmode = xz[cmd].mode;
                 xcmd = xo->cb;
@@ -1582,45 +1571,27 @@ xover(
                 cmd = XO_INIT;
                 utmp_mode(sysmode);
             }
-            else if (cmd >= XO_MOVE - XO_TALL)
+            else if ((cmd & XO_POS_MASK) > XO_NONE)
             {
                 /* --------------------------------------------- */
                 /* calc cursor pos and show cursor correctly     */
                 /* --------------------------------------------- */
 
-                /* cmd >= XO_MOVE - XO_TALL so ... :chuan: 假設 cmd = -1 ?? */
+                const bool wrap = cmd & XO_WRAP;
+                const int cur = xo->pos;
+
+                pos = (cmd & XO_POS_MASK) - XO_MOVE;
+                cmd = (cmd & ~XO_MOVE_MASK) + XO_NONE;
 
                 /* fix cursor's range */
 
                 num = xo->max - 1;
-
-                /* pos = (cmd | XO_WRAP) - (XO_MOVE + XO_WRAP); */
-                /* cmd &= XO_WRAP; */
-                /* itoc.020124: 修正在第一頁按 PGUP、最後一頁按 PGDN、第一項按 UP、
-                   最後一項按 DOWN 會把 XO_WRAP 旗標消失 */
-                /* IID.20191205: Correction:
-                      Fix `XO_WRAP` judged to be cleared and `pos > xo->max - 1` happening
-                         when user presses `UP` on the first item;
-                      fix `XO_WRAP` judged to be set
-                         when user presses `PGUP` on the first page. */
-
-                if (cmd > XO_MOVE + (XO_WRAP >> 1))    /* XO_WRAP >> 1 遠大過文章數 */
-                {
-                    pos = cmd - (XO_MOVE + XO_WRAP);
-                    cmd = 1;              /* 按 KEY_UP 或 KEY_DOWN */
-                }
-                else
-                {
-                    pos = cmd - XO_MOVE;
-                    cmd = 0;
-                }
-
                 if (pos < 0)
                 {
                     if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
                         pos = 0;
                     else
-                        pos = cmd ? num : 0;
+                        pos = (wrap) ? num : 0;
                     /* pos = 0; :chuan: */
                 }
                 else if (pos > num)
@@ -1628,32 +1599,72 @@ xover(
                     if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
                         pos = num;
                     else
-                        pos = cmd ? 0 : num;
+                        pos = (wrap) ? 0 : num;
                     /* pos = num; :chuan: */
                 }
 
                 /* check cursor's range */
 
-                cmd = xo->pos;
-
-                if (cmd == pos)
-                    break;
-
-                xo->pos = pos;
-                num = xo->top;
-                if ((pos < num) || (pos >= num + XO_TALL))
+                if (pos != cur)
                 {
-                    xo->top = (pos / XO_TALL) * XO_TALL;
-                    cmd = XO_LOAD;      /* 載入資料並予以顯示 */
+                    xo->pos = pos;
+                    num = xo->top;
+                    if ((pos < num) || (pos >= num + XO_TALL))
+                    {
+                        xo->top = (pos / XO_TALL) * XO_TALL;
+                        cmd |= XR_LOAD;     /* 載入資料並予以顯示 */
+                    }
+                    else
+                    {
+                        cursor_clear(3 + cur - num, 0);
+                        pos_prev = -1;  /* Redraw cursor */
+                    }
                 }
-                else
-                {
 
-
-                    cursor_clear(3 + cmd - num, 0);
-                    pos_prev = -1;  /* Redraw cursor */
-
+                if (cmd == XO_NONE)     /* Nothing else to do */
                     break;              /* 只移動游標 */
+            }
+
+            /* ----------------------------------------------- */
+            /* Special handling of operations                  */
+            /* ----------------------------------------------- */
+
+            if (cmd & XZ_ZONE)
+            {
+                if (cmd & XZ_QUIT)
+                {
+                    xo_user_level--;
+                    return;
+                }
+            }
+            else
+            {
+                if (cmd & XR_PART_BODY)
+                {
+#if 0
+                    if (xo->top + XO_TALL == xo->max)
+                    {
+                        /*outz("\x1b[44m 都給我看光光了! ^O^ \x1b[m");*/    /* Thor.0616 */
+                        msg = 1;
+                    }
+                    else if (msg)
+                    {
+                        move(b_lines, 0);
+                        clrtoeol();
+                        msg = 0;
+                    }
+#endif
+                    pos_prev = -1;  /* Item will be redrawn; redraw cursor */
+                }
+                if (cmd & XR_PART_FOOT)
+                {
+                    move(b_lines, 0);
+                    clrtoeol();
+
+                    /* Thor.0613: 輔助訊息清除 */
+                    msg = 0;
+
+                    /* IID.20191223: Continue to invoke the callback function */
                 }
             }
 
@@ -1713,16 +1724,7 @@ xover(
                 if (pos == cmd)
 #endif
                 {
-                    if (cmd >= XO_INIT && cmd < XO_FOOT)
-                        pos_prev = -1;  /* Item will be redrawn; redraw cursor */
-
                     cmd = (*(cb->second.func)) (xo);
-
-                    if (cmd == XO_QUIT)
-                    {
-                        xo_user_level--;
-                        return;
-                    }
                     goto xover_callback_end;
                 }
                 else  /* Callback function not found */
@@ -1740,24 +1742,6 @@ xover(
 #endif
 xover_callback_end:
             ;
-
-#if 0
-            if (pos >= XO_INIT && pos <= XO_BODY)
-            {
-                if (xo->top + XO_TALL == xo->max)
-                {
-                    /*outz("\x1b[44m 都給我看光光了! ^O^ \x1b[m");*/    /* Thor.0616 */
-                    msg = 1;
-                }
-                else if (msg)
-                {
-                    move(b_lines, 0);
-                    clrtoeol();
-                    msg = 0;
-                }
-            }
-#endif
-
         } /* Thor.990220:註解: end of while (cmd!=XO_NONE) */
 
 
@@ -1788,7 +1772,7 @@ xover_callback_end:
             cmd = XO_INIT;
             continue;
         }
-        if (cmd == Ctrl('U') && zone != XZ_ULIST)
+        if (cmd == Ctrl('U') && zone != XZ_INDEX_ULIST)
         {
             every_U();
             cmd = XO_INIT;
@@ -1809,7 +1793,7 @@ xover_callback_end:
         if (cmd == KEY_LEFT || cmd == 'e' || cmd == KEY_ESC || cmd == Meta(KEY_ESC))
         {
             /* cmd = XO_LAST; *//* try to load the last XO in future */
-            if (zone == XZ_MBOX)
+            if (zone == XZ_INDEX_MBOX)
             {
 
 #ifdef HAVE_MAILUNDELETE
@@ -1865,7 +1849,7 @@ xover_callback_end:
         else if (cmd == KEY_END || cmd == '$')
         {
             /* TODO(IID.20191206): Make this hotkey reload the list */
-            cmd = xo->max - 1 + XO_MOVE;        /* force re-load */
+            cmd = XO_TAIL + XO_MOVE;            /* force re-load */
         }
         else if (cmd >= '1' && cmd <= '9')
         {
@@ -1879,15 +1863,15 @@ xover_callback_end:
 
             if (cmd == KEY_RIGHT || cmd == '\n')
             {
-                if (zone == XZ_ULIST)
+                if (zone == XZ_INDEX_ULIST)
                     cmd = 'q'; //使用者名單會 Q
                 else
                     cmd = 'r';
             }
-#ifdef XZ_XPOST
-            else if (zone >= XZ_XPOST && zone < XZ_BANMAIL/* XZ_MBOX */)
+#ifdef XZ_INDEX_XPOST
+            else if (zone >= XZ_INDEX_XPOST && zone < XZ_INDEX_BANMAIL/* XZ_INDEX_MBOX */)
 #else
-            else if (zone >= XZ_MBOX && zone < XZ_BANMAIL)
+            else if (zone >= XZ_INDEX_MBOX && zone < XZ_INDEX_BANMAIL)
 #endif
             {
                 /* --------------------------------------------- */
@@ -1922,7 +1906,7 @@ xover_callback_end:
                 {
                     cmd = xo_tag(xo, cmd);
                 }
-                else if (cmd == Ctrl('D') && zone < XZ_GEM)
+                else if (cmd == Ctrl('D') && zone < XZ_INDEX_GEM)
                 {
                     /* 精華區要逐一刪除, 以避免誤砍 */
 
@@ -1953,8 +1937,8 @@ xover_callback_end:
                 /* 主題式閱讀                                    */
                 /* --------------------------------------------- */
 
-#ifdef XZ_XPOST
-                if (zone == XZ_XPOST)
+#ifdef XZ_INDEX_XPOST
+                if (zone == XZ_INDEX_XPOST)
                     continue;
 #endif
 

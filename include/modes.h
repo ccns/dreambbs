@@ -196,60 +196,141 @@ static const char *const ModeTypeTable[] =
 /* xover.c 中的模式                                      */
 /* ----------------------------------------------------- */
 
+/* IID.20200128: Reassign xover key values */
+
+/* For specify functions which require dynamic loading */
+
 #if NO_SO
 #define XO_DL           0x00000000
 #else
 #define XO_DL           0x80000000
 #endif
 
-#define XO_MODE         0x10000000
+/* Screen redraw/reloading modes */
 
+#define XO_REDO_MASK    0x3f000000      /* Apply this mask to get the redraw/reloading mode */
 
-#define XO_NONE         (XO_MODE + 0)
-#define XO_INIT         (XO_MODE + 1)
-#define XO_LOAD         (XO_MODE + 2)
-#define XO_HEAD         (XO_MODE + 3)
-#define XO_NECK         (XO_MODE + 4)
-#define XO_BODY         (XO_MODE + 5)
-#define XO_FOOT         (XO_MODE + 6)
-#define XO_LAST         (XO_MODE + 7)
-#define XO_QUIT         (XO_MODE + 8)
+/* Elements of Redraw/reloading (cannot be combined freely for now) */
+
+#define XR_PART_LOAD    0x01000000      /* Reload content */
+#define XR_PART_HEAD    0x02000000      /* Redraw header (the title at screen top) */
+#define XR_PART_NECK    0x04000000      /* Redraw necker (the description above list) */
+#define XR_PART_BODY    0x08000000      /* Redraw body (the list body) */
+#define XR_PART_KNEE    0x10000000      /* Redraw knee (the description below list) */
+#define XR_PART_FOOT    0x20000000      /* Redraw footer (the status bar at screen bottom) */
+
+/* Predefined combination of elements of redraw/reloading  */
+
+#define XR_INIT         (XR_PART_LOAD | XR_HEAD)
+#define XR_LOAD         (XR_PART_LOAD | XR_BODY)
+#define XR_HEAD         (XR_PART_HEAD | XR_NECK)
+#define XR_NECK         (XR_PART_NECK | XR_BODY)
+#define XR_BODY         (XR_PART_BODY | XR_KNEE)
+#define XR_KNEE         (XR_PART_KNEE | XR_FOOT)
+#define XR_FOOT         (XR_PART_FOOT)
+
+/* Legacy xover modes */
+
+/* Redraw/reloading */
+#define XO_NONE         (KEY_NONE)
+#define XO_INIT         (XR_INIT + XO_NONE)
+#define XO_LOAD         (XR_LOAD + XO_NONE)
+#define XO_HEAD         (XR_HEAD + XO_NONE)
+#define XO_NECK         (XR_NECK + XO_NONE)
+#define XO_BODY         (XR_BODY + XO_NONE)
+#define XO_KNEE         (XR_KNEE + XO_NONE)
+#define XO_FOOT         (XR_FOOT + XO_NONE)
+/* Zone operations (see below) */
+#define XO_LAST         ((XZ_ZONE | XZ_BACK) + XO_NONE)
+#define XO_QUIT         ((XZ_ZONE | XZ_QUIT) + XO_NONE)
+
+/* Special values */
 
 #define XO_RSIZ         256             /* max record length */
 #define XO_TALL         (b_lines - 3)   /* page size = b_lines - 3 (扣去 head/neck/foot 共三行) */
 
+/* Cursor movements */
 
-#define XO_MOVE         0x20000000      /* cursor movement */
-#define XO_WRAP         0x08000000      /* cursor wrap in movement */
-#define XO_TAIL         (XO_MOVE - 999) /* init cursor to tail */
+#define XO_MOVE_MASK    0x00ffffff      /* Apply this mask to get the cursor movement */
+#define XO_POS_MASK     0x001fffff      /* Apply this mask to get the cursor position */
 
+#define XO_MOVE         0x00100000      /* cursor movement bias */
+#define XO_WRAP         0x00800000      /* cursor wrap in movement */
+#define XO_MOVE_UNUSED1 0x00400000
+#define XO_MOVE_UNUSED2 0x00200000
 
-#define XO_ZONE         0x40000000      /* 進入某一個 zone */
-#define XZ_BACK         0x100
+#define XO_MOVE_MAX     (XO_POS_MASK - XO_MOVE)  /* The maximum value of cursor position */
+#define XO_MOVE_MIN     (XO_NONE + 1 - XO_MOVE)  /* The minimum value of cursor position */
+#define XO_TAIL         (XO_WRAP - 1)   /* Move or init cursor to tail */
 
+/* Zone operations */
 
-#define XZ_CLASS        (XO_ZONE + 0)   /* 看板列表 */
-#define XZ_ULIST        (XO_ZONE + 1)   /* 線上使用者名單 */
-#define XZ_PAL          (XO_ZONE + 2)   /* 好友名單 */
-#define XZ_VOTE         (XO_ZONE + 3)   /* 投票 */
-#define XZ_BMW          (XO_ZONE + 4)   /* 熱訊 */
+#define XO_ZONE_MASK    0x7f000000      /* Apply this mask to get the zone operation */
+
+#define XZ_ZONE         0x40000000      /* 進入某一個 zone */
+#define XZ_INIT         0x01000000      /* Perform initialization tasks for a zone */
+#define XZ_FINI         0x02000000      /* Perform finalization tasks for a zone */
+#define XZ_BACK         0x04000000      /* Return to the last zone */
+#define XZ_QUIT         0x08000000      /* Exit `xover()` */
+#define XZ_UNUSED4      0x10000000
+#define XZ_UNUSED5      0x20000000
+
+#define XO_ZONE         (XZ_ZONE + XO_MOVE)
+
+/* Zone indexes */
+
+#define XZ_INDEX_CLASS  0               /* 看板列表 */
+#define XZ_INDEX_ULIST  1               /* 線上使用者名單 */
+#define XZ_INDEX_PAL    2               /* 好友名單 */
+#define XZ_INDEX_VOTE   3               /* 投票 */
+#define XZ_INDEX_BMW    4               /* 熱訊 */
 
 #ifdef HAVE_XYPOST
-#define XZ_XPOST        (XO_ZONE + 5)   /* 搜尋文章模式 */
+#define XZ_INDEX_XPOST  5               /* 搜尋文章模式 */
 #endif
 
 /* 以下的有 thread 主題式閱讀的功能 */
 
-#define XZ_MBOX         (XO_ZONE + 6)   /* 信箱 */
-#define XZ_BOARD        (XO_ZONE + 7)   /* 看板 */
-#define XZ_GEM          (XO_ZONE + 8)   /* 精華區 */
-#define XZ_MAILGEM      (XO_ZONE + 9)   /* 信件精華區 */
-#define XZ_BANMAIL      (XO_ZONE + 10)  /* 擋信列表 */
-#define XZ_OTHER        (XO_ZONE + 11)  /* 其他列表 */
-#define XZ_MYFAVORITE   (XO_ZONE + 12)  /* 我的最愛 */
+#define XZ_INDEX_MBOX     6             /* 信箱 */
+#define XZ_INDEX_BOARD    7             /* 看板 */
+#define XZ_INDEX_GEM      8             /* 精華區 */
+#define XZ_INDEX_MAILGEM  9             /* 信件精華區 */
 
+/* 以上的有 thread 主題式閱讀的功能 */
+
+#define XZ_INDEX_BANMAIL      10        /* 擋信列表 */
+#define XZ_INDEX_OTHER        11        /* 其他列表 */
+#define XZ_INDEX_MYFAVORITE   12        /* 我的最愛 */
+
+/* Count of zone indexes */
+
+#define XZ_INDEX_MAX    XZ_INDEX_MYFAVORITE
+#define XZ_COUNT        (XZ_INDEX_MAX + 1)
+
+/* Legacy zone values */
+
+#define XZ_CLASS        (XO_ZONE + XZ_INDEX_CLASS)
+#define XZ_ULIST        (XO_ZONE + XZ_INDEX_ULIST)
+#define XZ_PAL          (XO_ZONE + XZ_INDEX_PAL)
+#define XZ_VOTE         (XO_ZONE + XZ_INDEX_VOTE)
+#define XZ_BMW          (XO_ZONE + XZ_INDEX_BMW)
+
+#ifdef HAVE_XYPOST
+#define XZ_XPOST        (XO_ZONE + XZ_INDEX_XPOST)
+#endif
+
+#define XZ_MBOX         (XO_ZONE + XZ_INDEX_MBOX)
+#define XZ_BOARD        (XO_ZONE + XZ_INDEX_BOARD)
+#define XZ_GEM          (XO_ZONE + XZ_INDEX_GEM)
+#define XZ_MAILGEM      (XO_ZONE + XZ_INDEX_MAILGEM)
+
+#define XZ_BANMAIL      (XO_ZONE + XZ_INDEX_BANMAIL)
+#define XZ_OTHER        (XO_ZONE + XZ_INDEX_OTHER)
+#define XZ_MYFAVORITE   (XO_ZONE + XZ_INDEX_MYFAVORITE)
+
+/* Zone aliases */
+#define XZ_INDEX_POST   XZ_INDEX_BOARD
 #define XZ_POST         XZ_BOARD
-
 
 
 //cache, 20101119
