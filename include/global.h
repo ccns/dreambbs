@@ -286,43 +286,53 @@
 #define OPT_OPERATOR    "Operator"
 
 /* ¡‰ΩL≥]©w */
-#define KEY_TAB         9
-#define KEY_ENTER       10
-#define KEY_ESC         27
-#define KEY_UP          0x0151
-#define KEY_DOWN        0x0152
-#define KEY_RIGHT       0x0153
-#define KEY_LEFT        0x0154
-#define KEY_STAB        0x0159  /* Shift-Tab */
-#define KEY_HOME        0x0251
-#define KEY_INS         0x0252
-#define KEY_DEL         0x0253
-#define KEY_END         0x0254
-#define KEY_PGUP        0x0255
-#define KEY_PGDN        0x0256
 
-#define KEY_NONE        0x4000
+/* Normal keys */
+#define KEY_TAB         '\t'
+#define KEY_ENTER       '\n'
+#define KEY_ESC         '\x1b'
 
-#define KEY_F1          0x0351
-#define KEY_F2          0x0352
-#define KEY_F3          0x0353
-#define KEY_F4          0x0354
-#define KEY_F5          0x0355
-#define KEY_F6          0x0356
-#define KEY_F7          0x0357
-#define KEY_F8          0x0358
-#define KEY_F9          0x0359
-#define KEY_F10         0x035A
-#define KEY_F11         0x035B
-#define KEY_F12         0x035C
+/* Control sequence keys */
+#define KEY_UP          0x0141  /* A */
+#define KEY_DOWN        0x0142  /* B */
+#define KEY_RIGHT       0x0143  /* C */
+#define KEY_LEFT        0x0144  /* D */
+#define KEY_BTAB        0x015A  /* Z; Shift-Tab */
+#define KEY_STAB        KEY_BTAB  /* Key alias for compatibility */
 
-#define KEY_INVALID     0x04FE
+/* Control sequence keys with final byte being `~` */
+/* Should be consecutive for compatibility */
+#define KEY_HOME        0x0241
+#define KEY_INS         0x0242
+#define KEY_DEL         0x0243
+#define KEY_END         0x0244
+#define KEY_PGUP        0x0245
+#define KEY_PGDN        0x0246
 
-#define I_TIMEOUT       0x05FD
-#define I_OTHERDATA     0x05FE
+/* Should be consecutive for compatibility */
+#define KEY_F1          0x0251
+#define KEY_F2          0x0252
+#define KEY_F3          0x0253
+#define KEY_F4          0x0254
+#define KEY_F5          0x0255
+#define KEY_F6          0x0256
+#define KEY_F7          0x0257
+#define KEY_F8          0x0258
+#define KEY_F9          0x0259
+#define KEY_F10         0x025A
+#define KEY_F11         0x025B
+#define KEY_F12         0x025C
+
+/* Special key values */
+#define KEY_INVALID     0x03FE
+
+#define I_TIMEOUT       0x04FD
+#define I_OTHERDATA     0x04FE
+
+#define KEY_NONE        0x4000  /* All key values should `< KEY_NONE` */
 
 #define Ctrl(c)         ( c & ~0x0060 )
-#define Meta(c)         ( c + 0x2000 )
+#define Meta(c)         ( c | 0x2000 )  /* All unmodified key values should `< 0x2000` */
 #define Shift(c)        ( c ^ 0x0020 )  /* Only works on 'A'-']', 'a'-'}', and special keys */
 /* If needed, apply `Shift()` after applying `Ctrl()`, e.g., `Shift(Ctrl(c))`. Do not do the reverse */
 /* For normal keys, do not apply `Shift()` on `Ctrl()`ed keys. */
