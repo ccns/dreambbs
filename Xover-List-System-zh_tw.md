@@ -4,7 +4,12 @@ Xover 列表系統是 MapleBBS 3.x 中所大量使用的列表顯示系統。
 
 不同於 Pirate BBS 原本的 `i_read` 列表系統只能用在文章與信件列表，Xover 列表系統能夠用來顯示任何的列表。
 
-以下使用歷史比較的方法概覽 Xover 列表系統。
+## 文章概覽
+
+- [Pirate BBS、PttBBS、MapleBBS 3 的列表顯示函數比較](https://github.com/ccns/dreambbs/wiki/Xover-List-System-zh_tw#pirate-bbspttbbsmaplebbs-3-%E7%9A%84%E5%88%97%E8%A1%A8%E9%A1%AF%E7%A4%BA%E5%87%BD%E6%95%B8%E6%AF%94%E8%BC%83) 一節使用歷史比較的方法概覽 Xover 列表系統。
+
+- [MapleBBS 3 與 DreamBBS v3 的 Xover callback key value 的分配](https://github.com/ccns/dreambbs/wiki/Xover-List-System-zh_tw#maplebbs-3-%E8%88%87-dreambbs-v3-%E7%9A%84-xover-callback-key-value-%E7%9A%84%E5%88%86%E9%85%8D) 一節比較了 MapleBBS 3 與 DreamBBS 的用於 Xover callback 列表的 key value 分配上的差異。
+
 ## Pirate BBS、PttBBS、MapleBBS 3 的列表顯示函數比較
 
 本文所提到的 BBS 系統間的演化關係
