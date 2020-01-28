@@ -2128,7 +2128,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 {
     int ch, len;
     int x, y;
-    bool dirty;
+    bool dirty, key_done;
 
     /* Adjust flags */
     if (!(echo & VGET_STRICT_DOECHO))
@@ -2335,6 +2335,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             continue;
         }
 
+        key_done = true;  /* Assume key processing will be done */
 #ifdef M3_USE_PFTERM
         if (!(echo & VGET_STEALTH_NOECHO))
             STANDOUT;
@@ -2433,7 +2434,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             break;
 
         default:
-            ch |= KEY_NONE;   /* Non-processed key */
+            key_done = false; /* Non-processed key */
             break;
         }
 #ifdef M3_USE_PFTERM
@@ -2442,7 +2443,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 #endif
 
         /* No further processing is needed */
-        if (!(ch & KEY_NONE))
+        if (key_done)
             continue;
 
         /* No input history for `NUMECHO` or hidden inputs */
@@ -2459,7 +2460,6 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         /* Seek history */
         {
             int line_prev = line;
-            ch ^= KEY_NONE;
             switch (ch)
             {
             case KEY_DOWN:

@@ -1773,6 +1773,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
     footer_backup_t old_footer;
     screen_backup_t old_screen;
     char buf[128];
+    bool reload = false;
 
     max = bmw_locus - 1;
 
@@ -1798,15 +1799,16 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
         prints(FOOTER_BMW_REPLY, d_cols, "");
     }
 
-    cc = KEY_NONE;
+    reload = true;
     pos = max;
 
     uhead = ushm->uslot;
 
     for (;;)
     {
-        if (cc == KEY_NONE)
+        if (reload)
         {
+            reload = false;
             bmw = bmw_lslot[pos];
             if (cuser.ufo2 & UFO2_REPLY || replymode)
                 bmw_display(max, pos);
@@ -1846,7 +1848,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
             if (pos > 0)
             {
                 pos--;
-                cc = KEY_NONE;
+                reload = true;
             }
             continue;
         }
@@ -1856,7 +1858,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
             if (pos < max)
             {
                 pos++;
-                cc = KEY_NONE;
+                reload = true;
             }
             continue;
         }
@@ -1866,7 +1868,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
             if (pos != max)
             {
                 pos = max;
-                cc = KEY_NONE;
+                reload = true;
             }
             continue;
         }
