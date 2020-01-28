@@ -2511,7 +2511,7 @@ mbox_tag(
     }
 
     /* return XO_NONE; */
-    return xo->pos + 1 + XO_MOVE; /* lkchu.981201: 跳至下一項 */
+    return XO_REL + 1 + XO_MOVE; /* lkchu.981201: 跳至下一項 */
 }
 
 

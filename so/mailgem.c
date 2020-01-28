@@ -848,7 +848,7 @@ XO *xo)
         cursor_show(3 + pos - xo->top, 0);
     }
 
-    return xo->pos + 1 + XO_MOVE;
+    return XO_REL + 1 + XO_MOVE;
 }
 
 

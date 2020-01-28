@@ -1583,6 +1583,7 @@ xover(
                 /* --------------------------------------------- */
 
                 const bool wrap = cmd & XO_WRAP;
+                const bool rel = cmd & XO_REL;
                 const int cur = xo->pos;
 
                 pos = (cmd & XO_POS_MASK) - XO_MOVE;
@@ -1591,6 +1592,10 @@ xover(
                 /* fix cursor's range */
 
                 num = xo->max - 1;
+
+                if (rel)
+                    pos += cur;
+
                 if (pos < 0)
                 {
                     if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
@@ -1858,19 +1863,19 @@ xover_callback_end:
         }
         else if (cmd == KEY_UP || cmd == 'p' || cmd == 'k')
         {
-            cmd = pos - 1 + XO_MOVE + XO_WRAP;
+            cmd = XO_REL - 1 + XO_MOVE + XO_WRAP;
         }
         else if (cmd == KEY_DOWN || cmd == 'n' || cmd == 'j')
         {
-            cmd = pos + 1 + XO_MOVE + XO_WRAP;
+            cmd = XO_REL + 1 + XO_MOVE + XO_WRAP;
         }
         else if (cmd == ' ' || cmd == KEY_PGDN || cmd == 'N'  /*|| cmd == Ctrl('F') */)
         {                                   /* lkchu.990428: 給「暫時更改來源」用 */
-            cmd = pos + XO_MOVE + XO_TALL;
+            cmd = XO_REL + XO_MOVE + XO_TALL;
         }
         else if (cmd == KEY_PGUP || cmd == 'P' /*|| cmd == Ctrl('B')*/)
         {
-            cmd = pos + XO_MOVE - XO_TALL;
+            cmd = XO_REL + XO_MOVE - XO_TALL;
         }
         else if (cmd == KEY_HOME || cmd == '0')
         {
