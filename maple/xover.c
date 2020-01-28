@@ -1555,43 +1555,23 @@ xover(
     {
         while ((cmd != XO_NONE) || redo_flags || zone_flags)
         {
-            if ((cmd & XZ_ZONE) && (cmd & XO_POS_MASK) > XO_NONE)
-            {
-                /* --------------------------------------------- */
-                /* switch zone                                   */
-                /* --------------------------------------------- */
-
-                zone_flags |= (cmd & ~XO_MOVE_MASK);  /* Collect zone operation flags */
-                cmd = (cmd & XO_POS_MASK) - XO_MOVE;
-
-                zone = cmd;
-                xo = xz[cmd].xo;
-                sysmode = xz[cmd].mode;
-                xcmd = xo->cb;
-
-                TagNum = 0;             /* clear TagList */
-                pos_prev = -1;  /* Redraw cursor */
-                cmd = XO_INIT;
-                utmp_mode(sysmode);
-
-                redo_flags = 0;  /* No more redraw/reloading is needed */
-            }
-            else if ((cmd & XO_POS_MASK) > XO_NONE)
+            if ((cmd & XO_POS_MASK) > XO_NONE)
             {
                 /* --------------------------------------------- */
                 /* calc cursor pos and show cursor correctly     */
                 /* --------------------------------------------- */
 
+                const bool zone_op = cmd & XZ_ZONE;
                 const bool wrap = cmd & XO_WRAP;
                 const bool rel = cmd & XO_REL;
-                const int cur = xo->pos;
+                const int cur = (zone_op) ? zone : xo->pos;
 
                 pos = (cmd & XO_POS_MASK) - XO_MOVE;
                 cmd = (cmd & ~XO_MOVE_MASK) + XO_NONE;
 
                 /* fix cursor's range */
 
-                num = xo->max - 1;
+                num = ((zone_op) ? XZ_COUNT : xo->max) - 1;
 
                 if (rel)
                     pos += cur;
@@ -1613,9 +1593,28 @@ xover(
                     /* pos = num; :chuan: */
                 }
 
-                /* check cursor's range */
+                /* IID.20200129: Switch zone using cursor movement semantic */
+                if (zone_op)
+                {
+                    /* --------------------------------------------- */
+                    /* switch zone                                   */
+                    /* --------------------------------------------- */
 
-                if (pos != cur)
+                    zone_flags |= (cmd & ~XO_MOVE_MASK);  /* Collect zone operation flags */
+
+                    zone = pos;
+                    xo = xz[pos].xo;
+                    sysmode = xz[pos].mode;
+                    xcmd = xo->cb;
+
+                    TagNum = 0;             /* clear TagList */
+                    pos_prev = -1;  /* Redraw cursor */
+                    cmd = XO_INIT;
+                    utmp_mode(sysmode);
+
+                    redo_flags = 0;  /* No more redraw/reloading is needed */
+                }
+                else if (pos != cur)        /* check cursor's range */
                 {
                     xo->pos = pos;
                     num = xo->top;
