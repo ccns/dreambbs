@@ -4097,7 +4097,8 @@ KeyFuncList ulist_cb =
 {
     {XO_INIT, {ulist_init}},
     {XO_LOAD, {ulist_body}},
-    {XO_NONE, {ulist_init}},
+    {XO_HEAD, {ulist_head}},
+    {XO_BODY, {ulist_body}},
 #if 1
     {'S', {ulist_state}},
 #endif
