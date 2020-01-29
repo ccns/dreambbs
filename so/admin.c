@@ -179,13 +179,15 @@ int
 Admin(void)
 {
     DL_HOLD;
-    XO *xo;
+    XO *xo, *last;
     char fpath[64];
     if (!check_admin(cuser.userid) && str_cmp(cuser.userid, SYSOPNAME))
     {
         vmsg("◎ 你不是系統管理員！");
         return DL_RELEASE(0);
     }
+
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
 
     utmp_mode(M_OMENU);
     sprintf(fpath, FN_ETC_ADMIN_DB);
@@ -195,6 +197,9 @@ Admin(void)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
+
     return DL_RELEASE(0);
 }
 

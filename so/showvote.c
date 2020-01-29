@@ -182,10 +182,14 @@ Showvote(
 XO *xo)
 {
     DL_HOLD;
+    XO *last;
     const VCH *vch;
     char fpath[128], *fname;
     if (!HAS_PERM(PERM_SYSOP))
         return DL_RELEASE(XO_NONE);
+
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
+
     vch = (const VCH *) xo_pool + (xo->pos - xo->top);
     hdr_fpath(fpath, xo->dir, (const HDR *) vch);
     fname = strrchr(fpath, '@');
@@ -199,6 +203,9 @@ XO *xo)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
+
     return DL_RELEASE(XO_INIT);
 }
 

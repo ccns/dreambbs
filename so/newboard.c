@@ -935,9 +935,12 @@ int
 XoNewBoard(void)
 {
     DL_HOLD;
-    XO *xo;
+    XO *xo, *last;
     char fpath[64];
     clear();
+
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
+
     sprintf(fpath, "newboard/%s", fn_dir);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = nbrd_cb;
@@ -946,5 +949,8 @@ XoNewBoard(void)
     xo->key = XZ_OTHER;
     xover(XZ_OTHER);
     free(xo);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
+
     return DL_RELEASE(0);
 }

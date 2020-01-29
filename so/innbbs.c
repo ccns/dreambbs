@@ -704,7 +704,7 @@ int
 a_innbbs(void)
 {
     DL_HOLD;
-    XO *xo;
+    XO *xo, *last;
     InnbbsXyz xyz;
     const char *fpath;
     int recsiz;
@@ -766,6 +766,8 @@ a_innbbs(void)
         return DL_RELEASE(0);
     }
 
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
+
     utmp_mode(M_OMENU);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = innbbs_cb;
@@ -781,5 +783,7 @@ a_innbbs(void)
         rec_sync(fpath, recsiz, xyz.sync_func, NULL);
 
     free(xo);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
     return DL_RELEASE(0);
 }

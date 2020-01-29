@@ -245,8 +245,11 @@ KeyFuncList banmail_cb = {
 
 int BanMail(void)
 {
-    XO *xo;
+    XO *xo, *last;
     char fpath[64];
+
+    last = xz[XZ_BANMAIL - XO_ZONE].xo;  /* record */
+
     sprintf(fpath, FN_ETC_BANMAIL_ACL);
     xz[XZ_BANMAIL - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = banmail_cb;
@@ -255,13 +258,18 @@ int BanMail(void)
     xover(XZ_BANMAIL);
     fwshm_load();
     free(xo);
+
+    xz[XZ_BANMAIL - XO_ZONE].xo = last;  /* restore */
+
     return 0;
 }
 
 void post_mail(void)
 {
-    XO *xx;
+    XO *xx, *last;
     char fpath[64];
+
+    last = xz[XZ_BANMAIL - XO_ZONE].xo;  /* record */
 
     sprintf(fpath, "brd/%s/banmail.acl", currboard);
     xz[XZ_BANMAIL - XO_ZONE].xo = xx = xo_new(fpath);
@@ -270,4 +278,6 @@ void post_mail(void)
     xx->pos = 0;
     xover(XZ_BANMAIL);
     free(xx);
+
+    xz[XZ_BANMAIL - XO_ZONE].xo = last;  /* restore */
 }

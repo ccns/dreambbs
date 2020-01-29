@@ -165,7 +165,7 @@ main_bstat(
 XO *xo)
 {
     DL_HOLD;
-    XO *xx;
+    XO *xx, last;
     char fpath[64];
     BRD *brd;
     short *chp;
@@ -177,6 +177,8 @@ XO *xo)
     chn = *chp;
     if (chn >= 0)
     {
+        last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
+
         brd = bshm->bcache + chn;
         utmp_mode(M_OMENU);
         brd_fpath(fpath, brd->brdname, FN_BRD_STATCOUNT);
@@ -187,6 +189,8 @@ XO *xo)
         xx->key = chn;
         xover(XZ_OTHER);
         free(xx);
+
+        xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
     }
 
     return DL_RELEASE(XO_HEAD);

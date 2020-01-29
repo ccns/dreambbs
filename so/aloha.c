@@ -309,8 +309,10 @@ int
 t_aloha(void)
 {
     DL_HOLD;
-    XO *xo;
+    XO *xo, *last;
     char fpath[64];
+
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
 
     utmp_mode(M_OMENU);
     usr_fpath(fpath, cuser.userid, FN_ALOHA);
@@ -320,6 +322,9 @@ t_aloha(void)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
+
     return DL_RELEASE(0);
 }
 

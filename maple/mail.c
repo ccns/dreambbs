@@ -2790,7 +2790,9 @@ mbox_sysop(
 {
     if (/*(xo == cmbox) &&*/ (HAS_PERM(PERM_SYSOP)))
     {
-        XO *xx;
+        XO *xx, *last;
+
+        last = xz[XZ_MBOX - XO_ZONE].xo;  /* record */
 
         xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new("usr/s/sysop/.DIR");
         xx->cb = mbox_cb;
@@ -2799,7 +2801,7 @@ mbox_sysop(
         xover(XZ_MBOX);
         free(xx);
 
-        xz[XZ_MBOX - XO_ZONE].xo = xo;
+        xz[XZ_MBOX - XO_ZONE].xo = last;  /* restore */
         return XO_INIT;
     }
 
@@ -2819,7 +2821,9 @@ mbox_other(
 
     while (acct_get(msg_uid, &acct) > 0)
     {
-        XO *xx;
+        XO *xx, *last;
+
+        last = xz[XZ_MBOX - XO_ZONE].xo;  /* record */
 
         //str_lower(id, acct.userid);
         //sprintf(path, "usr/%c/%s/.DIR", *id, id);
@@ -2836,7 +2840,7 @@ mbox_other(
 
         usr_fpath(cmbox->dir, cuser.userid, fn_dir);
 
-        xz[XZ_MBOX - XO_ZONE].xo = xo;
+        xz[XZ_MBOX - XO_ZONE].xo = last;  /* restore */
         return XO_INIT;
 
     }

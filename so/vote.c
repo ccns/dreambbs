@@ -1126,6 +1126,7 @@ XoVote(
 XO *xo)
 {
     DL_HOLD;
+    XO *last;
     char fpath[32];
 
     /* Τ post 舦把щ布 */
@@ -1140,12 +1141,16 @@ XO *xo)
         return DL_RELEASE(XO_FOOT);
     }
 
+    last = xz[XZ_VOTE - XO_ZONE].xo;  /* record */
+
     xz[XZ_VOTE - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = vote_cb;
     xo->recsiz = sizeof(VCH);
     xo->pos = 0;
     xover(XZ_VOTE);
     free(xo);
+
+    xz[XZ_VOTE - XO_ZONE].xo = last;  /* restore */
 
     return DL_RELEASE(XO_INIT);
 }
@@ -1155,7 +1160,7 @@ SystemVote(void)
 {
     DL_HOLD;
     char fpath[80];
-    XO *xo;
+    XO *xo, *last;
 
     /* Τ post 舦把щ布 */
     XoPost(brd_bno("SYSOP"));
@@ -1167,12 +1172,16 @@ SystemVote(void)
         return DL_RELEASE(0);
     }
 
+    last = xz[XZ_VOTE - XO_ZONE].xo;  /* record */
+
     xz[XZ_VOTE - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = vote_cb;
     xo->recsiz = sizeof(VCH);
     xo->pos = 0;
     xover(XZ_VOTE);
     free(xo);
+
+    xz[XZ_VOTE - XO_ZONE].xo = last;  /* restore */
 
     return DL_RELEASE(0);
 }

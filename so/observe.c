@@ -272,8 +272,11 @@ int
 Observe_list(void)
 {
     DL_HOLD;
-    XO *xo;
+    XO *xo, *last;
     char fpath[64];
+
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
+
     sprintf(fpath, FN_ETC_OBSERVE);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = observe_cb;
@@ -282,6 +285,9 @@ Observe_list(void)
     xover(XZ_OTHER);
     observeshm_load();
     free(xo);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
+
     return DL_RELEASE(0);
 }
 

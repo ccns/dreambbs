@@ -1050,8 +1050,10 @@ void
 mailgem_main(void)
 {
     DL_HOLD;
-    XO *xo;
+    XO *xo, *last;
     char fpath[128];
+
+    last = xz[XZ_MAILGEM - XO_ZONE].xo;  /* record */
 
     usr_fpath(fpath, cuser.userid, "gem");
 
@@ -1067,6 +1069,9 @@ mailgem_main(void)
     xo->xyz = (void *)"我的精華區";
     xover(XZ_MAILGEM);
     free(xo);
+
+    xz[XZ_MAILGEM - XO_ZONE].xo = last;  /* restore */
+
     DL_RELEASE(0);
 }
 

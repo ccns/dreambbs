@@ -981,8 +981,10 @@ KeyFuncList pal_cb =
 int
 t_pal(void)
 {
-    XO *xo;
+    XO *xo, *last;
     char fpath[64];
+
+    last = xz[XZ_PAL - XO_ZONE].xo;  /* record */
 
     usr_fpath(fpath, cuser.userid, FN_PAL);
     xz[XZ_PAL - XO_ZONE].xo = xo = xo_new(fpath);
@@ -992,6 +994,8 @@ t_pal(void)
     xover(XZ_PAL);
     pal_cache();
     free(xo);
+
+    xz[XZ_PAL - XO_ZONE].xo = last;  /* restore */
 
     return 0;
 }
@@ -1410,8 +1414,10 @@ XoBM(
          * ¤£»Ý¦Acheck readlevel PERM_SYSOP
          */
     {
-        XO *xt;
+        XO *xt, *last;
         char fpath[80];
+
+        last = xz[XZ_PAL - XO_ZONE].xo;  /* record */
 
         brd_fpath(fpath, currboard, FN_PAL);
         xz[XZ_PAL - XO_ZONE].xo = xt = xo_new(fpath);
@@ -1425,6 +1431,8 @@ XoBM(
         bm_image();
 
         free(xt);
+
+        xz[XZ_PAL - XO_ZONE].xo = last;  /* restore */
 
         return XO_INIT /* or post_init(xo) */ ;
     }
@@ -4824,8 +4832,10 @@ KeyFuncList banmsg_cb =
 int
 t_banmsg(void)
 {
-    XO *xo;
+    XO *xo, *last;
     char fpath[64];
+
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
 
     usr_fpath(fpath, cuser.userid, FN_BANMSG);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
@@ -4835,6 +4845,8 @@ t_banmsg(void)
     xover(XZ_OTHER);
     banmsg_cache();
     free(xo);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
 
     return 0;
 }

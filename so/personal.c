@@ -614,7 +614,10 @@ int
 personal_admin(void)
 {
     DL_HOLD;
-    XO *xo;
+    XO *xo, *last;
+
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
+
     utmp_mode(M_OMENU);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(FN_ETC_PERSONAL);
     xo->cb = personal_cb;
@@ -622,6 +625,9 @@ personal_admin(void)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
+
     return DL_RELEASE(0);
 }
 

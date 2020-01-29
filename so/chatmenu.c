@@ -313,7 +313,9 @@ Chatmenu(void)
 {
     DL_HOLD;
     char fpath[64];
-    XO *xx;
+    XO *xx, *last;
+
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
 
     utmp_mode(M_OMENU);
     sprintf(fpath, FN_CHAT_PARTY_DB);
@@ -324,6 +326,8 @@ Chatmenu(void)
     xx->pos = 0;
     xover(XZ_OTHER);
     free(xx);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
     return DL_RELEASE(0);
 }
 

@@ -244,8 +244,11 @@ int
 Memorandum(void)
 {
     DL_HOLD;
-    XO *xo;
+    XO *xo, *last;
     char fpath[80];
+
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
+
     utmp_mode(M_OMENU);
     usr_fpath(fpath, cuser.userid, "memorandum");
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
@@ -254,6 +257,9 @@ Memorandum(void)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
+
     return DL_RELEASE(0);
 }
 

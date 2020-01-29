@@ -227,8 +227,10 @@ int
 Violate(void)
 {
     DL_HOLD;
-    XO *xo;
+    XO *xo, *last;
     char fpath[64];
+
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
 
     utmp_mode(M_OMENU);
     sprintf(fpath, FN_VIOLATELAW_DB);
@@ -238,6 +240,9 @@ Violate(void)
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
+
     return DL_RELEASE(0);
 }
 

@@ -322,7 +322,7 @@ XO *xo)
         ways = 1;
     sprintf(buf, mode ? "board.%d" : "list.%d", ways);
     usr_fpath(fpath, cuser.userid, buf);
-    free(xo);
+    free(xz[XZ_OTHER - XO_ZONE].xo);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = list_cb;
     xo->recsiz = sizeof(LIST);
@@ -344,7 +344,7 @@ XO *xo)
         mode = 1;
     sprintf(buf, mode ? "board.%d" : "list.%d", ways);
     usr_fpath(fpath, cuser.userid, buf);
-    free(xo);
+    free(xz[XZ_OTHER - XO_ZONE].xo);
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = list_cb;
     xo->recsiz = sizeof(LIST);
@@ -357,7 +357,7 @@ int
 List(void)
 {
     DL_HOLD;
-    XO *xo;
+    XO *xo, *last;
     char fpath[128], msg[100];
     char buf[10];
     int i;
@@ -395,12 +395,18 @@ List(void)
     utmp_mode(M_OMENU);
     sprintf(buf, mode ? "board.%d" : "list.%d", ways);
     usr_fpath(fpath, cuser.userid, buf);
+
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
+
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = list_cb;
     xo->recsiz = sizeof(LIST);
     xo->pos = 0;
     xover(XZ_OTHER);
     free(xo);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
+
     return DL_RELEASE(0);
 }
 

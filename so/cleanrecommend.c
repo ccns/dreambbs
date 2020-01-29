@@ -247,7 +247,7 @@ clean(
     XO *xo)
 {
     DL_HOLD;
-    XO *xoo;
+    XO *xoo, *last;
     const HDR *hdr;
     HDR phdr;
     int pos, cur;
@@ -368,12 +368,16 @@ clean(
         fclose(fp);
     }
 
+    last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
+
     xz[XZ_OTHER - XO_ZONE].xo = xoo = xo_new(recommenddb);
     xoo->cb = cleanrecommend_cb;
     xoo->recsiz = sizeof(RMSG);
     xoo->pos = 0;
     xover(XZ_OTHER);
     free(xoo);
+
+    xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */
 
     for (i=0; i<rec_num(recommenddb, sizeof(RMSG)); i++)
     {
