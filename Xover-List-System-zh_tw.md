@@ -225,6 +225,7 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
 Macro         | 值                        | 功能                                  | 註解
  :---         | ---                       | ---                                   | ---
 `XO_MODE`     | `0x10000000`              | 表示畫面重繪、資料載入、離開列表等操作  | DreamBBS v3 中已移除
+`XO_NONE`     | - `0x10000000` <br> - `0x00004000` (DreamBBS v3)      | - 什麼都不作 <br> - 最小的被當作指令的 Xover key value |
 `XO_MOVE`     | - `0x20000000` <br> - `0x00100000` (DreamBBS v3)      | - 表示游標移動 <br> - 游標移動的 bias (DreamBBS v3)
 `XO_RSIZ`     | `256`                     | 列表資料的資料結構大小限制              | DreamBBS v3 起不使用
 `XO_TALL`     | `(b_lines - 3)`           | 翻頁所跳行數                           | 非常數
