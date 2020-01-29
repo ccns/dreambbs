@@ -207,11 +207,16 @@ Callback 取得方法　　 　| Loop/O(n)            | Direct index/O(1) | Loop
 `0x00000000` - `0x00003fff`         | (無)               | 按鍵輸入                     |
 `0x00004000`                        | `XO_NONE`          | 什麼都不做                   | 與 `Ctrl(' ')` (`'\0'`) 作區分
 `0x00ffffff` (mask)                 | `XO_MOVE_MASK`     | 游標移動相關                 |
+`0x001fffff` (mask)                 | `XO_POS_MASK`      | 取得游標目標位置             |
 `0x00004001` - `0x001fffff`         | `XO_MOVE + pos`                               | 單純設定游標位置             | 這限制了游標的移動範圍為 `-0x0000bfff` (-49151) - `0x001effff` (2031615)
-`0x**000000` - `0x**1fffff`         | `XR_* + XO_MOVE + pos`                        | 設定游標位置                 | `XO_MOVE` 是游標位置的 bias，設定為 `0x00010000`
-`0x**200000` - `0x**3fffff`         | `XR_* + XO_MOVE + XO_SCRL + pos`              | 設定畫面中列表首項            |
-`0x**400000` - `0x**5fffff`         | `XR_* + XO_MOVE + XO_WRAP + pos`              | 設定游標位置 (頭尾循環)       |
-`0x**600000` - `0x**7fffff`         | `XR_* + XO_MOVE + XO_WRAP + XO_SCRL + pos`    | 設定畫面中列表首項 (頭尾循環) |
+`0x**000000`                        | `XR_*`                                        | 單純畫面重繪、資料載入        |
+`0x**200000`                        | `XR_* + XO_SCRL`                              | 單純畫面重繪、資料載入        |
+`0x**400000`                        | `XR_* + XO_WRAP`                              | 單純畫面重繪、資料載入        |
+`0x**600000`                        | `XR_* + XO_WRAP + XO_SCRL`                    | 單純畫面重繪、資料載入        |
+`0x**000001` - `0x**1fffff`         | `XR_* + XO_MOVE + pos`                        | 設定游標位置                 | `XO_MOVE` 是游標位置的 bias，設定為 `0x00010000`
+`0x**200001` - `0x**3fffff`         | `XR_* + XO_MOVE + XO_SCRL + pos`              | 設定畫面中列表首項            |
+`0x**400001` - `0x**5fffff`         | `XR_* + XO_MOVE + XO_WRAP + pos`              | 設定游標位置 (頭尾循環)       |
+`0x**600001` - `0x**7fffff`         | `XR_* + XO_MOVE + XO_WRAP + XO_SCRL + pos`    | 設定畫面中列表首項 (頭尾循環) |
 `0x3f000000` (mask)                 | `XO_REDO_MASK`     | 畫面重繪、資料載入相關        | 把 `XR_*` macros `or` 起來的值
 `0x01000000` (mask)                 | `XR_LOAD`          | 重新載入列表資料             | `XO_INIT` = `XR_LOAD + XO_HEAD`, `XO_LOAD` = `XR_LOAD + XO_BODY`
 `0x02000000` (mask)                 | `XR_HEAD`          | 重繪畫面頂部                 | `XO_HEAD` = `XR_HEAD + XO_NECK`
@@ -229,8 +234,8 @@ Callback 取得方法　　 　| Loop/O(n)            | Direct index/O(1) | Loop
 `0x20000000` (mask)                 | (未使用)           | (未使用)                     |
 `0x80000000` (mask)                 | `key \| XO_DL`     | 動態載入功能                 |
 #### 新的 key value 分配的特點
-- 將 `XO_MOVE` 重新定義為游標位置的 bias，讓 key value 區間變為整數，解決須特別處理游標位置為負數的狀況的不便
+- 將 `XO_MOVE` 重新定義為游標位置的 bias，避免游標位置為負時 flag bits 的改變
 - 重繪畫面的各個 `XO_*` macros 之間的相對大小不變
 - 允許畫面重繪/重新載入 (`XR_*`) 的各個部分自由組合 (尚未實作)
-- 允許畫面重繪/重新載入 (`XR_*`) 的同時移動游標 (尚未實作)
-- 使用與游標移動相同的方法切換 zone (尚未實作)
+- 允許畫面重繪/重新載入 (`XR_*`) 的同時移動游標
+- 使用與游標移動相同的方法切換 zone
