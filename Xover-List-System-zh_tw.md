@@ -147,7 +147,7 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
 移動游標                 | (直接操作)           | `READ_NEXT` & `READ_PREV` | `XO_MOVE + pos`
 移動游標 (頭尾循環)       | (無)                | (無)                      | `XO_MOVE + XO_WRAP + pos`
 翻頁                     | (直接操作)          | (直接操作)                 | `XO_MOVE + pos ± XO_TALL`
-翻頁 (頭尾循環)           | (無)                | (無)                      | `XO_MOVE + XO_WRAP + pos ± XO_TALL`
+翻頁 (頭尾循環)           | (無)                | (無)                      | `XO_MOVE + XO_WRAP + pos ± XO_TALL` <br> - 在 DreamBBS v3 中會先停在頭尾再循環
 捲動列表                 | (無)                | (無)                      | `XO_MOVE + XO_SCRL + pos` (DreamBBS v3 新增)
 捲動列表 (頭尾循環)       | (無)                | (無)                      | `XO_MOVE + XO_SCRL + XO_WRAP + pos` (DreamBBS v3 新增)
 切換列表                 | (無)                | (無)                      | `XZ_<ZONE>` = `XO_ZONE + zone`
@@ -197,7 +197,7 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
 　                                  | `XR_* + move`      | 設定游標位置                  | Mask 後為 `0x00004001` - `0x001fffff` <br> 這限制了游標的移動範圍為 `-0x000fbfff` (-1032191‬) - `0x000fffff` (1048575‬)
 `0x00200000` (mask)                 | `XO_REL`           | 將游標位置解釋為相對位置      |
 `0x00400000` (mask)                 | `XO_SCRL`          | - 將游標移動解讀為捲動列表 (無 `XZ_ZONE`) <br> - (未使用) (有 `XZ_ZONE`) |
-`0x00800000` (mask)                 | `XO_WRAP`          | 讓游標位置頭尾循環            |
+`0x00800000` (mask)                 | `XO_WRAP`          | 讓游標位置頭尾循環            | 沒有 `XZ_ZONE` 時，如果目標位置不是 `XO_MOVE_MIN` (上移循環到尾項) 或 `XO_MOVE_MAX` (下移循環到首項)，會先停在頭尾再循環
 `0x3f000000` (mask)                 | `XO_REDO_MASK`     | 畫面重繪、資料載入相關        | 把 `XR_*` macros `or` 起來的值
 `0x01000000` (mask)                 | `XR_LOAD`          | 重新載入列表資料             | `XO_INIT` = `XR_LOAD + XO_HEAD` <br> `XO_LOAD` = `XR_LOAD + XO_BODY`
 `0x02000000` (mask)                 | `XR_HEAD`          | 重繪畫面頂部                 | `XO_HEAD` = `XR_HEAD + XO_NECK`
@@ -229,9 +229,9 @@ Macro         | 值                        | 功能                             
 `XO_MOVE`     | - `0x20000000` <br> - `0x00100000` (DreamBBS v3)      | - 表示游標移動 <br> - 游標移動的 bias (DreamBBS v3)
 `XO_RSIZ`     | `256`                     | 列表資料的資料結構大小限制              | DreamBBS v3 起不使用
 `XO_TALL`     | `(b_lines - 3)`           | 翻頁所跳行數                           | 非常數
-`XO_MOVE_MAX` | `(XO_POS_MASK - XO_MOVE)` | 可加在 `XO_MOVE` 上的最大值            | DreamBBS v3 新增
-`XO_MOVE_MIN` | `(XO_NONE + 1 - XO_MOVE)` | 可加在 `XO_MOVE` 上的最小值            | DreamBBS v3 新增
-`XO_TAIL`     | - `(XO_MOVE - 999)` <br> - `(XO_WRAP - 1)` (DreamBBS v3)  | - 用來將游標 `XO::pos` 初始化到列表尾項 <br> - 用在 `XO_MOVE + XO_TAIL` 中，將游標移到列表尾項 (DreamBBS v3 增加支援) | 注意是 `TAIL`，與 `XO_TALL` 不同
+`XO_MOVE_MAX` | `(XO_POS_MASK - XO_MOVE)` | 可加在 `XO_MOVE` 上的最大值 <br> 游標下移且頭尾循環時，不停在尾項 | DreamBBS v3 新增
+`XO_MOVE_MIN` | `(XO_NONE + 1 - XO_MOVE)` | 可加在 `XO_MOVE` 上的最小值 <br> 游標上移且頭尾循環時，不停在首項 | DreamBBS v3 新增
+`XO_TAIL`     | - `(XO_MOVE - 999)` <br> - `(XO_WRAP + XO_MOVE_MIN)` (DreamBBS v3)  | - 用來將游標 `XO::pos` 初始化到列表尾項 <br> - 用在 `XO_MOVE + XO_TAIL` 中，將游標移到列表尾項 (DreamBBS v3 增加支援) | 注意是 `TAIL`，與 `XO_TALL` 不同
 `XO_ZONE`     | `0x40000000`              | - 表示列表切換 <br> - 將操作解讀為列表切換 (DreamBBS v3) |
 `XZ_BACK`     | - `0x100` <br> - `0x04000000` (DreamBBS v3) | - (未使用) <br> - 加在 `XZ_ZONE` 上，表示回到上次進入的 zone (DreamBBS v3) |
 `XZ_MAX`      | `XZ_MYFAVORITE`           | 切換到最後一個 zone                    | DreamBBS v3 新增
