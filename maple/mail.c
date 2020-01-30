@@ -2169,8 +2169,8 @@ mbox_item(
 #endif
 
     int xmode = hdr->xmode;
-    prints("%6d %s%c%s",
-        pos,
+    prints("%6d%c%s%c%s",
+        pos, tag_char(hdr->chrono),
         (xmode & MAIL_DELETE) ? (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) ? "\x1b[1;37;41m" : "\x1b[1;5;37;41m")
             : (xmode & MAIL_MARKED) ? (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) ? "\x1b[36m" : "\x1b[1;36m")
             : "",
