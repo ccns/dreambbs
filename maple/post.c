@@ -975,18 +975,7 @@ post_visit(
     if (ans == 'v' || ans == 'u')
     {
         brh_visit(ans = ans == 'u');
-
-        row = xo->top;
-        max = BMIN(xo->max - xo->top + 3, b_lines);
-
-        fhdr = (const HDR *) xo_pool;
-        row = 3;
-
-        do
-        {
-            move(row, 7);
-            outc(post_attr(fhdr++));
-        } while (++row < max);
+        return XO_BODY;  /* Redraw the list to show changes */
     }
     return XO_FOOT;
 }
