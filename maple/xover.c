@@ -1554,6 +1554,15 @@ xover(
 
     for (;;)
     {
+        /* Thor.0613: 輔助訊息清除 */
+        /* IID.20200209: `<= 0`: No messages; `>= 1`: The message will be cleared after `msg-1` loops */
+        if (msg > 0)
+        {
+            msg--;
+            if (!msg)
+                cmd |= XR_FOOT;
+        }
+
         while ((cmd != XO_NONE) || redo_flags || zone_flags)
         {
             if ((cmd & XO_POS_MASK) > XO_NONE)
@@ -1692,12 +1701,6 @@ xover(
                         /*outz("\x1b[44m 都給我看光光了! ^O^ \x1b[m");*/    /* Thor.0616 */
                         msg = 1;
                     }
-                    else if (msg)
-                    {
-                        move(b_lines, 0);
-                        clrtoeol();
-                        msg = 0;
-                    }
 #endif
                     pos_prev = -1;  /* Item will be redrawn; redraw cursor */
                 }
@@ -1705,9 +1708,7 @@ xover(
                 {
                     move(b_lines, 0);
                     clrtoeol();
-
-                    /* Thor.0613: 輔助訊息清除 */
-                    msg = 0;
+                    msg = 0;  /* Message cleared */
 
                     /* IID.20191223: Continue to invoke the callback function */
                 }
@@ -1925,8 +1926,7 @@ xover_callback_end:
         }
         else if (cmd == KEY_END || cmd == '$')
         {
-            /* TODO(IID.20191206): Make this hotkey reload the list */
-            cmd = XO_MOVE + XO_TAIL;            /* force re-load */
+            cmd = XR_LOAD + XO_MOVE + XO_TAIL;  /* force re-load */
         }
         else if (cmd >= '1' && cmd <= '9')
         {
@@ -2028,13 +2028,7 @@ xover_callback_end:
                     if (cmd == XO_NONE)
                     {                   /* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
                         outz("\x1b[44m 找沒有了耶...:( \x1b[m");
-                        msg = 1;
-                    }
-                    else if (msg)
-                    {
-                        move(b_lines, 0);
-                        clrtoeol();
-                        msg = 0;
+                        msg = 2;  /* Clear the message after the next loop */
                     }
 #endif
 
