@@ -466,19 +466,19 @@ myfavorite_search(
                 //vmsg(ptr);
 
                 if (strstr(brd->brdname, ptr) || strstr(brd->title, ptr))
-                    return pos + XO_MOVE;
+                    return XO_MOVE + pos;
             }
             else if (hdr->xmode & GEM_FOLDER)
             {
                 if (strstr(hdr->title, ptr))
-                    return pos + XO_MOVE;
+                    return XO_MOVE + pos;
             }
             //chn = chp[pos];
             //if (chn >= 0)
             //{
                 //brd = bcache + chn;
                 //if (str_str(brd->brdname, ptr) || str_str(brd->title, ptr))
-                    //return pos + XO_MOVE;
+                    //return XO_MOVE + pos;
             //}
         } while (pos != num);
     }

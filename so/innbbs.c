@@ -664,7 +664,7 @@ innbbs_search(
             int cur = i - xo->top;
             if (xyz->search_func(xo_pool + cur * xo->recsiz, buf))
             {
-                return i + XO_MOVE;
+                return XO_MOVE + i;
             }
         }
     }

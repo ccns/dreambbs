@@ -1897,19 +1897,19 @@ xover_callback_end:
         }
         else if (cmd == KEY_UP || cmd == 'p' || cmd == 'k')
         {
-            cmd = XO_REL - 1 + XO_MOVE + XO_WRAP;
+            cmd = XO_MOVE + XO_WRAP + XO_REL - 1;
         }
         else if (cmd == KEY_DOWN || cmd == 'n' || cmd == 'j')
         {
-            cmd = XO_REL + 1 + XO_MOVE + XO_WRAP;
+            cmd = XO_MOVE + XO_WRAP + XO_REL + 1;
         }
         else if (cmd == ' ' || cmd == KEY_PGDN || cmd == 'N'  /*|| cmd == Ctrl('F') */)
         {                                   /* lkchu.990428: 給「暫時更改來源」用 */
-            cmd = XO_REL + XO_MOVE + XO_TALL;
+            cmd = XO_MOVE + XO_REL + XO_TALL;
         }
         else if (cmd == KEY_PGUP || cmd == 'P' /*|| cmd == Ctrl('B')*/)
         {
-            cmd = XO_REL + XO_MOVE - XO_TALL;
+            cmd = XO_MOVE + XO_REL - XO_TALL;
         }
         else if (cmd == KEY_HOME || cmd == '0')
         {
@@ -1918,7 +1918,7 @@ xover_callback_end:
         else if (cmd == KEY_END || cmd == '$')
         {
             /* TODO(IID.20191206): Make this hotkey reload the list */
-            cmd = XO_TAIL + XO_MOVE;            /* force re-load */
+            cmd = XO_MOVE + XO_TAIL;            /* force re-load */
         }
         else if (cmd >= '1' && cmd <= '9')
         {

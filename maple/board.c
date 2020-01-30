@@ -1361,7 +1361,7 @@ class_search(
             {
                 brd = bcache + chn;
                 if (str_str(brd->brdname, ptr) || str_str(brd->title, ptr))
-                    return pos + XO_MOVE;
+                    return XO_MOVE + pos;
             }
         } while (pos != num);
     }
