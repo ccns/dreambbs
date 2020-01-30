@@ -345,6 +345,7 @@ personal_change(
         rec_put(xo->dir, personal, sizeof(PB), pos);
         move(3 + cur, 0);
         personal_item(++pos, personal);
+        cursor_show(3 + cur, 0);
     }
 
     return XO_FOOT;
@@ -536,6 +537,7 @@ personal_open(
     rec_put(xo->dir, personal, sizeof(PB), pos);
     move(3 + cur, 0);
     personal_item(++pos, personal);
+    cursor_show(3 + cur, 0);
 
     mail2usr(personal, 0);
     if (acct_load(&acct, personal->userid) >= 0)

@@ -2486,6 +2486,7 @@ mbox_mark(
 
     move(3 + cur, 0);
     mbox_item(pos + 1, mhdr);
+    cursor_show(3 + cur, 0);
 
     return XO_NONE;
 }
@@ -2506,6 +2507,7 @@ mbox_tag(
     {
         move(3 + cur, 0);
         mbox_item(pos + 1, hdr);
+        cursor_show(3 + cur, 0);
     }
 
     /* return XO_NONE; */

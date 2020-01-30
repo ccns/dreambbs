@@ -147,6 +147,7 @@ XO *xo)
         rec_put(xo->dir, show, sizeof(LOG), pos);
         move(3 + cur, 0);
         show_item(++pos, show);
+        cursor_show(3 + cur, 0);
     }
 
     return XO_FOOT;

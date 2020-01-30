@@ -211,6 +211,7 @@ XO *xo)
         rec_put(xo->dir, memorandum, sizeof(MEMORANDUM), pos);
         move(3 + cur, 0);
         memorandum_item(++pos, memorandum);
+        cursor_show(3 + cur, 0);
     }
 
     return XO_FOOT;

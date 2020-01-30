@@ -1742,6 +1742,7 @@ post_tag(
     {
         move(3 + cur, 0);
         post_item(pos + 1, hdr);
+        cursor_show(3 + cur, 0);
     }
 
     /* return XO_NONE; */
@@ -1774,6 +1775,7 @@ post_mark(
         rec_put(xo->dir, hdr, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid);
         move(3 + cur, 0);
         post_item(pos + 1, hdr);
+        cursor_show(3 + cur, 0);
 
     }
     return XO_NONE;
@@ -1873,6 +1875,7 @@ post_delete(
             lazy_delete(fhdr); /* Thor.980911: 註解: 修改 xo_pool */
             move(3 + cur, 0);
             post_item(++pos, fhdr);
+            cursor_show(3 + cur, 0);
             return XO_FOOT;
         }
 
@@ -1942,6 +1945,7 @@ post_delete(
             lazy_delete(fhdr); /* Thor.980911: 註解: 修改 xo_pool */
             move(3 + cur, 0);
             post_item(++pos, fhdr);
+            cursor_show(3 + cur, 0);
         }
     }
     return XO_FOOT;
@@ -2038,6 +2042,7 @@ post_complete(
         rec_put(xo->dir, hdr, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid);
         move(3 + cur, 0);
         post_item(pos + 1, hdr);
+        cursor_show(3 + cur, 0);
     }
     return XO_NONE;
 }
@@ -2069,6 +2074,7 @@ post_lock(
         rec_put(xo->dir, hdr, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid);
         move(3 + cur, 0);
         post_item(pos + 1, hdr);
+        cursor_show(3 + cur, 0);
     }
     return XO_NONE;
 }
@@ -2280,6 +2286,7 @@ post_undelete(
     {
         move(3 + cur, 0);
         post_item(++pos, fhdr);
+        cursor_show(3 + cur, 0);
     }
     /*return XO_LOAD;*/
     return xo->pos + 1 + XO_MOVE;
@@ -2321,6 +2328,7 @@ post_expire(
     {
         move(3 + cur, 0);
         post_item(++pos, fhdr);
+        cursor_show(3 + cur, 0);
     }
     return XO_NONE;
 
@@ -2355,6 +2363,7 @@ post_unexpire(
     {
         move(3 + cur, 0);
         post_item(++pos, fhdr);
+        cursor_show(3 + cur, 0);
     }
     return XO_NONE;
 }
@@ -2818,6 +2827,7 @@ post_title(
         rec_put(xo->dir, fhdr, sizeof(HDR), pos);
         move(3 + cur, 0);
         post_item(++pos, fhdr);
+        cursor_show(3 + cur, 0);
 
         /* 0911105.cache: 順便改內文標題 */
         header_replace(xo, fhdr);
@@ -3152,6 +3162,7 @@ post_resetscore(
 
             move(3 + cur, 0);
             post_item(pos + 1, hdr);
+            cursor_show(3 + cur, 0);
 
             return XO_LOAD;
         //}
@@ -3446,6 +3457,7 @@ post_recommend(
             return XO_INIT;
             //move(3 + cur, 0);
             //post_item(pos+1, hdr);
+            //cursor_show(3 + cur, 0);
 
         }
         else

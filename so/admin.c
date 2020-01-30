@@ -144,6 +144,7 @@ XO *xo)
         rec_put(xo->dir, admin, sizeof(ADMIN), pos);
         move(3 + cur, 0);
         admin_item(++pos, admin);
+        cursor_show(3 + cur, 0);
     }
 
     return XO_FOOT;

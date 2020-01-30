@@ -236,6 +236,7 @@ XO *xo)
         rec_put(xo->dir, observe, sizeof(OBSERVE), pos);
         move(3 + cur, 0);
         observe_item(++pos, observe);
+        cursor_show(3 + cur, 0);
     }
 
     return XO_FOOT;
