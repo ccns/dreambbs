@@ -1272,8 +1272,8 @@ gem_tag(
 
     if ((ghdr = gem_check(xo, NULL, GEM_READ)) && (tag = Tagger(ghdr->chrono, pos = xo->pos, TAG_TOGGLE)))
     {
-        move(3 + pos - xo->top, 7);
-        outc(tag > 0 ? '*' : ' ');
+        move(3 + pos - xo->top, 0);
+        gem_item(pos + 1, ghdr);
     }
 
     /* return XO_NONE; */

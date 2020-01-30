@@ -842,8 +842,8 @@ XO *xo)
 
     if ((tag = Tagger(ghdr->chrono, pos, TAG_TOGGLE)))
     {
-        move(3 + pos - xo->top, 7);
-        outc(tag > 0 ? '*' : ' ');
+        move(3 + pos - xo->top, 0);
+        mailgem_item(pos + 1, ghdr);
     }
 
     return xo->pos + 1 + XO_MOVE;

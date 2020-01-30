@@ -1741,10 +1741,7 @@ post_tag(
     if ((tag = Tagger(hdr->chrono, pos, TAG_TOGGLE)))
     {
         move(3 + cur, 0);
-        //move(3 + cur, 8);
-        //outc(tag > 0 ? '*' : ' ');
-        //outs(tag > 0 ? " *" : "  ");
-        post_item(xo->pos + 1, hdr);
+        post_item(pos + 1, hdr);
     }
 
     /* return XO_NONE; */
@@ -1775,8 +1772,6 @@ post_mark(
 
         hdr->xmode ^= POST_MARKED;
         rec_put(xo->dir, hdr, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid);
-        //    move(3 + cur, 7);
-        //    outc(post_attr(hdr));
         move(3 + cur, 0);
         post_item(pos + 1, hdr);
 
@@ -2041,8 +2036,8 @@ post_complete(
 
         hdr->xmode ^= POST_COMPLETE;
         rec_put(xo->dir, hdr, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid);
-        move(3 + cur, 7);
-        outc(post_attr(hdr));
+        move(3 + cur, 0);
+        post_item(pos + 1, hdr);
     }
     return XO_NONE;
 }
@@ -2072,8 +2067,8 @@ post_lock(
 
         hdr->xmode ^= POST_LOCK;
         rec_put(xo->dir, hdr, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid);
-        move(3 + cur, 7);
-        outc(post_attr(hdr));
+        move(3 + cur, 0);
+        post_item(pos + 1, hdr);
     }
     return XO_NONE;
 }
@@ -3155,8 +3150,8 @@ post_resetscore(
             strcpy(hdr->lastrecommend, cuser.userid);
             rec_put(xo->dir, hdr, sizeof(HDR), pos);
 
-            move(3 + cur, 7);
-            outc(post_attr(hdr));
+            move(3 + cur, 0);
+            post_item(pos + 1, hdr);
 
             return XO_LOAD;
         //}

@@ -1466,9 +1466,7 @@ class_zap(
         if (!(brd->battr & BRD_NOZAP) || (brd_bits[chn] & BRD_Z_BIT))
         {
             move(3 + num - xo->top, 0);
-            //move(3 + num - xo->top, 8);
             brd_bits[chn] ^= BRD_Z_BIT;
-            //outc(num & BRD_Z_BIT ? '-' : ' ');
             class_item(num + 1, chn);
         }
     }
