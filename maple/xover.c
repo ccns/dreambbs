@@ -1804,7 +1804,7 @@ xover_callback_end:
         /* 基本的游標移動 routines                           */
         /* ------------------------------------------------- */
 
-        if (cmd == KEY_LEFT || cmd == 'e')
+        if (cmd == KEY_LEFT || cmd == 'e' || cmd == KEY_ESC || cmd == Meta(KEY_ESC))
         {
             /* cmd = XO_LAST; *//* try to load the last XO in future */
             if (zone == XZ_MBOX)
