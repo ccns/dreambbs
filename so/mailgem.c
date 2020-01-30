@@ -82,8 +82,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    ghdr = (const HDR *) xo_pool;
     num = xo->top;
+    ghdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -159,7 +159,7 @@ char *fpath)
 
     level = xo->key;
 
-    ghdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    ghdr = (HDR *) xo_pool_base + xo->pos;
     gtype = ghdr->xmode;
 
     if (fpath)
@@ -769,7 +769,7 @@ XO *xo)
     if (tag)
         hdr = &xhdr;
     else
-        hdr = (HDR *) xo_pool + xo->pos - xo->top;
+        hdr = (HDR *) xo_pool_base + xo->pos;
 
     dir = xo->dir;
     rc = (*dir == 'b') ? XO_LOAD : XO_FOOT;
@@ -839,7 +839,7 @@ XO *xo)
 
     pos = xo->pos;
     cur = pos - xo->top;
-    ghdr = (const HDR *) xo_pool + cur;
+    ghdr = (const HDR *) xo_pool_base + pos;
 
     if ((tag = Tagger(ghdr->chrono, pos, TAG_TOGGLE)))
     {
@@ -886,7 +886,7 @@ XO *xo)
         if (*xboard == 0)
             strcpy(xboard, currboard);
 
-        hdr = tag ? &xpost : (HDR *) xo_pool + (xo->pos - xo->top);
+        hdr = tag ? &xpost : (HDR *) xo_pool_base + xo->pos;
 
 
         if (!tag)

@@ -44,8 +44,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    observe = (const OBSERVE *) xo_pool;
     num = xo->top;
+    observe = (const OBSERVE *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -226,7 +226,7 @@ XO *xo)
 
     pos = xo->pos;
     cur = pos - xo->top;
-    observe = (OBSERVE *) xo_pool + cur;
+    observe = (OBSERVE *) xo_pool_base + pos;
 
     //mate = *observe;
     memcpy(&mate, observe, sizeof(OBSERVE));

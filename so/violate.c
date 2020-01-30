@@ -46,8 +46,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    viol = (const EMAIL *) xo_pool;
     num = xo->top;
+    viol = (const EMAIL *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -143,7 +143,7 @@ XO *xo)
 
     pos = xo->pos;
     cur = pos - xo->top;
-    viol = (EMAIL *) xo_pool + cur;
+    viol = (EMAIL *) xo_pool_base + pos;
 
     mate = *viol;
     viol_edit(viol, GCARRY);

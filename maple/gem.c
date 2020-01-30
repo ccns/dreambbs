@@ -154,8 +154,8 @@ gem_body(
         return XO_QUIT;
     }
 
-    ghdr = (const HDR *) xo_pool;
     num = xo->top;
+    ghdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -247,7 +247,7 @@ gem_check(
     if ((op & GEM_WRITE) && (level <= GEM_USER))
         return NULL;
 
-    ghdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    ghdr = (HDR *) xo_pool_base + xo->pos;
     gtype = ghdr->xmode;
 
 //  if ((gtype & GEM_RESTRICT) && (level <= GEM_USER))
@@ -1148,7 +1148,7 @@ gem_gather(
         EnumTagHdr(hdr, dir, 0);
     }
     else
-        hdr = (HDR *) xo_pool + xo->pos - xo->top;
+        hdr = (HDR *) xo_pool_base + xo->pos;
 
     if (hdr->xmode & POST_DELETE)
         return XO_FOOT;
@@ -1321,7 +1321,7 @@ gem_cross(
         if (*xboard == 0)
             strcpy(xboard, currboard);
 
-        hdr = tag ? &xpost : (HDR *) xo_pool + (xo->pos - xo->top);
+        hdr = tag ? &xpost : (HDR *) xo_pool_base + xo->pos;
 
 
         if (!tag)

@@ -61,7 +61,7 @@ char *fpath)
 
     level = xo->key;
 
-    ghdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    ghdr = (HDR *) xo_pool_base + xo->pos;
     gtype = ghdr->xmode;
 
     if ((gtype & GEM_RESTRICT) && (level <= GEM_USER))
@@ -103,7 +103,7 @@ char *fpath)
 
     level = xo->key;
 
-    ghdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    ghdr = (HDR *) xo_pool_base + xo->pos;
     gtype = ghdr->xmode;
 
     if ((gtype & GEM_RESTRICT) && (level <= GEM_USER))
@@ -174,8 +174,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    ghdr = (const HDR *) xo_pool;
     num = xo->top;
+    ghdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 

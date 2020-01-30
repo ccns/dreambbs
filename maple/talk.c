@@ -687,8 +687,8 @@ pal_body(
         return XO_QUIT;
     }
 
-    pal = (const PAL *) xo_pool;
     num = xo->top;
+    pal = (const PAL *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -890,7 +890,7 @@ pal_change(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    pal = (PAL *) xo_pool + cur;
+    pal = (PAL *) xo_pool_base + pos;
 
     mate = *pal;
     pal_edit(pal, GCARRY);
@@ -913,7 +913,7 @@ pal_mail(
     PAL *pal;
     char *userid;
 
-    pal = (PAL *) xo_pool + (xo->pos - xo->top);
+    pal = (PAL *) xo_pool_base + xo->pos;
     userid = pal->userid;
     if (*userid)
     {
@@ -940,7 +940,7 @@ pal_query(
 {
     const PAL *pal;
 
-    pal = (const PAL *) xo_pool + (xo->pos - xo->top);
+    pal = (const PAL *) xo_pool_base + xo->pos;
     move(1, 0);
     clrtobot();
     /* move(2, 0); *//* Thor.0810: 可以不加嗎? */
@@ -1078,8 +1078,8 @@ bmw_body(
         return XO_QUIT;
     }
 
-    bmw = (const BMW *) xo_pool;
     num = xo->top;
+    bmw = (const BMW *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -1146,7 +1146,7 @@ bmw_mail(
     BMW *bmw;
     char *userid;
 
-    bmw = (BMW *) xo_pool + (xo->pos - xo->top);
+    bmw = (BMW *) xo_pool_base + xo->pos;
     userid = bmw->userid;
     if (*userid)
     {
@@ -1164,7 +1164,7 @@ bmw_query(
 {
     const BMW *bmw;
 
-    bmw = (const BMW *) xo_pool + (xo->pos - xo->top);
+    bmw = (const BMW *) xo_pool_base + xo->pos;
     move(1, 0);
     clrtobot();
     /* move(2, 0); *//* Thor.0810: 可以不加嗎? */
@@ -1183,7 +1183,7 @@ bmw_write(
         UTMP *up = NULL;
         const BMW *benz;
 
-        benz = (const BMW *) xo_pool + (xo->pos - xo->top);
+        benz = (const BMW *) xo_pool_base + xo->pos;
         if ((benz->caller >= ushm->uslot && benz->caller < ushm->uslot + MAXACTIVE) && (benz->caller && benz->caller->userno == benz->sender) && can_message(benz->caller))
         {
             up = benz->caller;
@@ -4619,8 +4619,8 @@ banmsg_body(
         return XO_QUIT;
     }
 
-    banmsg = (const BANMSG *) xo_pool;
     num = xo->top;
+    banmsg = (const BANMSG *) xo_pool_base + num;
     tail = num + XO_TALL;
     if (max > tail)
         max = tail;
@@ -4746,7 +4746,7 @@ banmsg_change(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    banmsg = (BANMSG *) xo_pool + cur;
+    banmsg = (BANMSG *) xo_pool_base + pos;
 
     mate = *banmsg;
     banmsg_edit(banmsg, GCARRY);
@@ -4769,7 +4769,7 @@ banmsg_mail(
     BANMSG *banmsg;
     char *userid;
 
-    banmsg = (BANMSG *) xo_pool + (xo->pos - xo->top);
+    banmsg = (BANMSG *) xo_pool_base + xo->pos;
     userid = banmsg->userid;
     if (*userid)
     {
@@ -4796,7 +4796,7 @@ banmsg_query(
 {
     const BANMSG *banmsg;
 
-    banmsg = (const BANMSG *) xo_pool + (xo->pos - xo->top);
+    banmsg = (const BANMSG *) xo_pool_base + xo->pos;
     move(1, 0);
     clrtobot();
     my_query(banmsg->userid, 1);

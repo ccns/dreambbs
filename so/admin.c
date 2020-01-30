@@ -38,8 +38,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    admin = (const ADMIN *) xo_pool;
     num = xo->top;
+    admin = (const ADMIN *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -135,7 +135,7 @@ XO *xo)
 
     pos = xo->pos;
     cur = pos - xo->top;
-    admin = (ADMIN *) xo_pool + cur;
+    admin = (ADMIN *) xo_pool_base + pos;
 
     mate = *admin;
     admin_edit(admin, GCARRY);

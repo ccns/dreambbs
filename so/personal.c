@@ -248,8 +248,8 @@ personal_body(
         vmsg("目前沒有資料");
         return XO_QUIT;
     }
-    personal = (const PB *) xo_pool;
     num = xo->top;
+    personal = (const PB *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -336,7 +336,7 @@ personal_change(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    personal = (PB *) xo_pool + cur;
+    personal = (PB *) xo_pool_base + pos;
 
     mate = *personal;
     personal_edit(personal, GCARRY);
@@ -467,7 +467,7 @@ personal_open(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    personal = (PB *) xo_pool + cur;
+    personal = (PB *) xo_pool_base + pos;
 
     if (personal->state & PB_OPEN)
         return XO_NONE;
@@ -563,7 +563,7 @@ personal_deny(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    personal = (const PB *) xo_pool + cur;
+    personal = (const PB *) xo_pool_base + pos;
 
     if (personal->state & PB_OPEN)
         return XO_NONE;

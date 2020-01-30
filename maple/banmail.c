@@ -48,8 +48,8 @@ static int banmail_body(XO * xo)
         return XO_QUIT;
     }
 
-    banmail = (const BANMAIL *) xo_pool;
     num = xo->top;
+    banmail = (const BANMAIL *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -204,7 +204,7 @@ static int banmail_change(XO * xo)
 
     pos = xo->pos;
     cur = pos - xo->top;
-    banmail = (BANMAIL *) xo_pool + cur;
+    banmail = (BANMAIL *) xo_pool_base + pos;
 
     mate = *banmail;
     banmail_edit(banmail, GCARRY);

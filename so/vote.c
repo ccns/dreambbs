@@ -121,8 +121,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    vch = (const VCH *) xo_pool;
     num = xo->top;
+    vch = (const VCH *) xo_pool_base + num;
     tail = num + XO_TALL;
     if (max > tail)
         max = tail;
@@ -551,7 +551,7 @@ XO *xo)
 
     pos = xo->pos;
     dir = xo->dir;
-    vch = (VCH *) xo_pool + (pos - xo->top);
+    vch = (VCH *) xo_pool_base + pos;
 
     /* Thor: 修改投票主題 */
     vxx = *vch;
@@ -645,7 +645,7 @@ XO *xo)
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    vch = (const VCH *) xo_pool + (xo->pos - xo->top);
+    vch = (const VCH *) xo_pool_base + xo->pos;
     hdr_fpath(fpath, xo->dir, (const HDR *) vch);
 
 
@@ -777,7 +777,7 @@ XO *xo)
 
     pos = xo->pos;
     dir = xo->dir;
-    vch = (VCH *) xo_pool + (pos - xo->top);
+    vch = (VCH *) xo_pool_base + pos;
 
     hdr_fpath(fpath, dir, (HDR *) vch);
     more(fpath, (char *) - 1);
@@ -921,7 +921,7 @@ XO *xo)
     char account[10/*7*/];
     vitem_t vlist[MAX_CHOICES];
 
-    vch = (VCH *) xo_pool + (xo->pos - xo->top);
+    vch = (VCH *) xo_pool_base + xo->pos;
     if (time(0) > vch->vclose)
     {
         vmsg("投票已經截止了，請靜候開票");

@@ -42,8 +42,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    list = (const LIST *) xo_pool;
     num = xo->top;
+    list = (const LIST *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 

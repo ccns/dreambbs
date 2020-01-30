@@ -102,8 +102,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    memorandum = (const MEMORANDUM *) xo_pool;
     num = xo->top;
+    memorandum = (const MEMORANDUM *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -202,7 +202,7 @@ XO *xo)
 
     pos = xo->pos;
     cur = pos - xo->top;
-    memorandum = (MEMORANDUM *) xo_pool + cur;
+    memorandum = (MEMORANDUM *) xo_pool_base + pos;
 
     mate = *memorandum;
     memorandum_edit(memorandum, GCARRY);

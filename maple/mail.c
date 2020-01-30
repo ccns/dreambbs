@@ -2197,7 +2197,7 @@ mbox_body(
     }
 
     num = xo->top;
-    mhdr = (const HDR *) xo_pool;
+    mhdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -2255,7 +2255,7 @@ mbox_delete(
 #endif
 
     pos = xo->pos;
-    hdr = (HDR *) xo_pool + (pos - xo->top);
+    hdr = (HDR *) xo_pool_base + pos;
 
     xmode = hdr->xmode;
     if ((xmode & (MAIL_MARKED | MAIL_DELETE)) == MAIL_MARKED)
@@ -2310,7 +2310,7 @@ mbox_forward(
     if (acct_get("轉達信件給：", &muser) > 0)
     {
         pos = xo->pos;
-        hdr = (const HDR *) xo_pool + (pos - xo->top);
+        hdr = (const HDR *) xo_pool_base + pos;
 
         strcpy(quote_user, hdr->owner);
         hdr_fpath(quote_file, xo->dir, hdr);
@@ -2351,7 +2351,7 @@ mbox_browse(
     dir = xo->dir;
     pos = xo->pos;
     fpath = quote_file;
-    mhdr = (HDR *) xo_pool + (pos - xo->top);
+    mhdr = (HDR *) xo_pool_base + pos;
     memcpy(&hdr, mhdr, sizeof(HDR));
     mhdr = &hdr;
     strcpy(currtitle, str_ttl(mhdr->title));
@@ -2449,7 +2449,7 @@ mbox_reply(
         chk_mailstat = 0;
 
     pos = xo->pos;
-    mhdr = (HDR *) xo_pool + pos - xo->top;
+    mhdr = (HDR *) xo_pool_base + pos;
     memcpy(&hdr, mhdr, sizeof(HDR));
     mhdr = &hdr;
 
@@ -2479,7 +2479,7 @@ mbox_mark(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    mhdr = (HDR *) xo_pool + cur;
+    mhdr = (HDR *) xo_pool_base + pos;
 
     mhdr->xmode ^= MAIL_MARKED;
     rec_put(xo->dir, mhdr, sizeof(HDR), pos);
@@ -2501,7 +2501,7 @@ mbox_tag(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    hdr = (const HDR *) xo_pool + cur;
+    hdr = (const HDR *) xo_pool_base + pos;
 
     if ((tag = Tagger(hdr->chrono, pos, TAG_TOGGLE)))
     {
@@ -2584,7 +2584,7 @@ mbox_edit(
         return XO_FOOT;
     }
 
-    hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (HDR *) xo_pool_base + xo->pos;
     hdr_fpath(fpath, xo->dir, hdr);
     if (HAS_PERM(PERM_SYSOP))
     {
@@ -2603,7 +2603,7 @@ mbox_size(
     struct stat st;
 
     dir = xo->dir;
-    hdr = (const HDR *) xo_pool + xo->pos - xo->top;
+    hdr = (const HDR *) xo_pool_base + xo->pos;
     hdr_fpath(fpath, dir, hdr);
 
     if (HAS_PERM(PERM_SYSOP))
@@ -2643,7 +2643,7 @@ mbox_title(
         return XO_NONE;
 
 
-    hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (HDR *) xo_pool_base + xo->pos;
     mhdr = *hdr;
 
     vget(B_LINES_REF, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
@@ -2673,7 +2673,7 @@ mbox_undelete(
 {
     HDR *hdr;
 
-    hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (HDR *) xo_pool_base + xo->pos;
 
     hdr->xmode &= ~POST_DELETE;
 

@@ -624,6 +624,7 @@ extern char lastcmd[MAXLASTCMD][80];
 /* maple/xover.c */
 extern XZ xz[];
 /* XO's data pool */
+GCC_DEPRECATED("Use `xo_pool_base` instead")
 extern char *xo_pool;           /* The `xo->top`-st item of the pool */
 extern char *xo_pool_base;      /* The beginning of the pool */
 /* Tags */

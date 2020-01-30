@@ -80,8 +80,8 @@ myfavorite_body(
         return myfavorite_add(xo);
     }
 
-    myfavorite = (const HDR *) xo_pool;
     num = xo->top;
+    myfavorite = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -147,7 +147,7 @@ myfavorite_browse(
     int xmode, op=0, chn;
     char fpath[80], title[TTLEN + 1];
 
-    ghdr = (const HDR *) xo_pool + (xo->pos - xo->top);
+    ghdr = (const HDR *) xo_pool_base + xo->pos;
 
     xmode = ghdr->xmode;
     /* browse folder */
@@ -330,7 +330,7 @@ myfavorite_delete(
     {
         const HDR *hdr;
 
-        hdr = (const HDR *) xo_pool + (xo->pos - xo->top);
+        hdr = (const HDR *) xo_pool_base + xo->pos;
 
         if (hdr->xmode & GEM_FOLDER)
         {
@@ -361,7 +361,7 @@ myfavorite_mov(
 
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
-    ghdr = (const HDR *) xo_pool + (xo->pos - xo->top);
+    ghdr = (const HDR *) xo_pool_base + xo->pos;
 
     pos = xo->pos;
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
@@ -391,7 +391,7 @@ myfavorite_edit(
 
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
-    hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (HDR *) xo_pool_base + xo->pos;
     if (hdr->xmode & GEM_BOARD)
     {
         int chn;
@@ -457,7 +457,7 @@ myfavorite_search(
             if (++pos >= max)
                 pos = 0;
 
-            hdr = (const HDR *) xo_pool + (pos - xo->top);
+            hdr = (const HDR *) xo_pool_base + pos;
 
             if (hdr->xmode & GEM_BOARD)
             {

@@ -42,8 +42,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    chat = (const ChatAction *) xo_pool;
     num = xo->top;
+    chat = (const ChatAction *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -164,7 +164,7 @@ XO *xo)
 
     pos = xo->pos;
     cur = pos - xo->top;
-    chat = (ChatAction *) xo_pool + cur;
+    chat = (ChatAction *) xo_pool_base + pos;
 
     mate = *chat;
     chat_edit(chat, GCARRY);
@@ -204,7 +204,7 @@ XO *xo)
 
     pos = xo->pos;
     cur = pos - xo->top;
-    ghdr = (const ChatAction *) xo_pool + cur;
+    ghdr = (const ChatAction *) xo_pool_base + pos;
 
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
     if (!vget(B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))

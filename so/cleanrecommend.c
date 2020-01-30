@@ -95,8 +95,8 @@ cleanrecommend_body(
         vmsg("¨S¦³¯d¨¥");
         return XO_QUIT;
     }
-    cleanrecommend = (const RMSG *) xo_pool;
     num = xo->top;
+    cleanrecommend = (const RMSG *) xo_pool_base + num;
     tail = num + XO_TALL;
 /*
     counter = TCLAMP(max, -127, 127);
@@ -169,7 +169,7 @@ cleanrecommend_delete(
 
         pos = xo->pos;
         cur = pos - xo->top;
-        rmsg = (const RMSG *) xo_pool + cur;
+        rmsg = (const RMSG *) xo_pool_base + pos;
 
         if (!rec_del(xo->dir, sizeof(RMSG), xo->pos, NULL, NULL))
         {
@@ -192,7 +192,7 @@ cleanrecommend_change(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    cleanrecommend = (RMSG *) xo_pool + cur;
+    cleanrecommend = (RMSG *) xo_pool_base + pos;
 
     mate = *cleanrecommend;
     cleanrecommend_edit(cleanrecommend, GCARRY);
@@ -268,7 +268,7 @@ clean(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    hdr = (const HDR *) xo_pool + cur;
+    hdr = (const HDR *) xo_pool_base + pos;
 
     if (!hdr->recommend || hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
         return DL_RELEASE(XO_NONE);

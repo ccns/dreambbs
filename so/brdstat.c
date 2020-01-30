@@ -37,8 +37,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    bstat = (const BSTAT *) xo_pool;
     num = xo->top;
+    bstat = (const BSTAT *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 

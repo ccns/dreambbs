@@ -465,7 +465,7 @@ xo_tag(
     if (fimage == (char *) -1)
         return XO_NONE;
 
-    head = (const HDR *) xo_pool + (xo->pos - xo->top);
+    head = (const HDR *) xo_pool_base + xo->pos;
     if (op == Ctrl('A'))
     {
         token = head->owner;
@@ -571,7 +571,7 @@ xo_copy(
     if (tag)
         hdr = &xhdr;
     else
-        hdr = (HDR *) xo_pool + xo->pos - xo->top;
+        hdr = (HDR *) xo_pool_base + xo->pos;
 
     locus = 0;
     dir = xo->dir;
@@ -781,7 +781,7 @@ xo_forward(
 #endif
     }
 
-    hdr = tag ? &xhdr : (HDR *) xo_pool + xo->pos - xo->top;
+    hdr = tag ? &xhdr : (HDR *) xo_pool_base + xo->pos;
 
     dir = xo->dir;
     title = hdr->title;
@@ -912,7 +912,7 @@ xo_zmodem(
     if (tag)
         hdr = &xhdr;
     else
-        hdr = (HDR *) xo_pool + xo->pos - xo->top;
+        hdr = (HDR *) xo_pool_base + xo->pos;
 
     locus = 0;
     dir = xo->dir;
@@ -953,7 +953,7 @@ xo_uquery_lite(
     const HDR *hdr;
     const char *userid;
 
-    hdr = (const HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (const HDR *) xo_pool_base + xo->pos;
     if (hdr->xmode & (GEM_GOPHER | POST_INCOME | MAIL_INCOME))
         return XO_NONE;
 
@@ -990,7 +990,7 @@ xo_uquery(
     const HDR *hdr;
     const char *userid;
 
-    hdr = (const HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (const HDR *) xo_pool_base + xo->pos;
     if (hdr->xmode & (GEM_GOPHER | POST_INCOME | MAIL_INCOME))
         return XO_NONE;
 
@@ -1019,7 +1019,7 @@ xo_usetup(
     if (!HAVE_PERM(PERM_SYSOP | PERM_ACCOUNTS))
         return XO_NONE;
 
-    hdr = (const HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (const HDR *) xo_pool_base + xo->pos;
     userid = hdr->owner;
     if (strchr(userid, '.') || (acct_load(&xuser, userid) < 0))
         return XO_NONE;

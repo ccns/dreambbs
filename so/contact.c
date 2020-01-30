@@ -38,8 +38,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    contact = (const CONTACT *) xo_pool;
     num = xo->top;
+    contact = (const CONTACT *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -137,7 +137,7 @@ XO *xo)
 
     pos = xo->pos;
     cur = pos - xo->top;
-    contact = (CONTACT *) xo_pool + cur;
+    contact = (CONTACT *) xo_pool_base + pos;
 
     mate = *contact;
     contact_edit(contact, GCARRY);
@@ -170,7 +170,7 @@ XO *xo)
 
     pos = xo->pos;
     cur = pos - xo->top;
-    contact = (CONTACT *) xo_pool + cur;
+    contact = (CONTACT *) xo_pool_base + pos;
     contact_send(contact);
     return XO_INIT;
 }

@@ -152,8 +152,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    nbrd = (const NBRD *) xo_pool;
     num = xo->top;
+    nbrd = (const NBRD *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -467,7 +467,7 @@ XO *xo)
     LOG mail;
 
     memset(&mail, 0, sizeof(LOG));
-    nbrd = (NBRD *) xo_pool + (xo->pos - xo->top);
+    nbrd = (NBRD *) xo_pool_base + xo->pos;
     if (nbrd->mode & NBRD_REJECT)
     {
         vmsg("拒絕申請，資料不完整！");
@@ -673,7 +673,7 @@ XO *xo)
         return XO_NONE;
 
 
-    nbrd = (NBRD *) xo_pool + (xo->pos - xo->top);
+    nbrd = (NBRD *) xo_pool_base + xo->pos;
     if (nbrd->mode & ~(NBRD_MASK))
         vmsg("已通過或已停止！");
     else
@@ -715,7 +715,7 @@ XO *xo)
     }
 
 
-    nbrd = (NBRD *) xo_pool + (xo->pos - xo->top);
+    nbrd = (NBRD *) xo_pool_base + xo->pos;
     if (!HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
 
@@ -754,7 +754,7 @@ XO *xo)
 {
     NBRD *nbrd;
 
-    nbrd = (NBRD *) xo_pool + (xo->pos - xo->top);
+    nbrd = (NBRD *) xo_pool_base + xo->pos;
     if (!HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
     if (nbrd->mode & NBRD_OK)
@@ -778,7 +778,7 @@ XO *xo)
 {
     NBRD *nbrd;
 
-    nbrd = (NBRD *) xo_pool + (xo->pos - xo->top);
+    nbrd = (NBRD *) xo_pool_base + xo->pos;
     if (!HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
 
@@ -802,7 +802,7 @@ XO *xo)
 {
     NBRD *nbrd;
 
-    nbrd = (NBRD *) xo_pool + (xo->pos - xo->top);
+    nbrd = (NBRD *) xo_pool_base + xo->pos;
     if (!HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
 
@@ -819,7 +819,7 @@ XO *xo)
     const NBRD *nbrd;
     char fpath[80];
 
-    nbrd = (const NBRD *) xo_pool + (xo->pos - xo->top);
+    nbrd = (const NBRD *) xo_pool_base + xo->pos;
     nbrd_fpath(fpath, xo->dir, nbrd);
     more(fpath, NULL);
     return XO_INIT;
@@ -833,7 +833,7 @@ XO *xo)
     char fpath[80];
 
 
-    nbrd = (const NBRD *) xo_pool + (xo->pos - xo->top);
+    nbrd = (const NBRD *) xo_pool_base + xo->pos;
     if (strcmp(cuser.userid, nbrd->owner) && !HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
 
@@ -860,7 +860,7 @@ XO *xo)
     if (!HAS_PERM(PERM_ADMIN))
         return XO_NONE;
 
-    nbrd = (const NBRD *) xo_pool + (xo->pos - xo->top);
+    nbrd = (const NBRD *) xo_pool_base + xo->pos;
 
     if (ask_board(xboard, BRD_W_BIT,
                   "\n\n\x1b[1;33m請挑選適當的看板，切勿轉貼超過三板。\x1b[m\n\n")

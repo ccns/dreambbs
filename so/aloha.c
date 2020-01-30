@@ -84,8 +84,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    aloha = (const ALOHA *) xo_pool;
     num = xo->top;
+    aloha = (const ALOHA *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -265,7 +265,7 @@ XO *xo)
     {
         char fpath[64];
         const ALOHA *aloha;
-        aloha = (const ALOHA *) xo_pool + (xo->pos - xo->top);
+        aloha = (const ALOHA *) xo_pool_base + xo->pos;
 
         usr_fpath(fpath, aloha->userid, FN_FRIEND_BENZ);
         while (rec_loc(fpath, sizeof(BMW), cmpbmw) >= 0)

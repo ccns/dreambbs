@@ -717,7 +717,7 @@ post_reply(
     {
         HDR *hdr;
 
-        hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+        hdr = (HDR *) xo_pool_base + xo->pos;
         if (!(hdr->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_CURMODIFY)))
         {
             if ((hdr->xmode & POST_LOCK) && !(HAS_PERM(PERM_SYSOP| PERM_BOARD) || bbstate & STAT_BOARD))
@@ -938,8 +938,8 @@ post_body(
         return XO_QUIT;
     }
 
-    fhdr = (const HDR *) xo_pool;
     num = xo->top;
+    fhdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -1058,7 +1058,7 @@ post_cross(
     }
 
     // check delete or not .. by statue 2000/05/18
-    hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (HDR *) xo_pool_base + xo->pos;
     if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_CURMODIFY))
         return XO_NONE;
     if ((hdr->xmode & POST_LOCK) && !HAS_PERM(PERM_SYSOP))
@@ -1088,7 +1088,7 @@ post_cross(
         if (*xboard == 0)
             strcpy(xboard, currboard);
 
-        hdr = tag ? &xhdr : (HDR *) xo_pool + (xo->pos - xo->top);
+        hdr = tag ? &xhdr : (HDR *) xo_pool_base + xo->pos;
         /* lkchu.981201: 整批轉貼 */
         if (!tag && (hdr->xmode & POST_LOCK) && !HAS_PERM(PERM_SYSOP))
         {
@@ -1292,7 +1292,7 @@ post_xcross(
         return XO_NONE;
 
     // check delete or not .. by statue 2000/05/18
-    hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (HDR *) xo_pool_base + xo->pos;
     if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_CURMODIFY))
         return XO_NONE;
 
@@ -1473,7 +1473,7 @@ post_browse(
     {
 
         pos = xo->pos;
-        hdr = (HDR *) xo_pool + (pos - xo->top);
+        hdr = (HDR *) xo_pool_base + pos;
         xmode = hdr->xmode;
         if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE))
             break;
@@ -1718,7 +1718,7 @@ post_tag(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    hdr = (const HDR *) xo_pool + cur;
+    hdr = (const HDR *) xo_pool_base + pos;
 
 #ifdef XZ_XPOST
     if (xo->key == XZ_XPOST)
@@ -1753,7 +1753,7 @@ post_mark(
 
         pos = xo->pos;
         cur = pos - xo->top;
-        hdr = (HDR *) xo_pool + cur;
+        hdr = (HDR *) xo_pool_base + pos;
 
         if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE))
             return XO_NONE;
@@ -1817,7 +1817,7 @@ post_delete(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    fhdr = (HDR *) xo_pool + cur;
+    fhdr = (HDR *) xo_pool_base + pos;
 
     if (fhdr->xmode & (POST_MARKED | POST_CANCEL | POST_DELETE | POST_MDELETE))
         return XO_NONE;
@@ -1951,7 +1951,7 @@ post_clean_delete(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    hdr = (const HDR *) xo_pool + cur;
+    hdr = (const HDR *) xo_pool_base + pos;
 
     by_BM = strcmp(hdr->owner, cuser.userid);
 
@@ -1984,7 +1984,7 @@ post_bottom(
         HDR post;
         char fpath[64];
 
-        hdr = (const HDR *) xo_pool + (xo->pos - xo->top);
+        hdr = (const HDR *) xo_pool_base + xo->pos;
 
         //if ((hdr->xmode & POST_BOTTOM) && !HAVE_PERM(PERM_SYSOP)) /* 已置底就不能再置底 */
         //    return post_delete(xo);
@@ -2023,7 +2023,7 @@ post_complete(
 
         pos = xo->pos;
         cur = pos - xo->top;
-        hdr = (HDR *) xo_pool + cur;
+        hdr = (HDR *) xo_pool_base + pos;
 
         hdr->xmode ^= POST_COMPLETE;
         rec_put(xo->dir, hdr, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid);
@@ -2046,7 +2046,7 @@ post_lock(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    hdr = (HDR *) xo_pool + cur;
+    hdr = (HDR *) xo_pool_base + pos;
 
     if (!strcmp(hdr->owner, cuser.userid) || HAS_PERM(PERM_SYSOP | PERM_BOARD) || (bbstate & STAT_BOARD))
     {
@@ -2075,7 +2075,7 @@ post_state(
     char fpath[64], *dir, buf[32];
     struct stat st;
 
-    ghdr = (const HDR *) xo_pool + (xo->pos - xo->top);
+    ghdr = (const HDR *) xo_pool_base + xo->pos;
 
     dir = xo->dir;
     hdr_fpath(fpath, dir, ghdr);
@@ -2180,7 +2180,7 @@ post_state(
         return XO_NONE;
 
     dir = xo->dir;
-    hdr = (const HDR *) xo_pool + xo->pos - xo->top;
+    hdr = (const HDR *) xo_pool_base + xo->pos;
     hdr_fpath(fpath, dir, hdr);
 
 
@@ -2219,7 +2219,7 @@ post_undelete(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    fhdr = (HDR *) xo_pool + cur;
+    fhdr = (HDR *) xo_pool_base + pos;
     hdr_fpath(fpath, xo->dir, fhdr);
 
     if (!(fhdr->xmode & (POST_MDELETE | POST_DELETE | POST_CANCEL)))
@@ -2297,7 +2297,7 @@ post_expire(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    fhdr = (HDR *) xo_pool + cur;
+    fhdr = (HDR *) xo_pool_base + pos;
 
     if (fhdr->xmode & (POST_MARKED | POST_CANCEL | POST_DELETE | POST_MDELETE))
         return XO_NONE;
@@ -2334,7 +2334,7 @@ post_unexpire(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    fhdr = (HDR *) xo_pool + cur;
+    fhdr = (HDR *) xo_pool_base + pos;
 
     if (!(fhdr->xmode & (POST_EXPIRE)))
         return XO_NONE;
@@ -2386,7 +2386,7 @@ post_edit(
         return XO_FOOT;
     }
     pos = xo->pos;
-    hdr = (HDR *) xo_pool + (pos - xo->top);
+    hdr = (HDR *) xo_pool_base + pos;
 
     pos = seek_rec(xo, hdr);
 
@@ -2397,7 +2397,7 @@ post_edit(
 #endif
     if (HAS_PERM(PERM_SYSOP) && !(hdr->xmode & (POST_CANCEL|POST_DELETE)))
     {
-        /*hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+        /*hdr = (HDR *) xo_pool_base + xo->pos;
         hdr_fpath(fpath, xo->dir, hdr);*/
         vedit(fpath, false); /* Thor.981020: 注意被talk的問題 */
         return XO_HEAD;
@@ -2594,7 +2594,7 @@ int post_edit(XO *xo)
         return XO_FOOT;
     }
     pos = xo->pos;
-    hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+    hdr = (HDR *) xo_pool_base + xo->pos;
     hdr_fpath(fpath, xo->dir, hdr);
 #if 0
     if ((HAS_PERM(PERM_ALLBOARD))|| ((HAS_PERM(PERM_VALID)) \
@@ -2602,7 +2602,7 @@ int post_edit(XO *xo)
 #endif
         if (HAS_PERM(PERM_ALLBOARD))
         {
-            /*hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+            /*hdr = (HDR *) xo_pool_base + xo->pos;
                 hdr_fpath(fpath, xo->dir, hdr);*/
             vedit(fpath, false); /* Thor.981020: 注意被talk的問題 */
             return XO_HEAD;
@@ -2785,7 +2785,7 @@ post_title(
 
     pos = xo->pos;
     cur = pos - xo->top;
-    fhdr = (HDR *) xo_pool + cur;
+    fhdr = (HDR *) xo_pool_base + pos;
     mhdr = *fhdr;
 
     /* 100620.cache: 作者可以改標題 */
@@ -2833,7 +2833,7 @@ post_cross_terminator(  /* Thor.0521: 終極文章大法 */
     int mode;
     HDR *fhdr;
 
-    fhdr = (HDR *) xo_pool + xo->pos - xo->top;
+    fhdr = (HDR *) xo_pool_base + xo->pos;
     if (fhdr->xmode & (POST_DELETE | POST_MDELETE | POST_CANCEL | POST_LOCK))
         return XO_NONE;
 
@@ -3086,7 +3086,7 @@ post_resetscore(
 
         pos = xo->pos;
         cur = pos - xo->top;
-        hdr = (HDR *) xo_pool + cur;
+        hdr = (HDR *) xo_pool_base + pos;
 
         xmode = hdr->xmode;
         brd = bshm->bcache + currbno;
@@ -3183,7 +3183,7 @@ post_recommend(
     {
         pos = xo->pos;
         cur = pos - xo->top;
-        hdr = (HDR *) xo_pool + cur;
+        hdr = (HDR *) xo_pool_base + pos;
 
         if (!strcmp(hdr->lastrecommend, "$"))
         {
@@ -4000,7 +4000,7 @@ post_aid(
         xo->pos = pos;
         xo_load(xo, sizeof(HDR));
         /* 設定HDR資訊 */
-        hdr = (const HDR *) xo_pool + (xo->pos - xo->top);
+        hdr = (const HDR *) xo_pool_base + xo->pos;
         tag = hdr->xname;
         /* 若找到對應的文章，則設定match並跳出 */
         if (!strcmp(query, tag))
@@ -4029,7 +4029,7 @@ post_write(                  /* 丟線上作者熱訊 */
         const HDR *fhdr;
         UTMP *up;
 
-        fhdr = (const HDR *) xo_pool + (xo->pos - xo->top);
+        fhdr = (const HDR *) xo_pool_base + xo->pos;
 
         if ((up = utmp_check(fhdr->owner)) && can_message(up))
 /*      if ((up = utmp_check(fhdr->owner)) && can_override(up))*/
@@ -4066,7 +4066,7 @@ post_spam(
         return XO_NONE;
 
     dir = xo->dir;
-    hdr = (const HDR *) xo_pool + xo->pos - xo->top;
+    hdr = (const HDR *) xo_pool_base + xo->pos;
     hdr_fpath(fpath, dir, hdr);
 
     sprintf(msg, "%s\n", fpath);
@@ -4249,8 +4249,8 @@ xpost_body(
     }
 #endif
 
-    fhdr = (const HDR *) xo_pool;
     num = xo->top;
+    fhdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -4367,7 +4367,7 @@ xpost_browse(
 
     for (;;)
     {
-        hdr = (HDR *) xo_pool + (xo->pos - xo->top);
+        hdr = (HDR *) xo_pool_base + xo->pos;
         xmode = hdr->xmode;
         if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE))
             break;

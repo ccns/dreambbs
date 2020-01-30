@@ -556,8 +556,8 @@ innbbs_body(
         return XO_QUIT;
     }
 
-    rec = xo_pool;
     num = xo->top;
+    rec = xo_pool_base + xo->top * xo->recsiz;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -602,8 +602,7 @@ innbbs_query(
     XO *xo)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
-    int cur = xo->pos - xo->top;
-    xyz->query_func(xo_pool + cur * xo->recsiz);
+    xyz->query_func(xo_pool_base + xo->pos * xo->recsiz);
     return XO_BODY;
 }
 
@@ -639,8 +638,7 @@ innbbs_edit(
     XO *xo)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
-    int cur = xo->pos - xo->top;
-    if (xyz->add_func(xo->dir, xo_pool + cur * xo->recsiz, xo->pos))
+    if (xyz->add_func(xo->dir, xo_pool_base + xo->pos * xo->recsiz, xo->pos))
     {
         xyz->dirty = true;
         return XO_INIT;
@@ -661,8 +659,7 @@ innbbs_search(
         str_lower(buf, buf);
         for (i = xo->pos + 1; i <= num; i++)
         {
-            int cur = i - xo->top;
-            if (xyz->search_func(xo_pool + cur * xo->recsiz, buf))
+            if (xyz->search_func(xo_pool_base + i * xo->recsiz, buf))
             {
                 return XR_FOOT + XO_MOVE + i;
             }

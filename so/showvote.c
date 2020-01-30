@@ -41,8 +41,8 @@ XO *xo)
         return XO_QUIT;
     }
 
-    show = (const LOG *) xo_pool;
     num = xo->top;
+    show = (const LOG *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
@@ -138,7 +138,7 @@ XO *xo)
 
     pos = xo->pos;
     cur = pos - xo->top;
-    show = (LOG *) xo_pool + cur;
+    show = (LOG *) xo_pool_base + pos;
 
     mate = *show;
     show_edit(show, GCARRY);
@@ -190,7 +190,7 @@ XO *xo)
 
     last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
 
-    vch = (const VCH *) xo_pool + (xo->pos - xo->top);
+    vch = (const VCH *) xo_pool_base + xo->pos;
     hdr_fpath(fpath, xo->dir, (const HDR *) vch);
     fname = strrchr(fpath, '@');
     *fname = 'E';
