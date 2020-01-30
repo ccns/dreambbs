@@ -1913,9 +1913,9 @@ xover_callback_end:
         }
         else if (cmd == KEY_PGUP || cmd == 'P' /*|| cmd == Ctrl('B')*/)
         {
-            if (pos == 0)
-                /* Make the cursor snap to the list top on screen */
-                cmd = XO_MOVE + wrap_flag + XO_REL - ((xo->max-1) % XO_TALL + 1);
+            if (pos == 0 || (xo->top != 0 && pos == xo->max - 1))
+                /* Make the cursor snap to the list top or bottom on screen */
+                cmd = XO_MOVE + wrap_flag + XO_REL - ((xo->max-1 - xo->top) % XO_TALL + 1);
             else
                 cmd = XO_MOVE + XO_REL - XO_TALL;  /* Stop at the first item */
         }
