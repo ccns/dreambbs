@@ -1370,7 +1370,7 @@ post_history(
     XO *xo,
     const HDR *fhdr)
 {
-    int prev, chrono, next, pos, top, push=0;
+    int prev, chrono, next, pos, max, push=0;
     char *dir;
     HDR buf;
 
@@ -1382,7 +1382,7 @@ post_history(
 
     dir = xo->dir;
     pos = xo->pos;
-    top = xo->top;
+    max = xo->max;
 
     chrono = fhdr->chrono;
     push = fhdr->pushtime;
@@ -1395,28 +1395,15 @@ post_history(
         //if (!brh_unread(push))
             return;
 
-    if (--pos >= top)
-    {
+    if (pos - 1 >= 0)
         prev = fhdr[-1].chrono;
-    }
     else
-    {
-        if (!rec_get(dir, &buf, sizeof(HDR), pos))
-                prev = buf.chrono;
-        else
-            prev = chrono;
-    }
+        prev = chrono;
 
-    pos +=2;
-    if (pos < top + XO_TALL)
-            next = fhdr[1].chrono;
+    if (pos + 1 < xo->max)
+        next = fhdr[1].chrono;
     else
-    {
-        if (!rec_get(dir, &buf, sizeof(HDR), pos))
-            next = buf.chrono;
-        else
-            next = chrono;
-    }
+        next = chrono;
 /*
     if (push)
         prev = chrono = next = push;
