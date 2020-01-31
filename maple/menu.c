@@ -1305,7 +1305,8 @@ domenu(
             mode = 0;
         }
 
-        switch (cmd)
+        /* Invoke hotkey functions for keyboard input only */
+        switch ((keyboard_cmd) ? cmd : KEY_NONE)
         {
         case KEY_PGUP:
             cc = (cc == 0) ? max : 0;
@@ -1440,46 +1441,51 @@ domenu(
             // Falls through
             //    to move the cursor to option 'G' ('Goodbye'; exiting BBS)
 
+            /* Command matching */
         default:
+            switch (cmd)
             {
-                int maxlen = 0;
-
-                cmd = tolower(cmd);
-
-                /* IID.20200107: Match input sequence. */
-                for (int i = 0; i <= max; i++)
+            default:
                 {
-                    const char *const mdesc = table[i]->desc;
-                    int match_max = BMIN(cmdcur_max, strlen(mdesc));
-                    /* Skip spaces */
-                    cmdcur[i] += strspn(mdesc + cmdcur[i], " ");
-                    /* Not matched or cursor reached the end */
-                    if (cmdcur[i] >= match_max
-                        || tolower(mdesc[cmdcur[i]]) != cmd)
+                    int maxlen = 0;
+
+                    cmd = tolower(cmd);
+
+                    /* IID.20200107: Match input sequence. */
+                    for (int i = 0; i <= max; i++)
                     {
-                        /* Reset and skip spaces */
-                        cmdcur[i] = strspn(mdesc + cmdcur[0], " ");
-                        cmdlen[i] = 0;
-                    }
-                    if (tolower(mdesc[cmdcur[i]]) == cmd)
-                    {
-                        cmdcur[i]++;
-                        cmdlen[i]++;
-                    }
-                    if (cmdlen[i] > maxlen)
-                    {
-                        maxlen = cmdlen[i];
-                        cc = i;
+                        const char *const mdesc = table[i]->desc;
+                        int match_max = BMIN(cmdcur_max, strlen(mdesc));
+                        /* Skip spaces */
+                        cmdcur[i] += strspn(mdesc + cmdcur[i], " ");
+                        /* Not matched or cursor reached the end */
+                        if (cmdcur[i] >= match_max
+                            || tolower(mdesc[cmdcur[i]]) != cmd)
+                        {
+                            /* Reset and skip spaces */
+                            cmdcur[i] = strspn(mdesc + cmdcur[0], " ");
+                            cmdlen[i] = 0;
+                        }
+                        if (tolower(mdesc[cmdcur[i]]) == cmd)
+                        {
+                            cmdcur[i]++;
+                            cmdlen[i]++;
+                        }
+                        if (cmdlen[i] > maxlen)
+                        {
+                            maxlen = cmdlen[i];
+                            cc = i;
+                        }
                     }
                 }
+
+                // Falls through
+                //    to keep the input
+
+            case ' ':  /* Ignore space for matching */
+                if (keyboard_cmd)  /* `cmd` is from keyboard */
+                    keep_cmd = true;
             }
-
-            // Falls through
-            //    to keep the input
-
-        case ' ':  /* Ignore space for matching */
-            if (keyboard_cmd)  /* `cmd` is from keyboard */
-                keep_cmd = true;
         }
 
         if (cc != cx)
