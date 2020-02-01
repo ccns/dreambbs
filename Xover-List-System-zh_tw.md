@@ -134,6 +134,7 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
 重繪全畫面                | (`FULLUPDATE`)     | (`FULLUPDATE`)     | `XO_HEAD`
 從列表前說明處重繪        | (`FULLUPDATE`)     | (`FULLUPDATE`)     | `XO_NECK`
 從列表頭重繪              | (`PARTUPDATE`)     | `PART_REDRAW`      | `XO_BODY`
+重繪某項                  | (直接呼叫函數)     | (直接呼叫函數)      | - (直接呼叫函數) <br> - 有些分支有增加 `XO_ITEM`
 從列表後說明處重繪        | (`PARTUPDATE`)     | (`PART_REDRAW`)    | - (`XO_BODY`) <br> - 有些分支有增加 `XO_KNEE`
 重繪畫面底部              | (`PARTUPDATE`)     | `READ_REDRAW`      | `XO_FOOT` <br> - WindTop BBS 3.x: 只清除螢幕底部 (不會有 footer) <br> - MapleBBS-itoc: 在螢幕底部畫出 `XZ::feeter` <br> - DreamBBS v3: 呼叫 callback 列表對應 `XO_FOOT` 的函數
 重繪畫面頂部              | (`FULLUPDATE`)     | `TITLE_REDRAW`     | - (`XO_HEAD`) <br> - `XR_HEAD` (DreamBBS v3)
@@ -144,13 +145,13 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
  :---                    | ---                 | ---                       | ---
 指定某功能需要動態載入    | (無)                | (無)　                     | `cmd \| XO_DL`
 將游標放到最尾項          | (直接操作)          | (直接操作)                 | - (直接操作: `xo->pos = XO_TAIL`) <br> - `XO_MOVE + XO_TAIL` (DreamBBS v3 起支援)
-移動游標                 | (直接操作)           | `READ_NEXT` & `READ_PREV` | `XO_MOVE + pos`
-移動游標 (頭尾循環)       | (無)                | (無)                      | `XO_MOVE + XO_WRAP + pos`
-翻頁                     | (直接操作)          | (直接操作)                 | `XO_MOVE + pos ± XO_TALL`
-翻頁 (頭尾循環)           | (無)                | (無)                      | `XO_MOVE + XO_WRAP + pos ± XO_TALL`
-捲動列表                 | (無)                | (無)                      | `XO_MOVE + XO_SCRL + pos` (DreamBBS v3 新增)
-捲動列表 (頭尾循環)       | (無)                | (無)                      | `XO_MOVE + XO_SCRL + XO_WRAP + pos` (DreamBBS v3 新增)
-切換列表                 | (無)                | (無)                      | `XZ_<ZONE>` = `XO_ZONE + zone`
+移動游標                 | (直接操作)           | `READ_NEXT` & `READ_PREV` | - `XO_MOVE + pos` <br> - `XO_MOVE + XO_REL + diff` (DreamBBS v3 起支援)
+移動游標 (頭尾循環)       | (無)                | (無)                      | - `XO_MOVE + XO_WRAP + pos` <br> - `XO_MOVE + XO_WRAP + XO_REL + diff` (DreamBBS v3 起支援)
+翻頁                     | (直接操作)          | (直接操作)                 | - `XO_MOVE + pos ± XO_TALL` <br> - `XO_MOVE + XO_REL ± XO_TALL` (DreamBBS v3 起支援) <br> - 尾項上捲: `XO_MOVE + XO_REL - ((xo->max-1 - xo->top) % XO_TALL + 1)` (DreamBBS v3)
+翻頁 (頭尾循環)           | (無)                | (無)                      | - `XO_MOVE + XO_WRAP + pos ± XO_TALL` <br> - 尾項下捲: `xo->top = 0, XO_HEAD + XO_MOVE + XO_WRAP + XO_REL + BMIN(xo->max, XO_TALL)` (DreamBBS v3) <br> - 首尾項上捲: `XO_MOVE + XO_WRAP + XO_REL - ((xo->max-1 - xo->top) % XO_TALL + 1)` (DreamBBS v3)
+捲動列表                 | (無)                | (無)                      | - `XO_MOVE + XO_SCRL + pos` (DreamBBS v3 新增) <br> - `XO_MOVE + XO_SCRL + XO_REL + diff` (DreamBBS v3 新增)
+捲動列表 (頭尾循環)       | (無)                | (無)                      | - `XO_MOVE + XO_WRAP + XO_SCRL + pos` (DreamBBS v3 新增) <br> - `XO_MOVE + XO_WRAP + XO_SCRL + XO_REL + diff` (DreamBBS v3 新增)
+切換列表                 | (無)                | (無)                      | - `XZ_<ZONE>` = `XO_ZONE + zone` <br> - `XO_ZONE + XO_WRAP + zone` (DreamBBS v3 起支援) <br> - `XO_ZONE + XO_REL + diff` (DreamBBS v3 起支援) <br> - `XO_ZONE + XO_WRAP + XO_REL + diff` (DreamBBS v3 起支援)
 回到上層列表             | (無)                | (無)                      | (無；有 `XO_LAST`，但未實作)
 離開列表                 | `DOQUIT`            | `DOQUIT`                  | `XO_QUIT`
 
@@ -177,12 +178,12 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
  :---                               | ---                | ---                          | ---
 `0x00000000` - `0x00003fff`         | (無)               | 按鍵輸入                     |
 `0x00004000` - `0x0fffffff`         | (未使用)           | (未使用)                     |
-`0x10000000` - `0x1fffffff-XO_TALL` | `XO_MODE`          | 畫面重繪、資料載入、離開列表  | 實際上只使用 9 或 10 個 (有些分支有 `XO_KNEE`，有些沒有)
+`0x10000000` - `0x1fffffff-XO_TALL` | `XO_MODE`          | 畫面重繪、資料載入、離開列表  | 實際上只使用 9 到 11 個 (有些分支有 `XO_ITEM` 及 `XO_KNEE`，有些沒有)
 `0x20000000-XO_TALL` - `0x1fffffff` | `XO_MOVE + pos` (`pos < 0`)            | 設定游標位置 (頭尾循環)      | Maple-itoc 修正前
 `0x20000000` - `0x27ffffff-XO_TALL` | `XO_MOVE + pos`  (`pos >= 0`)          | 設定游標位置                | Maple-itoc 修正前
 `0x28000000` - `0x3fffffff`         | `XO_MOVE + XO_WRAP + pos` (`pos >= 0`) | 設定游標位置 (頭尾循環)      | Maple-itoc 修正前
 `0x20000000-XO_TALL` - `0x20800000` | `XO_MOVE + pos`                        | 設定游標位置                | Maple-itoc 修正後
-`0x20800001` - `0x3fffffff`         | `XO_MOVE + XO_WRAP + pos`              | 設定游標位置 (頭尾循環)      | Maple-itoc 修正後
+`0x20800001` - `0x3fffffff`         | `XO_MOVE + XO_WRAP + pos`              | 設定游標位置 (頭尾循環)      | Maple-itoc 修正後 <br> - 循環發生時跳到頭尾 <br> - 循環發生時跳到循環後的對應項 (DreamBBS v3)
 `0x40000000` - `0x7fffffff`         | `XO_ZONE + zone` (`zone >= 0`)         | 列表切換                    | Maple-itoc 只使用 14 個
 `0x80000000` - `0xffffffff`         | `key \| XO_DL`     | 特殊按鍵 (負數) 或動態載入功能 | 不能以特殊按鍵做為 callback 列表的 key <br> - DreamBBS v1 起將特殊按鍵值恢復為傳統的正數，可做為 callback 列表的 key
 
@@ -197,7 +198,7 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
 　                                  | `XR_* + move`      | 設定游標位置                  | Mask 後為 `0x00004001` - `0x001fffff` <br> 這限制了游標的移動範圍為 `-0x000fbfff` (-1032191‬) - `0x000fffff` (1048575‬)
 `0x00200000` (mask)                 | `XO_REL`           | 將游標位置解釋為相對位置      |
 `0x00400000` (mask)                 | `XO_SCRL`          | - 將游標移動解讀為捲動列表 (無 `XZ_ZONE`) <br> - (未使用) (有 `XZ_ZONE`) |
-`0x00800000` (mask)                 | `XO_WRAP`          | 讓游標位置頭尾循環            |
+`0x00800000` (mask)                 | `XO_WRAP`          | 讓游標位置頭尾循環            | 會跳到循環後的對應項而非頭尾
 `0x3f000000` (mask)                 | `XO_REDO_MASK`     | 畫面重繪、資料載入相關        | 把 `XR_*` macros `or` 起來的值
 `0x01000000` (mask)                 | `XR_LOAD`          | 重新載入列表資料             | `XO_INIT` = `XR_LOAD + XO_HEAD` <br> `XO_LOAD` = `XR_LOAD + XO_BODY`
 `0x02000000` (mask)                 | `XR_HEAD`          | 重繪畫面頂部                 | `XO_HEAD` = `XR_HEAD + XO_NECK`
@@ -209,12 +210,13 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
 `0x40000000` (mask)                 | `XZ_ZONE`          | 將操作解讀為列表切換          | `XO_ZONE` = `XZ_ZONE + XO_MOVE`
 `0x01000000` (mask)                 | `XZ_INIT`          | 進行某 zone 的初始化工作      |
 `0x02000000` (mask)                 | `XZ_FINI`          | 進行某 zone 的收拾工作        |
-`0x04000000` (mask)                 | `XZ_BACK`          | 回到上次所在的 zone           | `XO_LAST` = `XZ_ZONE + XZ_BACK`
+`0x04000000` (mask)                 | `XZ_BACK`          | 回到上次所在的 zone (未實作)  | `XO_LAST` = `XZ_ZONE + XZ_BACK`
 `0x08000000` (mask)                 | `XZ_QUIT`          | 離開 `xover()` 函數          | `XO_QUIT` = `XZ_ZONE + XZ_QUIT`
 `0x10000000` (mask)                 | `XZ_UNUSED4`       | (未使用)                     |
 `0x20000000` (mask)                 | `XZ_UNUSED5`       | (未使用)                     |
 `0x80000000` (mask)                 | `key \| XO_DL`     | 動態載入功能                 |
 #### 新的 key value 分配的特點
+- 除了頭尾循環邏輯改變，舊的 macro 使用方法仍然有效
 - 將 `XO_MOVE` 重新定義為游標位置的 bias，避免游標位置為負時 flag bits 的改變
 - 重繪畫面的各個 `XO_*` macros 之間的相對大小不變
 - 允許畫面重繪/重新載入 (`XR_*`) 的各個部分自由組合 (尚未實作)
