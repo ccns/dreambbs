@@ -384,9 +384,6 @@ int class_add(XO *xo);
 #define dashd(fpath)    S_ISDIR(f_mode(fpath))
 #define dashf(fpath)    S_ISREG(f_mode(fpath))
 
-#define STR4(x)         ((x[0] << 24) + (x[1] << 16) + (x[2] << 8) + x[3])
-                        /* Thor.980913: «OÃÒprecedence */
-
 #ifdef M3_USE_PFTERM
   #define foot_dump(pfoot)  scr_dump(pfoot)
   #define foot_redump(pfoot)  scr_redump(pfoot)

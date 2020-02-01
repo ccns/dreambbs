@@ -995,7 +995,7 @@ getsubject(
         char *str;
 
         str = currtitle;
-        if (STR4(str) == STR4(STR_REPLY)) /* Thor.980914: 有比較快點嗎? */
+        if (!strncmp(str, STR_REPLY, 4))
         {
             strcpy(title, str);
         }
@@ -4650,7 +4650,7 @@ XoXpost(                        /* Thor: call from post_cb */
 
             title = head->title;
 
-            if (STR4(title) == STR4(STR_REPLY)) /* Thor.980911: 先把 Re: 除外 */
+            if (!strncmp(title, STR_REPLY, 4)) /* Thor.980911: 先把 Re: 除外 */
                 title += 4;
 
             if (*key && !str_str(title, key))
@@ -4659,7 +4659,7 @@ XoXpost(                        /* Thor: call from post_cb */
         else if (mode == 1)
         {
             title = head->title;
-            if (STR4(title) == STR4(STR_REPLY))
+            if (!strncmp(title, STR_REPLY, 4))
                 continue;
         }
         else
