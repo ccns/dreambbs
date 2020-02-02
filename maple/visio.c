@@ -523,7 +523,7 @@ refresh(void)
 
     if (i)
     {
-        char buf[p_lines];
+        char buf[T_LINES - 6];
 
         scrollcnt = j = 0;
         if (i < 0)
