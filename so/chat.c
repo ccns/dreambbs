@@ -613,7 +613,7 @@ t_chat(void)
         outs("若不進入聊天室，則暱稱請留空\n");
         str_ncpy(chatid, cuser.userid, sizeof(chatid));
         /* Thor.980921: 愛用 dao lib */
-        ch = vget(b_lines, 0, "請輸入聊天代號：", chatid, 9, GCARRY);
+        ch = vget(B_LINES_REF, 0, "請輸入聊天代號：", chatid, 9, GCARRY);
         if (ch == '/')
             continue;
         else if (ch == '*' || !ch)

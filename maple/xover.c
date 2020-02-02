@@ -277,7 +277,7 @@ xo_delete(
     if ((bbsmode == M_READA) && !(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    vget(b_lines, 0, "[設定刪除範圍] 起點：", buf, 6, DOECHO);
+    vget(B_LINES_REF, 0, "[設定刪除範圍] 起點：", buf, 6, DOECHO);
     head = atoi(buf);
     if (head <= 0)
     {
@@ -285,7 +285,7 @@ xo_delete(
         return XO_FOOT;
     }
 
-    vget(b_lines, 28, "終點：", buf, 6, DOECHO);
+    vget(B_LINES_REF, 28, "終點：", buf, 6, DOECHO);
     tail = atoi(buf);
     if (tail < head)
     {
@@ -294,7 +294,7 @@ xo_delete(
     }
 
 
-    if (vget(b_lines, 41, msg_sure_ny, buf, 3, LCECHO) == 'y')
+    if (vget(B_LINES_REF, 41, msg_sure_ny, buf, 3, LCECHO) == 'y')
     {
         if (bbsmode == M_READA)
             hdr_prune(xo->dir, head, tail, 0);
@@ -694,7 +694,7 @@ xo_forward(
     if (!rcpt[0])
         strcpy(rcpt, cuser.email);
 
-    if (!vget(b_lines, 0, "目的地：", rcpt, sizeof(rcpt), GCARRY))
+    if (!vget(B_LINES_REF, 0, "目的地：", rcpt, sizeof(rcpt), GCARRY))
         return XO_FOOT;
 
     userid = cuser.userid;
@@ -1191,7 +1191,7 @@ xo_thread(
     {
 #define RS_BOARD        0x1000  /* 用於 RS_UNREAD，跟前面的不可重疊 */
         /* Thor.980909: 詢問 "首篇未讀" 或 "末篇已讀" */
-        if (!vget(b_lines, 0, "向前找尋 0)首篇未讀 1)末篇已讀 ", s_unread, sizeof(s_unread), GCARRY))
+        if (!vget(B_LINES_REF, 0, "向前找尋 0)首篇未讀 1)末篇已讀 ", s_unread, sizeof(s_unread), GCARRY))
             return XO_FOOT; /* Thor.980911: 找到時, 則沒清XO_FOOT, 再看看怎麼改 */
         match |= XR_FOOT;  /* IID.20200204: Redraw footer if found */
 
@@ -1222,7 +1222,7 @@ xo_thread(
             len = sizeof(s_author);
         }
         sprintf(buf, "搜尋%s(%s)：", title, (step > 0) ? "↓" : "↑");
-        if (!vget(b_lines, 0, buf, tag_query, len, GCARRY))
+        if (!vget(B_LINES_REF, 0, buf, tag_query, len, GCARRY))
             return XO_FOOT;
         /* Thor.980911: 要注意, 如果沒找到, "搜尋"的訊息會被清,
                         如果找到了, 則沒被清, 因傳回值為match, 沒法帶 XO_FOOT */
@@ -1469,7 +1469,7 @@ xo_jump(                        /* 移動游標到 number 所在的特定位置 */
 
     buf[0] = pos;
     buf[1] = '\0';
-    vget(b_lines, 0, "跳至第幾項：", buf, sizeof(buf), GCARRY);
+    vget(B_LINES_REF, 0, "跳至第幾項：", buf, sizeof(buf), GCARRY);
     move(b_lines, 0);
     clrtoeol();
     pos = atoi(buf);

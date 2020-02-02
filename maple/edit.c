@@ -157,7 +157,7 @@ ve_goto(void)
     int lno;
     char buf[8];
 
-    if (vget(b_lines, 0, "跳至第幾行：", buf, sizeof(buf), DOECHO) &&
+    if (vget(B_LINES_REF, 0, "跳至第幾行：", buf, sizeof(buf), DOECHO) &&
         (lno = atoi(buf)) > 0)
     {
         textline *vln, *tmp, *top;
@@ -623,7 +623,7 @@ ve_ansi(void)
     {
         move(b_lines - 1, 55);
         outs("\x1b[1;33;40mB\x1b[41mR\x1b[42mG\x1b[43mY\x1b[44mL\x1b[45mP\x1b[46mC\x1b[47mW\x1b[m");
-        if ((fg = vget(b_lines, 0, "請輸入  亮度/前景/背景[正常白字黑底][0wb]：",
+        if ((fg = vget(B_LINES_REF, 0, "請輸入  亮度/前景/背景[正常白字黑底][0wb]：",
                 apos = ans, 4, LCECHO)))
         {
             strcpy(buf, "\x1b[");
@@ -733,7 +733,7 @@ tbf_ask(int n)
     {
         do
         {
-            ch = vget(b_lines, 0, "請選擇暫存檔(1-5)：", fn_tbf + 4, 2, GCARRY);
+            ch = vget(B_LINES_REF, 0, "請選擇暫存檔(1-5)：", fn_tbf + 4, 2, GCARRY);
         } while (ch < '1' || ch > '5');
     }
     else
@@ -1104,7 +1104,7 @@ ve_quote(
 #endif
 
     msg[27] = op = cuser.signature + '0';
-    if ((fd = vget(b_lines, 0, msg, buf, 3, DOECHO)))
+    if ((fd = vget(B_LINES_REF, 0, msg, buf, 3, DOECHO)))
     {
         if (op != fd && fd >= '0' && fd <= '3')
         {
@@ -1335,7 +1335,7 @@ ve_select_sign(
     msg[27] = op = cuser.signature + '0';
     usr_fpath(buf, cuser.userid, FN_SIGN);
     ve_show_sign(buf);
-    if ((ans = vget(b_lines, 0, msg, buf, 3, DOECHO)))
+    if ((ans = vget(B_LINES_REF, 0, msg, buf, 3, DOECHO)))
     {
         if (op != ans && ans >= '0' && ans <= '3')
         {
@@ -1423,7 +1423,7 @@ ve_filer(
 
 /* cache.091023: 這邊註解掉就可以強制使用圖形選單 */
 //  if (cuser.ufo2 & UFO2_ORIGUI)
-//      re = vget(b_lines, 0, msg, buf, 3, LCECHO);
+//      re = vget(B_LINES_REF, 0, msg, buf, 3, LCECHO);
 //  else
 //  {
         if (bbsmode != M_POST)
@@ -1478,7 +1478,7 @@ ve_filer(
 
     case 't':
         strcpy(buf, ve_title);
-        if (!vget(b_lines, 0, "標題：", ve_title, TTLEN, GCARRY))
+        if (!vget(B_LINES_REF, 0, "標題：", ve_title, TTLEN, GCARRY))
             strcpy(ve_title, buf);
         return VE_FOOTER;
 

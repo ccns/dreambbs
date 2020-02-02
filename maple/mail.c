@@ -982,7 +982,7 @@ do_forward(
     strcpy(addr, cuser.email);
 
 /*
- *  if (!vget(b_lines, 0, "請輸入轉寄地址：", addr, 60, GCARRY))
+ *  if (!vget(B_LINES_REF, 0, "請輸入轉寄地址：", addr, 60, GCARRY))
  *      return;
  *
  *  if (not_addr(addr))
@@ -1265,7 +1265,7 @@ m_setforward(void)
         ip[0] = '\0';
     }
 
-    vget(b_lines - 1, 0, "請輸入信件自動轉寄的 E-mail：", ip, 50, GCARRY);
+    vget(B_LINES_REF - 1, 0, "請輸入信件自動轉寄的 E-mail：", ip, 50, GCARRY);
 
     if (ip[0] && !not_addr(ip) &&
         vans("確定開啟信件轉寄功\能(y/N)？[N] ") == 'y')
@@ -1298,7 +1298,7 @@ m_setmboxdir(void)
     if (vans("確定重建索引(y/N)？[N] ") == 'y')
     {
 
-        vget(b_lines - 1, 0, "請輸入帳號的第一個英文字母(小寫)：", id, 5, GCARRY);
+        vget(B_LINES_REF - 1, 0, "請輸入帳號的第一個英文字母(小寫)：", id, 5, GCARRY);
 
         usr_fpath(upath, cuser.userid, NULL);
 
@@ -2646,10 +2646,10 @@ mbox_title(
     hdr = (HDR *) xo_pool + (xo->pos - xo->top);
     mhdr = *hdr;
 
-    vget(b_lines, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
-    vget(b_lines, 0, "作者：", mhdr.owner, 74, GCARRY);
-    vget(b_lines, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
-    vget(b_lines, 0, "檔名：", mhdr.xname, sizeof(mhdr.date), GCARRY);
+    vget(B_LINES_REF, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
+    vget(B_LINES_REF, 0, "作者：", mhdr.owner, 74, GCARRY);
+    vget(B_LINES_REF, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
+    vget(B_LINES_REF, 0, "檔名：", mhdr.xname, sizeof(mhdr.date), GCARRY);
     if (mhdr.xid > 1000)
         mhdr.xid = 0;
     if (vans(msg_sure_ny) == 'y' &&

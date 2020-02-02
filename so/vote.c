@@ -449,7 +449,7 @@ XO *xo)
         check = 1;
     }
 
-    if (!vget(b_lines, 0, "投票主題：", buf, sizeof(buf), DOECHO))
+    if (!vget(B_LINES_REF, 0, "投票主題：", buf, sizeof(buf), DOECHO))
         return XO_INIT;
 
     dir = xo->dir;
@@ -563,7 +563,7 @@ XO *xo)
     }
 
 
-    if (!vget(b_lines, 0, "投票主題：", vxx.title, TTLEN + 1 - 5 /* sizeof(vxx.title) Thor.981020: 怕超過螢幕 */, GCARRY))
+    if (!vget(B_LINES_REF, 0, "投票主題：", vxx.title, TTLEN + 1 - 5 /* sizeof(vxx.title) Thor.981020: 怕超過螢幕 */, GCARRY))
         return XO_FOOT;
 
     hdr_fpath(fpath, dir, (HDR *) vch);
@@ -796,7 +796,7 @@ XO *xo)
     }
     else if (cc == 'a')
     {
-        vget(b_lines, 0, "請更改開票時間(-提前/+延後/0不改)：", buf, 3, DOECHO);
+        vget(B_LINES_REF, 0, "請更改開票時間(-提前/+延後/0不改)：", buf, 3, DOECHO);
         if ((cc = atoi(buf)))
         {
             vch->vclose = vch->vclose + cc * 86400;
@@ -856,7 +856,7 @@ const char *account)
     if (!Get_Socket(server, &sock))
     {
         close(sock);
-        vget(b_lines - 3, 0, line, buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+        vget(B_LINES_REF - 3, 0, line, buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
         if (strlen(buf) < 1)
             return 0;
         if (!POP3_Check(server, addr, buf))
@@ -895,7 +895,7 @@ const char *mail)
     if (!Get_Socket(server, &sock))
     {
         close(sock);
-        vget(b_lines - 3, 0, line, buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+        vget(B_LINES_REF - 3, 0, line, buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
         if (strlen(buf) < 1)
             return 0;
         if (!POP3_Check(server, addr, buf))
@@ -982,7 +982,7 @@ XO *xo)
         *fname = 'S';
         show_stud(fpath);
         account[0] = '\0';
-        if (vget(b_lines - 4, 0, "請輸入你的學號：", account, 10/*7*/, GCARRY))
+        if (vget(B_LINES_REF - 4, 0, "請輸入你的學號：", account, 10/*7*/, GCARRY))
         {
             if (strlen(account) < 9/*6*/)
             {
@@ -1037,7 +1037,7 @@ XO *xo)
     for (;;)
     {
         choice = bitset(choice, count, vch->maxblt, vch->title, slist);
-        vget(b_lines - 1, 0, "我有話要說：", buf, 60, GCARRY);
+        vget(B_LINES_REF - 1, 0, "我有話要說：", buf, 60, GCARRY);
         fd = vans("投票 (Y)確定 (N)重來 (Q)取消？[N] ");
         if (fd == 'y' || fd == 'Y' || fd == 'q' || fd == 'Q')
             break;

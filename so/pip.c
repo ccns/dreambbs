@@ -1677,7 +1677,7 @@ pip_write_backup(void)
     move(b_lines -2, 1);
     prints("儲存檔案會覆蓋\原儲存於 [%s] 的小雞的檔案喔！請考慮清楚...", files[num]);
     sprintf(buf1, "確定要儲存於 [%s] 檔案嗎？ [y/N]: ", files[num]);
-    getdata(b_lines - 1, 1, buf1, ans, 2, DOECHO, 0);
+    getdata(B_LINES_REF - 1, 1, buf1, ans, 2, DOECHO, 0);
     if (ans[0] != 'y' && ans[0] != 'Y')
     {
         vmsg("放棄儲存檔案");
@@ -1739,7 +1739,7 @@ pip_read_backup(void)
                 move(b_lines - 2, 1);
                 outs("讀取出檔案會覆蓋\現在正在玩的小雞的檔案喔！請考慮清楚...");
                 sprintf(buf, "確定要讀取出 [%s] 檔案嗎？ [y/N]: ", files[num]);
-                getdata(b_lines - 1, 1, buf, ans, 2, DOECHO, 0);
+                getdata(B_LINES_REF - 1, 1, buf, ans, 2, DOECHO, 0);
                 if (ans[0] != 'y' && ans[0] != 'Y')
                     vmsg("讓我再決定一下...");
                 else ok = 1;
@@ -2118,7 +2118,7 @@ int oldnum[])
         case 'b':
             move(b_lines - 1, 1);
             sprintf(inbuf, "想要買入啥呢? [0]放棄買入 [1～%d]物品商號: ", numlen);
-            getdata(b_lines - 1, 1, inbuf, genbuf, 3, LCECHO, "0");
+            getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 3, LCECHO, "0");
             choice = atoi(genbuf)-1;
             if (choice >= 0 && choice < numlen)
             {
@@ -2136,7 +2136,7 @@ int oldnum[])
                 else
                 {
                     sprintf(inbuf, "你要買入物品 [%s] 多少個呢?(上限 %d): ", p[choice].name, d.thing[THING_MONEY] / p[choice].money);
-                    getdata(b_lines - 1, 1, inbuf, genbuf, 6, DOECHO, 0);
+                    getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 6, DOECHO, 0);
                     smoney = atoi(genbuf);
                 }
                 if (smoney < 0)
@@ -2150,7 +2150,7 @@ int oldnum[])
                 else
                 {
                     sprintf(inbuf, "確定買入物品 [%s] 數量 %ld 個嗎?(店家賣價 %ld) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money);
-                    getdata(b_lines - 1, 1, inbuf, genbuf, 2, DOECHO, 0);
+                    getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 2, DOECHO, 0);
                     if (genbuf[0] == 'y' || genbuf[0] == 'Y')
                     {
                         oldnum[choice] += smoney;
@@ -2193,7 +2193,7 @@ int oldnum[])
             }
             move(b_lines - 1, 1);
             sprintf(inbuf, "想要賣出啥呢? [0]放棄賣出 [1～%d]物品商號: ", numlen);
-            getdata(b_lines - 1, 1, inbuf, genbuf, 3, LCECHO, "0");
+            getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 3, LCECHO, "0");
             choice = atoi(genbuf)-1;
             if (choice >= 0 && choice < numlen)
             {
@@ -2207,7 +2207,7 @@ int oldnum[])
                 move(b_lines - 1, 1);
                 smoney = 0;
                 sprintf(inbuf, "你要賣出物品 [%s] 多少個呢?(上限 %d): ", p[choice].name, oldnum[choice]);
-                getdata(b_lines - 1, 1, inbuf, genbuf, 6,, 0);
+                getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 6,, 0);
                 smoney = atoi(genbuf);
                 if (smoney < 0)
                 {
@@ -2221,7 +2221,7 @@ int oldnum[])
                 else
                 {
                     sprintf(inbuf, "確定賣出物品 [%s] 數量 %ld 個嗎?(店家買價 %ld) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money*8 / 10);
-                    getdata(b_lines - 1, 1, inbuf, genbuf, 2, DOECHO, 0);
+                    getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 2, DOECHO, 0);
                     if (genbuf[0] == 'y' || genbuf[0] == 'Y')
                     {
                         oldnum[choice] -= smoney;
@@ -2326,7 +2326,7 @@ const struct weapon *p)
         case 'b':
             move(b_lines - 1, 1);
             sprintf(shortbuf, "想要購買啥呢? 你的錢錢[%d]元:[數字]: ", d.thing[THING_MONEY]);
-            getdata(b_lines - 1, 1, shortbuf, choicekey, 4, LCECHO, "0");
+            getdata(B_LINES_REF - 1, 1, shortbuf, choicekey, 4, LCECHO, "0");
             choice = atoi(choicekey);
             if (choice >= 0 && choice <= n)
             {
@@ -2361,7 +2361,7 @@ const struct weapon *p)
                 else  /*順利購買*/
                 {
                     sprintf(shortbuf, "你確定要購買 %s 嗎?($%d) [y/N]: ", p[choice].name, p[choice].cost);
-                    getdata(b_lines - 1, 1, shortbuf, ans, 2, DOECHO, 0);
+                    getdata(B_LINES_REF - 1, 1, shortbuf, ans, 2, DOECHO, 0);
                     if (ans[0] == 'y' || ans[0] == 'Y')
                     {
                         sprintf(shortbuf, "小雞已經裝備上 %s 了", p[choice].name);
@@ -2386,7 +2386,7 @@ const struct weapon *p)
             if (variance != 0)
             {
                 sprintf(shortbuf, "你確定要賣掉%s嗎? 賣價:%d [y/N]: ", p[variance].name, p[variance].sell);
-                getdata(b_lines - 1, 1, shortbuf, ans, 2, DOECHO, 0);
+                getdata(B_LINES_REF - 1, 1, shortbuf, ans, 2, DOECHO, 0);
                 if (ans[0] == 'y' || ans[0] == 'Y')
                 {
                     sprintf(shortbuf, "裝備 %s 賣了 %d", p[variance].name, p[variance].sell);
@@ -4202,7 +4202,7 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
     move(b_lines - 2, 0);
     clrtoeol();
     sprintf(inbuf, "[%8s%4s課程]要花 $%ld，確定要嗎??[y/N]: ", classword[classnum][0], classrank[classgrade], smoney);
-    getdata(b_lines - 2, 1, inbuf, ans, 2, DOECHO, 0);
+    getdata(B_LINES_REF - 2, 1, inbuf, ans, 2, DOECHO, 0);
     if (ans[0] != 'y' && ans[0] != 'Y')  return -1;
     if (d.thing[THING_MONEY] < smoney)
     {
@@ -4299,7 +4299,7 @@ static int pip_change_weight(void)
     move(b_lines -1, 0);
     clrtoeol();
     show_special_pic(2);
-    getdata(b_lines - 1, 1, "你的選擇是? [Q]離開: ", genbuf, 2, 1, 0);
+    getdata(B_LINES_REF - 1, 1, "你的選擇是? [Q]離開: ", genbuf, 2, 1, 0);
     if (genbuf[0] == '1' || genbuf[0] == '2' || genbuf[0] == '3' || genbuf[0] == '4')
     {
         switch (genbuf[0])
@@ -4311,7 +4311,7 @@ static int pip_change_weight(void)
             }
             else
             {
-                getdata(b_lines - 1, 1, "需花費80元(3～5公斤)，你確定嗎? [y/N]: ", genbuf, 2, 1, 0);
+                getdata(B_LINES_REF - 1, 1, "需花費80元(3～5公斤)，你確定嗎? [y/N]: ", genbuf, 2, 1, 0);
                 if (genbuf[0] == 'Y' || genbuf[0] == 'y')
                 {
                     weightmp = 3 + random() % 3;
@@ -4331,7 +4331,7 @@ static int pip_change_weight(void)
             break;
 
         case '2':
-            getdata(b_lines - 1, 1, "增一公斤要30元，你要增多少公斤呢? [請填數字]: ", genbuf, 4, 1, 0);
+            getdata(B_LINES_REF - 1, 1, "增一公斤要30元，你要增多少公斤呢? [請填數字]: ", genbuf, 4, 1, 0);
             weightmp = atoi(genbuf);
             if (weightmp <= 0)
             {
@@ -4340,7 +4340,7 @@ static int pip_change_weight(void)
             else if (d.thing[THING_MONEY] > (weightmp*30))
             {
                 sprintf(inbuf, "增加%d公斤，總共需花費%d元，確定嗎? [y/N]: ", weightmp, weightmp*30);
-                getdata(b_lines - 1, 1, inbuf, genbuf, 2, 1, 0);
+                getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 2, 1, 0);
                 if (genbuf[0] == 'Y' || genbuf[0] == 'y')
                 {
                     d.thing[THING_MONEY] -= weightmp * 30;
@@ -4371,7 +4371,7 @@ static int pip_change_weight(void)
             }
             else
             {
-                getdata(b_lines - 1, 1, "需花費80元(3～5公斤)，你確定嗎? [y/N]: ", genbuf, 2, 1, 0);
+                getdata(B_LINES_REF - 1, 1, "需花費80元(3～5公斤)，你確定嗎? [y/N]: ", genbuf, 2, 1, 0);
                 if (genbuf[0] == 'Y' || genbuf[0] == 'y')
                 {
                     weightmp = 3 + random() % 3;
@@ -4392,7 +4392,7 @@ static int pip_change_weight(void)
             }
             break;
         case '4':
-            getdata(b_lines - 1, 1, "減一公斤要30元，你要減多少公斤呢? [請填數字]: ", genbuf, 4, 1, 0);
+            getdata(B_LINES_REF - 1, 1, "減一公斤要30元，你要減多少公斤呢? [請填數字]: ", genbuf, 4, 1, 0);
             weightmp = atoi(genbuf);
             if (weightmp <= 0)
             {
@@ -4405,7 +4405,7 @@ static int pip_change_weight(void)
             else if (d.thing[THING_MONEY] > (weightmp*30))
             {
                 sprintf(inbuf, "減少%d公斤，總共需花費%d元，確定嗎? [y/N]: ", weightmp, weightmp*30);
-                getdata(b_lines - 1, 1, inbuf, genbuf, 2, 1, 0);
+                getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 2, 1, 0);
                 if (genbuf[0] == 'Y' || genbuf[0] == 'y')
                 {
                     d.thing[THING_MONEY] -= weightmp * 30;
@@ -4815,7 +4815,7 @@ int first)
             int len;
             char msg[120];
             char buf[80];
-            len = getdata(b_lines, 0, "想說: ", buf, 60, 1, 0);
+            len = getdata(B_LINES_REF, 0, "想說: ", buf, 60, 1, 0);
             if (len && buf[0] != ' ')
             {
                 sprintf(msg, "\x1b[1;46;33m★%s\x1b[37;45m %s \x1b[m", cuser.userid, buf);
@@ -6475,7 +6475,7 @@ pip_system_freepip(void)
 {
     char buf[256];
     clrchyiuan(b_lines - 2, b_lines);
-    getdata(b_lines - 1, 1, "真的要放生嗎？(y/N): ", buf, 2, 1, 0);
+    getdata(B_LINES_REF - 1, 1, "真的要放生嗎？(y/N): ", buf, 2, 1, 0);
     if (buf[0] != 'y' && buf[0] != 'Y') return 0;
     sprintf(buf, "%s 被狠心的 %s 丟掉了~", d.name, cuser.userid);
     vmsg(buf);
@@ -6505,7 +6505,7 @@ pip_system_service(void)
     case '1':
         move(b_lines - 1, 0);
         clrtobot();
-        getdata(b_lines - 1, 1, "幫小雞重新取個好名字： ", buf, 11, DOECHO, NULL);
+        getdata(B_LINES_REF - 1, 1, "幫小雞重新取個好名字： ", buf, 11, DOECHO, NULL);
         if (!buf[0])
         {
             vmsg("等一下想好再來好了  :)");
@@ -7762,13 +7762,13 @@ pip_marriage_offer(void)
 
     money = random() % 2000 + random() % 3000 + 4000;
     sprintf(buf, "%s帶來了金錢%d，要向你的小雞求婚，您願意嗎？[y/N]: ", name[who][d.sex != 1], money);
-    getdata(b_lines - 1, 1, buf, ans, 2, 1, 0);
+    getdata(B_LINES_REF - 1, 1, buf, ans, 2, 1, 0);
     if (ans[0] == 'y' || ans[0] == 'Y')
     {
         if (d.wantend != 1 && d.wantend != 4)
         {
             sprintf(buf, "ㄚ～之前已經有婚約了，您確定要解除舊婚約，改定立婚約嗎？[y/N]: ");
-            getdata(b_lines - 1, 1, buf, ans, 2, 1, 0);
+            getdata(B_LINES_REF - 1, 1, buf, ans, 2, 1, 0);
             if (ans[0] != 'y' && ans[0] != 'Y')
             {
                 d.tmp[TMP_SOCIAL] += 10;

@@ -738,7 +738,7 @@ pal_edit(
 {
     if (echo == DOECHO)
         memset(pal, 0, sizeof(PAL));
-    vget(b_lines, 0, "友誼：", pal->ship, sizeof(pal->ship), echo);
+    vget(B_LINES_REF, 0, "友誼：", pal->ship, sizeof(pal->ship), echo);
     pal->ftype = vans("損友(y/N)？[N] ") == 'y' ? PAL_BAD : 0;
 }
 
@@ -754,7 +754,7 @@ pal_search(
     PAL *phead;
     char *fimage = NULL, fpath[64];
 
-    if (vget(b_lines, 0, msg_uid, buf, IDLEN + 1, GCARRY))
+    if (vget(B_LINES_REF, 0, msg_uid, buf, IDLEN + 1, GCARRY))
     {
         GCC_UNUSED int buflen;
         char bufl[IDLEN + 1];
@@ -1678,7 +1678,7 @@ bmw_edit(
     str[0] = cc;
     str[1] = '\0';
 
-    if (vget(b_lines - 1, 0, hint, str, 58, GCARRY) &&
+    if (vget(B_LINES_REF - 1, 0, hint, str, 58, GCARRY) &&
                                         /* lkchu.990103: 新介面只允許 48 個字元 */
         vans("確定要送出《熱訊》嗎(Y/n)？[Y] ") != 'n')
     {
@@ -2037,7 +2037,7 @@ pal_list(
             break;
 #if 1
         case 'g':
-            if ((userno = vget(b_lines, 0, "群組條件：", buf, 16, DOECHO)))
+            if ((userno = vget(B_LINES_REF, 0, "群組條件：", buf, 16, DOECHO)))
                 str_lower(buf, buf);
             // Falls through
 #endif
@@ -3435,7 +3435,7 @@ ulist_search(
     PICKUP *pp;
     static char buf[IDLEN + 1];
 
-    if (vget(b_lines, 0, msg_uid, buf, IDLEN + 1, GCARRY))
+    if (vget(B_LINES_REF, 0, msg_uid, buf, IDLEN + 1, GCARRY))
     {
         GCC_UNUSED int buflen;
         char bufl[IDLEN + 1];
@@ -3507,7 +3507,7 @@ ulist_makepal(
 
             strcpy(buf, up->userid);
 
-            vget(b_lines, 0, "好友描述：", pal.ship, sizeof(pal.ship), DOECHO);
+            vget(B_LINES_REF, 0, "好友描述：", pal.ship, sizeof(pal.ship), DOECHO);
             pal.ftype = 0;
             pal.userno = userno;
             strcpy(pal.userid, buf);
@@ -3547,7 +3547,7 @@ ulist_makebad(
 
             strcpy(buf, up->userid);
 
-            vget(b_lines, 0, "惡行惡狀：", pal.ship, sizeof(pal.ship), DOECHO);
+            vget(B_LINES_REF, 0, "惡行惡狀：", pal.ship, sizeof(pal.ship), DOECHO);
             pal.ftype = PAL_BAD;
             pal.userno = userno;
             strcpy(pal.userid, buf);
@@ -3820,7 +3820,7 @@ ulist_fromchange(
         return XO_NONE;
 
     strcpy(buf, str = cutmp->from);
-    vget(b_lines, 0, "請輸入新的故鄉：", buf, sizeof(cutmp->from), GCARRY);
+    vget(B_LINES_REF, 0, "請輸入新的故鄉：", buf, sizeof(cutmp->from), GCARRY);
     if (strcmp(buf, str))
     {
         strcpy(str, buf);
@@ -3844,7 +3844,7 @@ ulist_nickchange(
         return XO_NONE;
 
     strcpy(buf, str = cuser.username);
-    vget(b_lines, 0, "請輸入新的暱稱：", buf, sizeof(cuser.username), GCARRY);
+    vget(B_LINES_REF, 0, "請輸入新的暱稱：", buf, sizeof(cuser.username), GCARRY);
 
     if (strcmp(buf, str) && str_len(buf) > 0)
     {
@@ -4037,7 +4037,7 @@ ulist_changeship(
     strcpy(buf, "");
     copyship(buf, userno);
 
-    if (vget(b_lines, 0, check == 1 ?"友誼：":"惡行惡狀：", buf, sizeof(buf), GCARRY))
+    if (vget(B_LINES_REF, 0, check == 1 ?"友誼：":"惡行惡狀：", buf, sizeof(buf), GCARRY))
     {
         usr_fpath(fpath, cuser.userid, FN_PAL);
         if ((fd = open(fpath, O_RDONLY)) >= 0)
@@ -4669,7 +4669,7 @@ banmsg_edit(
 {
     if (echo == DOECHO)
         memset(banmsg, 0, sizeof(BANMSG));
-    vget(b_lines, 0, "描述：", banmsg->ship, sizeof(banmsg->ship), echo);
+    vget(B_LINES_REF, 0, "描述：", banmsg->ship, sizeof(banmsg->ship), echo);
 }
 
 

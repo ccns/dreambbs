@@ -96,7 +96,7 @@ int echo)
 {
     if (echo == DOECHO)
         memset(viol, 0, sizeof(EMAIL));
-    if (vget(b_lines, 0, "E-mail：", viol->email, sizeof(viol->email), echo))
+    if (vget(B_LINES_REF, 0, "E-mail：", viol->email, sizeof(viol->email), echo))
         return 1;
     else
         return 0;
@@ -166,7 +166,7 @@ XO *xo)
     int pos, fd;
     char buf[64];
 
-    if (!vget(b_lines, 0, "請輸入查詢字串:", buf, sizeof(buf), DOECHO))
+    if (!vget(B_LINES_REF, 0, "請輸入查詢字串:", buf, sizeof(buf), DOECHO))
         return XO_FOOT;
 
     fd = open(FN_VIOLATELAW_DB, O_RDONLY);

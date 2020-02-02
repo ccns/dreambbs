@@ -191,7 +191,7 @@ TransferAccount(void)
     move(11, 0);
     clrtobot();
 
-    if (!vget(b_lines, 0, "匯款理由：", str, 60, DOECHO))
+    if (!vget(B_LINES_REF, 0, "匯款理由：", str, 60, DOECHO))
         return 0;
 
     if (vans("確定要給他嗎？ [Y/n]") != 'n')
@@ -374,7 +374,7 @@ int bank_main(void)
     prints("夢幣 %d ", money);
     move (6, 2);
     prints("優良積分 %d ", point1);
-    if (!vget(b_lines, 0, "請選擇您要的服務： [Q] 離開 ", buf, 2, DOECHO))
+    if (!vget(B_LINES_REF, 0, "請選擇您要的服務： [Q] 離開 ", buf, 2, DOECHO))
         return DL_RELEASE(0);
 
     if (*buf == '1')

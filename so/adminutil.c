@@ -601,7 +601,7 @@ search(void)
     {
         clear();
         vs_bar("特殊搜尋");
-        vget(b_lines, 0, "搜尋內容：", input, sizeof(input), DOECHO);
+        vget(B_LINES_REF, 0, "搜尋內容：", input, sizeof(input), DOECHO);
         while (fgets(buf, sizeof(buf), fp))
         {
             if (strstr(buf, input))

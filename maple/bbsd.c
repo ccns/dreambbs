@@ -646,7 +646,7 @@ tn_login(void)
         }
         else if (str_cmp(uid, STR_GUEST))
         {
-            if (!vget(21, d_cols + 26, MSG_PASSWD, passbuf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO))
+            if (!vget(21, D_COLS_REF + 26, MSG_PASSWD, passbuf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO))
             {
                 continue;       /* 發現 userid 輸入錯誤，在輸入 passwd 時直接跳過 */
             }

@@ -91,7 +91,7 @@ int echo)
 {
     if (echo == DOECHO)
         memset(show, 0, sizeof(LOG));
-    if (vget(b_lines, 0, "E-mail¡G", show->email, sizeof(show->email), echo))
+    if (vget(B_LINES_REF, 0, "E-mail¡G", show->email, sizeof(show->email), echo))
         return 1;
     else
         return 0;

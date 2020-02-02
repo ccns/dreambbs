@@ -147,10 +147,10 @@ cleanrecommend_edit(
 {
     if (echo == DOECHO)
         memset(cleanrecommend, 0, sizeof(RMSG));
-    if (vget(b_lines, 0, "使用者:", cleanrecommend->userid, sizeof(cleanrecommend->userid), echo)
-     && vget(b_lines, 0, "動詞:", cleanrecommend->verb, sizeof(cleanrecommend->verb), echo)
-     && vget(b_lines, 0, "留言:", cleanrecommend->msg, sizeof(cleanrecommend->msg), echo)
-     && vget(b_lines, 0, "日期:", cleanrecommend->rtime, sizeof(cleanrecommend->rtime), echo))
+    if (vget(B_LINES_REF, 0, "使用者:", cleanrecommend->userid, sizeof(cleanrecommend->userid), echo)
+     && vget(B_LINES_REF, 0, "動詞:", cleanrecommend->verb, sizeof(cleanrecommend->verb), echo)
+     && vget(B_LINES_REF, 0, "留言:", cleanrecommend->msg, sizeof(cleanrecommend->msg), echo)
+     && vget(B_LINES_REF, 0, "日期:", cleanrecommend->rtime, sizeof(cleanrecommend->rtime), echo))
         return 1;
     else
         return 0;

@@ -344,6 +344,15 @@ static int vkey_is_typeahead(void)
   #endif
  #endif  /* #ifndef PMORE_HAVE_VKEY */
 #endif // M3_USE_PMORE
+
+#ifndef T_LINES_REF
+ // Screen size referencing coordinate is not supported;
+ //    use normal coordinate instead
+ #define T_LINES_REF t_lines
+ #define T_COLS_REF  t_columns
+ #define B_LINES_REF (T_LINES_REF - 1)
+ #define B_COLS_REF  (T_COLS_REF - 1)
+#endif
 // --------------------------------------------------------------- </PORTING>
 
 #include <assert.h>
@@ -2784,11 +2793,11 @@ _pmore2(
                     free(sr.search_str);
                     sr.search_str = NULL;
 
-                    getdata(b_lines - 1, 0, PMORE_MSG_SEARCH_KEYWORD, sbuf,
+                    getdata(B_LINES_REF - 1, 0, PMORE_MSG_SEARCH_KEYWORD, sbuf,
                             40, DOECHO);
 
                     if (sbuf[0]) {
-                        if (getdata(b_lines - 1, 0,
+                        if (getdata(B_LINES_REF - 1, 0,
                                     PMORE_MSG_SEARCH_LETTERCASE "[N] ",
                                     ans, sizeof(ans), LCECHO) && *ans == 'y')
                             sr.cmpfunc = strncmp;
@@ -2826,7 +2835,7 @@ _pmore2(
                         buf[0] = ch, buf[1] = 0;
 
                     pmore_clrtoeol(b_lines-1, 0);
-                    getdata_buf(b_lines-1, 0,
+                    getdata_buf(B_LINES_REF-1, 0,
                             (pageMode ?
                              PMORE_MSG_GOTO_PAGE : PMORE_MSG_GOTO_LINE),
                             buf, 8, DOECHO);
@@ -2919,7 +2928,7 @@ _pmore2(
                      * TODO scan current page to confirm if this is a new style movie
                      */
                     pmore_clrtoeol(b_lines-1, 0);
-                    getdata_buf(b_lines - 1, 0,
+                    getdata_buf(B_LINES_REF - 1, 0,
                             PMORE_MSG_MOVIE_PLAYOLD_GETTIME,
                             buf, 8, LCECHO);
 
@@ -2937,7 +2946,7 @@ _pmore2(
                         {
                             char ans[4];
                             pmore_clrtoeol(b_lines-1, 0);
-                            getdata(b_lines - 1, 0,
+                            getdata(B_LINES_REF - 1, 0,
                                     PMORE_MSG_MOVIE_PLAYOLD_AS24L,
                                     ans, 3, LCECHO);
                             if (ans[0] == 'n')

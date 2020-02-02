@@ -249,7 +249,7 @@ myfavorite_add(
         char title[64];
         char fpath[64];
 
-        if (!vget(b_lines, 0, "請輸入標題: ", title, sizeof(title), DOECHO))
+        if (!vget(B_LINES_REF, 0, "請輸入標題: ", title, sizeof(title), DOECHO))
             return XO_NONE;
 
         hdr_stamp(currdir, ans|HDR_LINK, &hdr, fpath);
@@ -365,7 +365,7 @@ myfavorite_mov(
 
     pos = xo->pos;
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
-    if (!vget(b_lines, 0, buf + 5, buf, 5, DOECHO))
+    if (!vget(B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
 
     newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);
@@ -409,7 +409,7 @@ myfavorite_edit(
     }
     else if (hdr->xmode & GEM_FOLDER)
     {
-        if (!vget(b_lines, 0, "請輸入標題: ", hdr->title, 64, GCARRY))
+        if (!vget(B_LINES_REF, 0, "請輸入標題: ", hdr->title, 64, GCARRY))
             return XO_FOOT;
         rec_put(currdir, hdr, sizeof(HDR), xo->pos);
         return XO_LOAD;
@@ -437,7 +437,7 @@ myfavorite_search(
     const HDR *hdr;
 
     ptr = buf;
-    pos = vget(b_lines, 0, "請輸入搜尋關鍵字：", ptr, IDLEN + 1, DOECHO);
+    pos = vget(B_LINES_REF, 0, "請輸入搜尋關鍵字：", ptr, IDLEN + 1, DOECHO);
     move(b_lines, 0);
     clrtoeol();
 

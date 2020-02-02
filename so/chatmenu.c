@@ -112,11 +112,11 @@ int echo)
 {
     if (echo == DOECHO)
         memset(chat, 0, sizeof(ChatAction));
-    if (vget(b_lines, 0, "動詞：", chat->verb, sizeof(chat->verb), echo)
-        && vget(b_lines, 0, "中文解釋：", chat->chinese, sizeof(chat->chinese), echo))
+    if (vget(B_LINES_REF, 0, "動詞：", chat->verb, sizeof(chat->verb), echo)
+        && vget(B_LINES_REF, 0, "中文解釋：", chat->chinese, sizeof(chat->chinese), echo))
     {
-        vget(b_lines, 0, "訊息一：", chat->part1_msg, sizeof(chat->part1_msg), echo);
-        vget(b_lines, 0, "訊息二：", chat->part2_msg, sizeof(chat->part2_msg), echo);
+        vget(B_LINES_REF, 0, "訊息一：", chat->part1_msg, sizeof(chat->part1_msg), echo);
+        vget(B_LINES_REF, 0, "訊息二：", chat->part2_msg, sizeof(chat->part2_msg), echo);
         return 1;
     }
     else
@@ -207,7 +207,7 @@ XO *xo)
     ghdr = (const ChatAction *) xo_pool + cur;
 
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
-    if (!vget(b_lines, 0, buf + 5, buf, 5, DOECHO))
+    if (!vget(B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
 
     newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);

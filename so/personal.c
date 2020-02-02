@@ -301,10 +301,10 @@ personal_edit(
 {
     if (echo == DOECHO)
         memset(personal, 0, sizeof(PB));
-    if (vget(b_lines, 0, "申請人:", personal->userid, sizeof(personal->userid), echo)
-     && vget(b_lines, 0, "看板名:", personal->brdname, sizeof(personal->brdname), echo)
-     && vget(b_lines, 0, "看板標題:", personal->brdtitle, sizeof(personal->brdtitle), echo)
-     && vget(b_lines, 0, "E-mail:", personal->email, sizeof(personal->email), echo))
+    if (vget(B_LINES_REF, 0, "申請人:", personal->userid, sizeof(personal->userid), echo)
+     && vget(B_LINES_REF, 0, "看板名:", personal->brdname, sizeof(personal->brdname), echo)
+     && vget(B_LINES_REF, 0, "看板標題:", personal->brdtitle, sizeof(personal->brdtitle), echo)
+     && vget(B_LINES_REF, 0, "E-mail:", personal->email, sizeof(personal->email), echo))
         return 1;
     else
         return 0;
@@ -568,7 +568,7 @@ personal_deny(
     if (personal->state & PB_OPEN)
         return XO_NONE;
 
-    if (!vget(b_lines, 0, "拒絕開板理由: ", msg, sizeof(msg), DOECHO))
+    if (!vget(B_LINES_REF, 0, "拒絕開板理由: ", msg, sizeof(msg), DOECHO))
         return XO_FOOT;
 
     if (vans("確定拒絕此申請嗎？[y/N]") != 'y')

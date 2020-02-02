@@ -126,7 +126,7 @@ int mainNum(int fighting /* Thor.990317: 對戰模式 */)
         {
             int i;
             char tmp[50];
-            vget(b_lines - 3, 0, "您猜我的數字是[????]:", tmp, 5, DOECHO);
+            vget(B_LINES_REF - 3, 0, "您猜我的數字是[????]:", tmp, 5, DOECHO);
             /* Thor.990317: 為簡化, 不作checking */
             if (!tmp[0]) goto abort_game;
 
@@ -174,7 +174,7 @@ int mainNum(int fighting /* Thor.990317: 對戰模式 */)
         {
             char buf[5];
             /* get response */
-            vget(b_lines, 0, "您的回答[?A?B]:", buf, 5, DOECHO);
+            vget(B_LINES_REF, 0, "您的回答[?A?B]:", buf, 5, DOECHO);
 
             if (!buf[0])
             {

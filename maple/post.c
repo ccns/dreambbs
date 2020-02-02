@@ -1880,7 +1880,7 @@ post_delete(
         }
 
         if (by_BM/* && (bbstate & BRD_NOTRAN) && !(fhdr->xmode & POST_BOTTOM)*/)
-            vget(b_lines, 0, "請輸入刪除理由：", delete_reason, 29, DOECHO);
+            vget(B_LINES_REF, 0, "請輸入刪除理由：", delete_reason, 29, DOECHO);
         //    return 0;
         if (by_BM/* && bbstate & BRD_NOTRAN*/&& (bbstate & STAT_BOARD) && !strstr(fhdr->owner, ".") && !strstr(fhdr->lastrecommend, "$") && !(fhdr->xmode & POST_BOTTOM))
         {
@@ -2811,13 +2811,13 @@ post_title(
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    vget(b_lines, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
+    vget(B_LINES_REF, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
 
     if (HAS_PERM(PERM_ALLBOARD))  /* 0911105.cache: 非看板總管只能改標題 */
     {
-        vget(b_lines, 0, "作者：", mhdr.owner, 74 /* sizeof(mhdr.owner)*/, GCARRY);
+        vget(B_LINES_REF, 0, "作者：", mhdr.owner, 74 /* sizeof(mhdr.owner)*/, GCARRY);
         /* Thor.980727:lkchu patch: sizeof(mhdr.owner) = 80會超過一行 */
-        vget(b_lines, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
+        vget(B_LINES_REF, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
     }
 
     if (vans(msg_sure_ny) == 'y' &&
@@ -2864,7 +2864,7 @@ post_cross_terminator(  /* Thor.0521: 終極文章大法 */
         title = fhdr->owner;
     else if (mode == 2)
     {
-        if (!vget(b_lines, 0, "其他：", other, sizeof(other), DOECHO))
+        if (!vget(B_LINES_REF, 0, "其他：", other, sizeof(other), DOECHO))
             return XO_HEAD;
         title = other;
     }
@@ -3124,7 +3124,7 @@ post_resetscore(
                         return XO_FOOT;
                     }
 
-                    if (!vget(b_lines, 0, "請輸入數字：", ans, 3, DOECHO))
+                    if (!vget(B_LINES_REF, 0, "請輸入數字：", ans, 3, DOECHO))
                         return XO_FOOT;
 
                     if ((brd->battr & BRD_PUSHSNEER) || (brd->battr & BRD_PUSHDEFINE))
@@ -3253,15 +3253,15 @@ post_recommend(
             switch (ans = vans("◎ 評論 1)推文 2)噓文 ？[Q] "))
             {
                 case '1':
-                    getans = vget(b_lines, 0, "推文：", msg, 53, DOECHO);
+                    getans = vget(B_LINES_REF, 0, "推文：", msg, 53, DOECHO);
                     addscore = 1;
                     break;
                 case '2':
-                    getans = vget(b_lines, 0, "噓文：", msg, 53, DOECHO);
+                    getans = vget(B_LINES_REF, 0, "噓文：", msg, 53, DOECHO);
                     addscore = -1;
                     break;
                 case '3':
-                    getans = vget(b_lines, 0, "留言：", msg, 53, DOECHO);
+                    getans = vget(B_LINES_REF, 0, "留言：", msg, 53, DOECHO);
                     addscore = 0;
                     break;
                 default:
@@ -3275,41 +3275,41 @@ post_recommend(
             switch (ans = vans("◎ 評論 1)推文 2)噓文 3)留言 4)自訂推文 5)自訂噓文 ？[Q] "))
             {
                 case '1':
-                    getans = vget(b_lines, 0, "推文：", msg, 53, DOECHO);
+                    getans = vget(B_LINES_REF, 0, "推文：", msg, 53, DOECHO);
                     strcpy(verb, "推");
                     addscore = 1;
                     break;
                 case '2':
-                    getans = vget(b_lines, 0, "噓文：", msg, 53, DOECHO);
+                    getans = vget(B_LINES_REF, 0, "噓文：", msg, 53, DOECHO);
                     strcpy(verb, "噓");
                     addscore = -1;
                     break;
                 case '3':
-                    getans = vget(b_lines, 0, "留言：", msg, 53, DOECHO);
+                    getans = vget(B_LINES_REF, 0, "留言：", msg, 53, DOECHO);
                     addscore = 0;
                     break;
 
                 case '4':
-                    pushverb = vget(b_lines, 0, "請輸入自訂的正面動詞：", verb, 3, DOECHO);
+                    pushverb = vget(B_LINES_REF, 0, "請輸入自訂的正面動詞：", verb, 3, DOECHO);
                     eof = strlen(verb);
                     if (eof<2)
                     {
                         zmsg("動詞須為一個中文字元或者兩個英文字元");
                         return XO_FOOT;
                     }
-                    getans = vget(b_lines, 0, "推文：", msg, 53, DOECHO);
+                    getans = vget(B_LINES_REF, 0, "推文：", msg, 53, DOECHO);
                     addscore = 1;
                     break;
 
                 case '5':
-                    pushverb = vget(b_lines, 0, "請輸入自訂的負面動詞：", verb, 3, DOECHO);
+                    pushverb = vget(B_LINES_REF, 0, "請輸入自訂的負面動詞：", verb, 3, DOECHO);
                     eof = strlen(verb);
                     if (eof<2)
                     {
                         zmsg("動詞須為一個中文字元或者兩個英文字元");
                         return XO_FOOT;
                     }
-                    getans = vget(b_lines, 0, "噓文：", msg, 53, DOECHO);
+                    getans = vget(B_LINES_REF, 0, "噓文：", msg, 53, DOECHO);
                     addscore = -1;
                     break;
 
@@ -3319,7 +3319,7 @@ post_recommend(
             }
         }
         else
-            getans = vget(b_lines, 0, "推文：", msg, 53, DOECHO);
+            getans = vget(B_LINES_REF, 0, "推文：", msg, 53, DOECHO);
 
         /* 081121.cache: 後悔的機會 */
         if (getans)
@@ -3834,7 +3834,7 @@ post_battr_threshold(
 
             if (echo & GCARRY)
                 sprintf(buf, "%d", th.age);
-            if (!vget(b_lines, 0, "請輸入發文門檻－註冊幾天以上？", buf, 4, echo))
+            if (!vget(B_LINES_REF, 0, "請輸入發文門檻－註冊幾天以上？", buf, 4, echo))
                 return XO_HEAD;
             if ((num = atoi(buf)) < 0)
                 return XO_HEAD;
@@ -3842,7 +3842,7 @@ post_battr_threshold(
 
             if (echo & GCARRY)
                 sprintf(buf, "%d", th.numlogins);
-            if (!vget(b_lines, 0, "請輸入發文門檻－登入幾次以上？", buf, 4, echo))
+            if (!vget(B_LINES_REF, 0, "請輸入發文門檻－登入幾次以上？", buf, 4, echo))
                 return XO_HEAD;
             if ((num = atoi(buf)) < 0)
                 return XO_HEAD;
@@ -3850,7 +3850,7 @@ post_battr_threshold(
 
             if (echo & GCARRY)
                 sprintf(buf, "%d", th.numposts);
-            if (!vget(b_lines, 0, "請輸入發文門檻－發文幾篇以上？", buf, 4, echo))
+            if (!vget(B_LINES_REF, 0, "請輸入發文門檻－發文幾篇以上？", buf, 4, echo))
                 return XO_HEAD;
             if ((num = atoi(buf)) < 0)
                 return XO_HEAD;
@@ -3858,7 +3858,7 @@ post_battr_threshold(
 
             if (echo & GCARRY)
                 sprintf(buf, "%d", th.point2);
-            if (!vget(b_lines, 0, "請輸入發文門檻－劣文幾篇以下？", buf, 4, echo))
+            if (!vget(B_LINES_REF, 0, "請輸入發文門檻－劣文幾篇以下？", buf, 4, echo))
                 return XO_HEAD;
             if ((num = atoi(buf)) < 0)
                 return XO_HEAD;
@@ -4003,7 +4003,7 @@ post_aid(
         return XO_FOOT;
 
     /* 請求使用者輸入文章代碼(AID) */
-    if (!vget(b_lines, 0, "請輸入文章代碼(AID)： #", aid, sizeof(aid), DOECHO))
+    if (!vget(B_LINES_REF, 0, "請輸入文章代碼(AID)： #", aid, sizeof(aid), DOECHO))
         return XO_FOOT;
     query = aid;
 
@@ -4586,11 +4586,11 @@ XoXpost(                        /* Thor: call from post_cb */
     if (!mode)
     {
         key = xypostKeyword;
-        filter_title = vget(b_lines, 0, MSG_XYPOST, key, sizeof(xypostKeyword), GCARRY);
+        filter_title = vget(B_LINES_REF, 0, MSG_XYPOST, key, sizeof(xypostKeyword), GCARRY);
         str_lower(buf, key);
         key = buf;
 
-        if ((filter_author = vget(b_lines, 0, "[串接模式]作者：", author, 30, DOECHO)))
+        if ((filter_author = vget(B_LINES_REF, 0, "[串接模式]作者：", author, 30, DOECHO)))
         {
             filter_author = strlen(author);
             str_lower(author, author);

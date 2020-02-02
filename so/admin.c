@@ -88,7 +88,7 @@ int echo)
 {
     if (echo == DOECHO)
         memset(admin, 0, sizeof(ADMIN));
-    if (vget(b_lines, 0, "超級站務列表：", admin->name, sizeof(admin->name), echo))
+    if (vget(B_LINES_REF, 0, "超級站務列表：", admin->name, sizeof(admin->name), echo))
         return 1;
     else
         return 0;

@@ -353,12 +353,12 @@ gem_add(
     }
     else
     {
-        if (!vget(b_lines, 0, "標題：", title, 64, DOECHO))
+        if (!vget(B_LINES_REF, 0, "標題：", title, 64, DOECHO))
             return XO_FOOT;
 
         if (gtype == 'c' || gtype == 'd')
         {
-            if (!vget(b_lines, 0, "檔名：", fpath, (gtype == 'c') ? IDLEN :IDLEN + 1, DOECHO))
+            if (!vget(B_LINES_REF, 0, "檔名：", fpath, (gtype == 'c') ? IDLEN :IDLEN + 1, DOECHO))
                 return XO_FOOT;
 
             if (strchr(fpath, '/'))
@@ -476,13 +476,13 @@ gem_title(
         return XO_NONE;
 
     xhdr = *ghdr;
-    vget(b_lines, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
+    vget(B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
 
     dir = xo->dir;
     if (HAS_PERM(PERM_ALLBOARD|PERM_GEM))
     {
-        vget(b_lines, 0, "編者：", xhdr.owner, IDLEN + 2, GCARRY);
-        vget(b_lines, 0, "時間：", xhdr.date, 9, GCARRY);
+        vget(B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 2, GCARRY);
+        vget(B_LINES_REF, 0, "時間：", xhdr.date, 9, GCARRY);
     }
 
     if (memcmp(ghdr, &xhdr, sizeof(HDR)) &&
@@ -996,7 +996,7 @@ gem_move(
 
     pos = xo->pos;
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
-    if (!vget(b_lines, 0, buf + 5, buf, 5, DOECHO))
+    if (!vget(B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
 
     newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);
@@ -1162,7 +1162,7 @@ gem_gather(
             return XO_FOOT;
 
         case '1':
-            if (!vget(b_lines, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY))
+            if (!vget(B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY))
                 return XO_FOOT;
             fp = fdopen(hdr_stamp(folder, 'A', &ghdr, fpath), "w");
             strcpy(ghdr.owner, cuser.userid);

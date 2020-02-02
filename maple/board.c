@@ -1337,7 +1337,7 @@ class_search(
     char buf[IDLEN + 1];
 
     ptr = buf;
-    pos = vget(b_lines, 0, MSG_BID, ptr, IDLEN + 1, DOECHO);
+    pos = vget(B_LINES_REF, 0, MSG_BID, ptr, IDLEN + 1, DOECHO);
     move(b_lines, 0);
     clrtoeol();
 
@@ -1515,7 +1515,7 @@ XoAuthor(
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
 
-    if (!vget(b_lines, 0, "請輸入作者：", author, IDLEN + 1, DOECHO))
+    if (!vget(B_LINES_REF, 0, "請輸入作者：", author, IDLEN + 1, DOECHO))
         return XO_FOOT;
 
     str_lower(author, author);
@@ -2026,11 +2026,11 @@ brd_list(
             break;
 #if 1
         case 'g':
-            if ((userno = vget(b_lines, 0, "群組條件：", buf, 16, DOECHO)))
+            if ((userno = vget(B_LINES_REF, 0, "群組條件：", buf, 16, DOECHO)))
                 str_lower(buf, buf);
             // Falls through
         case 'c':
-            if (!userno && vget(b_lines, 0, "分類：", buf, 16, DOECHO))
+            if (!userno && vget(B_LINES_REF, 0, "分類：", buf, 16, DOECHO))
                 str_lower(buf, buf);
             // Falls through
         case 'b':

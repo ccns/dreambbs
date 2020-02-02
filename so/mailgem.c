@@ -197,7 +197,7 @@ XO *xo)
     fd = -1;
     memset(&ghdr, 0, sizeof(HDR));
 
-    if (!vget(b_lines, 0, "標題：", title, 64, DOECHO))
+    if (!vget(B_LINES_REF, 0, "標題：", title, 64, DOECHO))
         return XO_FOOT;
 
     fd = hdr_stamp(dir, gtype, &ghdr, fpath);
@@ -282,7 +282,7 @@ XO *xo)
         return XO_NONE;
 
     xhdr = *ghdr;
-    vget(b_lines, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
+    vget(B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
 
     dir = xo->dir;
 
@@ -646,7 +646,7 @@ XO *xo)
 
     pos = xo->pos;
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
-    if (!vget(b_lines, 0, buf + 5, buf, 5, DOECHO))
+    if (!vget(B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
 
     newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);
@@ -754,7 +754,7 @@ XO *xo)
 
         case '1':
             strcpy(xhdr.title, currtitle);
-            if (!vget(b_lines, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY))
+            if (!vget(B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY))
                 return DL_RELEASE(XO_FOOT);
             fp = fdopen(hdr_stamp(folder, 'A', &ghdr, fpath), "w");
             strcpy(ghdr.owner, cuser.userid);

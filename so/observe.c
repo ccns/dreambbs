@@ -164,7 +164,7 @@ int echo)
         {
             observe->userno = acct.userno;
             strcpy(observe->userid, acct.userid);
-            vget(b_lines, 0, "說明：", observe->title, sizeof(observe->title), echo);
+            vget(B_LINES_REF, 0, "說明：", observe->title, sizeof(observe->title), echo);
             return 1;
         }
         else
@@ -172,7 +172,7 @@ int echo)
     }
     else
     {
-        vget(b_lines, 0, "說明：", observe->title, sizeof(observe->title), echo);
+        vget(B_LINES_REF, 0, "說明：", observe->title, sizeof(observe->title), echo);
         return 1;
     }
 }

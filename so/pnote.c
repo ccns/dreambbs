@@ -133,7 +133,7 @@ do_pnote(const char *userid)
         for (i = 0; (i < 3) &&
             getdata(16 + i, 0, ":", myitem.buf[i], 77, DOECHO, 0); i++);
 
-        getdata(b_lines, 0, "(S)儲存 (E)重新來過 (Q)取消？[S] ", buf, 3, LCECHO, 0);
+        getdata(B_LINES_REF, 0, "(S)儲存 (E)重新來過 (Q)取消？[S] ", buf, 3, LCECHO, 0);
         if ((buf[0] == 'q' || i == 0) && *buf != 'e')
         {
             return;
@@ -300,7 +300,7 @@ p_edithint(void)
 
 
     sprintf(genbuf, "主人留言(最多%d行) (D)刪除 (E)錄製 [Q]取消？[Q]", MAXHINTLINES);
-    getdata(b_lines, 0, genbuf, genbuf, 3, LCECHO, 0);
+    getdata(B_LINES_REF, 0, genbuf, genbuf, 3, LCECHO, 0);
 
     if (genbuf[0] == 'e')
     {
@@ -374,7 +374,7 @@ Pnote(int newflag)
 
         show_pnote(&item_array[offset - 1]);
         sprintf(prompt, "(N/P)往前/後 (A)全部 (R)回電 %s(X)刪除全部 (E)離開:", newflag ? "(S)保留 " : "(D)刪除 ");
-        getdata(b_lines, 0, prompt, ans, 2, DOECHO, 0);
+        getdata(B_LINES_REF, 0, prompt, ans, 2, DOECHO, 0);
 
         if (ans[0] == 'r' || ans[0] == 'R')
         {
@@ -545,7 +545,7 @@ p_read(void)
     char prompt[STRLEN];
 
     sprintf(prompt, "(N)新的留言/(S)被保存的留言 [%c]", check_personal_note(1, NULL) ? 'N' : 'S');
-    getdata(b_lines, 0, prompt, ans, 2, DOECHO, 0);
+    getdata(B_LINES_REF, 0, prompt, ans, 2, DOECHO, 0);
     if (ans[0] == 'n')
         Pnote(1);
     else if (ans[0] == 's')

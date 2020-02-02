@@ -151,7 +151,7 @@ static int banmail_edit(BANMAIL * banmail, int echo)
         change++;
     sprintf(buf, "擋信模式：(作者、標題、時間、路徑、來源、連線砍信)[%s]",
             modes);
-    if (vget(b_lines, 0, buf, modes, 8, GCARRY))
+    if (vget(B_LINES_REF, 0, buf, modes, 8, GCARRY))
     {
         banmail->mode = (modes[0] != '0') ? FW_OWNER : 0;
         banmail->mode |= (modes[1] != '0') ? FW_TITLE : 0;

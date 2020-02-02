@@ -2124,11 +2124,13 @@ vget_match(
 char lastcmd[MAXLASTCMD][80];
 
 
-int vget(int line, int col, const char *prompt, char *data, int max, int echo)
+/* IID.20200202: Use screen size referencing coordinate */
+int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo)
 {
     int ch, len;
-    int x, y;
-    bool dirty, key_done;
+    int line, col;
+    int x, y, x_prompt;
+    bool dirty = false, key_done;
 
     /* Adjust flags */
     if (!(echo & VGET_STRICT_DOECHO))
@@ -2141,16 +2143,18 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
     if ((echo & DOECHO) && (echo & VGET_STEALTH_NOECHO))
         echo ^= VGET_STEALTH_NOECHO;
 
+    max--;
+
+    /* `dirty` == `false` -> initialize and draw */
+    /* `dirty` == `true` -> redraw only */
+vget_redraw:
+    move_ref(y_ref, x_ref);
+
+    getyx(&SINKVAL(int), &x_prompt);
+
+    clrtoeol();
     if (prompt)
-    {
-        move(line, col);
-        clrtoeol();
         outs(prompt);
-    }
-    else
-    {
-        clrtoeol();
-    }
 
     if (!(echo & VGET_STEALTH_NOECHO))
         STANDOUT;
@@ -2159,7 +2163,9 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
 
     if (echo & GCARRY)
     {
-        if ((len = strlen(data)) && (echo & NUMECHO))
+        if (!dirty)
+            len = strlen(data);
+        if (!dirty && len && (echo & NUMECHO))
         {
             /* Remove non-digit characters */
             int col = 0;
@@ -2167,8 +2173,9 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
                 if (isdigit(data[ch]))
                     data[col++] = data[ch];
             data[col] = '\0';
+            len = col;
         }
-        if ((len = strlen(data)) && !(echo & VGET_STEALTH_NOECHO))
+        if (len && !(echo & VGET_STEALTH_NOECHO))
         {
             if (echo & DOECHO)
                 outs(data);
@@ -2182,6 +2189,7 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
     else
     {
         len = 0;
+        echo |= GCARRY;  /* For redrawing */
     }
 
     if (!(echo & VGET_STEALTH_NOECHO))
@@ -2190,15 +2198,21 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
         do
         {
             outc(' ');
-        } while (++ch < max);
+        } while (++ch < max+1);
 
         STANDEND;
+    }
+
+    if (dirty)
+    {
+        if (!(echo & VGET_STEALTH_NOECHO))
+            move(y, x + col);
+        goto vget_redraw_done;
     }
 
     dirty = len > 2;  /* Store default string */
     line = MAXLASTCMD - 1;  /* Obsolete the oldest entry */
     col = len;
-    max--;
 
     for (;;)
     {
@@ -2206,6 +2220,18 @@ int vget(int line, int col, const char *prompt, char *data, int max, int echo)
             move(y, x + col);
 
         ch = vkey();
+        if (gety_ref(y_ref) != y || getx_ref(x_ref) != x_prompt)
+        {
+            /* Screen size changed and redraw is needed */
+            /* clear */
+            move(y, x_prompt);
+            clrtoeol();
+            /* redraw */
+            data[len] = '\0';
+            dirty = true;
+            goto vget_redraw;
+        }
+vget_redraw_done:
 
         /* --------------------------------------------------- */
         /* ¨ú±o board / userid / on-line user                  */
@@ -2547,7 +2573,7 @@ vans(
 {
     char ans[3];
 
-    return vget(b_lines, 0, prompt, ans, sizeof(ans), LCECHO);
+    return vget(B_LINES_REF, 0, prompt, ans, sizeof(ans), LCECHO);
 }
 
 

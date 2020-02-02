@@ -88,8 +88,8 @@ int echo)
 {
     if (echo == DOECHO)
         memset(contact, 0, sizeof(CONTACT));
-    if (vget(b_lines, 0, "¦WºÙ¡G", contact->name, sizeof(contact->name), echo)
-        && vget(b_lines, 0, "e-mail address¡G", contact->email, sizeof(contact->email), echo))
+    if (vget(B_LINES_REF, 0, "¦WºÙ¡G", contact->name, sizeof(contact->name), echo)
+        && vget(B_LINES_REF, 0, "e-mail address¡G", contact->email, sizeof(contact->email), echo))
         return 1;
     else
         return 0;

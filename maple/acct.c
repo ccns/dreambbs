@@ -208,7 +208,7 @@ static int x_edit_file(const void *arg)
     int n;
     char buf[80];
 
-    n = vget(b_lines, 0, "(D)刪除 (E)編輯 (V)瀏覽 [Q]取消？", buf, 3, LCECHO);
+    n = vget(B_LINES_REF, 0, "(D)刪除 (E)編輯 (V)瀏覽 [Q]取消？", buf, 3, LCECHO);
     if (n != 'd' && n != 'e' && n != 'v')
         return 0;
 
@@ -635,7 +635,7 @@ void bm_setup(ACCT * u, int adm)
     {
         char tmp[80], why[80], buf[80] GCC_UNUSED;
         pmsg2("板主異動已加入站長日誌");
-        if (!vget(b_lines, 0, "請輸入異動理由：", why, 40, DOECHO))
+        if (!vget(B_LINES_REF, 0, "請輸入異動理由：", why, 40, DOECHO))
         {
             sprintf(why, "未輸入理由，禁止異動");
             pmsg2("請輸入異動理由");
@@ -1008,7 +1008,7 @@ void acct_setup(ACCT * u, int adm)
             {
                 char tmp[80], why[80];
                 pmsg2("查詢動作已加入站長日誌");
-                if (!vget(b_lines, 0, "請輸入理由：", why, 40, DOECHO))
+                if (!vget(B_LINES_REF, 0, "請輸入理由：", why, 40, DOECHO))
                 {
                     sprintf(why, "未輸入理由，禁止查詢");
                     pmsg2("請輸入查詢理由");
@@ -1036,7 +1036,7 @@ void acct_setup(ACCT * u, int adm)
             {
                 char tmp[80], why[80];
                 pmsg2("查詢動作已加入站長日誌");
-                if (!vget(b_lines, 0, "請輸入查詢理由：", why, 40, DOECHO))
+                if (!vget(B_LINES_REF, 0, "請輸入查詢理由：", why, 40, DOECHO))
                 {
                     sprintf(why, "未輸入理由，禁止查詢");
                     pmsg2("請輸入查詢理由");
@@ -1553,7 +1553,7 @@ int u_addr(void)
     tmp_perm = cuser.userlevel;
     /* lkchu.981201 */
     if (vget
-        (b_lines - 1, 0, "E-Mail 地址：", addr, sizeof(cuser.email), DOECHO))
+        (B_LINES_REF - 1, 0, "E-Mail 地址：", addr, sizeof(cuser.email), DOECHO))
     {
 #ifndef HAVE_SIMPLE_RFORM
         vtime = REG_REQUEST;
@@ -1597,7 +1597,7 @@ int u_addr(void)
         }
 
         /* pcbug.990522: pop3認證. */
-        vget(b_lines - 2, 0, "是否使用 POP3 認證?[Y]", buf, 2, LCECHO);
+        vget(B_LINES_REF - 2, 0, "是否使用 POP3 認證?[Y]", buf, 2, LCECHO);
 
         if (buf[0] != 'n' && buf[0] != 'N')
         {
@@ -1934,7 +1934,7 @@ int u_lock(void)
     };
 
     strcpy(swapmateid, cutmp->mateid);
-    vget(b_lines - 1, 0,
+    vget(B_LINES_REF - 1, 0,
          "理由:[0]發呆 (1)接電話 (2)覓食 (3)打瞌睡 (4)裝死 (5)哭哭 (6)其他 (Q)沒事:",
          buf, 2, DOECHO);
 
@@ -1944,7 +1944,7 @@ int u_lock(void)
     }
     else if (buf[0] == '6')
     {
-        vget(b_lines - 1, 0, "發呆的理由:", cutmp->mateid, IDLEN, DOECHO);
+        vget(B_LINES_REF - 1, 0, "發呆的理由:", cutmp->mateid, IDLEN, DOECHO);
     }
     else if (buf[0] == 'q' || buf[0] == 'Q')
     {
@@ -1960,7 +1960,7 @@ int u_lock(void)
 
     buf[0] = 'n';
     if (cuser.userlevel)
-        vget(b_lines - 1, 0, "是否要進入螢幕鎖定狀態(y/N)?[N]", buf, 2,
+        vget(B_LINES_REF - 1, 0, "是否要進入螢幕鎖定狀態(y/N)?[N]", buf, 2,
              DOECHO);
 
     clear();
@@ -2066,7 +2066,7 @@ static int m_setbrd(BRD * brd)
     {
         char tmp[80], why[80];
         pmsg2("修改動作已加入站長日誌");
-        if (!vget(b_lines, 0, "請輸入修改理由：", why, 40, DOECHO))
+        if (!vget(B_LINES_REF, 0, "請輸入修改理由：", why, 40, DOECHO))
         {
             sprintf(why, "未輸入理由，禁止修改");
             pmsg2("請輸入修改理由");
@@ -2427,7 +2427,7 @@ static void send_request(void)
 
     strcpy(form.userid, cuser.userid);
     form.userno = cuser.userno;
-    if (!vget(b_lines, 0, "請輸入原因 :", form.msg, 80, DOECHO))
+    if (!vget(B_LINES_REF, 0, "請輸入原因 :", form.msg, 80, DOECHO))
     {
         vmsg("送交失敗");
         return;
@@ -2658,7 +2658,7 @@ static int scan_register_form(int fd)
                 prints("%d) 請%s\n", n, str);
             clrtobot();
 
-            if ((op = vget(b_lines, 0, "退回原因：", buf, 60, DOECHO)))
+            if ((op = vget(B_LINES_REF, 0, "退回原因：", buf, 60, DOECHO)))
             {
                 int i;
                 char folder[80], fpath[80], boardbuf[IDLEN + 1];
@@ -2763,7 +2763,7 @@ static int ans_request(void)
                 prints("請提出退回申請表原因，按 <enter> 取消\n\n");
                 clrtobot();
 
-                if ((op = vget(b_lines, 0, "退回原因：", buf, 60, DOECHO)))
+                if ((op = vget(B_LINES_REF, 0, "退回原因：", buf, 60, DOECHO)))
                 {
                     char folder[80], fpath[80], boardbuf[IDLEN + 1];
                     HDR fhdr;
@@ -3061,7 +3061,7 @@ int u_verify(void)
     }
     fclose(fp);
 
-    if (vget(b_lines, 0, "請輸入認證碼：", inbuf, 8, DOECHO))
+    if (vget(B_LINES_REF, 0, "請輸入認證碼：", inbuf, 8, DOECHO))
     {
         if (strncmp(key, inbuf, 7))
         {

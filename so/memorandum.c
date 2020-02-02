@@ -152,9 +152,9 @@ int echo)
 {
     if (echo == DOECHO)
         memset(memorandum, 0, sizeof(MEMORANDUM));
-    if (vget(b_lines, 0, "日期：", memorandum->date, sizeof(memorandum->date), echo)
-        && vget(b_lines, 0, "時間:", memorandum->time, sizeof(memorandum->time), echo)
-        && vget(b_lines, 0, "工作或行程:", memorandum->work, sizeof(memorandum->work), echo))
+    if (vget(B_LINES_REF, 0, "日期：", memorandum->date, sizeof(memorandum->date), echo)
+        && vget(B_LINES_REF, 0, "時間:", memorandum->time, sizeof(memorandum->time), echo)
+        && vget(B_LINES_REF, 0, "工作或行程:", memorandum->work, sizeof(memorandum->work), echo))
         return 1;
     else
         return 0;

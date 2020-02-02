@@ -645,7 +645,7 @@ re_key:
             {
                 shift = HUNT_MASK | HUNT_NEXT;
             }
-            else if (vget(b_lines, 0, "·j´M¡G", hunt, sizeof(hunt), DOECHO))
+            else if (vget(B_LINES_REF, 0, "·j´M¡G", hunt, sizeof(hunt), DOECHO))
             {
                 str_lowest(hunt, hunt);
                 shift = HUNT_MASK | HUNT_START;

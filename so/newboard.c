@@ -241,7 +241,7 @@ XO *xo)
     if (mode == 1)
     {
         more(FN_NEWBOARD_HELP, NULL);
-        if (!vget(b_lines, 0, "", buf, sizeof(nbrd.brdname), DOECHO))
+        if (!vget(B_LINES_REF, 0, "", buf, sizeof(nbrd.brdname), DOECHO))
             return XO_INIT;
         if (brd_bno(buf) >= 0)
         {
@@ -253,12 +253,12 @@ XO *xo)
             vmsg("タ硈竝い");
             return XO_FOOT;
         }
-        if (!vget(b_lines, 0, "狾肈", buf1, sizeof(nbrd.title), DOECHO))
+        if (!vget(B_LINES_REF, 0, "狾肈", buf1, sizeof(nbrd.title), DOECHO))
             return XO_FOOT;
     }
     else if (mode == 2)
     {
-        if (!vget(b_lines, 0, "", buf, sizeof(nbrd.brdname), DOECHO))
+        if (!vget(B_LINES_REF, 0, "", buf, sizeof(nbrd.brdname), DOECHO))
             return XO_INIT;
         if (brd_bno(buf) < 0)
         {
@@ -274,14 +274,14 @@ XO *xo)
     }
     else if (mode == 3)
     {
-        if (!vget(b_lines, 0, "硈竝肈", buf1, sizeof(nbrd.title), DOECHO))
+        if (!vget(B_LINES_REF, 0, "硈竝肈", buf1, sizeof(nbrd.title), DOECHO))
             return XO_FOOT;
-        if (!vget(b_lines, 0, "硈竝ぱ计", tmp, 5, DOECHO))
+        if (!vget(B_LINES_REF, 0, "硈竝ぱ计", tmp, 5, DOECHO))
             return XO_FOOT;
         days = atoi(tmp);
         if (days > 30 || days < 1)
             return XO_FOOT;
-        if (!vget(b_lines, 0, "硈竝计", tmp, 6, DOECHO))
+        if (!vget(B_LINES_REF, 0, "硈竝计", tmp, 6, DOECHO))
             return XO_FOOT;
         numbers = atoi(tmp);
         if (numbers > 500 || numbers < 1)
@@ -621,7 +621,7 @@ XO *xo)
                 fprintf(fds, "%s", buf);
             }
             fprintf(fds, "%3u -> %-12s: %s\n", rmode == 1 ? nbrd->agree : nbrd->assist, cuser.userid, cuser.email);
-            if (vget(b_lines, 0, "иΤ杠璶弧", say, 65, DOECHO))
+            if (vget(B_LINES_REF, 0, "иΤ杠璶弧", say, 65, DOECHO))
                 fprintf(fds, "    %s : %s\n", cuser.userid, say);
 
             fprintf(fds, "%s", buf);

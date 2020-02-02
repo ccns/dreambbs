@@ -313,9 +313,9 @@ XO *xo)
     }
 
 
-    if (!vget(b_lines, 0, "點歌給誰：", idwho, sizeof(idwho), DOECHO))
+    if (!vget(B_LINES_REF, 0, "點歌給誰：", idwho, sizeof(idwho), DOECHO))
         strcpy(idwho, "大家");
-    if (!vget(b_lines, 0, "想說的話：", want_say, sizeof(want_say), DOECHO))
+    if (!vget(B_LINES_REF, 0, "想說的話：", want_say, sizeof(want_say), DOECHO))
         strcpy(want_say, ".........");
 
     if (vans("要匿名嗎 [y/N]：") == 'y')
@@ -451,7 +451,7 @@ XO *xo)
     sprintf(tmp, "%s 點歌給 %s", cuser.userid, acct.userid);
     log_song(tmp);
 
-    if (!vget(b_lines, 0, "想說的話：", want_say, sizeof(want_say), DOECHO))
+    if (!vget(B_LINES_REF, 0, "想說的話：", want_say, sizeof(want_say), DOECHO))
         strcpy(want_say, ".........");
 
     fp = fopen(fpath, "r+");
@@ -523,13 +523,13 @@ XO *xo)
         return XO_NONE;
 
     xhdr = *ghdr;
-    vget(b_lines, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
+    vget(B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
 
     dir = xo->dir;
     if (HAS_PERM(PERM_SYSOP | PERM_KTV))
     {
-        vget(b_lines, 0, "編者：", xhdr.owner, IDLEN + 2, GCARRY);
-        vget(b_lines, 0, "時間：", xhdr.date, 9, GCARRY);
+        vget(B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 2, GCARRY);
+        vget(B_LINES_REF, 0, "時間：", xhdr.date, 9, GCARRY);
     }
 
     if (memcmp(ghdr, &xhdr, sizeof(HDR)) &&
@@ -647,7 +647,7 @@ AddRequestTimes(void)
     char buf[128];
     int n, times;
 
-    if (!vget(b_lines, 0, "請選擇：1)增加單人 2)條件增加 0)取消 [0]", buf, 3, DOECHO))
+    if (!vget(B_LINES_REF, 0, "請選擇：1)增加單人 2)條件增加 0)取消 [0]", buf, 3, DOECHO))
         return DL_RELEASE(0);
     if (*buf == '1')
     {
@@ -667,7 +667,7 @@ AddRequestTimes(void)
     {
         n = 0;
         n = bitset(n, NUMPERMS, NUMPERMS, MSG_USERPERM, perm_tbl);
-        if (!vget(b_lines, 0, "加幾次：", buf, 5, DOECHO))
+        if (!vget(B_LINES_REF, 0, "加幾次：", buf, 5, DOECHO))
             return DL_RELEASE(0);
         times = atoi(buf);
         sprintf(buf, BINARY_SUFFIX"addsong %d %d &", n, times);

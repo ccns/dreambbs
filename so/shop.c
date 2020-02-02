@@ -170,7 +170,7 @@ int shop_main(void)
         "            (3) 購買隱藏故鄉     (需要夢幣  4194304 元/次)\n\n"
         "            (4) 購買站長權限\x1b[1;31m HOT\x1b[m (需要夢幣 10000000 元)\n");
 
-    if (!vget(b_lines, 0, "請選擇您要的服務： [Q] 離開 ", buf, 2, DOECHO))
+    if (!vget(B_LINES_REF, 0, "請選擇您要的服務： [Q] 離開 ", buf, 2, DOECHO))
         return DL_RELEASE(0);
 
     if (*buf == '1')

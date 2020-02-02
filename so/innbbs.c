@@ -69,8 +69,8 @@ nl_add(
     else
         memset(&nl, 0, sizeof(nodelist_t));
 
-    if (vget(b_lines, 0, "英文站名：", nl.name, sizeof(nl.name), GCARRY) &&
-        vget(b_lines, 0, "站址：", nl.host, /* sizeof(nl.host) */ 70, GCARRY))
+    if (vget(B_LINES_REF, 0, "英文站名：", nl.name, sizeof(nl.name), GCARRY) &&
+        vget(B_LINES_REF, 0, "站址：", nl.host, /* sizeof(nl.host) */ 70, GCARRY))
     {
         msg1[24] = (nl.xmode & INN_USEPOST) ? '2' : '1';        /* 新增資料預設 INN_HAVE */
         ch = vans(msg1);
@@ -80,14 +80,14 @@ nl_add(
         if (ch == '1')
         {
             nl.xmode = INN_USEIHAVE | INN_FEEDED;       /* IHAVE 一定是被餵信 */
-            vget(b_lines, 0, "Port：[7777] ", ans, 6, DOECHO);
+            vget(B_LINES_REF, 0, "Port：[7777] ", ans, 6, DOECHO);
             if ((port = atoi(ans)) <= 0)
                 port = 7777;
         }
         else /* if (ch == '2') */
         {
             nl.xmode = INN_USEPOST;
-            vget(b_lines, 0, "Port：[119] ", ans, 6, DOECHO);
+            vget(B_LINES_REF, 0, "Port：[119] ", ans, 6, DOECHO);
             if ((port = atoi(ans)) <= 0)
                 port = 119;
 
@@ -244,17 +244,17 @@ nf_add(
     }
 
     if ((brd = ask_board(nf.board, BRD_R_BIT, NULL)) &&
-        vget(b_lines, 0, "英文站名：", nf.path, sizeof(nf.path), GCARRY) &&
-        vget(b_lines, 0, "群組：", nf.newsgroup, /*  sizeof(nf.newsgroup) */ 70, GCARRY))
+        vget(B_LINES_REF, 0, "英文站名：", nf.path, sizeof(nf.path), GCARRY) &&
+        vget(B_LINES_REF, 0, "群組：", nf.newsgroup, /*  sizeof(nf.newsgroup) */ 70, GCARRY))
     {
-        if (!vget(b_lines, 0, "字集 [big5]：", nf.charset, sizeof(nf.charset), GCARRY))
+        if (!vget(B_LINES_REF, 0, "字集 [big5]：", nf.charset, sizeof(nf.charset), GCARRY))
             str_ncpy(nf.charset, "big5", sizeof(nf.charset));
         nf.xmode = (vans("是否轉進(Y/n)？[Y] ") == 'n') ? INN_NOINCOME : 0;
 
         if (vans("是否更改轉信的 high-number 設定，這設定對被餵信的群組無效(y/N)？[N] ") == 'y')
         {
             sprintf(ans, "%d", nf.high);
-            vget(b_lines, 0, "目前篇數：", ans, 11, GCARRY);
+            vget(B_LINES_REF, 0, "目前篇數：", ans, 11, GCARRY);
             if ((high = atoi(ans)) >= 0)
                 nf.high = high;
         }
@@ -341,8 +341,8 @@ ncm_add(
     else
         memset(&ncm, 0, sizeof(ncmperm_t));
 
-    if (vget(b_lines, 0, "發行：", ncm.issuer, /* sizeof(ncm.issuer) */ 70, GCARRY) &&
-        vget(b_lines, 0, "種類：", ncm.type, sizeof(ncm.type), GCARRY))
+    if (vget(B_LINES_REF, 0, "發行：", ncm.issuer, /* sizeof(ncm.issuer) */ 70, GCARRY) &&
+        vget(B_LINES_REF, 0, "種類：", ncm.type, sizeof(ncm.type), GCARRY))
     {
         ncm.perm = (vans("允許\此 NCM message 砍信(y/N)？[N] ") == 'y');
 
@@ -452,7 +452,7 @@ spam_add(
     else
         memset(&spam, 0, sizeof(spamrule_t));
 
-    vget(b_lines, 0, "英文站名：", spam.path, sizeof(spam.path), GCARRY);
+    vget(B_LINES_REF, 0, "英文站名：", spam.path, sizeof(spam.path), GCARRY);
     ask_board(spam.board, BRD_W_BIT, NULL);
 
     switch (vans("擋信規則 1)作者 2)暱稱 3)標題 4)路徑 5)MSGID 6)本文 7)組織 8)來源 [Q] "))
@@ -485,7 +485,7 @@ spam_add(
         return 0;
     }
 
-    if (vget(b_lines, 0, "包含：", spam.detail, /* sizeof(spam.detail) */ 70, GCARRY))
+    if (vget(B_LINES_REF, 0, "包含：", spam.detail, /* sizeof(spam.detail) */ 70, GCARRY))
     {
         if (old)
             rec_put(fpath, &spam, sizeof(spamrule_t), pos);
@@ -656,7 +656,7 @@ innbbs_search(
     char buf[40];
     int i, num = xo->max;
 
-    if (vget(b_lines, 0, "關鍵字：", buf, sizeof(buf), DOECHO))
+    if (vget(B_LINES_REF, 0, "關鍵字：", buf, sizeof(buf), DOECHO))
     {
         str_lower(buf, buf);
         for (i = xo->pos + 1; i <= num; i++)
