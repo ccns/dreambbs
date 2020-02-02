@@ -276,7 +276,7 @@ static int
 vlist_student(
 const char *path)
 {
-    VCHS stud[MAX_BOOKS], tmp;
+    VCHS stud[MAX_BOOKS];
     int item, i, fd;
     char buf[80];
 
@@ -291,27 +291,29 @@ const char *path)
         item = 0;
         for (;;)
         {
-            stud[item].inst[0] = '\0';
-            stud[item].level[0] = '\0';
-            stud[item].admis[0] = '\0';
-            stud[item].first[0] = '\0';
-            stud[item].last[0] = '\0';
+            VCHS *const tmp = &stud[item];
+
+            tmp->inst[0] = '\0';
+            tmp->level[0] = '\0';
+            tmp->admis[0] = '\0';
+            tmp->first[0] = '\0';
+            tmp->last[0] = '\0';
 
             sprintf(buf, "%2d%s", item, ")院系：");
-            if (vget(item + 3, 0, buf, stud[item].inst, sizeof(tmp.inst), GCARRY))
+            if (vget(item + 3, 0, buf, tmp->inst, sizeof(tmp->inst), GCARRY))
             {
-                while ( strcmp("*", stud[item].inst)&&strcasecmp("AN", stud[item].inst)&&!(isalpha(stud[item].inst[0])&&isdigit(stud[item].inst[1])) )
+                while ( strcmp("*", tmp->inst)&&strcasecmp("AN", tmp->inst)&&!(isalpha(tmp->inst[0])&&isdigit(tmp->inst[1])) )
                 {
                     vmsg("學號格式錯誤！");
-                    vget(item + 3, 0, buf, stud[item].inst, sizeof(tmp.inst), GCARRY);
+                    vget(item + 3, 0, buf, tmp->inst, sizeof(tmp->inst), GCARRY);
                 }
 
                 sprintf(buf, "%s", "部：");
                 for (;;)
                 {
-                    if (!vget(item + 3, 13, buf, stud[item].level, sizeof(tmp.level), GCARRY))
-                        strcpy(stud[item].level, "*");
-                    if (strcmp("*", stud[item].level)&&(!isdigit(stud[item].level[0])||(stud[item].level[0]!='4'&&stud[item].level[0]!='6'&&stud[item].level[0]!='7'&&stud[item].level[0]!='8')))
+                    if (!vget(item + 3, 13, buf, tmp->level, sizeof(tmp->level), GCARRY))
+                        strcpy(tmp->level, "*");
+                    if (strcmp("*", tmp->level)&&(!isdigit(tmp->level[0])||(tmp->level[0]!='4'&&tmp->level[0]!='6'&&tmp->level[0]!='7'&&tmp->level[0]!='8')))
                         vmsg("學號格式錯誤！");
                     else
                         break;
@@ -320,9 +322,9 @@ const char *path)
                 sprintf(buf, "%s", "入學年度：");
                 for (;;)
                 {
-                    if (!vget(item + 3, 20, buf, stud[item].admis, sizeof(tmp.admis), GCARRY))
-                        strcpy(stud[item].admis, "*");
-                    if (strcmp("*", stud[item].admis)&&!(isdigit(stud[item].admis[0])&&isdigit(stud[item].admis[1])))
+                    if (!vget(item + 3, 20, buf, tmp->admis, sizeof(tmp->admis), GCARRY))
+                        strcpy(tmp->admis, "*");
+                    if (strcmp("*", tmp->admis)&&!(isdigit(tmp->admis[0])&&isdigit(tmp->admis[1])))
                         vmsg("學號格式錯誤！");
                     else
                         break;
@@ -331,9 +333,9 @@ const char *path)
                 sprintf(buf, "%s", "範圍：");
                 for (;;)
                 {
-                    if (!vget(item + 3, 34, buf, stud[item].first, sizeof(tmp.first), GCARRY))
-                        strcpy(stud[item].first, "0001");
-                    if (!(isdigit(stud[item].first[0])&&isdigit(stud[item].first[1])&&isdigit(stud[item].first[2])&&isdigit(stud[item].first[3])))
+                    if (!vget(item + 3, 34, buf, tmp->first, sizeof(tmp->first), GCARRY))
+                        strcpy(tmp->first, "0001");
+                    if (!(isdigit(tmp->first[0])&&isdigit(tmp->first[1])&&isdigit(tmp->first[2])&&isdigit(tmp->first[3])))
                         vmsg("學號格式錯誤！");
                     else
                         break;
@@ -342,34 +344,34 @@ const char *path)
                 sprintf(buf, "%s", "  ->  ");
                 for (;;)
                 {
-                    if (!vget(item + 3, 44, buf, stud[item].last, sizeof(tmp.last), GCARRY))
-                        strcpy(stud[item].last, stud[item].first);
-                    if (!(isdigit(stud[item].last[0])&&isdigit(stud[item].last[1])&&isdigit(stud[item].last[2])&&isdigit(stud[item].last[3])))
+                    if (!vget(item + 3, 44, buf, tmp->last, sizeof(tmp->last), GCARRY))
+                        strcpy(tmp->last, tmp->first);
+                    if (!(isdigit(tmp->last[0])&&isdigit(tmp->last[1])&&isdigit(tmp->last[2])&&isdigit(tmp->last[3])))
                         vmsg("學號格式錯誤！");
                     else
                         break;
                 }
 
-                stud[item].end = '\n';
+                tmp->end = '\n';
             }
             /*
-            stud[item].grad[0] = '\0';
-            stud[item].major[0] = '\0';
-            stud[item].first[0] = '\0';
-            stud[item].last[0] = '\0';
+            tmp->grad[0] = '\0';
+            tmp->major[0] = '\0';
+            tmp->first[0] = '\0';
+            tmp->last[0] = '\0';
             sprintf(buf, "%2d%s", item, ")學年度：");
-            if (vget(item + 3, 0, buf, stud[item].grad, sizeof(tmp.grad), GCARRY))
+            if (vget(item + 3, 0, buf, tmp->grad, sizeof(tmp->grad), GCARRY))
             {
                 sprintf(buf, "%s", "系級：");
-                if (!vget(item + 3, 15, buf, stud[item].major, sizeof(tmp.major), GCARRY))
-                    strcpy(stud[item].major, "*");
+                if (!vget(item + 3, 15, buf, tmp->major, sizeof(tmp->major), GCARRY))
+                    strcpy(tmp->major, "*");
                 sprintf(buf, "%s", "範圍：");
-                if (!vget(item + 3, 24, buf, stud[item].first, sizeof(tmp.first), GCARRY))
-                    strcpy(stud[item].first, "001");
+                if (!vget(item + 3, 24, buf, tmp->first, sizeof(tmp->first), GCARRY))
+                    strcpy(tmp->first, "001");
                 sprintf(buf, "%s", "  ->  ");
-                if (!vget(item + 3, 33, buf, stud[item].last, sizeof(tmp.last), GCARRY))
-                    strcpy(stud[item].last, stud[item].first);
-                stud[item].end = '\n';
+                if (!vget(item + 3, 33, buf, tmp->last, sizeof(tmp->last), GCARRY))
+                    strcpy(tmp->last, tmp->first);
+                tmp->end = '\n';
             }
             */
             else
