@@ -215,8 +215,7 @@ XO *xo)
 
         if (str_str(list.userid, buf))
         {
-            xo->pos = cur;
-            return XO_INIT;
+            return XR_FOOT + XO_MOVE + cur;
 
         }
     }

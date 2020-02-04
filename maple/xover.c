@@ -1474,8 +1474,8 @@ xo_jump(                        /* 移動游標到 number 所在的特定位置 */
     clrtoeol();
     pos = atoi(buf);
     if (pos >= 0)
-        return XO_MOVE + pos - 1;
-    return XO_NONE;
+        return XR_FOOT + XO_MOVE + pos - 1;
+    return XO_FOOT;
 }
 
 

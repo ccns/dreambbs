@@ -781,7 +781,7 @@ pal_search(
                 move(b_lines, 0);
                 clrtoeol();
                 free(fimage);
-                return XO_MOVE + pos;
+                return XR_FOOT + XO_MOVE + pos;
             }
 
         } while (pos != num);
@@ -3462,7 +3462,7 @@ ulist_search(
             {
                 move(b_lines, 0);
                 clrtoeol();
-                return XO_MOVE + pos;
+                return XR_FOOT + XO_MOVE + pos;
             }
 
         } while (pos != num);
