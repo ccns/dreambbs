@@ -238,5 +238,5 @@ Macro             | 值                        | 功能                         
 `XZ_<zone>`       | `(XO_ZONE + <zone>)`      | 切換到某個 zone                        |
 `XZ_INDEX_<zone>` | `<zone>`                  | Zone 的 index 值                      | DreamBBS v3 新增
 `XZ_BACK`         | - `0x100` <br> - `0x04000000` (DreamBBS v3) | - (未使用) <br> - 加在 `XZ_ZONE` 上，表示回到上次進入的 zone (DreamBBS v3)    |
-`XZ_INDEX_MAX`    | `XZ_INDEX_MYFAVORITE`     | 切換到最後一個 zone                    | DreamBBS v3 新增
+`XZ_INDEX_MAX`    | `XZ_INDEX_MYFAVORITE`     | 最後一個 zone 的 index 值              | DreamBBS v3 新增
 `XZ_COUNT`        | `(XZ_INDEX_MAX + 1)`      | Xover zone 的數量                     | DreamBBS v3 新增
