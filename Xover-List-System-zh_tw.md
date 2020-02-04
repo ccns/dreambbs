@@ -224,17 +224,19 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
 - 使用與游標移動相同的方法切換 zone
 
 ## MapleBBS 3 與 DreamBBS v3 的 Xover 特殊值
-Macro         | 值                        | 功能                                  | 註解
- :---         | ---                       | ---                                   | ---
-`XO_MODE`     | `0x10000000`              | 表示畫面重繪、資料載入、離開列表等操作  | DreamBBS v3 中已移除
-`XO_NONE`     | - `0x10000000` <br> - `0x00004000` (DreamBBS v3)      | - 什麼都不作 <br> - 最小的被當作指令的 Xover key value |
-`XO_MOVE`     | - `0x20000000` <br> - `0x00100000` (DreamBBS v3)      | - 表示游標移動 <br> - 游標移動的 bias (DreamBBS v3)
-`XO_RSIZ`     | `256`                     | 列表資料的資料結構大小限制              | DreamBBS v3 起不使用
-`XO_TALL`     | `(b_lines - 3)`           | 翻頁所跳行數                           | 非常數
-`XO_MOVE_MAX` | `(XO_POS_MASK - XO_MOVE)` | 可加在 `XO_MOVE` 上的最大值            | DreamBBS v3 新增
-`XO_MOVE_MIN` | `(XO_NONE + 1 - XO_MOVE)` | 可加在 `XO_MOVE` 上的最小值            | DreamBBS v3 新增
-`XO_TAIL`     | - `(XO_MOVE - 999)` <br> - `(XO_WRAP - 1)` (DreamBBS v3)  | - 用來將游標 `XO::pos` 初始化到列表尾項 <br> - 用在 `XO_MOVE + XO_TAIL` 中，將游標移到列表尾項 (DreamBBS v3 增加支援) | 注意是 `TAIL`，與 `XO_TALL` 不同
-`XO_ZONE`     | `0x40000000`              | - 表示列表切換 <br> - 將操作解讀為列表切換 (DreamBBS v3) |
-`XZ_BACK`     | - `0x100` <br> - `0x04000000` (DreamBBS v3) | - (未使用) <br> - 加在 `XZ_ZONE` 上，表示回到上次進入的 zone (DreamBBS v3) |
-`XZ_MAX`      | `XZ_MYFAVORITE`           | 切換到最後一個 zone                    | DreamBBS v3 新增
-`XZ_COUNT`    | `(XZ_MAX - XO_ZONE + 1)`  | Xover zone 的數量                     | DreamBBS v3 新增
+Macro             | 值                        | 功能                                  | 註解
+ :---             | ---                       | ---                                   | ---
+`XO_MODE`         | `0x10000000`              | 表示畫面重繪、資料載入、離開列表等操作  | DreamBBS v3 中已移除
+`XO_NONE`         | - `0x10000000` <br> - `0x00004000` (DreamBBS v3)      | - 什麼都不作 <br> - 最小的被當作指令的 Xover key value |
+`XO_MOVE`         | - `0x20000000` <br> - `0x00100000` (DreamBBS v3)      | - 表示游標移動 <br> - 游標移動的 bias (DreamBBS v3)
+`XO_RSIZ`         | `256`                     | 列表資料的資料結構大小限制              | DreamBBS v3 起不使用
+`XO_TALL`         | `(b_lines - 3)`           | 翻頁所跳行數                           | 非常數
+`XO_MOVE_MAX`     | `(XO_POS_MASK - XO_MOVE)` | 可加在 `XO_MOVE` 上的最大值            | DreamBBS v3 新增
+`XO_MOVE_MIN`     | `(XO_NONE + 1 - XO_MOVE)` | 可加在 `XO_MOVE` 上的最小值            | DreamBBS v3 新增
+`XO_TAIL`         | - `(XO_MOVE - 999)` <br> - `(XO_WRAP - 1)` (DreamBBS v3)  | - 用來將游標 `XO::pos` 初始化到列表尾項 <br> - 用在 `XO_MOVE + XO_TAIL` 中，將游標移到列表尾項 (DreamBBS v3 增加支援) | 注意是 `TAIL`，與 `XO_TALL` 不同
+`XO_ZONE`         | `0x40000000`              | - 表示列表切換 <br> - 將操作解讀為列表切換 (DreamBBS v3) |
+`XZ_<zone>`       | `(XO_ZONE + <zone>)`      | 切換到某個 zone                        |
+`XZ_INDEX_<zone>` | `<zone>`                  | Zone 的 index 值                      | DreamBBS v3 新增
+`XZ_BACK`         | - `0x100` <br> - `0x04000000` (DreamBBS v3) | - (未使用) <br> - 加在 `XZ_ZONE` 上，表示回到上次進入的 zone (DreamBBS v3)    |
+`XZ_INDEX_MAX`    | `XZ_INDEX_MYFAVORITE`     | 切換到最後一個 zone                    | DreamBBS v3 新增
+`XZ_COUNT`        | `(XZ_INDEX_MAX + 1)`      | Xover zone 的數量                     | DreamBBS v3 新增
