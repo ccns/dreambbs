@@ -8,7 +8,7 @@
 
 #include "bbs.h"
 
-static int do_menu(MENU pmenu[], XO *xo, int y, int x);
+static int do_menu(MENU pmenu[], XO *xo, int y_ref, int x_ref);
 
 /* ----------------------------------------- */
 /* verit 判斷字串的第 pos 各字元是那一種情況 */
@@ -320,13 +320,15 @@ draw_menu(const MENU *const pmenu[20], int num, const char *title, int y, int x,
     return 0;
 }
 
+/* IID.20200204: Use screen size referencing coordinate */
 static int
 do_menu(
     MENU pmenu[],
     XO *xo,
-    int y,
-    int x)
+    int y_ref,
+    int x_ref)
 {
+    int y, x;
     int cur, old_cur, num, tmp;
     int c;
     MENU *table[20];
@@ -371,11 +373,27 @@ do_menu(
 
 
     scr_dump(&old_screen);
+
+    y = gety_ref(y_ref);
+    x = getx_ref(x_ref);
+
     draw_menu((const MENU *const *)table, num+1, title, y, x, cur);
 
     while (1)  /* verit . user 選擇 */
     {
         c = vkey();
+        if (gety_ref(y_ref) != y || getx_ref(x_ref) != x)
+        {
+            /* Screen size changed and redraw is needed */
+            /* clear */
+            scr_restore_keep(&old_screen);
+            /* update position */
+            y = gety_ref(y_ref);
+            x = getx_ref(x_ref);
+            /* redraw */
+            draw_menu((const MENU *const *)table, num+1, title, y, x, cur);
+        }
+
         old_cur = cur;
         switch (c)
         {
@@ -490,9 +508,11 @@ draw_menu_des(const char *const desc[], const char *title, int y, int x, int cur
 /*              第二個字元代表按下 KEY_LEFT 的預設回傳值        */
 /*         desc 最後一個必須為 NULL                             */
 /*------------------------------------------------------------- */
+/* IID.20200204: Use screen size referencing coordinate */
 int
-popupmenu_ans(const char *const desc[], const char *title, int y, int x)
+popupmenu_ans(const char *const desc[], const char *title, int y_ref, int x_ref)
 {
+    int y, x;
     int cur, old_cur, num, tmp;
     int c;
     char t[64];
@@ -501,6 +521,9 @@ popupmenu_ans(const char *const desc[], const char *title, int y, int x)
 
     scr_dump(&old_screen);
     hotkey = desc[0][0];
+
+    y = gety_ref(y_ref);
+    x = getx_ref(x_ref);
 
     sprintf(t, "【%s】", title);
     num = draw_menu_des(desc, t, y, x, 0);
@@ -515,6 +538,19 @@ popupmenu_ans(const char *const desc[], const char *title, int y, int x)
     while (1)
     {
         c = vkey();
+        if (gety_ref(y_ref) != y || getx_ref(x_ref) != x)
+        {
+            /* Screen size changed and redraw is needed */
+            /* clear */
+            scr_restore_keep(&old_screen);
+            /* update position */
+            y = gety_ref(y_ref);
+            x = getx_ref(x_ref);
+            /* redraw */
+            num = draw_menu_des(desc, t, y, x, 0);
+            draw_ans_item(desc[cur+1], 1, y+cur, x, hotkey);
+        }
+
         old_cur = cur;
         switch (c)
         {
@@ -560,9 +596,9 @@ popupmenu_ans(const char *const desc[], const char *title, int y, int x)
 }
 
 void
-popupmenu(MENU pmenu[], XO *xo, int y, int x)
+popupmenu(MENU pmenu[], XO *xo, int y_ref, int x_ref)
 {
-    do_menu(pmenu, xo, y, x);
+    do_menu(pmenu, xo, y_ref, x_ref);
 }
 
 static void pcopy(char *buf, const char *patten, int len)

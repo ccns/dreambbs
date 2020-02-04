@@ -2227,7 +2227,7 @@ every_Z(void)
     if (cuser.ufo2 & UFO2_ORIGUI)
         every_Z_Orig();
     else
-        popupmenu(menu_everyz, NULL, b_lines/2U - 4, d_cols/2U + 20);
+        popupmenu(menu_everyz, NULL, B_LINES_REF/2U - 4, D_COLS_REF/2U + 20);
 
     memcpy(&(xz[XZ_OTHER - XO_ZONE]), &xy, sizeof(XZ));
 
