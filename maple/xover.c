@@ -1153,7 +1153,7 @@ xo_thread(
     HDR *pool;
     const HDR *fhdr;
 
-    match = XO_NONE;
+    match = 0;
     pos = xo->pos;
     top = xo->top;
     pool = (HDR *) xo_pool;
@@ -1193,6 +1193,7 @@ xo_thread(
         /* Thor.980909: 詢問 "首篇未讀" 或 "末篇已讀" */
         if (!vget(b_lines, 0, "向前找尋 0)首篇未讀 1)末篇已讀 ", s_unread, sizeof(s_unread), GCARRY))
             return XO_FOOT; /* Thor.980911: 找到時, 則沒清XO_FOOT, 再看看怎麼改 */
+        match |= XR_FOOT;  /* IID.20200204: Redraw footer if found */
 
         if (*s_unread == '0')
             op |= RS_FIRST;  /* Thor.980909: 向前找尋首篇未讀 */
@@ -1201,7 +1202,7 @@ xo_thread(
         if (near == 'b')                /* search board */
             op |= RS_BOARD;
         else if (near != 'u')   /* search user's mbox */
-            return XO_NONE;
+            return XO_FOOT;
 
         near = -1;
     }
@@ -1225,6 +1226,7 @@ xo_thread(
             return XO_FOOT;
         /* Thor.980911: 要注意, 如果沒找到, "搜尋"的訊息會被清,
                         如果找到了, 則沒被清, 因傳回值為match, 沒法帶 XO_FOOT */
+        match |= XR_FOOT;  /* IID.20200204: Redraw footer if found */
 
         str_lower(buf, tag_query);
         query = buf;
@@ -1286,7 +1288,7 @@ xo_thread(
 
         if (op & RS_SEQUENT)
         {
-            match = -1;
+            match += XO_MOVE + XO_REL;
             break;
         }
 
@@ -1296,7 +1298,7 @@ xo_thread(
         {
             if (fhdr->xmode & (POST_MARKED /* | POST_GEM */))
             {
-                match = -1;
+                match += XO_MOVE + XO_REL;
                 break;
             }
             continue;
@@ -1325,7 +1327,7 @@ xo_thread(
             /* Thor.980909: 末篇已讀(!RS_FIRST) */
             if (!(op & RS_FIRST))
             {
-                match = -1;
+                match += XO_MOVE + XO_REL;
                 break;
             }
 
@@ -1347,7 +1349,7 @@ xo_thread(
             {
                 if (tag == title)
                 {
-                    match = -1;
+                    match += XO_MOVE + XO_REL;
                     break;
                 }
                 continue;
@@ -1376,29 +1378,32 @@ xo_thread(
                 strncmp(currtitle, query, TTLEN))
             {
                 str_ncpy(currtitle, query, TTLEN);
-                match = XO_BODY;
+                match |= XR_BODY;
             }
             else
 #endif
 
-                match = -1;
+                match += XO_MOVE + XO_REL;
             break;
         }
     }
 
     bottom = xo->top;
 
-    if (match < 0)
+    if ((match & XO_POS_MASK) > XO_NONE)
     {
+        /* A thread article is found */
         xo->pos = pos;
         if (bottom != top)
         {
             xo->top = top;
-            match = XO_BODY;            /* 找到了，並且需要更新畫面 */
+            match |= XR_BODY;           /* 找到了，並且需要更新畫面 */
         }
     }                           /* Thor: 加上 RS_FIRST功能 */
     else if ((op & RS_FIRST) && near >= 0)
     {
+        /* A thread article is found */
+        match += XO_MOVE + XO_REL;
         xo->pos = near;
         if (top != neartop)             /* Thor.0609: top 為目前的buffer之top */
         {
@@ -1408,10 +1413,8 @@ xo_thread(
         if (bottom != neartop)  /* Thor.0609: bottom為畫面之top */
         {
             xo->top = neartop;
-            match = XO_BODY;            /* 找到了，並且需要更新畫面 */
+            match |= XR_BODY;           /* 找到了，並且需要更新畫面 */
         }
-        else
-            match = -1;
     }
     else if (bottom != top)
     {
@@ -1422,7 +1425,7 @@ xo_thread(
     if (fd >= 0)
         close(fd);
 
-    return match;
+    return (match & XO_POS_MASK) ? match : match + XO_NONE;
 }
 
 
@@ -1442,7 +1445,7 @@ xo_getch(
     if (op >= 0)
     {
         ch = xo_thread(xo, op);
-        if (ch != XO_NONE)
+        if ((ch & XO_POS_MASK) > XO_NONE)  /* A thread article is found */
             ch = XO_BODY;               /* 繼續瀏覽 */
     }
 
@@ -2026,19 +2029,17 @@ xover_callback_end:
                 {
                     cmd = xo_thread(xo, pos);
 
-                    if (cmd == XO_NONE)
+                    if ((cmd & XO_POS_MASK) > XO_NONE)
+                    {
+                        /* A thread article is found */
+                        cursor_clear(num, 0);
+                        pos_prev = -1;  /* Redraw cursor */
+                        cmd = (cmd & ~XO_MOVE_MASK) + XO_NONE;
+                    }
+                    else
                     {                   /* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
                         outz("\x1b[44m 找沒有了耶...:( \x1b[m");
                         msg = 2;  /* Clear the message after the next loop */
-                    }
-
-                    if (cmd < 0)
-                    {
-
-
-                        cursor_clear(num, 0);
-                        pos_prev = -1;  /* Redraw cursor */
-                        cmd = XO_NONE;
                     }
                 }
             }
