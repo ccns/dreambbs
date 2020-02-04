@@ -8,7 +8,7 @@
 
 #include "bbs.h"
 
-static int do_menu(MENU pmenu[], XO *xo, int x, int y);
+static int do_menu(MENU pmenu[], XO *xo, int y, int x);
 
 /* ----------------------------------------- */
 /* verit 判斷字串的第 pos 各字元是那一種情況 */
@@ -53,7 +53,7 @@ is_big5(const char *src, int pos, int mode)
 #endif  /* #ifndef M3_USE_PFTERM */
 
 static int
-do_cmd(MENU *mptr, XO *xo, int x, int y)
+do_cmd(MENU *mptr, XO *xo, int y, int x)
 {
     GCC_UNUSED unsigned int mode;
     screen_backup_t old_screen;
@@ -102,7 +102,7 @@ do_cmd(MENU *mptr, XO *xo, int x, int y)
         case POPUP_MENU :
 //          sprintf(t, "【%s】", mptr->desc);
             scr_restore_free(&old_screen);
-            return do_menu(mitem.menu, xo, x, y);
+            return do_menu(mitem.menu, xo, y, x);
     }
 
     scr_free(&old_screen);
@@ -288,18 +288,18 @@ vs_line(
 
 /* mode 代表加背景的顏色 */
 static void
-draw_item(const char *desc, int mode, int x, int y)
+draw_item(const char *desc, int mode, int y, int x)
 {
     char buf[128];
 
     sprintf(buf, " \x1b[0;37m▏\x1b[4%d;37m%s(\x1b[1;36m%c\x1b[0;37;4%dm)%-25s%s\x1b[0;47;30m▉\x1b[40;30;1m▉\x1b[m ", mode, (mode>0)?"┤":"  ", *desc, mode, desc+1, (mode>0)?"├":"  ");
-    vs_line(buf, x, y);
+    vs_line(buf, y, x);
     move(b_lines, 0);
 }
 
 
 static int
-draw_menu(const MENU *const pmenu[20], int num, const char *title, int x, int y, int cur)
+draw_menu(const MENU *const pmenu[20], int num, const char *title, int y, int x, int cur)
 {
     char buf[128];
     int i;
@@ -308,15 +308,15 @@ draw_menu(const MENU *const pmenu[20], int num, const char *title, int x, int y,
     sprintf(t, "【%s】", title);
 
     sprintf(buf, " \x1b[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\x1b[m   ");
-    vs_line(buf, x-2, y);
+    vs_line(buf, y-2, x);
     sprintf(buf, " \x1b[0;37;44m▏\x1b[1m%-31s \x1b[0;47;34m▉\x1b[m   ", t);
-    vs_line(buf, x-1, y);
-    for (i=0; i<num; ++i, ++x)
+    vs_line(buf, y-1, x);
+    for (i=0; i<num; ++i, ++y)
     {
-        draw_item(pmenu[i]->desc, (i==cur), x, y);
+        draw_item(pmenu[i]->desc, (i==cur), y, x);
     }
     sprintf(buf, " \x1b[0;47;30m▇\x1b[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\x1b[40;30;1m▉\x1b[m ");
-    vs_line(buf, x, y);
+    vs_line(buf, y, x);
     return 0;
 }
 
@@ -324,8 +324,8 @@ static int
 do_menu(
     MENU pmenu[],
     XO *xo,
-    int x,
-    int y)
+    int y,
+    int x)
 {
     int cur, old_cur, num, tmp;
     int c;
@@ -371,7 +371,7 @@ do_menu(
 
 
     scr_dump(&old_screen);
-    draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
+    draw_menu((const MENU *const *)table, num+1, title, y, x, cur);
 
     while (1)  /* verit . user 選擇 */
     {
@@ -403,13 +403,13 @@ do_menu(
                     scr_restore_free(&old_screen);
                     return 1;
                 }
-                if (do_cmd(table[cur], xo, x, y)<0)
+                if (do_cmd(table[cur], xo, y, x)<0)
                 {
                     scr_restore_free(&old_screen);
                     return -1;
                 }
                 scr_restore_keep(&old_screen);
-                draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
+                draw_menu((const MENU *const *)table, num+1, title, y, x, cur);
                 break;
             default:
                 for (tmp=0; tmp<=num; tmp++)
@@ -424,13 +424,13 @@ do_menu(
                                 scr_restore_free(&old_screen);
                                 return 1;
                             }
-                            if (do_cmd(table[cur], xo, x, y)<0)
+                            if (do_cmd(table[cur], xo, y, x)<0)
                             {
                                 scr_restore_free(&old_screen);
                                 return -1;
                             }
                             scr_restore_keep(&old_screen);
-                            draw_menu((const MENU *const *)table, num+1, title, x, y, cur);
+                            draw_menu((const MENU *const *)table, num+1, title, y, x, cur);
                         }
                         break;
                     }
@@ -439,8 +439,8 @@ do_menu(
         }
         if (old_cur != cur)
         {
-            draw_item(table[old_cur]->desc, 0, x+old_cur, y);
-            draw_item(table[cur]->desc, 1, x+cur, y);
+            draw_item(table[old_cur]->desc, 0, y+old_cur, x);
+            draw_item(table[cur]->desc, 1, y+cur, x);
         }
     }
 
@@ -453,20 +453,20 @@ static void
 draw_ans_item(
     const char *desc,
     int mode,
-    int x,
     int y,
+    int x,
     char hotkey)
 {
     char buf[128];
 
     sprintf(buf, " \x1b[0;37m▏\x1b[4%d;37m%s%c\x1b[1;36m%c\x1b[0;37;4%dm%c%-25s%s\x1b[0;47;30m▉\x1b[40;30;1m▉\x1b[m ", mode, (mode>0)?"┤":"  ", (hotkey==*desc)?'[':'(', *desc, mode, (hotkey==*desc)?']':')', desc+1, (mode>0)?"├":"  ");
-    vs_line(buf, x, y);
+    vs_line(buf, y, x);
     move(b_lines, 0);
 }
 
 
 static int
-draw_menu_des(const char *const desc[], const char *title, int x, int y, int cur)
+draw_menu_des(const char *const desc[], const char *title, int y, int x, int cur)
 {
     int num;
     char buf[128];
@@ -474,13 +474,13 @@ draw_menu_des(const char *const desc[], const char *title, int x, int y, int cur
     hotkey = desc[0][0];
 
     sprintf(buf, " \x1b[0;40;37mˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍˍ\x1b[m   ");
-    vs_line(buf, x-2, y);
+    vs_line(buf, y-2, x);
     sprintf(buf, " \x1b[0;37;44m▏%-31s \x1b[0;47;34m▉\x1b[m   ", title);
-    vs_line(buf, x-1, y);
+    vs_line(buf, y-1, x);
     for (num=1; desc[num]; num++)
-        draw_ans_item(desc[num], (num==cur), x++, y, hotkey);
+        draw_ans_item(desc[num], (num==cur), y++, x, hotkey);
     sprintf(buf, " \x1b[0;47;30m▇\x1b[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\x1b[40;30;1m▉\x1b[m ");
-    vs_line(buf, x, y);
+    vs_line(buf, y, x);
     return num-2;
 }
 
@@ -491,7 +491,7 @@ draw_menu_des(const char *const desc[], const char *title, int x, int y, int cur
 /*         desc 最後一個必須為 NULL                             */
 /*------------------------------------------------------------- */
 int
-popupmenu_ans(const char *const desc[], const char *title, int x, int y)
+popupmenu_ans(const char *const desc[], const char *title, int y, int x)
 {
     int cur, old_cur, num, tmp;
     int c;
@@ -503,14 +503,14 @@ popupmenu_ans(const char *const desc[], const char *title, int x, int y)
     hotkey = desc[0][0];
 
     sprintf(t, "【%s】", title);
-    num = draw_menu_des(desc, t, x, y, 0);
+    num = draw_menu_des(desc, t, y, x, 0);
     cur = old_cur = 0;
     for (tmp=0; tmp<num; tmp++)
     {
         if (desc[tmp+1][0] == hotkey)
             cur = old_cur = tmp;
     }
-    draw_ans_item(desc[cur+1], 1, x+cur, y, hotkey);
+    draw_ans_item(desc[cur+1], 1, y+cur, x, hotkey);
 
     while (1)
     {
@@ -552,17 +552,17 @@ popupmenu_ans(const char *const desc[], const char *title, int x, int y)
         }
         if (old_cur != cur)
         {
-            draw_ans_item(desc[old_cur+1], 0, x+old_cur, y, hotkey);
-            draw_ans_item(desc[cur+1], 1, x+cur, y, hotkey);
+            draw_ans_item(desc[old_cur+1], 0, y+old_cur, x, hotkey);
+            draw_ans_item(desc[cur+1], 1, y+cur, x, hotkey);
         }
     }
     // return 0;
 }
 
 void
-popupmenu(MENU pmenu[], XO *xo, int x, int y)
+popupmenu(MENU pmenu[], XO *xo, int y, int x)
 {
-    do_menu(pmenu, xo, x, y);
+    do_menu(pmenu, xo, y, x);
 }
 
 static void pcopy(char *buf, const char *patten, int len)

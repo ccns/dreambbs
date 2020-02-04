@@ -19,11 +19,11 @@
 
 static void
 draw_line(
-    int x, int y,
+    int y, int x,
     const char *msg)
 {
     /* hrs.090928: 讓 terminal 去處理 */
-    move(x, y);
+    move(y, x);
     outstr(msg);
     return;
 }
@@ -38,8 +38,8 @@ static int x_roll;
 
 
 static void
-draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
-    int x, int y,
+draw_line(              /* 在 (y, x) 的位置塞入 msg，左右仍要印出原來的彩色文字 */
+    int y, int x,
     const char *msg)
 {
     char *str;
@@ -57,7 +57,7 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
     fg = 37;
     bg = 40;
 
-    i = x + x_roll;
+    i = y + x_roll;
     if (i > b_lines)
         i -= b_lines + 1;
 
@@ -66,10 +66,10 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
     strncpy(data, (char *) slt.data, slt.len);
     str = data;
 
-    move(x, 0);
+    move(y, 0);
     clrtoeol();
 
-    /* 印出 (x, 0) 至 (x, y - 1) */
+    /* 印出 (y, 0) 至 (y, x - 1) */
     ansi = 0;
     len = 0;            /* 已印出幾個字 (不含控制碼) */
     while ((ch = (unsigned char) *str++))
@@ -116,7 +116,7 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
         }
         else
         {
-            if (++len >= y)
+            if (++len >= x)
             {
                 /* 最後一字若是中文字的首碼，就不印 */
                 if (!in_chi && IS_DBCS_HI(ch))
@@ -139,10 +139,10 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
 
         outc(ch);
     }
-    while (len++ < y)
+    while (len++ < x)
         outc(' ');
 
-    /* 印出 (x, y) 至 (x, y + strip_ansi_len(msg) - 1) */
+    /* 印出 (y, x) 至 (y, x + strip_ansi_len(msg) - 1) */
     ptr = msg;
     ansi = 0;
     len = 0;            /* msg 的長度(不含控制碼) */
@@ -217,12 +217,12 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
         }
     }
 
-    /* 印出 (x, y + strip_ansi_len(msg)) 這個字及後面的控制碼 */
+    /* 印出 (y, x + strip_ansi_len(msg)) 這個字及後面的控制碼 */
     prints("\x1b[%d;%d;%dm", hl, fg, bg);
     /* 此字若是中文字的尾碼，就不印 */
     outc(in_chi ? ' ' : ch);
 
-    /* 印出 (x, y + strip_ansi_len(msg) + 1) 至 行尾 */
+    /* 印出 (y, x + strip_ansi_len(msg) + 1) 至 行尾 */
     outs(str);
     outs(str_ransi);
 }
@@ -235,7 +235,7 @@ draw_line(              /* 在 (x, y) 的位置塞入 msg，左右仍要印出原來的彩色文字 
 
 static void
 draw_item(
-    int x, int y,
+    int y, int x,
     const char *desc,
     char hotkey,
     int mode)           /* 0:清除光棒  1:畫上光棒 */
@@ -247,13 +247,13 @@ draw_item(
         (hotkey == *desc) ? '[' : '(', *desc,
         (hotkey == *desc) ? ']' : ')', desc + 1);
 
-    draw_line(x, y, buf);
+    draw_line(y, x, buf);
 }
 
 
 static int      /* 回傳總共有幾個選項 */
 draw_menu(
-    int x, int y,
+    int y, int x,
     const char *title,
     const char *const desc[],
     char hotkey,
@@ -262,22 +262,22 @@ draw_menu(
     int i, meet;
     char buf[128];
 
-    draw_line(x++, y, " ╭────────────────╮ ");
+    draw_line(y++, x, " ╭────────────────╮ ");
 
     sprintf(buf, " │" COLOR4 "  %-28s  \x1b[m│ ", title);
-    draw_line(x++, y, buf);
+    draw_line(y++, x, buf);
 
-    draw_line(x++, y, " ├────────────────┤ ");
+    draw_line(y++, x, " ├────────────────┤ ");
 
     for (i = 1; desc[i]; i++)
     {
         meet = (desc[i][0] == hotkey);
-        draw_item(x++, y, desc[i], hotkey, meet);
+        draw_item(y++, x, desc[i], hotkey, meet);
         if (meet)
             *cur = i;
     }
 
-    draw_line(x, y, " ╰────────────────╯ ");
+    draw_line(y, x, " ╰────────────────╯ ");
 
     /* 避免在偵測左右鍵全形下，按左鍵會跳離二層選單的問題 */
     move(b_lines, 0);
@@ -318,7 +318,7 @@ find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
 /*------------------------------------------------------ */
 /* 詢問選項，可用來取代 vans()                           */
 /*------------------------------------------------------ */
-/* x, y  是蹦出視窗左上角的 (x, y) 位置                  */
+/* y, x  是蹦出視窗左上角的 (y, x) 位置                  */
 /* title 是視窗的標題                                    */
 /* desc  是選項的敘述：                                  */
 /*       第一個字串必須為兩個 char                       */
@@ -329,7 +329,7 @@ find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
 /*------------------------------------------------------ */
 
 int             /* 傳回小寫字母或數字 */
-popupmenu_ans2(const char *const desc[], const char *title, int x, int y)
+popupmenu_ans2(const char *const desc[], const char *title, int y, int x)
 {
     int cur, old_cur, max, ch;
     char hotkey;
@@ -346,8 +346,8 @@ popupmenu_ans2(const char *const desc[], const char *title, int x, int y)
     hotkey = desc[0][0];
 
     /* 畫出整個選單 */
-    max = draw_menu(x, y, title, desc, hotkey, &cur);
-    x += 2;
+    max = draw_menu(y, x, title, desc, hotkey, &cur);
+    y += 2;
 
     /* 一進入，游標停在預設值 */
     old_cur = cur;
@@ -391,8 +391,8 @@ popupmenu_ans2(const char *const desc[], const char *title, int x, int y)
 
         if (old_cur != cur)             /* 游標變動位置才需要重繪 */
         {
-            draw_item(x + old_cur, y, desc[old_cur], hotkey, 0);
-            draw_item(x + cur, y, desc[cur], hotkey, 1);
+            draw_item(y + old_cur, x, desc[old_cur], hotkey, 0);
+            draw_item(y + cur, x, desc[cur], hotkey, 1);
             old_cur = cur;
             /* 避免在偵測左右鍵全形下，按左鍵會跳離二層選單的問題 */
             move(b_lines, 0);
@@ -409,7 +409,7 @@ void
 pmsg2_body(const char *msg)
 /* 不可為 NULL */
 {
-    int len, x, y, i;
+    int len, y, x, i;
     char buf[80];
 
     if (!msg)
@@ -423,32 +423,32 @@ pmsg2_body(const char *msg)
     len = BMAX(strlen(msg), (size_t)16); /* 取 msg title 其中較長者為 len */
     if (len % 2)                /* 變成偶數 */
         len++;
-    x = (b_lines - 4) >> 1;     /* 置中 */
-    y = (b_cols - 8 - len) >> 1;
+    y = (b_lines - 4) >> 1;     /* 置中 */
+    x = (b_cols - 8 - len) >> 1;
 
     strcpy(buf, "╭");
     for (i = -4; i < len; i += 2)
         strcat(buf, "─");
     strcat(buf, "╮");
-    draw_line(x++, y, buf);
+    draw_line(y++, x, buf);
 
     sprintf(buf, "│" COLOR4 "  %-*s  \x1b[m│", len, "請按任意鍵繼續..");
-    draw_line(x++, y, buf);
+    draw_line(y++, x, buf);
 
     strcpy(buf, "├");
     for (i = -4; i < len; i += 2)
         strcat(buf, "─");
     strcat(buf, "┤");
-    draw_line(x++, y, buf);
+    draw_line(y++, x, buf);
 
     sprintf(buf, "│\x1b[30;47m  %-*s  \x1b[m│", len, msg);
-    draw_line(x++, y, buf);
+    draw_line(y++, x, buf);
 
     strcpy(buf, "╰");
     for (i = -4; i < len; i += 2)
         strcat(buf, "─");
     strcat(buf, "╯");
-    draw_line(x++, y, buf);
+    draw_line(y++, x, buf);
 
     move(b_lines, 0);
 }
