@@ -213,8 +213,8 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
 `0x40000000` (mask)                 | `XZ_ZONE`          | 將操作解讀為列表操作          | `XO_ZONE` = `XZ_ZONE + XO_MOVE`
 `0x01000000` (mask)                 | `XZ_INIT`          | 進行某 zone 的初始化工作      |
 `0x02000000` (mask)                 | `XZ_FINI`          | 進行某 zone 的收拾工作        |
-`0x04000000` (mask)                 | `XZ_BACK`          | 回到上次所在的 zone (未實作)  | `XO_LAST` = `XZ_ZONE | XZ_BACK + XO_NONE`
-`0x08000000` (mask)                 | `XZ_QUIT`          | 離開 `xover()` 函數          | `XO_QUIT` = `XZ_ZONE | XZ_QUIT + XO_NONE`
+`0x04000000` (mask)                 | `XZ_BACK`          | 回到上次所在的 zone (未實作)  | `XO_LAST` = `(XZ_ZONE \| XZ_BACK) + XO_NONE`
+`0x08000000` (mask)                 | `XZ_QUIT`          | 離開 `xover()` 函數          | `XO_QUIT` = `(XZ_ZONE \| XZ_QUIT) + XO_NONE`
 `0x10000000` (mask)                 | `XZ_UNUSED4`       | (未使用)                     |
 `0x20000000` (mask)                 | `XZ_UNUSED5`       | (未使用)                     |
 `0x80000000` (mask)                 | `key \| XO_DL`     | 動態載入功能                 |
