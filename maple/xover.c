@@ -1529,6 +1529,7 @@ xover(
     int zone_flags = 0;  /* Collected zone operation flags */
     int pos;
     int pos_prev = -1;  /* Draw cursor on entry */
+    int top_prev = -1;  /* For showing the message for the last page which is full of items */
     int wrap_flag;
     int num=0;
     int zone=-1;
@@ -1693,12 +1694,6 @@ xover(
             {
                 if (cmd & XR_PART_BODY)
                 {
-                    if (xo->top + XO_TALL == xo->max)
-                    {
-                        /*outz("\x1b[44m 都給我看光光了! ^O^ \x1b[m");*/    /* Thor.0616 */
-                        msg = 1;
-                    }
-
                     pos_prev = -1;  /* Item will be redrawn; redraw cursor */
                 }
                 if (cmd & XR_PART_FOOT)
@@ -1814,6 +1809,16 @@ xover_callback_end:
             {
                 cursor_show(num, 0);
                 pos_prev = num;
+            }
+
+            if (xo->top != top_prev)
+            {
+                if (xo->top + XO_TALL == xo->max)
+                {
+                    outz("\x1b[44m 都給我看光光了! ^O^ \x1b[m");    /* Thor.0616 */
+                    msg = 1;
+                }
+                top_prev = xo->top;
             }
         }
 
