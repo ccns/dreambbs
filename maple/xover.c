@@ -1530,7 +1530,7 @@ xover(
     int pos;
     int pos_prev = -1;  /* Draw cursor on entry */
     int num=0;
-    int zone=0;
+    int zone=-1;
     int sysmode=0;
     XO *xo=NULL;
     KeyFuncListRef xcmd=NULL;
@@ -1564,14 +1564,18 @@ xover(
                 const bool zone_op = cmd & XZ_ZONE;
                 const bool wrap = cmd & XO_WRAP;
                 const bool rel = cmd & XO_REL;
-                const int cur = (zone_op) ? zone : xo->pos;
+                int cur;
 
                 pos = (cmd & XO_POS_MASK) - XO_MOVE;
                 cmd = (cmd & ~XO_MOVE_MASK) + XO_NONE;
 
+                if (!xo && !zone_op)
+                    continue;  /* Nothing to move */
+
                 /* fix cursor's range */
 
                 num = ((zone_op) ? XZ_COUNT : xo->max) - 1;
+                cur = (zone_op) ? zone : xo->pos;
 
                 if (rel)
                     pos += cur;
@@ -1602,17 +1606,25 @@ xover(
 
                     zone_flags |= (cmd & ~XO_MOVE_MASK);  /* Collect zone operation flags */
 
-                    zone = pos;
-                    xo = xz[pos].xo;
-                    sysmode = xz[pos].mode;
-                    xcmd = xo->cb;
+                    if (xz[pos].xo)
+                    {
+                        zone = pos;
+                        xo = xz[pos].xo;
+                        sysmode = xz[pos].mode;
+                        xcmd = xo->cb;
 
-                    TagNum = 0;             /* clear TagList */
-                    pos_prev = -1;  /* Redraw cursor */
-                    cmd = XO_INIT;
-                    utmp_mode(sysmode);
+                        TagNum = 0;             /* clear TagList */
+                        pos_prev = -1;  /* Redraw cursor */
+                        cmd = XO_INIT;
+                        utmp_mode(sysmode);
 
-                    redo_flags = 0;  /* No more redraw/reloading is needed */
+                        redo_flags = 0;  /* No more redraw/reloading is needed */
+                    }
+                    else
+                    {
+                        /* Switch failed; do nothing */
+                        cmd = XO_NONE;
+                    }
                 }
                 else if (pos != cur)        /* check cursor's range */
                 {
@@ -1707,6 +1719,13 @@ xover(
             /* 執行 call-back routines                         */
             /* ----------------------------------------------- */
 
+            if (!xcmd)
+            {
+                /* Nothing to invoke */
+                cmd = XO_NONE;
+                continue;
+            }
+
             /* IID.20191225: In C++ mode, use hash table for xover callback function list */
 #if !NO_SO
             num = cmd | XO_DL; /* Thor.990220: for dynamic load */
@@ -1778,6 +1797,13 @@ xover(
 xover_callback_end:
             ;
         } /* Thor.990220:註解: end of while ((cmd != XO_NONE) || redo_flags || zone_flags) */
+
+        if (!xo)
+        {
+            /* Not in a zone; exit */
+            cmd = XO_QUIT;
+            continue;
+        }
 
         utmp_mode(sysmode);
         /* Thor.990220:註解:用來回復 event handle routine 回來後的模式 */
