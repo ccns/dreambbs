@@ -1565,6 +1565,7 @@ xover(
                 const bool wrap = cmd & XO_WRAP;
                 const bool rel = cmd & XO_REL;
                 int cur;
+                int diff;
 
                 pos = (cmd & XO_POS_MASK) - XO_MOVE;
                 cmd = (cmd & ~XO_MOVE_MASK) + XO_NONE;
@@ -1579,6 +1580,7 @@ xover(
 
                 if (rel)
                     pos += cur;
+                diff = pos - cur;
 
                 if (pos < 0)
                 {
@@ -1619,6 +1621,13 @@ xover(
                         utmp_mode(sysmode);
 
                         redo_flags = 0;  /* No more redraw/reloading is needed */
+                    }
+                    else if (rel
+                        && ((wrap && UABS(diff) <= num) || (pos > 0 && pos < num)))  /* Prevent infinity loops */
+                    {
+                        /* Fallback movement */
+                        cmd = XO_ZONE + ((wrap) ? XO_WRAP : 0) + XO_REL + diff + ((diff > 0) ? 1 : -1);
+                        continue;
                     }
                     else
                     {
