@@ -1525,6 +1525,8 @@ void
 xover(
     int cmd)
 {
+    int redo_flags = 0;  /* Collected redraw/reloading flags */
+    int zone_flags = 0;  /* Collected zone operation flags */
     int pos;
     int pos_prev = -1;  /* Draw cursor on entry */
     int num=0;
@@ -1551,7 +1553,7 @@ xover(
 
     for (;;)
     {
-        while ((cmd != XO_NONE))
+        while ((cmd != XO_NONE) || redo_flags || zone_flags)
         {
             if ((cmd & XZ_ZONE) && (cmd & XO_POS_MASK) > XO_NONE)
             {
@@ -1559,6 +1561,7 @@ xover(
                 /* switch zone                                   */
                 /* --------------------------------------------- */
 
+                zone_flags |= (cmd & ~XO_MOVE_MASK);  /* Collect zone operation flags */
                 cmd = (cmd & XO_POS_MASK) - XO_MOVE;
 
                 zone = cmd;
@@ -1570,6 +1573,8 @@ xover(
                 pos_prev = -1;  /* Redraw cursor */
                 cmd = XO_INIT;
                 utmp_mode(sysmode);
+
+                redo_flags = 0;  /* No more redraw/reloading is needed */
             }
             else if ((cmd & XO_POS_MASK) > XO_NONE)
             {
@@ -1620,9 +1625,35 @@ xover(
                         pos_prev = -1;  /* Redraw cursor */
                     }
                 }
+            }
 
-                if (cmd == XO_NONE)     /* Nothing else to do */
-                    break;              /* 只移動游標 */
+            /* ----------------------------------------------- */
+            /* Collect and adjust operation flags              */
+            /* ----------------------------------------------- */
+
+            /* Collect and strip off operation flags */
+            if (cmd & XZ_ZONE)
+                zone_flags |= (cmd & ~XO_MOVE_MASK);
+            else
+                redo_flags |= (cmd & ~XO_MOVE_MASK);
+            cmd &= XO_MOVE_MASK;
+
+            /* Process collected operation flags if there is nothing else to do */
+            if (cmd == XO_NONE)
+            {
+                /* Process zone operation flags and then redraw/reloading flags */
+                if (zone_flags)
+                {
+                    cmd |= zone_flags;
+                    zone_flags = 0;
+                }
+                else if (redo_flags)
+                {
+                    cmd |= redo_flags;
+                    redo_flags = 0;
+                }
+                else
+                    continue;
             }
 
             /* ----------------------------------------------- */
@@ -1742,8 +1773,7 @@ xover(
 #endif
 xover_callback_end:
             ;
-        } /* Thor.990220:註解: end of while (cmd!=XO_NONE) */
-
+        } /* Thor.990220:註解: end of while ((cmd != XO_NONE) || redo_flags || zone_flags) */
 
         utmp_mode(sysmode);
         /* Thor.990220:註解:用來回復 event handle routine 回來後的模式 */
