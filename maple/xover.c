@@ -1538,10 +1538,8 @@ xover(
     KeyFuncIter cb;
 
 
-#if 1
     /* Thor.0613: 輔助訊息 */
     static int msg = 0;
-#endif
 
     if (xo_user_level >= MAX_LEVEL)
     {
@@ -1695,13 +1693,12 @@ xover(
             {
                 if (cmd & XR_PART_BODY)
                 {
-#if 0
                     if (xo->top + XO_TALL == xo->max)
                     {
                         /*outz("\x1b[44m 都給我看光光了! ^O^ \x1b[m");*/    /* Thor.0616 */
                         msg = 1;
                     }
-#endif
+
                     pos_prev = -1;  /* Item will be redrawn; redraw cursor */
                 }
                 if (cmd & XR_PART_FOOT)
@@ -2024,13 +2021,11 @@ xover_callback_end:
                 {
                     cmd = xo_thread(xo, pos);
 
-#if 1
                     if (cmd == XO_NONE)
                     {                   /* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
                         outz("\x1b[44m 找沒有了耶...:( \x1b[m");
                         msg = 2;  /* Clear the message after the next loop */
                     }
-#endif
 
                     if (cmd < 0)
                     {
