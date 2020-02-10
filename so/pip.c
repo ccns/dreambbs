@@ -2281,11 +2281,11 @@ const struct weapon *p)
         move(12, 2);
         prints_centered(" \x1b[1;31m──\x1b[37m白色 可以購買\x1b[31m──\x1b[32m綠色 擁有裝備\x1b[31m──\x1b[33m黃色 錢錢不夠\x1b[31m──\x1b[35m紫色 能力不足\x1b[31m──\x1b[m");
 
-        n = 0;
+        n = 1;
         while ((s = p[n].name))
         {
-            move(13 + n, 2);
-            if (variance != 0 && variance == (n))/*本身有的*/
+            move(12 + n, 2);
+            if (variance == (n))/*本身有的*/
             {
                 prints_centered("\x1b[1;32m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
                         n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
@@ -6681,68 +6681,6 @@ const char *userid)
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-static const char weaponhead[7][10] =
-{
-    "沒有裝備",
-    "塑膠帽子",
-    "牛皮小帽",
-    "㊣安全帽",
-    "鋼鐵頭盔",
-    "魔法髮箍",
-    "黃金聖盔"
-};
-
-
-static const char weaponrhand[10][10] =
-{
-    "沒有裝備",
-    "大木棒",
-    "金屬扳手",
-    "青銅劍",
-    "晴雷劍",
-    "蟬翼刀",
-    "忘情劍",
-    "獅頭寶刀",
-    "屠龍刀",
-    "黃金聖杖"
-};
-
-static const char weaponlhand[8][10] =
-{
-    "沒有裝備",
-    "大木棒",
-    "金屬扳手",
-    "木盾",
-    "不鏽鋼盾",
-    "白金之盾",
-    "魔法盾",
-    "黃金聖盾"
-};
-
-
-static const char weaponbody[7][10] =
-{
-    "沒有裝備",
-    "塑膠冑甲",
-    "特級皮甲",
-    "鋼鐵盔甲",
-    "魔法披風",
-    "白金盔甲",
-    "黃金聖衣"
-};
-
-static const char weaponfoot[8][12] =
-{
-    "沒有裝備",
-    "塑膠拖鞋",
-    "東洋木屐",
-    "特級雨鞋",
-    "NIKE運動鞋",
-    "鱷魚皮靴",
-    "飛天魔靴",
-    "黃金聖靴"
-};
-
 static int
 pip_system_freepip(void)
 {
@@ -7027,10 +6965,10 @@ const char *userid)
                     chicken.mresist, chicken.hskill, chicken.mskill);
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟頭部裝備 :\x1b[37m %-10s \x1b[33m﹟右手裝備 :\x1b[37m %-10s \x1b[33m﹟左手裝備 :\x1b[37m %-10s \x1b[31m│\x1b[m\n",
-                    weaponhead[chicken.weaponhead], weaponrhand[chicken.weaponrhand], weaponlhand[chicken.weaponlhand]);
+                    headlist[chicken.weaponhead].name, rhandlist[chicken.weaponrhand].name, lhandlist[chicken.weaponlhand].name);
 
             prints_centered("\x1b[1;31m │\x1b[33m﹟身體裝備 :\x1b[37m %-10s \x1b[33m﹟腳部裝備 :\x1b[37m %-10s \x1b[33m            \x1b[37m            \x1b[31m│\x1b[m\n",
-                    weaponbody[chicken.weaponbody], weaponfoot[chicken.weaponfoot]);
+                    bodylist[chicken.weaponbody].name, footlist[chicken.weaponfoot].name);
 
             prints_centered("\x1b[1;31m ├┤\x1b[41;37m 等級資料 \x1b[0;1;31m├─────────────────────────────┤\x1b[m\n");
 
