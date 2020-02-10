@@ -418,7 +418,7 @@ acct_apply(void)
     cuser.money = 0;
 
     cuser.userlevel = PERM_DEFAULT;
-    cuser.ufo2 = UFO2_COLOR | UFO2_MOVIE | UFO2_BNOTE;
+    cuser.ufo2 = UFO2_COLOR | UFO2_MOVIE | UFO2_BNOTE | UFO2_MENU_LIGHTBAR;
     /* Thor.980805: 註解, 預設旗標ufo */
     cuser.numlogins = 1;
 
@@ -738,7 +738,7 @@ tn_login(void)
             /* Thor.981207: 怕人亂玩, 強制寫回cuser.userlevel */
             ufo = UFO_PAGER | UFO_QUIET | UFO_MESSAGE | UFO_PAGER1 |UFO_HIDDEN;
             cuser.ufo = ufo;
-            cuser.ufo2 = UFO2_COLOR | UFO2_BNOTE | UFO2_MOVIE;
+            cuser.ufo2 = UFO2_COLOR | UFO2_BNOTE | UFO2_MOVIE | UFO2_MENU_LIGHTBAR;
             if (utmp_count(cuser.userno, 0) > MAXGUEST)
             {
                 pmsg2_body("目前在線上的guest過多");
