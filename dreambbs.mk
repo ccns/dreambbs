@@ -39,7 +39,7 @@ VALUEIF = "\#ifdef $(conf)$(.newline)$(conf:M*)$(.newline)\#else$(.newline)$(def
 DEFVAR = "\#undef $(exconf:M*)$(.newline)\#define $(exconf:M*) $($(exconf:M*):M*)"
 DEFCONF = "\#undef $(exconf:M*)$(.newline)\#define $(exconf:M*) $(exvalue:M*)"
 
-GETVAR = [ "$(var:M*:$(UNQUOTE))" ] && echo "$(var:M*:UNQUOTE)" || $(else_var)
+GETVAR = [ "$(var:M*:$(UNQUOTE))" ] && echo "$(var:M*:$(UNQUOTE))" || $(else_var)
 GETCONFS = echo "" | $(CC) -x c -dM -E -P $(hdr:@v@-imacros "$v"@) - 2>/dev/null
 GETVALUE = { echo $(VALUEIF$(conf::= $(conf:M*:$(UNQUOTE)))$(default::= $(default:M*))) | $(CC) -x c -E -P $(hdr:@v@-imacros "$v"@) - | xargs; } 2>/dev/null
 EXPORTVAR = echo $(DEFVAR$(exconf::= $(exconf:M*))) >> $(EXPORT_FILE)
