@@ -231,7 +231,7 @@ XO *xo)
 
         if (str_str(list.userid, buf))
         {
-            xo->pos = xo->top + cur;
+            xo->pos = cur;
             return XO_INIT;
 
         }
