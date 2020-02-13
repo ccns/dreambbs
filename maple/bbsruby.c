@@ -643,6 +643,7 @@ void print_exception(void)
     if (!RTEST(exception)) return;
 
     char* buffer = RSTRING_PTR(rb_obj_as_string(exception));
+    outs("\033[m");
     clear();
     move(0, 0);
     outs("程式發生錯誤，無法繼續執行。請通知原作者。\n錯誤資訊：\n");
