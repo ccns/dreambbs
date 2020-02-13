@@ -2750,6 +2750,7 @@ bbslua(const char *fpath)
     if (r != 0 && !blrt.abort)
     {
         const char *errmsg = lua_tostring(L, -1);
+        outs(ANSI_RESET);
         move(b_lines-3, 0); clrtobot();
         outs("\n");
         if (errmsg) outs(errmsg);
