@@ -1,3 +1,3 @@
-"$HOME/bin/camera"
-"$HOME/bin/acpro"
-"$HOME/bin/makefw"
+"$BBSHOME/bin$BBSVER/camera"
+"$BBSHOME/bin$BBSVER/acpro"
+"$BBSHOME/bin$BBSVER/makefw"
