@@ -1304,7 +1304,7 @@ m_setmboxdir(void)
 
         sprintf(fpath1, BBSHOME "/usr/%s/%s", id, cuser.userid);
 
-        sprintf(fpath2, "~/bin/redir");
+        sprintf(fpath2, BBSHOME "/bin/redir");
 
         sprintf(fpath3, "mv .DIR.@ .DIR");
 
