@@ -2860,7 +2860,7 @@ int m_register(void)
                 if (vans("確定無其他站務審核中？") == 'y')
                 {
                     system("/bin/cat run/" FN_RFORM ".tmp >> run/" FN_RFORM
-                           ";/bin/rm -f ~bbs/run/" FN_RFORM ".tmp");
+                           ";/bin/rm -f " BBSHOME "/run/" FN_RFORM ".tmp");
                     vmsg("修正完畢，下次請小心審核! 按任意鍵重新開始.");
                 }
             }
