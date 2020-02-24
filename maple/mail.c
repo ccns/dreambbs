@@ -1021,7 +1021,7 @@ do_forward(
             gem_fpath(fpath, currboard, NULL);
         }
 
-//      sprintf(cmd, "tar -zcv -f - %s | bin/base64encode > tmp/%s.tgz", fpath, userid);
+//      sprintf(cmd, "tar -zcv -f - %s | " BINARY_SUFFIX "base64encode > tmp/%s.tgz", fpath, userid);
 //      r2.20180316: try system default util to excute base64 encoding
         #ifdef __linux__
             sprintf(cmd, "tar -zcf - %s | base64 > tmp/%s.tgz", fpath, userid);
@@ -1029,7 +1029,7 @@ do_forward(
             #ifdef __FreeBSD__
                 sprintf(cmd, "tar -zcf - %s | b64encode -r %s > tmp/%s.tgz", fpath, userid, userid);
             #else
-                sprintf(cmd, "tar -zcf - %s | bin/base64encode > tmp/%s.tgz", fpath, userid);
+                sprintf(cmd, "tar -zcf - %s | " BINARY_SUFFIX "base64encode > tmp/%s.tgz", fpath, userid);
             #endif
         #endif  /* #ifdef __linux__ */
 
@@ -1304,7 +1304,7 @@ m_setmboxdir(void)
 
         sprintf(fpath1, BBSHOME "/usr/%s/%s", id, cuser.userid);
 
-        sprintf(fpath2, BBSHOME "/bin/redir");
+        sprintf(fpath2, BBSHOME "/" BINARY_SUFFIX "redir");
 
         sprintf(fpath3, "mv .DIR.@ .DIR");
 
