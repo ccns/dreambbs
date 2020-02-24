@@ -166,6 +166,9 @@ char *Ctime(const time_t *clock);
 char *Etime(const time_t *clock);
 char *Atime(const time_t *clock);
 char *Now(void);
+/* proc.c */
+int proc_runv(const char *path, const char *argv[]);
+GCC_CHECK_SENTINEL(0) int proc_runl(const char *path, const char *arg0, ...);
 /* xwrite.c */
 int xwrite(int fd, const char *data, int size);
 
