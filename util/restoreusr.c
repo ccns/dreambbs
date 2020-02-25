@@ -14,9 +14,10 @@ reaper(
     const char *fpath,
     const char *lowid)
 {
-    char buf[256];
-    sprintf(buf, "tar zxvf /var/tape/usr/%c/%s -C \"" BBSHOME "/usr/%c\"", *lowid, lowid, *lowid);
-    system(buf);
+    char buf[256], buf1[256];
+    sprintf(buf, "/var/tape/usr/%c/%s", *lowid, lowid);
+    sprintf(buf1, BBSHOME "/usr/%c", *lowid);
+    proc_runl("/bin/tar", "tar", "zxvf", buf, "-C", buf1, NULL);
 }
 
 static void

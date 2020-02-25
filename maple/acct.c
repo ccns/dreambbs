@@ -2313,15 +2313,12 @@ void brd_edit(int bno)
             /* 以免造成*bname為NULL時，會砍到 gem/brd and brd。 statue.000728 */
             if (*bname)
             {
-                char cmd[256];
                 sprintf(buf, "gem/brd/%s", bname);
                 //f_rm(buf);
                 //f_rm(buf + 4);
                 /* 100721.cache: f_rm is buggy... */
-                sprintf(cmd, "rm -rf %s", buf);
-                system(cmd);
-                sprintf(cmd, "rm -rf %s", buf + 4);
-                system(cmd);
+                proc_runl("/bin/rm", "rm", "-rf", buf, NULL);
+                proc_runl("/bin/rm", "rm", "-rf", buf + 4, NULL);
                 memset(&newbh, 0, sizeof(newbh));
                 sprintf(newbh.title, "[%s] deleted by %s", bname,
                         cuser.userid);
@@ -2859,8 +2856,8 @@ int m_register(void)
                     ("\n\n\x1b[1;33m請確定沒有其他站務在審核，否則將造成\x1b[1;31;5m使用者資料嚴重錯誤!\x1b[m\n\n\n");
                 if (vans("確定無其他站務審核中？") == 'y')
                 {
-                    system("/bin/cat run/" FN_RFORM ".tmp >> run/" FN_RFORM
-                           ";/bin/rm -f " BBSHOME "/run/" FN_RFORM ".tmp");
+                    system("/bin/cat run/" FN_RFORM ".tmp >> run/" FN_RFORM);
+                    proc_runl("/bin/rm", "rm", "-f", BBS_HOME "/run/" FN_RFORM ".tmp", NULL);
                     vmsg("修正完畢，下次請小心審核! 按任意鍵重新開始.");
                 }
             }
@@ -2974,7 +2971,7 @@ int m_trace(void)
         case '1':
             if (otflag)
             {
-                system("/bin/touch trace");
+                proc_runl("/bin/touch", "touch", "trace", NULL);
                 msg = "BBS   tracing enabled.";
                 report("opened report log");
             }
@@ -2989,7 +2986,7 @@ int m_trace(void)
         case '2':
             if (ctflag)
             {
-                system("/bin/touch trace.chatd");
+                proc_runl("/bin/touch", "touch", "trace.chatd", NULL);
                 msg = "Chat  tracing enabled.";
                 report("chatd trace log opened");
             }
@@ -3004,7 +3001,7 @@ int m_trace(void)
         case '3':
             if (btflag)
             {
-                system("/bin/touch trace.bvote");
+                proc_runl("/bin/touch", "touch", "trace.bvote", NULL);
                 msg = "BVote tracing enabled.";
                 report("BVote trace log opened");
             }

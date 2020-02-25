@@ -1688,15 +1688,15 @@ pip_write_backup(void)
     clrtobot();
     sprintf(buf1, "儲存 [%s] 檔案完成了", files[num]);
     vmsg(buf1);
-    sprintf(buf, "/bin/cp %s %s.bak%d", get_path(cuser.userid, "chicken"), get_path(cuser.userid, "chicken"), num);
-    system(buf);
+    sprintf(buf, "%s%d", get_path(cuser.userid, "chicken.bak"), num);
+    proc_runl("/bin/cp", "cp", get_path(cuser.userid, "chicken"), buf, NULL);
     return 0;
 }
 
 static int
 pip_read_backup(void)
 {
-    char buf[200], buf1[200], buf2[200];
+    char buf[200], buf1[200];
     static const char *const files[4] = {"沒有", "進度一", "進度二", "進度三"};
     char ans[3];
     int pipkey;
@@ -1759,10 +1759,9 @@ pip_read_backup(void)
     sprintf(buf, "讀取 [%s] 檔案完成了", files[num]);
     vmsg(buf);
 
-    sprintf(buf1, "/bin/touch %s%d", get_path(cuser.userid, "chicken.bak"), num);
-    sprintf(buf2, "/bin/cp %s.bak%d %s", get_path(cuser.userid, "chicken"), num, get_path(cuser.userid, "chicken"));
-    system(buf1);
-    system(buf2);
+    sprintf(buf1, "%s%d", get_path(cuser.userid, "chicken.bak"), num);
+    proc_runl("/bin/touch", "touch", buf1, NULL);
+    proc_runl("/bin/cp", "cp", buf1, get_path(cuser.userid, "chicken"), NULL);
     pip_read_file(&d, cuser.userid);
     return 0;
 }
@@ -5181,8 +5180,7 @@ pip_ending_screen(void)
     endgrade = pip_game_over(endgrade);
     /* inmoney(endgrade*10*ba);
       inexp(endgrade*ba);*/
-    sprintf(buf, "/bin/rm %s", get_path(cuser.userid, "chicken"));
-    system(buf);
+    proc_runl("/bin/rm", "rm", get_path(cuser.userid, "chicken"), NULL);
     sprintf(buf, "得到 %d 元，%d 點經驗值", endgrade*10*ba, endgrade*10);
     vmsg(buf);
     vmsg("下一頁是小雞資料  趕快copy下來作紀念");

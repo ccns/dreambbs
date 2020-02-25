@@ -443,10 +443,10 @@ gzip(
 {
     char buf[128];
 
-    sprintf(buf, "`which gzip` -n log/%s%s", target, stamp);
-    /* rename(source, &buf[13]); */
-    f_mv(source, &buf[17]); /* Thor.990409: 可跨 partition */
-    system(buf);
+    sprintf(buf, "log/%s%s", target, stamp);
+    /* rename(source, buf); */
+    f_mv(source, &buf[4]); /* Thor.990409: 可跨 partition */
+    proc_runl("/bin/gzip", "gzip", "-n", buf, NULL);
 }
 
 
@@ -458,8 +458,8 @@ gtar(
 {
     char buf[128];
 
-    sprintf(buf, "`which tar` cfz log/%s%s.tgz %s", target, stamp, source);
-    system(buf);
+    sprintf(buf, "log/%s%s.tgz", target, stamp);
+    proc_runl("/bin/tar", "tar", "cfz", buf, source, NULL);
 
     if (prune)
     {
@@ -527,8 +527,7 @@ main(void)
 
     if (rename(run_file, tmp_file))
     {
-        sprintf(buf, "touch %s", tmp_file);
-        system(buf);
+        proc_runl("bin/touch", "touch", tmp_file, NULL);
     }
     if ((fp = fopen(tmp_file, "r")) == NULL)
         error(tmp_file);
@@ -653,11 +652,11 @@ main(void)
         /* 以下是目前沒有在使用的紀錄 */
 
 //        sprintf(title, "[記錄] %s使用次數統計", date);
-//        system(BINARY_SUFFIX"spss.sh");
+//        proc_runl("bin/sh", "sh", BINARY_SUFFIX"spss.sh", NULL);
 //        keeplog("run/spss.log", NULL, title, 2);
 
 //        sprintf(title, "[記錄] %s版面閱\讀次數統計", date);
-//        system(BINARY_SUFFIX"brd_usies.sh");
+//        proc_runl("bin/sh", "sh", BINARY_SUFFIX"brd_usies.sh", NULL);
 //        keeplog(FN_BRD_USIES".log", NULL, title, 2); /* 整理過後的 log */
 //        keeplog(FN_BRD_USIES, BRD_SECRET, title, 2); /* 未整理前的 log */
 //        gzip(FN_BRD_USIES, "brdusies/brdusies", ymd);   /* 未整理前的 log */
@@ -843,7 +842,7 @@ main(void)
         sprintf(date, "[%02d 月 %02d 日] ", ptime.tm_mon + 1, ptime.tm_mday);
 
         sprintf(title, "[記錄] %s使用者編號紀錄", date);
-        system(BINARY_SUFFIX"userno");
+        proc_runl(BINARY_SUFFIX"userno", "userno", NULL);
         keeplog(FN_USERNO_LOG, BRD_SECRET, title, 2);
         gzip(FN_USERNO_LOG, "userno/userno", ymd);        /* 所有 [使用者編號紀錄] 記錄 */
         gzip(FN_MAIL_LOG, "mail/mail", ymd);    /* 所有 [寄信] 記錄 */
