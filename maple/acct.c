@@ -1118,12 +1118,11 @@ void acct_setup(ACCT * u, int adm)
                 break;
             case 'o':
                 {
-                    char command[256];
+                    char buf_mode[12], buf_time[22];
                     mode = select_mode(0);
-                    sprintf(command, BINARY_SUFFIX"stopperm %s %s %d %s %d &",
-                            u->userid, u->vmail, mode, cuser.userid,
-                            (int)time(0));
-                    system(command);
+                    sprintf(buf_mode, "%d", mode);
+                    sprintf(buf_time, "%lld", (long long)time(NULL));
+                    proc_runl_bg(BINARY_SUFFIX"stopperm", "stopperm", u->userid, u->vmail, buf_mode, cuser.userid, buf_time, NULL);
                 }
                 break;
             }

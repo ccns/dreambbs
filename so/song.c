@@ -644,8 +644,8 @@ AddRequestTimes(void)
 {
     DL_HOLD;
     ACCT acct;
-    char buf[128];
-    int n, times;
+    char buf[5];
+    int n;
 
     if (!vget(B_LINES_REF, 0, "請選擇：1)增加單人 2)條件增加 0)取消 [0]", buf, 3, DOECHO))
         return DL_RELEASE(0);
@@ -665,14 +665,14 @@ AddRequestTimes(void)
     }
     else if (*buf == '2')
     {
+        char buf_n[12];
         n = 0;
         n = bitset(n, NUMPERMS, NUMPERMS, MSG_USERPERM, perm_tbl);
         if (!vget(B_LINES_REF, 0, "加幾次：", buf, 5, DOECHO))
             return DL_RELEASE(0);
-        times = atoi(buf);
-        sprintf(buf, BINARY_SUFFIX"addsong %d %d &", n, times);
+        sprintf(buf_n, "%u", n);
         if (vans("確定增加嗎？ [y/N]") == 'y')
-            system(buf);
+            proc_runl_bg(BINARY_SUFFIX"addsong", "addsong", buf_n, buf, NULL);
     }
     return DL_RELEASE(0);
 }
