@@ -100,7 +100,7 @@
     - nios port test (2-BSD)
     - logind port test (2-BSD)
     - WSProxy ~port~ test (MIT; **Testing**)
-    - Note: (Maple3) visio = (Maple2.36/Ptt) term + screen/pfterm + io/(io + nios + vtkbd + vtuikit)
+    - Note: (Maple3) visio = (Pirate/Ptt) term + screen/pfterm + io/(io + nios + vtkbd + vtuikit)
 - Other (improved) features from other Maple3 versions
     - BBS-Ruby ~port~ test (**Testing**)
     - ~Screen resizing feature~
