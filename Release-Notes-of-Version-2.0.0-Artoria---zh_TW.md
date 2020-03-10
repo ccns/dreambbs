@@ -212,7 +212,7 @@
 
 - 修正使用 `Ctrl-C` 結束程式時會輸出無意義字串的問題。
 - `getdata/getstr()`: 修正在 PttBBS 上當 `echo` == 8 時會斷線的問題。
-- `getch()`/`kball()`: 修正在 PttBBS 上 `ESC-` 組合鍵會被誤當作 `ESC` 建的問題。
+- `getch()`/`kball()`: 修正在 PttBBS 上 `ESC-` 組合鍵會被誤當作 `ESC` 鍵的問題。
 
 ### BBS-Ruby support
 
