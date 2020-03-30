@@ -30,6 +30,16 @@ const EMAIL *viol)
 }
 
 static int
+viol_cur(
+XO *xo)
+{
+    const EMAIL *const viol = (const EMAIL *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    viol_item(xo->pos + 1, viol);
+    return XO_NONE;
+}
+
+static int
 viol_body(
 XO *xo)
 {
@@ -212,6 +222,7 @@ KeyFuncList viol_cb =
     {XO_LOAD, {viol_load}},
     {XO_HEAD, {viol_head}},
     {XO_BODY, {viol_body}},
+    {XO_CUR, {viol_cur}},
 
     {Ctrl('P'), {viol_add}},
     {'r', {viol_change}},

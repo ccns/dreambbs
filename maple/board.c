@@ -1248,6 +1248,16 @@ class_item(
     }
 }
 
+static int
+class_cur(
+    XO *xo)
+{
+    short *const chp = (short *) xo->xyz + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    class_item(xo->pos + 1, *chp);
+    return XO_NONE;
+}
+
 
 static int
 class_body(
@@ -1654,6 +1664,7 @@ static KeyFuncList class_cb =
     {XO_HEAD, {class_head}},
     {XO_NECK, {class_neck}},
     {XO_BODY, {class_body}},
+    {XO_CUR, {class_cur}},
 
     {'r', {class_browse}},
     {'/', {class_search}},

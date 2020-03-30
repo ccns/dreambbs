@@ -129,6 +129,16 @@ const NBRD *nbrd)
         prints("%6d %c %-5s %-13s %-*.*s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, d_cols + 50, d_cols + 50, nbrd->title);
 }
 
+static int
+nbrd_cur(
+XO *xo)
+{
+    const NBRD *const nbrd = (const NBRD *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    nbrd_item(xo->pos + 1, nbrd);
+    return XO_NONE;
+}
+
 
 static int
 nbrd_body(
@@ -915,6 +925,7 @@ KeyFuncList nbrd_cb =
     {XO_LOAD, {nbrd_load}},
     {XO_HEAD, {nbrd_head}},
     {XO_BODY, {nbrd_body}},
+    {XO_CUR, {nbrd_cur}},
 
     {'j', {nbrd_join}},
     {'r', {nbrd_browse}},

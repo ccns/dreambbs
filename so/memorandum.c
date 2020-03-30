@@ -86,6 +86,16 @@ const MEMORANDUM *memorandum)
 }
 
 static int
+memorandum_cur(
+XO *xo)
+{
+    const MEMORANDUM *const memorandum = (const MEMORANDUM *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    memorandum_item(xo->pos + 1, memorandum);
+    return XO_NONE;
+}
+
+static int
 memorandum_body(
 XO *xo)
 {
@@ -231,6 +241,7 @@ KeyFuncList memorandum_cb =
     {XO_LOAD, {memorandum_load}},
     {XO_HEAD, {memorandum_head}},
     {XO_BODY, {memorandum_body}},
+    {XO_CUR, {memorandum_cur}},
 
     {Ctrl('P'), {memorandum_add}},
     {'r', {memorandum_change}},

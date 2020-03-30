@@ -66,6 +66,16 @@ myfavorite_item(
 }
 
 static int
+myfavorite_cur(
+    XO *xo)
+{
+    const HDR *const myfavorite = (const HDR *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    myfavorite_item(xo->pos + 1, myfavorite);
+    return XO_NONE;
+}
+
+static int
 myfavorite_body(
     XO *xo)
 {
@@ -493,6 +503,7 @@ KeyFuncList myfavorite_cb =
     {XO_LOAD, {myfavorite_load}},
     {XO_HEAD, {myfavorite_head}},
     {XO_BODY, {myfavorite_body}},
+    {XO_CUR, {myfavorite_cur}},
 
     {Ctrl('P'), {myfavorite_add}},
     {'a', {myfavorite_add}},

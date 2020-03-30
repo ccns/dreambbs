@@ -26,6 +26,16 @@ const LIST *list)
 }
 
 static int
+list_cur(
+XO *xo)
+{
+    const LIST *const list = (const LIST *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    list_item(xo->pos + 1, list);
+    return XO_NONE;
+}
+
+static int
 list_body(
 XO *xo)
 {
@@ -295,6 +305,7 @@ KeyFuncList list_cb =
     {XO_LOAD, {list_load}},
     {XO_HEAD, {list_head}},
     {XO_BODY, {list_body}},
+    {XO_CUR, {list_cur}},
 
     {'r', {list_browse}},
     {'T', {list_title}},

@@ -116,6 +116,16 @@ gem_item(
     }
 }
 
+static int
+gem_cur(
+    XO *xo)
+{
+    const HDR *const ghdr = (const HDR *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    gem_item(xo->pos + 1, ghdr);
+    return XO_NONE;
+}
+
 
 static int
 gem_body(
@@ -1438,6 +1448,7 @@ static KeyFuncList gem_cb =
     {XO_HEAD, {gem_head}},
     {XO_BODY, {gem_body}},
     {XO_FOOT, {gem_foot}},
+    {XO_CUR, {gem_cur}},
 
     {'r', {gem_browse}},
 

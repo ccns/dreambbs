@@ -80,6 +80,16 @@ cleanrecommend_item(
 }
 
 static int
+cleanrecommend_cur(
+    XO *xo)
+{
+    const RMSG *const cleanrecommend = (const RMSG *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    cleanrecommend_item(xo->pos + 1, cleanrecommend);
+    return XO_NONE;
+}
+
+static int
 cleanrecommend_body(
     XO *xo)
 {
@@ -234,6 +244,7 @@ KeyFuncList cleanrecommend_cb =
     {XO_LOAD, {cleanrecommend_load}},
     {XO_HEAD, {cleanrecommend_head}},
     {XO_BODY, {cleanrecommend_body}},
+    {XO_CUR, {cleanrecommend_cur}},
 
     {'c', {cleanrecommend_change}},
     {'s', {xo_cb_init}},

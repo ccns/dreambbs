@@ -234,6 +234,16 @@ personal_item(
 }
 
 static int
+personal_cur(
+    XO *xo)
+{
+    const PB *const personal = (const PB *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    personal_item(xo->pos + 1, personal);
+    return XO_NONE;
+}
+
+static int
 personal_body(
     XO *xo)
 {
@@ -600,6 +610,7 @@ KeyFuncList personal_cb =
     {XO_LOAD, {personal_load}},
     {XO_HEAD, {personal_head}},
     {XO_BODY, {personal_body}},
+    {XO_CUR, {personal_cur}},
 
     {'c', {personal_change}},
     {'s', {xo_cb_init}},

@@ -22,6 +22,16 @@ const CONTACT *contact)
 }
 
 static int
+contact_cur(
+XO *xo)
+{
+    const CONTACT *const contact = (const CONTACT *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    contact_item(xo->pos + 1, contact);
+    return XO_NONE;
+}
+
+static int
 contact_body(
 XO *xo)
 {
@@ -221,6 +231,7 @@ KeyFuncList contact_cb =
     {XO_LOAD, {contact_load}},
     {XO_HEAD, {contact_head}},
     {XO_BODY, {contact_body}},
+    {XO_CUR, {contact_cur}},
 
     {Ctrl('P'), {contact_add}},
     {'m', {contact_mail}},

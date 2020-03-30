@@ -22,6 +22,16 @@ const ADMIN *admin)
 }
 
 static int
+admin_cur(
+XO *xo)
+{
+    const ADMIN *const admin = (const ADMIN *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    admin_item(xo->pos + 1, admin);
+    return XO_NONE;
+}
+
+static int
 admin_body(
 XO *xo)
 {
@@ -165,6 +175,7 @@ KeyFuncList admin_cb =
     {XO_LOAD, {admin_load}},
     {XO_HEAD, {admin_head}},
     {XO_BODY, {admin_body}},
+    {XO_CUR, {admin_cur}},
 
     {Ctrl('P'), {admin_add}},
     {'r', {admin_change}},

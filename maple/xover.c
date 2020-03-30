@@ -1659,6 +1659,7 @@ xover(
             /* XO_CUR + pos */
             if (cmd >= XO_CUR_MIN && cmd <= XO_CUR_MAX)
             {
+                xover_exec_cb(xo, XO_CUR);  /* Redraw the menu item under the cursor */
                 pos_prev = -1;  /* Suppress cursor clearing; redraw cursor */
                 cmd = XO_MOVE + XO_REL + cmd - XO_CUR;  /* Relative move */
                 continue;

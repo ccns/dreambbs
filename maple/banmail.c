@@ -35,6 +35,14 @@ static void banmail_item(int num, const BANMAIL * ban)
            modes, d_cols + 49, d_cols + 49, ban->data);
 }
 
+static int banmail_cur(XO *xo)
+{
+    const BANMAIL *const banmail = (const BANMAIL *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    banmail_item(xo->pos + 1, banmail);
+    return XO_NONE;
+}
+
 static int banmail_body(XO * xo)
 {
     const BANMAIL *banmail = NULL;
@@ -232,6 +240,7 @@ KeyFuncList banmail_cb = {
     {XO_LOAD, {banmail_load}},
     {XO_HEAD, {banmail_head}},
     {XO_BODY, {banmail_body}},
+    {XO_CUR, {banmail_cur}},
 
     {Ctrl('P'), {banmail_add}},
     {'S', {banmail_sync}},

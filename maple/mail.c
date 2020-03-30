@@ -2176,6 +2176,16 @@ mbox_item(
     hdr_outs(hdr, d_cols + 47);
 }
 
+static int
+mbox_cur(
+    XO *xo)
+{
+    const HDR *const mhdr = (const HDR *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    mbox_item(xo->pos + 1, mhdr);
+    return XO_NONE;
+}
+
 
 static int
 mbox_body(
@@ -2742,6 +2752,7 @@ static KeyFuncList mbox_cb =
     {XO_HEAD, {mbox_head}},
     {XO_BODY, {mbox_body}},
     {XO_FOOT, {mbox_foot}},
+    {XO_CUR, {mbox_cur}},
 
 #ifdef  HAVE_MAIL_FIX
     {'T', {mbox_title}},

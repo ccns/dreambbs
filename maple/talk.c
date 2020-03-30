@@ -671,6 +671,16 @@ pal_item(
         pal->userid, pal->ship);
 }
 
+static int
+pal_cur(
+    XO *xo)
+{
+    const PAL *const pal = (const PAL *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    pal_item(xo->pos + 1, pal);
+    return XO_NONE;
+}
+
 
 static int
 pal_body(
@@ -965,6 +975,7 @@ KeyFuncList pal_cb =
     {XO_LOAD, {pal_load}},
     {XO_HEAD, {pal_head}},
     {XO_BODY, {pal_body}},
+    {XO_CUR, {pal_cur}},
 
     {'a', {pal_add}},
     {'c', {pal_change}},
@@ -1059,6 +1070,16 @@ bmw_item(
                     bmw->userid, d_cols + 57, d_cols + 57, bmw->msg);
         }
     }
+}
+
+static int
+bmw_cur(
+    XO *xo)
+{
+    const BMW *const bmw = (const BMW *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    bmw_item(xo->pos + 1, bmw);
+    return XO_NONE;
 }
 
 
@@ -1246,6 +1267,7 @@ KeyFuncList bmw_cb =
     {XO_LOAD, {bmw_load}},
     {XO_HEAD, {bmw_head}},
     {XO_BODY, {bmw_body}},
+    {XO_CUR, {bmw_cur}},
 
     {'d', {bmw_delete}},
     {'m', {bmw_mail}},
@@ -4601,6 +4623,16 @@ banmsg_item(
     prints("%6d    %-14s%s\n", num, banmsg->userid, banmsg->ship);
 }
 
+static int
+banmsg_cur(
+    XO *xo)
+{
+    const BANMSG *const banmsg = (const BANMSG *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    banmsg_item(xo->pos + 1, banmsg);
+    return XO_NONE;
+}
+
 
 static int
 banmsg_body(
@@ -4819,6 +4851,7 @@ KeyFuncList banmsg_cb =
     {XO_LOAD, {banmsg_load}},
     {XO_HEAD, {banmsg_head}},
     {XO_BODY, {banmsg_body}},
+    {XO_CUR, {banmsg_cur}},
 
     {'a', {banmsg_add}},
     {'c', {banmsg_change}},
