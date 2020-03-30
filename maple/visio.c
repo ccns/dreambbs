@@ -1639,32 +1639,45 @@ add_io(
 }
 
 
+/* `iac_process()`: Returns the key to be handled
+    A boundary-checking version of `iac_count()`.
+*/
 int
-iac_count(
-    const unsigned char *current)
+iac_process(
+    const unsigned char *current,
+    const unsigned char *end,
+    int *pcount)
 {
-    const unsigned char *const end = vi_pool + vi_size;
-    if (current + 1 >= end) { return 1; }
+    const unsigned char *look = current;
+    int res_key = KEY_NONE;
 
-    switch (*(current + 1))
+    if (look >= end || *look != IAC || ++look >= end)
+        goto iac_process_end;
+
+    switch (*look++)
     {
     case DO:
     case DONT:
     case WILL:
     case WONT:
-        return 3;
+        look++;  /* Ignore option */
+        goto iac_process_end;
 
     case SB:                    /* loop forever looking for the SE */
         {
-            const unsigned char *look = current + 2;
-            if (look >= end) { return look + 1 - current; }
+            if (look >= end)
+                goto iac_process_end;
 
             /* fuse.030518: 線上調整畫面大小，重抓 b_lines */
-            if ((*look) == TELOPT_NAWS)
+            if ((*look++) == TELOPT_NAWS)
             {
-                if (look + 4 >= end) { return look + 4 - current; }
-                b_lines = ntohs(* (const short *) (look + 3)) - 1;
-                b_cols = ntohs(* (const short *) (look + 1)) - 1;
+                if (look + 3 >= end)  /* Incompleted command */
+                {
+                    look += 3;
+                    goto iac_process_end;
+                }
+                b_lines = ntohs(* (const short *) (look + 2)) - 1;
+                b_cols = ntohs(* (const short *) look) - 1;
 
                 /* b_lines 至少要 23，最多不能超過 T_LINES - 1 */
                 b_lines = TCLAMP(b_lines, 23, T_LINES - 1);
@@ -1675,7 +1688,7 @@ iac_count(
 #endif
                 d_cols = b_cols - 79;
 
-                look += 5;
+                look += 4;
             }
 
             for (;;)
@@ -1684,15 +1697,39 @@ iac_count(
                 {
                     if (look >= end || (*look++) == SE)
                     {
-                        return look - current;
+                        goto iac_process_end;
                     }
                 }
             }
         }
     case IAC:  /* `IAC` `IAC` => `'\xff'` */
+        res_key = '\xff';
+        goto iac_process_end;
     default:;
     }
-    return 1;
+
+iac_process_end:
+    if (pcount)
+        *pcount = look - current;
+    return res_key;
+}
+
+
+/* `iac_count()`: Returns the count of bytes to skip
+    Only use it when backward compatibility is needed.
+*/
+int
+iac_count(
+    const unsigned char *current)
+{
+    int count = 0;
+    int iac_key = iac_process(current, vi_pool + vi_size, &count);
+    if (iac_key != KEY_NONE && count > 0)
+    {
+        // A hack to keep the key returned by `iac_process()`
+        vi_pool[current - vi_pool + --count] = iac_key;
+    }
+    return count;
 }
 
 static int vi_mode = 0;
@@ -1742,8 +1779,12 @@ igetch(void)
                     cc = recv(0, data, VI_MAX, 0);
                     if (cc > 0)
                     {
+                        int iac_key;
                         vi_size = cc;
-                        vi_head = (*data) == IAC ? iac_count(data) : 0;
+                        vi_head = 0;
+                        iac_key = iac_process(data, data + cc, &vi_head);
+                        if (iac_key != KEY_NONE)
+                            return iac_key;
                         if (vi_head >= cc)
                             continue;
 

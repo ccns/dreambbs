@@ -313,6 +313,7 @@ void grayoutrect(int y, int yend, int x, int xend, int level);
 void grayout(int y, int end, int level);
 #endif  /* #ifndef M3_USE_PFTERM */
 void add_io(int fd, int timeout);
+int iac_process(const unsigned char *current, const unsigned char *end, int *pcount);
 int iac_count(const unsigned char *current);
 int igetch(void);
 BRD *ask_board(char *board, unsigned int perm, const char *msg);
