@@ -487,9 +487,14 @@ pmsg2(const char *msg)
 #endif
     scr_dump(&old_screen);
 
-    pmsg2_body(msg);
+    for (;;)
+    {
+        pmsg2_body(msg);
+        if ((x = vkey()) != I_RESIZETERM)
+            break;
+        scr_restore_keep(&old_screen);
+    }
 
-    x = vkey();
     scr_restore_free(&old_screen);
     return x;
 }

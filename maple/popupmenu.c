@@ -676,8 +676,13 @@ int pmsg(const char *msg)
 
     scr_dump(&old_screen);
 
-    pmsg_body(msg);
-    cc = vkey();
+    for (;;)
+    {
+        pmsg_body(msg);
+        if ((cc = vkey()) != I_RESIZETERM)
+            break;
+        scr_restore_keep(&old_screen);
+    }
 
     scr_restore_free(&old_screen);
     return cc;
