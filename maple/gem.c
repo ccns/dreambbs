@@ -501,9 +501,6 @@ gem_title(
         *ghdr = xhdr;
         num = xo->pos;
         rec_put(dir, ghdr, sizeof(HDR), num);
-        num++;
-        move(num - xo->top + 2, 0);
-        gem_item(num, ghdr);
 
         gem_log(xo->dir, "¼ÐÃD", ghdr);
         return XR_FOOT + XO_CUR;
@@ -528,9 +525,6 @@ gem_lock(
 
         num = xo->pos;
         rec_put(xo->dir, ghdr, sizeof(HDR), num);
-        num++;
-        move(num - xo->top + 2, 0);
-        gem_item(num, ghdr);
         return XO_CUR;
     }
 
@@ -551,9 +545,6 @@ gem_mark(
 
         num = xo->pos;
         rec_put(xo->dir, ghdr, sizeof(HDR), num);
-        num++;
-        move(num - xo->top + 2, 0);
-        gem_item(num, ghdr);
         return XO_CUR;
     }
 
@@ -1285,8 +1276,6 @@ gem_tag(
 
     if ((ghdr = gem_check(xo, NULL, GEM_READ)) && (tag = Tagger(ghdr->chrono, pos = xo->pos, TAG_TOGGLE)))
     {
-        move(3 + pos - xo->top, 0);
-        gem_item(pos + 1, ghdr);
         return XO_CUR + 1;
     }
 

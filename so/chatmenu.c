@@ -181,8 +181,6 @@ XO *xo)
     if (memcmp(chat, &mate, sizeof(ChatAction)))
     {
         rec_put(xo->dir, chat, sizeof(ChatAction), pos);
-        move(3 + cur, 0);
-        chat_item(++pos, chat);
         return XR_FOOT + XO_CUR;
     }
 

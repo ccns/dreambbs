@@ -1436,9 +1436,7 @@ class_zap(
         brd = bshm->bcache + chn;
         if (!(brd->battr & BRD_NOZAP) || (brd_bits[chn] & BRD_Z_BIT))
         {
-            move(3 + num - xo->top, 0);
             brd_bits[chn] ^= BRD_Z_BIT;
-            class_item(num + 1, chn);
             return XO_CUR;
         }
     }

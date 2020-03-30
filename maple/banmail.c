@@ -220,8 +220,6 @@ static int banmail_change(XO * xo)
     {
         banmail->time = time(0);
         rec_put(xo->dir, banmail, sizeof(BANMAIL), pos);
-        move(3 + cur, 0);
-        banmail_item(++pos, banmail);
         return XR_FOOT + XO_CUR;
     }
 

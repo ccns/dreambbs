@@ -152,8 +152,6 @@ XO *xo)
     if (memcmp(admin, &mate, sizeof(ADMIN)))
     {
         rec_put(xo->dir, admin, sizeof(ADMIN), pos);
-        move(3 + cur, 0);
-        admin_item(++pos, admin);
         return XR_FOOT + XO_CUR;
     }
 

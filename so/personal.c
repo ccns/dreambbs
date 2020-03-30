@@ -364,8 +364,6 @@ personal_change(
     if (memcmp(personal, &mate, sizeof(PB)))
     {
         rec_put(xo->dir, personal, sizeof(PB), pos);
-        move(3 + cur, 0);
-        personal_item(++pos, personal);
         return XR_FOOT + XO_CUR;
     }
 

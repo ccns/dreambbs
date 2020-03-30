@@ -244,8 +244,6 @@ XO *xo)
     if (memcmp(observe, &mate, sizeof(OBSERVE)))
     {
         rec_put(xo->dir, observe, sizeof(OBSERVE), pos);
-        move(3 + cur, 0);
-        observe_item(++pos, observe);
         return XR_FOOT + XO_CUR;
     }
 

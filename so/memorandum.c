@@ -219,8 +219,6 @@ XO *xo)
     if (memcmp(memorandum, &mate, sizeof(MEMORANDUM)))
     {
         rec_put(xo->dir, memorandum, sizeof(MEMORANDUM), pos);
-        move(3 + cur, 0);
-        memorandum_item(++pos, memorandum);
         return XR_FOOT + XO_CUR;
     }
 

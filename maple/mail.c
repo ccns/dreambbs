@@ -2491,9 +2491,6 @@ mbox_mark(
 
     mhdr->xmode ^= MAIL_MARKED;
     rec_put(xo->dir, mhdr, sizeof(HDR), pos);
-
-    move(3 + cur, 0);
-    mbox_item(pos + 1, mhdr);
     return XO_CUR;
 }
 
@@ -2511,8 +2508,6 @@ mbox_tag(
 
     if ((tag = Tagger(hdr->chrono, pos, TAG_TOGGLE)))
     {
-        move(3 + cur, 0);
-        mbox_item(pos + 1, hdr);
         return XO_CUR + 1;
     }
 

@@ -155,8 +155,6 @@ XO *xo)
     if (memcmp(show, &mate, sizeof(LOG)))
     {
         rec_put(xo->dir, show, sizeof(LOG), pos);
-        move(3 + cur, 0);
-        show_item(++pos, show);
         return XR_FOOT + XO_CUR;
     }
 

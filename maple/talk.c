@@ -902,8 +902,6 @@ pal_change(
     if (memcmp(pal, &mate, sizeof(PAL)))
     {
         rec_put(xo->dir, pal, sizeof(PAL), pos);
-        move(3 + cur, 0);
-        pal_item(++pos, pal);
         return XR_FOOT + XO_CUR;
     }
 
@@ -4775,8 +4773,6 @@ banmsg_change(
     if (memcmp(banmsg, &mate, sizeof(BANMSG)))
     {
         rec_put(xo->dir, banmsg, sizeof(BANMSG), pos);
-        move(3 + cur, 0);
-        banmsg_item(++pos, banmsg);
         return XR_FOOT + XO_CUR;
     }
 

@@ -160,8 +160,6 @@ XO *xo)
     if (memcmp(viol, &mate, sizeof(EMAIL)))
     {
         rec_put(xo->dir, viol, sizeof(EMAIL), pos);
-        move(3 + cur, 0);
-        viol_item(++pos, viol);
         return XR_FOOT + XO_CUR;
     }
 
