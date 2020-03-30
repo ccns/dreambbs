@@ -1452,12 +1452,78 @@ domenu(
 
     for (;;)
     {
+        int x_orig;
+        int y_orig;
+        int w;
+        int h;
+
         cmd = domenu_exec(&xo, cmd);
         if ((cmd & ~XO_MOVE_MASK) == (XZ_ZONE | XZ_QUIT))
             break;
 
         cmd = vkey();
         xyz.keyboard_cmd = true;
+
+        x_orig = xyz.x;
+        y_orig = xyz.y;
+        w = ((xyz.width) ? xyz.width : xyz.max_item_length) * ((xyz.height) ? (xo.max - 1)/xyz.height + 1 : 1);
+        h = (xyz.height) ? xyz.height : xo.max;
+
+        /* Movement */
+        switch (cmd)
+        {
+        case KEY_HOME:
+        case KEY_END:
+            if ((cmd == KEY_HOME) ? xyz.x > getx_ref(x_ref) : xyz.x < getx_ref(x_ref))
+                xyz.x_ref = x_ref;
+            else
+                xyz.x_ref = (cmd == KEY_HOME) ? 0 : B_COLS_REF - w;
+            xyz.x = getx_ref(xyz.x_ref);
+            break;
+        case KEY_PGUP:
+        case KEY_PGDN:
+            if ((cmd == KEY_PGUP) ? xyz.y > gety_ref(y_ref) : xyz.y < gety_ref(y_ref))
+                xyz.y_ref = y_ref;
+            else
+                xyz.y_ref = (cmd == KEY_PGUP) ? 1 : B_LINES_REF - h;  // Leave space for the footer
+            xyz.y = gety_ref(xyz.y_ref);
+            break;
+        case KEY_LEFT:
+        case KEY_RIGHT:
+            xyz.x_ref += TCLAMP(xyz.x + ((cmd == KEY_RIGHT) ? 1 : -1), 0, BMAX(0, b_cols - w)) - xyz.x;
+            xyz.x = getx_ref(xyz.x_ref);
+            break;
+        case KEY_UP:
+        case KEY_DOWN:
+            xyz.y_ref += TCLAMP(xyz.y + ((cmd == KEY_DOWN) ? 1 : -1), 1, BMAX(1, b_lines - h)) - xyz.y;
+            xyz.y = gety_ref(xyz.y_ref);
+            break;
+        default:;
+        }
+
+        /* Redraw */
+        switch (cmd)
+        {
+        case KEY_HOME:
+        case KEY_END:
+        case KEY_PGUP:
+        case KEY_PGDN:
+        case KEY_LEFT:
+        case KEY_RIGHT:
+        case KEY_UP:
+        case KEY_DOWN:
+            for (int k = 0; k < h; ++k)
+            {
+                move_ansi(y_orig + k, x_orig - 1);
+                clrtoeol();
+            }
+            cmd |= XR_BODY;
+            xyz.pos_prev = -1;  /* Redraw cursor */
+            if (MENU_NOMOVIE_POS(xyz.y, xyz.x) != MENU_NOMOVIE_POS(y_orig, x_orig))
+                cmd |= XR_PART_HEAD | XR_PART_NECK;
+            break;
+        default:;
+        }
 
         if (cmd == I_RESIZETERM)
             cmd = XO_HEAD;
