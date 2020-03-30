@@ -1803,6 +1803,12 @@ xover_callback_end:
         }
 
         cmd = vkey();
+        if (cmd == I_RESIZETERM)
+        {
+            cmd = XO_HEAD;
+            continue;
+        }
+
         if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
             wrap_flag = 0;
         else
