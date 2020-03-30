@@ -301,9 +301,6 @@ XO *xo)
         *ghdr = xhdr;
         num = xo->pos;
         rec_put(dir, ghdr, sizeof(HDR), num);
-        num++;
-        move(num - xo->top + 2, 0);
-        mailgem_item(num, ghdr);
         return XR_FOOT + XO_CUR;
 
     }
@@ -852,8 +849,6 @@ XO *xo)
 
     if ((tag = Tagger(ghdr->chrono, pos, TAG_TOGGLE)))
     {
-        move(3 + pos - xo->top, 0);
-        mailgem_item(pos + 1, ghdr);
         return XO_CUR + 1;
     }
 

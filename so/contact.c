@@ -154,8 +154,6 @@ XO *xo)
     if (memcmp(contact, &mate, sizeof(CONTACT)))
     {
         rec_put(xo->dir, contact, sizeof(CONTACT), pos);
-        move(3 + cur, 0);
-        contact_item(++pos, contact);
         return XR_FOOT + XO_CUR;
     }
 

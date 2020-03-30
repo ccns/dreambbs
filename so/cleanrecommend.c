@@ -209,8 +209,6 @@ cleanrecommend_change(
     if (memcmp(cleanrecommend, &mate, sizeof(RMSG)))
     {
         rec_put(xo->dir, cleanrecommend, sizeof(RMSG), pos);
-        move(3 + cur, 0);
-        cleanrecommend_item(++pos, cleanrecommend);
         return XR_FOOT + XO_CUR;
     }
 

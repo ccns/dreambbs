@@ -548,9 +548,6 @@ XO *xo)
         *ghdr = xhdr;
         num = xo->pos;
         rec_put(dir, ghdr, sizeof(HDR), num);
-        num++;
-        move(num - xo->top + 2, 0);
-        song_item(num, ghdr);
         return XR_FOOT + XO_CUR;
 
     }
