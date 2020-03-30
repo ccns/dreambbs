@@ -329,6 +329,8 @@
 #define I_TIMEOUT       0x04FD
 #define I_OTHERDATA     0x04FE
 
+#define I_RESIZETERM    Meta(Ctrl('L'))
+
 #define KEY_NONE        0x4000  /* All key values should `< KEY_NONE` */
 
 #define Ctrl(c)         ( c & ~0x0060 )

@@ -1687,6 +1687,7 @@ iac_process(
                 resizeterm(b_lines + 1, b_cols + 1);
 #endif
                 d_cols = b_cols - 79;
+                res_key = I_RESIZETERM;
 
                 look += 4;
             }
@@ -2632,6 +2633,8 @@ char_opt(int ch, int key, int key_timeout)
         return key_timeout;
       case I_OTHERDATA:
         return I_OTHERDATA;
+      case I_RESIZETERM:
+        return I_RESIZETERM;
       default:          /* "<sequence_until_ch> `ch`" => `key` */
         return key;
     }
