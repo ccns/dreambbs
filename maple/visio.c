@@ -1399,8 +1399,18 @@ int
 vmsg(
     const char *msg)             /* length <= 54 */
 {
-    vmsg_body(msg);
-    return vkey();
+    int b_lines_prev = b_lines;
+    int res_key;
+    for (;;)
+    {
+        vmsg_body(msg);
+        if ((res_key = vkey()) != I_RESIZETERM)
+            break;
+        move(b_lines_prev, 0);
+        clrtoeol();
+        b_lines_prev = b_lines;
+    }
+    return res_key;
 }
 
 static inline void
