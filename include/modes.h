@@ -244,6 +244,12 @@ static const char *const ModeTypeTable[] =
 #define XO_LAST         ((XZ_ZONE | XZ_BACK) + XO_NONE)
 #define XO_QUIT         ((XZ_ZONE | XZ_QUIT) + XO_NONE)
 
+/* Miscellaneous commands ({XO_WRAP|XO_SCRL|XO_REL} + key; key <= KEY_NONE) */
+#define XO_CUR          (XO_REL + XO_CUR_BIAS)  /* Redraw the item under the cursor and do relative move */
+#define XO_CUR_BIAS     0x2000               /* Bias of relative move */
+#define XO_CUR_MIN      (XO_REL + 0)         /* The minimum value of relative move */
+#define XO_CUR_MAX      (XO_REL + KEY_NONE)  /* The maximum value of relative move */
+
 /* Special values */
 
 //#define XO_RSIZ         256             /* max record length */ /* IID.20200102: Unlimited. */

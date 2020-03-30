@@ -173,7 +173,7 @@ XO *xo)
         rec_put(xo->dir, chat, sizeof(ChatAction), pos);
         move(3 + cur, 0);
         chat_item(++pos, chat);
-        cursor_show(3 + cur, 0);
+        return XR_FOOT + XO_CUR;
     }
 
     return XO_FOOT;

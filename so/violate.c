@@ -152,7 +152,7 @@ XO *xo)
         rec_put(xo->dir, viol, sizeof(EMAIL), pos);
         move(3 + cur, 0);
         viol_item(++pos, viol);
-        cursor_show(3 + cur, 0);
+        return XR_FOOT + XO_CUR;
     }
 
     return XO_FOOT;

@@ -541,7 +541,7 @@ XO *xo)
         num++;
         move(num - xo->top + 2, 0);
         song_item(num, ghdr);
-        cursor_show(num - xo->top + 2, 0);
+        return XR_FOOT + XO_CUR;
 
     }
     return XO_FOOT;

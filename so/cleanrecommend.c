@@ -201,7 +201,7 @@ cleanrecommend_change(
         rec_put(xo->dir, cleanrecommend, sizeof(RMSG), pos);
         move(3 + cur, 0);
         cleanrecommend_item(++pos, cleanrecommend);
-        cursor_show(3 + cur, 0);
+        return XR_FOOT + XO_CUR;
     }
 
     return XO_FOOT;

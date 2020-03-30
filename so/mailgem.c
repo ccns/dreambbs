@@ -295,7 +295,7 @@ XO *xo)
         num++;
         move(num - xo->top + 2, 0);
         mailgem_item(num, ghdr);
-        cursor_show(num - xo->top + 2, 0);
+        return XR_FOOT + XO_CUR;
 
     }
     return XO_FOOT;
@@ -845,7 +845,7 @@ XO *xo)
     {
         move(3 + pos - xo->top, 0);
         mailgem_item(pos + 1, ghdr);
-        cursor_show(3 + pos - xo->top, 0);
+        return XO_CUR + 1;
     }
 
     return XO_MOVE + XO_REL + 1;
