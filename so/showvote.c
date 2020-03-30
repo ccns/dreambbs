@@ -25,6 +25,16 @@ const LOG *show)
 }
 
 static int
+show_cur(
+XO *xo)
+{
+    const LOG *const show = (const LOG *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    show_item(xo->pos + 1, show);
+    return XO_NONE;
+}
+
+static int
 show_body(
 XO *xo)
 {
@@ -167,6 +177,7 @@ KeyFuncList show_cb =
     {XO_LOAD, {show_load}},
     {XO_HEAD, {show_head}},
     {XO_BODY, {show_body}},
+    {XO_CUR, {show_cur}},
 
     {Ctrl('P'), {show_add}},
     {'r', {show_change}},

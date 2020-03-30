@@ -52,6 +52,15 @@ const HDR *ghdr)
            (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
 }
 
+static int
+mailgem_cur(
+XO *xo)
+{
+    const HDR *const ghdr = (const HDR *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    mailgem_item(xo->pos + 1, ghdr);
+    return XO_NONE;
+}
 
 static int
 mailgem_body(
@@ -998,6 +1007,7 @@ static KeyFuncList mailgem_cb =
     {XO_HEAD, {mailgem_head}},
     {XO_BODY, {mailgem_body}},
     {XO_FOOT, {mailgem_foot}},
+    {XO_CUR, {mailgem_cur}},
 
     {'r', {mailgem_browse}},
 

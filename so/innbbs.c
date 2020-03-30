@@ -535,6 +535,17 @@ innbbs_foot(
 }
 
 static int
+innbbs_cur(
+    XO *xo)
+{
+    InnbbsXyz *const xyz = (InnbbsXyz *)xo->xyz;
+    const char *const rec = xo_pool_base + xo->pos * xo->recsiz;
+    move(3 + xo->pos - xo->top, 0);
+    xyz->item_func(xo->pos + 1, rec);
+    return XO_NONE;
+}
+
+static int
 innbbs_body(
     XO *xo)
 {
@@ -683,6 +694,7 @@ static KeyFuncList innbbs_cb =
     {XO_HEAD, {innbbs_head}},
     {XO_BODY, {innbbs_body}},
     {XO_FOOT, {innbbs_foot}},
+    {XO_CUR, {innbbs_cur}},
 
 
     {' ', {innbbs_query}},

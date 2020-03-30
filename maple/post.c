@@ -916,6 +916,16 @@ post_item(
 #endif  /* #ifdef HAVE_RECOMMEND */
 }
 
+static int
+post_cur(
+    XO *xo)
+{
+    const HDR *const fhdr = (const HDR *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    post_item(xo->pos + 1, fhdr);
+    return XO_NONE;
+}
+
     static int
 post_body(
     XO *xo)
@@ -4083,6 +4093,7 @@ KeyFuncList post_cb =
     {XO_HEAD, {post_head}},
     {XO_BODY, {post_body}},
     {XO_FOOT, {post_foot}},
+    {XO_CUR, {post_cur}},
 
     {'B', {post_manage}},
     {'r', {post_browse}},

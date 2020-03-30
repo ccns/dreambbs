@@ -26,6 +26,16 @@ const ChatAction *chat)
 }
 
 static int
+chat_cur(
+XO *xo)
+{
+    const ChatAction *const chat = (const ChatAction *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    chat_item(xo->pos + 1, chat);
+    return XO_NONE;
+}
+
+static int
 chat_body(
 XO *xo)
 {
@@ -259,6 +269,7 @@ KeyFuncList chat_cb =
     {XO_LOAD, {chat_load}},
     {XO_HEAD, {chat_head}},
     {XO_BODY, {chat_body}},
+    {XO_CUR, {chat_cur}},
 
     {Ctrl('P'), {chat_add}},
     {'a', {chat_add}},

@@ -98,6 +98,16 @@ const VCH *vch)
            num, vch->cdate, vch->owner, d_cols + 50, d_cols + 50, vch->title);
 }
 
+static int
+vote_cur(
+XO *xo)
+{
+    const VCH *const vch = (const VCH *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    vote_item(xo->pos + 1, vch);
+    return XO_NONE;
+}
+
 
 static int
 vote_body(
@@ -1109,6 +1119,7 @@ static KeyFuncList vote_cb =
     {XO_LOAD, {vote_load}},
     {XO_HEAD, {vote_head}},
     {XO_BODY, {vote_body}},
+    {XO_CUR, {vote_cur}},
 
     {'r', {vote_join}},
     {'v', {vote_join}},

@@ -28,6 +28,16 @@ const OBSERVE *observe)
 }
 
 static int
+observe_cur(
+XO *xo)
+{
+    const OBSERVE *const observe = (const OBSERVE *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    observe_item(xo->pos + 1, observe);
+    return XO_NONE;
+}
+
+static int
 observe_body(
 XO *xo)
 {
@@ -257,6 +267,7 @@ KeyFuncList observe_cb =
     {XO_LOAD, {observe_load}},
     {XO_HEAD, {observe_head}},
     {XO_BODY, {observe_body}},
+    {XO_CUR, {observe_cur}},
 
     {Ctrl('P'), {observe_add}},
     {'S', {observe_sync}},

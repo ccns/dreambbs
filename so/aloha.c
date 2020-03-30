@@ -63,6 +63,16 @@ const ALOHA *aloha)
 }
 
 static int
+aloha_cur(
+XO *xo)
+{
+    const ALOHA *const aloha = (const ALOHA *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    aloha_item(xo->pos + 1, aloha);
+    return XO_NONE;
+}
+
+static int
 aloha_body(
 XO *xo)
 {
@@ -291,6 +301,7 @@ KeyFuncList aloha_cb =
     {XO_LOAD, {aloha_load}},
     {XO_HEAD, {aloha_head}},
     {XO_BODY, {aloha_body}},
+    {XO_CUR, {aloha_cur}},
 
     {'a', {aloha_add}},
     {'D', {aloha_rangedel}},

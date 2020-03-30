@@ -158,6 +158,16 @@ const HDR *ghdr)
         prints("%-.*s\n", d_cols + 68, ghdr->title);
 }
 
+static int
+song_cur(
+XO *xo)
+{
+    const HDR *const ghdr = (const HDR *) xo_pool_base + xo->pos;
+    move(3 + xo->pos - xo->top, 0);
+    song_item(xo->pos + 1, ghdr);
+    return XO_NONE;
+}
+
 
 static int
 song_body(
@@ -562,6 +572,7 @@ static KeyFuncList song_cb =
     {XO_HEAD, {song_head}},
     {XO_BODY, {song_body}},
     {XO_FOOT, {song_foot}},
+    {XO_CUR, {song_cur}},
 
     {'r', {song_browse}},
     {'o', {song_order}},
