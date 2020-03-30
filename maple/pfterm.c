@@ -90,7 +90,7 @@ static int vkey_is_typeahead(void)
 #endif // PMORE_STYLE_ANSI
 
 #ifndef ANSI_IS_PARAM
-#define ANSI_IS_PARAM(c) (c == ';' || (c >= '0' && c <= '9'))
+#define ANSI_IS_PARAM(c) (c == ';' || c == ':' || (c >= '0' && c <= '9'))
 #endif // ANSI_IS_PARAM
 
 //////////////////////////////////////////////////////////////////////////
@@ -1902,6 +1902,89 @@ fterm_exec(void)
             case 49:
                 attrsetbg(FTATTR_DEFAULT_BG);
                 break;
+            case 38:
+            case 48:
+                {
+                    // Select Character Foreground Colour & Select Character Background Colour
+                    // After `38` or `48`, there is a parameter sub-string,
+                    //    consists of zero or more parameter elements separated by `:` (colon)
+                    //    or (xterm; non-ECMA-48) by `;` (semicolon).
+                    // A parameter element with no digits represents the default value.
+                    // ---------------------------------------------------------
+                    // Select Character Colour implementation:
+                    // SGR 38 0 (implement defined) is not supported.
+                    // SGR 38|48 1 (transparent)    is not supported.
+                    // SGR 38|48 2 (RGB direct)     is not supported.
+                    // SGR 38|48 3 (CMY direct)     is not supported.
+                    // SGR 38|48 4 (CMYK direct)    is not supported.
+                    // SGR 38|48 5 (indexed)        is not supported.
+
+                    // Note: Possible forms: `{38|48} ; <params>...` and `{38|48} : <params>...`
+                    // Since ECMA-48 specifies the parameter sub-strings separator to be ';' (semicolon),
+                    //    the former form conforms to the ECMA-48 standard therefore.
+                    // However, the latter form is also used by xterm, so both forms need to be handled.
+
+                    // Collect parameter elements
+                    int params[8], pos = 0, is_xterm = 0;
+                    // Skip the ':' following the `38` or `48`
+                    if (*p == ':' && p[-1] != ';')
+                        p++;
+                    do
+                    {
+                        if (!ANSI_IS_PARAM(*p))
+                            break;
+                        if (isdigit(*p))
+                            params[pos] = strtol(p, &p, 10);
+                        else
+                            params[pos] = 0;  // Defaults to `0` for simplicity
+                        if (*p == ':')  // Parameter element separator
+                        {
+                            // This separator is not allowed after a xterm-style separator is used
+                            if (!is_xterm)
+                                p++;
+                            else
+                                break;
+                        }
+                        else if (*p == ';')
+                        {
+                            if ((params[0] == 2 && pos < 3)  // 4 args; 3 `;`s
+                                || (params[0] == 5 && pos < 1))  // 2 args; 1`;`s
+                            {
+                                // xterm-style parameter element separator
+                                is_xterm = 1;
+                                p++;
+                                continue;
+                            }
+                            // End of parameter elements
+                            break;
+                        }
+                    } while (++pos < 8);
+
+                    // Process the parameter elements
+                    switch (params[0])
+                    {
+                    case 0:  // implementation defined (only applicable for the character foreground colour)
+                        break;
+                    case 1:  // transparent
+                        break;
+                    case 2:  // direct colour in rgb space
+                    case 3:  // direct colour in cmy space
+                    case 4:  // direct colour in cmyk space
+                        // <params[0]> : <color-space-id> : <r/c> : <g/m> : <b/y> : <k> : <tolerance-value> : <tolerance-color-space>
+                        // 2 ; <r> ; <g> ; <b> (xterm; non-ECMA-48)
+                        break;
+                    case 5:  // indexed colour
+                        // 5 : <index>
+                        // 5 ; <index> (xterm; non-ECMA-48)
+                        break;
+                    }
+
+                    // Skip ignored parameter elements
+                    p += strcspn(p, ";");
+                    if (*p == ';')
+                        p++;
+                    break;
+                }
             }
 
             // parse next command
