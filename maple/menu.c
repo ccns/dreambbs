@@ -1215,6 +1215,7 @@ domenu(
     int item_length[COUNTOF(table)]={0};
     int max_item_length = 0;
 
+domenu_resize:
     y = gety_ref(y_ref);
     x = getx_ref(x_ref);
     height = gety_ref(height_ref);
@@ -1572,14 +1573,10 @@ menu_key:
         cmd = vkey();
         keyboard_cmd = true;
 
-        if (gety_ref(y_ref) != y || getx_ref(x_ref) != x || gety_ref(height_ref) != height || getx_ref(width_ref) != width)
+        if (cmd == I_RESIZETERM)
         {
-            y = gety_ref(y_ref);
-            x = getx_ref(x_ref);
-            height = gety_ref(height_ref);
-            width = getx_ref(width_ref);
-
             mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
+            goto domenu_resize;
         }
     }
 }

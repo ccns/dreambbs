@@ -333,7 +333,8 @@ int             /* 傳回小寫字母或數字 */
 popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref)
 {
     int y, x;
-    int cur, old_cur, max, ch;
+    int cur, old_cur, max;
+    int ch = KEY_NONE;
     char hotkey;
 
     screen_backup_t old_screen;
@@ -343,12 +344,14 @@ popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref
 #endif
     scr_dump(&old_screen);
 
+popupmenu_ans2_redraw:
     y = gety_ref(y_ref);
     x = getx_ref(x_ref);
 
     grayout(0, b_lines, GRAYOUT_DARK);
 
-    hotkey = desc[0][0];
+    if (ch != I_RESIZETERM)
+        hotkey = desc[0][0];
 
     /* 畫出整個選單 */
     max = draw_menu(y, x, title, desc, hotkey, &cur);
@@ -360,20 +363,12 @@ popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref
     while (1)
     {
         ch = vkey();
-        if (gety_ref(y_ref) != y || getx_ref(x_ref) != x)
+        if (ch == I_RESIZETERM)
         {
             /* Screen size changed and redraw is needed */
             /* clear */
             scr_restore_keep(&old_screen);
-            /* update position */
-            y = gety_ref(y_ref);
-            x = getx_ref(x_ref);
-            /* redraw */
-            grayout(0, b_lines, GRAYOUT_DARK);
-            max = draw_menu(y, x, title, desc, hotkey, &cur);
-            /* update parameters */
-            y += 2;
-            old_cur = cur;
+            goto popupmenu_ans2_redraw;
         }
 
         switch (ch)
