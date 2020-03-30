@@ -1854,7 +1854,7 @@ xover_key(
     }
     if (cmd == Ctrl('Z'))
     {
-        every_Z();
+        every_Z(xo);
         return XO_INIT;
         /* return XO_FOOT;*/            /* by visor : ­×¥¿ ª©¥D bug */
     }
@@ -2219,7 +2219,7 @@ static MENU menu_everyz[] =
 };
 
 void
-every_Z(void)
+every_Z(XO *xo)
 {
     int tmpmode, savemode;
     int tmpbno;
@@ -2255,7 +2255,7 @@ every_Z(void)
     if (cuser.ufo2 & UFO2_ORIGUI)
         every_Z_Orig();
     else
-        popupmenu(menu_everyz, NULL, (B_LINES_REF >> 1) - 4, (D_COLS_REF >> 1) + 20);
+        popupmenu(menu_everyz, xo, (B_LINES_REF >> 1) - 4, (D_COLS_REF >> 1) + 20);
 
     memcpy(&(xz[XZ_OTHER - XO_ZONE]), &xy, sizeof(XZ));
 
