@@ -1429,7 +1429,7 @@ class_zap(
             move(3 + num - xo->top, 0);
             brd_bits[chn] ^= BRD_Z_BIT;
             class_item(num + 1, chn);
-            cursor_show(3 + num - xo->top, 0);
+            return XO_CUR;
         }
     }
 

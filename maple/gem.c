@@ -494,9 +494,9 @@ gem_title(
         num++;
         move(num - xo->top + 2, 0);
         gem_item(num, ghdr);
-        cursor_show(num - xo->top + 2, 0);
 
         gem_log(xo->dir, "¼ÐÃD", ghdr);
+        return XR_FOOT + XO_CUR;
     }
     return XO_FOOT;
 }
@@ -521,7 +521,7 @@ gem_lock(
         num++;
         move(num - xo->top + 2, 0);
         gem_item(num, ghdr);
-        cursor_show(num - xo->top + 2, 0);
+        return XO_CUR;
     }
 
     return XO_NONE;
@@ -544,7 +544,7 @@ gem_mark(
         num++;
         move(num - xo->top + 2, 0);
         gem_item(num, ghdr);
-        cursor_show(num - xo->top + 2, 0);
+        return XO_CUR;
     }
 
     return XO_NONE;
@@ -1277,7 +1277,7 @@ gem_tag(
     {
         move(3 + pos - xo->top, 0);
         gem_item(pos + 1, ghdr);
-        cursor_show(3 + pos - xo->top, 0);
+        return XO_CUR + 1;
     }
 
     /* return XO_NONE; */

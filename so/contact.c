@@ -146,7 +146,7 @@ XO *xo)
         rec_put(xo->dir, contact, sizeof(CONTACT), pos);
         move(3 + cur, 0);
         contact_item(++pos, contact);
-        cursor_show(3 + cur, 0);
+        return XR_FOOT + XO_CUR;
     }
 
     return XO_FOOT;

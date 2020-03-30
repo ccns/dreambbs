@@ -899,7 +899,7 @@ pal_change(
         rec_put(xo->dir, pal, sizeof(PAL), pos);
         move(3 + cur, 0);
         pal_item(++pos, pal);
-        cursor_show(3 + cur, 0);
+        return XR_FOOT + XO_CUR;
     }
 
     return XO_FOOT;
@@ -4755,7 +4755,7 @@ banmsg_change(
         rec_put(xo->dir, banmsg, sizeof(BANMSG), pos);
         move(3 + cur, 0);
         banmsg_item(++pos, banmsg);
-        cursor_show(3 + cur, 0);
+        return XR_FOOT + XO_CUR;
     }
 
     return XO_FOOT;

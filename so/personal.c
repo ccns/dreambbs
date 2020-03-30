@@ -345,7 +345,7 @@ personal_change(
         rec_put(xo->dir, personal, sizeof(PB), pos);
         move(3 + cur, 0);
         personal_item(++pos, personal);
-        cursor_show(3 + cur, 0);
+        return XR_FOOT + XO_CUR;
     }
 
     return XO_FOOT;

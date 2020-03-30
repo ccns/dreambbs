@@ -1620,7 +1620,7 @@ xover(
                             xo->top = BMAX(num + ((pos - num + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
                             cmd |= XR_BODY;     /* IID.20200103: Redraw list; do not reload. */
                         }
-                        else
+                        else if (pos_prev != -1)
                         {
                             cursor_clear(3 + cur - num, 0);
                             pos_prev = -1;  /* Redraw cursor */
@@ -1662,6 +1662,16 @@ xover(
             /* Special handling of operations                  */
             /* ----------------------------------------------- */
 
+            /* Miscellaneous commands */
+            /* XO_CUR + pos */
+            if (cmd >= XO_CUR_MIN && cmd <= XO_CUR_MAX)
+            {
+                pos_prev = -1;  /* Suppress cursor clearing; redraw cursor */
+                cmd = XO_MOVE + XO_REL + cmd - XO_CUR;  /* Relative move */
+                continue;
+            }
+
+            /* Flag commands */
             if (cmd & XZ_ZONE)
             {
                 if (cmd & XZ_QUIT)
@@ -2024,8 +2034,7 @@ xover_callback_end:
                     {
                         /* A thread article is found */
                         cursor_clear(num, 0);
-                        pos_prev = -1;  /* Redraw cursor */
-                        cmd = (cmd & ~XO_MOVE_MASK) + XO_NONE;
+                        cmd = (cmd & ~XO_MOVE_MASK) + XO_CUR;  /* Redraw cursor */
                     }
                     else
                     {                   /* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
