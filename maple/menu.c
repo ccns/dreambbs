@@ -1440,7 +1440,7 @@ domenu_resize:
 
 #ifdef EVERY_Z
         case Ctrl('Z'):
-            every_Z();          /* Thor: ctrl-Z everywhere */
+            every_Z(NULL);      /* Thor: ctrl-Z everywhere */
             goto menu_key;
 #endif
         case Ctrl('U'):

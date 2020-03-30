@@ -881,7 +881,7 @@ t_chat(void)
             /* Thor.0727: º»¶s vio_fd */
             holdon_fd = vio_fd;
             vio_fd = 0;
-            every_Z();
+            every_Z(NULL);
             /* Thor.0727: ¡Ÿ≠Ï vio_fd */
             vio_fd = holdon_fd;
             holdon_fd = 0;

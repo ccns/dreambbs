@@ -2621,7 +2621,7 @@ talk_speak(
             holdon_fd = vio_fd;
             vio_fd = 0;
             scr_dump(&old_screen);
-            every_Z();
+            every_Z(NULL);
             scr_restore_free(&old_screen);
             /* Thor.0727: ¡Ÿ≠Ï vio_fd */
             vio_fd = holdon_fd;
