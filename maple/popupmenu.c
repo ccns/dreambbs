@@ -387,7 +387,16 @@ do_menu_redraw:
         {
             /* Screen size changed and redraw is needed */
             /* clear */
-            scr_restore_keep(&old_screen);
+            if (xo)
+            {
+                /* Redraw and redump */
+                scr_restore_free(&old_screen);
+                xover_exec_cb(xo, XO_HEAD);
+                cursor_show(3 + xo->pos - xo->top, 0);
+                scr_dump(&old_screen);
+            }
+            else
+                scr_restore_keep(&old_screen);
             goto do_menu_redraw;
         }
 
