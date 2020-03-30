@@ -1212,6 +1212,8 @@ domenu(
     int cmdlen[COUNTOF(table)];  /* Command matching length (no spaces) */
     bool keep_cmd = false;
     bool keyboard_cmd = true;
+    int item_length[COUNTOF(table)]={0};
+    int max_item_length = 0;
 
     y = gety_ref(y_ref);
     x = getx_ref(x_ref);
@@ -1274,7 +1276,7 @@ domenu(
 
         if (mode & MENU_DRAW)
         {
-            int item_length[COUNTOF(table)]={0};
+            max_item_length = 0;
 
             if (mode & MENU_FILM)
             {
@@ -1309,7 +1311,8 @@ domenu(
                     if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
                         grayout(yi, yi + 1, GRAYOUT_COLORNORM);
 
-                    item_length[i]=(cuser.ufo2 & UFO2_COLOR) ? strlen(item)-strip_ansi_len(str)-2 : 0;
+                    item_length[i] = 4 + strip_ansi_len(str);
+                    max_item_length = BMAX(max_item_length, item_length[i]);
                 }
                 clrtoeol();
             }
