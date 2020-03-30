@@ -374,6 +374,7 @@ do_menu(
 
     scr_dump(&old_screen);
 
+do_menu_redraw:
     y = gety_ref(y_ref);
     x = getx_ref(x_ref);
 
@@ -382,16 +383,12 @@ do_menu(
     while (1)  /* verit . user ¿ï¾Ü */
     {
         c = vkey();
-        if (gety_ref(y_ref) != y || getx_ref(x_ref) != x)
+        if (c == I_RESIZETERM)
         {
             /* Screen size changed and redraw is needed */
             /* clear */
             scr_restore_keep(&old_screen);
-            /* update position */
-            y = gety_ref(y_ref);
-            x = getx_ref(x_ref);
-            /* redraw */
-            draw_menu((const MENU *const *)table, num+1, title, y, x, cur);
+            goto do_menu_redraw;
         }
 
         old_cur = cur;
@@ -514,7 +511,7 @@ popupmenu_ans(const char *const desc[], const char *title, int y_ref, int x_ref)
 {
     int y, x;
     int cur, old_cur, num, tmp;
-    int c;
+    int c = KEY_NONE;
     char t[64];
     char hotkey;
     screen_backup_t old_screen;
@@ -522,33 +519,36 @@ popupmenu_ans(const char *const desc[], const char *title, int y_ref, int x_ref)
     scr_dump(&old_screen);
     hotkey = desc[0][0];
 
+popupmenu_ans_redraw:
     y = gety_ref(y_ref);
     x = getx_ref(x_ref);
 
-    sprintf(t, "¡i%s¡j", title);
+    if (c != I_RESIZETERM)
+        sprintf(t, "¡i%s¡j", title);
+
     num = draw_menu_des(desc, t, y, x, 0);
-    cur = old_cur = 0;
-    for (tmp=0; tmp<num; tmp++)
+
+    if (c != I_RESIZETERM)
     {
-        if (desc[tmp+1][0] == hotkey)
-            cur = old_cur = tmp;
+        cur = old_cur = 0;
+        for (tmp=0; tmp<num; tmp++)
+        {
+            if (desc[tmp+1][0] == hotkey)
+                cur = old_cur = tmp;
+        }
     }
+
     draw_ans_item(desc[cur+1], 1, y+cur, x, hotkey);
 
     while (1)
     {
         c = vkey();
-        if (gety_ref(y_ref) != y || getx_ref(x_ref) != x)
+        if (c == I_RESIZETERM)
         {
             /* Screen size changed and redraw is needed */
             /* clear */
             scr_restore_keep(&old_screen);
-            /* update position */
-            y = gety_ref(y_ref);
-            x = getx_ref(x_ref);
-            /* redraw */
-            num = draw_menu_des(desc, t, y, x, 0);
-            draw_ans_item(desc[cur+1], 1, y+cur, x, hotkey);
+            goto popupmenu_ans_redraw;
         }
 
         old_cur = cur;

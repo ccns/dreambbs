@@ -333,7 +333,8 @@ int             /* 傳回小寫字母或數字 */
 popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref)
 {
     int y, x;
-    int cur, old_cur, max, ch;
+    int cur, old_cur, max;
+    int ch = KEY_NONE;
     char hotkey;
 
     screen_backup_t old_screen;
@@ -343,37 +344,41 @@ popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref
 #endif
     scr_dump(&old_screen);
 
-    y = gety_ref(y_ref);
-    x = getx_ref(x_ref);
-
     grayout(0, b_lines, GRAYOUT_DARK);
 
     hotkey = desc[0][0];
 
+popupmenu_ans2_redraw:
+    y = gety_ref(y_ref);
+    x = getx_ref(x_ref);
+
     /* 畫出整個選單 */
-    max = draw_menu(y, x, title, desc, hotkey, &cur);
+    max = draw_menu(y, x, title, desc, hotkey, (ch != I_RESIZETERM) ? &cur : &old_cur);
     y += 2;
 
     /* 一進入，游標停在預設值 */
-    old_cur = cur;
+    if (ch != I_RESIZETERM)
+        old_cur = cur;
 
     while (1)
     {
+        if (old_cur != cur)             /* 游標變動位置才需要重繪 */
+        {
+            draw_item(y + old_cur, x, desc[old_cur], hotkey, 0);
+            draw_item(y + cur, x, desc[cur], hotkey, 1);
+            old_cur = cur;
+            /* 避免在偵測左右鍵全形下，按左鍵會跳離二層選單的問題 */
+            move(b_lines, 0);
+        }
+
         ch = vkey();
-        if (gety_ref(y_ref) != y - 2 || getx_ref(x_ref) != x)
+        if (ch == I_RESIZETERM)
         {
             /* Screen size changed and redraw is needed */
             /* clear */
             scr_restore_keep(&old_screen);
-            /* update position */
-            y = gety_ref(y_ref);
-            x = getx_ref(x_ref);
-            /* redraw */
             grayout(0, b_lines, GRAYOUT_DARK);
-            max = draw_menu(y, x, title, desc, hotkey, &SINKVAL(int));
-            /* update parameters */
-            y += 2;
-            old_cur = cur;
+            goto popupmenu_ans2_redraw;
         }
 
         switch (ch)
@@ -409,15 +414,6 @@ popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref
             if ((ch = find_cur(ch, max, desc)) > 0)
                 cur = ch;
             break;
-        }
-
-        if (old_cur != cur)             /* 游標變動位置才需要重繪 */
-        {
-            draw_item(y + old_cur, x, desc[old_cur], hotkey, 0);
-            draw_item(y + cur, x, desc[cur], hotkey, 1);
-            old_cur = cur;
-            /* 避免在偵測左右鍵全形下，按左鍵會跳離二層選單的問題 */
-            move(b_lines, 0);
         }
     }
 }

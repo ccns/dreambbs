@@ -2170,10 +2170,11 @@ char lastcmd[MAXLASTCMD][80];
 /* IID.20200202: Use screen size referencing coordinate */
 int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo)
 {
-    int ch, len;
+    int ch = KEY_NONE;
+    int len;
     int line, col;
     int x, y, x_prompt;
-    bool dirty = false, key_done;
+    bool dirty, key_done;
 
     /* Adjust flags */
     if (!(echo & VGET_STRICT_DOECHO))
@@ -2188,8 +2189,6 @@ int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo
 
     max--;
 
-    /* `dirty` == `false` -> initialize and draw */
-    /* `dirty` == `true` -> redraw only */
 vget_redraw:
     move_ref(y_ref, x_ref);
 
@@ -2206,17 +2205,19 @@ vget_redraw:
 
     if (echo & GCARRY)
     {
-        if (!dirty)
-            len = strlen(data);
-        if (!dirty && len && (echo & NUMECHO))
+        if (ch != I_RESIZETERM)
         {
-            /* Remove non-digit characters */
-            int col = 0;
-            for (int ch = 0; ch < len; ch++)
-                if (isdigit(data[ch]))
-                    data[col++] = data[ch];
-            data[col] = '\0';
-            len = col;
+            len = strlen(data);
+            if (len && (echo & NUMECHO))
+            {
+                /* Remove non-digit characters */
+                int col = 0;
+                for (int ch = 0; ch < len; ch++)
+                    if (isdigit(data[ch]))
+                        data[col++] = data[ch];
+                data[col] = '\0';
+                len = col;
+            }
         }
         if (len && !(echo & VGET_STEALTH_NOECHO))
         {
@@ -2246,16 +2247,12 @@ vget_redraw:
         STANDEND;
     }
 
-    if (dirty)
+    if (ch != I_RESIZETERM)
     {
-        if (!(echo & VGET_STEALTH_NOECHO))
-            move(y, x + col);
-        goto vget_redraw_done;
+        dirty = len > 2;  /* Store default string */
+        line = MAXLASTCMD - 1;  /* Obsolete the oldest entry */
+        col = len;
     }
-
-    dirty = len > 2;  /* Store default string */
-    line = MAXLASTCMD - 1;  /* Obsolete the oldest entry */
-    col = len;
 
     for (;;)
     {
@@ -2263,7 +2260,7 @@ vget_redraw:
             move(y, x + col);
 
         ch = vkey();
-        if (gety_ref(y_ref) != y || getx_ref(x_ref) != x_prompt)
+        if (ch == I_RESIZETERM)
         {
             /* Screen size changed and redraw is needed */
             /* clear */
@@ -2271,10 +2268,8 @@ vget_redraw:
             clrtoeol();
             /* redraw */
             data[len] = '\0';
-            dirty = true;
             goto vget_redraw;
         }
-vget_redraw_done:
 
         /* --------------------------------------------------- */
         /* ¨ú±o board / userid / on-line user                  */
