@@ -1488,6 +1488,8 @@ XZ xz[] =
 /* interactive menu routines                             */
 /* ----------------------------------------------------- */
 
+/* Thor.0613: 輔助訊息 */
+static int msg = 0;
 
 void
 xover(
@@ -1495,20 +1497,11 @@ xover(
 {
     int redo_flags = 0;  /* Collected redraw/reloading flags */
     int zone_flags = 0;  /* Collected zone operation flags */
-    int pos;
     int pos_prev = -1;  /* Draw cursor on entry */
     int top_prev = -1;  /* For showing the message for the last page which is full of items */
-    int wrap_flag;
-    int num=0;
     int zone=-1;
     int sysmode=0;
     XO *xo=NULL;
-    KeyFuncListRef xcmd=NULL;
-    KeyFuncIter cb;
-
-
-    /* Thor.0613: 輔助訊息 */
-    static int msg = 0;
 
     if (xo_user_level >= MAX_LEVEL)
     {
@@ -1543,9 +1536,10 @@ xover(
                 const bool scrl = cmd & XO_SCRL;
                 const bool rel = cmd & XO_REL;
                 int cur;
+                int max;
                 int diff;
 
-                pos = (cmd & XO_POS_MASK) - XO_MOVE;
+                int pos = (cmd & XO_POS_MASK) - XO_MOVE;
                 cmd = (cmd & ~XO_MOVE_MASK) + XO_NONE;
 
                 if (!xo && !zone_op)
@@ -1553,7 +1547,7 @@ xover(
 
                 /* fix cursor's range */
 
-                num = ((zone_op) ? XZ_COUNT : xo->max) - 1;
+                max = ((zone_op) ? XZ_COUNT : xo->max) - 1;
                 cur = (zone_op) ? zone : (scrl) ? xo->top : xo->pos;
 
                 if (rel)
@@ -1561,9 +1555,9 @@ xover(
                 diff = pos - cur;
 
                 if (pos < 0)
-                    pos = (wrap) ? num - (-pos-1) % BMAX(num, 1) : 0;
-                else if (pos > num)
-                    pos = (wrap) ? (pos-1) % BMAX(num, 1) : num;
+                    pos = (wrap) ? max - (-pos-1) % BMAX(max, 1) : 0;
+                else if (pos > max)
+                    pos = (wrap) ? (pos-1) % BMAX(max, 1) : max;
 
                 /* IID.20200129: Switch zone using cursor movement semantic */
                 if (zone_op)
@@ -1579,7 +1573,6 @@ xover(
                         zone = pos;
                         xo = xz[pos].xo;
                         sysmode = xz[pos].mode;
-                        xcmd = xo->cb;
 
                         TagNum = 0;             /* clear TagList */
                         pos_prev = -1;  /* Redraw cursor */
@@ -1589,7 +1582,7 @@ xover(
                         redo_flags = 0;  /* No more redraw/reloading is needed */
                     }
                     else if (rel
-                        && ((wrap && UABS(diff) <= num) || (pos > 0 && pos < num)))  /* Prevent infinity loops */
+                        && ((wrap && UABS(diff) <= max) || (pos > 0 && pos < max)))  /* Prevent infinity loops */
                     {
                         /* Fallback movement */
                         cmd = XO_ZONE + ((wrap) ? XO_WRAP : 0) + XO_REL + diff + ((diff > 0) ? 1 : -1);
@@ -1606,23 +1599,23 @@ xover(
                     if (scrl)
                     {
                         xo->top = pos;
-                        num = xo->top;
-                        xo->pos = TCLAMP(xo->pos, num, num + XO_TALL - 1);
+                        max = xo->top;
+                        xo->pos = TCLAMP(xo->pos, max, max + XO_TALL - 1);
                         cmd |= XR_BODY;      /* IID.20200103: Redraw list; do not reload. */
                     }
                     else
                     {
                         xo->pos = pos;
-                        num = xo->top;
-                        if ((pos < num) || (pos >= num + XO_TALL))
+                        max = xo->top;
+                        if ((pos < max) || (pos >= max + XO_TALL))
                         {
-                            bool scrl_up = (pos < num);
-                            xo->top = BMAX(num + ((pos - num + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
+                            bool scrl_up = (pos < max);
+                            xo->top = BMAX(max + ((pos - max + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
                             cmd |= XR_BODY;     /* IID.20200103: Redraw list; do not reload. */
                         }
                         else if (pos_prev != -1)
                         {
-                            cursor_clear(3 + cur - num, 0);
+                            cursor_clear(3 + cur - max, 0);
                             pos_prev = -1;  /* Redraw cursor */
                         }
                     }
@@ -1699,84 +1692,8 @@ xover(
             /* ----------------------------------------------- */
             /* 執行 call-back routines                         */
             /* ----------------------------------------------- */
+            cmd = xover_exec_cb(xo, cmd);
 
-            if (!xcmd)
-            {
-                /* Nothing to invoke */
-                cmd = XO_NONE;
-                continue;
-            }
-
-            /* IID.20191225: In C++ mode, use hash table for xover callback function list */
-#if !NO_SO
-            num = cmd | XO_DL; /* Thor.990220: for dynamic load */
-#endif
-#ifndef HAVE_HASH_KEYFUNCLIST  /* Callback function fetching loop */
-            cb = xcmd;
-            for (;;)
-            {
-                pos = cb->first;
-#endif
-#if !NO_SO
-                /* Thor.990220: dynamic load, with key | XO_DL */
-  #ifdef HAVE_HASH_KEYFUNCLIST
-                cb = xcmd->find(num);
-                if (cb != xcmd->end())
-  #else
-                if (pos == num)
-  #endif
-                {
-                    int (*p)(XO *xo) = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
-                    if (p)
-                    {
-  #ifdef HAVE_HASH_KEYFUNCLIST
-    #ifdef DL_HOTSWAP
-                        xcmd->erase(num);
-                        cb = xcmd->insert({cmd, {p}}).first;
-    #endif
-  #else
-    #ifdef DL_HOTSWAP
-                        cb->second.func = p;
-                        cb->first = cmd;
-    #endif
-                        pos = cmd;
-  #endif
-                    }
-                    else
-                    {
-                        cmd = XO_NONE;
-                        goto xover_callback_end;
-                    }
-                }
-#endif
-#ifdef HAVE_HASH_KEYFUNCLIST
-  #if !NO_SO
-                else
-  #endif
-                    cb = xcmd->find(cmd);
-                if (cb != xcmd->end())
-#else
-                if (pos == cmd)
-#endif
-                {
-                    cmd = (*(cb->second.func)) (xo);
-                    goto xover_callback_end;
-                }
-                else  /* Callback function not found */
-#ifndef HAVE_HASH_KEYFUNCLIST
-                if (pos == 'h')
-#endif
-                {
-                    cmd = XO_NONE;
-                    goto xover_callback_end;
-                }
-
-#ifndef HAVE_HASH_KEYFUNCLIST  /* Continue callback function fetching loop */
-                cb++;
-            }
-#endif
-xover_callback_end:
-            ;
         } /* Thor.990220:註解: end of while ((cmd != XO_NONE) || redo_flags || zone_flags) */
 
         if (!xo)
@@ -1789,16 +1706,13 @@ xover_callback_end:
         utmp_mode(sysmode);
         /* Thor.990220:註解:用來回復 event handle routine 回來後的模式 */
 
-        pos = xo->pos;
-
         if (xo->max > 0)                /* Thor:若是無東西就不show了 */
         {
-            num = 3 + pos - xo->top;
-
-            if (num != pos_prev)
+            int pos_disp = 3 + xo->pos - xo->top;
+            if (pos_disp != pos_prev)
             {
-                cursor_show(num, 0);
-                pos_prev = num;
+                cursor_show(pos_disp, 0);
+                pos_prev = pos_disp;
             }
 
             if (xo->top != top_prev)
@@ -1813,242 +1727,336 @@ xover_callback_end:
         }
 
         cmd = vkey();
-        if (cmd == I_RESIZETERM)
-        {
-            cmd = XO_HEAD;
-            continue;
-        }
+        cmd = xover_key(xo, zone, cmd);
+    }
+}
 
-        if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
-            wrap_flag = 0;
-        else
-            wrap_flag = XO_WRAP;
+int
+xover_exec_cb(
+    XO *xo,
+    int cmd)
+{
+    const KeyFuncListRef xcmd = (xo) ? xo->cb : NULL;
+    int cmd_dl;
+    KeyFuncIter cb;
 
-        /* ------------------------------------------------- */
-        /* switch Zone                                       */
-        /* ------------------------------------------------- */
-        if (cmd == Ctrl('B'))
-        {
-            every_B();
-            cmd = XO_INIT;
-            continue;
-        }
-        if (cmd == Ctrl('U') && zone != XZ_INDEX_ULIST)
-        {
-            every_U();
-            cmd = XO_INIT;
-            continue;
-        }
-        if (cmd == Ctrl('Z'))
-        {
-            every_Z();
-            cmd = XO_INIT;
-            /* cmd = XO_FOOT;*/            /* by visor : 修正 版主 bug */
-            continue;
-        }
+    if (!xcmd)
+    {
+        /* Nothing to invoke */
+        return XO_NONE;
+    }
 
-        /* ------------------------------------------------- */
-        /* 基本的游標移動 routines                           */
-        /* ------------------------------------------------- */
-
-        if (cmd == KEY_LEFT || cmd == 'e' || cmd == KEY_ESC || cmd == Meta(KEY_ESC))
+    /* IID.20191225: In C++ mode, use hash table for xover callback function list */
+#if !NO_SO
+    cmd_dl = cmd | XO_DL; /* Thor.990220: for dynamic load */
+#endif
+#ifndef HAVE_HASH_KEYFUNCLIST  /* Callback function fetching loop */
+    cb = xcmd;
+    for (;;)
+    {
+        int key = cb->first;
+#endif
+#if !NO_SO
+        /* Thor.990220: dynamic load, with key | XO_DL */
+  #ifdef HAVE_HASH_KEYFUNCLIST
+        cb = xcmd->find(cmd_dl);
+        if (cb != xcmd->end())
+  #else
+        if (key == cmd_dl)
+  #endif
         {
-            /* cmd = XO_LAST; *//* try to load the last XO in future */
-            if (zone == XZ_INDEX_MBOX)
+            int (*p)(XO *xo) = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
+            if (p)
             {
+  #ifdef HAVE_HASH_KEYFUNCLIST
+    #ifdef DL_HOTSWAP
+                xcmd->erase(cmd_dl);
+                cb = xcmd->insert({cmd, {p}}).first;
+    #endif
+  #else
+    #ifdef DL_HOTSWAP
+                cb->second.func = p;
+                cb->first = cmd;
+    #endif
+                key = cmd;
+  #endif
+            }
+            else
+            {
+                return XO_NONE;
+            }
+        }
+#endif
+#ifdef HAVE_HASH_KEYFUNCLIST
+  #if !NO_SO
+        else
+  #endif
+            cb = xcmd->find(cmd);
+        if (cb != xcmd->end())
+#else
+        if (key == cmd)
+#endif
+        {
+            return (*(cb->second.func)) (xo);
+        }
+        else  /* Callback function not found */
+#ifndef HAVE_HASH_KEYFUNCLIST
+        if (key == 'h')
+#endif
+        {
+            return XO_NONE;
+        }
+
+#ifndef HAVE_HASH_KEYFUNCLIST  /* Continue callback function fetching loop */
+        cb++;
+    }
+#endif
+    /* return cmd; */ /* Unreachable */
+}
+
+int
+xover_key(
+    XO *xo,
+    int zone,
+    int cmd)
+{
+    const int pos = (xo) ? xo->pos : -1;
+    int wrap_flag;
+
+    if (!xo)
+        return XO_NONE;
+
+    if (cmd == I_RESIZETERM)
+        return XO_HEAD;
+
+    if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
+        wrap_flag = 0;
+    else
+        wrap_flag = XO_WRAP;
+
+    /* ------------------------------------------------- */
+    /* switch Zone                                       */
+    /* ------------------------------------------------- */
+    if (cmd == Ctrl('B'))
+    {
+        every_B();
+        return XO_INIT;
+    }
+    if (cmd == Ctrl('U') && zone != XZ_INDEX_ULIST)
+    {
+        every_U();
+        return XO_INIT;
+    }
+    if (cmd == Ctrl('Z'))
+    {
+        every_Z();
+        return XO_INIT;
+        /* return XO_FOOT;*/            /* by visor : 修正 版主 bug */
+    }
+
+    /* ------------------------------------------------- */
+    /* 基本的游標移動 routines                           */
+    /* ------------------------------------------------- */
+
+    if (cmd == KEY_LEFT || cmd == 'e' || cmd == KEY_ESC || cmd == Meta(KEY_ESC))
+    {
+        /* return XO_LAST; *//* try to load the last XO in future */
+        if (zone == XZ_INDEX_MBOX)
+        {
 
 #ifdef HAVE_MAILUNDELETE
-                int deltotal;
-                char fpath[256];
+            int deltotal;
+            char fpath[256];
 
-                if ((deltotal = mbox_check()))
-                {
-                    sprintf(fpath, "有 %d 封信件將要刪除，確定嗎？ [y/N]", deltotal);
-                    if (vans(fpath) == 'y')
-                    {
-                        usr_fpath(fpath, cuser.userid, FN_DIR);
-                        hdr_prune(fpath, 0, 0, 3);
-                    }
-                }
-#endif
-                if (mail_stat(CHK_MAIL_VALID))
-                {
-                    vmsg("你的信箱容量超過上限，請整理！");
-                    chk_mailstat = 1;
-                    continue;
-                }
-                else
-                    chk_mailstat = 0;
-            }
-            xo_user_level--;
-            return;
-        }
-        else if (xo->max <= 0)  /* Thor: 無東西則無法移游標 */
-        {
-            continue;
-        }
-        else if (cmd == KEY_UP || cmd == 'p' || cmd == 'k')
-        {
-            cmd = XO_MOVE + wrap_flag + XO_REL - 1;
-        }
-        else if (cmd == KEY_DOWN || cmd == 'n' || cmd == 'j')
-        {
-            cmd = XO_MOVE + wrap_flag + XO_REL + 1;
-        }
-        else if (cmd == ' ' || cmd == KEY_PGDN || cmd == 'N'  /*|| cmd == Ctrl('F') */)
-        {                                   /* lkchu.990428: 給「暫時更改來源」用 */
-            if (pos == xo->max - 1)
+            if ((deltotal = mbox_check()))
             {
-                /* Make the cursor snap to the list bottom on screen */
-                cmd = XO_MOVE + wrap_flag + XO_REL + BMIN(xo->max, XO_TALL);
-                if (wrap_flag)
+                sprintf(fpath, "有 %d 封信件將要刪除，確定嗎？ [y/N]", deltotal);
+                if (vans(fpath) == 'y')
                 {
-                    xo->top = 0;  /* Reset list top on screen */
-                    cmd |= XR_BODY;  /* Needs to redraw */
+                    usr_fpath(fpath, cuser.userid, FN_DIR);
+                    hdr_prune(fpath, 0, 0, 3);
                 }
             }
+#endif
+            if (mail_stat(CHK_MAIL_VALID))
+            {
+                vmsg("你的信箱容量超過上限，請整理！");
+                chk_mailstat = 1;
+                return XO_FOOT;
+            }
             else
-                cmd = XO_MOVE + XO_REL + XO_TALL;  /* Stop at the last item */
+                chk_mailstat = 0;
         }
-        else if (cmd == KEY_PGUP || cmd == 'P' /*|| cmd == Ctrl('B')*/)
+        return XO_QUIT;
+    }
+    if (xo->max <= 0)  /* Thor: 無東西則無法移游標 */
+    {
+        return cmd;
+    }
+    if (cmd == KEY_UP || cmd == 'p' || cmd == 'k')
+    {
+        return XO_MOVE + wrap_flag + XO_REL - 1;
+    }
+    if (cmd == KEY_DOWN || cmd == 'n' || cmd == 'j')
+    {
+        return XO_MOVE + wrap_flag + XO_REL + 1;
+    }
+    if (cmd == ' ' || cmd == KEY_PGDN || cmd == 'N'  /*|| cmd == Ctrl('F') */)
+    {                                   /* lkchu.990428: 給「暫時更改來源」用 */
+        if (pos == xo->max - 1)
         {
-            if (pos == 0 || (xo->top != 0 && pos == xo->max - 1))
-                /* Make the cursor snap to the list top or bottom on screen */
-                cmd = XO_MOVE + wrap_flag + XO_REL - ((xo->max-1 - xo->top) % XO_TALL + 1);
-            else
-                cmd = XO_MOVE + XO_REL - XO_TALL;  /* Stop at the first item */
-        }
-        else if (cmd == KEY_HOME || cmd == '0')
-        {
-            cmd = XO_MOVE;
-        }
-        else if (cmd == KEY_END || cmd == '$')
-        {
-            cmd = XR_LOAD + XO_MOVE + XO_TAIL;  /* force re-load */
-        }
-        else if (cmd == Meta(KEY_UP) || cmd == 'K')
-        {
-            cmd = XO_MOVE + wrap_flag + XO_SCRL + XO_REL - 1;
-        }
-        else if (cmd == Meta(KEY_DOWN) || cmd == 'J')
-        {
-            cmd = XO_MOVE + wrap_flag + XO_SCRL + XO_REL + 1;
-        }
-        else if (cmd >= '1' && cmd <= '9')
-        {
-            cmd = xo_jump(cmd);
+            /* Make the cursor snap to the list bottom on screen */
+            cmd = XO_MOVE + wrap_flag + XO_REL + BMIN(xo->max, XO_TALL);
+            if (wrap_flag)
+            {
+                xo->top = 0;  /* Reset list top on screen */
+                cmd |= XR_BODY;  /* Needs to redraw */
+            }
+            return cmd;
         }
         else
-        {
-            /* ----------------------------------------------- */
-            /* keyboard mapping                                */
-            /* ----------------------------------------------- */
-
-            if (cmd == KEY_RIGHT || cmd == '\n')
-            {
-                if (zone == XZ_INDEX_ULIST)
-                    cmd = 'q'; //使用者名單會 Q
-                else
-                    cmd = 'r';
-            }
-#ifdef XZ_INDEX_XPOST
-            else if (zone >= XZ_INDEX_XPOST && zone < XZ_INDEX_BANMAIL/* XZ_INDEX_MBOX */)
-#else
-            else if (zone >= XZ_INDEX_MBOX && zone < XZ_INDEX_BANMAIL)
-#endif
-            {
-                /* --------------------------------------------- */
-                /* Tag                                           */
-                /* --------------------------------------------- */
-
-                if (cmd == 'C')
-                {
-                    cmd = xo_copy(xo);
-                }
-                else if (cmd == 'F')
-                {
-                    cmd = xo_forward(xo);
-                }
-#if 0
-                else if (cmd == 'Z')
-                {
-                    cmd = xo_zmodem(xo);
-                }
-#endif
-                else if (cmd == Ctrl('C'))
-                {
-                    if (TagNum)
-                    {
-                        TagNum = 0;
-                        cmd = XO_BODY;
-                    }
-                    else
-                        cmd = XO_NONE;
-                }
-                else if (cmd == Ctrl('A') || cmd == Ctrl('T') || cmd == Meta('T'))
-                {
-                    cmd = xo_tag(xo, cmd);
-                }
-                else if (cmd == Ctrl('D') && zone < XZ_INDEX_GEM)
-                {
-                    /* 精華區要逐一刪除, 以避免誤砍 */
-
-                    cmd = xo_prune(xo);
-                }
-                else if (cmd == 'g' && (bbstate & STAT_BOARD))
-                { /* Thor.980806: 要注意沒進看版(未定看版)時, bbstate會沒有STAT_BOARD
-                                  站長會無法收錄文章 */
-                    cmd = gem_gather(xo);               /* 收錄文章到精華區 */
-                }
-#ifdef  HAVE_MAILGEM
-                else if (cmd == 'G' && HAS_PERM(PERM_MBOX))
-                {
-                    DL_HOTSWAP_SCOPE int (*mgp)(XO *xo) = NULL;
-                    if (!mgp)
-                    {
-                        mgp = DL_NAME_GET("mailgem.so", mailgem_gather);
-                        if (mgp)
-                            cmd = (*mgp)(xo);
-                        else
-                            vmsg("動態連結失敗，請聯絡系統管理員！");
-                    }
-                    else
-                        cmd = (*mgp)(xo);
-                }
-#endif
-                /* --------------------------------------------- */
-                /* 主題式閱讀                                    */
-                /* --------------------------------------------- */
-
-#ifdef XZ_INDEX_XPOST
-                if (zone == XZ_INDEX_XPOST)
-                    continue;
-#endif
-
-                pos = xo_keymap(cmd);
-                if (pos >= 0)
-                {
-                    cmd = xo_thread(xo, pos);
-
-                    if ((cmd & XO_POS_MASK) > XO_NONE)
-                    {
-                        /* A thread article is found */
-                        cursor_clear(num, 0);
-                        cmd = (cmd & ~XO_MOVE_MASK) + XO_CUR;  /* Redraw cursor */
-                    }
-                    else
-                    {                   /* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
-                        outz("\x1b[44m 找沒有了耶...:( \x1b[m");
-                        msg = 2;  /* Clear the message after the next loop */
-                    }
-                }
-            }
-            /* ----------------------------------------------- */
-            /* 其他的交給 call-back routine 去處理             */
-            /* ----------------------------------------------- */
-
-        } /* Thor.990220:註解: end of vkey() handling */
+            return XO_MOVE + XO_REL + XO_TALL;  /* Stop at the last item */
     }
+    if (cmd == KEY_PGUP || cmd == 'P' /*|| cmd == Ctrl('B')*/)
+    {
+        if (pos == 0 || (xo->top != 0 && pos == xo->max - 1))
+            /* Make the cursor snap to the list top or bottom on screen */
+            return XO_MOVE + wrap_flag + XO_REL - ((xo->max-1 - xo->top) % XO_TALL + 1);
+        else
+            return XO_MOVE + XO_REL - XO_TALL;  /* Stop at the first item */
+    }
+    if (cmd == KEY_HOME || cmd == '0')
+    {
+        return XO_MOVE;
+    }
+    if (cmd == KEY_END || cmd == '$')
+    {
+        return XR_LOAD + XO_MOVE + XO_TAIL;  /* force re-load */
+    }
+    if (cmd == Meta(KEY_UP) || cmd == 'K')
+    {
+        return XO_MOVE + wrap_flag + XO_SCRL + XO_REL - 1;
+    }
+    if (cmd == Meta(KEY_DOWN) || cmd == 'J')
+    {
+        return XO_MOVE + wrap_flag + XO_SCRL + XO_REL + 1;
+    }
+    if (cmd >= '1' && cmd <= '9')
+    {
+        return xo_jump(cmd);
+    }
+
+    /* ----------------------------------------------- */
+    /* keyboard mapping                                */
+    /* ----------------------------------------------- */
+
+    if (cmd == KEY_RIGHT || cmd == '\n')
+    {
+        if (zone == XZ_INDEX_ULIST)
+            return 'q'; //使用者名單會 Q
+        else
+            return 'r';
+    }
+#ifdef XZ_INDEX_XPOST
+    if (zone >= XZ_INDEX_XPOST && zone < XZ_INDEX_BANMAIL/* XZ_INDEX_MBOX */)
+#else
+    if (zone >= XZ_INDEX_MBOX && zone < XZ_INDEX_BANMAIL)
+#endif
+    {
+        /* --------------------------------------------- */
+        /* Tag                                           */
+        /* --------------------------------------------- */
+
+        if (cmd == 'C')
+        {
+            return xo_copy(xo);
+        }
+        if (cmd == 'F')
+        {
+            return xo_forward(xo);
+        }
+#if 0
+        if (cmd == 'Z')
+        {
+            return xo_zmodem(xo);
+        }
+#endif
+        if (cmd == Ctrl('C'))
+        {
+            if (TagNum)
+            {
+                TagNum = 0;
+                return XO_BODY;
+            }
+            return XO_NONE;
+        }
+        if (cmd == Ctrl('A') || cmd == Ctrl('T') || cmd == Meta('T'))
+        {
+            return xo_tag(xo, cmd);
+        }
+        if (cmd == Ctrl('D') && zone < XZ_INDEX_GEM)
+        {
+            /* 精華區要逐一刪除, 以避免誤砍 */
+
+            return xo_prune(xo);
+        }
+        if (cmd == 'g' && (bbstate & STAT_BOARD))
+        { /* Thor.980806: 要注意沒進看版(未定看版)時, bbstate會沒有STAT_BOARD
+                          站長會無法收錄文章 */
+            return gem_gather(xo);               /* 收錄文章到精華區 */
+        }
+#ifdef  HAVE_MAILGEM
+        if (cmd == 'G' && HAS_PERM(PERM_MBOX))
+        {
+            DL_HOTSWAP_SCOPE int (*mgp)(XO *xo) = NULL;
+            if (!mgp)
+            {
+                mgp = DL_NAME_GET("mailgem.so", mailgem_gather);
+                if (mgp)
+                    return (*mgp)(xo);
+                else
+                    vmsg("動態連結失敗，請聯絡系統管理員！");
+                return XO_FOOT;
+            }
+            else
+                return (*mgp)(xo);
+        }
+#endif
+        /* --------------------------------------------- */
+        /* 主題式閱讀                                    */
+        /* --------------------------------------------- */
+
+#ifdef XZ_INDEX_XPOST
+        if (zone == XZ_INDEX_XPOST)
+            return cmd;
+#endif
+
+        {
+            int rs_cmd = xo_keymap(cmd);
+            if (rs_cmd >= 0)
+            {
+                cmd = xo_thread(xo, rs_cmd);
+
+                if ((cmd & XO_POS_MASK) > XO_NONE)
+                {
+                    /* A thread article is found */
+                    cursor_clear(3 + pos - xo->top, 0);
+                    cmd = (cmd & ~XO_MOVE_MASK) + XO_CUR;  /* Redraw cursor */
+                }
+                else
+                {                   /* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
+                    outz("\x1b[44m 找沒有了耶...:( \x1b[m");
+                    msg = 2;  /* Clear the message after the next loop */
+                }
+            }
+        }
+        return cmd;
+    }
+
+    /* ----------------------------------------------- */
+    /* 其他的交給 call-back routine 去處理             */
+    /* ----------------------------------------------- */
+    return cmd;
 }
 
 
