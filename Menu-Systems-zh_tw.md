@@ -74,7 +74,7 @@ Macro (主選單) | 值 (主選單)   | Macro (Popupmenu)  | 值 (Popupmenu) | �
 `M_MASK`       | `0x0000FFFF` |                    |                | `umode` | - `umode` 的有效範圍；範圍之外為 flags <br> - DreamBBS v3 新增
 無             |              | `POPUP_MASK`       | `0x000000FF`   | `level` | `level` 的有效範圍；範圍之外為 flags
 `PERM_MENU`    | `PERM_PURGE` (`0x00800000`) | 無  | ---            | `level` | - 非選項；退出本層選單後將跳到該選單 <br> - 要在 `MENU` 列表的最末項出現
-無             | ---          | `POPUP_DO_INSTANT` | `0x01000000`   | `level` | 透過指令配對跳到此選項時，立即執行對應功能
+無             | ---          | `POPUP_DO_INSTANT` | `0x01000000`   | `level` | - 非選項；透過指令配對跳到該選單某選項時，立即執行對應功能 <br> - 在 `MENU` 列表的最末項出現時才有效
 
 ### User Mode、Menu Index、動態看板編號
 #### User Mode (無 `M_` 前綴)
