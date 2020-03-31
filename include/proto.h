@@ -173,6 +173,7 @@ void vs_mid(const char *mid);
 void vs_head(const char *title, const char *mid);
 void clear_notification(void);
 void movie(void);
+GCC_PURE int strip_ansi_n_len(const char *str, int maxlen);
 GCC_PURE int strip_ansi_len(const char *str);
 const char *check_info(const char *input);
 void main_menu(void);
