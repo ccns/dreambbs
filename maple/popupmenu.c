@@ -328,6 +328,8 @@ do_menu(
     int y_ref,
     int x_ref)
 {
+    int y_ref_orig = y_ref;
+    int x_ref_orig = x_ref;
     int y, x;
     int cur, old_cur, num, tmp;
     int c;
@@ -382,6 +384,9 @@ do_menu_redraw:
 
     while (1)  /* verit . user ¿ï¾Ü */
     {
+        int x_orig_ref;
+        int y_orig_ref;
+
         c = vkey();
         if (c == I_RESIZETERM)
         {
@@ -401,13 +406,9 @@ do_menu_redraw:
         }
 
         old_cur = cur;
+
         switch (c)
         {
-            case KEY_LEFT:
-            case KEY_ESC:
-            case Meta(KEY_ESC):
-                scr_restore_free(&old_screen);
-                return 1;
             case KEY_UP:
                 cur = (cur==0)?num:cur-1;
                 break;
@@ -419,6 +420,33 @@ do_menu_redraw:
                 break;
             case KEY_END:
                 cur = num;
+                break;
+        }
+
+        x_orig_ref = x_ref;
+        y_orig_ref = y_ref;
+
+        /* Movement */
+        x_ref = get_bounded_move_x(c, x_ref, 0, x_ref_orig, B_COLS_REF - 39);
+        y_ref = get_bounded_move_y(c, y_ref, 3, y_ref_orig, B_LINES_REF - (num + 2));
+
+        if (x_ref != x_orig_ref || y_ref != y_orig_ref)
+        {
+            scr_restore_keep(&old_screen);
+            goto do_menu_redraw;
+        }
+
+        switch (c)
+        {
+            case KEY_LEFT:
+            case KEY_ESC:
+            case Meta(KEY_ESC):
+                scr_restore_free(&old_screen);
+                return 1;
+            case KEY_UP:
+            case KEY_DOWN:
+            case KEY_HOME:
+            case KEY_END:
                 break;
             case KEY_RIGHT:
             case '\n':
@@ -518,6 +546,8 @@ draw_menu_des(const char *const desc[], const char *title, int y, int x, int cur
 int
 popupmenu_ans(const char *const desc[], const char *title, int y_ref, int x_ref)
 {
+    int y_ref_orig = y_ref;
+    int x_ref_orig = x_ref;
     int y, x;
     int cur, old_cur, num, tmp;
     int c = KEY_NONE;
@@ -551,23 +581,15 @@ popupmenu_ans_redraw:
 
     while (1)
     {
+        int x_orig_ref;
+        int y_orig_ref;
+
         c = vkey();
-        if (c == I_RESIZETERM)
-        {
-            /* Screen size changed and redraw is needed */
-            /* clear */
-            scr_restore_keep(&old_screen);
-            goto popupmenu_ans_redraw;
-        }
 
         old_cur = cur;
+
         switch (c)
         {
-            case KEY_LEFT:
-            case KEY_ESC:
-            case Meta(KEY_ESC):
-                scr_restore_free(&old_screen);
-                return tolower(desc[0][1]);
             case KEY_UP:
                 cur = (cur==0)?num:cur-1;
                 break;
@@ -579,6 +601,36 @@ popupmenu_ans_redraw:
                 break;
             case KEY_END:
                 cur = num;
+                break;
+        }
+
+        x_orig_ref = x_ref;
+        y_orig_ref = y_ref;
+
+        /* Movement */
+        x_ref = get_bounded_move_x(c, x_ref, 0, x_ref_orig, B_COLS_REF - 39);
+        y_ref = get_bounded_move_y(c, y_ref, 3, y_ref_orig, B_LINES_REF - (num + 2));
+
+        if (c == I_RESIZETERM || x_ref != x_orig_ref || y_ref != y_orig_ref)
+        {
+            /* Screen size changed and redraw is needed */
+            /* clear */
+            c = I_RESIZETERM;
+            scr_restore_keep(&old_screen);
+            goto popupmenu_ans_redraw;
+        }
+
+        switch (c)
+        {
+            case KEY_LEFT:
+            case KEY_ESC:
+            case Meta(KEY_ESC):
+                scr_restore_free(&old_screen);
+                return tolower(desc[0][1]);
+            case KEY_UP:
+            case KEY_DOWN:
+            case KEY_HOME:
+            case KEY_END:
                 break;
             case KEY_RIGHT:
             case '\n':

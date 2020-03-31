@@ -332,6 +332,8 @@ find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
 int             /* 傳回小寫字母或數字 */
 popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref)
 {
+    int y_ref_orig = y_ref;
+    int x_ref_orig = x_ref;
     int y, x;
     int cur, old_cur, max;
     int ch = KEY_NONE;
@@ -381,11 +383,42 @@ popupmenu_ans2_redraw:
 
     while (1)
     {
+        int x_orig_ref;
+        int y_orig_ref;
+
         ch = vkey();
-        if (ch == I_RESIZETERM)
+
+        switch (ch)
+        {
+        case KEY_UP:
+            cur = (cur == 1) ? max : cur - 1;
+            break;
+
+        case KEY_DOWN:
+            cur = (cur == max) ? 1 : cur + 1;
+            break;
+
+        case KEY_HOME:
+            cur = 1;
+            break;
+
+        case KEY_END:
+            cur = max;
+            break;
+        }
+
+        x_orig_ref = x_ref;
+        y_orig_ref = y_ref;
+
+        /* Movement */
+        x_ref = get_bounded_move_x(ch, x_ref, 0, x_ref_orig, B_COLS_REF - 38);
+        y_ref = get_bounded_move_y(ch, y_ref, 0, y_ref_orig, B_LINES_REF - (max + 3));
+
+        if (ch == I_RESIZETERM || x_ref != x_orig_ref || y_ref != y_orig_ref)
         {
             /* Screen size changed and redraw is needed */
             /* clear */
+            ch = I_RESIZETERM;
             scr_restore_keep(&old_screen_dark);
             goto popupmenu_ans2_redraw;
         }
@@ -405,19 +438,9 @@ popupmenu_ans2_redraw:
             return ch;
 
         case KEY_UP:
-            cur = (cur == 1) ? max : cur - 1;
-            break;
-
         case KEY_DOWN:
-            cur = (cur == max) ? 1 : cur + 1;
-            break;
-
         case KEY_HOME:
-            cur = 1;
-            break;
-
         case KEY_END:
-            cur = max;
             break;
 
         default:                /* 去找所按鍵是哪一個選項 */
