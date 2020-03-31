@@ -1405,6 +1405,56 @@ static KeyFuncList domenu_cb =
 
 static int domenu_exec(XO *xo, int cmd);
 
+GCC_PURE int
+get_bounded_move_x(
+    int cmd, int x_ref, int min_ref, int mid_ref, int max_ref)
+{
+    const int x = getx_ref(x_ref);
+    const int min = getx_ref(min_ref);
+    const int mid = getx_ref(mid_ref);
+    const int max = getx_ref(max_ref);
+
+    switch (cmd)
+    {
+    case KEY_HOME:
+    case KEY_END:
+        if ((cmd == KEY_HOME) ? x > mid : x < mid)
+            return mid_ref;
+        else
+            return (cmd == KEY_HOME) ? min_ref : max_ref;
+    case KEY_LEFT:
+    case KEY_RIGHT:
+        return x_ref + TCLAMP(x + ((cmd == KEY_RIGHT) ? 1 : -1), min, BMAX(min, max)) - x;
+    default:;
+        return x_ref + TCLAMP(x, min, BMAX(min, max)) - x;
+    }
+}
+
+GCC_PURE int
+get_bounded_move_y(
+    int cmd, int y_ref, int min_ref, int mid_ref, int max_ref)
+{
+    int y = gety_ref(y_ref);
+    int min = gety_ref(min_ref);
+    int mid = gety_ref(mid_ref);
+    int max = gety_ref(max_ref);
+
+    switch (cmd)
+    {
+    case KEY_PGUP:
+    case KEY_PGDN:
+        if ((cmd == KEY_PGUP) ? y > mid : y < mid)
+            return mid_ref;
+        else
+            return (cmd == KEY_PGUP) ? min_ref : max_ref;
+    case KEY_UP:
+    case KEY_DOWN:
+        return y_ref + TCLAMP(y + ((cmd == KEY_DOWN) ? 1 : -1), min, BMAX(min, max)) - y;
+    default:;
+        return y_ref + TCLAMP(y, min, BMAX(min, max)) - y;
+    }
+}
+
 void
 domenu(
     MENU *menu, int y_ref, int x_ref, int height_ref, int width_ref, int cmdcur_max)
@@ -1470,36 +1520,10 @@ domenu(
         h = (xyz.height) ? xyz.height : xo.max;
 
         /* Movement */
-        switch (cmd)
-        {
-        case KEY_HOME:
-        case KEY_END:
-            if ((cmd == KEY_HOME) ? xyz.x > getx_ref(x_ref) : xyz.x < getx_ref(x_ref))
-                xyz.x_ref = x_ref;
-            else
-                xyz.x_ref = (cmd == KEY_HOME) ? 0 : B_COLS_REF - w;
-            xyz.x = getx_ref(xyz.x_ref);
-            break;
-        case KEY_PGUP:
-        case KEY_PGDN:
-            if ((cmd == KEY_PGUP) ? xyz.y > gety_ref(y_ref) : xyz.y < gety_ref(y_ref))
-                xyz.y_ref = y_ref;
-            else
-                xyz.y_ref = (cmd == KEY_PGUP) ? 1 : B_LINES_REF - h;  // Leave space for the footer
-            xyz.y = gety_ref(xyz.y_ref);
-            break;
-        case KEY_LEFT:
-        case KEY_RIGHT:
-            xyz.x_ref += TCLAMP(xyz.x + ((cmd == KEY_RIGHT) ? 1 : -1), 0, BMAX(0, b_cols - w)) - xyz.x;
-            xyz.x = getx_ref(xyz.x_ref);
-            break;
-        case KEY_UP:
-        case KEY_DOWN:
-            xyz.y_ref += TCLAMP(xyz.y + ((cmd == KEY_DOWN) ? 1 : -1), 1, BMAX(1, b_lines - h)) - xyz.y;
-            xyz.y = gety_ref(xyz.y_ref);
-            break;
-        default:;
-        }
+        xyz.x_ref = get_bounded_move_x(cmd, xyz.x_ref, 0, x_ref, B_COLS_REF - w);
+        xyz.x = getx_ref(xyz.x_ref);
+        xyz.y_ref = get_bounded_move_y(cmd, xyz.y_ref, 1, y_ref, B_LINES_REF - h);
+        xyz.y = gety_ref(xyz.y_ref);
 
         /* Redraw */
         switch (cmd)
