@@ -1029,44 +1029,44 @@ namespace {
 INTERNAL_INIT MENU menu_main[] =
 {
     {{.menu = menu_admin}, PERM_ADMIN, M_ADMIN,
-    "0Admin    【 系統維護區 】"},
+    "0Admin    【 系統維護區 】\n設定、轉信、系統重置"},
 
     {{Gem}, 0, M_GEM,
-    "Announce  【 精華公佈欄 】"},
+    "Announce  【 精華公佈欄 】\n一些特別資訊"},
 
     {{Boards}, 0, M_BOARD,
-    "Boards    【 \x1b[1;33m佈告討論區\x1b[m 】"},
+    "Boards    【 \x1b[1;33m佈告討論區\x1b[m 】\n瀏覽所有看板"},
 
     {{Class}, 0, M_CLASS,
-    "Class     【 \x1b[1;33m分組討論區\x1b[m 】"},
+    "Class     【 \x1b[1;33m分組討論區\x1b[m 】\n瀏覽分類看板"},
 
 #ifdef  HAVE_PROFESS
     {{Profess}, 0, M_PROFESS,
-    "Profession【 \x1b[1;33m專業討論區\x1b[m 】"},
+    "Profession【 \x1b[1;33m專業討論區\x1b[m 】\n瀏覽專業看板"},
 #endif
 
 #ifdef  HAVE_FAVORITE
     {{MyFavorite}, PERM_BASIC, M_CLASS,
-    "Favorite  【 \x1b[1;32m我的最愛區\x1b[m 】"},
+    "Favorite  【 \x1b[1;32m我的最愛區\x1b[m 】\n瀏覽收藏看板"},
 #endif
 
 #ifdef HAVE_SIGNED_MAIL
     {{.menu = menu_mail}, PERM_BASIC, M_MAIL, /* Thor.990413: 若不用m_verify, guest就沒有選單內容囉 */
-    "Mail      【 信件工具區 】"},
+    "Mail      【 信件工具區 】\n讀信、寫信、信件設定"},
 #else
     {{.menu = menu_mail}, PERM_BASIC, M_MAIL,
-    "Mail      【 私人信件區 】"},
+    "Mail      【 私人信件區 】\n讀信、寫信、信件設定"},
 #endif
 
     {{.menu = menu_talk}, 0, M_TMENU,
-    "Talk      【 休閒聊天區 】"},
+    "Talk      【 休閒聊天區 】\n網友、熱訊、通知設定"},
 
     {{.menu = menu_service}, PERM_BASIC, M_XMENU,
-    "DService  【 " NICKNAME "服務區 】"},
+    "DService  【 " NICKNAME "服務區 】\n設定、遊戲、投票所"},
 
     /* lkchu.990428: 不要都塞在個人工具區 */
     {{.menu = menu_xyz}, 0, M_SMENU,
-    "Xyz       【 系統資訊區 】"},
+    "Xyz       【 系統資訊區 】\n排行、留言、系統資訊"},
 
 #ifdef  HAVE_CHANGE_SKIN
     {{.menu = *skin_main}, PERM_SYSOP, M_XMENU,
@@ -1074,7 +1074,7 @@ INTERNAL_INIT MENU menu_main[] =
 #endif
 
     {{goodbye}, 0, M_XMODE,
-    "Goodbye   【再別" BOARDNAME "】"},
+    "Goodbye   【再別" BOARDNAME "】\n離開" NICKNAME ""},
 
     {{NULL}, PERM_MENU + 'B', M_MMENU,
     "主功\能表"}
