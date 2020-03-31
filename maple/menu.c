@@ -1196,174 +1196,320 @@ main_menu(void)
     domenu(menu_main, MENU_YPOS_REF, MENU_XPOS_REF, 0, 0, 1);
 }
 
+/* IID.20200331: Restructure with xover commands */
+
+typedef struct {
+    int y_ref, x_ref, height_ref, width_ref;
+    int y, x, height, width;
+    MENU *menu, *mtail;
+    MENU **table;
+    int table_size;
+    int pos_prev; /* previous cursor position */
+    int max_prev; /* previous menu max */
+
+    /* IID.20200107: Match input sequence. */
+    int cmdcur_max;
+    int *cmdcur;  /* Command matching cursor */
+    int *cmdlen;  /* Command matching length (no spaces) */
+    bool keep_cmd;
+    bool keyboard_cmd;
+    int *item_length;
+    int max_item_length;
+} DomenuXyz;
+
+GCC_PURE static int
+domenu_gety(
+    int num,
+    const DomenuXyz *xyz)
+{
+    if (xyz->height > 0 && xyz->width > 0)
+        return xyz->y + (num % xyz->height);
+    else
+        return xyz->y + num;
+}
+
+GCC_PURE static int
+domenu_getx(
+    int num,
+    const DomenuXyz *xyz)
+{
+    if (xyz->height > 0 && xyz->width > 0)
+        return xyz->x + (num / xyz->height * xyz->width);
+    else
+        return xyz->x;
+}
+
+static void
+domenu_item(
+    int num,
+    DomenuXyz *xyz)
+{
+    char item[ANSILINELEN];
+    const MENU *const mptr = xyz->table[num - 1];
+    const char *const str = check_info(mptr->desc);
+    const int match_max = BMIN(xyz->cmdcur_max, strcspn(str, "\n"));
+    const int y = domenu_gety(num - 1, xyz);
+
+    sprintf(item, "\x1b[m(\x1b[1;36m%-*.*s\x1b[m)%.*s",
+            xyz->cmdcur_max, match_max, str, strcspn(str + match_max, "\n"), str + match_max);
+    outs(item);
+
+    if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
+        grayout(y, y + 1, GRAYOUT_COLORNORM);
+
+    xyz->item_length[num - 1] = 4 + strip_ansi_len(str);
+    xyz->max_item_length = BMAX(xyz->max_item_length, xyz->item_length[num - 1]);
+    clrtoeol();
+}
+
+static int
+domenu_redo(
+    XO *xo,
+    int cmd)
+{
+    DomenuXyz *const xyz = (DomenuXyz *)xo->xyz;
+    int cmd_res = cmd & XO_MOVE_MASK;
+
+    if (cmd & XZ_ZONE)
+        return cmd;  /* Cannot handle this */
+
+    if (cmd & XR_PART_LOAD)
+    {
+        const unsigned int level = cuser.userlevel;
+        unsigned int mlevel;
+        int max;
+
+#ifdef  MENU_VERBOSE
+domenu_redo_reload:
+#endif
+        max = 0;
+        for (xyz->mtail = xyz->menu;; xyz->mtail++)
+        {
+            mlevel = xyz->mtail->level;
+            if (mlevel & PERM_MENU)
+            {
+
+#ifdef  MENU_VERBOSE
+                if (max <= 0)                /* 找不到適合權限之功能，回上一層功能表 */
+                {
+                    xyz->menu = xyz->mtail->menu;
+                    goto domenu_redo_reload;
+                }
+#endif
+
+                break;
+            }
+            if (mlevel && !(mlevel & level))
+                continue;
+            if (!strncmp(xyz->mtail->desc, OPT_OPERATOR, strlen(OPT_OPERATOR)) && !(supervisor || !str_cmp(cuser.userid, ELDER) || !str_cmp(cuser.userid, STR_SYSOP)))
+                continue;
+
+            xyz->table[max++] = xyz->mtail;
+        }
+
+        xo->max = max;
+        xyz->max_prev = BMAX(xyz->max_prev, max);
+
+        if (cmd_res == XO_NONE)
+        {
+            if ((xyz->menu == menu_main) && (cutmp->ufo & UFO_BIFF))
+                cmd_res = 'M';
+            else if ((xyz->menu == menu_main) && (cutmp->ufo & UFO_BIFFN))
+                cmd_res = 'U';
+            else
+                cmd_res = mlevel ^ PERM_MENU;  /* default command */
+            xyz->keyboard_cmd = false;
+        }
+        utmp_mode(xyz->mtail->umode);
+    }
+    if (cmd & XR_PART_HEAD)
+    {
+        /* Resize */
+        xyz->y = gety_ref(xyz->y_ref);
+        xyz->x = getx_ref(xyz->x_ref);
+        xyz->height = gety_ref(xyz->height_ref);
+        xyz->width = getx_ref(xyz->width_ref);
+
+        clear();
+        vs_head(xyz->mtail->desc, NULL);
+        //prints("\n\x1b[30;47m     選項         選項說明                         動態看板                   \x1b[m\n");
+    }
+    if (cmd & XR_PART_NECK)
+    {
+        if (!MENU_NOMOVIE_POS(xyz->y, xyz->x))
+            movie();
+    }
+    if (cmd & XR_PART_BODY)
+    {
+        xyz->max_item_length = 0;
+        for (int i = 0; i <= xyz->max_prev; i++)
+        {
+            move_ansi(domenu_gety(i, xyz), domenu_getx(i, xyz) + 2);
+            if (i < xo->max)
+                domenu_item(i + 1, xyz);
+            else
+                clrtoeol();
+        }
+        xyz->pos_prev = -1;
+        xyz->max_prev = xo->max;
+    }
+    if (cmd & XR_PART_FOOT)
+    {
+        menu_foot();
+    }
+
+    return cmd_res;
+}
+
+static int
+domenu_cur(XO *xo)
+{
+    DomenuXyz *const xyz = (DomenuXyz *)xo->xyz;
+
+    const int i = xo->pos;
+    move_ansi(domenu_gety(i, xyz), domenu_getx(i, xyz) + 2);
+    if (i < xo->max)
+        domenu_item(i + 1, xyz);
+    else
+        clrtoeol();
+    return XO_NONE;
+}
+
+static int domenu_init(XO *xo) { return domenu_redo(xo, XO_INIT); }
+static int domenu_load(XO *xo) { return domenu_redo(xo, XO_LOAD); }
+static int domenu_head(XO *xo) { return domenu_redo(xo, XO_HEAD); }
+static int domenu_neck(XO *xo) { return domenu_redo(xo, XO_NECK); }
+static int domenu_body(XO *xo) { return domenu_redo(xo, XO_BODY); }
+static int domenu_foot(XO *xo) { return domenu_redo(xo, XO_FOOT); }
+
+static KeyFuncList domenu_cb =
+{
+    {XO_INIT, {domenu_init}},
+    {XO_LOAD, {domenu_load}},
+    {XO_HEAD, {domenu_head}},
+    {XO_NECK, {domenu_neck}},
+    {XO_BODY, {domenu_body}},
+    {XO_FOOT, {domenu_foot}},
+    {XO_CUR, {domenu_cur}},
+};
+
+static int domenu_exec(XO *xo, int cmd);
+
 void
 domenu(
     MENU *menu, int y_ref, int x_ref, int height_ref, int width_ref, int cmdcur_max)
 {
-    int y, x, height, width;
-    MENU *mtail, *table[41];
-    int cc=0, cx=0;     /* current / previous cursor position */
-    int max=0, mmx=0;   /* current / previous menu max */
-    int cmd=0;
-    unsigned int mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
+    MENU *table[41];
 
     /* IID.20200107: Match input sequence. */
     int cmdcur[COUNTOF(table)];  /* Command matching cursor */
     int cmdlen[COUNTOF(table)];  /* Command matching length (no spaces) */
-    bool keep_cmd = false;
-    bool keyboard_cmd = true;
-    int item_length[COUNTOF(table)]={0};
-    int max_item_length = 0;
+    int item_length[COUNTOF(table)] = {0};
 
-domenu_resize:
-    y = gety_ref(y_ref);
-    x = getx_ref(x_ref);
-    height = gety_ref(height_ref);
-    width = getx_ref(width_ref);
+    DomenuXyz xyz =
+    {
+        .y_ref = y_ref,
+        .x_ref = x_ref,
+        .height_ref = height_ref,
+        .width_ref = width_ref,
+        .menu = menu,
+        .table = table,
+        .table_size = COUNTOF(table),
+        .pos_prev = 0, /* previous cursor position */
+        .max_prev = 0, /* previous menu max */
+
+        .cmdcur = cmdcur,
+        .cmdlen = cmdlen,
+        .keep_cmd = false,
+        .keyboard_cmd = true,
+        .item_length = item_length,
+        .max_item_length = 0,
+        .cmdcur_max = cmdcur_max,
+    };
+
+    XO xo =
+    {
+        .pos = 0,
+        .top = 0,
+        .max = 0,
+        .xyz = &xyz,
+        .cb = domenu_cb,
+        .recsiz = sizeof(MENU),
+    };
+
+    int cmd = XO_INIT;
 
     for (;;)
     {
-        if (!menu)
+        cmd = domenu_exec(&xo, cmd);
+        if ((cmd & ~XO_MOVE_MASK) == (XZ_ZONE | XZ_QUIT))
+            break;
+
+        cmd = vkey();
+        xyz.keyboard_cmd = true;
+
+        if (cmd == I_RESIZETERM)
+            cmd = XO_HEAD;
+    }
+}
+
+static int
+domenu_exec(
+    XO *xo,
+    int cmd)
+{
+    DomenuXyz *const xyz = (DomenuXyz *)xo->xyz;
+
+    while (cmd != XO_NONE || (cmd & XO_ZONE_MASK))
+    {
+        if (!xyz->menu)
         {
-            return;
+            return XO_QUIT;
         }
-        if (!keep_cmd)
+        if (!xyz->keep_cmd)
         {
-            memset(cmdcur, 0, sizeof(cmdcur));
-            memset(cmdlen, 0, sizeof(cmdlen));
+            memset(xyz->cmdcur, 0, sizeof(xyz->cmdcur[0]) * xyz->table_size);
+            memset(xyz->cmdlen, 0, sizeof(xyz->cmdlen[0]) * xyz->table_size);
         }
-        keep_cmd = false;
+        xyz->keep_cmd = false;
 
-        if (mode & MENU_LOAD)
-        {
-            unsigned int level = cuser.userlevel;
-            unsigned int mlevel;
-            max = -1;
-            for (mtail = menu;; mtail++)
-            {
-                mlevel = mtail->level;
-                if (mlevel & PERM_MENU)
-                {
-
-#ifdef  MENU_VERBOSE
-                    if (max < 0)                /* 找不到適合權限之功能，回上一層功能表 */
-                    {
-                        menu = mtail->menu;
-                        continue;
-                    }
-#endif
-
-                    break;
-                }
-                if (mlevel && !(mlevel & level))
-                    continue;
-                if (!strncmp(mtail->desc, OPT_OPERATOR, strlen(OPT_OPERATOR)) && !(supervisor || !str_cmp(cuser.userid, ELDER) || !str_cmp(cuser.userid, STR_SYSOP)))
-                    continue;
-
-                table[++max] = mtail;
-            }
-
-            mmx = BMAX(mmx, max);
-
-            if ((menu == menu_main) && (cutmp->ufo & UFO_BIFF))
-                cmd = 'M';
-            else if ((menu == menu_main) && (cutmp->ufo & UFO_BIFFN))
-                cmd = 'U';
-            else
-                cmd = mlevel ^ PERM_MENU;  /* default command */
-            keyboard_cmd = false;
-            utmp_mode(mtail->umode);
-        }
-
-        if (mode & MENU_DRAW)
-        {
-            max_item_length = 0;
-
-            if (mode & MENU_FILM)
-            {
-                clear();
-            }
-            vs_head(mtail->desc, NULL);
-            //prints("\n\x1b[30;47m     選項         選項說明                         動態看板                   \x1b[m\n");
-            for (int i = 0; i <= mmx; i++)
-            {
-                int yi, xi;
-                if (height > 0 && width > 0)
-                {
-                    yi = y + (i % height);
-                    xi = x + (i / height * width);
-                }
-                else
-                {
-                    yi = y + i;
-                    xi = x;
-                }
-                move_ansi(yi, xi + 2);
-                if (i <= max)
-                {
-                    char item[ANSILINELEN];
-                    const MENU *const mptr = table[i];
-                    const char *const str = check_info(mptr->desc);
-                    int match_max = BMIN(cmdcur_max, strcspn(str, "\n"));
-                    sprintf(item, "\x1b[m(\x1b[1;36m%-*.*s\x1b[m)%.*s",
-                            cmdcur_max, match_max, str, strcspn(str + match_max, "\n"), str + match_max);
-                    outs(item);
-
-                    if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
-                        grayout(yi, yi + 1, GRAYOUT_COLORNORM);
-
-                    item_length[i] = 4 + strip_ansi_len(str);
-                    max_item_length = BMAX(max_item_length, item_length[i]);
-                }
-                clrtoeol();
-            }
-            if (mode & MENU_FILM)
-            {
-                if (!MENU_NOMOVIE_POS(y, x))
-                    movie();
-                menu_foot();
-                cx = -1;
-            }
-
-            mmx = max;
-            mode = 0;
-        }
+        cmd = domenu_redo(xo, cmd);
 
         /* Invoke hotkey functions for keyboard input only */
-        switch ((keyboard_cmd) ? cmd : KEY_NONE)
+        switch ((xyz->keyboard_cmd) ? cmd : KEY_NONE)
         {
         case KEY_PGUP:
-            cc = (cc == 0) ? max : 0;
+            xo->pos = (xo->pos == 0) ? xo->max - 1 : 0;
         break;
 
         case KEY_PGDN:
-            cc = (cc == max) ? 0 : max;
+            xo->pos = (xo->pos == xo->max - 1) ? 0 : xo->max - 1;
         break;
 
         case KEY_DOWN:
-            if (++cc <= max)
+            if (++xo->pos < xo->max)
                 break;
             // Else falls through
             //    to wrap around cursor
 
         case KEY_HOME:
-            cc = 0;
+            xo->pos = 0;
             break;
 
         case KEY_UP:
-            if (--cc >= 0)
+            if (--xo->pos >= 0)
                 break;
             // Else falls through
             //    to wrap around cursor
 
         case KEY_END:
-            cc = max;
+            xo->pos = xo->max - 1;
             break;
 
         case KEY_RIGHT:
-            if (height > 0 && cc + height <= max)
+            if (xyz->height > 0 && xo->pos + xyz->height < xo->max)
             {
-                cc += height;
+                xo->pos += xyz->height;
                 break;
             }
             // Else falls through
@@ -1371,7 +1517,7 @@ domenu_resize:
 
         case '\n':
             {
-                MENU *const mptr = table[cc];
+                MENU *const mptr = xyz->table[xo->pos];
                 MenuItem mitem = mptr->item;
                 int mmode = mptr->umode;
                 int res;
@@ -1392,10 +1538,10 @@ domenu_resize:
 
                 if ((mmode & M_MASK) <= M_XMENU)
                 {
-                    if (cmdcur_max == 1)
-                        mtail->level = PERM_MENU + mptr->desc[0];
-                    menu = mitem.menu;
-                    mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
+                    if (xyz->cmdcur_max == 1)
+                        xyz->mtail->level = PERM_MENU + mptr->desc[0];
+                    xyz->menu = mitem.menu;
+                    cmd = XO_INIT;
                     continue;
                 }
 
@@ -1404,61 +1550,76 @@ domenu_resize:
                 else
                     res = (*mitem.func)();
 
-                utmp_mode(mtail->umode);
+                utmp_mode(xyz->mtail->umode);
 
-                switch (res)
+                if (res >= -1 && res < '\b')  /* Non-xover return value */
                 {
-                case XEASY:
+                    res = XO_HEAD;
+                }
+                else if ((res & ~XO_MOVE_MASK) == XR_FOOT)
+                {
 #if 1
                     /* Thor.980826: 用 outz 就不用 move + clrtoeol了 */
                     outf(footer);
 #endif
-                    mode = 0;
+                    res &= ~XO_MOVE_MASK;
+                }
+
+                cmd = res & XO_MOVE_MASK;
+                res = (res & ~XO_MOVE_MASK) + XO_NONE;
+
+                switch (res)
+                {
+                case XEASY:
                     break;
 
                 case QUIT:
-                    return;
+                    return XO_QUIT;
 
 #ifdef  HAVE_CHANGE_SKIN
-                case SKIN:
+                case XZ_SKIN + XO_NONE:
                     vmsg("DEBUG:SKIN");
                     vmsg("123");
                     //(*s_menu)();
-                    return;
+                    return XO_QUIT;
                     vmsg("1234");
                     break;
 #endif
-
-                default:
-                    mode = MENU_DRAW | MENU_FILM;
+                default:;
                 }
 
-                cmd = ' ';
-                keyboard_cmd = false;
+                if (cmd == KEY_NONE)
+                    cmd = ' ';
+                cmd |= res & ~XO_MOVE_MASK;
+                xyz->keyboard_cmd = false;
                 continue;
             }
 
 #ifdef EVERY_Z
         case Ctrl('Z'):
-            every_Z(NULL);      /* Thor: ctrl-Z everywhere */
-            goto menu_key;
+            every_Z(xo);       /* Thor: ctrl-Z everywhere */
+            cmd = XO_HEAD;
+            continue;
 #endif
         case Ctrl('U'):
             every_U();
-            break;
+            cmd = XO_HEAD;
+            continue;
         case Ctrl('B'):
             every_B();
-            break;
+            cmd = XO_HEAD;
+            continue;
         case Ctrl('S'):
         case 'S':
         case 's':
         case '/':
             every_S();
-            break;
+            cmd = XO_HEAD;
+            continue;
         case KEY_LEFT:
-            if (height > 0 && cc - height >= 0)
+            if (xyz->height > 0 && xo->pos - xyz->height >= 0)
             {
-                cc -= height;
+                xo->pos -= xyz->height;
                 break;
             }
             // Else falls through
@@ -1467,16 +1628,16 @@ domenu_resize:
         case KEY_ESC:
         case Meta(KEY_ESC):
         case 'e':
-            if (menu != menu_main)
+            if (xyz->menu != menu_main)
             {
-                mtail->level = PERM_MENU + table[cc]->desc[0];
-                menu = mtail->item.menu;
-                mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
+                xyz->mtail->level = PERM_MENU + xyz->table[xo->pos]->desc[0];
+                xyz->menu = xyz->mtail->item.menu;
+                cmd = XO_INIT;
                 continue;
             }
 
             cmd = 'G';
-            keyboard_cmd = false;
+            xyz->keyboard_cmd = false;
 
             // Falls through
             //    to move the cursor to option 'G' ('Goodbye'; exiting BBS)
@@ -1492,29 +1653,29 @@ domenu_resize:
                     cmd = tolower(cmd);
 
                     /* IID.20200107: Match input sequence. */
-                    for (int i = 0; i <= max; i++)
+                    for (int i = 0; i < xo->max; i++)
                     {
-                        const char *const mdesc = table[i]->desc;
-                        int match_max = BMIN(cmdcur_max, strlen(mdesc));
+                        const char *const mdesc = xyz->table[i]->desc;
+                        const int match_max = BMIN(xyz->cmdcur_max, strlen(mdesc));
                         /* Skip spaces */
-                        cmdcur[i] += strspn(mdesc + cmdcur[i], " ");
+                        xyz->cmdcur[i] += strspn(mdesc + xyz->cmdcur[i], " ");
                         /* Not matched or cursor reached the end */
-                        if (cmdcur[i] >= match_max
-                            || tolower(mdesc[cmdcur[i]]) != cmd)
+                        if (xyz->cmdcur[i] >= match_max
+                            || tolower(mdesc[xyz->cmdcur[i]]) != cmd)
                         {
                             /* Reset and skip spaces */
-                            cmdcur[i] = strspn(mdesc + cmdcur[0], " ");
-                            cmdlen[i] = 0;
+                            xyz->cmdcur[i] = strspn(mdesc + xyz->cmdcur[0], " ");
+                            xyz->cmdlen[i] = 0;
                         }
-                        if (tolower(mdesc[cmdcur[i]]) == cmd)
+                        if (tolower(mdesc[xyz->cmdcur[i]]) == cmd)
                         {
-                            cmdcur[i]++;
-                            cmdlen[i]++;
+                            xyz->cmdcur[i]++;
+                            xyz->cmdlen[i]++;
                         }
-                        if (cmdlen[i] > maxlen)
+                        if (xyz->cmdlen[i] > maxlen)
                         {
-                            maxlen = cmdlen[i];
-                            cc = i;
+                            maxlen = xyz->cmdlen[i];
+                            xo->pos = i;
                         }
                     }
                 }
@@ -1523,61 +1684,54 @@ domenu_resize:
                 //    to keep the input
 
             case ' ':  /* Ignore space for matching */
-                if (keyboard_cmd)  /* `cmd` is from keyboard */
-                    keep_cmd = true;
+                if (xyz->keyboard_cmd)  /* `cmd` is from keyboard */
+                    xyz->keep_cmd = true;
+                break;
+            case KEY_NONE:
+                ; /* Do nothing */
             }
         }
 
+        cmd = XO_NONE;
         {
             int ycc, xcc, ycx, xcx;
-            if (height > 0 && width > 0)
+            if (xyz->height > 0 && xyz->width > 0)
             {
-                ycc = y + (cc % height);
-                xcc = x + (cc / height * width);
-                ycx = y + (cx % height);
-                xcx = x + (cx / height * width);
+                ycc = xyz->y + (xo->pos % xyz->height);
+                xcc = xyz->x + (xo->pos / xyz->height * xyz->width);
+                ycx = xyz->y + (xyz->pos_prev % xyz->height);
+                xcx = xyz->x + (xyz->pos_prev / xyz->height * xyz->width);
             }
             else
             {
-                ycc = y + cc;
-                xcc = x;
-                ycx = y + cx;
-                xcx = x;
+                ycc = xyz->y + xo->pos;
+                xcc = xyz->x;
+                ycx = xyz->y + xyz->pos_prev;
+                xcx = xyz->x;
             }
-            if (cc != cx)
+            if (xo->pos != xyz->pos_prev)
             {
-                const char *explan = strchr(table[cc]->desc, '\n');
+                const char *explan = strchr(xyz->table[xo->pos]->desc, '\n');
                 if (!explan)
-                    explan = strchr(mtail->desc, '\n');
+                    explan = strchr(xyz->mtail->desc, '\n');
                 if (explan)
                 {
                     move(b_lines - 1, b_cols - strip_ansi_len(explan + 1));
                     outs(explan + 1);
                 }
 
-                if (cx >= 0)
+                if (xyz->pos_prev >= 0)
                 {
-                    cursor_bar_clear(ycx, xcx, width);
+                    cursor_bar_clear(ycx, xcx, xyz->width);
                 }
-                cursor_bar_show(ycc, xcc, width);
-                cx = cc;
+                cursor_bar_show(ycc, xcc, xyz->width);
+                xyz->pos_prev = xo->pos;
             }
             else
             {
                 move(ycc, xcc + 1);
             }
         }
-
-menu_key:
-
-        cmd = vkey();
-        keyboard_cmd = true;
-
-        if (cmd == I_RESIZETERM)
-        {
-            mode = MENU_LOAD | MENU_DRAW | MENU_FILM;
-            goto domenu_resize;
-        }
     }
+    return XO_NONE;
 }
-

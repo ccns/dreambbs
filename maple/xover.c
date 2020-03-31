@@ -1565,33 +1565,39 @@ xover(
                     /* --------------------------------------------- */
                     /* switch zone                                   */
                     /* --------------------------------------------- */
-
-                    zone_flags |= (cmd & ~XO_MOVE_MASK);  /* Collect zone operation flags */
-
-                    if (xz[pos].xo)
+                    if (cmd & XZ_SKIN)
                     {
-                        zone = pos;
-                        xo = xz[pos].xo;
-                        sysmode = xz[pos].mode;
-
-                        TagNum = 0;             /* clear TagList */
-                        pos_prev = -1;  /* Redraw cursor */
-                        cmd = XO_INIT;
-                        utmp_mode(sysmode);
-
-                        redo_flags = 0;  /* No more redraw/reloading is needed */
-                    }
-                    else if (rel
-                        && ((wrap && UABS(diff) <= max) || (pos > 0 && pos < max)))  /* Prevent infinity loops */
-                    {
-                        /* Fallback movement */
-                        cmd = XO_ZONE + ((wrap) ? XO_WRAP : 0) + XO_REL + diff + ((diff > 0) ? 1 : -1);
-                        continue;
+                        /* TODO(IID.20200331): Change skin here */
                     }
                     else
                     {
-                        /* Switch failed; do nothing */
-                        cmd = XO_NONE;
+                        zone_flags |= (cmd & ~XO_MOVE_MASK);  /* Collect zone operation flags */
+
+                        if (xz[pos].xo)
+                        {
+                            zone = pos;
+                            xo = xz[pos].xo;
+                            sysmode = xz[pos].mode;
+
+                            TagNum = 0;             /* clear TagList */
+                            pos_prev = -1;  /* Redraw cursor */
+                            cmd = XO_INIT;
+                            utmp_mode(sysmode);
+
+                            redo_flags = 0;  /* No more redraw/reloading is needed */
+                        }
+                        else if (rel
+                            && ((wrap && UABS(diff) <= max) || (pos > 0 && pos < max)))  /* Prevent infinity loops */
+                        {
+                            /* Fallback movement */
+                            cmd = XO_ZONE + ((wrap) ? XO_WRAP : 0) + XO_REL + diff + ((diff > 0) ? 1 : -1);
+                            continue;
+                        }
+                        else
+                        {
+                            /* Switch failed; do nothing */
+                            cmd = XO_NONE;
+                        }
                     }
                 }
                 else if (pos != cur)        /* check cursor's range */

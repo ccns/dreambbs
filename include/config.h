@@ -528,9 +528,6 @@
 #define MENU_YPOS       13
 #define MENU_XPOS_REF   ((D_COLS_REF >> 1) + 23)  /* For `get[y|x]_ref()` & `move_ref()` */
 #define MENU_YPOS_REF   13
-#define MENU_LOAD       1
-#define MENU_DRAW       2
-#define MENU_FILM       4
 
 /* ----------------------------------------------------- */
 /* 系統參數                                              */

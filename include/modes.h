@@ -139,9 +139,9 @@ static const char *const ModeTypeTable[] =
 /* ----------------------------------------------------- */
 
 
-#define XEASY   0x333           /* Return value to un-redraw screen */
-#define QUIT    0x666           /* Return value to abort recursive functions */
-#define SKIN    0x999           /* Return value to change skin */
+#define XEASY   XO_FOOT         /* Return value to un-redraw screen */
+#define QUIT    XO_QUIT         /* Return value to abort recursive functions */
+#define SKIN    XO_SKIN         /* Return value to change skin */
 
 
 /* ----------------------------------------------------- */
@@ -278,10 +278,12 @@ static const char *const ModeTypeTable[] =
 #define XZ_FINI         0x02000000      /* Perform finalization tasks for a zone */
 #define XZ_BACK         0x04000000      /* Return to the last zone */
 #define XZ_QUIT         0x08000000      /* Exit `xover()` */
-#define XZ_UNUSED4      0x10000000
+#define XZ_SKIN         0x10000000      /* Change the skin instead of the zone */
+
 #define XZ_UNUSED5      0x20000000
 
 #define XO_ZONE         (XZ_ZONE + XO_MOVE)
+#define XO_SKIN         ((XZ_ZONE | XZ_SKIN) + XO_MOVE)
 
 /* Zone indexes */
 
