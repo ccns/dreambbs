@@ -313,6 +313,27 @@ find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
     return -1;
 }
 
+GCC_CONSTEXPR static int popup2_geth(int max)
+{
+    return max + 3;
+}
+
+GCC_CONSTEXPR static int popup2_getw(void)
+{
+    return 38;
+}
+
+GCC_PURE static int popup2_gety_move(int cmd, int y_ref, int max)
+{
+    const int h = popup2_geth(max);
+    return gety_bound_move(cmd, y_ref, 0, (B_LINES_REF - h) >> 1, B_LINES_REF - h);
+}
+
+GCC_PURE static int popup2_getx_move(int cmd, int x_ref)
+{
+    const int w = popup2_getw();
+    return getx_bound_move(cmd, x_ref, 0, (B_COLS_REF - w) >> 1, B_COLS_REF - w);
+}
 
 /*------------------------------------------------------ */
 /* 詢問選項，可用來取代 vans()                           */
@@ -363,6 +384,9 @@ popupmenu_ans2_redraw:
 
     while (1)
     {
+        const int y_orig_ref = y_ref;
+        const int x_orig_ref = x_ref;
+
         if (old_cur != cur)             /* 游標變動位置才需要重繪 */
         {
             draw_item(y + old_cur, x, desc[old_cur], hotkey, 0);
@@ -373,10 +397,71 @@ popupmenu_ans2_redraw:
         }
 
         ch = vkey();
+
+        switch (ch)
+        {
+        case Meta(KEY_PGUP):
+        case 'W':
+            y_ref = popup2_gety_move(KEY_PGUP, y_ref, max);
+            break;
+        case Meta(KEY_PGDN):
+        case 'S':
+            y_ref = popup2_gety_move(KEY_PGDN, y_ref, max);
+            break;
+        case Meta(KEY_UP):
+        case 'w':
+            y_ref = popup2_gety_move(KEY_UP, y_ref, max);
+            break;
+        case Meta(KEY_DOWN):
+        case 's':
+            y_ref = popup2_gety_move(KEY_DOWN, y_ref, max);
+            break;
+        case Meta(KEY_HOME):
+        case 'A':
+            x_ref = popup2_getx_move(KEY_HOME, x_ref);
+            break;
+        case Meta(KEY_END):
+        case 'D':
+            x_ref = popup2_getx_move(KEY_END, x_ref);
+            break;
+        case Meta(KEY_LEFT):
+        case 'a':
+            x_ref = popup2_getx_move(KEY_LEFT, x_ref);
+            break;
+        case Meta(KEY_RIGHT):
+        case 'd':
+            x_ref = popup2_getx_move(KEY_RIGHT, x_ref);
+            break;
+
+        case KEY_UP:
+            cur = (cur == 1) ? max : cur - 1;
+            break;
+
+        case KEY_DOWN:
+            cur = (cur == max) ? 1 : cur + 1;
+            break;
+
+        case KEY_HOME:
+            cur = 1;
+            break;
+
+        case KEY_END:
+            cur = max;
+            break;
+        }
+
         if (ch == I_RESIZETERM)
+        {
+            /* Keep menu in bound after resizing */
+            y_ref = popup2_gety_move(ch, y_ref, max);
+            x_ref = popup2_getx_move(ch, x_ref);
+        }
+
+        if (y_ref != y_orig_ref || x_ref != x_orig_ref)
         {
             /* Screen size changed and redraw is needed */
             /* clear */
+            ch = I_RESIZETERM;
             scr_restore_keep(&old_screen_dark);
             goto popupmenu_ans2_redraw;
         }
@@ -396,19 +481,9 @@ popupmenu_ans2_redraw:
             return ch;
 
         case KEY_UP:
-            cur = (cur == 1) ? max : cur - 1;
-            break;
-
         case KEY_DOWN:
-            cur = (cur == max) ? 1 : cur + 1;
-            break;
-
         case KEY_HOME:
-            cur = 1;
-            break;
-
         case KEY_END:
-            cur = max;
             break;
 
         default:                /* 去找所按鍵是哪一個選項 */

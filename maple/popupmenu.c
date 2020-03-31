@@ -312,6 +312,28 @@ draw_menu(const MENU *const pmenu[20], int num, const char *title, int y, int x,
     return 0;
 }
 
+GCC_CONSTEXPR static int popup_geth(int num)
+{
+    return num + 2;
+}
+
+GCC_CONSTEXPR static int popup_getw(void)
+{
+    return 39;
+}
+
+GCC_PURE static int popup_gety_move(int cmd, int y_ref, int num)
+{
+    const int h = popup_geth(num);
+    return gety_bound_move(cmd, y_ref, 1, 1 + ((B_LINES_REF - h) >> 1), B_LINES_REF - h);
+}
+
+GCC_PURE static int popup_getx_move(int cmd, int x_ref)
+{
+    const int w = popup_getw();
+    return getx_bound_move(cmd, x_ref, 0, (B_COLS_REF - w) >> 1, B_COLS_REF - w);
+}
+
 /* IID.20200204: Use screen size referencing coordinate */
 static int
 do_menu(
@@ -375,6 +397,9 @@ do_menu_redraw:
 
     while (1)  /* verit . user ¿ï¾Ü */
     {
+        const int y_orig_ref = y_ref;
+        const int x_orig_ref = x_ref;
+
         c = vkey();
         if (c == I_RESIZETERM)
         {
@@ -414,12 +439,50 @@ do_menu_redraw:
                 scr_restore_keep(&old_screen);
                 popup_old_screen = &old_screen;
             }
+
+            /* Keep menu in bound after resizing */
+            y_ref = popup_gety_move(c, y_ref, num);
+            x_ref = popup_getx_move(c, x_ref);
             goto do_menu_redraw;
         }
 
         old_cur = cur;
+
         switch (c)
         {
+            case Meta(KEY_PGUP):
+            case 'W':
+                y_ref = popup_gety_move(KEY_PGUP, y_ref, num);
+                break;
+            case Meta(KEY_PGDN):
+            case 'S':
+                y_ref = popup_gety_move(KEY_PGDN, y_ref, num);
+                break;
+            case Meta(KEY_UP):
+            case 'w':
+                y_ref = popup_gety_move(KEY_UP, y_ref, num);
+                break;
+            case Meta(KEY_DOWN):
+            case 's':
+                y_ref = popup_gety_move(KEY_DOWN, y_ref, num);
+                break;
+            case Meta(KEY_HOME):
+            case 'A':
+                x_ref = popup_getx_move(KEY_HOME, x_ref);
+                break;
+            case Meta(KEY_END):
+            case 'D':
+                x_ref = popup_getx_move(KEY_END, x_ref);
+                break;
+            case Meta(KEY_LEFT):
+            case 'a':
+                x_ref = popup_getx_move(KEY_LEFT, x_ref);
+                break;
+            case Meta(KEY_RIGHT):
+            case 'd':
+                x_ref = popup_getx_move(KEY_RIGHT, x_ref);
+                break;
+
             case KEY_LEFT:
             case KEY_ESC:
             case Meta(KEY_ESC):
@@ -437,6 +500,26 @@ do_menu_redraw:
                 break;
             case KEY_END:
                 cur = num;
+                break;
+        }
+
+        if (y_ref != y_orig_ref || x_ref != x_orig_ref)
+        {
+            scr_restore_keep(&old_screen);
+            goto do_menu_redraw;
+        }
+
+        switch (c)
+        {
+            case KEY_LEFT:
+            case KEY_ESC:
+            case Meta(KEY_ESC):
+                scr_restore_free(&old_screen);
+                return 1;
+            case KEY_UP:
+            case KEY_DOWN:
+            case KEY_HOME:
+            case KEY_END:
                 break;
             case KEY_RIGHT:
             case '\n':
@@ -575,23 +658,48 @@ popupmenu_ans_redraw:
 
     while (1)
     {
+        const int y_orig_ref = y_ref;
+        const int x_orig_ref = x_ref;
+
         c = vkey();
-        if (c == I_RESIZETERM)
-        {
-            /* Screen size changed and redraw is needed */
-            /* clear */
-            scr_restore_keep(&old_screen);
-            goto popupmenu_ans_redraw;
-        }
 
         old_cur = cur;
+
         switch (c)
         {
-            case KEY_LEFT:
-            case KEY_ESC:
-            case Meta(KEY_ESC):
-                scr_restore_free(&old_screen);
-                return tolower(desc[0][1]);
+            case Meta(KEY_PGUP):
+            case 'W':
+                y_ref = popup_gety_move(KEY_PGUP, y_ref, num);
+                break;
+            case Meta(KEY_PGDN):
+            case 'S':
+                y_ref = popup_gety_move(KEY_PGDN, y_ref, num);
+                break;
+            case Meta(KEY_UP):
+            case 'w':
+                y_ref = popup_gety_move(KEY_UP, y_ref, num);
+                break;
+            case Meta(KEY_DOWN):
+            case 's':
+                y_ref = popup_gety_move(KEY_DOWN, y_ref, num);
+                break;
+            case Meta(KEY_HOME):
+            case 'A':
+                x_ref = popup_getx_move(KEY_HOME, x_ref);
+                break;
+            case Meta(KEY_END):
+            case 'D':
+                x_ref = popup_getx_move(KEY_END, x_ref);
+                break;
+            case Meta(KEY_LEFT):
+            case 'a':
+                x_ref = popup_getx_move(KEY_LEFT, x_ref);
+                break;
+            case Meta(KEY_RIGHT):
+            case 'd':
+                x_ref = popup_getx_move(KEY_RIGHT, x_ref);
+                break;
+
             case KEY_UP:
                 cur = (cur==0)?num:cur-1;
                 break;
@@ -603,6 +711,36 @@ popupmenu_ans_redraw:
                 break;
             case KEY_END:
                 cur = num;
+                break;
+        }
+
+        if (c == I_RESIZETERM)
+        {
+            /* Keep menu in bound after resizing */
+            y_ref = popup_gety_move(c, y_ref, num);
+            x_ref = popup_getx_move(c, x_ref);
+        }
+
+        if (y_ref != y_orig_ref || x_ref != x_orig_ref)
+        {
+            /* Screen size changed and redraw is needed */
+            /* clear */
+            c = I_RESIZETERM;
+            scr_restore_keep(&old_screen);
+            goto popupmenu_ans_redraw;
+        }
+
+        switch (c)
+        {
+            case KEY_LEFT:
+            case KEY_ESC:
+            case Meta(KEY_ESC):
+                scr_restore_free(&old_screen);
+                return tolower(desc[0][1]);
+            case KEY_UP:
+            case KEY_DOWN:
+            case KEY_HOME:
+            case KEY_END:
                 break;
             case KEY_RIGHT:
             case '\n':
