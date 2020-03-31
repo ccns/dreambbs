@@ -338,6 +338,7 @@ popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref
     char hotkey;
 
     screen_backup_t old_screen;
+    screen_backup_t old_screen_dark;
 
 #ifndef M3_USE_PFTERM
     x_roll =
@@ -345,6 +346,7 @@ popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref
     scr_dump(&old_screen);
 
     grayout(0, b_lines, GRAYOUT_DARK);
+    scr_dump(&old_screen_dark);
 
     hotkey = desc[0][0];
 
@@ -376,8 +378,7 @@ popupmenu_ans2_redraw:
         {
             /* Screen size changed and redraw is needed */
             /* clear */
-            scr_restore_keep(&old_screen);
-            grayout(0, b_lines, GRAYOUT_DARK);
+            scr_restore_keep(&old_screen_dark);
             goto popupmenu_ans2_redraw;
         }
 
@@ -388,6 +389,7 @@ popupmenu_ans2_redraw:
         case Meta(KEY_ESC):
         case KEY_RIGHT:
         case '\n':
+            scr_free(&old_screen_dark);
             scr_restore_free(&old_screen);
             ch = (ch == KEY_RIGHT || ch == '\n') ? desc[cur][0] : desc[0][1];
             if (ch >= 'A' && ch <= 'Z')
