@@ -1128,15 +1128,16 @@ INTERNAL_INIT MENU menu_treat[] =
 #endif  /* #ifdef  TREAT */
 
 GCC_PURE
-int strip_ansi_len(
-    const char *str)
+int strip_ansi_n_len(
+    const char *str,
+    int maxlen)
 {
     int len;
     const char *ptr, *tmp;
     ptr = str;
-    len = strlen(str);
+    len = strnlen(str, maxlen);
 
-    while (ptr)
+    while (ptr && maxlen-- >= 0)
     {
         ptr = strstr(ptr, "\x1b");
         if (ptr)
@@ -1147,6 +1148,13 @@ int strip_ansi_len(
         }
     }
     return len;
+}
+
+GCC_PURE
+int strip_ansi_len(
+    const char *str)
+{
+    return strip_ansi_n_len(str, strlen(str));
 }
 
 
@@ -1215,6 +1223,7 @@ typedef struct {
     bool keyboard_cmd;
     int *item_length;
     int max_item_length;
+    int explan_len_prev;
 } DomenuXyz;
 
 GCC_PURE static int
@@ -1247,17 +1256,18 @@ domenu_item(
     char item[ANSILINELEN];
     const MENU *const mptr = xyz->table[num - 1];
     const char *const str = check_info(mptr->desc);
-    const int match_max = BMIN(xyz->cmdcur_max, strcspn(str, "\n"));
+    const int item_str_len = strcspn(str, "\n");
+    const int match_max = BMIN(xyz->cmdcur_max, item_str_len);
     const int y = domenu_gety(num - 1, xyz);
 
     sprintf(item, "\x1b[m(\x1b[1;36m%-*.*s\x1b[m)%.*s",
-            xyz->cmdcur_max, match_max, str, strcspn(str + match_max, "\n"), str + match_max);
+            xyz->cmdcur_max, match_max, str, BMAX(0, item_str_len - match_max), str + match_max);
     outs(item);
 
     if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
         grayout(y, y + 1, GRAYOUT_COLORNORM);
 
-    xyz->item_length[num - 1] = 4 + strip_ansi_len(str);
+    xyz->item_length[num - 1] = 4 + strip_ansi_n_len(str, item_str_len);
     xyz->max_item_length = BMAX(xyz->max_item_length, xyz->item_length[num - 1]);
     clrtoeol();
 }
@@ -1425,6 +1435,7 @@ domenu(
         .item_length = item_length,
         .max_item_length = 0,
         .cmdcur_max = cmdcur_max,
+        .explan_len_prev = 0,
     };
 
     XO xo =
@@ -1716,8 +1727,12 @@ domenu_exec(
                     explan = strchr(xyz->mtail->desc, '\n');
                 if (explan)
                 {
-                    move(b_lines - 1, b_cols - strip_ansi_len(explan + 1));
+                    int explan_len = strip_ansi_len(explan + 1);
+                    move_ansi(b_lines - 1, b_cols - xyz->explan_len_prev);
+                    clrtoeol();
+                    move_ansi(b_lines - 1, b_cols - explan_len);
                     outs(explan + 1);
+                    xyz->explan_len_prev = explan_len;
                 }
 
                 if (xyz->pos_prev >= 0)
