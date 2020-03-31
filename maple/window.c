@@ -354,11 +354,28 @@ popupmenu_ans2_redraw:
         hotkey = desc[0][0];
 
     /* 畫出整個選單 */
-    max = draw_menu(y, x, title, desc, hotkey, &cur);
+    if (ch == I_RESIZETERM)
+        max = draw_menu(y, x, title, desc, hotkey, &old_cur);
+    else
+        max = draw_menu(y, x, title, desc, hotkey, &cur);
     y += 2;
 
-    /* 一進入，游標停在預設值 */
-    old_cur = cur;
+    if (ch == I_RESIZETERM)
+    {
+        if (old_cur != cur)             /* 游標變動位置才需要重繪 */
+        {
+            draw_item(y + old_cur, x, desc[old_cur], hotkey, 0);
+            draw_item(y + cur, x, desc[cur], hotkey, 1);
+            old_cur = cur;
+            /* 避免在偵測左右鍵全形下，按左鍵會跳離二層選單的問題 */
+            move(b_lines, 0);
+        }
+    }
+    else
+    {
+        /* 一進入，游標停在預設值 */
+        old_cur = cur;
+    }
 
     while (1)
     {
