@@ -193,7 +193,7 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
 範圍或對應的 bit mask                | 相關 macro         | 功能                         | 註解
  :---                               | ---                | ---                          | ---
 `0x00000000` - `0x00003fff`         | `key`              | 按鍵輸入                      |
-`0x00004000`                        | `XO_NONE` = `KEY_NONE` | 什麼都不做 <br> - 可視為不對應任何功能的按鍵 | 與 `Ctrl(' ')` (`'\0'`) 作區分
+`0x00004000`                        | `XO_NONE` = `KEY_NONE` | 什麼都不做 <br> - 可視為不對應任何功能的按鍵 | 與 `Ctrl(' ')` / `Ctrl('@')` (`'\0'`) 作區分
 `0x00ffffff` (mask)                 | `XO_MOVE_MASK`     | 游標移動相關                  |
 `0x001fffff` (mask)                 | `XO_POS_MASK`      | 取得游標目標位置              | 實際目標位置是 `pos - XO_MOVE` <br> `XO_MOVE` 是游標位置的 bias，設定為 `0x00100000`
 　                                  | - `XR_* + key` <br> - `XZ_ZONE + XZ_* + key` | - 執行按鍵功能後進行畫面重繪及資料載入 <br> - 執行按鍵功能後進行列表相關操作 | 經過 `XO_MOVE_MASK` mask 後為 `0x00000000` - `0x00004000`
