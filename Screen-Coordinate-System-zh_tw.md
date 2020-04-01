@@ -88,7 +88,7 @@ y 軸           | y 為 row；+y 方向向下    | y 為 column；+y 方向向�
 ## 座標特殊值
 　                | 值                 | 類型                      | 出處            | 說明
 :---              | ---                | ---                       | ---            | ---
-`LINELEN`         | - `80` <br> - (移除) (Eagles BBS) | 原始字元座標與顯示座標之 x   | Pirate BBS    | 單行最大字元數，也是最大畫面寬度 <br> (Pirate BBS 並未處理控制碼)
+`LINELEN`         | - `80` <br> - (移除) (Eagles BBS 3.1) <br> - `256` (FireBird BBS 3.1) | 原始字元座標與顯示座標之 x   | Pirate BBS    | 單行最大字元數，也是最大畫面寬度 <br> (Pirate BBS 並未處理控制碼)
 `ANSILINELEN`     | - `511` (PttBBS) <br> - `500` (MapleBBS 3) | 原始字元座標之 x           | Eagles BBS    | 單行最大字元數
 `t_lines`         | - (變數，預設 `24`) <br> - `24` (MapleBBS 3) <br> - (移除) (MapleBBS-itoc) <br> - `b_lines + 1` (DreamBBS v1) | 顯示座標之 y               | Pirate BBS    | 畫面高度
 `b_lines`         | - `t_lines - 1` (MapleBBS 2 & PttBBS) <br> - `23` (MapleBBS 3) <br> - (變數，預設 `23`) (MapleBBS-itoc & DreamBBS v1) | 顯示座標之 y               | MapleBBS 2    | 顯示座標之 y 的有效最大值
