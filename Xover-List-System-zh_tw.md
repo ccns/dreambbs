@@ -99,7 +99,7 @@ xo_cursor(
 ### 按鍵處理
 　                     | Pirate BBS          | PttBBS             | MapleBBS 3
  :---                  | ---                 | ---                | ---          
-按鍵處理函數            | `i_read()`          | `i_read_key()`     | `xover()`
+按鍵處理函數            | `i_read()`          | `i_read_key()`     | - `xover()` <br> - `xover_exec_cb()` & `xover_key()` (DreamBBS v3)
 Callback 列表資料結構   | `struct one_key[]`  | `onekey_t[126]`    | - `KeyFunc[]` <br> - `std::unordered_map<unsigned int, XoFunc>` (DreamBBS v3; C++)
 Callback 列表結尾或條件 | `!one_key::fptr`    | (固定長度)         | - `KeyFunc::key == 'h'` <br> - `KeyFunc::first == 'h'` (DreamBBS v3; C) <br> - `std::unordered_map::end()` (DreamBBS v3; C++)
 Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loop/O(n) <br> - Hash table/O(1) (DreamBBS v3; C++)
@@ -197,8 +197,9 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
 `0x00ffffff` (mask)                 | `XO_MOVE_MASK`     | 游標移動相關                  |
 `0x001fffff` (mask)                 | `XO_POS_MASK`      | 取得游標目標位置              | 實際目標位置是 `pos - XO_MOVE` <br> `XO_MOVE` 是游標位置的 bias，設定為 `0x00100000`
 　                                  | - `XR_* + key` <br> - `XZ_ZONE + XZ_* + key` | - 執行按鍵功能後進行畫面重繪及資料載入 <br> - 執行按鍵功能後進行列表相關操作 | 經過 `XO_MOVE_MASK` mask 後為 `0x00000000` - `0x00004000`
-　                                  | - `XR_* + {XO_WRAP\|XO_SCRL\|XO_REL} + key` <br> - `XZ_ZONE + XZ_* + {XO_WRAP\|XO_SCRL\|XO_REL} + key` | (未使用)                     | 經過 `XO_MOVE_MASK` mask 後不為 `0x00000000` - `0x00004000`，而經過 `XO_POS_MASK` mask 後為 `0x00000000` - `0x00004000` <br> - 不需要操作游標的雜項功能放這一區
-　                                  | - `XR_* + move` <br> - `XZ_ZONE + XZ_* + move` | - 設定列表游標位置後進行畫面重繪及資料載入 <br> - 設定 zone 游標位置後進行列表相關操作 | 經過 `XO_POS_MASK` mask 後為 `0x00004001` - `0x001fffff` <br> 這限制了游標的移動範圍為 `-0x000fbfff` (-1032191‬) - `0x000fffff` (1048575‬)
+　                                  | - `XR_* + {XO_WRAP\|XO_SCRL\|XO_REL} + key` <br> - `XZ_ZONE + XZ_* + {XO_WRAP\|XO_SCRL\|XO_REL} + key` | - `XO_CUR` (`XO_REL + XO_CUR_BIAS`) <br> - (未使用) (其它) | 經過 `XO_MOVE_MASK` mask 後不為 `0x00000000` - `0x00004000`，而經過 `XO_POS_MASK` mask 後為 `0x00000000` - `0x00004000` <br> - 不需要操作游標的雜項功能放這一區
+　                         　       | - `XR_* + XO_CUR + diff` <br> - `XZ_ZONE + XZ_* + XO_CUR + diff` | 重繪游標所在行，並移動游標到指定的相對位置 | 經過 `XO_MOVE_MASK` mask 後為 `0x00200000` - `0x00204000` <br> - 移動範圍為 `-0x2000` (`-8192`) - `0x2000` (`8192`)
+　                                  | - `XR_* + XO_MOVE + move` <br> - `XZ_ZONE + XZ_* + XO_MOVE + move` | - 設定列表游標位置後進行畫面重繪及資料載入 <br> - 設定 zone 游標位置後進行列表相關操作 | 經過 `XO_POS_MASK` mask 後為 `0x00004001` - `0x001fffff` <br> - 這限制了游標的移動範圍為 `-0x000fbfff` (-1032191‬) - `0x000fffff` (1048575‬)
 `0x00200000` (mask)                 | `XO_REL`           | 將游標位置解釋為相對位置      |
 `0x00400000` (mask)                 | `XO_SCRL`          | - 將游標移動解讀為捲動列表 (無 `XZ_ZONE`) <br> - (未使用) (有 `XZ_ZONE`) |
 `0x00800000` (mask)                 | `XO_WRAP`          | 讓游標位置頭尾循環            | 會跳到循環後的對應項而非頭尾
@@ -210,12 +211,12 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
 `0x10000000` (mask)                 | `XR_PART_KNEE`     | 重繪列表後說明處             | - `XR_KNEE` = `XR_PART_KNEE \| XR_FOOT` <br> - `XO_KNEE` = `XR_KNEE + XO_NONE`
 `0x20000000` (mask)                 | `XR_PART_FOOT`     | 重繪畫面底部                 | - `XR_FOOT` = `XR_PART_FOOT` <br> - `XO_FOOT` = `XR_FOOT + XO_NONE`
 `0x7f000000` (mask)                 | `XO_ZONE_MASK`     | 列表操作相關                 | 把 `XZ_*` macros `or` 起來的值
-`0x40000000` (mask)                 | `XZ_ZONE`          | 將操作解讀為列表操作          | `XO_ZONE` = `XZ_ZONE + XO_MOVE`
-`0x01000000` (mask)                 | `XZ_INIT`          | 進行某 zone 的初始化工作      |
-`0x02000000` (mask)                 | `XZ_FINI`          | 進行某 zone 的收拾工作        |
-`0x04000000` (mask)                 | `XZ_BACK`          | 回到上次所在的 zone (未實作)  | `XO_LAST` = `(XZ_ZONE \| XZ_BACK) + XO_NONE`
+`0x40000000` (mask)                 | `XZ_ZONE`          | 將操作解讀為列表操作         | `XO_ZONE` = `XZ_ZONE + XO_MOVE`
+`0x01000000` (mask)                 | `XZ_INIT`          | - 進行某 zone 的初始化工作 (無 `XZ_SKIN`) <br> - (未使用) (有 `XZ_SKIN`) | 未實作
+`0x02000000` (mask)                 | `XZ_FINI`          | - 進行某 zone 的收拾工作 (無 `XZ_SKIN`) <br> - (未使用) (有 `XZ_SKIN`) | 未實作
+`0x04000000` (mask)                 | `XZ_BACK`          | - 回到上次所在的 zone (未實作) <br> - (未使用) (有 `XZ_SKIN`) | `XO_LAST` = `(XZ_ZONE \| XZ_BACK) + XO_NONE`
 `0x08000000` (mask)                 | `XZ_QUIT`          | 離開 `xover()` 函數          | `XO_QUIT` = `(XZ_ZONE \| XZ_QUIT) + XO_NONE`
-`0x10000000` (mask)                 | `XZ_UNUSED4`       | (未使用)                     |
+`0x10000000` (mask)                 | `XZ_SKIN`          | 將操作解讀為使用者介面 skin 切換 (未實作) | `XO_SKIN` = `((XZ_ZONE \| XZ_SKIN) + XO_MOVE)`
 `0x20000000` (mask)                 | `XZ_UNUSED5`       | (未使用)                     |
 `0x80000000` (mask)                 | `key \| XO_DL`     | 動態載入功能                 |
 #### 新的 key value 分配的特點
@@ -234,6 +235,10 @@ Macro             | 值                        | 功能                         
 `XR_<redo>`       | (多個)                    | 預先定義的畫面重繪及資料載入的組合動作  | DreamBBS v3 新增
 `XR_PART_<redo>`  | (多個)                    | 畫面重繪及資料載入中的某部分            | DreamBBS v3 新增
 `XO_MOVE`         | - `0x20000000` <br> - `0x00100000` (DreamBBS v3)      | - 表示游標移動 <br> - 游標移動的 bias (DreamBBS v3)
+`XO_CUR`          | `(XO_REL + XO_CUR_BIAS)`  | 重繪游標所在行，並移動游標到指定的相對位置 | DreamBBS v3 新增
+`XO_CUR_BIAS`     | `0x2000`                  | `XO_CUR` 內部處理相對位置時的 bias      | DreamBBS v3 新增
+`XO_CUR_MIN`      | `(XO_REL + 0 - XO_CUR)`   | `XO_CUR` 可指定的相對位置的最小值       | DreamBBS v3 新增
+`XO_CUR_MAX`      | `(XO_REL + KEY_NONE - XO_CUR)` | `XO_CUR` 可指定的相對位置的最大值  | DreamBBS v3 新增
 `XO_RSIZ`         | `256`                     | 列表資料的資料結構大小限制              | DreamBBS v3 起不使用
 `XO_TALL`         | `(b_lines - 3)`           | 翻頁所跳行數                           | 非常數
 `XO_MOVE_MAX`     | `(XO_POS_MASK - XO_MOVE)` | 可加在 `XO_MOVE` 上的最大值            | DreamBBS v3 新增
@@ -246,6 +251,8 @@ Macro             | 值                        | 功能                         
 `XZ_INDEX_<zone>` | `<zone>`                  | Zone 的 index 值                      | DreamBBS v3 新增
 `XZ_INDEX_MAX`    | `XZ_INDEX_MYFAVORITE`     | 最後一個 zone 的 index 值              | DreamBBS v3 新增
 `XZ_COUNT`        | `(XZ_INDEX_MAX + 1)`      | Xover zone 的數量                     | DreamBBS v3 新增
+`XO_SKIN`         | `((XZ_ZONE \| XZ_SKIN) + XO_MOVE)` | 套用某個使用者介面 skin (未實作) | DreamBBS v3 新增
+`XZ_SKIN`         | `0x10000000`              | 將操作解讀為使用者介面 skin 切換 (未實作) | DreamBBS v3 新增
 
 ## DreamBBS v3 的 Xover callback 指令連鎖機制
 ### 名詞說明
