@@ -7,7 +7,7 @@
 主選單 | - `bbs.c` (Pirate BBS) <br> - `nmenus.c` (Eagles BBS 3.1) <br> - `comm_list.c` (FireBird BBS) <br> - `menu.c` (MapleBBS 2.0) | - `docmd()` (Pirate BBS) <br> - `NdoMenu()` (Eagles BBS 3.1) <br> - `domenu()` (MapleBBS 2.0 & FireBird BBS) <br> - `menu()` (MapleBBS 3) <br> - `main_menu()` & `domenu()` (DreamBBS v3) | Pirate BBS |
 Popupmenu | `popupmenu.c` | - `popupmenu()` | WindTop 3.02 | 使用主選單系統的資料結構，但使用不同的特殊值
 Popupmenu Prompt | `popupmenu.c` | - `popupmenu_ans()` <br> - `pmsg()` | WindTop 3.02 | - 實質上與 Popupmenu 不是同一系統 <br> - 本文特稱之為 `Popupmenu Prompt` <br> - 使用次數稀少
-Window | `window.c` | - `popupmenu_ans2()` <br> - `pmsg2()` | MapleBBS-itoc | - 與 Popupmenu Prompt 系統相似 <br> - 在 MapleBBS-itoc 中無 `2` 後綴
+Window | `window.c` | - `popupmenu_ans2()` <br> - `pmsg2()` | MapleBBS-itoc | - 由 Popupmenu Prompt 系統演變而來 <br> - 在 MapleBBS-itoc 中無 `2` 後綴 <br> - DreamBBS 2010 時引入，加上 `2` 後綴
 
 其中本文主要介紹的是主選單與 Popupmenu 2 種使用相同資料結構的系統。
 
