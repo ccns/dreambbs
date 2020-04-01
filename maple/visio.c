@@ -1789,11 +1789,9 @@ igetch(void)
                             continue;
 
                         if (cutmp)
-                        {
-
-                            idle = 0;
                             time(&cutmp->idle_time);
-                        }
+                        else
+                            idle = 0;
 #ifdef  HAVE_SHOWNUMMSG
                         if (cutmp)
                             cutmp->num_msg = 0;
@@ -1809,7 +1807,10 @@ igetch(void)
                     if (cc < 60)                /* paging timeout */
                         return I_TIMEOUT;
 
-                    idle = (time(NULL) - cutmp->idle_time);
+                    if (cutmp)
+                        idle = (time(NULL) - cutmp->idle_time);
+                    else
+                        idle += cc;
                     vio_to.tv_sec = cc + 60;  /* Thor.980806: 每次 timeout都增加60秒,
                                                               所以片子愈換愈慢, 好懶:p */
                     /* Thor.990201: 註解: 除了talk_rqst, chat之外, 需要在動一動之後
