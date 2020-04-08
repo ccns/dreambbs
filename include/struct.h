@@ -1111,7 +1111,7 @@ typedef struct {
 
 typedef union {  /* The field to be used is determined by the value of `umode` */
     int (*func) (void);  /* Default (menu) or `POPUP_FUN` (popupmenu) */
-    FuncArg funcarg;  /* `umode | M_ARG` (menu) or `umode | POPUP_FUN` (popupmenu) */
+    FuncArg funcarg;  /* `umode | M_ARG` (menu) or `POPUP_FUN | POPUP_ARG` (popupmenu) */
 
     int (*xofunc) (XO *xo);  /* `POPUP_XO` (popupmenu) */
 
@@ -1121,7 +1121,7 @@ typedef union {  /* The field to be used is determined by the value of `umode` *
 #else
     const char *dlfunc;
 #endif
-    DlFuncArg dlfuncarg;  /* `M_DL(umode | M_ARG)` (menu) or `POPUP_SO | POPUP_ARG)` (popupmenu) */
+    DlFuncArg dlfuncarg;  /* `M_DL(umode | M_ARG)` (menu) or `M_DL(POPUP_FUN | POPUP_ARG)` or `POPUP_SO | POPUP_ARG` (popupmenu) */
 
     const char *title;  /* `POPUP_MENUTITLE` (popupmenu) */
     struct MENU *menu;  /* `<= M_XMENU` (menu) or `POPUP_MENU` (popupmenu) */
