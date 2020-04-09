@@ -38,7 +38,7 @@ typedef union
     struct sockaddr_in6 v6;
 }     ip_addr;  /* SHMDATA(raw); dependency(UTMP) */
 
-#define IPADDR_NONE     TEMPLVAL(ip_addr, {0})
+#define IPADDR_NONE     LISTLIT(ip_addr){0}
 
 /*
  * The standard udp packet size PACKETSZ (512) is not sufficient for some

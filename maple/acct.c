@@ -257,13 +257,13 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
                 "%*s%s", BMAX(24 - len_strip - 4, 0), "", flist[n] + 4);
                                        /* statue.000703: 註解: +4 去掉目錄 */
         }
-        list[n] = TEMPLVAL(MENU,
-                {{.funcarg = {x_edit_file, flist[n]}}, 0, mode | M_ARG, strdup(buf)});
+        list[n] =
+            LISTLIT(MENU){{.funcarg = {x_edit_file, flist[n]}}, 0, mode | M_ARG, strdup(buf)};
         n++;
     }
     sprintf(buf, "%s\n%s", (mode == M_XFILES) ? "編系統檔案" : "編個人檔案",
             "輸入檔案編號可跳至該項；按 (Enter)(→) 確定；按 (Esc)(e)(←) 回去");
-    list[n] = TEMPLVAL(MENU, {{NULL}, PERM_MENU, mode, buf});
+    list[n] = LISTLIT(MENU){{NULL}, PERM_MENU, mode, buf};
 
     if (mode == M_UFILES)
         domenu(list, MENU_YPOS_REF, MENU_XPOS_REF, 0, 0, 1);
