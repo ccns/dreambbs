@@ -11,7 +11,7 @@ Window | `window.c` | - `popupmenu_ans2()` <br> - `pmsg2()` | MapleBBS-itoc | - 
 
 其中本文主要介紹的是主選單與 Popupmenu 2 種使用相同資料結構的系統。
 
-### 主選單重繪指令
+## 主選單重繪指令
 |    | 值  | 出處 | 說明
  --- | --- | --- | ---
 `MENU_LOAD` | - `1` <br> - 移除 (DreamBBS v3) | MapleBBS 3 | DreamBBS v3 中以 `XR_PART_LOAD` 取代
@@ -20,7 +20,7 @@ Window | `window.c` | - `popupmenu_ans2()` <br> - `pmsg2()` | MapleBBS-itoc | - 
 
 DreamBBS v3 改用 Xover 指令指定主選單畫面的重繪。
 
-### 主選單所呼叫函數之 return 值
+## 主選單所呼叫函數之 return 值
 |       | 值      | 出處 | 說明
  ---    |  ---    | --- | ---
 `XEASY` | - `0x333` <br> - `XO_FOOT` (DreamBBS v3) | Phoenix BBS (?) | 回到選單後只重繪畫面底部
@@ -31,7 +31,7 @@ DreamBBS v3 改用 Xover 指令指定主選單畫面的重繪。
 
 DreamBBS v3 的主選單改為接受 Xover 指令。
 
-### MapleBBS 3 / WindTop 3.02 主選單系統之資料結構
+## MapleBBS 3 / WindTop 3.02 主選單系統之資料結構
 (取自 DreamBBS v3 之早期版本)
 ```cpp
 typedef struct MENU
@@ -74,9 +74,9 @@ Member 名稱 | 型別               | `level` 指定方式 (主選單) | `level
 
   如果這一項不是選項，則當作整個選單的預設選項說明。選項說明會在畫面底部上方一行向右對齊顯示。
 
-### WindTop 3.02 與 DreamBBS v3 的主選單系統使用的特殊值
+## WindTop 3.02 與 DreamBBS v3 的主選單系統使用的特殊值
 
-#### WindTop 3.02 主選單系統使用的特殊值
+### WindTop 3.02 主選單系統使用的特殊值
 Macro (主選單) | 值 (主選單)   | Macro (Popupmenu)  | 值 (Popupmenu) | 使用對象 | 說明
 ---            | ---          | ---                | ---            | ---     | ---
 無             | ---          | `POPUP_QUIT`       | `0x00`         | `umode` | 選擇後退出本層選單
@@ -92,7 +92,7 @@ Macro (主選單) | 值 (主選單)   | Macro (Popupmenu)  | 值 (Popupmenu) | �
 `PERM_MENU`    | `PERM_PURGE` (`0x00800000`) | 無  | ---            | `level` | - 非選項；退出本層選單後將跳到該選單 <br> - 代表主選單系統的 `MENU` 列表的最末項
 無             | ---          | `POPUP_DO_INSTANT` | `0x01000000`   | `level` | - 非選項；透過指令配對跳到該選單某選項時，立即執行對應功能 <br> - 在 `MENU` 列表的最末項出現時才有效
 
-#### DreamBBS v3 主選單系統使用的特殊值
+### DreamBBS v3 主選單系統使用的特殊值
 DreamBBS v3 將主選單系統與 Popupmenu 系統的特殊值整合為一，並使用相同條件來表示 `MENU` 列表的結束。
 
 Macro          | 值           | 使用對象 | 說明
@@ -117,15 +117,15 @@ Macro          | 值           | 使用對象 | 說明
 - `M_DOINSTANT`、`M_MENUTITLE`、以及 `PERM_MENU` 都能表示 `MENU` 列表的最末項
 - `item` 的型別不再與 `level` 有關；`PERM_MENU` 出現時不再假設為 `item` 的型別為 `struct MENU *`
 
-### User Mode、Menu Index、動態看板編號
-#### User Mode (無 `M_` 前綴)
+## User Mode、Menu Index、動態看板編號
+### User Mode (無 `M_` 前綴)
 出處：Pirate BBS
 
 MapleBBS 3 中改為有 `M_` 前綴，已不存在。
 
 在 PttBBS current 中則保留原名，仍為 user mode。
 
-#### User Mode / Menu Index (`M_*`)
+### User Mode / Menu Index (`M_*`)
 出處：Eagles BBS (?)
 
 (於 MapleBBS 2.36 及 FireBird 3.1 中皆不存在；應為 PttBBS current 與 MapleBBS 3 各自引入)
