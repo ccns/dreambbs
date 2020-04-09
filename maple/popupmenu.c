@@ -63,8 +63,8 @@ do_cmd(MENU *mptr, XO *xo, int y, int x)
 #if !NO_SO
     if (mmode < 0)
     {
-        mitem.xofunc = (int (*)(XO *xo)) DL_GET(mitem.dlfunc);
-        if (!mitem.xofunc)
+        mitem.func = (int (*)(void)) DL_GET(mitem.dl.func);
+        if (!mitem.func)
             return 0;
         mmode = -mmode;
   #ifndef DL_HOTSWAP
@@ -80,7 +80,7 @@ do_cmd(MENU *mptr, XO *xo, int y, int x)
     {
 #if !NO_SO
         case POPUP_SO :
-            mitem.func = (int (*)(void)) DL_GET(mitem.dlfunc);
+            mitem.func = (int (*)(void)) DL_GET(mitem.dl.func);
             if (!mitem.func)
             {
                 scr_free(&old_screen);

@@ -456,19 +456,19 @@ INTERNAL_INIT MENU menu_boardadm[] =
     {{BanMail}, PERM_BOARD|PERM_SYSOP, M_BANMAIL,
     "FireWall   擋信列表"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", bm_check)}, PERM_BOARD|PERM_SYSOP, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("adminutil.so", bm_check)}}, PERM_BOARD|PERM_SYSOP, M_DL(M_XMODE),
     "Manage     板主確認"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", m_expire)}, PERM_BOARD|PERM_SYSOP, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("adminutil.so", m_expire)}}, PERM_BOARD|PERM_SYSOP, M_DL(M_XMODE),
     "DExpire    清除看板刪除文章"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", mail_to_bm)}, PERM_SYSOP, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("adminutil.so", mail_to_bm)}}, PERM_SYSOP, M_DL(M_XMODE),
     "ToBM       寄信給板主"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", mail_to_all)}, PERM_SYSOP, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("adminutil.so", mail_to_all)}}, PERM_SYSOP, M_DL(M_XMODE),
     "Alluser    系統通告"},
 
-    {{.dlfunc = DL_NAME("personal.so", personal_admin)}, PERM_BOARD|PERM_SYSOP, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("personal.so", personal_admin)}}, PERM_BOARD|PERM_SYSOP, M_DL(M_XMODE),
     "Personal   個人板審核"},
 
     {{.menu = menu_admin}, PERM_MENU + 'N', M_ADMIN,
@@ -480,24 +480,24 @@ INTERNAL_INIT MENU menu_accadm[] =
     {{m_user}, PERM_ACCOUNTS, M_SYSTEM,
     "User       使用者資料"},
 
-    {{.dlfunc = DL_NAME("bank.so", money_back)}, PERM_ACCOUNTS, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("bank.so", money_back)}}, PERM_ACCOUNTS, M_DL(M_XMODE),
     "GetMoney   匯入舊夢幣"},
 
 #ifdef  HAVE_SONG
-    {{.dlfunc = DL_NAME("song.so", AddRequestTimes)}, PERM_KTV, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("song.so", AddRequestTimes)}}, PERM_KTV, M_DL(M_XMODE),
     "Addsongs   增加點歌次數"},
 #endif
 
-    {{.dlfunc = DL_NAME("passwd.so", new_passwd)}, PERM_SYSOP, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("passwd.so", new_passwd)}}, PERM_SYSOP, M_DL(M_XMODE),
     "Password   重送新密碼"},
 
 #ifdef  HAVE_REGISTER_FORM
-    {{.dlfunc = m_register}, PERM_ACCOUNTS, M_SYSTEM,
+    {{.dl = {m_register}}, PERM_ACCOUNTS, M_SYSTEM,
     "1Register  審核註冊表單"},
 #endif
 
 #ifdef HAVE_OBSERVE_LIST
-    {{.dlfunc = DL_NAME("observe.so", Observe_list)}, PERM_SYSOP|PERM_BOARD, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("observe.so", Observe_list)}}, PERM_SYSOP|PERM_BOARD, M_DL(M_XMODE),
     "2Observe   系統觀察名單"},
 #endif
 
@@ -508,25 +508,25 @@ INTERNAL_INIT MENU menu_accadm[] =
 INTERNAL_INIT MENU menu_settingadm[] =
 {
 
-    {{.dlfunc = DL_NAME("adminutil.so", m_xfile)}, PERM_SYSOP, M_DL(M_XFILES),
+    {{.dl = {DL_NAME("adminutil.so", m_xfile)}}, PERM_SYSOP, M_DL(M_XFILES),
     "File       編輯系統檔案"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", m_xhlp)}, PERM_SYSOP, M_DL(M_XFILES),
+    {{.dl = {DL_NAME("adminutil.so", m_xhlp)}}, PERM_SYSOP, M_DL(M_XFILES),
     "Hlp        編輯說明檔案"},
 
-    {{.dlfunc = DL_NAME("admin.so", Admin)}, PERM_SYSOP, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("admin.so", Admin)}}, PERM_SYSOP, M_DL(M_XMODE),
     "Operator   系統管理員列表"},
 
-    {{.dlfunc = DL_NAME("chatmenu.so", Chatmenu)}, PERM_CHATROOM|PERM_SYSOP, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("chatmenu.so", Chatmenu)}}, PERM_CHATROOM|PERM_SYSOP, M_DL(M_XMODE),
     "Chatmenu   " CHATROOMNAME "動詞"},
 
-    {{.dlfunc = DL_NAME("violate.so", Violate)}, PERM_SYSOP, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("violate.so", Violate)}}, PERM_SYSOP, M_DL(M_XMODE),
     "Violate    處罰名單"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", special_search)}, PERM_SYSOP, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("adminutil.so", special_search)}}, PERM_SYSOP, M_DL(M_XMODE),
     "XSpecial   特殊搜尋"},
 
-    {{.dlfunc = DL_NAME("adminutil.so", update_all)}, PERM_SYSOP, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("adminutil.so", update_all)}}, PERM_SYSOP, M_DL(M_XMODE),
     "Database   系統資料庫更新"},
 
     {{.menu = menu_admin}, PERM_MENU + 'X', M_ADMIN,
@@ -581,7 +581,7 @@ INTERNAL_INIT MENU menu_admin[] =
     {{.menu = menu_settingadm}, PERM_ADMIN, M_ADMIN,
     "Data       系統資料庫設定"},
 
-    {{.dlfunc = DL_NAME("innbbs.so", a_innbbs)}, PERM_BOARD, M_DL(M_SYSTEM),
+    {{.dl = {DL_NAME("innbbs.so", a_innbbs)}}, PERM_BOARD, M_DL(M_SYSTEM),
     "InnBBS     轉信設定"},
 
     {{.menu = menu_reset}, PERM_ADMIN, M_ADMIN,
@@ -642,7 +642,7 @@ INTERNAL_INIT MENU menu_mail[] =
     "Group      群組寄信"},
 #endif
 
-    {{.dlfunc = DL_NAME("contact.so", Contact)}, PERM_INTERNET, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("contact.so", Contact)}}, PERM_INTERNET, M_DL(M_XMODE),
     "Contact    聯絡名單"},
 
     {{m_setforward}, PERM_INTERNET, M_SMAIL,
@@ -700,7 +700,7 @@ INTERNAL_INIT MENU menu_talk[] =
     {{t_banmsg}, PERM_BASIC, M_XMODE,
     "Banmsg     拒收訊息名單"},
 #endif
-    {{.dlfunc = DL_NAME("aloha.so", t_aloha)}, PERM_BASIC, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("aloha.so", t_aloha)}}, PERM_BASIC, M_DL(M_XMODE),
     "Aloha      上站通知名單"},
 
     {{t_pager}, PERM_BASIC, M_XMODE,
@@ -713,7 +713,7 @@ INTERNAL_INIT MENU menu_talk[] =
     "Query      查詢網友"},
 
     /* Thor.990220: chatroom client 改採外掛 */
-    {{.dlfunc = DL_NAME("chat.so", t_chat)}, PERM_CHAT, M_DL(M_CHAT),
+    {{.dl = {DL_NAME("chat.so", t_chat)}}, PERM_CHAT, M_DL(M_CHAT),
     "ChatRoom   " NICKNAME CHATROOMNAME},
 
     {{t_recall}, PERM_BASIC, M_XMODE,
@@ -769,7 +769,7 @@ INTERNAL_INIT MENU menu_xyz[] =
     {{.funcarg = {menumore, FN_ETC_VERSION}}, 0, M_READA | M_ARG,
     "Version    源碼發展資訊"},
 
-    {{.dlfunc = DL_NAME("xyz.so", x_siteinfo)}, 0, M_DL(M_READA),
+    {{.dl = {DL_NAME("xyz.so", x_siteinfo)}}, 0, M_DL(M_READA),
     "Xinfo      系統程式資訊"},
 
     {{pad_view}, 0, M_READA,
@@ -815,7 +815,7 @@ INTERNAL_INIT MENU menu_reg[] =
     {{u_xfile}, PERM_BASIC, M_UFILES,
     "Xfile      編輯個人檔案"},
 
-    {{.dlfunc = DL_NAME("list.so", List)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("list.so", List)}}, PERM_VALID, M_DL(M_XMODE),
     "1List      群組名單"},
 
     {{.menu = menu_user}, PERM_MENU + 'I', M_MMENU,
@@ -831,14 +831,14 @@ INTERNAL_INIT MENU menu_user[] =
     {{u_lock}, PERM_BASIC, M_XMODE,
     "Lock       鎖定螢幕"},
 
-    {{.dlfunc = DL_NAME("memorandum.so", Memorandum)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("memorandum.so", Memorandum)}}, PERM_VALID, M_DL(M_XMODE),
     "Note       備忘錄"},
 
-    {{.dlfunc = DL_NAME("pnote.so", main_note)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("pnote.so", main_note)}}, PERM_VALID, M_DL(M_XMODE),
     "PNote      個人答錄機"},
 
 #ifdef  HAVE_CLASSTABLEALERT
-    {{.dlfunc = DL_NAME("classtable2.so", main_classtable)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("classtable2.so", main_classtable)}}, PERM_VALID, M_DL(M_XMODE),
     "2Table     新版個人功\課表"},
 #endif
 
@@ -862,19 +862,19 @@ INTERNAL MENU menu_service[];
 
 INTERNAL_INIT MENU menu_game[] =
 {
-    {{.dlfunc = DL_NAME("bj.so", BlackJack)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("bj.so", BlackJack)}}, PERM_VALID, M_DL(M_XMODE),
     "BlackJack  " NICKNAME "黑傑克"},
 
-    {{.dlfunc = DL_NAME("guessnum.so", fightNum)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("guessnum.so", fightNum)}}, PERM_VALID, M_DL(M_XMODE),
     "FightNum   數字大決戰"},
 
-    {{.dlfunc = DL_NAME("guessnum.so", guessNum)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("guessnum.so", guessNum)}}, PERM_VALID, M_DL(M_XMODE),
     "GuessNum   傻瓜猜數字"},
 
-    {{.dlfunc = DL_NAME("mine.so", Mine)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("mine.so", Mine)}}, PERM_VALID, M_DL(M_XMODE),
     "Mine       " NICKNAME "踩地雷"},
 
-    {{.dlfunc = DL_NAME("pip.so", p_pipple)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("pip.so", p_pipple)}}, PERM_VALID, M_DL(M_XMODE),
     "Pip        " NICKNAME "戰鬥雞"},
 
     {{.menu = menu_service}, PERM_MENU + 'F', M_UMENU,
@@ -889,13 +889,13 @@ INTERNAL_INIT MENU menu_game[] =
 INTERNAL_INIT MENU menu_special[] =
 {
 
-    {{.dlfunc = DL_NAME("personal.so", personal_apply)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("personal.so", personal_apply)}}, PERM_VALID, M_DL(M_XMODE),
     "PBApply      申請個人看板"},
 
-    {{.dlfunc = DL_NAME("bank.so", bank_main)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("bank.so", bank_main)}}, PERM_VALID, M_DL(M_XMODE),
     "Bank       　銀行"},
 
-    {{.dlfunc = DL_NAME("shop.so", shop_main)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("shop.so", shop_main)}}, PERM_VALID, M_DL(M_XMODE),
     "Pay        　商店"},
 
 #ifdef HAVE_SONG
@@ -919,13 +919,13 @@ INTERNAL_INIT MENU menu_special[] =
 #ifdef HAVE_SONG
 INTERNAL_INIT MENU menu_song[] =
 {
-    {{.dlfunc = DL_NAME("song.so", XoSongMain)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("song.so", XoSongMain)}}, PERM_VALID, M_DL(M_XMODE),
     "Request       點歌歌本"},
 
-    {{.dlfunc = DL_NAME("song.so", XoSongLog)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("song.so", XoSongLog)}}, PERM_VALID, M_DL(M_XMODE),
     "OrderSongs    點歌紀錄"},
 
-    {{.dlfunc = DL_NAME("song.so", XoSongSub)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("song.so", XoSongSub)}}, PERM_VALID, M_DL(M_XMODE),
     "Submit        投稿專區"},
 
     {{.menu = menu_special}, PERM_MENU + 'R', M_XMENU,
@@ -963,10 +963,10 @@ INTERNAL_INIT MENU menu_service[] =
 
 /* 091007.cache: 拉人灌票沒意義... */
 
-    {{.dlfunc = DL_NAME("newboard.so", XoNewBoard)}, PERM_VALID, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("newboard.so", XoNewBoard)}}, PERM_VALID, M_DL(M_XMODE),
     "Cosign    【 連署申請區 】"},
 
-    {{.dlfunc = DL_NAME("vote.so", SystemVote)}, PERM_POST, M_DL(M_XMODE),
+    {{.dl = {DL_NAME("vote.so", SystemVote)}}, PERM_POST, M_DL(M_XMODE),
     "Vote      【 系統投票區 】"},
 
     {{system_result}, 0, M_READA,
@@ -1536,7 +1536,7 @@ domenu_exec(
                 /* Thor.990212: dynamic load, with negative umode */
                 if (mmode < 0)
                 {
-                    mitem.func = (int (*)(void)) DL_GET(mitem.dlfunc);
+                    mitem.func = (int (*)(void)) DL_GET(mitem.dl.func);
                     if (!mitem.func) break;
                     mmode = -mmode;
   #ifndef DL_HOTSWAP
