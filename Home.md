@@ -1,6 +1,6 @@
 # Welcome to the DreamBBS wiki!
 
-This wiki has been created to gathers information about how to use & how to install the DreamBBS system. :)
+This wiki has been created to gather information about how to use & how to install the DreamBBS system. :)
 
 ## Latest Release
   + [Version 1.3.1 (codename: Veldora)](https://github.com/ccns/dreambbs/releases/tag/v1.3.1)
