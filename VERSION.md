@@ -10,7 +10,7 @@ Before the introduction of the new versioning scheme, the latest version name wa
 ## Current Versioning Scheme - `DreamBBS vX.Y.Z`; abbreviated as `vX.Y.Z` 
 Note the presence of `v`.
 
-Each new version has the corresponding legacy version number as well.
+Each new version has a corresponding legacy version number as well.
 
 ## Branches of Development
 The new development workflow has led to the two main branches seen today: `testing` and `current`.
