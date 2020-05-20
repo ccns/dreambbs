@@ -1,31 +1,31 @@
-# Release Notes of Version 2.0.0 (Drafts)
+# Release Notes of Version 2.0.0
 
 ## Features and fixes backported to v1.x
 
 ### Changes which directly affect the UI
 
-- Key `H` and `F1` now both open the help page of pmore/more
-- Now the key `KEY_DEL` deletes the character on the cursor in the input fields
+- Key <kbd>H</kbd> and <kbd>F1</kbd> now both open the help page of pmore/more
+- Now the key <kbd>Del</kbd> deletes the character on the cursor in the input fields
 - Invalid inputs or operations on input fields will now bell
 - Support on-the-fly terminal resizing detecting
 - Make the layout of `vs_bar()` consistent with `vs_head()`
 - Fix typoes and refine word usage in UI strings
 - Most UI elements now support widescreen display
-- Re-enable MyFavorite option in Ctrl-Z menu
-- The screenshot function in Ctrl-Z menu now supports widescreen
-- The screenshot function in Ctrl-Z menu is now enabled when pfterm is enabled
-- Add some `F*` and `ESC-*` key shortcuts from PttBBS for editor
+- Re-enable MyFavorite option in <kbd>Ctrl</kbd>-<kbd>Z</kbd> menu
+- The screenshot function in <kbd>Ctrl</kbd>-<kbd>Z</kbd> menu now supports widescreen
+- The screenshot function in <kbd>Ctrl</kbd>-<kbd>Z</kbd> menu is now enabled when pfterm is enabled
+- Add some <kbd>F*</kbd> and <kbd>Esc</kbd>-* key shortcuts from PttBBS for editor
 - The format of idle time is changed from `mmmm` to `hh:mm`
 - Now the guest who idles for too long will be kicked out
 - Now the idle alert will bell
-- Remove the useless `V` function of the user list UI
+- Remove the useless <kbd>V</kbd> function of the user list UI
 - Now the client will disconnect right after the disconnection message displays
 - Now the client will perform the logout works
    before the logout message displays
 - The number of failed reposts or forwarding posts will now be reported
-- The key shortcut `Ctrl-U` of the editor now inputs the character `ESC` instead;
-   please use `ESC-U` to bring out the user list instead
-- Add key shortcuts `ESC-1` - `ESC-5` for pasting the text
+- The key shortcut <kbd>Ctrl</kbd>-<kbd>U</kbd> of the editor now inputs the character `ESC` instead;
+   please use <kbd>Esc</kbd> <kbd>U</kbd> to bring out the user list instead
+- Add key shortcuts <kbd>Esc</kbd> <kbd>1</kbd> - <kbd>Esc</kbd> <kbd>5</kbd> for pasting the text
    from 1-5th temporary buffer file in the editor
 
 ### Fixes which directly affect the UI
@@ -48,9 +48,9 @@
    which is caused by buffer overflow
 - Fix the issue that rejected board changes cause the displayed name
    of the currently entered board become the name of the board to be changed to
-- Fix the issue that `class_yank2()` (the `i` function)
+- Fix the issue that `class_yank2()` (the <kbd>i</kbd> function)
    is not able to list all the friend-only and hidden boards
-- Fix the issue that using `class_yank()` (the `y` function) or `class_yank2()` (the `i` function) causes the user to be kicked out of or to be not able to enter the board list when there are no corresponding boards 
+- Fix the issue that using `class_yank()` (the <kbd>y</kbd> function) or `class_yank2()` (the <kbd>i</kbd> function) causes the user to be kicked out of or to be not able to enter the board list when there are no corresponding boards 
 - Fix the hottest board listing only the board 'SYSOP'; now it lists all hot boards
 - Fix the issue that an empty hottest board list prevents the user from entering the board category list
 
@@ -58,14 +58,14 @@
 
 - Use `int` instead of `char` to store the result of `vkey()`
 - Reassign special key values
-- Add support for function keys `F1` - `F12`
-- Add support for the key combination `Shift-Tab`
+- Add support for function keys <kbd>F1</kbd> - <kbd>F12</kbd>
+- Add support for the key combination <kbd>Shift</kbd>-<kbd>Tab</kbd>
 - `maple/visio.c`: Re-enable `ansi_move()`, and rename it to `move_ansi()` to be consistent with pfterm.
 - Make the parameters of `maple/visio.c` `grayout()` to be consistent with pfterm
 - `so/adminutil.c`: `top()`: Fix shell command `top` not working.
 - Remove function `clrtohol()`
 - Support special keys for more terminals
-- Support Ctrl-/Meta-/Shift- key modifiers for special keys
+- Support <kbd>Ctrl</kbd>/<kbd>Meta</kbd>/<kbd>Shift</kbd> key modifiers for special keys
 - Fix the connection overload message `msg_no_desc` of `innbbsd` being truncated
 - Fix the function `HISfetch()` being declared wrong in `innbbsd/inntobbs.h`
 
@@ -218,8 +218,8 @@
 - Implement adapter macros and functions
 - Now the user permission will be checked before executing BBS-Lua
 - Improve the compatibility of key value handling of special keys
-- Add support for `Shift-Tab`
-- Implement `Ctrl-C` detection for `bl_getdata()`
+- Add support for <kbd>Shift</kbd>-<kbd>Tab</kbd>
+- Implement <kbd>Ctrl</kbd>-<kbd>C</kbd> detection for `bl_getdata()`
 - Add `HIDEECHO` (32) flag for `bl_getdata()` for Maple3 to allow combining `NOECHO` effect with other `echo` flags
 - Replace deprecated bitlib library with BitOp <http://bitop.luajit.org/>
 - Support LuaJIT
@@ -229,9 +229,9 @@
 
 #### Fixes
 
-- Fix printing random string when aborting using 'Ctrl-C'
+- Fix printing random string when aborting using <kbd>Ctrl</kbd>-<kbd>C</kbd>
 - `getdata/getstr()`: Fix crash when `echo` == 8 on PttBBS
-- `getch()`/`kball()`: Fix `ESC-` keys being mistaken as `ESC` on PttBBS
+- `getch()`/`kball()`: Fix <kbd>Esc</kbd>-* keys being mistaken as <kbd>Esc</kbd> on PttBBS
 
 ### BBS-Ruby support
 
@@ -251,7 +251,7 @@
 - Add configuration macros
 - Make BBS-Ruby able to be compiled on PttBBS
 - Draw nothing in the `NOECHO` echo mode of `getdata()` if possible
-- Allow aborting BBS-Ruby with `Ctrl-C` if possible
+- Allow aborting BBS-Ruby with <kbd>Ctrl</kbd>-<kbd>C</kbd> if possible
 - Other minor refactoring
 
 #### Fixes
