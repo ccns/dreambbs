@@ -162,16 +162,16 @@ Callback 取得方法　   　| Loop/O(n)            | Direct index/O(1) | - Loo
 ### 輸入按鍵的值
 範圍或對應的 bit mask                | 相關 macro         | 功能                          | 註解
  :---                               | ---                | ---                           | ---
-`0x00000000` - `0x0000001f`         | `Ctrl()`           | `Ctrl-` 一般按鍵              |
+`0x00000000` - `0x0000001f`         | `Ctrl()`           | <kbd>Ctrl</kbd> + 一般按鍵    |
 `0x00000020` - `0x000000ff`         | (無)               | 一般按鍵                      |
 `0x00000100` - `0x00001fff`         | (無)               | 傳統特殊按鍵 (Phoenix BBS (?)) | DreamBBS v1 起恢復使用
-`0x00002000` - `0x000020ff`         | `Meta()`/`Esc()`   | `Esc-`/`Alt-` 一般按鍵        | Maple-itoc 不使用
-`0x00002100` - `0x00003fff`         | `Meta()`/`Esc()`   | `Esc-`/`Alt-` 特殊按鍵        | DreamBBS v1 起新增
-`0x00000060` (mask)                 | `Shift()`/`Ctrl()` | 特殊按鍵的 `Shift-`/`Ctrl-`   | DreamBBS v1 起新增
-　                                  | `Ctrl(key)`        | `0x00`: `Ctrl-`               | Mask 後變 `0x00`
-　                                  | `Shift(Ctrl(key))` | `0x20`: `Shift-Ctrl-`         | Mask 後變 `0x20`
+`0x00002000` - `0x000020ff`         | `Meta()`/`Esc()`   | <kbd>Esc</kbd>/<kbd>Alt</kbd> + 一般按鍵 | Maple-itoc 不使用
+`0x00002100` - `0x00003fff`         | `Meta()`/`Esc()`   | <kbd>Esc</kbd>/<kbd>Alt</kbd> + 特殊按鍵 | DreamBBS v1 起新增
+`0x00000060` (mask)                 | `Shift()`/`Ctrl()` | 特殊按鍵的 <kbd>Shift</kbd>/<kbd>Ctrl</kbd> | DreamBBS v1 起新增
+　                                  | `Ctrl(key)`        | `0x00`: <kbd>Ctrl</kbd>       | Mask 後變 `0x00`
+　                                  | `Shift(Ctrl(key))` | `0x20`: <kbd>Shift</kbd> + <kbd>Ctrl</kbd> | Mask 後變 `0x20`
 　                                  | `key`              | `0x40`: 正常                  | Mask 後變 `0x40`
-　                                  | `Shift(key)`       | `0x60`: `Shift-`              | Mask 後變 `0x60`
+　                                  | `Shift(key)`       | `0x60`: <kbd>Shift</kbd>      | Mask 後變 `0x60`
 `0x00004000` - `0x7fffffff`         | `KEY_NONE` = `0x4000`| (不使用)                    | 保留給 Xover 列表系統使用
 `0x80000000` - `0xffffffff`         | (無)               | MapleBBS 3 特殊按鍵 (負數)     | DreamBBS v1 起不使用，保留給 Xover 系統
 
@@ -304,7 +304,7 @@ MapleBBS 3 原本的 Xover 列表系統的切換列表操作，不是使用游�
 - `'i'` 對應的 `func_info()` 會增加某項目的查詢次數，並且在列表後說明處畫東西，執行完後需要用 `XR_KNEE` 重繪
 - `Meta('i')` 對應的 `func_info_full()` 會在列表內容處畫東西，需要用 `XR_BODY` 重繪，但需要呼叫 `func_info()` 來畫出剩下的部分
 
-而使用者按 `'i'` 執行 `func_info()` 後，要從畫面中列表後說明處向下重繪；按 `Esc-i` 間接執行 `func_info()` 後，則要從畫面中列表內容處向下重繪。
+而使用者按 <kbd>i</kbd> 執行 `func_info()` 後，要從畫面中列表後說明處向下重繪；按 <kbd>Esc</kbd> <kbd>i</kbd> 間接執行 `func_info()` 後，則要從畫面中列表內容處向下重繪。
 
 可以這樣寫：
 - 在 `func_info()` 中增加查詢次數，並 `return XR_KNEE + XO_NONE` (或 `return XO_KNEE`)
