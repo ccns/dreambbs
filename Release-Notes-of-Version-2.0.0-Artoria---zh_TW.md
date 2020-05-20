@@ -1,4 +1,4 @@
-# Version 2.0.0 Artoria 發行說明 (草稿)
+# Version 2.0.0 Artoria 發行說明
 
 ## 發行代號：Artoria
 
@@ -8,26 +8,26 @@
 
 ### 直接影響使用者操作及介面的改變
 
-- 現在按鍵 `H` 和 `F1` 都可以用來打開 pmore/more 的 help 頁面
-- 現在在輸入欄位中，可以用按鍵 `KEY_DEL` 刪除目前游標上的字元
+- 現在按鍵 <kbd>H</kbd> 和 <kbd>F1</kbd> 都可以用來打開 pmore/more 的 help 頁面
+- 現在在輸入欄位中，可以用按鍵 <kbd>Del</kbd> 刪除目前游標上的字元
 - 現在在輸入欄位中的錯誤輸入或操作會產生 bell 提示
 - 支援即時偵測 terminal 的大小調整
 - 讓 `vs_bar()` 的樣式與 `vs_head()` 一致
 - 修正使用者介面中的錯字，並改善部分用字
 - 現在大部分的使用者介面中的元素都支援寬螢幕顯示了
-- 重新開放 Ctrl-Z 選單中的 `我的最愛` 選項
-- 現在 Ctrl-Z 選單中的 `螢幕擷取` 功能支援寬螢幕了
-- 開放當 pfterm 啟用時，Ctrl-Z 選單中的 `螢幕擷取` 功能
-- 從 PttBBS 增加了編輯器介面的 `F*` 和 `ESC-*` 快速鍵
+- 重新開放 <kbd>Ctrl</kbd>-<kbd>Z</kbd> 選單中的 `我的最愛` 選項
+- 現在 <kbd>Ctrl</kbd>-<kbd>Z</kbd> 選單中的 `螢幕擷取` 功能支援寬螢幕了
+- 開放當 pfterm 啟用時，<kbd>Ctrl</kbd>-<kbd>Z</kbd> 選單中的 `螢幕擷取` 功能
+- 從 PttBBS 增加了編輯器介面的 <kbd>F*</kbd> 和 <kbd>Esc</kbd>-* 快速鍵
 - 將閒置時間的格式由 `mmmm` 改為 `hh:mm`
 - 現在會踢出閒置過久的 guest
 - 現在閒置警告會附帶 bell
-- 移除使用者名單介面的無用的大 V 功能
+- 移除使用者名單介面的無用的大 <kbd>V</kbd> 功能
 - 現在系統踢出使用者時，使用者端顯示出斷線訊息後會立刻斷線
 - 現在使用者登出時會先進行登出作業，再顯示登出訊息
 - 現在轉貼和轉寄文章時會顯示作業不成功或權限不足的文章數量
-- 編輯器的快速鍵 `Ctrl-U` 改成輸入 `ESC` 字元；請改用 `ESC-U` 叫出使用者名單
-- 編輯器增加快速鍵 `ESC-1` ~ `ESC-5`，分別會讀入 1 ~ 5 號暫存檔的內容
+- 編輯器的快速鍵 <kbd>Ctrl</kbd>-<kbd>U</kbd> 改成輸入 `ESC` 字元；請改用 <kbd>Esc</kbd> <kbd>U</kbd> 叫出使用者名單
+- 編輯器增加快速鍵 <kbd>Esc</kbd> <kbd>1</kbd> ~ <kbd>Esc</kbd> <kbd>5</kbd>，分別會讀入 1 ~ 5 號暫存檔的內容
 
 ### 直接影響使用者操作及介面的錯誤修正
 
@@ -54,14 +54,14 @@
 
 - 用 `int` 取代 `char` 來儲存 `vkey()` 的回傳值
 - 重新指定特殊按鍵的值
-- 支援功能鍵 `F1` - `F12`
-- 支援按鍵組合 `Shift-Tab`
+- 支援功能鍵 <kbd>F1</kbd> - <kbd>F12</kbd>
+- 支援按鍵組合 <kbd>Shift</kbd>-<kbd>Tab</kbd>
 - `maple/visio.c`: 重新啟用 `ansi_move()`，並重命名為 `move_ansi()` 以和 pfterm 一致。
 - 讓 `maple/visio.c` `grayout()` 的參數和 pfterm 一致
 - `so/adminutil.c`: `top()`: 修正 shell 指令 `top` 不能正常執行的問題。
 - 移除函數 `clrtohol()`
 - 支援更多不同 terminals 的特殊按鍵
-- 支援 Ctrl/Meta/Shift 與特殊按鍵的組合
+- 支援 <kbd>Ctrl</kbd>/<kbd>Meta</kbd>/<kbd>Shift</kbd> 與特殊按鍵的組合
 - 修正 `innbbsd` 的 `連線人數過多` 的訊息 `msg_no_desc` 被截斷的問題
 - 修正 `innbbsd/inntobbs.h` 中的函數 `HISfetch()` 宣告錯誤的問題
 
@@ -199,8 +199,8 @@
 - 實作轉接 macros 和函數
 - 現在執行 BBS-Lua 前會先檢查使用者有無足夠權限
 - 改善特殊按鍵的處理過程與其它 BBS 系統的相容度
-- 支援 `Shift-Tab`
-- 實作 `bl_getdata()` 的 `Ctrl-C` 偵測
+- 支援 <kbd>Shift</kbd>-<kbd>Tab</kbd>
+- 實作 `bl_getdata()` 的 <kbd>Ctrl</kbd>-<kbd>C</kbd> 偵測
 - 增加 `HIDEECHO` (32) flag 給 Maple3 版的 `bl_getdata()`，以讓 `NOECHO` 效果能與其它 `echo` flags 自由組合
 - 將 deprecated 的 bitlib library 以 BitOp <http://bitop.luajit.org/> 取代
 - 支援 LuaJIT
@@ -210,9 +210,9 @@
 
 #### 修正
 
-- 修正使用 `Ctrl-C` 結束程式時會輸出無意義字串的問題。
+- 修正使用 <kbd>Ctrl</kbd>-<kbd>C</kbd> 結束程式時會輸出無意義字串的問題。
 - `getdata/getstr()`: 修正在 PttBBS 上當 `echo` == 8 時會斷線的問題。
-- `getch()`/`kball()`: 修正在 PttBBS 上 `ESC-` 組合鍵會被誤當作 `ESC` 鍵的問題。
+- `getch()`/`kball()`: 修正在 PttBBS 上 <kbd>Esc</kbd>-* 組合鍵會被誤當作 <kbd>Esc</kbd> 鍵的問題。
 
 ### BBS-Ruby support
 
@@ -230,7 +230,7 @@
 - 增加編譯設定 macros
 - 讓 BBS-Ruby 能在 PttBBS 上通過編譯
 - 如果可能，讓 `getdata()` 在 `NOECHO` echo mode 中把輸入欄位隱形
-- 如果可能，讓 BBS-Ruby 可用 `Ctrl-C` 結束
+- 如果可能，讓 BBS-Ruby 可用 <kbd>Ctrl</kbd>-<kbd>C</kbd> 結束
 - 其它較小的 refactoring
 
 #### Fixes
