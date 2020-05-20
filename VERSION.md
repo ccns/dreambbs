@@ -118,7 +118,7 @@ Features in plan:
 This branch has new features or significant changes which are being tested.
 
 Versioning scheme: `vX.0-CURRENT`
-  - Develop branch for version `vX.Y`
+  - The corresponding development branch for version `vX.Y`
 
 Whenever a significant bug fix or change is made in `current`, the related commits will be ported back to released `testing` branches.
 
