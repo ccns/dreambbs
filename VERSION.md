@@ -44,7 +44,7 @@ Features:
 - Sample files are moved to another repository.
 - Other detailed changes from `current` version.
 
-It will become end-of-life when `v0.97.1` is released.
+It has become end-of-life when `v0.97.1` was released.
 
 ### `v0.97`: `stratosphere` (`3.10.97`) ( **End-of-Life** )
 - `v0.97-RCx`~`v0.97.0`: Pre-release
@@ -74,7 +74,7 @@ Planned alternative names:
     - [x] Screen resizing feature.
 - `v1.1.1`
   - Features:
-    - [x] `pfterm`, which is ported in this release version.
+    - [x] `pfterm`, which was ported in this release version.
     - Others: Please see <https://github.com/ccns/dreambbs/releases/tag/v1.1.0>.
 - `v1.2.0`: `shizu`
 - `v1.3.0`: `veldora`
