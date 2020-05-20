@@ -47,7 +47,7 @@ Features:
 It has become end-of-life when `v0.97.1` was released.
 
 ### `v0.97`: `stratosphere` (`3.10.97`) ( **End-of-Life** )
-- `v0.97-RCx`~`v0.97.0`: Pre-release
+- `v0.97-RCx`-`v0.97.0`: Pre-release
 - `v0.97.1`
 - `v0.97.2`
 - `v0.97.3`
@@ -56,7 +56,7 @@ Features:
   - Simple code test utilities.
   - Refined layout: Trailing whitespaces are removed.
 
-### `v0.98`~`v0.99` (`3.10.98`~`3.10.99`)
+### `v0.98`-`v0.99` (`3.10.98`-`3.10.99`)
 Plans dropped due to big changes which will be tested for a long time.
 Planned alternative names:
   - [x] `v1.0-alpha1`
