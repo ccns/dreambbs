@@ -2,12 +2,12 @@
 
 **Why do we do this? For fun!**
 
-## Legacy Versioning Convention - `DreamBBS X.Y.Z`; abbreviated as `X.Y.Z` 
-The versioning convention originated from MapleBBS.
+## Legacy Versioning Scheme - `DreamBBS X.Y.Z`; abbreviated as `X.Y.Z` 
+The versioning scheme originated from MapleBBS.
 
-Before the introduction of the new versioning convention, the latest version name was `WindTop 3.10 Rev.Beta 3` or `DreamBBS 3.10 Rev.Beta 3`.
+Before the introduction of the new versioning scheme, the latest version name was `WindTop 3.10 Rev.Beta 3` or `DreamBBS 3.10 Rev.Beta 3`.
 
-## Current Versioning Convention - `DreamBBS vX.Y.Z`; abbreviated as `vX.Y.Z` 
+## Current Versioning Scheme - `DreamBBS vX.Y.Z`; abbreviated as `vX.Y.Z` 
 Note the presence of `v`.
 
 Each new version has the corresponding legacy version number as well.
@@ -18,7 +18,7 @@ The new development workflow has led to the two main branches seen today: `testi
 ## `testing` Branch (Release Branch)
 This branch emphasize more on the stability, the easiness to install, and the ability to deploy on different platform and containers, than the `current` branch.
 
-Versioning convention: `vX.Y.Z`
+Versioning Scheme: `vX.Y.Z`
   - `X`: Major version; indicates significant changes
   - `Y`: Minor version; indicates introduction of new features
   - `Z`: Patch version; indicates bug fixes or security improvement; based on the previous version
@@ -26,7 +26,7 @@ Versioning convention: `vX.Y.Z`
   - For `X`>0, `vX.0` refers to the branch for `vX.Y.Z` versions
 
 ### `v0.95`: Aka. `3.10 REV-BETA4` (`3.10.95`) ( **End-of-Life** )
-The new versioning convention is introduced in this minor version.
+The new versioning scheme is introduced in this minor version.
 - `v0.95.1`: Aka. `3.10 REV-BETA4.1`
 - `v0.95.2`: Aka. `3.10 REV-BETA4.2`
 - `v0.95.3`: Aka. `3.10 REV-BETA4.3`
@@ -117,7 +117,7 @@ Features in plan:
 ## `current` Branch (`master`/Development Branch)
 This branch has new features or significant changes which are being tested.
 
-Versioning convention: `vX.0-CURRENT`
+Versioning scheme: `vX.0-CURRENT`
   - Develop branch for version `vX.Y`
 
 Whenever a significant bug fix or change is made in `current`, the related commits will be ported back to released `testing` branches.
