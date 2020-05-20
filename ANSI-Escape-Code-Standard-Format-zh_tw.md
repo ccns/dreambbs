@@ -58,8 +58,9 @@ C1 set 的具體功能表與 independent control functions 一起整理到了下
     - g) 以 `'\x3b'(';')` 開頭的話，視為在 `';'` 前有個空的 parameter sub-string；\
        以 `';'` 結束的話，視為在 `';'` 後有個空的 parameter sub-string；\
        含有連續的 `';'` 的話，視為每個 `';'` 之間都有一個空的 parameter sub-strings
-    - h) (譯自原文) `如果這個 control function 含有超過一個 parameter，並且某些 parameter sub-strings 是空的，分隔符號 (bit combination 03/11` (譯按：也就是 `'\x3b'(';')`)`) 還是得存在。`\
-       `不過，如果最後幾個 parameter sub-string 都是空的，在這之前的分隔符號可被省略，見 B.2 in annex B.`
+    - h) (譯自原文)
+      > 如果這個 control function 含有超過一個 parameter，並且某些 parameter sub-strings 是空的，分隔符號 (bit combination 03/11 _(譯按：也就是 `'\x3b'(';')`)_) 還是得存在。\
+      > 不過，如果最後幾個 parameter sub-string 都是空的，在這之前的分隔符號可被省略，見 B.2 in annex B.
 - 表示法:
     - `(NP)`: 沒有 parameter
     - `(Pn)`: 一個 numeric parameter (`numeric`: 數字的意義是純數值；允許任何數字)
