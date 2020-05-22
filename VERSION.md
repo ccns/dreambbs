@@ -58,6 +58,7 @@ Features:
 
 ### `v0.98`-`v0.99` (`3.10.98`-`3.10.99`)
 Plans dropped due to big changes which will be tested for a long time.
+
 Planned alternative names:
   - [x] `v1.0-alpha1`
   - [x] `v1.0-alpha2`
