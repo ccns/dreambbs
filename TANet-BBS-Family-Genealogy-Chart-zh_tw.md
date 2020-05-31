@@ -28,7 +28,8 @@
       │   │   │   │   │   │   └── FireBird BBS 2000  1999, 2000
       │   │   │   │   │   │       ├── PKUBBS  北京大学  北大未名  1999-
       │   │   │   │   │   │       └── Lily BBS  南京大学 小百合  2000-2005
-      │   │   │   │   │   │           └── fdubbs  复旦大学 日月光华  2002-
+      │   │   │   │   │   │           └── fdubbs  复旦大学 日月光华＊  2002-2008
+      │   │   │   │   │   │               └── fbbs  2008-
       │   │   │   │   │   ├── FireBird BBS 2.x-KCN  1998
       │   │   │   │   │   │   └── FireBird BBS 3.0-KCN  1999
       │   │   │   │   │   │       └── YTHT BBS  一塌糊涂  1999-2004
@@ -61,7 +62,7 @@
       │   │                            └── DreamLand BBS  2017-
       │   └── NCU BBS  中央大學  N.A.  n.d.
       └── NSYSU BBS  中山計中  美麗之島  1994, 1996, 1997, 1998
-          ├── Formosa BBS  中山計中  美麗之島＊  1997-2012
+          ├── Formosa BBS  中山計中  美麗之島＊  1997-2015
           ├── FCU CC BBS  逢甲計中  蒼穹資訊網  n.d.
           └── Rose BBS  (玫瑰天空？)  n.d.
 * Power BBS  中華資工  N.A.  1994-1997
