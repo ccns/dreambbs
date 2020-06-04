@@ -4,7 +4,7 @@
 
 系統 | 主程式檔 | 主函數 | 出處 | 說明
 --- | --- | --- | --- | ---
-主選單 | - `bbs.c` (Pirate BBS) <br> - `nmenus.c` (Eagles BBS 3.1) <br> - `comm_list.c` (FireBird BBS) <br> - `menu.c` (MapleBBS 2.0) | - `docmd()` (Pirate BBS) <br> - `NdoMenu()` (Eagles BBS 3.1) <br> - `domenu()` (MapleBBS 2.0 & FireBird BBS) <br> - `menu()` (MapleBBS 3) <br> - `main_menu()` & `domenu()` (DreamBBS v3) | Pirate BBS |
+主選單 | - `bbs.c` (Pirate BBS) <br> - `nmenus.c` (Eagles BBS 3.0) <br> - `comm_list.c` (Phoenix BBS 4.0) <br> `main.c` (SecretBBS 4.0) <br> - `menu.c` (MapleBBS 2.0.5) | - `docmd()` (Pirate BBS & SecretBBS 4.0) <br> - `NdoMenu()` (Eagles BBS 3.0) <br> - `domenu()` (Phoenix BBS 4.0 & MapleBBS 2.0.5) <br> - `menu()` (MapleBBS 3) <br> - `main_menu()` & `domenu()` (DreamBBS v3) | Pirate BBS |
 Popupmenu | `popupmenu.c` | - `popupmenu()` | WindTop 3.02 | - 使用主選單系統的資料結構 (WindTop 3.02 & DreamBBS v3) <br> - 使用與主選單系統不同的特殊值 <br> - 使用與主選單系統一致的特殊值 (DreamBBS v3)
 Popupmenu Prompt | `popupmenu.c` | - `popupmenu_ans()` <br> - `pmsg()` | WindTop 3.02 | - 實質上與 Popupmenu 不是同一系統 <br> - 本文特稱之為 `Popupmenu Prompt` <br> - 使用次數稀少
 Window | `window.c` | - `popupmenu_ans2()` <br> - `pmsg2()` | MapleBBS-itoc | - 由 Popupmenu Prompt 系統演變而來 <br> - 在 MapleBBS-itoc 中無 `2` 後綴 <br> - DreamBBS 2010 時引入，加上 `2` 後綴
@@ -23,7 +23,7 @@ DreamBBS v3 改用 Xover 指令指定主選單畫面的重繪。
 ## 主選單所呼叫函數之 return 值
 |       | 值      | 出處 | 說明
  ---    |  ---    | --- | ---
-`XEASY` | - `0x333` <br> - `XO_FOOT` (DreamBBS v3) | Phoenix BBS (?) | 回到選單後只重繪畫面底部
+`XEASY` | - `0x333` <br> - `XO_FOOT` (DreamBBS v3) | MapleBBS 2.0.5 | 回到選單後只重繪畫面底部
 `QUIT`  | - `0x666` <br> - 移除 (PttBBS current & MapleBBS-itoc) <br> - `XO_QUIT` (DreamBBS v3) | Pirate BBS | 強制退出選單
 `SKIN`  | - `0x999` <br> - `XO_SKIN + {XO_WRAP\|XO_SCRL\|XO_REL} + idx` (DreamBBS v3) | WindTop BBS 3.02 | 切換 skin (未實作)
 (其它)  | - `-1` - `'\a'` (`7`)  | ---  | 回到選單後重繪整個畫面 (Deprecated in DreamBBS v3)
@@ -126,9 +126,9 @@ MapleBBS 3 中改為有 `M_` 前綴，已不存在。
 在 PttBBS current 中則保留原名，仍為 user mode。
 
 ### User Mode / Menu Index (`M_*`)
-出處：Eagles BBS (?)
+出處：Eagles BBS、MapleBBS 3、PttBBS current (為各自引入)
 
-(於 MapleBBS 2.36 及 FireBird 3.1 中皆不存在；應為 PttBBS current 與 MapleBBS 3 各自引入)
+(於 SecretBBS 4.0 及 Phoenix BBS 4.0 中皆不存在)
 
 在 MapleBBS 3 中為 user mode，同時為 menu index；動態看板編號另外由 `FILM_*` 指定。
 
@@ -137,6 +137,6 @@ MapleBBS 3 中改為有 `M_` 前綴，已不存在。
 |                | User Mode    | Menu Index  | 動態看板編號
  ---             | ---          | ---         | ---
 Pirate BBS (1.9) | 無 `M_` 前綴 | 無 `M_` 前綴 | (無動態看板)
-Eagles BBS (3.1) | `M_*`        | `M_*`       | (無動態看板)
+Eagles BBS (3.0) | `M_*`        | `M_*`       | (無動態看板)
 MapleBBS 3       | `M_*`        | `M_*`       | `FILM_*`
 PttBBS current   | 無 `M_` 前綴 | `M_*`       | `M_*`
