@@ -71,10 +71,10 @@ static void tie(void);
 static void win(void);
 static void situ(void);
 static void lose(void);
-static int pip_practice_function(int classnum, int classgrade, int pic1, int pic2, int *change1, int *change2, int *change3, int *change4, int *change5);
+static int pip_practice_function(enum pipclass classnum, int classgrade, int pic1, int pic2, int *change1, int *change2, int *change3, int *change4, int *change5);
 static int pip_ending_decide(char *eendbuf1, char *eendbuf2, char *eendbuf3, int *endmode, int *endgrade);
 static int pip_game_over(int endgrade);
-static int pip_practice_gradeup(int classnum, int classgrade, int data);
+static int pip_practice_gradeup(enum pipclass classnum, int classgrade, int data);
 static int pip_read(const char *userid);
 
 /*系統選單*/
@@ -3747,51 +3747,72 @@ static void situ(void)
 /*---------------------------------------------------------------------------*/
 /* 資料庫                                                                    */
 /*---------------------------------------------------------------------------*/
-static const char *const classrank[5] = {"初級", "中級", "高級", "進階", "專業"};
-static const int classmoney[10][2] = {
-    {60, 170}, {70, 190}, {70, 190}, {80, 210}, {70, 190},
-    {60, 170}, {90, 230}, {70, 190}, {70, 190}, {80, 210}
+
+static const char *const classrank[] = {"初級", "中級", "高級", "進階", "專業"};
+
+struct classdata_money {
+    int mul;
+    int base;
 };
-static const int classvariable[10][4] =
+struct classdata_basic_effect {
+    int hp_dec;
+    int happy_dec;
+    int satisfy_dec;
+    int shit_inc;
+};
+
+struct classdata {
+    const char *name;
+    struct classdata_money money;
+    struct classdata_basic_effect effect;
+    const char *word[4];
+};
+
+//   課名, 花費, 效果, 成功一, 成功二, 失敗一, 失敗二
+static const struct classdata pip_class_list[CLASS_COUNT] =
 {
-    {5, 5, 4, 4}, {5, 7, 6, 4}, {5, 7, 6, 4}, {5, 6, 5, 4}, {7, 5, 4, 6},
-    {7, 5, 4, 6}, {6, 5, 4, 6}, {6, 6, 5, 4}, {5, 5, 4, 7}, {7, 5, 4, 7}
+    {"自然科學", {60, 170}, {5, 5, 4, 4}, {
+        "正在用功\讀書中..", "我是聰明雞 cccc...",
+        "這題怎麼看不懂咧..怪了", "唸不完了 :~~~~~~"}
+    },
+    {"唐詩宋詞", {70, 190}, {5, 7, 6, 4}, {
+        "床前明月光...疑是地上霜...", "紅豆生南國..春來發幾枝..",
+        "ㄟ..上課不要流口水", "你還混喔..罰你背會唐詩三百首"}
+    },
+    {"神學教育", {70, 190}, {5, 7, 6, 4}, {
+        "哈雷路亞  哈雷路亞", "讓我們迎接天堂之門",
+        "ㄟ..你在幹嘛ㄚ? 還不好好唸", "神學很嚴肅的..請好好學..:("}
+    },
+    {"軍學教育", {80, 210}, {5, 6, 5, 4}, {
+        "孫子兵法是中國兵法書..", "從軍報國，我要帶兵去打仗",
+        "什麼陣形ㄚ?混亂陣形?? @_@", "你還以為你在玩三國志ㄚ?"}
+    },
+    {"劍道技術", {70, 190}, {7, 5, 4, 6}, {
+        "看我的厲害  獨孤九劍....", "我刺 我刺 我刺刺刺..",
+        "劍要拿穩一點啦..", "你在刺地鼠ㄚ? 劍拿高一點"}
+    },
+    {"格鬥戰技", {60, 170}, {7, 5, 4, 6}, {
+        "肌肉是肌肉  呼呼..", "十八銅人行氣散..",
+        "腳再踢高一點啦...", "拳頭怎麼這麼沒力ㄚ.."}
+    },
+    {"魔法教育", {90, 230}, {6, 5, 4, 6}, {
+        "我變 我變 我變變變..", "蛇膽+蟋蜴尾+鼠牙+蟾蜍=??",
+        "小心你的掃帚啦  不要亂揮..", "ㄟ～口水不要流到水晶球上.."}
+    },
+    {"禮儀教育", {70, 190}, {6, 6, 5, 4}, {
+        "要當隻有禮貌的雞...", "歐嗨唷..ㄚ哩ㄚ豆..",
+        "怎麼學不會ㄚ??天呀..", "走起路來沒走樣..天ㄚ.."}
+    },
+    {"繪畫技巧", {70, 190}, {5, 5, 4, 7}, {
+        "很不錯唷..有美術天份..", "這幅畫的顏色搭配的很好..",
+        "不要鬼畫符啦..要加油..", "不要咬畫筆啦..壞壞小雞喔.."}
+    },
+    {"舞蹈技巧", {80, 210}, {7, 5, 4, 7}, {
+        "你就像一隻天鵝喔..", "舞蹈細胞很好喔..",
+        "身體再柔軟一點..", "拜託你優美一點..不要這麼粗魯.."}
+    },
 };
 
-
-//   課名, 成功一, 成功二, 失敗一, 失敗二
-static const char *const classword[10][5] =
-{
-    {"自然科學", "正在用功\讀書中..", "我是聰明雞 cccc...",
-     "這題怎麼看不懂咧..怪了", "唸不完了 :~~~~~~"},
-
-    {"唐詩宋詞", "床前明月光...疑是地上霜...", "紅豆生南國..春來發幾枝..",
-     "ㄟ..上課不要流口水", "你還混喔..罰你背會唐詩三百首"},
-
-    {"神學教育", "哈雷路亞  哈雷路亞", "讓我們迎接天堂之門",
-     "ㄟ..你在幹嘛ㄚ? 還不好好唸", "神學很嚴肅的..請好好學..:("},
-
-    {"軍學教育", "孫子兵法是中國兵法書..", "從軍報國，我要帶兵去打仗",
-     "什麼陣形ㄚ?混亂陣形?? @_@", "你還以為你在玩三國志ㄚ?"},
-
-    {"劍道技術", "看我的厲害  獨孤九劍....", "我刺 我刺 我刺刺刺..",
-     "劍要拿穩一點啦..", "你在刺地鼠ㄚ? 劍拿高一點"},
-
-    {"格鬥戰技", "肌肉是肌肉  呼呼..", "十八銅人行氣散..",
-     "腳再踢高一點啦...", "拳頭怎麼這麼沒力ㄚ.."},
-
-    {"魔法教育", "我變 我變 我變變變..", "蛇膽+蟋蜴尾+鼠牙+蟾蜍=??",
-     "小心你的掃帚啦  不要亂揮..", "ㄟ～口水不要流到水晶球上.."},
-
-    {"禮儀教育", "要當隻有禮貌的雞...", "歐嗨唷..ㄚ哩ㄚ豆..",
-     "怎麼學不會ㄚ??天呀..", "走起路來沒走樣..天ㄚ.."},
-
-    {"繪畫技巧", "很不錯唷..有美術天份..", "這幅畫的顏色搭配的很好..",
-     "不要鬼畫符啦..要加油..", "不要咬畫筆啦..壞壞小雞喔.."},
-
-    {"舞蹈技巧", "你就像一隻天鵝喔..", "舞蹈細胞很好喔..",
-     "身體再柔軟一點..", "拜託你優美一點..不要這麼粗魯.."}
-};
 /*---------------------------------------------------------------------------*/
 /* 修行選單:念書 練武 修行                                                   */
 /* 函式庫                                                                    */
@@ -3811,9 +3832,9 @@ static int pip_practice_classA(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN(d.learn[LEARN_WISDOM] / 200, 4); /*科學*/
+    class_ = BMIN(d.learn[LEARN_WISDOM] / 200, COUNTOF(classrank) - 1); /*科學*/
 
-    body = pip_practice_function(0, class_, 11, 12, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_A, class_, 11, 12, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.learn[LEARN_WISDOM] += change4 * LEARN_LEVEL;
     if (body == 0)
@@ -3826,7 +3847,7 @@ static int pip_practice_classA(void)
         d.state[STATE_BELIEF] -= random() % (4 + class_ * 2);
         d.fight[FIGHT_MRESIST] -= random() % 3;
     }
-    pip_practice_gradeup(0, class_, d.learn[LEARN_WISDOM] / 200);
+    pip_practice_gradeup(CLASS_A, class_, d.learn[LEARN_WISDOM] / 200);
     if (d.state[STATE_BELIEF] < 0)  d.state[STATE_BELIEF] = 0;
     if (d.fight[FIGHT_MRESIST] < 0) d.fight[FIGHT_MRESIST] = 0;
     d.class_[A] += 1;
@@ -3851,9 +3872,9 @@ static int pip_practice_classB(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, 4); /*詩詞*/
+    class_ = BMIN((d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, COUNTOF(classrank) - 1); /*詩詞*/
 
-    body = pip_practice_function(1, class_, 21, 21, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_B, class_, 21, 21, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.state[STATE_AFFECT] += change3 * LEARN_LEVEL;
     if (body == 0)
@@ -3869,7 +3890,7 @@ static int pip_practice_classB(void)
         d.learn[LEARN_ART] += random() % (class_ + 3) * LEARN_LEVEL;
     }
     body = (d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400;
-    pip_practice_gradeup(1, class_, body);
+    pip_practice_gradeup(CLASS_B, class_, body);
     d.class_[B] += 1;
     return 0;
 }
@@ -3888,9 +3909,9 @@ static int pip_practice_classC(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400, 4); /*神學*/
+    class_ = BMIN((d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400, COUNTOF(classrank) - 1); /*神學*/
 
-    body = pip_practice_function(2, class_, 31, 31, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_C, class_, 31, 31, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.learn[LEARN_WISDOM] += change2 * LEARN_LEVEL;
     d.state[STATE_BELIEF] += change3 * LEARN_LEVEL;
@@ -3903,7 +3924,7 @@ static int pip_practice_classC(void)
         d.fight[FIGHT_MRESIST] += random() % 3 * LEARN_LEVEL;
     }
     body = (d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400;
-    pip_practice_gradeup(2, class_, body);
+    pip_practice_gradeup(CLASS_C, class_, body);
     d.class_[C] += 1;
     return 0;
 }
@@ -3922,8 +3943,8 @@ static int pip_practice_classD(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400, 4);
-    body = pip_practice_function(3, class_, 41, 41, &change1, &change2, &change3, &change4, &change5);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400, COUNTOF(classrank) - 1);
+    body = pip_practice_function(CLASS_D, class_, 41, 41, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.learn[LEARN_WISDOM] += change2 * LEARN_LEVEL;
     if (body == 0)
@@ -3937,7 +3958,7 @@ static int pip_practice_classD(void)
         d.state[STATE_AFFECT] -= random() % 3 + 6;
     }
     body = (d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400;
-    pip_practice_gradeup(3, class_, body);
+    pip_practice_gradeup(CLASS_D, class_, body);
     if (d.state[STATE_AFFECT] < 0)  d.state[STATE_AFFECT] = 0;
     d.class_[D] += 1;
     return 0;
@@ -3957,9 +3978,9 @@ static int pip_practice_classE(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400, 4);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400, COUNTOF(classrank) - 1);
 
-    body = pip_practice_function(4, class_, 51, 51, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_E, class_, 51, 51, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.fight[FIGHT_SPEED] += (random() % 3 + 2) * LEARN_LEVEL;
     d.tmp[TMP_HEXP] += (random() % 2 + 2) * LEARN_LEVEL;
@@ -3973,7 +3994,7 @@ static int pip_practice_classE(void)
         d.fight[FIGHT_HSKILL] += (random() % 3 + 3) * LEARN_LEVEL;
     }
     body = (d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400;
-    pip_practice_gradeup(4, class_, body);
+    pip_practice_gradeup(CLASS_E, class_, body);
     d.class_[E] += 1;
     return 0;
 }
@@ -3992,9 +4013,9 @@ static int pip_practice_classF(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400, 4);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400, COUNTOF(classrank) - 1);
 
-    body = pip_practice_function(5, class_, 61, 61, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_F, class_, 61, 61, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.tmp[TMP_HEXP] += (random() % 2 + 2) * LEARN_LEVEL;
     d.fight[FIGHT_SPEED] += (random() % 3 + 2) * LEARN_LEVEL;
@@ -4008,7 +4029,7 @@ static int pip_practice_classF(void)
         d.fight[FIGHT_HSKILL] += (random() % 3 + 3) * LEARN_LEVEL;
     }
     body = (d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400;
-    pip_practice_gradeup(5, class_, body);
+    pip_practice_gradeup(CLASS_F, class_, body);
     d.class_[F] += 1;
     return 0;
 }
@@ -4027,9 +4048,9 @@ static int pip_practice_classG(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400, 4);
+    class_ = BMIN((d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400, COUNTOF(classrank) - 1);
 
-    body = pip_practice_function(6, class_, 71, 72, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_G, class_, 71, 72, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.fight[FIGHT_MAXMP] += change3 * LEARN_LEVEL;
     d.tmp[TMP_MEXP] += (random() % 2 + 2) * LEARN_LEVEL;
@@ -4043,7 +4064,7 @@ static int pip_practice_classG(void)
     }
 
     body = (d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400;
-    pip_practice_gradeup(6, class_, body);
+    pip_practice_gradeup(CLASS_G, class_, body);
     d.class_[G] += 1;
     return 0;
 }
@@ -4062,15 +4083,15 @@ static int pip_practice_classH(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.learn[LEARN_MANNERS] * 2 + d.learn[LEARN_CHARACTER]) / 400, 4);
+    class_ = BMIN((d.learn[LEARN_MANNERS] * 2 + d.learn[LEARN_CHARACTER]) / 400, COUNTOF(classrank) - 1);
 
-    body = pip_practice_function(7, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_H, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.tmp[TMP_SOCIAL] += (random() % 2 + 2) * LEARN_LEVEL;
     d.learn[LEARN_MANNERS] += (change1 + random() % 2) * LEARN_LEVEL;
     d.learn[LEARN_CHARACTER] += (change1 + random() % 2) * LEARN_LEVEL;
     body = (d.learn[LEARN_CHARACTER] + d.learn[LEARN_MANNERS]) / 400;
-    pip_practice_gradeup(7, class_, body);
+    pip_practice_gradeup(CLASS_H, class_, body);
     d.class_[H] += 1;
     return 0;
 }
@@ -4089,14 +4110,14 @@ static int pip_practice_classI(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, 4);
+    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, COUNTOF(classrank) - 1);
 
-    body = pip_practice_function(8, class_, 91, 91, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_I, class_, 91, 91, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.learn[LEARN_ART] += change4 * LEARN_LEVEL;
     d.state[STATE_AFFECT] += change2 * LEARN_LEVEL;
     body = (d.state[STATE_AFFECT] + d.learn[LEARN_ART]) / 400;
-    pip_practice_gradeup(8, class_, body);
+    pip_practice_gradeup(CLASS_I, class_, body);
     d.class_[I] += 1;
     return 0;
 }
@@ -4115,9 +4136,9 @@ static int pip_practice_classJ(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400, 4);
+    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400, COUNTOF(classrank) - 1);
 
-    body = pip_practice_function(9, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_J, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.learn[LEARN_ART] += change2 * LEARN_LEVEL;
     d.body[BODY_MAXHP] += (random() % 3 + 2) * LEARN_LEVEL;
@@ -4130,7 +4151,7 @@ static int pip_practice_classJ(void)
         d.learn[LEARN_CHARM] += random() % (3 + class_) * LEARN_LEVEL;
     }
     body = (d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400;
-    pip_practice_gradeup(9, class_, body);
+    pip_practice_gradeup(CLASS_J, class_, body);
     d.class_[J] += 1;
     return 0;
 }
@@ -4138,18 +4159,20 @@ static int pip_practice_classJ(void)
 /*傳入:課號 等級 生命 快樂 滿足 髒髒 傳回:變數12345 return:body(-1~1)*/
 static int
 pip_practice_function(
-int classnum, int classgrade, int pic1, int pic2,
+enum pipclass classnum, int classgrade, int pic1, int pic2,
 int *change1, int *change2, int *change3, int *change4, int *change5)
 {
     int  a, b, body, health;
     char inbuf[256], ans[5];
     long smoney;
 
+    const struct classdata *const clsdata = &pip_class_list[classnum];
+
     /*錢的算法*/
-    smoney = classgrade * classmoney[classnum][0] + classmoney[classnum][1];
+    smoney = classgrade * clsdata->money.mul + clsdata->money.base;
     move(b_lines - 2, 0);
     clrtoeol();
-    sprintf(inbuf, "[%8s%4s課程]要花 $%ld，確定要嗎??[y/N]: ", classword[classnum][0], classrank[classgrade], smoney);
+    sprintf(inbuf, "[%8s%4s課程]要花 $%ld，確定要嗎??[y/N]: ", clsdata->name, classrank[classgrade], smoney);
     getdata(B_LINES_REF - 2, 1, inbuf, ans, 2, DOECHO, 0);
     if (ans[0] != 'y' && ans[0] != 'Y')  return -1;
     if (d.thing[THING_MONEY] < smoney)
@@ -4166,10 +4189,10 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
 
     a = random() % 3 + 2;
     b = (random() % 12 + random() % 13) % 2;
-    d.body[BODY_HP] -= random() % (3 + random() % 3) + classvariable[classnum][0];
-    d.state[STATE_HAPPY] -= random() % (3 + random() % 3) + classvariable[classnum][1];
-    d.state[STATE_SATISFY] -= random() % (3 + random() % 3) + classvariable[classnum][2];
-    d.body[BODY_SHIT] += random() % (3 + random() % 3) + classvariable[classnum][3];
+    d.body[BODY_HP] -= random() % (3 + random() % 3) + clsdata->effect.hp_dec;
+    d.state[STATE_HAPPY] -= random() % (3 + random() % 3) + clsdata->effect.happy_dec;
+    d.state[STATE_SATISFY] -= random() % (3 + random() % 3) + clsdata->effect.satisfy_dec;
+    d.body[BODY_SHIT] += random() % (3 + random() % 3) + clsdata->effect.shit_inc;
     *change1 = random() % a + 4 + classgrade * 2 / (body + 2);    /* random()%3+3 */
     *change2 = random() % a + 6 + classgrade * 2 / (body + 2);    /* random()%3+5 */
     *change3 = random() % a + 8 + classgrade * 3 / (body + 2);    /* random()%3+7 */
@@ -4179,19 +4202,19 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
         show_practice_pic(pic1);
     else if (pic2 > 0)
         show_practice_pic(pic2);
-    vmsg(classword[classnum][1+body+b]);
+    vmsg(clsdata->word[body+b]);
     return body;
 }
 
 static int pip_practice_gradeup(
-int classnum, int classgrade, int data)
+enum pipclass classnum, int classgrade, int data)
 {
     char inbuf[256];
 
-    if ((data == (classgrade + 1)) && classgrade + 1 < 5)
+    if (data > classgrade && classgrade < COUNTOF(classrank) - 1)
     {
         sprintf(inbuf, "下次換上 [%8s%4s課程]",
-                classword[classnum][0], classrank[classgrade+1]);
+                pip_class_list[classnum].name, classrank[BMIN(data, COUNTOF(classrank) - 1)]);
         vmsg(inbuf);
     }
     return 0;

@@ -193,6 +193,8 @@ enum pipclass {
     CLASS_H,            /*Â§»ö*/
     CLASS_I,            /*Ã¸µe*/
     CLASS_J,            /*»RÁÐ*/
+
+    CLASS_COUNT,
 };
 
 struct chicken {  /* DISKDATA(format) */
