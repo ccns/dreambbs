@@ -57,7 +57,6 @@ static void pip_log_record(const char *msg);
 static void show_die_pic(int i);
 static int pip_mainmenu(enum pipmenumode mode);
 static void pip_time_change(time_t cnow);
-static int pip_go_palace_screen(const struct royalset *p);
 static int pip_ending_screen(void);
 static int pip_marriage_offer(void);
 static void show_usual_pic(int i);
@@ -4381,14 +4380,6 @@ static int pip_change_weight(void)
 static int
 pip_go_palace(void)
 {
-    pip_go_palace_screen(royallist);
-    return 0;
-}
-
-static int
-pip_go_palace_screen(
-const struct royalset *p)
-{
     int n;
     int a;
     int b;
@@ -4399,7 +4390,9 @@ const struct royalset *p)
     char inbuf1[20];
     char inbuf2[20];
     static const char *const needmode[3] = {"      ", "禮儀表現＞", "談吐技巧＞"};
-    int save[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    int save[COUNTOF(d.royal)] = {0};
+
+    const struct royalset *const p = royallist;
 
     d.nodone = 0;
     do
@@ -4411,13 +4404,13 @@ const struct royalset *p)
         move(14, 4);
         prints_centered("\x1b[1;31m│                                                                  │\x1b[0m");
 
-        for (n = 0; n < 5; n++)
+        for (n = 0; n < ROYAL_COUNT / 2; n++)
         {
             a = 2 * n;
             b = 2 * n + 1;
             move(15 + n, 4);
             sprintf(inbuf1, "%-10s%3d", needmode[p[a].needmode], p[a].needvalue);
-            if (n == 4)
+            if (n == ROYAL_J / 2)
             {
                 sprintf(inbuf2, "%-10s", needmode[p[b].needmode]);
             }
@@ -4425,7 +4418,7 @@ const struct royalset *p)
             {
                 sprintf(inbuf2, "%-10s%3d", needmode[p[b].needmode], p[b].needvalue);
             }
-            if ((d.see[SEE_ROYAL_J] == 1 && n == 4) || (n != 4))
+            if (n != ROYAL_J / 2 || d.see[SEE_ROYAL_J])
                 prints_centered("\x1b[1;31m│ \x1b[36m(\x1b[37m%c\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s     \x1b[36m(\x1b[37m%c\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s\x1b[31m│\x1b[0m",
                         p[a].num, p[a].name, inbuf1, p[b].num, p[b].name, inbuf2);
             else
@@ -4457,10 +4450,10 @@ const struct royalset *p)
             "\x1b[1;37;46m  參見選單  \x1b[44m [字母]選擇欲拜訪的人物  [Q]離開" NICKNAME "總司令部       %*s\x1b[0m", 20 + d_cols - ((int)(unsigned int)sizeof(NICKNAME) - 1), "");
         pipkey = vkey();
         choice = pipkey - 'A';
-        if (choice < 0 || choice >= 10)
+        if (choice < 0 || choice >= ROYAL_COUNT)
             choice = pipkey - 'a';
 
-        if ((choice >= 0 && choice < 10 && d.see[SEE_ROYAL_J] == 1) || (choice >= 0 && choice < 9 && d.see[SEE_ROYAL_J] == 0))
+        if ((choice >= 0 && choice < ROYAL_COUNT) && (choice != ROYAL_J || d.see[SEE_ROYAL_J]))
         {
             d.tmp[TMP_SOCIAL] += random() % 3 + 3;
             d.body[BODY_HP] -= random() % 5 + 6;
@@ -4485,7 +4478,7 @@ const struct royalset *p)
                     (p[choice].needmode == 1 && d.learn[LEARN_MANNERS] >= p[choice].needvalue) ||
                     (p[choice].needmode == 2 && d.learn[LEARN_SPEECH] >= p[choice].needvalue))
                 {
-                    if (choice >= 0 && choice < 9 && save[choice] >= p[choice].maxtoman)
+                    if (choice != ROYAL_J && save[choice] >= p[choice].maxtoman)
                     {
                         if (random() % 2 > 0)
                             sprintf(buf, "能和這麼偉大的你講話真是榮幸ㄚ...");
@@ -4495,32 +4488,33 @@ const struct royalset *p)
                     else
                     {
                         change = 0;
-                        if (choice >= 0 && choice < 8)
+                        switch (choice)
                         {
+                        default:
                             switch (choice)
                             {
-                            case 0:
+                            case ROYAL_A:
                                 change = d.learn[LEARN_CHARACTER] / 5;
                                 break;
-                            case 1:
+                            case ROYAL_B:
                                 change = d.learn[LEARN_CHARACTER] / 8;
                                 break;
-                            case 2:
+                            case ROYAL_C:
                                 change = d.learn[LEARN_CHARM] / 5;
                                 break;
-                            case 3:
+                            case ROYAL_D:
                                 change = d.learn[LEARN_WISDOM] / 10;
                                 break;
-                            case 4:
+                            case ROYAL_E:
                                 change = d.state[STATE_BELIEF] / 10;
                                 break;
-                            case 5:
+                            case ROYAL_F:
                                 change = d.learn[LEARN_SPEECH] / 10;
                                 break;
-                            case 6:
+                            case ROYAL_G:
                                 change = d.tmp[TMP_SOCIAL] / 10;
                                 break;
-                            case 7:
+                            case ROYAL_H:
                                 change = d.tmp[TMP_HEXP] / 10;
                                 break;
                             }
@@ -4532,17 +4526,18 @@ const struct royalset *p)
                                 change = p[choice].maxtoman - save[choice];
                             save[choice] += change;
                             d.learn[LEARN_TOMAN] += change;
-                        }
-                        else if (choice == 8)
-                        {
-                            save[8] = 0;
+                            break;
+
+                        case ROYAL_I:
+                            save[ROYAL_I] = 0;
                             d.tmp[TMP_SOCIAL] -= 13 + random() % 4;
                             d.state[STATE_AFFECT] += 13 + random() % 4;
-                        }
-                        else if (choice == 9 && d.see[SEE_ROYAL_J] == 1)
-                        {
+                            break;
+
+                        case ROYAL_J:
                             save[9] += 15 + random() % 4;
                             d.see[SEE_ROYAL_J] = 0;
+                            break;
                         }
                         if (random() % 2 > 0)
                             sprintf(buf, "%s", p[choice].words1);

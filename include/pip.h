@@ -156,6 +156,8 @@ enum piproyal { //10
     ROYAL_H,            /*from 國王*/
     ROYAL_I,            /*from 小丑*/
     ROYAL_J,            /*from 王子*/
+
+    ROYAL_COUNT,
 };
 enum pipsee {   //6
     SEE_ROYAL_J = 0,    /*是否已經看過王子了*/
@@ -480,7 +482,7 @@ const struct weaponlist pip_weapon_list[WEAPON_COUNT] =
 };
 
 //    T,         拜訪對象
-const struct royalset royallist[] =
+const struct royalset royallist[ROYAL_COUNT + 1] =
 {
     {'A',       "皇城騎兵連",     1,    10,     15,     100, "你真好，來陪我聊天..",                   "守衛星空的安全是很辛苦的.."},
     {'B',       "００７特務",     1,   100,     25,     200, "真是禮貌的小雞..我喜歡...",              "特務就是秘密保護站長安全的人.."},
