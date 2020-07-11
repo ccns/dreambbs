@@ -1583,7 +1583,7 @@ const char *msg)
 static int
 pip_write_backup(void)
 {
-    static const char *const files[4] = {"沒有", "進度一", "進度二", "進度三"};
+    static const char *const files[] = {"進度一", "進度二", "進度三"};
     char buf[200], buf1[200];
     char ans[3];
     int num = 0;
@@ -1601,25 +1601,17 @@ pip_write_backup(void)
         outs("儲存 [1]進度一 [2]進度二 [3]進度三 [Q]放棄 [1/2/3/Q]：");
         pipkey = vkey();
 
-        if (pipkey == '1')
-            num = 1;
-        else if (pipkey == '2')
-            num = 2;
-        else if (pipkey == '3')
-            num = 3;
-        else
-            num = 0;
-
+        num = pipkey - '0';
     }
-    while (pipkey != 'Q' && pipkey != 'q' && num != 1 && num != 2 && num != 3);
+    while (pipkey != 'Q' && pipkey != 'q' && (num < 1 || num > COUNTOF(files)));
     if (pipkey == 'q' || pipkey == 'Q')
     {
         vmsg("放棄儲存遊戲進度");
         return 0;
     }
     move(b_lines -2, 1);
-    prints("儲存檔案會覆蓋\原儲存於 [%s] 的小雞的檔案喔！請考慮清楚...", files[num]);
-    sprintf(buf1, "確定要儲存於 [%s] 檔案嗎？ [y/N]: ", files[num]);
+    prints("儲存檔案會覆蓋\原儲存於 [%s] 的小雞的檔案喔！請考慮清楚...", files[num - 1]);
+    sprintf(buf1, "確定要儲存於 [%s] 檔案嗎？ [y/N]: ", files[num - 1]);
     getdata(B_LINES_REF - 1, 1, buf1, ans, 2, DOECHO, 0);
     if (ans[0] != 'y' && ans[0] != 'Y')
     {
@@ -1629,7 +1621,7 @@ pip_write_backup(void)
 
     move(b_lines -1, 0);
     clrtobot();
-    sprintf(buf1, "儲存 [%s] 檔案完成了", files[num]);
+    sprintf(buf1, "儲存 [%s] 檔案完成了", files[num - 1]);
     vmsg(buf1);
     sprintf(buf, "/bin/cp %s %s.bak%d", get_path(cuser.userid, "chicken"), get_path(cuser.userid, "chicken"), num);
     system(buf);
@@ -1640,7 +1632,7 @@ static int
 pip_read_backup(void)
 {
     char buf[200], buf1[200], buf2[200];
-    static const char *const files[4] = {"沒有", "進度一", "進度二", "進度三"};
+    static const char *const files[] = {"進度一", "進度二", "進度三"};
     char ans[3];
     int pipkey;
     int num = 0;
@@ -1657,22 +1649,15 @@ pip_read_backup(void)
         outs("讀取 [1]進度一 [2]進度二 [3]進度三 [Q]放棄 [1/2/3/Q]：");
         pipkey = vkey();
 
-        if (pipkey == '1')
-            num = 1;
-        else if (pipkey == '2')
-            num = 2;
-        else if (pipkey == '3')
-            num = 3;
-        else
-            num = 0;
+        num = pipkey - '0';
 
-        if (num > 0)
+        if (num > 0 && num <= COUNTOF(files))
         {
             usr_fpath(buf, cuser.userid, "chicken.bak");
             sprintf(buf + strlen(buf), "%d", num);
             if ((fs = fopen(buf, "r")) == NULL)
             {
-                sprintf(buf, "檔案 [%s] 不存在", files[num]);
+                sprintf(buf, "檔案 [%s] 不存在", files[num - 1]);
                 vmsg(buf);
                 ok = 0;
             }
@@ -1681,7 +1666,7 @@ pip_read_backup(void)
 
                 move(b_lines - 2, 1);
                 outs("讀取出檔案會覆蓋\現在正在玩的小雞的檔案喔！請考慮清楚...");
-                sprintf(buf, "確定要讀取出 [%s] 檔案嗎？ [y/N]: ", files[num]);
+                sprintf(buf, "確定要讀取出 [%s] 檔案嗎？ [y/N]: ", files[num - 1]);
                 getdata(B_LINES_REF - 1, 1, buf, ans, 2, DOECHO, 0);
                 if (ans[0] != 'y' && ans[0] != 'Y')
                     vmsg("讓我再決定一下...");
@@ -1699,7 +1684,7 @@ pip_read_backup(void)
 
     move(b_lines -1, 0);
     clrtobot();
-    sprintf(buf, "讀取 [%s] 檔案完成了", files[num]);
+    sprintf(buf, "讀取 [%s] 檔案完成了", files[num - 1]);
     vmsg(buf);
 
     sprintf(buf1, "/bin/touch %s%d", get_path(cuser.userid, "chicken.bak"), num);
