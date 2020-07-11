@@ -740,43 +740,29 @@ static int pip_special_menu(void) { return pip_do_menu(PIPMENU_SPECIAL); }
 /* 系統選單:個人資料  小雞放生  特別服務                                     */
 static int pip_system_menu(void) { return pip_do_menu(PIPMENU_SYSTEM); }
 
+struct pipage {
+    int age;
+    const char *name;
+};
+
+/*static cosnt char yo[][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
+                             "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
+static const struct pipage pip_age_list[] = {
+    {0, "誕生"}, {1, "嬰兒"}, {5, "幼兒"}, {12, "兒童"}, {15, "少年"}, {18, "青年"},
+    {35, "成年"}, {45, "壯年"}, {60, "更年"}, {70, "老年"}, {100, "古稀"}, {-1, "神仙"},
+};
+
 static int pip_age_grade(int age)
 {
-    if (age <= 0)
-        return 0;   /*誕生*/
-    if (age <= 1)
-        return 1;   /*嬰兒*/
-    if (age <= 5)
-        return 2;   /*幼兒*/
-    if (age <= 12)
-        return 3;   /*兒童*/
-    if (age <= 15)
-        return 4;   /*少年*/
-    if (age <= 18)
-        return 5;   /*青年*/
-    if (age <= 35)
-        return 6;   /*成年*/
-    if (age <= 45)
-        return 7;   /*壯年*/
-    if (age <= 60)
-        return 8;   /*更年*/
-    if (age <= 70)
-        return 9;   /*老年*/
-    if (age <= 100)
-        return 10;  /*古稀*/
-    return 11;      /*神仙*/
+    for (int i = 0; i < COUNTOF(pip_age_list) - 1; ++i)
+        if (age <= pip_age_list[i].age)
+            return i;
+    return COUNTOF(pip_age_list) - 1;
 }
 
 static const char *pip_age_name(int age)
 {
-    /*static cosnt char yo[14][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
-                                   "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
-    static const char age_name[12][5] = {
-        "誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
-        "成年", "壯年", "更年", "老年", "古稀", "神仙",
-    };
-
-    return age_name[pip_age_grade(age)];
+    return pip_age_list[pip_age_grade(age)].name;
 }
 
 static void pip_show_age_pic(int age, int weight)
