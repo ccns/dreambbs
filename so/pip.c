@@ -61,7 +61,7 @@ static int pip_ending_screen(void);
 static int pip_marriage_offer(void);
 static void show_usual_pic(int i);
 static void show_feed_pic(int i);
-static int pip_buy_goods_new(int mode, const struct goodsofpip *p, int oldnum[]);
+static int pip_buy_goods_new(enum pipshopidx mode, int item_list[]);
 static int pip_weapon_doing_menu(enum pipweapon type, int item_list[WEAPON_COUNT]);
 static int pip_vs_man(int n, const struct playrule *p, int mode);
 static int pip_results_show_ending(int winorlost, int mode, int a, int b, int c);
@@ -1945,42 +1945,14 @@ show_resultshow_pic(int i)      /*收穫季*/
 
 /*---------------------------------------------------------------------------*/
 /* 商店選單:食物 零食 大補丸 玩具 書本                                       */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-
-/*---------------------------------------------------------------------------*/
-/* 商店選單:食物 零食 大補丸 玩具 書本                                       */
 /* 函式庫                                                                    */
 /*---------------------------------------------------------------------------*/
 
-static int pip_store_food(void)
-{
-    int num[COUNTOF(pipfoodlist)] = {d.eat[EAT_FOOD], d.eat[EAT_COOKIE]};
-    pip_buy_goods_new(1, pipfoodlist, num);
-    d.eat[EAT_FOOD] = num[0];
-    d.eat[EAT_COOKIE] = num[1];
-    return 0;
-}
+static int pip_store_food(void) { return pip_buy_goods_new(SHOP_FOOD, d.eat); }
 
-static int pip_store_medicine(void)
-{
-    int num[COUNTOF(pipmedicinelist)] = {d.eat[EAT_BIGHP], d.eat[EAT_MEDICINE], d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS]};
-    pip_buy_goods_new(2, pipmedicinelist, num);
-    d.eat[EAT_BIGHP] = num[0];
-    d.eat[EAT_MEDICINE] = num[1];
-    d.eat[EAT_GINSENG] = num[2];
-    d.eat[EAT_SNOWGRASS] = num[3];
-    return 0;
-}
+static int pip_store_medicine(void) { return pip_buy_goods_new(SHOP_MEDICINE, d.eat); }
 
-static int pip_store_other(void)
-{
-    int num[COUNTOF(pipotherlist)] = {d.thing[THING_PLAYTOOL], d.thing[THING_BOOK]};
-    pip_buy_goods_new(3, pipotherlist, num);
-    d.thing[THING_PLAYTOOL] = num[0];
-    d.thing[THING_BOOK] = num[1];
-    return 0;
-}
+static int pip_store_other(void) { return pip_buy_goods_new(SHOP_OTHER, d.thing); }
 
 /*頭部武器*/
 static int pip_store_weapon_head(void) { return pip_weapon_doing_menu(WEAPON_HEAD, d.weapon); }
@@ -1996,33 +1968,36 @@ static int pip_store_weapon_foot(void) { return pip_weapon_doing_menu(WEAPON_FOO
 
 static int
 pip_buy_goods_new(
-int mode,
-const struct goodsofpip *p,
-int oldnum[])
+enum pipshopidx mode,
+int item_list[])
 {
-    static const char *const shopname[4] = {"店名", "便利商店", NICKNAME "藥鋪", "夜裡書局"};
     char inbuf[256];
     char genbuf[20];
     long smoney;
     int oldmoney;
     int i, pipkey, choice;
     int numlen;
+
+    const struct pipshop *const shop = &pip_shop_list[mode];
+
     oldmoney = d.thing[THING_MONEY];
     do
     {
         clrchyiuan(6, b_lines - 6);
         move(6, 0);
         prints_centered("\x1b[1;31m  ─\x1b[41;37m 編號 \x1b[0;1;31m─\x1b[41;37m 商      品 \x1b[0;1;31m──\x1b[41;37m 效            能 \x1b[0;1;31m──\x1b[41;37m 價     格 \x1b[0;1;31m─\x1b[37;41m 擁有數量 \x1b[0;1;31m─\x1b[0m  ");
-        for (i = 0; p[i].name; i++)
+        for (i = 0; shop->list[i].name; i++)
         {
+            const struct goodsofpip *const pi = &shop->list[i];
+
             move(7 + i, 0);
             prints_centered("     \x1b[1;35m[\x1b[37m%2d\x1b[35m]     \x1b[36m%-10s      \x1b[37m%-14s        \x1b[1;33m%-10d   \x1b[1;32m%-9d    \x1b[0m",
-                    i+1, p[i].name, p[i].msgbuy, p[i].money, oldnum[i]);
+                    i+1, pi->name, pi->msgbuy, pi->money, item_list[pi->id]);
         }
         numlen = i;
         clrchyiuan(b_lines - 4, b_lines);
         move(b_lines, 0);
-        prints("\x1b[1;44;37m  %8s選單  \x1b[46m  [B]買入物品  [S]賣出物品  [Q]跳出      %*s\x1b[m", shopname[mode], 30 + d_cols - (int)(unsigned int)strlen(shopname[mode]), "");
+        prints("\x1b[1;44;37m  %8s選單  \x1b[46m  [B]買入物品  [S]賣出物品  [Q]跳出      %*s\x1b[m", shop->name, 30 + d_cols - (int)(unsigned int)strlen(shop->name), "");
         pipkey = vkey();
         switch (pipkey)
         {
@@ -2034,20 +2009,22 @@ int oldnum[])
             choice = atoi(genbuf)-1;
             if (choice >= 0 && choice < numlen)
             {
+                const struct goodsofpip *const pchoice = &shop->list[choice];
+
                 clrchyiuan(6, b_lines - 6);
                 if (random() % 2 > 0)
-                    show_buy_pic(p[choice].pic1);
+                    show_buy_pic(pchoice->pic1);
                 else
-                    show_buy_pic(p[choice].pic2);
+                    show_buy_pic(pchoice->pic2);
                 move(b_lines - 1, 0);
                 clrtoeol();
                 move(b_lines - 1, 1);
                 smoney = 0;
-                if (mode == 3)
+                if (mode == SHOP_OTHER)
                     smoney = 1;
                 else
                 {
-                    sprintf(inbuf, "你要買入物品 [%s] 多少個呢?(上限 %d): ", p[choice].name, d.thing[THING_MONEY] / p[choice].money);
+                    sprintf(inbuf, "你要買入物品 [%s] 多少個呢?(上限 %d): ", pchoice->name, d.thing[THING_MONEY] / pchoice->money);
                     getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 6, DOECHO, 0);
                     smoney = atoi(genbuf);
                 }
@@ -2055,27 +2032,27 @@ int oldnum[])
                 {
                     vmsg("放棄買入...");
                 }
-                else if (d.thing[THING_MONEY] < smoney*p[choice].money)
+                else if (d.thing[THING_MONEY] < smoney*pchoice->money)
                 {
                     vmsg("你的錢沒有那麼多喔..");
                 }
                 else
                 {
-                    sprintf(inbuf, "確定買入物品 [%s] 數量 %ld 個嗎?(店家賣價 %ld) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money);
+                    sprintf(inbuf, "確定買入物品 [%s] 數量 %ld 個嗎?(店家賣價 %ld) [y/N]: ", pchoice->name, smoney, smoney*pchoice->money);
                     getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 2, DOECHO, 0);
                     if (genbuf[0] == 'y' || genbuf[0] == 'Y')
                     {
-                        oldnum[choice] += smoney;
-                        d.thing[THING_MONEY] -= smoney * p[choice].money;
-                        sprintf(inbuf, "老闆給了你%ld個%s", smoney, p[choice].name);
+                        item_list[pchoice->id] += smoney;
+                        d.thing[THING_MONEY] -= smoney * pchoice->money;
+                        sprintf(inbuf, "老闆給了你%ld個%s", smoney, pchoice->name);
                         vmsg(inbuf);
-                        vmsg(p[choice].msguse);
-                        if (mode == 3 && choice == 0)
+                        vmsg(pchoice->msguse);
+                        if (mode == SHOP_OTHER && choice == 0)
                         {
                             d.state[STATE_HAPPY] += random() % 10 + 20 * smoney;
                             d.state[STATE_SATISFY] += random() % 10 + 20 * smoney;
                         }
-                        else if (mode == 3 && choice == 1)
+                        else if (mode == SHOP_OTHER && choice == 1)
                         {
                             d.state[STATE_HAPPY] += (random() % 2 + 2) * smoney;
                             d.learn[LEARN_WISDOM] += (2 + 10 / (d.learn[LEARN_WISDOM] / 100 + 1)) * smoney;
@@ -2098,7 +2075,7 @@ int oldnum[])
 
         case 'S':
         case 's':
-            if (mode == 3)
+            if (mode == SHOP_OTHER)
             {
                 vmsg("這些東西不能賣喔....");
                 break;
@@ -2109,36 +2086,38 @@ int oldnum[])
             choice = atoi(genbuf)-1;
             if (choice >= 0 && choice < numlen)
             {
+                const struct goodsofpip *const pchoice = &shop->list[choice];
+
                 clrchyiuan(6, b_lines - 6);
                 if (random() % 2 > 0)
-                    show_buy_pic(p[choice].pic1);
+                    show_buy_pic(pchoice->pic1);
                 else
-                    show_buy_pic(p[choice].pic2);
+                    show_buy_pic(pchoice->pic2);
                 move(b_lines - 1, 0);
                 clrtoeol();
                 move(b_lines - 1, 1);
                 smoney = 0;
-                sprintf(inbuf, "你要賣出物品 [%s] 多少個呢?(上限 %d): ", p[choice].name, oldnum[choice]);
+                sprintf(inbuf, "你要賣出物品 [%s] 多少個呢?(上限 %d): ", pchoice->name, item_list[pchoice->id]);
                 getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 6,, 0);
                 smoney = atoi(genbuf);
                 if (smoney < 0)
                 {
                     vmsg("放棄賣出...");
                 }
-                else if (smoney > oldnum[choice])
+                else if (smoney > item_list[pchoice->id])
                 {
-                    sprintf(inbuf, "你的 [%s] 沒有那麼多個喔", p[choice].name);
+                    sprintf(inbuf, "你的 [%s] 沒有那麼多個喔", pchoice->name);
                     vmsg(inbuf);
                 }
                 else
                 {
-                    sprintf(inbuf, "確定賣出物品 [%s] 數量 %ld 個嗎?(店家買價 %ld) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money*8 / 10);
+                    sprintf(inbuf, "確定賣出物品 [%s] 數量 %ld 個嗎?(店家買價 %ld) [y/N]: ", pchoice->name, smoney, smoney*pchoice->money*8 / 10);
                     getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 2, DOECHO, 0);
                     if (genbuf[0] == 'y' || genbuf[0] == 'Y')
                     {
-                        oldnum[choice] -= smoney;
-                        d.thing[THING_MONEY] += smoney * p[choice].money * 8 / 10;
-                        sprintf(inbuf, "老闆拿走了你的%ld個%s", smoney, p[choice].name);
+                        item_list[pchoice->id] -= smoney;
+                        d.thing[THING_MONEY] += smoney * pchoice->money * 8 / 10;
+                        sprintf(inbuf, "老闆拿走了你的%ld個%s", smoney, pchoice->name);
                         vmsg(inbuf);
                     }
                     else
@@ -2155,7 +2134,7 @@ int oldnum[])
             break;
         case 'Q':
         case 'q':
-            sprintf(inbuf, "金錢交易共 %d 元，離開 %s ", oldmoney - d.thing[THING_MONEY], shopname[mode]);
+            sprintf(inbuf, "金錢交易共 %d 元，離開 %s ", oldmoney - d.thing[THING_MONEY], shop->name);
             vmsg(inbuf);
             break;
         }

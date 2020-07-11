@@ -31,6 +31,14 @@ enum pipmenumode {
     MODE_FIGHT,  /*修行*/
 };
 
+enum pipshopidx {
+    SHOP_FOOD,
+    SHOP_MEDICINE,
+    SHOP_OTHER,
+
+    SHOP_COUNT,
+};
+
 /*--------------------------------------------------------------------------*/
 /*  怪物參數設定                                                            */
 /*--------------------------------------------------------------------------*/
@@ -342,6 +350,7 @@ typedef struct royalset royalset;
 /*--------------------------------------------------------------------------*/
 struct goodsofpip
 {
+    int id;             /*代碼*/
     const char *name;   /*名字*/
     const char *msgbuy; /*功用*/
     const char *msguse; /*說明*/
@@ -352,29 +361,41 @@ struct goodsofpip
 };
 typedef struct goodsofpip goodsofpip;
 
-//    物品名,         說明buy,        說明feed
+//   屬性代碼,     物品名,         說明buy,        說明feed
 const struct goodsofpip pipfoodlist[] =
 {
-    {"好吃的食物",   "體力恢復50",   "每吃一次食物會恢復體力50喔!",     50,     50,      1, 1},
-    {"美味的零食",   "體力恢復100",  "除了恢復體力，小雞也會更快樂",   120,    100,      2, 3},
-    {NULL,           NULL,           NULL,                               0,      0,      0, 0}
+    {EAT_FOOD,    "好吃的食物",   "體力恢復50",   "每吃一次食物會恢復體力50喔!",     50,     50,      1, 1},
+    {EAT_COOKIE,  "美味的零食",   "體力恢復100",  "除了恢復體力，小雞也會更快樂",   120,    100,      2, 3},
+    {0,           NULL,           NULL,           NULL,                               0,      0,      0, 0}
 };
 
-//     物品名,         說明buy.        說明feed
+//   屬性代碼,       物品名,         說明buy.        說明feed
 const struct goodsofpip pipmedicinelist[] =
 {
-    { "好用大補丸",   "體力恢復600",  "恢復大量流失體力的良方",         500,    600,      4, 4},
-    { "珍貴的靈芝",   "法力恢復50",   "每吃一次靈芝會恢復法力50喔!",    100,     50,      7, 7},
-    { "千年人參王",   "法力恢復500",  "恢復大量流失法力的良方",         800,    500,      7, 7},
-    { "天山雪蓮",     "法力體力最大", "這個  好貴......",             10000,      0,      7, 7},
-    { NULL,           NULL,           NULL,                               0,      0,      0, 0}
+    {EAT_BIGHP,     "好用大補丸",   "體力恢復600",  "恢復大量流失體力的良方",         500,    600,      4, 4},
+    {EAT_MEDICINE,  "珍貴的靈芝",   "法力恢復50",   "每吃一次靈芝會恢復法力50喔!",    100,     50,      7, 7},
+    {EAT_GINSENG,   "千年人參王",   "法力恢復500",  "恢復大量流失法力的良方",         800,    500,      7, 7},
+    {EAT_SNOWGRASS, "天山雪蓮",     "法力體力最大", "這個  好貴......",             10000,      0,      7, 7},
+    {0,             NULL,           NULL,           NULL,                               0,      0,      0, 0}
 };
 
-//     物品名,         說明buy.        說明feed
+//   屬性代碼,         物品名,         說明buy.        說明feed
 const struct goodsofpip pipotherlist[] = {
-    { "樂高玩具組",   "快樂滿意度",   "玩具讓小雞更快樂啦...",           50,      0,      5, 5},
-    { "百科全書",     "知識的來源",   "書本讓小雞更聰明更有氣質啦...",  100,      0,      6, 6},
-    { NULL,           NULL,           NULL,                               0,      0,      0, 0}
+    {THING_PLAYTOOL,  "樂高玩具組",   "快樂滿意度",   "玩具讓小雞更快樂啦...",           50,      0,      5, 5},
+    {THING_BOOK,      "百科全書",     "知識的來源",   "書本讓小雞更聰明更有氣質啦...",  100,      0,      6, 6},
+    {0,               NULL,           NULL,           NULL,                               0,      0,      0, 0}
+};
+
+struct pipshop {
+    const char *name;
+    const struct goodsofpip *list;
+};
+
+const struct pipshop pip_shop_list[SHOP_COUNT] =
+{
+    {"便利商店", pipfoodlist},
+    {NICKNAME "藥鋪", pipmedicinelist},
+    {"夜裡書局", pipotherlist},
 };
 
 /*--------------------------------------------------------------------------*/
