@@ -4557,28 +4557,28 @@ const struct royalset *p)
                         {
                             switch (choice)
                             {
-                            case 1:
+                            case 0:
                                 change = d.learn[LEARN_CHARACTER] / 5;
                                 break;
-                            case 2:
+                            case 1:
                                 change = d.learn[LEARN_CHARACTER] / 8;
                                 break;
-                            case 3:
+                            case 2:
                                 change = d.learn[LEARN_CHARM] / 5;
                                 break;
-                            case 4:
+                            case 3:
                                 change = d.learn[LEARN_WISDOM] / 10;
                                 break;
-                            case 5:
+                            case 4:
                                 change = d.state[STATE_BELIEF] / 10;
                                 break;
-                            case 6:
+                            case 5:
                                 change = d.learn[LEARN_SPEECH] / 10;
                                 break;
-                            case 7:
+                            case 6:
                                 change = d.tmp[TMP_SOCIAL] / 10;
                                 break;
-                            case 8:
+                            case 7:
                                 change = d.tmp[TMP_HEXP] / 10;
                                 break;
                             }
