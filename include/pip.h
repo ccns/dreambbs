@@ -11,6 +11,26 @@
 
 #define ALIVE   (9/10)  /* 復活比 */
 
+enum pipmenuidx {
+    PIPMENU_MAIN,
+    PIPMENU_BASIC,
+    PIPMENU_STORE,
+    PIPMENU_PRACTICE,
+    PIPMENU_PLAY,
+    PIPMENU_JOB,
+    PIPMENU_SPECIAL,
+    PIPMENU_SYSTEM,
+
+    PIPMENU_COUNT,
+};
+
+enum pipmenumode {
+    MODE_MAIN,   /*主要畫面*/
+    MODE_FEED,   /*餵食*/
+    MODE_WORK,   /*打工*/
+    MODE_FIGHT,  /*修行*/
+};
+
 /*--------------------------------------------------------------------------*/
 /*  怪物參數設定                                                            */
 /*--------------------------------------------------------------------------*/

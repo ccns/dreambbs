@@ -55,7 +55,7 @@ static int pip_live_again(void);
 static void show_basic_pic(int i);
 static void pip_log_record(const char *msg);
 static void show_die_pic(int i);
-static int pip_mainmenu(int mode);
+static int pip_mainmenu(enum pipmenumode mode);
 static void pip_time_change(time_t cnow);
 static int pip_go_palace_screen(const struct royalset *p);
 static int pip_ending_screen(void);
@@ -163,7 +163,7 @@ int p_pipple(void)
 
     lasttime = time(0);
     start_time = time(0);
-    /*pip_do_menu(0, 0, pipmainlist);*/
+    /*pip_do_menu(PIPMENU_MAIN);*/
     if (d.death != 0 || !d.name[0])  return DL_RELEASE(0);
     pip_load_mob("game/pipdata/pipmob.dat");
     pip_load_mobset("game/pipdata/pipmobset.dat");
@@ -437,33 +437,6 @@ int cal)
 /*主畫面和選單                                                               */
 /*---------------------------------------------------------------------------*/
 
-static const char *const menuname[8][2] =
-{
-    {"             ",
-     "\x1b[1;44;37m 選單 \x1b[46m[1]基本 [2]逛街 [3]修行 [4]玩樂 [5]打工 [6]特殊 [7]系統 [Q]離開          %*s\x1b[m"},
-
-    {"             ",
-     "\x1b[1;44;37m  基本選單  \x1b[46m[1]餵食 [2]清潔 [3]休息 [4]親親 [5]換錢        %*s[Q]跳出             \x1b[m"},
-
-    {"\x1b[1;44;37m 逛街 \x1b[46m【日常用品】[1]便利商店 [2]" NICKNAME "藥鋪 [3]夜裡書局          %*s\x1b[m",
-     "\x1b[1;44;37m 選單 \x1b[46m【武器百貨】[A]頭部裝備 [B]右手裝備 [C]左手裝備 [D]身體裝備 [E]腳部裝備  %*s\x1b[m"},
-
-    {"\x1b[1;44;37m 修行 \x1b[46m[A]科學(%d) [B]詩詞(%d) [C]神學(%d) [D]軍學(%d) [E]劍術(%d)                   %*s\x1b[m",
-     "\x1b[1;44;37m 選單 \x1b[46m[F]格鬥(%d) [G]魔法(%d) [H]禮儀(%d) [I]繪畫(%d) [J]舞蹈(%d) [Q]跳出           %*s\x1b[m"},
-
-    {"   ",
-     "\x1b[1;44;37m  玩樂選單  \x1b[46m[1]散步 [2]運動 [3]約會 [4]猜拳 [5]旅遊 [6]郊外 [7]唱歌 [Q]跳出    %*s\x1b[m"},
-
-    {"\x1b[1;44;37m 打工 \x1b[46m[A]家事 [B]保姆 [C]旅館 [D]農場 [E]餐\廳 [F]教堂 [G]地攤 [H]伐木 [I]美髮  %*s\x1b[m",
-     "\x1b[1;44;37m 選單 \x1b[46m[J]獵人 [K]工地 [L]守墓 [M]家教 [N]酒家 [O]酒店 [P]夜總會       %*s[Q]跳出  \x1b[m"},
-
-    {"\x1b[1;44;37m 特殊 \x1b[46m[1]" NICKNAME "醫院 [2]媚登峰 [3]戰鬥修行 [4]拜訪朋友 [5]" NICKNAME "        %*s\x1b[m",
-     "\x1b[1;44;37m 選單 \x1b[46m                                                                %*s[Q]跳出  \x1b[m"},
-
-    {"",
-     "\x1b[1;44;37m  系統選單  \x1b[46m[1]詳細資料 [2]小雞自由 [3]特別服務 [4]儲存進度 [5]讀取進度 [Q]跳出%*s\x1b[m"},
-};
-
 /*主選單*/
 static int pip_basic_menu(void), pip_store_menu(void), pip_practice_menu(void);
 static int pip_play_menu(void), pip_job_menu(void), pip_special_menu(void), pip_system_menu(void);
@@ -601,13 +574,53 @@ static const struct pipcommands pipsystemlist[] =
     {'\0', NULL               }
 };
 
+struct pipmenu {
+    const struct pipcommands *cmdtable;
+    enum pipmenumode mode;
+    const char *name[2];
+};
+
+static const struct pipmenu pip_menu_list[PIPMENU_COUNT] =
+{
+    {pipmainlist, MODE_MAIN, {
+        "             ",
+        "\x1b[1;44;37m 選單 \x1b[46m[1]基本 [2]逛街 [3]修行 [4]玩樂 [5]打工 [6]特殊 [7]系統 [Q]離開          %*s\x1b[m"}
+    },
+    {pipbasiclist, MODE_MAIN, {
+        "             ",
+        "\x1b[1;44;37m  基本選單  \x1b[46m[1]餵食 [2]清潔 [3]休息 [4]親親 [5]換錢        %*s[Q]跳出             \x1b[m"}
+    },
+    {pipstorelist, MODE_FEED, {
+        "\x1b[1;44;37m 逛街 \x1b[46m【日常用品】[1]便利商店 [2]" NICKNAME "藥鋪 [3]夜裡書局          %*s\x1b[m",
+        "\x1b[1;44;37m 選單 \x1b[46m【武器百貨】[A]頭部裝備 [B]右手裝備 [C]左手裝備 [D]身體裝備 [E]腳部裝備  %*s\x1b[m"}
+    },
+    {pippracticelist, MODE_FIGHT, {
+        "\x1b[1;44;37m 修行 \x1b[46m[A]科學(%d) [B]詩詞(%d) [C]神學(%d) [D]軍學(%d) [E]劍術(%d)                   %*s\x1b[m",
+        "\x1b[1;44;37m 選單 \x1b[46m[F]格鬥(%d) [G]魔法(%d) [H]禮儀(%d) [I]繪畫(%d) [J]舞蹈(%d) [Q]跳出           %*s\x1b[m"}
+    },
+    {pipplaylist, MODE_MAIN, {
+        "   ",
+        "\x1b[1;44;37m  玩樂選單  \x1b[46m[1]散步 [2]運動 [3]約會 [4]猜拳 [5]旅遊 [6]郊外 [7]唱歌 [Q]跳出    %*s\x1b[m"}
+    },
+    {pipjoblist, MODE_WORK, {
+        "\x1b[1;44;37m 打工 \x1b[46m[A]家事 [B]保姆 [C]旅館 [D]農場 [E]餐\廳 [F]教堂 [G]地攤 [H]伐木 [I]美髮  %*s\x1b[m",
+        "\x1b[1;44;37m 選單 \x1b[46m[J]獵人 [K]工地 [L]守墓 [M]家教 [N]酒家 [O]酒店 [P]夜總會       %*s[Q]跳出  \x1b[m"}
+    },
+    {pipspeciallist, MODE_MAIN, {
+        "\x1b[1;44;37m 特殊 \x1b[46m[1]" NICKNAME "醫院 [2]媚登峰 [3]戰鬥修行 [4]拜訪朋友 [5]" NICKNAME "        %*s\x1b[m",
+        "\x1b[1;44;37m 選單 \x1b[46m                                                                %*s[Q]跳出  \x1b[m"}
+    },
+    {pipsystemlist, MODE_MAIN, {
+        "",
+        "\x1b[1;44;37m  系統選單  \x1b[46m[1]詳細資料 [2]小雞自由 [3]特別服務 [4]儲存進度 [5]讀取進度 [Q]跳出%*s\x1b[m"}
+    },
+};
 
 
 /*類似menu.c的功能*/
 static int
 pip_do_menu(
-int menunum, int menumode,
-const struct pipcommands cmdtable[])
+enum pipmenuidx menunum)
 {
     time_t now;
     int pipkey;
@@ -615,17 +628,19 @@ const struct pipcommands cmdtable[])
     int class1 = 0, class2 = 0, class3 = 0, class4 = 0, class5 = 0;
     int class6 = 0, class7 = 0, class8 = 0, class9 = 0, class10 = 0;
 
+    const struct pipmenu *const menu = &pip_menu_list[menunum];
+
     do
     {
         /*判斷是否死亡  死掉即跳回上一層*/
         if (d.death == 1 || d.death == 2 || d.death == 3)
             return 0;
         /*經pip_mainmenu判定後是否死亡*/
-        if (pip_mainmenu(menumode))
+        if (pip_mainmenu(menu->mode))
             return 0;
 
         clrchyiuan(b_lines - 1, b_lines);
-        if (menunum == 3)                                           /*修行*/
+        if (menunum == PIPMENU_PRACTICE)                            /*修行*/
         {
             class1 = BMIN(d.learn[LEARN_WISDOM] / 200 + 1, 5);                   /*科學*/
             class2 = BMIN((d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400 + 1, 5); /*詩詞*/
@@ -639,9 +654,9 @@ const struct pipcommands cmdtable[])
             class10 = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400 + 1, 5);     /*舞蹈*/
 
             move(b_lines - 1, 0);
-            prints(menuname[menunum][0], class1, class2, class3, class4, class5, d_cols, "");
+            prints(menu->name[0], class1, class2, class3, class4, class5, d_cols, "");
             move(b_lines, 0);
-            prints(menuname[menunum][1], class6, class7, class8, class9, class10, d_cols, "");
+            prints(menu->name[1], class6, class7, class8, class9, class10, d_cols, "");
         }
         else
         {
@@ -659,10 +674,10 @@ const struct pipcommands cmdtable[])
             default:
                 fill = d_cols;
             }
-            prints(menuname[menunum][0], fill, "");
+            prints(menu->name[0], fill, "");
 
             move(b_lines, 0);
-            prints(menuname[menunum][1], d_cols, "");
+            prints(menu->name[1], d_cols, "");
         }
 
         now = time(0);
@@ -682,7 +697,7 @@ const struct pipcommands cmdtable[])
         default:
             {
                 int key;
-                for (const struct pipcommands *cmd = cmdtable; (key = cmd->key); cmd++)
+                for (const struct pipcommands *cmd = menu->cmdtable; (key = cmd->key); cmd++)
                 {
                     if (key == pipkey
                         || (key >= 0 && key <= 0xff && (key == tolower(pipkey))))
@@ -701,87 +716,29 @@ const struct pipcommands cmdtable[])
     return 0;
 }
 
-
-/*---------------------------------------------------------------------------*/
 /* 基本選單:餵食 清潔 親親 休息                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_main_menu(void)
-{
-    pip_do_menu(0, 0, pipmainlist);
-    return 0;
-}
+static int pip_main_menu(void) { return pip_do_menu(PIPMENU_MAIN); }
 
-/*---------------------------------------------------------------------------*/
 /* 基本選單:餵食 清潔 親親 休息                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_basic_menu(void)
-{
-    pip_do_menu(1, 0, pipbasiclist);
-    return 0;
-}
+static int pip_basic_menu(void) { return pip_do_menu(PIPMENU_BASIC); }
 
-/*---------------------------------------------------------------------------*/
 /* 商店選單:食物 零食 大補丸 玩具 書本                                       */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_store_menu(void)
-{
-    pip_do_menu(2, 1, pipstorelist);
-    return 0;
-}
+static int pip_store_menu(void) { return pip_do_menu(PIPMENU_STORE); }
 
-/*---------------------------------------------------------------------------*/
 /* 修行選單:念書 練武 修行                                                   */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_practice_menu(void)
-{
-    pip_do_menu(3, 3, pippracticelist);
-    return 0;
-}
+static int pip_practice_menu(void) { return pip_do_menu(PIPMENU_PRACTICE); }
 
-
-/*---------------------------------------------------------------------------*/
 /* 玩樂選單:散步 旅遊 運動 約會 猜拳                                         */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_play_menu(void)
-{
-    pip_do_menu(4, 0, pipplaylist);
-    return 0;
-}
+static int pip_play_menu(void) { return pip_do_menu(PIPMENU_PLAY); }
 
-/*---------------------------------------------------------------------------*/
 /* 打工選單:家事 苦工 家教 地攤                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_job_menu(void)
-{
-    pip_do_menu(5, 2, pipjoblist);
-    return 0;
-}
+static int pip_job_menu(void) { return pip_do_menu(PIPMENU_JOB); }
 
-/*---------------------------------------------------------------------------*/
 /* 特殊選單:看病 減肥 戰鬥 拜訪 朝見                                         */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_special_menu(void)
-{
-    pip_do_menu(6, 0, pipspeciallist);
-    return 0;
-}
+static int pip_special_menu(void) { return pip_do_menu(PIPMENU_SPECIAL); }
 
-/*---------------------------------------------------------------------------*/
 /* 系統選單:個人資料  小雞放生  特別服務                                     */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_system_menu(void)
-{
-    pip_do_menu(7, 0, pipsystemlist);
-    return 0;
-}
+static int pip_system_menu(void) { return pip_do_menu(PIPMENU_SYSTEM); }
 
 static int pip_age_grade(int age)
 {
@@ -864,7 +821,7 @@ static void pip_show_age_pic(int age, int weight)
 
 static int
 pip_mainmenu(
-int mode)
+enum pipmenumode mode)
 {
     char genbuf[200];
     time_t now;
@@ -923,7 +880,7 @@ int mode)
     if ((random() % 3000 == 29) && tm >= 15 && d.learn[LEARN_CHARM] >= 300 && d.learn[LEARN_CHARACTER] >= 300)
         pip_marriage_offer();
 
-    if (mode != 1 && random() % 4000 == 69)
+    if (mode != MODE_FEED && random() % 4000 == 69)
         pip_divine();
 
     /*武官*/
@@ -1007,8 +964,9 @@ int mode)
         color4 = 37;
     prints_centered(" \x1b[1;32m[命 MAX]\x1b[37m %-10d\x1b[32m[法 MAX]\x1b[37m %-10d\x1b[32m[髒／病]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[快／滿]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m",
             d.body[BODY_MAXHP], d.fight[FIGHT_MAXMP], color1, d.body[BODY_SHIT], color2, d.body[BODY_SICK], color3, d.state[STATE_HAPPY], color4, d.state[STATE_SATISFY]);
-    if (mode == 0)  /*主要畫面*/
+    switch (mode)
     {
+    case MODE_MAIN:
         anynum = random() % 4;
         move(4, 0);
         if (anynum == 0)
@@ -1019,9 +977,9 @@ int mode)
             prints_centered(" \x1b[1;35m[站長曰]:\x1b[37m隨時注意小雞的生命數值唷!\x1b[0m");
         else if (anynum == 3)
             prints_centered(" \x1b[1;35m[站長曰]:\x1b[37m快快樂樂的小雞才是幸福的小雞.....\x1b[0m");
-    }
-    else if (mode == 1)/*餵食*/
-    {
+        break;
+
+    case MODE_FEED:
         move(4, 0);
         if (d.eat[EAT_FOOD] <= 0)
             color1 = 31;
@@ -1049,22 +1007,21 @@ int mode)
             color4 = 37;
         prints_centered(" \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m",
                 color1, d.eat[EAT_FOOD], color2, d.eat[EAT_COOKIE], color3, d.eat[EAT_BIGHP], color4, d.eat[EAT_MEDICINE], d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS]);
+        break;
 
-    }
-    else if (mode == 2)/*打工*/
-    {
+    case MODE_WORK:
         move(4, 0);
         prints_centered(" \x1b[1;36m[愛心]\x1b[37m%-5d\x1b[36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[道德]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[家事]\x1b[37m%-5d\x1b[0m",
                 d.learn[LEARN_LOVE], d.learn[LEARN_WISDOM], d.learn[LEARN_CHARACTER], d.learn[LEARN_ART], d.learn[LEARN_ETHICS], d.learn[LEARN_BRAVE], d.learn[LEARN_HOMEWORK]);
+        break;
 
-    }
-    else if (mode == 3)/*修行*/
-    {
+    case MODE_FIGHT:
         move(4, 0);
         prints_centered(" \x1b[1;36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[攻擊]\x1b[37m%-5d\x1b[36m[防禦]\x1b[37m%-5d\x1b[36m[速度]\x1b[37m%-5d\x1b[0m",
                 d.learn[LEARN_WISDOM], d.learn[LEARN_CHARACTER], d.learn[LEARN_ART], d.learn[LEARN_BRAVE], d.fight[FIGHT_ATTACK], d.fight[FIGHT_RESIST], d.fight[FIGHT_SPEED]);
-
+        break;
     }
+
     move(5, 0);
     prints_centered("\x1b[1;%dm┌─────────────────────────────────────┐\x1b[m", color);
 
@@ -1380,7 +1337,7 @@ static int pip_basic_feed(void)     /* 餵食*/
     {
         if (d.death == 1 || d.death == 2 || d.death == 3)
             return 0;
-        if (pip_mainmenu(1)) return 0;
+        if (pip_mainmenu(MODE_FEED)) return 0;
         move(b_lines -2, 0);
         clrtoeol();
         move(b_lines - 2, 1);
@@ -3664,7 +3621,7 @@ static int pip_play_guess(void)   /* 猜拳程式 */
     {
         if (d.death == 1 || d.death == 2 || d.death == 3)
             return 0;
-        if (pip_mainmenu(0)) return 0;
+        if (pip_mainmenu(MODE_MAIN)) return 0;
         move(b_lines -2, 0);
         clrtoeol();
         move(b_lines, 0);
