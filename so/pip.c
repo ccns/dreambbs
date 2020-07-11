@@ -63,7 +63,7 @@ static int pip_marriage_offer(void);
 static void show_usual_pic(int i);
 static void show_feed_pic(int i);
 static int pip_buy_goods_new(int mode, const struct goodsofpip *p, int oldnum[]);
-static int pip_weapon_doing_menu(int variance, int type, const struct weapon *p);
+static int pip_weapon_doing_menu(enum pipweapon type, int item_list[WEAPON_COUNT]);
 static int pip_vs_man(int n, const struct playrule *p, int mode);
 static int pip_results_show_ending(int winorlost, int mode, int a, int b, int c);
 static void pip_fight_bad(int n);
@@ -2012,31 +2012,16 @@ static int pip_store_other(void)
     return 0;
 }
 
-static int pip_store_weapon_head(void)         /*頭部武器*/
-{
-    d.weapon[WEAPON_HEAD] = pip_weapon_doing_menu(d.weapon[WEAPON_HEAD], 0, headlist);
-    return 0;
-}
-static int pip_store_weapon_rhand(void)        /*右手武器*/
-{
-    d.weapon[WEAPON_RHAND] = pip_weapon_doing_menu(d.weapon[WEAPON_RHAND], 1, rhandlist);
-    return 0;
-}
-static int pip_store_weapon_lhand(void)        /*左手武器*/
-{
-    d.weapon[WEAPON_LHAND] = pip_weapon_doing_menu(d.weapon[WEAPON_LHAND], 2, lhandlist);
-    return 0;
-}
-static int pip_store_weapon_body(void)         /*身體武器*/
-{
-    d.weapon[WEAPON_BODY] = pip_weapon_doing_menu(d.weapon[WEAPON_BODY], 3, bodylist);
-    return 0;
-}
-static int pip_store_weapon_foot(void)         /*足部武器*/
-{
-    d.weapon[WEAPON_FOOT] = pip_weapon_doing_menu(d.weapon[WEAPON_FOOT], 4, footlist);
-    return 0;
-}
+/*頭部武器*/
+static int pip_store_weapon_head(void) { return pip_weapon_doing_menu(WEAPON_HEAD, d.weapon); }
+/*右手武器*/
+static int pip_store_weapon_rhand(void) { return pip_weapon_doing_menu(WEAPON_RHAND, d.weapon); }
+/*左手武器*/
+static int pip_store_weapon_lhand(void) { return pip_weapon_doing_menu(WEAPON_LHAND, d.weapon); }
+/*身體武器*/
+static int pip_store_weapon_body(void) { return pip_weapon_doing_menu(WEAPON_BODY, d.weapon); }
+/*足部武器*/
+static int pip_store_weapon_foot(void) { return pip_weapon_doing_menu(WEAPON_FOOT, d.weapon); }
 
 
 static int
@@ -2211,24 +2196,27 @@ int oldnum[])
 
 static int
 pip_weapon_doing_menu(             /* 武器購買畫面 */
-int variance,
-int type,
-const struct weapon *p)
+enum pipweapon type,
+int item_list[WEAPON_COUNT])
 {
     time_t now;
     int n = 0;
     const char *s;
     char ans[5];
     char shortbuf[100];
-    static const char menutitle[5][11] = {"頭部裝備區", "右手裝備區", "左手裝備區", "身體裝備區", "足部裝備區"};
     int pipkey;
     char choicekey[5];
     int choice;
 
+    int variance = item_list[type];
+    const struct weaponlist *const weapons = &pip_weapon_list[type];
+
     do
     {
+        const struct weapon *const pvariance = &weapons->list[variance];
+
         clear();
-        vs_head(menutitle[type], BoardName);
+        vs_head(weapons->menutitle, BoardName);
         show_weapon_pic(0);
    /*   move(10, 2);
         prints_centered("\x1b[1;37m現今能力:體力Max:\x1b[36m%-5d\x1b[37m  法力Max:\x1b[36m%-5d\x1b[37m  攻擊:\x1b[36m%-5d\x1b[37m  防禦:\x1b[36m%-5d\x1b[37m  速度:\x1b[36m%-5d \x1b[m",
@@ -2240,33 +2228,35 @@ const struct weapon *p)
         prints_centered(" \x1b[1;31m──\x1b[37m白色 可以購買\x1b[31m──\x1b[32m綠色 擁有裝備\x1b[31m──\x1b[33m黃色 錢錢不夠\x1b[31m──\x1b[35m紫色 能力不足\x1b[31m──\x1b[m");
 
         n = 1;
-        while ((s = p[n].name))
+        while ((s = weapons->list[n].name))
         {
+            const struct weapon *const pn = &weapons->list[n];
+
             move(12 + n, 2);
             if (variance == (n))/*本身有的*/
             {
                 prints_centered("\x1b[1;32m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
-                        n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
-                        p[n].attack, p[n].resist, p[n].speed, p[n].cost);
+                        n, pn->name, pn->needmaxhp, pn->needmaxmp, pn->needspeed,
+                        pn->attack, pn->resist, pn->speed, pn->cost);
             }
-            else if (d.body[BODY_MAXHP] < p[n].needmaxhp || d.fight[FIGHT_MAXMP] < p[n].needmaxmp || d.fight[FIGHT_SPEED] < p[n].needspeed)/*能力不足*/
+            else if (d.body[BODY_MAXHP] < pn->needmaxhp || d.fight[FIGHT_MAXMP] < pn->needmaxmp || d.fight[FIGHT_SPEED] < pn->needspeed)/*能力不足*/
             {
                 prints_centered("\x1b[1;35m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
-                        n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
-                        p[n].attack, p[n].resist, p[n].speed, p[n].cost);
+                        n, pn->name, pn->needmaxhp, pn->needmaxmp, pn->needspeed,
+                        pn->attack, pn->resist, pn->speed, pn->cost);
             }
 
-            else if (d.thing[THING_MONEY] < p[n].cost) /*錢不夠的*/
+            else if (d.thing[THING_MONEY] < pn->cost) /*錢不夠的*/
             {
                 prints_centered("\x1b[1;33m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
-                        n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
-                        p[n].attack, p[n].resist, p[n].speed, p[n].cost);
+                        n, pn->name, pn->needmaxhp, pn->needmaxmp, pn->needspeed,
+                        pn->attack, pn->resist, pn->speed, pn->cost);
             }
             else
             {
                 prints_centered("\x1b[1;37m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
-                        n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
-                        p[n].attack, p[n].resist, p[n].speed, p[n].cost);
+                        n, pn->name, pn->needmaxhp, pn->needmaxmp, pn->needspeed,
+                        pn->attack, pn->resist, pn->speed, pn->cost);
             }
             n++;
         }
@@ -2287,6 +2277,8 @@ const struct weapon *p)
             choice = atoi(choicekey);
             if (choice >= 0 && choice <= n)
             {
+                const struct weapon *const pchoice = &weapons->list[choice];
+
                 move(b_lines - 1, 0);
                 clrtoeol();
                 move(b_lines - 1, 1);
@@ -2298,36 +2290,36 @@ const struct weapon *p)
 
                 else if (variance == choice)  /*早已經有啦*/
                 {
-                    sprintf(shortbuf, "你早已經有 %s 囉", p[variance].name);
+                    sprintf(shortbuf, "你早已經有 %s 囉", pvariance->name);
                     vmsg(shortbuf);
                 }
 
-                else if (p[choice].cost >= (d.thing[THING_MONEY] + p[variance].sell))  /*錢不夠*/
+                else if (pchoice->cost >= (d.thing[THING_MONEY] + pvariance->sell))  /*錢不夠*/
                 {
-                    sprintf(shortbuf, "這個要 %d 元，你的錢不夠啦!", p[choice].cost);
+                    sprintf(shortbuf, "這個要 %d 元，你的錢不夠啦!", pchoice->cost);
                     vmsg(shortbuf);
                 }
 
-                else if (d.body[BODY_MAXHP] < p[choice].needmaxhp || d.fight[FIGHT_MAXMP] < p[choice].needmaxmp
-                          || d.fight[FIGHT_SPEED] < p[choice].needspeed)  /*能力不足*/
+                else if (d.body[BODY_MAXHP] < pchoice->needmaxhp || d.fight[FIGHT_MAXMP] < pchoice->needmaxmp
+                          || d.fight[FIGHT_SPEED] < pchoice->needspeed)  /*能力不足*/
                 {
                     sprintf(shortbuf, "需要HP %d MP %d SPEED %d 喔",
-                            p[choice].needmaxhp, p[choice].needmaxmp, p[choice].needspeed);
+                            pchoice->needmaxhp, pchoice->needmaxmp, pchoice->needspeed);
                     vmsg(shortbuf);
                 }
                 else  /*順利購買*/
                 {
-                    sprintf(shortbuf, "你確定要購買 %s 嗎?($%d) [y/N]: ", p[choice].name, p[choice].cost);
+                    sprintf(shortbuf, "你確定要購買 %s 嗎?($%d) [y/N]: ", pchoice->name, pchoice->cost);
                     getdata(B_LINES_REF - 1, 1, shortbuf, ans, 2, DOECHO, 0);
                     if (ans[0] == 'y' || ans[0] == 'Y')
                     {
-                        sprintf(shortbuf, "小雞已經裝備上 %s 了", p[choice].name);
+                        sprintf(shortbuf, "小雞已經裝備上 %s 了", pchoice->name);
                         vmsg(shortbuf);
-                        d.fight[FIGHT_ATTACK] += (p[choice].attack - p[variance].attack);
-                        d.fight[FIGHT_RESIST] += (p[choice].resist - p[variance].resist);
-                        d.fight[FIGHT_SPEED] += (p[choice].speed - p[variance].speed);
-                        d.thing[THING_MONEY] -= (p[choice].cost - p[variance].sell);
-                        variance = choice;
+                        d.fight[FIGHT_ATTACK] += (pchoice->attack - pvariance->attack);
+                        d.fight[FIGHT_RESIST] += (pchoice->resist - pvariance->resist);
+                        d.fight[FIGHT_SPEED] += (pchoice->speed - pvariance->speed);
+                        d.thing[THING_MONEY] -= (pchoice->cost - pvariance->sell);
+                        item_list[type] = variance = choice;
                     }
                     else
                     {
@@ -2342,17 +2334,17 @@ const struct weapon *p)
         case 's':
             if (variance != 0)
             {
-                sprintf(shortbuf, "你確定要賣掉%s嗎? 賣價:%d [y/N]: ", p[variance].name, p[variance].sell);
+                sprintf(shortbuf, "你確定要賣掉%s嗎? 賣價:%d [y/N]: ", pvariance->name, pvariance->sell);
                 getdata(B_LINES_REF - 1, 1, shortbuf, ans, 2, DOECHO, 0);
                 if (ans[0] == 'y' || ans[0] == 'Y')
                 {
-                    sprintf(shortbuf, "裝備 %s 賣了 %d", p[variance].name, p[variance].sell);
-                    d.fight[FIGHT_ATTACK] -= p[variance].attack;
-                    d.fight[FIGHT_RESIST] -= p[variance].resist;
-                    d.fight[FIGHT_SPEED] -= p[variance].speed;
-                    d.thing[THING_MONEY] += p[variance].sell;
+                    sprintf(shortbuf, "裝備 %s 賣了 %d", pvariance->name, pvariance->sell);
+                    d.fight[FIGHT_ATTACK] -= pvariance->attack;
+                    d.fight[FIGHT_RESIST] -= pvariance->resist;
+                    d.fight[FIGHT_SPEED] -= pvariance->speed;
+                    d.thing[THING_MONEY] += pvariance->sell;
                     vmsg(shortbuf);
-                    variance = 0;
+                    item_list[type] = variance = 0;
                 }
                 else
                 {
@@ -2364,7 +2356,6 @@ const struct weapon *p)
             {
                 sprintf(shortbuf, "你本來就沒有裝備了...");
                 vmsg(shortbuf);
-                variance = 0;
             }
             break;
 
@@ -2376,7 +2367,7 @@ const struct weapon *p)
     }
     while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
 
-    return variance;
+    return 0;
 }
 
 /*---------------------------------------------------------------------------*/

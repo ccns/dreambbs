@@ -91,12 +91,14 @@ enum pipfight {
 };
 
 /*---武器的參數---*/ //10
-enum pipweapon{
+enum pipweapon {
     WEAPON_HEAD,        /*頭部武器*/
     WEAPON_RHAND,       /*右手武器*/
     WEAPON_LHAND,       /*左手武器*/
     WEAPON_BODY,        /*身體武器*/
     WEAPON_FOOT,        /*腳的武器*/
+
+    WEAPON_COUNT,
 };
 
 /*---各能力參數---*/ //17
@@ -459,6 +461,20 @@ const struct weapon footlist[] =
     {"飛天魔靴",  100, 100,   0, 30,  50,  60,  25000,  10000, 0, 0},
     {"黃金聖靴",  300, 300, 300, 50, 100, 100, 150000, 100000, 0, 0},
     {NULL,          0,   0,   0,  0,   0,   0,      0,      0, 0, 0}
+};
+
+struct weaponlist {
+    const char *menutitle;
+    const struct weapon *list;
+};
+
+const struct weaponlist pip_weapon_list[WEAPON_COUNT] =
+{
+    {"頭部裝備區", headlist},
+    {"右手裝備區", rhandlist},
+    {"左手裝備區", lhandlist},
+    {"身體裝備區", bodylist},
+    {"足部裝備區", footlist},
 };
 
 //    T,         拜訪對象
