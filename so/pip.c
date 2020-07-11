@@ -2158,12 +2158,12 @@ int oldnum[])
                         sprintf(inbuf, "老闆給了你%ld個%s", smoney, p[choice].name);
                         vmsg(inbuf);
                         vmsg(p[choice].msguse);
-                        if (mode == 3 && choice == 1)
+                        if (mode == 3 && choice == 0)
                         {
                             d.state[STATE_HAPPY] += random() % 10 + 20 * smoney;
                             d.state[STATE_SATISFY] += random() % 10 + 20 * smoney;
                         }
-                        else if (mode == 3 && choice == 2)
+                        else if (mode == 3 && choice == 1)
                         {
                             d.state[STATE_HAPPY] += (random() % 2 + 2) * smoney;
                             d.learn[LEARN_WISDOM] += (2 + 10 / (d.learn[LEARN_WISDOM] / 100 + 1)) * smoney;
