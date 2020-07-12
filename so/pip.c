@@ -192,7 +192,7 @@ static void pip_new_game(void)
 {
     char buf[256];
     time_t now;
-    static const char *const pipsex[3] = {"？", "♂", "♀"};
+    static const char *const pipsex[] = {"？", "♂", "♀"};
     struct tm *ptime;
     ptime = localtime(&now);
 
@@ -323,7 +323,7 @@ static void pip_new_game(void)
 
         /*養雞記錄*/
         now = time(0);
-        sprintf(buf, "\x1b[1;36m%s %-11s養了一隻叫 [%s] 的 %s 小雞 \x1b[0m\n", Cdate(&now), cuser.userid, d.name, pipsex[d.sex]);
+        sprintf(buf, "\x1b[1;36m%s %-11s養了一隻叫 [%s] 的 %s 小雞 \x1b[0m\n", Cdate(&now), cuser.userid, d.name, pipsex[(d.sex > 0 && d.sex < COUNTOF(pipsex)) ? d.sex : 0]);
         pip_log_record(buf);
     }
     pip_write_file(&d, cuser.userid);
