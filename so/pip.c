@@ -5128,7 +5128,7 @@ char *endbuf1, char *endbuf2, char *endbuf3,
 int *endmode, int *endgrade)
 {
     //   男的, 女的
-    static const char *const name[8][2] = {
+    static const char *const name[][2] = {
         {"嫁給了同行的男生", "娶了同行的女孩"},
         {"嫁給王子",   "娶了公主"},
         {"嫁給你",     "娶了你"},
@@ -5188,7 +5188,7 @@ int *endmode, int *endgrade)
         sprintf(buf2, "常遇到很多問題....");
     }
     strcpy(endbuf2, buf2);
-    if (d.lover >= 1 && d.lover <= 7)
+    if (d.lover >= 1 && d.lover < COUNTOF(name))
     {
         if (d.sex == 1)
             sprintf(buf2, "%s", name[d.lover][1]);
@@ -7663,7 +7663,7 @@ pip_marriage_offer(void)
     char ans[4];
     int money;
     int who;
-    static const char *const name[5][2] = {
+    static const char *const name[][2] = {
         {"女商人Ａ", "商人Ａ"},
         {"女商人Ｂ", "商人Ｂ"},
         {"女商人Ｃ", "商人Ｃ"},
@@ -7672,7 +7672,7 @@ pip_marriage_offer(void)
     };
     do
     {
-        who = random() % 5;
+        who = random() % COUNTOF(name);
     }
     while (d.lover == (who + 3));
 
@@ -7914,7 +7914,7 @@ static int pip_results_show_ending(
 int winorlost, int mode, int a, int b, int c)
 {
     static const char *const gamename[4] = {"武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
-    static const int resultmoney[4] = {0, 3000, 5000, 8000};
+    static const int resultmoney[COUNTOF(gamename)] = {0, 3000, 5000, 8000};
     char name1[25], name2[25], name3[25], name4[25];
     char buf[256];
 
