@@ -451,11 +451,10 @@ VALUE brb_ansi_color RBF_P((int argc, VALUE *argv, VALUE self))
     char buf[50] = "\033[";
     char *p = buf + strlen(buf);
 
-    const char sep[2] = ";";
     for (int i=0; i<argc; i++)
     {
         int ansi = NUM2INT(argv[i]);
-        sprintf(p, "%d%s", ansi, (i == argc - 1) ? "" : sep);
+        sprintf(p, "%d%s", ansi, (i == argc - 1) ? "" : ";");
         p += strlen(p);
     }
 
