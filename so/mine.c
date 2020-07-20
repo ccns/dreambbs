@@ -84,7 +84,7 @@ show_fasttime(void)
     int i;
     FILE *fp;
     char buf[40];
-    const char *const buf1[4] = {"入門級:", "進階級:", "高  級:", "變態級:"};
+    static const char *const buf1[4] = {"入門級:", "進階級:", "高  級:", "變態級:"};
     fp = fopen("game/mine/mine_fasttime", "r");
     clear();
     for (i = 0; i < 4; i++)

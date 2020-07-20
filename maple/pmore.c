@@ -833,7 +833,7 @@ MFPROTO int
 mf_gunzip(GCC_UNUSED const char *fn, int fd)
 {
     char magic[2] = {0};
-    const char gzip_magic[2] = {0x1f, 0x8b};
+    static const char gzip_magic[2] = {0x1f, 0x8b};
     FILE *tmp;
     int tmp_fd, sts = 0;
 

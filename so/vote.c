@@ -831,7 +831,7 @@ static int
 check_mail(
 const char *account)
 {
-    //char validemail[3][20] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw", "nckualumni.org.tw"};
+    //static const char validemail[3][20] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw", "nckualumni.org.tw"};
     char addr[20], buf[40], line[80], server[60], *ptr;
     char year[3];
     int sock = 110;

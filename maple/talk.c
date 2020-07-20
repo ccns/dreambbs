@@ -82,7 +82,7 @@ bmode(
 {
     static char modestr[32];
 #ifdef  HAVE_SHOWNUMMSG
-    const char *const nums[9] = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
+    static const char *const nums[9] = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
 #endif
     int mode;
     const char *word;
@@ -1521,7 +1521,7 @@ do_query(
     else
         prints(" [信箱] 都看過了\n");
 
-    char fortune[7][9] = {"窮困阿宅", "家境普通", "家境小康", "家境富有", "財力雄厚", "富可敵國", "I'm Rich"};
+    static const char fortune[7][9] = {"窮困阿宅", "家境普通", "家境小康", "家境富有", "財力雄厚", "富可敵國", "I'm Rich"};
 
     if      (acct->money >= 100000000)
         rich=6;
@@ -3065,7 +3065,7 @@ ulist_body(
     int paltmp;
     int n, cnt, max, ufo, self, userno, sysop GCC_UNUSED, diff, diffmsg, fcolor, colortmp;
     char buf[16], color[20], ship[80];
-    const char *const wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
+    static const char *const wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
     time_t now;
 
 #ifdef HAVE_BOARD_PAL

@@ -21,7 +21,7 @@ personal_log(
 {
     FILE *fp;
     time_t now;
-    char tag[3][5] = {"申請", "開板", "拒絕"};
+    static const char tag[3][5] = {"申請", "開板", "拒絕"};
 
     if ((fp = fopen(FN_PERSONAL_LOG, "a+")))
     {
@@ -101,7 +101,7 @@ int
 personal_apply(void)
 {
     DL_HOLD;
-    char validemail[2][20] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw"};
+    static const char validemail[2][20] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw"};
     int i, num;
     char *c, /*buf[60], */brdname[IDLEN + 1];
     PB pb;
@@ -368,7 +368,7 @@ mail2usr(
     HDR hdr;
     time_t now;
     char folder[50], fpath[128];
-    char title[2][30] = {"您的個人板通過申請囉！", "您的個人板申請書被退回！"};
+    static const char title[2][30] = {"您的個人板通過申請囉！", "您的個人板申請書被退回！"};
     FILE *fp;
 
     now = time(0);

@@ -1557,7 +1557,7 @@ void
 grayoutrect(int y, int yend, int x, int xend, int level)
 // GRAYOUT_DARK(0): dark, GRAYOUT_BOLD(1): bold, GRAYOUR_NORMAL(2): normal
 {
-    const char *const prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
+    static const char *const prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
     char buf[ANSILINELEN];
     int yprev, xprev;
     getyx(&yprev, &xprev);
