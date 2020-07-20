@@ -146,7 +146,7 @@ ochar(
 void
 bell(void)
 {
-    static const char sound[1] = {Ctrl('G')};
+    static const char sound[] = {Ctrl('G')};
 
     telnet_flush(sound, sizeof(sound));
 }

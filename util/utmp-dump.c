@@ -40,7 +40,7 @@ attach_shm(
 /* 記錄 pal 的 user number                               */
 /* ----------------------------------------------------- */
 
-#define PICKUP_WAYS     (6)
+#define PICKUP_WAYS     COUNTOF(msg_pickup_way)
 
 static int pickup_way;
 
@@ -336,7 +336,7 @@ static int ulist_head(XO *xo);
 static int ulist_init(XO *xo);
 
 
-static const char *const msg_pickup_way[PICKUP_WAYS] =
+static const char *const msg_pickup_way[] =
 {
     "任意",
     "代號",

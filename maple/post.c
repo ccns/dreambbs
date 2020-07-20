@@ -19,9 +19,9 @@ CHECKSUMCOUNT cksum;
 #ifdef HAVE_DETECT_ZHANGBA
 static int zhangba_currentsession = 0;
 
-#define ZHANGBA_PATTERNS 5
+#define ZHANGBA_PATTERNS COUNTOF(zhangba_patterns)
 
-static const char zhangba_patterns[ZHANGBA_PATTERNS][25] = {
+static const char *const zhangba_patterns[] = {
     "±i®¶Án",
     "Án¥J",
     "taconet.com.tw/jscha",

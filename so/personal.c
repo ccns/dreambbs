@@ -21,7 +21,7 @@ personal_log(
 {
     FILE *fp;
     time_t now;
-    static const char tag[3][5] = {"申請", "開板", "拒絕"};
+    static const char *const tag[3] = {"申請", "開板", "拒絕"};
 
     if ((fp = fopen(FN_PERSONAL_LOG, "a+")))
     {
@@ -101,7 +101,7 @@ int
 personal_apply(void)
 {
     DL_HOLD;
-    static const char validemail[2][20] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw"};
+    static const char *const validemail[] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw"};
     int i, num;
     char *c, /*buf[60], */brdname[IDLEN + 1];
     PB pb;
@@ -120,11 +120,22 @@ personal_apply(void)
         return DL_RELEASE(0);
     }
 
-    c = strchr(cuser.email, '@');
-    if (c == NULL || (strcmp(c+1, validemail[0]) && strcmp(c+1, validemail[1])))
     {
-        vmsg("您的 E-mail 不合格!");
-        return DL_RELEASE(0);
+        bool valid = false;
+        c = strchr(cuser.email, '@');
+        if (c)
+        {
+            for (int i = 0; i < COUNTOF(validemail); ++i)
+            {
+                if (!strcmp(c+1, validemail[i]))
+                    valid = true;
+            }
+        }
+        if (!valid)
+        {
+            vmsg("您的 E-mail 不合格!");
+            return DL_RELEASE(0);
+        }
     }
 
     thisyear = t->tm_year - 11;
@@ -368,7 +379,7 @@ mail2usr(
     HDR hdr;
     time_t now;
     char folder[50], fpath[128];
-    static const char title[2][30] = {"您的個人板通過申請囉！", "您的個人板申請書被退回！"};
+    static const char *const title[2] = {"您的個人板通過申請囉！", "您的個人板申請書被退回！"};
     FILE *fp;
 
     now = time(0);
@@ -463,7 +474,7 @@ personal_open(
     HDR hdr;
     int bno;
     ACCT acct;
-    static const char gem[5][20] = {"gem/@/@Person_A_E", "gem/@/@Person_F_J", "gem/@/@Person_K_O", "gem/@/@Person_P_T", "gem/@/@Person_U_Z"};
+    static const char *const gem[] = {"gem/@/@Person_A_E", "gem/@/@Person_F_J", "gem/@/@Person_K_O", "gem/@/@Person_P_T", "gem/@/@Person_U_Z"};
 
     pos = xo->pos;
     cur = pos - xo->top;
@@ -526,8 +537,8 @@ personal_open(
 
     personal_sort("gem/@/@Person_All");
 
-    if ((index = (tolower(newboard.brdname[2]) - 'a') / 5) == 5)
-        index--;
+    if ((index = (tolower(newboard.brdname[2]) - 'a') / COUNTOF(gem)) >= COUNTOF(gem))
+        index = COUNTOF(gem) - 1;
     rec_add(gem[index], &hdr, sizeof(HDR));
 
     personal_sort(gem[index]);
