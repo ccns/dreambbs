@@ -359,11 +359,11 @@
 /* IID.20200721: Parameters for the qualifications for applying personal board */
 
 #ifndef PB_MAIL_DOMAINS
-#define PB_MAIL_DOMAINS         {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw"}
+#define PB_MAIL_DOMAINS         {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw", "gs.ncku.edu.tw"}
 #endif
 
 #ifndef PB_SCHOOL_LEN_YEAR_MAX
-#define PB_SCHOOL_LEN_YEAR_MAX  5
+#define PB_SCHOOL_LEN_YEAR_MAX  8
 #endif
 
 #ifndef PB_NUMPOST_MIN
