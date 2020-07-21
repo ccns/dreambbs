@@ -2739,7 +2739,7 @@ vkey(void)
 
                   /* "<Esc> O <a-d>" */ /* Ctrl-ed cursor key (rxvt) */
                   case 'a': case 'b': case 'c': case 'd':
-                    ch = mod_key(mod | SHIFT_CODE, KEY_UP + (ch - 'a'));
+                    ch = mod_key(mod | CTRL_CODE, KEY_UP + (ch - 'a'));
                     goto vkey_end;
 
                   default:
