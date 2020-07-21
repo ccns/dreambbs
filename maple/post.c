@@ -32,7 +32,7 @@ static const char *const zhangba_patterns[] = {
 zhangba_detect(
     const char *fpath)
 {
-    char checked[ZHANGBA_PATTERNS+1];
+    char checked[ZHANGBA_PATTERNS+1] = {0};
     FILE *fp;
     char buf[256];
     int i, num=0;
@@ -41,9 +41,9 @@ zhangba_detect(
     {
         while (fgets(buf, sizeof(buf), fp))
             for (i=0;  i < ZHANGBA_PATTERNS; i++)
-                if (strstr(buf, zhangba_patterns[i]) && (checked[i] != '1'))
+                if (strstr(buf, zhangba_patterns[i]) && !checked[i])
                 {
-                    checked[i] = '1';
+                    checked[i] = true;
                     num++;
                 }
         fclose(fp);
