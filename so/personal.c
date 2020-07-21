@@ -101,7 +101,7 @@ int
 personal_apply(void)
 {
     DL_HOLD;
-    static const char *const validemail[] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw"};
+    static const char *const validemail[] = PB_MAIL_DOMAINS;
     int i, num;
     char *c, /*buf[60], */brdname[IDLEN + 1];
     PB pb;
@@ -114,7 +114,7 @@ personal_apply(void)
 
 
 
-    if (cuser.numposts < 20 || cuser.numlogins < 500)
+    if (cuser.numposts < PB_NUMPOST_MIN || cuser.numlogins < PB_NUMLOGIN_MIN)
     {
         vmsg("資格不符無法申請個人板");
         return DL_RELEASE(0);
@@ -142,7 +142,7 @@ personal_apply(void)
     enteryear = (cuser.email[3]-'0') * 10 + (cuser.email[4]-'0');
 
     //百年蟲 ecchi float 2012/4/25
-    if ((thisyear - enteryear)%100 > 5)
+    if ((thisyear - enteryear)%100 > PB_SCHOOL_LEN_YEAR_MAX)
     {
         vmsg("您的身份不合格!");
         return DL_RELEASE(0);
