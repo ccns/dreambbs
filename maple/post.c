@@ -1243,7 +1243,7 @@ post_cross(
             ptime = localtime(&now);
             sprintf(tgt, "Âà¿ý¦Ü %s ¬ÝªO", xboard);
             xfp = fopen(fpath, "a");
-            sprintf(add, "\x1b[1;33m¡÷ %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, tgt, Btime(&hdr->pushtime)+3);
+            sprintf(add, "\x1b[1;33m¡÷ %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, tgt, Btime(&now)+3);
             fprintf(xfp, "%s", add);
             fclose(xfp);
         }
