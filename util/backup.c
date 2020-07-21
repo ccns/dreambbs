@@ -72,7 +72,7 @@ static void
 bk_usr(
     int day)
 {
-    char start[4] = {'a', 'e', 'l', 's'}, end[4] = {'d', 'k', 'r', 'z'};
+    static const char start[4] = {'a', 'e', 'l', 's'}, end[COUNTOF(start)] = {'d', 'k', 'r', 'z'};
     char buf[256], fpath[256], *fname;
     char ch;
 
@@ -187,7 +187,7 @@ bk_gem(void)
 static void
 bk_system_src(void)
 {
-    char system_folders[5][9] = {"bin", "etc", "innd", FN_NEWBOARD, "dreambbs"};
+    static const char *const system_folders[] = {"bin", "etc", "innd", FN_NEWBOARD, "dreambbs"};
     char path[64], cmd[256];
     int i;
 
@@ -204,7 +204,7 @@ bk_system_src(void)
     sprintf(cmd, "gzip -c .BRD > %s/BRD.gz", path);
     system(cmd);
 
-    for (i=0; i<5; i++)
+    for (i=0; i < COUNTOF(system_folders); i++)
     {
         sprintf(cmd, "tar zcf %s/%s.tgz %s", path, system_folders[i], system_folders[i]);
         system(cmd);

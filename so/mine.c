@@ -84,10 +84,10 @@ show_fasttime(void)
     int i;
     FILE *fp;
     char buf[40];
-    const char *const buf1[4] = {"入門級:", "進階級:", "高  級:", "變態級:"};
+    static const char *const buf1[] = {"入門級:", "進階級:", "高  級:", "變態級:"};
     fp = fopen("game/mine/mine_fasttime", "r");
     clear();
-    for (i = 0; i < 4; i++)
+    for (i = 0; i < COUNTOF(buf1); i++)
     {
         fscanf(fp, "%s%d", buf, &fasttime[i]);
         prints("\x1b[1;31m%s  \x1b[1;32m%s %d\x1b[m\n", buf1[i], buf, fasttime[i]);

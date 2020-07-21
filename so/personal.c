@@ -21,7 +21,7 @@ personal_log(
 {
     FILE *fp;
     time_t now;
-    char tag[3][5] = {"申請", "開板", "拒絕"};
+    static const char *const tag[3] = {"申請", "開板", "拒絕"};
 
     if ((fp = fopen(FN_PERSONAL_LOG, "a+")))
     {
@@ -101,7 +101,7 @@ int
 personal_apply(void)
 {
     DL_HOLD;
-    char validemail[2][20] = {"ccmail.ncku.edu.tw", "mail.ncku.edu.tw"};
+    static const char *const validemail[] = PB_MAIL_DOMAINS;
     int i, num;
     char *c, /*buf[60], */brdname[IDLEN + 1];
     PB pb;
@@ -114,24 +114,35 @@ personal_apply(void)
 
 
 
-    if (cuser.numposts < 20 || cuser.numlogins < 500)
+    if (cuser.numposts < PB_NUMPOST_MIN || cuser.numlogins < PB_NUMLOGIN_MIN)
     {
         vmsg("資格不符無法申請個人板");
         return DL_RELEASE(0);
     }
 
-    c = strchr(cuser.email, '@');
-    if (c == NULL || (strcmp(c+1, validemail[0]) && strcmp(c+1, validemail[1])))
     {
-        vmsg("您的 E-mail 不合格!");
-        return DL_RELEASE(0);
+        bool valid = false;
+        c = strchr(cuser.email, '@');
+        if (c)
+        {
+            for (int i = 0; i < COUNTOF(validemail); ++i)
+            {
+                if (!strcmp(c+1, validemail[i]))
+                    valid = true;
+            }
+        }
+        if (!valid)
+        {
+            vmsg("您的 E-mail 不合格!");
+            return DL_RELEASE(0);
+        }
     }
 
     thisyear = t->tm_year - 11;
     enteryear = (cuser.email[3]-'0') * 10 + (cuser.email[4]-'0');
 
     //百年蟲 ecchi float 2012/4/25
-    if ((thisyear - enteryear)%100 > 5)
+    if ((thisyear - enteryear)%100 > PB_SCHOOL_LEN_YEAR_MAX)
     {
         vmsg("您的身份不合格!");
         return DL_RELEASE(0);
@@ -368,7 +379,7 @@ mail2usr(
     HDR hdr;
     time_t now;
     char folder[50], fpath[128];
-    char title[2][30] = {"您的個人板通過申請囉！", "您的個人板申請書被退回！"};
+    static const char *const title[2] = {"您的個人板通過申請囉！", "您的個人板申請書被退回！"};
     FILE *fp;
 
     now = time(0);
@@ -463,7 +474,7 @@ personal_open(
     HDR hdr;
     int bno;
     ACCT acct;
-    static const char gem[5][20] = {"gem/@/@Person_A_E", "gem/@/@Person_F_J", "gem/@/@Person_K_O", "gem/@/@Person_P_T", "gem/@/@Person_U_Z"};
+    static const char *const gem[] = {"gem/@/@Person_A_E", "gem/@/@Person_F_J", "gem/@/@Person_K_O", "gem/@/@Person_P_T", "gem/@/@Person_U_Z"};
 
     pos = xo->pos;
     cur = pos - xo->top;
@@ -526,8 +537,8 @@ personal_open(
 
     personal_sort("gem/@/@Person_All");
 
-    if ((index = (tolower(newboard.brdname[2]) - 'a') / 5) == 5)
-        index--;
+    if ((index = (tolower(newboard.brdname[2]) - 'a') / COUNTOF(gem)) >= COUNTOF(gem))
+        index = COUNTOF(gem) - 1;
     rec_add(gem[index], &hdr, sizeof(HDR));
 
     personal_sort(gem[index]);

@@ -1966,14 +1966,14 @@ hdr_outs(               /* print HDR's subject */
 {
     static const char *const type[4] =
     {"Re", "¡º", "=>", "¡»"};
-    static const char *const type_reset[][4] = {
+    static const char *const type_reset[][COUNTOF(type)] = {
         {"\x1b[m", "\x1b[m", "\x1b[1;33m", "\x1b[1;32m"},
 #ifdef HAVE_MENU_LIGHTBAR
         {"\x1b[m", "\x1b[m", "\x1b[0;33m", "\x1b[0;32m"},
 #endif
     };
 #ifdef  HAVE_DECLARE
-    static const char *const type_dec[4] =
+    static const char *const type_dec[COUNTOF(type)] =
     {"\x1b[1;37m", "\x1b[1;37m", "\x1b[1;37m", "\x1b[1;33m"};
 #endif
     const char *title, *mark;

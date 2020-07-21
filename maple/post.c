@@ -19,9 +19,9 @@ CHECKSUMCOUNT cksum;
 #ifdef HAVE_DETECT_ZHANGBA
 static int zhangba_currentsession = 0;
 
-#define ZHANGBA_PATTERNS 5
+#define ZHANGBA_PATTERNS COUNTOF(zhangba_patterns)
 
-static const char zhangba_patterns[ZHANGBA_PATTERNS][25] = {
+static const char *const zhangba_patterns[] = {
     "張振聲",
     "聲仔",
     "taconet.com.tw/jscha",
@@ -32,7 +32,7 @@ static const char zhangba_patterns[ZHANGBA_PATTERNS][25] = {
 zhangba_detect(
     const char *fpath)
 {
-    char checked[ZHANGBA_PATTERNS+1];
+    char checked[ZHANGBA_PATTERNS+1] = {0};
     FILE *fp;
     char buf[256];
     int i, num=0;
@@ -41,9 +41,9 @@ zhangba_detect(
     {
         while (fgets(buf, sizeof(buf), fp))
             for (i=0;  i < ZHANGBA_PATTERNS; i++)
-                if (strstr(buf, zhangba_patterns[i]) && (checked[i] != '1'))
+                if (strstr(buf, zhangba_patterns[i]) && !checked[i])
                 {
-                    checked[i] = '1';
+                    checked[i] = true;
                     num++;
                 }
         fclose(fp);
@@ -1243,7 +1243,7 @@ post_cross(
             ptime = localtime(&now);
             sprintf(tgt, "轉錄至 %s 看板", xboard);
             xfp = fopen(fpath, "a");
-            sprintf(add, "\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, tgt, Btime(&hdr->pushtime)+3);
+            sprintf(add, "\x1b[1;33m→ %12s：\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, tgt, Btime(&now)+3);
             fprintf(xfp, "%s", add);
             fclose(xfp);
         }

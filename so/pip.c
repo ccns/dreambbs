@@ -55,15 +55,14 @@ static int pip_live_again(void);
 static void show_basic_pic(int i);
 static void pip_log_record(const char *msg);
 static void show_die_pic(int i);
-static int pip_mainmenu(int mode);
+static int pip_mainmenu(enum pipmenumode mode);
 static void pip_time_change(time_t cnow);
-static int pip_go_palace_screen(const struct royalset *p);
 static int pip_ending_screen(void);
 static int pip_marriage_offer(void);
 static void show_usual_pic(int i);
 static void show_feed_pic(int i);
-static int pip_buy_goods_new(int mode, const struct goodsofpip *p, int oldnum[]);
-static int pip_weapon_doing_menu(int variance, int type, const struct weapon *p);
+static int pip_buy_goods_new(enum pipshopidx mode, int item_list[]);
+static int pip_weapon_doing_menu(enum pipweapon type, int item_list[WEAPON_COUNT]);
 static int pip_vs_man(int n, const struct playrule *p, int mode);
 static int pip_results_show_ending(int winorlost, int mode, int a, int b, int c);
 static void pip_fight_bad(int n);
@@ -71,10 +70,10 @@ static void tie(void);
 static void win(void);
 static void situ(void);
 static void lose(void);
-static int pip_practice_function(int classnum, int classgrade, int pic1, int pic2, int *change1, int *change2, int *change3, int *change4, int *change5);
+static int pip_practice_function(enum pipclass classnum, int classgrade, int pic1, int pic2, int *change1, int *change2, int *change3, int *change4, int *change5);
 static int pip_ending_decide(char *eendbuf1, char *eendbuf2, char *eendbuf3, int *endmode, int *endgrade);
 static int pip_game_over(int endgrade);
-static int pip_practice_gradeup(int classnum, int classgrade, int data);
+static int pip_practice_gradeup(enum pipclass classnum, int classgrade, int data);
 static int pip_read(const char *userid);
 
 /*系統選單*/
@@ -163,7 +162,7 @@ int p_pipple(void)
 
     lasttime = time(0);
     start_time = time(0);
-    /*pip_do_menu(0, 0, pipmainlist);*/
+    /*pip_do_menu(PIPMENU_MAIN);*/
     if (d.death != 0 || !d.name[0])  return DL_RELEASE(0);
     pip_load_mob("game/pipdata/pipmob.dat");
     pip_load_mobset("game/pipdata/pipmobset.dat");
@@ -193,7 +192,7 @@ static void pip_new_game(void)
 {
     char buf[256];
     time_t now;
-    static const char *const pipsex[3] = {"？", "♂", "♀"};
+    static const char *const pipsex[] = {"？", "♂", "♀"};
     struct tm *ptime;
     ptime = localtime(&now);
 
@@ -324,7 +323,7 @@ static void pip_new_game(void)
 
         /*養雞記錄*/
         now = time(0);
-        sprintf(buf, "\x1b[1;36m%s %-11s養了一隻叫 [%s] 的 %s 小雞 \x1b[0m\n", Cdate(&now), cuser.userid, d.name, pipsex[d.sex]);
+        sprintf(buf, "\x1b[1;36m%s %-11s養了一隻叫 [%s] 的 %s 小雞 \x1b[0m\n", Cdate(&now), cuser.userid, d.name, pipsex[(d.sex > 0 && d.sex < COUNTOF(pipsex)) ? d.sex : 0]);
         pip_log_record(buf);
     }
     pip_write_file(&d, cuser.userid);
@@ -436,33 +435,6 @@ int cal)
 /*---------------------------------------------------------------------------*/
 /*主畫面和選單                                                               */
 /*---------------------------------------------------------------------------*/
-
-static const char *const menuname[8][2] =
-{
-    {"             ",
-     "\x1b[1;44;37m 選單 \x1b[46m[1]基本 [2]逛街 [3]修行 [4]玩樂 [5]打工 [6]特殊 [7]系統 [Q]離開          %*s\x1b[m"},
-
-    {"             ",
-     "\x1b[1;44;37m  基本選單  \x1b[46m[1]餵食 [2]清潔 [3]休息 [4]親親 [5]換錢        %*s[Q]跳出             \x1b[m"},
-
-    {"\x1b[1;44;37m 逛街 \x1b[46m【日常用品】[1]便利商店 [2]" NICKNAME "藥鋪 [3]夜裡書局          %*s\x1b[m",
-     "\x1b[1;44;37m 選單 \x1b[46m【武器百貨】[A]頭部裝備 [B]右手裝備 [C]左手裝備 [D]身體裝備 [E]腳部裝備  %*s\x1b[m"},
-
-    {"\x1b[1;44;37m 修行 \x1b[46m[A]科學(%d) [B]詩詞(%d) [C]神學(%d) [D]軍學(%d) [E]劍術(%d)                   %*s\x1b[m",
-     "\x1b[1;44;37m 選單 \x1b[46m[F]格鬥(%d) [G]魔法(%d) [H]禮儀(%d) [I]繪畫(%d) [J]舞蹈(%d) [Q]跳出           %*s\x1b[m"},
-
-    {"   ",
-     "\x1b[1;44;37m  玩樂選單  \x1b[46m[1]散步 [2]運動 [3]約會 [4]猜拳 [5]旅遊 [6]郊外 [7]唱歌 [Q]跳出    %*s\x1b[m"},
-
-    {"\x1b[1;44;37m 打工 \x1b[46m[A]家事 [B]保姆 [C]旅館 [D]農場 [E]餐\廳 [F]教堂 [G]地攤 [H]伐木 [I]美髮  %*s\x1b[m",
-     "\x1b[1;44;37m 選單 \x1b[46m[J]獵人 [K]工地 [L]守墓 [M]家教 [N]酒家 [O]酒店 [P]夜總會       %*s[Q]跳出  \x1b[m"},
-
-    {"\x1b[1;44;37m 特殊 \x1b[46m[1]" NICKNAME "醫院 [2]媚登峰 [3]戰鬥修行 [4]拜訪朋友 [5]" NICKNAME "        %*s\x1b[m",
-     "\x1b[1;44;37m 選單 \x1b[46m                                                                %*s[Q]跳出  \x1b[m"},
-
-    {"",
-     "\x1b[1;44;37m  系統選單  \x1b[46m[1]詳細資料 [2]小雞自由 [3]特別服務 [4]儲存進度 [5]讀取進度 [Q]跳出%*s\x1b[m"},
-};
 
 /*主選單*/
 static int pip_basic_menu(void), pip_store_menu(void), pip_practice_menu(void);
@@ -601,13 +573,53 @@ static const struct pipcommands pipsystemlist[] =
     {'\0', NULL               }
 };
 
+struct pipmenu {
+    const struct pipcommands *cmdtable;
+    enum pipmenumode mode;
+    const char *name[2];
+};
+
+static const struct pipmenu pip_menu_list[PIPMENU_COUNT] =
+{
+    {pipmainlist, MODE_MAIN, {
+        "             ",
+        "\x1b[1;44;37m 選單 \x1b[46m[1]基本 [2]逛街 [3]修行 [4]玩樂 [5]打工 [6]特殊 [7]系統 [Q]離開          %*s\x1b[m"}
+    },
+    {pipbasiclist, MODE_MAIN, {
+        "             ",
+        "\x1b[1;44;37m  基本選單  \x1b[46m[1]餵食 [2]清潔 [3]休息 [4]親親 [5]換錢        %*s[Q]跳出             \x1b[m"}
+    },
+    {pipstorelist, MODE_FEED, {
+        "\x1b[1;44;37m 逛街 \x1b[46m【日常用品】[1]便利商店 [2]" NICKNAME "藥鋪 [3]夜裡書局          %*s\x1b[m",
+        "\x1b[1;44;37m 選單 \x1b[46m【武器百貨】[A]頭部裝備 [B]右手裝備 [C]左手裝備 [D]身體裝備 [E]腳部裝備  %*s\x1b[m"}
+    },
+    {pippracticelist, MODE_FIGHT, {
+        "\x1b[1;44;37m 修行 \x1b[46m[A]科學(%d) [B]詩詞(%d) [C]神學(%d) [D]軍學(%d) [E]劍術(%d)                   %*s\x1b[m",
+        "\x1b[1;44;37m 選單 \x1b[46m[F]格鬥(%d) [G]魔法(%d) [H]禮儀(%d) [I]繪畫(%d) [J]舞蹈(%d) [Q]跳出           %*s\x1b[m"}
+    },
+    {pipplaylist, MODE_MAIN, {
+        "   ",
+        "\x1b[1;44;37m  玩樂選單  \x1b[46m[1]散步 [2]運動 [3]約會 [4]猜拳 [5]旅遊 [6]郊外 [7]唱歌 [Q]跳出    %*s\x1b[m"}
+    },
+    {pipjoblist, MODE_WORK, {
+        "\x1b[1;44;37m 打工 \x1b[46m[A]家事 [B]保姆 [C]旅館 [D]農場 [E]餐\廳 [F]教堂 [G]地攤 [H]伐木 [I]美髮  %*s\x1b[m",
+        "\x1b[1;44;37m 選單 \x1b[46m[J]獵人 [K]工地 [L]守墓 [M]家教 [N]酒家 [O]酒店 [P]夜總會       %*s[Q]跳出  \x1b[m"}
+    },
+    {pipspeciallist, MODE_MAIN, {
+        "\x1b[1;44;37m 特殊 \x1b[46m[1]" NICKNAME "醫院 [2]媚登峰 [3]戰鬥修行 [4]拜訪朋友 [5]" NICKNAME "        %*s\x1b[m",
+        "\x1b[1;44;37m 選單 \x1b[46m                                                                %*s[Q]跳出  \x1b[m"}
+    },
+    {pipsystemlist, MODE_MAIN, {
+        "",
+        "\x1b[1;44;37m  系統選單  \x1b[46m[1]詳細資料 [2]小雞自由 [3]特別服務 [4]儲存進度 [5]讀取進度 [Q]跳出%*s\x1b[m"}
+    },
+};
 
 
 /*類似menu.c的功能*/
 static int
 pip_do_menu(
-int menunum, int menumode,
-const struct pipcommands cmdtable[])
+enum pipmenuidx menunum)
 {
     time_t now;
     int pipkey;
@@ -615,17 +627,19 @@ const struct pipcommands cmdtable[])
     int class1 = 0, class2 = 0, class3 = 0, class4 = 0, class5 = 0;
     int class6 = 0, class7 = 0, class8 = 0, class9 = 0, class10 = 0;
 
+    const struct pipmenu *const menu = &pip_menu_list[menunum];
+
     do
     {
         /*判斷是否死亡  死掉即跳回上一層*/
         if (d.death == 1 || d.death == 2 || d.death == 3)
             return 0;
         /*經pip_mainmenu判定後是否死亡*/
-        if (pip_mainmenu(menumode))
+        if (pip_mainmenu(menu->mode))
             return 0;
 
         clrchyiuan(b_lines - 1, b_lines);
-        if (menunum == 3)                                           /*修行*/
+        if (menunum == PIPMENU_PRACTICE)                            /*修行*/
         {
             class1 = BMIN(d.learn[LEARN_WISDOM] / 200 + 1, 5);                   /*科學*/
             class2 = BMIN((d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400 + 1, 5); /*詩詞*/
@@ -639,9 +653,9 @@ const struct pipcommands cmdtable[])
             class10 = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400 + 1, 5);     /*舞蹈*/
 
             move(b_lines - 1, 0);
-            prints(menuname[menunum][0], class1, class2, class3, class4, class5, d_cols, "");
+            prints(menu->name[0], class1, class2, class3, class4, class5, d_cols, "");
             move(b_lines, 0);
-            prints(menuname[menunum][1], class6, class7, class8, class9, class10, d_cols, "");
+            prints(menu->name[1], class6, class7, class8, class9, class10, d_cols, "");
         }
         else
         {
@@ -659,10 +673,10 @@ const struct pipcommands cmdtable[])
             default:
                 fill = d_cols;
             }
-            prints(menuname[menunum][0], fill, "");
+            prints(menu->name[0], fill, "");
 
             move(b_lines, 0);
-            prints(menuname[menunum][1], d_cols, "");
+            prints(menu->name[1], d_cols, "");
         }
 
         now = time(0);
@@ -682,7 +696,7 @@ const struct pipcommands cmdtable[])
         default:
             {
                 int key;
-                for (const struct pipcommands *cmd = cmdtable; (key = cmd->key); cmd++)
+                for (const struct pipcommands *cmd = menu->cmdtable; (key = cmd->key); cmd++)
                 {
                     if (key == pipkey
                         || (key >= 0 && key <= 0xff && (key == tolower(pipkey))))
@@ -701,125 +715,53 @@ const struct pipcommands cmdtable[])
     return 0;
 }
 
-
-/*---------------------------------------------------------------------------*/
 /* 基本選單:餵食 清潔 親親 休息                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_main_menu(void)
-{
-    pip_do_menu(0, 0, pipmainlist);
-    return 0;
-}
+static int pip_main_menu(void) { return pip_do_menu(PIPMENU_MAIN); }
 
-/*---------------------------------------------------------------------------*/
 /* 基本選單:餵食 清潔 親親 休息                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_basic_menu(void)
-{
-    pip_do_menu(1, 0, pipbasiclist);
-    return 0;
-}
+static int pip_basic_menu(void) { return pip_do_menu(PIPMENU_BASIC); }
 
-/*---------------------------------------------------------------------------*/
 /* 商店選單:食物 零食 大補丸 玩具 書本                                       */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_store_menu(void)
-{
-    pip_do_menu(2, 1, pipstorelist);
-    return 0;
-}
+static int pip_store_menu(void) { return pip_do_menu(PIPMENU_STORE); }
 
-/*---------------------------------------------------------------------------*/
 /* 修行選單:念書 練武 修行                                                   */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_practice_menu(void)
-{
-    pip_do_menu(3, 3, pippracticelist);
-    return 0;
-}
+static int pip_practice_menu(void) { return pip_do_menu(PIPMENU_PRACTICE); }
 
-
-/*---------------------------------------------------------------------------*/
 /* 玩樂選單:散步 旅遊 運動 約會 猜拳                                         */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_play_menu(void)
-{
-    pip_do_menu(4, 0, pipplaylist);
-    return 0;
-}
+static int pip_play_menu(void) { return pip_do_menu(PIPMENU_PLAY); }
 
-/*---------------------------------------------------------------------------*/
 /* 打工選單:家事 苦工 家教 地攤                                              */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_job_menu(void)
-{
-    pip_do_menu(5, 2, pipjoblist);
-    return 0;
-}
+static int pip_job_menu(void) { return pip_do_menu(PIPMENU_JOB); }
 
-/*---------------------------------------------------------------------------*/
 /* 特殊選單:看病 減肥 戰鬥 拜訪 朝見                                         */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_special_menu(void)
-{
-    pip_do_menu(6, 0, pipspeciallist);
-    return 0;
-}
+static int pip_special_menu(void) { return pip_do_menu(PIPMENU_SPECIAL); }
 
-/*---------------------------------------------------------------------------*/
 /* 系統選單:個人資料  小雞放生  特別服務                                     */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-static int pip_system_menu(void)
-{
-    pip_do_menu(7, 0, pipsystemlist);
-    return 0;
-}
+static int pip_system_menu(void) { return pip_do_menu(PIPMENU_SYSTEM); }
+
+struct pipage {
+    int age;
+    const char *name;
+};
+
+/*static cosnt char yo[][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
+                             "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
+static const struct pipage pip_age_list[] = {
+    {0, "誕生"}, {1, "嬰兒"}, {5, "幼兒"}, {12, "兒童"}, {15, "少年"}, {18, "青年"},
+    {35, "成年"}, {45, "壯年"}, {60, "更年"}, {70, "老年"}, {100, "古稀"}, {-1, "神仙"},
+};
 
 static int pip_age_grade(int age)
 {
-    if (age <= 0)
-        return 0;   /*誕生*/
-    if (age <= 1)
-        return 1;   /*嬰兒*/
-    if (age <= 5)
-        return 2;   /*幼兒*/
-    if (age <= 12)
-        return 3;   /*兒童*/
-    if (age <= 15)
-        return 4;   /*少年*/
-    if (age <= 18)
-        return 5;   /*青年*/
-    if (age <= 35)
-        return 6;   /*成年*/
-    if (age <= 45)
-        return 7;   /*壯年*/
-    if (age <= 60)
-        return 8;   /*更年*/
-    if (age <= 70)
-        return 9;   /*老年*/
-    if (age <= 100)
-        return 10;  /*古稀*/
-    return 11;      /*神仙*/
+    for (int i = 0; i < COUNTOF(pip_age_list) - 1; ++i)
+        if (age <= pip_age_list[i].age)
+            return i;
+    return COUNTOF(pip_age_list) - 1;
 }
 
 static const char *pip_age_name(int age)
 {
-    /*static cosnt char yo[14][5]={"誕生", "嬰兒", "幼兒", "兒童", "青年", "少年", "成年",
-                                   "壯年", "壯年", "壯年", "更年", "老年", "老年", "古稀"};*/
-    static const char age_name[12][5] = {
-        "誕生", "嬰兒", "幼兒", "兒童", "少年", "青年",
-        "成年", "壯年", "更年", "老年", "古稀", "神仙",
-    };
-
-    return age_name[pip_age_grade(age)];
+    return pip_age_list[pip_age_grade(age)].name;
 }
 
 static void pip_show_age_pic(int age, int weight)
@@ -864,7 +806,7 @@ static void pip_show_age_pic(int age, int weight)
 
 static int
 pip_mainmenu(
-int mode)
+enum pipmenumode mode)
 {
     char genbuf[200];
     time_t now;
@@ -923,7 +865,7 @@ int mode)
     if ((random() % 3000 == 29) && tm >= 15 && d.learn[LEARN_CHARM] >= 300 && d.learn[LEARN_CHARACTER] >= 300)
         pip_marriage_offer();
 
-    if (mode != 1 && random() % 4000 == 69)
+    if (mode != MODE_FEED && random() % 4000 == 69)
         pip_divine();
 
     /*武官*/
@@ -1007,8 +949,9 @@ int mode)
         color4 = 37;
     prints_centered(" \x1b[1;32m[命 MAX]\x1b[37m %-10d\x1b[32m[法 MAX]\x1b[37m %-10d\x1b[32m[髒／病]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[快／滿]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m",
             d.body[BODY_MAXHP], d.fight[FIGHT_MAXMP], color1, d.body[BODY_SHIT], color2, d.body[BODY_SICK], color3, d.state[STATE_HAPPY], color4, d.state[STATE_SATISFY]);
-    if (mode == 0)  /*主要畫面*/
+    switch (mode)
     {
+    case MODE_MAIN:
         anynum = random() % 4;
         move(4, 0);
         if (anynum == 0)
@@ -1019,9 +962,9 @@ int mode)
             prints_centered(" \x1b[1;35m[站長曰]:\x1b[37m隨時注意小雞的生命數值唷!\x1b[0m");
         else if (anynum == 3)
             prints_centered(" \x1b[1;35m[站長曰]:\x1b[37m快快樂樂的小雞才是幸福的小雞.....\x1b[0m");
-    }
-    else if (mode == 1)/*餵食*/
-    {
+        break;
+
+    case MODE_FEED:
         move(4, 0);
         if (d.eat[EAT_FOOD] <= 0)
             color1 = 31;
@@ -1049,22 +992,21 @@ int mode)
             color4 = 37;
         prints_centered(" \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m",
                 color1, d.eat[EAT_FOOD], color2, d.eat[EAT_COOKIE], color3, d.eat[EAT_BIGHP], color4, d.eat[EAT_MEDICINE], d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS]);
+        break;
 
-    }
-    else if (mode == 2)/*打工*/
-    {
+    case MODE_WORK:
         move(4, 0);
         prints_centered(" \x1b[1;36m[愛心]\x1b[37m%-5d\x1b[36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[道德]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[家事]\x1b[37m%-5d\x1b[0m",
                 d.learn[LEARN_LOVE], d.learn[LEARN_WISDOM], d.learn[LEARN_CHARACTER], d.learn[LEARN_ART], d.learn[LEARN_ETHICS], d.learn[LEARN_BRAVE], d.learn[LEARN_HOMEWORK]);
+        break;
 
-    }
-    else if (mode == 3)/*修行*/
-    {
+    case MODE_FIGHT:
         move(4, 0);
         prints_centered(" \x1b[1;36m[智慧]\x1b[37m%-5d\x1b[36m[氣質]\x1b[37m%-5d\x1b[36m[藝術]\x1b[37m%-5d\x1b[36m[勇敢]\x1b[37m%-5d\x1b[36m[攻擊]\x1b[37m%-5d\x1b[36m[防禦]\x1b[37m%-5d\x1b[36m[速度]\x1b[37m%-5d\x1b[0m",
                 d.learn[LEARN_WISDOM], d.learn[LEARN_CHARACTER], d.learn[LEARN_ART], d.learn[LEARN_BRAVE], d.fight[FIGHT_ATTACK], d.fight[FIGHT_RESIST], d.fight[FIGHT_SPEED]);
-
+        break;
     }
+
     move(5, 0);
     prints_centered("\x1b[1;%dm┌─────────────────────────────────────┐\x1b[m", color);
 
@@ -1380,7 +1322,7 @@ static int pip_basic_feed(void)     /* 餵食*/
     {
         if (d.death == 1 || d.death == 2 || d.death == 3)
             return 0;
-        if (pip_mainmenu(1)) return 0;
+        if (pip_mainmenu(MODE_FEED)) return 0;
         move(b_lines -2, 0);
         clrtoeol();
         move(b_lines - 2, 1);
@@ -1640,7 +1582,7 @@ const char *msg)
 static int
 pip_write_backup(void)
 {
-    static const char *const files[4] = {"沒有", "進度一", "進度二", "進度三"};
+    static const char *const files[] = {"進度一", "進度二", "進度三"};
     char buf[200], buf1[200];
     char ans[3];
     int num = 0;
@@ -1658,25 +1600,17 @@ pip_write_backup(void)
         outs("儲存 [1]進度一 [2]進度二 [3]進度三 [Q]放棄 [1/2/3/Q]：");
         pipkey = vkey();
 
-        if (pipkey == '1')
-            num = 1;
-        else if (pipkey == '2')
-            num = 2;
-        else if (pipkey == '3')
-            num = 3;
-        else
-            num = 0;
-
+        num = pipkey - '0';
     }
-    while (pipkey != 'Q' && pipkey != 'q' && num != 1 && num != 2 && num != 3);
+    while (pipkey != 'Q' && pipkey != 'q' && (num < 1 || num > COUNTOF(files)));
     if (pipkey == 'q' || pipkey == 'Q')
     {
         vmsg("放棄儲存遊戲進度");
         return 0;
     }
     move(b_lines -2, 1);
-    prints("儲存檔案會覆蓋\原儲存於 [%s] 的小雞的檔案喔！請考慮清楚...", files[num]);
-    sprintf(buf1, "確定要儲存於 [%s] 檔案嗎？ [y/N]: ", files[num]);
+    prints("儲存檔案會覆蓋\原儲存於 [%s] 的小雞的檔案喔！請考慮清楚...", files[num - 1]);
+    sprintf(buf1, "確定要儲存於 [%s] 檔案嗎？ [y/N]: ", files[num - 1]);
     getdata(B_LINES_REF - 1, 1, buf1, ans, 2, DOECHO, 0);
     if (ans[0] != 'y' && ans[0] != 'Y')
     {
@@ -1686,7 +1620,7 @@ pip_write_backup(void)
 
     move(b_lines -1, 0);
     clrtobot();
-    sprintf(buf1, "儲存 [%s] 檔案完成了", files[num]);
+    sprintf(buf1, "儲存 [%s] 檔案完成了", files[num - 1]);
     vmsg(buf1);
     sprintf(buf, "/bin/cp %s %s.bak%d", get_path(cuser.userid, "chicken"), get_path(cuser.userid, "chicken"), num);
     system(buf);
@@ -1697,7 +1631,7 @@ static int
 pip_read_backup(void)
 {
     char buf[200], buf1[200], buf2[200];
-    static const char *const files[4] = {"沒有", "進度一", "進度二", "進度三"};
+    static const char *const files[] = {"進度一", "進度二", "進度三"};
     char ans[3];
     int pipkey;
     int num = 0;
@@ -1714,22 +1648,15 @@ pip_read_backup(void)
         outs("讀取 [1]進度一 [2]進度二 [3]進度三 [Q]放棄 [1/2/3/Q]：");
         pipkey = vkey();
 
-        if (pipkey == '1')
-            num = 1;
-        else if (pipkey == '2')
-            num = 2;
-        else if (pipkey == '3')
-            num = 3;
-        else
-            num = 0;
+        num = pipkey - '0';
 
-        if (num > 0)
+        if (num > 0 && num <= COUNTOF(files))
         {
             usr_fpath(buf, cuser.userid, "chicken.bak");
             sprintf(buf + strlen(buf), "%d", num);
             if ((fs = fopen(buf, "r")) == NULL)
             {
-                sprintf(buf, "檔案 [%s] 不存在", files[num]);
+                sprintf(buf, "檔案 [%s] 不存在", files[num - 1]);
                 vmsg(buf);
                 ok = 0;
             }
@@ -1738,7 +1665,7 @@ pip_read_backup(void)
 
                 move(b_lines - 2, 1);
                 outs("讀取出檔案會覆蓋\現在正在玩的小雞的檔案喔！請考慮清楚...");
-                sprintf(buf, "確定要讀取出 [%s] 檔案嗎？ [y/N]: ", files[num]);
+                sprintf(buf, "確定要讀取出 [%s] 檔案嗎？ [y/N]: ", files[num - 1]);
                 getdata(B_LINES_REF - 1, 1, buf, ans, 2, DOECHO, 0);
                 if (ans[0] != 'y' && ans[0] != 'Y')
                     vmsg("讓我再決定一下...");
@@ -1756,7 +1683,7 @@ pip_read_backup(void)
 
     move(b_lines -1, 0);
     clrtobot();
-    sprintf(buf, "讀取 [%s] 檔案完成了", files[num]);
+    sprintf(buf, "讀取 [%s] 檔案完成了", files[num - 1]);
     vmsg(buf);
 
     sprintf(buf1, "/bin/touch %s%d", get_path(cuser.userid, "chicken.bak"), num);
@@ -2018,99 +1945,59 @@ show_resultshow_pic(int i)      /*收穫季*/
 
 /*---------------------------------------------------------------------------*/
 /* 商店選單:食物 零食 大補丸 玩具 書本                                       */
-/*                                                                           */
-/*---------------------------------------------------------------------------*/
-
-/*---------------------------------------------------------------------------*/
-/* 商店選單:食物 零食 大補丸 玩具 書本                                       */
 /* 函式庫                                                                    */
 /*---------------------------------------------------------------------------*/
 
-static int pip_store_food(void)
-{
-    int num[COUNTOF(pipfoodlist)] = {d.eat[EAT_FOOD], d.eat[EAT_COOKIE]};
-    pip_buy_goods_new(1, pipfoodlist, num);
-    d.eat[EAT_FOOD] = num[0];
-    d.eat[EAT_COOKIE] = num[1];
-    return 0;
-}
+static int pip_store_food(void) { return pip_buy_goods_new(SHOP_FOOD, d.eat); }
 
-static int pip_store_medicine(void)
-{
-    int num[COUNTOF(pipmedicinelist)] = {d.eat[EAT_BIGHP], d.eat[EAT_MEDICINE], d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS]};
-    pip_buy_goods_new(2, pipmedicinelist, num);
-    d.eat[EAT_BIGHP] = num[0];
-    d.eat[EAT_MEDICINE] = num[1];
-    d.eat[EAT_GINSENG] = num[2];
-    d.eat[EAT_SNOWGRASS] = num[3];
-    return 0;
-}
+static int pip_store_medicine(void) { return pip_buy_goods_new(SHOP_MEDICINE, d.eat); }
 
-static int pip_store_other(void)
-{
-    int num[COUNTOF(pipotherlist)] = {d.thing[THING_PLAYTOOL], d.thing[THING_BOOK]};
-    pip_buy_goods_new(3, pipotherlist, num);
-    d.thing[THING_PLAYTOOL] = num[0];
-    d.thing[THING_BOOK] = num[1];
-    return 0;
-}
+static int pip_store_other(void) { return pip_buy_goods_new(SHOP_OTHER, d.thing); }
 
-static int pip_store_weapon_head(void)         /*頭部武器*/
-{
-    d.weapon[WEAPON_HEAD] = pip_weapon_doing_menu(d.weapon[WEAPON_HEAD], 0, headlist);
-    return 0;
-}
-static int pip_store_weapon_rhand(void)        /*右手武器*/
-{
-    d.weapon[WEAPON_RHAND] = pip_weapon_doing_menu(d.weapon[WEAPON_RHAND], 1, rhandlist);
-    return 0;
-}
-static int pip_store_weapon_lhand(void)        /*左手武器*/
-{
-    d.weapon[WEAPON_LHAND] = pip_weapon_doing_menu(d.weapon[WEAPON_LHAND], 2, lhandlist);
-    return 0;
-}
-static int pip_store_weapon_body(void)         /*身體武器*/
-{
-    d.weapon[WEAPON_BODY] = pip_weapon_doing_menu(d.weapon[WEAPON_BODY], 3, bodylist);
-    return 0;
-}
-static int pip_store_weapon_foot(void)         /*足部武器*/
-{
-    d.weapon[WEAPON_FOOT] = pip_weapon_doing_menu(d.weapon[WEAPON_FOOT], 4, footlist);
-    return 0;
-}
+/*頭部武器*/
+static int pip_store_weapon_head(void) { return pip_weapon_doing_menu(WEAPON_HEAD, d.weapon); }
+/*右手武器*/
+static int pip_store_weapon_rhand(void) { return pip_weapon_doing_menu(WEAPON_RHAND, d.weapon); }
+/*左手武器*/
+static int pip_store_weapon_lhand(void) { return pip_weapon_doing_menu(WEAPON_LHAND, d.weapon); }
+/*身體武器*/
+static int pip_store_weapon_body(void) { return pip_weapon_doing_menu(WEAPON_BODY, d.weapon); }
+/*足部武器*/
+static int pip_store_weapon_foot(void) { return pip_weapon_doing_menu(WEAPON_FOOT, d.weapon); }
 
 
 static int
 pip_buy_goods_new(
-int mode,
-const struct goodsofpip *p,
-int oldnum[])
+enum pipshopidx mode,
+int item_list[])
 {
-    static const char *const shopname[4] = {"店名", "便利商店", NICKNAME "藥鋪", "夜裡書局"};
     char inbuf[256];
     char genbuf[20];
     long smoney;
     int oldmoney;
     int i, pipkey, choice;
     int numlen;
+
+    const struct pipshop *const shop = &pip_shop_list[mode];
+
     oldmoney = d.thing[THING_MONEY];
     do
     {
         clrchyiuan(6, b_lines - 6);
         move(6, 0);
         prints_centered("\x1b[1;31m  ─\x1b[41;37m 編號 \x1b[0;1;31m─\x1b[41;37m 商      品 \x1b[0;1;31m──\x1b[41;37m 效            能 \x1b[0;1;31m──\x1b[41;37m 價     格 \x1b[0;1;31m─\x1b[37;41m 擁有數量 \x1b[0;1;31m─\x1b[0m  ");
-        for (i = 0; p[i].name; i++)
+        for (i = 0; shop->list[i].name; i++)
         {
+            const struct goodsofpip *const pi = &shop->list[i];
+
             move(7 + i, 0);
             prints_centered("     \x1b[1;35m[\x1b[37m%2d\x1b[35m]     \x1b[36m%-10s      \x1b[37m%-14s        \x1b[1;33m%-10d   \x1b[1;32m%-9d    \x1b[0m",
-                    i+1, p[i].name, p[i].msgbuy, p[i].money, oldnum[i]);
+                    i+1, pi->name, pi->msgbuy, pi->money, item_list[pi->id]);
         }
         numlen = i;
         clrchyiuan(b_lines - 4, b_lines);
         move(b_lines, 0);
-        prints("\x1b[1;44;37m  %8s選單  \x1b[46m  [B]買入物品  [S]賣出物品  [Q]跳出      %*s\x1b[m", shopname[mode], 30 + d_cols - (int)(unsigned int)strlen(shopname[mode]), "");
+        prints("\x1b[1;44;37m  %8s選單  \x1b[46m  [B]買入物品  [S]賣出物品  [Q]跳出      %*s\x1b[m", shop->name, 30 + d_cols - (int)(unsigned int)strlen(shop->name), "");
         pipkey = vkey();
         switch (pipkey)
         {
@@ -2122,20 +2009,22 @@ int oldnum[])
             choice = atoi(genbuf)-1;
             if (choice >= 0 && choice < numlen)
             {
+                const struct goodsofpip *const pchoice = &shop->list[choice];
+
                 clrchyiuan(6, b_lines - 6);
                 if (random() % 2 > 0)
-                    show_buy_pic(p[choice].pic1);
+                    show_buy_pic(pchoice->pic1);
                 else
-                    show_buy_pic(p[choice].pic2);
+                    show_buy_pic(pchoice->pic2);
                 move(b_lines - 1, 0);
                 clrtoeol();
                 move(b_lines - 1, 1);
                 smoney = 0;
-                if (mode == 3)
+                if (mode == SHOP_OTHER)
                     smoney = 1;
                 else
                 {
-                    sprintf(inbuf, "你要買入物品 [%s] 多少個呢?(上限 %d): ", p[choice].name, d.thing[THING_MONEY] / p[choice].money);
+                    sprintf(inbuf, "你要買入物品 [%s] 多少個呢?(上限 %d): ", pchoice->name, d.thing[THING_MONEY] / pchoice->money);
                     getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 6, DOECHO, 0);
                     smoney = atoi(genbuf);
                 }
@@ -2143,27 +2032,27 @@ int oldnum[])
                 {
                     vmsg("放棄買入...");
                 }
-                else if (d.thing[THING_MONEY] < smoney*p[choice].money)
+                else if (d.thing[THING_MONEY] < smoney*pchoice->money)
                 {
                     vmsg("你的錢沒有那麼多喔..");
                 }
                 else
                 {
-                    sprintf(inbuf, "確定買入物品 [%s] 數量 %ld 個嗎?(店家賣價 %ld) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money);
+                    sprintf(inbuf, "確定買入物品 [%s] 數量 %ld 個嗎?(店家賣價 %ld) [y/N]: ", pchoice->name, smoney, smoney*pchoice->money);
                     getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 2, DOECHO, 0);
                     if (genbuf[0] == 'y' || genbuf[0] == 'Y')
                     {
-                        oldnum[choice] += smoney;
-                        d.thing[THING_MONEY] -= smoney * p[choice].money;
-                        sprintf(inbuf, "老闆給了你%ld個%s", smoney, p[choice].name);
+                        item_list[pchoice->id] += smoney;
+                        d.thing[THING_MONEY] -= smoney * pchoice->money;
+                        sprintf(inbuf, "老闆給了你%ld個%s", smoney, pchoice->name);
                         vmsg(inbuf);
-                        vmsg(p[choice].msguse);
-                        if (mode == 3 && choice == 1)
+                        vmsg(pchoice->msguse);
+                        if (mode == SHOP_OTHER && choice == 0)
                         {
                             d.state[STATE_HAPPY] += random() % 10 + 20 * smoney;
                             d.state[STATE_SATISFY] += random() % 10 + 20 * smoney;
                         }
-                        else if (mode == 3 && choice == 2)
+                        else if (mode == SHOP_OTHER && choice == 1)
                         {
                             d.state[STATE_HAPPY] += (random() % 2 + 2) * smoney;
                             d.learn[LEARN_WISDOM] += (2 + 10 / (d.learn[LEARN_WISDOM] / 100 + 1)) * smoney;
@@ -2186,7 +2075,7 @@ int oldnum[])
 
         case 'S':
         case 's':
-            if (mode == 3)
+            if (mode == SHOP_OTHER)
             {
                 vmsg("這些東西不能賣喔....");
                 break;
@@ -2197,36 +2086,38 @@ int oldnum[])
             choice = atoi(genbuf)-1;
             if (choice >= 0 && choice < numlen)
             {
+                const struct goodsofpip *const pchoice = &shop->list[choice];
+
                 clrchyiuan(6, b_lines - 6);
                 if (random() % 2 > 0)
-                    show_buy_pic(p[choice].pic1);
+                    show_buy_pic(pchoice->pic1);
                 else
-                    show_buy_pic(p[choice].pic2);
+                    show_buy_pic(pchoice->pic2);
                 move(b_lines - 1, 0);
                 clrtoeol();
                 move(b_lines - 1, 1);
                 smoney = 0;
-                sprintf(inbuf, "你要賣出物品 [%s] 多少個呢?(上限 %d): ", p[choice].name, oldnum[choice]);
+                sprintf(inbuf, "你要賣出物品 [%s] 多少個呢?(上限 %d): ", pchoice->name, item_list[pchoice->id]);
                 getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 6,, 0);
                 smoney = atoi(genbuf);
                 if (smoney < 0)
                 {
                     vmsg("放棄賣出...");
                 }
-                else if (smoney > oldnum[choice])
+                else if (smoney > item_list[pchoice->id])
                 {
-                    sprintf(inbuf, "你的 [%s] 沒有那麼多個喔", p[choice].name);
+                    sprintf(inbuf, "你的 [%s] 沒有那麼多個喔", pchoice->name);
                     vmsg(inbuf);
                 }
                 else
                 {
-                    sprintf(inbuf, "確定賣出物品 [%s] 數量 %ld 個嗎?(店家買價 %ld) [y/N]: ", p[choice].name, smoney, smoney*p[choice].money*8 / 10);
+                    sprintf(inbuf, "確定賣出物品 [%s] 數量 %ld 個嗎?(店家買價 %ld) [y/N]: ", pchoice->name, smoney, smoney*pchoice->money*8 / 10);
                     getdata(B_LINES_REF - 1, 1, inbuf, genbuf, 2, DOECHO, 0);
                     if (genbuf[0] == 'y' || genbuf[0] == 'Y')
                     {
-                        oldnum[choice] -= smoney;
-                        d.thing[THING_MONEY] += smoney * p[choice].money * 8 / 10;
-                        sprintf(inbuf, "老闆拿走了你的%ld個%s", smoney, p[choice].name);
+                        item_list[pchoice->id] -= smoney;
+                        d.thing[THING_MONEY] += smoney * pchoice->money * 8 / 10;
+                        sprintf(inbuf, "老闆拿走了你的%ld個%s", smoney, pchoice->name);
                         vmsg(inbuf);
                     }
                     else
@@ -2243,7 +2134,7 @@ int oldnum[])
             break;
         case 'Q':
         case 'q':
-            sprintf(inbuf, "金錢交易共 %d 元，離開 %s ", oldmoney - d.thing[THING_MONEY], shopname[mode]);
+            sprintf(inbuf, "金錢交易共 %d 元，離開 %s ", oldmoney - d.thing[THING_MONEY], shop->name);
             vmsg(inbuf);
             break;
         }
@@ -2254,24 +2145,27 @@ int oldnum[])
 
 static int
 pip_weapon_doing_menu(             /* 武器購買畫面 */
-int variance,
-int type,
-const struct weapon *p)
+enum pipweapon type,
+int item_list[WEAPON_COUNT])
 {
     time_t now;
     int n = 0;
     const char *s;
     char ans[5];
     char shortbuf[100];
-    static const char menutitle[5][11] = {"頭部裝備區", "右手裝備區", "左手裝備區", "身體裝備區", "足部裝備區"};
     int pipkey;
     char choicekey[5];
     int choice;
 
+    int variance = item_list[type];
+    const struct weaponlist *const weapons = &pip_weapon_list[type];
+
     do
     {
+        const struct weapon *const pvariance = &weapons->list[variance];
+
         clear();
-        vs_head(menutitle[type], BoardName);
+        vs_head(weapons->menutitle, BoardName);
         show_weapon_pic(0);
    /*   move(10, 2);
         prints_centered("\x1b[1;37m現今能力:體力Max:\x1b[36m%-5d\x1b[37m  法力Max:\x1b[36m%-5d\x1b[37m  攻擊:\x1b[36m%-5d\x1b[37m  防禦:\x1b[36m%-5d\x1b[37m  速度:\x1b[36m%-5d \x1b[m",
@@ -2283,33 +2177,35 @@ const struct weapon *p)
         prints_centered(" \x1b[1;31m──\x1b[37m白色 可以購買\x1b[31m──\x1b[32m綠色 擁有裝備\x1b[31m──\x1b[33m黃色 錢錢不夠\x1b[31m──\x1b[35m紫色 能力不足\x1b[31m──\x1b[m");
 
         n = 1;
-        while ((s = p[n].name))
+        while ((s = weapons->list[n].name))
         {
+            const struct weapon *const pn = &weapons->list[n];
+
             move(12 + n, 2);
             if (variance == (n))/*本身有的*/
             {
                 prints_centered("\x1b[1;32m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
-                        n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
-                        p[n].attack, p[n].resist, p[n].speed, p[n].cost);
+                        n, pn->name, pn->needmaxhp, pn->needmaxmp, pn->needspeed,
+                        pn->attack, pn->resist, pn->speed, pn->cost);
             }
-            else if (d.body[BODY_MAXHP] < p[n].needmaxhp || d.fight[FIGHT_MAXMP] < p[n].needmaxmp || d.fight[FIGHT_SPEED] < p[n].needspeed)/*能力不足*/
+            else if (d.body[BODY_MAXHP] < pn->needmaxhp || d.fight[FIGHT_MAXMP] < pn->needmaxmp || d.fight[FIGHT_SPEED] < pn->needspeed)/*能力不足*/
             {
                 prints_centered("\x1b[1;35m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
-                        n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
-                        p[n].attack, p[n].resist, p[n].speed, p[n].cost);
+                        n, pn->name, pn->needmaxhp, pn->needmaxmp, pn->needspeed,
+                        pn->attack, pn->resist, pn->speed, pn->cost);
             }
 
-            else if (d.thing[THING_MONEY] < p[n].cost) /*錢不夠的*/
+            else if (d.thing[THING_MONEY] < pn->cost) /*錢不夠的*/
             {
                 prints_centered("\x1b[1;33m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
-                        n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
-                        p[n].attack, p[n].resist, p[n].speed, p[n].cost);
+                        n, pn->name, pn->needmaxhp, pn->needmaxmp, pn->needspeed,
+                        pn->attack, pn->resist, pn->speed, pn->cost);
             }
             else
             {
                 prints_centered("\x1b[1;37m (%2d)  %-10s %4d    %4d    %4d    %4d    %4d    %4d    %6d\x1b[m",
-                        n, p[n].name, p[n].needmaxhp, p[n].needmaxmp, p[n].needspeed,
-                        p[n].attack, p[n].resist, p[n].speed, p[n].cost);
+                        n, pn->name, pn->needmaxhp, pn->needmaxmp, pn->needspeed,
+                        pn->attack, pn->resist, pn->speed, pn->cost);
             }
             n++;
         }
@@ -2330,6 +2226,8 @@ const struct weapon *p)
             choice = atoi(choicekey);
             if (choice >= 0 && choice <= n)
             {
+                const struct weapon *const pchoice = &weapons->list[choice];
+
                 move(b_lines - 1, 0);
                 clrtoeol();
                 move(b_lines - 1, 1);
@@ -2341,36 +2239,36 @@ const struct weapon *p)
 
                 else if (variance == choice)  /*早已經有啦*/
                 {
-                    sprintf(shortbuf, "你早已經有 %s 囉", p[variance].name);
+                    sprintf(shortbuf, "你早已經有 %s 囉", pvariance->name);
                     vmsg(shortbuf);
                 }
 
-                else if (p[choice].cost >= (d.thing[THING_MONEY] + p[variance].sell))  /*錢不夠*/
+                else if (pchoice->cost >= (d.thing[THING_MONEY] + pvariance->sell))  /*錢不夠*/
                 {
-                    sprintf(shortbuf, "這個要 %d 元，你的錢不夠啦!", p[choice].cost);
+                    sprintf(shortbuf, "這個要 %d 元，你的錢不夠啦!", pchoice->cost);
                     vmsg(shortbuf);
                 }
 
-                else if (d.body[BODY_MAXHP] < p[choice].needmaxhp || d.fight[FIGHT_MAXMP] < p[choice].needmaxmp
-                          || d.fight[FIGHT_SPEED] < p[choice].needspeed)  /*能力不足*/
+                else if (d.body[BODY_MAXHP] < pchoice->needmaxhp || d.fight[FIGHT_MAXMP] < pchoice->needmaxmp
+                          || d.fight[FIGHT_SPEED] < pchoice->needspeed)  /*能力不足*/
                 {
                     sprintf(shortbuf, "需要HP %d MP %d SPEED %d 喔",
-                            p[choice].needmaxhp, p[choice].needmaxmp, p[choice].needspeed);
+                            pchoice->needmaxhp, pchoice->needmaxmp, pchoice->needspeed);
                     vmsg(shortbuf);
                 }
                 else  /*順利購買*/
                 {
-                    sprintf(shortbuf, "你確定要購買 %s 嗎?($%d) [y/N]: ", p[choice].name, p[choice].cost);
+                    sprintf(shortbuf, "你確定要購買 %s 嗎?($%d) [y/N]: ", pchoice->name, pchoice->cost);
                     getdata(B_LINES_REF - 1, 1, shortbuf, ans, 2, DOECHO, 0);
                     if (ans[0] == 'y' || ans[0] == 'Y')
                     {
-                        sprintf(shortbuf, "小雞已經裝備上 %s 了", p[choice].name);
+                        sprintf(shortbuf, "小雞已經裝備上 %s 了", pchoice->name);
                         vmsg(shortbuf);
-                        d.fight[FIGHT_ATTACK] += (p[choice].attack - p[variance].attack);
-                        d.fight[FIGHT_RESIST] += (p[choice].resist - p[variance].resist);
-                        d.fight[FIGHT_SPEED] += (p[choice].speed - p[variance].speed);
-                        d.thing[THING_MONEY] -= (p[choice].cost - p[variance].sell);
-                        variance = choice;
+                        d.fight[FIGHT_ATTACK] += (pchoice->attack - pvariance->attack);
+                        d.fight[FIGHT_RESIST] += (pchoice->resist - pvariance->resist);
+                        d.fight[FIGHT_SPEED] += (pchoice->speed - pvariance->speed);
+                        d.thing[THING_MONEY] -= (pchoice->cost - pvariance->sell);
+                        item_list[type] = variance = choice;
                     }
                     else
                     {
@@ -2385,17 +2283,17 @@ const struct weapon *p)
         case 's':
             if (variance != 0)
             {
-                sprintf(shortbuf, "你確定要賣掉%s嗎? 賣價:%d [y/N]: ", p[variance].name, p[variance].sell);
+                sprintf(shortbuf, "你確定要賣掉%s嗎? 賣價:%d [y/N]: ", pvariance->name, pvariance->sell);
                 getdata(B_LINES_REF - 1, 1, shortbuf, ans, 2, DOECHO, 0);
                 if (ans[0] == 'y' || ans[0] == 'Y')
                 {
-                    sprintf(shortbuf, "裝備 %s 賣了 %d", p[variance].name, p[variance].sell);
-                    d.fight[FIGHT_ATTACK] -= p[variance].attack;
-                    d.fight[FIGHT_RESIST] -= p[variance].resist;
-                    d.fight[FIGHT_SPEED] -= p[variance].speed;
-                    d.thing[THING_MONEY] += p[variance].sell;
+                    sprintf(shortbuf, "裝備 %s 賣了 %d", pvariance->name, pvariance->sell);
+                    d.fight[FIGHT_ATTACK] -= pvariance->attack;
+                    d.fight[FIGHT_RESIST] -= pvariance->resist;
+                    d.fight[FIGHT_SPEED] -= pvariance->speed;
+                    d.thing[THING_MONEY] += pvariance->sell;
                     vmsg(shortbuf);
-                    variance = 0;
+                    item_list[type] = variance = 0;
                 }
                 else
                 {
@@ -2407,7 +2305,6 @@ const struct weapon *p)
             {
                 sprintf(shortbuf, "你本來就沒有裝備了...");
                 vmsg(shortbuf);
-                variance = 0;
             }
             break;
 
@@ -2419,7 +2316,7 @@ const struct weapon *p)
     }
     while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
 
-    return variance;
+    return 0;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -3664,7 +3561,7 @@ static int pip_play_guess(void)   /* 猜拳程式 */
     {
         if (d.death == 1 || d.death == 2 || d.death == 3)
             return 0;
-        if (pip_mainmenu(0)) return 0;
+        if (pip_mainmenu(MODE_MAIN)) return 0;
         move(b_lines -2, 0);
         clrtoeol();
         move(b_lines, 0);
@@ -3799,51 +3696,72 @@ static void situ(void)
 /*---------------------------------------------------------------------------*/
 /* 資料庫                                                                    */
 /*---------------------------------------------------------------------------*/
-static const char *const classrank[5] = {"初級", "中級", "高級", "進階", "專業"};
-static const int classmoney[10][2] = {
-    {60, 170}, {70, 190}, {70, 190}, {80, 210}, {70, 190},
-    {60, 170}, {90, 230}, {70, 190}, {70, 190}, {80, 210}
+
+static const char *const classrank[] = {"初級", "中級", "高級", "進階", "專業"};
+
+struct classdata_money {
+    int mul;
+    int base;
 };
-static const int classvariable[10][4] =
+struct classdata_basic_effect {
+    int hp_dec;
+    int happy_dec;
+    int satisfy_dec;
+    int shit_inc;
+};
+
+struct classdata {
+    const char *name;
+    struct classdata_money money;
+    struct classdata_basic_effect effect;
+    const char *word[4];
+};
+
+//   課名, 花費, 效果, 成功一, 成功二, 失敗一, 失敗二
+static const struct classdata pip_class_list[CLASS_COUNT] =
 {
-    {5, 5, 4, 4}, {5, 7, 6, 4}, {5, 7, 6, 4}, {5, 6, 5, 4}, {7, 5, 4, 6},
-    {7, 5, 4, 6}, {6, 5, 4, 6}, {6, 6, 5, 4}, {5, 5, 4, 7}, {7, 5, 4, 7}
+    {"自然科學", {60, 170}, {5, 5, 4, 4}, {
+        "正在用功\讀書中..", "我是聰明雞 cccc...",
+        "這題怎麼看不懂咧..怪了", "唸不完了 :~~~~~~"}
+    },
+    {"唐詩宋詞", {70, 190}, {5, 7, 6, 4}, {
+        "床前明月光...疑是地上霜...", "紅豆生南國..春來發幾枝..",
+        "ㄟ..上課不要流口水", "你還混喔..罰你背會唐詩三百首"}
+    },
+    {"神學教育", {70, 190}, {5, 7, 6, 4}, {
+        "哈雷路亞  哈雷路亞", "讓我們迎接天堂之門",
+        "ㄟ..你在幹嘛ㄚ? 還不好好唸", "神學很嚴肅的..請好好學..:("}
+    },
+    {"軍學教育", {80, 210}, {5, 6, 5, 4}, {
+        "孫子兵法是中國兵法書..", "從軍報國，我要帶兵去打仗",
+        "什麼陣形ㄚ?混亂陣形?? @_@", "你還以為你在玩三國志ㄚ?"}
+    },
+    {"劍道技術", {70, 190}, {7, 5, 4, 6}, {
+        "看我的厲害  獨孤九劍....", "我刺 我刺 我刺刺刺..",
+        "劍要拿穩一點啦..", "你在刺地鼠ㄚ? 劍拿高一點"}
+    },
+    {"格鬥戰技", {60, 170}, {7, 5, 4, 6}, {
+        "肌肉是肌肉  呼呼..", "十八銅人行氣散..",
+        "腳再踢高一點啦...", "拳頭怎麼這麼沒力ㄚ.."}
+    },
+    {"魔法教育", {90, 230}, {6, 5, 4, 6}, {
+        "我變 我變 我變變變..", "蛇膽+蟋蜴尾+鼠牙+蟾蜍=??",
+        "小心你的掃帚啦  不要亂揮..", "ㄟ～口水不要流到水晶球上.."}
+    },
+    {"禮儀教育", {70, 190}, {6, 6, 5, 4}, {
+        "要當隻有禮貌的雞...", "歐嗨唷..ㄚ哩ㄚ豆..",
+        "怎麼學不會ㄚ??天呀..", "走起路來沒走樣..天ㄚ.."}
+    },
+    {"繪畫技巧", {70, 190}, {5, 5, 4, 7}, {
+        "很不錯唷..有美術天份..", "這幅畫的顏色搭配的很好..",
+        "不要鬼畫符啦..要加油..", "不要咬畫筆啦..壞壞小雞喔.."}
+    },
+    {"舞蹈技巧", {80, 210}, {7, 5, 4, 7}, {
+        "你就像一隻天鵝喔..", "舞蹈細胞很好喔..",
+        "身體再柔軟一點..", "拜託你優美一點..不要這麼粗魯.."}
+    },
 };
 
-
-//   課名, 成功一, 成功二, 失敗一, 失敗二
-static const char *const classword[10][5] =
-{
-    {"自然科學", "正在用功\讀書中..", "我是聰明雞 cccc...",
-     "這題怎麼看不懂咧..怪了", "唸不完了 :~~~~~~"},
-
-    {"唐詩宋詞", "床前明月光...疑是地上霜...", "紅豆生南國..春來發幾枝..",
-     "ㄟ..上課不要流口水", "你還混喔..罰你背會唐詩三百首"},
-
-    {"神學教育", "哈雷路亞  哈雷路亞", "讓我們迎接天堂之門",
-     "ㄟ..你在幹嘛ㄚ? 還不好好唸", "神學很嚴肅的..請好好學..:("},
-
-    {"軍學教育", "孫子兵法是中國兵法書..", "從軍報國，我要帶兵去打仗",
-     "什麼陣形ㄚ?混亂陣形?? @_@", "你還以為你在玩三國志ㄚ?"},
-
-    {"劍道技術", "看我的厲害  獨孤九劍....", "我刺 我刺 我刺刺刺..",
-     "劍要拿穩一點啦..", "你在刺地鼠ㄚ? 劍拿高一點"},
-
-    {"格鬥戰技", "肌肉是肌肉  呼呼..", "十八銅人行氣散..",
-     "腳再踢高一點啦...", "拳頭怎麼這麼沒力ㄚ.."},
-
-    {"魔法教育", "我變 我變 我變變變..", "蛇膽+蟋蜴尾+鼠牙+蟾蜍=??",
-     "小心你的掃帚啦  不要亂揮..", "ㄟ～口水不要流到水晶球上.."},
-
-    {"禮儀教育", "要當隻有禮貌的雞...", "歐嗨唷..ㄚ哩ㄚ豆..",
-     "怎麼學不會ㄚ??天呀..", "走起路來沒走樣..天ㄚ.."},
-
-    {"繪畫技巧", "很不錯唷..有美術天份..", "這幅畫的顏色搭配的很好..",
-     "不要鬼畫符啦..要加油..", "不要咬畫筆啦..壞壞小雞喔.."},
-
-    {"舞蹈技巧", "你就像一隻天鵝喔..", "舞蹈細胞很好喔..",
-     "身體再柔軟一點..", "拜託你優美一點..不要這麼粗魯.."}
-};
 /*---------------------------------------------------------------------------*/
 /* 修行選單:念書 練武 修行                                                   */
 /* 函式庫                                                                    */
@@ -3863,9 +3781,9 @@ static int pip_practice_classA(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN(d.learn[LEARN_WISDOM] / 200, 4); /*科學*/
+    class_ = BMIN(d.learn[LEARN_WISDOM] / 200, COUNTOF(classrank) - 1); /*科學*/
 
-    body = pip_practice_function(0, class_, 11, 12, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_A, class_, 11, 12, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.learn[LEARN_WISDOM] += change4 * LEARN_LEVEL;
     if (body == 0)
@@ -3878,7 +3796,7 @@ static int pip_practice_classA(void)
         d.state[STATE_BELIEF] -= random() % (4 + class_ * 2);
         d.fight[FIGHT_MRESIST] -= random() % 3;
     }
-    pip_practice_gradeup(0, class_, d.learn[LEARN_WISDOM] / 200);
+    pip_practice_gradeup(CLASS_A, class_, d.learn[LEARN_WISDOM] / 200);
     if (d.state[STATE_BELIEF] < 0)  d.state[STATE_BELIEF] = 0;
     if (d.fight[FIGHT_MRESIST] < 0) d.fight[FIGHT_MRESIST] = 0;
     d.class_[A] += 1;
@@ -3903,9 +3821,9 @@ static int pip_practice_classB(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, 4); /*詩詞*/
+    class_ = BMIN((d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, COUNTOF(classrank) - 1); /*詩詞*/
 
-    body = pip_practice_function(1, class_, 21, 21, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_B, class_, 21, 21, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.state[STATE_AFFECT] += change3 * LEARN_LEVEL;
     if (body == 0)
@@ -3921,7 +3839,7 @@ static int pip_practice_classB(void)
         d.learn[LEARN_ART] += random() % (class_ + 3) * LEARN_LEVEL;
     }
     body = (d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400;
-    pip_practice_gradeup(1, class_, body);
+    pip_practice_gradeup(CLASS_B, class_, body);
     d.class_[B] += 1;
     return 0;
 }
@@ -3940,9 +3858,9 @@ static int pip_practice_classC(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400, 4); /*神學*/
+    class_ = BMIN((d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400, COUNTOF(classrank) - 1); /*神學*/
 
-    body = pip_practice_function(2, class_, 31, 31, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_C, class_, 31, 31, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.learn[LEARN_WISDOM] += change2 * LEARN_LEVEL;
     d.state[STATE_BELIEF] += change3 * LEARN_LEVEL;
@@ -3955,7 +3873,7 @@ static int pip_practice_classC(void)
         d.fight[FIGHT_MRESIST] += random() % 3 * LEARN_LEVEL;
     }
     body = (d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400;
-    pip_practice_gradeup(2, class_, body);
+    pip_practice_gradeup(CLASS_C, class_, body);
     d.class_[C] += 1;
     return 0;
 }
@@ -3974,8 +3892,8 @@ static int pip_practice_classD(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400, 4);
-    body = pip_practice_function(3, class_, 41, 41, &change1, &change2, &change3, &change4, &change5);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400, COUNTOF(classrank) - 1);
+    body = pip_practice_function(CLASS_D, class_, 41, 41, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.learn[LEARN_WISDOM] += change2 * LEARN_LEVEL;
     if (body == 0)
@@ -3989,7 +3907,7 @@ static int pip_practice_classD(void)
         d.state[STATE_AFFECT] -= random() % 3 + 6;
     }
     body = (d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400;
-    pip_practice_gradeup(3, class_, body);
+    pip_practice_gradeup(CLASS_D, class_, body);
     if (d.state[STATE_AFFECT] < 0)  d.state[STATE_AFFECT] = 0;
     d.class_[D] += 1;
     return 0;
@@ -4009,9 +3927,9 @@ static int pip_practice_classE(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400, 4);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400, COUNTOF(classrank) - 1);
 
-    body = pip_practice_function(4, class_, 51, 51, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_E, class_, 51, 51, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.fight[FIGHT_SPEED] += (random() % 3 + 2) * LEARN_LEVEL;
     d.tmp[TMP_HEXP] += (random() % 2 + 2) * LEARN_LEVEL;
@@ -4025,7 +3943,7 @@ static int pip_practice_classE(void)
         d.fight[FIGHT_HSKILL] += (random() % 3 + 3) * LEARN_LEVEL;
     }
     body = (d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400;
-    pip_practice_gradeup(4, class_, body);
+    pip_practice_gradeup(CLASS_E, class_, body);
     d.class_[E] += 1;
     return 0;
 }
@@ -4044,9 +3962,9 @@ static int pip_practice_classF(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400, 4);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400, COUNTOF(classrank) - 1);
 
-    body = pip_practice_function(5, class_, 61, 61, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_F, class_, 61, 61, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.tmp[TMP_HEXP] += (random() % 2 + 2) * LEARN_LEVEL;
     d.fight[FIGHT_SPEED] += (random() % 3 + 2) * LEARN_LEVEL;
@@ -4060,7 +3978,7 @@ static int pip_practice_classF(void)
         d.fight[FIGHT_HSKILL] += (random() % 3 + 3) * LEARN_LEVEL;
     }
     body = (d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400;
-    pip_practice_gradeup(5, class_, body);
+    pip_practice_gradeup(CLASS_F, class_, body);
     d.class_[F] += 1;
     return 0;
 }
@@ -4079,9 +3997,9 @@ static int pip_practice_classG(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400, 4);
+    class_ = BMIN((d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400, COUNTOF(classrank) - 1);
 
-    body = pip_practice_function(6, class_, 71, 72, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_G, class_, 71, 72, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.fight[FIGHT_MAXMP] += change3 * LEARN_LEVEL;
     d.tmp[TMP_MEXP] += (random() % 2 + 2) * LEARN_LEVEL;
@@ -4095,7 +4013,7 @@ static int pip_practice_classG(void)
     }
 
     body = (d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400;
-    pip_practice_gradeup(6, class_, body);
+    pip_practice_gradeup(CLASS_G, class_, body);
     d.class_[G] += 1;
     return 0;
 }
@@ -4114,15 +4032,15 @@ static int pip_practice_classH(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.learn[LEARN_MANNERS] * 2 + d.learn[LEARN_CHARACTER]) / 400, 4);
+    class_ = BMIN((d.learn[LEARN_MANNERS] * 2 + d.learn[LEARN_CHARACTER]) / 400, COUNTOF(classrank) - 1);
 
-    body = pip_practice_function(7, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_H, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.tmp[TMP_SOCIAL] += (random() % 2 + 2) * LEARN_LEVEL;
     d.learn[LEARN_MANNERS] += (change1 + random() % 2) * LEARN_LEVEL;
     d.learn[LEARN_CHARACTER] += (change1 + random() % 2) * LEARN_LEVEL;
     body = (d.learn[LEARN_CHARACTER] + d.learn[LEARN_MANNERS]) / 400;
-    pip_practice_gradeup(7, class_, body);
+    pip_practice_gradeup(CLASS_H, class_, body);
     d.class_[H] += 1;
     return 0;
 }
@@ -4141,14 +4059,14 @@ static int pip_practice_classI(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, 4);
+    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, COUNTOF(classrank) - 1);
 
-    body = pip_practice_function(8, class_, 91, 91, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_I, class_, 91, 91, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.learn[LEARN_ART] += change4 * LEARN_LEVEL;
     d.state[STATE_AFFECT] += change2 * LEARN_LEVEL;
     body = (d.state[STATE_AFFECT] + d.learn[LEARN_ART]) / 400;
-    pip_practice_gradeup(8, class_, body);
+    pip_practice_gradeup(CLASS_I, class_, body);
     d.class_[I] += 1;
     return 0;
 }
@@ -4167,9 +4085,9 @@ static int pip_practice_classJ(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400, 4);
+    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400, COUNTOF(classrank) - 1);
 
-    body = pip_practice_function(9, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
+    body = pip_practice_function(CLASS_J, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.learn[LEARN_ART] += change2 * LEARN_LEVEL;
     d.body[BODY_MAXHP] += (random() % 3 + 2) * LEARN_LEVEL;
@@ -4182,7 +4100,7 @@ static int pip_practice_classJ(void)
         d.learn[LEARN_CHARM] += random() % (3 + class_) * LEARN_LEVEL;
     }
     body = (d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400;
-    pip_practice_gradeup(9, class_, body);
+    pip_practice_gradeup(CLASS_J, class_, body);
     d.class_[J] += 1;
     return 0;
 }
@@ -4190,18 +4108,20 @@ static int pip_practice_classJ(void)
 /*傳入:課號 等級 生命 快樂 滿足 髒髒 傳回:變數12345 return:body(-1~1)*/
 static int
 pip_practice_function(
-int classnum, int classgrade, int pic1, int pic2,
+enum pipclass classnum, int classgrade, int pic1, int pic2,
 int *change1, int *change2, int *change3, int *change4, int *change5)
 {
     int  a, b, body, health;
     char inbuf[256], ans[5];
     long smoney;
 
+    const struct classdata *const clsdata = &pip_class_list[classnum];
+
     /*錢的算法*/
-    smoney = classgrade * classmoney[classnum][0] + classmoney[classnum][1];
+    smoney = classgrade * clsdata->money.mul + clsdata->money.base;
     move(b_lines - 2, 0);
     clrtoeol();
-    sprintf(inbuf, "[%8s%4s課程]要花 $%ld，確定要嗎??[y/N]: ", classword[classnum][0], classrank[classgrade], smoney);
+    sprintf(inbuf, "[%8s%4s課程]要花 $%ld，確定要嗎??[y/N]: ", clsdata->name, classrank[classgrade], smoney);
     getdata(B_LINES_REF - 2, 1, inbuf, ans, 2, DOECHO, 0);
     if (ans[0] != 'y' && ans[0] != 'Y')  return -1;
     if (d.thing[THING_MONEY] < smoney)
@@ -4218,10 +4138,10 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
 
     a = random() % 3 + 2;
     b = (random() % 12 + random() % 13) % 2;
-    d.body[BODY_HP] -= random() % (3 + random() % 3) + classvariable[classnum][0];
-    d.state[STATE_HAPPY] -= random() % (3 + random() % 3) + classvariable[classnum][1];
-    d.state[STATE_SATISFY] -= random() % (3 + random() % 3) + classvariable[classnum][2];
-    d.body[BODY_SHIT] += random() % (3 + random() % 3) + classvariable[classnum][3];
+    d.body[BODY_HP] -= random() % (3 + random() % 3) + clsdata->effect.hp_dec;
+    d.state[STATE_HAPPY] -= random() % (3 + random() % 3) + clsdata->effect.happy_dec;
+    d.state[STATE_SATISFY] -= random() % (3 + random() % 3) + clsdata->effect.satisfy_dec;
+    d.body[BODY_SHIT] += random() % (3 + random() % 3) + clsdata->effect.shit_inc;
     *change1 = random() % a + 4 + classgrade * 2 / (body + 2);    /* random()%3+3 */
     *change2 = random() % a + 6 + classgrade * 2 / (body + 2);    /* random()%3+5 */
     *change3 = random() % a + 8 + classgrade * 3 / (body + 2);    /* random()%3+7 */
@@ -4231,19 +4151,19 @@ int *change1, int *change2, int *change3, int *change4, int *change5)
         show_practice_pic(pic1);
     else if (pic2 > 0)
         show_practice_pic(pic2);
-    vmsg(classword[classnum][1+body+b]);
+    vmsg(clsdata->word[body+b]);
     return body;
 }
 
 static int pip_practice_gradeup(
-int classnum, int classgrade, int data)
+enum pipclass classnum, int classgrade, int data)
 {
     char inbuf[256];
 
-    if ((data == (classgrade + 1)) && classgrade + 1 < 5)
+    if (data > classgrade && classgrade < COUNTOF(classrank) - 1)
     {
         sprintf(inbuf, "下次換上 [%8s%4s課程]",
-                classword[classnum][0], classrank[classgrade+1]);
+                pip_class_list[classnum].name, classrank[BMIN(data, COUNTOF(classrank) - 1)]);
         vmsg(inbuf);
     }
     return 0;
@@ -4439,14 +4359,6 @@ static int pip_change_weight(void)
 static int
 pip_go_palace(void)
 {
-    pip_go_palace_screen(royallist);
-    return 0;
-}
-
-static int
-pip_go_palace_screen(
-const struct royalset *p)
-{
     int n;
     int a;
     int b;
@@ -4457,7 +4369,9 @@ const struct royalset *p)
     char inbuf1[20];
     char inbuf2[20];
     static const char *const needmode[3] = {"      ", "禮儀表現＞", "談吐技巧＞"};
-    int save[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    int save[COUNTOF(d.royal)] = {0};
+
+    const struct royalset *const p = royallist;
 
     d.nodone = 0;
     do
@@ -4469,13 +4383,13 @@ const struct royalset *p)
         move(14, 4);
         prints_centered("\x1b[1;31m│                                                                  │\x1b[0m");
 
-        for (n = 0; n < 5; n++)
+        for (n = 0; n < ROYAL_COUNT / 2; n++)
         {
             a = 2 * n;
             b = 2 * n + 1;
             move(15 + n, 4);
             sprintf(inbuf1, "%-10s%3d", needmode[p[a].needmode], p[a].needvalue);
-            if (n == 4)
+            if (n == ROYAL_J / 2)
             {
                 sprintf(inbuf2, "%-10s", needmode[p[b].needmode]);
             }
@@ -4483,7 +4397,7 @@ const struct royalset *p)
             {
                 sprintf(inbuf2, "%-10s%3d", needmode[p[b].needmode], p[b].needvalue);
             }
-            if ((d.see[SEE_ROYAL_J] == 1 && n == 4) || (n != 4))
+            if (n != ROYAL_J / 2 || d.see[SEE_ROYAL_J])
                 prints_centered("\x1b[1;31m│ \x1b[36m(\x1b[37m%c\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s     \x1b[36m(\x1b[37m%c\x1b[36m) \x1b[33m%-10s  \x1b[37m%-14s\x1b[31m│\x1b[0m",
                         p[a].num, p[a].name, inbuf1, p[b].num, p[b].name, inbuf2);
             else
@@ -4515,10 +4429,10 @@ const struct royalset *p)
             "\x1b[1;37;46m  參見選單  \x1b[44m [字母]選擇欲拜訪的人物  [Q]離開" NICKNAME "總司令部       %*s\x1b[0m", 20 + d_cols - ((int)(unsigned int)sizeof(NICKNAME) - 1), "");
         pipkey = vkey();
         choice = pipkey - 'A';
-        if (choice < 0 || choice >= 10)
+        if (choice < 0 || choice >= ROYAL_COUNT)
             choice = pipkey - 'a';
 
-        if ((choice >= 0 && choice < 10 && d.see[SEE_ROYAL_J] == 1) || (choice >= 0 && choice < 9 && d.see[SEE_ROYAL_J] == 0))
+        if ((choice >= 0 && choice < ROYAL_COUNT) && (choice != ROYAL_J || d.see[SEE_ROYAL_J]))
         {
             d.tmp[TMP_SOCIAL] += random() % 3 + 3;
             d.body[BODY_HP] -= random() % 5 + 6;
@@ -4543,7 +4457,7 @@ const struct royalset *p)
                     (p[choice].needmode == 1 && d.learn[LEARN_MANNERS] >= p[choice].needvalue) ||
                     (p[choice].needmode == 2 && d.learn[LEARN_SPEECH] >= p[choice].needvalue))
                 {
-                    if (choice >= 0 && choice < 9 && save[choice] >= p[choice].maxtoman)
+                    if (choice != ROYAL_J && save[choice] >= p[choice].maxtoman)
                     {
                         if (random() % 2 > 0)
                             sprintf(buf, "能和這麼偉大的你講話真是榮幸ㄚ...");
@@ -4553,32 +4467,33 @@ const struct royalset *p)
                     else
                     {
                         change = 0;
-                        if (choice >= 0 && choice < 8)
+                        switch (choice)
                         {
+                        default:
                             switch (choice)
                             {
-                            case 1:
+                            case ROYAL_A:
                                 change = d.learn[LEARN_CHARACTER] / 5;
                                 break;
-                            case 2:
+                            case ROYAL_B:
                                 change = d.learn[LEARN_CHARACTER] / 8;
                                 break;
-                            case 3:
+                            case ROYAL_C:
                                 change = d.learn[LEARN_CHARM] / 5;
                                 break;
-                            case 4:
+                            case ROYAL_D:
                                 change = d.learn[LEARN_WISDOM] / 10;
                                 break;
-                            case 5:
+                            case ROYAL_E:
                                 change = d.state[STATE_BELIEF] / 10;
                                 break;
-                            case 6:
+                            case ROYAL_F:
                                 change = d.learn[LEARN_SPEECH] / 10;
                                 break;
-                            case 7:
+                            case ROYAL_G:
                                 change = d.tmp[TMP_SOCIAL] / 10;
                                 break;
-                            case 8:
+                            case ROYAL_H:
                                 change = d.tmp[TMP_HEXP] / 10;
                                 break;
                             }
@@ -4590,17 +4505,18 @@ const struct royalset *p)
                                 change = p[choice].maxtoman - save[choice];
                             save[choice] += change;
                             d.learn[LEARN_TOMAN] += change;
-                        }
-                        else if (choice == 8)
-                        {
-                            save[8] = 0;
+                            break;
+
+                        case ROYAL_I:
+                            save[ROYAL_I] = 0;
                             d.tmp[TMP_SOCIAL] -= 13 + random() % 4;
                             d.state[STATE_AFFECT] += 13 + random() % 4;
-                        }
-                        else if (choice == 9 && d.see[SEE_ROYAL_J] == 1)
-                        {
+                            break;
+
+                        case ROYAL_J:
                             save[9] += 15 + random() % 4;
                             d.see[SEE_ROYAL_J] = 0;
+                            break;
                         }
                         if (random() % 2 > 0)
                             sprintf(buf, "%s", p[choice].words1);
@@ -5212,7 +5128,7 @@ char *endbuf1, char *endbuf2, char *endbuf3,
 int *endmode, int *endgrade)
 {
     //   男的, 女的
-    static const char *const name[8][2] = {
+    static const char *const name[][2] = {
         {"嫁給了同行的男生", "娶了同行的女孩"},
         {"嫁給王子",   "娶了公主"},
         {"嫁給你",     "娶了你"},
@@ -5272,7 +5188,7 @@ int *endmode, int *endgrade)
         sprintf(buf2, "常遇到很多問題....");
     }
     strcpy(endbuf2, buf2);
-    if (d.lover >= 1 && d.lover <= 7)
+    if (d.lover >= 1 && d.lover < COUNTOF(name))
     {
         if (d.sex == 1)
             sprintf(buf2, "%s", name[d.lover][1]);
@@ -7747,7 +7663,7 @@ pip_marriage_offer(void)
     char ans[4];
     int money;
     int who;
-    static const char *const name[5][2] = {
+    static const char *const name[][2] = {
         {"女商人Ａ", "商人Ａ"},
         {"女商人Ｂ", "商人Ｂ"},
         {"女商人Ｃ", "商人Ｃ"},
@@ -7756,7 +7672,7 @@ pip_marriage_offer(void)
     };
     do
     {
-        who = random() % 5;
+        who = random() % COUNTOF(name);
     }
     while (d.lover == (who + 3));
 
@@ -7998,7 +7914,7 @@ static int pip_results_show_ending(
 int winorlost, int mode, int a, int b, int c)
 {
     static const char *const gamename[4] = {"武鬥大會", "藝術大展", "皇家舞會", "烹飪大賽"};
-    static const int resultmoney[4] = {0, 3000, 5000, 8000};
+    static const int resultmoney[COUNTOF(gamename)] = {0, 3000, 5000, 8000};
     char name1[25], name2[25], name3[25], name4[25];
     char buf[256];
 

@@ -11,6 +11,34 @@
 
 #define ALIVE   (9/10)  /* 復活比 */
 
+enum pipmenuidx {
+    PIPMENU_MAIN,
+    PIPMENU_BASIC,
+    PIPMENU_STORE,
+    PIPMENU_PRACTICE,
+    PIPMENU_PLAY,
+    PIPMENU_JOB,
+    PIPMENU_SPECIAL,
+    PIPMENU_SYSTEM,
+
+    PIPMENU_COUNT,
+};
+
+enum pipmenumode {
+    MODE_MAIN,   /*主要畫面*/
+    MODE_FEED,   /*餵食*/
+    MODE_WORK,   /*打工*/
+    MODE_FIGHT,  /*修行*/
+};
+
+enum pipshopidx {
+    SHOP_FOOD,
+    SHOP_MEDICINE,
+    SHOP_OTHER,
+
+    SHOP_COUNT,
+};
+
 /*--------------------------------------------------------------------------*/
 /*  怪物參數設定                                                            */
 /*--------------------------------------------------------------------------*/
@@ -71,12 +99,14 @@ enum pipfight {
 };
 
 /*---武器的參數---*/ //10
-enum pipweapon{
+enum pipweapon {
     WEAPON_HEAD,        /*頭部武器*/
     WEAPON_RHAND,       /*右手武器*/
     WEAPON_LHAND,       /*左手武器*/
     WEAPON_BODY,        /*身體武器*/
     WEAPON_FOOT,        /*腳的武器*/
+
+    WEAPON_COUNT,
 };
 
 /*---各能力參數---*/ //17
@@ -134,6 +164,8 @@ enum piproyal { //10
     ROYAL_H,            /*from 國王*/
     ROYAL_I,            /*from 小丑*/
     ROYAL_J,            /*from 王子*/
+
+    ROYAL_COUNT,
 };
 enum pipsee {   //6
     SEE_ROYAL_J = 0,    /*是否已經看過王子了*/
@@ -171,6 +203,8 @@ enum pipclass {
     CLASS_H,            /*禮儀*/
     CLASS_I,            /*繪畫*/
     CLASS_J,            /*舞蹈*/
+
+    CLASS_COUNT,
 };
 
 struct chicken {  /* DISKDATA(format) */
@@ -316,6 +350,7 @@ typedef struct royalset royalset;
 /*--------------------------------------------------------------------------*/
 struct goodsofpip
 {
+    int id;             /*代碼*/
     const char *name;   /*名字*/
     const char *msgbuy; /*功用*/
     const char *msguse; /*說明*/
@@ -326,29 +361,41 @@ struct goodsofpip
 };
 typedef struct goodsofpip goodsofpip;
 
-//    物品名,         說明buy,        說明feed
+//   屬性代碼,     物品名,         說明buy,        說明feed
 const struct goodsofpip pipfoodlist[] =
 {
-    {"好吃的食物",   "體力恢復50",   "每吃一次食物會恢復體力50喔!",     50,     50,      1, 1},
-    {"美味的零食",   "體力恢復100",  "除了恢復體力，小雞也會更快樂",   120,    100,      2, 3},
-    {NULL,           NULL,           NULL,                               0,      0,      0, 0}
+    {EAT_FOOD,    "好吃的食物",   "體力恢復50",   "每吃一次食物會恢復體力50喔!",     50,     50,      1, 1},
+    {EAT_COOKIE,  "美味的零食",   "體力恢復100",  "除了恢復體力，小雞也會更快樂",   120,    100,      2, 3},
+    {0,           NULL,           NULL,           NULL,                               0,      0,      0, 0}
 };
 
-//     物品名,         說明buy.        說明feed
+//   屬性代碼,       物品名,         說明buy.        說明feed
 const struct goodsofpip pipmedicinelist[] =
 {
-    { "好用大補丸",   "體力恢復600",  "恢復大量流失體力的良方",         500,    600,      4, 4},
-    { "珍貴的靈芝",   "法力恢復50",   "每吃一次靈芝會恢復法力50喔!",    100,     50,      7, 7},
-    { "千年人參王",   "法力恢復500",  "恢復大量流失法力的良方",         800,    500,      7, 7},
-    { "天山雪蓮",     "法力體力最大", "這個  好貴......",             10000,      0,      7, 7},
-    { NULL,           NULL,           NULL,                               0,      0,      0, 0}
+    {EAT_BIGHP,     "好用大補丸",   "體力恢復600",  "恢復大量流失體力的良方",         500,    600,      4, 4},
+    {EAT_MEDICINE,  "珍貴的靈芝",   "法力恢復50",   "每吃一次靈芝會恢復法力50喔!",    100,     50,      7, 7},
+    {EAT_GINSENG,   "千年人參王",   "法力恢復500",  "恢復大量流失法力的良方",         800,    500,      7, 7},
+    {EAT_SNOWGRASS, "天山雪蓮",     "法力體力最大", "這個  好貴......",             10000,      0,      7, 7},
+    {0,             NULL,           NULL,           NULL,                               0,      0,      0, 0}
 };
 
-//     物品名,         說明buy.        說明feed
+//   屬性代碼,         物品名,         說明buy.        說明feed
 const struct goodsofpip pipotherlist[] = {
-    { "樂高玩具組",   "快樂滿意度",   "玩具讓小雞更快樂啦...",           50,      0,      5, 5},
-    { "百科全書",     "知識的來源",   "書本讓小雞更聰明更有氣質啦...",  100,      0,      6, 6},
-    { NULL,           NULL,           NULL,                               0,      0,      0, 0}
+    {THING_PLAYTOOL,  "樂高玩具組",   "快樂滿意度",   "玩具讓小雞更快樂啦...",           50,      0,      5, 5},
+    {THING_BOOK,      "百科全書",     "知識的來源",   "書本讓小雞更聰明更有氣質啦...",  100,      0,      6, 6},
+    {0,               NULL,           NULL,           NULL,                               0,      0,      0, 0}
+};
+
+struct pipshop {
+    const char *name;
+    const struct goodsofpip *list;
+};
+
+const struct pipshop pip_shop_list[SHOP_COUNT] =
+{
+    {"便利商店", pipfoodlist},
+    {NICKNAME "藥鋪", pipmedicinelist},
+    {"夜裡書局", pipotherlist},
 };
 
 /*--------------------------------------------------------------------------*/
@@ -441,8 +488,22 @@ const struct weapon footlist[] =
     {NULL,          0,   0,   0,  0,   0,   0,      0,      0, 0, 0}
 };
 
+struct weaponlist {
+    const char *menutitle;
+    const struct weapon *list;
+};
+
+const struct weaponlist pip_weapon_list[WEAPON_COUNT] =
+{
+    {"頭部裝備區", headlist},
+    {"右手裝備區", rhandlist},
+    {"左手裝備區", lhandlist},
+    {"身體裝備區", bodylist},
+    {"足部裝備區", footlist},
+};
+
 //    T,         拜訪對象
-const struct royalset royallist[] =
+const struct royalset royallist[ROYAL_COUNT + 1] =
 {
     {'A',       "皇城騎兵連",     1,    10,     15,     100, "你真好，來陪我聊天..",                   "守衛星空的安全是很辛苦的.."},
     {'B',       "００７特務",     1,   100,     25,     200, "真是禮貌的小雞..我喜歡...",              "特務就是秘密保護站長安全的人.."},

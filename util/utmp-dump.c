@@ -40,7 +40,7 @@ attach_shm(
 /* 記錄 pal 的 user number                               */
 /* ----------------------------------------------------- */
 
-#define PICKUP_WAYS     (6)
+#define PICKUP_WAYS     COUNTOF(msg_pickup_way)
 
 static int pickup_way;
 
@@ -336,7 +336,7 @@ static int ulist_head(XO *xo);
 static int ulist_init(XO *xo);
 
 
-static const char *const msg_pickup_way[PICKUP_WAYS] =
+static const char *const msg_pickup_way[] =
 {
     "任意",
     "代號",
@@ -376,7 +376,7 @@ ulist_body(
     UTMP *up;
     int cnt, max, ufo, self, userno, sysop GCC_UNUSED, diff, diffmsg, fcolor, colortmp;
     char buf[16], color[20], ship[80];
-    const char *const wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
+    static const char *const wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
     time_t now;
 
 //  pal = cuser.ufo;

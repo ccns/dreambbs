@@ -146,7 +146,7 @@ ochar(
 void
 bell(void)
 {
-    static const char sound[1] = {Ctrl('G')};
+    static const char sound[] = {Ctrl('G')};
 
     telnet_flush(sound, sizeof(sound));
 }
@@ -1557,7 +1557,7 @@ void
 grayoutrect(int y, int yend, int x, int xend, int level)
 // GRAYOUT_DARK(0): dark, GRAYOUT_BOLD(1): bold, GRAYOUR_NORMAL(2): normal
 {
-    const char *const prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
+    static const char *const prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
     char buf[ANSILINELEN];
     int yprev, xprev;
     getyx(&yprev, &xprev);
@@ -2739,7 +2739,7 @@ vkey(void)
 
                   /* "<Esc> O <a-d>" */ /* Ctrl-ed cursor key (rxvt) */
                   case 'a': case 'b': case 'c': case 'd':
-                    ch = mod_key(mod | SHIFT_CODE, KEY_UP + (ch - 'a'));
+                    ch = mod_key(mod | CTRL_CODE, KEY_UP + (ch - 'a'));
                     goto vkey_end;
 
                   default:

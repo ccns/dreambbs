@@ -65,13 +65,8 @@ reset_utmp(void)
 /* 記錄 pal 的 user number                               */
 /* ----------------------------------------------------- */
 
-#ifdef  HAVE_BOARD_PAL
-#define PICKUP_WAYS     (7)
+#define PICKUP_WAYS     COUNTOF(msg_pickup_way)
 int pickup_way=1;
-#else
-#define PICKUP_WAYS     (6)
-int pickup_way=1;
-#endif  /* #ifdef  HAVE_BOARD_PAL */
 
 static char page_requestor[40];
 
@@ -82,7 +77,7 @@ bmode(
 {
     static char modestr[32];
 #ifdef  HAVE_SHOWNUMMSG
-    const char *const nums[9] = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
+    static const char *const nums[9] = {"一", "二", "三", "四", "五", "六", "七", "八", "九"};
 #endif
     int mode;
     const char *word;
@@ -1521,22 +1516,17 @@ do_query(
     else
         prints(" [信箱] 都看過了\n");
 
-    char fortune[7][9] = {"窮困阿宅", "家境普通", "家境小康", "家境富有", "財力雄厚", "富可敵國", "I'm Rich"};
+    static const char *const fortune[] = {"窮困阿宅", "家境普通", "家境小康", "家境富有", "財力雄厚", "富可敵國", "I'm Rich"};
 
-    if      (acct->money >= 100000000)
-        rich=6;
-    else if (acct->money >=  10000000)
-        rich=5;
-    else if (acct->money >=   1000000)
-        rich=4;
-    else if (acct->money >=    100000)
-        rich=3;
-    else if (acct->money >=     10000)
-        rich=2;
-    else if (acct->money >=      1000)
-        rich=1;
-    else
-        rich=0;
+    {
+        int money = acct->money / 1000;
+        for (rich = 0; rich < COUNTOF(fortune) - 1; ++rich)
+        {
+            if (money <= 0)
+                break;
+            money /= 10;
+        }
+    }
 
     if (acct->point1 > 10)
         prints(" [優良積分] \x1b[1;32m%d\x1b[m [劣文] %d [經濟] %s", acct->point1, acct->point2, fortune[rich]);
@@ -3021,7 +3011,7 @@ static int ulist_init(XO *xo);
 static XO ulist_xo;
 
 
-static const char *const msg_pickup_way[PICKUP_WAYS] =
+static const char *const msg_pickup_way[] =
 {
     "任意",
     "代號",
@@ -3065,7 +3055,7 @@ ulist_body(
     int paltmp;
     int n, cnt, max, ufo, self, userno, sysop GCC_UNUSED, diff, diffmsg, fcolor, colortmp;
     char buf[16], color[20], ship[80];
-    const char *const wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
+    static const char *const wcolor[7] = {"\x1b[m", COLOR_PAL, COLOR_BAD, COLOR_BOTH, COLOR_OPAL, COLOR_CLOAK, COLOR_BOARDPAL};
     time_t now;
 
 #ifdef HAVE_BOARD_PAL

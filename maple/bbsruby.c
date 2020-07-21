@@ -352,8 +352,7 @@ VALUE brb_outs RBF_P((int argc, VALUE *argv, VALUE self))
     mrb_get_args(mrb, "*", &argv, &argc);
 #endif
 
-    int i;
-    for (i=0; i<argc; i++)
+    for (int i=0; i<argc; i++)
     {
         outs(StringValueCStr(argv[i]));
     }
@@ -452,12 +451,10 @@ VALUE brb_ansi_color RBF_P((int argc, VALUE *argv, VALUE self))
     char buf[50] = "\033[";
     char *p = buf + strlen(buf);
 
-    const char sep[2] = ";";
-    int i;
-    for (i=0; i<argc; i++)
+    for (int i=0; i<argc; i++)
     {
         int ansi = NUM2INT(argv[i]);
-        sprintf(p, "%d%s", ansi, (i == argc - 1) ? "" : sep);
+        sprintf(p, "%d%s", ansi, (i == argc - 1) ? "" : ";");
         p += strlen(p);
     }
 
@@ -519,8 +516,7 @@ VALUE brb_pause RBF_P((VALUE self, VALUE msg))
     char buf2[200];
     sprintf(buf2, COLOR2 " [請按任意鍵繼續] ");
 
-    int i;
-    for (i = b_cols + sizeof(COLOR1) + sizeof(COLOR2) - strlen(buf) - strlen(buf2); i > 3; i--)
+    for (int i = b_cols + sizeof(COLOR1) + sizeof(COLOR2) - strlen(buf) - strlen(buf2); i > 3; i--)
     {
         outc(' ');
     }
@@ -555,8 +551,7 @@ void out_footer(
     char buf2[200];
     sprintf(buf2, COLOR2 " [%s] ", msg);
 
-    int i;
-    for (i = b_cols + sizeof(COLOR1) + sizeof(COLOR2) - strlen(buf) - strlen(buf2); i > 3; i--)
+    for (int i = b_cols + sizeof(COLOR1) + sizeof(COLOR2) - strlen(buf) - strlen(buf2); i > 3; i--)
     {
         outc(' ');
     }
@@ -751,8 +746,7 @@ void bbsruby_load_TOC RB_P((const char *cStart, const char *cEnd))
             while (*tEnd != '\n') tEnd++;
 
             // Possible TOC item, check patterns
-            int i;
-            for (i=0; i<BBSRUBY_TOC_HEADERS; i++)
+            for (int i=0; i<BBSRUBY_TOC_HEADERS; i++)
             {
                 int lenBuf = strlen(TOCs_HEADER[i]);
                 if (strncasecmp(tStart, TOCs_HEADER[i], lenBuf) == 0)
@@ -808,8 +802,7 @@ void print_exception RB_PV((void))
     if (mrb_array_p(ary))
 #endif
     {
-        int c;
-        for (c=0; c < RARRAY_LEN(ary); c++)
+        for (int c=0; c < RARRAY_LEN(ary); c++)
         {
             outs("  from: ");
             outs(StringValueCStr(RARRAY_PTR(ary)[c]));
@@ -1079,8 +1072,7 @@ void run_ruby(
     else if (d < BBSRUBY_INTERFACE_VER)
         sprintf(msgBuf, "\033[1;41m ● 程式版本過舊，可能發生不相容問題");
     outs(msgBuf);
-    int i;
-    for (i=0; i<b_cols - strlen(msgBuf) + 7; i++)
+    for (int i=0; i<b_cols - strlen(msgBuf) + 7; i++)
         outs(" ");
     outs("\033[m");
 

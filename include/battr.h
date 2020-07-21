@@ -52,9 +52,9 @@
 
 #ifdef ADMIN_C
 
-#define NUMATTRS        30
+#define NUMATTRS        COUNTOF(battrs)
 
-static const char *const battrs[NUMATTRS] =
+static const char *const battrs[] =
 {
       "不可 Zap",
       "不轉信",

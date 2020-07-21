@@ -62,7 +62,7 @@ int dns_query(const char *name, /* domain name */
 
 ip_addr dns_addr(const char *name)
 {
-    static const int qtypes[2] = {T_A, T_AAAA};
+    static const int qtypes[] = {T_A, T_AAAA};
     struct addrinfo hints = {0};
     struct addrinfo *hosts;
     ip_addr addr = {0};
@@ -533,7 +533,7 @@ int dns_openip(const ip_addr *addr, int port)
 
 int dns_open(const char *host, int port)
 {
-    static const int qtypes[2] = {T_A, T_AAAA};
+    static const int qtypes[] = {T_A, T_AAAA};
     querybuf ans;
     unsigned char *cp, *eom;
     char buf[MAXDNAME];

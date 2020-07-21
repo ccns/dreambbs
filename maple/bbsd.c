@@ -30,8 +30,8 @@
 #undef  SERVER_USAGE
 
 
-#define MAXPORTS        3
-static const int myports[MAXPORTS] = {23, 3456, 3001, /* 3002, 3003 */};
+#define MAXPORTS        COUNTOF(myports)
+static const int myports[] = {23, 3456, 3001, /* 3002, 3003 */};
 
 /* Thor.990113: exports for anonymous log */
 /* static */ char rusername[40];
