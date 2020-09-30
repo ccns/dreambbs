@@ -178,7 +178,7 @@
 
 - 系統程式資訊: 一律顯示所有模組
 - 增加 `vget()` 的 `echo` flags `VGET_STRICT_DOECHO`, `VGET_STEALTH_NOECHO`, `PASSECHO`, `VGET_BREAKABLE`, & `NUMECHO`
-- 現在使用 `LCECHO` 時，`vget()` 會將整個數入字串轉成小寫
+- 現在使用 `LCECHO` 時，`vget()` 會將整個輸入字串轉成小寫
 - 系統程式資訊: 啟用部分系統模組時，顯示其使用的外部函數庫的版本資訊
 - 移除會呼叫 shell 指令的一部分 adminutil 工具
 
@@ -242,7 +242,7 @@
 - 修正 BBS-Ruby 遇到錯誤會直接造成 segmentation fault 的問題
 - 修正執行時會導致所有的 signal handlers 被取代的問題
 - 部份解決 class `BBS` 和 variables 不會重設的問題
-- 修正 Fix `move()` and `moverel()` 因為沒有轉換到函數參數而造成結果不正確的問題
+- 修正 `move()` 和 `moverel()` 因為沒有轉換到函數參數而造成結果不正確的問題
 - 其它較小修正
 
 ### WebSocket proxy 的支援
@@ -265,7 +265,7 @@
 
 - 編譯時使用 `-ggdb3 -O0` 以方便 debug
 - 避免在非設定檔中定義 `M3_USE_*` 之類的 `macro`
-- 增加 `libdao` 函數 `f_mv()` and `f_cp()` 的測試
+- 增加 `libdao` 函數 `f_mv()` 與 `f_cp()` 的測試
 - Refactor Makefiles
 - 消除在 makefiles 中進行 `.include` 時不必要的載入
 - 支援不使用 dynamic library 載入機制來編譯及使用 BBS 系統的各個程式模組
