@@ -17,27 +17,27 @@
 #include <time.h>
 #include <sys/time.h>
 
-#if 0   /* itoc.030122.註解: 程式流程 */
-
-    0. bbsd 會把新文章的檔頭記錄在 out.bntp
-
-    1. 執行本程式以後，在 main() 處理一下參數
-
-    2. 在 main():initial_bbs() 讀出設定檔，然後進入 bbslink()
-
-    3. 在 bbslink():deal_bntp() 中首先處理 out.bntp
-         由於 out.bntp 是把所有板的新文章都放在一起，所以在這裡把這 out.bntp 檔依站台分去 *.link
-
-    4. 在 bbslink():visit_site() 中依以下步驟，一一拜訪各站
-
-         4.1. open_connect() 開啟連線
-         4.2. send_outgoing() 把本站台對應的 link 檔一筆一筆讀出來，把信送去對方站
-         4.3. readnews() 依序讀取每個想要的 newsgroup，並取對方站的信
-         4.4. close_connect() 關閉連線
-
-    [註] 即使沒有啟動 innbbsd，也可以使用 bbslink
-
-#endif
+//#if 0   /* itoc.030122.註解: 程式流程 */
+//
+//    0. bbsd 會把新文章的檔頭記錄在 out.bntp
+//
+//    1. 執行本程式以後，在 main() 處理一下參數
+//
+//    2. 在 main():initial_bbs() 讀出設定檔，然後進入 bbslink()
+//
+//    3. 在 bbslink():deal_bntp() 中首先處理 out.bntp
+//         由於 out.bntp 是把所有板的新文章都放在一起，所以在這裡把這 out.bntp 檔依站台分去 *.link
+//
+//    4. 在 bbslink():visit_site() 中依以下步驟，一一拜訪各站
+//
+//         4.1. open_connect() 開啟連線
+//         4.2. send_outgoing() 把本站台對應的 link 檔一筆一筆讀出來，把信送去對方站
+//         4.3. readnews() 依序讀取每個想要的 newsgroup，並取對方站的信
+//         4.4. close_connect() 關閉連線
+//
+//    [註] 即使沒有啟動 innbbsd，也可以使用 bbslink
+//
+//#endif
 
 
 static int SERVERfd = -1;
