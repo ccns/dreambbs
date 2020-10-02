@@ -328,11 +328,9 @@ find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
 /*       最後一個字串必須為 NULL                         */
 /*------------------------------------------------------ */
 
-/* IID.20200204: Use screen size referencing coordinate */
 int             /* 傳回小寫字母或數字 */
-popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref)
+popupmenu_ans2(const char *const desc[], const char *title, int y, int x)
 {
-    int y, x;
     int cur, old_cur, max, ch;
     char hotkey;
 
@@ -342,9 +340,6 @@ popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref
     x_roll =
 #endif
     scr_dump(&old_screen);
-
-    y = gety_ref(y_ref);
-    x = getx_ref(x_ref);
 
     grayout(0, b_lines, GRAYOUT_DARK);
 
@@ -359,24 +354,7 @@ popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref
 
     while (1)
     {
-        ch = vkey();
-        if (gety_ref(y_ref) != y || getx_ref(x_ref) != x)
-        {
-            /* Screen size changed and redraw is needed */
-            /* clear */
-            scr_restore_keep(&old_screen);
-            /* update position */
-            y = gety_ref(y_ref);
-            x = getx_ref(x_ref);
-            /* redraw */
-            grayout(0, b_lines, GRAYOUT_DARK);
-            max = draw_menu(y, x, title, desc, hotkey, &cur);
-            /* update parameters */
-            y += 2;
-            old_cur = cur;
-        }
-
-        switch (ch)
+        switch (ch = vkey())
         {
         case KEY_LEFT:
         case KEY_ESC:

@@ -356,13 +356,13 @@ int Ext_POP3_Check(const char *site, const char *account, const char *passwd);
 int pmore(const char *fpath, int promptend);
 #endif  /* #ifdef M3_USE_PMORE */
 /* popupmenu.c */
-int popupmenu_ans(const char *const desc[], const char *title, int y_ref, int x_ref);
-void popupmenu(MENU pmenu[], XO *xo, int y_ref, int x_ref);
+int popupmenu_ans(const char *const desc[], const char *title, int y, int x);
+void popupmenu(MENU pmenu[], XO *xo, int y, int x);
 void pmsg_body(const char *msg);
 int pmsg(const char *msg);
 int Every_Z_Screen(void);
 /* window.c */
-int popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref);
+int popupmenu_ans2(const char *const desc[], const char *title, int y, int x);
 void pmsg2_body(const char *msg);
 int pmsg2(const char *msg);
 /* myfavorite.c */

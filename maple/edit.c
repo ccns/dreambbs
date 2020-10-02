@@ -1427,11 +1427,11 @@ ve_filer(
 //  else
 //  {
         if (bbsmode != M_POST)
-            re = popupmenu_ans2(menu1, "存檔選項", B_LINES_REF/2U - 7, D_COLS_REF/2U + 20);
+            re = popupmenu_ans2(menu1, "存檔選項", b_lines/2U - 7, d_cols/2U + 20);
         else if (curredit & EDIT_OUTGO)
-            re = popupmenu_ans2(menu2, "存檔選項", B_LINES_REF/2U - 7, D_COLS_REF/2U + 20);
+            re = popupmenu_ans2(menu2, "存檔選項", b_lines/2U - 7, d_cols/2U + 20);
         else
-            re = popupmenu_ans2(menu3, "存檔選項", B_LINES_REF/2U - 7, D_COLS_REF/2U + 20);
+            re = popupmenu_ans2(menu3, "存檔選項", b_lines/2U - 7, d_cols/2U + 20);
 
 //  }
 
@@ -2190,7 +2190,7 @@ ve_key:
                         NULL
                     };
 
-                    switch (cc = popupmenu_ans2(menu, "控制碼選擇", B_LINES_REF/2U - 4, D_COLS_REF/2U + 20))
+                    switch (cc = popupmenu_ans2(menu, "控制碼選擇", b_lines/2U - 4, d_cols/2U + 20))
                     {
                     case 'i':
                         ve_char(KEY_ESC);
