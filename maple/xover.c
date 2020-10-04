@@ -1705,6 +1705,8 @@ xover(
             cb = xcmd;
             for (;;)
             {
+                int (*cbfunc)(XO *xo) = NULL;
+
                 pos = cb->first;
 #endif
 #if !NO_SO
@@ -1716,17 +1718,17 @@ xover(
                 if (pos == num)
   #endif
                 {
-                    int (*p)(XO *xo) = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
-                    if (p)
+                    cbfunc = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
+                    if (cbfunc)
                     {
   #ifdef HAVE_HASH_KEYFUNCLIST
-    #ifdef DL_HOTSWAP
+    #ifndef DL_HOTSWAP
                         xcmd->erase(num);
-                        cb = xcmd->insert({cmd, {p}}).first;
+                        cb = xcmd->insert({cmd, {cbfunc}}).first;
     #endif
   #else
-    #ifdef DL_HOTSWAP
-                        cb->second.func = p;
+    #ifndef DL_HOTSWAP
+                        cb->second.func = cbfunc;
                         cb->first = cmd;
     #endif
                         pos = cmd;
@@ -1749,7 +1751,9 @@ xover(
                 if (pos == cmd)
 #endif
                 {
-                    cmd = (*(cb->second.func)) (xo);
+                    if (!cbfunc)
+                        cbfunc = cb->second.func;
+                    cmd = (*cbfunc) (xo);
                     goto xover_callback_end;
                 }
                 else  /* Callback function not found */
