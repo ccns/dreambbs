@@ -319,7 +319,6 @@ vs_head(
     len_ttl = BMIN(len_ttl, spc); /* Truncate `title` if too long */
     spc -= len_ttl; /* 擺完 title 以後，中間還有 spc 格空間 */
     pad = BMAX(((b_cols - len) >> 1) - (len_ttl + 5), 0); /* pad: Spaces needed to center `mid` */
-    pad = BMAX(pad, 0);
 
 #ifdef  COLOR_HEADER
     prints("\x1b[1;%2d;37m【%.*s】%*s \x1b[33m%s\x1b[1;%2d;37m%*s \x1b[37m看板《%s》\x1b[m\n",
