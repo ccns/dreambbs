@@ -77,7 +77,7 @@ void xsort(void *a, size_t n, size_t es, int (*cmp) (const void *lhs, const void
         pn = (char *)a + (n - 1) * es;
         if (n > 40)
         {
-            d = (n / 8U) * es;
+            d = (n >> 3) * es;
             pl = med3(pl, pl + d, pl + d + d, cmp);
             pm = med3(pm - d, pm, pm + d, cmp);
             pn = med3(pn - 2 * d, pn - d, pn, cmp);

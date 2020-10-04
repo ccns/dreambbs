@@ -168,7 +168,7 @@ pad_draw(void)
     len = strlen(str);
     strcat(str, & " \x1b[30;46m"[len % 2U]);
 
-    for (i = len / 2U; i < 41; i++)
+    for (i = len >> 1; i < 41; i++)
         strcat(str, "▄");
     sprintf(str2, "\x1b[34;47m %.14s \x1b[37;46mΥ\x1b[m\n%-70.70s\n%-70.70s\n%-70.70s\n",
         Etime(&(pad.tpad)), buf[0], buf[1], buf[2]);
@@ -274,7 +274,7 @@ vs_mid(
     }
 
     spc = b_cols - len; /* spc: 中間還剩下多長的空間 */
-    pad = spc / 2U; /* pad: Spaces needed to center `mid` */
+    pad = spc >> 1; /* pad: Spaces needed to center `mid` */
 
     prints("%*s%s%*s\x1b[m\n", pad, "", mid, spc - pad, "");
 }
@@ -318,7 +318,7 @@ vs_head(
     spc = b_cols - 14 - len - strlen(currboard); /* spc: 中間還剩下多長的空間 */
     len_ttl = BMIN(len_ttl, spc); /* Truncate `title` if too long */
     spc -= len_ttl; /* 擺完 title 以後，中間還有 spc 格空間 */
-    pad = BMAX((b_cols - len)/2U - (len_ttl + 5), 0U); /* pad: Spaces needed to center `mid` */
+    pad = BMAX(((b_cols - len) >> 1) - (len_ttl + 5), 0); /* pad: Spaces needed to center `mid` */
     pad = BMAX(pad, 0);
 
 #ifdef  COLOR_HEADER

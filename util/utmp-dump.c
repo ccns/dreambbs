@@ -96,7 +96,7 @@ can_see(
     {
         for (count = up->pal_max; count > 0;)
         {
-            datum = cache[mid = count / 2U];
+            datum = cache[mid = count >> 1];
             if ((-cuser.userno) == datum)
                 return 2;
             if ((-cuser.userno) > datum)
@@ -114,7 +114,7 @@ can_see(
     {
         for (count = up->pal_max; count > 0;)
         {
-            datum = cache[mid = count / 2U];
+            datum = cache[mid = count >> 1];
             if (cuser.userno == datum)
                 return 1;
             if (cuser.userno > datum)
@@ -143,7 +143,7 @@ is_bad(
     {
         for (count = pal_count; count > 0;)
         {
-            datum = cache[mid = count / 2U];
+            datum = cache[mid = count >> 1];
             if ((-userno) == datum)
                 return true;
             if ((-userno) > datum)
@@ -231,7 +231,7 @@ is_pal(
     {
         for (count = pal_count; count > 0;)
         {
-            datum = cache[mid = count / 2U];
+            datum = cache[mid = count >> 1];
             if (userno == datum)
                 return true;
             if (userno > datum)

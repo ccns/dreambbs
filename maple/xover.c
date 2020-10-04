@@ -354,7 +354,7 @@ Tagger(
 
     for (head = 0, tail = TagNum - 1, tagp = TagList, cmp = 1; head <= tail;)
     {
-        pos = (head + tail) / 2U;
+        pos = (head + tail) >> 1;
         cmp = tagp[pos].chrono - chrono;
         if (!cmp)
         {
@@ -656,7 +656,7 @@ deny_forward(void)
         if (level & PERM_DENYMAIL)
         {
             /*
-            if ((cuser.numemail / 16U) < (cuser.numlogins + cuser.numposts))
+            if ((cuser.numemail >> 4) < (cuser.numlogins + cuser.numposts))
             {
                 cuser.userlevel = level ^ PERM_DENYMAIL;
                 return 0;
@@ -2227,7 +2227,7 @@ every_Z(void)
     if (cuser.ufo2 & UFO2_ORIGUI)
         every_Z_Orig();
     else
-        popupmenu(menu_everyz, NULL, B_LINES_REF/2U - 4, D_COLS_REF/2U + 20);
+        popupmenu(menu_everyz, NULL, (B_LINES_REF >> 1) - 4, (D_COLS_REF >> 1) + 20);
 
     memcpy(&(xz[XZ_OTHER - XO_ZONE]), &xy, sizeof(XZ));
 

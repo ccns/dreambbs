@@ -714,7 +714,7 @@ gbuf_malloc(
     {
         if (GemBufferSiz < num)
         {
-            num += (num / 2U);
+            num += (num >> 1);
             GemBufferSiz = num;
             GemBuffer = gbuf = (HDR *) realloc(gbuf, sizeof(HDR) * num);
         }

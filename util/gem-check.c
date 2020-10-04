@@ -126,7 +126,7 @@ sync_init(
 
                 if (xhead >= xsize)
                 {
-                    xsize += (xsize / 2U);
+                    xsize += (xsize >> 1);
                     xpool = (SyncData *) realloc(xpool, xsize * sizeof(SyncData));
                 }
 
@@ -280,7 +280,7 @@ sync_check(
         {
             xsync->exotic = 0;
             cc = xsync->chrono;
-            *str = radix32[cc % 32];
+            *str = radix32[cc % 32U];
             archiv32m(cc, fname);
             fname[0] = xsync->prefix;
 
@@ -350,7 +350,7 @@ check_log(
         fpw = NULL;
         if (!fstat(fileno(fpr), &st) && st.st_size > 32768)
         {
-            fseek(fpr, st.st_size / 2U, 0);
+            fseek(fpr, st.st_size >> 1, 0);
 
             while (fgets(buf, sizeof(buf), fpr))
             {

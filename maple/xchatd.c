@@ -3522,7 +3522,7 @@ main(
             char buf[32];
             static int xxx;
 
-            if ((++xxx & 8191) == 0)
+            if ((++xxx % 0x2000U) == 0)
             {
                 sprintf(buf, "%d/%d", nfds, maxfds);
                 logit("MAIN", buf);
