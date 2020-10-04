@@ -406,7 +406,7 @@ int num)
     {
         if (MailGemBufferSiz < num)
         {
-            num += (num / 2U);
+            num += (num >> 1);
             MailGemBufferSiz = num;
             MailGemBuffer = gbuf = (HDR *) realloc(gbuf, sizeof(HDR) * num);
         }
@@ -1171,7 +1171,7 @@ const char *fname)
 
                 if (xhead >= xsize)
                 {
-                    xsize += (xsize / 2U);
+                    xsize += (xsize >> 1);
                     xpool = (SyncData *) realloc(xpool, xsize * sizeof(SyncData));
                 }
 

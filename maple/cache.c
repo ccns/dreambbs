@@ -562,7 +562,7 @@ observeshm_find(
     {
         for (count = oshm->total; count > 0;)
         {
-            datum = cache[mid = count / 2U];
+            datum = cache[mid = count >> 1];
             if (userno == datum)
                 return 1;
             if (userno > datum)
@@ -761,7 +761,7 @@ out_rle(
     else
         getyx(&y, &SINKVAL(int));
 
-    move(y, d_cols / 2U /*item_length[count++]*/);
+    move(y, d_cols >> 1/*item_length[count++]*/);
     while ((cc = (unsigned char) *str))
     {
         str++;
@@ -780,7 +780,7 @@ out_rle(
                         outs("\x1b[m");
                         clrtoeol();
                     }
-                    move(++y, d_cols / 2U /*item_length[count++]*/);
+                    move(++y, d_cols >> 1/*item_length[count++]*/);
                 }
                 else
                     outc(cc);
@@ -811,7 +811,7 @@ out_rle(
                 outs("\x1b[m");
                 clrtoeol();
             }
-            move(++y, d_cols / 2U /*item_length[count++]*/);
+            move(++y, d_cols >> 1/*item_length[count++]*/);
 
         }
         else

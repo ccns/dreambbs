@@ -3930,7 +3930,7 @@ post_manage(
 
     grayout(0, b_lines, GRAYOUT_DARK);
 
-    switch (re = popupmenu_ans2(menu, "板主管理", b_lines/2U - 8, d_cols/2U + 20))
+    switch (re = popupmenu_ans2(menu, "板主管理", (B_LINES_REF >> 1) - 8, (D_COLS_REF >> 1) + 20))
     {
         case 't':
             return post_brdtitle(xo);
@@ -4682,7 +4682,7 @@ XoXpost(                        /* Thor: call from post_cb */
                 break;
             }
 
-            mid = (left + right) / 2U;
+            mid = (left + right) >> 1;
             cptr = &chain[mid];
             cmp = strcmp(title, cptr->subject);
 

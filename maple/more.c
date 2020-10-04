@@ -525,7 +525,7 @@ more(
 
             lino++;
 
-            if ((lino % 32U == 0) && ((i = lino / 32U) < MAXBLOCK))
+            if ((lino & 31 == 0) && ((i = lino >> 5) < MAXBLOCK))
                 block[i] = foff - fimage;
 
 
@@ -762,12 +762,12 @@ re_key:
                     while (more_line(buf))
                     {
                         totallino++;
-                        if ((totallino % 32U == 0) && ((i = totallino / 32U) < MAXBLOCK))
+                        if ((totallino & 31 == 0) && ((i = totallino >> 5) < MAXBLOCK))
                             block[i] = foff - fimage;
                     }
 
                     /* 先位移到上一個 block 的尾端 */
-                    i = BMIN((totallino - b_lines) / 32U, MAXBLOCK - 1);
+                    i = BMIN((totallino - b_lines) >> 5, MAXBLOCK - 1);
                     foff = fimage + block[i];
                     i = i * 32;
 
@@ -801,7 +801,7 @@ re_key:
                 */
 
                 /* 先位移到上一個 block 的尾端 */
-                i = BMIN((lino - b_lines) / 32U, MAXBLOCK - 1);
+                i = BMIN((lino - b_lines) >> 5, MAXBLOCK - 1);
                 foff = fimage + block[i];
                 i = i * 32;
 

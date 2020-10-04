@@ -354,7 +354,7 @@ Tagger(
 
     for (head = 0, tail = TagNum - 1, tagp = TagList, cmp = 1; head <= tail;)
     {
-        pos = (head + tail) / 2U;
+        pos = (head + tail) >> 1;
         cmp = tagp[pos].chrono - chrono;
         if (!cmp)
         {
@@ -656,7 +656,7 @@ deny_forward(void)
         if (level & PERM_DENYMAIL)
         {
             /*
-            if ((cuser.numemail / 16U) < (cuser.numlogins + cuser.numposts))
+            if ((cuser.numemail >> 4) < (cuser.numlogins + cuser.numposts))
             {
                 cuser.userlevel = level ^ PERM_DENYMAIL;
                 return 0;
@@ -1705,6 +1705,8 @@ xover(
             cb = xcmd;
             for (;;)
             {
+                int (*cbfunc)(XO *xo) = NULL;
+
                 pos = cb->first;
 #endif
 #if !NO_SO
@@ -1716,17 +1718,17 @@ xover(
                 if (pos == num)
   #endif
                 {
-                    int (*p)(XO *xo) = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
-                    if (p)
+                    cbfunc = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
+                    if (cbfunc)
                     {
   #ifdef HAVE_HASH_KEYFUNCLIST
-    #ifdef DL_HOTSWAP
+    #ifndef DL_HOTSWAP
                         xcmd->erase(num);
-                        cb = xcmd->insert({cmd, {p}}).first;
+                        cb = xcmd->insert({cmd, {cbfunc}}).first;
     #endif
   #else
-    #ifdef DL_HOTSWAP
-                        cb->second.func = p;
+    #ifndef DL_HOTSWAP
+                        cb->second.func = cbfunc;
                         cb->first = cmd;
     #endif
                         pos = cmd;
@@ -1749,7 +1751,9 @@ xover(
                 if (pos == cmd)
 #endif
                 {
-                    cmd = (*(cb->second.func)) (xo);
+                    if (!cbfunc)
+                        cbfunc = cb->second.func;
+                    cmd = (*cbfunc) (xo);
                     goto xover_callback_end;
                 }
                 else  /* Callback function not found */
@@ -2227,7 +2231,7 @@ every_Z(void)
     if (cuser.ufo2 & UFO2_ORIGUI)
         every_Z_Orig();
     else
-        popupmenu(menu_everyz, NULL, b_lines/2U - 4, d_cols/2U + 20);
+        popupmenu(menu_everyz, NULL, (B_LINES_REF >> 1) - 4, (D_COLS_REF >> 1) + 20);
 
     memcpy(&(xz[XZ_OTHER - XO_ZONE]), &xy, sizeof(XZ));
 

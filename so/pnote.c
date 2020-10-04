@@ -92,9 +92,9 @@ rebuild_pnote_ansi(int newflag)
         sprintf(buf, "\x1b[1;33m¡¼ùù \x1b[32m%s\x1b[37m(%s)",
                 myitem.userid, myitem.username);
         len = strlen(buf);
-        strcat(buf, & " \x1b[33m"[len % 2U]);
+        strcat(buf, & " \x1b[33m"[len & 1]);
 
-        for (i = len / 2U; i < 36; i++)
+        for (i = len >> 1; i < 36; i++)
             strcat(buf, "ùù");
         sprintf(buf2, "ùù\x1b[32m %.14s \x1b[33mùù¡¼\x1b[m\n",
                 Cdate(&(myitem.date)));
@@ -180,9 +180,9 @@ do_pnote(const char *userid)
         sprintf(buf, "\x1b[1;33m¡¼ùù \x1b[32m%s\x1b[37m(%s)",
                 myitem.userid, myitem.username);
         len = strlen(buf);
-        strcat(buf, & " \x1b[33m"[len % 2U]);
+        strcat(buf, & " \x1b[33m"[len & 1]);
 
-        for (i = len / 2U; i < 36; i++)
+        for (i = len >> 1; i < 36; i++)
             strcat(buf, "ùù");
         sprintf(buf2, "ùù\x1b[32m %.14s \x1b[33mùù¡¼\x1b[m\n",
                 Cdate(&(myitem.date)));
@@ -213,7 +213,7 @@ show_pnote(notedata *pitem)
     prints_centered("\x1b[1;36m¢z¢w¢w¢w \x1b[37m%s(%s)¦b \x1b[33m%s\x1b[37m ¯dªº¸Ü \x1b[m", pitem->userid, pitem->username,
             Cdate(&(pitem->date)));
     prints("\n\x1b[1;37m%*s  %s\n%*s  %s\n%*s  %s\n\x1b[0m",
-           d_cols/2U, "", pitem->buf[0], d_cols/2U, "", pitem->buf[1], d_cols/2U, "", pitem->buf[2]);
+           d_cols>>1, "", pitem->buf[0], d_cols>>1, "", pitem->buf[1], d_cols>>1, "", pitem->buf[2]);
     outs_centered("                 \x1b[1;36m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m\n");
     pitem->mode = 1;
 }

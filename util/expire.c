@@ -112,7 +112,7 @@ sync_init(
 
                 if (xhead >= xsize)
                 {
-                    xsize += (xsize / 2U);
+                    xsize += (xsize >> 1);
                     xpool = (SyncData *) realloc(xpool, xsize * sizeof(SyncData));
                 }
 

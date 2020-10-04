@@ -38,7 +38,7 @@ brh_alloc(
     if (size > brh_size)
     {
         /* size = (size & -BRH_PAGE) + BRH_PAGE; */
-        size += n / 16U;        /* 多預約一些記憶體 */
+        size += n >> 4;         /* 多預約一些記憶體 */
         base = (int *) realloc((char *) base, size);
 
         if (base == NULL)

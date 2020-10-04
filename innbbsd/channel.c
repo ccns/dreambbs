@@ -375,7 +375,7 @@ channelreader(
     if (len < ReadSize + 3)
     {
         len += (used + ReadSize);
-        len += (len / 8U);
+        len += (len >> 3);
 
         in->data = data = (char *) realloc(data, len);
         len -= used;

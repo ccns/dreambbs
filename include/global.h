@@ -376,8 +376,9 @@
 
 
 //#define STR_CURSOR      "¡´"
-#define STR_CURSOR      "> "
-#define STR_UNCUR       "  "
+//#define STR_UNCUR       "  "  // Needs to be as wide as `STR_CURSOR`
+#define STR_CURSOR      ">"
+#define STR_UNCUR       " "
 #define STR_SPACE       " \t\n\r"
 
 #define STR_AUTHOR1     "§@ªÌ:"

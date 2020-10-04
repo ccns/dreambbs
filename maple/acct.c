@@ -268,7 +268,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
     if (mode == M_UFILES)
         domenu(list, MENU_YPOS_REF, MENU_XPOS_REF, 0, 0, 1);
     else
-        domenu(list, (B_LINES_REF-19)/2U, 0, 20, T_COLS_REF/2U, 2);
+        domenu(list, ((B_LINES_REF-19) >> 1), 0, 20, T_COLS_REF >> 1, 2);
 
     for (MENU *mptr = list; mptr->item.func; mptr++)
         free((char *)mptr->desc);
@@ -347,7 +347,7 @@ unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
             else
                 pbits ^= j;
         }
-        move(5 + (i % 16U), (i < 16 ? 0 : (b_cols+1) / 2U));
+        move(5 + (i % 16U), (i < 16 ? 0 : (b_cols+1) >> 1));
         if (perms[i])
             prints("%c %s %s", radix32[i], msg, perms[i]);
         else
@@ -378,7 +378,7 @@ unsigned int bitset(unsigned int pbits, int count,    /* 共有幾個選項 */
             }
 
             pbits ^= j;
-            move(5 + (i % 16U), (i < 16 ? 0 : (b_cols+1) / 2U) + 2);
+            move(5 + (i % 16U), (i < 16 ? 0 : (b_cols+1) >> 1) + 2);
             outs(msg);
         }
     }
