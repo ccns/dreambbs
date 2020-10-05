@@ -47,14 +47,14 @@ m_expire(void)
     DL_HOLD;
     BRD *brd;
     char bname[16];
-    char buf[80];
 
     move(22, 0);
     outs("清除特定看板 cancel 之文章。");
     if ((brd = ask_board(bname, BRD_R_BIT, NULL)))
     {
-        sprintf(buf, BINARY_SUFFIX"expire 999 20000 20000 \"%s\" &", brd->brdname);
-        system(buf);
+        char buf[80];
+        sprintf(buf, "expire 999 20000 20000 %s", brd->brdname);
+        PROC_CMD_BG(BINARY_SUFFIX"expire", "999", "20000", "20000", brd->brdname);
         logitfile(FN_EXPIRED_LOG, cuser.userid, buf);
     }
     else
@@ -173,9 +173,7 @@ mail_to_bm(void)
         }
         else
         {
-            char command[128];
-            sprintf(command, BINARY_SUFFIX"mailtoall 2 \"%s\" \"%s\" &", fpath, title);
-            system(command);
+            PROC_CMD_BG(BINARY_SUFFIX"mailtoall", "2", fpath, title);
         }
     }
     free(bm);
@@ -274,9 +272,7 @@ mail_to_all(void)
         }
         else
         {
-            char command[128];
-            sprintf(command, BINARY_SUFFIX"mailtoall 1 \"%s\" \"%s\" &", fpath, title);
-            system(command);
+            PROC_CMD_BG(BINARY_SUFFIX"mailtoall", "1", fpath, title);
         }
     }
     return DL_RELEASE(0);
@@ -636,10 +632,8 @@ search(void)
 static void
 update_match(void)
 {
-    char fpath[128];
-    sprintf(fpath, BINARY_SUFFIX"match \"%s\" &", cuser.userid);
     if (access(FN_MATCH_NEW, 0))
-        system(fpath);
+        PROC_CMD_BG(BINARY_SUFFIX"match", cuser.userid);
     else
         vmsg("正在工作中");
 }
@@ -647,10 +641,8 @@ update_match(void)
 static void
 update_email(void)
 {
-    char fpath[128];
-    sprintf(fpath, BINARY_SUFFIX"checkemail \"%s\" &", cuser.userid);
     if (access(FN_ETC_EMAILADDR_ACL".new", 0))
-        system(fpath);
+        PROC_CMD_BG(BINARY_SUFFIX"checkemail", cuser.userid);
     else
         vmsg("正在工作中");
 }
