@@ -1289,7 +1289,7 @@ int
 m_setmboxdir(void)
 {
 
-    char upath[128], fpath1[128], fpath2[128], id[5];
+    char upath[128], fpath1[128], id[5];
 
     pmsg2("警告：本功\能只能在信箱已毀損時使用");
     pmsg2("警告：重建索引並不能保證信箱的完整");
@@ -1304,10 +1304,8 @@ m_setmboxdir(void)
 
         sprintf(fpath1, BBSHOME "/usr/%s/%s", id, cuser.userid);
 
-        sprintf(fpath2, BBSHOME "/" BINARY_SUFFIX "redir");
-
         chdir(fpath1);
-        system(fpath2);
+        PROC_CMD(BBSHOME "/" BINARY_SUFFIX "redir", NULL);
         f_mv(".DIR.@", FN_DIR);
         chdir(BBSHOME);
 

@@ -30,7 +30,7 @@ main(
     for (c = 'a'; c <= 'z'; c++)
     {
         char buf[64];
-        GCC_UNUSED char buf2[64];
+        GCC_UNUSED char buf2[64], buf3[64];
         struct dirent *de;
         DIR *dirp;
 
@@ -56,8 +56,9 @@ main(
             if ((fd = open(buf, O_RDONLY)) < 0)
             {
                 printf("brd/%s is missing, cp DIR.o\n", buf);
-                //sprintf(buf2, "cp %s/.DIR.o %s/.DIR", str, str);
-                //system(buf2);
+                //sprintf(buf2, "%s/.DIR.o", str);
+                //sprintf(buf3, "%s/.DIR", str);
+                //PROC_CMD("/bin/cp", buf2, buf3);
             }
             else
                 continue;

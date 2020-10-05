@@ -660,7 +660,7 @@ update_spammer_acl(void)
 {
     if (access(FN_ETC_SPAMMER_ACL".new", 0))
     {
-        system(BINARY_SUFFIX"clean_acl " FN_ETC_SPAMMER_ACL " " FN_ETC_SPAMMER_ACL".new");
+        PROC_CMD(BINARY_SUFFIX"clean_acl", FN_ETC_SPAMMER_ACL, FN_ETC_SPAMMER_ACL".new");
         rename(FN_ETC_SPAMMER_ACL".new", FN_ETC_SPAMMER_ACL);
     }
     else
@@ -672,7 +672,7 @@ update_untrust_acl(void)
 {
     if (access(FN_ETC_UNTRUST_ACL".new", 0))
     {
-        system(BINARY_SUFFIX"clean_acl " FN_ETC_UNTRUST_ACL " " FN_ETC_UNTRUST_ACL ".new");
+        PROC_CMD(BINARY_SUFFIX"clean_acl", FN_ETC_UNTRUST_ACL, FN_ETC_UNTRUST_ACL".new");
         rename(FN_ETC_UNTRUST_ACL".new", FN_ETC_UNTRUST_ACL);
     }
     else
@@ -879,11 +879,11 @@ const void *arg)
     switch (select)
     {
     case 1:
-        system(BINARY_SUFFIX"camera");
+        PROC_CMD(BINARY_SUFFIX"camera", NULL);
         logitfile(FN_RESET_LOG, "< 動態看板 >", NULL);
         break;
     case 2:
-        system(BINARY_SUFFIX"acpro");
+        PROC_CMD(BINARY_SUFFIX"acpro", NULL);
         board_main();
         logitfile(FN_RESET_LOG, "< 分類看板 >", NULL);
         break;
@@ -898,7 +898,7 @@ const void *arg)
         logitfile(FN_RESET_LOG, "< 異常程序 >", NULL);
         break;
     case 5:
-        system(BINARY_SUFFIX"makefw");
+        PROC_CMD(BINARY_SUFFIX"makefw", NULL);
         logitfile(FN_RESET_LOG, "< 擋信列表 >", NULL);
         break;
     case 6:
@@ -906,9 +906,9 @@ const void *arg)
         logitfile(FN_RESET_LOG, "< 主聊天室 >", NULL);
         break;
     case 7:
-        system(BINARY_SUFFIX"camera; "
-               BINARY_SUFFIX"acpro; "
-               "kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`; "
+        PROC_CMD(BINARY_SUFFIX"camera", NULL);
+        PROC_CMD(BINARY_SUFFIX"acpro", NULL);
+        system("kill -9 `ps -auxwww | grep innbbsd | awk '{print $2}'`; "
                "kill -9 `ps -auxwww | grep bbslink | awk '{print $2}'`; "
                "kill -9 `ps -auxwww | grep bbsnnrp | awk '{print $2}'`; "
                "kill -9 `ps -auxwww | grep xchatd  | awk '{print $2}'`");

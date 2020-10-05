@@ -177,6 +177,7 @@ int xwrite(int fd, const char *data, int size);
 #endif
 
 /* `proc_runl` without the need of `arg0` and trailing `NULL` */
+/* Use `PROC_CMD(path, NULL)` when no other arguments are needed */
 #define PROC_CMD(path, ...) proc_runl(path, path, __VA_ARGS__, NULL)
 
 #endif  /* DAO_H */

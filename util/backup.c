@@ -61,8 +61,8 @@ proceed(
         if (fname[0] > ' ' && fname[0] != '.')
         {
             //strcpy(str, fname);
-            sprintf(cmd, "tar zcf %s/usr/usr%02d%02d/%c/%s.tgz %s", bk_path, mon, mday, *fname, fname, fname);
-            system(cmd);
+            sprintf(cmd, "%s/usr/usr%02d%02d/%c/%s.tgz", bk_path, mon, mday, *fname, fname);
+            PROC_CMD("/bin/tar", "zcf", cmd, fname);
         }
     }
     closedir(dirp);
@@ -138,8 +138,8 @@ bk_brd(
             if ((day == 4 && ((ptr[0] >= '0' && ptr[0] <= '9') || (ptr[0] >= 'a' && ptr[0] <= 'k') || (ptr[0] >= 'A' && ptr[0] <= 'K'))) ||
                 (day == 5 && ((ptr[0] >= 'l' && ptr[0] <= 'z') || (ptr[0] >= 'L' && ptr[0] <= 'Z'))))
             {
-                sprintf(cmd, "tar zvcf %s/brd/brd%02d%02d/%s.tgz %s", bk_path, mon, mday, ptr, ptr);
-                system(cmd);
+                sprintf(cmd, "%s/brd/brd%02d%02d/%s.tgz", bk_path, mon, mday, ptr);
+                PROC_CMD("/bin/tar", "zvcf", cmd, ptr);
             }
             else
                 continue;
@@ -176,8 +176,8 @@ bk_gem(void)
 
         if (ptr[0] > ' ' && ptr[0] != '.')
         {
-            sprintf(cmd, "tar zcf %s/gem/gem%02d%02d/%s.tgz %s", bk_path, mon, mday, ptr, ptr);
-            system(cmd);
+            sprintf(cmd, "%s/gem/gem%02d%02d/%s.tgz", bk_path, mon, mday, ptr);
+            PROC_CMD("/bin/tar", "zcf", cmd, ptr);
         }
     }
     closedir(dirp);
@@ -206,31 +206,29 @@ bk_system_src(void)
 
     for (i=0; i < COUNTOF(system_folders); i++)
     {
-        sprintf(cmd, "tar zcf %s/%s.tgz %s", path, system_folders[i], system_folders[i]);
-        system(cmd);
+        sprintf(cmd, "%s/%s.tgz", path, system_folders[i]);
+        PROC_CMD("/bin/tar", "zcf", cmd, system_folders[i]);
     }
 
-    sprintf(cmd, "touch %s/gem.tar", path);
-    system(cmd);
-    sprintf(cmd, "tar rvf %s/gem.tar gem/.DIR", path);
-    system(cmd);
-    sprintf(cmd, "tar rvf %s/gem.tar gem/.GEM", path);
-    system(cmd);
+    sprintf(cmd, "%s/gem.tar", path);
+    PROC_CMD("/bin/touch", cmd);
+    PROC_CMD("/bin/tar", "rvf", cmd, "gem/.DIR");
+    PROC_CMD("/bin/tar", "rvf", cmd, "gem/.GEM");
     for (i = '0'; i <= '9'; i++)
     {
-        sprintf(cmd, "tar rvf %s/gem.tar gem/%c", path, i);
-        system(cmd);
+        char path_i[6];
+        sprintf(path_i, "gem/%c", i);
+        PROC_CMD("/bin/tar", "rvf", cmd, path_i);
     }
     for (i = 'A'; i <= 'V'; i++)
     {
-        sprintf(cmd, "tar rvf %s/gem.tar gem/%c", path, i);
-        system(cmd);
+        char path_i[6];
+        sprintf(path_i, "gem/%c", i);
+        PROC_CMD("/bin/tar", "rvf", cmd, path_i);
     }
-    sprintf(cmd, "tar rvf %s/gem.tar gem/@", path);
-    system(cmd);
+    PROC_CMD("/bin/tar", "rvf", cmd, "gem/@");
 
-    sprintf(cmd, "gzip -9 %s/gem.tar", path);
-    system(cmd);
+    PROC_CMD("/bin/gzip", "-9", cmd);
 
     log_backup("system backup complete");
 
