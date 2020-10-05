@@ -1096,47 +1096,59 @@ typedef struct PostRecommendHistory
 #endif  /* #if 0 */
 
 typedef struct {
-    int (*func)(const void *arg);
+    union {
+        int (*func)(const void *arg);
+        int (*xofunc)(XO *xo, const void *arg);
+    };
     const void *arg;
 } FuncArg;
 
 typedef struct {
+    union {
 #if NO_SO
-    int (*func)(const void *arg);
+        int (*func)(const void *arg);
+        int (*xofunc)(XO *xo, const void *arg);
 #else
-    const char *func;
+        const char *func;
+        const char *xofunc;
 #endif
+    };
     const void *arg;
 } DlFuncArg;
 
 typedef union {
     /* The field to be used is determined by the value of `umode` */
 #if NO_SO
-    int (*func) (void);  /* `M_DL(umode)` (menu & popupmenu) or `POPUP_SO` (popupmenu) */
+    int (*func) (void);  /* `M_DL(umode)`, `umode` `>= M_FUN` or `M_IDLE` */
+    int (*xofunc) (XO *xo);  /* `M_DL(umode | M_XO)` */
+    const char *title;  /* `M_DL(umode | M_MENUTITLE)` */
+    struct MENU *menu;  /* `M_DL(umode)`, `umode` `>= M_MENU` and `< M_FUN` */
 #else
     const char *func;
+    const char *xofunc;
+    const char *title;
+    const char *menu;
 #endif
 } DlMenuItem;
 
 typedef union {
     /* The field to be used is determined by the value of `umode` */
-    int (*func) (void);  /* Default (menu) or `POPUP_FUN` (popupmenu) */
-    FuncArg funcarg;  /* `umode | M_ARG` (menu) or `POPUP_FUN | POPUP_ARG` (popupmenu) */
+    int (*func) (void);  /* `>= M_FUN` or `M_IDLE` */
+    int (*xofunc) (XO *xo);  /* `umode | M_XO` */
+    FuncArg funcarg;  /* `umode | M_ARG` */
 
-    int (*xofunc) (XO *xo);  /* `POPUP_XO` (popupmenu) */
+    DlMenuItem dl;  /* `M_DL(umode)` */
+    DlFuncArg dlfuncarg;  /* `M_DL(umode) | M_ARG` */
 
-    DlMenuItem dl;  /* `M_DL(umode)` (menu & popupmenu) or `POPUP_SO` (popupmenu) */
-    DlFuncArg dlfuncarg;  /* `M_DL(umode | M_ARG)` (menu & popupmenu) or `POPUP_FUN | POPUP_ARG` (popupmenu) */
-
-    const char *title;  /* `POPUP_MENUTITLE` (popupmenu) */
-    struct MENU *menu;  /* `<= M_XMENU` (menu) or `POPUP_MENU` (popupmenu) */
+    const char *title;  /* `umode | M_MENUTITLE` */
+    struct MENU *menu;  /* `>= M_MENU` and `< M_FUN` */
 } MenuItem;
 
 typedef struct MENU
 {
     MenuItem item;
     unsigned int level;
-    int umode;
+    unsigned int umode;
     const char *desc;
 } MENU;
 

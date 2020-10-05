@@ -10,21 +10,19 @@
 #ifndef POPUP_H
 #define POPUP_H
 
-#define POPUP_QUIT              0x00
-#define POPUP_FUN               0x01
-#define POPUP_XO                0x02
-#define POPUP_MENU              0x04
-#define POPUP_MENUTITLE         0x08
+#include "modes.h"
+
+#define POPUP_QUIT              M_QUIT
+#define POPUP_FUN               M_FUN
+#define POPUP_XO                (M_FUN | M_XO)
+#define POPUP_MENU              M_MENU
+#define POPUP_MENUTITLE         (M_MENU | M_MENUTITLE)
 #if NO_SO
-  #define POPUP_SO              POPUP_FUN
+  #define POPUP_SO              M_FUN
 #else
-  #define POPUP_SO              0x10  /* For dynamic library loading */
+  #define POPUP_SO              M_DL(M_FUN) /* For dynamic library loading */
 #endif
 
-#define POPUP_DO_INSTANT        0x01000000
-
-#define POPUP_ARG               0x40000000  /* `item` is a function and a `void *` argument */
-
-#define POPUP_MASK              0x000000FF
+#define POPUP_ARG               M_ARG  /* `item` is a function and a `void *` argument */
 
 #endif  /* #ifndef POPUP_H */

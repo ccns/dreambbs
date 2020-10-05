@@ -415,9 +415,6 @@ menu_foot(void)
 #define MENU_CHANG      0x80000000
 
 
-#define PERM_MENU       PERM_PURGE
-
-
 #ifdef __cplusplus
   #define INTERNAL extern  /* Used inside an anonymous namespace */
   #define INTERNAL_INIT /* Empty */
@@ -538,25 +535,25 @@ INTERNAL_INIT MENU menu_settingadm[] =
 /* ----------------------------------------------------- */
 INTERNAL_INIT MENU menu_reset[] =
 {
-    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)1}}, PERM_BOARD, M_DL(M_XMODE | M_ARG),
+    {{.dlfuncarg = {{DL_NAME("adminutil.so", m_resetsys)}, (const void *)1}}, PERM_BOARD, M_DL(M_XMODE) | M_ARG,
     "Camera     動態看板"},
 
-    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)2}}, PERM_BOARD, M_DL(M_XMODE | M_ARG),
+    {{.dlfuncarg = {{DL_NAME("adminutil.so", m_resetsys)}, (const void *)2}}, PERM_BOARD, M_DL(M_XMODE) | M_ARG,
     "Group      分類群組"},
 
-    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)3}}, PERM_SYSOP, M_DL(M_XMODE | M_ARG),
+    {{.dlfuncarg = {{DL_NAME("adminutil.so", m_resetsys)}, (const void *)3}}, PERM_SYSOP, M_DL(M_XMODE) | M_ARG,
     "Mail       寄信收信轉信"},
 
-    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)4}}, PERM_ADMIN, M_DL(M_XMODE | M_ARG),
+    {{.dlfuncarg = {{DL_NAME("adminutil.so", m_resetsys)}, (const void *)4}}, PERM_ADMIN, M_DL(M_XMODE) | M_ARG,
     "Killbbs    清除不正常 BBS"},
 
-    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)5}}, PERM_BOARD, M_DL(M_XMODE | M_ARG),
+    {{.dlfuncarg = {{DL_NAME("adminutil.so", m_resetsys)}, (const void *)5}}, PERM_BOARD, M_DL(M_XMODE) | M_ARG,
     "Firewall   擋信列表"},
 
-    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)6}}, PERM_CHATROOM, M_DL(M_XMODE | M_ARG),
+    {{.dlfuncarg = {{DL_NAME("adminutil.so", m_resetsys)}, (const void *)6}}, PERM_CHATROOM, M_DL(M_XMODE) | M_ARG,
     "Xchatd     重開聊天室"},
 
-    {{.dlfuncarg = {DL_NAME("adminutil.so", m_resetsys), (const void *)7}}, PERM_SYSOP, M_DL(M_XMODE | M_ARG),
+    {{.dlfuncarg = {{DL_NAME("adminutil.so", m_resetsys)}, (const void *)7}}, PERM_SYSOP, M_DL(M_XMODE) | M_ARG,
     "All        全部"},
 
     {{.menu = menu_admin}, PERM_MENU + 'K', M_ADMIN,
@@ -735,25 +732,25 @@ INTERNAL_INIT MENU menu_talk[] =
 INTERNAL_INIT MENU menu_information[] =
 {
 
-    {{.funcarg = {menumore, "gem/@/@pop"}}, 0, M_READA | M_ARG,
+    {{.funcarg = {{menumore}, "gem/@/@pop"}}, 0, M_READA | M_ARG,
     "Login      上站次數排行榜"},
 
-    {{.funcarg = {menumore, "gem/@/@-act"}}, 0, M_READA | M_ARG,
+    {{.funcarg = {{menumore}, "gem/@/@-act"}}, 0, M_READA | M_ARG,
     "Today      今日上線人次統計"},
 
-    {{.funcarg = {menumore, "gem/@/@=act"}}, 0, M_READA | M_ARG,
+    {{.funcarg = {{menumore}, "gem/@/@=act"}}, 0, M_READA | M_ARG,
     "Yesterday  昨日上線人次統計"},
 
-    {{.funcarg = {menumore, "gem/@/@-day"}}, 0, M_READA | M_ARG,
+    {{.funcarg = {{menumore}, "gem/@/@-day"}}, 0, M_READA | M_ARG,
     "0Day       本日十大熱門話題"},
 
-    {{.funcarg = {menumore, "gem/@/@-week"}}, 0, M_READA | M_ARG,
+    {{.funcarg = {{menumore}, "gem/@/@-week"}}, 0, M_READA | M_ARG,
     "1Week      本週五十大熱門話題"},
 
-    {{.funcarg = {menumore, "gem/@/@-month"}}, 0, M_READA | M_ARG,
+    {{.funcarg = {{menumore}, "gem/@/@-month"}}, 0, M_READA | M_ARG,
     "2Month     本月百大熱門話題"},
 
-    {{.funcarg = {menumore, "gem/@/@-year"}}, 0, M_READA | M_ARG,
+    {{.funcarg = {{menumore}, "gem/@/@-year"}}, 0, M_READA | M_ARG,
     "3Year      本年度百大熱門話題"},
 
     {{.menu = menu_xyz}, PERM_MENU + 'L', M_MMENU,
@@ -766,7 +763,7 @@ INTERNAL_INIT MENU menu_xyz[] =
     {{.menu = menu_information}, 0, M_XMENU,
     "Tops       " NICKNAME "排行榜"},
 
-    {{.funcarg = {menumore, FN_ETC_VERSION}}, 0, M_READA | M_ARG,
+    {{.funcarg = {{menumore}, FN_ETC_VERSION}}, 0, M_READA | M_ARG,
     "Version    源碼發展資訊"},
 
     {{.dl = {DL_NAME("xyz.so", x_siteinfo)}}, 0, M_DL(M_READA),
@@ -778,7 +775,7 @@ INTERNAL_INIT MENU menu_xyz[] =
     {{welcome}, 0, M_READA,
     "Welcome    觀看歡迎畫面"},
 
-    {{.funcarg = {menumore, FN_ETC_COUNTER}}, 0, M_READA | M_ARG,
+    {{.funcarg = {{menumore}, FN_ETC_COUNTER}}, 0, M_READA | M_ARG,
     "History    本站歷史軌跡"},
 
     {{.menu = menu_main}, PERM_MENU + 'T', M_SMENU,
@@ -1287,6 +1284,7 @@ domenu_redo(
     {
         const unsigned int level = cuser.userlevel;
         unsigned int mlevel;
+        unsigned int umode;
         int max;
 
 #ifdef  MENU_VERBOSE
@@ -1296,7 +1294,8 @@ domenu_redo_reload:
         for (xyz->mtail = xyz->menu;; xyz->mtail++)
         {
             mlevel = xyz->mtail->level;
-            if (mlevel & PERM_MENU)
+            umode = xyz->mtail->umode;
+            if ((umode & M_TAIL_MASK) || (mlevel & PERM_MENU))
             {
 
 #ifdef  MENU_VERBOSE
@@ -1534,11 +1533,11 @@ domenu_exec(
                 int res;
 #if !NO_SO
                 /* Thor.990212: dynamic load, with negative umode */
-                if (mmode < 0)
+                if (mmode & M_DL(0))
                 {
                     mitem.func = (int (*)(void)) DL_GET(mitem.dl.func);
                     if (!mitem.func) break;
-                    mmode = -mmode;
+                    mmode &= ~M_DL(0);
   #ifndef DL_HOTSWAP
                     mptr->item = mitem;
                     mptr->umode = mmode;
@@ -1547,7 +1546,7 @@ domenu_exec(
 #endif
                 utmp_mode(mmode & M_MASK /* = mptr->umode*/);
 
-                if ((mmode & M_MASK) <= M_XMENU)
+                if ((mmode & M_MASK) >= M_MENU && (mmode & M_MASK) < M_FUN)
                 {
                     if (xyz->cmdcur_max == 1)
                         xyz->mtail->level = PERM_MENU + mptr->desc[0];
@@ -1557,9 +1556,19 @@ domenu_exec(
                 }
 
                 if (mmode & M_ARG)
-                    res = (*mitem.funcarg.func)(mitem.funcarg.arg);
+                {
+                    if (mmode & M_XO)
+                        res = mitem.funcarg.xofunc(xo, mitem.funcarg.arg);
+                    else
+                        res = mitem.funcarg.func(mitem.funcarg.arg);
+                }
                 else
-                    res = (*mitem.func)();
+                {
+                    if (mmode & M_XO)
+                        res = mitem.xofunc(xo);
+                    else
+                        res = mitem.func();
+                }
 
                 utmp_mode(xyz->mtail->umode);
 

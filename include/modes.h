@@ -10,6 +10,8 @@
 #ifndef MODES_H
 #define MODES_H
 
+#include "perm.h"
+
 enum
 {STRIP_ALL, ONLY_COLOR, NO_RELOAD};
 
@@ -21,15 +23,8 @@ enum
 /* user 操作狀態與模式                                   */
 /* ----------------------------------------------------- */
 
-#if NO_SO
-#define M_DL(umode)     (umode)
-#else
-#define M_DL(umode)     (-(umode))  /* For dynamic library loading */
-#endif
-
-#define M_ARG           0x40000000  /* `item` is a function and a `void *` argument */
-
-#define M_MASK          0x0000FFFF  /* Mask for valid user modes */
+#define M_MENU          M_MMENU     /* The first menu mode */
+#define M_FUN           M_PROFESS   /* The first non-menu, non-idle mode */
 
 #define M_IDLE          0
 #define M_MMENU         1       /* menu mode */
@@ -135,9 +130,32 @@ static const char *const ModeTypeTable[] =
 
 
 /* ----------------------------------------------------- */
-/* menu.c 中的模式                                       */
+/* menu.c & popupmenu.c 中的模式                         */
 /* ----------------------------------------------------- */
 
+/* For `umode` */
+
+#if NO_SO
+#define M_DL(umode)     (umode)
+#else
+#define M_DL(umode)     ((umode) | 0x80000000)  /* For dynamic library loading */
+#endif
+
+#define M_QUIT          0x01000000  /* Return to the outer menu after selection */
+#define M_XO            0x02000000  /* `item` is a xover function */
+#define M_ARG           0x04000000  /* `item` is a function and a `void *` argument */
+
+#define M_DOINSTANT     0x00010000  /* Immidiately select a menu item after command match */
+#define M_MENUTITLE     0x00020000  /* `item` is a string for the menu title */
+#define M_TAIL_MASK     0x00FF0000  /* Mask for the flags which indicate the menu list tail */
+
+#define M_MASK          0x0000FFFF  /* Mask for valid user modes */
+
+/* For `level` */
+
+#define PERM_MENU       PERM_PURGE  /* A permission flag reserved for valid users */
+
+/* Traditional return values */
 
 #define XEASY   XO_FOOT         /* Return value to un-redraw screen */
 #define QUIT    XO_QUIT         /* Return value to abort recursive functions */

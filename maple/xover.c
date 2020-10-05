@@ -2196,22 +2196,22 @@ static MENU menu_everyz[] =
     "Favorite 我的最愛"},
 #endif
 
-    {{.funcarg = {Every_Z_Xover, (const void *)XZ_GEM}}, 0, POPUP_FUN | POPUP_ARG,
+    {{.funcarg = {{Every_Z_Xover}, (const void *)XZ_GEM}}, 0, POPUP_FUN | POPUP_ARG,
     "Gem      精華區"},
 
-    {{.funcarg = {Every_Z_Xover, (const void *)XZ_ULIST}}, 0, POPUP_FUN | POPUP_ARG,
+    {{.funcarg = {{Every_Z_Xover}, (const void *)XZ_ULIST}}, 0, POPUP_FUN | POPUP_ARG,
     "Ulist    使用者名單"},
 
     {{Every_Z_Board}, 0, POPUP_FUN,
     "Post     文章列表"},
 
-    {{.funcarg = {Every_Z_Xover, (const void *)XZ_CLASS}}, 0, POPUP_FUN | POPUP_ARG,
+    {{.funcarg = {{Every_Z_Xover}, (const void *)XZ_CLASS}}, 0, POPUP_FUN | POPUP_ARG,
     "Class    看板列表"},
 
     {{Every_Z_MBox}, PERM_BASIC, POPUP_FUN,
     "Mail     信箱"},
 
-    {{.funcarg = {Every_Z_Xover, (const void *)XZ_BMW}}, 0, POPUP_FUN | POPUP_ARG,
+    {{.funcarg = {{Every_Z_Xover}, (const void *)XZ_BMW}}, 0, POPUP_FUN | POPUP_ARG,
     "Bmw      熱訊紀錄"},
 
     {{Every_Z_Screen}, 0, POPUP_FUN,
@@ -2220,7 +2220,7 @@ static MENU menu_everyz[] =
     {{NULL}, 0, POPUP_QUIT,
     "Quit     離開"},
 
-    {{.title = "快速選單"}, POPUP_DO_INSTANT + 'U', POPUP_MENUTITLE,
+    {{.title = "快速選單"}, 'U', POPUP_MENUTITLE | M_DOINSTANT,
     "快速選單切換"}
 };
 

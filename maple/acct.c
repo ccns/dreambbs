@@ -235,7 +235,6 @@ static int x_edit_file(const void *arg)
     return 0;
 }
 
-#define PERM_MENU       PERM_PURGE
 void x_file(int mode,            /* M_XFILES / M_UFILES */
             const char *const xlist[], /* description list */
             const char *const flist[]  /* filename list */
@@ -258,7 +257,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
                                        /* statue.000703: 註解: +4 去掉目錄 */
         }
         list[n] =
-            LISTLIT(MENU){{.funcarg = {x_edit_file, flist[n]}}, 0, mode | M_ARG, strdup(buf)};
+            LISTLIT(MENU){{.funcarg = {{x_edit_file}, flist[n]}}, 0, mode | M_ARG, strdup(buf)};
         n++;
     }
     sprintf(buf, "%s\n%s", (mode == M_XFILES) ? "編系統檔案" : "編個人檔案",

@@ -61,48 +61,40 @@ do_cmd(MENU *mptr, XO *xo, int y, int x)
     int mmode = mptr->umode;
 
 #if !NO_SO
-    if (mmode < 0)
+    if (mmode & M_DL(0))
     {
         mitem.func = (int (*)(void)) DL_GET(mitem.dl.func);
         if (!mitem.func)
             return 0;
-        mmode = -mmode;
+        mmode &= ~M_DL(0);
   #ifndef DL_HOTSWAP
         mptr->item = mitem;
-        mptr->umode = POPUP_FUN | (mmode &~ POPUP_MASK);
+        mptr->umode = mmode;
   #endif
     }
 #endif
 
     scr_dump(&old_screen);
 
-    switch (mmode & POPUP_MASK)
+    if ((mmode & M_MASK) >= M_MENU && (mmode & M_MASK) < M_FUN)
     {
-#if !NO_SO
-        case POPUP_SO :
-            mitem.func = (int (*)(void)) DL_GET(mitem.dl.func);
-            if (!mitem.func)
-            {
-                scr_free(&old_screen);
-                return 0;
-            }
-  #ifndef DL_HOTSWAP
-            mptr->item = mitem;
-            mptr->umode = POPUP_FUN | (mmode &~ POPUP_MASK);
-  #endif
-#endif
-            // Falls through
-            //   to call the function
-        case POPUP_FUN :
-            if (mmode & POPUP_ARG)
-                mode = (*mitem.funcarg.func)(mitem.funcarg.arg);
-            else
-                mode = (*mitem.func)();
-            break;
-        case POPUP_MENU :
-//          sprintf(t, "【%s】", mptr->desc);
-            scr_restore_free(&old_screen);
-            return do_menu(mitem.menu, xo, y, x);
+//      sprintf(t, "【%s】", mptr->desc);
+        scr_restore_free(&old_screen);
+        return do_menu(mitem.menu, xo, y, x);
+    }
+    else if (mmode & M_ARG)
+    {
+        if (mmode & M_XO)
+            mode = mitem.funcarg.xofunc(xo, mitem.funcarg.arg);
+        else
+            mode = mitem.funcarg.func(mitem.funcarg.arg);
+    }
+    else
+    {
+        if (mmode & M_XO)
+            mode = mitem.xofunc(xo);
+        else
+            mode = mitem.func();
     }
 
     scr_free(&old_screen);
@@ -338,7 +330,7 @@ do_menu(
 
     memset(table, 0, sizeof(table));
     /* verit. menu 權限檢查 */
-    for ( tmp=0, num=-1; pmenu[tmp].umode != POPUP_MENUTITLE; tmp++ )
+    for ( tmp=0, num=-1; !(pmenu[tmp].umode & M_TAIL_MASK || pmenu[tmp].level & PERM_MENU); tmp++ )
     {
         if (pmenu[tmp].level == 0 || pmenu[tmp].level & cuser.userlevel)
             table[++num] = &pmenu[tmp];
@@ -364,7 +356,7 @@ do_menu(
     /* 跳到預設選項 */
     for ( tmp=0; tmp<= num; tmp++ )
     {
-        if (tolower(table[tmp]->desc[0]) == tolower(table_title->level & POPUP_MASK))
+        if (tolower(table[tmp]->desc[0]) == tolower(table_title->level & ~PERM_MENU))
         {
             cur = old_cur = tmp;
             break;
@@ -422,7 +414,7 @@ do_menu_redraw:
                 break;
             case KEY_RIGHT:
             case '\n':
-                if (table[cur]->umode == POPUP_QUIT)
+                if (table[cur]->umode & M_QUIT)
                 {
                     scr_restore_free(&old_screen);
                     return 1;
@@ -441,9 +433,9 @@ do_menu_redraw:
                     if (tolower(c) == tolower(table[tmp]->desc[0]))
                     {
                         cur = tmp;
-                        if (table_title->level & POPUP_DO_INSTANT)
+                        if (table_title->umode & M_DOINSTANT)
                         {
-                            if (table[cur]->umode == POPUP_QUIT)
+                            if (table[cur]->umode & M_QUIT)
                             {
                                 scr_restore_free(&old_screen);
                                 return 1;
