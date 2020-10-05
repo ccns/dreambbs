@@ -89,6 +89,7 @@ int Ben_Perm(const BRD *bhdr, unsigned int ulevel);
 GCC_PURE int bstamp2bno(time_t stamp);
 void brh_load(void);
 void brh_save(void);
+bool XoPostSimple(int bno);
 bool XoPost(int bno);
 void board_outs(int chn, int num);
 void class_outs(const char *title, int num);

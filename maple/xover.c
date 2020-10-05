@@ -2266,7 +2266,7 @@ every_Z(XO *xo)
     memcpy(&(xz[XZ_OTHER - XO_ZONE]), &xy, sizeof(XZ));
 
     if (tmpbno >= 0)
-        XoPost(tmpbno);
+        XoPostSimple(tmpbno);
 
     utmp_mode(tmpmode);
 

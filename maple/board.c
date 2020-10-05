@@ -763,7 +763,7 @@ brd_usies_BMlog(void)
 
 /* 081206.cache: ¦n¤ÍªO­×¥¿ */
 bool
-XoPost(
+XoPostSimple(
     int bno)
 {
     XO *xo;
@@ -817,12 +817,8 @@ XoPost(
         bbstate |= STAT_MODERATED;
 #endif
 
-    if (/*!(bits & BRD_V_BIT) && */(cuser.ufo2 & UFO2_BNOTE))
-    {
+    if (!(bits & BRD_V_BIT))
         *str_bit = bits | BRD_V_BIT;
-        brd_fpath(fpath, currboard, FN_NOTE);
-        more(fpath, NULL);
-    }
 
     brd_fpath(fpath, currboard, fn_dir);
     xz[XZ_POST - XO_ZONE].xo = xo = xo_get(fpath);
@@ -850,6 +846,20 @@ XoPost(
         brd->n_reads++;
 #endif
     return true;
+}
+
+bool
+XoPost(
+    int bno)
+{
+    const bool res = XoPostSimple(bno);
+    if (/*!(bits & BRD_V_BIT) && */(cuser.ufo2 & UFO2_BNOTE))
+    {
+        char fpath[64];
+        brd_fpath(fpath, currboard, FN_NOTE);
+        more(fpath, NULL);
+    }
+    return res;
 }
 
 
