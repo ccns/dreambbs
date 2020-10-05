@@ -169,6 +169,8 @@ char *Now(void);
 /* proc.c */
 int proc_runv(const char *path, const char *argv[]);
 GCC_CHECK_SENTINEL(0) int proc_runl(const char *path, const char *arg0, ...);
+int proc_runv_bg(const char *path, const char *argv[]);
+GCC_CHECK_SENTINEL(0) int proc_runl_bg(const char *path, const char *arg0, ...);
 /* xwrite.c */
 int xwrite(int fd, const char *data, int size);
 
@@ -179,5 +181,9 @@ int xwrite(int fd, const char *data, int size);
 /* `proc_runl` without the need of `arg0` and trailing `NULL` */
 /* Use `PROC_CMD(path, NULL)` when no other arguments are needed */
 #define PROC_CMD(path, ...) proc_runl(path, path, __VA_ARGS__, NULL)
+
+/* `proc_runl_bg` without the need of `arg0` and trailing `NULL` */
+/* Use `PROC_CMD_BG(path, NULL)` when no other arguments are needed */
+#define PROC_CMD_BG(path, ...) proc_runl_bg(path, path, __VA_ARGS__, NULL)
 
 #endif  /* DAO_H */
