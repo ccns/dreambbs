@@ -2049,16 +2049,29 @@ post_lock(
 
     if (!strcmp(hdr->owner, cuser.userid) || HAS_PERM(PERM_SYSOP | PERM_BOARD) || (bbstate & STAT_BOARD))
     {
+        int redraw_flags = 0;
+
         if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE))
             return XO_NONE;
 
         /* cache.100529: prevent user unlock then delete */
-        if ((hdr->xmode & POST_LOCK) && !(bbstate & STAT_BOARD) && !HAS_PERM(PERM_ADMIN))
-            return XO_NONE;
+        if (!(bbstate & STAT_BOARD) && !HAS_PERM(PERM_ADMIN))
+        {
+            if (hdr->xmode & POST_LOCK)
+                return XO_NONE;
+
+            /* IID.2020-10-07: Prevent the user from accidentally locking their post */
+            if (vans("注意：非板主鎖文，不能自行解鎖。確定要鎖文嗎？[y/N] ") != 'y')
+                return XO_FOOT;
+            redraw_flags |= XR_FOOT;
+        }
 
         hdr->xmode ^= POST_LOCK;
         rec_put(xo->dir, hdr, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid);
-        return XO_CUR;
+
+        if (redraw_flags)
+            vmsg("已鎖文。如欲解鎖，請洽板主。");
+        return redraw_flags | XO_CUR;
     }
     return XO_NONE;
 }
