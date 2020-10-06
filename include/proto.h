@@ -75,6 +75,7 @@ void brd_edit(int bno);
 int a_editbrd(void);
 int u_verify(void);
 /* bbsd.c */
+void blog_pid(const char *mode, const char *msg, pid_t pid);
 void blog(const char *mode, const char *msg);
 void u_exit(const char *mode);
 GCC_NORETURN void abort_bbs(void);

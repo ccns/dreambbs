@@ -52,9 +52,10 @@ int treat=0;
 /* ----------------------------------------------------- */
 
 void
-blog(
+blog_pid(
     const char *mode,
-    const char *msg
+    const char *msg,
+    pid_t pid
 )
 {
     char buf[512], data[256];
@@ -64,11 +65,20 @@ blog(
     if (!msg)
     {
         msg = data;
-        sprintf(data, "Stay: %d (%d)", (int)(now - ap_start) / 60, currpid);
+        sprintf(data, "Stay: %d (%d)", (int)(now - ap_start) / 60, pid);
     }
 
     sprintf(buf, "%s %-5.5s %-13s%s\n", Etime(&now), mode, cuser.userid, msg);
     f_cat(FN_USIES, buf);
+}
+
+void
+blog(
+    const char *mode,
+    const char *msg
+)
+{
+    blog_pid(mode, msg, currpid);
 }
 
 
@@ -718,7 +728,7 @@ tn_login(void)
                     if (vans("偵測到多重登入，您想刪除其他重複的 login (Y/n)嗎？[Y] ") != 'n')
                     {
                         kill(pid, SIGTERM);
-                        blog("MULTI", cuser.username);
+                        blog_pid("MULTI", cuser.username, pid);
                         break;
                     }
 
