@@ -372,7 +372,7 @@ post_article(void)
         strcpy(hdr.nick, myacct.username);
     mytitle[TTLEN] = '\0';
     strcpy(hdr.title, mytitle);
-    rec_append(fpath, &hdr, sizeof(hdr));
+    rec_bot(fpath, &hdr, sizeof(hdr));
 
     if ((mymode == NET_SAVE) && (fp = fopen("innd/out.bntp", "a")))
     {
