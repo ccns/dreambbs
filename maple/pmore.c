@@ -810,6 +810,7 @@ MFFPROTO int mf_movieMaskedInput(int c);
 
 // some magic value that your vkey() will never return
 #define MOVIE_KEY_ANY (0x4d464b41)
+#define MOVIE_KEY_NONE (0x414b464d)
 
 // some environments already converted 0x7F to 0x08,
 // but we'd still do it again here for compatibility.
@@ -3367,7 +3368,7 @@ mf_movieWaitKey(struct timeval *ptv, int dorefresh)
 {
     int sel = 0;
     fd_set readfds;
-    int c = 0;
+    int c = MOVIE_KEY_NONE;
 
     if (dorefresh)
         refresh();
@@ -3415,7 +3416,7 @@ mf_movieWaitKey(struct timeval *ptv, int dorefresh)
         syncnow();
 #endif // PMORE_HAVE_SYNCNOW
 
-    return (sel == 0) ? 0 : 1;
+    return (sel == 0) ? MOVIE_KEY_NONE : 1;
 }
 
 // type : 1 = option selection, 0 = normal
@@ -3571,7 +3572,7 @@ mf_movieNamedKey(int c)
         default:
             break;
     }
-    return 0;
+    return MOVIE_KEY_NONE;
 }
 
 MFFPROTO int
@@ -3891,7 +3892,8 @@ mf_movieOptionHandler(const unsigned char *opt, const unsigned char *end)
     float optclk = -1.0f; // < 0 means infinite wait
     struct timeval tv;
 
-    int isel = 0, c = 0, maxsel = 0, selected = 0;
+    int c = MOVIE_KEY_NONE;
+    int isel = 0, maxsel = 0, selected = 0;
     int newOpt = 1;
     int hideOpts = 0;
     int promptlen = 0;
@@ -4002,7 +4004,7 @@ mf_movieOptionHandler(const unsigned char *opt, const unsigned char *end)
 
                     if (*pkey == '@' &&
                             ++ pkey < end &&
-                            (nk = mf_movieNamedKey(*pkey)))
+                            (nk = mf_movieNamedKey(*pkey)) != MOVIE_KEY_NONE)
                     {
                         key = nk;
                     } else {
@@ -4037,7 +4039,7 @@ mf_movieOptionHandler(const unsigned char *opt, const unsigned char *end)
 
                 // handle selection
                 if (c == key ||
-                        (key == MOVIE_KEY_ANY && c != 0))
+                        (key == MOVIE_KEY_ANY && c != MOVIE_KEY_NONE))
                 {
                     // hotkey pressed
                     selected = 1;
@@ -4079,7 +4081,7 @@ mf_movieOptionHandler(const unsigned char *opt, const unsigned char *end)
             mfmovie.optkeys = tmpopt;
 
             // if timeout, drop.
-            if (!c)
+            if (c == MOVIE_KEY_NONE)
                 return 0;
         } else {
             // infinite wait
@@ -4192,14 +4194,14 @@ mf_movieSyncFrame(void)
         if (dv.tv_sec < 0)
             return 1;
 
-        return !mf_movieWaitKey(&dv, 0);
+        return mf_movieWaitKey(&dv, 0) == MOVIE_KEY_NONE;
     } else {
         /* synchronize each frame clock model */
         /* because Linux will change the timeval passed to select,
          * let's use a temp value here.
          */
         struct timeval dv = mfmovie.frameclk;
-        return !mf_movieWaitKey(&dv, 0);
+        return mf_movieWaitKey(&dv, 0) == MOVIE_KEY_NONE;
     }
 }
 
@@ -4444,7 +4446,7 @@ mf_movieNextFrame(void)
 
                 c = mf_movieWaitKey(&tv, 0);
 
-                if (c)
+                if (c != MOVIE_KEY_NONE)
                 {
                     STOP_MOVIE();
                     return 0;
