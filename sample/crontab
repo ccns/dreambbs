@@ -1,7 +1,4 @@
-#!/bin/sh
 # minute hour monthday month weekday command
-
-BBSHOME=/home/bbs
 
 # 系統報時
 #5 8-17 * * 1-6 exec bin/classtable_alert > /dev/null 2>&1
@@ -34,7 +31,8 @@ BBSHOME=/home/bbs
 #50 */2 * * * bin/makefw > /dev/null 2>&1
 
 # 每星期三增加點歌次數
-40 4 * * 3 exec bin/addsong 4 1 > /dev/null 2>&1 #usage: bin/addsong [權限編號(perm)] [增加次數(number)]
+40 4 * * 3 exec bin/addsong 4 1 > /dev/null 2>&1
+#usage: bin/addsong [權限編號(perm)] [增加次數(number)]
 
 # 每天清理個人信箱, 風之塔改成 quota 制
 #10 5 * * * exec bin/bquota > /dev/null 2>&1
