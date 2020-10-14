@@ -118,3 +118,11 @@ sample/bbsd_unixsocket.service
 sample/crontab
 sample/startbbs.service
 sample/xchatd.service
+
+# Processed scripts with real values
+scripts/checkACCT.sh
+scripts/checkbrdDIR.sh
+scripts/checkusrDIR.sh
+scripts/clean.sh
+scripts/start.sh
+scripts/top.sh

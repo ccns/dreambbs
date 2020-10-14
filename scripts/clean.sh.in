@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-BBSHOME=${BBSHOME:-"/home/bbs"}
+BBSHOME=${BBSHOME:-"@BBSHOME@"}
 declare -i a
 #declare -i b
 #declare -i c

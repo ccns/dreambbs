@@ -26,6 +26,7 @@ all: verinfo
 	@(cd util; $(MAKE) all)
 	@(cd innbbsd; $(MAKE) all)
 	@(cd sample; $(MAKE) all)
+	@(cd scripts; $(MAKE) all)
 .if !$(NO_SO)
 	@(cd so; $(MAKE) all)
 .endif
@@ -37,6 +38,7 @@ njob: verinfo
 	@(cd util; $(MAKE) -j$(NPROC) all)
 	@(cd innbbsd; $(MAKE) -j$(NPROC) all)
 	@(cd sample; $(MAKE) -j$(NPROC) all)
+	@(cd scripts; $(MAKE) -j$(NPROC) all)
 .if !$(NO_SO)
 	@(cd so; $(MAKE) -j$(NPROC) all)
 .endif
@@ -88,4 +90,5 @@ clean:
 	@(cd util; $(MAKE) clean)
 	@(cd innbbsd; $(MAKE) clean)
 	@(cd sample; $(MAKE) clean)
+	@(cd scripts; $(MAKE) clean)
 	@(cd so; $(MAKE) clean)
