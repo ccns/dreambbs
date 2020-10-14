@@ -285,6 +285,7 @@ add_subdirectory(util)
 add_subdirectory(innbbsd)
 add_subdirectory(so)
 add_subdirectory(scripts)
+add_subdirectory(sample)
 
 enable_testing()
 add_subdirectory(test)

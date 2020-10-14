@@ -111,3 +111,10 @@ util/tranBRD
 util/transacct
 util/userno
 util/utmp-dump
+
+# Processed sample files with real values
+sample/bbsd.service
+sample/bbsd_unixsocket.service
+sample/crontab
+sample/startbbs.service
+sample/xchatd.service
