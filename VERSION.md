@@ -122,6 +122,7 @@ This branch has new features or significant changes which are being tested.
 
 Former versioning scheme: `vX.0-CURRENT`
   - The corresponding development branch for version `vX.Y`
+
 Version scheme after `v3.0`:
   1. The name of the latest release version for its development branch
   2. Or `X.Y-CURRENT for the development branch of upcoming release versions
