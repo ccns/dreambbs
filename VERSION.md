@@ -1,7 +1,5 @@
 # To-Do and Version Plan
 
-**Why do we do this? For fun!**
-
 ## Legacy Versioning Scheme - `DreamBBS X.Y.Z`; abbreviated as `X.Y.Z` 
 The versioning scheme originated from MapleBBS.
 
@@ -12,13 +10,15 @@ Note the presence of `v`.
 
 Each new version has a corresponding legacy version number as well.
 
+The versioning scheme is deprecated. It will become the same as legacy versioning scheme after `DreamBBS 4.0.0`/`DreamBBS v4.0.0`.
+
 ## Branches of Development
-The new development workflow has led to the two main branches seen today: `testing` and `current`.
+The new development workflow has led to the two main branches seen today: `master` and `develop`.
 
-## `testing` Branch (Release Branch)
-This branch emphasize more on the stability, the easiness to install, and the ability to deploy on different platform and containers, than the `current` branch.
+## `master` Branch (Release Branch; formerly `testing`)
+This branch emphasize more on the stability, the easiness to install, and the ability to deploy on different platform and containers, than the `develop` branch.
 
-Versioning Scheme: `vX.Y.Z`
+Versioning Scheme: `vX.Y.Z` or just `X.Y.Z` after `4.0.0`
   - `X`: Major version; indicates significant changes
   - `Y`: Minor version; indicates introduction of new features
   - `Z`: Patch version; indicates bug fixes or security improvement; based on the previous version
@@ -91,10 +91,12 @@ Planned alternative names:
     - Features:
       - Support building with CMake
 
-### `v3.X`: Aka. `2020 vX`; `Four Symbol` series (`3.20.X`) ( Upcoming Release Branch )
+### `2020 vX` (`v3.X`); `Four Symbol` series (`3.20.X`) ( Upcoming Release Branch )
 The full name of this major version is `DreamBBS-2020 vX`.
 
 This will be the last major version whose version number is different from the legacy version number.
+
+Due to the shortage of development resources, from this major version and on, only the latest release branch is officially maintained.
 
 - `2020 v0` (`v3.0`)
 - `2020 v1` (`v3.1`)
@@ -115,18 +117,21 @@ Features in plan:
   - [ ] Merge popup menu systems into main menu system
   - [ ] Merge main menu system into xover list system
 
-## `current` Branch (`master`/Development Branch)
+## `develop` Branch (formerly `current`/`master` branch)
 This branch has new features or significant changes which are being tested.
 
-Versioning scheme: `vX.0-CURRENT`
+Former versioning scheme: `vX.0-CURRENT`
   - The corresponding development branch for version `vX.Y`
+Version scheme after `v3.0`:
+  1. The name of the latest release version for its development branch
+  2. Or `X.Y-CURRENT for the development branch of upcoming release versions
+    - Will be changed into the real version name upon official releasing
 
-Whenever a significant bug fix or change is made in `current`, the related commits will be ported back to released `testing` branches.
+Whenever a significant bug fix or change is made in `develop`, the related commits will be merged into `master` branch for the latest release version soon.
 
-- `v1.0-CURRENT`
-- `v2.0-CURRENT`
-- `v3.0-CURRENT` ( **We are HERE** )
-- `vX.0-CURRENT`
+- [x] `v1.0-CURRENT`
+- [x] `v2.0-CURRENT`
+- [x] `v3.0-CURRENT` ( **We are HERE** )
 
 ## TODO
 - Features from PttBBS to port and test:
@@ -136,7 +141,7 @@ Whenever a significant bug fix or change is made in `current`, the related commi
     - [ ] vtuikit (2-BSD)
     - [ ] nios (2-BSD)
     - [ ] logind (2-BSD)
-    - [ ] WSProxy (MIT; **Testing**)
+    - [x] WSProxy (MIT)
     - Note: (Maple3) visio = (Pirate/Ptt) term + screen/pfterm + io/(io + nios + vtkbd + vtuikit)
 - Features from other Maple3 branches to port and test
     - [x] Screen resizing
