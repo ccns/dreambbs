@@ -174,15 +174,12 @@ cleanrecommend_delete(
 
     if (vans(msg_del_ny) == 'y')
     {
-        const RMSG *rmsg;
-        int pos;
-
-        pos = xo->pos;
-        rmsg = (const RMSG *) xo_pool_base + pos;
+        const RMSG *rmsg = (const RMSG *) xo_pool_base + xo->pos;
+        const RMSG rmsg_orig = *rmsg;
 
         if (!rec_del(xo->dir, sizeof(RMSG), xo->pos, NULL, NULL))
         {
-            cleanrecommend_log(rmsg, 0);
+            cleanrecommend_log(&rmsg_orig, 0);
             return XO_LOAD;
         }
     }

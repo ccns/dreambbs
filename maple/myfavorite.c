@@ -338,9 +338,8 @@ myfavorite_delete(
 
     if (vans(msg_del_ny) == 'y')
     {
-        const HDR *hdr;
-
-        hdr = (const HDR *) xo_pool_base + xo->pos;
+        const HDR *hdr = (const HDR *) xo_pool_base + xo->pos;
+        const HDR hdr_orig = *hdr;
 
         if (hdr->xmode & GEM_FOLDER)
         {
@@ -354,7 +353,7 @@ myfavorite_delete(
 
         if (!rec_del(currdir, sizeof(HDR), xo->pos, NULL, NULL))
         {
-            logitfile(FN_FAVORITE_LOG, "< DEL >", hdr->xname);
+            logitfile(FN_FAVORITE_LOG, "< DEL >", hdr_orig.xname);
             return XO_LOAD;
         }
     }
@@ -382,11 +381,12 @@ myfavorite_mov(
 
     if (newOrder != pos)
     {
+        const HDR ghdr_orig = *ghdr;
         if (!rec_del(currdir, sizeof(HDR), pos, NULL, NULL))
         {
-            rec_ins(currdir, ghdr, sizeof(HDR), newOrder, 1);
+            rec_ins(currdir, &ghdr_orig, sizeof(HDR), newOrder, 1);
             xo->pos = newOrder;
-            logitfile(FN_FAVORITE_LOG, "< MOV >", ghdr->xname);
+            logitfile(FN_FAVORITE_LOG, "< MOV >", ghdr_orig.xname);
             return XO_LOAD;
         }
     }

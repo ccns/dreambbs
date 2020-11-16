@@ -219,10 +219,11 @@ XO *xo)
     newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);
     if (newOrder != pos)
     {
+        const ChatAction ghdr_orig = *ghdr;
         const char *dir = xo->dir;
         if (!rec_del(dir, sizeof(ChatAction), pos, NULL, NULL))
         {
-            rec_ins(dir, ghdr, sizeof(ChatAction), newOrder, 1);
+            rec_ins(dir, &ghdr_orig, sizeof(ChatAction), newOrder, 1);
             xo->pos = newOrder;
             return XO_LOAD;
         }

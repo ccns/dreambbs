@@ -593,10 +593,13 @@ personal_deny(
 
     mail2usr(personal, 1);
 
-    if (!rec_del(xo->dir, sizeof(PB), xo->pos, NULL, NULL))
     {
-        personal_log(personal, 2);
-        return XO_LOAD;
+        const PB personal_orig = *personal;
+        if (!rec_del(xo->dir, sizeof(PB), xo->pos, NULL, NULL))
+        {
+            personal_log(&personal_orig, 2);
+            return XO_LOAD;
+        }
     }
 
 

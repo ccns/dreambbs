@@ -659,11 +659,12 @@ XO *xo)
 
     if (newOrder != pos)
     {
+        const HDR ghdr_orig = *ghdr;
 
         dir = xo->dir;
         if (!rec_del(dir, sizeof(HDR), pos, NULL, NULL))
         {
-            rec_ins(dir, ghdr, sizeof(HDR), newOrder, 1);
+            rec_ins(dir, &ghdr_orig, sizeof(HDR), newOrder, 1);
             xo->pos = newOrder;
             return XO_LOAD;
         }

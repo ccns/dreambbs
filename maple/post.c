@@ -1963,11 +1963,12 @@ post_clean_delete(
 
     if (vans("是否直接砍除文章？[y/N]") == 'y')
     {
+        const HDR hdr_orig = *hdr;
         currchrono = hdr->chrono;
 
         if (!rec_del(xo->dir, sizeof(HDR), xo->key == XZ_POST ? pos : hdr->xid, cmpchrono, 0))
         {
-            move_post(hdr, by_BM ? BRD_DELETED : BRD_JUNK, by_BM);
+            move_post(&hdr_orig, by_BM ? BRD_DELETED : BRD_JUNK, by_BM);
             return XO_LOAD;
         }
     }

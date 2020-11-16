@@ -310,7 +310,7 @@ static void
 gem_log(
     char *folder,
     const char *action,
-    HDR *hdr)
+    const HDR *hdr)
 {
     char fpath[80], buf[256];
 
@@ -860,9 +860,10 @@ gem_delete(
     }
     else
     {
+        const HDR ghdr_orig = *ghdr;
         currchrono = ghdr->chrono;
         rec_del(dir, sizeof(HDR), xo->pos, cmpchrono, NULL);
-        gem_log(dir, "§R°£", ghdr);
+        gem_log(dir, "§R°£", &ghdr_orig);
     }
 
     /* return XO_LOAD; */
@@ -1009,10 +1010,11 @@ gem_move(
         if (!rec_mov(xo->dir, sizeof(HDR), pos, newOrder))
             return XO_LOAD;
 #else
+        const HDR ghdr_orig = *ghdr;
         dir = xo->dir;
         if (!rec_del(dir, sizeof(HDR), pos, NULL, NULL))
         {
-            rec_ins(dir, ghdr, sizeof(HDR), newOrder, 1);
+            rec_ins(dir, &ghdr_orig, sizeof(HDR), newOrder, 1);
             xo->pos = newOrder;
             return XO_LOAD;
         }

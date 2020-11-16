@@ -2293,9 +2293,10 @@ mbox_delete(
             return XO_LOAD;
         }
 #else
+        const HDR hdr_orig = *hdr;
         if (!rec_del(dir, sizeof(HDR), pos, cmpchrono, NULL))
         {
-            hdr_fpath(fpath, dir, hdr);
+            hdr_fpath(fpath, dir, &hdr_orig);
             unlink(fpath);
             return XO_LOAD;
         }
