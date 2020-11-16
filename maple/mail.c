@@ -1964,8 +1964,8 @@ typedef struct {
 static const HdrStyle hdr_style[HDRMODE_COUNT] = {
     {"¡º", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[36m"}, {"", "\x1b[m"}},
     {"¡»", {"\x1b[1;32m", "\x1b[32m"}, {"\x1b[1;33m", "\x1b[33m"}, {"\x1b[m", "\x1b[m"}},
-    {0},
-    {0},
+    {"Âà", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[36m"}, {"", "\x1b[m"}},
+    {"Âà", {"\x1b[1;36m", "\x1b[36m"}, {"\x1b[1;33m", "\x1b[33m"}, {"\x1b[m", "\x1b[m"}},
     {"Re", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[36m"}, {"", "\x1b[m"}},
     {"=>", {"\x1b[1;33m", "\x1b[33m"}, {"\x1b[1;37m", "\x1b[37m"}, {"\x1b[m", "\x1b[m"}},
     {"Âê", {"\x1b[1;35m", "\x1b[0;35m"}, {"\x1b[1;31m", "\x1b[0;31m"}, {"\x1b[m", "\x1b[m"}},
@@ -2051,9 +2051,9 @@ hdr_outs(               /* print HDR's subject */
     }
     else
     {
-        const char *const mark = hdr->title;
-        title = str_ttl(hdr->title);
-        style = &hdr_style[(title == mark) ? 0 : 2];
+        enum HdrMode mode;
+        title = str_ttl_hdrmode(hdr->title, &mode);
+        style = &hdr_style[mode];
         if (!strcmp(currtitle, title))
             ++style;
     }
