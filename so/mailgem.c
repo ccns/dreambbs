@@ -897,7 +897,7 @@ XO *xo)
         {
             if (!(hdr->xmode & GEM_FOLDER))
             {
-                sprintf(xtitle, "[轉錄]%.66s", hdr->title);
+                sprintf(xtitle, STR_FORWARD " %.66s", hdr->title);
                 if (!vget(2, 0, "標題:", xtitle, TTLEN + 1, GCARRY))
                     return XO_HEAD;
             }
@@ -920,7 +920,7 @@ XO *xo)
             {
                 EnumTagHdr(hdr, dir, locus++);
 
-                sprintf(xtitle, "[轉錄]%.66s", hdr->title);
+                sprintf(xtitle, STR_FORWARD " %.66s", hdr->title);
             }
             if (!(hdr->xmode & GEM_FOLDER))
             {

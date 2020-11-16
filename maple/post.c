@@ -1106,7 +1106,7 @@ post_cross(
         if (!tag)   /* lkchu.981201: 整批轉錄就不要一一詢問 */
         {
             if (method)
-                sprintf(xtitle, "[轉錄]%.66s", hdr->title);
+                sprintf(xtitle, STR_FORWARD " %.66s", hdr->title);
             else
                 strcpy(xtitle, hdr->title);
 
@@ -1130,7 +1130,7 @@ post_cross(
                 EnumTagHdr(hdr, dir, locus++);
 
                 if (method)
-                    sprintf(xtitle, "[轉錄]%.66s", hdr->title);
+                    sprintf(xtitle, STR_FORWARD " %.66s", hdr->title);
                 else
                     strcpy(xtitle, hdr->title);
             }
