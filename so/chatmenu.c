@@ -170,10 +170,9 @@ chat_change(
 XO *xo)
 {
     ChatAction *chat, mate;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     chat = (ChatAction *) xo_pool_base + pos;
 
     mate = *chat;
@@ -208,10 +207,9 @@ XO *xo)
 {
     const ChatAction *ghdr;
     char buf[80];
-    int pos, newOrder, cur;
+    int pos, newOrder;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     ghdr = (const ChatAction *) xo_pool_base + pos;
 
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);

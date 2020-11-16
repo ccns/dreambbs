@@ -2495,10 +2495,9 @@ mbox_mark(
     XO *xo)
 {
     HDR *mhdr;
-    int cur, pos;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     mhdr = (HDR *) xo_pool_base + pos;
 
     mhdr->xmode ^= MAIL_MARKED;
@@ -2512,10 +2511,9 @@ mbox_tag(
     XO *xo)
 {
     const HDR *hdr;
-    int tag, pos, cur;
+    int tag, pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     hdr = (const HDR *) xo_pool_base + pos;
 
     if ((tag = Tagger(hdr->chrono, pos, TAG_TOGGLE)))

@@ -232,10 +232,9 @@ observe_change(
 XO *xo)
 {
     OBSERVE *observe, mate;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     observe = (OBSERVE *) xo_pool_base + pos;
 
     //mate = *observe;

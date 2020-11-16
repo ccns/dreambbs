@@ -208,10 +208,9 @@ static int banmail_delete(XO * xo)
 static int banmail_change(XO * xo)
 {
     BANMAIL *banmail, mate;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     banmail = (BANMAIL *) xo_pool_base + pos;
 
     mate = *banmail;

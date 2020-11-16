@@ -841,10 +841,9 @@ mailgem_tag(
 XO *xo)
 {
     const HDR *ghdr;
-    int pos, tag, cur;
+    int pos, tag;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     ghdr = (const HDR *) xo_pool_base + pos;
 
     if ((tag = Tagger(ghdr->chrono, pos, TAG_TOGGLE)))

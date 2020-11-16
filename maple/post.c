@@ -1728,10 +1728,9 @@ post_tag(
     XO *xo)
 {
     const HDR *hdr;
-    int tag, pos, cur;
+    int tag, pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     hdr = (const HDR *) xo_pool_base + pos;
 
 #ifdef XZ_XPOST
@@ -1761,10 +1760,9 @@ post_mark(
     if (bbstate & STAT_BOARD)
     {
         HDR *hdr;
-        int pos, cur;
+        int pos;
 
         pos = xo->pos;
-        cur = pos - xo->top;
         hdr = (HDR *) xo_pool_base + pos;
 
         if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE))
@@ -1806,7 +1804,7 @@ lazy_delete(
 post_delete(
     XO *xo)
 {
-    int pos, cur;
+    int pos;
     bool by_BM;
     HDR *fhdr, phdr;
     char buf[80], fpath[80];
@@ -1826,7 +1824,6 @@ post_delete(
     }
 
     pos = xo->pos;
-    cur = pos - xo->top;
     fhdr = (HDR *) xo_pool_base + pos;
 
     if (fhdr->xmode & (POST_MARKED | POST_CANCEL | POST_DELETE | POST_MDELETE))
@@ -1950,12 +1947,11 @@ static int
 post_clean_delete(
     XO *xo)
 {
-    int pos, cur;
+    int pos;
     bool by_BM;
     const HDR *hdr;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     hdr = (const HDR *) xo_pool_base + pos;
 
     by_BM = strcmp(hdr->owner, cuser.userid);
@@ -2024,10 +2020,9 @@ post_complete(
     if (HAS_PERM(PERM_SYSOP|PERM_BOARD))
     {
         HDR *hdr;
-        int pos, cur;
+        int pos;
 
         pos = xo->pos;
-        cur = pos - xo->top;
         hdr = (HDR *) xo_pool_base + pos;
 
         hdr->xmode ^= POST_COMPLETE;
@@ -2042,13 +2037,12 @@ post_lock(
     XO *xo)
 {
     HDR *hdr;
-    int pos, cur;
+    int pos;
 
     if (!cuser.userlevel) /* itoc.020114: guest 不能對其他 guest 的文章加密 */
         return XO_NONE;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     hdr = (HDR *) xo_pool_base + pos;
 
     if (!strcmp(hdr->owner, cuser.userid) || HAS_PERM(PERM_SYSOP | PERM_BOARD) || (bbstate & STAT_BOARD))
@@ -2223,7 +2217,7 @@ post_state(
 post_undelete(
     XO *xo)
 {
-    int pos, cur, i, len;
+    int pos, i, len;
     HDR *fhdr;
     char buf[256], fpath[128], *ptr;
     FILE *fp;
@@ -2232,7 +2226,6 @@ post_undelete(
         return XO_NONE;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     fhdr = (HDR *) xo_pool_base + pos;
     hdr_fpath(fpath, xo->dir, fhdr);
 
@@ -2299,7 +2292,7 @@ post_undelete(
 post_expire(
     XO *xo)
 {
-    int pos, cur;
+    int pos;
     HDR *fhdr;
     char fpath[80];
 
@@ -2312,7 +2305,6 @@ post_expire(
         return XO_NONE;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     fhdr = (HDR *) xo_pool_base + pos;
 
     if (fhdr->xmode & (POST_MARKED | POST_CANCEL | POST_DELETE | POST_MDELETE))
@@ -2339,7 +2331,7 @@ post_expire(
 post_unexpire(
     XO *xo)
 {
-    int pos, cur;
+    int pos;
     HDR *fhdr;
     char fpath[128];
 
@@ -2347,7 +2339,6 @@ post_unexpire(
         return XO_NONE;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     fhdr = (HDR *) xo_pool_base + pos;
 
     if (!(fhdr->xmode & (POST_EXPIRE)))
@@ -2793,10 +2784,9 @@ post_title(
     XO *xo)
 {
     HDR *fhdr, mhdr;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     fhdr = (HDR *) xo_pool_base + pos;
     mhdr = *fhdr;
 
@@ -3091,11 +3081,10 @@ post_resetscore(
     {
         HDR *hdr;
         BRD *brd;
-        int pos, cur, xmode GCC_UNUSED, recommend, pm;
+        int pos, xmode GCC_UNUSED, recommend, pm;
         char ans[3];
 
         pos = xo->pos;
-        cur = pos - xo->top;
         hdr = (HDR *) xo_pool_base + pos;
 
         xmode = hdr->xmode;

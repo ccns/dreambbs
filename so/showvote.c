@@ -144,10 +144,9 @@ show_change(
 XO *xo)
 {
     LOG *show, mate;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     show = (LOG *) xo_pool_base + pos;
 
     mate = *show;

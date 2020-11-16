@@ -149,10 +149,9 @@ viol_change(
 XO *xo)
 {
     EMAIL *viol, mate;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     viol = (EMAIL *) xo_pool_base + pos;
 
     mate = *viol;

@@ -208,10 +208,9 @@ memorandum_change(
 XO *xo)
 {
     MEMORANDUM *memorandum, mate;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     memorandum = (MEMORANDUM *) xo_pool_base + pos;
 
     mate = *memorandum;

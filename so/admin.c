@@ -141,10 +141,9 @@ admin_change(
 XO *xo)
 {
     ADMIN *admin, mate;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     admin = (ADMIN *) xo_pool_base + pos;
 
     mate = *admin;

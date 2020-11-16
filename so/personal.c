@@ -353,10 +353,9 @@ personal_change(
     XO *xo)
 {
     PB *personal, mate;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     personal = (PB *) xo_pool_base + pos;
 
     mate = *personal;
@@ -578,10 +577,9 @@ personal_deny(
     XO *xo)
 {
     const PB *personal;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     personal = (const PB *) xo_pool_base + pos;
 
     if (personal->state & PB_OPEN)

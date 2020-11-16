@@ -175,10 +175,9 @@ cleanrecommend_delete(
     if (vans(msg_del_ny) == 'y')
     {
         const RMSG *rmsg;
-        int pos, cur;
+        int pos;
 
         pos = xo->pos;
-        cur = pos - xo->top;
         rmsg = (const RMSG *) xo_pool_base + pos;
 
         if (!rec_del(xo->dir, sizeof(RMSG), xo->pos, NULL, NULL))
@@ -195,13 +194,12 @@ cleanrecommend_change(
     XO *xo)
 {
     RMSG *cleanrecommend, mate;
-    int pos, cur;
+    int pos;
 
     if (!HAS_PERM(PERM_BOARD))
         return XO_NONE;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     cleanrecommend = (RMSG *) xo_pool_base + pos;
 
     mate = *cleanrecommend;
@@ -259,7 +257,7 @@ clean(
     XO *xoo, *last;
     const HDR *hdr;
     HDR phdr;
-    int pos, cur;
+    int pos;
     char fpath[128], buf[256], tmp[128], recommenddb[128];
     FILE *fp;
     RMSG rmsg;
@@ -276,7 +274,6 @@ clean(
         return DL_RELEASE(0);
 
     pos = xo->pos;
-    cur = pos - xo->top;
     hdr = (const HDR *) xo_pool_base + pos;
 
     if (!hdr->recommend || hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))

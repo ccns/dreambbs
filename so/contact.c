@@ -143,10 +143,9 @@ contact_change(
 XO *xo)
 {
     CONTACT *contact, mate;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     contact = (CONTACT *) xo_pool_base + pos;
 
     mate = *contact;
@@ -173,11 +172,10 @@ static int
 contact_mail(
 XO *xo)
 {
-    int pos, cur;
+    int pos;
     CONTACT *contact;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     contact = (CONTACT *) xo_pool_base + pos;
     contact_send(contact);
     return XO_INIT;

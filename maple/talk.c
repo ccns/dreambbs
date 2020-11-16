@@ -891,10 +891,9 @@ pal_change(
     XO *xo)
 {
     PAL *pal, mate;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     pal = (PAL *) xo_pool_base + pos;
 
     mate = *pal;
@@ -4762,10 +4761,9 @@ banmsg_change(
     XO *xo)
 {
     BANMSG *banmsg, mate;
-    int pos, cur;
+    int pos;
 
     pos = xo->pos;
-    cur = pos - xo->top;
     banmsg = (BANMSG *) xo_pool_base + pos;
 
     mate = *banmsg;
