@@ -1636,7 +1636,14 @@ int holdon_fd;                  /* Thor.0727: ¸õ¥Xchat&talk¼È¦svio_fd¥Î */
 #endif
 
 
+#define VKEY_ESC_WAIT_TIME_MS  650  /* time to wait after receiving an initial `ESC` */
+#define VKEY_SEQ_WAIT_TIME_MS  10   /* time to wait for the next character of the escape sequence */
+
+/* `VKEY_ESC_WAIT_TIME_MS` >= `VKEY_SEQ_WAIT_TIME_MS` is expected */
+
 static struct timeval vio_to = {60, 0};
+static struct timeval esc_tv = {0, (long)(VKEY_ESC_WAIT_TIME_MS * 1000)};
+static struct timeval seq_tv = {0, (long)(VKEY_SEQ_WAIT_TIME_MS * 1000)};
 
 
 void
@@ -1646,6 +1653,19 @@ add_io(
 {
     vio_fd = fd;
     vio_to.tv_sec = timeout;
+
+    if (!fd)
+    {
+        /* Reinitialize them here so that `vkey` and `igetch` do not need to reinitialize them every time */
+        esc_tv = LISTLIT(struct timeval){0, (long)(VKEY_ESC_WAIT_TIME_MS * 1000)};
+        seq_tv = LISTLIT(struct timeval){0, (long)(VKEY_SEQ_WAIT_TIME_MS * 1000)};
+        if (vio_to.tv_sec <= esc_tv.tv_sec && vio_to.tv_usec <= esc_tv.tv_usec)
+        {
+            esc_tv = vio_to;
+            if (vio_to.tv_sec <= seq_tv.tv_sec && vio_to.tv_usec <= seq_tv.tv_usec)
+                seq_tv = vio_to;
+        }
+    }
 }
 
 
@@ -2637,9 +2657,6 @@ vans(
 
 #undef  TRAP_ESC  /* `ESC` is invalid (trap) if not at the beginning of the escape sequences */
 
-#define VKEY_ESC_WAIT_TIME_MS  650  /* time to wait after receiving an initial `ESC` */
-#define VKEY_SEQ_WAIT_TIME_MS  10   /* time to wait for the next character of the escape sequence */
-
 static inline int
 char_opt(int ch, int key, int key_timeout)
 {
@@ -2695,15 +2712,9 @@ int
 vkey(void)
 {
     const struct timeval vio_to_backup = vio_to;
-    struct timeval esc_tv = {0, (long)(VKEY_ESC_WAIT_TIME_MS * 1000)};
-    struct timeval seq_tv = {0, (long)(VKEY_SEQ_WAIT_TIME_MS * 1000)};
+    struct timeval seq_tv_dec = seq_tv; /* It decreases to prevent infinity escape sequences */
     int mode, mod = 0;
     int ch, last, last2;
-
-    if (vio_to.tv_sec <= esc_tv.tv_sec)
-        esc_tv = vio_to;
-    if (vio_to.tv_sec <= seq_tv.tv_sec)
-        seq_tv = vio_to;
 
     mode = last = last2 = 0;
     for (;;)
@@ -2736,8 +2747,8 @@ vkey(void)
             }
             else
             {
-                vio_to = seq_tv;
-                seq_tv.tv_usec >>= 1;  /* Prevent infinity escape sequences */
+                vio_to = seq_tv_dec;
+                seq_tv_dec.tv_usec >>= 1;  /* Prevent infinity escape sequences */
             }
 
             mode = 1;
@@ -2749,13 +2760,13 @@ vkey(void)
 #endif
         else if (mode == 1)   /* "<Esc> `ch`" */
         {                               /* Escape sequence */
-            vio_to = seq_tv;
+            vio_to = seq_tv_dec;
             if (ch == '[' || ch == 'O')       /* "<Esc> <[O>" */
                 mode = 2;
 #ifdef  TRAP_ESC
             else if (ch == KEY_ESC) /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
             {
-                seq_tv.tv_usec >>= 1;  /* Prevent infinity "<Esc>..." */
+                seq_tv_dec.tv_usec >>= 1;  /* Prevent infinity "<Esc>..." */
                 mod = META_CODE;       /* Make the key Meta-ed */
             }
 #endif
