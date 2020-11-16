@@ -1156,7 +1156,7 @@ int strip_ansi_len(
 
 
 const char *
-check_info(const char *input)
+check_info(const void *func, const char *input)
 {
 #if defined(HAVE_INFO) || defined(HAVE_STUDENT)
     const BRD *brd;
@@ -1164,7 +1164,7 @@ check_info(const char *input)
     const char *name = NULL;
     name = input;
 #ifdef  HAVE_INFO
-    if (!strcmp(input, INFO_EMPTY))
+    if (func == (const void *)Information)
     {
         brd = bshm->bcache + brd_bno(BRD_BULLETIN);
         if (brd)
@@ -1176,7 +1176,7 @@ check_info(const char *input)
     }
 #endif
 #ifdef  HAVE_STUDENT
-    if (!strcmp(input, STUDENT_EMPTY))
+    if (func == (const void *)Student)
     {
         brd = bshm->bcache + brd_bno(BRD_SBULLETIN);
         if (brd)
@@ -1252,7 +1252,7 @@ domenu_item(
 {
     char item[ANSILINELEN];
     const MENU *const mptr = xyz->table[num - 1];
-    const char *const str = check_info(mptr->desc);
+    const char *const str = check_info((const void *)mptr->item.func, mptr->desc);
     const int item_str_len = strcspn(str, "\n");
     const int match_max = BMIN(xyz->cmdcur_max, item_str_len);
     const int y = domenu_gety(num - 1, xyz);

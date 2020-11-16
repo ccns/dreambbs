@@ -178,7 +178,7 @@ void clear_notification(void);
 void movie(void);
 GCC_PURE int strip_ansi_n_len(const char *str, int maxlen);
 GCC_PURE int strip_ansi_len(const char *str);
-const char *check_info(const char *input);
+const char *check_info(const void *func, const char *input);
 void main_menu(void);
 void domenu(MENU *menu, int y_ref, int x_ref, int height_ref, int width_ref, int cmdcur_max);
 /* more.c */
