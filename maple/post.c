@@ -2252,8 +2252,12 @@ post_undelete(
         strncpy(fhdr->title, ptr, 60);
         if (!HAS_PERM(PERM_SYSOP))
         {
+            const int len_strip_id = strlen(fhdr->title) - strlen(cuser.userid) - 2;
             sprintf(buf, "{%s}", cuser.userid);
-            strcat(fhdr->title, buf);
+
+            /* IID.2020-11-16: Prevent repeated undeletion information */
+            if (len_strip_id < 0 || strcmp(fhdr->title + len_strip_id, buf))
+                strcat(fhdr->title, buf);
         }
         fhdr->title[71] = 0;  /* verit 2002.01.23 Á×§K±Ï¤å³¹³y¦¨ title Ãz±¼ */
 
