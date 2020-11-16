@@ -85,6 +85,7 @@ void brh_get(time_t bstamp, int bhno);
 GCC_PURE int brh_unread(time_t chrono);
 void brh_visit(int mode);
 void brh_add(time_t prev, time_t chrono, time_t next);
+void force_board(void);
 void remove_perm(void);
 int Ben_Perm(const BRD *bhdr, unsigned int ulevel);
 GCC_PURE int bstamp2bno(time_t stamp);
