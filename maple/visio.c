@@ -1769,7 +1769,7 @@ int
 igetch(void)
 {
 
-#define IM_TRAIL        0x01
+#define IM_TRAIL        0x01    /* Received `\r` and is waiting for `\0` or `\n` */
 #define IM_REPLY        0x02    /* ^R */
 #define IM_TALK         0x04
 #define IM_VKEY_ESC     0x08    /* `vkey()` is processing a escape sequence */
@@ -1795,7 +1795,7 @@ igetch(void)
 
             for (;;)
             {
-                struct timeval tv = vio_to;
+                struct timeval tv = (vi_mode & IM_TRAIL) ? seq_tv : vio_to;
                 /* Thor.980806: man page 假設 timeval 是會改變的 */
 
                 rset = 1 | fd;
@@ -1834,6 +1834,11 @@ igetch(void)
                 }
                 else if (cc == 0)
                 {
+                    if (vi_mode & IM_TRAIL)
+                    {
+                        vi_mode ^= IM_TRAIL;
+                        return '\n';
+                    }
                     cc = vio_to.tv_sec;
                     if (cc < 60)                /* paging timeout */
                         return I_TIMEOUT;
@@ -1891,14 +1896,15 @@ igetch(void)
         if (vi_mode & IM_TRAIL)
         {
             vi_mode ^= IM_TRAIL;
-            if (cc == 0 || cc == 0x0a)
-                continue;
+            if (!(cc == 0 || cc == 0x0a))
+                --vi_head;  /* Do not consume other characters */
+            return '\n';
         }
 
         if (cc == 0x0d)
         {
             vi_mode |= IM_TRAIL;
-            return '\n';
+            continue;
         }
 
         if (cc == 0x7f)
