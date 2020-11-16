@@ -1514,7 +1514,11 @@ post_browse(
 
         cmd = XO_LOAD;
         post_history(xo, hdr);
-        strcpy(currtitle, str_ttl(hdr->title));
+
+        if (!(hdr->xmode & POST_LOCK) || HAS_PERM(PERM_SYSOP))
+            strcpy(currtitle, str_ttl(hdr->title));
+        else
+            currtitle[0] = '\0';
 
         /* Thor.990204: 為考慮more 傳回值 */
         if ((key = more(fpath, FOOTER_POST)) < 0)
@@ -4422,7 +4426,10 @@ xpost_browse(
             brh_add(prev, hdr->chrono, next);
         }
 
-        strcpy(currtitle, str_ttl(hdr->title));
+        if (!(hdr->xmode & POST_LOCK) || HAS_PERM(PERM_SYSOP))
+            strcpy(currtitle, str_ttl(hdr->title));
+        else
+            currtitle[0] = '\0';
 
         // Thor.990204: 為考慮more 傳回值
         if ((key = more(fpath, FOOTER_POST)) < 0)

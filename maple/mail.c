@@ -1966,6 +1966,7 @@ enum HdrMode {
     HDRMODE_NORMAL_CURR,
     HDRMODE_REPLY,
     HDRMODE_REPLY_CURR,
+    HDRMODE_LOCKED,
 
     HDRMODE_COUNT,
 };
@@ -1975,6 +1976,7 @@ static const HdrStyle hdr_style[HDRMODE_COUNT] = {
     {"◆", {"\x1b[1;32m", "\x1b[0;32m"}, {"\x1b[1;33m", "\x1b[1;33m"}, {"\x1b[m", "\x1b[m"}},
     {"Re", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[1;37m"}, {"", "\x1b[m"}},
     {"=>", {"\x1b[1;33m", "\x1b[0;33m"}, {"\x1b[1;37m", "\x1b[1;37m"}, {"\x1b[m", "\x1b[m"}},
+    {"鎖", {"\x1b[1;35m", "\x1b[0;35m"}, {"\x1b[1;31m", "\x1b[0;31m"}, {"\x1b[m", "\x1b[m"}},
 };
 
 void
@@ -2050,6 +2052,12 @@ hdr_outs(               /* print HDR's subject */
         width = d_cols + 64;
     }
 
+    if (hdr->xmode & POST_LOCK)
+    {
+        title = (HAS_PERM(PERM_SYSOP)) ? hdr->title : "此文章已加密鎖定！";
+        style = &hdr_style[HDRMODE_LOCKED];
+    }
+    else
     {
         const char *const mark = hdr->title;
         title = str_ttl(hdr->title);
@@ -2059,13 +2067,6 @@ hdr_outs(               /* print HDR's subject */
     }
     outs(style->undec[has_lightbar]);
     outs(style->mark);
-
-    if (hdr->xmode & POST_LOCK && !HAS_PERM(PERM_SYSOP))
-    {
-        outs(" 此文章已加密鎖定！\x1b[m");
-        outc('\n');
-        return;
-    }
 
     {
         const char *const title_end = title + width;
