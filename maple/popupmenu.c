@@ -389,8 +389,13 @@ do_menu_redraw:
                 /* TODO(IID.2021-02-27): Refine Xover system to make cursor redraw logic customizable */
                 if (xo->cb == domenu_cb)
                 {
+                    const int level = xo_stack_level;
+                    /* XXX(IID.2021-02-27): Workaround for correcty detecting nested main menu */
+                    if (xo_stack_level > 0)
+                        --xo_stack_level;
                     xover_exec_cb(xo, XO_HEAD);
                     domenu_cursor_show(xo);
+                    xo_stack_level = level;
                 }
                 else
                 {

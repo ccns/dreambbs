@@ -230,6 +230,7 @@ extern int holdon_fd;
 extern char lastcmd[MAXLASTCMD][80];
 
 /* maple/xover.c */
+extern int xo_stack_level;
 extern XZ xz[];
 /* XO's data pool */
 GCC_DEPRECATED("Use `xo_pool_base` instead")

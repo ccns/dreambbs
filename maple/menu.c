@@ -18,6 +18,9 @@
 #define STUDENT_HAVE    "1Student  【 \x1b[41;33;1;5m快進來看看\x1b[m 】"
 #endif
 
+#define GOODBYE_EXIT    "Goodbye   【再別" BOARDNAME "】"
+#define GOODBYE_GOBACK  "GoBack    【 回上層選單 】"
+
 static int
 system_result(void)
 {
@@ -211,6 +214,9 @@ static int
 goodbye(void)
 {
     char ans;
+    if (xo_stack_level > 0)
+        return QUIT;
+
     bmw_save();
     if (cuser.ufo2 & UFO2_DEF_LEAVE)
     {
@@ -1071,7 +1077,7 @@ INTERNAL_INIT MENU menu_main[] =
 #endif
 
     {{goodbye}, 0, M_XMODE,
-    "Goodbye   【再別" BOARDNAME "】"},
+    GOODBYE_EXIT},
 
     {{NULL}, PERM_MENU + 'B', M_MMENU,
     "主功\能表"}
@@ -1114,7 +1120,7 @@ namespace {
 INTERNAL_INIT MENU menu_treat[] =
 {
     {{goodbye1}, 0, M_XMODE,
-    "Goodbye   【再別" NICKNAME "】"},
+    GOODBYE_EXIT},
 
     {{NULL}, PERM_MENU + 'G', M_MMENU,
     "主功\能表"}
@@ -1187,6 +1193,11 @@ check_info(const void *func, const char *input)
         }
     }
 #endif
+    if (func == (const void *)goodbye)
+    {
+        if (xo_stack_level > 0)
+            name = GOODBYE_GOBACK;
+    }
 
     return name;
 }
@@ -1701,7 +1712,7 @@ domenu_exec(
         case KEY_ESC:
         case Meta(KEY_ESC):
         case 'e':
-            if (xyz->menu != menu_main)
+            if (xyz->menu != menu_main || xo_stack_level > 0)
             {
                 xyz->mtail->level = PERM_MENU + xyz->table[xo->pos]->desc[0];
                 xyz->menu = xyz->mtail->item.menu;

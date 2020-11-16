@@ -10,7 +10,7 @@
 
 #define XO_STACK        (5)
 #define MAX_LEVEL       (20)
-static int xo_stack_level;
+int xo_stack_level;
 static int xo_user_level;
 
 #ifdef  HAVE_FAVORITE
@@ -2155,6 +2155,13 @@ every_Z_Orig(void)
     scr_restore_free(&old_screen);
 }
 
+static int
+Every_Z_Main(void)
+{
+    main_menu();
+    return 0;
+}
+
 #ifdef HAVE_FAVORITE
 static int
 Every_Z_Favorite(void)
@@ -2196,6 +2203,9 @@ Every_Z_MBox(void)
 
 static MENU menu_everyz[] =
 {
+    {{Every_Z_Main}, 0, POPUP_FUN,
+    "Home     主選單"},
+
 #ifdef HAVE_FAVORITE
     {{Every_Z_Favorite}, PERM_VALID, POPUP_FUN,
     "Favorite 我的最愛"},
