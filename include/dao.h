@@ -154,6 +154,7 @@ GCC_PURE char *str_str(const char *str, const char *tag);
 GCC_PURE char *str_sub(const char *str, const char *tag);
 GCC_PURE char *str_tail(const char *str);
 void str_trim(char *buf);
+char *str_ttl_hdrmode(const char *title, enum HdrMode *pmode);
 GCC_PURE char *str_ttl(const char *title);
 void str_xor(char *dst, const char *src);
 size_t strlcat(char *dst, const char *src, size_t siz);

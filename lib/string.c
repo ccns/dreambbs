@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include "dao.h"
+#include "global_def.h"
 
 #if defined __GLIBC_PREREQ && !defined __UCLIBC__
 #define GLIBC_PREREQ(M, m) (__GLIBC_PREREQ(M, m))
@@ -1209,9 +1210,12 @@ void str_trim(                    /* remove trailing space */
     }
 }
 
-GCC_PURE char *str_ttl(const char *title)
+char *str_ttl_hdrmode(const char *title, enum HdrMode *pmode)
 {
     static const char *const title_marks[] = {STR_REPLY, STR_FORWARD};
+    if (pmode)
+        *pmode = HDRMODE_NORMAL;
+
     for (size_t i = 0; i < COUNTOF(title_marks); ++i)
     {
         if (!str_ncmp(title, title_marks[i], strlen(title_marks[i])))
@@ -1219,11 +1223,30 @@ GCC_PURE char *str_ttl(const char *title)
             title += strlen(title_marks[i]);
             if (*title == ' ')
                 title++;
+            if (pmode)
+            {
+                switch (i)
+                {
+                case 0:
+                    *pmode = HDRMODE_REPLY;
+                    break;
+                case 1:
+                    *pmode = HDRMODE_FORWARD;
+                    break;
+                default:
+                    ;
+                }
+            }
             break;
         }
     }
 
     return (char *)title;
+}
+
+GCC_PURE char *str_ttl(const char *title)
+{
+    return str_ttl_hdrmode(title, NULL);
 }
 
 /*-------------------------------------------------------*/

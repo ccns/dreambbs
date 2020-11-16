@@ -5,6 +5,18 @@
 
 #include <sys/types.h>
 
+enum HdrMode {
+    HDRMODE_NORMAL,
+    HDRMODE_NORMAL_CURR,
+    HDRMODE_FORWARD,
+    HDRMODE_FORWARD_CURR,
+    HDRMODE_REPLY,
+    HDRMODE_REPLY_CURR,
+    HDRMODE_LOCKED,
+
+    HDRMODE_COUNT,
+};
+
 /* ----------------------------------------------------- */
 /* DIR of post / mail struct : 256 bytes                 */
 /* ----------------------------------------------------- */

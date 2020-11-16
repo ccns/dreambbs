@@ -1961,19 +1961,11 @@ typedef struct {
     const char *reset[2]; /* Use `[1]` when the title is currently declared, or `[0]` otherwise */
 } HdrStyle;
 
-enum HdrMode {
-    HDRMODE_NORMAL,
-    HDRMODE_NORMAL_CURR,
-    HDRMODE_REPLY,
-    HDRMODE_REPLY_CURR,
-    HDRMODE_LOCKED,
-
-    HDRMODE_COUNT,
-};
-
 static const HdrStyle hdr_style[HDRMODE_COUNT] = {
     {"¡º", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[36m"}, {"", "\x1b[m"}},
     {"¡»", {"\x1b[1;32m", "\x1b[32m"}, {"\x1b[1;33m", "\x1b[33m"}, {"\x1b[m", "\x1b[m"}},
+    {0},
+    {0},
     {"Re", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[36m"}, {"", "\x1b[m"}},
     {"=>", {"\x1b[1;33m", "\x1b[33m"}, {"\x1b[1;37m", "\x1b[37m"}, {"\x1b[m", "\x1b[m"}},
     {"Âê", {"\x1b[1;35m", "\x1b[0;35m"}, {"\x1b[1;31m", "\x1b[0;31m"}, {"\x1b[m", "\x1b[m"}},
