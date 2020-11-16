@@ -2288,6 +2288,11 @@ vget_redraw:
         if (ch == '\n')
         {
             data[len] = '\0';
+
+            /* IID.2020-11-17: Make sure the input field is truncated at the input end */
+            if (!(echo & VGET_STEALTH_NOECHO))
+                move(y, x + len);
+
             if ((echo & (GET_BRD | GET_LIST)) && len > 0)
             /* Thor.990204:要求輸入任一字才代表自動 match, 否則算cancel */
             {
@@ -2337,6 +2342,11 @@ vget_redraw:
         if (ch == Ctrl('C') && (echo & VGET_BREAKABLE))
         {
             data[0] = '\0';
+
+            /* IID.2020-11-17: Make sure the input field is truncated at the input end */
+            if (!(echo & VGET_STEALTH_NOECHO))
+                move(y, x + len);
+
             outc('\n');
 #ifdef M3_USE_PFTERM
             if (!(echo & VGET_STEALTH_NOECHO))
