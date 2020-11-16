@@ -1969,6 +1969,7 @@ static const HdrStyle hdr_style[HDRMODE_COUNT] = {
     {"Re", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[36m"}, {"", "\x1b[m"}},
     {"=>", {"\x1b[1;33m", "\x1b[33m"}, {"\x1b[1;37m", "\x1b[37m"}, {"\x1b[m", "\x1b[m"}},
     {"鎖", {"\x1b[1;35m", "\x1b[0;35m"}, {"\x1b[1;31m", "\x1b[0;31m"}, {"\x1b[m", "\x1b[m"}},
+    {"╳", {"\x1b[1;30m", "\x1b[m"}, {"\x1b[0;37m", "\x1b[m"}, {"\x1b[m", "\x1b[m"}},
 };
 
 void
@@ -2044,7 +2045,12 @@ hdr_outs(               /* print HDR's subject */
         width = d_cols + 64;
     }
 
-    if (hdr->xmode & POST_LOCK)
+    if (hdr->xmode & (POST_DELETE | POST_MDELETE))
+    {
+        title = hdr->title;
+        style = &hdr_style[HDRMODE_DELETED];
+    }
+    else if (hdr->xmode & POST_LOCK)
     {
         title = (HAS_PERM(PERM_SYSOP)) ? hdr->title : "此文章已加密鎖定！";
         style = &hdr_style[HDRMODE_LOCKED];
