@@ -1211,11 +1211,16 @@ void str_trim(                    /* remove trailing space */
 
 GCC_PURE char *str_ttl(const char *title)
 {
-    if (title[0] == 'R' && title[1] == 'e' && title[2] == ':')
+    static const char *const title_marks[] = {STR_REPLY, STR_FORWARD};
+    for (size_t i = 0; i < COUNTOF(title_marks); ++i)
     {
-        title += 3;
-        if (*title == ' ')
-            title++;
+        if (!str_ncmp(title, title_marks[i], strlen(title_marks[i])))
+        {
+            title += strlen(title_marks[i]);
+            if (*title == ' ')
+                title++;
+            break;
+        }
     }
 
     return (char *)title;
