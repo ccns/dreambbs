@@ -4114,6 +4114,7 @@ KeyFuncList post_cb =
     {'i', {post_showBRD_setting}},  /* cache.081122:看板資訊顯示 */
     {Ctrl('P'), {post_add}},
     {Ctrl('N'), {post_clean_delete}},
+    {Meta('N'), {post_clean_delete}},
 #ifdef HAVE_MULTI_CROSSPOST
     {Ctrl('X'), {post_xcross}},
 #endif

@@ -2645,7 +2645,7 @@ talk_speak(
             if (ch <= 0)
                 break;
 #if 0   // IID.20190508: `bwboard.so` and `chess.so` do not exist anymore.
-            if (data[0] == Ctrl('A'))
+            if (data[0] == Ctrl('A') || data[0] == Meta('A'))
             { /* Thor.990219: ©I¥s¥~±¾´Ñ½L */
                 if (DL_NAME_CALL("bwboard.so", BWboard)(fd, 1)==-2)
                     break;
@@ -2694,7 +2694,7 @@ talk_speak(
             }
         }
 #if 0   // IID.20190508: `bwboard.so` and `chess.so` do not exist anymore.
-        else if (ch == Ctrl('A'))
+        else if (ch == Ctrl('A') || ch == Meta('A'))
         { /* Thor.990219: ©I¥s¥~±¾´Ñ½L */
             /* int BWboard(int sock, int later); */
             data[0] = ch;

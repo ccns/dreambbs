@@ -469,7 +469,7 @@ xo_tag(
         return XO_NONE;
 
     head = (const HDR *) xo_pool_base + xo->pos;
-    if (op == Ctrl('A'))
+    if (op == Ctrl('A') || op == Meta('A'))
     {
         token = head->owner;
         op = 0;
@@ -2001,7 +2001,7 @@ xover_key(
             }
             return XO_NONE;
         }
-        if (cmd == Ctrl('A') || cmd == Ctrl('T') || cmd == Meta('T'))
+        if (cmd == Ctrl('A') || cmd == Meta('A') || cmd == Ctrl('T') || cmd == Meta('T'))
         {
             return xo_tag(xo, cmd);
         }
