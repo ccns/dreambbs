@@ -964,13 +964,23 @@ post_body(
 }
 
 
+static int
+post_neck(
+    XO *xo)
+{
+    char buf[17];
+    sprintf(buf, "人氣: %d", BMAX(bshm->mantime[currbno], 1));
+    prints(NECKPOST, d_cols, "", buf);
+    return post_body(xo);
+}
+
+
     static int                  /* Thor: 因為 XoBM 要用 */
 post_head(
     XO *xo)
 {
     vs_head(currBM, (const char *) xo->xyz);
-    prints(NECKPOST, d_cols, "");
-    return post_body(xo);
+    return post_neck(xo);
 }
 
 
@@ -4079,6 +4089,7 @@ KeyFuncList post_cb =
     {XO_INIT, {post_init}},
     {XO_LOAD, {post_load}},
     {XO_HEAD, {post_head}},
+    {XO_NECK, {post_neck}},
     {XO_BODY, {post_body}},
     {XO_FOOT, {post_foot}},
     {XO_CUR, {post_cur}},

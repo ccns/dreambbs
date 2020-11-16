@@ -76,7 +76,7 @@
 
 #define NECKPOST \
                    "  [←]離開 [→]閱\讀 [^P]發表 [b]備忘錄 [d]刪除 [V]投票 [TAB]精華區 [h]說明\n" \
-            COLOR3 "  編號     日 期 作  者       文  章  標  題%*s                                   \x1b[m"
+            COLOR3 "  編號     日 期 作  者       文  章  標  題%*s                  %16s \x1b[m"
 
 #define NECKMAIL \
                    "  [←]離開 [→]讀信 [d]刪除 [R]回信 [s]寄信 [x]轉貼 [y]群組回信 [h]說明\n" \
