@@ -1954,30 +1954,47 @@ tag_char(
     return TagNum && !Tagger(chrono, 0, TAG_NIN) ? '*' : ' ';
 }
 
+typedef struct {
+    const char *mark;
+    const char *undec[2]; /* Use `[1]` when lightbar is enabled, or `[0]` otherwise */
+    const char *dec[2];
+    const char *reset[2]; /* Use `[1]` when the title is currently declared, or `[0]` otherwise */
+} HdrStyle;
+
+enum HdrMode {
+    HDRMODE_NORMAL,
+    HDRMODE_NORMAL_CURR,
+    HDRMODE_REPLY,
+    HDRMODE_REPLY_CURR,
+
+    HDRMODE_COUNT,
+};
+
+static const HdrStyle hdr_style[HDRMODE_COUNT] = {
+    {"◇", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[1;37m"}, {"", "\x1b[m"}},
+    {"◆", {"\x1b[1;32m", "\x1b[0;32m"}, {"\x1b[1;33m", "\x1b[1;33m"}, {"\x1b[m", "\x1b[m"}},
+    {"Re", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[1;37m"}, {"", "\x1b[m"}},
+    {"=>", {"\x1b[1;33m", "\x1b[0;33m"}, {"\x1b[1;37m", "\x1b[1;37m"}, {"\x1b[m", "\x1b[m"}},
+};
 
 void
 hdr_outs(               /* print HDR's subject */
     const HDR *hdr,
-    int cc)
+    int width)
 {
-    static const char *const type[4] =
-    {"Re", "◇", "=>", "◆"};
-    static const char *const type_reset[][COUNTOF(type)] = {
-        {"\x1b[m", "\x1b[m", "\x1b[1;33m", "\x1b[1;32m"},
-#ifdef HAVE_MENU_LIGHTBAR
-        {"\x1b[m", "\x1b[m", "\x1b[0;33m", "\x1b[0;32m"},
-#endif
-    };
-#ifdef  HAVE_DECLARE
-    static const char *const type_dec[COUNTOF(type)] =
-    {"\x1b[1;37m", "\x1b[1;37m", "\x1b[1;37m", "\x1b[1;33m"};
-#endif
-    const char *title, *mark;
-    int ch, len;
-    UTMP *online;
+    const HdrStyle *style;
+    const char *title;
 
-    if (cc)
+    const bool has_lightbar = HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR);
+
+    if (width)
     {
+        const char *owner = hdr->owner;
+        const UTMP *const online = utmp_check(owner);  /* 使用者在站上就變色 */
+
+        int len = 13;
+        int ch;
+
 #if 0
         if (tag_char(hdr->chrono) == '*')
         {
@@ -2005,14 +2022,10 @@ hdr_outs(               /* print HDR's subject */
         outs(hdr->date + 3);
         outc(' ');
 
-        mark = hdr->owner;
-        len = 13;
-
-        online = utmp_check(mark);  /* 使用者在站上就變色 */
         if (online != NULL)
             outs("\x1b[1;37m");
 
-        while ((ch = (unsigned char) *mark))
+        while ((ch = (unsigned char) *owner))
         {
             if ((--len == 0) || (ch == '@'))
                 ch = '.';
@@ -2021,7 +2034,7 @@ hdr_outs(               /* print HDR's subject */
             if (ch == '.')
                 break;
 
-            mark++;
+            owner++;
         }
 
         while (len--)
@@ -2034,18 +2047,18 @@ hdr_outs(               /* print HDR's subject */
     }
     else
     {
-        cc = 64;
+        width = d_cols + 64;
     }
 
-    title = str_ttl(mark = hdr->title);
-    ch = title == mark;
-    if (!strcmp(currtitle, title))
-        ch += 2;
-    outs(type_reset[HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR)][ch]);
-    outs(type[ch]);
-
-    mark = title + cc;
-    cc = ' ';
+    {
+        const char *const mark = hdr->title;
+        title = str_ttl(hdr->title);
+        style = &hdr_style[(title == mark) ? 0 : 2];
+        if (!strcmp(currtitle, title))
+            ++style;
+    }
+    outs(style->undec[has_lightbar]);
+    outs(style->mark);
 
     if (hdr->xmode & POST_LOCK && !HAS_PERM(PERM_SYSOP))
     {
@@ -2054,8 +2067,9 @@ hdr_outs(               /* print HDR's subject */
         return;
     }
 
-
     {
+        const char *const title_end = title + width;
+        int ch = ' ';
 
 #ifdef  HAVE_DECLARE            /* Thor.0508: Declaration, 嘗試使某些title更明顯 */
                                 /* IID.20191204: Match balanced brackets. */
@@ -2078,7 +2092,7 @@ hdr_outs(               /* print HDR's subject */
 
 #ifdef  HAVE_DECLARE
             int *pcnt = NULL;
-            switch ((dbcs_hi) ? '\0' : cc)
+            switch ((dbcs_hi) ? '\0' : ch)
             {
             case '[':
             case ']':
@@ -2100,18 +2114,18 @@ hdr_outs(               /* print HDR's subject */
 
             if (dbcs_hi)
                 dbcs_hi = false;
-            else if (IS_DBCS_HI(cc))
+            else if (IS_DBCS_HI(ch))
                 dbcs_hi = true;
 
-            switch ((pcnt) ? cc : '\0')
+            switch ((pcnt) ? ch : '\0')
             {
             case '[':
             case '<':
             case '{':
                 if (++*pcnt == 1)
                 {
-                    outs(type_dec[ch]);
-                    outc(cc);
+                    outs(style->dec[has_lightbar]);
+                    outc(ch);
                     continue;
                 }
                 break;
@@ -2123,23 +2137,24 @@ hdr_outs(               /* print HDR's subject */
                 {
                     if (pcnt == &square)
                         square = -1;
-                    outc(cc);
-                    outs(type_reset[HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR)][ch]);
+                    outc(ch);
+                    outs(style->undec[has_lightbar]);
                     continue;
                 }
             }
 
 #endif  /* #ifdef  HAVE_DECLARE */
 
-            outc(cc);
-        } while ((cc = (unsigned char) *title++) && (title < mark));
+            outc(ch);
+        } while ((ch = (unsigned char) *title++) && (title < title_end));
 
-        if (ch >= 2
+        outs(style->reset[
 #ifdef  HAVE_DECLARE
-          || (square >= 1 || angle >= 1 || curly >= 1)
+            (square >= 1 || angle >= 1 || curly >= 1)
+#else
+            0
 #endif
-        )
-            outs("\x1b[m");
+        ]);
     }
 
     outc('\n');

@@ -164,7 +164,7 @@ int m_send(void);
 int mail_sysop(void);
 int mail_list(void);
 int tag_char(int chrono);
-void hdr_outs(const HDR *hdr, int cc);
+void hdr_outs(const HDR *hdr, int width);
 int mbox_send(XO *xo);
 int mail_stat(int mode);
 int mbox_check(void);
