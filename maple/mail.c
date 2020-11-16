@@ -1972,10 +1972,10 @@ enum HdrMode {
 };
 
 static const HdrStyle hdr_style[HDRMODE_COUNT] = {
-    {"¡º", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[1;37m"}, {"", "\x1b[m"}},
-    {"¡»", {"\x1b[1;32m", "\x1b[0;32m"}, {"\x1b[1;33m", "\x1b[1;33m"}, {"\x1b[m", "\x1b[m"}},
-    {"Re", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[1;37m"}, {"", "\x1b[m"}},
-    {"=>", {"\x1b[1;33m", "\x1b[0;33m"}, {"\x1b[1;37m", "\x1b[1;37m"}, {"\x1b[m", "\x1b[m"}},
+    {"¡º", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[36m"}, {"", "\x1b[m"}},
+    {"¡»", {"\x1b[1;32m", "\x1b[32m"}, {"\x1b[1;33m", "\x1b[33m"}, {"\x1b[m", "\x1b[m"}},
+    {"Re", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[36m"}, {"", "\x1b[m"}},
+    {"=>", {"\x1b[1;33m", "\x1b[33m"}, {"\x1b[1;37m", "\x1b[37m"}, {"\x1b[m", "\x1b[m"}},
     {"Âê", {"\x1b[1;35m", "\x1b[0;35m"}, {"\x1b[1;31m", "\x1b[0;31m"}, {"\x1b[m", "\x1b[m"}},
 };
 
@@ -2025,7 +2025,7 @@ hdr_outs(               /* print HDR's subject */
         outc(' ');
 
         if (online != NULL)
-            outs("\x1b[1;37m");
+            outs(has_lightbar ? "\x1b[36m" : "\x1b[1;37m");
 
         while ((ch = (unsigned char) *owner))
         {
