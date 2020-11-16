@@ -1002,18 +1002,8 @@ getsubject(
 
     if (reply)
     {
-        char *str;
-
-        str = currtitle;
-        if (!strncmp(str, STR_REPLY, 4))
-        {
-            strcpy(title, str);
-        }
-        else
-        {
-            sprintf(title, STR_REPLY "%s", str);
-            title[TTLEN] = '\0';
-        }
+        sprintf(title, STR_REPLY " %s", str_ttl(currtitle));
+        title[TTLEN] = '\0';
     }
     else
     {
@@ -4640,10 +4630,7 @@ XoXpost(                        /* Thor: call from post_cb */
 
             /* check condition */
 
-            title = head->title;
-
-            if (!strncmp(title, STR_REPLY, 4)) /* Thor.980911: 先把 Re: 除外 */
-                title += 4;
+            title = str_ttl(head->title); /* Thor.980911: 先把 Re: 除外 */
 
             if (*key && !str_str(title, key))
                 continue;
@@ -4651,7 +4638,7 @@ XoXpost(                        /* Thor: call from post_cb */
         else if (mode == 1)
         {
             title = head->title;
-            if (!strncmp(title, STR_REPLY, 4))
+            if (!strncmp(title, STR_REPLY, sizeof(STR_REPLY) - 1))
                 continue;
         }
         else

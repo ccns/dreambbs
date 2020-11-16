@@ -387,8 +387,8 @@
 #define STR_AUTHOR2     "發信人:"
 #define STR_POST1       "看板:"
 #define STR_POST2       "站內:"
-#define STR_REPLY       "Re: "
-#define STR_FORWARD     "Fw: "
+#define STR_REPLY       "Re:"
+#define STR_FORWARD     "Fw:"
 
 #define STR_LINE        "\n" \
 "> -------------------------------------------------------------------------- <\n\n"
