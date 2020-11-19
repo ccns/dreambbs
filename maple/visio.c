@@ -1999,26 +1999,36 @@ char_mod(int ch)    /* rxvt-style modifier character */
     }
 }
 
+enum VkeyMode {
+    VKEYMODE_NORMAL,
+    VKEYMODE_ESC,     /* "<Esc> `ch`" */
+    VKEYMODE_CSI_APP, /* "<Esc> <[O> `ch`" */
+    VKEYMODE_CSI_CH1,  /* "<Esc> [ <1-8> `ch`" */
+    VKEYMODE_CSI_CH2,  /* "<Esc> [ <1-8> <0-9> `ch`" */
+};
+
 int
 vkey(void)
 {
     const struct timeval vio_to_backup = vio_to;
     struct timeval seq_tv_dec = seq_tv; /* It decreases to prevent infinity escape sequences */
-    int mode, mod = 0;
-    int ch, last, last2;
+    enum VkeyMode mode = VKEYMODE_NORMAL;
+    int mod = 0;
+    int ch;
+    int last = 0;
+    int last2 = 0;
 
-    mode = last = last2 = 0;
     for (;;)
     {
         ch = igetch();
 #ifdef  TRAP_ESC
-        if (mode == 0)
+        if (mode == VKEYMODE_NORMAL)
         {
             if (ch == KEY_ESC)
             {
                 vi_mode |= IM_VKEY_ESC;
                 vio_to = esc_tv;
-                mode = 1;
+                mode = VKEYMODE_ESC;
             }
             else
                 goto vkey_end;          /* Normal Key */
@@ -2026,12 +2036,12 @@ vkey(void)
 #else
         if (ch == KEY_ESC)
         {
-            if (mode == 1)    /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
+            if (mode == VKEYMODE_ESC)    /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
                 mod = META_CODE;    /* Make the key Meta-ed */
             else
                 mod = 0;            /* Reset modifiers */
 
-            if (mode == 0)
+            if (mode == VKEYMODE_NORMAL)
             {
                 vi_mode |= IM_VKEY_ESC;
                 vio_to = esc_tv;
@@ -2042,18 +2052,18 @@ vkey(void)
                 seq_tv_dec.tv_usec >>= 1;  /* Prevent infinity escape sequences */
             }
 
-            mode = 1;
+            mode = VKEYMODE_ESC;
         }
-        else if (mode == 0)             /* Normal Key */
+        else if (mode == VKEYMODE_NORMAL)             /* Normal Key */
         {
             goto vkey_end;
         }
 #endif
-        else if (mode == 1)   /* "<Esc> `ch`" */
+        else if (mode == VKEYMODE_ESC)   /* "<Esc> `ch`" */
         {                               /* Escape sequence */
             vio_to = seq_tv_dec;
             if (ch == '[' || ch == 'O')       /* "<Esc> <[O>" */
-                mode = 2;
+                mode = VKEYMODE_CSI_APP;
 #ifdef  TRAP_ESC
             else if (ch == KEY_ESC) /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
             {
@@ -2067,7 +2077,7 @@ vkey(void)
                 goto vkey_end;
             }
         }
-        else if (mode == 2)   /* "<Esc> <[O> `ch`" */
+        else if (mode == VKEYMODE_CSI_APP)   /* "<Esc> <[O> `ch`" */
         {
             switch (ch)
             {
@@ -2137,7 +2147,7 @@ vkey(void)
 
               default:
                 if (ch >= '1' && ch <= '8')   /* "<Esc> [ <1-8>" */
-                    mode = 3;
+                    mode = VKEYMODE_CSI_CH1;
                 else    /* "<Esc> [ {`ch`|END}" */
                 {
                     ch = char_opt(ch, KEY_INVALID, Meta('['));
@@ -2165,15 +2175,15 @@ vkey(void)
             }
             mod_ch -= '1';   /* Change to bit number */
             mod |= mod_ch;
-            if (mode == 3 && last == '1')  /* "<Esc> [ 1 ; <2-9>" | "<Esc> [ 1 ; 1 <0-6>" */
+            if (mode == VKEYMODE_CSI_CH1 && last == '1')  /* "<Esc> [ 1 ; <2-9>" | "<Esc> [ 1 ; 1 <0-6>" */
             {
                 /* Recover state to "<Esc> [ `ch`" */
-                mode = 2;
+                mode = VKEYMODE_CSI_APP;
                 last = last2;
             } /* else "<Esc> [ <1-8> <0-9> ; <2-9>" | "<Esc> [ <1-8> <0-9> ; 1 <0-6>" */
             continue;     /* Get next `ch`; keep current state */
         }
-        else if (mode == 3)   /* "<Esc> [ <1-8> `ch`" */
+        else if (mode == VKEYMODE_CSI_CH1)   /* "<Esc> [ <1-8> `ch`" */
         {                               /* Home Ins Del End PgUp PgDn Home(rxvt) End(rxvt) */
             if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <~$^@>" */
             {
@@ -2197,14 +2207,14 @@ vkey(void)
                 }
             }
             else if (ch >= '0' && ch <= '9')      /* "<Esc> [ <1-8> <0-9>" */
-                mode = 4;
+                mode = VKEYMODE_CSI_CH2;
             else
             {
                 ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
                 goto vkey_end;
             }
         }
-        else if (mode == 4)   /* "<Esc> [ <1-8> <0-9> `ch`" */
+        else if (mode == VKEYMODE_CSI_CH2)   /* "<Esc> [ <1-8> <0-9> `ch`" */
         {                               /* F1 - F12 */
             if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <0-9> <~$^@>" */
             {
