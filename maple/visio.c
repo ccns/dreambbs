@@ -1764,6 +1764,7 @@ iac_count(
 }
 
 static int vi_mode = 0;
+static int vi_unget_key = KEY_NONE;
 
 int
 igetch(void)
@@ -1782,6 +1783,13 @@ igetch(void)
 
     for (;;)
     {
+        if (vi_unget_key != KEY_NONE)
+        {
+            int key = vi_unget_key;
+            vi_unget_key = KEY_NONE;
+            return key;
+        }
+
         if (vi_size <= vi_head)
         {
             if (nfds == 0)
@@ -1897,7 +1905,7 @@ igetch(void)
         {
             vi_mode ^= IM_TRAIL;
             if (!(cc == 0 || cc == 0x0a))
-                --vi_head;  /* Do not consume other characters */
+                vi_unget_key = cc;  /* Do not consume other characters */
             return '\n';
         }
 
@@ -1946,21 +1954,32 @@ igetch(void)
 }
 
 
-#undef  TRAP_ESC  /* `ESC` is invalid (trap) if not at the beginning of the escape sequences */
+#define TRAP_ESC  /* `ESC` is invalid (trap) if not at the beginning of the escape sequences */
 
 static inline int
 char_opt(int ch, int key, int key_timeout)
 {
     switch (ch)
     {
-      case I_TIMEOUT:   /* "<sequence_until_ch> END" => `key_last` */
+      case I_TIMEOUT:   /* "<sequence_until_ch> END" => `key_timeout` */
         return key_timeout;
       case I_OTHERDATA:
-        return I_OTHERDATA;
       case I_RESIZETERM:
-        return I_RESIZETERM;
+        if (key_timeout != KEY_INVALID)
+        {
+            /* Return the interrupted key and put back the interrupting key */
+            vi_unget_key = ch;
+            return key_timeout;
+        }
+        return ch; /* Ignore the invalid interrupted key. Just return the interrupting key */
       default:          /* "<sequence_until_ch> `ch`" => `key` */
-        return key;
+        if (key == KEY_INVALID && key_timeout != KEY_INVALID)
+        {
+            /* Return the interrupted key and put back the interrupting key */
+            vi_unget_key = ch;
+            return key_timeout;
+        }
+        return key; /* Return the uninterrupted key */
     }
 }
 
@@ -2021,7 +2040,6 @@ vkey(void)
     for (;;)
     {
         ch = igetch();
-#ifdef  TRAP_ESC
         if (mode == VKEYMODE_NORMAL)
         {
             if (ch == KEY_ESC)
@@ -2033,44 +2051,16 @@ vkey(void)
             else
                 goto vkey_end;          /* Normal Key */
         }
-#else
-        if (ch == KEY_ESC)
-        {
-            if (mode == VKEYMODE_ESC)    /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
-                mod = META_CODE;    /* Make the key Meta-ed */
-            else
-                mod = 0;            /* Reset modifiers */
-
-            if (mode == VKEYMODE_NORMAL)
-            {
-                vi_mode |= IM_VKEY_ESC;
-                vio_to = esc_tv;
-            }
-            else
-            {
-                vio_to = seq_tv_dec;
-                seq_tv_dec.tv_usec >>= 1;  /* Prevent infinity escape sequences */
-            }
-
-            mode = VKEYMODE_ESC;
-        }
-        else if (mode == VKEYMODE_NORMAL)             /* Normal Key */
-        {
-            goto vkey_end;
-        }
-#endif
         else if (mode == VKEYMODE_ESC)   /* "<Esc> `ch`" */
         {                               /* Escape sequence */
             vio_to = seq_tv_dec;
             if (ch == '[' || ch == 'O')       /* "<Esc> <[O>" */
                 mode = VKEYMODE_CSI_APP;
-#ifdef  TRAP_ESC
             else if (ch == KEY_ESC) /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
             {
                 seq_tv_dec.tv_usec >>= 1;  /* Prevent infinity "<Esc>..." */
                 mod = META_CODE;       /* Make the key Meta-ed */
             }
-#endif
             else  /* "<Esc> <Esc> {`ch`|END}" | "<Esc> {`ch`|END}" */
             {
                 ch = char_opt(ch, Meta(ch), mod_key(mod, KEY_ESC));
