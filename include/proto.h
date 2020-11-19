@@ -320,10 +320,10 @@ void add_io(int fd, int timeout);
 int iac_process(const unsigned char *current, const unsigned char *end, int *pcount);
 int iac_count(const unsigned char *current);
 int igetch(void);
+int vkey(void);
 BRD *ask_board(char *board, unsigned int perm, const char *msg);
 int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo);
 int vans(const char *prompt);
-int vkey(void);
 
 /* xover.c */
 XO *xo_new(const char *path);

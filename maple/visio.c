@@ -1946,6 +1946,294 @@ igetch(void)
 }
 
 
+#undef  TRAP_ESC  /* `ESC` is invalid (trap) if not at the beginning of the escape sequences */
+
+static inline int
+char_opt(int ch, int key, int key_timeout)
+{
+    switch (ch)
+    {
+      case I_TIMEOUT:   /* "<sequence_until_ch> END" => `key_last` */
+        return key_timeout;
+      case I_OTHERDATA:
+        return I_OTHERDATA;
+      case I_RESIZETERM:
+        return I_RESIZETERM;
+      default:          /* "<sequence_until_ch> `ch`" => `key` */
+        return key;
+    }
+}
+
+#define META_CODE   0x8
+#define CTRL_CODE   0x4
+#define ALT_CODE    0x2
+#define SHIFT_CODE  0x1
+
+static inline int
+mod_key(int mod, int key)   /* xterm-style modifier */
+{
+    if (mod & CTRL_CODE)
+        key = Ctrl(key);
+    if (mod & META_CODE || mod & ALT_CODE)
+        key = Meta(key);
+    if (mod & SHIFT_CODE)
+        key = Shift(key);
+    return key;
+}
+
+static inline int
+char_mod(int ch)    /* rxvt-style modifier character */
+{
+    switch (ch)
+    {
+      case '~':
+        return 0;
+      case '$':
+        return SHIFT_CODE;
+      case '^':
+        return CTRL_CODE;
+      case '@':
+        return CTRL_CODE | SHIFT_CODE;
+      default:
+        return -1;
+    }
+}
+
+int
+vkey(void)
+{
+    const struct timeval vio_to_backup = vio_to;
+    struct timeval seq_tv_dec = seq_tv; /* It decreases to prevent infinity escape sequences */
+    int mode, mod = 0;
+    int ch, last, last2;
+
+    mode = last = last2 = 0;
+    for (;;)
+    {
+        ch = igetch();
+#ifdef  TRAP_ESC
+        if (mode == 0)
+        {
+            if (ch == KEY_ESC)
+            {
+                vi_mode |= IM_VKEY_ESC;
+                vio_to = esc_tv;
+                mode = 1;
+            }
+            else
+                goto vkey_end;          /* Normal Key */
+        }
+#else
+        if (ch == KEY_ESC)
+        {
+            if (mode == 1)    /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
+                mod = META_CODE;    /* Make the key Meta-ed */
+            else
+                mod = 0;            /* Reset modifiers */
+
+            if (mode == 0)
+            {
+                vi_mode |= IM_VKEY_ESC;
+                vio_to = esc_tv;
+            }
+            else
+            {
+                vio_to = seq_tv_dec;
+                seq_tv_dec.tv_usec >>= 1;  /* Prevent infinity escape sequences */
+            }
+
+            mode = 1;
+        }
+        else if (mode == 0)             /* Normal Key */
+        {
+            goto vkey_end;
+        }
+#endif
+        else if (mode == 1)   /* "<Esc> `ch`" */
+        {                               /* Escape sequence */
+            vio_to = seq_tv_dec;
+            if (ch == '[' || ch == 'O')       /* "<Esc> <[O>" */
+                mode = 2;
+#ifdef  TRAP_ESC
+            else if (ch == KEY_ESC) /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
+            {
+                seq_tv_dec.tv_usec >>= 1;  /* Prevent infinity "<Esc>..." */
+                mod = META_CODE;       /* Make the key Meta-ed */
+            }
+#endif
+            else  /* "<Esc> <Esc> {`ch`|END}" | "<Esc> {`ch`|END}" */
+            {
+                ch = char_opt(ch, Meta(ch), mod_key(mod, KEY_ESC));
+                goto vkey_end;
+            }
+        }
+        else if (mode == 2)   /* "<Esc> <[O> `ch`" */
+        {
+            switch (ch)
+            {
+              /* "<Esc> <[O> <A-D>" */ /* Cursor key */
+              case 'A': case 'B': case 'C': case 'D':
+                ch = mod_key(mod, KEY_UP + (ch - 'A'));
+                goto vkey_end;
+
+              /* "<Esc> <[O> <HF>" */ /* Home End (xterm) */
+              case 'H':
+                ch = mod_key(mod, KEY_HOME);
+                goto vkey_end;
+              case 'F':
+                ch = mod_key(mod, KEY_END);
+                goto vkey_end;
+              default:;
+            }
+            if (last == 'O' || mod)   /* "<Esc> O `ch`" | "<Esc> [ 1 ; <2-9> `ch`" | "<Esc> [ 1 ; 1 <0-6> `ch`" */
+            {
+                switch (ch)
+                {
+                  /* "<Esc> O <PQRS>" */ /* F1 - F4 */
+                  case 'P': case 'Q': case 'R': case 'S':
+                    ch = mod_key(mod, KEY_F1 + (ch - 'P'));
+                    goto vkey_end;
+
+                  /* "<Esc> O w" */ /* END (PuTTY-rxvt) */
+                  case 'w':
+                    ch = mod_key(mod, KEY_END);
+                    goto vkey_end;
+
+                  /* "<Esc> O <a-d>" */ /* Ctrl-ed cursor key (rxvt) */
+                  case 'a': case 'b': case 'c': case 'd':
+                    ch = mod_key(mod | CTRL_CODE, KEY_UP + (ch - 'a'));
+                    goto vkey_end;
+
+                  default:
+                    if (last == 'O')  /* "<Esc> O {`ch`|END}" */
+                    {
+                        ch = char_opt(ch, KEY_INVALID, Meta('O'));
+                        goto vkey_end;
+                    }
+                }
+            }
+            switch (ch)                  /* "<Esc> [ `ch`" */
+            {
+              /* "<Esc> [ <GIL>" */ /* PgDn PgUp Ins (SCO) */
+              case 'G':
+                ch = mod_key(mod, KEY_PGDN);
+                goto vkey_end;
+              case 'I':
+                ch = mod_key(mod, KEY_PGUP);
+                goto vkey_end;
+              case 'L':
+                ch = mod_key(mod, KEY_INS);
+                goto vkey_end;
+
+              /* "<Esc> [ Z" */ /* Shift-Tab */
+              case 'Z':
+                ch = mod_key(mod, KEY_STAB);
+                goto vkey_end;
+
+              /* "<Esc> [ <a-d>" */ /* Shift-ed cursor key (rxvt) */
+              case 'a': case 'b': case 'c': case 'd':
+                ch = mod_key(mod | SHIFT_CODE, KEY_UP + (ch - 'a'));
+                goto vkey_end;
+
+              default:
+                if (ch >= '1' && ch <= '8')   /* "<Esc> [ <1-8>" */
+                    mode = 3;
+                else    /* "<Esc> [ {`ch`|END}" */
+                {
+                    ch = char_opt(ch, KEY_INVALID, Meta('['));
+                    goto vkey_end;
+                }
+            }
+        }
+        else if (ch == ';')   /* "<Esc> [ <1-8> ;" | "<Esc> [ <1-8> <0-9> ;" */
+        {
+            int mod_ch = igetch();      /* "; [END|`ch`]" */
+            if (mod_ch < '1' || mod_ch > '9')
+            {
+                ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
+                goto vkey_end;
+            }
+            if (mod_ch == '1')          /* "; <1-9>" */
+            {
+                mod_ch = igetch();      /* "; 1 [END|`ch`]" */
+                if (mod_ch < '0' || mod_ch > '6')
+                {
+                    ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
+                    goto vkey_end;
+                }
+                mod_ch += 10;           /* "; 1 <0-6>" */
+            }
+            mod_ch -= '1';   /* Change to bit number */
+            mod |= mod_ch;
+            if (mode == 3 && last == '1')  /* "<Esc> [ 1 ; <2-9>" | "<Esc> [ 1 ; 1 <0-6>" */
+            {
+                /* Recover state to "<Esc> [ `ch`" */
+                mode = 2;
+                last = last2;
+            } /* else "<Esc> [ <1-8> <0-9> ; <2-9>" | "<Esc> [ <1-8> <0-9> ; 1 <0-6>" */
+            continue;     /* Get next `ch`; keep current state */
+        }
+        else if (mode == 3)   /* "<Esc> [ <1-8> `ch`" */
+        {                               /* Home Ins Del End PgUp PgDn Home(rxvt) End(rxvt) */
+            if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <~$^@>" */
+            {
+                mod |= char_mod(ch);
+                if (last <= '6')        /* "<Esc> [ <1-6> <~$^@>" */
+                {
+                    ch = mod_key(mod, KEY_HOME + (last - '1'));
+                    goto vkey_end;
+                }
+                switch (last)           /* "<Esc> [ <78> <~$^@>" */ /* Home End (rxvt) */
+                {
+                  case '7':
+                    ch = mod_key(mod, KEY_HOME);
+                    goto vkey_end;
+                  case '8':
+                    ch = mod_key(mod, KEY_END);
+                    goto vkey_end;
+                  default:
+                    ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
+                    goto vkey_end;
+                }
+            }
+            else if (ch >= '0' && ch <= '9')      /* "<Esc> [ <1-8> <0-9>" */
+                mode = 4;
+            else
+            {
+                ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
+                goto vkey_end;
+            }
+        }
+        else if (mode == 4)   /* "<Esc> [ <1-8> <0-9> `ch`" */
+        {                               /* F1 - F12 */
+            if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <0-9> <~$^@>" */
+            {
+                mod |= char_mod(ch);
+                switch (last2)
+                {
+                  case '1':             /* "<Esc> [ 1 `last` <~$^@>" */ /* F1 - F8 */
+                    ch = mod_key(mod, KEY_F1 + (last - '1') - (last > '6'));
+                    goto vkey_end;
+                  case '2':             /* "<Esc> [ 2 `last` <~$^@>" */ /* F9 - F12 */
+                    ch = mod_key(mod, KEY_F9 + (last - '0') - (last > '2'));
+                    goto vkey_end;
+                  default:;
+                }
+            }
+            ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
+            goto vkey_end;
+        }
+        last2 = last;
+        last = ch;
+    }
+
+vkey_end:
+    vi_mode &= ~IM_VKEY_ESC;
+    vio_to = vio_to_backup;
+    return ch;
+}
+
+
 #define MATCH_END       0x8000
 /* Thor.990204: 註解: 代表MATCH完結, 要嘛就補足,
                       要嘛就維持原狀, 不秀出可能的值了 */
@@ -2658,292 +2946,4 @@ vans(
     char ans[3];
 
     return vget(B_LINES_REF, 0, prompt, ans, sizeof(ans), LCECHO);
-}
-
-
-#undef  TRAP_ESC  /* `ESC` is invalid (trap) if not at the beginning of the escape sequences */
-
-static inline int
-char_opt(int ch, int key, int key_timeout)
-{
-    switch (ch)
-    {
-      case I_TIMEOUT:   /* "<sequence_until_ch> END" => `key_last` */
-        return key_timeout;
-      case I_OTHERDATA:
-        return I_OTHERDATA;
-      case I_RESIZETERM:
-        return I_RESIZETERM;
-      default:          /* "<sequence_until_ch> `ch`" => `key` */
-        return key;
-    }
-}
-
-#define META_CODE   0x8
-#define CTRL_CODE   0x4
-#define ALT_CODE    0x2
-#define SHIFT_CODE  0x1
-
-static inline int
-mod_key(int mod, int key)   /* xterm-style modifier */
-{
-    if (mod & CTRL_CODE)
-        key = Ctrl(key);
-    if (mod & META_CODE || mod & ALT_CODE)
-        key = Meta(key);
-    if (mod & SHIFT_CODE)
-        key = Shift(key);
-    return key;
-}
-
-static inline int
-char_mod(int ch)    /* rxvt-style modifier character */
-{
-    switch (ch)
-    {
-      case '~':
-        return 0;
-      case '$':
-        return SHIFT_CODE;
-      case '^':
-        return CTRL_CODE;
-      case '@':
-        return CTRL_CODE | SHIFT_CODE;
-      default:
-        return -1;
-    }
-}
-
-int
-vkey(void)
-{
-    const struct timeval vio_to_backup = vio_to;
-    struct timeval seq_tv_dec = seq_tv; /* It decreases to prevent infinity escape sequences */
-    int mode, mod = 0;
-    int ch, last, last2;
-
-    mode = last = last2 = 0;
-    for (;;)
-    {
-        ch = igetch();
-#ifdef  TRAP_ESC
-        if (mode == 0)
-        {
-            if (ch == KEY_ESC)
-            {
-                vi_mode |= IM_VKEY_ESC;
-                vio_to = esc_tv;
-                mode = 1;
-            }
-            else
-                goto vkey_end;          /* Normal Key */
-        }
-#else
-        if (ch == KEY_ESC)
-        {
-            if (mode == 1)    /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
-                mod = META_CODE;    /* Make the key Meta-ed */
-            else
-                mod = 0;            /* Reset modifiers */
-
-            if (mode == 0)
-            {
-                vi_mode |= IM_VKEY_ESC;
-                vio_to = esc_tv;
-            }
-            else
-            {
-                vio_to = seq_tv_dec;
-                seq_tv_dec.tv_usec >>= 1;  /* Prevent infinity escape sequences */
-            }
-
-            mode = 1;
-        }
-        else if (mode == 0)             /* Normal Key */
-        {
-            goto vkey_end;
-        }
-#endif
-        else if (mode == 1)   /* "<Esc> `ch`" */
-        {                               /* Escape sequence */
-            vio_to = seq_tv_dec;
-            if (ch == '[' || ch == 'O')       /* "<Esc> <[O>" */
-                mode = 2;
-#ifdef  TRAP_ESC
-            else if (ch == KEY_ESC) /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
-            {
-                seq_tv_dec.tv_usec >>= 1;  /* Prevent infinity "<Esc>..." */
-                mod = META_CODE;       /* Make the key Meta-ed */
-            }
-#endif
-            else  /* "<Esc> <Esc> {`ch`|END}" | "<Esc> {`ch`|END}" */
-            {
-                ch = char_opt(ch, Meta(ch), mod_key(mod, KEY_ESC));
-                goto vkey_end;
-            }
-        }
-        else if (mode == 2)   /* "<Esc> <[O> `ch`" */
-        {
-            switch (ch)
-            {
-              /* "<Esc> <[O> <A-D>" */ /* Cursor key */
-              case 'A': case 'B': case 'C': case 'D':
-                ch = mod_key(mod, KEY_UP + (ch - 'A'));
-                goto vkey_end;
-
-              /* "<Esc> <[O> <HF>" */ /* Home End (xterm) */
-              case 'H':
-                ch = mod_key(mod, KEY_HOME);
-                goto vkey_end;
-              case 'F':
-                ch = mod_key(mod, KEY_END);
-                goto vkey_end;
-              default:;
-            }
-            if (last == 'O' || mod)   /* "<Esc> O `ch`" | "<Esc> [ 1 ; <2-9> `ch`" | "<Esc> [ 1 ; 1 <0-6> `ch`" */
-            {
-                switch (ch)
-                {
-                  /* "<Esc> O <PQRS>" */ /* F1 - F4 */
-                  case 'P': case 'Q': case 'R': case 'S':
-                    ch = mod_key(mod, KEY_F1 + (ch - 'P'));
-                    goto vkey_end;
-
-                  /* "<Esc> O w" */ /* END (PuTTY-rxvt) */
-                  case 'w':
-                    ch = mod_key(mod, KEY_END);
-                    goto vkey_end;
-
-                  /* "<Esc> O <a-d>" */ /* Ctrl-ed cursor key (rxvt) */
-                  case 'a': case 'b': case 'c': case 'd':
-                    ch = mod_key(mod | CTRL_CODE, KEY_UP + (ch - 'a'));
-                    goto vkey_end;
-
-                  default:
-                    if (last == 'O')  /* "<Esc> O {`ch`|END}" */
-                    {
-                        ch = char_opt(ch, KEY_INVALID, Meta('O'));
-                        goto vkey_end;
-                    }
-                }
-            }
-            switch (ch)                  /* "<Esc> [ `ch`" */
-            {
-              /* "<Esc> [ <GIL>" */ /* PgDn PgUp Ins (SCO) */
-              case 'G':
-                ch = mod_key(mod, KEY_PGDN);
-                goto vkey_end;
-              case 'I':
-                ch = mod_key(mod, KEY_PGUP);
-                goto vkey_end;
-              case 'L':
-                ch = mod_key(mod, KEY_INS);
-                goto vkey_end;
-
-              /* "<Esc> [ Z" */ /* Shift-Tab */
-              case 'Z':
-                ch = mod_key(mod, KEY_STAB);
-                goto vkey_end;
-
-              /* "<Esc> [ <a-d>" */ /* Shift-ed cursor key (rxvt) */
-              case 'a': case 'b': case 'c': case 'd':
-                ch = mod_key(mod | SHIFT_CODE, KEY_UP + (ch - 'a'));
-                goto vkey_end;
-
-              default:
-                if (ch >= '1' && ch <= '8')   /* "<Esc> [ <1-8>" */
-                    mode = 3;
-                else    /* "<Esc> [ {`ch`|END}" */
-                {
-                    ch = char_opt(ch, KEY_INVALID, Meta('['));
-                    goto vkey_end;
-                }
-            }
-        }
-        else if (ch == ';')   /* "<Esc> [ <1-8> ;" | "<Esc> [ <1-8> <0-9> ;" */
-        {
-            int mod_ch = igetch();      /* "; [END|`ch`]" */
-            if (mod_ch < '1' || mod_ch > '9')
-            {
-                ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
-                goto vkey_end;
-            }
-            if (mod_ch == '1')          /* "; <1-9>" */
-            {
-                mod_ch = igetch();      /* "; 1 [END|`ch`]" */
-                if (mod_ch < '0' || mod_ch > '6')
-                {
-                    ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
-                    goto vkey_end;
-                }
-                mod_ch += 10;           /* "; 1 <0-6>" */
-            }
-            mod_ch -= '1';   /* Change to bit number */
-            mod |= mod_ch;
-            if (mode == 3 && last == '1')  /* "<Esc> [ 1 ; <2-9>" | "<Esc> [ 1 ; 1 <0-6>" */
-            {
-                /* Recover state to "<Esc> [ `ch`" */
-                mode = 2;
-                last = last2;
-            } /* else "<Esc> [ <1-8> <0-9> ; <2-9>" | "<Esc> [ <1-8> <0-9> ; 1 <0-6>" */
-            continue;     /* Get next `ch`; keep current state */
-        }
-        else if (mode == 3)   /* "<Esc> [ <1-8> `ch`" */
-        {                               /* Home Ins Del End PgUp PgDn Home(rxvt) End(rxvt) */
-            if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <~$^@>" */
-            {
-                mod |= char_mod(ch);
-                if (last <= '6')        /* "<Esc> [ <1-6> <~$^@>" */
-                {
-                    ch = mod_key(mod, KEY_HOME + (last - '1'));
-                    goto vkey_end;
-                }
-                switch (last)           /* "<Esc> [ <78> <~$^@>" */ /* Home End (rxvt) */
-                {
-                  case '7':
-                    ch = mod_key(mod, KEY_HOME);
-                    goto vkey_end;
-                  case '8':
-                    ch = mod_key(mod, KEY_END);
-                    goto vkey_end;
-                  default:
-                    ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
-                    goto vkey_end;
-                }
-            }
-            else if (ch >= '0' && ch <= '9')      /* "<Esc> [ <1-8> <0-9>" */
-                mode = 4;
-            else
-            {
-                ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
-                goto vkey_end;
-            }
-        }
-        else if (mode == 4)   /* "<Esc> [ <1-8> <0-9> `ch`" */
-        {                               /* F1 - F12 */
-            if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <0-9> <~$^@>" */
-            {
-                mod |= char_mod(ch);
-                switch (last2)
-                {
-                  case '1':             /* "<Esc> [ 1 `last` <~$^@>" */ /* F1 - F8 */
-                    ch = mod_key(mod, KEY_F1 + (last - '1') - (last > '6'));
-                    goto vkey_end;
-                  case '2':             /* "<Esc> [ 2 `last` <~$^@>" */ /* F9 - F12 */
-                    ch = mod_key(mod, KEY_F9 + (last - '0') - (last > '2'));
-                    goto vkey_end;
-                  default:;
-                }
-            }
-            ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
-            goto vkey_end;
-        }
-        last2 = last;
-        last = ch;
-    }
-
-vkey_end:
-    vi_mode &= ~IM_VKEY_ESC;
-    vio_to = vio_to_backup;
-    return ch;
 }
