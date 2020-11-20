@@ -1932,7 +1932,7 @@ ve_key:
 
             case KEY_LEFT:
 
-                if (col)
+                if (pos)
                 {
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
                     continue;
