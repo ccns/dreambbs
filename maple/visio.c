@@ -2208,10 +2208,49 @@ vkey_end:
     return ch;
 }
 
+/* Ignore automatic key repeats for DBCS characters send by some clients */
+GCC_CHECK_NONNULL_ALL
+int vkey_process_no_dbcs_repeat(int (*fgetch)(void))
+{
+    static int unget_key = KEY_NONE;
+    if (unget_key != KEY_NONE)
+    {
+        const int key = unget_key;
+        unget_key = KEY_NONE;
+        return key;
+    }
+
+    const int key = vkey_process(fgetch);
+    switch (key)
+    {
+    case Ctrl('H'): /* Backspace */
+    /* case Ctrl('D'): */ /* KKman 3 handles this as Del */
+    /* However KKman users are probably few in 2020 */
+    case KEY_DEL:
+    case KEY_LEFT:
+    case KEY_RIGHT:
+        {
+            /* Check the upcoming key to see whether the key is repeated */
+            const struct timeval vio_to_backup = vio_to;
+            vio_to = seq_tv;
+            {
+                const int key2 = vkey_process(fgetch);
+                if (key2 != I_TIMEOUT && key2 != KEY_INVALID && key2 != key)
+                    unget_key = key2; /* Not repeated; put it back */
+            }
+            vio_to = vio_to_backup;
+        }
+        break;
+    default:
+        ;
+    }
+    return key;
+}
+
 int
 vkey(void)
 {
-    const int key = vkey_process(igetch);
+    const int key = vkey_process_no_dbcs_repeat(igetch);
 
     switch (key)
     {
