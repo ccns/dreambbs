@@ -49,6 +49,88 @@ static int ve_mode;             /* operation mode */
 
 
 /* ----------------------------------------------------- */
+/* Thor: ansi 座標轉換  for color 編輯模式               */
+/* ----------------------------------------------------- */
+
+
+/* Convert a displayed x position `ansix` relative to the row `line` into raw x position */
+GCC_PURE static int
+ansi2n(
+    int ansix,
+    const textline *line)
+{
+    const char *data, *tmp;
+    int ch;
+
+    data = tmp = line->data;
+
+    while ((ch = *tmp))
+    {
+        if (ch == KEY_ESC)
+        {
+            for (;;)
+            {
+                ch = (unsigned char) *++tmp;
+                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */)
+                {
+                    tmp++;
+                    break;
+                }
+                if (!ch)
+                    break;
+            }
+            continue;
+        }
+        if (ansix <= 0)
+            break;
+        tmp++;
+        ansix--;
+    }
+    return tmp - data;
+}
+
+
+/* Convert a raw x position `nx` into displayed x position relative to the row `line` */
+GCC_PURE static int
+n2ansi(
+    int nx,
+    const textline *line)
+{
+    const char *tmp, *nxp;
+    int ansix;
+    int ch;
+
+    tmp = nxp = line->data;
+    nxp += nx;
+    ansix = 0;
+
+    while ((ch = *tmp))
+    {
+        if (ch == KEY_ESC)
+        {
+            for (;;)
+            {
+                ch = (unsigned char) *++tmp;
+                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */)
+                {
+                    tmp++;
+                    break;
+                }
+                if (!ch)
+                    break;
+            }
+            continue;
+        }
+        if (tmp >= nxp)
+            break;
+        tmp++;
+        ansix++;
+    }
+    return ansix;
+}
+
+
+/* ----------------------------------------------------- */
 /* 記憶體管理與編輯處理                                  */
 /* ----------------------------------------------------- */
 
@@ -209,86 +291,6 @@ ve_alloc(void)
     ve_abort(13);                       /* 記憶體用光了 */
     abort_bbs();
     return NULL;
-}
-
-
-/* ----------------------------------------------------- */
-/* Thor: ansi 座標轉換  for color 編輯模式               */
-/* ----------------------------------------------------- */
-
-
-GCC_PURE static int
-ansi2n(
-    int ansix,
-    const textline *line)
-{
-    const char *data, *tmp;
-    int ch;
-
-    data = tmp = line->data;
-
-    while ((ch = *tmp))
-    {
-        if (ch == KEY_ESC)
-        {
-            for (;;)
-            {
-                ch = (unsigned char) *++tmp;
-                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */)
-                {
-                    tmp++;
-                    break;
-                }
-                if (!ch)
-                    break;
-            }
-            continue;
-        }
-        if (ansix <= 0)
-            break;
-        tmp++;
-        ansix--;
-    }
-    return tmp - data;
-}
-
-
-GCC_PURE static int
-n2ansi(
-    int nx,
-    const textline *line)
-{
-    const char *tmp, *nxp;
-    int ansix;
-    int ch;
-
-    tmp = nxp = line->data;
-    nxp += nx;
-    ansix = 0;
-
-    while ((ch = *tmp))
-    {
-        if (ch == KEY_ESC)
-        {
-            for (;;)
-            {
-                ch = (unsigned char) *++tmp;
-                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */)
-                {
-                    tmp++;
-                    break;
-                }
-                if (!ch)
-                    break;
-            }
-            continue;
-        }
-        if (tmp >= nxp)
-            break;
-        tmp++;
-        ansix++;
-    }
-    return ansix;
 }
 
 
