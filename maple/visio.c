@@ -2795,31 +2795,33 @@ vget_redraw:
 #endif
         switch (ch)
         {
-        case KEY_DEL:
-        case Ctrl('D'):
-
-            if (col >= len)
-            {
-                bell();
-                break;
-            }
-
-            col++;
-            // Falls through
-
         case Ctrl('H'):
-
             if (!col)
             {
                 bell();
                 break;
             }
 
+            col--;
+
+            /* `col >= len` should hold; skip the check */
+            if (0)
+            {
+                // Falls through
+
+        case KEY_DEL:
+        case Ctrl('D'):
+                if (col >= len)
+                {
+                    bell();
+                    break;
+                }
+            }
+
             /* ----------------------------------------------- */
             /* remove data and display it                      */
             /* ----------------------------------------------- */
 
-            col--;
             len--;
             dirty = true;
 
