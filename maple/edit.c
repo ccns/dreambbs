@@ -1535,7 +1535,7 @@ ve_filer(
                 str = p->data;
                 if (v || str[0])
                 {
-                    str_trim(str);
+                    str_rtrim(str);
 
                     if (v || (bbsmode != M_POST))
                         fprintf(fp, "%s\n", str);

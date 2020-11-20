@@ -257,7 +257,7 @@ outs_line(                      /* 印出一般內容 */
         ptr2 = buf;
         while (1)
         {
-            if (!(ptr1 = str_sub(str, hunt)))
+            if (!(ptr1 = str_casestr_dbcs(str, hunt)))
             {
                 str_ncpy(ptr2, str, buf + ANSILINELEN - ptr2 - 1);
                 break;
@@ -485,7 +485,7 @@ more(
 
     if (hunt[0])                /* 在 xxxx_browse() 請求搜尋字串 */
     {
-        str_lowest(hunt, hunt);
+        str_lower_dbcs(hunt, hunt);
         shift = HUNT_MASK | HUNT_START;
     }
     else
@@ -538,14 +538,14 @@ more(
                 if (shift & HUNT_NEXT)  /* 按 n 搜尋下一筆 */
                 {
                     /* 一找到就停於該列 */
-                    if (str_sub(buf, hunt))
+                    if (str_casestr_dbcs(buf, hunt))
                         shift = 0;
                 }
                 else                    /* 按 / 開始搜尋 */
                 {
                     /* 若在第二頁以後找到，一找到就停於該列；
                        若在第一頁找到，必須等到讀完第一頁才能停止 */
-                    if (shift & HUNT_START && str_sub(buf, hunt))
+                    if (shift & HUNT_START && str_casestr_dbcs(buf, hunt))
                         shift ^= HUNT_START | HUNT_FOUND;               /* 拿掉 HUNT_START 並加上 HUNT_FOUND */
                     if (shift & HUNT_FOUND && lino >= b_lines)
                         shift = 0;
@@ -647,7 +647,7 @@ re_key:
             }
             else if (vget(B_LINES_REF, 0, "搜尋：", hunt, sizeof(hunt), DOECHO))
             {
-                str_lowest(hunt, hunt);
+                str_lower_dbcs(hunt, hunt);
                 shift = HUNT_MASK | HUNT_START;
             }
             else                                /* 如果取消搜尋的話，重繪 footer 即可 */

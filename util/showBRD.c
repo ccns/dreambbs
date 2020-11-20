@@ -36,7 +36,7 @@ main(
 
     while (fread(&brd, sizeof(BRD), 1, fp) == 1)
     {
-        if (show_allbrd || !str_cmp(brd.brdname, argv[1]))
+        if (show_allbrd || !str_casecmp(brd.brdname, argv[1]))
         {
             printf("看板名稱：%-13s     看板標題：[%s] %s\n", brd.brdname, brd.class_, brd.title);
             printf("投票狀態：%-13d     看板板主：%s\n", brd.bvote, brd.BM);

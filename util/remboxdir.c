@@ -120,7 +120,7 @@ article_parse(
 
     if (strchr(ptr, '@'))
     {
-        str_from(ptr, hdr.owner, hdr.nick);
+        from_parse(ptr, hdr.owner, hdr.nick);
         hdr.xmode |= POST_INCOME;   /* also MAIL_INCOME */
     }
     else

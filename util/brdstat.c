@@ -383,7 +383,7 @@ main(void)
         {
 
 
-//          if (!str_cmp(head->brdname, "Test") || !str_cmp(head->brdname, "WindTop"))
+//          if (!str_casecmp(head->brdname, "Test") || !str_casecmp(head->brdname, "WindTop"))
 //          {
 //              printf("DEBUG: bname:%s  reads:%d  posts:%d\n", head->brdname, head->n_reads, head->n_posts);
                 memset(&bstat, 0, sizeof(BSTAT));

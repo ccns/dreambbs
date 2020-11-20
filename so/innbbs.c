@@ -116,7 +116,7 @@ nl_cmp(
     const void *a, const void *b)
 {
     /* 依 name 排序 */
-    return str_cmp(((const nodelist_t *)a) -> name, ((const nodelist_t *)b) -> name);
+    return str_casecmp(((const nodelist_t *)a) -> name, ((const nodelist_t *)b) -> name);
 }
 
 
@@ -125,7 +125,7 @@ nl_search(
     const void *nl,
     const char *key)
 {
-    return (int) (str_str(((const nodelist_t *)nl) -> name, key) || str_str(((const nodelist_t *)nl) -> host, key));
+    return (int) (str_casestr(((const nodelist_t *)nl) -> name, key) || str_casestr(((const nodelist_t *)nl) -> host, key));
 }
 
 
@@ -283,8 +283,8 @@ nf_cmp(
     const void *a, const void *b)
 {
     /* path/newsgroup 交叉比對 */
-    int k = str_cmp(((const newsfeeds_t *)a) -> path, ((const newsfeeds_t *)b) -> path);
-    return k ? k : str_cmp(((const newsfeeds_t *)a) -> newsgroup, ((const newsfeeds_t *)b) -> newsgroup);
+    int k = str_casecmp(((const newsfeeds_t *)a) -> path, ((const newsfeeds_t *)b) -> path);
+    return k ? k : str_casecmp(((const newsfeeds_t *)a) -> newsgroup, ((const newsfeeds_t *)b) -> newsgroup);
 }
 
 
@@ -293,7 +293,7 @@ nf_search(
     const void *nf,
     const char *key)
 {
-    return (int) (str_str(((const newsfeeds_t *)nf) -> newsgroup, key) || str_str(((const newsfeeds_t *)nf) -> board, key));
+    return (int) (str_casestr(((const newsfeeds_t *)nf) -> newsgroup, key) || str_casestr(((const newsfeeds_t *)nf) -> board, key));
 }
 
 
@@ -361,8 +361,8 @@ ncm_cmp(
     const void *a, const void *b)
 {
     /* issuer/type 交叉比對 */
-    int k = str_cmp(((const ncmperm_t *)a) -> issuer, ((const ncmperm_t *)b) -> issuer);
-    return k ? k : str_cmp(((const ncmperm_t *)a) -> type, ((const ncmperm_t *)b) -> type);
+    int k = str_casecmp(((const ncmperm_t *)a) -> issuer, ((const ncmperm_t *)b) -> issuer);
+    return k ? k : str_casecmp(((const ncmperm_t *)a) -> type, ((const ncmperm_t *)b) -> type);
 }
 
 
@@ -371,7 +371,7 @@ ncm_search(
     const void *ncm,
     const char *key)
 {
-    return (int) (str_str(((const ncmperm_t *)ncm) -> issuer, key) || str_str(((const ncmperm_t *)ncm) -> type, key));
+    return (int) (str_casestr(((const ncmperm_t *)ncm) -> issuer, key) || str_casestr(((const ncmperm_t *)ncm) -> type, key));
 }
 
 
@@ -507,7 +507,7 @@ spam_cmp(
     int i = strcmp(x->path, y->path);
     int j = strcmp(x->board, y->board);
     int k = x->xmode - y->xmode;
-    return i ? i : j ? j : k ? k : str_cmp(x->detail, y->detail);
+    return i ? i : j ? j : k ? k : str_casecmp(x->detail, y->detail);
 }
 
 
@@ -516,7 +516,7 @@ spam_search(
     const void *spam,
     const char *key)
 {
-    return (int) (str_str(((const spamrule_t *)spam) -> detail, key));
+    return (int) (str_casestr(((const spamrule_t *)spam) -> detail, key));
 }
 
 
@@ -718,7 +718,7 @@ a_innbbs(void)
     const char *fpath;
     int recsiz;
 
-    if (!check_admin(cuser.userid) && str_cmp(cuser.userid, SYSOPNAME))
+    if (!check_admin(cuser.userid) && str_casecmp(cuser.userid, SYSOPNAME))
     {
         vmsg("◎ 你不是系統管理員！");
         return DL_RELEASE(0);

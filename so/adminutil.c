@@ -289,7 +289,7 @@ const char *userid)
     do
     {
         cc = list[len];
-        if ((!cc || cc == '/') && !str_ncmp(list, userid, len))
+        if ((!cc || cc == '/') && !str_ncasecmp(list, userid, len))
         {
             return true;
         }
@@ -315,7 +315,7 @@ const char *list)             /* ªO¥D¡GBM list */
     do
     {
         cc = list[len];
-        if ((!cc || cc == '/') && !str_ncmp(list, userid, len))
+        if ((!cc || cc == '/') && !str_ncasecmp(list, userid, len))
         {
             return true;
         }

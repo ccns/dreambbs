@@ -221,7 +221,7 @@ pal_sync(
             if (size > 0)
             {
                 if (size > sizeof(PAL))
-                    xsort(pbase, size / sizeof(PAL), sizeof(PAL), (int (*)(const void *lhs, const void *rhs))str_cmp);
+                    xsort(pbase, size / sizeof(PAL), sizeof(PAL), (int (*)(const void *lhs, const void *rhs))str_casecmp);
 #ifndef FAKE_IO
                 lseek(fd, 0, SEEK_SET);
                 write(fd, pbase, size);

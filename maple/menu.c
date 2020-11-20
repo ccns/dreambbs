@@ -1310,7 +1310,7 @@ domenu_redo_reload:
             }
             if (mlevel && !(mlevel & level))
                 continue;
-            if (!strncmp(xyz->mtail->desc, OPT_OPERATOR, strlen(OPT_OPERATOR)) && !(supervisor || !str_cmp(cuser.userid, ELDER) || !str_cmp(cuser.userid, STR_SYSOP)))
+            if (!strncmp(xyz->mtail->desc, OPT_OPERATOR, strlen(OPT_OPERATOR)) && !(supervisor || !str_casecmp(cuser.userid, ELDER) || !str_casecmp(cuser.userid, STR_SYSOP)))
                 continue;
 
             xyz->table[max++] = xyz->mtail;

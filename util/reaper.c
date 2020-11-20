@@ -342,7 +342,7 @@ bm_list(                 /* 顯示 userid 是哪些板的板主 */
         {
             do
             {
-                if (!str_ncmp(list, userid, len))
+                if (!str_ncasecmp(list, userid, len))
                 {
                     ch = list[len];
                     if ((ch == 0) || (ch == '/'))

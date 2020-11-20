@@ -223,7 +223,7 @@ XO *xo)
     {
         rec_get(xo->dir, &list, sizeof(LIST), cur);
 
-        if (str_str(list.userid, buf))
+        if (str_casestr(list.userid, buf))
         {
             return XR_FOOT + XO_MOVE + cur;
 

@@ -65,7 +65,7 @@ static int
 header_cmp(
     const void *a, const void *b)
 {
-    return str_cmp(((const header_t *)a) -> name, ((const header_t *)b) -> name);
+    return str_casecmp(((const header_t *)a) -> name, ((const header_t *)b) -> name);
 }
 
 
@@ -104,7 +104,7 @@ is_loopback(
     for (;;)
     {
         cc = path[len];
-        if ((!cc || cc == '!') && !str_ncmp(path, token, len))
+        if ((!cc || cc == '!') && !str_ncasecmp(path, token, len))
             return true;
 
         for (;;)

@@ -185,7 +185,7 @@ XO *xo)
         lseek(fd, (off_t)(sizeof(EMAIL) * pos), SEEK_SET);
         if (read(fd, &viol, sizeof(EMAIL)) == sizeof(EMAIL))
         {
-            if (str_str(viol.email, buf))
+            if (str_casestr(viol.email, buf))
             {
                 xo->pos = pos;
                 close(fd);

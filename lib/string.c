@@ -6,7 +6,8 @@
 #include "dao.h"
 #include "global_def.h"
 
-char *str_add(char *dst, const char *src)
+/* Copy string `src` to buffer `dst` and return the new string end of `dst` (formerly `str_add`) */
+char *str_pcpy(char *dst, const char *src)
 {
     while ((*dst = *src))
     {
@@ -59,7 +60,9 @@ void str_cat(char *dst, const char *s1, const char *s2)
         ;
 }
 
-GCC_PURE int str_cmp(const char *s1, const char *s2)
+/* Compare two strings `s1` and `s2`, ignoring case differences (formerly `str_cmp`)
+ * Returns the value of difference between the first different bytes of the two strings or `0` if the strings do not differ */
+GCC_PURE int str_casecmp(const char *s1, const char *s2)
 {
     int c1, c2, diff;
 
@@ -78,7 +81,8 @@ GCC_PURE int str_cmp(const char *s1, const char *s2)
     return 0;
 }
 
-void str_cut(char *dst, const char *src)
+/* Split string `src` with spaces and copy the first line of the second splitted item to `dst` (formerly `str_cut`) */
+void str_split_2nd(char *dst, const char *src)
 {
     for (;;)
     {
@@ -116,7 +120,9 @@ char *str_dup(const char *src, int pad)
     return dst;
 }
 
-void str_folder(char *fpath, const char *folder, const char *fname)
+/* Similar to the `setdirpath` below, but for some `folder`, use the parent directory as the base directory instead (formerly `str_folder`)
+ * When `folder` is not a path to a `.DIR` or `.GEM` file, the parent directory is used as the base directory */
+void setdirpath_root(char *fpath, const char *folder, const char *fname)
 {
     int ch;
     char *token = NULL;
@@ -132,6 +138,7 @@ void str_folder(char *fpath, const char *folder, const char *fname)
     strcpy(token, fname);
 }
 
+/* Output the path string to `fname` with the containing directory of the file specified with `direct` as the base directory to `fpath` */
 void setdirpath(char *fpath, const char *direct, const char *fname)
 {
     int ch;
@@ -159,7 +166,10 @@ void setdirpath(char *fpath, const char *direct, const char *fname)
 /* 6. "nick" <user@domain>                               */
 /* ----------------------------------------------------  */
 
-int str_from(char *from, char *addr, char *nick)
+/* Parse string `from` and copy the email address into buffer `addr`, and the nickname into buffer `nick` (formerly `str_from`)
+ * Returns `-1` if `from` does not contain any email addresses; `from` is copied into `addr` and an empty string is copied into `nick`
+ * Returns `0` otherwise */
+int from_parse(char *from, char *addr, char *nick)
 {
     char *str, *ptr, *langle;
     int cc;
@@ -204,7 +214,7 @@ int str_from(char *from, char *addr, char *nick)
             }
             ptr[1] = '\0';
             strcpy(nick, from);
-            str_decode(nick);
+            mmdecode_str(nick);
         }
 
         from = langle + 1;
@@ -226,7 +236,7 @@ int str_from(char *from, char *addr, char *nick)
                     ptr++;
 
                 strcpy(nick, ptr);
-                str_decode(nick);
+                mmdecode_str(nick);
             }
         }
     }
@@ -241,7 +251,7 @@ GCC_PURE int str_has(const char *list, const char *tag)
     for (;;)
     {
         int cc = list[len];
-        if ((!cc || cc == '/') && !str_ncmp(list, tag, len))
+        if ((!cc || cc == '/') && !str_ncasecmp(list, tag, len))
             return 1;
 
         for (;;)
@@ -283,7 +293,8 @@ GCC_PURE int hash32(const char *str)
     return str_hash(str, seed);
 }
 
-GCC_PURE int str_len(const char *str)
+/* Return the length of string `str` without spaces (formerly `str_len) */
+GCC_PURE int str_len_nospace(const char *str)
 {
     int cc, len;
 
@@ -296,6 +307,7 @@ GCC_PURE int str_len(const char *str)
     return len;
 }
 
+/* Convert string `str` to lowercase and output the result to buffer `dst` */
 void str_lower(char *dst, const char *src)
 {
     int ch;
@@ -310,7 +322,8 @@ void str_lower(char *dst, const char *src)
     while (ch);
 }
 
-void str_lowest(char *dst, const char *src)
+/* Convert string `str` to lowercase with DBCS characters handled and output the result to buffer `dst` (formerly `str_lowest`) */
+void str_lower_dbcs(char *dst, const char *src)
 {
     int ch;
     int in_dbcs = 0;               /* 1: 前一碼是中文字 */
@@ -327,7 +340,9 @@ void str_lowest(char *dst, const char *src)
     while (ch);
 }
 
-GCC_PURE int str_ncmp(const char *s1, const char *s2, int n)
+/* Compare two strings `s1` and `s2` for at most `n` bytes, ignoring case differences (formerly `str_ncmp`)
+ * Returns the value of difference between the first different bytes of the two strings or `0` if the first `n` bytes of the two strings do not differ */
+GCC_PURE int str_ncasecmp(const char *s1, const char *s2, int n)
 {
     while (n--)
     {
@@ -351,7 +366,8 @@ GCC_PURE int str_ncmp(const char *s1, const char *s2, int n)
     return 0;
 }
 
-void str_strip(                    /* remove trailing space */
+/* Remove trailing spaces and tabs from the string end `str` in-place (formerly `str_strip`) */
+void str_rstrip_tail(                    /* remove trailing space */
                   char *str)
 {
     int ch;
@@ -484,9 +500,8 @@ GCC_PURE int str_pat(const char *str, const char *pat)
 }
 
 
-/* reverse the string */
-
-char *str_rev(char *dst, const char *src)
+/* Reverse the string `src`, output the result to a buffer from the buffer end `dst`, and return the string head of `dst` (formerly `str_rev`) */
+char *str_rev_tail(char *dst, const char *src)
 {
     int cc;
 
@@ -500,7 +515,9 @@ char *str_rev(char *dst, const char *src)
     return dst;
 }
 
-int str_rle(                    /* run-length encoding */
+/* Encode string `str` in-place using a form of run-length encoding and return the encoded string length (formerly `str_rle`)
+ * Encoding scheme: 4+ repeated bytes (value > `'\b'`) => `'\b' <repeat length in 8-bit binary>` */
+int rle_encode(                    /* run-length encoding */
                char *str)
 {
     char *src;
@@ -534,7 +551,8 @@ int str_rle(                    /* run-length encoding */
 #define NULL    (char*) 0
 #endif
 
-GCC_PURE char *str_str(const char *str, const char *tag      /* non-empty lower case pattern */
+/* Find and return the first occurrence of lowercase pattern `tag` in string `str` or `NULL` if not found, ignoring the case of `str` (formerly `str_str`) */
+GCC_PURE char *str_casestr(const char *str, const char *tag      /* non-empty lower case pattern */
     )
 {
     int cc, c1, c2;
@@ -572,7 +590,8 @@ GCC_PURE char *str_str(const char *str, const char *tag      /* non-empty lower 
     return NULL;
 }
 
-GCC_PURE char *str_sub(const char *str, const char *tag
+/* Find and return the first occurrence of lowercase pattern `tag` in string `str` or `NULL` if not found, ignoring the case of `str` and handling DBCS characters (formerly `str_sub`) */
+GCC_PURE char *str_casestr_dbcs(const char *str, const char *tag
                                         /* non-empty lowest case pattern */
     )
 {
@@ -634,7 +653,8 @@ GCC_PURE char *str_tail(const char *str)
     return (char *)str;
 }
 
-void str_trim(                    /* remove trailing space */
+/* Remove trailing spaces from string `buf` in-place (formerly `str_trim`) */
+void str_rtrim(                    /* remove trailing space */
                  char *buf)
 {
     char *p = buf;
@@ -658,7 +678,7 @@ char *str_ttl_hdrmode(const char *title, enum HdrMode *pmode)
 
     for (size_t i = 0; i < COUNTOF(title_marks); ++i)
     {
-        if (!str_ncmp(title, title_marks[i], strlen(title_marks[i])))
+        if (!str_ncasecmp(title, title_marks[i], strlen(title_marks[i])))
         {
             title += strlen(title_marks[i]);
             if (*title == ' ')

@@ -516,14 +516,14 @@ mailpost(void)
 
             if ((ptr = strchr(key, '\n')))
             {
-                str_strip(ptr);
+                str_rstrip_tail(ptr);
             }
 
             /* split token & skip leading space */
 
             if ((token = strchr(key, ':')))
             {
-                str_strip(token);
+                str_rstrip_tail(token);
 
                 do
                 {
@@ -531,27 +531,27 @@ mailpost(void)
                 } while (fh == ' ' || fh == '\t');
             }
 
-            if (!str_cmp(key, "name"))
+            if (!str_casecmp(key, "name"))
             {
                 strcpy(myname, token);
             }
-            else if (!str_cmp(key, "passwd") || !str_cmp(key, "password") || !str_cmp(key, "passward"))
+            else if (!str_casecmp(key, "passwd") || !str_casecmp(key, "password") || !str_casecmp(key, "passward"))
             {
                 strcpy(mypasswd, token);
             }
-            else if (!str_cmp(key, "board"))
+            else if (!str_casecmp(key, "board"))
             {
                 strcpy(myboard, token);
             }
-            else if (!str_cmp(key, "title") || !str_cmp(key, "subject"))
+            else if (!str_casecmp(key, "title") || !str_casecmp(key, "subject"))
             {
                 str_ansi(mytitle, token, sizeof(mytitle));
             }
-            else if (!str_cmp(key, "digest"))
+            else if (!str_casecmp(key, "digest"))
             {
                 mymode = DIGEST;
             }
-            else if (!str_cmp(key, "local"))
+            else if (!str_casecmp(key, "local"))
             {
                 mymode = LOCAL_SAVE;
             }
@@ -580,14 +580,14 @@ mailpost(void)
                 strtok(mybuf, " ");
                 strcpy(myfrom, (char *) strtok(NULL, " "));
 #endif
-                str_cut(myfrom, mybuf);
+                str_split_2nd(myfrom, mybuf);
             }
         }
         else if (!strncmp(mybuf, "Subject: ", 9))
         {
             /* audit justify mail */
 
-            str_decode(mybuf);
+            mmdecode_str(mybuf);
             /* if (ptr = strstr(mybuf, "[MapleBBS]To ")) */
             /* Thor.981012: 集中於 config.h 定義 */
             if ((ptr = strstr(mybuf, TAG_VALID)))

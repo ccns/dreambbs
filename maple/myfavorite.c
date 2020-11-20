@@ -487,7 +487,7 @@ myfavorite_search(
             //if (chn >= 0)
             //{
                 //brd = bcache + chn;
-                //if (str_str(brd->brdname, ptr) || str_str(brd->title, ptr))
+                //if (str_casestr(brd->brdname, ptr) || str_casestr(brd->title, ptr))
                     //return XO_MOVE + pos;
             //}
         } while (pos != num);

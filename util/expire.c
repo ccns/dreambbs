@@ -339,7 +339,7 @@ brdbno(
 
     do
     {
-        if (!str_cmp(bname, brdp->brdname))
+        if (!str_casecmp(bname, brdp->brdname))
             return bno;
 
         bno++;
@@ -454,7 +454,7 @@ main(
         /* Thor.981027: 加上 board時, 可sync 某一board. 加得很醜, 有空再改 */
         if (board)
         {
-            if (str_cmp(board, ptr))
+            if (str_casecmp(board, ptr))
                 continue;
             else
                 number=0;

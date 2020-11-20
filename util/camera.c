@@ -69,7 +69,7 @@ mirror(
             return;
 
         ptr[size] = '\0';
-        size = str_rle(ptr);
+        size = rle_encode(ptr);
 
         if (size > 0 && size < FILM_SIZ)
         {
@@ -90,7 +90,7 @@ play(
     if (number >= MOVIE_MAX -1)
         return 1;
 
-    /* str_rle(data); */
+    /* rle_encode(data); */
     /* Thor.980804: 等算完最後再來壓縮, 不然壓縮碼也被視作換行或行數不夠了 */
 
     head = data;
@@ -121,7 +121,7 @@ play(
 
     /* ch = data - head; */             /* length */
 
-    ch = str_rle(head) + 1; /* Thor.980804: +1 將結尾的0也算入 */
+    ch = rle_encode(head) + 1; /* Thor.980804: +1 將結尾的0也算入 */
 
     line = tail + ch;
     if (line >= MOVIE_SIZE)

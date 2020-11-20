@@ -563,7 +563,7 @@ aloha_sync(void)
             size = (char *) ptail - (char *) pbase;
             if (size > 0)
             {
-                //xsort(pbase, size / sizeof(BMW), sizeof(BMW), str_cmp);
+                //xsort(pbase, size / sizeof(BMW), sizeof(BMW), str_casecmp);
                 lseek(fd, 0, SEEK_SET);
                 write(fd, pbase, size);
                 ftruncate(fd, size);
@@ -630,7 +630,7 @@ pal_sync(
                 {
                     if (size > PAL_ALMR * sizeof(PAL))
                         vmsg("您的好友名單太多，請善加整理");
-                    xsort(pbase, size / sizeof(PAL), sizeof(PAL), (int (*)(const void *lhs, const void *rhs))str_cmp);
+                    xsort(pbase, size / sizeof(PAL), sizeof(PAL), (int (*)(const void *lhs, const void *rhs))str_casecmp);
                 }
 
                 /* Thor.0709: 是否要加上消除重覆的好友的動作? */
@@ -781,7 +781,7 @@ pal_search(
             else if (pos >= max)
                         pos = 0;
 
-            if (str_str((phead + pos)->userid, bufl) || str_str((phead + pos)->ship, bufl))
+            if (str_casestr((phead + pos)->userid, bufl) || str_casestr((phead + pos)->ship, bufl))
             {
                 move(b_lines, 0);
                 clrtoeol();
@@ -2063,7 +2063,7 @@ pal_list(
                     userid = pal->userid;
                     if (!ll_has(userid) && (pal->userno != cuser.userno) &&
                         !(pal->ftype & PAL_BAD) &&
-                        (!userno || str_str(pal->ship, buf)))
+                        (!userno || str_casestr(pal->ship, buf)))
                     {
                         ll_add(userid);
                         reciper++;
@@ -2673,11 +2673,11 @@ talk_speak(
                     break;
 
                 case Ctrl('H'): /* lkchu.981201: backspace */
-                    itswords[str_len(itswords) - 1] = '\0';
+                    itswords[str_len_nospace(itswords) - 1] = '\0';
                     break;
 
                 default:
-                    if (str_len(itswords) < sizeof(itswords))
+                    if (str_len_nospace(itswords) < sizeof(itswords))
                     {
                         strncat(itswords, (char *)&data[i], 1);
                     }
@@ -2732,11 +2732,11 @@ talk_speak(
                 break;
 
             case Ctrl('H'):
-                mywords[str_len(mywords) - 1] = '\0';
+                mywords[str_len_nospace(mywords) - 1] = '\0';
                 break;
 
             default:
-                if (str_len(mywords) < sizeof(mywords))
+                if (str_len_nospace(mywords) < sizeof(mywords))
                 {
                     strncat(mywords, (char *)&ch, 1);
                 }
@@ -3195,7 +3195,7 @@ ulist_cmp_userid(
     const PICKUP *a = (const PICKUP *)i;
     const PICKUP *b = (const PICKUP *)j;
     if (a->type == b->type)
-                return str_cmp(a->utmp->userid, b->utmp->userid);
+                return str_casecmp(a->utmp->userid, b->utmp->userid);
     else
         return a->type - b->type;
 }
@@ -3204,7 +3204,7 @@ static int
 ulist_cmp_host(
     const void *i, const void *j)
 {
-    return str_cmp(((const PICKUP *)i)->utmp->from, ((const PICKUP *)j)->utmp->from);
+    return str_casecmp(((const PICKUP *)i)->utmp->from, ((const PICKUP *)j)->utmp->from);
 }
 
 static int
@@ -3225,7 +3225,7 @@ static int
 ulist_cmp_nick(
     const void *i, const void *j)
 {
-    return str_cmp(((const PICKUP *)i)->utmp->username, ((const PICKUP *)j)->utmp->username);
+    return str_casecmp(((const PICKUP *)i)->utmp->username, ((const PICKUP *)j)->utmp->username);
 }
 
 #ifdef  HAVE_BOARD_PAL
@@ -3464,10 +3464,10 @@ ulist_search(
                 pos = 0;
 
             /* Thor.990124: id 則從頭 match */
-            /* if (str_ncmp(pp[pos]->userid, bufl, buflen)==0 */
+            /* if (str_ncasecmp(pp[pos]->userid, bufl, buflen)==0 */
 
-            if (str_str(pp[pos].utmp->userid, bufl) /* lkchu.990127: 找部份 id 好像比較好用 :p */
-            || str_str(pp[pos].utmp->username, bufl)) /* Thor.990124: 可以找 部分 nickname */
+            if (str_casestr(pp[pos].utmp->userid, bufl) /* lkchu.990127: 找部份 id 好像比較好用 :p */
+            || str_casestr(pp[pos].utmp->username, bufl)) /* Thor.990124: 可以找 部分 nickname */
             {
                 move(b_lines, 0);
                 clrtoeol();
@@ -3855,7 +3855,7 @@ ulist_nickchange(
     strcpy(buf, str = cuser.username);
     vget(B_LINES_REF, 0, "請輸入新的暱稱：", buf, sizeof(cuser.username), GCARRY);
 
-    if (strcmp(buf, str) && str_len(buf) > 0)
+    if (strcmp(buf, str) && str_len_nospace(buf) > 0)
     {
         strcpy(str, buf);
         strcpy(cutmp->username, buf);
@@ -4577,7 +4577,7 @@ banmsg_sync(
             {
                 if (size > sizeof(BANMSG))
                 {
-                    xsort(pbase, size / sizeof(BANMSG), sizeof(BANMSG), (int (*)(const void *lhs, const void *rhs))str_cmp);
+                    xsort(pbase, size / sizeof(BANMSG), sizeof(BANMSG), (int (*)(const void *lhs, const void *rhs))str_casecmp);
                 }
 
                 lseek(fd, 0, SEEK_SET);

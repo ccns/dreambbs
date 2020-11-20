@@ -690,8 +690,8 @@ m_verify(void)
         !vget(18, 0, ":", sign, sizeof sign, DOECHO))
         return 0;
 
-    str_trim(info); /* Thor: 去尾巴, for ptelnet自動加空白 */
-    str_trim(sign);
+    str_rtrim(info); /* Thor: 去尾巴, for ptelnet自動加空白 */
+    str_rtrim(sign);
 
     if (!memcmp("※ X-Info: ", p = info, 11))
         p += 11;
@@ -1354,7 +1354,7 @@ mail_external(
         return 0;
 
         /* Thor.990125: MYHOSTNAME統一放入 str_host */
-    if (str_cmp(str_host, str + 1))
+    if (str_casecmp(str_host, str + 1))
         return 1;
 
     /* 攔截 xyz@domain 或 xyz.bbs@domain */
@@ -1493,7 +1493,7 @@ mail_send(
     {
         char *p;
 
-        if ((p = str_str(acct.address, "bbc")) != NULL)  /* 找 BBC 描述 */
+        if ((p = str_casestr(acct.address, "bbc")) != NULL)  /* 找 BBC 描述 */
             DL_NAME_CALL("emailpage.so", EMailPager)(p + 3, cuser.userid, ve_title);
     }
 #endif

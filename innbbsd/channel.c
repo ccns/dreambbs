@@ -98,7 +98,7 @@ my_recv(
         rel = 0;
         if ((ptr = CONTROL))
         {
-            if (!str_ncmp(ptr, "cancel ", 7))
+            if (!str_ncasecmp(ptr, "cancel ", 7))
             {
                 /* itoc.030127: cancel 失敗還是要繼續收其他封信 */
                 /* rel = cancel_article(ptr + 7); */
@@ -164,7 +164,7 @@ searchcmd(
 
     for (p = cmds; (name = p->name); p++)
     {
-        if (!str_cmp(name, cmd))
+        if (!str_casecmp(name, cmd))
             return p;
     }
     return NULL;

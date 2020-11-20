@@ -189,7 +189,7 @@ Admin(void)
     DL_HOLD;
     XO *xo, *last;
     char fpath[64];
-    if (!check_admin(cuser.userid) && str_cmp(cuser.userid, SYSOPNAME))
+    if (!check_admin(cuser.userid) && str_casecmp(cuser.userid, SYSOPNAME))
     {
         vmsg("◎ 你不是系統管理員！");
         return DL_RELEASE(0);

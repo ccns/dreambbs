@@ -123,7 +123,7 @@ static int banmail_sync(XO * xo)
             {
                 if (size > sizeof(BANMAIL))
                     xsort(pbase, size / sizeof(BANMAIL), sizeof(BANMAIL),
-                          (int (*)(const void *lhs, const void *rhs))str_cmp);
+                          (int (*)(const void *lhs, const void *rhs))str_casecmp);
 
                 lseek(fd, 0, SEEK_SET);
                 write(fd, pbase, size);

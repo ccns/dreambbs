@@ -2764,7 +2764,7 @@ header_replace(         /* 0911105.cache: 修改文章標題順便修改內文的標題 */
     fputs(buf, fpw);
 
     fgets(buf, sizeof(buf), fpr);               /* 加入標題 */
-    if (!str_ncmp(buf, "標", 2))                /* 如果有 header 才改 */
+    if (!str_ncasecmp(buf, "標", 2))                /* 如果有 header 才改 */
     {
         strcpy(buf, buf[2] == ' ' ? "標  題: " : "標題: ");
         strcat(buf, hdr->title);
@@ -2886,17 +2886,17 @@ post_cross_terminator(  /* Thor.0521: 終極文章大法 */
             char fnew[80], fold[80];
             HDR *hdr;
 
-            if (!str_cmp(head->brdname, BRD_LOCALPOSTS))  /* LocalPosts 版不砍 */
+            if (!str_casecmp(head->brdname, BRD_LOCALPOSTS))  /* LocalPosts 版不砍 */
                 continue;
 
-            if (!str_cmp(head->brdname, brd_sysop))  /* SYSOP 版不砍 */
+            if (!str_casecmp(head->brdname, brd_sysop))  /* SYSOP 版不砍 */
                 continue;
 
-            if (!str_cmp(head->brdname, BRD_CAMERA))  /* ActiveInfo 版不砍 */
+            if (!str_casecmp(head->brdname, BRD_CAMERA))  /* ActiveInfo 版不砍 */
                 continue;
 
 #ifdef  HAVE_CROSSPOSTLOG
-            if (!str_cmp(head->brdname, BRD_CROSSPOST))  /* CostPost 版不砍 */
+            if (!str_casecmp(head->brdname, BRD_CROSSPOST))  /* CostPost 版不砍 */
                 continue;
 #endif
 
@@ -4634,14 +4634,14 @@ XoXpost(                        /* Thor: call from post_cb */
         /* Thor.981109: 特別注意, author是從頭match, 不是substr match, 為降低load */
         if (!mode)
         {
-            if (filter_author && str_ncmp(head->owner, author, filter_author))
+            if (filter_author && str_ncasecmp(head->owner, author, filter_author))
                 continue;
 
             /* check condition */
 
             title = str_ttl(head->title); /* Thor.980911: 先把 Re: 除外 */
 
-            if (*key && !str_str(title, key))
+            if (*key && !str_casestr(title, key))
                 continue;
         }
         else if (mode == 1)

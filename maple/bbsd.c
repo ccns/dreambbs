@@ -271,7 +271,7 @@ belong(
         while ((str = mgets(fd)))
         {
             str_lower(str, str);
-            if (str_str(key, str))
+            if (str_casestr(key, str))
             {
                 rc = true;
                 break;
@@ -298,7 +298,7 @@ is_badid(
     if (!is_alpha(*userid))
         return true;
 
-    if (!str_cmp(userid, STR_NEW))
+    if (!str_casecmp(userid, STR_NEW))
         return true;
 
     str = userid;
@@ -547,7 +547,7 @@ utmp_setup(
     time(&utmp.idle_time);
     srand(time(0));
     srandom(time(0));
-    strcpy(utmp.username, ((!str_cmp(cuser.userid, STR_GUEST)||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
+    strcpy(utmp.username, ((!str_casecmp(cuser.userid, STR_GUEST)||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
     strcpy(utmp.realname, cuser.realname);
     /* str_ncpy(utmp.from, fromhost, sizeof(utmp.from) - 1); */
     str_ncpy(utmp.from, fromhost, sizeof(utmp.from));
@@ -635,7 +635,7 @@ tn_login(void)
 
         vget(21, 0, msg_uid, uid, IDLEN + 1, DOECHO);
 
-        if (str_cmp(uid, STR_NEW) == 0)
+        if (str_casecmp(uid, STR_NEW) == 0)
         {
 
 #ifdef LOGINASNEW
@@ -654,7 +654,7 @@ tn_login(void)
         {
             vmsg(err_uid);
         }
-        else if (str_cmp(uid, STR_GUEST))
+        else if (str_casecmp(uid, STR_GUEST))
         {
             if (!vget(21, D_COLS_REF + 26, MSG_PASSWD, passbuf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO))
             {
@@ -672,7 +672,7 @@ tn_login(void)
             {
                 /* SYSOP gets all permission bits */
 
-                if (!str_cmp(cuser.userid, str_sysop))
+                if (!str_casecmp(cuser.userid, str_sysop))
                     cuser.userlevel = ~0 ^ (PERM_DENYPOST | PERM_DENYTALK |
                         PERM_DENYCHAT | PERM_DENYMAIL | PERM_DENYSTOP | PERM_DENYNICK |
                         PERM_DENYLOGIN | PERM_PURGE);

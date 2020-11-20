@@ -68,7 +68,7 @@ brd_get(
     tail = bhdr + bshm->number;
     do
     {
-        if (!str_cmp(bname, bhdr->brdname))
+        if (!str_casecmp(bname, bhdr->brdname))
             return bhdr;
     } while (++bhdr < tail);
     return NULL;
@@ -129,7 +129,7 @@ start:
             if ( ( ptr = strchr(str, '\n') ) )
                 *ptr = '\0';
 
-            str_from(str, owner, nick);
+            from_parse(str, owner, nick);
             if (*nick)
                 sprintf(sender, "%s (%s)", owner, nick);
             else
@@ -155,7 +155,7 @@ start:
         else if (!memcmp(buf, "Subject: ", 9))
         {
             str_ansi(title, buf + 9, sizeof(title));
-            /* str_decode(title); */
+            /* mmdecode_str(title); */
             /* LHD.051106: 若可能經 RFC 2047 QP encode 則有可能多行 subject */
             if (strstr(buf + 9, "=?"))
             {
@@ -165,7 +165,7 @@ start:
                         str_ansi(title + strlen(title), strstr(buf, "=?"), sizeof(title));
                     else
                     {
-                        str_decode(title);
+                        mmdecode_str(title);
                         goto start;
                     }
                 }
@@ -180,7 +180,7 @@ start:
             /* 一般 BBS 使用者通常只寄文字郵件或是從其他 BBS 站寄文章到自己的信箱
                而廣告信件通常是 html 格式或是裡面有夾帶其他檔案
                利用郵件的檔頭有 Content-Type: 的屬性把除了 text/plain (文字郵件) 的信件都擋下來 */
-            if (*str != '\0' && str_ncmp(str, "text/plain", 10))
+            if (*str != '\0' && str_ncasecmp(str, "text/plain", 10))
             {
                 sprintf(buf, "ANTI-HTML [%d] %s => %s", getppid(), sender, brdname);
                 mailog(buf);
@@ -192,7 +192,7 @@ start:
             {
                 char charset[32];
                 mm_getcharset(str, charset, sizeof(charset));
-                if (str_cmp(charset, "big5") && str_cmp(charset, "us-ascii"))
+                if (str_casecmp(charset, "big5") && str_casecmp(charset, "us-ascii"))
                 {
                     sprintf(buf, "ANTI-NONMYCHARSET [%d] %s => %s", getppid(), sender, brdname);
                     mailog(buf);

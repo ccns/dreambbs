@@ -666,7 +666,7 @@ my_post(void)
         {
             if ((ptr = CONTROL))
             {
-                if (!str_ncmp(ptr, "cancel ", 7))
+                if (!str_ncasecmp(ptr, "cancel ", 7))
                     rel = cancel_article(ptr + 7);
             }
             else

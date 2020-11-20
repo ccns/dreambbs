@@ -203,7 +203,7 @@ int mode)
         lseek(fd, (off_t)(sizeof(NBRD) * pos), SEEK_SET);
         if (read(fd, &nbrd, sizeof(NBRD)) == sizeof(NBRD))
         {
-            if (!str_cmp(nbrd.brdname, ptr) && !(nbrd.mode & (NBRD_REJECT | NBRD_STOP | NBRD_CLOSE | NBRD_OPEN)) && (nbrd.mode & mode))
+            if (!str_casecmp(nbrd.brdname, ptr) && !(nbrd.mode & (NBRD_REJECT | NBRD_STOP | NBRD_CLOSE | NBRD_OPEN)) && (nbrd.mode & mode))
             {
                 close(fd);
                 return 1;

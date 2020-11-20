@@ -2341,7 +2341,7 @@ ask_board(
     if (vget(1, 0, "請輸入看板名稱 (按 SPACE 或 TAB 自動搜尋)：",
             board, IDLEN + 1, GET_BRD | perm))
     {
-        if (!str_cmp(board, currboard))
+        if (!str_casecmp(board, currboard))
             *board = 0;         /* 跟目前的看板一樣 */
         return xbrd;
     }
@@ -2381,7 +2381,7 @@ vget_match(
             {
                 data = head->brdname;
 
-                if (str_ncmp(prefix, data, len))
+                if (str_ncasecmp(prefix, data, len))
                     continue;
 
                 xbrd = head;
@@ -2456,8 +2456,8 @@ vget_match(
                 if (*data <= ' ' || *data == '.')
                     continue;
 
-//              if (str_ncmp(prefix, data, len))
-                if (len && str_ncmp(prefix, data, len))
+//              if (str_ncasecmp(prefix, data, len))
+                if (len && str_ncasecmp(prefix, data, len))
                     continue;
 
                 match++;
@@ -2497,7 +2497,7 @@ vget_match(
         {
             data = list->data;
 
-            if (str_ncmp(prefix, data, len))
+            if (str_ncasecmp(prefix, data, len))
                 continue;
 
             if ((op & MATCH_END) && !data[len])
@@ -2984,7 +2984,7 @@ vget_redraw:
     outc('\n');
 
     if (echo & LCECHO)
-        str_lowest(data, data);
+        str_lower_dbcs(data, data);
     ch = (unsigned char) data[0];
 
 #ifdef M3_USE_PFTERM

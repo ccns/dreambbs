@@ -373,7 +373,7 @@ cancel_article(
     if (!HISfetch(msgid, board, xname))
         return -1;
 
-    str_from(FROM, cancelfrom, buffer);
+    from_parse(FROM, cancelfrom, buffer);
 
     /* XLOG("cancel %s (%s)\n", cancelfrom, buffer); */
 
@@ -466,7 +466,7 @@ is_spam(
         else
             continue;
 
-        if (str_sub(compare, detail))
+        if (str_casestr_dbcs(compare, detail))
             return true;
     }
     return false;
@@ -516,17 +516,17 @@ receive_article(void)
             /* Thor.980825: gc patch: lib/str_decode 只能接受 decode 完 strlen < 256 */
 
             str_ncpy(poolx, SUBJECT, 255);
-            str_decode(poolx);
+            mmdecode_str(poolx);
             str_ansi(mysubject, poolx, 70);     /* 70 是 bbspost_add() 標題所需的長度 */
             SUBJECT = mysubject;
 
             str_ncpy(poolx, FROM, 255);
-            str_decode(poolx);
-            str_ansi(myfrom, poolx, 128);       /* 雖然 bbspost_add() 發信人所需的長度只需要 50，但是 str_from() 需要長一些 */
+            mmdecode_str(poolx);
+            str_ansi(myfrom, poolx, 128);       /* 雖然 bbspost_add() 發信人所需的長度只需要 50，但是 from_parse() 需要長一些 */
             FROM = myfrom;
 
             str_ncpy(poolx, PATH, 255);
-            str_decode(poolx);
+            mmdecode_str(poolx);
             str_ansi(mypath, poolx, 128);
             sprintf(mypath, "%s!%.*s", MYBBSID, (int)(sizeof(mypath) - strlen(MYBBSID) - 2), PATH);
             /* itoc.030115.註解: PATH 如果有 .edu.tw 就截掉 */
@@ -550,7 +550,7 @@ receive_article(void)
             }
 
             strcpy(poolx, FROM);
-            str_from(poolx, myaddr, mynick);
+            from_parse(poolx, myaddr, mynick);
 
             if (is_spam(nf->board, myaddr, mynick))
             {

@@ -56,7 +56,7 @@ search_issuer(
     {
         find = NCMPERM + i;
         if (strstr(issuer, find->issuer) &&
-            (!type || !strcmp(find->type, "*") || !str_cmp(find->type, type)))
+            (!type || !strcmp(find->type, "*") || !str_casecmp(find->type, type)))
             return find;
     }
     return NULL;
@@ -299,7 +299,7 @@ static int
 readNCMheader(
     const char *line)
 {
-    if (!str_ncmp(line, "Version", strlen("Version")))
+    if (!str_ncasecmp(line, "Version", strlen("Version")))
     {
         str_ncpy(NCMVER, line + strlen("Version") + 2, sizeof(NCMVER));
         if (strcmp(NCMVER, "0.9"))
@@ -308,16 +308,16 @@ readNCMheader(
             return P_FAIL;
         }
     }
-    else if (!str_ncmp(line, "Issuer", strlen("Issuer")))
+    else if (!str_ncasecmp(line, "Issuer", strlen("Issuer")))
     {
         str_ncpy(ISSUER, line + strlen("Issuer") + 2, sizeof(ISSUER));
         FROM = ISSUER;
     }
-    else if (!str_ncmp(line, "Type", strlen("Type")))
+    else if (!str_ncasecmp(line, "Type", strlen("Type")))
     {
         str_ncpy(TYPE, line + strlen("Type") + 2, sizeof(TYPE));
     }
-    else if (!str_ncmp(line, "Action", strlen("Action")))
+    else if (!str_ncasecmp(line, "Action", strlen("Action")))
     {
         str_ncpy(ACTION, line + strlen("Action") + 2, sizeof(ACTION));
         if (strcmp(ACTION, "hide"))

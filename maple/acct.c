@@ -278,7 +278,7 @@ int check_admin(const char *name)
     ADMIN admin;
     int pos = 0, fd;
 
-    if (!str_cmp(cuser.userid, ELDER))
+    if (!str_casecmp(cuser.userid, ELDER))
         return 1;
 
     fd = open(FN_ETC_ADMIN_DB, O_RDONLY);
@@ -465,7 +465,7 @@ static void bm_list(            /* 顯示 userid 是哪些板的板主 */
         {
             do
             {
-                if (!str_ncmp(list, userid, len))
+                if (!str_ncasecmp(list, userid, len))
                 {
                     ch = list[len];
                     if ((ch == 0) || (ch == '/'))
@@ -504,7 +504,7 @@ static void perm_log(const ACCT * u, int oldl)
             sprintf(buf, "%s %s %s (%s) by %s\n", u->userid,
                     (u->userlevel & level) ? "■" : "□",
                     perm_tbl[i], Now(), cuser.userid);
-            if (!str_cmp(cuser.userid, ELDER))
+            if (!str_casecmp(cuser.userid, ELDER))
                 pmsg2("板主異動不加入日誌");
             else
                 f_cat(FN_SECURITY, buf);
@@ -628,7 +628,7 @@ void bm_setup(ACCT * u, int adm)
         outs("此帳號為本站的站長，無法更改權限！");
         goto cleanup;
     }
-    if (!str_cmp(cuser.userid, ELDER))
+    if (!str_casecmp(cuser.userid, ELDER))
         pmsg2("板主異動不加入日誌");
     else
     {
@@ -1001,7 +1001,7 @@ void acct_setup(ACCT * u, int adm)
     {
         if (supervisor)
         {
-            if (!str_cmp(cuser.userid, ELDER))
+            if (!str_casecmp(cuser.userid, ELDER))
                 pmsg2("查詢動作不加入日誌");
             else
             {
@@ -1029,7 +1029,7 @@ void acct_setup(ACCT * u, int adm)
         }
         else
         {
-            if (!str_cmp(cuser.userid, ELDER))
+            if (!str_casecmp(cuser.userid, ELDER))
                 pmsg2("查詢動作不加入日誌");
             else
             {
@@ -1153,7 +1153,7 @@ void acct_setup(ACCT * u, int adm)
         for (;;)
         {
             vget(i, 0, "使用者代號(不改請按 Enter)：", str, IDLEN + 1, GCARRY);
-            if (!str_cmp(str, u->userid) || !acct_userno(str))
+            if (!str_casecmp(str, u->userid) || !acct_userno(str))
                 break;
             vmsg("錯誤！已有相同 ID 的使用者");
         }
@@ -1209,7 +1209,7 @@ void acct_setup(ACCT * u, int adm)
     {
         vget(i, 0, "暱    稱：", str, sizeof(x.username), GCARRY);
     }
-    while (str_len(str) < 1);
+    while (str_len_nospace(str) < 1);
 
     i++;
     str = x.realname;
@@ -1217,7 +1217,7 @@ void acct_setup(ACCT * u, int adm)
     {
         vget(i, 0, "真實姓名：", str, sizeof(x.realname), GCARRY);
     }
-    while (str_len(str) < 4);
+    while (str_len_nospace(str) < 4);
 
     i++;
     str = x.address;
@@ -1225,7 +1225,7 @@ void acct_setup(ACCT * u, int adm)
     {
         vget(i, 0, "居住地址：", str, sizeof(x.address), GCARRY);
     }
-    while (str_len(str) < 8);
+    while (str_len_nospace(str) < 8);
 
     if (adm)
     {
@@ -1321,7 +1321,7 @@ void acct_setup(ACCT * u, int adm)
 
     if (adm)
     {
-        if (str_cmp(u->userid, x.userid))
+        if (str_casecmp(u->userid, x.userid))
         {                        /* Thor: 980806: 特別注意如果 usr每個字母不在同一partition的話會有問題 */
             char dst[80];
 
@@ -2058,7 +2058,7 @@ static int m_setbrd(BRD * brd)
     FILE *fp;
     char fpath[80];
 
-    if (!str_cmp(cuser.userid, ELDER))
+    if (!str_casecmp(cuser.userid, ELDER))
         pmsg2("修改動作不加入日誌");
     else
     {
@@ -2484,7 +2484,7 @@ int u_register(void)
         while (fread(&rform, sizeof(RFORM), 1, fn))
         {
             if ((rform.userno == cuser.userno) &&
-                !str_cmp(rform.userid, cuser.userid))
+                !str_casecmp(rform.userid, cuser.userid))
             {
                 fclose(fn);
                 zmsg("您的註冊申請單尚在處理中，請耐心等候");

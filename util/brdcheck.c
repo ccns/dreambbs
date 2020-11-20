@@ -49,7 +49,7 @@ main(
             if (*str <= ' ' || *str == '.')
                 continue;
 
-            if ((argc == 2) && str_cmp(str, argv[1]))
+            if ((argc == 2) && str_casecmp(str, argv[1]))
                 continue;
 
             sprintf(buf, "%s/" FN_DIR, str);

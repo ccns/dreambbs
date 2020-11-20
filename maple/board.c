@@ -361,7 +361,7 @@ is_bm(
     do
     {
         cc = list[len];
-        if ((!cc || cc == '/') && !str_ncmp(list, userid, len))
+        if ((!cc || cc == '/') && !str_ncasecmp(list, userid, len))
         {
             return true;
         }
@@ -397,7 +397,7 @@ Ben_Perm(
     if (!*bname)
         return 0;
 
-    if (!str_cmp(bname, DEFAULT_BOARD))
+    if (!str_casecmp(bname, DEFAULT_BOARD))
     {
 #ifdef  HAVE_MODERATED_BOARD
 #if defined(HAVE_WATER_LIST) && defined(HAVE_SYSOP_WATERLIST)
@@ -461,7 +461,7 @@ Ben_Perm(
     if (ulevel & PERM_ALLBOARD)
         bits |= (BRD_W_BIT | BRD_X_BIT);
 #endif
-    if (!str_cmp(cuser.userid, ELDER))
+    if (!str_casecmp(cuser.userid, ELDER))
         bits = BRD_R_BIT | BRD_W_BIT | BRD_X_BIT;
 
     return bits;
@@ -1380,7 +1380,7 @@ class_search(
             if (chn >= 0)
             {
                 brd = bcache + chn;
-                if (str_str(brd->brdname, ptr) || str_str(brd->title, ptr))
+                if (str_casestr(brd->brdname, ptr) || str_casestr(brd->title, ptr))
                     return XO_MOVE + pos;
             }
         } while (pos != num);
@@ -1574,9 +1574,9 @@ XoAuthor(
                 if (tail->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
                     continue;
 
-                /* if (str_str(temp, author)) *//* Thor.0818:希望比較快 */
+                /* if (str_casestr(temp, author)) *//* Thor.0818:希望比較快 */
 
-                if (!str_ncmp(tail->owner, author, len))
+                if (!str_ncasecmp(tail->owner, author, len))
                 {
                     XO *xt = xo_get(folder);
                     xt->pos = tail - head;
@@ -2021,8 +2021,8 @@ brd_list(
                     name = brd.brdname;
                     if (!ll_has(name) && (
                             (select == 'b') ||
-                            (select == 'g' && (str_str(brd.brdname, buf) || str_str(brd.title, buf)))||
-                            (select == 'c' && str_str(brd.class_, buf))))
+                            (select == 'g' && (str_casestr(brd.brdname, buf) || str_casestr(brd.title, buf)))||
+                            (select == 'c' && str_casestr(brd.class_, buf))))
                     {
                         ll_add(name);
                         reciper++;

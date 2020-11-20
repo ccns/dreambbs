@@ -58,7 +58,7 @@ belong(
         while ((str = mgets(fd)))
         {
             str_lower(str, str);
-            if (str_str(key, str))
+            if (str_casestr(key, str))
             {
                 rc = true;
                 break;
@@ -84,7 +84,7 @@ is_badid(
     if (!is_alpha(*userid))
         return true;
 
-    if (!str_cmp(userid, STR_NEW))
+    if (!str_casecmp(userid, STR_NEW))
         return true;
 
     str = userid;
@@ -430,7 +430,7 @@ sort_compare(
 
     a1 = (const HDR *) p1;
     a2 = (const HDR *) p2;
-    return str_cmp(a1->xname, a2->xname);
+    return str_casecmp(a1->xname, a2->xname);
 
 }
 

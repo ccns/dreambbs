@@ -356,7 +356,7 @@ valid_chatid(
 
 
 /* Thor.990211: 統一使用dao library */
-#define str_equal(s1, s2) (!str_cmp(s1, s2))
+#define str_equal(s1, s2) (!str_casecmp(s1, s2))
 
 /* ----------------------------------------------------- */
 /* match strings' similarity case-insensitively          */

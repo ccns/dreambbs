@@ -508,7 +508,7 @@ brd_bno(
 
     do
     {
-        if (!str_cmp(bname, brdp->brdname))
+        if (!str_casecmp(bname, brdp->brdname))
             return bno;
 
         bno++;
@@ -529,7 +529,7 @@ getbrd(
     tail = bhdr + bshm->number;
     do
     {
-        if (!str_cmp(bname, bhdr->brdname))
+        if (!str_casecmp(bname, bhdr->brdname))
             return bhdr;
     } while (++bhdr < tail);
     return NULL;

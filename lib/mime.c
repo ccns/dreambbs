@@ -234,7 +234,7 @@ static int mmdecode_header(const char *src,  /* Thor.980901: src和dst可相同, 但s
 }
 
 
-int mmdecode(                       /* 解 Header 的 mmdecode */
+int mmdecode(                       /* 解 Body 的 mmdecode */
                 const char *src,    /* Thor.980901: src和dst可相同, 但src一定有?或\0結束 */
                 char encode,        /* Thor.980901: 注意, decode出的結果不會自己加上 \0 */
                 char *dst)
@@ -303,7 +303,8 @@ int mmdecode(                       /* 解 Header 的 mmdecode */
 }
 
 
-void str_decode(char *str)
+/* Decode string `str` with embedded encoded texts in-place for MIME header (formerly `str_decode`) */
+void mmdecode_str(char *str)
 {
     int adj;
     char *src, *dst;

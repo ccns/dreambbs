@@ -53,7 +53,7 @@ gem_manage(
     {
         do
         {
-            if (!str_ncmp(list, cuser.userid, len))
+            if (!str_ncasecmp(list, cuser.userid, len))
             {
                 ch = list[len];
                 if ((ch == 0) || (ch == '/') || (ch == ']'))
@@ -317,7 +317,7 @@ gem_log(
     if (hdr->xmode & (GEM_RESTRICT | GEM_RESERVED | GEM_LOCK))
         return;
 
-    str_folder(fpath, folder, "@/@log");
+    setdirpath_root(fpath, folder, "@/@log");
     sprintf(buf, "[%s] %s (%s) %s\n%s\n\n",
         action, hdr->xname, Now(), cuser.userid, hdr->title);
     f_cat(fpath, buf);
@@ -578,7 +578,7 @@ gem_state(
 
     if (!(HAS_PERM(PERM_ALLBOARD)))
     {
-        if (!str_ncmp(fpath, "gem/brd/", 8))
+        if (!str_ncasecmp(fpath, "gem/brd/", 8))
         {
             dir = fpath + 8;
             if ((str = strchr(dir, '/')))
@@ -779,7 +779,7 @@ gem_store(void)
         return;
 
     folder = GemFolder;
-    str_folder(folder, folder, FN_GEM);
+    setdirpath_root(folder, folder, FN_GEM);
 
     rec_add(folder, GemBuffer, sizeof(HDR) * num);
 }
@@ -947,8 +947,8 @@ gem_paste(
         return XO_FOOT;
     }
 
-    str_folder(srcDir, GemFolder, FN_GEM);
-    str_folder(dstDir, dir = xo->dir, FN_GEM);
+    setdirpath_root(srcDir, GemFolder, FN_GEM);
+    setdirpath_root(dstDir, dir = xo->dir, FN_GEM);
 
     if (strcmp(srcDir, dstDir))
     {
@@ -1052,7 +1052,7 @@ gem_recycle(
         return XO_FOOT;
     }
 
-    str_folder(fpath, xo->dir, FN_GEM);
+    setdirpath_root(fpath, xo->dir, FN_GEM);
     if (rec_num(fpath, sizeof(HDR)) <= 0)
     {
         zmsg("資源回收筒並無資料");

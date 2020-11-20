@@ -627,7 +627,7 @@ rcpt_local(
         if (cc == '@')
         {
             /* Thor.990125: MYHOSTNAME 統一放入 str_host */
-            if (str_cmp(str, str_host))
+            if (str_casecmp(str, str_host))
                 return 0;
             str[-1] = '\0';
             if (str = strchr(addr, '.'))
@@ -743,7 +743,7 @@ xo_forward(
                 return XO_FOOT;
             }
         }
-        else if (!str_cmp(rcpt, userid))
+        else if (!str_casecmp(rcpt, userid))
         {
             /* userno = cuser.userno; */ /* Thor.981027: 寄精選集給自己不通知自己 */
             method = MF_SELF;
@@ -1343,7 +1343,7 @@ xo_thread(
         }
 
         if (((op & RS_RELATED) && !strncmp(tag, query, 40)) ||
-            (!(op & RS_RELATED) && str_str(tag, query)))
+            (!(op & RS_RELATED) && str_casestr(tag, query)))
         {
             if (op & RS_FIRST)
             {
