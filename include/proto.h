@@ -320,6 +320,7 @@ void add_io(int fd, int timeout);
 int iac_process(const unsigned char *current, const unsigned char *end, int *pcount);
 int iac_count(const unsigned char *current);
 int igetch(void);
+GCC_CHECK_NONNULL_ALL int vkey_process(int (*fgetch)(void));
 int vkey(void);
 BRD *ask_board(char *board, unsigned int perm, const char *msg);
 int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo);

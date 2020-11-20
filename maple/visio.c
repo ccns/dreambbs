@@ -1770,10 +1770,8 @@ int
 igetch(void)
 {
 
-#define IM_TRAIL        0x01    /* Received `\r` and is waiting for `\0` or `\n` */
 #define IM_REPLY        0x02    /* ^R */
 #define IM_TALK         0x04
-#define IM_VKEY_ESC     0x08    /* `vkey()` is processing a escape sequence */
 
     int cc, fd=0, nfds, rset;
     unsigned char *data;
@@ -1803,7 +1801,7 @@ igetch(void)
 
             for (;;)
             {
-                struct timeval tv = (vi_mode & IM_TRAIL) ? seq_tv : vio_to;
+                struct timeval tv = vio_to;
                 /* Thor.980806: man page 假設 timeval 是會改變的 */
 
                 rset = 1 | fd;
@@ -1842,11 +1840,6 @@ igetch(void)
                 }
                 else if (cc == 0)
                 {
-                    if (vi_mode & IM_TRAIL)
-                    {
-                        vi_mode ^= IM_TRAIL;
-                        return '\n';
-                    }
                     cc = vio_to.tv_sec;
                     if (cc < 60)                /* paging timeout */
                         return I_TIMEOUT;
@@ -1900,56 +1893,7 @@ igetch(void)
             }
         }
 
-        cc = (unsigned char) data[vi_head++];
-        if (vi_mode & IM_TRAIL)
-        {
-            vi_mode ^= IM_TRAIL;
-            if (!(cc == 0 || cc == 0x0a))
-                vi_unget_key = cc;  /* Do not consume other characters */
-            return '\n';
-        }
-
-        if (cc == 0x0d)
-        {
-            vi_mode |= IM_TRAIL;
-            continue;
-        }
-
-        if (cc == 0x7f)
-        {
-            return Ctrl('H');
-        }
-
-        if (cc == Ctrl('L') && !(vi_mode & IM_VKEY_ESC))
-        {
-            vs_redraw();
-            continue;
-        }
-
-        if ((cc == Ctrl('R') || cc == Meta('R')) && (bbstate & STAT_STARTED)
-                && !(bbstate & STAT_LOCK)       /* lkchu.990513: 鎖定時不可回訊 */
-                && !(vi_mode & (IM_REPLY | IM_VKEY_ESC)))
-        {
-            /*
-             * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
-             * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
-             */
-            signal(SIGUSR1, SIG_IGN);
-
-            vi_mode |= IM_REPLY;
-            bmw_reply(0);
-            vi_mode ^= IM_REPLY;
-
-            /*
-             * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
-             * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
-             */
-            signal(SIGUSR1, talk_rqst_signal);
-
-            continue;
-        }
-
-        return (cc);
+        return (unsigned char) data[vi_head++];
     }
 }
 
@@ -2020,14 +1964,15 @@ char_mod(int ch)    /* rxvt-style modifier character */
 
 enum VkeyMode {
     VKEYMODE_NORMAL,
+    VKEYMODE_CR,      /* "`'\r'` `ch`" */
     VKEYMODE_ESC,     /* "<Esc> `ch`" */
     VKEYMODE_CSI_APP, /* "<Esc> <[O> `ch`" */
     VKEYMODE_CSI_CH1,  /* "<Esc> [ <1-8> `ch`" */
     VKEYMODE_CSI_CH2,  /* "<Esc> [ <1-8> <0-9> `ch`" */
 };
 
-int
-vkey(void)
+GCC_CHECK_NONNULL_ALL
+int vkey_process(int (*fgetch)(void))
 {
     const struct timeval vio_to_backup = vio_to;
     struct timeval seq_tv_dec = seq_tv; /* It decreases to prevent infinity escape sequences */
@@ -2039,17 +1984,33 @@ vkey(void)
 
     for (;;)
     {
-        ch = igetch();
+        ch = fgetch();
         if (mode == VKEYMODE_NORMAL)
         {
-            if (ch == KEY_ESC)
+            switch (ch)
             {
-                vi_mode |= IM_VKEY_ESC;
+            case '\r':
+                vio_to = seq_tv_dec;
+                mode = VKEYMODE_CR;
+                break;
+            case KEY_ESC:
                 vio_to = esc_tv;
                 mode = VKEYMODE_ESC;
-            }
-            else
+                break;
+            case 0x7f:
+                ch = Ctrl('H');
+                goto vkey_end;
+            default:
                 goto vkey_end;          /* Normal Key */
+            }
+        }
+        else if (mode == VKEYMODE_CR)
+        {
+            if (ch == '\0' || ch == '\n')
+                ch = KEY_ENTER;
+            else
+                ch = char_opt(ch, KEY_INVALID, KEY_ENTER);
+            goto vkey_end;
         }
         else if (mode == VKEYMODE_ESC)   /* "<Esc> `ch`" */
         {                               /* Escape sequence */
@@ -2147,7 +2108,7 @@ vkey(void)
         }
         else if (ch == ';')   /* "<Esc> [ <1-8> ;" | "<Esc> [ <1-8> <0-9> ;" */
         {
-            int mod_ch = igetch();      /* "; [END|`ch`]" */
+            int mod_ch = fgetch();      /* "; [END|`ch`]" */
             if (mod_ch < '1' || mod_ch > '9')
             {
                 ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
@@ -2155,7 +2116,7 @@ vkey(void)
             }
             if (mod_ch == '1')          /* "; <1-9>" */
             {
-                mod_ch = igetch();      /* "; 1 [END|`ch`]" */
+                mod_ch = fgetch();      /* "; 1 [END|`ch`]" */
                 if (mod_ch < '0' || mod_ch > '6')
                 {
                     ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
@@ -2228,9 +2189,49 @@ vkey(void)
     }
 
 vkey_end:
-    vi_mode &= ~IM_VKEY_ESC;
     vio_to = vio_to_backup;
     return ch;
+}
+
+int
+vkey(void)
+{
+    const int key = vkey_process(igetch);
+
+    switch (key)
+    {
+    case Ctrl('L'):
+        vs_redraw();
+        break;
+    case Ctrl('R'):
+    case Meta('R'):
+        if ((bbstate & STAT_STARTED)
+            && !(bbstate & STAT_LOCK)       /* lkchu.990513: 鎖定時不可回訊 */
+            && !(vi_mode & IM_REPLY))
+        {
+            /*
+             * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
+             * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
+             */
+            signal(SIGUSR1, SIG_IGN);
+
+            vi_mode |= IM_REPLY;
+            bmw_reply(0);
+            vi_mode ^= IM_REPLY;
+
+            /*
+             * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
+             * 沒有vio_fd, 看不到 I_OTHERDATA 所以在 ctrl-r時talk, 看不到對方打的字
+             */
+            signal(SIGUSR1, talk_rqst_signal);
+
+            return KEY_INVALID; /* Consume the key */
+        }
+        break;
+    default:
+        ;
+    }
+    return key;
 }
 
 
