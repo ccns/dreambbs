@@ -20,9 +20,9 @@ int num,
 const ChatAction *chat)
 {
     if (!mode)
-        prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->chinese, d_cols + 55, d_cols + 55, chat->part1_msg);
+        prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->brief_desc, d_cols + 55, d_cols + 55, chat->part1_msg);
     else
-        prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->chinese, d_cols + 55, d_cols + 55, chat->part2_msg);
+        prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->brief_desc, d_cols + 55, d_cols + 55, chat->part2_msg);
 }
 
 static int
@@ -123,7 +123,7 @@ int echo)
     if (echo == DOECHO)
         memset(chat, 0, sizeof(ChatAction));
     if (vget(B_LINES_REF, 0, "動詞：", chat->verb, sizeof(chat->verb), echo)
-        && vget(B_LINES_REF, 0, "中文解釋：", chat->chinese, sizeof(chat->chinese), echo))
+        && vget(B_LINES_REF, 0, "中文解釋：", chat->brief_desc, sizeof(chat->brief_desc), echo))
     {
         vget(B_LINES_REF, 0, "訊息一：", chat->part1_msg, sizeof(chat->part1_msg), echo);
         vget(B_LINES_REF, 0, "訊息二：", chat->part2_msg, sizeof(chat->part2_msg), echo);

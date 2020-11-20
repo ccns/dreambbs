@@ -2626,7 +2626,7 @@ chat_party(
     cap = catbl(kind);
     for (i = 0; cap[i].verb[0]; i++)
     {
-        sprintf(buf, "%-10s %-20s", cap[i].verb, cap[i].chinese);
+        sprintf(buf, "%-10s %-20s", cap[i].verb, cap[i].brief_desc);
         send_to_user(cu, buf, 0, MSG_PARTYLIST);
     }
 
@@ -2679,7 +2679,7 @@ view_action_verb(       /* Thor.0726: 新加動詞分類顯示 */
 
         for (i = 0; strlen(p = cap[i].verb); i++)
         {
-            q = cap[i].chinese;
+            q = cap[i].brief_desc;
 
             strcat(data, p);
             strcat(expn, q);

@@ -49,7 +49,7 @@ draw_line(              /* 在 (y, x) 的位置塞入 msg，左右仍要印出原來的彩色文字 
     int ch, i;
     int len;
     int ansi;           /* 1: 在 ANSI 中 */
-    int in_chi = 0;     /* 1: 在中文字中 */
+    int in_dbcs = 0;    /* 1: 在中文字中 */
     int fg, bg, hl;     /* 前景/背景/高彩 */
     screenline slt;
 
@@ -119,22 +119,22 @@ draw_line(              /* 在 (y, x) 的位置塞入 msg，左右仍要印出原來的彩色文字 
             if (++len >= x)
             {
                 /* 最後一字若是中文字的首碼，就不印 */
-                if (!in_chi && IS_DBCS_HI(ch))
+                if (!in_dbcs && IS_DBCS_HI(ch))
                 {
                     outc(' ');
-                    in_chi ^= 1;
+                    in_dbcs ^= 1;
                 }
                 else
                 {
                     outc(ch);
-                    in_chi = 0;
+                    in_dbcs = 0;
                 }
                 outs(str_ransi);
                 break;
             }
 
-            if (in_chi || IS_DBCS_HI(ch))
-                in_chi ^= 1;
+            if (in_dbcs || IS_DBCS_HI(ch))
+                in_dbcs ^= 1;
         }
 
         outc(ch);
@@ -212,15 +212,15 @@ draw_line(              /* 在 (y, x) 的位置塞入 msg，左右仍要印出原來的彩色文字 
             if (--len < 0)      /* 跳過 strip_ansi_len(msg) 的長度 */
                 break;
 
-            if (in_chi || IS_DBCS_HI(ch))
-                in_chi ^= 1;
+            if (in_dbcs || IS_DBCS_HI(ch))
+                in_dbcs ^= 1;
         }
     }
 
     /* 印出 (y, x + strip_ansi_len(msg)) 這個字及後面的控制碼 */
     prints("\x1b[%d;%d;%dm", hl, fg, bg);
     /* 此字若是中文字的尾碼，就不印 */
-    outc(in_chi ? ' ' : ch);
+    outc(in_dbcs ? ' ' : ch);
 
     /* 印出 (y, x + strip_ansi_len(msg) + 1) 至 行尾 */
     outs(str);

@@ -737,7 +737,7 @@ typedef struct
 typedef struct
 {
     char verb[9];               /* 動詞 */
-    char chinese[7];            /* 中文翻譯 */
+    char brief_desc[7];         /* 中文翻譯 */
     char part1_msg[60];         /* 介詞 */
     char part2_msg[60];         /* 動作 */
 } ChatAction;  /* DISKDATA(raw) */

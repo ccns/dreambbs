@@ -148,9 +148,9 @@ static int
 more_line(
     char *buf)
 {
-    int ch, len, bytes, in_ansi, in_chi;
+    int ch, len, bytes, in_ansi, in_dbcs;
 
-    len = bytes = in_ansi = in_chi = 0;
+    len = bytes = in_ansi = in_dbcs = 0;
 
     for (;;)
     {
@@ -160,9 +160,9 @@ more_line(
         ch = (unsigned char) *foff;
 
         /* weiyu.040802: 如果這碼是中文字的首碼，但是只剩下一碼的空間可以印，那麼不要印這碼 */
-        if (in_chi || IS_DBCS_HI(ch))
-            in_chi ^= 1;
-        if (in_chi && (len >= more_width - 1 || bytes >= ANSILINELEN - 2))
+        if (in_dbcs || IS_DBCS_HI(ch))
+            in_dbcs ^= 1;
+        if (in_dbcs && (len >= more_width - 1 || bytes >= ANSILINELEN - 2))
             break;
 
         foff++;

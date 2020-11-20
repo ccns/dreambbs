@@ -680,13 +680,13 @@ void str_lower(char *dst, const char *src)
 void str_lowest(char *dst, const char *src)
 {
     int ch;
-    int in_chi = 0;                /* 1: 前一碼是中文字 */
+    int in_dbcs = 0;               /* 1: 前一碼是中文字 */
 
     do
     {
         ch = *src++;
-        if (in_chi || IS_DBCS_HI(ch))
-            in_chi ^= 1;
+        if (in_dbcs || IS_DBCS_HI(ch))
+            in_dbcs ^= 1;
         else if (ch >= 'A' && ch <= 'Z')
             ch |= 0x20;
         *dst++ = ch;
@@ -1138,21 +1138,21 @@ GCC_PURE char *str_sub(const char *str, const char *tag
 {
     int cc, c1, c2;
     const char *p1, *p2;
-    int in_chi = 0;                     /* 1: 前一碼是中文字 */
-    int in_chii;                        /* 1: 前一碼是中文字 */
+    int in_dbcs = 0;                    /* 1: 前一碼是中文字 */
+    int in_dbcsi;                       /* 1: 前一碼是中文字 */
 
     cc = *tag++;
 
     while ((c1 = *str))
     {
-        if (in_chi)
+        if (in_dbcs)
         {
-            in_chi ^= 1;
+            in_dbcs ^= 1;
         }
         else
         {
             if (IS_DBCS_HI(c1))
-                in_chi ^= 1;
+                in_dbcs ^= 1;
             else if (c1 >= 'A' && c1 <= 'Z')
                 c1 |= 0x20;
 
@@ -1160,7 +1160,7 @@ GCC_PURE char *str_sub(const char *str, const char *tag
             {
                 p1 = str;
                 p2 = tag;
-                in_chii = in_chi;
+                in_dbcsi = in_dbcs;
 
                 do
                 {
@@ -1170,8 +1170,8 @@ GCC_PURE char *str_sub(const char *str, const char *tag
 
                     p2++;
                     c1 = *++p1;
-                    if (in_chii || IS_DBCS_HI(c1))
-                        in_chii ^= 1;
+                    if (in_dbcsi || IS_DBCS_HI(c1))
+                        in_dbcsi ^= 1;
                     else if (c1 >= 'A' && c1 <= 'Z')
                         c1 |= 0x20;
                 }
