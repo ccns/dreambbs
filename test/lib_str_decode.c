@@ -1,6 +1,7 @@
 #include "config.h"
 
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 #include "dao.h"
 
@@ -10,11 +11,11 @@ int main(void)
 
     mmdecode_str(buf);
     puts(buf);
-    assert(!str_casecmp(buf, "回覆 : [MapleBBS]To yunlung(18K4FLM) [VALID]"));
+    assert(!strcmp(buf, "回覆 : [MapleBBS]To yunlung(18K4FLM) [VALID]"));
 
     buf[mmdecode("=A7=DA=A4@=AA=BD=B8I=A4=A3=A8=EC=A7=DA=BE=C7=AA=F8", 'q', buf)] = '\0';
     puts(buf);
-    assert(!str_casecmp(buf, "我一直碰不到我學長"));
+    assert(!strcmp(buf, "我一直碰不到我學長"));
 
     return 0;
 }
