@@ -1688,7 +1688,7 @@ vedit(
     int ve_op)  /* 0: 純粹編輯檔案 1: quote/header 2: quote */
 {
     textline *vln, *tmp;
-    int cc, col, mode, margin, pos;
+    int margin;
 
     /* --------------------------------------------------- */
     /* 初始設定：載入檔案、引用文章、設定編輯模式          */
@@ -1705,21 +1705,21 @@ vedit(
 
     if (*fpath)
     {
-        cc = open(fpath, O_RDONLY);
-        if (cc >= 0)
+        int fd = open(fpath, O_RDONLY);
+        if (fd >= 0)
         {
-            vln = ve_load(vln, cc);
+            vln = ve_load(vln, fd);
         }
         else
         {
-            cc = open(fpath, O_WRONLY | O_CREAT, 0600);
-            if (cc < 0)
+            fd = open(fpath, O_WRONLY | O_CREAT, 0600);
+            if (fd < 0)
             {
                 ve_abort(4);
                 abort_bbs();
             }
         }
-        close(cc);
+        close(fd);
     }
 
     if (ve_op)
@@ -1753,14 +1753,22 @@ vedit(
 
     for (;;)
     {
+        int mode = ve_mode;
+        int col = ve_col; /* Raw cursor x position */
+        int pos; /* Displayed cursor x position relative to the beginning of the row */
+        int pos_disp; /* Displayed cursor x position relative to the screen */
+        int len; /* Displayed length of the row */
+        int cc;
+
         vln = vx_cur;
-        mode = ve_mode;
-        col = ve_col;
-        cc = (col < b_cols) ? 0 : (col / (b_cols-7)) * (b_cols-7);
-        if (cc != margin)
+
         {
-            mode |= VE_REDRAW;
-            margin = cc;
+            const int margin_new = (col < b_cols) ? 0 : (col / (b_cols-7)) * (b_cols-7);
+            if (margin_new != margin)
+            {
+                mode |= VE_REDRAW;
+                margin = margin_new;
+            }
         }
 
         if (mode & VE_REDRAW)
@@ -1769,11 +1777,11 @@ vedit(
 
             tmp = vx_top;
 
-            for (pos = 0;; pos++)
+            for (int y = 0;; y++)
             {
-                move(pos, 0);
+                move(y, 0);
                 clrtoeol();
-                if (pos == b_lines)
+                if (y == b_lines)
                     break;
                 if (tmp)
                 {
@@ -1813,9 +1821,16 @@ vedit(
         /* ------------------------------------------------- */
 
         if (mode & VE_ANSI)             /* Thor: 作 ansi 編輯 */
-            pos = n2ansi(col, vln);     /* Thor: ansi 不會用到cc */
+        {
+            pos_disp = pos = n2ansi(col, vln);     /* Thor: ansi 不會用到margin */
+            len = n2ansi(vln->len, vln);
+        }
         else                    /* Thor: 不是ansi要作margin shift */
-            pos = col - margin;
+        {
+            pos = col;
+            pos_disp = col - margin;
+            len = vln->len;
+        }
 
         if (mode & VE_FOOTER)
         {
@@ -1826,18 +1841,18 @@ vedit(
                 mode & VE_BIFF ? "\x1b[1;41;37;5m  郵差來了  ": mode & VE_BIFFN ? "\x1b[1;41;37;5m  訊差來了  ":"\x1b[0;34;46m  編輯文章  ",
                 mode & VE_INSERT ? "插入" : "取代",
                 mode & VE_ANSI ? "ANSI" : "一般",
-                ve_lno, 1 + (mode & VE_ANSI ? pos : col), d_cols, "");
+                ve_lno, 1 + pos, d_cols, "");
                 /* Thor.980805: UFO_BIFF everywhere */
 #else
 
             prints(FOOTER_VEDIT,
                 mode & VE_INSERT ? "插入" : "取代",
                 mode & VE_ANSI ? "ANSI" : "一般",
-                ve_lno, 1 + (mode & VE_ANSI ? pos : col), d_cols, "");
+                ve_lno, 1 + pos, d_cols, "");
 #endif
         }
 
-        move(ve_row, pos);
+        move(ve_row, pos_disp);
 
 ve_key:
 
@@ -1875,9 +1890,9 @@ ve_key:
             case Ctrl('H'):             /* backspace */
 
 
-                if ((mode & VE_ANSI) ? pos : col)
+                if (pos)
                 {
-                    ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : col - 1;
+                    ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
                     delete_char(vln, ve_col);
                     continue;
                 }
@@ -1898,18 +1913,17 @@ ve_key:
             case Ctrl('D'):
             case KEY_DEL:               /* delete current character */
 
-                cc = (mode & VE_ANSI) ? n2ansi(vln->len, vln) : vln->len;
-                if (cc == ((mode & VE_ANSI) ? pos : col))
+                if (len == pos)
                 {
                     join_up(vln);
                     ve_mode = mode | VE_REDRAW;
                 }
                 else
                 {
-                    if (cc == 0)
+                    if (len == 0)
                         goto ve_key;
                     /* Thor: 雖然增加 load, 不過edit 時會比較好看 */
-                    ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : col;
+                    ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : pos;
                     delete_char(vln, ve_col);
                 }
                 continue;
@@ -1918,7 +1932,7 @@ ve_key:
 
                 if (col)
                 {
-                    ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : col - 1;
+                    ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
                     continue;
                 }
 
@@ -1935,7 +1949,7 @@ ve_key:
 
                 if (vln->len != col)
                 {
-                    ve_col = (mode & VE_ANSI) ? ansi2n(pos + 1, vln) : col + 1;
+                    ve_col = (mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
                     continue;
                 }
 
@@ -1974,7 +1988,7 @@ ve_key:
                 }
                 else
                 {
-                    ve_col = BMIN(col, tmp->len);
+                    ve_col = BMIN(pos, tmp->len);
                 }
                 vx_cur = tmp;
                 break;
@@ -1994,7 +2008,7 @@ ve_key:
                 }
                 else
                 {
-                    ve_col = BMIN(col, tmp->len);
+                    ve_col = BMIN(pos, tmp->len);
                 }
                 vx_cur = tmp;
                 break;
@@ -2038,31 +2052,32 @@ ve_key:
             case Meta('W'):
             case Meta('X'):
             case KEY_F10:
-
-                cc = ve_filer(fpath, ve_op & 11);
+                {
+                    const int op = ve_filer(fpath, ve_op & 11);
 #ifdef  HAVE_INPUT_TOOLS
-                if (cc == VE_INPUTOOL)
-                {
-                    DL_HOTSWAP_SCOPE void (*input_tool)(void) = NULL;
-                    if (!input_tool)
+                    if (op == VE_INPUTOOL)
                     {
-                        input_tool = DL_NAME_GET("ascii.so", input_tools);
-                        if (input_tool)
+                        DL_HOTSWAP_SCOPE void (*input_tool)(void) = NULL;
+                        if (!input_tool)
+                        {
+                            input_tool = DL_NAME_GET("ascii.so", input_tools);
+                            if (input_tool)
+                                (*input_tool)();
+                        }
+                        else
+                        {
                             (*input_tool)();
+                        }
+                        break;
                     }
-                    else
-                    {
-                        (*input_tool)();
-                    }
-                    break;
-                }
 #endif
-                if (cc <= 0)
-                {
-                    bbsothermode &= ~OTHERSTAT_EDITING;
-                    return cc;
+                    if (op <= 0)
+                    {
+                        bbsothermode &= ~OTHERSTAT_EDITING;
+                        return op;
+                    }
+                    ve_mode = mode | op;
                 }
-                ve_mode = mode | cc;
                 continue;
 
             case Meta('1'):
@@ -2088,7 +2103,7 @@ ve_key:
 
             case Ctrl('G'):             /* delete to end of file */
 
-                /* vln->len = ve_col = cc = 0; */
+                /* vln->len = ve_col = 0; */
                 tmp = vln->next;
                 vln->next = NULL;
                 while (tmp)
@@ -2108,9 +2123,9 @@ ve_key:
 
             case Ctrl('K'):             /* delete to end of line */
 
-                if ((cc = vln->len))
+                if ((len = vln->len))
                 {
-                    if (cc != col)
+                    if (len != col)
                     {
                         vln->len = col;
                         vln->data[col] = '\0';
@@ -2165,14 +2180,14 @@ ve_key:
 /*
                     static char msg[] = "顯示使用者資料 (1)id (2)暱稱？[1]";
 
-                    cc = vans(msg);
-                    if (cc == '1' || cc == '2')
-                        msg[sizeof(msg) - 3] = cc;
+                    int ans = vans(msg);
+                    if (ans == '1' || ans == '2')
+                        msg[sizeof(msg) - 3] = ans;
                     else
-                        cc = msg[sizeof(msg) - 3];
-                    cc -= '0';
-                    for (col = cc * 12; col; col--)
-                        ve_char(cc);
+                        ans = msg[sizeof(msg) - 3];
+                    ans -= '0';
+                    for (col = ans * 12; col; col--)
+                        ve_char(ans);
                 }
                 break;
 */
@@ -2190,7 +2205,8 @@ ve_key:
                         NULL
                     };
 
-                    switch (cc = popupmenu_ans2(menu, "控制碼選擇", (B_LINES_REF >> 1) - 4, (D_COLS_REF >> 1) + 20))
+                    const int ans = popupmenu_ans2(menu, "控制碼選擇", (B_LINES_REF >> 1) - 4, (D_COLS_REF >> 1) + 20);
+                    switch (ans)
                     {
                     case 'i':
                         ve_char(KEY_ESC);
@@ -2236,8 +2252,7 @@ ve_key:
         /* ------------------------------------------------- */
 
 
-        cc = ve_row;
-        if (cc < 0)
+        if (ve_row < 0)
         {
             ve_row = 0;
             if ((vln = vx_top->prev))
@@ -2250,7 +2265,7 @@ ve_key:
                 ve_abort(6);
             }
         }
-        else if (cc >= b_lines)
+        else if (ve_row >= b_lines)
         {
             ve_row = b_lines - 1;
             if ((vln = vx_top->next))
