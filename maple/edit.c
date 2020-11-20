@@ -159,7 +159,10 @@ ve_position(
 {
     int row;
 
-    ve_col = BMIN(ve_col, cur->len);
+    if (ve_mode & VE_ANSI)
+        ve_col = ansi2n(n2ansi(ve_col, cur), cur); /* Place the cursor outside any ANSI escapes */
+    else
+        ve_col = BMIN(ve_col, cur->len);
 
     row = 0;
     while (cur != top)
@@ -1905,7 +1908,7 @@ ve_key:
                 ve_row--;
                 ve_lno--;
                 vx_cur = tmp;
-                ve_col = tmp->len;
+                ve_col = (mode & VE_ANSI) ? ansi2n(tmp->len, tmp) : tmp->len;
                 if (vln == vx_top)
                     vx_top = vln->next;
                 join_up(tmp);
@@ -1915,18 +1918,18 @@ ve_key:
             case Ctrl('D'):
             case KEY_DEL:               /* delete current character */
 
-                if (len == pos)
-                {
-                    join_up(vln);
-                    ve_mode = mode | VE_REDRAW;
-                }
-                else
+                if (pos < len)
                 {
                     if (len == 0)
                         goto ve_key;
                     /* Thor: 雖然增加 load, 不過edit 時會比較好看 */
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : pos;
                     delete_char(vln, ve_col);
+                }
+                else
+                {
+                    join_up(vln);
+                    ve_mode = mode | VE_REDRAW;
                 }
                 continue;
 
@@ -1943,13 +1946,13 @@ ve_key:
 
                 ve_row--;
                 ve_lno--;
-                ve_col = tmp->len;
+                ve_col = (mode & VE_ANSI) ? ansi2n(tmp->len, tmp) : tmp->len;
                 vx_cur = tmp;
                 break;
 
             case KEY_RIGHT:
 
-                if (vln->len != col)
+                if (pos < len)
                 {
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
                     continue;
@@ -1960,20 +1963,20 @@ ve_key:
 
                 ve_row++;
                 ve_lno++;
-                ve_col = 0;
+                ve_col = (mode & VE_ANSI) ? ansi2n(0, tmp) : 0;
                 vx_cur = tmp;
                 break;
 
             case KEY_HOME:
             case Ctrl('A'):
 
-                ve_col = 0;
+                ve_col = (mode & VE_ANSI) ? ansi2n(0, vln) : 0;
                 continue;
 
             case KEY_END:
             case Ctrl('E'):
 
-                ve_col = vln->len;
+                ve_col = (mode & VE_ANSI) ? ansi2n(len, vln) : len;
                 continue;
 
             case KEY_UP:
@@ -1984,14 +1987,7 @@ ve_key:
 
                 ve_row--;
                 ve_lno--;
-                if (mode & VE_ANSI)
-                {
-                    ve_col = ansi2n(pos, tmp);
-                }
-                else
-                {
-                    ve_col = BMIN(pos, tmp->len);
-                }
+                ve_col = (mode & VE_ANSI) ? ansi2n(pos, tmp) : BMIN(pos, tmp->len);
                 vx_cur = tmp;
                 break;
 
@@ -2004,14 +2000,7 @@ ve_key:
 
                 ve_row++;
                 ve_lno++;
-                if (mode & VE_ANSI)
-                {
-                    ve_col = ansi2n(pos, tmp);
-                }
-                else
-                {
-                    ve_col = BMIN(pos, tmp->len);
-                }
+                ve_col = (mode & VE_ANSI) ? ansi2n(pos, tmp) : BMIN(pos, tmp->len);
                 vx_cur = tmp;
                 break;
 
@@ -2035,7 +2024,8 @@ ve_key:
             case Meta(','):
 
                 vx_cur = vx_top = vx_ini;
-                ve_col = ve_row = 0;
+                ve_row = 0;
+                ve_col = (mode & VE_ANSI) ? ansi2n(0, vx_ini) : 0;
                 ve_lno = 1;
                 ve_mode = mode | VE_REDRAW;
                 continue;
@@ -2046,6 +2036,8 @@ ve_key:
 
                 mode ^= VE_ANSI;
                 clear();
+                /* Place the cursor outside any ANSI escapes when entering ANSI mode */
+                ve_col = (mode & VE_ANSI) ? ansi2n(n2ansi(col, vln), vln) : col;
                 ve_mode = mode | VE_REDRAW;
                 continue;
 
@@ -2127,7 +2119,7 @@ ve_key:
 
                 if ((len = vln->len))
                 {
-                    if (len != col)
+                    if (col < len)
                     {
                         vln->len = col;
                         vln->data[col] = '\0';
