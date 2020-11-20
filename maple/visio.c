@@ -1985,8 +1985,9 @@ int vkey_process(int (*fgetch)(void))
     for (;;)
     {
         ch = fgetch();
-        if (mode == VKEYMODE_NORMAL)
+        switch (mode)
         {
+        case VKEYMODE_NORMAL:
             switch (ch)
             {
             case '\r':
@@ -2003,69 +2004,73 @@ int vkey_process(int (*fgetch)(void))
             default:
                 goto vkey_end;          /* Normal Key */
             }
-        }
-        else if (mode == VKEYMODE_CR)
-        {
-            if (ch == '\0' || ch == '\n')
-                ch = KEY_ENTER;
-            else
-                ch = char_opt(ch, KEY_INVALID, KEY_ENTER);
-            goto vkey_end;
-        }
-        else if (mode == VKEYMODE_ESC)   /* "<Esc> `ch`" */
-        {                               /* Escape sequence */
-            vio_to = seq_tv_dec;
-            if (ch == '[' || ch == 'O')       /* "<Esc> <[O>" */
-                mode = VKEYMODE_CSI_APP;
-            else if (ch == KEY_ESC) /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
+            break;
+
+        case VKEYMODE_CR:
+            switch (ch)
             {
+            case '\0': case '\n':
+                ch = KEY_ENTER;
+                break;
+            default:
+                ch = char_opt(ch, KEY_INVALID, KEY_ENTER);
+            }
+            goto vkey_end;
+
+        case VKEYMODE_ESC:   /* "<Esc> `ch`" */ /* Escape sequence */
+            vio_to = seq_tv_dec;
+            switch (ch)
+            {
+            case '[': case 'O':     /* "<Esc> <[O>" */
+                mode = VKEYMODE_CSI_APP;
+                break;
+            case KEY_ESC: /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
                 seq_tv_dec.tv_usec >>= 1;  /* Prevent infinity "<Esc>..." */
                 mod = META_CODE;       /* Make the key Meta-ed */
-            }
-            else  /* "<Esc> <Esc> {`ch`|END}" | "<Esc> {`ch`|END}" */
-            {
+                break;
+            default: /* "<Esc> <Esc> {`ch`|END}" | "<Esc> {`ch`|END}" */
                 ch = char_opt(ch, Meta(ch), mod_key(mod, KEY_ESC));
                 goto vkey_end;
             }
-        }
-        else if (mode == VKEYMODE_CSI_APP)   /* "<Esc> <[O> `ch`" */
-        {
+            break;
+
+        case VKEYMODE_CSI_APP:   /* "<Esc> <[O> `ch`" */
             switch (ch)
             {
-              /* "<Esc> <[O> <A-D>" */ /* Cursor key */
-              case 'A': case 'B': case 'C': case 'D':
+            /* "<Esc> <[O> <A-D>" */ /* Cursor key */
+            case 'A': case 'B': case 'C': case 'D':
                 ch = mod_key(mod, KEY_UP + (ch - 'A'));
                 goto vkey_end;
 
-              /* "<Esc> <[O> <HF>" */ /* Home End (xterm) */
-              case 'H':
+            /* "<Esc> <[O> <HF>" */ /* Home End (xterm) */
+            case 'H':
                 ch = mod_key(mod, KEY_HOME);
                 goto vkey_end;
-              case 'F':
+            case 'F':
                 ch = mod_key(mod, KEY_END);
                 goto vkey_end;
-              default:;
+            default:;
             }
             if (last == 'O' || mod)   /* "<Esc> O `ch`" | "<Esc> [ 1 ; <2-9> `ch`" | "<Esc> [ 1 ; 1 <0-6> `ch`" */
             {
                 switch (ch)
                 {
-                  /* "<Esc> O <PQRS>" */ /* F1 - F4 */
-                  case 'P': case 'Q': case 'R': case 'S':
+                /* "<Esc> O <PQRS>" */ /* F1 - F4 */
+                case 'P': case 'Q': case 'R': case 'S':
                     ch = mod_key(mod, KEY_F1 + (ch - 'P'));
                     goto vkey_end;
 
-                  /* "<Esc> O w" */ /* END (PuTTY-rxvt) */
-                  case 'w':
+                /* "<Esc> O w" */ /* END (PuTTY-rxvt) */
+                case 'w':
                     ch = mod_key(mod, KEY_END);
                     goto vkey_end;
 
-                  /* "<Esc> O <a-d>" */ /* Ctrl-ed cursor key (rxvt) */
-                  case 'a': case 'b': case 'c': case 'd':
+                /* "<Esc> O <a-d>" */ /* Ctrl-ed cursor key (rxvt) */
+                case 'a': case 'b': case 'c': case 'd':
                     ch = mod_key(mod | CTRL_CODE, KEY_UP + (ch - 'a'));
                     goto vkey_end;
 
-                  default:
+                default:
                     if (last == 'O')  /* "<Esc> O {`ch`|END}" */
                     {
                         ch = char_opt(ch, KEY_INVALID, Meta('O'));
@@ -2075,28 +2080,28 @@ int vkey_process(int (*fgetch)(void))
             }
             switch (ch)                  /* "<Esc> [ `ch`" */
             {
-              /* "<Esc> [ <GIL>" */ /* PgDn PgUp Ins (SCO) */
-              case 'G':
+            /* "<Esc> [ <GIL>" */ /* PgDn PgUp Ins (SCO) */
+            case 'G':
                 ch = mod_key(mod, KEY_PGDN);
                 goto vkey_end;
-              case 'I':
+            case 'I':
                 ch = mod_key(mod, KEY_PGUP);
                 goto vkey_end;
-              case 'L':
+            case 'L':
                 ch = mod_key(mod, KEY_INS);
                 goto vkey_end;
 
-              /* "<Esc> [ Z" */ /* Shift-Tab */
-              case 'Z':
+            /* "<Esc> [ Z" */ /* Shift-Tab */
+            case 'Z':
                 ch = mod_key(mod, KEY_STAB);
                 goto vkey_end;
 
-              /* "<Esc> [ <a-d>" */ /* Shift-ed cursor key (rxvt) */
-              case 'a': case 'b': case 'c': case 'd':
+            /* "<Esc> [ <a-d>" */ /* Shift-ed cursor key (rxvt) */
+            case 'a': case 'b': case 'c': case 'd':
                 ch = mod_key(mod | SHIFT_CODE, KEY_UP + (ch - 'a'));
                 goto vkey_end;
 
-              default:
+            default:
                 if (ch >= '1' && ch <= '8')   /* "<Esc> [ <1-8>" */
                     mode = VKEYMODE_CSI_CH1;
                 else    /* "<Esc> [ {`ch`|END}" */
@@ -2105,84 +2110,94 @@ int vkey_process(int (*fgetch)(void))
                     goto vkey_end;
                 }
             }
-        }
-        else if (ch == ';')   /* "<Esc> [ <1-8> ;" | "<Esc> [ <1-8> <0-9> ;" */
-        {
-            int mod_ch = fgetch();      /* "; [END|`ch`]" */
-            if (mod_ch < '1' || mod_ch > '9')
+            break;
+
+        case VKEYMODE_CSI_CH1:
+        case VKEYMODE_CSI_CH2:
+            if (ch == ';')   /* "<Esc> [ <1-8> ;" | "<Esc> [ <1-8> <0-9> ;" */
             {
-                ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
-                goto vkey_end;
-            }
-            if (mod_ch == '1')          /* "; <1-9>" */
-            {
-                mod_ch = fgetch();      /* "; 1 [END|`ch`]" */
-                if (mod_ch < '0' || mod_ch > '6')
+                int mod_ch = fgetch();      /* "; [END|`ch`]" */
+                if (mod_ch < '1' || mod_ch > '9')
                 {
                     ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
                     goto vkey_end;
                 }
-                mod_ch += 10;           /* "; 1 <0-6>" */
-            }
-            mod_ch -= '1';   /* Change to bit number */
-            mod |= mod_ch;
-            if (mode == VKEYMODE_CSI_CH1 && last == '1')  /* "<Esc> [ 1 ; <2-9>" | "<Esc> [ 1 ; 1 <0-6>" */
-            {
-                /* Recover state to "<Esc> [ `ch`" */
-                mode = VKEYMODE_CSI_APP;
-                last = last2;
-            } /* else "<Esc> [ <1-8> <0-9> ; <2-9>" | "<Esc> [ <1-8> <0-9> ; 1 <0-6>" */
-            continue;     /* Get next `ch`; keep current state */
-        }
-        else if (mode == VKEYMODE_CSI_CH1)   /* "<Esc> [ <1-8> `ch`" */
-        {                               /* Home Ins Del End PgUp PgDn Home(rxvt) End(rxvt) */
-            if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <~$^@>" */
-            {
-                mod |= char_mod(ch);
-                if (last <= '6')        /* "<Esc> [ <1-6> <~$^@>" */
+                if (mod_ch == '1')          /* "; <1-9>" */
                 {
-                    ch = mod_key(mod, KEY_HOME + (last - '1'));
-                    goto vkey_end;
+                    mod_ch = fgetch();      /* "; 1 [END|`ch`]" */
+                    if (mod_ch < '0' || mod_ch > '6')
+                    {
+                        ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
+                        goto vkey_end;
+                    }
+                    mod_ch += 10;           /* "; 1 <0-6>" */
                 }
-                switch (last)           /* "<Esc> [ <78> <~$^@>" */ /* Home End (rxvt) */
+                mod_ch -= '1';   /* Change to bit number */
+                mod |= mod_ch;
+                if (mode == VKEYMODE_CSI_CH1 && last == '1')  /* "<Esc> [ 1 ; <2-9>" | "<Esc> [ 1 ; 1 <0-6>" */
                 {
-                  case '7':
-                    ch = mod_key(mod, KEY_HOME);
-                    goto vkey_end;
-                  case '8':
-                    ch = mod_key(mod, KEY_END);
-                    goto vkey_end;
-                  default:
+                    /* Recover state to "<Esc> [ `ch`" */
+                    mode = VKEYMODE_CSI_APP;
+                    last = last2;
+                } /* else "<Esc> [ <1-8> <0-9> ; <2-9>" | "<Esc> [ <1-8> <0-9> ; 1 <0-6>" */
+                continue;     /* Get next `ch`; keep current state */
+            }
+            switch (mode)
+            {
+            case VKEYMODE_CSI_CH1:    /* "<Esc> [ <1-8> `ch`" */
+                                            /* Home Ins Del End PgUp PgDn Home(rxvt) End(rxvt) */
+                if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <~$^@>" */
+                {
+                    mod |= char_mod(ch);
+                    if (last <= '6')        /* "<Esc> [ <1-6> <~$^@>" */
+                    {
+                        ch = mod_key(mod, KEY_HOME + (last - '1'));
+                        goto vkey_end;
+                    }
+                    switch (last)           /* "<Esc> [ <78> <~$^@>" */ /* Home End (rxvt) */
+                    {
+                    case '7':
+                        ch = mod_key(mod, KEY_HOME);
+                        goto vkey_end;
+                    case '8':
+                        ch = mod_key(mod, KEY_END);
+                        goto vkey_end;
+                    default:
+                        ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
+                        goto vkey_end;
+                    }
+                }
+                else if (ch >= '0' && ch <= '9')      /* "<Esc> [ <1-8> <0-9>" */
+                    mode = VKEYMODE_CSI_CH2;
+                else
+                {
                     ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
                     goto vkey_end;
                 }
-            }
-            else if (ch >= '0' && ch <= '9')      /* "<Esc> [ <1-8> <0-9>" */
-                mode = VKEYMODE_CSI_CH2;
-            else
-            {
+                break;
+
+            case VKEYMODE_CSI_CH2:    /* "<Esc> [ <1-8> <0-9> `ch`" */
+                                            /* F1 - F12 */
+                if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <0-9> <~$^@>" */
+                {
+                    mod |= char_mod(ch);
+                    switch (last2)
+                    {
+                    case '1':               /* "<Esc> [ 1 `last` <~$^@>" */ /* F1 - F8 */
+                        ch = mod_key(mod, KEY_F1 + (last - '1') - (last > '6'));
+                        goto vkey_end;
+                    case '2':               /* "<Esc> [ 2 `last` <~$^@>" */ /* F9 - F12 */
+                        ch = mod_key(mod, KEY_F9 + (last - '0') - (last > '2'));
+                        goto vkey_end;
+                    default:;
+                    }
+                }
                 ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
                 goto vkey_end;
+
+            default: /* Impossible to get here */
+                goto vkey_end;
             }
-        }
-        else if (mode == VKEYMODE_CSI_CH2)   /* "<Esc> [ <1-8> <0-9> `ch`" */
-        {                               /* F1 - F12 */
-            if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <0-9> <~$^@>" */
-            {
-                mod |= char_mod(ch);
-                switch (last2)
-                {
-                  case '1':             /* "<Esc> [ 1 `last` <~$^@>" */ /* F1 - F8 */
-                    ch = mod_key(mod, KEY_F1 + (last - '1') - (last > '6'));
-                    goto vkey_end;
-                  case '2':             /* "<Esc> [ 2 `last` <~$^@>" */ /* F9 - F12 */
-                    ch = mod_key(mod, KEY_F9 + (last - '0') - (last > '2'));
-                    goto vkey_end;
-                  default:;
-                }
-            }
-            ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
-            goto vkey_end;
         }
         last2 = last;
         last = ch;
