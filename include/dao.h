@@ -38,8 +38,6 @@ extern const char radix32[32];
 /* acl.c */
 int acl_addr(const char *acl, const char *addr);
 int acl_has(const char *acl, const char *user, const char *host);
-/* chrono32.c */
-GCC_PURE time_t chrono32(const char *str);
 /* file.c */
 void f_cat(const char *fpath, const char *msg);
 int f_cp(const char *src, const char *dst, int mode);
@@ -65,13 +63,13 @@ GCC_PURE bool is_fname(const char *str);
 int is_fpath(char *path);
 GCC_PURE int not_addr(const char *addr);
 /* radix32.c */
+void archiv32(time_t chrono, char *fname);
+void archiv32m(time_t chrono, char *fname);
+GCC_PURE time_t chrono32(const char *str);
 /* shm.c */
 void *shm_new(int shmkey, int shmsize);
 /* url_encode.c */
 void url_encode(char *dst, const char *src);
-/* archiv32.c */
-void archiv32(time_t chrono, char *fname);
-void archiv32m(time_t chrono, char *fname);
 /* dl_lib.c */
 GCC_NODISCARD struct DL_handle* DL_hold(const char *path);
 int DL_release(const char *path, struct DL_handle *handle);
