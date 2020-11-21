@@ -111,20 +111,12 @@ int dns_name(const ip_addr *addr, char *name, int name_sz);
 int dns_openip(const ip_addr *addr, int port);
 int dns_open(const char *host, int port);
 int dns_smtp(char *host);
-/* rfc2047.c */
-void output_rfc2047_qp(FILE *fp, const char *prefix, const char *str, const char *charset, const char *suffix);
 /* string.c */
 char *str_add(char *dst, const char *src);
 void str_ansi(char *dst, const char *str, int max);
 void str_cat(char *dst, const char *s1, const char *s2);
 GCC_PURE int str_cmp(const char *s1, const char *s2);
 void str_cut(char *dst, const char *src);
-GCC_CONSTEXPR int qp_code(int x);
-GCC_CONSTEXPR int base64_code(int x);
-char *mm_getencode(char *str, char *code);
-void mm_getcharset(const char *str, char *charset, int size);
-int mmdecode(const char *src, char encode, char *dst);
-void str_decode(char *str);
 char *str_dup(const char *src, int pad);
 void str_folder(char *fpath, const char *folder, const char *fname);
 void setdirpath(char *fpath, const char *direct, const char *fname);
@@ -160,6 +152,14 @@ char *Ctime(const time_t *clock);
 char *Etime(const time_t *clock);
 char *Atime(const time_t *clock);
 char *Now(void);
+/* mime.c */
+GCC_CONSTEXPR int qp_code(int x);
+GCC_CONSTEXPR int base64_code(int x);
+char *mm_getencode(char *str, char *code);
+void mm_getcharset(const char *str, char *charset, int size);
+int mmdecode(const char *src, char encode, char *dst);
+void str_decode(char *str);
+void output_rfc2047_qp(FILE *fp, const char *prefix, const char *str, const char *charset, const char *suffix);
 /* passwd.c */
 char *getrandom_bytes(char *buf, size_t buflen);
 void explicit_zero_bytes(char *buf, size_t buflen);
