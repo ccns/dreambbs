@@ -141,12 +141,6 @@ GCC_PURE int str_ncmp(const char *s1, const char *s2, int n);
 void str_strip(char *str);
 void str_ncpy(char *dst, const char *src, int n);
 char *str_ndup(const char *src, int len);
-char *getrandom_bytes(char *buf, size_t buflen);
-void explicit_zero_bytes(char *buf, size_t buflen);
-char *genpasswd(char *pw, int mode);
-char *gensignature(char *pw);
-int chkpasswd(const char *passwd, const char *passhash, char *test);
-int chksignature(const char *passwd, char *test);
 GCC_PURE int str_pat(const char *str, const char *pat);
 char *str_rev(char *dst, const char *src);
 int str_rle(char *str);
@@ -166,6 +160,13 @@ char *Ctime(const time_t *clock);
 char *Etime(const time_t *clock);
 char *Atime(const time_t *clock);
 char *Now(void);
+/* passwd.c */
+char *getrandom_bytes(char *buf, size_t buflen);
+void explicit_zero_bytes(char *buf, size_t buflen);
+char *genpasswd(char *pw, int mode);
+char *gensignature(char *pw);
+int chkpasswd(const char *passwd, const char *passhash, char *test);
+int chksignature(const char *passwd, char *test);
 /* proc.c */
 int proc_runv(const char *path, const char *argv[]);
 GCC_CHECK_SENTINEL(0) int proc_runl(const char *path, const char *arg0, ...);
