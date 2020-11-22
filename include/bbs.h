@@ -52,7 +52,11 @@
     #include <termios.h>
 #endif // #ifdef __linux__
 
-#ifdef  SYSV
+#if defined(__sun) && defined(__svr4__)
+    #define SOLARIS
+#endif
+
+#ifdef  __sysv__
 
 #ifndef LOCK_EX
 #define LOCK_EX         F_LOCK
@@ -69,7 +73,7 @@
     select(0, NULL, NULL, NULL, &t);            \
 } while (0)
 
-#endif  /* SYSV */
+#endif  /* __sysv__ */
 
 #ifndef _BBTP_
 
