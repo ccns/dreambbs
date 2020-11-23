@@ -8,6 +8,8 @@
     - [[Menu Systems - 選單系統|Menu-Systems-zh_tw]]
     - [[Screen Coordinate System - 畫面座標系統|Screen-Coordinate-System-zh_tw]]
     - [[TANet BBS Family Genealogy Chart - TANet BBS 家族譜系圖|TANet-BBS-Family-Genealogy-Chart-zh_tw]]
+    - [[與 MapleBBS 3 的按鍵差異|VS-MapleBBS-3-Keyboard-zh_tw]]
+    - [[[WIP] 與 MapleBBS 3 的差異|VS-MapleBBS-3-zh_tw]]
 - References - 參考資料
     - [[ANSI Escape Code Standard Format - ANSI 控制碼標準格式|ANSI-Escape-Code-Standard-Format-zh_tw]]
 - Changelog
