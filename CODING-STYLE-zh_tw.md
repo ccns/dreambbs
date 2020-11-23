@@ -2,7 +2,7 @@
 
 本頁說明 DreamBBS 的 coding style (不含 indentation style)。
 
-Indentation style 的說明，請見 [INDENT](INDENT)。
+Indentation style 的說明，請見 [[INDENT]]。
 
 ## 語法
 - 語法要符合 10 年前最新的 ISO C 標準 (C99)，但不應使用不被最新 ISO C++ 標準或草案 (C++2a) 所支援的語法
