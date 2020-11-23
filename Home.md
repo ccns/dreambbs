@@ -11,7 +11,7 @@ This wiki has been created to gather information about how to use & how to insta
 ## Installation Guide (程式安裝手冊)
 
 ### Installation and Backup
-  + [**How to Install**](https://github.com/ccns/dreamlandbbs/wiki/INSTALL): 初步架站手冊
+  + **[[How to Install|INSTALL]]**: 初步架站手冊
   + **How To Move Your BBS System**: BBS 資料搬家步驟
   + **Directory Structure and Source Code Structure**: BBS 目錄與程式碼規畫
 
@@ -26,5 +26,5 @@ This wiki has been created to gather information about how to use & how to insta
 
 ## Other plans 其他測試計畫
 
-  + **[To-Do and Version Plan](VERSION)**: 版本規畫
+  + **[[To-Do and Version Plan|VERSION]]**: 版本規畫
 
