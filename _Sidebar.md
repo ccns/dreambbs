@@ -1,42 +1,42 @@
-- [Home](https://github.com/ccns/dreamlandbbs/wiki)
-- [Install | 安裝說明](https://github.com/ccns/dreamlandbbs/wiki/INSTALL)
-- [Version](https://github.com/ccns/dreambbs/wiki/VERSION)
-- Project Documentations | 專案資料
-    - [Coding style | 程式碼撰寫風格](https://github.com/ccns/dreambbs/wiki/CODING-STYLE-zh_tw)
-    - [Indentation](https://github.com/ccns/dreambbs/wiki/INDENT)
-    - [Xover List System | Xover 列表系統](https://github.com/ccns/dreambbs/wiki/Xover-List-System-zh_tw)
-    - [Menu Systems | 選單系統](https://github.com/ccns/dreambbs/wiki/Menu-Systems-zh_tw)
-    - [Screen Coordinate System | 畫面座標系統](https://github.com/ccns/dreambbs/wiki/Screen-Coordinate-System-zh_tw)
-    - [TANet BBS Family Genealogy Chart | TANet BBS 家族譜系圖](https://github.com/ccns/dreambbs/wiki/TANet-BBS-Family-Genealogy-Chart-zh_tw)
-- References | 參考資料
-    - [ANSI Escape Code Standard Format | ANSI 控制碼標準格式](https://github.com/ccns/dreambbs/wiki/ANSI-Escape-Code-Standard-Format-zh_tw)
+- [[Home|]]
+- [[Install - 安裝說明|INSTALL]]
+- [[Version|VERSION]]
+- Project Documentations - 專案資料
+    - [[Coding style - 程式碼撰寫風格|CODING-STYLE-zh_tw]]
+    - [[Indentation|INDENT]]
+    - [[Xover List System - Xover 列表系統|Xover-List-System-zh_tw]]
+    - [[Menu Systems - 選單系統|Menu-Systems-zh_tw]]
+    - [[Screen Coordinate System - 畫面座標系統|Screen-Coordinate-System-zh_tw]]
+    - [[TANet BBS Family Genealogy Chart - TANet BBS 家族譜系圖|TANet-BBS-Family-Genealogy-Chart-zh_tw]]
+- References - 參考資料
+    - [[ANSI Escape Code Standard Format - ANSI 控制碼標準格式|ANSI-Escape-Code-Standard-Format-zh_tw]]
 - Changelog
-    - [Unsorted Changelog](https://github.com/ccns/dreambbs/wiki/CHANGELOG)
-    - [新式密碼加密 (DLBBS v2.0+)](https://github.com/ccns/dreambbs/wiki/new_encrypt_way)
-    - [Release Notes of Version 2.0.0 Artoria](https://github.com/ccns/dreambbs/wiki/Release-Notes-of-Version-2.0.0)
-    - [Version 2.0.0 Artoria 發行說明](https://github.com/ccns/dreamlandbbs/wiki/Release-Notes-of-Version-2.0.0-Artoria---zh_TW)
-    - [Release Notes of Version 1.0.0 Rimuru](https://github.com/ccns/dreambbs/wiki/v1.0-rimuru)
-    - [Version 1.0.0 Rimuru 發行說明](https://github.com/ccns/dreambbs/wiki/v1.0-rimuru-zh_tw)
-- Legacy Documentations | 舊有資料
+    - [[Unsorted Changelog|CHANGELOG]]
+    - [[新式密碼加密 (DLBBS v2.0+)|new_encrypt_way]]
+    - [[Release Notes of Version 2.0.0 Artoria|Release-Notes-of-Version-2.0.0]]
+    - [[Version 2.0.0 Artoria 發行說明|Release-Notes-of-Version-2.0.0-Artoria---zh_TW]]
+    - [[Release Notes of Version 1.0.0 Rimuru|v1.0-rimuru]]
+    - [[Version 1.0.0 Rimuru 發行說明|v1.0-rimuru-zh_tw]]
+- Legacy Documentations - 舊有資料
 - NoCeM-innbbsd
-    - [CHANGES](https://github.com/ccns/dreambbs/wiki/LEGACY-CHANGES.nocem)
-    - [NOCEM](https://github.com/ccns/dreambbs/wiki/LEGACY-NOCEM)
-    - [README](https://github.com/ccns/dreambbs/wiki/LEGACY-README.nocem)
+    - [[CHANGES|LEGACY-CHANGES.nocem]]
+    - [[NOCEM|LEGACY-NOCEM]]
+    - [[README|LEGACY-README.nocem]]
 - WindTop 3.02
-    - [FAQ](https://github.com/ccns/dreambbs/wiki/LEGACY-FAQ)
-    - [FEATURE](https://github.com/ccns/dreambbs/wiki/LEGACY-FEATURE)
-    - [INSTALL](https://github.com/ccns/dreambbs/wiki/LEGACY-INSTALL)
-    - [MAPLE3.FEATURE](https://github.com/ccns/dreambbs/wiki/LEGACY-MAPLE3.FEATURE)
-    - [README.ACL](https://github.com/ccns/dreambbs/wiki/LEGACY-README.ACL)
-    - [README.ADMIN](https://github.com/ccns/dreambbs/wiki/LEGACY-README.ADMIN)
-    - [README.BM](https://github.com/ccns/dreambbs/wiki/LEGACY-README.BM)
-    - [README.CRONTAB](https://github.com/ccns/dreambbs/wiki/LEGACY-README.CRONTAB)
-    - [README.INNBBSD](https://github.com/ccns/dreambbs/wiki/LEGACY-README.INNBBSD)
-    - [README.MANIFEST](https://github.com/ccns/dreambbs/wiki/LEGACY-README.MANIFEST)
-    - [README.SONG](https://github.com/ccns/dreambbs/wiki/LEGACY-README.SONG)
-    - [README.SYSOP](https://github.com/ccns/dreambbs/wiki/LEGACY-README.SYSOP)
-    - [README.TAG](https://github.com/ccns/dreambbs/wiki/LEGACY-README.TAG)
-    - [README.UTIL](https://github.com/ccns/dreambbs/wiki/LEGACY-README.UTIL)
-    - [README](https://github.com/ccns/dreambbs/wiki/LEGACY-README)
-    - [SITE](https://github.com/ccns/dreambbs/wiki/LEGACY-SITE)
-    - [sendmail.cf](https://github.com/ccns/dreambbs/wiki/LEGACY-sendmail.cf)
+    - [[FAQ|LEGACY-FAQ]]
+    - [[FEATURE|LEGACY-FEATURE]]
+    - [[INSTALL|LEGACY-INSTALL]]
+    - [[MAPLE3.FEATURE|LEGACY-MAPLE3.FEATURE]]
+    - [[README.ACL|LEGACY-README.ACL]]
+    - [[README.ADMIN|LEGACY-README.ADMIN]]
+    - [[README.BM|LEGACY-README.BM]]
+    - [[README.CRONTAB|LEGACY-README.CRONTAB]]
+    - [[README.INNBBSD|LEGACY-README.INNBBSD]]
+    - [[README.MANIFEST|LEGACY-README.MANIFEST]]
+    - [[README.SONG|LEGACY-README.SONG]]
+    - [[README.SYSOP|LEGACY-README.SYSOP]]
+    - [[README.TAG|LEGACY-README.TAG]]
+    - [[README.UTIL|LEGACY-README.UTIL]]
+    - [[README|LEGACY-README]]
+    - [[SITE|LEGACY-SITE]]
+    - [[sendmail.cf|LEGACY-sendmail.cf]]
