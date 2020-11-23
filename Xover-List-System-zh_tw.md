@@ -6,13 +6,13 @@ Xover 列表系統是 MapleBBS 3.x 中所大量使用的列表顯示系統。
 
 ## 文章概覽
 
-- [Pirate BBS、PttBBS、MapleBBS 3 的列表顯示函數比較](https://github.com/ccns/dreambbs/wiki/Xover-List-System-zh_tw#pirate-bbspttbbsmaplebbs-3-%E7%9A%84%E5%88%97%E8%A1%A8%E9%A1%AF%E7%A4%BA%E5%87%BD%E6%95%B8%E6%AF%94%E8%BC%83) 一節使用歷史比較的方法概覽 Xover 列表系統。
+- [Pirate BBS、PttBBS、MapleBBS 3 的列表顯示函數比較](#pirate-bbspttbbsmaplebbs-3-%E7%9A%84%E5%88%97%E8%A1%A8%E9%A1%AF%E7%A4%BA%E5%87%BD%E6%95%B8%E6%AF%94%E8%BC%83) 一節使用歷史比較的方法概覽 Xover 列表系統。
 
-- [MapleBBS 3 與 DreamBBS v3 的 Xover callback key value 的分配](https://github.com/ccns/dreambbs/wiki/Xover-List-System-zh_tw#maplebbs-3-%E8%88%87-dreambbs-v3-%E7%9A%84-xover-callback-key-value-%E7%9A%84%E5%88%86%E9%85%8D) 一節比較了 MapleBBS 3 與 DreamBBS 的用於 Xover callback 列表的 key value 分配上的差異。
+- [MapleBBS 3 與 DreamBBS v3 的 Xover callback key value 的分配](#maplebbs-3-%E8%88%87-dreambbs-v3-%E7%9A%84-xover-callback-key-value-%E7%9A%84%E5%88%86%E9%85%8D) 一節比較了 MapleBBS 3 與 DreamBBS 的用於 Xover callback 列表的 key value 分配上的差異。
 
-- [MapleBBS 3 與 DreamBBS v3 的 Xover 特殊值](https://github.com/ccns/dreambbs/wiki/Xover-List-System-zh_tw#maplebbs-3-%E8%88%87-dreambbs-v3-%E7%9A%84-xover-%E7%89%B9%E6%AE%8A%E5%80%BC) 一節說明了 MapleBBS 3 與 DreamBBS 中的 Xover 系統使用到的特殊數值。
+- [MapleBBS 3 與 DreamBBS v3 的 Xover 特殊值](#maplebbs-3-%E8%88%87-dreambbs-v3-%E7%9A%84-xover-%E7%89%B9%E6%AE%8A%E5%80%BC) 一節說明了 MapleBBS 3 與 DreamBBS 中的 Xover 系統使用到的特殊數值。
 
-- [DreamBBS v3 的 Xover callback 指令連鎖機制](https://github.com/ccns/dreambbs/wiki/Xover-List-System-zh_tw#dreambbs-v3-%E7%9A%84-xover-callback-%E6%8C%87%E4%BB%A4%E9%80%A3%E9%8E%96%E6%A9%9F%E5%88%B6) 一節說明了 DreamBBS v3 新增的複合型指令的效果疊加機制。
+- [DreamBBS v3 的 Xover callback 指令連鎖機制](#dreambbs-v3-%E7%9A%84-xover-callback-%E6%8C%87%E4%BB%A4%E9%80%A3%E9%8E%96%E6%A9%9F%E5%88%B6) 一節說明了 DreamBBS v3 新增的複合型指令的效果疊加機制。
 
 ## Pirate BBS、PttBBS、MapleBBS 3 的列表顯示函數比較
 
