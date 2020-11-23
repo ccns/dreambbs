@@ -1,4 +1,4 @@
-# Menu Systems | 選單系統
+# 選單系統
 
 這篇文章介紹 DreamBBS v3 中所存在的不同的選單系統。
 
@@ -6,7 +6,7 @@
 --- | --- | --- | --- | ---
 主選單 | - `bbs.c` (Pirate BBS) <br> - `nmenus.c` (Eagles BBS 3.0) <br> - `comm_list.c` (Phoenix BBS 4.0) <br> `main.c` (SecretBBS 4.0) <br> - `menu.c` (MapleBBS 2.0.5) | - `docmd()` (Pirate BBS & SecretBBS 4.0) <br> - `NdoMenu()` (Eagles BBS 3.0) <br> - `domenu()` (Phoenix BBS 4.0 & MapleBBS 2.0.5) <br> - `menu()` (MapleBBS 3) <br> - `main_menu()` & `domenu()` (DreamBBS v3) | Pirate BBS |
 Popupmenu | `popupmenu.c` | - `popupmenu()` | WindTop 3.02 | - 使用主選單系統的資料結構 (WindTop 3.02 & DreamBBS v3) <br> - 使用與主選單系統不同的特殊值 <br> - 使用與主選單系統一致的特殊值 (DreamBBS v3)
-Popupmenu Prompt | `popupmenu.c` | - `popupmenu_ans()` <br> - `pmsg()` | WindTop 3.02 | - 實質上與 Popupmenu 不是同一系統 <br> - 本文特稱之為 `Popupmenu Prompt` <br> - 使用次數稀少
+Popupmenu Prompt | `popupmenu.c` | - `popupmenu_ans()` <br> - `pmsg()` | WindTop 3.02 | -  實質上與 Popupmenu 不是同一系統 <br> - 本文特稱之為 `Popupmenu Prompt` <br> - 使用次數稀少
 Window | `window.c` | - `popupmenu_ans2()` <br> - `pmsg2()` | MapleBBS-itoc | - 由 Popupmenu Prompt 系統演變而來 <br> - 在 MapleBBS-itoc 中無 `2` 後綴 <br> - DreamBBS 2010 時引入，加上 `2` 後綴
 
 其中本文主要介紹的是主選單與 Popupmenu 2 種使用相同資料結構的系統。
