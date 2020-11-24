@@ -21,7 +21,7 @@
     - 恢復 PheonixBBS 式 (類 PttBBS) 的特殊按鍵的正數按鍵碼 ([5f16be63b](https://github.com/ccns/dreambbs/commit/5f16be63bb8776c07bb01276ac06b637fe0b9192))
         - 解決特殊按鍵的負數按鍵碼與 xover callback 的 flag 衝突的問題，讓 xover callback 列表可以使用特殊按鍵作為 key
     - 支援 <kbd>F1</kbd> ~ <kbd>F12</kbd> ([5f16be63b](https://github.com/ccns/dreambbs/commit/5f16be63bb8776c07bb01276ac06b637fe0b9192))
-    - 支援 <kbd>Shift</kbd>-<kbd>Tab</kbd> ([8b9343910](https://github.com/ccns/dreambbs/commit/https://github.com/ccns/dreambbs/commit/8b934391017e9355f301308d087adb75248be843))
+    - 支援 <kbd>Shift</kbd>-<kbd>Tab</kbd> ([8b9343910](https://github.com/ccns/dreambbs/commit/8b934391017e9355f301308d087adb75248be843))
 
 ## v2.0-rc1 (3.12.0)
 - 輸入系統：
@@ -31,8 +31,8 @@
     - 支援 <kbd>Ctrl</kbd>/<kbd>Shift</kbd>/<kbd>Esc</kbd> 與特殊按鍵的組合 ([5398b5072](https://github.com/ccns/dreambbs/commit/5398b50721cd651f90377bcd90eb4285dc894e7e))
 - 文章瀏覽：
     - 按 <kbd>L</kbd>/<kbd>l</kbd> 可以執行 BBS-Lua ([effe3c894](https://github.com/ccns/dreambbs/commit/effe3c894389f9b0d954ce7ec0e0ada8da91811d))
-    - Maple3 傳統文章瀏覽器：<kbd>H</kbd> 鍵與 <kbd>F1</kbd> 鍵也可叫出幫助畫面 (同 <kbd>h</kbd>) ([a98db13cb](https://github.com/ccns/dreambbs/commit/a98db13cbcb108fe2a7050a16b0156bcad792691))
-    - pmore 文章瀏覽器：<kbd>F1</kbd> 鍵可叫出幫助畫面 (同 <kbd>h</kbd>/<kbd>H</kbd>) ([17b5a87b5](https://github.com/ccns/dreambbs/commit/17b5a87b52e3520792d29871bfc14850dcd9c972))
+    - Maple3 傳統文章瀏覽器：<kbd>H</kbd> 鍵與 <kbd>F1</kbd> 鍵也可叫出幫助畫面 (同 <kbd>h</kbd>/<kbd>?</kbd>) ([a98db13cb](https://github.com/ccns/dreambbs/commit/a98db13cbcb108fe2a7050a16b0156bcad792691))
+    - pmore 文章瀏覽器：<kbd>F1</kbd> 鍵可叫出幫助畫面 (同 <kbd>h</kbd>/<kbd>H</kbd>/<kbd>?</kbd>) ([17b5a87b5](https://github.com/ccns/dreambbs/commit/17b5a87b52e3520792d29871bfc14850dcd9c972))
     - 按 <kbd>!</kbd> 可以執行 BBS-Ruby ([400f19ce5](https://github.com/ccns/dreambbs/commit/400f19ce52c1416fae6ad78a0545af2bfb17d441))
 - `vget`：
     - 可以按 <kbd>Del</kbd> 鍵刪除字元 (同 <kbd>Ctrl</kbd>-<kbd>D</kbd>) ([f92103667](https://github.com/ccns/dreambbs/commit/f92103667f8caf646064643253891c4bcd9dac62))
@@ -79,7 +79,7 @@
         - 將這一字元記錄起來並在下次進入 `igetch` 時回傳
         - 一律定義 `TRAP_ESC` 以確保可能已結束的按鍵控制碼不被緊接著的 `Esc` 無效化，並移除不使用的程式碼
     - 調整按鍵處理順序 ([c1e1f98fd (develop)](https://github.com/IepIweidieng/dreambbs/commit/c1e1f98fdf87bf8b91d84bf0cc45dfccc91e1c40))
-        - 將 `\r` 與其它按鍵控制碼一起處理
+        - 將 `\r`、`\x7f` 與其它按鍵控制碼一起處理
         - 解析出按鍵後再處理重繪及熱訊等特殊按鍵功能
         - 現在按 <kbd>Ctrl</kbd>-<kbd>L</kbd> 重繪畫面後會再送出 `Ctrl('L')` 按鍵碼
     - 現在會過濾掉瀏覽程式送出的雙位元字的自動重複按鍵 ([76adfb84a (develop)](https://github.com/IepIweidieng/dreambbs/commit/76adfb84ab008bc88a7fb718e5b94a2fce6e52ba))
