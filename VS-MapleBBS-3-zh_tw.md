@@ -74,15 +74,15 @@ DreamBBS 3.20:
     - `str_add` -> `str_cpy`
     - `str_cmp` -> `str_casecmp`
     - `str_cut` -> `str_split_2nd`
-    - `str_decode` -> `mmdecode_text` (`lib/mime.c`)
+    - `str_decode` -> `mmdecode_str` (`lib/mime.c`)
     - `str_folder` -> `setdirpath_root`
-    - `str_from` -> `str_getfrom`
+    - `str_from` -> `from_parse`
     - `str_len` -> `str_len_nospace`
     - `str_lowest` -> `str_lower_dbcs`
     - `str_ncmp` -> `str_ncasecmp`
     - `str_strip` -> `str_rstrip_tail`
     - `str_rev` -> `str_rev_tail`
-    - `str_rle` -> `str_rleencode`
+    - `str_rle` -> `rle_encode`
     - `str_str` -> `str_casestr`
     - `str_sub` -> `str_casestr_dbcs`
     - `str_trim` -> `str_rtrim`
