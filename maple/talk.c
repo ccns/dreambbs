@@ -2673,11 +2673,11 @@ talk_speak(
                     break;
 
                 case Ctrl('H'): /* lkchu.981201: backspace */
-                    itswords[str_len_nospace(itswords) - 1] = '\0';
+                    itswords[strlen(itswords) - 1] = '\0';
                     break;
 
                 default:
-                    if (str_len_nospace(itswords) < sizeof(itswords))
+                    if (strlen(itswords) + 1 < sizeof(itswords))
                     {
                         strncat(itswords, (char *)&data[i], 1);
                     }
@@ -2732,11 +2732,11 @@ talk_speak(
                 break;
 
             case Ctrl('H'):
-                mywords[str_len_nospace(mywords) - 1] = '\0';
+                mywords[strlen(mywords) - 1] = '\0';
                 break;
 
             default:
-                if (str_len_nospace(mywords) < sizeof(mywords))
+                if (strlen(mywords) + 1 < sizeof(mywords))
                 {
                     strncat(mywords, (char *)&ch, 1);
                 }
