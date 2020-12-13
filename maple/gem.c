@@ -36,7 +36,7 @@ static int gem_recycle(XO *xo);
 
 static int
 gem_manage(
-    char* title)
+    const char* title)
 {
     int ch, len;
     char buf[100];
@@ -308,7 +308,7 @@ brd2gem(
 
 static void
 gem_log(
-    char *folder,
+    const char *folder,
     const char *action,
     const HDR *hdr)
 {
