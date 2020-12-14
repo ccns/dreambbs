@@ -514,18 +514,19 @@ receive_article(void)
         if (firstboard) /* opus: 第一個板才需要處理 */
         {
             /* Thor.980825: gc patch: lib/str_decode 只能接受 decode 完 strlen < 256 */
+            /* IID.2020-12-14: `mmdecode_str` now support strings of arbitrary length */
 
-            str_ncpy(poolx, SUBJECT, 255);
+            str_ncpy(poolx, SUBJECT, sizeof(poolx));
             mmdecode_str(poolx);
             str_ansi(mysubject, poolx, 70);     /* 70 是 bbspost_add() 標題所需的長度 */
             SUBJECT = mysubject;
 
-            str_ncpy(poolx, FROM, 255);
+            str_ncpy(poolx, FROM, sizeof(poolx));
             mmdecode_str(poolx);
             str_ansi(myfrom, poolx, 128);       /* 雖然 bbspost_add() 發信人所需的長度只需要 50，但是 from_parse() 需要長一些 */
             FROM = myfrom;
 
-            str_ncpy(poolx, PATH, 255);
+            str_ncpy(poolx, PATH, sizeof(poolx));
             mmdecode_str(poolx);
             str_ansi(mypath, poolx, 128);
             sprintf(mypath, "%s!%.*s", MYBBSID, (int)(sizeof(mypath) - strlen(MYBBSID) - 2), PATH);

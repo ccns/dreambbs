@@ -303,27 +303,24 @@ int mmdecode(                       /* 解 Body 的 mmdecode */
 }
 
 
-/* Decode string `str` with embedded encoded texts in-place for MIME header (formerly `str_decode`) */
+/* Decode string `str` with embedded encoded texts in-place for MIME header (formerly `str_decode`)
+ * `str` of arbitrary length is supported */
 void mmdecode_str(char *str)
 {
-    int adj;
-    char *src, *dst;
-    char buf[512];
+    const char *src = str;
+    char *dst = str;
+    bool adj = false;
 
-    src = str;
-    dst = buf;
-    adj = 0;
-
-    while (*src && (dst - buf) < sizeof(buf) - 1)
+    while (*src)
     {
         if (*src != '=')
         {                           /* Thor: not coded */
-            char *tmp = src;
+            const char *tmp = src;
             while (adj && *tmp && is_space(*tmp))
                 tmp++;
             if (adj && *tmp == '=')
             {                       /* Thor: jump over space */
-                adj = 0;
+                adj = false;
                 src = tmp;
             }
             else
@@ -331,7 +328,7 @@ void mmdecode_str(char *str)
         }
         else                        /* Thor: *src == '=' */
         {
-            char *tmp = src + 1;
+            const char *tmp = src + 1;
             if (*tmp == '?')        /* Thor: =? coded */
             {
                 /* "=?%s?Q?" for QP, "=?%s?B?" for BASE64 */
@@ -343,15 +340,15 @@ void mmdecode_str(char *str)
                     int i = mmdecode_header(tmp + 3, tmp[1], dst);
                     if (i >= 0)
                     {
-
-                        tmp += 3;       /* Thor: decode's src */
+                        /* IID.2020-12-14: Skip over the decoded string, which is never longer than the source string */
+                        tmp += 3 + i;   /* Thor: decode's src */
                         while (*tmp && *tmp++ != '?');      /* Thor: no ? end, mmdecode_header -1 */
                         /* Thor.980901: 0 也算 decode 結束 */
                         if (*tmp == '=')
                             tmp++;
                         src = tmp;      /* Thor: decode over */
                         dst += i;
-                        adj = 1;        /* Thor: adjacent */
+                        adj = true;     /* Thor: adjacent */
                     }
                 }
             }
@@ -361,7 +358,6 @@ void mmdecode_str(char *str)
         }
     }
     *dst = 0;
-    strcpy(str, buf);
 }
 
 
