@@ -12,9 +12,8 @@ int main(void)
 
 #define CHECK_CASE(input, addr_exp, nick_exp, ret_exp) \
     do { \
-        char buf[] = input; \
-        printf("`%s`: ", buf); \
-        assert(from_parse(buf, addr, nick) == ret_exp); \
+        printf("`%s`: ", input); \
+        assert(from_parse(input, addr, nick) == ret_exp); \
         printf("Address: `%s`, nick name: `%s`\n", addr, nick); \
         assert(!strcmp(addr, addr_exp)); \
         assert(!strcmp(nick, nick_exp)); \

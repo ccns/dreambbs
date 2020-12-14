@@ -120,7 +120,7 @@ void str_split_2nd(char *dst, const char *src);
 char *str_dup(const char *src, int pad);
 void setdirpath_root(char *fpath, const char *folder, const char *fname);
 void setdirpath(char *fpath, const char *direct, const char *fname);
-int from_parse(char *from, char *addr, char *nick);
+int from_parse(const char *from, char *addr, char *nick);
 GCC_PURE int str_has(const char *list, const char *tag);
 GCC_PURE int str_hash_mult(const char *str, unsigned int seed, unsigned int mult_base);
 GCC_PURE int str_hash(const char *str, unsigned int seed);

@@ -169,79 +169,81 @@ void setdirpath(char *fpath, const char *direct, const char *fname)
 /* Parse string `from` and copy the email address into buffer `addr`, and the nickname into buffer `nick` (formerly `str_from`)
  * Returns `-1` if `from` does not contain any email addresses; `from` is copied into `addr` and an empty string is copied into `nick`
  * Returns `0` otherwise */
-int from_parse(char *from, char *addr, char *nick)
+int from_parse(const char *from, char *addr, char *nick)
 {
-    char *str, *ptr, *langle;
-    int cc;
+    const char *at = NULL;
+    const char *langle = NULL;
+    const char *from_end;
 
-    *nick = 0;
+    *nick = '\0';
 
-    langle = ptr = NULL;
-
-    for (str = from; (cc = *str); str++)
     {
-        if (cc == '<')
-            langle = str;
-        else if (cc == '@')
-            ptr = str;
+        int cc;
+        for (from_end = from; (cc = *from_end); from_end++)
+        {
+            if (cc == '<')
+                langle = from_end;
+            else if (cc == '@')
+                at = from_end;
+        }
     }
 
-    if (ptr == NULL)
+    if (at == NULL)
     {
         strcpy(addr, from);
         return -1;
     }
 
-    if (langle && langle < ptr && str[-1] == '>')
+    if (langle && langle < at && from_end[-1] == '>')
     {
         /* case 2/5/6 : name <mail_addr> */
 
-        str[-1] = 0;
         if (langle > from)
         {
-            ptr = langle - 2;
-            if (*from == '"')
+            const char *nick_end = langle - 1;
+            const char *nick_head = from;
+            if (*nick_head == '(' && nick_end[-1] == ')')
             {
-                from++;
-                if (*ptr == '"')
-                    ptr--;
+                nick_head++;
+                nick_end--;
             }
-            if (*from == '(')
+            if (*nick_head == '"' && nick_end[-1] == '"')
             {
-                from++;
-                if (*ptr == ')')
-                    ptr--;
+                nick_head++;
+                nick_end--;
             }
-            ptr[1] = '\0';
-            strcpy(nick, from);
+            strlcpy(nick, nick_head, nick_end - nick_head + 1);
             mmdecode_str(nick);
         }
 
+        --from_end;
         from = langle + 1;
     }
     else
     {
         /* case 1/3/4 */
 
-        if (*--str == ')')
+        const char *nick_end = from_end - 1;
+        if (*nick_end == ')')
         {
-            if (str[-1] == '"')
-                str--;
-            *str = 0;
-
-            if ((ptr = (char *)strchr(from, '(')))
+            const char *nick_head = strchr(from, '(');
+            if (nick_head)
             {
-                ptr[-1] = 0;
-                if (*++ptr == '"')
-                    ptr++;
+                from_end = nick_head - 1;
 
-                strcpy(nick, ptr);
+                nick_head++;
+                if (*nick_head == '"' && nick_end[-1] == '"')
+                {
+                    nick_head++;
+                    nick_end--;
+                }
+                strlcpy(nick, nick_head, nick_end - nick_head + 1);
                 mmdecode_str(nick);
             }
         }
     }
 
-    strcpy(addr, from);
+    strlcpy(addr, from, from_end - from + 1);
     return 0;
 }
 
