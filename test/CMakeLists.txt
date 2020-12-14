@@ -7,7 +7,7 @@
 # ------------------------------------------------------- #
 
 set(LIBSTR
-    lib_str_decode lib_str_pat lib_str_xor
+    lib_str_decode lib_str_pat lib_str_xor lib_from_parse
 )
 
 set(LIBFILE

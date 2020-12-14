@@ -16,7 +16,7 @@ SRCROOT	= $(.CURDIR)/..
 
 .c.o:	; $(CC) $(MAKEFLAG) $(CFLAGS) -g -c $*.c
 
-LIBSTR	= lib_str_decode lib_str_pat lib_str_xor
+LIBSTR	= lib_str_decode lib_str_pat lib_str_xor lib_from_parse
 
 LIBFILE	= lib_f_mv lib_f_cp lib_f_rm
 

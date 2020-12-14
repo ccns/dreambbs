@@ -51,6 +51,7 @@ test/lib_splay
 test/lib_str_decode
 test/lib_str_pat
 test/lib_str_xor
+test/lib_from_parse
 test/lib_xsort
 test/testsize
 test/lib_f_mv
