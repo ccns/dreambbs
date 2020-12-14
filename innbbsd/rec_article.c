@@ -550,8 +550,7 @@ receive_article(void)
                     gb2b5(SITE);
             }
 
-            strcpy(poolx, FROM);
-            from_parse(poolx, myaddr, mynick);
+            from_parse(FROM, myaddr, mynick);
 
             if (is_spam(nf->board, myaddr, mynick))
             {
