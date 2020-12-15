@@ -438,6 +438,18 @@ char *str_ndup(const char *src, int len)
     return dst;
 }
 
+/* Return the length of string `str` or `maxlen` if `str` contains more than `maxlen` non-'\0' characters */
+GCC_PURE size_t str_nlen(const char *str, size_t maxlen)
+{
+    const char *const end = str + maxlen;
+    for (const char *p = str; p < end; ++p)
+    {
+        if (!*p)
+            return p - str;
+    }
+    return maxlen;
+}
+
 /* str_pat : wild card string pattern match support ? * \ */
 
 GCC_PURE int str_pat(const char *str, const char *pat)
