@@ -1676,7 +1676,7 @@ domenu_exec(
                     for (int i = 0; i < xo->max; i++)
                     {
                         const char *const mdesc = xyz->table[i]->desc;
-                        const int match_max = BMIN(xyz->cmdcur_max, strlen(mdesc));
+                        const int match_max = str_nlen(mdesc, xyz->cmdcur_max);
                         /* Skip spaces */
                         xyz->cmdcur[i] += strspn(mdesc + xyz->cmdcur[i], " ");
                         /* Not matched or cursor reached the end */

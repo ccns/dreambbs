@@ -1064,7 +1064,7 @@ outf(
 {
     const int lstr_len = strcspn(str, "\t");
     outnz(str, lstr_len);
-    prints("%*s%s\x1b[m", d_cols, "", str + BMIN(lstr_len + 1, strlen(str)));
+    prints("%*s%s\x1b[m", d_cols, "", str + str_nlen(str, lstr_len + 1));
 }
 
 #ifdef M3_USE_PFTERM
