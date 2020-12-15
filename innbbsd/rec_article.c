@@ -532,7 +532,7 @@ receive_article(void)
             sprintf(mypath, "%s!%.*s", MYBBSID, (int)(sizeof(mypath) - strlen(MYBBSID) - 2), PATH);
             /* itoc.030115.註解: PATH 如果有 .edu.tw 就截掉 */
             for (pathptr = mypath; (pathptr = strstr(pathptr, ".edu.tw"));)
-                strcpy(pathptr, pathptr + 7);
+                memmove(pathptr, pathptr + 7, strlen(pathptr + 7) + 1);
             mypath[70] = '\0';
             PATH = mypath;
 
