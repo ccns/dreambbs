@@ -71,7 +71,7 @@ DreamBBS 3.20:
 ## 全域函式名稱
 DreamBBS 3.20:
 - `lib/string.c`:
-    - `str_add` -> `str_cpy`
+    - `str_add` -> `str_pcpy`
     - `str_cmp` -> `str_casecmp`
     - `str_cut` -> `str_split_2nd`
     - `str_decode` -> `mmdecode_str` (`lib/mime.c`)
