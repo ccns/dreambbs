@@ -1,5 +1,6 @@
 #include "config.h"
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -247,20 +248,20 @@ int from_parse(const char *from, char *addr, char *nick)
     return 0;
 }
 
-GCC_PURE int str_has(const char *list, const char *tag)
+GCC_PURE bool str_has(const char *list, const char *tag)
 {
     int len = strlen(tag);
     for (;;)
     {
         int cc = list[len];
         if ((!cc || cc == '/') && !str_ncasecmp(list, tag, len))
-            return 1;
+            return true;
 
         for (;;)
         {
             cc = *list;
             if (!cc)
-                return 0;
+                return false;
             list++;
             if (cc == '/')
                 break;
@@ -452,7 +453,7 @@ GCC_PURE size_t str_nlen(const char *str, size_t maxlen)
 
 /* str_pat : wild card string pattern match support ? * \ */
 
-GCC_PURE int str_pat(const char *str, const char *pat)
+GCC_PURE bool str_pat(const char *str, const char *pat)
 {
     const char *xstr = NULL, *xpat;
     int cs, cp;
@@ -469,7 +470,7 @@ GCC_PURE int str_pat(const char *str, const char *pat)
                 cp = *pat;
 
                 if (cp == '\0')
-                    return 1;
+                    return true;
 
                 pat++;
 
@@ -502,7 +503,7 @@ GCC_PURE int str_pat(const char *str, const char *pat)
             continue;
 
         if (xpat == NULL)
-            return 0;
+            return false;
 
         pat = xpat;
         str = ++xstr;
@@ -511,12 +512,12 @@ GCC_PURE int str_pat(const char *str, const char *pat)
     while ((cp = *pat))
     {
         if (cp != '*')
-            return 0;
+            return false;
 
         pat++;
     }
 
-    return 1;
+    return true;
 }
 
 
