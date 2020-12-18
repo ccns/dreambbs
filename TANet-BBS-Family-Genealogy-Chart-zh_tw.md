@@ -24,14 +24,14 @@
       │   │   │   ├── FireBird BBS 2.0  中正資工  四百年來第一站  1995
       │   │   │   │   ├── Hibiscus Realm BBS 2.xM (FireBird BBS 2.xM)
       │   │   │   │   │   │  中央大學  大紅花的國度  1997, 1998
-      │   │   │   │   │   ├── FireBird BBS 3.0  1999
-      │   │   │   │   │   │   └── FireBird BBS 2000  1999, 2000
+      │   │   │   │   │   ├── FireBird BBS 3.0  N.A.  1999
+      │   │   │   │   │   │   └── FireBird BBS 2000  N.A.  1999, 2000
       │   │   │   │   │   │       ├── PKUBBS  北京大学  北大未名  1999-
       │   │   │   │   │   │       └── Lily BBS  南京大学  小百合  2000-2005
       │   │   │   │   │   │           └── fdubbs  复旦大学  日月光华＊  2002-2008
       │   │   │   │   │   │               └── fbbs  2008-
-      │   │   │   │   │   ├── FireBird BBS 2.x-KCN  1998
-      │   │   │   │   │   │   └── FireBird BBS 3.0-KCN  1999
+      │   │   │   │   │   ├── FireBird BBS 2.x-KCN  N.A.  1998
+      │   │   │   │   │   │   └── FireBird BBS 3.0-KCN  N.A.  1999
       │   │   │   │   │   │       └── YTHT BBS  一塌糊涂  1999-2004
       │   │   │   │   │   └── MagicBBS 0.90  魔法王國  1997-1999
       │   │   │   │   │       └── MagicBBS 1.x  1999-2000
@@ -45,37 +45,42 @@
       │   │       ├── Secret BBS 4.1B  1995
       │   │       └── Maple BBS 2.36  清大資科  楓橋驛站＊  1994-1995
       │   │           ├── Maple 3.0x (M3)  1995-1998
-      │   │           │   └── DragonII BBS  1998-1999
-      │   │           │       └── Maple 3.10  1998-2000
-      │   │           │           └── Maple 3.10-itoc  2000-
-      │   │           │               └── AT2-BBS  亞世界  2002-2003
-      │   │           └── Maple SOB 0.22  臺灣大學  陽光沙灘  1996
-      │   │               ├── SOB domi  (糟了！誤上賊船  sobdomi.twbbs.org？)  n.d.
-      │   │               ├── Forest BBS  (中原資管  森林站？)  n.d 
-      │   │               ├── Atlantis BBS  亞特蘭提斯＊  1996-
-      │   │               ├── NaiveAge BBS  中央機械  純真年代  n.d.
-      │   │               ├── Ptt BBS 0.001  臺灣大學  批踢踢實業坊＊  1996-
-      │   │               │   ├── Open Ptt  2000-2001
-      │   │               │   ├── Ptt Current  2003-
-      │   │               │   └── WD BBS 1.34  風與塵埃的對話＊  1999
-      │   │               │       ├── WD BBS 2.3 1999
-      │   │               │       │   ├── WD BBS  2000-
-      │   │               │       │   └── Athena BBS (AT-BBS)  雅典娜  1999-2002
-      │   │               │       └── StarRiver BBS  輔仁大學  星河夜話/銀河鐵道之戀  2000-2002
-      │   │               └── WindTop BBS 2.x  元智大學  風之塔＊  1998
-      │   │                   └── WindTop BBS 3.0x  2000-2004
-      │   │                       ├── WindTop BBS 3.10  2004-2009
-      │   │                       └── DreamLand BBS 3.02  成功大學  夢之大地＊  2004-2009
-      │   │                           └── DreamLand BBS 3.10 (DreamBBS 2010)  2010-2017
-      │   │                               └── DreamLand BBS  2017-
+      │   │           │   ├── DragonII BBS  交通大學  新冷馨居  1998-1999
+      │   │           │   │   └── Maple 3.10  1998-2000
+      │   │           │   │       └── Maple 3.10-itoc  臺南一中  與南共舞*  2000-
+      │   │           │   │           └── AT2-BBS  亞世界  2002-2003
+      │   │           │   └── Melix BBS  N.A.  2001
+      │   │           ├─── Rouge BBS  交通大學  冷馨居  1995-1997
+      │   │           ├─── Maple SOB 0.22  臺灣大學  陽光沙灘  1996
+      │   │           │   ├── SOB domi  (糟了！誤上賊船  sobdomi.twbbs.org？)  n.d.
+      │   │           │   ├── Forest BBS  (中原資管  森林站？)  n.d 
+      │   │           │   ├── Atlantis BBS  亞特蘭提斯＊  1996-
+      │   │           │   ├── NaiveAge BBS  中央機械  純真年代  n.d.
+      │   │           │   ├── Ptt BBS 0.001  臺灣大學  批踢踢實業坊＊  1996-
+      │   │           │   │   ├── Open Ptt  2000-2001
+      │   │           │   │   ├── Ptt Current  2003-
+      │   │           │   │   └── WD BBS 1.34  風與塵埃的對話＊  1999
+      │   │           │   │       ├── WD BBS 2.3 1999
+      │   │           │   │       │   ├── WD BBS  2000-2010
+      │   │           │   │       │   ├── Athena BBS (AT-BBS)  雅典娜  1999-2002
+      │   │           │   │       │   └── WD_hialan BBS (AT3-BBS)  威尼斯咖啡館  2002-2003
+      │   │           │   │       └── StarRiver BBS  輔仁大學  星河夜話/銀河鐵道之戀  2000-2002
+      │   │           │   └── WindTop BBS 2.x  元智大學  風之塔＊  1998-1999
+      │   │           │       └── WindTop BBS 3.0x  2000-2004
+      │   │           │           ├── WindTop BBS 3.10  2004-2009
+      │   │           │           └── DreamLand BBS 3.02  成功大學  夢之大地＊  2004-2009
+      │   │           │               └── DreamLand BBS 3.10 (DreamBBS 2010)  2010-2017
+      │   │           │                   └── DreamLand BBS  2017-
+      │   │           ├── RPG BBS  交通大學  創世紀  1996-1997
+      │   │           └── Purple Garden BBS  臺灣法律  小魚的紫色花園  1999
       │   └── NCU BBS  中央大學  N.A.  n.d.
       └── NSYSU BBS  中山計中  美麗之島  1994, 1996, 1997, 1998
           ├── Formosa BBS  中山計中  美麗之島＊  1997-2015
           ├── FCU CC BBS  逢甲計中  蒼穹資訊網  n.d.
           └── Rose BBS  (玫瑰天空？)  n.d.
-* Power BBS  中華資工  N.A.  1994-1997
-* ColaBBS  交大資科  N.A.  1997-2000
-* 天火 BBS  淡江電機  淡江蛋捲新系統測試＊  2002
+* Power BBS  中華資工  方城資訊站  1994-1997
+* ColaBBS  交大資科  插花島  1997-2000
+* 天火 BBS  淡江電機  蛋捲廣場＊  2002
 ```
 
 ### 譜系圖參考資料
