@@ -308,8 +308,7 @@ MapleBBS 3 原本的 Xover 列表系統的切換列表操作，不是使用游�
 - 在 `func_info()` 中增加查詢次數，並 `return XR_KNEE + XO_NONE` (或 `return XO_KNEE`)
 - `func_info_full()` 則有不同寫法：
     - 沒有連鎖規則時，要直接呼叫 `func_info(xo)` 再 `return XO_BODY`
-        - DreamBBS v3 不使用 redo-redo 連鎖機制時，可以使用 `return XR_BODY |
-func_info(xo)`，但要確定 `func_info()` 不會回傳按鍵輸入值，否則需要連鎖規則才能處理
+        - DreamBBS v3 不使用 redo-redo 連鎖機制時，可以使用 `return XR_BODY | func_info(xo)`，但要確定 `func_info()` 不會回傳按鍵輸入值，否則需要連鎖規則才能處理
     - 有連鎖規則的話，則可以直接 `return XR_BODY + 'i'`，這會間接呼叫 `func_info()`，並要求至少從畫面中列表內容處向下重繪
 
 `return XR_BODY | func_info(xo)` 寫法的優缺點：
