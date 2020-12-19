@@ -232,6 +232,7 @@ main(
                 if ((fd = open(fpath, O_RDONLY)) >= 0)
                 {
                     /* 讀入檔案 */
+                    char *ptr_buf;
 
                     size = read(fd, buf, FILM_SIZ);
                     close(fd);
@@ -240,23 +241,23 @@ main(
                         continue;
 
                     buf[size] = '\0';
-                    ptr = buf;
+                    ptr_buf = buf;
 
 #ifdef  HAVE_SONG_TO_CAMERA
                     if (j == 1 /*&& !strncmp(buf, str_author1, strlen(str_author1))*/)
                     {
-                        for (k=0; k<=3 && ptr; k++)
+                        for (k=0; k<=3 && ptr_buf; k++)
                         {
-                            ptr = strchr(ptr, '\n');
-                            if (ptr)
-                                ptr++;
+                            ptr_buf = strchr(ptr_buf, '\n');
+                            if (ptr_buf)
+                                ptr_buf++;
                         }
-                        if (!ptr)
+                        if (!ptr_buf)
                             continue;
                     }
 #endif
 
-                    if (play(ptr))      /* overflow */
+                    if (play(ptr_buf))  /* overflow */
                         break;
                     if (++i >= MOVIE_MAX) /* Thor.980804: 為什麼不乾脆用 number算了?:P */
                         break;
