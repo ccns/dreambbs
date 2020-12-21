@@ -12,7 +12,7 @@ Xover 列表系統是 MapleBBS 3.x 中所大量使用的列表顯示系統。
 
 - [MapleBBS 3 與 DreamBBS v3 的 Xover 特殊值](#maplebbs-3-%E8%88%87-dreambbs-v3-%E7%9A%84-xover-%E7%89%B9%E6%AE%8A%E5%80%BC) 一節說明了 MapleBBS 3 與 DreamBBS 中的 Xover 系統使用到的特殊數值。
 
-- [DreamBBS v3 的 Xover callback 指令連鎖機制](#dreambbs-v3-%E7%9A%84-xover-callback-%E6%8C%87%E4%BB%A4%E9%80%A3%E9%8E%96%E6%A9%9F%E5%88%B6) 一節說明了 DreamBBS v3 新增的複合型指令的效果疊加機制。
+- [DreamBBS v3 的 Xover callback 指令連鎖機制](#dreambbs-v3-%E7%9A%84-xover-callback-%E6%8C%87%E4%BB%A4%E9%80%A3%E9%8E%96%E6%A9%9F%E5%88%B6) 一節說明了 DreamBBS v3.0 新增的複合型指令的效果疊加機制。
 
 ## Pirate BBS 衍生之 BBS 的列表函式比較
 
@@ -27,7 +27,7 @@ Xover 列表系統是 MapleBBS 3.x 中所大量使用的列表顯示系統。
 列表主程式檔名       | `read.c`         | `cursor.c`       | `xover.c`
 列表主函式           | `i_read()`       | `cursor_menu()`  | `xover()`
 用途                | 文章與信件列表 <br> - 精華區、看板列表 (Formosa BBS 1.1.1) <br> - 好友列表 (FireBird BBS 2.51) | 主選單、文章、精華區、 <br> 投票、信件、看板、分類看板、 <br> 使用者、好友列表 <br> - 可處理大部分全螢幕列表 | 除主選單外的大部分全螢幕列表
-其它列表的處理方法   | 寫新的列表處理函式 | 用 `cursor_menu()` 改寫 | - 用 `xover()` 改寫 <br> - 寫新的列表顯示函式，用 `xo_cursor()` 處理游標位置 <br> - DreamBBS v3 不再使用 `xo_cursor()`，將其移除
+其它列表的處理方法   | 寫新的列表處理函式 | 用 `cursor_menu()` 改寫 | - 用 `xover()` 改寫 <br> - 寫新的列表顯示函式，用 `xo_cursor()` 處理游標位置 <br> - DreamBBS v3.0 不再使用 `xo_cursor()`，將其移除
 
 ### 列表主函式與其參數
 
@@ -79,12 +79,12 @@ xover(int cmd)
 - 參數 `direct` 併入 `XZ::dir`
 - 參數 `dotitle` 和 `doentry` 放入 callback list
 - 參數 `rcmdlist` 併入 `XZ::cb`
-    - DreamBBS v3: 改併入 `XO::cb`
+    - DreamBBS v3.0: 改併入 `XO::cb`
 - 無參數 `bidcache` (使用 `bbstate` + `currbid`)
 
 ### 其它列表的處理方法之範例
 
-- Pirate BBS (v1.9) 使用者列表的顯示函式與其參數（無游標，只能換頁）
+- Pirate BBS (1.9) 使用者列表的顯示函式與其參數（無游標，只能換頁）
 ```c
 printcuent(uentp)
 struct user_info *uentp ;
@@ -165,16 +165,16 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 使用場合                 | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> MapleBBS 2.39 <br> WD BBS | Formosa BBS | MapleBBS 3
  :---                    | ---                  | ---                  | ---
 指定某功能需要動態載入    | (無)                  | (無)                 | `cmd \| XO_DL`
-將游標放到最尾項          | (直接操作)            | (直接操作)            | - (直接操作: `xo->pos = XO_TAIL`) <br> - `XO_MOVE + XO_TAIL` (DreamBBS v3 起支援)
-移動游標                 | - (直接操作) <br> - `GOTO_NEXT` (FireBird BBS 2.51) | - `CAREYDOWN` & `CAREYUP` (1.1.1) <br> - `C_DOWN & C_UP` (1.4.1) | - `XO_MOVE + pos` <br> - `XO_MOVE + XO_REL + diff` (DreamBBS v3 起支援)
-移動游標 (頭尾循環)       | (無)                  | (無)                 | - `XO_MOVE + XO_WRAP + pos` <br> - `XO_MOVE + XO_WRAP + XO_REL + diff` (DreamBBS v3 起支援)
-翻頁                     | (直接操作)            | - (直接操作 + `CAREYDOWN`/`CAREYUP`) (1.1.1) <br> - (直接操作 + `C_MOVE`) (1.4.1) | - `XO_MOVE + pos ± XO_TALL` <br> - `XO_MOVE + XO_REL ± XO_TALL` (DreamBBS v3 起支援) <br> - 尾項上捲: `XO_MOVE + XO_REL - ((xo->max-1 - xo->top) % XO_TALL + 1)` (DreamBBS v3)
-翻頁 (頭尾循環)           | (無)                 | (無)                  | - `XO_MOVE + XO_WRAP + pos ± XO_TALL` <br> - 尾項下捲: `xo->top = 0, XR_BODY + XO_MOVE + XO_WRAP + XO_REL + BMIN(xo->max, XO_TALL)` (DreamBBS v3) <br> - 首尾項上捲: `XO_MOVE + XO_WRAP + XO_REL - ((xo->max-1 - xo->top) % XO_TALL + 1)` (DreamBBS v3)
-捲動列表                 | (無)                  | (無)                  | - `XO_MOVE + XO_SCRL + pos` (DreamBBS v3 新增) <br> - `XO_MOVE + XO_SCRL + XO_REL + diff` (DreamBBS v3 新增)
-捲動列表 (頭尾循環)       | (無)                  | (無)                  | - `XO_MOVE + XO_WRAP + XO_SCRL + pos` (DreamBBS v3 新增) <br> - `XO_MOVE + XO_WRAP + XO_SCRL + XO_REL + diff` (DreamBBS v3 新增)
-切換列表                 | (無)                  | (無)                  | - `XZ_<ZONE>` = `XO_ZONE + zone` <br> - `XO_ZONE + XO_WRAP + zone` (DreamBBS v3 起支援) <br> - `XO_ZONE + XO_REL + diff` (DreamBBS v3 起支援) <br> - `XO_ZONE + XO_WRAP + XO_REL + diff` (DreamBBS v3 起支援)
+將游標放到最尾項          | (直接操作)            | (直接操作)            | - (直接操作: `xo->pos = XO_TAIL`) <br> - `XO_MOVE + XO_TAIL` (DreamBBS v3.0 起支援)
+移動游標                 | - (直接操作) <br> - `GOTO_NEXT` (FireBird BBS 2.51) | - `CAREYDOWN` & `CAREYUP` (1.1.1) <br> - `C_DOWN & C_UP` (1.4.1) | - `XO_MOVE + pos` <br> - `XO_MOVE + XO_REL + diff` (DreamBBS v3.0 起支援)
+移動游標 (頭尾循環)       | (無)                  | (無)                 | - `XO_MOVE + XO_WRAP + pos` <br> - `XO_MOVE + XO_WRAP + XO_REL + diff` (DreamBBS v3.0 起支援)
+翻頁                     | (直接操作)            | - (直接操作 + `CAREYDOWN`/`CAREYUP`) (1.1.1) <br> - (直接操作 + `C_MOVE`) (1.4.1) | - `XO_MOVE + pos ± XO_TALL` <br> - `XO_MOVE + XO_REL ± XO_TALL` (DreamBBS v3.0 起支援) <br> - 尾項上捲: `XO_MOVE + XO_REL - ((xo->max-1 - xo->top) % XO_TALL + 1)` (DreamBBS v3.0)
+翻頁 (頭尾循環)           | (無)                 | (無)                  | - `XO_MOVE + XO_WRAP + pos ± XO_TALL` <br> - 尾項下捲: `xo->top = 0, XR_BODY + XO_MOVE + XO_WRAP + XO_REL + BMIN(xo->max, XO_TALL)` (DreamBBS v3.0) <br> - 首尾項上捲: `XO_MOVE + XO_WRAP + XO_REL - ((xo->max-1 - xo->top) % XO_TALL + 1)` (DreamBBS v3.0)
+捲動列表                 | (無)                  | (無)                  | - `XO_MOVE + XO_SCRL + pos` (DreamBBS v3.0 新增) <br> - `XO_MOVE + XO_SCRL + XO_REL + diff` (DreamBBS v3.0 新增)
+捲動列表 (頭尾循環)       | (無)                  | (無)                  | - `XO_MOVE + XO_WRAP + XO_SCRL + pos` (DreamBBS v3.0 新增) <br> - `XO_MOVE + XO_WRAP + XO_SCRL + XO_REL + diff` (DreamBBS v3.0 新增)
+切換列表                 | (無)                  | (無)                  | - `XZ_<ZONE>` = `XO_ZONE + zone` <br> - `XO_ZONE + XO_WRAP + zone` (DreamBBS v3.0 起支援) <br> - `XO_ZONE + XO_REL + diff` (DreamBBS v3.0 起支援) <br> - `XO_ZONE + XO_WRAP + XO_REL + diff` (DreamBBS v3.0 起支援)
 回到上層列表             | (無)                  | (無)                  | (無；有 `XO_LAST`，但未實作)
-離開列表函式             | - `DOQUIT` <br> - `QUIT` (MapleBBS 2.39 & WD BBS) | - (直接操作) (1.1.1) <br> -`C_REDO` (1.4.1) | `XO_QUIT` <br> - `QUIT` 重新定義為 `XO_QUIT` (DreamBBS v3)
+離開列表函式             | - `DOQUIT` <br> - `QUIT` (MapleBBS 2.39 & WD BBS) | - (直接操作) (1.1.1) <br> -`C_REDO` (1.4.1) | `XO_QUIT` <br> - `QUIT` 重新定義為 `XO_QUIT` (DreamBBS v3.0)
 
 ## MapleBBS 3 與 DreamBBS v3 的 Xover callback key value 的分配
 
@@ -183,17 +183,17 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
  :---                               | ---                | ---                           | ---
 `0x00000000` - `0x0000001f`         | `CTRL()`/`Ctrl()`  | <kbd>Ctrl</kbd> + 一般按鍵    | - `CTRL()` 出自 Eagles BBS <br> - `Ctrl()` 出自 Phoenix BBS
 `0x00000020` - `0x000000ff`         | (無)               | 一般按鍵                      |
-`0x00000100` - `0x00001fff`         | (無)               | 傳統特殊按鍵                  | 出自 Phoenix BBS <br> DreamBBS v1 起恢復使用
-`0x0000001f`                        | `KEY_ESC`          | <kbd>Esc</kbd>/<kbd>Alt</kbd> + 一般按鍵 | 按下的一般按鍵需用 `KEY_ESC_arg` 取得 <br> - 出自 Phoenix BBS <br> - MapleBBS 3 不使用
+`0x00000100` - `0x00001fff`         | (無)               | 傳統特殊按鍵                  | 出自 Phoenix BBS <br> DreamBBS v1.0 恢復使用
+`0x0000001f`                        | `KEY_ESC`          | - <kbd>Esc</kbd>/<kbd>Alt</kbd> + 一般按鍵 <br> - 單獨的 <kbd>Esc</kbd> (DreamBBS v3) | - 按下的一般按鍵需用 `KEY_ESC_arg` 取得 <br> - 出自 Phoenix BBS <br> - MapleBBS 3 不使用 <br> - DreamBBS v3.0 新增按鍵延時判斷機制，恢復使用
 `0x00002000` - `0x000020ff`         | `Meta()`/`Esc()`   | <kbd>Esc</kbd>/<kbd>Alt</kbd> + 一般按鍵 | - `Meta()` 出自 MapleBBS 3 <br> - `Esc()` 出自 Maple-itoc <br> - Maple-itoc 不使用
-`0x00002100` - `0x00003fff`         | `Meta()`           | <kbd>Esc</kbd>/<kbd>Alt</kbd> + 特殊按鍵 | DreamBBS v1 起新增
-`0x00000060` (mask)                 | `Shift()`/`Ctrl()` | 特殊按鍵的 <kbd>Shift</kbd>/<kbd>Ctrl</kbd> | DreamBBS v1 起新增
+`0x00002100` - `0x00003fff`         | `Meta()`           | <kbd>Esc</kbd>/<kbd>Alt</kbd> + 特殊按鍵 | DreamBBS v2.0 起支援
+`0x00000060` (mask)                 | `Shift()`/`Ctrl()` | 特殊按鍵的 <kbd>Shift</kbd>/<kbd>Ctrl</kbd> | DreamBBS v2.0 起支援
 　                                  | `Ctrl(key)`        | `0x00`: <kbd>Ctrl</kbd>       | Mask 後變 `0x00`
 　                                  | `Shift(Ctrl(key))` | `0x20`: <kbd>Shift</kbd> + <kbd>Ctrl</kbd> | Mask 後變 `0x20`
 　                                  | `key`              | `0x40`: 正常                  | Mask 後變 `0x40`
-　                                  | `Shift(key)`       | `0x60`: <kbd>Shift</kbd>      | `Shift()` 為 DreamBBS v1 起新增 <br> Mask 後變 `0x60`
-`0x00004000` - `0x7fffffff`         | `KEY_NONE` = `0x4000`| (不使用)                    | 保留給 Xover 列表系統使用 <br> - DreamBBS v1 起新增 <br> - DreamBBS v2 起改為現值 <br> - DreamBBS v3 起改為現用法
-`0x80000000` - `0xffffffff`         | (無)               | MapleBBS 3 特殊按鍵 (負數)     | DreamBBS v1 起不使用，保留給 Xover 系統
+　                                  | `Shift(key)`       | `0x60`: <kbd>Shift</kbd>      | `Shift()` 為 DreamBBS v2.0 新增 <br> Mask 後變 `0x60`
+`0x00004000` - `0x7fffffff`         | `KEY_NONE` = `0x4000`| (不使用)                    | 保留給 Xover 列表系統使用 <br> - DreamBBS v1.0 新增 <br> - DreamBBS v2.0 改為現值 <br> - DreamBBS v3.0 改為現用法
+`0x80000000` - `0xffffffff`         | (無)               | MapleBBS 3 特殊按鍵 (負數)     | DreamBBS v1.0 起不使用，保留給 Xover 系統
 
 ### MapleBBS 3 的 Xover callback key value 的分配
 範圍或對應的 bit mask                | 相關 macro         | 功能                         | 註解
@@ -205,9 +205,9 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 `0x20000000` - `0x27ffffff-XO_TALL` | `XO_MOVE + pos`  (`pos >= 0`)          | 設定游標位置                | Maple-itoc 修正前
 `0x28000000` - `0x3fffffff`         | `XO_MOVE + XO_WRAP + pos` (`pos >= 0`) | 設定游標位置 (頭尾循環)      | Maple-itoc 修正前
 `0x20000000-XO_TALL` - `0x20800000` | `XO_MOVE + pos`                        | 設定游標位置                | Maple-itoc 修正後
-`0x20800001` - `0x3fffffff`         | `XO_MOVE + XO_WRAP + pos`              | 設定游標位置 (頭尾循環)      | Maple-itoc 修正後 <br> - 循環發生時跳到頭尾 <br> - 循環發生時跳到循環後的對應項 (DreamBBS v3)
+`0x20800001` - `0x3fffffff`         | `XO_MOVE + XO_WRAP + pos`              | 設定游標位置 (頭尾循環)      | Maple-itoc 修正後 <br> - 循環發生時跳到頭尾 <br> - 循環發生時跳到循環後的對應項 (DreamBBS v3.0)
 `0x40000000` - `0x7fffffff`         | `XO_ZONE + zone` (`zone >= 0`)         | 列表切換                    | Maple-itoc 只使用 14 個
-`0x80000000` - `0xffffffff`         | `key \| XO_DL`     | 特殊按鍵 (負數) 或動態載入功能 | 不能以特殊按鍵做為 callback 列表的 key <br> - DreamBBS v1 起將特殊按鍵值恢復為傳統的正數，可做為 callback 列表的 key
+`0x80000000` - `0xffffffff`         | `key \| XO_DL`     | 特殊按鍵 (負數) 或動態載入功能 | 不能以特殊按鍵做為 callback 列表的 key <br> - DreamBBS v1.0 將特殊按鍵值恢復為傳統的正數，可做為 callback 列表的 key
 
 ### DreamBBS v3 的 Xover callback key value 的分配
 範圍或對應的 bit mask                | 相關 macro         | 功能                         | 註解
@@ -250,29 +250,29 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 ## MapleBBS 3 與 DreamBBS v3 的 Xover 特殊值
 Macro             | 值                        | 功能                                  | 註解
  :---             | ---                       | ---                                   | ---
-`XO_MODE`         | `0x10000000`              | 表示畫面重繪、資料載入、離開列表等操作  | DreamBBS v3 中已移除
+`XO_MODE`         | `0x10000000`              | 表示畫面重繪、資料載入、離開列表等操作  | DreamBBS v3.0 中已移除
 `XO_NONE`         | - `0x10000000` <br> - `0x00004000` (DreamBBS v3)      | - 什麼都不作 <br> - 最小的被當作指令的 Xover key value |
-`XR_<redo>`       | (多個)                    | 預先定義的畫面重繪及資料載入的組合動作  | DreamBBS v3 新增
-`XR_PART_<redo>`  | (多個)                    | 畫面重繪及資料載入中的某部分            | DreamBBS v3 新增
+`XR_<redo>`       | (多個)                    | 預先定義的畫面重繪及資料載入的組合動作  | DreamBBS v3.0 新增
+`XR_PART_<redo>`  | (多個)                    | 畫面重繪及資料載入中的某部分            | DreamBBS v3.0 新增
 `XO_MOVE`         | - `0x20000000` <br> - `0x00100000` (DreamBBS v3)      | - 表示游標移動 <br> - 游標移動的 bias (DreamBBS v3)
-`XO_CUR`          | `(XO_REL + XO_CUR_BIAS)`  | 重繪游標所在行，並移動游標到指定的相對位置 | DreamBBS v3 新增
-`XO_CUR_BIAS`     | `0x2000`                  | `XO_CUR` 內部處理相對位置時的 bias      | DreamBBS v3 新增
-`XO_CUR_MIN`      | `(XO_REL + 0 - XO_CUR)`   | `XO_CUR` 可指定的相對位置的最小值       | DreamBBS v3 新增
-`XO_CUR_MAX`      | `(XO_REL + KEY_NONE - XO_CUR)` | `XO_CUR` 可指定的相對位置的最大值  | DreamBBS v3 新增
-`XO_RSIZ`         | `256`                     | 列表資料的資料結構大小限制              | DreamBBS v3 起不使用
+`XO_CUR`          | `(XO_REL + XO_CUR_BIAS)`  | 重繪游標所在行，並移動游標到指定的相對位置 | DreamBBS v3.0 新增
+`XO_CUR_BIAS`     | `0x2000`                  | `XO_CUR` 內部處理相對位置時的 bias      | DreamBBS v3.0 新增
+`XO_CUR_MIN`      | `(XO_REL + 0 - XO_CUR)`   | `XO_CUR` 可指定的相對位置的最小值       | DreamBBS v3.0 新增
+`XO_CUR_MAX`      | `(XO_REL + KEY_NONE - XO_CUR)` | `XO_CUR` 可指定的相對位置的最大值  | DreamBBS v3.0 新增
+`XO_RSIZ`         | `256`                     | 列表資料的資料結構大小限制              | DreamBBS v3.0 起不使用
 `XO_TALL`         | `(b_lines - 3)`           | 翻頁所跳行數                           | 非常數
-`XO_MOVE_MAX`     | `(XO_POS_MASK - XO_MOVE)` | 可加在 `XO_MOVE` 上的最大值            | DreamBBS v3 新增
-`XO_MOVE_MIN`     | `(XO_NONE + 1 - XO_MOVE)` | 可加在 `XO_MOVE` 上的最小值            | DreamBBS v3 新增
-`XO_TAIL`         | - `(XO_MOVE - 999)` <br> - `(XO_WRAP - 1)` (DreamBBS v3)  | - 用來將游標 `XO::pos` 初始化到列表尾項 <br> - 用在 `XO_MOVE + XO_TAIL` 中，將游標移到列表尾項 (DreamBBS v3 增加支援) | 注意是 `TAIL`，與 `XO_TALL` 不同
+`XO_MOVE_MAX`     | `(XO_POS_MASK - XO_MOVE)` | 可加在 `XO_MOVE` 上的最大值            | DreamBBS v3.0 新增
+`XO_MOVE_MIN`     | `(XO_NONE + 1 - XO_MOVE)` | 可加在 `XO_MOVE` 上的最小值            | DreamBBS v3.0 新增
+`XO_TAIL`         | - `(XO_MOVE - 999)` <br> - `(XO_WRAP - 1)` (DreamBBS v3)  | - 用來將游標 `XO::pos` 初始化到列表尾項 <br> - 用在 `XO_MOVE + XO_TAIL` 中，將游標移到列表尾項 (DreamBBS v3.0 增加支援) | 注意是 `TAIL`，與 `XO_TALL` 不同
 `XO_ZONE`         | - `0x40000000` <br> - `(XZ_ZONE + XO_MOVE)` (DreamBBS v3) | 切換到某個列表 |
-`XZ_ZONE`         | - `0x40000000`            | 將操作解釋為列表相關操作                | DreamBBS v3 新增
+`XZ_ZONE`         | - `0x40000000`            | 將操作解釋為列表相關操作                | DreamBBS v3.0 新增
 `XZ_BACK`         | - `0x100` <br> - `0x04000000` (DreamBBS v3) | - (未使用) <br> - 加在 `XZ_ZONE` 上，表示回到上次進入的 zone (DreamBBS v3)    |
 `XZ_<zone>`       | `(XO_ZONE + <zone>)`      | 切換到某個 zone                        |
-`XZ_INDEX_<zone>` | `<zone>`                  | Zone 的 index 值                      | DreamBBS v3 新增
-`XZ_INDEX_MAX`    | `XZ_INDEX_MYFAVORITE`     | 最後一個 zone 的 index 值              | DreamBBS v3 新增
-`XZ_COUNT`        | `(XZ_INDEX_MAX + 1)`      | Xover zone 的數量                     | DreamBBS v3 新增
-`XO_SKIN`         | `((XZ_ZONE \| XZ_SKIN) + XO_MOVE)` | 套用某個使用者介面 skin (未實作) | DreamBBS v3 新增
-`XZ_SKIN`         | `0x10000000`              | 將操作解讀為使用者介面 skin 切換 (未實作) | DreamBBS v3 新增
+`XZ_INDEX_<zone>` | `<zone>`                  | Zone 的 index 值                      | DreamBBS v3.0 新增
+`XZ_INDEX_MAX`    | `XZ_INDEX_MYFAVORITE`     | 最後一個 zone 的 index 值              | DreamBBS v3.0 新增
+`XZ_COUNT`        | `(XZ_INDEX_MAX + 1)`      | Xover zone 的數量                     | DreamBBS v3.0 新增
+`XO_SKIN`         | `((XZ_ZONE \| XZ_SKIN) + XO_MOVE)` | 套用某個使用者介面 skin (未實作) | DreamBBS v3.0 新增
+`XZ_SKIN`         | `0x10000000`              | 將操作解讀為使用者介面 skin 切換 (未實作) | DreamBBS v3.0 新增
 
 ## DreamBBS v3 的 Xover callback 指令連鎖機制
 ### 名詞說明
@@ -289,7 +289,7 @@ Macro             | 值                        | 功能                         
 例如連鎖 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE` 中就包含了指令連鎖 `'i' -> 'j' -> 'k'`。
 
 #### 組合操作 - Redo 組合操作與 zone 組合操作
-從 DreamBBS v3 開始，可以將畫面重繪/重新載入或列表操作，與按鍵輸入或游標移動的操作組合表示，因此需要特別的規則來處理帶有這些組合的指令連鎖。
+從 DreamBBS v3.0 開始，可以將畫面重繪/重新載入或列表操作，與按鍵輸入或游標移動的操作組合表示，因此需要特別的規則來處理帶有這些組合的指令連鎖。
 
 其中畫面重繪/重新載入 (`XR_*`) 等操作，本文稱之為「redo-simple 操作」，與其組合的操作則稱為「redo 組合操作」；\
 列表操作 (`XZ_ZONE + XZ_*`) 等操作，本文稱之為「zone-simple 操作」，與其組合的操作則稱為「zone 組合操作」。
