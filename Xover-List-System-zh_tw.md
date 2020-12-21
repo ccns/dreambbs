@@ -26,12 +26,12 @@ Xover 列表系統是 MapleBBS 3.x 中所大量使用的列表顯示系統。
  :---               | ---              | ---              | ---          
 列表主程式檔名       | `read.c`         | `cursor.c`       | `xover.c`
 列表主函式           | `i_read()`       | `cursor_menu()`  | `xover()`
-用途                | 文章與信件列表 <br> - 精華區、看板列表 (Formosa BBS 1.1.1) <br> - 好友列表 (FireBird BBS 2.51) | 主選單、文章、精華區、 <br> 投票、信件、看板、分類看板、 <br> 使用者、好友列表 | 除主選單外的大部分全螢幕列表
-其它列表的處理方法   | 寫新的列表處理函式 | 寫新的列表處理函式 | 寫新的列表顯示函式，用 `xo_cursor()` 處理游標位置 <br> - DreamBBS v3 不再使用 `xo_cursor()`，將其移除
+用途                | 文章與信件列表 <br> - 精華區、看板列表 (Formosa BBS 1.1.1) <br> - 好友列表 (FireBird BBS 2.51) | 主選單、文章、精華區、 <br> 投票、信件、看板、分類看板、 <br> 使用者、好友列表 <br> - 可處理大部分全螢幕列表 | 除主選單外的大部分全螢幕列表
+其它列表的處理方法   | 寫新的列表處理函式 | 用 `cursor_menu()` 改寫 | - 用 `xover()` 改寫 <br> - 寫新的列表顯示函式，用 `xo_cursor()` 處理游標位置 <br> - DreamBBS v3 不再使用 `xo_cursor()`，將其移除
 
 ### 列表主函式與其參數
 
-#### Pirate BBS (v1.9)
+#### Pirate BBS (1.9)
 ```c
 i_read(direct, dotitle, doentry, rcmdlist)
 char *direct ;
@@ -48,6 +48,28 @@ i_read(int cmdmode, const char *direct, void (*dotitle) (),
 ```
 - 多出參數 `cmdmode` 和 `bidcache`
 
+#### Formosa BBS (1.4.1; r410)
+```c
+int cursor_menu( int y, int x,
+				 char *direct,
+				 struct one_key *comm,
+				 int hdrsize,
+				 int *ccur,
+				 void (*cm_title) (),
+				 void (*cm_btitle) (),
+				 void (*cm_entry) (int, void *, int, int, int, int),
+				 int (*cm_get) (char *, void *, int, int),
+				 int (*cm_max) (char *, int),
+				 int (*cm_findkey) (char *, void *, int, int ),
+				 int opt, int autowarp)
+```
+- 參數 `dotitle` 更名為 `cm_title`
+- 參數 `doentry` 更名為 `cm_entry`
+- 參數 `rcmdlist` 更名為 `comm`
+- 多出參數 `y`, `x`, `hdrsize`, `ccur`, `cm_btitle`, `cm_get`, `cm_max`, `cm_findkey`, `opt`, & `autowarp`
+- 無參數 `cmdmode` 和 `bidcache`
+- 共 14 個參數
+
 #### MapleBBS 3 (取自 DreamBBS v2.0)
 ```cpp
 void
@@ -55,10 +77,10 @@ xover(int cmd)
 ```
 - 參數 `cmdmode` 併入 `XZ::mode`
 - 參數 `direct` 併入 `XZ::dir`
-- 參數 `dotitle()` 和 `doentry()` 放入 callback list
+- 參數 `dotitle` 和 `doentry` 放入 callback list
 - 參數 `rcmdlist` 併入 `XZ::cb`
     - DreamBBS v3: 改併入 `XO::cb`
-- 無參數 `bidcache` (使用 bbstate + currbid)
+- 無參數 `bidcache` (使用 `bbstate` + `currbid`)
 
 ### 其它列表的處理方法之範例
 
