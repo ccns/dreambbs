@@ -22,12 +22,12 @@ Xover 列表系統是 MapleBBS 3.x 中所大量使用的列表顯示系統。
         - 現在的 DreamBBS v1 及更新版本是 DreamBBS 2010 的後代，架構上也屬於 MapleBBS 3.x
 
 ### 列表主函式
-　                  | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> Formosa BBS 1.1.1 | MapleBBS 3
- :---               | ---              | ---          
-列表主程式檔名       | `read.c`         | `xover.c`
-列表主函式           | `i_read()`       | `xover()`
-用途                | 文章與信件列表 <br> - 看板列表 (Formosa BBS 1.1.1) <br> - 好友列表 (FireBird BBS 2.51) | 大部分列表
-其它列表的處理方法   | 寫新的列表處理函式 | 寫新的列表顯示函式，用 `xo_cursor()` 處理游標位置 <br> - DreamBBS v3 不再使用 `xo_cursor()`，將其移除
+　                  | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> Formosa BBS 1.1.1 | Formosa BBS 1.4.1 | MapleBBS 3
+ :---               | ---              | ---              | ---          
+列表主程式檔名       | `read.c`         | `cursor.c`       | `xover.c`
+列表主函式           | `i_read()`       | `cursor_menu()`  | `xover()`
+用途                | 文章與信件列表 <br> - 精華區、看板列表 (Formosa BBS 1.1.1) <br> - 好友列表 (FireBird BBS 2.51) | 主選單、文章、精華區、 <br> 投票、信件、看板、分類看板、 <br> 使用者、好友列表 | 除主選單外的大部分全螢幕列表
+其它列表的處理方法   | 寫新的列表處理函式 | 寫新的列表處理函式 | 寫新的列表顯示函式，用 `xo_cursor()` 處理游標位置 <br> - DreamBBS v3 不再使用 `xo_cursor()`，將其移除
 
 ### 列表主函式與其參數
 
@@ -93,66 +93,66 @@ xo_cursor(
 6 個參數
 
 ### 按鍵處理
-　                     | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> MapleBBS 2.39 <br> WD BBS <br> Formosa BBS 1.1.1 | MapleBBS 3
+　                     | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> MapleBBS 2.39 <br> WD BBS <br> Formosa BBS | MapleBBS 3
  :---                  | ---                 | ---          
-按鍵處理函式            | - `i_read()` (Pirate BBS & Formosa BBS 1.1.1) <br> - `i_read_key()` (etc.) | - `xover()` <br> - `xover_exec_cb()` & `xover_key()` (DreamBBS v3)
+按鍵處理函式            | - `i_read()` (Pirate BBS & Formosa BBS 1.1.1) <br> - `cursor_menu()` (Formosa BBS 1.4.1) <br> - `i_read_key()` (etc.) | - `xover()` <br> - `xover_exec_cb()` & `xover_key()` (DreamBBS v3)
 Callback 列表資料結構   | - `struct one_key[]` <br> - `onekey_t[126]` (PttBBS) | - `KeyFunc[]` <br> - `std::unordered_map<unsigned int, XoFunc>` (DreamBBS v3; C++)
 Callback 列表結尾或條件 | - `!one_key::fptr` <br> - `!one_key::key` (MapleBBS 2.39) <br> - (固定長度) (PttBBS) <br> - `one_key::key == 'h' && (currmode & MODE_DIGEST)` <br> (MapleBBS 2.36, MapleBBS 2.39, & WD BBS) | - `KeyFunc::key == 'h'` <br> - `KeyFunc::first == 'h'` (DreamBBS v3; C) <br> - `std::unordered_map::end()` (DreamBBS v3; C++)
-Callback 取得方法　   　| - Loop/O(n) <br> - Direct index/O(1) (PttBBS) | - Loop/O(n) <br> - Hash table/O(1) (DreamBBS v3; C++)
+Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS) | - Loop/O(n) <br> - Hash table/O(1) (DreamBBS v3; C++)
 
-### 游標處理
-　                     | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> MapleBBS 2.39 <br> WD BBS | Formosa BBS 1.1.1 | MapleBBS 3
+### 游標紀錄處理
+　                     | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> MapleBBS 2.39 <br> WD BBS | Formosa BBS | MapleBBS 3
  :---                  | ---                        | ---                  | ---
-嘗試取得已載入列表的游標 | `getkeep()`                | (Array indexing)     | `xo_get()`
-游標資料結構儲存空間取得 | (`malloc()`)               | Statically allocated | `xo_new()`
+嘗試取得已載入列表的游標 | `getkeep()`                | (Array indexing) <br> - 或不儲存 (1.4.1) | `xo_get()` <br> - 或不儲存
+游標資料結構儲存空間取得 | (`malloc()`)               | Statically allocated <br> - 或 stack-based (1.4.1) | `xo_new()` <br> - 或 stack-based
 游標資料結構            | - `struct keeploc` <br> - `keeploc_t` (PttBBS) | (None) | `XO`
 游標紀錄資料結構        | - `struct keeploc *` <br> - `struct keepsome *` (PttBBS) | (None) | `XO *`
-游標紀錄儲存            | - `struct keeploc *keeplist` <br> - `struct keepsome *keeplist` (PttBBS) | `int t_top[TREASURE_DEPTH],` <br> `t_cur[TREASURE_DEPTH];` <br> `int mailtop, mailcur;` | `XO *xo_root`
+游標紀錄儲存            | - `struct keeploc *keeplist` <br> - `struct keepsome *keeplist` (PttBBS) | - `int t_top[TREASURE_DEPTH],` <br> `t_cur[TREASURE_DEPTH]` <br> `int mailtop, mailcur;` (1.1.1) <br> - (各自儲存或不儲存) (1.4.1) | `XO *xo_root` <br> - 或不儲存
 游標紀錄儲存可見度      | Function-scope global       | File-scope global | File-scope global
 游標紀錄資料結構類型    | - Singly linked list <br> - Singly linked block (1 block = `KEEPSLOT` (`10`)) (PttBBS) | Array | Singly linked list
 游標資料取得方法        | - Loop/String comparison <br> - Loop/Board number comparison (MapleBBS 2.39) <br> - Loop/String hash (PttBBS) | Array indexing | Loop/String comparison
 
 ### 列表資料
-　                      | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> MapleBBS 2.39 <br> WD BBS | Formosa BBS 1.1.1 | MapleBBS 3
+　                      | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> MapleBBS 2.39 <br> WD BBS | Formosa BBS | MapleBBS 3
  :---                   | ---                           | ---                           | ---
-列表資料結構             | - `struct fileheader` <br> - `fileheader_t` (PttBBS) <br> - (any; 另有 `struct fileheader`) (FireBird BBS 2.51) | `FILEHEADER` | (any; 另有 `HDR` 對應 `struct fileheader`)
-列表資料儲存 (全域變數)  | - `struct fileheader *files` <br> - `fileheader_t *headers` (PttBBS) <br> - `char *pnt` (FireBird BBS 2.51) | `FILEHEADER *fheads` | - 通常為 `char xo_pool[]` <br> - 通常為 `char *xo_pool_base` (DreamBBS v3)
-列表資料儲存空間取得     | - `calloc()` <br> - `calloc()` + `realloc()` (PttBBS) | `malloc()` | - 通常為 statically allocated <br> - 通常為 `mmap()` (DreamBBS v3)
-列表資料取得             | - `get_records()` <br> - `get_records_and_bottom()` (PttBBS) | `get_list()` | 通常為 `xo_load()`
-列表資料取得方法         | `lseek()` + `read()` 載入部分列表 | `lseek()` + `read()` 載入部分列表 | - 通常為 `lseek()` + `read()` 載入部分列表 <br> - 通常為 `mmap()` 映射整個列表 (DreamBBS v3)
+列表資料結構             | - `struct fileheader` <br> - `fileheader_t` (PttBBS) <br> - (any; 另有 `struct fileheader`) (FireBird BBS 2.51) | - `FILEHEADER` (1.1.1) <br> - (any; 另有 `FILEHEADER`) (1.4.1) | (any; 另有 `HDR` 對應 `struct fileheader`)
+列表資料儲存 (全域變數)  | - `struct fileheader *files` <br> - `fileheader_t *headers` (PttBBS) <br> - `char *pnt` (FireBird BBS 2.51) | - `FILEHEADER *fheads` (1.1.1) <br> - `char hdrs[MAX_SCREEN_SIZE * MAX_HDRSIZE]` (1.4.1) | - 通常為 `char xo_pool[]` <br> - 通常為 `char *xo_pool_base` (DreamBBS v3)
+列表資料儲存空間取得     | - `calloc()` <br> - `calloc()` + `realloc()` (PttBBS) | - `malloc()` (1.1.1) <br> - Statically allocated (1.4.1) | - 通常為 statically allocated <br> - 通常為 `mmap()` (DreamBBS v3)
+列表資料取得             | - `get_records()` <br> - `get_records_and_bottom()` (PttBBS) | - `get_list()` (1.1.1) <br> - `*_get()` (1.4.1) | 通常為 `xo_load()`
+列表資料取得方法         | `lseek()` + `read()` 載入部分列表 | `lseek()` + `read()` 載入部分列表 <br> - 或用 `memcpy()` 取得已載入資料的一部分 (1.4.1) | - 通常為 `lseek()` + `read()` 載入部分列表 <br> - 通常為 `mmap()` 映射整個列表 (DreamBBS v3)
 
 ### 重新載入與重繪的相關 macros (括號：無直接對應，替代的處理方式)
-使用場合                  | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 | Formosa BBS 1.1.1 | MapleBBS 2.39 <br> WD BBS | MapleBBS 3
+使用場合                  | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 | Formosa BBS | MapleBBS 2.39 <br> WD BBS | MapleBBS 3
  :---                    | ---                | ---           | ---           | ---
-什麼都不做                | `DONOTHING`        | `R_NO`/`B_NO`/`M_NO` <br> (定義一致) | `RC_NONE`     | `XO_NONE`
-切換列表資料檔，重新載入   | `NEWDIRECT`        | `R_NEW`/`B_NEW`/`M_NEW` <br> (定義一致) | `RC_NEWDIR`   | `XO_INIT`
-列表資料檔有更動，重新載入 | - (`FULLUPDATE`) <br> - `DIRCHANGED` <br> (MapleBBS 2.36, PttBBS, & FireBird BBS 2.51) | (`R_NEW`) | `RC_CHDIR` | (`XO_INIT`)
-重新載入資料並重繪全畫面   | `FULLUPDATE`       | (`R_NEW`)     | `RC_FULL`     | `XO_INIT`
-重新載入資料並從列表頭重繪 | `PARTUPDATE`       | (`R_NEW`)     | `RC_BODY`     | `XO_LOAD`
-重繪全畫面               | (`FULLUPDATE`)      | `R_FULL`/`B_FULL`/`M_FULL` (定義一致) | (`RC_FULL`)   | `XO_HEAD`
-從列表前說明處重繪        | (`FULLUPDATE`)      | (`R_FULL`)   | (`RC_FULL`)   | `XO_NECK`
-從列表頭重繪              | - (`PARTUPDATE`) <br> - `PART_REDRAW` <br> (MapleBBS 2.36 & PttBBS) | `R_PART`/`B_PART` (定義一致) | `RC_DRAW` | `XO_BODY`
-重繪某項                  | (直接呼叫函式)      | (`R_LINE`)   | - `RC_ITEM` <br> - (直接呼叫函式) (WD BBS) | - (直接呼叫函式) <br> - 有些分支有增加 `XO_ITEM` <br> - `XO_CUR + diff` (DreamBBS v3)
-重繪某項及畫面底部         | (直接呼叫函式)      | `R_LINE`/`B_LINE`/`M_LINE` (定義一致) | (直接呼叫函式) | - (直接呼叫函式) <br> - `XR_FOOT + XO_CUR + diff` (DreamBBS v3)
-從列表後說明處重繪        | - (`PARTUPDATE`) <br> - (`PART_REDRAW`) <br> (MapleBBS 2.36 & PttBBS) | (`R_FULL`) | (`RC_DRAW`) | - (`XO_BODY`) <br> - 有些分支有增加 `XO_KNEE`
-重繪畫面底部              | - (`PARTUPDATE`) <br> - `READ_REDRAW` <br> (MapleBBS 2.36 & PttBBS) | (`R_PART`) | `RC_FOOT` | `XO_FOOT` <br> - WindTop BBS 3.x: 只清除螢幕底部 (不會有 footer) <br> - MapleBBS-itoc: 在螢幕底部畫出 `XZ::feeter` <br> - DreamBBS v3: 呼叫 callback 列表對應 `XO_FOOT` 的函式
-重繪畫面頂部              | - (`FULLUPDATE`) <br> - `TITLE_REDRAW` (PttBBS) | (`R_FULL`) | (`RC_FULL`) | - (`XO_HEAD`) <br> - `XR_PART_HEAD + key` (DreamBBS v3)
+什麼都不做                | `DONOTHING`        | - `R_NO`/`B_NO`/`M_NO` <br> (定義一致) (1.1.1) <br> - `C_NONE` (1.4.1) | `RC_NONE`     | `XO_NONE`
+切換列表資料檔，重新載入   | `NEWDIRECT`        | - `R_NEW`/`B_NEW`/`M_NEW` <br> (定義一致) (1.1.1) <br> - `C_INIT` (1.4.1) | `RC_NEWDIR`   | `XO_INIT`
+列表資料檔有更動，重新載入 | - (`FULLUPDATE`) (Pirate BBS) <br> - `DIRCHANGED` (etc.) | - (`R_NEW`) (1.1.1) <br> - (`C_INIT`) (1.4.1) | `RC_CHDIR` | (`XO_INIT`)
+重新載入資料並重繪全畫面   | `FULLUPDATE`       | - (`R_NEW`) (1.1.1) <br> - `C_LOAD` (1.4.1) | `RC_FULL`     | `XO_INIT`
+重新載入資料並從列表頭重繪 | `PARTUPDATE`       | - (`R_NEW`) (1.1.1) <br> - (`C_LOAD`) (1.4.1) | `RC_BODY`     | `XO_LOAD`
+重繪全畫面               | (`FULLUPDATE`)      | - `R_FULL`/`B_FULL`/`M_FULL` <br> (定義一致) (1.1.1) <br> - `C_FULL` (1.4.1) | (`RC_FULL`)   | `XO_HEAD`
+從列表前說明處重繪        | (`FULLUPDATE`)      | - (`R_FULL`) (1.1.1) <br> - (`C_FULL`) (1.4.1) | (`RC_FULL`)   | `XO_NECK`
+從列表頭重繪              | - (`PARTUPDATE`) <br> - `PART_REDRAW` <br> (MapleBBS 2.36 & PttBBS) | - `R_PART`/`B_PART` (定義一致) (1.1.1) <br> - (`C_FULL`) (1.4.1) <br> - `CX_GET` (限內部處理) (1.4.1) | `RC_DRAW` | `XO_BODY`
+重繪某項                  | (直接呼叫函式)      | - (`R_LINE`) (1.1.1) <br> - (`C_LINE`) (1.4.1) | - `RC_ITEM` <br> - (直接呼叫函式) (WD BBS) | - (直接呼叫函式) <br> - 有些分支有增加 `XO_ITEM` <br> - `XO_CUR + diff` (DreamBBS v3)
+重繪某項及畫面底部         | (直接呼叫函式)      | - `R_LINE`/`B_LINE`/`M_LINE` <br> (定義一致) (1.1.1) <br> - `C_LINE` (1.4.1) | (直接呼叫函式) | - (直接呼叫函式) <br> - `XR_FOOT + XO_CUR + diff` (DreamBBS v3)
+從列表後說明處重繪        | - (`PARTUPDATE`) <br> - (`PART_REDRAW`) <br> (MapleBBS 2.36 & PttBBS) | - (`R_PART`) (1.1.1) <br> - (`C_FULL`) (1.4.1) | (`RC_DRAW`) | - (`XO_BODY`) <br> - 有些分支有增加 `XO_KNEE`
+重繪畫面底部              | - (`PARTUPDATE`) <br> - `READ_REDRAW` <br> (MapleBBS 2.36 & PttBBS) | - (`R_PART`) (1.1.1) <br> - `C_FOOT` (1.4.1) | `RC_FOOT` | `XO_FOOT` <br> - WindTop BBS 3.x: 只清除螢幕底部 (不會有 footer) <br> - MapleBBS-itoc: 在螢幕底部畫出 `XZ::feeter` <br> - DreamBBS v3: 呼叫 callback 列表對應 `XO_FOOT` 的函式
+重繪畫面頂部              | - (`FULLUPDATE`) <br> - `TITLE_REDRAW` (PttBBS) | - (`R_FULL`) (1.1.1) <br> - (`C_FULL`) (1.4.1) | (`RC_FULL`) | - (`XO_HEAD`) <br> - `XR_PART_HEAD + key` (DreamBBS v3)
 重新載入資料但不重繪      | - (`PARTUPDATE`) <br> - `HEADERS_RELOAD` (PttBBS) | (操作資料結構重新載入) | (操作資料結構重新載入) | - (操作資料結構重新載入) <br> - `XR_PART_LOAD + key` (DreamBBS v3)
 
 ### 列表操作的相關 macros (括號：無直接對應，替代的處理方式)
-使用場合                 | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> MapleBBS 2.39 <br> WD BBS | Formosa BBS 1.1.1 | MapleBBS 3
+使用場合                 | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> MapleBBS 2.39 <br> WD BBS | Formosa BBS | MapleBBS 3
  :---                    | ---                  | ---                  | ---
 指定某功能需要動態載入    | (無)                  | (無)                 | `cmd \| XO_DL`
 將游標放到最尾項          | (直接操作)            | (直接操作)            | - (直接操作: `xo->pos = XO_TAIL`) <br> - `XO_MOVE + XO_TAIL` (DreamBBS v3 起支援)
-移動游標                 | - (直接操作) <br> - `GOTO_NEXT` (FireBird BBS 2.51) | `CAREYUP` & `CAREYDOWN` | - `XO_MOVE + pos` <br> - `XO_MOVE + XO_REL + diff` (DreamBBS v3 起支援)
+移動游標                 | - (直接操作) <br> - `GOTO_NEXT` (FireBird BBS 2.51) | - `CAREYDOWN` & `CAREYUP` (1.1.1) <br> - `C_DOWN & C_UP` (1.4.1) | - `XO_MOVE + pos` <br> - `XO_MOVE + XO_REL + diff` (DreamBBS v3 起支援)
 移動游標 (頭尾循環)       | (無)                  | (無)                 | - `XO_MOVE + XO_WRAP + pos` <br> - `XO_MOVE + XO_WRAP + XO_REL + diff` (DreamBBS v3 起支援)
-翻頁                     | (直接操作)            | (直接操作 + `CAREYUP`/`CAREYDOWN`) | - `XO_MOVE + pos ± XO_TALL` <br> - `XO_MOVE + XO_REL ± XO_TALL` (DreamBBS v3 起支援) <br> - 尾項上捲: `XO_MOVE + XO_REL - ((xo->max-1 - xo->top) % XO_TALL + 1)` (DreamBBS v3)
+翻頁                     | (直接操作)            | - (直接操作 + `CAREYDOWN`/`CAREYUP`) (1.1.1) <br> - (直接操作 + `C_MOVE`) (1.4.1) | - `XO_MOVE + pos ± XO_TALL` <br> - `XO_MOVE + XO_REL ± XO_TALL` (DreamBBS v3 起支援) <br> - 尾項上捲: `XO_MOVE + XO_REL - ((xo->max-1 - xo->top) % XO_TALL + 1)` (DreamBBS v3)
 翻頁 (頭尾循環)           | (無)                 | (無)                  | - `XO_MOVE + XO_WRAP + pos ± XO_TALL` <br> - 尾項下捲: `xo->top = 0, XR_BODY + XO_MOVE + XO_WRAP + XO_REL + BMIN(xo->max, XO_TALL)` (DreamBBS v3) <br> - 首尾項上捲: `XO_MOVE + XO_WRAP + XO_REL - ((xo->max-1 - xo->top) % XO_TALL + 1)` (DreamBBS v3)
 捲動列表                 | (無)                  | (無)                  | - `XO_MOVE + XO_SCRL + pos` (DreamBBS v3 新增) <br> - `XO_MOVE + XO_SCRL + XO_REL + diff` (DreamBBS v3 新增)
 捲動列表 (頭尾循環)       | (無)                  | (無)                  | - `XO_MOVE + XO_WRAP + XO_SCRL + pos` (DreamBBS v3 新增) <br> - `XO_MOVE + XO_WRAP + XO_SCRL + XO_REL + diff` (DreamBBS v3 新增)
 切換列表                 | (無)                  | (無)                  | - `XZ_<ZONE>` = `XO_ZONE + zone` <br> - `XO_ZONE + XO_WRAP + zone` (DreamBBS v3 起支援) <br> - `XO_ZONE + XO_REL + diff` (DreamBBS v3 起支援) <br> - `XO_ZONE + XO_WRAP + XO_REL + diff` (DreamBBS v3 起支援)
 回到上層列表             | (無)                  | (無)                  | (無；有 `XO_LAST`，但未實作)
-離開列表                 | - `DOQUIT` <br> - `QUIT` (MapleBBS 2.39 & WD BBS) | (直接操作) | `XO_QUIT` <br> - `QUIT` 重新定義為 `XO_QUIT` (DreamBBS v3)
+離開列表函式             | - `DOQUIT` <br> - `QUIT` (MapleBBS 2.39 & WD BBS) | - (直接操作) (1.1.1) <br> -`C_REDO` (1.4.1) | `XO_QUIT` <br> - `QUIT` 重新定義為 `XO_QUIT` (DreamBBS v3)
 
 ## MapleBBS 3 與 DreamBBS v3 的 Xover callback key value 的分配
 
