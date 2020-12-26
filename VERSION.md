@@ -10,7 +10,7 @@ Before the introduction of the new versioning scheme, the latest version name wa
 ## Current Versioning Scheme - `DreamBBS vX.Y.Z`; abbreviated as `vX.Y.Z` 
 Note the presence of `v`.
 
-Each new version has a corresponding legacy version number as well.
+Each release using the new versioning scheme has a corresponding legacy version number as well.
 
 For DreamBBS v3, `Y` is an one digit number, e.g., `v3.0` but not `v3.00` and `v3.2` but not `v3.02`. The next major release after DreamBBS v3.3 will be DreamBBS v4.0, so that `Y` will not be larger than `9`.
 
@@ -18,7 +18,7 @@ It is acceptable to omit the `v` prefix for DreamBBS because using `X.Y.Z` along
 - DreamBBS derived from MapleBBS not before MapleBBS 2.36, so before DreamBBS v3 (i.e., `X` < `3`), `DreamBBS X.Y` refers to `DreamBBS vX.Y` but not `MapleBBS X.Y`
 - DreamBBS v3 and MapleBBS 3 use different numbers of digits for `Y`, so `DreamBBS 3.xx` refers to `MapleBBS 3.xx` but not `DreamBBS v3.xx`, while `DreamBBS 3.x` refers to `DreamBBS v3.x` but not `MapleBBS 3.x`
 
-The versioning scheme is deprecated. The version number `X.Y.Z` will be consistent with the legacy versioning scheme after `DreamBBS 4.0.0`/`DreamBBS v4.0.0`.
+The versioning scheme is deprecated. The version number `X.Y.Z` will be consistent with the legacy versioning scheme for `DreamBBS 4.0.0`/`DreamBBS v4.0.0` and on.
 
 ## Branches of Development
 The new development workflow has led to the two main branches seen today: `master` and `develop`.
@@ -38,7 +38,7 @@ The new versioning scheme is introduced in this minor version.
 - `v0.95.1`: Aka. `3.10 REV-BETA4.1`
 - `v0.95.2`: Aka. `3.10 REV-BETA4.2`
 - `v0.95.3`: Aka. `3.10 REV-BETA4.3`
-- `v0.95.4`: Aka. `3.10 REV-BETA4.4`; planned to be the final release of `v0.95`
+- `v0.95.4`: Aka. `3.10 REV-BETA4.4`; planned to be the last release of `v0.95`
 
 It has become end-of-life when `v0.97.0` was released.
 
@@ -65,9 +65,9 @@ Features:
   - Refined layout: Trailing whitespaces are removed.
 
 ### `v0.98`-`v0.99` (`3.10.98`-`3.10.99`)
-Plans dropped due to big changes which will be tested for a long time.
+The plans have been dropped due to significant changes which require comprehensive tests.
 
-Planned alternative names:
+Pre-releases for `v1.0` were planned instead:
   - [x] `v1.0-alpha1`
   - [x] `v1.0-alpha2`
   - [x] `v1.0-alpha3`
@@ -109,7 +109,7 @@ Due to the shortage of development resources, from this major version and on, on
 - `2020 v0` (`v3.0`)
 - `2020 v1` (`v3.1`)
 - `2020 v2` (`v3.2`)
-- `2020 v3` (`v3.3`); planned to be the final release of `v3.X`
+- `2020 v3` (`v3.3`); planned to be the last release of `v3.X`
 
 Features in plan:
   - [x] Hot-swapping of DSO.
@@ -133,8 +133,8 @@ Former versioning scheme: `vX.0-CURRENT`
 
 Version scheme after `v3.0`:
   1. The name of the latest release version for its development branch
-  2. Or `X.Y-CURRENT for the development branch of upcoming release versions
-    - Will be changed into the real version name upon official releasing
+  2. Or `X.Y-CURRENT` for the development branch of upcoming release versions
+    - Will be renamed into the real version name upon the official release
 
 Whenever a significant bug fix or change is made in `develop`, the related commits will be merged into `master` branch for the latest release version soon.
 
