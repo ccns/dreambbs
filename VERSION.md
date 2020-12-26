@@ -1,16 +1,24 @@
 # To-Do and Version Plan
 
-## Legacy Versioning Scheme - `DreamBBS X.Y.Z`; abbreviated as `X.Y.Z` 
+## Legacy Versioning Scheme - `DreamBBS X.Y.Z`; abbreviated as `X.Y.Z`
 The versioning scheme originated from MapleBBS.
 
-Before the introduction of the new versioning scheme, the latest version name was `WindTop 3.10 Rev.Beta 3` or `DreamBBS 3.10 Rev.Beta 3`.
+For MapleBBS 3, `Y` is a two digit number, e.g., `3.00` but not `3.0` and `3.02` but not `3.2`.
+
+Before the introduction of the new versioning scheme, the latest version name was `WindTop 3.10 Rev.Beta 3` or `DreamBBS 3.10 Rev.Beta 3`, and the `.Z` part is not actually used.
 
 ## Current Versioning Scheme - `DreamBBS vX.Y.Z`; abbreviated as `vX.Y.Z` 
 Note the presence of `v`.
 
 Each new version has a corresponding legacy version number as well.
 
-The versioning scheme is deprecated. It will become the same as legacy versioning scheme after `DreamBBS 4.0.0`/`DreamBBS v4.0.0`.
+For DreamBBS v3, `Y` is an one digit number, e.g., `v3.0` but not `v3.00` and `v3.2` but not `v3.02`. The next major release after DreamBBS v3.3 will be DreamBBS v4.0, so that `Y` will not be larger than `9`.
+
+It is acceptable to omit the `v` prefix for DreamBBS because using `X.Y.Z` along actually does not cause ambiguity:
+- DreamBBS derived from MapleBBS not before MapleBBS 2.36, so before DreamBBS v3 (i.e., `X` < `3`), `DreamBBS X.Y` refers to `DreamBBS vX.Y` but not `MapleBBS X.Y`
+- DreamBBS v3 and MapleBBS 3 use different numbers of digits for `Y`, so `DreamBBS 3.xx` refers to `MapleBBS 3.xx` but not `DreamBBS v3.xx`, while `DreamBBS 3.x` refers to `DreamBBS v3.x` but not `MapleBBS 3.x`
+
+The versioning scheme is deprecated. The version number `X.Y.Z` will be consistent with the legacy versioning scheme after `DreamBBS 4.0.0`/`DreamBBS v4.0.0`.
 
 ## Branches of Development
 The new development workflow has led to the two main branches seen today: `master` and `develop`.
