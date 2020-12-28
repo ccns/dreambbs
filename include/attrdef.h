@@ -56,7 +56,7 @@
   #elif __cplusplus >= 201103L  /* C++11 */
     #define GCC_NORETURN  [[noreturn]]
   #elif defined __GNUC__
-    #define GCC_NORETURN  __attribute__((__noreturn__))
+    #define GCC_NORETURN  __attribute__((noreturn))
   #else
     #define GCC_NORETURN  /* Ignored */
   #endif
@@ -96,7 +96,7 @@
 /* Indicates that the function does not write to any non-local objects or static local objects */
 #ifndef GCC_PURE
   #if defined __GNUC__
-    #define GCC_PURE  __attribute__((__pure__))
+    #define GCC_PURE  __attribute__((pure))
   #else
     #define GCC_PURE  /* Ignored */
   #endif
@@ -105,7 +105,7 @@
 /* Indicates that the function does not read or write to any non-local objects or static local objects */
 #ifndef GCC_CONSTEXPR
   #if defined __GNUC__
-    #define GCC_CONSTEXPR  __attribute__((__const__))
+    #define GCC_CONSTEXPR  __attribute__((const))
   #else
     #define GCC_CONSTEXPR  /* Ignored */
   #endif
@@ -116,7 +116,7 @@
 /* Indicates that the object is unused in some build configurations */
 #ifndef GCC_UNUSED
   #if defined __GNUC__
-    #define GCC_UNUSED    __attribute__((__unused__))
+    #define GCC_UNUSED    __attribute__((unused))
   #else
     #define GCC_UNUSED    /* Ignored */
   #endif
@@ -128,7 +128,7 @@
   #if __cplusplus >= 201402L  /* C++14 */
     #define GCC_DEPRECATED(msg_str)  [[deprecated(msg_str)]]
   #elif defined __GNUC__
-    #define GCC_DEPRECATED(msg_str)  __attribute__((__deprecated__(msg_str)))
+    #define GCC_DEPRECATED(msg_str)  __attribute__((deprecated(msg_str)))
   #else
     #define GCC_DEPRECATED(msg_str)  /* Ignored */
   #endif
@@ -139,7 +139,7 @@
   #if __cplusplus >= 201703L  /* C++17 */
     #define GCC_FALLTHROUGH  [[fallthrough]]
   #elif defined __GNUC__
-    #define GCC_FALLTHROUGH  __attribute__((__fallthrough__))
+    #define GCC_FALLTHROUGH  __attribute__((fallthrough))
   #else
     #define GCC_FALLTHROUGH  /* Ignored */
   #endif
