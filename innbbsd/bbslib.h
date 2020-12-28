@@ -1,31 +1,7 @@
 #ifndef BBSLIB_H
 #define BBSLIB_H
 
-/* Macros for implementation-defined attributes */
-
-#ifndef GCC_CHECK_FORMAT
-  #ifndef __GNUC__
-    #define GCC_CHECK_FORMAT(ifmt, iarg)  __attribute__((format(printf, ifmt, iarg)))
-  #else
-    #define GCC_CHECK_FORMAT(ifmt, iarg)  /* Ignored */
-  #endif
-#endif
-
-#ifndef GCC_PURE
-  #if defined __GNUC__
-    #define GCC_PURE  __attribute__((__pure__))
-  #else
-    #define GCC_PURE  /* Ignored */
-  #endif
-#endif
-
-#ifndef GCC_CONSTEXPR
-  #if defined __GNUC__
-    #define GCC_CONSTEXPR  __attribute__((__const__))
-  #else
-    #define GCC_CONSTEXPR  /* Ignored */
-  #endif
-#endif
+#include "attrdef.h" /* Macros for implementation-defined attributes */
 
 #ifdef __cplusplus
 extern "C" {
