@@ -113,6 +113,15 @@
 
 /* General/other attributes */
 
+/* Indicates that the array of `char` or the pointer to the array may contain a byte sequence without the `\0` string end */
+#ifndef GCC_NONSTRING
+  #if defined __GNUC__ && !defined __clang__ && __GNUC__ >= 8 /* GCC 8 */
+    #define GCC_NONSTRING __attribute__((nonstring))
+  #else
+    #define GCC_NONSTRING /* Ignored */
+  #endif
+#endif
+
 /* Indicates that the object is unused in some build configurations */
 #ifndef GCC_UNUSED
   #if defined __GNUC__
