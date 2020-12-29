@@ -29,6 +29,7 @@ v2.0 以後的版本，可以不用 `bmake`，改用 `cmake`。
 
 (註：v2.0 以後的版本，不再假設使用者名稱為 `bbs`，可自行取名)
 
+(註：v3.0 以後的版本，不再假設 BBS 家目錄為 `/home/bbs`，可自行選擇適合路徑)
 
 **== 以下用 root 權限 !! ==**
 
@@ -97,13 +98,31 @@ v2.0 後的版本，支援自動產生部分設定，需要使用 `bmake` 或 `c
 
     $ bmake configure
 
+也可參考以下指令，直接指定使用者資訊（未指定之選項將使用目前使用者的使用者資訊）（所列選項僅為範例，請自行斟酌是否合適）：
+
+    $ bmake BBSUSR=bbs BBSGROUP=bbs WWWGROUP=www-data BBSHOME=/home/bbs configure
+
 如果要使用 `cmake`，則建議改用以下指令：
 
     $ mkdir build/
     $ cd build/
     $ cmake ..
 
+其中最後的 `cmake ..` 指令，也可參考以下指令調整，直接指定使用者資訊（未指定之選項將使用目前使用者的使用者資訊）（所列選項僅為範例，請自行斟酌是否合適）：
+
+    $ BBSUSR=bbs BBSGROUP=bbs WWWGROUP=www-data BBSHOME=/home/bbs cmake ..
+
 可檢查所產生的設定是否符合需求。
+
+此外，使用 `cmake` 時，預設會使用系統之預設編譯器，並以 C 語言模式編譯。如要指定編譯器或使用 C++ 語言模式編譯，則可參考以下指令調整上述 `cmake ..` 指令（所列選項僅為範例，請自行斟酌是否合適）：
+
+    $ CC=gcc USE_CXX=1 cmake ..
+
+或是
+
+    $ cmake -DCMAKE_C_COMPILER=gcc -DUSE_CXX=ON ..
+
+使用 `bmake` 時的編譯器與語言模式的指定，請見後文：[編譯 BBS 執行檔](#6-%E7%B7%A8%E8%AD%AF-bbs-%E5%9F%B7%E8%A1%8C%E6%AA%94)。
 
 ## 5. 確認 BBS 目錄架構配置
 
@@ -138,6 +157,12 @@ cp -r bbs /home/
 如果 `dreambbs.conf` 中的相關變數都有定義到，應該可以順利編譯完成。
 
 (註：v2.0 以後的版本，即使 `dreambbs.conf` 中未定義任何變數，也可順利編譯完成並正常執行)
+
+使用 `bmake` 時，編譯器預設為 `clang`，以 C 語言模式編譯。如要使用其它編譯器或使用 C++ 語言模式編譯，則可執行以下指令來編譯（所列選項僅為範例，請自行斟酌是否合適）：
+
+    $ bmake CC=g++ all install
+
+有關 `cmake` 的編譯器與語言模式的指定，請見前文：[設定編譯相關檔案](#4-%E8%A8%AD%E5%AE%9A%E7%B7%A8%E8%AD%AF%E7%9B%B8%E9%97%9C%E6%AA%94%E6%A1%88)。
 
 ## 7. 系統環境調校與設定
 
