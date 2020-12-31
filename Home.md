@@ -1,6 +1,6 @@
 # Welcome to the DreamBBS wiki!
 
-This wiki has been created to gather information about how to use & how to install the DreamBBS system. :)
+This wiki has been created to gather information about how to develop & how to install the DreamBBS system. :)
 
 - [[Home|]]
 - [[Install - 安裝說明|INSTALL]]
