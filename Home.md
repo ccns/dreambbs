@@ -2,29 +2,47 @@
 
 This wiki has been created to gather information about how to use & how to install the DreamBBS system. :)
 
-## Latest Release
-  + [Version 1.3.1 (codename: Veldora)](https://github.com/ccns/dreambbs/releases/tag/v1.3.1)
-
-## Testing Version
-  + [Version 2.0rc4 (codename: Artoria)](https://github.com/ccns/dreambbs/releases/tag/v2.0rc4)
-
-## Installation Guide (程式安裝手冊)
-
-### Installation and Backup
-  + **[[How to Install|INSTALL]]**: 初步架站手冊
-  + **How To Move Your BBS System**: BBS 資料搬家步驟
-  + **Directory Structure and Source Code Structure**: BBS 目錄與程式碼規畫
-
-### Configuration
-  + **dreambbs.conf**: 調整編譯設定檔 / 重新編譯程式
-  + **Cron Tasks**: 建立與調整 BBS 所在作業系統的定期工作
-
-### Other Features
-  + **Easy Reader**: 好讀版安裝
-
-### **FAQ** 安裝常見問題
-
-## Other plans 其他測試計畫
-
-  + **[[To-Do and Version Plan|VERSION]]**: 版本規畫
-
+- [[Home|]]
+- [[Install - 安裝說明|INSTALL]]
+- [[Version - 版本規畫|VERSION]]
+- Project Documentations - 專案資料
+    - [[Coding style - 程式碼撰寫風格|CODING-STYLE-zh_tw]]
+    - [[Indentation - 排版風格|INDENT]]
+    - [[Xover List System - Xover 列表系統|Xover-List-System-zh_tw]]
+    - [[Menu Systems - 選單系統|Menu-Systems-zh_tw]]
+    - [[Screen Coordinate System - 畫面座標系統|Screen-Coordinate-System-zh_tw]]
+    - [[TANet BBS Family Genealogy Chart - TANet BBS 家族譜系圖|TANet-BBS-Family-Genealogy-Chart-zh_tw]]
+    - [[與 MapleBBS 3 的按鍵差異|VS-MapleBBS-3-Keyboard-zh_tw]]
+    - [[[WIP] 與 MapleBBS 3 的差異|VS-MapleBBS-3-zh_tw]]
+- References - 參考資料
+    - [[ANSI Escape Code Standard Format - ANSI 控制碼標準格式|ANSI-Escape-Code-Standard-Format-zh_tw]]
+- Changelog
+    - [[Unsorted Changelog|CHANGELOG]]
+    - [[新式密碼加密 (DLBBS v2.0+)|new_encrypt_way]]
+    - [[Release Notes of Version 2.0.0 Artoria|Release-Notes-of-Version-2.0.0]]
+    - [[Version 2.0.0 Artoria 發行說明|Release-Notes-of-Version-2.0.0-Artoria---zh_TW]]
+    - [[Release Notes of Version 1.0.0 Rimuru|v1.0-rimuru]]
+    - [[Version 1.0.0 Rimuru 發行說明|v1.0-rimuru-zh_tw]]
+- Legacy Documentations - 舊有資料
+- NoCeM-innbbsd
+    - [[CHANGES|LEGACY-CHANGES.nocem]]
+    - [[NOCEM|LEGACY-NOCEM]]
+    - [[README|LEGACY-README.nocem]]
+- WindTop 3.02
+    - [[FAQ|LEGACY-FAQ]]
+    - [[FEATURE|LEGACY-FEATURE]]
+    - [[INSTALL|LEGACY-INSTALL]]
+    - [[MAPLE3.FEATURE|LEGACY-MAPLE3.FEATURE]]
+    - [[README.ACL|LEGACY-README.ACL]]
+    - [[README.ADMIN|LEGACY-README.ADMIN]]
+    - [[README.BM|LEGACY-README.BM]]
+    - [[README.CRONTAB|LEGACY-README.CRONTAB]]
+    - [[README.INNBBSD|LEGACY-README.INNBBSD]]
+    - [[README.MANIFEST|LEGACY-README.MANIFEST]]
+    - [[README.SONG|LEGACY-README.SONG]]
+    - [[README.SYSOP|LEGACY-README.SYSOP]]
+    - [[README.TAG|LEGACY-README.TAG]]
+    - [[README.UTIL|LEGACY-README.UTIL]]
+    - [[README|LEGACY-README]]
+    - [[SITE|LEGACY-SITE]]
+    - [[sendmail.cf|LEGACY-sendmail.cf]]
