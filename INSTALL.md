@@ -9,7 +9,7 @@
 
 ## 0. 作業系統環境
 
-本程式經測試可以安裝的環境：FreeBSD 11.1~12.0, GNU/Linux, Cygwin in Windows 7/10
+本程式經測試可以安裝的環境：FreeBSD 11.1~12.0, GNU/Linux(CentOS 7/8, Debian 10, Ubuntu 20.04), Cygwin in Windows 7/10
 
 Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurses` 等 32-bit 版本的相依函式庫。
 
@@ -17,9 +17,7 @@ Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurse
 
 作業系統部分前面提過了，套件部分則建議先裝好 
 
-`git`, `bmake` (BSD-like 使用原生的 `make` 即可), `clang` 等程式。
-
-v2.0 以後的版本，可以不用 `bmake`，改用 `cmake`。
+`git`, `cmake`, `clang` 等程式。
 
 ## 2. 建立 BBS 帳號
 
@@ -77,7 +75,7 @@ v2.0 以後的版本，可以不用 `bmake`，改用 `cmake`。
 
 == 以下請登入 bbs 帳號後操作 ==
 
-    $ cd /home/bbs; git clone https://github.com/ccns/dreambbs; cd dreambbs; git checkout v2.0.1
+    $ cd /home/bbs; git clone https://github.com/ccns/dreambbs; cd dreambbs
 
 接著進去 dreambbs 主目錄。
 
@@ -92,17 +90,7 @@ v2.0 以後的版本，可以不用 `bmake`，改用 `cmake`。
 
     $ vim -c 'set fenc=big5 enc=big5 tenc=utf8' -c 'e!' dreambbs.conf
 
-v2.0 後的版本，支援自動產生部分設定，需要使用 `bmake` 或 `cmake` 產生自動設定檔：
-
-若您的作業系統有安裝 `bmake` 套件 (在BSD-like系統中，改用 `make` 指令即可)，請執行以下指令：
-
-    $ bmake configure
-
-也可參考以下指令，直接指定使用者資訊（未指定之選項將使用目前使用者的使用者資訊）（所列選項僅為範例，請自行斟酌是否合適）：
-
-    $ bmake BBSUSR=bbs BBSGROUP=bbs WWWGROUP=www-data BBSHOME=/home/bbs configure
-
-如果要使用 `cmake`，則建議改用以下指令：
+若您的作業系統有安裝 `cmake` 套件，請執行以下指令：
 
     $ mkdir build/
     $ cd build/
@@ -122,8 +110,6 @@ v2.0 後的版本，支援自動產生部分設定，需要使用 `bmake` 或 `c
 
     $ cmake -DCMAKE_C_COMPILER=gcc -DUSE_CXX=ON ..
 
-使用 `bmake` 時的編譯器與語言模式的指定，請見後文：[編譯 BBS 執行檔](#6-%E7%B7%A8%E8%AD%AF-bbs-%E5%9F%B7%E8%A1%8C%E6%AA%94)。
-
 ## 5. 確認 BBS 目錄架構配置
 
 設定完之後，先不要急著執行編譯指令。請先檢視 BBS 家目錄下全部的目錄結構，確認是否已完整配置。
@@ -137,7 +123,6 @@ v2.0 後的版本，支援自動產生部分設定，需要使用 `bmake` 或 `c
 git clone https://github.com/ccns/dreambbs-snap.git bbs
 cp -r bbs /home/
 ```
-
 此範例目錄是使用 WindTopBBS-3.02-20040420-SNAP 的架構為基礎，加以修改而來的。
 （參考連結：https://github.com/bbsmirror/BBSmirror/blob/master/WindTop/WindTopBBS-3.02-20040420-SNAP.tgz）
 
@@ -146,21 +131,11 @@ cp -r bbs /home/
 ## 6. 編譯 BBS 執行檔
 
 接著就開始編譯囉！
-若您的作業系統有安裝 `bmake` 套件 (在BSD-like系統中，改用 `make` 指令即可)，則建議執行以下指令來編譯：
-
-    $ bmake all install
-
-在 v2.0 以後的版本，若要使用 `cmake` 編譯，則進入剛才所建立的 `build/` 資料夾下，執行以下指令：
 
     $ make all install
 
 如果 `dreambbs.conf` 中的相關變數都有定義到，應該可以順利編譯完成。
-
 (註：v2.0 以後的版本，即使 `dreambbs.conf` 中未定義任何變數，也可順利編譯完成並正常執行)
-
-使用 `bmake` 時，編譯器預設為 `clang`，以 C 語言模式編譯。如要使用其它編譯器或使用 C++ 語言模式編譯，則可執行以下指令來編譯（所列選項僅為範例，請自行斟酌是否合適）：
-
-    $ bmake CC=g++ all install
 
 有關 `cmake` 的編譯器與語言模式的指定，請見前文：[設定編譯相關檔案](#4-%E8%A8%AD%E5%AE%9A%E7%B7%A8%E8%AD%AF%E7%9B%B8%E9%97%9C%E6%AA%94%E6%A1%88)。
 
@@ -170,7 +145,7 @@ cp -r bbs /home/
 
     $ crontab sample/crontab
 
-(建議您自行檢視裡面的設定是否符合需求，以及視需要調整裡面一些程式的執行路徑)
+(建議您自行檢視裡面的設定是否符合需求，以及視需要利用 `crontab -e` 調整裡面一些程式的執行路徑)
 
 至於設定 bbs 執行環境的部分：
 
@@ -247,7 +222,7 @@ su bbs -c '/home/bbs/bin/bbsd 3456'  # 大於3000的備用port可這樣設定
 這樣設定之後，從外面應該就可以連進自己啟動的 BBS 程式了。
 
 
-但要注意 CentOS 7.x 作業系統內可能有 `firewalld` `iptables` 等防火牆設定擋住連線。
+但要注意 CentOS >7.x 作業系統內可能有 `firewalld`（`iptables`/`nftables`前端) 等防火牆設定擋住連線。
 
 若有，建議自行參閱相關資料進行設定。
 
@@ -258,7 +233,7 @@ su bbs -c '/home/bbs/bin/bbsd 3456'  # 大於3000的備用port可這樣設定
 
 之後直接重新啟動：
 
-    # service firewalld restart 
+    # firewall-cmd --reload
 
 即可完成相關防火牆設定。
 
