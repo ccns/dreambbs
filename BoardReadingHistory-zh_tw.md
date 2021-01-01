@@ -6,7 +6,7 @@
 
 ## 名詞說明
 
-為表示區別，本文將一個看板對應之閱讀紀錄稱為 BRH，而將匯集了多篇看板的閱讀紀錄稱為 BRHs。
+為表示區別，本文將一個看板對應之閱讀紀錄稱為「BRH」，將匯集了多篇看板的閱讀紀錄稱為「BRHs」，而將在使用者目錄下的閱讀紀錄檔案稱為「`.BRH` 檔」。
 
 ### 相關的操作
 - 工作區：目前所閱讀的看板的 BRH 的記憶體存放位置 (`brh_tail` – `brh_tail + BRH_WINDOW`)
@@ -14,6 +14,7 @@
 - 解開：將 BRH 中的 `{final | BRH_SIGN}`；僅出現在未解開的 BRH 中；解開後變為 `{final, final}`
 - 壓縮：「解開」的逆操作
 - Zap：在看板列表中預設不列出某看板；此看板內的文章閱讀紀錄不被記錄
+    - 本文將 zapped 看板在 `.BRH` 檔中所對應的 BRH 稱為「zapped BRH」，而連續的多個 zapped BRH 組成的檔案區段稱為「zapped BRHs 區」
 
 ## 相關函式
 - `brh_alloc`: 分配空間給新 BRH，會依狀況重新配置記憶體空間
@@ -36,7 +37,7 @@ MapleBBS 3 並未直接在程式碼中使用資料結構操作 BRH，不過仍�
 
 欄位      | 型別     | 說明
 :---     | ---      | ---
-`bstamp` | `time_t` | 看板建立時間 <br> - Zapped 看板的 BRH 僅有此欄位
+`bstamp` | `time_t` | 看板建立時間 <br> - Zapped BRH 僅有此欄位
 `bvisit` (非工作區) <br> `bhno` (工作區) | `time_t` | - 上次進入看板的時間 (非工作區) <br> - 看板的 `HDR` 的編號 (工作區)
 `bcount` | `int`    | 組成已讀時間區間的 `time_t` 數量
 `tags`   | `time_t[]` (大小不定) | 已讀時間區間 <br> - 原無正式命名，本文稱之為 `tags`
@@ -85,9 +86,9 @@ Macro        | 值     | 說明
 `list[0] >= BBS_BIRTH_TIME && list[0] <= list[1] && list[2] < BBS_BIRTH_TIME`
 
 ### 非工作區的 BRHs 中的 BRH
-- 與工作區的未解開 BRH 基本相同，除了結尾可能多了一些 zapped 的 BRHs (只有 `bstamp`)
-- Zapped 的 `(bstamp & BRH_SIGN) != 0`；
-zapped 的 `(bstamp & BRH_MASK) >= BBS_BIRTH_TIME`
+- 與工作區的未解開 BRH 基本相同
+- `.BRH` 檔中的 BRHs 的結尾可能尚有 zapped BRHs  區 (只有 `bstamp`)；已載入記憶體的 BRHs 則沒有 zapped BRHs 區
+- Zapped BRH 的 `(bstamp & BRH_SIGN) != 0` 且 `(bstamp & BRH_MASK) >= BBS_BIRTH_TIME`
 
 開頭與結尾判斷：
 - 未 zapped BRH 的開頭：`list` 符合「工作區的未解開 BRH」的 BRH 開頭
