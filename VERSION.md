@@ -35,19 +35,20 @@ Versioning Scheme: `vX.Y.Z` or just `X.Y.Z` after `4.0.0`
   - `v0.Y` refers to the branch for `v0.Y.Z` versions
   - For `X`>0, `vX.0` refers to the branch for `vX.Y.Z` versions
 
-### `v0.95`: Aka. `3.10 REV-BETA4` (`3.10.95`) ( **End-of-Life** )
+### [`v0.95`](https://github.com/ccns/dreambbs/releases/tag/v0.95): Aka. `3.10 REV-BETA4` (`3.10.95`) ( **End-of-Life** )
 The new versioning scheme is introduced in this minor version.
-- `v0.95.1`: Aka. `3.10 REV-BETA4.1`
-- `v0.95.2`: Aka. `3.10 REV-BETA4.2`
-- `v0.95.3`: Aka. `3.10 REV-BETA4.3`
-- `v0.95.4`: Aka. `3.10 REV-BETA4.4`; planned to be the last release of `v0.95`
+- [`v0.95.1`](https://github.com/ccns/dreambbs/releases/tag/v0.95.1): Aka. `3.10 REV-BETA4.1`
+- [`v0.95.2`](https://github.com/ccns/dreambbs/releases/tag/v0.95.2): Aka. `3.10 REV-BETA4.2`
+- [`v0.95.3`](https://github.com/ccns/dreambbs/releases/tag/v0.95.3): Aka. `3.10 REV-BETA4.3`
+- [`v0.95.4`](https://github.com/ccns/dreambbs/releases/tag/v0.95.4): Aka. `3.10 REV-BETA4.4`; planned to be the last release of `v0.95`
 
 It has become end-of-life when `v0.97.0` was released.
 
-### `v0.96` (`3.10.96`) ( **End-of-Life** )
+### [`v0.96`](https://github.com/ccns/dreambbs/releases/tag/v0.96) (`3.10.96`) ( **End-of-Life** )
 The `REV-BETA` part in the version name is no longer used.
-- `v0.96.1`
-- `v0.96.2`
+- [`v0.96.1`](https://github.com/ccns/dreambbs/releases/tag/v0.96.1)
+- [`v0.96.2`](https://github.com/ccns/dreambbs/releases/tag/v0.96.2)
+- [`v0.96.3`](https://github.com/ccns/dreambbs/releases/tag/v0.96.3)
 
 Features:
 - Sorted common library and refined structure.
@@ -57,10 +58,10 @@ Features:
 It has become end-of-life when `v0.97.1` was released.
 
 ### `v0.97`: `stratosphere` (`3.10.97`) ( **End-of-Life** )
-- `v0.97-RCx`-`v0.97.0`: Pre-release
-- `v0.97.1`
-- `v0.97.2`
-- `v0.97.3`
+- [`v0.97-RCx`](https://github.com/ccns/dreambbs/releases/tag/v0.97.0-RC1)-[`v0.97.0`](https://github.com/ccns/dreambbs/releases/tag/v0.97.0): Pre-release
+- [`v0.97.1`](https://github.com/ccns/dreambbs/releases/tag/v0.97.1)
+- [`v0.97.2`](https://github.com/ccns/dreambbs/releases/tag/v0.97.2)
+- [`v0.97.3`](https://github.com/ccns/dreambbs/releases/tag/v0.97.3)
 
 Features:
   - Simple code test utilities.
@@ -70,28 +71,27 @@ Features:
 The plans have been dropped due to significant changes which require comprehensive tests.
 
 Pre-releases for `v1.0` were planned instead:
-  - [x] `v1.0-alpha1`
-  - [x] `v1.0-alpha2`
-  - [x] `v1.0-alpha3`
-  - [x] `v1.0-beta1`
-  - [x] `v1.0-RC1`
-  - [x] `v1.0-RC2`
-  - [x] `v1.0-RC3`
+  - [x] [`v1.0-alpha1`](https://github.com/ccns/dreambbs/releases/tag/v1.0-alpha1)
+  - [x] [`v1.0-alpha2`](https://github.com/ccns/dreambbs/releases/tag/v1.0-alpha2)
+  - [x] [`v1.0-alpha3`](https://github.com/ccns/dreambbs/releases/tag/v1.0-alpha3)
+  - [x] [`v1.0-beta1`](https://github.com/ccns/dreambbs/releases/tag/v1.0-beta1)
+  - [x] [`v1.0-RC1`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc1)
+  - [x] [`v1.0-RC2`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc2)
+  - [x] [`v1.0-RC3`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc3)
 
 ### `v1.X`: `Tensure` series (`3.11.X`)
-- `v1.0.0`: `rimuru`
-- `v1.1.0`: `milim`; backports and improvement from `current`
+- [`v1.0.0`](https://github.com/ccns/dreambbs/releases/tag/v1.0.0): `rimuru`
+- [`v1.1.0`](https://github.com/ccns/dreambbs/releases/tag/v1.1.0): `milim`; backports and improvement from `current`
   - Features:
     - [x] Screen resizing feature.
-- `v1.1.1`
+- [`v1.1.1`](https://github.com/ccns/dreambbs/releases/tag/v1.1.1)
   - Features:
     - [x] `pfterm`, which was ported in this release version.
-    - Others: Please see <https://github.com/ccns/dreambbs/releases/tag/v1.1.0>.
-- `v1.2.0`: `shizu`
-- `v1.3.0`: `veldora`
+- [`v1.2.0`](https://github.com/ccns/dreambbs/releases/tag/v1.2.0): `shizu`
+- [`v1.3.0`](https://github.com/ccns/dreambbs/releases/tag/v1.3.0): `veldora`
 
 ### `v2.X`: `Fate` series (`3.12.X`) ( **Latest Release Branch** )
-- `v2.0.0`: `artoria`
+- [`v2.0.0`](https://github.com/ccns/dreambbs/releases/tag/v2.0.0): `artoria`
   - Features in plan:
     - [x] Option for disabling DSO.
     - [ ] BBS-Lua/BBS-Ruby.
@@ -108,7 +108,7 @@ This will be the last major version whose version number is different from the l
 
 Due to the shortage of development resources, from this major version and on, only the latest release version is officially maintained.
 
-- `2020 v0` (`v3.0`)
+- `2020 v0` (`v3.0`)g
 - `2020 v1` (`v3.1`)
 - `2020 v2` (`v3.2`)
 - `2020 v3` (`v3.3`); planned to be the last release of `v3.X`
