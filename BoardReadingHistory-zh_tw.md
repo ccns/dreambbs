@@ -11,7 +11,7 @@ BRH 看板閱讀紀錄系統是 MapleBBS 3 所使用的看板閱讀紀錄系統�
 ### 相關的操作
 - 工作區：目前所閱讀的看板的 BRH 的記憶體存放位置 (`brh_tail` – `brh_tail + BRH_WINDOW`)
     - 本文的術語；「正讀」為 MapleBBS 3 原始碼所使用的對應術語
-- 解開：將 BRH 中的 `{final | BRH_SIGN}`；僅出現在未解開的 BRH 中；解開後變為 `{final, final}`
+- 解開：將未解開的 BRH 中的 `{final | BRH_SIGN}` 解開為 `{final, final}`
 - 壓縮：「解開」的逆操作
 - Zap：在看板列表中預設不列出某看板；此看板內的文章閱讀紀錄不被記錄
     - 本文將 zapped 看板在 `.BRH` 檔中所對應的 BRH 稱為「zapped BRH」，而連續的多個 zapped BRH 組成的檔案區段稱為「zapped BRHs 區」
