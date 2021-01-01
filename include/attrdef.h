@@ -22,6 +22,7 @@
     #define GCC_CHECK_FORMAT(ifmt, iarg)  /* Ignored */
   #endif
 #endif
+#define GCC_FORMAT GCC_CHECK_FORMAT
 
 /* Indicates that the `ri_nul`-th-to-last argument (`0` for the last) should be NULL */
 #ifndef GCC_CHECK_SENTINEL
@@ -31,6 +32,7 @@
     #define GCC_CHECK_SENTINEL(ri_nul)  /* Ignored */
   #endif
 #endif
+#define GCC_SENTINEL GCC_CHECK_SENTINEL
 
 /* For functions with pointer parameters */
 
@@ -46,6 +48,9 @@
     #define GCC_CHECK_NONNULL(...)  /* Ignored */
   #endif
 #endif
+#define GCC_NONNULL_ALL GCC_CHECK_NONNULL_ALL
+#define GCC_NONNULLS    GCC_CHECK_NONNULL_ALL
+#define GCC_NONNULL     GCC_CHECK_NONNULL
 
 /* Attributes about the return value of a function */
 
@@ -90,6 +95,7 @@
     #define GCC_RETURNS_NONNULL  /* Ignored */
   #endif
 #endif
+#define GCC_RET_NONNULL GCC_RETURNS_NONNULL
 
 /* Attributes about the side-effects of a function */
 

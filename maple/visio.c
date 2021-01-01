@@ -1179,7 +1179,7 @@ outsep(
     outs("\x1b[m");
 }
 
-GCC_CHECK_FORMAT(1, 2) void
+GCC_FORMAT(1, 2) void
 prints(const char *fmt, ...)
 {
     va_list args;
@@ -1971,7 +1971,7 @@ enum VkeyMode {
     VKEYMODE_CSI_CH2,  /* "<Esc> [ <1-8> <0-9> `ch`" */
 };
 
-GCC_CHECK_NONNULL_ALL
+GCC_NONNULLS
 int vkey_process(int (*fgetch)(void))
 {
     const struct timeval vio_to_backup = vio_to;
@@ -2209,7 +2209,7 @@ vkey_end:
 }
 
 /* Ignore automatic key repeats for DBCS characters send by some clients */
-GCC_CHECK_NONNULL_ALL
+GCC_NONNULLS
 int vkey_process_no_dbcs_repeat(int (*fgetch)(void))
 {
     static int unget_key = KEY_NONE;

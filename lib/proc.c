@@ -85,7 +85,7 @@ int proc_runv(const char *path, const char *argv[])
 }
 
 /* Variadic version for convenience */
-GCC_CHECK_SENTINEL(0)
+GCC_SENTINEL(0)
 int proc_runl(const char *path, const char *arg0, ...)
 {
     int ret;
@@ -102,7 +102,7 @@ int proc_runv_bg(const char *path, const char *argv[])
     return runv(false, path, argv);
 }
 
-GCC_CHECK_SENTINEL(0)
+GCC_SENTINEL(0)
 int proc_runl_bg(const char *path, const char *arg0, ...)
 {
     int ret;

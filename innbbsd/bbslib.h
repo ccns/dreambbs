@@ -26,7 +26,7 @@ extern spamrule_t *SPAMRULE;
 
 /* bbslib.c */
 int initial_bbs(void);
-GCC_CHECK_FORMAT(1, 2) void bbslog(const char *fmt, ...);
+GCC_FORMAT(1, 2) void bbslog(const char *fmt, ...);
 
 /* convcode.c */
 void b52gb(char *str);
