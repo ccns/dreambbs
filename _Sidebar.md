@@ -1,7 +1,7 @@
 - [[Home|]]
 - [[Install - 安裝說明|INSTALL]]
 - [[Version|VERSION]]
-- Project Documentations - 專案資料
+- Project Documentations - 專案說明文件
     - [[Coding style - 程式碼撰寫風格|CODING-STYLE-zh_tw]]
     - [[Indentation|INDENT]]
     - [[Xover List System - Xover 列表系統|Xover-List-System-zh_tw]]
@@ -21,13 +21,13 @@
     - [[Release Notes of Version 1.0.0 Rimuru|v1.0-rimuru]]
     - [[Version 1.0.0 Rimuru 發行說明|v1.0-rimuru-zh_tw]]
 
-## Legacy Documentations - 舊有資料
+## Legacy Documentations - 舊有說明文件
 
-- NoCeM-innbbsd 原始參考資料
+- NoCeM-innbbsd 原始說明文件
     - [[CHANGES|LEGACY-CHANGES.nocem]]
     - [[NOCEM|LEGACY-NOCEM]]
     - [[README|LEGACY-README.nocem]]
-- WindTop 3.02 原始參考資料
+- WindTop 3.02 原始說明文件
     - [[FAQ|LEGACY-FAQ]]
     - [[FEATURE|LEGACY-FEATURE]]
     - [[INSTALL|LEGACY-INSTALL]]
