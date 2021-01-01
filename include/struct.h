@@ -486,7 +486,7 @@ typedef struct
 } PIPUTMP;  /* SHMDATA(raw); dependency */
 #endif  /* #ifdef  HAVE_PIP_FIGHT1 */
 
-struct UTMP  /* DISKDATA(raw) */
+struct UTMP  /* SHMDATA(raw) */
 {
     pid_t         pid;                          /* process ID */
     int           userno;                       /* user number in .PASSWDS */
