@@ -23,7 +23,7 @@ Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurse
 
 這裡先把相關的帳號建立好，以避免之後權限問題。
 
-以下方法僅為參考，可用 `useradd`、`groupadd` 等指令替代。
+以下方法僅為參考，建議可用 `useradd`、`groupadd` 等指令替代。
 
 (註：v2.0 以後的版本，不再假設使用者名稱為 `bbs`，可自行取名)
 
@@ -90,7 +90,7 @@ Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurse
 
     $ vim -c 'set fenc=big5 enc=big5 tenc=utf8' -c 'e!' dreambbs.conf
 
-若您的作業系統有安裝 `cmake` 套件，請執行以下指令：
+確定已安裝 `cmake` 套件後，請執行以下指令：
 
     $ mkdir build/
     $ cd build/
@@ -102,7 +102,7 @@ Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurse
 
 可檢查所產生的設定是否符合需求。
 
-此外，使用 `cmake` 時，預設會使用系統之預設編譯器，並以 C 語言模式編譯。如要指定編譯器或使用 C++ 語言模式編譯，則可參考以下指令調整上述 `cmake ..` 指令（所列選項僅為範例，請自行斟酌是否合適）：
+此外，預設會使用系統之預設編譯器，並以 C 語言模式編譯。如要指定編譯器或使用 C++ 語言模式編譯，則可參考以下指令調整上述 `cmake ..` 指令（所列選項僅為範例，請自行斟酌是否合適）：
 
     $ CC=gcc USE_CXX=1 cmake ..
 
@@ -132,12 +132,14 @@ cp -r bbs /home/
 
 接著就開始編譯囉！
 
+請在剛才所建立的 `build/` 目錄下，執行：
+
     $ make all install
 
 如果 `dreambbs.conf` 中的相關變數都有定義到，應該可以順利編譯完成。
 (註：v2.0 以後的版本，即使 `dreambbs.conf` 中未定義任何變數，也可順利編譯完成並正常執行)
 
-有關 `cmake` 的編譯器與語言模式的指定，請見前文：[設定編譯相關檔案](#4-%E8%A8%AD%E5%AE%9A%E7%B7%A8%E8%AD%AF%E7%9B%B8%E9%97%9C%E6%AA%94%E6%A1%88)。
+如果要重新指定編譯器以及程式語言模式，請見前文：[設定編譯相關檔案](#4-%E8%A8%AD%E5%AE%9A%E7%B7%A8%E8%AD%AF%E7%9B%B8%E9%97%9C%E6%AA%94%E6%A1%88)。
 
 ## 7. 系統環境調校與設定
 
@@ -146,6 +148,7 @@ cp -r bbs /home/
     $ crontab sample/crontab
 
 (建議您自行檢視裡面的設定是否符合需求，以及視需要利用 `crontab -e` 調整裡面一些程式的執行路徑)
+(注：v3.0 以後的版本會產生有正確路徑的 `crontab`)
 
 至於設定 bbs 執行環境的部分：
 
