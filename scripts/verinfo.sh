@@ -23,7 +23,7 @@ build_branch="$(git symbolic-ref --short HEAD 2>/dev/null)"
 
 build_head="$(format_commit HEAD)"
 if ! git diff --quiet 2>/dev/null; then
-  build_head="${build_head} Modified"
+    build_head="${build_head} Modified"
 fi
 
 # `branch.<name>.pushRemote` > `remote.pushDefault` > `branch.<name>.remote`
