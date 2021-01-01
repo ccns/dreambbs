@@ -20,12 +20,14 @@
     - [[Version 2.0.0 Artoria 發行說明|Release-Notes-of-Version-2.0.0-Artoria---zh_TW]]
     - [[Release Notes of Version 1.0.0 Rimuru|v1.0-rimuru]]
     - [[Version 1.0.0 Rimuru 發行說明|v1.0-rimuru-zh_tw]]
-- Legacy Documentations - 舊有資料
-- NoCeM-innbbsd
+
+## Legacy Documentations - 舊有資料
+
+- NoCeM-innbbsd 原始參考資料
     - [[CHANGES|LEGACY-CHANGES.nocem]]
     - [[NOCEM|LEGACY-NOCEM]]
     - [[README|LEGACY-README.nocem]]
-- WindTop 3.02
+- WindTop 3.02 原始參考資料
     - [[FAQ|LEGACY-FAQ]]
     - [[FEATURE|LEGACY-FEATURE]]
     - [[INSTALL|LEGACY-INSTALL]]
