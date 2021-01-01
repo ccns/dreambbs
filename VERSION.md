@@ -21,10 +21,12 @@ It is acceptable to omit the `v` prefix for DreamBBS because using `X.Y.Z` along
 The versioning scheme is deprecated. The version number `X.Y.Z` will be consistent with the legacy versioning scheme for `DreamBBS 4.0.0`/`DreamBBS v4.0.0` and on.
 
 ## Branches of Development
-The new development workflow has led to the two main branches seen today: `master` and `develop`.
+The new development workflow has led to the two main branches seen today: Release and `current`.
 
-## `master` Branch (Release Branch; formerly `testing`)
-This branch emphasize more on the stability, the easiness to install, and the ability to deploy on different platform and containers, than the `develop` branch.
+From DreamBBS v3.0 and on, no dedicated git branches for releases will be created. Instead, new releases on the release development branch are published based on git tags from the `master` branch.
+
+## Release Branch (formerly `testing`)
+This branch emphasize more on the stability, the easiness to install, and the ability to deploy on different platform and containers, than the `current` branch.
 
 Versioning Scheme: `vX.Y.Z` or just `X.Y.Z` after `4.0.0`
   - `X`: Major version; indicates significant changes
@@ -104,7 +106,7 @@ The full name of this major version is `DreamBBS-2020 vX`.
 
 This will be the last major version whose version number is different from the legacy version number.
 
-Due to the shortage of development resources, from this major version and on, only the latest release branch is officially maintained.
+Due to the shortage of development resources, from this major version and on, only the latest release version is officially maintained.
 
 - `2020 v0` (`v3.0`)
 - `2020 v1` (`v3.1`)
@@ -125,7 +127,7 @@ Features in plan:
   - [ ] Merge popup menu systems into main menu system
   - [ ] Merge main menu system into xover list system
 
-## `develop` Branch (formerly `current`/`master` branch)
+## `master` Branch (Current Branch)
 This branch has new features or significant changes which are being tested.
 
 Former versioning scheme: `vX.0-CURRENT`
@@ -136,7 +138,9 @@ Version scheme after `v3.0`:
   2. Or `X.Y-CURRENT` for the development branch of upcoming release versions
     - Will be renamed into the real version name upon the official release
 
-Whenever a significant bug fix or change is made in `develop`, the related commits will be merged into `master` branch for the latest release version soon.
+Whenever a significant bug fix or change is made in `current`, the related commits will be merged into `testing` branch for the latest release version soon.
+
+However, from DreamBBS v3.0 and on, instead of merge the commits into the dedicated branch, a new release will be published soon.
 
 - [x] `v1.0-CURRENT`
 - [x] `v2.0-CURRENT`
