@@ -380,11 +380,17 @@ void str_rstrip_tail(                    /* remove trailing space */
     str[1] = '\0';
 }
 
+/* Thor.980921: str_ncpy 含 0 */
+/* Thor.980921: str_ncpy 已含 0之空間 */
+/* Thor.980921: 已包含 0 */
+/* Thor.980921: str_ncpy與一般 strncpy有所不同, 特別注意 */
 /*
- * str_ncpy() - similar to strncpy(3) but terminates string always with '\0'
- * if n != 0, and doesn't do padding
+ * str_scpy() - similar to strncpy(3) but terminates string always with '\0' if n != 0,
+ * and doesn't do padding (formerly `str_ncpy`)
+ * It behaviors like `strlcpy`, except that it does not read more than `n` bytes from `src`.
+ * It behaviors the same as `strscpy` from the Linux Kernel API, except that it does not return any values.
  */
-void str_ncpy(char *dst, const char *src, int n)
+void str_scpy(char *dst, const char *src, int n)
 {
     char *end;
 

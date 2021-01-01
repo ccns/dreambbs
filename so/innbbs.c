@@ -248,7 +248,7 @@ nf_add(
         vget(B_LINES_REF, 0, "群組：", nf.newsgroup, /*  sizeof(nf.newsgroup) */ 70, GCARRY))
     {
         if (!vget(B_LINES_REF, 0, "字集 [big5]：", nf.charset, sizeof(nf.charset), GCARRY))
-            str_ncpy(nf.charset, "big5", sizeof(nf.charset));
+            str_scpy(nf.charset, "big5", sizeof(nf.charset));
         nf.xmode = (vans("是否轉進(Y/n)？[Y] ") == 'n') ? INN_NOINCOME : 0;
 
         if (vans("是否更改轉信的 high-number 設定，這設定對被餵信的群組無效(y/N)？[N] ") == 'y')

@@ -1358,7 +1358,7 @@ xo_thread(
             if ((!(op & RS_CURRENT)) && (op & RS_RELATED) &&
                 strncmp(currtitle, query, TTLEN))
             {
-                str_ncpy(currtitle, query, TTLEN);
+                str_scpy(currtitle, query, TTLEN);
                 match |= XR_BODY;
             }
             else

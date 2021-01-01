@@ -226,10 +226,10 @@ trans_acct(
 
     new_->userno = old->userno;
 
-    str_ncpy(new_->userid, old->userid, sizeof(new_->userid));
-    str_ncpy(new_->passwd, old->passwd, sizeof(new_->passwd));
-    str_ncpy(new_->realname, old->realname, sizeof(new_->realname));
-    str_ncpy(new_->username, old->username, sizeof(new_->username));
+    str_scpy(new_->userid, old->userid, sizeof(new_->userid));
+    str_scpy(new_->passwd, old->passwd, sizeof(new_->passwd));
+    str_scpy(new_->realname, old->realname, sizeof(new_->realname));
+    str_scpy(new_->username, old->username, sizeof(new_->username));
 
     new_->userlevel = old->userlevel;
     new_->ufo = old->ufo;
@@ -248,12 +248,12 @@ trans_acct(
     new_->deny = old->deny;
     new_->vtime = old->vtime;
 
-    str_ncpy(new_->lasthost, old->lasthost, sizeof(new_->lasthost));
-    str_ncpy(new_->email, old->email, sizeof(new_->email));
-    str_ncpy(new_->address, old->address, sizeof(new_->address));
-    str_ncpy(new_->justify, old->justify, sizeof(new_->justify));
-    str_ncpy(new_->vmail, old->vmail, sizeof(new_->vmail));
-    str_ncpy(new_->ident, old->ident, sizeof(new_->ident));
+    str_scpy(new_->lasthost, old->lasthost, sizeof(new_->lasthost));
+    str_scpy(new_->email, old->email, sizeof(new_->email));
+    str_scpy(new_->address, old->address, sizeof(new_->address));
+    str_scpy(new_->justify, old->justify, sizeof(new_->justify));
+    str_scpy(new_->vmail, old->vmail, sizeof(new_->vmail));
+    str_scpy(new_->ident, old->ident, sizeof(new_->ident));
 
     new_->request = (int)m3;
     new_->money  = (int)m1;

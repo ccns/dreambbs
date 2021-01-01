@@ -1195,8 +1195,8 @@ void acct_setup(ACCT * u, int adm)
         if (!strcmp(buf, pass))
         {
             buf[num-1] = '\0';
-            str_ncpy(x.passwd, str = genpasswd(buf, mode), PASSLEN);
-            str_ncpy(x.passhash, str + PASSLEN, sizeof(x.passhash));
+            str_scpy(x.passwd, str = genpasswd(buf, mode), PASSLEN);
+            str_scpy(x.passhash, str + PASSLEN, sizeof(x.passhash));
             i++;
             logitfile(FN_PASS_LOG, cuser.userid, cuser.lasthost);
             break;
@@ -1640,9 +1640,9 @@ int u_addr(void)
 
                         if (cuser.userlevel & PERM_DENYCHAT)
                             cuser.userlevel &= ~PERM_CHAT;
-                        str_ncpy(cuser.vmail, addr, sizeof(cuser.vmail));
+                        str_scpy(cuser.vmail, addr, sizeof(cuser.vmail));
                         sprintf(agent, "pop3認證:%s", addr);
-                        str_ncpy(cuser.justify, agent, sizeof(cuser.justify));
+                        str_scpy(cuser.justify, agent, sizeof(cuser.justify));
                         time(&cuser.tvalid);
                         strcpy(cuser.email, addr);
                         acct_save(&cuser);
@@ -2608,7 +2608,7 @@ static int scan_register_form(int fd)
             sprintf(muser.email, "%s.bbs@%s", muser.userid, MYHOSTNAME);
             strcpy(muser.vmail, muser.email);
             sprintf(msg, "reg:%s:%s:%s", rform.phone, rform.career, agent);
-            str_ncpy(muser.justify, msg, sizeof(muser.justify));
+            str_scpy(muser.justify, msg, sizeof(muser.justify));
             /* Thor.980921: 保險起見 */
 
             /* Thor.981022: 手動認證也改認證時間, 每半年會再自動認證一次 */
@@ -3077,7 +3077,7 @@ int u_verify(void)
                 (PERM_VALID | PERM_POST | PERM_PAGE | PERM_CHAT);
             strcpy(cuser.vmail, cuser.email);
             sprintf(buf, "key認證:%s", cuser.email);
-            str_ncpy(cuser.justify, buf, sizeof(cuser.justify));
+            str_scpy(cuser.justify, buf, sizeof(cuser.justify));
             time(&cuser.tvalid);
             acct_save(&cuser);
             usr_fpath(buf, cuser.userid, fn_dir);

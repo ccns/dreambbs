@@ -1263,9 +1263,7 @@ ve_header(
                 strcpy(postlog.author, cuser.userid);
 
             strcpy(postlog.board, currboard);
-            /* str_ncpy(postlog.title, str_ttl(title), sizeof(postlog.title) - 1); */
-            /* Thor.980921: str_ncpy §t 0 */
-            str_ncpy(postlog.title, str_ttl(title), sizeof(postlog.title));
+            str_scpy(postlog.title, str_ttl(title), sizeof(postlog.title));
             postlog.date = now;
             postlog.number = 1;
 

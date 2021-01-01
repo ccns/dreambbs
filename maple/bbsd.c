@@ -405,8 +405,8 @@ acct_apply(void)
         vmsg("密碼輸入錯誤，請重新輸入密碼");
     }
 
-    str_ncpy(cuser.passwd, pw = genpasswd(buf, try_), PASSLEN);
-    str_ncpy(cuser.passhash, pw + PASSLEN, sizeof(cuser.passhash));
+    str_scpy(cuser.passwd, pw = genpasswd(buf, try_), PASSLEN);
+    str_scpy(cuser.passhash, pw + PASSLEN, sizeof(cuser.passhash));
 
     do
     {
@@ -549,9 +549,7 @@ utmp_setup(
     srandom(time(0));
     strcpy(utmp.username, ((!str_casecmp(cuser.userid, STR_GUEST)||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
     strcpy(utmp.realname, cuser.realname);
-    /* str_ncpy(utmp.from, fromhost, sizeof(utmp.from) - 1); */
-    str_ncpy(utmp.from, fromhost, sizeof(utmp.from));
-    /* Thor.980921: str_ncpy 含 0 */
+    str_scpy(utmp.from, fromhost, sizeof(utmp.from));
 
     /* cache.20130407 保存使用者登入IP位置(IPv4) */
     /* IID.20191228: Or IPv6 */
@@ -928,7 +926,7 @@ tn_login(void)
 
         cuser.lastlogin = start;
         cuser.userlevel = level;
-        str_ncpy(cuser.lasthost, fromhost, sizeof(cuser.lasthost));
+        str_scpy(cuser.lasthost, fromhost, sizeof(cuser.lasthost));
         usr_fpath(fpath, cuser.userid, FN_ACCT);
         fd = open(fpath, O_WRONLY);
         write(fd, &cuser, sizeof(ACCT));

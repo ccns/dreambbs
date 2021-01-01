@@ -68,7 +68,7 @@ search_nodelist_bynode(
 {
     nodelist_t nl;
 
-    str_ncpy(nl.name, name, sizeof(nl.name));
+    str_scpy(nl.name, name, sizeof(nl.name));
     return (nodelist_t *) bsearch(&nl, NODELIST, NLCOUNT, sizeof(nodelist_t), nl_bynamecmp);
 }
 
@@ -79,7 +79,7 @@ search_newsfeeds_byboard(
 {
     newsfeeds_t nf;
 
-    str_ncpy(nf.board, board, sizeof(nf.board));
+    str_scpy(nf.board, board, sizeof(nf.board));
     return (newsfeeds_t *) bsearch(&nf, NEWSFEEDS_B, NFCOUNT, sizeof(newsfeeds_t), nf_byboardcmp);
 }
 
@@ -175,7 +175,7 @@ deal_sover(
     if (bntp->chrono > 0)               /* ·s«H */
     {
         mtime = bntp->chrono;
-        str_ncpy(sover.title, bntp->title, sizeof(sover.title));
+        str_scpy(sover.title, bntp->title, sizeof(sover.title));
         sprintf(sover.msgid, "%s$%s@" MYHOSTNAME, board, filename);
     }
     else                                /* cancel */
@@ -187,12 +187,12 @@ deal_sover(
         sprintf(sover.control, "cancel <%s>", buf);
     }
 
-    str_ncpy(sover.board, board, sizeof(sover.board));
-    str_ncpy(sover.filename, filename, sizeof(sover.filename));
+    str_scpy(sover.board, board, sizeof(sover.board));
+    str_scpy(sover.filename, filename, sizeof(sover.filename));
     sprintf(sover.from, "%s.bbs@" MYHOSTNAME " (%s)", bntp->owner, bntp->nick);
-    str_ncpy(sover.date, Gtime(mtime), sizeof(sover.date));
-    str_ncpy(sover.group, nf->newsgroup, sizeof(sover.group));
-    str_ncpy(sover.charset, nf->charset, sizeof(sover.charset));
+    str_scpy(sover.date, Gtime(mtime), sizeof(sover.date));
+    str_scpy(sover.group, nf->newsgroup, sizeof(sover.group));
+    str_scpy(sover.charset, nf->charset, sizeof(sover.charset));
 
     queuefeed(nl, &sover);
 }

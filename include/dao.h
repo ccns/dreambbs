@@ -131,7 +131,7 @@ void str_lower(char *dst, const char *src);
 void str_lower_dbcs(char *dst, const char *src);
 GCC_PURE int str_ncasecmp(const char *s1, const char *s2, int n);
 void str_rstrip_tail(char *str);
-void str_ncpy(char *dst, const char *src, int n);
+void str_scpy(char *dst, const char *src, int n);
 char *str_ndup(const char *src, int len);
 GCC_PURE int str_pat(const char *str, const char *pat);
 char *str_rev_tail(char *dst, const char *src);

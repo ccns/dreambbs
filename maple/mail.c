@@ -707,7 +707,7 @@ m_verify(void)
         return 0;
     }
 
-    str_ncpy(s.str + 1, q, 8);  /* Thor: 暫借一下 s.str */
+    str_scpy(s.str + 1, q, 8);  /* Thor: 暫借一下 s.str */
     chrono = chrono32(s.str); /* prefix 1 char */
 
     q += 7; /* real sign */

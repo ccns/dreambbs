@@ -259,14 +259,14 @@ outs_line(                      /* 印出一般內容 */
         {
             if (!(ptr1 = str_casestr_dbcs(str, hunt)))
             {
-                str_ncpy(ptr2, str, buf + ANSILINELEN - ptr2 - 1);
+                str_scpy(ptr2, str, buf + ANSILINELEN - ptr2 - 1);
                 break;
             }
 
             if (buf + ANSILINELEN - 1 <= ptr2 + (ptr1 - str) + (len + 7))       /* buf 空間不夠 */
                 break;
 
-            str_ncpy(ptr2, str, ptr1 - str + 1);
+            str_scpy(ptr2, str, ptr1 - str + 1);
             ptr2 += ptr1 - str;
             sprintf(ptr2, "\x1b[7m%.*s\x1b[m", len, ptr1);
             ptr2 += len + 7;

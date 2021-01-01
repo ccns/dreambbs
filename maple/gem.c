@@ -1084,7 +1084,7 @@ gem_anchor(
         if (ans == 'a')
         {
             strcpy(folder, xo->dir);
-            str_ncpy(GemSailor, (const char *) xo->xyz, sizeof(GemSailor));
+            str_scpy(GemSailor, (const char *) xo->xyz, sizeof(GemSailor));
         }
         else if (ans == 'd')
         {

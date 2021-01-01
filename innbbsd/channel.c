@@ -316,8 +316,8 @@ channelcreate(
 {
     buffer_t *in, *out;
 
-    str_ncpy(client->nodename, nodename, 13);
-    str_ncpy(client->hostname, hostname, 128);
+    str_scpy(client->nodename, nodename, 13);
+    str_scpy(client->hostname, hostname, 128);
 
     client->fd = sock;
     FD_SET(sock, &rfd);

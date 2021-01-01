@@ -57,7 +57,7 @@ reset_utmp(void)
     strcpy(cutmp->userid, cuser.userid);
     strcpy(cutmp->username, cuser.username);
     strcpy(cutmp->realname, cuser.realname);
-    str_ncpy(cutmp->from, fromhost, sizeof(cutmp->from));
+    str_scpy(cutmp->from, fromhost, sizeof(cutmp->from));
 }
 
 

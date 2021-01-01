@@ -85,9 +85,9 @@ HISadd(                         /* 將 (msgid, path, xname) 此配對記錄在 history 
 
     time(&(his.htime));
     his.hash = str_hash(msgid, 1);
-    str_ncpy(his.msgid, msgid, sizeof(his.msgid));
-    str_ncpy(his.board, board, sizeof(his.board));
-    str_ncpy(his.xname, xname, sizeof(his.xname));
+    str_scpy(his.msgid, msgid, sizeof(his.msgid));
+    str_scpy(his.board, board, sizeof(his.board));
+    str_scpy(his.xname, xname, sizeof(his.xname));
 
     /* 依 msgid 將 history 打散至 32 個檔案 */
     sprintf(fpath, "innd/history/%02d", his.hash % 32U);

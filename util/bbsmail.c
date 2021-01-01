@@ -302,11 +302,11 @@ mail2bbs(
     fd = hdr_stamp(folder, 0, &hdr, buf);
     hdr.xmode = MAIL_INCOME;
 
-    str_ncpy(hdr.owner, owner, sizeof(hdr.owner));
-    str_ncpy(hdr.nick, nick, sizeof(hdr.nick));
+    str_scpy(hdr.owner, owner, sizeof(hdr.owner));
+    str_scpy(hdr.nick, nick, sizeof(hdr.nick));
     if (!title[0])
         sprintf(title, "¨Ó¦Û %.64s", sender);
-    str_ncpy(hdr.title, title, sizeof(hdr.title));
+    str_scpy(hdr.title, title, sizeof(hdr.title));
 
     /* copy the stdin to the specified file */
 

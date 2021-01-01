@@ -70,8 +70,8 @@ NCMupdate(
     ncmperm_t ncm;
 
     memset(&ncm, 0, sizeof(ncmperm_t));
-    str_ncpy(ncm.issuer, issuer, sizeof(ncm.issuer));
-    str_ncpy(ncm.type, type, sizeof(ncm.type));
+    str_scpy(ncm.issuer, issuer, sizeof(ncm.issuer));
+    str_scpy(ncm.type, type, sizeof(ncm.type));
     ncm.perm = 0;
     rec_add("innd/ncmperm.bbs", &ncm, sizeof(ncmperm_t));
     read_ncmperm();
@@ -301,7 +301,7 @@ readNCMheader(
 {
     if (!str_ncasecmp(line, "Version", strlen("Version")))
     {
-        str_ncpy(NCMVER, line + strlen("Version") + 2, sizeof(NCMVER));
+        str_scpy(NCMVER, line + strlen("Version") + 2, sizeof(NCMVER));
         if (strcmp(NCMVER, "0.9"))
         {
             sprintf(errmsg, "unknown version: %s", NCMVER);
@@ -310,16 +310,16 @@ readNCMheader(
     }
     else if (!str_ncasecmp(line, "Issuer", strlen("Issuer")))
     {
-        str_ncpy(ISSUER, line + strlen("Issuer") + 2, sizeof(ISSUER));
+        str_scpy(ISSUER, line + strlen("Issuer") + 2, sizeof(ISSUER));
         FROM = ISSUER;
     }
     else if (!str_ncasecmp(line, "Type", strlen("Type")))
     {
-        str_ncpy(TYPE, line + strlen("Type") + 2, sizeof(TYPE));
+        str_scpy(TYPE, line + strlen("Type") + 2, sizeof(TYPE));
     }
     else if (!str_ncasecmp(line, "Action", strlen("Action")))
     {
-        str_ncpy(ACTION, line + strlen("Action") + 2, sizeof(ACTION));
+        str_scpy(ACTION, line + strlen("Action") + 2, sizeof(ACTION));
         if (strcmp(ACTION, "hide"))
         {
             sprintf(errmsg, "unsupported action: %s", ACTION);

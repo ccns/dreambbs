@@ -991,9 +991,7 @@ chat_topic(
     }
 
     topic = room->topic;
-    /* str_ncpy(topic, msg, sizeof(room->topic) - 1); */
-    str_ncpy(topic, msg, sizeof(room->topic));
-    /* Thor.980921: str_ncpy 已含 0之空間 */
+    str_scpy(topic, msg, sizeof(room->topic));
 
     if (cu->clitype)
     {
@@ -1681,9 +1679,7 @@ enter_room(
         }
 
         memset(room, 0, sizeof(ChatRoom));
-        /* str_ncpy(room->name, rname, IDLEN - 1); */
-        str_ncpy(room->name, rname, IDLEN);
-        /* Thor.980921: 已包含 0 */
+        str_scpy(room->name, rname, IDLEN);
         strcpy(room->topic, "這是一個新天地");
 
         sprintf(buf, "+ %s 1 0 %s", room->name, room->topic);
@@ -1960,11 +1956,7 @@ login_user(
     /* Thor: 進來先清空 ROOMOP (同PERM_CHAT) */
 
     strcpy(cu->userid, userid);
-    str_ncpy(cu->chatid, chatid, sizeof(cu->chatid));
-    /* Thor.980921: str_ncpy與一般 strncpy有所不同, 特別注意 */
-
-    /* Thor.980921: 防止太長 */
-    /* cu->chatid[8]=0; */
+    str_scpy(cu->chatid, chatid, sizeof(cu->chatid));
 
     fprintf(flog, "ENTER\t[%d] %s\n", cu->sno, userid);
 
@@ -1974,7 +1966,7 @@ login_user(
     getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->rhost, sizeof(cu->rhost), NULL, NI_MAXSERV, NI_NUMERICHOST);
 #else
     dns_name((ip_addr *)cu->rhost, cu->ibuf, sizeof(cu->ibuf));
-    str_ncpy(cu->rhost, cu->ibuf, sizeof(cu->rhost));
+    str_scpy(cu->rhost, cu->ibuf, sizeof(cu->rhost));
   #if 0
     getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->rhost, sizeof(cu->rhost), NULL, NI_MAXSERV, 0);
   #endif

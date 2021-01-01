@@ -88,7 +88,7 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
     char *ptr, *str, buf[80];
     struct tm ptime;
 
-    str_ncpy(buf, DATE, sizeof(buf));
+    str_scpy(buf, DATE, sizeof(buf));
     str_lower(buf, buf);                        /* 通通換小寫，因為 Dec DEC dec 各種都有人用 */
 
     str = buf + 2;  /* Skip `mday` (assume no `wday`) */
@@ -226,10 +226,10 @@ bbspost_add(
     hdr.xmode = POST_INCOME;
 
     /* Thor.980825: 防止字串太長蓋過頭 */
-    str_ncpy(hdr.owner, addr, sizeof(hdr.owner));
-    str_ncpy(hdr.nick, nick, sizeof(hdr.nick));
+    str_scpy(hdr.owner, addr, sizeof(hdr.owner));
+    str_scpy(hdr.nick, nick, sizeof(hdr.nick));
     str_stamp(hdr.date, &datevalue);    /* 依 DATE: 欄位的日期，與 hdr.chrono 不同步 */
-    str_ncpy(hdr.title, SUBJECT, sizeof(hdr.title));
+    str_scpy(hdr.title, SUBJECT, sizeof(hdr.title));
 
     rec_bot(folder, &hdr, sizeof(HDR));
 
@@ -487,7 +487,7 @@ search_newsfeeds_bygroup(
 {
     newsfeeds_t nf, *find;
 
-    str_ncpy(nf.newsgroup, newsgroup, sizeof(nf.newsgroup));
+    str_scpy(nf.newsgroup, newsgroup, sizeof(nf.newsgroup));
     find = (newsfeeds_t *) bsearch(&nf, NEWSFEEDS_G, NFCOUNT, sizeof(newsfeeds_t), nf_bygroupcmp);
     if (find && !(find->xmode & INN_NOINCOME))
         return find;
@@ -516,17 +516,17 @@ receive_article(void)
             /* Thor.980825: gc patch: lib/str_decode 只能接受 decode 完 strlen < 256 */
             /* IID.2020-12-14: `mmdecode_str` now support strings of arbitrary length */
 
-            str_ncpy(poolx, SUBJECT, sizeof(poolx));
+            str_scpy(poolx, SUBJECT, sizeof(poolx));
             mmdecode_str(poolx);
             str_ansi(mysubject, poolx, 70);     /* 70 是 bbspost_add() 標題所需的長度 */
             SUBJECT = mysubject;
 
-            str_ncpy(poolx, FROM, sizeof(poolx));
+            str_scpy(poolx, FROM, sizeof(poolx));
             mmdecode_str(poolx);
             str_ansi(myfrom, poolx, 128);       /* 雖然 bbspost_add() 發信人所需的長度只需要 50，但是 from_parse() 需要長一些 */
             FROM = myfrom;
 
-            str_ncpy(poolx, PATH, sizeof(poolx));
+            str_scpy(poolx, PATH, sizeof(poolx));
             mmdecode_str(poolx);
             str_ansi(mypath, poolx, 128);
             sprintf(mypath, "%s!%.*s", MYBBSID, (int)(sizeof(mypath) - strlen(MYBBSID) - 2), PATH);

@@ -47,8 +47,8 @@ new_passwd(void)
                     passwd[fd] = (passwd[fd] % 26) + ((passwd[fd] % 52 >= 26) ? 'a' : 'A');
                 }
                 passwd[len-1] = '\0';
-                str_ncpy(acct.passwd, pw = genpasswd(passwd, ans), PASSLEN);
-                str_ncpy(acct.passhash, pw + PASSLEN, sizeof(acct.passhash));
+                str_scpy(acct.passwd, pw = genpasswd(passwd, ans), PASSLEN);
+                str_scpy(acct.passhash, pw + PASSLEN, sizeof(acct.passhash));
                 acct_save(&acct);
                 do
                 {

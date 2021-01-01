@@ -135,7 +135,7 @@ char *genpasswd(char *pw, int mode)
             return genpasswd(pw, GENPASSWD_DES);  /* Fall back to DES encryption */
         return NULL;
     }
-    str_ncpy(pwbuf, hash, PASSLEN + PASSHASHLEN);
+    str_scpy(pwbuf, hash, PASSLEN + PASSHASHLEN);
 
     if (mode == GENPASSWD_SHA256)
         memmove(pwbuf + PASSLEN, pwbuf + PASSLEN-1, PASSHASHLEN);  /* Prefix `passhash` with `$` */
@@ -173,7 +173,7 @@ int chkpasswd(const char *passwd, const char *passhash, char *test)
 
     /* if (!*passwd) return -1 *//* Thor.990416: 怕有時passwd是空的 */
 
-    str_ncpy(pwbuf, test, PLAINPASSLEN);
+    str_scpy(pwbuf, test, PLAINPASSLEN);
     explicit_zero_bytes(test, strlen(test));
 
     if (*passwd == '$')   /* IID.20190522: `passhash` is the encrypted password. */
@@ -200,11 +200,11 @@ int chksignature(const char *passwd, char *test)
         return chkpasswd(passwd, NULL, test);
 
     memcpy(saltc, SHA256_SALT, 3);  /* Restore `SHA256_SALT` prefix */
-    str_ncpy(saltc+3, passwd, PASSLEN-3);
+    str_scpy(saltc+3, passwd, PASSLEN-3);
     saltc[PASSLEN-1] = '\0';
 
     hashc[0] = '$';   /* Restore `$` prefix for `passhash` */
-    str_ncpy(hashc+1, passwd + PASSLEN-3, PASSHASHLEN-1);
+    str_scpy(hashc+1, passwd + PASSLEN-3, PASSHASHLEN-1);
     hashc[PASSHASHLEN-1] = '\0';
 
     return chkpasswd(saltc, hashc, test);

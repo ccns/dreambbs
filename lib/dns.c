@@ -313,7 +313,7 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
                         (buf, "%s , %s : USERID :%*[^:]:%79s", rmt_port, our_port,
                          ruser_buf) == 3 && !strcmp(rmt_pt, rmt_port) && !strcmp(our_pt, our_port))
                     {
-                        str_ncpy(ruser, ruser_buf, ruser_sz);
+                        str_scpy(ruser, ruser_buf, ruser_sz);
 
                         /*
                          * Strip trailing carriage return. It is part of the protocol, not
@@ -398,7 +398,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
                 /* if (!strcmp(name, (char *) strtok(abuf, " \t\r\n"))) */
                 if (strstr(name, (char *)strtok(abuf, " \t\r\n")))
                 {
-                    str_ncpy(name, (char *)strtok(NULL, " \t\r\n"), name_sz);
+                    str_scpy(name, (char *)strtok(NULL, " \t\r\n"), name_sz);
                     fclose(fp);
                     return 0;
                 }
@@ -472,7 +472,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
             int n = dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME);
             if (n >= 0)
             {
-                str_ncpy(name, hostbuf, name_sz);
+                str_scpy(name, hostbuf, name_sz);
                 return 0;
             }
         }
@@ -480,7 +480,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
 #if 0
         if (type == T_CNAME)
         {
-            str_ncpy(name, hostbuf, name_sz);
+            str_scpy(name, hostbuf, name_sz);
             return 0;
         }
 #endif

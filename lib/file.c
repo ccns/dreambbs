@@ -304,7 +304,7 @@ void usr_fpath(char *fpath, const char *user, const char *fname)
 #endif
     /* Thor.981027: 防止 buffer overflow, 雖然 SunOS 4.1.x上無此情況,
        以後再想好的改法 */
-    str_ncpy(buf, user, sizeof(buf));
+    str_scpy(buf, user, sizeof(buf));
     str_lower(buf, buf);
 
     *fpath++ = *buf;

@@ -2938,7 +2938,7 @@ vget_redraw:
                 }
                 if (dirty && len > 2)
                 {
-                    str_ncpy(lastcmd[line_prev], data, len+1);  /* Save changes */
+                    str_scpy(lastcmd[line_prev], data, len+1);  /* Save changes */
                     dirty = 0;
                 }
                 move(y, x);

@@ -688,7 +688,7 @@ XO *xo)
         if (ans == 'a')
         {
             strcpy(folder, xo->dir);
-            str_ncpy(MailGemSailor, (const char *) xo->xyz, sizeof(MailGemSailor));
+            str_scpy(MailGemSailor, (const char *) xo->xyz, sizeof(MailGemSailor));
         }
         else if (ans == 'd')
         {
