@@ -1,6 +1,6 @@
-# BRH 看板閱讀紀錄
+# BRH 看板閱讀紀錄系統
 
-`BRH` 是 MapleBBS 3 的看板閱讀紀錄的資料結構。
+`BRH` 是 MapleBBS 3 的看板閱讀紀錄系統所使用的資料結構。
 
 在 `BBS` 使用者目錄下的 `.BRH` 檔是匯集了此使用者閱讀的所有看板的 `BRH` 的輸出。
 
@@ -106,7 +106,9 @@ zapped 的 `(bstamp & BRH_MASK) >= BBS_BIRTH_TIME`
 - `tags` 的結尾（可能是 `tags` 已解開但仍有 `bvisit` 的 BRH 開頭）：`list` 符合 `k>0, list == &tag[2*k]`, `list[0] >= list[-1] || list[-1] <= 1 || list[-2] < bstamp`，或是 `k>=0, list == &tag[2*k]`, `list[1] > list[0]`
 
 ## 運作問題
-MapleBBS 3.00a 時，在 `brh_load`, `brh_save`, `brh_put` 等函式誤用了 `memcpy` 來移動記憶體範圍可能重疊的 BRH 資料，產生 undefined behavior 而未加以修正。記憶體範圍可能重疊時，應使用 `memmove` 而不是 `memcpy` 以避免 undefined behavior。
+MapleBBS 3.00a 時，在 `brh_load`, `brh_save`, `brh_put` 等函式誤用了 `memcpy` 來移動記憶體範圍可能重疊的 BRH 資料，產生 undefined behavior 而未加以修正。
+
+記憶體範圍可能重疊時，應使用 `memmove` 而不是 `memcpy` 以避免 undefined behavior。
 
 在較舊的作業系統上，因為 `memcpy` 沒有特別的最佳化，所以不會出現問題。但是在較新的作業系統上 `memcpy` 有特別的最佳化，會讓記憶體範圍重疊的資料複製時出現問題。
 
