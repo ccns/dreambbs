@@ -1809,7 +1809,7 @@ int main(int argc, char *argv[])
                 ((struct sockaddr_in6 *)&sin)->sin6_addr = *(struct in6_addr *)&cdata.raddr;
                 ((struct sockaddr_in6 *)&sin)->sin6_port = cdata.rport;
                 break;
-            default:;
+            default:; /* Unsupported address family */
             }
             /* mport = cdata.lport; */
         }
@@ -1820,8 +1820,8 @@ int main(int argc, char *argv[])
         case AF_INET6:
             break;
 
-        case AF_UNIX:
-        default:
+        case AF_UNIX: /* Unsupported address family of connections accepted from Unix socket */
+        default: /* Other unsupported address family */
             close(csock);
             continue;
         }
