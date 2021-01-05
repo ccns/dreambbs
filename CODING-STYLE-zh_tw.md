@@ -5,7 +5,7 @@
 Indentation style 的說明，請見 [[INDENT]]。
 
 ## 語法
-- 語法要符合 10 年前最新的 ISO C 標準 (C99)，但不應使用不被最新 ISO C++ 標準或草案 (C++20) 所支援的語法
+- 語法要符合 10 年前最新的 ISO C 標準 (C11)，但不應使用不被最新 ISO C++ 標準或草案 (C++20) 所支援的語法
     - 目前 (2019-09-01) 的程式碼，在語法上符合 C99 而已經不符合 C90，不必再繼續支援 C90 語法
 - 需要支援 C++ 時，僅考慮過去 10 年內的 ISO C++ 標準 (最舊到 C++11)
 - 新的程式碼不能將最新 ISO C++ 標準中的關鍵字當作變數／函式／型別名
@@ -15,14 +15,11 @@ Indentation style 的說明，請見 [[INDENT]]。
   但最好在不使用 GNU C extensions 時也能夠編譯
     - 目前 (2019-09-01) 僅使用 GCC 和 Clang 編譯器，而它們都支援 GNU C extensions
 
-## 程式邏輯
-- 程式碼不應造成 compiler 發出容易解決的 warning
-    - 對於用語言標準難以解決的 compiler warning，如果使用 GNU C extension 可容易解決，就使用 GNU C extension；  
-      如果還是難以解決，就暫不解決，等待新的語法標準或 GNU C extensions
+## 區域變數的使用
 - 應透過限制變數的 scope 而非重用變數來節省記憶體的使用量
     - 限制變數 scope 有利於編譯器分析變數的使用狀況，可讓編譯器重新利用不使用的變數的記憶體空間；  
       而重用變數不利於編譯器分析變數的使用狀況
-    - 不應一次將所有變數宣告於函式定義的開頭；應善用 block scope 變數以及 C99 的迴圈 scope 變數
+- 不應一次將所有變數宣告於函式定義的開頭；應善用 block scope 變數以及 C99 的迴圈 scope 變數；可依可讀性的需要，而在須使用之處時再定義變數
 
 **Good:**
 ```cpp
@@ -39,39 +36,35 @@ for (i = 0; i < n; ++i) {
 }
 ```
 
-- 不應為了在邏輯上節省記憶體使用量，而將函式的指標參數所指向的 struct 暫時用作其他型別資料的 buffer
+- 在維持易讀性的前提下，儘可能不要定義暫時變數，尤其是不要定義未使用的變數；既有的未使用變數則應移除
+- 非得使用暫時變數時，則儘可能使用 `const`
 
 **Good:**
 ```cpp
-int func(Struct *obj)
-{
-    FILE *fp;
-    {
-        char path[LENGTH];
-        get_path(path);
-        if (!(fp = fopen(path, "r")))
-            return 1;
-    }
-    code_about_obj;
-    fclose(fp);
-    return 0;
+char buf[32];
+const char *str = "<anonymous>";
+const char *const name = get_name();
+if (name) {
+    strlcpy(buf, name, sizeof(buf));
+    str = buf;
 }
+process(str);
 ```
 **Bad:**
 ```cpp
-int func(Struct *obj)
-{
-    FILE *fp;
-    get_path((char *)obj);
-    if (!(fp = fopen((char *)obj, "r")))
-        return 1;
-    code_about_obj;
-    fclose(fp);
-    return 0;
-}
+char buf[32];
+char *str = "<anonymous>";
+char *name = get_name();
+size_t len;
+if (name)
+    len = strlcpy(str = buf, name, sizeof(buf));
+process(str);
 ```
 
-- 不要使用全域變數回傳函式執行結果；盡量使用 `return` 或 output arguments
+## 全域變數的使用
+- 欲僅宣告全域變數並於稍後定義時，應使用 `extern`
+- 減少與避免全域變數的使用
+    - 不要使用全域變數回傳函式執行結果；盡量使用 `return` 或 output arguments
 
 **Good:**
 ```cpp
@@ -112,6 +105,7 @@ void process(void)
 }
 ```
 
+-   - 如未能完全避免全域變數的使用，則應將用於同一功能的全域變數以 struct 組織起來
 - 避免 boilerplate code，以減少 code size
     - 需要增加新功能時，盡量使用既有的函式，不要複製原有函式
 
@@ -135,6 +129,43 @@ void func2(void)
 }
 ```
 
+## 可讀性與可移植性
+- 程式碼不應造成 compiler 發出容易解決的 warning
+    - 對於用語言標準難以解決的 compiler warning，如果使用 GNU C extension 可容易解決，就使用 GNU C extension；  
+      如果還是難以解決，就暫不解決，等待新的語法標準或 GNU C extensions
+- 不應假設函式的回傳值必為某值
+- 不應為了節省記憶體的使用，而將函式的指標參數所指向的 struct 暫時用作其他型別資料的 buffer，以免改動相關程式後出現 buffer 大小不足的狀況
+
+**Good:**
+```cpp
+int func(Struct *obj)
+{
+    FILE *fp;
+    {
+        char path[LENGTH];
+        get_path(path);
+        if (!(fp = fopen(path, "r")))
+            return 1;
+    }
+    code_about_obj;
+    fclose(fp);
+    return 0;
+}
+```
+**Bad:**
+```cpp
+int func(Struct *obj)
+{
+    FILE *fp;
+    get_path((char *)obj);
+    if (!(fp = fopen((char *)obj, "r")))
+        return 1;
+    code_about_obj;
+    fclose(fp);
+    return 0;
+}
+```
+
 - 不要使用避免或依賴編譯器優化的 workarounds
 - 不要手動優化運算式；現代許多編譯器已經能夠自動優化運算式（`gcc` 及 `clang` 在 `-O0` 下也會優化）
 
@@ -155,14 +186,15 @@ int x = (y << 5) - y;
 **Good:**
 ```cpp
 int y = get_value();
-int x = (int)floor(y / 32.0);
+int x = y >> 5;
 ```
 **OK:**
 ```cpp
 int y = get_value();
-int x = y >> 5;
+int x = (int)floor(y / 32.0);
 ```
 
+## Macro 的使用
 - 不要定義實作過於複雜的 macro 來處理容易解決的 C 語法問題
     - 例如：不要用 macro 生成 `malloc` 回傳指標的轉型（parse 實作過於複雜），而應直接手寫轉型
 - 如果定義了較為複雜的 macro，應該使用註解解釋背後邏輯
@@ -178,6 +210,7 @@ int x = y >> 5;
     - 參見 `include/struct.h`
 - 應當標註會被讀出／寫入 binary file 的資料結構
     - 目前 (2020-02-24) 所有相關資料結構都已標註上 `DISKDATA(raw)`
+- 在會被讀出／寫入 binary file 或是 shared memory 的資料結構中，不應使用指標型別
 
 ## Header 的使用
 - 不同支程式使用的 header 應該分開，以方便控制特定程式的編譯環境
