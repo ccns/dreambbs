@@ -101,17 +101,17 @@ Pre-releases for `v1.0` were planned instead:
     - Features:
       - Support building with CMake
 
-### `2020 vX` (`v3.X`); `Four Symbol` series (`3.20.X`) ( Upcoming Release Branch )
-The full name of this major version is `DreamBBS-2020 vX`.
+### `202X vX` (`v3.X`); `Four Symbol` series (`3.20.X`) ( Upcoming Release Branch )
+The full name of this major version is `DreamBBS-202X vX`. `202X` refers to the 2020s decade and is spelt literally this way.
 
 This will be the last major version whose version number is different from the legacy version number.
 
 Due to the shortage of development resources, from this major version and on, only the latest release version is officially maintained.
 
-- `2020 v0` (`v3.0`)
-- `2020 v1` (`v3.1`)
-- `2020 v2` (`v3.2`)
-- `2020 v3` (`v3.3`); planned to be the last release of `v3.X`
+- `202X v0` (`v3.0`)
+- `202X v1` (`v3.1`)
+- `202X v2` (`v3.2`)
+- `202X v3` (`v3.3`); planned to be the last release of `v3.X`
 
 Features in plan:
   - [x] Hot-swapping of DSO.
