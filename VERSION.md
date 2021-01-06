@@ -108,7 +108,7 @@ This will be the last major version whose version number is different from the l
 
 Due to the shortage of development resources, from this major version and on, only the latest release version is officially maintained.
 
-- `2020 v0` (`v3.0`)g
+- `2020 v0` (`v3.0`)
 - `2020 v1` (`v3.1`)
 - `2020 v2` (`v3.2`)
 - `2020 v3` (`v3.3`); planned to be the last release of `v3.X`
