@@ -109,6 +109,6 @@ y 軸           | y 為 row；+y 方向向下    | y 為 column；+y 方向向�
 `B_COLS_REF`      | `T_COLS_REF - 1`   | 畫面大小座標之 x           | DreamBBS v3   | 對應 `b_cols` 的值
 `D_COLS_REF`      | `B_COLS_REF - 79`  | 畫面大小座標之 x           | DreamBBS v3   | 對應 `d_cols` 的值
 
-- MapleBBS 3 及更舊的直系分支，不支援 telnet 協定的畫面大小改變指令，僅有 shell 模式下的畫面大小改變機制
+- MapleBBS 3 及更舊的直系分支，不支援 telnet 協定的畫面大小改變命令，僅有 shell 模式下的畫面大小改變機制
 - MapleBBS 3 取消了 shell 模式，因此沒有改變畫面大小的機制
-- PttBBS 與 MapleBBS-itoc 分別增加了 telnet 協定的畫面大小改變指令的支援；DreamBBS v1 從 MapleBBS-itoc 將其引入
+- PttBBS 與 MapleBBS-itoc 分別增加了 telnet 協定的畫面大小改變命令的支援；DreamBBS v1 從 MapleBBS-itoc 將其引入
