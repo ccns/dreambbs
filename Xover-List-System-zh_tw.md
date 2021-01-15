@@ -12,7 +12,7 @@ Xover 列表系統是 MapleBBS 3.x 中所大量使用的列表顯示系統。
 
 - [MapleBBS 3 與 DreamBBS v3 的 Xover 特殊值](#maplebbs-3-%E8%88%87-dreambbs-v3-%E7%9A%84-xover-%E7%89%B9%E6%AE%8A%E5%80%BC) 一節說明了 MapleBBS 3 與 DreamBBS 中的 Xover 系統使用到的特殊數值。
 
-- [DreamBBS v3 的 Xover callback 指令連鎖機制](#dreambbs-v3-%E7%9A%84-xover-callback-%E6%8C%87%E4%BB%A4%E9%80%A3%E9%8E%96%E6%A9%9F%E5%88%B6) 一節說明了 DreamBBS v3.0 新增的複合型指令的效果疊加機制。
+- [DreamBBS v3 的 Xover callback 命令連鎖機制](#dreambbs-v3-%E7%9A%84-xover-callback-%E5%91%BD%E4%BB%A4%E9%80%A3%E9%8E%96%E6%A9%9F%E5%88%B6) 一節說明了 DreamBBS v3.0 新增的複合型命令的效果疊加機制。
 
 ## Pirate BBS 衍生之 BBS 的列表函式比較
 
@@ -251,7 +251,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 Macro             | 值                        | 功能                                  | 註解
  :---             | ---                       | ---                                   | ---
 `XO_MODE`         | `0x10000000`              | 表示畫面重繪、資料載入、離開列表等操作  | DreamBBS v3.0 中已移除
-`XO_NONE`         | - `0x10000000` <br> - `0x00004000` (DreamBBS v3)      | - 什麼都不作 <br> - 最小的被當作指令的 Xover key value |
+`XO_NONE`         | - `0x10000000` <br> - `0x00004000` (DreamBBS v3)      | - 什麼都不作 <br> - 最小的被當作命令的 Xover key value |
 `XR_<redo>`       | (多個)                    | 預先定義的畫面重繪及資料載入的組合動作  | DreamBBS v3.0 新增
 `XR_PART_<redo>`  | (多個)                    | 畫面重繪及資料載入中的某部分            | DreamBBS v3.0 新增
 `XO_MOVE`         | - `0x20000000` <br> - `0x00100000` (DreamBBS v3)      | - 表示游標移動 <br> - 游標移動的 bias (DreamBBS v3)
@@ -274,22 +274,22 @@ Macro             | 值                        | 功能                         
 `XO_SKIN`         | `((XZ_ZONE \| XZ_SKIN) + XO_MOVE)` | 套用某個使用者介面 skin (未實作) | DreamBBS v3.0 新增
 `XZ_SKIN`         | `0x10000000`              | 將操作解讀為使用者介面 skin 切換 (未實作) | DreamBBS v3.0 新增
 
-## DreamBBS v3 的 Xover callback 指令連鎖機制
+## DreamBBS v3 的 Xover callback 命令連鎖機制
 ### 名詞說明
 #### 連鎖
 `i_read` 與 Xover 列表系統的 callback 函式都可以透過回傳值，呼叫下一個 callback，本文稱之為「連鎖」。
 
 例如 `'i'` 對應的 callback 回傳 `'j'`，`'j'` 對應的 callback 回傳 `'k'`，`'k'` 對應的 callback 回傳 `XO_BODY`，`XO_BODY` 對應的 callback 回傳 `XO_FOOT`，`XO_FOOT` 對應的 callback 回傳 `XO_NONE`，稱為一個連鎖，可以記為 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE`。
 
-連鎖的結尾 callback 可以回傳游標移動指令、`XO_NONE` 指令、或沒有對應 callback 的指令。
+連鎖的結尾 callback 可以回傳游標移動命令、`XO_NONE` 命令、或沒有對應 callback 的命令。
 
-#### 指令連鎖
-透過回傳按鍵值而呼叫下一個 callback 的連鎖，稱為「指令連鎖」。
+#### 命令連鎖
+透過回傳按鍵值而呼叫下一個 callback 的連鎖，稱為「命令連鎖」。
 
-例如連鎖 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE` 中就包含了指令連鎖 `'i' -> 'j' -> 'k'`。
+例如連鎖 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE` 中就包含了命令連鎖 `'i' -> 'j' -> 'k'`。
 
 #### 組合操作 - Redo 組合操作與 zone 組合操作
-從 DreamBBS v3.0 開始，可以將畫面重繪/重新載入或列表操作，與按鍵輸入或游標移動的操作組合表示，因此需要特別的規則來處理帶有這些組合的指令連鎖。
+從 DreamBBS v3.0 開始，可以將畫面重繪/重新載入或列表操作，與按鍵輸入或游標移動的操作組合表示，因此需要特別的規則來處理帶有這些組合的命令連鎖。
 
 其中畫面重繪/重新載入 (`XR_*`) 等操作，本文稱之為「redo-simple 操作」，與其組合的操作則稱為「redo 組合操作」；\
 列表操作 (`XZ_ZONE + XZ_*`) 等操作，本文稱之為「zone-simple 操作」，與其組合的操作則稱為「zone 組合操作」。
@@ -307,9 +307,9 @@ Null 操作是 pure 操作的特例，是導致連鎖終止的單純操作，包
 此外，DreamBBS v3 的切換列表操作 (`XZ_<zone>`)，是用游標移動達成的，本文將其歸類為 pure 操作中的 null 操作，而非 zone 組合操作；\
 MapleBBS 3 原本的 Xover 列表系統的切換列表操作，不是使用游標移動達到的，但本文也將其看作游標操作。
 
-### 組合指令連鎖規則
+### 組合命令連鎖規則
 #### 通則
-組合操作中的 redo-simple 部分及 zone-simple 部分，會累積起來，在指令連鎖結束時再執行。
+組合操作中的 redo-simple 部分及 zone-simple 部分，會累積起來，在命令連鎖結束時再執行。
 
 其中，如果同時累積有 redo-simple 及 zone-simple 部分，則會先執行 zone-simple 部分，再執行 redo-simple 部分。
 
@@ -335,12 +335,12 @@ MapleBBS 3 原本的 Xover 列表系統的切換列表操作，不是使用游�
 
 `return XR_BODY | func_info(xo)` 寫法的優缺點：
 - 適合用在按鍵的對應功能的函式已知的情況
-- 限制是 `func_info(xo)` 不能回傳 `XZ_*` 指令
+- 限制是 `func_info(xo)` 不能回傳 `XZ_*` 命令
 
 `return XR_BODY + 'i'`  寫法的優缺點：
 - 適合用在按鍵的對應功能的函式未知的情況，尤其是在按鍵本身的值未知時
-- 可以正確處理按鍵的對應功能的函式回傳 `XZ_*` 指令的狀況
-- 限制是按鍵本身不能是 `XZ_*` 指令
+- 可以正確處理按鍵的對應功能的函式回傳 `XZ_*` 命令的狀況
+- 限制是按鍵本身不能是 `XZ_*` 命令
 
 #### Zone-zone 連鎖 -> pure-pure-zone-simple 連鎖
 先後執行兩個操作的 pure 部分後，將與兩者組合的 zone-simple 操作一齊執行。
