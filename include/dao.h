@@ -159,8 +159,7 @@ GCC_PURE char *str_ttl(const char *title);
 void str_xor(char *dst, const char *src);
 size_t strlcat(char *dst, const char *src, size_t siz);
 size_t strlcpy(char *dst, const char *src, size_t siz);
-GCC_PURE int hash32(const char *str);
-/* date_str.c */
+/* date.c */
 void str_stamp(char *str, const time_t *chrono);
 char *Btime(const time_t *clock);
 char *Ctime(const time_t *clock);
