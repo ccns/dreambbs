@@ -68,20 +68,18 @@ gindex(
     if (!fgem)
         return;
 
-#if 0
-[ 解決空精華區不會自動產生 index & log 的問題]
-
-int gindex(void)
-
-    fgem = fopen(fpath, "r");
-    if (!fgem)
-        /* return; */
-        fgem = fopen(fpath, "w+");          /* lkchu: creat .DIR of new board */
-                                            /* lkchu: w+ 不知道會不會有問題 */
-    /* Thor.980730: 覺得還是先不自動產生, 若要 access 資源回收筒,
-                    得先產生一個article or folder在根目錄方能進回收筒,
-                    可用 g 的方式, 新增選 paste */
-#endif
+//[ 解決空精華區不會自動產生 index & log 的問題]
+//
+//int gindex(void)
+//
+//    fgem = fopen(fpath, "r");
+//    if (!fgem)
+//        /* return; */
+//        fgem = fopen(fpath, "w+");          /* lkchu: creat .DIR of new board */
+//                                            /* lkchu: w+ 不知道會不會有問題 */
+//    /* Thor.980730: 覺得還是先不自動產生, 若要 access 資源回收筒,
+//                    得先產生一個article or folder在根目錄方能進回收筒,
+//                    可用 g 的方式, 新增選 paste */
 
     fname = fpath;
     while ((xmode = *fname++))
