@@ -130,8 +130,10 @@ void str_folder(char *fpath, const char *folder, const char *fname);
 void setdirpath(char *fpath, const char *direct, const char *fname);
 int str_from(char *from, char *addr, char *nick);
 GCC_PURE int str_has(const char *list, const char *tag);
-GCC_PURE int str_hash2(const char *str, unsigned int seed);
+GCC_PURE int str_hash_mult(const char *str, unsigned int seed, unsigned int mult_base);
 GCC_PURE int str_hash(const char *str, unsigned int seed);
+GCC_PURE int str_hash2(const char *str, unsigned int seed);
+GCC_PURE int hash32(const char *str);
 GCC_PURE int str_len(const char *str);
 void str_lower(char *dst, const char *src);
 void str_lowest(char *dst, const char *src);
@@ -157,7 +159,7 @@ GCC_PURE char *str_ttl(const char *title);
 void str_xor(char *dst, const char *src);
 size_t strlcat(char *dst, const char *src, size_t siz);
 size_t strlcpy(char *dst, const char *src, size_t siz);
-/* date.c */
+/* date_str.c */
 void str_stamp(char *str, const time_t *chrono);
 char *Btime(const time_t *clock);
 char *Ctime(const time_t *clock);

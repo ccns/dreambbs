@@ -628,26 +628,31 @@ GCC_PURE int str_has(const char *list, const char *tag)
     }
 }
 
-GCC_PURE int str_hash2(const char *str, unsigned int seed)
+GCC_PURE int str_hash_mult(const char *str, unsigned int seed, unsigned int mult_base)
 {
     unsigned int cc;
 
     while ((cc = *str++))
     {
-        seed = 127 * seed + cc;
+        seed = mult_base * seed + cc;
     }
     return (seed & 0x7fffffff);
 }
 
 GCC_PURE int str_hash(const char *str, unsigned int seed)
 {
-    unsigned int cc;
+    return str_hash_mult(str, seed, 31);
+}
 
-    while ((cc = *str++))
-    {
-        seed = 31 * seed + cc;
-    }
-    return (seed & 0x7fffffff);
+GCC_PURE int str_hash2(const char *str, unsigned int seed)
+{
+    return str_hash_mult(str, seed, 127);
+}
+
+GCC_PURE int hash32(const char *str)
+{
+    const unsigned int seed = 1048583; /* a big prime number */
+    return str_hash(str, seed);
 }
 
 GCC_PURE int str_len(const char *str)
@@ -1345,16 +1350,4 @@ size_t strlcpy(char *dst, const char *src, size_t siz)
     }
 
     return (s - src - 1);       /* count does not include NUL */
-}
-
-GCC_PURE int hash32(const char *str)
-{
-    unsigned int xo, cc;
-
-    xo = 1048583;               /* a big prime number */
-    while ((cc = *str++))
-    {
-        xo = 31 * xo + cc;
-    }
-    return (xo & 0x7fffffff);
 }
