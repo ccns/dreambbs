@@ -1,7 +1,7 @@
 # ------------------------------------------------------- #
 #  sample/CMakeLists.txt ( NCKU CCNS DreamBBS 3.0 )       #
 # ------------------------------------------------------- #
-#  Author: 37586669+IepIweidieng@users.noreply.github.com #
+#  Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>     #
 #  Target: CMakeLists for DreamBBS sample files           #
 #  Create: 2020-10-15                                     #
 # ------------------------------------------------------- #

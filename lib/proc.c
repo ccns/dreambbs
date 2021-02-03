@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
 /* lib/proc.c   ( NCKU CCNS WindTop-DreamBBS 3.0 )       */
 /*-------------------------------------------------------*/
-/* Author: 37586669+IepIweidieng@users.noreply.github.com*/
+/* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
 /* Target: Process manipulation library for DreamBBS     */
 /* Create: 2020/02/24                                    */
 /*-------------------------------------------------------*/

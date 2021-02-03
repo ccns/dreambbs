@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
 /* lib/passwd.c ( NCKU CCNS WindTop-DreamBBS 3.20 )      */
 /*-------------------------------------------------------*/
-/* Author: 37586669+IepIweidieng@users.noreply.github.com*/
+/* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
 /* Target: Password hashing library for DreamBBS         */
 /* Create: 2020/11/21                                    */
 /*-------------------------------------------------------*/

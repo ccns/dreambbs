@@ -1,7 +1,7 @@
 # ------------------------------------------------------- #
 #  maple/CMakeLists.txt ( NCKU CCNS WindTop-DreamBBS 3.0 )#
 # ------------------------------------------------------- #
-#  Author: 37586669+IepIweidieng@users.noreply.github.com #
+#  Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>     #
 #  Target: CMakeLists for DreamBBS main programs          #
 #  Create: 2019/11/30                                     #
 # ------------------------------------------------------- #

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
 /* attrdef.h    ( NCKU CCNS WindTop-DreamBBS 2.0 )       */
 /*-------------------------------------------------------*/
-/* Author: 37586669+IepIweidieng@users.noreply.github.com*/
+/* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
 /* Target: Implementation-defined attribute macros       */
 /* Create: 2019/09/25                                    */
 /*-------------------------------------------------------*/

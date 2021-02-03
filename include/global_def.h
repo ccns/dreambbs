@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
 /* global_def.h     ( NCKU CCNS WindTop-DreamBBS 3.0 )   */
 /*-------------------------------------------------------*/
-/* Author: 37586669+IepIweidieng@users.noreply.github.com*/
+/* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
 /* Target: Global definitions                            */
 /* Create: 2020-11-16                                    */
 /*-------------------------------------------------------*/

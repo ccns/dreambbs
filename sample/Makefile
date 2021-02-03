@@ -1,7 +1,7 @@
 # ------------------------------------------------------- #
 #  sample/Makefile ( NCKU CCNS DreamBBS 3.0 )             #
 # ------------------------------------------------------- #
-#  Author: 37586669+IepIweidieng@users.noreply.github.com #
+#  Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>     #
 #  Target: Makefile for DreamBBS sample files             #
 #  Create: 2020-10-15                                     #
 # ------------------------------------------------------- #

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
 /* so.h         ( NCKU CCNS WindTop-DreamBBS 2.0 )       */
 /*-------------------------------------------------------*/
-/* Author: 37586669+IepIweidieng@users.noreply.github.com*/
+/* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
 /* Target: Prototype for shared object library           */
 /* Create: 2019/05/07                                    */
 /*-------------------------------------------------------*/

@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
 /* cppdef.h     ( NCKU CCNS WindTop-DreamBBS 2.0 )       */
 /*-------------------------------------------------------*/
-/* Author: 37586669+IepIweidieng@users.noreply.github.com*/
+/* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
 /* Target: C preprocessor utility macros                 */
 /* Create: 2019/03/30                                    */
 /*-------------------------------------------------------*/

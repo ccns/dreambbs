@@ -1,7 +1,7 @@
 # -------------------------------------------------------#
 #  so/so.mk     ( NCKU CCNS WindTop-DreamBBS 2.0 )       #
 # -------------------------------------------------------#
-#  Author: 37586669+IepIweidieng@users.noreply.github.com#
+#  Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    #
 #  Target: Shared object target files for DreamBBS       #
 #  Create: 2019/05/07                                    #
 # -------------------------------------------------------#
