@@ -183,6 +183,7 @@ VAR const unsigned int module_flags   INI(
 
 #ifdef NO_SO  /* For the main program and the modules of `bbsd` */
 /* maple/bbsd.c */
+extern Logger g_logger;      /* IID.2021-02-09: The global message logger */
 extern char rusername[];     /* Thor: °O¿ý RFC931, ©Èguest verify */
 
 /* maple/board.c */

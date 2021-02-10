@@ -29,6 +29,12 @@
 #define LOG_FILE        "run/bbs.log"
 #undef  SERVER_USAGE
 
+/* IID.2021-02-09: The global message logger */
+Logger g_logger = {
+    .file = NULL,
+    .path = LOG_FILE,
+    .lv_skip = LOGLV_WARN,
+};
 
 #define MAXPORTS        COUNTOF(myports)
 static const int myports[] = {23, 3456, 3001, /* 3002, 3003 */};

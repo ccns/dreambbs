@@ -24,6 +24,7 @@
 #define REC_SIZ         4096            /* disk I/O record size */
 #endif
 
+#include "logger.h"                     /* Message logging types */
 #include "hdr.h"                        /* prototype */
 #include "dns.h"                        /* dns type */
 #include "splay.h"                      /* splay type */
@@ -173,6 +174,8 @@ int proc_runv(const char *path, const char *argv[]);
 GCC_SENTINEL(0) int proc_runl(const char *path, const char *arg0, ...);
 int proc_runv_bg(const char *path, const char *argv[]);
 GCC_SENTINEL(0) int proc_runl_bg(const char *path, const char *arg0, ...);
+/* logger.c */
+GCC_FORMAT(3, 4) GCC_NONNULL(1, 3) void loggerf(const Logger *logger, enum LogLevel level, const char *format, ...);
 /* xwrite.c */
 int xwrite(int fd, const char *data, int size);
 
@@ -187,5 +190,23 @@ int xwrite(int fd, const char *data, int size);
 /* `proc_runl_bg` without the need of `arg0` and trailing `NULL` */
 /* Use `PROC_CMD_BG(path, NULL)` when no other arguments are needed */
 #define PROC_CMD_BG(path, ...) proc_runl_bg(path, path, __VA_ARGS__, NULL)
+
+/* `loggerf` shorthands */
+#define LOGF_EMERG(_logger, ...) \
+    loggerf(_logger, LOGLV_EMERG, __VA_ARGS__)
+#define LOGF_ALERT(_logger, ...) \
+    loggerf(_logger, LOGLV_ALERT, __VA_ARGS__)
+#define LOGF_CRIT(_logger, ...) \
+    loggerf(_logger, LOGLV_CRIT, __VA_ARGS__)
+#define LOGF_ERR(_logger, ...) \
+    loggerf(_logger, LOGLV_ERR, __VA_ARGS__)
+#define LOGF_WARN(_logger, ...) \
+    loggerf(_logger, LOGLV_WARN, __VA_ARGS__)
+#define LOGF_NOTICE(_logger, ...) \
+    loggerf(_logger, LOGLV_NOTICE, __VA_ARGS__)
+#define LOGF_INFO(_logger, ...) \
+    loggerf(_logger, LOGLV_INFO, __VA_ARGS__)
+#define LOGF_DEBUG(_logger, ...) \
+    loggerf(_logger, LOGLV_DEBUG, __VA_ARGS__)
 
 #endif  /* DAO_H */
