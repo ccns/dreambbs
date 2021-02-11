@@ -125,8 +125,8 @@ GCC_RET_NONNULL char *str_dup(const char *src, int pad)
 
 /* Similar to the `setdirpath` below, but for some `folder`, use the parent directory as the base directory instead (formerly `str_folder`)
  * When `folder` is not a path to a `.DIR` or `.GEM` file, the parent directory is used as the base directory
- * `folder` must contain at least 1 `'/'` character, otherwise the result is undefined
- * The characters after the last `'/'` (can be empty) is taken as the name of a file in the containing directory
+ * If `folder` does not contain any `'/'` characters, `folder` is used as the base directory
+ * Otherwise, the characters after the last `'/'` (can be empty) is taken as the name of a file in the containing directory
  * The name of the containing directory must be a single character when the parent directory is used as the base directory
  * E.g., `fname`: `"file"`
  * - `folder`: `"gem/brd/test/.DIR"` -> `fpath`: `"gem/brd/test/file"`
@@ -135,35 +135,57 @@ GCC_RET_NONNULL char *str_dup(const char *src, int pad)
  * - `folder`: `"gem/brd/test/@/@class"` -> `fpath`: `"gem/brd/test/file"` (cf. `setdirpath`)
  * - `folder`: `"gem/.DIR"` -> `fpath`: `"gem/file"`
  * - `folder`: `"gem/U/F0S8JULU"` -> `fpath`: `"gem/file"` (cf. `setdirpath`)
+ * - `folder`: `"gem"` -> `fpath`: `"gem/file"`
  * - `folder`: `"g/"` -> `fpath`: `"file"` (cf. `setdirpath`)
  * - `folder`: `"/"` -> `fpath`: `"/file"` */
 GCC_NONNULLS
 void setdirpath_root(char *fpath, const char *folder, const char *fname)
 {
     const char *tail = strrchr(folder, '/');
-    ++tail;
-    if (*tail != '.' && tail - 2 >= folder)
-        tail -= 2;
+    if (tail)
+    {
+        ++tail;
+        if (*tail != '.' && tail - 2 >= folder)
+            tail -= 2;
 
-    const size_t len = tail - folder;
-    memmove(fpath, folder, len);
-    strcpy(fpath + len, fname);
+        const size_t len = tail - folder;
+        memmove(fpath, folder, len);
+        strcpy(fpath + len, fname);
+    }
+    else
+    {
+        const size_t len = strlen(folder);
+        memmove(fpath, folder, len);
+        fpath[len] = '/';
+        strcpy(fpath + len + 1, fname);
+    }
 }
 
 /* Output the path string to `fname` with the containing directory of the file specified with `direct` as the base directory to `fpath`
- * `direct` must contain at least 1 `'/'` character, otherwise the result is undefined
- * The characters after the last `'/'` (can be empty) is taken as the name of a file in the containing directory
+ * If `direct` does not contain any `'/'` characters, `direct` is taken as the containing directory
+ * Otherwise, the characters after the last `'/'` (can be empty) is taken as the name of a file in the containing directory
  * E.g., `fname`: `"file"`
  * - `direct`: `"brd/test/.DIR"` -> `fpath`: `"brd/test/file"`
  * - `direct`: `"brd/test/P/A1E443BP"` -> `fpath`: `"brd/test/P/file"`
- * - `direct`: `"brd/test/"` -> `fpath`: `"brd/test/file"` */
+ * - `direct`: `"brd/test/"` -> `fpath`: `"brd/test/file"`
+ * - `direct`: `"brd"` -> `fpath`: `"brd/file"` */
 GCC_NONNULLS
 void setdirpath(char *fpath, const char *direct, const char *fname)
 {
     const char *const delim = strrchr(direct, '/');
-    const size_t len = delim - direct + 1;
-    memmove(fpath, direct, len);
-    strcpy(fpath + len, fname);
+    if (delim)
+    {
+        const size_t len = delim - direct + 1;
+        memmove(fpath, direct, len);
+        strcpy(fpath + len, fname);
+    }
+    else
+    {
+        const size_t len = strlen(direct);
+        memmove(fpath, direct, len);
+        fpath[len] = '/';
+        strcpy(fpath + len + 1, fname);
+    }
 }
 
 /* ----------------------------------------------------  */
