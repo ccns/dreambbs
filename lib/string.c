@@ -113,12 +113,12 @@ void str_split_2nd(char *dst, const char *src)
 
 /* Return a string allocated using `malloc` with the content of string `src`
  * `pad` is the size in bytes of the space after the string, including the `'\0'` string end
- * `pad` must > `0`, otherwise a buffer overflow occurs */
+ * If `pad` <= `0`, the space for the `'\0'` string end is still included and is set to `'\0'` */
 GCC_NONNULLS
 GCC_RET_NONNULL char *str_dup(const char *src, int pad)
 {
     const size_t len = strlen(src);
-    char *const dst = (char *)malloc(len + pad);
+    char *const dst = (char *)malloc(len + BMAX(pad, 1));
     memcpy(dst, src, len + 1);
     return dst;
 }
