@@ -124,19 +124,26 @@ GCC_RET_NONNULL char *str_dup(const char *src, int pad)
 }
 
 /* Similar to the `setdirpath` below, but for some `folder`, use the parent directory as the base directory instead (formerly `str_folder`)
- * When `folder` is not a path to a `.DIR` or `.GEM` file, the parent directory is used as the base directory
+ * When `folder` is nether a path to a `.DIR` or `.GEM` file nor ends with `'/'`,
+ *     and the name of the containing directory is a single character, then the parent directory is used as the base directory
  * If `folder` does not contain any `'/'` characters, `folder` is used as the base directory
  * Otherwise, the characters after the last `'/'` (can be empty) is taken as the name of a file in the containing directory
- * The name of the containing directory must be a single character when the parent directory is used as the base directory
  * E.g., `fname`: `"file"`
  * - `folder`: `"gem/brd/test/.DIR"` -> `fpath`: `"gem/brd/test/file"`
  * - `folder`: `"gem/brd/test/.GEM"` -> `fpath`: `"gem/brd/test/file"`
  * - `folder`: `"gem/brd/test/Q/F1FRGANQ"` -> `fpath`: `"gem/brd/test/file"` (cf. `setdirpath`)
  * - `folder`: `"gem/brd/test/@/@class"` -> `fpath`: `"gem/brd/test/file"` (cf. `setdirpath`)
+ * - `folder`: `"gem/brd/test/@/"` -> `fpath`: `"gem/brd/test/@/file"`
+ * - `folder`: `"gem/brd/test/@"` -> `fpath`: `"gem/brd/test/file"`
+ * - `folder`: `"gem/brd/test/"` -> `fpath`: `"gem/brd/test/file"`
+ * - `folder`: `"gem/brd/t/@"` -> `fpath`: `"gem/brd/file"` (cf. `setdirpath`)
+ * - `folder`: `"gem/brd/t/"` -> `fpath`: `"gem/brd/t/file"`
  * - `folder`: `"gem/.DIR"` -> `fpath`: `"gem/file"`
  * - `folder`: `"gem/U/F0S8JULU"` -> `fpath`: `"gem/file"` (cf. `setdirpath`)
+ * - `folder`: `"gem/"` -> `fpath`: `"gem/file"`
  * - `folder`: `"gem"` -> `fpath`: `"gem/file"`
- * - `folder`: `"g/"` -> `fpath`: `"file"` (cf. `setdirpath`)
+ * - `folder`: `"g/@"` -> `fpath`: `"file"` (cf. `setdirpath`)
+ * - `folder`: `"g/"` -> `fpath`: `"g/file"`
  * - `folder`: `"/"` -> `fpath`: `"/file"` */
 GCC_NONNULLS
 void setdirpath_root(char *fpath, const char *folder, const char *fname)
@@ -145,7 +152,7 @@ void setdirpath_root(char *fpath, const char *folder, const char *fname)
     if (tail)
     {
         ++tail;
-        if (*tail != '.' && tail - 2 >= folder)
+        if (!(*tail == '.' || !*tail) && ((tail - 3 >= folder && tail[-3] == '/') || tail - 2 >= folder))
             tail -= 2;
 
         const size_t len = tail - folder;
