@@ -453,11 +453,10 @@ void str_scpy(char *dst, const char *src GCC_NONSTRING, int n)
 GCC_NONNULLS
 GCC_RET_NONNULL char *str_ndup(const char *src GCC_NONSTRING, int len)
 {
-    const size_t slen = (len > 0) ? str_nlen(src, len - 1) + 1 : !*src;
-    char *const dst = (char *)malloc(slen);
-    memcpy(dst, src, slen + 1);
-    if (dst[slen])
-        dst[slen + 1] = '\0';
+    const size_t slen = (len > 0) ? str_nlen(src, len) : 0;
+    char *const dst = (char *)malloc(slen + 1);
+    memcpy(dst, src, slen);
+    dst[slen + 1] = '\0';
     return dst;
 }
 
