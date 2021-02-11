@@ -296,11 +296,11 @@ GCC_PURE bool str_has(const char *list, const char *tag)
     const size_t len = strlen(tag);
     for (;;)
     {
-        const int cc = list[len];
-        if ((!cc || cc == '/') && !str_ncasecmp(list, tag, len))
+        const size_t len_pat = strcspn(list, "/");
+        if (len_pat == len && !str_ncasecmp(list, tag, len))
             return true;
-        list = strchr(list, '/');
-        if (!list)
+        list += len_pat;
+        if (!*list)
             return false;
         ++list;
     }
