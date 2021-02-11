@@ -134,15 +134,18 @@ GCC_RET_NONNULL char *str_dup(const char *src, int pad)
  * - `folder`: `"gem/brd/test/Q/F1FRGANQ"` -> `fpath`: `"gem/brd/test/file"` (cf. `setdirpath`)
  * - `folder`: `"gem/brd/test/@/@class"` -> `fpath`: `"gem/brd/test/file"` (cf. `setdirpath`)
  * - `folder`: `"gem/.DIR"` -> `fpath`: `"gem/file"`
- * - `folder`: `"gem/U/F0S8JULU"` -> `fpath`: `"gem/file"` (cf. `setdirpath`) */
+ * - `folder`: `"gem/U/F0S8JULU"` -> `fpath`: `"gem/file"` (cf. `setdirpath`)
+ * - `folder`: `"g/"` -> `fpath`: `"file"` (cf. `setdirpath`)
+ * - `folder`: `"/"` -> `fpath`: `"/file"` */
 GCC_NONNULLS
 void setdirpath_root(char *fpath, const char *folder, const char *fname)
 {
-    const char *delim = strrchr(folder, '/');
-    if (delim[1] != '.')
-        delim -= 2;
+    const char *tail = strrchr(folder, '/');
+    ++tail;
+    if (*tail != '.' && tail - 2 >= folder)
+        tail -= 2;
 
-    const size_t len = delim - folder + 1;
+    const size_t len = tail - folder;
     memmove(fpath, folder, len);
     strcpy(fpath + len, fname);
 }
