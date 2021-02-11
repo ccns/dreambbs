@@ -18,36 +18,43 @@ GCC_RET_NONNULL char *str_pcpy(char *dst, const char *src)
 
 /* Strip ANSI escapes from string `str` and output the result string to buffer `dst`
  * At most `max - 1` characters is output to `dst`, and a `'\0'` string end is always added.
- * `max` must > `0` */
+ * If `max` == `1`, output an empty string to `dst`
+ * If `max` <= 0, do nothing */
 GCC_NONNULLS
 void str_ansi(char *dst, const char *str, int max)
 {
-    const char *const tail = dst + max - 1;
+    const char *tail = dst + max - 1;
     bool ansi = false;
 
-    for (int ch; (ch = *str); ++str)
+    if (dst < tail)
     {
-        if (ch == '\n')
+        for (int ch; (ch = *str); ++str)
         {
-            break;
-        }
-        else if (ch == '\x1b')
-        {
-            ansi = true;
-        }
-        else if (ansi)
-        {
-            if ((ch < '0' || ch > '9') && ch != ';' && ch != '[')
-                ansi = false;
-        }
-        else
-        {
-            *dst++ = ch;
-            if (dst >= tail)
+            if (ch == '\n')
+            {
+                /* Skip the rest of `str` */
+                tail = dst;
                 break;
+            }
+            else if (ch == '\x1b')
+            {
+                ansi = true;
+            }
+            else if (ansi)
+            {
+                if ((ch < '0' || ch > '9') && ch != ';' && ch != '[')
+                    ansi = false;
+            }
+            else
+            {
+                *dst++ = ch;
+                if (dst >= tail)
+                    break;
+            }
         }
     }
-    *dst = '\0';
+    if (dst <= tail)
+        *dst = '\0';
 }
 
 /* Concatenate strings `s1` & `s2` and output the result string to buffer `dst` */
