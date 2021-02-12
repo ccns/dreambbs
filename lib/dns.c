@@ -422,15 +422,23 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
             break;
         case AF_INET6:
             ad = (const unsigned char *) &addr->v6.sin6_addr;
-            sprintf(qbuf, INADDR6_FMT ".ip6.arpa",
-                    ad[15] >> 4, ad[15] & 0xf, ad[14] >> 4, ad[14] & 0xf,
-                    ad[13] >> 4, ad[13] & 0xf, ad[12] >> 4, ad[12] & 0xf,
-                    ad[11] >> 4, ad[11] & 0xf, ad[10] >> 4, ad[10] & 0xf,
-                    ad[9] >> 4, ad[9] & 0xf, ad[8] >> 4, ad[8] & 0xf,
-                    ad[7] >> 4, ad[7] & 0xf, ad[6] >> 4, ad[6] & 0xf,
-                    ad[5] >> 4, ad[5] & 0xf, ad[4] >> 4, ad[4] & 0xf,
-                    ad[3] >> 4, ad[3] & 0xf, ad[2] >> 4, ad[2] & 0xf,
-                    ad[1] >> 4, ad[1] & 0xf, ad[0] >> 4, ad[0] & 0xf);
+            if (IN6_IS_ADDR_V4MAPPED(&addr->v6.sin6_addr))
+            {
+                sprintf(qbuf, INADDR_FMT ".in-addr.arpa",
+                        ad[15], ad[14], ad[13], ad[12]);
+            }
+            else
+            {
+                sprintf(qbuf, INADDR6_FMT ".ip6.arpa",
+                        ad[15] >> 4, ad[15] & 0xf, ad[14] >> 4, ad[14] & 0xf,
+                        ad[13] >> 4, ad[13] & 0xf, ad[12] >> 4, ad[12] & 0xf,
+                        ad[11] >> 4, ad[11] & 0xf, ad[10] >> 4, ad[10] & 0xf,
+                        ad[9] >> 4, ad[9] & 0xf, ad[8] >> 4, ad[8] & 0xf,
+                        ad[7] >> 4, ad[7] & 0xf, ad[6] >> 4, ad[6] & 0xf,
+                        ad[5] >> 4, ad[5] & 0xf, ad[4] >> 4, ad[4] & 0xf,
+                        ad[3] >> 4, ad[3] & 0xf, ad[2] >> 4, ad[2] & 0xf,
+                        ad[1] >> 4, ad[1] & 0xf, ad[0] >> 4, ad[0] & 0xf);
+            }
             break;
         default:
             return -1;
