@@ -2868,10 +2868,9 @@ talk_page(
     }
 #endif
 
-    hints.ai_family = AF_UNSPEC;
+    hints.ai_family = AF_INET6;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV;
-    hints.ai_flags |= AI_PASSIVE;
+    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
     if (getaddrinfo(NULL, "0", &hints, &hs))
         return -1;
 

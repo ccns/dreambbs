@@ -2999,7 +2999,6 @@ servo_daemon(
 #ifdef RLIMIT
     struct rlimit limit;
 #endif //RLIMIT
-    bool listen_success = false;
 
     /*
      * More idiot speed-hacking --- the first time conversion makes the C
@@ -3070,7 +3069,7 @@ servo_daemon(
     /* bind the service port                               */
     /* --------------------------------------------------- */
 
-    hints.ai_family = AF_UNSPEC;
+    hints.ai_family = AF_INET6;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
     hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
@@ -3107,13 +3106,15 @@ servo_daemon(
             (listen(fd, SOCK_QLEN) < 0))
         {
             close(fd);
+            fd = -1;
             continue;
         }
 
-        listen_success = true;
+        /* Success */
+        break;
     }
     freeaddrinfo(hosts);
-    if (!listen_success)
+    if (fd < 0)
         exit(1);
 
     return fd;

@@ -1439,7 +1439,6 @@ static void start_daemon(int argc, char *const argv[])
 #endif
     char buf[80], data[80];
     int fd;
-    bool listen_success = false;
 
     int port;
 
@@ -1565,7 +1564,7 @@ static void start_daemon(int argc, char *const argv[])
     }
     else
     {
-        hints.ai_family = AF_UNSPEC;
+        hints.ai_family = AF_INET6;
         hints.ai_socktype = SOCK_STREAM;
         hints.ai_protocol = IPPROTO_TCP;
         hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
@@ -1612,6 +1611,7 @@ static void start_daemon(int argc, char *const argv[])
         if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) || (listen(fd, QLEN) < 0))
         {
             close(fd);
+            fd = -1;
             continue;
         }
 
@@ -1620,11 +1620,13 @@ static void start_daemon(int argc, char *const argv[])
             chown(unix_path, BBSUID, WWWGID);
             chmod(unix_path, 0660);
         }
-        listen_success = true;
+
+        /* Success */
+        break;
     }
     if (port != -2)
         freeaddrinfo(hosts);
-    if (!listen_success)
+    if (fd < 0)
         exit(1);
 
     /* --------------------------------------------------- */
