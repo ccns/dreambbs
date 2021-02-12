@@ -320,45 +320,25 @@ bm_list(                 /* 顯示 userid 是哪些板的板主 */
     const char *userid,
     char *msg)
 {
-    int len, ch;
-    BRD *bhdr, *tail;
-    char *list;
+    const BRD *bhdr = bshm->bcache;
+    const BRD *const tail = bhdr + bshm->number;
+    int num = 0;
 
-    int num;
-
-    num = 0;
-
-    len = strlen(userid);
-
-    bhdr = bshm->bcache;
-    tail = bhdr + bshm->number;
     *msg = '\0';
 
     do
     {
-        list = bhdr->BM;
-        ch = *list;
+        const char *const list = bhdr->BM;
+        const int ch = *list;
+
         if ((ch > ' ') && (ch < 128))
         {
-            do
+            if (str_has(list, userid))
             {
-                if (!str_ncasecmp(list, userid, len))
-                {
-                    ch = list[len];
-                    if ((ch == 0) || (ch == '/'))
-                    {
-                        strcat(msg, bhdr->brdname);
-                        strcat(msg, " ");
-                        num++;
-                        break;
-                    }
-                }
-                while ((ch = *list++))
-                {
-                    if (ch == '/')
-                        break;
-                }
-            } while (ch);
+                strcat(msg, bhdr->brdname);
+                strcat(msg, " ");
+                num++;
+            }
         }
     } while (++bhdr < tail);
     return num;

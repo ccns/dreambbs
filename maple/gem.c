@@ -38,36 +38,19 @@ static int
 gem_manage(
     const char* title)
 {
-    int ch, len;
-    char buf[100];
-    char *list;
-
-    strcpy(buf, title);
-
-    len = strlen(cuser.userid);
-    if ((list = strrchr(buf, '[')) == NULL)
+    const char *const l_square = strrchr(title, '[');
+    if (!l_square)
         return 0;
 
-    ch = *(++list);
-    if (ch)
-    {
-        do
-        {
-            if (!str_ncasecmp(list, cuser.userid, len))
-            {
-                ch = list[len];
-                if ((ch == 0) || (ch == '/') || (ch == ']'))
-                    return 1;
-            }
-            while ( (ch = *list++) )
-            {
-                if (ch == '/')
-                    break;
-            }
-        } while (ch);
-    }
+    const char *const list = l_square + 1;
+    const char *list_end = strrchr(title, ']');
+    if (!list_end)
+        list_end = strchr(title, '\0');
 
-    return 0;
+    char buf[100];
+    str_scpy(buf, list, list_end - list + 1);
+
+    return str_has(buf, cuser.userid);
 }
 
 static int

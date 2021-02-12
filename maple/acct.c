@@ -447,41 +447,22 @@ static void acct_su(const ACCT * u)
 static void bm_list(            /* 顯示 userid 是哪些板的板主 */
                        const char *userid)
 {
-    int len, ch;
-    BRD *bhdr, *tail;
-    char *list;
+    const BRD *bhdr = bshm->bcache;
+    const BRD *const tail = bhdr + bshm->number;
 
-    len = strlen(userid);
     outs("擔任板主：");
-
-    bhdr = bshm->bcache;
-    tail = bhdr + bshm->number;
 
     do
     {
-        list = bhdr->BM;
-        ch = *list;
+        const char *const list = bhdr->BM;
+        const int ch = *list;
         if ((ch > ' ') && (ch < 128))
         {
-            do
+            if (str_has(list, userid))
             {
-                if (!str_ncasecmp(list, userid, len))
-                {
-                    ch = list[len];
-                    if ((ch == 0) || (ch == '/'))
-                    {
-                        outs(bhdr->brdname);
-                        outc(' ');
-                        break;
-                    }
-                }
-                while ((ch = *list++))
-                {
-                    if (ch == '/')
-                        break;
-                }
+                outs(bhdr->brdname);
+                outc(' ');
             }
-            while (ch);
         }
     }
     while (++bhdr < tail);

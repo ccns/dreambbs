@@ -354,25 +354,7 @@ GCC_PURE static inline bool
 is_bm(
     const char *list)                 /* ªO¥D¡GBM list */
 {
-    int cc, len;
-    const char *userid;
-
-    len = strlen(userid = cuser.userid);
-    do
-    {
-        cc = list[len];
-        if ((!cc || cc == '/') && !str_ncasecmp(list, userid, len))
-        {
-            return true;
-        }
-        while ((cc = *list++))
-        {
-            if (cc == '/')
-                break;
-        }
-    } while (cc);
-
-    return false;
+    return str_has(list, cuser.userid);
 }
 
 #if     defined(HAVE_RESIST_WATER) || defined(HAVE_DETECT_CROSSPOST)
