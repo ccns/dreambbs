@@ -1743,9 +1743,19 @@ static void usage(char *argv0)
 {
     fprintf(stderr,
             "Usage: %s\n"
-            "Listen on pre-defined ports\n"
-            "\n",
-            argv0);
+            "Listen on pre-defined ports.\n"
+            "Equivalent to `%s",
+            argv0, argv0);
+    for (size_t i = 1; i < COUNTOF(argv_default); ++i)
+    {
+        if (strchr(argv_default[i], ' '))
+            fprintf(stderr, " \"%s\"", argv_default[i]);
+        else
+            fprintf(stderr, " %s", argv_default[i]);
+    }
+    fprintf(stderr,
+            "` with the current configuration.\n"
+            "\n");
     fprintf(stderr,
             "       %s -i\n"
             "Listen on inetd port when run by inetd\n"
