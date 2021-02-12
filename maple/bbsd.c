@@ -36,8 +36,16 @@ Logger g_logger = {
     .lv_skip = LOGLV_WARN,
 };
 
-#define MAXPORTS        COUNTOF(myports)
-static const int myports[] = {23, 3456, 3001, /* 3002, 3003 */};
+static const char *argv_default[] = {
+    NULL, /* For `argv[0]`, the name of the program */
+    "23",
+    "3456",
+    "3001",
+/*
+    "3002",
+    "3003",
+*/
+};
 
 /* Thor.990113: exports for anonymous log */
 /* static */ char rusername[40];
@@ -1379,10 +1387,53 @@ term_init(void)
 /* stand-alone daemon                                    */
 /* ----------------------------------------------------- */
 
-static void
-start_daemon(
-    int port /* Thor.981206:  0  *⊿Τ把计*, -1  -i (inetd) */
-             /* IID.20190903: `-2` represents `-u` <unix_socket>`. */ )
+/* Returns positive number for port number
+ * Returns `-1` for `-i` command-line option (inetd/xinetd)
+ * Returns `-2` for `-u` command-line option (unix socket)
+ * Returns `0` when all ports specified by `argv` are processed */
+GCC_NONNULLS
+static int get_port(int argc, char *const argv[], const char **p_unix_path)
+{
+    int port = 0;
+
+    /* Reset for connection type detection */
+    *p_unix_path = NULL;
+
+    while (optind < argc)
+    {
+        switch (getopt(argc, argv, "+" "p:u:i"))
+        {
+        case -1:
+            if (!(optarg = argv[optind++]))
+                break;
+            // Falls through
+            // to handle omitted `-p`
+        case 'p':  /* IID.20190902: `bbsd [-p] 3456`. */
+            if ((port = atoi(optarg)) > 0)
+                return port;
+
+            if (0)  // Falls over the case
+            {
+        case 'u':  /* IID.20190903: `bbsd -u <unix_socket>` */
+                *p_unix_path = optarg;
+                return -2;
+            }
+            else if (0)
+            {
+        case 'i': /* `bbsd -i` */
+                return -1;
+            }
+
+        default:
+            ; /* Ignore invalid arguments */
+        }
+    }
+
+    /* All ports specified by `argv` are processed */
+    return 0;
+}
+
+static void start_daemon(int argc, char *const argv[])
 {
     struct addrinfo hints = {0};
     struct addrinfo *hosts;
@@ -1393,6 +1444,8 @@ start_daemon(
     char buf[80], data[80];
     int fd;
     bool listen_success = false;
+
+    int port;
 
     {
         /*
@@ -1448,6 +1501,11 @@ start_daemon(
     close(1);
     close(2);
 
+    port = get_port(argc, argv, &unix_path);
+
+    if (!port)
+        exit(0); /* Nothing to listen. In case no valid default ports are given */
+
     if (port == -1) /* Thor.981206: inetd -i */
     {
         int n;
@@ -1485,6 +1543,21 @@ start_daemon(
     /* fork daemon process                                 */
     /* --------------------------------------------------- */
 
+    {
+        int port_next;
+        const char *unix_path_next;
+        while ((port_next = get_port(argc, argv, &unix_path_next)))
+        {
+            /* The next port presents; make the `fork()` child handle the current `port` and `unix_path` */
+            if (fork() == 0)
+                break;
+
+            sleep(1);
+            port = port_next;
+            unix_path = unix_path_next;
+        }
+    }
+
     if (port == -2)
     {
         hints.ai_family = sun.sun_family = AF_UNIX;
@@ -1500,20 +1573,6 @@ start_daemon(
         hints.ai_socktype = SOCK_STREAM;
         hints.ai_protocol = IPPROTO_TCP;
         hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
-    }
-
-    if (port == 0) /* Thor.981206: port 0 ⊿Τ把计 */
-    {
-        int n = MAXPORTS - 1;
-        while (n)
-        {
-            if (fork() == 0)
-                break;
-
-            sleep(1);
-            n--;
-        }
-        port = myports[n];
     }
 
     if (port == -2)
@@ -1697,7 +1756,7 @@ static void usage(char *argv0)
             "\n",
             argv0);
     fprintf(stderr,
-            "       %s <listen_spec>\n"
+            "       %s <listen_spec>...\n"
             "listen_specs:\n"
             "\t[-p] <port>        listen on port; -p can be omitted (port > 0)\n"
             "\t-u <unix_socket>   listen on unix_socket, with connection data passing enabled\n"
@@ -1705,55 +1764,99 @@ static void usage(char *argv0)
             argv0);
 }
 
+/* Verify whether the command-line arguments conform to the usage
+ * If the command-line arguments conform, `0` is returned and `getopt` is reset for further use
+ * Otherwise, non-`0` is returned and `getopt` is not reset */
+static int verify_arg(int argc, char *const argv[])
+{
+    /* No arguments */
+    if (argc == 1)
+        return 0;
+
+    /* Whether any `-i` options are processed */
+    bool opt_i = false;
+
+    /* `-i` or `<listen_spec>...` (`-i` is valid only when it appears solely) */
+    while (optind < argc)
+    {
+        switch (getopt(argc, argv, "+" "p:u:i"))
+        {
+        case -1:
+            if (!(optarg = argv[optind++]))
+                break;
+            // Falls through
+            // to handle omitted `-p`
+        case 'p':  /* IID.20190902: `bbsd [-p] 3456`. */
+            if (atoi(optarg) > 0)
+            {
+                if (!opt_i)
+                    break;
+            }
+
+            if (0)  // Falls over the case
+            {
+        case 'u':  /* IID.20190903: `bbsd -u <unix_socket>` */
+                if (!opt_i)
+                    break;
+            }
+            else if (0)
+            {
+        case 'i':
+                opt_i = true;
+                if (optind == 1)
+                    break;
+            }
+            // Falls through
+            // to handle invalid argument values
+        default:
+            if (opt_i)
+                fprintf(stderr, "%s: -i can only be used solely\n", argv[0]);
+            usage(argv[0]);
+            return 2;
+        }
+    }
+
+    /* Reset `getopt` for further use */
+#ifdef __GLIBC__
+    optind = 0;
+#else
+    optind = 1;
+#endif
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
+    optreset = 1;
+#endif
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
     int csock;                  /* socket for Master and Child */
     int *totaluser;
-    int value = 0;
     bool is_proxy = false;      /* Whether connection data passing is enabled */
 
     /* --------------------------------------------------- */
     /* setup standalone daemon                             */
     /* --------------------------------------------------- */
 
-    /* Thor.990325: usage, bbsd, or bbsd -i, or bbsd 1234 */
-    /* Thor.981206:  0  *⊿Τ把计*, -1  -i */
+    /* Verify the command-line arguments first */
+    const int verify_res = verify_arg(argc, argv);
+    if (verify_res)
+        return verify_res;
 
-    switch (getopt(argc, argv, "p:u:i"))
+    if (argc > 1)
     {
-    case -1:
-        if (!(optarg = argv[optind++]))
-            break;
-        // Falls through
-        // to handle omitted `-p`
-    case 'p':  /* IID.20190902: `bbsd [-p] 3456`. */
-        if ((value = atoi(optarg)) > 0)
-        {
-            unix_path = NULL;
-            break;
-        }
-
-        if (0)  // Falls over the case
-        {
-    case 'u':  /* IID.20190903: `bbsd -u <unix_socket>` */
-            unix_path = optarg;
-            is_proxy = true;
-            value = -2;
-            break;
-        }
-        else if (0)
-        {
-    case 'i':
-            value = -1;
-            break;
-        }
-
-    default:
-        usage(argv[0]);
-        return 2;
+        /* Some command-line arguments are passed */
+        start_daemon(argc, argv);
+    }
+    else
+    {
+        /* No command-line arguments; use predefined arguments */
+        argv_default[0] = argv[0]; /* Load `argv[0]` for `getopt` */
+        start_daemon(COUNTOF(argv_default), (char *const *)argv_default);
     }
 
-    start_daemon(value);
+    if (unix_path)
+        is_proxy = true;
 
     main_signals();
 
