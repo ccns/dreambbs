@@ -1610,7 +1610,10 @@ static void start_daemon(int argc, char *const argv[])
         /* mport = port; */ /* Thor.990325: 不需要了:P */
 
         if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) || (listen(fd, QLEN) < 0))
+        {
+            close(fd);
             continue;
+        }
 
         if (port == -2)
         {

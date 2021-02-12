@@ -3105,7 +3105,10 @@ servo_daemon(
 
         if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) ||
             (listen(fd, SOCK_QLEN) < 0))
+        {
+            close(fd);
             continue;
+        }
 
         listen_success = true;
     }
