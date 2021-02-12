@@ -1874,7 +1874,7 @@ int main(int argc, char *argv[])
         getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), fromhost, sizeof(fromhost), NULL, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV);
 #else
         /* Thor.990325: 修改dns_ident定義, 來自哪if連那 */
-        dns_ident(0 /* listen fd */, &tn_addr, fromhost, sizeof(fromhost), rusername, sizeof(rusername));
+        dns_ident(0 /* mport */, &tn_addr, fromhost, sizeof(fromhost), rusername, sizeof(rusername));
 #endif
 
         telnet_init();
