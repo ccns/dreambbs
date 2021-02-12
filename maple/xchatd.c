@@ -1962,13 +1962,17 @@ login_user(
 
     /* Xshadow: 取得 client 的來源 */
 
+    /* IID.2021-02-12: After `command_execute()` is done, `cu->ibuf` will be reset by setting `cu->isize` to `0`,
+     *     so it can be used as a temporary buffer here without problems. */
 #ifdef NOIDENT
-    getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->rhost, sizeof(cu->rhost), NULL, NI_MAXSERV, NI_NUMERICHOST);
+    memcpy(cu->ibuf, cu->rhost, sizeof(ip_addr));
+    getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->ibuf, sizeof(ip_addr), NULL, NI_MAXSERV, NI_NUMERICHOST);
 #else
     dns_name((ip_addr *)cu->rhost, cu->ibuf, sizeof(cu->ibuf));
     str_scpy(cu->rhost, cu->ibuf, sizeof(cu->rhost));
   #if 0
-    getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->rhost, sizeof(cu->rhost), NULL, NI_MAXSERV, 0);
+    memcpy(cu->ibuf, cu->rhost, sizeof(ip_addr));
+    getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->ibuf, sizeof(ip_addr), NULL, NI_MAXSERV, 0);
   #endif
 #endif
 
