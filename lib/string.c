@@ -426,27 +426,29 @@ void str_rstrip_tail(char *str)
 /* Thor.980921: 已包含 0 */
 /* Thor.980921: str_ncpy與一般 strncpy有所不同, 特別注意 */
 /*
- * str_scpy() - similar to strncpy(3) but terminates string always with '\0' if n != 0,
+ * str_scpy() - similar to strncpy(3) but terminates string always with '\0' if siz != 0,
  * and doesn't do padding (formerly `str_ncpy`)
- * It behaviors like `strlcpy`, except that it does not read more than `n` bytes from `src`.
- * It behaviors the same as `strscpy` from the Linux Kernel API, except that it does not return any values.
+ * It behaves like `strlcpy`, except that it does not read more than `siz` bytes from `src`.
+ * It behaves the same as `strscpy` from the Linux Kernel API, except that it return `-1` when truncation occurs.
  */
 GCC_NONNULLS
-void str_scpy(char *dst, const char *src GCC_NONSTRING, int n)
+ssize_t str_scpy(char *dst, const char *src GCC_NONSTRING, size_t siz)
 {
     /* Copy as many bytes as will fit */
-    const size_t slen = (n > 0) ? str_nlen(src, n) : 0;
-    if (slen < n)
+    const size_t slen = (siz > 0) ? str_nlen(src, siz) : 0;
+    if (slen < siz)
     {
         memmove(dst, src, slen + 1); /* Copy the `'\0'` end */
+        return slen;
     }
-    else if (n > 0)
+    else if (siz > 0)
     {
-        memmove(dst, src, n - 1);
+        memmove(dst, src, siz - 1);
 
         /* Not enough room in dst, add NUL */
-        dst[n - 1] = '\0';    /* NUL-terminate dst */
+        dst[siz - 1] = '\0';    /* NUL-terminate dst */
     }
+    return -1;
 }
 
 /* Return a string allocated using `malloc` with the content of the first `len` characters from string `src` */

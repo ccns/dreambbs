@@ -132,7 +132,7 @@ GCC_NONNULLS void str_lower(char *dst, const char *src);
 GCC_NONNULLS void str_lower_dbcs(char *dst, const char *src);
 GCC_NONNULLS GCC_PURE int str_ncasecmp(const char *s1, const char *s2, int n);
 GCC_NONNULLS void str_rstrip_tail(char *str);
-GCC_NONNULLS void str_scpy(char *dst, const char *src GCC_NONSTRING, int n);
+GCC_NONNULLS ssize_t str_scpy(char *dst, const char *src GCC_NONSTRING, size_t siz);
 GCC_NONNULLS GCC_RET_NONNULL char *str_ndup(const char *src GCC_NONSTRING, int len);
 GCC_NONNULLS GCC_PURE size_t str_nlen(const char *str GCC_NONSTRING, size_t maxlen);
 GCC_NONNULLS GCC_PURE bool str_pat(const char *str, const char *pat);
