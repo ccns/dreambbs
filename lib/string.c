@@ -451,6 +451,31 @@ ssize_t str_scpy(char *dst, const char *src GCC_NONSTRING, size_t siz)
     return -1;
 }
 
+/* Copy at most `n` bytes from string `src` into buffer `dst` with size of `siz` bytes
+ * `dst` will always be `'\0'`-terminated unless `siz` is `0`
+ * Return `-1` when truncation occurs
+ * Return the number of non-`'\0'` characters copied otherwise
+ * It does not read more than `siz` bytes nor `n` bytes from `src`. */
+GCC_NONNULLS
+ssize_t str_sncpy(char *dst, const char *src GCC_NONSTRING, size_t siz, size_t n)
+{
+    /* Copy as many bytes as will fit */
+    const size_t slen = ((siz = BMIN(siz, n + 1)) > 0) ? str_nlen(src, siz) : 0;
+    if (slen < siz)
+    {
+        memmove(dst, src, slen + 1); /* Copy the `'\0'` end */
+        return slen;
+    }
+    else if (siz > 0)
+    {
+        memmove(dst, src, siz - 1);
+
+        /* Not enough room in dst, add NUL */
+        dst[siz - 1] = '\0';    /* NUL-terminate dst */
+    }
+    return -1;
+}
+
 /* Return a string allocated using `malloc` with the content of the first `len` characters from string `src` */
 GCC_NONNULLS
 GCC_RET_NONNULL char *str_ndup(const char *src GCC_NONSTRING, int len)
