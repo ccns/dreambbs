@@ -12,7 +12,7 @@ Get_Socket(  /* site for hostname, sock for port & socket */
     /* Getting remote-site data */
 
     hints.ai_family = AF_UNSPEC;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV;
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV;
     sprintf(port_str, "%d", *sock);
     if (getaddrinfo(site, port_str, &hints, &hosts))
         return -1;

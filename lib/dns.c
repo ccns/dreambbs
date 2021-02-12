@@ -69,7 +69,7 @@ ip_addr dns_addr(const char *name)
 
     /* disallow names consisting only of digits/dots, unless they end in a dot. */
     hints.ai_family = AF_UNSPEC;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICHOST | AI_NUMERICSERV;
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICHOST | AI_NUMERICSERV;
     {
         int status = getaddrinfo(name, NULL, &hints, &hosts);
         if (status)
@@ -507,7 +507,7 @@ int dns_openip(const ip_addr *addr, int port)
 
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICHOST | AI_NUMERICSERV;
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICHOST | AI_NUMERICSERV;
 
     getnameinfo((const struct sockaddr *)addr, sizeof(*addr), addr_str, sizeof(port_str), NULL, NI_MAXSERV, NI_NUMERICHOST);
     sprintf(port_str, "%d", port);

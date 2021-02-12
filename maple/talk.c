@@ -4363,7 +4363,7 @@ over_for:
 
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV;
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV;
     {
         char port_str[12];
         sprintf(port_str, "%d", port);
