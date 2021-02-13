@@ -232,7 +232,7 @@ outs_line(                      /* 印出一般內容 */
         ch1 = str[2];
         outs((ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2) ? "\x1b[33m" : "\x1b[36m");     /* 引用一層/二層不同顏色 */
     }
-    else if (ch1 == '\241' && ch2 == '\260')    /* ※ 引言者 */
+    else if (!strncmp(str, "※", sizeof("※" - 1))) /* ※ 引言者 */
     {
         ansi = 1;
         outs("\x1b[1;36m");
