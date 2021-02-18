@@ -157,8 +157,8 @@ char *gensignature(char *pw)
 
     if (hash[PASSLEN])  /* `genpasswd()` is not falled back */
     {
-        memmove(hash, hash+3, PASSLEN-3);   /* Remove `SHA256_SALT` prefix */
-        memmove(hash + PASSLEN-1-3, hash + PASSLEN, PASSHASHLEN-1);   /* Remove `$` prefix for `passhash` */
+        memmove(hash, hash + 3, PASSLEN-1-3);  /* Remove `SHA256_SALT` prefix */
+        memmove(hash + PASSLEN-1-3, hash + PASSLEN + 1, PASSHASHLEN-1-1);  /* Remove `$` prefix for `passhash` */
         hash[PASSLEN-1-3 + PASSHASHLEN-1-1] = '\0';
     }
     return hash;
@@ -204,7 +204,7 @@ int chksignature(const char *passwd, char *test)
     saltc[PASSLEN-1] = '\0';
 
     hashc[0] = '$';   /* Restore `$` prefix for `passhash` */
-    str_scpy(hashc+1, passwd + PASSLEN-3, PASSHASHLEN-1);
+    str_scpy(hashc+1, passwd + PASSLEN-1-3, PASSHASHLEN-1);
     hashc[PASSHASHLEN-1] = '\0';
 
     return chkpasswd(saltc, hashc, test);
