@@ -219,26 +219,22 @@ static void
 outs_line(                      /* 印出一般內容 */
     const char *str)
 {
-    int ch1, ch2, ansi;
+    bool ansi = false;
 
     /* ※處理引用者 & 引言 */
 
-    ch1 = str[0];
-    ch2 = (str[0]) ? str[1] : '\0';
-
-    if (ch2 == ' ' && (ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2))       /* 引言 */
+    const int ch1 = str[0];
+    if ((ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2) && str[1] == ' ')    /* 引言 */
     {
-        ansi = 1;
-        ch1 = str[2];
-        outs((ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2) ? "\x1b[33m" : "\x1b[36m");     /* 引用一層/二層不同顏色 */
+        const int ch3 = str[2];
+        outs((ch3 == QUOTE_CHAR1 || ch3 == QUOTE_CHAR2) ? "\x1b[33m" : "\x1b[36m");     /* 引用一層/二層不同顏色 */
+        ansi = true;
     }
     else if (!strncmp(str, "※", sizeof("※" - 1))) /* ※ 引言者 */
     {
-        ansi = 1;
         outs("\x1b[1;36m");
+        ansi = true;
     }
-    else
-        ansi = 0;
 
     /* 印出內容 */
 
@@ -248,22 +244,20 @@ outs_line(                      /* 印出一般內容 */
     }
     else
     {
-        int len;
         char buf[ANSILINELEN];
-        char *ptr2;
-        const char *ptr1;
+        char *ptr2 = buf;
+        const int len = strlen(hunt);
 
-        len = strlen(hunt);
-        ptr2 = buf;
-        while (1)
+        for (;;)
         {
-            if (!(ptr1 = str_casestr_dbcs(str, hunt)))
+            const char *const ptr1 = str_casestr_dbcs(str, hunt);
+            if (!ptr1)
             {
-                str_scpy(ptr2, str, buf + ANSILINELEN - ptr2 - 1);
+                str_scpy(ptr2, str, buf + sizeof(buf) - ptr2 - 1);
                 break;
             }
 
-            if (buf + ANSILINELEN - 1 <= ptr2 + (ptr1 - str) + (len + 7))       /* buf 空間不夠 */
+            if (ptr2 + (ptr1 - str) + (len + 7) >= buf + sizeof(buf) - 1)       /* buf 空間不夠 */
                 break;
 
             str_scpy(ptr2, str, ptr1 - str + 1);
