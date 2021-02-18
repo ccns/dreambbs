@@ -253,7 +253,7 @@ outs_line(                      /* 印出一般內容 */
             const char *const ptr1 = str_casestr_dbcs(str, hunt);
             if (!ptr1)
             {
-                str_scpy(ptr2, str, buf + sizeof(buf) - ptr2 - 1);
+                str_scpy(ptr2, str, buf + sizeof(buf) - ptr2);
                 break;
             }
 
