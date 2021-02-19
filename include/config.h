@@ -177,8 +177,6 @@
 
 #define HAVE_RECOMMEND                 /* 推薦文章 */
 
-#include <sys/mman.h>
-
 #define HAVE_INPUT_TOOLS        /* 符號輸入工具 */
 
 #define HAVE_BANMSG             /* 拒收訊息功能列表 */
