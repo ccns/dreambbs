@@ -354,7 +354,7 @@ static void
 Pnote(int newflag)
 {
     int offset, num, num1, i;
-    char ans[4], prompt[STRLEN];
+    char ans[4], prompt[STRSIZE];
     notedata item_array[MAX_PNOTE + 1];
     char fpath[MAXPATHLEN];
     FILE *fp;
@@ -541,7 +541,7 @@ static int
 p_read(void)
 {
     char ans[4];
-    char prompt[STRLEN];
+    char prompt[STRSIZE];
 
     sprintf(prompt, "(N)新的留言/(S)被保存的留言 [%c]", check_personal_note(1, NULL) ? 'N' : 'S');
     getdata(B_LINES_REF, 0, prompt, ans, 2, DOECHO, 0);

@@ -222,15 +222,15 @@ bsmtp(
     char *str, buf[512], from[80], subject[80], msgid[80], keyfile[80], valid[10];
 #ifdef HAVE_SIGNED_MAIL
     const char *signature = NULL;
-    char prikey[PLAINPASSLEN];
+    char prikey[PLAINPASSSIZE];
     union {
-        char str[PLAINPASSLEN];
+        char str[PLAINPASSSIZE];
         struct {
             unsigned int hash, hash2;
         } val;
     } sign = {{0}};
 
-    *prikey = prikey[PLAINPASSLEN-1] = sign.str[PLAINPASSLEN-1] = '\0'; /* Thor.990413:註解: 字串結束 */
+    *prikey = prikey[PLAINPASSSIZE-1] = sign.str[PLAINPASSSIZE-1] = '\0'; /* Thor.990413:註解: 字串結束 */
 #endif
 
     cuser.numemail++;           /* 記錄使用者共寄出幾封 Internet E-mail */
@@ -396,7 +396,7 @@ bsmtp(
             fclose(fp);
         }
 #ifdef HAVE_SIGNED_MAIL
-        if (!(method & MQ_JUSTIFY) && !rec_get(PRIVATE_KEY, prikey, PLAINPASSLEN-1, 0))
+        if (!(method & MQ_JUSTIFY) && !rec_get(PRIVATE_KEY, prikey, PLAINPASSSIZE-1, 0))
         /* Thor.990413: 除了認證函外, 其他信件都要加sign */
         {
             /* Thor.990413: buf用不到了, 借來用用 :P */
@@ -656,7 +656,8 @@ smtp_file_log:
 #ifdef HAVE_SIGNED_MAIL
 /* Thor.990413: 提供驗證功能 */
 
-#define SIGNATURELEN  (PASSLEN-1-3 + PASSHASHLEN-1-1 + 1)
+#define SIGNATURESIZE (PASSSIZE-1-3 + PASSHASHSIZE-1-1 + 1)
+#define SIGNATURELEN  SIGNATURESIZE /* Alias for backward compatibility */
 int
 m_verify(void)
 {
@@ -665,17 +666,17 @@ m_verify(void)
     char sign[79], *q;
     char buf[160];
 
-    char prikey[PLAINPASSLEN];
+    char prikey[PLAINPASSSIZE];
     union {
-        char str[PLAINPASSLEN];
+        char str[PLAINPASSSIZE];
         struct {
             unsigned int hash, hash2;
         } val;
     } s = {{0}};
 
-    prikey[PLAINPASSLEN-1] = s.str[PLAINPASSLEN-1] = '\0'; /* Thor.990413:註解: 字串結束 */
+    prikey[PLAINPASSSIZE-1] = s.str[PLAINPASSSIZE-1] = '\0'; /* Thor.990413:註解: 字串結束 */
 
-    if (rec_get(PRIVATE_KEY, prikey, PLAINPASSLEN-1, 0))
+    if (rec_get(PRIVATE_KEY, prikey, PLAINPASSSIZE-1, 0))
     {
         zmsg("本系統並無電子簽章，請洽SYSOP");
         return XEASY;
@@ -701,7 +702,7 @@ m_verify(void)
         q += 11;
     while (*q == ' ') q++;
 
-    if (strlen(q) < 7 + PASSLEN-1 || (isalnum(q[7+PASSLEN-1]) && strlen(q) < 7 + SIGNATURELEN-1))
+    if (strlen(q) < 7 + PASSSIZE-1 || (isalnum(q[7+PASSSIZE-1]) && strlen(q) < 7 + SIGNATURESIZE-1))
     {
         vmsg("電子簽章有誤");
         return 0;
@@ -711,10 +712,10 @@ m_verify(void)
     chrono = chrono32(s.str); /* prefix 1 char */
 
     q += 7; /* real sign */
-    if (isalnum(q[PASSLEN-1]))
-        q[SIGNATURELEN-1] = 0; /* 補尾0 */
+    if (isalnum(q[PASSSIZE-1]))
+        q[SIGNATURESIZE-1] = 0; /* 補尾0 */
     else
-        q[PASSLEN-1] = 0; /* 補尾0 */
+        q[PASSSIZE-1] = 0; /* 補尾0 */
 
     s.val.hash = str_hash(p, chrono);
     s.val.hash2 = str_hash2(p, s.val.hash);
@@ -723,7 +724,7 @@ m_verify(void)
 
     sprintf(buf, "(%s)", Btime(&chrono));
 
-    if (chksignature(q, s.str) || strcmp(q + ((isalnum(q[PASSLEN-1])) ? SIGNATURELEN : PASSLEN), buf))
+    if (chksignature(q, s.str) || strcmp(q + ((isalnum(q[PASSSIZE-1])) ? SIGNATURESIZE : PASSSIZE), buf))
     {
         /* Thor.990413: log usage */
         sprintf(buf, "%s@%s - XInfo:%s", rusername, fromhost, p);

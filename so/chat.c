@@ -93,8 +93,8 @@ printchatline(
             move(i, 0);
             memcpy(last_slp, cur_slp, sizeof(screenline));
             last_slp->smod = 0;
-            last_slp->emod = ANSILINELEN;
-            last_slp->oldlen = ANSILINELEN;
+            last_slp->emod = ANSILINESIZE;
+            last_slp->oldlen = ANSILINESIZE;
             last_slp->mode = SL_MODIFIED;
             last_slp = cur_slp;
         }

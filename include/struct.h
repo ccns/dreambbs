@@ -21,31 +21,40 @@
 
 /* String length and buffer size */
 
-#define STRLEN          80             /* Length of most string data */
+#define STRSIZE         80             /* Buffer size of most string data */
 #define BTLEN           42             /* Length of board title */
 #define BMLEN           36             /* Length of board managers */
 #define TTLEN           72             /* Length of title */
 #define FNLEN           28             /* Length of filename  */
 #define IDLEN           12             /* Length of board / user id */
-#define PASSLEN         14             /* Length of (salt-part) encrypted passwd field */
-#define PLAINPASSLEN    37             /* Length of plaintext passwd field */
-#define OLDPLAINPASSLEN 9              /* Length of old plaintext passwd field */
-#define PASSHASHLEN     45             /* Length of hash-part encrypted passwd field */
+#define PASSSIZE        14             /* Buffer size of (salt-part) encrypted passwd field */
+#define PLAINPASSSIZE   37             /* Buffer size of plaintext passwd field */
+#define OLDPLAINPASSSIZE 9             /* Buffer size of old plaintext passwd field */
+#define PASSHASHSIZE    45             /* Buffer size of hash-part encrypted passwd field */
 #define BCLEN           4              /* Length of board class */
-#define ANSILINELEN     4000           /* Maximum Screen width in chars，不能超過 1023 */
+#define ANSILINESIZE    4000           /* Buffer size for holding screen line data，不能超過 1023 */
                                        /* temperary expand ANSILINELEN to 4000 before
                                           inplementing dynamic allocating size */
+
+/* Aliases for backward compatibility */
+
+#define STRLEN          STRSIZE
+#define PASSLEN         PASSSIZE
+#define PLAINPASSLEN    PLAINPASSSIZE
+#define OLDPLAINPASSLEN OLDPLAINPASSSIZE
+#define PASSHASHLEN     PASSHASHSIZE
+#define ANSILINELEN     ANSILINESIZE
 
 /* screen control */
 
 #define T_LINES         50             /* maximum total lines */
-#define T_COLS          120            /* maximum total columns，要比 ANSILINELEN 小 */
+#define T_COLS          120            /* maximum total columns，要比 ANSILINESIZE 小 */
 #define TAB_STOP        4U             /* 按 TAB 換成幾格空白 (建議是 2 的次方，可免去除法) */
 
 #define SCR_WIDTH       80
-/* #define VE_WIDTH        (ANSILINELEN - 1) */
+/* #define VE_WIDTH        (ANSILINESIZE - 1) */
 /* Thor.990330: 為防止引言後, ">"要變色, 一行會超過ANSILINELEN, 故多留空間 */
-#define VE_WIDTH        (ANSILINELEN - 11)
+#define VE_WIDTH        (ANSILINESIZE - 11)
 
 /* IID.20200113: For `get[y|x]_ref()` & `move_ref()` */
 /* Use 2's power to prevent division */
@@ -119,7 +128,7 @@ typedef struct
 {
     int userno;                 /* unique positive code */
     char userid[IDLEN + 1];     /* userid */
-    char passwd[PASSLEN];       /* user password crypt by DES / salt for SHA-256 */
+    char passwd[PASSSIZE];      /* user password crypt by DES / salt for SHA-256 */
     unsigned char signature;    /* user signature number */
     char realname[20];          /* user realname */
     char username[24];          /* user nickname */
@@ -640,13 +649,15 @@ typedef struct BoardReadingHistory
 #define PROFESS_IMGFILE "run/profess.img"
 
 #define CH_END          -1
-#define CH_TTLEN        64
+#define CH_TTSIZE       64
 
+/* Aliases for backward compatibility */
+#define CH_TTLEN        CH_TTSIZE
 
 typedef struct
 {
     int count;
-    char title[CH_TTLEN];
+    char title[CH_TTSIZE];
     short chno[FLEX_SIZE];
 } ClassHeader;  /* DISKDATA(raw); runtime */
 #define ClassHeader_FLEX_MEMBER    chno
@@ -777,7 +788,7 @@ typedef struct screenline
     unsigned short emod;                 /* end of modified data */
     unsigned char sso;                  /* start of standout data */
     unsigned char eso;                  /* end of standout data */
-    unsigned char data[ANSILINELEN];
+    unsigned char data[ANSILINESIZE];
 } screenline;
 
 

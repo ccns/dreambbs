@@ -241,7 +241,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
     )
 {
     const char *desc;
-    char buf[ANSILINELEN];
+    char buf[ANSILINESIZE];
 
     MENU list[41];
 
@@ -962,7 +962,7 @@ void acct_setup(ACCT * u, int adm)
 
     int i, num, tmp, mode;
     FILE *flog;
-    char *str, buf[80], pass[PLAINPASSLEN];
+    char *str, buf[80], pass[PLAINPASSSIZE];
     char id[13];
     tmp = 0;
 
@@ -1142,8 +1142,8 @@ void acct_setup(ACCT * u, int adm)
     else
     {
         /* pcbug.990813: 新PASSLEN過長, 改成直接寫死 */
-        /*    vget(i, 0, "請確認密碼：", buf, PASSLEN, NOECHO); */
-        vget(i, 0, "請確認密碼：", buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+        /*    vget(i, 0, "請確認密碼：", buf, PASSSIZE, NOECHO); */
+        vget(i, 0, "請確認密碼：", buf, PLAINPASSSIZE, NOECHO | VGET_STEALTH_NOECHO);
         if (chkpasswd(u->passwd, u->passhash, buf))
         {
             vmsg("密碼錯誤");
@@ -1158,26 +1158,26 @@ void acct_setup(ACCT * u, int adm)
         if (vget(++i, 0, "是否使用新式密碼加密(y/N)？[N]", buf, 3, LCECHO) == 'y')
         {
             mode = GENPASSWD_SHA256;
-            num = PLAINPASSLEN;
+            num = PLAINPASSSIZE;
         }
         else
         {
             mode = GENPASSWD_DES;
-            num = OLDPLAINPASSLEN;
+            num = OLDPLAINPASSSIZE;
         }
 
         if (!vget
-            (++i, 0, "設定新密碼(不改請按 Enter)：", buf, /*PASSLEN*/ num,
+            (++i, 0, "設定新密碼(不改請按 Enter)：", buf, /*PASSSIZE*/ num,
              NOECHO | VGET_STEALTH_NOECHO))
             break;
 
         strcpy(pass, buf);
-        vget(i + 1, 0, "檢查新密碼：", buf, /*PASSLEN*/ num, NOECHO | VGET_STEALTH_NOECHO);
+        vget(i + 1, 0, "檢查新密碼：", buf, /*PASSSIZE*/ num, NOECHO | VGET_STEALTH_NOECHO);
         if (!strcmp(buf, pass))
         {
             buf[num-1] = '\0';
-            str_scpy(x.passwd, str = genpasswd(buf, mode), PASSLEN);
-            str_scpy(x.passhash, str + PASSLEN, sizeof(x.passhash));
+            str_scpy(x.passwd, str = genpasswd(buf, mode), PASSSIZE);
+            str_scpy(x.passhash, str + PASSSIZE, sizeof(x.passhash));
             i++;
             logitfile(FN_PASS_LOG, cuser.userid, cuser.lasthost);
             break;
@@ -1603,7 +1603,7 @@ int u_addr(void)
                     move(15, 0);
                     clrtobot();
                     vget(15, 0, "請輸入以上所列出之工作站帳號的密碼: ", buf,
-                         PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+                         PLAINPASSSIZE, NOECHO | VGET_STEALTH_NOECHO);
                     move(16, 0);
                     prints("\x1b[5;37m身份確認中...請稍候\x1b[m\n\n");
                     refresh();
@@ -1901,7 +1901,7 @@ int ue_setup(void)
 
 int u_lock(void)
 {
-    char buf[PLAINPASSLEN];
+    char buf[PLAINPASSSIZE];
     char swapmateid[IDLEN + 1] = "";
     const char IdleState[][IDLEN] = {
         "自強觀星",
@@ -1955,7 +1955,7 @@ int u_lock(void)
         check = 0;
         do
         {
-            vget(7, 0, "▲ 請輸入密碼，以解除螢幕鎖定：", buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+            vget(7, 0, "▲ 請輸入密碼，以解除螢幕鎖定：", buf, PLAINPASSSIZE, NOECHO | VGET_STEALTH_NOECHO);
             check = chkpasswd(cuser.passwd, cuser.passhash, buf);
             if (check)
             {

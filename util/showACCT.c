@@ -16,7 +16,7 @@
 
 #ifdef SHOW_PASSWORD
 
-#define GUESS_LEN       3       /* 代絏()盞絏舱 (程琌 PLAINPASSLEN) */
+#define GUESS_LEN       3       /* 代絏()盞絏舱 (程琌 PLAINPASSSIZE) */
 
 static inline void
 showpasswd(
@@ -24,7 +24,7 @@ showpasswd(
     const char *passhash)
 {
     int i;
-    char guess[PLAINPASSLEN];
+    char guess[PLAINPASSSIZE];
 
     /* 礚阶琌ぐ或 encrypt よ猭常祑眖 ' ' 秨﹍ try  0x7f */
 

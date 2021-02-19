@@ -391,12 +391,12 @@ acct_apply(void)
     if (vget(18, 0, "是否使用新式密碼加密(y/N)？[N]", buf, 3, LCECHO) == 'y')
     {
         try_ = GENPASSWD_SHA256;
-        fd = PLAINPASSLEN;
+        fd = PLAINPASSSIZE;
     }
     else
     {
         try_ = GENPASSWD_DES;
-        fd = OLDPLAINPASSLEN;
+        fd = OLDPLAINPASSSIZE;
     }
 
     for (;;)
@@ -408,15 +408,15 @@ acct_apply(void)
             continue;
         }
 
-        vget(20, 0, "請檢查密碼：", buf + PLAINPASSLEN + 1, fd, NOECHO | VGET_STEALTH_NOECHO);
-        if (!strcmp(buf, buf + PLAINPASSLEN + 1))
+        vget(20, 0, "請檢查密碼：", buf + PLAINPASSSIZE + 1, fd, NOECHO | VGET_STEALTH_NOECHO);
+        if (!strcmp(buf, buf + PLAINPASSSIZE + 1))
             break;
 
         vmsg("密碼輸入錯誤，請重新輸入密碼");
     }
 
-    str_scpy(cuser.passwd, pw = genpasswd(buf, try_), PASSLEN);
-    str_scpy(cuser.passhash, pw + PASSLEN, sizeof(cuser.passhash));
+    str_scpy(cuser.passwd, pw = genpasswd(buf, try_), PASSSIZE);
+    str_scpy(cuser.passhash, pw + PASSSIZE, sizeof(cuser.passhash));
 
     do
     {
@@ -590,7 +590,7 @@ tn_login(void)
     time_t start, check_deny;
     char fpath[80], uid[IDLEN + 1];
 
-    char passbuf[PLAINPASSLEN];
+    char passbuf[PLAINPASSSIZE];
 
     /* 借 currtitle 一用 */
 
@@ -664,12 +664,12 @@ tn_login(void)
         }
         else if (str_casecmp(uid, STR_GUEST))
         {
-            if (!vget(21, D_COLS_REF + 26, MSG_PASSWD, passbuf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO))
+            if (!vget(21, D_COLS_REF + 26, MSG_PASSWD, passbuf, PLAINPASSSIZE, NOECHO | VGET_STEALTH_NOECHO))
             {
                 continue;       /* 發現 userid 輸入錯誤，在輸入 passwd 時直接跳過 */
             }
 
-            passbuf[PLAINPASSLEN-1] = '\0';
+            passbuf[PLAINPASSSIZE-1] = '\0';
 
             if (chkpasswd(cuser.passwd, cuser.passhash, passbuf))
             {

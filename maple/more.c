@@ -162,7 +162,7 @@ more_line(
         /* weiyu.040802: 如果這碼是中文字的首碼，但是只剩下一碼的空間可以印，那麼不要印這碼 */
         if (in_dbcs || IS_DBCS_HI(ch))
             in_dbcs ^= 1;
-        if (in_dbcs && (len >= more_width - 1 || bytes >= ANSILINELEN - 2))
+        if (in_dbcs && (len >= more_width - 1 || bytes >= ANSILINESIZE - 2))
             break;
 
         foff++;
@@ -192,11 +192,11 @@ more_line(
 
         *buf++ = ch;
 
-        /* 若不含控制碼的長度已達 more_width 字，或含控制碼的長度已達 ANSILINELEN-1，那麼離開迴圈 */
-        if (len >= more_width || bytes >= ANSILINELEN - 1)
+        /* 若不含控制碼的長度已達 more_width 字，或含控制碼的長度已達 ANSILINESIZE-1，那麼離開迴圈 */
+        if (len >= more_width || bytes >= ANSILINESIZE - 1)
         {
             /* itoc.031123: 如果是控制碼，即使不含控制碼的長度已達 more_width 了，還可以繼續吃 */
-            if ((in_ansi || (foff < fend && *foff == KEY_ESC)) && bytes < ANSILINELEN - 1)
+            if ((in_ansi || (foff < fend && *foff == KEY_ESC)) && bytes < ANSILINESIZE - 1)
                 continue;
 
             /* itoc.031123: 再檢查下一個字是不是 '\n'，避免恰好是 more_width 或 ANSILINELEN-1 時，會多跳一列空白 */
@@ -244,7 +244,7 @@ outs_line(                      /* 印出一般內容 */
     }
     else
     {
-        char buf[ANSILINELEN];
+        char buf[ANSILINESIZE];
         char *ptr2 = buf;
         const int len = strlen(hunt);
 
@@ -416,7 +416,7 @@ more(
     const char *footer)
 {
 #ifndef M3_USE_PMORE
-    char buf[ANSILINELEN];
+    char buf[ANSILINESIZE];
     int i;
 
     const char *headend;                /* 檔頭結束 */

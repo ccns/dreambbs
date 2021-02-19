@@ -44,7 +44,7 @@ draw_line(              /* 在 (y, x) 的位置塞入 msg，左右仍要印出原來的彩色文字 
 {
     char *str;
     const char *ptr;
-    char data[ANSILINELEN];
+    char data[ANSILINESIZE];
     char color[4];
     int ch, i;
     int len;

@@ -2744,7 +2744,7 @@ header_replace(         /* 0911105.cache: 修改文章標題順便修改內文的標題 */
     const HDR *hdr)
 {
     FILE *fpr, *fpw;
-    char srcfile[64], tmpfile[64], buf[ANSILINELEN];
+    char srcfile[64], tmpfile[64], buf[ANSILINESIZE];
 
     hdr_fpath(srcfile, xo->dir, hdr);
     strcpy(tmpfile, "tmp/");

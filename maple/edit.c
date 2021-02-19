@@ -13,7 +13,7 @@ typedef struct textline
     struct textline *prev;
     struct textline *next;
     int len;
-    char data[ANSILINELEN];
+    char data[ANSILINESIZE];
 }        textline;
 
 

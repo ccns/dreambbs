@@ -616,8 +616,8 @@ static void pcopy(char *buf, const char *patten, int len)
 // IID.20190909: `pmsg()` without blocking and without screen restoring.
 void pmsg_body(const char *msg)
 {
-    char buf[ANSILINELEN];
-    char patten[ANSILINELEN];
+    char buf[ANSILINESIZE];
+    char patten[ANSILINESIZE];
     int len, plen, cc GCC_UNUSED;
 
     if (cuser.ufo2 & UFO2_ORIGUI)

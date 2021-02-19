@@ -1854,9 +1854,9 @@ login_user(
 
     /* Thor.990214: 注意, daolib中 非0代表失敗 */
     /* if (!chkpasswd(acct.passwd, acct.passhash, passwd)) */
-    if ((strncmp(passwd, acct.passwd, PASSLEN-1)
-          || (strlen(passwd) >= PASSLEN
-              && strncmp(passwd + PASSLEN - 1, acct.passhash, sizeof(acct.passhash))))
+    if ((strncmp(passwd, acct.passwd, PASSSIZE-1)
+          || (strlen(passwd) >= PASSSIZE
+              && strncmp(passwd + PASSSIZE - 1, acct.passhash, sizeof(acct.passhash))))
         && chkpasswd(acct.passwd, acct.passhash, passwd))
     {
 

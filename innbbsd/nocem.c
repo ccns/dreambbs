@@ -335,7 +335,7 @@ static int
 readNCMbody(
     const char *line)
 {
-    char buf[LINELEN];
+    char buf[LINESIZE];
     const char *group;
 
     strcpy(buf, line);

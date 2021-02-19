@@ -1250,7 +1250,7 @@ domenu_item(
     int num,
     DomenuXyz *xyz)
 {
-    char item[ANSILINELEN];
+    char item[ANSILINESIZE];
     const MENU *const mptr = xyz->table[num - 1];
     const char *const str = check_info((const void *)mptr->item.func, mptr->desc);
     const int item_str_len = strcspn(str, "\n");

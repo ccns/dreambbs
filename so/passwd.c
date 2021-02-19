@@ -7,7 +7,7 @@ new_passwd(void)
     ACCT acct;
     FILE *fp;
     int ans, fd, len;
-    char Email[61], passwd[PLAINPASSLEN], *pw;
+    char Email[61], passwd[PLAINPASSSIZE], *pw;
 
     srand(time(0));
     move(b_lines-1, 0);
@@ -33,12 +33,12 @@ new_passwd(void)
                 if (vget(B_LINES_REF-3, 0, "是否使用新式密碼加密(y/N)？[N]", Email, 3, LCECHO) == 'y')
                 {
                     ans = GENPASSWD_SHA256;
-                    len = PLAINPASSLEN;
+                    len = PLAINPASSSIZE;
                 }
                 else
                 {
                     ans = GENPASSWD_DES;
-                    len = OLDPLAINPASSLEN;
+                    len = OLDPLAINPASSSIZE;
                 }
 
                 getrandom_bytes(passwd, len-1);
@@ -47,8 +47,8 @@ new_passwd(void)
                     passwd[fd] = (passwd[fd] % 26) + ((passwd[fd] % 52 >= 26) ? 'a' : 'A');
                 }
                 passwd[len-1] = '\0';
-                str_scpy(acct.passwd, pw = genpasswd(passwd, ans), PASSLEN);
-                str_scpy(acct.passhash, pw + PASSLEN, sizeof(acct.passhash));
+                str_scpy(acct.passwd, pw = genpasswd(passwd, ans), PASSSIZE);
+                str_scpy(acct.passhash, pw + PASSSIZE, sizeof(acct.passhash));
                 acct_save(&acct);
                 do
                 {

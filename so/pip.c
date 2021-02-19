@@ -6251,7 +6251,7 @@ pip_money(void)
 static int pip_query(void)  /*«ô³X¤pÂû*/
 {
     int id;
-    char genbuf[STRLEN];
+    char genbuf[STRSIZE];
 
     vs_bar("«ô³X¦P¦ñ");
     usercomplete(msg_uid, genbuf);

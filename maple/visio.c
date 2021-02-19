@@ -799,7 +799,7 @@ new_line:
             if (showansi)
             {
                 ch = i + pos;
-                if (ch < ANSILINELEN - 1)
+                if (ch < ANSILINESIZE - 1)
                 {
                     memcpy(data, ansibuf, i);
                     slp->len = slp->emod = cur_pos = ch;
@@ -838,7 +838,7 @@ new_line:
     cur_pos = ++pos;
     cx = ++cur_col;
 
-    if ((pos >= ANSILINELEN) /* || (cx >= t_columns) */ )
+    if ((pos >= ANSILINESIZE) /* || (cx >= t_columns) */ )
         goto new_line;
 
     if (slp->width < cx)
@@ -1568,7 +1568,7 @@ grayoutrect(int y, int yend, int x, int xend, int level)
 // GRAYOUT_DARK(0): dark, GRAYOUT_BOLD(1): bold, GRAYOUR_NORMAL(2): normal
 {
     static const char *const prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
-    char buf[ANSILINELEN];
+    char buf[ANSILINESIZE];
     int yprev, xprev;
     getyx(&yprev, &xprev);
 

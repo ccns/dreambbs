@@ -865,7 +865,7 @@ const char *account)
     if (!Get_Socket(server, &sock))
     {
         close(sock);
-        vget(B_LINES_REF - 3, 0, line, buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+        vget(B_LINES_REF - 3, 0, line, buf, PLAINPASSSIZE, NOECHO | VGET_STEALTH_NOECHO);
         if (strlen(buf) < 1)
             return 0;
         if (!POP3_Check(server, addr, buf))
@@ -904,7 +904,7 @@ const char *mail)
     if (!Get_Socket(server, &sock))
     {
         close(sock);
-        vget(B_LINES_REF - 3, 0, line, buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+        vget(B_LINES_REF - 3, 0, line, buf, PLAINPASSSIZE, NOECHO | VGET_STEALTH_NOECHO);
         if (strlen(buf) < 1)
             return 0;
         if (!POP3_Check(server, addr, buf))

@@ -165,7 +165,7 @@ class_parse(
 
         chx[chn++] = chp =
             (ClassHeader *) malloc(SIZEOF_FLEX(ClassHeader, count));
-        memset(chp->title, 0, CH_TTLEN);
+        memset(chp->title, 0, CH_TTSIZE);
         strcpy(chp->title, key);
 
         ans = chn;
@@ -251,7 +251,7 @@ class_sort(void)
 
     qsort(chp->chno, j, sizeof(short), chno_cmp);
 
-    memset(chp->title, 0, CH_TTLEN);
+    memset(chp->title, 0, CH_TTSIZE);
     strcpy(chp->title, "Boards");
     chx[chn++] = chp;
 }
@@ -279,7 +279,7 @@ class_image(
     for (i = 0; i < chn; i++)
     {
         pos[i] = len;
-        len += CH_TTLEN + chx[i]->count * sizeof(short);
+        len += CH_TTSIZE + chx[i]->count * sizeof(short);
     }
     pos[i++] = len;
     if ((fp = fopen(runfile, "w")))
@@ -288,7 +288,7 @@ class_image(
         for (i = 0; i < chn; i++)
         {
             chp = chx[i];
-            fwrite(chp->title, 1, CH_TTLEN + chp->count * sizeof(short), fp);
+            fwrite(chp->title, 1, CH_TTSIZE + chp->count * sizeof(short), fp);
             free(chp);
         }
         fclose(fp);

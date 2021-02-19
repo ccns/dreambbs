@@ -865,7 +865,7 @@ main(void)
     {
         sprintf(title, "log/prikey%s", ymd);
         f_mv(PRIVATE_KEY, title);
-        i = PLAINPASSLEN-1;
+        i = PLAINPASSSIZE-1;
         for (;;)
         {
             j = random() % 0x100U;
@@ -873,7 +873,7 @@ main(void)
             title[--i] = j;
             if (i == 0) break;
         }
-        rec_add(PRIVATE_KEY, title, PLAINPASSLEN-1);
+        rec_add(PRIVATE_KEY, title, PLAINPASSSIZE-1);
     }
 #endif  /* #ifdef HAVE_SIGNED_MAIL */
 

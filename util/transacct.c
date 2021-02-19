@@ -33,7 +33,7 @@ typedef struct
 {
     int userno;                 /* unique positive code */
     char userid[IDLEN + 1];     /* userid */
-    char passwd[PASSLEN];       /* user password crypt by DES */
+    char passwd[PASSSIZE];      /* user password crypt by DES */
     unsigned char signature;    /* user signature number */
     char realname[20];          /* user realname */
     char username[24];          /* user nickname */
@@ -72,7 +72,7 @@ typedef struct
 {
     int userno;                 /* unique positive code */
     char userid[IDLEN + 1];     /* userid */
-    char passwd[PASSLEN];       /* user password crypt by DES */
+    char passwd[PASSSIZE];      /* user password crypt by DES */
     unsigned char signature;    /* user signature number */
     char realname[20];          /* user realname */
     char username[24];          /* user nickname */

@@ -84,7 +84,7 @@ void explicit_zero_bytes(char *buf, size_t buflen)
 #endif
 }
 
-static char pwbuf[PASSLEN + PASSHASHLEN];
+static char pwbuf[PASSSIZE + PASSHASHSIZE];
 
 /* `mode`: Encryption method
     `GENPASSWD_SHA256` (5): SHA-256
@@ -93,7 +93,7 @@ static char pwbuf[PASSLEN + PASSHASHLEN];
 /* NOTE: The string pointed by `pw` will be wiped out. */
 char *genpasswd(char *pw, int mode)
 {
-    char saltc[PASSLEN], *hash;
+    char saltc[PASSSIZE], *hash;
     int i, c;
 
     if (!*pw)
@@ -107,15 +107,15 @@ char *genpasswd(char *pw, int mode)
     }
 
     /* IID.20190524: Get salt from the system PRNG device. */
-    if (!getrandom_bytes(saltc + c, PASSLEN-1 - c))
+    if (!getrandom_bytes(saltc + c, PASSSIZE-1 - c))
     {
         explicit_zero_bytes(pw, strlen(pw));
         return NULL;
     }
 
-    saltc[PASSLEN-1] = '\0';
+    saltc[PASSSIZE-1] = '\0';
 
-    for (i = c; i < PASSLEN-1; i++)
+    for (i = c; i < PASSSIZE-1; i++)
     {
         c = (saltc[i] & 0x3f) + '.';
         if (c > '9')
@@ -128,20 +128,20 @@ char *genpasswd(char *pw, int mode)
     explicit_zero_bytes(pw, strlen(pw));
 
     hash = crypt(pwbuf, saltc);
-    explicit_zero_bytes(pwbuf, PLAINPASSLEN);
+    explicit_zero_bytes(pwbuf, PLAINPASSSIZE);
     if (!hash)
     {
         if (mode)
             return genpasswd(pw, GENPASSWD_DES);  /* Fall back to DES encryption */
         return NULL;
     }
-    str_scpy(pwbuf, hash, PASSLEN + PASSHASHLEN);
+    str_scpy(pwbuf, hash, PASSSIZE + PASSHASHSIZE);
 
     if (mode == GENPASSWD_SHA256)
-        memmove(pwbuf + PASSLEN, pwbuf + PASSLEN-1, PASSHASHLEN);  /* Prefix `passhash` with `$` */
+        memmove(pwbuf + PASSSIZE, pwbuf + PASSSIZE-1, PASSHASHSIZE);  /* Prefix `passhash` with `$` */
     else
-        pwbuf[PASSLEN] = '\0';  /* Make `passhash` an empty string */
-    pwbuf[PASSLEN-1] = '\0';
+        pwbuf[PASSSIZE] = '\0';  /* Make `passhash` an empty string */
+    pwbuf[PASSSIZE-1] = '\0';
     return pwbuf;
 }
 
@@ -155,11 +155,11 @@ char *gensignature(char *pw)
     if (!hash)
         return NULL;
 
-    if (hash[PASSLEN])  /* `genpasswd()` is not falled back */
+    if (hash[PASSSIZE])  /* `genpasswd()` is not falled back */
     {
-        memmove(hash, hash + 3, PASSLEN-1-3);  /* Remove `SHA256_SALT` prefix */
-        memmove(hash + PASSLEN-1-3, hash + PASSLEN + 1, PASSHASHLEN-1-1);  /* Remove `$` prefix for `passhash` */
-        hash[PASSLEN-1-3 + PASSHASHLEN-1-1] = '\0';
+        memmove(hash, hash + 3, PASSSIZE-1-3);  /* Remove `SHA256_SALT` prefix */
+        memmove(hash + PASSSIZE-1-3, hash + PASSSIZE + 1, PASSHASHSIZE-1-1);  /* Remove `$` prefix for `passhash` */
+        hash[PASSSIZE-1-3 + PASSHASHSIZE-1-1] = '\0';
     }
     return hash;
 }
@@ -173,20 +173,20 @@ int chkpasswd(const char *passwd, const char *passhash, char *test)
 
     /* if (!*passwd) return -1 *//* Thor.990416: 怕有時passwd是空的 */
 
-    str_scpy(pwbuf, test, PLAINPASSLEN);
+    str_scpy(pwbuf, test, PLAINPASSSIZE);
     explicit_zero_bytes(test, strlen(test));
 
     if (*passwd == '$')   /* IID.20190522: `passhash` is the encrypted password. */
     {
-        pw = crypt(pwbuf, passwd) + PASSLEN;
-        explicit_zero_bytes(pwbuf, PLAINPASSLEN);
-        return (strncmp(pw, passhash+1, PASSHASHLEN));  /* `passhash` is prefixed with `$` */
+        pw = crypt(pwbuf, passwd) + PASSSIZE;
+        explicit_zero_bytes(pwbuf, PLAINPASSSIZE);
+        return (strncmp(pw, passhash+1, PASSHASHSIZE));  /* `passhash` is prefixed with `$` */
     }
     else  /* IID.20190522: `passwd` is the encrypted password; legacy/falled-back `passwd`. */
     {
         pw = crypt(pwbuf, passwd);
-        explicit_zero_bytes(pwbuf, PLAINPASSLEN);
-        return (strncmp(pw, passwd, PASSLEN));
+        explicit_zero_bytes(pwbuf, PLAINPASSSIZE);
+        return (strncmp(pw, passwd, PASSSIZE));
     }
 }
 
@@ -194,16 +194,16 @@ int chkpasswd(const char *passwd, const char *passhash, char *test)
 /* NOTE: The string pointed by `test` will be wiped out. */
 int chksignature(const char *passwd, char *test)
 {
-    char saltc[PASSLEN], hashc[PASSHASHLEN];
+    char saltc[PASSSIZE], hashc[PASSHASHSIZE];
 
-    if (strlen(passwd) <= PASSLEN-1)  /* Legacy/falled-back `passwd` */
+    if (strlen(passwd) <= PASSSIZE-1)  /* Legacy/falled-back `passwd` */
         return chkpasswd(passwd, NULL, test);
 
     memcpy(saltc, SHA256_SALT, 3);  /* Restore `SHA256_SALT` prefix */
-    str_scpy(saltc+3, passwd, PASSLEN-3);
+    str_scpy(saltc+3, passwd, PASSSIZE-3);
 
     hashc[0] = '$';   /* Restore `$` prefix for `passhash` */
-    str_scpy(hashc+1, passwd + PASSLEN-1-3, PASSHASHLEN-1);
+    str_scpy(hashc+1, passwd + PASSSIZE-1-3, PASSHASHSIZE-1);
 
     return chkpasswd(saltc, hashc, test);
 }

@@ -902,7 +902,7 @@ class_check(
 
     chead = cbase + chn;
 
-    pos = chead[0] + CH_TTLEN;
+    pos = chead[0] + CH_TTSIZE;
     max = chead[1];
 
     chead = (short *) ((char *) cbase + pos);
@@ -997,7 +997,7 @@ class_load(
 
     chead = cbase + chn;
 
-    pos = chead[0] + CH_TTLEN;
+    pos = chead[0] + CH_TTSIZE;
     max = chead[1];
 
     chead = (short *) ((char *) cbase + pos);

@@ -24,7 +24,10 @@
 #define P_DISALLOW      -3
 
 #define MAXSPAMMID      10000
-#define LINELEN         512
+#define LINESIZE        512
+
+/* Aliases for backward compatibility */
+#define LINELEN         LINESIZE
 
 #ifdef __cplusplus
 extern "C" {
