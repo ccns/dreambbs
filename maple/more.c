@@ -260,7 +260,7 @@ outs_line(                      /* 印出一般內容 */
             if (ptr2 + (ptr1 - str) + (len + 7) >= buf + sizeof(buf) - 1)       /* buf 空間不夠 */
                 break;
 
-            str_scpy(ptr2, str, ptr1 - str + 1);
+            str_sncpy(ptr2, str, buf + sizeof(buf) - ptr2, ptr1 - str);
             ptr2 += ptr1 - str;
             sprintf(ptr2, "\x1b[7m%.*s\x1b[m", len, ptr1);
             ptr2 += len + 7;

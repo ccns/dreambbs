@@ -216,6 +216,9 @@ int from_parse(const char *from, char *addr, char *nick)
     const char *langle = NULL;
     const char *from_end;
 
+    /* Assume that `addr` and `nick` both point to buffers with a size adequate to hold the string `from` */
+    const size_t from_sz = strlen(from) + 1;
+
     *nick = '\0';
 
     {
@@ -253,7 +256,7 @@ int from_parse(const char *from, char *addr, char *nick)
                 ++nick_head;
                 --nick_end;
             }
-            strlcpy(nick, nick_head, nick_end - nick_head + 1);
+            str_sncpy(nick, nick_head, from_sz, nick_end - nick_head);
             mmdecode_str(nick);
         }
 
@@ -278,13 +281,13 @@ int from_parse(const char *from, char *addr, char *nick)
                     ++nick_head;
                     --nick_end;
                 }
-                strlcpy(nick, nick_head, nick_end - nick_head + 1);
+                str_sncpy(nick, nick_head, from_sz, nick_end - nick_head);
                 mmdecode_str(nick);
             }
         }
     }
 
-    strlcpy(addr, from, from_end - from + 1);
+    str_sncpy(addr, from, from_sz, from_end - from);
     return 0;
 }
 

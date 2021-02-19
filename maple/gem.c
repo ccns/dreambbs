@@ -48,7 +48,7 @@ gem_manage(
         list_end = strchr(title, '\0');
 
     char buf[100];
-    str_scpy(buf, list, list_end - list + 1);
+    str_sncpy(buf, list, sizeof(buf), list_end - list);
 
     return str_has(buf, cuser.userid);
 }
