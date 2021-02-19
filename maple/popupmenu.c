@@ -134,7 +134,7 @@ get_color(const char *s, int len, int *fc, int *bc, int *bbc)
     int state = 0, reset=0, exit = 0;
 
     memset(buf, 0, sizeof(buf));
-    strncpy(buf, s+2, len-1);
+    str_sncpy(buf, s+2, sizeof(buf), len-1);
 
     for (p = e = &buf[0]; exit == 0; ++p)
     {
