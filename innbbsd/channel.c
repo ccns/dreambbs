@@ -188,7 +188,7 @@ argify(
     while (strchr("\t\n\r ", *line))
         line++;
     p = argifybuffer;
-    strncpy(p, line, sizeof(argifybuffer));
+    str_scpy(p, line, sizeof(argifybuffer));
     for (*argvp = argv, i = 0; *p && i < MAX_ARG;)
     {
         for (*argv++ = p; *p && !strchr("\t\r\n ", *p); p++);
