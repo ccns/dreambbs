@@ -201,11 +201,9 @@ int chksignature(const char *passwd, char *test)
 
     memcpy(saltc, SHA256_SALT, 3);  /* Restore `SHA256_SALT` prefix */
     str_scpy(saltc+3, passwd, PASSLEN-3);
-    saltc[PASSLEN-1] = '\0';
 
     hashc[0] = '$';   /* Restore `$` prefix for `passhash` */
     str_scpy(hashc+1, passwd + PASSLEN-1-3, PASSHASHLEN-1);
-    hashc[PASSHASHLEN-1] = '\0';
 
     return chkpasswd(saltc, hashc, test);
 }
