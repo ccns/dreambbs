@@ -1561,6 +1561,10 @@ static void start_daemon(int argc, char *const argv[])
         hints.ai_addrlen = sizeof(sun);
         hints.ai_next = NULL;
         hosts = &hints;
+
+        strlcpy(sun.sun_path, unix_path, sizeof(sun.sun_path));
+        // remove the file first if it exists.
+        unlink(sun.sun_path);
     }
     else
     {
@@ -1568,16 +1572,7 @@ static void start_daemon(int argc, char *const argv[])
         hints.ai_socktype = SOCK_STREAM;
         hints.ai_protocol = IPPROTO_TCP;
         hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
-    }
 
-    if (port == -2)
-    {
-        strlcpy(sun.sun_path, unix_path, sizeof(sun.sun_path));
-        // remove the file first if it exists.
-        unlink(sun.sun_path);
-    }
-    else
-    {
         char port_str[12];
         sprintf(port_str, "%d", port);
         if (getaddrinfo(NULL, port_str, &hints, &hosts))
