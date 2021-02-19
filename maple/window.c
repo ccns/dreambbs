@@ -61,9 +61,8 @@ draw_line(              /* 在 (y, x) 的位置塞入 msg，左右仍要印出原來的彩色文字 
     if (i > b_lines)
         i -= b_lines + 1;
 
-    memset(data, 0, sizeof(data));
     vs_save_line(&slt, i);
-    strncpy(data, (char *) slt.data, slt.len);
+    str_sncpy(data, (char *) slt.data, sizeof(data), slt.len);
     str = data;
 
     move(y, 0);

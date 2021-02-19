@@ -144,8 +144,7 @@ do_pnote(const char *userid)
 
     utmp_mode(M_XMODE);
     strcpy(myitem.userid, cuser.userid);
-    strncpy(myitem.username, cuser.username, 18);
-    myitem.username[18] = '\0';
+    str_scpy(myitem.username, cuser.username, sizeof(myitem.username));
     time(&(myitem.date));
 
     /* begin load file */

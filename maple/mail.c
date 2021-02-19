@@ -257,7 +257,7 @@ bsmtp(
             fprintf(fp, "%s\n", buf);
             fclose(fp);
         }
-        strncpy(valid, buf, 10);
+        str_scpy(valid, buf, sizeof(valid));
 
     }
     else

@@ -22,8 +22,7 @@ void log_bank(
     char c_time[25], c_buf[100]={0};
 
     now = time(0);
-    strncpy(c_time, ctime(&now), 24);
-    c_time[24] = '\0';
+    str_scpy(c_time, ctime(&now), sizeof(c_time));
 
     if (mode == 1)
         sprintf(c_buf, "%s %s Àu¨}ÂI¼Æ(%d)->¹Ú¹ô(%d)\n", c_time, cuser.userid, a, b);
@@ -99,8 +98,7 @@ static int point1_money(void)
         time_t now;
         char c_time[25], c_buf[100]={0};
         now = time(0);
-        strncpy(c_time, ctime(&now), 24);
-        c_time[24] = '\0';
+        str_scpy(c_time, ctime(&now), sizeof(c_time));
         sprintf(c_buf, "%s %s Àu¨}ÂI¼Æ(%d)->¹Ú¹ô(%d)\n", c_time, cuser.userid, num, (int)temp);
         f_cat(FN_BANK, c_buf);
 
@@ -223,8 +221,7 @@ TransferAccount(void)
         time_t now;
         char c_time[25], c_buf[100]={0};
         now = time(0);
-        strncpy(c_time, ctime(&now), 24);
-        c_time[24] = '\0';
+        str_scpy(c_time, ctime(&now), sizeof(c_time));
         sprintf(c_buf, "%s %s ¶×´Ú(%d)-> %s (%d)\n", c_time, cuser.userid, pay, userid, (int)atoi(buf));
         f_cat(FN_BANK, c_buf);
 
@@ -319,8 +316,7 @@ money_back(void)
         time_t now;
         char c_time[25], c_buf[100]={0};
         now = time(0);
-        strncpy(c_time, ctime(&now), 24);
-        c_time[24] = '\0';
+        str_scpy(c_time, ctime(&now), sizeof(c_time));
         sprintf(c_buf, "%s %s ¶×¤JÂÂ¹Ú¹ô(%d)\n", c_time, acct.userid, (int)m1);
         f_cat(FN_BANK, c_buf);
 

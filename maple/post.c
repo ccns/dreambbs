@@ -1226,7 +1226,7 @@ post_cross(
                     memcpy(&chdr, hdr, sizeof(HDR));
                     strcpy(chdr.owner, cuser.userid);
                     sprintf(cbuf, "(%s) %s", xboard, hdr->title);
-                    strncpy(chdr.title, cbuf, TTLEN);
+                    str_sncpy(chdr.title, cbuf, sizeof(chdr.title), TTLEN);
                     move_post(&chdr, BRD_CROSSPOST, -3);
                 }
 #endif
@@ -2247,7 +2247,7 @@ post_undelete(
         buf[strlen(buf)-1] = 0;
         ptr = strchr(buf, ':');
         ptr = ptr ? ptr+2:buf;
-        strncpy(fhdr->title, ptr, 60);
+        str_sncpy(fhdr->title, ptr, sizeof(fhdr->title), 60);
         if (!HAS_PERM(PERM_SYSOP))
         {
             const int len_strip_id = strlen(fhdr->title) - strlen(cuser.userid) - 2;
@@ -3066,8 +3066,7 @@ post_recommend_log(
     char c_time[25], buf[300];
 
     now = time(0);
-    strncpy(c_time, ctime(&now), 24);
-    c_time[24] = '\0';
+    str_scpy(c_time, ctime(&now), sizeof(c_time));
 
     sprintf(buf, "%s %s %s %s ªO¡G%s(%lld) from %s\n", c_time, cuser.userid, (mode == 0) ? "²M°£":"±ÀÂË", currboard, hdr->title, (long long)hdr->chrono, fromhost);
     f_cat(FN_RECOMMEND_LOG, buf);

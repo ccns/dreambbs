@@ -154,22 +154,22 @@ main(void)
 
             if ((p = findmin(toplogins))->num < cuser.numlogins)
             {
-                strncpy(p->userid, cuser.userid, IDLEN);
-                strncpy(p->username, cuser.username, 24);
+                str_scpy(p->userid, cuser.userid, sizeof(p->userid));
+                str_scpy(p->username, cuser.username, sizeof(p->username));
                 p->num = cuser.numlogins;
             }
 
             if ((p = findmin(topposts))->num < cuser.numposts)
             {
-                strncpy(p->userid, cuser.userid, IDLEN);
-                strncpy(p->username, cuser.username, 24);
+                str_scpy(p->userid, cuser.userid, sizeof(p->userid));
+                str_scpy(p->username, cuser.username, sizeof(p->username));
                 p->num = cuser.numposts;
             }
 
             if ((p = findmin(topstay))->num < (cuser.staytime/3600))
             {
-                strncpy(p->userid, cuser.userid, IDLEN);
-                strncpy(p->username, cuser.username, 24);
+                str_scpy(p->userid, cuser.userid, sizeof(p->userid));
+                str_scpy(p->username, cuser.username, sizeof(p->username));
                 p->num = cuser.staytime/3600;
             }
         }

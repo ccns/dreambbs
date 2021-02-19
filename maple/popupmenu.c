@@ -133,7 +133,6 @@ get_color(const char *s, int len, int *fc, int *bc, int *bbc)
     int color;
     int state = 0, reset=0, exit = 0;
 
-    memset(buf, 0, sizeof(buf));
     str_sncpy(buf, s+2, sizeof(buf), len-1);
 
     for (p = e = &buf[0]; exit == 0; ++p)
@@ -199,8 +198,6 @@ vs_line(const char *msg, int y, int x)
     int word, slen, fc=37, bc=40, bbc=0;
     screenline sl;
 
-    memset(buf, 0, sizeof(buf));
-
     vs_save_line(&sl, y);
     sl.data[sl.len] = '\0';
     str = tmp = (char *) sl.data;
@@ -217,7 +214,7 @@ vs_line(const char *msg, int y, int x)
         word++;
     }
 
-    strncpy(buf, (char *) sl.data, str - tmp);
+    str_sncpy(buf, (char *) sl.data, sizeof(buf), str - tmp);
 
     while (word++<x)
         strcat(buf, " ");
@@ -710,7 +707,6 @@ Every_Z_Screen(void)
     }
     for (i=0; i<=b_lines; ++i)
     {
-        memset(buf, 0, sizeof(buf));
 #ifdef M3_USE_PFTERM
         move(i, 0);
         inansistr(buf, 512);
@@ -718,7 +714,7 @@ Every_Z_Screen(void)
         {
             screenline sl;
             vs_save_line(&sl, i);
-            strncpy(buf, (char *) sl.data, sl.len);
+            str_sncpy(buf, (char *) sl.data, sizeof(buf), sl.len);
         }
 #endif
         fprintf(fp, "%s\n", buf);

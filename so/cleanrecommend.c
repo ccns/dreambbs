@@ -327,16 +327,16 @@ clean(
                     continue;
                 }
                 c2 = strrchr(buf, '\n') - 5;
-                strncpy(rmsg.rtime, c2, 5);
+                str_scpy(rmsg.rtime, c2, sizeof(rmsg.rtime));
 
                 c2 -= 58;
-                strncpy(rmsg.msg, c2, 54);
+                str_scpy(rmsg.msg, c2, sizeof(rmsg.msg));
 
                 c2 -= 19;
-                strncpy(rmsg.userid, c2, 12);
+                str_scpy(rmsg.userid, c2, sizeof(rmsg.userid));
 
                 c2 = strchr(buf, 'm');
-                strncpy(rmsg.verb, c2+1, 2);
+                str_scpy(rmsg.verb, c2+1, sizeof(rmsg.verb));
 
                 if ((battr & BRD_PUSHDEFINE) && !strncmp(rmsg.verb, "¡÷", 2) )
                     rmsg.pn = COMMENT;

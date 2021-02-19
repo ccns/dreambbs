@@ -1206,7 +1206,7 @@ gem_gather(
                     ptr = strchr(tmp, '@');
                     if (ptr)
                         *ptr = '\0';
-                    strncpy(ghdr.title, hdr->title, sizeof(ghdr.title) - IDLEN - 4);
+                    str_scpy(ghdr.title, hdr->title, sizeof(ghdr.title) - IDLEN - 3);
                     strcat(ghdr.title, " (");
                     strcat(ghdr.title, tmp);
                     strcat(ghdr.title, ")");

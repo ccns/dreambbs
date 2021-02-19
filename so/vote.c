@@ -247,11 +247,10 @@ const char *path)
     buf2[1] = '\0';
     strcpy(buf3, account + 3);
     */
-    strncpy(buf1, account, 2);
-    strncpy(buf2, account + 2, 1);
-    strncpy(buf3, account + 3, 2);
-    strncpy(buf4, account + 5, 4);
-    buf1[2] = buf2[1] = buf3[2] = buf4[4] = '\0';
+    str_sncpy(buf1, account, sizeof(buf1), 2);
+    str_sncpy(buf2, account + 2, sizeof(buf2), 1);
+    str_sncpy(buf3, account + 3, sizeof(buf3), 2);
+    str_sncpy(buf4, account + 5, sizeof(buf4), 4);
 
     fd = open(path, O_RDONLY);
     while (fd >= 0)
@@ -854,10 +853,10 @@ const char *account)
     else
         return 0;
 
-    strncpy(year, account + 3, 2);
+    str_sncpy(year, account + 3, sizeof(year), 2);
 
     if ( atoi(year) <= 97 )// Ecchi.100331: 98年以前入學的信箱，帳號部分尾端都要消去一碼
-        strncpy(addr, account, 8);
+        str_sncpy(addr, account, sizeof(addr), 8);
     else
         strcpy(addr, account);
 
