@@ -1402,7 +1402,7 @@ mail_send(
             return -1;
 
         if (!title)
-            vget(2, 0, "主題：", ve_title, TTLEN, DOECHO);
+            vget(2, 0, "主題：", ve_title, TTLEN + 1, DOECHO);
 
     }
 

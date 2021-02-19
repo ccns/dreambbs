@@ -1226,7 +1226,7 @@ post_cross(
                     memcpy(&chdr, hdr, sizeof(HDR));
                     strcpy(chdr.owner, cuser.userid);
                     sprintf(cbuf, "(%s) %s", xboard, hdr->title);
-                    str_sncpy(chdr.title, cbuf, sizeof(chdr.title), TTLEN);
+                    str_sncpy(chdr.title, cbuf, sizeof(chdr.title), TTLEN + 1);
                     move_post(&chdr, BRD_CROSSPOST, -3);
                 }
 #endif

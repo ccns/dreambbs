@@ -1481,7 +1481,7 @@ ve_filer(
 
     case 't':
         strcpy(buf, ve_title);
-        if (!vget(B_LINES_REF, 0, "標題：", ve_title, TTLEN, GCARRY))
+        if (!vget(B_LINES_REF, 0, "標題：", ve_title, TTLEN + 1, GCARRY))
             strcpy(ve_title, buf);
         return VE_FOOTER;
 
