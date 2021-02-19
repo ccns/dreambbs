@@ -408,8 +408,8 @@ acct_apply(void)
             continue;
         }
 
-        vget(20, 0, "請檢查密碼：", buf + PLAINPASSSIZE + 1, fd, NOECHO | VGET_STEALTH_NOECHO);
-        if (!strcmp(buf, buf + PLAINPASSSIZE + 1))
+        vget(20, 0, "請檢查密碼：", buf + PLAINPASSSIZE, fd, NOECHO | VGET_STEALTH_NOECHO);
+        if (!strcmp(buf, buf + PLAINPASSSIZE))
             break;
 
         vmsg("密碼輸入錯誤，請重新輸入密碼");
