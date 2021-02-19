@@ -2811,13 +2811,17 @@ static int
 talk_page(
     UTMP *up)
 {
-    int sock, msgsock;
+    int sock = -1;
+    int msgsock;
     pid_t pid;
     struct sockaddr_storage sin;
     int ans, length, myans;
     char buf[60];
     struct addrinfo hints = {0};
     struct addrinfo *hs;
+
+    /* IID.2021-02-19: Fallback to native IPv4 when IPv6 is not available */
+    static const sa_family_t ai_family[] = {AF_INET6, AF_INET};
 
 #ifdef EVERY_Z
     /* Thor.0725: 為 talk & chat 可用 ^z 作準備 */
@@ -2868,30 +2872,36 @@ talk_page(
     }
 #endif
 
-    hints.ai_family = AF_INET6;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
-    if (getaddrinfo(NULL, "0", &hints, &hs))
-        return 0;
-
-    for (struct addrinfo *h = hs; h; h = h ->ai_next)
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
+    for (int i = 0; i < COUNTOF(ai_family); ++i)
     {
-        sock = socket(h->ai_family, h->ai_socktype, 0);
-        if (sock < 0)
+        hints.ai_family = ai_family[i];
+        if (getaddrinfo(NULL, "0", &hints, &hs))
             continue;
 
-        length = sizeof(sin);
-        if (bind(sock, h->ai_addr, h->ai_addrlen) < 0 || getsockname(sock, (struct sockaddr *) &sin, (socklen_t *) &length) < 0)
+        for (struct addrinfo *h = hs; h; h = h ->ai_next)
         {
-            close(sock);
-            sock = -1;
-            continue;
-        }
+            sock = socket(h->ai_family, h->ai_socktype, 0);
+            if (sock < 0)
+                continue;
 
-        /* Success */
-        break;
+            length = sizeof(sin);
+            if (bind(sock, h->ai_addr, h->ai_addrlen) < 0 || getsockname(sock, (struct sockaddr *) &sin, (socklen_t *) &length) < 0)
+            {
+                close(sock);
+                sock = -1;
+                continue;
+            }
+
+            /* Success */
+            break;
+        }
+        freeaddrinfo(hs);
+
+        if (sock >= 0)
+            break; /* Success */
     }
-    freeaddrinfo(hs);
     if (sock < 0)
         return 0;
 

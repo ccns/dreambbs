@@ -1438,9 +1438,14 @@ static void start_daemon(int argc, char *const argv[])
     struct rlimit rl;
 #endif
     char buf[80], data[80];
-    int fd;
+    int fd = -1;
 
     int port;
+
+    /* IID.2021-02-19: Fallback to native IPv4 when IPv6 is not available */
+    static const sa_family_t ai_family_inet[] = {AF_INET6, AF_INET};
+    const sa_family_t *ai_family;
+    int family_count;
 
     {
         /*
@@ -1553,9 +1558,14 @@ static void start_daemon(int argc, char *const argv[])
         }
     }
 
+    char port_str[12];
+
     if (port == -2)
     {
-        hints.ai_family = sun.sun_family = AF_UNIX;
+        sun.sun_family = AF_UNIX;
+        ai_family = &sun.sun_family;
+        family_count = 1;
+
         hints.ai_socktype = SOCK_STREAM;
         hints.ai_addr = (struct sockaddr *)&sun;
         hints.ai_addrlen = sizeof(sun);
@@ -1568,59 +1578,67 @@ static void start_daemon(int argc, char *const argv[])
     }
     else
     {
-        hints.ai_family = AF_INET6;
+        ai_family = ai_family_inet;
+        family_count = COUNTOF(ai_family_inet);
+
         hints.ai_socktype = SOCK_STREAM;
         hints.ai_protocol = IPPROTO_TCP;
-        hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
+        hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
 
-        char port_str[12];
         sprintf(port_str, "%d", port);
-        if (getaddrinfo(NULL, port_str, &hints, &hosts))
-            exit(1);
     }
 
-    for (struct addrinfo *host = hosts; host; host = host->ai_next)
+    for (int i = 0; i < family_count; ++i)
     {
-        struct linger ld;
-        int val;
+        hints.ai_family = ai_family[i];
+        if (port != -2 && getaddrinfo(NULL, port_str, &hints, &hosts))
+                continue;
+        for (struct addrinfo *host = hosts; host; host = host->ai_next)
+        {
+            struct linger ld;
+            int val;
 
-        fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
-        if (fd < 0)
-            continue;
+            fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
+            if (fd < 0)
+                continue;
 
-        val = 1;
-        setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &val, sizeof(val));
+            val = 1;
+            setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &val, sizeof(val));
 
 #if 0
-        setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (char *) &val, sizeof(val));
+            setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (char *) &val, sizeof(val));
 
-        if (port != -2)
-            setsockopt(fd, host->ai_socktype, TCP_NODELAY, (char *) &val, sizeof(val));
+            if (port != -2)
+                setsockopt(fd, host->ai_socktype, TCP_NODELAY, (char *) &val, sizeof(val));
 #endif
 
-        ld.l_onoff = ld.l_linger = 0;
-        setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
+            ld.l_onoff = ld.l_linger = 0;
+            setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
 
-        /* mport = port; */ /* Thor.990325: 不需要了:P */
+            /* mport = port; */ /* Thor.990325: 不需要了:P */
 
-        if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) || (listen(fd, QLEN) < 0))
-        {
-            close(fd);
-            fd = -1;
-            continue;
+            if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) || (listen(fd, QLEN) < 0))
+            {
+                close(fd);
+                fd = -1;
+                continue;
+            }
+
+            if (port == -2)
+            {
+                chown(unix_path, BBSUID, WWWGID);
+                chmod(unix_path, 0660);
+            }
+
+            /* Success */
+            break;
         }
+        if (port != -2)
+            freeaddrinfo(hosts);
 
-        if (port == -2)
-        {
-            chown(unix_path, BBSUID, WWWGID);
-            chmod(unix_path, 0660);
-        }
-
-        /* Success */
-        break;
+        if (fd >= 0)
+            break; /* Success */
     }
-    if (port != -2)
-        freeaddrinfo(hosts);
     if (fd < 0)
         exit(1);
 

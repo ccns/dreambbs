@@ -3004,6 +3004,9 @@ servo_daemon(
     struct rlimit limit;
 #endif //RLIMIT
 
+    /* IID.2021-02-19: Fallback to native IPv4 when IPv6 is not available */
+    static const sa_family_t ai_family[] = {AF_INET6, AF_INET};
+
     /*
      * More idiot speed-hacking --- the first time conversion makes the C
      * library open the files containing the locale definition and time zone.
@@ -3073,51 +3076,58 @@ servo_daemon(
     /* bind the service port                               */
     /* --------------------------------------------------- */
 
-    hints.ai_family = AF_INET6;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
     sprintf(port_str, "%d", CHAT_PORT);
-    if (getaddrinfo(NULL, port_str, &hints, &hosts))
-        exit(1);
 
-    for (struct addrinfo *host = hosts; host; host = host->ai_next)
+    for (int i = 0; i < COUNTOF(ai_family); ++i)
     {
-        fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
-        if (fd < 0)
+        hints.ai_family = ai_family[i];
+        if (getaddrinfo(NULL, port_str, &hints, &hosts))
             continue;
 
-        /*
-         * timeout 方面, 將 socket 改成 O_NDELAY (no delay, non-blocking),
-         * 如果能順利送出資料就送出, 不能送出就算了, 不再等待 TCP_TIMEOUT 時間。
-         * (default 是 120 秒, 並且有 3-way handshaking 機制, 有可能一等再等)。
-         */
+        for (struct addrinfo *host = hosts; host; host = host->ai_next)
+        {
+            fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
+            if (fd < 0)
+                continue;
+
+            /*
+             * timeout 方面, 將 socket 改成 O_NDELAY (no delay, non-blocking),
+             * 如果能順利送出資料就送出, 不能送出就算了, 不再等待 TCP_TIMEOUT 時間。
+             * (default 是 120 秒, 並且有 3-way handshaking 機制, 有可能一等再等)。
+             */
 
 #if 1
-        fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NDELAY);
+            fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NDELAY);
 #endif
 
-        value = 1;
-        setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &value, sizeof(value));
+            value = 1;
+            setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &value, sizeof(value));
 
-        value = 1;
-        setsockopt(fd, host->ai_protocol, TCP_NODELAY, (char *) &value, sizeof(value));
+            value = 1;
+            setsockopt(fd, host->ai_protocol, TCP_NODELAY, (char *) &value, sizeof(value));
 
-        ld.l_onoff = ld.l_linger = 0;
-        setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
+            ld.l_onoff = ld.l_linger = 0;
+            setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
 
-        if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) ||
-            (listen(fd, SOCK_QLEN) < 0))
-        {
-            close(fd);
-            fd = -1;
-            continue;
+            if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) ||
+                (listen(fd, SOCK_QLEN) < 0))
+            {
+                close(fd);
+                fd = -1;
+                continue;
+            }
+
+            /* Success */
+            break;
         }
+        freeaddrinfo(hosts);
 
-        /* Success */
-        break;
+        if (fd >= 0)
+            break; /* Success */
     }
-    freeaddrinfo(hosts);
     if (fd < 0)
         exit(1);
 
