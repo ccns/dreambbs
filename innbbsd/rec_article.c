@@ -259,7 +259,7 @@ move_post(
 
     /* ª½±µ½Æ»s trailing data */
 
-    memcpy(post.owner, hdr->owner, TTLEN + 140);
+    memcpy(post.owner, hdr->owner, sizeof(HDR) - offsetof(HDR, owner));
 
     sprintf(post.title, "[cancel] %-60.60s", FROM);
 

@@ -258,7 +258,7 @@ move_post(      /* 將 hdr 從 currboard 搬到 board */
 
     /* 直接複製 trailing data */
 
-    memcpy(post.owner, hdr->owner, TTLEN + 140);
+    memcpy(post.owner, hdr->owner, sizeof(HDR) - offsetof(HDR, owner));
     if (by_bm == -1)
         strcpy(post.owner, cuser.userid);
     if (by_bm == -2)
