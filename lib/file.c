@@ -1,4 +1,6 @@
 #include "dao.h"
+#include "struct.h"
+
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
@@ -289,8 +291,6 @@ void usr_fpath(char *fpath, const char *user, const char *fname)
 #if 0
     char buf[16];
 #endif
-
-#define IDLEN    12                /* Length of board / user id, copy from  struct.h */
 
     char buf[IDLEN + 1];
 
