@@ -19,7 +19,7 @@
   #include <utility>
 #endif
 
-/* screen control */
+/* String length and buffer size */
 
 #define STRLEN          80             /* Length of most string data */
 #define BTLEN           42             /* Length of board title */
@@ -35,6 +35,9 @@
 #define ANSILINELEN     4000           /* Maximum Screen width in chars，不能超過 1023 */
                                        /* temperary expand ANSILINELEN to 4000 before
                                           inplementing dynamic allocating size */
+
+/* screen control */
+
 #define T_LINES         50             /* maximum total lines */
 #define T_COLS          120            /* maximum total columns，要比 ANSILINELEN 小 */
 #define TAB_STOP        4U             /* 按 TAB 換成幾格空白 (建議是 2 的次方，可免去除法) */
@@ -43,8 +46,6 @@
 /* #define VE_WIDTH        (ANSILINELEN - 1) */
 /* Thor.990330: 為防止引言後, ">"要變色, 一行會超過ANSILINELEN, 故多留空間 */
 #define VE_WIDTH        (ANSILINELEN - 11)
-
-#define BFLAG(n)        (1U << n)       /* 32 bit-wise flag */
 
 /* IID.20200113: For `get[y|x]_ref()` & `move_ref()` */
 /* Use 2's power to prevent division */
@@ -187,6 +188,7 @@ typedef struct
 /* User Flag Option : flags in ACCT.ufo                  */
 /* ----------------------------------------------------- */
 
+#define BFLAG(n)        (1U << n)       /* 32 bit-wise flag */
 
 //#define UFO_COLOR       BFLAG(0)        /* true if the ANSI color mode open */
 //#define UFO_MOVIE       BFLAG(1)        /* true if show movie */
