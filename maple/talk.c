@@ -2872,7 +2872,7 @@ talk_page(
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
     if (getaddrinfo(NULL, "0", &hints, &hs))
-        return -1;
+        return 0;
 
     for (struct addrinfo *h = hs; h; h = h ->ai_next)
     {
