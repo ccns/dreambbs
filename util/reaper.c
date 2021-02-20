@@ -295,12 +295,12 @@ report_eaddr_group(void)
                     fd = open(buf, O_RDONLY, 0);
                     if (fd < 0)
                     {
-                        fprintf(faddr, "==> %d)%-*s can't open\n", j, IDLEN, s.userid);
+                        fprintf(faddr, "==> %d)%-*.*s can't open\n", j, IDLEN, IDLEN, s.userid);
                         continue;
                     }
                     if (read(fd, &acct, sizeof(acct)) != sizeof(acct))
                     {
-                        fprintf(faddr, "==> %d)%-*s can't read\n", j, IDLEN, s.userid);
+                        fprintf(faddr, "==> %d)%-*.*s can't read\n", j, IDLEN, IDLEN, s.userid);
                         continue;
                     }
                     close(fd);
