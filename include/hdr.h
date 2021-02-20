@@ -48,7 +48,7 @@ typedef struct
 } HDR;  /* DISKDATA(raw) */
 
 /* gopher url ¦r¦ê¡Gxname + owner + nick + date */
-#define GEM_URLEN               (32 + 80 + 50 + 9 - 1)
+#define GEM_URLEN               (offsetof(HDR, title) - offsetof(HDR, xname) - 1)
 
 /* ----------------------------------------------------- */
 /* post.xmode ªº©w¸q                                     */
