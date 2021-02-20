@@ -621,8 +621,8 @@ void bm_setup(ACCT * u, int adm)
             pmsg2("請輸入異動理由");
             goto cleanup;
         }
-        sprintf(tmp, "\n\n%s %-12s 對使用者 %-12s 執行板主異動\n理由: ", Now(),
-                cuser.userid, u->userid);
+        sprintf(tmp, "\n\n%s %-*s 對使用者 %-*s 執行板主異動\n理由: ", Now(),
+                IDLEN, cuser.userid, IDLEN, u->userid);
         f_cat(FN_BLACKSU_LOG, tmp);
         f_cat(FN_BLACKSU_LOG, why);
     }
@@ -995,8 +995,8 @@ void acct_setup(ACCT * u, int adm)
                     goto cleanup;
                 }
                 sprintf(tmp,
-                        "\n\n%s %-12s 對使用者 %-12s 執行查詢動作\n理由: ",
-                        Now(), cuser.userid, u->userid);
+                        "\n\n%s %-*s 對使用者 %-*s 執行查詢動作\n理由: ",
+                        Now(), IDLEN, cuser.userid, IDLEN, u->userid);
                 f_cat(FN_BLACKSU_LOG, tmp);
                 f_cat(FN_BLACKSU_LOG, why);
             }
@@ -1023,8 +1023,8 @@ void acct_setup(ACCT * u, int adm)
                     goto cleanup;
                 }
                 sprintf(tmp,
-                        "\n\n%s %-12s 對使用者 %-12s 執行查詢動作\n理由: ",
-                        Now(), cuser.userid, u->userid);
+                        "\n\n%s %-*s 對使用者 %-*s 執行查詢動作\n理由: ",
+                        Now(), IDLEN, cuser.userid, IDLEN, u->userid);
                 f_cat(FN_BLACKSU_LOG, tmp);
                 f_cat(FN_BLACKSU_LOG, why);
             }
@@ -2051,8 +2051,8 @@ static int m_setbrd(BRD * brd)
             pmsg2("請輸入修改理由");
             return 0;
         }
-        sprintf(tmp, "\n\n%s %-12s 對看板 %-12s 執行修改動作\n理由: ", Now(),
-                cuser.userid, brd->brdname);
+        sprintf(tmp, "\n\n%s %-*s 對看板 %-*s 執行修改動作\n理由: ", Now(),
+                IDLEN, cuser.userid, IDLEN, brd->brdname);
         f_cat(FN_BLACKSU_LOG, tmp);
         f_cat(FN_BLACKSU_LOG, why);
     }

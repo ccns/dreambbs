@@ -94,8 +94,8 @@ vote_item(
 int num,
 const VCH *vch)
 {
-    prints("%6d %-9.8s%-12s %-*.*s\n",
-           num, vch->cdate, vch->owner, d_cols + 50, d_cols + 50, vch->title);
+    prints("%6d %-9.8s%-*s %-*.*s\n",
+           num, vch->cdate, IDLEN, vch->owner, d_cols + 50, d_cols + 50, vch->title);
 }
 
 static int
@@ -1074,7 +1074,7 @@ XO *xo)
                 *fname = 'O';
                 if ((fp = fopen(fpath, "a")))
                 {
-                    fprintf(fp, "%-12s: %s\n", cuser.userid, buf);
+                    fprintf(fp, "%-*s: %s\n", IDLEN, cuser.userid, buf);
                     fclose(fp);
                 }
             }

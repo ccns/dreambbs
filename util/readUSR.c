@@ -24,8 +24,8 @@ int main(void)
     for (n=0; n < (st.st_size/sizeof(SCHEMA)); n++)
     {
         str_scpy(userid, usr[n].userid, sizeof(userid));
-        printf("uptime:%s userid:%-12s\n",
-            Btime(&usr[n].uptime), userid);
+        printf("uptime:%s userid:%-*s\n",
+            Btime(&usr[n].uptime), IDLEN, userid);
     }
     free(usr);
 }

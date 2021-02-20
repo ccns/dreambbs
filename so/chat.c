@@ -31,8 +31,8 @@ chat_topic(void)
 {
     const char *title = (frec ? " 錄音室 " : CHATROOMNAME);
     move(0, 0);
-    prints("\x1b[1;37;46m %s：%-12s\x1b[45m 話題：%-*s\x1b[m",
-           title, chatroom, d_cols + 57 - strlen(title), chattopic);
+    prints("\x1b[1;37;46m %s：%-*s\x1b[45m 話題：%-*s\x1b[m",
+           title, IDLEN, chatroom, d_cols + 57 - strlen(title), chattopic);
 }
 
 #  ifdef M3_USE_PFTERM

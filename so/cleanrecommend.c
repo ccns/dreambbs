@@ -65,17 +65,17 @@ cleanrecommend_item(
         if (cleanrecommend->pn == POSITIVE)
         {
             pn = "\x1b[1;33m+";
-            prints("%4d%s%2s\x1b[m%-12s %-*s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
+            prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
         }
         else if (cleanrecommend->pn == NEGATIVE)
         {
             pn = "\x1b[1;31m-";
-            prints("%4d%s%2s\x1b[m%-12s %-*s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
+            prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
         }
         else
         {
             pn = " ";
-            prints("%4d%s%2s\x1b[m%-12s %-*s%-5s\n", num, pn, cleanrecommend->verb, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
+            prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
         }
 }
 
@@ -296,21 +296,21 @@ clean(
         if (brd->battr & BRD_PUSHSNEER)
         {
             if (addscore == 1)
-                sprintf(add,                "[[1;33m¡÷ %12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                sprintf(add,                "[[1;33m¡÷ %*s¡G[[36m%-54.54s [[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
             else if (addscore == -1)
-                sprintf(add,      "[[1;31m¼N[[m [[1;33m%12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                sprintf(add,      "[[1;31m¼N[[m [[1;33m%*s¡G[[36m%-54.54s [[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
         }
         else if (brd->battr & BRD_PUSHDEFINE)
         {
             if (addscore == 1)
-                sprintf(add, "[[1;33m%02.2s %12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                sprintf(add, "[[1;33m%02.2s %*s¡G[[36m%-54.54s [[m%5.5s\n", verb, IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
             else if (addscore == -1)
-                sprintf(add, "[[1;31m%02.2s[[m [[1;33m%12s¡G[[36m%-54.54s [[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                sprintf(add, "[[1;31m%02.2s[[m [[1;33m%*s¡G[[36m%-54.54s [[m%5.5s\n", verb, IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
             else
-                sprintf(add,                "[[1;33m¡÷ %12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                sprintf(add,                "[[1;33m¡÷ %*s¡G[[36m%-54.54s [[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
         }
         else
-            sprintf(add,                  "[[1;33m¡÷ %12s¡G[[36m%-54.54s [[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+            sprintf(add,                  "[[1;33m¡÷ %*s¡G[[36m%-54.54s [[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
 */
         while (fgets(buf, 256, fp))
         {
@@ -388,16 +388,16 @@ clean(
         if (rmsg.pn == POSITIVE)
         {
             counter++;
-            sprintf(buf, "\x1b[1;33m%2s %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", rmsg.verb, rmsg.userid, rmsg.msg, rmsg.rtime);
+            sprintf(buf, "\x1b[1;33m%2s %*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", rmsg.verb, IDLEN, rmsg.userid, rmsg.msg, rmsg.rtime);
         }
         else if (rmsg.pn == NEGATIVE)
         {
             counter--;
-            sprintf(buf, "\x1b[1;31m%2s \x1b[33m%12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", rmsg.verb, rmsg.userid, rmsg.msg, rmsg.rtime);
+            sprintf(buf, "\x1b[1;31m%2s \x1b[33m%*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", rmsg.verb, IDLEN, rmsg.userid, rmsg.msg, rmsg.rtime);
         }
         else
         {
-            sprintf(buf, "\x1b[m\x1b[1;33m   %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", rmsg.userid, rmsg.msg, rmsg.rtime);
+            sprintf(buf, "\x1b[m\x1b[1;33m   %*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, rmsg.userid, rmsg.msg, rmsg.rtime);
         }
         f_cat(tmp, buf);
     }

@@ -1755,9 +1755,9 @@ static void bmw_display(int max, int pos)
             sprintf(color, "0");
 
         if (strstr(bmw.msg, "¡¹¼s¼½"))
-            sprintf(buf, "   \x1b[1;45;37m[%-12s]\x1b[%sm %-58s\x1b[m", bmw.userid, color, (bmw.msg+8));
+            sprintf(buf, "   \x1b[1;45;37m[%-*s]\x1b[%sm %-58s\x1b[m", IDLEN, bmw.userid, color, (bmw.msg+8));
         else
-            sprintf(buf, "   \x1b[37;%sm[\x1b[33m%-12s\x1b[37m] %-58s\x1b[m", color, bmw.userid, bmw.msg);
+            sprintf(buf, "   \x1b[37;%sm[\x1b[33m%-*s\x1b[37m] %-58s\x1b[m", color, IDLEN, bmw.userid, bmw.msg);
         move(i, 0);
         outs(buf);
         i++;
@@ -1773,7 +1773,7 @@ static void bmw_display(int max, int pos)
         {
             sent = 1;
             bmw = bmw_sentlot[j];
-            sprintf(buf, "  \x1b[1;32mTo %-12s\x1b[m: \x1b[32m%-57s\x1b[m", bmw.userid, bmw.msg);
+            sprintf(buf, "  \x1b[1;32mTo %-*s\x1b[m: \x1b[32m%-57s\x1b[m", IDLEN, bmw.userid, bmw.msg);
             outs(buf);
             break;
         }
@@ -3174,7 +3174,7 @@ ulist_body(
 
                 strcpy(color, wcolor[fcolor]);
 
-                prints("%6d%c%s%-13s%-*.*s%s%-*.*s%c%c %-12.12s %5.5s",
+                prints("%6d%c%s%-13s%-*.*s%s%-*.*s%c%c %-*.*s %5.5s",
                     cnt, (up->ufo & UFO_WEB)?'*':' ',
                     color, up->userid,
                     (d_cols >> 1) + 22, (d_cols >> 1) + 21, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
@@ -3182,7 +3182,7 @@ ulist_body(
                     ((d_cols+1) >> 1) + 16, ((d_cols+1) >> 1) + 15,
                     (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
                     HIDDEN_SRC : up->from, diff, diffmsg,
-                    bmode(up, 0), buf);
+                    IDLEN, IDLEN, bmode(up, 0), buf);
             }
             else
             {

@@ -500,7 +500,7 @@ logattempt(
         p->tm_hour, p->tm_min, p->tm_sec, type, conn_type, currtitle);
 
 #if 0
-    sprintf(buf, "%c%-12s[%s] %s\n", type, cuser.userid,
+    sprintf(buf, "%c%-*s[%s] %s\n", type, IDLEN, cuser.userid,
         Etime(&ap_start), currtitle);
     f_cat(FN_LOGIN_LOG, buf);
 #endif

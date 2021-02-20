@@ -630,7 +630,7 @@ XO *xo)
                     }
                 fprintf(fds, "%s", buf);
             }
-            fprintf(fds, "%3u -> %-12s: %s\n", rmode == 1 ? nbrd->agree : nbrd->assist, cuser.userid, cuser.email);
+            fprintf(fds, "%3u -> %-*s: %s\n", rmode == 1 ? nbrd->agree : nbrd->assist, IDLEN, cuser.userid, cuser.email);
             if (vget(B_LINES_REF, 0, "我有話要說：", say, 65, DOECHO))
                 fprintf(fds, "    %s : %s\n", cuser.userid, say);
 

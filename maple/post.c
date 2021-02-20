@@ -1253,7 +1253,7 @@ post_cross(
             ptime = localtime(&now);
             sprintf(tgt, "Âà¿ý¦Ü %s ¬ÝªO", xboard);
             xfp = fopen(fpath, "a");
-            sprintf(add, "\x1b[1;33m¡÷ %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, tgt, Btime(&now)+3);
+            sprintf(add, "\x1b[1;33m¡÷ %*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, cuser.userid, tgt, Btime(&now)+3);
             fprintf(xfp, "%s", add);
             fclose(xfp);
         }
@@ -3380,23 +3380,23 @@ post_recommend(
             if (brd->battr & BRD_PUSHSNEER)
             {
                 if (addscore == 1)
-                    sprintf(add, "\x1b[1;33m¡÷ %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;33m¡÷ %*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else if (addscore == -1)
-                    sprintf(add, "\x1b[1;31m¼N\x1b[m \x1b[1;33m%12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;31m¼N\x1b[m \x1b[1;33m%*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else
-                    sprintf(add, "\x1b[m\x1b[1;33m   %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[m\x1b[1;33m   %*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
             }
             else if (brd->battr & BRD_PUSHDEFINE)
             {
                 if (addscore == 1)
-                    sprintf(add, "\x1b[1;33m%2.2s %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;33m%2.2s %*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else if (addscore == -1)
-                    sprintf(add, "\x1b[1;31m%2.2s\x1b[m \x1b[1;33m%12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;31m%2.2s\x1b[m \x1b[1;33m%*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
                 else
-                    sprintf(add, "\x1b[1;33m¡÷\x1b[m \x1b[1;33m%12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                    sprintf(add, "\x1b[1;33m¡÷\x1b[m \x1b[1;33m%*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
             }
             else
-                sprintf(add, "\x1b[1;33m¡÷ %12s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", cuser.userid, msg, Btime(&hdr->pushtime)+3);
+                sprintf(add, "\x1b[1;33m¡÷ %*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
             /*
             if (dashf(fpath))
                 f_cat(fpath, add);

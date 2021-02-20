@@ -1210,8 +1210,8 @@ chat_do_user_list(
         }
         else
         {
-            sprintf(buf, " %-8s│%-12s│%s",
-                user->chatid, user->userid, room ? room->name : "[在門口徘徊]");
+            sprintf(buf, " %-8s│%-*s│%s",
+                user->chatid, IDLEN, user->userid, room ? room->name : "[在門口徘徊]");
 /* Thor.980603: PERM_CHATROOM改為 default 沒有 roomop, 但可以自己取得 */
 /*          if (uflag & (PERM_ROOMOP | PERM_SYSOP | PERM_CHATROOM)) */
             /* if (uflag & (PERM_ROOMOP|PERM_CHATOP)) */
@@ -1312,9 +1312,9 @@ chat_map_chatids(
         if (CLOAK(user) && (user != cu) && !CHATSYSOP(cu))      /* Thor:隱身術 */
             continue;
 
-        sprintf(buf + (c * 24), " %-8s%c%-12s%s",
+        sprintf(buf + (c * 24), " %-8s%c%-*s%s",
             user->chatid, ROOMOP(user) ? '*' : ' ',
-            user->userid, (c < 2 ? "│" : "  "));
+            IDLEN, user->userid, (c < 2 ? "│" : "  "));
 
         if (++c == 3)
         {
