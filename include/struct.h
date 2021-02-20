@@ -162,7 +162,7 @@ typedef struct
 typedef struct                  /* 16 bytes */
 {
     time_t uptime;
-    char userid[IDLEN];
+    char userid[IDLEN] GCC_NONSTRING;
 } SCHEMA;  /* DISKDATA(raw) */
 
 
