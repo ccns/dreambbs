@@ -36,7 +36,7 @@ else()
 endif()
 
 add_compile_options(-ggdb3 -O0 -pipe -fomit-frame-pointer)
-add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings)
+add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format)
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/include)
 
 link_libraries(-L${PROJECT_BINARY_DIR}/lib dao crypt)
@@ -173,6 +173,14 @@ else()
 endif()
 
 ## Other compile options and link options settings
+
+# Prevent `-Wformat-overflow=` warnings from halting the compilation
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-format-overflow -Wno-error=format-overflow -Wformat-overflow")
+endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-format-overflow -Wno-error=format-overflow -Wformat-overflow")
+endif()
 
 if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-invalid-source-encoding")

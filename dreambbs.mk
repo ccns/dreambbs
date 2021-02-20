@@ -24,7 +24,7 @@ BUILDTIME	!= date '+%s'
 
 ## To be expanded
 
-CFLAGS_WARN	= -Wall -Wpointer-arith -Wcast-qual -Wwrite-strings
+CFLAGS_WARN	= -Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format
 CFLAGS_MK	= -ggdb3 -O0 -pipe -fomit-frame-pointer $(CFLAGS_WARN) -I$$(SRCROOT)/include $(CFLAGS_ARCHI) $(CFLAGS_COMPAT)
 
 LDFLAGS_MK = -L$$(SRCROOT)/lib -ldao -lcrypt $(LDFLAGS_ARCHI)
@@ -83,7 +83,7 @@ DEF_LIST	!= sh -c '$(GETCONFS$(hdr::= $(BBSCONF)))'
 DEF_TEST	 = [ $(DEF_LIST:M$(conf:M*:S/"//g:N")) ]  # Balance the quotes
 DEF_YES		:= && echo "YES" || echo ""
 USE_PMORE	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_PMORE")) $(DEF_YES)'
-USE_PFTERM	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_PFTERM")) $(DEF_YES)'
+UE_PFTERM	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_PFTERM")) $(DEF_YES)'
 USE_BBSLUA	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSLUA")) $(DEF_YES)'
 USE_BBSRUBY	!= sh -c '$(DEF_TEST$(conf::= "M3_USE_BBSRUBY")) $(DEF_YES)'
 USE_LUAJIT	!= sh -c '$(DEF_TEST$(conf::= "BBSLUA_USE_LUAJIT")) $(DEF_YES)'
@@ -96,6 +96,11 @@ NO_SO_CONF	!= $(GETVALUE$(conf::= "NO_SO")$(default::= "0")$(hdr::= $(EXPORT_MAP
 NO_SO		= $(NO_SO_CLI:S/NO//g)$(NO_SO_CONF:S/0//g)
 
 CC_HASFLAGS = echo "" | $(CC) -x c -E $(flags:M*) -Werror - >/dev/null 2>&1
+
+# Prevent `-Wformat-overflow=` warnings from halting the compilation
+.if $(CC:Mgcc*)
+CFLAGS_WARN	= -Wno-format-overflow -Wno-error=format-overflow -Wformat-overflow
+.endif
 
 .if $(CC:Mclang*)
 CFLAGS_WARN	+= -Wno-invalid-source-encoding
