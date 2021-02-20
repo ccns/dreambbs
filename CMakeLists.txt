@@ -36,7 +36,7 @@ else()
 endif()
 
 add_compile_options(-ggdb3 -O0 -pipe)
-add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format)
+add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format -Werror=incompatible-pointer-types)
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/include)
 
 link_libraries(-L${PROJECT_BINARY_DIR}/lib dao crypt)
@@ -175,17 +175,22 @@ endif()
 ## Other compile options and link options settings
 
 # Prevent `-Wformat-overflow=` warnings from halting the compilation
+set(W_NO_ERROR_FORMAT_OVERFLOW "-Wno-format-overflow -Wno-error=format-overflow -Wformat-overflow")
 if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-format-overflow -Wno-error=format-overflow -Wformat-overflow")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${W_NO_ERROR_FORMAT_OVERFLOW}")
 endif()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-format-overflow -Wno-error=format-overflow -Wformat-overflow")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${W_NO_ERROR_FORMAT_OVERFLOW}")
 endif()
 
+# Prevent `-Wincompatible-pointer-types-discards-qualifiers` warnings from halting the compilation
+set(W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS "-Wno-incompatible-pointer-types-discards-qualifiers -Wno-error=incompatible-pointer-types-discards-qualifiers -Wincompatible-pointer-types-discards-qualifiers")
 if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS}")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-invalid-source-encoding")
 endif()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-invalid-source-encoding")
 endif()
 
