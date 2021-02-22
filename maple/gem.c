@@ -92,10 +92,10 @@ gem_item(
         if (xmode & GEM_BOARD)
         {
             sprintf(fpath, "gem/brd/%s/", ghdr->xname);
-            prints("%-*.*s%-13s%s\n", d_cols + 47, d_cols + 46, ghdr->title, (gtype == 1 ? ghdr->xname : ghdr->owner), access(fpath, R_OK) ? "[deleted]" : ghdr->date);
+            prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title, IDLEN + 1, (gtype == 1 ? ghdr->xname : ghdr->owner), access(fpath, R_OK) ? "[deleted]" : ghdr->date);
         }
         else
-            prints("%-*.*s%-13s%s\n", d_cols + 47, d_cols + 46, ghdr->title, (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
+            prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title, IDLEN + 1, (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
     }
 }
 
@@ -365,7 +365,7 @@ gem_add(
             if (gtype == 'c')
             {
                 strcat(fpath, "/");
-                sprintf(ghdr.title, "%-13s¡i %s ¡j", fpath, title);
+                sprintf(ghdr.title, "%-*s ¡i %s ¡j", IDLEN, fpath, title);
                 ghdr.xmode = GEM_FOLDER;
             }
             else

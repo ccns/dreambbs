@@ -29,7 +29,7 @@ const char *lowid)
 
     if (!strcmp(acct.email, kmail))
     {
-        fprintf(flog, "%-13s\n", acct.userid);
+        fprintf(flog, "%-*s\n", IDLEN, acct.userid);
         total++;
     }
 }

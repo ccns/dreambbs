@@ -122,11 +122,11 @@ int num,
 const NBRD *nbrd)
 {
     if (nbrd->mode & NBRD_NBRD)
-        prints("%6d %c %-5s %-13s %-13s:%-*.*s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, nbrd->brdname, d_cols + 36, d_cols + 36, nbrd->title);
+        prints("%6d %c %-5s %-*s %-*s:%-*.*s\n", num, nbrd_attr(nbrd), nbrd->date + 3, IDLEN, nbrd->owner, IDLEN, nbrd->brdname, d_cols + 36, d_cols + 36, nbrd->title);
     else if (nbrd->mode & NBRD_CANCEL)
-        prints("%6d %c %-5s %-13s 廢除 %s 版版主\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, nbrd->brdname);
+        prints("%6d %c %-5s %-*s 廢除 %s 版版主\n", num, nbrd_attr(nbrd), nbrd->date + 3, IDLEN, nbrd->owner, nbrd->brdname);
     else
-        prints("%6d %c %-5s %-13s %-*.*s\n", num, nbrd_attr(nbrd), nbrd->date + 3, nbrd->owner, d_cols + 50, d_cols + 50, nbrd->title);
+        prints("%6d %c %-5s %-*s %-*.*s\n", num, nbrd_attr(nbrd), nbrd->date + 3, IDLEN, nbrd->owner, d_cols + 50, d_cols + 50, nbrd->title);
 }
 
 static int
@@ -897,7 +897,7 @@ XO *xo)
         memcpy(xpost.date, nbrd->date, sizeof(xpost.date));
 
         if (nbrd->mode & NBRD_NBRD)
-            sprintf(xpost.title, "申請新版 %-13s:%-22.22s", nbrd->brdname, nbrd->title);
+            sprintf(xpost.title, "申請新版 %-*s:%-22.22s", IDLEN, nbrd->brdname, nbrd->title);
         else if (nbrd->mode & NBRD_CANCEL)
             sprintf(xpost.title, "廢除 %s 版版主", nbrd->brdname);
         else

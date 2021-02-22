@@ -446,7 +446,7 @@ user_info *uentp)
     if (cloak && !HAS_PERM(PERM_SEECLOAK))
         return 0;
 
-    sprintf(pline, " %-13s%c%-10s", uentp->userid,
+    sprintf(pline, " %-*s %c%-10s", IDLEN, uentp->userid,
             cloak ? '#' : ' ', bmode(uentp, 1));
     if (cnt < 2)
         strcat(pline, "¢x");

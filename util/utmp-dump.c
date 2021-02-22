@@ -437,9 +437,9 @@ ulist_body(
                 colortmp = 0;
             strcpy(color, wcolor[fcolor]);
 
-            printf("%5d %s%-13s%-22.21s%s%-16.15s%c%c %-14.14s%s\n",
+            printf("%5d %s%-*s %-22.21s%s%-16.15s%c%c %-14.14s%s\n",
                 cnt,
-                color, up->userid,
+                color, IDLEN, up->userid,
                 (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
                 colortmp > 0 ? "\x1b[m" : "",
                 (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?

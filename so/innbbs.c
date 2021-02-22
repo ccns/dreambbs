@@ -162,8 +162,8 @@ nf_item(
         outgo = income = 'X';
     }
 
-    prints("%6d %-13s%-*.*s %c-%c %-13s %.7s\n", num,
-        nf->path, d_cols + 33, d_cols + 33, nf->newsgroup, outgo, income, nf->board, nf->charset);
+    prints("%6d %-13s%-*.*s %c-%c %-*s %.7s\n", num,
+        nf->path, d_cols + 33, d_cols + 33, nf->newsgroup, outgo, income, IDLEN, nf->board, nf->charset);
 }
 
 
@@ -414,8 +414,8 @@ spam_item(
 
     path = spam->path;
     board = spam->board;
-    prints("%6d %-13s%-13s[%s] 包含 %.*s\n",
-        num, *path ? path : "所有站台", *board ? board : "所有看板",
+    prints("%6d %-13s%-*s [%s] 包含 %.*s\n",
+        num, *path ? path : "所有站台", IDLEN, *board ? board : "所有看板",
         spam_compare(spam->xmode), d_cols + 31, spam->detail);
 }
 

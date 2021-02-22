@@ -39,7 +39,7 @@ reaper(
 
     if (!strcmp(acct.email, kmail))
     {
-        fprintf(flog, "%-13s\n", acct.userid);
+        fprintf(flog, "%-*s\n", IDLEN, acct.userid);
         total++;
     }
 }
@@ -399,7 +399,9 @@ setup(
 
     for (i=1; i<=num; i++)
     {
-        fscanf(flog, "%13s", buf);
+        char fmt[13];
+        sprintf(fmt, "%%%ds", IDLEN);
+        fscanf(flog, fmt, buf);
         acct_load(u, buf);
 
         if (u != NULL)

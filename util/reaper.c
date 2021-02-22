@@ -295,18 +295,18 @@ report_eaddr_group(void)
                     fd = open(buf, O_RDONLY, 0);
                     if (fd < 0)
                     {
-                        fprintf(faddr, "==> %d)%-13s can't open\n", j, s.userid);
+                        fprintf(faddr, "==> %d)%-*s can't open\n", j, IDLEN, s.userid);
                         continue;
                     }
                     if (read(fd, &acct, sizeof(acct)) != sizeof(acct))
                     {
-                        fprintf(faddr, "==> %d)%-13s can't read\n", j, s.userid);
+                        fprintf(faddr, "==> %d)%-*s can't read\n", j, IDLEN, s.userid);
                         continue;
                     }
                     close(fd);
 
                     datemsg(buf, &acct.lastlogin);
-                    fprintf(faddr, "%5d) %-13s%s[%d]\t%s\n", acct.userno, acct.userid, buf, acct.numlogins, acct.email);
+                    fprintf(faddr, "%5d) %-*s %s[%d]\t%s\n", acct.userno, IDLEN, acct.userid, buf, acct.numlogins, acct.email);
                 }
             }
         }
@@ -361,24 +361,24 @@ reaper(
     fd = open(buf, O_RDONLY, 0);
     if (fd < 0)
     { /* Thor.981001: 加些 log */
-        fprintf(flog, "acct can't open %-13s ==> %s\n", lowid, buf);
+        fprintf(flog, "acct can't open %-*s ==> %s\n", IDLEN, lowid, buf);
         return;
     }
 
     if (read(fd, &acct, sizeof(acct))!=sizeof(acct))
     {
-        fprintf(flog, "acct can't read %-13s ==> %s\n", lowid, buf);
+        fprintf(flog, "acct can't read %-*s ==> %s\n", IDLEN, lowid, buf);
         close(fd);
         return;
     }
     close(fd);
-    fprintf(fmah, "%-13s %-20s %-40.40s\n", acct.userid, acct.realname, acct.email);
+    fprintf(fmah, "%-*s %-20s %-40.40s\n", IDLEN, acct.userid, acct.realname, acct.email);
 
     fd = acct.userno;
 
     if ((fd <= 0) || (fd > max_uno))
     {
-        fprintf(flog, "%5d) %-13s ==> %s\n", fd, acct.userid, buf);
+        fprintf(flog, "%5d) %-*s ==> %s\n", fd, IDLEN, acct.userid, buf);
         return;
     }
 
@@ -398,7 +398,7 @@ reaper(
     {
         if (ulevel != (PERM_BASIC|PERM_CHAT|PERM_PAGE|PERM_POST|PERM_VALID|PERM_BM))
         {
-            fprintf(flst, "%5d) %-13s%s[%s] %d\n", fd, acct.userid, buf, data, login);
+            fprintf(flst, "%5d) %-*s %s[%s] %d\n", fd, IDLEN, acct.userid, buf, data, login);
             manager++;
         }
 
@@ -407,7 +407,7 @@ reaper(
             if (bshm)
             {
                 num = bm_list(acct.userid, bmlist);
-                fprintf(fbml, "%5d) %-13s%s %-6d %-2d %s\n", fd, acct.userid, buf, login, num, bmlist);
+                fprintf(fbml, "%5d) %-*s %s %-6d %-2d %s\n", fd, IDLEN, acct.userid, buf, login, num, bmlist);
                 bms++;
 #if 0
                 if (*bmlist == '\0')
@@ -419,12 +419,12 @@ reaper(
                     fd = open(fl, O_WRONLY, 0);
                     if (fd < 0)
                     { /* Thor.981001: 加些 log */
-                        fprintf(flog, "acct can't open %-13s ==> %s\n", lowid, fl);
+                        fprintf(flog, "acct can't open %-*s ==> %s\n", IDLEN, lowid, fl);
                     }
 
                     if (write(fd, &acct, sizeof(acct))!=sizeof(acct))
                     {
-                        fprintf(flog, "acct can't read %-13s ==> %s\n", lowid, fl);
+                        fprintf(flog, "acct can't read %-*s ==> %s\n", IDLEN, lowid, fl);
                     }
                     if (fd >= 0)
                         close(fd);
@@ -435,7 +435,7 @@ reaper(
 #ifdef CHECK_LAZYBM
             if (life < due_lazybm)
             {
-                fprintf(fbm, "%5d) %-13s%s %d\n", fd, acct.userid, buf, login);
+                fprintf(fbm, "%5d) %-*s %s %d\n", fd, IDLEN, acct.userid, buf, login);
                 lazybm++;
             }
 #endif
@@ -445,7 +445,7 @@ reaper(
     {
         if (ulevel & PERM_CRIMINAL)
         {
-                fprintf(fcri, "%5d) %-13s%s[%s] %d\n", fd, acct.userid, buf, data, login);
+                fprintf(fcri, "%5d) %-*s %s[%s] %d\n", fd, IDLEN, acct.userid, buf, data, login);
                 criminal++;
         }
 
@@ -489,7 +489,7 @@ reaper(
             }
 
             userno_free(fd);
-            fprintf(flog, "%5d) %-13s%s%d\n", fd, acct.userid, buf, login);
+            fprintf(flog, "%5d) %-*s %s%d\n", fd, IDLEN, acct.userid, buf, login);
             prune++;
         }
 #ifdef  HAVE_MAILGEM

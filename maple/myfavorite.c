@@ -36,7 +36,7 @@ myfavorite_item(
     if (myfavorite->xmode & GEM_BOARD)
     {
         if (myfavorite->recommend == -1)
-            prints("%6d   %-13s< 本看板已不存在 >\n", num, myfavorite->xname);
+            prints("%6d   %-*s < 本看板已不存在 >\n", num, IDLEN, myfavorite->xname);
         else
         {
             BRD *brd;

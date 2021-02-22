@@ -17,6 +17,7 @@
 #include <string.h>
 #include <sys/stat.h>   /* lkchu.981201 */
 #include "cppdef.h"
+#include "struct.h"
 
 
 static const char *const myfile[] = {"day", "week", "month", "year"};
@@ -408,7 +409,7 @@ post_author(void)
                 text = (PostText *) malloc(SIZEOF_FLEX(PostText, len + 13));
                 text->ptnext = pahe->text;
                 text->count = 1;
-                sprintf(text->title, "%-13s%s", post.board, str);
+                sprintf(text->title, "%-*s %s", IDLEN, post.board, str);
                 /* memcpy(text->title, str, len); */
                 pahe->text = text;
                 break;

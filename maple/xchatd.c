@@ -193,9 +193,9 @@ logtalk(
 
     time(&now);
     p = localtime(&now);
-    fprintf(ftalk, "%02d/%02d/%02d %02d:%02d:%02d %-13s%s\n",
+    fprintf(ftalk, "%02d/%02d/%02d %02d:%02d:%02d %-*s %s\n",
         p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
-        p->tm_hour, p->tm_min, p->tm_sec, key, msg);
+        p->tm_hour, p->tm_min, p->tm_sec, IDLEN, key, msg);
 }
 
 
@@ -209,9 +209,9 @@ logit(
 
     time(&now);
     p = localtime(&now);
-    fprintf(flog, "%02d/%02d/%02d %02d:%02d:%02d %-13s%s\n",
+    fprintf(flog, "%02d/%02d/%02d %02d:%02d:%02d %-*s %s\n",
         p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
-        p->tm_hour, p->tm_min, p->tm_sec, key, msg);
+        p->tm_hour, p->tm_min, p->tm_sec, IDLEN, key, msg);
 }
 
 
@@ -2070,7 +2070,7 @@ chat_ignore(
                 len = 0;
                 do
                 {
-                    sprintf(userid, "%-13s", list->userid);
+                    sprintf(userid, "%-*s ", IDLEN, list->userid);
                     strcpy(buf + len, userid);
                     len += 13;
                     if (len >= 78)

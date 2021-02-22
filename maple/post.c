@@ -265,7 +265,7 @@ move_post(      /* 將 hdr 從 currboard 搬到 board */
         post.xmode |= POST_MARKED;
 
     if (by_bm>0)
-        sprintf(post.title, "%-13s%.59s", cuser.userid, hdr->title);
+        sprintf(post.title, "%-*s %.59s", IDLEN, cuser.userid, hdr->title);
 
     rec_bot(folder, &post, sizeof(post));
     if (by_bm>=0)
@@ -287,7 +287,7 @@ log_anonymous(
     char buf[512];
     time_t now = time(0);
     /* Thor.990113: 加上 rusername 和 fromhost比較詳盡 */
-    sprintf(buf, "%s %-13s(%s@%s) %s %s %s\n", Etime(&now), cuser.userid, rusername, fromhost, currboard, ve_title, fname);
+    sprintf(buf, "%s %-*s (%s@%s) %s %s %s\n", Etime(&now), IDLEN, cuser.userid, rusername, fromhost, currboard, ve_title, fname);
     f_cat(FN_ANONYMOUS_LOG, buf);
 }
 #endif

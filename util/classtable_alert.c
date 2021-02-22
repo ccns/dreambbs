@@ -151,7 +151,7 @@ init(void)
             continue;
         if (!(up->ufo & UFO_CLASSTABLE))
             continue;
-//      printf("%-13.13s  %6.6d  %6.6d\n", up->userid, up->userno, up->pid);
+//      printf("%-*.*s  %6.6d  %6.6d\n", IDLEN, IDLEN, up->userid, up->userno, up->pid);
         if ((ptr=bfind(up->userno)))
         {
             //strcpy(bmw.msg, "訊息測試，不便請見諒");

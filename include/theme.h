@@ -170,11 +170,11 @@
             COLOR3 "  編號  日期      時間      工作或行程%*s                                         \x1b[m"
 
 #define NECK_NBRD  "  [←]離開 [→]閱\讀 [^P]發表 [d]刪除 [j]加入連署 [TAB]精華區 [h]elp\n" \
-            COLOR0 "  編號   日 期 舉辦人        看  版  標  題%*s                                    \x1b[m"
+            COLOR0 "  編號   日 期 舉辦人       看  版  標  題%*s                                     \x1b[m"
 
 #define NECK_OBSERVE \
                    "  [←]離開 ^P)新增 c)修改 d)刪除 S)重整 [h]elp\n" \
-            COLOR3 "  編號 使用者ID      說明%*s                                                      \x1b[m"
+            COLOR3 "  編號 使用者ID     說明%*s                                                       \x1b[m"
 
 #define NECK_PERSONAL1 \
                    "  [←]離開 c)修改 d)刪除 s)重整 TAB)中文版名/E-mail O)開板 D)退件 [h]elp\n" \

@@ -295,8 +295,8 @@ outs_header(    /* ¶L•X¿…¿Y */
         if ((ptr = strstr(word, str_post1)) || (ptr = strstr(word, str_post2)))
         {
             ptr[-1] = ptr[4] = '\0';
-            prints(COLOR5 " %s " COLOR6 "%-*.*s" COLOR5 " %s " COLOR6 "%-13s\x1b[m",
-                header1[0], d_cols + 54, d_cols + 54, word, ptr, ptr + 5);
+            prints(COLOR5 " %s " COLOR6 "%-*.*s" COLOR5 " %s " COLOR6 "%-*s\x1b[m",
+                header1[0], d_cols + 54, d_cols + 54, word, ptr, IDLEN + 1, ptr + 5);
         }
         else
         {

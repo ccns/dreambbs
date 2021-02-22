@@ -48,8 +48,8 @@ const HDR *ghdr)
 
     gtype = HAS_PERM(PERM_SYSOP) ? mailgem_way : 0;
 
-    prints("%-*.*s%-13s%s\n", d_cols + 47, d_cols + 46, ghdr->title,
-           (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
+    prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title,
+           IDLEN + 1, (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
 }
 
 static int

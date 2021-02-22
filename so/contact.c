@@ -18,7 +18,7 @@ contact_item(
 int num,
 const CONTACT *contact)
 {
-    prints("%6d     %-13s      %-*s\n", num, contact->name, d_cols + 49, contact->email);
+    prints("%6d     %-*s       %-*s\n", num, IDLEN, contact->name, d_cols + 49, contact->email);
 }
 
 static int

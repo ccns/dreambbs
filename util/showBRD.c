@@ -38,7 +38,7 @@ main(
     {
         if (show_allbrd || !str_casecmp(brd.brdname, argv[1]))
         {
-            printf("看板名稱：%-13s     看板標題：[%s] %s\n", brd.brdname, brd.class_, brd.title);
+            printf("看板名稱：%-*s      看板標題：[%s] %s\n", IDLEN, brd.brdname, brd.class_, brd.title);
             printf("投票狀態：%-13d     看板板主：%s\n", brd.bvote, brd.BM);
             printf("文章篇數：%d\n", brd.bpost);
             printf("開板時間：%s\n", Btime(&brd.bstamp));

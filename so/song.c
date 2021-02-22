@@ -22,7 +22,7 @@ const char *msg)
 {
     char buf[512];
     time_t now = time(0);
-    sprintf(buf, "%s %-13s %s\n", Etime(&now), cuser.userid, msg);
+    sprintf(buf, "%s %-*s %s\n", Etime(&now), IDLEN, cuser.userid, msg);
     f_cat(FN_SONG_LOG, buf);
 }
 

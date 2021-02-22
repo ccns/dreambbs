@@ -1077,7 +1077,9 @@ void acct_setup(ACCT * u, int adm)
 
                 for (i = 1; i <= num; i++)
                 {
-                    fscanf(flog, "%13s", buf);
+                    char fmt[13];
+                    sprintf(fmt, "%%%ds", IDLEN);
+                    fscanf(flog, fmt, buf);
                     acct_load(u, buf);
                     if (u != NULL)
                     {

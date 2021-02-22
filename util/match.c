@@ -34,7 +34,7 @@ reaper(
     }
 
     close(fd);
-    fprintf(flog, "%-13s %-20s %-40.40s\n", acct.userid, acct.realname, acct.email);
+    fprintf(flog, "%-*s %-20s %-40.40s\n", IDLEN, acct.userid, acct.realname, acct.email);
 
 }
 

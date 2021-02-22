@@ -442,7 +442,7 @@ pal_cache(void)
     {
         if (fsize > (PAL_MAX * sizeof(PAL)))
         {
-            sprintf(fpath, "%-13s%d > %d * %zu\n", cuser.userid, fsize, PAL_MAX, sizeof(PAL));
+            sprintf(fpath, "%-*s %d > %d * %zu\n", IDLEN, cuser.userid, fsize, PAL_MAX, sizeof(PAL));
             f_cat(FN_PAL_LOG, fpath);
             fsize = PAL_MAX * sizeof(PAL);
         }
@@ -1028,17 +1028,17 @@ bmw_item(
             if (!*userid)
                 userid = "眾家好友";
 
-            prints("%6d %02d:%02d %-13s☆%-*.*s\n", num, ptime->tm_hour, ptime->tm_min,
-                userid, d_cols + 50, d_cols + 50, bmw->msg);
+            prints("%6d %02d:%02d %-*s ☆%-*.*s\n", num, ptime->tm_hour, ptime->tm_min,
+                IDLEN, userid, d_cols + 50, d_cols + 50, bmw->msg);
         }
         else
         {
             if (strstr(bmw->msg, "★廣播"))
-                prints("%6d \x1b[36;1m%02d:%02d %-13s★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
-                    bmw->userid, d_cols + 50, d_cols + 50, (bmw->msg)+8);
+                prints("%6d \x1b[36;1m%02d:%02d %-*s ★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
+                    IDLEN, bmw->userid, d_cols + 50, d_cols + 50, (bmw->msg)+8);
             else
-                prints("%6d \x1b[32m%02d:%02d %-13s★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
-                    bmw->userid, d_cols + 50, d_cols + 50, bmw->msg);
+                prints("%6d \x1b[32m%02d:%02d %-*s ★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
+                    IDLEN, bmw->userid, d_cols + 50, d_cols + 50, bmw->msg);
         }
     }
     else
@@ -1050,16 +1050,16 @@ bmw_item(
             if (!*userid)
                 userid = "眾家好友";
 
-            prints("%6d %-13s☆%-*.*s\n", num, userid, d_cols + 57, d_cols + 57, bmw->msg);
+            prints("%6d %-*s ☆%-*.*s\n", num, IDLEN, userid, d_cols + 57, d_cols + 57, bmw->msg);
         }
         else
         {
             if (strstr(bmw->msg, "★廣播"))
-                prints("%6d \x1b[36;1m%-13s★%-*.*s\x1b[m\n", num,
-                    bmw->userid, d_cols + 57, d_cols + 57, (bmw->msg)+8);
+                prints("%6d \x1b[36;1m%-*s ★%-*.*s\x1b[m\n", num,
+                    IDLEN, bmw->userid, d_cols + 57, d_cols + 57, (bmw->msg)+8);
             else
-                prints("%6d \x1b[32m%-13s★%-*.*s\x1b[m\n", num,
-                    bmw->userid, d_cols + 57, d_cols + 57, bmw->msg);
+                prints("%6d \x1b[32m%-*s ★%-*.*s\x1b[m\n", num,
+                    IDLEN, bmw->userid, d_cols + 57, d_cols + 57, bmw->msg);
         }
     }
 }
@@ -2232,7 +2232,7 @@ loginNotify(void)
                 }
             }
 
-            prints("%-13s", bmw->userid);
+            prints("%-*s ", IDLEN, bmw->userid);
 
         }
         close(fd);
@@ -3174,9 +3174,9 @@ ulist_body(
 
                 strcpy(color, wcolor[fcolor]);
 
-                prints("%6d%c%s%-13s%-*.*s%s%-*.*s%c%c %-*.*s %5.5s",
+                prints("%6d%c%s%-*s %-*.*s%s%-*.*s%c%c %-*.*s %5.5s",
                     cnt, (up->ufo & UFO_WEB)?'*':' ',
-                    color, up->userid,
+                    color, IDLEN, up->userid,
                     (d_cols >> 1) + 22, (d_cols >> 1) + 21, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
                     colortmp > 0 ? "\x1b[m" : "",
                     ((d_cols+1) >> 1) + 16, ((d_cols+1) >> 1) + 15,

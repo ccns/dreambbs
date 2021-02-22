@@ -442,7 +442,7 @@ smtp_log:
     /* 記錄寄信                                            */
     /* --------------------------------------------------- */
 
-    sprintf(buf, "%s%-13s%c> %s %s %s\n\t%s\n\t%s\n", Btime(&stamp), cuser.userid,
+    sprintf(buf, "%s%-*s %c> %s %s %s\n\t%s\n\t%s\n", Btime(&stamp), IDLEN, cuser.userid,
         ((method == MQ_JUSTIFY) ? '=' : '-'), rcpt, msgid,
 #ifdef HAVE_SIGNED_MAIL
             signature? signature: "NoPriKey",
@@ -644,7 +644,7 @@ smtp_file_log:
     /* 記錄寄信                                            */
     /* --------------------------------------------------- */
 
-    sprintf(buf, "%s%-13s> %s %s\n\t%s\n\t%s\n", Btime(&stamp), cuser.userid,
+    sprintf(buf, "%s%-*s > %s %s\n\t%s\n\t%s\n", Btime(&stamp), IDLEN, cuser.userid,
         rcpt, msgid, title, fpath);
     f_cat(FN_MAIL_LOG, buf);
 
