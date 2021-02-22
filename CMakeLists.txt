@@ -35,7 +35,7 @@ else()
     set(USE_CXX ON CACHE BOOL "Compile C code using C++ mode")
 endif()
 
-add_compile_options(-ggdb3 -O0 -pipe -fomit-frame-pointer)
+add_compile_options(-ggdb3 -O0 -pipe)
 add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format)
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/include)
 
