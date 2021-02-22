@@ -474,7 +474,7 @@ gem_title(
     dir = xo->dir;
     if (HAS_PERM(PERM_ALLBOARD|PERM_GEM))
     {
-        vget(B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 2, GCARRY);
+        vget(B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 1, GCARRY);
         vget(B_LINES_REF, 0, "時間：", xhdr.date, 9, GCARRY);
     }
 
