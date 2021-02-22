@@ -1183,11 +1183,12 @@ board_outs(
         str2 = "     ";
 //注意有三格空白, 因為 HOT 是三個 char 故更改排版
 //      prints("\x1b[%d;4%d;37m%6d%s%s%c%-13s\x1b[%sm%-4s %s%-33.32s%s%s%.13s", mode, mode?cuser.barcolor:0, num, str, mode ? "\x1b[37m" : "\x1b[m",
-//          brdtype, brd->brdname, buf, brd->class_, mode ? "\x1b[37m" : "\x1b[m", brd->title, brd->bvote ? "\x1b[1;33m  投 " : str2, mode ? "\x1b[37m" : "\x1b[m", brd->BM);
 
     sprintf(buf, "%d;3%d", (!brd->color) ? 1 : HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) ? 0 : brd->color/10, brd->color%10);
 //      prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-36s%c %.13s", num, str,
 //      prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%s%c %.13s", num, str,
+
+//          brdtype, brd->brdname, buf, brd->class_, mode ? "\x1b[37m" : "\x1b[m", brd->title, brd->bvote ? "\x1b[1;33m  投 " : str2, mode ? "\x1b[37m" : "\x1b[m", brd->BM);
 
     prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-*s%s", num, str, brdtype, brd->brdname, buf, brd->class_, d_cols + 33, tmp, str2);
 
