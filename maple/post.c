@@ -2805,8 +2805,9 @@ post_title(
 
     if (HAS_PERM(PERM_ALLBOARD))  /* 0911105.cache: 非看板總管只能改標題 */
     {
-        vget(B_LINES_REF, 0, "作者：", mhdr.owner, 74 /* sizeof(mhdr.owner)*/, GCARRY);
+        vget(B_LINES_REF, 0, "作者：", mhdr.owner, BMIN(80UL - 6, sizeof(mhdr.owner)), GCARRY);
         /* Thor.980727:lkchu patch: sizeof(mhdr.owner) = 80會超過一行 */
+        /* IID.2021-02-22: `sizeof(mhdr.owner)` has become 47; simply hardcoded size cannot be used */
         vget(B_LINES_REF, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
     }
 
