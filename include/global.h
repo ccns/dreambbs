@@ -66,7 +66,7 @@ VAR char currtitle[80];
 VAR char hunt[32];              /* hunt keyword */
 
 VAR char ve_title[80];
-VAR char currboard[IDLEN + 2];          /* name of currently selected board */
+VAR char currboard[IDLEN + 1];          /* name of currently selected board */
 VAR char currBM[BMLEN + 7];             /* BM of currently selected board */
 VAR int  currbno        INI(-1);
 VAR const char str_ransi[4]   INI("\x1b[m");
