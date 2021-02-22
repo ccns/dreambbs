@@ -184,7 +184,7 @@ personal_apply(void)
     {
         while (1)
         {
-            if (!vget(7, 0, "看板英文名稱： ", brdname, IDLEN - 1, num))
+            if (!vget(7, 0, "看板英文名稱： ", brdname, IDLEN - 2 + 1, num))
                 return DL_RELEASE(0);
 
             if (is_badid(brdname))
