@@ -25,7 +25,7 @@ int main(void)
     {
         str_scpy(userid, usr[n].userid, sizeof(userid));
         printf("uptime:%s userid:%-*s\n",
-            Btime(&usr[n].uptime), IDLEN, userid);
+            Btime_any(&usr[n].uptime), IDLEN, userid);
     }
     free(usr);
 }

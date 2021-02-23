@@ -512,7 +512,7 @@ personal_open(
     newboard.color = 7;
     strcpy(newboard.class_, "­Ó¤H");
     strcpy(newboard.BM, personal->userid);
-    time(&newboard.bstamp);
+    time32(&newboard.bstamp);
 //  newboard.readlevel |= PERM_SYSOP;
     newboard.postlevel |= (PERM_POST|PERM_VALID|PERM_BASIC);
     newboard.battr |= BRD_NOTRAN;

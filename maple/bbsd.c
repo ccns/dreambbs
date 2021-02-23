@@ -177,7 +177,7 @@ u_exit(
     {
         if (read(fd, &tuser, sizeof(ACCT)) == sizeof(ACCT))
         {
-            delta = time(&cuser.lastlogin) - ap_start;
+            delta = time32(&cuser.lastlogin) - ap_start;
             cuser.staytime += delta;
             /* lkchu.981201: 用 delta, 每次上站都要超過三分鐘才算 */
             if (delta > 3 * 60)
@@ -554,7 +554,7 @@ utmp_setup(
 #endif
 
     strcpy(utmp.userid, cuser.userid);
-    time(&utmp.idle_time);
+    time32(&utmp.idle_time);
     srand(time(0));
     srandom(time(0));
     strcpy(utmp.username, ((!str_casecmp(cuser.userid, STR_GUEST)||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
@@ -929,7 +929,7 @@ tn_login(void)
         /* Thor.990318: 為防止有大機率 有人在welcome畫面回認證信, 故移至此 */
         move(b_lines - 3, 0);
         prints("★ 歡迎您第 \x1b[1;33m%d\x1b[m 度拜訪本站，我記得那天是 \x1b[1;33m%s\x1b[m\n",
-            cuser.numlogins, Ctime(&cuser.lastlogin));
+            cuser.numlogins, Ctime_any(&cuser.lastlogin));
         prints("★ 來自於 \x1b[1;33m%s\x1b[m", cuser.lasthost);
         /* Thor.990321: 將vmsg移至後方, 防止有人在此時回認證信 */
 #endif

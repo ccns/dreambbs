@@ -11,6 +11,7 @@
 
 #include "cppdef.h"
 #include "attrdef.h"
+#include "timetype.h"
 
 #include "dns.h"
 
@@ -98,7 +99,7 @@ typedef struct
 {
     char    data[48];
     int32_t mode;
-    time_t  time;
+    time32_t time;
     int32_t usage;
 } BANMAIL;  /* DISKDATA(raw) */
 
@@ -106,7 +107,7 @@ typedef struct
 {
     char    data[48];
     int32_t mode;
-    time_t  time;
+    time32_t time;
     int32_t usage;
     char    name[IDLEN+1];
 } FW;  /* SHMDATA(raw); dependency */
@@ -137,18 +138,18 @@ typedef struct
     int32_t numlogins;          /* user login times */
     int32_t numposts;           /* user post times */
     uint32_t ufo;               /* user basic flags */
-    time_t firstlogin;          /* user first login time */
-    time_t lastlogin;           /* user last login time */
-    time_t staytime;            /* user total stay time */
-    time_t tcheck;              /* time to check mbox/pal */
+    time32_t firstlogin;        /* user first login time */
+    time32_t lastlogin;         /* user last login time */
+    time32_t staytime;          /* user total stay time */
+    time32_t tcheck;            /* time to check mbox/pal */
     char lasthost[32];          /* user last login remote host */
     int32_t numemail;           /* 原為寄發 Inetrnet E-mail 次數, 在不更改資料結構的狀況下, 擴充為積分 */
-    time_t tvalid;              /* 通過認證、更改 mail address 的時間 */
+    time32_t tvalid;            /* 通過認證、更改 mail address 的時間 */
     char email[60];             /* user email */
     char address[60];           /* user address */
     char justify[60];           /* FROM of replied justify mail */
     char vmail[60];             /* 通過認證之 email */
-    time_t deny;                /* user violatelaw time */
+    time32_t deny;              /* user violatelaw time */
     int32_t request;            /* 點歌系統 */
     int32_t money;              /* 夢幣 */
     uint32_t ufo2;              /* 延伸的個人設定 */
@@ -157,12 +158,12 @@ typedef struct
     char ident[30];             /* user remote host ident */
     int32_t point1;             /* 優良積分 */
     int32_t point2;             /* 劣文 */
-    time_t vtime;               /* validate time */
+    time32_t vtime;             /* validate time */
 } ACCT;  /* DISKDATA(raw) */
 
 typedef struct                  /* 16 bytes */
 {
-    time_t uptime;
+    time32_t uptime;
     char userid[IDLEN] GCC_NONSTRING;
 } SCHEMA;  /* DISKDATA(raw) */
 
@@ -172,7 +173,7 @@ typedef struct                  /* 16 bytes */
 typedef struct  /* 註冊表單 (Register From) 256 bytes */
 {
     int32_t userno;
-    time_t rtime;
+    time32_t rtime;
     char userid[IDLEN + 1];
     char agent[IDLEN + 1];
     char realname[20];
@@ -310,9 +311,9 @@ typedef struct
 #if 0
 typedef struct VoteControlHeader
 {
-    time_t chrono;                /* 投票開辦時間 */      /* Thor: 為 key 而且 match HDR chrono */
-    time_t bstamp;                /* 看板辨識代碼 */      /* Thor: 為 key */
-    time_t vclose;                /* 投票結束時間 */
+    time32_t chrono;              /* 投票開辦時間 */      /* Thor: 為 key 而且 match HDR chrono */
+    time32_t bstamp;              /* 看板辨識代碼 */      /* Thor: 為 key */
+    time32_t vclose;              /* 投票結束時間 */
 
     char xname[32];               /* 主檔名 */            /* Thor: match HDR 的 xname */
     char date[9];                 /* 開始日期 */          /* Thor: match HDR 的 date */
@@ -336,10 +337,10 @@ typedef struct VoteControlHeader
 
 typedef struct VoteControlHeader
 {
-    time_t chrono;              /* 投票開辦時間 */  /* Thor:為 key */
+    time32_t chrono;            /* 投票開辦時間 */  /* Thor:為 key */
                                                     /* 而且 match HDR chrono */
-    time_t bstamp;              /* 看板辨識代碼 */  /* Thor:為 key */
-    time_t vclose;              /* 投票結束時間 */
+    time32_t bstamp;            /* 看板辨識代碼 */  /* Thor:為 key */
+    time32_t vclose;            /* 投票結束時間 */
     char xname[17];             /* 主檔名 */ /* Thor: match HDR的xname */
     char vsort;                 /* 開票結果是否排序 */
     char vpercent;              /* 是否顯示百分比例 */
@@ -392,7 +393,7 @@ typedef struct
 
 typedef struct
 {
-    time_t mailtime;            /* 寄信時間 */
+    time32_t mailtime;          /* 寄信時間 */
     int8_t method;
     char sender[IDLEN + 1];
     char username[24];
@@ -453,7 +454,7 @@ typedef struct
 
 typedef struct
 {
-    time_t btime;
+    time32_t btime;
     UTMP *caller;               /* who call-in me ? */
     int32_t sender;             /* calling userno */
     int32_t recver;             /* called userno */
@@ -503,7 +504,7 @@ struct UTMP  /* SHMDATA(raw) */
     pid_t         pid;                          /* process ID */
     int32_t       userno;                       /* user number in .PASSWDS */
 
-    time_t        idle_time;                    /* active time for last event */
+    time32_t      idle_time;                    /* active time for last event */
     uint32_t      mode;                         /* bbsmode */
     uint32_t      ufo;                          /* the same as userec.ufo */
     uint32_t      flag;                         /* user flag */
@@ -564,13 +565,13 @@ typedef struct BoardHeader
 
     uint8_t bvote;              /* 共有幾項投票舉行中 */
 
-    time_t bstamp;              /* 建立看板的時間, unique */
+    time32_t bstamp;            /* 建立看板的時間, unique */
     uint32_t readlevel;         /* 閱讀文章的權限 */
     uint32_t postlevel;         /* 發表文章的權限 */
     uint32_t battr;             /* 看板屬性 */
-    time_t btime;               /* .DIR 的 st_mtime */
+    time32_t btime;             /* .DIR 的 st_mtime */
     int32_t bpost;              /* 共有幾篇 post */
-    time_t blast;               /* 最後一篇 post 的時間 */
+    time32_t blast;             /* 最後一篇 post 的時間 */
     uint32_t expiremax;         /* Expire Max Post */
     uint32_t expiremin;         /* Expire Min Post */
     uint32_t expireday;         /* Expire old Post */
@@ -587,8 +588,8 @@ typedef struct NewBoardHeader
 {
     char          brdname[IDLEN + 1];
     char          title[49];
-    time_t        btime;
-    time_t        etime;
+    time32_t      btime;
+    time32_t      etime;
     char          xname[32];
     char          owner[IDLEN +1];
     char          date[9];
@@ -619,13 +620,13 @@ typedef struct NewBoardHeader
 
 typedef struct BoardReadingHistory
 {
-    time_t bstamp;              /* 建立看板的時間, unique */ /* Thor.brh_tail*/
-    time_t bvisit;              /* 上次閱讀時間 */ /* Thor.980902:沒用到? */
+    time32_t bstamp;            /* 建立看板的時間, unique */ /* Thor.brh_tail*/
+    time32_t bvisit;            /* 上次閱讀時間 */ /* Thor.980902:沒用到? */
                         /* Thor.980904:未讀時放上次讀的時間, 正讀時放 bhno */
     int32_t bcount;                                /* Thor.980902:沒用到? */
                                                    /* Thor.980902:給自己看的 */
     /* --------------------------------------------------- */
-    /* time_t {final, begin} / {final | BRH_SIGN}          */
+    /* time32_t {final, begin} / {final | BRH_SIGN}        */
     /* --------------------------------------------------- */
                             /* Thor.980904:註解: BRH_SIGN代表final begin 相同 */
                             /* Thor.980904:註解: 由大到小排列, 存放已讀interval */
@@ -637,7 +638,7 @@ typedef struct BoardReadingHistory
 #define BRH_PAGE        2048         /* Thor.980902:註解:每次多配量, 用不到了 */
 #define BRH_MASK        0x7fffffff   /* Thor.980902:註解:最大量為2038年1月中*/
 #define BRH_SIGN        0x80000000   /* Thor.980902:註解:zap及壓final專用 */
-#define BRH_WINDOW      (sizeof(BRH) + sizeof(time_t) * BRH_MAX)
+#define BRH_WINDOW      (sizeof(BRH) + sizeof(time32_t) * BRH_MAX)
 
 /* ----------------------------------------------------- */
 /* Class image                                           */
@@ -732,7 +733,7 @@ typedef struct
     BRD bcache[MAXBOARD];
     int32_t mantime[MAXBOARD];  /* 各板目前正有多少人在閱讀 */
     int32_t number;
-    time_t uptime;
+    time32_t uptime;
 } BCACHE;  /* SHMDATA(raw) */
 
 typedef struct
@@ -890,15 +891,15 @@ typedef struct
 #ifdef MODE_STAT
 typedef struct
 {
-    time_t logtime;
-    time_t used_time[30];
+    time32_t logtime;
+    time32_t used_time[30];
 } UMODELOG;  /* DISKDATA(raw) */
 
 
 typedef struct
 {
-    time_t logtime;
-    time_t used_time[30];
+    time32_t logtime;
+    time32_t used_time[30];
     int32_t count[30];
     int32_t usercount;
 } MODELOG;  /* DISKDATA(raw) */
@@ -940,7 +941,7 @@ typedef struct
 {
     char email[56];
     int32_t times;
-    time_t deny;
+    time32_t deny;
 } EMAIL;  /* DISKDATA(raw) */
 
 /* ----------------------------------------------------- */
@@ -999,7 +1000,7 @@ typedef struct
     int32_t max_regist;
     int32_t cur_hour_max_login;
     int32_t cur_day_max_login;
-    time_t samehour_max_time;
+    time32_t samehour_max_time;
     int32_t max_regist_old;
     int32_t samehour_max_login_old;
     char ident[90];
@@ -1007,7 +1008,7 @@ typedef struct
 
 typedef struct
 {
-    time_t date;
+    time32_t date;
     int32_t mode;
     char userid[IDLEN + 1];
     char username[19];
@@ -1104,8 +1105,8 @@ typedef struct
 #ifdef  HAVE_RECOMMEND
 typedef struct PostRecommendHistory
 {
-    time_t chrono;
-    time_t bstamp;
+    time32_t chrono;
+    time32_t bstamp;
 } PRH;
 #endif
 #endif  /* #if 0 */
@@ -1173,7 +1174,7 @@ typedef struct MENU
 
 typedef struct
 {
-    time_t chrono;
+    time32_t chrono;
     char  type[16];             /* 統計型態 */
     uint32_t n_reads;           /* 看板閱讀累計 times/hour */
     uint32_t n_posts;           /* 看板發表累計 times/hour */
@@ -1234,7 +1235,7 @@ typedef struct PersonalBoard
 
 typedef struct
 {
-    time_t chrono;              /* >=0:stamp -1:cancel */
+    time32_t chrono;            /* >=0:stamp -1:cancel */
     char board[IDLEN + 1];
 
     /* 以下欄位的大小與 HDR 相同 */

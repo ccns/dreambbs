@@ -230,7 +230,7 @@ start:
     fp = fdopen(fd, "w");
 
     fprintf(fp, "發信人: %.50s 看板: %s\n標  題: %.72s\n發信站: %s\n\n",
-        sender, brdname, title, Btime(&hdr.chrono));
+        sender, brdname, title, Btime_any(&hdr.chrono));
 
     while (fgets(buf, sizeof(buf), stdin))
     {

@@ -92,7 +92,7 @@ bsend(
 
     /* find available BMW slot in pool */
 
-    texpire = time(&bmw->btime) - BMW_EXPIRE;
+    texpire = time32(&bmw->btime) - BMW_EXPIRE;
 
     mpool = ushm->mpool;
     mhead = ushm->mbase;

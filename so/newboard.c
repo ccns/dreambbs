@@ -75,7 +75,7 @@ char *fpath)
     rc = open(fpath, O_WRONLY | O_CREAT | O_EXCL, 0600);
     memset(nbrd, 0, sizeof(NBRD));
     nbrd->btime = token;
-    str_stamp(nbrd->date, &nbrd->btime);
+    str_stamp_any(nbrd->date, &nbrd->btime);
     strcpy(nbrd->xname, fname);
     return rc;
 }
@@ -515,13 +515,13 @@ XO *xo)
     /* 檢查是否已經連署過                                  */
     /* --------------------------------------------------- */
 
-#define FV_SZ   (sizeof(time_t))
+#define FV_SZ   (sizeof(time32_t))
 
     usr_fpath(buf, cuser.userid, FN_NEWBOARD);
     fv = open(buf, O_RDWR | O_CREAT, 0600);
     f_exlock(fv);
 
-    while (read(fv, &check, FV_SZ) == FV_SZ)
+    while (read(fv, &TEMPLVAL(time32_t, {check}), FV_SZ) == FV_SZ)
     {
         if (check == nbrd->btime)
         {

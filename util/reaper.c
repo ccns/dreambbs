@@ -127,7 +127,7 @@ userno_free(
     /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
     f_exlock(fd);
 
-    time(&schema.uptime);
+    time32(&schema.uptime);
     off = (uno - 1) * sizeof(schema);
     if (lseek(fd, off, SEEK_SET) < 0)
         exit(2);
@@ -305,7 +305,7 @@ report_eaddr_group(void)
                     }
                     close(fd);
 
-                    datemsg(buf, &acct.lastlogin);
+                    datemsg(buf, &TEMPLVAL(time_t, {acct.lastlogin}));
                     fprintf(faddr, "%5d) %-*s %s[%d]\t%s\n", acct.userno, IDLEN, acct.userid, buf, acct.numlogins, acct.email);
                 }
             }
@@ -391,7 +391,7 @@ reaper(
         eaddr_group(fd, acct.email);
 #endif
 
-    datemsg(buf, &acct.lastlogin);
+    datemsg(buf, &TEMPLVAL(time_t, {acct.lastlogin}));
     levelmsg(data, ulevel);
 
     if (ulevel & (PERM_MANAGE|PERM_BM))

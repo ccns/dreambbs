@@ -52,7 +52,7 @@ bsend(
         }
     }
 
-    texpire = time(&bmw->btime) - BMW_EXPIRE;
+    texpire = time32(&bmw->btime) - BMW_EXPIRE;
 
     mpool = ushm->mpool;
     mhead = ushm->mbase;

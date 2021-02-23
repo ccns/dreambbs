@@ -1116,7 +1116,10 @@ board_outs(
                     brd->blast = (brdnew) ? BMAX(hdr.chrono, brd->blast) : hdr.chrono;
                 }
                 else
-                    brd->blast = brd->bpost = 0;
+                {
+                    brd->blast = 0;
+                    brd->bpost = 0;
+                }
             }
 
             close(fd);
@@ -1800,11 +1803,12 @@ check_new(
             {
                 brd->bpost = fsize / sizeof(HDR);
                 lseek(fd, fsize - sizeof(HDR), SEEK_SET);
-                read(fd, &brd->blast, sizeof(time_t));
+                read(fd, &brd->blast, sizeof(time32_t));
             }
             else
             {
-                brd->blast = brd->bpost = 0;
+                brd->blast = 0;
+                brd->bpost = 0;
             }
         }
         close(fd);

@@ -313,7 +313,7 @@ mail2bbs(
     fp = fdopen(fd, "w");
 
     fprintf(fp, "作者: %s\n標題: %s\n時間: %s\n\n",
-        sender, title, Btime(&hdr.chrono));
+        sender, title, Btime_any(&hdr.chrono));
 
     while (fgets(buf, sizeof(buf), stdin))
     {

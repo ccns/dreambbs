@@ -206,7 +206,7 @@ justify_user(void)
         close(fd);
     }
 
-    myacct.vtime = time(&myacct.tvalid);
+    myacct.vtime = time32(&myacct.tvalid);
     strcpy(myacct.justify, myfrom);
     myfrom[sizeof(myacct.justify)-1] = 0;
     strcpy(myacct.vmail, myacct.email);
@@ -355,7 +355,7 @@ post_article(void)
     {
         fprintf(fp, "作者: %s (%s) %s: %s\n標題: %s\n時間: %s\n",
             myname, myacct.username, (mymode == LOCAL_SAVE ? "站內" : "看板"),
-            myboard, mytitle, ctime(&hdr.chrono));
+            myboard, mytitle, ctime_any(&hdr.chrono));
 
         hdr.xmode = (mymode == LOCAL_SAVE ? POST_EMAIL : POST_EMAIL | POST_OUTGO);
     }
@@ -445,7 +445,7 @@ digest_article(void)
 */
         fprintf(fp, "作者: %s (%s) %s: %s\n標題: %s\n時間: %s\n",
             myname, myacct.username, (mymode == LOCAL_SAVE ? "站內" : "看板"),
-            myboard, mytitle, ctime(&hdr.chrono));
+            myboard, mytitle, ctime_any(&hdr.chrono));
 
         hdr.xmode =  POST_EMAIL;
 /*

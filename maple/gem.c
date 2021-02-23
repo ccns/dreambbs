@@ -282,7 +282,7 @@ brd2gem(
     HDR *gem)
 {
     memset(gem, 0, sizeof(HDR));
-    time(&gem->chrono);
+    time32(&gem->chrono);
     strcpy(gem->xname, brd->brdname);
     sprintf(gem->title, "%-16s%s", brd->brdname, brd->title);
     gem->xmode = GEM_BOARD | GEM_FOLDER;
@@ -360,7 +360,7 @@ gem_add(
                 return XO_FOOT;
             }
 
-            time(&ghdr.chrono);
+            time32(&ghdr.chrono);
             sprintf(ghdr.xname, "@%s", fpath);
             if (gtype == 'c')
             {

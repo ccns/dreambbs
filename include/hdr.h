@@ -5,6 +5,8 @@
 
 #include <sys/types.h>
 
+#include "timetype.h"
+
 enum HdrMode {
     HDRMODE_NORMAL,
     HDRMODE_NORMAL_CURR,
@@ -24,17 +26,17 @@ enum HdrMode {
 
 typedef struct
 {
-    time_t chrono;                /* timestamp */
+    time32_t chrono;              /* timestamp */
     int32_t xmode;
 
     int32_t xid;                  /* reserved 保留*/
 
     char xname[32];               /* 檔案名稱 */
     char owner[47];               /* 作者 (E-mail address) */
-    time_t stamp;                 /* 未讀標記 */
-    uint32_t expire;              /* 自動刪除 */
+    time32_t stamp;               /* 未讀標記 */
+    utime32_t expire;             /* 自動刪除 */
     char lastrecommend[13];       /* 最後推文者 */
-    time_t pushtime;              /* 最後推文時間 */
+    time32_t pushtime;            /* 最後推文時間 */
 //  uint32_t recommend;           /* 推薦文章 */
     int16_t modifytimes;          /* 改文次數 */
     int16_t recommend;            /* 推薦文章 */

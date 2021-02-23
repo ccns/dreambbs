@@ -67,7 +67,7 @@ expire(
             fwoshm->fwocache[total].usage = head.usage;
             fwoshm->fwocache[total].time = head.time;
             fwoshm->fwocache[total].mode = head.mode;
-            printf("%-15s %6.6d %10.10ld %s\n", brd, head.usage, head.time, head.data);
+            printf("%-15s %6.6d %10.10ld %s\n", brd, head.usage, (long)head.time, head.data);
             total++;
             if (total >= (MAXOFILEWALL-1))
                 break;

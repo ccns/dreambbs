@@ -1826,7 +1826,7 @@ igetch(void)
                             continue;
 
                         if (cutmp)
-                            time(&cutmp->idle_time);
+                            time32(&cutmp->idle_time);
                         else
                             idle = 0;
 #ifdef  HAVE_SHOWNUMMSG

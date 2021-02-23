@@ -22,7 +22,7 @@ brd2myfavorite(
     HDR *gem)
 {
     memset(gem, 0, sizeof(HDR));
-    time(&gem->chrono);
+    time32(&gem->chrono);
     strcpy(gem->xname, brd->brdname);
     sprintf(gem->title, "%-16s%s", brd->brdname, brd->title);
     gem->xmode = GEM_BOARD;

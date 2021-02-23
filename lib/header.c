@@ -119,7 +119,7 @@ int hdr_stamp(const char *folder, int token, HDR * hdr, char *fpath)
         {
             memset(hdr, 0, sizeof(HDR));
             hdr->chrono = chrono;
-            str_stamp(hdr->date, &hdr->chrono);
+            str_stamp_any(hdr->date, &hdr->chrono);
             strcpy(hdr->xname, --fname);
             break;
         }

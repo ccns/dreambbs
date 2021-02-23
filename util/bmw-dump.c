@@ -78,7 +78,7 @@ main(
 
     while (read(inf, &bmw, sizeof(BMW)) == sizeof(BMW))
     {
-        struct tm *ptime = localtime(&bmw.btime);
+        struct tm *ptime = localtime_any(&bmw.btime);
         count++;
         printf("%s%s(%02d:%02d)¡G%s\x1b[m\n",
                bmw.sender == acct.userno ? "¡¸" : "\x1b[32m¡¹",

@@ -90,7 +90,7 @@ x_sysload(void)
 
 typedef struct
 {
-    time_t tpad;
+    time32_t tpad;
     char msg[356];
 }      Pad;  /* DISKDATA(raw) */
 
@@ -160,7 +160,7 @@ pad_draw(void)
             return;
     } while (cc == 'e');
 
-    time(&(pad.tpad));
+    time32(&(pad.tpad));
 
     str = pad.msg;
 
@@ -171,7 +171,7 @@ pad_draw(void)
     for (i = len >> 1; i < 41; i++)
         strcat(str, "¢e");
     sprintf(str2, "\x1b[34;47m %.14s \x1b[37;46m£W\x1b[m\n%-70.70s\n%-70.70s\n%-70.70s\n",
-        Etime(&(pad.tpad)), buf[0], buf[1], buf[2]);
+        Etime_any(&(pad.tpad)), buf[0], buf[1], buf[2]);
     strcat(str, str2);
 
     f_cat(FN_NOTE_ALL, str);

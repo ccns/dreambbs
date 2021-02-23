@@ -189,7 +189,7 @@ VCH *vch)
     if (num < 1)
         num = 1;
     vch->vclose = vch->chrono + num * 86400;
-    str_stamp(vch->cdate, &vch->vclose);
+    str_stamp_any(vch->cdate, &vch->vclose);
 
     vch->vsort =
         (vget(22, 0, "秨布挡狦琌逼(y/N)[N] ", buf, 3, LCECHO) == 'y')
@@ -731,8 +731,8 @@ XO *xo)
     buf[74] = '\0';
 
     fprintf(fp, "\n\n> %s <\n\n』 [%s]狾щ布%s\n\n羭快  %s\n\n羭快ら戳%s\n",
-            buf, currboard, vch->title, vch->owner, ctime(&vch->chrono));
-    fprintf(fp, "秨布ら戳%s\n』 щ布肈:\n\n", ctime(&vch->vclose));
+            buf, currboard, vch->title, vch->owner, ctime_any(&vch->chrono));
+    fprintf(fp, "秨布ら戳%s\n』 щ布肈:\n\n", ctime_any(&vch->vclose));
 
     *fname = '@';
     f_suck(fp, fpath);
@@ -800,7 +800,7 @@ XO *xo)
     if (cc == 'c')
     {
         vch->vclose = time(0);
-        str_stamp(vch->cdate, &vch->vclose);
+        str_stamp_any(vch->cdate, &vch->vclose);
         rec_put(dir, vch, sizeof(VCH), pos);
     }
     else if (cc == 'a')
@@ -809,7 +809,7 @@ XO *xo)
         if ((cc = atoi(buf)))
         {
             vch->vclose = vch->vclose + cc * 86400;
-            str_stamp(vch->cdate, &vch->vclose);
+            str_stamp_any(vch->cdate, &vch->vclose);
             rec_put(dir, vch, sizeof(VCH), pos);
         }
     }
@@ -941,7 +941,7 @@ XO *xo)
     /* 浪琩琌竒щ筁布                                  */
     /* --------------------------------------------------- */
 
-#define FV_SZ   (sizeof(time_t) * 2)
+#define FV_SZ   (sizeof(time32_t) * 2)
 
     usr_fpath(buf, cuser.userid, FN_VOTE);
     fv = open(buf, O_RDWR | O_CREAT, 0600);
@@ -1217,13 +1217,13 @@ vote_sync(void)
 
     if (!fstat(fd, &st) && (size = st.st_size) > 0)
     {
-        time_t *base, *head, *tail;
+        time32_t *base, *head, *tail;
 
-        base = head = (time_t *) malloc(size);
+        base = head = (time32_t *) malloc(size);
         size = read(fd, base, size);
         if (size >= FV_SZ)
         {
-            tail = (time_t *)((char *) base + size);
+            tail = (time32_t *)((char *) base + size);
 
 outerLoop:
             while (head < tail)

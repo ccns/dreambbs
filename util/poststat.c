@@ -56,7 +56,7 @@ struct posttop  /* DISKDATA(raw) */
     char author[13];            /* author name */
     char board[13];             /* board name */
     char title[66];             /* title name */
-    time_t date;                /* last post's date */
+    time32_t date;              /* last post's date */
     int32_t number;             /* post number */
 }       top[TOPCOUNT], *tp;
 
@@ -261,7 +261,7 @@ poststat(
         for (int i = cnt = 0; (cnt < max) && (i < j); i++)
         {
             tp = &top[i];
-            strcpy(buf, ctime(&(tp->date)));
+            strcpy(buf, ctime_any(&(tp->date)));
 //          buf[20] = (char) NULL;
             buf[20] = '\0';
             fprintf(fp,

@@ -890,7 +890,7 @@ chat_query(
             acct.userid, acct.username, acct.numlogins, acct.numposts);
         send_to_user(cu, buf, 0, MSG_MESSAGE);
 
-        sprintf(buf, "最近(%s)從(%s)上站", Ctime(&acct.lastlogin),
+        sprintf(buf, "最近(%s)從(%s)上站", Ctime_any(&acct.lastlogin),
             (acct.lasthost[0] ? acct.lasthost : "外太空"));
         send_to_user(cu, buf, 0, MSG_MESSAGE);
 

@@ -163,7 +163,7 @@ bmw_sync(
 
             while (read(fd, &bmw, sizeof(BMW)) == sizeof(BMW))
             {
-                struct tm *ptime = localtime(&bmw.btime);
+                struct tm *ptime = localtime_any(&bmw.btime);
 
                 fprintf(fout, "%s%s(%02d:%02d)¡G%s\x1b[m\n",
                     bmw.sender == userno ? "¡¸" : "\x1b[32m¡¹",
@@ -368,7 +368,7 @@ main(void)
         for (num = 1; num <= total; num++)
         {
             strncpy(slot.userid, map[num].userid, IDLEN);
-            time(&slot.uptime);
+            time32(&slot.uptime);
             write(fd, &slot, sizeof(SCHEMA));
         }
         close(fd);

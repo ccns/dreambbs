@@ -114,7 +114,7 @@ main(void)
         for (num = 1; num <= total; num++)
         {
             strncpy(slot.userid, map[num].userid, IDLEN);
-            time(&slot.uptime);
+            time32(&slot.uptime);
             write(fd, &slot, sizeof(SCHEMA));
         }
         close(fd);

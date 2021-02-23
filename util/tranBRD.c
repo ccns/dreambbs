@@ -27,13 +27,13 @@ typedef struct BoardHeaderOld
 
     uint8_t bvote;                /* 共有幾項投票舉行中 */
 
-    time_t bstamp;                /* 建立看板的時間, unique */
+    time32_t bstamp;              /* 建立看板的時間, unique */
     uint32_t readlevel;           /* 閱讀文章的權限 */
     uint32_t postlevel;           /* 發表文章的權限 */
     uint32_t battr;               /* 看板屬性 */
-    time_t btime;                 /* .DIR 的 st_mtime */
+    time32_t btime;               /* .DIR 的 st_mtime */
     int32_t bpost;                /* 共有幾篇 post */
-    time_t blast;                 /* 最後一篇 post 的時間 */
+    time32_t blast;               /* 最後一篇 post 的時間 */
 }           BRDOLD;  /* DISKDATA(raw) */
 
 

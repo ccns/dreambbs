@@ -1017,7 +1017,7 @@ bmw_item(
     int num,
     const BMW *bmw)
 {
-    struct tm *ptime = localtime(&bmw->btime);
+    struct tm *ptime = localtime_any(&bmw->btime);
 
     if (!(bmw_modetype & BMW_MODE))
     {
@@ -1508,7 +1508,7 @@ do_query(
         acct->userlevel & PERM_VALID ? "已" : "未");
 
     prints(" 上次(\x1b[1;33m%s\x1b[m)來自(%s)\n",
-    Ctime(&acct->lastlogin), ((acct->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
+    Ctime_any(&acct->lastlogin), ((acct->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
     HIDDEN_SRC : acct->lasthost);
 
 #if defined(REALINFO) && defined(QUERY_REALNAMES)
@@ -1640,7 +1640,7 @@ bmw_send(
 
     /* find available BMW slot in pool */
 
-    texpire = time(&bmw->btime) - BMW_EXPIRE;
+    texpire = time32(&bmw->btime) - BMW_EXPIRE;
 
     mpool = ushm->mpool;
     mhead = BMAX(ushm->mbase, mpool);
@@ -1717,7 +1717,7 @@ bmw_edit(
         else
             *bmw->userid = '\0';        /* lkchu.990206: 好友廣播設為 NULL */
 
-        time(&bmw->btime);
+        time32(&bmw->btime);
         usr_fpath(fpath, userid, FN_BMW);
         rec_add(fpath, bmw, sizeof(BMW));
         strcpy(bmw->userid, userid);
@@ -2341,7 +2341,7 @@ bmw_save(void)
 
                     while (read(fd, &bmw, sizeof(BMW)) == sizeof(BMW))
                     {
-                        struct tm *ptime = localtime(&bmw.btime);
+                        struct tm *ptime = localtime_any(&bmw.btime);
 
                         fprintf(fout, "%s%s(%02d:%02d)：%s\x1b[m\n",
                             bmw.sender == cuser.userno ? "☆" : "\x1b[32m★",

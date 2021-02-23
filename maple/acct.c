@@ -105,7 +105,7 @@ void keeplog(const char *fnlog, const char *board, const char *title, int mode  
     {
         fp = fdopen(fd, "w");
         fprintf(fp, "作者: SYSOP (%s)\n標題: %s\n時間: %s\n",
-                SYSOPNICK, title, ctime(&hdr.chrono));
+                SYSOPNICK, title, ctime_any(&hdr.chrono));
         f_suck(fp, fnlog);
         fclose(fp);
         if (mode == 2)
@@ -519,9 +519,9 @@ void acct_show(const ACCT * u, int adm
            ((adm != 3) && (adm != 4)) ? u->address : "資料保密",
            (adm != 3) ? u->email : "資料保密");
 
-    prints("註冊日期：%s", ctime(&u->firstlogin));
+    prints("註冊日期：%s", ctime_any(&u->firstlogin));
 
-    prints("光臨日期：%s", ctime(&u->lastlogin));
+    prints("光臨日期：%s", ctime_any(&u->lastlogin));
 
     diff = u->staytime / 60;
     prints("上站次數：%d 次 (共 %d 時 %d 分)\n",
@@ -541,7 +541,7 @@ void acct_show(const ACCT * u, int adm
     outs("身分認證：\x1b[32m");
     if (ulevel & PERM_VALID)
     {
-        outs(u->tvalid ? Ctime(&u->tvalid) : "有效期間已過，請重新認證");
+        outs(u->tvalid ? Ctime_any(&u->tvalid) : "有效期間已過，請重新認證");
     }
     else
     {
@@ -556,7 +556,7 @@ void acct_show(const ACCT * u, int adm
             outs("無期徒刑 \x1b[m\n");
         else
         {
-            outs(Ctime(&u->deny));
+            outs(Ctime_any(&u->deny));
             outs("\x1b[m");
             prints("  距今還剩 %ld 天 %ld 時 \n", (u->deny - now) / 86400,
                    (u->deny - now) / 3600 - ((u->deny - now) / 86400) * 24);
@@ -1223,7 +1223,7 @@ void acct_setup(ACCT * u, int adm)
             vget(++i, 0, "增加有效期限(y/N)：", buf, 2, DOECHO);
             if (buf[0] == 'y' || buf[0] == 'Y')
             {
-                time(&x.tvalid);
+                time32(&x.tvalid);
                 x.userlevel |=
                     (PERM_BASIC | PERM_CHAT | PERM_PAGE | PERM_POST |
                      PERM_VALID);
@@ -1626,7 +1626,7 @@ int u_addr(void)
                         str_scpy(cuser.vmail, addr, sizeof(cuser.vmail));
                         sprintf(agent, "pop3認證:%s", addr);
                         str_scpy(cuser.justify, agent, sizeof(cuser.justify));
-                        time(&cuser.tvalid);
+                        time32(&cuser.tvalid);
                         strcpy(cuser.email, addr);
                         acct_save(&cuser);
                         find_same_email(addr, 2);
@@ -2219,7 +2219,7 @@ int m_newbrd(void)
     if (vans(msg_sure_ny) != 'y')
         return 0;
 
-    time(&newboard.bstamp);
+    time32(&newboard.bstamp);
     if ((bno = brd_bno("")) >= 0)
     {
         rec_put(FN_BRD, &newboard, sizeof(newboard), bno);
@@ -3061,7 +3061,7 @@ int u_verify(void)
             strcpy(cuser.vmail, cuser.email);
             sprintf(buf, "key認證:%s", cuser.email);
             str_scpy(cuser.justify, buf, sizeof(cuser.justify));
-            time(&cuser.tvalid);
+            time32(&cuser.tvalid);
             acct_save(&cuser);
             usr_fpath(buf, cuser.userid, fn_dir);
             hdr_stamp(buf, HDR_LINK, &fhdr, "etc/justified");

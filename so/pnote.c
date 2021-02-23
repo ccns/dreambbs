@@ -89,15 +89,15 @@ rebuild_pnote_ansi(int newflag)
     {
         if (total--)
             read(fd, (char *) &myitem, sizeof(myitem));
-        sprintf(buf, "\x1b[1;33m¡¼ùù \x1b[32m%s\x1b[37m(%s)",
+        sprintf(buf, "\x1b[1;33m¡¼¢¤ \x1b[32m%s\x1b[37m(%s)",
                 myitem.userid, myitem.username);
         len = strlen(buf);
         strcat(buf, & " \x1b[33m"[len & 1]);
 
         for (i = len >> 1; i < 36; i++)
-            strcat(buf, "ùù");
-        sprintf(buf2, "ùù\x1b[32m %.14s \x1b[33mùù¡¼\x1b[m\n",
-                Cdate(&(myitem.date)));
+            strcat(buf, "¢¤");
+        sprintf(buf2, "¢¤\x1b[32m %.14s \x1b[33m¢¤¡¼\x1b[m\n",
+                Cdate(&TEMPLVAL(time_t, {myitem.date})));
         strcat(buf, buf2);
         fputs(buf, fp);
 
@@ -145,7 +145,7 @@ do_pnote(const char *userid)
     utmp_mode(M_XMODE);
     strcpy(myitem.userid, cuser.userid);
     str_scpy(myitem.username, cuser.username, sizeof(myitem.username));
-    time(&(myitem.date));
+    time32(&(myitem.date));
 
     /* begin load file */
 
@@ -176,15 +176,15 @@ do_pnote(const char *userid)
     collect = 1;
     while (total)
     {
-        sprintf(buf, "\x1b[1;33m¡¼ùù \x1b[32m%s\x1b[37m(%s)",
+        sprintf(buf, "\x1b[1;33m¡¼¢¤ \x1b[32m%s\x1b[37m(%s)",
                 myitem.userid, myitem.username);
         len = strlen(buf);
         strcat(buf, & " \x1b[33m"[len & 1]);
 
         for (i = len >> 1; i < 36; i++)
-            strcat(buf, "ùù");
-        sprintf(buf2, "ùù\x1b[32m %.14s \x1b[33mùù¡¼\x1b[m\n",
-                Cdate(&(myitem.date)));
+            strcat(buf, "¢¤");
+        sprintf(buf2, "¢¤\x1b[32m %.14s \x1b[33m¢¤¡¼\x1b[m\n",
+                Cdate(&TEMPLVAL(time_t, {myitem.date})));
         strcat(buf, buf2);
         fputs(buf, fp);
 
@@ -210,7 +210,7 @@ show_pnote(notedata *pitem)
     clrchyiuan(2, 6);
     move(2, 0);
     prints_centered("\x1b[1;36m¢z¢w¢w¢w \x1b[37m%s(%s)¦b \x1b[33m%s\x1b[37m ¯dªº¸Ü \x1b[m", pitem->userid, pitem->username,
-            Cdate(&(pitem->date)));
+            Cdate(&TEMPLVAL(time_t, {pitem->date})));
     prints("\n\x1b[1;37m%*s  %s\n%*s  %s\n%*s  %s\n\x1b[0m",
            d_cols>>1, "", pitem->buf[0], d_cols>>1, "", pitem->buf[1], d_cols>>1, "", pitem->buf[2]);
     outs_centered("                 \x1b[1;36m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢}\x1b[m\n");

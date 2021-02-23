@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
                     {
                         /* fill in chrono/date/xmode/xid/xname */
                         hdr->chrono = chrono32(n_pool[ch]);
-                        str_stamp(hdr->date, &hdr->chrono);
+                        str_stamp_any(hdr->date, &hdr->chrono);
                         strcpy(hdr->xname, n_pool[ch]);
                         hdr->xid = 0;
                         if (n_pool[ch][0] == 'F')
@@ -291,7 +291,7 @@ int main(int argc, char *argv[])
                     {
                         /* fill in chrono/date/xid/xname */
                         hdr->chrono = chrono32(n_pool[ch]);
-                        str_stamp(hdr->date, &hdr->chrono);
+                        str_stamp_any(hdr->date, &hdr->chrono);
                         strcpy(hdr->xname, n_pool[ch]);
                         hdr->xid = 0;
 

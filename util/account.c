@@ -219,8 +219,8 @@ draw_vote(
     memset(buf, '-', 74);
     buf[74] = '\0';
     fprintf(fp, "\n\n> %s <\n\n』 [%s] 狾щ布%s\n\n羭快  %s\n\n羭快ら戳%s\n",
-        buf, bid, vch->title, vch->owner, ctime(&vch->chrono));
-    fprintf(fp, "秨布ら戳%s\n』 щ布肈:\n\n", ctime(&vch->vclose));
+        buf, bid, vch->title, vch->owner, ctime_any(&vch->chrono));
+    fprintf(fp, "秨布ら戳%s\n』 щ布肈:\n\n", ctime_any(&vch->vclose));
 
     *fname = '@';
     f_suck(fp, fpath);
@@ -417,7 +417,7 @@ closepolls(void)
     f_unlock(state);
 
     close(state);
-    time(&bshm->uptime);
+    time32(&bshm->uptime);
 }
 
 
@@ -911,7 +911,7 @@ keeplog(
     {
         fp = fdopen(fd, "w");
         fprintf(fp, ": SYSOP (" SYSOPNICK ")\n夹肈: %s\n丁: %s\n",
-            title, ctime(&hdr.chrono));
+            title, ctime_any(&hdr.chrono));
         f_suck(fp, fnlog);
         fclose(fp);
         if (mode)

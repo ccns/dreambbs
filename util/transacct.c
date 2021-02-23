@@ -41,25 +41,25 @@ typedef struct
     int32_t numlogins;          /* user login times */
     int32_t numposts;           /* user post times */
     uint32_t ufo;               /* user basic flags */
-    time_t firstlogin;          /* user first login time */
-    time_t lastlogin;           /* user last login time */
-    time_t staytime;            /* user total stay time */
-    time_t tcheck;              /* time to check mbox/pal */
+    time32_t firstlogin;        /* user first login time */
+    time32_t lastlogin;         /* user last login time */
+    time32_t staytime;          /* user total stay time */
+    time32_t tcheck;            /* time to check mbox/pal */
     char lasthost[32];          /* user last login remote host */
     int32_t numemail;           /* 原為寄發 Inetrnet E-mail 次數, 在不更改資料結構的狀況下, 擴充為積分 */
-    time_t tvalid;              /* 通過認證、更改 mail address 的時間 */
+    time32_t tvalid;            /* 通過認證、更改 mail address 的時間 */
     char email[60];             /* user email */
     char address[60];           /* user address */
     char justify[60];           /* FROM of replied justify mail */
     char vmail[60];             /* 通過認證之 email */
-    time_t deny;                /* user violatelaw time */
+    time32_t deny;              /* user violatelaw time */
     int32_t request;            /* 點歌系統 */
     int32_t money;              /* 夢幣 */
     uint32_t ufo2;              /* 延伸的個人設定 */
     char ident[96];             /* user remote host ident */
     int32_t point1;             /* 優良積分 */
     int32_t point2;             /* 劣文 */
-    time_t vtime;               /* validate time */
+    time32_t vtime;             /* validate time */
 }       NEW;  /* DISKDATA(raw) */
 
 
@@ -80,24 +80,24 @@ typedef struct
     int32_t numlogins;          /* user login times */
     int32_t numposts;           /* user post times */
     uint32_t ufo;               /* user basic flags */
-    time_t firstlogin;          /* user first login time */
-    time_t lastlogin;           /* user last login time */
-    time_t staytime;            /* user total stay time */
-    time_t tcheck;              /* time to check mbox/pal */
+    time32_t firstlogin;        /* user first login time */
+    time32_t lastlogin;         /* user last login time */
+    time32_t staytime;          /* user total stay time */
+    time32_t tcheck;            /* time to check mbox/pal */
     char lasthost[32];          /* user last login remote host */
     int32_t numemail;           /* 寄發 Inetrnet E-mail 次數 */
-    time_t tvalid;              /* 通過認證、更改 mail address 的時間 */
+    time32_t tvalid;            /* 通過認證、更改 mail address 的時間 */
     char email[60];             /* user email */
     char address[60];           /* user address */
     char justify[60];           /* FROM of replied justify mail */
     char vmail[60];             /* 通過認證之 email */
-    time_t deny;                /* user violatelaw time */
+    time32_t deny;              /* user violatelaw time */
     int32_t extrambox;          /* 加大信箱 (最大 50 封) */
     int32_t extrasize;          /* 加大信箱容量 (最大 1000K) */
     uint8_t ufo2;               /* 延伸的個人設定 */
     char ident[103];            /* user remote host ident */
     int8_t barcolor;            /* 光棒顏色 */
-    time_t vtime;               /* validate time */
+    time32_t vtime;             /* validate time */
 }       OLD;  /* DISKDATA(raw) */
 
 

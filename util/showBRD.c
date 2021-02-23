@@ -41,9 +41,9 @@ main(
             printf("看板名稱：%-*s      看板標題：[%s] %s\n", IDLEN, brd.brdname, brd.class_, brd.title);
             printf("投票狀態：%-13d     看板板主：%s\n", brd.bvote, brd.BM);
             printf("文章篇數：%d\n", brd.bpost);
-            printf("開板時間：%s\n", Btime(&brd.bstamp));
-            printf(".DIR時間：%s\n", Btime(&brd.btime));
-            printf("最後一篇：%s\n", Btime(&brd.blast));
+            printf("開板時間：%s\n", Btime_any(&brd.bstamp));
+            printf(".DIR時間：%s\n", Btime_any(&brd.btime));
+            printf("最後一篇：%s\n", Btime_any(&brd.blast));
 
             if (!show_allbrd)
                 break;

@@ -90,10 +90,10 @@ showACCT(
 {
     char /*msg1[40], msg2[40], */ msg3[40], msg4[40], msg5[40], msg6[40];
 
-    strcpy(msg3, Btime(&(acct->firstlogin)));
-    strcpy(msg4, Btime(&(acct->lastlogin)));
-    strcpy(msg5, Btime(&(acct->tcheck)));
-    strcpy(msg6, Btime(&(acct->tvalid)));
+    strcpy(msg3, Btime_any(&(acct->firstlogin)));
+    strcpy(msg4, Btime_any(&(acct->lastlogin)));
+    strcpy(msg5, Btime_any(&(acct->tcheck)));
+    strcpy(msg6, Btime_any(&(acct->tvalid)));
 
     printf("> ------------------------------------------------------------------------------------------ \n"
         "½s¸¹: %-15d [ID]: %-15s ©m¦W: %-15s ¼ÊºÙ: %-15s \n"

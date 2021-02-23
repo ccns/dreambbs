@@ -137,7 +137,7 @@ keeplog(
 
     fp = fdopen(fd, "w");
     fprintf(fp, "作者: SYSOP (" SYSOPNICK ")\n標題: %s\n時間: %s\n",
-        title, ctime(&hdr.chrono));
+        title, ctime_any(&hdr.chrono));
     f_suck(fp, fnlog);
     fclose(fp);
 

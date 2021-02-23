@@ -1247,7 +1247,7 @@ ve_header(
                 char author[IDLEN + 1];
                 char board[IDLEN + 1];
                 char title[66];
-                time_t date;            /* last post's date */
+                time32_t date;          /* last post's date */
                 int32_t number;         /* post number */
             }      postlog = {{0}, {0}, {0}, 0, 0};  /* DISKDATA(raw) */
 
