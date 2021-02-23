@@ -291,24 +291,24 @@ poststat(
 #include "splay.h"
 
 
-    typedef struct PostText
-    {
-        struct PostText *ptnext;
-        int count;
-        char title[FLEX_SIZE];
-    } PostText;
-    #define PostText_FLEX_MEMBER     title
+typedef struct PostText
+{
+    struct PostText *ptnext;
+    int count;
+    char title[FLEX_SIZE];
+} PostText;
+#define PostText_FLEX_MEMBER     title
 
 
-    typedef struct PostAuthor
-    {
-        struct PostAuthor *panext;
-        PostText *text;
-        int count;
-        int hash;
-        char author[FLEX_SIZE];
-    } PostAuthor;
-    #define PostAuthor_FLEX_MEMBER   author
+typedef struct PostAuthor
+{
+    struct PostAuthor *panext;
+    PostText *text;
+    int count;
+    int hash;
+    char author[FLEX_SIZE];
+} PostAuthor;
+#define PostAuthor_FLEX_MEMBER   author
 
 
 static int
