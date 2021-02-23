@@ -1622,7 +1622,7 @@ const int vi_max = VI_MAX;
 unsigned char vi_pool[VI_MAX];
 int vi_size;
 int vi_head;
-int idle;
+time_t idle;
 #ifdef __cplusplus
 }  /* extern "C" */
 #endif

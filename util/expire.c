@@ -190,7 +190,7 @@ expire(
     FILE *fpr, *fpw;
 
     int days, maxp, minp;
-    int duetime, now;
+    time_t duetime, now;
 
     SyncData *xpool=NULL, *xsync;
     int xhead=0;

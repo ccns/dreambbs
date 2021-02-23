@@ -258,7 +258,8 @@ clean(
     char fpath[128], buf[256], tmp[128], recommenddb[128];
     FILE *fp;
     RMSG rmsg;
-    int i, chrono, pushstart;
+    int i, pushstart;
+    time_t chrono;
     struct stat st;
     int total, fd;
     const BRD *brd;

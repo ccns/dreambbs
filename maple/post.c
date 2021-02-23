@@ -1295,7 +1295,8 @@ post_xcross(
 {
     char *xboard, fpath[80], xfolder[80], buf[80], *dir;
     HDR *hdr, xpost, xhdr;
-    int tag, locus, listing, do_expire;
+    int tag, locus, listing;
+    time_t do_expire;
     LinkList *wp;
 
     if (!HAS_PERM(PERM_ALLBOARD))
@@ -1380,7 +1381,8 @@ post_history(
     XO *xo,
     const HDR *fhdr)
 {
-    int prev, chrono, next, pos, max, push=0;
+    time_t prev, chrono, next;
+    int pos, max, push=0;
     char *dir;
     HDR buf;
 
@@ -4408,7 +4410,8 @@ xpost_browse(
         chrono = hdr->chrono;
         if (brh_unread(chrono))
         {
-            int prev, next, pos;
+            time_t prev, next;
+            int pos;
             char *dir;
             HDR buf;
 

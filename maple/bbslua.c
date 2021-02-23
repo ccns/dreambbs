@@ -397,7 +397,7 @@ extern unsigned char vi_pool[];
 extern int vi_size;
 extern int vi_head;
 #ifdef BBSLUA_EXPOSED_VISIO_IDLE
-extern int idle;
+extern time_t idle;
 #endif
 #ifdef __cplusplus
 }  /* extern "C" */
