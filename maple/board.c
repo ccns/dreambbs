@@ -8,8 +8,8 @@
 
 #include "bbs.h"
 
-static int *brh_base;           /* allocated memory */
-static int *brh_tail;           /* allocated memory */
+static time32_t *brh_base;      /* allocated memory */
+static time32_t *brh_tail;      /* allocated memory */
 static int brh_size;            /* allocated memory size */
 static time_t brh_expire;
 
@@ -25,12 +25,13 @@ static XO board_xo;
 BRD *xbrd;
 int boardmode=0;
 
-static int *
+static time32_t *
 brh_alloc(
-    int *tail,
+    time32_t *tail,
     int size)
 {
-    int *base, n;
+    time32_t *base;
+    int n;
 
     base = brh_base;
     n = (char *) tail - (char *) base;
@@ -39,14 +40,14 @@ brh_alloc(
     {
         /* size = (size & -BRH_PAGE) + BRH_PAGE; */
         size += n >> 4;         /* 多預約一些記憶體 */
-        base = (int *) realloc((char *) base, size);
+        base = (time32_t *) realloc((char *) base, size);
 
         if (base == NULL)
             abort_bbs();
 
         brh_base = base;
         brh_size = size;
-        tail = (int *) ((char *) base + n);
+        tail = (time32_t *) ((char *) base + n);
     }
 
     return tail;
@@ -56,7 +57,7 @@ brh_alloc(
 static void
 brh_put(void)
 {
-    int *list;
+    time32_t *list;
 
     /* compact the history list */
 
@@ -64,11 +65,13 @@ brh_put(void)
 
     if (*list)
     {
-        int *head, *tail, n, item, chrono;
+        time32_t *head, *tail;
+        int n;
+        time_t item, chrono;
 
         n = *++list;   /* Thor.980904: 正讀時是bhno */
         brd_bits[n] |= BRD_H_BIT;
-        time((time_t *) list);    /* Thor.980904: 註解: bvisit time */
+        time32(list);  /* Thor.980904: 註解: bvisit time */
 
         item = *++list;
         head = ++list;
@@ -102,8 +105,9 @@ brh_get(
     time_t bstamp,              /* board stamp */
     int bhno)
 {
-    int *head, *tail;
-    int size, bcnt, item;
+    time32_t *head, *tail;
+    time_t item;
+    int size, bcnt;
     char buf[BRH_WINDOW];
 
     if (bstamp == *brh_tail) /* Thor.980904:註解:該版已在 brh_tail上 */
@@ -120,18 +124,18 @@ brh_get(
         while (head < tail)
         {
             item = head[2];
-            size = item * sizeof(time_t) + sizeof(BRH);
+            size = item * sizeof(time32_t) + sizeof(BRH);
 
             if (bstamp == *head)
             {
                 bcnt = item;
                 memcpy(buf, head + 3, size - sizeof(BRH));
-                tail = (int *) ((char *) tail - size);
+                tail = (time32_t *) ((char *) tail - size);
                 if ((item = (char *) tail - (char *) head))
                     memmove(head, (char *) head + size, item);
                 break;
             }
-            head = (int *) ((char *) head + size);
+            head = (time32_t *) ((char *) head + size);
         }
     }
 
@@ -142,11 +146,11 @@ brh_get(
 
     if (bcnt)                   /* expand history list */
     {
-        int *list;
+        time32_t *list;
 
         size = bcnt;
         list = tail;
-        head = (int *) buf;
+        head = (time32_t *) buf;
 
         do
         {
@@ -173,8 +177,8 @@ GCC_PURE int
 brh_unread(
     time_t chrono)
 {
-    const int *head, *tail;
-    int item;
+    const time32_t *head, *tail;
+    time_t item;
 
     if (chrono <= brh_expire)
         return 0;
@@ -205,9 +209,9 @@ void
 brh_visit(
     int mode)                   /* 0 : visit, 1: un-visit */
 {
-    int *list;
+    time32_t *list;
 
-    list = (int *) brh_tail + 2;
+    list = brh_tail + 2;
     *list++ = 2;
     if (mode)
     {
@@ -215,7 +219,7 @@ brh_visit(
     }
     else
     {
-        time((time_t *)list);
+        time32(list);
     }
     *++list = mode;
 }
@@ -223,7 +227,8 @@ brh_visit(
 void
 brh_add(time_t prev, time_t chrono, time_t next)
 {
-    int *base, *head, *tail, item, final, begin;
+    time32_t *base, *head, *tail;
+    time_t item, final, begin;
 
     head = base = brh_tail + 2;
     item = *head++;
@@ -482,7 +487,8 @@ brh_load(void)
     int n, cbno GCC_UNUSED;
     char *bits;
 
-    int size, *base;
+    int size;
+    time32_t *base;
     time_t expire, *bstp;
     char fpath[64];
 
@@ -531,11 +537,12 @@ brh_load(void)
 
 
     brh_size = n = size + BRH_WINDOW;
-    brh_base = base = (int *) malloc(n);
+    brh_base = base = (time32_t *) malloc(n);
 
     if (size && ((n = open(fpath, O_RDONLY)) >= 0))
     {
-        int *head, *tail, *list, bstamp, bhno;
+        time32_t *head, *tail, *list;
+        time_t bstamp, bhno;
 
         size = read(n, base, size);
         close(n);
@@ -544,7 +551,7 @@ brh_load(void)
         /* compact reading history : remove dummy/expired record */
 
         head = base;
-        tail = (int *) ((char *) base + size);
+        tail = (time32_t *) ((char *) base + size);
         bits = brd_bits;
         while (head < tail && head >= brh_base)
         {
@@ -621,10 +628,10 @@ brh_load(void)
                     head[2] = n;
                 }
 
-                n = n * sizeof(time_t) + sizeof(BRH);
+                n = n * sizeof(time32_t) + sizeof(BRH);
                 if (base != head)
                     memmove(base, head, n);
-                base = (int *) ((char *) base + n);
+                base = (time32_t *) ((char *) base + n);
             }
             head += size;
         }
@@ -650,7 +657,9 @@ brh_load(void)
 void
 brh_save(void)
 {
-    int *base, *head, *tail, bhno, size;
+    time32_t *base, *head, *tail;
+    time_t bhno;
+    int size;
     BRD *bhdr, *bend;
     char *bits;
 
@@ -672,19 +681,19 @@ brh_save(void)
     while (head < tail)
     {
         bhno = bstamp2bno(*head);
-        size = head[2] * sizeof(time_t) + sizeof(BRH);
+        size = head[2] * sizeof(time32_t) + sizeof(BRH);
         if (bhno >= 0 && !(bits[bhno] & BRD_Z_BIT))
         {
             if (base != head)
                 memmove(base, head, size);
-            base = (int *) ((char *) base + size);
+            base = (time32_t *) ((char *) base + size);
         }
-        head = (int *) ((char *) head + size);
+        head = (time32_t *) ((char *) head + size);
     }
 
     /* save zap record */
 
-    tail = brh_alloc(base, sizeof(time_t) * MAXBOARD);
+    tail = brh_alloc(base, sizeof(time32_t) * MAXBOARD);
 
     bhdr = bshm->bcache;
     bend = bhdr + bshm->number;
