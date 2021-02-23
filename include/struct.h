@@ -105,7 +105,8 @@ typedef struct
 typedef struct
 {
     char    data[48];
-    int     mode;  time_t  time;
+    int     mode;
+    time_t  time;
     int     usage;
     char    name[IDLEN+1];
 } FW;  /* SHMDATA(raw); dependency */
