@@ -54,8 +54,8 @@ void
 bshm_init(void)
 {
     BCACHE *xshm;
-    time_t *uptime;
-    int n, turn;
+    time32_t *uptime;
+    int turn;
 
     turn = 0;
     xshm = bshm;
@@ -68,11 +68,11 @@ bshm_init(void)
 
     for (;;)
     {
-        n = *uptime;
-        if (n > 0)
+        const time_t t = *uptime;
+        if (t > 0)
             return;
 
-        if (n < 0)
+        if (t < 0)
         {
             if (++turn < 30)
             {
@@ -83,16 +83,17 @@ bshm_init(void)
 
         *uptime = -1;
 
-        if ((n = open(FN_BRD, O_RDONLY)) >= 0)
+        const int fd = open(FN_BRD, O_RDONLY);
+        if (fd >= 0)
         {
             xshm->number =
-                read(n, xshm->bcache, MAXBOARD * sizeof(BRD)) / sizeof(BRD);
-            close(n);
+                read(fd, xshm->bcache, MAXBOARD * sizeof(BRD)) / sizeof(BRD);
+            close(fd);
         }
 
         /* 等所有 boards 資料更新後再設定 uptime */
 
-        time(uptime);
+        time32(uptime);
         fprintf(stderr, "[account]\tCACHE\treload bcache");
 
         return;

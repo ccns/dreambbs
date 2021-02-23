@@ -70,8 +70,8 @@ void
 bshm_init(void)
 {
     BCACHE *xshm;
-    time_t *uptime;
-    int n, turn;
+    time32_t *uptime;
+    int turn;
 
     turn = 0;
     xshm = bshm;
@@ -84,11 +84,11 @@ bshm_init(void)
 
     for (;;)
     {
-        n = *uptime;
-        if (n > 0)
+        const time_t t = *uptime;
+        if (t > 0)
             return;
 
-        if (n < 0)
+        if (t < 0)
         {
             if (++turn < 30)
             {
@@ -99,16 +99,17 @@ bshm_init(void)
 
         *uptime = -1;
 
-        if ((n = open(FN_BRD, O_RDONLY)) >= 0)
+        const int fd = open(FN_BRD, O_RDONLY);
+        if (fd >= 0)
         {
             xshm->number =
-                read(n, xshm->bcache, MAXBOARD * sizeof(BRD)) / sizeof(BRD);
-            close(n);
+                read(fd, xshm->bcache, MAXBOARD * sizeof(BRD)) / sizeof(BRD);
+            close(fd);
         }
 
         /* 等所有 boards 資料更新後再設定 uptime */
 
-        time(uptime);
+        time32(uptime);
         fprintf(stderr, "[account]\tCACHE\treload bcache\r\n");
         return;
     }
@@ -617,7 +618,7 @@ main(void)
     if (act[25] == 0) act[25]=1; /* Thor.980928: lkchu patch: 防止除數為0 */
 
     fprintf(fp, "\x1b[34m"
-        "  ╒═══════════════════════════════════╕\n  \x1b[32m"
+        "  ╒═══════════════════════════════════╕\n  \x1b[32m"
         "0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n\n"
         "\t%s\t\x1b[35m總共上站人次：\x1b[37m%-9d\x1b[35m平均使用時間：\x1b[37m%d\x1b[m\n",
         over ? "\x1b[35m單位：\x1b[37m10 人" : "", total, act[24] / act[25] + 1);
