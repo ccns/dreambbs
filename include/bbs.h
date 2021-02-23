@@ -29,6 +29,7 @@
 #include <sys/shm.h>
 #include <sys/mman.h>
 #include "cppdef.h"             /* Preprocessor utility macros */
+#include "timetype.h"           /* Helper functions for fixed-size `time_t` */
 #include "struct.h"             /* data structure */
 #include "dao.h"                /* common library */
 #include "perm.h"               /* user/board permission */
