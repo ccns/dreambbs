@@ -15,7 +15,7 @@
 typedef struct
 {
     time_t htime;               /* 加入 history 檔的時間 */
-    int hash;                   /* 為了快速搜尋 */
+    int32_t hash;               /* 為了快速搜尋 */
     char msgid[256];            /* message id (假設 256 已夠長) */
     char board[IDLEN + 1];
     char xname[9];

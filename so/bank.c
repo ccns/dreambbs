@@ -236,9 +236,9 @@ TransferAccount(void)
 
 typedef struct
 {
-    int money;          /* 夢幣 */
-    int save;           /* 存款 */
-    int request;        /* 小雞點券 */
+    int32_t money;      /* 夢幣 */
+    int32_t save;       /* 存款 */
+    int32_t request;    /* 小雞點券 */
 }       MONEY;  /* DISKDATA(raw) */
 
 /*

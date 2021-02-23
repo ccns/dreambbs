@@ -97,17 +97,17 @@ typedef struct
 typedef struct
 {
     char    data[48];
-    int     mode;
+    int32_t mode;
     time_t  time;
-    int     usage;
+    int32_t usage;
 } BANMAIL;  /* DISKDATA(raw) */
 
 typedef struct
 {
     char    data[48];
-    int     mode;
+    int32_t mode;
     time_t  time;
-    int     usage;
+    int32_t usage;
     char    name[IDLEN+1];
 } FW;  /* SHMDATA(raw); dependency */
 
@@ -127,36 +127,36 @@ typedef struct
 
 typedef struct
 {
-    int userno;                 /* unique positive code */
+    int32_t userno;             /* unique positive code */
     char userid[IDLEN + 1];     /* userid */
     char passwd[PASSSIZE];      /* user password crypt by DES / salt for SHA-256 */
-    unsigned char signature;    /* user signature number */
+    uint8_t signature;          /* user signature number */
     char realname[20];          /* user realname */
     char username[24];          /* user nickname */
-    unsigned int userlevel;     /* user perm */
-    int numlogins;              /* user login times */
-    int numposts;               /* user post times */
-    unsigned int ufo;           /* user basic flags */
+    uint32_t userlevel;         /* user perm */
+    int32_t numlogins;          /* user login times */
+    int32_t numposts;           /* user post times */
+    uint32_t ufo;               /* user basic flags */
     time_t firstlogin;          /* user first login time */
     time_t lastlogin;           /* user last login time */
     time_t staytime;            /* user total stay time */
     time_t tcheck;              /* time to check mbox/pal */
     char lasthost[32];          /* user last login remote host */
-    int numemail;               /* 原為寄發 Inetrnet E-mail 次數, 在不更改資料結構的狀況下, 擴充為積分 */
+    int32_t numemail;           /* 原為寄發 Inetrnet E-mail 次數, 在不更改資料結構的狀況下, 擴充為積分 */
     time_t tvalid;              /* 通過認證、更改 mail address 的時間 */
     char email[60];             /* user email */
     char address[60];           /* user address */
     char justify[60];           /* FROM of replied justify mail */
     char vmail[60];             /* 通過認證之 email */
     time_t deny;                /* user violatelaw time */
-    int request;                /* 點歌系統 */
-    int money;                  /* 夢幣 */
-    unsigned int ufo2;          /* 延伸的個人設定 */
+    int32_t request;            /* 點歌系統 */
+    int32_t money;              /* 夢幣 */
+    uint32_t ufo2;              /* 延伸的個人設定 */
     char passhash[66];          /* user password, encrypted using SHA-256 (extra bytes reserved for SHA-512) */
     GCC_DEPRECATED("see FN_USIES log file for ident info instead")
     char ident[30];             /* user remote host ident */
-    int point1;                 /* 優良積分 */
-    int point2;                 /* 劣文 */
+    int32_t point1;             /* 優良積分 */
+    int32_t point2;             /* 劣文 */
     time_t vtime;               /* validate time */
 } ACCT;  /* DISKDATA(raw) */
 
@@ -171,7 +171,7 @@ typedef struct                  /* 16 bytes */
 
 typedef struct  /* 註冊表單 (Register From) 256 bytes */
 {
-    int userno;
+    int32_t userno;
     time_t rtime;
     char userid[IDLEN + 1];
     char agent[IDLEN + 1];
@@ -186,7 +186,7 @@ typedef struct  /* 註冊表單 (Register From) 256 bytes */
 #ifndef HAVE_SIMPLE_RFORM
 typedef struct
 {
-    int userno;
+    int32_t userno;
     char userid[IDLEN + 1];
     char msg[80];
 } RFORM_R;  /* DISKDATA(raw) */
@@ -344,9 +344,9 @@ typedef struct VoteControlHeader
     char vsort;                 /* 開票結果是否排序 */
     char vpercent;              /* 是否顯示百分比例 */
     char cdate[9];              /* 結束日期 */ /* Thor.990329: 只供顯示, y2k */
-    int maxblt;                 /* 每人可投幾票 */
+    int32_t maxblt;             /* 每人可投幾票 */
     char owner[129];            /* 舉辦人 */
-    char check;                 /* 學生投票系統 */
+    int8_t check;               /* 學生投票系統 */
     char date[9];               /* 開始日期 */ /* Thor: match HDR的date*/
     char title[TTLEN + 1];      /* 投票主題 */
 } VCH;  /* DISKDATA(raw) */
@@ -377,8 +377,8 @@ typedef char vitem_t[32];       /* 投票選項 */ /* DISKDATA(raw) */
 typedef struct
 {
     char userid[IDLEN + 1];
-    char numvotes;
-    unsigned int choice;
+    int8_t numvotes;
+    uint32_t choice;
 } VLOG;
 
 
@@ -393,7 +393,7 @@ typedef struct
 typedef struct
 {
     time_t mailtime;            /* 寄信時間 */
-    char method;
+    int8_t method;
     char sender[IDLEN + 1];
     char username[24];
     char subject[TTLEN + 1];
@@ -420,9 +420,9 @@ typedef struct
 typedef struct
 {
     char userid[IDLEN + 1];
-    char ftype;
+    int8_t ftype;
     char ship[46];
-    int userno;
+    int32_t userno;
 } PAL;  /* DISKDATA(raw) */
 
 #ifdef  HAVE_BANMSG
@@ -430,7 +430,7 @@ typedef struct
 {
     char userid[IDLEN + 1];
     char ship[46];
-    int userno;
+    int32_t userno;
 } BANMSG;  /* DISKDATA(raw) */
 #endif
 
@@ -439,7 +439,7 @@ typedef struct
 typedef struct
 {
     char userid[IDLEN+1];
-    int userno;
+    int32_t userno;
 } ALOHA;  /* DISKDATA(raw) */
 
 
@@ -455,8 +455,8 @@ typedef struct
 {
     time_t btime;
     UTMP *caller;               /* who call-in me ? */
-    int sender;                 /* calling userno */
-    int recver;                 /* called userno */
+    int32_t sender;             /* calling userno */
+    int32_t recver;             /* called userno */
     char userid[IDLEN + 1];
     char msg[71];               /* 熱訊 */
 } BMW;                     /* bbs message write */ /* DISKDATA(raw) */
@@ -471,22 +471,22 @@ typedef struct
 typedef struct
 {
     char name[20];
-    int pid;
-    int hp;                     /*體力*/
-    int maxhp;                  /*體力上限*/
-    int mp;                     /*法力*/
-    int maxmp;                  /*法力上限*/
-    int attack;                 /*攻擊*/
-    int resist;                 /*防禦*/
-    int speed;                  /*速度*/
-    int mresist;                /*魔法防禦*/
-    int resistmode;             /*防禦型態*/
-    int nodone;                 /*完成*/
-    int leaving;                /*離開*/
-    int pipmode;                /*狀態*/
-    int mode;                   /*幾代雞*/
-    int msgcount;               /*訊息個數*/
-    int chatcount;
+    int32_t pid;
+    int32_t hp;                 /*體力*/
+    int32_t maxhp;              /*體力上限*/
+    int32_t mp;                 /*法力*/
+    int32_t maxmp;              /*法力上限*/
+    int32_t attack;             /*攻擊*/
+    int32_t resist;             /*防禦*/
+    int32_t speed;              /*速度*/
+    int32_t mresist;            /*魔法防禦*/
+    int32_t resistmode;         /*防禦型態*/
+    int32_t nodone;             /*完成*/
+    int32_t leaving;            /*離開*/
+    int32_t pipmode;            /*狀態*/
+    int32_t mode;               /*幾代雞*/
+    int32_t msgcount;           /*訊息個數*/
+    int32_t chatcount;
     char msg[150];              /*訊息內容*/
     char chat[10][150];         /*聊天內容*/
 } pipdata;  /* DISKDATA(raw) */
@@ -501,14 +501,14 @@ typedef struct
 struct UTMP  /* SHMDATA(raw) */
 {
     pid_t         pid;                          /* process ID */
-    int           userno;                       /* user number in .PASSWDS */
+    int32_t       userno;                       /* user number in .PASSWDS */
 
     time_t        idle_time;                    /* active time for last event */
-    unsigned int  mode;                         /* bbsmode */
-    unsigned int  ufo;                          /* the same as userec.ufo */
-    unsigned int  flag;                         /* user flag */
+    uint32_t      mode;                         /* bbsmode */
+    uint32_t      ufo;                          /* the same as userec.ufo */
+    uint32_t      flag;                         /* user flag */
     ip_addr       in_addr;                      /* Internet address */
-    int           sockport;                     /* socket port for talk */
+    int32_t       sockport;                     /* socket port for talk */
     UTMP          *talker;                      /* who talk-to me ? */
 
     BMW           *mslot[BMW_PER_USER];
@@ -517,25 +517,25 @@ struct UTMP  /* SHMDATA(raw) */
     char          mateid[IDLEN + 1];            /* partner's ID */
     char          username[24];
     char          realname[20];
-    unsigned int  userlevel;
+    uint32_t      userlevel;
     char          from[48];                     /* remote host */
 #ifdef  HAVE_SHOWNUMMSG
-    int           num_msg;                      /* receive messages */
+    int32_t       num_msg;                      /* receive messages */
 #endif
-    int           pal_max;                      /* friends max */
-    int           pal_spool[PAL_MAX];           /* friends spool */
+    int32_t       pal_max;                      /* friends max */
+    int32_t       pal_spool[PAL_MAX];           /* friends spool */
 #ifdef  HAVE_BANMSG
-    int           banmsg_max;                   /* banmsg max */
-    int           banmsg_spool[BANMSG_MAX];     /* banmsg spool */
+    int32_t       banmsg_max;                   /* banmsg max */
+    int32_t       banmsg_spool[BANMSG_MAX];     /* banmsg spool */
 #endif
 #ifdef HAVE_BOARD_PAL
-    int           board_pal;
+    int32_t       board_pal;
 #endif
 #ifdef  HAVE_PIP_FIGHT1
     pipdata       *pip;
 #endif
 #ifdef  PREFORK
-    int           bgen;                         /* generation */
+    int32_t       bgen;                         /* generation */
 #endif
 
 };
@@ -548,36 +548,36 @@ struct UTMP  /* SHMDATA(raw) */
 /* 090519.cache: 板主自訂看板發文權限*/
 typedef struct
 {
-    int age;
-    int numlogins;
-    int numposts;
-    int point2;
+    int32_t age;
+    int32_t numlogins;
+    int32_t numposts;
+    int32_t point2;
 } THRESHOLD;  /* DISKDATA(raw) */
 
 typedef struct BoardHeader
 {
     char brdname[IDLEN + 1];    /* board ID */
     char title[BTLEN + 1];
-    char color;
+    int8_t color;
     char class_[5];
     char BM[BMLEN + 1];         /* BMs' uid, token '/' */
 
-    unsigned char bvote;        /* 共有幾項投票舉行中 */
+    uint8_t bvote;              /* 共有幾項投票舉行中 */
 
     time_t bstamp;              /* 建立看板的時間, unique */
-    unsigned int readlevel;     /* 閱讀文章的權限 */
-    unsigned int postlevel;     /* 發表文章的權限 */
-    unsigned int battr;         /* 看板屬性 */
+    uint32_t readlevel;         /* 閱讀文章的權限 */
+    uint32_t postlevel;         /* 發表文章的權限 */
+    uint32_t battr;             /* 看板屬性 */
     time_t btime;               /* .DIR 的 st_mtime */
-    int bpost;                  /* 共有幾篇 post */
+    int32_t bpost;              /* 共有幾篇 post */
     time_t blast;               /* 最後一篇 post 的時間 */
-    unsigned int expiremax;     /* Expire Max Post */
-    unsigned int expiremin;     /* Expire Min Post */
-    unsigned int expireday;     /* Expire old Post */
-    unsigned int n_reads;       /* 看板閱讀累計 times/hour */
-    unsigned int n_posts;       /* 看板發表累計 times/hour */
-    unsigned int n_news;        /* 看板轉信累計 times/hour */
-    unsigned int n_bans;        /* 看板檔信累計 times/hour */
+    uint32_t expiremax;         /* Expire Max Post */
+    uint32_t expiremin;         /* Expire Min Post */
+    uint32_t expireday;         /* Expire old Post */
+    uint32_t n_reads;           /* 看板閱讀累計 times/hour */
+    uint32_t n_posts;           /* 看板發表累計 times/hour */
+    uint32_t n_news;            /* 看板轉信累計 times/hour */
+    uint32_t n_bans;            /* 看板檔信累計 times/hour */
     char  reserve[100];         /* 保留未用 */
 } BRD;  /* DISKDATA(raw) */
 
@@ -592,10 +592,10 @@ typedef struct NewBoardHeader
     char          xname[32];
     char          owner[IDLEN +1];
     char          date[9];
-    unsigned int  mode;
-    unsigned int  total;
-    unsigned int  agree;
-    unsigned int  assist;
+    uint32_t      mode;
+    uint32_t      total;
+    uint32_t      agree;
+    uint32_t      assist;
     char          reserve[64];
 } NBRD;  /* DISKDATA(raw) */
 
@@ -622,7 +622,7 @@ typedef struct BoardReadingHistory
     time_t bstamp;              /* 建立看板的時間, unique */ /* Thor.brh_tail*/
     time_t bvisit;              /* 上次閱讀時間 */ /* Thor.980902:沒用到? */
                         /* Thor.980904:未讀時放上次讀的時間, 正讀時放 bhno */
-    int bcount;                                    /* Thor.980902:沒用到? */
+    int32_t bcount;                                /* Thor.980902:沒用到? */
                                                    /* Thor.980902:給自己看的 */
     /* --------------------------------------------------- */
     /* time_t {final, begin} / {final | BRH_SIGN}          */
@@ -657,9 +657,9 @@ typedef struct BoardReadingHistory
 
 typedef struct
 {
-    int count;
+    int32_t count;
     char title[CH_TTSIZE];
-    short chno[FLEX_SIZE];
+    int16_t chno[FLEX_SIZE];
 } ClassHeader;  /* DISKDATA(raw); runtime */
 #define ClassHeader_FLEX_MEMBER    chno
 
@@ -671,7 +671,7 @@ typedef struct
 
 typedef struct
 {
-    int shot[MOVIE_MAX];        /* Thor.980805: 可能還要再加1, 因合理範圍為0..MOVIE_MAX */
+    int32_t shot[MOVIE_MAX];    /* Thor.980805: 可能還要再加1, 因合理範圍為0..MOVIE_MAX */
     char film[MOVIE_SIZE];
 } FCACHE;  /* SHMDATA(raw) */
 
@@ -712,11 +712,11 @@ typedef struct
 typedef struct
 {
     UTMP uslot[MAXACTIVE];      /* UTMP slots */
-    int count;                  /* number of active session */
-    unsigned int offset;        /* offset for last active UTMP */
+    int32_t count;              /* number of active session */
+    uint32_t offset;            /* offset for last active UTMP */
 
     double sysload[3];
-    int avgload;
+    int32_t avgload;
 
     BMW *mbase;                 /* sequential pointer for BMW */
     BMW mpool[BMW_MAX];
@@ -730,21 +730,21 @@ typedef struct
 typedef struct
 {
     BRD bcache[MAXBOARD];
-    int mantime[MAXBOARD];      /* 各板目前正有多少人在閱讀 */
-    int number;
+    int32_t mantime[MAXBOARD];  /* 各板目前正有多少人在閱讀 */
+    int32_t number;
     time_t uptime;
 } BCACHE;  /* SHMDATA(raw) */
 
 typedef struct
 {
     BANMAIL fwcache[MAXFIREWALL];
-    int number;
+    int32_t number;
 } FWCACHE;  /* SHMDATA(raw) */
 
 typedef struct
 {
     FW fwocache[MAXOFILEWALL];
-    int mode;
+    int32_t mode;
 } FWOCACHE;  /* SHMDATA(raw) */
 
 
@@ -781,14 +781,14 @@ typedef struct
 
 typedef struct screenline
 {
-    unsigned short oldlen;               /* previous line length */
-    unsigned char len;                  /* current length of line */
-    unsigned char width;                /* padding length of ANSI codes */
-    unsigned char mode;                 /* status of line, as far as update */
-    unsigned char smod;                 /* start of modified data */
-    unsigned short emod;                 /* end of modified data */
-    unsigned char sso;                  /* start of standout data */
-    unsigned char eso;                  /* end of standout data */
+    uint16_t oldlen;                    /* previous line length */
+    uint8_t len;                        /* current length of line */
+    uint8_t width;                      /* padding length of ANSI codes */
+    uint8_t mode;                       /* status of line, as far as update */
+    uint8_t smod;                       /* start of modified data */
+    uint16_t emod;                      /* end of modified data */
+    uint8_t sso;                        /* start of standout data */
+    uint8_t eso;                        /* end of standout data */
     unsigned char data[ANSILINESIZE];
 } screenline;
 
@@ -899,8 +899,8 @@ typedef struct
 {
     time_t logtime;
     time_t used_time[30];
-    int count[30];
-    int usercount;
+    int32_t count[30];
+    int32_t usercount;
 } MODELOG;  /* DISKDATA(raw) */
 #endif
 
@@ -933,13 +933,13 @@ typedef struct
 typedef struct
 {
     char email[60];
-    int num;
+    int32_t num;
 } SAME_EMAIL;  /* DISKDATA(raw) */
 
 typedef struct
 {
     char email[56];
-    int times;
+    int32_t times;
     time_t deny;
 } EMAIL;  /* DISKDATA(raw) */
 
@@ -948,7 +948,7 @@ typedef struct
 /* ----------------------------------------------------- */
 typedef struct
 {
-    int lost;
+    int32_t lost;
     char name[9];
     char teacher[9];
     char class_[5];
@@ -957,8 +957,8 @@ typedef struct
 
 typedef struct
 {
-    int hour;
-    int min;
+    int32_t hour;
+    int32_t min;
 }  CLOCK;
 
 
@@ -970,7 +970,7 @@ typedef struct
 
 typedef struct
 {
-    int mode;
+    int32_t mode;
     CLASS table[6][13];
     CLASS_TIME time;
 } CLASS_TABLE;
@@ -993,22 +993,22 @@ typedef struct
 /* ----------------------------------------------------- */
 typedef struct
 {
-    int hour_max_login;
-    int day_max_login;
-    int samehour_max_login;
-    int max_regist;
-    int cur_hour_max_login;
-    int cur_day_max_login;
+    int32_t hour_max_login;
+    int32_t day_max_login;
+    int32_t samehour_max_login;
+    int32_t max_regist;
+    int32_t cur_hour_max_login;
+    int32_t cur_day_max_login;
     time_t samehour_max_time;
-    int max_regist_old;
-    int samehour_max_login_old;
+    int32_t max_regist_old;
+    int32_t samehour_max_login_old;
     char ident[90];
 } COUNTER;  /* SHMDATA(raw) */
 
 typedef struct
 {
     time_t date;
-    int mode;
+    int32_t mode;
     char userid[IDLEN + 1];
     char username[19];
     char buf[3][80];
@@ -1060,9 +1060,9 @@ typedef struct
     char teacher[11];
     char other[30];
     char room[20];
-    int  valid;
-    int  x;
-    int  y;
+    int32_t valid;
+    int32_t x;
+    int32_t y;
 } CLASS_TABLE2;  /* DISKDATA(raw) */
 
 #ifdef  HAVE_CLASSTABLEALERT
@@ -1070,13 +1070,13 @@ typedef struct
 {
     char condensation[9];
     char room[20];
-    unsigned int used;
+    uint32_t used;
 } CLASS_TABLE_ALERT_ITEM;  /* DISKDATA(raw); dependency */
 
 typedef struct
 {
     CLASS_TABLE_ALERT_ITEM item[78];
-    unsigned int userno;
+    uint32_t userno;
 } CLASS_TABLE_ALERT;  /* DISKDATA(raw) */
 
 #endif
@@ -1086,16 +1086,16 @@ typedef struct
 typedef struct
 {
     char userid[16];
-    unsigned int userno;
+    uint32_t userno;
     char title[64];
     char reserve[44];
 } OBSERVE;  /* DISKDATA(raw) */
 
 typedef struct
 {
-    unsigned int userno[MAXOBSERVELIST];
-    int total;
-    int mode;
+    uint32_t userno[MAXOBSERVELIST];
+    int32_t total;
+    int32_t mode;
 } OCACHE;  /* SHMDATA(raw) */
 
 #endif
@@ -1162,8 +1162,8 @@ typedef union {
 typedef struct MENU
 {
     MenuItem item;
-    unsigned int level;
-    unsigned int umode;
+    uint32_t level;
+    uint32_t umode;
     const char *desc;
 } MENU;
 
@@ -1175,10 +1175,10 @@ typedef struct
 {
     time_t chrono;
     char  type[16];             /* 統計型態 */
-    unsigned int n_reads;       /* 看板閱讀累計 times/hour */
-    unsigned int n_posts;       /* 看板發表累計 times/hour */
-    unsigned int n_news;        /* 看板轉信累計 times/hour */
-    unsigned int n_bans;        /* 看板檔信累計 times/hour */
+    uint32_t n_reads;           /* 看板閱讀累計 times/hour */
+    uint32_t n_posts;           /* 看板發表累計 times/hour */
+    uint32_t n_news;            /* 看板轉信累計 times/hour */
+    uint32_t n_bans;            /* 看板檔信累計 times/hour */
     char reserve[28];           /* 保留 */
 } BSTAT;  /* DISKDATA(raw) */
 
@@ -1222,7 +1222,7 @@ typedef struct PersonalBoard
     char email[60];
     char brdname[IDLEN + 1];
     char brdtitle[BTLEN + 1];
-    unsigned int state;
+    uint32_t state;
 } PB;  /* DISKDATA(raw) */
 
 #define PB_APPLY        0x01    /* 申請中 */
@@ -1253,10 +1253,10 @@ typedef struct
 {
     char name[13];              /* 該站的 short-name */
     char host[83];              /* 該站的 host */
-    int port;                   /* 該站的 port */
-    unsigned int xmode;         /* 該站的 xmode */
+    int32_t port;               /* 該站的 port */
+    uint32_t xmode;             /* 該站的 xmode */
     char blank[20];             /* 保留 */
-    int feedfd;                 /* bbslink.c 使用 */
+    int32_t feedfd;             /* bbslink.c 使用 */
 } nodelist_t;  /* DISKDATA(raw) */
 
 #define INN_NOINCOME    0x0001
@@ -1268,8 +1268,8 @@ typedef struct
     char newsgroup[83];         /* 該群組的名稱 */
     char board[IDLEN + 1];      /* 該群組所對應的看板 */
     char charset[11];           /* 該群組的字集 */
-    unsigned int xmode;         /* 該群組的 xmode */
-    int high;                   /* 目前抓到該群組的哪一篇 */
+    uint32_t xmode;             /* 該群組的 xmode */
+    int32_t high;               /* 目前抓到該群組的哪一篇 */
 } newsfeeds_t;  /* DISKDATA(raw) */
 
 
@@ -1277,7 +1277,7 @@ typedef struct
 {
     char issuer[128];           /* NCM message 的發信人 */
     char type[64];              /* NCM message 的種類名稱 */
-    int perm;                   /* 允許此 NCM message 刪信 (1:開 0:關) */
+    int32_t perm;               /* 允許此 NCM message 刪信 (1:開 0:關) */
     char blank[60];             /* 保留 */
 } ncmperm_t;  /* DISKDATA(raw) */
 
@@ -1294,7 +1294,7 @@ typedef struct
 typedef struct
 {
     char detail[80];            /* 該規則的 內容 */
-    unsigned int xmode;         /* 該規則的 xmode */
+    uint32_t xmode;             /* 該規則的 xmode */
     char board[IDLEN + 1];      /* 該規則適用的看板 */
     char path[13];              /* 該規則適用的站台 */
     char blank[18];             /* 保留 */
@@ -1337,13 +1337,13 @@ typedef screenline footer_backup_t[2];
 
 typedef struct
 {
-    unsigned int cb;            /* size of current structure */
-    unsigned int encoding;
-    unsigned int raddr_len;
-    unsigned char raddr[16];
-    unsigned short int rport;
-    unsigned short int lport;
-    unsigned int flags;
+    uint32_t cb;                /* size of current structure */
+    uint32_t encoding;
+    uint32_t raddr_len;
+    uint8_t raddr[16];
+    uint16_t rport;
+    uint16_t lport;
+    uint32_t flags;
 } conn_data_t;
 
 #endif                          /* STRUCT_H */

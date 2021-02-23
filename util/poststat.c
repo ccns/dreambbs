@@ -57,7 +57,7 @@ struct posttop  /* DISKDATA(raw) */
     char board[13];             /* board name */
     char title[66];             /* title name */
     time_t date;                /* last post's date */
-    int number;                 /* post number */
+    int32_t number;             /* post number */
 }       top[TOPCOUNT], *tp;
 
 

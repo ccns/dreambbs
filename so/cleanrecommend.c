@@ -19,7 +19,7 @@ typedef struct RecommendMessage
 {
     char userid[IDLEN + 1];
     char verb[3];
-    int  pn;
+    int32_t pn;
     char msg[55];
     char rtime[6];
 }       RMSG;  /* DISKDATA(raw); runtime */

@@ -15,7 +15,7 @@ typedef struct
 {
     char id[IDLEN+1];
     char brd[IDLEN+1];
-    int check;
+    int32_t check;
 } BM;  /* DISKDATA(raw) */
 
 

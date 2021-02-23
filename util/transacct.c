@@ -31,34 +31,34 @@ double m3 = 0;
 
 typedef struct
 {
-    int userno;                 /* unique positive code */
+    int32_t userno;             /* unique positive code */
     char userid[IDLEN + 1];     /* userid */
     char passwd[PASSSIZE];      /* user password crypt by DES */
-    unsigned char signature;    /* user signature number */
+    uint8_t signature;          /* user signature number */
     char realname[20];          /* user realname */
     char username[24];          /* user nickname */
-    unsigned int userlevel;     /* user perm */
-    int numlogins;              /* user login times */
-    int numposts;               /* user post times */
-    unsigned int ufo;           /* user basic flags */
+    uint32_t userlevel;         /* user perm */
+    int32_t numlogins;          /* user login times */
+    int32_t numposts;           /* user post times */
+    uint32_t ufo;               /* user basic flags */
     time_t firstlogin;          /* user first login time */
     time_t lastlogin;           /* user last login time */
     time_t staytime;            /* user total stay time */
     time_t tcheck;              /* time to check mbox/pal */
     char lasthost[32];          /* user last login remote host */
-    int numemail;               /* 原為寄發 Inetrnet E-mail 次數, 在不更改資料結構的狀況下, 擴充為積分 */
+    int32_t numemail;           /* 原為寄發 Inetrnet E-mail 次數, 在不更改資料結構的狀況下, 擴充為積分 */
     time_t tvalid;              /* 通過認證、更改 mail address 的時間 */
     char email[60];             /* user email */
     char address[60];           /* user address */
     char justify[60];           /* FROM of replied justify mail */
     char vmail[60];             /* 通過認證之 email */
     time_t deny;                /* user violatelaw time */
-    int request;                /* 點歌系統 */
-    int money;                  /* 夢幣 */
-    unsigned int ufo2;          /* 延伸的個人設定 */
+    int32_t request;            /* 點歌系統 */
+    int32_t money;              /* 夢幣 */
+    uint32_t ufo2;              /* 延伸的個人設定 */
     char ident[96];             /* user remote host ident */
-    int point1;                 /* 優良積分 */
-    int point2;                 /* 劣文 */
+    int32_t point1;             /* 優良積分 */
+    int32_t point2;             /* 劣文 */
     time_t vtime;               /* validate time */
 }       NEW;  /* DISKDATA(raw) */
 
@@ -70,33 +70,33 @@ typedef struct
 
 typedef struct
 {
-    int userno;                 /* unique positive code */
+    int32_t userno;             /* unique positive code */
     char userid[IDLEN + 1];     /* userid */
     char passwd[PASSSIZE];      /* user password crypt by DES */
-    unsigned char signature;    /* user signature number */
+    uint8_t signature;          /* user signature number */
     char realname[20];          /* user realname */
     char username[24];          /* user nickname */
-    unsigned int userlevel;     /* user perm */
-    int numlogins;              /* user login times */
-    int numposts;               /* user post times */
-    unsigned int ufo;           /* user basic flags */
+    uint32_t userlevel;         /* user perm */
+    int32_t numlogins;          /* user login times */
+    int32_t numposts;           /* user post times */
+    uint32_t ufo;               /* user basic flags */
     time_t firstlogin;          /* user first login time */
     time_t lastlogin;           /* user last login time */
     time_t staytime;            /* user total stay time */
     time_t tcheck;              /* time to check mbox/pal */
     char lasthost[32];          /* user last login remote host */
-    int numemail;               /* 寄發 Inetrnet E-mail 次數 */
+    int32_t numemail;           /* 寄發 Inetrnet E-mail 次數 */
     time_t tvalid;              /* 通過認證、更改 mail address 的時間 */
     char email[60];             /* user email */
     char address[60];           /* user address */
     char justify[60];           /* FROM of replied justify mail */
     char vmail[60];             /* 通過認證之 email */
     time_t deny;                /* user violatelaw time */
-    int extrambox;              /* 加大信箱 (最大 50 封) */
-    int extrasize;              /* 加大信箱容量 (最大 1000K) */
-    unsigned int ufo2;          /* 延伸的個人設定 */
+    int32_t extrambox;          /* 加大信箱 (最大 50 封) */
+    int32_t extrasize;          /* 加大信箱容量 (最大 1000K) */
+    uint8_t ufo2;               /* 延伸的個人設定 */
     char ident[103];            /* user remote host ident */
-    char barcolor;              /* 光棒顏色 */
+    int8_t barcolor;            /* 光棒顏色 */
     time_t vtime;               /* validate time */
 }       OLD;  /* DISKDATA(raw) */
 
@@ -265,9 +265,9 @@ trans_acct(
 
 typedef struct
 {
-    int money;                /* 夢幣 */
-    int save;                 /* 存款 */
-    int request;              /* 小雞點券 */
+    int32_t money;            /* 夢幣 */
+    int32_t save;             /* 存款 */
+    int32_t request;          /* 小雞點券 */
 }       MONEY;  /* DISKDATA(raw) */
 
 int

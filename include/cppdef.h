@@ -289,4 +289,7 @@ static inline long double ld_clamp(long double x, long double low, long double h
 #define YEA     CPP_MACRO_DEPRECATED(use 'true' instead)  (1)
 #define NA      CPP_MACRO_DEPRECATED(use 'false' instead) (0)
 
+/* Standard integer types with specified widths */
+#include <stdint.h>
+
 #endif  // #ifndef CPPDEF_H
