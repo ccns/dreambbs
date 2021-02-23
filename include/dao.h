@@ -184,6 +184,18 @@ int xwrite(int fd, const char *data, int size);
 }  /* extern "C" */
 #endif
 
+/* Helper macros for fixed-size `time_t` */
+#define str_stamp_any(_str, _chrono) \
+    str_stamp(_str, &TEMPLVAL(time_t, {*(_chrono)}))
+#define Btime_any(_clock) \
+    Btime(&TEMPLVAL(time_t, {*(_clock)}))
+#define Ctime_any(_clock) \
+    Ctime(&TEMPLVAL(time_t, {*(_clock)}))
+#define Etime_any(_clock) \
+    Etime(&TEMPLVAL(time_t, {*(_clock)}))
+#define Atime_any(_clock) \
+    Atime(&TEMPLVAL(time_t, {*(_clock)}))
+
 /* `proc_runl` without the need of `arg0` and trailing `NULL` */
 /* Use `PROC_CMD(path, NULL)` when no other arguments are needed */
 #define PROC_CMD(path, ...) proc_runl(path, path, __VA_ARGS__, NULL)
