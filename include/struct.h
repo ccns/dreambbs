@@ -1026,12 +1026,6 @@ typedef struct
 
 typedef struct
 {
-    char *grad;
-    char *server;
-} YZU_MAIL;
-
-typedef struct
-{
     char name[20];
     char host[26];
     char ip[16];
