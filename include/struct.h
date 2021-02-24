@@ -391,7 +391,8 @@ typedef struct
     char subject[TTLEN + 1];
     char rcpt[60];
     char filepath[77];
-    char *revdomain;            /* reverse domain */
+ /* char *revdomain; */         /* reverse domain (unused) */
+    char reserve[4];            /* IID.2021-02-24: The previous space for unused `revdomain` */
 } MailQueue;  /* DISKDATA(raw) */
 
 
