@@ -374,14 +374,6 @@ typedef struct VoteStudents
 typedef char vitem_t[32];       /* 投票選項 */ /* DISKDATA(raw) */
 
 
-typedef struct
-{
-    char userid[IDLEN + 1];
-    int8_t numvotes;
-    uint32_t choice;
-} VLOG;
-
-
 /* filepath : brd/<board>/.VCH, brd/<board>/@/... */
 
 
@@ -944,38 +936,6 @@ typedef struct
 } EMAIL;  /* DISKDATA(raw) */
 
 /* ----------------------------------------------------- */
-/* classtable.c 中運用的資料結構                         */
-/* ----------------------------------------------------- */
-typedef struct
-{
-    int32_t lost;
-    char name[9];
-    char teacher[9];
-    char class_[5];
-    char obj_id[7];
-}   CLASS;
-
-typedef struct
-{
-    int32_t hour;
-    int32_t min;
-}  CLOCK;
-
-
-typedef struct
-{
-    CLOCK start[13];
-    CLOCK end[13];
-} CLASS_TIME;
-
-typedef struct
-{
-    int32_t mode;
-    CLASS table[6][13];
-    CLASS_TIME time;
-} CLASS_TABLE;
-
-/* ----------------------------------------------------- */
 /* list.c 中運用的資料結構                               */
 /* ----------------------------------------------------- */
 typedef struct
@@ -1019,15 +979,6 @@ typedef struct
     int start;
     int end;
 } REAPER_TIME;
-
-typedef struct
-{
-    char name[20];
-    char host[26];
-    char ip[16];
-    char port[6];
-} BBSNET;
-
 
 #define TOPLOGINS       (0)
 #define TOPPOSTS        (1)
@@ -1289,18 +1240,6 @@ typedef struct
     char path[13];              /* 該規則適用的站台 */
     char blank[18];             /* 保留 */
 } spamrule_t;  /* DISKDATA(raw) */
-
-/* ----------------------------------------------------- */
-/* PAYCHECK : 32 bytes                                   */
-/* ----------------------------------------------------- */
-
-typedef struct
-{
-    time_t tissue;              /* 開支票時間 */
-    int money;
-    int gold;
-    char reason[20];
-} PAYCHECK;
 
 /* ----------------------------------------------------- */
 /* Data structure for screen backup                      */

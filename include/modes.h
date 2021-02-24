@@ -79,7 +79,6 @@ enum
 #define M_MYFAVORITE    37
 
 #define M_MAX           M_MYFAVORITE
-#define M_BBSNET        0
 
 
 #ifdef  MODES_C

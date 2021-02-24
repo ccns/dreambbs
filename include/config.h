@@ -337,8 +337,6 @@
 #define FORCE_BOARD             BRD_ANNOUNCE  /* statue.000725 */
 #endif
 
-#undef  HAVE_BBSNET             /* 提供 BBSNET */
-
 #define HAVE_COLOR_VMSG         /* 彩色的VMSG */
 
 #define HAVE_POST_BOTTOM        /* 文章置底 */
@@ -474,8 +472,6 @@
 #define BANMAIL_EXPIRE  (30)              /* 擋信列表更新 (天) */
 
 #define CNA_MAX         20                /* lkchu.981201: 即時新聞上限 */
-
-#define BBSNETMAX       10                /* BBSNET 最大連線數量 */
 
 /* ----------------------------------------------------- */
 /* chat.c & xchatd.c 中採用的 port 及 protocol           */

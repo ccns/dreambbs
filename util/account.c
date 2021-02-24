@@ -679,8 +679,6 @@ main(void)
 //        keeplog(FN_INNBBS_LOG, BRD_SECRET, title, 2);
 //        gzip(FN_INNBBS_LOG, "innbbsd/innbbsd", ymd);  /* 轉信紀錄 */
 
-//        sprintf(title, "[記錄] %sMailService使用紀錄", date);
-//        keeplog(FN_MAILSERVICE_LOG, BRD_SECRET, title, 2);
 
 //        sprintf(title, "[記錄] %s看版信件刪除紀錄", date);
 //        keeplog(FN_EXPIRE_LOG, BRD_SECRET, title, 2);
@@ -771,11 +769,6 @@ main(void)
 #ifdef  HAVE_FAVORITE
         sprintf(title, "[記錄] %s我的最愛紀錄", date);
         keeplog(FN_FAVORITE_LOG, BRD_SECRET, title, 2);
-#endif
-
-#ifdef  HAVE_BBSNET
-        sprintf(title, "[記錄] %sBBSNET 使用紀錄", date);
-        keeplog(FN_BBSNET_LOG, BRD_SECRET, title, 2);
 #endif
 
         /* 以下是公開紀錄 */

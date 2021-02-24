@@ -82,10 +82,8 @@
 #define FN_ETC_JUSTIFIED_POP3   "etc/justified.pop3"    /* POP3 通過身分認證 */
 #define FN_ETC_JUSTIFIED_BMTA   "etc/justified.bmta"    /* BMTA 通過身分認證 */
 #define FN_ETC_JUSTIFY          "etc/justify"           /* 身分認證的方法 */
-#define FN_ETC_LOVEPAPER        "etc/lovepaper"         /* 情書產生器資料庫 */
 #define FN_ETC_SPAMMER_ACL      "etc/spamer.acl"        /* 站外 SPAM 名單 */
 #define FN_ETC_MAIL_OVER        "etc/mail.over"         /* 信件超出上限 */
-#define FN_ETC_MAILSERVICE      "etc/mailservice"       /* 電子郵件服務 */
 #define FN_MATCH_MAIL           "etc/match.mail"        /* 告知特殊搜尋更新完畢 */
 #define FN_ETC_MQUOTA           "etc/mquota"            /* 超過保存期限 */
 #define FN_ETC_NEWUSER          "etc/newuser"           /* 新手上路須知 */
@@ -102,15 +100,6 @@
 #define FN_ETC_OBSERVE          "etc/observe.db"        /* 系統觀察名單 */
 #define FN_ETC_PERSONAL         "etc/personal"          /* 個人板資料庫 */
 #define FN_VCH                  ".VCH"                  /* vote control header */
-#define FN_PAYCHECK             "paycheck"              /* 支票 */
-
-/* ----------------------------------------------------- */
-/* news 設定檔                                           */
-/* ----------------------------------------------------- */
-#define FN_NEWS                 "etc/news/"             /* 設定檔位置 */
-#define FN_NEWS_CLASS           "etc/news/class.ini"    /* Class 名稱對應 */
-#define FN_NEWS_NEWS            "etc/news/news.ini"     /* 站台設定 */
-#define BRD_NEWS                "news/"                 /* 文章位置 */
 
 /* ----------------------------------------------------- */
 /* 各個版下的檔名設定                                    */
@@ -157,7 +146,6 @@
 #define FN_LAZYBM_LOG           "run/lazybm.log"        /* 偷懶版主紀錄 */
 #define FN_MAIL_LOG             "run/mail.log"          /* 所有 [信件] 記錄 */
 #define FN_BBSMAILPOST_LOG      "run/bbsmailpost.log"   /* bbsmail mailpost 紀錄 */
-#define FN_MAILSERVICE_LOG      "run/mailservice.log"
 
 #ifdef  HAVE_RECOMMEND
 #define FN_RECOMMEND_LOG        "run/recommend.log"     /* 推薦文章 */
@@ -177,7 +165,6 @@
 #define FN_POST_LOG             "run/post.log"          /* 文章篇數統計 */
 #define FN_POST_DB              "run/post.db"           /* 文章篇數統計資料庫 */
 #define FN_POSTEDIT_LOG         "run/postedit.log"      /* 修改文章紀錄 */
-#define FN_PYDICT_LOG           "run/pydict.log"        /* 英漢漢英字典 */
 
 #define FN_REAPER_LOG           "run/reaper.log"        /* 本日砍帳號紀錄 */
 #define FN_LOGIN_LOG            "run/login.log"         /* 所有 [登錄] 記錄 */
@@ -204,13 +191,9 @@
 #endif  /* #ifdef LOG_ADMIN */
 #define FN_VERIFY_LOG           "run/verify.log"        /* 認證記錄 */
 #define FN_CRIMINAL_LOG         "run/criminal.log"      /* 停權名單 */
-#define FN_UEEQUERY_LOG         "run/ueequery.log"      /* 聯考查榜紀錄 */
 #define FN_RFORM_R              "run/rform_r.db"        /* 註冊單申請資料庫 */
 
-#define FN_BBSNET_LOG           "run/bbsnet.log"        /* BBSNET log */
-#define FN_SEVEN_LOG            "run/seven.log"         /* 接龍 log */
 #define FN_PERSONAL_LOG         "run/personal.log"      /* 個人板相關 log */
-#define FN_YZUSERVICE_LOG       "run/yzuservice.log"    /* YzuService Log */
 
 /* ----------------------------------------------------- */
 /* 其他的檔名設定                                        */
@@ -219,9 +202,6 @@
 #define FN_HOTBOARD             "gem/@/@HotBoard"       /* 熱門看板 */
 #define FN_APRIL_FIRST          "gem/brd/Admin/J/A106LL7J"
                                                         /* IID.20190822: The April first article (unused) */
-
-#define FN_GAME_BBSNET          "game/bbsnet/bbsdata.db"
-                                                        /* BBSNET 站台 */
 
 /* ----------------------------------------------------- */
 /* 各個版的檔名設定                                      */
