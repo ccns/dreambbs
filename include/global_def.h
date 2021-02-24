@@ -119,7 +119,6 @@
 /* run/ 下的檔名設定                                     */
 /* ----------------------------------------------------- */
 #define FN_BROWSE_LOG           "run/browse.log"
-#define FN_NEWSEXPIRE_LOG       "run/newsexpire.log"
 #define FN_RESET_LOG            "run/reset.log"         /* 系統重置 */
 #define FN_CHAT_LOG             "run/chat.log"
 #define FN_CHATDATA_LOG         "run/chatdata.log"
@@ -226,8 +225,6 @@
 #define BRD_ORDERSONGS          "SongToCamera"
 
 /* Thor.981223: 將 bbsreg untrust.acl 分離出來 */
-#define NEWS_ACLFILE            "etc/news.acl"          /* news access control list */
-
 #ifdef HAVE_SIGNED_MAIL
 #define PRIVATE_KEY             "etc/prikey"            /* Thor.990409: key file name */
 #endif
