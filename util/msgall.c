@@ -94,7 +94,7 @@ main(
     strcpy(bmw.msg, argv[1]);
 
     up = ushm->uslot;
-    uceil = (UTMP *) ((char *) up + ushm->offset);
+    uceil = up + ushm->ubackidx;
 
     do
     {

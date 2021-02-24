@@ -1907,7 +1907,7 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 
             up = bmw.caller;
 #if 1
-            if ((up < uhead) || (up > uhead + MAXACTIVE /*ushm->offset*/))
+            if ((up < uhead) || (up > uhead + MAXACTIVE /*ushm->ubackidx*/))
                 /* lkchu.981201: comparison of distinct pointer types */
             {
                 vmsg(MSG_USR_LEFT);
@@ -2106,7 +2106,7 @@ aloha(void)
         sprintf(benz.msg, "◎ 進 入 (%s) 囉!! ◎", BOARDNAME);
 
         ubase = ushm->uslot;
-        uceil = (UTMP *) ((char *) ubase + ushm->offset);
+        uceil = ubase + ushm->ubackidx;
 
         mgets(-1);
         while ((bmw = (BMW *) mread(fd, sizeof(BMW))))
@@ -2199,7 +2199,7 @@ loginNotify(void)
         sprintf(benz.msg, "◎ 剛剛踏進%s的門 [系統協尋] ◎", BOARDNAME);
 
         ubase = ushm->uslot;
-        uceil = (UTMP *) ((char *) ubase + ushm->offset);
+        uceil = ubase + ushm->ubackidx;
 
         mgets(-1);
         while ((bmw = (BMW *) mread(fd, sizeof(BMW))))
@@ -3275,7 +3275,7 @@ ulist_init(
     seecloak = HAS_PERM(PERM_SEECLOAK);
 
     up = ushm->uslot;
-    uceil = (UTMP *) ((char *) up + ushm->offset);
+    uceil = up + ushm->ubackidx;
 
     max = 0;
     bad = false;

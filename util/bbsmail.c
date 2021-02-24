@@ -58,7 +58,7 @@ my_biff(char *userid)
     ushm_init(&ushm);
 
     utmp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (!strcasecmp(utmp->userid, userid))
@@ -79,14 +79,14 @@ bbs_biff(
     const char *userid)
 {
     UTMP *utmp, *uceil;
-    unsigned int offset;
+    unsigned int idx;
 
-    offset = ushm->offset;
-    if (offset > (MAXACTIVE - 1) * sizeof(UTMP))        /* Thor.980805: 不然call不到 */
-        offset = (MAXACTIVE - 1) * sizeof(UTMP);
+    idx = ushm->ubackidx;
+    if (idx > MAXACTIVE - 1)        /* Thor.980805: 不然call不到 */
+        idx = MAXACTIVE - 1;
 
     utmp = ushm->uslot;
-    uceil = (UTMP *) ((char *) utmp + offset);
+    uceil = utmp + idx;
 
     do
     {

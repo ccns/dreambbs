@@ -140,13 +140,13 @@ utmp_new(
     {
         if (!uentp->pid && !uentp->userno)
         {
-            unsigned int offset;
+            unsigned int idx;
 
-            offset = (char *) uentp - (char *) xshm->uslot;
+            idx = uentp - xshm->uslot;
             memcpy(uentp, up, sizeof(UTMP));
             xshm->count++;
-            if (xshm->offset < offset)
-                xshm->offset = offset;
+            if (xshm->ubackidx < idx)
+                xshm->ubackidx = idx;
             cutmp = uentp;
 
 #ifdef  HAVE_SEM
@@ -197,7 +197,7 @@ utmp_find(
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (uentp->userno == userno)
@@ -214,7 +214,7 @@ pid_find(
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (uentp->pid == pid && uentp->pid != 0)
@@ -252,7 +252,7 @@ utmp_search(
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (uentp->userno == userno)
@@ -276,7 +276,7 @@ utmp_count(
 
     count = 0;
     uentp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (uentp->userno == userno)
@@ -643,7 +643,7 @@ utmp_check(        /* 檢查使用者是否在站上 */
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (uentp->pid)

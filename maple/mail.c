@@ -1171,7 +1171,7 @@ m_biff(
     UTMP *utmp, *uceil;
 
     utmp = ushm->uslot;
-    uceil = (UTMP *) ((char *) utmp + ushm->offset);
+    uceil = utmp + ushm->ubackidx;
     do
     {
         if (utmp->userno == userno)
