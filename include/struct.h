@@ -72,7 +72,6 @@
 #define D_COLS_REF   (B_COLS_REF - 79)  /* Mapped to `d_cols` */
 
 
-typedef char const *STRING;
 typedef struct UTMP UTMP;
 
 /* ban email Âà«H¥Î */
