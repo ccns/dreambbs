@@ -25,7 +25,6 @@ int main(void)
     CHECK_SIZE(BRD, 256);
     CHECK_SIZE(BRH, 12);
     CHECK_SIZE(HDR, 256);
-    CHECK_SIZE(CLASS, 36);
     CHECK_SIZE(ACCT, 512);
 
     return 0;
