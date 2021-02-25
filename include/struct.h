@@ -32,8 +32,9 @@
 #define OLDPLAINPASSLEN 9              /* Length of old plaintext passwd field */
 #define PASSHASHLEN     45             /* Length of hash-part encrypted passwd field */
 #define BCLEN           4              /* Length of board class */
-#define ANSILINELEN     500            /* Maximum Screen width in chars，不能超過 1023 */
-
+#define ANSILINELEN     4000           /* Maximum Screen width in chars，不能超過 1023 */
+                                       /* temperary expand ANSILINELEN to 4000 before
+                                          inplementing dynamic allocating size */
 #define T_LINES         50             /* maximum total lines */
 #define T_COLS          120            /* maximum total columns，要比 ANSILINELEN 小 */
 #define TAB_STOP        4U             /* 按 TAB 換成幾格空白 (建議是 2 的次方，可免去除法) */
