@@ -1687,7 +1687,7 @@ bmw_edit(
     str[0] = cc;
     str[1] = '\0';
 
-    if (vget(B_LINES_REF - 1, 0, hint, str, 58, GCARRY) &&
+    if (vget(B_LINES_REF - 1, 0, hint, str, BMIN(58UL, sizeof(bmw->msg)), GCARRY) &&
                                         /* lkchu.990103: 新介面只允許 48 個字元 */
         vans("確定要送出《熱訊》嗎(Y/n)？[Y] ") != 'n')
     {
