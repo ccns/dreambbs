@@ -74,6 +74,21 @@
 
 typedef struct UTMP UTMP;
 
+/* Index types for SHM structures */
+/* For signed types, `-1` represents `NULL` (empty) */
+
+typedef int utmp_idx_t;
+typedef unsigned int utmp_uidx_t;
+typedef int32_t utmp_idx32_t;
+typedef uint32_t utmp_uidx32_t;
+
+typedef int bmw_idx_t;
+typedef int32_t bmw_idx32_t;
+
+/* index of `PIPUTMP[]` * 2 + index of `pipdata[]` */
+typedef int pipdata_idx_t;
+typedef int32_t pipdata_idx32_t;
+
 /* ban email 轉信用 */
 
 typedef struct
@@ -447,7 +462,7 @@ typedef struct
 typedef struct
 {
     time32_t btime;
-    UTMP *caller;               /* who call-in me ? */
+    utmp_idx32_t caller;        /* who call-in me ? (index of `ushm->uslot[]`) */
     int32_t sender;             /* calling userno */
     int32_t recver;             /* called userno */
     char userid[IDLEN + 1];
@@ -484,11 +499,7 @@ typedef struct
     char chat[10][150];         /*聊天內容*/
 } pipdata;  /* DISKDATA(raw) */
 
-typedef struct
-{
-    pipdata pip1;
-    pipdata pip2;
-} PIPUTMP;  /* SHMDATA(raw); dependency */
+typedef pipdata PIPUTMP[2];  /* SHMDATA(raw); dependency */
 #endif  /* #ifdef  HAVE_PIP_FIGHT1 */
 
 struct UTMP  /* SHMDATA(raw) */
@@ -502,9 +513,9 @@ struct UTMP  /* SHMDATA(raw) */
     uint32_t      flag;                         /* user flag */
     ip_addr       in_addr;                      /* Internet address */
     int32_t       sockport;                     /* socket port for talk */
-    UTMP          *talker;                      /* who talk-to me ? */
+    utmp_idx32_t  talker;                       /* who talk-to me ? (index of `ushm->uslot[]`) */
 
-    BMW           *mslot[BMW_PER_USER];
+    bmw_idx32_t   mslot[BMW_PER_USER];          /* (indexes of `ushm->mpool[]`) */
 
     char          userid[IDLEN + 1];            /* user's ID */
     char          mateid[IDLEN + 1];            /* partner's ID */
@@ -525,7 +536,7 @@ struct UTMP  /* SHMDATA(raw) */
     int32_t       board_pal;
 #endif
 #ifdef  HAVE_PIP_FIGHT1
-    pipdata       *pip;
+    pipdata_idx32_t pip;                        /* (index of `ushm->pip[]` * 2 + index of `ushm->pip[i][]`) */
 #endif
 #ifdef  PREFORK
     int32_t       bgen;                         /* generation */
@@ -706,12 +717,12 @@ typedef struct
 {
     UTMP uslot[MAXACTIVE];      /* UTMP slots */
     int32_t count;              /* number of active session */
-    uint32_t ubackidx;          /* index of the back of active UTMPs */
+    utmp_uidx32_t ubackidx;     /* index of the back of active UTMPs */
 
     double sysload[3];
     int32_t avgload;
 
-    BMW *mbase;                 /* sequential pointer for BMW */
+    bmw_idx32_t mbase;          /* sequential offset for BMW (index of `ushm->mpool[]`) */
     BMW mpool[BMW_MAX];
 #ifdef  HAVE_PIP_FIGHT1
     PIPUTMP pip[PIP_MAX];

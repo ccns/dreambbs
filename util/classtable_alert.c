@@ -49,7 +49,8 @@ bsend(
     UTMP *callee,
     BMW *bmw)
 {
-    BMW *mpool, *mhead, *mtail, **mslot;
+    BMW *mpool, *mhead, *mtail;
+    bmw_idx32_t *mslot;
     int i;
     pid_t pid;
     time_t texpire;
@@ -66,7 +67,7 @@ bsend(
 
     for (;;)
     {
-        if (mslot[i] == NULL)
+        if (mslot[i] < 0)
             break;
 
         if (++i >= BMW_PER_USER)
@@ -81,9 +82,7 @@ bsend(
     texpire = time32(&bmw->btime) - BMW_EXPIRE;
 
     mpool = ushm->mpool;
-    mhead = ushm->mbase;
-    if (mhead < mpool)
-        mhead = mpool;
+    mhead = mpool + BMAX(ushm->mbase, 0);
     mtail = mpool + BMW_MAX;
 
     do
@@ -93,7 +92,7 @@ bsend(
     } while (mhead->btime > texpire);
 
     *mhead = *bmw;
-    ushm->mbase = mslot[i] = mhead;
+    ushm->mbase = mslot[i] = mhead - mpool;
 
     /* sem_lock(BSEM_LEAVE); */
     return kill(pid, SIGUSR2);
@@ -108,7 +107,7 @@ bedit(
 
     bmw->recver = up->userno;   /* 先記下 userno 作為 check */
 
-    bmw->caller = NULL;
+    bmw->caller = -1;
     bmw->sender = 0;
     strcpy(bmw->userid, "系統報時者");
 

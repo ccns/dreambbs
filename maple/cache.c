@@ -140,7 +140,7 @@ utmp_new(
     {
         if (!uentp->pid && !uentp->userno)
         {
-            unsigned int idx;
+            utmp_uidx_t idx;
 
             idx = uentp - xshm->uslot;
             memcpy(uentp, up, sizeof(UTMP));

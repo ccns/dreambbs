@@ -79,7 +79,7 @@ bbs_biff(
     const char *userid)
 {
     UTMP *utmp, *uceil;
-    unsigned int idx;
+    utmp_uidx_t idx;
 
     idx = ushm->ubackidx;
     if (idx > MAXACTIVE - 1)        /* Thor.980805: 不然call不到 */

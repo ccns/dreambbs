@@ -549,6 +549,9 @@ utmp_setup(
     utmp.userno = cuser.userno;
     utmp.mode = bbsmode = mode;
     utmp.in_addr = tn_addr;
+    utmp.talker = -1;
+    for (int i = 0; i < COUNTOF(utmp.mslot); ++i)
+        utmp.mslot[i] = -1;
     utmp.ufo = cuser.ufo;
     utmp.flag = 0;
     utmp.userlevel = cuser.userlevel;
@@ -557,6 +560,9 @@ utmp_setup(
 #endif
 #ifdef HAVE_BOARD_PAL
     utmp.board_pal = -1;
+#endif
+#ifdef  HAVE_PIP_FIGHT1
+    utmp.pip = -1;
 #endif
 
     strcpy(utmp.userid, cuser.userid);

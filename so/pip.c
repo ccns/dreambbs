@@ -4550,21 +4550,23 @@ pip_go_palace(void)
 static void
 pip_set_currutmp(void)
 {
-    currutmp->pip->hp = d.body[BODY_HP];
-    currutmp->pip->mp = d.fight[FIGHT_MP];
-    currutmp->pip->maxhp = d.body[BODY_MAXHP];
-    currutmp->pip->maxmp = d.fight[FIGHT_MAXMP];
-    currutmp->pip->attack = d.fight[FIGHT_ATTACK];
-    currutmp->pip->resist = d.fight[FIGHT_RESIST];
-    currutmp->pip->mresist = d.fight[FIGHT_MRESIST];
-    currutmp->pip->speed = d.fight[FIGHT_SPEED];
+    pipdata *const currpip = &ushm->pip[currutmp->pip >> 1][currutmp->pip % 2U];
+    currpip->hp = d.body[BODY_HP];
+    currpip->mp = d.fight[FIGHT_MP];
+    currpip->maxhp = d.body[BODY_MAXHP];
+    currpip->maxmp = d.fight[FIGHT_MAXMP];
+    currpip->attack = d.fight[FIGHT_ATTACK];
+    currpip->resist = d.fight[FIGHT_RESIST];
+    currpip->mresist = d.fight[FIGHT_MRESIST];
+    currpip->speed = d.fight[FIGHT_SPEED];
 }
 
 static void
 pip_get_currutmp(void)
 {
-    d.body[BODY_HP] = currutmp->pip->hp;
-    d.fight[FIGHT_MP] = currutmp->pip->mp;
+    pipdata *const currpip = &ushm->pip[currutmp->pip >> 1][currutmp->pip % 2U];
+    d.body[BODY_HP] = currpip->hp;
+    d.fight[FIGHT_MP] = currpip->mp;
 }
 
 int
@@ -4585,23 +4587,27 @@ int first)
     UTMP *opponent;
     char data[200], buf1[256], buf2[256], mymsg[8][150];
 
-    memcpy(&temp, &(cutmp->pip), sizeof(pipdata));
+    pipdata *currpip;
+    pipdata *opponpip;
+
+    memcpy(&temp, &ushm->pip[cutmp->pip >> 1][cutmp->pip % 2U], sizeof(pipdata));
     memcpy(&chickentemp, &d, sizeof(d));
 
 
     currutmp = cutmp;
+    currpip = &ushm->pip[currutmp->pip >> 1][cutmp->pip % 2U];
     utmp_mode(M_CHICKEN);
     clear();
     pip_read_file(&d, cuser.userid);
-    currutmp->pip->pipmode = 0; /*1:輸了 2:贏了 3:不玩了 */
-    currutmp->pip->leaving = 1;
-    currutmp->pip->mode = d.chickenmode;
+    currpip->pipmode = 0; /*1:輸了 2:贏了 3:不玩了 */
+    currpip->leaving = 1;
+    currpip->mode = d.chickenmode;
     pip_set_currutmp();         /*把小雞的data  down load for被呼叫者*/
-    currutmp->pip->nodone = first;      /*決定誰先攻擊*/
-    currutmp->pip->msgcount = 0;        /*戰鬥訊息歸零*/
-    currutmp->pip->chatcount = 0;       /*聊天訊息歸零*/
-    currutmp->pip->msg[0] = '\0';
-    strcpy(currutmp->pip->name, d.name);
+    currpip->nodone = first;      /*決定誰先攻擊*/
+    currpip->msgcount = 0;        /*戰鬥訊息歸零*/
+    currpip->chatcount = 0;       /*聊天訊息歸零*/
+    currpip->msg[0] = '\0';
+    strcpy(currpip->name, d.name);
 
 
     /*存下舊小雞data*/
@@ -4610,16 +4616,16 @@ int first)
     oldbrave = d.learn[LEARN_BRAVE];
     oldhskill = d.fight[FIGHT_HSKILL];
     oldmskill = d.fight[FIGHT_MSKILL];
-    opponent = cutmp->talker;
+    opponent = &ushm->uslot[cutmp->talker];
     add_io(fd, 2);
     /*對方未準備妥當  先等一下  為了防止當機 */
-    while (gameover == 0 && (opponent->pip == NULL || opponent->pip->leaving == 0))
+    while (gameover == 0 && (opponent->pip < 0 || (opponpip = &ushm->pip[opponent->pip >> 1][opponent->pip % 2U])->leaving == 0))
     {
         move(b_lines, 0);
         prints("\x1b[1;46m 對方還在準備中                                                                %*s\x1b[m", d_cols, "");
         ch = vkey();
     }
-    if (currutmp->pip->mode != opponent->pip->mode)
+    if (currpip->mode != opponpip->mode)
     {
         vmsg("一代雞與二代雞不能互相 PK !!");
         add_io(0, 60);
@@ -4628,24 +4634,24 @@ int first)
     for (i = 0; i < 8; i++)
         mymsg[i][0] = '\0';
     for (i = 0; i < 10; i++)
-        currutmp->pip->chat[i][0] = '\0';
+        currpip->chat[i][0] = '\0';
     /*開始的訊息*/
     sprintf(mymsg[0], "\x1b[1;37m%s 和 %s 的戰鬥開始了..\x1b[m",
-            opponent->pip->name, currutmp->pip->name);
-    strcpy(currutmp->pip->msg, mymsg[0]);
-    currutmp->pip->msgcount = 0;
+            opponpip->name, currpip->name);
+    strcpy(currpip->msg, mymsg[0]);
+    currpip->msgcount = 0;
     /*msgcount和charcount的算法不同*/
     add_io(fd, 1);
-    /*  currutmp->pip->mode=0;*/
-    while (!(opponent->pip || currutmp->pip->leaving == 0 || opponent->pip->leaving == 0))
+    /*  currpip->mode=0;*/
+    while (!(opponent->pip >= 0 || currpip->leaving == 0 || (opponpip = &ushm->pip[opponent->pip >> 1][opponent->pip % 2U])->leaving == 0))
     {
         clear();
         /*為了一些其他的原因  像餵食等是呼叫舊的  所以reload*/
         pip_get_currutmp();
         /*              pip_set_currutmp();*/
 
-        if (opponent->pip->nodone != 1)
-            strcpy(mymsg[currutmp->pip->msgcount%8], currutmp->pip->msg);
+        if (opponpip->nodone != 1)
+            strcpy(mymsg[currpip->msgcount%8], currpip->msg);
         move(0, 0);
         outs_centered("\x1b[1;34m═╣\x1b[44;37m 自己資料 \x1b[0;1;34m╠═══════════════════════════════\x1b[m\n");
         prints_centered("\x1b[1m   \x1b[33m姓  名:\x1b[37m%-20s                                              \x1b[31m  \x1b[m\n",
@@ -4668,14 +4674,14 @@ int first)
         {
             move(8 + i, 1);
 
-            if (currutmp->pip->msgcount < 8)
+            if (currpip->msgcount < 8)
             {
                 outs_centered(mymsg[i]);
                 /*適用pip.msgcount在8行內*/
             }
             else
             {
-                outs_centered(mymsg[(currutmp->pip->msgcount-8+i)%8]);
+                outs_centered(mymsg[(currpip->msgcount-8+i)%8]);
                 /*pip.msgcount=8:表示已經有9個 所以從0->7*/
             }
         }
@@ -4684,27 +4690,27 @@ int first)
         for (i = 0; i < 2; i++)
         {
             move(17 + i, 0);
-            if (currutmp->pip->chatcount < 3)
+            if (currpip->chatcount < 3)
             {
-                outs_centered(currutmp->pip->chat[i]);
+                outs_centered(currpip->chat[i]);
                 /*適用pip.chatcount在2行內*/
             }
             else
             {
-                prints_centered("%s", currutmp->pip->chat[(currutmp->pip->chatcount-2+i)%10]);
+                prints_centered("%s", currpip->chat[(currpip->chatcount-2+i)%10]);
                 /*pip.chatcount=3:表示已經有2個 所以從0->1*/
             }
         }
         move(19, 0);
         outs_centered("\x1b[1;34m═╣\x1b[1;37;44m 對手資料 \x1b[0;1;34m╠═══════════════════════════════\x1b[m\n");
         prints_centered("\x1b[1m   \x1b[33m姓  名:\x1b[37m%-20s                                                \x1b[m\n",
-               opponent->pip->name);
-        sprintf(buf1, "%d/%d", opponent->pip->hp, opponent->pip->maxhp);
-        sprintf(buf2, "%d/%d", opponent->pip->mp, opponent->pip->maxmp);
+               opponpip->name);
+        sprintf(buf1, "%d/%d", opponpip->hp, opponpip->maxhp);
+        sprintf(buf2, "%d/%d", opponpip->mp, opponpip->maxmp);
         prints_centered("\x1b[1m   \x1b[33m體  力:\x1b[37m%-24s       \x1b[33m法  力:\x1b[37m%-24s\x1b[m\n",
                buf1, buf2);
         outs_centered("\x1b[1;34m═══════════════════════════════════════\x1b[m\n");
-        if (opponent->pip->nodone == 1)
+        if (opponpip->nodone == 1)
         {
             notyou = 1;
             prints("\x1b[1;37;44m  對方出招中，請稍待一會.....                                [T/^T]CHAT/回顧  \x1b[m");
@@ -4717,7 +4723,7 @@ int first)
 
         while ((ch = vkey()) == I_TIMEOUT)
         {
-            if (opponent->pip->nodone != 1 && notyou == 1)
+            if (opponpip->nodone != 1 && notyou == 1)
                 break;
         }
 
@@ -4736,10 +4742,10 @@ int first)
             if (len && buf[0] != ' ')
             {
                 sprintf(msg, "\x1b[1;46;33m★%s\x1b[37;45m %s \x1b[m", cuser.userid, buf);
-                strcpy(opponent->pip->chat[currutmp->pip->chatcount%10], msg);
-                strcpy(currutmp->pip->chat[currutmp->pip->chatcount%10], msg);
-                opponent->pip->chatcount++;
-                currutmp->pip->chatcount++;
+                strcpy(opponpip->chat[currpip->chatcount%10], msg);
+                strcpy(currpip->chat[currpip->chatcount%10], msg);
+                opponpip->chatcount++;
+                currpip->chatcount++;
             }
 
         }
@@ -4752,14 +4758,14 @@ int first)
             for (i = 0; i < 10; i++)
             {
                 move(8 + i, 0);
-                if (currutmp->pip->chatcount < 10)
+                if (currpip->chatcount < 10)
                 {
-                    outs_centered(currutmp->pip->chat[i]);
+                    outs_centered(currpip->chat[i]);
                     /*適用pip.msgcount在七行內*/
                 }
                 else
                 {
-                    prints_centered("%s", currutmp->pip->chat[(currutmp->pip->chatcount-10+i)%10]);
+                    prints_centered("%s", currpip->chat[(currpip->chatcount-10+i)%10]);
                     /*pip.chatcount=10:表示已經有11個 所以從0->9*/
                 }
             }
@@ -4768,7 +4774,7 @@ int first)
             vmsg("回顧之前的談話 只有10通");
             add_io(fd, 1);
         }
-        else if (currutmp->pip->nodone == 1 && opponent->pip->leaving == 1 && notyou == 0)
+        else if (currpip->nodone == 1 && opponpip->leaving == 1 && notyou == 0)
         {
             d.nodone = 1;
             switch (ch)
@@ -4779,30 +4785,30 @@ int first)
                 {
                     vmsg("竟然沒打中..:~~~");
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m對 \x1b[33m%s\x1b[37m 施展普通攻擊，但是沒有打中...",
-                            d.name, opponent->pip->name);
+                            d.name, opponpip->name);
                 }
                 else
                 {
-                    if (opponent->pip->resistmode == 0)
-                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 9 - opponent->pip->resist / 12 + random() % 20 - opponent->pip->speed / 30 + d.fight[FIGHT_SPEED] / 30);
+                    if (opponpip->resistmode == 0)
+                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 9 - opponpip->resist / 12 + random() % 20 - opponpip->speed / 30 + d.fight[FIGHT_SPEED] / 30);
                     else
-                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 9 - opponent->pip->resist / 6 + random() % 20 - opponent->pip->speed / 10 + d.fight[FIGHT_SPEED] / 30);
+                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 9 - opponpip->resist / 6 + random() % 20 - opponpip->speed / 10 + d.fight[FIGHT_SPEED] / 30);
                     dinjure = BMAX(dinjure, 10);
-                    opponent->pip->hp -= dinjure;
+                    opponpip->hp -= dinjure;
                     d.tmp[TMP_HEXP] += random() % 2 + 2;
                     d.fight[FIGHT_HSKILL] += random() % 2 + 1;
                     sprintf(buf, "普通攻擊，對方體力減低%d", dinjure);
                     vmsg(buf);
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了普通攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m",
-                            d.name, opponent->pip->name, dinjure);
+                            d.name, opponpip->name, dinjure);
                 }
-                opponent->pip->resistmode = 0;
-                opponent->pip->msgcount++;
-                currutmp->pip->msgcount++;
-                strcpy(opponent->pip->msg, buf);
-                strcpy(mymsg[currutmp->pip->msgcount%8], buf);
-                currutmp->pip->nodone = 2;      /*做完*/
-                opponent->pip->nodone = 1;
+                opponpip->resistmode = 0;
+                opponpip->msgcount++;
+                currpip->msgcount++;
+                strcpy(opponpip->msg, buf);
+                strcpy(mymsg[currpip->msgcount%8], buf);
+                currpip->nodone = 2;      /*做完*/
+                opponpip->nodone = 1;
                 break;
 
             case '2':
@@ -4811,25 +4817,25 @@ int first)
                 {
                     vmsg("竟然沒打中..:~~~");
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m對 \x1b[33m%s\x1b[37m 施展全力攻擊，但是沒有打中...",
-                            d.name, opponent->pip->name);
+                            d.name, opponpip->name);
                 }
                 else
                 {
-                    if (opponent->pip->resistmode == 0)
-                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - opponent->pip->resist / 12 + random() % 30 - opponent->pip->speed / 50 + d.fight[FIGHT_SPEED] / 30);
+                    if (opponpip->resistmode == 0)
+                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - opponpip->resist / 12 + random() % 30 - opponpip->speed / 50 + d.fight[FIGHT_SPEED] / 30);
                     else
-                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - opponent->pip->resist / 6 + random() % 30 - opponent->pip->speed / 30 + d.fight[FIGHT_SPEED] / 30);
+                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - opponpip->resist / 6 + random() % 30 - opponpip->speed / 30 + d.fight[FIGHT_SPEED] / 30);
                     dinjure = BMAX(dinjure, 20);
                     if (d.body[BODY_HP] > 5)
                     {
-                        opponent->pip->hp -= dinjure;
+                        opponpip->hp -= dinjure;
                         d.body[BODY_HP] -= 5;
                         d.tmp[TMP_HEXP] += random() % 3 + 3;
                         d.fight[FIGHT_HSKILL] += random() % 2 + 2;
                         sprintf(buf, "全力攻擊，對方體力減低%d", dinjure);
                         vmsg(buf);
                         sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了全力攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m",
-                                d.name, opponent->pip->name, dinjure);
+                                d.name, opponpip->name, dinjure);
                     }
                     else
                     {
@@ -4837,13 +4843,13 @@ int first)
                         vmsg("你的HP小於5啦..不行啦...");
                     }
                 }
-                opponent->pip->resistmode = 0;
-                opponent->pip->msgcount++;
-                currutmp->pip->msgcount++;
-                strcpy(opponent->pip->msg, buf);
-                strcpy(mymsg[currutmp->pip->msgcount%8], buf);
-                currutmp->pip->nodone = 2;      /*做完*/
-                opponent->pip->nodone = 1;
+                opponpip->resistmode = 0;
+                opponpip->msgcount++;
+                currpip->msgcount++;
+                strcpy(opponpip->msg, buf);
+                strcpy(mymsg[currpip->msgcount%8], buf);
+                currpip->nodone = 2;      /*做完*/
+                opponpip->nodone = 1;
                 break;
 
             case '3':
@@ -4872,47 +4878,47 @@ int first)
                         {
                             vmsg("竟然沒打中..:~~~");
                             sprintf(buf, "\x1b[1;33m%s \x1b[37m對 \x1b[33m%s\x1b[37m 施展魔法攻擊，但是沒有打中...",
-                                    d.name, opponent->pip->name);
+                                    d.name, opponpip->name);
                         }
                         else
                         {
                             dinjure = get_hurt(dinjure, d.tmp[TMP_MEXP]);
-                            mresist = TCLAMP((d.tmp[TMP_MEXP]) / (opponent->pip->mresist + 1), 0.3, 3);
+                            mresist = TCLAMP((d.tmp[TMP_MEXP]) / (opponpip->mresist + 1), 0.3, 3);
                             dinjure = (int)dinjure * mresist;
 
-                            opponent->pip->hp -= dinjure;
+                            opponpip->hp -= dinjure;
                             d.fight[FIGHT_MSKILL] += random() % 2 + 2;
                             sprintf(buf, "魔法攻擊，對方體力減低%d", dinjure);
                             vmsg(buf);
                             sprintf(buf, "\x1b[1;33m%s \x1b[37m施展了魔法攻擊，\x1b[33m%s \x1b[37m的體力減低 \x1b[31m%d \x1b[37m點\x1b[m",
-                                    d.name, opponent->pip->name, dinjure);
+                                    d.name, opponpip->name, dinjure);
                         }
                     }
 
-                    opponent->pip->msgcount++;
-                    currutmp->pip->msgcount++;
-                    strcpy(opponent->pip->msg, buf);
-                    strcpy(mymsg[currutmp->pip->msgcount%8], buf);
+                    opponpip->msgcount++;
+                    currpip->msgcount++;
+                    strcpy(opponpip->msg, buf);
+                    strcpy(mymsg[currpip->msgcount%8], buf);
                     /*恢復體力是用d.body[BODY_HP]和d.body[BODY_MAXHP]去 所以得更新*/
-                    currutmp->pip->hp = d.body[BODY_HP];
-                    currutmp->pip->mp = d.fight[FIGHT_MP];
-                    currutmp->pip->nodone = 2;  /*做完*/
-                    opponent->pip->nodone = 1;
+                    currpip->hp = d.body[BODY_HP];
+                    currpip->mp = d.fight[FIGHT_MP];
+                    currpip->nodone = 2;  /*做完*/
+                    opponpip->nodone = 1;
                     pip_set_currutmp();
                 }
                 break;
 
             case '4':
-                currutmp->pip->resistmode = 1;
+                currpip->resistmode = 1;
                 vmsg("小雞加強防禦啦....");
                 sprintf(buf, "\x1b[1;33m%s \x1b[37m加強防禦，準備全力抵擋 \x1b[33m%s \x1b[37m的下一招\x1b[m",
-                        d.name, opponent->pip->name);
-                opponent->pip->msgcount++;
-                currutmp->pip->msgcount++;
-                strcpy(opponent->pip->msg, buf);
-                strcpy(mymsg[currutmp->pip->msgcount%8], buf);
-                currutmp->pip->nodone = 2;      /*做完*/
-                opponent->pip->nodone = 1;
+                        d.name, opponpip->name);
+                opponpip->msgcount++;
+                currpip->msgcount++;
+                strcpy(opponpip->msg, buf);
+                strcpy(mymsg[currpip->msgcount%8], buf);
+                currpip->nodone = 2;      /*做完*/
+                opponpip->nodone = 1;
                 break;
             case '5':
                 add_io(fd, 60);
@@ -4921,90 +4927,90 @@ int first)
                 if (d.nodone != 1)
                 {
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m補充了身上的能量，體力或法力有顯著的提升\x1b[m", d.name);
-                    opponent->pip->msgcount++;
-                    currutmp->pip->msgcount++;
-                    strcpy(opponent->pip->msg, buf);
-                    strcpy(mymsg[currutmp->pip->msgcount%8], buf);
+                    opponpip->msgcount++;
+                    currpip->msgcount++;
+                    strcpy(opponpip->msg, buf);
+                    strcpy(mymsg[currpip->msgcount%8], buf);
                     /*恢復體力是用d.body[BODY_HP]和d.body[BODY_MAXHP]去 所以得更新*/
-                    currutmp->pip->hp = d.body[BODY_HP];
-                    currutmp->pip->mp = d.fight[FIGHT_MP];
-                    currutmp->pip->nodone = 2;  /*做完*/
-                    opponent->pip->nodone = 1;
+                    currpip->hp = d.body[BODY_HP];
+                    currpip->mp = d.fight[FIGHT_MP];
+                    currpip->nodone = 2;  /*做完*/
+                    opponpip->nodone = 1;
                     pip_set_currutmp();
                 }
                 break;
             case '6':
-                opponent->pip->msgcount++;
-                currutmp->pip->msgcount++;
-                if (random() % 20 >= 18 || (random() % 20 > 13 && d.fight[FIGHT_SPEED] <= opponent->pip->speed))
+                opponpip->msgcount++;
+                currpip->msgcount++;
+                if (random() % 20 >= 18 || (random() % 20 > 13 && d.fight[FIGHT_SPEED] <= opponpip->speed))
                 {
                     vmsg("想逃跑，卻失敗了...");
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m想先逃跑再說...但卻失敗了...\x1b[m", d.name);
-                    strcpy(opponent->pip->msg, buf);
-                    strcpy(mymsg[currutmp->pip->msgcount%8], buf);
+                    strcpy(opponpip->msg, buf);
+                    strcpy(mymsg[currpip->msgcount%8], buf);
                 }
                 else
                 {
                     sprintf(buf, "\x1b[1;33m%s \x1b[37m自覺打不過對方，所以決定先逃跑再說...\x1b[m", d.name);
-                    strcpy(opponent->pip->msg, buf);
-                    strcpy(mymsg[currutmp->pip->msgcount%8], buf);
-                    currutmp->pip->pipmode = 3;
+                    strcpy(opponpip->msg, buf);
+                    strcpy(mymsg[currpip->msgcount%8], buf);
+                    currpip->pipmode = 3;
                     clear();
                     vs_head("電子養小雞", BoardName);
                     move(10, 0);
                     outs_centered("            \x1b[1;31m┌──────────────────────┐\x1b[m\n");
                     prints_centered("            \x1b[1;31m│  \x1b[37m實力不強的小雞 \x1b[33m%-10s                 \x1b[31m│\x1b[m\n", d.name);
-                    prints_centered("            \x1b[1;31m│  \x1b[37m在與對手 \x1b[32m%-10s \x1b[37m戰鬥後落跑啦          \x1b[31m│\x1b[m\n", opponent->pip->name);
+                    prints_centered("            \x1b[1;31m│  \x1b[37m在與對手 \x1b[32m%-10s \x1b[37m戰鬥後落跑啦          \x1b[31m│\x1b[m\n", opponpip->name);
                     outs_centered("            \x1b[1;31m└──────────────────────┘\x1b[m\n");
-                    currutmp->pip->leaving = 0;
+                    currpip->leaving = 0;
                     add_io(fd, 60);
                     vmsg("三十六計 走為上策...");
                 }
-                currutmp->pip->nodone = 2;      /*做完*/
-                opponent->pip->nodone = 1;
+                currpip->nodone = 2;      /*做完*/
+                opponpip->nodone = 1;
                 break;
 
 
             }
         }
-        if (currutmp->pip->hp < 0)
+        if (currpip->hp < 0)
         {
-            currutmp->pip->pipmode = 1;
-            opponent->pip->pipmode = 2;
+            currpip->pipmode = 1;
+            opponpip->pipmode = 2;
         }
-        if (currutmp->pip->pipmode == 2 || opponent->pip->pipmode == 1 || opponent->pip->pipmode == 3)
+        if (currpip->pipmode == 2 || opponpip->pipmode == 1 || opponpip->pipmode == 3)
         {
             clear();
             vs_head("電子養小雞", BoardName);
             move(10, 0);
             outs_centered("            \x1b[1;31m┌──────────────────────┐\x1b[m\n");
             prints_centered("            \x1b[1;31m│  \x1b[37m英勇的小雞 \x1b[33m%-10s                     \x1b[31m│\x1b[m\n", d.name);
-            prints_centered("            \x1b[1;31m│  \x1b[37m打敗了對方小雞 \x1b[32m%-10s                 \x1b[31m│\x1b[m\n", opponent->pip->name);
+            prints_centered("            \x1b[1;31m│  \x1b[37m打敗了對方小雞 \x1b[32m%-10s                 \x1b[31m│\x1b[m\n", opponpip->name);
             outs_centered("            \x1b[1;31m└──────────────────────┘\x1b[m");
-            currutmp->pip->leaving = 0;
+            currpip->leaving = 0;
             add_io(fd, 60);
-            if (opponent->pip->hp <= 0)
+            if (opponpip->hp <= 0)
                 vmsg("對方死掉囉..所以你贏囉..");
             else
                 vmsg("對方落跑囉..所以算你贏囉.....");
         }
-        if (gameover != 1 && (opponent->pip->pipmode == 2 || currutmp->pip->pipmode == 1))
+        if (gameover != 1 && (opponpip->pipmode == 2 || currpip->pipmode == 1))
         {
             clear();
             vs_head("電子養小雞", BoardName);
             move(10, 0);
             outs_centered("            \x1b[1;31m┌──────────────────────┐\x1b[m\n");
             prints_centered("            \x1b[1;31m│  \x1b[37m可憐的小雞 \x1b[33m%-10s                     \x1b[31m│\x1b[m\n", d.name);
-            prints_centered("            \x1b[1;31m│  \x1b[37m在與 \x1b[32m%-10s \x1b[37m的戰鬥中，                \x1b[31m│\x1b[m\n", opponent->pip->name);
+            prints_centered("            \x1b[1;31m│  \x1b[37m在與 \x1b[32m%-10s \x1b[37m的戰鬥中，                \x1b[31m│\x1b[m\n", opponpip->name);
             outs_centered("            \x1b[1;31m│  \x1b[37m不幸地打輸了，記者現場特別報導.........   \x1b[31m│\x1b[m\n");
             outs_centered("            \x1b[1;31m└──────────────────────┘\x1b[m\n");
-            currutmp->pip->leaving = 0;
+            currpip->leaving = 0;
             add_io(fd, 60);
             vmsg("小雞打輸了....");
         }
-        if (opponent->pip->pipmode != 0 || currutmp->pip->pipmode != 0)
+        if (opponpip->pipmode != 0 || currpip->pipmode != 0)
         {
-            currutmp->pip->leaving = 0;
+            currpip->leaving = 0;
         }
 
     }
@@ -5012,7 +5018,7 @@ int first)
     close(fd);
     vmsg(NULL);
     utmp_mode(M_CHICKEN);
-    memcpy(&(cutmp->pip), &temp, sizeof(pipdata));
+    memcpy(&ushm->pip[cutmp->pip >> 1][cutmp->pip % 2U], &temp, sizeof(pipdata));
     memcpy(&d, &chickentemp, sizeof(d));
     return DL_RELEASE(0);
 }
@@ -7630,10 +7636,10 @@ const UTMP *opt)
         getdata(17, 4, "確定使用嗎? [Y/n]: ", ans, 2, 1, 0);
         if (ans[0] != 'n' && ans[0] != 'N')
         {
-            injure = (opt->pip->hp * p[mg[pipkey]].hp / 100 - random() % 300);
+            injure = (ushm->pip[opt->pip >> 1][opt->pip % 2U].hp * p[mg[pipkey]].hp / 100 - random() % 300);
             d.fight[FIGHT_MP] -= p[mg[pipkey]].needmp;
             d.tmp[TMP_MEXP] += random() % 30 + pipkey + 100;
-            cutmp->pip->mode = - mg[pipkey];
+            ushm->pip[cutmp->pip >> 1][cutmp->pip % 2U].mode = - mg[pipkey];
         }
         else
         {

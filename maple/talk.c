@@ -1189,9 +1189,9 @@ bmw_write(
         const BMW *benz;
 
         benz = (const BMW *) xo_pool_base + xo->pos;
-        if ((benz->caller >= ushm->uslot && benz->caller < ushm->uslot + MAXACTIVE) && (benz->caller->userno == benz->sender) && can_message(benz->caller))
+        if ((benz->caller >= 0 && benz->caller < MAXACTIVE) && (ushm->uslot[benz->caller].userno == benz->sender) && can_message(&ushm->uslot[benz->caller]))
         {
-            up = benz->caller;
+            up = &ushm->uslot[benz->caller];
         }
 
         if ((up || (up = utmp_find(benz->sender))) && can_message(up))
@@ -1603,7 +1603,8 @@ bmw_send(
     UTMP *callee,
     BMW *bmw)
 {
-    BMW *mpool, *mhead, *mtail, **mslot;
+    BMW *mpool, *mhead, *mtail;
+    bmw_idx32_t *mslot;
     int i;
     pid_t pid;
     time_t texpire;
@@ -1620,7 +1621,7 @@ bmw_send(
 
     for (;;)
     {
-        if (mslot[i] == NULL)
+        if (mslot[i] < 0)
             break;
 
         if (++i >= BMW_PER_USER)
@@ -1635,7 +1636,7 @@ bmw_send(
     texpire = time32(&bmw->btime) - BMW_EXPIRE;
 
     mpool = ushm->mpool;
-    mhead = BMAX(ushm->mbase, mpool);
+    mhead = mpool + BMAX(ushm->mbase, 0);
     mtail = mpool + BMW_MAX;
 
     do
@@ -1645,10 +1646,11 @@ bmw_send(
     } while (mhead->btime > texpire);
 
     *mhead = *bmw;
-    ushm->mbase = mslot[i] = mhead;
+    ushm->mbase = mslot[i] = mhead - mpool;
     /* Thor.981206: 需注意, 若ushm mapping不同,
                     則不同支 bbsd 互call會core dump,
                     除非這也用offset, 不過除了 -i, 應該是非必要 */
+    /* IID.2021-02-25: Use index for `ushm->mbase` and `mslot[i]` */
 
 
     /* sem_lock(BSEM_LEAVE); */
@@ -1687,7 +1689,7 @@ bmw_edit(
         char *userid, fpath[64];
 
 
-        bmw->caller = cutmp;
+        bmw->caller = cutmp - ushm->uslot;
         bmw->sender = cuser.userno;
         strcpy(bmw->userid, userid = cuser.userid);
 
@@ -1905,15 +1907,15 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
                 break;
             }
 
-            up = bmw.caller;
 #if 1
-            if ((up < uhead) || (up > uhead + MAXACTIVE /*ushm->ubackidx*/))
+            if ((bmw.caller < 0) || (bmw.caller > MAXACTIVE /*ushm->ubackidx*/))
                 /* lkchu.981201: comparison of distinct pointer types */
             {
                 vmsg(MSG_USR_LEFT);
                 break;
             }
 #endif
+            up = uhead + bmw.caller;
             /* userno = bmw.sender; */ /* Thor.980805: 防止系統回扣 */
             if (up->userno != userno)
             {
@@ -2099,7 +2101,7 @@ aloha(void)
             close(fd);
             return;
         }
-        benz.caller = cutmp;
+        benz.caller = cutmp - ushm->uslot;
         /* benz.sender = cuser.userno; */
         benz.sender = 0; /* Thor.980805: 系統協尋為單向 call in */
         strcpy(benz.userid, cuser.userid);
@@ -2114,7 +2116,7 @@ aloha(void)
             /* Thor.1030:只通知朋友 */
 
             userno = bmw->recver;
-            /* up = bmw->caller; */
+            /* up = &ubase[bmw->caller]; */
             up = utmp_find(userno);     /* lkchu.981201: frienz 中的 utmp 無效 */
 
             if (up >= ubase && up <= uceil &&
@@ -2157,7 +2159,7 @@ t_loginNotify(void)
     if (pal_list(0))
     {
         wp = ll_head;
-        bmw.caller = cutmp;
+        bmw.caller = cutmp - ushm->uslot;
         bmw.recver = cuser.userno;
         strcpy(bmw.userid, cuser.userid);
 
@@ -2192,7 +2194,7 @@ loginNotify(void)
     {
         vs_bar("系統協尋網友");
 
-        benz.caller = cutmp;
+        benz.caller = cutmp - ushm->uslot;
         /* benz.sender = cuser.userno; */
         benz.sender = 0; /* Thor.980805: 系統協尋為單向 call in */
         strcpy(benz.userid, cuser.userid);
@@ -2206,11 +2208,11 @@ loginNotify(void)
         {
             /* Thor.1030:只通知朋友 */
 
-            up = bmw->caller;
+            bmw_idx_t uidx = bmw->caller;
             userno = bmw->recver;
 
-            if (up >= ubase && up <= uceil &&
-                up->userno == userno && !(cuser.ufo & UFO_CLOAK) && userno != cuser.userno  && can_see(up) !=2)
+            if (uidx >= 0 && uidx <= uceil - ubase &&
+                (up = &ushm->uslot[uidx])->userno == userno && !(cuser.ufo & UFO_CLOAK) && userno != cuser.userno  && can_see(up) !=2)
                                         /* Thor.980804: 隱身上站不通知, 站長特權 */
             {
 /*              benz.sender = is_pal(userno) ? cuser.userno : 0; */
@@ -2367,7 +2369,9 @@ void
 bmw_rqst(void)
 {
     int i, j, userno, locus;
-    BMW bmw[BMW_PER_USER], *mptr, **mslot;
+    BMW bmw[BMW_PER_USER], *mptr;
+    bmw_idx_t midx;
+    bmw_idx32_t *mslot;
 
     /* download BMW slot first */
 
@@ -2375,9 +2379,10 @@ bmw_rqst(void)
     userno = cuser.userno;
     mslot = cutmp->mslot;
 
-    while ((mptr = mslot[i]))
+    while ((midx = mslot[i]) >= 0)
     {
-        mslot[i] = NULL;
+        mslot[i] = -1;
+        mptr = &ushm->mpool[midx];
         if (mptr->recver == userno)
         {
             bmw[j++] = *mptr;
@@ -2904,7 +2909,7 @@ talk_page(
         cutmp->sockport = atoi(port_str);
     }
     strcpy(cutmp->mateid, up->userid);
-    up->talker = cutmp;
+    up->talker = cutmp - ushm->uslot;
 #ifdef  HAVE_PIP_FIGHT
     if (myans == 'c')
         utmp_mode(M_CHICKEN);
@@ -2978,9 +2983,9 @@ talk_page(
             p = DL_NAME_GET("pip.so", pip_vf_fight);
         if (p)
         {
-            up->pip = NULL;
+            up->pip = -1;
             (*p)(msgsock, 2);
-            cutmp->pip = NULL;
+            cutmp->pip = -1;
         }
         add_io(0, 60);
 /*      pip_vf_fight(msgsock, 1);*/
@@ -3008,7 +3013,7 @@ talk_page(
     }
 
     close(msgsock);
-    cutmp->talker = NULL;
+    cutmp->talker = -1;
 #ifdef  LOG_TALK
     if (ans == 'y' && cutmp->mode != M_CHICKEN)    /* mat.991011: 防止Talk被拒絕時，產生聊天記錄的record */
         talk_save();          /* lkchu.981201: talk 記錄處理 */
@@ -3632,7 +3637,7 @@ ulist_broadcast(
     if (num < 1)
         return XO_NONE;
 
-    bmw.caller = 0;
+    bmw.caller = -1;
     bmw_edit(NULL, "★廣播：", &bmw, 0);
     sprintf(buf, "★廣播：%s", bmw.msg);
     strcpy(bmw.msg, buf);
@@ -3649,7 +3654,7 @@ ulist_broadcast(
         strcpy(bmw.userid, "SYSOP");
         /*bmw.sender = 1;*/
     }
-    if (bmw.caller)
+    if (bmw.caller >= 0)
     {
         pp = ulist_pool;
         while (--num >= 0)
@@ -4254,10 +4259,12 @@ talk_rqst(void)
     struct addrinfo hints = {0};
     struct addrinfo *hs;
 
-    up = cutmp->talker;
-    if (!up)
+    const utmp_idx_t uidx = cutmp->talker;
+    if (uidx < 0)
         return;
-    up->talker = cutmp;
+
+    up = &ushm->uslot[uidx];
+    up->talker = cutmp - ushm->uslot;
 
     port = up->sockport;
     if (!port)
@@ -4398,9 +4405,9 @@ over_for:
                 strcpy(cutmp->mateid, up->userid);
                 if (p)
                 {
-                    cutmp->pip = NULL;
+                    cutmp->pip = -1;
                     (*p)(sock, 1);
-                    cutmp->pip = NULL;
+                    cutmp->pip = -1;
 
                 }
                 add_io(0, 60);
