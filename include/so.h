@@ -107,6 +107,9 @@ int personal_admin(void);
 
 /* so/pip.c */
 int p_pipple(void);
+#ifdef HAVE_PIP_FIGHT
+int pip_vf_fight(int fd, int first);
+#endif
 
 /* so/pipfun.c */
 
