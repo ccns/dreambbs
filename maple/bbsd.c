@@ -61,6 +61,17 @@ int treat=0;
 /* Â÷¶} BBS µ{¦¡                                         */
 /* ----------------------------------------------------- */
 
+static Logger blog_logger = {
+    .file = NULL,
+    .path = FN_USIES,
+    .lv_skip = LOGLV_WARN,
+};
+
+static void blog_formatter(char *buf, size_t len, const char *mode, const char *msg)
+{
+    snprintf(buf, len, "%s %-5.5s %-*s %s", Etime(&TEMPLVAL(time_t, {time(NULL)})), mode, IDLEN, cuser.userid, msg);
+}
+
 void
 blog_pid(
     const char *mode,
@@ -68,18 +79,13 @@ blog_pid(
     pid_t pid
 )
 {
-    char buf[512], data[256];
-    time_t now;
-
-    time(&now);
+    char data[256];
     if (!msg)
     {
         msg = data;
-        sprintf(data, "Stay: %d (%d)", (int)(now - ap_start) / 60, pid);
+        sprintf(data, "Stay: %d (%d)", (int)(time(NULL) - ap_start) / 60, pid);
     }
-
-    sprintf(buf, "%s %-5.5s %-*s %s\n", Etime(&now), mode, IDLEN, cuser.userid, msg);
-    f_cat(FN_USIES, buf);
+    logger_tag(&blog_logger, mode, msg, blog_formatter);
 }
 
 void

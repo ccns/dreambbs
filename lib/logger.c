@@ -11,6 +11,7 @@
 #include "logger.h"
 
 #include <stdarg.h>
+#include <string.h>
 #include <time.h>
 
 #include <sys/types.h>
@@ -68,6 +69,32 @@ void loggerf(const Logger *logger, enum LogLevel level, const char *format, ...)
     va_end(args);
 
     /* Close the temporarily opened file */
+    if (!logger->file)
+        fclose(file);
+}
+
+/* Log a message with tag and custem formatter to the file specified by `logger`
+ * Use `logger->file` if it is not `NULL`,
+ *     otherwise temporarily open and then close the file with path `logger->path` if it is not `NULL`,
+ *     otherwise do nothing.
+ * All messages are not ignored.
+ * An extra newline will be appended to the message for output,
+ *     therefore it is not needed to add a trailing newline in `formatter`. */
+GCC_NONNULLS
+void logger_tag(const Logger *logger, const char *tag, const char *msg, void (*formatter)(char *buf, size_t size, const char *mode, const char *msg))
+{
+    FILE *const file = logger->file ? logger->file : logger->path ? fopen(logger->path, "a") : NULL;
+
+    if (!file)
+        return;
+
+    const int fd = fileno(file);
+
+    char buf[512];
+    formatter(buf, sizeof(buf) - 1, tag, msg); // Reserve 1 byte for the trailing newline
+    strcat(buf, "\n");
+    write(fd, buf, strlen(buf));
+
     if (!logger->file)
         fclose(file);
 }

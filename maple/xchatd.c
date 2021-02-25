@@ -183,19 +183,20 @@ static FILE *ftalk;
 /* Thor.990211: ²Î¤@¥Î dao library */
 #define str_time(t) Btime(t)
 
+static void log_formatter(char *buf, size_t size, const char *tag, const char *msg)
+{
+    const struct tm *const p = localtime(&TEMPLVAL(time_t, {time(NULL)}));
+    snprintf(buf, size, "%02d/%02d/%02d %02d:%02d:%02d %-*s %s",
+        p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
+        p->tm_hour, p->tm_min, p->tm_sec, IDLEN, tag, msg);
+}
+
 static void
 logtalk(
     const char *key,
     const char *msg)
 {
-    time_t now;
-    struct tm *p;
-
-    time(&now);
-    p = localtime(&now);
-    fprintf(ftalk, "%02d/%02d/%02d %02d:%02d:%02d %-*s %s\n",
-        p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
-        p->tm_hour, p->tm_min, p->tm_sec, IDLEN, key, msg);
+    logger_tag(&TEMPLVAL(Logger, {.file = ftalk}), key, msg, log_formatter);
 }
 
 
@@ -204,14 +205,7 @@ logit(
     const char *key,
     const char *msg)
 {
-    time_t now;
-    struct tm *p;
-
-    time(&now);
-    p = localtime(&now);
-    fprintf(flog, "%02d/%02d/%02d %02d:%02d:%02d %-*s %s\n",
-        p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
-        p->tm_hour, p->tm_min, p->tm_sec, IDLEN, key, msg);
+    logger_tag(&TEMPLVAL(Logger, {.file = flog}), key, msg, log_formatter);
 }
 
 

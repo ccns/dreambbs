@@ -177,6 +177,7 @@ int proc_runv_bg(const char *path, const char *argv[]);
 GCC_SENTINEL(0) int proc_runl_bg(const char *path, const char *arg0, ...);
 /* logger.c */
 GCC_FORMAT(3, 4) GCC_NONNULL(1, 3) void loggerf(const Logger *logger, enum LogLevel level, const char *format, ...);
+GCC_NONNULLS void logger_tag(const Logger *logger, const char *tag, const char *msg, void (*formatter)(char *buf, size_t size, const char *mode, const char *msg));
 /* xwrite.c */
 int xwrite(int fd, const char *data, int size);
 
