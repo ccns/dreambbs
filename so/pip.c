@@ -82,8 +82,8 @@ static int pip_write_backup(void), pip_read_backup(void);
 static int pip_divine(void), pip_results_show(void);
 
 #ifdef  HAVE_PIP_FIGHT
-static int pip_magic_fight_menu(void);
-static int get_hurt(void);
+static int pip_magic_fight_menu(const struct magicset *p, const UTMP *opt);
+static int get_hurt(int hurt, int mexp);
 static int pip_fight_feed(void);
 
 #endif
