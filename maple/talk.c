@@ -1197,7 +1197,7 @@ bmw_write(
         const BMW *benz;
 
         benz = (const BMW *) xo_pool_base + xo->pos;
-        if ((benz->caller >= ushm->uslot && benz->caller < ushm->uslot + MAXACTIVE) && (benz->caller && benz->caller->userno == benz->sender) && can_message(benz->caller))
+        if ((benz->caller >= ushm->uslot && benz->caller < ushm->uslot + MAXACTIVE) && (benz->caller->userno == benz->sender) && can_message(benz->caller))
         {
             up = benz->caller;
         }
