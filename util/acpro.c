@@ -11,95 +11,6 @@
 
 static BCACHE *bshm;
 
-static void
-attach_err(
-    int shmkey,
-    const char *name)
-{
-    fprintf(stderr, "[%s error] key = %lx\n", name, (unsigned long)shmkey);
-    exit(1);
-}
-
-
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-    {
-        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
-        if (shmid < 0)
-            attach_err(shmkey, "shmget");
-    }
-    else
-    {
-        shmsize = 0;
-    }
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-    if (shmptr == (void *) -1)
-        attach_err(shmkey, "shmat");
-
-    if (shmsize)
-        memset(shmptr, 0, shmsize);
-
-    return shmptr;
-}
-
-void
-bshm_init(void)
-{
-    BCACHE *xshm;
-    time32_t *uptime;
-    int turn;
-
-    turn = 0;
-    xshm = bshm;
-    if (xshm == NULL)
-    {
-        bshm = xshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
-    }
-
-    uptime = &(xshm->uptime);
-
-    for (;;)
-    {
-        const time_t t = *uptime;
-        if (t > 0)
-            return;
-
-        if (t < 0)
-        {
-            if (++turn < 30)
-            {
-                sleep(2);
-                continue;
-            }
-        }
-
-        *uptime = -1;
-
-        const int fd = open(FN_BRD, O_RDONLY);
-        if (fd >= 0)
-        {
-            xshm->number =
-                read(fd, xshm->bcache, MAXBOARD * sizeof(BRD)) / sizeof(BRD);
-            close(fd);
-        }
-
-        /* 等所有 boards 資料更新後再設定 uptime */
-
-        time32(uptime);
-        fprintf(stderr, "[account]\tCACHE\treload bcache");
-
-        return;
-    }
-}
-
 /* ----------------------------------------------------- */
 /* build Class image                                     */
 /* ----------------------------------------------------- */
@@ -316,7 +227,8 @@ main(void)
     /* --------------------------------------------------- */
     /* build Class image                                   */
     /* --------------------------------------------------- */
-    bshm_init();
+    shm_logger_init(NULL);
+    bshm_init(&bshm);
     class_image(CLASS_INIFILE, CLASS_RUNFILE, CLASS_IMGFILE);
     class_image(PROFESS_INIFILE, PROFESS_RUNFILE, PROFESS_IMGFILE);
     exit(0);

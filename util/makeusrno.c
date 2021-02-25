@@ -25,14 +25,6 @@ MAP map[60000];
 int total;
 static void pal_sync(const char *fpath);
 
-static int
-int_cmp(
-    const void *a,
-    const void *b)
-{
-    return *(const int *)a - *(const int *)b;
-}
-
 static void
 bimage(
     const char *brd)

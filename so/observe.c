@@ -291,7 +291,7 @@ Observe_list(void)
     xo->recsiz = sizeof(OBSERVE);
     xo->pos = 0;
     xover(XZ_OTHER);
-    observeshm_load();
+    observeshm_load(oshm);
     free(xo);
 
     xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */

@@ -1893,16 +1893,20 @@ int main(int argc, char *argv[])
     /* --------------------------------------------------- */
     /* attach shared memory & semaphore                    */
     /* --------------------------------------------------- */
+
+    shm_logger_init(&blog_logger);
+    shm_formatter_init(blog_formatter);
+
 #ifdef  HAVE_SEM
     sem_init();
 #endif
-    ushm_init();
-    bshm_init();
-    fshm_init();
-    fwshm_init();
-    count_init();
+    ushm_init(&ushm);
+    bshm_init(&bshm);
+    fshm_init(&fshm);
+    fwshm_init(&fwshm);
+    count_init(&countshm);
 #ifdef  HAVE_OBSERVE_LIST
-    observeshm_init();
+    observeshm_init(&oshm);
 #endif
 
     /* --------------------------------------------------- */

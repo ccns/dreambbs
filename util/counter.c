@@ -13,31 +13,6 @@
 
 COUNTER *count;
 
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-    {
-        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
-    }
-    else
-    {
-        shmsize = 0;
-    }
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-
-    if (shmsize)
-        memset(shmptr, 0, shmsize);
-
-    return shmptr;
-}
-
 int
 main(
     int argc,
@@ -53,7 +28,7 @@ main(
     setuid(BBSUID);
     chdir(BBSHOME);
 
-    count = (COUNTER *) attach_shm(COUNT_KEY, sizeof(COUNTER));
+    count_init(&count);
 
     optind++;
     switch ((argc > 1) ? *argv[1] : 0)

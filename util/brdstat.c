@@ -91,64 +91,6 @@ keeplog(
 static BCACHE *bshm;
 
 
-static void
-attach_err(
-    int shmkey,
-    const char *name)
-{
-    fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
-    exit(1);
-}
-
-
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-    {
-        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
-        if (shmid < 0)
-            attach_err(shmkey, "shmget");
-    }
-    else
-    {
-        shmsize = 0;
-    }
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-    if (shmptr == (void *) -1)
-        attach_err(shmkey, "shmat");
-
-    if (shmsize)
-        memset(shmptr, 0, shmsize);
-
-    return shmptr;
-}
-
-
-/* static */
-void
-bshm_init(void)
-{
-    BCACHE *xshm;
-
-    xshm = bshm;
-    if (xshm == NULL)
-    {
-        bshm = xshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
-    }
-
-    if (bshm->uptime < 0)
-        exit(1);
-
-}
-
-
 /* ----------------------------------------------------- */
 
 static void
@@ -365,7 +307,10 @@ main(void)
     /* build Class image                                   */
     /* --------------------------------------------------- */
 
-    bshm_init();
+    shm_logger_init(NULL);
+    bshm_attach(&bshm);
+    if (!bshm) /* bshm 未設定完成 */
+        exit(1);
 
     /* --------------------------------------------------- */
     /* 看板資訊統計                                        */

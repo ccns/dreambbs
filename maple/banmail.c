@@ -262,7 +262,7 @@ int BanMail(void)
     xo->recsiz = sizeof(BANMAIL);
     xo->pos = 0;
     xover(XZ_BANMAIL);
-    fwshm_load();
+    fwshm_load(fwshm);
     free(xo);
 
     xz[XZ_BANMAIL - XO_ZONE].xo = last;  /* restore */

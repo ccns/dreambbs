@@ -22,31 +22,6 @@ typedef struct
 } BM;
 
 
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-    {
-        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
-    }
-    else
-    {
-        shmsize = 0;
-    }
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-
-    if (shmsize)
-        memset(shmptr, 0, shmsize);
-
-    return shmptr;
-}
-
 GCC_PURE static int
 check_in_memory(const char *bm, const char *id)
 {
@@ -205,7 +180,8 @@ main(
     setuid(BBSUID);
     chdir(BBSHOME);
 
-    bshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
+    shm_logger_init(NULL);
+    bshm_init(&bshm);
 
     mode = (argc > 1) ? atoi(argv[1]) : 0;
     optind++;

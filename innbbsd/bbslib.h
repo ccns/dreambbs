@@ -33,7 +33,7 @@ void b52gb(char *str);
 void gb2b5(char *str);
 
 /* rec_article.c */
-void init_bshm(void);
+extern BCACHE *bshm;
 int cancel_article(const char *msgid);
 int receive_article(void);
 #ifdef NoCeM

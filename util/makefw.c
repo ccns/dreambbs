@@ -9,42 +9,8 @@
 
 #include "bbs.h"
 
-FWOCACHE *fwoshm;
+static FWOCACHE *fwoshm;
 int total;
-FW *cur;
-
-static int
-cmpfw(
-    const void *ban)
-{
-    return !strcmp(((const BANMAIL *)ban) -> data, cur->data);
-}
-
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-    {
-        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
-    }
-    else
-    {
-        shmsize = 0;
-    }
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-
-    if (shmsize)
-        memset(shmptr, 0, shmsize);
-
-    return shmptr;
-}
-
 
 static void
 expire(
@@ -77,39 +43,6 @@ expire(
     }
 }
 
-static void
-rewrite(void)
-{
-    BANMAIL data;
-    FW *head;
-    char fpath[128];
-    int pos;
-    time_t now;
-
-    now = time(0);
-
-    head = fwoshm->fwocache;
-    while (head->name[0])
-    {
-        brd_fpath(fpath, head->name, BANMAIL_ACL);
-        cur = head;
-        pos = rec_loc(fpath, sizeof(BANMAIL), cmpfw);
-        if (pos >= 0)
-        {
-            rec_get(fpath, &data, sizeof(BANMAIL), pos);
-            data.usage = head->usage;
-            if ((now - head->time) > (BANMAIL_EXPIRE * 86400))
-                rec_del(fpath, sizeof(BANMAIL), pos, NULL, NULL);
-            else
-            {
-                data.time = head->time;
-                rec_put(fpath, &data, sizeof(BANMAIL), pos);
-            }
-        }
-        head++;
-    }
-}
-
 int
 main(
     int argc,
@@ -124,9 +57,9 @@ main(
     setuid(BBSUID);
     chdir(BBSHOME);
 
-    fwoshm = (FWOCACHE *) attach_shm(FWOSHM_KEY, sizeof(FWOCACHE));
-
-    rewrite();
+    shm_logger_init(NULL);
+    fwoshm_init(&fwoshm);
+    fwoshm_load(fwoshm);
 
     if (chdir("brd") || !(dirp = opendir(".")))
     {

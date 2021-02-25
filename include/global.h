@@ -194,7 +194,12 @@ extern time_t brd_visit[MAXBOARD];     /* 最近瀏覽時間 */
 /* maple/cache.c */
 extern BCACHE *bshm;
 extern UCACHE *ushm;
+extern FCACHE *fshm;
 extern FWCACHE *fwshm;
+extern COUNTER *countshm;
+#ifdef HAVE_OBSERVE_LIST
+extern OCACHE *oshm;
+#endif
 
 /* maple/edit.c */
 extern int wordsnum;            /* itoc.010408: 計算文章字數 */

@@ -1782,6 +1782,8 @@ print_user_counts(
         sprintf(buf + strlen(buf), " [ %d ¤H¦b¯µ±K¥]´[]", suserc);
     send_to_user(cuser, buf, 0, number);
 
+//  shm_logger_init(&TEMPLVAL(Logger, {.file = flog}));
+//  shm_formatter_init(log_formatter);
 //  load_mud_like();
 }
 
@@ -3276,33 +3278,6 @@ main_signals(void)
 
 }
 
-
-/*
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-    {
-        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
-    }
-    else
-    {
-        shmsize = 0;
-    }
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-
-    if (shmsize)
-        memset(shmptr, 0, shmsize);
-
-    return shmptr;
-}
-*/
 
 /*
 void

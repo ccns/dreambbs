@@ -1051,7 +1051,10 @@ main(
     if (!bbslink_get_lock())
         return -1;
 
-    init_bshm();
+    shm_logger_init(NULL);
+    bshm_attach(&bshm);
+    if (!bshm) /* bshm 未設定完成 */
+        exit(0);
 
     if (initial_bbs())
         bbslink();

@@ -534,7 +534,7 @@ personal_open(
     mak_dirs(fpath + 4);
 
     bshm->uptime = 0;             /* force reload of bcache */
-    bshm_init();
+    bshm_init(&bshm);
 
     /* ¶¶«K¥[¶i NewBoard */
 

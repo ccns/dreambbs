@@ -103,7 +103,6 @@ int Boards(void);
 int brd_list(int reciper);
 /* cache.c */
 void sem_init(void);
-void ushm_init(void);
 void utmp_mode(int mode);
 int utmp_new(const UTMP *up);
 void utmp_free(void);
@@ -113,17 +112,9 @@ int utmp_count(int userno, int show);
 GCC_PURE int cmpclasstable(const void *ptr);
 void classtable_free(void);
 void classtable_main(void);
-void bshm_init(void);
 GCC_PURE int brd_bno(const char *bname);
 GCC_PURE int observeshm_find(int userno);
-void observeshm_load(void);
-void observeshm_init(void);
 void count_update(void);
-void count_load(void);
-void count_init(void);
-void fwshm_load(void);
-void fwshm_init(void);
-void fshm_init(void);
 int film_out(int tag, int row);
 GCC_PURE UTMP *utmp_check(const char *userid);
 /* edit.c */

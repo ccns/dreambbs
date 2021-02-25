@@ -28,6 +28,7 @@
 #include "hdr.h"                        /* prototype */
 #include "dns.h"                        /* dns type */
 #include "splay.h"                      /* splay type */
+#include "struct.h"                     /* Miscellaneous types */
 
 #ifdef __cplusplus
 extern "C" {
@@ -68,7 +69,26 @@ void archiv32(time_t chrono, char *fname);
 void archiv32m(time_t chrono, char *fname);
 GCC_PURE time_t chrono32(const char *str);
 /* shm.c */
-void *shm_new(int shmkey, int shmsize);
+void shm_logger_init(const Logger *logger);
+void shm_formatter_init(void (*formatter)(char *buf, size_t size, const char *mode, const char *msg));
+GCC_NONNULLS void attach_err(int shmkey, const char *name);
+void *attach_shm(int shmkey, int shmsize);
+void *attach_shm_noinit(int shmkey, int shmsize);
+GCC_NONNULLS void ushm_init(UCACHE **p_ushm);
+GCC_NONNULLS void ushm_attach(UCACHE **p_ushm);
+GCC_NONNULLS void bshm_init(BCACHE **p_bshm);
+GCC_NONNULLS void bshm_attach(BCACHE **p_bshm);
+GCC_NONNULLS int int_cmp(const void *a, const void *b);
+GCC_NONNULLS void observeshm_load(OCACHE *oshm);
+GCC_NONNULLS void observeshm_init(OCACHE **p_oshm);
+GCC_NONNULLS void count_load(COUNTER *countshm);
+GCC_NONNULLS void count_init(COUNTER **p_countshm);
+GCC_NONNULLS void count_attach(COUNTER **p_countshm);
+GCC_NONNULLS void fwshm_load(FWCACHE *fwshm);
+GCC_NONNULLS void fwshm_init(FWCACHE **p_fwshm);
+GCC_NONNULLS void fwoshm_load(FWOCACHE *fwoshm);
+GCC_NONNULLS void fwoshm_init(FWOCACHE **p_fwoshm);
+GCC_NONNULLS void fshm_init(FCACHE **p_fshm);
 /* url_encode.c */
 void url_encode(char *dst, const char *src);
 /* dl_lib.c */

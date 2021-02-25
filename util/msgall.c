@@ -10,21 +10,6 @@
 
 static UCACHE *ushm;
 
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    shmsize = 0;
-    shmptr = (void *) shmat(shmid, NULL, 0);
-
-    return shmptr;
-}
-
-
 int
 bsend(
     UTMP *callee,
@@ -104,7 +89,8 @@ main(
         exit(2);
     }
 
-    ushm = (UCACHE *) attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
+    shm_logger_init(NULL);
+    ushm_attach(&ushm);
     strcpy(bmw.msg, argv[1]);
 
     up = ushm->uslot;

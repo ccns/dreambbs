@@ -21,20 +21,6 @@ static int can_see(const UTMP *up);
 static bool can_message(const UTMP *up);
 typedef UTMP *pickup;
 
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    shmsize = 0;
-    shmptr = (void *) shmat(shmid, NULL, 0);
-
-    return shmptr;
-}
-
 
 /* ----------------------------------------------------- */
 /* °O¿ý pal ªº user number                               */
@@ -246,15 +232,6 @@ is_pal(
         }
     }
     return false;
-}
-
-
-static int
-int_cmp(
-    const void *a,
-    const void *b)
-{
-    return *(const int *)a - *(const int *)b;
 }
 
 
@@ -655,7 +632,8 @@ main(
         return 2;
     }
 
-    ushm = (UCACHE *) attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
+    shm_logger_init(NULL);
+    ushm_attach(&ushm);
     cutmp = &utmp;
     usr_fpath(fpath, userid, FN_ACCT);
     fd = open(fpath, O_RDONLY);

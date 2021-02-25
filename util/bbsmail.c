@@ -46,12 +46,6 @@ mailog(
 static UCACHE *ushm;
 
 
-static inline void
-init_ushm(void)
-{
-    ushm = (UCACHE *) shm_new(UTMPSHM_KEY, sizeof(UCACHE));
-}
-
 #if 0  // Unused
 static inline void
 my_biff(char *userid)
@@ -61,7 +55,7 @@ my_biff(char *userid)
     // XXX 這個 userid 已經轉成小寫了嗎? 好像是
 
     // XXX 沒效率? 唉
-    ushm_init();
+    ushm_init(&ushm);
 
     utmp = ushm->uslot;
     uceil = (UTMP *) ((char *) uentp + ushm->offset);
@@ -377,7 +371,8 @@ main(
     signal(SIGSEGV, sig_catch);
     signal(SIGPIPE, sig_catch);
 
-    init_ushm();
+    shm_logger_init(NULL);
+    ushm_init(&ushm);
     str_lower(buf, argv[1]);    /* 把 userid 換成小寫 */
 
     if (mail2bbs(buf))

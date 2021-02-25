@@ -25,20 +25,6 @@ static UCACHE *ushm;
 static CLASS_TABLE_ALERT *cache;
 static int cache_size;
 
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    shmsize = 0;
-    shmptr = (void *) shmat(shmid, NULL, 0);
-
-    return shmptr;
-}
-
 static CLASS_TABLE_ALERT *
 bfind(
     int userno)
@@ -288,7 +274,8 @@ main(
     setuid(BBSUID);
     chdir(BBSHOME);
 
-    ushm = (UCACHE *) attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
+    shm_logger_init(NULL);
+    ushm_attach(&ushm);
 
     if (!ushm)
     {

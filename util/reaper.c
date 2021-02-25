@@ -99,21 +99,6 @@ logit(
 #endif
 
 
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-        return NULL;
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-    return shmptr;
-}
-
 static void
 userno_free(
     int uno)
@@ -568,10 +553,8 @@ main(void)
     setgid(BBSGID);
     chdir(BBSHOME);
 
-    bshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
-
-    if (bshm->uptime < 0)
-        bshm = NULL;
+    shm_logger_init(NULL);
+    bshm_attach(&bshm);
 
     vacation = check_vacation();
     flog = fopen(FN_REAPER_LOG, "w");
@@ -700,7 +683,7 @@ main(void)
 #ifdef DEBUG
     logit("counter");
 #endif
-    counter = (COUNTER *) attach_shm(COUNT_KEY, sizeof(COUNTER));
+    count_attach(&counter);
     if (counter)
         counter->max_regist = visit;
 
