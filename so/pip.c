@@ -4547,7 +4547,7 @@ pip_go_palace(void)
 /* 作者:chyiuan   感謝SiEpthero的技術指導                                   */
 /*--------------------------------------------------------------------------*/
 #ifdef  HAVE_PIP_FIGHT
-static int
+static void
 pip_set_currutmp(void)
 {
     currutmp->pip->hp = d.body[BODY_HP];
@@ -4560,7 +4560,7 @@ pip_set_currutmp(void)
     currutmp->pip->speed = d.fight[FIGHT_SPEED];
 }
 
-static int
+static void
 pip_get_currutmp(void)
 {
     d.body[BODY_HP] = currutmp->pip->hp;
