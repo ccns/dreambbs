@@ -265,8 +265,8 @@ poststat(
 //          buf[20] = (char) NULL;
             buf[20] = '\0';
             fprintf(fp,
-                "\x1b[1;31m%3d. \x1b[33m看板 : \x1b[32m%-16s\x1b[35m《 %s》\x1b[36m%4d 篇\x1b[33m%16s\n"
-                "     \x1b[33m標題 : \x1b[0;44;37m%-60.60s\x1b[40m\n",
+                "\x1b[1;31m%3d. \x1b[33m看板 : \x1b[32m%-16s\x1b[35m《 %s》\x1b[36m%4d 篇\x1b[33m%16s\x1b[m\n"
+                "     \x1b[1;33m標題 : \x1b[0;44;37m%-60.60s\x1b[m\n",
                 ++cnt, tp->board, p, tp->number, tp->author, tp->title);
         }
         fclose(fp);

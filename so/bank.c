@@ -130,8 +130,8 @@ TransferAccount(void)
     vs_bar("匯款");
 
     move (9, 8);
-    prints("\x1b[1;33m轉帳相關規定： \x1b[36m１. 一次最少要給 100 夢幣(稅前)。\n"
-        "                       ２. 收手續費 10 %%。\x1b[m");
+    prints("\x1b[1;33m轉帳相關規定： \x1b[36m１. 一次最少要給 100 夢幣(稅前)。\x1b[m\n"
+        "                       \x1b[36m２. 收手續費 10 %%。\x1b[m");
 
     if (acct_get("要匯給誰：", &acct)<1)
         return 0;

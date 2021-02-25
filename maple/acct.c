@@ -938,7 +938,7 @@ int add_deny(ACCT * u, int adm, int cross)
                     check_time ? "上次處罰到期日累加" : "從今天起", cdays);
     }
     fprintf(fp,
-            "\x1b[1;32m※ Origin: \x1b[1;33m%s \x1b[1;37m<%s>\n\x1b[1;31m◆ From: \x1b[1;36m%s\x1b[m\n",
+            "\x1b[1;32m※ Origin: \x1b[1;33m%s \x1b[1;37m<%s>\x1b[m\n\x1b[1;31m◆ From: \x1b[1;36m%s\x1b[m\n",
             BOARDNAME, MYHOSTNAME, MYHOSTNAME);
 
     fclose(fp);

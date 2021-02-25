@@ -106,7 +106,7 @@ pad_view(void)
 
     clear();
     move(0, 23);
-    outs("\x1b[1;37;45m ¡´  " BOARDNAME " ¯d ¨¥ ªO  ¡´ \n\n");
+    outs("\x1b[1;37;45m ¡´  " BOARDNAME " ¯d ¨¥ ªO  ¡´ \x1b[m\n\n");
     count = 0;
 
     mgets(-1);

@@ -7378,7 +7378,7 @@ int mode)
             clear();
             vs_head("電子養小雞", BoardName);
             move(10, 0);
-            outs_centered("            \x1b[1;31m┌──────────────────────┐\n\x1b[m");
+            outs_centered("            \x1b[1;31m┌──────────────────────┐\x1b[m\n");
             prints_centered("            \x1b[1;31m│  \x1b[37m可憐的小雞 \x1b[33m%-10s                     \x1b[31m│\x1b[m\n", d.name);
             prints_centered("            \x1b[1;31m│  \x1b[37m在與 \x1b[32m%-10s \x1b[37m的戰鬥中，                \x1b[31m│\x1b[m\n", p[n].name);
             outs_centered("            \x1b[1;31m│  \x1b[37m不幸地打輸了，記者現場特別報導.........   \x1b[31m│\x1b[m\n");

@@ -83,7 +83,7 @@ rebuild_pnote_ansi(int newflag)
     {
         total = BMIN(st.st_size / sizeof(notedata), (off_t)MAX_PNOTE);
     }
-    fputs("\t\t\t\x1b[1;32m ★ \x1b[37m答 錄 機 中 的 留 言\x1b[32m★ \n\n", fp);
+    fputs("\t\t\t\x1b[1;32m ★ \x1b[37m答 錄 機 中 的 留 言\x1b[32m★ \x1b[m\n\n", fp);
 
     while (total)
     {
@@ -172,7 +172,7 @@ do_pnote(const char *userid)
         total = BMIN(st.st_size / sizeof(notedata) + 1, (off_t)MAX_PNOTE);
     }
 
-    fputs("\t\t\t\x1b[1;32m ★ \x1b[37m您 的 答 錄 機 !!! \x1b[32m★ \n\n", fp);
+    fputs("\t\t\t\x1b[1;32m ★ \x1b[37m您 的 答 錄 機 !!! \x1b[32m★ \x1b[m\n\n", fp);
     collect = 1;
     while (total)
     {
@@ -211,7 +211,7 @@ show_pnote(notedata *pitem)
     move(2, 0);
     prints_centered("\x1b[1;36m┌─── \x1b[37m%s(%s)在 \x1b[33m%s\x1b[37m 留的話 \x1b[m", pitem->userid, pitem->username,
             Cdate(&TEMPLVAL(time_t, {pitem->date})));
-    prints("\n\x1b[1;37m%*s  %s\n%*s  %s\n%*s  %s\n\x1b[0m",
+    prints("\n\x1b[1;37m%*s  %s\x1b[m\n\x1b[1;37m%*s  %s\x1b[m\n\x1b[1;37m%*s  %s\x1b[m\n",
            d_cols>>1, "", pitem->buf[0], d_cols>>1, "", pitem->buf[1], d_cols>>1, "", pitem->buf[2]);
     outs_centered("                 \x1b[1;36m──────────────────────────────┘\x1b[m\n");
     pitem->mode = 1;

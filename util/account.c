@@ -498,10 +498,11 @@ main(void)
         error(fn_today);
 
     /* Thor.990329: y2k */
-    fprintf(fp, "\t\t\t   \x1b[1;33;46m [%02d/%02d/%02d] 上站人次統計 \x1b[40m\n",
+    fprintf(fp, "\t\t\t   \x1b[1;33;46m [%02d/%02d/%02d] 上站人次統計 \x1b[m\n",
         ptime.tm_year % 100, ptime.tm_mon + 1, ptime.tm_mday);
     for (i = MAX_LINE + 1; i > 0; i--)
     {
+        fprintf(fp, "\x1b[1m");
         strcpy(buf, "   ");
         for (j = 0; j < 24; j++)
         {
@@ -522,15 +523,15 @@ main(void)
             else
                 strcat(buf, "   ");
         }
-        fprintf(fp, "\n");
+        fprintf(fp, "\x1b[m\n");
     }
 
     if (act[25] == 0) act[25]=1; /* Thor.980928: lkchu patch: 防止除數為0 */
 
-    fprintf(fp, "\x1b[34m"
-        "  ╒═══════════════════════════════════╕\n  \x1b[32m"
-        "0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n\n"
-        "\t%s\t\x1b[35m總共上站人次：\x1b[37m%-9d\x1b[35m平均使用時間：\x1b[37m%d\x1b[m\n",
+    fprintf(fp, "\x1b[1;34m"
+        "  ╒═══════════════════════════════════╕\x1b[m\n  \x1b[1;32m"
+        "0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23\x1b[m\n\n"
+        "\t%s\t\x1b[1;35m總共上站人次：\x1b[37m%-9d\x1b[35m平均使用時間：\x1b[37m%d\x1b[m\n",
         over ? "\x1b[35m單位：\x1b[37m10 人" : "", total, act[24] / act[25] + 1);
     fclose(fp);
 
