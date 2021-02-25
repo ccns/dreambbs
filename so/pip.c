@@ -4572,6 +4572,8 @@ pip_vf_fight(
 int fd,
 int first)
 {
+    DL_HOLD;
+
     pipdata temp;
     struct chicken chickentemp;
     int ch, datac, dinjure, oldtired, oldhp;
@@ -4621,7 +4623,7 @@ int first)
     {
         vmsg("一代雞與二代雞不能互相 PK !!");
         add_io(0, 60);
-        return 0;
+        return DL_RELEASE(0);
     }
     for (i = 0; i < 8; i++)
         mymsg[i][0] = '\0';
@@ -5012,7 +5014,7 @@ int first)
     utmp_mode(M_CHICKEN);
     memcpy(&(cutmp->pip), &temp, sizeof(pipdata));
     memcpy(&d, &chickentemp, sizeof(d));
-    return 0;
+    return DL_RELEASE(0);
 }
 #endif  /* #ifdef  HAVE_PIP_FIGHT */
 
