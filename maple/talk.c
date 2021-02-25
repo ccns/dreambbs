@@ -2980,7 +2980,7 @@ talk_page(
 #ifdef  HAVE_PIP_FIGHT
     else if (ans == 'c')
     {
-        DL_HOTSWAP_SCOPE void (*p)(void) = NULL;
+        DL_HOTSWAP_SCOPE int (*p)(int, int) = NULL;
         if (!p)
             p = DL_NAME_GET("pip.so", pip_vf_fight);
         if (p)
@@ -4399,7 +4399,7 @@ over_for:
 #ifdef  HAVE_PIP_FIGHT
             else if (ans == 'c')
             {
-                DL_HOTSWAP_SCOPE void (*p)(void) = NULL;
+                DL_HOTSWAP_SCOPE int (*p)(int, int) = NULL;
                 if (!p)
                     p = DL_NAME_GET("pip.so", pip_vf_fight);
                 strcpy(cutmp->mateid, up->userid);
