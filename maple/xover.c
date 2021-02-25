@@ -1838,7 +1838,12 @@ xover_key(
         return XO_NONE;
 
     if (cmd == I_RESIZETERM)
+    {
+        /* IID.2021-02-26: Keep the cursor on screen when the screen is shrunk */
+        if (pos > xo->top + XO_TALL - 1)
+            return XR_HEAD + XO_MOVE + XO_SCRL + XO_REL + pos - (xo->top + XO_TALL - 1);
         return XO_HEAD;
+    }
 
     if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
         wrap_flag = 0;
