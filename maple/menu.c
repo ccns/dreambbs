@@ -1489,11 +1489,17 @@ domenu_exec(
         switch ((xyz->keyboard_cmd) ? cmd : KEY_NONE)
         {
         case KEY_PGUP:
-            xo->pos = (xo->pos == 0) ? xo->max - 1 : 0;
+            if (xyz->height > 0 && xo->pos - xyz->height >= 0)
+                xo->pos -= xyz->height;
+            else
+                xo->pos = (xo->pos == 0) ? xo->max - 1 : 0;
         break;
 
         case KEY_PGDN:
-            xo->pos = (xo->pos == xo->max - 1) ? 0 : xo->max - 1;
+            if (xyz->height > 0 && xo->pos + xyz->height < xo->max)
+                xo->pos += xyz->height;
+            else
+                xo->pos = (xo->pos == xo->max - 1) ? 0 : xo->max - 1;
         break;
 
         case KEY_DOWN:
