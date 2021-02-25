@@ -1912,11 +1912,6 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 
                 break;
             }
-            if (bmw.caller->ufo & UFO_REJECT)
-            {
-                vmsg("對方有事，請稍待一會兒....");
-                break;
-            }
 
             up = bmw.caller;
 #if 1
@@ -1936,6 +1931,12 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
                     vmsg(MSG_USR_LEFT);
                     break;
                 }
+            }
+
+            if (up->ufo & UFO_REJECT)
+            {
+                vmsg("對方有事，請稍待一會兒....");
+                break;
             }
 
 #ifdef  HAVE_SHOWNUMMSG
