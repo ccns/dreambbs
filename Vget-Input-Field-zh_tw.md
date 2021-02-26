@@ -47,22 +47,24 @@ int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo
 ## Echo flags
 　              | 值      | 出處  | 說明
 :---            | ---     | ---  | ---
-`NOECHO`        | `0` <br> - `0x0000` (MapleBBS 3.00) | PirateBBS | - 完全不顯示輸入框 <br> (PirateBBS, MapleBBS 2.36 (有 `dumb_term`), & PttBBS) <br> (DreamBBS v2.0 (有 `VGET_STEALTH_NOECHO`)) <br> - 將輸入字元顯示為 `*` <br> (MapleBBS 2.36 (無 `dumb_term`) & MapleBBS 3) <br> (DreamBBS v2.0 (無 `VGET_STEALTH_NOECHO`))
-`DOECHO`        | `1` <br> - `0x0100` (MapleBBS 3.00) | PirateBBS | 正常顯示輸入框
+`NOECHO`        | `0` <br> - `0x0000` (MapleBBS 3.00) <br> - `HIDEECHO` (DreamBBS v3.0) | PirateBBS | - 完全不顯示輸入框 <br> (PirateBBS, MapleBBS 2.36 (有 `dumb_term`), & PttBBS) <br> (DreamBBS v2.0 (有 `VGET_STEALTH_NOECHO`)) <br> - 將輸入字元顯示為 `*` <br> (MapleBBS 2.36 (無 `dumb_term`) & MapleBBS 3) <br> (DreamBBS v2.0 (無 `VGET_STEALTH_NOECHO`))
+`DOECHO`        | `1` <br> - `0x0100` (MapleBBS 3.00) <br> - `0` (DreamBBS v3.0) | PirateBBS | 正常顯示輸入框
+`HIDEECHO`      | `0x0100` (DreamBBS v3.0) | DreamBBS v3.0 | - 完全不顯示輸入框 (有 `VGET_STEALTH_NOECHO`) <br> - 將輸入字元顯示為 `*` (無 `VGET_STEALTH_NOECHO`)
 `LCECHO`        | - `2` (MapleBBS 2.36 & PttBBS) <br> - `0x0200` (MapleBBS 3.00) | MapleBBS 2.36 | - 將輸入的第一個字元轉為小寫 <br> - 將輸入全部轉為小寫 (DreamBBS v2.0)
 `NUMECHO`       | - `4` (PttBBS) <br> - `0x0400` (DreamBBS v2.0) | PttBBS | 只能輸入數字 `0`–`9` <br> - DreamBBS v2.0 時引入
 `GCARRY`        | - `0x0800` (MapleBBS 3.00) <br> - `8` (PttBBS) | MapleBBS 3.00 | 將輸出 `buf` 的初始內容用作預設已輸入內容
-`PASSECHO`      | - `0x10` (PttBBS) <br> - `NOECHO` (DreamBBS v2.0) | PttBBS | 將輸入字元顯示為 `*` <br> - `NOECHO` 的預設行為 (DreamBBS v2.0) <br> - DreamBBS v2.0 時引入
+`PASSECHO`      | - `0x10` (PttBBS) <br> - `NOECHO` (DreamBBS v2.0) <br> - `HIDEECHO` (DreamBBS v3.0) | PttBBS | 將輸入字元顯示為 `*` <br> - `NOECHO` 的預設行為 (DreamBBS v2.0) <br> - DreamBBS v2.0 時引入
 `GET_LIST`      | `0x1000` | MapleBBS 3.00 | 依照 link list `ll_head` 的內容進行自動完成 <br> 需先用 `ll_new()`/`ll_add()`/`ll_del()` 設定 `ll_head`
 `GET_USER`      | `0x2000` | MapleBBS 3.00 | 自動完成 user ID
 `GET_BRD`       | `0x4000` | MapleBBS 3.02 | 自動完成 board ID
-`VGET_STRICT_DOECHO` | `0x10000` | DreamBBS v2.0 | 忽略 flags 所預設附帶的 `DOECHO` 效果
+`VGET_STRICT_DOECHO` | - `0x10000` (DreamBBS v2.0) <br> - `false` (DreamBBS v3.0) | DreamBBS v2.0 | 忽略 flags 所預設附帶的 `DOECHO` 效果
 `VGET_STEALTH_NOECHO` | `0x20000` | DreamBBS v2.0 | 完全不顯示輸入框 (沒有 `DOECHO` 時)
 `VGET_BREAKABLE` | `0x40000` | DreamBBS v2.0 | 允許用 <kbd>Ctrl</kbd>-<kbd>C</kbd> 關閉輸入框 <br> PttBBS `vget()` 的預設行為
 
 - 在 MapleBBS 2.36 與 PttBBS 中，echo flags 不可疊加使用
 - 在 MapleBBS 3.00 後，`0x01` 到 `0x80` 的位元範圍保留給 BRD bits (下述)，於 `GET_BRD` 時疊加使用
 - 在 DreamBBS v2.0 後，echo flags 可用 bitwise OR (`|`) 自由疊加使用
+- DreamBBS v3.0 將 `DOECHO` 改為 `0`，以表示無 flags 時為一般狀態
 
 ## 特殊值
 　                  | 值   | 出處      | 說明
