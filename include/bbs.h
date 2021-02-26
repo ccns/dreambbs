@@ -79,7 +79,9 @@
 
 #ifndef _BBTP_
 
-#define NOECHO          0x0000          /* Flags to getdata input function */
+/* Flags to `vget()` input function */
+
+#define NOECHO          0x0000
 #define DOECHO          0x0100
 #define LCECHO          0x0200
 #define NUMECHO         0x0400
