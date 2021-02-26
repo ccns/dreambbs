@@ -8,6 +8,7 @@
     - [[Menu Systems - 選單系統|Menu-Systems-zh_tw]]
     - [[Screen Coordinate System - 畫面座標系統|Screen-Coordinate-System-zh_tw]]
     - [[BoardReadingHistory - BRH 看板閱讀紀錄系統|BoardReadingHistory zh_tw]]
+    - [[Vget Input Field - Vget 輸入框函式|Vget Input Field zh_tw]]
     - [[TANet BBS Family Genealogy Chart - TANet BBS 家族譜系圖|TANet-BBS-Family-Genealogy-Chart-zh_tw]]
     - [[與 MapleBBS 3 的按鍵差異|VS-MapleBBS-3-Keyboard-zh_tw]]
     - [[[WIP] 與 MapleBBS 3 的差異|VS-MapleBBS-3-zh_tw]]
