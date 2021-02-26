@@ -101,6 +101,6 @@ int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo
 ### Match Operations
 　            | 值  | 出處           | 說明
 :---          | --- | ---           | ---
-`MATCH_END`   | - `1` <br> - `0x8000` (MapleBBS 3.02) | MapleBBS 3.00 | 進行自動完成並結束自動完成 <br> - 可疊加在 echo flags 上 (MapleBBS 3.02)
-`MATCH_LIST`  | - `2` <br> - (移除) (MapleBBS 3.02) | MapleBBS 3.00 | 進行自動完成並顯示自動完成清單 <br> - 等效於沒有 `MATCH_END` 而移除 (MapleBBS 3.02)
-`MATCH_CHECK` | - `4` <br> - (移除) (MapleBBS 3.02) | MapleBBS 3.00 | 檢查輸入是否存在於自動完成清單，不進行自動完成 <br> - 僅用於 `GET_LIST` (MapleBBS 3.00) <br> - 一律進行自動完成而移除 (MapleBBS 3.02)
+`MATCH_END`   | - `1` <br> - `0x8000` (MapleBBS 3.02) | MapleBBS 3.00 | 進行自動完成並結束自動完成 <br> 限內部處理 <br> - 可疊加在 echo flags 上 (MapleBBS 3.02)
+`MATCH_LIST`  | - `2` <br> - (移除) (MapleBBS 3.02) | MapleBBS 3.00 | 進行自動完成並顯示自動完成清單 <br> 限內部處理 <br> - 等效於沒有 `MATCH_END` 而移除 (MapleBBS 3.02)
+`MATCH_CHECK` | - `4` <br> - (移除) (MapleBBS 3.02) | MapleBBS 3.00 | 檢查輸入是否存在於自動完成清單，不進行自動完成 <br> 限內部處理 <br> - 僅用於 `GET_LIST` (MapleBBS 3.00) <br> - 一律進行自動完成而移除 (MapleBBS 3.02)
