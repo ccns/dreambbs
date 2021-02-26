@@ -2556,15 +2556,10 @@ int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo
     bool dirty, key_done;
 
     /* Adjust flags */
-    if (!(echo & VGET_STRICT_DOECHO))
-    {
-        if (echo & VGET_IMPLY_DOECHO)
-            echo |= DOECHO;
-    }
     if (echo & VGET_FORCE_DOECHO)
-        echo |= DOECHO;
-    if ((echo & DOECHO) && (echo & VGET_STEALTH_NOECHO))
-        echo ^= VGET_STEALTH_NOECHO;
+        echo &= ~HIDEECHO;
+    if (!(echo & HIDEECHO))
+        echo &= ~VGET_STEALTH_NOECHO;
 
     max--;
 
@@ -2600,12 +2595,14 @@ vget_redraw:
         }
         if (len && !(echo & VGET_STEALTH_NOECHO))
         {
-            if (echo & DOECHO)
-                outs(data);
-            else
+            if (echo & HIDEECHO)
             {
                 for (int ch = 0; ch < len; ch++)
                     outc('*');
+            }
+            else
+            {
+                outs(data);
             }
         }
     }
@@ -2755,7 +2752,7 @@ vget_redraw:
                 int next = (unsigned char)data[i];
 
                 if (!(echo & VGET_STEALTH_NOECHO))
-                    outc((echo & DOECHO) ? ch : '*');
+                    outc((echo & HIDEECHO) ? '*' : ch);
 
                 data[i] = ch;
                 ch = next;
@@ -2775,14 +2772,14 @@ vget_redraw:
         /* ----------------------------------------------- */
 
 #if 0
-        if ((!(echo & DOECHO) || mfunc) && ch != Ctrl('H'))
+        if (((echo & HIDEECHO) || mfunc) && ch != Ctrl('H'))
         {
             bell();
             continue;
         }
 #endif
 
-        if (!(echo & DOECHO) && ch != Ctrl('H'))
+        if ((echo & HIDEECHO) && ch != Ctrl('H'))
         {
             bell();
             continue;
@@ -2833,7 +2830,7 @@ vget_redraw:
                 data[i - 1] = ch = (unsigned char) data[i];
 
                 if (!(echo & VGET_STEALTH_NOECHO))
-                    outc((echo & DOECHO) ? ch : '*');
+                    outc((echo & NOECHO) ? '*' : ch);
             }
             if (!(echo & VGET_STEALTH_NOECHO))
                 outc(' ');
@@ -2902,7 +2899,7 @@ vget_redraw:
             continue;
 
         /* No input history for `NUMECHO` or hidden inputs */
-        if (!(echo & DOECHO) || (echo & NUMECHO))
+        if ((echo & (HIDEECHO | NUMECHO)))
         {
             bell();
             continue;
@@ -2973,7 +2970,7 @@ vget_redraw:
 #endif
     }
 
-    if (len > 2 && (echo & DOECHO) && !(echo & NUMECHO))
+    if (len > 2 && !(echo & (HIDEECHO | NUMECHO)))
     {
         /* Move current history entry to the front */
         for (int ln = line; ln; ln--)
