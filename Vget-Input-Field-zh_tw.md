@@ -84,7 +84,7 @@ int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo
 `BRD_Z_BIT` | `0x20` | MapleBBS 3.00 | 被使用者 zap 的看板
 `BRD_F_BIT` | `0x40` | DreamBBS-2010 | 使用者的看板清單中可出現此看板 (但僅看板好友可進入)
 
-- MapleBBS 3.10-itoc 有不同的定義 (下術)
+- MapleBBS 3.10-itoc 有不同的定義 (下述)
 
 ### BRD bits (MapleBBS 3.10-itoc)
 　          | 值     | 說明
