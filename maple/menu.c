@@ -1391,7 +1391,7 @@ static int domenu_neck(XO *xo) { return domenu_redo(xo, XO_NECK); }
 static int domenu_body(XO *xo) { return domenu_redo(xo, XO_BODY); }
 static int domenu_foot(XO *xo) { return domenu_redo(xo, XO_FOOT); }
 
-static KeyFuncList domenu_cb =
+KeyFuncList domenu_cb =
 {
     {XO_INIT, {domenu_init}},
     {XO_LOAD, {domenu_load}},

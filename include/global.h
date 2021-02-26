@@ -208,6 +208,9 @@ extern int keysnum;
 /* maple/mail.c */
 extern LinkList *ll_head;
 
+/* maple/menu.c */
+extern KeyFuncList domenu_cb; /* IID.2021-02-26: For `popupmenu()` redrawing environment detection */
+
 /* maple/post.c */
 extern KeyFuncList post_cb;
 #ifdef  HAVE_DETECT_CROSSPOST

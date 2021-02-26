@@ -386,11 +386,20 @@ do_menu_redraw:
                 popup_old_screen = NULL;
                 scr_restore_free(&old_screen);
 
-                /* IID.2021-02-27: Keep the cursor on screen when the screen is shrunk */
-                if (xo->pos > xo->top + XO_TALL - 1)
-                    xo->top += xo->pos - (xo->top + XO_TALL - 1);
-                xover_exec_cb(xo, XO_HEAD);
-                cursor_show(3 + xo->pos - xo->top, 0);
+                /* TODO(IID.2021-02-27): Refine Xover system to make cursor redraw logic customizable */
+                if (xo->cb == domenu_cb)
+                {
+                    xover_exec_cb(xo, XO_HEAD);
+                    domenu_cursor_show(xo);
+                }
+                else
+                {
+                    /* IID.2021-02-27: Keep the cursor on screen when the screen is shrunk */
+                    if (xo->pos > xo->top + XO_TALL - 1)
+                        xo->top += xo->pos - (xo->top + XO_TALL - 1);
+                    xover_exec_cb(xo, XO_HEAD);
+                    cursor_show(3 + xo->pos - xo->top, 0);
+                }
 
                 scr_dump(&old_screen);
                 popup_old_screen = &old_screen;
