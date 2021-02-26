@@ -89,7 +89,8 @@ y 軸           | y 為 row；+y 方向向下    | y 為 column；+y 方向向�
 　                | 值                 | 類型                      | 出處            | 說明
 :---              | ---                | ---                       | ---            | ---
 `LINELEN`         | - `80` <br> - `80` (Eagles BBS 3.1) <br> - `120` (Phoenix BBS) <br> - `200` (SecretBBS) <br> - `256` (FireBird BBS 3.1) | 原始字元座標與顯示座標之 x   | Pirate BBS    | 單行最大字元數，也是最大畫面寬度 <br> (Pirate BBS 並未處理控制碼)
-`ANSILINELEN`     | `160` (MapleBBS 2.0.5) <br> - `511` (PttBBS) <br> - `500` (MapleBBS 3) | 原始字元座標之 x           | MapleBBS 2        | 單行最大字元數
+`ANSILINELEN`     | `160` (MapleBBS 2.0.5) <br> - `511` (PttBBS) <br> - `500` (MapleBBS 3) <br> - `ANSILINESIZE` (DreamBBS v3.0) | 原始字元座標之 x           | MapleBBS 2        | 單行最大字元數
+`ANSILINESIZE`     | `4000` (DreamBBS v3.0) | 原始字元座標之 x | DreamBBS v3.0 | 單行最大字元數 <br> 緩衝區位元組大小 <br> `ANSILINELEN` 為其別名
 `t_lines`         | - (變數，預設 `24`) <br> - `24` (MapleBBS 3) <br> - (移除) (MapleBBS-itoc) <br> - `b_lines + 1` (DreamBBS v1) | 顯示座標之 y               | Pirate BBS    | 畫面高度
 `b_lines`         | - `t_lines - 1` (MapleBBS 2 & PttBBS) <br> - `23` (MapleBBS 3) <br> - (變數，預設 `23`) (MapleBBS-itoc & DreamBBS v1) | 顯示座標之 y               | MapleBBS 2    | 顯示座標之 y 的有效最大值
 `p_lines`         | - `t_lines - 4` (MapleBBS 2 & PttBBS) <br> - `18` (MapleBBS 3) <br> - (移除) (MapleBBS-itoc) <br> - `b_lines - 5` (DreamBBS v1) | 顯示座標之 y               | MapleBBS 2    | 除去標題列、說明列、狀態列後的畫面高度 <br> - 頁面捲動用
