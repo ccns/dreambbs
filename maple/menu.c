@@ -1463,6 +1463,53 @@ domenu(
     }
 }
 
+void domenu_cursor_show(XO *xo)
+{
+    DomenuXyz *const xyz = (DomenuXyz *)xo->xyz;
+
+    int ycc, xcc, ycx, xcx;
+    if (xyz->height > 0 && xyz->width > 0)
+    {
+        ycc = xyz->y + (xo->pos % xyz->height);
+        xcc = xyz->x + (xo->pos / xyz->height * xyz->width);
+        ycx = xyz->y + (xyz->pos_prev % xyz->height);
+        xcx = xyz->x + (xyz->pos_prev / xyz->height * xyz->width);
+    }
+    else
+    {
+        ycc = xyz->y + xo->pos;
+        xcc = xyz->x;
+        ycx = xyz->y + xyz->pos_prev;
+        xcx = xyz->x;
+    }
+    if (xo->pos != xyz->pos_prev)
+    {
+        const char *explan = strchr(xyz->table[xo->pos]->desc, '\n');
+        if (!explan)
+            explan = strchr(xyz->mtail->desc, '\n');
+        if (explan)
+        {
+            int explan_len = strip_ansi_len(explan + 1);
+            move_ansi(b_lines - 1, b_cols - xyz->explan_len_prev);
+            clrtoeol();
+            move_ansi(b_lines - 1, b_cols - explan_len);
+            outs(explan + 1);
+            xyz->explan_len_prev = explan_len;
+        }
+
+        if (xyz->pos_prev >= 0)
+        {
+            cursor_bar_clear(ycx, xcx, xyz->width);
+        }
+        cursor_bar_show(ycc, xcc, xyz->width);
+        xyz->pos_prev = xo->pos;
+    }
+    else
+    {
+        move(ycc, xcc + 1);
+    }
+}
+
 static int
 domenu_exec(
     XO *xo,
@@ -1719,49 +1766,7 @@ domenu_exec(
         }
 
         cmd = XO_NONE;
-        {
-            int ycc, xcc, ycx, xcx;
-            if (xyz->height > 0 && xyz->width > 0)
-            {
-                ycc = xyz->y + (xo->pos % xyz->height);
-                xcc = xyz->x + (xo->pos / xyz->height * xyz->width);
-                ycx = xyz->y + (xyz->pos_prev % xyz->height);
-                xcx = xyz->x + (xyz->pos_prev / xyz->height * xyz->width);
-            }
-            else
-            {
-                ycc = xyz->y + xo->pos;
-                xcc = xyz->x;
-                ycx = xyz->y + xyz->pos_prev;
-                xcx = xyz->x;
-            }
-            if (xo->pos != xyz->pos_prev)
-            {
-                const char *explan = strchr(xyz->table[xo->pos]->desc, '\n');
-                if (!explan)
-                    explan = strchr(xyz->mtail->desc, '\n');
-                if (explan)
-                {
-                    int explan_len = strip_ansi_len(explan + 1);
-                    move_ansi(b_lines - 1, b_cols - xyz->explan_len_prev);
-                    clrtoeol();
-                    move_ansi(b_lines - 1, b_cols - explan_len);
-                    outs(explan + 1);
-                    xyz->explan_len_prev = explan_len;
-                }
-
-                if (xyz->pos_prev >= 0)
-                {
-                    cursor_bar_clear(ycx, xcx, xyz->width);
-                }
-                cursor_bar_show(ycc, xcc, xyz->width);
-                xyz->pos_prev = xo->pos;
-            }
-            else
-            {
-                move(ycc, xcc + 1);
-            }
-        }
+        domenu_cursor_show(xo);
     }
     return XO_NONE;
 }
