@@ -8,6 +8,9 @@
 
 #include "bbs.h"
 
+/* For screenshot */
+static screen_backup_t *popup_old_screen = NULL;
+
 static int do_menu(MENU pmenu[], XO *xo, int y_ref, int x_ref);
 
 /* ----------------------------------------- */
@@ -362,6 +365,7 @@ do_menu(
 
 
     scr_dump(&old_screen);
+    popup_old_screen = &old_screen;
 
 do_menu_redraw:
     y = gety_ref(y_ref);
@@ -379,13 +383,20 @@ do_menu_redraw:
             if (xo)
             {
                 /* Redraw and redump */
+                popup_old_screen = NULL;
                 scr_restore_free(&old_screen);
+
                 xover_exec_cb(xo, XO_HEAD);
                 cursor_show(3 + xo->pos - xo->top, 0);
+
                 scr_dump(&old_screen);
+                popup_old_screen = &old_screen;
             }
             else
+            {
                 scr_restore_keep(&old_screen);
+                popup_old_screen = &old_screen;
+            }
             goto do_menu_redraw;
         }
 
@@ -395,6 +406,7 @@ do_menu_redraw:
             case KEY_LEFT:
             case KEY_ESC:
             case Meta(KEY_ESC):
+                popup_old_screen = NULL;
                 scr_restore_free(&old_screen);
                 return 1;
             case KEY_UP:
@@ -413,15 +425,18 @@ do_menu_redraw:
             case '\n':
                 if (table[cur]->umode & M_QUIT)
                 {
+                    popup_old_screen = NULL;
                     scr_restore_free(&old_screen);
                     return 1;
                 }
                 if (do_cmd(table[cur], xo, y, x)<0)
                 {
+                    popup_old_screen = NULL;
                     scr_restore_free(&old_screen);
                     return -1;
                 }
                 scr_restore_keep(&old_screen);
+                popup_old_screen = &old_screen;
                 draw_menu((const MENU *const *)table, num+1, title, y, x, cur);
                 break;
             default:
@@ -434,15 +449,18 @@ do_menu_redraw:
                         {
                             if (table[cur]->umode & M_QUIT)
                             {
+                                popup_old_screen = NULL;
                                 scr_restore_free(&old_screen);
                                 return 1;
                             }
                             if (do_cmd(table[cur], xo, y, x)<0)
                             {
+                                popup_old_screen = NULL;
                                 scr_restore_free(&old_screen);
                                 return -1;
                             }
                             scr_restore_keep(&old_screen);
+                            popup_old_screen = &old_screen;
                             draw_menu((const MENU *const *)table, num+1, title, y, x, cur);
                         }
                         break;
@@ -693,6 +711,9 @@ Every_Z_Screen(void)
     FILE *fp;
     int i;
     char buf[512];
+
+    screen_backup_t old_screen = {0};
+
 #ifdef M3_USE_PFTERM
     int oy, ox;
 
@@ -705,6 +726,15 @@ Every_Z_Screen(void)
         vmsg("ÀÉ®×¶}±Ò¿ù»~ !!");
         return 0;
     }
+
+    /* IID.2021-02-26: Restore the screen saved by `popupmenu()`
+     * or use the current screen if the saved screen is not available */
+    if (popup_old_screen && popup_old_screen->IF_ON(M3_USE_PFTERM, raw_memory, slp))
+    {
+        scr_dump(&old_screen);
+        scr_restore_keep(popup_old_screen);
+    }
+
     for (i=0; i<=b_lines; ++i)
     {
 #ifdef M3_USE_PFTERM
@@ -721,8 +751,12 @@ Every_Z_Screen(void)
     }
     fclose(fp);
 
+    /* Restore the screen if the saved screen is used */
+    if (old_screen.IF_ON(M3_USE_PFTERM, raw_memory, slp))
+        scr_restore_free(&old_screen);
 #ifdef M3_USE_PFTERM
-    move(oy, ox);
+    else
+        move(oy, ox);
 #endif
     return 1;
 }
