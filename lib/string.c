@@ -604,8 +604,8 @@ int rle_encode(char *str)
     return dst - str;
 }
 
-/* Find and return the first occurrence of lowercase pattern `tag` in string `str` or `NULL` if not found, ignoring the case of `str` (formerly `str_str`)
- * `tag` is a non-empty lowercase string */
+/* Find and return the first occurrence of pattern `tag` in string `str` or `NULL` if not found, ignoring case differences (formerly `str_str`)
+ * `tag` is a non-empty string */
 GCC_NONNULLS
 GCC_PURE char *str_casestr(const char *str, const char *tag)
 {
@@ -626,6 +626,8 @@ GCC_PURE char *str_casestr(const char *str, const char *tag)
                 int c2 = *p2++;
                 if (!c2)
                     return (char *)str;
+                if (c2 >= 'A' && c2 <= 'Z')
+                    c2 |= 0x20;
 
                 int c1 = *p1++;
                 if (c1 >= 'A' && c1 <= 'Z')
@@ -640,8 +642,8 @@ GCC_PURE char *str_casestr(const char *str, const char *tag)
     return NULL;
 }
 
-/* Find and return the first occurrence of lowercase pattern `tag` in string `str` or `NULL` if not found, ignoring the case of `str` and handling DBCS characters (formerly `str_sub`)
- * `tag` is an non-empty lowercase string and may contain DBCS characters */
+/* Find and return the first occurrence of pattern `tag` in string `str` or `NULL` if not found, ignoring case differences and handling DBCS characters (formerly `str_sub`)
+ * `tag` is an non-empty string and may contain DBCS characters */
 GCC_NONNULLS
 GCC_PURE char *str_casestr_dbcs(const char *str, const char *tag)
 {
@@ -665,17 +667,22 @@ GCC_PURE char *str_casestr_dbcs(const char *str, const char *tag)
         {
             const char *p1 = str + 1;
             const char *p2 = tag + 1;
-            bool in_dbcsi = in_dbcs; /* 1: 前一碼是中文字 */
+            bool in_dbcs1 = in_dbcs; /* 1: 前一碼是中文字 */
+            bool in_dbcs2 = IS_DBCS_HI(c2_head);
 
             for (;;)
             {
                 int c2 = *p2++;
                 if (!c2)
                     return (char *)str;
+                if (in_dbcs2 || IS_DBCS_HI(c2))
+                    in_dbcs2 = !in_dbcs2;
+                else if (c2 >= 'A' && c2 <= 'Z')
+                    c2 |= 0x20;
 
                 int c1 = *p1++;
-                if (in_dbcsi || IS_DBCS_HI(c1))
-                    in_dbcsi = !in_dbcsi;
+                if (in_dbcs1 || IS_DBCS_HI(c1))
+                    in_dbcs1 = !in_dbcs1;
                 else if (c1 >= 'A' && c1 <= 'Z')
                     c1 |= 0x20;
 
