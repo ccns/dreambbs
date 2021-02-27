@@ -28,7 +28,8 @@ static unsigned char *GtoB = NULL;
 static void
 conv_init(void)
 {
-    int fd, size, BGsize, GBsize;
+    int fd;
+    off_t BGsize, GBsize;
     struct stat st;
 
     if (BtoG != NULL)
@@ -42,15 +43,13 @@ conv_init(void)
     if ((fd = open("etc/b2g_table", O_RDONLY)) >= 0)
     {
         fstat(fd, &st);
-        size = BGsize <= st.st_size ? BGsize : st.st_size;
-        read(fd, BtoG, size);
+        read(fd, BtoG, BMIN(BGsize, st.st_size));
         close(fd);
     }
     if ((fd = open("etc/g2b_table", O_RDONLY)) >= 0)
     {
         fstat(fd, &st);
-        size = GBsize <= st.st_size ? GBsize : st.st_size;
-        read(fd, GtoB, size);
+        read(fd, GtoB, BMIN(GBsize, st.st_size));
         close(fd);
     }
 }

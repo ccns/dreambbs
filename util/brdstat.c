@@ -269,7 +269,7 @@ count_board(
 
 
         head = base + (year - 1);
-        size = ((count <= YEAR_HOUR) ? count : YEAR_HOUR) * sizeof(BSTAT);
+        size = BMIN(count, YEAR_HOUR) * sizeof(BSTAT);
         lseek(fd, (off_t) 0, SEEK_SET);
         write(fd, head, size);
         ftruncate(fd, size);
