@@ -767,36 +767,39 @@ void str_rtrim(char *buf)
         *p = '\0';
 }
 
+typedef struct {
+    const char *mark;
+    enum HdrMode mode;
+} TitleMark;
+
+static const TitleMark str_ttl_marks[] = {
+    {STR_REPLY, HDRMODE_REPLY},
+    {STR_FORWARD, HDRMODE_FORWARD},
+};
+
 /* Return the begin of article title in string `title` with article type tags skipped and output the article type to `pmode`
+ * If the tag begins with a `'['`, the tag is not skipped
  * If `pmode` is `NULL`, the article type is discard and is not output to `pmode` */
 GCC_NONNULL(1)
 GCC_RET_NONNULL char *str_ttl_hdrmode(const char *title, enum HdrMode *pmode)
 {
-    static const char *const title_marks[] = {STR_REPLY, STR_FORWARD};
     if (pmode)
         *pmode = HDRMODE_NORMAL;
 
-    for (size_t i = 0; i < COUNTOF(title_marks); ++i)
+    for (size_t i = 0; i < COUNTOF(str_ttl_marks); ++i)
     {
-        if (!str_ncasecmp(title, title_marks[i], strlen(title_marks[i])))
+        const TitleMark *const mark = &str_ttl_marks[i];
+        if (!str_ncasecmp_dbcs(title, mark->mark, strlen(mark->mark)))
         {
-            title += strlen(title_marks[i]);
-            if (*title == ' ')
-                ++title;
-            if (pmode)
+            /* Do not skip the initial `[]` tag */
+            if (mark->mark[0] != '[')
             {
-                switch (i)
-                {
-                case 0:
-                    *pmode = HDRMODE_REPLY;
-                    break;
-                case 1:
-                    *pmode = HDRMODE_FORWARD;
-                    break;
-                default:
-                    ;
-                }
+                title += strlen(mark->mark);
+                if (*title == ' ')
+                    ++title;
             }
+            if (pmode)
+                *pmode = mark->mode;
             break;
         }
     }
