@@ -1419,10 +1419,12 @@ zkey(void)                              /* press any key or timeout */
     /* static */ struct timeval tv = {1, 100};
     /* Thor.980806: man page 假設 timeval struct是會改變的 */
 
-    int rset;
+    fd_set rset;
 
-    rset = 1;
-    select(1, (fd_set *) &rset, NULL, NULL, &tv);
+    FD_ZERO(&rset);
+    FD_SET(0, &rset);
+
+    select(1, &rset, NULL, NULL, &tv);
 
 #if 0
     if (select(1, &rset, NULL, NULL, &tv) > 0)
@@ -1773,7 +1775,8 @@ igetch(void)
 #define IM_REPLY        0x02    /* ^R */
 #define IM_TALK         0x04
 
-    int cc, fd=0, nfds, rset;
+    fd_set rset;
+    int cc, fd=0, nfds;
     unsigned char *data;
 
     data = vi_pool;
@@ -1795,8 +1798,7 @@ igetch(void)
                 refresh();
                 fd = (vi_mode & IM_REPLY) ? 0 : vio_fd;
                 nfds = fd + 1;
-                if (fd)
-                    fd = 1 << fd;
+                FD_ZERO(&rset);
             }
 
             for (;;)
@@ -1804,13 +1806,14 @@ igetch(void)
                 struct timeval tv = vio_to;
                 /* Thor.980806: man page 假設 timeval 是會改變的 */
 
-                rset = 1 | fd;
-                cc = select(nfds, (fd_set *) & rset, NULL, NULL, &tv /*&vio_to*/);
+                FD_SET(0, &rset);
+                FD_SET(fd, &rset);
+                cc = select(nfds, &rset, NULL, NULL, &tv /*&vio_to*/);
                                       /* Thor.980806: man page 假設 timeval 是會改變的 */
 
                 if (cc > 0)
                 {
-                    if (fd & rset)
+                    if (fd != 0 && FD_ISSET(fd, &rset))
                         return I_OTHERDATA;
 
                     cc = recv(0, data, VI_MAX, 0);

@@ -565,10 +565,11 @@ void out_footer(
 
 int getkey(double wait)
 {
-    int fd;
+    fd_set fds;
     struct timeval tv;
 
-    fd = 1;
+    FD_ZERO(&fds);
+    FD_SET(0, &fds);
 
     tv.tv_sec = (int)wait;
     wait-=(int)wait;
@@ -576,7 +577,7 @@ int getkey(double wait)
 
     /* 若有按鍵，回傳所按的鍵；若 delay 的時間到了仍沒有按鍵，回傳 0 */
 
-    if (select(1, (fd_set *) &fd, NULL, NULL, &tv) > 0)
+    if (select(1, &fds, NULL, NULL, &tv) > 0)
         return vkey();
 
     return 0;

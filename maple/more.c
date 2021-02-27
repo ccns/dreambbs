@@ -372,6 +372,7 @@ more_slideshow(void)
     }
     else
     {
+        fd_set rfds;
         struct timeval tv[9] =
         {
             {4, 0}, {3, 0}, {2, 0}, {1, 500000}, {1, 0},
@@ -379,8 +380,9 @@ more_slideshow(void)
         };
 
         refresh();
-        ch = 1;
-        if (select(1, (fd_set *) &ch, NULL, NULL, tv + slideshow - 1) > 0)
+        FD_ZERO(&rfds);
+        FD_SET(0, &rfds);
+        if (select(1, &rfds, NULL, NULL, tv + slideshow - 1) > 0)
         {
             /* 若播放中按任意鍵，則停止播放 */
             slideshow = 0;

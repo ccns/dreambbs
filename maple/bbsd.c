@@ -1274,15 +1274,17 @@ telnet_init(void)
         IAC, DO, TELOPT_BINARY
     };
 
+    fd_set rset;
     int n, len;
     const unsigned char *cmd;
-    int rset;
     struct timeval to;
     char buf[64];
 
     /* --------------------------------------------------- */
     /* init telnet protocol                                */
     /* --------------------------------------------------- */
+
+    FD_ZERO(&rset);
 
 #if 0
     to.tv_sec = 1;
@@ -1296,11 +1298,11 @@ telnet_init(void)
         send(0, cmd, len, 0);
         cmd += len;
 
-        rset = 1;
+        FD_SET(0, &rset);
         /* Thor.981221: for future reservation bug */
         to.tv_sec = 1;
         to.tv_usec = 1;
-        if (select(1, (fd_set *) & rset, NULL, NULL, &to) > 0)
+        if (select(1, &rset, NULL, NULL, &to) > 0)
             recv(0, buf, sizeof(buf), 0);
     }
 }
@@ -1326,9 +1328,11 @@ term_init(void)
         IAC, DO, TELOPT_NAWS
     };
 
-    int rset;
+    fd_set rset;
     char buf[64], *rcv;
     struct timeval to;
+
+    FD_ZERO(&rset);
 
 #ifdef M3_USE_PFTERM
     initscr();
@@ -1339,10 +1343,10 @@ term_init(void)
     /* 問對方 (telnet client) 有沒有支援不同的螢幕寬高 */
     send(0, svr, 3, 0);
 
-    rset = 1;
+    FD_SET(0, &rset);
     to.tv_sec = 1;
     to.tv_usec = 1;
-    if (select(1, (fd_set *) & rset, NULL, NULL, &to) > 0)
+    if (select(1, &rset, NULL, NULL, &to) > 0)
         recv(0, buf, sizeof(buf), 0);
 
     rcv = NULL;
@@ -1357,10 +1361,10 @@ term_init(void)
         {
             if ((unsigned char) buf[3] != IAC)
             {
-                rset = 1;
+                FD_SET(0, &rset);
                 to.tv_sec = 1;
                 to.tv_usec = 1;
-                if (select(1, (fd_set *) & rset, NULL, NULL, &to) > 0)
+                if (select(1, &rset, NULL, NULL, &to) > 0)
                     recv(0, buf + 3, sizeof(buf) - 3, 0);
             }
                 if ((unsigned char) buf[3] == IAC && (unsigned char) buf[4] == SB && buf[5] == TELOPT_NAWS)
@@ -1922,11 +1926,16 @@ int main(int argc, char *argv[])
     totaluser = &ushm->count;
     /* avgload = &ushm->avgload; */
 
+    fd_set rfds;
+    FD_ZERO(&rfds);
+
     for (;;)
     {
         struct sockaddr_storage sin;
-        int value = 1;
-        if (select(1, (fd_set *) & value, NULL, NULL, NULL) < 0)
+        int value;
+
+        FD_SET(0, &rfds);
+        if (select(1, &rfds, NULL, NULL, NULL) < 0)
             continue;
         value = sizeof(sin);
         csock = accept(0, (struct sockaddr *) &sin, (socklen_t *) &value);
