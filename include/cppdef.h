@@ -174,6 +174,9 @@ template <class T>
 
 #define COUNTOF(x)      (sizeof(x)/sizeof(x[0]))
 
+/* The argument `strlit` should expand to a string literal */
+#define STRLITLEN(strlit) (sizeof(strlit "" /* Ensure that `strlit` is a string literal */) - 1)
+
 /* Macros for managing loading of dynamic libraries */
 
 #include "config.h"

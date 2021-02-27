@@ -39,7 +39,7 @@ class_parse(
     FILE *fp;
 
     strcpy(fpath, "gem/@/@");
-    str = fpath + sizeof("gem/@/@") - 1;
+    str = fpath + STRLITLEN("gem/@/@");
     for (ptr = key;; ptr++)
     {
         i = *ptr;

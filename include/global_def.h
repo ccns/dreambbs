@@ -357,8 +357,8 @@
 
 #define STR_LINE        "\n" \
 "> -------------------------------------------------------------------------- <\n\n"
-#define LEN_AUTHOR1     (sizeof(STR_AUTHOR1) - 1)
-#define LEN_AUTHOR2     (sizeof(STR_AUTHOR2) - 1)
+#define LEN_AUTHOR1     (STRLITLEN(STR_AUTHOR1))
+#define LEN_AUTHOR2     (STRLITLEN(STR_AUTHOR2))
 
 #define STR_SYSOP       "sysop"
 #define SYSOPNAME       "sysop"

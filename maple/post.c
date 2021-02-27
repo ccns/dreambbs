@@ -4650,7 +4650,7 @@ XoXpost(                        /* Thor: call from post_cb */
         else if (mode == 1)
         {
             title = head->title;
-            if (!strncmp(title, STR_REPLY, sizeof(STR_REPLY) - 1))
+            if (!strncmp(title, STR_REPLY, STRLITLEN(STR_REPLY)))
                 continue;
         }
         else

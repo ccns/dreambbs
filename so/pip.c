@@ -665,10 +665,10 @@ enum pipmenuidx menunum)
             switch (menunum)
             {
             case 2:
-                fill = 20 + d_cols - (sizeof(NICKNAME) - 1);
+                fill = 20 + d_cols - (STRLITLEN(NICKNAME));
                 break;
             case 6:
-                fill = 20 + d_cols - 2 * (sizeof(NICKNAME) - 1);
+                fill = 20 + d_cols - 2 * (STRLITLEN(NICKNAME));
                 break;
             default:
                 fill = d_cols;
@@ -878,11 +878,11 @@ enum pipmenumode mode)
     /*vs_head("¹q¤l¾i¤pÂû", BoardName);*/
     move(0, 0);
     if (d.sex == 1)
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד [%s¥NÂû] \x1b[32m¡ס \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "¤G" : "¤@", d.name, 40 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
+        prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד [%s¥NÂû] \x1b[32m¡ס \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "¤G" : "¤@", d.name, 40 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
     else if (d.sex == 2)
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד [%s¥NÂû] \x1b[33m¡נ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "¤G" : "¤@", d.name, 40 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
+        prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד [%s¥NÂû] \x1b[33m¡נ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "¤G" : "¤@", d.name, 40 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
     else
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד [%s¥NÂû] \x1b[34m¡H \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "¤G" : "¤@", d.name, 40 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
+        prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד [%s¥NÂû] \x1b[34m¡H \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "¤G" : "¤@", d.name, 40 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
 
     move(1, 0);
     if (d.thing[THING_MONEY] <= 100)
@@ -4425,7 +4425,7 @@ pip_go_palace(void)
         clrtoeol();
         move(b_lines, 0);
         prints(
-            "\x1b[1;37;46m  °Ñ¨£¿ן³ז  \x1b[44m [¦r¥À]¿ן¾Ü±‎«פ³X×÷¤H×«  [Q]Âק¶}" NICKNAME "Á`¥q¥O³¡       %*s\x1b[0m", 20 + d_cols - ((int)(unsigned int)sizeof(NICKNAME) - 1), "");
+            "\x1b[1;37;46m  °Ñ¨£¿ן³ז  \x1b[44m [¦r¥À]¿ן¾Ü±‎«פ³X×÷¤H×«  [Q]Âק¶}" NICKNAME "Á`¥q¥O³¡       %*s\x1b[0m", 20 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME)), "");
         pipkey = vkey();
         choice = pipkey - 'A';
         if (choice < 0 || choice >= ROYAL_COUNT)
@@ -4653,7 +4653,7 @@ int first)
         if (opponpip->nodone != 1)
             strcpy(mymsg[currpip->msgcount%8], currpip->msg);
         move(0, 0);
-        outs_centered("\x1b[1;34mשששג\x1b[44;37m ¦Û¤v¸ך®Æ \x1b[0;1;34mשאשששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששש\x1b[m\n");
+        outs_centered("\x1b[1;34m¢¤שג\x1b[44;37m ¦Û¤v¸ך®Æ \x1b[0;1;34mשא¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤\x1b[m\n");
         prints_centered("\x1b[1m   \x1b[33m©m  ¦W:\x1b[37m%-20s                                              \x1b[31m  \x1b[m\n",
                d.name);
         sprintf(buf1, "%d/%d", d.body[BODY_HP], d.body[BODY_MAXHP]);
@@ -4669,7 +4669,7 @@ int first)
         prints_centered("\x1b[1m   \x1b[33m¤H  חx:\x1b[37m%-12d\x1b[33m³·  ½¬:\x1b[37m%-12d\x1b[33m¯h  ³Ò:\x1b[37m%-15d               \x1b[m\n",
                d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS], d.body[BODY_TIRED]);
         move(7, 0);
-        outs_centered("\x1b[1;34mשששג\x1b[44;37m ¾Ô°«°T®§ \x1b[0;1;34mשאשששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששש\x1b[m\n");
+        outs_centered("\x1b[1;34m¢¤שג\x1b[44;37m ¾Ô°«°T®§ \x1b[0;1;34mשא¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤\x1b[m\n");
         for (i = 0; i < 8; i++)
         {
             move(8 + i, 1);
@@ -4686,7 +4686,7 @@ int first)
             }
         }
         move(16, 0);
-        outs_centered("\x1b[1;34mשששג\x1b[44;37m ½Í¸Ü°T®§ \x1b[0;1;34mשאשששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששש\x1b[m\n");
+        outs_centered("\x1b[1;34m¢¤שג\x1b[44;37m ½Í¸Ü°T®§ \x1b[0;1;34mשא¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤\x1b[m\n");
         for (i = 0; i < 2; i++)
         {
             move(17 + i, 0);
@@ -4702,14 +4702,14 @@ int first)
             }
         }
         move(19, 0);
-        outs_centered("\x1b[1;34mשששג\x1b[1;37;44m ¹ן¤ג¸ך®Æ \x1b[0;1;34mשאשששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששש\x1b[m\n");
+        outs_centered("\x1b[1;34m¢¤שג\x1b[1;37;44m ¹ן¤ג¸ך®Æ \x1b[0;1;34mשא¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤\x1b[m\n");
         prints_centered("\x1b[1m   \x1b[33m©m  ¦W:\x1b[37m%-20s                                                \x1b[m\n",
                opponpip->name);
         sprintf(buf1, "%d/%d", opponpip->hp, opponpip->maxhp);
         sprintf(buf2, "%d/%d", opponpip->mp, opponpip->maxmp);
         prints_centered("\x1b[1m   \x1b[33mÅי  ¤O:\x1b[37m%-24s       \x1b[33m×k  ¤O:\x1b[37m%-24s\x1b[m\n",
                buf1, buf2);
-        outs_centered("\x1b[1;34mשששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששש\x1b[m\n");
+        outs_centered("\x1b[1;34m¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤\x1b[m\n");
         if (opponpip->nodone == 1)
         {
             notyou = 1;
@@ -4754,7 +4754,7 @@ int first)
             add_io(fd, 30);
             clrchyiuan(7, b_lines - 4);
             move(7, 0);
-            outs_centered("\x1b[1;31mשששג\x1b[41;37m ¦^ÅU½Í¸Ü \x1b[0;1;31mשאשששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששש\x1b[m\n");
+            outs_centered("\x1b[1;31m¢¤שג\x1b[41;37m ¦^ÅU½Í¸Ü \x1b[0;1;31mשא¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤\x1b[m\n");
             for (i = 0; i < 10; i++)
             {
                 move(8 + i, 0);
@@ -4770,7 +4770,7 @@ int first)
                 }
             }
             move(18, 0);
-            outs_centered("\x1b[1;31mשששג\x1b[41;37m ¨ל¦¹¬°¤מ \x1b[0;1;31mשאשששששששששששששששששששששששששששששששששששששששששששששששששששששששששששששש\x1b[m");
+            outs_centered("\x1b[1;31m¢¤שג\x1b[41;37m ¨ל¦¹¬°¤מ \x1b[0;1;31mשא¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤¢¤\x1b[m");
             vmsg("¦^ÅU¤§«e×÷½Í¸Ü ¥u¦³10³q");
             add_io(fd, 1);
         }
@@ -5059,17 +5059,17 @@ pip_ending_screen(void)
     clear();
     pip_ending_decide(endbuf1, endbuf2, endbuf3, &endmode, &endgrade);
     move(1, (d_cols>>1) + 9);
-    outs("\x1b[1;33mשÝששששששש‗שÝשששששûש‗שÝשששששששûשÝששששששש‗שÝשששששûש‗שתשששששששû\x1b[0m");
+    outs("\x1b[1;33mשÝ¢¤¢¤¢¤ש‗שÝ¢¤¢¤¢¡ש‗שÝ¢¤¢¤¢¤¢¡שÝ¢¤¢¤¢¤ש‗שÝ¢¤¢¤¢¡ש‗¢~¢¤¢¤¢¤¢¡\x1b[0m");
     move(2, (d_cols>>1) + 9);
     outs("\x1b[1;37mשר      שרשר    שרשרשר      שרשר      שרשר    שרשרשר      שר\x1b[0m");
     move(3, (d_cols>>1) + 9);
-    outs("\x1b[0;37mשר    שששגשר    שרשרשר  שתשûשרשדששש‗שÝשושר    שרשרשר  שÝששש‗\x1b[0m");
+    outs("\x1b[0;37mשר    ¢¤שגשר    שרשרשר  ¢~¢¡שרשד¢¤ש‗שÝשושר    שרשרשר  שÝ¢¤ש‗\x1b[0m");
     move(4, (d_cols>>1) + 9);
-    outs("\x1b[0;37mשר    שששגשר  שר  שרשר  שüש‎שרשÝשששושדש‗שר  שר  שרשר  שüש‎שר\x1b[0m");
+    outs("\x1b[0;37mשר    ¢¤שגשר  שר  שרשר  ¢¢¢£שרשÝ¢¤שושדש‗שר  שר  שרשר  ¢¢¢£שר\x1b[0m");
     move(5, (d_cols>>1) + 9);
     outs("\x1b[1;37mשר      שרשר  שר  שרשר      שרשר      שרשר  שר  שרשר      שר\x1b[0m");
     move(6, (d_cols>>1) + 9);
-    outs("\x1b[1;35mשדשששששששושדשששüשששושדששששששש‎שדשששששששושדשששüשששושüששששששש‎\x1b[0m");
+    outs("\x1b[1;35mשד¢¤¢¤¢¤שושד¢¤¢¢¢¤שושד¢¤¢¤¢¤¢£שד¢¤¢¤¢¤שושד¢¤¢¢¢¤שו¢¢¢¤¢¤¢¤¢£\x1b[0m");
     move(b_lines - 16, (d_cols>>1) + 8);
     outs("\x1b[1;31m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w\x1b[41;37m " NICKNAME PIPNAME "µ²§½³ר§i \x1b[0;1;31m¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w\x1b[0m");
     move(b_lines - 14, (d_cols>>1) + 10);
@@ -6551,10 +6551,10 @@ const char *userid)
 
     clear();
     move(1, 0);
-    outs_centered("       \x1b[1;33mשÝשששששששûשתשששששששûשÝששששששש‗שתשששששששû\x1b[m\n");
-    outs_centered("       \x1b[0;37mשרשתשû  שרשר שש   שרשדש‗שÝשששושר שש   שר\x1b[m\n");
-    outs_centered("       \x1b[1;37mשרשüש‎  שרשרשÝש‗  שר  שרשר    שרשÝש‗  שר\x1b[m\n");
-    outs_centered("       \x1b[1;34mשדששששששש‎שדשושדשששו  שדשו    שדשושדשששו\x1b[32m......................\x1b[m");
+    outs_centered("       \x1b[1;33mשÝ¢¤¢¤¢¤¢¡¢~¢¤¢¤¢¤¢¡שÝ¢¤¢¤¢¤ש‗¢~¢¤¢¤¢¤¢¡\x1b[m\n");
+    outs_centered("       \x1b[0;37mשר¢~¢¡  שרשר ¢¤   שרשדש‗שÝ¢¤שושר ¢¤   שר\x1b[m\n");
+    outs_centered("       \x1b[1;37mשר¢¢¢£  שרשרשÝש‗  שר  שרשר    שרשÝש‗  שר\x1b[m\n");
+    outs_centered("       \x1b[1;34mשד¢¤¢¤¢¤¢£שדשושד¢¤שו  שדשו    שדשושד¢¤שו\x1b[32m......................\x1b[m");
     do
     {
         clrchyiuan(5, b_lines);
@@ -6902,11 +6902,11 @@ int mode)
         /*vs_head("¹q¤l¾i¤pÂû", BoardName);*/
         move(0, 0);
         if (d.sex == 1)
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[32m¡ס \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
+            prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[32m¡ס \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
         else if (d.sex == 2)
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[33m¡נ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
+            prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[33m¡נ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
         else
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[34m¡H \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
+            prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[34m¡H \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
         move(6, 0);
         if (mode == 1)
             show_badman_pic(m.map/*n*/);
@@ -7131,11 +7131,11 @@ int mode)
         clear();
         move(0, 0);
         if (d.sex == 1)
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[32m¡ס \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
+            prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[32m¡ס \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
         else if (d.sex == 2)
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[33m¡נ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
+            prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[33m¡נ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
         else
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[34m¡H \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)sizeof(NICKNAME PIPNAME) - 1), "");
+            prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[34m¡H \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
         move(1, 0);
         prints_centered("\x1b[1;31m¢z¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢w¢{\x1b[m");
         move(2, 0);
@@ -8102,11 +8102,11 @@ int mode)
     clear();
     move(0, 0);
     if (d.sex == 1)
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[32m¡ס \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+        prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[32m¡ס \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - (STRLITLEN(NICKNAME PIPNAME)), "");
     else if (d.sex == 2)
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[33m¡נ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+        prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[33m¡נ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - (STRLITLEN(NICKNAME PIPNAME)), "");
     else
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[34m¡H \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - (sizeof(NICKNAME PIPNAME) - 1), "");
+        prints("\x1b[1;41m  " NICKNAME PIPNAME " ¡ד \x1b[34m¡H \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - (STRLITLEN(NICKNAME PIPNAME)), "");
 
     move(1, 0);
     if (d.thing[THING_MONEY] <= 100)

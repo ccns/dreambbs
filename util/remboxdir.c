@@ -153,7 +153,7 @@ article_parse(
     /* part of hdr.xmode */
 
 #if 0
-    if (strncmp("¡° Origin: " BOARDNAME, buf, 11 + sizeof(BOARDNAME) - 1) == 0)
+    if (strncmp("¡° Origin: " BOARDNAME, buf, 11 + STRLITLEN(BOARDNAME)) == 0)
 #endif
     if (!(hdr.xmode & POST_INCOME))
     {             /* inside maple */

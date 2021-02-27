@@ -593,7 +593,7 @@ mailpost(void)
             if ((ptr = strstr(mybuf, TAG_VALID)))
             {
                 /* gslin.990101: TAG_VALID 長度不一定 */
-                verify_user(ptr + sizeof(TAG_VALID) - 1);
+                verify_user(ptr + STRLITLEN(TAG_VALID));
                 /* verify_user(ptr + 13); */
                 return 1;               /* eat mail queue */
             }

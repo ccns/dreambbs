@@ -157,7 +157,7 @@ bell(void)
 /* ----------------------------------------------------- */
 
 #ifndef M3_USE_PFTERM
-#define o_ansi(x)       output(x, sizeof(x)-1)
+#define o_ansi(x)       output(x, STRLITLEN(x))
 
 #define o_clear()       o_ansi("\x1b[;H\x1b[2J")
 #define o_cleol()       o_ansi("\x1b[K")
