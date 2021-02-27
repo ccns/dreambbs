@@ -36,7 +36,7 @@ else()
 endif()
 
 add_compile_options(-ggdb3 -O0 -pipe)
-add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format -Werror=incompatible-pointer-types -Werror=int-conversion)
+add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format -Werror=incompatible-pointer-types -Werror=int-conversion -Werror=pointer-to-int-cast)
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/include)
 
 link_libraries(-L${PROJECT_BINARY_DIR}/lib dao crypt)

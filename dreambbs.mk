@@ -104,7 +104,7 @@ CFLAGS_WARN	= -Wno-format-overflow -Wno-error=format-overflow -Wformat-overflow
 
 # Prevent `-Wincompatible-pointer-types-discards-qualifiers` warnings from halting the compilation
 .if $(CC:Mclang*)
-CFLAGS_WARN	+= -Wno-incompatible-pointer-types-discards-qualifiers -Wno-error=incompatible-pointer-types-discards-qualifiers -Wincompatible-pointer-types-discards-qualifiers
+CFLAGS_WARN	+= -Wno-incompatible-pointer-types-discards-qualifiers -Wno-error=incompatible-pointer-types-discards-qualifiers -Wincompatible-pointer-types-discards-qualifiers -Werror=pointer-to-int-cast
 CFLAGS_WARN	+= -Wno-invalid-source-encoding
 .endif
 
