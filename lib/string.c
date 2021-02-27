@@ -10,21 +10,20 @@
 /* Copy string `src` to buffer `dst` and return the new string end of `dst` (formerly `str_add`) */
 char *str_pcpy(char *dst, const char *src)
 {
-    while ((*dst = *src))
-    {
-        src++;
-        dst++;
-    }
-    return dst;
+    const size_t len = strlen(src);
+    memmove(dst, src, len + 1);
+    return dst + len;
 }
 
-void str_ansi(                    /* strip ANSI code */
-                 char *dst, const char *str, int max)
+/* Strip ANSI escapes from string `str` and output the result string to buffer `dst`
+ * At most `max - 1` characters is output to `dst`, and a `'\0'` string end is always added.
+ * `max` must > `0` */
+void str_ansi(char *dst, const char *str, int max)
 {
-    int ch, ansi;
-    char *tail;
+    const char *const tail = dst + max - 1;
+    bool ansi = false;
 
-    for (ansi = 0, tail = dst + max - 1; (ch = *str); str++)
+    for (int ch; (ch = *str); ++str)
     {
         if (ch == '\n')
         {
@@ -32,12 +31,12 @@ void str_ansi(                    /* strip ANSI code */
         }
         else if (ch == '\x1b')
         {
-            ansi = 1;
+            ansi = true;
         }
         else if (ansi)
         {
             if ((ch < '0' || ch > '9') && ch != ';' && ch != '[')
-                ansi = 0;
+                ansi = false;
         }
         else
         {
@@ -49,111 +48,104 @@ void str_ansi(                    /* strip ANSI code */
     *dst = '\0';
 }
 
+/* Concatenate strings `s1` & `s2` and output the result string to buffer `dst` */
 void str_cat(char *dst, const char *s1, const char *s2)
 {
-    while ((*dst = *s1))
-    {
-        s1++;
-        dst++;
-    }
-
-    while ((*dst++ = *s2++))
-        ;
+    const size_t len1 = strlen(s1);
+    const size_t len2 = strlen(s2);
+    memmove(dst, s1, len1);
+    memmove(dst + len1, s2, len2 + 1);
 }
 
 /* Compare two strings `s1` and `s2`, ignoring case differences (formerly `str_cmp`)
  * Returns the value of difference between the first different bytes of the two strings or `0` if the strings do not differ */
 GCC_PURE int str_casecmp(const char *s1, const char *s2)
 {
-    int c1, c2, diff;
-
-    do
+    for (;;)
     {
-        c1 = *s1++;
-        c2 = *s2++;
+        int c1 = *s1++;
         if (c1 >= 'A' && c1 <= 'Z')
-            c1 |= 32;
+            c1 |= 0x20;
+
+        int c2 = *s2++;
         if (c2 >= 'A' && c2 <= 'Z')
-            c2 |= 32;
-        if ((diff = c1 - c2))
-            return (diff);
+            c2 |= 0x20;
+
+        const int diff = c1 - c2;
+        if (diff || !c1)
+            return diff;
     }
-    while (c1);
-    return 0;
 }
 
 /* Split string `src` with spaces and copy the first line of the second splitted item to `dst` (formerly `str_cut`) */
 void str_split_2nd(char *dst, const char *src)
 {
-    for (;;)
+    src = strchr(src, ' ');
+    if (!src)
     {
-        int cc = *src++;
-        if (!cc)
-        {
-            *dst = '\0';
-            return;
-        }
+        *dst = '\0';
+        return;
+    }
 
-        if (cc == ' ')
-        {
-            while (*src == ' ')
-                src++;
+    do
+    {
+        ++src;
+    } while (*src == ' ');
 
-            while ((cc = *src++))
-            {
-                if (cc == ' ' || cc == '\n' || cc == '\r')
-                    break;
-                *dst++ = cc;
-            }
-
-            *dst = '\0';
-            return;
-        }
+    {
+        const size_t len = strcspn(src, " \n\r");
+        memmove(dst, src, len);
+        dst[len] = '\0';
     }
 }
 
+/* Return a string allocated using `malloc` with the content of string `src`
+ * `pad` is the size in bytes of the space after the string, including the `'\0'` string end
+ * `pad` must > `0`, otherwise a buffer overflow occurs */
 char *str_dup(const char *src, int pad)
 {
-    char *dst;
-
-    dst = (char *)malloc(strlen(src) + pad);
-    strcpy(dst, src);
+    const size_t len = strlen(src);
+    char *const dst = (char *)malloc(len + pad);
+    memcpy(dst, src, len + 1);
     return dst;
 }
 
 /* Similar to the `setdirpath` below, but for some `folder`, use the parent directory as the base directory instead (formerly `str_folder`)
- * When `folder` is not a path to a `.DIR` or `.GEM` file, the parent directory is used as the base directory */
+ * When `folder` is not a path to a `.DIR` or `.GEM` file, the parent directory is used as the base directory
+ * `folder` must contain at least 1 `'/'` character, otherwise the result is undefined
+ * The characters after the last `'/'` (can be empty) is taken as the name of a file in the containing directory
+ * The name of the containing directory must be a single character when the parent directory is used as the base directory
+ * E.g., `fname`: `"file"`
+ * - `folder`: `"gem/brd/test/.DIR"` -> `fpath`: `"gem/brd/test/file"`
+ * - `folder`: `"gem/brd/test/.GEM"` -> `fpath`: `"gem/brd/test/file"`
+ * - `folder`: `"gem/brd/test/Q/F1FRGANQ"` -> `fpath`: `"gem/brd/test/file"` (cf. `setdirpath`)
+ * - `folder`: `"gem/brd/test/@/@class"` -> `fpath`: `"gem/brd/test/file"` (cf. `setdirpath`)
+ * - `folder`: `"gem/.DIR"` -> `fpath`: `"gem/file"`
+ * - `folder`: `"gem/U/F0S8JULU"` -> `fpath`: `"gem/file"` (cf. `setdirpath`) */
 void setdirpath_root(char *fpath, const char *folder, const char *fname)
 {
-    int ch;
-    char *token = NULL;
+    const char *delim = strrchr(folder, '/');
+    if (delim[1] != '.')
+        delim -= 2;
 
-    while ((ch = *folder++))
-    {
-        *fpath++ = ch;
-        if (ch == '/')
-            token = fpath;
-    }
-    if (*token != '.')
-        token -= 2;
-    strcpy(token, fname);
+    const size_t len = delim - folder + 1;
+    memmove(fpath, folder, len);
+    strcpy(fpath + len, fname);
 }
 
-/* Output the path string to `fname` with the containing directory of the file specified with `direct` as the base directory to `fpath` */
+/* Output the path string to `fname` with the containing directory of the file specified with `direct` as the base directory to `fpath`
+ * `direct` must contain at least 1 `'/'` character, otherwise the result is undefined
+ * The characters after the last `'/'` (can be empty) is taken as the name of a file in the containing directory
+ * E.g., `fname`: `"file"`
+ * - `direct`: `"brd/test/.DIR"` -> `fpath`: `"brd/test/file"`
+ * - `direct`: `"brd/test/P/A1E443BP"` -> `fpath`: `"brd/test/P/file"`
+ * - `direct`: `"brd/test/"` -> `fpath`: `"brd/test/file"` */
 void setdirpath(char *fpath, const char *direct, const char *fname)
 {
-    int ch;
-    char *target = NULL;
-
-    while ((ch = *direct))
-    {
-        *fpath++ = ch;
-        if (ch == '/')
-            target = fpath;
-        direct++;
-    }
-
-    strcpy(target, fname);
+    const char *const delim = strrchr(direct, '/');
+    const size_t len = delim - direct + 1;
+    memmove(fpath, direct, len);
+    strcpy(fpath + len, fname);
 }
 
 /* ----------------------------------------------------  */
@@ -180,7 +172,7 @@ int from_parse(const char *from, char *addr, char *nick)
 
     {
         int cc;
-        for (from_end = from; (cc = *from_end); from_end++)
+        for (from_end = from; (cc = *from_end); ++from_end)
         {
             if (cc == '<')
                 langle = from_end;
@@ -205,13 +197,13 @@ int from_parse(const char *from, char *addr, char *nick)
             const char *nick_head = from;
             if (*nick_head == '(' && nick_end[-1] == ')')
             {
-                nick_head++;
-                nick_end--;
+                ++nick_head;
+                --nick_end;
             }
             if (*nick_head == '"' && nick_end[-1] == '"')
             {
-                nick_head++;
-                nick_end--;
+                ++nick_head;
+                --nick_end;
             }
             strlcpy(nick, nick_head, nick_end - nick_head + 1);
             mmdecode_str(nick);
@@ -232,11 +224,11 @@ int from_parse(const char *from, char *addr, char *nick)
             {
                 from_end = nick_head - 1;
 
-                nick_head++;
+                ++nick_head;
                 if (*nick_head == '"' && nick_end[-1] == '"')
                 {
-                    nick_head++;
-                    nick_end--;
+                    ++nick_head;
+                    --nick_end;
                 }
                 strlcpy(nick, nick_head, nick_end - nick_head + 1);
                 mmdecode_str(nick);
@@ -248,35 +240,29 @@ int from_parse(const char *from, char *addr, char *nick)
     return 0;
 }
 
+
+/* Return whether string `tag` is present in the token list string `list`, whose items are delimited with `'/'` characters */
 GCC_PURE bool str_has(const char *list, const char *tag)
 {
-    int len = strlen(tag);
+    const size_t len = strlen(tag);
     for (;;)
     {
-        int cc = list[len];
+        const int cc = list[len];
         if ((!cc || cc == '/') && !str_ncasecmp(list, tag, len))
             return true;
-
-        for (;;)
-        {
-            cc = *list;
-            if (!cc)
-                return false;
-            list++;
-            if (cc == '/')
-                break;
-        }
+        list = strchr(list, '/');
+        if (!list)
+            return false;
+        ++list;
     }
 }
 
+/* Return a polynomial rolling hash for string `str` with specifying the initial value to be `seed` and the multiplier to be `mult_base`
+ * The most significant bit of the result is set to `0` */
 GCC_PURE int str_hash_mult(const char *str, unsigned int seed, unsigned int mult_base)
 {
-    unsigned int cc;
-
-    while ((cc = *str++))
-    {
+    for (unsigned int cc; (cc = *str); ++str)
         seed = mult_base * seed + cc;
-    }
     return (seed & 0x7fffffff);
 }
 
@@ -299,12 +285,12 @@ GCC_PURE int hash32(const char *str)
 /* Return the length of string `str` without spaces (formerly `str_len) */
 GCC_PURE int str_len_nospace(const char *str)
 {
-    int cc, len;
+    int len = 0;
 
-    for (len = 0; (cc = *str); str++)
+    for (int cc; (cc = *str); ++str)
     {
         if (cc != ' ')
-            len++;
+            ++len;
     }
 
     return len;
@@ -313,34 +299,33 @@ GCC_PURE int str_len_nospace(const char *str)
 /* Convert string `str` to lowercase and output the result to buffer `dst` */
 void str_lower(char *dst, const char *src)
 {
-    int ch;
-
-    do
+    for (;;)
     {
-        ch = *src++;
+        int ch = *src++;
         if (ch >= 'A' && ch <= 'Z')
             ch |= 0x20;
         *dst++ = ch;
+        if (!ch)
+            return;
     }
-    while (ch);
 }
 
 /* Convert string `str` to lowercase with DBCS characters handled and output the result to buffer `dst` (formerly `str_lowest`) */
 void str_lower_dbcs(char *dst, const char *src)
 {
-    int ch;
-    int in_dbcs = 0;               /* 1: 前一碼是中文字 */
+    bool in_dbcs = false;          /* 1: 前一碼是中文字 */
 
-    do
+    for (;;)
     {
-        ch = *src++;
+        int ch = *src++;
         if (in_dbcs || IS_DBCS_HI(ch))
-            in_dbcs ^= 1;
+            in_dbcs = !in_dbcs;
         else if (ch >= 'A' && ch <= 'Z')
             ch |= 0x20;
         *dst++ = ch;
+        if (!ch)
+            return;
     }
-    while (ch);
 }
 
 /* Compare two strings `s1` and `s2` for at most `n` bytes, ignoring case differences (formerly `str_ncmp`)
@@ -349,37 +334,32 @@ GCC_PURE int str_ncasecmp(const char *s1, const char *s2, int n)
 {
     while (n--)
     {
-        int c1, c2;
-
-        c1 = *s1++;
+        int c1 = *s1++;
         if (c1 >= 'A' && c1 <= 'Z')
             c1 |= 0x20;
 
-        c2 = *s2++;
+        int c2 = *s2++;
         if (c2 >= 'A' && c2 <= 'Z')
             c2 |= 0x20;
 
-        if (c1 -= c2)
-            return (c1);
-
-        if (!c2)
-            break;
+        const int diff = c1 - c2;
+        if (diff || !c1)
+            return diff;
     }
 
     return 0;
 }
 
-/* Remove trailing spaces and tabs from the string end `str` in-place (formerly `str_strip`) */
-void str_rstrip_tail(                    /* remove trailing space */
-                  char *str)
+/* Remove trailing spaces and tabs from the string end `str` in-place (formerly `str_strip`)
+ * There must be at least 1 character which is neither space nor tab before `str`, otherwise a buffer overrun occurs */
+void str_rstrip_tail(char *str)
 {
-    int ch;
-
-    do
+    for (;;)
     {
-        ch = *(--str);
+        const int ch = *--str;
+        if (!(ch == ' ' || ch == '\t'))
+            break;
     }
-    while (ch == ' ' || ch == '\t');
     str[1] = '\0';
 }
 
@@ -395,47 +375,29 @@ void str_rstrip_tail(                    /* remove trailing space */
  */
 void str_scpy(char *dst, const char *src, int n)
 {
-    char *end;
-
-    end = dst + n - 1;
-
-    do
+    /* Copy as many bytes as will fit */
+    const size_t slen = (n > 0) ? str_nlen(src, n) : 0;
+    if (slen < n)
     {
-        n = (dst >= end) ? 0 : *src++;
-        *dst++ = n;
+        memmove(dst, src, slen + 1); /* Copy the `'\0'` end */
     }
-    while (n);
+    else if (n > 0)
+    {
+        memmove(dst, src, n - 1);
+
+        /* Not enough room in dst, add NUL */
+        dst[n - 1] = '\0';    /* NUL-terminate dst */
+    }
 }
 
+/* Return a string allocated using `malloc` with the content of the first `len` characters from string `src` */
 char *str_ndup(const char *src, int len)
 {
-    char *dst, *str;
-    const char *str_src, *end;
-
-    str_src = src;
-    end = src + len;
-    do
-    {
-        if (!*str_src++)
-        {
-            end = str_src;
-            break;
-        }
-    }
-    while (str_src < end);
-
-    dst = (char *)malloc(end - src);
-
-    for (str = dst; (*str = *src); src++)
-    {
-        str++;
-        if (src >= end)
-        {
-            *str = '\0';
-            break;
-        }
-    }
-
+    const size_t slen = (len > 0) ? str_nlen(src, len - 1) + 1 : !*src;
+    char *const dst = (char *)malloc(slen);
+    memcpy(dst, src, slen + 1);
+    if (dst[slen])
+        dst[slen + 1] = '\0';
     return dst;
 }
 
@@ -451,39 +413,27 @@ GCC_PURE size_t str_nlen(const char *str, size_t maxlen)
     return maxlen;
 }
 
-/* str_pat : wild card string pattern match support ? * \ */
-
+/* str_pat: String match with wildcard pattern, supporting wildcard characters `?`, `*`, & `\`
+ * Returns `true` when string `str` matches the pattern specified with string `pat` */
 GCC_PURE bool str_pat(const char *str, const char *pat)
 {
-    const char *xstr = NULL, *xpat;
-    int cs, cp;
+    const char *xstr = NULL;
+    const char *xpat = NULL;
 
-    xpat = NULL;
-
-    while ((cs = *str))
+    for (int cs; (cs = *str); ++str)
     {
-        cp = *pat++;
+        int cp = *pat++;
         if (cp == '*')
         {
-            for (;;)
+            do
             {
-                cp = *pat;
-
-                if (cp == '\0')
+                cp = *pat++;
+                if (!cp)
                     return true;
-
-                pat++;
-
-                if (cp != '*')
-                {
-                    xpat = pat;
-                    xstr = str;
-                    break;
-                }
-            }
+            } while (cp == '*');
+            xpat = pat;
+            xstr = str;
         }
-
-        str++;
 
         if (cp == '?')
             continue;
@@ -493,28 +443,29 @@ GCC_PURE bool str_pat(const char *str, const char *pat)
 
 #ifdef  CASE_IN_SENSITIVE
         if (cp >= 'A' && cp <= 'Z')
-            cp += 0x20;
-
+            cp |= 0x20;
         if (cs >= 'A' && cs <= 'Z')
-            cs += 0x20;
+            cs |= 0x20;
 #endif
-
         if (cp == cs)
             continue;
 
-        if (xpat == NULL)
-            return false;
+        if (xpat)
+        {
+            pat = xpat;
+            str = xstr++;
+            continue;
+        }
 
-        pat = xpat;
-        str = ++xstr;
+        return false;
     }
 
-    while ((cp = *pat))
     {
-        if (cp != '*')
+        int cp;
+        while ((cp = *pat) == '*')
+            ++pat;
+        if (cp)
             return false;
-
-        pat++;
     }
 
     return true;
@@ -524,39 +475,31 @@ GCC_PURE bool str_pat(const char *str, const char *pat)
 /* Reverse the string `src`, output the result to a buffer from the buffer end `dst`, and return the string head of `dst` (formerly `str_rev`) */
 char *str_rev_tail(char *dst, const char *src)
 {
-    int cc;
-
     *dst = '\0';
-
-    while ((cc = *src))
-    {
+    for (int cc; (cc = *src); ++src)
         *--dst = cc;
-        src++;
-    }
     return dst;
 }
 
 /* Encode string `str` in-place using a form of run-length encoding and return the encoded string length (formerly `str_rle`)
  * Encoding scheme: 4+ repeated bytes (value > `'\b'`) => `'\b' <repeat length in 8-bit binary>` */
-int rle_encode(                    /* run-length encoding */
-               char *str)
+int rle_encode(char *str)
 {
-    char *src;
-    char *dst;
-    int cc, rl;
+    const char *src = str;
+    char *dst = str;
 
-    dst = src = str;
-    while ((cc = *src++))
+    for (int cc; (cc = *src); ++src)
     {
-        if (cc > 8 && cc == src[0] && cc == src[1] && cc == src[2])
+        if (cc > 8 && cc == src[1] && cc == src[2] && cc == src[3])
         {
-            src += 2;
-            rl = 4;
-            while (*++src == cc)
+            int rl = 4;
+            src += 4;
+            while (rl < 0xff && *src == cc)
             {
-                if (++rl >= 255)
-                    break;
+                ++rl;
+                ++src;
             }
+            --src;
 
             *dst++ = 8;
             *dst++ = rl;
@@ -568,129 +511,104 @@ int rle_encode(                    /* run-length encoding */
     return dst - str;
 }
 
-#ifndef NULL
-#define NULL    (char*) 0
-#endif
-
-/* Find and return the first occurrence of lowercase pattern `tag` in string `str` or `NULL` if not found, ignoring the case of `str` (formerly `str_str`) */
-GCC_PURE char *str_casestr(const char *str, const char *tag      /* non-empty lower case pattern */
-    )
+/* Find and return the first occurrence of lowercase pattern `tag` in string `str` or `NULL` if not found, ignoring the case of `str` (formerly `str_str`)
+ * `tag` is a non-empty lowercase string */
+GCC_PURE char *str_casestr(const char *str, const char *tag)
 {
-    int cc, c1, c2;
-    const char *p1, *p2;
+    const int c2_head = *tag;
 
-    cc = *tag++;
-
-    while ((c1 = *str))
+    for (int c1_head; (c1_head = *str); ++str)
     {
-        if (c1 >= 'A' && c1 <= 'Z')
-            c1 |= 0x20;
+        if (c1_head >= 'A' && c1_head <= 'Z')
+            c1_head |= 0x20;
 
-        if (c1 == cc)
+        if (c1_head == c2_head)
         {
-            p1 = str;
-            p2 = tag;
+            const char *p1 = str + 1;
+            const char *p2 = tag + 1;
 
-            do
+            for (;;)
             {
-                c2 = *p2;
+                int c2 = *p2++;
                 if (!c2)
                     return (char *)str;
 
-                p2++;
-                c1 = *++p1;
+                int c1 = *p1++;
                 if (c1 >= 'A' && c1 <= 'Z')
                     c1 |= 0x20;
-            }
-            while (c1 == c2);
-        }
 
-        str++;
+                if (c1 != c2)
+                    break;
+            }
+        }
     }
 
     return NULL;
 }
 
-/* Find and return the first occurrence of lowercase pattern `tag` in string `str` or `NULL` if not found, ignoring the case of `str` and handling DBCS characters (formerly `str_sub`) */
-GCC_PURE char *str_casestr_dbcs(const char *str, const char *tag
-                                        /* non-empty lowest case pattern */
-    )
+/* Find and return the first occurrence of lowercase pattern `tag` in string `str` or `NULL` if not found, ignoring the case of `str` and handling DBCS characters (formerly `str_sub`)
+ * `tag` is an non-empty lowercase string and may contain DBCS characters */
+GCC_PURE char *str_casestr_dbcs(const char *str, const char *tag)
 {
-    int cc, c1, c2;
-    const char *p1, *p2;
-    int in_dbcs = 0;                    /* 1: 前一碼是中文字 */
-    int in_dbcsi;                       /* 1: 前一碼是中文字 */
+    const int c2_head = *tag;
+    bool in_dbcs = false;               /* 1: 前一碼是中文字 */
 
-    cc = *tag++;
-
-    while ((c1 = *str))
+    for (int c1_head; (c1_head = *str); ++str)
     {
         if (in_dbcs)
         {
-            in_dbcs ^= 1;
+            in_dbcs = !in_dbcs;
+            continue;
         }
-        else
+
+        if (IS_DBCS_HI(c1_head))
+            in_dbcs = !in_dbcs;
+        else if (c1_head >= 'A' && c1_head <= 'Z')
+            c1_head |= 0x20;
+
+        if (c1_head == c2_head)
         {
-            if (IS_DBCS_HI(c1))
-                in_dbcs ^= 1;
-            else if (c1 >= 'A' && c1 <= 'Z')
-                c1 |= 0x20;
+            const char *p1 = str + 1;
+            const char *p2 = tag + 1;
+            bool in_dbcsi = in_dbcs; /* 1: 前一碼是中文字 */
 
-            if (c1 == cc)
+            for (;;)
             {
-                p1 = str;
-                p2 = tag;
-                in_dbcsi = in_dbcs;
+                int c2 = *p2++;
+                if (!c2)
+                    return (char *)str;
 
-                do
-                {
-                    c2 = *p2;
-                    if (!c2)
-                        return (char *)str;
+                int c1 = *p1++;
+                if (in_dbcsi || IS_DBCS_HI(c1))
+                    in_dbcsi = !in_dbcsi;
+                else if (c1 >= 'A' && c1 <= 'Z')
+                    c1 |= 0x20;
 
-                    p2++;
-                    c1 = *++p1;
-                    if (in_dbcsi || IS_DBCS_HI(c1))
-                        in_dbcsi ^= 1;
-                    else if (c1 >= 'A' && c1 <= 'Z')
-                        c1 |= 0x20;
-                }
-                while (c1 == c2);
+                if (c1 != c2)
+                    break;
             }
         }
-
-        str++;
     }
 
     return NULL;
 }
 
+/* Return the string end of string `str` */
 GCC_PURE char *str_tail(const char *str)
 {
-    while (*str)
-    {
-        str++;
-    }
-    return (char *)str;
+    return (char *)strchr(str, '\0');
 }
 
 /* Remove trailing spaces from string `buf` in-place (formerly `str_trim`) */
-void str_rtrim(                    /* remove trailing space */
-                 char *buf)
+void str_rtrim(char *buf)
 {
-    char *p = buf;
-
-    while (*p)
-        p++;
-    while (--p >= buf)
-    {
-        if (*p == ' ')
-            *p = '\0';
-        else
-            break;
-    }
+    char *p = strchr(buf, '\0');
+    while (--p >= buf && *p == ' ')
+        *p = '\0';
 }
 
+/* Return the begin of article title in string `title` with article type tags skipped and output the article type to `pmode`
+ * If `pmode` is `NULL`, the article type is discard and is not output to `pmode` */
 char *str_ttl_hdrmode(const char *title, enum HdrMode *pmode)
 {
     static const char *const title_marks[] = {STR_REPLY, STR_FORWARD};
@@ -703,7 +621,7 @@ char *str_ttl_hdrmode(const char *title, enum HdrMode *pmode)
         {
             title += strlen(title_marks[i]);
             if (*title == ' ')
-                title++;
+                ++title;
             if (pmode)
             {
                 switch (i)
@@ -725,6 +643,7 @@ char *str_ttl_hdrmode(const char *title, enum HdrMode *pmode)
     return (char *)title;
 }
 
+/* Return the begin of article title in string `title` with article type tags skipped */
 GCC_PURE char *str_ttl(const char *title)
 {
     return str_ttl_hdrmode(title, NULL);
@@ -739,18 +658,21 @@ GCC_PURE char *str_ttl(const char *title)
 /* update :   /  /                                       */
 /*-------------------------------------------------------*/
 
-//const char*
+/* Thor: 結果是將src xor到dst上, 若有0結果, 則不變,
+         所以dst長度必大於等於 src(以字串而言) */
+/* Perform bitwise `xor` on binary data `dst` in-place with string `src`
+ * The string length of `src` is the length of bytes where `xor` is performed
+ * Bytes with `xor` result `0` are kept with their original values */
 void str_xor(char *dst,         /* Thor.990409: 任意長度任意binary seq, 至少要 src那麼長 */
              const char *src    /* Thor.990409: 任意長度str, 不含 \0 */
-             /* Thor: 結果是將src xor到dst上, 若有0結果, 則不變,
-                      所以dst長度必大於等於 src(以字串而言) */
     )
 {
-    for (; *src; src++, dst++)
+    for (int cc; (cc = *src); ++src)
     {
-        int cc;
-        if ((cc = *src ^ *dst))
-            *dst = cc;
+        const int cxor = cc ^ *dst;
+        if (cxor)
+             *dst = cxor;
+        ++dst;
     }
 }
 
@@ -765,31 +687,17 @@ void str_xor(char *dst,         /* Thor.990409: 任意長度任意binary seq, 至少要 s
  */
 size_t strlcat(char *dst, const char *src, size_t siz)
 {
-    char *d = dst;
-    const char *s = src;
-    size_t n = siz;
-    size_t dlen;
-
     /* Find the end of dst and adjust bytes left but don't go past end */
-    while (n-- != 0 && *d != '\0')
-        d++;
-    dlen = d - dst;
-    n = siz - dlen;
+    const size_t dlen = str_nlen(dst, siz);
+    if (dlen == siz)
+        return siz + strlen(src);
 
-    if (n == 0)
-        return (dlen + strlen(s));
-    while (*s != '\0')
-    {
-        if (n != 1)
-        {
-            *d++ = *s;
-            n--;
-        }
-        s++;
-    }
-    *d = '\0';
+    char *const d = dst + dlen;
+    const size_t slen = str_nlen(src, siz - 1 - dlen);
+    memmove(d, src, slen);
+    d[slen] = '\0';
 
-    return (dlen + (s - src));    /* count does not include NUL */
+    return dlen + slen + strlen(src + slen); /* count does not include NUL */
 }
 
 /* strlcpy based on OpenBSDs strlcpy */
@@ -798,32 +706,21 @@ size_t strlcat(char *dst, const char *src, size_t siz)
  * will be copied.  Always NUL terminates (unless siz == 0).
  * Returns strlen(src); if retval >= siz, truncation occurred.
  */
-
 size_t strlcpy(char *dst, const char *src, size_t siz)
 {
-    char *d = dst;
-    const char *s = src;
-    size_t n = siz;
-
     /* Copy as many bytes as will fit */
-    if (n != 0 && --n != 0)
+    const size_t slen = str_nlen(src, siz);
+    if (slen != siz)
     {
-        do
-        {
-            if ((*d++ = *s++) == 0)
-                break;
-        }
-        while (--n != 0);
+        memmove(dst, src, slen + 1); /* Copy the `'\0'` end */
+    }
+    else if (siz != 0)
+    {
+        memmove(dst, src, siz - 1);
+
+        /* Not enough room in dst, add NUL */
+        dst[siz - 1] = '\0';    /* NUL-terminate dst */
     }
 
-    /* Not enough room in dst, add NUL and traverse rest of src */
-    if (n == 0)
-    {
-        if (siz != 0)
-            *d = '\0';          /* NUL-terminate dst */
-        while (*s++)
-            ;
-    }
-
-    return (s - src - 1);       /* count does not include NUL */
+    return slen + strlen(src + slen); /* count does not include NUL */
 }
