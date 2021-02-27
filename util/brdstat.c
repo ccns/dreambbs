@@ -142,6 +142,15 @@ count_hot(
 }
 
 static void
+count_rotate(
+    BSTAT (*lstat)[24],
+    const BSTAT *stat)
+{
+    memmove(&(*lstat)[0], &(*lstat)[1], sizeof(BSTAT) * 23);
+    memcpy(&(*lstat)[23], stat, sizeof(BSTAT));
+}
+
+static void
 count_board(
     const BRD *brd,
     time_t now)
@@ -149,7 +158,7 @@ count_board(
     struct tm ntime, *xtime;
     BSTATCOUNT bcount;
     char fpath[128], flog[128];
-    BSTAT tmp[24], *base, *head, *tail;
+    BSTAT *base, *head, *tail;
 
     int fd, count, size;
     struct stat st;
@@ -243,30 +252,14 @@ count_board(
     bcount.halfyear.chrono = now;
     bcount.year.chrono = now;
 
-    memcpy(tmp, &(bcount.lhour[1]), sizeof(BSTAT) * 23);
-    memcpy(bcount.lhour, tmp, sizeof(BSTAT) * 23);
-    memcpy(&(bcount.lhour[23]), &(bcount.hour), sizeof(BSTAT));
-
+    count_rotate(&bcount.lhour, &bcount.hour);
     if (ntime.tm_hour == 0)
     {
-        memcpy(tmp, &(bcount.lday[1]), sizeof(BSTAT) * 23);
-        memcpy(bcount.lday, tmp, sizeof(BSTAT) * 23);
-        memcpy(&(bcount.lday[23]), &(bcount.day), sizeof(BSTAT));
-
+        count_rotate(&bcount.lday, &bcount.day);
         if (ntime.tm_wday == 0)
-        {
-            memcpy(tmp, &(bcount.lweek[1]), sizeof(BSTAT) * 23);
-            memcpy(bcount.lweek, tmp, sizeof(BSTAT) * 23);
-            memcpy(&(bcount.lweek[23]), &(bcount.week), sizeof(BSTAT));
-        }
-
+            count_rotate(&bcount.lweek, &bcount.week);
         if (ntime.tm_mday == 1)
-        {
-            memcpy(tmp, &(bcount.lmonth[1]), sizeof(BSTAT) * 23);
-            memcpy(bcount.lmonth, tmp, sizeof(BSTAT) * 23);
-            memcpy(&(bcount.lmonth[23]), &(bcount.month), sizeof(BSTAT));
-        }
-
+            count_rotate(&bcount.lmonth, &bcount.month);
 
         head = base + (year - 1);
         size = BMIN(count, YEAR_HOUR) * sizeof(BSTAT);
