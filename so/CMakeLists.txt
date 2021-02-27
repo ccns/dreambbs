@@ -16,11 +16,7 @@ foreach(module IN LISTS SO)
         add_library(so_${module} OBJECT ${module}.c)
     else()
         add_library(so_${module} MODULE ${module}.c)
-        if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-            target_link_libraries(so_${module} PRIVATE dao -m32)
-        else()
-            target_link_libraries(so_${module} PRIVATE dao)
-        endif()
+        target_link_libraries(so_${module} PRIVATE dao)
         target_compile_definitions(so_${module} PRIVATE
             DL_CURRENT_MODULE_STR="$<TARGET_FILE_NAME:so_${module}>"
         )

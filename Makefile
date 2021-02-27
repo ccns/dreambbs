@@ -57,7 +57,6 @@ export: deprecated
 	@$(EXPORTVAR$(exconf::= WWWGID))
 	@$(EXPORTCONF$(exconf::= BBSHOME)$(exvalue::= \"$(BBSHOME)\"))
 	@$(EXPORTCONF$(exconf::= BBSUTCZONE)$(exvalue::= \"$(BBSUTCZONE)\"))
-	@$("$(ARCHI)" == "64" :? $(EXPORTCONF$(exconf::= _FILE_OFFSET_BITS)$(exvalue::= 64)) :)
 
 configure: deprecated
 	@printf "\033[1;36mGenerating '$(EXPORT_FILE)'...\033[0m\n" >&2

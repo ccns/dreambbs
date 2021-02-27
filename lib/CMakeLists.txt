@@ -14,6 +14,3 @@ add_library(dao STATIC
     attr_lib.c  dns.c       header.c  string.c    xwrite.c
     proc.c      passwd.c  mime.c     logger.c
 )
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    target_link_libraries(dao PRIVATE -m32)
-endif()

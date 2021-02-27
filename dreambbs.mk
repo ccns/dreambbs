@@ -109,25 +109,10 @@ CFLAGS_WARN	+= -Wno-invalid-source-encoding
 .endif
 
 # Architecture information
-MULTIARCH_NATIVE	!= $(CC) -dumpmachine | sed 's/^\(.*\)-\(.*\)-\(.*\)-\(.*\)$$/\1-\3-\4/'
+MULTIARCH	!= $(CC) -dumpmachine | sed 's/^\(.*\)-\(.*\)-\(.*\)-\(.*\)$$/\1-\3-\4/'
 
 .if $(ARCHI)=="64"
-CFLAGS_ARCHI	+= -m32
-LDFLAGS_ARCHI	+= -m32
-
-# Set up the search paths for `pkg-config`
-MULTIARCH	= $(MULTIARCH_NATIVE:S/x86_64/i386/g)
-TRIPLETS	= $(MULTIARCH_NATIVE:S/x86_64/i486/g) $(MULTIARCH_NATIVE:S/x86_64/i686/g)
-
-PKG_CONFIG_LIBDIR	:= $(/usr/local/lib/$(MULTIARCH)/pkgconfig:L:Q)
-PKG_CONFIG_LIBDIR	+= $(TRIPLETS:@v@$(/usr/local/$v/lib/pkgconfig:L:Q)@)
-PKG_CONFIG_LIBDIR	+= $(/usr/local/share/pkgconfig:L:Q)
-PKG_CONFIG_LIBDIR	:= $(PKG_CONFIG_LIBDIR) $(PKG_CONFIG_LIBDIR:S/local\///g)
-PKG_CONFIG_LIBDIR	:= "$(PKG_CONFIG_LIBDIR:ts:)"
-.export PKG_CONFIG_LIBDIR
-
-.else
-MULTIARCH	= $(MULTIARCH_NATIVE)
+CFLAGS_ARCHI	+= -fPIC
 .endif
 
 .if $(OPSYS) == "GNU/Linux"

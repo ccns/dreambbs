@@ -29,14 +29,6 @@ CFLAGS_SO += -fPIC
 
 LDFLAGS_SO = -fPIC -shared -Wl,-G
 
-.if $(ARCHI)=="64"
-.if $(OPSYS) == "FreeBSD"
-    LDFLAGS_SO_ARCHI += -m32
-.else
-    LDFLAGS_SO_ARCHI += -m32
-.endif #OPSYS
-.endif #ARCHI
-
 LDFLAGS_SO += -L$(SRCROOT)/lib -ldao
 
 .o.so:  ;   $(CC) $*.o -o $*.so $(LDFLAGS_SO) $(LDFLAGS_SO_ARCHI)

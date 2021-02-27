@@ -213,33 +213,13 @@ endif()
 # Architecture information
 execute_process(
     COMMAND ${CMAKE_C_COMPILER} -dumpmachine
-    OUTPUT_VARIABLE MULTIARCH_NATIVE
+    OUTPUT_VARIABLE MULTIARCH
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-string(REGEX REPLACE "^(.*)-(.*)-(.*)-(.*)$" \\1-\\3-\\4 MULTIARCH_NATIVE ${MULTIARCH_NATIVE})
+string(REGEX REPLACE "^(.*)-(.*)-(.*)-(.*)$" \\1-\\3-\\4 MULTIARCH ${MULTIARCH})
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    add_compile_options(-m32)
-    link_libraries(-m32)
-    set(_FILE_OFFSET_BITS 64)
-
-    # Set up the search paths for `pkg-config`
-    string(REPLACE x86_64 i386 MULTIARCH ${MULTIARCH_NATIVE})
-    string(REGEX REPLACE "^(.*)x86_64(.*)$" "\\1i486\\2;\\1i686\\2" TRIPLETS ${MULTIARCH_NATIVE})  # Replace into a list with 2 items
-
-    set(PKG_CONFIG_LIBDIR_LOCAL /usr/local/lib/${MULTIARCH}/pkgconfig)
-    foreach(triplet IN LISTS TRIPLETS)
-        list(APPEND PKG_CONFIG_LIBDIR_LOCAL /usr/local/${triplet}/lib/pkgconfig)
-    endforeach(triplet)
-    list(APPEND PKG_CONFIG_LIBDIR_LOCAL /usr/local/share/pkgconfig)
-
-    string(REPLACE local/ "" PKG_CONFIG_LIBDIR_NONLOCAL "${PKG_CONFIG_LIBDIR_LOCAL}")
-    set(PKG_CONFIG_LIBDIR ${PKG_CONFIG_LIBDIR_LOCAL} ${PKG_CONFIG_LIBDIR_NONLOCAL})
-    string(REPLACE ";" : PKG_CONFIG_LIBDIR "${PKG_CONFIG_LIBDIR}")  # Replace the list delimiter
-    set(ENV{PKG_CONFIG_LIBDIR} \"${PKG_CONFIG_LIBDIR}\")  # Quote it
-
-else()
-    set(MULTIARCH ${MULTIARCH_NATIVE})
+    add_compile_options(-fPIC)
 endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
