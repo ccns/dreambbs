@@ -248,6 +248,10 @@ template <class T>
 #define MACRO_DEPRECATED(msg) \
     CPP_PRAGMA(GCC warning CPP_STR(deprecated macro: msg))
 
+/* Forbidden macro */
+#define MACRO_FORBIDDEN(msg) \
+    CPP_PRAGMA(GCC error CPP_STR(forbidden macro: msg))
+
 /* Macros for limiting the value range */
 
 #ifdef __cplusplus
