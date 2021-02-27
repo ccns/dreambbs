@@ -775,6 +775,7 @@ typedef struct {
 static const TitleMark str_ttl_marks[] = {
     {STR_REPLY, HDRMODE_REPLY},
     {STR_FORWARD, HDRMODE_FORWARD},
+    {STR_FORWARD_TAG, HDRMODE_FORWARD},
 };
 
 /* Return the begin of article title in string `title` with article type tags skipped and output the article type to `pmode`
