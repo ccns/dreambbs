@@ -488,6 +488,7 @@ bsmtp_file(
     {
         int i;
         const char *const alias[] = SMTP_SERVER, *str_alias;
+        sock = -1;
         for (i=0; (str_alias = alias[i]); i++)
         {
             sock = dns_open(str_alias, 25);
