@@ -166,11 +166,19 @@ template <class T>
 
 #include <stddef.h>
 
+/* Helper macro for getting typed pointer of a member */
+#define NULL_MEMBER_PTR(Type, memb) \
+    (&(((Type *)NULL)->memb))
+
+/* Get the size of the member */
+#define MEMBER_SIZE(Type, memb) \
+    sizeof(*NULL_MEMBER_PTR(Type, memb))
+
 #define FLEX_SIZE       /* For declaration of flexible array member */
 
 #define SIZEOF_FLEX(Type, n) \
     (offsetof(Type, Type##_FLEX_MEMBER) \
-      + (n) * sizeof(((Type *)NULL)->Type##_FLEX_MEMBER[0]))
+      + (n) * sizeof((*NULL_MEMBER_PTR(Type, Type##_FLEX_MEMBER))[0]))
 
 #define COUNTOF(x)      (sizeof(x)/sizeof(x[0]))
 
