@@ -88,6 +88,33 @@ GCC_PURE int str_casecmp(const char *s1, const char *s2)
     }
 }
 
+/* Compare two strings `s1` and `s2`, ignoring case differences and handling DBCS characters
+ * Returns the value of difference between the first different bytes of the two strings or `0` if the strings do not differ */
+GCC_NONNULLS
+GCC_PURE int str_casecmp_dbcs(const char *s1, const char *s2)
+{
+    bool in_dbcs1 = false;
+    bool in_dbcs2 = false;
+    for (;;)
+    {
+        int c1 = *s1++;
+        if (in_dbcs1 || IS_DBCS_HI(c1))
+            in_dbcs1 = !in_dbcs1;
+        else if (c1 >= 'A' && c1 <= 'Z')
+            c1 |= 0x20;
+
+        int c2 = *s2++;
+        if (in_dbcs2 || IS_DBCS_HI(c2))
+            in_dbcs2 = !in_dbcs2;
+        else if (c2 >= 'A' && c2 <= 'Z')
+            c2 |= 0x20;
+
+        const int diff = c1 - c2;
+        if (diff || !c1)
+            return diff;
+    }
+}
+
 /* Split string `src` with spaces and copy the first line of the second splitted item to `dst` (formerly `str_cut`) */
 GCC_NONNULLS
 void str_split_2nd(char *dst, const char *src)
@@ -400,6 +427,35 @@ GCC_PURE int str_ncasecmp(const char *s1, const char *s2, int n)
 
         int c2 = *s2++;
         if (c2 >= 'A' && c2 <= 'Z')
+            c2 |= 0x20;
+
+        const int diff = c1 - c2;
+        if (diff || !c1)
+            return diff;
+    }
+
+    return 0;
+}
+
+/* Compare two strings `s1` and `s2` for at most `n` bytes, ignoring case differences and handling DBCS characters
+ * Returns the value of difference between the first different bytes of the two strings or `0` if the first `n` bytes of the two strings do not differ */
+GCC_NONNULLS
+GCC_PURE int str_ncasecmp_dbcs(const char *s1, const char *s2, int n)
+{
+    bool in_dbcs1 = false;
+    bool in_dbcs2 = false;
+    while (n--)
+    {
+        int c1 = *s1++;
+        if (in_dbcs1 || IS_DBCS_HI(c1))
+            in_dbcs1 = !in_dbcs1;
+        else if (c1 >= 'A' && c1 <= 'Z')
+            c1 |= 0x20;
+
+        int c2 = *s2++;
+        if (in_dbcs2 || IS_DBCS_HI(c2))
+            in_dbcs2 = !in_dbcs2;
+        else if (c2 >= 'A' && c2 <= 'Z')
             c2 |= 0x20;
 
         const int diff = c1 - c2;
