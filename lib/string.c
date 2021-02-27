@@ -776,6 +776,8 @@ static const TitleMark str_ttl_marks[] = {
     {STR_REPLY, HDRMODE_REPLY},
     {STR_FORWARD, HDRMODE_FORWARD},
     {STR_FORWARD_TAG, HDRMODE_FORWARD},
+    {STR_ANNOUNCE, HDRMODE_ANNOUNCE},
+    {STR_ANNOUNCE_EN, HDRMODE_ANNOUNCE},
 };
 
 /* Return the begin of article title in string `title` with article type tags skipped and output the article type to `pmode`

@@ -352,6 +352,8 @@
 #define STR_REPLY       "Re:"
 #define STR_FORWARD     "Fw:"
 #define STR_FORWARD_TAG "[Âà¿ý]"
+#define STR_ANNOUNCE    "[¤½§i]"
+#define STR_ANNOUNCE_EN "[Announce]"
 
 #define STR_LINE        "\n" \
 "> -------------------------------------------------------------------------- <\n\n"
