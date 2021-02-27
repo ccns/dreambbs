@@ -1445,7 +1445,9 @@ static int get_port(int argc, char *const argv[], const char **p_unix_path)
     return 0;
 }
 
-static void start_daemon(int argc, char *const argv[])
+/* Returns the file descriptor for `accept()` connections
+ * The file descriptor returned is assumed to be > `32` */
+static int start_daemon(int argc, char *const argv[])
 {
     struct addrinfo hints = {0};
     struct addrinfo *hosts;
@@ -1542,7 +1544,7 @@ static void start_daemon(int argc, char *const argv[])
 
         sprintf(data, "%d\t%s\t%d\tinetd -i\n", getpid(), buf, port);
         f_cat(PID_FILE_INET, data);
-        return;
+        return 0;
     }
 
     close(0);
@@ -1676,6 +1678,8 @@ static void start_daemon(int argc, char *const argv[])
     {
         f_cat(PID_FILE, data);
     }
+
+    return fd;
 }
 
 
@@ -1870,7 +1874,8 @@ static int verify_arg(int argc, char *const argv[])
 
 int main(int argc, char *argv[])
 {
-    int csock;                  /* socket for Master and Child */
+    int lsock;                  /* The socket listening the connections (assumed to be < `32`) */
+    int csock;                  /* The socket for the accepted connection */
     int *totaluser;
     bool is_proxy = false;      /* Whether connection data passing is enabled */
 
@@ -1886,13 +1891,13 @@ int main(int argc, char *argv[])
     if (argc > 1)
     {
         /* Some command-line arguments are passed */
-        start_daemon(argc, argv);
+        lsock = start_daemon(argc, argv);
     }
     else
     {
         /* No command-line arguments; use predefined arguments */
         argv_default[0] = argv[0]; /* Load `argv[0]` for `getopt` */
-        start_daemon(COUNTOF(argv_default), (char *const *)argv_default);
+        lsock = start_daemon(COUNTOF(argv_default), (char *const *)argv_default);
     }
 
     if (unix_path)
@@ -1934,11 +1939,12 @@ int main(int argc, char *argv[])
         struct sockaddr_storage sin;
         int value;
 
-        FD_SET(0, &rfds);
-        if (select(1, &rfds, NULL, NULL, NULL) < 0)
+        FD_SET(lsock, &rfds);
+        if (select(lsock + 1, &rfds, NULL, NULL, NULL) < 0)
             continue;
+
         value = sizeof(sin);
-        csock = accept(0, (struct sockaddr *) &sin, (socklen_t *) &value);
+        csock = accept(lsock, (struct sockaddr *) &sin, (socklen_t *) &value);
         if (csock < 0)
         {
             reaper(0);
@@ -2001,6 +2007,7 @@ int main(int argc, char *argv[])
             continue;
         }
 
+        close(lsock);
         dup2(csock, 0);
         close(csock);
 
