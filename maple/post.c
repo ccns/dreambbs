@@ -2935,7 +2935,7 @@ post_cross_terminator(  /* Thor.0521: ²×·¥¤å³¹¤jªk */
                 if (mode==1)
                     check_mode = strcmp(title, str_ttl(hdr->owner));
                 else if (mode==2)
-                    check_mode = !((int)strstr(hdr->owner, title)|(int)strstr(hdr->title, title));
+                    check_mode = !(strstr(hdr->owner, title) || strstr(hdr->title, title));
                 else
                     check_mode = strcmp(title, str_ttl(hdr->title));
 
