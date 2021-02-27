@@ -2174,7 +2174,7 @@ Every_Z_Favorite(void)
 static int
 Every_Z_Xover(const void *arg)
 {
-    xover((int)arg);
+    xover((int)(unsigned int)(long)arg);
     return 0;
 }
 
