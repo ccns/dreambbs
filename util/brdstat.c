@@ -189,13 +189,13 @@ count_board(
     tail = head + count;
 
     hour = count;
-    day = (count > DAY_HOUR) ? (count - DAY_HOUR + 1) : 1;
-    week = (count > WEEK_HOUR) ? (count - WEEK_HOUR + 1) : 1;
-    twoweek = (count > TWOWEEK_HOUR) ? (count - TWOWEEK_HOUR + 1) : 1;
-    month = (count > MONTH_HOUR) ? (count - MONTH_HOUR + 1) : 1;
-    threemonth = (count > THREEMONTH_HOUR) ? (count - THREEMONTH_HOUR + 1) : 1;
-    halfyear = (count > HALFYEAR_HOUR) ? (count - HALFYEAR_HOUR + 1) : 1;
-    year = (count > YEAR_HOUR) ? (count - YEAR_HOUR + 1) : 1;
+    day = BMAX(count - DAY_HOUR, 0) + 1;
+    week = BMAX(count - WEEK_HOUR, 0) + 1;
+    twoweek = BMAX(count - TWOWEEK_HOUR, 0) + 1;
+    month = BMAX(count - MONTH_HOUR, 0) + 1;
+    threemonth = BMAX(count - THREEMONTH_HOUR, 0) + 1;
+    halfyear = BMAX(count - HALFYEAR_HOUR, 0) + 1;
+    year = BMAX(count - YEAR_HOUR, 0) + 1;
 
     pos = 1;
 
