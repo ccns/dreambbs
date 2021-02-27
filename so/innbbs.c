@@ -16,7 +16,7 @@ typedef struct {
     void (*query_func)(const void *obj);
     int (*add_func)(const char *fpath, const void *old, int pos);
     int (*sync_func)(const void *lhs, const void *rhs);
-    int (*search_func)(const void *obj, const char *key);
+    bool (*search_func)(const void *obj, const char *key);
     bool dirty;
 } InnbbsXyz;
 
@@ -120,12 +120,12 @@ nl_cmp(
 }
 
 
-static int
+static bool
 nl_search(
     const void *nl,
     const char *key)
 {
-    return (int) (str_casestr(((const nodelist_t *)nl) -> name, key) || str_casestr(((const nodelist_t *)nl) -> host, key));
+    return str_casestr(((const nodelist_t *)nl) -> name, key) || str_casestr(((const nodelist_t *)nl) -> host, key);
 }
 
 
@@ -288,12 +288,12 @@ nf_cmp(
 }
 
 
-static int
+static bool
 nf_search(
     const void *nf,
     const char *key)
 {
-    return (int) (str_casestr(((const newsfeeds_t *)nf) -> newsgroup, key) || str_casestr(((const newsfeeds_t *)nf) -> board, key));
+    return str_casestr(((const newsfeeds_t *)nf) -> newsgroup, key) || str_casestr(((const newsfeeds_t *)nf) -> board, key);
 }
 
 
@@ -366,12 +366,12 @@ ncm_cmp(
 }
 
 
-static int
+static bool
 ncm_search(
     const void *ncm,
     const char *key)
 {
-    return (int) (str_casestr(((const ncmperm_t *)ncm) -> issuer, key) || str_casestr(((const ncmperm_t *)ncm) -> type, key));
+    return str_casestr(((const ncmperm_t *)ncm) -> issuer, key) || str_casestr(((const ncmperm_t *)ncm) -> type, key);
 }
 
 
@@ -511,12 +511,12 @@ spam_cmp(
 }
 
 
-static int
+static bool
 spam_search(
     const void *spam,
     const char *key)
 {
-    return (int) (str_casestr(((const spamrule_t *)spam) -> detail, key));
+    return str_casestr(((const spamrule_t *)spam) -> detail, key);
 }
 
 
