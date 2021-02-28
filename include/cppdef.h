@@ -92,16 +92,16 @@
 #define CPP_IF_ON_TEST_true  ,
 
 
-// Test if `conf` is expanded, then select the 0th item of `__VA_ARGS__`,
+// Test if `conf` expands and does not expand to itself, then select the 0th item of `__VA_ARGS__`,
 //    else select the 1st item of `__VA_ARGS__`
-#define IF_DEF_PRIME(conf, ...)  CPP_SELECT_2(conf ## _IS_DEF, CPP_SELECT_1, CPP_SELECT_0,)(__VA_ARGS__)
+#define IF_EXPANDS_PRIME(conf, ...)  CPP_SELECT_2(conf ## _TEST_EXPANDS, CPP_SELECT_1, CPP_SELECT_0,)(__VA_ARGS__)
 
 // Try to expand `conf` and then test whether `conf` is expanded
-#define IF_DEF(conf, ...)  IF_DEF_PRIME(conf, __VA_ARGS__)
+#define IF_EXPANDS(conf, ...)  IF_EXPANDS_PRIME(conf, __VA_ARGS__)
 
-// Usage: `#define <conf>_IS_DEF  IS_DEF_TEST`
-// Not expanded => not defined
-#define IS_DEF_TEST  ,
+// Usage: `#define <conf>_TEST_EXPANDS  IF_EXPANDS_TEST`
+// <conf> remains the name => not expanded
+#define IF_EXPANDS_TEST  ,
 
 
 /* Macros for config-dependent attributes for user or board */

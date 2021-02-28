@@ -129,19 +129,19 @@ VAR const char build_date[]           INI(BUILD_DATE);
 VAR const time_t build_time           INI(BUILD_TIME);
 
 /* Compiler information */
-#define __cplusplus_IS_DEF  IS_DEF_TEST
-#define __clang___IS_DEF  IS_DEF_TEST
+#define __cplusplus_TEST_EXPANDS  IF_EXPANDS_TEST
+#define __clang___TEST_EXPANDS  IF_EXPANDS_TEST
 
 VAR const char build_compiler[]   INI(
-    IF_DEF(__clang__,
+    IF_EXPANDS(__clang__,
         "Clang-" VER_PATCH_STR(__clang_major__, __clang_minor__, __clang_patchlevel__),
         "GCC-" VER_PATCH_STR(__GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__))
 );
-VAR const char build_lang[]       INI(IF_DEF(__cplusplus, "GNU-C++", "GNU-C"));
-VAR const int build_langver       INI(IF_DEF(__cplusplus, (int)__cplusplus, (int)__STDC_VERSION__));
+VAR const char build_lang[]       INI(IF_EXPANDS(__cplusplus, "GNU-C++", "GNU-C"));
+VAR const int build_langver       INI(IF_EXPANDS(__cplusplus, (int)__cplusplus, (int)__STDC_VERSION__));
 
-#undef __cplusplus_IS_DEF
-#undef __clang___IS_DEF
+#undef __cplusplus_TEST_EXPANDS
+#undef __clang___TEST_EXPANDS
 
 /* Client module status information */
 #define MODULE_MultiRecommend     (1U << 0)
