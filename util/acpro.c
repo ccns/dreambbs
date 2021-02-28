@@ -58,7 +58,7 @@ class_parse(
     for (i = 1; i < chn; i++)
     {
         str = chx[i]->title;
-        if (str[len] == '/' && !memcmp(key, str, len))
+        if (str[len] == '/' && !strncmp(key, str, len))
             return CH_END - i;
     }
 

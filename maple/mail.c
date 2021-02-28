@@ -326,7 +326,7 @@ bsmtp(
         fw = fdopen(sock, "w");
 
         fgets(buf, sizeof(buf), fr);
-        if (memcmp(buf, "220", 3))
+        if (strncmp(buf, "220", 3))
             goto smtp_error;
         while (buf[3] == '-') /* maniac.bbs@WMStar.twbbs.org 2000.04.18 */
             fgets(buf, sizeof(buf), fr);
@@ -337,7 +337,7 @@ bsmtp(
     do \
     { \
         fgets(buf, sizeof(buf), fr); \
-        if (memcmp(buf, "250", 3)) \
+        if (strncmp(buf, "250", 3)) \
             goto smtp_error; \
     } while (buf[3] == '-'); \
 } while (0)
@@ -425,7 +425,7 @@ bsmtp(
         fflush(fw);
 
         fgets(buf, sizeof(buf), fr);
-        if (memcmp(buf, "250", 3))
+        if (strncmp(buf, "250", 3))
             goto smtp_error;
 
         fputs("QUIT\r\n", fw);
@@ -507,11 +507,11 @@ m_verify(void)
     str_rtrim(info); /* Thor: 去尾巴, for ptelnet自動加空白 */
     str_rtrim(sign);
 
-    if (!memcmp("※ X-Info: ", p = info, 11))
+    if (!strncmp("※ X-Info: ", p = info, 11))
         p += 11;
     while (*p == ' ') p++; /* Thor: 去前頭 */
 
-    if (!memcmp("※ X-Sign: ", q = sign, 11))
+    if (!strncmp("※ X-Sign: ", q = sign, 11))
         q += 11;
     while (*q == ' ') q++;
 
@@ -1569,7 +1569,7 @@ multi_send(
         fp = fopen(quote_file, "r");
         while (fgets(buf, sizeof(buf), fp))
         {
-            if (memcmp(buf, "※ ", 3))
+            if (strncmp(buf, "※ ", 3))
             {
                 if (listing)
                     break;
@@ -1590,7 +1590,7 @@ multi_send(
                         }
                     } while ((userid = (char *) strtok(NULL, " \n\r")));
                 }
-                else if (!memcmp(userid, "[通告]", 6))
+                else if (!strncmp(userid, "[通告]", 6))
                     listing = 1;
             }
         }

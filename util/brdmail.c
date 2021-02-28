@@ -106,7 +106,7 @@ mail2brd(
     while (fgets(buf, sizeof(buf), stdin))
     {
 start:
-        if (!memcmp(buf, "From: ", 6))
+        if (!strncmp(buf, "From: ", 6))
         {
             str = buf + 6;
 
@@ -139,7 +139,7 @@ start:
             }
         }
 
-        else if (!memcmp(buf, "Subject: ", 9))
+        else if (!strncmp(buf, "Subject: ", 9))
         {
             str_ansi(title, buf + 9, sizeof(title));
             /* mmdecode_str(title); */
@@ -159,7 +159,7 @@ start:
             }
         }
 
-        else if (!memcmp(buf, "Content-Type: ", 14))
+        else if (!strncmp(buf, "Content-Type: ", 14))
         {
             str = buf + 14;
 
@@ -190,7 +190,7 @@ start:
 #endif
         }
 
-        else if (!memcmp(buf, "Content-Transfer-Encoding: ", 27))
+        else if (!strncmp(buf, "Content-Transfer-Encoding: ", 27))
         {
             mm_getencode(buf + 27, &decode);
         }

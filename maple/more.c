@@ -287,8 +287,8 @@ outs_header(    /* 印出檔頭 */
 
     /* 處理檔頭 */
 
-    if ((header_len == LEN_AUTHOR1 && !memcmp(str, header1[0], LEN_AUTHOR1 - 1)) ||
-        (header_len == LEN_AUTHOR2 && !memcmp(str, header2[0], LEN_AUTHOR2 - 1)))
+    if ((header_len == LEN_AUTHOR1 && !strncmp(str, header1[0], LEN_AUTHOR1 - 1)) ||
+        (header_len == LEN_AUTHOR2 && !strncmp(str, header2[0], LEN_AUTHOR2 - 1)))
     {
         /* 作者/看板 檔頭有二欄，特別處理 */
         word = str + header_len;
@@ -309,8 +309,8 @@ outs_header(    /* 印出檔頭 */
 
     for (i = 1; i < LINE_HEADER; i++)
     {
-        if ((header_len == LEN_AUTHOR1 && !memcmp(str, header1[i], LEN_AUTHOR1 - 1)) ||
-            (header_len == LEN_AUTHOR2 && !memcmp(str, header2[i], LEN_AUTHOR2 - 1)))
+        if ((header_len == LEN_AUTHOR1 && !strncmp(str, header1[i], LEN_AUTHOR1 - 1)) ||
+            (header_len == LEN_AUTHOR2 && !strncmp(str, header2[i], LEN_AUTHOR2 - 1)))
         {
             /* 其他檔頭都只有一欄 */
             word = str + header_len;
@@ -459,8 +459,8 @@ more(
         if (i == 0)
         {
             header_len =
-                !memcmp(buf, str_author1, LEN_AUTHOR1) ? LEN_AUTHOR1 :  /* 「作者:」表站內文章 */
-                !memcmp(buf, str_author2, LEN_AUTHOR2) ? LEN_AUTHOR2 :  /* 「發信人:」表轉信文章 */
+                !strncmp(buf, str_author1, LEN_AUTHOR1) ? LEN_AUTHOR1 :  /* 「作者:」表站內文章 */
+                !strncmp(buf, str_author2, LEN_AUTHOR2) ? LEN_AUTHOR2 :  /* 「發信人:」表轉信文章 */
                 0;                                                      /* 沒有檔頭 */
         }
 

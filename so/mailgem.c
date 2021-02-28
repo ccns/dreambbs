@@ -1246,7 +1246,7 @@ const char *fgem)
 
     while (fread(&hdr, sizeof(hdr), 1, fpr) == 1)
     {
-        if ((hdr.xmode & GEM_DROP) && !(memcmp(hdr.title, "·É®ü¬B¿ò [", 10)))
+        if ((hdr.xmode & GEM_DROP) && !(strncmp(hdr.title, "·É®ü¬B¿ò [", 10)))
         {
             if ((xsync = (SyncData *) bsearch(&hdr.chrono, sync_pool, sync_head, sizeof(SyncData), sync_cmp)))
             {

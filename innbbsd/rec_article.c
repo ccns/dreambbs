@@ -376,7 +376,7 @@ cancel_article(
         close(fd);
 
         /* Thor.981221.註解: 外來文章才能被 cancel */
-        if ((len > 10) && !memcmp(buffer, "發信人: ", 8))
+        if ((len > 10) && !strncmp(buffer, "發信人: ", 8))
         {
             char *xfrom, *str;
 

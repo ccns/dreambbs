@@ -450,7 +450,7 @@ main(void)
     {
         fputs(buf, fpw);
 
-        if (!memcmp(buf + 22, "ENTER", 5))
+        if (!strncmp(buf + 22, "ENTER", 5))
         {
             hour = atoi(buf + 9);
             if (hour >= 0 && hour <= 23)
@@ -458,7 +458,7 @@ main(void)
             continue;
         }
 
-        if (!memcmp(buf + 41, "Stay:", 5))
+        if (!strncmp(buf + 41, "Stay:", 5))
         {
             if ((hour = atoi(buf + 47)))
             {

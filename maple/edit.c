@@ -943,7 +943,7 @@ quote_line(
         str++;
     if (qlevel >= qlimit)
     {
-        if (!memcmp(str, "※ ", 3) || !memcmp(str, "==>", 3) ||
+        if (!strncmp(str, "※ ", 3) || !strncmp(str, "==>", 3) ||
             strstr(str, ") 提到:\n"))
             return 0;
     }
@@ -1061,7 +1061,7 @@ ve_quote(
 
                     if (curredit & EDIT_LIST)   /* 去掉 mail list 之 header */
                     {
-                        while (fgets(str, 256, fp) && (!memcmp(str, "※ ", 3)));
+                        while (fgets(str, 256, fp) && (!strncmp(str, "※ ", 3)));
                     }
                 }
 
