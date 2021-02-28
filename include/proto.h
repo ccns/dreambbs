@@ -138,7 +138,6 @@ int ll_del(const char *name);
 GCC_PURE int ll_has(const char *name);
 void ll_out(int row, int column, const char *msg);
 int bsmtp(const char *fpath, const char *title, char *rcpt, int method);
-int bsmtp_file(const char *fpath, const char *title, char *rcpt);
 int m_verify(void);
 int m_total_size(void);
 unsigned int m_quota(void);

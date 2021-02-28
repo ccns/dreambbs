@@ -414,6 +414,7 @@ typedef struct
 #define MQ_UUENCODE     0x01    MACRO_FORBIDDEN(uuencode is no longer supported) /* 先 uuencode 再寄出 */
 #define MQ_JUSTIFY      0x02    /* 身分認證信函 */
 #define MQ_MIME         0x04    /* MIME */
+#define MQ_ATTACH       0x08    /* The mail has attachment files (implies `MQ_MIME`) */
 
 #define CHK_MAIL_NOMSG  0x01
 #define CHK_MAIL_NORMAL 0x02

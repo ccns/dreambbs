@@ -158,8 +158,8 @@ ll_out(
 
 
 #ifdef  BATCH_SMTP
-int
-bsmtp(
+static int
+bsmtp_batch(
     const char *fpath, const char *title, const char *rcpt,
     int method)
 {
@@ -203,8 +203,7 @@ bsmtp(
     cuser.numemail++;           /* 記錄使用者共寄出幾封 Internet E-mail */
     return chrono;
 }
-
-#else
+#endif
 
 /* ----------------------------------------------------- */
 /* (direct) SMTP                                         */
@@ -219,7 +218,8 @@ bsmtp(
     int sock;
     time_t chrono, stamp;
     FILE *fp, *fr, *fw;
-    char *str, buf[512], from[80], subject[80], msgid[80], keyfile[80], valid[10];
+    char *str, buf[512], from[80], subject[80], msgid[80], keyfile[80], valid[10], boundary[256];
+    char fname[256];
 #ifdef HAVE_SIGNED_MAIL
     const char *signature = NULL;
     char prikey[PLAINPASSSIZE];
@@ -231,6 +231,11 @@ bsmtp(
     } sign = {{0}};
 
     *prikey = prikey[PLAINPASSSIZE-1] = sign.str[PLAINPASSSIZE-1] = '\0'; /* Thor.990413:註解: 字串結束 */
+#endif
+
+#ifdef BATCH_SMTP
+    if (!(method & MQ_ATTACH))
+        return bsmtp_batch(fpath, title, rcpt, method);
 #endif
 
     cuser.numemail++;           /* 記錄使用者共寄出幾封 Internet E-mail */
@@ -262,6 +267,12 @@ bsmtp(
     }
     else
     {
+        if (method & MQ_ATTACH)
+        {
+            const struct tm *const xtime = localtime(&chrono);
+            sprintf(fname, "mail_%04d%02d%02d.tgz", xtime->tm_year + 1900, xtime->tm_mon + 1, xtime->tm_mday);
+        }
+
         /* Thor.990125: MYHOSTNAME統一放入 str_host */
         sprintf(from, "%s.bbs@%s", cuser.userid, str_host);
     }
@@ -291,6 +302,9 @@ bsmtp(
     if (sock >= 0)
     {
         archiv32(chrono, msgid);
+
+        if (method & MQ_ATTACH)
+            sprintf(boundary, "----=_NextPart_%s", msgid);
 
         move(b_lines, 0);
         clrtoeol();
@@ -362,10 +376,12 @@ bsmtp(
         /* Thor.990125: 儘可能的像 RFC822 & sendmail的作法, 免得別人不接:p */
         fprintf(fw, "From: %s\r\nTo: %s\r\nSubject: %s\r\nX-Sender: %s (%s)\r\n"
             "Date: %s\r\nMessage-Id: <%s@%s>\r\n"
-            "X-Disclaimer: [%s] 對本信內容恕不負責\r\n\r\n",
+            "X-Disclaimer: [%s] 對本信內容恕不負責\r\n",
             from, rcpt, title, cuser.userid, cuser.username,
             Atime(&stamp), msgid, str_host,
             str_site);
+        if (!(method & MQ_ATTACH))
+            fputs("\r\n", fw);
 
         if (method & MQ_JUSTIFY)        /* 身分認證信函 */
         {
@@ -373,9 +389,19 @@ bsmtp(
                 cuser.userid, cuser.username, rcpt);
         }
 
-        /* ------------------------------------------------- */
-        /* begin of mail body                                */
-        /* ------------------------------------------------- */
+        if (method & MQ_ATTACH)
+        {
+            fprintf(fw, "MIME-Version: 1.0\r\nContent-Type: multipart/mixed;\r\n"
+                    "\tboundary=\"%s\"\r\n\r\n", boundary);
+
+            fprintf(fw, "This is a multi-part message in MIME format.\r\n");
+            fprintf(fw, "--%s\r\nContent-Type: text/plain;\r\n\tcharset=\"big5\"\r\n"
+                    "Content-Transfer-Encoding: 8bit\r\n\r\n附件名稱：%s\r\n", boundary, fname);
+
+            fprintf(fw, "--%s\r\nContent-Type: application/x-compressed;\r\n\tname=\"%s\"\r\n"
+                    "Content-Transfer-Encoding: base64\r\nContent-Disposition: attachment;\r\n"
+                    "\tfilename=\"%s\"\r\n\r\n", boundary, fname, fname);
+        }
 
         if ((fp = fopen(fpath, "r")))
         {
@@ -395,6 +421,9 @@ bsmtp(
             }
             fclose(fp);
         }
+        if (method & MQ_ATTACH)
+            fprintf(fw, "--%s--\r\n", boundary);
+
 #ifdef HAVE_SIGNED_MAIL
         if (!(method & MQ_JUSTIFY) && !rec_get(PRIVATE_KEY, prikey, PLAINPASSSIZE-1, 0))
         /* Thor.990413: 除了認證函外, 其他信件都要加sign */
@@ -454,205 +483,6 @@ smtp_log:
 
     return chrono;
 }
-#endif  /* #ifdef  BATCH_SMTP */
-
-#ifdef HAVE_DOWNLOAD
-int
-bsmtp_file(
-    const char *fpath, const char *title, char *rcpt)
-{
-    int sock;
-    time_t chrono, stamp;
-    FILE *fp, *fr, *fw;
-    char *str, buf[512], from[80], msgid[80], boundary[256];
-    char fname[256];
-    struct tm ntime, *xtime;
-
-
-
-    cuser.numemail++;           /* 記錄使用者共寄出幾封 Internet E-mail */
-    chrono = time(&stamp);
-    xtime = localtime(&chrono);
-    ntime = *xtime;
-
-    sprintf(fname, "mail_%04d%02d%02d.tgz", ntime.tm_year + 1900, ntime.tm_mon + 1, ntime.tm_mday);
-
-    /* --------------------------------------------------- */
-    /* 身分認證信函                                        */
-    /* --------------------------------------------------- */
-
-    /* Thor.990125: MYHOSTNAME統一放入 str_host */
-    sprintf(from, "%s.bbs@%s", cuser.userid, str_host);
-
-#ifdef HAVE_SMTP_SERVER
-    {
-        int i;
-        const char *const alias[] = SMTP_SERVER, *str_alias;
-        sock = -1;
-        for (i=0; (str_alias = alias[i]); i++)
-        {
-            sock = dns_open(str_alias, 25);
-            if (sock >= 0)
-                break;
-        }
-        if (sock < 0)
-        {
-            str = strchr(rcpt, '@') + 1;
-            sock = dns_smtp(str);
-        }
-    }
-#else
-    str = strchr(rcpt, '@') + 1;
-    sock = dns_smtp(str);
-#endif
-
-    if (sock >= 0)
-    {
-        archiv32(chrono, msgid);
-
-        sprintf(boundary, "----=_NextPart_%s", msgid);
-
-        move(b_lines, 0);
-        clrtoeol();
-
-        prints("★ 寄信給 %s \x1b[5m...\x1b[m", rcpt);
-        refresh();
-
-        sleep(1);                       /* wait for mail server response */
-
-        fr = fdopen(sock, "r");
-        fw = fdopen(sock, "w");
-
-        fgets(buf, sizeof(buf), fr);
-        if (memcmp(buf, "220", 3))
-            goto smtp_file_error;
-        while (buf[3] == '-') /* maniac.bbs@WMStar.twbbs.org 2000.04.18 */
-            fgets(buf, sizeof(buf), fr);
-
-        /* Thor.990125: MYHOSTNAME統一放入 str_host */
-        fprintf(fw, "HELO %s\r\n", str_host);
-        fflush(fw);
-        do
-        {
-            fgets(buf, sizeof(buf), fr);
-            if (memcmp(buf, "250", 3))
-                goto smtp_file_error;
-        } while (buf[3] == '-');
-
-        fprintf(fw, "MAIL FROM:<%s>\r\n", from);
-        fflush(fw);
-        do
-        {
-            fgets(buf, sizeof(buf), fr);
-            if (memcmp(buf, "250", 3))
-                goto smtp_file_error;
-        } while (buf[3] == '-');
-
-        fprintf(fw, "RCPT TO:<%s>\r\n", rcpt);
-        fflush(fw);
-        do
-        {
-            fgets(buf, sizeof(buf), fr);
-            if (memcmp(buf, "250", 3))
-                goto smtp_file_error;
-        } while (buf[3] == '-');
-
-        fprintf(fw, "DATA\r\n");
-        fflush(fw);
-        do
-        {
-            fgets(buf, sizeof(buf), fr);
-            if (memcmp(buf, "354", 3))
-                goto smtp_file_error;
-        } while (buf[3] == '-');
-
-        /* ------------------------------------------------- */
-        /* begin of mail header                              */
-        /* ------------------------------------------------- */
-
-        /* Thor.990125: 儘可能的像 RFC822 & sendmail的作法, 免得別人不接:p */
-        fprintf(fw, "From: %s\r\nTo: %s\r\nSubject: %s\r\nX-Sender: %s (%s)\r\n"
-            "Date: %s\r\nMessage-Id: <%s@%s>\r\n"
-            "X-Disclaimer: [%s] 對本信內容恕不負責\r\n",
-            from, rcpt, title, cuser.userid, cuser.username,
-            Atime(&stamp), msgid, str_host,
-            str_site);
-
-        fprintf(fw, "MIME-Version: 1.0\r\nContent-Type: multipart/mixed;\r\n"
-                "\tboundary=\"%s\"\r\n\r\n", boundary);
-
-        fprintf(fw, "This is a multi-part message in MIME format.\r\n");
-        fprintf(fw, "--%s\r\nContent-Type: text/plain;\r\n\tcharset=\"big5\"\r\n"
-                "Content-Transfer-Encoding: 8bit\r\n\r\n附件名稱：%s\r\n", boundary, fname);
-
-        fprintf(fw, "--%s\r\nContent-Type: application/x-compressed;\r\n\tname=\"%s\"\r\n"
-                "Content-Transfer-Encoding: base64\r\nContent-Disposition: attachment;\r\n"
-                "\tfilename=\"%s\"\r\n\r\n", boundary, fname, fname);
-
-        /* ------------------------------------------------- */
-        /* begin of mail body                                */
-        /* ------------------------------------------------- */
-
-        if ((fp = fopen(fpath, "r")))
-        {
-            char *ptr;
-
-            str = buf;
-            *str++ = '.';
-            while (fgets(str, sizeof(buf) - 3, fp))
-            {
-                if ((ptr = strchr(str, '\n')))
-                {
-                    *ptr++ = '\r';
-                    *ptr++ = '\n';
-                    *ptr = '\0';
-                }
-                fputs((*str == '.' ? buf : str), fw);
-            }
-            fclose(fp);
-        }
-        fprintf(fw, "--%s--\r\n", boundary);
-
-        fputs("\r\n.\r\n", fw);
-        fflush(fw);
-
-        fgets(buf, sizeof(buf), fr);
-        if (memcmp(buf, "250", 3))
-            goto smtp_file_error;
-
-        fputs("QUIT\r\n", fw);
-        fflush(fw);
-        fclose(fw);
-        fclose(fr);
-        goto smtp_file_log;
-
-smtp_file_error:
-
-        fclose(fr);
-        fclose(fw);
-        sprintf(msgid + 7, "\n\t%.70s", buf);
-        chrono = -1;
-    }
-    else
-    {
-        chrono = -1;
-        strcpy(msgid, "CONN");
-    }
-
-smtp_file_log:
-
-    /* --------------------------------------------------- */
-    /* 記錄寄信                                            */
-    /* --------------------------------------------------- */
-
-    sprintf(buf, "%s%-*s > %s %s\n\t%s\n\t%s\n", Btime(&stamp), IDLEN, cuser.userid,
-        rcpt, msgid, title, fpath);
-    f_cat(FN_MAIL_LOG, buf);
-
-    return chrono;
-}
-
-#endif  /* #ifdef HAVE_DOWNLOAD */
 
 #ifdef HAVE_SIGNED_MAIL
 /* Thor.990413: 提供驗證功能 */
@@ -1001,7 +831,7 @@ do_forward(
         return;
 
     userid = strchr(addr, '@') + 1;
-    if (dns_smtp(userid) >= 0)   /* itoc.註解: 雖然 bsmtp_file() 也會做，但是這邊先做，以免壓縮完才知道是無效的工作站地址 */
+    if (dns_smtp(userid) >= 0)   /* itoc.註解: 雖然 bsmtp() 也會做，但是這邊先做，以免壓縮完才知道是無效的工作站地址 */
     {
         userid = cuser.userid;
 
@@ -1038,8 +868,7 @@ do_forward(
         system(cmd);
 
         sprintf(fpath, "tmp/%s.tgz", userid);
-//      rc = bsmtp(fpath, title, addr, 0x02);
-        rc = bsmtp_file(fpath, title, addr);
+        rc = bsmtp(fpath, title, addr, MQ_ATTACH);
         unlink(fpath);
 
         if (rc >= 0)
