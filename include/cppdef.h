@@ -245,7 +245,7 @@ template <class T>
 
 #define CPP_PRAGMA(arg)  _Pragma(CPP_STR(arg))
 
-#define CPP_MACRO_DEPRECATED(msg) \
+#define MACRO_DEPRECATED(msg) \
     CPP_PRAGMA(GCC warning CPP_STR(deprecated macro: msg))
 
 /* Macros for limiting the value range */
@@ -297,8 +297,8 @@ static inline long double ld_clamp(long double x, long double low, long double h
 #include <stdbool.h>
 
 /* Booleans  (Yep, for true and false) (Deprecated) */
-#define YEA     CPP_MACRO_DEPRECATED(use 'true' instead)  (1)
-#define NA      CPP_MACRO_DEPRECATED(use 'false' instead) (0)
+#define YEA     MACRO_DEPRECATED(use 'true' instead)  (1)
+#define NA      MACRO_DEPRECATED(use 'false' instead) (0)
 
 /* Standard integer types with specified widths */
 #include <stdint.h>
