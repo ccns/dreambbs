@@ -29,6 +29,7 @@
 #include "dns.h"                        /* dns type */
 #include "splay.h"                      /* splay type */
 #include "struct.h"                     /* Miscellaneous types */
+#include "modes.h"                      /* Enumeration types */
 
 #ifdef __cplusplus
 extern "C" {
@@ -139,6 +140,10 @@ GCC_NONNULLS void str_cat(char *dst, const char *s1, const char *s2);
 GCC_NONNULLS GCC_PURE int str_casecmp(const char *s1, const char *s2);
 GCC_NONNULLS GCC_PURE int str_casecmp_dbcs(const char *s1, const char *s2);
 GCC_NONNULLS void str_split_2nd(char *dst, const char *src);
+GCC_NONNULLS GCC_PURE enum DbcsState dbcs_state(const char *str, size_t idx);
+GCC_NONNULLS GCC_PURE enum DbcsState dbcs_nstate(const char *str GCC_NONSTRING, size_t idx, size_t len);
+GCC_NONNULLS GCC_PURE enum DbcsState dbcs_state_ansi(const char *str, size_t idx);
+GCC_NONNULLS GCC_PURE enum DbcsState dbcs_nstate_ansi(const char *str GCC_NONSTRING, size_t idx, size_t len);
 GCC_NONNULLS GCC_RET_NONNULL char *str_dup(const char *src, int pad);
 GCC_NONNULLS void setdirpath_root(char *fpath, const char *folder, const char *fname);
 GCC_NONNULLS void setdirpath(char *fpath, const char *direct, const char *fname);
@@ -151,6 +156,7 @@ GCC_NONNULLS GCC_PURE int hash32(const char *str);
 GCC_NONNULLS GCC_PURE int str_len_nospace(const char *str);
 GCC_NONNULLS void str_lower(char *dst, const char *src);
 GCC_NONNULLS void str_lower_dbcs(char *dst, const char *src);
+GCC_NONNULLS GCC_PURE size_t str_nmove_ansi(const char *str GCC_NONSTRING, size_t idx, ssize_t diff, size_t len);
 GCC_NONNULLS GCC_PURE int str_ncasecmp(const char *s1, const char *s2, int n);
 GCC_NONNULLS GCC_PURE int str_ncasecmp_dbcs(const char *s1, const char *s2, int n);
 GCC_NONNULLS void str_rstrip_tail(char *str);
@@ -206,6 +212,36 @@ int xwrite(int fd, const char *data, int size);
 #ifdef __cplusplus
 }  /* extern "C" */
 #endif
+
+/* `IS_DBCS_*()`: Whether the byte at character position `_idx` in the string `_str` is the leading/trailing DBCS byte */
+
+/* Not boundary-checking version
+ * `idx` must smaller than the length of `str`, otherwise buffer overrun may occur */
+#define IS_DBCS_LEAD(_str, _idx) \
+    (bool)(dbcs_state(_str, _idx) & DBCS_LEAD)
+#define IS_DBCS_TRAIL(_str, _idx) \
+    (bool)(dbcs_state(_str, _idx) & DBCS_TRAIL)
+
+/* Boundary-checking version */
+#define IS_DBCS_LEAD_N(_str, _idx, _len) \
+    (bool)(dbcs_nstate(_str, _idx, _len) & DBCS_LEAD)
+#define IS_DBCS_TRAIL_N(_str, _idx, _len) \
+    (bool)(dbcs_nstate(_str, _idx, _len) & DBCS_TRAIL)
+
+/* `IS_DBCS_*_ANSI()`: Whether the byte at character position `_idx` in the string `_str` is the leading/trailing DBCS byte after ignoring ANSI escapes */
+
+/* Not boundary-checking version
+ * `idx` must smaller than the length of `str`, otherwise buffer overrun may occur */
+#define IS_DBCS_LEAD_ANSI(_str, _idx) \
+    (bool)(dbcs_state_ansi(_str, _idx) & DBCS_LEAD)
+#define IS_DBCS_TRAIL_ANSI(_str, _idx) \
+    (bool)(dbcs_state_ansi(_str, _idx) & DBCS_TRAIL)
+
+/* Boundary-checking version */
+#define IS_DBCS_LEAD_ANSI_N(_str, _idx, _len) \
+    (bool)(dbcs_nstate_ansi(_str, _idx, _len) & DBCS_LEAD)
+#define IS_DBCS_TRAIL_ANSI_N(_str, _idx, _len) \
+    (bool)(dbcs_nstate_ansi(_str, _idx, _len) & DBCS_TRAIL)
 
 /* Helper macros for fixed-size `time_t` */
 #define str_stamp_any(_str, _chrono) \

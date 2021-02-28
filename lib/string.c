@@ -138,6 +138,89 @@ void str_split_2nd(char *dst, const char *src)
     }
 }
 
+/* Not boundary-checking version of `dbcs_nstate()`
+ * `idx` must smaller than the length of `str`, otherwise buffer overrun may occur */
+GCC_NONNULLS
+GCC_PURE enum DbcsState dbcs_state(const char *str, size_t idx)
+{
+    return dbcs_nstate(str, idx, idx + strlen(str + idx));
+}
+
+/* Return the DBCS state at byte position `idx` in the string `str` of maximum length `len` */
+GCC_NONNULLS
+GCC_PURE enum DbcsState dbcs_nstate(const char *str GCC_NONSTRING, size_t idx, size_t len)
+{
+    if (idx >= len)
+        return DBCS_ASCII; /* Invalid; defaults to `DBCS_ASCII` */
+
+    /* H: High byte; L: Low byte; A: ASCII byte */
+    const char *ptr = str + idx;
+    const bool is_hi = IS_DBCS_HI(*ptr);
+
+    /* "L"/"A" || "?A" || "LL"/"AL" => ASCII */
+    /*  ^   ^       ^       ^    ^ptr */
+    if (!is_hi && (ptr <= str || !IS_DBCS_LOW(*ptr) || !IS_DBCS_HI(ptr[-1])))
+        return DBCS_ASCII;
+
+    /* "H" * (2n+1) => LEAD || "H" * 2n => TRAIL  */
+    /* "H" * 2n + "L" => ASCII || "H" * (2n+1) + "L" => TRAIL */
+    bool is_head = true;
+    while (--ptr >= str && IS_DBCS_HI(*ptr))
+        is_head = !is_head;
+    /* "H" is head: "HH" => LEAD || "HL" => LEAD || "HA" => ASCII */
+    /* Check the next byte of the byte at position `idx` */
+    if (is_head && is_hi)
+        return (idx + 1 < len && (IS_DBCS_HI(str[idx + 1]) || IS_DBCS_LOW(str[idx + 1]))) ? DBCS_LEAD : DBCS_ASCII;
+    /* Otherwise the head is ASCII */
+    return (is_head) ? DBCS_ASCII : DBCS_TRAIL;
+}
+
+/* Not boundary-checking version of `dbcs_nstate_ansi()`
+ * `idx` must smaller than the length of `str`, otherwise buffer overrun may occur */
+GCC_NONNULLS
+GCC_PURE enum DbcsState dbcs_state_ansi(const char *str, size_t idx)
+{
+    return dbcs_nstate_ansi(str, idx, idx + strlen(str + idx));
+}
+
+/* Return the DBCS state at byte position `idx` in the string `str` of maximum length `len`, ignoring ANSI escapes
+ * If `idx` is larger than the length of `str`, return DBCS_ASCII */
+GCC_NONNULLS
+GCC_PURE enum DbcsState dbcs_nstate_ansi(const char *str GCC_NONSTRING, size_t idx, size_t len)
+{
+    /* H: High byte; L: Low byte; A: ASCII byte */
+    size_t cur = idx;
+    const bool is_hi = IS_DBCS_HI(str[cur]);
+
+    /* "L"/"A" || "?A" || "LL"/"AL" => ASCII */
+    /*  ^   ^       ^       ^    ^cur */
+    size_t prev = str_nmove_ansi(str, cur, -1, len);
+    if (!is_hi && (!(prev < cur && (prev || str[prev] != '\x1b')) || !IS_DBCS_LOW(str[cur]) || !IS_DBCS_HI(str[prev])))
+        return DBCS_ASCII;
+
+    /* "H" * (2n+1) => LEAD || "H" * 2n => TRAIL  */
+    /* "H" * 2n + "L" => ASCII || "H" * (2n+1) + "L" => TRAIL */
+    bool is_head = true;
+    bool interesc = prev + 1 < cur;
+    while (prev < cur && (prev || str[prev] != '\x1b') && IS_DBCS_HI(str[prev]))
+    {
+        is_head = !is_head;
+        cur = prev;
+        prev = str_nmove_ansi(str, cur, -1, len);
+    }
+    /* Also check whether escapes occur between the leading byte and the trailing byte for trailing bytes */
+    /* "H" is head: "HH" => LEAD || "HL" => LEAD || "HA" => ASCII */
+    if (is_head && is_hi)
+    {
+        /* Check the next non-ANSI escape byte of the byte at position `idx` */
+        int next = str_nmove_ansi(str, idx, 1, len);
+        interesc = (str[next] && next > idx + 1);
+        return (str[next] && (IS_DBCS_HI(str[next]) || IS_DBCS_LOW(str[next]))) ? ((interesc) ? DBCS_LEAD_INTERESC : DBCS_LEAD) : DBCS_ASCII;
+    }
+    /* Otherwise the head is ASCII */
+    return (is_head) ? DBCS_ASCII : ((interesc) ? DBCS_TRAIL_INTERESC : DBCS_TRAIL);
+}
+
 /* Return a string allocated using `malloc` with the content of string `src`
  * `pad` is the size in bytes of the space after the string, including the `'\0'` string end
  * If `pad` <= `0`, the space for the `'\0'` string end is still included and is set to `'\0'` */
@@ -412,6 +495,124 @@ void str_lower_dbcs(char *dst, const char *src)
         if (!ch)
             return;
     }
+}
+
+GCC_CONSTEXPR static inline bool is_ansi_param(int ch)
+{
+    return (ch >= '0' && ch <= '9') || ch == ';' || ch == ':';
+}
+
+/* Return the resulting byte position of moving from the byte position `idx` in the string `str` of maximum length of `len` by diff bytes, skip ANSI escapes
+ * The result is unspecified if `idx` is inside of a ANSI escape except for the leading `ESC` byte
+ * The result is bounded between `0` and the length of `str`:
+ *     - `0` is returned for moving to positions before the first non-ANSI-escape bytes
+ *     - The length of `str` is returned for moving to positions after the last non-ANSI-escape bytes */
+GCC_NONNULLS
+GCC_PURE size_t str_nmove_ansi(const char *str, size_t idx, ssize_t diff, size_t len)
+{
+    const char *ptr = str + BMIN(idx, len);
+
+    /* `diff > 0`: Move afterwards; `diff < 0`: Move backwards */
+    if (diff > 0)
+    {
+        do
+        {
+            const size_t len_rest = str_nlen(ptr, BMIN(diff, len));
+            const char *const ptr_esc = memchr(ptr, '\x1b', len_rest);
+            const ssize_t step = (ptr_esc) ? ptr_esc - ptr : len_rest;
+            ptr += step;
+            diff -= step;
+            if (ptr_esc)
+            {
+                /* step: 01     000     0000 */
+                /*      "A*sB" "A**sB" "A*[*sB" (* == ESC) */
+                /*        ^ptr    ^ptr     ^ptr */
+                /*       (-1)   (-0)    (-0) */
+                if (step)
+                    ++diff; /* ESC does not count */
+                ++ptr;
+                if (*ptr == '[')
+                {
+                    /* "A*[1;31mB" */
+                    /*    ^ptr */
+                    do
+                    {
+                        ++ptr;
+                    } while (*ptr && is_ansi_param(*ptr));
+                    /* "A*[1;31mB" */
+                    /*         ^ptr */
+                }
+                /* step: 0001 */
+                /*      "A*sB" */
+                /*         ^ptr */
+            }
+            /* else: "str" */
+            /*           ^ptr (*ptr == '\0') */
+        } while (*ptr && diff > 0);
+        /* Skip the trailing ANSI escapes */
+        while (*ptr == '\x1b')
+        {
+            ++ptr;
+            if (*ptr == '[')
+            {
+                do
+                {
+                    ++ptr;
+                } while (*ptr && is_ansi_param(*ptr));
+            }
+            /* Skip the ANSI escape final byte */
+            if (*ptr != '\x1b')
+                ++ptr;
+        }
+    }
+    else if (diff < 0)
+    {
+        /* Assume `*ptr` has a value not for the param bytes of ANSI escape */
+        const char *final = ptr;
+        while (ptr > str)
+        {
+            --ptr;
+            ++diff;
+            if (*ptr == '[' && ptr > str && ptr[-1] == '\x1b')
+            {
+                --ptr;
+                /*              .final    .final */
+                /* step:  66543210      11010 */
+                /*      "1*[1;31mA"   "1*[*sA" */
+                /*        ^ptr          ^ptr */
+                /*        (-6)          (-1) */
+                diff -= final - ptr - ((*final == '\x1b') ? 1 : 0); /* Add back */
+                final = ptr;
+            }
+            else if (*ptr == '\x1b')
+            {
+                /*         .final   .final   .final */
+                /* step:  210      1000     10000 */
+                /*      "1*sA"   "1**sA"  "1**[mA" */
+                /*        ^ptr     ^ptr     ^ptr */
+                /*       (-2)      (-1)     (-1) */
+                diff -= 2 - ((*final == '\x1b') ? 1 : 0); /* Add back */
+                final = ptr;
+            }
+            else if (!is_ansi_param(*ptr))
+            {
+                /*          .      .       .final      .final     .final    .final   +.final */
+                /*      "*[[A"  "[10"   "2[0"    "1*[1mA"    "1*[mA"    "1*sA"    "*sBA" */
+                /*         ^ptr  ^ptr     ^ptr        ^ptr       ^ptr      ^ptr     +^ptr */
+                /* ansi:   io    ooo      oo          io         io        io       ioo (in/out) */
+                if (diff == 1 && ptr + 1 == final && *final != '\x1b')
+                    break; /* The previous byte is out of ANSI escapes */
+                final = ptr;
+            }
+            /* else:        .final */
+            /*      "1*[1;31m0" */
+            /*            ^ptr */
+        }
+        if (diff > 0)
+            ptr += diff; /* No possible ANSI escape heads found; backtract */
+    }
+
+    return ptr - str;
 }
 
 /* Compare two strings `s1` and `s2` for at most `n` bytes, ignoring case differences (formerly `str_ncmp`)

@@ -300,7 +300,10 @@
 /* For normal keys, do not apply `Shift()` on `Ctrl()`ed keys. */
 #define isprint2(c)     ((c >= ' ') && (c <= 0xff)) /* ((c & 0x80 || isprint(c))) */
 
+/* Whether the value of `x` is in the range for DBCS high/low byte */
+/* For checking whether the byte is the leading/trailing DBCS byte, use `IS_DBCS_LEAD*()` & `IS_DBCS_TRAIL*()` macros from "dao.h" instead */
 #define IS_DBCS_HI(x)   ((x) >= 0x80U)
+#define IS_DBCS_LOW(x)  ((x) >= 0x40U)
 
 /* ----------------------------------------------------- */
 /* 參數設定                                              */

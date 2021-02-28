@@ -19,6 +19,21 @@ enum
 #define GENPASSWD_DES      0
 #define GENPASSWD_SHA256   5
 
+/* For `dbcs_state()` */
+enum DbcsState {
+    DBCS_ASCII = 0,
+
+    /* The bit range 0x1 - 0x8 is reserved for encoding the byte position in the DBCS character */
+    DBCS_INTERESC = 0x40,
+    DBCS_LEAD = 0x20,
+    DBCS_TRAIL = 0x10,
+
+    /* ANSI escapes occur between the byte and the trailing byte */
+    DBCS_LEAD_INTERESC = DBCS_LEAD | DBCS_INTERESC,
+    /* ANSI escapes occur between the leading byte and the byte */
+    DBCS_TRAIL_INTERESC = DBCS_TRAIL | DBCS_INTERESC,
+};
+
 /* ----------------------------------------------------- */
 /* user ¾Þ§@ª¬ºA»P¼Ò¦¡                                   */
 /* ----------------------------------------------------- */
