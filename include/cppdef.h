@@ -297,8 +297,8 @@ static inline long double ld_clamp(long double x, long double low, long double h
 #include <stdbool.h>
 
 /* Booleans  (Yep, for true and false) (Deprecated) */
-#define YEA     MACRO_DEPRECATED(use 'true' instead)  (1)
-#define NA      MACRO_DEPRECATED(use 'false' instead) (0)
+#define YEA     (1) MACRO_DEPRECATED(use 'true' instead)
+#define NA      (0) MACRO_DEPRECATED(use 'false' instead)
 
 /* Standard integer types with specified widths */
 #include <stdint.h>
