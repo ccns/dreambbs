@@ -411,7 +411,7 @@ typedef struct
 } MailQueue;  /* DISKDATA(raw) */
 
 
-#define MQ_UUENCODE     0x01    /* 先 uuencode 再寄出 */
+#define MQ_UUENCODE     0x01    MACRO_FORBIDDEN(uuencode is no longer supported) /* 先 uuencode 再寄出 */
 #define MQ_JUSTIFY      0x02    /* 身分認證信函 */
 #define MQ_MIME         0x04    /* MIME */
 

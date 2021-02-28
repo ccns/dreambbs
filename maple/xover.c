@@ -777,11 +777,6 @@ xo_forward(
             return XO_FOOT;
 
         method = 0;
-
-#if 0
-        method = vans("¬O§_»Ý­n uuencode(y/N)¡H[N] ") == 'y' ?
-            MQ_UUENCODE : 0;
-#endif
     }
 
     hdr = tag ? &xhdr : (HDR *) xo_pool_base + xo->pos;
