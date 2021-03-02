@@ -521,7 +521,7 @@ more(
 
             lino++;
 
-            if ((lino & 31 == 0) && ((i = lino >> 5) < MAXBLOCK))
+            if ((lino % 32 == 0) && ((i = lino >> 5) < MAXBLOCK))
                 block[i] = foff - fimage;
 
 
@@ -758,7 +758,7 @@ re_key:
                     while (more_line(buf))
                     {
                         totallino++;
-                        if ((totallino & 31 == 0) && ((i = totallino >> 5) < MAXBLOCK))
+                        if ((totallino % 32 == 0) && ((i = totallino >> 5) < MAXBLOCK))
                             block[i] = foff - fimage;
                     }
 
