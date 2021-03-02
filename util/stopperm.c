@@ -402,9 +402,7 @@ setup(
         char fmt[13];
         sprintf(fmt, "%%%ds", IDLEN);
         fscanf(flog, fmt, buf);
-        acct_load(u, buf);
-
-        if (u != NULL)
+        if (acct_load(u, buf) >= 0)
         {
             if (strcmp(u->userid, id))
                 add_deny_exer(u, mode, 1, exer);
