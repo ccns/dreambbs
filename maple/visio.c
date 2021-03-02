@@ -2803,6 +2803,8 @@ vget_redraw:
             }
 
             col--;
+            if (col && IS_DBCS_TRAIL_N(data, col, len))
+                col--;
 
             /* `col >= len` should hold; skip the check */
             if (0)
@@ -2822,35 +2824,48 @@ vget_redraw:
             /* remove data and display it                      */
             /* ----------------------------------------------- */
 
-            len--;
-            dirty = true;
-
-            if (!(echo & VGET_STEALTH_NOECHO))
-                move(y, x + col);
-
-            for (int i = col+1; i <= len; i++)
             {
-                data[i - 1] = ch = (unsigned char) data[i];
+                const int del_len = (col + 1 < len && IS_DBCS_LEAD_N(data, col, len)) ? 2 : 1;
+                len -= del_len;
+                dirty = true;
 
                 if (!(echo & VGET_STEALTH_NOECHO))
-                    outc((echo & NOECHO) ? '*' : ch);
+                    move(y, x + col);
+
+                for (int i = col; i < len; i++)
+                {
+                    data[i] = ch = (unsigned char) data[i + del_len];
+
+                    if (!(echo & VGET_STEALTH_NOECHO))
+                        outc((echo & NOECHO) ? '*' : ch);
+                }
+                for (int i = 0; i < del_len; i++)
+                {
+                    data[len + i] = '\0';
+                    if (!(echo & VGET_STEALTH_NOECHO))
+                        outc(' ');
+                }
             }
-            if (!(echo & VGET_STEALTH_NOECHO))
-                outc(' ');
 
             break;
 
         case KEY_LEFT:
         case Ctrl('B'):
             if (col)
+            {
                 --col;
+                if (col && IS_DBCS_TRAIL_N(data, col, len))
+                    --col;
+            }
             else
                 bell();
             break;
 
         case KEY_RIGHT:
         case Ctrl('F'):
-            if (col < len)
+            if (col + 1 < len && IS_DBCS_LEAD_N(data, col, len))
+                col += 2;
+            else if (col < len)
                 ++col;
             else
                 bell();
