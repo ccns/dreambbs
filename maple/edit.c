@@ -152,6 +152,19 @@ ve_abort(
 #endif
 
 
+/* If the cursor is on the trail byte of a DBCS character, move the cursor to the next character */
+static void
+ve_fix_cursor_dbcs(
+    const textline *vln)
+{
+    if (IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1))
+    {
+        const int pos = (ve_mode & VE_ANSI) ? n2ansi(ve_col, vln) : ve_col;
+        ve_col = (ve_mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
+    }
+}
+
+
 static void
 ve_position(
     const textline *cur,
@@ -163,6 +176,7 @@ ve_position(
         ve_col = ansi2n(n2ansi(ve_col, cur), cur); /* Place the cursor outside any ANSI escapes */
     else
         ve_col = BMIN(ve_col, cur->len);
+    ve_fix_cursor_dbcs(cur);
 
     row = 0;
     while (cur != top)
@@ -1896,7 +1910,15 @@ ve_key:
                 if (pos)
                 {
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
+                    const bool on_trail = pos > 1 && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1);
                     delete_char(vln, ve_col);
+                    pos -= 1;
+
+                    if (on_trail)
+                    {
+                        ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
+                        delete_char(vln, ve_col);
+                    }
                     continue;
                 }
 
@@ -1920,9 +1942,17 @@ ve_key:
                 {
                     if (len == 0)
                         goto ve_key;
+
                     /* Thor: 雖然增加 load, 不過edit 時會比較好看 */
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : pos;
+                    const bool on_lead = pos < len && IS_DBCS_LEAD_ANSI_N(vln->data, ve_col, vln->len - 1);
                     delete_char(vln, ve_col);
+
+                    if (on_lead)
+                    {
+                        ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : pos;
+                        delete_char(vln, ve_col);
+                    }
                 }
                 else
                 {
@@ -1936,6 +1966,9 @@ ve_key:
                 if (pos)
                 {
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
+                    pos -= 1;
+                    if (pos && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1))
+                        ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
                     continue;
                 }
 
@@ -1953,6 +1986,9 @@ ve_key:
                 if (pos < len)
                 {
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
+                    pos += 1;
+                    if (pos < len && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1))
+                        ve_col = (mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
                     continue;
                 }
 
@@ -1986,6 +2022,7 @@ ve_key:
                 ve_row--;
                 ve_lno--;
                 ve_col = (mode & VE_ANSI) ? ansi2n(pos, tmp) : BMIN(pos, tmp->len);
+                ve_fix_cursor_dbcs(tmp);
                 vx_cur = tmp;
                 break;
 
@@ -1999,6 +2036,7 @@ ve_key:
                 ve_row++;
                 ve_lno++;
                 ve_col = (mode & VE_ANSI) ? ansi2n(pos, tmp) : BMIN(pos, tmp->len);
+                ve_fix_cursor_dbcs(tmp);
                 vx_cur = tmp;
                 break;
 
