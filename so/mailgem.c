@@ -1077,7 +1077,7 @@ mailgem_main(void)
 
     xz[XZ_MAILGEM - XO_ZONE].xo = last;  /* restore */
 
-    DL_RELEASE(0);
+    DL_RELEASE_VOID();
 }
 
 

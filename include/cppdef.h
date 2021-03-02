@@ -234,10 +234,12 @@ template <class T>
   #define DL_HOLD  \
     struct DL_handle *const _dl_handle = {DL_hold(DL_CURRENT_MODULE_STR)}
   #define DL_RELEASE(ret)  ((void)DL_release(DL_CURRENT_MODULE_STR, _dl_handle), ret)
+  #define DL_RELEASE_VOID()  ((void)DL_release(DL_CURRENT_MODULE_STR, _dl_handle))
 #else
   #define DL_HOTSWAP_SCOPE  static
   #define DL_HOLD  void *const _dl_dummy = {NULL}
   #define DL_RELEASE(ret)  ((void)_dl_dummy, ret)
+  #define DL_RELEASE_VOID()  ((void)_dl_dummy)
 #endif
 
 

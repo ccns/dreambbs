@@ -76,7 +76,7 @@ input_tools(void)
 
     if (ch < '1' || ch > '6')
     {
-        DL_RELEASE(0);
+        DL_RELEASE_VOID();
         return;
     }
 
@@ -111,5 +111,5 @@ input_tools(void)
             break;
         }
     }
-    DL_RELEASE(0);
+    DL_RELEASE_VOID();
 }
