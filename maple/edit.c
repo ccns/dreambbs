@@ -44,6 +44,7 @@ static int ve_mode;             /* operation mode */
 #define VE_BIFFN        0x20
 #endif /* Thor.980805: 郵差到處來按鈴 */
 
+#define VE_DBCS         0x40    /* DBCS detection for handling DBCS characters */
 
 #define FN_BAK          "bak"
 
@@ -157,7 +158,7 @@ static void
 ve_fix_cursor_dbcs(
     const textline *vln)
 {
-    if (IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1))
+    if ((ve_mode & VE_DBCS) && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1))
     {
         const int pos = (ve_mode & VE_ANSI) ? n2ansi(ve_col, vln) : ve_col;
         ve_col = (ve_mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
@@ -1758,7 +1759,7 @@ vedit(
 
     ve_col = ve_row = margin = 0;
     ve_lno = 1;
-    ve_mode = VE_INSERT | VE_REDRAW | (cuser.ufo2 & UFO2_VEDIT ? 0 : VE_FOOTER);
+    ve_mode = VE_INSERT | VE_REDRAW | (cuser.ufo2 & UFO2_VEDIT ? 0 : VE_FOOTER) | VE_DBCS;
 
     /* --------------------------------------------------- */
     /* 主迴圈：螢幕顯示、鍵盤處理、檔案處理                */
@@ -1858,6 +1859,7 @@ vedit(
                 mode & VE_BIFF ? "\x1b[1;41;37;5m  郵差來了  ": mode & VE_BIFFN ? "\x1b[1;41;37;5m  訊差來了  ":"\x1b[0;34;46m  編輯文章  ",
                 mode & VE_INSERT ? "插入" : "取代",
                 mode & VE_ANSI ? "ANSI" : "一般",
+                mode & VE_DBCS ? "雙" : "單",
                 ve_lno, 1 + pos, d_cols, "");
                 /* Thor.980805: UFO_BIFF everywhere */
 #else
@@ -1865,6 +1867,7 @@ vedit(
             prints(FOOTER_VEDIT,
                 mode & VE_INSERT ? "插入" : "取代",
                 mode & VE_ANSI ? "ANSI" : "一般",
+                mode & VE_DBCS ? "雙" : "單",
                 ve_lno, 1 + pos, d_cols, "");
 #endif
         }
@@ -1910,7 +1913,7 @@ ve_key:
                 if (pos)
                 {
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
-                    const bool on_trail = pos > 1 && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1);
+                    const bool on_trail = (ve_mode & VE_DBCS) && pos > 1 && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1);
                     delete_char(vln, ve_col);
                     pos -= 1;
 
@@ -1945,7 +1948,7 @@ ve_key:
 
                     /* Thor: 雖然增加 load, 不過edit 時會比較好看 */
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : pos;
-                    const bool on_lead = pos < len && IS_DBCS_LEAD_ANSI_N(vln->data, ve_col, vln->len - 1);
+                    const bool on_lead = (ve_mode & VE_DBCS) && pos < len && IS_DBCS_LEAD_ANSI_N(vln->data, ve_col, vln->len - 1);
                     delete_char(vln, ve_col);
 
                     if (on_lead)
@@ -1967,7 +1970,7 @@ ve_key:
                 {
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
                     pos -= 1;
-                    if (pos && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1))
+                    if ((ve_mode & VE_DBCS) && pos && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1))
                         ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
                     continue;
                 }
@@ -1987,7 +1990,7 @@ ve_key:
                 {
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
                     pos += 1;
-                    if (pos < len && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1))
+                    if ((ve_mode & VE_DBCS) && pos < len && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1))
                         ve_col = (mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
                     continue;
                 }
@@ -2075,6 +2078,14 @@ ve_key:
                 /* Place the cursor outside any ANSI escapes when entering ANSI mode */
                 ve_col = (mode & VE_ANSI) ? ansi2n(n2ansi(col, vln), vln) : col;
                 ve_mode = mode | VE_REDRAW;
+                continue;
+
+            case Meta('r'): /* Toggle DBCS detection for handling DBCS characters */
+
+                mode ^= VE_DBCS;
+                ve_mode = mode | VE_REDRAW;
+                /* Make the cursor not to be in the middle of any DBCS characters when entering DBCS detection mode */
+                ve_fix_cursor_dbcs(vln);
                 continue;
 
             case Ctrl('X'):             /* Save and exit */

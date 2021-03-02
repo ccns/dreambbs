@@ -221,10 +221,10 @@
 
 
 #define FOOTER_VEDIT_BIFF \
-               "%s\x1b[m" COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s║%5d:%3d%*s     \x1b[m"
+               "%s\x1b[m" COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s│%s║%5d:%3d%*s \x1b[m"
 
 #define FOOTER_VEDIT \
-    COLOR1 "  編輯文章  " COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s║%5d:%3d%*s     \x1b[m"
+    COLOR1 "  編輯文章  " COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s│%s║%5d:%3d%*s \x1b[m"
 
 
 /*#define FOOTER_BMW_REPLY \
