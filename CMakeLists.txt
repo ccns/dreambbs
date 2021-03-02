@@ -239,7 +239,8 @@ if(USE_BBSLUA)
     if(USE_LUAJIT)
         pkg_search_module(LUA REQUIRED luajit)
     else()
-        pkg_search_module(LUA REQUIRED lua-5.1 lua5.1)
+        # Prevent LuaJIT from being chosen
+        pkg_search_module(LUA REQUIRED lua-5.1 lua5.1 luajit<-1)
     endif()
 endif()
 
