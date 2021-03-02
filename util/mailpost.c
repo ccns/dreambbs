@@ -668,8 +668,8 @@ mailpost(void)
         if (mymode != LOCAL_SAVE)
             mymode = NET_SAVE;
 
-        /* if (brd.battr & BRD_NOCOUNT == 0) */
         /* Thor.981123: lkchu patch: mailpost 文章數不增加問題 */
+        /* IID.2021-03-02: Explanation: `&` has lower precedence than `==`; it should be enclosed in `()` */
         if (!(brd.battr & BRD_NOCOUNT))
         {
             myacct.numposts++;
