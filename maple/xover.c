@@ -1775,7 +1775,7 @@ xover_exec_cb(
   #ifdef HAVE_HASH_KEYFUNCLIST
     #ifndef DL_HOTSWAP
                 xcmd->erase(cmd_dl);
-                cb = xcmd->insert({cmd, {p}}).first;
+                cb = xcmd->insert({cmd, {cbfunc}}).first;
     #endif
   #else
     #ifndef DL_HOTSWAP
