@@ -81,11 +81,12 @@ cleanrecommend_item(
 
 static int
 cleanrecommend_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const RMSG *const cleanrecommend = (const RMSG *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    cleanrecommend_item(xo->pos + 1, cleanrecommend);
+    const RMSG *const cleanrecommend = (const RMSG *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    cleanrecommend_item(pos + 1, cleanrecommend);
     return XO_NONE;
 }
 
@@ -169,15 +170,16 @@ cleanrecommend_edit(
 
 static int
 cleanrecommend_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        const RMSG *rmsg = (const RMSG *) xo_pool_base + xo->pos;
+        const RMSG *rmsg = (const RMSG *) xo_pool_base + pos;
         const RMSG rmsg_orig = *rmsg;
 
-        if (!rec_del(xo->dir, sizeof(RMSG), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(RMSG), pos, NULL, NULL))
         {
             cleanrecommend_log(&rmsg_orig, 0);
             return XO_LOAD;
@@ -188,15 +190,14 @@ cleanrecommend_delete(
 
 static int
 cleanrecommend_change(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     RMSG *cleanrecommend, mate;
-    int pos;
 
     if (!HAS_PERM(PERM_BOARD))
         return XO_NONE;
 
-    pos = xo->pos;
     cleanrecommend = (RMSG *) xo_pool_base + pos;
 
     mate = *cleanrecommend;
@@ -237,24 +238,24 @@ KeyFuncList cleanrecommend_cb =
     {XO_LOAD, {cleanrecommend_load}},
     {XO_HEAD, {cleanrecommend_head}},
     {XO_BODY, {cleanrecommend_body}},
-    {XO_CUR, {cleanrecommend_cur}},
+    {XO_CUR | XO_POSF, {.posf = cleanrecommend_cur}},
 
-    {'c', {cleanrecommend_change}},
+    {'c' | XO_POSF, {.posf = cleanrecommend_change}},
     {'s', {xo_cb_init}},
-    {'d', {cleanrecommend_delete}},
+    {'d' | XO_POSF, {.posf = cleanrecommend_delete}},
     {'D', {cleanrecommend_cleanall}},
     {'h', {cleanrecommend_help}}
 };
 
 int
 clean(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     DL_HOLD;
     XO *xoo, *last;
     const HDR *hdr;
     HDR phdr;
-    int pos;
     char fpath[128], buf[256], tmp[128], recommenddb[128];
     FILE *fp;
     RMSG rmsg;
@@ -271,7 +272,6 @@ clean(
     if (!(bbstate & STAT_BOARD))
         return DL_RELEASE(0);
 
-    pos = xo->pos;
     hdr = (const HDR *) xo_pool_base + pos;
 
     if (!hdr->recommend || hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))

@@ -35,11 +35,11 @@ static void banmail_item(int num, const BANMAIL * ban)
            modes, d_cols + 49, d_cols + 49, ban->data);
 }
 
-static int banmail_cur(XO *xo)
+static int banmail_cur(XO *xo, int pos)
 {
-    const BANMAIL *const banmail = (const BANMAIL *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    banmail_item(xo->pos + 1, banmail);
+    const BANMAIL *const banmail = (const BANMAIL *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    banmail_item(pos + 1, banmail);
     return XO_NONE;
 }
 
@@ -191,12 +191,12 @@ static int banmail_add(XO * xo)
     return XO_HEAD;
 }
 
-static int banmail_delete(XO * xo)
+static int banmail_delete(XO * xo, int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(BANMAIL), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(BANMAIL), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -205,12 +205,10 @@ static int banmail_delete(XO * xo)
 }
 
 
-static int banmail_change(XO * xo)
+static int banmail_change(XO * xo, int pos)
 {
     BANMAIL *banmail, mate;
-    int pos;
 
-    pos = xo->pos;
     banmail = (BANMAIL *) xo_pool_base + pos;
 
     mate = *banmail;
@@ -237,14 +235,14 @@ KeyFuncList banmail_cb = {
     {XO_LOAD, {banmail_load}},
     {XO_HEAD, {banmail_head}},
     {XO_BODY, {banmail_body}},
-    {XO_CUR, {banmail_cur}},
+    {XO_CUR | XO_POSF, {.posf = banmail_cur}},
 
     {Ctrl('P'), {banmail_add}},
     {'S', {banmail_sync}},
-    {'r', {banmail_change}},
-    {'c', {banmail_change}},
+    {'r' | XO_POSF, {.posf = banmail_change}},
+    {'c' | XO_POSF, {.posf = banmail_change}},
     {'s', {xo_cb_init}},
-    {'d', {banmail_delete}},
+    {'d' | XO_POSF, {.posf = banmail_delete}},
     {'h', {banmail_help}}
 };
 

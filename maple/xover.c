@@ -672,7 +672,8 @@ deny_forward(void)
 
 static int
 xo_forward(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     static char rcpt[64];
     char fpath[128], folder[80], *dir, *title, *userid, ckforward[80];
@@ -779,7 +780,7 @@ xo_forward(
         method = 0;
     }
 
-    hdr = tag ? &xhdr : (HDR *) xo_pool_base + xo->pos;
+    hdr = tag ? &xhdr : (HDR *) xo_pool_base + pos;
 
     dir = xo->dir;
     title = hdr->title;
@@ -894,7 +895,8 @@ z_download(
 
 static int
 xo_zmodem(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     char fpath[128], *dir;
     HDR *hdr, xhdr;
@@ -910,7 +912,7 @@ xo_zmodem(
     if (tag)
         hdr = &xhdr;
     else
-        hdr = (HDR *) xo_pool_base + xo->pos;
+        hdr = (HDR *) xo_pool_base + pos;
 
     locus = 0;
     dir = xo->dir;
@@ -946,12 +948,13 @@ xo_zmodem(
 /* 090929.cache: 簡易版 */
 int
 xo_uquery_lite(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
     const char *userid;
 
-    hdr = (const HDR *) xo_pool_base + xo->pos;
+    hdr = (const HDR *) xo_pool_base + pos;
     if (hdr->xmode & (GEM_GOPHER | POST_INCOME | MAIL_INCOME))
         return XO_NONE;
 
@@ -983,12 +986,13 @@ xo_uquery_lite(
 
 int
 xo_uquery(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
     const char *userid;
 
-    hdr = (const HDR *) xo_pool_base + xo->pos;
+    hdr = (const HDR *) xo_pool_base + pos;
     if (hdr->xmode & (GEM_GOPHER | POST_INCOME | MAIL_INCOME))
         return XO_NONE;
 
@@ -1008,7 +1012,8 @@ xo_uquery(
 
 int
 xo_usetup(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
     const char *userid;
@@ -1017,7 +1022,7 @@ xo_usetup(
     if (!HAVE_PERM(PERM_SYSOP | PERM_ACCOUNTS))
         return XO_NONE;
 
-    hdr = (const HDR *) xo_pool_base + xo->pos;
+    hdr = (const HDR *) xo_pool_base + pos;
     userid = hdr->owner;
     if (strchr(userid, '.') || (acct_load(&xuser, userid) < 0))
         return XO_NONE;
@@ -1153,6 +1158,7 @@ xo_keymap(
 static int
 xo_thread(
     XO *xo,
+    int pos,
     int op)
 {
     static char s_author[16], s_title[32], s_unread[2]="0";
@@ -1160,13 +1166,12 @@ xo_thread(
 
     const char *query=NULL;
     const char *tag, *title=NULL;
-    int pos, match, near=0, max;
+    int match, near=0, max;
 
     int step, len;
     const HDR *fhdr;
 
     match = 0;
-    pos = xo->pos;
     fhdr = (HDR *) xo_pool_base + pos;
     step = (op & RS_FORWARD) ? 1 : - 1;
 
@@ -1394,6 +1399,7 @@ xo_thread(
 int
 xo_getch(
     XO *xo,
+    int pos,
     int ch)
 {
     int op;
@@ -1404,7 +1410,7 @@ xo_getch(
     op = xo_keymap(ch);
     if (op >= 0)
     {
-        ch = xo_thread(xo, op);
+        ch = xo_thread(xo, pos, op);
         if ((ch & XO_POS_MASK) > XO_NONE)  /* A thread article is found */
             ch = XO_BODY;               /* 繼續瀏覽 */
     }
@@ -1739,7 +1745,6 @@ xover_exec_cb(
     int cmd)
 {
     const KeyFuncListRef xcmd = (xo) ? xo->cb : NULL;
-    int cmd_dl;
     KeyFuncIter cb;
 
     if (!xcmd)
@@ -1749,40 +1754,42 @@ xover_exec_cb(
     }
 
     /* IID.20191225: In C++ mode, use hash table for xover callback function list */
-#if !NO_SO
-    cmd_dl = cmd | XO_DL; /* Thor.990220: for dynamic load */
-#endif
 #ifndef HAVE_HASH_KEYFUNCLIST  /* Callback function fetching loop */
     cb = xcmd;
     for (;;)
     {
-        int (*cbfunc)(XO *xo) = NULL;
+        XoFunc cbfunc = {0};
 
         int key = cb->first;
 #endif
+        /* IID.2021-03-03: Ignore function type specification flags */
 #if !NO_SO
         /* Thor.990220: dynamic load, with key | XO_DL */
   #ifdef HAVE_HASH_KEYFUNCLIST
-        cb = xcmd->find(cmd_dl);
+        cb = xcmd->find(cmd | XO_DL);
+
+        /* Try to find the `XO_POSF` version if not found */
+        if (cb == xcmd->end() && xo->max > 0)
+            cb = xcmd->find(cmd | XO_POSF | XO_DL);
+
         if (cb != xcmd->end())
   #else
-        if (key == cmd_dl)
+        if ((key & XO_FUNC_MASK) == cmd && (key & XO_DL))
   #endif
         {
-            cbfunc = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
-            if (cbfunc)
+            cbfunc.func = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
+            if (cbfunc.func)
             {
   #ifdef HAVE_HASH_KEYFUNCLIST
     #ifndef DL_HOTSWAP
-                xcmd->erase(cmd_dl);
-                cb = xcmd->insert({cmd, {cbfunc}}).first;
+                xcmd->erase(key);
+                cb = xcmd->insert({key & ~XO_DL, cbfunc}).first;
     #endif
   #else
     #ifndef DL_HOTSWAP
-                cb->second.func = cbfunc;
-                cb->first = cmd;
+                cb->second = cbfunc;
+                cb->first = key & ~XO_DL;
     #endif
-                key = cmd;
   #endif
             }
             else
@@ -1796,14 +1803,29 @@ xover_exec_cb(
         else
   #endif
             cb = xcmd->find(cmd);
+
+        /* Try to find the `XO_POSF` version if not found */
+        if (cb == xcmd->end() && xo->max > 0)
+            cb = xcmd->find(cmd | XO_POSF);
+
         if (cb != xcmd->end())
 #else
-        if (key == cmd)
+        if ((key & XO_FUNC_MASK) == cmd)
 #endif
         {
-            if (!cbfunc)
-                cbfunc = cb->second.func;
-            return (*cbfunc) (xo);
+            if (!cbfunc.func)
+                cbfunc = cb->second;
+
+            if (key & XO_POSF)
+            {
+                /* `XO_POSF` callbacks can be invoked only if the Xover list is not empty */
+                if (xo->max > 0)
+                    return cbfunc.posf(xo, xo->pos);
+                else
+                    return XO_NONE;
+            }
+
+            return cbfunc.func(xo);
         }
         else  /* Callback function not found */
 #ifndef HAVE_HASH_KEYFUNCLIST
@@ -1984,7 +2006,7 @@ xover_key(
         }
         if (cmd == 'F')
         {
-            return xo_forward(xo);
+            return xo_forward(xo, pos);
         }
 #if 0
         if (cmd == 'Z')
@@ -2014,23 +2036,23 @@ xover_key(
         if (cmd == 'g' && (bbstate & STAT_BOARD))
         { /* Thor.980806: 要注意沒進看版(未定看版)時, bbstate會沒有STAT_BOARD
                           站長會無法收錄文章 */
-            return gem_gather(xo);               /* 收錄文章到精華區 */
+            return gem_gather(xo, pos);           /* 收錄文章到精華區 */
         }
 #ifdef  HAVE_MAILGEM
         if (cmd == 'G' && HAS_PERM(PERM_MBOX))
         {
-            DL_HOTSWAP_SCOPE int (*mgp)(XO *xo) = NULL;
+            DL_HOTSWAP_SCOPE int (*mgp)(XO *xo, int pos) = NULL;
             if (!mgp)
             {
                 mgp = DL_NAME_GET("mailgem.so", mailgem_gather);
                 if (mgp)
-                    return (*mgp)(xo);
+                    return (*mgp)(xo, pos);
                 else
                     vmsg("動態連結失敗，請聯絡系統管理員！");
                 return XO_FOOT;
             }
             else
-                return (*mgp)(xo);
+                return (*mgp)(xo, pos);
         }
 #endif
         /* --------------------------------------------- */
@@ -2046,7 +2068,7 @@ xover_key(
             int rs_cmd = xo_keymap(cmd);
             if (rs_cmd >= 0)
             {
-                cmd = xo_thread(xo, rs_cmd);
+                cmd = xo_thread(xo, pos, rs_cmd);
 
                 if ((cmd & XO_POS_MASK) > XO_NONE)
                 {

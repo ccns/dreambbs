@@ -536,12 +536,13 @@ innbbs_foot(
 
 static int
 innbbs_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     InnbbsXyz *const xyz = (InnbbsXyz *)xo->xyz;
-    const char *const rec = xo_pool_base + xo->pos * xo->recsiz;
-    move(3 + xo->pos - xo->top, 0);
-    xyz->item_func(xo->pos + 1, rec);
+    const char *const rec = xo_pool_base + pos * xo->recsiz;
+    move(3 + pos - xo->top, 0);
+    xyz->item_func(pos + 1, rec);
     return XO_NONE;
 }
 
@@ -610,10 +611,11 @@ innbbs_load(
 
 static int
 innbbs_query(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
-    xyz->query_func(xo_pool_base + xo->pos * xo->recsiz);
+    xyz->query_func(xo_pool_base + pos * xo->recsiz);
     return XO_BODY;
 }
 
@@ -632,12 +634,13 @@ innbbs_add(
 
 static int
 innbbs_del(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
     if (vans(msg_del_ny) == 'y')
     {
-        rec_del(xo->dir, xo->recsiz, xo->pos, NULL, NULL);
+        rec_del(xo->dir, xo->recsiz, pos, NULL, NULL);
         xyz->dirty = true;
         return XO_LOAD;
     }
@@ -646,10 +649,11 @@ innbbs_del(
 
 static int
 innbbs_edit(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
-    if (xyz->add_func(xo->dir, xo_pool_base + xo->pos * xo->recsiz, xo->pos))
+    if (xyz->add_func(xo->dir, xo_pool_base + pos * xo->recsiz, pos))
     {
         xyz->dirty = true;
         return XO_INIT;
@@ -659,7 +663,8 @@ innbbs_edit(
 
 static int
 innbbs_search(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
     char buf[40];
@@ -668,7 +673,7 @@ innbbs_search(
     if (vget(B_LINES_REF, 0, "ÃöÁä¦r¡G", buf, sizeof(buf), DOECHO))
     {
         str_lower(buf, buf);
-        for (i = xo->pos + 1; i <= num; i++)
+        for (i = pos + 1; i <= num; i++)
         {
             if (xyz->search_func(xo_pool_base + i * xo->recsiz, buf))
             {
@@ -694,17 +699,17 @@ static KeyFuncList innbbs_cb =
     {XO_HEAD, {innbbs_head}},
     {XO_BODY, {innbbs_body}},
     {XO_FOOT, {innbbs_foot}},
-    {XO_CUR, {innbbs_cur}},
+    {XO_CUR | XO_POSF, {.posf = innbbs_cur}},
 
 
-    {' ', {innbbs_query}},
-    {'r', {innbbs_query}},
+    {' ' | XO_POSF, {.posf = innbbs_query}},
+    {'r' | XO_POSF, {.posf = innbbs_query}},
 
     {Ctrl('P'), {innbbs_add}},
-    {'d', {innbbs_del}},
-    {'E', {innbbs_edit}},
+    {'d' | XO_POSF, {.posf = innbbs_del}},
+    {'E' | XO_POSF, {.posf = innbbs_edit}},
 
-    {'/', {innbbs_search}},
+    {'/' | XO_POSF, {.posf = innbbs_search}},
 
     {'h', {innbbs_help}}
 };

@@ -27,11 +27,12 @@ const ChatAction *chat)
 
 static int
 chat_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const ChatAction *const chat = (const ChatAction *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    chat_item(xo->pos + 1, chat);
+    const ChatAction *const chat = (const ChatAction *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    chat_item(pos + 1, chat);
     return XO_NONE;
 }
 
@@ -151,12 +152,13 @@ XO *xo)
 
 static int
 chat_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(ChatAction), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(ChatAction), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -167,12 +169,11 @@ XO *xo)
 
 static int
 chat_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     ChatAction *chat, mate;
-    int pos;
 
-    pos = xo->pos;
     chat = (ChatAction *) xo_pool_base + pos;
 
     mate = *chat;
@@ -203,13 +204,13 @@ XO *xo)
 
 static int
 chat_move(
-XO *xo)
+XO *xo,
+int pos)
 {
     const ChatAction *ghdr;
     char buf[80];
-    int pos, newOrder;
+    int newOrder;
 
-    pos = xo->pos;
     ghdr = (const ChatAction *) xo_pool_base + pos;
 
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
@@ -266,18 +267,18 @@ KeyFuncList chat_cb =
     {XO_LOAD, {chat_load}},
     {XO_HEAD, {chat_head}},
     {XO_BODY, {chat_body}},
-    {XO_CUR, {chat_cur}},
+    {XO_CUR | XO_POSF, {.posf = chat_cur}},
 
     {Ctrl('P'), {chat_add}},
     {'a', {chat_add}},
-    {'r', {chat_change}},
-    {'c', {chat_change}},
+    {'r' | XO_POSF, {.posf = chat_change}},
+    {'c' | XO_POSF, {.posf = chat_change}},
     {'s', {xo_cb_init}},
     {'S', {chat_sync}},
     {'f', {chat_mode}},
-    {'M', {chat_move}},
+    {'M' | XO_POSF, {.posf = chat_move}},
     {KEY_TAB, {chat_kind}},
-    {'d', {chat_delete}},
+    {'d' | XO_POSF, {.posf = chat_delete}},
     {'h', {chat_help}}
 };
 

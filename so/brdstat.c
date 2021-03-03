@@ -23,11 +23,12 @@ const BSTAT *bstat)
 
 static int
 bstat_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const BSTAT *const bstat = (const BSTAT *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    bstat_item(xo->pos + 1, bstat);
+    const BSTAT *const bstat = (const BSTAT *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    bstat_item(pos + 1, bstat);
     return XO_NONE;
 }
 
@@ -162,7 +163,7 @@ KeyFuncList bstat_cb =
     {XO_LOAD, {bstat_load}},
     {XO_HEAD, {bstat_head}},
     {XO_BODY, {bstat_body}},
-    {XO_CUR, {bstat_cur}},
+    {XO_CUR | XO_POSF, {.posf = bstat_cur}},
 
     {'s', {xo_cb_init}},
     {'S', {bstat_stat}},
@@ -173,7 +174,8 @@ KeyFuncList bstat_cb =
 
 int
 main_bstat(
-XO *xo)
+XO *xo,
+int pos)
 {
     DL_HOLD;
     XO *xx, last;
@@ -183,7 +185,7 @@ XO *xo)
     int num, chn;
 
 
-    num = xo->pos;
+    num = pos;
     chp = (short *) xo->xyz + num;
     chn = *chp;
     if (chn >= 0)

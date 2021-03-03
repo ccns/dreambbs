@@ -230,13 +230,21 @@ static const char *const ModeTypeTable[] =
 
 /* IID.20200128: Reassign xover key values */
 
-/* For specify functions which require dynamic loading */
+/* Callback function specifications for Xover callback lists */
 
+/* The callback function requires dynamic loading */
 #if NO_SO
 #define XO_DL           0x00000000
 #else
 #define XO_DL           0x80000000
 #endif
+
+/* The callback function has a parameter for `xo->pos` */
+#define XO_POSF         XO_MOVE
+
+#define XO_FSPEC_MASK    (XO_DL | XO_POSF) /* Apply this mask to get the function specification flagss */
+
+#define XO_FUNC_MASK    (~XO_FSPEC_MASK) /* Apply this mask to get the actual key for the callback function */
 
 /* Screen redraw/reloading modes */
 

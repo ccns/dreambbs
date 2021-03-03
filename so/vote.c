@@ -100,11 +100,12 @@ const VCH *vch)
 
 static int
 vote_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const VCH *const vch = (const VCH *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    vote_item(xo->pos + 1, vch);
+    const VCH *const vch = (const VCH *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    vote_item(pos + 1, vch);
     return XO_NONE;
 }
 
@@ -538,9 +539,10 @@ XO *xo)
 
 static int
 vote_edit(
-XO *xo)
+XO *xo,
+int pos)
 {
-    int pos, check = 0;
+    int check = 0;
     VCH *vch, vxx;
     char *dir, fpath[80];
     /* Thor: for 修改投票選項 */
@@ -558,7 +560,6 @@ XO *xo)
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    pos = xo->pos;
     dir = xo->dir;
     vch = (VCH *) xo_pool_base + pos;
 
@@ -642,7 +643,8 @@ XO *xo)
 
 static int
 vote_browse(
-XO *xo)
+XO *xo,
+int pos)
 {
     const VCH *vch;
     FILE *fp;
@@ -654,7 +656,7 @@ XO *xo)
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    vch = (const VCH *) xo_pool_base + xo->pos;
+    vch = (const VCH *) xo_pool_base + pos;
     hdr_fpath(fpath, xo->dir, (const HDR *) vch);
 
 
@@ -775,16 +777,16 @@ XO *xo)
 
 static int
 vote_query(
-XO *xo)
+XO *xo,
+int pos)
 {
     char *dir, *fname, fpath[80], buf[80];
     VCH *vch;
-    int cc, pos;
+    int cc;
 
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    pos = xo->pos;
     dir = xo->dir;
     vch = (VCH *) xo_pool_base + pos;
 
@@ -921,7 +923,8 @@ const char *mail)
 
 static int
 vote_join(
-XO *xo)
+XO *xo,
+int pos)
 {
     VCH *vch;
     int count, choice, fd, fv;
@@ -930,7 +933,7 @@ XO *xo)
     char account[10/*7*/];
     vitem_t vlist[MAX_CHOICES];
 
-    vch = (VCH *) xo_pool_base + xo->pos;
+    vch = (VCH *) xo_pool_base + pos;
     if (time(0) > vch->vclose)
     {
         vmsg("投票已經截止了，請靜候開票");
@@ -1118,16 +1121,16 @@ static KeyFuncList vote_cb =
     {XO_LOAD, {vote_load}},
     {XO_HEAD, {vote_head}},
     {XO_BODY, {vote_body}},
-    {XO_CUR, {vote_cur}},
+    {XO_CUR | XO_POSF, {.posf = vote_cur}},
 
-    {'r', {vote_join}},
-    {'v', {vote_join}},
+    {'r' | XO_POSF, {.posf = vote_join}},
+    {'v' | XO_POSF, {.posf = vote_join}},
     {'R', {vote_result}},
-    {'m', {vote_browse}},
-    {'S' | XO_DL, {.dlfunc = DL_NAME("showvote.so", Showvote)}},
-    {'E', {vote_edit}},
+    {'m' | XO_POSF, {.posf = vote_browse}},
+    {'S' | XO_POSF | XO_DL, {.dlposf = DL_NAME("showvote.so", Showvote)}},
+    {'E' | XO_POSF, {.posf = vote_edit}},
     {Ctrl('P'), {vote_add}},
-    {Ctrl('Q'), {vote_query}},
+    {Ctrl('Q') | XO_POSF, {.posf = vote_query}},
 
     {'h', {vote_help}}
 };

@@ -51,7 +51,7 @@ int bank_main(void);
 int BlackJack(void);
 
 /* so/brdstat.c */
-int main_bstat(XO *xo);
+int main_bstat(XO *xo, int pos);
 
 /* so/chat.c */
 int t_chat(void);
@@ -63,7 +63,7 @@ int Chatmenu(void);
 int main_classtable(void);
 
 /* so/cleanrecommend.c */
-int clean(XO *xo);
+int clean(XO *xo, int pos);
 
 /* so/contact.c */
 int Contact(void);
@@ -82,7 +82,7 @@ int a_innbbs(void);
 int List(void);
 
 /* so/mailgem.c */
-int mailgem_gather(XO *xo);
+int mailgem_gather(XO *xo, int pos);
 void mailgem_main(void);
 int gcheck(int level, char *fpath);
 
@@ -123,7 +123,7 @@ int same_mail(char *mail);
 int shop_main(void);
 
 /* so/showvote.c */
-int Showvote(XO *xo);
+int Showvote(XO *xo, int pos);
 
 /* so/song.c */
 int XoSongMain(void);

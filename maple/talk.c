@@ -660,11 +660,12 @@ pal_item(
 
 static int
 pal_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const PAL *const pal = (const PAL *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    pal_item(xo->pos + 1, pal);
+    const PAL *const pal = (const PAL *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    pal_item(pos + 1, pal);
     return XO_NONE;
 }
 
@@ -743,9 +744,10 @@ pal_edit(
 static int
 pal_search(
     XO *xo,
+    int pos,
     int step)
 {
-    int num, pos, max;
+    int num, max;
     static char buf[IDLEN + 1];
     int fsize;
     PAL *phead;
@@ -763,7 +765,7 @@ pal_search(
         str_lower(bufl, buf);
         buflen = strlen(bufl);
 
-        pos = num = xo->pos;
+        num = pos;
         max = xo->max;
         do
         {
@@ -790,16 +792,18 @@ pal_search(
 
 static int
 pal_search_forward(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    return pal_search(xo, 1); /* step = +1 */
+    return pal_search(xo, pos, 1); /* step = +1 */
 }
 
 static int
 pal_search_backward(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    return pal_search(xo, -1); /* step = -1 */
+    return pal_search(xo, pos, -1); /* step = -1 */
 }
 
 
@@ -860,11 +864,12 @@ pal_add(
 
 static int
 pal_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(PAL), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(PAL), pos, NULL, NULL))
         {
 
 #if 1                           /* Thor.0709: 好友名單同步 */
@@ -880,12 +885,11 @@ pal_delete(
 
 static int
 pal_change(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     PAL *pal, mate;
-    int pos;
 
-    pos = xo->pos;
     pal = (PAL *) xo_pool_base + pos;
 
     mate = *pal;
@@ -902,12 +906,13 @@ pal_change(
 
 static int
 pal_mail(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     PAL *pal;
     char *userid;
 
-    pal = (PAL *) xo_pool_base + xo->pos;
+    pal = (PAL *) xo_pool_base + pos;
     userid = pal->userid;
     if (*userid)
     {
@@ -930,11 +935,12 @@ pal_sort(
 
 static int
 pal_query(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const PAL *pal;
 
-    pal = (const PAL *) xo_pool_base + xo->pos;
+    pal = (const PAL *) xo_pool_base + pos;
     move(1, 0);
     clrtobot();
     /* move(2, 0); *//* Thor.0810: 可以不加嗎? */
@@ -959,16 +965,16 @@ KeyFuncList pal_cb =
     {XO_LOAD, {pal_load}},
     {XO_HEAD, {pal_head}},
     {XO_BODY, {pal_body}},
-    {XO_CUR, {pal_cur}},
+    {XO_CUR | XO_POSF, {.posf = pal_cur}},
 
     {'a', {pal_add}},
-    {'c', {pal_change}},
-    {'d', {pal_delete}},
-    {'m', {pal_mail}},
-    {'q', {pal_query}},
+    {'c' | XO_POSF, {.posf = pal_change}},
+    {'d' | XO_POSF, {.posf = pal_delete}},
+    {'m' | XO_POSF, {.posf = pal_mail}},
+    {'q' | XO_POSF, {.posf = pal_query}},
     {'s', {pal_sort}},
-    {'/', {pal_search_forward}},
-    {'?', {pal_search_backward}},
+    {'/' | XO_POSF, {.posf = pal_search_forward}},
+    {'?' | XO_POSF, {.posf = pal_search_backward}},
     {'h', {pal_help}}
 };
 
@@ -1058,11 +1064,12 @@ bmw_item(
 
 static int
 bmw_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const BMW *const bmw = (const BMW *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    bmw_item(xo->pos + 1, bmw);
+    const BMW *const bmw = (const BMW *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    bmw_item(pos + 1, bmw);
     return XO_NONE;
 }
 
@@ -1134,10 +1141,11 @@ bmw_init(
 
 static int
 bmw_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (vans(msg_del_ny) == 'y')
-        if (!rec_del(xo->dir, sizeof(BMW), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(BMW), pos, NULL, NULL))
             return XO_LOAD;
 
     return XO_FOOT;
@@ -1146,12 +1154,13 @@ bmw_delete(
 
 static int
 bmw_mail(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     BMW *bmw;
     char *userid;
 
-    bmw = (BMW *) xo_pool_base + xo->pos;
+    bmw = (BMW *) xo_pool_base + pos;
     userid = bmw->userid;
     if (*userid)
     {
@@ -1165,11 +1174,12 @@ bmw_mail(
 
 static int
 bmw_query(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const BMW *bmw;
 
-    bmw = (const BMW *) xo_pool_base + xo->pos;
+    bmw = (const BMW *) xo_pool_base + pos;
     move(1, 0);
     clrtobot();
     /* move(2, 0); *//* Thor.0810: 可以不加嗎? */
@@ -1181,14 +1191,15 @@ bmw_query(
 
 static int
 bmw_write(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (HAS_PERM(PERM_PAGE))
     {
         UTMP *up = NULL;
         const BMW *benz;
 
-        benz = (const BMW *) xo_pool_base + xo->pos;
+        benz = (const BMW *) xo_pool_base + pos;
         if ((benz->caller >= 0 && benz->caller < MAXACTIVE) && (ushm->uslot[benz->caller].userno == benz->sender) && can_message(&ushm->uslot[benz->caller]))
         {
             up = &ushm->uslot[benz->caller];
@@ -1251,13 +1262,13 @@ KeyFuncList bmw_cb =
     {XO_LOAD, {bmw_load}},
     {XO_HEAD, {bmw_head}},
     {XO_BODY, {bmw_body}},
-    {XO_CUR, {bmw_cur}},
+    {XO_CUR | XO_POSF, {.posf = bmw_cur}},
 
-    {'d', {bmw_delete}},
-    {'m', {bmw_mail}},
-    {'w', {bmw_write}},
-    {'q', {bmw_query}},
-    {Ctrl('Q'), {bmw_query}},
+    {'d' | XO_POSF, {.posf = bmw_delete}},
+    {'m' | XO_POSF, {.posf = bmw_mail}},
+    {'w' | XO_POSF, {.posf = bmw_write}},
+    {'q' | XO_POSF, {.posf = bmw_query}},
+    {Ctrl('Q') | XO_POSF, {.posf = bmw_query}},
     {'s', {xo_cb_init}},
     {KEY_TAB, {bmw_mode}},
     {'h', {bmw_help}}
@@ -3445,9 +3456,10 @@ ulist_pal(
 static int
 ulist_search(
     XO *xo,
+    int pos,
     int step)
 {
-    int num, pos, max;
+    int num, max;
     PICKUP *pp;
     static char buf[IDLEN + 1];
 
@@ -3459,7 +3471,7 @@ ulist_search(
         str_lower(bufl, buf);
         buflen = strlen(bufl); /* Thor: 必定大於0 */
 
-        pos = num = xo->pos;
+        num = pos;
         max = xo->max;
         pp = ulist_pool;
         do
@@ -3489,30 +3501,33 @@ ulist_search(
 
 static int
 ulist_search_forward(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    return ulist_search(xo, 1); /* step = +1 */
+    return ulist_search(xo, pos, 1); /* step = +1 */
 }
 
 static int
 ulist_search_backward(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    return ulist_search(xo, -1); /* step = -1 */
+    return ulist_search(xo, pos, -1); /* step = -1 */
 }
 
 
 
 static int
 ulist_makepal(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (cuser.userlevel)
     {
         UTMP *up;
         int userno;
 
-        up = ulist_pool[xo->pos].utmp;
+        up = ulist_pool[pos].utmp;
         userno = up->userno;
         if (userno > 0 && !is_pal(userno) && !is_bad(userno)   /* 尚未列入好友名單 */
                 && (userno != cuser.userno))    /* lkchu.981217: 自己不可為好友 */
@@ -3545,14 +3560,15 @@ ulist_makepal(
 
 static int
 ulist_makebad(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (cuser.userlevel)
     {
         UTMP *up;
         int userno;
 
-        up = ulist_pool[xo->pos].utmp;
+        up = ulist_pool[pos].utmp;
         userno = up->userno;
         if (userno > 0 && !is_pal(userno) && !is_bad(userno)  /* 尚未列入好友名單 */
                 && (userno != cuser.userno))    /* lkchu.981217: 自己不可為好友 */
@@ -3584,7 +3600,8 @@ ulist_makebad(
 
 static int
 ulist_mail(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     char userid[IDLEN + 1];
 
@@ -3592,7 +3609,7 @@ ulist_mail(
     if (!HAS_PERM(PERM_INTERNET) || HAS_PERM(PERM_DENYMAIL) || !cuser.userlevel)
         return XO_NONE;
 
-    strcpy(userid, ulist_pool[xo->pos].utmp->userid);
+    strcpy(userid, ulist_pool[pos].utmp->userid);
     if (*userid)
     {
         vs_bar("寄  信");
@@ -3608,11 +3625,12 @@ ulist_mail(
 
 static int
 ulist_query(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     move(1, 0);
     clrtobot();
-    my_query(ulist_pool[xo->pos].utmp->userid, 0);
+    my_query(ulist_pool[pos].utmp->userid, 0);
     /*return XO_NECK;*/
     return XO_INIT;
 }
@@ -3674,13 +3692,14 @@ ulist_broadcast(
 
 static int
 ulist_talk(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (HAS_PERM(PERM_PAGE))
     {
         UTMP *up;
 
-        up = ulist_pool[xo->pos].utmp;
+        up = ulist_pool[pos].utmp;
         if (can_override(up))
             return talk_page(up) ? XO_INIT : XO_FOOT;
     }
@@ -3690,13 +3709,14 @@ ulist_talk(
 
 static int
 ulist_write(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (HAS_PERM(PERM_PAGE))
     {
         UTMP *up;
 
-        up = ulist_pool[xo->pos].utmp;
+        up = ulist_pool[pos].utmp;
         if (can_message(up))
         {
             BMW bmw;
@@ -3727,12 +3747,13 @@ ulist_write(
 
 static int
 ulist_edit(                     /* Thor: 可線上查看及修改使用者 */
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     ACCT acct;
 
     if (!HAS_PERM(PERM_SYSOP) ||
-        acct_load(&acct, ulist_pool[xo->pos].utmp->userid) < 0)
+        acct_load(&acct, ulist_pool[pos].utmp->userid) < 0)
         return XO_NONE;
 
     vs_bar("使用者設定");
@@ -3743,7 +3764,8 @@ ulist_edit(                     /* Thor: 可線上查看及修改使用者 */
 /* BLACK SU */
 static int
 ulist_su(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     XO *tmp;
     ACCT acct;
@@ -3752,7 +3774,7 @@ ulist_su(
     ufo = cuser.ufo;
     level = cuser.userlevel;
     if (!supervisor ||
-        acct_load(&acct, ulist_pool[xo->pos].utmp->userid) < 0)
+        acct_load(&acct, ulist_pool[pos].utmp->userid) < 0)
         return XO_NONE;
 
     memcpy(&cuser, &acct, sizeof(ACCT));
@@ -3784,17 +3806,18 @@ ulist_su(
 
 static int
 ulist_kick(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     ACCT u;
-    acct_load(&u, ulist_pool[xo->pos].utmp->userid);
+    acct_load(&u, ulist_pool[pos].utmp->userid);
     if ((HAS_PERM(PERM_SYSOP)&& (!(u.userlevel & PERM_SYSOP) || !strcmp(cuser.userid, u.userid)))||check_admin(cuser.userid))
     {
         UTMP *up;
         pid_t pid;
         char buf[80];
 
-        up = ulist_pool[xo->pos].utmp;
+        up = ulist_pool[pos].utmp;
         if ((pid = up->pid))
         {
             if (vans(msg_sure_ny) != 'y' || pid != up->pid)
@@ -3994,7 +4017,8 @@ ulist_readmail(
 
 static int
 ulist_del(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     UTMP *up;
     char ans;
@@ -4006,7 +4030,7 @@ ulist_del(
     ans = vans("是否刪除(y/N)：");
     if (ans == 'y' || ans == 'Y')
     {
-        up = ulist_pool[xo->pos].utmp;
+        up = ulist_pool[pos].utmp;
         userno = up->userno;
 
         usr_fpath(fpath, cuser.userid, FN_PAL);
@@ -4034,7 +4058,8 @@ ulist_del(
 
 static int
 ulist_changeship(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     UTMP *up;
     int userno;
@@ -4043,7 +4068,7 @@ ulist_changeship(
     PAL *pal;
     int check;
 
-    up = ulist_pool[xo->pos].utmp;
+    up = ulist_pool[pos].utmp;
     userno = up->userno;
 
 
@@ -4082,12 +4107,13 @@ ulist_changeship(
 #if 1
 static int
 ulist_state(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     char buf[128];
     if (!HAS_PERM(PERM_SYSOP))
         return XO_NONE;
-    sprintf(buf, "PID : %d", ulist_pool[xo->pos].utmp->pid);
+    sprintf(buf, "PID : %d", ulist_pool[pos].utmp->pid);
     vmsg(buf);
     return XO_INIT;
 }
@@ -4116,46 +4142,46 @@ KeyFuncList ulist_cb =
     {XO_HEAD, {ulist_head}},
     {XO_BODY, {ulist_body}},
 #if 1
-    {'S', {ulist_state}},
+    {'S' | XO_POSF, {.posf = ulist_state}},
 #endif
     {'y', {ulist_readmail}},
 /* BLACK SU */
-    {'u', {ulist_su}},
+    {'u' | XO_POSF, {.posf = ulist_su}},
 /* BLACK SU */
     {'m', {ulist_message}},
     {'Z', {ulist_ship}},
     {'f', {ulist_pal}},
-    {'a', {ulist_makepal}},
-    {'A', {ulist_makebad}},
-    {'t', {ulist_talk}},
-    {'w', {ulist_write}},
+    {'a' | XO_POSF, {.posf = ulist_makepal}},
+    {'A' | XO_POSF, {.posf = ulist_makebad}},
+    {'t' | XO_POSF, {.posf = ulist_talk}},
+    {'w' | XO_POSF, {.posf = ulist_write}},
     {'l', {ulist_recall}},                /* Thor: 熱訊回顧 */
-    {'j', {ulist_changeship}},
-    {'q', {ulist_query}},
+    {'j' | XO_POSF, {.posf = ulist_changeship}},
+    {'q' | XO_POSF, {.posf = ulist_query}},
     {'b', {ulist_broadcast}},
     {'s', {xo_cb_init}},          /* refresh status Thor: 應user要求 */
     {'c', {t_cloak}},
     {'R', {ulist_realname}},
     {'o', {ulist_mp}},
-    {'d', {ulist_del}},
+    {'d' | XO_POSF, {.posf = ulist_del}},
     {'p', {ulist_pager}},
-    {Ctrl('Q'), {ulist_query}},
-    {Ctrl('K'), {ulist_kick}},
-    {Ctrl('X'), {ulist_edit}},
+    {Ctrl('Q') | XO_POSF, {.posf = ulist_query}},
+    {Ctrl('K') | XO_POSF, {.posf = ulist_kick}},
+    {Ctrl('X') | XO_POSF, {.posf = ulist_edit}},
     {'g', {ulist_nickchange}},
 #ifdef HAVE_CHANGE_FROM
     {Ctrl('F'), {ulist_fromchange}},
 #endif
 
     /* Thor.990125: 可前後搜尋, id or nickname */
-    {'/', {ulist_search_forward}},
-    {'?', {ulist_search_backward}},
+    {'/' | XO_POSF, {.posf = ulist_search_forward}},
+    {'?' | XO_POSF, {.posf = ulist_search_backward}},
 
 #ifdef  APRIL_FIRST
     {'X', {ulist_april1}},
 #endif
 
-    {'M', {ulist_mail}},
+    {'M' | XO_POSF, {.posf = ulist_mail}},
     {KEY_TAB, {ulist_toggle}},
     {'h', {ulist_help}}
 };
@@ -4621,11 +4647,12 @@ banmsg_item(
 
 static int
 banmsg_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const BANMSG *const banmsg = (const BANMSG *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    banmsg_item(xo->pos + 1, banmsg);
+    const BANMSG *const banmsg = (const BANMSG *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    banmsg_item(pos + 1, banmsg);
     return XO_NONE;
 }
 
@@ -4749,12 +4776,13 @@ banmsg_add(
 
 static int
 banmsg_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (vans(msg_del_ny) == 'y')
     {
 
-        if (!rec_del(xo->dir, sizeof(BANMSG), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(BANMSG), pos, NULL, NULL))
         {
 
             banmsg_cache();
@@ -4767,12 +4795,11 @@ banmsg_delete(
 
 static int
 banmsg_change(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     BANMSG *banmsg, mate;
-    int pos;
 
-    pos = xo->pos;
     banmsg = (BANMSG *) xo_pool_base + pos;
 
     mate = *banmsg;
@@ -4789,12 +4816,13 @@ banmsg_change(
 
 static int
 banmsg_mail(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     BANMSG *banmsg;
     char *userid;
 
-    banmsg = (BANMSG *) xo_pool_base + xo->pos;
+    banmsg = (BANMSG *) xo_pool_base + pos;
     userid = banmsg->userid;
     if (*userid)
     {
@@ -4817,11 +4845,12 @@ banmsg_sort(
 
 static int
 banmsg_query(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const BANMSG *banmsg;
 
-    banmsg = (const BANMSG *) xo_pool_base + xo->pos;
+    banmsg = (const BANMSG *) xo_pool_base + pos;
     move(1, 0);
     clrtobot();
     my_query(banmsg->userid, 1);
@@ -4844,13 +4873,13 @@ KeyFuncList banmsg_cb =
     {XO_LOAD, {banmsg_load}},
     {XO_HEAD, {banmsg_head}},
     {XO_BODY, {banmsg_body}},
-    {XO_CUR, {banmsg_cur}},
+    {XO_CUR | XO_POSF, {.posf = banmsg_cur}},
 
     {'a', {banmsg_add}},
-    {'c', {banmsg_change}},
-    {'d', {banmsg_delete}},
-    {'m', {banmsg_mail}},
-    {'q', {banmsg_query}},
+    {'c' | XO_POSF, {.posf = banmsg_change}},
+    {'d' | XO_POSF, {.posf = banmsg_delete}},
+    {'m' | XO_POSF, {.posf = banmsg_mail}},
+    {'q' | XO_POSF, {.posf = banmsg_query}},
     {'s', {banmsg_sort}},
     {'h', {banmsg_help}}
 };

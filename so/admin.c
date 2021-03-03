@@ -23,11 +23,12 @@ const ADMIN *admin)
 
 static int
 admin_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const ADMIN *const admin = (const ADMIN *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    admin_item(xo->pos + 1, admin);
+    const ADMIN *const admin = (const ADMIN *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    admin_item(pos + 1, admin);
     return XO_NONE;
 }
 
@@ -122,12 +123,13 @@ XO *xo)
 
 static int
 admin_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(ADMIN), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(ADMIN), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -138,12 +140,11 @@ XO *xo)
 
 static int
 admin_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     ADMIN *admin, mate;
-    int pos;
 
-    pos = xo->pos;
     admin = (ADMIN *) xo_pool_base + pos;
 
     mate = *admin;
@@ -172,13 +173,13 @@ KeyFuncList admin_cb =
     {XO_LOAD, {admin_load}},
     {XO_HEAD, {admin_head}},
     {XO_BODY, {admin_body}},
-    {XO_CUR, {admin_cur}},
+    {XO_CUR | XO_POSF, {.posf = admin_cur}},
 
     {Ctrl('P'), {admin_add}},
-    {'r', {admin_change}},
-    {'c', {admin_change}},
+    {'r' | XO_POSF, {.posf = admin_change}},
+    {'c' | XO_POSF, {.posf = admin_change}},
     {'s', {xo_cb_init}},
-    {'d', {admin_delete}},
+    {'d' | XO_POSF, {.posf = admin_delete}},
     {'h', {admin_help}}
 };
 

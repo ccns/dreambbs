@@ -815,10 +815,13 @@ typedef struct OverView XO;
 
 typedef union {  /* IID.20191106: The field to be used is determined by the value of `key` */
     int (*func)(XO *xo);  /* Default */
+    int (*posf)(XO *xo, int pos); /* `key | XO_POSF` */
 #if NO_SO
     int (*dlfunc)(XO *xo);  /* `key | XO_DL` */
+    int (*dlposf)(XO *xo, int pos); /* `key | XO_POSF | XO_DL` */
 #else
     const char *dlfunc;
+    const char *dlposf;
 #endif
 } XoFunc;
 

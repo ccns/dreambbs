@@ -1255,11 +1255,12 @@ class_item(
 
 static int
 class_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    short *const chp = (short *) xo->xyz + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    class_item(xo->pos + 1, *chp);
+    short *const chp = (short *) xo->xyz + pos;
+    move(3 + pos - xo->top, 0);
+    class_item(pos + 1, *chp);
     return XO_NONE;
 }
 
@@ -1345,9 +1346,10 @@ class_help(
 
 static int
 class_search(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    int num, pos, max;
+    int num, max;
     char *ptr;
     char buf[IDLEN + 1];
 
@@ -1364,7 +1366,7 @@ class_search(
         bcache = bshm->bcache;
 
         str_lower(ptr, ptr);
-        pos = num = xo->pos;
+        num = pos;
         max = xo->max;
         chp = (short *) xo->xyz;
         do
@@ -1427,13 +1429,14 @@ class_yank(
 
 static int
 class_zap(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     BRD *brd;
     short *chp;
     int num, chn;
 
-    num = xo->pos;
+    num = pos;
     chp = (short *) xo->xyz + num;
     chn = *chp;
     if (chn >= 0)
@@ -1452,7 +1455,8 @@ class_zap(
 
 static int
 class_edit(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     /* if (HAS_PERM(PERM_ALLBOARD)) */
     /* Thor.990119: 只有站長可以修改 */
@@ -1461,7 +1465,7 @@ class_edit(
         short *chp;
         int chn;
 
-        chp = (short *) xo->xyz + xo->pos;
+        chp = (short *) xo->xyz + pos;
         chn = *chp;
         if (chn >= 0)
         {
@@ -1617,14 +1621,15 @@ XoAuthor(
 #if defined(HAVE_COUNT_BOARD) && 0
 static int
 class_stat(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     BRD *brd;
     short *chp;
     int num, chn;
     char msg[80];
 
-    num = xo->pos;
+    num = pos;
     chp = (short *) xo->xyz + num;
     chn = *chp;
     if (chn >= 0)
@@ -1640,12 +1645,13 @@ class_stat(
 
 static int
 class_visit(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     short *chp;
     int chn;
 
-    chp = (short *) xo->xyz + xo->pos;
+    chp = (short *) xo->xyz + pos;
     chn = *chp;
     if (chn >= 0)
     {
@@ -1658,7 +1664,7 @@ class_visit(
     return XO_BODY;
 }
 
-static int class_browse(XO *xo);
+static int class_browse(XO *xo, int pos);
 
 static KeyFuncList class_cb =
 {
@@ -1667,25 +1673,25 @@ static KeyFuncList class_cb =
     {XO_HEAD, {class_head}},
     {XO_NECK, {class_neck}},
     {XO_BODY, {class_body}},
-    {XO_CUR, {class_cur}},
+    {XO_CUR | XO_POSF, {.posf = class_cur}},
 
-    {'r', {class_browse}},
-    {'/', {class_search}},
+    {'r' | XO_POSF, {.posf = class_browse}},
+    {'/' | XO_POSF, {.posf = class_search}},
     {'c', {class_newmode}},
 
     {'s', {class_switch}},
 
     {'y', {class_yank}},
     {'i', {class_yank2}}, //列出所有有閱讀權限的秘密/好友看板
-    {'z', {class_zap}},
-    {'E', {class_edit}},
-    {'v', {class_visit}},
+    {'z' | XO_POSF, {.posf = class_zap}},
+    {'E' | XO_POSF, {.posf = class_edit}},
+    {'v' | XO_POSF, {.posf = class_visit}},
 #ifdef  HAVE_COUNT_BOARD
-    {'S' | XO_DL, {.dlfunc = DL_NAME("brdstat.so", main_bstat)}},
+    {'S' | XO_POSF | XO_DL, {.dlposf = DL_NAME("brdstat.so", main_bstat)}},
 #endif
 
 #ifdef  HAVE_FAVORITE
-    {'a', {class_add}},
+    {'a' | XO_POSF, {.posf = class_add}},
 #endif
 
 #ifdef AUTHOR_EXTRACTION
@@ -1741,12 +1747,13 @@ XoClass(
 
 static int
 class_browse(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     short *chp;
     int chn;
 
-    chp = (short *) xo->xyz + xo->pos;
+    chp = (short *) xo->xyz + pos;
     chn = *chp;
     if (chn < 0)
     {

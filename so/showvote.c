@@ -26,11 +26,12 @@ const LOG *show)
 
 static int
 show_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const LOG *const show = (const LOG *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    show_item(xo->pos + 1, show);
+    const LOG *const show = (const LOG *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    show_item(pos + 1, show);
     return XO_NONE;
 }
 
@@ -125,12 +126,13 @@ XO *xo)
 
 static int
 show_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(LOG), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(LOG), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -141,12 +143,11 @@ XO *xo)
 
 static int
 show_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     LOG *show, mate;
-    int pos;
 
-    pos = xo->pos;
     show = (LOG *) xo_pool_base + pos;
 
     mate = *show;
@@ -174,20 +175,21 @@ KeyFuncList show_cb =
     {XO_LOAD, {show_load}},
     {XO_HEAD, {show_head}},
     {XO_BODY, {show_body}},
-    {XO_CUR, {show_cur}},
+    {XO_CUR | XO_POSF, {.posf = show_cur}},
 
     {Ctrl('P'), {show_add}},
-    {'r', {show_change}},
-    {'c', {show_change}},
+    {'r' | XO_POSF, {.posf = show_change}},
+    {'c' | XO_POSF, {.posf = show_change}},
     {'s', {xo_cb_init}},
-    {'d', {show_delete}},
+    {'d' | XO_POSF, {.posf = show_delete}},
     {'h', {show_help}}
 };
 
 
 int
 Showvote(
-XO *xo)
+XO *xo,
+int pos)
 {
     DL_HOLD;
     XO *last;
@@ -198,7 +200,7 @@ XO *xo)
 
     last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
 
-    vch = (const VCH *) xo_pool_base + xo->pos;
+    vch = (const VCH *) xo_pool_base + pos;
     hdr_fpath(fpath, xo->dir, (const HDR *) vch);
     fname = strrchr(fpath, '@');
     *fname = 'E';

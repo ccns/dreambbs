@@ -131,11 +131,12 @@ const NBRD *nbrd)
 
 static int
 nbrd_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const NBRD *const nbrd = (const NBRD *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    nbrd_item(xo->pos + 1, nbrd);
+    const NBRD *const nbrd = (const NBRD *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    nbrd_item(pos + 1, nbrd);
     return XO_NONE;
 }
 
@@ -468,7 +469,8 @@ const char *mail)
 
 static int
 nbrd_join(
-XO *xo)
+XO *xo,
+int pos)
 {
     NBRD *nbrd;
     int fd, fv, lock;
@@ -477,7 +479,7 @@ XO *xo)
     LOG mail;
 
     memset(&mail, 0, sizeof(LOG));
-    nbrd = (NBRD *) xo_pool_base + xo->pos;
+    nbrd = (NBRD *) xo_pool_base + pos;
     if (nbrd->mode & NBRD_REJECT)
     {
         vmsg("拒絕申請，資料不完整！");
@@ -501,7 +503,7 @@ XO *xo)
     else if (time(0) > nbrd->etime || nbrd->mode & NBRD_STOP)
     {
         nbrd->mode = NBRD_STOP  | (nbrd->mode & NBRD_MASK);
-        rec_put(xo->dir, nbrd, sizeof(NBRD), xo->pos);
+        rec_put(xo->dir, nbrd, sizeof(NBRD), pos);
         vmsg("連署已經截止了，請下次再來！");
         return XO_FOOT;
     }
@@ -609,7 +611,7 @@ XO *xo)
         fp = fopen(fpath, "r+");
         fds = fopen(nfile, "w");
 
-        rec_get(xo->dir, nbrd, sizeof(NBRD), xo->pos);
+        rec_get(xo->dir, nbrd, sizeof(NBRD), pos);
         if (fp)
         {
             while (fgets(buf, 128, fp))
@@ -654,7 +656,7 @@ XO *xo)
                 nbrd->mode = NBRD_OK  | (nbrd->mode & NBRD_MASK) | NBRD_START;
             }
             strcpy(mail.email, cuser.email);
-            rec_put(xo->dir, nbrd, sizeof(NBRD), xo->pos);
+            rec_put(xo->dir, nbrd, sizeof(NBRD), pos);
             rec_add(logpath, &mail, sizeof(LOG));
         }
         else
@@ -674,7 +676,8 @@ XO *xo)
 
 static int
 nbrd_start(
-XO *xo)
+XO *xo,
+int pos)
 {
     NBRD *nbrd;
     char fpath[80], buf[128], tmp[10];
@@ -683,7 +686,7 @@ XO *xo)
         return XO_NONE;
 
 
-    nbrd = (NBRD *) xo_pool_base + xo->pos;
+    nbrd = (NBRD *) xo_pool_base + pos;
     if (nbrd->mode & ~(NBRD_MASK))
         vmsg("已通過或已停止！");
     else
@@ -704,7 +707,7 @@ XO *xo)
         }
         nbrd->etime = etime;
         nbrd->mode = NBRD_START  | (nbrd->mode & NBRD_MASK);
-        rec_put(xo->dir, nbrd, sizeof(NBRD), xo->pos);
+        rec_put(xo->dir, nbrd, sizeof(NBRD), pos);
         vmsg("申請通過");
     }
     return XO_HEAD;
@@ -712,7 +715,8 @@ XO *xo)
 
 static int
 nbrd_reject(
-XO *xo)
+XO *xo,
+int pos)
 {
     NBRD *nbrd;
     char path[128], fpath[128];
@@ -725,7 +729,7 @@ XO *xo)
     }
 
 
-    nbrd = (NBRD *) xo_pool_base + xo->pos;
+    nbrd = (NBRD *) xo_pool_base + pos;
     if (!HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
 
@@ -751,7 +755,7 @@ XO *xo)
         fclose(fp);
         f_cat(fpath, S_PART);
         nbrd->mode |= NBRD_REJECT  | (nbrd->mode & NBRD_MASK);
-        rec_put(xo->dir, nbrd, sizeof(NBRD), xo->pos);
+        rec_put(xo->dir, nbrd, sizeof(NBRD), pos);
         vmsg("拒絕申請");
         unlink(path);
     }
@@ -760,11 +764,12 @@ XO *xo)
 
 static int
 nbrd_close(
-XO *xo)
+XO *xo,
+int pos)
 {
     NBRD *nbrd;
 
-    nbrd = (NBRD *) xo_pool_base + xo->pos;
+    nbrd = (NBRD *) xo_pool_base + pos;
     if (!HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
     if (nbrd->mode & NBRD_OK)
@@ -776,7 +781,7 @@ XO *xo)
     else
     {
         nbrd->mode = NBRD_CLOSE  | (nbrd->mode & NBRD_MASK);
-        rec_put(xo->dir, nbrd, sizeof(NBRD), xo->pos);
+        rec_put(xo->dir, nbrd, sizeof(NBRD), pos);
         vmsg("關閉完成");
     }
     return XO_HEAD;
@@ -784,11 +789,12 @@ XO *xo)
 
 static int
 nbrd_open(
-XO *xo)
+XO *xo,
+int pos)
 {
     NBRD *nbrd;
 
-    nbrd = (NBRD *) xo_pool_base + xo->pos;
+    nbrd = (NBRD *) xo_pool_base + pos;
     if (!HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
 
@@ -799,7 +805,7 @@ XO *xo)
     else
     {
         nbrd->mode = NBRD_OPEN | (nbrd->mode & NBRD_MASK);
-        rec_put(xo->dir, nbrd, sizeof(NBRD), xo->pos);
+        rec_put(xo->dir, nbrd, sizeof(NBRD), pos);
         vmsg("開版完成");
     }
     return XO_HEAD;
@@ -808,28 +814,30 @@ XO *xo)
 #ifdef  TEST_COSIGN
 static int
 nbrd_zero(
-XO *xo)
+XO *xo,
+int pos)
 {
     NBRD *nbrd;
 
-    nbrd = (NBRD *) xo_pool_base + xo->pos;
+    nbrd = (NBRD *) xo_pool_base + pos;
     if (!HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
 
     nbrd->mode |= NBRD_START;
-    rec_put(xo->dir, nbrd, sizeof(NBRD), xo->pos);
+    rec_put(xo->dir, nbrd, sizeof(NBRD), pos);
     return XO_HEAD;
 }
 #endif
 
 static int
 nbrd_browse(
-XO *xo)
+XO *xo,
+int pos)
 {
     const NBRD *nbrd;
     char fpath[80];
 
-    nbrd = (const NBRD *) xo_pool_base + xo->pos;
+    nbrd = (const NBRD *) xo_pool_base + pos;
     nbrd_fpath(fpath, xo->dir, nbrd);
     more(fpath, NULL);
     return XO_INIT;
@@ -837,13 +845,14 @@ XO *xo)
 
 static int
 nbrd_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
     const NBRD *nbrd;
     char fpath[80];
 
 
-    nbrd = (const NBRD *) xo_pool_base + xo->pos;
+    nbrd = (const NBRD *) xo_pool_base + pos;
     if (strcmp(cuser.userid, nbrd->owner) && !HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
 
@@ -853,13 +862,14 @@ XO *xo)
     unlink(fpath);
     strcat(fpath, ".log");
     unlink(fpath);
-    rec_del(xo->dir, sizeof(NBRD), xo->pos, NULL, NULL);
+    rec_del(xo->dir, sizeof(NBRD), pos, NULL, NULL);
     return XO_INIT;
 }
 
 static int
 nbrd_cross(
-XO *xo)
+XO *xo,
+int pos)
 {
     char xboard[20], fpath[80], xfolder[80], buf[80];
     HDR xpost;
@@ -870,7 +880,7 @@ XO *xo)
     if (!HAS_PERM(PERM_ADMIN))
         return XO_NONE;
 
-    nbrd = (const NBRD *) xo_pool_base + xo->pos;
+    nbrd = (const NBRD *) xo_pool_base + pos;
 
     if (ask_board(xboard, BRD_W_BIT,
                   "\n\n\x1b[1;33m請挑選適當的看板，切勿轉貼超過三板。\x1b[m\n\n")
@@ -925,18 +935,18 @@ KeyFuncList nbrd_cb =
     {XO_LOAD, {nbrd_load}},
     {XO_HEAD, {nbrd_head}},
     {XO_BODY, {nbrd_body}},
-    {XO_CUR, {nbrd_cur}},
+    {XO_CUR | XO_POSF, {.posf = nbrd_cur}},
 
-    {'j', {nbrd_join}},
-    {'r', {nbrd_browse}},
-    {'o', {nbrd_open}},
-    {'s', {nbrd_start}},
-    {'R', {nbrd_reject}},
-    {'c', {nbrd_close}},
-    {'d', {nbrd_delete}},
-    {'x', {nbrd_cross}},
+    {'j' | XO_POSF, {.posf = nbrd_join}},
+    {'r' | XO_POSF, {.posf = nbrd_browse}},
+    {'o' | XO_POSF, {.posf = nbrd_open}},
+    {'s' | XO_POSF, {.posf = nbrd_start}},
+    {'R' | XO_POSF, {.posf = nbrd_reject}},
+    {'c' | XO_POSF, {.posf = nbrd_close}},
+    {'d' | XO_POSF, {.posf = nbrd_delete}},
+    {'x' | XO_POSF, {.posf = nbrd_cross}},
 #ifdef  TEST_COSIGN
-    {'z', {nbrd_zero}},
+    {'z' | XO_POSF, {.posf = nbrd_zero}},
 #endif
     {Ctrl('P'), {nbrd_add}},
     {'h', {nbrd_help}}

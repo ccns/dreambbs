@@ -87,11 +87,12 @@ const MEMORANDUM *memorandum)
 
 static int
 memorandum_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const MEMORANDUM *const memorandum = (const MEMORANDUM *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    memorandum_item(xo->pos + 1, memorandum);
+    const MEMORANDUM *const memorandum = (const MEMORANDUM *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    memorandum_item(pos + 1, memorandum);
     return XO_NONE;
 }
 
@@ -189,12 +190,13 @@ XO *xo)
 
 static int
 memorandum_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(MEMORANDUM), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(MEMORANDUM), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -205,12 +207,11 @@ XO *xo)
 
 static int
 memorandum_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     MEMORANDUM *memorandum, mate;
-    int pos;
 
-    pos = xo->pos;
     memorandum = (MEMORANDUM *) xo_pool_base + pos;
 
     mate = *memorandum;
@@ -238,13 +239,13 @@ KeyFuncList memorandum_cb =
     {XO_LOAD, {memorandum_load}},
     {XO_HEAD, {memorandum_head}},
     {XO_BODY, {memorandum_body}},
-    {XO_CUR, {memorandum_cur}},
+    {XO_CUR | XO_POSF, {.posf = memorandum_cur}},
 
     {Ctrl('P'), {memorandum_add}},
-    {'r', {memorandum_change}},
-    {'c', {memorandum_change}},
+    {'r' | XO_POSF, {.posf = memorandum_change}},
+    {'c' | XO_POSF, {.posf = memorandum_change}},
     {'s', {xo_cb_init}},
-    {'d', {memorandum_delete}},
+    {'d' | XO_POSF, {.posf = memorandum_delete}},
     {'h', {memorandum_help}}
 };
 

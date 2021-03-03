@@ -31,11 +31,12 @@ const EMAIL *viol)
 
 static int
 viol_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const EMAIL *const viol = (const EMAIL *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    viol_item(xo->pos + 1, viol);
+    const EMAIL *const viol = (const EMAIL *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    viol_item(pos + 1, viol);
     return XO_NONE;
 }
 
@@ -130,12 +131,13 @@ XO *xo)
 
 static int
 viol_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(EMAIL), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(EMAIL), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -146,12 +148,11 @@ XO *xo)
 
 static int
 viol_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     EMAIL *viol, mate;
-    int pos;
 
-    pos = xo->pos;
     viol = (EMAIL *) xo_pool_base + pos;
 
     mate = *viol;
@@ -167,10 +168,11 @@ XO *xo)
 
 static int
 viol_find(
-XO *xo)
+XO *xo,
+int pos)
 {
     EMAIL viol;
-    int pos, fd;
+    int fd;
     char buf[64];
 
     if (!vget(B_LINES_REF, 0, "½Ð¿é¤J¬d¸ß¦r¦ê:", buf, sizeof(buf), DOECHO))
@@ -178,7 +180,7 @@ XO *xo)
 
     fd = open(FN_VIOLATELAW_DB, O_RDONLY);
 
-    pos = xo->pos + 1;
+    pos = pos + 1;
 
     while (fd >= 0)
     {
@@ -219,14 +221,14 @@ KeyFuncList viol_cb =
     {XO_LOAD, {viol_load}},
     {XO_HEAD, {viol_head}},
     {XO_BODY, {viol_body}},
-    {XO_CUR, {viol_cur}},
+    {XO_CUR | XO_POSF, {.posf = viol_cur}},
 
     {Ctrl('P'), {viol_add}},
-    {'r', {viol_change}},
-    {'f', {viol_find}},
-    {'c', {viol_change}},
+    {'r' | XO_POSF, {.posf = viol_change}},
+    {'f' | XO_POSF, {.posf = viol_find}},
+    {'c' | XO_POSF, {.posf = viol_change}},
     {'s', {xo_cb_init}},
-    {'d', {viol_delete}},
+    {'d' | XO_POSF, {.posf = viol_delete}},
     {'h', {viol_help}}
 };
 

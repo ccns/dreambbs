@@ -2007,11 +2007,12 @@ mbox_item(
 
 static int
 mbox_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const HDR *const mhdr = (const HDR *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    mbox_item(xo->pos + 1, mhdr);
+    const HDR *const mhdr = (const HDR *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    mbox_item(pos + 1, mhdr);
     return XO_NONE;
 }
 
@@ -2080,16 +2081,16 @@ mbox_init(
 
 static int
 mbox_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    int pos, xmode;
+    int xmode;
     HDR *hdr;
     char *dir;
 #ifndef HAVE_MAILUNDELETE
     char fpath[64];
 #endif
 
-    pos = xo->pos;
     hdr = (HDR *) xo_pool_base + pos;
 
     xmode = hdr->xmode;
@@ -2122,10 +2123,10 @@ mbox_delete(
 
 static int
 mbox_forward(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     ACCT muser;
-    int pos;
     const HDR *hdr;
     if (bbsothermode & OTHERSTAT_EDITING)
     {
@@ -2145,7 +2146,6 @@ mbox_forward(
 
     if (acct_get("轉達信件給：", &muser) > 0)
     {
-        pos = xo->pos;
         hdr = (const HDR *) xo_pool_base + pos;
 
         strcpy(quote_user, hdr->owner);
@@ -2178,14 +2178,14 @@ mbox_forward(
 
 static int
 mbox_browse(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *mhdr, hdr;
-    int pos, xmode, nmode, mode;
+    int xmode, nmode, mode;
     char *dir, *fpath;
 
     dir = xo->dir;
-    pos = xo->pos;
     fpath = quote_file;
     mhdr = (HDR *) xo_pool_base + pos;
     memcpy(&hdr, mhdr, sizeof(HDR));
@@ -2228,7 +2228,7 @@ mbox_browse(
 
     if (nmode == 'd')
     {
-        if (mbox_delete(xo) != XO_FOOT)
+        if (mbox_delete(xo, pos) != XO_FOOT)
         {
             *fpath = '\0';
             return XO_INIT;
@@ -2250,7 +2250,7 @@ mbox_browse(
     }
     else if (nmode == 'x')
     {
-        mbox_forward(xo);
+        mbox_forward(xo, pos);
     }
 
     nmode = mhdr->xmode | MAIL_READ;
@@ -2267,9 +2267,10 @@ mbox_browse(
 
 static int
 mbox_reply(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    int pos, xmode;
+    int xmode;
     HDR *mhdr, hdr;
 
 //  if (m_count())
@@ -2284,7 +2285,6 @@ mbox_reply(
     else
         chk_mailstat = 0;
 
-    pos = xo->pos;
     mhdr = (HDR *) xo_pool_base + pos;
     memcpy(&hdr, mhdr, sizeof(HDR));
     mhdr = &hdr;
@@ -2308,12 +2308,11 @@ mbox_reply(
 
 static int
 mbox_mark(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *mhdr;
-    int pos;
 
-    pos = xo->pos;
     mhdr = (HDR *) xo_pool_base + pos;
 
     mhdr->xmode ^= MAIL_MARKED;
@@ -2324,12 +2323,12 @@ mbox_mark(
 
 static int
 mbox_tag(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
-    int tag, pos;
+    int tag;
 
-    pos = xo->pos;
     hdr = (const HDR *) xo_pool_base + pos;
 
     if ((tag = Tagger(hdr->chrono, pos, TAG_TOGGLE)))
@@ -2401,7 +2400,8 @@ mbox_stat(
 
 static int
 mbox_edit(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr;
     char fpath[128];
@@ -2411,7 +2411,7 @@ mbox_edit(
         return XO_FOOT;
     }
 
-    hdr = (HDR *) xo_pool_base + xo->pos;
+    hdr = (HDR *) xo_pool_base + pos;
     hdr_fpath(fpath, xo->dir, hdr);
     if (HAS_PERM(PERM_SYSOP))
     {
@@ -2423,14 +2423,15 @@ mbox_edit(
 
 static int
 mbox_size(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
     char *dir, fpath[80], buf[128];
     struct stat st;
 
     dir = xo->dir;
-    hdr = (const HDR *) xo_pool_base + xo->pos;
+    hdr = (const HDR *) xo_pool_base + pos;
     hdr_fpath(fpath, dir, hdr);
 
     if (HAS_PERM(PERM_SYSOP))
@@ -2462,7 +2463,8 @@ mbox_size(
 #ifdef  HAVE_MAIL_FIX
 static int
 mbox_title(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr, mhdr;
 
@@ -2470,7 +2472,7 @@ mbox_title(
         return XO_NONE;
 
 
-    hdr = (HDR *) xo_pool_base + xo->pos;
+    hdr = (HDR *) xo_pool_base + pos;
     mhdr = *hdr;
 
     vget(B_LINES_REF, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
@@ -2483,7 +2485,7 @@ mbox_title(
         memcmp(hdr, &mhdr, sizeof(HDR)))
     {
         *hdr = mhdr;
-        rec_put(xo->dir, hdr, sizeof(HDR), xo->pos);
+        rec_put(xo->dir, hdr, sizeof(HDR), pos);
         return XO_INIT;
     }
 
@@ -2496,15 +2498,16 @@ mbox_title(
 
 static int
 mbox_undelete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr;
 
-    hdr = (HDR *) xo_pool_base + xo->pos;
+    hdr = (HDR *) xo_pool_base + pos;
 
     hdr->xmode &= ~POST_DELETE;
 
-    if (!rec_put(xo->dir, hdr, sizeof(HDR), xo->pos))
+    if (!rec_put(xo->dir, hdr, sizeof(HDR), pos))
         return XO_INIT;
     return XO_NONE;
 }
@@ -2575,37 +2578,37 @@ static KeyFuncList mbox_cb =
     {XO_HEAD, {mbox_head}},
     {XO_BODY, {mbox_body}},
     {XO_FOOT, {mbox_foot}},
-    {XO_CUR, {mbox_cur}},
+    {XO_CUR | XO_POSF, {.posf = mbox_cur}},
 
 #ifdef  HAVE_MAIL_FIX
-    {'T', {mbox_title}},
+    {'T' | XO_POSF, {.posf = mbox_title}},
 #endif
-    {'r', {mbox_browse}},
-    {'E', {mbox_edit}},
+    {'r' | XO_POSF, {.posf = mbox_browse}},
+    {'E' | XO_POSF, {.posf = mbox_edit}},
     {'s', {mbox_send}},
-    {'d', {mbox_delete}},
-    {Ctrl('X'), {mbox_forward}},
-    {'m', {mbox_mark}},
+    {'d' | XO_POSF, {.posf = mbox_delete}},
+    {Ctrl('X') | XO_POSF, {.posf = mbox_forward}},
+    {'m' | XO_POSF, {.posf = mbox_mark}},
 #ifdef  HAVE_MAILGEM
     {'z', {mbox_gem}},
 #endif
-    {'R', {mbox_reply}},
-    {'y', {mbox_reply}},
+    {'R' | XO_POSF, {.posf = mbox_reply}},
+    {'y' | XO_POSF, {.posf = mbox_reply}},
     {'c', {mbox_stat}},
 #ifdef HAVE_MAILUNDELETE
     {'U', {mbox_clean}},
-    {'u', {mbox_undelete}},
+    {'u' | XO_POSF, {.posf = mbox_undelete}},
 #endif
 
     {KEY_TAB, {mbox_sysop}},
     {'I', {mbox_other}},
-    {'t', {mbox_tag}},
-    {'S', {mbox_size}},
+    {'t' | XO_POSF, {.posf = mbox_tag}},
+    {'S' | XO_POSF, {.posf = mbox_size}},
     {'D', {xo_delete}},
 
-    {Ctrl('Q'), {xo_uquery}},
-    {'X', {xo_usetup}},
-    {'x', {post_cross}},
+    {Ctrl('Q') | XO_POSF, {.posf = xo_uquery}},
+    {'X' | XO_POSF, {.posf = xo_usetup}},
+    {'x' | XO_POSF, {.posf = post_cross}},
 
     {'h', {mbox_help}}
 };

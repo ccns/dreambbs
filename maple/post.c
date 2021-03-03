@@ -559,7 +559,7 @@ do_post(
         /* if ((mode) && (!(bbstate & BRD_NOTRAN))) */
         /* Thor.990111: 已由 edit.c 中統一check */
         brh_add(post.chrono, post.chrono, post.chrono);
-        //post_history(xz[XZ_POST - XO_ZONE].xo, &post);
+        //post_history(xz[XZ_POST - XO_ZONE].xo, xo->pos, &post);
 #ifdef  HAVE_DETECT_VIOLATELAW
         if (mode && !banpost)
 #else
@@ -711,13 +711,14 @@ do_reply(
 
     static int
 post_reply(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (bbstate & STAT_POST)
     {
         HDR *hdr;
 
-        hdr = (HDR *) xo_pool_base + xo->pos;
+        hdr = (HDR *) xo_pool_base + pos;
         if (!(hdr->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_CURMODIFY)))
         {
             if ((hdr->xmode & POST_LOCK) && !(HAS_PERM(PERM_SYSOP| PERM_BOARD) || bbstate & STAT_BOARD))
@@ -743,7 +744,7 @@ static int post_head(XO *xo);           /* Thor: 因為 XoBM 要用 */
 
 
 #ifdef XZ_XPOST
-static int XoXpost(XO *xo);             /* Thor: for XoXpost */
+static int XoXpost(XO *xo, int pos);    /* Thor: for XoXpost */
 #endif
 
 
@@ -758,9 +759,10 @@ post_init(
     static int          /* cat@20050628 search record in .DIR file */
 seek_rec(
     XO *xo,
+    int pos,
     HDR *hdr)
 {
-    int fd, total, pos;
+    int fd, total;
     struct stat st;
     HDR thdr;
 
@@ -770,7 +772,7 @@ seek_rec(
     fstat(fd, &st);
 
     total = st.st_size / sizeof(HDR);
-    pos = BMIN(xo->pos, total-1);
+    pos = BMIN(pos, total-1);
 
     memcpy(&thdr, hdr, sizeof(HDR));
 
@@ -918,11 +920,12 @@ post_item(
 
 static int
 post_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const HDR *const fhdr = (const HDR *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    post_item(xo->pos + 1, fhdr);
+    const HDR *const fhdr = (const HDR *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    post_item(pos + 1, fhdr);
     return XO_NONE;
 }
 
@@ -1038,7 +1041,8 @@ post_add(
 
     int
 post_cross(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     char xboard[20], fpath[80], xfolder[80], xtitle[80], buf[80], *dir;
     HDR *hdr, xpost, xhdr;
@@ -1068,7 +1072,7 @@ post_cross(
     }
 
     // check delete or not .. by statue 2000/05/18
-    hdr = (HDR *) xo_pool_base + xo->pos;
+    hdr = (HDR *) xo_pool_base + pos;
     if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_CURMODIFY))
         return XO_NONE;
     if ((hdr->xmode & POST_LOCK) && !HAS_PERM(PERM_SYSOP))
@@ -1098,7 +1102,7 @@ post_cross(
         if (*xboard == 0)
             strcpy(xboard, currboard);
 
-        hdr = tag ? &xhdr : (HDR *) xo_pool_base + xo->pos;
+        hdr = tag ? &xhdr : (HDR *) xo_pool_base + pos;
         /* lkchu.981201: 整批轉貼 */
         if (!tag && (hdr->xmode & POST_LOCK) && !HAS_PERM(PERM_SYSOP))
         {
@@ -1291,7 +1295,8 @@ post_cross(
 #ifdef HAVE_MULTI_CROSSPOST
     static int
 post_xcross(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     char *xboard, fpath[80], xfolder[80], buf[80], *dir;
     HDR *hdr, xpost, xhdr;
@@ -1303,7 +1308,7 @@ post_xcross(
         return XO_NONE;
 
     // check delete or not .. by statue 2000/05/18
-    hdr = (HDR *) xo_pool_base + xo->pos;
+    hdr = (HDR *) xo_pool_base + pos;
     if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_CURMODIFY))
         return XO_NONE;
 
@@ -1379,10 +1384,11 @@ post_xcross(
 void
 post_history(
     XO *xo,
+    int pos,
     const HDR *fhdr)
 {
     time_t prev, chrono, next;
-    int pos, max, push=0;
+    int max, push=0;
     char *dir;
     HDR buf;
 
@@ -1393,7 +1399,6 @@ post_history(
 
 
     dir = xo->dir;
-    pos = xo->pos;
     max = xo->max;
 
     chrono = fhdr->chrono;
@@ -1469,10 +1474,11 @@ post_history(          /* 將 hdr 這篇加入 brh */
 
     static int
 post_browse(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr;
-    int cmd GCC_UNUSED, xmode, pos;
+    int cmd GCC_UNUSED, xmode;
     char *dir, fpath[64], *board GCC_UNUSED;
 
     int key;
@@ -1484,7 +1490,6 @@ post_browse(
     for (;;)
     {
 
-        pos = xo->pos;
         hdr = (HDR *) xo_pool_base + pos;
         xmode = hdr->xmode;
         if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE))
@@ -1525,7 +1530,7 @@ post_browse(
         //      break;
 
         cmd = XO_LOAD;
-        post_history(xo, hdr);
+        post_history(xo, pos, hdr);
 
         if (!(hdr->xmode & POST_LOCK) || HAS_PERM(PERM_SYSOP))
             strcpy(currtitle, str_ttl(hdr->title));
@@ -1538,7 +1543,9 @@ post_browse(
 
         if (key == -2)
             return XO_INIT;
-        switch (xo_getch(xo, key))
+        key = xo_getch(xo, pos, key);
+        pos = xo->pos;
+        switch (key)
         {
             case XO_BODY:
                 continue;
@@ -1570,7 +1577,7 @@ post_browse(
 #ifdef HAVE_RECOMMEND
             case 'X':
             case '%':
-                post_recommend(xo);
+                post_recommend(xo, pos);
                 break;
 #endif
         }
@@ -1727,12 +1734,12 @@ post_switch(
 
     int
 post_tag(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
-    int tag, pos;
+    int tag;
 
-    pos = xo->pos;
     hdr = (const HDR *) xo_pool_base + pos;
 
 #ifdef XZ_XPOST
@@ -1757,14 +1764,12 @@ post_tag(
 
     static int
 post_mark(
-    XO *xo)
+    XO *xo, int pos)
 {
     if (bbstate & STAT_BOARD)
     {
         HDR *hdr;
-        int pos;
 
-        pos = xo->pos;
         hdr = (HDR *) xo_pool_base + pos;
 
         if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE))
@@ -1804,9 +1809,8 @@ lazy_delete(
 
     static int
 post_delete(
-    XO *xo)
+    XO *xo, int pos)
 {
-    int pos;
     bool by_BM;
     HDR *fhdr, phdr;
     char buf[80], fpath[80];
@@ -1825,7 +1829,6 @@ post_delete(
         return XO_FOOT;
     }
 
-    pos = xo->pos;
     fhdr = (HDR *) xo_pool_base + pos;
 
     if (fhdr->xmode & (POST_MARKED | POST_CANCEL | POST_DELETE | POST_MDELETE))
@@ -1921,7 +1924,7 @@ post_delete(
         }
 
         /* Thor.980911: for 版主砍文章 in 串接 */
-        /* if (!rec_del(xo->dir, sizeof(HDR), xo->pos, cmpchrono, lazy_delete)) */
+        /* if (!rec_del(xo->dir, sizeof(HDR), pos, cmpchrono, lazy_delete)) */
         if (!rec_del(xo->dir, sizeof(HDR), xo->key == XZ_POST ? pos : fhdr->xid, cmpchrono, lazy_delete))
         {
             move_post(fhdr, by_BM ? BN_DELETED : BN_JUNK, by_BM);
@@ -1947,13 +1950,11 @@ post_delete(
 
 static int
 post_clean_delete(
-    XO *xo)
+    XO *xo, int pos)
 {
-    int pos;
     bool by_BM;
     const HDR *hdr;
 
-    pos = xo->pos;
     hdr = (const HDR *) xo_pool_base + pos;
 
     by_BM = strcmp(hdr->owner, cuser.userid);
@@ -1980,7 +1981,7 @@ post_clean_delete(
 #ifdef HAVE_POST_BOTTOM
     static int
 post_bottom(
-    XO *xo)
+    XO *xo, int pos)
 {
     if (bbstate & STAT_BOARD)
     {
@@ -1988,7 +1989,7 @@ post_bottom(
         HDR post;
         char fpath[64];
 
-        hdr = (const HDR *) xo_pool_base + xo->pos;
+        hdr = (const HDR *) xo_pool_base + pos;
 
         //if ((hdr->xmode & POST_BOTTOM) && !HAVE_PERM(PERM_SYSOP)) /* 已置底就不能再置底 */
         //    return post_delete(xo);
@@ -2018,14 +2019,13 @@ post_bottom(
 
     static int
 post_complete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (HAS_PERM(PERM_SYSOP|PERM_BOARD))
     {
         HDR *hdr;
-        int pos;
 
-        pos = xo->pos;
         hdr = (HDR *) xo_pool_base + pos;
 
         hdr->xmode ^= POST_COMPLETE;
@@ -2037,15 +2037,13 @@ post_complete(
 
     static int
 post_lock(
-    XO *xo)
+    XO *xo, int pos)
 {
     HDR *hdr;
-    int pos;
 
     if (!cuser.userlevel) /* itoc.020114: guest 不能對其他 guest 的文章加密 */
         return XO_NONE;
 
-    pos = xo->pos;
     hdr = (HDR *) xo_pool_base + pos;
 
     if (!strcmp(hdr->owner, cuser.userid) || HAS_PERM(PERM_SYSOP | PERM_BOARD) || (bbstate & STAT_BOARD))
@@ -2080,13 +2078,14 @@ post_lock(
 /*cache.080520: 新版觀看文章屬性*/
     static int
 post_state(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *ghdr;
     char fpath[64], *dir, buf[32];
     struct stat st;
 
-    ghdr = (const HDR *) xo_pool_base + xo->pos;
+    ghdr = (const HDR *) xo_pool_base + pos;
 
     dir = xo->dir;
     hdr_fpath(fpath, dir, ghdr);
@@ -2181,7 +2180,8 @@ post_state(
 #if 0
     static int
 post_state(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
     char *dir, fpath[80];
@@ -2191,7 +2191,7 @@ post_state(
         return XO_NONE;
 
     dir = xo->dir;
-    hdr = (const HDR *) xo_pool_base + xo->pos;
+    hdr = (const HDR *) xo_pool_base + pos;
     hdr_fpath(fpath, dir, hdr);
 
 
@@ -2218,9 +2218,9 @@ post_state(
 
     static int
 post_undelete(
-    XO *xo)
+    XO *xo, int pos)
 {
-    int pos, i, len;
+    int i, len;
     HDR *fhdr;
     char buf[256], fpath[128], *ptr;
     FILE *fp;
@@ -2228,7 +2228,6 @@ post_undelete(
     if (!cuser.userlevel)
         return XO_NONE;
 
-    pos = xo->pos;
     fhdr = (HDR *) xo_pool_base + pos;
     hdr_fpath(fpath, xo->dir, fhdr);
 
@@ -2293,9 +2292,8 @@ post_undelete(
 
     static int
 post_expire(
-    XO *xo)
+    XO *xo, int pos)
 {
-    int pos;
     HDR *fhdr;
     char fpath[80];
 
@@ -2307,7 +2305,6 @@ post_expire(
     if (!HAS_PERM(PERM_ALLBOARD))
         return XO_NONE;
 
-    pos = xo->pos;
     fhdr = (HDR *) xo_pool_base + pos;
 
     if (fhdr->xmode & (POST_MARKED | POST_CANCEL | POST_DELETE | POST_MDELETE))
@@ -2332,16 +2329,14 @@ post_expire(
 
     static int
 post_unexpire(
-    XO *xo)
+    XO *xo, int pos)
 {
-    int pos;
     HDR *fhdr;
     char fpath[128];
 
     if (!HAS_PERM(PERM_ALLBOARD))
         return XO_NONE;
 
-    pos = xo->pos;
     fhdr = (HDR *) xo_pool_base + pos;
 
     if (!(fhdr->xmode & (POST_EXPIRE)))
@@ -2367,11 +2362,11 @@ post_unexpire(
 
 int
 post_edit(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr;
     char fpath[80];
-    int pos;
 #ifdef  HAVE_USER_MODIFY
     int temp=0;
     int bno;
@@ -2391,10 +2386,9 @@ post_edit(
         vmsg("你還有檔案還沒編完哦！");
         return XO_FOOT;
     }
-    pos = xo->pos;
     hdr = (HDR *) xo_pool_base + pos;
 
-    pos = seek_rec(xo, hdr);
+    pos = seek_rec(xo, pos, hdr);
 
     hdr_fpath(fpath, xo->dir, hdr);
 #if 0
@@ -2403,7 +2397,7 @@ post_edit(
 #endif
     if (HAS_PERM(PERM_SYSOP) && !(hdr->xmode & (POST_CANCEL|POST_DELETE)))
     {
-        /*hdr = (HDR *) xo_pool_base + xo->pos;
+        /*hdr = (HDR *) xo_pool_base + pos;
         hdr_fpath(fpath, xo->dir, hdr);*/
         vedit(fpath, false); /* Thor.981020: 注意被talk的問題 */
         return XO_HEAD;
@@ -2535,7 +2529,7 @@ post_edit(
             fclose(fp);
         }
 
-        if ((pos = seek_rec(xo, hdr)) >= 0)
+        if ((pos = seek_rec(xo, pos, hdr)) >= 0)
         {
             if (temp>=0 && strcmp(brd->brdname, "test") /*&& ++hdr->modifytimes >= 5*/)
                 hdr->xmode |= POST_MODIFY;
@@ -2574,11 +2568,10 @@ post_edit(
 }
 
 #if 0
-int post_edit(XO *xo)
+int post_edit(XO *xo, int pos)
 {
     HDR *hdr;
     char fpath[80];
-    int pos;
 #ifdef  HAVE_USER_MODIFY
     int bno;
     BRD *brd;
@@ -2599,8 +2592,7 @@ int post_edit(XO *xo)
         vmsg("你還有檔案還沒編完哦！");
         return XO_FOOT;
     }
-    pos = xo->pos;
-    hdr = (HDR *) xo_pool_base + xo->pos;
+    hdr = (HDR *) xo_pool_base + pos;
     hdr_fpath(fpath, xo->dir, hdr);
 #if 0
     if ((HAS_PERM(PERM_ALLBOARD))|| ((HAS_PERM(PERM_VALID)) \
@@ -2608,7 +2600,7 @@ int post_edit(XO *xo)
 #endif
         if (HAS_PERM(PERM_ALLBOARD))
         {
-            /*hdr = (HDR *) xo_pool_base + xo->pos;
+            /*hdr = (HDR *) xo_pool_base + pos;
                 hdr_fpath(fpath, xo->dir, hdr);*/
             vedit(fpath, false); /* Thor.981020: 注意被talk的問題 */
             return XO_HEAD;
@@ -2784,12 +2776,11 @@ header_replace(         /* 0911105.cache: 修改文章標題順便修改內文的標題 */
 
     int
 post_title(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *fhdr, mhdr;
-    int pos;
 
-    pos = xo->pos;
     fhdr = (HDR *) xo_pool_base + pos;
     mhdr = *fhdr;
 
@@ -2831,13 +2822,14 @@ post_title(
 #ifdef HAVE_TERMINATOR
     static int
 post_cross_terminator(  /* Thor.0521: 終極文章大法 */
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     char *title, buf[128], other[128];
     int mode;
     HDR *fhdr;
 
-    fhdr = (HDR *) xo_pool_base + xo->pos;
+    fhdr = (HDR *) xo_pool_base + pos;
     if (fhdr->xmode & (POST_DELETE | POST_MDELETE | POST_CANCEL | POST_LOCK))
         return XO_NONE;
 
@@ -3078,16 +3070,16 @@ post_recommend_log(
 
     int
 post_resetscore(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if ((bbstate & STAT_BOARD) || HAS_PERM(PERM_BOARD))
     {
         HDR *hdr;
         BRD *brd;
-        int pos, xmode GCC_UNUSED, recommend, pm;
+        int xmode GCC_UNUSED, recommend, pm;
         char ans[3];
 
-        pos = xo->pos;
         hdr = (HDR *) xo_pool_base + pos;
 
         xmode = hdr->xmode;
@@ -3163,10 +3155,11 @@ post_resetscore(
 
     int
 post_recommend(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr;
-    int pos, cur, addscore, eof, point=0;
+    int cur, addscore, eof, point=0;
     BRD *brd;
     char fpath[80], msg[53], add[128], lastrecommend[IDLEN+1], verb[3];
     char ans, getans, pushverb GCC_UNUSED;
@@ -3178,7 +3171,6 @@ post_recommend(
 
     if (HAS_PERM(PERM_VALID) && (!(brd->battr & BRD_PRH)) && (bbstate & STAT_POST))
     {
-        pos = xo->pos;
         cur = pos - xo->top;
         hdr = (HDR *) xo_pool_base + pos;
 
@@ -3200,7 +3192,7 @@ post_recommend(
         }
 
         //更新資料操硬碟
-        pos = seek_rec(xo, hdr);
+        pos = seek_rec(xo, pos, hdr);
 
         if (pos < 0)
             return XO_NONE;
@@ -3312,7 +3304,7 @@ post_recommend(
             ans = 'n';
 
         //更新資料操硬碟
-        pos = seek_rec(xo, hdr);
+        pos = seek_rec(xo, pos, hdr);
         hdr->xmode &= ~POST_RECOMMEND_ING;
         hdr->xid = 0;
 
@@ -3970,15 +3962,16 @@ post_manage(
 
     static int
 post_aid(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const char *query;
     char aid[9];
-    int currpos, pos, max, match = 0;
+    int currpos, max, match = 0;
     const HDR *hdr;
 
     /* 保存目前所在的位置 */
-    currpos = xo->pos;
+    currpos = pos;
     /* 紀錄看板文章總數；新貼文AID是未知的不可能在其中 */
     max = xo->max;
 
@@ -3997,7 +3990,7 @@ post_aid(
         xo->pos = pos;
         xo_load(xo, sizeof(HDR));
         /* 設定HDR資訊 */
-        hdr = (const HDR *) xo_pool_base + xo->pos;
+        hdr = (const HDR *) xo_pool_base + pos;
         tag = hdr->xname;
         /* 若找到對應的文章，則設定match並跳出 */
         if (!strcmp(query, tag))
@@ -4019,14 +4012,15 @@ post_aid(
 
 int
 post_write(                  /* 丟線上作者熱訊 */
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (HAS_PERM(PERM_PAGE))
     {
         const HDR *fhdr;
         UTMP *up;
 
-        fhdr = (const HDR *) xo_pool_base + xo->pos;
+        fhdr = (const HDR *) xo_pool_base + pos;
 
         if ((up = utmp_check(fhdr->owner)) && can_message(up))
 /*      if ((up = utmp_check(fhdr->owner)) && can_override(up))*/
@@ -4052,7 +4046,8 @@ post_help(
 
     static int
 post_spam(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
     char *dir, fpath[80];
@@ -4063,7 +4058,7 @@ post_spam(
         return XO_NONE;
 
     dir = xo->dir;
-    hdr = (const HDR *) xo_pool_base + xo->pos;
+    hdr = (const HDR *) xo_pool_base + pos;
     hdr_fpath(fpath, dir, hdr);
 
     sprintf(msg, "%s\n", fpath);
@@ -4084,34 +4079,34 @@ KeyFuncList post_cb =
     {XO_NECK, {post_neck}},
     {XO_BODY, {post_body}},
     {XO_FOOT, {post_foot}},
-    {XO_CUR, {post_cur}},
+    {XO_CUR | XO_POSF, {.posf = post_cur}},
 
     {'B', {post_manage}},
-    {'r', {post_browse}},
+    {'r' | XO_POSF, {.posf = post_browse}},
     {'s', {post_switch}},
     {KEY_TAB, {post_gem}},
     {'z', {post_gem}},
-    {'u', {post_undelete}},
-    {'y', {post_reply}},
-    {'d', {post_delete}},
+    {'u' | XO_POSF, {.posf = post_undelete}},
+    {'y' | XO_POSF, {.posf = post_reply}},
+    {'d' | XO_POSF, {.posf = post_delete}},
     {'v', {post_visit}},
-    {'q', {post_state}},
-    {'S', {post_complete}}, //板主處理標記
-    {'w', {post_write}},
-    {Ctrl('W'), {post_spam}},
-    {Meta('W'), {post_spam}},
-    {'e', {post_expire}},
-    {'U', {post_unexpire}},
-    {'#', {post_aid}},              /* cache.090612: 以文章代碼(AID)快速尋文 */
+    {'q' | XO_POSF, {.posf = post_state}},
+    {'S' | XO_POSF, {.posf = post_complete}}, //板主處理標記
+    {'w' | XO_POSF, {.posf = post_write}},
+    {Ctrl('W') | XO_POSF, {.posf = post_spam}},
+    {Meta('W') | XO_POSF, {.posf = post_spam}},
+    {'e' | XO_POSF, {.posf = post_expire}},
+    {'U' | XO_POSF, {.posf = post_unexpire}},
+    {'#' | XO_POSF, {.posf = post_aid}}, /* cache.090612: 以文章代碼(AID)快速尋文 */
     {'i', {post_showBRD_setting}},  /* cache.081122:看板資訊顯示 */
     {Ctrl('P'), {post_add}},
-    {Ctrl('N'), {post_clean_delete}},
-    {Meta('N'), {post_clean_delete}},
+    {Ctrl('N') | XO_POSF, {.posf = post_clean_delete}},
+    {Meta('N') | XO_POSF, {.posf = post_clean_delete}},
 #ifdef HAVE_MULTI_CROSSPOST
-    {Ctrl('X'), {post_xcross}},
+    {Ctrl('X') | XO_POSF, {.posf = post_xcross}},
 #endif
-    {'x', {post_cross}},
-    {Ctrl('Q'), {xo_uquery_lite}},
+    {'x' | XO_POSF, {.posf = post_cross}},
+    {Ctrl('Q') | XO_POSF, {.posf = xo_uquery_lite}},
     //  {'I', {xo_usetup}}, /* cache.081122: 有些人會忘記設禁止查詢資料, 建議關閉保護隱私 */
 #if 1 /* Thor.981120: 暫時取消, 防誤用 */
     /* lkchu.981201: 沒有 'D' 很不習慣 :p */
@@ -4119,22 +4114,22 @@ KeyFuncList post_cb =
 #endif
 
 #ifdef HAVE_TERMINATOR
-    {'Z', {post_cross_terminator}},
+    {'Z' | XO_POSF, {.posf = post_cross_terminator}},
 #endif
 
-    {'t', {post_tag}},
-    {'l', {post_lock}},
+    {'t' | XO_POSF, {.posf = post_tag}},
+    {'l' | XO_POSF, {.posf = post_lock}},
 
-    {'E', {post_edit}},
-    {'T', {post_title}},
-    {'m', {post_mark}},
+    {'E' | XO_POSF, {.posf = post_edit}},
+    {'T' | XO_POSF, {.posf = post_title}},
+    {'m' | XO_POSF, {.posf = post_mark}},
 
 #ifdef  HAVE_RECOMMEND
-    {'X', {post_recommend}},
-    {'%', {post_recommend}},           /* r2.20170802: 與 itoc 版熱鍵通用 */
+    {'X' | XO_POSF, {.posf = post_recommend}},
+    {'%' | XO_POSF, {.posf = post_recommend}}, /* r2.20170802: 與 itoc 版熱鍵通用 */
     //  {'o', {post_recommend_options}},
-    {'o' | XO_DL, {.dlfunc = DL_NAME("cleanrecommend.so", clean)}},
-    {Ctrl('S'), {post_resetscore}},         /* cache.090416: 推文設定 */
+    {'o' | XO_POSF | XO_DL, {.dlposf = DL_NAME("cleanrecommend.so", clean)}},
+    {Ctrl('S') | XO_POSF, {.posf = post_resetscore}}, /* cache.090416: 推文設定 */
 #endif
 
     {'R' | XO_DL, {.dlfunc = DL_NAME("vote.so", vote_result)}},
@@ -4147,12 +4142,12 @@ KeyFuncList post_cb =
 #endif
 
 #ifdef XZ_XPOST
-    {'/', {XoXpost}},                     /* Thor: for XoXpost */
-    {'~', {XoXpost}},                     /* Thor: for XoXpost */
+    {'/' | XO_POSF, {.posf = XoXpost}},   /* Thor: for XoXpost */
+    {'~' | XO_POSF, {.posf = XoXpost}},   /* Thor: for XoXpost */
 #endif
 
 #ifdef HAVE_POST_BOTTOM
-    {'_', {post_bottom}},
+    {'_' | XO_POSF, {.posf = post_bottom}},
 #endif
 
     {'h', {post_help}}
@@ -4356,7 +4351,8 @@ xpost_help(
 
     static int
 xpost_browse(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr;
     int cmd, chrono, xmode;
@@ -4370,7 +4366,7 @@ xpost_browse(
 
     for (;;)
     {
-        hdr = (HDR *) xo_pool_base + xo->pos;
+        hdr = (HDR *) xo_pool_base + pos;
         xmode = hdr->xmode;
         if (xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE))
             break;
@@ -4470,7 +4466,7 @@ xpost_browse(
             case ' ':
                 {
                     int top = xo->top;
-                    int pos = xo->pos + 1;
+                    pos = pos + 1;
 
                     /* Thor.980727: 修正看過頭的bug */
 
@@ -4505,7 +4501,7 @@ xpost_browse(
 
 #ifdef HAVE_RECOMMEND
             case 'p':
-                post_recommend(xo);
+                post_recommend(xo, pos);
                 return XO_INIT;
 #endif
 
@@ -4527,21 +4523,21 @@ static KeyFuncList xpost_cb =
 #endif
     {XO_BODY, {post_body}}, /* Thor.980911: 共用即可 */
 
-    {'r', {xpost_browse}},
-    {'y', {post_reply}},
-    {'t', {post_tag}},
-    {'m', {post_mark}},
+    {'r' | XO_POSF, {.posf = xpost_browse}},
+    {'y' | XO_POSF, {.posf = post_reply}},
+    {'t' | XO_POSF, {.posf = post_tag}},
+    {'m' | XO_POSF, {.posf = post_mark}},
 
-    {'d', {post_delete}},  /* Thor.980911: 方便版主*/
+    {'d' | XO_POSF, {.posf = post_delete}},  /* Thor.980911: 方便版主*/
 
     {Ctrl('P'), {post_add}},
-    {Ctrl('Q'), {xo_uquery}},
-    {'q', {post_spam}},
-    {'I', {xo_usetup}},
+    {Ctrl('Q') | XO_POSF, {.posf = xo_uquery}},
+    {'q' | XO_POSF, {.posf = post_spam}},
+    {'I' | XO_POSF, {.posf = xo_usetup}},
 #ifdef HAVE_MULTI_CROSSPOST
-    {Ctrl('X'), {post_xcross}},
+    {Ctrl('X') | XO_POSF, {.posf = post_xcross}},
 #endif
-    {'x', {post_cross}},
+    {'x' | XO_POSF, {.posf = post_cross}},
 
     {'h', {xpost_help}}
 };
@@ -4553,7 +4549,8 @@ static KeyFuncList xpost_cb =
 
     static int
 XoXpost(                        /* Thor: call from post_cb */
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     int *plist, *xlist, fsize, max, locus, sum, i, m, n;
     Chain *chain;
@@ -4735,7 +4732,7 @@ XoXpost(                        /* Thor: call from post_cb */
 
     free(xz[XZ_XPOST - XO_ZONE].xo);
 
-    comebackPos = xo->pos;      /* Thor: record pos, future use */
+    comebackPos = pos;      /* Thor: record pos, future use */
     xz[XZ_XPOST - XO_ZONE].xo = xt = xo_new(xo->dir);
     xt->cb = xpost_cb;
     xt->recsiz = sizeof(HDR);

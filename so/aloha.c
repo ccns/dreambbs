@@ -64,11 +64,12 @@ const ALOHA *aloha)
 
 static int
 aloha_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const ALOHA *const aloha = (const ALOHA *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    aloha_item(xo->pos + 1, aloha);
+    const ALOHA *const aloha = (const ALOHA *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    aloha_item(pos + 1, aloha);
     return XO_NONE;
 }
 
@@ -269,18 +270,19 @@ XO *xo)
 
 static int
 aloha_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
     if (vans(msg_del_ny) == 'y')
     {
         char fpath[64];
         const ALOHA *aloha;
-        aloha = (const ALOHA *) xo_pool_base + xo->pos;
+        aloha = (const ALOHA *) xo_pool_base + pos;
 
         usr_fpath(fpath, aloha->userid, FN_FRIEND_BENZ);
         while (rec_loc(fpath, sizeof(BMW), cmpbmw) >= 0)
             rec_del(fpath, sizeof(BMW), 0, cmpbmw, NULL);
-        rec_del(xo->dir, sizeof(ALOHA), xo->pos, NULL, NULL);
+        rec_del(xo->dir, sizeof(ALOHA), pos, NULL, NULL);
         return XO_INIT;
     }
     return XO_FOOT;
@@ -301,7 +303,7 @@ KeyFuncList aloha_cb =
     {XO_LOAD, {aloha_load}},
     {XO_HEAD, {aloha_head}},
     {XO_BODY, {aloha_body}},
-    {XO_CUR, {aloha_cur}},
+    {XO_CUR | XO_POSF, {.posf = aloha_cur}},
 
     {'a', {aloha_add}},
     {'D', {aloha_rangedel}},
@@ -311,7 +313,7 @@ KeyFuncList aloha_cb =
     {'c', {aloha_change}},
 #endif
     {'s', {xo_cb_init}},
-    {'d', {aloha_delete}},
+    {'d' | XO_POSF, {.posf = aloha_delete}},
     {'h', {aloha_help}}
 };
 

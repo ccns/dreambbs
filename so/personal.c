@@ -246,11 +246,12 @@ personal_item(
 
 static int
 personal_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const PB *const personal = (const PB *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    personal_item(xo->pos + 1, personal);
+    const PB *const personal = (const PB *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    personal_item(pos + 1, personal);
     return XO_NONE;
 }
 
@@ -334,12 +335,13 @@ personal_edit(
 
 static int
 personal_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(PB), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(PB), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -350,12 +352,11 @@ personal_delete(
 
 static int
 personal_change(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     PB *personal, mate;
-    int pos;
 
-    pos = xo->pos;
     personal = (PB *) xo_pool_base + pos;
 
     mate = *personal;
@@ -472,10 +473,11 @@ personal_sort(
 
 static int
 personal_open(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     PB *personal;
-    int cur, pos, index;
+    int cur, index;
     char fpath[80];
     BRD newboard;
     HDR hdr;
@@ -483,7 +485,6 @@ personal_open(
     ACCT acct;
     static const char *const gem[] = {"gem/@/@Person_A_E", "gem/@/@Person_F_J", "gem/@/@Person_K_O", "gem/@/@Person_P_T", "gem/@/@Person_U_Z"};
 
-    pos = xo->pos;
     cur = pos - xo->top;
     personal = (PB *) xo_pool_base + pos;
 
@@ -574,12 +575,11 @@ personal_open(
 
 static int
 personal_deny(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const PB *personal;
-    int pos;
 
-    pos = xo->pos;
     personal = (const PB *) xo_pool_base + pos;
 
     if (personal->state & PB_OPEN)
@@ -595,7 +595,7 @@ personal_deny(
 
     {
         const PB personal_orig = *personal;
-        if (!rec_del(xo->dir, sizeof(PB), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(PB), pos, NULL, NULL))
         {
             personal_log(&personal_orig, 2);
             return XO_LOAD;
@@ -620,14 +620,14 @@ KeyFuncList personal_cb =
     {XO_LOAD, {personal_load}},
     {XO_HEAD, {personal_head}},
     {XO_BODY, {personal_body}},
-    {XO_CUR, {personal_cur}},
+    {XO_CUR | XO_POSF, {.posf = personal_cur}},
 
-    {'c', {personal_change}},
+    {'c' | XO_POSF, {.posf = personal_change}},
     {'s', {xo_cb_init}},
-    {'d', {personal_delete}},
+    {'d' | XO_POSF, {.posf = personal_delete}},
     {KEY_TAB, {personal_switch}},
-    {'O', {personal_open}},
-    {'D', {personal_deny}},
+    {'O' | XO_POSF, {.posf = personal_open}},
+    {'D' | XO_POSF, {.posf = personal_deny}},
     {'h', {personal_help}}
 };
 

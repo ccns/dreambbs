@@ -67,11 +67,12 @@ myfavorite_item(
 
 static int
 myfavorite_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const HDR *const myfavorite = (const HDR *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    myfavorite_item(xo->pos + 1, myfavorite);
+    const HDR *const myfavorite = (const HDR *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    myfavorite_item(pos + 1, myfavorite);
     return XO_NONE;
 }
 
@@ -151,13 +152,14 @@ myfavorite_switch(
 
 static int
 myfavorite_browse(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *ghdr;
     int xmode, op=0, chn;
     char fpath[80], title[TTLEN + 1];
 
-    ghdr = (const HDR *) xo_pool_base + xo->pos;
+    ghdr = (const HDR *) xo_pool_base + pos;
 
     xmode = ghdr->xmode;
     /* browse folder */
@@ -331,14 +333,15 @@ remove_dir(
 
 static int
 myfavorite_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
 
     if (vans(msg_del_ny) == 'y')
     {
-        const HDR *hdr = (const HDR *) xo_pool_base + xo->pos;
+        const HDR *hdr = (const HDR *) xo_pool_base + pos;
         const HDR hdr_orig = *hdr;
 
         if (hdr->xmode & GEM_FOLDER)
@@ -351,7 +354,7 @@ myfavorite_delete(
             remove_dir(fpath);
         }
 
-        if (!rec_del(currdir, sizeof(HDR), xo->pos, NULL, NULL))
+        if (!rec_del(currdir, sizeof(HDR), pos, NULL, NULL))
         {
             logitfile(FN_FAVORITE_LOG, "< DEL >", hdr_orig.xname);
             return XO_LOAD;
@@ -362,17 +365,17 @@ myfavorite_delete(
 
 static int
 myfavorite_mov(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *ghdr;
     char buf[80];
-    int pos, newOrder;
+    int newOrder;
 
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
-    ghdr = (const HDR *) xo_pool_base + xo->pos;
+    ghdr = (const HDR *) xo_pool_base + pos;
 
-    pos = xo->pos;
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
     if (!vget(B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
@@ -395,13 +398,14 @@ myfavorite_mov(
 
 static int
 myfavorite_edit(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr;
 
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
-    hdr = (HDR *) xo_pool_base + xo->pos;
+    hdr = (HDR *) xo_pool_base + pos;
     if (hdr->xmode & GEM_BOARD)
     {
         int chn;
@@ -421,7 +425,7 @@ myfavorite_edit(
     {
         if (!vget(B_LINES_REF, 0, "請輸入標題: ", hdr->title, 64, GCARRY))
             return XO_FOOT;
-        rec_put(currdir, hdr, sizeof(HDR), xo->pos);
+        rec_put(currdir, hdr, sizeof(HDR), pos);
         return XO_LOAD;
     }
     return XO_NONE;
@@ -439,9 +443,10 @@ myfavorite_help(
 
 static int
 myfavorite_search(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    int num, pos, max;
+    int num, max;
     char *ptr;
     char buf[IDLEN + 1];
     const HDR *hdr;
@@ -459,7 +464,7 @@ myfavorite_search(
         //bcache = bshm->bcache;
 
         //str_lower(ptr, ptr);
-        pos = num = xo->pos;
+        num = pos;
         max = xo->max;
         //chp = (short *) xo->xyz;
         do
@@ -503,17 +508,17 @@ KeyFuncList myfavorite_cb =
     {XO_LOAD, {myfavorite_load}},
     {XO_HEAD, {myfavorite_head}},
     {XO_BODY, {myfavorite_body}},
-    {XO_CUR, {myfavorite_cur}},
+    {XO_CUR | XO_POSF, {.posf = myfavorite_cur}},
 
     {Ctrl('P'), {myfavorite_add}},
     {'a', {myfavorite_add}},
-    {'r', {myfavorite_browse}},
+    {'r' | XO_POSF, {.posf = myfavorite_browse}},
     {'s', {myfavorite_switch}},
     {'c', {myfavorite_newmode}},
-    {'d', {myfavorite_delete}},
-    {'M', {myfavorite_mov}},
-    {'E', {myfavorite_edit}},
-    {'/', {myfavorite_search}},
+    {'d' | XO_POSF, {.posf = myfavorite_delete}},
+    {'M' | XO_POSF, {.posf = myfavorite_mov}},
+    {'E' | XO_POSF, {.posf = myfavorite_edit}},
+    {'/' | XO_POSF, {.posf = myfavorite_search}},
     {'h', {myfavorite_help}}
 };
 
@@ -666,7 +671,8 @@ myfavorite_main(void)
 
 int
 class_add(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR hdr;
     char fpath[64];
@@ -675,7 +681,7 @@ class_add(
 
     usr_fpath(fpath, cuser.userid, FN_MYFAVORITE);
 
-    chp = (short *) xo->xyz + xo->pos;
+    chp = (short *) xo->xyz + pos;
     chn = *chp;
     if (chn < 0)
     {

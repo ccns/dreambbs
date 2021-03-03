@@ -23,11 +23,12 @@ const CONTACT *contact)
 
 static int
 contact_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const CONTACT *const contact = (const CONTACT *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    contact_item(xo->pos + 1, contact);
+    const CONTACT *const contact = (const CONTACT *) xo_pool_base + pos;
+    move(3 + pos - xo->top, 0);
+    contact_item(pos + 1, contact);
     return XO_NONE;
 }
 
@@ -124,12 +125,13 @@ XO *xo)
 
 static int
 contact_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(CONTACT), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(CONTACT), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -140,12 +142,11 @@ XO *xo)
 
 static int
 contact_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     CONTACT *contact, mate;
-    int pos;
 
-    pos = xo->pos;
     contact = (CONTACT *) xo_pool_base + pos;
 
     mate = *contact;
@@ -170,12 +171,11 @@ XO *xo)
 
 static int
 contact_mail(
-XO *xo)
+XO *xo,
+int pos)
 {
-    int pos;
     CONTACT *contact;
 
-    pos = xo->pos;
     contact = (CONTACT *) xo_pool_base + pos;
     contact_send(contact);
     return XO_INIT;
@@ -227,14 +227,14 @@ KeyFuncList contact_cb =
     {XO_LOAD, {contact_load}},
     {XO_HEAD, {contact_head}},
     {XO_BODY, {contact_body}},
-    {XO_CUR, {contact_cur}},
+    {XO_CUR | XO_POSF, {.posf = contact_cur}},
 
     {Ctrl('P'), {contact_add}},
-    {'m', {contact_mail}},
-    {'r', {contact_mail}},
-    {'c', {contact_change}},
+    {'m' | XO_POSF, {.posf = contact_mail}},
+    {'r' | XO_POSF, {.posf = contact_mail}},
+    {'c' | XO_POSF, {.posf = contact_change}},
     {'s', {xo_cb_init}},
-    {'d', {contact_delete}},
+    {'d' | XO_POSF, {.posf = contact_delete}},
     {'h', {contact_help}}
 };
 

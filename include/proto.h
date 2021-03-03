@@ -128,7 +128,7 @@ int ve_subject(int row, const char *topic, const char *dft);
 int vedit(char *fpath, int ve_op);
 /* gem.c */
 void brd2gem(const BRD *brd, HDR *gem);
-int gem_gather(XO *xo);
+int gem_gather(XO *xo, int pos);
 void XoGem(const char *folder, const char *title, int level);
 void gem_main(void);
 /* mail.c */
@@ -186,19 +186,19 @@ void move_post(const HDR *hdr, const char *board, int by_bm);
 void log_anonymous(const char *fname);
 GCC_PURE int seek_log(const char *title, int state);
 int getsubject(int row, int reply);
-int post_cross(XO *xo);
-void post_history(XO *xo, const HDR *fhdr);
+int post_cross(XO *xo, int pos);
+void post_history(XO *xo, int pos, const HDR *fhdr);
 int post_gem(XO *xo);
-int post_tag(XO *xo);
-int post_edit(XO *xo);
+int post_tag(XO *xo, int pos);
+int post_edit(XO *xo, int pos);
 void header_replace(XO *xo, const HDR *hdr);
-int post_title(XO *xo);
+int post_title(XO *xo, int pos);
 int post_ban_mail(XO *xo);
 void record_recommend(int chrono, const char *text);
-int post_resetscore(XO *xo);
-int post_recommend(XO *xo);
+int post_resetscore(XO *xo, int pos);
+int post_recommend(XO *xo, int pos);
 int post_manage(XO *xo);
-int post_write(XO *xo);
+int post_write(XO *xo, int pos);
 /* banmail.c */
 int BanMail(void);
 void post_mail(void);
@@ -328,10 +328,10 @@ int xo_delete(XO *xo);
 int Tagger(time_t chrono, int recno, int op);
 void EnumTagHdr(HDR *hdr, const char *dir, int locus);
 int AskTag(const char *msg);
-int xo_uquery_lite(XO *xo);
-int xo_uquery(XO *xo);
-int xo_usetup(XO *xo);
-int xo_getch(XO *xo, int ch);
+int xo_uquery_lite(XO *xo, int pos);
+int xo_uquery(XO *xo, int pos);
+int xo_usetup(XO *xo, int pos);
+int xo_getch(XO *xo, int pos, int ch);
 int xo_cb_init(XO *xo);
 int xo_cb_load(XO *xo);
 int xo_cb_head(XO *xo);
@@ -371,7 +371,7 @@ int MyFavorite(void);
 int myfavorite_find_chn(const char *brdname);
 void myfavorite_parse(char *fpath);
 void myfavorite_main(void);
-int class_add(XO *xo);
+int class_add(XO *xo, int pos);
 
 #ifdef __cplusplus
 }  /* extern "C" */

@@ -1382,11 +1382,11 @@ domenu_redo_reload:
 }
 
 static int
-domenu_cur(XO *xo)
+domenu_cur(XO *xo, int pos)
 {
     DomenuXyz *const xyz = (DomenuXyz *)xo->xyz;
 
-    const int i = xo->pos;
+    const int i = pos;
     move_ansi(domenu_gety(i, xyz), domenu_getx(i, xyz) + 2);
     if (i < xo->max)
         domenu_item(i + 1, xyz);
@@ -1410,7 +1410,7 @@ KeyFuncList domenu_cb =
     {XO_NECK, {domenu_neck}},
     {XO_BODY, {domenu_body}},
     {XO_FOOT, {domenu_foot}},
-    {XO_CUR, {domenu_cur}},
+    {XO_CUR | XO_POSF, {.posf = domenu_cur}},
 };
 
 static int domenu_exec(XO *xo, int cmd);
