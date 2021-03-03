@@ -551,7 +551,7 @@ xo_copy(
     if (!cuser.userlevel)
         return XO_NONE;
 
-    /* lkchu.990428: mat patch 當看版尚末選定，修正copy會斷線的問題 */
+    /* lkchu.990428: mat patch 當看版尚未選定，修正copy會斷線的問題 */
     if (bbsmode == M_READA)
     {
         /* lkchu.981205: 借用 tag 存放看版屬性 */
@@ -685,7 +685,7 @@ xo_forward(
     if (deny_forward())
         return XO_FOOT;
 
-    /* lkchu.990428: mat patch 當看版尚末選定，修正forward會斷線的問題 */
+    /* lkchu.990428: mat patch 當看版尚未選定，修正forward會斷線的問題 */
     if (bbsmode == M_READA)
     {
         /* lkchu.981205: 借用 method 存放看版屬性 */
