@@ -70,26 +70,15 @@ XO *xo)
     const HDR *ghdr;
     int num, max, tail;
 
+    move(3, 0);
+
     max = xo->max;
     if (max <= 0)
     {
-        outs("\n\n《精華區》尚在吸取天地間的日精月華 :)");
-        max = vans("(A)新增資料 (G)海錨功\能 (W)資源回收筒 [N]無所事事 ");
-        switch (max)
-        {
-        case 'a':
-            max = mailgem_add(xo);
-            if (xo->max > 0)
-                return max;
-            break;
-        case 'g':
-            mailgem_anchor(xo);
-            break;
-        case 'w':
-            mailgem_recycle(xo);
-            break;
-        }
-        return XO_QUIT;
+        outs("\n《精華區》尚在吸取天地間的日精月華 :)\n");
+        outs("\n  (^P)新增資料 (^G)海錨功\能 (W)資源回收筒\n");
+        clrtobot();
+        return mailgem_foot(xo);
     }
 
     num = xo->top;
@@ -97,7 +86,6 @@ XO *xo)
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
         mailgem_item(++num, ghdr++);

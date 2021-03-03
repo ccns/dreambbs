@@ -48,9 +48,9 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-            return chat_add(xo);
-        return XO_QUIT;
+        outs("\n《" CHATROOMNAME "動詞》目前沒有資料\n");
+        outs("\n  (^P)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;

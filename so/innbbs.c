@@ -554,18 +554,15 @@ innbbs_body(
     const char *rec;
     int num, max, tail;
 
+    move(3, 0);
+
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎？(y/N) [N] ") == 'y')
-        {
-            if (xyz->add_func(xo->dir, NULL, -1))
-            {
-                xyz->dirty = true;
-                return XO_INIT;
-            }
-        }
-        return XO_QUIT;
+        outs("\n《轉信設定》目前沒有資料\n");
+        outs("\n  (^P)新增資料\n");
+        clrtobot();
+        return innbbs_foot(xo);
     }
 
     num = xo->top;
@@ -573,7 +570,6 @@ innbbs_body(
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
         xyz->item_func(++num, rec);

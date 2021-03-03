@@ -267,8 +267,8 @@ personal_body(
     max = xo->max;
     if (max <= 0)
     {
-        vmsg("目前沒有資料");
-        return XO_QUIT;
+        outs("\n《個人板清單》目前沒有資料\n");
+        return XO_NONE;
     }
     num = xo->top;
     personal = (const PB *) xo_pool_base + num;

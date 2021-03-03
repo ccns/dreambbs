@@ -1272,6 +1272,8 @@ class_body(
     short *chp;
     int num, max, tail;
 
+    move(3, 0);
+
     max = xo->max;
     if (max <= 0)
     {
@@ -1288,7 +1290,9 @@ class_body(
         }
         if (!ret)
         {
-            return XO_QUIT;
+            outs("\n《看板列表》目前沒有資料\n");
+            clrtobot();
+            return XO_NONE;
         }
         return XO_BODY;
     }
@@ -1298,7 +1302,6 @@ class_body(
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
         class_item(++num, *chp++);

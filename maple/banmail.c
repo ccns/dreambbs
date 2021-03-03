@@ -48,12 +48,15 @@ static int banmail_body(XO * xo)
     const BANMAIL *banmail = NULL;
     int num, max, tail;
 
+    move(3, 0);
+
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-            return banmail_add(xo);
-        return XO_QUIT;
+        outs("\n《擋信列表》目前沒有資料\n");
+        outs("\n  (^P)新增資料\n");
+        clrtobot();
+        return XO_NONE;
     }
 
     num = xo->top;
@@ -61,7 +64,6 @@ static int banmail_body(XO * xo)
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
         banmail_item(++num, banmail++);

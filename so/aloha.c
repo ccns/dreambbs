@@ -85,14 +85,9 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-        {
-            if (vans("新增單人或引入好友名單(A/F)？[A] ") == 'f')
-                return aloha_loadpal(xo);
-            else
-                return aloha_add(xo);
-        }
-        return XO_QUIT;
+        outs("\n《上站通知名單》目前沒有資料\n");
+        outs("\n  (a)新增單人 (f)引入好友名單\n");
+        return XO_NONE;
     }
 
     num = xo->top;

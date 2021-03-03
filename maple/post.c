@@ -936,19 +936,16 @@ post_body(
     const HDR *fhdr;
     int num, max, tail;
 
+    move(3, 0);
+
     max = xo->max;
     if (max <= 0)
     {
+        outs("\n《看板》本看板尚無文章\n");
         if (bbstate & STAT_POST)
-        {
-            if (vans("要新增資料嗎？(y/N) [N] ") == 'y')
-                return post_add(xo);
-        }
-        else
-        {
-            vmsg("本看板尚無文章");
-        }
-        return XO_QUIT;
+            outs("\n  (^P)新增資料\n");
+        clrtobot();
+        return post_foot(xo);
     }
 
     num = xo->top;
@@ -956,7 +953,6 @@ post_body(
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
         post_item(++num, fhdr++);

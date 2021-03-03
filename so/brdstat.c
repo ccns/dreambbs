@@ -44,8 +44,8 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        vmsg("無任何統計資料");
-        return XO_QUIT;
+        outs("\n《看板使用資訊》無任何統計資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;

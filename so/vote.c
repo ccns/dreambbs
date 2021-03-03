@@ -117,19 +117,16 @@ XO *xo)
     const VCH *vch;
     int num, max, tail;
 
+    move(3, 0);
+
     max = xo->max;
     if (max <= 0)
     {
+        outs("\nщ布┮ヘ玡礚щ布羭︽\n");
         if (bbstate & STAT_BOARD)
-        {
-            if (vans("璶羭快щ布盾(y/N)[N] ") == 'y')
-                return vote_add(xo);
-        }
-        else
-        {
-            vmsg("ヘ玡礚щ布羭︽");
-        }
-        return XO_QUIT;
+            outs("\n  (^P)羭快щ布\n");
+        clrtobot();
+        return XO_NONE;
     }
 
     num = xo->top;
@@ -138,7 +135,6 @@ XO *xo)
     if (max > tail)
         max = tail;
 
-    move(3, 0);
     do
     {
         vote_item(++num, vch++);

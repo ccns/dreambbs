@@ -677,12 +677,15 @@ pal_body(
     const PAL *pal;
     int num, max, tail;
 
+    move(3, 0);
+
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要交新朋友嗎(y/N)？[N] ") == 'y')
-            return pal_add(xo);
-        return XO_QUIT;
+        outs("\n《好友名單》目前沒有資料\n");
+        outs("\n  (a)交新朋友\n");
+        clrtobot();
+        return XO_NONE;
     }
 
     num = xo->top;
@@ -690,7 +693,6 @@ pal_body(
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
         pal_item(++num, pal++);
@@ -1086,8 +1088,8 @@ bmw_body(
     max = xo->max;
     if (max <= 0)
     {
-        vmsg("先前並無熱訊呼叫");
-        return XO_QUIT;
+        outs("\n《查看訊息》先前並無熱訊呼叫\n");
+        return XO_NONE;
     }
 
     num = xo->top;
@@ -3104,7 +3106,10 @@ ulist_body(
     max = xo->max;
     if (max <= 0)
     {
-        return XO_QUIT;
+        move(3, 0);
+        prints("\n《%s》目前沒有資料\n", (cuser.ufo2 & UFO2_PAL) ? "好友列表" : "網友列表");
+        clrtobot();
+        return XO_NONE;
     }
 
     cnt = xo->top;
@@ -4669,9 +4674,9 @@ banmsg_body(
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增嗎(y/N)？[N] ") == 'y')
-            return banmsg_add(xo);
-        return XO_QUIT;
+        outs("\n《拒收名單》目前沒有資料\n");
+        outs("\n  (a)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;

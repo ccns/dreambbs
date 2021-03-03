@@ -179,12 +179,14 @@ XO *xo)
     const HDR *ghdr;
     int num, max, tail;
 
+    move(3, 0);
+
     max = xo->max;
     if (max <= 0)
     {
-        outs("\n\n《歌本》尚在吸取天地間的日精月華 :)");
-        vmsg(NULL);
-        return XO_QUIT;
+        outs("\n《歌本》尚在吸取天地間的日精月華 :)\n");
+        clrtobot();
+        return song_foot(xo);
     }
 
     num = xo->top;
@@ -192,7 +194,6 @@ XO *xo)
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
         song_item(++num, ghdr++);

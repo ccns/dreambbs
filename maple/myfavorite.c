@@ -88,7 +88,9 @@ myfavorite_body(
     max = xo->max;
     if (max <= 0)
     {
-        return myfavorite_add(xo);
+        outs("\n《我的最愛》目前沒有資料\n");
+        outs("\n  (^P/a)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;
@@ -287,8 +289,6 @@ myfavorite_add(
     }
     else
     {
-        if (!xo->max)
-            return XO_QUIT;
         return XO_FOOT;
     }
 

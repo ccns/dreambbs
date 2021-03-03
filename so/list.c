@@ -48,9 +48,9 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-            return list_add(xo);
-        return XO_QUIT;
+        outs("\n《群組名單》目前沒有資料\n");
+        outs("\n  (a)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;

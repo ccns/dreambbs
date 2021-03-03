@@ -148,19 +148,16 @@ XO *xo)
     const NBRD *nbrd;
     int num, max, tail;
 
+    move(3, 0);
+
     max = xo->max;
     if (max <= 0)
     {
+        outs("\n《連署系統》尚無連署活動\n");
         if (HAS_PERM(PERM_VALID))
-        {
-            if (vans("要新增連署項目嗎？(y/N) [N] ") == 'y')
-                return nbrd_add(xo);
-        }
-        else
-        {
-            vmsg("尚無連署活動");
-        }
-        return XO_QUIT;
+            outs("\n  (^P)新增連署項目\n");
+        clrtobot();
+        return XO_NONE;
     }
 
     num = xo->top;
@@ -168,7 +165,6 @@ XO *xo)
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
         nbrd_item(++num, nbrd++);

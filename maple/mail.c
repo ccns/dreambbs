@@ -2024,12 +2024,15 @@ mbox_body(
     const HDR *mhdr;
     int num, max, tail;
 
+    move(3, 0);
+
     max = xo->max;
 
     if (max <= 0)
     {
-        vmsg("您沒有來信");
-        return XO_QUIT;
+        outs("\n《郵件選單》您沒有來信\n");
+        clrtobot();
+        return mbox_foot(xo);
     }
 
     num = xo->top;
@@ -2037,7 +2040,6 @@ mbox_body(
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
         mbox_item(++num, mhdr++);

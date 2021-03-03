@@ -103,8 +103,8 @@ cleanrecommend_body(
     if (max <= 0)
     {
         //counter = 0;
-        vmsg("沒有留言");
-        return XO_QUIT;
+        outs("\n《推薦留言清單》沒有留言\n");
+        return XO_NONE;
     }
     num = xo->top;
     cleanrecommend = (const RMSG *) xo_pool_base + num;
