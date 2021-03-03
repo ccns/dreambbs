@@ -1616,8 +1616,8 @@ XoAuthor(
 
 #if defined(HAVE_COUNT_BOARD) && 0
 static int
-class_stat(xo)
-    XO *xo;
+class_stat(
+    XO *xo)
 {
     BRD *brd;
     short *chp;
