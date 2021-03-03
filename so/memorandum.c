@@ -132,7 +132,7 @@ static int
 memorandum_head(
 XO *xo)
 {
-    vs_head("聯絡名單", str_site);
+    vs_head("備忘錄", str_site);
     prints(NECK_MEMORANDUM, d_cols, "");
     return memorandum_body(xo);
 }
@@ -178,7 +178,7 @@ XO *xo)
 {
     MEMORANDUM memorandum;
     if (xo->max >= MAX_MEMORANDUM)
-        vmsg("你的聯絡名單已到達上限!!");
+        vmsg("你的備忘錄已到達上限!!");
     else if (memorandum_edit(&memorandum, DOECHO))
     {
         rec_add(xo->dir, &memorandum, sizeof(MEMORANDUM));
