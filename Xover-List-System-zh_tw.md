@@ -4,16 +4,6 @@ Xover 列表系統是 MapleBBS 3.x 中所大量使用的列表顯示系統。
 
 不同於 Pirate BBS 原本的 `i_read` 列表系統只能用在文章與信件列表，Xover 列表系統能夠用來顯示任何的列表。
 
-## 文章概覽
-
-- [Pirate BBS 衍生之 BBS 的列表函式比較](#pirate-bbs-%E8%A1%8D%E7%94%9F%E4%B9%8B-bbs-%E7%9A%84%E5%88%97%E8%A1%A8%E5%87%BD%E5%BC%8F%E6%AF%94%E8%BC%83) 一節使用歷史比較的方法概覽 Xover 列表系統。
-
-- [MapleBBS 3 與 DreamBBS v3 的 Xover callback key value 的分配](#maplebbs-3-%E8%88%87-dreambbs-v3-%E7%9A%84-xover-callback-key-value-%E7%9A%84%E5%88%86%E9%85%8D) 一節比較了 MapleBBS 3 與 DreamBBS 的用於 Xover callback 列表的 key value 分配上的差異。
-
-- [MapleBBS 3 與 DreamBBS v3 的 Xover 特殊值](#maplebbs-3-%E8%88%87-dreambbs-v3-%E7%9A%84-xover-%E7%89%B9%E6%AE%8A%E5%80%BC) 一節說明了 MapleBBS 3 與 DreamBBS 中的 Xover 系統使用到的特殊數值。
-
-- [DreamBBS v3 的 Xover callback 命令連鎖機制](#dreambbs-v3-%E7%9A%84-xover-callback-%E5%91%BD%E4%BB%A4%E9%80%A3%E9%8E%96%E6%A9%9F%E5%88%B6) 一節說明了 DreamBBS v3.0 新增的複合型命令的效果疊加機制。
-
 ## Pirate BBS 衍生之 BBS 的列表函式比較
 
 本文所提到的 BBS 系統間的衍生關係，可見 [[TANet BBS 家族譜系圖|TANet-BBS-Family-Genealogy-Chart-zh_tw]]，其中須注意：
