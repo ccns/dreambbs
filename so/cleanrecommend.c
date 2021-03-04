@@ -57,26 +57,26 @@ cleanrecommend_item(
     const RMSG *cleanrecommend)
 {
 
-        char tmp[10];
-        const char *pn;
+    char tmp[10];
+    const char *pn;
 
-        pn = tmp;
+    pn = tmp;
 
-        if (cleanrecommend->pn == POSITIVE)
-        {
-            pn = "\x1b[1;33m+";
-            prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
-        }
-        else if (cleanrecommend->pn == NEGATIVE)
-        {
-            pn = "\x1b[1;31m-";
-            prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
-        }
-        else
-        {
-            pn = " ";
-            prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
-        }
+    if (cleanrecommend->pn == POSITIVE)
+    {
+        pn = "\x1b[1;33m+";
+        prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
+    }
+    else if (cleanrecommend->pn == NEGATIVE)
+    {
+        pn = "\x1b[1;31m-";
+        prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
+    }
+    else
+    {
+        pn = " ";
+        prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
+    }
 }
 
 static int
