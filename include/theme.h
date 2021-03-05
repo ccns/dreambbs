@@ -10,6 +10,8 @@
 #ifndef THEME_H
 #define THEME_H
 
+#include "cppdef.h"
+
 /* ----------------------------------------------------- */
 /* 暫存區                                                */
 /* ----------------------------------------------------- */
@@ -258,14 +260,35 @@
 /* 站簽：站台來源簽名                                    */
 /* ----------------------------------------------------- */
 
-#ifndef ORIGIN_TAG
-#define ORIGIN_TAG \
-    "--\n" \
+/* IID.2021-03-06: Formatted customization of `ORIGIN_TAG` */
+
+/* `ORIGIN_TAG_PIC` should end with an ANSI reset and a newline if not empty */
+#ifndef ORIGIN_TAG_PIC
+#define ORIGIN_TAG_PIC \
     "\x1b[1;44;32m  ◢\x1b[0;32;44m◣   \x1b[1;37m︵︵     \x1b[30m█▔◣ █▔█ █▔▔ █▔█ █▆▉ █   █▔█ █◣█ █▔\x1b[31m● \x1b[m\n" \
     "\x1b[1;32;44m◢\x1b[42m◤\x1b[0;44;32m█◣\x1b[1m◢\x1b[0;32;44m◣ \x1b[1;37m︵︵ \x1b[0;37;44m█  █ █▁◤ █▁▁ █▁█ ▉▉▉ █   █▁█ █◥█ █  █ \x1b[m\n" \
-    "\x1b[1;36;42m夢之大地 逼逼ㄟ四 \x1b[37m█▁◤ █  █ █▁▁ █  █ ▉▉▉ █▁ █  █ █  █ █▁◤ \x1b[m\n" \
-    "\x1b[1;32m※ Origin:\x1b[33m <bbs.ccns.ncku.edu.tw>  \x1b[31m◆ From:\x1b[36m %-34.34s \x1b[m\n"
-#endif  // ORIGIN_TAG
+    "\x1b[1;36;42m夢之大地 逼逼ㄟ四 \x1b[37m█▁◤ █  █ █▁▁ █  █ ▉▉▉ █▁ █  █ █  █ █▁◤ \x1b[m\n"
+#endif
+
+/* `ORIGIN_TAG_SITENAME` should start and end with a space after excluding ANSI escapes */
+#ifndef ORIGIN_TAG_SITENAME
+#define ORIGIN_TAG_SITENAME " "
+#endif
+
+/* `ORIGIN_TAG_SITENAME` should start with a `"<"` and end with a `">"` after excluding ANSI escapes */
+#ifndef ORIGIN_TAG_HOSTNAME
+#define ORIGIN_TAG_HOSTNAME "\x1b[33m<" MYHOSTNAME ">"
+#endif
+
+/* Forbid `ORIGIN_TAG` from being defined elsewhere */
+#ifdef ORIGIN_TAG
+CPP_PRAGMA(GCC error "Customizing `ORIGIN_TAG` by defining it elsewhere is no longer supported. Use `ORIGIN_TAG_PIC`/`ORIGIN_TAG_SITENAME`/`ORIGIN_TAG_HOSTNAME` to customize `ORIGIN_TAG` instead");
+#endif
+
+#define ORIGIN_TAG \
+    "--\n" \
+    ORIGIN_TAG_PIC \
+    "\x1b[1;32m※ Origin:" ORIGIN_TAG_SITENAME ORIGIN_TAG_HOSTNAME "  \x1b[31m◆ From:\x1b[36m %s \x1b[m\n"
 
 #define MODIFY_TAG    "\x1b[1;32m※ Modify: \x1b[33m<%s> \x1b[m%s"
 
