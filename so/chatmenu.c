@@ -14,15 +14,18 @@ static int chat_add(XO *xo);
 static int mode = 0;
 static int kind = 0;
 
-static void
+static int
 chat_item(
-int num,
-const ChatAction *chat)
+XO *xo,
+int pos)
 {
+    const ChatAction *const chat = (const ChatAction *) xo_pool_base + pos;
+    const int num = pos + 1;
     if (!mode)
         prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->brief_desc, d_cols + 55, d_cols + 55, chat->part1_msg);
     else
         prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->brief_desc, d_cols + 55, d_cols + 55, chat->part2_msg);
+    return XO_NONE;
 }
 
 static int
@@ -30,17 +33,14 @@ chat_cur(
 XO *xo,
 int pos)
 {
-    const ChatAction *const chat = (const ChatAction *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    chat_item(pos + 1, chat);
-    return XO_NONE;
+    return chat_item(xo, pos);
 }
 
 static int
 chat_body(
 XO *xo)
 {
-    const ChatAction *chat;
     int num, max, tail;
 
     move(3, 0);
@@ -54,13 +54,12 @@ XO *xo)
     }
 
     num = xo->top;
-    chat = (const ChatAction *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        chat_item(++num, chat++);
+        chat_item(xo, num++);
     }
     while (num < max);
 

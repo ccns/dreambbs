@@ -16,12 +16,15 @@ typedef struct
     char email[60];
 } LOG;  /* DISKDATA(raw) */
 
-static void
+static int
 show_item(
-int num,
-const LOG *show)
+XO *xo,
+int pos)
 {
+    const LOG *const show = (const LOG *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d     %s\n", num, show->email);
+    return XO_NONE;
 }
 
 static int
@@ -29,17 +32,14 @@ show_cur(
 XO *xo,
 int pos)
 {
-    const LOG *const show = (const LOG *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    show_item(pos + 1, show);
-    return XO_NONE;
+    return show_item(xo, pos);
 }
 
 static int
 show_body(
 XO *xo)
 {
-    const LOG *show;
     int num, max, tail;
 
     move(3, 0);
@@ -53,13 +53,12 @@ XO *xo)
     }
 
     num = xo->top;
-    show = (const LOG *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        show_item(++num, show++);
+        show_item(xo, num++);
     }
     while (num < max);
 

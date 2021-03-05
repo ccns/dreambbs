@@ -19,8 +19,11 @@
 static int banmail_add(XO * xo);
 
 
-static void banmail_item(int num, const BANMAIL * ban)
+static int banmail_item(XO * xo, int pos)
 {
+    const BANMAIL *const ban = (const BANMAIL *) xo_pool_base + pos;
+    const int num = pos + 1;
+
     time_t now;
     char modes[7];
     sprintf(modes, "%c%c%c%c%c%c", (ban->mode & FW_OWNER) ? '1' : '0',
@@ -33,19 +36,19 @@ static void banmail_item(int num, const BANMAIL * ban)
     now = ((ban->time - time(0) + BANMAIL_EXPIRE * 86400) / 3600);
     prints("%6d  %6d %6ld %s  %-*.*s\n", num, ban->usage, BMAX(now, (time_t)0),
            modes, d_cols + 49, d_cols + 49, ban->data);
+
+    return XO_NONE;
 }
 
 static int banmail_cur(XO *xo, int pos)
 {
-    const BANMAIL *const banmail = (const BANMAIL *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    banmail_item(pos + 1, banmail);
+    banmail_item(xo, pos);
     return XO_NONE;
 }
 
 static int banmail_body(XO * xo)
 {
-    const BANMAIL *banmail = NULL;
     int num, max, tail;
 
     move(3, 0);
@@ -60,13 +63,12 @@ static int banmail_body(XO * xo)
     }
 
     num = xo->top;
-    banmail = (const BANMAIL *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        banmail_item(++num, banmail++);
+        banmail_item(xo, num++);
     }
     while (num < max);
     clrtobot();

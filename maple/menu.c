@@ -1256,17 +1256,18 @@ domenu_getx(
         return xyz->x;
 }
 
-static void
+static int
 domenu_item(
-    int num,
-    DomenuXyz *xyz)
+    XO *xo,
+    int pos)
 {
+    DomenuXyz *const xyz = (DomenuXyz *)xo->xyz;
     char item[ANSILINESIZE];
-    const MENU *const mptr = xyz->table[num - 1];
+    const MENU *const mptr = xyz->table[pos];
     const char *const str = check_info((const void *)mptr->item.func, mptr->desc);
     const int item_str_len = strcspn(str, "\n");
     const int match_max = BMIN(xyz->cmdcur_max, item_str_len);
-    const int y = domenu_gety(num - 1, xyz);
+    const int y = domenu_gety(pos, xyz);
 
     sprintf(item, "\x1b[m(\x1b[1;36m%-*.*s\x1b[m)%.*s",
             xyz->cmdcur_max, match_max, str, BMAX(0, item_str_len - match_max), str + match_max);
@@ -1275,9 +1276,11 @@ domenu_item(
     if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
         grayout(y, y + 1, GRAYOUT_COLORNORM);
 
-    xyz->item_length[num - 1] = 4 + strip_ansi_n_len(str, item_str_len);
-    xyz->max_item_length = BMAX(xyz->max_item_length, xyz->item_length[num - 1]);
+    xyz->item_length[pos] = 4 + strip_ansi_n_len(str, item_str_len);
+    xyz->max_item_length = BMAX(xyz->max_item_length, xyz->item_length[pos]);
     clrtoeol();
+
+    return XO_NONE;
 }
 
 static int
@@ -1366,7 +1369,7 @@ domenu_redo_reload:
         {
             move_ansi(domenu_gety(i, xyz), domenu_getx(i, xyz) + 2);
             if (i < xo->max)
-                domenu_item(i + 1, xyz);
+                domenu_item(xo, i);
             else
                 clrtoeol();
         }
@@ -1389,9 +1392,8 @@ domenu_cur(XO *xo, int pos)
     const int i = pos;
     move_ansi(domenu_gety(i, xyz), domenu_getx(i, xyz) + 2);
     if (i < xo->max)
-        domenu_item(i + 1, xyz);
-    else
-        clrtoeol();
+        return domenu_item(xo, i);
+    clrtoeol();
     return XO_NONE;
 }
 

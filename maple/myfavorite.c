@@ -28,11 +28,14 @@ brd2myfavorite(
     gem->xmode = GEM_BOARD;
 }
 
-static void
+static int
 myfavorite_item(
-    int num,
-    const HDR *myfavorite)
+    XO *xo,
+    int pos)
 {
+    const HDR *const myfavorite = (const HDR *) xo_pool_base + pos;
+    const int num = pos + 1;
+
     if (myfavorite->xmode & GEM_BOARD)
     {
         if (myfavorite->recommend == -1)
@@ -63,6 +66,8 @@ myfavorite_item(
     {
         class_outs(myfavorite->title, num);
     }
+
+    return XO_NONE;
 }
 
 static int
@@ -70,17 +75,14 @@ myfavorite_cur(
     XO *xo,
     int pos)
 {
-    const HDR *const myfavorite = (const HDR *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    myfavorite_item(pos + 1, myfavorite);
-    return XO_NONE;
+    return myfavorite_item(xo, pos);
 }
 
 static int
 myfavorite_body(
     XO *xo)
 {
-    const HDR *myfavorite;
     int num, max, tail;
 
     move(3, 0);
@@ -94,13 +96,12 @@ myfavorite_body(
     }
 
     num = xo->top;
-    myfavorite = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        myfavorite_item(++num, myfavorite++);
+        myfavorite_item(xo, num++);
     } while (num < max);
 
     return XO_NONE;

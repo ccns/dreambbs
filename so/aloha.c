@@ -54,12 +54,15 @@ const ALOHA *aloha)
     return 0;
 }
 
-static void
+static int
 aloha_item(
-int num,
-const ALOHA *aloha)
+XO *xo,
+int pos)
 {
+    const ALOHA *const aloha = (const ALOHA *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d     %s\n", num, aloha->userid);
+    return XO_NONE;
 }
 
 static int
@@ -67,17 +70,14 @@ aloha_cur(
 XO *xo,
 int pos)
 {
-    const ALOHA *const aloha = (const ALOHA *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    aloha_item(pos + 1, aloha);
-    return XO_NONE;
+    return aloha_item(xo, pos);
 }
 
 static int
 aloha_body(
 XO *xo)
 {
-    const ALOHA *aloha;
     int num, max, tail;
 
     move(3, 0);
@@ -91,13 +91,12 @@ XO *xo)
     }
 
     num = xo->top;
-    aloha = (const ALOHA *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        aloha_item(++num, aloha++);
+        aloha_item(xo, num++);
     }
     while (num < max);
 

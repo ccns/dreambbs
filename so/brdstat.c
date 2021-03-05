@@ -12,13 +12,16 @@
 
 #ifdef  HAVE_COUNT_BOARD
 
-static void
+static int
 bstat_item(
-int num,
-const BSTAT *bstat)
+XO *xo,
+int pos)
 {
+    const BSTAT *const bstat = (const BSTAT *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d   %-8.8s    %6d    %6d    %6d    %6d\n", num,
            bstat->type, bstat->n_reads, bstat->n_posts, bstat->n_news, bstat->n_bans);
+    return XO_NONE;
 }
 
 static int
@@ -26,17 +29,14 @@ bstat_cur(
 XO *xo,
 int pos)
 {
-    const BSTAT *const bstat = (const BSTAT *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    bstat_item(pos + 1, bstat);
-    return XO_NONE;
+    return bstat_item(xo, pos);
 }
 
 static int
 bstat_body(
 XO *xo)
 {
-    const BSTAT *bstat;
     int num, max, tail;
 
     move(3, 0);
@@ -49,13 +49,12 @@ XO *xo)
     }
 
     num = xo->top;
-    bstat = (const BSTAT *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        bstat_item(++num, bstat++);
+        bstat_item(xo, num++);
     }
     while (num < max);
 

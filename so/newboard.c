@@ -116,17 +116,20 @@ XO *xo)
 }
 
 
-static void
+static int
 nbrd_item(
-int num,
-const NBRD *nbrd)
+XO *xo,
+int pos)
 {
+    const NBRD *const nbrd = (const NBRD *) xo_pool_base + pos;
+    const int num = pos + 1;
     if (nbrd->mode & NBRD_NBRD)
         prints("%6d %c %-5s %-*s %-*s:%-*.*s\n", num, nbrd_attr(nbrd), nbrd->date + 3, IDLEN, nbrd->owner, IDLEN, nbrd->brdname, d_cols + 36, d_cols + 36, nbrd->title);
     else if (nbrd->mode & NBRD_CANCEL)
         prints("%6d %c %-5s %-*s ¼o°£ %s ª©ª©¥D\n", num, nbrd_attr(nbrd), nbrd->date + 3, IDLEN, nbrd->owner, nbrd->brdname);
     else
         prints("%6d %c %-5s %-*s %-*.*s\n", num, nbrd_attr(nbrd), nbrd->date + 3, IDLEN, nbrd->owner, d_cols + 50, d_cols + 50, nbrd->title);
+    return XO_NONE;
 }
 
 static int
@@ -134,10 +137,8 @@ nbrd_cur(
 XO *xo,
 int pos)
 {
-    const NBRD *const nbrd = (const NBRD *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    nbrd_item(pos + 1, nbrd);
-    return XO_NONE;
+    return nbrd_item(xo, pos);
 }
 
 
@@ -145,7 +146,6 @@ static int
 nbrd_body(
 XO *xo)
 {
-    const NBRD *nbrd;
     int num, max, tail;
 
     move(3, 0);
@@ -161,13 +161,12 @@ XO *xo)
     }
 
     num = xo->top;
-    nbrd = (const NBRD *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        nbrd_item(++num, nbrd++);
+        nbrd_item(xo, num++);
     }
     while (num < max);
 

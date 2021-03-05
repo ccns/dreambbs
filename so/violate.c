@@ -13,11 +13,13 @@
 static int viol_add(XO *xo);
 
 
-static void
+static int
 viol_item(
-int num,
-const EMAIL *viol)
+XO *xo,
+int pos)
 {
+    const EMAIL *const viol = (const EMAIL *) xo_pool_base + pos;
+    const int num = pos + 1;
     char buf[5];
     int now;
     now = (viol->deny - time(0)) / 3600;
@@ -27,6 +29,8 @@ const EMAIL *viol)
     else
         sprintf(buf, "%4d", BMAX(now, 0));
     prints("%6d %4d %4s %-*.*s\n", num, viol->times, buf, d_cols + 62, d_cols + 62, viol->email);
+
+    return XO_NONE;
 }
 
 static int
@@ -34,17 +38,14 @@ viol_cur(
 XO *xo,
 int pos)
 {
-    const EMAIL *const viol = (const EMAIL *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    viol_item(pos + 1, viol);
-    return XO_NONE;
+    return viol_item(xo, pos);
 }
 
 static int
 viol_body(
 XO *xo)
 {
-    const EMAIL *viol;
     int num, max, tail;
 
     move(3, 0);
@@ -58,13 +59,12 @@ XO *xo)
     }
 
     num = xo->top;
-    viol = (const EMAIL *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        viol_item(++num, viol++);
+        viol_item(xo, num++);
     }
     while (num < max);
 

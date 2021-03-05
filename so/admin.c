@@ -13,12 +13,15 @@
 static int admin_add(XO *xo);
 
 
-static void
+static int
 admin_item(
-int num,
-const ADMIN *admin)
+XO *xo,
+int pos)
 {
+    const ADMIN *const admin = (const ADMIN *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d     %s\n", num, admin->name);
+    return XO_NONE;
 }
 
 static int
@@ -26,17 +29,14 @@ admin_cur(
 XO *xo,
 int pos)
 {
-    const ADMIN *const admin = (const ADMIN *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    admin_item(pos + 1, admin);
-    return XO_NONE;
+    return admin_item(xo, pos);
 }
 
 static int
 admin_body(
 XO *xo)
 {
-    const ADMIN *admin;
     int num, max, tail;
 
     move(3, 0);
@@ -50,13 +50,12 @@ XO *xo)
     }
 
     num = xo->top;
-    admin = (const ADMIN *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        admin_item(++num, admin++);
+        admin_item(xo, num++);
     }
     while (num < max);
 

@@ -51,11 +51,13 @@ cleanrecommend_log(
     return 0;
 }
 
-static void
+static int
 cleanrecommend_item(
-    int num,
-    const RMSG *cleanrecommend)
+    XO *xo,
+    int pos)
 {
+    const RMSG *const cleanrecommend = (const RMSG *) xo_pool_base + pos;
+    const int num = pos + 1;
 
     char tmp[10];
     const char *pn;
@@ -77,6 +79,8 @@ cleanrecommend_item(
         pn = " ";
         prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
     }
+
+    return XO_NONE;
 }
 
 static int
@@ -84,17 +88,14 @@ cleanrecommend_cur(
     XO *xo,
     int pos)
 {
-    const RMSG *const cleanrecommend = (const RMSG *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    cleanrecommend_item(pos + 1, cleanrecommend);
-    return XO_NONE;
+    return cleanrecommend_item(xo, pos);
 }
 
 static int
 cleanrecommend_body(
     XO *xo)
 {
-    const RMSG *cleanrecommend;
     int num, max, tail;
 
     move(3, 0);
@@ -107,7 +108,6 @@ cleanrecommend_body(
         return XO_NONE;
     }
     num = xo->top;
-    cleanrecommend = (const RMSG *) xo_pool_base + num;
     tail = num + XO_TALL;
 /*
     counter = TCLAMP(max, -127, 127);
@@ -116,7 +116,7 @@ cleanrecommend_body(
 
     do
     {
-        cleanrecommend_item(++num, cleanrecommend++);
+        cleanrecommend_item(xo, num++);
     } while (num < max);
 
     return XO_NONE;

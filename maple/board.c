@@ -1221,11 +1221,13 @@ class_outs(
     prints("%6d   %-*.*s     %.*s\n", num, IDLEN, IDLEN, title, d_cols + 53, title + IDLEN + 1);
 }
 
-static void
+static int
 class_item(
-    int num,
-    int chn)
+    XO *xo,
+    int pos)
 {
+    const short chn = ((short *) xo->xyz)[pos];
+    const int num = pos + 1;
 
     if (chn >= 0)
         board_outs(chn, num);
@@ -1251,6 +1253,8 @@ class_item(
         chx = (short *) img + (CH_END - chn);
         class_outs(img + *chx, num);
     }
+
+    return XO_NONE;
 }
 
 static int
@@ -1258,9 +1262,8 @@ class_cur(
     XO *xo,
     int pos)
 {
-    short *const chp = (short *) xo->xyz + pos;
     move(3 + pos - xo->top, 0);
-    class_item(pos + 1, *chp);
+    class_item(xo, pos);
     return XO_NONE;
 }
 
@@ -1269,7 +1272,6 @@ static int
 class_body(
     XO *xo)
 {
-    short *chp;
     int num, max, tail;
 
     move(3, 0);
@@ -1297,14 +1299,13 @@ class_body(
         return XO_BODY;
     }
 
-    chp = (short *) xo->xyz + xo->top;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        class_item(++num, *chp++);
+        class_item(xo, num++);
     } while (num < max);
 
     clrtobot();

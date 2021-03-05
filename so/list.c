@@ -17,12 +17,15 @@ static int list_add(XO *xo);
 static int mode;
 
 
-static void
+static int
 list_item(
-int num,
-const LIST *list)
+XO *xo,
+int pos)
 {
+    const LIST *const list = (const LIST *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d     %s\n", num, list->userid);
+    return XO_NONE;
 }
 
 static int
@@ -30,17 +33,14 @@ list_cur(
 XO *xo,
 int pos)
 {
-    const LIST *const list = (const LIST *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    list_item(pos + 1, list);
-    return XO_NONE;
+    return list_item(xo, pos);
 }
 
 static int
 list_body(
 XO *xo)
 {
-    const LIST *list;
     int num, max, tail;
 
     move(3, 0);
@@ -54,13 +54,12 @@ XO *xo)
     }
 
     num = xo->top;
-    list = (const LIST *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        list_item(++num, list++);
+        list_item(xo, num++);
     }
     while (num < max);
 

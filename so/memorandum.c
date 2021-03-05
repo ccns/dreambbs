@@ -77,12 +77,15 @@ get_sch_time(void)
 }
 #endif  /* #if 0 */
 
-static void
+static int
 memorandum_item(
-int num,
-const MEMORANDUM *memorandum)
+XO *xo,
+int pos)
 {
+    const MEMORANDUM *const memorandum = (const MEMORANDUM *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d  %-8s  %-8s  %-*s\n", num, memorandum->date, memorandum->time, d_cols + 51, memorandum->work);
+    return XO_NONE;
 }
 
 static int
@@ -90,17 +93,14 @@ memorandum_cur(
 XO *xo,
 int pos)
 {
-    const MEMORANDUM *const memorandum = (const MEMORANDUM *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    memorandum_item(pos + 1, memorandum);
-    return XO_NONE;
+    return memorandum_item(xo, pos);
 }
 
 static int
 memorandum_body(
 XO *xo)
 {
-    const MEMORANDUM *memorandum;
     int num, max, tail;
 
     move(3, 0);
@@ -114,13 +114,12 @@ XO *xo)
     }
 
     num = xo->top;
-    memorandum = (const MEMORANDUM *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        memorandum_item(++num, memorandum++);
+        memorandum_item(xo, num++);
     }
     while (num < max);
 

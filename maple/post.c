@@ -850,11 +850,14 @@ post_foot(
     return XO_NONE;
 }
 
-    static void
+    static int
 post_item(
-    int num,
-    const HDR *hdr)
+    XO *xo,
+    int pos)
 {
+    const HDR *const hdr = (const HDR *) xo_pool_base + pos;
+    int num = pos + 1;
+
 #ifdef HAVE_RECOMMEND
 
     if (hdr->xmode & POST_BOTTOM)
@@ -916,6 +919,8 @@ post_item(
     prints("%6d%c%c ", (hdr->xmode & POST_BOTTOM) ? -1 : num, tag_char(hdr->chrono), post_attr(hdr));
     hdr_outs(hdr, d_cols + 47);
 #endif  /* #ifdef HAVE_RECOMMEND */
+
+    return XO_NONE;
 }
 
 static int
@@ -923,17 +928,14 @@ post_cur(
     XO *xo,
     int pos)
 {
-    const HDR *const fhdr = (const HDR *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    post_item(pos + 1, fhdr);
-    return XO_NONE;
+    return post_item(xo, pos);
 }
 
     static int
 post_body(
     XO *xo)
 {
-    const HDR *fhdr;
     int num, max, tail;
 
     move(3, 0);
@@ -949,13 +951,12 @@ post_body(
     }
 
     num = xo->top;
-    fhdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        post_item(++num, fhdr++);
+        post_item(xo, num++);
     } while (num < max);
 
     clrtobot();
@@ -3428,7 +3429,7 @@ post_recommend(
             brd->blast = hdr->pushtime;
             return XO_INIT;
             //move(3 + cur, 0);
-            //post_item(pos+1, hdr);
+            //post_item(xo, pos);
             //cursor_show(3 + cur, 0);
 
         }
@@ -4228,7 +4229,6 @@ static char xypostKeyword[30];
 xpost_body(
     XO *xo)
 {
-    const HDR *fhdr;
     int num, max, tail;
 
     max = xo->max;
@@ -4241,14 +4241,13 @@ xpost_body(
 #endif
 
     num = xo->top;
-    fhdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     move(3, 0);
     do
     {
-        post_item(++num, fhdr++);
+        post_item(xo, num++);
     } while (num < max);
 
     clrtobot();

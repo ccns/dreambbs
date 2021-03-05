@@ -13,12 +13,15 @@
 static void contact_send(CONTACT *contact);
 static int contact_add(XO *xo);
 
-static void
+static int
 contact_item(
-int num,
-const CONTACT *contact)
+XO *xo,
+int pos)
 {
+    const CONTACT *const contact = (const CONTACT *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d     %-*s       %-*s\n", num, IDLEN, contact->name, d_cols + 49, contact->email);
+    return XO_NONE;
 }
 
 static int
@@ -26,17 +29,14 @@ contact_cur(
 XO *xo,
 int pos)
 {
-    const CONTACT *const contact = (const CONTACT *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    contact_item(pos + 1, contact);
-    return XO_NONE;
+    return contact_item(xo, pos);
 }
 
 static int
 contact_body(
 XO *xo)
 {
-    const CONTACT *contact;
     int num, max, tail;
 
     move(3, 0);
@@ -50,13 +50,12 @@ XO *xo)
     }
 
     num = xo->top;
-    contact = (const CONTACT *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        contact_item(++num, contact++);
+        contact_item(xo, num++);
     }
     while (num < max);
 

@@ -19,12 +19,15 @@
 static int observe_add(XO *xo);
 
 
-static void
+static int
 observe_item(
-int num,
-const OBSERVE *observe)
+XO *xo,
+int pos)
 {
+    const OBSERVE *const observe = (const OBSERVE *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d %-*.*s %-*.*s\n", num, IDLEN, IDLEN, observe->userid, d_cols + 58, d_cols + 58, observe->title);
+    return XO_NONE;
 }
 
 static int
@@ -32,17 +35,14 @@ observe_cur(
 XO *xo,
 int pos)
 {
-    const OBSERVE *const observe = (const OBSERVE *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    observe_item(pos + 1, observe);
-    return XO_NONE;
+    return observe_item(xo, pos);
 }
 
 static int
 observe_body(
 XO *xo)
 {
-    const OBSERVE *observe;
     int num, max, tail;
 
     move(3, 0);
@@ -56,13 +56,12 @@ XO *xo)
     }
 
     num = xo->top;
-    observe = (const OBSERVE *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        observe_item(++num, observe++);
+        observe_item(xo, num++);
     }
     while (num < max);
 

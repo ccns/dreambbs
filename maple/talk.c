@@ -649,13 +649,16 @@ pal_sync(
 static int pal_add(XO *xo);
 
 
-static void
+static int
 pal_item(
-    int num,
-    const PAL *pal)
+    XO *xo,
+    int pos)
 {
+    const PAL *const pal = (const PAL *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d %-3s%-14s%s\n", num, pal->ftype & PAL_BAD ? "¢æ" : "",
         pal->userid, pal->ship);
+    return XO_NONE;
 }
 
 static int
@@ -663,10 +666,8 @@ pal_cur(
     XO *xo,
     int pos)
 {
-    const PAL *const pal = (const PAL *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    pal_item(pos + 1, pal);
-    return XO_NONE;
+    return pal_item(xo, pos);
 }
 
 
@@ -674,7 +675,6 @@ static int
 pal_body(
     XO *xo)
 {
-    const PAL *pal;
     int num, max, tail;
 
     move(3, 0);
@@ -689,13 +689,12 @@ pal_body(
     }
 
     num = xo->top;
-    pal = (const PAL *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        pal_item(++num, pal++);
+        pal_item(xo, num++);
     } while (num < max);
     clrtobot();
 
@@ -1012,11 +1011,14 @@ t_pal(void)
 /*static */void bmw_edit(UTMP *up, const char *hint, BMW *bmw, int cc);
 
 
-static void
+static int
 bmw_item(
-    int num,
-    const BMW *bmw)
+    XO *xo,
+    int pos)
 {
+    const BMW *const bmw = (const BMW *) xo_pool_base + pos;
+    const int num = pos + 1;
+
     struct tm *ptime = localtime_any(&bmw->btime);
 
     if (!(bmw_modetype & BMW_MODE))
@@ -1062,6 +1064,8 @@ bmw_item(
                     IDLEN, bmw->userid, d_cols + 57, d_cols + 57, bmw->msg);
         }
     }
+
+    return XO_NONE;
 }
 
 static int
@@ -1069,10 +1073,8 @@ bmw_cur(
     XO *xo,
     int pos)
 {
-    const BMW *const bmw = (const BMW *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    bmw_item(pos + 1, bmw);
-    return XO_NONE;
+    return bmw_item(xo, pos);
 }
 
 
@@ -1080,7 +1082,6 @@ static int
 bmw_body(
     XO *xo)
 {
-    const BMW *bmw;
     int num, max, tail;
 
     move(3, 0);
@@ -1093,13 +1094,12 @@ bmw_body(
     }
 
     num = xo->top;
-    bmw = (const BMW *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        bmw_item(++num, bmw++);
+        bmw_item(xo, num++);
     } while (num < max);
 
     return XO_NONE;
@@ -4642,12 +4642,15 @@ banmsg_sync(
 static int banmsg_add(XO *xo);
 
 
-static void
+static int
 banmsg_item(
-    int num,
-    const BANMSG *banmsg)
+    XO *xo,
+    int pos)
 {
+    const BANMSG *const banmsg = (const BANMSG *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d    %-14s%s\n", num, banmsg->userid, banmsg->ship);
+    return XO_NONE;
 }
 
 static int
@@ -4655,10 +4658,8 @@ banmsg_cur(
     XO *xo,
     int pos)
 {
-    const BANMSG *const banmsg = (const BANMSG *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    banmsg_item(pos + 1, banmsg);
-    return XO_NONE;
+    return banmsg_item(xo, pos);
 }
 
 
@@ -4666,7 +4667,6 @@ static int
 banmsg_body(
     XO *xo)
 {
-    const BANMSG *banmsg;
     int num, max, tail;
 
     move(3, 0);
@@ -4680,14 +4680,13 @@ banmsg_body(
     }
 
     num = xo->top;
-    banmsg = (const BANMSG *) xo_pool_base + num;
     tail = num + XO_TALL;
     if (max > tail)
         max = tail;
 
     do
     {
-        banmsg_item(++num, banmsg++);
+        banmsg_item(xo, num++);
     } while (num < max);
 
     return XO_NONE;

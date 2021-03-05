@@ -89,13 +89,16 @@ XO *xo)
 }
 
 
-static void
+static int
 vote_item(
-int num,
-const VCH *vch)
+XO *xo,
+int pos)
 {
+    const VCH *const vch = (const VCH *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d %-9.8s%-*s %-*.*s\n",
            num, vch->cdate, IDLEN, vch->owner, d_cols + 50, d_cols + 50, vch->title);
+    return XO_NONE;
 }
 
 static int
@@ -103,10 +106,8 @@ vote_cur(
 XO *xo,
 int pos)
 {
-    const VCH *const vch = (const VCH *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    vote_item(pos + 1, vch);
-    return XO_NONE;
+    return vote_item(xo, pos);
 }
 
 
@@ -114,7 +115,6 @@ static int
 vote_body(
 XO *xo)
 {
-    const VCH *vch;
     int num, max, tail;
 
     move(3, 0);
@@ -130,14 +130,13 @@ XO *xo)
     }
 
     num = xo->top;
-    vch = (const VCH *) xo_pool_base + num;
     tail = num + XO_TALL;
     if (max > tail)
         max = tail;
 
     do
     {
-        vote_item(++num, vch++);
+        vote_item(xo, num++);
     }
     while (num < max);
     clrtobot();

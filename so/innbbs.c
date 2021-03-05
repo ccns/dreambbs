@@ -12,7 +12,7 @@
 
 
 typedef struct {
-    void (*item_func)(int num, const void *obj);
+    int (*item_func)(XO *xo, int pos);
     void (*query_func)(const void *obj);
     int (*add_func)(const char *fpath, const void *old, int pos);
     int (*sync_func)(const void *lhs, const void *rhs);
@@ -26,14 +26,16 @@ typedef struct {
 /* ----------------------------------------------------- */
 
 
-static void
+static int
 nl_item(
-    int num,
-    const void *nl_obj)
+    XO *xo,
+    int pos)
 {
-    const nodelist_t *nl = (const nodelist_t *)nl_obj;
+    const nodelist_t *nl = (const nodelist_t *)xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d %-13s%-*.*s %s(%d)\n", num,
         nl->name, d_cols + 45, d_cols + 45, nl->host, nl->xmode & INN_USEIHAVE ? "IHAVE" : "POST", nl->port);
+    return XO_NONE;
 }
 
 
@@ -134,12 +136,14 @@ nl_search(
 /* ----------------------------------------------------- */
 
 
-static void
+static int
 nf_item(
-    int num,
-    const void *nf_obj)
+    XO *xo,
+    int pos)
 {
-    const newsfeeds_t *nf = (const newsfeeds_t *)nf_obj;
+    const newsfeeds_t *nf = (const newsfeeds_t *)xo_pool_base + pos;
+    const int num = pos + 1;
+
     int bno;
     BRD *brd;
     char outgo, income;
@@ -164,6 +168,8 @@ nf_item(
 
     prints("%6d %-13s%-*.*s %c-%c %-*s %.7s\n", num,
         nf->path, d_cols + 33, d_cols + 33, nf->newsgroup, outgo, income, IDLEN, nf->board, nf->charset);
+
+    return XO_NONE;
 }
 
 
@@ -302,14 +308,16 @@ nf_search(
 /* ----------------------------------------------------- */
 
 
-static void
+static int
 ncm_item(
-    int num,
-    const void *ncm_obj)
+    XO *xo,
+    int pos)
 {
-    const ncmperm_t *ncm = (const ncmperm_t *)ncm_obj;
+    const ncmperm_t *ncm = (const ncmperm_t *)xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d %-*.*s%-23.23s %s\n", num,
         d_cols + 46, d_cols + 46, ncm->issuer, ncm->type, ncm->perm ? "○" : "╳");
+    return XO_NONE;
 }
 
 
@@ -404,12 +412,14 @@ spam_compare(
 }
 
 
-static void
+static int
 spam_item(
-    int num,
-    const void *spam_obj)
+    XO *xo,
+    int pos)
 {
-    const spamrule_t *spam = (const spamrule_t *)spam_obj;
+    const spamrule_t *spam = (const spamrule_t *)xo_pool_base + pos;
+    const int num = pos + 1;
+
     const char *path, *board;
 
     path = spam->path;
@@ -417,6 +427,8 @@ spam_item(
     prints("%6d %-13s%-*s [%s] 包含 %.*s\n",
         num, *path ? path : "所有站台", IDLEN, *board ? board : "所有看板",
         spam_compare(spam->xmode), d_cols + 31, spam->detail);
+
+    return XO_NONE;
 }
 
 
@@ -539,11 +551,9 @@ innbbs_cur(
     XO *xo,
     int pos)
 {
-    InnbbsXyz *const xyz = (InnbbsXyz *)xo->xyz;
-    const char *const rec = xo_pool_base + pos * xo->recsiz;
+    InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
     move(3 + pos - xo->top, 0);
-    xyz->item_func(pos + 1, rec);
-    return XO_NONE;
+    return xyz->item_func(xo, pos);
 }
 
 static int
@@ -551,7 +561,6 @@ innbbs_body(
     XO *xo)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
-    const char *rec;
     int num, max, tail;
 
     move(3, 0);
@@ -566,14 +575,12 @@ innbbs_body(
     }
 
     num = xo->top;
-    rec = xo_pool_base + xo->top * xo->recsiz;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        xyz->item_func(++num, rec);
-        rec += xo->recsiz;
+        xyz->item_func(xo, num++);
     } while (num < max);
 
     clrtobot();

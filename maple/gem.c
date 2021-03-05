@@ -61,11 +61,14 @@ gem_foot(
     return XO_NONE;
 }
 
-static void
+static int
 gem_item(
-    int num,
-    const HDR *ghdr)
+    XO *xo,
+    int pos)
 {
+    const HDR *const ghdr = (const HDR *) xo_pool_base + pos;
+    const int num = pos + 1;
+
     int xmode, gtype;
     char fpath[64];
 
@@ -97,6 +100,8 @@ gem_item(
         else
             prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title, IDLEN + 1, (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
     }
+
+    return XO_NONE;
 }
 
 static int
@@ -104,10 +109,8 @@ gem_cur(
     XO *xo,
     int pos)
 {
-    const HDR *const ghdr = (const HDR *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    gem_item(pos + 1, ghdr);
-    return XO_NONE;
+    return gem_item(xo, pos);
 }
 
 
@@ -115,7 +118,6 @@ static int
 gem_body(
     XO *xo)
 {
-    const HDR *ghdr;
     int num, max, tail;
 
     move(3, 0);
@@ -131,13 +133,12 @@ gem_body(
     }
 
     num = xo->top;
-    ghdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        gem_item(++num, ghdr++);
+        gem_item(xo, num++);
     } while (num < max);
     clrtobot();
 

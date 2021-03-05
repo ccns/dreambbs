@@ -137,11 +137,13 @@ song_foot(
     return XO_NONE;
 }
 
-static void
+static int
 song_item(
-int num,
-const HDR *ghdr)
+XO *xo,
+int pos)
 {
+    const HDR *const ghdr = (const HDR *) xo_pool_base + pos;
+    const int num = pos + 1;
     int xmode, gtype;
 
     xmode = ghdr->xmode;
@@ -158,6 +160,8 @@ const HDR *ghdr)
         prints("\x1b[1;33m¸ê®Æ«O±K¡I\x1b[m\n");
     else if ((gtype == 0) || (xmode & GEM_GOPHER))
         prints("%-.*s\n", d_cols + 68, ghdr->title);
+
+    return XO_NONE;
 }
 
 static int
@@ -165,10 +169,8 @@ song_cur(
 XO *xo,
 int pos)
 {
-    const HDR *const ghdr = (const HDR *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    song_item(pos + 1, ghdr);
-    return XO_NONE;
+    return song_item(xo, pos);
 }
 
 
@@ -176,7 +178,6 @@ static int
 song_body(
 XO *xo)
 {
-    const HDR *ghdr;
     int num, max, tail;
 
     move(3, 0);
@@ -190,13 +191,12 @@ XO *xo)
     }
 
     num = xo->top;
-    ghdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        song_item(++num, ghdr++);
+        song_item(xo, num++);
     }
     while (num < max);
     clrtobot();

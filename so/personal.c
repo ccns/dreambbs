@@ -233,15 +233,18 @@ personal_attr(unsigned int state)
     return ' ';
 }
 
-static void
+static int
 personal_item(
-    int num,
-    const PB *personal)
+    XO *xo,
+    int pos)
 {
+    const PB *const personal = (const PB *) xo_pool_base + pos;
+    const int num = pos + 1;
     if (!mode)
         prints("%6d %c %-*s %-*s %-*s\n", num, personal_attr(personal->state), IDLEN, personal->userid, IDLEN, personal->brdname, d_cols + 44, personal->email);
     else
         prints("%6d %c %-*s %-*s %-*s\n", num, personal_attr(personal->state), IDLEN, personal->userid, IDLEN, personal->brdname, d_cols + 44, personal->brdtitle);
+    return XO_NONE;
 }
 
 static int
@@ -249,17 +252,14 @@ personal_cur(
     XO *xo,
     int pos)
 {
-    const PB *const personal = (const PB *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    personal_item(pos + 1, personal);
-    return XO_NONE;
+    return personal_item(xo, pos);
 }
 
 static int
 personal_body(
     XO *xo)
 {
-    const PB *personal;
     int num, max, tail;
 
     move(3, 0);
@@ -271,13 +271,12 @@ personal_body(
         return XO_NONE;
     }
     num = xo->top;
-    personal = (const PB *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        personal_item(++num, personal++);
+        personal_item(xo, num++);
     } while (num < max);
 
     return XO_NONE;
@@ -555,7 +554,7 @@ personal_open(
 
     rec_put(xo->dir, personal, sizeof(PB), pos);
     move(3 + cur, 0);
-    personal_item(++pos, personal);
+    personal_item(xo, pos);
     cursor_show(3 + cur, 0);
 
     mail2usr(personal, 0);

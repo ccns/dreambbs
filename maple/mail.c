@@ -1983,11 +1983,13 @@ mbox_foot(
     return XO_NONE;
 }
 
-static inline void
+static inline int
 mbox_item(
-    int pos,                    /* sequence number */
-    const HDR *hdr)
+    XO *xo,
+    int pos)
 {
+    const HDR *const hdr = (const HDR *) xo_pool_base + pos;
+    pos = pos + 1;              /* sequence number */
 
 #if 0                           /* Thor.0508: 變色看看 */
     prints("%5d %c%", pos, mbox_attr(hdr->xmode));
@@ -2003,6 +2005,8 @@ mbox_item(
         (xmode & (MAIL_DELETE | MAIL_MARKED)) ? "\x1b[m" : "");
 
     hdr_outs(hdr, d_cols + 47);
+
+    return XO_NONE;
 }
 
 static int
@@ -2010,10 +2014,8 @@ mbox_cur(
     XO *xo,
     int pos)
 {
-    const HDR *const mhdr = (const HDR *) xo_pool_base + pos;
     move(3 + pos - xo->top, 0);
-    mbox_item(pos + 1, mhdr);
-    return XO_NONE;
+    return mbox_item(xo, pos);
 }
 
 
@@ -2021,7 +2023,6 @@ static int
 mbox_body(
     XO *xo)
 {
-    const HDR *mhdr;
     int num, max, tail;
 
     move(3, 0);
@@ -2036,13 +2037,12 @@ mbox_body(
     }
 
     num = xo->top;
-    mhdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        mbox_item(++num, mhdr++);
+        mbox_item(xo, num++);
     } while (num < max);
     clrtobot();
 
