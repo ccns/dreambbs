@@ -1492,6 +1492,8 @@ XZ xz[] =
 /* Thor.0613: »²§U°T®§ */
 static int msg = 0;
 
+static int xover_cursor(XO *xo, int zone, int cmd, int *pos_prev);
+
 void
 xover(
     int cmd)
@@ -1526,107 +1528,28 @@ xover(
 
         while ((cmd != XO_NONE) || redo_flags || zone_flags)
         {
+            cmd = xover_cursor(xo, zone, cmd, &pos_prev);
             if ((cmd & XO_POS_MASK) > XO_NONE)
             {
-                /* --------------------------------------------- */
-                /* calc cursor pos and show cursor correctly     */
-                /* --------------------------------------------- */
-
-                const bool zone_op = cmd & XZ_ZONE;
-                const bool wrap = cmd & XO_WRAP;
-                const bool scrl = cmd & XO_SCRL;
-                const bool rel = cmd & XO_REL;
-                int cur;
-                int max;
-                int diff;
-
-                int pos = (cmd & XO_POS_MASK) - XO_MOVE;
-                cmd = (cmd & ~XO_MOVE_MASK) + XO_NONE;
-
-                if (!xo && !zone_op)
-                    continue;  /* Nothing to move */
-
-                /* fix cursor's range */
-
-                max = ((zone_op) ? XZ_COUNT : xo->max) - 1;
-                cur = (zone_op) ? zone : (scrl) ? xo->top : xo->pos;
-
-                if (rel)
-                    pos += cur;
-                diff = pos - cur;
-
-                if (pos < 0)
-                    pos = (wrap) ? max - (-pos-1) % BMAX(max, 1) : 0;
-                else if (pos > max)
-                    pos = (wrap) ? (pos-1) % BMAX(max, 1) : max;
-
-                /* IID.20200129: Switch zone using cursor movement semantic */
-                if (zone_op)
+                if ((cmd & XZ_ZONE) && !(cmd & XO_REL))
                 {
-                    /* --------------------------------------------- */
-                    /* switch zone                                   */
-                    /* --------------------------------------------- */
-                    if (cmd & XZ_SKIN)
-                    {
-                        /* TODO(IID.20200331): Change skin here */
-                    }
-                    else
-                    {
-                        zone_flags |= (cmd & ~XO_MOVE_MASK);  /* Collect zone operation flags */
+                    zone_flags |= (cmd & ~XO_MOVE_MASK);  /* Collect zone operation flags */
+                    if (cmd & XO_REL)
+                        continue;
+                    /* Need to switch the zone */
+                    const int pos = (cmd & XO_POS_MASK) - XO_MOVE;
+                    zone = pos;
+                    xo = xz[pos].xo;
+                    sysmode = xz[pos].mode;
 
-                        if (xz[pos].xo)
-                        {
-                            zone = pos;
-                            xo = xz[pos].xo;
-                            sysmode = xz[pos].mode;
+                    TagNum = 0;             /* clear TagList */
+                    pos_prev = -1;  /* Redraw cursor */
+                    utmp_mode(sysmode);
+                    cmd = XO_INIT;
 
-                            TagNum = 0;             /* clear TagList */
-                            pos_prev = -1;  /* Redraw cursor */
-                            cmd = XO_INIT;
-                            utmp_mode(sysmode);
-
-                            redo_flags = 0;  /* No more redraw/reloading is needed */
-                        }
-                        else if (rel
-                            && ((wrap && UABS(diff) <= max) || (pos > 0 && pos < max)))  /* Prevent infinity loops */
-                        {
-                            /* Fallback movement */
-                            cmd = XO_ZONE + ((wrap) ? XO_WRAP : 0) + XO_REL + diff + ((diff > 0) ? 1 : -1);
-                            continue;
-                        }
-                        else
-                        {
-                            /* Switch failed; do nothing */
-                            cmd = XO_NONE;
-                        }
-                    }
+                    redo_flags = 0;  /* No more redraw/reloading is needed */
                 }
-                else if (pos != cur)        /* check cursor's range */
-                {
-                    if (scrl)
-                    {
-                        xo->top = pos;
-                        max = xo->top;
-                        xo->pos = TCLAMP(xo->pos, max, max + XO_TALL - 1);
-                        cmd |= XR_BODY;      /* IID.20200103: Redraw list; do not reload. */
-                    }
-                    else
-                    {
-                        xo->pos = pos;
-                        max = xo->top;
-                        if ((pos < max) || (pos >= max + XO_TALL))
-                        {
-                            bool scrl_up = (pos < max);
-                            xo->top = BMAX(max + ((pos - max + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
-                            cmd |= XR_BODY;     /* IID.20200103: Redraw list; do not reload. */
-                        }
-                        else if (pos_prev != -1)
-                        {
-                            cursor_clear(3 + cur - max, 0);
-                            pos_prev = -1;  /* Redraw cursor */
-                        }
-                    }
-                }
+                continue; /* Further cursor handling is needed */
             }
 
             /* ----------------------------------------------- */
@@ -1666,9 +1589,14 @@ xover(
             /* XO_CUR + pos */
             if (cmd >= XO_CUR_MIN && cmd <= XO_CUR_MAX)
             {
-                xover_exec_cb(xo, XO_CUR);  /* Redraw the menu item under the cursor */
+                /* IID.2021-03-05: Make the destination cursor position accessible with `xo->pos` to the `XO_CUR` callback */
+                const int pos = xo->pos;
+                cmd = XO_MOVE + XO_REL + cmd - XO_CUR;  /* Relative move before redraw */
                 pos_prev = -1;  /* Suppress cursor clearing; redraw cursor */
-                cmd = XO_MOVE + XO_REL + cmd - XO_CUR;  /* Relative move */
+                cmd = xover_cursor(xo, zone, cmd, &pos_prev);
+                /* Check whether the menu item under the saved cursor is visible after cursor movement */
+                if (pos >= xo->top && pos < xo->top + XO_TALL)
+                    xover_exec_cb_pos(xo, XO_CUR, pos); /* If visible, redraw the menu item under the saved cursor */
                 continue;
             }
 
@@ -1739,10 +1667,106 @@ xover(
     }
 }
 
+static int xover_cursor(XO *xo, int zone, int cmd, int *pos_prev)
+{
+    if ((cmd & XO_POS_MASK) > XO_NONE)
+    {
+        /* --------------------------------------------- */
+        /* calc cursor pos and show cursor correctly     */
+        /* --------------------------------------------- */
+
+        const bool zone_op = cmd & XZ_ZONE;
+        const bool wrap = cmd & XO_WRAP;
+        const bool scrl = cmd & XO_SCRL;
+        const bool rel = cmd & XO_REL;
+        int cur;
+        int max;
+        int diff;
+
+        int pos = (cmd & XO_POS_MASK) - XO_MOVE;
+        cmd = (cmd & ~XO_MOVE_MASK) + XO_NONE;
+
+        if (!xo && !zone_op)
+            return cmd;  /* Nothing to move */
+
+        /* fix cursor's range */
+
+        max = ((zone_op) ? XZ_COUNT : xo->max) - 1;
+        cur = (zone_op) ? zone : (scrl) ? xo->top : xo->pos;
+
+        if (rel)
+            pos += cur;
+        diff = pos - cur;
+
+        if (pos < 0)
+            pos = (wrap) ? max - (-pos-1) % BMAX(max, 1) : 0;
+        else if (pos > max)
+            pos = (wrap) ? (pos-1) % BMAX(max, 1) : max;
+
+        /* IID.20200129: Switch zone using cursor movement semantic */
+        if (zone_op)
+        {
+            /* --------------------------------------------- */
+            /* switch zone                                   */
+            /* --------------------------------------------- */
+            if (cmd & XZ_SKIN)
+            {
+                /* TODO(IID.20200331): Change skin here */
+                return cmd;
+            }
+
+            if (xz[pos].xo)
+            {
+                /* Request `xover()` to switch the zone */
+                return XO_ZONE + pos;
+            }
+            if (rel && ((wrap && UABS(diff) <= max) || (pos > 0 && pos < max)))  /* Prevent infinity loops */
+            {
+                /* Fallback movement */
+                return XO_ZONE + ((wrap) ? XO_WRAP : 0) + XO_REL + diff + ((diff > 0) ? 1 : -1);
+            }
+            /* Switch failed; do nothing */
+            return XO_NONE;
+        }
+        else if (pos != cur)        /* check cursor's range */
+        {
+            if (scrl)
+            {
+                xo->top = pos;
+                max = xo->top;
+                xo->pos = TCLAMP(xo->pos, max, max + XO_TALL - 1);
+                return XR_BODY | cmd; /* IID.20200103: Redraw list; do not reload. */
+            }
+            xo->pos = pos;
+            max = xo->top;
+            if ((pos < max) || (pos >= max + XO_TALL))
+            {
+                bool scrl_up = (pos < max);
+                xo->top = BMAX(max + ((pos - max + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
+                cmd |= XR_BODY;     /* IID.20200103: Redraw list; do not reload. */
+            }
+            else if (*pos_prev != -1)
+            {
+                cursor_clear(3 + cur - max, 0);
+                *pos_prev = -1;  /* Redraw cursor */
+            }
+            return cmd;
+        }
+    }
+
+    return cmd;
+}
+
+int xover_exec_cb(XO *xo, int cmd)
+{
+    return xover_exec_cb_pos(xo, cmd, (xo) ? xo->pos : 0);
+}
+
 int
-xover_exec_cb(
+xover_exec_cb_pos(
     XO *xo,
-    int cmd)
+    int cmd,
+    int pos)
 {
     const KeyFuncListRef xcmd = (xo) ? xo->cb : NULL;
     KeyFuncIter cb;
@@ -1820,7 +1844,7 @@ xover_exec_cb(
             {
                 /* `XO_POSF` callbacks can be invoked only if the Xover list is not empty */
                 if (xo->max > 0)
-                    return cbfunc.posf(xo, xo->pos);
+                    return cbfunc.posf(xo, pos);
                 else
                     return XO_NONE;
             }
