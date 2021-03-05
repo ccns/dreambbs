@@ -1588,9 +1588,11 @@ ve_filer(
 
             if (ve_op)
             {
+                /* IID.2021-03-06: Print the user address information in a separated line if too long */
+                const char *const from = ((cuser.ufo & UFO_HIDDEN)&&(cuser.userlevel)) ? HIDDEN_SRC : fromhost;
                 fprintf(fp, ORIGIN_TAG,
-                    /*str_site, MYHOSTNAME, */ ((cuser.ufo & UFO_HIDDEN)&&(cuser.userlevel)) ? HIDDEN_SRC : fromhost);
-
+                    /*str_site, MYHOSTNAME, */
+                    (strlen(from) > 34) ? "\x1b[m\n" : " ", from);
                 if ((bbstate & BRD_LOGEMAIL) && !(bbsmode == M_SMAIL))
                     fprintf(fp, EMAIL_TAG, cuser.email);
             }
