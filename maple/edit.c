@@ -1854,22 +1854,17 @@ vedit(
         {
             move(b_lines, 0);
             clrtoeol();
+            prints(FOOTER_VEDIT,
 #ifdef EVERY_BIFF
-            prints(FOOTER_VEDIT_BIFF,
                 mode & VE_BIFF ? "\x1b[1;41;37;5m  郵差來了  ": mode & VE_BIFFN ? "\x1b[1;41;37;5m  訊差來了  ":"\x1b[0;34;46m  編輯文章  ",
+#else
+                COLOR1 "  編輯文章  ",
+#endif
                 mode & VE_INSERT ? "插入" : "取代",
                 mode & VE_ANSI ? "ANSI" : "一般",
                 mode & VE_DBCS ? "雙" : "單",
                 ve_lno, 1 + pos, d_cols, "");
                 /* Thor.980805: UFO_BIFF everywhere */
-#else
-
-            prints(FOOTER_VEDIT,
-                mode & VE_INSERT ? "插入" : "取代",
-                mode & VE_ANSI ? "ANSI" : "一般",
-                mode & VE_DBCS ? "雙" : "單",
-                ve_lno, 1 + pos, d_cols, "");
-#endif
         }
 
         move(ve_row, pos_disp);

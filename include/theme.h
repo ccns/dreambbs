@@ -220,11 +220,8 @@
     COLOR1 " 交談模式 " COLOR2 " (^A)\x1b[30m對奕模式 \x1b[31m(^B)\x1b[30m象棋模式 \x1b[31m(^C, ^D)\x1b[30m結束交談 \x1b[31m(^Z)\x1b[30m快捷列表 \x1b[31m(^G)\x1b[30m嗶嗶    "
 
 
-#define FOOTER_VEDIT_BIFF \
-               "%s\x1b[m" COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s│%s║%5d:%3d%*s \x1b[m"
-
 #define FOOTER_VEDIT \
-    COLOR1 "  編輯文章  " COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s│%s║%5d:%3d%*s \x1b[m"
+               "%s\x1b[m" COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s│%s║%5d:%3d%*s \x1b[m"
 
 
 /*#define FOOTER_BMW_REPLY \
