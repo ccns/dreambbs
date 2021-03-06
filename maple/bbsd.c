@@ -1983,7 +1983,22 @@ int main(int argc, char *argv[])
         switch (sin.ss_family)
         {
         case AF_INET:
+            break;
+
         case AF_INET6:
+            {
+                struct sockaddr_in6 *const addr6 = (struct sockaddr_in6 *)&sin;
+                if (IN6_IS_ADDR_V4MAPPED(&addr6->sin6_addr))
+                {
+                    /* Convert `sin` to `sockaddr_in` if it is IPv4-mapped */
+                    struct sockaddr_in addr4 = LISTLIT(struct sockaddr_in){
+                        .sin_family = AF_INET,
+                        .sin_port = addr6->sin6_port,
+                    };
+                    memcpy(&addr4.sin_addr, &((char *)&addr6->sin6_addr)[12], 4 * sizeof(char));
+                    memcpy(&sin, &addr4, sizeof(addr4));
+                }
+            }
             break;
 
         case AF_UNIX: /* Unsupported address family of connections accepted from Unix socket */
