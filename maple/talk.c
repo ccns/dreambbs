@@ -3405,19 +3405,17 @@ ulist_neck(
     XO *xo)
 {
     move(1, 0);
+    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d"
+        IF_ON(HAVE_BOARD_PAL, " \x1b[0;36m板友：%d", "")
+        "\x1b[m",
+        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num
 #ifdef HAVE_BOARD_PAL
-    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d \x1b[0;36m板友：%d\x1b[m",
-        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num, board_pals);
-    prints(NECK_ULIST,
-        (d_cols >> 1) + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
-        ((d_cols+1) >> 1) + 13, (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
-#else
-    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\x1b[m",
-        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num);
-    prints(NECK_ULIST,
-        (d_cols >> 1) + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
-        ((d_cols+1) >> 1) + 13, (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
+        , board_pals
 #endif
+        );
+    prints(NECK_ULIST,
+        (d_cols >> 1) + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
+        ((d_cols+1) >> 1) + 13, (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
 
     return ulist_body(xo);
 }
