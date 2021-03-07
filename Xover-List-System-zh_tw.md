@@ -272,7 +272,7 @@ Member 名稱 | 型別           | 出處          | 說明
 Member 名稱 | 型別   | 出處          | 說明
  ---        | ---   | ---           | ---
 `key` <br> - `first` (DreamBBS v3.0) | - `int` <br> - `unsigned int` (DreamBBS v2.1) | MapleBBS 3.00 | 回呼函式對應按鍵的值
-`func`  <br> - `second` (DreamBBS v3.0) | - `int (*)()` (MapleBBS 3 / WindTop 3.02) <br> - `int (*)(XO *xo)` (DreamBBS v0.96) - <br> `XoFunc` (DreamBBS v3.0) | MapleBBS 3.00 | 回呼函式
+`func`  <br> - `second` (DreamBBS v3.0) | - `int (*)()` (MapleBBS 3 / WindTop 3.02) <br> - `int (*)(XO *xo)` (DreamBBS v0.96) <br> - `XoFunc` (DreamBBS v3.0) | MapleBBS 3.00 | 回呼函式
 
 `func`/`second` 為一 union 物件；在 MapleBBS 3 / WindTop 3.02 中原為 `int (*)()`，實際使用時須依 `key`/`first` 的值手動轉型。
 
