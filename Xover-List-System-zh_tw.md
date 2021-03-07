@@ -228,7 +228,11 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 `0x08000000` (mask)                 | `XZ_QUIT`          | 離開 `xover()` 函式          | `XO_QUIT` = `(XZ_ZONE \| XZ_QUIT) + XO_NONE`
 `0x10000000` (mask)                 | `XZ_SKIN`          | 將操作解讀為使用者介面 skin 切換 (未實作) | `XO_SKIN` = `((XZ_ZONE \| XZ_SKIN) + XO_MOVE)`
 `0x20000000` (mask)                 | `XZ_UNUSED5`       | (未使用)                     |
-`0x80000000` (mask)                 | `key \| XO_DL`     | 動態載入功能                 |
+`0x80100000` (mask)                 | `XO_FSPEC_MASK`    | 指定回呼函式類別相關 <br> 用在 `KeyFunc` 的按鍵值上 | 把相關的 macros `or` 起來的值 <br> DreamBBS v3.0 新增
+`0x80000000` (mask)                 | `key \| XO_DL`     | 指定回呼函式需動態載入        |
+`0x00100000` (mask)                 | `key \| XO_POSF`   | 指定回呼函式具有 `pos` 參數   | DreamBBS v3.0 新增
+`0x7fefffff` (mask)                 | `XO_FUNC_MASK` <br> (= `~XO_FSPEC_MASK`) | 用以取得忽略函式類別指定 flags 後的實際對應按鍵值 | DreamBBS v3.0 新增
+
 #### 新的 key value 分配的特點
 - 除了頭尾循環邏輯改變，舊的 macro 使用方法仍然有效
 - 將 `XO_MOVE` 重新定義為游標位置的 bias，避免游標位置為負時 flag bits 的改變
@@ -291,7 +295,9 @@ DreamBBS v3.0 特別定義了 `KeyFunc` 相關型別以利支援使用 hash tabl
 Member 名稱 | 型別               | 出處          | `key`/`first` 指定方式 | 說明
  ---        | ---               | ---           | ---                   | ---
 `func`      | `int (*)(XO *xo)` | DreamBBS v2.1 | `key`                 | 普通 Xover 回呼函式
+`posf`      | `int (*)(XO *xo, int pos)` | DreamBBS v3.0 | `key \| XO_POSF` | 帶 `pos` 參數的 Xover 回呼函式
 `dlfunc`    | - `const char *` (使用動態載入) <br> - `int (*)(XO *xo)` (不使用動態載入) | DreamBBS v2.1 | `key \| XO_DL` | 需動態載入的普通 Xover 回呼函式
+`dlposf`    | - `const char *` (使用動態載入) <br> - `int (*)(XO *xo, int pos)` (不使用動態載入) | DreamBBS v3.0 | `key \| XO_POSF \| XO_DL` | 需動態載入的帶 `pos` 參數的 Xover 回呼函式
 
 ## MapleBBS 3 與 DreamBBS v3 的 Xover 特殊值
 Macro             | 值                        | 功能                                  | 註解
