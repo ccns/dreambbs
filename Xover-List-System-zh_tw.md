@@ -230,7 +230,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 `0x20000000` (mask)                 | `XZ_UNUSED5`       | (未使用)                     |
 `0x80100000` (mask)                 | `XO_FSPEC_MASK`    | 指定回呼函式類別相關 <br> 用在 `KeyFunc` 的按鍵值上 | 把相關的 macros `or` 起來的值 <br> DreamBBS v3.0 新增
 `0x80000000` (mask)                 | `key \| XO_DL`     | 指定回呼函式需動態載入        |
-`0x00100000` (mask)                 | `key \| XO_POSF`   | 指定回呼函式具有 `pos` 參數   | DreamBBS v3.0 新增
+`0x00100000` (mask)                 | `key \| XO_POSF` <br> (= `XO_MOVE`) | 指定回呼函式具有 `pos` 參數   | DreamBBS v3.0 新增
 `0x7fefffff` (mask)                 | `XO_FUNC_MASK` <br> (= `~XO_FSPEC_MASK`) | 用以取得忽略函式類別指定 flags 後的實際對應按鍵值 | DreamBBS v3.0 新增
 
 #### 新的 key value 分配的特點
