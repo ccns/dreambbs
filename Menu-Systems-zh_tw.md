@@ -46,7 +46,9 @@ typedef struct MENU
 
 `MenuItem item` 為一 union 物件；`item` 在 MapleBBS 3 / WindTop 3.02 中原為 `void *func`，實際使用時須依 `umode` 及 `level` 的值手動轉型。
 
-DreamBBS v2.1 時將其改為 union，以減少手動轉型錯誤的可能。
+DreamBBS v2.1 時將其改為匿名 union，以減少手動轉型錯誤的可能。
+
+DreamBBS v3 時將此 union 分開定義為 `MenuItem`。
 
 Member 名稱 | 型別               | `umode` 指定方式 (主選單) | `umode` 指定方式 (Popupmenu) | 說明
  ---        | ---               | ---                       | ---                         | ---
