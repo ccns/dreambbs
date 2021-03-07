@@ -237,6 +237,62 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 - 允許將畫面重繪/重新載入 (`XR_*`) 或列表操作 (`XZ_ZONE + XZ_*`)，與按鍵輸入或移動游標的操作組合表示
 - 使用游標移動表示 zone 的切換
 
+## MapleBBS 3 Xover 系統之資料結構
+
+### 列表區域資料結構 `XZ`
+此結構為 MapleBBS 3.02 時引入。MapleBBS 3.00 的 `xover()` 尚未將相關處理邏輯結構化。
+
+Member 名稱 | 型別           | 出處          | 說明
+ ---        | ---           | ---           | ---
+`xo`        | `XO *`        | MapleBBS 3.02 | 用以存放此區域的游標資料
+`cb` <br> - 移入 `XO` (DreamBBS v3) | - `KeyFunc *` <br> - `KeyFuncListRef` (後移入 `XO`) <br> (DreamBBS v3) | MapleBBS 3.02 | 此區域的回呼函式清單
+`mode`      | `int`         | MapleBBS 3.02 | 此區域對應的使用者狀態
+
+### 游標資料結構 `XO`
+又名 `struct OverView`。
+
+Member 名稱 | 型別           | 出處          | 說明
+ ---        | ---           | ---           | ---
+`pos`       | `int`         | MapleBBS 3.00 | 目前游標在列表中的絕對位置
+`top`       | `int`         | MapleBBS 3.00 | 畫面中列表第一項在列表中的絕對位置
+`max`       | `int`         | MapleBBS 3.00 | 列表項目數量 <br> `0` 代表列表為空
+`key`       | `int`         | MapleBBS 3.00 | 內部使用值 <br> 意義隨回呼函式而定
+`xyz`       | - `char *` <br> - `void *` (DreamBBS v3.0) | MapleBBS 3.00 | 內部雜項資料 <br> 實際內容及意義隨回呼函式而定
+`nxt`       | `XO *`        | MapleBBS 3.00 | 指向游標紀錄串列中的下一筆資料 <br> 游標資料紀錄用
+`cb`        | `KeyFuncListRef` | DreamBBS v3.0 | 回呼函式清單 <br> 原 `XZ::cb`
+`recsiz`    | `int`         | DreamBBS v3.0 | 列表資料項目的資料位元組大小 <br> `0` 代表未設定完成
+`dir`       | - `char [0]` <br> - `char [FLEX_SIZE]` (DreamBBS v2.0) | MapleBBS 3.00 | 列表資料檔的系統路徑字串
+
+### Xover 回呼函式資料結構 `KeyFunc`
+
+Member 名稱 | 型別   | 出處          | 說明
+ ---        | ---   | ---           | ---
+`key` <br> - `first` (DreamBBS v3.0) | - `int` <br> - `unsigned int` (DreamBBS v2.1) | MapleBBS 3.00 | 回呼函式對應按鍵的值
+`func`  <br> - `second` (DreamBBS v3.0) | - `int (*)()` (MapleBBS 3 / WindTop 3.02) <br> - `int (*)(XO *xo)` (DreamBBS v0.96) - <br> `XoFunc` (DreamBBS v3.0) | MapleBBS 3.00 | 回呼函式
+
+`func`/`second` 為一 union 物件；在 MapleBBS 3 / WindTop 3.02 中原為 `int (*)()`，實際使用時須依 `key`/`first` 的值手動轉型。
+
+DreamBBS v2.1 時將其改為匿名 union，以減少手動轉型錯誤的可能。
+
+DreamBBS v3.0 時將此 union 分開定義為 `XoFunc`。
+
+#### `KeyFunc` 相關型別
+DreamBBS v3.0 特別定義了 `KeyFunc` 相關型別以利支援使用 hash table 實作回呼函式清單。
+
+名稱        | 等效 C 定義        | 等效 C++ 定義  | 說明
+ ---        | ---               | ---           | ---
+`KeyFunc`   | 含有上述成員的 `struct` | 含有上述成員的 `std::pair` | `KeyFuncList` 的元素
+`KeyFuncList` | `KeyFunc []` | 模板參數為上述成員型別的 `std::unordered_map` | 含有多個 `KeyFunc` 的表
+`KeyFuncIter` | `KeyFunc *` | `KeyFuncList::iterator` | 用以遍歷 `KeyFuncList`
+`KeyFuncListRef` | `KeyFunc *` | 自訂了建構式、`operator =()`、與 `operator ->()` 的結構 | 用以參照整個 `KeyFuncList`
+
+#### Union `XoFunc`
+
+Member 名稱 | 型別               | 出處          | `key`/`first` 指定方式 | 說明
+ ---        | ---               | ---           | ---                   | ---
+`func`      | `int (*)(XO *xo)` | DreamBBS v2.1 | `key`                 | 普通 Xover 回呼函式
+`dlfunc`    | - `const char *` (使用動態載入) <br> - `int (*)(XO *xo)` (不使用動態載入) | DreamBBS v2.1 | `key \| XO_DL` | 需動態載入的普通 Xover 回呼函式
+
 ## MapleBBS 3 與 DreamBBS v3 的 Xover 特殊值
 Macro             | 值                        | 功能                                  | 註解
  :---             | ---                       | ---                                   | ---
