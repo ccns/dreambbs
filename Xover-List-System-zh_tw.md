@@ -251,7 +251,7 @@ Member 名稱 | 型別           | 出處          | 說明
 `xo`        | `XO *`        | MapleBBS 3.02 | 用以存放此區域的游標資料
 `cb` <br> - 移入 `XO` (DreamBBS v3) | - `KeyFunc *` <br> - `KeyFuncListRef` (後移入 `XO`) <br> (DreamBBS v3) | MapleBBS 3.02 | 此區域的回呼函式清單
 `mode`      | `int`         | MapleBBS 3.02 | 此區域對應的使用者狀態
-`feeter`    | `char *`      | MapleBBS-itoc | 存放執行 `XO_FOOT` 指令時要畫出的 footer <br> - DreamBBS 未引入此成員 <br> (DreamBBS v3.0 執行 `XO_FOOT` 指令時會呼叫回呼函式清單中的對應函式)
+`feeter`    | `char *`      | MapleBBS-itoc | 存放執行 `XO_FOOT` 命令時要畫出的 footer <br> - DreamBBS 未引入此成員 <br> (DreamBBS v3.0 執行 `XO_FOOT` 命令時會呼叫回呼函式清單中的對應函式)
 
 ### 游標資料結構 `XO`
 又名 `struct OverView`。
