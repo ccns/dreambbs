@@ -864,10 +864,12 @@ typedef KeyFunc *KeyFuncIter;
 typedef KeyFunc *KeyFuncListRef;
 #endif
 
+#define XO_NCUR                 2 /* Number of Xover cursors */
 
 typedef struct OverView
 {
-    int pos;                    /* current position */
+    int pos[XO_NCUR];           /* current positions */
+    int cur_idx;                /* Index of the current cursor */
     int top;                    /* top */
     int max;                    /* max */
     int key;                    /* key */

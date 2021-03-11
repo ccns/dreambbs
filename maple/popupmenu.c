@@ -425,10 +425,10 @@ do_menu_redraw:
                 else
                 {
                     /* IID.2021-02-27: Keep the cursor on screen when the screen is shrunk */
-                    if (xo->pos > xo->top + XO_TALL - 1)
-                        xo->top += xo->pos - (xo->top + XO_TALL - 1);
+                    if (xo->pos[xo->cur_idx] > xo->top + XO_TALL - 1)
+                        xo->top += xo->pos[xo->cur_idx] - (xo->top + XO_TALL - 1);
                     xover_exec_cb(xo, XO_HEAD);
-                    cursor_show(3 + xo->pos - xo->top, 0);
+                    cursor_show(3 + xo->pos[xo->cur_idx] - xo->top, 0);
                 }
 
                 scr_dump(&old_screen);

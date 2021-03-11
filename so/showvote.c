@@ -117,7 +117,7 @@ XO *xo)
     if (show_edit(&show, DOECHO))
     {
         rec_add(xo->dir, &show, sizeof(LOG));
-        xo->pos = XO_TAIL;
+        xo->pos[xo->cur_idx] = XO_TAIL;
         xo_load(xo, sizeof(LOG));
     }
     return XO_HEAD;
@@ -209,7 +209,8 @@ int pos)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = show_cb;
     xo->recsiz = sizeof(LOG);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xover(XZ_OTHER);
     free(xo);
 

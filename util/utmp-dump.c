@@ -528,8 +528,12 @@ ulist_init(
 
     xo->max = max = pp - ulist_pool;;
 
-    if (xo->pos >= max)
-        xo->pos = xo->top = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+    {
+        if (xo->pos[i] >= max)
+            xo->pos[i] = xo->top = 0;
+    }
+    xo->cur_idx = 0;
 
     if ((max > 1) && (pickup_way))
     {

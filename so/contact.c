@@ -116,7 +116,7 @@ XO *xo)
     else if (contact_edit(&contact, DOECHO))
     {
         rec_add(xo->dir, &contact, sizeof(CONTACT));
-        xo->pos = XO_TAIL /* xo->max */ ;
+        xo->pos[xo->cur_idx] = XO_TAIL /* xo->max */ ;
         return XO_INIT;
     }
     return XO_HEAD;
@@ -251,7 +251,8 @@ Contact(void)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = contact_cb;
     xo->recsiz = sizeof(CONTACT);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xover(XZ_OTHER);
     free(xo);
 

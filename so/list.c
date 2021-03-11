@@ -197,7 +197,7 @@ XO *xo)
     {
         strcpy(list.userid, mode ? brd->brdname : acct.userid);
         rec_add(xo->dir, &list, sizeof(LIST));
-        xo->pos = XO_TAIL;
+        xo->pos[xo->cur_idx] = XO_TAIL;
         xo_load(xo, sizeof(LIST));
     }
     return XO_HEAD;
@@ -338,7 +338,8 @@ XO *xo)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = list_cb;
     xo->recsiz = sizeof(LIST);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     return XO_INIT;
 }
 
@@ -360,7 +361,8 @@ XO *xo)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = list_cb;
     xo->recsiz = sizeof(LIST);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     return XO_INIT;
 }
 #endif
@@ -413,7 +415,8 @@ List(void)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = list_cb;
     xo->recsiz = sizeof(LIST);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i]= 0;
     xover(XZ_OTHER);
     free(xo);
 

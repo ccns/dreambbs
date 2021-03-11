@@ -1538,7 +1538,7 @@ post_browse(
         if (key == -2)
             return XO_INIT;
         key = xo_getch(xo, pos, key);
-        pos = xo->pos;
+        pos = xo->pos[xo->cur_idx];
         switch (key)
         {
             case XO_BODY:
@@ -3981,7 +3981,7 @@ post_aid(
     for (pos = 0; pos < max; pos++)
     {
         const char *tag;
-        xo->pos = pos;
+        xo->pos[xo->cur_idx] = pos;
         xo_load(xo, sizeof(HDR));
         /* 設定HDR資訊 */
         hdr = (const HDR *) xo_pool_base + pos;
@@ -3998,7 +3998,7 @@ post_aid(
     if (!match)
     {
         zmsg("找不到文章，是不是找錯看板了呢？");
-        xo->pos = currpos;  /* 恢復xo->pos紀錄 */
+        xo->pos[xo->cur_idx] = currpos;  /* 恢復xo->pos紀錄 */
     }
 
     return XO_LOAD;
@@ -4214,7 +4214,7 @@ static int *xypostI;
 
 /* Thor: first ypost pos in ypost_xo.key */
 
-static int comebackPos;
+static int comebackPos[XO_NCUR];
 
 /* Thor: first xpost pos in xpost_xo.key */
 
@@ -4284,7 +4284,7 @@ xypost_pick(
 
     xyp = xypostI;
 
-    pos = xo->pos;
+    pos = xo->pos[xo->cur_idx];
     top = xo->top;
     scrl_up = (pos < top);
     xo->top = BMAX(top + ((pos - top + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
@@ -4388,7 +4388,7 @@ xpost_browse(
         //    if ((key = more(fpath, MSG_POST)) == -1)
         //      break;
 
-        comebackPos = hdr->xid;
+        comebackPos[xo->cur_idx] = hdr->xid;
         /* Thor.980911: 從串接模式回來時要回到看過的那篇文章位置 */
 
         cmd = XO_HEAD;
@@ -4465,7 +4465,7 @@ xpost_browse(
                     if (pos >= xo->max)
                         return cmd;
 
-                    xo->pos = pos;
+                    xo->pos[xo->cur_idx] = pos;
 
                     if (pos >= xo->top + XO_TALL)
                         xo->top = BMAX(top + ((pos - top) / XO_TALL) * XO_TALL, 0);
@@ -4724,11 +4724,12 @@ XoXpost(                        /* Thor: call from post_cb */
 
     free(xz[XZ_XPOST - XO_ZONE].xo);
 
-    comebackPos = pos;      /* Thor: record pos, future use */
+    memcpy(comebackPos, xo->pos, sizeof(xo->pos)); /* Thor: record pos, future use */
     xz[XZ_XPOST - XO_ZONE].xo = xt = xo_new(xo->dir);
     xt->cb = xpost_cb;
     xt->recsiz = sizeof(HDR);
-    xt->pos = 0;
+    for (int i = 0; i < COUNTOF(xt->pos); ++i)
+        xt->pos[i] = 0;
     xt->max = sum;
     xt->xyz = xo->xyz;
     xt->key = XZ_XPOST;
@@ -4737,7 +4738,7 @@ XoXpost(                        /* Thor: call from post_cb */
 
     /* set xo->pos for new location */
 
-    xo->pos = comebackPos;
+    memcpy(xo->pos, comebackPos, sizeof(xo->pos));
 
     /* free xpost_xo */
 

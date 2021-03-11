@@ -143,7 +143,7 @@ XO *xo)
     if (chat_edit(&chat, DOECHO))
     {
         rec_add(xo->dir, &chat, sizeof(ChatAction));
-        xo->pos = XO_TAIL;
+        xo->pos[xo->cur_idx] = XO_TAIL;
         xo_load(xo, sizeof(ChatAction));
     }
     return XO_HEAD;
@@ -224,7 +224,7 @@ int pos)
         if (!rec_del(dir, sizeof(ChatAction), pos, NULL, NULL))
         {
             rec_ins(dir, &ghdr_orig, sizeof(ChatAction), newOrder, 1);
-            xo->pos = newOrder;
+            xo->pos[xo->cur_idx] = newOrder;
             return XO_LOAD;
         }
     }
@@ -312,7 +312,8 @@ XO *xo)
     xz[XZ_OTHER - XO_ZONE].xo = xo_new(fpath);
     xz[XZ_OTHER - XO_ZONE].xo->cb = chat_cb;
     xz[XZ_OTHER - XO_ZONE].xo->recsiz = sizeof(ChatAction);
-    xz[XZ_OTHER - XO_ZONE].xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xz[XZ_OTHER - XO_ZONE].xo->pos); ++i)
+        xz[XZ_OTHER - XO_ZONE].xo->pos[i] = 0;
     return XO_INIT;
 }
 
@@ -331,7 +332,8 @@ Chatmenu(void)
     xz[XZ_OTHER - XO_ZONE].xo = xx = xo_new(fpath);
     xx->cb = chat_cb;
     xx->recsiz = sizeof(ChatAction);
-    xx->pos = 0;
+    for (int i = 0; i < COUNTOF(xx->pos); ++i)
+        xx->pos[i] = 0;
     xover(XZ_OTHER);
     free(xx);
 

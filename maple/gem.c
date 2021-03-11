@@ -402,7 +402,7 @@ gem_add(
     }
 
     if (ans == 'i' || ans == 'n')
-        rec_ins(dir, &ghdr, sizeof(HDR), xo->pos + (ans == 'n'), 1);
+        rec_ins(dir, &ghdr, sizeof(HDR), xo->pos[xo->cur_idx] + (ans == 'n'), 1);
     else
         rec_add(dir, &ghdr, sizeof(HDR));
 
@@ -654,7 +654,7 @@ gem_browse(
         op = GEM_READ | GEM_FILE;
 
         xmode = xo_getch(xo, pos, xmode);
-        pos = xo->pos;
+        pos = xo->pos[xo->cur_idx];
 
     } while (xmode == XO_BODY);
 
@@ -939,7 +939,7 @@ gem_paste(
         return XO_FOOT;
 
     case 'e':
-        if (xo->max > 0 && gem_extend(xo, xo->pos, num))
+        if (xo->max > 0 && gem_extend(xo, xo->pos[xo->cur_idx], num))
         {
             zmsg("[Extend 檔案附加] 動作並未完全成功\");
             return XO_FOOT;
@@ -949,7 +949,7 @@ gem_paste(
 
     case 'i':
     case 'n':
-        rec_ins(dir, GemBuffer, sizeof(HDR), xo->pos + (ans == 'n'), num);
+        rec_ins(dir, GemBuffer, sizeof(HDR), xo->pos[xo->cur_idx] + (ans == 'n'), num);
         break;
 
     default:
@@ -992,7 +992,7 @@ gem_move(
         if (!rec_del(dir, sizeof(HDR), pos, NULL, NULL))
         {
             rec_ins(dir, &ghdr_orig, sizeof(HDR), newOrder, 1);
-            xo->pos = newOrder;
+            xo->pos[xo->cur_idx] = newOrder;
             return XO_LOAD;
         }
 #endif
@@ -1463,7 +1463,8 @@ XoGem(
     xz[XZ_GEM - XO_ZONE].xo = xo = xo_new(folder);
     xo->cb = gem_cb;
     xo->recsiz = sizeof(HDR);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xo->key = level;
     xo->xyz = (void *)title;
 
@@ -1484,7 +1485,8 @@ gem_main(void)
     xz[XZ_GEM - XO_ZONE].xo = xo = xo_new("gem/.DIR");
     xo->cb = gem_cb;
     xo->recsiz = sizeof(HDR);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xo->key = ((HAS_PERM(PERM_SYSOP|PERM_BOARD|PERM_GEM)) ? GEM_SYSOP : GEM_USER);
     xo->xyz = (void *)"";
 }

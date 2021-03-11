@@ -301,7 +301,7 @@ myfavorite_add(
     }
 
     if (ans == 'i' || ans == 'n')
-        rec_ins(currdir, &hdr, sizeof(HDR), xo->pos + (ans == 'n'), 1);
+        rec_ins(currdir, &hdr, sizeof(HDR), xo->pos[xo->cur_idx] + (ans == 'n'), 1);
     else
         rec_add(currdir, &hdr, sizeof(HDR));
 
@@ -389,7 +389,7 @@ myfavorite_mov(
         if (!rec_del(currdir, sizeof(HDR), pos, NULL, NULL))
         {
             rec_ins(currdir, &ghdr_orig, sizeof(HDR), newOrder, 1);
-            xo->pos = newOrder;
+            xo->pos[xo->cur_idx] = newOrder;
             logitfile(FN_FAVORITE_LOG, "< MOV >", ghdr_orig.xname);
             return XO_LOAD;
         }
@@ -541,7 +541,8 @@ XoFavorite(
     xz[XZ_MYFAVORITE - XO_ZONE].xo = xo = xo_new(folder);
     xo->cb = myfavorite_cb;
     xo->recsiz = sizeof(HDR);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xo->key = XZ_MYFAVORITE;
 
     xover(XZ_MYFAVORITE);

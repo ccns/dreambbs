@@ -437,7 +437,8 @@ static void acct_su(const ACCT * u)
     xz[XZ_BMW - XO_ZONE].xo =  xo_new(path);
     xz[XZ_BMW - XO_ZONE].xo->cb = bmw_cb;
     xz[XZ_BMW - XO_ZONE].xo->recsiz = sizeof(BMW);
-    xz[XZ_BMW - XO_ZONE].xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xz[XZ_BMW - XO_ZONE].xo->pos); ++i)
+        xz[XZ_BMW - XO_ZONE].xo->pos[i] = 0;
     free(xo);
     pal_cache();
 }
