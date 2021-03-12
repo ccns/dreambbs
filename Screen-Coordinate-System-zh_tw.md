@@ -24,7 +24,7 @@ y 軸           | y 為 row；+y 方向向下    | y 為 column；+y 方向向�
 最小有效座標     | `(0, 0)`                   | `(0, 0)`            | - (理論上無限制) <br> - `(0, 0)` (目前之簡化實作)
 最大有效座標     | `(b_lines, ANSILINELEN-1)` | `(b_lines, b_cols)` | - (理論上無限制) <br> - `(B_LINES_REF, B_COLS_REF)` (目前之簡化實作)
 真實畫面上的游標座標 | (無)                     | - `(tc_line, tc_col)` (screen) <br> - `(tc_row, tc_col)` (visio) <br> - `(ft.ry, ft.rx)` (pfterm) | (無)
-內部使用的游標座標 | - `(cur_ln, cur_pos)` (screen) <br> - `(cur_ln, cur_col)` (PttBBS screen) <br> - `(cur_row, cur_pos)` (visio) |  - `(cur_row, cur_col)` (screen & visio) <br> (visio 中 `move()` 後 `cur_col` 不同步而無效) <br> - `(cur_ln, <動態算出>)` (PttBBS screen) <br> - `(ft.y, ft.x)` (pfterm) | (無)
+內部使用的游標座標 | - `(cur_ln, cur_pos)` (screen) <br> - `(cur_row, cur_pos)` (visio) <br> - `(cur_ln, cur_col)` (PttBBS screen) | - `(cur_ln, cur_col)` (screen) <br> - `(cur_row, cur_col)` (visio) <br> (visio 中 `move()` 後 `cur_col` 不同步而無效) <br> - `(cur_ln, <動態算出>)` (PttBBS screen) <br> - `(ft.y, ft.x)` (pfterm) | (無)
 取得內部使用的游標座標 | - (無) (screen & visio) <br> - `getyx()` (PttBBS screen) | - `getyx()` (screen, visio, & pfterm) <br> - `getyx_ansi()` (pfterm & PttBBS screen) <br> - `getxy()` (MapleBBS-itoc visio; 被註解不可用) | (無)
 設定內部使用的游標座標 | - (無) (screen) <br> - `move()` (PttBBS screen & visio) | - `move()` (screen & pfterm) <br> - `ansi_move()` (WindTopBBS 3 visio) <br> - `move_ansi()` <br> (pfterm, PttBBS screen, & DreamBBS v3 visio) | `move_ref()`
 轉成原始字元座標 | --                     | 一對多，但不考慮控制碼時為一對一 <br> - `move_ansi(y, x), getyx()` (PttBBS screen) | 多對多，但不考慮控制碼時為多對一 <br> - (無)
@@ -34,6 +34,8 @@ y 軸           | y 為 row；+y 方向向下    | y 為 column；+y 方向向�
 註: 
 - 這裡所指的 `screen` (無 PttBBS 前綴) 為 MapleBBS 2.36 原版的 `screen` 函式庫
 - 這裡所稱的 `visio` 為 MapleBBS 3 之系統輸出入函式庫，非 PttBBS 中現名為 `vtuikit` 的使用者介面函式庫
+- visio 中的 `move()` 原為設定顯示座標的函式，但內部沒有處理 ANSI 控制碼以計算原始字元座標 `cur_pos` 的值，會造成 `cur_col` 與 `cur_pos` 不同步的問題
+    因為 visio 的原始座標為原始字元座標系統，這裡將其視為設定原始字元座標的函式
 
 ## 「原始字元座標」與「顯示座標」的範例解說
 　                  | Row 中內容
