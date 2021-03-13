@@ -35,6 +35,7 @@ y 軸           | y 為 row；+y 方向向下    | y 為 column；+y 方向向�
 - 這裡所指的 `screen` (無 PttBBS 前綴) 為 MapleBBS 2.36 原版的 `screen` 函式庫
 - 這裡所稱的 `visio` 為 MapleBBS 3 之系統輸出入函式庫，非 PttBBS 中現名為 `vtuikit` 的使用者介面函式庫
 - visio 中的 `move()` 原為設定顯示座標的函式，但內部沒有處理 ANSI 控制碼以計算原始字元座標 `cur_pos` 的值，會造成 `cur_col` 與 `cur_pos` 不同步的問題
+
     因為 visio 的原始座標為原始字元座標系統，這裡將其視為設定原始字元座標的函式
 
 ## 「原始字元座標」與「顯示座標」的範例解說
