@@ -28,8 +28,8 @@
 // default color (\x1b[37; 40m)
 #define STANDEND   (void) ( attrsetbg(0), attrsetfg(7) )
 #endif  /* #ifdef M3_USE_PFTERM */
-int cur_row, cur_col;
-int cur_pos;                    /* current position with ANSI codes */
+int cur_row, cur_col;           /* Current position without ANSI codes (display coordination) */
+int cur_pos;                    /* current column position with ANSI codes (raw character coordination) */
 
 /* ----------------------------------------------------- */
 /* output routines                                       */
@@ -248,8 +248,8 @@ move_ansi(
     cur_slp = cslp = &vbuf[y];
     if (x >= t_columns)
     {
-        cur_col = cslp->len - 1;
-        cur_pos = t_columns - 1;
+        cur_pos = cslp->len - 1;
+        cur_col = t_columns - 1;
         return;
     }
     cur_col = x;
