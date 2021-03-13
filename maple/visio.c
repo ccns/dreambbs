@@ -704,6 +704,46 @@ clrtobot(void)
     }
 }
 
+/* Return whether any ANSI escapes are removed */
+GCC_NONNULLS
+static bool remove_ansi_at(screenline *slp, int pos)
+{
+    unsigned char *const data = &slp->data[pos];
+
+    /* IID.2021-03-14: If there are ANSI escapes before the byte to be overridden, remove the escapes */
+    if (pos < slp->len && *data == KEY_ESC)
+    {
+        int idx = 1;
+        while (pos + idx < slp->len)
+        {
+            const int ch_i = data[idx++];
+            if (ch_i == KEY_ESC) /* Handle incomplete ANSI escapes interrupted by another ANSI escape */
+                continue;
+            if (!((ch_i >= '0' && ch_i <= '9') || ch_i == '[' || ch_i == ';'))
+            {
+                if (!(pos + idx < slp->len && data[idx] == KEY_ESC))
+                    break; /* There no more ANSI escapes to remove */
+            }
+        }
+
+        /* Move the original data after ANSI escapes to `data`, if any */
+        if (slp->len - pos - idx > 0)
+            memmove(data, data + idx, slp->len - pos - idx);
+
+        slp->len -= idx;
+        /* The color after `pos` are modified and need redraw */
+        if (!(slp->mode & SL_MODIFIED))
+        {
+            slp->mode |= SL_MODIFIED;
+            slp->smod = pos;
+        }
+        slp->emod = slp->len - 1;
+
+        return true;
+    }
+    return false;
+}
+
 void
 outc(
     int ch)
@@ -769,14 +809,14 @@ new_line:
     {
         cx = *data;
     }
-    else
+    else if (cx < 0)
     {
-        while (cx < 0)
+        do
         {
             data[cx++] = ' ';
-        }
+        } while (cx < 0);
 
-        slp->len = /* slp->width = */ pos + 1;
+        slp->len = /* slp->width = */ pos;
     }
 
     /* ---------------------------- */
@@ -798,11 +838,24 @@ new_line:
 
             if (showansi)
             {
-                ch = i + pos;
-                if (ch < ANSILINESIZE - 1)
+                remove_ansi_at(slp, pos);
+
+                /* IID.2021-03-14: Move the original data to leave the space for the inserted ANSI escape */
+                if (slp->len + i <= ANSILINESIZE)
                 {
+                    if (pos < slp->len)
+                        memmove(data + i, data, slp->len - pos);
                     memcpy(data, ansibuf, i);
-                    slp->len = slp->emod = cur_pos = ch;
+                    cur_pos = pos + i;
+                    if (pos < slp->len)
+                    {
+                        slp->len += i;
+                        slp->emod = slp->len - 1; /* The color after `pos` are modified and need redraw */
+                    }
+                    else
+                    {
+                        slp->len = slp->emod = pos + i;
+                    }
                     slp->mode |= SL_MODIFIED;
                     if (slp->smod > pos)
                         slp->smod = pos;
@@ -812,6 +865,9 @@ new_line:
         ansipos = 0;
         return;
     }
+
+    if (remove_ansi_at(slp, pos) && pos < slp->len)
+        cx = *data;
 
     /* ---------------------------- */
     /* 判定哪些文字需要重新送出螢幕 */
@@ -835,6 +891,7 @@ new_line:
         }
     }
 
+    slp->len = BMAX(slp->len, pos + 1);
     cur_pos = ++pos;
     cx = ++cur_col;
 
