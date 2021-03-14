@@ -341,6 +341,15 @@
 #define QUOTE_CHAR1     '>'
 #define QUOTE_CHAR2     ':'
 
+/* Colors for cursors not on the current cursor position */
+#define STR_CUR0_COLOR "\x1b[0;31m"
+#define STR_CUR1_COLOR "\x1b[0;36m"
+#define STR_CURA_COLOR "\x1b[0;35m"
+
+/* Colors for cursors on the current cursor position */
+#define STR_CUR0_COLOR_CURR "\x1b[0;1;31m"
+#define STR_CUR1_COLOR_CURR "\x1b[0;1;36m"
+#define STR_CURA_COLOR_CURR "\x1b[0;1;35m"
 
 //#define STR_CURSOR      "¡´"
 //#define STR_UNCUR       "  "  // Needs to be as wide as `STR_CURSOR`

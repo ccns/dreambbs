@@ -1501,7 +1501,10 @@ xover(
 {
     int redo_flags = 0;  /* Collected redraw/reloading flags */
     int zone_flags = 0;  /* Collected zone operation flags */
-    int pos_prev = -1;  /* Draw cursor on entry */
+    int pos_prev = -1;  /* For cursor redrawing
+                           - `-1`: redraw all without clearing
+                           - `-2`: redraw the current cursor only without clearning
+                           - `-3 - pos`: redraw `pos` and the current cursor without clearing */
     int top_prev = -1;  /* For showing the message for the last page which is full of items */
     int zone=-1;
     int sysmode=0;
@@ -1544,7 +1547,7 @@ xover(
                     sysmode = xz[pos].mode;
 
                     TagNum = 0;             /* clear TagList */
-                    pos_prev = -1;  /* Redraw cursor */
+                    pos_prev = -1;  /* Redraw all cursors */
                     utmp_mode(sysmode);
                     cmd = XO_INIT;
 
@@ -1593,7 +1596,7 @@ xover(
                 /* IID.2021-03-05: Make the destination cursor position accessible with `xo->pos` to the `XO_CUR` callback */
                 const int pos = xo->pos[xo->cur_idx];
                 cmd = XO_MOVE + XO_REL + cmd - XO_CUR;  /* Relative move before redraw */
-                pos_prev = -1;  /* Suppress cursor clearing; redraw cursor */
+                pos_prev = -3 - pos;  /* Suppress cursor cleaning; redraw the saved and destination cursor */
                 cmd = xover_cursor(xo, zone, cmd, &pos_prev);
                 /* Check whether the menu item under the saved cursor is visible after cursor movement */
                 if (pos >= xo->top && pos < xo->top + XO_TALL)
@@ -1645,11 +1648,35 @@ xover(
 
         if (xo->max > 0)                /* Thor:若是無東西就不show了 */
         {
+            int pos_curr = xo->pos[xo->cur_idx];
             int pos_disp = 3 + xo->pos[xo->cur_idx] - xo->top;
-            if (pos_disp != pos_prev)
+
+            if (pos_prev == -1)
             {
-                cursor_show(pos_disp, 0);
-                pos_prev = pos_disp;
+                /* `-1`: redraw all without clearing */
+                for (int i = 0; i < COUNTOF(xo->pos); ++i)
+                {
+                    if (i == xo->cur_idx)
+                        continue;
+                    const int posi = xo->pos[i];
+                    const int posi_disp = 3 + posi - xo->top;
+                    if (posi >= xo->top && posi < xo->top + XO_TALL)
+                        cursor_show_mark(xo, posi_disp, 0, i);
+                }
+            }
+            else if (pos_prev <= -3)
+            {
+                /* `-3 - pos`: redraw `pos` and the current cursor without clearing */
+                const int posp = -3 - pos_prev;
+                const int posp_disp = 3 + posp - xo->top;
+                if (posp >= xo->top && posp < xo->top + XO_TALL)
+                    cursor_clear_mark(xo, posp_disp, 0, xo->cur_idx, posp);
+            }
+
+            if (pos_curr != pos_prev)
+            {
+                cursor_show(xo, pos_disp, 0, xo->cur_idx);
+                pos_prev = pos_curr;
             }
 
             if (xo->top != top_prev)
@@ -1746,10 +1773,12 @@ static int xover_cursor(XO *xo, int zone, int cmd, int *pos_prev)
                 xo->top = BMAX(max + ((pos - max + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
                 cmd |= XR_BODY;     /* IID.20200103: Redraw list; do not reload. */
             }
-            else if (*pos_prev != -1)
+            else if (*pos_prev >= 0)
             {
-                cursor_clear(3 + cur - max, 0);
-                *pos_prev = -1;  /* Redraw cursor */
+                const int cur_disp = 3 + cur - max;
+                if (cur >= xo->top && cur < xo->top + XO_TALL)
+                cursor_clear(xo, cur_disp, 0, xo->cur_idx, *pos_prev);
+                *pos_prev = -2;  /* Redraw the current cursor without clearing */
             }
             return cmd;
         }
@@ -2098,7 +2127,7 @@ xover_key(
                 if ((cmd & XO_POS_MASK) > XO_NONE)
                 {
                     /* A thread article is found */
-                    cursor_clear(3 + pos - xo->top, 0);
+                    cursor_clear(xo, 3 + pos - xo->top, 0, xo->cur_idx, pos);
                     cmd = (cmd & ~XO_MOVE_MASK) + XO_CUR;  /* Redraw cursor */
                 }
                 else

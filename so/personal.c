@@ -555,7 +555,7 @@ personal_open(
     rec_put(xo->dir, personal, sizeof(PB), pos);
     move(3 + cur, 0);
     personal_item(xo, pos);
-    cursor_show(3 + cur, 0);
+    cursor_show(xo, 3 + cur, 0, xo->cur_idx);
 
     mail2usr(personal, 0);
     if (acct_load(&acct, personal->userid) >= 0)

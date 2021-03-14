@@ -1525,71 +1525,105 @@ vs_bar(
 #endif
 }
 
-
-void
-cursor_bar_show(
-    int row, int column, int width)
+GCC_NONNULLS
+void cursor_show_mark(XO *xo, int row, int column, int cur_idx)
 {
     move(row, column);
-    if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
+    if (xo->pos[0] == xo->pos[1])
+        outs(STR_CURA_COLOR_CURR STR_CURSOR);
+    else if (cur_idx == xo->cur_idx)
+        outs((cur_idx == 0) ? STR_CUR0_COLOR_CURR STR_CURSOR : STR_CUR1_COLOR_CURR STR_CURSOR);
+    else
+        outs((cur_idx == 0) ? STR_CUR0_COLOR STR_CURSOR : STR_CUR1_COLOR STR_CURSOR);
+    outs("\x1b[m");
+    move(row, column + 1);
+}
+
+GCC_NONNULLS
+void cursor_clear_mark(XO *xo, int row, int column, int cur_idx, int pos_prev)
+{
+    move(row, column);
+    if (cur_idx == 0)
+        outs((pos_prev == xo->pos[1]) ? STR_CUR1_COLOR STR_CURSOR : STR_UNCUR);
+    else
+        outs((pos_prev == xo->pos[0]) ? STR_CUR0_COLOR STR_CURSOR : STR_UNCUR);
+    outs("\x1b[m");
+    move(row, column + 1);
+}
+
+GCC_NONNULLS
+void
+cursor_bar_show(
+    XO *xo, int row, int column, int width, int cur_idx)
+{
+    if (row < 0 || column < 0)
+        return;
+
+    if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) && cur_idx == xo->cur_idx)
     {
         if (width > 0)
             grayoutrect(row, row + 1, column, column + width + 2, GRAYOUT_COLORBOLD);
         else
             grayout(row, row + 1, GRAYOUT_COLORBOLD);
     }
-    outs(STR_CURSOR);
-    move(row, column + 1);
+    cursor_show_mark(xo, row, column, cur_idx);
 }
 
 
+GCC_NONNULLS
 void
 cursor_bar_clear(
-    int row, int column, int width)
+    XO *xo, int row, int column, int width, int cur_idx, int pos_prev)
 {
-    move(row, column);
-    if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR))
+    if (row < 0 || column < 0)
+        return;
+
+    if (HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) && cur_idx == xo->cur_idx)
     {
         if (width > 0)
             grayoutrect(row, row + 1, column, column + width + 2, GRAYOUT_COLORNORM);
         else
             grayout(row, row + 1, GRAYOUT_COLORNORM);
     }
-    outs(STR_UNCUR);
+    cursor_clear_mark(xo, row, column, cur_idx, pos_prev);
 }
 
 
+GCC_NONNULLS
 int
 cursor_bar_key(
-    int row, int column, int width)
+    XO *xo, int row, int column, int width, int cur_idx, int pos_prev)
 {
     int ch;
 
-    cursor_bar_show(row, column, width);
+    cursor_bar_show(xo, row, column, width, cur_idx);
     ch = vkey();
-    cursor_bar_clear(row, column, width);
+    cursor_bar_clear(xo, row, column, width, cur_idx, pos_prev);
     return ch;
 }
 
 
+GCC_NONNULLS
 void
 cursor_show(
-    int row, int column)
+    XO *xo, int row, int column, int cur_idx)
 {
-    cursor_bar_show(row, column, 0);
+    cursor_bar_show(xo, row, column, 0, cur_idx);
 }
 
 
+GCC_NONNULLS
 void
-cursor_clear(int row, int column)
+cursor_clear(XO *xo, int row, int column, int cur_idx, int pos_prev)
 {
-    cursor_bar_clear(row, column, 0);
+    cursor_bar_clear(xo, row, column, 0, cur_idx, pos_prev);
 }
 
+GCC_NONNULLS
 int
-cursor_key(int row, int column)
+cursor_key(XO *xo, int row, int column, int cur_idx, int pos_prev)
 {
-    return cursor_bar_key(row, column, 0);
+    return cursor_bar_key(xo, row, column, 0, cur_idx, pos_prev);
 }
 
 static void
