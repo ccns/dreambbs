@@ -2603,6 +2603,7 @@ static KeyFuncList mbox_cb =
 #endif
 
     {KEY_TAB, {mbox_sysop}},
+    {Meta(KEY_TAB), {mbox_sysop}},
     {'I', {mbox_other}},
     {'t' | XO_POSF, {.posf = mbox_tag}},
     {'S' | XO_POSF, {.posf = mbox_size}},

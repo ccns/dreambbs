@@ -625,6 +625,7 @@ KeyFuncList personal_cb =
     {'s', {xo_cb_init}},
     {'d' | XO_POSF, {.posf = personal_delete}},
     {KEY_TAB, {personal_switch}},
+    {Meta(KEY_TAB), {personal_switch}},
     {'O' | XO_POSF, {.posf = personal_open}},
     {'D' | XO_POSF, {.posf = personal_deny}},
     {'h', {personal_help}}

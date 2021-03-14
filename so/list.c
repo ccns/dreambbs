@@ -319,6 +319,7 @@ KeyFuncList list_cb =
     {'s', {xo_cb_init}},
     {'d' | XO_POSF, {.posf = list_delete}},
     {KEY_TAB, {list_mode}},
+    {Meta(KEY_TAB), {list_mode}},
     {'/' | XO_POSF, {.posf = list_search}},
     {'h', {list_help}}
 };

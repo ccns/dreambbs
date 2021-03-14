@@ -1274,6 +1274,7 @@ KeyFuncList bmw_cb =
     {Ctrl('Q') | XO_POSF, {.posf = bmw_query}},
     {'s', {xo_cb_init}},
     {KEY_TAB, {bmw_mode}},
+    {Meta(KEY_TAB), {bmw_mode}},
     {'h', {bmw_help}}
 };
 
@@ -4205,6 +4206,7 @@ KeyFuncList ulist_cb =
 
     {'M' | XO_POSF, {.posf = ulist_mail}},
     {KEY_TAB, {ulist_toggle}},
+    {Meta(KEY_TAB), {ulist_toggle}},
     {'h', {ulist_help}}
 };
 

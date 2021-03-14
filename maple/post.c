@@ -4079,6 +4079,7 @@ KeyFuncList post_cb =
     {'r' | XO_POSF, {.posf = post_browse}},
     {'s', {post_switch}},
     {KEY_TAB, {post_gem}},
+    {Meta(KEY_TAB), {post_gem}},
     {'z', {post_gem}},
     {'u' | XO_POSF, {.posf = post_undelete}},
     {'y' | XO_POSF, {.posf = post_reply}},
