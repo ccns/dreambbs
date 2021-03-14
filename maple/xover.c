@@ -1980,6 +1980,14 @@ xover_key(
     {
         return cmd;
     }
+    if (cmd == KEY_TAB)
+    {
+        xo->cur_idx = (xo->cur_idx + 1) % XO_NCUR;
+        /* Re-placing the cursor to redraw the cursors */
+        const int pos_next = xo->pos[xo->cur_idx];
+        xo->pos[xo->cur_idx] = pos;
+        return XO_MOVE + pos_next;
+    }
     if (cmd == KEY_UP || cmd == 'p' || cmd == 'k')
     {
         return XO_MOVE + wrap_flag + XO_REL - 1;
