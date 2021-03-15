@@ -1364,6 +1364,16 @@ domenu_redo_reload:
     }
     if (cmd & XR_PART_BODY)
     {
+        const int h = (xyz->height) ? xyz->height : xo->max;
+
+        if (xyz->y + (h - 1) >= b_lines - 1 && xyz->explan_len_prev > b_cols - xyz->x)
+        {
+            /* Clean the previous explanation if the explanation is overlapped in the middle */
+            move_ansi(b_lines - 1, b_cols - xyz->explan_len_prev);
+            clrtoeol();
+            xyz->explan_len_prev = 0;
+        }
+
         xyz->max_item_length = 0;
         for (int i = 0; i <= xyz->max_prev; i++)
         {
@@ -1502,12 +1512,19 @@ void domenu_cursor_show(XO *xo)
             explan = strchr(xyz->mtail->desc, '\n');
         if (explan)
         {
+            const int h = (xyz->height) ? xyz->height : xo->max;
+            const int w = ((xyz->width) ? xyz->width : xyz->max_item_length) * ((xyz->height) ? (xo->max - 1)/xyz->height + 1 : 1);
             int explan_len = strip_ansi_len(explan + 1);
-            move_ansi(b_lines - 1, b_cols - xyz->explan_len_prev);
-            clrtoeol();
-            move_ansi(b_lines - 1, b_cols - explan_len);
-            outs(explan + 1);
-            xyz->explan_len_prev = explan_len;
+
+            /* Ensure there is room to display the explanation */
+            if (xyz->y + (h - 1) < b_lines - 1 || b_cols - (xyz->x + w) > explan_len)
+            {
+                move_ansi(b_lines - 1, b_cols - xyz->explan_len_prev);
+                clrtoeol();
+                move_ansi(b_lines - 1, b_cols - explan_len);
+                outs(explan + 1);
+                xyz->explan_len_prev = explan_len;
+            }
         }
 
         if (xyz->pos_prev >= 0)
