@@ -1983,8 +1983,19 @@ xover_key(
     if (cmd == KEY_TAB)
     {
         xo->cur_idx = (xo->cur_idx + 1) % XO_NCUR;
-        /* Re-placing the cursor to redraw the cursors */
         const int pos_next = xo->pos[xo->cur_idx];
+        /* Keep both cursors inside the screen if possible */
+        if (pos_next >= xo->top + XO_TALL && pos_next < pos + XO_TALL)
+        {
+            xo->top = BMIN(pos, pos_next - XO_TALL + 1);
+            return XR_BODY + XO_MOVE + pos_next;
+        }
+        if (pos_next < xo->top && pos < pos_next + XO_TALL)
+        {
+            xo->top = BMAX(pos_next, pos - XO_TALL + 1);
+            return XR_BODY + XO_MOVE + pos_next;
+        }
+        /* Otherwise re-placing the cursor to redraw the cursors */
         xo->pos[xo->cur_idx] = pos;
         return XO_MOVE + pos_next;
     }
