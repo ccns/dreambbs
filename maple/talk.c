@@ -3289,6 +3289,7 @@ ulist_init(
 #ifdef HAVE_BOARD_PAL
     bool isbpal;
 #endif
+    int user_num = 0; /* All online users including invisible users */
 
     pp = ulist_pool;
 
@@ -3318,6 +3319,7 @@ ulist_init(
         userno = up->userno;
         if (userno <= 0 || (up->pid <= 0 && !HAS_PERM(PERM_SYSOP|PERM_SEECLOAK)))
             continue;
+        ++user_num;
         if (!seecloak && (up->ufo & UFO_CLOAK))
             continue;
         tmp = can_see(up);
@@ -3373,6 +3375,7 @@ ulist_init(
         userno = up->userno;
         if (userno <= 0)
             continue;
+        ++user_num;
         if ((userno == self) || ((seecloak || !(up->ufo & UFO_CLOAK))&&(can_see(up)!=2 || HAS_PERM(PERM_SYSOP)) && (!filter || is_pal(userno))))
         {
             *pp++ = up;
@@ -3390,7 +3393,7 @@ ulist_init(
     {
         xsort(ulist_pool, max, sizeof(PICKUP), ulist_cmp[pickup_way - 1]);
     }
-    total_num = max;
+    total_num = user_num;
 
 /* cache.101023: shm爆炸造成人數亂掉後的自動修正 */
 #ifdef AUTO_FIX_INFO
