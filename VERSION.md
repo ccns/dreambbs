@@ -153,9 +153,10 @@ However, from DreamBBS v3.0 and on, instead of merge the commits into the dedica
 Sometimes, special versions are released on special events.
 
 ### April Fools' Day Event
-- [x] `v4.20-alpha` (2020) (Based on `v3.0-CURRENT`)
+- [x] [`v4.20-alpha`](https://github.com/ccns/dreambbs/tree/v4.20-alpha) (2020) (Based on `v3.0-CURRENT`)
     - The main menu and the popup menu are movable
-- [x] `v4.20-beta` (2021) (Based on `202X v0`/`v3.0`)
+    - Every items in the main menu have a verbose explanation
+- [x] [`v4.20-beta`](https://github.com/ccns/dreambbs/tree/v4.20-beta) (2021) (Based on `202X v0`/`v3.0`)
     - The main menu and the Xover list have 2 cursors
     - The main menu and the popup menu are movable again
 
