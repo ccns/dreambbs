@@ -148,7 +148,7 @@ However, from DreamBBS v3.0 and on, instead of merge the commits into the dedica
 - [x] `v2.0-CURRENT`
 - [x] `v3.0-CURRENT` ( **We are HERE** )
 
-## Special Release Version
+## Special Release Versions
 
 Sometimes, special versions are released on special events.
 
