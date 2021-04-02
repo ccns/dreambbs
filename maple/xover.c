@@ -554,9 +554,8 @@ xo_copy(
     /* lkchu.990428: mat patch 當看版尚未選定，修正copy會斷線的問題 */
     if (bbsmode == M_READA)
     {
-        /* lkchu.981205: 借用 tag 存放看版屬性 */
-        tag = (bshm->bcache + currbno)->battr;
-        if (!HAS_PERM(PERM_SYSOP) && (tag & BRD_NOFORWARD))
+        const int battr = (bshm->bcache + currbno)->battr;
+        if (!HAS_PERM(PERM_SYSOP) && (battr & BRD_NOFORWARD))
         {
             outz("★ 此板文章不可轉貼");
             return XO_FOOT;
@@ -689,9 +688,8 @@ xo_forward(
     /* lkchu.990428: mat patch 當看版尚未選定，修正forward會斷線的問題 */
     if (bbsmode == M_READA)
     {
-        /* lkchu.981205: 借用 method 存放看版屬性 */
-        method = (bshm->bcache + currbno)->battr;
-        if (!HAS_PERM(PERM_SYSOP) && (method & BRD_NOFORWARD))
+        const int battr = (bshm->bcache + currbno)->battr;
+        if (!HAS_PERM(PERM_SYSOP) && (battr & BRD_NOFORWARD))
         {
             outz("★ 此板文章不可轉貼");
             return XO_FOOT;

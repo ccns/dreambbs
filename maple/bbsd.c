@@ -2009,9 +2009,10 @@ int main(int argc, char *argv[])
         argc = *totaluser;
         if (argc >= MAXACTIVE - 5 /* || *avgload > THRESHOLD */)
         {
-            sprintf(currtitle,
+            char msg[80];
+            sprintf(msg,
                 "目前線上人數 [%d] 人，系統滿載，請稍後再來\n", argc);
-            send(csock, currtitle, strlen(currtitle), 0);
+            send(csock, msg, strlen(msg), 0);
             close(csock);
             continue;
         }
@@ -2031,8 +2032,11 @@ int main(int argc, char *argv[])
 
         telnet_init();
 
-        sprintf(currtitle, "正進入%s...\n", str_site);
-        send(0, currtitle, strlen(currtitle), 0);
+        {
+            char msg[80];
+            sprintf(msg, "正進入%s...\n", str_site);
+            send(0, msg, strlen(msg), 0);
+        }
 #endif
 
         /* ------------------------------------------------- */

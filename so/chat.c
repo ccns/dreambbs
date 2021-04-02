@@ -387,11 +387,13 @@ char *arg)
                     /* Thor.0722: msg file加上自己說的話 */
 
                     sprintf(fpmsg + 4, "%s-", cuser.userid);
-                    /* Thor.0722: 借用 len當一下fd :p */
-                    len = open(fpmsg, O_WRONLY | O_CREAT | O_APPEND, 0600);
-                    sprintf(buf, "給%s：%s\n", up->userid, str);
-                    write(len, buf, strlen(buf));
-                    close(len);
+
+                    {
+                        const int fd = open(fpmsg, O_WRONLY | O_CREAT | O_APPEND, 0600);
+                        sprintf(buf, "給%s：%s\n", up->userid, str);
+                        write(fd, buf, strlen(buf));
+                        close(fd);
+                    }
 
                     sprintf(buf, "%s(%s", cuser.userid, cuser.username);
                     len = strlen(str);

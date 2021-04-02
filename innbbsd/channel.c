@@ -696,7 +696,7 @@ filetime(                       /* 傳回 fpath 的檔案時間 */
 static void
 inndchannel(void)
 {
-    int i, fd, sock;
+    int fd, sock;
     const char *nodename;
     time_t uptime1;             /* time to maintain history */
     time_t uptime2;             /* time in initial_bbs */
@@ -731,8 +731,7 @@ inndchannel(void)
 
     time(&uptime1);
     ptime = localtime(&uptime1);
-    i = (HIS_MAINT_HOUR - ptime->tm_hour) * 3600 + (HIS_MAINT_MIN - ptime->tm_min) * 60;
-    uptime1 += i;
+    uptime1 += (HIS_MAINT_HOUR - ptime->tm_hour) * 3600 + (HIS_MAINT_MIN - ptime->tm_min) * 60;
 
     uptime2 = 0;                /* force to initial_bbs in the first time */
 
@@ -742,7 +741,7 @@ inndchannel(void)
 
     memset(Channel, 0, sizeof(Channel));
 
-    for (i = 0; i < MAXCLIENT; i++)
+    for (int i = 0; i < MAXCLIENT; i++)
     {
         clientp = Channel + i;
         clientp->fd = -1;
@@ -788,17 +787,17 @@ inndchannel(void)
         if (FD_ISSET(sock, &orfd))              /* 剛上站 */
         {
             char hostname[256];
+            const socklen_t socklen = sizeof(sin);
             if ((fd = tryaccept(sock)) < 0)
                 continue;
 
             /* 檢查有沒有在 nodelist.bbs 裡面 */
-            i = sizeof(sin);            /* 借用 i */
-            if (getpeername(fd, (struct sockaddr *) &sin, (socklen_t *) &i) < 0)
+            if (getpeername(fd, (struct sockaddr *) &sin, (socklen_t *) &socklen) < 0)
             {
                 close(fd);
                 continue;
             }
-            getnameinfo((struct sockaddr *) &sin, i, hostname, sizeof(hostname), NULL, NI_MAXSERV, NI_NUMERICHOST);
+            getnameinfo((struct sockaddr *) &sin, socklen, hostname, sizeof(hostname), NULL, NI_MAXSERV, NI_NUMERICHOST);
             if (!(nodename = search_nodelist_byhost(hostname)))
             {
                 char buf[256];
@@ -811,13 +810,14 @@ inndchannel(void)
             }
 
             /* 找一個空的 ClientType */
-            for (i = 0; i < MAXCLIENT; i++)
+            for (int i = 0; i < MAXCLIENT; i++)
             {
                 clientp = Channel + i;
                 if (clientp->fd == -1)
-                    break;
+                    goto found_free_client;
             }
-            if (i == MAXCLIENT)
+
+            /* If not found */
             {
                 static const char msg_no_desc[] = "502 目前連線人數過多，請稍後再試\r\n";
 
@@ -826,6 +826,7 @@ inndchannel(void)
                 continue;
             }
 
+found_free_client:
             channelcreate(clientp, fd, nodename, hostname);
 
             fprintf(clientp->Argv.out, "200 INNBBSD %s (%s)\r\n", VERSION, hostname);
@@ -833,7 +834,7 @@ inndchannel(void)
         }
 
         /* 執行所有 ClientType 的請求，並清掉沒在用的 ClientType */
-        for (i = 0; i < MAXCLIENT; i++)
+        for (int i = 0; i < MAXCLIENT; i++)
         {
             clientp = Channel + i;
             fd = clientp->fd;

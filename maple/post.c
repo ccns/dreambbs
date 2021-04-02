@@ -1194,11 +1194,8 @@ post_cross(
                     /* lkchu.981201: 原文轉載保留原日期 */
                 }
 
-                /* Thor.981205: 借用 method 存放看版屬性 */
-                /* method = (bshm->bcache + brd_bno(xboard))->battr; */
-
                 /* Thor.990111: 在可以轉出前, 要check user有沒有轉出的權力? */
-                if (!HAS_PERM(PERM_INTERNET) || (/* method */ battr & BRD_NOTRAN))
+                if (!HAS_PERM(PERM_INTERNET) || (battr & BRD_NOTRAN))
                     rc = 'l';
 
                 strcpy(xpost.title, xtitle);
@@ -1264,7 +1261,7 @@ post_cross(
             vmsg("轉錄失敗。");
         }
         /* Thor.981205: check 被轉的版有沒有列入紀錄? */
-        else if (/* method */ battr & BRD_NOCOUNT)
+        else if (battr & BRD_NOCOUNT)
         {
             if (success_count == ((tag == 0) ? 1 : tag))
                 prints("轉錄 %d 篇成功\，文章不列入紀錄，敬請包涵。", success_count);
