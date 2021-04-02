@@ -787,10 +787,7 @@ tn_login(void)
 
 //  setproctitle("%s@%s", cuser.userid, fromhost);
 
-    sprintf(fpath, "%s (%d)", currtitle, currpid);
-
-
-    blog("ENTER", fpath);
+    blog("ENTER", currtitle);
     // IID.20190521: Currently unused; disabled for now.
     // if (rusername[0])
     //     strcpy(cuser.ident, currtitle);
