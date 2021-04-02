@@ -109,20 +109,22 @@ This will be the last major version whose version number is different from the l
 Due to the shortage of development resources, from this major version and on, only the latest release version is officially maintained.
 
 - `202X v0` (`v3.0`)
+  - [x] Hot-swapping of DSO
+  - [x] Force using 32-bit int type structure member in native 64-bit environment
+  - [x] Full IPv6 support
+  - [x] Auto screen resizing
+  - [x] Server-side DBCS character detection
 - `202X v1` (`v3.1`)
 - `202X v2` (`v3.2`)
 - `202X v3` (`v3.3`); planned to be the last release of `v3.X`
 
 Features in plan:
-  - [x] Hot-swapping of DSO.
   - [ ] Built-in Big5-UAO/UTF-8 conversion support.
   - [ ] Data races prevention using atomic variables and `pthread` mutexes.
   - [ ] Replace System V shared memory API calls with POSIX shared memory API.
-  - [ ] Support forcing use 32-bit int type variables in 64-bit environment when BBS is compiled natively.
   - [ ] Support using 64-bit `time_t` to make the BBS system to be immune to the 2038 problem.
     - **48** different structs need to be transformed
       - Not feasible in short-term
-  - [x] Full IPv6 support.
   - [ ] Refactor out boilerplate code in xover list system
   - [ ] Merge popup menu systems into main menu system
   - [ ] Merge main menu system into xover list system
