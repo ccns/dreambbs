@@ -13,7 +13,7 @@ typedef struct textline
     struct textline *prev;
     struct textline *next;
     int len;
-    char data[ANSILINELEN];
+    char data[ANSILINESIZE];
 }        textline;
 
 
@@ -44,8 +44,91 @@ static int ve_mode;             /* operation mode */
 #define VE_BIFFN        0x20
 #endif /* Thor.980805: 郵差到處來按鈴 */
 
+#define VE_DBCS         0x40    /* DBCS detection for handling DBCS characters */
 
 #define FN_BAK          "bak"
+
+
+/* ----------------------------------------------------- */
+/* Thor: ansi 座標轉換  for color 編輯模式               */
+/* ----------------------------------------------------- */
+
+
+/* Convert a displayed x position `ansix` relative to the row `line` into raw x position */
+GCC_PURE static int
+ansi2n(
+    int ansix,
+    const textline *line)
+{
+    const char *data, *tmp;
+    int ch;
+
+    data = tmp = line->data;
+
+    while ((ch = *tmp))
+    {
+        if (ch == KEY_ESC)
+        {
+            for (;;)
+            {
+                ch = (unsigned char) *++tmp;
+                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */)
+                {
+                    tmp++;
+                    break;
+                }
+                if (!ch)
+                    break;
+            }
+            continue;
+        }
+        if (ansix <= 0)
+            break;
+        tmp++;
+        ansix--;
+    }
+    return tmp - data;
+}
+
+
+/* Convert a raw x position `nx` into displayed x position relative to the row `line` */
+GCC_PURE static int
+n2ansi(
+    int nx,
+    const textline *line)
+{
+    const char *tmp, *nxp;
+    int ansix;
+    int ch;
+
+    tmp = nxp = line->data;
+    nxp += nx;
+    ansix = 0;
+
+    while ((ch = *tmp))
+    {
+        if (ch == KEY_ESC)
+        {
+            for (;;)
+            {
+                ch = (unsigned char) *++tmp;
+                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */)
+                {
+                    tmp++;
+                    break;
+                }
+                if (!ch)
+                    break;
+            }
+            continue;
+        }
+        if (tmp >= nxp)
+            break;
+        tmp++;
+        ansix++;
+    }
+    return ansix;
+}
 
 
 /* ----------------------------------------------------- */
@@ -70,6 +153,19 @@ ve_abort(
 #endif
 
 
+/* If the cursor is on the trail byte of a DBCS character, move the cursor to the next character */
+static void
+ve_fix_cursor_dbcs(
+    const textline *vln)
+{
+    if ((ve_mode & VE_DBCS) && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1))
+    {
+        const int pos = (ve_mode & VE_ANSI) ? n2ansi(ve_col, vln) : ve_col;
+        ve_col = (ve_mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
+    }
+}
+
+
 static void
 ve_position(
     const textline *cur,
@@ -77,7 +173,11 @@ ve_position(
 {
     int row;
 
-    ve_col = BMIN(ve_col, cur->len);
+    if (ve_mode & VE_ANSI)
+        ve_col = ansi2n(n2ansi(ve_col, cur), cur); /* Place the cursor outside any ANSI escapes */
+    else
+        ve_col = BMIN(ve_col, cur->len);
+    ve_fix_cursor_dbcs(cur);
 
     row = 0;
     while (cur != top)
@@ -209,86 +309,6 @@ ve_alloc(void)
     ve_abort(13);                       /* 記憶體用光了 */
     abort_bbs();
     return NULL;
-}
-
-
-/* ----------------------------------------------------- */
-/* Thor: ansi 座標轉換  for color 編輯模式               */
-/* ----------------------------------------------------- */
-
-
-GCC_PURE static int
-ansi2n(
-    int ansix,
-    const textline *line)
-{
-    const char *data, *tmp;
-    int ch;
-
-    data = tmp = line->data;
-
-    while ((ch = *tmp))
-    {
-        if (ch == KEY_ESC)
-        {
-            for (;;)
-            {
-                ch = (unsigned char) *++tmp;
-                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */)
-                {
-                    tmp++;
-                    break;
-                }
-                if (!ch)
-                    break;
-            }
-            continue;
-        }
-        if (ansix <= 0)
-            break;
-        tmp++;
-        ansix--;
-    }
-    return tmp - data;
-}
-
-
-GCC_PURE static int
-n2ansi(
-    int nx,
-    const textline *line)
-{
-    const char *tmp, *nxp;
-    int ansix;
-    int ch;
-
-    tmp = nxp = line->data;
-    nxp += nx;
-    ansix = 0;
-
-    while ((ch = *tmp))
-    {
-        if (ch == KEY_ESC)
-        {
-            for (;;)
-            {
-                ch = (unsigned char) *++tmp;
-                if (ch >= 'a' && ch <= 'z' /* isalpha(ch) */)
-                {
-                    tmp++;
-                    break;
-                }
-                if (!ch)
-                    break;
-            }
-            continue;
-        }
-        if (tmp >= nxp)
-            break;
-        tmp++;
-        ansix++;
-    }
-    return ansix;
 }
 
 
@@ -938,7 +958,7 @@ quote_line(
         str++;
     if (qlevel >= qlimit)
     {
-        if (!memcmp(str, "※ ", 3) || !memcmp(str, "==>", 3) ||
+        if (!strncmp(str, "※ ", 3) || !strncmp(str, "==>", 3) ||
             strstr(str, ") 提到:\n"))
             return 0;
     }
@@ -1056,7 +1076,7 @@ ve_quote(
 
                     if (curredit & EDIT_LIST)   /* 去掉 mail list 之 header */
                     {
-                        while (fgets(str, 256, fp) && (!memcmp(str, "※ ", 3)));
+                        while (fgets(str, 256, fp) && (!strncmp(str, "※ ", 3)));
                     }
                 }
 
@@ -1242,8 +1262,8 @@ ve_header(
                 char author[IDLEN + 1];
                 char board[IDLEN + 1];
                 char title[66];
-                time_t date;            /* last post's date */
-                int number;             /* post number */
+                time32_t date;          /* last post's date */
+                int32_t number;         /* post number */
             }      postlog = {{0}, {0}, {0}, 0, 0};  /* DISKDATA(raw) */
 
 #ifdef HAVE_ANONYMOUS
@@ -1258,9 +1278,7 @@ ve_header(
                 strcpy(postlog.author, cuser.userid);
 
             strcpy(postlog.board, currboard);
-            /* str_ncpy(postlog.title, str_ttl(title), sizeof(postlog.title) - 1); */
-            /* Thor.980921: str_ncpy 含 0 */
-            str_ncpy(postlog.title, str_ttl(title), sizeof(postlog.title));
+            str_scpy(postlog.title, str_ttl(title), sizeof(postlog.title));
             postlog.date = now;
             postlog.number = 1;
 
@@ -1478,7 +1496,7 @@ ve_filer(
 
     case 't':
         strcpy(buf, ve_title);
-        if (!vget(B_LINES_REF, 0, "標題：", ve_title, TTLEN, GCARRY))
+        if (!vget(B_LINES_REF, 0, "標題：", ve_title, TTLEN + 1, GCARRY))
             strcpy(ve_title, buf);
         return VE_FOOTER;
 
@@ -1530,7 +1548,7 @@ ve_filer(
                 str = p->data;
                 if (v || str[0])
                 {
-                    str_trim(str);
+                    str_rtrim(str);
 
                     if (v || (bbsmode != M_POST))
                         fprintf(fp, "%s\n", str);
@@ -1570,9 +1588,11 @@ ve_filer(
 
             if (ve_op)
             {
+                /* IID.2021-03-06: Print the user address information in a separated line if too long */
+                const char *const from = ((cuser.ufo & UFO_HIDDEN)&&(cuser.userlevel)) ? HIDDEN_SRC : fromhost;
                 fprintf(fp, ORIGIN_TAG,
-                    /*str_site, MYHOSTNAME, */ ((cuser.ufo & UFO_HIDDEN)&&(cuser.userlevel)) ? HIDDEN_SRC : fromhost);
-
+                    /*str_site, MYHOSTNAME, */
+                    (strlen(from) > 34) ? "\x1b[m\n" : " ", from);
                 if ((bbstate & BRD_LOGEMAIL) && !(bbsmode == M_SMAIL))
                     fprintf(fp, EMAIL_TAG, cuser.email);
             }
@@ -1688,7 +1708,7 @@ vedit(
     int ve_op)  /* 0: 純粹編輯檔案 1: quote/header 2: quote */
 {
     textline *vln, *tmp;
-    int cc, col, mode, margin, pos;
+    int margin;
 
     /* --------------------------------------------------- */
     /* 初始設定：載入檔案、引用文章、設定編輯模式          */
@@ -1705,21 +1725,21 @@ vedit(
 
     if (*fpath)
     {
-        cc = open(fpath, O_RDONLY);
-        if (cc >= 0)
+        int fd = open(fpath, O_RDONLY);
+        if (fd >= 0)
         {
-            vln = ve_load(vln, cc);
+            vln = ve_load(vln, fd);
         }
         else
         {
-            cc = open(fpath, O_WRONLY | O_CREAT, 0600);
-            if (cc < 0)
+            fd = open(fpath, O_WRONLY | O_CREAT, 0600);
+            if (fd < 0)
             {
                 ve_abort(4);
                 abort_bbs();
             }
         }
-        close(cc);
+        close(fd);
     }
 
     if (ve_op)
@@ -1741,7 +1761,7 @@ vedit(
 
     ve_col = ve_row = margin = 0;
     ve_lno = 1;
-    ve_mode = VE_INSERT | VE_REDRAW | (cuser.ufo2 & UFO2_VEDIT ? 0 : VE_FOOTER);
+    ve_mode = VE_INSERT | VE_REDRAW | (cuser.ufo2 & UFO2_VEDIT ? 0 : VE_FOOTER) | VE_DBCS;
 
     /* --------------------------------------------------- */
     /* 主迴圈：螢幕顯示、鍵盤處理、檔案處理                */
@@ -1753,14 +1773,22 @@ vedit(
 
     for (;;)
     {
+        int mode = ve_mode;
+        int col = ve_col; /* Raw cursor x position */
+        int pos; /* Displayed cursor x position relative to the beginning of the row */
+        int pos_disp; /* Displayed cursor x position relative to the screen */
+        int len; /* Displayed length of the row */
+        int cc;
+
         vln = vx_cur;
-        mode = ve_mode;
-        col = ve_col;
-        cc = (col < b_cols) ? 0 : (col / (b_cols-7)) * (b_cols-7);
-        if (cc != margin)
+
         {
-            mode |= VE_REDRAW;
-            margin = cc;
+            const int margin_new = (col < b_cols) ? 0 : (col / (b_cols-7)) * (b_cols-7);
+            if (margin_new != margin)
+            {
+                mode |= VE_REDRAW;
+                margin = margin_new;
+            }
         }
 
         if (mode & VE_REDRAW)
@@ -1769,11 +1797,11 @@ vedit(
 
             tmp = vx_top;
 
-            for (pos = 0;; pos++)
+            for (int y = 0;; y++)
             {
-                move(pos, 0);
+                move(y, 0);
                 clrtoeol();
-                if (pos == b_lines)
+                if (y == b_lines)
                     break;
                 if (tmp)
                 {
@@ -1813,31 +1841,35 @@ vedit(
         /* ------------------------------------------------- */
 
         if (mode & VE_ANSI)             /* Thor: 作 ansi 編輯 */
-            pos = n2ansi(col, vln);     /* Thor: ansi 不會用到cc */
+        {
+            pos_disp = pos = n2ansi(col, vln);     /* Thor: ansi 不會用到margin */
+            len = n2ansi(vln->len, vln);
+        }
         else                    /* Thor: 不是ansi要作margin shift */
-            pos = col - margin;
+        {
+            pos = col;
+            pos_disp = col - margin;
+            len = vln->len;
+        }
 
         if (mode & VE_FOOTER)
         {
             move(b_lines, 0);
             clrtoeol();
-#ifdef EVERY_BIFF
-            prints(FOOTER_VEDIT_BIFF,
-                mode & VE_BIFF ? "\x1b[1;41;37;5m  郵差來了  ": mode & VE_BIFFN ? "\x1b[1;41;37;5m  訊差來了  ":"\x1b[0;34;46m  編輯文章  ",
-                mode & VE_INSERT ? "插入" : "取代",
-                mode & VE_ANSI ? "ANSI" : "一般",
-                ve_lno, 1 + (mode & VE_ANSI ? pos : col), d_cols, "");
-                /* Thor.980805: UFO_BIFF everywhere */
-#else
-
             prints(FOOTER_VEDIT,
+#ifdef EVERY_BIFF
+                mode & VE_BIFF ? "\x1b[1;41;37;5m  郵差來了  ": mode & VE_BIFFN ? "\x1b[1;41;37;5m  訊差來了  ":"\x1b[0;34;46m  編輯文章  ",
+#else
+                COLOR1 "  編輯文章  ",
+#endif
                 mode & VE_INSERT ? "插入" : "取代",
                 mode & VE_ANSI ? "ANSI" : "一般",
-                ve_lno, 1 + (mode & VE_ANSI ? pos : col), d_cols, "");
-#endif
+                mode & VE_DBCS ? "雙" : "單",
+                ve_lno, 1 + pos, d_cols, "");
+                /* Thor.980805: UFO_BIFF everywhere */
         }
 
-        move(ve_row, pos);
+        move(ve_row, pos_disp);
 
 ve_key:
 
@@ -1875,10 +1907,18 @@ ve_key:
             case Ctrl('H'):             /* backspace */
 
 
-                if ((mode & VE_ANSI) ? pos : col)
+                if (pos)
                 {
-                    ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : col - 1;
+                    ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
+                    const bool on_trail = (ve_mode & VE_DBCS) && pos > 1 && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1);
                     delete_char(vln, ve_col);
+                    pos -= 1;
+
+                    if (on_trail)
+                    {
+                        ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
+                        delete_char(vln, ve_col);
+                    }
                     continue;
                 }
 
@@ -1888,7 +1928,7 @@ ve_key:
                 ve_row--;
                 ve_lno--;
                 vx_cur = tmp;
-                ve_col = tmp->len;
+                ve_col = (mode & VE_ANSI) ? ansi2n(tmp->len, tmp) : tmp->len;
                 if (vln == vx_top)
                     vx_top = vln->next;
                 join_up(tmp);
@@ -1898,27 +1938,37 @@ ve_key:
             case Ctrl('D'):
             case KEY_DEL:               /* delete current character */
 
-                cc = (mode & VE_ANSI) ? n2ansi(vln->len, vln) : vln->len;
-                if (cc == ((mode & VE_ANSI) ? pos : col))
+                if (pos < len)
                 {
-                    join_up(vln);
-                    ve_mode = mode | VE_REDRAW;
+                    if (len == 0)
+                        goto ve_key;
+
+                    /* Thor: 雖然增加 load, 不過edit 時會比較好看 */
+                    ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : pos;
+                    const bool on_lead = (ve_mode & VE_DBCS) && pos < len && IS_DBCS_LEAD_ANSI_N(vln->data, ve_col, vln->len - 1);
+                    delete_char(vln, ve_col);
+
+                    if (on_lead)
+                    {
+                        ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : pos;
+                        delete_char(vln, ve_col);
+                    }
                 }
                 else
                 {
-                    if (cc == 0)
-                        goto ve_key;
-                    /* Thor: 雖然增加 load, 不過edit 時會比較好看 */
-                    ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : col;
-                    delete_char(vln, ve_col);
+                    join_up(vln);
+                    ve_mode = mode | VE_REDRAW;
                 }
                 continue;
 
             case KEY_LEFT:
 
-                if (col)
+                if (pos)
                 {
-                    ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : col - 1;
+                    ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
+                    pos -= 1;
+                    if ((ve_mode & VE_DBCS) && pos && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1))
+                        ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
                     continue;
                 }
 
@@ -1927,15 +1977,18 @@ ve_key:
 
                 ve_row--;
                 ve_lno--;
-                ve_col = tmp->len;
+                ve_col = (mode & VE_ANSI) ? ansi2n(tmp->len, tmp) : tmp->len;
                 vx_cur = tmp;
                 break;
 
             case KEY_RIGHT:
 
-                if (vln->len != col)
+                if (pos < len)
                 {
-                    ve_col = (mode & VE_ANSI) ? ansi2n(pos + 1, vln) : col + 1;
+                    ve_col = (mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
+                    pos += 1;
+                    if ((ve_mode & VE_DBCS) && pos < len && IS_DBCS_TRAIL_ANSI_N(vln->data, ve_col, vln->len - 1))
+                        ve_col = (mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
                     continue;
                 }
 
@@ -1944,20 +1997,20 @@ ve_key:
 
                 ve_row++;
                 ve_lno++;
-                ve_col = 0;
+                ve_col = (mode & VE_ANSI) ? ansi2n(0, tmp) : 0;
                 vx_cur = tmp;
                 break;
 
             case KEY_HOME:
             case Ctrl('A'):
 
-                ve_col = 0;
+                ve_col = (mode & VE_ANSI) ? ansi2n(0, vln) : 0;
                 continue;
 
             case KEY_END:
             case Ctrl('E'):
 
-                ve_col = vln->len;
+                ve_col = (mode & VE_ANSI) ? ansi2n(len, vln) : len;
                 continue;
 
             case KEY_UP:
@@ -1968,14 +2021,8 @@ ve_key:
 
                 ve_row--;
                 ve_lno--;
-                if (mode & VE_ANSI)
-                {
-                    ve_col = ansi2n(pos, tmp);
-                }
-                else
-                {
-                    ve_col = BMIN(col, tmp->len);
-                }
+                ve_col = (mode & VE_ANSI) ? ansi2n(pos, tmp) : BMIN(pos, tmp->len);
+                ve_fix_cursor_dbcs(tmp);
                 vx_cur = tmp;
                 break;
 
@@ -1988,14 +2035,8 @@ ve_key:
 
                 ve_row++;
                 ve_lno++;
-                if (mode & VE_ANSI)
-                {
-                    ve_col = ansi2n(pos, tmp);
-                }
-                else
-                {
-                    ve_col = BMIN(col, tmp->len);
-                }
+                ve_col = (mode & VE_ANSI) ? ansi2n(pos, tmp) : BMIN(pos, tmp->len);
+                ve_fix_cursor_dbcs(tmp);
                 vx_cur = tmp;
                 break;
 
@@ -2019,7 +2060,8 @@ ve_key:
             case Meta(','):
 
                 vx_cur = vx_top = vx_ini;
-                ve_col = ve_row = 0;
+                ve_row = 0;
+                ve_col = (mode & VE_ANSI) ? ansi2n(0, vx_ini) : 0;
                 ve_lno = 1;
                 ve_mode = mode | VE_REDRAW;
                 continue;
@@ -2030,7 +2072,17 @@ ve_key:
 
                 mode ^= VE_ANSI;
                 clear();
+                /* Place the cursor outside any ANSI escapes when entering ANSI mode */
+                ve_col = (mode & VE_ANSI) ? ansi2n(n2ansi(col, vln), vln) : col;
                 ve_mode = mode | VE_REDRAW;
+                continue;
+
+            case Meta('r'): /* Toggle DBCS detection for handling DBCS characters */
+
+                mode ^= VE_DBCS;
+                ve_mode = mode | VE_REDRAW;
+                /* Make the cursor not to be in the middle of any DBCS characters when entering DBCS detection mode */
+                ve_fix_cursor_dbcs(vln);
                 continue;
 
             case Ctrl('X'):             /* Save and exit */
@@ -2038,31 +2090,32 @@ ve_key:
             case Meta('W'):
             case Meta('X'):
             case KEY_F10:
-
-                cc = ve_filer(fpath, ve_op & 11);
+                {
+                    const int op = ve_filer(fpath, ve_op & 11);
 #ifdef  HAVE_INPUT_TOOLS
-                if (cc == VE_INPUTOOL)
-                {
-                    DL_HOTSWAP_SCOPE void (*input_tool)(void) = NULL;
-                    if (!input_tool)
+                    if (op == VE_INPUTOOL)
                     {
-                        input_tool = DL_NAME_GET("ascii.so", input_tools);
-                        if (input_tool)
+                        DL_HOTSWAP_SCOPE void (*input_tool)(void) = NULL;
+                        if (!input_tool)
+                        {
+                            input_tool = DL_NAME_GET("ascii.so", input_tools);
+                            if (input_tool)
+                                (*input_tool)();
+                        }
+                        else
+                        {
                             (*input_tool)();
+                        }
+                        break;
                     }
-                    else
-                    {
-                        (*input_tool)();
-                    }
-                    break;
-                }
 #endif
-                if (cc <= 0)
-                {
-                    bbsothermode &= ~OTHERSTAT_EDITING;
-                    return cc;
+                    if (op <= 0)
+                    {
+                        bbsothermode &= ~OTHERSTAT_EDITING;
+                        return op;
+                    }
+                    ve_mode = mode | op;
                 }
-                ve_mode = mode | cc;
                 continue;
 
             case Meta('1'):
@@ -2088,7 +2141,7 @@ ve_key:
 
             case Ctrl('G'):             /* delete to end of file */
 
-                /* vln->len = ve_col = cc = 0; */
+                /* vln->len = ve_col = 0; */
                 tmp = vln->next;
                 vln->next = NULL;
                 while (tmp)
@@ -2108,9 +2161,9 @@ ve_key:
 
             case Ctrl('K'):             /* delete to end of line */
 
-                if ((cc = vln->len))
+                if ((len = vln->len))
                 {
-                    if (cc != col)
+                    if (col < len)
                     {
                         vln->len = col;
                         vln->data[col] = '\0';
@@ -2165,14 +2218,14 @@ ve_key:
 /*
                     static char msg[] = "顯示使用者資料 (1)id (2)暱稱？[1]";
 
-                    cc = vans(msg);
-                    if (cc == '1' || cc == '2')
-                        msg[sizeof(msg) - 3] = cc;
+                    int ans = vans(msg);
+                    if (ans == '1' || ans == '2')
+                        msg[sizeof(msg) - 3] = ans;
                     else
-                        cc = msg[sizeof(msg) - 3];
-                    cc -= '0';
-                    for (col = cc * 12; col; col--)
-                        ve_char(cc);
+                        ans = msg[sizeof(msg) - 3];
+                    ans -= '0';
+                    for (col = ans * 12; col; col--)
+                        ve_char(ans);
                 }
                 break;
 */
@@ -2190,7 +2243,8 @@ ve_key:
                         NULL
                     };
 
-                    switch (cc = popupmenu_ans2(menu, "控制碼選擇", (B_LINES_REF >> 1) - 4, (D_COLS_REF >> 1) + 20))
+                    const int ans = popupmenu_ans2(menu, "控制碼選擇", (B_LINES_REF >> 1) - 4, (D_COLS_REF >> 1) + 20);
+                    switch (ans)
                     {
                     case 'i':
                         ve_char(KEY_ESC);
@@ -2236,8 +2290,7 @@ ve_key:
         /* ------------------------------------------------- */
 
 
-        cc = ve_row;
-        if (cc < 0)
+        if (ve_row < 0)
         {
             ve_row = 0;
             if ((vln = vx_top->prev))
@@ -2250,7 +2303,7 @@ ve_key:
                 ve_abort(6);
             }
         }
-        else if (cc >= b_lines)
+        else if (ve_row >= b_lines)
         {
             ve_row = b_lines - 1;
             if ((vln = vx_top->next))

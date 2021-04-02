@@ -11,94 +11,6 @@
 
 static BCACHE *bshm;
 
-static void
-attach_err(
-    int shmkey,
-    const char *name)
-{
-    fprintf(stderr, "[%s error] key = %lx\n", name, (unsigned long)shmkey);
-    exit(1);
-}
-
-
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-    {
-        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
-        if (shmid < 0)
-            attach_err(shmkey, "shmget");
-    }
-    else
-    {
-        shmsize = 0;
-    }
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-    if (shmptr == (void *) -1)
-        attach_err(shmkey, "shmat");
-
-    if (shmsize)
-        memset(shmptr, 0, shmsize);
-
-    return shmptr;
-}
-
-void
-bshm_init(void)
-{
-    BCACHE *xshm;
-    time_t *uptime;
-    int n, turn;
-
-    turn = 0;
-    xshm = bshm;
-    if (xshm == NULL)
-    {
-        bshm = xshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
-    }
-
-    uptime = &(xshm->uptime);
-
-    for (;;)
-    {
-        n = *uptime;
-        if (n > 0)
-            return;
-
-        if (n < 0)
-        {
-            if (++turn < 30)
-            {
-                sleep(2);
-                continue;
-            }
-        }
-
-        *uptime = -1;
-
-        if ((n = open(FN_BRD, O_RDONLY)) >= 0)
-        {
-            xshm->number =
-                read(n, xshm->bcache, MAXBOARD * sizeof(BRD)) / sizeof(BRD);
-            close(n);
-        }
-
-        /* 等所有 boards 資料更新後再設定 uptime */
-
-        time(uptime);
-        fprintf(stderr, "[account]\tCACHE\treload bcache");
-
-        return;
-    }
-}
-
 /* ----------------------------------------------------- */
 /* build Class image                                     */
 /* ----------------------------------------------------- */
@@ -127,7 +39,7 @@ class_parse(
     FILE *fp;
 
     strcpy(fpath, "gem/@/@");
-    str = fpath + sizeof("gem/@/@") - 1;
+    str = fpath + STRLITLEN("gem/@/@");
     for (ptr = key;; ptr++)
     {
         i = *ptr;
@@ -146,7 +58,7 @@ class_parse(
     for (i = 1; i < chn; i++)
     {
         str = chx[i]->title;
-        if (str[len] == '/' && !memcmp(key, str, len))
+        if (str[len] == '/' && !strncmp(key, str, len))
             return CH_END - i;
     }
 
@@ -165,7 +77,7 @@ class_parse(
 
         chx[chn++] = chp =
             (ClassHeader *) malloc(SIZEOF_FLEX(ClassHeader, count));
-        memset(chp->title, 0, CH_TTLEN);
+        memset(chp->title, 0, CH_TTSIZE);
         strcpy(chp->title, key);
 
         ans = chn;
@@ -251,7 +163,7 @@ class_sort(void)
 
     qsort(chp->chno, j, sizeof(short), chno_cmp);
 
-    memset(chp->title, 0, CH_TTLEN);
+    memset(chp->title, 0, CH_TTSIZE);
     strcpy(chp->title, "Boards");
     chx[chn++] = chp;
 }
@@ -279,7 +191,7 @@ class_image(
     for (i = 0; i < chn; i++)
     {
         pos[i] = len;
-        len += CH_TTLEN + chx[i]->count * sizeof(short);
+        len += CH_TTSIZE + chx[i]->count * sizeof(short);
     }
     pos[i++] = len;
     if ((fp = fopen(runfile, "w")))
@@ -288,7 +200,7 @@ class_image(
         for (i = 0; i < chn; i++)
         {
             chp = chx[i];
-            fwrite(chp->title, 1, CH_TTLEN + chp->count * sizeof(short), fp);
+            fwrite(chp->title, 1, CH_TTSIZE + chp->count * sizeof(short), fp);
             free(chp);
         }
         fclose(fp);
@@ -315,7 +227,8 @@ main(void)
     /* --------------------------------------------------- */
     /* build Class image                                   */
     /* --------------------------------------------------- */
-    bshm_init();
+    shm_logger_init(NULL);
+    bshm_init(&bshm);
     class_image(CLASS_INIFILE, CLASS_RUNFILE, CLASS_IMGFILE);
     class_image(PROFESS_INIFILE, PROFESS_RUNFILE, PROFESS_IMGFILE);
     exit(0);

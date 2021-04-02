@@ -12,55 +12,12 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
+
+/* IID.2021-02-25: For functions independent of bbsd globals, please refer to lib/shm.c */
+
+
 #ifdef  HAVE_SEM
 #include <sys/sem.h>
-#endif
-
-static void
-attach_err(
-    int shmkey,
-    const char *name)
-{
-    char buf[80];
-
-    sprintf(buf, "key = %lx", (unsigned long)shmkey);
-    blog(name, buf);
-    exit(1);
-}
-
-
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-    {
-        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
-        if (shmid < 0)
-            attach_err(shmkey, "shmget");
-    }
-    else
-    {
-        shmsize = 0;
-    }
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-    if (shmptr == (void *) -1)
-        attach_err(shmkey, "shmat");
-
-    if (shmsize)
-        memset(shmptr, 0, shmsize);
-
-    return shmptr;
-}
-
-
-#ifdef  HAVE_SEM
-
 
 /* ----------------------------------------------------- */
 /* semaphore : for critical section                      */
@@ -117,20 +74,6 @@ sem_lock(
 
 
 UCACHE *ushm;
-
-
-void
-ushm_init(void)
-{
-    UCACHE *xshm;
-
-    ushm = xshm = (UCACHE *) attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
-
-#if 0
-    if (xshm->mbase < xshm->mpool)
-        xshm->mbase = xshm->mpool;
-#endif
-}
 
 
 #ifndef _BBTP_
@@ -197,13 +140,13 @@ utmp_new(
     {
         if (!uentp->pid && !uentp->userno)
         {
-            unsigned int offset;
+            utmp_uidx_t idx;
 
-            offset = (char *) uentp - (char *) xshm->uslot;
+            idx = uentp - xshm->uslot;
             memcpy(uentp, up, sizeof(UTMP));
             xshm->count++;
-            if (xshm->offset < offset)
-                xshm->offset = offset;
+            if (xshm->ubackidx < idx)
+                xshm->ubackidx = idx;
             cutmp = uentp;
 
 #ifdef  HAVE_SEM
@@ -254,7 +197,7 @@ utmp_find(
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (uentp->userno == userno)
@@ -271,7 +214,7 @@ pid_find(
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (uentp->pid == pid && uentp->pid != 0)
@@ -309,7 +252,7 @@ utmp_search(
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (uentp->userno == userno)
@@ -333,7 +276,7 @@ utmp_count(
 
     count = 0;
     uentp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (uentp->userno == userno)
@@ -425,55 +368,6 @@ bsync(void)
 #endif
 
 
-void
-bshm_init(void)
-{
-    BCACHE *xshm;
-    time_t *uptime;
-    int n, turn;
-
-    turn = 0;
-    xshm = bshm;
-    if (xshm == NULL)
-    {
-        bshm = xshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
-    }
-
-    uptime = &(xshm->uptime);
-
-    for (;;)
-    {
-        n = *uptime;
-        if (n > 0)
-            return;
-
-        if (n < 0)
-        {
-            if (++turn < 30)
-            {
-                sleep(2);
-                continue;
-            }
-        }
-
-        *uptime = -1;
-
-        if ((n = open(FN_BRD, O_RDONLY)) >= 0)
-        {
-            xshm->number =
-                read(n, xshm->bcache, MAXBOARD * sizeof(BRD)) / sizeof(BRD);
-            close(n);
-        }
-
-        /* 等所有 boards 資料更新後再設定 uptime */
-
-        time(uptime);
-        blog("CACHE", "reload bcache");
-        return;
-    }
-}
-
-
 #if 0
 int
 apply_boards(
@@ -508,7 +402,7 @@ brd_bno(
 
     do
     {
-        if (!str_cmp(bname, brdp->brdname))
+        if (!str_casecmp(bname, brdp->brdname))
             return bno;
 
         bno++;
@@ -529,7 +423,7 @@ getbrd(
     tail = bhdr + bshm->number;
     do
     {
-        if (!str_cmp(bname, bhdr->brdname))
+        if (!str_casecmp(bname, bhdr->brdname))
             return bhdr;
     } while (++bhdr < tail);
     return NULL;
@@ -541,14 +435,6 @@ getbrd(
 /* etc/observe.db cache                                  */
 /*-------------------------------------------------------*/
 OCACHE *oshm;
-
-static int
-int_cmp(
-    const void *a,
-    const void *b)
-{
-    return *(const int *)a - *(const int *)b;
-}
 
 
 GCC_PURE int
@@ -578,169 +464,36 @@ observeshm_find(
     }
     return 0;
 }
-
-
-void
-observeshm_load(void)
-{
-    OBSERVE *head, *tail;
-    int size;
-    char *fimage;
-
-    size = 0;
-    oshm->total = 0;
-    memset(oshm->userno, 0, sizeof(int)*MAXOBSERVELIST);
-    fimage = f_img(FN_ETC_OBSERVE, &size);
-    if (fimage)
-    {
-        if (size > 0)
-        {
-            head = (OBSERVE *) fimage;
-            tail = (OBSERVE *) (fimage + size);
-            for (; head<tail; head++)
-            {
-                oshm->userno[oshm->total++] = head->userno;
-            }
-            if (oshm->total>1)
-                xsort(oshm->userno, oshm->total, sizeof(int), int_cmp);
-        }
-        free(fimage);
-    }
-
-}
-
-void
-observeshm_init(void)
-{
-    oshm = (OCACHE *) attach_shm(OBSERVE_KEY, sizeof(OCACHE));
-    observeshm_load();
-}
 #endif  /* #ifdef  HAVE_OBSERVE_LIST */
 
 /*-------------------------------------------------------*/
 /* run/var/counter cache                                 */
 /*-------------------------------------------------------*/
-COUNTER *curcount;
+COUNTER *countshm;
 
 void
 count_update(void)
 {
-    if ((ushm->count) > (curcount->samehour_max_login))
+    if ((ushm->count) > (countshm->samehour_max_login))
     {
-        curcount->samehour_max_login = ushm->count;
-        curcount->samehour_max_time = time(0);
+        countshm->samehour_max_login = ushm->count;
+        countshm->samehour_max_time = time(0);
     }
-    curcount->cur_hour_max_login++;
-    curcount->cur_day_max_login++;
-}
-
-void
-count_load(void)
-{
-    COUNTER *head;
-    int fw, size;
-    struct stat st;
-
-    head = curcount;
-    if ((fw = open(FN_VAR_SYSHISTORY, O_RDONLY)) >= 0)
-    {
-
-        if (!fstat(fw, &st) && (size = st.st_size) > 0)
-        {
-            read(fw, head, sizeof(COUNTER));
-        }
-        close(fw);
-    }
-}
-
-void
-count_init(void)
-{
-    if (curcount == NULL)
-    {
-        curcount = (COUNTER *) attach_shm(COUNT_KEY, sizeof(COUNTER));
-        if (curcount->hour_max_login == 0)
-            count_load();
-    }
+    countshm->cur_hour_max_login++;
+    countshm->cur_day_max_login++;
 }
 
 /*-------------------------------------------------------*/
 /* etc/banmail cache                                     */
 /*-------------------------------------------------------*/
 FWCACHE *fwshm;
-BANMAIL *curfw;
-
-static int
-cmpban(
-    const void *ban)
-{
-    return !strcmp(((const BANMAIL *)ban) -> data, curfw->data);
-}
-
-void
-fwshm_load(void)
-{
-    BANMAIL *head, data;
-    int fw, size, pos;
-    struct stat st;
-
-    head = fwshm->fwcache;
-
-    while (*head->data)
-    {
-        curfw = head;
-        pos = rec_loc(FN_ETC_BANMAIL_ACL, sizeof(BANMAIL), cmpban);
-        if (pos >= 0)
-        {
-            rec_get(FN_ETC_BANMAIL_ACL, &data, sizeof(BANMAIL), pos);
-            data.usage = head->usage;
-            data.time = head->time;
-            rec_put(FN_ETC_BANMAIL_ACL, &data, sizeof(BANMAIL), pos);
-        }
-        head++;
-    }
-
-    head = fwshm->fwcache;
-    fw = open(FN_ETC_BANMAIL_ACL, O_RDONLY);
-    fstat(fw, &st);
-
-    if (!fstat(fw, &st) && (size = st.st_size) > 0)
-    {
-        if (size > MAXFIREWALL * sizeof(BANMAIL))
-            size = MAXFIREWALL * sizeof(BANMAIL);
-
-        if (size)
-            read(fw, head, size);
-        fwshm->number = size / sizeof(BANMAIL);
-    }
-    close(fw);
-}
-
-void
-fwshm_init(void)
-{
-    if (fwshm == NULL)
-    {
-        fwshm = (FWCACHE *) attach_shm(FWSHM_KEY, sizeof(FWCACHE));
-        if (fwshm->number == 0)
-            fwshm_load();
-    }
-}
 
 /*-------------------------------------------------------*/
 /* etc/movie cache                                       */
 /*-------------------------------------------------------*/
 
 
-static FCACHE *fshm;
-
-
-void
-fshm_init(void)
-{
-    if (fshm == NULL)
-        fshm = (FCACHE *) attach_shm(FILMSHM_KEY, sizeof(FCACHE));
-}
+FCACHE *fshm;
 
 
 static inline void
@@ -890,7 +643,7 @@ utmp_check(        /* 檢查使用者是否在站上 */
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (uentp->pid)

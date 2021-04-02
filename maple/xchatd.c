@@ -183,19 +183,20 @@ static FILE *ftalk;
 /* Thor.990211: 統一用 dao library */
 #define str_time(t) Btime(t)
 
+static void log_formatter(char *buf, size_t size, const char *tag, const char *msg)
+{
+    const struct tm *const p = localtime(&TEMPLVAL(time_t, {time(NULL)}));
+    snprintf(buf, size, "%02d/%02d/%02d %02d:%02d:%02d %-*s %s",
+        p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
+        p->tm_hour, p->tm_min, p->tm_sec, IDLEN, tag, msg);
+}
+
 static void
 logtalk(
     const char *key,
     const char *msg)
 {
-    time_t now;
-    struct tm *p;
-
-    time(&now);
-    p = localtime(&now);
-    fprintf(ftalk, "%02d/%02d/%02d %02d:%02d:%02d %-13s%s\n",
-        p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
-        p->tm_hour, p->tm_min, p->tm_sec, key, msg);
+    logger_tag(&TEMPLVAL(Logger, {.file = ftalk}), key, msg, log_formatter);
 }
 
 
@@ -204,14 +205,7 @@ logit(
     const char *key,
     const char *msg)
 {
-    time_t now;
-    struct tm *p;
-
-    time(&now);
-    p = localtime(&now);
-    fprintf(flog, "%02d/%02d/%02d %02d:%02d:%02d %-13s%s\n",
-        p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
-        p->tm_hour, p->tm_min, p->tm_sec, key, msg);
+    logger_tag(&TEMPLVAL(Logger, {.file = flog}), key, msg, log_formatter);
 }
 
 
@@ -356,7 +350,7 @@ valid_chatid(
 
 
 /* Thor.990211: 統一使用dao library */
-#define str_equal(s1, s2) (!str_cmp(s1, s2))
+#define str_equal(s1, s2) (!str_casecmp(s1, s2))
 
 /* ----------------------------------------------------- */
 /* match strings' similarity case-insensitively          */
@@ -890,7 +884,7 @@ chat_query(
             acct.userid, acct.username, acct.numlogins, acct.numposts);
         send_to_user(cu, buf, 0, MSG_MESSAGE);
 
-        sprintf(buf, "最近(%s)從(%s)上站", Ctime(&acct.lastlogin),
+        sprintf(buf, "最近(%s)從(%s)上站", Ctime_any(&acct.lastlogin),
             (acct.lasthost[0] ? acct.lasthost : "外太空"));
         send_to_user(cu, buf, 0, MSG_MESSAGE);
 
@@ -991,9 +985,7 @@ chat_topic(
     }
 
     topic = room->topic;
-    /* str_ncpy(topic, msg, sizeof(room->topic) - 1); */
-    str_ncpy(topic, msg, sizeof(room->topic));
-    /* Thor.980921: str_ncpy 已含 0之空間 */
+    str_scpy(topic, msg, sizeof(room->topic));
 
     if (cu->clitype)
     {
@@ -1212,8 +1204,8 @@ chat_do_user_list(
         }
         else
         {
-            sprintf(buf, " %-8s│%-12s│%s",
-                user->chatid, user->userid, room ? room->name : "[在門口徘徊]");
+            sprintf(buf, " %-8s│%-*s│%s",
+                user->chatid, IDLEN, user->userid, room ? room->name : "[在門口徘徊]");
 /* Thor.980603: PERM_CHATROOM改為 default 沒有 roomop, 但可以自己取得 */
 /*          if (uflag & (PERM_ROOMOP | PERM_SYSOP | PERM_CHATROOM)) */
             /* if (uflag & (PERM_ROOMOP|PERM_CHATOP)) */
@@ -1314,9 +1306,9 @@ chat_map_chatids(
         if (CLOAK(user) && (user != cu) && !CHATSYSOP(cu))      /* Thor:隱身術 */
             continue;
 
-        sprintf(buf + (c * 24), " %-8s%c%-12s%s",
+        sprintf(buf + (c * 24), " %-8s%c%-*s%s",
             user->chatid, ROOMOP(user) ? '*' : ' ',
-            user->userid, (c < 2 ? "│" : "  "));
+            IDLEN, user->userid, (c < 2 ? "│" : "  "));
 
         if (++c == 3)
         {
@@ -1681,9 +1673,7 @@ enter_room(
         }
 
         memset(room, 0, sizeof(ChatRoom));
-        /* str_ncpy(room->name, rname, IDLEN - 1); */
-        str_ncpy(room->name, rname, IDLEN);
-        /* Thor.980921: 已包含 0 */
+        str_scpy(room->name, rname, IDLEN);
         strcpy(room->topic, "這是一個新天地");
 
         sprintf(buf, "+ %s 1 0 %s", room->name, room->topic);
@@ -1792,6 +1782,8 @@ print_user_counts(
         sprintf(buf + strlen(buf), " [ %d 人在秘密包廂]", suserc);
     send_to_user(cuser, buf, 0, number);
 
+//  shm_logger_init(&TEMPLVAL(Logger, {.file = flog}));
+//  shm_formatter_init(log_formatter);
 //  load_mud_like();
 }
 
@@ -1858,9 +1850,9 @@ login_user(
 
     /* Thor.990214: 注意, daolib中 非0代表失敗 */
     /* if (!chkpasswd(acct.passwd, acct.passhash, passwd)) */
-    if ((strncmp(passwd, acct.passwd, PASSLEN-1)
-          || (strlen(passwd) >= PASSLEN
-              && strncmp(passwd + PASSLEN - 1, acct.passhash, sizeof(acct.passhash))))
+    if ((strncmp(passwd, acct.passwd, PASSSIZE-1)
+          || (strlen(passwd) >= PASSSIZE
+              && strncmp(passwd + PASSSIZE - 1, acct.passhash, sizeof(acct.passhash))))
         && chkpasswd(acct.passwd, acct.passhash, passwd))
     {
 
@@ -1960,23 +1952,23 @@ login_user(
     /* Thor: 進來先清空 ROOMOP (同PERM_CHAT) */
 
     strcpy(cu->userid, userid);
-    str_ncpy(cu->chatid, chatid, sizeof(cu->chatid));
-    /* Thor.980921: str_ncpy與一般 strncpy有所不同, 特別注意 */
-
-    /* Thor.980921: 防止太長 */
-    /* cu->chatid[8]=0; */
+    str_scpy(cu->chatid, chatid, sizeof(cu->chatid));
 
     fprintf(flog, "ENTER\t[%d] %s\n", cu->sno, userid);
 
     /* Xshadow: 取得 client 的來源 */
 
+    /* IID.2021-02-12: After `command_execute()` is done, `cu->ibuf` will be reset by setting `cu->isize` to `0`,
+     *     so it can be used as a temporary buffer here without problems. */
 #ifdef NOIDENT
-    getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->rhost, sizeof(cu->rhost), NULL, NI_MAXSERV, NI_NUMERICHOST);
+    memcpy(cu->ibuf, cu->rhost, sizeof(ip_addr));
+    getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->ibuf, sizeof(ip_addr), NULL, NI_MAXSERV, NI_NUMERICHOST);
 #else
     dns_name((ip_addr *)cu->rhost, cu->ibuf, sizeof(cu->ibuf));
-    str_ncpy(cu->rhost, cu->ibuf, sizeof(cu->rhost));
+    str_scpy(cu->rhost, cu->ibuf, sizeof(cu->rhost));
   #if 0
-    getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->rhost, sizeof(cu->rhost), NULL, NI_MAXSERV, 0);
+    memcpy(cu->ibuf, cu->rhost, sizeof(ip_addr));
+    getnameinfo((struct sockaddr *)cu->rhost, sizeof(cu->rhost), cu->ibuf, sizeof(ip_addr), NULL, NI_MAXSERV, 0);
   #endif
 #endif
 
@@ -2074,7 +2066,7 @@ chat_ignore(
                 len = 0;
                 do
                 {
-                    sprintf(userid, "%-13s", list->userid);
+                    sprintf(userid, "%-*s ", IDLEN, list->userid);
                     strcpy(buf + len, userid);
                     len += 13;
                     if (len >= 78)
@@ -2626,7 +2618,7 @@ chat_party(
     cap = catbl(kind);
     for (i = 0; cap[i].verb[0]; i++)
     {
-        sprintf(buf, "%-10s %-20s", cap[i].verb, cap[i].chinese);
+        sprintf(buf, "%-10s %-20s", cap[i].verb, cap[i].brief_desc);
         send_to_user(cu, buf, 0, MSG_PARTYLIST);
     }
 
@@ -2679,7 +2671,7 @@ view_action_verb(       /* Thor.0726: 新加動詞分類顯示 */
 
         for (i = 0; strlen(p = cap[i].verb); i++)
         {
-            q = cap[i].chinese;
+            q = cap[i].brief_desc;
 
             strcat(data, p);
             strcat(expn, q);
@@ -3007,7 +2999,9 @@ servo_daemon(
 #ifdef RLIMIT
     struct rlimit limit;
 #endif //RLIMIT
-    bool listen_success = false;
+
+    /* IID.2021-02-19: Fallback to native IPv4 when IPv6 is not available */
+    static const sa_family_t ai_family[] = {AF_INET6, AF_INET};
 
     /*
      * More idiot speed-hacking --- the first time conversion makes the C
@@ -3078,47 +3072,59 @@ servo_daemon(
     /* bind the service port                               */
     /* --------------------------------------------------- */
 
-    hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
     sprintf(port_str, "%d", CHAT_PORT);
-    if (getaddrinfo(NULL, port_str, &hints, &hosts))
-        exit(1);
 
-    for (struct addrinfo *host = hosts; host; host = host->ai_next)
+    for (int i = 0; i < COUNTOF(ai_family); ++i)
     {
-        fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
-        if (fd < 0)
+        hints.ai_family = ai_family[i];
+        if (getaddrinfo(NULL, port_str, &hints, &hosts))
             continue;
 
-        /*
-         * timeout 方面, 將 socket 改成 O_NDELAY (no delay, non-blocking),
-         * 如果能順利送出資料就送出, 不能送出就算了, 不再等待 TCP_TIMEOUT 時間。
-         * (default 是 120 秒, 並且有 3-way handshaking 機制, 有可能一等再等)。
-         */
+        for (struct addrinfo *host = hosts; host; host = host->ai_next)
+        {
+            fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
+            if (fd < 0)
+                continue;
+
+            /*
+             * timeout 方面, 將 socket 改成 O_NDELAY (no delay, non-blocking),
+             * 如果能順利送出資料就送出, 不能送出就算了, 不再等待 TCP_TIMEOUT 時間。
+             * (default 是 120 秒, 並且有 3-way handshaking 機制, 有可能一等再等)。
+             */
 
 #if 1
-        fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NDELAY);
+            fcntl(fd, F_SETFL, fcntl(fd, F_GETFL, 0) | O_NDELAY);
 #endif
 
-        value = 1;
-        setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &value, sizeof(value));
+            value = 1;
+            setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &value, sizeof(value));
 
-        value = 1;
-        setsockopt(fd, host->ai_protocol, TCP_NODELAY, (char *) &value, sizeof(value));
+            value = 1;
+            setsockopt(fd, host->ai_protocol, TCP_NODELAY, (char *) &value, sizeof(value));
 
-        ld.l_onoff = ld.l_linger = 0;
-        setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
+            ld.l_onoff = ld.l_linger = 0;
+            setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
 
-        if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) ||
-            (listen(fd, SOCK_QLEN) < 0))
-            continue;
+            if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) ||
+                (listen(fd, SOCK_QLEN) < 0))
+            {
+                close(fd);
+                fd = -1;
+                continue;
+            }
 
-        listen_success = true;
+            /* Success */
+            break;
+        }
+        freeaddrinfo(hosts);
+
+        if (fd >= 0)
+            break; /* Success */
     }
-    freeaddrinfo(hosts);
-    if (!listen_success)
+    if (fd < 0)
         exit(1);
 
     return fd;
@@ -3272,33 +3278,6 @@ main_signals(void)
 
 }
 
-
-/*
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-    {
-        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
-    }
-    else
-    {
-        shmsize = 0;
-    }
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-
-    if (shmsize)
-        memset(shmptr, 0, shmsize);
-
-    return shmptr;
-}
-*/
 
 /*
 void

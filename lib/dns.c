@@ -69,7 +69,7 @@ ip_addr dns_addr(const char *name)
 
     /* disallow names consisting only of digits/dots, unless they end in a dot. */
     hints.ai_family = AF_UNSPEC;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICHOST | AI_NUMERICSERV;
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICHOST | AI_NUMERICSERV;
     {
         int status = getaddrinfo(name, NULL, &hints, &hosts);
         if (status)
@@ -313,7 +313,7 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
                         (buf, "%s , %s : USERID :%*[^:]:%79s", rmt_port, our_port,
                          ruser_buf) == 3 && !strcmp(rmt_pt, rmt_port) && !strcmp(our_pt, our_port))
                     {
-                        str_ncpy(ruser, ruser_buf, ruser_sz);
+                        str_scpy(ruser, ruser_buf, ruser_sz);
 
                         /*
                          * Strip trailing carriage return. It is part of the protocol, not
@@ -398,7 +398,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
                 /* if (!strcmp(name, (char *) strtok(abuf, " \t\r\n"))) */
                 if (strstr(name, (char *)strtok(abuf, " \t\r\n")))
                 {
-                    str_ncpy(name, (char *)strtok(NULL, " \t\r\n"), name_sz);
+                    str_scpy(name, (char *)strtok(NULL, " \t\r\n"), name_sz);
                     fclose(fp);
                     return 0;
                 }
@@ -422,15 +422,23 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
             break;
         case AF_INET6:
             ad = (const unsigned char *) &addr->v6.sin6_addr;
-            sprintf(qbuf, INADDR6_FMT ".ip6.arpa",
-                    ad[15] >> 4, ad[15] & 0xf, ad[14] >> 4, ad[14] & 0xf,
-                    ad[13] >> 4, ad[13] & 0xf, ad[12] >> 4, ad[12] & 0xf,
-                    ad[11] >> 4, ad[11] & 0xf, ad[10] >> 4, ad[10] & 0xf,
-                    ad[9] >> 4, ad[9] & 0xf, ad[8] >> 4, ad[8] & 0xf,
-                    ad[7] >> 4, ad[7] & 0xf, ad[6] >> 4, ad[6] & 0xf,
-                    ad[5] >> 4, ad[5] & 0xf, ad[4] >> 4, ad[4] & 0xf,
-                    ad[3] >> 4, ad[3] & 0xf, ad[2] >> 4, ad[2] & 0xf,
-                    ad[1] >> 4, ad[1] & 0xf, ad[0] >> 4, ad[0] & 0xf);
+            if (IN6_IS_ADDR_V4MAPPED(&addr->v6.sin6_addr))
+            {
+                sprintf(qbuf, INADDR_FMT ".in-addr.arpa",
+                        ad[15], ad[14], ad[13], ad[12]);
+            }
+            else
+            {
+                sprintf(qbuf, INADDR6_FMT ".ip6.arpa",
+                        ad[15] >> 4, ad[15] & 0xf, ad[14] >> 4, ad[14] & 0xf,
+                        ad[13] >> 4, ad[13] & 0xf, ad[12] >> 4, ad[12] & 0xf,
+                        ad[11] >> 4, ad[11] & 0xf, ad[10] >> 4, ad[10] & 0xf,
+                        ad[9] >> 4, ad[9] & 0xf, ad[8] >> 4, ad[8] & 0xf,
+                        ad[7] >> 4, ad[7] & 0xf, ad[6] >> 4, ad[6] & 0xf,
+                        ad[5] >> 4, ad[5] & 0xf, ad[4] >> 4, ad[4] & 0xf,
+                        ad[3] >> 4, ad[3] & 0xf, ad[2] >> 4, ad[2] & 0xf,
+                        ad[1] >> 4, ad[1] & 0xf, ad[0] >> 4, ad[0] & 0xf);
+            }
             break;
         default:
             return -1;
@@ -472,7 +480,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
             int n = dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME);
             if (n >= 0)
             {
-                str_ncpy(name, hostbuf, name_sz);
+                str_scpy(name, hostbuf, name_sz);
                 return 0;
             }
         }
@@ -480,7 +488,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
 #if 0
         if (type == T_CNAME)
         {
-            str_ncpy(name, hostbuf, name_sz);
+            str_scpy(name, hostbuf, name_sz);
             return 0;
         }
 #endif
@@ -507,7 +515,7 @@ int dns_openip(const ip_addr *addr, int port)
 
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICHOST | AI_NUMERICSERV;
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICHOST | AI_NUMERICSERV;
 
     getnameinfo((const struct sockaddr *)addr, sizeof(*addr), addr_str, sizeof(port_str), NULL, NI_MAXSERV, NI_NUMERICHOST);
     sprintf(port_str, "%d", port);

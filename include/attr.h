@@ -12,7 +12,7 @@
 #if 0
   int key;
   key < 0 is reserved.
-  key & 0xff == 0 is reserved.
+  (key & 0xff) == 0 is reserved.
   sizeof(attr): key & 0xff
 
   file: $userhome/.ATTR

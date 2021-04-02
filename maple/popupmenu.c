@@ -8,6 +8,9 @@
 
 #include "bbs.h"
 
+/* For screenshot */
+static screen_backup_t *popup_old_screen = NULL;
+
 static int do_menu(MENU pmenu[], XO *xo, int y_ref, int x_ref);
 
 /* ----------------------------------------- */
@@ -133,8 +136,7 @@ get_color(const char *s, int len, int *fc, int *bc, int *bbc)
     int color;
     int state = 0, reset=0, exit = 0;
 
-    memset(buf, 0, sizeof(buf));
-    strncpy(buf, s+2, len-1);
+    str_sncpy(buf, s+2, sizeof(buf), len-1);
 
     for (p = e = &buf[0]; exit == 0; ++p)
     {
@@ -199,8 +201,6 @@ vs_line(const char *msg, int y, int x)
     int word, slen, fc=37, bc=40, bbc=0;
     screenline sl;
 
-    memset(buf, 0, sizeof(buf));
-
     vs_save_line(&sl, y);
     sl.data[sl.len] = '\0';
     str = tmp = (char *) sl.data;
@@ -217,7 +217,7 @@ vs_line(const char *msg, int y, int x)
         word++;
     }
 
-    strncpy(buf, (char *) sl.data, str - tmp);
+    str_sncpy(buf, (char *) sl.data, sizeof(buf), str - tmp);
 
     while (word++<x)
         strcat(buf, " ");
@@ -365,6 +365,7 @@ do_menu(
 
 
     scr_dump(&old_screen);
+    popup_old_screen = &old_screen;
 
 do_menu_redraw:
     y = gety_ref(y_ref);
@@ -382,13 +383,37 @@ do_menu_redraw:
             if (xo)
             {
                 /* Redraw and redump */
+                popup_old_screen = NULL;
                 scr_restore_free(&old_screen);
-                xover_exec_cb(xo, XO_HEAD);
-                cursor_show(3 + xo->pos - xo->top, 0);
+
+                /* TODO(IID.2021-02-27): Refine Xover system to make cursor redraw logic customizable */
+                if (xo->cb == domenu_cb)
+                {
+                    const int level = xo_stack_level;
+                    /* XXX(IID.2021-02-27): Workaround for correcty detecting nested main menu */
+                    if (xo_stack_level > 0)
+                        --xo_stack_level;
+                    xover_exec_cb(xo, XO_HEAD);
+                    domenu_cursor_show(xo);
+                    xo_stack_level = level;
+                }
+                else
+                {
+                    /* IID.2021-02-27: Keep the cursor on screen when the screen is shrunk */
+                    if (xo->pos > xo->top + XO_TALL - 1)
+                        xo->top += xo->pos - (xo->top + XO_TALL - 1);
+                    xover_exec_cb(xo, XO_HEAD);
+                    cursor_show(3 + xo->pos - xo->top, 0);
+                }
+
                 scr_dump(&old_screen);
+                popup_old_screen = &old_screen;
             }
             else
+            {
                 scr_restore_keep(&old_screen);
+                popup_old_screen = &old_screen;
+            }
             goto do_menu_redraw;
         }
 
@@ -398,6 +423,7 @@ do_menu_redraw:
             case KEY_LEFT:
             case KEY_ESC:
             case Meta(KEY_ESC):
+                popup_old_screen = NULL;
                 scr_restore_free(&old_screen);
                 return 1;
             case KEY_UP:
@@ -416,15 +442,18 @@ do_menu_redraw:
             case '\n':
                 if (table[cur]->umode & M_QUIT)
                 {
+                    popup_old_screen = NULL;
                     scr_restore_free(&old_screen);
                     return 1;
                 }
                 if (do_cmd(table[cur], xo, y, x)<0)
                 {
+                    popup_old_screen = NULL;
                     scr_restore_free(&old_screen);
                     return -1;
                 }
                 scr_restore_keep(&old_screen);
+                popup_old_screen = &old_screen;
                 draw_menu((const MENU *const *)table, num+1, title, y, x, cur);
                 break;
             default:
@@ -437,15 +466,18 @@ do_menu_redraw:
                         {
                             if (table[cur]->umode & M_QUIT)
                             {
+                                popup_old_screen = NULL;
                                 scr_restore_free(&old_screen);
                                 return 1;
                             }
                             if (do_cmd(table[cur], xo, y, x)<0)
                             {
+                                popup_old_screen = NULL;
                                 scr_restore_free(&old_screen);
                                 return -1;
                             }
                             scr_restore_keep(&old_screen);
+                            popup_old_screen = &old_screen;
                             draw_menu((const MENU *const *)table, num+1, title, y, x, cur);
                         }
                         break;
@@ -619,8 +651,8 @@ static void pcopy(char *buf, const char *patten, int len)
 // IID.20190909: `pmsg()` without blocking and without screen restoring.
 void pmsg_body(const char *msg)
 {
-    char buf[ANSILINELEN];
-    char patten[ANSILINELEN];
+    char buf[ANSILINESIZE];
+    char patten[ANSILINESIZE];
     int len, plen, cc GCC_UNUSED;
 
     if (cuser.ufo2 & UFO2_ORIGUI)
@@ -696,6 +728,9 @@ Every_Z_Screen(void)
     FILE *fp;
     int i;
     char buf[512];
+
+    screen_backup_t old_screen = {0};
+
 #ifdef M3_USE_PFTERM
     int oy, ox;
 
@@ -708,9 +743,17 @@ Every_Z_Screen(void)
         vmsg("ÀÉ®×¶}±Ò¿ù»~ !!");
         return 0;
     }
+
+    /* IID.2021-02-26: Restore the screen saved by `popupmenu()`
+     * or use the current screen if the saved screen is not available */
+    if (popup_old_screen && popup_old_screen->IF_ON(M3_USE_PFTERM, raw_memory, slp))
+    {
+        scr_dump(&old_screen);
+        scr_restore_keep(popup_old_screen);
+    }
+
     for (i=0; i<=b_lines; ++i)
     {
-        memset(buf, 0, sizeof(buf));
 #ifdef M3_USE_PFTERM
         move(i, 0);
         inansistr(buf, 512);
@@ -718,15 +761,19 @@ Every_Z_Screen(void)
         {
             screenline sl;
             vs_save_line(&sl, i);
-            strncpy(buf, (char *) sl.data, sl.len);
+            str_sncpy(buf, (char *) sl.data, sizeof(buf), sl.len);
         }
 #endif
         fprintf(fp, "%s\n", buf);
     }
     fclose(fp);
 
+    /* Restore the screen if the saved screen is used */
+    if (old_screen.IF_ON(M3_USE_PFTERM, raw_memory, slp))
+        scr_restore_free(&old_screen);
 #ifdef M3_USE_PFTERM
-    move(oy, ox);
+    else
+        move(oy, ox);
 #endif
     return 1;
 }

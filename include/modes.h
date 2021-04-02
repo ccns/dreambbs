@@ -19,6 +19,21 @@ enum
 #define GENPASSWD_DES      0
 #define GENPASSWD_SHA256   5
 
+/* For `dbcs_state()` */
+enum DbcsState {
+    DBCS_ASCII = 0,
+
+    /* The bit range 0x1 - 0x8 is reserved for encoding the byte position in the DBCS character */
+    DBCS_INTERESC = 0x40,
+    DBCS_LEAD = 0x20,
+    DBCS_TRAIL = 0x10,
+
+    /* ANSI escapes occur between the byte and the trailing byte */
+    DBCS_LEAD_INTERESC = DBCS_LEAD | DBCS_INTERESC,
+    /* ANSI escapes occur between the leading byte and the byte */
+    DBCS_TRAIL_INTERESC = DBCS_TRAIL | DBCS_INTERESC,
+};
+
 /* ----------------------------------------------------- */
 /* user ¾Þ§@ª¬ºA»P¼Ò¦¡                                   */
 /* ----------------------------------------------------- */
@@ -79,7 +94,6 @@ enum
 #define M_MYFAVORITE    37
 
 #define M_MAX           M_MYFAVORITE
-#define M_BBSNET        0
 
 
 #ifdef  MODES_C
@@ -216,13 +230,21 @@ static const char *const ModeTypeTable[] =
 
 /* IID.20200128: Reassign xover key values */
 
-/* For specify functions which require dynamic loading */
+/* Callback function specifications for Xover callback lists */
 
+/* The callback function requires dynamic loading */
 #if NO_SO
 #define XO_DL           0x00000000
 #else
 #define XO_DL           0x80000000
 #endif
+
+/* The callback function has a parameter for `xo->pos` */
+#define XO_POSF         XO_MOVE
+
+#define XO_FSPEC_MASK    (XO_DL | XO_POSF) /* Apply this mask to get the function specification flagss */
+
+#define XO_FUNC_MASK    (~XO_FSPEC_MASK) /* Apply this mask to get the actual key for the callback function */
 
 /* Screen redraw/reloading modes */
 

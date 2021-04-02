@@ -15,7 +15,7 @@ typedef struct
 {
     char id[IDLEN+1];
     char brd[IDLEN+1];
-    int check;
+    int32_t check;
 } BM;  /* DISKDATA(raw) */
 
 
@@ -283,51 +283,14 @@ is_bms(
 const char *list,             /* 板主：BM list */
 const char *userid)
 {
-    int cc, len;
-
-    len = strlen(userid);
-    do
-    {
-        cc = list[len];
-        if ((!cc || cc == '/') && !str_ncmp(list, userid, len))
-        {
-            return true;
-        }
-        while ((cc = *list++))
-        {
-            if (cc == '/')
-                break;
-        }
-    }
-    while (cc);
-
-    return false;
+    return str_has(list, userid);
 }
 
 GCC_PURE static inline bool
 is_bm(
 const char *list)             /* 板主：BM list */
 {
-    int cc, len;
-    const char *userid;
-
-    len = strlen(userid = cuser.userid);
-    do
-    {
-        cc = list[len];
-        if ((!cc || cc == '/') && !str_ncmp(list, userid, len))
-        {
-            return true;
-        }
-        while ((cc = *list++))
-        {
-            if (cc == '/')
-                break;
-        }
-    }
-    while (cc);
-
-    return false;
+    return str_has(list, cuser.userid);
 }
 
 
@@ -735,7 +698,6 @@ m_xfile(void)
         "允許\註冊名單",
         "禁止上站位置",
         "不信任名單",           /* pcbug.990806: edit ~/etc/untrust */
-        "情書產生器",
         "程式版本",
         "歷史上的一刻",
         "站務列表",
@@ -764,7 +726,6 @@ m_xfile(void)
         FN_ETC_ALLOW_ACL,
         FN_ETC_BANIP_ACL,
         FN_ETC_UNTRUST_ACL,
-        FN_ETC_LOVEPAPER,
         FN_ETC_VERSION,
         FN_ETC_COUNTER,
         FN_ETC_SYSOP,
@@ -861,7 +822,7 @@ const void *arg)
     DL_HOLD;
     time_t now;
     struct tm ntime, *xtime;
-    int select = (int)arg;
+    int select = (int)(unsigned int)(long)arg;
     now = time(NULL);
     xtime = localtime(&now);
     ntime = *xtime;

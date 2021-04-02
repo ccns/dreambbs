@@ -91,64 +91,6 @@ keeplog(
 static BCACHE *bshm;
 
 
-static void
-attach_err(
-    int shmkey,
-    const char *name)
-{
-    fprintf(stderr, "[%s error] key = %x\n", name, shmkey);
-    exit(1);
-}
-
-
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-    {
-        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
-        if (shmid < 0)
-            attach_err(shmkey, "shmget");
-    }
-    else
-    {
-        shmsize = 0;
-    }
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-    if (shmptr == (void *) -1)
-        attach_err(shmkey, "shmat");
-
-    if (shmsize)
-        memset(shmptr, 0, shmsize);
-
-    return shmptr;
-}
-
-
-/* static */
-void
-bshm_init(void)
-{
-    BCACHE *xshm;
-
-    xshm = bshm;
-    if (xshm == NULL)
-    {
-        bshm = xshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
-    }
-
-    if (bshm->uptime < 0)
-        exit(1);
-
-}
-
-
 /* ----------------------------------------------------- */
 
 static void
@@ -200,6 +142,15 @@ count_hot(
 }
 
 static void
+count_rotate(
+    BSTAT (*lstat)[24],
+    const BSTAT *stat)
+{
+    memmove(&(*lstat)[0], &(*lstat)[1], sizeof(BSTAT) * 23);
+    memcpy(&(*lstat)[23], stat, sizeof(BSTAT));
+}
+
+static void
 count_board(
     const BRD *brd,
     time_t now)
@@ -207,7 +158,7 @@ count_board(
     struct tm ntime, *xtime;
     BSTATCOUNT bcount;
     char fpath[128], flog[128];
-    BSTAT tmp[24], *base, *head, *tail;
+    BSTAT *base, *head, *tail;
 
     int fd, count, size;
     struct stat st;
@@ -247,13 +198,13 @@ count_board(
     tail = head + count;
 
     hour = count;
-    day = (count > DAY_HOUR) ? (count - DAY_HOUR + 1) : 1;
-    week = (count > WEEK_HOUR) ? (count - WEEK_HOUR + 1) : 1;
-    twoweek = (count > TWOWEEK_HOUR) ? (count - TWOWEEK_HOUR + 1) : 1;
-    month = (count > MONTH_HOUR) ? (count - MONTH_HOUR + 1) : 1;
-    threemonth = (count > THREEMONTH_HOUR) ? (count - THREEMONTH_HOUR + 1) : 1;
-    halfyear = (count > HALFYEAR_HOUR) ? (count - HALFYEAR_HOUR + 1) : 1;
-    year = (count > YEAR_HOUR) ? (count - YEAR_HOUR + 1) : 1;
+    day = BMAX(count - DAY_HOUR, 0) + 1;
+    week = BMAX(count - WEEK_HOUR, 0) + 1;
+    twoweek = BMAX(count - TWOWEEK_HOUR, 0) + 1;
+    month = BMAX(count - MONTH_HOUR, 0) + 1;
+    threemonth = BMAX(count - THREEMONTH_HOUR, 0) + 1;
+    halfyear = BMAX(count - HALFYEAR_HOUR, 0) + 1;
+    year = BMAX(count - YEAR_HOUR, 0) + 1;
 
     pos = 1;
 
@@ -301,33 +252,17 @@ count_board(
     bcount.halfyear.chrono = now;
     bcount.year.chrono = now;
 
-    memcpy(tmp, &(bcount.lhour[1]), sizeof(BSTAT) * 23);
-    memcpy(bcount.lhour, tmp, sizeof(BSTAT) * 23);
-    memcpy(&(bcount.lhour[23]), &(bcount.hour), sizeof(BSTAT));
-
+    count_rotate(&bcount.lhour, &bcount.hour);
     if (ntime.tm_hour == 0)
     {
-        memcpy(tmp, &(bcount.lday[1]), sizeof(BSTAT) * 23);
-        memcpy(bcount.lday, tmp, sizeof(BSTAT) * 23);
-        memcpy(&(bcount.lday[23]), &(bcount.day), sizeof(BSTAT));
-
+        count_rotate(&bcount.lday, &bcount.day);
         if (ntime.tm_wday == 0)
-        {
-            memcpy(tmp, &(bcount.lweek[1]), sizeof(BSTAT) * 23);
-            memcpy(bcount.lweek, tmp, sizeof(BSTAT) * 23);
-            memcpy(&(bcount.lweek[23]), &(bcount.week), sizeof(BSTAT));
-        }
-
+            count_rotate(&bcount.lweek, &bcount.week);
         if (ntime.tm_mday == 1)
-        {
-            memcpy(tmp, &(bcount.lmonth[1]), sizeof(BSTAT) * 23);
-            memcpy(bcount.lmonth, tmp, sizeof(BSTAT) * 23);
-            memcpy(&(bcount.lmonth[23]), &(bcount.month), sizeof(BSTAT));
-        }
-
+            count_rotate(&bcount.lmonth, &bcount.month);
 
         head = base + (year - 1);
-        size = ((count <= YEAR_HOUR) ? count : YEAR_HOUR) * sizeof(BSTAT);
+        size = BMIN(count, YEAR_HOUR) * sizeof(BSTAT);
         lseek(fd, (off_t) 0, SEEK_SET);
         write(fd, head, size);
         ftruncate(fd, size);
@@ -365,7 +300,10 @@ main(void)
     /* build Class image                                   */
     /* --------------------------------------------------- */
 
-    bshm_init();
+    shm_logger_init(NULL);
+    bshm_attach(&bshm);
+    if (!bshm) /* bshm 未設定完成 */
+        exit(1);
 
     /* --------------------------------------------------- */
     /* 看板資訊統計                                        */
@@ -383,7 +321,7 @@ main(void)
         {
 
 
-//          if (!str_cmp(head->brdname, "Test") || !str_cmp(head->brdname, "WindTop"))
+//          if (!str_casecmp(head->brdname, "Test") || !str_casecmp(head->brdname, "WindTop"))
 //          {
 //              printf("DEBUG: bname:%s  reads:%d  posts:%d\n", head->brdname, head->n_reads, head->n_posts);
                 memset(&bstat, 0, sizeof(BSTAT));

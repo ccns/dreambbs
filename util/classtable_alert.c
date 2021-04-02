@@ -25,20 +25,6 @@ static UCACHE *ushm;
 static CLASS_TABLE_ALERT *cache;
 static int cache_size;
 
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    shmsize = 0;
-    shmptr = (void *) shmat(shmid, NULL, 0);
-
-    return shmptr;
-}
-
 static CLASS_TABLE_ALERT *
 bfind(
     int userno)
@@ -63,7 +49,8 @@ bsend(
     UTMP *callee,
     BMW *bmw)
 {
-    BMW *mpool, *mhead, *mtail, **mslot;
+    BMW *mpool, *mhead, *mtail;
+    bmw_idx32_t *mslot;
     int i;
     pid_t pid;
     time_t texpire;
@@ -80,7 +67,7 @@ bsend(
 
     for (;;)
     {
-        if (mslot[i] == NULL)
+        if (mslot[i] < 0)
             break;
 
         if (++i >= BMW_PER_USER)
@@ -92,12 +79,10 @@ bsend(
 
     /* find available BMW slot in pool */
 
-    texpire = time(&bmw->btime) - BMW_EXPIRE;
+    texpire = time32(&bmw->btime) - BMW_EXPIRE;
 
     mpool = ushm->mpool;
-    mhead = ushm->mbase;
-    if (mhead < mpool)
-        mhead = mpool;
+    mhead = mpool + BMAX(ushm->mbase, 0);
     mtail = mpool + BMW_MAX;
 
     do
@@ -107,7 +92,7 @@ bsend(
     } while (mhead->btime > texpire);
 
     *mhead = *bmw;
-    ushm->mbase = mslot[i] = mhead;
+    ushm->mbase = mslot[i] = mhead - mpool;
 
     /* sem_lock(BSEM_LEAVE); */
     return kill(pid, SIGUSR2);
@@ -122,7 +107,7 @@ bedit(
 
     bmw->recver = up->userno;   /* 先記下 userno 作為 check */
 
-    bmw->caller = NULL;
+    bmw->caller = -1;
     bmw->sender = 0;
     strcpy(bmw->userid, "系統報時者");
 
@@ -142,7 +127,7 @@ init(void)
 
 
     up = ushm->uslot;
-    uceil = (UTMP *) ((char *) up + ushm->offset);
+    uceil = up + ushm->ubackidx;
 
     do
     {
@@ -151,7 +136,7 @@ init(void)
             continue;
         if (!(up->ufo & UFO_CLASSTABLE))
             continue;
-//      printf("%-13.13s  %6.6d  %6.6d\n", up->userid, up->userno, up->pid);
+//      printf("%-*.*s  %6.6d  %6.6d\n", IDLEN, IDLEN, up->userid, up->userno, up->pid);
         if ((ptr=bfind(up->userno)))
         {
             //strcpy(bmw.msg, "訊息測試，不便請見諒");
@@ -198,7 +183,7 @@ utmp_find(
     UTMP *uentp, *uceil;
 
     uentp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (uentp->userno == userno)
@@ -288,7 +273,8 @@ main(
     setuid(BBSUID);
     chdir(BBSHOME);
 
-    ushm = (UCACHE *) attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
+    shm_logger_init(NULL);
+    ushm_attach(&ushm);
 
     if (!ushm)
     {

@@ -21,19 +21,19 @@ typedef struct BoardHeaderOld
 {
     char brdname[IDLEN + 1];      /* board ID */
     char title[BTLEN + 1];
-    char color;
+    int8_t color;
     char class_[5];
     char BM[BMLEN + 1];           /* BMs' uid, token '/' */
 
-    unsigned char bvote;          /* 共有幾項投票舉行中 */
+    uint8_t bvote;                /* 共有幾項投票舉行中 */
 
-    time_t bstamp;                /* 建立看板的時間, unique */
-    unsigned int readlevel;       /* 閱讀文章的權限 */
-    unsigned int postlevel;       /* 發表文章的權限 */
-    unsigned int battr;           /* 看板屬性 */
-    time_t btime;                 /* .DIR 的 st_mtime */
-    int bpost;                    /* 共有幾篇 post */
-    time_t blast;                 /* 最後一篇 post 的時間 */
+    time32_t bstamp;              /* 建立看板的時間, unique */
+    uint32_t readlevel;           /* 閱讀文章的權限 */
+    uint32_t postlevel;           /* 發表文章的權限 */
+    uint32_t battr;               /* 看板屬性 */
+    time32_t btime;               /* .DIR 的 st_mtime */
+    int32_t bpost;                /* 共有幾篇 post */
+    time32_t blast;               /* 最後一篇 post 的時間 */
 }           BRDOLD;  /* DISKDATA(raw) */
 
 
@@ -140,7 +140,7 @@ main(
             brd.expireday = key->days;
         }
 
-        printf("%04d %-13s %-5s %-40s %-20s %5u %5u %5u\n", num, brd.brdname, brd.class_, brd.title, brd.BM, brd.expiremax, brd.expiremin, brd.expireday);
+        printf("%04d %-*s %-5s %-40s %-20s %5u %5u %5u\n", num, IDLEN, brd.brdname, brd.class_, brd.title, brd.BM, brd.expiremax, brd.expiremin, brd.expireday);
 
         write(outf, &brd, sizeof(BRD));
     }

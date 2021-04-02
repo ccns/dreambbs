@@ -19,29 +19,30 @@
 static int observe_add(XO *xo);
 
 
-static void
+static int
 observe_item(
-int num,
-const OBSERVE *observe)
+XO *xo,
+int pos)
 {
-    prints("%6d %-13.13s %-*.*s\n", num, observe->userid, d_cols + 58, d_cols + 58, observe->title);
+    const OBSERVE *const observe = (const OBSERVE *) xo_pool_base + pos;
+    const int num = pos + 1;
+    prints("%6d %-*.*s %-*.*s\n", num, IDLEN, IDLEN, observe->userid, d_cols + 58, d_cols + 58, observe->title);
+    return XO_NONE;
 }
 
 static int
 observe_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const OBSERVE *const observe = (const OBSERVE *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    observe_item(xo->pos + 1, observe);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return observe_item(xo, pos);
 }
 
 static int
 observe_body(
 XO *xo)
 {
-    const OBSERVE *observe;
     int num, max, tail;
 
     move(3, 0);
@@ -49,19 +50,18 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-            return observe_add(xo);
-        return XO_QUIT;
+        outs("\n《觀察名單列表》目前沒有資料\n");
+        outs("\n  (^P)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    observe = (const OBSERVE *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        observe_item(++num, observe++);
+        observe_item(xo, num++);
     }
     while (num < max);
 
@@ -141,7 +141,7 @@ XO *xo)
             if (total > 0)
             {
                 if (total > 1)
-                    xsort(pbase, total, sizeof(OBSERVE), (int (*)(const void *lhs, const void *rhs))str_cmp);
+                    xsort(pbase, total, sizeof(OBSERVE), (int (*)(const void *lhs, const void *rhs))str_casecmp);
 
                 lseek(fd, 0, SEEK_SET);
                 write(fd, pbase, total * sizeof(OBSERVE));
@@ -213,12 +213,13 @@ XO *xo)
 
 static int
 observe_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(OBSERVE), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(OBSERVE), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -229,13 +230,11 @@ XO *xo)
 
 static int
 observe_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     OBSERVE *observe, mate;
-    int pos, cur;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     observe = (OBSERVE *) xo_pool_base + pos;
 
     //mate = *observe;
@@ -265,14 +264,14 @@ KeyFuncList observe_cb =
     {XO_LOAD, {observe_load}},
     {XO_HEAD, {observe_head}},
     {XO_BODY, {observe_body}},
-    {XO_CUR, {observe_cur}},
+    {XO_CUR | XO_POSF, {.posf = observe_cur}},
 
     {Ctrl('P'), {observe_add}},
     {'S', {observe_sync}},
-    {'r', {observe_change}},
-    {'c', {observe_change}},
+    {'r' | XO_POSF, {.posf = observe_change}},
+    {'c' | XO_POSF, {.posf = observe_change}},
     {'s', {xo_cb_init}},
-    {'d', {observe_delete}},
+    {'d' | XO_POSF, {.posf = observe_delete}},
     {'h', {observe_help}}
 };
 
@@ -292,7 +291,7 @@ Observe_list(void)
     xo->recsiz = sizeof(OBSERVE);
     xo->pos = 0;
     xover(XZ_OTHER);
-    observeshm_load();
+    observeshm_load(oshm);
     free(xo);
 
     xz[XZ_OTHER - XO_ZONE].xo = last;  /* restore */

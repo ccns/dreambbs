@@ -31,8 +31,8 @@ chat_topic(void)
 {
     const char *title = (frec ? " 錄音室 " : CHATROOMNAME);
     move(0, 0);
-    prints("\x1b[1;37;46m %s：%-12s\x1b[45m 話題：%-*s\x1b[m",
-           title, chatroom, d_cols + 57 - strlen(title), chattopic);
+    prints("\x1b[1;37;46m %s：%-*s \x1b[45m 話題：%-*s\x1b[m",
+           title, IDLEN - 1, chatroom, (int)(unsigned int)(d_cols + 57 - strlen(title)), chattopic);
 }
 
 #  ifdef M3_USE_PFTERM
@@ -93,8 +93,8 @@ printchatline(
             move(i, 0);
             memcpy(last_slp, cur_slp, sizeof(screenline));
             last_slp->smod = 0;
-            last_slp->emod = ANSILINELEN;
-            last_slp->oldlen = ANSILINELEN;
+            last_slp->emod = ANSILINESIZE;
+            last_slp->oldlen = ANSILINESIZE;
             last_slp->mode = SL_MODIFIED;
             last_slp = cur_slp;
         }
@@ -306,33 +306,24 @@ char *chatid)
             }
             else if (fd == 'n')
             {
-                /* str_ncpy(chatid, str, sizeof(chatid) - 1); */
+                /* str_scpy(chatid, str, sizeof(chatid)); */
                 /* Thor.0819: chatid array長度9, 但沒傳入, 所以硬給囉 */
-                /* str_ncpy(chatid, str, 8); */
-
-                /* Thor.980921: str_ncpy含0*/
-                str_ncpy(chatid, str, 9);
+                str_scpy(chatid, str, 9);
 
                 /* Thor.0819: 順便換一下 mateid 好了... */
-                /*str_ncpy(cutmp->mateid, str, 8); */
-                /* Thor.980921: str_ncpy含0*/
-                str_ncpy(cutmp->mateid, str, sizeof(cutmp->mateid));
+                str_scpy(cutmp->mateid, str, sizeof(cutmp->mateid));
 
                 print_chatid(chatid);
                 clrtoeol();
             }
             else if (fd == 'r')
             {
-                /* str_ncpy(chatroom, str, sizeof(chatroom) - 1); */
-                /* Thor.980921: str_ncpy含0*/
-                str_ncpy(chatroom, str, sizeof(chatroom));
+                str_scpy(chatroom, str, sizeof(chatroom));
                 chat_topic();
             }
             else if (fd == 't')
             {
-                /* str_ncpy(chattopic, str, sizeof(chattopic) - 1); */
-                /* Thor.980921: str_ncpy含0*/
-                str_ncpy(chattopic, str, sizeof(chattopic));
+                str_scpy(chattopic, str, sizeof(chattopic));
                 chat_topic();
             }
         }
@@ -455,7 +446,7 @@ user_info *uentp)
     if (cloak && !HAS_PERM(PERM_SEECLOAK))
         return 0;
 
-    sprintf(pline, " %-13s%c%-10s", uentp->userid,
+    sprintf(pline, " %-*s %c%-10s", IDLEN, uentp->userid,
             cloak ? '#' : ' ', bmode(uentp, 1));
     if (cnt < 2)
         strcat(pline, "│");
@@ -579,7 +570,7 @@ t_chat(void)
 
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV;
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV;
     {
         char port_str[12];
         sprintf(port_str, "%d", CHAT_PORT);
@@ -611,7 +602,7 @@ t_chat(void)
 
         move(b_lines - 1, 0);
         outs("若不進入聊天室，則暱稱請留空\n");
-        str_ncpy(chatid, cuser.userid, sizeof(chatid));
+        str_scpy(chatid, cuser.userid, sizeof(chatid));
         /* Thor.980921: 愛用 dao lib */
         ch = vget(B_LINES_REF, 0, "請輸入聊天代號：", chatid, 9, GCARRY);
         if (ch == '/')

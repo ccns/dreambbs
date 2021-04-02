@@ -12,11 +12,11 @@
 
 
 typedef struct {
-    void (*item_func)(int num, const void *obj);
+    int (*item_func)(XO *xo, int pos);
     void (*query_func)(const void *obj);
     int (*add_func)(const char *fpath, const void *old, int pos);
     int (*sync_func)(const void *lhs, const void *rhs);
-    int (*search_func)(const void *obj, const char *key);
+    bool (*search_func)(const void *obj, const char *key);
     bool dirty;
 } InnbbsXyz;
 
@@ -26,14 +26,16 @@ typedef struct {
 /* ----------------------------------------------------- */
 
 
-static void
+static int
 nl_item(
-    int num,
-    const void *nl_obj)
+    XO *xo,
+    int pos)
 {
-    const nodelist_t *nl = (const nodelist_t *)nl_obj;
+    const nodelist_t *nl = (const nodelist_t *)xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d %-13s%-*.*s %s(%d)\n", num,
         nl->name, d_cols + 45, d_cols + 45, nl->host, nl->xmode & INN_USEIHAVE ? "IHAVE" : "POST", nl->port);
+    return XO_NONE;
 }
 
 
@@ -116,16 +118,16 @@ nl_cmp(
     const void *a, const void *b)
 {
     /* 依 name 排序 */
-    return str_cmp(((const nodelist_t *)a) -> name, ((const nodelist_t *)b) -> name);
+    return str_casecmp(((const nodelist_t *)a) -> name, ((const nodelist_t *)b) -> name);
 }
 
 
-static int
+static bool
 nl_search(
     const void *nl,
     const char *key)
 {
-    return (int) (str_str(((const nodelist_t *)nl) -> name, key) || str_str(((const nodelist_t *)nl) -> host, key));
+    return str_casestr(((const nodelist_t *)nl) -> name, key) || str_casestr(((const nodelist_t *)nl) -> host, key);
 }
 
 
@@ -134,12 +136,14 @@ nl_search(
 /* ----------------------------------------------------- */
 
 
-static void
+static int
 nf_item(
-    int num,
-    const void *nf_obj)
+    XO *xo,
+    int pos)
 {
-    const newsfeeds_t *nf = (const newsfeeds_t *)nf_obj;
+    const newsfeeds_t *nf = (const newsfeeds_t *)xo_pool_base + pos;
+    const int num = pos + 1;
+
     int bno;
     BRD *brd;
     char outgo, income;
@@ -162,8 +166,10 @@ nf_item(
         outgo = income = 'X';
     }
 
-    prints("%6d %-13s%-*.*s %c-%c %-13s %.7s\n", num,
-        nf->path, d_cols + 33, d_cols + 33, nf->newsgroup, outgo, income, nf->board, nf->charset);
+    prints("%6d %-13s%-*.*s %c-%c %-*s %.7s\n", num,
+        nf->path, d_cols + 33, d_cols + 33, nf->newsgroup, outgo, income, IDLEN, nf->board, nf->charset);
+
+    return XO_NONE;
 }
 
 
@@ -248,7 +254,7 @@ nf_add(
         vget(B_LINES_REF, 0, "群組：", nf.newsgroup, /*  sizeof(nf.newsgroup) */ 70, GCARRY))
     {
         if (!vget(B_LINES_REF, 0, "字集 [big5]：", nf.charset, sizeof(nf.charset), GCARRY))
-            str_ncpy(nf.charset, "big5", sizeof(nf.charset));
+            str_scpy(nf.charset, "big5", sizeof(nf.charset));
         nf.xmode = (vans("是否轉進(Y/n)？[Y] ") == 'n') ? INN_NOINCOME : 0;
 
         if (vans("是否更改轉信的 high-number 設定，這設定對被餵信的群組無效(y/N)？[N] ") == 'y')
@@ -283,17 +289,17 @@ nf_cmp(
     const void *a, const void *b)
 {
     /* path/newsgroup 交叉比對 */
-    int k = str_cmp(((const newsfeeds_t *)a) -> path, ((const newsfeeds_t *)b) -> path);
-    return k ? k : str_cmp(((const newsfeeds_t *)a) -> newsgroup, ((const newsfeeds_t *)b) -> newsgroup);
+    int k = str_casecmp(((const newsfeeds_t *)a) -> path, ((const newsfeeds_t *)b) -> path);
+    return k ? k : str_casecmp(((const newsfeeds_t *)a) -> newsgroup, ((const newsfeeds_t *)b) -> newsgroup);
 }
 
 
-static int
+static bool
 nf_search(
     const void *nf,
     const char *key)
 {
-    return (int) (str_str(((const newsfeeds_t *)nf) -> newsgroup, key) || str_str(((const newsfeeds_t *)nf) -> board, key));
+    return str_casestr(((const newsfeeds_t *)nf) -> newsgroup, key) || str_casestr(((const newsfeeds_t *)nf) -> board, key);
 }
 
 
@@ -302,14 +308,16 @@ nf_search(
 /* ----------------------------------------------------- */
 
 
-static void
+static int
 ncm_item(
-    int num,
-    const void *ncm_obj)
+    XO *xo,
+    int pos)
 {
-    const ncmperm_t *ncm = (const ncmperm_t *)ncm_obj;
+    const ncmperm_t *ncm = (const ncmperm_t *)xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d %-*.*s%-23.23s %s\n", num,
         d_cols + 46, d_cols + 46, ncm->issuer, ncm->type, ncm->perm ? "○" : "╳");
+    return XO_NONE;
 }
 
 
@@ -361,17 +369,17 @@ ncm_cmp(
     const void *a, const void *b)
 {
     /* issuer/type 交叉比對 */
-    int k = str_cmp(((const ncmperm_t *)a) -> issuer, ((const ncmperm_t *)b) -> issuer);
-    return k ? k : str_cmp(((const ncmperm_t *)a) -> type, ((const ncmperm_t *)b) -> type);
+    int k = str_casecmp(((const ncmperm_t *)a) -> issuer, ((const ncmperm_t *)b) -> issuer);
+    return k ? k : str_casecmp(((const ncmperm_t *)a) -> type, ((const ncmperm_t *)b) -> type);
 }
 
 
-static int
+static bool
 ncm_search(
     const void *ncm,
     const char *key)
 {
-    return (int) (str_str(((const ncmperm_t *)ncm) -> issuer, key) || str_str(((const ncmperm_t *)ncm) -> type, key));
+    return str_casestr(((const ncmperm_t *)ncm) -> issuer, key) || str_casestr(((const ncmperm_t *)ncm) -> type, key);
 }
 
 
@@ -404,19 +412,23 @@ spam_compare(
 }
 
 
-static void
+static int
 spam_item(
-    int num,
-    const void *spam_obj)
+    XO *xo,
+    int pos)
 {
-    const spamrule_t *spam = (const spamrule_t *)spam_obj;
+    const spamrule_t *spam = (const spamrule_t *)xo_pool_base + pos;
+    const int num = pos + 1;
+
     const char *path, *board;
 
     path = spam->path;
     board = spam->board;
-    prints("%6d %-13s%-13s[%s] 包含 %.*s\n",
-        num, *path ? path : "所有站台", *board ? board : "所有看板",
+    prints("%6d %-13s%-*s [%s] 包含 %.*s\n",
+        num, *path ? path : "所有站台", IDLEN, *board ? board : "所有看板",
         spam_compare(spam->xmode), d_cols + 31, spam->detail);
+
+    return XO_NONE;
 }
 
 
@@ -507,16 +519,16 @@ spam_cmp(
     int i = strcmp(x->path, y->path);
     int j = strcmp(x->board, y->board);
     int k = x->xmode - y->xmode;
-    return i ? i : j ? j : k ? k : str_cmp(x->detail, y->detail);
+    return i ? i : j ? j : k ? k : str_casecmp(x->detail, y->detail);
 }
 
 
-static int
+static bool
 spam_search(
     const void *spam,
     const char *key)
 {
-    return (int) (str_str(((const spamrule_t *)spam) -> detail, key));
+    return str_casestr(((const spamrule_t *)spam) -> detail, key);
 }
 
 
@@ -536,13 +548,12 @@ innbbs_foot(
 
 static int
 innbbs_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    InnbbsXyz *const xyz = (InnbbsXyz *)xo->xyz;
-    const char *const rec = xo_pool_base + xo->pos * xo->recsiz;
-    move(3 + xo->pos - xo->top, 0);
-    xyz->item_func(xo->pos + 1, rec);
-    return XO_NONE;
+    InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
+    move(3 + pos - xo->top, 0);
+    return xyz->item_func(xo, pos);
 }
 
 static int
@@ -550,33 +561,26 @@ innbbs_body(
     XO *xo)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
-    const char *rec;
     int num, max, tail;
+
+    move(3, 0);
 
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎？(y/N) [N] ") == 'y')
-        {
-            if (xyz->add_func(xo->dir, NULL, -1))
-            {
-                xyz->dirty = true;
-                return XO_INIT;
-            }
-        }
-        return XO_QUIT;
+        outs("\n《轉信設定》目前沒有資料\n");
+        outs("\n  (^P)新增資料\n");
+        clrtobot();
+        return innbbs_foot(xo);
     }
 
     num = xo->top;
-    rec = xo_pool_base + xo->top * xo->recsiz;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
-        xyz->item_func(++num, rec);
-        rec += xo->recsiz;
+        xyz->item_func(xo, num++);
     } while (num < max);
 
     clrtobot();
@@ -610,10 +614,11 @@ innbbs_load(
 
 static int
 innbbs_query(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
-    xyz->query_func(xo_pool_base + xo->pos * xo->recsiz);
+    xyz->query_func(xo_pool_base + pos * xo->recsiz);
     return XO_BODY;
 }
 
@@ -632,12 +637,13 @@ innbbs_add(
 
 static int
 innbbs_del(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
     if (vans(msg_del_ny) == 'y')
     {
-        rec_del(xo->dir, xo->recsiz, xo->pos, NULL, NULL);
+        rec_del(xo->dir, xo->recsiz, pos, NULL, NULL);
         xyz->dirty = true;
         return XO_LOAD;
     }
@@ -646,10 +652,11 @@ innbbs_del(
 
 static int
 innbbs_edit(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
-    if (xyz->add_func(xo->dir, xo_pool_base + xo->pos * xo->recsiz, xo->pos))
+    if (xyz->add_func(xo->dir, xo_pool_base + pos * xo->recsiz, pos))
     {
         xyz->dirty = true;
         return XO_INIT;
@@ -659,7 +666,8 @@ innbbs_edit(
 
 static int
 innbbs_search(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
     char buf[40];
@@ -668,7 +676,7 @@ innbbs_search(
     if (vget(B_LINES_REF, 0, "關鍵字：", buf, sizeof(buf), DOECHO))
     {
         str_lower(buf, buf);
-        for (i = xo->pos + 1; i <= num; i++)
+        for (i = pos + 1; i <= num; i++)
         {
             if (xyz->search_func(xo_pool_base + i * xo->recsiz, buf))
             {
@@ -694,17 +702,17 @@ static KeyFuncList innbbs_cb =
     {XO_HEAD, {innbbs_head}},
     {XO_BODY, {innbbs_body}},
     {XO_FOOT, {innbbs_foot}},
-    {XO_CUR, {innbbs_cur}},
+    {XO_CUR | XO_POSF, {.posf = innbbs_cur}},
 
 
-    {' ', {innbbs_query}},
-    {'r', {innbbs_query}},
+    {' ' | XO_POSF, {.posf = innbbs_query}},
+    {'r' | XO_POSF, {.posf = innbbs_query}},
 
     {Ctrl('P'), {innbbs_add}},
-    {'d', {innbbs_del}},
-    {'E', {innbbs_edit}},
+    {'d' | XO_POSF, {.posf = innbbs_del}},
+    {'E' | XO_POSF, {.posf = innbbs_edit}},
 
-    {'/', {innbbs_search}},
+    {'/' | XO_POSF, {.posf = innbbs_search}},
 
     {'h', {innbbs_help}}
 };
@@ -718,7 +726,7 @@ a_innbbs(void)
     const char *fpath;
     int recsiz;
 
-    if (!check_admin(cuser.userid) && str_cmp(cuser.userid, SYSOPNAME))
+    if (!check_admin(cuser.userid) && str_casecmp(cuser.userid, SYSOPNAME))
     {
         vmsg("◎ 你不是系統管理員！");
         return DL_RELEASE(0);

@@ -13,29 +13,30 @@
 static void contact_send(CONTACT *contact);
 static int contact_add(XO *xo);
 
-static void
+static int
 contact_item(
-int num,
-const CONTACT *contact)
+XO *xo,
+int pos)
 {
-    prints("%6d     %-13s      %-*s\n", num, contact->name, d_cols + 49, contact->email);
+    const CONTACT *const contact = (const CONTACT *) xo_pool_base + pos;
+    const int num = pos + 1;
+    prints("%6d     %-*s       %-*s\n", num, IDLEN, contact->name, d_cols + 49, contact->email);
+    return XO_NONE;
 }
 
 static int
 contact_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const CONTACT *const contact = (const CONTACT *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    contact_item(xo->pos + 1, contact);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return contact_item(xo, pos);
 }
 
 static int
 contact_body(
 XO *xo)
 {
-    const CONTACT *contact;
     int num, max, tail;
 
     move(3, 0);
@@ -43,19 +44,18 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-            return contact_add(xo);
-        return XO_QUIT;
+        outs("\n《聯絡名單》目前沒有資料\n");
+        outs("\n  (^P)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    contact = (const CONTACT *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        contact_item(++num, contact++);
+        contact_item(xo, num++);
     }
     while (num < max);
 
@@ -124,12 +124,13 @@ XO *xo)
 
 static int
 contact_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(CONTACT), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(CONTACT), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -140,13 +141,11 @@ XO *xo)
 
 static int
 contact_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     CONTACT *contact, mate;
-    int pos, cur;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     contact = (CONTACT *) xo_pool_base + pos;
 
     mate = *contact;
@@ -171,13 +170,11 @@ XO *xo)
 
 static int
 contact_mail(
-XO *xo)
+XO *xo,
+int pos)
 {
-    int pos, cur;
     CONTACT *contact;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     contact = (CONTACT *) xo_pool_base + pos;
     contact_send(contact);
     return XO_INIT;
@@ -197,7 +194,7 @@ CONTACT *contact)
         vmsg("E-mail 不正確!!");
     else if (HAS_PERM(PERM_DENYMAIL))
         vmsg("你的信箱被鎖!!");
-    else if (vget(21, 0, "主  題：", ve_title, TTLEN, DOECHO))
+    else if (vget(21, 0, "主  題：", ve_title, TTLEN + 1, DOECHO))
     {
         const char *msg;
         switch (mail_send(contact->email, ve_title))
@@ -229,14 +226,14 @@ KeyFuncList contact_cb =
     {XO_LOAD, {contact_load}},
     {XO_HEAD, {contact_head}},
     {XO_BODY, {contact_body}},
-    {XO_CUR, {contact_cur}},
+    {XO_CUR | XO_POSF, {.posf = contact_cur}},
 
     {Ctrl('P'), {contact_add}},
-    {'m', {contact_mail}},
-    {'r', {contact_mail}},
-    {'c', {contact_change}},
+    {'m' | XO_POSF, {.posf = contact_mail}},
+    {'r' | XO_POSF, {.posf = contact_mail}},
+    {'c' | XO_POSF, {.posf = contact_change}},
     {'s', {xo_cb_init}},
-    {'d', {contact_delete}},
+    {'d' | XO_POSF, {.posf = contact_delete}},
     {'h', {contact_help}}
 };
 

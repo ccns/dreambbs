@@ -120,7 +120,7 @@ article_parse(
 
     if (strchr(ptr, '@'))
     {
-        str_from(ptr, hdr.owner, hdr.nick);
+        from_parse(ptr, hdr.owner, hdr.nick);
         hdr.xmode |= POST_INCOME;   /* also MAIL_INCOME */
     }
     else
@@ -153,7 +153,7 @@ article_parse(
     /* part of hdr.xmode */
 
 #if 0
-    if (strncmp("¡° Origin: " BOARDNAME, buf, 11 + sizeof(BOARDNAME) - 1) == 0)
+    if (strncmp("¡° Origin: " BOARDNAME, buf, 11 + STRLITLEN(BOARDNAME)) == 0)
 #endif
     if (!(hdr.xmode & POST_INCOME))
     {             /* inside maple */
@@ -239,7 +239,7 @@ int main(int argc, char *argv[])
                     {
                         /* fill in chrono/date/xmode/xid/xname */
                         hdr->chrono = chrono32(n_pool[ch]);
-                        str_stamp(hdr->date, &hdr->chrono);
+                        str_stamp_any(hdr->date, &hdr->chrono);
                         strcpy(hdr->xname, n_pool[ch]);
                         hdr->xid = 0;
                         if (n_pool[ch][0] == 'F')
@@ -291,7 +291,7 @@ int main(int argc, char *argv[])
                     {
                         /* fill in chrono/date/xid/xname */
                         hdr->chrono = chrono32(n_pool[ch]);
-                        str_stamp(hdr->date, &hdr->chrono);
+                        str_stamp_any(hdr->date, &hdr->chrono);
                         strcpy(hdr->xname, n_pool[ch]);
                         hdr->xid = 0;
 

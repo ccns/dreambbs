@@ -69,7 +69,7 @@ mirror(
             return;
 
         ptr[size] = '\0';
-        size = str_rle(ptr);
+        size = rle_encode(ptr);
 
         if (size > 0 && size < FILM_SIZ)
         {
@@ -90,7 +90,7 @@ play(
     if (number >= MOVIE_MAX -1)
         return 1;
 
-    /* str_rle(data); */
+    /* rle_encode(data); */
     /* Thor.980804: 等算完最後再來壓縮, 不然壓縮碼也被視作換行或行數不夠了 */
 
     head = data;
@@ -121,7 +121,7 @@ play(
 
     /* ch = data - head; */             /* length */
 
-    ch = str_rle(head) + 1; /* Thor.980804: +1 將結尾的0也算入 */
+    ch = rle_encode(head) + 1; /* Thor.980804: +1 將結尾的0也算入 */
 
     line = tail + ch;
     if (line >= MOVIE_SIZE)
@@ -232,6 +232,7 @@ main(
                 if ((fd = open(fpath, O_RDONLY)) >= 0)
                 {
                     /* 讀入檔案 */
+                    char *ptr_buf;
 
                     size = read(fd, buf, FILM_SIZ);
                     close(fd);
@@ -240,23 +241,23 @@ main(
                         continue;
 
                     buf[size] = '\0';
-                    ptr = buf;
+                    ptr_buf = buf;
 
 #ifdef  HAVE_SONG_TO_CAMERA
                     if (j == 1 /*&& !strncmp(buf, str_author1, strlen(str_author1))*/)
                     {
-                        for (k=0; k<=3 && ptr; k++)
+                        for (k=0; k<=3 && ptr_buf; k++)
                         {
-                            ptr = strchr(ptr, '\n');
-                            if (ptr)
-                                ptr++;
+                            ptr_buf = strchr(ptr_buf, '\n');
+                            if (ptr_buf)
+                                ptr_buf++;
                         }
-                        if (!ptr)
+                        if (!ptr_buf)
                             continue;
                     }
 #endif
 
-                    if (play(ptr))      /* overflow */
+                    if (play(ptr_buf))  /* overflow */
                         break;
                     if (++i >= MOVIE_MAX) /* Thor.980804: 為什麼不乾脆用 number算了?:P */
                         break;
@@ -294,7 +295,8 @@ main(
     /* resolve shared memory                               */
     /* --------------------------------------------------- */
 
-    fshm = (FCACHE *) shm_new(FILMSHM_KEY, sizeof(FCACHE));
+    shm_logger_init(NULL);
+    fshm_init(&fshm);
     memcpy(fshm, &image, sizeof(image.shot) + tail);
     /* Thor.980805: 再加上 shot的部分 */
     image.shot[0] = fshm->shot[0] = i;  /* 總共有幾片 ? */

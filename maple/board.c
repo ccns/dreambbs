@@ -8,8 +8,8 @@
 
 #include "bbs.h"
 
-static int *brh_base;           /* allocated memory */
-static int *brh_tail;           /* allocated memory */
+static time32_t *brh_base;      /* allocated memory */
+static time32_t *brh_tail;      /* allocated memory */
 static int brh_size;            /* allocated memory size */
 static time_t brh_expire;
 
@@ -25,12 +25,13 @@ static XO board_xo;
 BRD *xbrd;
 int boardmode=0;
 
-static int *
+static time32_t *
 brh_alloc(
-    int *tail,
+    time32_t *tail,
     int size)
 {
-    int *base, n;
+    time32_t *base;
+    int n;
 
     base = brh_base;
     n = (char *) tail - (char *) base;
@@ -39,14 +40,14 @@ brh_alloc(
     {
         /* size = (size & -BRH_PAGE) + BRH_PAGE; */
         size += n >> 4;         /* 多預約一些記憶體 */
-        base = (int *) realloc((char *) base, size);
+        base = (time32_t *) realloc((char *) base, size);
 
         if (base == NULL)
             abort_bbs();
 
         brh_base = base;
         brh_size = size;
-        tail = (int *) ((char *) base + n);
+        tail = (time32_t *) ((char *) base + n);
     }
 
     return tail;
@@ -56,7 +57,7 @@ brh_alloc(
 static void
 brh_put(void)
 {
-    int *list;
+    time32_t *list;
 
     /* compact the history list */
 
@@ -64,11 +65,13 @@ brh_put(void)
 
     if (*list)
     {
-        int *head, *tail, n, item, chrono;
+        time32_t *head, *tail;
+        int n;
+        time_t item, chrono;
 
         n = *++list;   /* Thor.980904: 正讀時是bhno */
         brd_bits[n] |= BRD_H_BIT;
-        time((time_t *) list);    /* Thor.980904: 註解: bvisit time */
+        time32(list);  /* Thor.980904: 註解: bvisit time */
 
         item = *++list;
         head = ++list;
@@ -102,8 +105,9 @@ brh_get(
     time_t bstamp,              /* board stamp */
     int bhno)
 {
-    int *head, *tail;
-    int size, bcnt, item;
+    time32_t *head, *tail;
+    time_t item;
+    int size, bcnt;
     char buf[BRH_WINDOW];
 
     if (bstamp == *brh_tail) /* Thor.980904:註解:該版已在 brh_tail上 */
@@ -120,18 +124,18 @@ brh_get(
         while (head < tail)
         {
             item = head[2];
-            size = item * sizeof(time_t) + sizeof(BRH);
+            size = item * sizeof(time32_t) + sizeof(BRH);
 
             if (bstamp == *head)
             {
                 bcnt = item;
                 memcpy(buf, head + 3, size - sizeof(BRH));
-                tail = (int *) ((char *) tail - size);
+                tail = (time32_t *) ((char *) tail - size);
                 if ((item = (char *) tail - (char *) head))
                     memmove(head, (char *) head + size, item);
                 break;
             }
-            head = (int *) ((char *) head + size);
+            head = (time32_t *) ((char *) head + size);
         }
     }
 
@@ -142,11 +146,11 @@ brh_get(
 
     if (bcnt)                   /* expand history list */
     {
-        int *list;
+        time32_t *list;
 
         size = bcnt;
         list = tail;
-        head = (int *) buf;
+        head = (time32_t *) buf;
 
         do
         {
@@ -173,8 +177,8 @@ GCC_PURE int
 brh_unread(
     time_t chrono)
 {
-    const int *head, *tail;
-    int item;
+    const time32_t *head, *tail;
+    time_t item;
 
     if (chrono <= brh_expire)
         return 0;
@@ -205,9 +209,9 @@ void
 brh_visit(
     int mode)                   /* 0 : visit, 1: un-visit */
 {
-    int *list;
+    time32_t *list;
 
-    list = (int *) brh_tail + 2;
+    list = brh_tail + 2;
     *list++ = 2;
     if (mode)
     {
@@ -215,7 +219,7 @@ brh_visit(
     }
     else
     {
-        time((time_t *)list);
+        time32(list);
     }
     *++list = mode;
 }
@@ -223,7 +227,8 @@ brh_visit(
 void
 brh_add(time_t prev, time_t chrono, time_t next)
 {
-    int *base, *head, *tail, item, final, begin;
+    time32_t *base, *head, *tail;
+    time_t item, final, begin;
 
     head = base = brh_tail + 2;
     item = *head++;
@@ -354,25 +359,7 @@ GCC_PURE static inline bool
 is_bm(
     const char *list)                 /* 板主：BM list */
 {
-    int cc, len;
-    const char *userid;
-
-    len = strlen(userid = cuser.userid);
-    do
-    {
-        cc = list[len];
-        if ((!cc || cc == '/') && !str_ncmp(list, userid, len))
-        {
-            return true;
-        }
-        while ((cc = *list++))
-        {
-            if (cc == '/')
-                break;
-        }
-    } while (cc);
-
-    return false;
+    return str_has(list, cuser.userid);
 }
 
 #if     defined(HAVE_RESIST_WATER) || defined(HAVE_DETECT_CROSSPOST)
@@ -397,7 +384,7 @@ Ben_Perm(
     if (!*bname)
         return 0;
 
-    if (!str_cmp(bname, DEFAULT_BOARD))
+    if (!str_casecmp(bname, DEFAULT_BOARD))
     {
 #ifdef  HAVE_MODERATED_BOARD
 #if defined(HAVE_WATER_LIST) && defined(HAVE_SYSOP_WATERLIST)
@@ -461,7 +448,7 @@ Ben_Perm(
     if (ulevel & PERM_ALLBOARD)
         bits |= (BRD_W_BIT | BRD_X_BIT);
 #endif
-    if (!str_cmp(cuser.userid, ELDER))
+    if (!str_casecmp(cuser.userid, ELDER))
         bits = BRD_R_BIT | BRD_W_BIT | BRD_X_BIT;
 
     return bits;
@@ -500,7 +487,8 @@ brh_load(void)
     int n, cbno GCC_UNUSED;
     char *bits;
 
-    int size, *base;
+    int size;
+    time32_t *base;
     time_t expire, *bstp;
     char fpath[64];
 
@@ -549,11 +537,12 @@ brh_load(void)
 
 
     brh_size = n = size + BRH_WINDOW;
-    brh_base = base = (int *) malloc(n);
+    brh_base = base = (time32_t *) malloc(n);
 
     if (size && ((n = open(fpath, O_RDONLY)) >= 0))
     {
-        int *head, *tail, *list, bstamp, bhno;
+        time32_t *head, *tail, *list;
+        time_t bstamp, bhno;
 
         size = read(n, base, size);
         close(n);
@@ -562,7 +551,7 @@ brh_load(void)
         /* compact reading history : remove dummy/expired record */
 
         head = base;
-        tail = (int *) ((char *) base + size);
+        tail = (time32_t *) ((char *) base + size);
         bits = brd_bits;
         while (head < tail && head >= brh_base)
         {
@@ -639,10 +628,10 @@ brh_load(void)
                     head[2] = n;
                 }
 
-                n = n * sizeof(time_t) + sizeof(BRH);
+                n = n * sizeof(time32_t) + sizeof(BRH);
                 if (base != head)
                     memmove(base, head, n);
-                base = (int *) ((char *) base + n);
+                base = (time32_t *) ((char *) base + n);
             }
             head += size;
         }
@@ -668,7 +657,9 @@ brh_load(void)
 void
 brh_save(void)
 {
-    int *base, *head, *tail, bhno, size;
+    time32_t *base, *head, *tail;
+    time_t bhno;
+    int size;
     BRD *bhdr, *bend;
     char *bits;
 
@@ -690,19 +681,19 @@ brh_save(void)
     while (head < tail)
     {
         bhno = bstamp2bno(*head);
-        size = head[2] * sizeof(time_t) + sizeof(BRH);
+        size = head[2] * sizeof(time32_t) + sizeof(BRH);
         if (bhno >= 0 && !(bits[bhno] & BRD_Z_BIT))
         {
             if (base != head)
                 memmove(base, head, size);
-            base = (int *) ((char *) base + size);
+            base = (time32_t *) ((char *) base + size);
         }
-        head = (int *) ((char *) head + size);
+        head = (time32_t *) ((char *) head + size);
     }
 
     /* save zap record */
 
-    tail = brh_alloc(base, sizeof(time_t) * MAXBOARD);
+    tail = brh_alloc(base, sizeof(time32_t) * MAXBOARD);
 
     bhdr = bshm->bcache;
     bend = bhdr + bshm->number;
@@ -920,7 +911,7 @@ class_check(
 
     chead = cbase + chn;
 
-    pos = chead[0] + CH_TTLEN;
+    pos = chead[0] + CH_TTSIZE;
     max = chead[1];
 
     chead = (short *) ((char *) cbase + pos);
@@ -1015,7 +1006,7 @@ class_load(
 
     chead = cbase + chn;
 
-    pos = chead[0] + CH_TTLEN;
+    pos = chead[0] + CH_TTSIZE;
     max = chead[1];
 
     chead = (short *) ((char *) cbase + pos);
@@ -1125,7 +1116,10 @@ board_outs(
                     brd->blast = (brdnew) ? BMAX(hdr.chrono, brd->blast) : hdr.chrono;
                 }
                 else
-                    brd->blast = brd->bpost = 0;
+                {
+                    brd->blast = 0;
+                    brd->bpost = 0;
+                }
             }
 
             close(fd);
@@ -1200,14 +1194,15 @@ board_outs(
     else
         str2 = "     ";
 //注意有三格空白, 因為 HOT 是三個 char 故更改排版
-//      prints("\x1b[%d;4%d;37m%6d%s%s%c%-13s\x1b[%sm%-4s %s%-33.32s%s%s%.13s", mode, mode?cuser.barcolor:0, num, str, mode ? "\x1b[37m" : "\x1b[m",
-//          brdtype, brd->brdname, buf, brd->class_, mode ? "\x1b[37m" : "\x1b[m", brd->title, brd->bvote ? "\x1b[1;33m  投 " : str2, mode ? "\x1b[37m" : "\x1b[m", brd->BM);
+//      prints("\x1b[%d;4%d;37m%6d%s%s%c%-*s \x1b[%sm%-4s %s%-33.32s%s%s%.13s", mode, mode?cuser.barcolor:0, num, str, mode ? "\x1b[37m" : "\x1b[m",
 
     sprintf(buf, "%d;3%d", (!brd->color) ? 1 : HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR) ? 0 : brd->color/10, brd->color%10);
-//      prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-36s%c %.13s", num, str,
-//      prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%s%c %.13s", num, str,
+//      prints("%6d%s%c%-*s \x1b[%sm%-4s \x1b[m%-36s%c %.13s", num, str,
+//      prints("%6d%s%c%-*s \x1b[%sm%-4s \x1b[m%s%c %.13s", num, str,
 
-    prints("%6d%s%c%-13s\x1b[%sm%-4s \x1b[m%-*s%s", num, str, brdtype, brd->brdname, buf, brd->class_, d_cols + 33, tmp, str2);
+//          brdtype, IDLEN, brd->brdname, buf, brd->class_, mode ? "\x1b[37m" : "\x1b[m", brd->title, brd->bvote ? "\x1b[1;33m  投 " : str2, mode ? "\x1b[37m" : "\x1b[m", brd->BM);
+
+    prints("%6d%s%c%-*s \x1b[%sm%-4s \x1b[m%-*s%s", num, str, brdtype, IDLEN, brd->brdname, buf, brd->class_, d_cols + 33, tmp, str2);
 
     strcpy(tmp, brd->BM);
     if (IS_DBCS_HI(tmp[14]))
@@ -1223,14 +1218,16 @@ class_outs(
     const char *title,
     int num)
 {
-    prints("%6d   %-13.13s    %.*s\n", num, title, d_cols + 53, title + 13);
+    prints("%6d   %-*.*s     %.*s\n", num, IDLEN, IDLEN, title, d_cols + 53, title + IDLEN + 1);
 }
 
-static void
+static int
 class_item(
-    int num,
-    int chn)
+    XO *xo,
+    int pos)
 {
+    const short chn = ((short *) xo->xyz)[pos];
+    const int num = pos + 1;
 
     if (chn >= 0)
         board_outs(chn, num);
@@ -1256,15 +1253,17 @@ class_item(
         chx = (short *) img + (CH_END - chn);
         class_outs(img + *chx, num);
     }
+
+    return XO_NONE;
 }
 
 static int
 class_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    short *const chp = (short *) xo->xyz + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    class_item(xo->pos + 1, *chp);
+    move(3 + pos - xo->top, 0);
+    class_item(xo, pos);
     return XO_NONE;
 }
 
@@ -1273,8 +1272,9 @@ static int
 class_body(
     XO *xo)
 {
-    short *chp;
     int num, max, tail;
+
+    move(3, 0);
 
     max = xo->max;
     if (max <= 0)
@@ -1292,20 +1292,20 @@ class_body(
         }
         if (!ret)
         {
-            return XO_QUIT;
+            outs("\n《看板列表》目前沒有資料\n");
+            clrtobot();
+            return XO_NONE;
         }
         return XO_BODY;
     }
 
-    chp = (short *) xo->xyz + xo->top;
     num = xo->top;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
-        class_item(++num, *chp++);
+        class_item(xo, num++);
     } while (num < max);
 
     clrtobot();
@@ -1350,9 +1350,10 @@ class_help(
 
 static int
 class_search(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    int num, pos, max;
+    int num, max;
     char *ptr;
     char buf[IDLEN + 1];
 
@@ -1369,7 +1370,7 @@ class_search(
         bcache = bshm->bcache;
 
         str_lower(ptr, ptr);
-        pos = num = xo->pos;
+        num = pos;
         max = xo->max;
         chp = (short *) xo->xyz;
         do
@@ -1380,7 +1381,7 @@ class_search(
             if (chn >= 0)
             {
                 brd = bcache + chn;
-                if (str_str(brd->brdname, ptr) || str_str(brd->title, ptr))
+                if (str_casestr(brd->brdname, ptr) || str_casestr(brd->title, ptr))
                     return XO_MOVE + pos;
             }
         } while (pos != num);
@@ -1432,13 +1433,14 @@ class_yank(
 
 static int
 class_zap(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     BRD *brd;
     short *chp;
     int num, chn;
 
-    num = xo->pos;
+    num = pos;
     chp = (short *) xo->xyz + num;
     chn = *chp;
     if (chn >= 0)
@@ -1457,7 +1459,8 @@ class_zap(
 
 static int
 class_edit(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     /* if (HAS_PERM(PERM_ALLBOARD)) */
     /* Thor.990119: 只有站長可以修改 */
@@ -1466,7 +1469,7 @@ class_edit(
         short *chp;
         int chn;
 
-        chp = (short *) xo->xyz + xo->pos;
+        chp = (short *) xo->xyz + pos;
         chn = *chp;
         if (chn >= 0)
         {
@@ -1574,9 +1577,9 @@ XoAuthor(
                 if (tail->xmode & (POST_CANCEL | POST_DELETE | POST_MDELETE | POST_LOCK))
                     continue;
 
-                /* if (str_str(temp, author)) *//* Thor.0818:希望比較快 */
+                /* if (str_casestr(temp, author)) *//* Thor.0818:希望比較快 */
 
-                if (!str_ncmp(tail->owner, author, len))
+                if (!str_ncasecmp(tail->owner, author, len))
                 {
                     XO *xt = xo_get(folder);
                     xt->pos = tail - head;
@@ -1621,15 +1624,16 @@ XoAuthor(
 
 #if defined(HAVE_COUNT_BOARD) && 0
 static int
-class_stat(xo)
-    XO *xo;
+class_stat(
+    XO *xo,
+    int pos)
 {
     BRD *brd;
     short *chp;
     int num, chn;
     char msg[80];
 
-    num = xo->pos;
+    num = pos;
     chp = (short *) xo->xyz + num;
     chn = *chp;
     if (chn >= 0)
@@ -1645,12 +1649,13 @@ class_stat(xo)
 
 static int
 class_visit(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     short *chp;
     int chn;
 
-    chp = (short *) xo->xyz + xo->pos;
+    chp = (short *) xo->xyz + pos;
     chn = *chp;
     if (chn >= 0)
     {
@@ -1663,7 +1668,7 @@ class_visit(
     return XO_BODY;
 }
 
-static int class_browse(XO *xo);
+static int class_browse(XO *xo, int pos);
 
 static KeyFuncList class_cb =
 {
@@ -1672,25 +1677,25 @@ static KeyFuncList class_cb =
     {XO_HEAD, {class_head}},
     {XO_NECK, {class_neck}},
     {XO_BODY, {class_body}},
-    {XO_CUR, {class_cur}},
+    {XO_CUR | XO_POSF, {.posf = class_cur}},
 
-    {'r', {class_browse}},
-    {'/', {class_search}},
+    {'r' | XO_POSF, {.posf = class_browse}},
+    {'/' | XO_POSF, {.posf = class_search}},
     {'c', {class_newmode}},
 
     {'s', {class_switch}},
 
     {'y', {class_yank}},
     {'i', {class_yank2}}, //列出所有有閱讀權限的秘密/好友看板
-    {'z', {class_zap}},
-    {'E', {class_edit}},
-    {'v', {class_visit}},
+    {'z' | XO_POSF, {.posf = class_zap}},
+    {'E' | XO_POSF, {.posf = class_edit}},
+    {'v' | XO_POSF, {.posf = class_visit}},
 #ifdef  HAVE_COUNT_BOARD
-    {'S' | XO_DL, {.dlfunc = DL_NAME("brdstat.so", main_bstat)}},
+    {'S' | XO_POSF | XO_DL, {.dlposf = DL_NAME("brdstat.so", main_bstat)}},
 #endif
 
 #ifdef  HAVE_FAVORITE
-    {'a', {class_add}},
+    {'a' | XO_POSF, {.posf = class_add}},
 #endif
 
 #ifdef AUTHOR_EXTRACTION
@@ -1746,12 +1751,13 @@ XoClass(
 
 static int
 class_browse(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     short *chp;
     int chn;
 
-    chp = (short *) xo->xyz + xo->pos;
+    chp = (short *) xo->xyz + pos;
     chn = *chp;
     if (chn < 0)
     {
@@ -1808,11 +1814,12 @@ check_new(
             {
                 brd->bpost = fsize / sizeof(HDR);
                 lseek(fd, fsize - sizeof(HDR), SEEK_SET);
-                read(fd, &brd->blast, sizeof(time_t));
+                read(fd, &brd->blast, sizeof(time32_t));
             }
             else
             {
-                brd->blast = brd->bpost = 0;
+                brd->blast = 0;
+                brd->bpost = 0;
             }
         }
         close(fd);
@@ -2021,8 +2028,8 @@ brd_list(
                     name = brd.brdname;
                     if (!ll_has(name) && (
                             (select == 'b') ||
-                            (select == 'g' && (str_str(brd.brdname, buf) || str_str(brd.title, buf)))||
-                            (select == 'c' && str_str(brd.class_, buf))))
+                            (select == 'g' && (str_casestr(brd.brdname, buf) || str_casestr(brd.title, buf)))||
+                            (select == 'c' && str_casestr(brd.class_, buf))))
                     {
                         ll_add(name);
                         reciper++;

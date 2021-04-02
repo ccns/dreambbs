@@ -3,7 +3,7 @@
 /*-------------------------------------------------------*/
 /* target : site-configurable settings                   */
 /* create : 95/03/29                                     */
-/* update : 106/2/24                                     */
+/* update : 2017/2/24                                    */
 /*-------------------------------------------------------*/
 
 #ifndef CONFIG_H
@@ -35,8 +35,8 @@
 #define MYHOSTNAME      "ccns.cc"                   /* 網路位址 */
 #endif
 
-#define BBSVERNAME      "DreamBBS"                  /* 版本名稱 */
-#define BBSVERSION      "v3.0-CURRENT"              /* 版本編號, 最多 <= 14 字 */
+#define BBSVERNAME      "DreamBBS-202X"             /* 版本名稱 */
+#define BBSVERSION      "v0-Azure"                  /* 版本編號, 最多 <= 14 字 */
 #define BBSVER_SUFFIX   ""                          /* A version string for the path suffix */
 #define BINARY_SUFFIX   "bin" BBSVER_SUFFIX "/"     /* todo: move it to global.h, or merge global.h to here */
 
@@ -176,15 +176,6 @@
 #undef  HAVE_REPORT                    /* 系統追蹤報告 */ /* 尚未完工請勿開啟 */
 
 #define HAVE_RECOMMEND                 /* 推薦文章 */
-
-/* 採用 mmap(): memory mapped I/O */
-/* 在 SunOS、FreeBSD 上可以加速 30 倍 */
-#include <sys/mman.h>
-#ifdef MAP_FILE                 /* 44BSD defines this & requires it to mmap files */
-#  define BBS_MAP       (MAP_SHARED | MAP_FILE)
-#else
-#  define BBS_MAP       (MAP_SHARED)
-#endif
 
 #define HAVE_INPUT_TOOLS        /* 符號輸入工具 */
 
@@ -346,8 +337,6 @@
 #define FORCE_BOARD             BRD_ANNOUNCE  /* statue.000725 */
 #endif
 
-#undef  HAVE_BBSNET             /* 提供 BBSNET */
-
 #define HAVE_COLOR_VMSG         /* 彩色的VMSG */
 
 #define HAVE_POST_BOTTOM        /* 文章置底 */
@@ -484,8 +473,6 @@
 
 #define CNA_MAX         20                /* lkchu.981201: 即時新聞上限 */
 
-#define BBSNETMAX       10                /* BBSNET 最大連線數量 */
-
 /* ----------------------------------------------------- */
 /* chat.c & xchatd.c 中採用的 port 及 protocol           */
 /* ------------------------------------------------------*/
@@ -517,7 +504,6 @@
 #define MAX_CHOICES     32              /* vote.c 投票時最多有 32 種選擇 */
 #define TAG_MAX         256             /* xover.c TagList 標籤數目之上限 */
 #define LINE_HEADER     4               /* more.c bhttpd.c 檔頭有三列 */
-#define IS_DBCS_HI(x)   (x >= 0x80U)
 
 /* 動態看板 & menu 位置 */
 

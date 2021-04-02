@@ -1,7 +1,7 @@
 # -------------------------------------------------------#
 #  so/so.cmake    ( NCKU CCNS WindTop-DreamBBS 3.0 )     #
 # -------------------------------------------------------#
-#  Author: 37586669+IepIweidieng@users.noreply.github.com#
+#  Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    #
 #  Target: Shared libraries for DreamBBS                 #
 #  Create: 2019/11/30                                    #
 # -------------------------------------------------------#

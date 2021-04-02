@@ -105,7 +105,7 @@ void keeplog(const char *fnlog, const char *board, const char *title, int mode  
     {
         fp = fdopen(fd, "w");
         fprintf(fp, "作者: SYSOP (%s)\n標題: %s\n時間: %s\n",
-                SYSOPNICK, title, ctime(&hdr.chrono));
+                SYSOPNICK, title, ctime_any(&hdr.chrono));
         f_suck(fp, fnlog);
         fclose(fp);
         if (mode == 2)
@@ -241,7 +241,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
     )
 {
     const char *desc;
-    char buf[ANSILINELEN];
+    char buf[ANSILINESIZE];
 
     MENU list[41];
 
@@ -278,7 +278,7 @@ int check_admin(const char *name)
     ADMIN admin;
     int pos = 0, fd;
 
-    if (!str_cmp(cuser.userid, ELDER))
+    if (!str_casecmp(cuser.userid, ELDER))
         return 1;
 
     fd = open(FN_ETC_ADMIN_DB, O_RDONLY);
@@ -447,41 +447,22 @@ static void acct_su(const ACCT * u)
 static void bm_list(            /* 顯示 userid 是哪些板的板主 */
                        const char *userid)
 {
-    int len, ch;
-    BRD *bhdr, *tail;
-    char *list;
+    const BRD *bhdr = bshm->bcache;
+    const BRD *const tail = bhdr + bshm->number;
 
-    len = strlen(userid);
     outs("擔任板主：");
-
-    bhdr = bshm->bcache;
-    tail = bhdr + bshm->number;
 
     do
     {
-        list = bhdr->BM;
-        ch = *list;
+        const char *const list = bhdr->BM;
+        const int ch = *list;
         if ((ch > ' ') && (ch < 128))
         {
-            do
+            if (str_has(list, userid))
             {
-                if (!str_ncmp(list, userid, len))
-                {
-                    ch = list[len];
-                    if ((ch == 0) || (ch == '/'))
-                    {
-                        outs(bhdr->brdname);
-                        outc(' ');
-                        break;
-                    }
-                }
-                while ((ch = *list++))
-                {
-                    if (ch == '/')
-                        break;
-                }
+                outs(bhdr->brdname);
+                outc(' ');
             }
-            while (ch);
         }
     }
     while (++bhdr < tail);
@@ -504,7 +485,7 @@ static void perm_log(const ACCT * u, int oldl)
             sprintf(buf, "%s %s %s (%s) by %s\n", u->userid,
                     (u->userlevel & level) ? "■" : "□",
                     perm_tbl[i], Now(), cuser.userid);
-            if (!str_cmp(cuser.userid, ELDER))
+            if (!str_casecmp(cuser.userid, ELDER))
                 pmsg2("板主異動不加入日誌");
             else
                 f_cat(FN_SECURITY, buf);
@@ -538,9 +519,9 @@ void acct_show(const ACCT * u, int adm
            ((adm != 3) && (adm != 4)) ? u->address : "資料保密",
            (adm != 3) ? u->email : "資料保密");
 
-    prints("註冊日期：%s", ctime(&u->firstlogin));
+    prints("註冊日期：%s", ctime_any(&u->firstlogin));
 
-    prints("光臨日期：%s", ctime(&u->lastlogin));
+    prints("光臨日期：%s", ctime_any(&u->lastlogin));
 
     diff = u->staytime / 60;
     prints("上站次數：%d 次 (共 %d 時 %d 分)\n",
@@ -560,7 +541,7 @@ void acct_show(const ACCT * u, int adm
     outs("身分認證：\x1b[32m");
     if (ulevel & PERM_VALID)
     {
-        outs(u->tvalid ? Ctime(&u->tvalid) : "有效期間已過，請重新認證");
+        outs(u->tvalid ? Ctime_any(&u->tvalid) : "有效期間已過，請重新認證");
     }
     else
     {
@@ -575,7 +556,7 @@ void acct_show(const ACCT * u, int adm
             outs("無期徒刑 \x1b[m\n");
         else
         {
-            outs(Ctime(&u->deny));
+            outs(Ctime_any(&u->deny));
             outs("\x1b[m");
             prints("  距今還剩 %ld 天 %ld 時 \n", (u->deny - now) / 86400,
                    (u->deny - now) / 3600 - ((u->deny - now) / 86400) * 24);
@@ -628,7 +609,7 @@ void bm_setup(ACCT * u, int adm)
         outs("此帳號為本站的站長，無法更改權限！");
         goto cleanup;
     }
-    if (!str_cmp(cuser.userid, ELDER))
+    if (!str_casecmp(cuser.userid, ELDER))
         pmsg2("板主異動不加入日誌");
     else
     {
@@ -640,8 +621,8 @@ void bm_setup(ACCT * u, int adm)
             pmsg2("請輸入異動理由");
             goto cleanup;
         }
-        sprintf(tmp, "\n\n%s %-12s 對使用者 %-12s 執行板主異動\n理由: ", Now(),
-                cuser.userid, u->userid);
+        sprintf(tmp, "\n\n%s %-*s 對使用者 %-*s 執行板主異動\n理由: ", Now(),
+                IDLEN, cuser.userid, IDLEN, u->userid);
         f_cat(FN_BLACKSU_LOG, tmp);
         f_cat(FN_BLACKSU_LOG, why);
     }
@@ -957,7 +938,7 @@ int add_deny(ACCT * u, int adm, int cross)
                     check_time ? "上次處罰到期日累加" : "從今天起", cdays);
     }
     fprintf(fp,
-            "\x1b[1;32m※ Origin: \x1b[1;33m%s \x1b[1;37m<%s>\n\x1b[1;31m◆ From: \x1b[1;36m%s\x1b[m\n",
+            "\x1b[1;32m※ Origin: \x1b[1;33m%s \x1b[1;37m<%s>\x1b[m\n\x1b[1;31m◆ From: \x1b[1;36m%s\x1b[m\n",
             BOARDNAME, MYHOSTNAME, MYHOSTNAME);
 
     fclose(fp);
@@ -981,7 +962,7 @@ void acct_setup(ACCT * u, int adm)
 
     int i, num, tmp, mode;
     FILE *flog;
-    char *str, buf[80], pass[PLAINPASSLEN];
+    char *str, buf[80], pass[PLAINPASSSIZE];
     char id[13];
     tmp = 0;
 
@@ -1001,7 +982,7 @@ void acct_setup(ACCT * u, int adm)
     {
         if (supervisor)
         {
-            if (!str_cmp(cuser.userid, ELDER))
+            if (!str_casecmp(cuser.userid, ELDER))
                 pmsg2("查詢動作不加入日誌");
             else
             {
@@ -1014,8 +995,8 @@ void acct_setup(ACCT * u, int adm)
                     goto cleanup;
                 }
                 sprintf(tmp,
-                        "\n\n%s %-12s 對使用者 %-12s 執行查詢動作\n理由: ",
-                        Now(), cuser.userid, u->userid);
+                        "\n\n%s %-*s 對使用者 %-*s 執行查詢動作\n理由: ",
+                        Now(), IDLEN, cuser.userid, IDLEN, u->userid);
                 f_cat(FN_BLACKSU_LOG, tmp);
                 f_cat(FN_BLACKSU_LOG, why);
             }
@@ -1029,7 +1010,7 @@ void acct_setup(ACCT * u, int adm)
         }
         else
         {
-            if (!str_cmp(cuser.userid, ELDER))
+            if (!str_casecmp(cuser.userid, ELDER))
                 pmsg2("查詢動作不加入日誌");
             else
             {
@@ -1042,8 +1023,8 @@ void acct_setup(ACCT * u, int adm)
                     goto cleanup;
                 }
                 sprintf(tmp,
-                        "\n\n%s %-12s 對使用者 %-12s 執行查詢動作\n理由: ",
-                        Now(), cuser.userid, u->userid);
+                        "\n\n%s %-*s 對使用者 %-*s 執行查詢動作\n理由: ",
+                        Now(), IDLEN, cuser.userid, IDLEN, u->userid);
                 f_cat(FN_BLACKSU_LOG, tmp);
                 f_cat(FN_BLACKSU_LOG, why);
             }
@@ -1096,9 +1077,10 @@ void acct_setup(ACCT * u, int adm)
 
                 for (i = 1; i <= num; i++)
                 {
-                    fscanf(flog, "%13s", buf);
-                    acct_load(u, buf);
-                    if (u != NULL)
+                    char fmt[13];
+                    sprintf(fmt, "%%%ds", IDLEN);
+                    fscanf(flog, fmt, buf);
+                    if (acct_load(u, buf) >= 0)
                     {
                         if (strcmp(u->userid, id))
                             tmp = add_deny(u, tmp, 1);
@@ -1153,7 +1135,7 @@ void acct_setup(ACCT * u, int adm)
         for (;;)
         {
             vget(i, 0, "使用者代號(不改請按 Enter)：", str, IDLEN + 1, GCARRY);
-            if (!str_cmp(str, u->userid) || !acct_userno(str))
+            if (!str_casecmp(str, u->userid) || !acct_userno(str))
                 break;
             vmsg("錯誤！已有相同 ID 的使用者");
         }
@@ -1161,8 +1143,8 @@ void acct_setup(ACCT * u, int adm)
     else
     {
         /* pcbug.990813: 新PASSLEN過長, 改成直接寫死 */
-        /*    vget(i, 0, "請確認密碼：", buf, PASSLEN, NOECHO); */
-        vget(i, 0, "請確認密碼：", buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+        /*    vget(i, 0, "請確認密碼：", buf, PASSSIZE, NOECHO); */
+        vget(i, 0, "請確認密碼：", buf, PLAINPASSSIZE, NOECHO | VGET_STEALTH_NOECHO);
         if (chkpasswd(u->passwd, u->passhash, buf))
         {
             vmsg("密碼錯誤");
@@ -1177,26 +1159,26 @@ void acct_setup(ACCT * u, int adm)
         if (vget(++i, 0, "是否使用新式密碼加密(y/N)？[N]", buf, 3, LCECHO) == 'y')
         {
             mode = GENPASSWD_SHA256;
-            num = PLAINPASSLEN;
+            num = PLAINPASSSIZE;
         }
         else
         {
             mode = GENPASSWD_DES;
-            num = OLDPLAINPASSLEN;
+            num = OLDPLAINPASSSIZE;
         }
 
         if (!vget
-            (++i, 0, "設定新密碼(不改請按 Enter)：", buf, /*PASSLEN*/ num,
+            (++i, 0, "設定新密碼(不改請按 Enter)：", buf, /*PASSSIZE*/ num,
              NOECHO | VGET_STEALTH_NOECHO))
             break;
 
         strcpy(pass, buf);
-        vget(i + 1, 0, "檢查新密碼：", buf, /*PASSLEN*/ num, NOECHO | VGET_STEALTH_NOECHO);
+        vget(i + 1, 0, "檢查新密碼：", buf, /*PASSSIZE*/ num, NOECHO | VGET_STEALTH_NOECHO);
         if (!strcmp(buf, pass))
         {
             buf[num-1] = '\0';
-            str_ncpy(x.passwd, str = genpasswd(buf, mode), PASSLEN);
-            str_ncpy(x.passhash, str + PASSLEN, sizeof(x.passhash));
+            str_scpy(x.passwd, str = genpasswd(buf, mode), PASSSIZE);
+            str_scpy(x.passhash, str + PASSSIZE, sizeof(x.passhash));
             i++;
             logitfile(FN_PASS_LOG, cuser.userid, cuser.lasthost);
             break;
@@ -1209,7 +1191,7 @@ void acct_setup(ACCT * u, int adm)
     {
         vget(i, 0, "暱    稱：", str, sizeof(x.username), GCARRY);
     }
-    while (str_len(str) < 1);
+    while (str_len_nospace(str) < 1);
 
     i++;
     str = x.realname;
@@ -1217,7 +1199,7 @@ void acct_setup(ACCT * u, int adm)
     {
         vget(i, 0, "真實姓名：", str, sizeof(x.realname), GCARRY);
     }
-    while (str_len(str) < 4);
+    while (str_len_nospace(str) < 4);
 
     i++;
     str = x.address;
@@ -1225,7 +1207,7 @@ void acct_setup(ACCT * u, int adm)
     {
         vget(i, 0, "居住地址：", str, sizeof(x.address), GCARRY);
     }
-    while (str_len(str) < 8);
+    while (str_len_nospace(str) < 8);
 
     if (adm)
     {
@@ -1240,7 +1222,7 @@ void acct_setup(ACCT * u, int adm)
             vget(++i, 0, "增加有效期限(y/N)：", buf, 2, DOECHO);
             if (buf[0] == 'y' || buf[0] == 'Y')
             {
-                time(&x.tvalid);
+                time32(&x.tvalid);
                 x.userlevel |=
                     (PERM_BASIC | PERM_CHAT | PERM_PAGE | PERM_POST |
                      PERM_VALID);
@@ -1321,7 +1303,7 @@ void acct_setup(ACCT * u, int adm)
 
     if (adm)
     {
-        if (str_cmp(u->userid, x.userid))
+        if (str_casecmp(u->userid, x.userid))
         {                        /* Thor: 980806: 特別注意如果 usr每個字母不在同一partition的話會有問題 */
             char dst[80];
 
@@ -1622,7 +1604,7 @@ int u_addr(void)
                     move(15, 0);
                     clrtobot();
                     vget(15, 0, "請輸入以上所列出之工作站帳號的密碼: ", buf,
-                         PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+                         PLAINPASSSIZE, NOECHO | VGET_STEALTH_NOECHO);
                     move(16, 0);
                     prints("\x1b[5;37m身份確認中...請稍候\x1b[m\n\n");
                     refresh();
@@ -1640,10 +1622,10 @@ int u_addr(void)
 
                         if (cuser.userlevel & PERM_DENYCHAT)
                             cuser.userlevel &= ~PERM_CHAT;
-                        str_ncpy(cuser.vmail, addr, sizeof(cuser.vmail));
+                        str_scpy(cuser.vmail, addr, sizeof(cuser.vmail));
                         sprintf(agent, "pop3認證:%s", addr);
-                        str_ncpy(cuser.justify, agent, sizeof(cuser.justify));
-                        time(&cuser.tvalid);
+                        str_scpy(cuser.justify, agent, sizeof(cuser.justify));
+                        time32(&cuser.tvalid);
                         strcpy(cuser.email, addr);
                         acct_save(&cuser);
                         find_same_email(addr, 2);
@@ -1920,7 +1902,7 @@ int ue_setup(void)
 
 int u_lock(void)
 {
-    char buf[PLAINPASSLEN];
+    char buf[PLAINPASSSIZE];
     char swapmateid[IDLEN + 1] = "";
     const char IdleState[][IDLEN] = {
         "自強觀星",
@@ -1974,7 +1956,7 @@ int u_lock(void)
         check = 0;
         do
         {
-            vget(7, 0, "▲ 請輸入密碼，以解除螢幕鎖定：", buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+            vget(7, 0, "▲ 請輸入密碼，以解除螢幕鎖定：", buf, PLAINPASSSIZE, NOECHO | VGET_STEALTH_NOECHO);
             check = chkpasswd(cuser.passwd, cuser.passhash, buf);
             if (check)
             {
@@ -2058,7 +2040,7 @@ static int m_setbrd(BRD * brd)
     FILE *fp;
     char fpath[80];
 
-    if (!str_cmp(cuser.userid, ELDER))
+    if (!str_casecmp(cuser.userid, ELDER))
         pmsg2("修改動作不加入日誌");
     else
     {
@@ -2070,8 +2052,8 @@ static int m_setbrd(BRD * brd)
             pmsg2("請輸入修改理由");
             return 0;
         }
-        sprintf(tmp, "\n\n%s %-12s 對看板 %-12s 執行修改動作\n理由: ", Now(),
-                cuser.userid, brd->brdname);
+        sprintf(tmp, "\n\n%s %-*s 對看板 %-*s 執行修改動作\n理由: ", Now(),
+                IDLEN, cuser.userid, IDLEN, brd->brdname);
         f_cat(FN_BLACKSU_LOG, tmp);
         f_cat(FN_BLACKSU_LOG, why);
     }
@@ -2236,7 +2218,7 @@ int m_newbrd(void)
     if (vans(msg_sure_ny) != 'y')
         return 0;
 
-    time(&newboard.bstamp);
+    time32(&newboard.bstamp);
     if ((bno = brd_bno("")) >= 0)
     {
         rec_put(FN_BRD, &newboard, sizeof(newboard), bno);
@@ -2258,7 +2240,7 @@ int m_newbrd(void)
     mak_dirs(fpath + 4);
 
     bshm->uptime = 0;            /* force reload of bcache */
-    bshm_init();
+    bshm_init(&bshm);
 
     /* 順便加進 NewBoard */
 
@@ -2484,7 +2466,7 @@ int u_register(void)
         while (fread(&rform, sizeof(RFORM), 1, fn))
         {
             if ((rform.userno == cuser.userno) &&
-                !str_cmp(rform.userid, cuser.userid))
+                !str_casecmp(rform.userid, cuser.userid))
             {
                 fclose(fn);
                 zmsg("您的註冊申請單尚在處理中，請耐心等候");
@@ -2608,7 +2590,7 @@ static int scan_register_form(int fd)
             sprintf(muser.email, "%s.bbs@%s", muser.userid, MYHOSTNAME);
             strcpy(muser.vmail, muser.email);
             sprintf(msg, "reg:%s:%s:%s", rform.phone, rform.career, agent);
-            str_ncpy(muser.justify, msg, sizeof(muser.justify));
+            str_scpy(muser.justify, msg, sizeof(muser.justify));
             /* Thor.980921: 保險起見 */
 
             /* Thor.981022: 手動認證也改認證時間, 每半年會再自動認證一次 */
@@ -3077,8 +3059,8 @@ int u_verify(void)
                 (PERM_VALID | PERM_POST | PERM_PAGE | PERM_CHAT);
             strcpy(cuser.vmail, cuser.email);
             sprintf(buf, "key認證:%s", cuser.email);
-            str_ncpy(cuser.justify, buf, sizeof(cuser.justify));
-            time(&cuser.tvalid);
+            str_scpy(cuser.justify, buf, sizeof(cuser.justify));
+            time32(&cuser.tvalid);
             acct_save(&cuser);
             usr_fpath(buf, cuser.userid, fn_dir);
             hdr_stamp(buf, HDR_LINK, &fhdr, "etc/justified");

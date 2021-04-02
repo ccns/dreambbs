@@ -17,29 +17,30 @@ static int list_add(XO *xo);
 static int mode;
 
 
-static void
+static int
 list_item(
-int num,
-const LIST *list)
+XO *xo,
+int pos)
 {
+    const LIST *const list = (const LIST *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d     %s\n", num, list->userid);
+    return XO_NONE;
 }
 
 static int
 list_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const LIST *const list = (const LIST *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    list_item(xo->pos + 1, list);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return list_item(xo, pos);
 }
 
 static int
 list_body(
 XO *xo)
 {
-    const LIST *list;
     int num, max, tail;
 
     move(3, 0);
@@ -47,19 +48,18 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-            return list_add(xo);
-        return XO_QUIT;
+        outs("\n《群組名單》目前沒有資料\n");
+        outs("\n  (a)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    list = (const LIST *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        list_item(++num, list++);
+        list_item(xo, num++);
     }
     while (num < max);
 
@@ -205,13 +205,14 @@ XO *xo)
 
 static int
 list_search(
-XO *xo)
+XO *xo,
+int pos)
 {
     LIST list;
     int max, cur;
     char buf[IDLEN+1];
 
-    cur=xo->pos;
+    cur=pos;
     max=xo->max;
 
     if (!vget(B_LINES_REF, 0, "關鍵字：", buf, sizeof(buf), DOECHO))
@@ -223,7 +224,7 @@ XO *xo)
     {
         rec_get(xo->dir, &list, sizeof(LIST), cur);
 
-        if (str_str(list.userid, buf))
+        if (str_casestr(list.userid, buf))
         {
             return XR_FOOT + XO_MOVE + cur;
 
@@ -237,12 +238,13 @@ XO *xo)
 
 static int
 list_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(LIST), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(LIST), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -305,7 +307,7 @@ KeyFuncList list_cb =
     {XO_LOAD, {list_load}},
     {XO_HEAD, {list_head}},
     {XO_BODY, {list_body}},
-    {XO_CUR, {list_cur}},
+    {XO_CUR | XO_POSF, {.posf = list_cur}},
 
     {'r', {list_browse}},
     {'T', {list_title}},
@@ -315,9 +317,9 @@ KeyFuncList list_cb =
     {'F', {list_board}},
 #endif
     {'s', {xo_cb_init}},
-    {'d', {list_delete}},
+    {'d' | XO_POSF, {.posf = list_delete}},
     {KEY_TAB, {list_mode}},
-    {'/', {list_search}},
+    {'/' | XO_POSF, {.posf = list_search}},
     {'h', {list_help}}
 };
 

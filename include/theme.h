@@ -10,6 +10,8 @@
 #ifndef THEME_H
 #define THEME_H
 
+#include "cppdef.h"
+
 /* ----------------------------------------------------- */
 /* 暫存區                                                */
 /* ----------------------------------------------------- */
@@ -76,7 +78,7 @@
 
 #define NECKPOST \
                    "  [←]離開 [→]閱\讀 [^P]發表 [b]備忘錄 [d]刪除 [V]投票 [TAB]精華區 [h]說明\n" \
-            COLOR3 "  編號     日 期 作  者       文  章  標  題%*s                                   \x1b[m"
+            COLOR3 "  編號     日 期 作  者       文  章  標  題%*s                  %16s \x1b[m"
 
 #define NECKMAIL \
                    "  [←]離開 [→]讀信 [d]刪除 [R]回信 [s]寄信 [x]轉貼 [y]群組回信 [h]說明\n" \
@@ -105,7 +107,7 @@
             COLOR3 "  編號    日 期 作  者       文  章  標  題%*s                                    \x1b[m"
 
 #define NECK_ULIST "\n" \
-            COLOR3 "  No.  代號         %-*s%-*s   PM %-14s閒置\x1b[m"
+            COLOR3 "  No.  代號         %-*s %-*s PM %-14s閒置\x1b[m"
 
 #define NECK_PAL   "  [←]離開 a)新增 c)修改 d)刪除 m)寄信 s)整理 [/?]搜尋 [q]查詢 [h]elp\n" \
             COLOR3 "  編號    代 號         友       誼%*s                                            \x1b[m"
@@ -170,11 +172,11 @@
             COLOR3 "  編號  日期      時間      工作或行程%*s                                         \x1b[m"
 
 #define NECK_NBRD  "  [←]離開 [→]閱\讀 [^P]發表 [d]刪除 [j]加入連署 [TAB]精華區 [h]elp\n" \
-            COLOR0 "  編號   日 期 舉辦人        看  版  標  題%*s                                    \x1b[m"
+            COLOR0 "  編號   日 期 舉辦人       看  版  標  題%*s                                     \x1b[m"
 
 #define NECK_OBSERVE \
                    "  [←]離開 ^P)新增 c)修改 d)刪除 S)重整 [h]elp\n" \
-            COLOR3 "  編號 使用者ID      說明%*s                                                      \x1b[m"
+            COLOR3 "  編號 使用者ID     說明%*s                                                       \x1b[m"
 
 #define NECK_PERSONAL1 \
                    "  [←]離開 c)修改 d)刪除 s)重整 TAB)中文版名/E-mail O)開板 D)退件 [h]elp\n" \
@@ -220,11 +222,8 @@
     COLOR1 " 交談模式 " COLOR2 " (^A)\x1b[30m對奕模式 \x1b[31m(^B)\x1b[30m象棋模式 \x1b[31m(^C, ^D)\x1b[30m結束交談 \x1b[31m(^Z)\x1b[30m快捷列表 \x1b[31m(^G)\x1b[30m嗶嗶    "
 
 
-#define FOOTER_VEDIT_BIFF \
-               "%s\x1b[m" COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s║%5d:%3d%*s     \x1b[m"
-
 #define FOOTER_VEDIT \
-    COLOR1 "  編輯文章  " COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s║%5d:%3d%*s     \x1b[m"
+               "%s\x1b[m" COLOR2 "  (Ctrl-Z)\x1b[30m 操作說明  \x1b[31m(^w, ^x)\x1b[30m 檔案處理 ║%s│%s│%s║%5d:%3d%*s \x1b[m"
 
 
 /*#define FOOTER_BMW_REPLY \
@@ -261,14 +260,36 @@
 /* 站簽：站台來源簽名                                    */
 /* ----------------------------------------------------- */
 
-#ifndef ORIGIN_TAG
-#define ORIGIN_TAG \
-    "--\n" \
+/* IID.2021-03-06: Formatted customization of `ORIGIN_TAG` */
+
+/* `ORIGIN_TAG_PIC` should end with an ANSI reset and a newline if not empty */
+#ifndef ORIGIN_TAG_PIC
+#define ORIGIN_TAG_PIC \
     "\x1b[1;44;32m  ◢\x1b[0;32;44m◣   \x1b[1;37m︵︵     \x1b[30m█▔◣ █▔█ █▔▔ █▔█ █▆▉ █   █▔█ █◣█ █▔\x1b[31m● \x1b[m\n" \
     "\x1b[1;32;44m◢\x1b[42m◤\x1b[0;44;32m█◣\x1b[1m◢\x1b[0;32;44m◣ \x1b[1;37m︵︵ \x1b[0;37;44m█  █ █▁◤ █▁▁ █▁█ ▉▉▉ █   █▁█ █◥█ █  █ \x1b[m\n" \
-    "\x1b[1;36;42m夢之大地 逼逼ㄟ四 \x1b[37m█▁◤ █  █ █▁▁ █  █ ▉▉▉ █▁ █  █ █  █ █▁◤ \x1b[m\n" \
-    "\x1b[1;32m※ Origin:\x1b[33m <bbs.ccns.ncku.edu.tw>  \x1b[31m◆ From:\x1b[36m %-34.34s \x1b[m\n"
-#endif  // ORIGIN_TAG
+    "\x1b[1;36;42m夢之大地 逼逼ㄟ四 \x1b[37m█▁◤ █  █ █▁▁ █  █ ▉▉▉ █▁ █  █ █  █ █▁◤ \x1b[m\n"
+#endif
+
+/* `ORIGIN_TAG_SITENAME` should start and end with a space after excluding ANSI escapes */
+#ifndef ORIGIN_TAG_SITENAME
+#define ORIGIN_TAG_SITENAME " "
+#endif
+
+/* `ORIGIN_TAG_SITENAME` should start with a `"<"` and end with a `">"` after excluding ANSI escapes */
+#ifndef ORIGIN_TAG_HOSTNAME
+#define ORIGIN_TAG_HOSTNAME "\x1b[33m<" MYHOSTNAME ">"
+#endif
+
+/* Forbid `ORIGIN_TAG` from being defined elsewhere */
+#ifdef ORIGIN_TAG
+CPP_PRAGMA(GCC error "Customizing `ORIGIN_TAG` by defining it elsewhere is no longer supported. Use `ORIGIN_TAG_PIC`/`ORIGIN_TAG_SITENAME`/`ORIGIN_TAG_HOSTNAME` to customize `ORIGIN_TAG` instead");
+#endif
+
+/* IID.2021-03-06: Print the user address information in a separated line if too long */
+#define ORIGIN_TAG \
+    "--\n" \
+    ORIGIN_TAG_PIC \
+    "\x1b[1;32m※ Origin:" ORIGIN_TAG_SITENAME ORIGIN_TAG_HOSTNAME " %s\x1b[31m◆ From:\x1b[36m %s \x1b[m\n"
 
 #define MODIFY_TAG    "\x1b[1;32m※ Modify: \x1b[33m<%s> \x1b[m%s"
 

@@ -58,7 +58,7 @@ belong(
         while ((str = mgets(fd)))
         {
             str_lower(str, str);
-            if (str_str(key, str))
+            if (str_casestr(key, str))
             {
                 rc = true;
                 break;
@@ -84,7 +84,7 @@ is_badid(
     if (!is_alpha(*userid))
         return true;
 
-    if (!str_cmp(userid, STR_NEW))
+    if (!str_casecmp(userid, STR_NEW))
         return true;
 
     str = userid;
@@ -184,7 +184,7 @@ personal_apply(void)
     {
         while (1)
         {
-            if (!vget(7, 0, "看板英文名稱： ", brdname, IDLEN - 1, num))
+            if (!vget(7, 0, "看板英文名稱： ", brdname, IDLEN - 2 + 1, num))
                 return DL_RELEASE(0);
 
             if (is_badid(brdname))
@@ -233,32 +233,33 @@ personal_attr(unsigned int state)
     return ' ';
 }
 
-static void
+static int
 personal_item(
-    int num,
-    const PB *personal)
+    XO *xo,
+    int pos)
 {
+    const PB *const personal = (const PB *) xo_pool_base + pos;
+    const int num = pos + 1;
     if (!mode)
-        prints("%6d %c %-12s %-12s %-*s\n", num, personal_attr(personal->state), personal->userid, personal->brdname, d_cols + 44, personal->email);
+        prints("%6d %c %-*s %-*s %-*s\n", num, personal_attr(personal->state), IDLEN, personal->userid, IDLEN, personal->brdname, d_cols + 44, personal->email);
     else
-        prints("%6d %c %-12s %-12s %-*s\n", num, personal_attr(personal->state), personal->userid, personal->brdname, d_cols + 44, personal->brdtitle);
+        prints("%6d %c %-*s %-*s %-*s\n", num, personal_attr(personal->state), IDLEN, personal->userid, IDLEN, personal->brdname, d_cols + 44, personal->brdtitle);
+    return XO_NONE;
 }
 
 static int
 personal_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const PB *const personal = (const PB *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    personal_item(xo->pos + 1, personal);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return personal_item(xo, pos);
 }
 
 static int
 personal_body(
     XO *xo)
 {
-    const PB *personal;
     int num, max, tail;
 
     move(3, 0);
@@ -266,17 +267,16 @@ personal_body(
     max = xo->max;
     if (max <= 0)
     {
-        vmsg("目前沒有資料");
-        return XO_QUIT;
+        outs("\n《個人板清單》目前沒有資料\n");
+        return XO_NONE;
     }
     num = xo->top;
-    personal = (const PB *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        personal_item(++num, personal++);
+        personal_item(xo, num++);
     } while (num < max);
 
     return XO_NONE;
@@ -334,12 +334,13 @@ personal_edit(
 
 static int
 personal_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(PB), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(PB), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -350,13 +351,11 @@ personal_delete(
 
 static int
 personal_change(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     PB *personal, mate;
-    int pos, cur;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     personal = (PB *) xo_pool_base + pos;
 
     mate = *personal;
@@ -431,7 +430,7 @@ sort_compare(
 
     a1 = (const HDR *) p1;
     a2 = (const HDR *) p2;
-    return str_cmp(a1->xname, a2->xname);
+    return str_casecmp(a1->xname, a2->xname);
 
 }
 
@@ -473,10 +472,11 @@ personal_sort(
 
 static int
 personal_open(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     PB *personal;
-    int cur, pos, index;
+    int cur, index;
     char fpath[80];
     BRD newboard;
     HDR hdr;
@@ -484,7 +484,6 @@ personal_open(
     ACCT acct;
     static const char *const gem[] = {"gem/@/@Person_A_E", "gem/@/@Person_F_J", "gem/@/@Person_K_O", "gem/@/@Person_P_T", "gem/@/@Person_U_Z"};
 
-    pos = xo->pos;
     cur = pos - xo->top;
     personal = (PB *) xo_pool_base + pos;
 
@@ -513,7 +512,7 @@ personal_open(
     newboard.color = 7;
     strcpy(newboard.class_, "個人");
     strcpy(newboard.BM, personal->userid);
-    time(&newboard.bstamp);
+    time32(&newboard.bstamp);
 //  newboard.readlevel |= PERM_SYSOP;
     newboard.postlevel |= (PERM_POST|PERM_VALID|PERM_BASIC);
     newboard.battr |= BRD_NOTRAN;
@@ -535,7 +534,7 @@ personal_open(
     mak_dirs(fpath + 4);
 
     bshm->uptime = 0;             /* force reload of bcache */
-    bshm_init();
+    bshm_init(&bshm);
 
     /* 順便加進 NewBoard */
 
@@ -555,7 +554,7 @@ personal_open(
 
     rec_put(xo->dir, personal, sizeof(PB), pos);
     move(3 + cur, 0);
-    personal_item(++pos, personal);
+    personal_item(xo, pos);
     cursor_show(3 + cur, 0);
 
     mail2usr(personal, 0);
@@ -575,13 +574,11 @@ personal_open(
 
 static int
 personal_deny(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const PB *personal;
-    int pos, cur;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     personal = (const PB *) xo_pool_base + pos;
 
     if (personal->state & PB_OPEN)
@@ -595,10 +592,13 @@ personal_deny(
 
     mail2usr(personal, 1);
 
-    if (!rec_del(xo->dir, sizeof(PB), xo->pos, NULL, NULL))
     {
-        personal_log(personal, 2);
-        return XO_LOAD;
+        const PB personal_orig = *personal;
+        if (!rec_del(xo->dir, sizeof(PB), pos, NULL, NULL))
+        {
+            personal_log(&personal_orig, 2);
+            return XO_LOAD;
+        }
     }
 
 
@@ -619,14 +619,14 @@ KeyFuncList personal_cb =
     {XO_LOAD, {personal_load}},
     {XO_HEAD, {personal_head}},
     {XO_BODY, {personal_body}},
-    {XO_CUR, {personal_cur}},
+    {XO_CUR | XO_POSF, {.posf = personal_cur}},
 
-    {'c', {personal_change}},
+    {'c' | XO_POSF, {.posf = personal_change}},
     {'s', {xo_cb_init}},
-    {'d', {personal_delete}},
+    {'d' | XO_POSF, {.posf = personal_delete}},
     {KEY_TAB, {personal_switch}},
-    {'O', {personal_open}},
-    {'D', {personal_deny}},
+    {'O' | XO_POSF, {.posf = personal_open}},
+    {'D' | XO_POSF, {.posf = personal_deny}},
     {'h', {personal_help}}
 };
 

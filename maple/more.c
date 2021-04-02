@@ -148,9 +148,9 @@ static int
 more_line(
     char *buf)
 {
-    int ch, len, bytes, in_ansi, in_chi;
+    int ch, len, bytes, in_ansi, in_dbcs;
 
-    len = bytes = in_ansi = in_chi = 0;
+    len = bytes = in_ansi = in_dbcs = 0;
 
     for (;;)
     {
@@ -160,9 +160,9 @@ more_line(
         ch = (unsigned char) *foff;
 
         /* weiyu.040802: 如果這碼是中文字的首碼，但是只剩下一碼的空間可以印，那麼不要印這碼 */
-        if (in_chi || IS_DBCS_HI(ch))
-            in_chi ^= 1;
-        if (in_chi && (len >= more_width - 1 || bytes >= ANSILINELEN - 2))
+        if (in_dbcs || IS_DBCS_HI(ch))
+            in_dbcs ^= 1;
+        if (in_dbcs && (len >= more_width - 1 || bytes >= ANSILINESIZE - 2))
             break;
 
         foff++;
@@ -192,11 +192,11 @@ more_line(
 
         *buf++ = ch;
 
-        /* 若不含控制碼的長度已達 more_width 字，或含控制碼的長度已達 ANSILINELEN-1，那麼離開迴圈 */
-        if (len >= more_width || bytes >= ANSILINELEN - 1)
+        /* 若不含控制碼的長度已達 more_width 字，或含控制碼的長度已達 ANSILINESIZE-1，那麼離開迴圈 */
+        if (len >= more_width || bytes >= ANSILINESIZE - 1)
         {
             /* itoc.031123: 如果是控制碼，即使不含控制碼的長度已達 more_width 了，還可以繼續吃 */
-            if ((in_ansi || (foff < fend && *foff == KEY_ESC)) && bytes < ANSILINELEN - 1)
+            if ((in_ansi || (foff < fend && *foff == KEY_ESC)) && bytes < ANSILINESIZE - 1)
                 continue;
 
             /* itoc.031123: 再檢查下一個字是不是 '\n'，避免恰好是 more_width 或 ANSILINELEN-1 時，會多跳一列空白 */
@@ -219,26 +219,22 @@ static void
 outs_line(                      /* 印出一般內容 */
     const char *str)
 {
-    int ch1, ch2, ansi;
+    bool ansi = false;
 
     /* ※處理引用者 & 引言 */
 
-    ch1 = str[0];
-    ch2 = (str[0]) ? str[1] : '\0';
-
-    if (ch2 == ' ' && (ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2))       /* 引言 */
+    const int ch1 = str[0];
+    if ((ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2) && str[1] == ' ')    /* 引言 */
     {
-        ansi = 1;
-        ch1 = str[2];
-        outs((ch1 == QUOTE_CHAR1 || ch1 == QUOTE_CHAR2) ? "\x1b[33m" : "\x1b[36m");     /* 引用一層/二層不同顏色 */
+        const int ch3 = str[2];
+        outs((ch3 == QUOTE_CHAR1 || ch3 == QUOTE_CHAR2) ? "\x1b[33m" : "\x1b[36m");     /* 引用一層/二層不同顏色 */
+        ansi = true;
     }
-    else if (ch1 == '\241' && ch2 == '\260')    /* ※ 引言者 */
+    else if (!strncmp(str, "※", sizeof("※" - 1))) /* ※ 引言者 */
     {
-        ansi = 1;
         outs("\x1b[1;36m");
+        ansi = true;
     }
-    else
-        ansi = 0;
 
     /* 印出內容 */
 
@@ -248,25 +244,23 @@ outs_line(                      /* 印出一般內容 */
     }
     else
     {
-        int len;
-        char buf[ANSILINELEN];
-        char *ptr2;
-        const char *ptr1;
+        char buf[ANSILINESIZE];
+        char *ptr2 = buf;
+        const int len = strlen(hunt);
 
-        len = strlen(hunt);
-        ptr2 = buf;
-        while (1)
+        for (;;)
         {
-            if (!(ptr1 = str_sub(str, hunt)))
+            const char *const ptr1 = str_casestr_dbcs(str, hunt);
+            if (!ptr1)
             {
-                str_ncpy(ptr2, str, buf + ANSILINELEN - ptr2 - 1);
+                str_scpy(ptr2, str, buf + sizeof(buf) - ptr2);
                 break;
             }
 
-            if (buf + ANSILINELEN - 1 <= ptr2 + (ptr1 - str) + (len + 7))       /* buf 空間不夠 */
+            if (ptr2 + (ptr1 - str) + (len + 7) >= buf + sizeof(buf) - 1)       /* buf 空間不夠 */
                 break;
 
-            str_ncpy(ptr2, str, ptr1 - str + 1);
+            str_sncpy(ptr2, str, buf + sizeof(buf) - ptr2, ptr1 - str);
             ptr2 += ptr1 - str;
             sprintf(ptr2, "\x1b[7m%.*s\x1b[m", len, ptr1);
             ptr2 += len + 7;
@@ -293,16 +287,16 @@ outs_header(    /* 印出檔頭 */
 
     /* 處理檔頭 */
 
-    if ((header_len == LEN_AUTHOR1 && !memcmp(str, header1[0], LEN_AUTHOR1 - 1)) ||
-        (header_len == LEN_AUTHOR2 && !memcmp(str, header2[0], LEN_AUTHOR2 - 1)))
+    if ((header_len == LEN_AUTHOR1 && !strncmp(str, header1[0], LEN_AUTHOR1 - 1)) ||
+        (header_len == LEN_AUTHOR2 && !strncmp(str, header2[0], LEN_AUTHOR2 - 1)))
     {
         /* 作者/看板 檔頭有二欄，特別處理 */
         word = str + header_len;
         if ((ptr = strstr(word, str_post1)) || (ptr = strstr(word, str_post2)))
         {
             ptr[-1] = ptr[4] = '\0';
-            prints(COLOR5 " %s " COLOR6 "%-*.*s" COLOR5 " %s " COLOR6 "%-13s\x1b[m",
-                header1[0], d_cols + 54, d_cols + 54, word, ptr, ptr + 5);
+            prints(COLOR5 " %s " COLOR6 "%-*.*s" COLOR5 " %s " COLOR6 "%-*s\x1b[m",
+                header1[0], d_cols + 54, d_cols + 54, word, ptr, IDLEN + 1, ptr + 5);
         }
         else
         {
@@ -315,8 +309,8 @@ outs_header(    /* 印出檔頭 */
 
     for (i = 1; i < LINE_HEADER; i++)
     {
-        if ((header_len == LEN_AUTHOR1 && !memcmp(str, header1[i], LEN_AUTHOR1 - 1)) ||
-            (header_len == LEN_AUTHOR2 && !memcmp(str, header2[i], LEN_AUTHOR2 - 1)))
+        if ((header_len == LEN_AUTHOR1 && !strncmp(str, header1[i], LEN_AUTHOR1 - 1)) ||
+            (header_len == LEN_AUTHOR2 && !strncmp(str, header2[i], LEN_AUTHOR2 - 1)))
         {
             /* 其他檔頭都只有一欄 */
             word = str + header_len;
@@ -343,7 +337,7 @@ outs_footer(
     /* prints(FOOTER_MORE, (lino - 2) / PAGE_SCROLL + 1, ((foff - fimage) * 100) / fsize); */
 
     /* itoc.010821: 為了和 FOOTER 對齊 */
-    sprintf(buf, FOOTER_MORE, (lino - 2) / PAGE_SCROLL + 1, ((foff - fimage) * 100) / fsize);
+    sprintf(buf, FOOTER_MORE, (lino - 2) / PAGE_SCROLL + 1, (int)(unsigned)((foff - fimage) * 100) / fsize);
     outs(buf);
 
     for (i = b_cols + sizeof(COLOR1) + sizeof(COLOR2) - strlen(buf); i > 3; i--)
@@ -378,6 +372,7 @@ more_slideshow(void)
     }
     else
     {
+        fd_set rfds;
         struct timeval tv[9] =
         {
             {4, 0}, {3, 0}, {2, 0}, {1, 500000}, {1, 0},
@@ -385,8 +380,9 @@ more_slideshow(void)
         };
 
         refresh();
-        ch = 1;
-        if (select(1, (fd_set *) &ch, NULL, NULL, tv + slideshow - 1) > 0)
+        FD_ZERO(&rfds);
+        FD_SET(0, &rfds);
+        if (select(1, &rfds, NULL, NULL, tv + slideshow - 1) > 0)
         {
             /* 若播放中按任意鍵，則停止播放 */
             slideshow = 0;
@@ -422,7 +418,7 @@ more(
     const char *footer)
 {
 #ifndef M3_USE_PMORE
-    char buf[ANSILINELEN];
+    char buf[ANSILINESIZE];
     int i;
 
     const char *headend;                /* 檔頭結束 */
@@ -463,8 +459,8 @@ more(
         if (i == 0)
         {
             header_len =
-                !memcmp(buf, str_author1, LEN_AUTHOR1) ? LEN_AUTHOR1 :  /* 「作者:」表站內文章 */
-                !memcmp(buf, str_author2, LEN_AUTHOR2) ? LEN_AUTHOR2 :  /* 「發信人:」表轉信文章 */
+                !strncmp(buf, str_author1, LEN_AUTHOR1) ? LEN_AUTHOR1 :  /* 「作者:」表站內文章 */
+                !strncmp(buf, str_author2, LEN_AUTHOR2) ? LEN_AUTHOR2 :  /* 「發信人:」表轉信文章 */
                 0;                                                      /* 沒有檔頭 */
         }
 
@@ -485,7 +481,7 @@ more(
 
     if (hunt[0])                /* 在 xxxx_browse() 請求搜尋字串 */
     {
-        str_lowest(hunt, hunt);
+        str_lower_dbcs(hunt, hunt);
         shift = HUNT_MASK | HUNT_START;
     }
     else
@@ -525,7 +521,7 @@ more(
 
             lino++;
 
-            if ((lino & 31 == 0) && ((i = lino >> 5) < MAXBLOCK))
+            if ((lino % 32 == 0) && ((i = lino >> 5) < MAXBLOCK))
                 block[i] = foff - fimage;
 
 
@@ -538,14 +534,14 @@ more(
                 if (shift & HUNT_NEXT)  /* 按 n 搜尋下一筆 */
                 {
                     /* 一找到就停於該列 */
-                    if (str_sub(buf, hunt))
+                    if (str_casestr_dbcs(buf, hunt))
                         shift = 0;
                 }
                 else                    /* 按 / 開始搜尋 */
                 {
                     /* 若在第二頁以後找到，一找到就停於該列；
                        若在第一頁找到，必須等到讀完第一頁才能停止 */
-                    if (shift & HUNT_START && str_sub(buf, hunt))
+                    if (shift & HUNT_START && str_casestr_dbcs(buf, hunt))
                         shift ^= HUNT_START | HUNT_FOUND;               /* 拿掉 HUNT_START 並加上 HUNT_FOUND */
                     if (shift & HUNT_FOUND && lino >= b_lines)
                         shift = 0;
@@ -647,7 +643,7 @@ re_key:
             }
             else if (vget(B_LINES_REF, 0, "搜尋：", hunt, sizeof(hunt), DOECHO))
             {
-                str_lowest(hunt, hunt);
+                str_lower_dbcs(hunt, hunt);
                 shift = HUNT_MASK | HUNT_START;
             }
             else                                /* 如果取消搜尋的話，重繪 footer 即可 */
@@ -762,7 +758,7 @@ re_key:
                     while (more_line(buf))
                     {
                         totallino++;
-                        if ((totallino & 31 == 0) && ((i = totallino >> 5) < MAXBLOCK))
+                        if ((totallino % 32 == 0) && ((i = totallino >> 5) < MAXBLOCK))
                             block[i] = foff - fimage;
                     }
 

@@ -51,6 +51,7 @@ test/lib_splay
 test/lib_str_decode
 test/lib_str_pat
 test/lib_str_xor
+test/lib_from_parse
 test/lib_xsort
 test/testsize
 test/lib_f_mv
@@ -111,3 +112,18 @@ util/tranBRD
 util/transacct
 util/userno
 util/utmp-dump
+
+# Processed sample files with real values
+sample/bbsd.service
+sample/bbsd_unixsocket.service
+sample/crontab
+sample/startbbs.service
+sample/xchatd.service
+
+# Processed scripts with real values
+scripts/checkACCT.sh
+scripts/checkbrdDIR.sh
+scripts/checkusrDIR.sh
+scripts/clean.sh
+scripts/start.sh
+scripts/top.sh

@@ -57,7 +57,7 @@ reset_utmp(void)
     strcpy(cutmp->userid, cuser.userid);
     strcpy(cutmp->username, cuser.username);
     strcpy(cutmp->realname, cuser.realname);
-    str_ncpy(cutmp->from, fromhost, sizeof(cutmp->from));
+    str_scpy(cutmp->from, fromhost, sizeof(cutmp->from));
 }
 
 
@@ -402,14 +402,6 @@ is_banmsg(
 }
 #endif
 
-static int
-int_cmp(
-    const void *a,
-    const void *b)
-{
-    return *(const int *)a - *(const int *)b;
-}
-
 
 void
 pal_cache(void)
@@ -442,7 +434,7 @@ pal_cache(void)
     {
         if (fsize > (PAL_MAX * sizeof(PAL)))
         {
-            sprintf(fpath, "%-13s%d > %d * %zu\n", cuser.userid, fsize, PAL_MAX, sizeof(PAL));
+            sprintf(fpath, "%-*s %d > %d * %zu\n", IDLEN, cuser.userid, fsize, PAL_MAX, sizeof(PAL));
             f_cat(FN_PAL_LOG, fpath);
             fsize = PAL_MAX * sizeof(PAL);
         }
@@ -563,7 +555,7 @@ aloha_sync(void)
             size = (char *) ptail - (char *) pbase;
             if (size > 0)
             {
-                //xsort(pbase, size / sizeof(BMW), sizeof(BMW), str_cmp);
+                //xsort(pbase, size / sizeof(BMW), sizeof(BMW), str_casecmp);
                 lseek(fd, 0, SEEK_SET);
                 write(fd, pbase, size);
                 ftruncate(fd, size);
@@ -630,7 +622,7 @@ pal_sync(
                 {
                     if (size > PAL_ALMR * sizeof(PAL))
                         vmsg("您的好友名單太多，請善加整理");
-                    xsort(pbase, size / sizeof(PAL), sizeof(PAL), (int (*)(const void *lhs, const void *rhs))str_cmp);
+                    xsort(pbase, size / sizeof(PAL), sizeof(PAL), (int (*)(const void *lhs, const void *rhs))str_casecmp);
                 }
 
                 /* Thor.0709: 是否要加上消除重覆的好友的動作? */
@@ -657,23 +649,25 @@ pal_sync(
 static int pal_add(XO *xo);
 
 
-static void
+static int
 pal_item(
-    int num,
-    const PAL *pal)
+    XO *xo,
+    int pos)
 {
+    const PAL *const pal = (const PAL *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d %-3s%-14s%s\n", num, pal->ftype & PAL_BAD ? "Ｘ" : "",
         pal->userid, pal->ship);
+    return XO_NONE;
 }
 
 static int
 pal_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const PAL *const pal = (const PAL *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    pal_item(xo->pos + 1, pal);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return pal_item(xo, pos);
 }
 
 
@@ -681,26 +675,26 @@ static int
 pal_body(
     XO *xo)
 {
-    const PAL *pal;
     int num, max, tail;
+
+    move(3, 0);
 
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要交新朋友嗎(y/N)？[N] ") == 'y')
-            return pal_add(xo);
-        return XO_QUIT;
+        outs("\n《好友名單》目前沒有資料\n");
+        outs("\n  (a)交新朋友\n");
+        clrtobot();
+        return XO_NONE;
     }
 
     num = xo->top;
-    pal = (const PAL *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
-        pal_item(++num, pal++);
+        pal_item(xo, num++);
     } while (num < max);
     clrtobot();
 
@@ -751,9 +745,10 @@ pal_edit(
 static int
 pal_search(
     XO *xo,
+    int pos,
     int step)
 {
-    int num, pos, max;
+    int num, max;
     static char buf[IDLEN + 1];
     int fsize;
     PAL *phead;
@@ -771,7 +766,7 @@ pal_search(
         str_lower(bufl, buf);
         buflen = strlen(bufl);
 
-        pos = num = xo->pos;
+        num = pos;
         max = xo->max;
         do
         {
@@ -781,7 +776,7 @@ pal_search(
             else if (pos >= max)
                         pos = 0;
 
-            if (str_str((phead + pos)->userid, bufl) || str_str((phead + pos)->ship, bufl))
+            if (str_casestr((phead + pos)->userid, bufl) || str_casestr((phead + pos)->ship, bufl))
             {
                 move(b_lines, 0);
                 clrtoeol();
@@ -798,16 +793,18 @@ pal_search(
 
 static int
 pal_search_forward(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    return pal_search(xo, 1); /* step = +1 */
+    return pal_search(xo, pos, 1); /* step = +1 */
 }
 
 static int
 pal_search_backward(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    return pal_search(xo, -1); /* step = -1 */
+    return pal_search(xo, pos, -1); /* step = -1 */
 }
 
 
@@ -868,11 +865,12 @@ pal_add(
 
 static int
 pal_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(PAL), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(PAL), pos, NULL, NULL))
         {
 
 #if 1                           /* Thor.0709: 好友名單同步 */
@@ -888,13 +886,11 @@ pal_delete(
 
 static int
 pal_change(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     PAL *pal, mate;
-    int pos, cur;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     pal = (PAL *) xo_pool_base + pos;
 
     mate = *pal;
@@ -911,12 +907,13 @@ pal_change(
 
 static int
 pal_mail(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     PAL *pal;
     char *userid;
 
-    pal = (PAL *) xo_pool_base + xo->pos;
+    pal = (PAL *) xo_pool_base + pos;
     userid = pal->userid;
     if (*userid)
     {
@@ -939,11 +936,12 @@ pal_sort(
 
 static int
 pal_query(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const PAL *pal;
 
-    pal = (const PAL *) xo_pool_base + xo->pos;
+    pal = (const PAL *) xo_pool_base + pos;
     move(1, 0);
     clrtobot();
     /* move(2, 0); *//* Thor.0810: 可以不加嗎? */
@@ -968,16 +966,16 @@ KeyFuncList pal_cb =
     {XO_LOAD, {pal_load}},
     {XO_HEAD, {pal_head}},
     {XO_BODY, {pal_body}},
-    {XO_CUR, {pal_cur}},
+    {XO_CUR | XO_POSF, {.posf = pal_cur}},
 
     {'a', {pal_add}},
-    {'c', {pal_change}},
-    {'d', {pal_delete}},
-    {'m', {pal_mail}},
-    {'q', {pal_query}},
+    {'c' | XO_POSF, {.posf = pal_change}},
+    {'d' | XO_POSF, {.posf = pal_delete}},
+    {'m' | XO_POSF, {.posf = pal_mail}},
+    {'q' | XO_POSF, {.posf = pal_query}},
     {'s', {pal_sort}},
-    {'/', {pal_search_forward}},
-    {'?', {pal_search_backward}},
+    {'/' | XO_POSF, {.posf = pal_search_forward}},
+    {'?' | XO_POSF, {.posf = pal_search_backward}},
     {'h', {pal_help}}
 };
 
@@ -1013,12 +1011,15 @@ t_pal(void)
 /*static */void bmw_edit(UTMP *up, const char *hint, BMW *bmw, int cc);
 
 
-static void
+static int
 bmw_item(
-    int num,
-    const BMW *bmw)
+    XO *xo,
+    int pos)
 {
-    struct tm *ptime = localtime(&bmw->btime);
+    const BMW *const bmw = (const BMW *) xo_pool_base + pos;
+    const int num = pos + 1;
+
+    struct tm *ptime = localtime_any(&bmw->btime);
 
     if (!(bmw_modetype & BMW_MODE))
     {
@@ -1029,17 +1030,17 @@ bmw_item(
             if (!*userid)
                 userid = "眾家好友";
 
-            prints("%6d %02d:%02d %-13s☆%-*.*s\n", num, ptime->tm_hour, ptime->tm_min,
-                userid, d_cols + 50, d_cols + 50, bmw->msg);
+            prints("%6d %02d:%02d %-*s ☆%-*.*s\n", num, ptime->tm_hour, ptime->tm_min,
+                IDLEN, userid, d_cols + 50, d_cols + 50, bmw->msg);
         }
         else
         {
             if (strstr(bmw->msg, "★廣播"))
-                prints("%6d \x1b[36;1m%02d:%02d %-13s★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
-                    bmw->userid, d_cols + 50, d_cols + 50, (bmw->msg)+8);
+                prints("%6d \x1b[36;1m%02d:%02d %-*s ★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
+                    IDLEN, bmw->userid, d_cols + 50, d_cols + 50, (bmw->msg)+8);
             else
-                prints("%6d \x1b[32m%02d:%02d %-13s★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
-                    bmw->userid, d_cols + 50, d_cols + 50, bmw->msg);
+                prints("%6d \x1b[32m%02d:%02d %-*s ★%-*.*s\x1b[m\n", num, ptime->tm_hour, ptime->tm_min,
+                    IDLEN, bmw->userid, d_cols + 50, d_cols + 50, bmw->msg);
         }
     }
     else
@@ -1051,28 +1052,29 @@ bmw_item(
             if (!*userid)
                 userid = "眾家好友";
 
-            prints("%6d %-13s☆%-*.*s\n", num, userid, d_cols + 57, d_cols + 57, bmw->msg);
+            prints("%6d %-*s ☆%-*.*s\n", num, IDLEN, userid, d_cols + 57, d_cols + 57, bmw->msg);
         }
         else
         {
             if (strstr(bmw->msg, "★廣播"))
-                prints("%6d \x1b[36;1m%-13s★%-*.*s\x1b[m\n", num,
-                    bmw->userid, d_cols + 57, d_cols + 57, (bmw->msg)+8);
+                prints("%6d \x1b[36;1m%-*s ★%-*.*s\x1b[m\n", num,
+                    IDLEN, bmw->userid, d_cols + 57, d_cols + 57, (bmw->msg)+8);
             else
-                prints("%6d \x1b[32m%-13s★%-*.*s\x1b[m\n", num,
-                    bmw->userid, d_cols + 57, d_cols + 57, bmw->msg);
+                prints("%6d \x1b[32m%-*s ★%-*.*s\x1b[m\n", num,
+                    IDLEN, bmw->userid, d_cols + 57, d_cols + 57, bmw->msg);
         }
     }
+
+    return XO_NONE;
 }
 
 static int
 bmw_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const BMW *const bmw = (const BMW *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    bmw_item(xo->pos + 1, bmw);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return bmw_item(xo, pos);
 }
 
 
@@ -1080,7 +1082,6 @@ static int
 bmw_body(
     XO *xo)
 {
-    const BMW *bmw;
     int num, max, tail;
 
     move(3, 0);
@@ -1088,18 +1089,17 @@ bmw_body(
     max = xo->max;
     if (max <= 0)
     {
-        vmsg("先前並無熱訊呼叫");
-        return XO_QUIT;
+        outs("\n《查看訊息》先前並無熱訊呼叫\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    bmw = (const BMW *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        bmw_item(++num, bmw++);
+        bmw_item(xo, num++);
     } while (num < max);
 
     return XO_NONE;
@@ -1143,10 +1143,11 @@ bmw_init(
 
 static int
 bmw_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (vans(msg_del_ny) == 'y')
-        if (!rec_del(xo->dir, sizeof(BMW), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(BMW), pos, NULL, NULL))
             return XO_LOAD;
 
     return XO_FOOT;
@@ -1155,12 +1156,13 @@ bmw_delete(
 
 static int
 bmw_mail(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     BMW *bmw;
     char *userid;
 
-    bmw = (BMW *) xo_pool_base + xo->pos;
+    bmw = (BMW *) xo_pool_base + pos;
     userid = bmw->userid;
     if (*userid)
     {
@@ -1174,11 +1176,12 @@ bmw_mail(
 
 static int
 bmw_query(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const BMW *bmw;
 
-    bmw = (const BMW *) xo_pool_base + xo->pos;
+    bmw = (const BMW *) xo_pool_base + pos;
     move(1, 0);
     clrtobot();
     /* move(2, 0); *//* Thor.0810: 可以不加嗎? */
@@ -1190,17 +1193,18 @@ bmw_query(
 
 static int
 bmw_write(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (HAS_PERM(PERM_PAGE))
     {
         UTMP *up = NULL;
         const BMW *benz;
 
-        benz = (const BMW *) xo_pool_base + xo->pos;
-        if ((benz->caller >= ushm->uslot && benz->caller < ushm->uslot + MAXACTIVE) && (benz->caller && benz->caller->userno == benz->sender) && can_message(benz->caller))
+        benz = (const BMW *) xo_pool_base + pos;
+        if ((benz->caller >= 0 && benz->caller < MAXACTIVE) && (ushm->uslot[benz->caller].userno == benz->sender) && can_message(&ushm->uslot[benz->caller]))
         {
-            up = benz->caller;
+            up = &ushm->uslot[benz->caller];
         }
 
         if ((up || (up = utmp_find(benz->sender))) && can_message(up))
@@ -1260,13 +1264,13 @@ KeyFuncList bmw_cb =
     {XO_LOAD, {bmw_load}},
     {XO_HEAD, {bmw_head}},
     {XO_BODY, {bmw_body}},
-    {XO_CUR, {bmw_cur}},
+    {XO_CUR | XO_POSF, {.posf = bmw_cur}},
 
-    {'d', {bmw_delete}},
-    {'m', {bmw_mail}},
-    {'w', {bmw_write}},
-    {'q', {bmw_query}},
-    {Ctrl('Q'), {bmw_query}},
+    {'d' | XO_POSF, {.posf = bmw_delete}},
+    {'m' | XO_POSF, {.posf = bmw_mail}},
+    {'w' | XO_POSF, {.posf = bmw_write}},
+    {'q' | XO_POSF, {.posf = bmw_query}},
+    {Ctrl('Q') | XO_POSF, {.posf = bmw_query}},
     {'s', {xo_cb_init}},
     {KEY_TAB, {bmw_mode}},
     {'h', {bmw_help}}
@@ -1509,7 +1513,7 @@ do_query(
         acct->userlevel & PERM_VALID ? "已" : "未");
 
     prints(" 上次(\x1b[1;33m%s\x1b[m)來自(%s)\n",
-    Ctime(&acct->lastlogin), ((acct->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
+    Ctime_any(&acct->lastlogin), ((acct->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
     HIDDEN_SRC : acct->lasthost);
 
 #if defined(REALINFO) && defined(QUERY_REALNAMES)
@@ -1612,7 +1616,8 @@ bmw_send(
     UTMP *callee,
     BMW *bmw)
 {
-    BMW *mpool, *mhead, *mtail, **mslot;
+    BMW *mpool, *mhead, *mtail;
+    bmw_idx32_t *mslot;
     int i;
     pid_t pid;
     time_t texpire;
@@ -1629,7 +1634,7 @@ bmw_send(
 
     for (;;)
     {
-        if (mslot[i] == NULL)
+        if (mslot[i] < 0)
             break;
 
         if (++i >= BMW_PER_USER)
@@ -1641,10 +1646,10 @@ bmw_send(
 
     /* find available BMW slot in pool */
 
-    texpire = time(&bmw->btime) - BMW_EXPIRE;
+    texpire = time32(&bmw->btime) - BMW_EXPIRE;
 
     mpool = ushm->mpool;
-    mhead = BMAX(ushm->mbase, mpool);
+    mhead = mpool + BMAX(ushm->mbase, 0);
     mtail = mpool + BMW_MAX;
 
     do
@@ -1654,10 +1659,11 @@ bmw_send(
     } while (mhead->btime > texpire);
 
     *mhead = *bmw;
-    ushm->mbase = mslot[i] = mhead;
+    ushm->mbase = mslot[i] = mhead - mpool;
     /* Thor.981206: 需注意, 若ushm mapping不同,
                     則不同支 bbsd 互call會core dump,
                     除非這也用offset, 不過除了 -i, 應該是非必要 */
+    /* IID.2021-02-25: Use index for `ushm->mbase` and `mslot[i]` */
 
 
     /* sem_lock(BSEM_LEAVE); */
@@ -1688,7 +1694,7 @@ bmw_edit(
     str[0] = cc;
     str[1] = '\0';
 
-    if (vget(B_LINES_REF - 1, 0, hint, str, 58, GCARRY) &&
+    if (vget(B_LINES_REF - 1, 0, hint, str, BMIN(58UL, sizeof(bmw->msg)), GCARRY) &&
                                         /* lkchu.990103: 新介面只允許 48 個字元 */
         vans("確定要送出《熱訊》嗎(Y/n)？[Y] ") != 'n')
     {
@@ -1696,7 +1702,7 @@ bmw_edit(
         char *userid, fpath[64];
 
 
-        bmw->caller = cutmp;
+        bmw->caller = cutmp - ushm->uslot;
         bmw->sender = cuser.userno;
         strcpy(bmw->userid, userid = cuser.userid);
 
@@ -1718,7 +1724,7 @@ bmw_edit(
         else
             *bmw->userid = '\0';        /* lkchu.990206: 好友廣播設為 NULL */
 
-        time(&bmw->btime);
+        time32(&bmw->btime);
         usr_fpath(fpath, userid, FN_BMW);
         rec_add(fpath, bmw, sizeof(BMW));
         strcpy(bmw->userid, userid);
@@ -1756,9 +1762,9 @@ static void bmw_display(int max, int pos)
             sprintf(color, "0");
 
         if (strstr(bmw.msg, "★廣播"))
-            sprintf(buf, "   \x1b[1;45;37m[%-12s]\x1b[%sm %-58s\x1b[m", bmw.userid, color, (bmw.msg+8));
+            sprintf(buf, "   \x1b[1;45;37m[%-*s]\x1b[%sm %-58s\x1b[m", IDLEN, bmw.userid, color, (bmw.msg+8));
         else
-            sprintf(buf, "   \x1b[37;%sm[\x1b[33m%-12s\x1b[37m] %-58s\x1b[m", color, bmw.userid, bmw.msg);
+            sprintf(buf, "   \x1b[37;%sm[\x1b[33m%-*s\x1b[37m] %-58s\x1b[m", color, IDLEN, bmw.userid, bmw.msg);
         move(i, 0);
         outs(buf);
         i++;
@@ -1774,7 +1780,7 @@ static void bmw_display(int max, int pos)
         {
             sent = 1;
             bmw = bmw_sentlot[j];
-            sprintf(buf, "  \x1b[1;32mTo %-12s\x1b[m: \x1b[32m%-57s\x1b[m", bmw.userid, bmw.msg);
+            sprintf(buf, "  \x1b[1;32mTo %-*s\x1b[m: \x1b[32m%-57s\x1b[m", IDLEN, bmw.userid, bmw.msg);
             outs(buf);
             break;
         }
@@ -1913,21 +1919,16 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
 
                 break;
             }
-            if (bmw.caller->ufo & UFO_REJECT)
-            {
-                vmsg("對方有事，請稍待一會兒....");
-                break;
-            }
 
-            up = bmw.caller;
 #if 1
-            if ((up < uhead) || (up > uhead + MAXACTIVE /*ushm->offset*/))
+            if ((bmw.caller < 0) || (bmw.caller > MAXACTIVE /*ushm->ubackidx*/))
                 /* lkchu.981201: comparison of distinct pointer types */
             {
                 vmsg(MSG_USR_LEFT);
                 break;
             }
 #endif
+            up = uhead + bmw.caller;
             /* userno = bmw.sender; */ /* Thor.980805: 防止系統回扣 */
             if (up->userno != userno)
             {
@@ -1937,6 +1938,12 @@ void bmw_reply(int replymode)/* 0:一次ctrl+r 1:兩次ctrl+r */
                     vmsg(MSG_USR_LEFT);
                     break;
                 }
+            }
+
+            if (up->ufo & UFO_REJECT)
+            {
+                vmsg("對方有事，請稍待一會兒....");
+                break;
             }
 
 #ifdef  HAVE_SHOWNUMMSG
@@ -2064,7 +2071,7 @@ pal_list(
                     userid = pal->userid;
                     if (!ll_has(userid) && (pal->userno != cuser.userno) &&
                         !(pal->ftype & PAL_BAD) &&
-                        (!userno || str_str(pal->ship, buf)))
+                        (!userno || str_casestr(pal->ship, buf)))
                     {
                         ll_add(userid);
                         reciper++;
@@ -2107,14 +2114,14 @@ aloha(void)
             close(fd);
             return;
         }
-        benz.caller = cutmp;
+        benz.caller = cutmp - ushm->uslot;
         /* benz.sender = cuser.userno; */
         benz.sender = 0; /* Thor.980805: 系統協尋為單向 call in */
         strcpy(benz.userid, cuser.userid);
         sprintf(benz.msg, "◎ 進 入 (%s) 囉!! ◎", BOARDNAME);
 
         ubase = ushm->uslot;
-        uceil = (UTMP *) ((char *) ubase + ushm->offset);
+        uceil = ubase + ushm->ubackidx;
 
         mgets(-1);
         while ((bmw = (BMW *) mread(fd, sizeof(BMW))))
@@ -2122,7 +2129,7 @@ aloha(void)
             /* Thor.1030:只通知朋友 */
 
             userno = bmw->recver;
-            /* up = bmw->caller; */
+            /* up = &ubase[bmw->caller]; */
             up = utmp_find(userno);     /* lkchu.981201: frienz 中的 utmp 無效 */
 
             if (up >= ubase && up <= uceil &&
@@ -2165,7 +2172,7 @@ t_loginNotify(void)
     if (pal_list(0))
     {
         wp = ll_head;
-        bmw.caller = cutmp;
+        bmw.caller = cutmp - ushm->uslot;
         bmw.recver = cuser.userno;
         strcpy(bmw.userid, cuser.userid);
 
@@ -2200,25 +2207,25 @@ loginNotify(void)
     {
         vs_bar("系統協尋網友");
 
-        benz.caller = cutmp;
+        benz.caller = cutmp - ushm->uslot;
         /* benz.sender = cuser.userno; */
         benz.sender = 0; /* Thor.980805: 系統協尋為單向 call in */
         strcpy(benz.userid, cuser.userid);
         sprintf(benz.msg, "◎ 剛剛踏進%s的門 [系統協尋] ◎", BOARDNAME);
 
         ubase = ushm->uslot;
-        uceil = (UTMP *) ((char *) ubase + ushm->offset);
+        uceil = ubase + ushm->ubackidx;
 
         mgets(-1);
         while ((bmw = (BMW *) mread(fd, sizeof(BMW))))
         {
             /* Thor.1030:只通知朋友 */
 
-            up = bmw->caller;
+            bmw_idx_t uidx = bmw->caller;
             userno = bmw->recver;
 
-            if (up >= ubase && up <= uceil &&
-                up->userno == userno && !(cuser.ufo & UFO_CLOAK) && userno != cuser.userno  && can_see(up) !=2)
+            if (uidx >= 0 && uidx <= uceil - ubase &&
+                (up = &ushm->uslot[uidx])->userno == userno && !(cuser.ufo & UFO_CLOAK) && userno != cuser.userno  && can_see(up) !=2)
                                         /* Thor.980804: 隱身上站不通知, 站長特權 */
             {
 /*              benz.sender = is_pal(userno) ? cuser.userno : 0; */
@@ -2233,7 +2240,7 @@ loginNotify(void)
                 }
             }
 
-            prints("%-13s", bmw->userid);
+            prints("%-*s ", IDLEN, bmw->userid);
 
         }
         close(fd);
@@ -2342,7 +2349,7 @@ bmw_save(void)
 
                     while (read(fd, &bmw, sizeof(BMW)) == sizeof(BMW))
                     {
-                        struct tm *ptime = localtime(&bmw.btime);
+                        struct tm *ptime = localtime_any(&bmw.btime);
 
                         fprintf(fout, "%s%s(%02d:%02d)：%s\x1b[m\n",
                             bmw.sender == cuser.userno ? "☆" : "\x1b[32m★",
@@ -2375,7 +2382,9 @@ void
 bmw_rqst(void)
 {
     int i, j, userno, locus;
-    BMW bmw[BMW_PER_USER], *mptr, **mslot;
+    BMW bmw[BMW_PER_USER], *mptr;
+    bmw_idx_t midx;
+    bmw_idx32_t *mslot;
 
     /* download BMW slot first */
 
@@ -2383,9 +2392,10 @@ bmw_rqst(void)
     userno = cuser.userno;
     mslot = cutmp->mslot;
 
-    while ((mptr = mslot[i]))
+    while ((midx = mslot[i]) >= 0)
     {
-        mslot[i] = NULL;
+        mslot[i] = -1;
+        mptr = &ushm->mpool[midx];
         if (mptr->recver == userno)
         {
             bmw[j++] = *mptr;
@@ -2645,7 +2655,7 @@ talk_speak(
             if (ch <= 0)
                 break;
 #if 0   // IID.20190508: `bwboard.so` and `chess.so` do not exist anymore.
-            if (data[0] == Ctrl('A'))
+            if (data[0] == Ctrl('A') || data[0] == Meta('A'))
             { /* Thor.990219: 呼叫外掛棋盤 */
                 if (DL_NAME_CALL("bwboard.so", BWboard)(fd, 1)==-2)
                     break;
@@ -2674,11 +2684,11 @@ talk_speak(
                     break;
 
                 case Ctrl('H'): /* lkchu.981201: backspace */
-                    itswords[str_len(itswords) - 1] = '\0';
+                    itswords[strlen(itswords) - 1] = '\0';
                     break;
 
                 default:
-                    if (str_len(itswords) < sizeof(itswords))
+                    if (strlen(itswords) + 1 < sizeof(itswords))
                     {
                         strncat(itswords, (char *)&data[i], 1);
                     }
@@ -2694,7 +2704,7 @@ talk_speak(
             }
         }
 #if 0   // IID.20190508: `bwboard.so` and `chess.so` do not exist anymore.
-        else if (ch == Ctrl('A'))
+        else if (ch == Ctrl('A') || ch == Meta('A'))
         { /* Thor.990219: 呼叫外掛棋盤 */
             /* int BWboard(int sock, int later); */
             data[0] = ch;
@@ -2733,11 +2743,11 @@ talk_speak(
                 break;
 
             case Ctrl('H'):
-                mywords[str_len(mywords) - 1] = '\0';
+                mywords[strlen(mywords) - 1] = '\0';
                 break;
 
             default:
-                if (str_len(mywords) < sizeof(mywords))
+                if (strlen(mywords) + 1 < sizeof(mywords))
                 {
                     strncat(mywords, (char *)&ch, 1);
                 }
@@ -2812,13 +2822,17 @@ static int
 talk_page(
     UTMP *up)
 {
-    int sock, msgsock;
+    int sock = -1;
+    int msgsock;
     pid_t pid;
     struct sockaddr_storage sin;
     int ans, length, myans;
     char buf[60];
     struct addrinfo hints = {0};
     struct addrinfo *hs;
+
+    /* IID.2021-02-19: Fallback to native IPv4 when IPv6 is not available */
+    static const sa_family_t ai_family[] = {AF_INET6, AF_INET};
 
 #ifdef EVERY_Z
     /* Thor.0725: 為 talk & chat 可用 ^z 作準備 */
@@ -2869,31 +2883,36 @@ talk_page(
     }
 #endif
 
-    hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV;
-    hints.ai_flags |= AI_PASSIVE;
-    if (getaddrinfo(NULL, "0", &hints, &hs))
-        return -1;
-
-    for (struct addrinfo *h = hs; h; h = h ->ai_next)
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
+    for (int i = 0; i < COUNTOF(ai_family); ++i)
     {
-        sock = socket(h->ai_family, h->ai_socktype, 0);
-        if (sock < 0)
+        hints.ai_family = ai_family[i];
+        if (getaddrinfo(NULL, "0", &hints, &hs))
             continue;
 
-        length = sizeof(sin);
-        if (bind(sock, h->ai_addr, h->ai_addrlen) < 0 || getsockname(sock, (struct sockaddr *) &sin, (socklen_t *) &length) < 0)
+        for (struct addrinfo *h = hs; h; h = h ->ai_next)
         {
-            close(sock);
-            sock = -1;
-            continue;
-        }
+            sock = socket(h->ai_family, h->ai_socktype, 0);
+            if (sock < 0)
+                continue;
 
-        /* Success */
-        break;
+            length = sizeof(sin);
+            if (bind(sock, h->ai_addr, h->ai_addrlen) < 0 || getsockname(sock, (struct sockaddr *) &sin, (socklen_t *) &length) < 0)
+            {
+                close(sock);
+                sock = -1;
+                continue;
+            }
+
+            /* Success */
+            break;
+        }
+        freeaddrinfo(hs);
+
+        if (sock >= 0)
+            break; /* Success */
     }
-    freeaddrinfo(hs);
     if (sock < 0)
         return 0;
 
@@ -2903,7 +2922,7 @@ talk_page(
         cutmp->sockport = atoi(port_str);
     }
     strcpy(cutmp->mateid, up->userid);
-    up->talker = cutmp;
+    up->talker = cutmp - ushm->uslot;
 #ifdef  HAVE_PIP_FIGHT
     if (myans == 'c')
         utmp_mode(M_CHICKEN);
@@ -2972,14 +2991,14 @@ talk_page(
 #ifdef  HAVE_PIP_FIGHT
     else if (ans == 'c')
     {
-        DL_HOTSWAP_SCOPE void (*p)(void) = NULL;
+        DL_HOTSWAP_SCOPE int (*p)(int, int) = NULL;
         if (!p)
             p = DL_NAME_GET("pip.so", pip_vf_fight);
         if (p)
         {
-            up->pip = NULL;
+            up->pip = -1;
             (*p)(msgsock, 2);
-            cutmp->pip = NULL;
+            cutmp->pip = -1;
         }
         add_io(0, 60);
 /*      pip_vf_fight(msgsock, 1);*/
@@ -3007,7 +3026,7 @@ talk_page(
     }
 
     close(msgsock);
-    cutmp->talker = NULL;
+    cutmp->talker = -1;
 #ifdef  LOG_TALK
     if (ans == 'y' && cutmp->mode != M_CHICKEN)    /* mat.991011: 防止Talk被拒絕時，產生聊天記錄的record */
         talk_save();          /* lkchu.981201: talk 記錄處理 */
@@ -3087,7 +3106,10 @@ ulist_body(
     max = xo->max;
     if (max <= 0)
     {
-        return XO_QUIT;
+        move(3, 0);
+        prints("\n《%s》目前沒有資料\n", (cuser.ufo2 & UFO2_PAL) ? "好友列表" : "網友列表");
+        clrtobot();
+        return XO_NONE;
     }
 
     cnt = xo->top;
@@ -3166,15 +3188,20 @@ ulist_body(
 
                 strcpy(color, wcolor[fcolor]);
 
-                prints("%6d%c%s%-13s%-*.*s%s%-*.*s%c%c %-12.12s %5.5s",
+                /* IID.2021-03-06: Limit the length of the field for user name to make the field for user address information larger */
+                const int margin = BMAX((d_cols >> 1) + 21 - (int)(unsigned)BMAX(sizeof(up->realname), sizeof(up->username)), 0);
+                const int name_len = (d_cols >> 1) + 21 - margin;
+                const int from_len = ((d_cols+1) >> 1) + 15 + margin;
+
+                prints("%6d%c%s%-*s %-*.*s %s%-*.*s %c%c %-*.*s %5.5s",
                     cnt, (up->ufo & UFO_WEB)?'*':' ',
-                    color, up->userid,
-                    (d_cols >> 1) + 22, (d_cols >> 1) + 21, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
+                    color, IDLEN, up->userid,
+                    name_len, name_len, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
                     colortmp > 0 ? "\x1b[m" : "",
-                    ((d_cols+1) >> 1) + 16, ((d_cols+1) >> 1) + 15,
+                    from_len, from_len,
                     (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
                     HIDDEN_SRC : up->from, diff, diffmsg,
-                    bmode(up, 0), buf);
+                    IDLEN, IDLEN, bmode(up, 0), buf);
             }
             else
             {
@@ -3196,7 +3223,7 @@ ulist_cmp_userid(
     const PICKUP *a = (const PICKUP *)i;
     const PICKUP *b = (const PICKUP *)j;
     if (a->type == b->type)
-                return str_cmp(a->utmp->userid, b->utmp->userid);
+                return str_casecmp(a->utmp->userid, b->utmp->userid);
     else
         return a->type - b->type;
 }
@@ -3205,7 +3232,7 @@ static int
 ulist_cmp_host(
     const void *i, const void *j)
 {
-    return str_cmp(((const PICKUP *)i)->utmp->from, ((const PICKUP *)j)->utmp->from);
+    return str_casecmp(((const PICKUP *)i)->utmp->from, ((const PICKUP *)j)->utmp->from);
 }
 
 static int
@@ -3226,7 +3253,7 @@ static int
 ulist_cmp_nick(
     const void *i, const void *j)
 {
-    return str_cmp(((const PICKUP *)i)->utmp->username, ((const PICKUP *)j)->utmp->username);
+    return str_casecmp(((const PICKUP *)i)->utmp->username, ((const PICKUP *)j)->utmp->username);
 }
 
 #ifdef  HAVE_BOARD_PAL
@@ -3262,6 +3289,7 @@ ulist_init(
 #ifdef HAVE_BOARD_PAL
     bool isbpal;
 #endif
+    int user_num = 0; /* All online users including invisible users */
 
     pp = ulist_pool;
 
@@ -3274,7 +3302,7 @@ ulist_init(
     seecloak = HAS_PERM(PERM_SEECLOAK);
 
     up = ushm->uslot;
-    uceil = (UTMP *) ((char *) up + ushm->offset);
+    uceil = up + ushm->ubackidx;
 
     max = 0;
     bad = false;
@@ -3291,6 +3319,7 @@ ulist_init(
         userno = up->userno;
         if (userno <= 0 || (up->pid <= 0 && !HAS_PERM(PERM_SYSOP|PERM_SEECLOAK)))
             continue;
+        ++user_num;
         if (!seecloak && (up->ufo & UFO_CLOAK))
             continue;
         tmp = can_see(up);
@@ -3346,6 +3375,7 @@ ulist_init(
         userno = up->userno;
         if (userno <= 0)
             continue;
+        ++user_num;
         if ((userno == self) || ((seecloak || !(up->ufo & UFO_CLOAK))&&(can_see(up)!=2 || HAS_PERM(PERM_SYSOP)) && (!filter || is_pal(userno))))
         {
             *pp++ = up;
@@ -3363,7 +3393,7 @@ ulist_init(
     {
         xsort(ulist_pool, max, sizeof(PICKUP), ulist_cmp[pickup_way - 1]);
     }
-    total_num = max;
+    total_num = user_num;
 
 /* cache.101023: shm爆炸造成人數亂掉後的自動修正 */
 #ifdef AUTO_FIX_INFO
@@ -3382,20 +3412,23 @@ static int
 ulist_neck(
     XO *xo)
 {
+    /* IID.2021-03-06: Limit the length of the field for user name to make the field for user address information larger */
+    const int margin = BMAX((d_cols >> 1) + 21 - (int)(unsigned)BMAX(MEMBER_SIZE(ACCT, realname), MEMBER_SIZE(ACCT, username)), 0);
+    const int name_len = (d_cols >> 1) + 21 - margin;
+    const int from_len = ((d_cols+1) >> 1) + 15 + margin;
+
     move(1, 0);
+    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d"
+        IF_ON(HAVE_BOARD_PAL, " \x1b[0;36m板友：%d", "")
+        "\x1b[m",
+        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num
 #ifdef HAVE_BOARD_PAL
-    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d \x1b[0;36m板友：%d\x1b[m",
-        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num, board_pals);
-    prints(NECK_ULIST,
-        (d_cols >> 1) + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
-        ((d_cols+1) >> 1) + 13, (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
-#else
-    prints("  排列方式：[\x1b[1m%s\x1b[m] 上站人數：%d %s我的朋友：%d %s與我為友：%d %s壞人：%d\x1b[m",
-        msg_pickup_way[pickup_way], total_num, COLOR_PAL, friend_num+pfriend_num, COLOR_OPAL, friend_num+ofriend_num, COLOR_BAD, bfriend_num);
-    prints(NECK_ULIST,
-        (d_cols >> 1) + 22, (HAS_PERM(PERM_SYSOP) && (cuser.ufo & UFO_REALNAME)) ? "真實姓名" : "暱  稱",
-        ((d_cols+1) >> 1) + 13, (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
+        , board_pals
 #endif
+        );
+    prints(NECK_ULIST,
+        name_len, (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME)) ? "真實姓名" : "暱  稱",
+        from_len, (cuser.ufo2 & UFO2_SHIP) ? "好友描述" :"故鄉", "動態");
 
     return ulist_body(xo);
 }
@@ -3439,9 +3472,10 @@ ulist_pal(
 static int
 ulist_search(
     XO *xo,
+    int pos,
     int step)
 {
-    int num, pos, max;
+    int num, max;
     PICKUP *pp;
     static char buf[IDLEN + 1];
 
@@ -3453,7 +3487,7 @@ ulist_search(
         str_lower(bufl, buf);
         buflen = strlen(bufl); /* Thor: 必定大於0 */
 
-        pos = num = xo->pos;
+        num = pos;
         max = xo->max;
         pp = ulist_pool;
         do
@@ -3465,10 +3499,10 @@ ulist_search(
                 pos = 0;
 
             /* Thor.990124: id 則從頭 match */
-            /* if (str_ncmp(pp[pos]->userid, bufl, buflen)==0 */
+            /* if (str_ncasecmp(pp[pos]->userid, bufl, buflen)==0 */
 
-            if (str_str(pp[pos].utmp->userid, bufl) /* lkchu.990127: 找部份 id 好像比較好用 :p */
-            || str_str(pp[pos].utmp->username, bufl)) /* Thor.990124: 可以找 部分 nickname */
+            if (str_casestr(pp[pos].utmp->userid, bufl) /* lkchu.990127: 找部份 id 好像比較好用 :p */
+            || str_casestr(pp[pos].utmp->username, bufl)) /* Thor.990124: 可以找 部分 nickname */
             {
                 move(b_lines, 0);
                 clrtoeol();
@@ -3483,30 +3517,33 @@ ulist_search(
 
 static int
 ulist_search_forward(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    return ulist_search(xo, 1); /* step = +1 */
+    return ulist_search(xo, pos, 1); /* step = +1 */
 }
 
 static int
 ulist_search_backward(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    return ulist_search(xo, -1); /* step = -1 */
+    return ulist_search(xo, pos, -1); /* step = -1 */
 }
 
 
 
 static int
 ulist_makepal(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (cuser.userlevel)
     {
         UTMP *up;
         int userno;
 
-        up = ulist_pool[xo->pos].utmp;
+        up = ulist_pool[pos].utmp;
         userno = up->userno;
         if (userno > 0 && !is_pal(userno) && !is_bad(userno)   /* 尚未列入好友名單 */
                 && (userno != cuser.userno))    /* lkchu.981217: 自己不可為好友 */
@@ -3539,14 +3576,15 @@ ulist_makepal(
 
 static int
 ulist_makebad(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (cuser.userlevel)
     {
         UTMP *up;
         int userno;
 
-        up = ulist_pool[xo->pos].utmp;
+        up = ulist_pool[pos].utmp;
         userno = up->userno;
         if (userno > 0 && !is_pal(userno) && !is_bad(userno)  /* 尚未列入好友名單 */
                 && (userno != cuser.userno))    /* lkchu.981217: 自己不可為好友 */
@@ -3578,7 +3616,8 @@ ulist_makebad(
 
 static int
 ulist_mail(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     char userid[IDLEN + 1];
 
@@ -3586,7 +3625,7 @@ ulist_mail(
     if (!HAS_PERM(PERM_INTERNET) || HAS_PERM(PERM_DENYMAIL) || !cuser.userlevel)
         return XO_NONE;
 
-    strcpy(userid, ulist_pool[xo->pos].utmp->userid);
+    strcpy(userid, ulist_pool[pos].utmp->userid);
     if (*userid)
     {
         vs_bar("寄  信");
@@ -3602,11 +3641,12 @@ ulist_mail(
 
 static int
 ulist_query(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     move(1, 0);
     clrtobot();
-    my_query(ulist_pool[xo->pos].utmp->userid, 0);
+    my_query(ulist_pool[pos].utmp->userid, 0);
     /*return XO_NECK;*/
     return XO_INIT;
 }
@@ -3631,7 +3671,7 @@ ulist_broadcast(
     if (num < 1)
         return XO_NONE;
 
-    bmw.caller = 0;
+    bmw.caller = -1;
     bmw_edit(NULL, "★廣播：", &bmw, 0);
     sprintf(buf, "★廣播：%s", bmw.msg);
     strcpy(bmw.msg, buf);
@@ -3648,7 +3688,7 @@ ulist_broadcast(
         strcpy(bmw.userid, "SYSOP");
         /*bmw.sender = 1;*/
     }
-    if (bmw.caller)
+    if (bmw.caller >= 0)
     {
         pp = ulist_pool;
         while (--num >= 0)
@@ -3668,13 +3708,14 @@ ulist_broadcast(
 
 static int
 ulist_talk(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (HAS_PERM(PERM_PAGE))
     {
         UTMP *up;
 
-        up = ulist_pool[xo->pos].utmp;
+        up = ulist_pool[pos].utmp;
         if (can_override(up))
             return talk_page(up) ? XO_INIT : XO_FOOT;
     }
@@ -3684,13 +3725,14 @@ ulist_talk(
 
 static int
 ulist_write(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (HAS_PERM(PERM_PAGE))
     {
         UTMP *up;
 
-        up = ulist_pool[xo->pos].utmp;
+        up = ulist_pool[pos].utmp;
         if (can_message(up))
         {
             BMW bmw;
@@ -3721,12 +3763,13 @@ ulist_write(
 
 static int
 ulist_edit(                     /* Thor: 可線上查看及修改使用者 */
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     ACCT acct;
 
     if (!HAS_PERM(PERM_SYSOP) ||
-        acct_load(&acct, ulist_pool[xo->pos].utmp->userid) < 0)
+        acct_load(&acct, ulist_pool[pos].utmp->userid) < 0)
         return XO_NONE;
 
     vs_bar("使用者設定");
@@ -3737,7 +3780,8 @@ ulist_edit(                     /* Thor: 可線上查看及修改使用者 */
 /* BLACK SU */
 static int
 ulist_su(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     XO *tmp;
     ACCT acct;
@@ -3746,7 +3790,7 @@ ulist_su(
     ufo = cuser.ufo;
     level = cuser.userlevel;
     if (!supervisor ||
-        acct_load(&acct, ulist_pool[xo->pos].utmp->userid) < 0)
+        acct_load(&acct, ulist_pool[pos].utmp->userid) < 0)
         return XO_NONE;
 
     memcpy(&cuser, &acct, sizeof(ACCT));
@@ -3778,17 +3822,18 @@ ulist_su(
 
 static int
 ulist_kick(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     ACCT u;
-    acct_load(&u, ulist_pool[xo->pos].utmp->userid);
+    acct_load(&u, ulist_pool[pos].utmp->userid);
     if ((HAS_PERM(PERM_SYSOP)&& (!(u.userlevel & PERM_SYSOP) || !strcmp(cuser.userid, u.userid)))||check_admin(cuser.userid))
     {
         UTMP *up;
         pid_t pid;
         char buf[80];
 
-        up = ulist_pool[xo->pos].utmp;
+        up = ulist_pool[pos].utmp;
         if ((pid = up->pid))
         {
             if (vans(msg_sure_ny) != 'y' || pid != up->pid)
@@ -3856,7 +3901,7 @@ ulist_nickchange(
     strcpy(buf, str = cuser.username);
     vget(B_LINES_REF, 0, "請輸入新的暱稱：", buf, sizeof(cuser.username), GCARRY);
 
-    if (strcmp(buf, str) && str_len(buf) > 0)
+    if (strcmp(buf, str) && str_len_nospace(buf) > 0)
     {
         strcpy(str, buf);
         strcpy(cutmp->username, buf);
@@ -3988,7 +4033,8 @@ ulist_readmail(
 
 static int
 ulist_del(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     UTMP *up;
     char ans;
@@ -4000,7 +4046,7 @@ ulist_del(
     ans = vans("是否刪除(y/N)：");
     if (ans == 'y' || ans == 'Y')
     {
-        up = ulist_pool[xo->pos].utmp;
+        up = ulist_pool[pos].utmp;
         userno = up->userno;
 
         usr_fpath(fpath, cuser.userid, FN_PAL);
@@ -4028,7 +4074,8 @@ ulist_del(
 
 static int
 ulist_changeship(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     UTMP *up;
     int userno;
@@ -4037,7 +4084,7 @@ ulist_changeship(
     PAL *pal;
     int check;
 
-    up = ulist_pool[xo->pos].utmp;
+    up = ulist_pool[pos].utmp;
     userno = up->userno;
 
 
@@ -4076,12 +4123,13 @@ ulist_changeship(
 #if 1
 static int
 ulist_state(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     char buf[128];
     if (!HAS_PERM(PERM_SYSOP))
         return XO_NONE;
-    sprintf(buf, "PID : %d", ulist_pool[xo->pos].utmp->pid);
+    sprintf(buf, "PID : %d", ulist_pool[pos].utmp->pid);
     vmsg(buf);
     return XO_INIT;
 }
@@ -4110,46 +4158,46 @@ KeyFuncList ulist_cb =
     {XO_HEAD, {ulist_head}},
     {XO_BODY, {ulist_body}},
 #if 1
-    {'S', {ulist_state}},
+    {'S' | XO_POSF, {.posf = ulist_state}},
 #endif
     {'y', {ulist_readmail}},
 /* BLACK SU */
-    {'u', {ulist_su}},
+    {'u' | XO_POSF, {.posf = ulist_su}},
 /* BLACK SU */
     {'m', {ulist_message}},
     {'Z', {ulist_ship}},
     {'f', {ulist_pal}},
-    {'a', {ulist_makepal}},
-    {'A', {ulist_makebad}},
-    {'t', {ulist_talk}},
-    {'w', {ulist_write}},
+    {'a' | XO_POSF, {.posf = ulist_makepal}},
+    {'A' | XO_POSF, {.posf = ulist_makebad}},
+    {'t' | XO_POSF, {.posf = ulist_talk}},
+    {'w' | XO_POSF, {.posf = ulist_write}},
     {'l', {ulist_recall}},                /* Thor: 熱訊回顧 */
-    {'j', {ulist_changeship}},
-    {'q', {ulist_query}},
+    {'j' | XO_POSF, {.posf = ulist_changeship}},
+    {'q' | XO_POSF, {.posf = ulist_query}},
     {'b', {ulist_broadcast}},
     {'s', {xo_cb_init}},          /* refresh status Thor: 應user要求 */
     {'c', {t_cloak}},
     {'R', {ulist_realname}},
     {'o', {ulist_mp}},
-    {'d', {ulist_del}},
+    {'d' | XO_POSF, {.posf = ulist_del}},
     {'p', {ulist_pager}},
-    {Ctrl('Q'), {ulist_query}},
-    {Ctrl('K'), {ulist_kick}},
-    {Ctrl('X'), {ulist_edit}},
+    {Ctrl('Q') | XO_POSF, {.posf = ulist_query}},
+    {Ctrl('K') | XO_POSF, {.posf = ulist_kick}},
+    {Ctrl('X') | XO_POSF, {.posf = ulist_edit}},
     {'g', {ulist_nickchange}},
 #ifdef HAVE_CHANGE_FROM
     {Ctrl('F'), {ulist_fromchange}},
 #endif
 
     /* Thor.990125: 可前後搜尋, id or nickname */
-    {'/', {ulist_search_forward}},
-    {'?', {ulist_search_backward}},
+    {'/' | XO_POSF, {.posf = ulist_search_forward}},
+    {'?' | XO_POSF, {.posf = ulist_search_backward}},
 
 #ifdef  APRIL_FIRST
     {'X', {ulist_april1}},
 #endif
 
-    {'M', {ulist_mail}},
+    {'M' | XO_POSF, {.posf = ulist_mail}},
     {KEY_TAB, {ulist_toggle}},
     {'h', {ulist_help}}
 };
@@ -4253,10 +4301,12 @@ talk_rqst(void)
     struct addrinfo hints = {0};
     struct addrinfo *hs;
 
-    up = cutmp->talker;
-    if (!up)
+    const utmp_idx_t uidx = cutmp->talker;
+    if (uidx < 0)
         return;
-    up->talker = cutmp;
+
+    up = &ushm->uslot[uidx];
+    up->talker = cutmp - ushm->uslot;
 
     port = up->sockport;
     if (!port)
@@ -4365,7 +4415,7 @@ over_for:
 
     hints.ai_family = AF_UNSPEC;
     hints.ai_socktype = SOCK_STREAM;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV;
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV;
     {
         char port_str[12];
         sprintf(port_str, "%d", port);
@@ -4391,15 +4441,15 @@ over_for:
 #ifdef  HAVE_PIP_FIGHT
             else if (ans == 'c')
             {
-                DL_HOTSWAP_SCOPE void (*p)(void) = NULL;
+                DL_HOTSWAP_SCOPE int (*p)(int, int) = NULL;
                 if (!p)
                     p = DL_NAME_GET("pip.so", pip_vf_fight);
                 strcpy(cutmp->mateid, up->userid);
                 if (p)
                 {
-                    cutmp->pip = NULL;
+                    cutmp->pip = -1;
                     (*p)(sock, 1);
-                    cutmp->pip = NULL;
+                    cutmp->pip = -1;
 
                 }
                 add_io(0, 60);
@@ -4578,7 +4628,7 @@ banmsg_sync(
             {
                 if (size > sizeof(BANMSG))
                 {
-                    xsort(pbase, size / sizeof(BANMSG), sizeof(BANMSG), (int (*)(const void *lhs, const void *rhs))str_cmp);
+                    xsort(pbase, size / sizeof(BANMSG), sizeof(BANMSG), (int (*)(const void *lhs, const void *rhs))str_casecmp);
                 }
 
                 lseek(fd, 0, SEEK_SET);
@@ -4603,22 +4653,24 @@ banmsg_sync(
 static int banmsg_add(XO *xo);
 
 
-static void
+static int
 banmsg_item(
-    int num,
-    const BANMSG *banmsg)
+    XO *xo,
+    int pos)
 {
+    const BANMSG *const banmsg = (const BANMSG *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d    %-14s%s\n", num, banmsg->userid, banmsg->ship);
+    return XO_NONE;
 }
 
 static int
 banmsg_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const BANMSG *const banmsg = (const BANMSG *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    banmsg_item(xo->pos + 1, banmsg);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return banmsg_item(xo, pos);
 }
 
 
@@ -4626,7 +4678,6 @@ static int
 banmsg_body(
     XO *xo)
 {
-    const BANMSG *banmsg;
     int num, max, tail;
 
     move(3, 0);
@@ -4634,20 +4685,19 @@ banmsg_body(
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增嗎(y/N)？[N] ") == 'y')
-            return banmsg_add(xo);
-        return XO_QUIT;
+        outs("\n《拒收名單》目前沒有資料\n");
+        outs("\n  (a)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    banmsg = (const BANMSG *) xo_pool_base + num;
     tail = num + XO_TALL;
     if (max > tail)
         max = tail;
 
     do
     {
-        banmsg_item(++num, banmsg++);
+        banmsg_item(xo, num++);
     } while (num < max);
 
     return XO_NONE;
@@ -4741,12 +4791,13 @@ banmsg_add(
 
 static int
 banmsg_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (vans(msg_del_ny) == 'y')
     {
 
-        if (!rec_del(xo->dir, sizeof(BANMSG), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(BANMSG), pos, NULL, NULL))
         {
 
             banmsg_cache();
@@ -4759,13 +4810,11 @@ banmsg_delete(
 
 static int
 banmsg_change(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     BANMSG *banmsg, mate;
-    int pos, cur;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     banmsg = (BANMSG *) xo_pool_base + pos;
 
     mate = *banmsg;
@@ -4782,12 +4831,13 @@ banmsg_change(
 
 static int
 banmsg_mail(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     BANMSG *banmsg;
     char *userid;
 
-    banmsg = (BANMSG *) xo_pool_base + xo->pos;
+    banmsg = (BANMSG *) xo_pool_base + pos;
     userid = banmsg->userid;
     if (*userid)
     {
@@ -4810,11 +4860,12 @@ banmsg_sort(
 
 static int
 banmsg_query(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const BANMSG *banmsg;
 
-    banmsg = (const BANMSG *) xo_pool_base + xo->pos;
+    banmsg = (const BANMSG *) xo_pool_base + pos;
     move(1, 0);
     clrtobot();
     my_query(banmsg->userid, 1);
@@ -4837,13 +4888,13 @@ KeyFuncList banmsg_cb =
     {XO_LOAD, {banmsg_load}},
     {XO_HEAD, {banmsg_head}},
     {XO_BODY, {banmsg_body}},
-    {XO_CUR, {banmsg_cur}},
+    {XO_CUR | XO_POSF, {.posf = banmsg_cur}},
 
     {'a', {banmsg_add}},
-    {'c', {banmsg_change}},
-    {'d', {banmsg_delete}},
-    {'m', {banmsg_mail}},
-    {'q', {banmsg_query}},
+    {'c' | XO_POSF, {.posf = banmsg_change}},
+    {'d' | XO_POSF, {.posf = banmsg_delete}},
+    {'m' | XO_POSF, {.posf = banmsg_mail}},
+    {'q' | XO_POSF, {.posf = banmsg_query}},
     {'s', {banmsg_sort}},
     {'h', {banmsg_help}}
 };

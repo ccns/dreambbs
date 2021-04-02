@@ -19,7 +19,7 @@ outs_centered(const char *str)
     outs(str);
 }
 
-GCC_CHECK_FORMAT(1, 2) static inline void
+GCC_FORMAT(1, 2) static inline void
 prints_centered(const char *fmt, ...)
 {
     va_list args;

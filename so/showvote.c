@@ -16,29 +16,30 @@ typedef struct
     char email[60];
 } LOG;  /* DISKDATA(raw) */
 
-static void
+static int
 show_item(
-int num,
-const LOG *show)
+XO *xo,
+int pos)
 {
+    const LOG *const show = (const LOG *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d     %s\n", num, show->email);
+    return XO_NONE;
 }
 
 static int
 show_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const LOG *const show = (const LOG *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    show_item(xo->pos + 1, show);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return show_item(xo, pos);
 }
 
 static int
 show_body(
 XO *xo)
 {
-    const LOG *show;
     int num, max, tail;
 
     move(3, 0);
@@ -46,19 +47,18 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-            return show_add(xo);
-        return XO_QUIT;
+        outs("\n《已投票名單》目前沒有資料\n");
+        outs("\n  (^P)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    show = (const LOG *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        show_item(++num, show++);
+        show_item(xo, num++);
     }
     while (num < max);
 
@@ -125,12 +125,13 @@ XO *xo)
 
 static int
 show_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(LOG), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(LOG), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -141,13 +142,11 @@ XO *xo)
 
 static int
 show_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     LOG *show, mate;
-    int pos, cur;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     show = (LOG *) xo_pool_base + pos;
 
     mate = *show;
@@ -175,20 +174,21 @@ KeyFuncList show_cb =
     {XO_LOAD, {show_load}},
     {XO_HEAD, {show_head}},
     {XO_BODY, {show_body}},
-    {XO_CUR, {show_cur}},
+    {XO_CUR | XO_POSF, {.posf = show_cur}},
 
     {Ctrl('P'), {show_add}},
-    {'r', {show_change}},
-    {'c', {show_change}},
+    {'r' | XO_POSF, {.posf = show_change}},
+    {'c' | XO_POSF, {.posf = show_change}},
     {'s', {xo_cb_init}},
-    {'d', {show_delete}},
+    {'d' | XO_POSF, {.posf = show_delete}},
     {'h', {show_help}}
 };
 
 
 int
 Showvote(
-XO *xo)
+XO *xo,
+int pos)
 {
     DL_HOLD;
     XO *last;
@@ -199,7 +199,7 @@ XO *xo)
 
     last = xz[XZ_OTHER - XO_ZONE].xo;  /* record */
 
-    vch = (const VCH *) xo_pool_base + xo->pos;
+    vch = (const VCH *) xo_pool_base + pos;
     hdr_fpath(fpath, xo->dir, (const HDR *) vch);
     fname = strrchr(fpath, '@');
     *fname = 'E';

@@ -23,10 +23,9 @@ int main(void)
     printf("st.st_size=%lld\n", (long long)st.st_size);
     for (n=0; n < (st.st_size/sizeof(SCHEMA)); n++)
     {
-        strncpy(userid, usr[n].userid, IDLEN);
-        userid[IDLEN]='\0';
-        printf("uptime:%s userid:%-12s\n",
-            Btime(&usr[n].uptime), userid);
+        str_scpy(userid, usr[n].userid, sizeof(userid));
+        printf("uptime:%s userid:%-*s\n",
+            Btime_any(&usr[n].uptime), IDLEN, userid);
     }
     free(usr);
 }

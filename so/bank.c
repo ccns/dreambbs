@@ -22,8 +22,7 @@ void log_bank(
     char c_time[25], c_buf[100]={0};
 
     now = time(0);
-    strncpy(c_time, ctime(&now), 24);
-    c_time[24] = '\0';
+    str_scpy(c_time, ctime(&now), sizeof(c_time));
 
     if (mode == 1)
         sprintf(c_buf, "%s %s 優良點數(%d)->夢幣(%d)\n", c_time, cuser.userid, a, b);
@@ -99,8 +98,7 @@ static int point1_money(void)
         time_t now;
         char c_time[25], c_buf[100]={0};
         now = time(0);
-        strncpy(c_time, ctime(&now), 24);
-        c_time[24] = '\0';
+        str_scpy(c_time, ctime(&now), sizeof(c_time));
         sprintf(c_buf, "%s %s 優良點數(%d)->夢幣(%d)\n", c_time, cuser.userid, num, (int)temp);
         f_cat(FN_BANK, c_buf);
 
@@ -132,8 +130,8 @@ TransferAccount(void)
     vs_bar("匯款");
 
     move (9, 8);
-    prints("\x1b[1;33m轉帳相關規定： \x1b[36m１. 一次最少要給 100 夢幣(稅前)。\n"
-        "                       ２. 收手續費 10 %%。\x1b[m");
+    prints("\x1b[1;33m轉帳相關規定： \x1b[36m１. 一次最少要給 100 夢幣(稅前)。\x1b[m\n"
+        "                       \x1b[36m２. 收手續費 10 %%。\x1b[m");
 
     if (acct_get("要匯給誰：", &acct)<1)
         return 0;
@@ -223,8 +221,7 @@ TransferAccount(void)
         time_t now;
         char c_time[25], c_buf[100]={0};
         now = time(0);
-        strncpy(c_time, ctime(&now), 24);
-        c_time[24] = '\0';
+        str_scpy(c_time, ctime(&now), sizeof(c_time));
         sprintf(c_buf, "%s %s 匯款(%d)-> %s (%d)\n", c_time, cuser.userid, pay, userid, (int)atoi(buf));
         f_cat(FN_BANK, c_buf);
 
@@ -239,9 +236,9 @@ TransferAccount(void)
 
 typedef struct
 {
-    int money;          /* 夢幣 */
-    int save;           /* 存款 */
-    int request;        /* 小雞點券 */
+    int32_t money;      /* 夢幣 */
+    int32_t save;       /* 存款 */
+    int32_t request;    /* 小雞點券 */
 }       MONEY;  /* DISKDATA(raw) */
 
 /*
@@ -319,8 +316,7 @@ money_back(void)
         time_t now;
         char c_time[25], c_buf[100]={0};
         now = time(0);
-        strncpy(c_time, ctime(&now), 24);
-        c_time[24] = '\0';
+        str_scpy(c_time, ctime(&now), sizeof(c_time));
         sprintf(c_buf, "%s %s 匯入舊夢幣(%d)\n", c_time, acct.userid, (int)m1);
         f_cat(FN_BANK, c_buf);
 

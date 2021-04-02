@@ -158,8 +158,8 @@ ll_out(
 
 
 #ifdef  BATCH_SMTP
-int
-bsmtp(
+static int
+bsmtp_batch(
     const char *fpath, const char *title, const char *rcpt,
     int method)
 {
@@ -203,8 +203,7 @@ bsmtp(
     cuser.numemail++;           /* 記錄使用者共寄出幾封 Internet E-mail */
     return chrono;
 }
-
-#else
+#endif
 
 /* ----------------------------------------------------- */
 /* (direct) SMTP                                         */
@@ -219,18 +218,24 @@ bsmtp(
     int sock;
     time_t chrono, stamp;
     FILE *fp, *fr, *fw;
-    char *str, buf[512], from[80], subject[80], msgid[80], keyfile[80], valid[10];
+    char *str, buf[512], from[80], subject[80], msgid[80], keyfile[80], valid[10], boundary[256];
+    char fname[256];
 #ifdef HAVE_SIGNED_MAIL
     const char *signature = NULL;
-    char prikey[PLAINPASSLEN];
+    char prikey[PLAINPASSSIZE];
     union {
-        char str[PLAINPASSLEN];
+        char str[PLAINPASSSIZE];
         struct {
             unsigned int hash, hash2;
         } val;
     } sign = {{0}};
 
-    *prikey = prikey[PLAINPASSLEN-1] = sign.str[PLAINPASSLEN-1] = '\0'; /* Thor.990413:註解: 字串結束 */
+    *prikey = prikey[PLAINPASSSIZE-1] = sign.str[PLAINPASSSIZE-1] = '\0'; /* Thor.990413:註解: 字串結束 */
+#endif
+
+#ifdef BATCH_SMTP
+    if (!(method & MQ_ATTACH))
+        return bsmtp_batch(fpath, title, rcpt, method);
 #endif
 
     cuser.numemail++;           /* 記錄使用者共寄出幾封 Internet E-mail */
@@ -257,11 +262,17 @@ bsmtp(
             fprintf(fp, "%s\n", buf);
             fclose(fp);
         }
-        strncpy(valid, buf, 10);
+        str_scpy(valid, buf, sizeof(valid));
 
     }
     else
     {
+        if (method & MQ_ATTACH)
+        {
+            const struct tm *const xtime = localtime(&chrono);
+            sprintf(fname, "mail_%04d%02d%02d.tgz", xtime->tm_year + 1900, xtime->tm_mon + 1, xtime->tm_mday);
+        }
+
         /* Thor.990125: MYHOSTNAME統一放入 str_host */
         sprintf(from, "%s.bbs@%s", cuser.userid, str_host);
     }
@@ -292,6 +303,9 @@ bsmtp(
     {
         archiv32(chrono, msgid);
 
+        if (method & MQ_ATTACH)
+            sprintf(boundary, "----=_NextPart_%s", msgid);
+
         move(b_lines, 0);
         clrtoeol();
 
@@ -312,48 +326,30 @@ bsmtp(
         fw = fdopen(sock, "w");
 
         fgets(buf, sizeof(buf), fr);
-        if (memcmp(buf, "220", 3))
+        if (strncmp(buf, "220", 3))
             goto smtp_error;
         while (buf[3] == '-') /* maniac.bbs@WMStar.twbbs.org 2000.04.18 */
             fgets(buf, sizeof(buf), fr);
 
+#define SMTP_TRY_SENDF(...) do { \
+    fprintf(fw, __VA_ARGS__); \
+    fflush(fw); \
+    do \
+    { \
+        fgets(buf, sizeof(buf), fr); \
+        if (strncmp(buf, "250", 3)) \
+            goto smtp_error; \
+    } while (buf[3] == '-'); \
+} while (0)
+
         /* Thor.990125: MYHOSTNAME統一放入 str_host */
-        fprintf(fw, "HELO %s\r\n", str_host);
-        fflush(fw);
-        do
-        {
-            fgets(buf, sizeof(buf), fr);
-            if (memcmp(buf, "250", 3))
-                goto smtp_error;
-        } while (buf[3] == '-');
+        SMTP_TRY_SENDF("HELO %s\r\n", str_host);
+        SMTP_TRY_SENDF("MAIL FROM:<%s>\r\n", from);
+        SMTP_TRY_SENDF("RCPT TO:<%s>\r\n", rcpt);
+/*      SMTP_TRY_SENDF("DATA\r\n", rcpt);*/ /* statue.000713 */
+        SMTP_TRY_SENDF("DATA\r\n");
 
-        fprintf(fw, "MAIL FROM:<%s>\r\n", from);
-        fflush(fw);
-        do
-        {
-            fgets(buf, sizeof(buf), fr);
-            if (memcmp(buf, "250", 3))
-                goto smtp_error;
-        } while (buf[3] == '-');
-
-        fprintf(fw, "RCPT TO:<%s>\r\n", rcpt);
-        fflush(fw);
-        do
-        {
-            fgets(buf, sizeof(buf), fr);
-            if (memcmp(buf, "250", 3))
-                goto smtp_error;
-        } while (buf[3] == '-');
-
-/*      fprintf(fw, "DATA\r\n", rcpt);*/ /* statue.000713 */
-        fprintf(fw, "DATA\r\n");
-        fflush(fw);
-        do
-        {
-            fgets(buf, sizeof(buf), fr);
-            if (memcmp(buf, "354", 3))
-                goto smtp_error;
-        } while (buf[3] == '-');
+#undef SMTP_TRY_SENDF
 
         /* ------------------------------------------------- */
         /* begin of mail header                              */
@@ -362,10 +358,12 @@ bsmtp(
         /* Thor.990125: 儘可能的像 RFC822 & sendmail的作法, 免得別人不接:p */
         fprintf(fw, "From: %s\r\nTo: %s\r\nSubject: %s\r\nX-Sender: %s (%s)\r\n"
             "Date: %s\r\nMessage-Id: <%s@%s>\r\n"
-            "X-Disclaimer: [%s] 對本信內容恕不負責\r\n\r\n",
+            "X-Disclaimer: [%s] 對本信內容恕不負責\r\n",
             from, rcpt, title, cuser.userid, cuser.username,
             Atime(&stamp), msgid, str_host,
             str_site);
+        if (!(method & MQ_ATTACH))
+            fputs("\r\n", fw);
 
         if (method & MQ_JUSTIFY)        /* 身分認證信函 */
         {
@@ -373,9 +371,19 @@ bsmtp(
                 cuser.userid, cuser.username, rcpt);
         }
 
-        /* ------------------------------------------------- */
-        /* begin of mail body                                */
-        /* ------------------------------------------------- */
+        if (method & MQ_ATTACH)
+        {
+            fprintf(fw, "MIME-Version: 1.0\r\nContent-Type: multipart/mixed;\r\n"
+                    "\tboundary=\"%s\"\r\n\r\n", boundary);
+
+            fprintf(fw, "This is a multi-part message in MIME format.\r\n");
+            fprintf(fw, "--%s\r\nContent-Type: text/plain;\r\n\tcharset=\"big5\"\r\n"
+                    "Content-Transfer-Encoding: 8bit\r\n\r\n附件名稱：%s\r\n", boundary, fname);
+
+            fprintf(fw, "--%s\r\nContent-Type: application/x-compressed;\r\n\tname=\"%s\"\r\n"
+                    "Content-Transfer-Encoding: base64\r\nContent-Disposition: attachment;\r\n"
+                    "\tfilename=\"%s\"\r\n\r\n", boundary, fname, fname);
+        }
 
         if ((fp = fopen(fpath, "r")))
         {
@@ -395,8 +403,11 @@ bsmtp(
             }
             fclose(fp);
         }
+        if (method & MQ_ATTACH)
+            fprintf(fw, "--%s--\r\n", boundary);
+
 #ifdef HAVE_SIGNED_MAIL
-        if (!(method & MQ_JUSTIFY) && !rec_get(PRIVATE_KEY, prikey, PLAINPASSLEN-1, 0))
+        if (!(method & MQ_JUSTIFY) && !rec_get(PRIVATE_KEY, prikey, PLAINPASSSIZE-1, 0))
         /* Thor.990413: 除了認證函外, 其他信件都要加sign */
         {
             /* Thor.990413: buf用不到了, 借來用用 :P */
@@ -414,7 +425,7 @@ bsmtp(
         fflush(fw);
 
         fgets(buf, sizeof(buf), fr);
-        if (memcmp(buf, "250", 3))
+        if (strncmp(buf, "250", 3))
             goto smtp_error;
 
         fputs("QUIT\r\n", fw);
@@ -442,7 +453,7 @@ smtp_log:
     /* 記錄寄信                                            */
     /* --------------------------------------------------- */
 
-    sprintf(buf, "%s%-13s%c> %s %s %s\n\t%s\n\t%s\n", Btime(&stamp), cuser.userid,
+    sprintf(buf, "%s%-*s %c> %s %s %s\n\t%s\n\t%s\n", Btime(&stamp), IDLEN, cuser.userid,
         ((method == MQ_JUSTIFY) ? '=' : '-'), rcpt, msgid,
 #ifdef HAVE_SIGNED_MAIL
             signature? signature: "NoPriKey",
@@ -454,209 +465,12 @@ smtp_log:
 
     return chrono;
 }
-#endif  /* #ifdef  BATCH_SMTP */
-
-#ifdef HAVE_DOWNLOAD
-int
-bsmtp_file(
-    const char *fpath, const char *title, char *rcpt)
-{
-    int sock;
-    time_t chrono, stamp;
-    FILE *fp, *fr, *fw;
-    char *str, buf[512], from[80], msgid[80], boundary[256];
-    char fname[256];
-    struct tm ntime, *xtime;
-
-
-
-    cuser.numemail++;           /* 記錄使用者共寄出幾封 Internet E-mail */
-    chrono = time(&stamp);
-    xtime = localtime(&chrono);
-    ntime = *xtime;
-
-    sprintf(fname, "mail_%04d%02d%02d.tgz", ntime.tm_year + 1900, ntime.tm_mon + 1, ntime.tm_mday);
-
-    /* --------------------------------------------------- */
-    /* 身分認證信函                                        */
-    /* --------------------------------------------------- */
-
-    /* Thor.990125: MYHOSTNAME統一放入 str_host */
-    sprintf(from, "%s.bbs@%s", cuser.userid, str_host);
-
-#ifdef HAVE_SMTP_SERVER
-    {
-        int i;
-        const char *const alias[] = SMTP_SERVER, *str_alias;
-        for (i=0; (str_alias = alias[i]); i++)
-        {
-            sock = dns_open(str_alias, 25);
-            if (sock >= 0)
-                break;
-        }
-        if (sock < 0)
-        {
-            str = strchr(rcpt, '@') + 1;
-            sock = dns_smtp(str);
-        }
-    }
-#else
-    str = strchr(rcpt, '@') + 1;
-    sock = dns_smtp(str);
-#endif
-
-    if (sock >= 0)
-    {
-        archiv32(chrono, msgid);
-
-        sprintf(boundary, "----=_NextPart_%s", msgid);
-
-        move(b_lines, 0);
-        clrtoeol();
-
-        prints("★ 寄信給 %s \x1b[5m...\x1b[m", rcpt);
-        refresh();
-
-        sleep(1);                       /* wait for mail server response */
-
-        fr = fdopen(sock, "r");
-        fw = fdopen(sock, "w");
-
-        fgets(buf, sizeof(buf), fr);
-        if (memcmp(buf, "220", 3))
-            goto smtp_file_error;
-        while (buf[3] == '-') /* maniac.bbs@WMStar.twbbs.org 2000.04.18 */
-            fgets(buf, sizeof(buf), fr);
-
-        /* Thor.990125: MYHOSTNAME統一放入 str_host */
-        fprintf(fw, "HELO %s\r\n", str_host);
-        fflush(fw);
-        do
-        {
-            fgets(buf, sizeof(buf), fr);
-            if (memcmp(buf, "250", 3))
-                goto smtp_file_error;
-        } while (buf[3] == '-');
-
-        fprintf(fw, "MAIL FROM:<%s>\r\n", from);
-        fflush(fw);
-        do
-        {
-            fgets(buf, sizeof(buf), fr);
-            if (memcmp(buf, "250", 3))
-                goto smtp_file_error;
-        } while (buf[3] == '-');
-
-        fprintf(fw, "RCPT TO:<%s>\r\n", rcpt);
-        fflush(fw);
-        do
-        {
-            fgets(buf, sizeof(buf), fr);
-            if (memcmp(buf, "250", 3))
-                goto smtp_file_error;
-        } while (buf[3] == '-');
-
-        fprintf(fw, "DATA\r\n");
-        fflush(fw);
-        do
-        {
-            fgets(buf, sizeof(buf), fr);
-            if (memcmp(buf, "354", 3))
-                goto smtp_file_error;
-        } while (buf[3] == '-');
-
-        /* ------------------------------------------------- */
-        /* begin of mail header                              */
-        /* ------------------------------------------------- */
-
-        /* Thor.990125: 儘可能的像 RFC822 & sendmail的作法, 免得別人不接:p */
-        fprintf(fw, "From: %s\r\nTo: %s\r\nSubject: %s\r\nX-Sender: %s (%s)\r\n"
-            "Date: %s\r\nMessage-Id: <%s@%s>\r\n"
-            "X-Disclaimer: [%s] 對本信內容恕不負責\r\n",
-            from, rcpt, title, cuser.userid, cuser.username,
-            Atime(&stamp), msgid, str_host,
-            str_site);
-
-        fprintf(fw, "MIME-Version: 1.0\r\nContent-Type: multipart/mixed;\r\n"
-                "\tboundary=\"%s\"\r\n\r\n", boundary);
-
-        fprintf(fw, "This is a multi-part message in MIME format.\r\n");
-        fprintf(fw, "--%s\r\nContent-Type: text/plain;\r\n\tcharset=\"big5\"\r\n"
-                "Content-Transfer-Encoding: 8bit\r\n\r\n附件名稱：%s\r\n", boundary, fname);
-
-        fprintf(fw, "--%s\r\nContent-Type: application/x-compressed;\r\n\tname=\"%s\"\r\n"
-                "Content-Transfer-Encoding: base64\r\nContent-Disposition: attachment;\r\n"
-                "\tfilename=\"%s\"\r\n\r\n", boundary, fname, fname);
-
-        /* ------------------------------------------------- */
-        /* begin of mail body                                */
-        /* ------------------------------------------------- */
-
-        if ((fp = fopen(fpath, "r")))
-        {
-            char *ptr;
-
-            str = buf;
-            *str++ = '.';
-            while (fgets(str, sizeof(buf) - 3, fp))
-            {
-                if ((ptr = strchr(str, '\n')))
-                {
-                    *ptr++ = '\r';
-                    *ptr++ = '\n';
-                    *ptr = '\0';
-                }
-                fputs((*str == '.' ? buf : str), fw);
-            }
-            fclose(fp);
-        }
-        fprintf(fw, "--%s--\r\n", boundary);
-
-        fputs("\r\n.\r\n", fw);
-        fflush(fw);
-
-        fgets(buf, sizeof(buf), fr);
-        if (memcmp(buf, "250", 3))
-            goto smtp_file_error;
-
-        fputs("QUIT\r\n", fw);
-        fflush(fw);
-        fclose(fw);
-        fclose(fr);
-        goto smtp_file_log;
-
-smtp_file_error:
-
-        fclose(fr);
-        fclose(fw);
-        sprintf(msgid + 7, "\n\t%.70s", buf);
-        chrono = -1;
-    }
-    else
-    {
-        chrono = -1;
-        strcpy(msgid, "CONN");
-    }
-
-smtp_file_log:
-
-    /* --------------------------------------------------- */
-    /* 記錄寄信                                            */
-    /* --------------------------------------------------- */
-
-    sprintf(buf, "%s%-13s> %s %s\n\t%s\n\t%s\n", Btime(&stamp), cuser.userid,
-        rcpt, msgid, title, fpath);
-    f_cat(FN_MAIL_LOG, buf);
-
-    return chrono;
-}
-
-#endif  /* #ifdef HAVE_DOWNLOAD */
 
 #ifdef HAVE_SIGNED_MAIL
 /* Thor.990413: 提供驗證功能 */
 
-#define SIGNATURELEN  (PASSLEN-1-3 + PASSHASHLEN-1-1 + 1)
+#define SIGNATURESIZE (PASSSIZE-1-3 + PASSHASHSIZE-1-1 + 1)
+#define SIGNATURELEN  SIGNATURESIZE /* Alias for backward compatibility */
 int
 m_verify(void)
 {
@@ -665,17 +479,17 @@ m_verify(void)
     char sign[79], *q;
     char buf[160];
 
-    char prikey[PLAINPASSLEN];
+    char prikey[PLAINPASSSIZE];
     union {
-        char str[PLAINPASSLEN];
+        char str[PLAINPASSSIZE];
         struct {
             unsigned int hash, hash2;
         } val;
     } s = {{0}};
 
-    prikey[PLAINPASSLEN-1] = s.str[PLAINPASSLEN-1] = '\0'; /* Thor.990413:註解: 字串結束 */
+    prikey[PLAINPASSSIZE-1] = s.str[PLAINPASSSIZE-1] = '\0'; /* Thor.990413:註解: 字串結束 */
 
-    if (rec_get(PRIVATE_KEY, prikey, PLAINPASSLEN-1, 0))
+    if (rec_get(PRIVATE_KEY, prikey, PLAINPASSSIZE-1, 0))
     {
         zmsg("本系統並無電子簽章，請洽SYSOP");
         return XEASY;
@@ -690,31 +504,31 @@ m_verify(void)
         !vget(18, 0, ":", sign, sizeof sign, DOECHO))
         return 0;
 
-    str_trim(info); /* Thor: 去尾巴, for ptelnet自動加空白 */
-    str_trim(sign);
+    str_rtrim(info); /* Thor: 去尾巴, for ptelnet自動加空白 */
+    str_rtrim(sign);
 
-    if (!memcmp("※ X-Info: ", p = info, 11))
+    if (!strncmp("※ X-Info: ", p = info, 11))
         p += 11;
     while (*p == ' ') p++; /* Thor: 去前頭 */
 
-    if (!memcmp("※ X-Sign: ", q = sign, 11))
+    if (!strncmp("※ X-Sign: ", q = sign, 11))
         q += 11;
     while (*q == ' ') q++;
 
-    if (strlen(q) < 7 + PASSLEN-1 || (isalnum(q[7+PASSLEN-1]) && strlen(q) < 7 + SIGNATURELEN-1))
+    if (strlen(q) < 7 + PASSSIZE-1 || (isalnum(q[7+PASSSIZE-1]) && strlen(q) < 7 + SIGNATURESIZE-1))
     {
         vmsg("電子簽章有誤");
         return 0;
     }
 
-    str_ncpy(s.str + 1, q, 8);  /* Thor: 暫借一下 s.str */
+    str_scpy(s.str + 1, q, 8);  /* Thor: 暫借一下 s.str */
     chrono = chrono32(s.str); /* prefix 1 char */
 
     q += 7; /* real sign */
-    if (isalnum(q[PASSLEN-1]))
-        q[SIGNATURELEN-1] = 0; /* 補尾0 */
+    if (isalnum(q[PASSSIZE-1]))
+        q[SIGNATURESIZE-1] = 0; /* 補尾0 */
     else
-        q[PASSLEN-1] = 0; /* 補尾0 */
+        q[PASSSIZE-1] = 0; /* 補尾0 */
 
     s.val.hash = str_hash(p, chrono);
     s.val.hash2 = str_hash2(p, s.val.hash);
@@ -723,7 +537,7 @@ m_verify(void)
 
     sprintf(buf, "(%s)", Btime(&chrono));
 
-    if (chksignature(q, s.str) || strcmp(q + ((isalnum(q[PASSLEN-1])) ? SIGNATURELEN : PASSLEN), buf))
+    if (chksignature(q, s.str) || strcmp(q + ((isalnum(q[PASSSIZE-1])) ? SIGNATURESIZE : PASSSIZE), buf))
     {
         /* Thor.990413: log usage */
         sprintf(buf, "%s@%s - XInfo:%s", rusername, fromhost, p);
@@ -999,7 +813,7 @@ do_forward(
         return;
 
     userid = strchr(addr, '@') + 1;
-    if (dns_smtp(userid) >= 0)   /* itoc.註解: 雖然 bsmtp_file() 也會做，但是這邊先做，以免壓縮完才知道是無效的工作站地址 */
+    if (dns_smtp(userid) >= 0)   /* itoc.註解: 雖然 bsmtp() 也會做，但是這邊先做，以免壓縮完才知道是無效的工作站地址 */
     {
         userid = cuser.userid;
 
@@ -1036,8 +850,7 @@ do_forward(
         system(cmd);
 
         sprintf(fpath, "tmp/%s.tgz", userid);
-//      rc = bsmtp(fpath, title, addr, 0x02);
-        rc = bsmtp_file(fpath, title, addr);
+        rc = bsmtp(fpath, title, addr, MQ_ATTACH);
         unlink(fpath);
 
         if (rc >= 0)
@@ -1170,7 +983,7 @@ m_biff(
     UTMP *utmp, *uceil;
 
     utmp = ushm->uslot;
-    uceil = (UTMP *) ((char *) utmp + ushm->offset);
+    uceil = utmp + ushm->ubackidx;
     do
     {
         if (utmp->userno == userno)
@@ -1354,7 +1167,7 @@ mail_external(
         return 0;
 
         /* Thor.990125: MYHOSTNAME統一放入 str_host */
-    if (str_cmp(str_host, str + 1))
+    if (str_casecmp(str_host, str + 1))
         return 1;
 
     /* 攔截 xyz@domain 或 xyz.bbs@domain */
@@ -1402,7 +1215,7 @@ mail_send(
             return -1;
 
         if (!title)
-            vget(2, 0, "主題：", ve_title, TTLEN, DOECHO);
+            vget(2, 0, "主題：", ve_title, TTLEN + 1, DOECHO);
 
     }
 
@@ -1493,7 +1306,7 @@ mail_send(
     {
         char *p;
 
-        if ((p = str_str(acct.address, "bbc")) != NULL)  /* 找 BBC 描述 */
+        if ((p = str_casestr(acct.address, "bbc")) != NULL)  /* 找 BBC 描述 */
             DL_NAME_CALL("emailpage.so", EMailPager)(p + 3, cuser.userid, ve_title);
     }
 #endif
@@ -1756,7 +1569,7 @@ multi_send(
         fp = fopen(quote_file, "r");
         while (fgets(buf, sizeof(buf), fp))
         {
-            if (memcmp(buf, "※ ", 3))
+            if (strncmp(buf, "※ ", 3))
             {
                 if (listing)
                     break;
@@ -1777,7 +1590,7 @@ multi_send(
                         }
                     } while ((userid = (char *) strtok(NULL, " \n\r")));
                 }
-                else if (!memcmp(userid, "[通告]", 6))
+                else if (!strncmp(userid, "[通告]", 6))
                     listing = 1;
             }
         }
@@ -1954,30 +1767,44 @@ tag_char(
     return TagNum && !Tagger(chrono, 0, TAG_NIN) ? '*' : ' ';
 }
 
+typedef struct {
+    const char *mark;
+    const char *undec[2]; /* Use `[1]` when lightbar is enabled, or `[0]` otherwise */
+    const char *dec[2];
+    const char *reset[2]; /* Use `[1]` when the title is currently declared, or `[0]` otherwise */
+} HdrStyle;
+
+static const HdrStyle hdr_style[HDRMODE_COUNT] = {
+    {"◇", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[36m"}, {"", "\x1b[m"}},
+    {"◆", {"\x1b[1;32m", "\x1b[32m"}, {"\x1b[1;33m", "\x1b[33m"}, {"\x1b[m", "\x1b[m"}},
+    {"轉", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[36m"}, {"", "\x1b[m"}},
+    {"轉", {"\x1b[1;36m", "\x1b[36m"}, {"\x1b[1;33m", "\x1b[33m"}, {"\x1b[m", "\x1b[m"}},
+    {"Re", {"\x1b[m", "\x1b[m"}, {"\x1b[1;37m", "\x1b[36m"}, {"", "\x1b[m"}},
+    {"=>", {"\x1b[1;33m", "\x1b[33m"}, {"\x1b[1;37m", "\x1b[37m"}, {"\x1b[m", "\x1b[m"}},
+    {"◇", {"\x1b[m", "\x1b[m"}, {"\x1b[1;33m", "\x1b[33m"}, {"", "\x1b[m"}},
+    {"◆", {"\x1b[1;32m", "\x1b[32m"}, {"\x1b[1;33m", "\x1b[33m"}, {"\x1b[m", "\x1b[m"}},
+    {"鎖", {"\x1b[1;35m", "\x1b[0;35m"}, {"\x1b[1;31m", "\x1b[0;31m"}, {"\x1b[m", "\x1b[m"}},
+    {"╳", {"\x1b[1;30m", "\x1b[m"}, {"\x1b[0;37m", "\x1b[m"}, {"\x1b[m", "\x1b[m"}},
+};
 
 void
 hdr_outs(               /* print HDR's subject */
     const HDR *hdr,
-    int cc)
+    int width)
 {
-    static const char *const type[4] =
-    {"Re", "◇", "=>", "◆"};
-    static const char *const type_reset[][COUNTOF(type)] = {
-        {"\x1b[m", "\x1b[m", "\x1b[1;33m", "\x1b[1;32m"},
-#ifdef HAVE_MENU_LIGHTBAR
-        {"\x1b[m", "\x1b[m", "\x1b[0;33m", "\x1b[0;32m"},
-#endif
-    };
-#ifdef  HAVE_DECLARE
-    static const char *const type_dec[COUNTOF(type)] =
-    {"\x1b[1;37m", "\x1b[1;37m", "\x1b[1;37m", "\x1b[1;33m"};
-#endif
-    const char *title, *mark;
-    int ch, len;
-    UTMP *online;
+    const HdrStyle *style;
+    const char *title;
 
-    if (cc)
+    const bool has_lightbar = HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR);
+
+    if (width)
     {
+        const char *owner = hdr->owner;
+        const UTMP *const online = utmp_check(owner);  /* 使用者在站上就變色 */
+
+        int len = 13;
+        int ch;
+
 #if 0
         if (tag_char(hdr->chrono) == '*')
         {
@@ -2005,14 +1832,10 @@ hdr_outs(               /* print HDR's subject */
         outs(hdr->date + 3);
         outc(' ');
 
-        mark = hdr->owner;
-        len = 13;
-
-        online = utmp_check(mark);  /* 使用者在站上就變色 */
         if (online != NULL)
-            outs("\x1b[1;37m");
+            outs(has_lightbar ? "\x1b[36m" : "\x1b[1;37m");
 
-        while ((ch = (unsigned char) *mark))
+        while ((ch = (unsigned char) *owner))
         {
             if ((--len == 0) || (ch == '@'))
                 ch = '.';
@@ -2021,7 +1844,7 @@ hdr_outs(               /* print HDR's subject */
             if (ch == '.')
                 break;
 
-            mark++;
+            owner++;
         }
 
         while (len--)
@@ -2034,28 +1857,33 @@ hdr_outs(               /* print HDR's subject */
     }
     else
     {
-        cc = 64;
+        width = d_cols + 64;
     }
 
-    title = str_ttl(mark = hdr->title);
-    ch = title == mark;
-    if (!strcmp(currtitle, title))
-        ch += 2;
-    outs(type_reset[HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR)][ch]);
-    outs(type[ch]);
-
-    mark = title + cc;
-    cc = ' ';
-
-    if (hdr->xmode & POST_LOCK && !HAS_PERM(PERM_SYSOP))
+    if (hdr->xmode & (POST_DELETE | POST_MDELETE))
     {
-        outs(" 此文章已加密鎖定！\x1b[m");
-        outc('\n');
-        return;
+        title = hdr->title;
+        style = &hdr_style[HDRMODE_DELETED];
     }
-
+    else if (hdr->xmode & POST_LOCK)
+    {
+        title = (HAS_PERM(PERM_SYSOP)) ? hdr->title : "此文章已加密鎖定！";
+        style = &hdr_style[HDRMODE_LOCKED];
+    }
+    else
+    {
+        enum HdrMode mode;
+        title = str_ttl_hdrmode(hdr->title, &mode);
+        style = &hdr_style[mode];
+        if (!strcmp(currtitle, title))
+            ++style;
+    }
+    outs(style->undec[has_lightbar]);
+    outs(style->mark);
 
     {
+        const char *const title_end = title + width;
+        int ch = ' ';
 
 #ifdef  HAVE_DECLARE            /* Thor.0508: Declaration, 嘗試使某些title更明顯 */
                                 /* IID.20191204: Match balanced brackets. */
@@ -2078,7 +1906,7 @@ hdr_outs(               /* print HDR's subject */
 
 #ifdef  HAVE_DECLARE
             int *pcnt = NULL;
-            switch ((dbcs_hi) ? '\0' : cc)
+            switch ((dbcs_hi) ? '\0' : ch)
             {
             case '[':
             case ']':
@@ -2100,18 +1928,18 @@ hdr_outs(               /* print HDR's subject */
 
             if (dbcs_hi)
                 dbcs_hi = false;
-            else if (IS_DBCS_HI(cc))
+            else if (IS_DBCS_HI(ch))
                 dbcs_hi = true;
 
-            switch ((pcnt) ? cc : '\0')
+            switch ((pcnt) ? ch : '\0')
             {
             case '[':
             case '<':
             case '{':
                 if (++*pcnt == 1)
                 {
-                    outs(type_dec[ch]);
-                    outc(cc);
+                    outs(style->dec[has_lightbar]);
+                    outc(ch);
                     continue;
                 }
                 break;
@@ -2123,23 +1951,24 @@ hdr_outs(               /* print HDR's subject */
                 {
                     if (pcnt == &square)
                         square = -1;
-                    outc(cc);
-                    outs(type_reset[HAVE_UFO2_CONF(UFO2_MENU_LIGHTBAR)][ch]);
+                    outc(ch);
+                    outs(style->undec[has_lightbar]);
                     continue;
                 }
             }
 
 #endif  /* #ifdef  HAVE_DECLARE */
 
-            outc(cc);
-        } while ((cc = (unsigned char) *title++) && (title < mark));
+            outc(ch);
+        } while ((ch = (unsigned char) *title++) && (title < title_end));
 
-        if (ch >= 2
+        outs(style->reset[
 #ifdef  HAVE_DECLARE
-          || (square >= 1 || angle >= 1 || curly >= 1)
+            (square >= 1 || angle >= 1 || curly >= 1)
+#else
+            0
 #endif
-        )
-            outs("\x1b[m");
+        ]);
     }
 
     outc('\n');
@@ -2154,11 +1983,13 @@ mbox_foot(
     return XO_NONE;
 }
 
-static inline void
+static inline int
 mbox_item(
-    int pos,                    /* sequence number */
-    const HDR *hdr)
+    XO *xo,
+    int pos)
 {
+    const HDR *const hdr = (const HDR *) xo_pool_base + pos;
+    pos = pos + 1;              /* sequence number */
 
 #if 0                           /* Thor.0508: 變色看看 */
     prints("%5d %c%", pos, mbox_attr(hdr->xmode));
@@ -2174,16 +2005,17 @@ mbox_item(
         (xmode & (MAIL_DELETE | MAIL_MARKED)) ? "\x1b[m" : "");
 
     hdr_outs(hdr, d_cols + 47);
+
+    return XO_NONE;
 }
 
 static int
 mbox_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const HDR *const mhdr = (const HDR *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    mbox_item(xo->pos + 1, mhdr);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return mbox_item(xo, pos);
 }
 
 
@@ -2191,26 +2023,26 @@ static int
 mbox_body(
     XO *xo)
 {
-    const HDR *mhdr;
     int num, max, tail;
+
+    move(3, 0);
 
     max = xo->max;
 
     if (max <= 0)
     {
-        vmsg("您沒有來信");
-        return XO_QUIT;
+        outs("\n《郵件選單》您沒有來信\n");
+        clrtobot();
+        return mbox_foot(xo);
     }
 
     num = xo->top;
-    mhdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
-        mbox_item(++num, mhdr++);
+        mbox_item(xo, num++);
     } while (num < max);
     clrtobot();
 
@@ -2251,16 +2083,16 @@ mbox_init(
 
 static int
 mbox_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    int pos, xmode;
+    int xmode;
     HDR *hdr;
     char *dir;
 #ifndef HAVE_MAILUNDELETE
     char fpath[64];
 #endif
 
-    pos = xo->pos;
     hdr = (HDR *) xo_pool_base + pos;
 
     xmode = hdr->xmode;
@@ -2279,9 +2111,10 @@ mbox_delete(
             return XO_LOAD;
         }
 #else
+        const HDR hdr_orig = *hdr;
         if (!rec_del(dir, sizeof(HDR), pos, cmpchrono, NULL))
         {
-            hdr_fpath(fpath, dir, hdr);
+            hdr_fpath(fpath, dir, &hdr_orig);
             unlink(fpath);
             return XO_LOAD;
         }
@@ -2292,10 +2125,10 @@ mbox_delete(
 
 static int
 mbox_forward(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     ACCT muser;
-    int pos;
     const HDR *hdr;
     if (bbsothermode & OTHERSTAT_EDITING)
     {
@@ -2315,7 +2148,6 @@ mbox_forward(
 
     if (acct_get("轉達信件給：", &muser) > 0)
     {
-        pos = xo->pos;
         hdr = (const HDR *) xo_pool_base + pos;
 
         strcpy(quote_user, hdr->owner);
@@ -2348,14 +2180,14 @@ mbox_forward(
 
 static int
 mbox_browse(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *mhdr, hdr;
-    int pos, xmode, nmode, mode;
+    int xmode, nmode, mode;
     char *dir, *fpath;
 
     dir = xo->dir;
-    pos = xo->pos;
     fpath = quote_file;
     mhdr = (HDR *) xo_pool_base + pos;
     memcpy(&hdr, mhdr, sizeof(HDR));
@@ -2398,7 +2230,7 @@ mbox_browse(
 
     if (nmode == 'd')
     {
-        if (mbox_delete(xo) != XO_FOOT)
+        if (mbox_delete(xo, pos) != XO_FOOT)
         {
             *fpath = '\0';
             return XO_INIT;
@@ -2420,7 +2252,7 @@ mbox_browse(
     }
     else if (nmode == 'x')
     {
-        mbox_forward(xo);
+        mbox_forward(xo, pos);
     }
 
     nmode = mhdr->xmode | MAIL_READ;
@@ -2437,9 +2269,10 @@ mbox_browse(
 
 static int
 mbox_reply(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    int pos, xmode;
+    int xmode;
     HDR *mhdr, hdr;
 
 //  if (m_count())
@@ -2454,7 +2287,6 @@ mbox_reply(
     else
         chk_mailstat = 0;
 
-    pos = xo->pos;
     mhdr = (HDR *) xo_pool_base + pos;
     memcpy(&hdr, mhdr, sizeof(HDR));
     mhdr = &hdr;
@@ -2478,13 +2310,11 @@ mbox_reply(
 
 static int
 mbox_mark(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *mhdr;
-    int cur, pos;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     mhdr = (HDR *) xo_pool_base + pos;
 
     mhdr->xmode ^= MAIL_MARKED;
@@ -2495,13 +2325,12 @@ mbox_mark(
 
 static int
 mbox_tag(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
-    int tag, pos, cur;
+    int tag;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     hdr = (const HDR *) xo_pool_base + pos;
 
     if ((tag = Tagger(hdr->chrono, pos, TAG_TOGGLE)))
@@ -2573,7 +2402,8 @@ mbox_stat(
 
 static int
 mbox_edit(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr;
     char fpath[128];
@@ -2583,7 +2413,7 @@ mbox_edit(
         return XO_FOOT;
     }
 
-    hdr = (HDR *) xo_pool_base + xo->pos;
+    hdr = (HDR *) xo_pool_base + pos;
     hdr_fpath(fpath, xo->dir, hdr);
     if (HAS_PERM(PERM_SYSOP))
     {
@@ -2595,14 +2425,15 @@ mbox_edit(
 
 static int
 mbox_size(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
     char *dir, fpath[80], buf[128];
     struct stat st;
 
     dir = xo->dir;
-    hdr = (const HDR *) xo_pool_base + xo->pos;
+    hdr = (const HDR *) xo_pool_base + pos;
     hdr_fpath(fpath, dir, hdr);
 
     if (HAS_PERM(PERM_SYSOP))
@@ -2634,7 +2465,8 @@ mbox_size(
 #ifdef  HAVE_MAIL_FIX
 static int
 mbox_title(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr, mhdr;
 
@@ -2642,7 +2474,7 @@ mbox_title(
         return XO_NONE;
 
 
-    hdr = (HDR *) xo_pool_base + xo->pos;
+    hdr = (HDR *) xo_pool_base + pos;
     mhdr = *hdr;
 
     vget(B_LINES_REF, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
@@ -2655,7 +2487,7 @@ mbox_title(
         memcmp(hdr, &mhdr, sizeof(HDR)))
     {
         *hdr = mhdr;
-        rec_put(xo->dir, hdr, sizeof(HDR), xo->pos);
+        rec_put(xo->dir, hdr, sizeof(HDR), pos);
         return XO_INIT;
     }
 
@@ -2668,15 +2500,16 @@ mbox_title(
 
 static int
 mbox_undelete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr;
 
-    hdr = (HDR *) xo_pool_base + xo->pos;
+    hdr = (HDR *) xo_pool_base + pos;
 
     hdr->xmode &= ~POST_DELETE;
 
-    if (!rec_put(xo->dir, hdr, sizeof(HDR), xo->pos))
+    if (!rec_put(xo->dir, hdr, sizeof(HDR), pos))
         return XO_INIT;
     return XO_NONE;
 }
@@ -2747,37 +2580,37 @@ static KeyFuncList mbox_cb =
     {XO_HEAD, {mbox_head}},
     {XO_BODY, {mbox_body}},
     {XO_FOOT, {mbox_foot}},
-    {XO_CUR, {mbox_cur}},
+    {XO_CUR | XO_POSF, {.posf = mbox_cur}},
 
 #ifdef  HAVE_MAIL_FIX
-    {'T', {mbox_title}},
+    {'T' | XO_POSF, {.posf = mbox_title}},
 #endif
-    {'r', {mbox_browse}},
-    {'E', {mbox_edit}},
+    {'r' | XO_POSF, {.posf = mbox_browse}},
+    {'E' | XO_POSF, {.posf = mbox_edit}},
     {'s', {mbox_send}},
-    {'d', {mbox_delete}},
-    {Ctrl('X'), {mbox_forward}},
-    {'m', {mbox_mark}},
+    {'d' | XO_POSF, {.posf = mbox_delete}},
+    {Ctrl('X') | XO_POSF, {.posf = mbox_forward}},
+    {'m' | XO_POSF, {.posf = mbox_mark}},
 #ifdef  HAVE_MAILGEM
     {'z', {mbox_gem}},
 #endif
-    {'R', {mbox_reply}},
-    {'y', {mbox_reply}},
+    {'R' | XO_POSF, {.posf = mbox_reply}},
+    {'y' | XO_POSF, {.posf = mbox_reply}},
     {'c', {mbox_stat}},
 #ifdef HAVE_MAILUNDELETE
     {'U', {mbox_clean}},
-    {'u', {mbox_undelete}},
+    {'u' | XO_POSF, {.posf = mbox_undelete}},
 #endif
 
     {KEY_TAB, {mbox_sysop}},
     {'I', {mbox_other}},
-    {'t', {mbox_tag}},
-    {'S', {mbox_size}},
+    {'t' | XO_POSF, {.posf = mbox_tag}},
+    {'S' | XO_POSF, {.posf = mbox_size}},
     {'D', {xo_delete}},
 
-    {Ctrl('Q'), {xo_uquery}},
-    {'X', {xo_usetup}},
-    {'x', {post_cross}},
+    {Ctrl('Q') | XO_POSF, {.posf = xo_uquery}},
+    {'X' | XO_POSF, {.posf = xo_usetup}},
+    {'x' | XO_POSF, {.posf = post_cross}},
 
     {'h', {mbox_help}}
 };

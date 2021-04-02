@@ -113,9 +113,8 @@ main(void)
         fd = open(".USR.new", O_CREAT | O_TRUNC | O_WRONLY, 0600);
         for (num = 1; num <= total; num++)
         {
-            memset(&slot, 0, sizeof(SCHEMA));
-            strcpy(slot.userid, map[num].userid);
-            time(&slot.uptime);
+            strncpy(slot.userid, map[num].userid, IDLEN);
+            time32(&slot.uptime);
             write(fd, &slot, sizeof(SCHEMA));
         }
         close(fd);

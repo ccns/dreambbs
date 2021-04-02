@@ -14,8 +14,8 @@
 
 typedef struct
 {
-    time_t htime;               /* 加入 history 檔的時間 */
-    int hash;                   /* 為了快速搜尋 */
+    time32_t htime;             /* 加入 history 檔的時間 */
+    int32_t hash;               /* 為了快速搜尋 */
     char msgid[256];            /* message id (假設 256 已夠長) */
     char board[IDLEN + 1];
     char xname[9];
@@ -83,11 +83,11 @@ HISadd(                         /* 將 (msgid, path, xname) 此配對記錄在 history 
 
     memset(&his, 0, sizeof(HIS));
 
-    time(&(his.htime));
+    time32(&(his.htime));
     his.hash = str_hash(msgid, 1);
-    str_ncpy(his.msgid, msgid, sizeof(his.msgid));
-    str_ncpy(his.board, board, sizeof(his.board));
-    str_ncpy(his.xname, xname, sizeof(his.xname));
+    str_scpy(his.msgid, msgid, sizeof(his.msgid));
+    str_scpy(his.board, board, sizeof(his.board));
+    str_scpy(his.xname, xname, sizeof(his.xname));
 
     /* 依 msgid 將 history 打散至 32 個檔案 */
     sprintf(fpath, "innd/history/%02d", his.hash % 32U);

@@ -206,7 +206,7 @@ justify_user(void)
         close(fd);
     }
 
-    myacct.vtime = time(&myacct.tvalid);
+    myacct.vtime = time32(&myacct.tvalid);
     strcpy(myacct.justify, myfrom);
     myfrom[sizeof(myacct.justify)-1] = 0;
     strcpy(myacct.vmail, myacct.email);
@@ -355,7 +355,7 @@ post_article(void)
     {
         fprintf(fp, "作者: %s (%s) %s: %s\n標題: %s\n時間: %s\n",
             myname, myacct.username, (mymode == LOCAL_SAVE ? "站內" : "看板"),
-            myboard, mytitle, ctime(&hdr.chrono));
+            myboard, mytitle, ctime_any(&hdr.chrono));
 
         hdr.xmode = (mymode == LOCAL_SAVE ? POST_EMAIL : POST_EMAIL | POST_OUTGO);
     }
@@ -445,7 +445,7 @@ digest_article(void)
 */
         fprintf(fp, "作者: %s (%s) %s: %s\n標題: %s\n時間: %s\n",
             myname, myacct.username, (mymode == LOCAL_SAVE ? "站內" : "看板"),
-            myboard, mytitle, ctime(&hdr.chrono));
+            myboard, mytitle, ctime_any(&hdr.chrono));
 
         hdr.xmode =  POST_EMAIL;
 /*
@@ -516,14 +516,14 @@ mailpost(void)
 
             if ((ptr = strchr(key, '\n')))
             {
-                str_strip(ptr);
+                str_rstrip_tail(ptr);
             }
 
             /* split token & skip leading space */
 
             if ((token = strchr(key, ':')))
             {
-                str_strip(token);
+                str_rstrip_tail(token);
 
                 do
                 {
@@ -531,27 +531,27 @@ mailpost(void)
                 } while (fh == ' ' || fh == '\t');
             }
 
-            if (!str_cmp(key, "name"))
+            if (!str_casecmp(key, "name"))
             {
                 strcpy(myname, token);
             }
-            else if (!str_cmp(key, "passwd") || !str_cmp(key, "password") || !str_cmp(key, "passward"))
+            else if (!str_casecmp(key, "passwd") || !str_casecmp(key, "password") || !str_casecmp(key, "passward"))
             {
                 strcpy(mypasswd, token);
             }
-            else if (!str_cmp(key, "board"))
+            else if (!str_casecmp(key, "board"))
             {
                 strcpy(myboard, token);
             }
-            else if (!str_cmp(key, "title") || !str_cmp(key, "subject"))
+            else if (!str_casecmp(key, "title") || !str_casecmp(key, "subject"))
             {
                 str_ansi(mytitle, token, sizeof(mytitle));
             }
-            else if (!str_cmp(key, "digest"))
+            else if (!str_casecmp(key, "digest"))
             {
                 mymode = DIGEST;
             }
-            else if (!str_cmp(key, "local"))
+            else if (!str_casecmp(key, "local"))
             {
                 mymode = LOCAL_SAVE;
             }
@@ -580,20 +580,20 @@ mailpost(void)
                 strtok(mybuf, " ");
                 strcpy(myfrom, (char *) strtok(NULL, " "));
 #endif
-                str_cut(myfrom, mybuf);
+                str_split_2nd(myfrom, mybuf);
             }
         }
         else if (!strncmp(mybuf, "Subject: ", 9))
         {
             /* audit justify mail */
 
-            str_decode(mybuf);
+            mmdecode_str(mybuf);
             /* if (ptr = strstr(mybuf, "[MapleBBS]To ")) */
             /* Thor.981012: 集中於 config.h 定義 */
             if ((ptr = strstr(mybuf, TAG_VALID)))
             {
                 /* gslin.990101: TAG_VALID 長度不一定 */
-                verify_user(ptr + sizeof(TAG_VALID) - 1);
+                verify_user(ptr + STRLITLEN(TAG_VALID));
                 /* verify_user(ptr + 13); */
                 return 1;               /* eat mail queue */
             }
@@ -668,8 +668,8 @@ mailpost(void)
         if (mymode != LOCAL_SAVE)
             mymode = NET_SAVE;
 
-        /* if (brd.battr & BRD_NOCOUNT == 0) */
         /* Thor.981123: lkchu patch: mailpost 文章數不增加問題 */
+        /* IID.2021-03-02: Explanation: `&` has lower precedence than `==`; it should be enclosed in `()` */
         if (!(brd.battr & BRD_NOCOUNT))
         {
             myacct.numposts++;

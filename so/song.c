@@ -5,7 +5,7 @@
 #ifdef HAVE_SONG
 
 static void XoSong(const char *folder, const char *title, int level);
-static int song_order(XO *xo);
+static int song_order(XO *xo, int pos);
 
 #define GEM_READ        1       /* readable */
 #define GEM_WRITE       2       /* writable */
@@ -22,7 +22,7 @@ const char *msg)
 {
     char buf[512];
     time_t now = time(0);
-    sprintf(buf, "%s %-13s %s\n", Etime(&now), cuser.userid, msg);
+    sprintf(buf, "%s %-*s %s\n", Etime(&now), IDLEN, cuser.userid, msg);
     f_cat(FN_SONG_LOG, buf);
 }
 
@@ -53,6 +53,7 @@ const char *des)
 static HDR *
 song_check(
 XO *xo,
+int pos,
 char *fpath)
 {
     HDR *ghdr;
@@ -61,7 +62,7 @@ char *fpath)
 
     level = xo->key;
 
-    ghdr = (HDR *) xo_pool_base + xo->pos;
+    ghdr = (HDR *) xo_pool_base + pos;
     gtype = ghdr->xmode;
 
     if ((gtype & GEM_RESTRICT) && (level <= GEM_USER))
@@ -95,6 +96,7 @@ char *fpath)
 static HDR *
 song_get(
 XO *xo,
+int pos,
 char *fpath)
 {
     HDR *ghdr;
@@ -103,7 +105,7 @@ char *fpath)
 
     level = xo->key;
 
-    ghdr = (HDR *) xo_pool_base + xo->pos;
+    ghdr = (HDR *) xo_pool_base + pos;
     gtype = ghdr->xmode;
 
     if ((gtype & GEM_RESTRICT) && (level <= GEM_USER))
@@ -135,11 +137,13 @@ song_foot(
     return XO_NONE;
 }
 
-static void
+static int
 song_item(
-int num,
-const HDR *ghdr)
+XO *xo,
+int pos)
 {
+    const HDR *const ghdr = (const HDR *) xo_pool_base + pos;
+    const int num = pos + 1;
     int xmode, gtype;
 
     xmode = ghdr->xmode;
@@ -156,16 +160,17 @@ const HDR *ghdr)
         prints("\x1b[1;33m資料保密！\x1b[m\n");
     else if ((gtype == 0) || (xmode & GEM_GOPHER))
         prints("%-.*s\n", d_cols + 68, ghdr->title);
+
+    return XO_NONE;
 }
 
 static int
 song_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const HDR *const ghdr = (const HDR *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    song_item(xo->pos + 1, ghdr);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return song_item(xo, pos);
 }
 
 
@@ -173,26 +178,25 @@ static int
 song_body(
 XO *xo)
 {
-    const HDR *ghdr;
     int num, max, tail;
+
+    move(3, 0);
 
     max = xo->max;
     if (max <= 0)
     {
-        outs("\n\n《歌本》尚在吸取天地間的日精月華 :)");
-        vmsg(NULL);
-        return XO_QUIT;
+        outs("\n《歌本》尚在吸取天地間的日精月華 :)\n");
+        clrtobot();
+        return song_foot(xo);
     }
 
     num = xo->top;
-    ghdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
-        song_item(++num, ghdr++);
+        song_item(xo, num++);
     }
     while (num < max);
     clrtobot();
@@ -237,7 +241,8 @@ XO *xo)
 
 static int
 song_browse(
-XO *xo)
+XO *xo,
+int pos)
 {
     HDR *ghdr;
     int xmode, op = 0;
@@ -245,7 +250,7 @@ XO *xo)
 
     do
     {
-        ghdr = song_check(xo, fpath);
+        ghdr = song_check(xo, pos, fpath);
         if (ghdr == NULL)
             break;
 
@@ -284,8 +289,8 @@ XO *xo)
 
         op = GEM_READ | GEM_FILE;
 
-        xmode = xo_getch(xo, xmode);
-
+        xmode = xo_getch(xo, pos, xmode);
+        pos = xo->pos;
     }
     while (xmode == XO_BODY);
 
@@ -297,7 +302,8 @@ XO *xo)
 #if 1
 static int
 song_order(
-XO *xo)
+XO *xo,
+int pos)
 {
     char xboard[20], fpath[80], xfolder[80], xtitle[80], *dir, buf[128];
     char tmp[256], idwho[20], want_say[32];
@@ -310,7 +316,7 @@ XO *xo)
     memset(&xpost, 0, sizeof(HDR));
     acct_load(&acct, cuser.userid);
 
-    hdr = song_get(xo, fpath);
+    hdr = song_get(xo, pos, fpath);
     if (hdr == NULL)
         return XO_NONE;
 
@@ -414,7 +420,8 @@ XO *xo)
 
 static int
 song_send(
-XO *xo)
+XO *xo,
+int pos)
 {
     char fpath[128], folder[128], *dir GCC_UNUSED, title[80], buf[128], want_say[32], date[9];
     char tmp[300];
@@ -430,7 +437,7 @@ XO *xo)
 
     str_stamp(date, &now);
     acct_load(&cacct, cuser.userid);
-    hdr = song_get(xo, fpath);
+    hdr = song_get(xo, pos, fpath);
 
 
     if (!cuser.userlevel)
@@ -499,7 +506,8 @@ XO *xo)
 
 static int
 song_edit(
-XO *xo)
+XO *xo,
+int pos)
 {
     char fpath[80];
     HDR *hdr;
@@ -513,7 +521,7 @@ XO *xo)
 
     if (!HAS_PERM(PERM_KTV))
         return XO_NONE;
-    hdr = song_get(xo, fpath);
+    hdr = song_get(xo, pos, fpath);
     if (hdr)
         vedit(fpath, false);
     return XO_HEAD;
@@ -521,14 +529,15 @@ XO *xo)
 
 static int
 song_title(
-XO *xo)
+XO *xo,
+int pos)
 {
     HDR *ghdr, xhdr;
     int num;
     char *dir;
     char fpath[128];
 
-    ghdr = song_get(xo, fpath);
+    ghdr = song_get(xo, pos, fpath);
     if (ghdr == NULL)
         return XO_NONE;
 
@@ -538,7 +547,7 @@ XO *xo)
     dir = xo->dir;
     if (HAS_PERM(PERM_SYSOP | PERM_KTV))
     {
-        vget(B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 2, GCARRY);
+        vget(B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 1, GCARRY);
         vget(B_LINES_REF, 0, "時間：", xhdr.date, 9, GCARRY);
     }
 
@@ -546,7 +555,7 @@ XO *xo)
         vans("確定要修改嗎(y/N)？[N]") == 'y')
     {
         *ghdr = xhdr;
-        num = xo->pos;
+        num = pos;
         rec_put(dir, ghdr, sizeof(HDR), num);
         return XR_FOOT + XO_CUR;
 
@@ -569,14 +578,14 @@ static KeyFuncList song_cb =
     {XO_HEAD, {song_head}},
     {XO_BODY, {song_body}},
     {XO_FOOT, {song_foot}},
-    {XO_CUR, {song_cur}},
+    {XO_CUR | XO_POSF, {.posf = song_cur}},
 
-    {'r', {song_browse}},
-    {'o', {song_order}},
-    {'E', {song_edit}},
-    {'T', {song_title}},
+    {'r' | XO_POSF, {.posf = song_browse}},
+    {'o' | XO_POSF, {.posf = song_order}},
+    {'E' | XO_POSF, {.posf = song_edit}},
+    {'T' | XO_POSF, {.posf = song_title}},
     {'q', {song_query}},
-    {'m', {song_send}},
+    {'m' | XO_POSF, {.posf = song_send}},
     {'h', {song_help}}
 };
 

@@ -54,29 +54,30 @@ const ALOHA *aloha)
     return 0;
 }
 
-static void
+static int
 aloha_item(
-int num,
-const ALOHA *aloha)
+XO *xo,
+int pos)
 {
+    const ALOHA *const aloha = (const ALOHA *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d     %s\n", num, aloha->userid);
+    return XO_NONE;
 }
 
 static int
 aloha_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const ALOHA *const aloha = (const ALOHA *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    aloha_item(xo->pos + 1, aloha);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return aloha_item(xo, pos);
 }
 
 static int
 aloha_body(
 XO *xo)
 {
-    const ALOHA *aloha;
     int num, max, tail;
 
     move(3, 0);
@@ -84,24 +85,18 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-        {
-            if (vans("新增單人或引入好友名單(A/F)？[A] ") == 'f')
-                return aloha_loadpal(xo);
-            else
-                return aloha_add(xo);
-        }
-        return XO_QUIT;
+        outs("\n《上站通知名單》目前沒有資料\n");
+        outs("\n  (a)新增單人 (f)引入好友名單\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    aloha = (const ALOHA *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        aloha_item(++num, aloha++);
+        aloha_item(xo, num++);
     }
     while (num < max);
 
@@ -269,18 +264,19 @@ XO *xo)
 
 static int
 aloha_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
     if (vans(msg_del_ny) == 'y')
     {
         char fpath[64];
         const ALOHA *aloha;
-        aloha = (const ALOHA *) xo_pool_base + xo->pos;
+        aloha = (const ALOHA *) xo_pool_base + pos;
 
         usr_fpath(fpath, aloha->userid, FN_FRIEND_BENZ);
         while (rec_loc(fpath, sizeof(BMW), cmpbmw) >= 0)
             rec_del(fpath, sizeof(BMW), 0, cmpbmw, NULL);
-        rec_del(xo->dir, sizeof(ALOHA), xo->pos, NULL, NULL);
+        rec_del(xo->dir, sizeof(ALOHA), pos, NULL, NULL);
         return XO_INIT;
     }
     return XO_FOOT;
@@ -301,7 +297,7 @@ KeyFuncList aloha_cb =
     {XO_LOAD, {aloha_load}},
     {XO_HEAD, {aloha_head}},
     {XO_BODY, {aloha_body}},
-    {XO_CUR, {aloha_cur}},
+    {XO_CUR | XO_POSF, {.posf = aloha_cur}},
 
     {'a', {aloha_add}},
     {'D', {aloha_rangedel}},
@@ -311,7 +307,7 @@ KeyFuncList aloha_cb =
     {'c', {aloha_change}},
 #endif
     {'s', {xo_cb_init}},
-    {'d', {aloha_delete}},
+    {'d' | XO_POSF, {.posf = aloha_delete}},
     {'h', {aloha_help}}
 };
 

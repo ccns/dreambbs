@@ -25,95 +25,6 @@ static const char fn_yesterday[] = "gem/@/@=act";     /* 昨日上站人次統計 */
 
 static BCACHE *bshm;
 
-static void
-attach_err(
-    int shmkey,
-    const char *name)
-{
-    fprintf(stderr, "[%s error] key = %lx\n", name, (unsigned long)shmkey);
-    exit(1);
-}
-
-
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-    {
-        shmid = shmget(shmkey, shmsize, IPC_CREAT | 0600);
-        if (shmid < 0)
-            attach_err(shmkey, "shmget");
-    }
-    else
-    {
-        shmsize = 0;
-    }
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-    if (shmptr == (void *) -1)
-        attach_err(shmkey, "shmat");
-
-    if (shmsize)
-        memset(shmptr, 0, shmsize);
-
-    return shmptr;
-}
-
-
-/* static */
-void
-bshm_init(void)
-{
-    BCACHE *xshm;
-    time_t *uptime;
-    int n, turn;
-
-    turn = 0;
-    xshm = bshm;
-    if (xshm == NULL)
-    {
-        bshm = xshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
-    }
-
-    uptime = &(xshm->uptime);
-
-    for (;;)
-    {
-        n = *uptime;
-        if (n > 0)
-            return;
-
-        if (n < 0)
-        {
-            if (++turn < 30)
-            {
-                sleep(2);
-                continue;
-            }
-        }
-
-        *uptime = -1;
-
-        if ((n = open(FN_BRD, O_RDONLY)) >= 0)
-        {
-            xshm->number =
-                read(n, xshm->bcache, MAXBOARD * sizeof(BRD)) / sizeof(BRD);
-            close(n);
-        }
-
-        /* 等所有 boards 資料更新後再設定 uptime */
-
-        time(uptime);
-        fprintf(stderr, "[account]\tCACHE\treload bcache\r\n");
-        return;
-    }
-}
-
 
 struct Tchoice
 {
@@ -218,8 +129,8 @@ draw_vote(
     memset(buf, '-', 74);
     buf[74] = '\0';
     fprintf(fp, "\n\n> %s <\n\n◆ [%s] 看板投票：%s\n\n舉辦人  ：%s\n\n舉辦日期：%s\n",
-        buf, bid, vch->title, vch->owner, ctime(&vch->chrono));
-    fprintf(fp, "開票日期：%s\n◆ 投票主題:\n\n", ctime(&vch->vclose));
+        buf, bid, vch->title, vch->owner, ctime_any(&vch->chrono));
+    fprintf(fp, "開票日期：%s\n◆ 投票主題:\n\n", ctime_any(&vch->vclose));
 
     *fname = '@';
     f_suck(fp, fpath);
@@ -416,7 +327,7 @@ closepolls(void)
     f_unlock(state);
 
     close(state);
-    time(&bshm->uptime);
+    time32(&bshm->uptime);
 }
 
 
@@ -539,7 +450,7 @@ main(void)
     {
         fputs(buf, fpw);
 
-        if (!memcmp(buf + 22, "ENTER", 5))
+        if (!strncmp(buf + 22, "ENTER", 5))
         {
             hour = atoi(buf + 9);
             if (hour >= 0 && hour <= 23)
@@ -547,7 +458,7 @@ main(void)
             continue;
         }
 
-        if (!memcmp(buf + 41, "Stay:", 5))
+        if (!strncmp(buf + 41, "Stay:", 5))
         {
             if ((hour = atoi(buf + 47)))
             {
@@ -587,10 +498,11 @@ main(void)
         error(fn_today);
 
     /* Thor.990329: y2k */
-    fprintf(fp, "\t\t\t   \x1b[1;33;46m [%02d/%02d/%02d] 上站人次統計 \x1b[40m\n",
+    fprintf(fp, "\t\t\t   \x1b[1;33;46m [%02d/%02d/%02d] 上站人次統計 \x1b[m\n",
         ptime.tm_year % 100, ptime.tm_mon + 1, ptime.tm_mday);
     for (i = MAX_LINE + 1; i > 0; i--)
     {
+        fprintf(fp, "\x1b[1m");
         strcpy(buf, "   ");
         for (j = 0; j < 24; j++)
         {
@@ -611,15 +523,15 @@ main(void)
             else
                 strcat(buf, "   ");
         }
-        fprintf(fp, "\n");
+        fprintf(fp, "\x1b[m\n");
     }
 
     if (act[25] == 0) act[25]=1; /* Thor.980928: lkchu patch: 防止除數為0 */
 
-    fprintf(fp, "\x1b[34m"
-        "  ╒═══════════════════════════════════╕\n  \x1b[32m"
-        "0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n\n"
-        "\t%s\t\x1b[35m總共上站人次：\x1b[37m%-9d\x1b[35m平均使用時間：\x1b[37m%d\x1b[m\n",
+    fprintf(fp, "\x1b[1;34m"
+        "  ╒═══════════════════════════════════╕\x1b[m\n  \x1b[1;32m"
+        "0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23\x1b[m\n\n"
+        "\t%s\t\x1b[1;35m總共上站人次：\x1b[37m%-9d\x1b[35m平均使用時間：\x1b[37m%d\x1b[m\n",
         over ? "\x1b[35m單位：\x1b[37m10 人" : "", total, act[24] / act[25] + 1);
     fclose(fp);
 
@@ -627,7 +539,8 @@ main(void)
     /* Load board shm                                      */
     /* --------------------------------------------------- */
 
-    bshm_init();
+    shm_logger_init(NULL);
+    bshm_init(&bshm);
 
     /* --------------------------------------------------- */
     /* 系統開票                                            */
@@ -678,8 +591,6 @@ main(void)
 //        keeplog(FN_INNBBS_LOG, BRD_SECRET, title, 2);
 //        gzip(FN_INNBBS_LOG, "innbbsd/innbbsd", ymd);  /* 轉信紀錄 */
 
-//        sprintf(title, "[記錄] %sMailService使用紀錄", date);
-//        keeplog(FN_MAILSERVICE_LOG, BRD_SECRET, title, 2);
 
 //        sprintf(title, "[記錄] %s看版信件刪除紀錄", date);
 //        keeplog(FN_EXPIRE_LOG, BRD_SECRET, title, 2);
@@ -772,11 +683,6 @@ main(void)
         keeplog(FN_FAVORITE_LOG, BRD_SECRET, title, 2);
 #endif
 
-#ifdef  HAVE_BBSNET
-        sprintf(title, "[記錄] %sBBSNET 使用紀錄", date);
-        keeplog(FN_BBSNET_LOG, BRD_SECRET, title, 2);
-#endif
-
         /* 以下是公開紀錄 */
 
         //sprintf(date, "[%2d 月 %2d 日] ", ptime.tm_mon + 1, ptime.tm_mday);
@@ -865,7 +771,7 @@ main(void)
     {
         sprintf(title, "log/prikey%s", ymd);
         f_mv(PRIVATE_KEY, title);
-        i = PLAINPASSLEN-1;
+        i = PLAINPASSSIZE-1;
         for (;;)
         {
             j = random() % 0x100U;
@@ -873,7 +779,7 @@ main(void)
             title[--i] = j;
             if (i == 0) break;
         }
-        rec_add(PRIVATE_KEY, title, PLAINPASSLEN-1);
+        rec_add(PRIVATE_KEY, title, PLAINPASSSIZE-1);
     }
 #endif  /* #ifdef HAVE_SIGNED_MAIL */
 
@@ -910,7 +816,7 @@ keeplog(
     {
         fp = fdopen(fd, "w");
         fprintf(fp, "作者: SYSOP (" SYSOPNICK ")\n標題: %s\n時間: %s\n",
-            title, ctime(&hdr.chrono));
+            title, ctime_any(&hdr.chrono));
         f_suck(fp, fnlog);
         fclose(fp);
         if (mode)

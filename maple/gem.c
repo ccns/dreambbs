@@ -36,38 +36,21 @@ static int gem_recycle(XO *xo);
 
 static int
 gem_manage(
-    char* title)
+    const char* title)
 {
-    int ch, len;
-    char buf[100];
-    char *list;
-
-    strcpy(buf, title);
-
-    len = strlen(cuser.userid);
-    if ((list = strrchr(buf, '[')) == NULL)
+    const char *const l_square = strrchr(title, '[');
+    if (!l_square)
         return 0;
 
-    ch = *(++list);
-    if (ch)
-    {
-        do
-        {
-            if (!str_ncmp(list, cuser.userid, len))
-            {
-                ch = list[len];
-                if ((ch == 0) || (ch == '/') || (ch == ']'))
-                    return 1;
-            }
-            while ( (ch = *list++) )
-            {
-                if (ch == '/')
-                    break;
-            }
-        } while (ch);
-    }
+    const char *const list = l_square + 1;
+    const char *list_end = strrchr(title, ']');
+    if (!list_end)
+        list_end = strchr(title, '\0');
 
-    return 0;
+    char buf[100];
+    str_sncpy(buf, list, sizeof(buf), list_end - list);
+
+    return str_has(buf, cuser.userid);
 }
 
 static int
@@ -78,11 +61,14 @@ gem_foot(
     return XO_NONE;
 }
 
-static void
+static int
 gem_item(
-    int num,
-    const HDR *ghdr)
+    XO *xo,
+    int pos)
 {
+    const HDR *const ghdr = (const HDR *) xo_pool_base + pos;
+    const int num = pos + 1;
+
     int xmode, gtype;
     char fpath[64];
 
@@ -109,21 +95,22 @@ gem_item(
         if (xmode & GEM_BOARD)
         {
             sprintf(fpath, "gem/brd/%s/", ghdr->xname);
-            prints("%-*.*s%-13s%s\n", d_cols + 47, d_cols + 46, ghdr->title, (gtype == 1 ? ghdr->xname : ghdr->owner), access(fpath, R_OK) ? "[deleted]" : ghdr->date);
+            prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title, IDLEN + 1, (gtype == 1 ? ghdr->xname : ghdr->owner), access(fpath, R_OK) ? "[deleted]" : ghdr->date);
         }
         else
-            prints("%-*.*s%-13s%s\n", d_cols + 47, d_cols + 46, ghdr->title, (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
+            prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title, IDLEN + 1, (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
     }
+
+    return XO_NONE;
 }
 
 static int
 gem_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const HDR *const ghdr = (const HDR *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    gem_item(xo->pos + 1, ghdr);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return gem_item(xo, pos);
 }
 
 
@@ -131,48 +118,27 @@ static int
 gem_body(
     XO *xo)
 {
-    const HDR *ghdr;
     int num, max, tail;
+
+    move(3, 0);
 
     max = xo->max;
     if (max <= 0)
     {
-        outs("\n\n《精華區》尚在吸取天地間的日精月華 :)");
+        outs("\n《精華區》尚在吸取天地間的日精月華 :)\n");
         if (xo->key >= GEM_LMANAGER)
-        {
-            max = vans("(A)新增資料 (G)海錨功\能 (W)資源回收筒 [N]無所事事 ");
-            switch (max)
-            {
-                case 'a':
-                    max = gem_add(xo);
-                    if (xo->max > 0)
-                        return max;
-                    break;
-                case 'g':
-                    gem_anchor(xo);
-                    break;
-                case 'w':
-                    gem_recycle(xo);
-                    break;
-            }
-
-        }
-        else
-        {
-            vmsg(NULL);
-        }
-        return XO_QUIT;
+            outs("\n  (^P)新增資料 (^G)海錨功\能 (^W/Esc-W)資源回收筒\n");
+        clrtobot();
+        return gem_foot(xo);
     }
 
     num = xo->top;
-    ghdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
-        gem_item(++num, ghdr++);
+        gem_item(xo, num++);
     } while (num < max);
     clrtobot();
 
@@ -246,6 +212,7 @@ gem_load(
 static HDR *
 gem_check(
     XO *xo,
+    int pos,
     char *fpath,
     int op)
 {
@@ -257,7 +224,7 @@ gem_check(
     if ((op & GEM_WRITE) && (level <= GEM_USER))
         return NULL;
 
-    ghdr = (HDR *) xo_pool_base + xo->pos;
+    ghdr = (HDR *) xo_pool_base + pos;
     gtype = ghdr->xmode;
 
 //  if ((gtype & GEM_RESTRICT) && (level <= GEM_USER))
@@ -299,7 +266,7 @@ brd2gem(
     HDR *gem)
 {
     memset(gem, 0, sizeof(HDR));
-    time(&gem->chrono);
+    time32(&gem->chrono);
     strcpy(gem->xname, brd->brdname);
     sprintf(gem->title, "%-16s%s", brd->brdname, brd->title);
     gem->xmode = GEM_BOARD | GEM_FOLDER;
@@ -308,16 +275,16 @@ brd2gem(
 
 static void
 gem_log(
-    char *folder,
+    const char *folder,
     const char *action,
-    HDR *hdr)
+    const HDR *hdr)
 {
     char fpath[80], buf[256];
 
     if (hdr->xmode & (GEM_RESTRICT | GEM_RESERVED | GEM_LOCK))
         return;
 
-    str_folder(fpath, folder, "@/@log");
+    setdirpath_root(fpath, folder, "@/@log");
     sprintf(buf, "[%s] %s (%s) %s\n%s\n\n",
         action, hdr->xname, Now(), cuser.userid, hdr->title);
     f_cat(fpath, buf);
@@ -377,12 +344,12 @@ gem_add(
                 return XO_FOOT;
             }
 
-            time(&ghdr.chrono);
+            time32(&ghdr.chrono);
             sprintf(ghdr.xname, "@%s", fpath);
             if (gtype == 'c')
             {
                 strcat(fpath, "/");
-                sprintf(ghdr.title, "%-13s【 %s 】", fpath, title);
+                sprintf(ghdr.title, "%-*s 【 %s 】", IDLEN, fpath, title);
                 ghdr.xmode = GEM_FOLDER;
             }
             else
@@ -452,7 +419,8 @@ gem_add(
 
 static int
 gem_edit(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     char fpath[80];
     HDR *hdr;
@@ -463,7 +431,7 @@ gem_edit(
         return XO_FOOT;
     }
 
-    if (!(hdr = gem_check(xo, fpath, GEM_WRITE | GEM_FILE)))
+    if (!(hdr = gem_check(xo, pos, fpath, GEM_WRITE | GEM_FILE)))
         return XO_NONE;
     if ((hdr->xmode & GEM_RESERVED) && (xo->key < GEM_SYSOP))
         return XO_NONE;
@@ -475,13 +443,14 @@ gem_edit(
 
 static int
 gem_title(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *ghdr, xhdr;
     int num;
     char *dir;
 
-    ghdr = gem_check(xo, NULL, GEM_WRITE);
+    ghdr = gem_check(xo, pos, NULL, GEM_WRITE);
     if (ghdr == NULL)
         return XO_NONE;
 
@@ -491,7 +460,7 @@ gem_title(
     dir = xo->dir;
     if (HAS_PERM(PERM_ALLBOARD|PERM_GEM))
     {
-        vget(B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 2, GCARRY);
+        vget(B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 1, GCARRY);
         vget(B_LINES_REF, 0, "時間：", xhdr.date, 9, GCARRY);
     }
 
@@ -499,7 +468,7 @@ gem_title(
         vans("確定要修改嗎(y/N)？[N]") == 'y')
     {
         *ghdr = xhdr;
-        num = xo->pos;
+        num = pos;
         rec_put(dir, ghdr, sizeof(HDR), num);
 
         gem_log(xo->dir, "標題", ghdr);
@@ -511,7 +480,8 @@ gem_title(
 
 static int
 gem_lock(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *ghdr;
     int num;
@@ -519,11 +489,11 @@ gem_lock(
     if (!HAS_PERM(PERM_SYSOP))
         return XO_NONE;
 
-    if ((ghdr = gem_check(xo, NULL, GEM_WRITE)))
+    if ((ghdr = gem_check(xo, pos, NULL, GEM_WRITE)))
     {
         ghdr->xmode ^= GEM_LOCK;
 
-        num = xo->pos;
+        num = pos;
         rec_put(xo->dir, ghdr, sizeof(HDR), num);
         return XO_CUR;
     }
@@ -534,16 +504,17 @@ gem_lock(
 
 static int
 gem_mark(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *ghdr;
     int num;
 
-    if ((ghdr = gem_check(xo, NULL, GEM_WRITE)))
+    if ((ghdr = gem_check(xo, pos, NULL, GEM_WRITE)))
     {
         ghdr->xmode ^= GEM_RESTRICT;
 
-        num = xo->pos;
+        num = pos;
         rec_put(xo->dir, ghdr, sizeof(HDR), num);
         return XO_CUR;
     }
@@ -554,7 +525,8 @@ gem_mark(
 
 static int
 gem_state(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *ghdr;
     char *dir, fpath[80], site[64] GCC_UNUSED, path[512] GCC_UNUSED, *str;
@@ -572,13 +544,13 @@ gem_state(
         return XO_NONE;
 
 
-    if (!(ghdr = gem_check(xo, fpath, GEM_READ)))
+    if (!(ghdr = gem_check(xo, pos, fpath, GEM_READ)))
         return XO_NONE;
     /* Thor.980216: 注意! 有可能傳回 NULL導致踢人 */
 
     if (!(HAS_PERM(PERM_ALLBOARD)))
     {
-        if (!str_ncmp(fpath, "gem/brd/", 8))
+        if (!str_ncasecmp(fpath, "gem/brd/", 8))
         {
             dir = fpath + 8;
             if ((str = strchr(dir, '/')))
@@ -623,7 +595,8 @@ gem_state(
 
 static int
 gem_browse(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *ghdr;
     int op, xmode;
@@ -633,7 +606,7 @@ gem_browse(
 
     do
     {
-        ghdr = gem_check(xo, fpath, op);
+        ghdr = gem_check(xo, pos, fpath, op);
         if (ghdr == NULL)
             break;
 
@@ -680,7 +653,8 @@ gem_browse(
 
         op = GEM_READ | GEM_FILE;
 
-        xmode = xo_getch(xo, xmode);
+        xmode = xo_getch(xo, pos, xmode);
+        pos = xo->pos;
 
     } while (xmode == XO_BODY);
 
@@ -779,7 +753,7 @@ gem_store(void)
         return;
 
     folder = GemFolder;
-    str_folder(folder, folder, FN_GEM);
+    setdirpath_root(folder, folder, FN_GEM);
 
     rec_add(folder, GemBuffer, sizeof(HDR) * num);
 }
@@ -787,13 +761,14 @@ gem_store(void)
 
 static int
 gem_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *ghdr;
     char *dir, buf[80];
     int tag;
 
-    if (!(ghdr = gem_check(xo, NULL, GEM_WRITE)))
+    if (!(ghdr = gem_check(xo, pos, NULL, GEM_WRITE)))
         return XO_NONE;
 
     tag = AskTag("精華區刪除");
@@ -860,9 +835,10 @@ gem_delete(
     }
     else
     {
+        const HDR ghdr_orig = *ghdr;
         currchrono = ghdr->chrono;
-        rec_del(dir, sizeof(HDR), xo->pos, cmpchrono, NULL);
-        gem_log(dir, "刪除", ghdr);
+        rec_del(dir, sizeof(HDR), pos, cmpchrono, NULL);
+        gem_log(dir, "刪除", &ghdr_orig);
     }
 
     /* return XO_LOAD; */
@@ -872,12 +848,13 @@ gem_delete(
 
 static int
 gem_copy(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *ghdr;
     int tag;
 
-    ghdr = gem_check(xo, NULL, GEM_WRITE);
+    ghdr = gem_check(xo, pos, NULL, GEM_WRITE);
     if (ghdr == NULL)
         return XO_NONE;
 
@@ -897,6 +874,7 @@ gem_copy(
 static inline int
 gem_extend(
     XO *xo,
+    int pos,
     int num)
 {
     char *dir, fpath[80], gpath[80];
@@ -904,7 +882,7 @@ gem_extend(
     time_t chrono;
     HDR *hdr;
 
-    if (!(hdr = gem_check(xo, fpath, GEM_WRITE | GEM_FILE)))
+    if (!(hdr = gem_check(xo, pos, fpath, GEM_WRITE | GEM_FILE)))
         return -1;
 
     if (!(fp = fopen(fpath, "a")))
@@ -946,8 +924,8 @@ gem_paste(
         return XO_FOOT;
     }
 
-    str_folder(srcDir, GemFolder, FN_GEM);
-    str_folder(dstDir, dir = xo->dir, FN_GEM);
+    setdirpath_root(srcDir, GemFolder, FN_GEM);
+    setdirpath_root(dstDir, dir = xo->dir, FN_GEM);
 
     if (strcmp(srcDir, dstDir))
     {
@@ -961,7 +939,7 @@ gem_paste(
         return XO_FOOT;
 
     case 'e':
-        if (gem_extend(xo, num))
+        if (xo->max > 0 && gem_extend(xo, xo->pos, num))
         {
             zmsg("[Extend 檔案附加] 動作並未完全成功\");
             return XO_FOOT;
@@ -984,18 +962,18 @@ gem_paste(
 
 static int
 gem_move(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *ghdr;
     char *dir, buf[80];
-    int pos, newOrder;
+    int newOrder;
 
-    ghdr = gem_check(xo, NULL, GEM_WRITE);
+    ghdr = gem_check(xo, pos, NULL, GEM_WRITE);
 
     if (ghdr == NULL)
         return XO_NONE;
 
-    pos = xo->pos;
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
     if (!vget(B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
@@ -1009,10 +987,11 @@ gem_move(
         if (!rec_mov(xo->dir, sizeof(HDR), pos, newOrder))
             return XO_LOAD;
 #else
+        const HDR ghdr_orig = *ghdr;
         dir = xo->dir;
         if (!rec_del(dir, sizeof(HDR), pos, NULL, NULL))
         {
-            rec_ins(dir, ghdr, sizeof(HDR), newOrder, 1);
+            rec_ins(dir, &ghdr_orig, sizeof(HDR), newOrder, 1);
             xo->pos = newOrder;
             return XO_LOAD;
         }
@@ -1050,7 +1029,7 @@ gem_recycle(
         return XO_FOOT;
     }
 
-    str_folder(fpath, xo->dir, FN_GEM);
+    setdirpath_root(fpath, xo->dir, FN_GEM);
     if (rec_num(fpath, sizeof(HDR)) <= 0)
     {
         zmsg("資源回收筒並無資料");
@@ -1082,7 +1061,7 @@ gem_anchor(
         if (ans == 'a')
         {
             strcpy(folder, xo->dir);
-            str_ncpy(GemSailor, (const char *) xo->xyz, sizeof(GemSailor));
+            str_scpy(GemSailor, (const char *) xo->xyz, sizeof(GemSailor));
         }
         else if (ans == 'd')
         {
@@ -1106,7 +1085,8 @@ gem_anchor(
 
 int
 gem_gather(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr, *gbuf, ghdr, xhdr;
     int tag, locus, rc, xmode, anchor, mode;
@@ -1149,7 +1129,7 @@ gem_gather(
         EnumTagHdr(hdr, dir, 0);
     }
     else
-        hdr = (HDR *) xo_pool_base + xo->pos;
+        hdr = (HDR *) xo_pool_base + pos;
 
     if (hdr->xmode & POST_DELETE)
         return XO_FOOT;
@@ -1221,7 +1201,7 @@ gem_gather(
                     ptr = strchr(tmp, '@');
                     if (ptr)
                         *ptr = '\0';
-                    strncpy(ghdr.title, hdr->title, sizeof(ghdr.title) - IDLEN - 4);
+                    str_scpy(ghdr.title, hdr->title, sizeof(ghdr.title) - IDLEN - 3);
                     strcat(ghdr.title, " (");
                     strcat(ghdr.title, tmp);
                     strcat(ghdr.title, ")");
@@ -1248,7 +1228,7 @@ gem_gather(
 
                 hdr->xmode = xmode | POST_GEM;
                 rec_put(dir, hdr, sizeof(HDR), tag ? TagList[locus].recno :
-                    (xo->key == XZ_POST ? xo->pos : hdr->xid));
+                    (xo->key == XZ_POST ? pos : hdr->xid));
             }
         }
     } while (++locus < tag);
@@ -1269,12 +1249,13 @@ gem_gather(
 
 static int
 gem_tag(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *ghdr;
-    int pos, tag;
+    int tag;
 
-    if ((ghdr = gem_check(xo, NULL, GEM_READ)) && (tag = Tagger(ghdr->chrono, pos = xo->pos, TAG_TOGGLE)))
+    if ((ghdr = gem_check(xo, pos, NULL, GEM_READ)) && (tag = Tagger(ghdr->chrono, pos, TAG_TOGGLE)))
     {
         return XO_CUR + 1;
     }
@@ -1294,7 +1275,8 @@ gem_help(
 
 static int
 gem_cross(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     char xboard[20], fpath[80], xfolder[80], xtitle[80], buf[80], *dir;
     HDR *hdr, xpost, *ghdr;
@@ -1308,7 +1290,7 @@ gem_cross(
     if (!cuser.userlevel)
         return XO_NONE;
 
-    ghdr = gem_check(xo, NULL, GEM_READ);
+    ghdr = gem_check(xo, pos, NULL, GEM_READ);
     tag = AskTag("轉貼");
     if ((tag < 0) || (tag==0 && (!ghdr || ghdr->xmode & GEM_FOLDER)))
         return XO_FOOT;
@@ -1320,7 +1302,7 @@ gem_cross(
         if (*xboard == 0)
             strcpy(xboard, currboard);
 
-        hdr = tag ? &xpost : (HDR *) xo_pool_base + xo->pos;
+        hdr = tag ? &xpost : (HDR *) xo_pool_base + pos;
 
 
         if (!tag)
@@ -1328,7 +1310,7 @@ gem_cross(
             if (!(hdr->xmode & GEM_FOLDER) && !((hdr->xmode & (GEM_RESTRICT|GEM_RESERVED)) && (xo->key < GEM_MANAGER))
                 && !((hdr->xmode & GEM_LOCK) && !HAS_PERM(PERM_SYSOP)))
             {
-                sprintf(xtitle, "[轉錄]%.66s", hdr->title);
+                sprintf(xtitle, STR_FORWARD " %.66s", hdr->title);
                 if (!vget(2, 0, "標題:", xtitle, TTLEN + 1, GCARRY))
                     return XO_HEAD;
             }
@@ -1351,7 +1333,7 @@ gem_cross(
             {
                 EnumTagHdr(hdr, dir, locus++);
 
-                sprintf(xtitle, "[轉錄]%.66s", hdr->title);
+                sprintf(xtitle, STR_FORWARD " %.66s", hdr->title);
             }
             if (!(hdr->xmode & GEM_FOLDER) && !((hdr->xmode & (GEM_RESTRICT|GEM_RESERVED)) && (xo->key < GEM_MANAGER))
                   && !((hdr->xmode & GEM_LOCK) && !HAS_PERM(PERM_SYSOP)))
@@ -1437,28 +1419,28 @@ static KeyFuncList gem_cb =
     {XO_HEAD, {gem_head}},
     {XO_BODY, {gem_body}},
     {XO_FOOT, {gem_foot}},
-    {XO_CUR, {gem_cur}},
+    {XO_CUR | XO_POSF, {.posf = gem_cur}},
 
-    {'r', {gem_browse}},
+    {'r' | XO_POSF, {.posf = gem_browse}},
 
     {Ctrl('P'), {gem_add}},
-    {'E', {gem_edit}},
-    {'T', {gem_title}},
-    {'m', {gem_mark}},
-    {'x', {gem_cross}},
-    {'l', {gem_lock}},
+    {'E' | XO_POSF, {.posf = gem_edit}},
+    {'T' | XO_POSF, {.posf = gem_title}},
+    {'m' | XO_POSF, {.posf = gem_mark}},
+    {'x' | XO_POSF, {.posf = gem_cross}},
+    {'l' | XO_POSF, {.posf = gem_lock}},
 
-    {'d', {gem_delete}},
-    {'c', {gem_copy}},
+    {'d' | XO_POSF, {.posf = gem_delete}},
+    {'c' | XO_POSF, {.posf = gem_copy}},
 
     {Ctrl('G'), {gem_anchor}},
     {Ctrl('V'), {gem_paste}},
 
-    {'t', {gem_tag}},
+    {'t' | XO_POSF, {.posf = gem_tag}},
     {'f', {gem_toggle}},
-    {'M', {gem_move}},
+    {'M' | XO_POSF, {.posf = gem_move}},
 
-    {'S', {gem_state}},
+    {'S' | XO_POSF, {.posf = gem_state}},
 
     {Ctrl('W'), {gem_recycle}},
     {Meta('W'), {gem_recycle}},

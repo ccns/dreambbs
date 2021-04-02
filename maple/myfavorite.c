@@ -22,21 +22,24 @@ brd2myfavorite(
     HDR *gem)
 {
     memset(gem, 0, sizeof(HDR));
-    time(&gem->chrono);
+    time32(&gem->chrono);
     strcpy(gem->xname, brd->brdname);
     sprintf(gem->title, "%-16s%s", brd->brdname, brd->title);
     gem->xmode = GEM_BOARD;
 }
 
-static void
+static int
 myfavorite_item(
-    int num,
-    const HDR *myfavorite)
+    XO *xo,
+    int pos)
 {
+    const HDR *const myfavorite = (const HDR *) xo_pool_base + pos;
+    const int num = pos + 1;
+
     if (myfavorite->xmode & GEM_BOARD)
     {
         if (myfavorite->recommend == -1)
-            prints("%6d   %-13s< 本看板已不存在 >\n", num, myfavorite->xname);
+            prints("%6d   %-*s < 本看板已不存在 >\n", num, IDLEN, myfavorite->xname);
         else
         {
             BRD *brd;
@@ -63,23 +66,23 @@ myfavorite_item(
     {
         class_outs(myfavorite->title, num);
     }
+
+    return XO_NONE;
 }
 
 static int
 myfavorite_cur(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    const HDR *const myfavorite = (const HDR *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    myfavorite_item(xo->pos + 1, myfavorite);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return myfavorite_item(xo, pos);
 }
 
 static int
 myfavorite_body(
     XO *xo)
 {
-    const HDR *myfavorite;
     int num, max, tail;
 
     move(3, 0);
@@ -87,17 +90,18 @@ myfavorite_body(
     max = xo->max;
     if (max <= 0)
     {
-        return myfavorite_add(xo);
+        outs("\n《我的最愛》目前沒有資料\n");
+        outs("\n  (^P/a)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    myfavorite = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        myfavorite_item(++num, myfavorite++);
+        myfavorite_item(xo, num++);
     } while (num < max);
 
     return XO_NONE;
@@ -151,13 +155,14 @@ myfavorite_switch(
 
 static int
 myfavorite_browse(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *ghdr;
     int xmode, op=0, chn;
     char fpath[80], title[TTLEN + 1];
 
-    ghdr = (const HDR *) xo_pool_base + xo->pos;
+    ghdr = (const HDR *) xo_pool_base + pos;
 
     xmode = ghdr->xmode;
     /* browse folder */
@@ -285,8 +290,6 @@ myfavorite_add(
     }
     else
     {
-        if (!xo->max)
-            return XO_QUIT;
         return XO_FOOT;
     }
 
@@ -331,16 +334,16 @@ remove_dir(
 
 static int
 myfavorite_delete(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
 
     if (vans(msg_del_ny) == 'y')
     {
-        const HDR *hdr;
-
-        hdr = (const HDR *) xo_pool_base + xo->pos;
+        const HDR *hdr = (const HDR *) xo_pool_base + pos;
+        const HDR hdr_orig = *hdr;
 
         if (hdr->xmode & GEM_FOLDER)
         {
@@ -352,9 +355,9 @@ myfavorite_delete(
             remove_dir(fpath);
         }
 
-        if (!rec_del(currdir, sizeof(HDR), xo->pos, NULL, NULL))
+        if (!rec_del(currdir, sizeof(HDR), pos, NULL, NULL))
         {
-            logitfile(FN_FAVORITE_LOG, "< DEL >", hdr->xname);
+            logitfile(FN_FAVORITE_LOG, "< DEL >", hdr_orig.xname);
             return XO_LOAD;
         }
     }
@@ -363,17 +366,17 @@ myfavorite_delete(
 
 static int
 myfavorite_mov(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *ghdr;
     char buf[80];
-    int pos, newOrder;
+    int newOrder;
 
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
-    ghdr = (const HDR *) xo_pool_base + xo->pos;
+    ghdr = (const HDR *) xo_pool_base + pos;
 
-    pos = xo->pos;
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
     if (!vget(B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
@@ -382,11 +385,12 @@ myfavorite_mov(
 
     if (newOrder != pos)
     {
+        const HDR ghdr_orig = *ghdr;
         if (!rec_del(currdir, sizeof(HDR), pos, NULL, NULL))
         {
-            rec_ins(currdir, ghdr, sizeof(HDR), newOrder, 1);
+            rec_ins(currdir, &ghdr_orig, sizeof(HDR), newOrder, 1);
             xo->pos = newOrder;
-            logitfile(FN_FAVORITE_LOG, "< MOV >", ghdr->xname);
+            logitfile(FN_FAVORITE_LOG, "< MOV >", ghdr_orig.xname);
             return XO_LOAD;
         }
     }
@@ -395,13 +399,14 @@ myfavorite_mov(
 
 static int
 myfavorite_edit(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR *hdr;
 
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
-    hdr = (HDR *) xo_pool_base + xo->pos;
+    hdr = (HDR *) xo_pool_base + pos;
     if (hdr->xmode & GEM_BOARD)
     {
         int chn;
@@ -421,7 +426,7 @@ myfavorite_edit(
     {
         if (!vget(B_LINES_REF, 0, "請輸入標題: ", hdr->title, 64, GCARRY))
             return XO_FOOT;
-        rec_put(currdir, hdr, sizeof(HDR), xo->pos);
+        rec_put(currdir, hdr, sizeof(HDR), pos);
         return XO_LOAD;
     }
     return XO_NONE;
@@ -439,9 +444,10 @@ myfavorite_help(
 
 static int
 myfavorite_search(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
-    int num, pos, max;
+    int num, max;
     char *ptr;
     char buf[IDLEN + 1];
     const HDR *hdr;
@@ -459,7 +465,7 @@ myfavorite_search(
         //bcache = bshm->bcache;
 
         //str_lower(ptr, ptr);
-        pos = num = xo->pos;
+        num = pos;
         max = xo->max;
         //chp = (short *) xo->xyz;
         do
@@ -487,7 +493,7 @@ myfavorite_search(
             //if (chn >= 0)
             //{
                 //brd = bcache + chn;
-                //if (str_str(brd->brdname, ptr) || str_str(brd->title, ptr))
+                //if (str_casestr(brd->brdname, ptr) || str_casestr(brd->title, ptr))
                     //return XO_MOVE + pos;
             //}
         } while (pos != num);
@@ -503,17 +509,17 @@ KeyFuncList myfavorite_cb =
     {XO_LOAD, {myfavorite_load}},
     {XO_HEAD, {myfavorite_head}},
     {XO_BODY, {myfavorite_body}},
-    {XO_CUR, {myfavorite_cur}},
+    {XO_CUR | XO_POSF, {.posf = myfavorite_cur}},
 
     {Ctrl('P'), {myfavorite_add}},
     {'a', {myfavorite_add}},
-    {'r', {myfavorite_browse}},
+    {'r' | XO_POSF, {.posf = myfavorite_browse}},
     {'s', {myfavorite_switch}},
     {'c', {myfavorite_newmode}},
-    {'d', {myfavorite_delete}},
-    {'M', {myfavorite_mov}},
-    {'E', {myfavorite_edit}},
-    {'/', {myfavorite_search}},
+    {'d' | XO_POSF, {.posf = myfavorite_delete}},
+    {'M' | XO_POSF, {.posf = myfavorite_mov}},
+    {'E' | XO_POSF, {.posf = myfavorite_edit}},
+    {'/' | XO_POSF, {.posf = myfavorite_search}},
     {'h', {myfavorite_help}}
 };
 
@@ -666,7 +672,8 @@ myfavorite_main(void)
 
 int
 class_add(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     HDR hdr;
     char fpath[64];
@@ -675,7 +682,7 @@ class_add(
 
     usr_fpath(fpath, cuser.userid, FN_MYFAVORITE);
 
-    chp = (short *) xo->xyz + xo->pos;
+    chp = (short *) xo->xyz + pos;
     chn = *chp;
     if (chn < 0)
     {

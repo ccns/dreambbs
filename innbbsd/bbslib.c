@@ -34,7 +34,7 @@ GCC_PURE int
 nl_bynamecmp(
     const void *a, const void *b)
 {
-    return str_cmp(((const nodelist_t *)a) -> name, ((const nodelist_t *)b) -> name);
+    return str_casecmp(((const nodelist_t *)a) -> name, ((const nodelist_t *)b) -> name);
 }
 
 
@@ -83,7 +83,7 @@ GCC_PURE int
 nf_byboardcmp(
     const void *a, const void *b)
 {
-    return str_cmp(((const newsfeeds_t *)a) -> board, ((const newsfeeds_t *)b) -> board);
+    return str_casecmp(((const newsfeeds_t *)a) -> board, ((const newsfeeds_t *)b) -> board);
 }
 
 
@@ -91,7 +91,7 @@ GCC_PURE int
 nf_bygroupcmp(
     const void *a, const void *b)
 {
-    return str_cmp(((const newsfeeds_t *)a) -> newsgroup, ((const newsfeeds_t *)b) -> newsgroup);
+    return str_casecmp(((const newsfeeds_t *)a) -> newsgroup, ((const newsfeeds_t *)b) -> newsgroup);
 }
 
 
@@ -208,7 +208,7 @@ read_spamrule(void)
         /* 將 SPAMRULE[] 都變成小寫，這樣比對時就可以大小寫通吃 */
         spam = SPAMRULE + fd;
         detail = spam->detail;
-        str_lowest(detail, detail);
+        str_lower_dbcs(detail, detail);
     }
 
     return 0;

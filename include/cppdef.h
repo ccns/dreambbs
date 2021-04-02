@@ -1,7 +1,7 @@
 /*-------------------------------------------------------*/
 /* cppdef.h     ( NCKU CCNS WindTop-DreamBBS 2.0 )       */
 /*-------------------------------------------------------*/
-/* Author: 37586669+IepIweidieng@users.noreply.github.com*/
+/* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
 /* Target: C preprocessor utility macros                 */
 /* Create: 2019/03/30                                    */
 /*-------------------------------------------------------*/
@@ -92,16 +92,16 @@
 #define CPP_IF_ON_TEST_true  ,
 
 
-// Test if `conf` is expanded, then select the 0th item of `__VA_ARGS__`,
+// Test if `conf` expands and does not expand to itself, then select the 0th item of `__VA_ARGS__`,
 //    else select the 1st item of `__VA_ARGS__`
-#define IF_DEF_PRIME(conf, ...)  CPP_SELECT_2(conf ## _IS_DEF, CPP_SELECT_1, CPP_SELECT_0,)(__VA_ARGS__)
+#define IF_EXPANDS_PRIME(conf, ...)  CPP_SELECT_2(conf ## _TEST_EXPANDS, CPP_SELECT_1, CPP_SELECT_0,)(__VA_ARGS__)
 
 // Try to expand `conf` and then test whether `conf` is expanded
-#define IF_DEF(conf, ...)  IF_DEF_PRIME(conf, __VA_ARGS__)
+#define IF_EXPANDS(conf, ...)  IF_EXPANDS_PRIME(conf, __VA_ARGS__)
 
-// Usage: `#define <conf>_IS_DEF  IS_DEF_TEST`
-// Not expanded => not defined
-#define IS_DEF_TEST  ,
+// Usage: `#define <conf>_TEST_EXPANDS  IF_EXPANDS_TEST`
+// <conf> remains the name => not expanded
+#define IF_EXPANDS_TEST  ,
 
 
 /* Macros for config-dependent attributes for user or board */
@@ -166,13 +166,24 @@ template <class T>
 
 #include <stddef.h>
 
+/* Helper macro for getting typed pointer of a member */
+#define NULL_MEMBER_PTR(Type, memb) \
+    (&(((Type *)NULL)->memb))
+
+/* Get the size of the member */
+#define MEMBER_SIZE(Type, memb) \
+    sizeof(*NULL_MEMBER_PTR(Type, memb))
+
 #define FLEX_SIZE       /* For declaration of flexible array member */
 
 #define SIZEOF_FLEX(Type, n) \
     (offsetof(Type, Type##_FLEX_MEMBER) \
-      + (n) * sizeof(((Type *)NULL)->Type##_FLEX_MEMBER[0]))
+      + (n) * sizeof((*NULL_MEMBER_PTR(Type, Type##_FLEX_MEMBER))[0]))
 
 #define COUNTOF(x)      (sizeof(x)/sizeof(x[0]))
+
+/* The argument `strlit` should expand to a string literal */
+#define STRLITLEN(strlit) (sizeof(strlit "" /* Ensure that `strlit` is a string literal */) - 1)
 
 /* Macros for managing loading of dynamic libraries */
 
@@ -223,10 +234,12 @@ template <class T>
   #define DL_HOLD  \
     struct DL_handle *const _dl_handle = {DL_hold(DL_CURRENT_MODULE_STR)}
   #define DL_RELEASE(ret)  ((void)DL_release(DL_CURRENT_MODULE_STR, _dl_handle), ret)
+  #define DL_RELEASE_VOID()  ((void)DL_release(DL_CURRENT_MODULE_STR, _dl_handle))
 #else
   #define DL_HOTSWAP_SCOPE  static
   #define DL_HOLD  void *const _dl_dummy = {NULL}
   #define DL_RELEASE(ret)  ((void)_dl_dummy, ret)
+  #define DL_RELEASE_VOID()  ((void)_dl_dummy)
 #endif
 
 
@@ -234,8 +247,12 @@ template <class T>
 
 #define CPP_PRAGMA(arg)  _Pragma(CPP_STR(arg))
 
-#define CPP_MACRO_DEPRECATED(msg) \
+#define MACRO_DEPRECATED(msg) \
     CPP_PRAGMA(GCC warning CPP_STR(deprecated macro: msg))
+
+/* Forbidden macro */
+#define MACRO_FORBIDDEN(msg) \
+    CPP_PRAGMA(GCC error CPP_STR(forbidden macro: msg))
 
 /* Macros for limiting the value range */
 
@@ -286,7 +303,10 @@ static inline long double ld_clamp(long double x, long double low, long double h
 #include <stdbool.h>
 
 /* Booleans  (Yep, for true and false) (Deprecated) */
-#define YEA     CPP_MACRO_DEPRECATED(use 'true' instead)  (1)
-#define NA      CPP_MACRO_DEPRECATED(use 'false' instead) (0)
+#define YEA     (1) MACRO_DEPRECATED(use 'true' instead)
+#define NA      (0) MACRO_DEPRECATED(use 'false' instead)
+
+/* Standard integer types with specified widths */
+#include <stdint.h>
 
 #endif  // #ifndef CPPDEF_H

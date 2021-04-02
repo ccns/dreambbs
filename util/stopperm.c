@@ -39,7 +39,7 @@ reaper(
 
     if (!strcmp(acct.email, kmail))
     {
-        fprintf(flog, "%-13s\n", acct.userid);
+        fprintf(flog, "%-*s\n", IDLEN, acct.userid);
         total++;
     }
 }
@@ -137,7 +137,7 @@ keeplog(
 
     fp = fdopen(fd, "w");
     fprintf(fp, "作者: SYSOP (" SYSOPNICK ")\n標題: %s\n時間: %s\n",
-        title, ctime(&hdr.chrono));
+        title, ctime_any(&hdr.chrono));
     f_suck(fp, fnlog);
     fclose(fp);
 
@@ -355,7 +355,7 @@ add_deny_exer(
         else
             fprintf(fp, "期間: %s%s，期限一過自動復權。\n\n", check_time ? "上次處罰到期日累加":"從今天起", cdays);
     }
-    fprintf(fp, "\x1b[1;32m※ Origin: \x1b[1;33m%s \x1b[1;37m<%s>\n\x1b[1;31m◆ From: \x1b[1;36m%s\x1b[m\n", BOARDNAME, MYHOSTNAME, MYHOSTNAME);
+    fprintf(fp, "\x1b[1;32m※ Origin: \x1b[1;33m%s \x1b[1;37m<%s>\x1b[m\n\x1b[1;31m◆ From: \x1b[1;36m%s\x1b[m\n", BOARDNAME, MYHOSTNAME, MYHOSTNAME);
 
     fclose(fp);
     sprintf(buf, "[%s處罰] %s %s", cross ? "連坐":"", u->userid, cselect);
@@ -399,10 +399,10 @@ setup(
 
     for (i=1; i<=num; i++)
     {
-        fscanf(flog, "%13s", buf);
-        acct_load(u, buf);
-
-        if (u != NULL)
+        char fmt[13];
+        sprintf(fmt, "%%%ds", IDLEN);
+        fscanf(flog, fmt, buf);
+        if (acct_load(u, buf) >= 0)
         {
             if (strcmp(u->userid, id))
                 add_deny_exer(u, mode, 1, exer);

@@ -13,11 +13,13 @@
 static int viol_add(XO *xo);
 
 
-static void
+static int
 viol_item(
-int num,
-const EMAIL *viol)
+XO *xo,
+int pos)
 {
+    const EMAIL *const viol = (const EMAIL *) xo_pool_base + pos;
+    const int num = pos + 1;
     char buf[5];
     int now;
     now = (viol->deny - time(0)) / 3600;
@@ -27,23 +29,23 @@ const EMAIL *viol)
     else
         sprintf(buf, "%4d", BMAX(now, 0));
     prints("%6d %4d %4s %-*.*s\n", num, viol->times, buf, d_cols + 62, d_cols + 62, viol->email);
+
+    return XO_NONE;
 }
 
 static int
 viol_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const EMAIL *const viol = (const EMAIL *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    viol_item(xo->pos + 1, viol);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return viol_item(xo, pos);
 }
 
 static int
 viol_body(
 XO *xo)
 {
-    const EMAIL *viol;
     int num, max, tail;
 
     move(3, 0);
@@ -51,19 +53,18 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-            return viol_add(xo);
-        return XO_QUIT;
+        outs("\n《暫時禁止名單》目前沒有資料\n");
+        outs("\n  (^P)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    viol = (const EMAIL *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        viol_item(++num, viol++);
+        viol_item(xo, num++);
     }
     while (num < max);
 
@@ -130,12 +131,13 @@ XO *xo)
 
 static int
 viol_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(EMAIL), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(EMAIL), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -146,13 +148,11 @@ XO *xo)
 
 static int
 viol_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     EMAIL *viol, mate;
-    int pos, cur;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     viol = (EMAIL *) xo_pool_base + pos;
 
     mate = *viol;
@@ -168,10 +168,11 @@ XO *xo)
 
 static int
 viol_find(
-XO *xo)
+XO *xo,
+int pos)
 {
     EMAIL viol;
-    int pos, fd;
+    int fd;
     char buf[64];
 
     if (!vget(B_LINES_REF, 0, "請輸入查詢字串:", buf, sizeof(buf), DOECHO))
@@ -179,14 +180,14 @@ XO *xo)
 
     fd = open(FN_VIOLATELAW_DB, O_RDONLY);
 
-    pos = xo->pos + 1;
+    pos = pos + 1;
 
     while (fd >= 0)
     {
         lseek(fd, (off_t)(sizeof(EMAIL) * pos), SEEK_SET);
         if (read(fd, &viol, sizeof(EMAIL)) == sizeof(EMAIL))
         {
-            if (str_str(viol.email, buf))
+            if (str_casestr(viol.email, buf))
             {
                 xo->pos = pos;
                 close(fd);
@@ -220,14 +221,14 @@ KeyFuncList viol_cb =
     {XO_LOAD, {viol_load}},
     {XO_HEAD, {viol_head}},
     {XO_BODY, {viol_body}},
-    {XO_CUR, {viol_cur}},
+    {XO_CUR | XO_POSF, {.posf = viol_cur}},
 
     {Ctrl('P'), {viol_add}},
-    {'r', {viol_change}},
-    {'f', {viol_find}},
-    {'c', {viol_change}},
+    {'r' | XO_POSF, {.posf = viol_change}},
+    {'f' | XO_POSF, {.posf = viol_find}},
+    {'c' | XO_POSF, {.posf = viol_change}},
     {'s', {xo_cb_init}},
-    {'d', {viol_delete}},
+    {'d' | XO_POSF, {.posf = viol_delete}},
     {'h', {viol_help}}
 };
 

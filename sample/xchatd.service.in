@@ -3,11 +3,11 @@ Description=DreamBBS Chatroom Daemon
 After=syslog.target network.target remote-fs.target nss-lookup.target
 
 [Service]
-User=bbs
-Group=bbs
+User=@BBSUSR@
+Group=@BBSGROUP@
 Type=forking
-PIDFile=/home/bbs/run/chat.pid
-ExecStart=/home/bbs/bin/xchatd &
+PIDFile=@BBSHOME@/run/chat.pid
+ExecStart=@BBSHOME@/bin/xchatd &
 ExecStop=/bin/kill -s QUIT $MAINPID
 Restart=on-failure
 RestartSec=42s

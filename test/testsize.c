@@ -8,24 +8,27 @@
   #define EXPECT_SIZE(Type, expect)  assert(sizeof(Type) == expect)
 #endif
 
-#define CHECK_SIZE(Type, expect)  do { \
+#define SHOW_SIZE(Type) do { \
     printf("sizeof(" #Type "): %zu\n", sizeof(Type)); \
+} while (0)
+
+#define CHECK_SIZE(Type, expect)  do { \
+    SHOW_SIZE(Type); \
     EXPECT_SIZE(Type, expect); \
 } while (0)
 
 int main(void)
 {
     // print out variable size
-    CHECK_SIZE(size_t, 4);
-    CHECK_SIZE(int, 4);
-    CHECK_SIZE(long, 4);
-    CHECK_SIZE(time_t, 4);
+    SHOW_SIZE(size_t);
+    SHOW_SIZE(int);
+    SHOW_SIZE(long);
+    SHOW_SIZE(time_t);
 
     //print out bbs struct size
     CHECK_SIZE(BRD, 256);
     CHECK_SIZE(BRH, 12);
     CHECK_SIZE(HDR, 256);
-    CHECK_SIZE(CLASS, 36);
     CHECK_SIZE(ACCT, 512);
 
     return 0;

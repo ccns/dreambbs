@@ -89,23 +89,25 @@ XO *xo)
 }
 
 
-static void
+static int
 vote_item(
-int num,
-const VCH *vch)
+XO *xo,
+int pos)
 {
-    prints("%6d %-9.8s%-12s %-*.*s\n",
-           num, vch->cdate, vch->owner, d_cols + 50, d_cols + 50, vch->title);
+    const VCH *const vch = (const VCH *) xo_pool_base + pos;
+    const int num = pos + 1;
+    prints("%6d %-9.8s%-*s %-*.*s\n",
+           num, vch->cdate, IDLEN, vch->owner, d_cols + 50, d_cols + 50, vch->title);
+    return XO_NONE;
 }
 
 static int
 vote_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const VCH *const vch = (const VCH *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    vote_item(xo->pos + 1, vch);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return vote_item(xo, pos);
 }
 
 
@@ -113,34 +115,28 @@ static int
 vote_body(
 XO *xo)
 {
-    const VCH *vch;
     int num, max, tail;
+
+    move(3, 0);
 
     max = xo->max;
     if (max <= 0)
     {
+        outs("\nщ布┮ヘ玡礚щ布羭︽\n");
         if (bbstate & STAT_BOARD)
-        {
-            if (vans("璶羭快щ布盾(y/N)[N] ") == 'y')
-                return vote_add(xo);
-        }
-        else
-        {
-            vmsg("ヘ玡礚щ布羭︽");
-        }
-        return XO_QUIT;
+            outs("\n  (^P)羭快щ布\n");
+        clrtobot();
+        return XO_NONE;
     }
 
     num = xo->top;
-    vch = (const VCH *) xo_pool_base + num;
     tail = num + XO_TALL;
     if (max > tail)
         max = tail;
 
-    move(3, 0);
     do
     {
-        vote_item(++num, vch++);
+        vote_item(xo, num++);
     }
     while (num < max);
     clrtobot();
@@ -189,7 +185,7 @@ VCH *vch)
     if (num < 1)
         num = 1;
     vch->vclose = vch->chrono + num * 86400;
-    str_stamp(vch->cdate, &vch->vclose);
+    str_stamp_any(vch->cdate, &vch->vclose);
 
     vch->vsort =
         (vget(22, 0, "秨布挡狦琌逼(y/N)[N] ", buf, 3, LCECHO) == 'y')
@@ -247,11 +243,10 @@ const char *path)
     buf2[1] = '\0';
     strcpy(buf3, account + 3);
     */
-    strncpy(buf1, account, 2);
-    strncpy(buf2, account + 2, 1);
-    strncpy(buf3, account + 3, 2);
-    strncpy(buf4, account + 5, 4);
-    buf1[2] = buf2[1] = buf3[2] = buf4[4] = '\0';
+    str_sncpy(buf1, account, sizeof(buf1), 2);
+    str_sncpy(buf2, account + 2, sizeof(buf2), 1);
+    str_sncpy(buf3, account + 3, sizeof(buf3), 2);
+    str_sncpy(buf4, account + 5, sizeof(buf4), 4);
 
     fd = open(path, O_RDONLY);
     while (fd >= 0)
@@ -539,9 +534,10 @@ XO *xo)
 
 static int
 vote_edit(
-XO *xo)
+XO *xo,
+int pos)
 {
-    int pos, check = 0;
+    int check = 0;
     VCH *vch, vxx;
     char *dir, fpath[80];
     /* Thor: for эщ布匡兜 */
@@ -559,7 +555,6 @@ XO *xo)
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    pos = xo->pos;
     dir = xo->dir;
     vch = (VCH *) xo_pool_base + pos;
 
@@ -643,7 +638,8 @@ XO *xo)
 
 static int
 vote_browse(
-XO *xo)
+XO *xo,
+int pos)
 {
     const VCH *vch;
     FILE *fp;
@@ -655,7 +651,7 @@ XO *xo)
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    vch = (const VCH *) xo_pool_base + xo->pos;
+    vch = (const VCH *) xo_pool_base + pos;
     hdr_fpath(fpath, xo->dir, (const HDR *) vch);
 
 
@@ -732,8 +728,8 @@ XO *xo)
     buf[74] = '\0';
 
     fprintf(fp, "\n\n> %s <\n\n』 [%s]狾щ布%s\n\n羭快  %s\n\n羭快ら戳%s\n",
-            buf, currboard, vch->title, vch->owner, ctime(&vch->chrono));
-    fprintf(fp, "秨布ら戳%s\n』 щ布肈:\n\n", ctime(&vch->vclose));
+            buf, currboard, vch->title, vch->owner, ctime_any(&vch->chrono));
+    fprintf(fp, "秨布ら戳%s\n』 щ布肈:\n\n", ctime_any(&vch->vclose));
 
     *fname = '@';
     f_suck(fp, fpath);
@@ -776,16 +772,16 @@ XO *xo)
 
 static int
 vote_query(
-XO *xo)
+XO *xo,
+int pos)
 {
     char *dir, *fname, fpath[80], buf[80];
     VCH *vch;
-    int cc, pos;
+    int cc;
 
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    pos = xo->pos;
     dir = xo->dir;
     vch = (VCH *) xo_pool_base + pos;
 
@@ -801,7 +797,7 @@ XO *xo)
     if (cc == 'c')
     {
         vch->vclose = time(0);
-        str_stamp(vch->cdate, &vch->vclose);
+        str_stamp_any(vch->cdate, &vch->vclose);
         rec_put(dir, vch, sizeof(VCH), pos);
     }
     else if (cc == 'a')
@@ -810,7 +806,7 @@ XO *xo)
         if ((cc = atoi(buf)))
         {
             vch->vclose = vch->vclose + cc * 86400;
-            str_stamp(vch->cdate, &vch->vclose);
+            str_stamp_any(vch->cdate, &vch->vclose);
             rec_put(dir, vch, sizeof(VCH), pos);
         }
     }
@@ -854,10 +850,10 @@ const char *account)
     else
         return 0;
 
-    strncpy(year, account + 3, 2);
+    str_sncpy(year, account + 3, sizeof(year), 2);
 
     if ( atoi(year) <= 97 )// Ecchi.100331: 98玡厩獺絚眀腹场だЮ狠常璶絏
-        strncpy(addr, account, 8);
+        str_sncpy(addr, account, sizeof(addr), 8);
     else
         strcpy(addr, account);
 
@@ -866,7 +862,7 @@ const char *account)
     if (!Get_Socket(server, &sock))
     {
         close(sock);
-        vget(B_LINES_REF - 3, 0, line, buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+        vget(B_LINES_REF - 3, 0, line, buf, PLAINPASSSIZE, NOECHO | VGET_STEALTH_NOECHO);
         if (strlen(buf) < 1)
             return 0;
         if (!POP3_Check(server, addr, buf))
@@ -905,7 +901,7 @@ const char *mail)
     if (!Get_Socket(server, &sock))
     {
         close(sock);
-        vget(B_LINES_REF - 3, 0, line, buf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO);
+        vget(B_LINES_REF - 3, 0, line, buf, PLAINPASSSIZE, NOECHO | VGET_STEALTH_NOECHO);
         if (strlen(buf) < 1)
             return 0;
         if (!POP3_Check(server, addr, buf))
@@ -922,7 +918,8 @@ const char *mail)
 
 static int
 vote_join(
-XO *xo)
+XO *xo,
+int pos)
 {
     VCH *vch;
     int count, choice, fd, fv;
@@ -931,7 +928,7 @@ XO *xo)
     char account[10/*7*/];
     vitem_t vlist[MAX_CHOICES];
 
-    vch = (VCH *) xo_pool_base + xo->pos;
+    vch = (VCH *) xo_pool_base + pos;
     if (time(0) > vch->vclose)
     {
         vmsg("щ布竒篒ゎ叫繰秨布");
@@ -942,7 +939,7 @@ XO *xo)
     /* 浪琩琌竒щ筁布                                  */
     /* --------------------------------------------------- */
 
-#define FV_SZ   (sizeof(time_t) * 2)
+#define FV_SZ   (sizeof(time32_t) * 2)
 
     usr_fpath(buf, cuser.userid, FN_VOTE);
     fv = open(buf, O_RDWR | O_CREAT, 0600);
@@ -1075,7 +1072,7 @@ XO *xo)
                 *fname = 'O';
                 if ((fp = fopen(fpath, "a")))
                 {
-                    fprintf(fp, "%-12s: %s\n", cuser.userid, buf);
+                    fprintf(fp, "%-*s: %s\n", IDLEN, cuser.userid, buf);
                     fclose(fp);
                 }
             }
@@ -1119,16 +1116,16 @@ static KeyFuncList vote_cb =
     {XO_LOAD, {vote_load}},
     {XO_HEAD, {vote_head}},
     {XO_BODY, {vote_body}},
-    {XO_CUR, {vote_cur}},
+    {XO_CUR | XO_POSF, {.posf = vote_cur}},
 
-    {'r', {vote_join}},
-    {'v', {vote_join}},
+    {'r' | XO_POSF, {.posf = vote_join}},
+    {'v' | XO_POSF, {.posf = vote_join}},
     {'R', {vote_result}},
-    {'m', {vote_browse}},
-    {'S' | XO_DL, {.dlfunc = DL_NAME("showvote.so", Showvote)}},
-    {'E', {vote_edit}},
+    {'m' | XO_POSF, {.posf = vote_browse}},
+    {'S' | XO_POSF | XO_DL, {.dlposf = DL_NAME("showvote.so", Showvote)}},
+    {'E' | XO_POSF, {.posf = vote_edit}},
     {Ctrl('P'), {vote_add}},
-    {Ctrl('Q'), {vote_query}},
+    {Ctrl('Q') | XO_POSF, {.posf = vote_query}},
 
     {'h', {vote_help}}
 };
@@ -1218,13 +1215,13 @@ vote_sync(void)
 
     if (!fstat(fd, &st) && (size = st.st_size) > 0)
     {
-        time_t *base, *head, *tail;
+        time32_t *base, *head, *tail;
 
-        base = head = (time_t *) malloc(size);
+        base = head = (time32_t *) malloc(size);
         size = read(fd, base, size);
         if (size >= FV_SZ)
         {
-            tail = (time_t *)((char *) base + size);
+            tail = (time32_t *)((char *) base + size);
 
 outerLoop:
             while (head < tail)

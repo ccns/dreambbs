@@ -30,7 +30,7 @@ int userno)
     UTMP *utmp, *uceil;
 
     utmp = ushm->uslot;
-    uceil = (UTMP *) ((char *) utmp + ushm->offset);
+    uceil = utmp + ushm->ubackidx;
     do
     {
         if (utmp->userno == userno)
@@ -83,21 +83,21 @@ rebuild_pnote_ansi(int newflag)
     {
         total = BMIN(st.st_size / sizeof(notedata), (off_t)MAX_PNOTE);
     }
-    fputs("\t\t\t\x1b[1;32m ★ \x1b[37m答 錄 機 中 的 留 言\x1b[32m★ \n\n", fp);
+    fputs("\t\t\t\x1b[1;32m ★ \x1b[37m答 錄 機 中 的 留 言\x1b[32m★ \x1b[m\n\n", fp);
 
     while (total)
     {
         if (total--)
             read(fd, (char *) &myitem, sizeof(myitem));
-        sprintf(buf, "\x1b[1;33m□═ \x1b[32m%s\x1b[37m(%s)",
+        sprintf(buf, "\x1b[1;33m□═ \x1b[32m%s\x1b[37m(%s)",
                 myitem.userid, myitem.username);
         len = strlen(buf);
         strcat(buf, & " \x1b[33m"[len & 1]);
 
         for (i = len >> 1; i < 36; i++)
-            strcat(buf, "═");
-        sprintf(buf2, "═\x1b[32m %.14s \x1b[33m═□\x1b[m\n",
-                Cdate(&(myitem.date)));
+            strcat(buf, "═");
+        sprintf(buf2, "═\x1b[32m %.14s \x1b[33m═□\x1b[m\n",
+                Cdate(&TEMPLVAL(time_t, {myitem.date})));
         strcat(buf, buf2);
         fputs(buf, fp);
 
@@ -144,9 +144,8 @@ do_pnote(const char *userid)
 
     utmp_mode(M_XMODE);
     strcpy(myitem.userid, cuser.userid);
-    strncpy(myitem.username, cuser.username, 18);
-    myitem.username[18] = '\0';
-    time(&(myitem.date));
+    str_scpy(myitem.username, cuser.username, sizeof(myitem.username));
+    time32(&(myitem.date));
 
     /* begin load file */
 
@@ -173,19 +172,19 @@ do_pnote(const char *userid)
         total = BMIN(st.st_size / sizeof(notedata) + 1, (off_t)MAX_PNOTE);
     }
 
-    fputs("\t\t\t\x1b[1;32m ★ \x1b[37m您 的 答 錄 機 !!! \x1b[32m★ \n\n", fp);
+    fputs("\t\t\t\x1b[1;32m ★ \x1b[37m您 的 答 錄 機 !!! \x1b[32m★ \x1b[m\n\n", fp);
     collect = 1;
     while (total)
     {
-        sprintf(buf, "\x1b[1;33m□═ \x1b[32m%s\x1b[37m(%s)",
+        sprintf(buf, "\x1b[1;33m□═ \x1b[32m%s\x1b[37m(%s)",
                 myitem.userid, myitem.username);
         len = strlen(buf);
         strcat(buf, & " \x1b[33m"[len & 1]);
 
         for (i = len >> 1; i < 36; i++)
-            strcat(buf, "═");
-        sprintf(buf2, "═\x1b[32m %.14s \x1b[33m═□\x1b[m\n",
-                Cdate(&(myitem.date)));
+            strcat(buf, "═");
+        sprintf(buf2, "═\x1b[32m %.14s \x1b[33m═□\x1b[m\n",
+                Cdate(&TEMPLVAL(time_t, {myitem.date})));
         strcat(buf, buf2);
         fputs(buf, fp);
 
@@ -211,8 +210,8 @@ show_pnote(notedata *pitem)
     clrchyiuan(2, 6);
     move(2, 0);
     prints_centered("\x1b[1;36m┌─── \x1b[37m%s(%s)在 \x1b[33m%s\x1b[37m 留的話 \x1b[m", pitem->userid, pitem->username,
-            Cdate(&(pitem->date)));
-    prints("\n\x1b[1;37m%*s  %s\n%*s  %s\n%*s  %s\n\x1b[0m",
+            Cdate(&TEMPLVAL(time_t, {pitem->date})));
+    prints("\n\x1b[1;37m%*s  %s\x1b[m\n\x1b[1;37m%*s  %s\x1b[m\n\x1b[1;37m%*s  %s\x1b[m\n",
            d_cols>>1, "", pitem->buf[0], d_cols>>1, "", pitem->buf[1], d_cols>>1, "", pitem->buf[2]);
     outs_centered("                 \x1b[1;36m──────────────────────────────┘\x1b[m\n");
     pitem->mode = 1;
@@ -355,7 +354,7 @@ static void
 Pnote(int newflag)
 {
     int offset, num, num1, i;
-    char ans[4], prompt[STRLEN];
+    char ans[4], prompt[STRSIZE];
     notedata item_array[MAX_PNOTE + 1];
     char fpath[MAXPATHLEN];
     FILE *fp;
@@ -542,7 +541,7 @@ static int
 p_read(void)
 {
     char ans[4];
-    char prompt[STRLEN];
+    char prompt[STRSIZE];
 
     sprintf(prompt, "(N)新的留言/(S)被保存的留言 [%c]", check_personal_note(1, NULL) ? 'N' : 'S');
     getdata(B_LINES_REF, 0, prompt, ans, 2, DOECHO, 0);

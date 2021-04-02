@@ -332,7 +332,11 @@ getdata_str(int line, int col, const char *prompt, char *buf, int len, int echo,
     // IID.20190224: Unless setting other flags does not imply `DOECHO`,
     if (defaultstr && *defaultstr)
 #else  // IID.20190125: `vget()` with `NOECHO` should not have default string.
-    if ((new_echo & ~NEW_HIDEECHO) != NOECHO && defaultstr && *defaultstr)
+    if ((new_echo & ~NEW_HIDEECHO
+#if MACRO_NONZERO(VGET_STEALTH_NOECHO)
+            & ~VGET_STEALTH_NOECHO
+#endif
+        ) != NOECHO && defaultstr && *defaultstr)
 #endif
     {
         strlcpy(buf, defaultstr, len);
@@ -397,7 +401,7 @@ extern unsigned char vi_pool[];
 extern int vi_size;
 extern int vi_head;
 #ifdef BBSLUA_EXPOSED_VISIO_IDLE
-extern int idle;
+extern time_t idle;
 #endif
 #ifdef __cplusplus
 }  /* extern "C" */

@@ -17,6 +17,7 @@
 #include <string.h>
 #include <sys/stat.h>   /* lkchu.981201 */
 #include "cppdef.h"
+#include "struct.h"
 
 
 static const char *const myfile[] = {"day", "week", "month", "year"};
@@ -55,8 +56,8 @@ struct posttop  /* DISKDATA(raw) */
     char author[13];            /* author name */
     char board[13];             /* board name */
     char title[66];             /* title name */
-    time_t date;                /* last post's date */
-    int number;                 /* post number */
+    time32_t date;              /* last post's date */
+    int32_t number;             /* post number */
 }       top[TOPCOUNT], *tp;
 
 
@@ -260,12 +261,12 @@ poststat(
         for (int i = cnt = 0; (cnt < max) && (i < j); i++)
         {
             tp = &top[i];
-            strcpy(buf, ctime(&(tp->date)));
+            strcpy(buf, ctime_any(&(tp->date)));
 //          buf[20] = (char) NULL;
             buf[20] = '\0';
             fprintf(fp,
-                "\x1b[1;31m%3d. \x1b[33m看板 : \x1b[32m%-16s\x1b[35m《 %s》\x1b[36m%4d 篇\x1b[33m%16s\n"
-                "     \x1b[33m標題 : \x1b[0;44;37m%-60.60s\x1b[40m\n",
+                "\x1b[1;31m%3d. \x1b[33m看板 : \x1b[32m%-16s\x1b[35m《 %s》\x1b[36m%4d 篇\x1b[33m%16s\x1b[m\n"
+                "     \x1b[1;33m標題 : \x1b[0;44;37m%-60.60s\x1b[m\n",
                 ++cnt, tp->board, p, tp->number, tp->author, tp->title);
         }
         fclose(fp);
@@ -290,24 +291,24 @@ poststat(
 #include "splay.h"
 
 
-    typedef struct PostText
-    {
-        struct PostText *ptnext;
-        int count;
-        char title[FLEX_SIZE];
-    } PostText;
-    #define PostText_FLEX_MEMBER     title
+typedef struct PostText
+{
+    struct PostText *ptnext;
+    int count;
+    char title[FLEX_SIZE];
+} PostText;
+#define PostText_FLEX_MEMBER     title
 
 
-    typedef struct PostAuthor
-    {
-        struct PostAuthor *panext;
-        PostText *text;
-        int count;
-        int hash;
-        char author[FLEX_SIZE];
-    } PostAuthor;
-    #define PostAuthor_FLEX_MEMBER   author
+typedef struct PostAuthor
+{
+    struct PostAuthor *panext;
+    PostText *text;
+    int count;
+    int hash;
+    char author[FLEX_SIZE];
+} PostAuthor;
+#define PostAuthor_FLEX_MEMBER   author
 
 
 static int
@@ -408,7 +409,7 @@ post_author(void)
                 text = (PostText *) malloc(SIZEOF_FLEX(PostText, len + 13));
                 text->ptnext = pahe->text;
                 text->count = 1;
-                sprintf(text->title, "%-13s%s", post.board, str);
+                sprintf(text->title, "%-*s %s", IDLEN, post.board, str);
                 /* memcpy(text->title, str, len); */
                 pahe->text = text;
                 break;

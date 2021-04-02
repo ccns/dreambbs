@@ -9,7 +9,8 @@
 void hdr_fpath(char *fpath, const char *folder, const HDR * hdr)
 {
     char *str = NULL;
-    int cc, chrono;
+    time_t chrono;
+    int cc;
 
     while ((cc = *folder++))
     {
@@ -55,7 +56,8 @@ void hdr_fpath(char *fpath, const char *folder, const HDR * hdr)
 int hdr_stamp(const char *folder, int token, HDR * hdr, char *fpath)
 {
     char *fname, *family = NULL;
-    int rc, chrono;
+    time_t chrono;
+    int rc;
     char buf[128];
     const char *flink;
 
@@ -117,7 +119,7 @@ int hdr_stamp(const char *folder, int token, HDR * hdr, char *fpath)
         {
             memset(hdr, 0, sizeof(HDR));
             hdr->chrono = chrono;
-            str_stamp(hdr->date, &hdr->chrono);
+            str_stamp_any(hdr->date, &hdr->chrono);
             strcpy(hdr->xname, --fname);
             break;
         }

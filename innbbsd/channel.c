@@ -98,7 +98,7 @@ my_recv(
         rel = 0;
         if ((ptr = CONTROL))
         {
-            if (!str_ncmp(ptr, "cancel ", 7))
+            if (!str_ncasecmp(ptr, "cancel ", 7))
             {
                 /* itoc.030127: cancel 失敗還是要繼續收其他封信 */
                 /* rel = cancel_article(ptr + 7); */
@@ -164,7 +164,7 @@ searchcmd(
 
     for (p = cmds; (name = p->name); p++)
     {
-        if (!str_cmp(name, cmd))
+        if (!str_casecmp(name, cmd))
             return p;
     }
     return NULL;
@@ -188,7 +188,7 @@ argify(
     while (strchr("\t\n\r ", *line))
         line++;
     p = argifybuffer;
-    strncpy(p, line, sizeof(argifybuffer));
+    str_scpy(p, line, sizeof(argifybuffer));
     for (*argvp = argv, i = 0; *p && i < MAX_ARG;)
     {
         for (*argv++ = p; *p && !strchr("\t\r\n ", *p); p++);
@@ -234,40 +234,51 @@ initinetserver(void)
 {
     struct addrinfo *hosts;      /* host information entries */
     struct addrinfo hints = {0}; /* Internet endpoint hints */
-    int fd, value;
+    int fd = -1;
+    int value;
     struct linger foobar;
     char port_str[12];
 
-    hints.ai_family = AF_UNSPEC;
+    /* IID.2021-02-19: Fallback to native IPv4 when IPv6 is not available */
+    static const sa_family_t ai_family[] = {AF_INET6, AF_INET};
+
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_protocol = IPPROTO_TCP;
-    hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
+    hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
 
     sprintf(port_str, "%d", INNBBS_PORT);
 
-    if (getaddrinfo(NULL, port_str, &hints, &hosts))
-        return -1;
-
-    for (struct addrinfo *host = hosts; host; host = host->ai_next)
+    for (int i = 0; i < COUNTOF(ai_family); ++i)
     {
-        /* Allocate a socket */
-        fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
-        if (fd < 0)
+        hints.ai_family = ai_family[i];
+
+        if (getaddrinfo(NULL, port_str, &hints, &hosts))
             continue;
 
-        if (bind(fd, host->ai_addr, host->ai_addrlen) < 0)
+        for (struct addrinfo *host = hosts; host; host = host->ai_next)
         {
-            printf("innbbsd 已由 inetd 啟動了，無需再手動執行\n");
-            close(fd);
-            freeaddrinfo(hosts);
-            return -1;
-        }
+            /* Allocate a socket */
+            fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
+            if (fd < 0)
+                continue;
 
-        /* Success */
-        listen(fd, 10);
-        break;
+            if (bind(fd, host->ai_addr, host->ai_addrlen) < 0)
+            {
+                printf("innbbsd 已由 inetd 啟動了，無需再手動執行\n");
+                close(fd);
+                freeaddrinfo(hosts);
+                return -1;
+            }
+
+            /* Success */
+            listen(fd, 10);
+            break;
+        }
+        freeaddrinfo(hosts);
+
+        if (fd >= 0)
+            break; /* Success */
     }
-    freeaddrinfo(hosts);
     if (fd < 0)
     {
         printf("inet socket 開啟失敗\n");
@@ -316,8 +327,8 @@ channelcreate(
 {
     buffer_t *in, *out;
 
-    str_ncpy(client->nodename, nodename, 13);
-    str_ncpy(client->hostname, hostname, 128);
+    str_scpy(client->nodename, nodename, 13);
+    str_scpy(client->hostname, hostname, 128);
 
     client->fd = sock;
     FD_SET(sock, &rfd);
@@ -918,7 +929,10 @@ main(
         }
     }
 
-    init_bshm();
+    shm_logger_init(NULL);
+    bshm_attach(&bshm);
+    if (!bshm) /* bshm 未設定完成 */
+        exit(0);
     standaloneinit();
     inndchannel();
 

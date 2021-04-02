@@ -16,7 +16,7 @@
 
 #ifdef SHOW_PASSWORD
 
-#define GUESS_LEN       3       /* 代絏()盞絏舱 (程琌 PLAINPASSLEN) */
+#define GUESS_LEN       3       /* 代絏()盞絏舱 (程琌 PLAINPASSSIZE) */
 
 static inline void
 showpasswd(
@@ -24,7 +24,7 @@ showpasswd(
     const char *passhash)
 {
     int i;
-    char guess[PLAINPASSLEN];
+    char guess[PLAINPASSSIZE];
 
     /* 礚阶琌ぐ或 encrypt よ猭常祑眖 ' ' 秨﹍ try  0x7f */
 
@@ -90,10 +90,10 @@ showACCT(
 {
     char /*msg1[40], msg2[40], */ msg3[40], msg4[40], msg5[40], msg6[40];
 
-    strcpy(msg3, Btime(&(acct->firstlogin)));
-    strcpy(msg4, Btime(&(acct->lastlogin)));
-    strcpy(msg5, Btime(&(acct->tcheck)));
-    strcpy(msg6, Btime(&(acct->tvalid)));
+    strcpy(msg3, Btime_any(&(acct->firstlogin)));
+    strcpy(msg4, Btime_any(&(acct->lastlogin)));
+    strcpy(msg5, Btime_any(&(acct->tcheck)));
+    strcpy(msg6, Btime_any(&(acct->tvalid)));
 
     printf("> ------------------------------------------------------------------------------------------ \n"
         "絪腹: %-15d [ID]: %-15s ﹎: %-15s 际嘿: %-15s \n"

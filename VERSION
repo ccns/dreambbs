@@ -1,29 +1,53 @@
-Phoenix Bulletin Board System       Version: 3.00-4.0
-Copyright (C) 1993, 1994            Ming-Feng Chen,Ji-Tzay Yang,Tsun-Yi Wen
+Pirate Bulletin Board System            Version: 1.00
+Copyright (C) 1990                      Edward A. Luke
 
-秘密情人資訊站                      Version: 3.1-4.0
-Copyright (C) 1994                  簡顯鑑, 劉佳峰
+Eagles Bulletin Board System            Version: 2.00-3.00
+Copyright (C) 1992, 1993, 1994          Raymond R. Rocker, Dominic B. Tynes
+                                        Guy T. Vega
 
-MapleBridge Bulletin Board System   Version: 3.00
-Copyright (C) 1995-1997             Jeng-Hermes Lin
+Phoenix Bulletin Board System           Version: 3.00-4.0
+Copyright (C) 1993, 1994                Ming-Feng Chen, Ji-Tzay Yang
+                                        Tsun-Yi Wen
 
-MapleBridge Bulletin Board System   Version: 3.02
-Copyright (C) 1997-1998             Jeng-Hermes Lin,Thor
+秘密情人資訊站                          Version: 3.1-4.0
+Copyright (C) 1994                      簡顯鑑, 劉佳峰
 
-DragonII Bulletin Board System      Version: 3.02
-Copyright (C) 1998-1999             lkchu
+MapleBridge Bulletin Board System       Version: 2.36
+Copyright (C) 1994-1995                 Jeng-Hermes Lin, Hung-Pin Chen
+                                        SoC, Xshadow
 
-Wind's Top Bulletin Board System    Version: 3.02 Rev. 20040424
-Copyright (C) 2000-2004             visor, statue, Jerics, yab, verit
+SunOfBeach Bulletin Board System        Version: 2.36
+Copyright (C) 1996                      Kaede, woju
 
-DreamLand Bulletin Board System     Version: 3.02
-Copyright (C) 2004-2008             cat
+Wind's Top Bulletin Board System        Version: 2.3 Rev. 981101
+Copyright (C) 1998                      Yu-Chung Tsao, virtu
 
-Wind's Top Bulletin Board System    Version: 3.10 Rev. 20081002
-Copyright (C) 2004-2008             Hung-Yi Chen (gaod)
+Wind's Top Bulletin Board System        Version: 2.4 Rev. 991031
+Copyright (C) 1999                      Sar, statue
 
-DreamLand Bulletin Board System     Version: 3.10 Rev. Beta 3
-Copyright (C) 2010-2017             Pang-Wei Tsai (cache)
+MapleBridge Bulletin Board System       Version: 3.00
+Copyright (C) 1995-1997                 Jeng-Hermes Lin
 
-DreamLand Bulletin Board System     DreamBBS Version 0.95-1.0
-Copyright (C) 2017-2021             IepIweidieng, r2
+MapleBridge Bulletin Board System       Version: 3.02
+Copyright (C) 1997-1998                 Jeng-Hermes Lin, 潘仁義 (Thor)
+
+DragonII Bulletin Board System          Version: 3.02
+Copyright (C) 1998-1999                 朱亮愷 (lkchu)
+
+Wind's Top Bulletin Board System        Version: 3.02 Rev. 20040424
+Copyright (C) 2000-2004                 visor, statue, Jerics, yab, verit
+
+DreamLand Bulletin Board System         Version: 3.02
+Copyright (C) 2004-2008                 cat
+
+MapleBridge Bulletin Board System       Version: 3.10
+Copyright (C) 1998-2000                 潘仁義 (Thor)
+
+Wind's Top Bulletin Board System        Version: 3.10 Rev. 20081002
+Copyright (C) 2004-2008                 Hung-Yi Chen (gaod)
+
+DreamLand Bulletin Board System         Version: 3.10 Rev. Beta 3
+Copyright (C) 2010-2017                 Pang-Wei Tsai (cache)
+
+DreamLand Bulletin Board System         Version: 3.10.95 - 3.20.0
+Copyright (C) 2017-2021                 Wei-Cheng Yeh (IID), Li-Hsin Ho (r2)

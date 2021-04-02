@@ -118,7 +118,10 @@
 #define NNTP_XGTITLE_BAD                481     /* Yes, 481. */
 #define NNTP_XGTITLE_OK                 282
 
-#define NNTP_STRLEN                     512
+#define NNTP_STRSIZE                    512
+
+/* Aliases for backward compatibility */
+#define NNTP_STRLEN                     NNTP_STRSIZE
 
 /*
 **  For tin newsreader

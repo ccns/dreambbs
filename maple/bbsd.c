@@ -29,9 +29,19 @@
 #define LOG_FILE        "run/bbs.log"
 #undef  SERVER_USAGE
 
+/* IID.2021-02-09: The global message logger */
+Logger g_logger = {
+    .file = NULL,
+    .path = LOG_FILE,
+    .lv_skip = LOGLV_WARN,
+};
 
-#define MAXPORTS        COUNTOF(myports)
-static const int myports[] = {23, 3456, 3001, /* 3002, 3003 */};
+static const char *argv_default[] = {
+    NULL, /* For `argv[0]`, the name of the program */
+    "23",
+    "3456",
+    "-u", "run/bbsd.sock",
+};
 
 /* Thor.990113: exports for anonymous log */
 /* static */ char rusername[40];
@@ -51,6 +61,17 @@ int treat=0;
 /* 離開 BBS 程式                                         */
 /* ----------------------------------------------------- */
 
+static Logger blog_logger = {
+    .file = NULL,
+    .path = FN_USIES,
+    .lv_skip = LOGLV_WARN,
+};
+
+static void blog_formatter(char *buf, size_t len, const char *mode, const char *msg)
+{
+    snprintf(buf, len, "%s %-5.5s %-*s %s", Etime(&TEMPLVAL(time_t, {time(NULL)})), mode, IDLEN, cuser.userid, msg);
+}
+
 void
 blog_pid(
     const char *mode,
@@ -58,18 +79,13 @@ blog_pid(
     pid_t pid
 )
 {
-    char buf[512], data[256];
-    time_t now;
-
-    time(&now);
+    char data[256];
     if (!msg)
     {
         msg = data;
-        sprintf(data, "Stay: %d (%d)", (int)(now - ap_start) / 60, pid);
+        sprintf(data, "Stay: %d (%d)", (int)(time(NULL) - ap_start) / 60, pid);
     }
-
-    sprintf(buf, "%s %-5.5s %-13s%s\n", Etime(&now), mode, cuser.userid, msg);
-    f_cat(FN_USIES, buf);
+    logger_tag(&blog_logger, mode, msg, blog_formatter);
 }
 
 void
@@ -167,7 +183,7 @@ u_exit(
     {
         if (read(fd, &tuser, sizeof(ACCT)) == sizeof(ACCT))
         {
-            delta = time(&cuser.lastlogin) - ap_start;
+            delta = time32(&cuser.lastlogin) - ap_start;
             cuser.staytime += delta;
             /* lkchu.981201: 用 delta, 每次上站都要超過三分鐘才算 */
             if (delta > 3 * 60)
@@ -271,7 +287,7 @@ belong(
         while ((str = mgets(fd)))
         {
             str_lower(str, str);
-            if (str_str(key, str))
+            if (str_casestr(key, str))
             {
                 rc = true;
                 break;
@@ -298,7 +314,7 @@ is_badid(
     if (!is_alpha(*userid))
         return true;
 
-    if (!str_cmp(userid, STR_NEW))
+    if (!str_casecmp(userid, STR_NEW))
         return true;
 
     str = userid;
@@ -381,12 +397,12 @@ acct_apply(void)
     if (vget(18, 0, "是否使用新式密碼加密(y/N)？[N]", buf, 3, LCECHO) == 'y')
     {
         try_ = GENPASSWD_SHA256;
-        fd = PLAINPASSLEN;
+        fd = PLAINPASSSIZE;
     }
     else
     {
         try_ = GENPASSWD_DES;
-        fd = OLDPLAINPASSLEN;
+        fd = OLDPLAINPASSSIZE;
     }
 
     for (;;)
@@ -398,15 +414,15 @@ acct_apply(void)
             continue;
         }
 
-        vget(20, 0, "請檢查密碼：", buf + PLAINPASSLEN + 1, fd, NOECHO | VGET_STEALTH_NOECHO);
-        if (!strcmp(buf, buf + PLAINPASSLEN + 1))
+        vget(20, 0, "請檢查密碼：", buf + PLAINPASSSIZE, fd, NOECHO | VGET_STEALTH_NOECHO);
+        if (!strcmp(buf, buf + PLAINPASSSIZE))
             break;
 
         vmsg("密碼輸入錯誤，請重新輸入密碼");
     }
 
-    str_ncpy(cuser.passwd, pw = genpasswd(buf, try_), PASSLEN);
-    str_ncpy(cuser.passhash, pw + PASSLEN, sizeof(cuser.passhash));
+    str_scpy(cuser.passwd, pw = genpasswd(buf, try_), PASSSIZE);
+    str_scpy(cuser.passhash, pw + PASSSIZE, sizeof(cuser.passhash));
 
     do
     {
@@ -490,7 +506,7 @@ logattempt(
         p->tm_hour, p->tm_min, p->tm_sec, type, conn_type, currtitle);
 
 #if 0
-    sprintf(buf, "%c%-12s[%s] %s\n", type, cuser.userid,
+    sprintf(buf, "%c%-*s[%s] %s\n", type, IDLEN, cuser.userid,
         Etime(&ap_start), currtitle);
     f_cat(FN_LOGIN_LOG, buf);
 #endif
@@ -533,6 +549,9 @@ utmp_setup(
     utmp.userno = cuser.userno;
     utmp.mode = bbsmode = mode;
     utmp.in_addr = tn_addr;
+    utmp.talker = -1;
+    for (int i = 0; i < COUNTOF(utmp.mslot); ++i)
+        utmp.mslot[i] = -1;
     utmp.ufo = cuser.ufo;
     utmp.flag = 0;
     utmp.userlevel = cuser.userlevel;
@@ -542,16 +561,17 @@ utmp_setup(
 #ifdef HAVE_BOARD_PAL
     utmp.board_pal = -1;
 #endif
+#ifdef  HAVE_PIP_FIGHT1
+    utmp.pip = -1;
+#endif
 
     strcpy(utmp.userid, cuser.userid);
-    time(&utmp.idle_time);
+    time32(&utmp.idle_time);
     srand(time(0));
     srandom(time(0));
-    strcpy(utmp.username, ((!str_cmp(cuser.userid, STR_GUEST)||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
+    strcpy(utmp.username, ((!str_casecmp(cuser.userid, STR_GUEST)||!HAS_PERM(PERM_VALID)||HAS_PERM(PERM_DENYNICK))&&!HAS_PERM(PERM_SYSOP)) ? guestname[rand()%GUESTNAME] : cuser.username);
     strcpy(utmp.realname, cuser.realname);
-    /* str_ncpy(utmp.from, fromhost, sizeof(utmp.from) - 1); */
-    str_ncpy(utmp.from, fromhost, sizeof(utmp.from));
-    /* Thor.980921: str_ncpy 含 0 */
+    str_scpy(utmp.from, fromhost, sizeof(utmp.from));
 
     /* cache.20130407 保存使用者登入IP位置(IPv4) */
     /* IID.20191228: Or IPv6 */
@@ -582,7 +602,7 @@ tn_login(void)
     time_t start, check_deny;
     char fpath[80], uid[IDLEN + 1];
 
-    char passbuf[PLAINPASSLEN];
+    char passbuf[PLAINPASSSIZE];
 
     /* 借 currtitle 一用 */
 
@@ -635,7 +655,7 @@ tn_login(void)
 
         vget(21, 0, msg_uid, uid, IDLEN + 1, DOECHO);
 
-        if (str_cmp(uid, STR_NEW) == 0)
+        if (str_casecmp(uid, STR_NEW) == 0)
         {
 
 #ifdef LOGINASNEW
@@ -654,14 +674,14 @@ tn_login(void)
         {
             vmsg(err_uid);
         }
-        else if (str_cmp(uid, STR_GUEST))
+        else if (str_casecmp(uid, STR_GUEST))
         {
-            if (!vget(21, D_COLS_REF + 26, MSG_PASSWD, passbuf, PLAINPASSLEN, NOECHO | VGET_STEALTH_NOECHO))
+            if (!vget(21, D_COLS_REF + 26, MSG_PASSWD, passbuf, PLAINPASSSIZE, NOECHO | VGET_STEALTH_NOECHO))
             {
                 continue;       /* 發現 userid 輸入錯誤，在輸入 passwd 時直接跳過 */
             }
 
-            passbuf[PLAINPASSLEN-1] = '\0';
+            passbuf[PLAINPASSSIZE-1] = '\0';
 
             if (chkpasswd(cuser.passwd, cuser.passhash, passbuf))
             {
@@ -672,7 +692,7 @@ tn_login(void)
             {
                 /* SYSOP gets all permission bits */
 
-                if (!str_cmp(cuser.userid, str_sysop))
+                if (!str_casecmp(cuser.userid, str_sysop))
                     cuser.userlevel = ~0 ^ (PERM_DENYPOST | PERM_DENYTALK |
                         PERM_DENYCHAT | PERM_DENYMAIL | PERM_DENYSTOP | PERM_DENYNICK |
                         PERM_DENYLOGIN | PERM_PURGE);
@@ -921,14 +941,14 @@ tn_login(void)
         /* Thor.990318: 為防止有大機率 有人在welcome畫面回認證信, 故移至此 */
         move(b_lines - 3, 0);
         prints("★ 歡迎您第 \x1b[1;33m%d\x1b[m 度拜訪本站，我記得那天是 \x1b[1;33m%s\x1b[m\n",
-            cuser.numlogins, Ctime(&cuser.lastlogin));
+            cuser.numlogins, Ctime_any(&cuser.lastlogin));
         prints("★ 來自於 \x1b[1;33m%s\x1b[m", cuser.lasthost);
         /* Thor.990321: 將vmsg移至後方, 防止有人在此時回認證信 */
 #endif
 
         cuser.lastlogin = start;
         cuser.userlevel = level;
-        str_ncpy(cuser.lasthost, fromhost, sizeof(cuser.lasthost));
+        str_scpy(cuser.lasthost, fromhost, sizeof(cuser.lasthost));
         usr_fpath(fpath, cuser.userid, FN_ACCT);
         fd = open(fpath, O_WRONLY);
         write(fd, &cuser, sizeof(ACCT));
@@ -1166,10 +1186,12 @@ tn_main(void)
     currbno = -1;
 
     //getloadavg(load, 3);
-    prints( MYHOSTNAME " ⊙ " OWNER " ⊙ " BBSIP " [" BBSVERNAME " " BBSVERSION "]\n"
-"歡迎光臨【\x1b[1;33;46m %s \x1b[m】。系統負載：%.2f %.2f %.2f / %ld [%s] 線上人數 [%d/%d]",
+    prints( MYHOSTNAME " ⊙ " OWNER " ⊙ " BBSIP " [" BBSVERNAME " " BBSVERSION "]");
+    move(1, 0);
+    prints("歡迎光臨【\x1b[1;33;46m %s \x1b[m】。系統負載：%.2f %.2f %.2f / %ld [%s] 線上人數 [%d/%d]",
         str_site, load[0], load[1], load[2], nproc, load_norm>5?"\x1b[1;37;41m過高\x1b[m":load_norm>1?"\x1b[1;37;42m偏高\x1b[m":"\x1b[1;37;44m正常\x1b[m", ushm->count, MAXACTIVE);
 
+    move(2, 0);
     film_out(FILM_INCOME, 2);
 
     total_num = ushm->count+1;
@@ -1225,8 +1247,8 @@ tn_main(void)
 #endif
 
     clear();
-    prints("       \x1b[1;31m ●       \x1b[1;36m ┌─┐┌─┐┌─┐┌─╮ ┌─╮┌╮┐┌─┐\n"
-        "      \x1b[1;31m●\x1b[1;37m○\x1b[1;33m●\x1b[1;37m═══\x1b[1;36m│  ┬│  ││  ││  │ │ ═ └  ┘│═╡\x1b[1;37m════\n"
+    prints("       \x1b[1;31m ●       \x1b[1;36m ┌─┐┌─┐┌─┐┌─╮ ┌─╮┌╮┐┌─┐\x1b[m\n"
+        "      \x1b[1;31m●\x1b[1;37m○\x1b[1;33m●\x1b[1;37m═══\x1b[1;36m│  ┬│  ││  ││  │ │ ═ └  ┘│═╡\x1b[1;37m════\x1b[m\n"
         "       \x1b[1;33m ●        \x1b[1;34m└─┤└─┘└─┘└─╯ └─╯ └┘ └─┘\x1b[m\n");
     prints("Dear \x1b[32m%s(%s)\x1b[m，別忘了再度光臨【 %s 】\n"
         "以下是您在站內的註冊資料:\n",
@@ -1254,15 +1276,17 @@ telnet_init(void)
         IAC, DO, TELOPT_BINARY
     };
 
+    fd_set rset;
     int n, len;
     const unsigned char *cmd;
-    int rset;
     struct timeval to;
     char buf[64];
 
     /* --------------------------------------------------- */
     /* init telnet protocol                                */
     /* --------------------------------------------------- */
+
+    FD_ZERO(&rset);
 
 #if 0
     to.tv_sec = 1;
@@ -1276,11 +1300,11 @@ telnet_init(void)
         send(0, cmd, len, 0);
         cmd += len;
 
-        rset = 1;
+        FD_SET(0, &rset);
         /* Thor.981221: for future reservation bug */
         to.tv_sec = 1;
         to.tv_usec = 1;
-        if (select(1, (fd_set *) & rset, NULL, NULL, &to) > 0)
+        if (select(1, &rset, NULL, NULL, &to) > 0)
             recv(0, buf, sizeof(buf), 0);
     }
 }
@@ -1306,9 +1330,11 @@ term_init(void)
         IAC, DO, TELOPT_NAWS
     };
 
-    int rset;
+    fd_set rset;
     char buf[64], *rcv;
     struct timeval to;
+
+    FD_ZERO(&rset);
 
 #ifdef M3_USE_PFTERM
     initscr();
@@ -1319,10 +1345,10 @@ term_init(void)
     /* 問對方 (telnet client) 有沒有支援不同的螢幕寬高 */
     send(0, svr, 3, 0);
 
-    rset = 1;
+    FD_SET(0, &rset);
     to.tv_sec = 1;
     to.tv_usec = 1;
-    if (select(1, (fd_set *) & rset, NULL, NULL, &to) > 0)
+    if (select(1, &rset, NULL, NULL, &to) > 0)
         recv(0, buf, sizeof(buf), 0);
 
     rcv = NULL;
@@ -1337,10 +1363,10 @@ term_init(void)
         {
             if ((unsigned char) buf[3] != IAC)
             {
-                rset = 1;
+                FD_SET(0, &rset);
                 to.tv_sec = 1;
                 to.tv_usec = 1;
-                if (select(1, (fd_set *) & rset, NULL, NULL, &to) > 0)
+                if (select(1, &rset, NULL, NULL, &to) > 0)
                     recv(0, buf + 3, sizeof(buf) - 3, 0);
             }
                 if ((unsigned char) buf[3] == IAC && (unsigned char) buf[4] == SB && buf[5] == TELOPT_NAWS)
@@ -1375,10 +1401,55 @@ term_init(void)
 /* stand-alone daemon                                    */
 /* ----------------------------------------------------- */
 
-static void
-start_daemon(
-    int port /* Thor.981206: 取 0 代表 *沒有參數*, -1 代表 -i (inetd) */
-             /* IID.20190903: `-2` represents `-u` <unix_socket>`. */ )
+/* Returns positive number for port number
+ * Returns `-1` for `-i` command-line option (inetd/xinetd)
+ * Returns `-2` for `-u` command-line option (unix socket)
+ * Returns `0` when all ports specified by `argv` are processed */
+GCC_NONNULLS
+static int get_port(int argc, char *const argv[], const char **p_unix_path)
+{
+    int port = 0;
+
+    /* Reset for connection type detection */
+    *p_unix_path = NULL;
+
+    while (optind < argc)
+    {
+        switch (getopt(argc, argv, "+" "p:u:i"))
+        {
+        case -1:
+            if (!(optarg = argv[optind++]))
+                break;
+            // Falls through
+            // to handle omitted `-p`
+        case 'p':  /* IID.20190902: `bbsd [-p] 3456`. */
+            if ((port = atoi(optarg)) > 0)
+                return port;
+
+            if (0)  // Falls over the case
+            {
+        case 'u':  /* IID.20190903: `bbsd -u <unix_socket>` */
+                *p_unix_path = optarg;
+                return -2;
+            }
+            else if (0)
+            {
+        case 'i': /* `bbsd -i` */
+                return -1;
+            }
+
+        default:
+            ; /* Ignore invalid arguments */
+        }
+    }
+
+    /* All ports specified by `argv` are processed */
+    return 0;
+}
+
+/* Returns the file descriptor for `accept()` connections
+ * The file descriptor returned is assumed to be > `32` */
+static int start_daemon(int argc, char *const argv[])
 {
     struct addrinfo hints = {0};
     struct addrinfo *hosts;
@@ -1387,8 +1458,14 @@ start_daemon(
     struct rlimit rl;
 #endif
     char buf[80], data[80];
-    int fd;
-    bool listen_success = false;
+    int fd = -1;
+
+    int port;
+
+    /* IID.2021-02-19: Fallback to native IPv4 when IPv6 is not available */
+    static const sa_family_t ai_family_inet[] = {AF_INET6, AF_INET};
+    const sa_family_t *ai_family;
+    int family_count;
 
     {
         /*
@@ -1444,6 +1521,11 @@ start_daemon(
     close(1);
     close(2);
 
+    port = get_port(argc, argv, &unix_path);
+
+    if (!port)
+        exit(0); /* Nothing to listen. In case no valid default ports are given */
+
     if (port == -1) /* Thor.981206: inetd -i */
     {
         int n;
@@ -1464,7 +1546,7 @@ start_daemon(
 
         sprintf(data, "%d\t%s\t%d\tinetd -i\n", getpid(), buf, port);
         f_cat(PID_FILE_INET, data);
-        return;
+        return 0;
     }
 
     close(0);
@@ -1481,88 +1563,103 @@ start_daemon(
     /* fork daemon process                                 */
     /* --------------------------------------------------- */
 
+    {
+        int port_next;
+        const char *unix_path_next;
+        while ((port_next = get_port(argc, argv, &unix_path_next)))
+        {
+            /* The next port presents; make the `fork()` child handle the current `port` and `unix_path` */
+            if (fork() == 0)
+                break;
+
+            sleep(1);
+            port = port_next;
+            unix_path = unix_path_next;
+        }
+    }
+
+    char port_str[12];
+
     if (port == -2)
     {
-        hints.ai_family = sun.sun_family = AF_UNIX;
+        sun.sun_family = AF_UNIX;
+        ai_family = &sun.sun_family;
+        family_count = 1;
+
         hints.ai_socktype = SOCK_STREAM;
         hints.ai_addr = (struct sockaddr *)&sun;
         hints.ai_addrlen = sizeof(sun);
         hints.ai_next = NULL;
         hosts = &hints;
-    }
-    else
-    {
-        hints.ai_family = AF_UNSPEC;
-        hints.ai_socktype = SOCK_STREAM;
-        hints.ai_protocol = IPPROTO_TCP;
-        hints.ai_flags = AI_V4MAPPED | AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
-    }
 
-    if (port == 0) /* Thor.981206: port 0 代表沒有參數 */
-    {
-        int n = MAXPORTS - 1;
-        while (n)
-        {
-            if (fork() == 0)
-                break;
-
-            sleep(1);
-            n--;
-        }
-        port = myports[n];
-    }
-
-    if (port == -2)
-    {
         strlcpy(sun.sun_path, unix_path, sizeof(sun.sun_path));
         // remove the file first if it exists.
         unlink(sun.sun_path);
     }
     else
     {
-        char port_str[12];
+        ai_family = ai_family_inet;
+        family_count = COUNTOF(ai_family_inet);
+
+        hints.ai_socktype = SOCK_STREAM;
+        hints.ai_protocol = IPPROTO_TCP;
+        hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICSERV | AI_PASSIVE;
+
         sprintf(port_str, "%d", port);
-        if (getaddrinfo(NULL, port_str, &hints, &hosts))
-            exit(1);
     }
 
-    for (struct addrinfo *host = hosts; host; host = host->ai_next)
+    for (int i = 0; i < family_count; ++i)
     {
-        struct linger ld;
-        int val;
+        hints.ai_family = ai_family[i];
+        if (port != -2 && getaddrinfo(NULL, port_str, &hints, &hosts))
+                continue;
+        for (struct addrinfo *host = hosts; host; host = host->ai_next)
+        {
+            struct linger ld;
+            int val;
 
-        fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
-        if (fd < 0)
-            continue;
+            fd = socket(host->ai_family, host->ai_socktype, host->ai_protocol);
+            if (fd < 0)
+                continue;
 
-        val = 1;
-        setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &val, sizeof(val));
+            val = 1;
+            setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &val, sizeof(val));
 
 #if 0
-        setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (char *) &val, sizeof(val));
+            setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (char *) &val, sizeof(val));
 
-        if (port != -2)
-            setsockopt(fd, host->ai_socktype, TCP_NODELAY, (char *) &val, sizeof(val));
+            if (port != -2)
+                setsockopt(fd, host->ai_socktype, TCP_NODELAY, (char *) &val, sizeof(val));
 #endif
 
-        ld.l_onoff = ld.l_linger = 0;
-        setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
+            ld.l_onoff = ld.l_linger = 0;
+            setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
 
-        /* mport = port; */ /* Thor.990325: 不需要了:P */
+            /* mport = port; */ /* Thor.990325: 不需要了:P */
 
-        if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) || (listen(fd, QLEN) < 0))
-            continue;
+            if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) || (listen(fd, QLEN) < 0))
+            {
+                close(fd);
+                fd = -1;
+                continue;
+            }
 
-        if (port == -2)
-        {
-            chown(unix_path, BBSUID, WWWGID);
-            chmod(unix_path, 0660);
+            if (port == -2)
+            {
+                chown(unix_path, BBSUID, WWWGID);
+                chmod(unix_path, 0660);
+            }
+
+            /* Success */
+            break;
         }
-        listen_success = true;
+        if (port != -2)
+            freeaddrinfo(hosts);
+
+        if (fd >= 0)
+            break; /* Success */
     }
-    if (port != -2)
-        freeaddrinfo(hosts);
-    if (!listen_success)
+    if (fd < 0)
         exit(1);
 
     /* --------------------------------------------------- */
@@ -1583,6 +1680,8 @@ start_daemon(
     {
         f_cat(PID_FILE, data);
     }
+
+    return fd;
 }
 
 
@@ -1684,16 +1783,26 @@ static void usage(char *argv0)
 {
     fprintf(stderr,
             "Usage: %s\n"
-            "Listen on pre-defined ports\n"
-            "\n",
-            argv0);
+            "Listen on pre-defined ports.\n"
+            "Equivalent to `%s",
+            argv0, argv0);
+    for (size_t i = 1; i < COUNTOF(argv_default); ++i)
+    {
+        if (strchr(argv_default[i], ' '))
+            fprintf(stderr, " \"%s\"", argv_default[i]);
+        else
+            fprintf(stderr, " %s", argv_default[i]);
+    }
+    fprintf(stderr,
+            "` with the current configuration.\n"
+            "\n");
     fprintf(stderr,
             "       %s -i\n"
             "Listen on inetd port when run by inetd\n"
             "\n",
             argv0);
     fprintf(stderr,
-            "       %s <listen_spec>\n"
+            "       %s <listen_spec>...\n"
             "listen_specs:\n"
             "\t[-p] <port>        listen on port; -p can be omitted (port > 0)\n"
             "\t-u <unix_socket>   listen on unix_socket, with connection data passing enabled\n"
@@ -1701,71 +1810,120 @@ static void usage(char *argv0)
             argv0);
 }
 
+/* Verify whether the command-line arguments conform to the usage
+ * If the command-line arguments conform, `0` is returned and `getopt` is reset for further use
+ * Otherwise, non-`0` is returned and `getopt` is not reset */
+static int verify_arg(int argc, char *const argv[])
+{
+    /* No arguments */
+    if (argc == 1)
+        return 0;
+
+    /* Whether any `-i` options are processed */
+    bool opt_i = false;
+
+    /* `-i` or `<listen_spec>...` (`-i` is valid only when it appears solely) */
+    while (optind < argc)
+    {
+        switch (getopt(argc, argv, "+" "p:u:i"))
+        {
+        case -1:
+            if (!(optarg = argv[optind++]))
+                break;
+            // Falls through
+            // to handle omitted `-p`
+        case 'p':  /* IID.20190902: `bbsd [-p] 3456`. */
+            if (atoi(optarg) > 0)
+            {
+                if (!opt_i)
+                    break;
+            }
+
+            if (0)  // Falls over the case
+            {
+        case 'u':  /* IID.20190903: `bbsd -u <unix_socket>` */
+                if (!opt_i)
+                    break;
+            }
+            else if (0)
+            {
+        case 'i':
+                opt_i = true;
+                if (optind == 1)
+                    break;
+            }
+            // Falls through
+            // to handle invalid argument values
+        default:
+            if (opt_i)
+                fprintf(stderr, "%s: -i can only be used solely\n", argv[0]);
+            usage(argv[0]);
+            return 2;
+        }
+    }
+
+    /* Reset `getopt` for further use */
+#ifdef __GLIBC__
+    optind = 0;
+#else
+    optind = 1;
+#endif
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
+    optreset = 1;
+#endif
+    return 0;
+}
+
 int main(int argc, char *argv[])
 {
-    int csock;                  /* socket for Master and Child */
+    int lsock;                  /* The socket listening the connections (assumed to be < `32`) */
+    int csock;                  /* The socket for the accepted connection */
     int *totaluser;
-    int value = 0;
     bool is_proxy = false;      /* Whether connection data passing is enabled */
 
     /* --------------------------------------------------- */
     /* setup standalone daemon                             */
     /* --------------------------------------------------- */
 
-    /* Thor.990325: usage, bbsd, or bbsd -i, or bbsd 1234 */
-    /* Thor.981206: 取 0 代表 *沒有參數*, -1 代表 -i */
+    /* Verify the command-line arguments first */
+    const int verify_res = verify_arg(argc, argv);
+    if (verify_res)
+        return verify_res;
 
-    switch (getopt(argc, argv, "p:u:i"))
+    if (argc > 1)
     {
-    case -1:
-        if (!(optarg = argv[optind++]))
-            break;
-        // Falls through
-        // to handle omitted `-p`
-    case 'p':  /* IID.20190902: `bbsd [-p] 3456`. */
-        if ((value = atoi(optarg)) > 0)
-        {
-            unix_path = NULL;
-            break;
-        }
-
-        if (0)  // Falls over the case
-        {
-    case 'u':  /* IID.20190903: `bbsd -u <unix_socket>` */
-            unix_path = optarg;
-            is_proxy = true;
-            value = -2;
-            break;
-        }
-        else if (0)
-        {
-    case 'i':
-            value = -1;
-            break;
-        }
-
-    default:
-        usage(argv[0]);
-        return 2;
+        /* Some command-line arguments are passed */
+        lsock = start_daemon(argc, argv);
+    }
+    else
+    {
+        /* No command-line arguments; use predefined arguments */
+        argv_default[0] = argv[0]; /* Load `argv[0]` for `getopt` */
+        lsock = start_daemon(COUNTOF(argv_default), (char *const *)argv_default);
     }
 
-    start_daemon(value);
+    if (unix_path)
+        is_proxy = true;
 
     main_signals();
 
     /* --------------------------------------------------- */
     /* attach shared memory & semaphore                    */
     /* --------------------------------------------------- */
+
+    shm_logger_init(&blog_logger);
+    shm_formatter_init(blog_formatter);
+
 #ifdef  HAVE_SEM
     sem_init();
 #endif
-    ushm_init();
-    bshm_init();
-    fshm_init();
-    fwshm_init();
-    count_init();
+    ushm_init(&ushm);
+    bshm_init(&bshm);
+    fshm_init(&fshm);
+    fwshm_init(&fwshm);
+    count_init(&countshm);
 #ifdef  HAVE_OBSERVE_LIST
-    observeshm_init();
+    observeshm_init(&oshm);
 #endif
 
     /* --------------------------------------------------- */
@@ -1775,14 +1933,20 @@ int main(int argc, char *argv[])
     totaluser = &ushm->count;
     /* avgload = &ushm->avgload; */
 
+    fd_set rfds;
+    FD_ZERO(&rfds);
+
     for (;;)
     {
         struct sockaddr_storage sin;
-        int value = 1;
-        if (select(1, (fd_set *) & value, NULL, NULL, NULL) < 0)
+        int value;
+
+        FD_SET(lsock, &rfds);
+        if (select(lsock + 1, &rfds, NULL, NULL, NULL) < 0)
             continue;
+
         value = sizeof(sin);
-        csock = accept(0, (struct sockaddr *) &sin, (socklen_t *) &value);
+        csock = accept(lsock, (struct sockaddr *) &sin, (socklen_t *) &value);
         if (csock < 0)
         {
             reaper(0);
@@ -1811,7 +1975,7 @@ int main(int argc, char *argv[])
                 ((struct sockaddr_in6 *)&sin)->sin6_addr = *(struct in6_addr *)&cdata.raddr;
                 ((struct sockaddr_in6 *)&sin)->sin6_port = cdata.rport;
                 break;
-            default:;
+            default:; /* Unsupported address family */
             }
             /* mport = cdata.lport; */
         }
@@ -1819,11 +1983,26 @@ int main(int argc, char *argv[])
         switch (sin.ss_family)
         {
         case AF_INET:
-        case AF_INET6:
             break;
 
-        case AF_UNIX:
-        default:
+        case AF_INET6:
+            {
+                struct sockaddr_in6 *const addr6 = (struct sockaddr_in6 *)&sin;
+                if (IN6_IS_ADDR_V4MAPPED(&addr6->sin6_addr))
+                {
+                    /* Convert `sin` to `sockaddr_in` if it is IPv4-mapped */
+                    struct sockaddr_in addr4 = LISTLIT(struct sockaddr_in){
+                        .sin_family = AF_INET,
+                        .sin_port = addr6->sin6_port,
+                    };
+                    memcpy(&addr4.sin_addr, &((char *)&addr6->sin6_addr)[12], 4 * sizeof(char));
+                    memcpy(&sin, &addr4, sizeof(addr4));
+                }
+            }
+            break;
+
+        case AF_UNIX: /* Unsupported address family of connections accepted from Unix socket */
+        default: /* Other unsupported address family */
             close(csock);
             continue;
         }
@@ -1845,6 +2024,7 @@ int main(int argc, char *argv[])
             continue;
         }
 
+        close(lsock);
         dup2(csock, 0);
         close(csock);
 
@@ -1870,7 +2050,7 @@ int main(int argc, char *argv[])
         getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), fromhost, sizeof(fromhost), NULL, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV);
 #else
         /* Thor.990325: 修改dns_ident定義, 來自哪if連那 */
-        dns_ident(0 /* listen fd */, &tn_addr, fromhost, sizeof(fromhost), rusername, sizeof(rusername));
+        dns_ident(0 /* mport */, &tn_addr, fromhost, sizeof(fromhost), rusername, sizeof(rusername));
 #endif
 
         telnet_init();

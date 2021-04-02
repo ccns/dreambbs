@@ -25,14 +25,6 @@ MAP map[60000];
 int total;
 static void pal_sync(const char *fpath);
 
-static int
-int_cmp(
-    const void *a,
-    const void *b)
-{
-    return *(const int *)a - *(const int *)b;
-}
-
 static void
 bimage(
     const char *brd)
@@ -163,7 +155,7 @@ bmw_sync(
 
             while (read(fd, &bmw, sizeof(BMW)) == sizeof(BMW))
             {
-                struct tm *ptime = localtime(&bmw.btime);
+                struct tm *ptime = localtime_any(&bmw.btime);
 
                 fprintf(fout, "%s%s(%02d:%02d)¡G%s\x1b[m\n",
                     bmw.sender == userno ? "¡¸" : "\x1b[32m¡¹",
@@ -221,7 +213,7 @@ pal_sync(
             if (size > 0)
             {
                 if (size > sizeof(PAL))
-                    xsort(pbase, size / sizeof(PAL), sizeof(PAL), (int (*)(const void *lhs, const void *rhs))str_cmp);
+                    xsort(pbase, size / sizeof(PAL), sizeof(PAL), (int (*)(const void *lhs, const void *rhs))str_casecmp);
 #ifndef FAKE_IO
                 lseek(fd, 0, SEEK_SET);
                 write(fd, pbase, size);
@@ -367,9 +359,8 @@ main(void)
         fd = open(".USR.new", O_CREAT | O_TRUNC | O_WRONLY, 0600);
         for (num = 1; num <= total; num++)
         {
-            memset(&slot, 0, sizeof(SCHEMA));
-            strcpy(slot.userid, map[num].userid);
-            time(&slot.uptime);
+            strncpy(slot.userid, map[num].userid, IDLEN);
+            time32(&slot.uptime);
             write(fd, &slot, sizeof(SCHEMA));
         }
         close(fd);

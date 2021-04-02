@@ -99,21 +99,6 @@ logit(
 #endif
 
 
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    if (shmid < 0)
-        return NULL;
-
-    shmptr = (void *) shmat(shmid, NULL, 0);
-    return shmptr;
-}
-
 static void
 userno_free(
     int uno)
@@ -127,7 +112,7 @@ userno_free(
     /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
     f_exlock(fd);
 
-    time(&schema.uptime);
+    time32(&schema.uptime);
     off = (uno - 1) * sizeof(schema);
     if (lseek(fd, off, SEEK_SET) < 0)
         exit(2);
@@ -295,18 +280,18 @@ report_eaddr_group(void)
                     fd = open(buf, O_RDONLY, 0);
                     if (fd < 0)
                     {
-                        fprintf(faddr, "==> %d)%-13s can't open\n", j, s.userid);
+                        fprintf(faddr, "==> %d)%-*.*s can't open\n", j, IDLEN, IDLEN, s.userid);
                         continue;
                     }
                     if (read(fd, &acct, sizeof(acct)) != sizeof(acct))
                     {
-                        fprintf(faddr, "==> %d)%-13s can't read\n", j, s.userid);
+                        fprintf(faddr, "==> %d)%-*.*s can't read\n", j, IDLEN, IDLEN, s.userid);
                         continue;
                     }
                     close(fd);
 
-                    datemsg(buf, &acct.lastlogin);
-                    fprintf(faddr, "%5d) %-13s%s[%d]\t%s\n", acct.userno, acct.userid, buf, acct.numlogins, acct.email);
+                    datemsg(buf, &TEMPLVAL(time_t, {acct.lastlogin}));
+                    fprintf(faddr, "%5d) %-*s %s[%d]\t%s\n", acct.userno, IDLEN, acct.userid, buf, acct.numlogins, acct.email);
                 }
             }
         }
@@ -320,45 +305,25 @@ bm_list(                 /* 顯示 userid 是哪些板的板主 */
     const char *userid,
     char *msg)
 {
-    int len, ch;
-    BRD *bhdr, *tail;
-    char *list;
+    const BRD *bhdr = bshm->bcache;
+    const BRD *const tail = bhdr + bshm->number;
+    int num = 0;
 
-    int num;
-
-    num = 0;
-
-    len = strlen(userid);
-
-    bhdr = bshm->bcache;
-    tail = bhdr + bshm->number;
     *msg = '\0';
 
     do
     {
-        list = bhdr->BM;
-        ch = *list;
+        const char *const list = bhdr->BM;
+        const int ch = *list;
+
         if ((ch > ' ') && (ch < 128))
         {
-            do
+            if (str_has(list, userid))
             {
-                if (!str_ncmp(list, userid, len))
-                {
-                    ch = list[len];
-                    if ((ch == 0) || (ch == '/'))
-                    {
-                        strcat(msg, bhdr->brdname);
-                        strcat(msg, " ");
-                        num++;
-                        break;
-                    }
-                }
-                while ((ch = *list++))
-                {
-                    if (ch == '/')
-                        break;
-                }
-            } while (ch);
+                strcat(msg, bhdr->brdname);
+                strcat(msg, " ");
+                num++;
+            }
         }
     } while (++bhdr < tail);
     return num;
@@ -381,24 +346,24 @@ reaper(
     fd = open(buf, O_RDONLY, 0);
     if (fd < 0)
     { /* Thor.981001: 加些 log */
-        fprintf(flog, "acct can't open %-13s ==> %s\n", lowid, buf);
+        fprintf(flog, "acct can't open %-*s ==> %s\n", IDLEN, lowid, buf);
         return;
     }
 
     if (read(fd, &acct, sizeof(acct))!=sizeof(acct))
     {
-        fprintf(flog, "acct can't read %-13s ==> %s\n", lowid, buf);
+        fprintf(flog, "acct can't read %-*s ==> %s\n", IDLEN, lowid, buf);
         close(fd);
         return;
     }
     close(fd);
-    fprintf(fmah, "%-13s %-20s %-40.40s\n", acct.userid, acct.realname, acct.email);
+    fprintf(fmah, "%-*s %-20s %-40.40s\n", IDLEN, acct.userid, acct.realname, acct.email);
 
     fd = acct.userno;
 
     if ((fd <= 0) || (fd > max_uno))
     {
-        fprintf(flog, "%5d) %-13s ==> %s\n", fd, acct.userid, buf);
+        fprintf(flog, "%5d) %-*s ==> %s\n", fd, IDLEN, acct.userid, buf);
         return;
     }
 
@@ -411,14 +376,14 @@ reaper(
         eaddr_group(fd, acct.email);
 #endif
 
-    datemsg(buf, &acct.lastlogin);
+    datemsg(buf, &TEMPLVAL(time_t, {acct.lastlogin}));
     levelmsg(data, ulevel);
 
     if (ulevel & (PERM_MANAGE|PERM_BM))
     {
         if (ulevel != (PERM_BASIC|PERM_CHAT|PERM_PAGE|PERM_POST|PERM_VALID|PERM_BM))
         {
-            fprintf(flst, "%5d) %-13s%s[%s] %d\n", fd, acct.userid, buf, data, login);
+            fprintf(flst, "%5d) %-*s %s[%s] %d\n", fd, IDLEN, acct.userid, buf, data, login);
             manager++;
         }
 
@@ -427,7 +392,7 @@ reaper(
             if (bshm)
             {
                 num = bm_list(acct.userid, bmlist);
-                fprintf(fbml, "%5d) %-13s%s %-6d %-2d %s\n", fd, acct.userid, buf, login, num, bmlist);
+                fprintf(fbml, "%5d) %-*s %s %-6d %-2d %s\n", fd, IDLEN, acct.userid, buf, login, num, bmlist);
                 bms++;
 #if 0
                 if (*bmlist == '\0')
@@ -439,12 +404,12 @@ reaper(
                     fd = open(fl, O_WRONLY, 0);
                     if (fd < 0)
                     { /* Thor.981001: 加些 log */
-                        fprintf(flog, "acct can't open %-13s ==> %s\n", lowid, fl);
+                        fprintf(flog, "acct can't open %-*s ==> %s\n", IDLEN, lowid, fl);
                     }
 
                     if (write(fd, &acct, sizeof(acct))!=sizeof(acct))
                     {
-                        fprintf(flog, "acct can't read %-13s ==> %s\n", lowid, fl);
+                        fprintf(flog, "acct can't read %-*s ==> %s\n", IDLEN, lowid, fl);
                     }
                     if (fd >= 0)
                         close(fd);
@@ -455,7 +420,7 @@ reaper(
 #ifdef CHECK_LAZYBM
             if (life < due_lazybm)
             {
-                fprintf(fbm, "%5d) %-13s%s %d\n", fd, acct.userid, buf, login);
+                fprintf(fbm, "%5d) %-*s %s %d\n", fd, IDLEN, acct.userid, buf, login);
                 lazybm++;
             }
 #endif
@@ -465,7 +430,7 @@ reaper(
     {
         if (ulevel & PERM_CRIMINAL)
         {
-                fprintf(fcri, "%5d) %-13s%s[%s] %d\n", fd, acct.userid, buf, data, login);
+                fprintf(fcri, "%5d) %-*s %s[%s] %d\n", fd, IDLEN, acct.userid, buf, data, login);
                 criminal++;
         }
 
@@ -509,7 +474,7 @@ reaper(
             }
 
             userno_free(fd);
-            fprintf(flog, "%5d) %-13s%s%d\n", fd, acct.userid, buf, login);
+            fprintf(flog, "%5d) %-*s %s%d\n", fd, IDLEN, acct.userid, buf, login);
             prune++;
         }
 #ifdef  HAVE_MAILGEM
@@ -588,10 +553,8 @@ main(void)
     setgid(BBSGID);
     chdir(BBSHOME);
 
-    bshm = (BCACHE *) attach_shm(BRDSHM_KEY, sizeof(BCACHE));
-
-    if (bshm->uptime < 0)
-        bshm = NULL;
+    shm_logger_init(NULL);
+    bshm_attach(&bshm);
 
     vacation = check_vacation();
     flog = fopen(FN_REAPER_LOG, "w");
@@ -720,7 +683,7 @@ main(void)
 #ifdef DEBUG
     logit("counter");
 #endif
-    counter = (COUNTER *) attach_shm(COUNT_KEY, sizeof(COUNTER));
+    count_attach(&counter);
     if (counter)
         counter->max_regist = visit;
 

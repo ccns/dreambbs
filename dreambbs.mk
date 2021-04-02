@@ -24,8 +24,8 @@ BUILDTIME	!= date '+%s'
 
 ## To be expanded
 
-CFLAGS_WARN	= -Wall -Wpointer-arith -Wcast-qual -Wwrite-strings
-CFLAGS_MK	= -ggdb3 -O0 -pipe -fomit-frame-pointer $(CFLAGS_WARN) -I$$(SRCROOT)/include $(CFLAGS_ARCHI) $(CFLAGS_COMPAT)
+CFLAGS_WARN	= -Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format -Werror=incompatible-pointer-types -Werror=int-conversion
+CFLAGS_MK	= -ggdb3 -O0 -pipe $(CFLAGS_WARN) -I$$(SRCROOT)/include $(CFLAGS_ARCHI) $(CFLAGS_COMPAT)
 
 LDFLAGS_MK = -L$$(SRCROOT)/lib -ldao -lcrypt $(LDFLAGS_ARCHI)
 
@@ -97,25 +97,22 @@ NO_SO		= $(NO_SO_CLI:S/NO//g)$(NO_SO_CONF:S/0//g)
 
 CC_HASFLAGS = echo "" | $(CC) -x c -E $(flags:M*) -Werror - >/dev/null 2>&1
 
+# Prevent `-Wformat-overflow=` warnings from halting the compilation
+.if $(CC:Mgcc*)
+CFLAGS_WARN	= -Wno-format-overflow -Wno-error=format-overflow -Wformat-overflow
+.endif
+
+# Prevent `-Wincompatible-pointer-types-discards-qualifiers` warnings from halting the compilation
 .if $(CC:Mclang*)
+CFLAGS_WARN	+= -Wno-incompatible-pointer-types-discards-qualifiers -Wno-error=incompatible-pointer-types-discards-qualifiers -Wincompatible-pointer-types-discards-qualifiers -Werror=pointer-to-int-cast
 CFLAGS_WARN	+= -Wno-invalid-source-encoding
 .endif
 
+# Architecture information
+MULTIARCH	!= $(CC) -dumpmachine | sed 's/^\(.*\)-\(.*\)-\(.*\)-\(.*\)$$/\1-\3-\4/'
+
 .if $(ARCHI)=="64"
-CFLAGS_ARCHI	+= -m32
-LDFLAGS_ARCHI	+= -m32
-
-# Set up the search paths for `pkg-config`
-MULTIARCH_NATIVE	!= $(CC) -dumpmachine | sed 's/^\(.*\)-\(.*\)-\(.*\)-\(.*\)$$/\1-\3-\4/'
-MULTIARCH	= $(MULTIARCH_NATIVE:S/x86_64/i386/g)
-TRIPLETS	= $(MULTIARCH_NATIVE:S/x86_64/i486/g) $(MULTIARCH_NATIVE:S/x86_64/i686/g)
-
-PKG_CONFIG_LIBDIR	:= $(/usr/local/lib/$(MULTIARCH)/pkgconfig:L:Q)
-PKG_CONFIG_LIBDIR	+= $(TRIPLETS:@v@$(/usr/local/$v/lib/pkgconfig:L:Q)@)
-PKG_CONFIG_LIBDIR	+= $(/usr/local/share/pkgconfig:L:Q)
-PKG_CONFIG_LIBDIR	:= $(PKG_CONFIG_LIBDIR) $(PKG_CONFIG_LIBDIR:S/local\///g)
-PKG_CONFIG_LIBDIR	:= "$(PKG_CONFIG_LIBDIR:ts:)"
-.export PKG_CONFIG_LIBDIR
+CFLAGS_ARCHI	+= -fPIC
 .endif
 
 .if $(OPSYS) == "GNU/Linux"

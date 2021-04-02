@@ -21,20 +21,6 @@ static int can_see(const UTMP *up);
 static bool can_message(const UTMP *up);
 typedef UTMP *pickup;
 
-static void *
-attach_shm(
-    int shmkey, int shmsize)
-{
-    void *shmptr;
-    int shmid;
-
-    shmid = shmget(shmkey, shmsize, 0);
-    shmsize = 0;
-    shmptr = (void *) shmat(shmid, NULL, 0);
-
-    return shmptr;
-}
-
 
 /* ----------------------------------------------------- */
 /* °O¿ý pal ªº user number                               */
@@ -249,15 +235,6 @@ is_pal(
 }
 
 
-static int
-int_cmp(
-    const void *a,
-    const void *b)
-{
-    return *(const int *)a - *(const int *)b;
-}
-
-
 void
 pal_cache(void)
 {
@@ -437,9 +414,9 @@ ulist_body(
                 colortmp = 0;
             strcpy(color, wcolor[fcolor]);
 
-            printf("%5d %s%-13s%-22.21s%s%-16.15s%c%c %-14.14s%s\n",
+            printf("%5d %s%-*s %-22.21s%s%-16.15s%c%c %-14.14s%s\n",
                 cnt,
-                color, up->userid,
+                color, IDLEN, up->userid,
                 (HAS_PERM(PERM_SYSOP) && (cuser.ufo2 & UFO2_REALNAME))? up->realname : up->username,
                 colortmp > 0 ? "\x1b[m" : "",
                 (cuser.ufo2 & UFO2_SHIP) ? ship : ((up->ufo & UFO_HIDDEN)&&!HAS_PERM(PERM_SYSOP)) ?
@@ -456,7 +433,7 @@ static int
 ulist_cmp_userid(
     const void *i, const void *j)
 {
-    return str_cmp((*(const UTMP *const *)i) -> userid, (*(const UTMP *const *)j) -> userid);
+    return str_casecmp((*(const UTMP *const *)i) -> userid, (*(const UTMP *const *)j) -> userid);
 }
 
 
@@ -464,7 +441,7 @@ static int
 ulist_cmp_host(
     const void *i, const void *j)
 {
-    return str_cmp((*(const UTMP *const *)i) -> from, (*(const UTMP *const *)j) -> from);
+    return str_casecmp((*(const UTMP *const *)i) -> from, (*(const UTMP *const *)j) -> from);
 }
 
 static int
@@ -485,7 +462,7 @@ static int
 ulist_cmp_nick(
     const void *i, const void *j)
 {
-    return str_cmp((*(const UTMP *const *)i) -> username, (*(const UTMP *const *)j) -> username);
+    return str_casecmp((*(const UTMP *const *)i) -> username, (*(const UTMP *const *)j) -> username);
 }
 
 static int (*const ulist_cmp[]) (const void *i, const void *j) =
@@ -514,7 +491,7 @@ ulist_init(
     seecloak = HAS_PERM(PERM_SEECLOAK);
 
     up = ushm->uslot;
-    uceil = (UTMP *) ((char *) up + ushm->offset);
+    uceil = up + ushm->ubackidx;
 
     max = 0;
     friend_num = ofriend_num = pfriend_num = nf_num = bfriend_num = 0;
@@ -655,7 +632,8 @@ main(
         return 2;
     }
 
-    ushm = (UCACHE *) attach_shm(UTMPSHM_KEY, sizeof(UCACHE));
+    shm_logger_init(NULL);
+    ushm_attach(&ushm);
     cutmp = &utmp;
     usr_fpath(fpath, userid, FN_ACCT);
     fd = open(fpath, O_RDONLY);

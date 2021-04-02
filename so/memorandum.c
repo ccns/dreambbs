@@ -77,29 +77,30 @@ get_sch_time(void)
 }
 #endif  /* #if 0 */
 
-static void
+static int
 memorandum_item(
-int num,
-const MEMORANDUM *memorandum)
+XO *xo,
+int pos)
 {
+    const MEMORANDUM *const memorandum = (const MEMORANDUM *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d  %-8s  %-8s  %-*s\n", num, memorandum->date, memorandum->time, d_cols + 51, memorandum->work);
+    return XO_NONE;
 }
 
 static int
 memorandum_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const MEMORANDUM *const memorandum = (const MEMORANDUM *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    memorandum_item(xo->pos + 1, memorandum);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return memorandum_item(xo, pos);
 }
 
 static int
 memorandum_body(
 XO *xo)
 {
-    const MEMORANDUM *memorandum;
     int num, max, tail;
 
     move(3, 0);
@@ -107,19 +108,18 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-            return memorandum_add(xo);
-        return XO_QUIT;
+        outs("\n《備忘錄》目前沒有資料\n");
+        outs("\n  (^P)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    memorandum = (const MEMORANDUM *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        memorandum_item(++num, memorandum++);
+        memorandum_item(xo, num++);
     }
     while (num < max);
 
@@ -131,7 +131,7 @@ static int
 memorandum_head(
 XO *xo)
 {
-    vs_head("聯絡名單", str_site);
+    vs_head("備忘錄", str_site);
     prints(NECK_MEMORANDUM, d_cols, "");
     return memorandum_body(xo);
 }
@@ -177,7 +177,7 @@ XO *xo)
 {
     MEMORANDUM memorandum;
     if (xo->max >= MAX_MEMORANDUM)
-        vmsg("你的聯絡名單已到達上限!!");
+        vmsg("你的備忘錄已到達上限!!");
     else if (memorandum_edit(&memorandum, DOECHO))
     {
         rec_add(xo->dir, &memorandum, sizeof(MEMORANDUM));
@@ -189,12 +189,13 @@ XO *xo)
 
 static int
 memorandum_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(MEMORANDUM), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(MEMORANDUM), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -205,13 +206,11 @@ XO *xo)
 
 static int
 memorandum_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     MEMORANDUM *memorandum, mate;
-    int pos, cur;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     memorandum = (MEMORANDUM *) xo_pool_base + pos;
 
     mate = *memorandum;
@@ -239,13 +238,13 @@ KeyFuncList memorandum_cb =
     {XO_LOAD, {memorandum_load}},
     {XO_HEAD, {memorandum_head}},
     {XO_BODY, {memorandum_body}},
-    {XO_CUR, {memorandum_cur}},
+    {XO_CUR | XO_POSF, {.posf = memorandum_cur}},
 
     {Ctrl('P'), {memorandum_add}},
-    {'r', {memorandum_change}},
-    {'c', {memorandum_change}},
+    {'r' | XO_POSF, {.posf = memorandum_change}},
+    {'c' | XO_POSF, {.posf = memorandum_change}},
     {'s', {xo_cb_init}},
-    {'d', {memorandum_delete}},
+    {'d' | XO_POSF, {.posf = memorandum_delete}},
     {'h', {memorandum_help}}
 };
 

@@ -13,29 +13,30 @@
 static int admin_add(XO *xo);
 
 
-static void
+static int
 admin_item(
-int num,
-const ADMIN *admin)
+XO *xo,
+int pos)
 {
+    const ADMIN *const admin = (const ADMIN *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d     %s\n", num, admin->name);
+    return XO_NONE;
 }
 
 static int
 admin_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const ADMIN *const admin = (const ADMIN *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    admin_item(xo->pos + 1, admin);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return admin_item(xo, pos);
 }
 
 static int
 admin_body(
 XO *xo)
 {
-    const ADMIN *admin;
     int num, max, tail;
 
     move(3, 0);
@@ -43,19 +44,18 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-            return admin_add(xo);
-        return XO_QUIT;
+        outs("\n《超級站務》目前沒有資料\n");
+        outs("\n  (^P)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    admin = (const ADMIN *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        admin_item(++num, admin++);
+        admin_item(xo, num++);
     }
     while (num < max);
 
@@ -122,12 +122,13 @@ XO *xo)
 
 static int
 admin_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(ADMIN), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(ADMIN), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -138,13 +139,11 @@ XO *xo)
 
 static int
 admin_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     ADMIN *admin, mate;
-    int pos, cur;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     admin = (ADMIN *) xo_pool_base + pos;
 
     mate = *admin;
@@ -173,13 +172,13 @@ KeyFuncList admin_cb =
     {XO_LOAD, {admin_load}},
     {XO_HEAD, {admin_head}},
     {XO_BODY, {admin_body}},
-    {XO_CUR, {admin_cur}},
+    {XO_CUR | XO_POSF, {.posf = admin_cur}},
 
     {Ctrl('P'), {admin_add}},
-    {'r', {admin_change}},
-    {'c', {admin_change}},
+    {'r' | XO_POSF, {.posf = admin_change}},
+    {'c' | XO_POSF, {.posf = admin_change}},
     {'s', {xo_cb_init}},
-    {'d', {admin_delete}},
+    {'d' | XO_POSF, {.posf = admin_delete}},
     {'h', {admin_help}}
 };
 
@@ -190,7 +189,7 @@ Admin(void)
     DL_HOLD;
     XO *xo, *last;
     char fpath[64];
-    if (!check_admin(cuser.userid) && str_cmp(cuser.userid, SYSOPNAME))
+    if (!check_admin(cuser.userid) && str_casecmp(cuser.userid, SYSOPNAME))
     {
         vmsg("◎ 你不是系統管理員！");
         return DL_RELEASE(0);

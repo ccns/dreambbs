@@ -32,11 +32,13 @@ mailgem_foot(
     return XO_NONE;
 }
 
-static void
+static int
 mailgem_item(
-int num,
-const HDR *ghdr)
+XO *xo,
+int pos)
 {
+    const HDR *const ghdr = (const HDR *) xo_pool_base + pos;
+    const int num = pos + 1;
     int xmode, gtype;
 
     xmode = ghdr->xmode;
@@ -48,58 +50,45 @@ const HDR *ghdr)
 
     gtype = HAS_PERM(PERM_SYSOP) ? mailgem_way : 0;
 
-    prints("%-*.*s%-13s%s\n", d_cols + 47, d_cols + 46, ghdr->title,
-           (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
+    prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title,
+           IDLEN + 1, (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
+
+    return XO_NONE;
 }
 
 static int
 mailgem_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const HDR *const ghdr = (const HDR *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    mailgem_item(xo->pos + 1, ghdr);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return mailgem_item(xo, pos);
 }
 
 static int
 mailgem_body(
 XO *xo)
 {
-    const HDR *ghdr;
     int num, max, tail;
+
+    move(3, 0);
 
     max = xo->max;
     if (max <= 0)
     {
-        outs("\n\n《精華區》尚在吸取天地間的日精月華 :)");
-        max = vans("(A)新增資料 (G)海錨功\能 (W)資源回收筒 [N]無所事事 ");
-        switch (max)
-        {
-        case 'a':
-            max = mailgem_add(xo);
-            if (xo->max > 0)
-                return max;
-            break;
-        case 'g':
-            mailgem_anchor(xo);
-            break;
-        case 'w':
-            mailgem_recycle(xo);
-            break;
-        }
-        return XO_QUIT;
+        outs("\n《精華區》尚在吸取天地間的日精月華 :)\n");
+        outs("\n  (^P)新增資料 (^G)海錨功\能 (W)資源回收筒\n");
+        clrtobot();
+        return mailgem_foot(xo);
     }
 
     num = xo->top;
-    ghdr = (const HDR *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
-    move(3, 0);
     do
     {
-        mailgem_item(++num, ghdr++);
+        mailgem_item(xo, num++);
     }
     while (num < max);
     clrtobot();
@@ -160,6 +149,7 @@ XO *xo)
 static HDR *
 mailgem_check(
 XO *xo,
+int pos,
 char *fpath)
 {
     HDR *ghdr;
@@ -168,7 +158,7 @@ char *fpath)
 
     level = xo->key;
 
-    ghdr = (HDR *) xo_pool_base + xo->pos;
+    ghdr = (HDR *) xo_pool_base + pos;
     gtype = ghdr->xmode;
 
     if (fpath)
@@ -260,7 +250,8 @@ XO *xo)
 
 static int
 mailgem_edit(
-XO *xo)
+XO *xo,
+int pos)
 {
     char fpath[80];
     HDR *hdr;
@@ -271,7 +262,7 @@ XO *xo)
         return XO_FOOT;
     }
 
-    if (!(hdr = mailgem_check(xo, fpath)))
+    if (!(hdr = mailgem_check(xo, pos, fpath)))
         return XO_NONE;
     vedit(fpath, false);
     return XO_HEAD;
@@ -280,13 +271,14 @@ XO *xo)
 
 static int
 mailgem_title(
-XO *xo)
+XO *xo,
+int pos)
 {
     HDR *ghdr, xhdr;
     int num;
     char *dir;
 
-    ghdr = mailgem_check(xo, NULL);
+    ghdr = mailgem_check(xo, pos, NULL);
     if (ghdr == NULL)
         return XO_NONE;
 
@@ -299,7 +291,7 @@ XO *xo)
         vans("確定要修改嗎(y/N)？[N]") == 'y')
     {
         *ghdr = xhdr;
-        num = xo->pos;
+        num = pos;
         rec_put(dir, ghdr, sizeof(HDR), num);
         return XR_FOOT + XO_CUR;
 
@@ -309,7 +301,8 @@ XO *xo)
 
 static int
 mailgem_state(
-XO *xo)
+XO *xo,
+int pos)
 {
     HDR *ghdr;
     char *dir, fpath[80];
@@ -318,7 +311,7 @@ XO *xo)
     if (!HAS_PERM(PERM_SYSOP))
         return XO_NONE;
 
-    if (!(ghdr = mailgem_check(xo, fpath)))
+    if (!(ghdr = mailgem_check(xo, pos, fpath)))
         return XO_NONE;
 
     dir = xo->dir;
@@ -348,7 +341,8 @@ XO *xo)
 
 static int
 mailgem_browse(
-XO *xo)
+XO *xo,
+int pos)
 {
     HDR *ghdr;
     int xmode;
@@ -356,7 +350,7 @@ XO *xo)
 
     do
     {
-        ghdr = mailgem_check(xo, fpath);
+        ghdr = mailgem_check(xo, pos, fpath);
         if (ghdr == NULL)
             break;
 
@@ -378,8 +372,8 @@ XO *xo)
         if (xmode == -1)
             break;
 
-        xmode = xo_getch(xo, xmode);
-
+        xmode = xo_getch(xo, pos, xmode);
+        pos = xo->pos;
     }
     while (xmode == XO_BODY);
 
@@ -467,13 +461,14 @@ const HDR *ghdr)                /* NULL 代表放入 TagList, 否則將傳入的放入 */
 
 static int
 mailgem_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
     HDR *ghdr;
     char *dir, buf[80];
     int tag;
 
-    if (!(ghdr = mailgem_check(xo, NULL)))
+    if (!(ghdr = mailgem_check(xo, pos, NULL)))
         return XO_NONE;
 
     tag = AskTag("精華區刪除");
@@ -533,7 +528,7 @@ XO *xo)
     else
     {
         currchrono = ghdr->chrono;
-        rec_del(dir, sizeof(HDR), xo->pos, cmpchrono, NULL);
+        rec_del(dir, sizeof(HDR), pos, cmpchrono, NULL);
     }
 
     return XO_INIT;
@@ -542,12 +537,13 @@ XO *xo)
 
 static int
 mailgem_copy(
-XO *xo)
+XO *xo,
+int pos)
 {
     HDR *ghdr;
     int tag;
 
-    ghdr = mailgem_check(xo, NULL);
+    ghdr = mailgem_check(xo, pos, NULL);
     if (ghdr == NULL)
         return XO_NONE;
 
@@ -566,6 +562,7 @@ XO *xo)
 static inline int
 mailgem_extend(
 XO *xo,
+int pos,
 int num)
 {
     char *dir, fpath[80], gpath[80];
@@ -573,7 +570,7 @@ int num)
     time_t chrono;
     HDR *hdr;
 
-    if (!(hdr = mailgem_check(xo, fpath)))
+    if (!(hdr = mailgem_check(xo, pos, fpath)))
         return -1;
 
     if (!(fp = fopen(fpath, "a")))
@@ -617,7 +614,7 @@ XO *xo)
         return XO_FOOT;
 
     case 'e':
-        if (mailgem_extend(xo, num))
+        if (xo->max > 0 && mailgem_extend(xo, xo->pos, num))
         {
             zmsg("[Extend 檔案附加] 動作並未完全成功\");
             return XO_FOOT;
@@ -639,18 +636,18 @@ XO *xo)
 
 static int
 mailgem_move(
-XO *xo)
+XO *xo,
+int pos)
 {
     HDR *ghdr;
     char *dir, buf[80];
-    int pos, newOrder;
+    int newOrder;
 
-    ghdr = mailgem_check(xo, NULL);
+    ghdr = mailgem_check(xo, pos, NULL);
 
     if (ghdr == NULL)
         return XO_NONE;
 
-    pos = xo->pos;
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
     if (!vget(B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
@@ -659,12 +656,13 @@ XO *xo)
 
     if (newOrder != pos)
     {
+        const HDR ghdr_orig = *ghdr;
 
         dir = xo->dir;
         if (!rec_del(dir, sizeof(HDR), pos, NULL, NULL))
         {
-            rec_ins(dir, ghdr, sizeof(HDR), newOrder, 1);
-            xo->pos = newOrder;
+            rec_ins(dir, &ghdr_orig, sizeof(HDR), newOrder, 1);
+            pos = newOrder;
             return XO_LOAD;
         }
     }
@@ -687,7 +685,7 @@ XO *xo)
         if (ans == 'a')
         {
             strcpy(folder, xo->dir);
-            str_ncpy(MailGemSailor, (const char *) xo->xyz, sizeof(MailGemSailor));
+            str_scpy(MailGemSailor, (const char *) xo->xyz, sizeof(MailGemSailor));
         }
         else if (ans == 'd')
         {
@@ -715,7 +713,8 @@ XO *xo)
 
 int
 mailgem_gather(
-XO *xo)
+XO *xo,
+int pos)
 {
     DL_HOLD;
     HDR *hdr, *gbuf, ghdr, xhdr;
@@ -775,7 +774,7 @@ XO *xo)
     if (tag)
         hdr = &xhdr;
     else
-        hdr = (HDR *) xo_pool_base + xo->pos;
+        hdr = (HDR *) xo_pool_base + pos;
 
     dir = xo->dir;
     rc = (*dir == 'b') ? XO_LOAD : XO_FOOT;
@@ -838,13 +837,12 @@ XO *xo)
 
 static int
 mailgem_tag(
-XO *xo)
+XO *xo,
+int pos)
 {
     const HDR *ghdr;
-    int pos, tag, cur;
+    int tag;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     ghdr = (const HDR *) xo_pool_base + pos;
 
     if ((tag = Tagger(ghdr->chrono, pos, TAG_TOGGLE)))
@@ -867,7 +865,8 @@ XO *xo)
 
 static int
 mailgem_cross(
-XO *xo)
+XO *xo,
+int pos)
 {
     char xboard[20], fpath[80], xfolder[80], xtitle[80], buf[80], *dir;
     HDR *hdr, xpost, *ghdr;
@@ -878,7 +877,7 @@ XO *xo)
     if (!cuser.userlevel)
         return XO_NONE;
 
-    ghdr = mailgem_check(xo, NULL);
+    ghdr = mailgem_check(xo, pos, NULL);
     tag = AskTag("轉貼");
     if ((tag < 0) || (tag == 0 && (ghdr->xmode & GEM_FOLDER)))
         return XO_FOOT;
@@ -890,14 +889,14 @@ XO *xo)
         if (*xboard == 0)
             strcpy(xboard, currboard);
 
-        hdr = tag ? &xpost : (HDR *) xo_pool_base + xo->pos;
+        hdr = tag ? &xpost : (HDR *) xo_pool_base + pos;
 
 
         if (!tag)
         {
             if (!(hdr->xmode & GEM_FOLDER))
             {
-                sprintf(xtitle, "[轉錄]%.66s", hdr->title);
+                sprintf(xtitle, STR_FORWARD " %.66s", hdr->title);
                 if (!vget(2, 0, "標題:", xtitle, TTLEN + 1, GCARRY))
                     return XO_HEAD;
             }
@@ -920,7 +919,7 @@ XO *xo)
             {
                 EnumTagHdr(hdr, dir, locus++);
 
-                sprintf(xtitle, "[轉錄]%.66s", hdr->title);
+                sprintf(xtitle, STR_FORWARD " %.66s", hdr->title);
             }
             if (!(hdr->xmode & GEM_FOLDER))
             {
@@ -1002,26 +1001,26 @@ static KeyFuncList mailgem_cb =
     {XO_HEAD, {mailgem_head}},
     {XO_BODY, {mailgem_body}},
     {XO_FOOT, {mailgem_foot}},
-    {XO_CUR, {mailgem_cur}},
+    {XO_CUR | XO_POSF, {.posf = mailgem_cur}},
 
-    {'r', {mailgem_browse}},
+    {'r' | XO_POSF, {.posf = mailgem_browse}},
 
     {Ctrl('P'), {mailgem_add}},
-    {'E', {mailgem_edit}},
-    {'T', {mailgem_title}},
-    {'x', {mailgem_cross}},
-    {'M', {mailgem_move}},
-    {'d', {mailgem_delete}},
-    {'c', {mailgem_copy}},
+    {'E' | XO_POSF, {.posf = mailgem_edit}},
+    {'T' | XO_POSF, {.posf = mailgem_title}},
+    {'x' | XO_POSF, {.posf = mailgem_cross}},
+    {'M' | XO_POSF, {.posf = mailgem_move}},
+    {'d' | XO_POSF, {.posf = mailgem_delete}},
+    {'c' | XO_POSF, {.posf = mailgem_copy}},
     {'W', {mailgem_recycle}},
 
     {Ctrl('G'), {mailgem_anchor}},
     {Ctrl('V'), {mailgem_paste}},
 
-    {'t', {mailgem_tag}},
+    {'t' | XO_POSF, {.posf = mailgem_tag}},
     {'f', {mailgem_toggle}},
 
-    {'S', {mailgem_state}},
+    {'S' | XO_POSF, {.posf = mailgem_state}},
 
     {'h', {mailgem_help}}
 };
@@ -1077,7 +1076,7 @@ mailgem_main(void)
 
     xz[XZ_MAILGEM - XO_ZONE].xo = last;  /* restore */
 
-    DL_RELEASE(0);
+    DL_RELEASE_VOID();
 }
 
 
@@ -1246,7 +1245,7 @@ const char *fgem)
 
     while (fread(&hdr, sizeof(hdr), 1, fpr) == 1)
     {
-        if ((hdr.xmode & GEM_DROP) && !(memcmp(hdr.title, "滄海拾遺 [", 10)))
+        if ((hdr.xmode & GEM_DROP) && !(strncmp(hdr.title, "滄海拾遺 [", 10)))
         {
             if ((xsync = (SyncData *) bsearch(&hdr.chrono, sync_pool, sync_head, sizeof(SyncData), sync_cmp)))
             {

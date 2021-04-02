@@ -28,7 +28,8 @@ static unsigned char *GtoB = NULL;
 static void
 conv_init(void)
 {
-    int fd, size, BGsize, GBsize;
+    int fd;
+    off_t BGsize, GBsize;
     struct stat st;
 
     if (BtoG != NULL)
@@ -42,44 +43,40 @@ conv_init(void)
     if ((fd = open("etc/b2g_table", O_RDONLY)) >= 0)
     {
         fstat(fd, &st);
-        size = BGsize <= st.st_size ? BGsize : st.st_size;
-        read(fd, BtoG, size);
+        read(fd, BtoG, BMIN(BGsize, st.st_size));
         close(fd);
     }
     if ((fd = open("etc/g2b_table", O_RDONLY)) >= 0)
     {
         fstat(fd, &st);
-        size = GBsize <= st.st_size ? GBsize : st.st_size;
-        read(fd, GtoB, size);
+        read(fd, GtoB, BMIN(GBsize, st.st_size));
         close(fd);
     }
 }
-
-
-#define c1      (unsigned char)(src[0])
-#define c2      (unsigned char)(src[1])
 
 
 static void
 b2g(
     const char *src, char *dst)
 {
-    int i;
+    const int c1 = (unsigned char)src[0];
 
     if ((c1 >= 0xa1) && (c1 <= 0xf9))
     {
+        const int c2 = (unsigned char)src[1];
+
         if ((c2 >= 0x40) && (c2 <= 0x7e))
         {
-            i = ((c1 - 0xa1) * 157 + (c2 - 0x40)) * 2;
-            dst[0] = BtoG[i++];
-            dst[1] = BtoG[i];
+            const int i = ((c1 - 0xa1) * 157 + (c2 - 0x40)) * 2;
+            dst[0] = BtoG[i];
+            dst[1] = BtoG[i + 1];
             return;
         }
         else if ((c2 >= 0xa1) && (c2 <= 0xfe))
         {
-            i = ((c1 - 0xa1) * 157 + (c2 - 0xa1) + 63) * 2;
-            dst[0] = BtoG[i++];
-            dst[1] = BtoG[i];
+            const int i = ((c1 - 0xa1) * 157 + (c2 - 0xa1) + 63) * 2;
+            dst[0] = BtoG[i];
+            dst[1] = BtoG[i + 1];
             return;
         }
     }
@@ -92,22 +89,24 @@ static void
 g2b(
     const char *src, char *dst)
 {
-    int i;
+    const int c2 = (unsigned char)src[1];
 
     if ((c2 >= 0xa1) && (c2 <= 0xfe))
     {
+        const int c1 = (unsigned char)src[0];
+
         if ((c1 >= 0xa1) && (c1 <= 0xa9))
         {
-            i = ((c1 - 0xa1) * 94 + (c2 - 0xa1)) * 2;
-            dst[0] = GtoB[i++];
-            dst[1] = GtoB[i];
+            const int i = ((c1 - 0xa1) * 94 + (c2 - 0xa1)) * 2;
+            dst[0] = GtoB[i];
+            dst[1] = GtoB[i + 1];
             return;
         }
         else if ((c1 >= 0xb0) && (c1 <= 0xf7))
         {
-            i = ((c1 - 0xb0 + 9) * 94 + (c2 - 0xa1)) * 2;
-            dst[0] = GtoB[i++];
-            dst[1] = GtoB[i];
+            const int i = ((c1 - 0xb0 + 9) * 94 + (c2 - 0xa1)) * 2;
+            dst[0] = GtoB[i];
+            dst[1] = GtoB[i + 1];
             return;
         }
     }
@@ -133,7 +132,7 @@ hzconvert(
     end = src + len;
     while (src < end)
     {
-        if (IS_DBCS_HI((unsigned char)*src))   /* hi-bit on 表示是漢字 */
+        if (IS_DBCS_HI(*src)) /* hi-bit on 表示是漢字 */
         {
             dbcvrt(src, p);
             src += 2;           /* 一次轉二碼 */
@@ -141,12 +140,14 @@ hzconvert(
         }
         else
         {
-            /* *p = *src; */    /* 不需要，因為在 b52gb()、gb2b5() 的應用裡 src == dst */
+            /* IID.2020-12-15: No longer assume `src` and `dst` to be the same for code extensibility */
+            *p = *src;          /* 不需要，因為在 b52gb()、gb2b5() 的應用裡 src == dst */
             src++;
             p++;
         }
     }
-    /* dst[len] = '\0'; */      /* 不需要，因為在 b52gb()、gb2b5() 的應用裡 src == dst */
+    /* IID.2020-12-15: No longer assume `src` and `dst` to be the same for code extensibility */
+    dst[len] = '\0';            /* 不需要，因為在 b52gb()、gb2b5() 的應用裡 src == dst */
 
     return dst;
 }

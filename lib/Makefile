@@ -12,15 +12,15 @@ SRCROOT	= $(.CURDIR)/..
 
 HDR 	= dao.h dao.p
 
-SRC	= acl.c       chrono32.c  file.c    isnot.c    radix32.c   shm.c   \
-	  archiv32.c  dl_lib.c    record.c  splay.c    date_str.c  xsort.c \
-	  attr_lib.c  dns.c       header.c  rfc2047.c  string.c    xwrite.c \
-	  proc.c
+SRC	= acl.c       file.c    isnot.c    radix32.c   shm.c   \
+	  dl_lib.c    record.c  splay.c    date.c      xsort.c \
+	  attr_lib.c  dns.c       header.c  string.c    xwrite.c \
+	  proc.c      passwd.c  mime.c     logger.c
 
-OBJ	= acl.o       chrono32.o  file.o    isnot.o    radix32.o   shm.o   \
-	  archiv32.o  dl_lib.o    record.o  splay.o    date_str.o  xsort.o \
-	  attr_lib.o  dns.o       header.o  rfc2047.o  string.o    xwrite.o \
-	  proc.o
+OBJ	= acl.o       file.o    isnot.o    radix32.o   shm.o   \
+	  dl_lib.o    record.o  splay.o    date.o      xsort.o \
+	  attr_lib.o  dns.o       header.o  string.o    xwrite.o \
+	  proc.o      passwd.o  mime.o     logger.o
 
 .c.o:   ;$(CC) $(CFLAGS) -c $*.c
 

@@ -14,32 +14,33 @@ static int chat_add(XO *xo);
 static int mode = 0;
 static int kind = 0;
 
-static void
+static int
 chat_item(
-int num,
-const ChatAction *chat)
+XO *xo,
+int pos)
 {
+    const ChatAction *const chat = (const ChatAction *) xo_pool_base + pos;
+    const int num = pos + 1;
     if (!mode)
-        prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->chinese, d_cols + 55, d_cols + 55, chat->part1_msg);
+        prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->brief_desc, d_cols + 55, d_cols + 55, chat->part1_msg);
     else
-        prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->chinese, d_cols + 55, d_cols + 55, chat->part2_msg);
+        prints("%6d %-9s %-6s %-*.*s\n", num, chat->verb, chat->brief_desc, d_cols + 55, d_cols + 55, chat->part2_msg);
+    return XO_NONE;
 }
 
 static int
 chat_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const ChatAction *const chat = (const ChatAction *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    chat_item(xo->pos + 1, chat);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return chat_item(xo, pos);
 }
 
 static int
 chat_body(
 XO *xo)
 {
-    const ChatAction *chat;
     int num, max, tail;
 
     move(3, 0);
@@ -47,19 +48,18 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        if (vans("要新增資料嗎(y/N)？[N] ") == 'y')
-            return chat_add(xo);
-        return XO_QUIT;
+        outs("\n《" CHATROOMNAME "動詞》目前沒有資料\n");
+        outs("\n  (^P)新增資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    chat = (const ChatAction *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        chat_item(++num, chat++);
+        chat_item(xo, num++);
     }
     while (num < max);
 
@@ -123,7 +123,7 @@ int echo)
     if (echo == DOECHO)
         memset(chat, 0, sizeof(ChatAction));
     if (vget(B_LINES_REF, 0, "動詞：", chat->verb, sizeof(chat->verb), echo)
-        && vget(B_LINES_REF, 0, "中文解釋：", chat->chinese, sizeof(chat->chinese), echo))
+        && vget(B_LINES_REF, 0, "中文解釋：", chat->brief_desc, sizeof(chat->brief_desc), echo))
     {
         vget(B_LINES_REF, 0, "訊息一：", chat->part1_msg, sizeof(chat->part1_msg), echo);
         vget(B_LINES_REF, 0, "訊息二：", chat->part2_msg, sizeof(chat->part2_msg), echo);
@@ -151,12 +151,13 @@ XO *xo)
 
 static int
 chat_delete(
-XO *xo)
+XO *xo,
+int pos)
 {
 
     if (vans(msg_del_ny) == 'y')
     {
-        if (!rec_del(xo->dir, sizeof(ChatAction), xo->pos, NULL, NULL))
+        if (!rec_del(xo->dir, sizeof(ChatAction), pos, NULL, NULL))
         {
             return XO_LOAD;
         }
@@ -167,13 +168,11 @@ XO *xo)
 
 static int
 chat_change(
-XO *xo)
+XO *xo,
+int pos)
 {
     ChatAction *chat, mate;
-    int pos, cur;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     chat = (ChatAction *) xo_pool_base + pos;
 
     mate = *chat;
@@ -204,14 +203,13 @@ XO *xo)
 
 static int
 chat_move(
-XO *xo)
+XO *xo,
+int pos)
 {
     const ChatAction *ghdr;
     char buf[80];
-    int pos, newOrder, cur;
+    int newOrder;
 
-    pos = xo->pos;
-    cur = pos - xo->top;
     ghdr = (const ChatAction *) xo_pool_base + pos;
 
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
@@ -221,10 +219,11 @@ XO *xo)
     newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);
     if (newOrder != pos)
     {
+        const ChatAction ghdr_orig = *ghdr;
         const char *dir = xo->dir;
         if (!rec_del(dir, sizeof(ChatAction), pos, NULL, NULL))
         {
-            rec_ins(dir, ghdr, sizeof(ChatAction), newOrder, 1);
+            rec_ins(dir, &ghdr_orig, sizeof(ChatAction), newOrder, 1);
             xo->pos = newOrder;
             return XO_LOAD;
         }
@@ -267,18 +266,18 @@ KeyFuncList chat_cb =
     {XO_LOAD, {chat_load}},
     {XO_HEAD, {chat_head}},
     {XO_BODY, {chat_body}},
-    {XO_CUR, {chat_cur}},
+    {XO_CUR | XO_POSF, {.posf = chat_cur}},
 
     {Ctrl('P'), {chat_add}},
     {'a', {chat_add}},
-    {'r', {chat_change}},
-    {'c', {chat_change}},
+    {'r' | XO_POSF, {.posf = chat_change}},
+    {'c' | XO_POSF, {.posf = chat_change}},
     {'s', {xo_cb_init}},
     {'S', {chat_sync}},
     {'f', {chat_mode}},
-    {'M', {chat_move}},
+    {'M' | XO_POSF, {.posf = chat_move}},
     {KEY_TAB, {chat_kind}},
-    {'d', {chat_delete}},
+    {'d' | XO_POSF, {.posf = chat_delete}},
     {'h', {chat_help}}
 };
 

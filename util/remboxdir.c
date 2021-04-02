@@ -103,7 +103,7 @@ article_parse(
     if (ptr)
     {
         ptr[-1] = '\0';
-        if (ptr[-2] == ', ')
+        if (ptr[-2] == ',')
         {
             ptr[-2] = '\0';
         }
@@ -120,7 +120,7 @@ article_parse(
 
     if (strchr(ptr, '@'))
     {
-        str_from(ptr, hdr.owner, hdr.nick);
+        from_parse(ptr, hdr.owner, hdr.nick);
         hdr.xmode |= POST_INCOME;   /* also MAIL_INCOME */
     }
     else
@@ -153,7 +153,7 @@ article_parse(
     /* part of hdr.xmode */
 
 #if 0
-    if (strncmp("¡° Origin: " BOARDNAME, buf, 11 + sizeof(BOARDNAME) - 1) == 0)
+    if (strncmp("¡° Origin: " BOARDNAME, buf, 11 + STRLITLEN(BOARDNAME)) == 0)
 #endif
     if (!(hdr.xmode & POST_INCOME))
     {             /* inside maple */

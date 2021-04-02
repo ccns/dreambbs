@@ -95,7 +95,7 @@ int acl_addr(const char *acl,      /* file name of access control list */
 
             if (addr)            /* match user name */
             {
-                if ((luser != addr - filter) || memcmp(buf, filter, luser))
+                if ((luser != addr - filter) || strncmp(buf, filter, luser))
                     continue;
 
                 if (!*addr)
@@ -184,7 +184,7 @@ int acl_has(const char *acl,      /* file name of access control list */
 
         if (addr)                /* match user name */
         {
-            if ((luser != addr - filter) || memcmp(user, filter, luser))
+            if ((luser != addr - filter) || strncmp(user, filter, luser))
                 continue;
 
             if (!*++addr)
@@ -208,13 +208,13 @@ int acl_has(const char *acl,      /* file name of access control list */
 
             if (cc == lhost)
             {
-                if (memcmp(addr, host, lhost))
+                if (strncmp(addr, host, lhost))
                     continue;
             }
             else
             {
-                if (((*addr != '.') || memcmp(addr, host + lhost - cc, cc)) &&
-                    ((addr[cc - 1] != '.') || memcmp(addr, host, cc)))
+                if (((*addr != '.') || strncmp(addr, host + lhost - cc, cc)) &&
+                    ((addr[cc - 1] != '.') || strncmp(addr, host, cc)))
                     continue;
             }
         }

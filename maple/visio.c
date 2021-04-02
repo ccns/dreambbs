@@ -28,8 +28,8 @@
 // default color (\x1b[37; 40m)
 #define STANDEND   (void) ( attrsetbg(0), attrsetfg(7) )
 #endif  /* #ifdef M3_USE_PFTERM */
-int cur_row, cur_col;
-int cur_pos;                    /* current position with ANSI codes */
+int cur_row, cur_col;           /* Current position without ANSI codes (display coordination) */
+int cur_pos;                    /* current column position with ANSI codes (raw character coordination) */
 
 /* ----------------------------------------------------- */
 /* output routines                                       */
@@ -157,7 +157,7 @@ bell(void)
 /* ----------------------------------------------------- */
 
 #ifndef M3_USE_PFTERM
-#define o_ansi(x)       output(x, sizeof(x)-1)
+#define o_ansi(x)       output(x, STRLITLEN(x))
 
 #define o_clear()       o_ansi("\x1b[;H\x1b[2J")
 #define o_cleol()       o_ansi("\x1b[K")
@@ -248,8 +248,8 @@ move_ansi(
     cur_slp = cslp = &vbuf[y];
     if (x >= t_columns)
     {
-        cur_col = cslp->len - 1;
-        cur_pos = t_columns - 1;
+        cur_pos = cslp->len - 1;
+        cur_col = t_columns - 1;
         return;
     }
     cur_col = x;
@@ -704,6 +704,46 @@ clrtobot(void)
     }
 }
 
+/* Return whether any ANSI escapes are removed */
+GCC_NONNULLS
+static bool remove_ansi_at(screenline *slp, int pos)
+{
+    unsigned char *const data = &slp->data[pos];
+
+    /* IID.2021-03-14: If there are ANSI escapes before the byte to be overridden, remove the escapes */
+    if (pos < slp->len && *data == KEY_ESC)
+    {
+        int idx = 1;
+        while (pos + idx < slp->len)
+        {
+            const int ch_i = data[idx++];
+            if (ch_i == KEY_ESC) /* Handle incomplete ANSI escapes interrupted by another ANSI escape */
+                continue;
+            if (!((ch_i >= '0' && ch_i <= '9') || ch_i == '[' || ch_i == ';'))
+            {
+                if (!(pos + idx < slp->len && data[idx] == KEY_ESC))
+                    break; /* There no more ANSI escapes to remove */
+            }
+        }
+
+        /* Move the original data after ANSI escapes to `data`, if any */
+        if (slp->len - pos - idx > 0)
+            memmove(data, data + idx, slp->len - pos - idx);
+
+        slp->len -= idx;
+        /* The color after `pos` are modified and need redraw */
+        if (!(slp->mode & SL_MODIFIED))
+        {
+            slp->mode |= SL_MODIFIED;
+            slp->smod = pos;
+        }
+        slp->emod = slp->len - 1;
+
+        return true;
+    }
+    return false;
+}
+
 void
 outc(
     int ch)
@@ -769,14 +809,14 @@ new_line:
     {
         cx = *data;
     }
-    else
+    else if (cx < 0)
     {
-        while (cx < 0)
+        do
         {
             data[cx++] = ' ';
-        }
+        } while (cx < 0);
 
-        slp->len = /* slp->width = */ pos + 1;
+        slp->len = /* slp->width = */ pos;
     }
 
     /* ---------------------------- */
@@ -798,11 +838,24 @@ new_line:
 
             if (showansi)
             {
-                ch = i + pos;
-                if (ch < ANSILINELEN - 1)
+                remove_ansi_at(slp, pos);
+
+                /* IID.2021-03-14: Move the original data to leave the space for the inserted ANSI escape */
+                if (slp->len + i <= ANSILINESIZE)
                 {
+                    if (pos < slp->len)
+                        memmove(data + i, data, slp->len - pos);
                     memcpy(data, ansibuf, i);
-                    slp->len = slp->emod = cur_pos = ch;
+                    cur_pos = pos + i;
+                    if (pos < slp->len)
+                    {
+                        slp->len += i;
+                        slp->emod = slp->len - 1; /* The color after `pos` are modified and need redraw */
+                    }
+                    else
+                    {
+                        slp->len = slp->emod = pos + i;
+                    }
                     slp->mode |= SL_MODIFIED;
                     if (slp->smod > pos)
                         slp->smod = pos;
@@ -812,6 +865,9 @@ new_line:
         ansipos = 0;
         return;
     }
+
+    if (remove_ansi_at(slp, pos) && pos < slp->len)
+        cx = *data;
 
     /* ---------------------------- */
     /* 判定哪些文字需要重新送出螢幕 */
@@ -835,10 +891,11 @@ new_line:
         }
     }
 
+    slp->len = BMAX(slp->len, pos + 1);
     cur_pos = ++pos;
     cx = ++cur_col;
 
-    if ((pos >= ANSILINELEN) /* || (cx >= t_columns) */ )
+    if ((pos >= ANSILINESIZE) /* || (cx >= t_columns) */ )
         goto new_line;
 
     if (slp->width < cx)
@@ -1064,7 +1121,7 @@ outf(
 {
     const int lstr_len = strcspn(str, "\t");
     outnz(str, lstr_len);
-    prints("%*s%s\x1b[m", d_cols, "", str + BMIN(lstr_len + 1, strlen(str)));
+    prints("%*s%s\x1b[m", d_cols, "", str + str_nlen(str, lstr_len + 1));
 }
 
 #ifdef M3_USE_PFTERM
@@ -1179,7 +1236,7 @@ outsep(
     outs("\x1b[m");
 }
 
-GCC_CHECK_FORMAT(1, 2) void
+GCC_FORMAT(1, 2) void
 prints(const char *fmt, ...)
 {
     va_list args;
@@ -1419,10 +1476,12 @@ zkey(void)                              /* press any key or timeout */
     /* static */ struct timeval tv = {1, 100};
     /* Thor.980806: man page 假設 timeval struct是會改變的 */
 
-    int rset;
+    fd_set rset;
 
-    rset = 1;
-    select(1, (fd_set *) &rset, NULL, NULL, &tv);
+    FD_ZERO(&rset);
+    FD_SET(0, &rset);
+
+    select(1, &rset, NULL, NULL, &tv);
 
 #if 0
     if (select(1, &rset, NULL, NULL, &tv) > 0)
@@ -1562,50 +1621,37 @@ vs_line(
 }
 
 #ifndef M3_USE_PFTERM
+/* For interface compatibility with pfterm */
+void grayoutrect(int y, int yend, int x, int xend, int level)
+{
+    return grayout(y, yend, level);
+}
+
 /* 090127.cache 淡入淡出特效 */
 void
-grayoutrect(int y, int yend, int x, int xend, int level)
+grayout(int y, int end, int level)
 // GRAYOUT_DARK(0): dark, GRAYOUT_BOLD(1): bold, GRAYOUR_NORMAL(2): normal
 {
     static const char *const prefix[3] = { "\x1b[1;30m", "\x1b[1;37m", "\x1b[0;37m" };
-    char buf[ANSILINELEN];
-    int yprev, xprev;
-    getyx(&yprev, &xprev);
+    char buf[ANSILINESIZE];
 
     if (level < 0 || level > 2)
         return;
 
     y = BMAX(y, 0);
-    yend = BMIN(yend, t_lines);
-    x = BMAX(x, 0);
-    xend = TCLAMP(xend, x, t_columns);
 
-    for (int i = y; i < yend; i++)
+    for (int i = y; i < end; i++)
     {
-        int ibegin, iend;
-        move_ansi(i, x);
-        getyx(&SINKVAL(int), &ibegin);
-
-        move_ansi(i, xend);
-        getyx(&SINKVAL(int), &iend);
-
-        if (!(iend - ibegin))
+        if (!vbuf[i].width)
             continue;
 
         vbuf[i].oldlen = vbuf[i].len;
         vbuf[i].len = vbuf[i].width + 7 + 3;
 
-        str_ansi(buf, (char *) vbuf[i].data + ibegin, (iend - ibegin) + 1);
-        sprintf((char *) vbuf[i].data + ibegin, "%s%s\x1b[m", prefix[level], buf);
+        str_ansi(buf, (char *) vbuf[i].data, vbuf[i].width + 1);
+        sprintf((char *) vbuf[i].data, "%s%s\x1b[m", prefix[level], buf);
     }
-    move(yprev, xprev);
     vs_redraw();
-}
-
-void
-grayout(int y, int end, int level)
-{
-    grayoutrect(y, end, 0, t_columns, level);
 }
 #endif //#ifndef M3_USE_PFTERM
 
@@ -1622,7 +1668,7 @@ const int vi_max = VI_MAX;
 unsigned char vi_pool[VI_MAX];
 int vi_size;
 int vi_head;
-int idle;
+time_t idle;
 #ifdef __cplusplus
 }  /* extern "C" */
 #endif
@@ -1636,7 +1682,14 @@ int holdon_fd;                  /* Thor.0727: 跳出chat&talk暫存vio_fd用 */
 #endif
 
 
+#define VKEY_ESC_WAIT_TIME_MS  650  /* time to wait after receiving an initial `ESC` */
+#define VKEY_SEQ_WAIT_TIME_MS  10   /* time to wait for the next character of the escape sequence */
+
+/* `VKEY_ESC_WAIT_TIME_MS` >= `VKEY_SEQ_WAIT_TIME_MS` is expected */
+
 static struct timeval vio_to = {60, 0};
+static struct timeval esc_tv = {0, (long)(VKEY_ESC_WAIT_TIME_MS * 1000)};
+static struct timeval seq_tv = {0, (long)(VKEY_SEQ_WAIT_TIME_MS * 1000)};
 
 
 void
@@ -1646,6 +1699,19 @@ add_io(
 {
     vio_fd = fd;
     vio_to.tv_sec = timeout;
+
+    if (!fd)
+    {
+        /* Reinitialize them here so that `vkey` and `igetch` do not need to reinitialize them every time */
+        esc_tv = LISTLIT(struct timeval){0, (long)(VKEY_ESC_WAIT_TIME_MS * 1000)};
+        seq_tv = LISTLIT(struct timeval){0, (long)(VKEY_SEQ_WAIT_TIME_MS * 1000)};
+        if (vio_to.tv_sec <= esc_tv.tv_sec && vio_to.tv_usec <= esc_tv.tv_usec)
+        {
+            esc_tv = vio_to;
+            if (vio_to.tv_sec <= seq_tv.tv_sec && vio_to.tv_usec <= seq_tv.tv_usec)
+                seq_tv = vio_to;
+        }
+    }
 }
 
 
@@ -1744,17 +1810,17 @@ iac_count(
 }
 
 static int vi_mode = 0;
+static int vi_unget_key = KEY_NONE;
 
 int
 igetch(void)
 {
 
-#define IM_TRAIL        0x01
 #define IM_REPLY        0x02    /* ^R */
 #define IM_TALK         0x04
-#define IM_VKEY_ESC     0x08    /* `vkey()` is processing a escape sequence */
 
-    int cc, fd=0, nfds, rset;
+    fd_set rset;
+    int cc, fd=0, nfds;
     unsigned char *data;
 
     data = vi_pool;
@@ -1762,6 +1828,13 @@ igetch(void)
 
     for (;;)
     {
+        if (vi_unget_key != KEY_NONE)
+        {
+            int key = vi_unget_key;
+            vi_unget_key = KEY_NONE;
+            return key;
+        }
+
         if (vi_size <= vi_head)
         {
             if (nfds == 0)
@@ -1769,8 +1842,7 @@ igetch(void)
                 refresh();
                 fd = (vi_mode & IM_REPLY) ? 0 : vio_fd;
                 nfds = fd + 1;
-                if (fd)
-                    fd = 1 << fd;
+                FD_ZERO(&rset);
             }
 
             for (;;)
@@ -1778,13 +1850,14 @@ igetch(void)
                 struct timeval tv = vio_to;
                 /* Thor.980806: man page 假設 timeval 是會改變的 */
 
-                rset = 1 | fd;
-                cc = select(nfds, (fd_set *) & rset, NULL, NULL, &tv /*&vio_to*/);
+                FD_SET(0, &rset);
+                FD_SET(fd, &rset);
+                cc = select(nfds, &rset, NULL, NULL, &tv /*&vio_to*/);
                                       /* Thor.980806: man page 假設 timeval 是會改變的 */
 
                 if (cc > 0)
                 {
-                    if (fd & rset)
+                    if (fd != 0 && FD_ISSET(fd, &rset))
                         return I_OTHERDATA;
 
                     cc = recv(0, data, VI_MAX, 0);
@@ -1800,7 +1873,7 @@ igetch(void)
                             continue;
 
                         if (cutmp)
-                            time(&cutmp->idle_time);
+                            time32(&cutmp->idle_time);
                         else
                             idle = 0;
 #ifdef  HAVE_SHOWNUMMSG
@@ -1867,34 +1940,375 @@ igetch(void)
             }
         }
 
-        cc = (unsigned char) data[vi_head++];
-        if (vi_mode & IM_TRAIL)
-        {
-            vi_mode ^= IM_TRAIL;
-            if (cc == 0 || cc == 0x0a)
-                continue;
-        }
+        return (unsigned char) data[vi_head++];
+    }
+}
 
-        if (cc == 0x0d)
-        {
-            vi_mode |= IM_TRAIL;
-            return '\n';
-        }
 
-        if (cc == 0x7f)
-        {
-            return Ctrl('H');
-        }
+#define TRAP_ESC  /* `ESC` is invalid (trap) if not at the beginning of the escape sequences */
 
-        if (cc == Ctrl('L') && !(vi_mode & IM_VKEY_ESC))
+static inline int
+char_opt(int ch, int key, int key_timeout)
+{
+    switch (ch)
+    {
+      case I_TIMEOUT:   /* "<sequence_until_ch> END" => `key_timeout` */
+        return key_timeout;
+      case I_OTHERDATA:
+      case I_RESIZETERM:
+        if (key_timeout != KEY_INVALID)
         {
-            vs_redraw();
-            continue;
+            /* Return the interrupted key and put back the interrupting key */
+            vi_unget_key = ch;
+            return key_timeout;
         }
+        return ch; /* Ignore the invalid interrupted key. Just return the interrupting key */
+      default:          /* "<sequence_until_ch> `ch`" => `key` */
+        if (key == KEY_INVALID && key_timeout != KEY_INVALID)
+        {
+            /* Return the interrupted key and put back the interrupting key */
+            vi_unget_key = ch;
+            return key_timeout;
+        }
+        return key; /* Return the uninterrupted key */
+    }
+}
 
-        if ((cc == Ctrl('R') || cc == Meta('R')) && (bbstate & STAT_STARTED)
-                && !(bbstate & STAT_LOCK)       /* lkchu.990513: 鎖定時不可回訊 */
-                && !(vi_mode & (IM_REPLY | IM_VKEY_ESC)))
+#define META_CODE   0x8
+#define CTRL_CODE   0x4
+#define ALT_CODE    0x2
+#define SHIFT_CODE  0x1
+
+static inline int
+mod_key(int mod, int key)   /* xterm-style modifier */
+{
+    if (mod & CTRL_CODE)
+        key = Ctrl(key);
+    if (mod & META_CODE || mod & ALT_CODE)
+        key = Meta(key);
+    if (mod & SHIFT_CODE)
+        key = Shift(key);
+    return key;
+}
+
+static inline int
+char_mod(int ch)    /* rxvt-style modifier character */
+{
+    switch (ch)
+    {
+      case '~':
+        return 0;
+      case '$':
+        return SHIFT_CODE;
+      case '^':
+        return CTRL_CODE;
+      case '@':
+        return CTRL_CODE | SHIFT_CODE;
+      default:
+        return -1;
+    }
+}
+
+enum VkeyMode {
+    VKEYMODE_NORMAL,
+    VKEYMODE_CR,      /* "`'\r'` `ch`" */
+    VKEYMODE_ESC,     /* "<Esc> `ch`" */
+    VKEYMODE_CSI_APP, /* "<Esc> <[O> `ch`" */
+    VKEYMODE_CSI_CH1,  /* "<Esc> [ <1-8> `ch`" */
+    VKEYMODE_CSI_CH2,  /* "<Esc> [ <1-8> <0-9> `ch`" */
+};
+
+GCC_NONNULLS
+int vkey_process(int (*fgetch)(void))
+{
+    const struct timeval vio_to_backup = vio_to;
+    struct timeval seq_tv_dec = seq_tv; /* It decreases to prevent infinity escape sequences */
+    enum VkeyMode mode = VKEYMODE_NORMAL;
+    int mod = 0;
+    int ch;
+    int last = 0;
+    int last2 = 0;
+
+    for (;;)
+    {
+        ch = fgetch();
+        switch (mode)
+        {
+        case VKEYMODE_NORMAL:
+            switch (ch)
+            {
+            case '\r':
+                vio_to = seq_tv_dec;
+                mode = VKEYMODE_CR;
+                break;
+            case KEY_ESC:
+                vio_to = esc_tv;
+                mode = VKEYMODE_ESC;
+                break;
+            case 0x7f:
+                ch = Ctrl('H');
+                goto vkey_end;
+            default:
+                goto vkey_end;          /* Normal Key */
+            }
+            break;
+
+        case VKEYMODE_CR:
+            switch (ch)
+            {
+            case '\0': case '\n':
+                ch = KEY_ENTER;
+                break;
+            default:
+                ch = char_opt(ch, KEY_INVALID, KEY_ENTER);
+            }
+            goto vkey_end;
+
+        case VKEYMODE_ESC:   /* "<Esc> `ch`" */ /* Escape sequence */
+            vio_to = seq_tv_dec;
+            switch (ch)
+            {
+            case '[': case 'O':     /* "<Esc> <[O>" */
+                mode = VKEYMODE_CSI_APP;
+                break;
+            case KEY_ESC: /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
+                seq_tv_dec.tv_usec >>= 1;  /* Prevent infinity "<Esc>..." */
+                mod = META_CODE;       /* Make the key Meta-ed */
+                break;
+            default: /* "<Esc> <Esc> {`ch`|END}" | "<Esc> {`ch`|END}" */
+                ch = char_opt(ch, Meta(ch), mod_key(mod, KEY_ESC));
+                goto vkey_end;
+            }
+            break;
+
+        case VKEYMODE_CSI_APP:   /* "<Esc> <[O> `ch`" */
+            switch (ch)
+            {
+            /* "<Esc> <[O> <A-D>" */ /* Cursor key */
+            case 'A': case 'B': case 'C': case 'D':
+                ch = mod_key(mod, KEY_UP + (ch - 'A'));
+                goto vkey_end;
+
+            /* "<Esc> <[O> <HF>" */ /* Home End (xterm) */
+            case 'H':
+                ch = mod_key(mod, KEY_HOME);
+                goto vkey_end;
+            case 'F':
+                ch = mod_key(mod, KEY_END);
+                goto vkey_end;
+            default:;
+            }
+            if (last == 'O' || mod)   /* "<Esc> O `ch`" | "<Esc> [ 1 ; <2-9> `ch`" | "<Esc> [ 1 ; 1 <0-6> `ch`" */
+            {
+                switch (ch)
+                {
+                /* "<Esc> O <PQRS>" */ /* F1 - F4 */
+                case 'P': case 'Q': case 'R': case 'S':
+                    ch = mod_key(mod, KEY_F1 + (ch - 'P'));
+                    goto vkey_end;
+
+                /* "<Esc> O w" */ /* END (PuTTY-rxvt) */
+                case 'w':
+                    ch = mod_key(mod, KEY_END);
+                    goto vkey_end;
+
+                /* "<Esc> O <a-d>" */ /* Ctrl-ed cursor key (rxvt) */
+                case 'a': case 'b': case 'c': case 'd':
+                    ch = mod_key(mod | CTRL_CODE, KEY_UP + (ch - 'a'));
+                    goto vkey_end;
+
+                default:
+                    if (last == 'O')  /* "<Esc> O {`ch`|END}" */
+                    {
+                        ch = char_opt(ch, KEY_INVALID, Meta('O'));
+                        goto vkey_end;
+                    }
+                }
+            }
+            switch (ch)                  /* "<Esc> [ `ch`" */
+            {
+            /* "<Esc> [ <GIL>" */ /* PgDn PgUp Ins (SCO) */
+            case 'G':
+                ch = mod_key(mod, KEY_PGDN);
+                goto vkey_end;
+            case 'I':
+                ch = mod_key(mod, KEY_PGUP);
+                goto vkey_end;
+            case 'L':
+                ch = mod_key(mod, KEY_INS);
+                goto vkey_end;
+
+            /* "<Esc> [ Z" */ /* Shift-Tab */
+            case 'Z':
+                ch = mod_key(mod, KEY_STAB);
+                goto vkey_end;
+
+            /* "<Esc> [ <a-d>" */ /* Shift-ed cursor key (rxvt) */
+            case 'a': case 'b': case 'c': case 'd':
+                ch = mod_key(mod | SHIFT_CODE, KEY_UP + (ch - 'a'));
+                goto vkey_end;
+
+            default:
+                if (ch >= '1' && ch <= '8')   /* "<Esc> [ <1-8>" */
+                    mode = VKEYMODE_CSI_CH1;
+                else    /* "<Esc> [ {`ch`|END}" */
+                {
+                    ch = char_opt(ch, KEY_INVALID, Meta('['));
+                    goto vkey_end;
+                }
+            }
+            break;
+
+        case VKEYMODE_CSI_CH1:
+        case VKEYMODE_CSI_CH2:
+            if (ch == ';')   /* "<Esc> [ <1-8> ;" | "<Esc> [ <1-8> <0-9> ;" */
+            {
+                int mod_ch = fgetch();      /* "; [END|`ch`]" */
+                if (mod_ch < '1' || mod_ch > '9')
+                {
+                    ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
+                    goto vkey_end;
+                }
+                if (mod_ch == '1')          /* "; <1-9>" */
+                {
+                    mod_ch = fgetch();      /* "; 1 [END|`ch`]" */
+                    if (mod_ch < '0' || mod_ch > '6')
+                    {
+                        ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
+                        goto vkey_end;
+                    }
+                    mod_ch += 10;           /* "; 1 <0-6>" */
+                }
+                mod_ch -= '1';   /* Change to bit number */
+                mod |= mod_ch;
+                if (mode == VKEYMODE_CSI_CH1 && last == '1')  /* "<Esc> [ 1 ; <2-9>" | "<Esc> [ 1 ; 1 <0-6>" */
+                {
+                    /* Recover state to "<Esc> [ `ch`" */
+                    mode = VKEYMODE_CSI_APP;
+                    last = last2;
+                } /* else "<Esc> [ <1-8> <0-9> ; <2-9>" | "<Esc> [ <1-8> <0-9> ; 1 <0-6>" */
+                continue;     /* Get next `ch`; keep current state */
+            }
+            switch (mode)
+            {
+            case VKEYMODE_CSI_CH1:    /* "<Esc> [ <1-8> `ch`" */
+                                            /* Home Ins Del End PgUp PgDn Home(rxvt) End(rxvt) */
+                if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <~$^@>" */
+                {
+                    mod |= char_mod(ch);
+                    if (last <= '6')        /* "<Esc> [ <1-6> <~$^@>" */
+                    {
+                        ch = mod_key(mod, KEY_HOME + (last - '1'));
+                        goto vkey_end;
+                    }
+                    switch (last)           /* "<Esc> [ <78> <~$^@>" */ /* Home End (rxvt) */
+                    {
+                    case '7':
+                        ch = mod_key(mod, KEY_HOME);
+                        goto vkey_end;
+                    case '8':
+                        ch = mod_key(mod, KEY_END);
+                        goto vkey_end;
+                    default:
+                        ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
+                        goto vkey_end;
+                    }
+                }
+                else if (ch >= '0' && ch <= '9')      /* "<Esc> [ <1-8> <0-9>" */
+                    mode = VKEYMODE_CSI_CH2;
+                else
+                {
+                    ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
+                    goto vkey_end;
+                }
+                break;
+
+            case VKEYMODE_CSI_CH2:    /* "<Esc> [ <1-8> <0-9> `ch`" */
+                                            /* F1 - F12 */
+                if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <0-9> <~$^@>" */
+                {
+                    mod |= char_mod(ch);
+                    switch (last2)
+                    {
+                    case '1':               /* "<Esc> [ 1 `last` <~$^@>" */ /* F1 - F8 */
+                        ch = mod_key(mod, KEY_F1 + (last - '1') - (last > '6'));
+                        goto vkey_end;
+                    case '2':               /* "<Esc> [ 2 `last` <~$^@>" */ /* F9 - F12 */
+                        ch = mod_key(mod, KEY_F9 + (last - '0') - (last > '2'));
+                        goto vkey_end;
+                    default:;
+                    }
+                }
+                ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
+                goto vkey_end;
+
+            default: /* Impossible to get here */
+                goto vkey_end;
+            }
+        }
+        last2 = last;
+        last = ch;
+    }
+
+vkey_end:
+    vio_to = vio_to_backup;
+    return ch;
+}
+
+/* Ignore automatic key repeats for DBCS characters send by some clients */
+GCC_NONNULLS
+int vkey_process_no_dbcs_repeat(int (*fgetch)(void))
+{
+    static int unget_key = KEY_NONE;
+    if (unget_key != KEY_NONE)
+    {
+        const int key = unget_key;
+        unget_key = KEY_NONE;
+        return key;
+    }
+
+    const int key = vkey_process(fgetch);
+    switch (key)
+    {
+    case Ctrl('H'): /* Backspace */
+    /* case Ctrl('D'): */ /* KKman 3 handles this as Del */
+    /* However KKman users are probably few in 2020 */
+    case KEY_DEL:
+    case KEY_LEFT:
+    case KEY_RIGHT:
+        {
+            /* Check the upcoming key to see whether the key is repeated */
+            const struct timeval vio_to_backup = vio_to;
+            vio_to = seq_tv;
+            {
+                const int key2 = vkey_process(fgetch);
+                if (key2 != I_TIMEOUT && key2 != KEY_INVALID && key2 != key)
+                    unget_key = key2; /* Not repeated; put it back */
+            }
+            vio_to = vio_to_backup;
+        }
+        break;
+    default:
+        ;
+    }
+    return key;
+}
+
+int
+vkey(void)
+{
+    const int key = vkey_process_no_dbcs_repeat(igetch);
+
+    switch (key)
+    {
+    case Ctrl('L'):
+        vs_redraw();
+        break;
+    case Ctrl('R'):
+    case Meta('R'):
+        if ((bbstate & STAT_STARTED)
+            && !(bbstate & STAT_LOCK)       /* lkchu.990513: 鎖定時不可回訊 */
+            && !(vi_mode & IM_REPLY))
         {
             /*
              * Thor.980307: 想不到什麼好方法, 在^R時禁止talk, 否則會因,
@@ -1912,11 +2326,13 @@ igetch(void)
              */
             signal(SIGUSR1, talk_rqst_signal);
 
-            continue;
+            return KEY_INVALID; /* Consume the key */
         }
-
-        return (cc);
+        break;
+    default:
+        ;
     }
+    return key;
 }
 
 
@@ -1972,7 +2388,7 @@ ask_board(
     if (vget(1, 0, "請輸入看板名稱 (按 SPACE 或 TAB 自動搜尋)：",
             board, IDLEN + 1, GET_BRD | perm))
     {
-        if (!str_cmp(board, currboard))
+        if (!str_casecmp(board, currboard))
             *board = 0;         /* 跟目前的看板一樣 */
         return xbrd;
     }
@@ -2012,7 +2428,7 @@ vget_match(
             {
                 data = head->brdname;
 
-                if (str_ncmp(prefix, data, len))
+                if (str_ncasecmp(prefix, data, len))
                     continue;
 
                 xbrd = head;
@@ -2087,8 +2503,8 @@ vget_match(
                 if (*data <= ' ' || *data == '.')
                     continue;
 
-//              if (str_ncmp(prefix, data, len))
-                if (len && str_ncmp(prefix, data, len))
+//              if (str_ncasecmp(prefix, data, len))
+                if (len && str_ncasecmp(prefix, data, len))
                     continue;
 
                 match++;
@@ -2128,7 +2544,7 @@ vget_match(
         {
             data = list->data;
 
-            if (str_ncmp(prefix, data, len))
+            if (str_ncasecmp(prefix, data, len))
                 continue;
 
             if ((op & MATCH_END) && !data[len])
@@ -2187,15 +2603,10 @@ int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo
     bool dirty, key_done;
 
     /* Adjust flags */
-    if (!(echo & VGET_STRICT_DOECHO))
-    {
-        if (echo & VGET_IMPLY_DOECHO)
-            echo |= DOECHO;
-    }
     if (echo & VGET_FORCE_DOECHO)
-        echo |= DOECHO;
-    if ((echo & DOECHO) && (echo & VGET_STEALTH_NOECHO))
-        echo ^= VGET_STEALTH_NOECHO;
+        echo &= ~HIDEECHO;
+    if (!(echo & HIDEECHO))
+        echo &= ~VGET_STEALTH_NOECHO;
 
     max--;
 
@@ -2231,12 +2642,14 @@ vget_redraw:
         }
         if (len && !(echo & VGET_STEALTH_NOECHO))
         {
-            if (echo & DOECHO)
-                outs(data);
-            else
+            if (echo & HIDEECHO)
             {
                 for (int ch = 0; ch < len; ch++)
                     outc('*');
+            }
+            else
+            {
+                outs(data);
             }
         }
     }
@@ -2288,6 +2701,11 @@ vget_redraw:
         if (ch == '\n')
         {
             data[len] = '\0';
+
+            /* IID.2020-11-17: Make sure the input field is truncated at the input end */
+            if (!(echo & VGET_STEALTH_NOECHO))
+                move(y, x + len);
+
             if ((echo & (GET_BRD | GET_LIST)) && len > 0)
             /* Thor.990204:要求輸入任一字才代表自動 match, 否則算cancel */
             {
@@ -2337,6 +2755,11 @@ vget_redraw:
         if (ch == Ctrl('C') && (echo & VGET_BREAKABLE))
         {
             data[0] = '\0';
+
+            /* IID.2020-11-17: Make sure the input field is truncated at the input end */
+            if (!(echo & VGET_STEALTH_NOECHO))
+                move(y, x + len);
+
             outc('\n');
 #ifdef M3_USE_PFTERM
             if (!(echo & VGET_STEALTH_NOECHO))
@@ -2376,7 +2799,7 @@ vget_redraw:
                 int next = (unsigned char)data[i];
 
                 if (!(echo & VGET_STEALTH_NOECHO))
-                    outc((echo & DOECHO) ? ch : '*');
+                    outc((echo & HIDEECHO) ? '*' : ch);
 
                 data[i] = ch;
                 ch = next;
@@ -2396,14 +2819,14 @@ vget_redraw:
         /* ----------------------------------------------- */
 
 #if 0
-        if ((!(echo & DOECHO) || mfunc) && ch != Ctrl('H'))
+        if (((echo & HIDEECHO) || mfunc) && ch != Ctrl('H'))
         {
             bell();
             continue;
         }
 #endif
 
-        if (!(echo & DOECHO) && ch != Ctrl('H'))
+        if ((echo & HIDEECHO) && ch != Ctrl('H'))
         {
             bell();
             continue;
@@ -2416,60 +2839,77 @@ vget_redraw:
 #endif
         switch (ch)
         {
-        case KEY_DEL:
-        case Ctrl('D'):
-
-            if (col >= len)
-            {
-                bell();
-                break;
-            }
-
-            col++;
-            // Falls through
-
         case Ctrl('H'):
-
             if (!col)
             {
                 bell();
                 break;
             }
 
+            col--;
+            if (col && IS_DBCS_TRAIL_N(data, col, len))
+                col--;
+
+            /* `col >= len` should hold; skip the check */
+            if (0)
+            {
+                // Falls through
+
+        case KEY_DEL:
+        case Ctrl('D'):
+                if (col >= len)
+                {
+                    bell();
+                    break;
+                }
+            }
+
             /* ----------------------------------------------- */
             /* remove data and display it                      */
             /* ----------------------------------------------- */
 
-            col--;
-            len--;
-            dirty = true;
-
-            if (!(echo & VGET_STEALTH_NOECHO))
-                move(y, x + col);
-
-            for (int i = col+1; i <= len; i++)
             {
-                data[i - 1] = ch = (unsigned char) data[i];
+                const int del_len = (col + 1 < len && IS_DBCS_LEAD_N(data, col, len)) ? 2 : 1;
+                len -= del_len;
+                dirty = true;
 
                 if (!(echo & VGET_STEALTH_NOECHO))
-                    outc((echo & DOECHO) ? ch : '*');
+                    move(y, x + col);
+
+                for (int i = col; i < len; i++)
+                {
+                    data[i] = ch = (unsigned char) data[i + del_len];
+
+                    if (!(echo & VGET_STEALTH_NOECHO))
+                        outc((echo & NOECHO) ? '*' : ch);
+                }
+                for (int i = 0; i < del_len; i++)
+                {
+                    data[len + i] = '\0';
+                    if (!(echo & VGET_STEALTH_NOECHO))
+                        outc(' ');
+                }
             }
-            if (!(echo & VGET_STEALTH_NOECHO))
-                outc(' ');
 
             break;
 
         case KEY_LEFT:
         case Ctrl('B'):
             if (col)
+            {
                 --col;
+                if (col && IS_DBCS_TRAIL_N(data, col, len))
+                    --col;
+            }
             else
                 bell();
             break;
 
         case KEY_RIGHT:
         case Ctrl('F'):
-            if (col < len)
+            if (col + 1 < len && IS_DBCS_LEAD_N(data, col, len))
+                col += 2;
+            else if (col < len)
                 ++col;
             else
                 bell();
@@ -2521,7 +2961,7 @@ vget_redraw:
             continue;
 
         /* No input history for `NUMECHO` or hidden inputs */
-        if (!(echo & DOECHO) || (echo & NUMECHO))
+        if ((echo & (HIDEECHO | NUMECHO)))
         {
             bell();
             continue;
@@ -2557,7 +2997,7 @@ vget_redraw:
                 }
                 if (dirty && len > 2)
                 {
-                    str_ncpy(lastcmd[line_prev], data, len+1);  /* Save changes */
+                    str_sncpy(lastcmd[line_prev], data, sizeof(lastcmd[line_prev]), len);  /* Save changes */
                     dirty = 0;
                 }
                 move(y, x);
@@ -2592,7 +3032,7 @@ vget_redraw:
 #endif
     }
 
-    if (len > 2 && (echo & DOECHO) && !(echo & NUMECHO))
+    if (len > 2 && !(echo & (HIDEECHO | NUMECHO)))
     {
         /* Move current history entry to the front */
         for (int ln = line; ln; ln--)
@@ -2603,7 +3043,7 @@ vget_redraw:
     outc('\n');
 
     if (echo & LCECHO)
-        str_lowest(data, data);
+        str_lower_dbcs(data, data);
     ch = (unsigned char) data[0];
 
 #ifdef M3_USE_PFTERM
@@ -2622,301 +3062,4 @@ vans(
     char ans[3];
 
     return vget(B_LINES_REF, 0, prompt, ans, sizeof(ans), LCECHO);
-}
-
-
-#undef  TRAP_ESC  /* `ESC` is invalid (trap) if not at the beginning of the escape sequences */
-
-#define VKEY_ESC_WAIT_TIME_MS  650  /* time to wait after receiving an initial `ESC` */
-#define VKEY_SEQ_WAIT_TIME_MS  10   /* time to wait for the next character of the escape sequence */
-
-static inline int
-char_opt(int ch, int key, int key_timeout)
-{
-    switch (ch)
-    {
-      case I_TIMEOUT:   /* "<sequence_until_ch> END" => `key_last` */
-        return key_timeout;
-      case I_OTHERDATA:
-        return I_OTHERDATA;
-      case I_RESIZETERM:
-        return I_RESIZETERM;
-      default:          /* "<sequence_until_ch> `ch`" => `key` */
-        return key;
-    }
-}
-
-#define META_CODE   0x8
-#define CTRL_CODE   0x4
-#define ALT_CODE    0x2
-#define SHIFT_CODE  0x1
-
-static inline int
-mod_key(int mod, int key)   /* xterm-style modifier */
-{
-    if (mod & CTRL_CODE)
-        key = Ctrl(key);
-    if (mod & META_CODE || mod & ALT_CODE)
-        key = Meta(key);
-    if (mod & SHIFT_CODE)
-        key = Shift(key);
-    return key;
-}
-
-static inline int
-char_mod(int ch)    /* rxvt-style modifier character */
-{
-    switch (ch)
-    {
-      case '~':
-        return 0;
-      case '$':
-        return SHIFT_CODE;
-      case '^':
-        return CTRL_CODE;
-      case '@':
-        return CTRL_CODE | SHIFT_CODE;
-      default:
-        return -1;
-    }
-}
-
-int
-vkey(void)
-{
-    const struct timeval vio_to_backup = vio_to;
-    struct timeval esc_tv = {0, (long)(VKEY_ESC_WAIT_TIME_MS * 1000)};
-    struct timeval seq_tv = {0, (long)(VKEY_SEQ_WAIT_TIME_MS * 1000)};
-    int mode, mod = 0;
-    int ch, last, last2;
-
-    if (vio_to.tv_sec <= esc_tv.tv_sec)
-        esc_tv = vio_to;
-    if (vio_to.tv_sec <= seq_tv.tv_sec)
-        seq_tv = vio_to;
-
-    mode = last = last2 = 0;
-    for (;;)
-    {
-        ch = igetch();
-#ifdef  TRAP_ESC
-        if (mode == 0)
-        {
-            if (ch == KEY_ESC)
-            {
-                vi_mode |= IM_VKEY_ESC;
-                vio_to = esc_tv;
-                mode = 1;
-            }
-            else
-                goto vkey_end;          /* Normal Key */
-        }
-#else
-        if (ch == KEY_ESC)
-        {
-            if (mode == 1)    /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
-                mod = META_CODE;    /* Make the key Meta-ed */
-            else
-                mod = 0;            /* Reset modifiers */
-
-            if (mode == 0)
-            {
-                vi_mode |= IM_VKEY_ESC;
-                vio_to = esc_tv;
-            }
-            else
-            {
-                vio_to = seq_tv;
-                seq_tv.tv_usec >>= 1;  /* Prevent infinity escape sequences */
-            }
-
-            mode = 1;
-        }
-        else if (mode == 0)             /* Normal Key */
-        {
-            goto vkey_end;
-        }
-#endif
-        else if (mode == 1)   /* "<Esc> `ch`" */
-        {                               /* Escape sequence */
-            vio_to = seq_tv;
-            if (ch == '[' || ch == 'O')       /* "<Esc> <[O>" */
-                mode = 2;
-#ifdef  TRAP_ESC
-            else if (ch == KEY_ESC) /* "<Esc> <Esc>" */ /* <Esc> + possible special keys */
-            {
-                seq_tv.tv_usec >>= 1;  /* Prevent infinity "<Esc>..." */
-                mod = META_CODE;       /* Make the key Meta-ed */
-            }
-#endif
-            else  /* "<Esc> <Esc> {`ch`|END}" | "<Esc> {`ch`|END}" */
-            {
-                ch = char_opt(ch, Meta(ch), mod_key(mod, KEY_ESC));
-                goto vkey_end;
-            }
-        }
-        else if (mode == 2)   /* "<Esc> <[O> `ch`" */
-        {
-            switch (ch)
-            {
-              /* "<Esc> <[O> <A-D>" */ /* Cursor key */
-              case 'A': case 'B': case 'C': case 'D':
-                ch = mod_key(mod, KEY_UP + (ch - 'A'));
-                goto vkey_end;
-
-              /* "<Esc> <[O> <HF>" */ /* Home End (xterm) */
-              case 'H':
-                ch = mod_key(mod, KEY_HOME);
-                goto vkey_end;
-              case 'F':
-                ch = mod_key(mod, KEY_END);
-                goto vkey_end;
-              default:;
-            }
-            if (last == 'O' || mod)   /* "<Esc> O `ch`" | "<Esc> [ 1 ; <2-9> `ch`" | "<Esc> [ 1 ; 1 <0-6> `ch`" */
-            {
-                switch (ch)
-                {
-                  /* "<Esc> O <PQRS>" */ /* F1 - F4 */
-                  case 'P': case 'Q': case 'R': case 'S':
-                    ch = mod_key(mod, KEY_F1 + (ch - 'P'));
-                    goto vkey_end;
-
-                  /* "<Esc> O w" */ /* END (PuTTY-rxvt) */
-                  case 'w':
-                    ch = mod_key(mod, KEY_END);
-                    goto vkey_end;
-
-                  /* "<Esc> O <a-d>" */ /* Ctrl-ed cursor key (rxvt) */
-                  case 'a': case 'b': case 'c': case 'd':
-                    ch = mod_key(mod | CTRL_CODE, KEY_UP + (ch - 'a'));
-                    goto vkey_end;
-
-                  default:
-                    if (last == 'O')  /* "<Esc> O {`ch`|END}" */
-                    {
-                        ch = char_opt(ch, KEY_INVALID, Meta('O'));
-                        goto vkey_end;
-                    }
-                }
-            }
-            switch (ch)                  /* "<Esc> [ `ch`" */
-            {
-              /* "<Esc> [ <GIL>" */ /* PgDn PgUp Ins (SCO) */
-              case 'G':
-                ch = mod_key(mod, KEY_PGDN);
-                goto vkey_end;
-              case 'I':
-                ch = mod_key(mod, KEY_PGUP);
-                goto vkey_end;
-              case 'L':
-                ch = mod_key(mod, KEY_INS);
-                goto vkey_end;
-
-              /* "<Esc> [ Z" */ /* Shift-Tab */
-              case 'Z':
-                ch = mod_key(mod, KEY_STAB);
-                goto vkey_end;
-
-              /* "<Esc> [ <a-d>" */ /* Shift-ed cursor key (rxvt) */
-              case 'a': case 'b': case 'c': case 'd':
-                ch = mod_key(mod | SHIFT_CODE, KEY_UP + (ch - 'a'));
-                goto vkey_end;
-
-              default:
-                if (ch >= '1' && ch <= '8')   /* "<Esc> [ <1-8>" */
-                    mode = 3;
-                else    /* "<Esc> [ {`ch`|END}" */
-                {
-                    ch = char_opt(ch, KEY_INVALID, Meta('['));
-                    goto vkey_end;
-                }
-            }
-        }
-        else if (ch == ';')   /* "<Esc> [ <1-8> ;" | "<Esc> [ <1-8> <0-9> ;" */
-        {
-            int mod_ch = igetch();      /* "; [END|`ch`]" */
-            if (mod_ch < '1' || mod_ch > '9')
-            {
-                ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
-                goto vkey_end;
-            }
-            if (mod_ch == '1')          /* "; <1-9>" */
-            {
-                mod_ch = igetch();      /* "; 1 [END|`ch`]" */
-                if (mod_ch < '0' || mod_ch > '6')
-                {
-                    ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
-                    goto vkey_end;
-                }
-                mod_ch += 10;           /* "; 1 <0-6>" */
-            }
-            mod_ch -= '1';   /* Change to bit number */
-            mod |= mod_ch;
-            if (mode == 3 && last == '1')  /* "<Esc> [ 1 ; <2-9>" | "<Esc> [ 1 ; 1 <0-6>" */
-            {
-                /* Recover state to "<Esc> [ `ch`" */
-                mode = 2;
-                last = last2;
-            } /* else "<Esc> [ <1-8> <0-9> ; <2-9>" | "<Esc> [ <1-8> <0-9> ; 1 <0-6>" */
-            continue;     /* Get next `ch`; keep current state */
-        }
-        else if (mode == 3)   /* "<Esc> [ <1-8> `ch`" */
-        {                               /* Home Ins Del End PgUp PgDn Home(rxvt) End(rxvt) */
-            if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <~$^@>" */
-            {
-                mod |= char_mod(ch);
-                if (last <= '6')        /* "<Esc> [ <1-6> <~$^@>" */
-                {
-                    ch = mod_key(mod, KEY_HOME + (last - '1'));
-                    goto vkey_end;
-                }
-                switch (last)           /* "<Esc> [ <78> <~$^@>" */ /* Home End (rxvt) */
-                {
-                  case '7':
-                    ch = mod_key(mod, KEY_HOME);
-                    goto vkey_end;
-                  case '8':
-                    ch = mod_key(mod, KEY_END);
-                    goto vkey_end;
-                  default:
-                    ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
-                    goto vkey_end;
-                }
-            }
-            else if (ch >= '0' && ch <= '9')      /* "<Esc> [ <1-8> <0-9>" */
-                mode = 4;
-            else
-            {
-                ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
-                goto vkey_end;
-            }
-        }
-        else if (mode == 4)   /* "<Esc> [ <1-8> <0-9> `ch`" */
-        {                               /* F1 - F12 */
-            if (char_mod(ch) != -1)     /* "<Esc> [ <1-8> <0-9> <~$^@>" */
-            {
-                mod |= char_mod(ch);
-                switch (last2)
-                {
-                  case '1':             /* "<Esc> [ 1 `last` <~$^@>" */ /* F1 - F8 */
-                    ch = mod_key(mod, KEY_F1 + (last - '1') - (last > '6'));
-                    goto vkey_end;
-                  case '2':             /* "<Esc> [ 2 `last` <~$^@>" */ /* F9 - F12 */
-                    ch = mod_key(mod, KEY_F9 + (last - '0') - (last > '2'));
-                    goto vkey_end;
-                  default:;
-                }
-            }
-            ch = char_opt(ch, KEY_INVALID, KEY_INVALID);
-            goto vkey_end;
-        }
-        last2 = last;
-        last = ch;
-    }
-
-vkey_end:
-    vi_mode &= ~IM_VKEY_ESC;
-    vio_to = vio_to_backup;
-    return ch;
 }

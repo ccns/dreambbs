@@ -1,7 +1,7 @@
 # ------------------------------------------------------- #
 #  CMakeLists.txt   ( NCKU CCNS WindTop-DreamBBS 3.0 )    #
 # ------------------------------------------------------- #
-#  Author: 37586669+IepIweidieng@users.noreply.github.com #
+#  Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>     #
 #  Target: CMakeLists for ALL                             #
 #  Create: 2019/11/30                                     #
 # ------------------------------------------------------- #
@@ -35,8 +35,8 @@ else()
     set(USE_CXX ON CACHE BOOL "Compile C code using C++ mode")
 endif()
 
-add_compile_options(-ggdb3 -O0 -pipe -fomit-frame-pointer)
-add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings)
+add_compile_options(-ggdb3 -O0 -pipe)
+add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format -Werror=incompatible-pointer-types -Werror=int-conversion -Werror=pointer-to-int-cast)
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/include)
 
 link_libraries(-L${PROJECT_BINARY_DIR}/lib dao crypt)
@@ -143,7 +143,7 @@ LOADVALUE(BBSHOME "${BBSUSR_HOME}" ${BBSCONF_ORIGIN} BBSHOME)
 
 ## Numeric local timezone
 execute_process(
-    COMMAND date %z
+    COMMAND date +%z
     OUTPUT_VARIABLE BBSUTCZONE_DEFAULT
     OUTPUT_STRIP_TRAILING_WHITESPACE
 )
@@ -174,10 +174,23 @@ endif()
 
 ## Other compile options and link options settings
 
+# Prevent `-Wformat-overflow=` warnings from halting the compilation
+set(W_NO_ERROR_FORMAT_OVERFLOW "-Wno-format-overflow -Wno-error=format-overflow -Wformat-overflow")
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${W_NO_ERROR_FORMAT_OVERFLOW}")
+endif()
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${W_NO_ERROR_FORMAT_OVERFLOW}")
+endif()
+
+# Prevent `-Wincompatible-pointer-types-discards-qualifiers` warnings from halting the compilation
+set(W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS "-Wno-incompatible-pointer-types-discards-qualifiers -Wno-error=incompatible-pointer-types-discards-qualifiers -Wincompatible-pointer-types-discards-qualifiers")
 if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS}")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-invalid-source-encoding")
 endif()
 if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-invalid-source-encoding")
 endif()
 
@@ -197,31 +210,16 @@ if(CC_HAS_F_COLOR_DIAGNOSTICS)
     add_compile_options(-fcolor-diagnostics)
 endif()
 
+# Architecture information
+execute_process(
+    COMMAND ${CMAKE_C_COMPILER} -dumpmachine
+    OUTPUT_VARIABLE MULTIARCH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+string(REGEX REPLACE "^(.*)-(.*)-(.*)-(.*)$" \\1-\\3-\\4 MULTIARCH ${MULTIARCH})
+
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    add_compile_options(-m32)
-    link_libraries(-m32)
-    set(_FILE_OFFSET_BITS 64)
-
-    # Set up the search paths for `pkg-config`
-    execute_process(
-        COMMAND ${CMAKE_C_COMPILER} -dumpmachine
-        OUTPUT_VARIABLE MULTIARCH_NATIVE
-        OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    string(REGEX REPLACE "^(.*)-(.*)-(.*)-(.*)$" \\1-\\3-\\4 MULTIARCH_NATIVE ${MULTIARCH_NATIVE})
-    string(REPLACE x86_64 i386 MULTIARCH ${MULTIARCH_NATIVE})
-    string(REGEX REPLACE "^(.*)x86_64(.*)$" "\\1i486\\2;\\1i686\\2" TRIPLETS ${MULTIARCH_NATIVE})  # Replace into a list with 2 items
-
-    set(PKG_CONFIG_LIBDIR_LOCAL /usr/local/lib/${MULTIARCH}/pkgconfig)
-    foreach(triplet IN LISTS TRIPLETS)
-        list(APPEND PKG_CONFIG_LIBDIR_LOCAL /usr/local/${triplet}/lib/pkgconfig)
-    endforeach(triplet)
-    list(APPEND PKG_CONFIG_LIBDIR_LOCAL /usr/local/share/pkgconfig)
-
-    string(REPLACE local/ "" PKG_CONFIG_LIBDIR_NONLOCAL "${PKG_CONFIG_LIBDIR_LOCAL}")
-    set(PKG_CONFIG_LIBDIR ${PKG_CONFIG_LIBDIR_LOCAL} ${PKG_CONFIG_LIBDIR_NONLOCAL})
-    string(REPLACE ";" : PKG_CONFIG_LIBDIR "${PKG_CONFIG_LIBDIR}")  # Replace the list delimiter
-    set(ENV{PKG_CONFIG_LIBDIR} \"${PKG_CONFIG_LIBDIR}\")  # Quote it
+    add_compile_options(-fPIC)
 endif()
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -241,7 +239,8 @@ if(USE_BBSLUA)
     if(USE_LUAJIT)
         pkg_search_module(LUA REQUIRED luajit)
     else()
-        pkg_search_module(LUA REQUIRED lua-5.1 lua5.1)
+        # Prevent LuaJIT from being chosen
+        pkg_search_module(LUA REQUIRED lua-5.1 lua5.1 luajit<-1)
     endif()
 endif()
 
@@ -285,6 +284,7 @@ add_subdirectory(util)
 add_subdirectory(innbbsd)
 add_subdirectory(so)
 add_subdirectory(scripts)
+add_subdirectory(sample)
 
 enable_testing()
 add_subdirectory(test)

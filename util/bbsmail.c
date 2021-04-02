@@ -46,12 +46,6 @@ mailog(
 static UCACHE *ushm;
 
 
-static inline void
-init_ushm(void)
-{
-    ushm = (UCACHE *) shm_new(UTMPSHM_KEY, sizeof(UCACHE));
-}
-
 #if 0  // Unused
 static inline void
 my_biff(char *userid)
@@ -61,10 +55,10 @@ my_biff(char *userid)
     // XXX 這個 userid 已經轉成小寫了嗎? 好像是
 
     // XXX 沒效率? 唉
-    ushm_init();
+    ushm_init(&ushm);
 
     utmp = ushm->uslot;
-    uceil = (UTMP *) ((char *) uentp + ushm->offset);
+    uceil = uentp + ushm->ubackidx;
     do
     {
         if (!strcasecmp(utmp->userid, userid))
@@ -85,18 +79,18 @@ bbs_biff(
     const char *userid)
 {
     UTMP *utmp, *uceil;
-    unsigned int offset;
+    utmp_uidx_t idx;
 
-    offset = ushm->offset;
-    if (offset > (MAXACTIVE - 1) * sizeof(UTMP))        /* Thor.980805: 不然call不到 */
-        offset = (MAXACTIVE - 1) * sizeof(UTMP);
+    idx = ushm->ubackidx;
+    if (idx > MAXACTIVE - 1)        /* Thor.980805: 不然call不到 */
+        idx = MAXACTIVE - 1;
 
     utmp = ushm->uslot;
-    uceil = (UTMP *) ((char *) utmp + offset);
+    uceil = utmp + idx;
 
     do
     {
-        if (!str_cmp(utmp->userid, userid))
+        if (!str_casecmp(utmp->userid, userid))
             utmp->ufo |= UFO_BIFF;
     } while (++utmp <= uceil);
 }
@@ -172,7 +166,7 @@ mail2bbs(
     while (fgets(buf, sizeof(buf), stdin))
     {
     start:
-        if (!memcmp(buf, "From", 4))
+        if (!strncmp(buf, "From", 4))
         {
             if ((str = strrchr(buf, '<')) && (ptr = strrchr(str, '>')))
             {
@@ -197,7 +191,7 @@ mail2bbs(
                     if ((right = strrchr(++ptr, '"')))
                         *right = '\0';
 
-                    str_decode(ptr);
+                    mmdecode_str(ptr);
                     sprintf(sender, "%s (%s)", str, ptr);
                     strcpy(nick, ptr);
                     strcpy(owner, str);
@@ -236,10 +230,10 @@ mail2bbs(
 #endif
         }
 
-        else if (!memcmp(buf, "Subject: ", 9))
+        else if (!strncmp(buf, "Subject: ", 9))
         {
             str_ansi(title, buf + 9, sizeof(title));
-            /* str_decode(title); */
+            /* mmdecode_str(title); */
             /* LHD.051106: 若可能經 RFC 2047 QP encode 則有可能多行 subject */
             if (strstr(buf + 9, "=?"))
             {
@@ -249,14 +243,14 @@ mail2bbs(
                         str_ansi(title + strlen(title), strstr(buf, "=?"), sizeof(title));
                     else
                     {
-                        str_decode(title);
+                        mmdecode_str(title);
                         goto start;
                     }
                 }
             }
         }
 
-        else if (!memcmp(buf, "Content-Type: ", 14))
+        else if (!strncmp(buf, "Content-Type: ", 14))
         {
             str = buf + 14;
 
@@ -264,7 +258,7 @@ mail2bbs(
             /* 一般 BBS 使用者通常只寄文字郵件或是從其他 BBS 站寄文章到自己的信箱
                而廣告信件通常是 html 格式或是裡面有夾帶其他檔案
                利用郵件的檔頭有 Content-Type: 的屬性把除了 text/plain (文字郵件) 的信件都擋下來 */
-            if (*str != '\0' && str_ncmp(str, "text/plain", 10))
+            if (*str != '\0' && str_ncasecmp(str, "text/plain", 10))
             {
                 sprintf(buf, "ANTI-HTML [%d] %s => %s", getppid(), sender, userid);
                 mailog(buf);
@@ -276,7 +270,7 @@ mail2bbs(
             {
                 char charset[32];
                 mm_getcharset(str, charset, sizeof(charset));
-                if (str_cmp(charset, "big5") && str_cmp(charset, "us-ascii"))
+                if (str_casecmp(charset, "big5") && str_casecmp(charset, "us-ascii"))
                 {
                     sprintf(buf, "ANTI-NONMYCHARSET [%d] %s => %s", getppid(), sender, userid);
                     mailog(buf);
@@ -286,7 +280,7 @@ mail2bbs(
 #endif
         }
 
-        else if (!memcmp(buf, "Content-Transfer-Encoding: ", 27))
+        else if (!strncmp(buf, "Content-Transfer-Encoding: ", 27))
         {
             mm_getencode(buf + 27, &decode);
         }
@@ -302,18 +296,18 @@ mail2bbs(
     fd = hdr_stamp(folder, 0, &hdr, buf);
     hdr.xmode = MAIL_INCOME;
 
-    str_ncpy(hdr.owner, owner, sizeof(hdr.owner));
-    str_ncpy(hdr.nick, nick, sizeof(hdr.nick));
+    str_scpy(hdr.owner, owner, sizeof(hdr.owner));
+    str_scpy(hdr.nick, nick, sizeof(hdr.nick));
     if (!title[0])
         sprintf(title, "來自 %.64s", sender);
-    str_ncpy(hdr.title, title, sizeof(hdr.title));
+    str_scpy(hdr.title, title, sizeof(hdr.title));
 
     /* copy the stdin to the specified file */
 
     fp = fdopen(fd, "w");
 
     fprintf(fp, "作者: %s\n標題: %s\n時間: %s\n\n",
-        sender, title, Btime(&hdr.chrono));
+        sender, title, Btime_any(&hdr.chrono));
 
     while (fgets(buf, sizeof(buf), stdin))
     {
@@ -377,7 +371,8 @@ main(
     signal(SIGSEGV, sig_catch);
     signal(SIGPIPE, sig_catch);
 
-    init_ushm();
+    shm_logger_init(NULL);
+    ushm_init(&ushm);
     str_lower(buf, argv[1]);    /* 把 userid 換成小寫 */
 
     if (mail2bbs(buf))

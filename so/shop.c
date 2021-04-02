@@ -18,8 +18,7 @@ static int cloak_temp(void)
     char c_time[25], c_buf[128];
 
     now = time(0);
-    strncpy(c_time, ctime(&now), 24);
-    c_time[24] = '\0';
+    str_scpy(c_time, ctime(&now), sizeof(c_time));
     ACCT acct;
     int money;
 
@@ -74,8 +73,7 @@ static int hidefrom_temp(void)
     char c_time[25], c_buf[128];
 
     now = time(0);
-    strncpy(c_time, ctime(&now), 24);
-    c_time[24] = '\0';
+    str_scpy(c_time, ctime(&now), sizeof(c_time));
     ACCT acct;
     int money;
 

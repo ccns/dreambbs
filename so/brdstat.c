@@ -12,30 +12,31 @@
 
 #ifdef  HAVE_COUNT_BOARD
 
-static void
+static int
 bstat_item(
-int num,
-const BSTAT *bstat)
+XO *xo,
+int pos)
 {
+    const BSTAT *const bstat = (const BSTAT *) xo_pool_base + pos;
+    const int num = pos + 1;
     prints("%6d   %-8.8s    %6d    %6d    %6d    %6d\n", num,
            bstat->type, bstat->n_reads, bstat->n_posts, bstat->n_news, bstat->n_bans);
+    return XO_NONE;
 }
 
 static int
 bstat_cur(
-XO *xo)
+XO *xo,
+int pos)
 {
-    const BSTAT *const bstat = (const BSTAT *) xo_pool_base + xo->pos;
-    move(3 + xo->pos - xo->top, 0);
-    bstat_item(xo->pos + 1, bstat);
-    return XO_NONE;
+    move(3 + pos - xo->top, 0);
+    return bstat_item(xo, pos);
 }
 
 static int
 bstat_body(
 XO *xo)
 {
-    const BSTAT *bstat;
     int num, max, tail;
 
     move(3, 0);
@@ -43,18 +44,17 @@ XO *xo)
     max = xo->max;
     if (max <= 0)
     {
-        vmsg("無任何統計資料");
-        return XO_QUIT;
+        outs("\n《看板使用資訊》無任何統計資料\n");
+        return XO_NONE;
     }
 
     num = xo->top;
-    bstat = (const BSTAT *) xo_pool_base + num;
     tail = num + XO_TALL;
     max = BMIN(max, tail);
 
     do
     {
-        bstat_item(++num, bstat++);
+        bstat_item(xo, num++);
     }
     while (num < max);
 
@@ -162,7 +162,7 @@ KeyFuncList bstat_cb =
     {XO_LOAD, {bstat_load}},
     {XO_HEAD, {bstat_head}},
     {XO_BODY, {bstat_body}},
-    {XO_CUR, {bstat_cur}},
+    {XO_CUR | XO_POSF, {.posf = bstat_cur}},
 
     {'s', {xo_cb_init}},
     {'S', {bstat_stat}},
@@ -173,7 +173,8 @@ KeyFuncList bstat_cb =
 
 int
 main_bstat(
-XO *xo)
+XO *xo,
+int pos)
 {
     DL_HOLD;
     XO *xx, last;
@@ -183,7 +184,7 @@ XO *xo)
     int num, chn;
 
 
-    num = xo->pos;
+    num = pos;
     chp = (short *) xo->xyz + num;
     chn = *chp;
     if (chn >= 0)

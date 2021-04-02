@@ -10,7 +10,7 @@
 
 #define XO_STACK        (5)
 #define MAX_LEVEL       (20)
-static int xo_stack_level;
+int xo_stack_level;
 static int xo_user_level;
 
 #ifdef  HAVE_FAVORITE
@@ -469,7 +469,7 @@ xo_tag(
         return XO_NONE;
 
     head = (const HDR *) xo_pool_base + xo->pos;
-    if (op == Ctrl('A'))
+    if (op == Ctrl('A') || op == Meta('A'))
     {
         token = head->owner;
         op = 0;
@@ -551,7 +551,7 @@ xo_copy(
     if (!cuser.userlevel)
         return XO_NONE;
 
-    /* lkchu.990428: mat patch 當看版尚末選定，修正copy會斷線的問題 */
+    /* lkchu.990428: mat patch 當看版尚未選定，修正copy會斷線的問題 */
     if (bbsmode == M_READA)
     {
         /* lkchu.981205: 借用 tag 存放看版屬性 */
@@ -627,7 +627,7 @@ rcpt_local(
         if (cc == '@')
         {
             /* Thor.990125: MYHOSTNAME 統一放入 str_host */
-            if (str_cmp(str, str_host))
+            if (str_casecmp(str, str_host))
                 return 0;
             str[-1] = '\0';
             if (str = strchr(addr, '.'))
@@ -672,7 +672,8 @@ deny_forward(void)
 
 static int
 xo_forward(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     static char rcpt[64];
     char fpath[128], folder[80], *dir, *title, *userid, ckforward[80];
@@ -685,7 +686,7 @@ xo_forward(
     if (deny_forward())
         return XO_FOOT;
 
-    /* lkchu.990428: mat patch 當看版尚末選定，修正forward會斷線的問題 */
+    /* lkchu.990428: mat patch 當看版尚未選定，修正forward會斷線的問題 */
     if (bbsmode == M_READA)
     {
         /* lkchu.981205: 借用 method 存放看版屬性 */
@@ -743,7 +744,7 @@ xo_forward(
                 return XO_FOOT;
             }
         }
-        else if (!str_cmp(rcpt, userid))
+        else if (!str_casecmp(rcpt, userid))
         {
             /* userno = cuser.userno; */ /* Thor.981027: 寄精選集給自己不通知自己 */
             method = MF_SELF;
@@ -777,14 +778,9 @@ xo_forward(
             return XO_FOOT;
 
         method = 0;
-
-#if 0
-        method = vans("是否需要 uuencode(y/N)？[N] ") == 'y' ?
-            MQ_UUENCODE : 0;
-#endif
     }
 
-    hdr = tag ? &xhdr : (HDR *) xo_pool_base + xo->pos;
+    hdr = tag ? &xhdr : (HDR *) xo_pool_base + pos;
 
     dir = xo->dir;
     title = hdr->title;
@@ -899,7 +895,8 @@ z_download(
 
 static int
 xo_zmodem(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     char fpath[128], *dir;
     HDR *hdr, xhdr;
@@ -915,7 +912,7 @@ xo_zmodem(
     if (tag)
         hdr = &xhdr;
     else
-        hdr = (HDR *) xo_pool_base + xo->pos;
+        hdr = (HDR *) xo_pool_base + pos;
 
     locus = 0;
     dir = xo->dir;
@@ -951,12 +948,13 @@ xo_zmodem(
 /* 090929.cache: 簡易版 */
 int
 xo_uquery_lite(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
     const char *userid;
 
-    hdr = (const HDR *) xo_pool_base + xo->pos;
+    hdr = (const HDR *) xo_pool_base + pos;
     if (hdr->xmode & (GEM_GOPHER | POST_INCOME | MAIL_INCOME))
         return XO_NONE;
 
@@ -988,12 +986,13 @@ xo_uquery_lite(
 
 int
 xo_uquery(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
     const char *userid;
 
-    hdr = (const HDR *) xo_pool_base + xo->pos;
+    hdr = (const HDR *) xo_pool_base + pos;
     if (hdr->xmode & (GEM_GOPHER | POST_INCOME | MAIL_INCOME))
         return XO_NONE;
 
@@ -1013,7 +1012,8 @@ xo_uquery(
 
 int
 xo_usetup(
-    XO *xo)
+    XO *xo,
+    int pos)
 {
     const HDR *hdr;
     const char *userid;
@@ -1022,7 +1022,7 @@ xo_usetup(
     if (!HAVE_PERM(PERM_SYSOP | PERM_ACCOUNTS))
         return XO_NONE;
 
-    hdr = (const HDR *) xo_pool_base + xo->pos;
+    hdr = (const HDR *) xo_pool_base + pos;
     userid = hdr->owner;
     if (strchr(userid, '.') || (acct_load(&xuser, userid) < 0))
         return XO_NONE;
@@ -1158,6 +1158,7 @@ xo_keymap(
 static int
 xo_thread(
     XO *xo,
+    int pos,
     int op)
 {
     static char s_author[16], s_title[32], s_unread[2]="0";
@@ -1165,13 +1166,12 @@ xo_thread(
 
     const char *query=NULL;
     const char *tag, *title=NULL;
-    int pos, match, near=0, max;
+    int match, near=0, max;
 
     int step, len;
     const HDR *fhdr;
 
     match = 0;
-    pos = xo->pos;
     fhdr = (HDR *) xo_pool_base + pos;
     step = (op & RS_FORWARD) ? 1 : - 1;
 
@@ -1343,7 +1343,7 @@ xo_thread(
         }
 
         if (((op & RS_RELATED) && !strncmp(tag, query, 40)) ||
-            (!(op & RS_RELATED) && str_str(tag, query)))
+            (!(op & RS_RELATED) && str_casestr(tag, query)))
         {
             if (op & RS_FIRST)
             {
@@ -1358,7 +1358,7 @@ xo_thread(
             if ((!(op & RS_CURRENT)) && (op & RS_RELATED) &&
                 strncmp(currtitle, query, TTLEN))
             {
-                str_ncpy(currtitle, query, TTLEN);
+                str_scpy(currtitle, query, TTLEN + 1);
                 match |= XR_BODY;
             }
             else
@@ -1399,6 +1399,7 @@ xo_thread(
 int
 xo_getch(
     XO *xo,
+    int pos,
     int ch)
 {
     int op;
@@ -1409,7 +1410,7 @@ xo_getch(
     op = xo_keymap(ch);
     if (op >= 0)
     {
-        ch = xo_thread(xo, op);
+        ch = xo_thread(xo, pos, op);
         if ((ch & XO_POS_MASK) > XO_NONE)  /* A thread article is found */
             ch = XO_BODY;               /* 繼續瀏覽 */
     }
@@ -1491,6 +1492,8 @@ XZ xz[] =
 /* Thor.0613: 輔助訊息 */
 static int msg = 0;
 
+static int xover_cursor(XO *xo, int zone, int cmd, int *pos_prev);
+
 void
 xover(
     int cmd)
@@ -1525,107 +1528,28 @@ xover(
 
         while ((cmd != XO_NONE) || redo_flags || zone_flags)
         {
+            cmd = xover_cursor(xo, zone, cmd, &pos_prev);
             if ((cmd & XO_POS_MASK) > XO_NONE)
             {
-                /* --------------------------------------------- */
-                /* calc cursor pos and show cursor correctly     */
-                /* --------------------------------------------- */
-
-                const bool zone_op = cmd & XZ_ZONE;
-                const bool wrap = cmd & XO_WRAP;
-                const bool scrl = cmd & XO_SCRL;
-                const bool rel = cmd & XO_REL;
-                int cur;
-                int max;
-                int diff;
-
-                int pos = (cmd & XO_POS_MASK) - XO_MOVE;
-                cmd = (cmd & ~XO_MOVE_MASK) + XO_NONE;
-
-                if (!xo && !zone_op)
-                    continue;  /* Nothing to move */
-
-                /* fix cursor's range */
-
-                max = ((zone_op) ? XZ_COUNT : xo->max) - 1;
-                cur = (zone_op) ? zone : (scrl) ? xo->top : xo->pos;
-
-                if (rel)
-                    pos += cur;
-                diff = pos - cur;
-
-                if (pos < 0)
-                    pos = (wrap) ? max - (-pos-1) % BMAX(max, 1) : 0;
-                else if (pos > max)
-                    pos = (wrap) ? (pos-1) % BMAX(max, 1) : max;
-
-                /* IID.20200129: Switch zone using cursor movement semantic */
-                if (zone_op)
+                if ((cmd & XZ_ZONE) && !(cmd & XO_REL))
                 {
-                    /* --------------------------------------------- */
-                    /* switch zone                                   */
-                    /* --------------------------------------------- */
-                    if (cmd & XZ_SKIN)
-                    {
-                        /* TODO(IID.20200331): Change skin here */
-                    }
-                    else
-                    {
-                        zone_flags |= (cmd & ~XO_MOVE_MASK);  /* Collect zone operation flags */
+                    zone_flags |= (cmd & ~XO_MOVE_MASK);  /* Collect zone operation flags */
+                    if (cmd & XO_REL)
+                        continue;
+                    /* Need to switch the zone */
+                    const int pos = (cmd & XO_POS_MASK) - XO_MOVE;
+                    zone = pos;
+                    xo = xz[pos].xo;
+                    sysmode = xz[pos].mode;
 
-                        if (xz[pos].xo)
-                        {
-                            zone = pos;
-                            xo = xz[pos].xo;
-                            sysmode = xz[pos].mode;
+                    TagNum = 0;             /* clear TagList */
+                    pos_prev = -1;  /* Redraw cursor */
+                    utmp_mode(sysmode);
+                    cmd = XO_INIT;
 
-                            TagNum = 0;             /* clear TagList */
-                            pos_prev = -1;  /* Redraw cursor */
-                            cmd = XO_INIT;
-                            utmp_mode(sysmode);
-
-                            redo_flags = 0;  /* No more redraw/reloading is needed */
-                        }
-                        else if (rel
-                            && ((wrap && UABS(diff) <= max) || (pos > 0 && pos < max)))  /* Prevent infinity loops */
-                        {
-                            /* Fallback movement */
-                            cmd = XO_ZONE + ((wrap) ? XO_WRAP : 0) + XO_REL + diff + ((diff > 0) ? 1 : -1);
-                            continue;
-                        }
-                        else
-                        {
-                            /* Switch failed; do nothing */
-                            cmd = XO_NONE;
-                        }
-                    }
+                    redo_flags = 0;  /* No more redraw/reloading is needed */
                 }
-                else if (pos != cur)        /* check cursor's range */
-                {
-                    if (scrl)
-                    {
-                        xo->top = pos;
-                        max = xo->top;
-                        xo->pos = TCLAMP(xo->pos, max, max + XO_TALL - 1);
-                        cmd |= XR_BODY;      /* IID.20200103: Redraw list; do not reload. */
-                    }
-                    else
-                    {
-                        xo->pos = pos;
-                        max = xo->top;
-                        if ((pos < max) || (pos >= max + XO_TALL))
-                        {
-                            bool scrl_up = (pos < max);
-                            xo->top = BMAX(max + ((pos - max + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
-                            cmd |= XR_BODY;     /* IID.20200103: Redraw list; do not reload. */
-                        }
-                        else if (pos_prev != -1)
-                        {
-                            cursor_clear(3 + cur - max, 0);
-                            pos_prev = -1;  /* Redraw cursor */
-                        }
-                    }
-                }
+                continue; /* Further cursor handling is needed */
             }
 
             /* ----------------------------------------------- */
@@ -1665,9 +1589,14 @@ xover(
             /* XO_CUR + pos */
             if (cmd >= XO_CUR_MIN && cmd <= XO_CUR_MAX)
             {
-                xover_exec_cb(xo, XO_CUR);  /* Redraw the menu item under the cursor */
+                /* IID.2021-03-05: Make the destination cursor position accessible with `xo->pos` to the `XO_CUR` callback */
+                const int pos = xo->pos;
+                cmd = XO_MOVE + XO_REL + cmd - XO_CUR;  /* Relative move before redraw */
                 pos_prev = -1;  /* Suppress cursor clearing; redraw cursor */
-                cmd = XO_MOVE + XO_REL + cmd - XO_CUR;  /* Relative move */
+                cmd = xover_cursor(xo, zone, cmd, &pos_prev);
+                /* Check whether the menu item under the saved cursor is visible after cursor movement */
+                if (pos >= xo->top && pos < xo->top + XO_TALL)
+                    xover_exec_cb_pos(xo, XO_CUR, pos); /* If visible, redraw the menu item under the saved cursor */
                 continue;
             }
 
@@ -1738,13 +1667,108 @@ xover(
     }
 }
 
+static int xover_cursor(XO *xo, int zone, int cmd, int *pos_prev)
+{
+    if ((cmd & XO_POS_MASK) > XO_NONE)
+    {
+        /* --------------------------------------------- */
+        /* calc cursor pos and show cursor correctly     */
+        /* --------------------------------------------- */
+
+        const bool zone_op = cmd & XZ_ZONE;
+        const bool wrap = cmd & XO_WRAP;
+        const bool scrl = cmd & XO_SCRL;
+        const bool rel = cmd & XO_REL;
+        int cur;
+        int max;
+        int diff;
+
+        int pos = (cmd & XO_POS_MASK) - XO_MOVE;
+        cmd = (cmd & ~XO_MOVE_MASK) + XO_NONE;
+
+        if (!xo && !zone_op)
+            return cmd;  /* Nothing to move */
+
+        /* fix cursor's range */
+
+        max = ((zone_op) ? XZ_COUNT : xo->max) - 1;
+        cur = (zone_op) ? zone : (scrl) ? xo->top : xo->pos;
+
+        if (rel)
+            pos += cur;
+        diff = pos - cur;
+
+        if (pos < 0)
+            pos = (wrap) ? max - (-pos-1) % BMAX(max, 1) : 0;
+        else if (pos > max)
+            pos = (wrap) ? (pos-1) % BMAX(max, 1) : max;
+
+        /* IID.20200129: Switch zone using cursor movement semantic */
+        if (zone_op)
+        {
+            /* --------------------------------------------- */
+            /* switch zone                                   */
+            /* --------------------------------------------- */
+            if (cmd & XZ_SKIN)
+            {
+                /* TODO(IID.20200331): Change skin here */
+                return cmd;
+            }
+
+            if (xz[pos].xo)
+            {
+                /* Request `xover()` to switch the zone */
+                return XO_ZONE + pos;
+            }
+            if (rel && ((wrap && UABS(diff) <= max) || (pos > 0 && pos < max)))  /* Prevent infinity loops */
+            {
+                /* Fallback movement */
+                return XO_ZONE + ((wrap) ? XO_WRAP : 0) + XO_REL + diff + ((diff > 0) ? 1 : -1);
+            }
+            /* Switch failed; do nothing */
+            return XO_NONE;
+        }
+        else if (pos != cur)        /* check cursor's range */
+        {
+            if (scrl)
+            {
+                xo->top = pos;
+                max = xo->top;
+                xo->pos = TCLAMP(xo->pos, max, max + XO_TALL - 1);
+                return XR_BODY | cmd; /* IID.20200103: Redraw list; do not reload. */
+            }
+            xo->pos = pos;
+            max = xo->top;
+            if ((pos < max) || (pos >= max + XO_TALL))
+            {
+                bool scrl_up = (pos < max);
+                xo->top = BMAX(max + ((pos - max + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
+                cmd |= XR_BODY;     /* IID.20200103: Redraw list; do not reload. */
+            }
+            else if (*pos_prev != -1)
+            {
+                cursor_clear(3 + cur - max, 0);
+                *pos_prev = -1;  /* Redraw cursor */
+            }
+            return cmd;
+        }
+    }
+
+    return cmd;
+}
+
+int xover_exec_cb(XO *xo, int cmd)
+{
+    return xover_exec_cb_pos(xo, cmd, (xo) ? xo->pos : 0);
+}
+
 int
-xover_exec_cb(
+xover_exec_cb_pos(
     XO *xo,
-    int cmd)
+    int cmd,
+    int pos)
 {
     const KeyFuncListRef xcmd = (xo) ? xo->cb : NULL;
-    int cmd_dl;
     KeyFuncIter cb;
 
     if (!xcmd)
@@ -1754,40 +1778,42 @@ xover_exec_cb(
     }
 
     /* IID.20191225: In C++ mode, use hash table for xover callback function list */
-#if !NO_SO
-    cmd_dl = cmd | XO_DL; /* Thor.990220: for dynamic load */
-#endif
 #ifndef HAVE_HASH_KEYFUNCLIST  /* Callback function fetching loop */
     cb = xcmd;
     for (;;)
     {
-        int (*cbfunc)(XO *xo) = NULL;
+        XoFunc cbfunc = {0};
 
         int key = cb->first;
 #endif
+        /* IID.2021-03-03: Ignore function type specification flags */
 #if !NO_SO
         /* Thor.990220: dynamic load, with key | XO_DL */
   #ifdef HAVE_HASH_KEYFUNCLIST
-        cb = xcmd->find(cmd_dl);
+        cb = xcmd->find(cmd | XO_DL);
+
+        /* Try to find the `XO_POSF` version if not found */
+        if (cb == xcmd->end() && xo->max > 0)
+            cb = xcmd->find(cmd | XO_POSF | XO_DL);
+
         if (cb != xcmd->end())
   #else
-        if (key == cmd_dl)
+        if ((key & XO_FUNC_MASK) == cmd && (key & XO_DL))
   #endif
         {
-            cbfunc = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
-            if (cbfunc)
+            cbfunc.func = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
+            if (cbfunc.func)
             {
   #ifdef HAVE_HASH_KEYFUNCLIST
     #ifndef DL_HOTSWAP
-                xcmd->erase(cmd_dl);
-                cb = xcmd->insert({cmd, {p}}).first;
+                xcmd->erase(key);
+                cb = xcmd->insert({key & ~XO_DL, cbfunc}).first;
     #endif
   #else
     #ifndef DL_HOTSWAP
-                cb->second.func = cbfunc;
-                cb->first = cmd;
+                cb->second = cbfunc;
+                cb->first = key & ~XO_DL;
     #endif
-                key = cmd;
   #endif
             }
             else
@@ -1801,14 +1827,29 @@ xover_exec_cb(
         else
   #endif
             cb = xcmd->find(cmd);
+
+        /* Try to find the `XO_POSF` version if not found */
+        if (cb == xcmd->end() && xo->max > 0)
+            cb = xcmd->find(cmd | XO_POSF);
+
         if (cb != xcmd->end())
 #else
-        if (key == cmd)
+        if ((key & XO_FUNC_MASK) == cmd)
 #endif
         {
-            if (!cbfunc)
-                cbfunc = cb->second.func;
-            return (*cbfunc) (xo);
+            if (!cbfunc.func)
+                cbfunc = cb->second;
+
+            if (key & XO_POSF)
+            {
+                /* `XO_POSF` callbacks can be invoked only if the Xover list is not empty */
+                if (xo->max > 0)
+                    return cbfunc.posf(xo, pos);
+                else
+                    return XO_NONE;
+            }
+
+            return cbfunc.func(xo);
         }
         else  /* Callback function not found */
 #ifndef HAVE_HASH_KEYFUNCLIST
@@ -1838,7 +1879,12 @@ xover_key(
         return XO_NONE;
 
     if (cmd == I_RESIZETERM)
+    {
+        /* IID.2021-02-26: Keep the cursor on screen when the screen is shrunk */
+        if (pos > xo->top + XO_TALL - 1)
+            return XR_HEAD + XO_MOVE + XO_SCRL + XO_REL + pos - (xo->top + XO_TALL - 1);
         return XO_HEAD;
+    }
 
     if (!(cuser.ufo2 & UFO2_CIRCLE) && (bbsmode == M_READA))
         wrap_flag = 0;
@@ -1984,7 +2030,7 @@ xover_key(
         }
         if (cmd == 'F')
         {
-            return xo_forward(xo);
+            return xo_forward(xo, pos);
         }
 #if 0
         if (cmd == 'Z')
@@ -2001,7 +2047,7 @@ xover_key(
             }
             return XO_NONE;
         }
-        if (cmd == Ctrl('A') || cmd == Ctrl('T') || cmd == Meta('T'))
+        if (cmd == Ctrl('A') || cmd == Meta('A') || cmd == Ctrl('T') || cmd == Meta('T'))
         {
             return xo_tag(xo, cmd);
         }
@@ -2014,23 +2060,23 @@ xover_key(
         if (cmd == 'g' && (bbstate & STAT_BOARD))
         { /* Thor.980806: 要注意沒進看版(未定看版)時, bbstate會沒有STAT_BOARD
                           站長會無法收錄文章 */
-            return gem_gather(xo);               /* 收錄文章到精華區 */
+            return gem_gather(xo, pos);           /* 收錄文章到精華區 */
         }
 #ifdef  HAVE_MAILGEM
         if (cmd == 'G' && HAS_PERM(PERM_MBOX))
         {
-            DL_HOTSWAP_SCOPE int (*mgp)(XO *xo) = NULL;
+            DL_HOTSWAP_SCOPE int (*mgp)(XO *xo, int pos) = NULL;
             if (!mgp)
             {
                 mgp = DL_NAME_GET("mailgem.so", mailgem_gather);
                 if (mgp)
-                    return (*mgp)(xo);
+                    return (*mgp)(xo, pos);
                 else
                     vmsg("動態連結失敗，請聯絡系統管理員！");
                 return XO_FOOT;
             }
             else
-                return (*mgp)(xo);
+                return (*mgp)(xo, pos);
         }
 #endif
         /* --------------------------------------------- */
@@ -2046,7 +2092,7 @@ xover_key(
             int rs_cmd = xo_keymap(cmd);
             if (rs_cmd >= 0)
             {
-                cmd = xo_thread(xo, rs_cmd);
+                cmd = xo_thread(xo, pos, rs_cmd);
 
                 if ((cmd & XO_POS_MASK) > XO_NONE)
                 {
@@ -2150,6 +2196,13 @@ every_Z_Orig(void)
     scr_restore_free(&old_screen);
 }
 
+static int
+Every_Z_Main(void)
+{
+    main_menu();
+    return 0;
+}
+
 #ifdef HAVE_FAVORITE
 static int
 Every_Z_Favorite(void)
@@ -2162,7 +2215,7 @@ Every_Z_Favorite(void)
 static int
 Every_Z_Xover(const void *arg)
 {
-    xover((int)arg);
+    xover((int)(unsigned int)(long)arg);
     return 0;
 }
 
@@ -2191,6 +2244,9 @@ Every_Z_MBox(void)
 
 static MENU menu_everyz[] =
 {
+    {{Every_Z_Main}, 0, POPUP_FUN,
+    "Home     主選單"},
+
 #ifdef HAVE_FAVORITE
     {{Every_Z_Favorite}, PERM_VALID, POPUP_FUN,
     "Favorite 我的最愛"},

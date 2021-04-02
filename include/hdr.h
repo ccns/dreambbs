@@ -5,26 +5,43 @@
 
 #include <sys/types.h>
 
+#include "timetype.h"
+
+enum HdrMode {
+    HDRMODE_NORMAL,
+    HDRMODE_NORMAL_CURR,
+    HDRMODE_FORWARD,
+    HDRMODE_FORWARD_CURR,
+    HDRMODE_REPLY,
+    HDRMODE_REPLY_CURR,
+    HDRMODE_ANNOUNCE,
+    HDRMODE_ANNOUNCE_CURR,
+    HDRMODE_LOCKED,
+    HDRMODE_DELETED,
+
+    HDRMODE_COUNT,
+};
+
 /* ----------------------------------------------------- */
 /* DIR of post / mail struct : 256 bytes                 */
 /* ----------------------------------------------------- */
 
 typedef struct
 {
-    time_t chrono;                /* timestamp */
-    int xmode;
+    time32_t chrono;              /* timestamp */
+    int32_t xmode;
 
-    int xid;                      /* reserved 保留*/
+    int32_t xid;                  /* reserved 保留*/
 
     char xname[32];               /* 檔案名稱 */
     char owner[47];               /* 作者 (E-mail address) */
-    time_t stamp;                 /* 未讀標記 */
-    unsigned int expire;          /* 自動刪除 */
+    time32_t stamp;               /* 未讀標記 */
+    utime32_t expire;             /* 自動刪除 */
     char lastrecommend[13];       /* 最後推文者 */
-    time_t pushtime;              /* 最後推文時間 */
-//  unsigned int recommend;       /* 推薦文章 */
-    short modifytimes;            /* 改文次數 */
-    short recommend;              /* 推薦文章 */
+    time32_t pushtime;            /* 最後推文時間 */
+//  uint32_t recommend;           /* 推薦文章 */
+    int16_t modifytimes;          /* 改文次數 */
+    int16_t recommend;            /* 推薦文章 */
     char nick[50];                /* 暱稱 */
 
     char date[9];                 /* [96/12/01] */
@@ -35,7 +52,7 @@ typedef struct
 } HDR;  /* DISKDATA(raw) */
 
 /* gopher url 字串：xname + owner + nick + date */
-#define GEM_URLEN               (32 + 80 + 50 + 9 - 1)
+#define GEM_URLEN               (offsetof(HDR, title) - offsetof(HDR, xname) - 1)
 
 /* ----------------------------------------------------- */
 /* post.xmode 的定義                                     */
