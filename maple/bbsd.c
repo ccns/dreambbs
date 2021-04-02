@@ -46,6 +46,9 @@ static const char *argv_default[] = {
 /* Thor.990113: exports for anonymous log */
 /* static */ char rusername[40];
 
+/* IID.2021-04-02: User address information string */
+static char frominfo[128];
+
 /* static int mport; */ /* Thor.990325: 不需要了:P */
 static ip_addr tn_addr;
 
@@ -254,7 +257,7 @@ login_abort(
 {
     outs(msg);
     refresh();
-    blog("LOGIN", currtitle);
+    blog("LOGIN", frominfo);
     exit(0);
 }
 
@@ -495,7 +498,7 @@ logattempt(
     int type                    /* '-' login failure   ' ' success */
 )
 {
-    char buf[128], fpath[80];
+    char buf[256], fpath[80];
     const char *const conn_type = (unix_path) ? "WSP" : "BBS";
 
 //  time_t now = time(0);
@@ -503,18 +506,18 @@ logattempt(
     p = localtime(&ap_start);
     sprintf(buf, "%02d/%02d/%02d %02d:%02d:%02d %c%s\t%s\n",
         p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
-        p->tm_hour, p->tm_min, p->tm_sec, type, conn_type, currtitle);
+        p->tm_hour, p->tm_min, p->tm_sec, type, conn_type, frominfo);
 
 #if 0
     sprintf(buf, "%c%-*s[%s] %s\n", type, IDLEN, cuser.userid,
-        Etime(&ap_start), currtitle);
+        Etime(&ap_start), frominfo);
     f_cat(FN_LOGIN_LOG, buf);
 #endif
 
 //  str_stamp(fpath, &ap_start);
-//  sprintf(buf, "%s %cBBS\t%s\n", fpath, type, currtitle);
-    /* Thor.990415: currtitle已內含ip */
-    /* sprintf(buf, "%s %cBBS\t%s ip:%08x\n", fpath, type, currtitle, tn_addr); */
+//  sprintf(buf, "%s %cBBS\t%s\n", fpath, type, frominfo);
+    /* Thor.990415: currtitle已內含ip */ /* IID.2021-04-02: Use `frominfo` for user address information instead */
+    /* sprintf(buf, "%s %cBBS\t%s ip:%08x\n", fpath, type, frominfo, tn_addr); */
     /* Thor.980803: 追蹤 ip address */
     usr_fpath(fpath, cuser.userid, FN_LOG);
     f_cat(fpath, buf);
@@ -523,7 +526,7 @@ logattempt(
     {
         usr_fpath(fpath, cuser.userid, FN_LOGINS_BAD);
         sprintf(buf, "[%s] %s %s\n", Ctime(&ap_start), conn_type,
-            (type == '*' ? currtitle : fromhost));
+            (type == '*' ? frominfo: fromhost));
         f_cat(fpath, buf);
     }
 }
@@ -604,12 +607,10 @@ tn_login(void)
 
     char passbuf[PLAINPASSSIZE];
 
-    /* 借 currtitle 一用 */
-
-    /* sprintf(currtitle, "%s@%s", rusername, fromhost); */
+    /* sprintf(frominfo, "%s@%s", rusername, fromhost); */
     /* Thor.990415: 紀錄ip, 怕正查不到 */
     getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), fpath, sizeof(fpath), NULL, NI_MAXSERV, NI_NUMERICHOST);
-    sprintf(currtitle, "%s@%s ip:%s (%d)", rusername, fromhost, fpath, currpid);
+    sprintf(frominfo, "%s@%s ip:%s (%d)", rusername, fromhost, fpath, currpid);
 
 
 /* by visor */
@@ -787,10 +788,10 @@ tn_login(void)
 
 //  setproctitle("%s@%s", cuser.userid, fromhost);
 
-    blog("ENTER", currtitle);
+    blog("ENTER", frominfo);
     // IID.20190521: Currently unused; disabled for now.
     // if (rusername[0])
-    //     strcpy(cuser.ident, currtitle);
+    //     strcpy(cuser.ident, frominfo);
 
     /* --------------------------------------------------- */
     /* 初始化 utmp、flag、mode                           */
