@@ -289,7 +289,7 @@ CPP_PRAGMA(GCC error "Customizing `ORIGIN_TAG` by defining it elsewhere is no lo
 #define ORIGIN_TAG \
     "--\n" \
     ORIGIN_TAG_PIC \
-    "\x1b[1;32m¡° Origin:" ORIGIN_TAG_SITENAME ORIGIN_TAG_HOSTNAME " %s\x1b[31m¡» From:\x1b[36m %s \x1b[m\n"
+    "\x1b[1;32m¡° Origin:" ORIGIN_TAG_SITENAME ORIGIN_TAG_HOSTNAME " %s\x1b[1;31m¡» From:\x1b[36m %s \x1b[m\n"
 
 #define MODIFY_TAG    "\x1b[1;32m¡° Modify: \x1b[33m<%s> \x1b[m%s"
 
