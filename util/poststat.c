@@ -35,18 +35,6 @@ static const char *const mytitle[] = {"日十", "週五十", "月百", "年度百"};
 #define LOWER_BOUND     4
 
 
-static
-struct postrec
-{
-    char author[13];            /* author name */
-    char board[13];             /* board name */
-    char title[66];             /* title name */
-    time_t date;                /* last post's date */
-    int number;                 /* post number */
-    struct postrec *next;       /* next rec */
-}      *bucket[HASHSIZE];
-
-
 /* 100 bytes */
 
 
@@ -59,6 +47,14 @@ struct posttop  /* DISKDATA(raw) */
     time32_t date;              /* last post's date */
     int32_t number;             /* post number */
 }       top[TOPCOUNT], *tp;
+
+
+static
+struct postrec
+{
+    struct posttop data;
+    struct postrec *next;       /* next rec */
+}      *bucket[HASHSIZE];
 
 
 static int
@@ -93,7 +89,7 @@ search(
     p = bucket[i];
     while (p && (!found))
     {
-        if (!strcmp(p->title, t->title) && !strcmp(p->board, t->board))
+        if (!strcmp(p->data.title, t->title) && !strcmp(p->data.board, t->board))
             found = 1;
         else
         {
@@ -103,14 +99,14 @@ search(
     }
     if (found)
     {
-        p->number += t->number;
-        if (p->date < t->date)  /* 取較近日期 */
-            p->date = t->date;
+        p->data.number += t->number;
+        if (p->data.date < t->date)  /* 取較近日期 */
+            p->data.date = t->date;
     }
     else
     {
         struct postrec *s = (struct postrec *) malloc(sizeof(struct postrec));
-        memcpy(s, t, sizeof(struct posttop));
+        memcpy(&s->data, t, sizeof(struct posttop));
         s->next = NULL;
         if (q == NULL)
             bucket[i] = s;
@@ -127,14 +123,14 @@ sort(
 {
     for (int i = 0; i <= count; i++)
     {
-        if (pp->number > top[i].number)
+        if (pp->data.number > top[i].number)
         {
             if (count < TOPCOUNT - 1)
                 count++;
             for (int j = count - 1; j >= i; j--)
                 memcpy(&top[j + 1], &top[j], sizeof(struct posttop));
 
-            memcpy(&top[i], pp, sizeof(struct posttop));
+            memcpy(&top[i], &pp->data, sizeof(struct posttop));
             break;
         }
     }
@@ -227,10 +223,10 @@ poststat(
 
 #ifdef  DEBUG
             printf("Title : %s, Board: %s\nPostNo : %d, Author: %s\n",
-                pp->title,
-                pp->board,
-                pp->number,
-                pp->author);
+                pp->data.title,
+                pp->data.board,
+                pp->data.number,
+                pp->data.author);
 #endif
 
             j = sort(pp, j);
