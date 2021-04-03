@@ -11,7 +11,9 @@
 
 本程式經測試可以安裝的環境：FreeBSD 11.1~12.0, GNU/Linux(CentOS 7/8, Debian 10, Ubuntu 20.04), Cygwin in Windows 7/10
 
-Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurses` 等 32-bit 版本的相依函式庫。
+欲安裝早於 v3.0 的版本時，Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurses` 等 32-bit 版本的相依函式庫。
+
+v3.0 支援在原生 x86_64 環境中編譯與執行，不須安裝 32-bit 版本的相依函式庫。
 
 ## 1. 安裝作業系統及相關環境
 
