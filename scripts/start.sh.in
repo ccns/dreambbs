@@ -1,5 +1,5 @@
 if [ "${BBSHOME}" = "" ]; then BBSHOME="@BBSHOME@"; fi
 if [ "${BBSVER}" = "" ]; then BBSVER="@BBSVER@"; fi
-"$BBSHOME/bin$BBSVER/camera"
-"$BBSHOME/bin$BBSVER/acpro"
-"$BBSHOME/bin$BBSVER/makefw"
+${BBSHOME}/bin${BBSVER}/camera
+${BBSHOME}/bin${BBSVER}/acpro
+${BBSHOME}/bin${BBSVER}/makefw
