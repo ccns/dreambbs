@@ -127,11 +127,11 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 
 若您的 BBS 家目錄 ( `/home/bbs` ) 下沒有任何 source code ( `dreambbs/` ) 以外的資料，
 
-或是尚未熟悉本版本 BBS 運作所必要的目錄結構，可參考 [dreambbs-snap](https://github.com/ccns/dreambbs-snap) 中的範例目錄。
+或是尚未熟悉本版本 BBS 運作所必要的目錄結構，可參考 [dreambbs_snap](https://github.com/ccns/dreambbs_snap) 中的範例目錄。
 
 也可以透過執行以下指令來完成目錄結構的配置：
 ```
-git clone https://github.com/ccns/dreambbs-snap.git bbs
+git clone https://github.com/ccns/dreambbs_snap.git bbs
 cp -r bbs /home/
 ```
 此範例目錄是使用 WindTopBBS-3.02-20040420-SNAP 的架構為基礎，加以修改而來的。
