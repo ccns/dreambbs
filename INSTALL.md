@@ -148,6 +148,7 @@ cp -r bbs /home/
     $ make all install
 
 如果 `dreambbs.conf` 中的相關變數都有定義到，應該可以順利編譯完成。
+
 (註：v2.0 以後的版本，即使 `dreambbs.conf` 中未定義任何變數，也可順利編譯完成並正常執行)
 
 如果要重新指定編譯器以及程式語言模式，請見前文：[設定編譯相關檔案](#4-%E8%A8%AD%E5%AE%9A%E7%B7%A8%E8%AD%AF%E7%9B%B8%E9%97%9C%E6%AA%94%E6%A1%88)。
@@ -159,7 +160,8 @@ cp -r bbs /home/
     $ crontab sample/crontab
 
 (建議您自行檢視裡面的設定是否符合需求，以及視需要利用 `crontab -e` 調整裡面一些程式的執行路徑)
-(注：v3.0 以後的版本會產生有正確路徑的 `crontab`)
+
+(注：v3.0 以後的版本會在 `make` 時產生有正確路徑的 `crontab`，請到上述的 `build/` 目錄下執行該指令)
 
 至於設定 bbs 執行環境的部分：
 
@@ -174,22 +176,27 @@ cp -r bbs /home/
 
 或者是拿 `scripts` 裡面的 `start.sh` 這個 shell script 去執行。
 
+(注：v3.0 以後的版本在使用 `make install` 安裝時，會將已產生正確路徑的此腳本安裝至 BBS 家目錄下的 `sh/start.sh`，可直接執行)
+
 之後若要提供 port 23 的 telnet 連線的話，以 root 權限執行即可，如：
 
-    # /home/bbs/bin/bbsd
+    # /home/bbs/bin/bbsd 23
 
 若要提供連線的 port 編號 > 3000，則以 bbs 權限執行即可，如:
 
     $ /home/bbs/bin/bbsd 3456
 
+不加參數時，則會使用預設 port 設定。在 v3.0 後可執行 `bin/bbsd -?` 查看預設的 port 設定。
+
 (註：v2.0 後額外支援 `/home/bbs/bin/bbsd -p 3456` 的語法)
+
+(註：v3.0 後可一次指定多個 ports)
 
 之後開機自動執行的設定部分，可以參考 `sample/bbs/sh/start.sh` 的內容，
 
 或自己建立 `/etc/rc.d/rc.local` 檔案，寫進以下內容：
 
 ```
-
 #! /bin/sh
 # MapleBBS-WindTop-DreamBBS
 
@@ -197,7 +204,14 @@ su bbs -c '/home/bbs/bin/camera'
 su bbs -c '/home/bbs/bin/account'
 su bbs -c '/home/bbs/bin/acpro'
 su bbs -c '/home/bbs/bin/makefw'
+```
 
+v3.0 後也可改寫進以下內容：
+```
+#! /bin/sh
+# MapleBBS-WindTop-DreamBBS
+
+su bbs -c '/home/bbs/sh/start.sh'
 ```
 
 (註：v2.1 後不需 `su bbs` 也可正常運作)
@@ -209,7 +223,6 @@ su bbs -c '/home/bbs/bin/makefw'
 (安裝 `xinetd` 套件後，將以下內容複製到 `/etc/xinetd.d/telnet` 裡 [原本無此檔案])
 
 ```
-
 service telnet
 {
         disable         = no
@@ -220,17 +233,14 @@ service telnet
         server          = /home/bbs/bin/bbsd
         server_args     = -i
 }
-
 ```
 
 如要以 standalone 模式啟動，請在 `/etc/rc.local` 中再加上：
 
 ```
-
 # 前略..
 su bbs -c '/home/bbs/bin/bbsd 3456'  # 大於3000的備用port可這樣設定
-/home/bbs/bin/bbsd                   # port 23 請直接用 root 權限啟動
-
+/home/bbs/bin/bbsd 23                # port 23 請直接用 root 權限啟動
 ```
 
 這樣設定之後，從外面應該就可以連進自己啟動的 BBS 程式了。
