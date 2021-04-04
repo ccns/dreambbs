@@ -117,7 +117,7 @@ Pre-releases for `v1.0` were planned instead:
     - [ ] BBS-Lua/BBS-Ruby.
     - [x] SHA-256-encrypted password support.
     - [x] Preliminary WebSocket support, based on relevant patches to Maple3 and PttBBS.
-- `v2.1.0`: `gilgamesh`
+- [`v2.1-rc1`](https://github.com/ccns/dreambbs/releases/tag/v2.1-rc1): `gilgamesh` (pre-release only)
     - Features:
       - Support building with CMake
 
