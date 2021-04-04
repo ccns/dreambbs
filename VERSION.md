@@ -91,13 +91,13 @@ Features:
 The plans have been dropped due to significant changes which require comprehensive tests.
 
 Pre-releases for `v1.0` were planned instead:
-  - [x] [`v1.0-alpha1`](https://github.com/ccns/dreambbs/releases/tag/v1.0-alpha1)
-  - [x] [`v1.0-alpha2`](https://github.com/ccns/dreambbs/releases/tag/v1.0-alpha2)
-  - [x] [`v1.0-alpha3`](https://github.com/ccns/dreambbs/releases/tag/v1.0-alpha3)
-  - [x] [`v1.0-beta1`](https://github.com/ccns/dreambbs/releases/tag/v1.0-beta1)
-  - [x] [`v1.0-RC1`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc1)
-  - [x] [`v1.0-RC2`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc2)
-  - [x] [`v1.0-RC3`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc3)
+  - [`v1.0-alpha1`](https://github.com/ccns/dreambbs/releases/tag/v1.0-alpha1)
+  - [`v1.0-alpha2`](https://github.com/ccns/dreambbs/releases/tag/v1.0-alpha2)
+  - [`v1.0-alpha3`](https://github.com/ccns/dreambbs/releases/tag/v1.0-alpha3)
+  - [`v1.0-beta1`](https://github.com/ccns/dreambbs/releases/tag/v1.0-beta1)
+  - [`v1.0-RC1`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc1)
+  - [`v1.0-RC2`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc2)
+  - [`v1.0-RC3`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc3)
 
 ### `v1.X`: `Tensure` series (`3.11.X`)
 - [`v1.0.0`](https://github.com/ccns/dreambbs/releases/tag/v1.0.0): `rimuru`
@@ -128,15 +128,15 @@ This will be the last major version whose version number is different from the l
 
 Due to the shortage of development resources, from this major version and on, only the latest release version is officially maintained.
 
-- `202X v0` (`v3.0`)
+- [ ] `202X v0` (`v3.0`) (**Testing**)
   - [x] Hot-swapping of DSO
   - [x] Force using 32-bit int type structure member in native 64-bit environment
   - [x] Full IPv6 support
   - [x] Auto screen resizing
   - [x] Server-side DBCS character detection
-- `202X v1` (`v3.1`)
-- `202X v2` (`v3.2`)
-- `202X v3` (`v3.3`); planned to be the last release of `v3.X`
+- [ ] `202X v1` (`v3.1`)
+- [ ] `202X v2` (`v3.2`)
+- [ ] `202X v3` (`v3.3`); planned to be the last release of `v3.X`
 
 Features in plan:
   - [ ] Built-in Big5-UAO/UTF-8 conversion support.
