@@ -338,6 +338,14 @@ ansi_puts(
 {
     static char state = '0';
 
+    if (mode == '\n')
+    {
+        /* Reset the last ANSI state on line wraps */
+        state = '0';
+        fprintf(fp, "\x1b[m\n");
+        return;
+    }
+
     if (state != mode)
         fprintf(fp, "\x1b[3%cm", state = mode);
     if (buf[0])
@@ -523,7 +531,7 @@ main(void)
             else
                 strcat(buf, "   ");
         }
-        fprintf(fp, "\x1b[m\n");
+        ansi_puts(fp, buf, '\n');
     }
 
     if (act[25] == 0) act[25]=1; /* Thor.980928: lkchu patch: ¨¾¤î°£¼Æ¬°0 */
