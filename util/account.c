@@ -438,7 +438,7 @@ main(void)
 
     if (rename(run_file, tmp_file))
     {
-        PROC_CMD("bin/touch", tmp_file);
+        PROC_CMD("/bin/touch", tmp_file);
     }
     if ((fp = fopen(tmp_file, "r")) == NULL)
         error(tmp_file);
@@ -565,11 +565,11 @@ main(void)
         /* 以下是目前沒有在使用的紀錄 */
 
 //        sprintf(title, "[記錄] %s使用次數統計", date);
-//        PROC_CMD("bin/sh", BINARY_SUFFIX"spss.sh");
+//        PROC_CMD("/bin/sh", BINARY_SUFFIX"spss.sh");
 //        keeplog("run/spss.log", NULL, title, 2);
 
 //        sprintf(title, "[記錄] %s版面閱\讀次數統計", date);
-//        PROC_CMD("bin/sh", BINARY_SUFFIX"brd_usies.sh");
+//        PROC_CMD("/bin/sh", BINARY_SUFFIX"brd_usies.sh");
 //        keeplog(FN_BRD_USIES".log", NULL, title, 2); /* 整理過後的 log */
 //        keeplog(FN_BRD_USIES, BRD_SECRET, title, 2); /* 未整理前的 log */
 //        gzip(FN_BRD_USIES, "brdusies/brdusies", ymd);   /* 未整理前的 log */
