@@ -397,7 +397,7 @@ main(void)
 
     static const char act_file[] = "run/var/act";
     static const char run_file[] = FN_USIES;
-    static const char tmp_file[] = "run/tmp";
+    static const char tmp_file[] = "run/usies_tmp";
     static const char log_file[] = "run/usies=";
 //  static const char brd_file[] = FN_BRD_USIES;
 
