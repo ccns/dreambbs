@@ -21,9 +21,29 @@ It is acceptable to omit the `v` prefix for DreamBBS because using `X.Y.Z` along
 The versioning scheme is deprecated. The version number `X.Y.Z` will be consistent with the legacy versioning scheme for `DreamBBS 4.0.0`/`DreamBBS v4.0.0` and on.
 
 ## Branches of Development
-The new development workflow has led to the two main branches seen today: Release and `current`.
+The new development workflow has led to the two main branches seen today: Release and `current`, which are explained in the following paragraphs.
 
 From DreamBBS v3.0 and on, no dedicated git branches for releases will be created. Instead, new releases on the release development branch are published based on git tags from the `master` branch.
+
+After v3.0, there are unstable branches for the convenience of testing as well: `develop` and `<user>/develop`.
+
+The stages of the overall development workflow after v3.0, from the most unstable to the most stable:
+- `<user>/develop`
+    - The developer's develop branch for self-review
+    - Other names can be used in place of the `develop` at the developer's intention
+    - Force-updates can be performed at any time at the developer's intention
+    - As soon as the commits themselves are checked to not have problems, these commits should be merged onto `develop` (fast-forwarding is preferred)
+- `develop`
+    - The branch for commits which need review from the maintainers
+    - Force-updates require acknowledge and agreement from all maintainers in advance
+    - As soon as the review are done, the commits should be merged onto `master` (fast-forwarding is preferred)
+    - Pull requests should target this branch
+- `master`
+    - The stable branch where the functionality are reviewed by the maintainers
+    - Force-updates should not be performed on this branch
+- Releases
+    - The git tags added on `master` at times
+    - The referenced commit should not be changed after the changelog is published
 
 ## Release Branch (formerly `testing`)
 This branch emphasize more on the stability, the easiness to install, and the ability to deploy on different platform and containers, than the `current` branch.
