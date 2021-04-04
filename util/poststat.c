@@ -465,7 +465,7 @@ main(
             break;
 
         default:
-            if (!(argc >= -1 && argc < COUNTOF(myfile) - 1))
+            if (!(argc >= -1 && argc < (long)COUNTOF(myfile) - 1))
             {
                 fprintf(stderr, "Usage: %s [action]\n", argv[0]);
                 fprintf(stderr, "actions:\n");
