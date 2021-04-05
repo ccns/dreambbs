@@ -399,7 +399,11 @@ error(
 int
 main(void)
 {
-    int fact, hour, max, item, total, i, j, over;
+    /* IID.2021-04-05: 128 resolution bar chart for login statistic */
+    static const char *const act_bar[] = {"　", "▁", "▂", "▃", "▄", "▅", "▆", "▇"};
+    static const char *const act_bar_full = "█";
+
+    int fact, max, item, total, over;
     char date[16];
     char title[80];
 
@@ -460,7 +464,7 @@ main(void)
 
         if (!strncmp(buf + 22, "ENTER", 5))
         {
-            hour = atoi(buf + 9);
+            const int hour = atoi(buf + 9);
             if (hour >= 0 && hour <= 23)
                 act[hour]++;
             continue;
@@ -468,7 +472,8 @@ main(void)
 
         if (!strncmp(buf + 41, "Stay:", 5))
         {
-            if ((hour = atoi(buf + 47)))
+            const int hour = atoi(buf + 47);
+            if (hour)
             {
                 act[24] += hour;
                 act[25]++;
@@ -482,22 +487,32 @@ main(void)
 
     // IID.20190311: Zero-out the file `fact` to reset the login count at 0 am.
     if (ntime.tm_hour == 0)
-        for (i = 0; i < sizeof(act); i++)
+        for (int i = 0; i < sizeof(act); i++)
             write(fact, "", sizeof(char));
     else
         write(fact, act, sizeof(act));
 
     close(fact);
 
-    for (i = max = total = 0; i < 24; i++)
+    max = 1; /* Make the minimum value of the bar unit to be `1` */
+    total = 0;
+    for (int i = 0; i < 24; i++)
     {
         total += act[i];
         if (act[i] > max)
             max = act[i];
     }
 
-    item = max / MAX_LINE + 1;
-    over = max > 1000;
+    /* Calculate the units for the bar chart */
+
+    /* Use ceiling division for the bar unit to prevent the bar from exceeding the chart */
+    item = (max + (MAX_LINE * COUNTOF(act_bar)) - 1) / (MAX_LINE * COUNTOF(act_bar));
+    /* Keep the displayed numbers in the bar chart under `1000` */
+    for (over = 1; over < 1000000000; over *= 10)
+    {
+        if (1000 * over > max)
+            break;
+    }
 
     if (!ptime.tm_hour)
         keeplog(fn_today, NULL, "[記錄] 上站人次統計", 1);
@@ -508,39 +523,61 @@ main(void)
     /* Thor.990329: y2k */
     fprintf(fp, "\t\t\t   \x1b[1;33;46m [%02d/%02d/%02d] 上站人次統計 \x1b[m\n",
         ptime.tm_year % 100, ptime.tm_mon + 1, ptime.tm_mday);
-    for (i = MAX_LINE + 1; i > 0; i--)
+
+    /* Generate the chart from the topmost row to the bottommost row */
+    /* The topmost row is reserved for the number texts */
+    for (int i = MAX_LINE; i >= 0; i--)
     {
         fprintf(fp, "\x1b[1m");
         strcpy(buf, "   ");
-        for (j = 0; j < 24; j++)
+        /* Output the bar or number text for each hour */
+        for (int h = 0; h < 24; h++)
         {
-            max = item * i;
-            hour = act[j];
-            if (hour && (max > hour) && (max - item <= hour))
+            const int bar_min = item * i * COUNTOF(act_bar);
+            const int acth = act[h];
+            const int acth_num = acth + item * COUNTOF(act_bar); /* Space for the number text */
+            if (acth_num - bar_min < item)
             {
-                ansi_puts(fp, buf, '3');
-                if (over)
-                    hour = (hour + 5) / 10;
-                fprintf(fp, "%-3d", hour);
+                /* Above the bar and the number */
+                strcat(buf, "   ");
             }
-            else if (max <= hour)
+            else if (acth - bar_min < item)
             {
-                ansi_puts(fp, buf, '1');
-                fprintf(fp, "█ ");
+                /* The number text above the bar */
+                if (acth)
+                {
+                    ansi_puts(fp, buf, (h % 2U) ? '7' : '3');
+                    fprintf(fp, "%-3d", (acth + (over >> 1)) / over);
+                }
+                else if (h > ntime.tm_hour)
+                {
+                    /* No data available yet */
+                    ansi_puts(fp, buf, (h % 2U) ? '7' : '3');
+                    fprintf(fp, "-- ");
+                }
+                else
+                    strcat(buf, "   "); /* No one logged in */
             }
             else
-                strcat(buf, "   ");
+            {
+                /* The body or the top of the bar which is not empty */
+                const bool full = acth - bar_min >= item * COUNTOF(act_bar);
+                ansi_puts(fp, buf, (h % 2U) ? '5' : '1');
+                fprintf(fp, "%s ", (full) ? act_bar_full : act_bar[(acth - bar_min) / item]);
+            }
         }
         ansi_puts(fp, buf, '\n');
     }
 
     if (act[25] == 0) act[25]=1; /* Thor.980928: lkchu patch: 防止除數為0 */
 
-    fprintf(fp, "\x1b[1;34m"
-        "  ╒═══════════════════════════════════╕\x1b[m\n  \x1b[1;32m"
-        "0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23\x1b[m\n\n"
-        "\t%s\t\x1b[1;35m總共上站人次：\x1b[37m%-9d\x1b[35m平均使用時間：\x1b[37m%d\x1b[m\n",
-        over ? "\x1b[35m單位：\x1b[37m10 人" : "", total, act[24] / act[25] + 1);
+    fprintf(fp, "\x1b[1;34m  ╒═══════════════════════════════════╕\x1b[m\n"
+        "  \x1b[1;32m0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23\x1b[m\n"
+        "\n\t");
+    if (over > 1)
+        fprintf(fp, "\x1b[1;35m單位：\x1b[37m%d 人", over);
+    fprintf(fp, "\t\x1b[1;35m總共上站人次：\x1b[37m%-9d\x1b[35m平均使用時間：\x1b[37m%d\x1b[m\n",
+        total, act[24] / act[25] + 1);
     fclose(fp);
 
     /* --------------------------------------------------- */
@@ -779,10 +816,10 @@ main(void)
     {
         sprintf(title, "log/prikey%s", ymd);
         f_mv(PRIVATE_KEY, title);
-        i = PLAINPASSSIZE-1;
+        int i = PLAINPASSSIZE-1;
         for (;;)
         {
-            j = random() % 0x100U;
+            const int j = random() % 0x100U;
             if (!j) continue;
             title[--i] = j;
             if (i == 0) break;
