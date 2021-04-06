@@ -969,7 +969,7 @@ post_neck(
     XO *xo)
 {
     char buf[17];
-    sprintf(buf, "人氣: %d", BMAX(bshm->mantime[currbno], 1));
+    sprintf(buf, "人氣：%d", BMAX(bshm->mantime[currbno], 1));
     prints(NECKPOST, d_cols, "", buf);
     return post_body(xo);
 }
