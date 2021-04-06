@@ -336,12 +336,12 @@ ansi_puts(
     FILE *fp,
     char buf[], char mode)
 {
-    static char state = '0';
+    static char state = '\0';
 
     if (mode == '\n')
     {
         /* Reset the last ANSI state on line wraps */
-        state = '0';
+        state = '\0';
         fprintf(fp, "\x1b[m\n");
         return;
     }
