@@ -14,7 +14,6 @@
 #include "bbs.h"
 
 #define MAX_LINE        16
-#define ADJUST_M        60      /* adjust back 1 hour */
 
 static const char fn_today[] = "gem/@/@-act"; /* さらΩ参璸 */
 static const char fn_yesterday[] = "gem/@/@=act";     /* 琎らΩ参璸 */
@@ -417,16 +416,25 @@ main(void)
     FILE *fp, *fpw;
 
     int act[26];                        /* Ω计/仓璸丁 */
-    time_t now;
-    struct tm ntime, ptime, *xtime;
+    time_t now, day;
+    struct tm ntime, ptime;
 
+    /* Get the current time point */
     now = time(NULL);
-    xtime = localtime(&now);
-    ntime = *xtime;
+    ntime = *localtime(&now);
 
-    now -= ADJUST_M * 60;               /* back to ancient */
-    xtime = localtime(&now);
-    ptime = *xtime;
+    /* Get the begin time point of today */
+    {
+        struct tm dtime = ntime;
+        dtime.tm_hour = 0;
+        dtime.tm_min = 0;
+        dtime.tm_sec = 0;
+        day = mktime(&dtime);
+    }
+
+    /* Get a time point on yesterday */
+    now = day - 60;  /* back to yesterday */
+    ptime = *localtime(&now);
 
     setgid(BBSGID);
     setuid(BBSUID);
@@ -442,7 +450,7 @@ main(void)
     if (fact < 0)
         error(act_file);
 
-    if (ptime.tm_hour != 0)
+    if (ntime.tm_hour != 1)
     {
         read(fact, act, sizeof(act));
         lseek(fact, 0, SEEK_SET);
@@ -514,7 +522,7 @@ main(void)
             break;
     }
 
-    if (!ptime.tm_hour)
+    if (ntime.tm_hour == 1)
         keeplog(fn_today, NULL, "[癘魁] Ω参璸", 1);
 
     if ((fp = fopen(fn_today, "w")) == NULL)
@@ -601,7 +609,6 @@ main(void)
     sprintf(ymd, "-%02d%02d%02d",
         ptime.tm_year % 100, ptime.tm_mon + 1, ptime.tm_mday);
 
-    /* if (ptime.tm_hour == 23) */
     if (ntime.tm_hour == 0)
     {
 
