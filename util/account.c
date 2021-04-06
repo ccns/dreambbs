@@ -549,10 +549,10 @@ main(void)
                     ansi_puts(fp, buf, (h % 2U) ? '7' : '3');
                     fprintf(fp, "%-3d", (acth + (over >> 1)) / over);
                 }
-                else if (h > ntime.tm_hour)
+                else if (h >= ntime.tm_hour)
                 {
-                    /* No data available yet */
-                    ansi_puts(fp, buf, (h % 2U) ? '7' : '3');
+                    /* The datum is still unavailable */
+                    ansi_puts(fp, buf, '0');
                     fprintf(fp, "-- ");
                 }
                 else
