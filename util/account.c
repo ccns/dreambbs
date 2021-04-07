@@ -453,11 +453,8 @@ main(void)
     if (fact < 0)
         error(act_file);
 
-    if (ntime.tm_hour != 1)
-    {
-        read(fact, act, sizeof(act));
-        lseek(fact, 0, SEEK_SET);
-    }
+    read(fact, act, sizeof(act));
+    lseek(fact, 0, SEEK_SET);
 
     if (rename(run_file, tmp_file))
     {
@@ -523,12 +520,6 @@ main(void)
     {
         if (1000 * over > max)
             break;
-    }
-
-    if (ntime.tm_hour == 1)
-    {
-        sprintf(title, "[記錄] %s上站人次統計", date);
-        keeplog(fn_today, NULL, title, 0);
     }
 
     if ((fp = fopen(fn_today, "w")) == NULL)
@@ -764,12 +755,6 @@ main(void)
         sprintf(title, "[記錄] %s本日十大熱門話題", date);
         keeplog("gem/@/@-day", NULL, title, 0);
 
-        if ((fp = fopen(fn_yesterday, "w")))
-        {
-            f_suck(fp, fn_today);
-            fclose(fp);
-        }
-
         if (ntime.tm_wday == 0)
         {
             sprintf(title, "[記錄] %s本週五十大熱門話題", date);
@@ -787,6 +772,14 @@ main(void)
             sprintf(title, "[記錄] %s年度百大熱門話題", date);
             keeplog("gem/@/@-year", NULL, title, 0);
         }
+
+        if ((fp = fopen(fn_yesterday, "w")))
+        {
+            f_suck(fp, fn_today);
+            fclose(fp);
+        }
+        sprintf(title, "[記錄] %s上站人次統計", date);
+        keeplog(fn_yesterday, NULL, title, 0);
 
         gzip(log_file, "usies/usies", ymd);
 
