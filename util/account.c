@@ -563,7 +563,7 @@ main(void)
                     ansi_puts(fp, buf, (h % 2U) ? '7' : '3');
                     fprintf(fp, "%-3d", (acth + (over >> 1)) / over);
                 }
-                else if (h >= ntime.tm_hour)
+                else if (ntime.tm_hour != 0 && h >= ntime.tm_hour)
                 {
                     /* The datum is still unavailable */
                     ansi_puts(fp, buf, '0');
