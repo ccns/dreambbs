@@ -729,6 +729,10 @@ main(void)
         keeplog(FN_FAVORITE_LOG, BRD_SECRET, title, 2);
 #endif
 
+        PROC_CMD(BINARY_SUFFIX"userno", NULL);
+        sprintf(title, "[記錄] %s使用者編號紀錄", date);
+        keeplog(FN_USERNO_LOG, BRD_SECRET, title, 2);
+
         /* 以下是公開紀錄 */
 
         sprintf(title, "[記錄] %s文章篇數統計", date);
@@ -789,15 +793,9 @@ main(void)
 //      gzip(brd_file, FN_BRD_USIES, ymd);   /* lkchu.981201: 備份看版閱讀記錄 */
 //#endif
 
-    }
-    else if (ntime.tm_hour == 1)
-    {
-        sprintf(title, "[記錄] %s使用者編號紀錄", date);
-        PROC_CMD(BINARY_SUFFIX"userno", NULL);
-        keeplog(FN_USERNO_LOG, BRD_SECRET, title, 2);
         gzip(FN_USERNO_LOG, "userno/userno", ymd);        /* 所有 [使用者編號紀錄] 記錄 */
-        gzip(FN_MAIL_LOG, "mail/mail", ymd);    /* 所有 [寄信] 記錄 */
 
+        gzip(FN_MAIL_LOG, "mail/mail", ymd);    /* 所有 [寄信] 記錄 */
 
         if (ntime.tm_wday == 6)
         {
