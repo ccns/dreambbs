@@ -436,6 +436,9 @@ main(void)
     now = day - 60;  /* back to yesterday */
     ptime = *localtime(&now);
 
+    /* Prepare the string `date` first */
+    sprintf(date, "[ %02d 月 %02d 日] ", ptime.tm_mon + 1, ptime.tm_mday);
+
     setgid(BBSGID);
     setuid(BBSUID);
     chdir(BBSHOME);
@@ -523,7 +526,10 @@ main(void)
     }
 
     if (ntime.tm_hour == 1)
-        keeplog(fn_today, NULL, "[記錄] 上站人次統計", 1);
+    {
+        sprintf(title, "[記錄] %s上站人次統計", date);
+        keeplog(fn_today, NULL, title, 1);
+    }
 
     if ((fp = fopen(fn_today, "w")) == NULL)
         error(fn_today);
@@ -611,9 +617,6 @@ main(void)
 
     if (ntime.tm_hour == 0)
     {
-
-        sprintf(date, "[ %02d 月 %02d 日] ", ptime.tm_mon + 1, ptime.tm_mday);
-
         /* 以下是目前沒有在使用的紀錄 */
 
 //        sprintf(title, "[記錄] %s使用次數統計", date);
@@ -737,7 +740,6 @@ main(void)
 
         /* 以下是公開紀錄 */
 
-        //sprintf(date, "[%2d 月 %2d 日] ", ptime.tm_mon + 1, ptime.tm_mday);
         sprintf(title, "[記錄] %s文章篇數統計", date);
         keeplog(FN_POST_LOG, NULL, title, 2);
 
@@ -797,8 +799,6 @@ main(void)
     }
     else if (ntime.tm_hour == 1)
     {
-        sprintf(date, "[%02d 月 %02d 日] ", ptime.tm_mon + 1, ptime.tm_mday);
-
         sprintf(title, "[記錄] %s使用者編號紀錄", date);
         PROC_CMD(BINARY_SUFFIX"userno", NULL);
         keeplog(FN_USERNO_LOG, BRD_SECRET, title, 2);
