@@ -528,7 +528,7 @@ main(void)
     if (ntime.tm_hour == 1)
     {
         sprintf(title, "[記錄] %s上站人次統計", date);
-        keeplog(fn_today, NULL, title, 1);
+        keeplog(fn_today, NULL, title, 0);
     }
 
     if ((fp = fopen(fn_today, "w")) == NULL)
