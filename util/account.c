@@ -525,9 +525,13 @@ main(void)
     if ((fp = fopen(fn_today, "w")) == NULL)
         error(fn_today);
 
-    /* Thor.990329: y2k */
-    fprintf(fp, "\t\t\t   \x1b[1;33;46m [%02d/%02d/%02d] 上站人次統計 \x1b[m\n",
-        ptime.tm_year % 100, ptime.tm_mon + 1, ptime.tm_mday);
+    {
+        /* Finish yesterday's chart at the first hour of the day */
+        const struct tm *const chtime = (ntime.tm_hour == 0) ? &ptime : &ntime;
+        /* Thor.990329: y2k */
+        fprintf(fp, "\t\t\t   \x1b[1;33;46m [%02d/%02d/%02d] 上站人次統計 \x1b[m\n",
+            chtime->tm_year % 100, chtime->tm_mon + 1, chtime->tm_mday);
+    }
 
     /* Generate the chart from the topmost row to the bottommost row */
     /* The topmost row is reserved for the number texts */
