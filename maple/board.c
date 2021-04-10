@@ -844,7 +844,7 @@ XoPost(
     int bno)
 {
     const bool res = XoPostSimple(bno);
-    if (/*!(bits & BRD_V_BIT) && */(cuser.ufo2 & UFO2_BNOTE))
+    if (/*!(bits & BRD_V_BIT) && */(cuser.ufo2 & UFO2_BNOTE) && res)
     {
         char fpath[64];
         brd_fpath(fpath, currboard, FN_NOTE);
