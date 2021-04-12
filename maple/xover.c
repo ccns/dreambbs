@@ -2092,16 +2092,17 @@ xover_key(
             {
                 cmd = xo_thread(xo, pos, rs_cmd);
 
-                if ((cmd & XO_POS_MASK) > XO_NONE)
-                {
-                    /* A thread article is found */
-                    cursor_clear(3 + pos - xo->top, 0);
-                    cmd = (cmd & ~XO_MOVE_MASK) + XO_CUR;  /* Redraw cursor */
-                }
-                else
+                if (!((cmd & XO_POS_MASK) > XO_NONE))
                 {                   /* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
                     outz("\x1b[44m 找沒有了耶...:( \x1b[m");
                     msg = 2;  /* Clear the message after the next loop */
+                }
+                else if (!(cmd & XR_PART_BODY))
+                {
+                    /* A thread article is found on the same page as the current article */
+                    /* Clear the previous cursor on the screen */
+                    cursor_clear(3 + pos - xo->top, 0);
+                    cmd = (cmd & ~XO_MOVE_MASK) + XO_CUR;  /* Redraw cursor */
                 }
             }
         }
