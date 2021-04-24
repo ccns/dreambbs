@@ -121,7 +121,7 @@ Pre-releases for `v1.0` were planned instead:
     - Features:
       - Support building with CMake
 
-### `202X vX` (`v3.X`); `Four Symbol` series (`3.20.X`) ( Upcoming Release Branch )
+### `202X vX` (`v3.X`); `Four Symbol` series (`3.21.X`) ( Upcoming Release Branch )
 The full name of this major version is `DreamBBS-202X vX`. `202X` refers to the 2020s decade and is spelt literally this way.
 
 This will be the last major version whose version number is different from the legacy version number.

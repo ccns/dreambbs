@@ -44,7 +44,7 @@ DreamBBS 3.10.95:
 - 修正註解錯字
 - 將 `lib/` 中性質相近的零散原始碼檔案合併
 
-DreamBBS 3.20:
+DreamBBS 3.21:
 - 將 `include/global.h` 中的 macro 定義獨立成 `include/global_def.h`
 
 ## 資料結構名稱與欄位名稱
@@ -55,7 +55,7 @@ DreamBBS 3.10.95:
     - struct `BSTATCOUNT`:
         - `herfyear` -> `halfyear`
 
-DreamBBS 3.20:
+DreamBBS 3.21:
 - `maple/xover.c`:
     - struct `KeyMap`:
         - `key` -> `first`
@@ -69,7 +69,7 @@ DreamBBS 3.20:
         - `chinese` -> `brief_desc`
 
 ## 全域函式名稱
-DreamBBS 3.20:
+DreamBBS 3.21:
 - `lib/string.c`:
     - `str_add` -> `str_pcpy`
     - `str_cmp` -> `str_casecmp`

@@ -57,7 +57,7 @@
 - 傳統切換選單：按 <kbd>f</kbd> 鍵可正確進入夢大式我的最愛列表 ([10598d476](https://github.com/ccns/dreambbs/commit/10598d476749b00bd3ee415d2caefa35b29aadc0))
 - 分類看板列表：移除 <kbd>Ctrl</kbd>-<kbd>P</kbd>、<kbd>d</kbd>、<kbd>M</kbd> 等 Maple3 式我的最愛專用按鍵 ([3760a95c1](https://github.com/ccns/dreambbs/commit/3760a95c1be5ba7caa0199fac831484be6735408))
 
-## v3.0 (3.20.0)
+## v3.0 (3.21.0)
 - 輸入系統：
     - 改進按鍵控制碼的可能結尾字元的下一字元的處理 ([0d4885448](https://github.com/ccns/dreambbs/commit/0d48854480c3e49d63508880a23337b80d7c1436))
         - 可依下一字元是否逾時判斷按鍵是否已送完
