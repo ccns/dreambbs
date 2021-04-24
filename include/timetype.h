@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* timetype.h   ( NCKU CCNS WindTop-DreamBBS 3.20 )      */
+/* timetype.h   ( NCKU CCNS WindTop-DreamBBS 3.21 )      */
 /*-------------------------------------------------------*/
 /* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
 /* Target: Helper functions for fixed-size `time_t`      */

@@ -1,5 +1,5 @@
 /*-------------------------------------------------------*/
-/* lib/mime.c   ( NCKU CCNS WindTop-DreamBBS 3.20 )      */
+/* lib/mime.c   ( NCKU CCNS WindTop-DreamBBS 3.21 )      */
 /*-------------------------------------------------------*/
 /* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
 /* Target: MIME code processing library for DreamBBS     */
