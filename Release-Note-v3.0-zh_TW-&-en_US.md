@@ -38,8 +38,11 @@ The major changes from v2.0 are explained below.
 * 修正使用者的文章閱讀紀錄（BRHs）會因為 `memcpy()` 在較新的作業系統上的未定義行為而損壞的問題\
   Fix users' article-reading record (BRHs) corrupted due to the undefined behavior of `memcpy()` on recent OSs
 
-* 修正編輯器的編輯行為問題
-  Fix the editing behavior issues of the editor
+* 修正編輯器的編輯行為問題\
+  Fix the editing behavior issues of the editor\
+  詳細的行為修正可見：\
+  For detail of fixed behaviors, please refer to:\
+  https://github.com/ccns/dreambbs/pull/58
 
 ### 程式架構改變 Program Architecture Changes
 
@@ -75,3 +78,16 @@ The major changes from v2.0 are explained below.
   Relevant codes now use `getaddrinfo()` instead
   `lib/dns.c` 亦已實作 IPv6 地址之 AAAA 紀錄的 DNS 反查\
   DNS lookup for AAAA records of IPv6 addresses is implemented in `lib/dns.c` as well
+
+## 統計資訊 Statistic Information
+
+本發佈版本的專案大小 The project size of this release:
+- 檔案數 Files: 226
+- 行數 Lines: 105980
+- 位元組大小 Byte size: 2,778,572 B (≈ 2.65 MB)
+
+與 v2.0.0 的程式碼差異（排除空白字元的改變）The code differences from v2.0.0 (excluding whitespace changes):
+- Commits: 713
+- 修改檔案數 File changed: 218 (≈ 96.5%)
+- 增加行數 Line insertions: 20323 (≈ 19.2%)
+- 刪除行數 Line deletions: 17632 (≈ 16.6%)
