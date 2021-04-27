@@ -56,7 +56,7 @@ DreamBBS 3.10.97:
 - 移除 GNU 格式的 Makefile (`Makefile.gnu`)
 - 將舊有說明文件移出程式碼分支。目前已收錄在本 wiki 中，以及本專案的 `wiki` 分支中。
 
-DreamBBS 3.21:
+DreamBBS 3.21.0:
 - 將 `include/global.h` 中的 macro 定義獨立成 `include/global_def.h`
 
 ## 資料結構名稱、欄位名稱、與定義
@@ -78,7 +78,7 @@ DreamBBS 3.12.1-rc1:
         } screen_backup_t;
         ```
 
-DreamBBS 3.21:
+DreamBBS 3.21.0:
 - `maple/xover.c`:
     - struct `KeyMap`:
         - `key` -> `first`
@@ -98,7 +98,7 @@ DreamBBS 3.21:
 
 ## 全域函式名稱、參數定義、回傳值定義變更
 
-DreamBBS 3.11:
+DreamBBS 3.11.0:
 - `maple/visio.c`:
     - `ansi_move()` (from WindTopBBS) -> `move_ansi()`
 
@@ -110,7 +110,7 @@ DreamBBS 3.12.0:
       -> `FILE *tbf_open(int n)`
         - 新增參數 `n` 以直接指定暫存檔編號；傳入 `-1` 以詢問使用者暫存檔編號
 
-DreamBBS 3.21:
+DreamBBS 3.21.0:
 - `lib/dns.c`:
     - `void dns_ident(int sock, const ip_addr *from, char *rhost, char *ruser)`\
       -> `void dns_ident(int sock, const ip_addr *from, char *rhost, int rhost_sz, char *ruser, int ruser_sz)`
@@ -159,7 +159,7 @@ DreamBBS 3.10.95:
     - `msg_seperator` -> `msg_separator`
     - `recommand_time` -> `recommend_time`
 
-DreamBBS 3.21:
+DreamBBS 3.21.0:
 - `include/global.h`:
     - `ipv4addr` -> `ipv6addr`
     - `curcount` (from `maple/cache.c`) -> `countshm`
@@ -180,7 +180,7 @@ DreamBBS 3.10.95:
 - `include/struct.h`:
     - `UFO_HIDEDN` -> `UFO_HIDDEN`
 
-DreamBBS 3.21:
+DreamBBS 3.21.0:
 - `include/cppdef.h`:
     - `countof()` (from `include/bbs.h`) -> `COUNTOF()`
 - `include/global_def.h`
