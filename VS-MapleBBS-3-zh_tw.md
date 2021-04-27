@@ -71,21 +71,21 @@ DreamBBS 3.21:
 ## 全域函式名稱
 DreamBBS 3.21:
 - `lib/string.c`:
-    - `str_add` -> `str_pcpy`
-    - `str_cmp` -> `str_casecmp`
-    - `str_cut` -> `str_split_2nd`
-    - `str_decode` -> `mmdecode_str` (`lib/mime.c`)
-    - `str_folder` -> `setdirpath_root`
-    - `str_from` -> `from_parse`
-    - `str_len` -> `str_len_nospace`
-    - `str_lowest` -> `str_lower_dbcs`
-    - `str_ncmp` -> `str_ncasecmp`
-    - `str_strip` -> `str_rstrip_tail`
-    - `str_rev` -> `str_rev_tail`
-    - `str_rle` -> `rle_encode`
-    - `str_str` -> `str_casestr`
-    - `str_sub` -> `str_casestr_dbcs`
-    - `str_trim` -> `str_rtrim`
+    - `str_add()` -> `str_pcpy()`
+    - `str_cmp()` -> `str_casecmp()`
+    - `str_cut()` -> `str_split_2nd()`
+    - `str_decode()` -> `mmdecode_str()` (`lib/mime.c`)
+    - `str_folder()` -> `setdirpath_root()`
+    - `str_from()` -> `from_parse()`
+    - `str_len()` -> `str_len_nospace()`
+    - `str_lowest()` -> `str_lower_dbcs()`
+    - `str_ncmp()` -> `str_ncasecmp()`
+    - `str_strip()` -> `str_rstrip_tail()`
+    - `str_rev()` -> `str_rev_tail()`
+    - `str_rle()` -> `rle_encode()`
+    - `str_str()` -> `str_casestr()`
+    - `str_sub()` -> `str_casestr_dbcs()`
+    - `str_trim()` -> `str_rtrim()`
 
 ## 全域變數名稱
 DreamBBS 3.10.95:
