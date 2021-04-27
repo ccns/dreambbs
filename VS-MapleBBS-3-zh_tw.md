@@ -30,6 +30,10 @@ DreamBBS 3.10.95:
     - `2nd_expire.c` & `flowlog.c`
 - 移除與帳號註冊不直接相關的個人資料，如生日、年齡等 (`HAVE_PERSON_DATA`)
 
+DreamBBS 3.10.97:
+- 移除 gopher 功能
+- 移除已註解掉的 `pip_request()` 函式（將養雞遊戲貨幣轉為點歌次數）
+
 ## 專案建置
 DreamBBS 3.10.95:
 - 取消對 SunOS/Solaris (`make sun/solaris/sol-x86`)、BSD < 4.4 (`make bsd`)、Cygwin (`make cygwin`) 平臺的正式支援
@@ -44,16 +48,35 @@ DreamBBS 3.10.95:
 - 修正註解錯字
 - 將 `lib/` 中性質相近的零散原始碼檔案合併
 
+DreamBBS 3.10.96:
+- 移除 `acl.ic`, `bbsctrl.h`, `bbsnet.h`, `rpg.h`
+- 移除過去的程式碼備份檔
+
+DreamBBS 3.10.97:
+- 移除 GNU 格式的 Makefile (`Makefile.gnu`)
+- 將舊有說明文件移出程式碼分支。目前已收錄在本 wiki 中，以及本專案的 `wiki` 分支中。
+
 DreamBBS 3.21:
 - 將 `include/global.h` 中的 macro 定義獨立成 `include/global_def.h`
 
-## 資料結構名稱與欄位名稱
+## 資料結構名稱、欄位名稱、與定義
 DreamBBS 3.10.95:
 - `include/struct.h`
     - struct `MailQueue`:
         - `niamod` -> `revdomain`
     - struct `BSTATCOUNT`:
         - `herfyear` -> `halfyear`
+
+DreamBBS 3.12.1-rc1:
+- `include/struct.h`
+    - `typedef screenline screen_backup_t[T_LINES]` ->
+        ```c
+        typedef struct {
+            int old_t_lines;
+            int old_roll;
+            screenline *slp;
+        } screen_backup_t;
+        ```
 
 DreamBBS 3.21:
 - `maple/xover.c`:
@@ -67,14 +90,50 @@ DreamBBS 3.21:
         - `dlfunc` -> `second.dlfunc`
     - struct `ChatAction`:
         - `chinese` -> `brief_desc`
+    - struct `MENU`:
+        - `void *func` -> `MenuItem item`
+    - struct `UCACHE`
+        - `uint32_t offset` -> `utmp_uidx32_t ubackidx`
+            - The member now stores the array index instead of the byte offset
 
-## 全域函式名稱
+## 全域函式名稱、參數定義、回傳值定義變更
+
+DreamBBS 3.11:
+- `maple/visio.c`:
+    - `ansi_move()` (from WindTopBBS) -> `move_ansi()`
+
+DreamBBS 3.12.0:
+- `maple/edit.c`:
+    - `char *tbf_ask(void)`\
+      -> `char *tbf_ask(int n)`
+    - `FILE *tbf_open(void)`\
+      -> `FILE *tbf_open(int n)`
+        - 新增參數 `n` 以直接指定暫存檔編號；傳入 `-1` 以詢問使用者暫存檔編號
+
 DreamBBS 3.21:
+- `lib/dns.c`:
+    - `void dns_ident(int sock, const ip_addr *from, char *rhost, char *ruser)`\
+      -> `void dns_ident(int sock, const ip_addr *from, char *rhost, int rhost_sz, char *ruser, int ruser_sz)`
+        - 新增參數 `rhost_sz` 與 `ruser_sz` 以指定對應參數的緩衝區大小
+    - `int dns_name(const ip_addr *addr, char *name)`\
+      -> `int dns_name(const ip_addr *addr, char *name, int name_sz)`
+        - 新增參數 `name_sz` 以指定 `name` 的緩衝區大小
+- `maple/menu.c`:
+    - `void domenu(void)`\
+      -> `void domenu(MENU *menu, int y_ref, int x_ref, int height_ref, int width_ref, int cmdcur_max)`
+    - `const char *check_info(const void *func)`\
+      -> `const char *check_info(const void *func, const char *input)`
+        - 新增參數 `input`
+    - `count_len()` (from WindTopBBS) -> `strip_ansi_len()`
+- `maple/xover.c`:
+    - `void every_Z(void)`\
+      -> `void every_Z(XO *xo)`
+        - 新增參數 `xo`
 - `lib/string.c`:
     - `str_add()` -> `str_pcpy()`
-    - `str_cmp()` -> `str_casecmp()`
     - `str_cut()` -> `str_split_2nd()`
-    - `str_decode()` -> `mmdecode_str()` (`lib/mime.c`)
+    - `str_cmp()` -> `str_casecmp()`
+    - `str_decode()` -> `mmdecode_str()` (to `lib/mime.c`)
     - `str_folder()` -> `setdirpath_root()`
     - `str_from()` -> `from_parse()`
     - `str_len()` -> `str_len_nospace()`
@@ -86,6 +145,13 @@ DreamBBS 3.21:
     - `str_str()` -> `str_casestr()`
     - `str_sub()` -> `str_casestr_dbcs()`
     - `str_trim()` -> `str_rtrim()`
+    - `void str_ncpy()` -> `ssize_t str_scpy()`
+        - 回傳 `-1` 代表發生字串截斷，否則回傳複製的非 `\0` 位元組數量
+- `lib/shm.c`:
+    - `attach_shm()` (not-initializing version, from `util/*.c`) -> `attach_shm_noinit()`
+    - `init_ushm()` (from `util/*.c`) -> `ushm_attach()`
+    - `init_bshm()` (from `innbbsd/*.c` & `util/*.c`) -> `bshm_attach()`
+    - `rewrite()` (from WindTopBBS `util/makefw.c`) -> `fwoshm_load()`
 
 ## 全域變數名稱
 DreamBBS 3.10.95:
@@ -93,11 +159,20 @@ DreamBBS 3.10.95:
     - `msg_seperator` -> `msg_separator`
     - `recommand_time` -> `recommend_time`
 
+DreamBBS 3.21:
+- `include/global.h`:
+    - `ipv4addr` -> `ipv6addr`
+    - `curcount` (from `maple/cache.c`) -> `countshm`
+- `maple/popupmenu.c`:
+    - `screenline sl` -> `screen_backup_t *popup_old_screen`
+
 ## 全域或用於控制程式功能的 macro 名稱
 DreamBBS 3.10.95:
 - `maple/visio.c`:
     - `KICK_IDLE_TIMTOUT` -> `KICK_IDLE_TIMEOUT`
 - `include/config.c`:
+    - 移除 `HAVE_STUDENT`
+    - 移除 `HAVE_ACTIVITY`
     - `HAVE_DETECT_VIOLAWATE` -> `HAVE_DETECT_VIOLATELAW`
     - `HIDEDN_SRC` -> `HIDDEN_SRC`
     - `RECOMMAND_TIME` -> `RECOMMEND_TIME`
@@ -105,4 +180,26 @@ DreamBBS 3.10.95:
 - `include/struct.h`:
     - `UFO_HIDEDN` -> `UFO_HIDDEN`
 
+DreamBBS 3.21:
+- `include/cppdef.h`:
+    - `countof()` (from `include/bbs.h`) -> `COUNTOF()`
+- `include/global_def.h`
+    - `IS_ZHC_HI()` (from `include/config.h`) -> `IS_DBCS_HI()`
+- `include/struct.h`:
+    - `STRLEN` -> `STRSIZE` (alias)
+    - `PASSLEN` -> `PASSSIZE` (alias)
+    - `PLAINPASSLEN` -> `PLAINPASSSIZE` (alias)
+    - `OLDPLAINPASSLEN` -> `OLDPLAINPASSSIZE` (alias)
+    - `PASSHASHLEN` -> `PASSHASHSIZE` (alias)
+    - `ANSILINELEN` -> `ANSILINESIZE` (alias)
+    - `CH_TTLEN` -> `CH_TTSIZE` (alias)
+- `include/nntp.h`:
+    - `NNTP_STRLEN` -> `NNTP_STRSIZE` (alias)
+- `include/nocem.h`:
+    - `LINELEN` -> `LINESIZE` (alias)
+- `maple/mail.c`:
+    - `SIGNATURESIZE` -> `SIGNATURELEN` (alias)
+- `include/theme.h`:
+    - `FOOTER_VEDIT_BIFF` -> `FOOTER_VEDIT` (merged)
+    
 ## 主程式流程
