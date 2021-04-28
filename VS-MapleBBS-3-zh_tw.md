@@ -69,7 +69,7 @@ DreamBBS 3.10.95:
 
 DreamBBS 3.12.1-rc1:
 - `include/struct.h`
-    - `typedef screenline screen_backup_t[T_LINES]` ->
+    - `typedef screenline screen_backup_t[T_LINES];` ->
         ```c
         typedef struct {
             int old_t_lines;
@@ -92,9 +92,28 @@ DreamBBS 3.21.0:
         - `chinese` -> `brief_desc`
     - struct `MENU`:
         - `void *func` -> `MenuItem item`
-    - struct `UCACHE`
+    - struct `UCACHE`:
         - `uint32_t offset` -> `utmp_uidx32_t ubackidx`
             - The member now stores the array index instead of the byte offset
+        - `BMW *mbase` -> `bmw_idx32_t mbase`
+    - struct `BMW`:
+        - `UTMP *caller` -> `utmp_idx32_t caller`
+            - The special value `NULL` has been reassigned to `-1`
+    - struct `UTMP`:
+        - `UTMP *talker` -> `utmp_idx32_t talker`
+            - The special value `NULL` has been reassigned to `-1`
+        - `BMW *mslot[BMW_PER_USER]` -> `bmw_idx32_t mslot[BMW_PER_USER]`
+            - The special value `NULL` has been reassigned to `-1`
+        - `pipdata *pip` -> `pipdata_idx32_t pip` (from WindTop BBS; for `HAVE_PIP_FIGHT1`)
+            - The special value `NULL` has been reassigned to `-1`
+    - ```c
+      typedef struct
+      {
+          pipdata pip1;
+          pipdata pip2;
+      } PIPUTMP;
+      ```
+      -> `typedef pipdata PIPUTMP[2];`
 
 ## 全域函式名稱、參數定義、回傳值定義變更
 
