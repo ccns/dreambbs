@@ -67,7 +67,7 @@ The major changes from v2.0 are explained below.
   Fix the editing behavior issues of the editor
 
   詳細的行為修正可見：\
-  For detail of fixed behaviors, please refer to:\
+  For details of fixed behaviors, please refer to:\
   https://github.com/ccns/dreambbs/pull/58
 
 ### 專案部屬工具改變 Project Deployment Tool Changes
@@ -81,7 +81,7 @@ The major changes from v2.0 are explained below.
 + 已可用 CMake 建置 DreamBBS\
   DreamBBS can now be built with CMake
 
-  **BSD Makefile 檔案已被棄用，將在 v3.1 時被移除。請改用 CMake 建置。**\
+  **BSD Makefile 檔案已被棄用，將在 v3.1 時被移除。請改用 CMake 建置本專案。**\
   **BSD Makefiles are now deprecated and will be removed in v3.1. Please build this project with CMake instead.**
 
 ### 程式架構改變 Program Architecture Changes
