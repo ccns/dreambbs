@@ -23,6 +23,9 @@ The major changes from v2.0 are explained below.
 + 使用者閒置時間精度現為秒，其顯示範圍現涵蓋 32 位元整數\
   The users' idle time now has the resolution of one second as well as the display range of 32-bit integer
 
++ 現在聊天室的聊天訊息一律採用使用向上捲動的顯示方式\
+  Now the chat messages in the chatroom are always displayed as being scrolled upward
+
 * 現在進入聊天室時，聊天暱稱欄會預先填入使用者 ID，而送出空暱稱可取消進入聊天室\
   Now, when the user enters the chatroom, the input field for the user's nickname in chatroom will be pre-filled with the user's ID, and sending an empty nickname cancels the entry
 
@@ -100,6 +103,9 @@ The major changes from v2.0 are explained below.
   如果 pfterm 未啟用，則本功能無效。\
   This feature is disabled when pfterm is not enabled.
 
++ 現在標題列的中央標題會儘可能向整個標題列的中央置中\
+  Now the middle title on the title bar is placed on the entire title bar as close to the center as possible
+
 + 轉信設定介面改用 `xover()` 實作，可使用 Xover 列表的預設快速鍵\
   The UI of internet article sending/receiving setting is reimplemented using `xover()`, so the default hotkeys of Xover list can be used
 
@@ -150,33 +156,35 @@ The major changes from v2.0 are explained below.
 * 修正使用者的文章閱讀紀錄（BRHs）會因為 `memcpy()` 在較新的作業系統上的未定義行為而損壞的問題\
   Fix users' article-reading record (BRHs) corrupted due to the undefined behavior of `memcpy()` on recent OSs
 
-* 修正 visio screen 的畫面備份機制在寬／高螢幕下以及螢幕大小變更時，不能正確運作的問題
-  Fix the screen backup mechanism of visio screen broken for wide/tall screens and resizing screen
+* 修正其它執行資料會因為 `memcpy()` 在較新的作業系統上的未定義行為而損壞的問題\
+  Fix other runtime data corrupted due to the undefined behavior of `memcpy()` on recent OSs
+
+* 修正 visio screen 的畫面備份機制在寬／高螢幕下以及螢幕大小變更時，不能正確運作的問題\
+  Fix the screen backup mechanism of visio screen was broken for wide/tall screens and resizing screen
 
 * 修正 Xover 列表項目在某些操作後的顯示樣式不正確的問題\
   Fix incorrect appearance of Xover list items after certain operations
   
   現在單一項目的顯示有所更動時，會一律重新繪製此項目\
-  Now the redrawing of the whole item is always performed when the display of the item alters
+  Now the redrawing of the entire item is always performed when the display of the item alters
 
-* 修正編輯器的編輯行為問題\
-  Fix the editing behavior issues of the editor
+* 修正編輯器的游標在空行或只有空白的行的前一行行尾時，按下 <kbd>Del</kbd> 無效的問題\
+  Fix <kbd>Del</kbd> not worked at the end of a line above an empty or space-only line
 
-  詳細的行為修正可見：\
-  For details of fixed behaviors, please refer to:\
-  https://github.com/ccns/dreambbs/pull/58
+* 修正編輯器的游標位於非檔案第一行的畫面第一行的行首時，按下倒退鍵會導致程式崩潰的問題\
+  Fix crash when pressing backspace at the beginning of the topmost line which is not the beginning of a file in the editor
 
 * 修正在高螢幕下，閱讀文章時進入並退出使用者列表，可能會產生暫時甚至永久的無效文章項目的問題\
   Fix possible generation of temporary or even persistent corrupted article entries when the user enter and exit the online user list while using a tall screen
 
 * 修正將線上使用者自動停權所使用的函式（`remove_perm()`）只會將使用者的對系統內的前 1750（`MAXBOARD/4`）個看板的寫入權限移除的問題\
-  Fix the function for automatically suspending online users (`remove_perm()`) only remove their write permission of the first 1750 (`MAXBOARD/4`) boards in the system
+  Fix the function for automatically suspending online users (`remove_perm()`) only removed their write permission of the first 1750 (`MAXBOARD/4`) boards in the system
 
 * 修正信件列表中的 tag 記號在畫面重繪後會消失的問題\
-  Fix the tag marks in the mail list disappear after redraws
+  Fix the tag marks in the mail list disappeared after redraws
 
 * 修正群組名單搜尋（`list_search()`）的目標不在第一頁時會跳到錯誤項的問題\
-  Fix the issue that the searching function for the contact group list (`list_search()`) jumps to the wrong item when the target is not in the first page
+  Fix the issue that the searching function for the contact group list (`list_search()`) jumped to the wrong item when the target is not in the first page
 
 * 修正了 BBS-Lua 與 BBS-Ruby 的問題\
   Fix issues about BBS-Lua and BBS-Ruby
@@ -191,6 +199,15 @@ The major changes from v2.0 are explained below.
   詳情請見：\
   For details, please refer to:\
   https://github.com/ccns/dreambbs/pull/61
+
+* 修正文章轉綠時間變為上次推文時間的問題\
+  Fix the date of article reposting became the date of the last comment
+
+* 修正張爸關鍵字的偵測會產生未定義結果，造成關鍵字被隨機允許的問題\
+  Fix the Zhangba pattern matching produced undefined result and wrongly, randomly allowing some patterns
+
+* 修正 rxvt 式的 <kbd>Ctrl</kbd>-方向鍵被誤認為 <kbd>Shift</kbd>-方向鍵的問題
+  Fix rxvt-style <kbd>Ctrl</kbd>-arrow keys were misinterpreted as <kbd>Shift</kbd>-arrow keys
 
 ### 專案部屬工具改變 Project Deployment Tool Changes
 
@@ -251,8 +268,12 @@ The major changes from v2.0 are explained below.
   此座標系中的固定座標值能隨畫面大小對應不同的實際座標。\
   In this coordination system, a fixed coordination value can map to different actual coordination values depends on the screen size.
 
-  例如畫面中央可用 `(T_LINES_REF/2, T_COLS_REF/2)` 表示，其中 `T_LINES_REF`（對應畫面高度）與 `T_COLS_REF`（對應畫面寬度）為常數。\
-  For example, the center of the screen can be represented by `(T_LINES_REF/2, T_COLS_REF/2)`, where `T_LINES_REF` (which maps to the screen height) and `T_COLS_REF` (which maps to the screen width) are constants.
+  範例 Examples:
+  - 畫面底部橫行 The bottom line of the screen: `(T_LINES_REF-1, 0)` == `(B_LINES_REF, 0)`
+  - 畫面中央 The screen center: `(T_LINES_REF/2, T_COLS_REF/2)`
+
+  其中 `T_LINES_REF`（對應畫面高度）與 `T_COLS_REF`（對應畫面寬度）皆為常數。\
+  Where `T_LINES_REF` (which maps to the screen height) and `T_COLS_REF` (which maps to the screen width) are both constants.
 
   對此座標系統的更深入介紹，請見：\
   For a deeper introduction of the coordination system, please refer to:\
@@ -271,10 +292,14 @@ The major changes from v2.0 are explained below.
   The redesigned Xover special value scheme avoids the negative issue of cursor movement, and allows specifying the redraws and key operations at the same time.
 
   改進後的 Xover 列表系統使用 `mmap()` 一次載入整個列表的資料。\
-  The improved Xover list system uses `mmap()` to load the data of the whole list at once.
+  The improved Xover list system uses `mmap()` to load the data of the entire list at once.
 
-  引進新的特殊值，包含而不限於 `XO_REL`（相對移動）、`XO_SCRL`（行捲動）、`XO_POSF`（回呼函式有位置參數）。\
-  New special values are introduced, including but not limited to `XO_REL` (relative movement), `XO_SCRL` (scroll by rows), and `XO_POSF` (the callback function has a position parameter).
+  引進新的特殊值，包含而不限於：\
+  New special values are introduced, including but not limited to:
+  - `XO_REL + diff`: 相對移動 Relative move
+  - `XO_SCRL + move`: 行捲動 Scroll by rows
+  - `XO_CUR + diff`: 重繪單項並相對移動 Redraw a single item and relative move
+  - `XO_POSF + key`: 表示按鍵對應的回呼函式有位置參數 Specify that the callback function for the key has a position parameter
 
   有關 Xover 列表系統變更前後的詳細說明，請見：\
   For details for Xover list system before and after the change, please refer to:\
@@ -340,7 +365,7 @@ The major changes from v2.0 are explained below.
   使用固定寬度的整數型別作為硬碟上與 SHM（共用記憶體）中儲存的資料結構的成員\
   Use fixed-width integer types for structure members for data structures stored on hard disk or in SHM (shared memory)
 
-  在 64 位元環境中，內部會使用 64 位元寬的 `time_t` 處理時間，而固定寬度的時間型別僅會在上述情況使用。
+  在 64 位元環境中，內部會使用 64 位元寬的 `time_t` 處理時間，而固定寬度的時間型別僅會在上述情況使用。\
   64-bit `time_t` is used for internal time processing in 64-bit environment, while fixed-width time types is used only for the condition above.
 
   改寫硬碟上與 SHM 中儲存的資料結構中的指標為索引值\
@@ -362,6 +387,12 @@ The major changes from v2.0 are explained below.
 
 + 新增 macros 以使用 ISO C99 與 ISO C++11 中功能相近但形式不同的語法\
   Add macros to use syntaxes with the similar functionality but in different forms between ISO C99 and ISO C++11
+
+- 移除毫無意義地寫死了的顯式地指定了的陣列大小\
+  Remove unmeaningfully hardcoded explicit array size
+
+* 修正用 `#if 0` 取代標準註解語法當作文字註解的問題\
+  Fix `#if 0` replaced the standard comment syntaxes for text comments
 
 ## 統計資訊 Statistic Information
 
