@@ -73,16 +73,16 @@
         - 騰出更多編碼空間，並預留未來可能增加支援的按鍵的空位
         - <kbd>Shift</kbd>-<kbd>Tab</kbd> 正名為 `KEY_BTAB`，原名 `KEY_STAB` 為了向舊版相容而保留
     - 可以按 <kbd>Esc</kbd>-<kbd>Ctrl</kbd>-<kbd>L</kbd> 手動送出調整畫面大小後的重繪指令 (`I_RESIZETERM`) ([cc14385ce](https://github.com/ccns/dreambbs/commit/cc14385ce7346d18aaf71a1469d77ce477ee5a1a))
-    - `\r` 的處理改為與按鍵控制碼的 0.01 秒延時判斷類似，收到下一字元或逾時後才回傳按鍵 ([f53a8c9a4 (develop)](https://github.com/IepIweidieng/dreambbs/commit/f53a8c9a4e10c1f82dadde928415698f3ba2a587))
+    - `\r` 的處理改為與按鍵控制碼的 0.01 秒延時判斷類似，收到下一字元或逾時後才回傳按鍵 ([111524a46](https://github.com/ccns/dreambbs/commit/111524a468d57d1bc7a79f240ddd0ccd40a92fb5))
         - 這樣收到 `\r\0` 或 `\r\n` 後能立即離開 `vkey`，而不會停在 `igetch` 等下一字元
-    - 改進按鍵控制碼的可能結尾字元的下一字元為其它按鍵控制碼開頭或系統特殊按鍵碼的處理 ([ff6b6765c (develop)](https://github.com/IepIweidieng/dreambbs/commit/ff6b6765c2c6c8d7c234daca0e0e6ec818e23343))
+    - 改進按鍵控制碼的可能結尾字元的下一字元為其它按鍵控制碼開頭或系統特殊按鍵碼的處理 ([7b362c9ae](https://github.com/ccns/dreambbs/commit/7b362c9ae8485f6881926abf99197a27bbb465ab))
         - 將這一字元記錄起來並在下次進入 `igetch` 時回傳
         - 一律定義 `TRAP_ESC` 以確保可能已結束的按鍵控制碼不被緊接著的 `Esc` 無效化，並移除不使用的程式碼
-    - 調整按鍵處理順序 ([c1e1f98fd (develop)](https://github.com/IepIweidieng/dreambbs/commit/c1e1f98fdf87bf8b91d84bf0cc45dfccc91e1c40))
+    - 調整按鍵處理順序 ([1e9d59de7](https://github.com/ccns/dreambbs/commit/1e9d59de7e82357974d3943b3b75cb304f951cbd))
         - 將 `\r`、`\x7f` 與其它按鍵控制碼一起處理
         - 解析出按鍵後再處理重繪及熱訊等特殊按鍵功能
         - 現在按 <kbd>Ctrl</kbd>-<kbd>L</kbd> 重繪畫面後會再送出 `Ctrl('L')` 按鍵碼
-    - 現在會過濾掉瀏覽程式送出的雙位元字的自動重複按鍵 ([76adfb84a (develop)](https://github.com/IepIweidieng/dreambbs/commit/76adfb84ab008bc88a7fb718e5b94a2fce6e52ba))
+    - 現在會過濾掉瀏覽程式送出的雙位元字的自動重複按鍵 ([df69c19ed2](https://github.com/ccns/dreambbs/commit/df69c19ed21a65c749f3b4d52f4928437bf4f5c0))
 - `vget` 的自動完成列表 ([2b48a99db](https://github.com/ccns/dreambbs/commit/2b48a99dbdbcdff4ed16cfbfa0311b5b20a262a8))：
     - 按 <kbd>Space</kbd> 或 <kbd>Tab</kbd> 會自動完成
     - 按 <kbd>Enter</kbd>、<kbd>Space</kbd>、<kbd>Tab</kbd> 鍵會繼續列出，按其它鍵繼續輸入
@@ -99,7 +99,7 @@
     - 按 <kbd>S</kbd> 鍵或 <kbd>/</kbd> 鍵可以搜尋看板 (同 <kbd>S</kbd>/<kbd>Ctrl</kbd>-<kbd>s</kbd>) ([6c64679f5](https://github.com/ccns/dreambbs/commit/6c64679f5853600b03a83aa84744fc18054d14fd))
 - 針對 PttChrome 中不能按的按鍵組合，所另外追加的替代快速鍵 ([998d34502](https://github.com/ccns/dreambbs/commit/998d3450214be77323b86974270ea47ae1e19d0a))
     - <kbd>Esc</kbd>-<kbd>R</kbd> (同 <kbd>Ctrl</kbd>-<kbd>R</kbd>)：
-        - 回覆熱訊 ([c1e1f98fd (develop)](https://github.com/IepIweidieng/dreambbs/commit/c1e1f98fdf87bf8b91d84bf0cc45dfccc91e1c40) 後才可正常使用)
+        - 回覆熱訊 ([1e9d59de7](https://github.com/ccns/dreambbs/commit/1e9d59de7e82357974d3943b3b75cb304f951cbd) 後才可正常使用)
         - 從熱訊介面進入詳細熱訊
     - <kbd>Esc</kbd>-<kbd>W</kbd> (同 <kbd>Ctrl</kbd>-<kbd>W</kbd>)：
         - 編輯器：叫出檔案選單
@@ -109,8 +109,8 @@
         - 編輯器：跳到檔案結尾
         - xover 列表：標記同標題文章
         - 小雞對戰時叫出聊天紀錄
-    - <kbd>Esc</kbd>-<kbd>A</kbd> (同 <kbd>Ctrl</kbd>-<kbd>A</kbd>) ([4ceee32f3 (develop)](https://github.com/IepIweidieng/dreambbs/commit/4ceee32f3a931626a72022082dea016701609bb0))：
+    - <kbd>Esc</kbd>-<kbd>A</kbd> (同 <kbd>Ctrl</kbd>-<kbd>A</kbd>) ([3d99c78ab](https://github.com/ccns/dreambbs/commit/3d99c78abc1c89c8362acf3c32de337a9cb57a20))：
        - 私訊聊天：執行 `BWboard` 遊戲 (但已移除；相關程式碼已禁用)
        - xover 列表：標記同作者文章
-    - <kbd>Esc</kbd>-<kbd>N</kbd> (同 <kbd>Ctrl</kbd>-<kbd>N</kbd>) ([4ceee32f3 (develop)](https://github.com/IepIweidieng/dreambbs/commit/4ceee32f3a931626a72022082dea016701609bb0))：
+    - <kbd>Esc</kbd>-<kbd>N</kbd> (同 <kbd>Ctrl</kbd>-<kbd>N</kbd>) ([3d99c78ab](https://github.com/ccns/dreambbs/commit/3d99c78abc1c89c8362acf3c32de337a9cb57a20))：
        - 文章列表：直接從列表移除文章
