@@ -9,7 +9,11 @@ DreamBBS-202X v0-Azure (also v3.0/3.21) is the next major release after DreamBBS
 
 有關從 v2.0 到此版本的改變細節，請見此發佈版本的計畫專案中的各個 pull request 的說明：\
 For details of changes from v2.0 until now, please refer to the description of pull requests of the project for this release:\
-<https://github.com/ccns/dreambbs/projects/4>
+https://github.com/ccns/dreambbs/projects/4
+
+有關快速鍵的改變，請見：\
+For hotkey changes, please refer to:\
+https://github.com/ccns/dreambbs/wiki/VS-MapleBBS-3-Keyboard-zh_tw
 
 以下說明從 v2.0 的重大改變。\
 The major changes from v2.0 are explained below.
@@ -37,9 +41,13 @@ The major changes from v2.0 are explained below.
 + 加大了使用者名單中的「故鄉」（使用者的網際網路地址訊息）欄位的最大寬度，請使用寬螢幕看看。\
   The maximum width of the "homeland" (users' internet address information) field in the online user list has been increased. Please check it out with a wide screen.
 
-+ 增加自動生成的程式版本與編譯環境資訊，可在 BBS 介面主選單進入以下選項查看：\
-  Add automatic generated program version and compilation environment information which can be viewed in the BBS UI by entering the following menu item:\
-  `(X)yz` (系統資訊區 System Information Area) -> `(X)info` (系統程式資訊 System Environment and Program Information)
++ 增加自動生成的程式版本與編譯環境資訊\
+  Add automatic generated program version and compilation environment information
+
+  可從 BBS 介面主選單選擇以下選項以查看：\
+  To view it, please choose the following menu item from the main menu:
+  - `(X)yz` (系統資訊區 System Information Area)\
+    -> `(X)info` (系統程式資訊 System Environment and Program Information)
 
 + 現在使用者上站紀錄的 IP 地址會被印成標準格式，並且連線類型在由 WebSocket 連入時會顯示為 `WSP` (WebSocket Proxy)\
   Now, in the user's login history, the IP is printed in the standard format, and the connection type is displayed as `WSP` (WebSocket Proxy) if the user connects via WebSocket
@@ -53,14 +61,71 @@ The major changes from v2.0 are explained below.
 + 選擇使用者／系統檔案以編輯的介面（`x_file()`）改為使用主選單函式 (`domenu()`，原 `menu()`) 實作\
   The UI for choosing user/system files (`x_file()`) for editing is reimplemented with the main menu function (`domenu()`, formerly `menu()`)
 
++ 實作 pfterm 的黑白模式\
+  Implement the Black-and-White mode for pfterm
+
+  可從 BBS 介面主選單選擇以下選項以使用功能：\
+  To access this function, please choose the following menu item from the main menu:
+  - `(D)Service` (服務區 Service Area)\
+    -> `(U)ser` (個人工具區 User Utilities)\
+    -> `(C)onfigure` (註冊及設定個人資訊 Register and User Information Setting)\
+    -> `(F)avorite` (個人喜好設定 User Preference)\
+    -> `0 □` (彩色模式 Color Mode)
+
+  並使該選項的圖案變為空心 And make the icon for the option unfilled: `□`
+
++ 現在 pfterm 支援更多彩現屬性\
+  pfterm now supports more render attributes
+
+  v2.0 引進的 Virtual Attribute 已更名為 Cursor Attribute\
+  The Virtual Attribute introduced in v2.0 has been renamed to Cursor Attribute
+
+  有關完整的新增支援的彩現屬性清單，請見：\
+  For the complete list of newly supported render attributes, please refer to:\
+  https://github.com/ccns/dreambbs/pull/61
+
++ 引進 PttBBS 式的光棒選單系統\
+  Introduce the PttBBS-style lightbar menu system
+
+  可從 BBS 介面主選單選擇以下選項以啟用：\
+  To enable it, please choose the following menu item from the main menu:
+  - `(D)Service` (服務區 Service Area)\
+    -> `(U)ser` (個人工具區 User Utilities)\
+    -> `(C)onfigure` (註冊及設定個人資訊 Register and User Information Setting)\
+    -> `(F)avorite` (個人喜好設定 User Preference)\
+    -> `K ■` (使用光棒選單系統 Enable Lightbar Menu System)
+
+  並使該選項的圖案填滿 And make the icon for the option filled: `■`
+
+  如果 pfterm 未啟用，則本功能無效。\
+  This feature is disabled when pfterm is not enabled.
+
 + 轉信設定介面改用 `xover()` 實作，可使用 Xover 列表的預設快速鍵\
   The UI of internet article sending/receiving setting is reimplemented using `xover()`, so the default hotkeys of Xover list can be used
+
++ 重新實作 Xover 列表的 footer 顯示，改善 Xover 快速訊息的顯示\
+  Reimplement the footer display in Xover list and refine the display of Xover quick messages
+
+  現在執行會改變 footer 所在橫行的顯示的操作後，會正確地重繪 footer 了\
+  Now the footer is redrawn correctly after operations which alter the display of the row for the footer
+
+  現在 Xover 快速訊息出現時，按任意按鍵會清除此訊息並重繪回 footer\
+  Now, when the Xover quick messages appear, pressing any key causes the message to be cleared and the footer to be redrawn
+
++ 改善 `vget()` 輸入框系統的歷史紀錄處理\
+  Refine the history entry handling of the `vget()` input field system
+
+  不能再向後跳到空白紀錄或向前跳到最舊紀錄了。\
+  It is no longer possible to jump backward to empty entries or jump forward to the oldest entry.
+
+  已編輯的新輸入與歷史在前後切換歷史時會被儲存，而送出為輸入的歷史會變成最新的歷史。\
+  Edited new input and history entries are saved when switching between the history entry, and the history entry which sent as the input becomes the newest entry.
 
 + 現在改變畫面大小時會進行畫面自動重繪\
   Now an automatic redraw is performed when the screen size is changed
 
-  亦可按 Esc-Ctrl-L 手動重繪\
-  Esc-Ctrl-L can be used for manual redraws if needed
+  亦可按 <kbd>Esc</kbd>-<kbd>Ctrl</kbd>-<kbd>L</kbd> 手動重繪\
+  <kbd>Esc</kbd>-<kbd>Ctrl</kbd>-<kbd>L</kbd> can be used for manual redraws if needed
 
 + 改進文章標題色彩突顯系統 (`hdr_outs()`)\
   Improve the color-highlighting system for article titles (`hdr_outs()`)
@@ -100,6 +165,18 @@ The major changes from v2.0 are explained below.
   詳細的行為修正可見：\
   For details of fixed behaviors, please refer to:\
   https://github.com/ccns/dreambbs/pull/58
+
+* 修正在高螢幕下，閱讀文章時進入並退出使用者列表，可能會產生暫時甚至永久的無效文章項目的問題\
+  Fix possible generation of temporary or even persistent corrupted article entries when the user enter and exit the online user list while using a tall screen
+
+* 修正將線上使用者自動停權所使用的函式（`remove_perm()`）只會將使用者的對系統內的前 1750（`MAXBOARD/4`）個看板的寫入權限移除的問題\
+  Fix the function for automatically suspending online users (`remove_perm()`) only remove their write permission of the first 1750 (`MAXBOARD/4`) boards in the system
+
+* 修正信件列表中的 tag 記號在畫面重繪後會消失的問題\
+  Fix the tag marks in the mail list disappear after redraws
+
+* 修正群組名單搜尋（`list_search()`）的目標不在第一頁時會跳到錯誤項的問題\
+  Fix the issue that the searching function for the contact group list (`list_search()`) jumps to the wrong item when the target is not in the first page
 
 * 修正了 BBS-Lua 與 BBS-Ruby 的問題\
   Fix issues about BBS-Lua and BBS-Ruby
@@ -162,6 +239,28 @@ The major changes from v2.0 are explained below.
   `lib/dns.c` 亦已實作 IPv6 地址之 AAAA 紀錄的 DNS 反查\
   DNS lookup for AAAA records of IPv6 addresses is implemented in `lib/dns.c` as well
 
++ `vkey()` 按鍵輸入系統已加入延時判斷機制\
+  The delayed key determination mechanism is implemented in the `vkey()` key input system
+
+  現在一律定義 `TRAP_ESC` 以正確處理被 `Esc` 中斷的不確定是否完整的按鍵序列碼。\
+  `TRAP_ESC` is now always defined to correctly handle key sequences which may not be complete.
+
++ 引進畫面大小參考座標系統\
+  Introduce the Screen-Size–Referencing Coordination System
+
+  此座標系中的固定座標值能隨畫面大小對應不同的實際座標。\
+  In this coordination system, a fixed coordination value can map to different actual coordination values depends on the screen size.
+
+  例如畫面中央可用 `(T_LINES_REF/2, T_COLS_REF/2)` 表示，其中 `T_LINES_REF`（對應畫面高度）與 `T_COLS_REF`（對應畫面寬度）為常數。\
+  For example, the center of the screen can be represented by `(T_LINES_REF/2, T_COLS_REF/2)`, where `T_LINES_REF` (which maps to the screen height) and `T_COLS_REF` (which maps to the screen width) are constants.
+
+  對此座標系統的更深入介紹，請見：\
+  For a deeper introduction of the coordination system, please refer to:\
+  https://github.com/ccns/dreambbs/wiki/Screen-Coordinate-System-zh_tw
+
+  目前 DreamBBS 使用此座標系統處理主選單、彈出式選單、以及 `vget()` 輸入框在畫面大小變更時的重繪。\
+  The coordination is currently used in DreamBBS for handling the redrawing of the main menu, the popup menu, and the `vget()` input field on screen resizing.
+
 + 改進並擴充 Xover 列表系統\
   Improve and extend the Xover list system
 
@@ -182,7 +281,7 @@ The major changes from v2.0 are explained below.
   https://github.com/ccns/dreambbs/wiki/Xover-List-System-zh_tw
 
   有關詳細變更的介紹，請見：\
-  For the introduction of detailed changes, please refer to:\
+  For the introduction of the changes in detail, please refer to:\
   https://github.com/ccns/dreambbs/pull/61
 
 + 改進並擴充主選單系統，使其它外觀相似的選單能共用其函式\
