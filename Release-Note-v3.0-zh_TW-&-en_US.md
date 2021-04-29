@@ -84,6 +84,13 @@ The major changes from v2.0 are explained below.
   **BSD Makefile 檔案已被棄用，將在 v3.1 時被移除。請改用 CMake 建置本專案。**\
   **BSD Makefiles are now deprecated and will be removed in v3.1. Please build this project with CMake instead.**
 
++ `wsproxy` 模組不再需要 `vstruct` 函式庫\
+  The `wsproxy` module no longer requires the library `vstruct`
+
+  此修改已移植回 PttBBS：\
+  This change has been backported to PttBBS:\
+  https://github.com/ptt/pttbbs/pull/87
+
 ### 程式架構改變 Program Architecture Changes
 
 + 支援使用帶有 GCC 擴充語法的 C++ 模式編譯\
