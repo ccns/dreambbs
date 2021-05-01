@@ -127,8 +127,11 @@ The major changes from v2.0 are explained below.
   已編輯的新輸入與歷史在前後切換歷史時會被儲存，而送出為輸入的歷史會變成最新的歷史。\
   Edited new input and history entries are saved when switching between the history entry, and the history entry which sent as the input becomes the newest entry.
 
-+ 現在改變畫面大小時會進行畫面自動重繪\
-  Now an automatic redraw is performed when the screen size is changed
++ 現在鎖文時，如果沒有板主權限而不能自行解鎖，會先顯示警告訊息要使用者確認\
+  Now a warning prompt displays when users try to lock their post but do not have the moderator permission to unlock the post
+
++ 現在許多介面支援在畫面大小改變時會進行畫面自動重繪，如 Xover 列表、彈出式選單、`vget()` 輸入框\
+  Now many UIs support automatic redraws when the screen size is changed, e.g., Xover lists, the popup menu, and the `vget()` input fields
 
   亦可按 <kbd>Esc</kbd>-<kbd>Ctrl</kbd>-<kbd>L</kbd> 手動重繪\
   <kbd>Esc</kbd>-<kbd>Ctrl</kbd>-<kbd>L</kbd> can be used for manual redraws if needed
@@ -208,6 +211,15 @@ The major changes from v2.0 are explained below.
 
 * 修正 rxvt 式的 <kbd>Ctrl</kbd>-方向鍵被誤認為 <kbd>Shift</kbd>-方向鍵的問題
   Fix rxvt-style <kbd>Ctrl</kbd>-arrow keys were misinterpreted as <kbd>Shift</kbd>-arrow keys
+
+* 修正從 <kbd>Ctrl</kbd>-<kbd>Z</kbd> 選單離開會跳出進板畫面的問題\
+  Fix exiting from the <kbd>Ctrl</kbd>-<kbd>Z</kbd> menu triggered the welcome screen of the current board
+
+* 修正訪客閒置時異常斷線\
+  Fix idling guests got disconnected abnormally
+
+* 修正踢除重複連線時，踢人的 pid 被誤當成被踢的 pid 記錄\
+  Fix the kicker session's pid wrongly logged as the kicked session's pid when the previous session is kicked due to multi-session
 
 ### 專案部屬工具改變 Project Deployment Tool Changes
 
