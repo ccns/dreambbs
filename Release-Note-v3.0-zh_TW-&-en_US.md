@@ -212,7 +212,7 @@ The major changes from v2.0 are explained below.
 * 修正 rxvt 式的 <kbd>Ctrl</kbd>-方向鍵被誤認為 <kbd>Shift</kbd>-方向鍵的問題
   Fix rxvt-style <kbd>Ctrl</kbd>-arrow keys were misinterpreted as <kbd>Shift</kbd>-arrow keys
 
-* 修正從 <kbd>Ctrl</kbd>-<kbd>Z</kbd> 選單離開會跳出進板畫面的問題\
+* 修正從 <kbd>Ctrl</kbd>-<kbd>Z</kbd> 選單離開會跳出目前看板的進板畫面的問題\
   Fix exiting from the <kbd>Ctrl</kbd>-<kbd>Z</kbd> menu triggered the welcome screen of the current board
 
 * 修正訪客閒置時異常斷線\
@@ -220,6 +220,9 @@ The major changes from v2.0 are explained below.
 
 * 修正踢除重複連線時，踢人的 pid 被誤當成被踢的 pid 記錄\
   Fix the kicker session's pid wrongly logged as the kicked session's pid when the previous session is kicked due to multi-session
+
+* 修正 `mailpost` 會將文章加到文章列表中的置底文章下方的問題\
+  Fix `mailpost` inserted articles after bottomed posts in the article list
 
 ### 專案部屬工具改變 Project Deployment Tool Changes
 
@@ -273,6 +276,9 @@ The major changes from v2.0 are explained below.
 
   現在一律定義 `TRAP_ESC` 以正確處理被 `Esc` 中斷的不確定是否完整的按鍵序列碼。\
   `TRAP_ESC` is now always defined to correctly handle key sequences which may not be complete.
+
+* `vkey()` 過去內部使用的 `iac_count()` 被棄用，已改用新的有邊界檢查的 `iac_process()`\
+  The `iac_count()` which was used internally in `vkey()` has been deprecated in favor of the new bound-checking `iac_process()`
 
 + 引進畫面大小參考座標系統\
   Introduce the Screen-Size–Referencing Coordination System
@@ -330,13 +336,19 @@ The major changes from v2.0 are explained below.
   將主選單系統與 WindTop BBS 的彈出式選單系統所使用的特殊值整合為一\
   Merge the special values used for the main menu system and the WindTop BBS popup menu system
 
-  有關主選單系統的特殊值變更前後的詳細說明，請見：\
-  For details for the special values used in main menu before and after the change, please refer to:\
-  https://github.com/ccns/dreambbs/wiki/Menu-Systems-zh_tw
+  選單系統的內部程式不再使用 WindTop BBS 彈出式選單的 `POPUP_*` 巨集。\
+  The `POPUP_*` macros for WindTop BBS popup menu are no longer used in the internal code of the menu systems.
 
   有關主選單的詳細行為變更，請見：\
   For details for behavior changes of the main menu, please refer to:\
   https://github.com/ccns/dreambbs/pull/61
+
+  改寫主選單以符合 Xover 架構，並將一部份命令改成與 Xover 命令相同。\
+  Rewrite the main menu to be compatible with Xover architecture. Some commands for main menu were changed to be consistent with Xover commands.
+
+  有關主選單系統的特殊值變更前後的詳細說明，請見：\
+  For details for the special values used in main menu before and after the change, please refer to:\
+  https://github.com/ccns/dreambbs/wiki/Menu-Systems-zh_tw
 
 + 改進轉信程式 (`innbbsd`) 的時間格式解析邏輯 (`parse_date()`)，使之能處理 RFC-1123 所允許的除文字時區與任意括號外的其它時間格式\
   Improve the date parsing logic (`parse_date()`) of the internet article sending/receiving program (`innbbsd`) to make it handles other date formats permitted by RFC-1123 other than the time zone texts and arbitrary parentheses
@@ -368,7 +380,10 @@ The major changes from v2.0 are explained below.
   移除看板分類區在一天的特定時段中不能重建的限制\
   Lift the limitation that the board category area should not be rebuilt in the certain time period of a day
 
-* 支援在 64 位元環境下原生編譯而不影響資料結構的記憶體佈局\
++ 新增不須使用系統殼層介面的系統程式呼叫函式取代部分 `system()` 函式呼叫，改善安全性\
+  Add new system-program–calling functions which do not depend on the system shell to replace `system()` function calls to improve security
+
++ 支援在 64 位元環境下原生編譯而不影響資料結構的記憶體佈局\
   Support native compilation under 64-bit environment without disrupting the memory layout of data structures
 
   **由於資料結構 `UCACHE` 中的一些資料欄位定義已更改，請務必使用系統殼層命令 `ipcrm` 重開 SHM（共用記憶體）。**\
