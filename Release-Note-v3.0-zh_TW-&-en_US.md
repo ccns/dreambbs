@@ -136,22 +136,28 @@ The major changes from v2.0 are explained below.
   亦可按 <kbd>Esc</kbd>-<kbd>Ctrl</kbd>-<kbd>L</kbd> 手動重繪\
   <kbd>Esc</kbd>-<kbd>Ctrl</kbd>-<kbd>L</kbd> can be used for manual redraws if needed
 
+* 現在在編輯器中，允許在一行內輸入最多 3986 個位元組長（含 ANSI 控制碼）的文字\
+  Now, texts up to 3986 bytes long (including ANSI escapes) are allowed to be input on a single line in the editor
+
+  顯示系統及編輯器的單行緩衝區大小（`ANSILINESIZE`，原 `ANSILINELEN`）已加大至 4000 個位元組\
+  The buffer size for a single line in the display system and the editor (`ANSILINESIZE`, formerly `ANSILINELEN`) has been increased to 4000 bytes
+
 + 改進文章標題色彩突顯系統 (`hdr_outs()`)\
   Improve the color-highlighting system for article titles (`hdr_outs()`)
 
-  現在文章標題色彩突顯會正確處理雙位元字元\
+  現在文章標題色彩突顯會正確處理雙位元組字元\
   Now the color-highlighting of article titles correctly handles DBCS characters
 
   同時使相關程式碼更簡潔並易讀\
   Also improve the conciseness and readability of relevant codes
 
-+ 已實作伺服器端雙位元字元偵測\
++ 已實作伺服器端雙位元組字元偵測\
   Server-side DBCS character detection is now implemented
 
-  同時，BBS 使用者端所送出的雙位元字元按鍵自動重複會被偵測出並忽略\
+  同時，BBS 使用者端所送出的雙位元組字元按鍵自動重複會被偵測出並忽略\
   Also, the auto repeats for DBCS character are detected and ignored
 
-  在編輯器中，Esc-r 可暫時開關雙位元字元偵測\
+  在編輯器中，Esc-r 可暫時開關雙位元組字元偵測\
   In the editor, Esc-r can temporarily toggles DBCS character detection
 
 ### 錯誤修正 Bug Fixes
@@ -202,6 +208,9 @@ The major changes from v2.0 are explained below.
   詳情請見：\
   For details, please refer to:\
   https://github.com/ccns/dreambbs/pull/61
+
+* 修正 `utmp-dump` 先前以 `getopt()` 重寫的命令列參數處理，會將給定的任意參數皆誤判為不合法的問題\
+  Fix the rewritten command-line option parsing of `utmp-dump` mistook any given options as invalid
 
 * 修正文章轉綠時間變為上次推文時間的問題\
   Fix the date of article reposting became the date of the last comment
