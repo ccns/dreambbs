@@ -2,8 +2,8 @@
 
 ## 版本名稱 Version Name
 
-DreamBBS-202X v0-Azure (或稱 v3.0/3.21) 是續 DreamBBS v2.0-Artoria (或稱 3.12) 的下一個主要發佈版本。\
-DreamBBS-202X v0-Azure (also v3.0/3.21) is the next major release after DreamBBS v2.0-Artoria (also 3.12).
+DreamBBS-202X v0-Azure (或稱 v3.0/3.21.0) 是續 DreamBBS v2.0-Artoria (或稱 3.12.0) 的下一個主要發佈版本。\
+DreamBBS-202X v0-Azure (also v3.0/3.21.0) is the next major release after DreamBBS v2.0-Artoria (also 3.12.0).
 
 ## 改變說明 Changes
 
@@ -227,7 +227,7 @@ The major changes from v2.0 are explained below.
 * 修正訪客閒置時異常斷線\
   Fix idling guests got disconnected abnormally
 
-* 修正踢除重複連線時，踢人的 pid 被誤當成被踢的 pid 記錄\
+* 修正踢除先前的重複連線時，踢人的 pid 被誤當成被踢的 pid 記錄\
   Fix the kicker session's pid wrongly logged as the kicked session's pid when the previous session is kicked due to multi-session
 
 * 修正 `mailpost` 會將文章加到文章列表中的置底文章下方的問題\
