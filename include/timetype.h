@@ -6,8 +6,8 @@
 /* Create: 2021-02-23                                    */
 /*-------------------------------------------------------*/
 
-#ifndef TIMEDEF_H
-#define TIMEDEF_H
+#ifndef TIMETYPE_H
+#define TIMETYPE_H
 
 #include <time.h>
 
@@ -57,4 +57,4 @@ static inline time64_t time64(time64_t *tloc)
 #define localtime_any_r(_timep, _result) \
     localtime_r(&TEMPLVAL(time_t, {*(_timep)}), _result)
 
-#endif  // #ifndef TIMEDEF_H
+#endif  // #ifndef TIMETYPE_H
