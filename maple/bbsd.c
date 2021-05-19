@@ -1912,6 +1912,7 @@ int main(int argc, char *argv[])
     /* attach shared memory & semaphore                    */
     /* --------------------------------------------------- */
 
+    ban_addr_tlogger_init(&blog_tlogger);
     shm_tlogger_init(&blog_tlogger);
 
 #ifdef  HAVE_SEM

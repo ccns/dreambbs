@@ -38,6 +38,22 @@ extern "C" {
 /* Thor.981206: lkchu patch */
 extern const char radix32[32];
 
+/* acct.c */
+void addmoney(int addend, const char *userid);
+void addpoint1(int addend, const char *userid);
+void addpoint2(int addend, const char *userid);
+void keeplog(const char *fnlog, const char *board, const char *title, int mode);
+int acct_load(ACCT *acct, const char *userid);
+void acct_save(const ACCT *acct);
+int acct_userno(const char *userid);
+void deny_log_email(const char *mail, time_t deny);
+int seek_log_email(const char *mail, int mode);
+int add_deny_exer(ACCT *u, int adm, int cross, const char *exer);
+void ban_addr_tlogger_init(const TLogger *tlogger);
+int ban_addr(const char *addr);
+int allow_addr(const char *addr);
+void check_nckuemail(char *email);
+int find_same_email(const char *mail, int mode);
 /* acl.c */
 int acl_addr(const char *acl, const char *addr);
 int acl_has(const char *acl, const char *user, const char *host);

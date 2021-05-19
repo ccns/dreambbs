@@ -100,24 +100,6 @@ bbs_biff(
 /* 主程式                                                */
 /* ----------------------------------------------------- */
 
-int
-acct_load(
-    ACCT *acct,
-    const char *userid)
-{
-    int fd;
-
-    usr_fpath((char *) acct, userid, FN_ACCT);
-    fd = open((char *) acct, O_RDONLY);
-    if (fd >= 0)
-    {
-        /* Thor.990416: 特別注意, 有時 .ACCT的長度會是0 */
-        read(fd, acct, sizeof(ACCT));
-        close(fd);
-    }
-    return fd;
-}
-
 static int
 mail2bbs(
     const char *userid)

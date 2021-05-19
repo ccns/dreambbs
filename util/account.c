@@ -656,10 +656,10 @@ main(void)
 
         /* 以下是秘密紀錄 */
         sprintf(title, "[記錄] %s文章觀看紀錄", date);
-        keeplog(FN_BROWSE_LOG, BRD_SECRET, title, 3);
+        keeplog(FN_BROWSE_LOG, BRD_SECRET, title, 4);
 
         sprintf(title, "[記錄] %s匿名板紀錄", date);
-        keeplog(FN_ANONYMOUS_LOG, BRD_SECRET, title, 3);
+        keeplog(FN_ANONYMOUS_LOG, BRD_SECRET, title, 4);
 
         /*  由於一直處於開檔狀態, 是故不 log by statue
             修改 SIG_USR1 可將 log dump 出來 by visor */
@@ -831,56 +831,3 @@ main(void)
 
     exit(0);
 }
-
-void
-keeplog(
-    const char *fnlog,
-    const char *board,
-    const char *title,
-    int mode)           /* 0:load 1: rename  2:unlink 3:mark*/
-{
-    HDR hdr;
-    char folder[128], fpath[128];
-    int fd;
-    FILE *fp;
-
-    if (!board)
-        board = BRD_SYSTEM;
-
-    sprintf(folder, "brd/%s/.DIR", board);
-    fd = hdr_stamp(folder, 'A', &hdr, fpath);
-    if (fd < 0)
-        return;
-
-    if (mode == 1 || mode == 3)
-    {
-        close(fd);
-        /* rename(fnlog, fpath); */
-        f_mv(fnlog, fpath); /* Thor.990409:可跨partition */
-    }
-    else
-    {
-        fp = fdopen(fd, "w");
-        fprintf(fp, "作者: SYSOP (" SYSOPNICK ")\n標題: %s\n時間: %s\n",
-            title, ctime_any(&hdr.chrono));
-        f_suck(fp, fnlog);
-        fclose(fp);
-        if (mode)
-            unlink(fnlog);
-    }
-    if (mode == 3)
-        hdr.xmode |= POST_MARKED;
-
-    strcpy(hdr.title, title);
-    strcpy(hdr.owner, "SYSOP");
-    strcpy(hdr.nick, SYSOPNICK);
-    fd = open(folder, O_WRONLY | O_CREAT | O_APPEND, 0600);
-    if (fd < 0)
-    {
-        unlink(fpath);
-        return;
-    }
-    write(fd, &hdr, sizeof(HDR));
-    close(fd);
-}
-

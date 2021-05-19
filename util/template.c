@@ -11,22 +11,6 @@
 
 #include "bbs.h"
 
-void
-acct_save(
-    const ACCT *acct)
-{
-    int fd;
-    char fpath[80];
-
-    usr_fpath(fpath, acct->userid, FN_ACCT);
-    fd = open(fpath, O_WRONLY, 0600);     /* fpath 必須已經存在 */
-    if (fd >= 0)
-    {
-        write(fd, acct, sizeof(ACCT));
-        close(fd);
-    }
-}
-
 static void
 reaper(
     const char *fpath,

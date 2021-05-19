@@ -847,26 +847,6 @@ exit_room(
 /* ----------------------------------------------------- */
 
 /* Thor.990211: 統一用 dao library */
-/* static */
-int
-acct_load(
-    ACCT *acct,
-    const char *userid)
-{
-    int fd;
-
-    usr_fpath((char *) acct, userid, FN_ACCT);
-    fd = open((char *) acct, O_RDONLY);
-    if (fd >= 0)
-    {
-        read(fd, acct, sizeof(ACCT));
-        close(fd);
-    }
-    return fd;
-}
-
-
-/* Thor.990211: 統一用 dao library */
 
 static void
 chat_query(

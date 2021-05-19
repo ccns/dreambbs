@@ -12,5 +12,5 @@ add_library(dao STATIC
     acl.c       file.c    isnot.c    radix32.c   shm.c
     dl_lib.c    record.c  splay.c    date.c      xsort.c
     attr_lib.c  dns.c       header.c  string.c    xwrite.c
-    proc.c      passwd.c  mime.c     logger.c
+    proc.c      passwd.c  mime.c     logger.c    acct.c
 )
