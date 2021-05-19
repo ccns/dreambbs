@@ -1,9 +1,11 @@
 /*-------------------------------------------------------*/
 /* lib/mime.c   ( NCKU CCNS WindTop-DreamBBS 3.21 )      */
 /*-------------------------------------------------------*/
-/* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
+/* Author: ???                                           */
 /* Target: MIME code processing library for DreamBBS     */
-/* Create: 2020/11/21                                    */
+/* Create: ????-??-?? (as lib/str_*.c)                   */
+/* Update: 2020/11/21 (split from lib/string.c)          */
+/*       : by Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw> */
 /*-------------------------------------------------------*/
 
 #include "config.h"

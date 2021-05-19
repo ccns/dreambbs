@@ -3,6 +3,7 @@
 /*-------------------------------------------------------*/
 /* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
 /* Target: C preprocessor utility macros                 */
+/*       : Some were adopted/adapted from other headers  */
 /* Create: 2019/03/30                                    */
 /*-------------------------------------------------------*/
 

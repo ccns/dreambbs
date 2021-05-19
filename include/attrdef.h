@@ -3,6 +3,7 @@
 /*-------------------------------------------------------*/
 /* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
 /* Target: Implementation-defined attribute macros       */
+/*       : Some were adopted/adapted from PttBBS headers */
 /* Create: 2019/09/25                                    */
 /*-------------------------------------------------------*/
 

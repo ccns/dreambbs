@@ -1,9 +1,11 @@
 # -------------------------------------------------------#
 #  so/so.mk     ( NCKU CCNS WindTop-DreamBBS 2.0 )       #
 # -------------------------------------------------------#
-#  Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    #
+#  Author: opus.bbs@bbs.cs.nthu.edu.tw                   #
 #  Target: Shared object target files for DreamBBS       #
-#  Create: 2019/05/07                                    #
+#  Create: 95/03/29 (so/Makefile)                        #
+#  Update: 2019/05/07 (split from so/Makefile)           #
+#        : by Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw> #
 # -------------------------------------------------------#
 
 HDR	= bbs.h config.h global.h modes.h perm.h struct.h bbs_script.h cppdef.h

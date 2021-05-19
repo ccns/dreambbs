@@ -1,9 +1,11 @@
 /*-------------------------------------------------------*/
 /* global_def.h     ( NCKU CCNS WindTop-DreamBBS 3.0 )   */
 /*-------------------------------------------------------*/
-/* Author: Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw>    */
+/* Author: ???                                           */
 /* Target: Global definitions                            */
-/* Create: 2020-11-16                                    */
+/* Create: 95/03/29 (as "global.h")                      */
+/* Update: 2020-11-16 (split from "global.h")            */
+/*       : by Wei-Cheng Yeh (IID) <iid@ccns.ncku.edu.tw> */
 /*-------------------------------------------------------*/
 #ifndef GLOBAL_DEF_H
 #define GLOBAL_DEF_H
