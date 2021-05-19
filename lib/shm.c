@@ -25,39 +25,13 @@
 #include "struct.h"
 #include "dao.h"
 
-/* Log output and formatting */
+/* Tag logger */
 
-static Logger shm_logger = {
-    .file = NULL,
-    .path = NULL,
-    .lv_skip = LOGLV_WARN,
-};
+static TLogger shm_tlogger = TLOGGER_DEFAULT;
 
-static void shm_formatter_default(char *buf, size_t size, const char *tag, const char *msg)
+void shm_tlogger_init(const TLogger *tlogger)
 {
-    snprintf(buf, size, "[%s] %s", tag, msg);
-}
-
-static void (*shm_formatter)(char *buf, size_t size, const char *tag, const char *msg) = shm_formatter_default;
-
-/* Setters */
-
-/* Set `shm_logger` to `*logger`
- * If `logger` is `NULL`, the default value is used */
-void shm_logger_init(const Logger *logger)
-{
-    shm_logger = (logger) ? *logger : LISTLIT(Logger){
-        .file = NULL,
-        .path = NULL,
-        .lv_skip = LOGLV_WARN,
-    };
-}
-
-/* Set `shm_formatter` to `formatter`
- * If `formatter` is `NULL`, the default value is used */
-void shm_formatter_init(void (*formatter)(char *buf, size_t size, const char *mode, const char *msg))
-{
-    shm_formatter = (formatter) ? formatter : shm_formatter_default;
+    shm_tlogger = (tlogger) ? *tlogger : TLOGGER_DEFAULT;
 }
 
 /* SHM loader */
@@ -70,7 +44,7 @@ void attach_err(int shmkey, const char *name)
 
     sprintf(tag, "%s error", name);
     sprintf(msg, "key = %lx", (unsigned long)shmkey);
-    logger_tag(&shm_logger, tag, msg, shm_formatter);
+    logger_tag(&shm_tlogger, tag, msg);
     exit(1);
 }
 
@@ -186,7 +160,7 @@ void bshm_init(BCACHE **p_bshm)
         /* 等所有 boards 資料更新後再設定 uptime */
 
         time32(uptime);
-        logger_tag(&shm_logger, "CACHE", "reload bcache", shm_formatter);
+        logger_tag(&shm_tlogger, "CACHE", "reload bcache");
         return;
     }
 }

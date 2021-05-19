@@ -196,7 +196,7 @@ logtalk(
     const char *key,
     const char *msg)
 {
-    logger_tag(&TEMPLVAL(Logger, {.file = ftalk}), key, msg, log_formatter);
+    logger_tag(&TEMPLVAL(TLogger, {.logger = {.file = ftalk}, .formatter = log_formatter}), key, msg);
 }
 
 
@@ -205,7 +205,7 @@ logit(
     const char *key,
     const char *msg)
 {
-    logger_tag(&TEMPLVAL(Logger, {.file = flog}), key, msg, log_formatter);
+    logger_tag(&TEMPLVAL(TLogger, {.logger = {.file = flog}, .formatter = log_formatter}), key, msg);
 }
 
 
@@ -1782,8 +1782,7 @@ print_user_counts(
         sprintf(buf + strlen(buf), " [ %d ¤H¦b¯µ±K¥]´[]", suserc);
     send_to_user(cuser, buf, 0, number);
 
-//  shm_logger_init(&TEMPLVAL(Logger, {.file = flog}));
-//  shm_formatter_init(log_formatter);
+//  shm_logger_init(&TEMPLVAL(TLogger, {.logger = {.file = flog}, .formatter = log_formatter}));
 //  load_mud_like();
 }
 

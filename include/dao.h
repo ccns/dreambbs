@@ -70,8 +70,7 @@ void archiv32(time_t chrono, char *fname);
 void archiv32m(time_t chrono, char *fname);
 GCC_PURE time_t chrono32(const char *str);
 /* shm.c */
-void shm_logger_init(const Logger *logger);
-void shm_formatter_init(void (*formatter)(char *buf, size_t size, const char *mode, const char *msg));
+void shm_tlogger_init(const TLogger *tlogger);
 GCC_NONNULLS void attach_err(int shmkey, const char *name);
 void *attach_shm(int shmkey, int shmsize);
 void *attach_shm_noinit(int shmkey, int shmsize);
@@ -205,7 +204,7 @@ int proc_runv_bg(const char *path, const char *argv[]);
 GCC_SENTINEL(0) int proc_runl_bg(const char *path, const char *arg0, ...);
 /* logger.c */
 GCC_FORMAT(3, 4) GCC_NONNULL(1, 3) void loggerf(const Logger *logger, enum LogLevel level, const char *format, ...);
-GCC_NONNULLS void logger_tag(const Logger *logger, const char *tag, const char *msg, void (*formatter)(char *buf, size_t size, const char *mode, const char *msg));
+GCC_NONNULLS void logger_tag(const TLogger *tlogger, const char *tag, const char *msg);
 /* xwrite.c */
 int xwrite(int fd, const char *data, int size);
 

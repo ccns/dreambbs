@@ -73,24 +73,35 @@ void loggerf(const Logger *logger, enum LogLevel level, const char *format, ...)
         fclose(file);
 }
 
-/* Log a message with tag and custem formatter to the file specified by `logger`
- * Use `logger->file` if it is not `NULL`,
- *     otherwise temporarily open and then close the file with path `logger->path` if it is not `NULL`,
+/* The default formatter for message logging with tag */
+static void logger_tag_formatter_default(char *buf, size_t size, const char *tag, const char *msg)
+{
+    snprintf(buf, size, "[%s] %s", tag, msg);
+}
+
+/* Log a message with tag and custem formatter to the file specified by `tlogger`
+ * Use `tlogger->logger->file` if it is not `NULL`,
+ *     otherwise temporarily open and then close the file with path `tlogger->logger->path` if it is not `NULL`,
  *     otherwise output the message to `stderr`.
+ * If `tlogger->formatter` is `NULL`, the default formatter is used.
  * All messages are not ignored.
  * An extra newline will be appended to the message for output,
- *     therefore it is not needed to add a trailing newline in `formatter`. */
+ *     therefore it is not needed to add a trailing newline in the formatter. */
 GCC_NONNULLS
-void logger_tag(const Logger *logger, const char *tag, const char *msg, void (*formatter)(char *buf, size_t size, const char *mode, const char *msg))
+void logger_tag(const TLogger *tlogger, const char *tag, const char *msg)
 {
+    const Logger *const logger = &tlogger->logger;
     FILE *const file = logger->file ? logger->file : logger->path ? fopen(logger->path, "a") : stderr;
 
     if (!file)
         return;
 
+    void (*const formatter)(char *buf, size_t size, const char *mode, const char *msg) =
+        tlogger->formatter ? tlogger->formatter : logger_tag_formatter_default;
     const int fd = fileno(file);
 
     char buf[512];
+
     formatter(buf, sizeof(buf) - 1, tag, msg); // Reserve 1 byte for the trailing newline
     strcat(buf, "\n");
     write(fd, buf, strlen(buf));

@@ -36,4 +36,22 @@ typedef struct {
     enum LogLevel lv_skip; // The minimum log level to ignore
 } Logger;
 
+/* Tag Logger: A logger with tag and custom formatter */
+typedef struct {
+    Logger logger;
+    void (*formatter)(char *buf, size_t size, const char *tag, const char *msg);
+} TLogger;
+
+#define TLOGGER_DEFAULT_LVSKIP(_lv_skip) \
+    LISTLIT(TLogger){ \
+        .logger = { \
+            .file = NULL, \
+            .path = NULL, /* Use the default log file (`stderr`) */ \
+            .lv_skip = (_lv_skip), \
+        }, \
+        .formatter = NULL, /* Use the default formatter */ \
+    }
+
+#define TLOGGER_DEFAULT TLOGGER_DEFAULT_LVSKIP(LOGLV_WARN)
+
 #endif // LOGGER_H

@@ -64,16 +64,19 @@ int treat=0;
 /* Â÷¶} BBS µ{¦¡                                         */
 /* ----------------------------------------------------- */
 
-static Logger blog_logger = {
-    .file = NULL,
-    .path = FN_USIES,
-    .lv_skip = LOGLV_WARN,
-};
-
 static void blog_formatter(char *buf, size_t len, const char *mode, const char *msg)
 {
     snprintf(buf, len, "%s %-5.5s %-*s %s", Etime(&TEMPLVAL(time_t, {time(NULL)})), mode, IDLEN, cuser.userid, msg);
 }
+
+static TLogger blog_tlogger = {
+    .logger = {
+        .file = NULL,
+        .path = FN_USIES,
+        .lv_skip = LOGLV_WARN,
+    },
+    .formatter = blog_formatter,
+};
 
 void
 blog_pid(
@@ -88,7 +91,7 @@ blog_pid(
         msg = data;
         sprintf(data, "Stay: %d (%d)", (int)(time(NULL) - ap_start) / 60, pid);
     }
-    logger_tag(&blog_logger, mode, msg, blog_formatter);
+    logger_tag(&blog_tlogger, mode, msg);
 }
 
 void
@@ -1909,8 +1912,7 @@ int main(int argc, char *argv[])
     /* attach shared memory & semaphore                    */
     /* --------------------------------------------------- */
 
-    shm_logger_init(&blog_logger);
-    shm_formatter_init(blog_formatter);
+    shm_tlogger_init(&blog_tlogger);
 
 #ifdef  HAVE_SEM
     sem_init();
