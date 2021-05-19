@@ -35,7 +35,7 @@
  #define BBSRUBY_HAVE_GETYX
  #undef BBSRUBY_HAVE_STR_RANSI
  #undef BBSRUBY_VER_INFO_FILE
- #define BBSRUBY_USE_MRUBY
+ //#define BBSRUBY_USE_MRUBY
 #endif //PTT_USE_BBSRUBY
 
 /* Inferred settings */
