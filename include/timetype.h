@@ -37,7 +37,7 @@ static inline time64_t time64(time64_t *tloc)
     return time(NULL);
 }
 
-/* Helper macros for for fixed-size `time_t` */
+/* Helper macros for fixed-size `time_t` */
 
 #define ctime_any(_timep) \
     ctime(&TEMPLVAL(time_t, {*(_timep)}))
