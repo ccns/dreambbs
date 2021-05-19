@@ -1,6 +1,6 @@
 # Dreamland-BBS
 
-Travis CI status: [![](https://travis-ci.com/ccns/dreambbs.svg?branch=master)](https://travis-ci.com/ccns/dreambbs)
+Build status: [![master branch build status](https://github.com/bbsdocker/imagedreambbs/actions/workflows/push_container.yml/badge.svg)](https://github.com/bbsdocker/imagedreambbs/actions/workflows/push_container.yml) [![develop branch build status](https://github.com/bbsdocker/imagedreambbs/actions/workflows/push_container_develop.yml/badge.svg)](https://github.com/bbsdocker/imagedreambbs/actions/workflows/push_container_develop.yml)
 
 [![](https://i.imgur.com/0EpI7Fa.png)](https://github.com/ccns/dreambbs)
 
