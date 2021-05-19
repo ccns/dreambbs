@@ -67,7 +67,7 @@
  #undef BLSCONF_ENABLED
  #undef BBSLUA_EXPOSED_VISIO_VI
  #undef BBSLUA_EXPOSED_VISIO_IDLE
- #undef BBSLUA_USE_LUAJIT
+ //define BBSLUA_USE_LUAJIT
 #endif //PTT_USE_BBSLUA
 
 /* Inferred settings */
