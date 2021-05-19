@@ -88,7 +88,6 @@ main(
         exit(2);
     }
 
-    shm_logger_init(NULL);
     ushm_attach(&ushm);
     strcpy(bmw.msg, argv[1]);
 

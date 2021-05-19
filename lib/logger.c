@@ -33,7 +33,7 @@ static const char *const loglv_name[LOGLV_COUNT] = {
 /* Log a formatted message with log level `level` using the setting of `logger`
  * Use `logger->file` if it is not `NULL`,
  *     otherwise temporarily open and then close the file with path `logger->path` if it is not `NULL`,
- *     otherwise do nothing.
+ *     otherwise output the message to `stderr`.
  * Messages with its log level >= `logger->lv_skip` will be ignored.
  * An extra newline will be appended to the message for output,
  *     therefore it is not needed to include a trailing newline in `format`. */
@@ -44,7 +44,7 @@ void loggerf(const Logger *logger, enum LogLevel level, const char *format, ...)
         return;
 
     /* Temporarily open the file if necessary */
-    FILE *const file = logger->file ? logger->file : logger->path ? fopen(logger->path, "a") : NULL;
+    FILE *const file = logger->file ? logger->file : logger->path ? fopen(logger->path, "a") : stderr;
 
     if (!file)
         return;
@@ -76,14 +76,14 @@ void loggerf(const Logger *logger, enum LogLevel level, const char *format, ...)
 /* Log a message with tag and custem formatter to the file specified by `logger`
  * Use `logger->file` if it is not `NULL`,
  *     otherwise temporarily open and then close the file with path `logger->path` if it is not `NULL`,
- *     otherwise do nothing.
+ *     otherwise output the message to `stderr`.
  * All messages are not ignored.
  * An extra newline will be appended to the message for output,
  *     therefore it is not needed to add a trailing newline in `formatter`. */
 GCC_NONNULLS
 void logger_tag(const Logger *logger, const char *tag, const char *msg, void (*formatter)(char *buf, size_t size, const char *mode, const char *msg))
 {
-    FILE *const file = logger->file ? logger->file : logger->path ? fopen(logger->path, "a") : NULL;
+    FILE *const file = logger->file ? logger->file : logger->path ? fopen(logger->path, "a") : stderr;
 
     if (!file)
         return;

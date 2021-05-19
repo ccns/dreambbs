@@ -273,7 +273,6 @@ main(
     setuid(BBSUID);
     chdir(BBSHOME);
 
-    shm_logger_init(NULL);
     ushm_attach(&ushm);
 
     if (!ushm)

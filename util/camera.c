@@ -295,7 +295,6 @@ main(
     /* resolve shared memory                               */
     /* --------------------------------------------------- */
 
-    shm_logger_init(NULL);
     fshm_init(&fshm);
     memcpy(fshm, &image, sizeof(image.shot) + tail);
     /* Thor.980805: 再加上 shot的部分 */

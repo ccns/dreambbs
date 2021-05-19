@@ -72,7 +72,6 @@ main(void)
     /* build Class image                                   */
     /* --------------------------------------------------- */
 
-    shm_logger_init(NULL);
     bshm_attach(&bshm);
     if (!bshm) /* bshm 未設定完成 */
         exit(1);

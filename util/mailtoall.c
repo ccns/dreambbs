@@ -180,7 +180,6 @@ main(
     setuid(BBSUID);
     chdir(BBSHOME);
 
-    shm_logger_init(NULL);
     bshm_init(&bshm);
 
     mode = (argc > 1) ? atoi(argv[1]) : 0;

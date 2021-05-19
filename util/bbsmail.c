@@ -371,7 +371,6 @@ main(
     signal(SIGSEGV, sig_catch);
     signal(SIGPIPE, sig_catch);
 
-    shm_logger_init(NULL);
     ushm_init(&ushm);
     str_lower(buf, argv[1]);    /* §â userid ´«¦¨¤p¼g */
 

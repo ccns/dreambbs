@@ -47,7 +47,7 @@ static void (*shm_formatter)(char *buf, size_t size, const char *tag, const char
 void shm_logger_init(const Logger *logger)
 {
     shm_logger = (logger) ? *logger : LISTLIT(Logger){
-        .file = stderr,
+        .file = NULL,
         .path = NULL,
         .lv_skip = LOGLV_WARN,
     };

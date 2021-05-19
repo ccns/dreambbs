@@ -227,7 +227,6 @@ main(void)
     /* --------------------------------------------------- */
     /* build Class image                                   */
     /* --------------------------------------------------- */
-    shm_logger_init(NULL);
     bshm_init(&bshm);
     class_image(CLASS_INIFILE, CLASS_RUNFILE, CLASS_IMGFILE);
     class_image(PROFESS_INIFILE, PROFESS_RUNFILE, PROFESS_IMGFILE);

@@ -553,7 +553,6 @@ main(void)
     setgid(BBSGID);
     chdir(BBSHOME);
 
-    shm_logger_init(NULL);
     bshm_attach(&bshm);
 
     vacation = check_vacation();

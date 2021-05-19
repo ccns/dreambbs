@@ -57,7 +57,6 @@ main(
     setuid(BBSUID);
     chdir(BBSHOME);
 
-    shm_logger_init(NULL);
     fwoshm_init(&fwoshm);
     fwoshm_load(fwoshm);
 

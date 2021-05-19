@@ -632,7 +632,6 @@ main(
         return 2;
     }
 
-    shm_logger_init(NULL);
     ushm_attach(&ushm);
     cutmp = &utmp;
     usr_fpath(fpath, userid, FN_ACCT);
