@@ -253,6 +253,7 @@ KeyFuncList banmail_cb = {
 
 int BanMail(void)
 {
+    DL_HOLD;
     XO *xo, *last;
     char fpath[64];
 
@@ -269,11 +270,12 @@ int BanMail(void)
 
     xz[XZ_BANMAIL - XO_ZONE].xo = last;  /* restore */
 
-    return 0;
+    return DL_RELEASE(0);
 }
 
 void post_mail(void)
 {
+    DL_HOLD;
     XO *xx, *last;
     char fpath[64];
 
@@ -288,4 +290,6 @@ void post_mail(void)
     free(xx);
 
     xz[XZ_BANMAIL - XO_ZONE].xo = last;  /* restore */
+
+    DL_RELEASE_VOID();
 }

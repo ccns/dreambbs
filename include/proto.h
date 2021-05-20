@@ -188,9 +188,6 @@ int post_resetscore(XO *xo, int pos);
 int post_recommend(XO *xo, int pos);
 int post_manage(XO *xo);
 int post_write(XO *xo, int pos);
-/* banmail.c */
-int BanMail(void);
-void post_mail(void);
 /* talk.c */
 const char *bmode(const UTMP *up, int simple);
 #ifdef NO_SO  /* For the main program and the modules of `bbsd` */

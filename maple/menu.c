@@ -456,7 +456,7 @@ INTERNAL_INIT MENU menu_boardadm[] =
     {{m_bmset}, PERM_BOARD, M_SYSTEM,
     "BMset      設定版主權限"},
 
-    {{BanMail}, PERM_BOARD|PERM_SYSOP, M_BANMAIL,
+    {{.dl = {DL_NAME("banmail.so", BanMail)}}, PERM_BOARD|PERM_SYSOP, M_DL(M_BANMAIL),
     "FireWall   擋信列表"},
 
     {{.dl = {DL_NAME("adminutil.so", bm_check)}}, PERM_BOARD|PERM_SYSOP, M_DL(M_XMODE),

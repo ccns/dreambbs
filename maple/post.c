@@ -2985,14 +2985,20 @@ contWhileOuter:
 post_ban_mail(
     XO *xo)
 {
-
-    if ((bbstate & STAT_BOARD)||HAS_PERM(PERM_ALLBOARD))
-    {
-        post_mail();
-        return XO_INIT;
-    }
-    else
+    DL_HOTSWAP_SCOPE void (*func)(void) = NULL;
+    if (!((bbstate & STAT_BOARD)||HAS_PERM(PERM_ALLBOARD)))
         return XO_NONE;
+    if (!func)
+    {
+        func = DL_NAME_GET("banmail.so", post_mail);
+        if (!func)
+        {
+            vmsg("動態連結失敗，請聯絡系統管理員！");
+            return XO_FOOT;
+        }
+    }
+    func();
+    return XO_INIT;
 }
 
 #ifdef  HAVE_BRDTITLE_CHANGE

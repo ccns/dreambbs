@@ -12,7 +12,7 @@ EXPORT_CONF(${CMAKE_CURRENT_SOURCE_DIR}/make_export.conf)
 
 add_executable(bbsd
     acct.c bbsd.c board.c cache.c edit.c
-    gem.c mail.c menu.c more.c post.c banmail.c
+    gem.c mail.c menu.c more.c post.c
     talk.c visio.c xover.c socket.c popupmenu.c
     window.c myfavorite.c
 )

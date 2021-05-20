@@ -16,4 +16,4 @@ SO	= chat.so vote.so xyz.so guessnum.so \
 	  showvote.so list.so mine.so bj.so \
 	  pnote.so passwd.so adminutil.so ascii.so\
 	  classtable2.so observe.so pip.so brdstat.so personal.so \
-	  cleanrecommend.so shop.so bank.so innbbs.so contact.so
+	  cleanrecommend.so shop.so bank.so innbbs.so contact.so banmail.so

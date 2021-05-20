@@ -47,6 +47,10 @@ void input_tools(void);
 int money_back(void);
 int bank_main(void);
 
+/* so/banmail.c */
+int BanMail(void);
+void post_mail(void);
+
 /* so/bj.c */
 int BlackJack(void);
 
