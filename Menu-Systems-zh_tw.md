@@ -2,7 +2,7 @@
 
 這篇文章介紹 DreamBBS v3 中所存在的不同的選單系統。
 
-系統 | 主程式檔 | 主函數 | 出處 | 說明
+系統 | 主程式檔 | 主函式 | 出處 | 說明
 --- | --- | --- | --- | ---
 主選單 | - `bbs.c` (Pirate BBS) <br> - `nmenus.c` (Eagles BBS 3.0) <br> - `comm_list.c` (Phoenix BBS 4.0) <br> `main.c` (SecretBBS 4.0) <br> - `menu.c` (MapleBBS 2.0.5) | - `docmd()` (Pirate BBS & SecretBBS 4.0) <br> - `NdoMenu()` (Eagles BBS 3.0) <br> - `domenu()` (Phoenix BBS 4.0 & MapleBBS 2.0.5) <br> - `menu()` (MapleBBS 3) <br> - `main_menu()` & `domenu()` (DreamBBS v3) | Pirate BBS |
 Popupmenu | `popupmenu.c` | - `popupmenu()` | WindTop 3.02 | - 使用主選單系統的資料結構 (WindTop 3.02 & DreamBBS v3) <br> - 使用與主選單系統不同的特殊值 <br> - 使用與主選單系統一致的特殊值 (DreamBBS v3)
@@ -20,7 +20,7 @@ Window | `window.c` | - `popupmenu_ans2()` <br> - `pmsg2()` | MapleBBS-itoc | - 
 
 DreamBBS v3 改用 Xover 指令指定主選單畫面的重繪。
 
-## 主選單所呼叫函數之 return 值
+## 主選單所呼叫函式之 return 值
 |       | 值      | 出處 | 說明
  ---    |  ---    | --- | ---
 `XEASY` | - `0x333` <br> - `XO_FOOT` (DreamBBS v3) | MapleBBS 2.0.5 | 回到選單後只重繪畫面底部
@@ -52,15 +52,15 @@ DreamBBS v3 時將此 union 分開定義為 `MenuItem`。
 
 Member 名稱 | 型別               | `umode` 指定方式 (主選單) | `umode` 指定方式 (Popupmenu) | 說明
  ---        | ---               | ---                       | ---                         | ---
-`func`      | `int (*)(void)`   | `umode` <br> (`(umode & M_MASK) > M_XMENU`) | - `POPUP_FUN` <br> - `umode` <br> (`(umode & M_MASK) > M_XMENU`) (DreamBBS v3 新增) | 無參數函數
-`funcarg`   | `FuncArg *`       | `umode \| M_ARG`          | - `POPUP_FUN \| POPUP_ARG` <br> - `umode \| M_ARG` (DreamBBS v3 新增) | - 帶參數的函數物件 <br> - DreamBBS v3 新增
-`xofunc`    | `int (*)(XO *xo)` | - 無 <br> - `umode \| M_XO` (DreamBBS v3) | - `POPUP_XO` <br> - `umode \| M_XO` (DreamBBS v3 新增) | - Xover 函數 (WindTop 3.02 & DreamBBS v3) <br> - 未實作 <br> - DreamBBS v3 新增實作
+`func`      | `int (*)(void)`   | `umode` <br> (`(umode & M_MASK) > M_XMENU`) | - `POPUP_FUN` <br> - `umode` <br> (`(umode & M_MASK) > M_XMENU`) (DreamBBS v3 新增) | 無參數函式
+`funcarg`   | `FuncArg *`       | `umode \| M_ARG`          | - `POPUP_FUN \| POPUP_ARG` <br> - `umode \| M_ARG` (DreamBBS v3 新增) | - 帶參數的函式物件 <br> - DreamBBS v3 新增
+`xofunc`    | `int (*)(XO *xo)` | - 無 <br> - `umode \| M_XO` (DreamBBS v3) | - `POPUP_XO` <br> - `umode \| M_XO` (DreamBBS v3 新增) | - Xover 函式 (WindTop 3.02 & DreamBBS v3) <br> - 未實作 <br> - DreamBBS v3 新增實作
 `title`     | `const char *`    | - 無 <br> - `umode \| M_MENUTITLE` (DreamBBS v3 新增) | - `POPUP_MENUTITLE` <br> - `umode \| M_MENUTITLE` (DreamBBS v3 新增) | - 顯示在彈出式選單上的選單標題 <br> - 表示 Popupmenu 使用的 `MENU` 列表的最末項
 `menu`      | `struct MENU *`   | `umode` <br> (`(umode & M_MASK) <= M_XMENU`) | - `POPUP_MENU` <br> - `umode` <br> (`(umode & M_MASK) <= M_XMENU`) (DreamBBS v3 新增) | 內層選單
-`dlfuncarg` | `DlFuncArg *`     | - `M_DL(umode \| M_ARG)` <br> - `M_DL(umode) \| M_ARG` (DreamBBS v3 新增；建議寫法) | - `M_DL(umode \| M_ARG)` <br> - `POPUP_SO \| POPUP_ARG` <br> - `M_DL(umode) \| M_ARG` (DreamBBS v3 新增) | - 帶參數的函數物件，函數需動態載入 <br> - DreamBBS v3 新增
+`dlfuncarg` | `DlFuncArg *`     | - `M_DL(umode \| M_ARG)` <br> - `M_DL(umode) \| M_ARG` (DreamBBS v3 新增；建議寫法) | - `M_DL(umode \| M_ARG)` <br> - `POPUP_SO \| POPUP_ARG` <br> - `M_DL(umode) \| M_ARG` (DreamBBS v3 新增) | - 帶參數的函式物件，函式需動態載入 <br> - DreamBBS v3 新增
 | `dl`      | `DlMenuItem`      | `M_DL(umode)` | `M_DL(umode)` | - 需動態載入的功能 <br> - DreamBBS v3 新增
-| - `dlfunc` <br> - `dl.func` (DreamBBS v3) | - `const char *` (使用動態載入) <br> - `int (*)(void)` (不使用動態載入) | - `M_DL(umode)` <br> - `M_DL(umode)` (`(umode & M_MASK) > M_XMENU`) (DreamBBS v3) | - `M_DL(umode)` <br> - `M_DL(umode)` <br> (`(umode & M_MASK) > M_XMENU`) (DreamBBS v3) <br> - `POPUP_SO` (WindTop 3.02 & DreamBBS v3) | - 需動態載入的函數 <br> - Popupmenu 使用 `M_DL(umode)` 時，會看 `umode` 決定實際型別 (DreamBBS v3 移除)
-`dl.xofunc`   | - `const char *` (使用動態載入) <br> - `int (*)(XO *xo)` (不使用動態載入) | `M_DL(umode \| M_XO)`    | - `M_DL(POPUP_XO)` <br> - `M_DL(umode \| M_XO)` | - 需動態載入的 Xover 函數 <br> - DreamBBS v3 新增
+| - `dlfunc` <br> - `dl.func` (DreamBBS v3) | - `const char *` (使用動態載入) <br> - `int (*)(void)` (不使用動態載入) | - `M_DL(umode)` <br> - `M_DL(umode)` (`(umode & M_MASK) > M_XMENU`) (DreamBBS v3) | - `M_DL(umode)` <br> - `M_DL(umode)` <br> (`(umode & M_MASK) > M_XMENU`) (DreamBBS v3) <br> - `POPUP_SO` (WindTop 3.02 & DreamBBS v3) | - 需動態載入的函式 <br> - Popupmenu 使用 `M_DL(umode)` 時，會看 `umode` 決定實際型別 (DreamBBS v3 移除)
+`dl.xofunc`   | - `const char *` (使用動態載入) <br> - `int (*)(XO *xo)` (不使用動態載入) | `M_DL(umode \| M_XO)`    | - `M_DL(POPUP_XO)` <br> - `M_DL(umode \| M_XO)` | - 需動態載入的 Xover 函式 <br> - DreamBBS v3 新增
 `dl.title`    | `const char *`  | `M_DL(umode \| M_MENUTITLE)` | - `M_DL(POPUP_MENUTITLE)` <br> - `M_DL(umode \| M_MENUTITLE)` | - 需動態載入的顯示在彈出式選單上的選單標題 <br> - DreamBBS v3 新增
 `dl.menu`     | - `const char *` (使用動態載入) <br> - `struct MENU *` (不使用動態載入) | `M_DL(umode)` <br> (`(umode & M_MASK) <= M_XMENU`) | - `M_DL(POPUP_MENU)` <br> - `M_DL(umode)` <br> (`(umode & M_MASK) <= M_XMENU`) | - 需動態載入的內層選單 <br> - DreamBBS v3 新增
 
@@ -78,12 +78,12 @@ Member 名稱 | 型別               | `level` 指定方式 (主選單) | `level
 Macro (主選單) | 值 (主選單)   | Macro (Popupmenu)  | 值 (Popupmenu) | 使用對象 | 說明
 ---            | ---          | ---                | ---            | ---     | ---
 無             | ---          | `POPUP_QUIT`       | `0x00`         | `umode` | 選擇後退出本層選單
-無             | `umode` <br> (`(umode & M_MASK) > M_XMENU`) | `POPUP_FUN` | `0x01` | `umode` | 選擇後執行函數
-無             | ---          | `POPUP_XO`         | `0x02`         | `umode` | 選擇後執行 Xover 函數
+無             | `umode` <br> (`(umode & M_MASK) > M_XMENU`) | `POPUP_FUN` | `0x01` | `umode` | 選擇後執行函式
+無             | ---          | `POPUP_XO`         | `0x02`         | `umode` | 選擇後執行 Xover 函式
 無             | `umode` <br> (`(umode & M_MASK) <= M_XMENU`) | `POPUP_MENU` | `0x04` | `umode` | 選擇後進入內層選單
 無             | ---          | `POPUP_MENUTITLE`  | `0x08`         | `umode` | - 非選項；設定選單標題 <br> - 代表 Popupmenu 系統的 `MENU` 列表的最末項
-無             | ---          | `POPUP_SO` | - `0x10` (使用動態載入) <br> - `POPUP_FUN` (不使用動態載入) | `umode` | - 選擇後執行無參數函數；此函數需要動態載入 <br> - DreamBBS v3 移除
-`M_ARG`        | `0x40000000` | `POPUP_ARG`        | `0x40000000`   | `umode` | - 執行函數時，以函數物件所帶的參數呼叫函數 <br> - DreamBBS v3 新增
+無             | ---          | `POPUP_SO` | - `0x10` (使用動態載入) <br> - `POPUP_FUN` (不使用動態載入) | `umode` | - 選擇後執行無參數函式；此函式需要動態載入 <br> - DreamBBS v3 移除
+`M_ARG`        | `0x40000000` | `POPUP_ARG`        | `0x40000000`   | `umode` | - 執行函式時，以函式物件所帶的參數呼叫函式 <br> - DreamBBS v3 新增
 `M_DL(umode)`  | - `-umode` (使用動態載入) <br> - `umode` (不使用動態載入) | `M_DL(umode)` | - `-umode` (使用動態載入) <br> - `umode` (不使用動態載入) | `umode` | - 此選項功能需要動態載入 <br> - DreamBBS v2.0 時新增
 `M_MASK`       | `0x0000FFFF` |                    |                | `umode` | - `umode` 的有效範圍；範圍之外為 flags <br> - DreamBBS v3 新增
 無             |              | `POPUP_MASK`       | `0x000000FF`   | `level` | - `level` 的有效範圍；範圍之外為 flags <br> - DreamBBS v3 移除
@@ -95,14 +95,14 @@ DreamBBS v3 將主選單系統與 Popupmenu 系統的特殊值整合為一，並
 
 Macro          | 值           | 使用對象 | 說明
 ---            | ---          | ---     | ---
-無             | `umode` <br> (`(umode & M_MASK) > M_XMENU`) | `umode` | 選擇後執行函數
-`M_FUN`        | `M_PROFESS` (`8`) | `umode` | - 選擇後執行函數 <br> - 最小的非 menu、非 idle 的 user mode <br> - 對應原 `POPUP_FUN`
+無             | `umode` <br> (`(umode & M_MASK) > M_XMENU`) | `umode` | 選擇後執行函式
+`M_FUN`        | `M_PROFESS` (`8`) | `umode` | - 選擇後執行函式 <br> - 最小的非 menu、非 idle 的 user mode <br> - 對應原 `POPUP_FUN`
 無             | `umode` <br> (`(umode & M_MASK) <= M_XMENU`) | `umode` | 選擇後進入內層選單
 `M_MENU`       | `M_MMENU` (`1`) | `umode` | - 選擇後進入內層選單 <br> - 最小的 menu user mode <br> - 對應原 `POPUP_MENU`
 `M_DL(umode)`  | - `umode \| 0x80000000` (使用動態載入) <br> - `umode` (不使用動態載入) | `umode` | - 此選項功能需要動態載入 <br> - DreamBBS v2.0 時新增
 `M_QUIT`       | `0x01000000` | `umode` | - 選擇後退出本層選單 <br> - 對應原 `POPUP_QUIT`
-`M_XO`         | `0x02000000` | `umode` | - 選擇後執行 Xover 函數 <br> - 對應原 `POPUP_XO`
-`M_ARG`        | `0x04000000` | `umode` | - 執行函數時，以函數物件所帶的參數呼叫函數 <br> - DreamBBS v3 新增
+`M_XO`         | `0x02000000` | `umode` | - 選擇後執行 Xover 函式 <br> - 對應原 `POPUP_XO`
+`M_ARG`        | `0x04000000` | `umode` | - 執行函式時，以函式物件所帶的參數呼叫函式 <br> - DreamBBS v3 新增
 `M_DOINSTANT`  | `0x00010000` | `umode` | - 非選項；透過指令配對跳到該選單某選項時，立即執行對應功能 <br> - 表示 `MENU` 列表的最末項 <br> - 對應原 `POPUP_DO_INSTANT` <br> - 注意是對 `umode` 使用
 `M_MENUTITLE`  | `0x00020000` | `umode` | - 非選項；指定選單標題 <br> - 表示 `MENU` 列表的最末項 <br> - 對應原 `POPUP_MENUTITLE`
 `M_TAIL_MASK`  | `0x00FF0000` | `umode` | - 可代表 `MENU` 列表的最末項的 flags <br> - DreamBBS v3 新增
