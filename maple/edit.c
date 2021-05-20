@@ -2099,13 +2099,10 @@ ve_key:
                         if (!input_tool)
                         {
                             input_tool = DL_NAME_GET("ascii.so", input_tools);
-                            if (input_tool)
-                                (*input_tool)();
+                            if (!input_tool)
+                                break;
                         }
-                        else
-                        {
-                            (*input_tool)();
-                        }
+                        (*input_tool)();
                         break;
                     }
 #endif

@@ -2559,13 +2559,13 @@ mbox_gem(
     if (!mgp)
     {
         mgp = DL_NAME_GET("mailgem.so", mailgem_main);
-        if (mgp)
-            (*mgp)();
-        else
+        if (!mgp)
+        {
             vmsg("動態連結失敗，請聯絡系統管理員！");
+            return XO_FOOT;
+        }
     }
-    else
-        (*mgp)();
+    (*mgp)();
     return XO_INIT;
 }
 #endif

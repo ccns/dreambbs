@@ -2998,10 +2998,10 @@ talk_page(
         {
             up->pip = -1;
             (*p)(msgsock, 2);
+/*          pip_vf_fight(msgsock, 1);*/
             cutmp->pip = -1;
+            add_io(0, 60);
         }
-        add_io(0, 60);
-/*      pip_vf_fight(msgsock, 1);*/
     }
     else if (ans == 'C')
     {
@@ -4444,16 +4444,15 @@ over_for:
                 DL_HOTSWAP_SCOPE int (*p)(int, int) = NULL;
                 if (!p)
                     p = DL_NAME_GET("pip.so", pip_vf_fight);
-                strcpy(cutmp->mateid, up->userid);
                 if (p)
                 {
+                    strcpy(cutmp->mateid, up->userid);
                     cutmp->pip = -1;
                     (*p)(sock, 1);
+/*                  pip_vf_fight(sock, 2);*/
                     cutmp->pip = -1;
-
+                    add_io(0, 60);
                 }
-                add_io(0, 60);
-/*              pip_vf_fight(sock, 2);*/
             }
 #endif
             close(sock);

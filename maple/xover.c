@@ -2067,14 +2067,13 @@ xover_key(
             if (!mgp)
             {
                 mgp = DL_NAME_GET("mailgem.so", mailgem_gather);
-                if (mgp)
-                    return (*mgp)(xo, pos);
-                else
+                if (!mgp)
+                {
                     vmsg("動態連結失敗，請聯絡系統管理員！");
-                return XO_FOOT;
+                    return XO_FOOT;
+                }
             }
-            else
-                return (*mgp)(xo, pos);
+            return (*mgp)(xo, pos);
         }
 #endif
         /* --------------------------------------------- */

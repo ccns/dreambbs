@@ -709,21 +709,18 @@ void acct_setup(ACCT * u, int adm)
         }
         if (adm == '3')
         {
-            DL_HOTSWAP_SCOPE int (*sm) (char *mail) = NULL;
+            DL_HOTSWAP_SCOPE int (*sm)(char *mail) = NULL;
             switch (vans("使用程序 i)內部 o)外部 q)取消：[q]"))
             {
             case 'i':
                 if (!sm)
                 {
                     sm = DL_NAME_GET("same_mail.so", same_mail);
+                    if (!sm)
+                        break;
                 }
                 strcpy(id, u->userid);
-                if (sm)
-                {
-                    num = (*sm) (u->vmail);
-                }
-                else
-                    break;
+                num = (*sm)(u->vmail);
 
                 flog = fopen(FN_SAMEEMAIL_LOG, "r");
                 tmp = 0;
