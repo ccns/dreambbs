@@ -53,11 +53,11 @@ DreamBBS v3 時將此 union 分開定義為 `MenuItem`。
 Member 名稱 | 型別               | `umode` 指定方式 (主選單) | `umode` 指定方式 (Popupmenu) | 說明
  ---        | ---               | ---                       | ---                         | ---
 `func`      | `int (*)(void)`   | `umode` <br> (`(umode & M_MASK) > M_XMENU`) | - `POPUP_FUN` <br> - `umode` <br> (`(umode & M_MASK) > M_XMENU`) (DreamBBS v3 新增) | 無參數函數
-`funcarg`   | `FuncArg`         | `umode \| M_ARG`          | - `POPUP_FUN \| POPUP_ARG` <br> - `umode \| M_ARG` (DreamBBS v3 新增) | - 帶參數的函數物件 <br> - DreamBBS v3 新增
+`funcarg`   | `FuncArg *`       | `umode \| M_ARG`          | - `POPUP_FUN \| POPUP_ARG` <br> - `umode \| M_ARG` (DreamBBS v3 新增) | - 帶參數的函數物件 <br> - DreamBBS v3 新增
 `xofunc`    | `int (*)(XO *xo)` | - 無 <br> - `umode \| M_XO` (DreamBBS v3) | - `POPUP_XO` <br> - `umode \| M_XO` (DreamBBS v3 新增) | - Xover 函數 (WindTop 3.02 & DreamBBS v3) <br> - 未實作 <br> - DreamBBS v3 新增實作
 `title`     | `const char *`    | - 無 <br> - `umode \| M_MENUTITLE` (DreamBBS v3 新增) | - `POPUP_MENUTITLE` <br> - `umode \| M_MENUTITLE` (DreamBBS v3 新增) | - 顯示在彈出式選單上的選單標題 <br> - 表示 Popupmenu 使用的 `MENU` 列表的最末項
 `menu`      | `struct MENU *`   | `umode` <br> (`(umode & M_MASK) <= M_XMENU`) | - `POPUP_MENU` <br> - `umode` <br> (`(umode & M_MASK) <= M_XMENU`) (DreamBBS v3 新增) | 內層選單
-`dlfuncarg` | `DlFuncArg`       | - `M_DL(umode \| M_ARG)` <br> - `M_DL(umode) \| M_ARG` (DreamBBS v3 新增；建議寫法) | - `M_DL(umode \| M_ARG)` <br> - `POPUP_SO \| POPUP_ARG` <br> - `M_DL(umode) \| M_ARG` (DreamBBS v3 新增) | - 帶參數的函數物件，函數需動態載入 <br> - DreamBBS v3 新增
+`dlfuncarg` | `DlFuncArg *`     | - `M_DL(umode \| M_ARG)` <br> - `M_DL(umode) \| M_ARG` (DreamBBS v3 新增；建議寫法) | - `M_DL(umode \| M_ARG)` <br> - `POPUP_SO \| POPUP_ARG` <br> - `M_DL(umode) \| M_ARG` (DreamBBS v3 新增) | - 帶參數的函數物件，函數需動態載入 <br> - DreamBBS v3 新增
 | `dl`      | `DlMenuItem`      | `M_DL(umode)` | `M_DL(umode)` | - 需動態載入的功能 <br> - DreamBBS v3 新增
 | - `dlfunc` <br> - `dl.func` (DreamBBS v3) | - `const char *` (使用動態載入) <br> - `int (*)(void)` (不使用動態載入) | - `M_DL(umode)` <br> - `M_DL(umode)` (`(umode & M_MASK) > M_XMENU`) (DreamBBS v3) | - `M_DL(umode)` <br> - `M_DL(umode)` <br> (`(umode & M_MASK) > M_XMENU`) (DreamBBS v3) <br> - `POPUP_SO` (WindTop 3.02 & DreamBBS v3) | - 需動態載入的函數 <br> - Popupmenu 使用 `M_DL(umode)` 時，會看 `umode` 決定實際型別 (DreamBBS v3 移除)
 `dl.xofunc`   | - `const char *` (使用動態載入) <br> - `int (*)(XO *xo)` (不使用動態載入) | `M_DL(umode \| M_XO)`    | - `M_DL(POPUP_XO)` <br> - `M_DL(umode \| M_XO)` | - 需動態載入的 Xover 函數 <br> - DreamBBS v3 新增
@@ -67,10 +67,6 @@ Member 名稱 | 型別               | `umode` 指定方式 (主選單) | `umode
 Member 名稱 | 型別               | `level` 指定方式 (主選單) | `level` 指定方式 (Popupmenu) | 說明
  ---        | ---               | ---                       | ---                         | ---
 | - `menu` <br> - 依 `umode` 而定 (DreamBBS v3) | - `struct MENU *` <br> - 依 `umode` 而定 (DreamBBS v3)  | `PERM_MENU + key`         | - 無 <br> - `PERM_MENU + key` (DreamBBS v3 新增) | - 上層選單 <br> - 回上層時執行的功能 (DreamBBS v3) <br> - 表示主選單系統使用的 `MENU` 列表的最末項 (WindTop 3.02 & DreamBBS v3)
-
-- 在 DreamBBS v3 中，載入 `MenuItem::dlfuncarg` 中的函數指標時，可以使用 `MenuItem::dl` 的載入方法。
-
-  這是因為 `MenuItem::dlfuncarg` 是 `MenuItem::dl` 的 2 倍大；使用 `MenuItem::dl` 的載入方法時，只會改變 `dlfuncarg` 的前半部分，即 `dlfuncarg.func`。
 
 - 在 DreamBBS v3 的主選單中，當 MENU 列表某一項的 `desc` 字串中包含換行字元 (`'\n'`)，會把換行字元後的文字當作這一項的選項說明。
 
