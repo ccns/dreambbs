@@ -1088,6 +1088,13 @@ typedef struct {
     const void *arg;
 } DlFuncArg;
 
+/* Helper macros for building `MenuItem` with `DlFuncArg` or `FuncArg` objects */
+
+#define FUNCARG(_func, _arg) \
+    .funcarg = &STATLVAL(FuncArg, {{(_func)}, (const void *)(_arg)})
+#define DLFUNCARG(_func, _arg) \
+    .dlfuncarg = &STATLVAL(DlFuncArg, {{(_func)}, (const void *)(_arg)})
+
 typedef union {
     /* The field to be used is determined by the value of `umode` */
 #if NO_SO
@@ -1107,10 +1114,10 @@ typedef union {
     /* The field to be used is determined by the value of `umode` */
     int (*func) (void);  /* `>= M_FUN` or `M_IDLE` */
     int (*xofunc) (XO *xo);  /* `umode | M_XO` */
-    FuncArg funcarg;  /* `umode | M_ARG` */
+    FuncArg *funcarg;  /* `umode | M_ARG` */
 
     DlMenuItem dl;  /* `M_DL(umode)` */
-    DlFuncArg dlfuncarg;  /* `M_DL(umode) | M_ARG` */
+    DlFuncArg *dlfuncarg;  /* `M_DL(umode) | M_ARG` */
 
     const char *title;  /* `umode | M_MENUTITLE` */
     struct MENU *menu;  /* `>= M_MENU` and `< M_FUN` */

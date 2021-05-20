@@ -66,9 +66,18 @@ do_cmd(MENU *mptr, XO *xo, int y, int x)
 #if !NO_SO
     if (mmode & M_DL(0))
     {
-        mitem.func = (int (*)(void)) DL_GET(mitem.dl.func);
-        if (!mitem.func)
-            return 0;
+        if (mmode & M_ARG)
+        {
+            mitem.funcarg->func = (int (*)(const void *)) DL_GET(mitem.dlfuncarg->func);
+            if (!mitem.funcarg->func)
+                return 0;
+        }
+        else
+        {
+            mitem.func = (int (*)(void)) DL_GET(mitem.dl.func);
+            if (!mitem.func)
+                return 0;
+        }
         mmode &= ~M_DL(0);
   #ifndef DL_HOTSWAP
         mptr->item = mitem;
@@ -88,9 +97,9 @@ do_cmd(MENU *mptr, XO *xo, int y, int x)
     else if (mmode & M_ARG)
     {
         if (mmode & M_XO)
-            mode = mitem.funcarg.xofunc(xo, mitem.funcarg.arg);
+            mode = mitem.funcarg->xofunc(xo, mitem.funcarg->arg);
         else
-            mode = mitem.funcarg.func(mitem.funcarg.arg);
+            mode = mitem.funcarg->func(mitem.funcarg->arg);
     }
     else
     {

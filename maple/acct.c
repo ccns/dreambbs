@@ -102,6 +102,7 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
     char buf[ANSILINESIZE];
 
     MENU list[41];
+    FuncArg funcargs[COUNTOF(list)];
 
     int n = 0;
     while ((desc = xlist[n]))
@@ -114,8 +115,8 @@ void x_file(int mode,            /* M_XFILES / M_UFILES */
                 "%*s%s", BMAX(24 - len_strip - 4, 0), "", flist[n] + 4);
                                        /* statue.000703: 註解: +4 去掉目錄 */
         }
-        list[n] =
-            LISTLIT(MENU){{.funcarg = {{x_edit_file}, flist[n]}}, 0, mode | M_ARG, strdup(buf)};
+        funcargs[n] = LISTLIT(FuncArg){{x_edit_file}, flist[n]};
+        list[n] = LISTLIT(MENU){{.funcarg = &funcargs[n]}, 0, mode | M_ARG, strdup(buf)};
         n++;
     }
     sprintf(buf, "%s\n%s", (mode == M_XFILES) ? "編系統檔案" : "編個人檔案",
