@@ -80,8 +80,8 @@ static void logger_tag_formatter_default(char *buf, size_t size, const char *tag
 }
 
 /* Log a message with tag and custom formatter to the file specified by `tlogger`
- * Use `tlogger->logger->file` if it is not `NULL`,
- *     otherwise temporarily open and then close the file with path `tlogger->logger->path` if it is not `NULL`,
+ * Use `tlogger->logger.file` if it is not `NULL`,
+ *     otherwise temporarily open and then close the file with path `tlogger->logger.path` if it is not `NULL`,
  *     otherwise output the message to `stderr`.
  * If `tlogger->formatter` is `NULL`, the default formatter is used.
  * All messages are not ignored.
