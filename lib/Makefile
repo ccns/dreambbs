@@ -20,7 +20,7 @@ SRC	= acl.c       file.c    isnot.c    radix32.c   shm.c   \
 OBJ	= acl.o       file.o    isnot.o    radix32.o   shm.o   \
 	  dl_lib.o    record.o  splay.o    date.o      xsort.o \
 	  attr_lib.o  dns.o       header.o  string.o    xwrite.o \
-	  proc.o      passwd.o  mime.o     logger.o    acct.c
+	  proc.o      passwd.o  mime.o     logger.o    acct.o
 
 .c.o:   ;$(CC) $(CFLAGS) -c $*.c
 
