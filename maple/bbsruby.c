@@ -586,7 +586,11 @@ int getkey(double wait)
 void BBSRubyHook(
 #ifdef BBSRUBY_USE_MRUBY
     mrb_state *mrb,
+  #if MRUBY_RELEASE_NO >= 30000
+    const mrb_irep *irep,
+  #else
     mrb_irep *irep,
+  #endif
   #if MRUBY_RELEASE_NO >= 20100
     const mrb_code *pc,
   #else
@@ -1049,7 +1053,7 @@ void run_ruby(
 
         // Hook Ruby
 #ifdef BBSRUBY_USE_MRUBY
-  #ifdef MRB_ENABLE_DEBUG_HOOK
+  #if defined MRB_ENABLE_DEBUG_HOOK /* mruby2 */ || defined MRB_USE_DEBUG_HOOK /* mruby3 */
         mrb->code_fetch_hook = BBSRubyHook;
   #endif
 #else
