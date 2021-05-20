@@ -45,7 +45,7 @@ njob: deprecated verinfo
 	@(cd test; $(MAKE) -j$(NPROC) all)
 
 deprecated: .PHONY
-	@printf "\033[1mMakefile: \033[35mwarning: \033[;1mbmake makefiles is deprecated and will be removed in DreamBBS 3.21. Use CMake to build the project instead.\n\033[m"
+	@printf "\033[1mMakefile: \033[35mwarning: \033[;1mbmake makefiles is deprecated and will be removed in DreamBBS 3.21.1. Use CMake to build the project instead.\n\033[m"
 
 export: deprecated
 	@> $(EXPORT_FILE)
