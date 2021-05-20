@@ -79,7 +79,7 @@ static void logger_tag_formatter_default(char *buf, size_t size, const char *tag
     snprintf(buf, size, "[%s] %s", tag, msg);
 }
 
-/* Log a message with tag and custem formatter to the file specified by `tlogger`
+/* Log a message with tag and custom formatter to the file specified by `tlogger`
  * Use `tlogger->logger->file` if it is not `NULL`,
  *     otherwise temporarily open and then close the file with path `tlogger->logger->path` if it is not `NULL`,
  *     otherwise output the message to `stderr`.
