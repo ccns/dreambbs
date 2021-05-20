@@ -127,6 +127,27 @@
   #define CXX_CONSTEXPR_TRY_ASM  /* Empty */
 #endif
 
+#if __cplusplus >= 201103L  /* C++11 */
+  #define CPP_TYPEOF(...) decltype(__VA_ARGS__)
+#elif defined __GNUC__
+  #define CPP_TYPEOF(...) __typeof__(__VA_ARGS__)
+#endif
+
+/* Block in expressions */
+#if defined __cplusplus
+  #define EXPR_BLOCK_BEGIN_STATIC  [](void) { /* For expression blocks outside of function definitions */
+  #define EXPR_BLOCK_BEGIN  [&](void) {
+  #define EXPR_BLOCK_END  }()
+  #define EXPR_BLOCK_RETURN  return
+#elif defined __GNUC__
+  #define EXPR_BLOCK_BEGIN_STATIC  __extension__ ({
+  #define EXPR_BLOCK_BEGIN  __extension__ ({
+  #define EXPR_BLOCK_END  })
+  #define EXPR_BLOCK_RETURN  /* Empty */
+#endif
+
+/* Macros for creating anonymous objects */
+
 #ifdef __cplusplus
 template <class T>
     using Identity_T = T;
@@ -138,30 +159,24 @@ template <class T>
   /*        `TEMPLVAL(Type, (init_value))` */
   #define TEMPLVAL(Type, ...)  \
     ((void)0, const_cast<Identity_T<Type> &>((const Identity_T<Type> &)LISTLIT(Type) __VA_ARGS__))
+
+  /* Static lvalue */
+  /* Usage: `STATLVAL(Type, {init_values...})` (preferred) */
+  /*        `STATLVAL(Type, (init_value))` */
+  /* Should be used only outside of function definitions */
+  #define STATLVAL(Type, ...)  \
+    ((void) 0, *EXPR_BLOCK_BEGIN_STATIC \
+        static CPP_TYPEOF(LISTLIT(Type) __VA_ARGS__) val = LISTLIT(Type) __VA_ARGS__; \
+        EXPR_BLOCK_RETURN &val; \
+    EXPR_BLOCK_END)
 #else
   #define LISTLIT(Type)  (Type)
   #define TEMPLVAL(Type, ...)  LISTLIT(Type) __VA_ARGS__
+  #define STATLVAL(Type, ...)  TEMPLVAL(Type, __VA_ARGS__) /* Only static outside of function definitions */
 #endif
 
 /* Temporary lvalue whose value is not important */
 #define SINKVAL(Type)  TEMPLVAL(Type, {0})
-
-#if __cplusplus >= 201103L  /* C++11 */
-  #define CPP_TYPEOF(...) decltype(__VA_ARGS__)
-#elif defined __GNUC__
-  #define CPP_TYPEOF(...) __typeof__(__VA_ARGS__)
-#endif
-
-/* Block in expressions */
-#if defined __cplusplus
-  #define EXPR_BLOCK_BEGIN  [&](void) {
-  #define EXPR_BLOCK_END  }()
-  #define EXPR_BLOCK_RETURN  return
-#elif defined __GNUC__
-  #define EXPR_BLOCK_BEGIN  __extension__ ({
-  #define EXPR_BLOCK_END  })
-  #define EXPR_BLOCK_RETURN  /* Empty */
-#endif
 
 /* Macros for manipulating structs */
 
