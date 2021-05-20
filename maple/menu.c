@@ -495,7 +495,7 @@ INTERNAL_INIT MENU menu_accadm[] =
     "Password   重送新密碼"},
 
 #ifdef  HAVE_REGISTER_FORM
-    {{.dl = {m_register}}, PERM_ACCOUNTS, M_SYSTEM,
+    {m_register}, PERM_ACCOUNTS, M_SYSTEM,
     "1Register  審核註冊表單"},
 #endif
 
