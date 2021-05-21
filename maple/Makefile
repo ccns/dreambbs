@@ -19,20 +19,10 @@ CFLAGS	+= $(CFLAGS_MAPLE)
 
 .if $(USE_BBSLUA)
 CFLAGS	+= $(LUA_CFLAGS)
-LDFLAGS	+= $(LUA_LDFLAGS) $(LUA_LDFLAGS_ARCHI)
-SRC	+= bbslua.c
-OBJ	+= bbslua.o
-.if !$(USE_LUAJIT)
-SRC	+= bbsluaext.c
-OBJ	+= bbsluaext.o
-.endif
 .endif
 
 .if $(USE_BBSRUBY)
 CFLAGS	+= $(RUBY_CFLAGS)
-LDFLAGS	+= $(RUBY_LDFLAGS) $(RUBY_LDFLAGS_ARCHI)
-SRC	+= bbsruby.c
-OBJ	+= bbsruby.o
 .endif
 
 .if $(USE_PFTERM)
@@ -58,6 +48,19 @@ OBJ	+= pmore.o
 .if $(NO_SO)
 SO_SRC	= $(SO:R:@v@$(SRCROOT)/so/$v.c@)  # Add path
 SO_OBJ	= $(SO:R:@v@$(SRCROOT)/so/$v.o@)
+
+.if $(USE_BBSLUA)
+LDFLAGS	+= $(LUA_LDFLAGS) $(LUA_LDFLAGS_ARCHI)
+.if !$(USE_LUAJIT)
+SO_SRC	+= $(SRCROOT)/so/bbsluaext.c
+SO_OBJ	+= $(SRCROOT)/so/bbsluaext.o
+.endif
+.endif
+
+.if $(USE_BBSRUBY)
+LDFLAGS	+= $(RUBY_LDFLAGS) $(RUBY_LDFLAGS_ARCHI)
+.endif
+
 SRC	+= $(SO_SRC)
 OBJ	+= $(SO_OBJ)
 

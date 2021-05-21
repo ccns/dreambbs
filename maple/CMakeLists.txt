@@ -19,18 +19,11 @@ add_executable(bbsd
 target_compile_options(bbsd PRIVATE -imacros${EXPORT_MAPLE})
 
 if(USE_BBSLUA)
-    target_sources(bbsd PRIVATE bbslua.c)
-    if(NOT USE_LUAJIT)
-        target_sources(bbsd PRIVATE bbsluaext.c)
-    endif()
     target_compile_options(bbsd PRIVATE ${LUA_CFLAGS})
-    target_link_libraries(bbsd PRIVATE ${LUA_LDFLAGS})
 endif()
 
 if(USE_BBSRUBY)
-    target_sources(bbsd PRIVATE bbsruby.c)
     target_compile_options(bbsd PRIVATE ${RUBY_CFLAGS})
-    target_link_libraries(bbsd PRIVATE ${RUBY_LDFLAGS})
 endif()
 
 if(USE_PFTERM)
@@ -42,6 +35,14 @@ if(USE_PMORE)
 endif()
 
 if(NO_SO)
+    if(USE_BBSLUA)
+        target_link_libraries(bbsd PRIVATE ${LUA_LDFLAGS})
+    endif()
+
+    if(USE_BBSRUBY)
+        target_link_libraries(bbsd PRIVATE ${RUBY_LDFLAGS})
+    endif()
+
     foreach(module IN LISTS SO)
         unset(so_${module}_LIB_DEPENDS CACHE)
         target_sources(bbsd PRIVATE $<TARGET_OBJECTS:so_${module}>)

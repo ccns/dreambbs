@@ -17,3 +17,11 @@ SO	= chat.so vote.so xyz.so guessnum.so \
 	  pnote.so passwd.so adminutil.so ascii.so\
 	  classtable2.so observe.so pip.so brdstat.so personal.so \
 	  cleanrecommend.so shop.so bank.so innbbs.so contact.so banmail.so
+
+.if $(USE_BBSLUA)
+SO	+= bbslua.so
+.endif
+
+.if $(USE_BBSRUBY)
+SO	+= bbsruby.so
+.endif

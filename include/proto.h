@@ -227,13 +227,6 @@ void banmsg_cache(void);
 void banmsg_sync(const char *fpath);
 int t_banmsg(void);
 
-/* bbslua.c */
-int bbslua(const char *fpath);
-int bbslua_isHeader(const char *ps, const char *pe);
-
-/* bbsruby.c */
-void run_ruby(const char *fpath);
-
 /* visio.c */
 void bell(void);
 #ifdef M3_USE_PFTERM

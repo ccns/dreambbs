@@ -703,6 +703,14 @@ vkey_purge(void)
 #endif  // #ifndef BBSLUA_HAVE_VKEY
 
 //////////////////////////////////////////////////////////////////////////
+// dynamic library loading handling
+//////////////////////////////////////////////////////////////////////////
+
+#ifndef DL_RELEASE
+#define DL_RELEASE(_ret) ((void)0, _ret)
+#endif
+
+//////////////////////////////////////////////////////////////////////////
 // BBS-Lua Project
 //
 // Author: Hung-Te Lin(piaip), Jan. 2008.
@@ -2099,12 +2107,15 @@ bbslua_detach(char *p, int len)
 int
 bbslua_isHeader(const char *ps, const char *pe)
 {
+#ifdef DL_HOLD
+    DL_HOLD;
+#endif
     int szsig = strlen(BBSLUA_SIGNATURE);
     if (ps + szsig > pe)
-        return 0;
+        return DL_RELEASE(0);
     if (strncmp(ps, BBSLUA_SIGNATURE, szsig) == 0)
-        return 1;
-    return 0;
+        return DL_RELEASE(1);
+    return DL_RELEASE(0);
 }
 
 static int
@@ -2649,6 +2660,9 @@ bbslua_path2hash(const char *path)
 int
 bbslua(const char *fpath)
 {
+#ifdef DL_HOLD
+    DL_HOLD;
+#endif
     int r = 0;
     lua_State *L;
     char *bs = NULL, *ps = NULL, *pe = NULL, *pc = NULL;
@@ -2669,7 +2683,7 @@ bbslua(const char *fpath)
 
     // re-entrant not supported!
     if (blrt.running)
-        return 0;
+        return DL_RELEASE(0);
 
     // initialize runtime
     BL_INIT_RUNTIME();
@@ -2682,7 +2696,7 @@ bbslua(const char *fpath)
     alloc_init(&ad);
     L = lua_newstate(allocf, &ad);
     if (!L)
-        return 0;
+        return DL_RELEASE(0);
     lua_atpanic(L, &panic);
 
     strlcpy(bfpath, fpath, sizeof(bfpath));
@@ -2696,7 +2710,7 @@ bbslua(const char *fpath)
             bbslua_detach(bs, sz);
         lua_close(L);
         vmsg("BBS-Lua 載入錯誤: 未含 BBS-Lua 程式");
-        return 0;
+        return DL_RELEASE(0);
     }
 
     // init library
@@ -2730,7 +2744,7 @@ bbslua(const char *fpath)
         outs(errmsg);
         lua_close(L); // delay closing because we need to print out error message
         vmsg("BBS-Lua 載入錯誤: 請通知作者修正程式碼。");
-        return 0;
+        return DL_RELEASE(0);
     }
 
 #ifdef UMODE_BBSLUA
@@ -2798,7 +2812,7 @@ bbslua(const char *fpath)
     setutmpmode(prevmode);
 #endif
 
-    return 0;
+    return DL_RELEASE(0);
 }
 
 // vim:ts=4:sw=4:expandtab

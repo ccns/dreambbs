@@ -706,20 +706,32 @@ re_key:
 #ifdef M3_USE_BBSLUA
         else if ((key == 'L' || key == 'l') && HAS_PERM(PERM_BBSLUA))
         {
-            screen_backup_t old_screen;
-            scr_dump(&old_screen);
-            bbslua(fpath);
-            scr_restore_free(&old_screen);
+            DL_HOTSWAP_SCOPE int (*func)(const char *) = NULL;
+            if (!func)
+                func = DL_NAME_GET("bbslua.so", bbslua);
+            if (func)
+            {
+                screen_backup_t old_screen;
+                scr_dump(&old_screen);
+                func(fpath);
+                scr_restore_free(&old_screen);
+            }
         }
 #endif  /* #ifdef M3_USE_BBSLUA */
 #ifdef M3_USE_BBSRUBY
 /* 081229.cache: BBSRuby */
         else if (key == '!' && HAS_PERM(PERM_BBSRUBY))
         {
-            screen_backup_t old_screen;
-            scr_dump(&old_screen);
-            run_ruby(fpath);
-            scr_restore_free(&old_screen);
+            DL_HOTSWAP_SCOPE void (*func)(const char *) = NULL;
+            if (!func)
+                func = DL_NAME_GET("bbsruby.so", run_ruby);
+            if (func)
+            {
+                screen_backup_t old_screen;
+                scr_dump(&old_screen);
+                func(fpath);
+                scr_restore_free(&old_screen);
+            }
         }
 #endif  /* #ifdef M3_USE_BBSRUBY */
 

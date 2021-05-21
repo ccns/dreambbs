@@ -2881,8 +2881,16 @@ _pmore2(
             case 'l': case 'L':
                 if (!HasUserPerm(PERM_BBSLUA))
                     HANDLE_UNKNOWN_NAVKEY();
-
-                bbslua(* (char **)ahctx);
+                {
+                    DL_HOTSWAP_SCOPE int (*func)(const char *) = NULL;
+                    if (!func)
+                    {
+                        func = DL_NAME_GET("bbslua.so", bbslua);
+                        if (!func)
+                            HANDLE_UNKNOWN_NAVKEY();
+                    }
+                    func(* (char **)ahctx);
+                }
                 MFDISP_DIRTY();
                 break;
 #endif // USE_BBSLUA
@@ -2892,8 +2900,16 @@ _pmore2(
             case '!':
                 if (!HasUserPerm(PERM_BBSRUBY))
                     HANDLE_UNKNOWN_NAVKEY();
-
-                run_ruby(* (char **)ahctx);
+                {
+                    DL_HOTSWAP_SCOPE void (*func)(const char *) = NULL;
+                    if (!func)
+                    {
+                        func = DL_NAME_GET("bbsruby.so", run_ruby);
+                        if (!func)
+                            HANDLE_UNKNOWN_NAVKEY();
+                    }
+                    func(* (char **)ahctx);
+                }
                 MFDISP_DIRTY();
                 break;
 #endif // USE_BBSRUBY

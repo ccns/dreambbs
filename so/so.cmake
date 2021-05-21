@@ -15,3 +15,11 @@ set(SO
     classtable2 observe pip brdstat personal
     cleanrecommend shop bank innbbs contact banmail
 )
+
+if(USE_BBSLUA)
+    list(APPEND SO bbslua)
+endif()
+
+if (USE_BBSRUBY)
+    list(APPEND SO bbsruby)
+endif()

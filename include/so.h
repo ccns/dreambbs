@@ -51,6 +51,13 @@ int bank_main(void);
 int BanMail(void);
 void post_mail(void);
 
+/* so/bbslua.c */
+int bbslua(const char *fpath);
+int bbslua_isHeader(const char *ps, const char *pe);
+
+/* so/bbsruby.c */
+void run_ruby(const char *fpath);
+
 /* so/bj.c */
 int BlackJack(void);
 

@@ -96,6 +96,10 @@ static inline void getyx(int *y, int *x)
   #define BMAX(a, b)  MAX(a, b)
 #endif
 
+#ifndef DL_RELEASE_VOID
+  #define DL_RELEASE_VOID() ((void)0)
+#endif
+
 //-------------------------------------------------------
 // BBSRuby.c
 //-------------------------------------------------------
@@ -984,6 +988,9 @@ static VALUE bbsruby_eval_code RB_P((VALUE eval_args))
 void run_ruby(
     const char* fpath)
 {
+#ifdef DL_HOLD
+    DL_HOLD;
+#endif
 #ifdef BBSRUBY_USE_MRUBY
     mrb_state *mrb;
     mrb_bool error = 0;
@@ -1000,6 +1007,7 @@ void run_ruby(
     if (!post)
     {
         out_footer(" (內部錯誤)",  "按任意鍵返回");
+        DL_RELEASE_VOID();
         return;
     }
 
@@ -1011,6 +1019,7 @@ void run_ruby(
     {
         ruby_script_detach(post, pLen);
         out_footer(" (找不到程式區段)",  "按任意鍵返回");
+        DL_RELEASE_VOID();
         return;
     }
 
@@ -1027,6 +1036,7 @@ void run_ruby(
 #endif
         {
             out_footer(" (內部錯誤)",  "按任意鍵返回");
+            DL_RELEASE_VOID();
             return;
         }
 
@@ -1118,4 +1128,5 @@ void run_ruby(
 #ifdef BBSRUBY_USE_MRUBY
     mrb_close(mrb);
 #endif
+    DL_RELEASE_VOID();
 }

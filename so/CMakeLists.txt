@@ -45,6 +45,17 @@ foreach(module IN LISTS SO)
     )
 endforeach(module)
 
+if(USE_BBSLUA)
+    if(NOT USE_LUAJIT)
+        target_sources(so_bbslua PRIVATE bbsluaext.c)
+    endif()
+    target_link_libraries(so_bbslua PRIVATE ${LUA_LDFLAGS})
+endif()
+
+if(USE_BBSRUBY)
+    target_link_libraries(so_bbsruby PRIVATE ${RUBY_LDFLAGS})
+endif()
+
 if(NOT NO_SO)
     install(
         CODE "execute_process(COMMAND chown -R ${BBSUSR}:${BBSGROUP} ${CMAKE_INSTALL_PREFIX}/bin${BBSVER})"
