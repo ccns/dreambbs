@@ -12,6 +12,7 @@
 //#define BBSRUBY_VER_INFO_FILE             // The file with version information for BBS-Ruby
 #define BBSRUBY_HAVE_BMIN_BMAX            // The BBS has macros `BMIN` and `BMAX`
 //#define BBSRUBY_USE_MRUBY                 // Use mruby instead of CRuby
+//#define BBSRUBY_MRUBY_HAS_FULLCORE_GEMBOX // The mruby library is compiled with the `full-core` gembox
 
 #include "bbs.h"
 #include <sys/time.h>
@@ -25,6 +26,7 @@
  #define BBSRUBY_HAVE_STR_RANSI
  #define BBSRUBY_VER_INFO_FILE "bbs_script.h"
  //#define BBSRUBY_USE_MRUBY
+ //#define BBSRUBY_MRUBY_HAS_FULLCORE_GEMBOX
 #endif //M3_USE_BBSRUBY
 
 #ifdef PTT_USE_BBSRUBY    // For compiling on PttBBS
@@ -36,6 +38,7 @@
  #undef BBSRUBY_HAVE_STR_RANSI
  #undef BBSRUBY_VER_INFO_FILE
  //#define BBSRUBY_USE_MRUBY
+ //#define BBSRUBY_MRUBY_HAS_FULLCORE_GEMBOX
 #endif //PTT_USE_BBSRUBY
 
 /* Inferred settings */
@@ -837,7 +840,41 @@ void print_exception RB_PV((void))
 #define BRBCPP_EXPAND_LIST_OP1_END
 #define BRBCPP_EXPAND_LIST_OP2_END
 
-#define BRB_MRB10400_GEMBOX_DEFAULT  \
+/* mruby gem enabling conditions. Can be combined to achieve the logical AND logic */
+
+#ifdef BBSRUBY_MRUBY_HAS_FULLCORE_GEMBOX
+  #define BRB_FULLCORE(_gem) _gem
+#else
+  #define BRB_FULLCORE(_gem) /* Empty */
+#endif
+
+/* Assume `MRUBY_RELEASE_NO >= 10400` */
+
+#if MRUBY_RELEASE_NO >= 10401
+  #define BRB_MRB10401(_gem) _gem
+  #define BRB_BEFORE_MRB10401(_gem) /* Empty */
+#else
+  #define BRB_MRB10401(_gem) /* Empty */
+  #define BRB_BEFORE_MRB10401(_gem) _gem
+#endif
+
+#if MRUBY_RELEASE_NO >= 20000
+  #define BRB_MRB20000(_gem) _gem
+  #define BRB_BEFORE_MRB20000(_gem) /* Empty */
+#else
+  #define BRB_MRB20000(_gem) /* Empty */
+  #define BRB_BEFORE_MRB20000(_gem) _gem
+#endif
+
+#if MRUBY_RELEASE_NO >= 20100
+  #define BRB_MRB20100(_gem) _gem
+  #define BRB_BEFORE_MRB20100(_gem) /* Empty */
+#else
+  #define BRB_MRB20100(_gem) /* Empty */
+  #define BRB_BEFORE_MRB20100(_gem) _gem
+#endif
+
+#define BRB_MRBGEM_LIST  \
     (mruby_sprintf) \
     /* (mruby_print) */ \
     (mruby_math) \
@@ -861,34 +898,20 @@ void print_exception RB_PV((void))
     (mruby_toplevel_ext) \
     (mruby_kernel_ext) \
     (mruby_class_ext) \
-    (mruby_error)
-
-#define BRB_MRB10400_GEMBOX_FULLCORE  \
-    /* (mruby_exit) */ \
-    (mruby_eval) \
-    /* (mruby_socket) */
-
-#if MRUBY_RELEASE_NO >= 20000
-  #define BRB_MRB20000_GEMBOX_DEFAULT  \
-    (mruby_metaprog) \
-    /* (mruby_io) */ \
-    (mruby_pack) \
-    (mruby_method)
-
-  #define BRB_MRB20000_GEMBOX_FULLCORE  \
-    (mruby_complex) \
-    (mruby_rational) \
-    /* (mruby_sleep) */
-#else
-  #define BRB_MRB20000_GEMBOX_DEFAULT
-  #define BRB_MRB20000_GEMBOX_FULLCORE
-#endif
-
-#define BRB_MRBGEM_LIST  \
-    BRB_MRB10400_GEMBOX_DEFAULT \
-    /* BRB_MRB10400_GEMBOX_FULLCORE */ \
-    BRB_MRB20000_GEMBOX_DEFAULT \
-    /* BRB_MRB20000_GEMBOX_FULLCORE */
+    (mruby_error) \
+    /* BRB_FULLCORE((mruby_exit)) */ \
+    BRB_FULLCORE((mruby_eval)) \
+    /* BRB_FULLCORE(BRB_BEFORE_MRB10401((mruby_io))) */ \
+    BRB_FULLCORE(BRB_BEFORE_MRB20100((mruby_method))) \
+    /* BRB_MRB10401((mruby_io)) */ \
+    BRB_MRB10401((mruby_pack)) \
+    /* BRB_FULLCORE(BRB_MRB10401((mruby_socket))) */ \
+    BRB_MRB20000((mruby_metaprog)) \
+    /* BRB_FULLCORE(BRB_MRB20000((mruby_sleep))) */ \
+    BRB_MRB20100((mruby_method)) \
+    BRB_FULLCORE(BRB_MRB20100((mruby_complex))) \
+    BRB_FULLCORE(BRB_MRB20100((mruby_rational))) \
+    /* End of list */
 
 #ifdef __cplusplus
 extern "C" {
