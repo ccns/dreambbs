@@ -252,7 +252,7 @@ if(USE_BBSRUBY)
         set(RUBY_CFLAGS)
         set(RUBY_LDFLAGS mruby m)
     else()
-    pkg_search_module(RUBY REQUIRED ruby<=2.2 ruby-2.2)
+        pkg_search_module(RUBY REQUIRED ruby<=2.2 ruby-2.2)
     endif()
 endif()
 
