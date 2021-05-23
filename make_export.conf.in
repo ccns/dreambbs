@@ -14,3 +14,5 @@
 #define BBSHOME "@BBSHOME@"
 #undef BBSUTCZONE
 #define BBSUTCZONE "@BBSUTCZONE@"
+#undef MRB_CONFIG
+#define MRB_CONFIG "@MRB_CONFIG@"

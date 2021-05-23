@@ -78,6 +78,10 @@ BBSHOME != $(GETVAR$(var::= "$(BBSHOME)")$(else_var::= $(GETVALUE$(conf::= "BBSH
 ## Numeric local timezone
 BBSUTCZONE != $(GETVAR$(var::= "$(BBSUTCZONE)")$(else_var::= $(GETVALUE$(conf::= "BBSUTCZONE")$(default::= "$(:!date +%z!)")$(hdr::= $(BBSCONF)))))
 
+## `mruby-config` executable path for building BBS-Ruby with mruby
+MRB_CONFIG_PATH != which mruby-config
+MRB_CONFIG != $(GETVAR$(var::= "$(MRB_CONFIG)")$(else_var::= $(GETVALUE$(conf::= "MRB_CONFIG")$(default::= "$(MRB_CONFIG_PATH)")$(hdr::= $(BBSCONF_ORIGIN)))))
+
 # rules ref: PttBBS: mbbsd/Makefile
 DEF_LIST	!= sh -c '$(GETCONFS$(hdr::= $(BBSCONF)))'
 DEF_TEST	 = [ $(DEF_LIST:M$(conf:M*:S/"//g:N")) ]  # Balance the quotes
@@ -181,8 +185,10 @@ LUA_LDFLAGS	!= pkg-config --libs $(LUA_PKG_NAME)
 .endif
 
 .if $(USE_MRUBY)
-RUBY_CFLAGS	=
-RUBY_LDFLAGS	= -lmruby -lm
+MRB_CFLAGS	!= "$(MRB_CONFIG)" --cflags
+MRB_LDFLAGS	!= "$(MRB_CONFIG)" --ldflags
+RUBY_CFLAGS	= $(MRB_CFLAGS)
+RUBY_LDFLAGS	= $(MRB_LDFLAGS) mruby m
 .else
 RUBY_CFLAGS	!= pkg-config --cflags ruby-2.2
 RUBY_LDFLAGS	!= pkg-config --libs ruby-2.2

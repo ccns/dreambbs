@@ -149,6 +149,14 @@ execute_process(
 )
 LOADVALUE(BBSUTCZONE "${BBSUTCZONE_DEFAULT}" ${BBSCONF_ORIGIN} BBSUTCZONE)
 
+## `mruby-config` executable path for building BBS-Ruby with mruby
+execute_process(
+    COMMAND which mruby-config
+    OUTPUT_VARIABLE MRB_CONFIG_PATH
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+LOADVALUE(MRB_CONFIG "${MRB_CONFIG_PATH}" ${BBSCONF_ORIGIN} MRB_CONFIG)
+
 # Flags for enabling modules
 DEF_TEST(M3_USE_PMORE ${BBSCONF} USE_PMORE)
 DEF_TEST(M3_USE_PFTERM ${BBSCONF} USE_PFTERM)
@@ -249,8 +257,18 @@ if(USE_BBSRUBY)
         link_libraries(-Wl,--no-as-needed)
     endif()
     if(USE_MRUBY)
-        set(RUBY_CFLAGS)
-        set(RUBY_LDFLAGS mruby m)
+        execute_process(
+            COMMAND ${MRB_CONFIG} --cflags
+            OUTPUT_VARIABLE MRB_CFLAGS
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+        execute_process(
+            COMMAND ${MRB_CONFIG} --ldflags
+            OUTPUT_VARIABLE MRB_CFLAGS
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+        )
+        set(RUBY_CFLAGS ${MRB_CFLAGS})
+        set(RUBY_LDFLAGS ${MRB_LDFLAGS} mruby m)
     else()
         pkg_search_module(RUBY REQUIRED ruby<=2.2 ruby-2.2)
     endif()
