@@ -882,6 +882,22 @@ void print_exception RB_PV((void))
   #define BRB_BEFORE_MRB20100(_gem) _gem
 #endif
 
+#if MRUBY_RELEASE_NO >= 20102
+  #define BRB_MRB20102(_gem) _gem
+  #define BRB_BEFORE_MRB20102(_gem) /* Empty */
+#else
+  #define BRB_MRB20102(_gem) /* Empty */
+  #define BRB_BEFORE_MRB20102(_gem) _gem
+#endif
+
+#if MRUBY_RELEASE_NO >= 30000
+  #define BRB_MRB30000(_gem) _gem
+  #define BRB_BEFORE_MRB30000(_gem) /* Empty */
+#else
+  #define BRB_MRB30000(_gem) /* Empty */
+  #define BRB_BEFORE_MRB30000(_gem) _gem
+#endif
+
 #define BRB_MRBGEM_LIST  \
     (mruby_sprintf) \
     /* (mruby_print) */ \
@@ -908,18 +924,24 @@ void print_exception RB_PV((void))
     (mruby_class_ext) \
     (mruby_error) \
     /* BRB_FULLCORE((mruby_exit)) */ \
-    BRB_FULLCORE((mruby_eval)) \
+    BRB_FULLCORE(BRB_BEFORE_MRB20102((mruby_eval))) \
     /* BRB_FULLCORE(BRB_BEFORE_MRB10401((mruby_io))) */ \
     BRB_FULLCORE(BRB_BEFORE_MRB20100((mruby_method))) \
     /* BRB_MRB10401((mruby_io)) */ \
     BRB_MRB10401((mruby_pack)) \
-    /* BRB_FULLCORE(BRB_MRB10401((mruby_socket))) */ \
+    /* BRB_FULLCORE(BRB_BEFORE_MRB30000(BRB_MRB10401((mruby_socket)))) */ \
     BRB_MRB20000((mruby_metaprog)) \
     /* BRB_FULLCORE(BRB_MRB20000((mruby_sleep))) */ \
     BRB_FULLCORE(BRB_MRB20001((mruby_enum_chain))) \
     BRB_MRB20100((mruby_method)) \
-    BRB_FULLCORE(BRB_MRB20100((mruby_complex))) \
-    BRB_FULLCORE(BRB_MRB20100((mruby_rational))) \
+    BRB_FULLCORE(BRB_BEFORE_MRB20102(BRB_MRB20100((mruby_complex)))) \
+    BRB_FULLCORE(BRB_BEFORE_MRB20102(BRB_MRB20100((mruby_rational)))) \
+    BRB_MRB20102((mruby_eval)) \
+    BRB_MRB20102((mruby_complex)) \
+    BRB_MRB20102((mruby_rational)) \
+    /* BRB_MRB30000((mruby_socket)) */ \
+    BRB_FULLCORE(BRB_MRB30000((mruby_catch))) \
+    BRB_FULLCORE(BRB_MRB30000((mruby_os_memsize))) \
     /* End of list */
 
 #ifdef __cplusplus
