@@ -866,6 +866,14 @@ void print_exception RB_PV((void))
   #define BRB_BEFORE_MRB20000(_gem) _gem
 #endif
 
+#if MRUBY_RELEASE_NO >= 20001
+  #define BRB_MRB20001(_gem) _gem
+  #define BRB_BEFORE_MRB20001(_gem) /* Empty */
+#else
+  #define BRB_MRB20001(_gem) /* Empty */
+  #define BRB_BEFORE_MRB20001(_gem) _gem
+#endif
+
 #if MRUBY_RELEASE_NO >= 20100
   #define BRB_MRB20100(_gem) _gem
   #define BRB_BEFORE_MRB20100(_gem) /* Empty */
@@ -908,6 +916,7 @@ void print_exception RB_PV((void))
     /* BRB_FULLCORE(BRB_MRB10401((mruby_socket))) */ \
     BRB_MRB20000((mruby_metaprog)) \
     /* BRB_FULLCORE(BRB_MRB20000((mruby_sleep))) */ \
+    BRB_FULLCORE(BRB_MRB20001((mruby_enum_chain))) \
     BRB_MRB20100((mruby_method)) \
     BRB_FULLCORE(BRB_MRB20100((mruby_complex))) \
     BRB_FULLCORE(BRB_MRB20100((mruby_rational))) \
