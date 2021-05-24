@@ -1,5 +1,5 @@
 #include "bbs.h"
-#include <assert.h>
+#include "test.h"
 
 int main(int argc, char *argv[])
 {

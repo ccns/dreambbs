@@ -3,8 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <assert.h>
 #include "dao.h"
+#include "test.h"
 
 #define MMM     (0x40000)
 

@@ -1,5 +1,5 @@
 #include "bbs.h"
-#include <assert.h>
+#include "test.h"
 
 #if __STDC_VERSION__ >= 201112L  /* C11 */ || __cplusplus >= 201103L  /* C++11 */
   #define EXPECT_SIZE(Type, expect) \

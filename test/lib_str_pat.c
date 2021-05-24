@@ -1,8 +1,8 @@
 #include "config.h"
 
 #include <stdio.h>
-#include <assert.h>
 #include "dao.h"
+#include "test.h"
 
 #define STR_PAT(x, y)   (printf("<%s, %s> : %d\n", x, y, str_pat(x, y)), assert(str_pat(x, y)))
 

@@ -2,8 +2,8 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <assert.h>
 #include "dao.h"
+#include "test.h"
 
 int main(void)
 {
