@@ -262,11 +262,13 @@ if(USE_BBSRUBY)
             OUTPUT_VARIABLE MRB_CFLAGS
             OUTPUT_STRIP_TRAILING_WHITESPACE
         )
+        separate_arguments(MRB_CFLAGS)
         execute_process(
             COMMAND ${MRB_CONFIG} --ldflags
             OUTPUT_VARIABLE MRB_LDFLAGS
             OUTPUT_STRIP_TRAILING_WHITESPACE
         )
+        separate_arguments(MRB_LDFLAGS)
         set(RUBY_CFLAGS ${MRB_CFLAGS})
         set(RUBY_LDFLAGS ${MRB_LDFLAGS} mruby m)
     else()
