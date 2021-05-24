@@ -188,7 +188,7 @@ LUA_LDFLAGS	!= pkg-config --libs $(LUA_PKG_NAME)
 MRB_CFLAGS	!= "$(MRB_CONFIG)" --cflags
 MRB_LDFLAGS	!= "$(MRB_CONFIG)" --ldflags
 RUBY_CFLAGS	= $(MRB_CFLAGS)
-RUBY_LDFLAGS	= $(MRB_LDFLAGS) mruby m
+RUBY_LDFLAGS	= $(MRB_LDFLAGS) -lmruby -lm
 .else
 RUBY_CFLAGS	!= pkg-config --cflags ruby-2.2
 RUBY_LDFLAGS	!= pkg-config --libs ruby-2.2
