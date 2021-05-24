@@ -264,7 +264,7 @@ if(USE_BBSRUBY)
         )
         execute_process(
             COMMAND ${MRB_CONFIG} --ldflags
-            OUTPUT_VARIABLE MRB_CFLAGS
+            OUTPUT_VARIABLE MRB_LDFLAGS
             OUTPUT_STRIP_TRAILING_WHITESPACE
         )
         set(RUBY_CFLAGS ${MRB_CFLAGS})
