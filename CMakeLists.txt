@@ -35,7 +35,21 @@ else()
     set(USE_CXX ON CACHE BOOL "Compile C code using C++ mode")
 endif()
 
-add_compile_options(-ggdb3 -O0 -pipe)
+if(DEFINED ENV{CMAKE_BUILD_TYPE})
+    set(CMAKE_BUILD_TYPE $ENV{CMAKE_BUILD_TYPE})
+elseif(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE RelWithDebInfo)
+endif()
+
+message(STATUS "Using build configuration: ${CMAKE_BUILD_TYPE}")
+
+add_compile_options(
+    $<$<CONFIG:Release>:>
+    "$<$<CONFIG:Debug>:-ggdb3>"
+    "$<$<CONFIG:RelWithDebInfo>:-ggdb3>"
+    $<$<CONFIG:MinSizeRel>:>
+    -pipe
+)
 add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format -Werror=incompatible-pointer-types -Werror=int-conversion -Werror=pointer-to-int-cast)
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/include)
 
