@@ -508,7 +508,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
 
 int dns_openip(const ip_addr *addr, int port)
 {
-    int sock;
+    int sock = -1;
     struct addrinfo hints = {0};
     struct addrinfo *hosts;
     char addr_str[INET6_ADDRSTRLEN], port_str[12];
