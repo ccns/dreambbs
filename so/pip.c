@@ -6860,7 +6860,7 @@ int mode)
     }
     else
     {
-        m.maxhp = d.body[BODY_MAXHP] * (80 + random() % 50) / 100 + 20;;
+        m.maxhp = d.body[BODY_MAXHP] * (80 + random() % 50) / 100 + 20;
         m.hp = m.maxhp - random() % 10 + 20;
         m.maxmp = d.fight[FIGHT_MAXMP] * (80 + random() % 50) / 100 + 10;
         m.mp = m.maxmp - random() % 20 + 10;

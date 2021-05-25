@@ -530,7 +530,7 @@ int dns_openip(const ip_addr *addr, int port)
             continue;
 
         if (!connect(sock, host->ai_addr, host->ai_addrlen))
-            break;;
+            break;
 
         sock = -1;
         close(sock);

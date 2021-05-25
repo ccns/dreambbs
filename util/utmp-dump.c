@@ -526,7 +526,7 @@ ulist_init(
     for (i=0; i<nf_num; i++)
         *pp++ = nf[i];
 
-    xo->max = max = pp - ulist_pool;;
+    xo->max = max = pp - ulist_pool;
 
     if (xo->pos >= max)
         xo->pos = xo->top = 0;
