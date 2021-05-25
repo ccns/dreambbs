@@ -647,10 +647,13 @@ int dns_open(const char *host, int port)
 
 #define DNS_MXLIST_DELIMITER  ';'
 
-static inline void dns_mx(const char *domain, char *mxlist)
+static inline void dns_mx(const char *domain, char *mxlist, int mxlist_sz)
 {
     querybuf ans;
     unsigned char *cp, *eom;
+
+    /* No space for more MX entries when the string end of any appended MX entry reaches or exceeds `mxlist_end` */
+    const char *const mxlist_end = mxlist + mxlist_sz - 2;
 
     *mxlist = 0;
 
@@ -674,12 +677,10 @@ static inline void dns_mx(const char *domain, char *mxlist)
         cp += n + QFIXEDSZ;
     }
 
-    domain = mxlist + MAX_MXLIST - MAXDNAME - 2;
-
     for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
     {
         int type;
-        int n = dn_expand((unsigned char *)&ans, eom, cp, mxlist, MAXDNAME);
+        int n = dn_expand((unsigned char *)&ans, eom, cp, mxlist, mxlist_end - mxlist);
         if (n < 0)
             break;
 
@@ -693,8 +694,7 @@ static inline void dns_mx(const char *domain, char *mxlist)
         {
             /* pref = getshort(cp); */
             *mxlist = '\0';
-            if ((dn_expand
-                 ((unsigned char *)&ans, eom, cp + 2, mxlist, MAXDNAME)) < 0)
+            if ((dn_expand((unsigned char *)&ans, eom, cp + 2, mxlist, mxlist_end - mxlist)) < 0)
                 break;
 
             if (!*mxlist)
@@ -705,10 +705,11 @@ static inline void dns_mx(const char *domain, char *mxlist)
 
             while (*mxlist)
                 mxlist++;
-            *mxlist++ = DNS_MXLIST_DELIMITER;
 
-            if (mxlist >= domain)
+            if (mxlist >= mxlist_end)
                 break;
+
+            *mxlist++ = DNS_MXLIST_DELIMITER;
         }
 
         cp += n;
@@ -722,7 +723,7 @@ int dns_smtp(char *host)
 {
     char mxlist[MAX_MXLIST], *str = mxlist;
 
-    dns_mx(host, str);
+    dns_mx(host, str, sizeof(mxlist));
     if (!*str)
         str = host;
 
