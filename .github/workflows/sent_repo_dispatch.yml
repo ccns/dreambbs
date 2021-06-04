@@ -19,6 +19,6 @@ jobs:
             https://api.github.com/repos/bbsdocker/imagedreambbs/actions/workflows/$WORKFLOW_ID/dispatches \
             --data '{
             "ref": "refs/heads/master",
-            "inputs": {"src_ref": '"$GITHUB_REF"', "src_sha": '"$GITHUB_SHA"'}
+            "inputs": {"src_ref": "'"$GITHUB_REF"'", "src_sha": "'"$GITHUB_SHA"'"}
             }'
           echo "Dispatch sent."
