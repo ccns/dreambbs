@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - env:
-          WORKFLOW_ID: ${{ github.ref == 'refs/heads/master' && 'push_container.yml' || 'push_container_develop.yml' }}
+          WORKFLOW_ID: 'push_container.yml'
         run: |
           curl \
             -X POST \
