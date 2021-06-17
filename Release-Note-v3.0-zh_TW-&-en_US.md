@@ -160,6 +160,10 @@ The major changes from v2.0 are explained below.
   在編輯器中，Esc-r 可暫時開關雙位元組字元偵測\
   In the editor, Esc-r can temporarily toggles DBCS character detection
 
+* 已預設使用新式密碼加密產生新密碼\
+  The generation of new passwords now defaults to use the new encryption 
+
+
 ### 錯誤修正 Bug Fixes
 
 * 修正使用者的文章閱讀紀錄（BRHs）會因為 `memcpy()` 在較新的作業系統上的未定義行為而損壞的問題\
@@ -256,6 +260,9 @@ The major changes from v2.0 are explained below.
 
 - 移除專案中 Travis CI 的設定檔\
   Remove the configure file for Travis CI from the project
+
+  已改用 GitHub Actions 來產生專案建置是否順利的資訊。\
+  The build status is now generated with GitHub Actions instead.
 
 ### 程式架構改變 Program Architecture Changes
 
