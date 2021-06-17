@@ -228,9 +228,6 @@ The major changes from v2.0 are explained below.
 * 修正從 <kbd>Ctrl</kbd>-<kbd>Z</kbd> 選單離開會跳出目前看板的進板畫面的問題\
   Fix exiting from the <kbd>Ctrl</kbd>-<kbd>Z</kbd> menu triggered the welcome screen of the current board
 
-* 修正訪客閒置時異常斷線\
-  Fix idling guests got disconnected abnormally
-
 * 修正踢除先前的重複連線時，踢人的 pid 被誤當成被踢的 pid 記錄\
   Fix the kicker session's pid wrongly logged as the kicked session's pid when the previous session is kicked due to multi-session
 
