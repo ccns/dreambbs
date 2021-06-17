@@ -30,7 +30,7 @@ new_passwd(void)
                 if (Email[0] != 'y')
                     break;
                 /* IID.20190530: For forward compatibility with older versions */
-                if (vget(B_LINES_REF-3, 0, "是否使用新式密碼加密(y/N)？[N]", Email, 3, LCECHO) == 'y')
+                if (vget(B_LINES_REF-3, 0, "是否使用新式密碼加密(Y/n)？[Y]", Email, 3, LCECHO) != 'n')
                 {
                     ans = GENPASSWD_SHA256;
                     len = PLAINPASSSIZE;

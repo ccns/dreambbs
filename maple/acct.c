@@ -808,7 +808,7 @@ void acct_setup(ACCT * u, int adm)
     for (;;)
     {
         /* IID.20190530: For forward compatibility with older versions */
-        if (vget(++i, 0, "是否使用新式密碼加密(y/N)？[N]", buf, 3, LCECHO) == 'y')
+        if (vget(++i, 0, "是否使用新式密碼加密(Y/n)？[Y]", buf, 3, LCECHO) != 'n')
         {
             mode = GENPASSWD_SHA256;
             num = PLAINPASSSIZE;

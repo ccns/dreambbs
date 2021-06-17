@@ -400,7 +400,7 @@ acct_apply(void)
     }
 
     /* IID.20190530: For the forward compatibility of older versions */
-    if (vget(18, 0, "是否使用新式密碼加密(y/N)？[N]", buf, 3, LCECHO) == 'y')
+    if (vget(18, 0, "是否使用新式密碼加密(Y/n)？[Y]", buf, 3, LCECHO) != 'n')
     {
         try_ = GENPASSWD_SHA256;
         fd = PLAINPASSSIZE;
