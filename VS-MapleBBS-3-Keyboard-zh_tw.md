@@ -55,7 +55,7 @@
 ## v2.1-rc1 (3.12.1)
 - 編輯器：可以在 ANSI 模式中直接使用 <kbd>Backspace</kbd>，不需離開 ANSI 模式 ([d52ad44f2](https://github.com/ccns/dreambbs/commit/d52ad44f29c75765ce573833fed2a9eeb02620ff))
 - 傳統切換選單：按 <kbd>f</kbd> 鍵可正確進入夢大式我的最愛列表 ([10598d476](https://github.com/ccns/dreambbs/commit/10598d476749b00bd3ee415d2caefa35b29aadc0))
-- 分類看板列表：移除 <kbd>Ctrl</kbd>-<kbd>P</kbd>、<kbd>d</kbd>、<kbd>M</kbd> 等 Maple3 式我的最愛專用按鍵 ([3760a95c1](https://github.com/ccns/dreambbs/commit/3760a95c1be5ba7caa0199fac831484be6735408))
+- 分類看板列表：移除 <kbd>Ctrl</kbd>-<kbd>P</kbd>、<kbd>d</kbd>、<kbd>M</kbd> 等 WindTop 式我的最愛專用按鍵 ([3760a95c1](https://github.com/ccns/dreambbs/commit/3760a95c1be5ba7caa0199fac831484be6735408))
 
 ## v3.0 (3.21.0)
 - 輸入系統：
