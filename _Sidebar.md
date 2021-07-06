@@ -17,8 +17,8 @@
 - Changelog
     - [[Unsorted Changelog|CHANGELOG]]
     - [[新式密碼加密 (DLBBS v2.0+)|new_encrypt_way]]
-    - [[Release Notes of Version 2.0.0 Artoria|Release-Notes-of-Version-2.0.0]]
-    - [[Version 2.0.0 Artoria 發行說明|Release-Notes-of-Version-2.0.0-Artoria---zh_TW]]
+    - [[Release Notes of Version 2.0.0 Artoria|v2.0-Artoria]]
+    - [[Version 2.0.0 Artoria 發行說明|v2.0-Artoria-zh_TW]]
     - [[Release Notes of Version 1.0.0 Rimuru|v1.0-rimuru]]
     - [[Version 1.0.0 Rimuru 發行說明|v1.0-rimuru-zh_tw]]
 
