@@ -86,7 +86,9 @@
 - `vget` 的自動完成列表 ([2b48a99db](https://github.com/ccns/dreambbs/commit/2b48a99dbdbcdff4ed16cfbfa0311b5b20a262a8))：
     - 按 <kbd>Space</kbd> 或 <kbd>Tab</kbd> 會自動完成
     - 按 <kbd>Enter</kbd>、<kbd>Space</kbd>、<kbd>Tab</kbd> 鍵會繼續列出，按其它鍵繼續輸入
-- 編輯器：按 <kbd>Esc</kbd> 鍵後等 0.65 秒，或快速按兩下 <kbd>Esc</kbd> 鍵 (即 <kbd>Esc</kbd>-<kbd>Esc</kbd>) 可以輸入 `Esc` 字元 ([97812e94d](https://github.com/ccns/dreambbs/commit/97812e94d5d8bd7392a53f7dc1335e8c3a3c1c07))
+- 編輯器：
+    - 按 <kbd>Esc</kbd> 鍵後等 0.65 秒，或快速按兩下 <kbd>Esc</kbd> 鍵 (即 <kbd>Esc</kbd>-<kbd>Esc</kbd>) 可以輸入 `Esc` 字元 ([97812e94d](https://github.com/ccns/dreambbs/commit/97812e94d5d8bd7392a53f7dc1335e8c3a3c1c07))
+    - 按 <kbd>Esc</kbd>-<kbd>r</kbd> 可開關雙位元字偵測 ([3fbbf54e4](https://github.com/ccns/dreambbs/commit/3fbbf54e4a01618b0f482f21da2c7ac784702dfb))
 - 踩地雷遊戲：要用 <kbd>Esc</kbd> 鍵退出遊戲時，可快速按兩下以送出 <kbd>Esc</kbd>-<kbd>Esc</kbd> ([97812e94d](https://github.com/ccns/dreambbs/commit/97812e94d5d8bd7392a53f7dc1335e8c3a3c1c07))
 - 現在許多選單可以用 <kbd>Esc</kbd> 與 <kbd>Esc</kbd>-<kbd>Esc</kbd> 跳回上層
     - 彈出式選單 ([73480e7b9](https://github.com/ccns/dreambbs/commit/73480e7b955996df67e7958f8b710e92c62a775b))
