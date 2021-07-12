@@ -115,4 +115,36 @@ MapleBBS 3.00a 時，在 `brh_load`, `brh_save`, `brh_put` 等函式誤用了 `m
 
 MapleBBS 3 的各分支，如未加以修正，在較新的作業系統上運作時，會因為 `memcpy` 最佳化的 undefined behavior 而出現 BRHs 損壞的現象。
 
-DreamBBS v2.1 時已完全修正此問題。
+### 已知的可能症狀
+- 未讀標記異常：有時進入看板，所看到的未讀標記與先前的並不一致（例如被自動重設）。
+    - **造成此現象的 BRH 損壞**：
+        - 此看板的 BRH 開頭部份被意外複製，在使用者的 BRHs 中重複出現。
+        - 某看板的 BRH 的 `bcount` 損壞，造成 BRHs 中偶然出現可被解讀為此看板的 BRH 開頭的資料。
+    - **引發此現象的程式動作**：
+        - 某次嘗試載入此看板的 BRH 時，載入到的是同一看板的不同的 BRH。
+- 在進行以下操作時，系統回應時間過久，甚至斷線（伺服器端提供此連線服務的程式崩潰）。
+    - 登入
+    - 登出
+    - 進入看板列表／看板分類列表／我的最愛列表
+    - 進入某看板
+    - **造成此現象的 BRH 損壞**：
+        - 此看板的 BRH 的 `bcount` 被其它資料覆寫，變得過大。
+        - 某看板的 BRH 的 `bcount` 損壞，造成 BRHs 中偶然出現可被解讀為此看板的 BRH 開頭的資料，其中的 `bcount` 原為時間值而過大。
+    - **引發此現象的程式動作**：
+        - 程式根據損壞的 `bcount` 嘗試將過大的 BRH 資料載入記憶體，造成執行速度緩慢，甚至造成記憶體空間不足而使程式崩潰。
+        - 程式根據損壞的 `bcount` 嘗試存取非法記憶體位址，引發記憶體區段錯誤而強制中止程式的執行。
+
+### 暫時緩解方式
+- 刪除 `.BRH` 檔以重置閱讀紀錄
+
+### 問題解決狀況
+DreamBBS v2.1 時已完全修正會引起 BRHs 損壞的問題。
+
+修正內容請見：
+- [bc67fbb220](https://github.com/ccns/dreambbs/commit/bc67fbb2200d2071aa78d5c6ffc6576b34fe12b5) 「maple/board.c: `brh_get()`: Fix using `memcpy()` to move data between overlapped ranges.」
+- [2f64941529](https://github.com/ccns/dreambbs/commit/2f649415299378805bd3ab4931ec07797efc72ca) 「maple/board.c: `brh_load()` & `brh_save()`: Fix using `memcpy()` to move data between possibly overlapping ranges; should have used `memmove()`. [ref: bc67fbb]」
+
+尚未完全解決已存在的 BRHs 損壞所引發的問題。
+
+有關修正損壞的 BRHs 所引發的問題的嘗試，請見：
+- [82747bf62f](https://github.com/ccns/dreambbs/commit/82747bf62fe1582b3481011b2356dbb25917b606) 「maple/board.c: `brh_load()`: Fix and work around the BRH file loading errors caused by invalid `bcount` fields of BRH entries.」
