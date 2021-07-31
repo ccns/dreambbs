@@ -7,11 +7,11 @@
 預計未來將再加入更多新增功能的說明以及與其它 MapleBBS 3 主要分支的比較。
 
 ## 相關頁面
-- 有關 xover 系統使用上的差異，請見 [[Xover 列表系統|Xover-List-System-zh_tw]]。
+- 有關 xover 系統使用上的差異，請見 [[Xover 列表系統|Xover-zh_tw]]。
 
-- 有關選單系統的差異，請見[[選單系統|Menu-Systems-zh_tw]]。
+- 有關選單系統的差異，請見[[選單系統|Menu-zh_tw]]。
 
-- 有關畫面座標系統的差異，請見[[畫面座標系統|Screen-Coordinate-System-zh_tw]]。
+- 有關畫面座標系統的差異，請見[[畫面座標系統|Screen-Coord-zh_tw]]。
 
 - 有關按鍵的輸入系統與對應功能的差異，請見[[與 MapleBBS 3 的按鍵差異|VS MapleBBS 3 Keyboard zh_tw]]。
 
