@@ -1,6 +1,6 @@
-# Deny 停權系統
+# DENY 停權系統
 
-Deny 停權系統是源自 WindTopBBS 的可將使用者自動停權的系統。
+DENY 停權系統是源自 WindTopBBS 的可將使用者自動停權的系統。
 
 MapleBBS-itoc 無此系統。
 
