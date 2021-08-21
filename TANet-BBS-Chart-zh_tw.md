@@ -16,8 +16,8 @@
       │   │   ├── Eagles BBS 3.1  1995-1997
       │   │   └── Palm BBS  臺大計中  椰林風情  1995
       │   ├── Pivot BBS 5.8  中興計中  天樞資訊  1993-1996
-      │   │   ├── Feeling BBS  中正計中  寂寞芳心  1995-1996
-      │   │   └── NCHU Pivot BBS 5.9  1996
+      │   │   ├── NCHU Pivot BBS 5.9  1996
+      │   │   └── Feeling BBS  中正計中  寂寞芳心  1995-1996
       │   ├── NCTU CIS BBS  交大資科  n.d.
       │   ├── Phoenix BBS 3.0  交大資工  鳳凰城資訊站  1993, 1994
       │   │   ├── Phoenix BBS 4.0  1995
