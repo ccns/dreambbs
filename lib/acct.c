@@ -26,7 +26,7 @@
 #include "dao.h"
 
 /* ----------------------------------------------------- */
-/* å¢åŠ éŠ€å¹£, å„ªè‰¯ç©åˆ†, åŠ£é€€                              */
+/* ¼W¥[»È¹ô, Àu¨}¿n¤À, ¦H°h                              */
 /* ----------------------------------------------------- */
 
 void addmoney(int addend, const char *userid)
@@ -34,7 +34,7 @@ void addmoney(int addend, const char *userid)
     ACCT acct;
     if (acct_load(&acct, userid) >= 0)
     {
-        double temp = (acct.money + addend);    /* é¿å…æº¢ä½ */
+        double temp = (acct.money + addend);    /* Á×§K·¸¦ì */
         if (temp < INT_MAX)
             acct.money += addend;
         else
@@ -50,7 +50,7 @@ void addpoint1(int addend, const char *userid)
     ACCT acct;
     if (acct_load(&acct, userid) >= 0)
     {
-        double temp = (acct.point1 + addend);    /* é¿å…æº¢ä½ */
+        double temp = (acct.point1 + addend);    /* Á×§K·¸¦ì */
         if (temp < INT_MAX)
             acct.point1 += addend;
         acct_save(&acct);
@@ -62,7 +62,7 @@ void addpoint2(int addend, const char *userid)
     ACCT acct;
     if (acct_load(&acct, userid) >= 0)
     {
-        double temp = (acct.point2 + addend);    /* é¿å…æº¢ä½ */
+        double temp = (acct.point2 + addend);    /* Á×§K·¸¦ì */
         if (temp < INT_MAX)
             acct.point2 += addend;
         acct_save(&acct);
@@ -70,7 +70,7 @@ void addpoint2(int addend, const char *userid)
 }
 
 /* ----------------------------------------------------- */
-/* (.ACCT) ä½¿ç”¨è€…å¸³è™Ÿ (account) subroutines              */
+/* (.ACCT) ¨Ï¥ÎªÌ±b¸¹ (account) subroutines              */
 /* ----------------------------------------------------- */
 
 void keeplog(const char *fnlog, const char *board, const char *title, int mode    /* 0:load 1:rename 2:load+unlink 3:load+mark 4:rename+mark */
@@ -93,12 +93,12 @@ void keeplog(const char *fnlog, const char *board, const char *title, int mode  
     {
         close(fd);
         /* rename(fnlog, fpath); */
-        f_mv(fnlog, fpath);        /* Thor.990409:å¯è·¨partition */
+        f_mv(fnlog, fpath);        /* Thor.990409:¥i¸ópartition */
     }
     else
     {
         fp = fdopen(fd, "w");
-        fprintf(fp, "ä½œè€…: SYSOP (%s)\næ¨™é¡Œ: %s\næ™‚é–“: %s\n",
+        fprintf(fp, "§@ªÌ: SYSOP (%s)\n¼ĞÃD: %s\n®É¶¡: %s\n",
                 SYSOPNICK, title, ctime_any(&hdr.chrono));
         f_suck(fp, fnlog);
         fclose(fp);
@@ -130,7 +130,7 @@ int acct_load(ACCT *acct, const char *userid)
     fd = open((char *)acct, O_RDONLY);
     if (fd >= 0)
     {
-        /* Thor.990416: ç‰¹åˆ¥æ³¨æ„, æœ‰æ™‚ .ACCTçš„é•·åº¦æœƒæ˜¯0 */
+        /* Thor.990416: ¯S§Oª`·N, ¦³®É .ACCTªºªø«×·|¬O0 */
         read(fd, acct, sizeof(ACCT));
         close(fd);
     }
@@ -143,7 +143,7 @@ void acct_save(const ACCT *acct)
     char fpath[80];
 
     usr_fpath(fpath, acct->userid, FN_ACCT);
-    fd = open(fpath, O_WRONLY, 0600);    /* fpath å¿…é ˆå·²ç¶“å­˜åœ¨ */
+    fd = open(fpath, O_WRONLY, 0600);    /* fpath ¥²¶·¤w¸g¦s¦b */
     if (fd >= 0)
     {
         write(fd, acct, sizeof(ACCT));
@@ -170,7 +170,7 @@ int acct_userno(const char *userid)
 }
 
 /* ----------------------------------------------------- */
-/* å¸³è™Ÿç®¡ç†                                              */
+/* ±b¸¹ºŞ²z                                              */
 /* ----------------------------------------------------- */
 
 int seek_log_email(const char *mail, int mode)
@@ -235,7 +235,7 @@ static void deny_add_email(ACCT *he, const char *exer)
     sprintf(buf, "%s # %02d/%02d/%02d %02d:%02d %s (%s)\n",
             he->vmail,
             p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
-            p->tm_hour, p->tm_min, "åœæ¬Š", exer);
+            p->tm_hour, p->tm_min, "°±Åv", exer);
     f_cat(FN_ETC_UNTRUST_ACL, buf);
 }
 
@@ -267,16 +267,16 @@ int add_deny_exer(ACCT *u, int adm, int cross, const char *exer)
     if (adm & DENY_SEL)
     {
         if (adm & DENY_SEL_TALK)
-            cselect = "ä¸ç•¶è¨€è«–";
+            cselect = "¤£·í¨¥½×";
         else if (adm & DENY_SEL_POST)
             cselect = " Cross Post";
         else if (adm & DENY_SEL_MAIL)
-            cselect = "æ•£ç™¼é€£é–ä¿¡";
+            cselect = "´²µo³sÂê«H";
         else if (adm & DENY_SEL_AD)
-            cselect = "æ•£ç™¼å»£å‘Šä¿¡";
+            cselect = "´²µo¼s§i«H";
         else if (adm & DENY_SEL_SELL)
-            cselect = "è²©è³£éæ³•äº‹ç‰©";
-        fprintf(fp, "æŸ¥ %s é•åç«™è¦%sï¼Œä¾ç«™è¦åœæ­¢", u->userid, cselect);
+            cselect = "³c½æ«Dªk¨Æª«";
+        fprintf(fp, "¬d %s ¹H¤Ï¯¸³W%s¡A¨Ì¯¸³W°±¤î", u->userid, cselect);
     }
     if ((adm & (DENY_MODE_ALL)) && !(adm & DENY_MODE_GUEST))
     {
@@ -285,7 +285,7 @@ int add_deny_exer(ACCT *u, int adm, int cross, const char *exer)
             x.userlevel |=
                 (PERM_DENYPOST | PERM_DENYTALK | PERM_DENYCHAT | PERM_DENYMAIL
                  | PERM_DENYNICK);
-            cmode = " Talkã€Mailã€\nPostã€æ›´æ”¹æš±ç¨±";
+            cmode = " Talk¡BMail¡B\nPost¡B§ó§ï¼ÊºÙ";
         }
         else if (adm & DENY_MODE_POST)
         {
@@ -305,9 +305,9 @@ int add_deny_exer(ACCT *u, int adm, int cross, const char *exer)
         else if (adm & DENY_MODE_NICK)
         {
             x.userlevel |= (PERM_DENYNICK);
-            cmode = "æ›´æ”¹æš±ç¨±";
+            cmode = "§ó§ï¼ÊºÙ";
         }
-        fprintf(fp, "%sæ¬Šé™", cmode);
+        fprintf(fp, "%sÅv­­", cmode);
     }
     if (adm & DENY_MODE_GUEST)
     {
@@ -316,10 +316,10 @@ int add_deny_exer(ACCT *u, int adm, int cross, const char *exer)
              PERM_DENYNICK | PERM_DENYSTOP);
         x.userlevel &= ~(PERM_BASIC | PERM_VALID);
         x.deny += 86400 * 31;
-        cmode = " Talkã€Mailã€\nPostã€æ›´æ”¹æš±ç¨±";
+        cmode = " Talk¡BMail¡B\nPost¡B§ó§ï¼ÊºÙ";
         fprintf(fp,
-                "%sæ¬Šé™ï¼Œæ¬Šé™é™è‡³ guestï¼Œæ°¸ä¸å¾©æ¬Šï¼Œä¸¦ä¿ç•™å¸³è™Ÿï¼Œ\nå…¶ E-mailï¼š%s æ°¸ä¸å¾—åœ¨æœ¬ç«™è¨»å†Šã€‚\n\n",
-                cmode, u->vmail[0] ? u->vmail : "[ç„¡èªè­‰ä¿¡ç®±]");
+                "%sÅv­­¡AÅv­­­°¦Ü guest¡A¥Ã¤£´_Åv¡A¨Ã«O¯d±b¸¹¡A\n¨ä E-mail¡G%s ¥Ã¤£±o¦b¥»¯¸µù¥U¡C\n\n",
+                cmode, u->vmail[0] ? u->vmail : "[µL»{ÃÒ«H½c]");
         deny_add_email(u, exer);
     }
     if ((adm & DENY_DAYS) && !(adm & DENY_MODE_GUEST))
@@ -327,22 +327,22 @@ int add_deny_exer(ACCT *u, int adm, int cross, const char *exer)
         x.deny = ((now > x.deny) ? now : x.deny);
         if (adm & DENY_DAYS_1)
         {
-            cdays = "ä¸€æ˜ŸæœŸ";
+            cdays = "¤@¬P´Á";
             x.deny += 86400 * 7;
         }
         else if (adm & DENY_DAYS_2)
         {
-            cdays = "å…©æ˜ŸæœŸ";
+            cdays = "¨â¬P´Á";
             x.deny += 86400 * 14;
         }
         else if (adm & DENY_DAYS_3)
         {
-            cdays = "ä¸‰æ˜ŸæœŸ";
+            cdays = "¤T¬P´Á";
             x.deny += 86400 * 21;
         }
         else if (adm & DENY_DAYS_4)
         {
-            cdays = "ä¸€å€‹æœˆ";
+            cdays = "¤@­Ó¤ë";
             x.deny += 86400 * 31;
         }
         else if (adm & DENY_DAYS_5)
@@ -351,19 +351,19 @@ int add_deny_exer(ACCT *u, int adm, int cross, const char *exer)
             x.deny += 86400 * 31;
             x.userlevel |= PERM_DENYSTOP;
         }
-        fprintf(fp, "%sã€‚\n", cdays);
+        fprintf(fp, "%s¡C\n", cdays);
         if (adm & DENY_DAYS_5)
-            fprintf(fp, "æœŸé–“: æ°¸ä¸å¾©æ¬Šã€‚\n\n");
+            fprintf(fp, "´Á¶¡: ¥Ã¤£´_Åv¡C\n\n");
         else
-            fprintf(fp, "æœŸé–“: %s%sï¼ŒæœŸé™ä¸€éè‡ªå‹•å¾©æ¬Šã€‚\n\n",
-                    check_time ? "ä¸Šæ¬¡è™•ç½°åˆ°æœŸæ—¥ç´¯åŠ " : "å¾ä»Šå¤©èµ·", cdays);
+            fprintf(fp, "´Á¶¡: %s%s¡A´Á­­¤@¹L¦Û°Ê´_Åv¡C\n\n",
+                    check_time ? "¤W¦¸³B»@¨ì´Á¤é²Ö¥[" : "±q¤µ¤Ñ°_", cdays);
     }
     fprintf(fp,
-            "\x1b[1;32mâ€» Origin: \x1b[1;33m%s \x1b[1;37m<%s>\x1b[m\n\x1b[1;31mâ—† From: \x1b[1;36m%s\x1b[m\n",
+            "\x1b[1;32m¡° Origin: \x1b[1;33m%s \x1b[1;37m<%s>\x1b[m\n\x1b[1;31m¡» From: \x1b[1;36m%s\x1b[m\n",
             BOARDNAME, MYHOSTNAME, MYHOSTNAME);
 
     fclose(fp);
-    sprintf(buf, "[%sè™•ç½°] %s %s", cross ? "é€£å" : "", u->userid, cselect);
+    sprintf(buf, "[%s³B»@] %s %s", cross ? "³s§¤" : "", u->userid, cselect);
     keeplog(FN_STOP_LOG, BRD_VIOLATELAW, buf, 3);
     usr_fpath(buf, x.userid, FN_STOPPERM_LOG);
     fp = fopen(buf, "a+");
@@ -376,7 +376,7 @@ int add_deny_exer(ACCT *u, int adm, int cross, const char *exer)
 }
 
 /* ----------------------------------------------------- */
-/* è¨­å®š E-mail address                                   */
+/* ³]©w E-mail address                                   */
 /* ----------------------------------------------------- */
 
 /* Tag logger */
@@ -392,7 +392,7 @@ int ban_addr(const char *addr)
 {
     int i;
     char *host, *str GCC_UNUSED;
-    char foo[64];                /* SoC: æ”¾ç½®å¾…æª¢æŸ¥çš„ email address */
+    char foo[64];                /* SoC: ©ñ¸m«İÀË¬dªº email address */
     const char* str_invalid;
 
     static const char *const invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
@@ -400,7 +400,7 @@ int ban_addr(const char *addr)
         "193.64.202.3", "brd@", NULL
     };
 
-    /* SoC: ä¿æŒåŸ email çš„å¤§å°å¯« */
+    /* SoC: «O«ù­ì email ªº¤j¤p¼g */
     str_lower(foo, addr);
 
     for (i = 0; (str_invalid = invalid[i]); i++)
@@ -414,7 +414,7 @@ int ban_addr(const char *addr)
     host = (char *)strchr(foo, '@');
     *host = '\0';
     /* i = acl_has(FN_ETC_SPAMMER_ACL, foo, host + 1); */
-    /* Thor.981223: å°‡bbsregæ‹’çµ•éƒ¨åˆ†åˆ†é–‹ */
+    /* Thor.981223: ±Nbbsreg©Úµ´³¡¤À¤À¶} */
     i = acl_has(FN_ETC_UNTRUST_ACL, foo, host + 1);
     /* *host = '@'; */
     if (i < 0)
@@ -436,7 +436,7 @@ int allow_addr(const char *addr)
     return i > 0;
 }
 
-/* gaod:æ›æ–°:p */
+/* gaod:´«·s:p */
 void check_nckuemail(char *email)
 {
     char *ptr;
@@ -448,7 +448,7 @@ void check_nckuemail(char *email)
     }
 }
 
-/* æ‰¾å°‹æ˜¯å¦æœ‰è¨»å†Šä¸‰å€‹ä»¥ä¸Šä¹‹ Email */
+/* §ä´M¬O§_¦³µù¥U¤T­Ó¥H¤W¤§ Email */
 /* mode : 1.find 2.add 3.del */
 int find_same_email(const char *mail, int mode)
 {

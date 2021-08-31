@@ -157,7 +157,7 @@ void bshm_init(BCACHE **p_bshm)
             close(fd);
         }
 
-        /* ç­‰æ‰€æœ‰ boards è³‡æ–™æ›´æ–°å¾Œå†è¨­å®š uptime */
+        /* µ¥©Ò¦³ boards ¸ê®Æ§ó·s«á¦A³]©w uptime */
 
         time32(uptime);
         logger_tag(&shm_tlogger, "CACHE", "reload bcache");
@@ -171,7 +171,7 @@ void bshm_attach(BCACHE **p_bshm)
 {
     *p_bshm = (BCACHE *) attach_shm_noinit(BRDSHM_KEY, sizeof(BCACHE));
 
-    if ((*p_bshm)->uptime <= 0) /* bshm æœªè¨­å®šå®Œæˆ */
+    if ((*p_bshm)->uptime <= 0) /* bshm ¥¼³]©w§¹¦¨ */
         *p_bshm = NULL;
 }
 
