@@ -53,7 +53,8 @@ Macro | 值或定義 | 出處 | 說明
 `DENY_DAYS_3`    | - `0x00040000` <br> - `DENY_DAYS(21)` (DreamBBS v3.0) | WindTopBBS 3.02 | 停權參星期 (21 日)
 `DENY_DAYS_4`    | - `0x00080000` <br> - `DENY_DAYS(31)` (DreamBBS v3.0) | WindTopBBS 3.02 | 停權一個月 (31 日)
 `DENY_DAYS_5`    | - `0x00100000` <br> - `(DENY_DAYS(31) \| DENY_DAYS_PERM)` (DreamBBS v3.0) | WindTopBBS 3.02 | 無限期停權（停權 31 日＋設定禁制權限 `PERM_DENYSTOP`）
-`DENY_MODE_ALL`   | - `(DENY_MODE_TALK\|DENY_MODE_MAIL\|DENY_MODE_POST\|DENY_MODE_NICK\|DENY_MODE_GUEST)` <br> (WindTopBBS 3.02) <br> - `(DENY_MODE_TALK\|DENY_MODE_MAIL\|DENY_MODE_POST\|DENY_MODE_NICK)` <br> (WindTopBBS 3.10 & DreamBBS-2010) <br> - `0x00000FF0` (DreamBBS v3.0) | WindTopBBS 3.02 | `DENY_MODE_*` 的位元遮罩 <br> 指定停權權限 <br> - `DENY_MODE_*` 只能擇一或全選；<br> - 可任意組合 (DreamBBS v3.0)。
+`DENY_MODE`       | `0x00000FF0` | DreamBBS v3.0 | `DENY_MODE_*` 的位元遮罩 <br> 指定停權權限 <br> - `DENY_MODE_*` 只能擇一或全選 (WindTopBBS 3.02)；<br> - 可任意組合 (DreamBBS v3.0)。
+`DENY_MODE_ALL`   | - `(DENY_MODE_TALK\|DENY_MODE_MAIL\|DENY_MODE_POST\|DENY_MODE_NICK\|DENY_MODE_GUEST)` <br> (WindTopBBS 3.02) <br> - `(DENY_MODE_TALK\|DENY_MODE_MAIL\|DENY_MODE_POST\|DENY_MODE_NICK)` <br> (WindTopBBS 3.10 & DreamBBS-2010) <br> - `(DENY_MODE_POST \| DENY_MODE_TALK_PERM \| DENY_MODE_CHAT \| DENY_MODE_MAIL \| DENY_MODE_NICK)` (DreamBBS v3.0) | WindTopBBS 3.02 | 設定所有禁制權限 `PERM_DENY*`
 `DENY_MODE_POST`  | `0x04000000` <br> - `0x00000010` (DreamBBS v3.0) | WindTopBBS 3.02 | 設定禁制權限 `PERM_DENYPOST`
 `DENY_MODE_TALK_PERM`  | `0x00000020` | DreamBBS v3.0 | 設定禁制權限 `PERM_DENYTALK`
 `DENY_MODE_CHAT`  | `0x00000040` | DreamBBS v3.0 | 設定禁制權限 `PERM_DENYCHAT`
