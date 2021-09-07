@@ -245,125 +245,202 @@ int add_deny_exer(ACCT *u, int adm, int cross, const char *exer)
     char buf[80];
     ACCT x;
     time_t now;
-    bool check_time;
-    const char *cselect = NULL, *cdays = NULL, *cmode = NULL;
+    const char *cselect;
+    char *ptr = buf;
 
     memcpy(&x, u, sizeof(ACCT));
     time(&now);
-    check_time = (x.deny > now);
 
     if (!strncmp(u->justify, "reg:", 4))
         adm = (adm & ~DENY_MODE_ALL) | DENY_MODE_GUEST;
 
     unlink(FN_STOP_LOG);
     fp = fopen(FN_STOP_LOG, "w");
-    if (adm & DENY_SEL_OK)
+
+    /* The reason for suspension */
+    switch (adm & DENY_SEL)
     {
-        x.deny = now;
-        memcpy(u, &x, sizeof(x));
-        acct_save(u);
-        return adm;
+    case DENY_SEL_TALK:
+        cselect = "不當言論";
+        break;
+    case DENY_SEL_POST:
+        cselect = " Cross Post";
+        break;
+    case DENY_SEL_MAIL:
+        cselect = "散發連鎖信";
+        break;
+    case DENY_SEL_AD:
+        cselect = "散發廣告信";
+        break;
+    case DENY_SEL_SELL:
+        cselect = "販賣非法事物";
+        break;
+    case DENY_SEL_NONE:
+    default: /* Unknown reasons */
+        cselect = NULL;
     }
-    if (adm & DENY_SEL)
+    if (cselect)
+        fprintf(fp, "查 %s 違反站規%s，依站規", u->userid, cselect);
+
+    /* Permissions to be suspended */
+    if (adm & DENY_MODE)
     {
-        if (adm & DENY_SEL_TALK)
-            cselect = "不當言論";
-        else if (adm & DENY_SEL_POST)
-            cselect = " Cross Post";
-        else if (adm & DENY_SEL_MAIL)
-            cselect = "散發連鎖信";
-        else if (adm & DENY_SEL_AD)
-            cselect = "散發廣告信";
-        else if (adm & DENY_SEL_SELL)
-            cselect = "販賣非法事物";
-        fprintf(fp, "查 %s 違反站規%s，依站規停止", u->userid, cselect);
+        typedef struct {
+            int deny_mode;
+            int perm;
+            const char *name;
+        } SusPerm ;
+        static const SusPerm sus_perm[] = {
+            {DENY_MODE_POST, PERM_DENYPOST, " Post "},
+            {DENY_MODE_TALK, PERM_DENYTALK | PERM_DENYCHAT, " Talk "},
+            {DENY_MODE_TALK_PERM, PERM_DENYTALK, " Talk (保留 Chat 權限) "},
+            {DENY_MODE_CHAT, PERM_DENYCHAT, " Chat "},
+            {DENY_MODE_MAIL, PERM_DENYMAIL, " Mail "},
+            {DENY_MODE_NICK, PERM_DENYNICK, "更改暱稱"},
+            {DENY_MODE_UNUSED7, 0, NULL},
+        };
+
+        const char *br = ptr; /* The character right after the last line break */
+        int deny_mode = adm & DENY_MODE;
+        for (const SusPerm *sus = sus_perm; sus < sus_perm + COUNTOF(sus_perm); ++sus)
+        {
+            if ((deny_mode & sus->deny_mode) == sus->deny_mode)
+            {
+                deny_mode &= ~sus->deny_mode;
+                if (!sus->perm)
+                {
+                    /* Unused flags */
+                    continue;
+                }
+                x.userlevel |= sus->perm;
+                if (ptr > buf)
+                {
+                    /* Remove spaces around fullwidth punctuation marks */
+                    if (!IS_DBCS_TRAIL(buf, ptr - buf) && ptr[-1] == ' ')
+                        --ptr;
+                    ptr = str_pcpy(ptr, "、");
+                    if (ptr - br > 14)
+                        br = ptr = str_pcpy(ptr, "\n");
+                    ptr = str_pcpy(ptr, sus->name + (sus->name[0] == ' '));
+                }
+                else
+                {
+                    ptr += sprintf(ptr, "停止%s", sus->name);
+                }
+            }
+        }
+        if (ptr > buf)
+            ptr = str_pcpy(ptr, "權限");
+        else
+            ptr = strcpy(buf, "");
+        if (adm & DENY_MODE_LEVEL)
+        {
+            x.userlevel &= ~(PERM_BASIC | PERM_VALID);
+            if (ptr > buf)
+                ptr = str_pcpy(ptr, "，");
+            if (ptr - br > 21)
+                br = ptr = str_pcpy(ptr, "\n");
+            ptr = str_pcpy(ptr, "權限降至 guest ");
+        }
+
     }
-    if ((adm & (DENY_MODE_ALL)) && !(adm & DENY_MODE_GUEST))
+    if (DENY_DAYS_ADM(adm) > 0)
     {
-        if ((adm & DENY_MODE_ALL) == DENY_MODE_ALL)
+        const int days = DENY_DAYS_ADM(adm);
+        char *cdays = ptr;
+        bool check_time;
+        if (adm & DENY_DAYS_RESET)
         {
-            x.userlevel |=
-                (PERM_DENYPOST | PERM_DENYTALK | PERM_DENYCHAT | PERM_DENYMAIL
-                 | PERM_DENYNICK);
-            cmode = " Talk、Mail、\nPost、更改暱稱";
+            /* Non-accumulative suspension duration */
+            x.deny = now;
+            check_time = false;
         }
-        else if (adm & DENY_MODE_POST)
+        else
         {
-            x.userlevel |= (PERM_DENYPOST);
-            cmode = " Post ";
+            x.deny = ((now > x.deny) ? now : x.deny);
+            check_time = (x.deny > now);
         }
-        else if (adm & DENY_MODE_TALK)
+        x.deny += 86400 * days;
+        if (adm & DENY_DAYS_PERM)
+            x.userlevel |= PERM_DENYSTOP;
+
+        if (!(adm & DENY_DAYS_PERM))
         {
-            x.userlevel |= (PERM_DENYTALK | PERM_DENYCHAT);
-            cmode = " Talk ";
+            switch (days)
+            {
+            case 7:
+                strcpy(cdays, "一星期");
+                break;
+            case 14:
+                strcpy(cdays, "兩星期");
+                break;
+            case 21:
+                strcpy(cdays, "三星期");
+                break;
+            case 31:
+                strcpy(cdays, "一個月");
+                break;
+            default:
+                /* Collapse consecutive spaces */
+                if (ptr > buf && !IS_DBCS_TRAIL(buf, ptr - buf) && ptr[-1] == ' ')
+                    --cdays;
+                sprintf(cdays, " %d 天", days);
+            }
+            ptr = cdays;
         }
-        else if (adm & DENY_MODE_MAIL)
+        /* Remove spaces before fullwidth punctuation marks */
+        if (ptr > buf && !IS_DBCS_TRAIL(buf, ptr - buf) && ptr[-1] == ' ')
+            strcpy(--ptr, "");
+        if (adm & DENY_MODE_LEVEL)
+            fprintf(fp, "%s，", buf);
+        else
+            fprintf(fp, "%s。\n期間: ", buf);
+        if (adm & DENY_DAYS_PERM)
         {
-            x.userlevel |= (PERM_DENYMAIL);
-            cmode = " Mail ";
+            fprintf(fp, "永不復權");
+            if (adm & DENY_MODE_LEVEL)
+                fprintf(fp, "，並保留帳號");
         }
-        else if (adm & DENY_MODE_NICK)
+        else
         {
-            x.userlevel |= (PERM_DENYNICK);
-            cmode = "更改暱稱";
+            fprintf(fp, "%s%s，期限一過自動復權", check_time ? "上次處罰到期日累加" : "從今天起", ptr);
+            if (adm & DENY_MODE_LEVEL)
+                fprintf(fp, "，且須重新認證");
         }
-        fprintf(fp, "%s權限", cmode);
     }
-    if (adm & DENY_MODE_GUEST)
+    if (adm & DENY_MODE_VMAIL)
     {
-        x.userlevel |=
-            (PERM_DENYPOST | PERM_DENYTALK | PERM_DENYCHAT | PERM_DENYMAIL |
-             PERM_DENYNICK | PERM_DENYSTOP);
-        x.userlevel &= ~(PERM_BASIC | PERM_VALID);
-        x.deny += 86400 * 31;
-        cmode = " Talk、Mail、\nPost、更改暱稱";
-        fprintf(fp,
-                "%s權限，權限降至 guest，永不復權，並保留帳號，\n其 E-mail：%s 永不得在本站註冊。\n\n",
-                cmode, u->vmail[0] ? u->vmail : "[無認證信箱]");
+        if (ptr > buf)
+            fprintf(fp, "，");
+        fprintf(fp, "\n其 E-mail：%s 永不得在本站註冊",
+            u->vmail[0] ? u->vmail : "[無認證信箱]");
         deny_add_email(u, exer);
     }
-    if ((adm & DENY_DAYS) && !(adm & DENY_MODE_GUEST))
+    fprintf(fp, "。\n\n");
+
+    /* Check whether any suspension is performed */
+    if (!(cselect && (adm & DENY_MODE) && DENY_DAYS_ADM(adm) > 0))
     {
-        x.deny = ((now > x.deny) ? now : x.deny);
-        if (adm & DENY_DAYS_1)
+        if (adm & DENY_DAYS_RESET)
         {
-            cdays = "一星期";
-            x.deny += 86400 * 7;
+            /* Lift the previous suspension */
+            memcpy(&x, u, sizeof(x)); /* Discard any permission changes */
+            x.deny = now;
+            memcpy(u, &x, sizeof(x));
+            acct_save(u);
+            /* Now the permissions will be reset at the next time the user logs in */
         }
-        else if (adm & DENY_DAYS_2)
-        {
-            cdays = "兩星期";
-            x.deny += 86400 * 14;
-        }
-        else if (adm & DENY_DAYS_3)
-        {
-            cdays = "三星期";
-            x.deny += 86400 * 21;
-        }
-        else if (adm & DENY_DAYS_4)
-        {
-            cdays = "一個月";
-            x.deny += 86400 * 31;
-        }
-        else if (adm & DENY_DAYS_5)
-        {
-            cdays = "";
-            x.deny += 86400 * 31;
-            x.userlevel |= PERM_DENYSTOP;
-        }
-        fprintf(fp, "%s。\n", cdays);
-        if (adm & DENY_DAYS_5)
-            fprintf(fp, "期間: 永不復權。\n\n");
-        else
-            fprintf(fp, "期間: %s%s，期限一過自動復權。\n\n",
-                    check_time ? "上次處罰到期日累加" : "從今天起", cdays);
+        /* Discard any permission changes and the generated post */
+        fclose(fp);
+        return adm;
     }
+
     fprintf(fp,
             "\x1b[1;32m※ Origin: \x1b[1;33m%s \x1b[1;37m<%s>\x1b[m\n\x1b[1;31m◆ From: \x1b[1;36m%s\x1b[m\n",
             BOARDNAME, MYHOSTNAME, MYHOSTNAME);
 
     fclose(fp);
-    sprintf(buf, "[%s處罰] %s %s", cross ? "連坐" : "", u->userid, cselect);
+    sprintf(buf, "[%s處罰] %s %s", cross ? "連坐" : "", u->userid, cselect + (cselect[0] == ' '));
     keeplog(FN_STOP_LOG, BRD_VIOLATELAW, buf, 3);
     usr_fpath(buf, x.userid, FN_STOPPERM_LOG);
     fp = fopen(buf, "a+");

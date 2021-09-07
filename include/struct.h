@@ -915,27 +915,48 @@ typedef struct
 /* ----------------------------------------------------- */
 /* acct.c 中運用的資料結構                               */
 /* ----------------------------------------------------- */
+
+/* Special values for permission suspension */
+/* Used for the argument to parameter `adm` to `add_deny()` & `add_deny_exer()`  */
+
+/* `0` is a no-op */
+
+/* The reason for suspension */
+#define DENY_SEL_NONE   0x00000000 /* No reason; no suspensions */
 #define DENY_SEL_TALK   0x00000001
 #define DENY_SEL_POST   0x00000002
-#define DENY_SEL_MAIL   0x00000004
-#define DENY_SEL_AD     0x00000008
-#define DENY_SEL_SELL   0x00000010
-#define DENY_SEL_OK     0x00000020
-#define DENY_SEL        (DENY_SEL_TALK|DENY_SEL_POST|DENY_SEL_MAIL|DENY_SEL_AD|DENY_SEL_SELL)
+#define DENY_SEL_MAIL   0x00000003
+#define DENY_SEL_AD     0x00000004
+#define DENY_SEL_SELL   0x00000005
+#define DENY_SEL        0x0000000F /* Mask for reasons */
 
-#define DENY_DAYS_1     0x00010000
-#define DENY_DAYS_2     0x00020000
-#define DENY_DAYS_3     0x00040000
-#define DENY_DAYS_4     0x00080000
-#define DENY_DAYS_5     0x00100000
-#define DENY_DAYS       (DENY_DAYS_1|DENY_DAYS_2|DENY_DAYS_3|DENY_DAYS_4|DENY_DAYS_5)
+/* Duration of suspension (max: 65535 days (roughly 179.43 years)) */
+#define DENY_DAYS(_x)   ((_x) << 16U)
+#define DENY_DAYS_PERM  0x00004000 /* Permanent suspension */
+#define DENY_DAYS_RESET 0x00008000 /* Use non-accumulative suspension duration */
+#define DENY_DAYS_1     DENY_DAYS(7)
+#define DENY_DAYS_2     DENY_DAYS(14)
+#define DENY_DAYS_3     DENY_DAYS(21)
+#define DENY_DAYS_4     DENY_DAYS(31)
+#define DENY_DAYS_5     (DENY_DAYS(31) | DENY_DAYS_PERM)
+#define DENY_DAYS_ADM(_adm) ((_adm) >> 16U)
 
-#define DENY_MODE_TALK  0x01000000
-#define DENY_MODE_MAIL  0x02000000
-#define DENY_MODE_POST  0x04000000
-#define DENY_MODE_GUEST 0x08000000
-#define DENY_MODE_NICK  0x10000000
-#define DENY_MODE_ALL   (DENY_MODE_TALK|DENY_MODE_MAIL|DENY_MODE_POST|DENY_MODE_NICK)
+/* Permissions to be suspended */
+#define DENY_MODE_POST  0x00000010
+#define DENY_MODE_TALK_PERM 0x00000020
+#define DENY_MODE_CHAT  0x00000040
+#define DENY_MODE_MAIL  0x00000080
+#define DENY_MODE_NICK  0x00000100
+#define DENY_MODE_LEVEL 0x00000200 /* Keep only guest permissions */
+#define DENY_MODE_VMAIL 0x00000400 /* Forbid future registation with the user's email (permanent) */
+#define DENY_MODE_UNUSED7 0x00000800
+#define DENY_MODE       0x00000FF0 /* Mask for permissions */
+#define DENY_MODE_TALK  (DENY_MODE_TALK_PERM | DENY_MODE_CHAT)
+#define DENY_MODE_GUEST (DENY_MODE_ALL | DENY_DAYS_PERM)
+#define DENY_MODE_ALL   (DENY_MODE_POST | DENY_MODE_TALK_PERM | DENY_MODE_CHAT | DENY_MODE_MAIL | DENY_MODE_NICK)
+
+/* Lift the previous suspension */
+#define DENY_SEL_OK     (DENY_SEL_NONE | DENY_DAYS_RESET)
 
 
 typedef struct
