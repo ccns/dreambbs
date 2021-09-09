@@ -425,6 +425,8 @@ int add_deny_exer(ACCT *u, int adm, int cross, const char *exer)
         {
             /* Lift the previous suspension */
             memcpy(&x, u, sizeof(x)); /* Discard any permission changes */
+            x.userlevel |= PERM_BASIC | PERM_DENYPOST | PERM_DENYTALK | PERM_DENYCHAT | PERM_DENYMAIL | PERM_DENYNICK;
+            x.userlevel &= ~PERM_DENYSTOP;
             x.deny = now;
             memcpy(u, &x, sizeof(x));
             acct_save(u);
