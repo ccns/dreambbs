@@ -309,7 +309,8 @@ int add_deny_exer(ACCT *u, int adm, int cross, const char *exer)
                 deny_mode &= ~sus->deny_mode;
                 if (!sus->perm)
                 {
-                    /* Unused flags */
+                    /* Clear unused flags */
+                    adm &= ~sus->deny_mode;
                     continue;
                 }
                 x.userlevel |= sus->perm;
@@ -421,6 +422,8 @@ int add_deny_exer(ACCT *u, int adm, int cross, const char *exer)
     /* Check whether any suspension is performed */
     if (!(cselect && (adm & DENY_MODE) && DENY_DAYS_ADM(adm) > 0))
     {
+        /* Clear ineffective flags */
+        adm &= DENY_DAYS_RESET;
         if (adm & DENY_DAYS_RESET)
         {
             /* Lift the previous suspension */
