@@ -66,6 +66,17 @@ Macro | 值或定義 | 出處 | 說明
 `DENY_MODE_TALK`  | - `0x01000000` <br> - `(DENY_MODE_TALK_PERM \| DENY_DAYS_CHAT)` (DreamBBS v3.0) | WindTopBBS 3.02 | 設定禁制權限 `PERM_DENYTALK\|PERM_DENYCHAT`
 `DENY_MODE_GUEST` | - `0x08000000` <br> - `(DENY_MODE_ALL \| DENY_DAYS_PERM)` (DreamBBS v3.0) | WindTopBBS 3.02 | 設定所有禁制權限 <br> 除禁制權限外，只保留 guest 權限 <br> 無限期禁止以同認證信箱註冊 <br> - 無限期停權（同 `DENY_DAYS_5`）；<br> - 無限期停權（同 `DENY_DAYS_PERM`） (DreamBBS v3.0)。
 
+### `adm` 參數值的位元分配比較
+
+圖例：`欄位名(所佔位元數)`
+
+(`--` 表示未使用的位元；已省略前綴 `DENY_` 以求簡潔)
+
+#### WindTopBBS 3.02
+`32| --(3) | MODE_*(5) | --(3) | DAYS_*(5) | --(10) | SEL_*(6) |0`
+#### DreamBBS v3.0
+`32| DAYS_*(16) | DAYS_RESET(1) | DAYS_PERM(1) | --(2) | MODE_*(8) | SEL_*(4) |0`
+
 ### 新的 `adm` 參數值定義的特點
 - 舊的 macro 使用方法仍然有效。
 - 將邏輯上僅能擇一的 macros，從可以相組合的位元旗標形式，改成僅能擇一的列舉形式，以充分運用值域空間。
