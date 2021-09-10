@@ -341,6 +341,8 @@ Member 名稱 | 型別               | 出處          | `key`/`first` 指定方
 ## MapleBBS 3 與 DreamBBS v3 的 Xover 特殊值
 Macro             | 值                        | 功能                                  | 註解
  :---             | ---                       | ---                                   | ---
+`XO_DL`           | `0x80000000` <br> `0x00000000` (DreamBBS v2.0; 不使用動態載入時) | 指定回呼函式需要動態載入 | MapleBBS 3.10 新增
+`XO_POSF`         | `XO_MOVE`                 | 指定回呼函式具有 `pos` 參數            | DreamBBS v3.0 新增
 `XO_MODE`         | `0x10000000`              | 表示畫面重繪、資料載入、離開列表等操作  | DreamBBS v3.0 中已移除
 `XO_NONE`         | - `0x10000000` <br> - `0x00004000` (DreamBBS v3)      | - 什麼都不作 <br> - 最小的被當作命令的 Xover key value |
 `XR_<redo>`       | (多個)                    | 預先定義的畫面重繪及資料載入的組合動作  | DreamBBS v3.0 新增
