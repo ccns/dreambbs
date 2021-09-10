@@ -271,7 +271,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 - 無 `XZ_ZONE` 時：`31| XZ_ZONE = 0(1) | XR_PART_FOOT(1) | XR_PART_KNEE(1) | XR_PART_BODY(1) | XR_PART_NECK(1) | XR_PART_HEAD(1) | XR_PART_LOAD(1) |24`
 - 有 `XZ_ZONE` 時：`31| XZ_ZONE = 1(1) | XZ_UNUSED5(1) | XZ_SKIN(1) | XZ_QUIT(1) | XZ_BACK(1) | XZ_FINI(1) | XZ_INIT(1) |24`
 
-#### 新的 key value 分配的特點
+### DreamBBS v3.0 的新的 key value 分配的特點
 - 除了頭尾循環邏輯改變，舊的 macro 使用方法仍然有效
 - 將 `XO_MOVE` 重新定義為游標位置的 bias，避免游標位置為負時 flag bits 的改變
 - 重繪畫面的各個 `XO_*` macros 之間的相對大小不變
