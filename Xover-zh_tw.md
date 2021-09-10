@@ -233,6 +233,44 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 `0x00100000` (mask)                 | `key \| XO_POSF` <br> (= `XO_MOVE`) | 指定回呼函式具有 `pos` 參數   | DreamBBS v3.0 新增
 `0x7fefffff` (mask)                 | `XO_FUNC_MASK` <br> (= `~XO_FSPEC_MASK`) | 用以取得忽略函式類別指定 flags 後的實際對應按鍵值 | DreamBBS v3.0 新增
 
+### Xover callback key value 的位元分配比較
+
+圖例：`欄位名(所佔位元數)`、`欄位名 = 此欄定值(所佔位元數)`、`欄位名 (= 此欄通常值)(所佔位元數)`
+
+(`--` 表示未使用或須為定值的位元)
+
+#### MapleBBS 3
+- Xover 命令與回呼函式指定：
+    -   - MapleBBS 3.10 後，若在 _命令_ 中加了 `XO_DL`（**不應使用**），會造成需動態載入的按鍵功能載入後仍有 `XO_DL`，再次嘗試載入時會造成程式崩潰。
+    - 一般按鍵：`32| XO_DL(1) | -- = 0(3) | -- (= 0)(20) | 按鍵值(8) |0`
+    - 特殊按鍵（**不應使用**）：`32| XO_DL = 1(1) | -- (= 0x7fffff)(23) | 按鍵值的絕對值的二補數(8) |0`
+        - MapleBBS 3.10 後，若用來 _指定回呼函式_，會被解析成有 `XO_DL` 而強制使用動態載入的方式載入按鍵功能，會造成程式崩潰。
+    - 畫面重繪：`32| XO_DL(1) | -- = 0(2) | XO_MODE = 1(1) | -- (= 0)(24) | 重繪索引值(4) |0`
+- 限 Xover 命令：
+    - 游標移動：`32| -- (= 0)(1) | -- = 0(1) | XO_MOVE = 1(1) | --(1) | XO_WRAP(1) | 游標位置(27) |0`
+        - 正游標位置，有加 `XO_WRAP`：`30 | XO_MOVE = 1(1) | XO_MODE = 0(1) | XO_WRAP = 1(1) | 游標位置(27) |0`
+        - 負游標位置，有加 `XO_WRAP`：`30 | XO_MOVE = 1(1) | XO_MODE = 0(1) | XO_WRAP = 0(1) | 游標位置的絕對值的二補數(27) |0`
+        - 正游標位置，未加 `XO_WRAP`：`30 | XO_MOVE = 1(1) | XO_MODE - 0(1) | XO_WRAP = 0(1) | 游標位置(27) |0`
+        - 負游標位置，未加 `XO_WRAP`：`30 | XO_MOVE = 0(1) | XO_MODE = 1(1) | XO_WRAP = 1(1) | 游標位置的絕對值的二補數(27) |0`
+    - Zone 切換：`32| -- (= 0)(1) | XO_ZONE = 1(1) | -- (= 0)(26) | Zone 索引值(4) |0`
+
+#### DreamBBS v3.0
+- Xover 命令：`32| -- (= 0)(1) | XZ_ZONE(1) | XR_PART_*/XZ_* flags(6) | XO_WRAP(1) | XO_SCRL(1) | XO_REL(1) | 游標位置值或按鍵(21) |0`
+    - 若加上 `XO_DL`（**不建議**），會找不到對應的回呼函式 (C)，或僅嘗試呼叫需動態載入的版本 (C++)。
+    - 無法在 Xover _命令_ 直接加上 `XO_POSF`（會被解釋為 `XO_MOVE`），不過可透過 `xover_exec_cb()` 直接呼叫對應的回呼函式（行為見後述）。
+    - 其中 `21| 游標位置值或按鍵(21) |0` 的部份為：
+        - 正游標位置：`21 | XO_MOVE = 1(1) | 游標位置(20) |0`
+        - 負游標位置：`21 | XO_MOVE = 0(1) | 游標位置的絕對值的二補數(20) |0` (游標位置的絕對值的二補數 > `XO_NONE`/`0x4000`)
+        - 僅重繪畫面或切換 zone：`21 | XO_MOVE = 0(1) | -- = 0(5) | -- = XO_NONE(15) |0`
+        - 按鍵與雜項功能：`21 | XO_MOVE = 0(1) | -- = 0(6) | 按鍵值(14) |0`
+- 回呼函式指定與呼叫：
+    -   - 呼叫時，若加上 `XO_POSF`（**不建議**），會找不到對應的回呼函式 (C)，或僅嘗試呼叫帶 `pos` 參數的版本 (C++)。
+    - 按鍵與雜項功能：`32| XO_DL(1) | -- = 0(7) | XO_WRAP(1) | XO_SCRL(1) | XO_REL(1) | XO_POSF(1) | -- = 0(6) | 按鍵值(14) |0`
+    - 重繪畫面或切換 zone：`32| XO_DL(1) | XZ_ZONE(1) | XR_PART_*/XZ_* flags(6) | -- = 0(3) | XO_POSF(1) | -- = 0(5) | -- = XO_NONE(15) |0`
+其中 `31| XZ_ZONE(1) | XR_PART_*/XZ_* flags(6) |24` 的部份為：
+- 無 `XZ_ZONE` 時：`31| XZ_ZONE = 0(1) | XR_PART_FOOT(1) | XR_PART_KNEE(1) | XR_PART_BODY(1) | XR_PART_NECK(1) | XR_PART_HEAD(1) | XR_PART_LOAD(1) |24`
+- 有 `XZ_ZONE` 時：`31| XZ_ZONE = 1(1) | XZ_UNUSED5(1) | XZ_SKIN(1) | XZ_QUIT(1) | XZ_BACK(1) | XZ_FINI(1) | XZ_INIT(1) |24`
+
 #### 新的 key value 分配的特點
 - 除了頭尾循環邏輯改變，舊的 macro 使用方法仍然有效
 - 將 `XO_MOVE` 重新定義為游標位置的 bias，避免游標位置為負時 flag bits 的改變
