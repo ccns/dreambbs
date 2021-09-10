@@ -154,7 +154,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 ### 列表操作的相關 macros (括號：無直接對應，替代的處理方式)
 使用場合                 | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> MapleBBS 2.39 <br> WD BBS | Formosa BBS | MapleBBS 3
  :---                    | ---                  | ---                  | ---
-指定某功能需要動態載入    | (無)                  | (無)                 | `cmd \| XO_DL`
+指定某功能需要動態載入    | (無)                  | (無)                 | `cmd \| XO_DL` (MapleBBS 3.10)
 將游標放到最尾項          | (直接操作)            | (直接操作)            | - (直接操作: `xo->pos = XO_TAIL`) <br> - `XO_MOVE + XO_TAIL` (DreamBBS v3.0 起支援)
 移動游標                 | - (直接操作) <br> - `GOTO_NEXT` (FireBird BBS 2.51) | - `CAREYDOWN` & `CAREYUP` (1.1.1) <br> - `C_DOWN & C_UP` (1.4.1) | - `XO_MOVE + pos` <br> - `XO_MOVE + XO_REL + diff` (DreamBBS v3.0 起支援)
 移動游標 (頭尾循環)       | (無)                  | (無)                 | - `XO_MOVE + XO_WRAP + pos` <br> - `XO_MOVE + XO_WRAP + XO_REL + diff` (DreamBBS v3.0 起支援)
@@ -197,7 +197,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 `0x20000000-XO_TALL` - `0x20800000` | `XO_MOVE + pos`                        | 設定游標位置                | Maple-itoc 修正後
 `0x20800001` - `0x3fffffff`         | `XO_MOVE + XO_WRAP + pos`              | 設定游標位置 (頭尾循環)      | Maple-itoc 修正後 <br> - 循環發生時跳到頭尾 <br> - 循環發生時跳到循環後的對應項 (DreamBBS v3.0)
 `0x40000000` - `0x7fffffff`         | `XO_ZONE + zone` (`zone >= 0`)         | 列表切換                    | Maple-itoc 只使用 14 個
-`0x80000000` - `0xffffffff`         | `key \| XO_DL`     | 特殊按鍵 (負數) 或動態載入功能 | 不能以特殊按鍵做為 callback 列表的 key <br> - DreamBBS v1.0 將特殊按鍵值恢復為傳統的正數，可做為 callback 列表的 key
+`0x80000000` - `0xffffffff`         | - `key` (`key < 0`) <br> - `key \| XO_DL` (MapleBBS 3.10) | 特殊按鍵 (負數) <br> - 或動態載入功能 (MapleBBS 3.10) | MapleBBS 3.10 後不能以特殊按鍵做為 callback 列表的 key <br> - DreamBBS v1.0 將特殊按鍵值恢復為傳統的正數，可做為 callback 列表的 key
 
 ### DreamBBS v3 的 Xover callback key value 的分配
 範圍或對應的 bit mask                | 相關 macro         | 功能                         | 註解
