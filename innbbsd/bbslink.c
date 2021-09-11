@@ -249,7 +249,7 @@ inetclient(
     struct addrinfo *hosts;      /* host information entries */
     struct addrinfo hints = {0}; /* Internet endpoint hints */
     char port_str[12];
-    int fd;
+    int fd = -1;
 
     if (!*server || !port)
         return -1;
