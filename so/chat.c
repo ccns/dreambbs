@@ -686,6 +686,8 @@ t_chat(void)
             vmsg("請勿派遣「分身」進入談天室");
             return DL_RELEASE(0);
         }
+        else /* An invalid response */
+            return DL_RELEASE(0);
         move(b_lines - 1, 0);
         outs(msg);
         clrtoeol();
