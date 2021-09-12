@@ -4821,13 +4821,13 @@ int first)
                 }
                 else
                 {
-                    if (opponpip->resistmode == 0)
-                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - opponpip->resist / 12 + random() % 30 - opponpip->speed / 50 + d.fight[FIGHT_SPEED] / 30);
-                    else
-                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - opponpip->resist / 6 + random() % 30 - opponpip->speed / 30 + d.fight[FIGHT_SPEED] / 30);
-                    dinjure = BMAX(dinjure, 20);
                     if (d.body[BODY_HP] > 5)
                     {
+                        if (opponpip->resistmode == 0)
+                            dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - opponpip->resist / 12 + random() % 30 - opponpip->speed / 50 + d.fight[FIGHT_SPEED] / 30);
+                        else
+                            dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - opponpip->resist / 6 + random() % 30 - opponpip->speed / 30 + d.fight[FIGHT_SPEED] / 30);
+                        dinjure = BMAX(dinjure, 20);
                         opponpip->hp -= dinjure;
                         d.body[BODY_HP] -= 5;
                         d.tmp[TMP_HEXP] += random() % 3 + 3;
@@ -4860,8 +4860,6 @@ int first)
                 add_io(fd, 60);
                 dinjure = pip_magic_menu(1, opponent);
                 add_io(fd, 1);
-                if (dinjure < 0)
-                    dinjure = 5;
                 if (d.nodone == 0)
                 {
                     if (d.fight[FIGHT_MAGICMODE] == 1)
@@ -4882,6 +4880,8 @@ int first)
                         }
                         else
                         {
+                            if (dinjure < 0)
+                                dinjure = 5;
                             dinjure = get_hurt(dinjure, d.tmp[TMP_MEXP]);
                             mresist = TCLAMP((d.tmp[TMP_MEXP]) / (opponpip->mresist + 1), 0.3, 3);
                             dinjure = (int)dinjure * mresist;
@@ -6986,14 +6986,14 @@ int mode)
                 }
                 else
                 {
-                    if (mresistmode == 0)
-                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - m.resist / 12 + random() % 12 + 6 - m.speed / 50 + d.fight[FIGHT_SPEED] / 30);
-                    else
-                        dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - m.resist / 8 + random() % 12 + 6 - m.speed / 40 + d.fight[FIGHT_SPEED] / 30);
-                    if (dinjure <= 15)
-                        dinjure = 20;
                     if (d.body[BODY_HP] > 5)
                     {
+                        if (mresistmode == 0)
+                            dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - m.resist / 12 + random() % 12 + 6 - m.speed / 50 + d.fight[FIGHT_SPEED] / 30);
+                        else
+                            dinjure = (d.fight[FIGHT_HSKILL] / 100 + d.tmp[TMP_HEXP] / 100 + d.fight[FIGHT_ATTACK] / 5 - m.resist / 8 + random() % 12 + 6 - m.speed / 40 + d.fight[FIGHT_SPEED] / 30);
+                        if (dinjure <= 15)
+                            dinjure = 20;
                         m.hp -= dinjure;
                         d.body[BODY_HP] -= 5;
                         d.tmp[TMP_HEXP] += random() % 3 + 3;
@@ -7015,8 +7015,6 @@ int mode)
                 oldhp = d.body[BODY_HP];
                 d.fight[FIGHT_MAGICMODE] = 0;
                 dinjure = pip_magic_menu(0, NULL);
-                if (dinjure < 0)
-                    dinjure = 5;
                 if (d.nodone == 0)
                 {
                     if (d.fight[FIGHT_MAGICMODE] == 1)
@@ -7032,6 +7030,8 @@ int mode)
                             vmsg("竟然沒打中..:~~~");
                         else
                         {
+                            if (dinjure < 0)
+                                dinjure = 5;
                             if (d.tmp[TMP_MEXP] <= 100)
                             {
                                 if (random() % 4 > 0)
