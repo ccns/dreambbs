@@ -556,7 +556,7 @@ int
 t_chat(void)
 {
     DL_HOLD;
-    int ch, cfd, cmdpos, cmdcol;
+    int ch, cfd = -1, cmdpos, cmdcol;
     char *ptr = NULL, buf[128], chatid[9];
     struct addrinfo hints = {0};
     struct addrinfo *hs;
