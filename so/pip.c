@@ -7128,6 +7128,10 @@ int mode)
                 break;
             }
         }
+        else
+        {
+            pipkey = KEY_NONE;
+        }
         clear();
         move(0, 0);
         if (d.sex == 1)
