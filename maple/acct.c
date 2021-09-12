@@ -2523,7 +2523,7 @@ int m_trace(void)
 
 int u_verify(void)
 {
-    char keyfile[80], buf[80], /* buf2[80], */ inbuf[8], *key;
+    char keyfile[80], buf[80], /* buf2[80], */ inbuf[8], *key = NULL;
     FILE *fp;
     HDR fhdr;
 
@@ -2553,6 +2553,11 @@ int u_verify(void)
         key = strtok(buf, "");
     }
     fclose(fp);
+    if (!key)
+    {
+        zmsg("讀取開啟檔案有問題，請通知站長");
+        return XEASY;
+    }
 
     if (vget(B_LINES_REF, 0, "請輸入認證碼：", inbuf, 8, DOECHO))
     {
