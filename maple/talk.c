@@ -774,7 +774,7 @@ pal_search(
             if (pos < 0)
                 pos = max - 1;
             else if (pos >= max)
-                        pos = 0;
+                pos = 0;
 
             if (str_casestr((phead + pos)->userid, bufl) || str_casestr((phead + pos)->ship, bufl))
             {
