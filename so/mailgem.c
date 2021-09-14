@@ -662,8 +662,7 @@ int pos)
         if (!rec_del(dir, sizeof(HDR), pos, NULL, NULL))
         {
             rec_ins(dir, &ghdr_orig, sizeof(HDR), newOrder, 1);
-            pos = newOrder;
-            return XO_LOAD;
+            return XR_LOAD + XO_MOVE + newOrder;
         }
     }
     return XO_FOOT;
