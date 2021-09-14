@@ -561,7 +561,7 @@ GCC_PURE size_t str_nmove_ansi(const char *str, size_t idx, ssize_t diff, size_t
                 } while (*ptr && is_ansi_param(*ptr));
             }
             /* Skip the ANSI escape final byte */
-            if (*ptr != '\x1b')
+            if (*ptr && *ptr != '\x1b')
                 ++ptr;
         }
     }
