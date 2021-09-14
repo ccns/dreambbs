@@ -1358,11 +1358,11 @@ class_search(
     char buf[IDLEN + 1];
 
     ptr = buf;
-    pos = vget(B_LINES_REF, 0, MSG_BID, ptr, IDLEN + 1, DOECHO);
+    num = vget(B_LINES_REF, 0, MSG_BID, ptr, IDLEN + 1, DOECHO);
     move(b_lines, 0);
     clrtoeol();
 
-    if (pos)
+    if (num)
     {
         short *chp, chn;
         BRD *bcache, *brd;

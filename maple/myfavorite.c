@@ -453,11 +453,11 @@ myfavorite_search(
     const HDR *hdr;
 
     ptr = buf;
-    pos = vget(B_LINES_REF, 0, "請輸入搜尋關鍵字：", ptr, IDLEN + 1, DOECHO);
+    num = vget(B_LINES_REF, 0, "請輸入搜尋關鍵字：", ptr, IDLEN + 1, DOECHO);
     move(b_lines, 0);
     clrtoeol();
 
-    if (pos)
+    if (num)
     {
         int chn;
         const BRD *brd;
