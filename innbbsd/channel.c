@@ -787,7 +787,7 @@ inndchannel(void)
         if (FD_ISSET(sock, &orfd))              /* ­è¤W¯¸ */
         {
             char hostname[256];
-            const socklen_t socklen = sizeof(sin);
+            socklen_t socklen = sizeof(sin);
             if ((fd = tryaccept(sock)) < 0)
                 continue;
 
