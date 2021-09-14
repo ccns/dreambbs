@@ -518,7 +518,7 @@ int pos)
     fv = open(buf, O_RDWR | O_CREAT, 0600);
     f_exlock(fv);
 
-    while (read(fv, &TEMPLVAL(time32_t, {check}), FV_SZ) == FV_SZ)
+    while (read(fv, (time32_t *)&check, FV_SZ) == FV_SZ)
     {
         if (check == nbrd->btime)
         {
