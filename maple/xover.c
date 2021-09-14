@@ -1653,7 +1653,9 @@ xover(
             {
                 if (xo->top + XO_TALL == xo->max)
                 {
-                    outz("\x1b[44m 都給我看光光了! ^O^ \x1b[m");    /* Thor.0616 */
+                    /* outz("\x1b[44m 都給我看光光了! ^O^ \x1b[m"); */    /* Thor.0616 */
+                    outz("\x1b[44m 後面沒有囉~~ ^O^ \x1b[m");     /* Thor.991022 */
+
                     msg = 1;
                 }
                 top_prev = xo->top;
