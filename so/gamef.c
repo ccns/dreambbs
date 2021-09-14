@@ -30,9 +30,16 @@ pressanykey(const char *fmt, ...)
     char buf[512], *ptr;
     int cc, ch;
 
-    va_start(args, fmt);
-    vsprintf(buf, fmt, args);
-    va_end(args);
+    if (fmt)
+    {
+        va_start(args, fmt);
+        vsprintf(buf, fmt, args);
+        va_end(args);
+    }
+    else
+    {
+        sprintf(buf, "\x1b[37;45;1m%*s● 請按 \x1b[33m(Space/Return)\x1b[37m 繼續 ●%*s\x1b[m", (d_cols >> 1) + 22 , "", ((d_cols + 1) >> 1) + 21, "");
+    }
     move(b_lines, 0);
     for (ptr = buf; (cc = (unsigned char) *ptr); ptr++)
         outc(cc);
