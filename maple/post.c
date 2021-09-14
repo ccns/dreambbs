@@ -3295,7 +3295,10 @@ post_recommend(
             }
         }
         else
+        {
             getans = vget(B_LINES_REF, 0, "推文：", msg, 53, DOECHO);
+            addscore = 0;
+        }
 
         /* 081121.cache: 後悔的機會 */
         if (getans)
