@@ -197,23 +197,16 @@ endif()
 ## Other compile options and link options settings
 
 # Prevent `-Wformat-overflow=` warnings from halting the compilation
-set(W_NO_ERROR_FORMAT_OVERFLOW "-Wno-format-overflow -Wno-error=format-overflow -Wformat-overflow")
-if(CMAKE_C_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${W_NO_ERROR_FORMAT_OVERFLOW}")
-endif()
-if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${W_NO_ERROR_FORMAT_OVERFLOW}")
+set(W_NO_ERROR_FORMAT_OVERFLOW -Wno-format-overflow -Wno-error=format-overflow -Wformat-overflow)
+if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    add_compile_options(${W_NO_ERROR_FORMAT_OVERFLOW})
 endif()
 
 # Prevent `-Wincompatible-pointer-types-discards-qualifiers` warnings from halting the compilation
-set(W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS "-Wno-incompatible-pointer-types-discards-qualifiers -Wno-error=incompatible-pointer-types-discards-qualifiers -Wincompatible-pointer-types-discards-qualifiers")
-if(CMAKE_C_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS}")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-invalid-source-encoding")
-endif()
-if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS}")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-invalid-source-encoding")
+set(W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS -Wno-incompatible-pointer-types-discards-qualifiers -Wno-error=incompatible-pointer-types-discards-qualifiers -Wincompatible-pointer-types-discards-qualifiers)
+if(CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+    add_compile_options(${W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS})
+    add_compile_options(-Wno-invalid-source-encoding)
 endif()
 
 if(NOT USE_CXX)
