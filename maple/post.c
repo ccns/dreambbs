@@ -4359,7 +4359,7 @@ xpost_browse(
     int cmd, chrono, xmode;
     char *dir, fpath[64], *board GCC_UNUSED;
 
-    int key;
+    int key = 0;
 
     cmd = XO_NONE;
     dir = xo->dir;
