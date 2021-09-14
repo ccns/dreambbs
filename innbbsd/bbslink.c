@@ -584,6 +584,8 @@ NNRPgroup(                      /* 切換 group，並傳回 low-number 及 high-number 
     }
     if ((i = atoi(ptr + 1)) >= 0)
         *low = i;
+    else
+        return 0;
 
     /* 找 SERVERbuffer 的第三個 ' ' */
     ptr++;
@@ -591,6 +593,8 @@ NNRPgroup(                      /* 切換 group，並傳回 low-number 及 high-number 
         return 0;
     if ((i = atoi(ptr + 1)) >= 0)
         *high = i;
+    else
+        return 0;
 
     return 1;
 }
