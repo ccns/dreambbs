@@ -828,7 +828,7 @@ t_chat(void)
         }
 
 
-        if (ch == Ctrl('H'))
+        if (ch == '\b')
         {
             if (cmdcol)
             {

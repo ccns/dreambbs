@@ -250,6 +250,7 @@
 /* ¡‰ΩL≥]©w */
 
 /* Normal keys */
+#define KEY_BACKSPACE   '\b'
 #define KEY_TAB         '\t'
 #define KEY_ENTER       '\n'
 #define KEY_ESC         '\x1b'

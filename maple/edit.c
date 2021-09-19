@@ -1904,7 +1904,7 @@ ve_key:
                 ve_mode = mode ^ VE_INSERT;
                 continue;
 
-            case Ctrl('H'):             /* backspace */
+            case '\b':                  /* backspace */
 
 
                 if (pos)

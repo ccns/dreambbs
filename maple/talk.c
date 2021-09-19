@@ -2515,7 +2515,7 @@ talk_char(
     {
         talk_nextline(twin);
     }
-    else if (ch == Ctrl('H'))
+    else if (ch == '\b')
     {
         if (col)
         {
@@ -2683,7 +2683,7 @@ talk_speak(
                     }
                     break;
 
-                case Ctrl('H'): /* lkchu.981201: backspace */
+                case '\b': /* lkchu.981201: backspace */
                     itswords[strlen(itswords) - 1] = '\0';
                     break;
 
@@ -2725,7 +2725,7 @@ talk_speak(
                 break;
         }
 #endif
-        else if (isprint2(ch) || ch == '\n' || ch == Ctrl('H') || ch == Ctrl('G'))
+        else if (isprint2(ch) || ch == '\n' || ch == '\b' || ch == Ctrl('G'))
         {
             data[0] = ch;
             if (send(fd, data, 1, 0) != 1)
@@ -2742,7 +2742,7 @@ talk_speak(
                 }
                 break;
 
-            case Ctrl('H'):
+            case '\b':
                 mywords[strlen(mywords) - 1] = '\0';
                 break;
 

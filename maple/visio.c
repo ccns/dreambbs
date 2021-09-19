@@ -386,7 +386,7 @@ rel_move(
 
         if (new_col == was_col - 1)
         {
-            ochar(Ctrl('H'));
+            ochar('\b');
             return;
         }
     }
@@ -2046,7 +2046,7 @@ int vkey_process(int (*fgetch)(void))
                 mode = VKEYMODE_ESC;
                 break;
             case 0x7f:
-                ch = Ctrl('H');
+                ch = KEY_BACKSPACE;
                 goto vkey_end;
             default:
                 goto vkey_end;          /* Normal Key */
@@ -2270,7 +2270,7 @@ int vkey_process_no_dbcs_repeat(int (*fgetch)(void))
     const int key = vkey_process(fgetch);
     switch (key)
     {
-    case Ctrl('H'): /* Backspace */
+    case KEY_BACKSPACE:
     /* case Ctrl('D'): */ /* KKman 3 handles this as Del */
     /* However KKman users are probably few in 2020 */
     case KEY_DEL:
@@ -2819,14 +2819,14 @@ vget_redraw:
         /* ----------------------------------------------- */
 
 #if 0
-        if (((echo & HIDEECHO) || mfunc) && ch != Ctrl('H'))
+        if (((echo & HIDEECHO) || mfunc) && ch != '\b')
         {
             bell();
             continue;
         }
 #endif
 
-        if ((echo & HIDEECHO) && ch != Ctrl('H'))
+        if ((echo & HIDEECHO) && ch != '\b')
         {
             bell();
             continue;
@@ -2839,7 +2839,7 @@ vget_redraw:
 #endif
         switch (ch)
         {
-        case Ctrl('H'):
+        case '\b':
             if (!col)
             {
                 bell();
