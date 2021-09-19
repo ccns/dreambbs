@@ -3869,17 +3869,17 @@ static int
 ulist_fromchange(
     XO *xo)
 {
-    char *str, buf[34];
+    const char *const str = cutmp->from;
+    char buf[sizeof(cutmp->from)];
 
     if (!HAS_PERM(PERM_ADMIN))
         return XO_NONE;
 
-    strcpy(buf, str = cutmp->from);
-    vget(B_LINES_REF, 0, "請輸入新的故鄉：", buf, sizeof(cutmp->from), GCARRY);
+    str_scpy(buf, str, sizeof(buf));
+    vget(B_LINES_REF, 0, "請輸入新的故鄉：", buf, sizeof(buf), GCARRY);
     if (strcmp(buf, str))
     {
-        strcpy(str, buf);
-        strcpy(cutmp->from, buf);
+        str_scpy(cutmp->from, buf, sizeof(cutmp->from));
         return XO_INIT;
         /*return XO_LOAD;*/
     }
