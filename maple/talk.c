@@ -3893,18 +3893,19 @@ static int
 ulist_nickchange(
     XO *xo)
 {
-    char *str, buf[24];
+    const char *const str = cuser.username;
+    char buf[BMAX(sizeof(cuser.username), sizeof(cutmp->username))];
 
     if (!HAS_PERM(PERM_VALID) || (HAS_PERM(PERM_DENYNICK)&&!HAS_PERM(PERM_SYSOP)))
         return XO_NONE;
 
-    strcpy(buf, str = cuser.username);
-    vget(B_LINES_REF, 0, "請輸入新的暱稱：", buf, sizeof(cuser.username), GCARRY);
+    str_scpy(buf, str, sizeof(buf));
+    vget(B_LINES_REF, 0, "請輸入新的暱稱：", buf, sizeof(buf), GCARRY);
 
     if (strcmp(buf, str) && str_len_nospace(buf) > 0)
     {
-        strcpy(str, buf);
-        strcpy(cutmp->username, buf);
+        str_scpy(cuser.username, buf, sizeof(cuser.username));
+        str_scpy(cutmp->username, buf, sizeof(cutmp->username));
         return XO_INIT;
         /*return XO_BODY;*/
     }
