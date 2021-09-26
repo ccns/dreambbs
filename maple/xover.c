@@ -2307,7 +2307,7 @@ every_Z(XO *xo)
     if (xo_stack_level < XO_STACK) {
         xo_stack_level++;
     } else {
-        vmsg("已達到最大上限堆疊空間！");
+        vmsg("已達到堆疊空間上限！");
         return;
     }
 
