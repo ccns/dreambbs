@@ -456,6 +456,19 @@ BRC 是採用一篇文章一個紀錄的方式記錄閱讀紀錄，並且分開�
 <span style="float: right;">_2021-07-11 Iweidieng Iep_</span>&#8288;
 :::
 
+### <input class="task-list-item-checkbox" disabled type="checkbox"> 主選單的 <kbd>Ctrl</kbd>- 快速鍵所對應的功能增加各畫面通用的 <kbd>Esc</kbd>- 的按法
+
+:::spoiler {state=open} 方案構想
+<kbd>Esc</kbd>- 按鍵 | 既有按鍵 | 對應函式 | 功能
+:---: | :---: | --- | ---
+<kbd>Esc</kbd>‍‍-‍<kbd>Z</kbd> | <kbd>Ctrl</kbd>‍-‍<kbd>Z</kbd> | `every_Z()` | 叫出快速切換列選單
+<kbd>Esc</kbd>-<kbd>U</kbd> | <kbd>Ctrl</kbd>-<kbd>U</kbd> | `every_U()` | 叫出使用者名單
+<kbd>Esc</kbd>-<kbd>S</kbd> | <kbd>Ctrl</kbd>-<kbd>S</kbd> | `every_S()` | 快速切換看板
+<kbd>Esc</kbd>-<kbd>B</kbd> | <kbd>Ctrl</kbd>-<kbd>B</kbd> | `every_B()` | 快速鎖定畫面
+
+> [name=IID] [time=2021_09_29 (Wed) 20:10 UTC+8]
+:::
+
 ## 文件上的 TODO
 
 ### <input class="task-list-item-checkbox" disabled type="checkbox"> 撰寫系統管理細節
@@ -687,6 +700,13 @@ xo->pos = pos;
 return XR_BODY + XO_REL + 0;
 ```
 > 這樣。 [name=IID] [time=2021_04_06]
+
+- 替代方案：
+```cpp
+return XO_DMOVE + pos;
+```
+其中 `XO_DMOVE` (Xover distant movement) 爲 `XO_DL`。
+> [name=IID] [time=2021_09_30 (Thu) 20:04 UTC+8]
 :::
 
 ### <input class="task-list-item-checkbox" disabled type="checkbox"> 實作以 Tab 字元劃分欄位的推文的顯示
