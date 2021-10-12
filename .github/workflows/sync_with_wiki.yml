@@ -1,0 +1,17 @@
+name: Synchronizing branch "wiki" with GitHub Wiki
+
+on:
+  gollum
+
+jobs:
+  sync-with-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          repository: ${{ format('{0}.wiki', github.repository) }}
+          persist-credentials: false
+      - name: sync
+        run: |
+          git remote add main-repo $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.wiki.git
+          git push main-repo @:wiki
