@@ -2083,6 +2083,8 @@ ve_key:
                 /* Place the cursor outside any ANSI escapes when entering ANSI mode */
                 ve_col = (mode & VE_ANSI) ? ansi2n(n2ansi(col, vln), vln) : col;
                 ve_mode = mode | VE_REDRAW;
+                /* Make the cursor not to be in the middle of any DBCS characters when exiting the ANSI mode */
+                ve_fix_cursor_dbcs(vln);
                 continue;
 
             case Meta('r'): /* Toggle DBCS detection for handling DBCS characters */
