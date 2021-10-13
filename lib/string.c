@@ -503,7 +503,7 @@ GCC_CONSTEXPR static inline bool is_ansi_param(int ch)
 }
 
 /* Return the resulting byte position of moving from the byte position `idx` in the string `str` of maximum length of `len` by diff bytes, skip ANSI escapes
- * The result is unspecified if `idx` is inside of a ANSI escape except for the leading `ESC` byte
+ * The result is unspecified if `idx` is inside of an ANSI escape except for the leading `ESC` byte
  * The result is bounded between `0` and the length of `str`:
  *     - `0` is returned for moving to positions before the first non-ANSI-escape bytes
  *     - The length of `str` is returned for moving to positions after the last non-ANSI-escape bytes */
