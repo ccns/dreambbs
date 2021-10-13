@@ -576,22 +576,22 @@ GCC_PURE size_t str_nmove_ansi(const char *str, size_t idx, ssize_t diff, size_t
             if (*ptr == '[' && ptr > str && ptr[-1] == '\x1b')
             {
                 --ptr;
-                /*              .final    .final */
-                /* step:  66543210      11010 */
-                /*      "1*[1;31mA"   "1*[*sA" */
-                /*        ^ptr          ^ptr */
-                /*        (-6)          (-1) */
-                diff -= final - ptr - ((*final == '\x1b') ? 1 : 0); /* Add back */
+                /*              .final    .final     .final */
+                /* step:  66543210      11010     2210 */
+                /*      "1*[1;31mA"   "1*[*sA"  "1*[1" */
+                /*        ^ptr          ^ptr      ^ptr */
+                /*        (-6)          (-1)      (-2) */
+                diff -= final - ptr - (!*final || *final == '\x1b'); /* Add back */
                 final = ptr;
             }
             else if (*ptr == '\x1b')
             {
-                /*         .final   .final   .final */
-                /* step:  210      1000     10000 */
-                /*      "1*sA"   "1**sA"  "1**[mA" */
-                /*        ^ptr     ^ptr     ^ptr */
-                /*       (-2)      (-1)     (-1) */
-                diff -= 2 - ((*final == '\x1b') ? 1 : 0); /* Add back */
+                /*         .final   .final   .final   .final */
+                /* step:  210      1000     10000    10 */
+                /*      "1*sA"   "1**sA"  "1**[mA" "1*" */
+                /*        ^ptr     ^ptr     ^ptr     ^ptr */
+                /*       (-2)      (-1)     (-1)     (-1) */
+                diff -= 2 - (!*final || *final == '\x1b'); /* Add back */
                 final = ptr;
             }
             else if (!is_ansi_param(*ptr))
