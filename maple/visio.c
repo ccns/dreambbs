@@ -2275,7 +2275,7 @@ int vkey_process_no_dbcs_repeat(int (*fgetch)(void))
     }
 
     const int key = vkey_process(fgetch);
-    switch (key)
+    switch (key & ~Meta(0)) /* Ignore the Meta- modifier */
     {
     case KEY_BACKSPACE:
     /* case Ctrl('D'): */ /* KKman 3 handles this as Del */
@@ -2289,7 +2289,8 @@ int vkey_process_no_dbcs_repeat(int (*fgetch)(void))
             vio_to = seq_tv;
             {
                 const int key2 = vkey_process(fgetch);
-                if (key2 != I_TIMEOUT && key2 != KEY_INVALID && key2 != key)
+                /* The repeating key for Meta-ed keys may not be Meta-ed */
+                if (key2 != I_TIMEOUT && key2 != KEY_INVALID && key2 != key && Meta(key2) != key)
                     unget_key = key2; /* Not repeated; put it back */
             }
             vio_to = vio_to_backup;
