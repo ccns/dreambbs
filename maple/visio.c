@@ -2057,10 +2057,10 @@ int vkey_process(int (*fgetch)(void))
             switch (ch)
             {
             case '\0': case '\n':
-                ch = KEY_ENTER;
+                ch = mod_key(mod, KEY_ENTER);
                 break;
             default:
-                ch = char_opt(ch, KEY_INVALID, KEY_ENTER);
+                ch = char_opt(ch, KEY_INVALID, mod_key(mod, KEY_ENTER));
             }
             goto vkey_end;
 
@@ -2075,6 +2075,13 @@ int vkey_process(int (*fgetch)(void))
                 seq_tv_dec.tv_usec >>= 1;  /* Prevent infinity "<Esc>..." */
                 mod = META_CODE;       /* Make the key Meta-ed */
                 break;
+            case '\r':
+                mode = VKEYMODE_CR;
+                mod = META_CODE;       /* Make the key Meta-ed */
+                break;
+            case 0x7f:
+                ch = Meta(KEY_BACKSPACE);
+                goto vkey_end;
             default: /* "<Esc> <Esc> {`ch`|END}" | "<Esc> {`ch`|END}" */
                 ch = char_opt(ch, Meta(ch), mod_key(mod, KEY_ESC));
                 goto vkey_end;
