@@ -166,7 +166,7 @@ static void
 ve_fix_cursor_dbcs(
     const textline *vln)
 {
-    if ((ve_mode & VE_DBCS) && IS_DBCS_TRAIL_VE_N(ve_mode, vln->data, ve_col, vln->len - 1))
+    if ((ve_mode & VE_DBCS) && IS_DBCS_TRAIL_VE_N(ve_mode, vln->data, ve_col, vln->len))
     {
         const int pos = (ve_mode & VE_ANSI) ? n2ansi(ve_col, vln) : ve_col;
         ve_col = (ve_mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
@@ -1918,7 +1918,7 @@ ve_key:
                 if (pos)
                 {
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
-                    const bool on_trail = (ve_mode & VE_DBCS) && pos > 1 && IS_DBCS_TRAIL_VE_N(mode, vln->data, ve_col, vln->len - 1);
+                    const bool on_trail = (ve_mode & VE_DBCS) && pos > 1 && IS_DBCS_TRAIL_VE_N(mode, vln->data, ve_col, vln->len);
                     delete_char(vln, ve_col);
                     pos -= 1;
 
@@ -1953,7 +1953,7 @@ ve_key:
 
                     /* Thor: 雖然增加 load, 不過edit 時會比較好看 */
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos, vln) : pos;
-                    const bool on_lead = (ve_mode & VE_DBCS) && pos < len && IS_DBCS_LEAD_VE_N(mode, vln->data, ve_col, vln->len - 1);
+                    const bool on_lead = (ve_mode & VE_DBCS) && pos < len && IS_DBCS_LEAD_VE_N(mode, vln->data, ve_col, vln->len);
                     delete_char(vln, ve_col);
 
                     if (on_lead)
@@ -1975,7 +1975,7 @@ ve_key:
                 {
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
                     pos -= 1;
-                    if ((ve_mode & VE_DBCS) && pos && IS_DBCS_TRAIL_VE_N(mode, vln->data, ve_col, vln->len - 1))
+                    if ((ve_mode & VE_DBCS) && pos && IS_DBCS_TRAIL_VE_N(mode, vln->data, ve_col, vln->len))
                         ve_col = (mode & VE_ANSI) ? ansi2n(pos - 1, vln) : pos - 1;
                     continue;
                 }
@@ -1995,7 +1995,7 @@ ve_key:
                 {
                     ve_col = (mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
                     pos += 1;
-                    if ((ve_mode & VE_DBCS) && pos < len && IS_DBCS_TRAIL_VE_N(mode, vln->data, ve_col, vln->len - 1))
+                    if ((ve_mode & VE_DBCS) && pos < len && IS_DBCS_TRAIL_VE_N(mode, vln->data, ve_col, vln->len))
                         ve_col = (mode & VE_ANSI) ? ansi2n(pos + 1, vln) : pos + 1;
                     continue;
                 }
