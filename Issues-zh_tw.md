@@ -1,6 +1,9 @@
 # DreamBBS issue list (暫)
 
 <style>
+a[anchor] + input[type=checkbox] {
+  margin-left: 0;
+}
 @keyframes inlineSpoilerExpand {
   0% {
     color: transparent;
@@ -384,9 +387,9 @@ BRC 是採用一篇文章一個紀錄的方式記錄閱讀紀錄，並且分開�
 > 不過因爲每次鍵盤輸入逾時時，逾時時間會增加 1 分鐘，所以如果登入後直接閒置的話，理論上會在閒置達到 66 分鐘時直接被踢。 [name=IID] [time=2021_09_15 05:44 (Wed) UTC+8]
 :::
 
-### <input class="task-list-item-checkbox" disabled type="checkbox"> 在編輯器中的原始文字模式中，雙位元組字元後的 ANSI 控制碼會被誤判爲雙位元組字元
+### <input class="task-list-item-checkbox" disabled type="checkbox" checked> 在編輯器中的原始文字模式中，雙位元組字元後的 ANSI 控制碼會被誤判爲雙位元組字元
 
-:::spoiler {state=open} 問題敘述與構想
+:::spoiler 問題敘述與構想 (solved by [b6f6e6e744](https://github.com/ccns/dreambbs/commit/b6f6e6e74487c6e01e646feff55778b97bc9895a ) & [a2bffc7150](https://github.com/ccns/dreambbs/commit/a2bffc7150ae6d8705b4c02ed3051a459996c49a ))
 因爲編輯器程式用以取得 DBCS 狀態所呼叫的 `str_nstate_ansi()`，其中用以忽略 ANSI 控制碼而呼叫的 `str_nmove_ansi()`，被設計爲內部游標初始位置位於 ANSI 控制碼的非 `ESC` 字元上時，其結果並沒有特別定義。
 
 正確做法是在非 ANSI 預覽模式下改呼叫 `str_nstate()` 以取得 DBCS 狀態。
@@ -430,9 +433,9 @@ BRC 是採用一篇文章一個紀錄的方式記錄閱讀紀錄，並且分開�
 
 :::
 
-### <input class="task-list-item-checkbox" disabled type="checkbox"> Esc- 瀏覽器端雙位元字自動重複按鍵的過濾不正確
+### <input class="task-list-item-checkbox" disabled type="checkbox" checked> Esc- 瀏覽器端雙位元字自動重複按鍵的過濾不正確
 
-:::spoiler {state=open} 問題敘述
+:::spoiler 問題敘述 (solved by [0db749149b](https://github.com/ccns/dreambbs/commit/0db749149bdc9321d6f741ff2887901985e83fd0 ) & [95fc710dd2](https://github.com/ccns/dreambbs/commit/95fc710dd2a2b174e5556c8c17110a028b82744f))
 > 如果使用者快速按下 `Esc` 、`Right`，而瀏覽軟體因爲全形字偵測而送出 `Esc`、`Right-Right` 時，伺服器端應該要判斷爲單個 `Esc-Right`。
 > 但在目前的夢大上會判斷爲 `Esc-Right`、`Right`，而自動重複送出的 `Right` 沒被濾掉。
 [name=IID] [time=2021_06_18 (Fri) 03:29 UTC+8]
