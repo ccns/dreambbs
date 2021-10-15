@@ -30,16 +30,16 @@ x_siteinfo(void)
     clear();
 
     move(1, 0);
-    prints("站    名： %s - %s\n", str_host, BBSIP);
-    prints("程式版本： %s [%s] %s\n", bbsvername, bbsversion, build_head);
-    prints("分支版本： %s %s %s\n", build_remote_url, build_branch_remote, build_head_remote);
-    prints("編譯環境： %s %s %s %s%d\n",
+    prints("站    名：%s - %s\n", str_host, BBSIP);
+    prints("程式版本：%s [%s] %s\n", bbsvername, bbsversion, build_head);
+    prints("分支版本：%s %s %s\n", build_remote_url, build_branch_remote, build_head_remote);
+    prints("編譯環境：%s %s %s %s%d\n",
         build_make, build_arch, build_compiler, build_lang, build_langver / 100 % 100);
-    prints("系統負載： %.2f %.2f %.2f / %ld [%s] ",
+    prints("系統負載：%.2f %.2f %.2f / %ld [%s] ",
         load[0], load[1], load[2], nproc, load_norm > 5 ? "\x1b[1;41;37m過高\x1b[m" : load_norm > 1 ?
         "\x1b[1;42;37m稍高\x1b[m" : "\x1b[1;44;37m正常\x1b[m");
-    prints("站上人數： %d/%d\n", ushm->count, MAXACTIVE);
-    prints("索引資料： BRD %zu bytes, ACCT %zu bytes, HDR %zu bytes\n", sizeof(BRD), sizeof(ACCT), sizeof(HDR));
+    prints("站上人數：%d/%d\n", ushm->count, MAXACTIVE);
+    prints("索引資料：BRD %zu bytes, ACCT %zu bytes, HDR %zu bytes\n", sizeof(BRD), sizeof(ACCT), sizeof(HDR));
     prints("\n");
     prints("\x1b[1m本 BBS 版本是由 WindTop BBS 為起始，\x1b[m\n");
     prints("\x1b[1m並參考諸位前輩的智慧結晶改版而來，所有智慧財產均屬於原作者。\x1b[m\n");
