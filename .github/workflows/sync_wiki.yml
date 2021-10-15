@@ -1,0 +1,17 @@
+name: Synchronizing GitHub Wiki with branch "wiki"
+
+on:
+  push:
+    branches: [wiki]
+
+jobs:
+  sync-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+      - name: sync
+        run: |
+          git remote add wiki $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.wiki.git
+          git push wiki @:master
