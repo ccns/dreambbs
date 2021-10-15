@@ -31,8 +31,12 @@ x_siteinfo(void)
 
     move(1, 0);
     prints("站    名：%s - %s\n", str_host, BBSIP);
-    prints("程式版本：%s [%s] %s\n", bbsvername, bbsversion, build_head);
-    prints("分支版本：%s %s %s\n", build_remote_url, build_branch_remote, build_head_remote);
+    prints("程式版本：%s [%s] %s", bbsvername, bbsversion, build_head);
+    if (strcmp(BUILD_HEAD, build_head))
+        prints(" \x1b[1m最新：%s\x1b[m\n", BUILD_HEAD);
+    prints("分支版本：%s %s %s\n",
+        build_remote_url, build_branch_remote,
+        (!strcmp(BUILD_BRANCH_REMOTE, build_branch_remote)) ? BUILD_HEAD_REMOTE : build_head_remote);
     prints("編譯環境：%s %s %s %s%d\n",
         build_make, build_arch, build_compiler, build_lang, build_langver / 100 % 100);
     prints("系統負載：%.2f %.2f %.2f / %ld [%s] ",
