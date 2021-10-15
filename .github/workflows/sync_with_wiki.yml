@@ -13,5 +13,5 @@ jobs:
           persist-credentials: false
       - name: sync
         run: |
-          git remote add main-repo $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.wiki.git
+          git remote add main-repo $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.git
           git push main-repo @:wiki
