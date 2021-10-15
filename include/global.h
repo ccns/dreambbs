@@ -160,7 +160,7 @@ VAR const char bbslua_version_str[]   INI(
 #endif
 #ifdef  HAVE_BBSRUBY
 VAR const char bbsruby_version_str[]  INI(
-    BBSRUBY_VERSION_STR " Interface: " BBSRUBY_INTERFACE_VER_STR
+    BBSRUBY_VERSION_STR " API " BBSRUBY_INTERFACE_VER_STR
     IF_ON(M3_USE_BBSRUBY, " / Ruby " RUBY_RELEASE_STR
         IF_ON(BBSRUBY_USE_MRUBY, " / " MRUBY_RUBY_ENGINE " " MRUBY_VERSION))
 );

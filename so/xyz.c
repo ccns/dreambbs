@@ -71,7 +71,7 @@ x_siteinfo(void)
 #endif
 //    prints(STATUS_FMT, STATUS_STR(SMerge), "Smart Merge 修文自動合併", "", "by hrs113355 & cache");
 #ifdef HAVE_BBSRUBY
-    prints(STATUS_FMT, STATUS_STR(M3_USE_BBSRUBY), "(EXP) BBSRuby", bbsruby_version_str, "by zero");
+    prints(STATUS_FMT, STATUS_STR(M3_USE_BBSRUBY), "BBS-Ruby", bbsruby_version_str, "by zero");
 #endif
 
 #else
