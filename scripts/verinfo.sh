@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # prevent localized logs
-LC_ALL=C
+LC_ALL=C.UTF-8
 export LC_ALL
 
 source_dir="${source_dir:-"."}"
@@ -57,7 +57,7 @@ build_time="$(date -d"${build_date}" "+%s")"
 export_file="${source_dir}/verinfo_export.conf"
 
 printf "\033[1;36mGenerating '%s'...\033[0m\n" "${export_file}"
-cat > "${export_file}" <<EOF
+iconv -t big5 -o "${export_file}" <<EOF
 #define BUILD_MAKE "${build_make}"
 #define BUILD_ARCH "${build_arch}"
 #define BUILD_BRANCH "${build_branch}"
@@ -69,5 +69,5 @@ cat > "${export_file}" <<EOF
 #define BUILD_TIME ${build_time}L
 EOF
 printf "\033[1;33m"
-cat "${export_file}"
+iconv -f big5 "${export_file}"
 printf "\033[0m"
