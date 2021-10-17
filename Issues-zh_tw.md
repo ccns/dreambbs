@@ -1,8 +1,8 @@
 # DreamBBS issue list (暫)
 
 <style>
-a[anchor] + input[type=checkbox] {
-  margin-left: 0;
+a.anchor + .task-list-item-checkbox {
+  margin: .31em 0.3em .2em 0 !important
 }
 @keyframes inlineSpoilerExpand {
   0% {
@@ -62,6 +62,17 @@ a[anchor] + input[type=checkbox] {
 :::spoiler {state=open} 需要的 piping 機制的程式碼參考
 > 之後應該把所有的 `system()` 取代成 `execl()`/`execv()`，然後用 C 操作 IO redirection 和 piping。 \
 https://stackoverflow.com/questions/8082932/connecting-n-commands-with-pipes-in-a-shell [name=IID] [time=2019_08_22]
+:::
+
+### <input class="task-list-item-checkbox" disabled type="checkbox"> 無用的 `NULL` 指標判定
+:::spoiler {state=open} 問題敘述
+```c
+while (p != NULL)
+{
+    free(p);
+}
+```
+> ![](https://media.discordapp.net/attachments/370600485612290060/625319470583382017/unknown.png) [name=IID] [time=2019_09_22 (Sun) 21:16 UTC+8]
 :::
 
 ### <input class="task-list-item-checkbox" disabled type="checkbox"> 新增 pfterm 的 "256 color" 與 "true color" 的支援
@@ -191,6 +202,17 @@ B  # 第三個簽名檔  # 結束
 這樣就不用再在 `*_body()` 函式中手動確認清單是否為空，然後還要用 `vget()`/`vans()` 另外處理按鍵。 ==[name=IID] [time=2021_02_22 (Mon) 19:05]==
     - [x] _[前略……]_ 不過反過來說，可以設計成用 `cb_key | XO_POS` (`XO_POS = XO_REL`) 指定 callback 函式有 `pos` 參數。 ==[name=IID] [time=2021_02_22 (Mon) 19:34]==
     - 註：`XO_POS` 實作時已改名為 `XO_POSF`。
+:::
+
+### <input class="task-list-item-checkbox" disabled type="checkbox"> `more()` 的回傳值的處理的問題
+:::spoiler {state=open} 問題敘述
+> 發現 DreamBBS 有幾個判斷 `more()` 的回傳是否為 `-2` 的地方，但是 `more()` 的回傳值不可能是 `-2`。\
+MapleBBS 3.xx 的 `KEY_UP` 值是 `-1`，而 `KEY_LEFT` 值是 `-2`。不過 DreamBBS v1.0 時被我改回正數。\
+DreamBBS 從 DreamBBS-2010 的 `more.c` 就是 itoc 版本的，當不被處理的按鍵是特殊按鍵時 (當時是 `< 0`)，會改回傳 `'q'`。\
+所以我拿了 WindTopBBS 3.02 rev.20040420 的 `more.c` 比較，發現原本在 `KEY_LEFT` 及 `'q'` 時，`more()` 會回傳 `-2`。\
+> \
+> 原本的邏輯是如果拿到 `-2` 就要在外面重繪畫面，但是 itoc 版改成離開呼叫 `more()` 的函式前一律重繪畫面。
+> ![](https://media.discordapp.net/attachments/370600485612290060/798938919886520330/unknown.png) [name=IID] [time=2021_01_13 23:38 (Wed) UTC+8]
 :::
 
 ### <input class="task-list-item-checkbox" disabled type="checkbox"> 在我的最愛按下 `c` 的問題
