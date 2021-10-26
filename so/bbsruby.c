@@ -210,6 +210,7 @@ static double KBHIT_TMIN = 0.001;
 static double KBHIT_TMAX = 60*10;
 static VALUE KB_QUEUE;
 
+static int pause_msg(const char *msg, const char *reason, const char *prompt);
 static int getkey(double wait);
 
 /* BBS helper class : following BBSLua SDK */
@@ -514,24 +515,7 @@ VALUE brb_pause RBF_P((VALUE self, VALUE msg))
     mrb_get_args(mrb, "o", &msg);
 #endif
 
-    char buf[200];
-    move(b_lines, 0);
-
-    sprintf(buf, COLOR1 " ★ %s", StringValueCStr(msg));
-    outs(buf);
-
-    char buf2[200];
-    sprintf(buf2, COLOR2 " [請按任意鍵繼續] ");
-
-    for (int i = b_cols + sizeof(COLOR1) + sizeof(COLOR2) - strlen(buf) - strlen(buf2); i > 3; i--)
-    {
-        outc(' ');
-    }
-
-    outs(buf2);
-    outs(str_ransi);
-
-    int k = vkey();
+    int k = pause_msg(StringValueCStr(msg), "", "請按任意鍵繼續");
 
     move(b_lines, 0);
     clrtoeol();
@@ -545,18 +529,16 @@ GCC_PURE VALUE brb_toc RBF_P((VALUE self))
 }
 /* End of BBS helper class */
 
-static void out_footer(
-    const char* reason,
-    const char* msg)
+static int pause_msg(const char *msg, const char *reason, const char *prompt)
 {
     char buf[200];
     move(b_lines, 0);
 
-    sprintf(buf, COLOR1 " ★ BBSRuby " BBSRUBY_VERSION_STR " (" __DATE__ " " __TIME__ ")%s", reason);
+    sprintf(buf, COLOR1 " ★ %s%s", msg, (reason) ? reason : "");
     outs(buf);
 
     char buf2[200];
-    sprintf(buf2, COLOR2 " [%s] ", msg);
+    sprintf(buf2, COLOR2 " [%s] ", prompt);
 
     for (int i = b_cols + sizeof(COLOR1) + sizeof(COLOR2) - strlen(buf) - strlen(buf2); i > 3; i--)
     {
@@ -566,7 +548,14 @@ static void out_footer(
     outs(buf2);
     outs(str_ransi);
 
-    vkey();
+    return vkey();
+}
+
+static void out_footer(
+    const char* reason,
+    const char* msg)
+{
+    pause_msg("BBSRuby " BBSRUBY_VERSION_STR " (" __DATE__ " " __TIME__ ")", reason, msg);
 }
 
 
