@@ -1124,10 +1124,13 @@ void run_ruby(
         sprintf(msgBuf, "\033[1;41m ● 程式未載明相容的Interface版本，可能發生不相容問題");
     else if (d < BBSRUBY_INTERFACE_VER)
         sprintf(msgBuf, "\033[1;41m ● 程式版本過舊，可能發生不相容問題");
-    outs(msgBuf);
-    for (int i=0; i<b_cols - (int)(unsigned)strlen(msgBuf) + 7; i++)
-        outs(" ");
-    outs("\033[m");
+    if (*msgBuf)
+    {
+        outs(msgBuf);
+        for (int i=0; i<b_cols - (int)(unsigned)strlen(msgBuf) + 7; i++)
+            outs(" ");
+        outs("\033[m");
+    }
 
     //Before execution, prepare keyboard buffer
     //KB_QUEUE = RB_CV(rb_ary_new)();
