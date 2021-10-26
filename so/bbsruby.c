@@ -1132,8 +1132,8 @@ void run_ruby(
     BRB_C(bbsruby_load_TOC)(cStart, cEnd);
     // Check interface version
     float d = 0;
-    if (TOCs_DATA[4])
-        d = atof(TOCs_DATA[4]);
+    if (TOCs_DATA[0])
+        d = atof(TOCs_DATA[0]);
     move(b_lines - 1, 0);
     char msgBuf[200]="";
     if (d == 0)
