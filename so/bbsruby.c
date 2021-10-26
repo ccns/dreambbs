@@ -1115,7 +1115,7 @@ void run_ruby(
     BRB_C(bbsruby_load_TOC)(cStart, cEnd);
     // Check interface version
     VALUE toc_apiver = CMRB_C(rb_hash_aref, mrb_hash_get)(TOCs_rubyhash, RB_C(rb_str_new_cstr)(TOCs_HEADER[0]));
-    float d = 0;
+    double d = 0; // Prevent further floating-point rounding errors
     if (RTEST(toc_apiver))
         d = atof(StringValueCStr(toc_apiver));
     move(b_lines - 1, 0);
