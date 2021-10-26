@@ -200,15 +200,15 @@ typedef VALUE rb_class_t;
 #define BBSRUBY_SIGNATURE "###BBSRuby"
 
 #define BBSRUBY_INTERFACE_VER 0.111
-int ABORT_BBSRUBY = 0;
+static int ABORT_BBSRUBY = 0;
 
 #define BBSRUBY_TOC_HEADERS (6)
-const char* const TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"interface", "title", "notes", "author", "version", "date"};
-char* TOCs_DATA[BBSRUBY_TOC_HEADERS] = {0};
-VALUE TOCs_rubyhash;
-double KBHIT_TMIN = 0.001;
-double KBHIT_TMAX = 60*10;
-VALUE KB_QUEUE;
+static const char* const TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"interface", "title", "notes", "author", "version", "date"};
+static char* TOCs_DATA[BBSRUBY_TOC_HEADERS] = {0};
+static VALUE TOCs_rubyhash;
+static double KBHIT_TMIN = 0.001;
+static double KBHIT_TMAX = 60*10;
+static VALUE KB_QUEUE;
 
 static int getkey(double wait);
 
@@ -545,7 +545,7 @@ GCC_PURE VALUE brb_toc RBF_P((VALUE self))
 }
 /* End of BBS helper class */
 
-void out_footer(
+static void out_footer(
     const char* reason,
     const char* msg)
 {
@@ -570,7 +570,7 @@ void out_footer(
 }
 
 
-int getkey(double wait)
+static int getkey(double wait)
 {
     fd_set fds;
     struct timeval tv;
@@ -590,7 +590,7 @@ int getkey(double wait)
     return 0;
 }
 
-void BBSRubyHook(
+static void BBSRubyHook(
 #ifdef BBSRUBY_USE_MRUBY
     mrb_state *mrb,
   #if MRUBY_RELEASE_NO >= 30000
@@ -671,12 +671,12 @@ ruby_script_attach(const char *fpath, int *plen)
     return buf;
 }
 
-void ruby_script_detach(char *p, int len)
+static void ruby_script_detach(char *p, int len)
 {
     munmap(p, len);
 }
 
-int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
+static int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
 {
     int lenSignature = strlen(BBSRUBY_SIGNATURE);
 
@@ -734,7 +734,7 @@ int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
     return 1;
 }
 
-void bbsruby_load_TOC RB_P((const char *cStart, const char *cEnd))
+static void bbsruby_load_TOC RB_P((const char *cStart, const char *cEnd))
 {
     // Create TOC class wrapping these information
     const char *tStart, *tEnd;
@@ -789,7 +789,7 @@ void bbsruby_load_TOC RB_P((const char *cStart, const char *cEnd))
     TOCs_rubyhash = hashTOC;
 }
 
-void print_exception RB_PV((void))
+static void print_exception RB_PV((void))
 {
     clear();
 #ifdef BBSRUBY_USE_MRUBY
