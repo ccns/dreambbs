@@ -204,7 +204,6 @@ static int ABORT_BBSRUBY = 0;
 
 #define BBSRUBY_TOC_HEADERS (6)
 static const char* const TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"interface", "title", "notes", "author", "version", "date"};
-static char* TOCs_DATA[BBSRUBY_TOC_HEADERS] = {0};
 static VALUE TOCs_rubyhash;
 static double KBHIT_TMIN = 0.001;
 static double KBHIT_TMAX = 60*10;
@@ -758,13 +757,8 @@ static void bbsruby_load_TOC RB_P((const char *cStart, const char *cEnd))
                     tStart++;
 
                     while (*tStart == ' ') tStart++;
-                    char *data = (char *) malloc(sizeof(char) * (tEnd - tStart) + 1);
-                    strncpy(data, tStart, tEnd - tStart);
-                    data[tEnd - tStart] ='\0';
-                    free(TOCs_DATA[i]);
-                    TOCs_DATA[i] = data;
-                    CMRB_C(rb_hash_aset, mrb_hash_set)(hashTOC, RB_C(rb_str_new_cstr)(TOCs_HEADER[i]), RB_C(rb_str_new_cstr)(data));
-                    CMRB_C(rb_hash_aset, mrb_hash_set)(hashTOC, CMRB_C(rb_funcallv, mrb_funcall_argv)(RB_C(rb_str_new_cstr)(TOCs_HEADER[i]), CMRB_C(rb_intern, mrb_intern_cstr)("capitalize!"), 0, NULL), RB_C(rb_str_new_cstr)(data));
+                    CMRB_C(rb_hash_aset, mrb_hash_set)(hashTOC, RB_C(rb_str_new_cstr)(TOCs_HEADER[i]), RB_C(rb_str_new)(tStart, tEnd - tStart));
+                    CMRB_C(rb_hash_aset, mrb_hash_set)(hashTOC, CMRB_C(rb_funcallv, mrb_funcall_argv)(RB_C(rb_str_new_cstr)(TOCs_HEADER[i]), CMRB_C(rb_intern, mrb_intern_cstr)("capitalize!"), 0, NULL), RB_C(rb_str_new)(tStart, tEnd - tStart));
                     TOCfound = 1;
                     break;
                 }
@@ -1120,9 +1114,10 @@ void run_ruby(
 
     BRB_C(bbsruby_load_TOC)(cStart, cEnd);
     // Check interface version
+    VALUE toc_apiver = CMRB_C(rb_hash_aref, mrb_hash_get)(TOCs_rubyhash, RB_C(rb_str_new_cstr)(TOCs_HEADER[0]));
     float d = 0;
-    if (TOCs_DATA[0])
-        d = atof(TOCs_DATA[0]);
+    if (RTEST(toc_apiver))
+        d = atof(StringValueCStr(toc_apiver));
     move(b_lines - 1, 0);
     char msgBuf[200]="";
     if (d == 0)
@@ -1133,12 +1128,6 @@ void run_ruby(
     for (int i=0; i<b_cols - (int)(unsigned)strlen(msgBuf) + 7; i++)
         outs(" ");
     outs("\033[m");
-
-    for (int i = 0; i < BBSRUBY_TOC_HEADERS; i++)
-    {
-        free(TOCs_DATA[i]);
-        TOCs_DATA[i] = NULL;
-    }
 
     //Before execution, prepare keyboard buffer
     //KB_QUEUE = RB_CV(rb_ary_new)();
