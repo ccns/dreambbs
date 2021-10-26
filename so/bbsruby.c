@@ -269,7 +269,7 @@ VALUE brb_clock RBF_P((VALUE self))
     double d = 0;
     memset(&tz, 0, sizeof(tz));
     gettimeofday(&tv, &tz);
-    d = tv.tv_sec + tv.tv_usec / 1000000;
+    d = tv.tv_sec + tv.tv_usec / (double)1000000;
     return CMRB_C(rb_float_new, mrb_float_value)(d);
 }
 
