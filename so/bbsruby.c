@@ -540,7 +540,7 @@ static int pause_msg(const char *msg, const char *reason, const char *prompt)
     char buf2[200];
     sprintf(buf2, COLOR2 " [%s] ", prompt);
 
-    for (int i = b_cols + sizeof(COLOR1) + sizeof(COLOR2) - strlen(buf) - strlen(buf2); i > 3; i--)
+    for (int i = b_cols + (int)(unsigned)(sizeof(COLOR1) + sizeof(COLOR2)) - (int)(unsigned)(strlen(buf) + strlen(buf2)); i > 3; i--)
     {
         outc(' ');
     }
@@ -1130,7 +1130,7 @@ void run_ruby(
     else if (d < BBSRUBY_INTERFACE_VER)
         sprintf(msgBuf, "\033[1;41m ● 程式版本過舊，可能發生不相容問題");
     outs(msgBuf);
-    for (int i=0; i<b_cols - strlen(msgBuf) + 7; i++)
+    for (int i=0; i<b_cols - (int)(unsigned)strlen(msgBuf) + 7; i++)
         outs(" ");
     outs("\033[m");
 
