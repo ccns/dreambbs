@@ -192,10 +192,18 @@ typedef VALUE rb_class_t;
 
 #define BBSRUBY_MAJOR_VERSION (0)
 #define BBSRUBY_MINOR_VERSION (3)
+#ifndef BBSRUBY_PATCH_VERSION
+    #define BBSRUBY_PATCH_VERSION 0
+#endif
+#ifndef BBSRUBY_DL_PATCH_VERSION
+    #define BBSRUBY_DL_PATCH_VERSION 0
+#endif
 
 #ifndef BBSRUBY_VERSION_STR
   #define BBSRUBY_VERSION_STR "v0.3"
 #endif
+
+#define BBSRUBY_VERSION_VALUE (1000000 * BBSRUBY_MAJOR_VERSION + 10000 * BBSRUBY_MINOR_VERSION + 100 * BBSRUBY_PATCH_VERSION + BBSRUBY_DL_PATCH_VERSION)
 
 #define BBSRUBY_SIGNATURE "###BBSRuby"
 
@@ -1022,6 +1030,59 @@ static VALUE bbsruby_eval_code RB_P((VALUE eval_args))
     return Qnil;
 }
 
+/* "0.111 v0.3-DL-2" => *apiver = 0.111, *brbver = 30002 */
+static void parse_toc_apiver(const char *str, double *apiver, int *brbver)
+{
+    /* The BBS-Ruby API version (optional): A floating-point number without any suffixes */
+    {
+        const char *const p = str;
+        *apiver = strtod(p, (char **)&str);
+        if (str != p && *str && *str++ != ' ') // Reject "0.111v..." & Accept "0.111"
+        {
+            *apiver = 0;
+            *brbver = 0;
+            return;
+        }
+        /* Else if str == p, apiver may be omitted */
+    }
+    while (*str == ' ')
+        ++str;
+    /* The targeting BBS-Ruby version (optional): "v1.2.3-DL-4a" => 1020304 */
+    if (*str == 'v' && *++str >= '0' && *str <= '9') // Reject "v.2" & "v+1"
+    {
+        *brbver = 1000000 * strtoul(str, (char **)&str, 10); // Major version
+        if (*str == '.')
+        {
+            if (!(*++str >= '0' && *str <= '9'))
+                goto invalid_brbver;
+            *brbver += 10000 * strtoul(str, (char **)&str, 10); // Minor version (optional)
+            if (*str == '.')
+            {
+                if (!(*++str >= '0' && *str <= '9'))
+                    goto invalid_brbver;
+                *brbver += 100 * strtoul(str, (char **)&str, 10); // Patch version (optional)
+            }
+        }
+        int has_exver = 0;
+        while (*str == '-') // Extra version (optional) & tags (0 or more): "-DL-4a" (of "v1.2.3-DL-4a") => 4
+        {
+            if (has_exver || !(*++str && *str != ' ' && *str != '-')) // Reject "v1.2.3-DL-4a-...", "v1.2.3-", "v1.2.3- ...", & "v1.2.3--..."
+                goto invalid_brbver;
+            if ((has_exver = (*str >= '0' && *str <= '9')))
+                *brbver += strtoul(str, (char **)&str, 10); // Extra version
+            while (*str && *str != ' ' && *str != '-') // Tag content ("DL" in "-DL") / version suffix ("a" in "-4a")
+                ++str;
+        }
+        if (*str && *str != ' ') // Reject "v1.2.3a"
+            goto invalid_brbver;
+    }
+    else
+    {
+invalid_brbver:
+        *brbver = 0;
+    }
+}
+
 void run_ruby(
     const char* fpath)
 {
@@ -1115,14 +1176,15 @@ void run_ruby(
     BRB_C(bbsruby_load_TOC)(cStart, cEnd);
     // Check interface version
     VALUE toc_apiver = CMRB_C(rb_hash_aref, mrb_hash_get)(TOCs_rubyhash, RB_C(rb_str_new_cstr)(TOCs_HEADER[0]));
-    double d = 0; // Prevent further floating-point rounding errors
+    double apiver = 0; // Prevent further floating-point rounding errors
+    int brbver = 0;
     if (RTEST(toc_apiver))
-        d = atof(StringValueCStr(toc_apiver));
+        parse_toc_apiver(StringValueCStr(toc_apiver), &apiver, &brbver);
     move(b_lines - 1, 0);
     char msgBuf[200]="";
-    if (d == 0)
+    if (apiver == 0 && brbver == 0)
         sprintf(msgBuf, "\033[1;41m ● 程式未載明相容的Interface版本，可能發生不相容問題");
-    else if (d < BBSRUBY_INTERFACE_VER)
+    else if (apiver < BBSRUBY_INTERFACE_VER || (brbver && brbver < BBSRUBY_VERSION_VALUE))
         sprintf(msgBuf, "\033[1;41m ● 程式版本過舊，可能發生不相容問題");
     if (*msgBuf)
     {
