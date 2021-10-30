@@ -216,6 +216,7 @@ static VALUE TOCs_rubyhash;
 static double KBHIT_TMIN = 0.001;
 static double KBHIT_TMAX = 60*10;
 static VALUE KB_QUEUE;
+static int badxy_compat = 0; // Whether to replicate the behavior of badly confused x/y coordination in v0.3 and before
 
 static int pause_msg(const char *msg, const char *reason, const char *prompt);
 static int getkey(double wait);
@@ -395,8 +396,8 @@ VALUE brb_print RBF_P((int argc, VALUE *argv, VALUE self))
 VALUE brb_getmaxyx RBF_P((VALUE self))
 {
     VALUE rethash = RB_CV(rb_hash_new)();
-    CMRB_C(rb_hash_aset, mrb_hash_set)(rethash, RB_C(rb_str_new_cstr)(BRB_COOR_ROW), INT2NUM(b_lines + 1));
-    CMRB_C(rb_hash_aset, mrb_hash_set)(rethash, RB_C(rb_str_new_cstr)(BRB_COOR_COL), INT2NUM(b_cols + 1));
+    CMRB_C(rb_hash_aset, mrb_hash_set)(rethash, RB_C(rb_str_new_cstr)(badxy_compat ? "x" : BRB_COOR_ROW), INT2NUM(b_lines + 1));
+    CMRB_C(rb_hash_aset, mrb_hash_set)(rethash, RB_C(rb_str_new_cstr)(badxy_compat ? "y" : BRB_COOR_COL), INT2NUM(b_cols + 1));
     return rethash;
 }
 
@@ -405,8 +406,8 @@ VALUE brb_getyx RBF_P((VALUE self))
     VALUE rethash = RB_CV(rb_hash_new)();
     int cur_row, cur_col;
     getyx(&cur_row, &cur_col);
-    CMRB_C(rb_hash_aset, mrb_hash_set)(rethash, RB_C(rb_str_new_cstr)(BRB_COOR_ROW), INT2NUM(cur_row));
-    CMRB_C(rb_hash_aset, mrb_hash_set)(rethash, RB_C(rb_str_new_cstr)(BRB_COOR_COL), INT2NUM(cur_col));
+    CMRB_C(rb_hash_aset, mrb_hash_set)(rethash, RB_C(rb_str_new_cstr)(badxy_compat ? "x" : BRB_COOR_ROW), INT2NUM(badxy_compat ? cur_col : cur_row));
+    CMRB_C(rb_hash_aset, mrb_hash_set)(rethash, RB_C(rb_str_new_cstr)(badxy_compat ? "y" : BRB_COOR_COL), INT2NUM(badxy_compat ? cur_row : cur_col));
     return rethash;
 }
 
@@ -417,7 +418,7 @@ VALUE brb_move RBF_P((VALUE self, VALUE y, VALUE x))
     mrb_get_args(mrb, "oo", &y, &x);
 #endif
 
-    move(NUM2INT(y), NUM2INT(x));
+    move(NUM2INT(badxy_compat ? x : y), NUM2INT(badxy_compat ? y : x));
     return Qnil;
 }
 
@@ -430,7 +431,7 @@ VALUE brb_moverel RBF_P((VALUE self, VALUE dy, VALUE dx))
 
     int cur_row, cur_col;
     getyx(&cur_row, &cur_col);
-    move(cur_row + NUM2INT(dy), cur_col + NUM2INT(dx));
+    move(cur_row + NUM2INT(badxy_compat ? dx : dy), cur_col + NUM2INT(badxy_compat ? dy : dx));
     return Qnil;
 }
 
@@ -558,11 +559,11 @@ static int pause_msg(const char *msg, const char *reason, const char *prompt)
     return vkey();
 }
 
-static void out_footer(
+static int out_footer(
     const char* reason,
     const char* msg)
 {
-    pause_msg("BBSRuby " BBSRUBY_VERSION_STR " (" __DATE__ " " __TIME__ ")", reason, msg);
+    return pause_msg("BBSRuby " BBSRUBY_VERSION_STR " (" __DATE__ " " __TIME__ ")", reason, msg);
 }
 
 
@@ -1180,7 +1181,9 @@ void run_ruby(
     int brbver = 0;
     if (RTEST(toc_apiver))
         parse_toc_apiver(StringValueCStr(toc_apiver), &apiver, &brbver);
-    move(b_lines - 1, 0);
+    /* For the compatibility of the coordination behavior before v0.3-DL-1 (API 0.111) */
+    badxy_compat = (brbver ? brbver < 30001 : apiver <= 0.111); // Will be exammed again later
+    move(b_lines - 1 - badxy_compat, 0);
     char msgBuf[200]="";
     if (apiver == 0 && brbver == 0)
         sprintf(msgBuf, "\033[1;41m ● 程式未載明相容的Interface版本，可能發生不相容問題");
@@ -1194,10 +1197,21 @@ void run_ruby(
         outs("\033[m");
     }
 
+    if (badxy_compat)
+    {
+        move(b_lines - 1, 0);
+        sprintf(msgBuf, "\033[1;41m %s 此程式%s是為舊版 BBS-Ruby (<= v3.0) 撰寫的。以座標相容模式執行？[Y/n]", (*msgBuf) ? "  " : "●", (!brbver && (!apiver || apiver == 0.111)) ? "可能" : "");
+        outs(msgBuf);
+        for (int i=0; i<b_cols - (int)(unsigned)strlen(msgBuf) + 7; i++)
+            outs(" ");
+        outs("\033[m");
+    }
+
     //Before execution, prepare keyboard buffer
     //KB_QUEUE = RB_CV(rb_ary_new)();
 
-    out_footer("", "按任意鍵開始執行");
+    if ((out_footer("", "按任意鍵開始執行") | 0x20) == 'n')
+        badxy_compat = 0;
     clear();
     refresh();
 
