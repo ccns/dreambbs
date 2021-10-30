@@ -581,8 +581,8 @@ static int getkey(double wait)
     if (wait > KBHIT_TMIN)
         refresh();
 
-    tv.tv_sec = (int)wait;
-    wait-=(int)wait;
+    tv.tv_sec = (long)wait;
+    wait-=(long)wait;
     tv.tv_usec = wait * 1000000;
 
     /* 若有按鍵，回傳所按的鍵；若 delay 的時間到了仍沒有按鍵，回傳 0 */
