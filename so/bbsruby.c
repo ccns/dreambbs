@@ -647,7 +647,7 @@ static void BBSRubyHook(
 }
 
 static char*
-ruby_script_attach(const char *fpath, int *plen)
+ruby_script_attach(const char *fpath, size_t *plen)
 {
     struct stat st;
     int fd = open(fpath, O_RDONLY, 0600);
@@ -1106,7 +1106,7 @@ void run_ruby(
     ABORT_BBSRUBY = 0;
 
     // Run
-    int pLen = 0;
+    size_t pLen = 0;
     char *post;
     post = ruby_script_attach(fpath, &pLen);
     if (!post)
