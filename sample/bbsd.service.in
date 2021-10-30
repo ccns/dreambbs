@@ -6,7 +6,7 @@ Requires=startbbs.service
 [Service]
 Type=forking
 PIDFile=@BBSHOME@/run/bbs.pid
-ExecStart=@BBSHOME@/bin/bbsd 23 &
+ExecStart=@BBSHOME@/bin/bbsd 23
 ExecStop=/bin/kill -s TERM $MAINPID
 Restart=on-failure
 RestartSec=42s
