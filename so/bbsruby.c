@@ -570,10 +570,16 @@ static int out_footer(
 static int getkey(double wait)
 {
     fd_set fds;
-    struct timeval tv;
+    struct timeval tv = {0L, 0L};
 
     FD_ZERO(&fds);
     FD_SET(0, &fds);
+
+    /* Determine whether to refresh */
+    if (select(1, &fds, NULL, NULL, &tv) > 0)
+        return vkey();
+    if (wait > KBHIT_TMIN)
+        refresh();
 
     tv.tv_sec = (int)wait;
     wait-=(int)wait;
