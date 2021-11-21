@@ -494,6 +494,30 @@ BRC 是採用一篇文章一個紀錄的方式記錄閱讀紀錄，並且分開�
 > [name=IID] [time=2021_09_29 (Wed) 20:10 UTC+8]
 :::
 
+### <input class="task-list-item-checkbox" disabled type="checkbox"> `cleanrecommend.c` 的推文解析不正確
+
+:::spoiler {state=open} 問題敘述
+> ![](https://media.discordapp.net/attachments/370600485612290060/908966065646764072/Screenshot_20211113-142611_Edge.png)  [name=IID] [time=2021_11_13 (Sat) 14:26 UTC+8]
+> 推文編輯壞掉了。 \
+> 看來 `so/cleanrecommend.c` 該重寫了。  [name=IID] [time=2021_11_13 (Sat) 14:27 UTC+8]
+
+> 要改成沒有推文也允許使用 `o` 進入推文編輯介面。 \
+因爲 DreamBBS v3 Xover 支援空清單 (用 `XO_POSF` 標示需要非空清單的操作按鍵)，所以可以簡單地做到。  [name=IID] [time=2021_11_13 (Sat) 18:49 UTC+8]
+:::
+
+### <input class="task-list-item-checkbox" disabled type="checkbox"> 看板目錄的敘述文字顯示不正確
+
+::: spoiler {state=open} 問題敘述
+> ![](https://media.discordapp.net/attachments/489808831337988107/910880993639038996/unknown.png) [name=r2] [time=2021_11_18 (Thu) 21:15 UTC+8]
+> ![](https://media.discordapp.net/attachments/489808831337988107/910881056108994580/unknown.png) [name=r2] [time=2021_11_18 (Thu) 21:16 UTC+8]
+> 你有空再研究發生什麼事了@@ [name=r2] [time=2021_11_18 (Thu) 21:16 UTC+8]
+
+> 這個造成的嗎？
+![](https://github.com/ccns/dreambbs/commit/15ad16f0bc314e9c354fbdc2ab84de322f145605#diff-def0824a4d87a550f698f4dc81cdc052b1ec4839ca5a19a9c36114fa22191021L1250) [name=IID] [time=2021_11_18 (Thu) 22:14 UTC+8]
+> 因爲我是直接 hardcode 長度的，沒考慮到會切到字。 \
+> 應該是中文敘述的第一個字元被切了。 [name=IID] [time=2021_11_18 (Thu) 22:15 UTC+8]
+:::
+
 ## 文件上的 TODO
 
 ### <input class="task-list-item-checkbox" disabled type="checkbox"> 撰寫系統管理細節
