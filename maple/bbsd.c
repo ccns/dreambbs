@@ -46,14 +46,15 @@ static const char *argv_default[] = {
 /* Thor.990113: exports for anonymous log */
 /* static */ char rusername[40];
 
-/* IID.2021-04-02: User address information string */
-static char frominfo[128];
-
-/* static int mport; */ /* Thor.990325: 不需要了:P */
-static ip_addr tn_addr;
-
-/* IID.20190903: The unix socket path for listening proxy connections */
-static const char *unix_path;
+/* IID.2021-11-25: Extra connection info */
+typedef struct
+{
+    ip_addr addr;
+    /* int lport; */ /* Thor.990325: 不需要了:P */
+    const char *unpath; /* IID.20190903: The unix socket path for listening proxy connections */
+    char frominfo[128]; /* IID.2021-04-02: User address information string */
+} ConnInfo;
+static ConnInfo tn; /* IID.2021-11-26: TelNet-based connection; vs. `cs`: Client-Server connection (has never been implemented) */
 
 
 #ifdef  TREAT
@@ -260,7 +261,7 @@ login_abort(
 {
     outs(msg);
     refresh();
-    blog("LOGIN", frominfo);
+    blog("LOGIN", tn.frominfo);
     exit(0);
 }
 
@@ -502,25 +503,25 @@ logattempt(
 )
 {
     char buf[256], fpath[80];
-    const char *const conn_type = (unix_path) ? "WSP" : "BBS";
+    const char *const conn_type = (tn.unpath) ? "WSP" : "BBS";
 
 //  time_t now = time(0);
     struct tm *p;
     p = localtime(&ap_start);
     sprintf(buf, "%02d/%02d/%02d %02d:%02d:%02d %c%s\t%s\n",
         p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
-        p->tm_hour, p->tm_min, p->tm_sec, type, conn_type, frominfo);
+        p->tm_hour, p->tm_min, p->tm_sec, type, conn_type, tn.frominfo);
 
 #if 0
     sprintf(buf, "%c%-*s[%s] %s\n", type, IDLEN, cuser.userid,
-        Etime(&ap_start), frominfo);
+        Etime(&ap_start), tn.frominfo);
     f_cat(FN_LOGIN_LOG, buf);
 #endif
 
 //  str_stamp(fpath, &ap_start);
-//  sprintf(buf, "%s %cBBS\t%s\n", fpath, type, frominfo);
+//  sprintf(buf, "%s %cBBS\t%s\n", fpath, type, tn.frominfo);
     /* Thor.990415: currtitle已內含ip */ /* IID.2021-04-02: Use `frominfo` for user address information instead */
-    /* sprintf(buf, "%s %cBBS\t%s ip:%08x\n", fpath, type, frominfo, tn_addr); */
+    /* sprintf(buf, "%s %cBBS\t%s ip:%08x\n", fpath, type, tn.frominfo, tn.addr); */
     /* Thor.980803: 追蹤 ip address */
     usr_fpath(fpath, cuser.userid, FN_LOG);
     f_cat(fpath, buf);
@@ -529,7 +530,7 @@ logattempt(
     {
         usr_fpath(fpath, cuser.userid, FN_LOGINS_BAD);
         sprintf(buf, "[%s] %s %s\n", Ctime(&ap_start), conn_type,
-            (type == '*' ? frominfo: fromhost));
+            (type == '*' ? tn.frominfo: fromhost));
         f_cat(fpath, buf);
     }
 }
@@ -554,7 +555,7 @@ utmp_setup(
     utmp.pid = currpid;
     utmp.userno = cuser.userno;
     utmp.mode = bbsmode = mode;
-    utmp.in_addr = tn_addr;
+    utmp.in_addr = tn.addr;
     utmp.talker = -1;
     for (int i = 0; i < COUNTOF(utmp.mslot); ++i)
         utmp.mslot[i] = -1;
@@ -581,7 +582,7 @@ utmp_setup(
 
     /* cache.20130407 保存使用者登入IP位置(IPv4) */
     /* IID.20191228: Or IPv6 */
-    getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), ipv6addr, sizeof(ipv6addr), NULL, NI_MAXSERV, NI_NUMERICHOST);
+    getnameinfo((struct sockaddr *)&tn.addr, sizeof(tn.addr), ipv6addr, sizeof(ipv6addr), NULL, NI_MAXSERV, NI_NUMERICHOST);
 
     /* Thor: 告訴User已經滿了放不下... */
 
@@ -610,10 +611,10 @@ tn_login(void)
 
     char passbuf[PLAINPASSSIZE];
 
-    /* sprintf(frominfo, "%s@%s", rusername, fromhost); */
+    /* sprintf(tn.frominfo, "%s@%s", rusername, fromhost); */
     /* Thor.990415: 紀錄ip, 怕正查不到 */
-    getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), fpath, sizeof(fpath), NULL, NI_MAXSERV, NI_NUMERICHOST);
-    sprintf(frominfo, "%s@%s ip:%s (%d)", rusername, fromhost, fpath, currpid);
+    getnameinfo((struct sockaddr *)&tn.addr, sizeof(tn.addr), fpath, sizeof(fpath), NULL, NI_MAXSERV, NI_NUMERICHOST);
+    sprintf(tn.frominfo, "%s@%s ip:%s (%d)", rusername, fromhost, fpath, currpid);
 
 
 /* by visor */
@@ -713,7 +714,7 @@ tn_login(void)
                 if ((level & PERM_ADMIN) && (cuser.ufo2 & UFO2_ACL))
                 {
                     char buf[256]; /* check ip */
-                    getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), buf, sizeof(buf), NULL, NI_MAXSERV, NI_NUMERICHOST);
+                    getnameinfo((struct sockaddr *)&tn.addr, sizeof(tn.addr), buf, sizeof(buf), NULL, NI_MAXSERV, NI_NUMERICHOST);
                     usr_fpath(fpath, cuser.userid, "acl");
                     str_lower(rusername, rusername);      /* lkchu.981201: 換小寫 */
                     str_lower(fromhost, fromhost);
@@ -791,10 +792,10 @@ tn_login(void)
 
 //  setproctitle("%s@%s", cuser.userid, fromhost);
 
-    blog("ENTER", frominfo);
+    blog("ENTER", tn.frominfo);
     // IID.20190521: Currently unused; disabled for now.
     // if (rusername[0])
-    //     strcpy(cuser.ident, frominfo);
+    //     strcpy(cuser.ident, tn.frominfo);
 
     /* --------------------------------------------------- */
     /* 初始化 utmp、flag、mode                           */
@@ -1136,7 +1137,7 @@ tn_main(void)
     double load[3], load_norm;
     char buf[128], buf2[128];
 
-    getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), buf2, sizeof(buf2), NULL, NI_MAXSERV, NI_NUMERICHOST);
+    getnameinfo((struct sockaddr *)&tn.addr, sizeof(tn.addr), buf2, sizeof(buf2), NULL, NI_MAXSERV, NI_NUMERICHOST);
     str_lower(buf, fromhost);
 
     if (acl_has(FN_ETC_BANIP_ACL, "", buf) > 0
@@ -1522,7 +1523,7 @@ static int start_daemon(int argc, char *const argv[])
     close(1);
     close(2);
 
-    port = get_port(argc, argv, &unix_path);
+    port = get_port(argc, argv, &tn.unpath);
 
     if (!port)
         exit(0); /* Nothing to listen. In case no valid default ports are given */
@@ -1540,10 +1541,10 @@ static int start_daemon(int argc, char *const argv[])
         {
             char port_str[NI_MAXSERV];
             getnameinfo((struct sockaddr *) &sin, n, NULL, NI_MAXHOST, port_str, sizeof(port_str), NI_NUMERICSERV);
-            /* mport = */ port = atoi(port_str);
+            /* tn.lport = */ port = atoi(port_str);
         }
 #endif
-        /* mport = port; */ /* Thor.990325: 不需要了:P */
+        /* tn.lport = port; */ /* Thor.990325: 不需要了:P */
 
         sprintf(data, "%d\t%s\t%d\tinetd -i\n", getpid(), buf, port);
         f_cat(PID_FILE_INET, data);
@@ -1569,13 +1570,13 @@ static int start_daemon(int argc, char *const argv[])
         const char *unix_path_next;
         while ((port_next = get_port(argc, argv, &unix_path_next)))
         {
-            /* The next port presents; make the `fork()` child handle the current `port` and `unix_path` */
+            /* The next port presents; make the `fork()` child handle the current `port` and `tn.unpath` */
             if (fork() == 0)
                 break;
 
             sleep(1);
             port = port_next;
-            unix_path = unix_path_next;
+            tn.unpath = unix_path_next;
         }
     }
 
@@ -1593,7 +1594,7 @@ static int start_daemon(int argc, char *const argv[])
         hints.ai_next = NULL;
         hosts = &hints;
 
-        strlcpy(sun.sun_path, unix_path, sizeof(sun.sun_path));
+        strlcpy(sun.sun_path, tn.unpath, sizeof(sun.sun_path));
         // remove the file first if it exists.
         unlink(sun.sun_path);
     }
@@ -1636,7 +1637,7 @@ static int start_daemon(int argc, char *const argv[])
             ld.l_onoff = ld.l_linger = 0;
             setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
 
-            /* mport = port; */ /* Thor.990325: 不需要了:P */
+            /* tn.lport = port; */ /* Thor.990325: 不需要了:P */
 
             if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) || (listen(fd, QLEN) < 0))
             {
@@ -1647,8 +1648,8 @@ static int start_daemon(int argc, char *const argv[])
 
             if (port == -2)
             {
-                chown(unix_path, BBSUID, WWWGID);
-                chmod(unix_path, 0660);
+                chown(tn.unpath, BBSUID, WWWGID);
+                chmod(tn.unpath, 0660);
             }
 
             /* Success */
@@ -1903,7 +1904,7 @@ int main(int argc, char *argv[])
         lsock = start_daemon(COUNTOF(argv_default), (char *const *)argv_default);
     }
 
-    if (unix_path)
+    if (tn.unpath)
         is_proxy = true;
 
     main_signals();
@@ -1978,7 +1979,7 @@ int main(int argc, char *argv[])
                 break;
             default:; /* Unsupported address family */
             }
-            /* mport = cdata.lport; */
+            /* tn.lport = cdata.lport; */
         }
 
         switch (sin.ss_family)
@@ -2048,14 +2049,14 @@ int main(int argc, char *argv[])
 
         /* rfc931((struct sockaddr *)&sin, fromhost, rusername); */
 
-        tn_addr = *(ip_addr *)&sin;
+        tn.addr = *(ip_addr *)&sin;
 
 #ifdef NOIDENT
         /* cache.090728: 連線不反查, 增加速度 */
-        getnameinfo((struct sockaddr *)&tn_addr, sizeof(tn_addr), fromhost, sizeof(fromhost), NULL, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV);
+        getnameinfo((struct sockaddr *)&tn.addr, sizeof(tn.addr), fromhost, sizeof(fromhost), NULL, NI_MAXSERV, NI_NUMERICHOST | NI_NUMERICSERV);
 #else
         /* Thor.990325: 修改dns_ident定義, 來自哪if連那 */
-        dns_ident(0 /* mport */, &tn_addr, fromhost, sizeof(fromhost), rusername, sizeof(rusername));
+        dns_ident(0 /* tn.lport */, &tn.addr, fromhost, sizeof(fromhost), rusername, sizeof(rusername));
 #endif
 
         telnet_init();
