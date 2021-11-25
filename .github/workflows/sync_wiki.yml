@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           persist-credentials: false
+          fetch-depth: 0
       - name: sync
         run: |
           git remote add wiki "${GITHUB_SERVER_URL%%://*}://${PAT_USERNAME}:${PAT_TOKEN}@${GITHUB_SERVER_URL#*://}/$GITHUB_REPOSITORY.wiki.git"

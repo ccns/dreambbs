@@ -11,6 +11,7 @@ jobs:
         with:
           repository: ${{ format('{0}.wiki', github.repository) }}
           persist-credentials: false
+          fetch-depth: 0
       - name: sync
         run: |
           git remote add main-repo "${GITHUB_SERVER_URL%%://*}://${PAT_USERNAME}:${PAT_TOKEN}@${GITHUB_SERVER_URL#*://}/$GITHUB_REPOSITORY.git"
