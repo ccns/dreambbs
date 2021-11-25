@@ -51,6 +51,7 @@ typedef struct
 {
     ip_addr addr;
     int lport; /* Thor.990325: 不需要了:P */ /* IID.2021-11-26: Re-enable for detecting connection protocol */
+    unsigned int enc;
     unsigned int flags;
     const char *unpath; /* IID.20190903: The unix socket path for listening proxy connections */
     char frominfo[128]; /* IID.2021-04-02: User address information string */
@@ -635,6 +636,13 @@ tn_login(void)
     /* 081119.cache: 正常顯示進站畫面 */
     move(b_lines, 0);
     prints("\x1b[m參觀用帳號：\x1b[1;32mguest\x1b[m  申請新帳號：\x1b[1;31mnew\x1b[m");
+
+    /* TODO(IID.2021-11-26): Implement UTF-8 conversion so that this fallback can be removed */
+    if (tn.enc == CONN_ENC_UTF8) /* Connection via SSH as user bbsu */
+    {
+        tn.enc = CONN_ENC_NATIVE;
+        prints("  UTF-8 isn't supported; u in bbsu ignored.");
+    }
 
     /*move(b_lines, 0);
     outs("※ 無法連線時，請利用 port 3456 上站");*/
@@ -1970,6 +1978,7 @@ int main(int argc, char *argv[])
                 continue;
             }
 
+            tn.enc = cdata.encoding;
             tn.flags = cdata.flags;
 
             switch (value = cdata.raddr_len)
@@ -1990,6 +1999,7 @@ int main(int argc, char *argv[])
         }
         else
         {
+            tn.enc = CONN_ENC_NATIVE;
             tn.flags = 0U;
         }
 

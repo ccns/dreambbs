@@ -1319,6 +1319,8 @@ typedef struct
     uint32_t flags;
 } conn_data_t;
 
+#define CONN_ENC_NATIVE  0U
+#define CONN_ENC_UTF8    1U
 #define CONN_FLAG_SECURE BFLAG(0)
 
 #endif                          /* STRUCT_H */
