@@ -1,7 +1,8 @@
 [Unit]
 Description=DreamBBS Unixsocket server
-After=syslog.target network.target remote-fs.target nss-lookup.target
+After=syslog.target network.target remote-fs.target nss-lookup.target startbbs.service
 Requires=startbbs.service
+Wants=xchatd.service
 
 [Service]
 User=@BBSUSR@

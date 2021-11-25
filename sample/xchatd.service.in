@@ -1,6 +1,7 @@
 [Unit]
 Description=DreamBBS Chatroom Daemon
-After=syslog.target network.target remote-fs.target nss-lookup.target
+After=syslog.target network.target remote-fs.target nss-lookup.target startbbs.service
+Requires=startbbs.service
 
 [Service]
 User=@BBSUSR@
@@ -15,5 +16,3 @@ PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target
-Wants=bbsd.service
-Requires=startbbs.service
