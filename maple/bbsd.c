@@ -40,7 +40,7 @@ static const char *argv_default[] = {
     NULL, /* For `argv[0]`, the name of the program */
     "23",
     "3456",
-    "-u", "run/bbsd.sock",
+    "-u", "run/bbsd.socket",
 };
 
 /* Thor.990113: exports for anonymous log */
