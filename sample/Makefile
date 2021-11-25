@@ -17,7 +17,7 @@ all: $(DEST)
 
 .for target in $(DEST)
 $(target): $(target).in
-	sed 's/@BBSHOME@/$(BBSHOME:S/\//\\\//g)/; s/@BBSUSR@/$(BBSUSR)/; s/@BBSGROUP@/$(BBSGROUP)/' $? > $@
+	sed 's/@BBSHOME@/$(BBSHOME:S/\//\\\//g)/g; s/@BBSUSR@/$(BBSUSR)/g; s/@BBSGROUP@/$(BBSGROUP)/g' $? > $@
 .endfor
 
 clean:

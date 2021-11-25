@@ -6,7 +6,7 @@ WSPROXY = wsproxy/wsproxy.lua
 
 .for target in $(SH)
 $(target): $(target).in
-	sed 's/@BBSHOME@/$(BBSHOME:S/\//\\\//g)/; s/@BBSVER@/$(BBSVER)/' $? > $@
+	sed 's/@BBSHOME@/$(BBSHOME:S/\//\\\//g)/g; s/@BBSVER@/$(BBSVER)/g' $? > $@
 .endfor
 
 all: $(SH)
