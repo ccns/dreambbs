@@ -3,6 +3,7 @@ name: Synchronizing GitHub Wiki with branch "wiki"
 on:
   push:
     branches: [wiki]
+  workflow_dispatch:
 
 jobs:
   sync-wiki:

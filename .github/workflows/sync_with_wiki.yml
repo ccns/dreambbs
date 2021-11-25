@@ -1,7 +1,7 @@
 name: Synchronizing branch "wiki" with GitHub Wiki
 
 on:
-  gollum
+  [gollum, workflow_dispatch]
 
 jobs:
   sync-with-wiki:
