@@ -21,7 +21,7 @@ v3.0 支援在原生 x86_64 環境中編譯與執行，不須安裝 32-bit 版�
 
 套件部分，須要先安裝：`git`, `make`, `cmake`, `gcc`/`clang`, `g++`/`clang++`。
 
-也建議安裝：`vim`。
+也建議安裝：`vim`。若對類似編輯器介面不熟，也可用 `nano` 或其他更簡易的編輯器介面來編輯，
 
 ## 2. 建立 BBS 帳號
 
@@ -40,6 +40,8 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 
 (註：v3.0 以後的版本，不再假設 BBS 家目錄為 `/home/bbs`，可自行選擇適合路徑)
 
+首先編輯 `/etc/passwd` 來增加名為 `bbs` 的使用者：
+
 **== 以下用 root 權限 !! ==**
 
     # mkdir /home/bbs
@@ -54,13 +56,11 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 *(也要注意 UID 不能與檔案裡其他使用者的重複，以免出現權限問題)*
 
 
-接下來編輯 `/etc/group` 來增加名為 `bbs` 的群組。這裡使用 `vim` 編輯，
+接下來編輯 `/etc/group` 來增加名為 `bbs` 的群組。
 
 (註：v2.0 以後的版本，不再假設群組名稱為 `bbs`，可自行取名)
 
-若對類似編輯器介面不熟，也可用 `nano` 或其他更簡易的編輯器介面來編輯，
-
-    # vim /etc/group
+    # vigr
 
 在該檔最後一行加上：
 
