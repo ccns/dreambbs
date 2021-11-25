@@ -9,6 +9,7 @@
 set(DEST
     bbsd.service bbsd_unixsocket.service
     startbbs.service xchatd.service
+    bbs-sshd.service
     crontab
 )
 

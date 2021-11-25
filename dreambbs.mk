@@ -82,6 +82,9 @@ BBSUTCZONE != $(GETVAR$(var::= "$(BBSUTCZONE)")$(else_var::= $(GETVALUE$(conf::=
 MRB_CONFIG_PATH != which mruby-config
 MRB_CONFIG != $(GETVAR$(var::= "$(MRB_CONFIG)")$(else_var::= $(GETVALUE$(conf::= "MRB_CONFIG")$(default::= "$(MRB_CONFIG_PATH)")$(hdr::= $(BBSCONF_ORIGIN)))))
 
+## The project root directory of bbs-sshd
+BBS_SSHD_ROOT != $(GETVAR$(var::= "$(BBS_SSHD_ROOT)")$(else_var::= $(GETVALUE$(conf::= "BBS_SSHD_ROOT")$(default::= "$(BBSHOME)/bbs-sshd")$(hdr::= $(BBSCONF)))))
+
 # rules ref: PttBBS: mbbsd/Makefile
 DEF_LIST	!= sh -c '$(GETCONFS$(hdr::= $(BBSCONF)))'
 DEF_TEST	 = [ $(DEF_LIST:M$(conf:M*:S/"//g:N")) ]  # Balance the quotes

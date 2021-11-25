@@ -1,0 +1,16 @@
+[Unit]
+Description=bbs-sshd, an SSH-to-telnet-over-UNIX-socket proxy (https://github.com/ptt/bbs-sshd)
+After=syslog.target network.target remote-fs.target nss-lookup.target
+
+[Service]
+Type=forking
+PIDFile=@BBSHOME@/run/bbs-sshd.pid
+ExecStart=@BBS_SSHD_ROOT@/target/release/bbs-sshd -f @BBS_SSHD_ROOT@/bbs-sshd.toml
+ExecStop=/bin/kill -s TERM $MAINPID
+Restart=on-failure
+RestartSec=42s
+KillMode=process
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

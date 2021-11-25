@@ -58,6 +58,7 @@ export: deprecated
 	@$(EXPORTCONF$(exconf::= BBSHOME)$(exvalue::= \"$(BBSHOME)\"))
 	@$(EXPORTCONF$(exconf::= BBSUTCZONE)$(exvalue::= \"$(BBSUTCZONE)\"))
 	@$(EXPORTCONF$(exconf::= MRB_CONFIG)$(exvalue::= \"$(MRB_CONFIG)\"))
+	@$(EXPORTCONF$(exconf::= BBS_SSHD_ROOT)$(exvalue::= \"$(BBS_SSHD_ROOT)\"))
 
 configure: deprecated
 	@printf "\033[1;36mGenerating '$(EXPORT_FILE)'...\033[0m\n" >&2

@@ -11,13 +11,14 @@ SRCROOT	= $(.CURDIR)/..
 
 DEST 	+= bbsd.service bbsd_unixsocket.service \
 	   startbbs.service xchatd.service \
+	   bbs-sshd.service \
 	   crontab
 
 all: $(DEST)
 
 .for target in $(DEST)
 $(target): $(target).in
-	sed 's/@BBSHOME@/$(BBSHOME:S/\//\\\//g)/g; s/@BBSUSR@/$(BBSUSR)/g; s/@BBSGROUP@/$(BBSGROUP)/g' $? > $@
+	sed 's/@BBSHOME@/$(BBSHOME:S/\//\\\//g)/g; s/@BBSUSR@/$(BBSUSR)/g; s/@BBSGROUP@/$(BBSGROUP)/g; s/@BBS_SSHD_ROOT@/$(BBS_SSHD_ROOT:S/\//\\\//g)/g' $? > $@
 .endfor
 
 clean:

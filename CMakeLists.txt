@@ -171,6 +171,9 @@ execute_process(
 )
 LOADVALUE(MRB_CONFIG "${MRB_CONFIG_PATH}" ${BBSCONF_ORIGIN} MRB_CONFIG)
 
+## The project root directory of bbs-sshd
+LOADVALUE(BBS_SSHD_ROOT "${BBSHOME}/bbs-sshd" ${BBSCONF_ORIGIN} BBS_SSHD_ROOT)
+
 # Flags for enabling modules
 DEF_TEST(M3_USE_PMORE ${BBSCONF} USE_PMORE)
 DEF_TEST(M3_USE_PFTERM ${BBSCONF} USE_PFTERM)
