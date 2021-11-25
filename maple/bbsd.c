@@ -50,7 +50,8 @@ static const char *argv_default[] = {
 typedef struct
 {
     ip_addr addr;
-    /* int lport; */ /* Thor.990325: 不需要了:P */
+    int lport; /* Thor.990325: 不需要了:P */ /* IID.2021-11-26: Re-enable for detecting connection protocol */
+    unsigned int flags;
     const char *unpath; /* IID.20190903: The unix socket path for listening proxy connections */
     char frominfo[128]; /* IID.2021-04-02: User address information string */
 } ConnInfo;
@@ -503,7 +504,11 @@ logattempt(
 )
 {
     char buf[256], fpath[80];
-    const char *const conn_type = (tn.unpath) ? "WSP" : "BBS";
+    const char *const conn_type =
+        (!tn.unpath) ? "BBS" /* Raw telnet */
+        : (!(tn.flags & CONN_FLAG_SECURE)) ? "WSP" /* (Insecure) WebSocket (wsproxy) */
+        : (tn.lport == 22) ? "SSH" /* Secure Shell (bbs-sshd) (default port) */
+        : "WSS"; /* WebSocket Secure (wsproxy) */ /* FIXME(IID.2021-11-26): Detect SSH via a non-default port) */
 
 //  time_t now = time(0);
     struct tm *p;
@@ -1541,10 +1546,10 @@ static int start_daemon(int argc, char *const argv[])
         {
             char port_str[NI_MAXSERV];
             getnameinfo((struct sockaddr *) &sin, n, NULL, NI_MAXHOST, port_str, sizeof(port_str), NI_NUMERICSERV);
-            /* tn.lport = */ port = atoi(port_str);
+            tn.lport = port = atoi(port_str);
         }
 #endif
-        /* tn.lport = port; */ /* Thor.990325: 不需要了:P */
+        tn.lport = port; /* Thor.990325: 不需要了:P */ /* IID.2021-11-26: For protocol detection */
 
         sprintf(data, "%d\t%s\t%d\tinetd -i\n", getpid(), buf, port);
         f_cat(PID_FILE_INET, data);
@@ -1637,7 +1642,7 @@ static int start_daemon(int argc, char *const argv[])
             ld.l_onoff = ld.l_linger = 0;
             setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));
 
-            /* tn.lport = port; */ /* Thor.990325: 不需要了:P */
+            tn.lport = port; /* Thor.990325: 不需要了:P */ /* IID.2021-11-26: For protocol detection */
 
             if ((bind(fd, host->ai_addr, host->ai_addrlen) < 0) || (listen(fd, QLEN) < 0))
             {
@@ -1965,6 +1970,8 @@ int main(int argc, char *argv[])
                 continue;
             }
 
+            tn.flags = cdata.flags;
+
             switch (value = cdata.raddr_len)
             {
             case 4:
@@ -1979,7 +1986,11 @@ int main(int argc, char *argv[])
                 break;
             default:; /* Unsupported address family */
             }
-            /* tn.lport = cdata.lport; */
+            tn.lport = cdata.lport;
+        }
+        else
+        {
+            tn.flags = 0U;
         }
 
         switch (sin.ss_family)
