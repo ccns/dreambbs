@@ -13,5 +13,8 @@ jobs:
           persist-credentials: false
       - name: sync
         run: |
-          git remote add wiki $GITHUB_SERVER_URL/$GITHUB_REPOSITORY.wiki.git
+          git remote add wiki "${GITHUB_SERVER_URL%%://*}://${PAT_USERNAME}:${PAT_TOKEN}@${GITHUB_SERVER_URL#*://}/$GITHUB_REPOSITORY.wiki.git"
           git push wiki @:master
+        env:
+          PAT_USERNAME: ${{ secrets.PAT_USERNAME }}
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
