@@ -3,8 +3,8 @@ Description=Start DreamBBS Telnet server
 After=syslog.target network.target remote-fs.target nss-lookup.target
 
 [Service]
-User=bbs
-Group=bbs
+User=@BBSUSR@
+Group=@BBSGROUP@
 Type=oneshot
 ## if set User and Group as bbs, then we don't need sudo commands
 ExecStart=@BBSHOME@/bin/camera
