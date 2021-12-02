@@ -60,7 +60,7 @@ do_cmd(MENU *mptr, XO *xo, int y, int x)
 {
     GCC_UNUSED unsigned int mode;
     screen_backup_t old_screen;
-    int mmode = mptr->umode;
+    unsigned int mmode = mptr->umode;
     /* IID.2021-12-02: Helper union for proper handling of `M_ARG` */
     typedef union {
         MenuItem item;

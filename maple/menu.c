@@ -1611,7 +1611,7 @@ domenu_exec(
         case '\n':
             {
                 MENU *const mptr = xyz->table[xo->pos];
-                int mmode = mptr->umode;
+                unsigned int mmode = mptr->umode;
                 int res;
                 /* IID.2021-12-02: Helper union for proper handling of `M_ARG` */
                 typedef union {
