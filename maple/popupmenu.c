@@ -60,27 +60,41 @@ do_cmd(MENU *mptr, XO *xo, int y, int x)
 {
     GCC_UNUSED unsigned int mode;
     screen_backup_t old_screen;
-    MenuItem mitem = mptr->item;
     int mmode = mptr->umode;
+    /* IID.2021-12-02: Helper union for proper handling of `M_ARG` */
+    typedef union {
+        MenuItem item;
+        FuncArg funcarg;
+        DlFuncArg dlfuncarg;
+    } MItem;
+    MItem m =
+        (mmode & M_ARG) ? LISTLIT(MItem){.funcarg = *mptr->item.funcarg} /* Make a copy of the `FuncArg` object */
+        : LISTLIT(MItem){.item = mptr->item};
 
 #if !NO_SO
     if (mmode & M_DL(0))
     {
         if (mmode & M_ARG)
         {
-            mitem.funcarg->func = (int (*)(const void *)) DL_GET(mitem.dlfuncarg->func);
-            if (!mitem.funcarg->func)
+            m.funcarg.func = (int (*)(const void *)) DL_GET(m.dlfuncarg.func);
+            if (!m.funcarg.func)
                 return 0;
+  #ifndef DL_HOTSWAP
+            /* Update the `FuncArg` object */
+            mptr->item.funcarg->func = m.funcarg.func;
+  #endif
         }
         else
         {
-            mitem.func = (int (*)(void)) DL_GET(mitem.dl.func);
-            if (!mitem.func)
+            m.item.func = (int (*)(void)) DL_GET(m.item.dl.func);
+            if (!m.item.func)
                 return 0;
+  #ifndef DL_HOTSWAP
+            mptr->item.func = m.item.func;
+  #endif
         }
         mmode &= ~M_DL(0);
   #ifndef DL_HOTSWAP
-        mptr->item = mitem;
         mptr->umode = mmode;
   #endif
     }
@@ -92,21 +106,21 @@ do_cmd(MENU *mptr, XO *xo, int y, int x)
     {
 //      sprintf(t, "¡i%s¡j", mptr->desc);
         scr_restore_free(&old_screen);
-        return do_menu(mitem.menu, xo, y, x);
+        return do_menu(m.item.menu, xo, y, x);
     }
     else if (mmode & M_ARG)
     {
         if (mmode & M_XO)
-            mode = mitem.funcarg->xofunc(xo, mitem.funcarg->arg);
+            mode = m.funcarg.xofunc(xo, m.funcarg.arg);
         else
-            mode = mitem.funcarg->func(mitem.funcarg->arg);
+            mode = m.funcarg.func(m.funcarg.arg);
     }
     else
     {
         if (mmode & M_XO)
-            mode = mitem.xofunc(xo);
+            mode = m.item.xofunc(xo);
         else
-            mode = mitem.func();
+            mode = m.item.func();
     }
 
     scr_free(&old_screen);

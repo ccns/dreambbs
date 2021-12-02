@@ -1611,26 +1611,40 @@ domenu_exec(
         case '\n':
             {
                 MENU *const mptr = xyz->table[xo->pos];
-                MenuItem mitem = mptr->item;
                 int mmode = mptr->umode;
                 int res;
+                /* IID.2021-12-02: Helper union for proper handling of `M_ARG` */
+                typedef union {
+                    MenuItem item;
+                    FuncArg funcarg;
+                    DlFuncArg dlfuncarg;
+                } MItem;
+                MItem m =
+                    (mmode & M_ARG) ? LISTLIT(MItem){.funcarg = *mptr->item.funcarg} /* Make a copy of the `FuncArg` object */
+                    : LISTLIT(MItem){.item = mptr->item};
 #if !NO_SO
                 /* Thor.990212: dynamic load, with negative umode */
                 if (mmode & M_DL(0))
                 {
                     if (mmode & M_ARG)
                     {
-                        mitem.funcarg->func = (int (*)(const void *)) DL_GET(mitem.dlfuncarg->func);
-                        if (!mitem.funcarg->func) break;
+                        m.funcarg.func = (int (*)(const void *)) DL_GET(m.dlfuncarg.func);
+                        if (!m.funcarg.func) break;
+  #ifndef DL_HOTSWAP
+                        /* Update the `FuncArg` object */
+                        mptr->item.funcarg->func = m.funcarg.func;
+  #endif
                     }
                     else
                     {
-                        mitem.func = (int (*)(void)) DL_GET(mitem.dl.func);
-                        if (!mitem.func) break;
+                        m.item.func = (int (*)(void)) DL_GET(m.item.dl.func);
+                        if (!m.item.func) break;
+  #ifndef DL_HOTSWAP
+                        mptr->item.func = m.item.func;
+  #endif
                     }
                     mmode &= ~M_DL(0);
   #ifndef DL_HOTSWAP
-                    mptr->item = mitem;
                     mptr->umode = mmode;
   #endif
                 }
@@ -1641,7 +1655,7 @@ domenu_exec(
                 {
                     if (xyz->cmdcur_max == 1)
                         xyz->mtail->level = PERM_MENU + mptr->desc[0];
-                    xyz->menu = mitem.menu;
+                    xyz->menu = m.item.menu;
                     cmd = XO_INIT;
                     continue;
                 }
@@ -1649,16 +1663,16 @@ domenu_exec(
                 if (mmode & M_ARG)
                 {
                     if (mmode & M_XO)
-                        res = mitem.funcarg->xofunc(xo, mitem.funcarg->arg);
+                        res = m.funcarg.xofunc(xo, m.funcarg.arg);
                     else
-                        res = mitem.funcarg->func(mitem.funcarg->arg);
+                        res = m.funcarg.func(m.funcarg.arg);
                 }
                 else
                 {
                     if (mmode & M_XO)
-                        res = mitem.xofunc(xo);
+                        res = m.item.xofunc(xo);
                     else
-                        res = mitem.func();
+                        res = m.item.func();
                 }
 
                 utmp_mode(xyz->mtail->umode);
