@@ -505,9 +505,9 @@ BRC 是採用一篇文章一個紀錄的方式記錄閱讀紀錄，並且分開�
 因爲 DreamBBS v3 Xover 支援空清單 (用 `XO_POSF` 標示需要非空清單的操作按鍵)，所以可以簡單地做到。  [name=IID] [time=2021_11_13 (Sat) 18:49 UTC+8]
 :::
 
-### <input class="task-list-item-checkbox" disabled type="checkbox"> 看板目錄的敘述文字顯示不正確
+### <input class="task-list-item-checkbox" disabled type="checkbox" checked> 看板目錄的敘述文字顯示不正確
 
-::: spoiler {state=open} 問題敘述
+::: spoiler 問題敘述 (solved by [2bd076be2b](https://github.com/ccns/dreambbs/commit/2bd076be2b5f72efa1d600183be0055e9a845f17))
 > ![](https://media.discordapp.net/attachments/489808831337988107/910880993639038996/unknown.png) [name=r2] [time=2021_11_18 (Thu) 21:15 UTC+8]
 > ![](https://media.discordapp.net/attachments/489808831337988107/910881056108994580/unknown.png) [name=r2] [time=2021_11_18 (Thu) 21:16 UTC+8]
 > 你有空再研究發生什麼事了@@ [name=r2] [time=2021_11_18 (Thu) 21:16 UTC+8]
