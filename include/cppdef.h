@@ -196,7 +196,7 @@ template <class T>
     (offsetof(Type, Type##_FLEX_MEMBER) \
       + (n) * sizeof((*NULL_MEMBER_PTR(Type, Type##_FLEX_MEMBER))[0]))
 
-#define COUNTOF(x)      (sizeof(x)/sizeof(x[0]))
+#define COUNTOF(x)      (sizeof(x)/sizeof((x)[0]))
 
 /* The argument `strlit` should expand to a string literal */
 #define STRLITLEN(strlit) (sizeof(strlit "" /* Ensure that `strlit` is a string literal */) - 1)
@@ -207,12 +207,12 @@ template <class T>
 
 #if NO_SO
 
-#define DL_NAME(module_str, obj)   (&obj)
-#define DL_GET(dl_name)   (&dl_name)
-#define DL_CALL(dl_name)  dl_name
+#define DL_NAME(module_str, obj)   (&(obj))
+#define DL_GET(dl_name)   (&(dl_name))
+#define DL_CALL(dl_name)  (dl_name)
 
-#define DL_NAME_GET(module_str, obj)  (&obj)
-#define DL_NAME_CALL(module_str, func)  func
+#define DL_NAME_GET(module_str, obj)  (&(obj))
+#define DL_NAME_CALL(module_str, func)  (func)
 
 #undef DL_HOTSWAP
 

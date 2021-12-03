@@ -65,19 +65,19 @@ static int gline;
 #define ROOM_ALL        (NULL)
 
 
-#define LOCKED(room)    (room->rflag & ROOM_LOCKED)
-#define SECRET(room)    (room->rflag & ROOM_SECRET)
-#define OPENTOPIC(room) (room->rflag & ROOM_OPENTOPIC)
+#define LOCKED(room)    ((room)->rflag & ROOM_LOCKED)
+#define SECRET(room)    ((room)->rflag & ROOM_SECRET)
+#define OPENTOPIC(room) ((room)->rflag & ROOM_OPENTOPIC)
 
 
-#define RESTRICTED(usr) (usr->uflag == 0)       /* guest */
-#define CHATSYSOP(usr)  (usr->uflag & (PERM_SYSOP | PERM_CHATROOM))
+#define RESTRICTED(usr) ((usr)->uflag == 0)       /* guest */
+#define CHATSYSOP(usr)  ((usr)->uflag & (PERM_SYSOP | PERM_CHATROOM))
 #define PERM_ROOMOP     PERM_CHAT       /* Thor: 借 PERM_CHAT為 PERM_ROOMOP */
 #define PERM_CHATOP     PERM_DENYCHAT   /* Thor: 借 PERM_DENYCHAT為 PERM_CHATOP */
-/* #define ROOMOP(usr)     (usr->uflag & ( PERM_ROOMOP | PERM_SYSOP | PERM_CHATROOM )) */
+/* #define ROOMOP(usr)     ((usr)->uflag & ( PERM_ROOMOP | PERM_SYSOP | PERM_CHATROOM )) */
 /* Thor.980603: PERM_CHATROOM改為 default 沒有 roomop, 但可以自己取得 chatop*/
-#define ROOMOP(usr)     (usr->uflag & (PERM_ROOMOP|PERM_CHATOP))
-#define CLOAK(usr)      (usr->uflag & PERM_CLOAK)
+#define ROOMOP(usr)     ((usr)->uflag & (PERM_ROOMOP|PERM_CHATOP))
+#define CLOAK(usr)      ((usr)->uflag & PERM_CLOAK)
 
 
 /* ----------------------------------------------------- */

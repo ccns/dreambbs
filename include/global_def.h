@@ -296,12 +296,12 @@
 
 #define KEY_NONE        0x4000  /* All key values should `< KEY_NONE` */
 
-#define Ctrl(c)         ( c & ~0x0060 )
-#define Meta(c)         ( c | 0x2000 )  /* All unmodified key values should `< 0x2000` */
-#define Shift(c)        ( c ^ 0x0020 )  /* Only works on 'A'-']', 'a'-'}', and special keys */
+#define Ctrl(c)         ( (c) & ~0x0060 )
+#define Meta(c)         ( (c) | 0x2000 )  /* All unmodified key values should `< 0x2000` */
+#define Shift(c)        ( (c) ^ 0x0020 )  /* Only works on 'A'-']', 'a'-'}', and special keys */
 /* If needed, apply `Shift()` after applying `Ctrl()`, e.g., `Shift(Ctrl(c))`. Do not do the reverse */
 /* For normal keys, do not apply `Shift()` on `Ctrl()`ed keys. */
-#define isprint2(c)     ((c >= ' ') && (c <= 0xff)) /* ((c & 0x80 || isprint(c))) */
+#define isprint2(c)     (((c) >= ' ') && ((c) <= 0xff)) /* (((c) & 0x80 || isprint(c))) */
 
 /* Whether the value of `x` is in the range for DBCS high/low byte */
 /* For checking whether the byte is the leading/trailing DBCS byte, use `IS_DBCS_LEAD*()` & `IS_DBCS_TRAIL*()` macros from "dao.h" instead */

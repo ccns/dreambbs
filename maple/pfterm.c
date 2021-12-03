@@ -90,7 +90,7 @@ static int vkey_is_typeahead(void)
 #endif // PMORE_STYLE_ANSI
 
 #ifndef ANSI_IS_PARAM
-#define ANSI_IS_PARAM(c) (c == ';' || c == ':' || (c >= '0' && c <= '9'))
+#define ANSI_IS_PARAM(c) ((c) == ';' || (c) == ':' || ((c) >= '0' && (c) <= '9'))
 #endif // ANSI_IS_PARAM
 
 //////////////////////////////////////////////////////////////////////////
@@ -351,8 +351,8 @@ static FlatTerm ft;
 // ftattr: 0| FG(3) | BOLD(1) | BG(3) | BLINK(1) |8
 #define FTATTR_FGSHIFT  (0)
 #define FTATTR_BGSHIFT  (4)
-#define FTATTR_GETFG(x) ((x >> FTATTR_FGSHIFT) & 0x7)
-#define FTATTR_GETBG(x) ((x >> FTATTR_BGSHIFT) & 0x7)
+#define FTATTR_GETFG(x) (((x) >> FTATTR_FGSHIFT) & 0x7)
+#define FTATTR_GETBG(x) (((x) >> FTATTR_BGSHIFT) & 0x7)
 #define FTATTR_FGMASK   ((ftattr)(0x7 << FTATTR_FGSHIFT))
 #define FTATTR_BGMASK   ((ftattr)(0x7 << FTATTR_BGSHIFT))
 #define FTATTR_BOLD     (0x08)

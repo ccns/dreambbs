@@ -213,7 +213,7 @@ typedef struct
 /* User Flag Option : flags in ACCT.ufo                  */
 /* ----------------------------------------------------- */
 
-#define BFLAG(n)        (1U << n)       /* 32 bit-wise flag */
+#define BFLAG(n)        (1U << (n))       /* 32 bit-wise flag */
 
 //#define UFO_COLOR       BFLAG(0)        /* true if the ANSI color mode open */
 //#define UFO_MOVIE       BFLAG(1)        /* true if show movie */

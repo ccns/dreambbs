@@ -135,13 +135,13 @@ static inline void getyx(int *y, int *x)
   #define RBF_ARG(...)  (mrb, self)                         // `rb_func_t` arguments
   #define RB_ARG(...)  (mrb, __VA_ARGS__)                   // arguments
   #define RB_VARG()  (mrb)                                  // void argument
-  #define RBF_C(func)  func RBF_ARG                         // `rb_func_t` call
-  #define RB_C(func)  m##func RB_ARG                        // Ruby API call
-  #define RB_CV(func)  m##func RB_VARG                      // Ruby API call void
-  #define BRB_C(func)  func RB_ARG                          // normal ruby call
-  #define BRB_CV(func)  func RB_VARG                        // normal ruby call void
-  #define CMRB_C(crbfunc, mrbfunc)  mrbfunc RB_ARG          // (CRuby, mruby) API call
-  #define CMRB_CV(crbfunc, mrbfunc)  mrbfunc RB_VARG        // (CRuby, mruby) API call void
+  #define RBF_C(func)  (func)RBF_ARG                        // `rb_func_t` call
+  #define RB_C(func)  (m##func)RB_ARG                       // Ruby API call
+  #define RB_CV(func)  (m##func)RB_VARG                     // Ruby API call void
+  #define BRB_C(func)  (func)RB_ARG                         // normal ruby call
+  #define BRB_CV(func)  (func)RB_VARG                       // normal ruby call void
+  #define CMRB_C(crbfunc, mrbfunc)  (mrbfunc)RB_ARG         // (CRuby, mruby) API call
+  #define CMRB_CV(crbfunc, mrbfunc)  (mrbfunc)RB_VARG       // (CRuby, mruby) API call void
 
 typedef mrb_value VALUE;
 typedef struct RClass *rb_class_t;
@@ -173,18 +173,18 @@ typedef rb_event_t rb_event_flag_t;
   #define RBF_P(paras)  paras                 // `rb_func_t` parameter
   #define RB_P(paras)  paras                  // parameter
   #define RB_PV(paras)  (void)                // parameter void
-  #define RBF_C(func)  func                   // `rb_func_t` call
-  #define RB_C(func)  func                    // Ruby API call
-  #define RB_CV(func)  func                   // Ruby API call void
-  #define BRB_C(func)  func                   // normal ruby call
-  #define BRB_CV(func)  func                  // normal ruby call void
-  #define CMRB_C(crbfunc, mrbfunc)  crbfunc   // (CRuby, mruby) API call
-  #define CMRB_CV(crbfunc, mrbfunc)  crbfunc  // (CRuby, mruby) API call void
+  #define RBF_C(func)  (func)                 // `rb_func_t` call
+  #define RB_C(func)  (func)                  // Ruby API call
+  #define RB_CV(func)  (func)                 // Ruby API call void
+  #define BRB_C(func)  (func)                 // normal ruby call
+  #define BRB_CV(func)  (func)                // normal ruby call void
+  #define CMRB_C(crbfunc, mrbfunc)  (crbfunc) // (CRuby, mruby) API call
+  #define CMRB_CV(crbfunc, mrbfunc) (crbfunc) // (CRuby, mruby) API call void
 
 typedef VALUE (*rb_func_t)(ANYARGS);
 typedef VALUE rb_class_t;
 
-  #define RB_ARGS_REQ(n)  n
+  #define RB_ARGS_REQ(n)  (n)
   #define RB_ARGS_REST()  -1
 
   #define BRB_HOOK_COUNT_FACTOR  1

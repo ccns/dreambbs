@@ -3,9 +3,9 @@
 
 #if __STDC_VERSION__ >= 201112L  /* C11 */ || __cplusplus >= 201103L  /* C++11 */
   #define EXPECT_SIZE(Type, expect) \
-    static_assert(sizeof(Type) == expect, #Type " check failed!")
+    static_assert(sizeof(Type) == (expect), #Type " check failed!")
 #else
-  #define EXPECT_SIZE(Type, expect)  assert(sizeof(Type) == expect)
+  #define EXPECT_SIZE(Type, expect)  assert(sizeof(Type) == (expect))
 #endif
 
 #define SHOW_SIZE(Type) do { \

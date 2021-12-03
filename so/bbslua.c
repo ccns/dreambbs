@@ -106,7 +106,7 @@
 #endif // PMORE_STYLE_ANSI
 
 #ifndef ANSI_IS_PARAM
-#define ANSI_IS_PARAM(c) (c == ';' || (c >= '0' && c <= '9'))
+#define ANSI_IS_PARAM(c) ((c) == ';' || ((c) >= '0' && (c) <= '9'))
 #endif // ANSI_IS_PARAM
 
 //////////////////////////////////////////////////////////////////////////
@@ -927,10 +927,10 @@ bl_peekbreak(float f)
 
 #if KEY_UP > 0  /* Key values for special keys are negative on some BBSs */
   #define KEY_BIT(v)  (v)
-  #define IS_NORMAL_KEY(v) (v < 0x100)
+  #define IS_NORMAL_KEY(v) ((v) < 0x100)
 #else
-  #define KEY_BIT(v)  ((v > 0) ? v : ~v)
-  #define IS_NORMAL_KEY(v) (v > 0 && v < 0x100)
+  #define KEY_BIT(v)  (((v) > 0) ? (v) : ~(v))
+  #define IS_NORMAL_KEY(v) ((v) > 0 && (v) < 0x100)
 #endif
 
 #ifndef META_BIT

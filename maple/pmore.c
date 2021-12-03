@@ -260,7 +260,7 @@
 #ifdef M3_USE_PMORE
  // input/output API
  #define getdata(y, x, msg, buf, size, mode)     vget(y, x, msg, buf, size, mode)
- #define getdata_buf(y, x, msg, buf, size, mode) vget(y, x, msg, buf, size, GCARRY|mode)
+ #define getdata_buf(y, x, msg, buf, size, mode) vget(y, x, msg, buf, size, GCARRY|(mode))
  // #define outs(x)                            outs((unsigned char*)(x))
  // variables
  #define t_lines    (b_lines + 1)
@@ -437,9 +437,9 @@ static int debug = 0;
 #endif
 
 /* DBCS users tend to write unsigned char. let's make compiler happy */
-#define ustrlen(x)      strlen((const char*)x)
-#define ustrchr(x, y)    (unsigned char*)strchr((const char*)x, y)
-#define ustrrchr(x, y)   (unsigned char*)strrchr((const char*)x, y)
+#define ustrlen(x)      strlen((const char*)(x))
+#define ustrchr(x, y)    (unsigned char*)strchr((const char*)(x), y)
+#define ustrrchr(x, y)   (unsigned char*)strrchr((const char*)(x), y)
 
 // NOTE: this is a special strlen to speed up processing.
 // WARNING: x MUST be #define x "msg".
@@ -475,7 +475,7 @@ static int debug = 0;
 #endif /* PMORE_STYLE_ANSI */
 
 #define ANSI_IN_MOVECMD(x) (strchr("ABCDfjHJRu", x) != NULL)
-#define PMORE_DBCS_LEADING(c) (c >= 0x80)
+#define PMORE_DBCS_LEADING(c) ((c) >= 0x80)
 
 // Poor BBS terminal system Workarounds
 // - Most BBS implements clrtoeol() as fake command
@@ -1212,7 +1212,7 @@ mf_search(int direction)
  * whether yes or no, here we provides some.
  */
 
-#define ISSPACE(x) (x <= ' ')
+#define ISSPACE(x) ((x) <= ' ')
 
 MFPROTO void
 pmore_str_strip_ansi(unsigned char *p)  // warning: p is NULL terminated
@@ -4222,8 +4222,8 @@ mf_movieSyncFrame(void)
 }
 
 #define MOVIECMD_SKIP_ALL(p, end) do { \
-    while (p < end && *p && *p != '\n') \
-    { p++; } \
+    while ((p) < (end) && *(p) && *(p) != '\n') \
+    { (p)++; } \
 } while (0)
 
 MFPROTO unsigned char *
