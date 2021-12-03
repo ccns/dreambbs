@@ -117,7 +117,7 @@ TransferAccount(void)
     HDR xhdr;
     FILE *fp;
     char folder[128], date[9], fpath[128];
-    char userid[13];
+    char userid[IDLEN + 1];
     char str[128];
     int selfmoney GCC_UNUSED, pay;
     double temp;

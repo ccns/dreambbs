@@ -6,6 +6,7 @@
 #include <sys/types.h>
 
 #include "timetype.h"
+#include "struct.h"
 
 enum HdrMode {
     HDRMODE_NORMAL,
@@ -37,7 +38,7 @@ typedef struct
     char owner[47];               /* 作者 (E-mail address) */
     time32_t stamp;               /* 未讀標記 */
     utime32_t expire;             /* 自動刪除 */
-    char lastrecommend[13];       /* 最後推文者 */
+    char lastrecommend[IDLEN + 1]; /* 最後推文者 */
     time32_t pushtime;            /* 最後推文時間 */
 //  uint32_t recommend;           /* 推薦文章 */
     int16_t modifytimes;          /* 改文次數 */

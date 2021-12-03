@@ -618,7 +618,7 @@ void acct_setup(ACCT * u, int adm)
     int i, num, tmp, mode;
     FILE *flog;
     char *str, buf[80], pass[PLAINPASSSIZE];
-    char id[13];
+    char id[IDLEN + 1];
     tmp = 0;
 
     getyx(&y, &c);

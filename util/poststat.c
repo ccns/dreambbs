@@ -41,8 +41,8 @@ static const char *const mytitle[] = {"日十", "週五十", "月百", "年度百"};
 static
 struct posttop  /* DISKDATA(raw) */
 {
-    char author[13];            /* author name */
-    char board[13];             /* board name */
+    char author[IDLEN + 1];     /* author name */
+    char board[IDLEN + 1];      /* board name */
     char title[66];             /* title name */
     time32_t date;              /* last post's date */
     int32_t number;             /* post number */

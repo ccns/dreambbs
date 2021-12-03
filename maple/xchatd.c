@@ -2047,7 +2047,7 @@ chat_ignore(
                 {
                     sprintf(userid, "%-*s ", IDLEN, list->userid);
                     strcpy(buf + len, userid);
-                    len += 13;
+                    len += IDLEN + 1;
                     if (len >= 78)
                     {
                         send_to_user(cu, buf, 0, MSG_MESSAGE);
