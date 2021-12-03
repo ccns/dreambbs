@@ -2039,14 +2039,12 @@ chat_ignore(
             if ((list = cu->ignore))
             {
                 int len;
-                char userid[16];
 
                 send_to_user(cu, "◆ 這些人被打入冷宮了：", 0, MSG_MESSAGE);
                 len = 0;
                 do
                 {
-                    sprintf(userid, "%-*s ", IDLEN, list->userid);
-                    strcpy(buf + len, userid);
+                    sprintf(buf + len, "%-*s ", IDLEN, list->userid);
                     len += IDLEN + 1;
                     if (len >= 78)
                     {
@@ -2767,10 +2765,7 @@ command_execute(
         {
             if (cu->room && !CLOAK(cu)) /* 隱身的人也不能說話哦 */
             {
-                char chatid[16];
-
-                sprintf(chatid, "%s:", cu->chatid);
-                sprintf(buf, "%-10s%s", chatid, msg);
+                sprintf(buf, "%-10s:%s", cu->chatid, msg);
                 send_to_room(cu->room, buf, cu->userno, MSG_MESSAGE);
             }
         }
