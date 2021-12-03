@@ -207,12 +207,12 @@ template <class T>
 
 #if NO_SO
 
-#define DL_NAME(module_str, obj)   (&(obj))
-#define DL_GET(dl_name)   (&(dl_name))
-#define DL_CALL(dl_name)  (dl_name)
+#define DL_NAME(module_str, obj)   ((void)0, &(obj))
+#define DL_GET(dl_name)   ((void)0, &(dl_name))
+#define DL_CALL(dl_name)  ((void)0, dl_name)
 
-#define DL_NAME_GET(module_str, obj)  (&(obj))
-#define DL_NAME_CALL(module_str, func)  (func)
+#define DL_NAME_GET(module_str, obj)  ((void)0, &(obj))
+#define DL_NAME_CALL(module_str, func)  ((void)0, func)
 
 #undef DL_HOTSWAP
 
@@ -231,7 +231,7 @@ template <class T>
 
 #ifdef CPP_TYPEOF
   #define DL_NAME_GET(module_str, obj)  \
-      ((CPP_TYPEOF(obj) *) DL_GET(DL_NAME(module_str, obj)))
+      ((void)0, (CPP_TYPEOF(obj) *) DL_GET(DL_NAME(module_str, obj)))
 
   #define DL_NAME_CALL(module_str, func)  EXPR_BLOCK_BEGIN \
     CPP_TYPEOF(obj) *pfunc = DL_NAME_GET(module_str, func); \
@@ -319,8 +319,8 @@ static inline long double ld_clamp(long double x, long double low, long double h
 #include <stdbool.h>
 
 /* Booleans  (Yep, for true and false) (Deprecated) */
-#define YEA     (1) MACRO_DEPRECATED(use 'true' instead)
-#define NA      (0) MACRO_DEPRECATED(use 'false' instead)
+#define YEA     1 MACRO_DEPRECATED(use 'true' instead)
+#define NA      0 MACRO_DEPRECATED(use 'false' instead)
 
 /* Standard integer types with specified widths */
 #include <stdint.h>

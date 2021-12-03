@@ -27,7 +27,7 @@
 
 #define LOGFILE         FN_INNBBS_LOG           /* °O¿ýÀÉ¸ô®| */
 
-#define INNBBS_PORT     (7777)
+#define INNBBS_PORT     7777
 
 #define INNBBS_UTCZONE  BBSUTCZONE              /* Numeric local timezone */
 

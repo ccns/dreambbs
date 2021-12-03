@@ -62,7 +62,7 @@
 
 
 /* This is the default permission granted to all new accounts. */
-#define PERM_DEFAULT    (PERM_BASIC)
+#define PERM_DEFAULT    PERM_BASIC
 
 #define PERM_ADMIN      (PERM_BOARD | PERM_ACCOUNTS | PERM_SYSOP | PERM_CHATROOM | PERM_KTV)
 #define PERM_ALLBOARD   (PERM_SYSOP | PERM_BOARD)
@@ -70,8 +70,8 @@
 #define PERM_SEEULEVELS PERM_SYSOP
 #define PERM_SEEBLEVELS (PERM_SYSOP | PERM_BM)
 
-#define PERM_BBSLUA     (PERM_BASIC)
-#define PERM_BBSRUBY    (PERM_BASIC)
+#define PERM_BBSLUA     PERM_BASIC
+#define PERM_BBSRUBY    PERM_BASIC
 
 
 /*
@@ -86,10 +86,10 @@
 #define PERM_FORWARD    PERM_INTERNET   /* to do the forwarding */
 
 /*
-#define HAS_PERM(x)     ((x)?cuser.userlevel&(x):1)
+#define HAS_PERM(x)     ((void)0, (x)?cuser.userlevel&(x):1)
 */
 #define HAS_PERM        HAVE_PERM
-#define HAVE_PERM(x)    (cuser.userlevel&(x))
+#define HAVE_PERM(x)    ((void)0, cuser.userlevel&(x))
 
 
 /* ----------------------------------------------------- */
@@ -148,8 +148,8 @@ static const char *const perm_tbl[] = {
 /* ----------------------------------------------------- */
 
 
-#define GEM_QUIT        -2      /* recursive quit */
-#define GEM_VISIT       -1
+#define GEM_QUIT        (-2)      /* recursive quit */
+#define GEM_VISIT       (-1)
 #define GEM_USER        0
 #define GEM_RECYCLE     1
 #define GEM_LMANAGER    2

@@ -302,7 +302,7 @@ CPP_PRAGMA(GCC error "Customizing `ORIGIN_TAG` by defining it elsewhere is no lo
 /* ----------------------------------------------------- */
 
 //for M3_USE_PFTERM
-#define FILEDFG            (0)
-#define FILEDBG            (7)
+#define FILEDFG            0
+#define FILEDBG            7
 
 #endif                          /* THEME_H */

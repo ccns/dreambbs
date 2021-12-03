@@ -23,7 +23,7 @@
 #define TWOWEEK_HOUR    (14 * 24)
 #define WEEK_HOUR       (7 * 24)
 #define DAY_HOUR        (1 * 24)
-#define HOUR            (1)
+#define HOUR            1
 
 
 HDR hotboard[MAX_HOTBOARD];

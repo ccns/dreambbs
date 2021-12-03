@@ -311,7 +311,7 @@ typedef struct playrule playrule;
 /*const struct playrule goodmanlist[] = {
 }*/
 
-#define PIP_BADMAN       (3)            /* ┣俱砰计  */
+#define PIP_BADMAN       3              /* ┣俱砰计  */
 
 /*--------------------------------------------------------------------------*/
 /*  臸猭把计砞﹚                                                            */

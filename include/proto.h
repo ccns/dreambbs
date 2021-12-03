@@ -381,7 +381,7 @@ int class_add(XO *xo, int pos);
 
   #define foot_dump(pfoot)  save_foot(*(pfoot))
   #define foot_redump(pfoot)  save_foot(*(pfoot))
-  #define foot_free(pfoot)  (void)0
+  #define foot_free(pfoot)  ((void)0)
   #define foot_restore(pfoot)  restore_foot(*(pfoot))
   #define foot_restore_free(pfoot)  restore_foot(*(pfoot))
   #define foot_restore_keep(pfoot)  restore_foot(*(pfoot))

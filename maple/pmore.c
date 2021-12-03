@@ -220,8 +220,8 @@
     MFDISP_SEP_OLD
 
 // promptend modes
-#define PMORE_USER_EXIT (1) // exit only if user request to do so.
-#define PMORE_AUTO_EXIT (0) // exit when reaching last page (implies movie autoplay)
+#define PMORE_USER_EXIT 1   // exit only if user request to do so.
+#define PMORE_AUTO_EXIT 0   // exit when reaching last page (implies movie autoplay)
 
 // ---------------------------------------------------------- </LOCALIZATION>
 
@@ -263,14 +263,14 @@
  #define getdata_buf(y, x, msg, buf, size, mode) vget(y, x, msg, buf, size, GCARRY|(mode))
  // #define outs(x)                            outs((unsigned char*)(x))
  // variables
- #define t_lines    (b_lines + 1)
- #define t_columns  (b_cols + 1)
+ #define t_lines    ((void)0, b_lines + 1)
+ #define t_columns  ((void)0, b_cols + 1)
  // Permissions
  #if !defined(HasUserPerm)
  # define HasUserPerm(x)  HAS_PERM(x)
  #endif  /* #if !defined(HasUserPerm) */
  #if !defined(HAS_PERM)
- # define HAS_PERM(x)  ((cuser.userlevel & (x)) != 0)
+ # define HAS_PERM(x)  (((void)0, cuser.userlevel & (x)) != 0)
  #endif  /* #if defined(HAS_PERM) */
  #if !defined(PERM_BBSLUA)
  # define PERM_BBSLUA PERM_BASIC
@@ -371,7 +371,7 @@ static int vkey_is_typeahead(void)
 #elif defined(MAP_POPULATE)
 #define MF_MMAP_OPTION (MAP_POPULATE|MAP_SHARED)
 #else
-#define MF_MMAP_OPTION (MAP_SHARED)
+#define MF_MMAP_OPTION MAP_SHARED
 #endif  /* #ifdef MAP_NOSYNC */
 
 /* Developer's Guide
@@ -438,8 +438,8 @@ static int debug = 0;
 
 /* DBCS users tend to write unsigned char. let's make compiler happy */
 #define ustrlen(x)      strlen((const char*)(x))
-#define ustrchr(x, y)    (unsigned char*)strchr((const char*)(x), y)
-#define ustrrchr(x, y)   (unsigned char*)strrchr((const char*)(x), y)
+#define ustrchr(x, y)   ((void)0, (unsigned char*)strchr((const char*)(x), y))
+#define ustrrchr(x, y)  ((void)0, (unsigned char*)strrchr((const char*)(x), y))
 
 // NOTE: this is a special strlen to speed up processing.
 // WARNING: x MUST be #define x "msg".
@@ -458,7 +458,7 @@ static int debug = 0;
 #define PMORE_STYLE_ANSI
 
 // Escapes. I don't like \x1b everywhere.
-#define ESC_NUM (0x1b)
+#define ESC_NUM  0x1b
 #define ESC_STR "\x1b"
 #define ESC_CHR '\x1b'
 
@@ -474,7 +474,7 @@ static int debug = 0;
 
 #endif /* PMORE_STYLE_ANSI */
 
-#define ANSI_IN_MOVECMD(x) (strchr("ABCDfjHJRu", x) != NULL)
+#define ANSI_IN_MOVECMD(x) ((void)0, strchr("ABCDfjHJRu", x) != NULL)
 #define PMORE_DBCS_LEADING(c) ((c) >= 0x80)
 
 // Poor BBS terminal system Workarounds
@@ -564,7 +564,7 @@ enum MF_NAV_COMMANDS {
 };
 
 /* Navigation units (dynamic, so not in enum const) */
-#define MFNAV_PAGE  (t_lines-2) // when navigation, how many lines in a page to move
+#define MFNAV_PAGE  ((void)0, t_lines-2) // when navigation, how many lines in a page to move
 
 /* Display system */
 enum MF_DISP_CONST {
@@ -596,8 +596,8 @@ enum MF_DISP_CONST {
 
 };
 
-#define MFDISP_PAGE (t_lines-1) // the real number of lines to be shown.
-#define MFDISP_DIRTY() (void) ( mf.oldlineno = -1 )
+#define MFDISP_PAGE ((void)0, t_lines-1) // the real number of lines to be shown.
+#define MFDISP_DIRTY() (void) ( mf.oldlineno = -1, (void)0 )
 
 /* Indicators */
 #define MFDISP_TRUNC_INDICATOR  ANSI_COLOR(0;1;37) ">" ANSI_RESET
@@ -631,9 +631,9 @@ struct SimpleBuffer {
 };
 
 /* pretty format header */
-#define FH_HEADERS    (4)  // how many headers do we know?
-#define FH_HEADER_LEN (4)  // strlen of each heads
-#define FH_FLOATS     (2)  // right floating, name and val
+#define FH_HEADERS    4    // how many headers do we know?
+#define FH_HEADER_LEN 4    // strlen of each heads
+#define FH_FLOATS     2    // right floating, name and val
 static const char *const _fh_disp_heads[FH_HEADERS] =
     {"作者", "標題", "時間", "轉信"};
 
@@ -663,9 +663,9 @@ enum MFSEARCH_DIRECTION {
 
 // Reset structures
 #define RESETMF() (void) ( memset(&mf, 0, sizeof(mf)), \
-    mf.lastpagelines = mf.maxlinenoS = mf.oldlineno = -1 )
+    mf.lastpagelines = mf.maxlinenoS = mf.oldlineno = -1, (void)0 )
 #define RESETFH() (void) ( memset(&fh, 0, sizeof(fh)), \
-    fh.lines = -1 )
+    fh.lines = -1, (void)0 )
 
 // Artwork
 #define OPTATTR_NORMAL        ANSI_COLOR(0;34;47)
@@ -683,9 +683,9 @@ enum MFSEARCH_DIRECTION {
 #define PMHLPATTR_HEADER      ANSI_COLOR(0;1;32)
 
 // Prompt Bar Shadow
-#define PMORE_SHADOW_ABOVE      (1)
-#define PMORE_SHADOW_BELOW      (2)
-#define PMORE_SHADOW_NONE       (0)
+#define PMORE_SHADOW_ABOVE      1
+#define PMORE_SHADOW_BELOW      2
+#define PMORE_SHADOW_NONE       0
 
 // --------------------------- </Aux. Structures>
 
@@ -768,7 +768,7 @@ MF_Movie mfmovie;
     (mfmovie.mode == MFDISP_MOVIE_PLAYING_OLD) && \
         (mfmovie.mode =  MFDISP_MOVIE_NO), \
     mf_determinemaxdisps(MFNAV_PAGE, 0), \
-    mf_forward(0) \
+    (void)mf_forward(0) \
 )
 
 #define RESET_MOVIE() (void) ( \
@@ -782,11 +782,12 @@ MF_Movie mfmovie;
     mfmovie.interactive     = 0, \
     mfmovie.synctime.tv_sec = mfmovie.synctime.tv_usec = 0, \
     mfmovie.frameclk.tv_sec = 1, mfmovie.frameclk.tv_usec = 0, \
-    mfmovie.lastframe = NULL \
+    mfmovie.lastframe = NULL, \
+    (void)0 \
 )
 
 #define MOVIE_IS_PLAYING() \
-    ((mfmovie.mode == MFDISP_MOVIE_PLAYING) || \
+    ((void)0, (mfmovie.mode == MFDISP_MOVIE_PLAYING) || \
      (mfmovie.mode == MFDISP_MOVIE_PLAYING_OLD))
 
 unsigned char *
@@ -803,19 +804,19 @@ MFPROTO unsigned char *mf_movieNextLine(unsigned char *frame);
 #endif
 MFFPROTO int mf_movieMaskedInput(int c);
 
-#define MOVIE_MIN_FRAMECLK (0.1f)
-#define MOVIE_MAX_FRAMECLK (3600.0f)
-#define MOVIE_SECOND_U (1000000L)
+#define MOVIE_MIN_FRAMECLK 0.1f
+#define MOVIE_MAX_FRAMECLK 3600.0f
+#define MOVIE_SECOND_U 1000000L
 #define MOVIE_ANTI_ANTI_IDLE
 
 // some magic value that your vkey() will never return
-#define MOVIE_KEY_ANY (0x4d464b41)
-#define MOVIE_KEY_NONE (0x414b464d)
+#define MOVIE_KEY_ANY 0x4d464b41
+#define MOVIE_KEY_NONE 0x414b464d
 
 // some environments already converted 0x7F to 0x08,
 // but we'd still do it again here for compatibility.
 #ifndef MOVIE_KEY_BS2
-#define MOVIE_KEY_BS2 (0x7f)
+#define MOVIE_KEY_BS2 0x7f
 #endif
 
 #endif  /* #ifdef PMORE_USE_ASCII_MOVIE */
@@ -1421,18 +1422,18 @@ MFDISP_DBCS_HEADERWIDTH(int originalw)
     return originalw - (originalw % 2U);
 }
 
-#define MFDISP_FORCEUPDATE2TOP() (void) ( startline = 0 )
-#define MFDISP_FORCEUPDATE2BOT() (void) ( endline   = MFDISP_PAGE - 1 )
+#define MFDISP_FORCEUPDATE2TOP() (void) ( startline = 0, (void)0 )
+#define MFDISP_FORCEUPDATE2BOT() (void) ( endline   = MFDISP_PAGE - 1, (void)0 )
 #define MFDISP_FORCEDIRTY2BOT() (void) ( \
-    (optimized == MFDISP_OPT_OPTIMIZED) && ( \
+    (void)((optimized == MFDISP_OPT_OPTIMIZED) && ( \
         optimized = MFDISP_OPT_FORCEDIRTY, \
         MFDISP_FORCEUPDATE2BOT(), 0 \
-    ))
+    )))
 
 static const char *override_msg = NULL;
 static const char *override_attr = NULL;
 
-#define RESET_OVERRIDE_MSG() (void) ( override_attr = override_msg = NULL )
+#define RESET_OVERRIDE_MSG() (void) ( override_attr = override_msg = NULL, (void)0 )
 
 /*
  * display mf content from disps for MFDISP_PAGE
@@ -2337,7 +2338,7 @@ PMORE_UINAV_FORWARDLINE(void)
     mf_forward(1);
 }
 
-#define REENTRANT_RESTORE() (void) ( mf = bkmf, fh = bkfh )
+#define REENTRANT_RESTORE() (void) ( mf = bkmf, fh = bkfh, (void)0 )
 
 /*
  * piaip's more, a replacement for old more
@@ -2631,7 +2632,7 @@ _pmore2(
         }
 
 #ifndef PMORE_IGNORE_UNKNOWN_NAVKEYS
-#define HANDLE_UNKNOWN_NAVKEY() do { return ch; } while (0)
+#define HANDLE_UNKNOWN_NAVKEY() return ch
 #else
 #define HANDLE_UNKNOWN_NAVKEY() break
 #endif // PMORE_IGNORE_UNKNOWN_NAVKEYS
@@ -3283,7 +3284,7 @@ static const char
     NULL,
 };
 
-#define PMHLP_BLOCKS    (3)
+#define PMHLP_BLOCKS    3
 
 MFPROTO void
 pmore_Help(void *ctx, int (*help_handler)(int y, void *ctx))

@@ -24,7 +24,7 @@
 
 #include "bbs.h"
 #include "gamef.c"
-#define random(x) (rand() % (x))
+#define random(x) ((void)0, rand() % (x))
 static char *BoardName = currboard;
 
 enum {  MAP_MAXY = 20,

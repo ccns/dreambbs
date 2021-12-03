@@ -233,30 +233,30 @@ int xwrite(int fd, const char *data, int size);
 /* Not boundary-checking version
  * `idx` must smaller than the length of `str`, otherwise buffer overrun may occur */
 #define IS_DBCS_LEAD(_str, _idx) \
-    (bool)(dbcs_state(_str, _idx) & DBCS_LEAD)
+    ((void)0, (bool)(dbcs_state(_str, _idx) & DBCS_LEAD))
 #define IS_DBCS_TRAIL(_str, _idx) \
-    (bool)(dbcs_state(_str, _idx) & DBCS_TRAIL)
+    ((void)0, (bool)(dbcs_state(_str, _idx) & DBCS_TRAIL))
 
 /* Boundary-checking version */
 #define IS_DBCS_LEAD_N(_str, _idx, _len) \
-    (bool)(dbcs_nstate(_str, _idx, _len) & DBCS_LEAD)
+    ((void)0, (bool)(dbcs_nstate(_str, _idx, _len) & DBCS_LEAD))
 #define IS_DBCS_TRAIL_N(_str, _idx, _len) \
-    (bool)(dbcs_nstate(_str, _idx, _len) & DBCS_TRAIL)
+    ((void)0, (bool)(dbcs_nstate(_str, _idx, _len) & DBCS_TRAIL))
 
 /* `IS_DBCS_*_ANSI()`: Whether the byte at character position `_idx` in the string `_str` is the leading/trailing DBCS byte after ignoring ANSI escapes */
 
 /* Not boundary-checking version
  * `idx` must smaller than the length of `str`, otherwise buffer overrun may occur */
 #define IS_DBCS_LEAD_ANSI(_str, _idx) \
-    (bool)(dbcs_state_ansi(_str, _idx) & DBCS_LEAD)
+    ((void)0, (bool)(dbcs_state_ansi(_str, _idx) & DBCS_LEAD))
 #define IS_DBCS_TRAIL_ANSI(_str, _idx) \
-    (bool)(dbcs_state_ansi(_str, _idx) & DBCS_TRAIL)
+    ((void)0, (bool)(dbcs_state_ansi(_str, _idx) & DBCS_TRAIL))
 
 /* Boundary-checking version */
 #define IS_DBCS_LEAD_ANSI_N(_str, _idx, _len) \
-    (bool)(dbcs_nstate_ansi(_str, _idx, _len) & DBCS_LEAD)
+    ((void)0, (bool)(dbcs_nstate_ansi(_str, _idx, _len) & DBCS_LEAD))
 #define IS_DBCS_TRAIL_ANSI_N(_str, _idx, _len) \
-    (bool)(dbcs_nstate_ansi(_str, _idx, _len) & DBCS_TRAIL)
+    ((void)0, (bool)(dbcs_nstate_ansi(_str, _idx, _len) & DBCS_TRAIL))
 
 /* Helper macros for fixed-size `time_t` */
 #define str_stamp_any(_str, _chrono) \

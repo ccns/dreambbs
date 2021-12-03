@@ -22,7 +22,7 @@
 
 #define SWAPINIT(a, es) (void) \
     (swaptype = (((char *)(a) - (char *)0) % sizeof(long) || \
-    (es) % sizeof(long)) ? 2 : ((es) == sizeof(long)? 0 : 1))
+    (es) % sizeof(long)) ? 2 : ((es) == sizeof(long)? 0 : 1), (void)0)
 
 static inline void swapfunc(char *a, char *b, int n, int swaptype)
 {
@@ -41,7 +41,7 @@ static inline void swapfunc(char *a, char *b, int n, int swaptype)
         swapfunc(a, b, es, swaptype);           \
 } while (0)
 
-#define vecswap(a, b, n)        (void) (((n) > 0) && (swapfunc(a, b, n, swaptype), 0))
+#define vecswap(a, b, n) (void) ((void)(((n) > 0) && (swapfunc(a, b, n, swaptype), 0)))
 
 static inline char *med3(char *a,
                          char *b, char *c, int (*cmp) (const void *lhs, const void *rhs))

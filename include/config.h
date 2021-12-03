@@ -103,34 +103,34 @@
 /* ----------------------------------------------------- */
 
 #ifndef MAXBOARD
-#define MAXBOARD        (7000)          /* 最大開板個數 */
+#define MAXBOARD        7000            /* 最大開板個數 */
 #endif
 
 #ifndef MAXACTIVE
-#define MAXACTIVE       (4096)          /* 最多同時上站人數 (ex.1400)*/
+#define MAXACTIVE       4096            /* 最多同時上站人數 (ex.1400)*/
                                         /* 若要超過 1024 請修改 kernel */
                                         /* options         SHMMAXPGS=? */
 #endif
 
-#define MAXFIREWALL     (300)           /* 全域擋信列表上限 */
+#define MAXFIREWALL     300             /* 全域擋信列表上限 */
 
-#define MAXOFILEWALL    (500)           /* 看版擋信列表上限 */
+#define MAXOFILEWALL    500             /* 看版擋信列表上限 */
 
-#define PAL_MAX         (512)           /* 好友名單上限 */
+#define PAL_MAX         512             /* 好友名單上限 */
 
-#define PAL_ALMR        (450)           /* 警告 */
+#define PAL_ALMR        450             /* 警告 */
 
-#define BANMSG_MAX      (32)            /* 拒收訊息名單上限 */
+#define BANMSG_MAX      32              /* 拒收訊息名單上限 */
 
 /* ----------------------------------------------------- */
 /* guest的名字                             by Jerics     */
 /* ------------------------------------------------------*/
 
 #ifndef MAXGUEST
-#define MAXGUEST        (16)            /* 最多有幾個 guest？ */
+#define MAXGUEST        16              /* 最多有幾個 guest？ */
 #endif
 
-#define GUESTNAME       (1)             /* guest名稱的數量 */
+#define GUESTNAME       1               /* guest名稱的數量 */
 #define GUEST_NAMES     GUEST_1
 #define GUEST_1         BOARDNAME"訪客"
 
@@ -153,12 +153,12 @@
 /* ------------------------------------------------------*/
 
 #ifndef CLASS_HOT
-#define CLASS_HOT (5)                  /* 熱門看板臨界值 */
+#define CLASS_HOT 5                    /* 熱門看板臨界值 */
 #endif
 
 #undef CAN_POSTFIX                     /* po文前選擇文章類別 */
 
-#define MAX_MODIFY (5)                 /* 最大修改文章數 */
+#define MAX_MODIFY 5                   /* 最大修改文章數 */
 
 #define HAVE_DETECT_ZHANGBA            /* 偵測張爸文 */
 
@@ -371,84 +371,84 @@
                                   /* r2.20180430: please define it on your own if needed */
 
 #ifdef  HAVE_PIP_FIGHT1
-#define PIP_MAX         (16)
+#define PIP_MAX         16
 #endif
 
 #ifdef  HAVE_RECOMMEND
-#define RECOMMEND_TIME  (30)       /* 推文時間 */
+#define RECOMMEND_TIME  30         /* 推文時間 */
 #endif
 
-#define LOGINATTEMPTS   (3)        /* 最大進站失誤次數 */
+#define LOGINATTEMPTS   3          /* 最大進站失誤次數 */
 
-#define LOGINASNEW      (1)        /* 採用上站申請帳號制度 */
+#define LOGINASNEW      1          /* 採用上站申請帳號制度 */
 
-#define MAX_REGIST      (10)       /* 最大註冊數 */
+#define MAX_REGIST      10         /* 最大註冊數 */
 
-#define MAX_RESERVE     (16)       /* 站務保留位置 */
+#define MAX_RESERVE     16         /* 站務保留位置 */
 
-#define MAX_MEMORANDUM  (200)      /* 最大備忘錄個數 */
+#define MAX_MEMORANDUM  200        /* 最大備忘錄個數 */
 
-#define MAX_CONTACT     (200)      /* 最大聯絡名單個數 */
+#define MAX_CONTACT     200        /* 最大聯絡名單個數 */
 
-#define BMW_MAX         (128)      /* 熱訊上限 */
+#define BMW_MAX         128        /* 熱訊上限 */
 
-#define BMW_PER_USER    (9)        /* 每位使用者熱訊上限 */
+#define BMW_PER_USER    9          /* 每位使用者熱訊上限 */
 
-#define BMW_EXPIRE      (60)       /* 熱訊處理時間 */
+#define BMW_EXPIRE      60         /* 熱訊處理時間 */
 
-#define BMW_MAX_SIZE    (100)      /* 熱訊上限 (K) */
+#define BMW_MAX_SIZE    100        /* 熱訊上限 (K) */
 
-#define MAX_BBSMAIL     (10000)    /* bbsmail 收信上限 (封) */
+#define MAX_BBSMAIL     10000      /* bbsmail 收信上限 (封) */
 
-#define MAX_VALIDMAIL   (500)      /* 認證 user 收信上限 (封) */
+#define MAX_VALIDMAIL   500        /* 認證 user 收信上限 (封) */
 
-#define MAX_NOVALIDMAIL (500)      /* 未認證 user 收信上限 (封) */
+#define MAX_NOVALIDMAIL 500        /* 未認證 user 收信上限 (封) */
 
-#define MAIL_SIZE_NO    (3000)     /* 未認證 user 收信上限 (K) */
+#define MAIL_SIZE_NO    3000       /* 未認證 user 收信上限 (K) */
 
-#define MAIL_SIZE       (5000)     /* 最大信箱上限 (K) */
+#define MAIL_SIZE       5000       /* 最大信箱上限 (K) */
 
-#define MAX_LIST        (6)        /* 群組名單最大數 */
+#define MAX_LIST        6          /* 群組名單最大數 */
 
-#define MAX_MAIL_SIZE   (102400)   /* 總信箱容量 */
+#define MAX_MAIL_SIZE   102400     /* 總信箱容量 */
 
                         /* Thor.981011: 以上for bbs主程式用, 超過則提示 */
                         /* 記得同步修改 etc/mail.over */
                         /* Thor.981014: bquota 用來清過期檔案/信件, 時間如下 */
                         /* 記得同步修改 etc/justified 通知函以及 etc/approved */
 
-#define MARK_DUE        (180)      /* 標記保存之信件 (天) */
-#define MAIL_DUE        (60)       /* 一般信件 (天) */
-#define FILE_DUE        (30)       /* 其他檔案 (天) */
+#define MARK_DUE        180        /* 標記保存之信件 (天) */
+#define MAIL_DUE        60         /* 一般信件 (天) */
+#define FILE_DUE        30         /* 其他檔案 (天) */
 
-#define MAX_ALOHA       (64)       /* 上站通知引入數 */
+#define MAX_ALOHA       64         /* 上站通知引入數 */
 
-#define MAX_BOOKS       (16)       /* 最大的名冊數 */
+#define MAX_BOOKS       16         /* 最大的名冊數 */
 
-#define NBRD_MAX        (30)       /* 最大連署數 */
+#define NBRD_MAX        30         /* 最大連署數 */
 
-#define NBRD_DAYS       (14)       /* 連署天數 */
+#define NBRD_DAYS       14         /* 連署天數 */
 
-#define NBRD_MAX_CANCEL (30)       /* 最大廢版主人數 */
+#define NBRD_MAX_CANCEL 30         /* 最大廢版主人數 */
 
-#define MAXPAGES        (256)      /* more.c 中文章頁數上限 (lines/22), 預設:128 */
+#define MAXPAGES        256        /* more.c 中文章頁數上限 (lines/22), 預設:128 */
 
-#define MOVIE_MAX       (180)      /* 動畫張數 */
+#define MOVIE_MAX       180        /* 動畫張數 */
 
 #define MOVIE_SIZE      (108*1024) /* 動畫 cache size */
 
 #ifdef  HAVE_RECOMMEND
-#define MIN_RECOMMEND   (3)        /* 最小推薦文章顯示數字 */
+#define MIN_RECOMMEND   3          /* 最小推薦文章顯示數字 */
 #endif
 
 #ifdef  HAVE_DETECT_CROSSPOST
-#define MAX_CHECKSUM    (6)        /* crosspost checksum 行數 */
+#define MAX_CHECKSUM    6          /* crosspost checksum 行數 */
 
-#define MAX_CROSS_POST  (10)       /* cross post 最大數量 */
+#define MAX_CROSS_POST  10         /* cross post 最大數量 */
 #endif
 
 #ifdef  HAVE_OBSERVE_LIST          /* 系統觀察名單 */
-#define MAXOBSERVELIST  (32)
+#define MAXOBSERVELIST  32
 #define BRD_OBSERVE                "ObserveList"
 #endif
 
@@ -459,17 +459,17 @@
 
 #define CHECK_BM_TIME   (86400 * 14)      /* 版主確認時間 */
 
-#define IDLE_TIMEOUT    (60)              /* 發呆過久自動簽退 */
+#define IDLE_TIMEOUT    60                /* 發呆過久自動簽退 */
 
-#define MAX_HOTBOARD    (20)              /* 熱門看板 */
+#define MAX_HOTBOARD    20                /* 熱門看板 */
 
 #ifdef  HAVE_RESIST_WATER
-#define CHECK_QUOT      (3)               /* 文章灌水最小行數 */
+#define CHECK_QUOT      3                 /* 文章灌水最小行數 */
 
-#define CHECK_QUOT_MAX  (3)               /* 文章灌水連續篇數 */
+#define CHECK_QUOT_MAX  3                 /* 文章灌水連續篇數 */
 #endif
 
-#define BANMAIL_EXPIRE  (30)              /* 擋信列表更新 (天) */
+#define BANMAIL_EXPIRE  30                /* 擋信列表更新 (天) */
 
 #define CNA_MAX         20                /* lkchu.981201: 即時新聞上限 */
 
@@ -483,10 +483,10 @@
 #define CHAT_SECURE     /* 安全的聊天室 */
 
 #define EXIT_LOGOUT     0
-#define EXIT_LOSTCONN   -1
-#define EXIT_CLIERROR   -2
-#define EXIT_TIMEDOUT   -3
-#define EXIT_KICK       -4
+#define EXIT_LOSTCONN   (-1)
+#define EXIT_CLIERROR   (-2)
+#define EXIT_TIMEDOUT   (-3)
+#define EXIT_KICK       (-4)
 
 #define CHAT_LOGIN_OK       "OK"
 #define CHAT_LOGIN_EXISTS   "EX"
@@ -507,7 +507,7 @@
 
 /* 動態看板 & menu 位置 */
 
-#define MOVIE_LINES     (11)            /* 動畫最多有 11 列 */
+#define MOVIE_LINES     11              /* 動畫最多有 11 列 */
 
 #define MENU_NOMOVIE_POS(y, x)  ((y) < (MOVIE_LINES + 2))  /* Suppress movie display when menu starts at (x, y) */
 #define MENU_XPOS       ((d_cols >> 1) + 23)  /* 選單開始的 (y, x) 座標 */
@@ -520,45 +520,45 @@
 /* ----------------------------------------------------- */
 
 #ifndef BRDSHM_KEY
-#define BRDSHM_KEY      (2997)
+#define BRDSHM_KEY      2997
 #endif
 
 #ifndef UTMPSHM_KEY
-#define UTMPSHM_KEY     (1998)
+#define UTMPSHM_KEY     1998
 #endif
 
 #ifndef FILMSHM_KEY
-#define FILMSHM_KEY     (2999)
+#define FILMSHM_KEY     2999
 #endif
 
 #ifndef FWSHM_KEY
-#define FWSHM_KEY       (3999)
+#define FWSHM_KEY       3999
 #endif
 
 #ifndef FWOSHM_KEY
-#define FWOSHM_KEY      (5000)
+#define FWOSHM_KEY      5000
 #endif
 
 #ifndef COUNT_KEY
-#define COUNT_KEY       (4000)
+#define COUNT_KEY       4000
 #endif
 
 
 #ifdef  HAVE_OBSERVE_LIST               /* 系統觀察名單 */
 
 #ifndef OBSERVE_KEY
-#define OBSERVE_KEY     (6000)
+#define OBSERVE_KEY     6000
 #endif
 
 #endif  /* #ifdef  HAVE_OBSERVE_LIST */
 
-#define SPEAK_MAX       (50)
-#define CONDITION_MAX   (100)
-#define PARTY_MAX       (150)
+#define SPEAK_MAX       50
+#define CONDITION_MAX   100
+#define PARTY_MAX       150
 
 #define BSEM_KEY        2000            /* semaphore key */
 #define BSEM_FLG        0600            /* semaphore mode */
-#define BSEM_ENTER      -1              /* enter semaphore */
+#define BSEM_ENTER      (-1)            /* enter semaphore */
 #define BSEM_LEAVE      1               /* leave semaphore */
 #define BSEM_RESET      0               /* reset semaphore */
 

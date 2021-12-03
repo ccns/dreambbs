@@ -23,7 +23,7 @@ static FILE *frec;
 static FILE *fmail;
 #endif
 
-#define stop_line       (b_lines - 2)
+#define stop_line       ((void)0, b_lines - 2)
 
 
 static void

@@ -8,9 +8,9 @@
   #define EXPECT_SIZE(Type, expect)  assert(sizeof(Type) == (expect))
 #endif
 
-#define SHOW_SIZE(Type) do { \
-    printf("sizeof(" #Type "): %zu\n", sizeof(Type)); \
-} while (0)
+#define SHOW_SIZE(Type)  (void)( \
+    (void)printf("sizeof(" #Type "): %zu\n", sizeof(Type)) \
+)
 
 #define CHECK_SIZE(Type, expect)  do { \
     SHOW_SIZE(Type); \

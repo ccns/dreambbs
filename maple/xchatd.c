@@ -37,9 +37,9 @@
 static int gline;
 
 #ifdef  WATCH_DOG
-#define MYDOG  gline = __LINE__
+#define MYDOG()  (void) (gline = __LINE__, (void)0)
 #else
-#define MYDOG                   /* NOOP */
+#define MYDOG()  (void) ((void)0) /* NOOP */
 #endif
 
 
@@ -62,22 +62,22 @@ static int gline;
 #define ROOM_LOCKED     1
 #define ROOM_SECRET     2
 #define ROOM_OPENTOPIC  4
-#define ROOM_ALL        (NULL)
+#define ROOM_ALL        NULL
 
 
-#define LOCKED(room)    ((room)->rflag & ROOM_LOCKED)
-#define SECRET(room)    ((room)->rflag & ROOM_SECRET)
-#define OPENTOPIC(room) ((room)->rflag & ROOM_OPENTOPIC)
+#define LOCKED(room)    ((void)0, (room)->rflag & ROOM_LOCKED)
+#define SECRET(room)    ((void)0, (room)->rflag & ROOM_SECRET)
+#define OPENTOPIC(room) ((void)0, (room)->rflag & ROOM_OPENTOPIC)
 
 
-#define RESTRICTED(usr) ((usr)->uflag == 0)       /* guest */
-#define CHATSYSOP(usr)  ((usr)->uflag & (PERM_SYSOP | PERM_CHATROOM))
+#define RESTRICTED(usr) ((void)0, (usr)->uflag == 0)       /* guest */
+#define CHATSYSOP(usr)  ((void)0, (usr)->uflag & (PERM_SYSOP | PERM_CHATROOM))
 #define PERM_ROOMOP     PERM_CHAT       /* Thor: 借 PERM_CHAT為 PERM_ROOMOP */
 #define PERM_CHATOP     PERM_DENYCHAT   /* Thor: 借 PERM_DENYCHAT為 PERM_CHATOP */
-/* #define ROOMOP(usr)     ((usr)->uflag & ( PERM_ROOMOP | PERM_SYSOP | PERM_CHATROOM )) */
+/* #define ROOMOP(usr)     ((void)0, (usr)->uflag & ( PERM_ROOMOP | PERM_SYSOP | PERM_CHATROOM )) */
 /* Thor.980603: PERM_CHATROOM改為 default 沒有 roomop, 但可以自己取得 chatop*/
-#define ROOMOP(usr)     ((usr)->uflag & (PERM_ROOMOP|PERM_CHATOP))
-#define CLOAK(usr)      ((usr)->uflag & PERM_CLOAK)
+#define ROOMOP(usr)     ((void)0, (usr)->uflag & (PERM_ROOMOP|PERM_CHATOP))
+#define CLOAK(usr)      ((void)0, (usr)->uflag & PERM_CLOAK)
 
 
 /* ----------------------------------------------------- */
@@ -270,7 +270,7 @@ debug_user(void)
     logit("DEBUG_U", buf);
     for (i = 0, user = mainuser; user; user = user->unext)
     {
-        /* MYDOG; */
+        /* MYDOG(); */
         sprintf(buf, "%d) %p %-6d %s %s", ++i, user, user->userno, user->userid, user->chatid);
         logit("DEBUG_U", buf);
     }
@@ -291,7 +291,7 @@ debug_room(void)
     logit("DEBUG_R", buf);
     do
     {
-        MYDOG;
+        MYDOG();
         sprintf(buf, "%d) %p %s %d", ++i, room, room->name, room->occupants);
         logit("DEBUG_R", buf);
     } while (room = room->next);
@@ -350,7 +350,7 @@ valid_chatid(
 
 
 /* Thor.990211: 統一使用dao library */
-#define str_equal(s1, s2) (!str_casecmp(s1, s2))
+#define str_equal(s1, s2) ((void)0, !str_casecmp(s1, s2))
 
 /* ----------------------------------------------------- */
 /* match strings' similarity case-insensitively          */

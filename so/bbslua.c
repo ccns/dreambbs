@@ -116,9 +116,9 @@
 #ifndef GRAYOUT_DARK
 #define GRAYOUT_COLORBOLD (-2)
 #define GRAYOUT_BOLD (-1)
-#define GRAYOUT_DARK (0)
-#define GRAYOUT_NORM (1)
-#define GRAYOUT_COLORNORM (+2)
+#define GRAYOUT_DARK 0
+#define GRAYOUT_NORM 1
+#define GRAYOUT_COLORNORM 2
 #endif // GRAYOUT_DARK
 
 //////////////////////////////////////////////////////////////////////////
@@ -128,17 +128,17 @@
 // #include config.h
 
 #ifndef PATHLEN
-#define PATHLEN (256)
+#define PATHLEN 256
 #endif
 
 #ifndef DEFAULT_FILE_CREATE_PERM
-#define DEFAULT_FILE_CREATE_PERM (0644)
+#define DEFAULT_FILE_CREATE_PERM 0644
 #endif
 
 // #include common.h
 
 #ifndef MILLISECONDS
-#define MILLISECONDS (1000)  // milliseconds of one second
+#define MILLISECONDS 1000    // milliseconds of one second
 #endif
 //////////////////////////////////////////////////////////////////////////
 // External variables
@@ -164,10 +164,10 @@ extern time_t now;
 //////////////////////////////////////////////////////////////////////////
 
 #if !defined(BBSLUA_NATIVE_T_LINES) && !defined(t_lines)
-#define t_lines  (b_lines + 1)
+#define t_lines  ((void)0, b_lines + 1)
 #endif
 #if !defined(BBSLUA_NATIVE_T_COLUMNS) && !defined(t_columns)
-#define t_columns  (b_cols + 1)
+#define t_columns  ((void)0, b_cols + 1)
 #endif
 
 #ifndef BBSLUA_FORCE_TIME4_T
@@ -247,7 +247,7 @@ OpenCreate(const char *path, int flags)
 #ifndef BBSLUA_HAVE_VTUIKIT
 
 #ifndef VBUFLEN
-#define VBUFLEN     (ANSILINELEN)
+#define VBUFLEN     ANSILINELEN
 #endif
 GCC_CHECK_FORMAT(1, 2) static int
 vmsgf(const char *fmt, ...)
@@ -421,18 +421,18 @@ static void vin_clear(void)
 // After reading `VIN_AFTER_HEAD_SIZE()` chars from `vin`,
 //    the next char cursor will be at `vi_size`.
 #define VIN_AFTER_HEAD_SIZE()  \
-    ((vi_size >= vi_head) ? vi_size - vi_head : 0)
+    ((void)0, (vi_size >= vi_head) ? vi_size - vi_head : 0)
 
 // After reading `VIN_AFTER_TAIL_SPACE()` chars into `vin`,
 //    the next char cursor will be at `vi_max`.
 #define VIN_AFTER_TAIL_SPACE()  \
-    (vi_max - vi_size)
+    ((void)0, vi_max - vi_size)
 
 #else  // #ifdef BBSLUA_EXPOSED_VISIO_VI
 
 // IID.20190502: If `vi_pool` is not exposed, only peek un`recv()`ed data.
 //               This is not used to store inputs, but just to peek.
-#define IBUFSIZE  (128)
+#define IBUFSIZE  128
 static unsigned char peek_buf[IBUFSIZE];
 static int peek_size;
 
@@ -790,7 +790,7 @@ extern "C" {
 // CONST DEFINITION
 //////////////////////////////////////////////////////////////////////////
 
-#define BBSLUA_INTERFACE_VER    0.119 // (0.201)
+#define BBSLUA_INTERFACE_VER    0.119 // 0.201
 #define BBSLUA_SIGNATURE        "--#BBSLUA"
 
 // BBS-Lua script format:
@@ -811,14 +811,14 @@ extern "C" {
 #define BLAPI_PROTO     int
 
 #define BLCONF_BREAK_KEY    Ctrl('C')
-#define BLCONF_EXEC_COUNT   (5000)
-#define BLCONF_PEEK_TIME    (0.01)
-#define BLCONF_KBHIT_TMIN   (BLCONF_PEEK_TIME)
+#define BLCONF_EXEC_COUNT   5000
+#define BLCONF_PEEK_TIME    0.01
+#define BLCONF_KBHIT_TMIN   BLCONF_PEEK_TIME
 #define BLCONF_KBHIT_TMAX   (60*10)
-#define BLCONF_SLEEP_TMIN   (BLCONF_PEEK_TIME)
-#define BLCONF_SLEEP_TMAX   (BLCONF_KBHIT_TMAX)
-#define BLCONF_U_SECOND     (1000000L)
-#define BLCONF_PRINT_TOC_INDEX (2)
+#define BLCONF_SLEEP_TMIN   BLCONF_PEEK_TIME
+#define BLCONF_SLEEP_TMAX   BLCONF_KBHIT_TMAX
+#define BLCONF_U_SECOND     1000000L
+#define BLCONF_PRINT_TOC_INDEX 2
 
 #define BLCONF_MMAP_ATTACH
 #define BLCONF_CURRENT_USERID   cuser.userid
@@ -875,16 +875,17 @@ BBSLuaRT blrt = {0};
 #ifdef BLSCONF_ENABLED
   #define BL_INIT_RUNTIME()  (void) ( \
       memset(&blrt, 0, sizeof(blrt)), \
-      blrt.storename = FNV1_32_INIT \
+      blrt.storename = FNV1_32_INIT, \
+      (void)0 \
   )
 #else
   #define BL_INIT_RUNTIME()  (void) ( \
-      memset(&blrt, 0, sizeof(blrt)) \
+      (void)memset(&blrt, 0, sizeof(blrt)) \
   )
 #endif
 
 #define BL_END_RUNTIME()  (void) ( \
-    memset(&blrt, 0, sizeof(blrt)) \
+    (void)memset(&blrt, 0, sizeof(blrt)) \
 )
 
 #ifdef BBSLUA_USAGE
@@ -1005,9 +1006,9 @@ bl_peekbreak(float f)
       #define CTRL_FLIP
     #elif Ctrl(~0) != ~0  // `Ctrl` is a macro function which unsets bits
       #ifdef SHIFT_BIT      // `Ctrl` may unsets `SHIFT_BIT`
-        #define CTRL_BIT  ~ (Ctrl(~0) | SHIFT_BIT)
+        #define CTRL_BIT  (~(Ctrl(~0) | SHIFT_BIT))
       #else
-        #define CTRL_BIT  ~ Ctrl(~0)
+        #define CTRL_BIT  (~Ctrl(~0))
       #endif
       #define CTRL_FLIP ~  // Flip the result
     #endif
@@ -1698,7 +1699,7 @@ bls_setfn(char *fn, size_t sz, const char *p)
         case BLS_USER:
             setuserfile(fn, BLSCONF_UPATH);
 #ifndef DEFAULT_FOLDER_CREATE_PERM
-#define DEFAULT_FOLDER_CREATE_PERM (0755)
+#define DEFAULT_FOLDER_CREATE_PERM 0755
 #endif
             mkdir(fn, DEFAULT_FOLDER_CREATE_PERM);
             assert(strlen(fn) +8 <= sz);

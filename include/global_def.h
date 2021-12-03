@@ -315,10 +315,10 @@
 /* ----------------------------------------------------- */
 /* Register Form Log                                     */
 /* ----------------------------------------------------- */
-#define RFORM_PASS             (0)
-#define RFORM_NOPASS           (1)
-#define RFORM_DEL              (2)
-#define RFORM_CANCELREG        (3)
+#define RFORM_PASS             0
+#define RFORM_NOPASS           1
+#define RFORM_DEL              2
+#define RFORM_CANCELREG        3
 
 /* ----------------------------------------------------- */
 /* Grayout Levels                                        */
@@ -326,14 +326,14 @@
 #ifdef M3_USE_PFTERM
 #define GRAYOUT_COLORBOLD      (-2)
 #define GRAYOUT_BOLD           (-1)
-#define GRAYOUT_DARK           (0)
-#define GRAYOUT_NORM           (1)
-#define GRAYOUT_COLORNORM      (+2)
+#define GRAYOUT_DARK           0
+#define GRAYOUT_NORM           1
+#define GRAYOUT_COLORNORM      2
 #else  // #ifdef M3_USE_PFTERM
 #define GRAYOUT_COLORBOLD      (-1)
-#define GRAYOUT_BOLD           (1)
-#define GRAYOUT_DARK           (0)
-#define GRAYOUT_NORM           (2)
+#define GRAYOUT_BOLD           1
+#define GRAYOUT_DARK           0
+#define GRAYOUT_NORM           2
 #define GRAYOUT_COLORNORM      (-2)
 #endif  // #ifdef M3_USE_PFTERM
 
@@ -363,8 +363,8 @@
 
 #define STR_LINE        "\n" \
 "> -------------------------------------------------------------------------- <\n\n"
-#define LEN_AUTHOR1     (STRLITLEN(STR_AUTHOR1))
-#define LEN_AUTHOR2     (STRLITLEN(STR_AUTHOR2))
+#define LEN_AUTHOR1     STRLITLEN(STR_AUTHOR1)
+#define LEN_AUTHOR2     STRLITLEN(STR_AUTHOR2)
 
 #define STR_SYSOP       "sysop"
 #define SYSOPNAME       "sysop"

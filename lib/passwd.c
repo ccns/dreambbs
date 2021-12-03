@@ -24,7 +24,7 @@
 #include "struct.h"
 
 #if defined __GLIBC_PREREQ && !defined __UCLIBC__
-#define GLIBC_PREREQ(M, m) (__GLIBC_PREREQ(M, m))
+#define GLIBC_PREREQ(M, m) __GLIBC_PREREQ(M, m)
 #else
 #define GLIBC_PREREQ(M, m) 0
 #endif

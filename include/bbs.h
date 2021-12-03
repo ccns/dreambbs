@@ -66,7 +66,7 @@
 #endif /* LOCK_EX */
 
 
-#define getdtablesize()         (64)
+#define getdtablesize()         64
 
 #define usleep(usec)         do {               \
     struct timeval t;                           \
@@ -89,7 +89,7 @@
 #define NUMECHO         0x0400
 #define GCARRY          0x0800
 
-#define PASSECHO        (HIDEECHO)      /* `HIDEECHO` without `VGET_STEALTH_NOECHO` */
+#define PASSECHO        HIDEECHO        /* `HIDEECHO` without `VGET_STEALTH_NOECHO` */
 
 #define GET_LIST        0x1000          /* 取得 Link List */
 #define GET_USER        0x2000          /* 取得 user id */
@@ -102,7 +102,7 @@
 #define VGET_STEALTH_NOECHO 0x20000     /* Hide the entire input field if `HIDEECHO` is set */
 #define VGET_BREAKABLE      0x40000     /* Whether Ctrl-C closes the input field */
 
-#define VGET_EXIT_BREAK     -1          /* The input field is closed with Ctrl-C */
+#define VGET_EXIT_BREAK     (-1)        /* The input field is closed with Ctrl-C */
 
 #endif  /* #ifndef _BBTP_ */
 

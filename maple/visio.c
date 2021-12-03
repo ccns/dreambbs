@@ -12,21 +12,21 @@
 
 #include "bbs.h"
 
-#define VO_MAX  (5120)
-#define VI_MAX  (256)
+#define VO_MAX  5120
+#define VI_MAX  256
 
 #define INPUT_ACTIVE    0
 #define INPUT_IDLE      1
 
-#define t_lines    (b_lines + 1)
-#define p_lines    (b_lines - 5)
-#define t_columns  (b_cols  + 1)
+#define t_lines    ((void)0, b_lines + 1)
+#define p_lines    ((void)0, b_lines - 5)
+#define t_columns  ((void)0, b_cols  + 1)
 
 #ifdef M3_USE_PFTERM
 // filed color   (defined in theme.h)
-#define STANDOUT   (void) ( attrsetbg(FILEDBG), attrsetfg(FILEDFG) )
+#define STANDOUT() (void) ( attrsetbg(FILEDBG), attrsetfg(FILEDFG) )
 // default color (\x1b[37; 40m)
-#define STANDEND   (void) ( attrsetbg(0), attrsetfg(7) )
+#define STANDEND() (void) ( attrsetbg(0), attrsetfg(7) )
 #endif  /* #ifdef M3_USE_PFTERM */
 int cur_row, cur_col;           /* Current position without ANSI codes (display coordination) */
 int cur_pos;                    /* current column position with ANSI codes (raw character coordination) */
@@ -428,8 +428,8 @@ standoutput(
 }
 
 
-#define STANDOUT   (void) ( cur_slp->sso = cur_pos, cur_slp->mode |= SL_STANDOUT )
-#define STANDEND   (void) ( cur_slp->eso = cur_pos )
+#define STANDOUT() (void) ( cur_slp->sso = cur_pos, cur_slp->mode |= SL_STANDOUT, (void)0 )
+#define STANDEND() (void) ( cur_slp->eso = cur_pos, (void)0 )
 
 
 #if 0
@@ -2628,7 +2628,7 @@ vget_redraw:
         outs(prompt);
 
     if (!(echo & VGET_STEALTH_NOECHO))
-        STANDOUT;
+        STANDOUT();
 
     getyx(&y, &x);
 
@@ -2675,7 +2675,7 @@ vget_redraw:
             outc(' ');
         } while (++ch < max+1);
 
-        STANDEND;
+        STANDEND();
     }
 
     if (ch != I_RESIZETERM)
@@ -2720,7 +2720,7 @@ vget_redraw:
                 int len_prev = len;
                 len = vget_match(data, len, echo | MATCH_END);
 #ifdef M3_USE_PFTERM
-                STANDOUT;
+                STANDOUT();
 #endif
                 if (len > len_prev)
                 {
@@ -2732,7 +2732,7 @@ vget_redraw:
                     data[0] = '\0';
                 }
 #ifdef M3_USE_PFTERM
-                STANDEND;
+                STANDEND();
 #endif
             }
             break;
@@ -2742,7 +2742,7 @@ vget_redraw:
         {
             int len_match = vget_match(data, len, echo);
 #ifdef M3_USE_PFTERM
-            STANDOUT;
+            STANDOUT();
 #endif
             if (len_match > len)
             {
@@ -2752,7 +2752,7 @@ vget_redraw:
                 dirty = true;
             }
 #ifdef M3_USE_PFTERM
-            STANDEND;
+            STANDEND();
 #endif
             if (len_match >= 0)
                 continue;
@@ -2771,7 +2771,7 @@ vget_redraw:
             outc('\n');
 #ifdef M3_USE_PFTERM
             if (!(echo & VGET_STEALTH_NOECHO))
-                STANDEND;
+                STANDEND();
 #endif
             return VGET_EXIT_BREAK;
         }
@@ -2798,7 +2798,7 @@ vget_redraw:
             {
                 move(y, x + col);
 #ifdef M3_USE_PFTERM
-                STANDOUT;
+                STANDOUT();
 #endif
             }
 
@@ -2814,7 +2814,7 @@ vget_redraw:
             }
 #ifdef M3_USE_PFTERM
             if (!(echo & VGET_STEALTH_NOECHO))
-                STANDEND;
+                STANDEND();
 #endif
             col++;
             len++;
@@ -2843,7 +2843,7 @@ vget_redraw:
         key_done = true;  /* Assume key processing will be done */
 #ifdef M3_USE_PFTERM
         if (!(echo & VGET_STEALTH_NOECHO))
-            STANDOUT;
+            STANDOUT();
 #endif
         switch (ch)
         {
@@ -2961,7 +2961,7 @@ vget_redraw:
         }
 #ifdef M3_USE_PFTERM
         if (!(echo & VGET_STEALTH_NOECHO))
-            STANDEND;
+            STANDEND();
 #endif
 
         /* No further processing is needed */
@@ -2976,7 +2976,7 @@ vget_redraw:
         }
 
 #ifdef M3_USE_PFTERM
-        STANDOUT;
+        STANDOUT();
 #endif
 
         /* Seek history */
@@ -3036,7 +3036,7 @@ vget_redraw:
             }
         }
 #ifdef M3_USE_PFTERM
-        STANDEND;
+        STANDEND();
 #endif
     }
 
@@ -3056,7 +3056,7 @@ vget_redraw:
 
 #ifdef M3_USE_PFTERM
     if (!(echo & VGET_STEALTH_NOECHO))
-        STANDEND;
+        STANDEND();
 #endif
 
     return ch;

@@ -305,7 +305,7 @@ typedef struct
 
 /* IID.20191224: Macros for checking config-dependent ufo2 flags */
 
-#define HAVE_UFO2_CONF(ufo2_flag)  IF_ON(CONF_ ## ufo2_flag, ((bool)(cuser.ufo2 & ufo2_flag)), CONF_DEFAULT_ ## ufo2_flag)
+#define HAVE_UFO2_CONF(ufo2_flag)  IF_ON(CONF_ ## ufo2_flag, ((void)0, (bool)(cuser.ufo2 & ufo2_flag)), CONF_DEFAULT_ ## ufo2_flag)
 
 #define CONF_UFO2_MIME  HAVE_MIME_TRANSFER
 #define CONF_DEFAULT_UFO2_MIME  false
@@ -654,7 +654,7 @@ typedef struct BoardReadingHistory
 #define PROFESS_INIFILE "Profess"
 #define PROFESS_IMGFILE "run/profess.img"
 
-#define CH_END          -1
+#define CH_END          (-1)
 #define CH_TTSIZE       64
 
 /* Aliases for backward compatibility */
@@ -684,35 +684,35 @@ typedef struct
 #define FILM_SIZ        4000    /* max size for each film */
 
 
-#define FILM_WELCOME    (0)
-#define FILM_GOODBYE    (1)
-#define FILM_APPLY      (2)     /* new account */
-#define FILM_TRYOUT     (3)
-#define FILM_POST       (4)
-#define FILM_GEM        (5)     /* help message */
-#define FILM_BOARD      (6)
-#define FILM_CLASS      (7)
-#define FILM_PAL        (8)
-#define FILM_MAIL       (9)
-#define FILM_ULIST      (10)
-#define FILM_VOTE       (11)
-#define FILM_MORE       (12)
-#define FILM_EDIT       (13)
-#define FILM_BMW        (14)
-#define FILM_BANMAIL    (15)
-#define FILM_INCOME     (16)
-#define FILM_ADMIN      (17)
-#define FILM_SONG       (18)
-#define FILM_MIME       (19)
-#define FILM_CONTACT    (20)
-#define FILM_MEMORANDUM (21)
-#define FILM_ALOHA      (22)
-#define FILM_SIGNUP     (23)
-#define FILM_FAVORITE   (24)
-#define FILM_MOVIE      (25)    /* normal movies */
+#define FILM_WELCOME    0
+#define FILM_GOODBYE    1
+#define FILM_APPLY      2       /* new account */
+#define FILM_TRYOUT     3
+#define FILM_POST       4
+#define FILM_GEM        5       /* help message */
+#define FILM_BOARD      6
+#define FILM_CLASS      7
+#define FILM_PAL        8
+#define FILM_MAIL       9
+#define FILM_ULIST      10
+#define FILM_VOTE       11
+#define FILM_MORE       12
+#define FILM_EDIT       13
+#define FILM_BMW        14
+#define FILM_BANMAIL    15
+#define FILM_INCOME     16
+#define FILM_ADMIN      17
+#define FILM_SONG       18
+#define FILM_MIME       19
+#define FILM_CONTACT    20
+#define FILM_MEMORANDUM 21
+#define FILM_ALOHA      22
+#define FILM_SIGNUP     23
+#define FILM_FAVORITE   24
+#define FILM_MOVIE      25      /* normal movies */
 
 
-#define FILM_ROW        (40)
+#define FILM_ROW        40
 
 typedef struct
 {
@@ -779,9 +779,9 @@ typedef struct
 /* Screen Line buffer modes */
 
 
-#define SL_MODIFIED     (1)     /* if line has been modified, screen output */
-#define SL_STANDOUT     (2)     /* if this line contains standout code */
-#define SL_ANSICODE     (4)     /* if this line contains ANSI code */
+#define SL_MODIFIED     1       /* if line has been modified, screen output */
+#define SL_STANDOUT     2       /* if this line contains standout code */
+#define SL_ANSICODE     4       /* if this line contains ANSI code */
 
 
 typedef struct screenline
@@ -1017,10 +1017,10 @@ typedef struct
     int end;
 } REAPER_TIME;
 
-#define TOPLOGINS       (0)
-#define TOPPOSTS        (1)
+#define TOPLOGINS       0
+#define TOPPOSTS        1
 
-#define TOPNUM          (50)
+#define TOPNUM          50
 #define TOPNUM_HALF     (TOPNUM/2)
 
 typedef struct

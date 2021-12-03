@@ -267,12 +267,12 @@ static const char *const ModeTypeTable[] =
 #define XR_NECK         (XR_PART_NECK | XR_BODY)
 #define XR_BODY         (XR_PART_BODY | XR_KNEE)
 #define XR_KNEE         (XR_PART_KNEE | XR_FOOT)
-#define XR_FOOT         (XR_PART_FOOT)
+#define XR_FOOT         XR_PART_FOOT
 
 /* Legacy xover modes */
 
 /* Redraw/reloading */
-#define XO_NONE         (KEY_NONE)
+#define XO_NONE         KEY_NONE
 #define XO_INIT         (XR_INIT + XO_NONE)
 #define XO_LOAD         (XR_LOAD + XO_NONE)
 #define XO_HEAD         (XR_HEAD + XO_NONE)
@@ -293,7 +293,7 @@ static const char *const ModeTypeTable[] =
 /* Special values */
 
 //#define XO_RSIZ         256             /* max record length */ /* IID.20200102: Unlimited. */
-#define XO_TALL         (b_lines - 3)   /* page size = b_lines - 3 (扣去 head/neck/foot 共三行) */
+#define XO_TALL         ((void)0, b_lines - 3)   /* page size = b_lines - 3 (扣去 head/neck/foot 共三行) */
 
 /* Cursor movements */
 

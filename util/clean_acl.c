@@ -10,7 +10,7 @@
 
 #include "bbs.h"
 
-#define MAX_AC  (50000)
+#define MAX_AC  50000
 
 char map[MAX_AC][256];
 int total;

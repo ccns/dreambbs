@@ -6,8 +6,8 @@
 *************************************************/
 
 #include "bbs.h"
-#define MAX_PNOTE        (10)            /* 答錄機保留通數 */
-#define MAXHINTLINES     (10)            /* 答錄機主人留言長度 */
+#define MAX_PNOTE        10              /* 答錄機保留通數 */
+#define MAXHINTLINES     10              /* 答錄機主人留言長度 */
 
 static const char *const fn_note_tmp      = FN_PNOTE_TMP;
 static const char *const fn_note_dat      = FN_PNOTE_DAT;

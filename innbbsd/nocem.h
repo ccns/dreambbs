@@ -13,15 +13,15 @@
 #define NCMHDR          1
 #define NCMBDY          2
 
-#define NOPGP           -1
+#define NOPGP           (-1)
 #define PGPGOOD         0
 #define PGPBAD          1
 #define PGPUN           2
 
 #define P_OKAY          0
-#define P_FAIL          -1
-#define P_UNKNOWN       -2
-#define P_DISALLOW      -3
+#define P_FAIL          (-1)
+#define P_UNKNOWN       (-2)
+#define P_DISALLOW      (-3)
 
 #define MAXSPAMMID      10000
 #define LINESIZE        512

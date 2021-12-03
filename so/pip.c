@@ -4,13 +4,13 @@
 /* ¹Ï¹Ï by tiball.bbs@bbs.nhctc.edu.tw */
 /* ----------------------------------- */
 #define ba 5
-#define START_MONEY     (3000)
-#define START_FOOD      (20)
-#define START_HP        (50)
-#define START_HAPPY     (20)
-#define START_SATISFY   (20)
+#define START_MONEY     3000
+#define START_FOOD      20
+#define START_HP        50
+#define START_HAPPY     20
+#define START_SATISFY   20
 
-#define LEARN_LEVEL     ((d.state[STATE_HAPPY]+d.state[STATE_SATISFY])/100)
+#define LEARN_LEVEL     ((void)0, (d.state[STATE_HAPPY]+d.state[STATE_SATISFY])/100)
 
 #include "bbs.h"
 #include "pipstruct.h"

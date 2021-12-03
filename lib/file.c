@@ -127,7 +127,7 @@ int f_unlock(int fd)
 #ifdef MAP_FILE                    /* 44BSD defines this & requires it to mmap files */
 #define DAO_MAP       (MAP_SHARED | MAP_FILE)
 #else
-#define DAO_MAP       (MAP_SHARED)
+#define DAO_MAP       MAP_SHARED
 #endif
 
 char *f_map(const char *fpath, int *fsize)

@@ -23,7 +23,7 @@ extern "C" {
 
 // Must be consistent with "bbslua.c"
 
-#define BBSLUA_INTERFACE_VER    0.119 // (0.201)
+#define BBSLUA_INTERFACE_VER    0.119 // 0.201
 #define BBSLUA_DL_PATCH_VERSION 1
 #define BBSLUA_INTERFACE_VER_STR  CPP_STR(BBSLUA_INTERFACE_VER)
 #define BBSLUA_VERSION_STR \
@@ -49,8 +49,8 @@ extern "C" {
 
 // Must be consistent with "bbsruby.c"
 
-#define BBSRUBY_MAJOR_VERSION   (0)
-#define BBSRUBY_MINOR_VERSION   (3)
+#define BBSRUBY_MAJOR_VERSION   0
+#define BBSRUBY_MINOR_VERSION   3
 #define BBSRUBY_DL_PATCH_VERSION  2
 #define BBSRUBY_VERSION_STR \
     VER_DL_STR(BBSRUBY_MAJOR_VERSION, BBSRUBY_MINOR_VERSION, BBSRUBY_DL_PATCH_VERSION)

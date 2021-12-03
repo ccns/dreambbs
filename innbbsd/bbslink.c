@@ -54,7 +54,7 @@ static int MaxArts = MAX_ARTS;          /* 對 news server 每個群組最多只抓幾封文
 static const char *DefaultProcSite = NULL;  /* !=NULL: 只處理某特定站台 */
 
 
-#define DEBUG(arg)      if (Verbose) printf arg
+#define DEBUG(arg)      (void) ((void)((Verbose) && (printf arg, 0)))
 
 
 /*-------------------------------------------------------*/

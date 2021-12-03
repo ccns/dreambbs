@@ -25,17 +25,17 @@
 
 #ifndef FT_DBCS_NOINTRESC
 # ifdef  UF_DBCS_NOINTRESC
-#  define FT_DBCS_NOINTRESC (cuser.uflag & UF_DBCS_NOINTRESC)
+#  define FT_DBCS_NOINTRESC ((void)0, cuser.uflag & UF_DBCS_NOINTRESC)
 # else
-#  define FT_DBCS_NOINTRESC (0)
+#  define FT_DBCS_NOINTRESC 0
 # endif
 #endif
 
 #ifndef FT_COLOR_NOCOLOR
 # ifdef  UF_COLOR_NOCOLOR
-#  define FT_COLOR_NOCOLOR (cuser.uflag & UF_COLOR_NOCOLOR)
+#  define FT_COLOR_NOCOLOR ((void)0, cuser.uflag & UF_COLOR_NOCOLOR)
 # else
-#  define FT_COLOR_NOCOLOR (0)
+#  define FT_COLOR_NOCOLOR 0
 # endif
 #endif
 
@@ -100,9 +100,9 @@ static int vkey_is_typeahead(void)
 #ifndef GRAYOUT_DARK
 #define GRAYOUT_COLORBOLD (-2)
 #define GRAYOUT_BOLD (-1)
-#define GRAYOUT_DARK (0)
-#define GRAYOUT_NORM (1)
-#define GRAYOUT_COLORNORM (+2)
+#define GRAYOUT_DARK 0
+#define GRAYOUT_NORM 1
+#define GRAYOUT_COLORNORM 2
 #endif // GRAYOUT_DARK
 
 //////////////////////////////////////////////////////////////////////////
@@ -110,7 +110,7 @@ static int vkey_is_typeahead(void)
 //////////////////////////////////////////////////////////////////////////
 #ifndef TYPEAHEAD_NONE
 #define TYPEAHEAD_NONE  (-1)
-#define TYPEAHEAD_STDIN (0)
+#define TYPEAHEAD_STDIN 0
 #endif // TYPEAHEAD
 
 //////////////////////////////////////////////////////////////////////////
@@ -248,45 +248,45 @@ static int vkey_is_typeahead(void)
 // 2: Good terminals can accept any omit format (ESC[;nH)
 // 1: Poor terminals (eg, Win/DOS telnet) can only omit 2nd (ESC[mH)
 // 0: Very few poor terminals (eg, CrazyTerm/BBMan) cannot omit any parameters
-#define FTCONF_ANSICMD2_OMIT (0)
+#define FTCONF_ANSICMD2_OMIT 0
 
 //////////////////////////////////////////////////////////////////////////
 // Flat Terminal Definition
 //////////////////////////////////////////////////////////////////////////
 
-#define FTSZ_DEFAULT_ROW (24)
-#define FTSZ_DEFAULT_COL (80)
-#define FTSZ_MIN_ROW     (24)
-#define FTSZ_MAX_ROW     (100)
-#define FTSZ_MIN_COL     (80)
-#define FTSZ_MAX_COL     (320)
+#define FTSZ_DEFAULT_ROW 24
+#define FTSZ_DEFAULT_COL 80
+#define FTSZ_MIN_ROW     24
+#define FTSZ_MAX_ROW     100
+#define FTSZ_MIN_COL     80
+#define FTSZ_MAX_COL     320
 
-#define FTCHAR_ERASE     (' ')
-#define FTATTR_ERASE     (0x07)
-#define FTCHAR_BLANK     (' ')
-#define FTATTR_DEFAULT   (FTATTR_ERASE)
-#define FTCHAR_INVALID_DBCS ('?')
-// #define FTATTR_TRANSPARENT (0x80)
-#define FTCATTR_DEFAULT  (0x00)
+#define FTCHAR_ERASE     ' '
+#define FTATTR_ERASE     0x07
+#define FTCHAR_BLANK     ' '
+#define FTATTR_DEFAULT   FTATTR_ERASE
+#define FTCHAR_INVALID_DBCS '?'
+// #define FTATTR_TRANSPARENT 0x80
+#define FTCATTR_DEFAULT  0x00
 
-#define FTDIRTY_CHAR    (0x01)
-#define FTDIRTY_ATTR    (0x02)
-#define FTDIRTY_DBCS    (0x04)
-#define FTDIRTY_INVALID_DBCS (0x08)
-#define FTDIRTY_RAWMOVE (0x10)
-#define FTDIRTY_CLEAR_DBCS (0x20)
+#define FTDIRTY_CHAR    0x01
+#define FTDIRTY_ATTR    0x02
+#define FTDIRTY_DBCS    0x04
+#define FTDIRTY_INVALID_DBCS 0x08
+#define FTDIRTY_RAWMOVE 0x10
+#define FTDIRTY_CLEAR_DBCS 0x20
 
-#define FTDBCS_SAFE     (0)     // standard DBCS
-#define FTDBCS_UNSAFE   (1)     // not on all systems (better do rawmove)
-#define FTDBCS_INVALID  (2)     // invalid
+#define FTDBCS_SAFE     0       // standard DBCS
+#define FTDBCS_UNSAFE   1       // not on all systems (better do rawmove)
+#define FTDBCS_INVALID  2       // invalid
 
-#define FTCMD_MAXLEN    (63)    // max escape command sequence length
-#define FTATTR_MINCMD   (16)
+#define FTCMD_MAXLEN    63      // max escape command sequence length
+#define FTATTR_MINCMD   16
 
 #ifndef FTCONF_USE_ANSI_RELMOVE
-# define FTMV_COST      (8)     // always ESC[m;nH will costs avg 8 bytes
+# define FTMV_COST      8       // always ESC[m;nH will costs avg 8 bytes
 #else
-# define FTMV_COST      (5)     // ESC[ABCD with ESC[m;nH costs avg 4+ bytes
+# define FTMV_COST      5       // ESC[ABCD with ESC[m;nH costs avg 4+ bytes
 #endif
 
 //////////////////////////////////////////////////////////////////////////
@@ -349,25 +349,25 @@ static FlatTerm ft;
 //////////////////////////////////////////////////////////////////////////
 
 // ftattr: 0| FG(3) | BOLD(1) | BG(3) | BLINK(1) |8
-#define FTATTR_FGSHIFT  (0)
-#define FTATTR_BGSHIFT  (4)
+#define FTATTR_FGSHIFT  0
+#define FTATTR_BGSHIFT  4
 #define FTATTR_GETFG(x) (((x) >> FTATTR_FGSHIFT) & 0x7)
 #define FTATTR_GETBG(x) (((x) >> FTATTR_BGSHIFT) & 0x7)
 #define FTATTR_FGMASK   ((ftattr)(0x7 << FTATTR_FGSHIFT))
 #define FTATTR_BGMASK   ((ftattr)(0x7 << FTATTR_BGSHIFT))
-#define FTATTR_BOLD     (0x08)
-#define FTATTR_BLINK    (0x80)
+#define FTATTR_BOLD     0x08
+#define FTATTR_BLINK    0x80
 #define FTATTR_DEFAULT_FG   (FTATTR_GETFG(FTATTR_DEFAULT))
 #define FTATTR_DEFAULT_BG   (FTATTR_GETBG(FTATTR_DEFAULT))
 #define FTATTR_MAKE(f, b)   (((f)<<FTATTR_FGSHIFT)|((b)<<FTATTR_BGSHIFT))
 #define FTCHAR_ISBLANK(x)   ((x) == (FTCHAR_BLANK))
 
 // ftcattr: 0| UNUSED(3) | BGBRIGHT(1) | FGBRIGHT(1) | ITALIC(1) | REVERSE(1) | CONCEAL(1) |8
-#define FTCATTR_FGBRIGHT   (0x08)
-#define FTCATTR_BGBRIGHT   (0x10)
-#define FTCATTR_ITALIC     (0x20)
-#define FTCATTR_REVERSE    (0x40)
-#define FTCATTR_CONCEAL    (0x80)
+#define FTCATTR_FGBRIGHT   0x08
+#define FTCATTR_BGBRIGHT   0x10
+#define FTCATTR_ITALIC     0x20
+#define FTCATTR_REVERSE    0x40
+#define FTCATTR_CONCEAL    0x80
 
 #define FTCMAP  ft.cmap[ft.mi]
 #define FTAMAP  ft.amap[ft.mi]
@@ -415,7 +415,7 @@ static FlatTerm ft;
 #define abs(x) (((x)>0)?(x):-(x))
 #endif
 
-#define ranged(x, vmin, vmax) (max(min(x, vmax), vmin))
+#define ranged(x, vmin, vmax) max(min(x, vmax), vmin)
 
 #ifdef __cplusplus
 extern "C" {
@@ -538,7 +538,7 @@ ftattr  fterm_apply_cattr(ftattr attr, ftcattr cattr);  // Apply `cattr` to `att
 // Flat Terminal Implementation
 //////////////////////////////////////////////////////////////////////////
 
-#define fterm_markdirty() (void) ( ft.dirty = 1 )
+#define fterm_markdirty() (void) ( ft.dirty = 1, (void)0 )
 
 // initialization
 
@@ -1679,7 +1679,7 @@ fterm_exec(void)
         p++;
     // p now points to the next parameter sub-string or the final byte
 
-#define EXEC_C1_FS  (0x0100)   // For ESC cmd (a C1 set element or an independent control function)
+#define EXEC_C1_FS  0x0100     // For ESC cmd (a C1 set element or an independent control function)
     switch ((ft.szcmd) > 2 ? cmd : EXEC_C1_FS | cmd)
     {
         // Cursor Movement

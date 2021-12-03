@@ -149,16 +149,16 @@ ve_abort(
 
 #else
 
-#define ve_abort(n)     (void) 0
+#define ve_abort(n)     (void) ((void)0)
 #endif
 
 
 /* `IS_DBCS_*_VE_N()`: Whether the byte at character position `_idx` in the string `_str` is the leading/trailing DBCS byte, ignoring ANSI escapes according to `_mode` */
 
 #define IS_DBCS_LEAD_VE_N(_mode, _str, _idx, _len) \
-    (bool)(((_mode) & VE_ANSI) ? IS_DBCS_LEAD_ANSI_N(_str, _idx, _len) : IS_DBCS_LEAD_N(_str, _idx, _len))
+    ((void)0, ((_mode) & VE_ANSI) ? IS_DBCS_LEAD_ANSI_N(_str, _idx, _len) : IS_DBCS_LEAD_N(_str, _idx, _len))
 #define IS_DBCS_TRAIL_VE_N(_mode, _str, _idx, _len) \
-    (bool)(((_mode) & VE_ANSI) ? IS_DBCS_TRAIL_ANSI_N(_str, _idx, _len) : IS_DBCS_TRAIL_N(_str, _idx, _len))
+    ((void)0, ((_mode) & VE_ANSI) ? IS_DBCS_TRAIL_ANSI_N(_str, _idx, _len) : IS_DBCS_TRAIL_N(_str, _idx, _len))
 
 
 /* If the cursor is on the trail byte of a DBCS character, move the cursor to the next character */

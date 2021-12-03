@@ -56,10 +56,10 @@
 //------------------------------------------------------------------------
 
 #if !defined(BBSRUBY_NATIVE_B_LINES) && !defined(b_lines)
-  #define b_lines  (t_lines - 1)
+  #define b_lines  ((void)0, t_lines - 1)
 #endif
 #if !defined(BBSRUBY_NATIVE_B_COLS) && !defined(b_cols)
-  #define b_cols  (t_columns - 1)
+  #define b_cols  ((void)0, t_columns - 1)
 #endif
 
 #ifndef BBSRUBY_HAVE_STR_RANSI
@@ -100,7 +100,7 @@ static inline void getyx(int *y, int *x)
 #endif
 
 #ifndef DL_RELEASE_VOID
-  #define DL_RELEASE_VOID() ((void)0)
+  #define DL_RELEASE_VOID() (void) ((void)0)
 #endif
 
 //-------------------------------------------------------
@@ -135,13 +135,13 @@ static inline void getyx(int *y, int *x)
   #define RBF_ARG(...)  (mrb, self)                         // `rb_func_t` arguments
   #define RB_ARG(...)  (mrb, __VA_ARGS__)                   // arguments
   #define RB_VARG()  (mrb)                                  // void argument
-  #define RBF_C(func)  (func)RBF_ARG                        // `rb_func_t` call
-  #define RB_C(func)  (m##func)RB_ARG                       // Ruby API call
-  #define RB_CV(func)  (m##func)RB_VARG                     // Ruby API call void
-  #define BRB_C(func)  (func)RB_ARG                         // normal ruby call
-  #define BRB_CV(func)  (func)RB_VARG                       // normal ruby call void
-  #define CMRB_C(crbfunc, mrbfunc)  (mrbfunc)RB_ARG         // (CRuby, mruby) API call
-  #define CMRB_CV(crbfunc, mrbfunc)  (mrbfunc)RB_VARG       // (CRuby, mruby) API call void
+  #define RBF_C(func)  ((void)0, func)RBF_ARG               // `rb_func_t` call
+  #define RB_C(func)  ((void)0, m##func)RB_ARG              // Ruby API call
+  #define RB_CV(func)  ((void)0, m##func)RB_VARG            // Ruby API call void
+  #define BRB_C(func)  ((void)0, func)RB_ARG                // normal ruby call
+  #define BRB_CV(func)  ((void)0, func)RB_VARG              // normal ruby call void
+  #define CMRB_C(crbfunc, mrbfunc)  ((void)0, mrbfunc)RB_ARG       // (CRuby, mruby) API call
+  #define CMRB_CV(crbfunc, mrbfunc)  ((void)0, mrbfunc)RB_VARG     // (CRuby, mruby) API call void
 
 typedef mrb_value VALUE;
 typedef struct RClass *rb_class_t;
@@ -150,7 +150,7 @@ typedef mrb_func_t rb_func_t;
   #define RB_ARGS_REQ(n)  MRB_ARGS_REQ(n)
   #define RB_ARGS_REST()  MRB_ARGS_REST()
 
-  #define rb_cObject  (mrb->object_class)
+  #define rb_cObject  mrb->object_class
   #define Qnil  mrb_nil_value()
   #define Qundef  mrb_undef_value()
   #define INT2FIX(i)  mrb_fixnum_value(i)
@@ -173,25 +173,25 @@ typedef rb_event_t rb_event_flag_t;
   #define RBF_P(paras)  paras                 // `rb_func_t` parameter
   #define RB_P(paras)  paras                  // parameter
   #define RB_PV(paras)  (void)                // parameter void
-  #define RBF_C(func)  (func)                 // `rb_func_t` call
-  #define RB_C(func)  (func)                  // Ruby API call
-  #define RB_CV(func)  (func)                 // Ruby API call void
-  #define BRB_C(func)  (func)                 // normal ruby call
-  #define BRB_CV(func)  (func)                // normal ruby call void
-  #define CMRB_C(crbfunc, mrbfunc)  (crbfunc) // (CRuby, mruby) API call
-  #define CMRB_CV(crbfunc, mrbfunc) (crbfunc) // (CRuby, mruby) API call void
+  #define RBF_C(func)  ((void)0, func)        // `rb_func_t` call
+  #define RB_C(func)  ((void)0, func)         // Ruby API call
+  #define RB_CV(func)  ((void)0, func)        // Ruby API call void
+  #define BRB_C(func)  ((void)0, func)        // normal ruby call
+  #define BRB_CV(func)  ((void)0, func)       // normal ruby call void
+  #define CMRB_C(crbfunc, mrbfunc)  ((void)0, crbfunc) // (CRuby, mruby) API call
+  #define CMRB_CV(crbfunc, mrbfunc) ((void)0, crbfunc) // (CRuby, mruby) API call void
 
 typedef VALUE (*rb_func_t)(ANYARGS);
 typedef VALUE rb_class_t;
 
   #define RB_ARGS_REQ(n)  (n)
-  #define RB_ARGS_REST()  -1
+  #define RB_ARGS_REST()  (-1)
 
   #define BRB_HOOK_COUNT_FACTOR  1
 #endif
 
-#define BBSRUBY_MAJOR_VERSION (0)
-#define BBSRUBY_MINOR_VERSION (3)
+#define BBSRUBY_MAJOR_VERSION 0
+#define BBSRUBY_MINOR_VERSION 3
 #ifndef BBSRUBY_PATCH_VERSION
     #define BBSRUBY_PATCH_VERSION 0
 #endif
@@ -210,7 +210,7 @@ typedef VALUE rb_class_t;
 #define BBSRUBY_INTERFACE_VER 0.111
 static int ABORT_BBSRUBY = 0;
 
-#define BBSRUBY_TOC_HEADERS (6)
+#define BBSRUBY_TOC_HEADERS 6
 static const char* const TOCs_HEADER[BBSRUBY_TOC_HEADERS] = {"interface", "title", "notes", "author", "version", "date"};
 static VALUE TOCs_rubyhash;
 static double KBHIT_TMIN = 0.001;

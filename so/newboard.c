@@ -512,7 +512,7 @@ int pos)
     /* 檢查是否已經連署過                                  */
     /* --------------------------------------------------- */
 
-#define FV_SZ   (sizeof(time32_t))
+#define FV_SZ   sizeof(time32_t)
 
     usr_fpath(buf, cuser.userid, FN_NEWBOARD);
     fv = open(buf, O_RDWR | O_CREAT, 0600);

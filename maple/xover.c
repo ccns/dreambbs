@@ -8,8 +8,8 @@
 
 #include "bbs.h"
 
-#define XO_STACK        (5)
-#define MAX_LEVEL       (20)
+#define XO_STACK        5
+#define MAX_LEVEL       20
 int xo_stack_level;
 static int xo_user_level;
 
