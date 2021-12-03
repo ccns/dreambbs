@@ -9,7 +9,7 @@
 #ifndef PIP_H
 #define PIP_H
 
-#define ALIVE   (9/10)  /* 復活比 */
+#define ALIVE   (9/10.0)  /* 復活比 */
 
 enum pipmenuidx {
     PIPMENU_MAIN,
