@@ -1218,7 +1218,10 @@ class_outs(
     const char *title,
     int num)
 {
-    prints("%6d   %-*.*s     %.*s\n", num, IDLEN, IDLEN, title, d_cols + 53, title + IDLEN + 1);
+    /* IID.2021-12-04: Format: <ClassID '/'>(IDLEN) (<pad> (5) | <pad>(1) Category(4)) <pad>(1) Description */
+    const bool has_cate = (title[IDLEN] != ' ' && title[IDLEN] != '/');
+    const char *const desc = title + IDLEN + (has_cate ? 4 : 0);
+    prints("%6d   %-.*s %*.*s %.*s\n", num, IDLEN, title, 4, 4, has_cate ? title + IDLEN : "", d_cols + 52, desc + strspn(desc, " "));
 }
 
 static int
