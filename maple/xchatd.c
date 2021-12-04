@@ -2765,7 +2765,7 @@ command_execute(
         {
             if (cu->room && !CLOAK(cu)) /* 隱身的人也不能說話哦 */
             {
-                sprintf(buf, "%-10s:%s", cu->chatid, msg);
+                sprintf(buf, "%-s:%*s %s", cu->chatid, BMAX(0, 10 - (int)(unsigned)strlen(cu->chatid) - 1), "", msg);
                 send_to_room(cu->room, buf, cu->userno, MSG_MESSAGE);
             }
         }
