@@ -603,15 +603,14 @@ do_post(
             const char *msg = "作者無法收信";
 #define MSG_OK                "回應至作者信箱"
 
-            char *const rcpt = quote_user;
-            if (strchr(rcpt, '@'))
+            if (strchr(quote_user, '@'))
             {
-                if (bsmtp(fpath, title, rcpt, 0) >= 0)
+                if (bsmtp(fpath, title, quote_user, 0) >= 0)
                     msg = MSG_OK;
             }
             else
             {
-                usr_fpath(folder, rcpt, fn_dir);
+                usr_fpath(folder, quote_user, fn_dir);
                 if (hdr_stamp(folder, HDR_LINK, &post, fpath) == 0)
                 {
                     strcpy(post.owner, cuser.userid);

@@ -38,15 +38,13 @@ int f_cp(const char *src, const char *dst, int mode    /* O_EXCL / O_APPEND / O_
         if (fdst >= 0)
         {
             char pool[BLK_SIZ];
-
-            char *data = pool;
             do
             {
-                ret = read(fsrc, data, BLK_SIZ);
+                ret = read(fsrc, pool, BLK_SIZ);
                 if (ret <= 0)
                     break;
             }
-            while (write(fdst, data, ret) > 0);
+            while (write(fdst, pool, ret) > 0);
             close(fdst);
         }
         close(fsrc);
@@ -372,11 +370,9 @@ void f_suck(FILE * fp, const char *fpath)
     {
         char pool[BLK_SIZ];
         int size;
-
-        char *data = pool;
-        while ((size = read(fd, data, BLK_SIZ)) > 0)
+        while ((size = read(fd, pool, BLK_SIZ)) > 0)
         {
-            fwrite(data, size, 1, fp);
+            fwrite(pool, size, 1, fp);
         }
         close(fd);
     }

@@ -124,20 +124,17 @@ static void
 ochar(
     int ch)
 {
-    char *data;
     int size;
-
-    data = vo_pool;
     size = vo_size;
     if (size >= VO_MAX - 2)
     {
-        telnet_flush(data, size);
+        telnet_flush(vo_pool, size);
         size = 0;
     }
-    data[size++] = ch;
+    vo_pool[size++] = ch;
     if (ch == IAC)  /* `'\xff'` => `IAC` `IAC` */
     {
-        data[size++] = ch;
+        vo_pool[size++] = ch;
     }
     vo_size = size;
 }
@@ -1821,9 +1818,6 @@ igetch(void)
 
     fd_set rset;
     int cc, fd=0, nfds;
-    unsigned char *data;
-
-    data = vi_pool;
     nfds = 0;
 
     for (;;)
@@ -1860,13 +1854,13 @@ igetch(void)
                     if (fd != 0 && FD_ISSET(fd, &rset))
                         return I_OTHERDATA;
 
-                    cc = recv(0, data, VI_MAX, 0);
+                    cc = recv(0, vi_pool, VI_MAX, 0);
                     if (cc > 0)
                     {
                         int iac_key;
                         vi_size = cc;
                         vi_head = 0;
-                        iac_key = iac_process(data, data + cc, &vi_head);
+                        iac_key = iac_process(vi_pool, vi_pool + cc, &vi_head);
                         if (iac_key != KEY_NONE)
                             return iac_key;
                         if (vi_head >= cc)
@@ -1940,7 +1934,7 @@ igetch(void)
             }
         }
 
-        return (unsigned char) data[vi_head++];
+        return (unsigned char) vi_pool[vi_head++];
     }
 }
 
