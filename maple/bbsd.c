@@ -1292,8 +1292,6 @@ telnet_init(void)
     };
 
     fd_set rset;
-    int n, len;
-    const unsigned char *cmd;
     struct timeval to;
     char buf[64];
 
@@ -1303,25 +1301,13 @@ telnet_init(void)
 
     FD_ZERO(&rset);
 
-#if 0
+    send(0, svr, sizeof(svr), 0);
+
+    FD_SET(0, &rset);
     to.tv_sec = 1;
     to.tv_usec = 1;
-#endif
-    cmd = svr;
-
-    for (n = 0; n < 4; n++)
-    {
-        len = (n == 1 ? 6 : 3);
-        send(0, cmd, len, 0);
-        cmd += len;
-
-        FD_SET(0, &rset);
-        /* Thor.981221: for future reservation bug */
-        to.tv_sec = 1;
-        to.tv_usec = 1;
-        if (select(1, &rset, NULL, NULL, &to) > 0)
-            recv(0, buf, sizeof(buf), 0);
-    }
+    if (select(1, &rset, NULL, NULL, &to) > 0)
+        recv(0, buf, sizeof(buf), 0);
 }
 
 
