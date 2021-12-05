@@ -1809,6 +1809,18 @@ iac_count(
 static int vi_mode = 0;
 static int vi_unget_key = KEY_NONE;
 
+static void reset_idle(void)
+{
+    if (cutmp)
+        time32(&cutmp->idle_time);
+    else
+        idle = 0;
+#ifdef  HAVE_SHOWNUMMSG
+    if (cutmp)
+        cutmp->num_msg = 0;
+#endif
+}
+
 int
 igetch(void)
 {
@@ -1816,6 +1828,7 @@ igetch(void)
 #define IM_REPLY        0x02    /* ^R */
 #define IM_TALK         0x04
 
+    static unsigned char *iac_next = NULL;
     fd_set rset;
     int cc, fd=0, nfds;
     nfds = 0;
@@ -1857,23 +1870,11 @@ igetch(void)
                     cc = recv(0, vi_pool, VI_MAX, 0);
                     if (cc > 0)
                     {
-                        int iac_key;
                         vi_size = cc;
                         vi_head = 0;
-                        iac_key = iac_process(vi_pool, vi_pool + cc, &vi_head);
-                        if (iac_key != KEY_NONE)
-                            return iac_key;
-                        if (vi_head >= cc)
-                            continue;
-
-                        if (cutmp)
-                            time32(&cutmp->idle_time);
-                        else
-                            idle = 0;
-#ifdef  HAVE_SHOWNUMMSG
-                        if (cutmp)
-                            cutmp->num_msg = 0;
-#endif
+                        iac_next = (unsigned char *)strchr((char *)vi_pool, IAC);
+                        if (iac_next > vi_pool)
+                            reset_idle();
                         break;
                     }
                     if ((cc == 0) || (errno != EINTR))
@@ -1933,7 +1934,19 @@ igetch(void)
                 }
             }
         }
-
+        /* IID.2021-12-05: Handle IAC commands anywhere in the input data. */
+        if (vi_pool + vi_head == iac_next)
+        {
+            int count;
+            const int iac_key = iac_process(vi_pool + vi_head, vi_pool + vi_size, &count);
+            vi_head += count;
+            iac_next = (unsigned char *)strchr((char *)vi_pool + vi_head, IAC);
+            if (iac_next > vi_pool + vi_head)
+                reset_idle();
+            if (iac_key == KEY_NONE)
+                continue;
+            return iac_key;
+        }
         return (unsigned char) vi_pool[vi_head++];
     }
 }
