@@ -1283,113 +1283,43 @@ tn_main(void)
 static void
 telnet_init(void)
 {
-    static const unsigned char svr[] = {
+    static const unsigned char svr[] = {    /* server */
         IAC, DO, TELOPT_TTYPE,
         IAC, SB, TELOPT_TTYPE, TELQUAL_SEND, IAC, SE,
         IAC, WILL, TELOPT_ECHO,
         IAC, WILL, TELOPT_SGA,
-        IAC, DO, TELOPT_BINARY
+        IAC, DO, TELOPT_BINARY,
+
+        /* 支援超過 24 列的畫面 */
+        /* ask client to report it's term size */
+        /* 問對方 (telnet client) 有沒有支援不同的螢幕寬高 */
+
+        /* fuse.030518: 註解 */
+        //  server問：你會改變行列數嗎？(TN_NAWS, Negotiate About Window Size)
+        //  client答：Yes, I do. (TNCH_DO)
+        //
+        //  那麼在連線時，當TERM變化行列數時就會發出：
+        //  TNCH_IAC + TNCH_SB + TN_NAWS + 行數列數 + TNCH_IAC + TNCH_SE;
+        IAC, DO, TELOPT_NAWS,
     };
-
-    fd_set rset;
-    struct timeval to;
-    char buf[64];
-
-    /* --------------------------------------------------- */
-    /* init telnet protocol                                */
-    /* --------------------------------------------------- */
-
-    FD_ZERO(&rset);
-
     send(0, svr, sizeof(svr), 0);
-
-    FD_SET(0, &rset);
-    to.tv_sec = 1;
-    to.tv_usec = 1;
-    if (select(1, &rset, NULL, NULL, &to) > 0)
-        recv(0, buf, sizeof(buf), 0);
+    /* IID.2021-12-06: Handle the response from client with `iac_process()` when `igetch()` is called later. */
 }
-
-
-/* ----------------------------------------------------- */
-/* 支援超過 24 列的畫面                                  */
-/* ----------------------------------------------------- */
 
 static void
 term_init(void)
 {
-/* fuse.030518: 註解 */
-//  server問：你會改變行列數嗎？(TN_NAWS, Negotiate About Window Size)
-//  client答：Yes, I do. (TNCH_DO)
-//
-//  那麼在連線時，當TERM變化行列數時就會發出：
-//  TNCH_IAC + TNCH_SB + TN_NAWS + 行數列數 + TNCH_IAC + TNCH_SE;
-
-    /* ask client to report it's term size */
-    static const unsigned char svr[] =      /* server */
-    {
-        IAC, DO, TELOPT_NAWS
-    };
-
-    fd_set rset;
-    char buf[64], *rcv;
-    struct timeval to;
-
-    FD_ZERO(&rset);
-
 #ifdef M3_USE_PFTERM
     initscr();
 #endif
 
-    memset(buf, 0, sizeof(buf));
+    /* gslin: Unix 的 telnet 對有無加 port 參數的行為不太一樣 */
+    /* IID.2021-12-06: `iac_process()` now handles both of these cases. */
 
-    /* 問對方 (telnet client) 有沒有支援不同的螢幕寬高 */
-    send(0, svr, 3, 0);
-
-    FD_SET(0, &rset);
-    to.tv_sec = 1;
-    to.tv_usec = 1;
-    if (select(1, &rset, NULL, NULL, &to) > 0)
-        recv(0, buf, sizeof(buf), 0);
-
-    rcv = NULL;
-    if ((unsigned char) buf[0] == IAC && buf[2] == TELOPT_NAWS)
-    {
-        /* gslin: Unix 的 telnet 對有無加 port 參數的行為不太一樣 */
-        if ((unsigned char) buf[1] == SB)
-        {
-            rcv = buf + 3;
-        }
-        else if ((unsigned char) buf[1] == WILL)
-        {
-            if ((unsigned char) buf[3] != IAC)
-            {
-                FD_SET(0, &rset);
-                to.tv_sec = 1;
-                to.tv_usec = 1;
-                if (select(1, &rset, NULL, NULL, &to) > 0)
-                    recv(0, buf + 3, sizeof(buf) - 3, 0);
-            }
-                if ((unsigned char) buf[3] == IAC && (unsigned char) buf[4] == SB && buf[5] == TELOPT_NAWS)
-                    rcv = buf + 6;
-        }
-    }
-
-    if (rcv)
-    {
-        b_lines = ntohs(* (short *) (rcv + 2)) - 1;
-        b_cols = ntohs(* (short *) rcv) - 1;
-
-        /* b_lines 至少要 23，最多不能超過 T_LINES - 1 */
-        b_lines = TCLAMP(b_lines, 23, T_LINES - 1);
-        /* b_cols 至少要 79，最多不能超過 T_COLS - 1 */
-        b_cols = TCLAMP(b_cols, 79, T_COLS - 1);
-    }
-    else
-    {
-        b_lines = 23;
-        b_cols = 79;
-    }
+    /* IID.2021-12-06: Set up the screen dimensions with only the default values here.
+     * The actual value will be handled by `iac_process()` when `igetch()` is called later. */
+    b_lines = 23;
+    b_cols = 79;
 
 #ifdef M3_USE_PFTERM
     resizeterm(b_lines + 1, b_cols + 1);
