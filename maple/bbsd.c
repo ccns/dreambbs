@@ -1289,6 +1289,7 @@ telnet_init(void)
         IAC, SB, TELOPT_TTYPE, TELQUAL_SEND, IAC, SE,
         IAC, WILL, TELOPT_ECHO,
         IAC, WILL, TELOPT_SGA,
+        IAC, WILL, TELOPT_BINARY,
         IAC, DO, TELOPT_BINARY,
 
         /* 支援超過 24 列的畫面 */
