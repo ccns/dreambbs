@@ -1283,6 +1283,7 @@ tn_main(void)
 static void
 telnet_init(void)
 {
+    /* init telnet protocol */
     static const unsigned char svr[] = {    /* server */
         IAC, DO, TELOPT_TTYPE,
         IAC, SB, TELOPT_TTYPE, TELQUAL_SEND, IAC, SE,
