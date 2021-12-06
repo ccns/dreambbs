@@ -226,7 +226,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 `0x02000000` (mask)                 | `XZ_FINI`          | - 進行某 zone 的收拾工作 (無 `XZ_SKIN`) <br> - (未使用) (有 `XZ_SKIN`) | 未實作
 `0x04000000` (mask)                 | `XZ_BACK`          | - 回到上次所在的 zone (未實作) <br> - (未使用) (有 `XZ_SKIN`) | `XO_LAST` = `(XZ_ZONE \| XZ_BACK) + XO_NONE`
 `0x08000000` (mask)                 | `XZ_QUIT`          | 離開 `xover()` 函式          | `XO_QUIT` = `(XZ_ZONE \| XZ_QUIT) + XO_NONE`
-`0x10000000` (mask)                 | `XZ_SKIN`          | 將操作解讀為使用者介面 skin 切換 (未實作) | `XO_SKIN` = `((XZ_ZONE \| XZ_SKIN) + XO_MOVE)`
+`0x10000000` (mask)                 | `XZ_SKIN`          | 將操作解讀為使用者介面 skin 切換 (未實作) | `XO_SKIN` = `(XZ_ZONE \| XZ_SKIN) + XO_MOVE`
 `0x20000000` (mask)                 | `XZ_UNUSED5`       | (未使用)                     |
 `0x80100000` (mask)                 | `XO_FSPEC_MASK`    | 指定回呼函式類別相關 <br> 用在 `KeyFunc` 的按鍵值上 | 把相關的 macros `or` 起來的值 <br> DreamBBS v3.0 新增
 `0x80000000` (mask)                 | `key \| XO_DL`     | 指定回呼函式需動態載入        |
@@ -339,7 +339,7 @@ Member 名稱 | 型別               | 出處          | `key`/`first` 指定方
 `dlposf`    | - `const char *` (使用動態載入) <br> - `int (*)(XO *xo, int pos)` (不使用動態載入) | DreamBBS v3.0 | `key \| XO_POSF \| XO_DL` | 需動態載入的帶 `pos` 參數的 Xover 回呼函式
 
 ## MapleBBS 3 與 DreamBBS v3 的 Xover 特殊值
-Macro             | 值                        | 功能                                  | 註解
+Macro             | 值 (省略最外層括號)        | 功能                                  | 註解
  :---             | ---                       | ---                                   | ---
 `XO_DL`           | `0x80000000` <br> `0x00000000` (DreamBBS v2.0; 不使用動態載入時) | 指定回呼函式需要動態載入 | MapleBBS 3.10 新增
 `XO_POSF`         | `XO_MOVE`                 | 指定回呼函式具有 `pos` 參數            | DreamBBS v3.0 新增
@@ -348,23 +348,23 @@ Macro             | 值                        | 功能                         
 `XR_<redo>`       | (多個)                    | 預先定義的畫面重繪及資料載入的組合動作  | DreamBBS v3.0 新增
 `XR_PART_<redo>`  | (多個)                    | 畫面重繪及資料載入中的某部分            | DreamBBS v3.0 新增
 `XO_MOVE`         | - `0x20000000` <br> - `0x00100000` (DreamBBS v3)      | - 表示游標移動 <br> - 游標移動的 bias (DreamBBS v3)
-`XO_CUR`          | `(XO_REL + XO_CUR_BIAS)`  | 重繪游標所在行，並移動游標到指定的相對位置 | DreamBBS v3.0 新增
+`XO_CUR`          | `XO_REL + XO_CUR_BIAS`    | 重繪游標所在行，並移動游標到指定的相對位置 | DreamBBS v3.0 新增
 `XO_CUR_BIAS`     | `0x2000`                  | `XO_CUR` 內部處理相對位置時的 bias      | DreamBBS v3.0 新增
-`XO_CUR_MIN`      | `(XO_REL + 0 - XO_CUR)`   | `XO_CUR` 可指定的相對位置的最小值       | DreamBBS v3.0 新增
-`XO_CUR_MAX`      | `(XO_REL + KEY_NONE - XO_CUR)` | `XO_CUR` 可指定的相對位置的最大值  | DreamBBS v3.0 新增
+`XO_CUR_MIN`      | `XO_REL + 0 - XO_CUR`     | `XO_CUR` 可指定的相對位置的最小值       | DreamBBS v3.0 新增
+`XO_CUR_MAX`      | `XO_REL + KEY_NONE - XO_CUR` | `XO_CUR` 可指定的相對位置的最大值  | DreamBBS v3.0 新增
 `XO_RSIZ`         | `256`                     | 列表資料的資料結構大小限制              | DreamBBS v3.0 起不使用
-`XO_TALL`         | `(b_lines - 3)`           | 翻頁所跳行數                           | 非常數
-`XO_MOVE_MAX`     | `(XO_POS_MASK - XO_MOVE)` | 可加在 `XO_MOVE` 上的最大值            | DreamBBS v3.0 新增
-`XO_MOVE_MIN`     | `(XO_NONE + 1 - XO_MOVE)` | 可加在 `XO_MOVE` 上的最小值            | DreamBBS v3.0 新增
-`XO_TAIL`         | - `(XO_MOVE - 999)` <br> - `(XO_WRAP - 1)` (DreamBBS v3)  | - 用來將游標 `XO::pos` 初始化到列表尾項 <br> - 用在 `XO_MOVE + XO_TAIL` 中，將游標移到列表尾項 (DreamBBS v3.0 增加支援) | 注意是 `TAIL`，與 `XO_TALL` 不同
-`XO_ZONE`         | - `0x40000000` <br> - `(XZ_ZONE + XO_MOVE)` (DreamBBS v3) | 切換到某個列表 |
+`XO_TALL`         | `b_lines - 3`             | 翻頁所跳行數                           | 非常數
+`XO_MOVE_MAX`     | `XO_POS_MASK - XO_MOVE`   | 可加在 `XO_MOVE` 上的最大值            | DreamBBS v3.0 新增
+`XO_MOVE_MIN`     | `XO_NONE + 1 - XO_MOVE`   | 可加在 `XO_MOVE` 上的最小值            | DreamBBS v3.0 新增
+`XO_TAIL`         | - `XO_MOVE - 999` <br> - `XO_WRAP - 1` (DreamBBS v3)  | - 用來將游標 `XO::pos` 初始化到列表尾項 <br> - 用在 `XO_MOVE + XO_TAIL` 中，將游標移到列表尾項 (DreamBBS v3.0 增加支援) | 注意是 `TAIL`，與 `XO_TALL` 不同
+`XO_ZONE`         | - `0x40000000` <br> - `XZ_ZONE + XO_MOVE` (DreamBBS v3) | 切換到某個列表 |
 `XZ_ZONE`         | - `0x40000000`            | 將操作解釋為列表相關操作                | DreamBBS v3.0 新增
 `XZ_BACK`         | - `0x100` <br> - `0x04000000` (DreamBBS v3) | - (未使用) <br> - 加在 `XZ_ZONE` 上，表示回到上次進入的 zone (DreamBBS v3)    |
-`XZ_<zone>`       | `(XO_ZONE + <zone>)`      | 切換到某個 zone                        |
+`XZ_<zone>`       | `XO_ZONE + <zone>`        | 切換到某個 zone                        |
 `XZ_INDEX_<zone>` | `<zone>`                  | Zone 的 index 值                      | DreamBBS v3.0 新增
 `XZ_INDEX_MAX`    | `XZ_INDEX_MYFAVORITE`     | 最後一個 zone 的 index 值              | DreamBBS v3.0 新增
-`XZ_COUNT`        | `(XZ_INDEX_MAX + 1)`      | Xover zone 的數量                     | DreamBBS v3.0 新增
-`XO_SKIN`         | `((XZ_ZONE \| XZ_SKIN) + XO_MOVE)` | 套用某個使用者介面 skin (未實作) | DreamBBS v3.0 新增
+`XZ_COUNT`        | `XZ_INDEX_MAX + 1`        | Xover zone 的數量                     | DreamBBS v3.0 新增
+`XO_SKIN`         | `(XZ_ZONE \| XZ_SKIN) + XO_MOVE` | 套用某個使用者介面 skin (未實作) | DreamBBS v3.0 新增
 `XZ_SKIN`         | `0x10000000`              | 將操作解讀為使用者介面 skin 切換 (未實作) | DreamBBS v3.0 新增
 
 ## DreamBBS v3 的 Xover callback 命令連鎖機制
