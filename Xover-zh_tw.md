@@ -367,6 +367,50 @@ Macro             | 值 (省略最外層括號)        | 功能                 
 `XO_SKIN`         | `(XZ_ZONE \| XZ_SKIN) + XO_MOVE` | 套用某個使用者介面 skin (未實作) | DreamBBS v3.0 新增
 `XZ_SKIN`         | `0x10000000`              | 將操作解讀為使用者介面 skin 切換 (未實作) | DreamBBS v3.0 新增
 
+### MapleBBS 3 的 `XO_MODE + <mode>` (含 `XO_MODE`) 與 DreamBBS v3 Xover 特殊值的對應
+
+Macro     | 值 (MapleBBS 3) | 值 (DreamBBS v3) | 註解
+ :---     | ---             | ---              | ---
+`XO_MODE` | `0x10000000`    | (移除)           | 表示畫面重繪、資料載入、離開列表等操作
+`XO_NONE` | `XO_MODE + 0`   | `KEY_NONE` <br> (= `0x4000`) | 什麼都不做
+`XO_INIT` | `XO_MODE + 1`   | `XR_INIT + XO_NONE` <br> (= `(XR_PART_LOAD \| XR_HEAD) + XO_NONE`) | 重新載入列表資料並從畫面頂部重繪
+`XO_LOAD` | `XO_MODE + 2`   | `XR_LOAD + XO_NONE` <br> (= `(XR_PART_LOAD \| XR_BODY) + XO_NONE`) | 重新載入列表資料並從列表前說明處重繪
+`XO_HEAD` | `XO_MODE + 3`   | `XR_HEAD + XO_NONE` <br> (= `(XR_PART_HEAD \| XR_NECK) + XO_NONE`) | 從畫面頂部重繪
+`XO_NECK` | `XO_MODE + 4`   | `XR_NECK + XO_NONE` <br> (= `(XR_PART_NECK \| XR_BODY) + XO_NONE`) | 從列表前說明處重繪
+`XO_BODY` | `XO_MODE + 5`   | `XR_BODY + XO_NONE` <br> (= `(XR_PART_BODY \| XR_KNEE) + XO_NONE`) | 從列表處重繪
+`XO_KNEE` | (無)            | `XR_KNEE + XO_NONE` <br> (= `(XR_PART_KNEE \| XR_FOOT) + XO_NONE`) | 從列表後說明處重繪 <br> - DreamBBS v3.0 新增 <br> - 未實際使用 (DreamBBS v3.0)
+`XO_FOOT` | `XO_MODE + 6`   | `XR_FOOT + XO_NONE` <br> (= `(XR_PART_FOOT) + XO_NONE`) | 從畫面底部重繪
+`XO_LAST` | `XO_MODE + 7`   | `(XZ_ZONE \| XZ_BACK) + XO_NONE` | 回到上次所在的 zone (未實作)
+`XO_QUIT` | `XO_MODE + 8`   | `(XZ_ZONE \| XZ_QUIT) + XO_NONE` | 離開 `xover()` 函式
+`XO_ITEM` | `XO_MODE + 9` <br> (MapleBBS-itoc 非標準版) | `XO_CUR + diff` | 重繪游標所在行 <br> - 並移動游標到指定的相對位置 (DreamBBS v3)
+
+### `XZ_<zone>` (含 `XZ_BACK`)
+
+Macro      | 值 (MapleBBS 3) | 值 (DreamBBS v3) | 說明
+ :---      | ---             | ---              | ---
+`XZ_CLASS` | - `XO_ZONE + 0x0002` (MapleBBS 3.00) <br> - `XO_ZONE + 0` (MapleBBS 3.02) | `XO_ZONE + XZ_INDEX_CLASS` <br> (= `XO_ZONE + 0`) | 看板列表
+`XZ_ULIST` | - `XO_ZONE + 0x0001` (MapleBBS 3.00) <br> - `XO_ZONE + 1` (MapleBBS 3.02) | `XO_ZONE + XZ_INDEX_ULUST` <br> (= `XO_ZONE + 1`) | 線上使用者名單
+`XZ_PAL`   | - `XO_ZONE + 0x0020` (MapleBBS 3.00) <br> - `XO_ZONE + 2` (MapleBBS 3.02) | `XO_ZONE + XZ_INDEX_PAL` <br> (= `XO_ZONE + 2`) | 好友名單
+`XZ_BLIST` | - `XO_ZONE + 0x0040` (MapleBBS 3.00) <br> - (移除) (MapleBBS 3.02) | (無) | 看板名單 (moderated) <br> (未使用)
+`XZ_ALOHA` | `XO_ZONE + 3` (MapleBBS-itoc) | (無) | 上站通知名單
+`XZ_VOTE`  | - `XO_ZONE + 0x0080` (MapleBBS 3.00) <br> - `XO_ZONE + 4` (MapleBBS 3.02 & MapleBBS-itoc) <br> - `XO_ZONE + 3` (MapleBBS 3.10) | `XO_ZONE + XZ_INDEX_VOTE` <br> (= `XO_ZONE + 3`) | 投票
+`XZ_BMW`   | - `XO_ZONE + 3` (MapleBBS 3.02) <br> - `XO_ZONE + 4` (MapleBBS 3.10) <br> - `XO_ZONE + 5` (MapleBBS-itoc) | `XO_ZONE + XZ_INDEX_BMW` <br> (= `XO_ZONE + 4`) | 熱訊 (「水球」)
+`XZ_MF` | `XO_ZONE + 6` (MapleBBS-itoc) | (無) | 我的最愛
+`XZ_COSIGN` | `XO_ZONE + 7` (MapleBBS-itoc) | (無) | 連署
+`XZ_SONG` | `XO_ZONE + 8` (MapleBBS-itoc) | (無) | 點歌
+`XZ_NEWS` | `XO_ZONE + 9` (MapleBBS-itoc) | (無) | 新聞閱讀模式
+`XZ_XPOST` | - `XO_ZONE + 0x0100` (MapleBBS 3.00) <br> - `XO_ZONE + 5` (MapleBBS 3.02) <br> - `XO_ZONE + 10` (MapleBBS-itoc) | `XO_ZONE + XZ_INDEX_XPOST` <br> (= `XO_ZONE + 5`) | 搜尋文章模式
+`XZ_YPOST` | - `XO_ZONE + 0x0200` (MapleBBS 3.00) <br> - (移除) (MapleBBS 3.02) | (無) | 串接文章模式 <br> - MapleBBS 3.02 時併入 `XZ_XPOST` 而移除
+`XZ_MBOX`  | - `XO_ZONE + 0x1000` (MapleBBS 3.00) <br> - `XO_ZONE + 6` (MapleBBS 3.02) <br> - `XO_ZONE + 11` (MapleBBS-itoc) | `XO_ZONE + XZ_INDEX_MBOX` <br> (= `XO_ZONE + 6`) | 信箱
+`XZ_BOARD` | - `XO_ZONE + 0x2000` (MapleBBS 3.00) <br> - `XO_ZONE + 7` (MapleBBS 3.02) <br> - (移除) (MapleBBS-itoc) | `XO_ZONE + XZ_INDEX_BOARD` <br> (= `XO_ZONE + 7`) | 看板
+`XZ_POST`  | - `XZ_BOARD` (MapleBBS 3.00) <br> - `XO_ZONE + 12` (MapleBBS-itoc) | `XZ_BOARD` <br> (= `XO_ZONE + XZ_INDEX_POST`) <br> (= `XO_ZONE + 7`) | 看板 (同 `XZ_BOARD`)
+`XZ_GEM`   | - `XO_ZONE + 0x4000` (MapleBBS 3.00) <br> - `XO_ZONE + 8` (MapleBBS 3.02) <br> - `XO_ZONE + 13` (MapleBBS-itoc) | `XO_ZONE + XZ_INDEX_GEM` <br> (= `XO_ZONE + 8`) | 精華區
+`XZ_MAILGEM` | `XO_ZONE + 9` (WindTopBBS 3.02)  | `XO_ZONE + XZ_INDEX_MAILGEM` <br> (= `XO_ZONE + 9`) | 信件精華區
+`XZ_BANMAIL` | `XO_ZONE + 10` (WindTopBBS 3.02) | `XO_ZONE + XZ_INDEX_BANMAIL` <br> (= `XO_ZONE + 10`) | 擋信列表
+`XZ_OTHER` | `XO_ZONE + 11` (WindTopBBS 3.02) | `XO_ZONE + XZ_INDEX_OTHER` <br> (= `XO_ZONE + 11`) | 其它列表
+`XZ_MYFAVORITE` | `XO_ZONE + 12` (DreamBBS-2010) | `XO_ZONE + XZ_INDEX_MYFAVORITE` <br> (= `XO_ZONE + 12`) | 我的最愛
+`XZ_BACK`  | `0x100` (MapleBBS 3.00) | `0x04000000` | 回到上次進入的 zone <br> - (未實作)
+
 ## DreamBBS v3 的 Xover callback 命令連鎖機制
 ### 名詞說明
 #### 連鎖
