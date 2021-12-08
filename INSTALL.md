@@ -192,7 +192,7 @@ cp -r bbs /home/
 
 (註：v3.0 後可一次指定多個 ports)
 
-之後開機自動執行的設定部分，可以參考 `sample/bbs/sh/start.sh` 的內容，
+之後開機自動執行的設定部分，可以參考 `sh/start.sh` 的內容，
 
 或自己建立 `/etc/rc.d/rc.local` 檔案，寫進以下內容：
 
