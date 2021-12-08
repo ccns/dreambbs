@@ -29,12 +29,12 @@ v3.0 支援在原生 x86_64 環境中編譯與執行，不須安裝 32-bit 版�
 
 在 v3.0 以後的版本，以 root 權限執行 `useradd -m bbs` (使用者名稱可自訂) 即可完成設定。
 
-在早於 v3.0 的版本下，可以 root 權限執行以下指令來完成設定：
+在早於 v3.0 的版本下，可以 root 權限執行以下命令來完成設定：
 ```
 groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 ```
 
-如不使用 `useradd`、`groupadd` 等指令，而要手動設定，可改參考以下方法操作。
+如不使用 `useradd`、`groupadd` 等命令，而要手動設定，可改參考以下方法操作。
 
 (註：v2.0 以後的版本，不再假設使用者名稱為 `bbs`，可自行取名)
 
@@ -101,19 +101,19 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 
     $ vim -c 'set fenc=big5 enc=big5 tenc=utf8' -c 'e!' dreambbs.conf
 
-確定已安裝 `cmake` 套件後，請執行以下指令：
+確定已安裝 `cmake` 套件後，請執行以下命令：
 
     $ mkdir build/
     $ cd build/
     $ cmake ..
 
-其中最後的 `cmake ..` 指令，也可參考以下指令調整，直接指定使用者資訊（未指定之選項將使用目前使用者的使用者資訊）（所列選項僅為範例，請自行斟酌是否合適）：
+其中最後的 `cmake ..` 命令，也可參考以下命令調整，直接指定使用者資訊（未指定之選項將使用目前使用者的使用者資訊）（所列選項僅為範例，請自行斟酌是否合適）：
 
     $ BBSUSR=bbs BBSGROUP=bbs WWWGROUP=www-data BBSHOME=/home/bbs cmake ..
 
 可檢查所產生的設定是否符合需求。
 
-此外，預設會使用系統之預設編譯器，並以 C 語言模式編譯。如要指定編譯器或使用 C++ 語言模式編譯，則可參考以下指令調整上述 `cmake ..` 指令（所列選項僅為範例，請自行斟酌是否合適）：
+此外，預設會使用系統之預設編譯器，並以 C 語言模式編譯。如要指定編譯器或使用 C++ 語言模式編譯，則可參考以下命令調整上述 `cmake ..` 命令（所列選項僅為範例，請自行斟酌是否合適）：
 
     $ CC=gcc USE_CXX=1 cmake ..
 
@@ -123,13 +123,13 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 
 ## 5. 確認 BBS 目錄架構配置
 
-設定完之後，先不要急著執行編譯指令。請先檢視 BBS 家目錄下全部的目錄結構，確認是否已完整配置。
+設定完之後，先不要急著執行編譯命令。請先檢視 BBS 家目錄下全部的目錄結構，確認是否已完整配置。
 
 若您的 BBS 家目錄 ( `/home/bbs` ) 下沒有任何 source code ( `dreambbs/` ) 以外的資料，
 
 或是尚未熟悉本版本 BBS 運作所必要的目錄結構，可參考 [dreambbs_snap](https://github.com/ccns/dreambbs_snap) 中的範例目錄。
 
-也可以透過執行以下指令來完成目錄結構的配置：
+也可以透過執行以下命令來完成目錄結構的配置：
 ```
 git clone https://github.com/ccns/dreambbs_snap.git bbs
 cp -r bbs /home/
@@ -161,7 +161,7 @@ cp -r bbs /home/
 
 (建議您自行檢視裡面的設定是否符合需求，以及視需要利用 `crontab -e` 調整裡面一些程式的執行路徑)
 
-(注：v3.0 以後的版本會在 `make` 時產生有正確路徑的 `crontab`，請到上述的 `build/` 目錄下執行該指令)
+(注：v3.0 以後的版本會在 `make` 時產生有正確路徑的 `crontab`，請到上述的 `build/` 目錄下執行該命令)
 
 至於設定 bbs 執行環境的部分：
 
