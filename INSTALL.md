@@ -288,7 +288,7 @@ service telnet
 
     $ /home/bbs/bin/bbsd -u /home/bbs/run/bbsd.socket
 
-如要設定在開機時自動以此命令啟動 BBS 主程式，請見：[方法：Systemd unit 設定檔](<#方法：Systemd unit 設定檔>)。
+如要設定在開機時自動以此命令啟動 BBS 主程式，請見：[方法：Systemd unit 設定檔](<#方法Systemd-unit-設定檔>)。
 
 #### 設定：透過 `wsproxy` 提供 WebSocket 連線
 
@@ -318,7 +318,7 @@ v2.0 時，本專案新增了目錄 `scripts/wsproxy/`，內含 wsproxy 的說�
 
 (如設定使用了編號 < 1024 的連接埠，則需要 root 權限)
 
-v3.1 時，新增了對應的 Systemd unit 設定檔，以在開機時自動啟動 `bbs-sshd`，請見：[方法：Systemd unit 設定檔](<#方法：Systemd unit 設定檔>)。
+v3.1 時，新增了對應的 Systemd unit 設定檔，以在開機時自動啟動 `bbs-sshd`，請見：[方法：Systemd unit 設定檔](<#方法Systemd-unit-設定檔>)。
 
 ### 設定：網路連線
 
