@@ -288,15 +288,19 @@ service telnet
 
     $ /home/bbs/bin/bbsd -u /home/bbs/run/bbsd.socket
 
+請先記住該 socket 的路徑（`/home/bbs/run/bbsd.socket`），後續設定時會使用到。
+
 如要設定在開機時自動以此命令啟動 BBS 主程式，請見：[方法：Systemd unit 設定檔](<#方法Systemd-unit-設定檔>)。
 
 #### 設定：透過 `wsproxy` 提供 WebSocket 連線
 
-`wsproxy` 是由 [@robertabcd](https://github.com/robertabcd) 針對 OpenResty 所開發的 Lua 腳本，可透過 Websocket 傳送 Telnet 協定的資料。
+`wsproxy` 是由 [@robertabcd](https://github.com/robertabcd) 針對 OpenResty 所開發的 Lua 腳本，可透過 Websocket 傳送 Telnet 協定的資料。它使用 UNIX socket 與 `logind` 或與之相容的伺服器程式溝通。
 
 v2.0 時，本專案新增了目錄 `scripts/wsproxy/`，內含 wsproxy 的說明文件 (`README.md`) 與主程式 (`wsproxy.lua`)（此目錄來自 PttBBS，程式行為相同）。
 
 安裝與設定的細節可參考此目錄下的 `README.md` 修改 OpenResty 的設定檔。
+
+其中 UNIX socket 的路徑，請設定成前面所設定的 socket 路徑。
 
 (v2.1 後會將 `wsproxy.lua` 安裝至 `/home/bbs/sh/wsproxy/wsproxy.lua`，設定時可直接使用該路徑)
 
@@ -304,7 +308,7 @@ v2.0 時，本專案新增了目錄 `scripts/wsproxy/`，內含 wsproxy 的說�
 
 注意：執行 `bbs-sshd` 前，請先確定電腦的 22 號連接埠並未被使用。尤其是電腦已有執行 `sshd` 供自行連線時，請另外設定額外的連接埠以供自行連線，避免被 `bbs-sshd` 佔用而無法連線。
 
-`bbs-sshd` 是由 [@robertabcd](https://github.com/robertabcd) 以 Rust 語言開發的 SSH 伺服器，可將使用者端的 SSH 協定資料與 BBS 伺服器端的 Telnet 協定資料進行雙向轉換 。
+`bbs-sshd` 是由 [@robertabcd](https://github.com/robertabcd) 以 Rust 語言開發的 SSH 伺服器，可將使用者端的 SSH 協定資料與 BBS 伺服器端的 Telnet 協定資料進行雙向轉換。它使用 UNIX socket 與 `logind` 或與之相容的伺服器程式溝通。
 
 請選擇適當目錄（比如 `/home/bbs/`）並執行以下命令以取得 `bbs-sshd` 原始碼：
 
@@ -312,13 +316,21 @@ v2.0 時，本專案新增了目錄 `scripts/wsproxy/`，內含 wsproxy 的說�
 
 接著請參考該專案的 `README.md` 進行 `bbs-sshd` 的建置與設定。
 
-完成後，請參考該專案主目錄下的 `sample/etc/bbs-sshd.toml` 的內容，在專案主目錄下建立 `bbs-sshd.toml`。接著使用以下命令啟動 `bbs-sshd`（假設使用了 `cargo build --release` 進行建置）。
+完成後，請參考該專案主目錄下的 `sample/etc/bbs-sshd.toml` 的內容，在專案主目錄下建立 `bbs-sshd.toml`。
+
+其中 UNIX socket 的路徑，請設定成前面所設定的 socket 路徑。
+
+接著使用以下命令啟動 `bbs-sshd`（假設使用了 `cargo build --release` 進行建置）。
 
     $ /home/bbs/bbs-sshd/target/release/bbs-sshd -f /home/bbs/bbs-sshd/bbs-sshd.toml
 
 (如設定使用了編號 < 1024 的連接埠，則需要 root 權限)
 
 v3.1 時，新增了對應的 Systemd unit 設定檔，以在開機時自動啟動 `bbs-sshd`，請見：[方法：Systemd unit 設定檔](<#方法Systemd-unit-設定檔>)。
+
+在使用 `make` 建置本專案前，請先確認在專案主目錄生成的 `make_export.conf` 中的 `BBS_SSHD_ROOT` 的值為 `bbs-sshd` 的專案主目錄，以使產生的 Systemd unit 設定檔具有正確的執行路徑。
+
+若自動生成的路徑不合，可直接編輯 `make_export.conf`，並再次執行 `cmake` 以讀取修改。
 
 ### 設定：網路連線
 
