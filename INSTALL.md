@@ -223,11 +223,13 @@ cp -r bbs /home/
     # chmod +x /etc/rc.d/rc.local
     # systemctl enable rc-local
 
+(註：在 CentOS 7/8 上，`/etc/rc.local` 是指向 `/etc/rc.d/rc.local` 的符號連結，或是說「檔案捷徑」。請依作業系統中的實際路徑調整以上命令。)
+
 如要立即啟動 `rc.local` 服務，可執行以下命令：
 
     # systemctl start rc-local
 
-接著可參考 `sh/start.sh` 的內容，或自己建立 `/etc/rc.d/rc.local` 檔案，寫進以下內容：
+接著可參考 `sh/start.sh` 的內容，或自己建立 `/etc/rc.local` 檔案，寫進以下內容：
 
 ```
 #! /bin/sh
