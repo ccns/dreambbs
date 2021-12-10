@@ -206,7 +206,7 @@ cp -r bbs /home/
 
 #### 方法：Systemd unit 設定檔
 
-在 CentOS 7/8 以及 Ubuntu 18.06 後的作業系統上系統服務是由 Systemd 管理的，建議使用這個設定方式。
+在 CentOS 7 與 Ubuntu 18.04 以後的作業系統上，系統服務是由 Systemd 管理的，建議使用這個設定方式。
 
 在 v2.0 後的 `sample/` 下，提供了範例的 Systemd unit 設定檔。
 
