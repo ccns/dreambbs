@@ -202,9 +202,32 @@ cp -r bbs /home/
 
 ### 設定：開機自動啟動
 
-之後開機自動執行的設定部分，可以參考 `sh/start.sh` 的內容，
+之後是開機自動執行的設定部分。
 
-或自己建立 `/etc/rc.d/rc.local` 檔案，寫進以下內容：
+#### 方法：Systemd unit 設定檔
+
+在 CentOS 7/8 以及 Ubuntu 18.06 後的作業系統上系統服務是由 Systemd 管理的，建議使用這個設定方式。
+
+在 v2.0 後的 `sample/` 下，提供了範例的 Systemd unit 設定檔。
+
+請參考 `sample/bbsd.service`，建立 `/etc/systemd/system/bbsd.service` 設定檔。
+
+也可依需求，自行參考 `sample/` 下的其它 `*.service` 檔以建立對應的 Systemctl unit 設定檔。
+
+(注：v3.0 以後的版本會在 `make` 時產生已代入正確的環境參數的設定檔，可直接使用；請到上述的 `build/` 目錄下查看)
+
+#### 方法：`rc.local`
+
+在系統服務由 `systemd` 所管理的系統上，預設不會執行 `rc.local` 檔案。若仍要以此方法設定，請先以 root 權限執行以下命令，以在開機時啟動 `rc.local` 服務。
+
+    # chmod +x /etc/rc.d/rc.local
+    # systemctl enable rc-local
+
+如要立即啟動 `rc.local` 服務，可執行以下命令：
+
+    # systemctl start rc-local
+
+接著可參考 `sh/start.sh` 的內容，或自己建立 `/etc/rc.d/rc.local` 檔案，寫進以下內容：
 
 ```
 #! /bin/sh
@@ -226,7 +249,17 @@ su bbs -c '/home/bbs/sh/start.sh'
 
 (註：v2.1 後不需 `su bbs` 也可正常運作)
 
-並確認已將 `rc.local` 的權限設定為「可執行」(`+x`)。
+並確認已將 `rc.local` 的權限設定為「可執行」(`+x`)（見以上說明）。
+
+如不使用 `xinetd`，而要直接以 standalone 模式啟動 BBS 主程式，請在 `/etc/rc.local` 中再加上：
+
+```
+# 前略..
+su bbs -c '/home/bbs/bin/bbsd 3456'  # 大於3000的備用port可這樣設定
+/home/bbs/bin/bbsd 23                # port 23 請直接用 root 權限啟動
+```
+
+### 設定：`xinetd`
 
 若要裝 xinetd 提供 telnet 連線至 BBS 主程式，可參考以下設定：
 
@@ -243,14 +276,6 @@ service telnet
         server          = /home/bbs/bin/bbsd
         server_args     = -i
 }
-```
-
-如要以 standalone 模式啟動，請在 `/etc/rc.local` 中再加上：
-
-```
-# 前略..
-su bbs -c '/home/bbs/bin/bbsd 3456'  # 大於3000的備用port可這樣設定
-/home/bbs/bin/bbsd 23                # port 23 請直接用 root 權限啟動
 ```
 
 ### 設定：網路連線
