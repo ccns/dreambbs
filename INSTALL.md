@@ -167,7 +167,7 @@ cp -r bbs /home/
 
 (建議您自行檢視裡面的設定是否符合需求，以及視需要利用 `crontab -e` 調整裡面一些程式的執行路徑)
 
-(注：v3.0 以後的版本會在 `make` 時產生有正確路徑的 `crontab`，請到上述的 `build/` 目錄下執行該命令)
+(註：v3.0 以後的版本會在 `make` 時產生有正確路徑的 `crontab`，請到上述的 `build/` 目錄下執行該命令)
 
 ### BBS 的執行
 
@@ -184,7 +184,7 @@ cp -r bbs /home/
 
 或者是拿 `scripts` 裡面的 `start.sh` 這個 shell script 去執行。
 
-(注：v3.0 以後的版本在使用 `make install` 安裝時，會將已產生正確路徑的此腳本安裝至 BBS 家目錄下的 `sh/start.sh`，可直接執行)
+(註：v3.0 以後的版本在使用 `make install` 安裝時，會將已產生正確路徑的此腳本安裝至 BBS 家目錄下的 `sh/start.sh`，可直接執行)
 
 之後若要提供 port 23 的 telnet 連線的話，以 root 權限執行即可，如：
 
@@ -214,7 +214,7 @@ cp -r bbs /home/
 
 也可依需求，自行參考 `sample/` 下的其它 `*.service` 檔以建立對應的 Systemctl unit 設定檔。
 
-(注：v3.0 以後的版本會在 `make` 時產生已代入正確的環境參數的設定檔，可直接使用；請到上述的 `build/` 目錄下查看)
+(註：v3.0 以後的版本會在 `make` 時產生已代入正確的環境參數的設定檔，可直接使用；請到上述的 `build/` 目錄下查看)
 
 #### 方法：`rc.local`
 
