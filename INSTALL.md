@@ -27,7 +27,9 @@ v3.0 支援在原生 x86_64 環境中編譯與執行，不須安裝 32-bit 版�
 
 這裡先把相關的帳號建立好，以避免之後權限問題。
 
-### 方式：一行命令
+### 帳號 `bbs` 的設定
+
+#### 方式：一行命令
 
 在 v3.0 以後的版本，以 root 權限執行 `useradd -m bbs` (使用者名稱可自訂) 即可完成設定。
 
@@ -36,7 +38,7 @@ v3.0 支援在原生 x86_64 環境中編譯與執行，不須安裝 32-bit 版�
 groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 ```
 
-### 方式：手動設定
+#### 方式：手動設定
 
 如不使用 `useradd`、`groupadd` 等命令，而要手動設定，可改參考以下方法操作。
 
@@ -82,6 +84,13 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 記得將 bbs 的家目錄擁有者設定成 bbs 自己：
 
     # chown -R bbs:bbs /home/bbs
+
+### 帳號 `www-data` 的設定
+
+此外，如果要設定 `wsproxy`（見：[設定：透過 `wsproxy` 提供 WebSocket 連線](#設定透過-wsproxy-提供-WebSocket-連線
+)），還需再將建立的使用者加入 `www-data` (或其它適合的使用者群組) 以便使 BBS 主程式自動設定 UNIX socket 的權限。可執行以下命令：
+
+    $ usermod -a -G www-data bbs
 
 主機帳戶部分設定完成！
 
@@ -298,9 +307,13 @@ service telnet
 
 v2.0 時，本專案新增了目錄 `scripts/wsproxy/`，內含 wsproxy 的說明文件 (`README.md`) 與主程式 (`wsproxy.lua`)（此目錄來自 PttBBS，程式行為相同）。
 
-安裝與設定的細節可參考此目錄下的 `README.md` 修改 OpenResty 的設定檔。
+安裝與設定的細節可參考此目錄下的 `README.md` 修改 OpenResty 的設定檔 `nginx.conf`。
 
-其中 UNIX socket 的路徑，請設定成前面所設定的 socket 路徑。
+請確認在本 BBS 專案主目錄生成的 `make_export.conf` 中的 `WWWGROUP` (預設為 `www-data`) 的值與 `nginx.conf` 的使用者設定相符。如生成的 `WWWGROUP` 不合需求，可編輯 `make_export.conf` 並再次執行 `cmake` 與 `make` 以重新建置 BBS 主程式。
+
+`nginx.conf` 的使用者設定預設是 `user nobody;`，須改為 `user www-data www-data;` (或其它使用者；視自行設定的 `WWWGROUP` 的值而定)，以使 OpenResty 能夠成功存取與 BBS 主程式溝通用的 UNIX socket。請見：[帳號 `www-data` 的設定](#帳號-www-data-的設定)。
+
+而 `wsproxy` 所使用的 UNIX socket 的路徑，請設定成前面所設定的 socket 路徑。
 
 (v2.1 後會將 `wsproxy.lua` 安裝至 `/home/bbs/sh/wsproxy/wsproxy.lua`，設定時可直接使用該路徑)
 
