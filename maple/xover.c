@@ -1156,10 +1156,10 @@ xo_keymap(
 /* xo_thread(): Find an HDR item which meets the condition specified by `op`.
  * If found, `xo->pos` is set to the index of the item.
  * Return values:
- * - `XO_NONE`: Not found
- * - `XO_CUR`: Found, no cursor movement is needed
+ * - `XO_NONE`: None are found
+ * - `XO_CUR`: Found under the cursor
  * - (Additionally, if `XR_FOOT` is set, the footer needs to be redrawn)
- * - `XO_MOVE + XO_REL`: Found, otherwise
+ * - `XO_MOVE + XO_REL`: Found with cursor moved relatively
  * - (Additionally, if `XR_BODY` is set, a page flip is needed) */
 static int
 xo_thread(
