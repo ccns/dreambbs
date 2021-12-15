@@ -1212,9 +1212,10 @@ xo_thread(
     {
 #define RS_BOARD        0x1000  /* 用於 RS_UNREAD，跟前面的不可重疊 */
         /* Thor.980909: 詢問 "首篇未讀" 或 "末篇已讀" */
+        /* Thor.980911: 找到時, 則沒清XO_FOOT, 再看看怎麼改 */
+        match |= XR_FOOT;  /* IID.20200204: Redraw footer */
         if (!vget(B_LINES_REF, 0, "向前找尋 0)首篇未讀 1)末篇已讀 ", s_unread, sizeof(s_unread), GCARRY))
-            return XO_FOOT; /* Thor.980911: 找到時, 則沒清XO_FOOT, 再看看怎麼改 */
-        match |= XR_FOOT;  /* IID.20200204: Redraw footer if found */
+            goto notfound;
 
         if (*s_unread == '0')
             op |= RS_FIRST;  /* Thor.980909: 向前找尋首篇未讀 */
@@ -1223,13 +1224,16 @@ xo_thread(
         if (near == 'b')                /* search board */
             op |= RS_BOARD;
         else if (near != 'u')   /* search user's mbox */
-            return XO_FOOT;
+            goto notfound;
 
         near = -1;
     }
     else if (!(op & (RS_THREAD | RS_SEQUENT | RS_MARKED)))
     {
         char *tag_query;
+        /* Thor.980911: 要注意, 如果沒找到, "搜尋"的訊息會被清,
+                        如果找到了, 則沒被清, 因傳回值為match, 沒法帶 XO_FOOT */
+        match |= XR_FOOT;  /* IID.20200204: Redraw footer */
         if (op & RS_TITLE)
         {
             title = "標題";
@@ -1244,10 +1248,7 @@ xo_thread(
         }
         sprintf(buf, "搜尋%s(%s)：", title, (step > 0) ? "↓" : "↑");
         if (!vget(B_LINES_REF, 0, buf, tag_query, len, GCARRY))
-            return XO_FOOT;
-        /* Thor.980911: 要注意, 如果沒找到, "搜尋"的訊息會被清,
-                        如果找到了, 則沒被清, 因傳回值為match, 沒法帶 XO_FOOT */
-        match |= XR_FOOT;  /* IID.20200204: Redraw footer if found */
+            goto notfound;
 
         str_lower(buf, tag_query);
         query = buf;
@@ -1368,6 +1369,7 @@ xo_thread(
         goto found;
     }
 
+notfound:
     return match + XO_NONE; /* No matching thread articles are found */
 
 found:
