@@ -1275,20 +1275,14 @@ xo_thread(
             continue;
 
         if (op & RS_SEQUENT)
-        {
-            match += XO_MOVE + XO_REL;
-            break;
-        }
+            goto found;
 
         /* Thor: 前後 search marked 文章 */
 
         if (op & RS_MARKED)
         {
             if (fhdr->xmode & (POST_MARKED /* | POST_GEM */))
-            {
-                match += XO_MOVE + XO_REL;
-                break;
-            }
+                goto found;
             continue;
         }
 
@@ -1314,10 +1308,7 @@ xo_thread(
 #undef  RS_BOARD
             /* Thor.980909: 末篇已讀(!RS_FIRST) */
             if (!(op & RS_FIRST))
-            {
-                match += XO_MOVE + XO_REL;
-                break;
-            }
+                goto found;
 
             near = pos;         /* Thor:記下最接近起點的位置 */
             continue;
@@ -1335,10 +1326,7 @@ xo_thread(
             if (op & RS_THREAD)
             {
                 if (tag == title)
-                {
-                    match += XO_MOVE + XO_REL;
-                    break;
-                }
+                    goto found;
                 continue;
             }
         }
@@ -1369,17 +1357,19 @@ xo_thread(
             else
 #endif
 
-                match += XO_MOVE + XO_REL;
-            break;
+                goto found;
         }
     }
 
     if ((op & RS_FIRST) && near >= 0)   /* Thor: 加上 RS_FIRST功能 */
     {
         pos = near;
-        match = (match & ~XO_MOVE_MASK) + XO_MOVE + XO_REL;
+        goto found;
     }
-    if ((match & XO_POS_MASK) > XO_NONE)
+
+    return match + XO_NONE; /* No matching thread articles are found */
+
+found:
     {
         /* A thread article is found */
         int top = xo->top;
@@ -1393,9 +1383,8 @@ xo_thread(
             match |= XR_BODY;           /* 找到了，並且需要更新畫面 */
             xo_pool = xo_pool_base + sizeof(HDR) * top;
         }
+        return match + XO_MOVE + XO_REL; /* A match is found and the cursor moved */
     }
-
-    return (match & XO_POS_MASK) ? match : match + XO_NONE;
 }
 
 
