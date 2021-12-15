@@ -1987,6 +1987,8 @@ xover_key(
     }
     if (cmd == KEY_END || cmd == '$')
     {
+        if (pos == xo->max - 1)
+            return XO_NONE; /* No-op */
         return XR_LOAD + XO_MOVE + XO_TAIL;  /* force re-load */
     }
     if (cmd == Meta(KEY_UP) || cmd == 'K')
