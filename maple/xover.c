@@ -2106,6 +2106,8 @@ xover_key(
                     }
                     else
                         outz("\x1b[44m §ä¨S¦³¤F­C...:( \x1b[m");
+                    if ((cmd & XO_REDO_MASK) == XR_FOOT)
+                        cmd &= ~XR_FOOT;
                     msg = 2;  /* Clear the message after the next loop */
                 }
                 else if (!(cmd & XR_PART_BODY))
