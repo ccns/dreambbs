@@ -207,9 +207,11 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 `0x00ffffff` (mask)                 | `XO_MOVE_MASK`     | 游標移動相關                  |
 `0x001fffff` (mask)                 | `XO_POS_MASK`      | 取得游標目標位置              | 實際目標位置是 `pos - XO_MOVE` <br> `XO_MOVE` 是游標位置的 bias，設定為 `0x00100000`
 　                                  | - `XR_* + key` <br> - `XZ_ZONE + XZ_* + key` | - 執行按鍵功能後進行畫面重繪及資料載入 <br> - 執行按鍵功能後進行列表相關操作 | 經過 `XO_MOVE_MASK` mask 後為 `0x00000000` - `0x00004000`
-　                                  | - `XR_* + {XO_WRAP\|XO_SCRL\|XO_REL} + key` <br> - `XZ_ZONE + XZ_* + {XO_WRAP\|XO_SCRL\|XO_REL} + key` | - `XO_CUR` (`XO_REL + XO_CUR_BIAS`) <br> - (未使用) (其它) | 經過 `XO_MOVE_MASK` mask 後不為 `0x00000000` - `0x00004000`，而經過 `XO_POS_MASK` mask 後為 `0x00000000` - `0x00004000` <br> - 不需要操作游標的雜項功能放這一區
+　                                  | - `XR_* + {XO_WRAP\|XO_SCRL\|XO_REL} + key` <br> - `XZ_ZONE + XZ_* + {XO_WRAP\|XO_SCRL\|XO_REL} + key` | - `XO_CUR` (`XO_REL + XO_CUR_BIAS`) <br> - `XO_RS` (`XO_SCRL`) (v3.1) <br> - (未使用) (其它) | 經過 `XO_MOVE_MASK` mask 後不為 `0x00000000` - `0x00004000`，而經過 `XO_POS_MASK` mask 後為 `0x00000000` - `0x00004000` <br> - 不需要操作游標的雜項功能放這一區
 　                         　       | - `XR_* + XO_CUR + diff` <br> - `XZ_ZONE + XZ_* + XO_CUR + diff` | 重繪游標所在行，並移動游標到指定的相對位置 | 經過 `XO_MOVE_MASK` mask 後為 `0x00200000` - `0x00204000` <br> - 移動範圍為 `-0x2000` (`-8192`) - `0x2000` (`8192`)
+　                         　       | - `XR_* + XO_RS + RS_*` <br> - `XZ_ZONE + XZ_* + XO_RS + RS_*` | 主題式閱讀命令 | 經過 `XO_MOVE_MASK` mask 後為 `0x00400000` - `0x00404000` <br> - v3.1 新增
 　                                  | - `XR_* + XO_MOVE + move` <br> - `XZ_ZONE + XZ_* + XO_MOVE + move` | - 設定列表游標位置後進行畫面重繪及資料載入 <br> - 設定 zone 游標位置後進行列表相關操作 | 經過 `XO_POS_MASK` mask 後為 `0x00004001` - `0x001fffff` <br> - 這限制了游標的移動範圍為 `-0x000fbfff` (-1032191‬) - `0x000fffff` (1048575‬)
+`0x00e00000` (mask)                 | `XO_MFLAG_MASK`    | 游標移動方式相關             | 把 `XO_WRAP`, `XO_SCRL`, & `XO_REL` `or` 起來的值 <br> - v3.1 新增
 `0x00200000` (mask)                 | `XO_REL`           | 將游標位置解釋為相對位置      |
 `0x00400000` (mask)                 | `XO_SCRL`          | - 將游標移動解讀為捲動列表 (無 `XZ_ZONE`) <br> - (未使用) (有 `XZ_ZONE`) |
 `0x00800000` (mask)                 | `XO_WRAP`          | 讓游標位置頭尾循環            | 會跳到循環後的對應項而非頭尾
@@ -352,6 +354,7 @@ Macro             | 值 (省略最外層括號)        | 功能                 
 `XO_CUR_BIAS`     | `0x2000`                  | `XO_CUR` 內部處理相對位置時的 bias      | DreamBBS v3.0 新增
 `XO_CUR_MIN`      | `XO_REL + 0 - XO_CUR`     | `XO_CUR` 可指定的相對位置的最小值       | DreamBBS v3.0 新增
 `XO_CUR_MAX`      | `XO_REL + KEY_NONE - XO_CUR` | `XO_CUR` 可指定的相對位置的最大值  | DreamBBS v3.0 新增
+`XO_RS`           | `XO_SCRL`                 | 將操作解釋為主題式閱讀命令              | DreamBBS v3.1 新增
 `XO_RSIZ`         | `256`                     | 列表資料的資料結構大小限制              | DreamBBS v3.0 起不使用
 `XO_TALL`         | `b_lines - 3`             | 翻頁所跳行數                           | 非常數
 `XO_MOVE_MAX`     | `XO_POS_MASK - XO_MOVE`   | 可加在 `XO_MOVE` 上的最大值            | DreamBBS v3.0 新增
@@ -410,6 +413,46 @@ Macro      | 值 (MapleBBS 3) | 值 (DreamBBS v3) | 說明
 `XZ_OTHER` | `XO_ZONE + 11` (WindTopBBS 3.02) | `XO_ZONE + XZ_INDEX_OTHER` <br> (= `XO_ZONE + 11`) | 其它列表
 `XZ_MYFAVORITE` | `XO_ZONE + 12` (DreamBBS-2010) | `XO_ZONE + XZ_INDEX_MYFAVORITE` <br> (= `XO_ZONE + 12`) | 我的最愛
 `XZ_BACK`  | `0x100` (MapleBBS 3.00) | `0x04000000` | 回到上次進入的 zone <br> - (未實作)
+
+## MapleBBS 2.36b 與 DreamBBS v3 的主題式閱讀命令
+
+### MapleBBS 2.36b 與 DreamBBS v3 的主題式閱讀特殊值
+
+Macro        | 值 (MapleBBS 2.36b) | 值 (DreamBBS v3.1) | 說明
+ :---        | ---                 | ---                | ---
+`RS_TITLE`   | `0x02` <br> - `0x001` (MapleBBS 3.00a) | `0x0001` | - 有：搜尋標題相符的文章 <br> - 無：搜尋作者相符的文章
+`RS_FORWARD` | `0x01` <br> - `0x002` (MapleBBS 3.00a) | `0x0002` | - 有：向下搜尋 <br> - 無：向上搜尋
+`RS_RELATED` | `0x04`              | `0x0004`           | - 有：以目前文章當作搜尋條件 <br> - 無：不限以目前文章當作搜尋條件；需額外條件時詢問使用者
+`RS_FIRST`   | `0x08`              | `0x0008`           | - 有：搜尋離游標最遠的符合文章 <br> - 無：搜尋離游標最近的符合文章
+`RS_CURRENT` | `0x10`              | `0x0010`           | - 有：以最近一次閱讀的文章為目前文章 <br> - 無：以游標所在的文章為目前文章
+`RS_THREAD`  | `0x20`              | `0x0020`           | - 有：排除回應、轉錄文章 <br> - 無：不排除
+`RS_NEXT`    | - `0x40` (MapleBBS 2.39) <br> - (移除) (MapleBBS 3.00a) | `RS_READ_NEXT` | - 下一篇文章
+`RS_PREV`    | - `0x80` (MapleBBS 2.39) <br> - (移除) (MapleBBS 3.00a) | `RS_READ_PREV` | - 上一篇文章
+`RS_SEQUENT` | `0x40` (MapleBBS 3.00b) | `0x0040`       | - 有：游標上下篇文章
+`RS_MARKED`  | `0x80` (MapleBBS 3.00b) | `0x0080`       | - 有：搜尋有 mark 標記的文章
+`RS_UNREAD`  | `0x100` (MapleBBS 3.00b) | `0x0100`      | - 有：搜尋未讀的文章 <br> - 無 RS_FIRST`：上一篇未讀 (MapleBBS 3.02)
+`RS_UNUSED9` | (無)                | `0x0200`           | (未使用)
+`RS_UNUSED10` | (無)               | `0x0400`           | (未使用)
+`RS_UNUSED11` | (無)               | `0x0800`           | (未使用)
+`RS_BOARD`   | `0x1000` (MapleBBS 3.00a) | `0x1000`     | - 有：搜尋看板文章 <br> - 無：搜尋信箱文章 <br> - 限內部處理，配合 `RS_UNREAD`。
+`RS_UNUSED13` | (無)               | `0x2000`           | (未使用)
+
+### MapleBBS 2.36b 的主題式閱讀命令與 DreamBBS v3 Xover 特殊值的對應
+
+Macro         | 值 (MapleBBS 2.36b) | 值 (DreamBBS v3.1) | 說明
+ :---         | ---             | ---              | ---
+`CURSOR_FIRST` | `RS_RELATED \| RS_TITLE \| RS_FIRST` | `XO_RS + RS_CURSOR_FIRST` <br> (= `XO_RS + (RS_RELATED \| RS_TITLE \| RS_FIRST)`) | 最上篇與游標所在文章標題相符的文章
+`CURSOR_NEXT` | `RS_RELATED \| RS_TITLE \| RS_FORWARD` | `XO_RS + RS_CURSOR_NEXT` <br> (= `XO_RS + (RS_RELATED \| RS_TITLE \| RS_FORWARD)`)  | 下一篇與游標所在文章標題相符的文章
+`CURSOR_PREV` | `RS_RELATED \| RS_TITLE` | `XO_RS + RS_CURSOR_PREV` <br> (= `XO_RS + (RS_RELATED \| RS_TITLE)`)  | 上一篇與游標所在文章標題相符的文章
+`RELATE_FIRST` | `RS_RELATED \| RS_TITLE \| RS_FIRST \| RS_CURRENT` | `XO_RS + RS_RELATE_FIRST` <br> (= `XO_RS + (RS_RELATED \| RS_TITLE \| RS_FIRST \| RS_CURRENT)`)  | 最上篇與最近一次閱讀的文章標題相符的文章
+`RELATE_NEXT` | `RS_RELATED \| RS_TITLE \| RS_FORWARD \| RS_CURRENT` | `XO_RS + RS_RELATE_NEXT` <br> (= `XO_RS + (RS_RELATED \| RS_TITLE \| RS_FORWARD \| RS_CURRENT)`)  | 下一篇與最近一次閱讀的文章標題相符的文章
+`RELATE_PREV` | `RS_RELATED \| RS_TITLE \| RS_CURRENT` | `XO_RS + RS_RELATE_PREV` <br> (= `XO_RS + (RS_RELATED \| RS_TITLE \| RS_CURRENT)`)  | 上一篇與最近一次閱讀的文章標題相符的文章
+`THREAD_NEXT` | `RS_THREAD \| RS_FORWARD` | `XO_RS + RS_THREAD_NEXT` <br> (= `XO_RS + (RS_THREAD \| RS_FORWARD)`) | 下一篇非回應、非轉錄文章
+`THREAD_PREV` | `RS_THREAD`     | `XO_RS + RS_THREAD_PREV` <br> (= `XO_RS + RS_THREAD`) | 上一篇非回應、非轉錄文章
+`READ_NEXT`   | - `5` <br> - (移除) (MapleBBS 3.00b) | `XO_RS + RS_READ_NEXT` <br> (= `XO_RS + (RS_SEQUENT \| RS_FORWARD)`)  | 下一篇文章
+`READ_PREV`   | - `6` <br> - (移除) (MapleBBS 3.00b) | `XO_RS + RS_READ_PREV` <br> (= `XO_RS + RS_SEQUENT`)  | 上一篇文章
+`MARK_NEXT`   | `RS_MARKED \| RS_FORWARD \| RS_CURRENT` (MapleBBS 3.00b) | `XO_RS + RS_MARK_NEXT` <br> (= `XO_RS + (RS_MARKED \| RS_FORWARD \| RS_CURRENT)`) | 下一篇有 mark 標記的文章
+`MARK_PREV`   | `RS_MARKED \| RS_CURRENT` (MapleBBS 3.00b) | `XO_RS + RS_MARK_PREV` <br> (= `XO_RS + (RS_MARKED \| RS_CURRENT)`) | 上一篇有 mark 標記的文章
 
 ## DreamBBS v3 的 Xover callback 命令連鎖機制
 ### 名詞說明
