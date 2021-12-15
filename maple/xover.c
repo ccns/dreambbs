@@ -1157,6 +1157,7 @@ xo_keymap(
  * If found, `xo->pos` is set to the index of the item.
  * Return values:
  * - `XO_NONE`: Not found
+ * - `XO_CUR`: Found, no cursor movement is needed
  * - (Additionally, if `XR_FOOT` is set, the footer needs to be redrawn)
  * - `XO_MOVE + XO_REL`: Found, otherwise
  * - (Additionally, if `XR_BODY` is set, a page flip is needed) */
@@ -1190,7 +1191,7 @@ xo_thread(
             if (op & RS_FIRST)
             {
                 if (!strcmp(query, tag))/* 目前的就是第一筆了 */
-                    return XO_NONE;
+                    goto found;
                 near = -1;
             }
         }
@@ -1200,7 +1201,7 @@ xo_thread(
             if (op & RS_FIRST)
             {
                 if (title == tag)
-                    return XO_NONE;
+                    goto found;
                 near = -1;
             }
             strcpy(buf, title);
@@ -1374,6 +1375,8 @@ found:
         /* A thread article is found */
         int top = xo->top;
         bool scrl_up;
+        if (pos == xo->pos)
+            return match + XO_CUR; /* The matched article is under the cursor */
         xo->pos = pos;
         scrl_up = (pos < top);
         top = BMAX(top + ((pos - top + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
@@ -1405,7 +1408,7 @@ xo_getch(
     if (op >= 0)
     {
         ch = xo_thread(xo, pos, op);
-        if ((ch & XO_POS_MASK) > XO_NONE)  /* A thread article is found */
+        if ((ch & XO_POS_MASK) > XO_NONE)  /* Another thread article is found */
             ch = XO_BODY;               /* 繼續瀏覽 */
     }
 
@@ -2091,7 +2094,11 @@ xover_key(
 
                 if (!((cmd & XO_POS_MASK) > XO_NONE))
                 {                   /* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
-                    outz("\x1b[44m 找沒有了耶...:( \x1b[m");
+                    const int p_cmd = cmd & XO_MOVE_MASK /* Examine the pure part */;
+                    if (p_cmd >= XO_CUR_MIN && p_cmd <= XO_CUR_MAX)
+                        outz("\x1b[44m 已經是了喔...:) \x1b[m"); /* IID.2021-12-15: Found without cursor movement */
+                    else
+                        outz("\x1b[44m 找沒有了耶...:( \x1b[m");
                     msg = 2;  /* Clear the message after the next loop */
                 }
                 else if (!(cmd & XR_PART_BODY))
