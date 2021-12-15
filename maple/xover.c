@@ -2096,7 +2096,10 @@ xover_key(
                 {                   /* Thor.0612: 找沒有或是 已經是了, 游標不想動 */
                     const int p_cmd = cmd & XO_MOVE_MASK /* Examine the pure part */;
                     if (p_cmd >= XO_CUR_MIN && p_cmd <= XO_CUR_MAX)
+                    {
+                        cmd = XO_MOVE + XO_REL + cmd - XO_CUR;  /* Convert to plain relative move */
                         outz("\x1b[44m 已經是了喔...:) \x1b[m"); /* IID.2021-12-15: Found without cursor movement */
+                    }
                     else
                         outz("\x1b[44m 找沒有了耶...:( \x1b[m");
                     msg = 2;  /* Clear the message after the next loop */
