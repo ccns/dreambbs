@@ -38,7 +38,7 @@ pressanykey(const char *fmt, ...)
     }
     else
     {
-        sprintf(buf, "\x1b[37;45;1m%*sâ— è«‹æŒ‰ \x1b[33m(Space/Return)\x1b[37m ç¹¼çºŒ â—%*s\x1b[m", (d_cols >> 1) + 22 , "", ((d_cols + 1) >> 1) + 21, "");
+        sprintf(buf, "\x1b[37;45;1m%*s¡´ ½Ð«ö \x1b[33m(Space/Return)\x1b[37m Ä~Äò ¡´%*s\x1b[m", (d_cols >> 1) + 22 , "", ((d_cols + 1) >> 1) + 21, "");
     }
     move(b_lines, 0);
     for (ptr = buf; (cc = (unsigned char) *ptr); ptr++)
