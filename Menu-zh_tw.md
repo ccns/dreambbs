@@ -84,6 +84,7 @@ Macro (主選單) | 值 (主選單)   | Macro (Popupmenu)  | 值 (Popupmenu) | �
 無             | ---          | `POPUP_MENUTITLE`  | `0x08`         | `umode` | - 非選項；設定選單標題 <br> - 代表 Popupmenu 系統的 `MENU` 列表的最末項
 無             | ---          | `POPUP_SO` | - `0x10` (使用動態載入) <br> - `POPUP_FUN` (不使用動態載入) | `umode` | - 選擇後執行無參數函式；此函式需要動態載入 <br> - DreamBBS v3 移除
 `M_ARG`        | `0x40000000` | `POPUP_ARG`        | `0x40000000`   | `umode` | - 執行函式時，以函式物件所帶的參數呼叫函式 <br> - DreamBBS v3 新增
+`MENU_CHANG`   | `0x80000000` | 無                 | ---            | `umode`? | - 功能未知 (未使用) <br> - WindTopBBS 3.02 rev.20040420 新增
 `M_DL(umode)`  | - `-umode` (使用動態載入) <br> - `umode` (不使用動態載入) | `M_DL(umode)` | - `-umode` (使用動態載入) <br> - `umode` (不使用動態載入) | `umode` | - 此選項功能需要動態載入 <br> - DreamBBS v2.0 時新增
 `M_MASK`       | `0x0000FFFF` |                    |                | `umode` | - `umode` 的有效範圍；範圍之外為 flags <br> - DreamBBS v3 新增
 無             |              | `POPUP_MASK`       | `0x000000FF`   | `level` | - `level` 的有效範圍；範圍之外為 flags <br> - DreamBBS v3 移除
