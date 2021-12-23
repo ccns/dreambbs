@@ -1,6 +1,6 @@
 # Dreamland-BBS
 
-Build status: [![master branch build status](https://github.com/bbsdocker/imagedreambbs/actions/workflows/push_container_master.yml/badge.svg)](https://github.com/bbsdocker/imagedreambbs/actions/workflows/push_container_master.yml) [![develop branch build status](https://github.com/bbsdocker/imagedreambbs/actions/workflows/push_container_develop.yml/badge.svg)](https://github.com/bbsdocker/imagedreambbs/actions/workflows/push_container_develop.yml)
+Build status: `master` [![master branch build status](https://github.com/ccns/dreambbs/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/ccns/dreambbs/actions/workflows/build.yml) `develop` [![develop branch build status](https://github.com/ccns/dreambbs/actions/workflows/build.yml/badge.svg?branch=develop)](https://github.com/ccns/dreambbs/actions/workflows/build.yml/badge.svg?branch=develop)
 
 [![](https://i.imgur.com/0EpI7Fa.png)](https://github.com/ccns/dreambbs)
 
