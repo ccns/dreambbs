@@ -454,22 +454,22 @@ Macro         | 值 (MapleBBS 2.36b) | 值 (DreamBBS v3.1) | 說明
 `MARK_NEXT`   | `RS_MARKED \| RS_FORWARD \| RS_CURRENT` (MapleBBS 3.00b) | `XO_RS + RS_MARK_NEXT` <br> (= `XO_RS + (RS_MARKED \| RS_FORWARD \| RS_CURRENT)`) | 下一篇有 mark 標記的文章
 `MARK_PREV`   | `RS_MARKED \| RS_CURRENT` (MapleBBS 3.00b) | `XO_RS + RS_MARK_PREV` <br> (= `XO_RS + (RS_MARKED \| RS_CURRENT)`) | 上一篇有 mark 標記的文章
 
-## DreamBBS v3 的 Xover callback 命令連鎖機制
+## DreamBBS v3 的 Xover callback 命令鏈鎖機制
 ### 名詞說明
-#### 連鎖
-`i_read` 與 Xover 列表系統的 callback 函式都可以透過回傳值，呼叫下一個 callback，本文稱之為「連鎖」。
+#### 鏈鎖
+`i_read` 與 Xover 列表系統的 callback 函式都可以透過回傳值，呼叫下一個 callback，本文稱之為「鏈鎖」。
 
-例如 `'i'` 對應的 callback 回傳 `'j'`，`'j'` 對應的 callback 回傳 `'k'`，`'k'` 對應的 callback 回傳 `XO_BODY`，`XO_BODY` 對應的 callback 回傳 `XO_FOOT`，`XO_FOOT` 對應的 callback 回傳 `XO_NONE`，稱為一個連鎖，可以記為 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE`。
+例如 `'i'` 對應的 callback 回傳 `'j'`，`'j'` 對應的 callback 回傳 `'k'`，`'k'` 對應的 callback 回傳 `XO_BODY`，`XO_BODY` 對應的 callback 回傳 `XO_FOOT`，`XO_FOOT` 對應的 callback 回傳 `XO_NONE`，稱為一個鏈鎖，可以記為 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE`。
 
-連鎖的結尾 callback 可以回傳游標移動命令、`XO_NONE` 命令、或沒有對應 callback 的命令。
+鏈鎖的結尾 callback 可以回傳游標移動命令、`XO_NONE` 命令、或沒有對應 callback 的命令。
 
-#### 命令連鎖
-透過回傳按鍵值而呼叫下一個 callback 的連鎖，稱為「命令連鎖」。
+#### 命令鏈鎖
+透過回傳按鍵值而呼叫下一個 callback 的鏈鎖，稱為「命令鏈鎖」。
 
-例如連鎖 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE` 中就包含了命令連鎖 `'i' -> 'j' -> 'k'`。
+例如鏈鎖 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE` 中就包含了命令鏈鎖 `'i' -> 'j' -> 'k'`。
 
 #### 組合操作 - Redo 組合操作與 zone 組合操作
-從 DreamBBS v3.0 開始，可以將畫面重繪/重新載入或列表操作，與按鍵輸入或游標移動的操作組合表示，因此需要特別的規則來處理帶有這些組合的命令連鎖。
+從 DreamBBS v3.0 開始，可以將畫面重繪/重新載入或列表操作，與按鍵輸入或游標移動的操作組合表示，因此需要特別的規則來處理帶有這些組合的命令鏈鎖。
 
 其中畫面重繪/重新載入 (`XR_*`) 等操作，本文稱之為「redo-simple 操作」，與其組合的操作則稱為「redo 組合操作」；\
 列表操作 (`XZ_ZONE + XZ_*`) 等操作，本文稱之為「zone-simple 操作」，與其組合的操作則稱為「zone 組合操作」。
@@ -480,24 +480,24 @@ Macro         | 值 (MapleBBS 2.36b) | 值 (DreamBBS v3.1) | 說明
 不是組合操作的操作，本文稱為「簡單操作」，因此，前文中的「redo-simple 操作」與「zone-simple 操作」都屬於「簡單操作」。
 
 代表單純的按鍵輸入或游標移動的簡單操作，本文稱之為「pure 操作」。\
-之所以稱為「pure 操作」，是因為當按鍵連鎖中的各個 callback 的回傳值只有單純的按鍵輸入與游標移動操作時，回傳值之間不會互相影響。
+之所以稱為「pure 操作」，是因為當按鍵鏈鎖中的各個 callback 的回傳值只有單純的按鍵輸入與游標移動操作時，回傳值之間不會互相影響。
 
-Null 操作是 pure 操作的特例，是導致連鎖終止的單純操作，包含游標移動操作、`XO_NONE` 操作、以及沒有對應 callback 的值所代表的操作。
+Null 操作是 pure 操作的特例，是導致鏈鎖終止的單純操作，包含游標移動操作、`XO_NONE` 操作、以及沒有對應 callback 的值所代表的操作。
 
 此外，DreamBBS v3 的切換列表操作 (`XZ_<zone>`)，是用游標移動達成的，本文將其歸類為 pure 操作中的 null 操作，而非 zone 組合操作；\
 MapleBBS 3 原本的 Xover 列表系統的切換列表操作，不是使用游標移動達到的，但本文也將其看作游標操作。
 
-### 組合命令連鎖規則
+### 組合命令鏈鎖規則
 #### 通則
-組合操作中的 redo-simple 部分及 zone-simple 部分，會累積起來，在命令連鎖結束時再執行。
+組合操作中的 redo-simple 部分及 zone-simple 部分，會累積起來，在命令鏈鎖結束時再執行。
 
 其中，如果同時累積有 redo-simple 及 zone-simple 部分，則會先執行 zone-simple 部分，再執行 redo-simple 部分。
 
-#### Pure-redo & Redo-pure 連鎖 -> pure-pure-redo-simple 連鎖
+#### Pure-redo & Redo-pure 鏈鎖 -> pure-pure-redo-simple 鏈鎖
 先後執行兩個操作的 pure 部分後，執行 redo-simple 操作。
-#### Pure-zone & zone-pure 連鎖 -> pure-pure-zone-simple 連鎖
+#### Pure-zone & zone-pure 鏈鎖 -> pure-pure-zone-simple 鏈鎖
 先後執行兩個操作的 pure 部分後，執行 zone-simple 操作。
-#### Redo-redo 連鎖 -> pure-pure-redo-simple 連鎖
+#### Redo-redo 鏈鎖 -> pure-pure-redo-simple 鏈鎖
 先後執行兩個操作的 pure 部分後，將與兩者組合的 redo-simple 操作一齊執行。
 
 例如有 2 個 callback 函式：
@@ -509,9 +509,9 @@ MapleBBS 3 原本的 Xover 列表系統的切換列表操作，不是使用游�
 可以這樣寫：
 - 在 `func_info()` 中增加查詢次數，並 `return XR_KNEE + XO_NONE` (或 `return XO_KNEE`)
 - `func_info_full()` 則有不同寫法：
-    - 沒有連鎖規則時，要直接呼叫 `func_info(xo)` 再 `return XO_BODY`
-        - DreamBBS v3 不使用 redo-redo 連鎖機制時，可以使用 `return XR_BODY | func_info(xo)`，但要確定 `func_info()` 不會回傳按鍵輸入值，否則需要連鎖規則才能處理
-    - 有連鎖規則的話，則可以直接 `return XR_BODY + 'i'`，這會間接呼叫 `func_info()`，並要求至少從畫面中列表內容處向下重繪
+    - 沒有鏈鎖規則時，要直接呼叫 `func_info(xo)` 再 `return XO_BODY`
+        - DreamBBS v3 不使用 redo-redo 鏈鎖機制時，可以使用 `return XR_BODY | func_info(xo)`，但要確定 `func_info()` 不會回傳按鍵輸入值，否則需要鏈鎖規則才能處理
+    - 有鏈鎖規則的話，則可以直接 `return XR_BODY + 'i'`，這會間接呼叫 `func_info()`，並要求至少從畫面中列表內容處向下重繪
 
 `return XR_BODY | func_info(xo)` 寫法的優缺點：
 - 適合用在按鍵的對應功能的函式已知的情況
@@ -522,9 +522,9 @@ MapleBBS 3 原本的 Xover 列表系統的切換列表操作，不是使用游�
 - 可以正確處理按鍵的對應功能的函式回傳 `XZ_*` 命令的狀況
 - 限制是按鍵本身不能是 `XZ_*` 命令
 
-#### Zone-zone 連鎖 -> pure-pure-zone-simple 連鎖
+#### Zone-zone 鏈鎖 -> pure-pure-zone-simple 鏈鎖
 先後執行兩個操作的 pure 部分後，將與兩者組合的 zone-simple 操作一齊執行。
-#### Redo-zone & zone-redo 連鎖 -> pure-pure-zone-simple-redo-simple 連鎖
+#### Redo-zone & zone-redo 鏈鎖 -> pure-pure-zone-simple-redo-simple 鏈鎖
 先後執行兩個操作的 pure 部分後，先執行 zone-simple 操作，再執行 redo-simple 操作。
 
 在某些 zone-simple 操作後可以省略部分或全部的 redo-simple 操作。
