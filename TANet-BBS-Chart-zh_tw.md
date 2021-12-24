@@ -107,9 +107,12 @@
 &nbsp;         │   └── [Formosa BBS CE](https://github.com/PichuChen/formosa)  2009&ndash;2012
 &nbsp;         ├── FCU CC BBS  逢甲計中  蒼穹資訊網  n.d.
 &nbsp;         └── Rose BBS  (玫瑰天空？)  n.d.
-* [Power BBS](https://github.com/bbsmirror/BBSmirror/tree/master/PowerBBS)  中華資工  方城資訊站  1994&ndash;1997
-* [ColaBBS](https://github.com/bbsmirror/BBSmirror/tree/master/ColaBBS)  交大資科  插花島  1997&ndash;2000
-* [天火 BBS](http://tube.ee.tku.edu.tw/~rexchen/bbs/index.html) ([archived](https://github.com/bbsmirror/BBSmirror/tree/master/rexchen))  淡江電機  蛋捲廣場＊  2002
+</pre></big>
+<big><pre>* [Power BBS](https://github.com/bbsmirror/BBSmirror/tree/master/PowerBBS)  中華資工  方城資訊站  1994&ndash;1997
+</pre></big>
+<big><pre>* [ColaBBS](https://github.com/bbsmirror/BBSmirror/tree/master/ColaBBS)  交大資科  插花島  1997&ndash;2000
+</pre></big>
+<big><pre>* [天火 BBS](http://tube.ee.tku.edu.tw/~rexchen/bbs/index.html) ([archived](https://github.com/bbsmirror/BBSmirror/tree/master/rexchen))  淡江電機  蛋捲廣場＊  2002
 </pre></big>
 
 ### 譜系圖參考資料
