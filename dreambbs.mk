@@ -24,7 +24,7 @@ BUILDTIME	!= date '+%s'
 
 ## To be expanded
 
-CFLAGS_WARN	= -Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format -Werror=incompatible-pointer-types -Werror=int-conversion
+CFLAGS_WARN	= -Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format
 CFLAGS_MK	= -ggdb3 -O0 -pipe $(CFLAGS_WARN) -I$$(SRCROOT)/include $(CFLAGS_ARCHI) $(CFLAGS_COMPAT)
 
 LDFLAGS_MK = -L$$(SRCROOT)/lib -ldao -lcrypt $(LDFLAGS_ARCHI)
@@ -109,9 +109,7 @@ CC_HASFLAGS = echo "" | $(CC) -x c -E $(flags:M*) -Werror - >/dev/null 2>&1
 CFLAGS_WARN	= -Wno-format-overflow -Wno-error=format-overflow -Wformat-overflow
 .endif
 
-# Prevent `-Wincompatible-pointer-types-discards-qualifiers` warnings from halting the compilation
 .if $(CC:Mclang*)
-CFLAGS_WARN	+= -Wno-incompatible-pointer-types-discards-qualifiers -Wno-error=incompatible-pointer-types-discards-qualifiers -Wincompatible-pointer-types-discards-qualifiers -Werror=pointer-to-int-cast
 CFLAGS_WARN	+= -Wno-invalid-source-encoding
 .endif
 
@@ -145,7 +143,11 @@ CFLAGS_SO	+= -DNO_SO=0
 .if $(CC:M*++) || $(CC:M*++-*)
 CFLAGS_COMPAT	+= -x c++
 .else
-CFLAGS_WARN	+= -Wstrict-prototypes
+CFLAGS_WARN	+= -Wstrict-prototypes -Werror=incompatible-pointer-types -Werror=int-conversion
+# Prevent `-Wincompatible-pointer-types-discards-qualifiers` warnings from halting the compilation
+.if $(CC:Mclang*)
+CFLAGS_WARN	+= -Wno-incompatible-pointer-types-discards-qualifiers -Wno-error=incompatible-pointer-types-discards-qualifiers -Wincompatible-pointer-types-discards-qualifiers -Werror=pointer-to-int-cast
+.endif
 .endif
 
 CC_HAS_W_UNREACHABLE_CODE_AGGRESSIVE != $(CC_HASFLAGS$(flags::= -Wunreachable-code-aggressive)) $(DEF_YES)

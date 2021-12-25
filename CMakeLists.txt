@@ -50,7 +50,7 @@ add_compile_options(
     $<$<CONFIG:MinSizeRel>:>
     -pipe
 )
-add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format -Werror=incompatible-pointer-types -Werror=int-conversion -Werror=pointer-to-int-cast)
+add_compile_options(-Wall -Wpointer-arith -Wcast-qual -Wwrite-strings -Werror=format)
 include_directories(${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/include)
 
 link_libraries(-L${PROJECT_BINARY_DIR}/lib dao crypt)
@@ -205,15 +205,18 @@ if(CMAKE_C_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
     add_compile_options(${W_NO_ERROR_FORMAT_OVERFLOW})
 endif()
 
-# Prevent `-Wincompatible-pointer-types-discards-qualifiers` warnings from halting the compilation
-set(W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS -Wno-incompatible-pointer-types-discards-qualifiers -Wno-error=incompatible-pointer-types-discards-qualifiers -Wincompatible-pointer-types-discards-qualifiers)
 if(CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_compile_options(${W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS})
     add_compile_options(-Wno-invalid-source-encoding)
 endif()
 
 if(NOT USE_CXX)
-    add_compile_options(-Wstrict-prototypes)
+    add_compile_options(-Wstrict-prototypes -Werror=incompatible-pointer-types -Werror=int-conversion -Werror=pointer-to-int-cast)
+
+    # Prevent `-Wincompatible-pointer-types-discards-qualifiers` warnings from halting the compilation
+    set(W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS -Wno-incompatible-pointer-types-discards-qualifiers -Wno-error=incompatible-pointer-types-discards-qualifiers -Wincompatible-pointer-types-discards-qualifiers)
+    if(CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+        add_compile_options(${W_NO_INCOMPATIBLE_POINTER_TYPES_DISCARDS_QUALIFIERS})
+    endif()
 endif()
 
 check_c_compiler_flag(-Wunreachable-code-aggressive CC_HAS_W_UNREACHABLE_CODE_AGGRESSIVE)
