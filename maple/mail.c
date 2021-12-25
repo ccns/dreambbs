@@ -565,7 +565,7 @@ static union
 {
     XO mail_xo;
     char bytes[SIZEOF_FLEX(XO, 32)];
-}      cmbox_union;
+}      cmbox_union = {0};
 static XO *const cmbox = &cmbox_union.mail_xo;
 
 int
