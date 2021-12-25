@@ -888,7 +888,7 @@ new_line:
         }
     }
 
-    slp->len = BMAX(slp->len, pos + 1);
+    slp->len = BMAX(slp->len, (uint8_t)(pos + 1));
     cur_pos = ++pos;
     cx = ++cur_col;
 

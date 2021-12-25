@@ -775,7 +775,7 @@ re_key:
                     }
 
                     /* 先位移到上一個 block 的尾端 */
-                    i = BMIN((totallino - b_lines) >> 5, MAXBLOCK - 1);
+                    i = BMIN((totallino - b_lines) >> 5, (int)MAXBLOCK - 1);
                     foff = fimage + block[i];
                     i = i * 32;
 
@@ -809,7 +809,7 @@ re_key:
                 */
 
                 /* 先位移到上一個 block 的尾端 */
-                i = BMIN((lino - b_lines) >> 5, MAXBLOCK - 1);
+                i = BMIN((lino - b_lines) >> 5, (int)MAXBLOCK - 1);
                 foff = fimage + block[i];
                 i = i * 32;
 
