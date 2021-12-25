@@ -517,7 +517,7 @@ GCC_PURE size_t str_nmove_ansi(const char *str, size_t idx, ssize_t diff, size_t
     {
         do
         {
-            const size_t len_rest = str_nlen(ptr, BMIN(diff, len));
+            const size_t len_rest = str_nlen(ptr, BMIN((size_t)diff, len));
             const char *const ptr_esc = (const char *)memchr(ptr, '\x1b', len_rest);
             const ssize_t step = (ptr_esc) ? ptr_esc - ptr : len_rest;
             ptr += step;

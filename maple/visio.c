@@ -934,7 +934,7 @@ gety_ref(
     int y_ref)
 {
     /* Substitute `T_LINES` with `t_lines` */
-    const int y_clipped = TCLAMP(y_ref, 0, T_LINES_REF - 1);
+    const int y_clipped = TCLAMP(y_ref, 0, (int)T_LINES_REF - 1);
     /* Calculate the multiplier/divisor (`n*`, `/n`) */
     const int y_segment = y_clipped / (2*T_LINES_OFF_MAX);
     /*    and then substitute the multiplicand/dividend with `t_lines` */
@@ -953,7 +953,7 @@ getx_ref(
 {
     /* Substitute `T_COLS` with `t_columns` */
     /* Do the same with `x` */
-    const int x_clipped = TCLAMP(x_ref, 0, T_COLS_REF - 1);
+    const int x_clipped = TCLAMP(x_ref, 0, (int)T_COLS_REF - 1);
     const int x_segment = x_clipped / (2*T_COLS_OFF_MAX);
     const int x_base = x_segment * t_columns / T_COLS_DIV_RES;
     const int x_compensate = (x_segment * t_columns % T_COLS_DIV_RES != 0);

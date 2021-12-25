@@ -3780,7 +3780,7 @@ static int pip_practice_classA(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN(d.learn[LEARN_WISDOM] / 200, COUNTOF(classrank) - 1); /*科學*/
+    class_ = BMIN(d.learn[LEARN_WISDOM] / 200, (int)(unsigned)COUNTOF(classrank) - 1); /*科學*/
 
     body = pip_practice_function(CLASS_A, class_, 11, 12, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -3820,7 +3820,7 @@ static int pip_practice_classB(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, COUNTOF(classrank) - 1); /*詩詞*/
+    class_ = BMIN((d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, (int)(unsigned)COUNTOF(classrank) - 1); /*詩詞*/
 
     body = pip_practice_function(CLASS_B, class_, 21, 21, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -3857,7 +3857,7 @@ static int pip_practice_classC(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400, COUNTOF(classrank) - 1); /*神學*/
+    class_ = BMIN((d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400, (int)(unsigned)COUNTOF(classrank) - 1); /*神學*/
 
     body = pip_practice_function(CLASS_C, class_, 31, 31, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -3891,7 +3891,7 @@ static int pip_practice_classD(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400, COUNTOF(classrank) - 1);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
     body = pip_practice_function(CLASS_D, class_, 41, 41, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.learn[LEARN_WISDOM] += change2 * LEARN_LEVEL;
@@ -3926,7 +3926,7 @@ static int pip_practice_classE(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400, COUNTOF(classrank) - 1);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
 
     body = pip_practice_function(CLASS_E, class_, 51, 51, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -3961,7 +3961,7 @@ static int pip_practice_classF(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400, COUNTOF(classrank) - 1);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
 
     body = pip_practice_function(CLASS_F, class_, 61, 61, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -3996,7 +3996,7 @@ static int pip_practice_classG(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400, COUNTOF(classrank) - 1);
+    class_ = BMIN((d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
 
     body = pip_practice_function(CLASS_G, class_, 71, 72, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -4031,7 +4031,7 @@ static int pip_practice_classH(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.learn[LEARN_MANNERS] * 2 + d.learn[LEARN_CHARACTER]) / 400, COUNTOF(classrank) - 1);
+    class_ = BMIN((d.learn[LEARN_MANNERS] * 2 + d.learn[LEARN_CHARACTER]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
 
     body = pip_practice_function(CLASS_H, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -4058,7 +4058,7 @@ static int pip_practice_classI(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, COUNTOF(classrank) - 1);
+    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
 
     body = pip_practice_function(CLASS_I, class_, 91, 91, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -4084,7 +4084,7 @@ static int pip_practice_classJ(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400, COUNTOF(classrank) - 1);
+    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
 
     body = pip_practice_function(CLASS_J, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -4162,7 +4162,7 @@ enum pipclass classnum, int classgrade, int data)
     if (data > classgrade && classgrade < COUNTOF(classrank) - 1)
     {
         sprintf(inbuf, "下次換上 [%8s%4s課程]",
-                pip_class_list[classnum].name, classrank[BMIN(data, COUNTOF(classrank) - 1)]);
+                pip_class_list[classnum].name, classrank[BMIN(data, (int)(unsigned)COUNTOF(classrank) - 1)]);
         vmsg(inbuf);
     }
     return 0;
