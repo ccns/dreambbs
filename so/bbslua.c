@@ -2789,8 +2789,8 @@ bbslua(const char *fpath)
         walltime = bl_tv2double(&lua_endtime) - bl_tv2double(&lua_begintime);
         load = cputime / walltime;
         log_filef("log/bbslua.log", LOG_CREAT,
-                "maxalloc=%d leak=%d op=%d cpu=%.3f Mop/s=%.1f load=%f file=%s\n",
-                (int)ad.max_alloc_size, (int)ad.alloc_size,
+                "maxalloc=%ld leak=%ld op=%d cpu=%.3f Mop/s=%.1f load=%f file=%s\n",
+                ad.max_alloc_size, ad.alloc_size,
                 bbslua_count, cputime, bbslua_count / cputime / 1000000.0, load * 100,
                 fpath);
     }

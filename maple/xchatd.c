@@ -3119,33 +3119,33 @@ server_usage(GCC_UNUSED int signum)
         "system time: %.6f\n"
         "maximum resident set size: %ld P\n"
         "integral resident set size: %ld\n"
-        "page faults not requiring physical I/O: %d\n"
-        "page faults requiring physical I/O: %d\n"
-        "swaps: %d\n"
-        "block input operations: %d\n"
-        "block output operations: %d\n"
-        "messages sent: %d\n"
-        "messages received: %d\n"
-        "signals received: %d\n"
-        "voluntary context switches: %d\n"
-        "involuntary context switches: %d\n"
+        "page faults not requiring physical I/O: %ld\n"
+        "page faults requiring physical I/O: %ld\n"
+        "swaps: %ld\n"
+        "block input operations: %ld\n"
+        "block output operations: %ld\n"
+        "messages sent: %ld\n"
+        "messages received: %ld\n"
+        "signals received: %ld\n"
+        "voluntary context switches: %ld\n"
+        "involuntary context switches: %ld\n"
         "gline: %d\n\n",
 
         (double) ru.ru_utime.tv_sec + (double) ru.ru_utime.tv_usec / 1000000.0,
         (double) ru.ru_stime.tv_sec + (double) ru.ru_stime.tv_usec / 1000000.0,
         ru.ru_maxrss,
         ru.ru_idrss,
-        (int) ru.ru_minflt,
-        (int) ru.ru_majflt,
-        (int) ru.ru_nswap,
-        (int) ru.ru_inblock,
-        (int) ru.ru_oublock,
-        (int) ru.ru_msgsnd,
-        (int) ru.ru_msgrcv,
-        (int) ru.ru_nsignals,
-        (int) ru.ru_nvcsw,
-        (int) ru.ru_nivcsw,
-        (int) gline);
+        ru.ru_minflt,
+        ru.ru_majflt,
+        ru.ru_nswap,
+        ru.ru_inblock,
+        ru.ru_oublock,
+        ru.ru_msgsnd,
+        ru.ru_msgrcv,
+        ru.ru_nsignals,
+        ru.ru_nvcsw,
+        ru.ru_nivcsw,
+        gline);
 
     fflush(flog);
 }

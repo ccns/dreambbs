@@ -2132,14 +2132,14 @@ mf_display_footer(
         /* in debug mode don't print ANSI codes
          * because themselves are buggy.
          */
-        prints("L#%ld(w%ld, lp%ld) Dsp:%08X/%08X/%08X, "
-                "F:%08X/%08X(%d) tScr(%dx%d)",
+        prints("L#%ld(w%ld, lp%ld) Dsp:%p/%p/%p, "
+                "F:%p/%p(%ld) tScr(%dx%d)",
                 mf.lineno, mf.wraplines, mf.lastpagelines,
-                (unsigned int)mf.disps,
-                (unsigned int)mf.maxdisps,
-                (unsigned int)mf.dispe,
-                (unsigned int)mf.start, (unsigned int)mf.end,
-                (int)mf.len,
+                (void *)mf.disps,
+                (void *)mf.maxdisps,
+                (void *)mf.dispe,
+                (void *)mf.start, (void *)mf.end,
+                mf.len,
                 t_columns,
                 t_lines
               );
