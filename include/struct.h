@@ -825,9 +825,7 @@ typedef union {  /* IID.20191106: The field to be used is determined by the valu
 #endif
 } XoFunc;
 
-/* XXX(IID.20191227): Workaround for g++ not currently supporting
- *    function overload resolution for designated initializer */
-#if defined __cplusplus && defined __clang__
+#if defined __cplusplus
 /* IID.20191225: Use hash table for xover callback function list */
 
 #define HAVE_HASH_KEYFUNCLIST
