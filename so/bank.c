@@ -99,7 +99,7 @@ static int point1_money(void)
         char c_time[25], c_buf[100]={0};
         now = time(0);
         str_scpy(c_time, ctime(&now), sizeof(c_time));
-        sprintf(c_buf, "%s %s Àu¨}ÂI¼Æ(%d)->¹Ú¹ô(%d)\n", c_time, cuser.userid, num, (int)temp);
+        sprintf(c_buf, "%s %s Àu¨}ÂI¼Æ(%d)->¹Ú¹ô(%+d)\n", c_time, cuser.userid, num, (int)temp);
         f_cat(FN_BANK, c_buf);
 
     }
@@ -222,7 +222,7 @@ TransferAccount(void)
         char c_time[25], c_buf[100]={0};
         now = time(0);
         str_scpy(c_time, ctime(&now), sizeof(c_time));
-        sprintf(c_buf, "%s %s ¶×´Ú(%d)-> %s (%d)\n", c_time, cuser.userid, pay, userid, (int)atoi(buf));
+        sprintf(c_buf, "%s %s ¶×´Ú(%d)-> %s (%+d)\n", c_time, cuser.userid, pay, userid, (int)atoi(buf));
         f_cat(FN_BANK, c_buf);
 
     }
