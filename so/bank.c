@@ -77,19 +77,19 @@ static int point1_money(void)
         return 0;
     else
     {
-        double temp = num*4096 + acct.money;
+        double temp = num*4096;
 
-        if (temp > INT_MAX)
+        if (temp + acct.money > INT_MAX)
         {
             pmsg2("轉換後夢幣超過上限！");
             return 0;
         }
 
-        temp = (int)temp;
+        const int dmoney = (int)temp;
 
         if (acct_load(&acct, cuser.userid) >= 0)
         {
-            acct.money = temp;
+            acct.money += dmoney;
             acct.point1 -= num;
         }
 
@@ -99,7 +99,7 @@ static int point1_money(void)
         char c_time[25], c_buf[100]={0};
         now = time(0);
         str_scpy(c_time, ctime(&now), sizeof(c_time));
-        sprintf(c_buf, "%s %s 優良點數(%d)->夢幣(%+d)\n", c_time, cuser.userid, num, (int)temp);
+        sprintf(c_buf, "%s %s 優良點數(%d)->夢幣(%+d)\n", c_time, cuser.userid, num, dmoney);
         f_cat(FN_BANK, c_buf);
 
     }
