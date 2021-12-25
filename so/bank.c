@@ -120,7 +120,7 @@ TransferAccount(void)
     char userid[IDLEN + 1];
     char str[128];
     int selfmoney GCC_UNUSED, pay;
-    double temp;
+    int dmoney;
 
 #ifdef M3_USE_PFTERM
     clrregion(0, 22);
@@ -163,28 +163,28 @@ TransferAccount(void)
     if (!vget(7, 0, "你要匯款多少夢幣：", buf, 10, DOECHO))
         return 0;
 
-    temp = ((int)atoi(buf) + acct.money);
+    dmoney = atoi(buf);
 
-    if ((int)atoi(buf) < 100)
+    if (dmoney < 100)
     {
         pmsg2("匯款金額不得低於 100 元");
         return 0;
     }
-    else if ((int)atoi(buf) > selfacct.money)
+    else if (dmoney > selfacct.money)
     {
         pmsg2("匯款金額超過能匯出的上限");
         return 0;
     }
-    else if (temp>INT_MAX)
+    else if ((double)dmoney + acct.money > INT_MAX)
     {
         pmsg2("匯款金額超過對方能接受的上限");
         return 0;
     }
 
-    pay = (int)(atoi(buf)*1.1);
+    pay = (int)(dmoney * 1.1);
 
     move(9, 0);
-    prints("欲轉 %d 元夢幣(稅前)，實際支付 %d 夢幣(稅後)", (int)atoi(buf), pay);
+    prints("欲轉 %d 元夢幣(稅前)，實際支付 %d 夢幣(稅後)", dmoney, pay);
 
     move(11, 0);
     clrtobot();
@@ -208,12 +208,12 @@ TransferAccount(void)
         fprintf(fp, "作者: %s (%s)\n", cuser.userid, cuser.username);
         fprintf(fp, "標題: 匯款通知\n");
         fprintf(fp, "時間: %s\n", date);
-        fprintf(fp, "\n\n%s 送給你 \x1b[1;31m%d\x1b[m 夢幣，請笑納~\n", cuser.userid, (int)atoi(buf));
+        fprintf(fp, "\n\n%s 送給你 \x1b[1;31m%d\x1b[m 夢幣，請笑納~\n", cuser.userid, dmoney);
         fprintf(fp, "\n\n匯款理由：%s\n", str);
         fclose(fp);
         rec_add(folder, &xhdr, sizeof(HDR));
 
-        acct.money += (int)atoi(buf);
+        acct.money += dmoney;
         selfacct.money -= pay;
         acct_save(&acct);
         acct_save(&selfacct);
@@ -222,7 +222,7 @@ TransferAccount(void)
         char c_time[25], c_buf[100]={0};
         now = time(0);
         str_scpy(c_time, ctime(&now), sizeof(c_time));
-        sprintf(c_buf, "%s %s 匯款(%d)-> %s (%+d)\n", c_time, cuser.userid, pay, userid, (int)atoi(buf));
+        sprintf(c_buf, "%s %s 匯款(%d)-> %s (%+d)\n", c_time, cuser.userid, pay, userid, dmoney);
         f_cat(FN_BANK, c_buf);
 
     }
