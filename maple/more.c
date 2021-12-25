@@ -337,7 +337,7 @@ outs_footer(
     /* prints(FOOTER_MORE, (lino - 2) / PAGE_SCROLL + 1, ((foff - fimage) * 100) / fsize); */
 
     /* itoc.010821: 為了和 FOOTER 對齊 */
-    sprintf(buf, FOOTER_MORE, (lino - 2) / PAGE_SCROLL + 1, INT((foff - fimage) * 100) / fsize);
+    sprintf(buf, FOOTER_MORE, (lino - 2) / PAGE_SCROLL + 1, INT((foff - fimage) * 100 / fsize));
     outs(buf);
 
     for (i = b_cols + sizeof(COLOR1) + sizeof(COLOR2) - strlen(buf); i > 3; i--)
