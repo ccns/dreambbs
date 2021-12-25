@@ -92,7 +92,7 @@ blog_pid(
     if (!msg)
     {
         msg = data;
-        sprintf(data, "Stay: %d (%d)", (int)(time(NULL) - ap_start) / 60, pid);
+        sprintf(data, "Stay: %ld (%d)", (long)(time(NULL) - ap_start) / 60, pid);
     }
     logger_tag(&blog_tlogger, mode, msg);
 }

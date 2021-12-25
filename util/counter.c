@@ -40,7 +40,7 @@ main(
         printf("max_regist = %d \n", count->max_regist);
         printf("cur_hour_max_login = %d \n", count->cur_hour_max_login);
         printf("cur_day_max_login = %d \n", count->cur_day_max_login);
-        printf("samehour_max_time = %d \n", (int) count->samehour_max_time);
+        printf("samehour_max_time = %ld \n", (long)count->samehour_max_time);
         printf("samehour_max_login_old = %d \n", count->samehour_max_login_old);
         printf("max_regist_old = %d \n", count->max_regist_old);
         break;

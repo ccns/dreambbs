@@ -470,7 +470,7 @@ reaper(
             while (rename(fpath, buf))
             {
                 fprintf(flog, "rename %s ==> %s : %d\n", fpath, buf, errno);
-                sprintf(buf, "usr/@/%s.%d", lowid, (int)++life);
+                sprintf(buf, "usr/@/%s.%ld", lowid, (long)++life);
             }
 
             userno_free(fd);
@@ -667,7 +667,7 @@ main(void)
     end -= start;
     start = end % 60;
     end /= 60;
-    fprintf(flog, "# 共花時間 : %d:%d:%d\n", (int)end / 60, (int)end % 60, (int)start);
+    fprintf(flog, "# 共花時間 : %ld:%ld:%ld\n", (long)(end / 60), (long)(end % 60), (long)start);
     fprintf(flog, "# 註冊人數(包含未認證) : %d\n", visit);
     fprintf(flog, "# 刪除人數 : %d\n", prune);
     fprintf(flog, "# 未認證人數 : %d\n", invalid);

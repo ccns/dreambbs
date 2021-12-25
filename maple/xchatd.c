@@ -1720,8 +1720,8 @@ cuser_free(
     {
         exit_room(cuser, EXIT_LOSTCONN, NULL);
     }
-    fprintf(flog, "BYE\t[%d] T%d X%d\n",
-        cuser->sno, (int) (time(0) - cuser->tbegin), cuser->xdata);
+    fprintf(flog, "BYE\t[%d] T%ld X%d\n",
+        cuser->sno, (long)(time(0) - cuser->tbegin), cuser->xdata);
 }
 
 

@@ -1637,9 +1637,9 @@ bl_clock(lua_State *L)
     syncnow();
     // XXX the may be some latency between our GetSystemTime and syncnow.
     // So build again the "second" part.
-    d = (int)((now / 60) * 60);
+    d = (long)((now / 60) * 60);
 #else
-    d = (int)((time(NULL) / 60) * 60);
+    d = (long)((time(NULL) / 60) * 60);
 #endif
     d += st.wSecond;
     d += (st.wMilliseconds / 1000.0f);
