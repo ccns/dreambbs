@@ -665,10 +665,10 @@ enum pipmenuidx menunum)
             switch (menunum)
             {
             case 2:
-                fill = 20 + d_cols - (STRLITLEN(NICKNAME));
+                fill = 20 + d_cols - STRLITLEN_INT(NICKNAME);
                 break;
             case 6:
-                fill = 20 + d_cols - 2 * (STRLITLEN(NICKNAME));
+                fill = 20 + d_cols - 2 * STRLITLEN_INT(NICKNAME);
                 break;
             default:
                 fill = d_cols;
@@ -878,11 +878,11 @@ enum pipmenumode mode)
     /*vs_head("電子養小雞", BoardName);*/
     move(0, 0);
     if (d.sex == 1)
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[32m♂ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
+        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[32m♂ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
     else if (d.sex == 2)
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[33m♀ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
+        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[33m♀ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
     else
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[34m？ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
+        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[34m？ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
 
     move(1, 0);
     if (d.thing[THING_MONEY] <= 100)
@@ -1996,7 +1996,7 @@ int item_list[])
         numlen = i;
         clrchyiuan(b_lines - 4, b_lines);
         move(b_lines, 0);
-        prints("\x1b[1;44;37m  %8s選單  \x1b[46m  [B]買入物品  [S]賣出物品  [Q]跳出      %*s\x1b[m", shop->name, 30 + d_cols - (int)(unsigned int)strlen(shop->name), "");
+        prints("\x1b[1;44;37m  %8s選單  \x1b[46m  [B]買入物品  [S]賣出物品  [Q]跳出      %*s\x1b[m", shop->name, 30 + d_cols - INT(strlen(shop->name)), "");
         pipkey = vkey();
         switch (pipkey)
         {
@@ -3780,7 +3780,7 @@ static int pip_practice_classA(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN(d.learn[LEARN_WISDOM] / 200, (int)(unsigned)COUNTOF(classrank) - 1); /*科學*/
+    class_ = BMIN(d.learn[LEARN_WISDOM] / 200, COUNTOF_INT(classrank) - 1); /*科學*/
 
     body = pip_practice_function(CLASS_A, class_, 11, 12, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -3820,7 +3820,7 @@ static int pip_practice_classB(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, (int)(unsigned)COUNTOF(classrank) - 1); /*詩詞*/
+    class_ = BMIN((d.state[STATE_AFFECT] * 2 + d.learn[LEARN_WISDOM] + d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, COUNTOF_INT(classrank) - 1); /*詩詞*/
 
     body = pip_practice_function(CLASS_B, class_, 21, 21, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -3857,7 +3857,7 @@ static int pip_practice_classC(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400, (int)(unsigned)COUNTOF(classrank) - 1); /*神學*/
+    class_ = BMIN((d.state[STATE_BELIEF] * 2 + d.learn[LEARN_WISDOM]) / 400, COUNTOF_INT(classrank) - 1); /*神學*/
 
     body = pip_practice_function(CLASS_C, class_, 31, 31, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -3891,7 +3891,7 @@ static int pip_practice_classD(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] * 2 + d.learn[LEARN_WISDOM]) / 400, COUNTOF_INT(classrank) - 1);
     body = pip_practice_function(CLASS_D, class_, 41, 41, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
     d.learn[LEARN_WISDOM] += change2 * LEARN_LEVEL;
@@ -3926,7 +3926,7 @@ static int pip_practice_classE(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_ATTACK]) / 400, COUNTOF_INT(classrank) - 1);
 
     body = pip_practice_function(CLASS_E, class_, 51, 51, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -3961,7 +3961,7 @@ static int pip_practice_classF(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
+    class_ = BMIN((d.fight[FIGHT_HSKILL] + d.fight[FIGHT_RESIST]) / 400, COUNTOF_INT(classrank) - 1);
 
     body = pip_practice_function(CLASS_F, class_, 61, 61, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -3996,7 +3996,7 @@ static int pip_practice_classG(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
+    class_ = BMIN((d.fight[FIGHT_MSKILL] + d.fight[FIGHT_MAXMP]) / 400, COUNTOF_INT(classrank) - 1);
 
     body = pip_practice_function(CLASS_G, class_, 71, 72, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -4031,7 +4031,7 @@ static int pip_practice_classH(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.learn[LEARN_MANNERS] * 2 + d.learn[LEARN_CHARACTER]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
+    class_ = BMIN((d.learn[LEARN_MANNERS] * 2 + d.learn[LEARN_CHARACTER]) / 400, COUNTOF_INT(classrank) - 1);
 
     body = pip_practice_function(CLASS_H, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -4058,7 +4058,7 @@ static int pip_practice_classI(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
+    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARACTER]) / 400, COUNTOF_INT(classrank) - 1);
 
     body = pip_practice_function(CLASS_I, class_, 91, 91, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -4084,7 +4084,7 @@ static int pip_practice_classJ(void)
     int body, class_;
     int change1, change2, change3, change4, change5;
 
-    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400, (int)(unsigned)COUNTOF(classrank) - 1);
+    class_ = BMIN((d.learn[LEARN_ART] * 2 + d.learn[LEARN_CHARM]) / 400, COUNTOF_INT(classrank) - 1);
 
     body = pip_practice_function(CLASS_J, class_, 0, 0, &change1, &change2, &change3, &change4, &change5);
     if (body == -1) return 0;
@@ -4162,7 +4162,7 @@ enum pipclass classnum, int classgrade, int data)
     if (data > classgrade && classgrade < COUNTOF(classrank) - 1)
     {
         sprintf(inbuf, "下次換上 [%8s%4s課程]",
-                pip_class_list[classnum].name, classrank[BMIN(data, (int)(unsigned)COUNTOF(classrank) - 1)]);
+                pip_class_list[classnum].name, classrank[BMIN(data, COUNTOF_INT(classrank) - 1)]);
         vmsg(inbuf);
     }
     return 0;
@@ -4425,7 +4425,7 @@ pip_go_palace(void)
         clrtoeol();
         move(b_lines, 0);
         prints(
-            "\x1b[1;37;46m  參見選單  \x1b[44m [字母]選擇欲拜訪的人物  [Q]離開" NICKNAME "總司令部       %*s\x1b[0m", 20 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME)), "");
+            "\x1b[1;37;46m  參見選單  \x1b[44m [字母]選擇欲拜訪的人物  [Q]離開" NICKNAME "總司令部       %*s\x1b[0m", 20 + d_cols - STRLITLEN_INT(NICKNAME), "");
         pipkey = vkey();
         choice = pipkey - 'A';
         if (choice < 0 || choice >= ROYAL_COUNT)
@@ -6902,11 +6902,11 @@ int mode)
         /*vs_head("電子養小雞", BoardName);*/
         move(0, 0);
         if (d.sex == 1)
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
+            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
         else if (d.sex == 2)
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
+            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
         else
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
+            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
         move(6, 0);
         if (mode == 1)
             show_badman_pic(m.map/*n*/);
@@ -7135,11 +7135,11 @@ int mode)
         clear();
         move(0, 0);
         if (d.sex == 1)
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
+            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
         else if (d.sex == 2)
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
+            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
         else
-            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - ((int)(unsigned int)STRLITLEN(NICKNAME PIPNAME)), "");
+            prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-10s         %*s\x1b[0m", d.name, 50 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
         move(1, 0);
         prints_centered("\x1b[1;31m┌─────────────────────────────────────┐\x1b[m");
         move(2, 0);
@@ -8106,11 +8106,11 @@ int mode)
     clear();
     move(0, 0);
     if (d.sex == 1)
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - (STRLITLEN(NICKNAME PIPNAME)), "");
+        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[32m♂ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
     else if (d.sex == 2)
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - (STRLITLEN(NICKNAME PIPNAME)), "");
+        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[33m♀ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
     else
-        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - (STRLITLEN(NICKNAME PIPNAME)), "");
+        prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
 
     move(1, 0);
     if (d.thing[THING_MONEY] <= 100)

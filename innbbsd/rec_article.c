@@ -516,7 +516,7 @@ receive_article(void)
             str_scpy(poolx, PATH, sizeof(poolx));
             mmdecode_str(poolx);
             str_ansi(mypath, poolx, 128);
-            sprintf(mypath, "%s!%.*s", MYBBSID, (int)(sizeof(mypath) - strlen(MYBBSID) - 2), PATH);
+            sprintf(mypath, "%s!%.*s", MYBBSID, INT(sizeof(mypath) - strlen(MYBBSID) - 2), PATH);
             /* itoc.030115.註解: PATH 如果有 .edu.tw 就截掉 */
             for (pathptr = mypath; (pathptr = strstr(pathptr, ".edu.tw"));)
                 memmove(pathptr, pathptr + 7, strlen(pathptr + 7) + 1);

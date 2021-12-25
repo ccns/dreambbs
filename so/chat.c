@@ -32,7 +32,7 @@ chat_topic(void)
     const char *title = (frec ? " ¿ý­µ«Ç " : CHATROOMNAME);
     move(0, 0);
     prints("\x1b[1;37;46m %s¡G%-*s \x1b[45m ¸ÜÃD¡G%-*s\x1b[m",
-           title, IDLEN - 1, chatroom, (int)(unsigned int)(d_cols + 57 - strlen(title)), chattopic);
+           title, IDLEN - 1, chatroom, d_cols + 57 - INT(strlen(title)), chattopic);
 }
 
 #  ifdef M3_USE_PFTERM

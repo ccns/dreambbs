@@ -196,10 +196,15 @@ template <class T>
     (offsetof(Type, Type##_FLEX_MEMBER) \
       + (n) * sizeof((*NULL_MEMBER_PTR(Type, Type##_FLEX_MEMBER))[0]))
 
+/* Truncate an integer into `signed int` without undefined behaviors */
+#define INT(x)          ((int)(unsigned)(x))
+
 #define COUNTOF(x)      (sizeof(x)/sizeof((x)[0]))
+#define COUNTOF_INT(x)  INT(COUNTOF(x))
 
 /* The argument `strlit` should expand to a string literal */
 #define STRLITLEN(strlit) (sizeof(strlit "" /* Ensure that `strlit` is a string literal */) - 1)
+#define STRLITLEN_INT(strlit) INT(STRLITLEN(strlit))
 
 /* Macros for managing loading of dynamic libraries */
 

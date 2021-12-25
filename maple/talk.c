@@ -3189,7 +3189,7 @@ ulist_body(
                 strcpy(color, wcolor[fcolor]);
 
                 /* IID.2021-03-06: Limit the length of the field for user name to make the field for user address information larger */
-                const int margin = BMAX((d_cols >> 1) + 21 - (int)(unsigned)BMAX(sizeof(up->realname), sizeof(up->username)), 0);
+                const int margin = BMAX((d_cols >> 1) + 21 - INT(BMAX(sizeof(up->realname), sizeof(up->username))), 0);
                 const int name_len = (d_cols >> 1) + 21 - margin;
                 const int from_len = ((d_cols+1) >> 1) + 15 + margin;
 
@@ -3413,7 +3413,7 @@ ulist_neck(
     XO *xo)
 {
     /* IID.2021-03-06: Limit the length of the field for user name to make the field for user address information larger */
-    const int margin = BMAX((d_cols >> 1) + 21 - (int)(unsigned)BMAX(MEMBER_SIZE(ACCT, realname), MEMBER_SIZE(ACCT, username)), 0);
+    const int margin = BMAX((d_cols >> 1) + 21 - INT(BMAX(MEMBER_SIZE(ACCT, realname), MEMBER_SIZE(ACCT, username))), 0);
     const int name_len = (d_cols >> 1) + 21 - margin;
     const int from_len = ((d_cols+1) >> 1) + 15 + margin;
 

@@ -1084,7 +1084,7 @@ chat_list_rooms(
             }
             else
             {
-                sprintf(buf, "%-*s│%4d│%s", (int)(unsigned int)strlen(CHATROOMNAME)-6+12,
+                sprintf(buf, "%-*s│%4d│%s", INT(strlen(CHATROOMNAME))-6+12,
                     cr->name, cr->occupants, cr->topic);
                 if (LOCKED(cr))
                     strcat(buf, " [鎖住]");
@@ -2765,7 +2765,7 @@ command_execute(
         {
             if (cu->room && !CLOAK(cu)) /* 隱身的人也不能說話哦 */
             {
-                sprintf(buf, "%-s:%*s %s", cu->chatid, BMAX(0, 10 - (int)(unsigned)strlen(cu->chatid) - 1), "", msg);
+                sprintf(buf, "%-s:%*s %s", cu->chatid, BMAX(0, 10 - INT(strlen(cu->chatid)) - 1), "", msg);
                 send_to_room(cu->room, buf, cu->userno, MSG_MESSAGE);
             }
         }
