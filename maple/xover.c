@@ -1770,8 +1770,6 @@ xover_exec_cb_pos(
     int pos)
 {
     const KeyFuncListRef xcmd = (xo) ? xo->cb : NULL;
-    KeyFuncIter cb;
-
     if (!xcmd)
     {
         /* Nothing to invoke */
@@ -1780,13 +1778,17 @@ xover_exec_cb_pos(
 
     /* IID.20191225: In C++ mode, use hash table for xover callback function list */
 #ifndef HAVE_HASH_KEYFUNCLIST  /* Callback function fetching loop */
-    cb = xcmd;
-    for (;;)
-    {
-        XoFunc cbfunc = {0};
-
-        int key = cb->first;
+    for (KeyFuncIter cb = xcmd;; ++cb)
 #endif
+    {
+#ifdef HAVE_HASH_KEYFUNCLIST
+        KeyFuncIter cb;
+#endif
+        XoFunc cbfunc = {0};
+#ifndef HAVE_HASH_KEYFUNCLIST
+        const int key = cb->first;
+#endif
+
         /* IID.2021-03-03: Ignore function type specification flags */
 #if !NO_SO
         /* Thor.990220: dynamic load, with key | XO_DL */
@@ -1802,18 +1804,18 @@ xover_exec_cb_pos(
         if ((key & XO_FUNC_MASK) == cmd && (key & XO_DL))
   #endif
         {
+#if defined HAVE_HASH_KEYFUNCLIST && !defined DL_HOTSWAP
+            const int key = cb->first;
+#endif
             cbfunc.func = (int (*)(XO *xo)) DL_GET(cb->second.dlfunc);
             if (cbfunc.func)
             {
-  #ifdef HAVE_HASH_KEYFUNCLIST
-    #ifndef DL_HOTSWAP
+  #ifndef DL_HOTSWAP
+    #ifdef HAVE_HASH_KEYFUNCLIST
                 xcmd->erase(key);
                 cb = xcmd->insert({key & ~XO_DL, cbfunc}).first;
-    #endif
-  #else
-    #ifndef DL_HOTSWAP
-                cb->second = cbfunc;
-                cb->first = key & ~XO_DL;
+    #else
+                *cb = LISTLIT(KeyFunc){key & ~XO_DL, cbfunc};
     #endif
   #endif
             }
@@ -1838,6 +1840,9 @@ xover_exec_cb_pos(
         if ((key & XO_FUNC_MASK) == cmd)
 #endif
         {
+#ifdef HAVE_HASH_KEYFUNCLIST
+            const int key = cb->first;
+#endif
             if (!cbfunc.func)
                 cbfunc = cb->second;
 
@@ -1859,11 +1864,7 @@ xover_exec_cb_pos(
         {
             return XO_NONE;
         }
-
-#ifndef HAVE_HASH_KEYFUNCLIST  /* Continue callback function fetching loop */
-        cb++;
     }
-#endif
     /* return cmd; */ /* Unreachable */
 }
 
