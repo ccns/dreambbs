@@ -1111,8 +1111,8 @@ xo_keymap(
 
 #ifdef HAVE_HASH_KEYMAPLIST
     km = keymap.find(key);
-    if (km == keymap.end())
-        return XO_NONE;
+    if (km != keymap.end())
+        return km->second;
 #else
     int ch;
 
@@ -1120,12 +1120,12 @@ xo_keymap(
     while ((ch = km->first) != KEY_NONE)
     {
         if (ch == key)
-            break;
+            return km->second;
         km++;
     }
 #endif
 
-    return km->second;
+    return key;
 }
 
 
@@ -1153,7 +1153,10 @@ xo_thread(
     int step, len;
     const HDR *fhdr;
 
-    match = 0;
+    if ((op & XO_POS_MASK) > XO_NONE || (op & XO_MFLAG_MASK) != XO_RS)
+        return op; /* Not supported xover cmd */
+
+    match = (op & ~XO_MOVE_MASK); /* Collect redraw/reloading flags */
     fhdr = (HDR *) xo_pool_base + pos;
     step = (op & RS_FORWARD) ? 1 : - 1;
 
@@ -1198,7 +1201,9 @@ xo_thread(
         near = xo->dir[0];
         if (near == 'b')                /* search board */
             op |= RS_BOARD;
-        else if (near != 'u')   /* search user's mbox */
+        else if (near == 'u')   /* search user's mbox */
+            op &= ~RS_BOARD;
+        else
             goto notfound;
 
         near = -1;

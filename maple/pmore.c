@@ -279,10 +279,14 @@
  # define PERM_BBSRUBY PERM_BASIC
  #endif  /* #if !defined(PERM_BBSRUBY) */
  // key mapping
- #define RELATE_PREV '['
- #define RELATE_NEXT ']'
- #define READ_NEXT   'j'
- #define READ_PREV   'k'
+ #if !defined(RELATE_NEXT)
+ # define RELATE_PREV '['
+ # define RELATE_NEXT ']'
+ #endif  /* #if !defined(RELATE_NEXT) */
+ #if !defined(READ_NEXT)
+ # define READ_NEXT   'j'
+ # define READ_PREV   'k'
+ #endif  /* #if !defined(READ_NEXT) */
  #if !defined(FULLUPDATE) && defined(XO_HEAD)
  # define FULLUPDATE XO_HEAD
  #endif  /* #if !defined(FULLUPDATE) && defined(XO_HEAD) */

@@ -330,7 +330,6 @@ static const char *const ModeTypeTable[] =
 
 /* Legacy thread reading modes */
 
-#if 0
 #define CURSOR_FIRST    (XO_RS + RS_CURSOR_FIRST)
 #define CURSOR_NEXT     (XO_RS + RS_CURSOR_NEXT)
 #define CURSOR_PREV     (XO_RS + RS_CURSOR_PREV)
@@ -344,7 +343,6 @@ static const char *const ModeTypeTable[] =
 /* Thor: 前後找mark文章, 方便知道有什麼問題未處理 */
 #define MARK_NEXT       (XO_RS + RS_MARK_NEXT)
 #define MARK_PREV       (XO_RS + RS_MARK_PREV)
-#endif // #if 0
 
 /* Special values */
 
