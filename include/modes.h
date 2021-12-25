@@ -290,6 +290,62 @@ static const char *const ModeTypeTable[] =
 #define XO_CUR_MIN      (XO_REL + 0)         /* The minimum value of relative move */
 #define XO_CUR_MAX      (XO_REL + KEY_NONE)  /* The maximum value of relative move */
 
+/* Thread reading ("reading series") */
+
+#define XO_RS           XO_SCRL
+
+#define RS_TITLE        0x0001  /* author/title */
+#define RS_FORWARD      0x0002  /* backward */
+#define RS_RELATED      0x0004
+#define RS_FIRST        0x0008  /* find first article */
+#define RS_CURRENT      0x0010  /* match current read article */
+#define RS_THREAD       0x0020  /* search the first article */
+#define RS_SEQUENT      0x0040  /* sequential read */
+#define RS_MARKED       0x0080  /* marked article */
+#define RS_UNREAD       0x0100  /* unread article */
+#define RS_UNUSED9      0x0200
+#define RS_UNUSED10     0x0400
+#define RS_UNUSED11     0x0800
+#define RS_BOARD        0x1000  /* 用於 RS_UNREAD，跟前面的不可重疊 */
+#define RS_UNUSED13     0x2000
+
+/* Predefined combination of thread reading flags */
+
+#define RS_CURSOR_FIRST (RS_RELATED | RS_TITLE | RS_FIRST)
+#define RS_CURSOR_NEXT  (RS_RELATED | RS_TITLE | RS_FORWARD)
+#define RS_CURSOR_PREV  (RS_RELATED | RS_TITLE)
+#define RS_RELATE_FIRST (RS_RELATED | RS_TITLE | RS_FIRST | RS_CURRENT)
+#define RS_RELATE_NEXT  (RS_RELATED | RS_TITLE | RS_FORWARD | RS_CURRENT)
+#define RS_RELATE_PREV  (RS_RELATED | RS_TITLE | RS_CURRENT)
+#define RS_THREAD_NEXT  (RS_THREAD | RS_FORWARD)
+#define RS_THREAD_PREV  RS_THREAD
+#define RS_READ_NEXT    (RS_SEQUENT | RS_FORWARD)
+#define RS_READ_PREV    RS_SEQUENT
+#define RS_MARK_NEXT    (RS_MARKED | RS_FORWARD | RS_CURRENT)
+#define RS_MARK_PREV    (RS_MARKED | RS_CURRENT)
+
+/* Flag aliases */
+#define RS_NEXT         RS_READ_NEXT
+#define RS_PREV         RS_READ_PREV
+
+/* Legacy thread reading modes */
+
+#if 0
+#define CURSOR_FIRST    (XO_RS + RS_CURSOR_FIRST)
+#define CURSOR_NEXT     (XO_RS + RS_CURSOR_NEXT)
+#define CURSOR_PREV     (XO_RS + RS_CURSOR_PREV)
+#define RELATE_FIRST    (XO_RS + RS_RELATE_FIRST)
+#define RELATE_NEXT     (XO_RS + RS_RELATE_NEXT)
+#define RELATE_PREV     (XO_RS + RS_RELATE_PREV)
+#define THREAD_NEXT     (XO_RS + RS_THREAD_NEXT)
+#define THREAD_PREV     (XO_RS + RS_THREAD_PREV)
+#define READ_NEXT       (XO_RS + RS_READ_NEXT)
+#define READ_PREV       (XO_RS + RS_READ_PREV)
+/* Thor: 前後找mark文章, 方便知道有什麼問題未處理 */
+#define MARK_NEXT       (XO_RS + RS_MARK_NEXT)
+#define MARK_PREV       (XO_RS + RS_MARK_PREV)
+#endif // #if 0
+
 /* Special values */
 
 //#define XO_RSIZ         256             /* max record length */ /* IID.20200102: Unlimited. */
@@ -299,6 +355,7 @@ static const char *const ModeTypeTable[] =
 
 #define XO_MOVE_MASK    0x00ffffff      /* Apply this mask to get the cursor movement */
 #define XO_POS_MASK     0x001fffff      /* Apply this mask to get the cursor position */
+#define XO_MFLAG_MASK   0x00e00000      /* Apply this mask to get the movement flags */
 
 #define XO_MOVE         0x00100000      /* cursor movement bias */
 #define XO_WRAP         0x00800000      /* cursor wrap in movement */

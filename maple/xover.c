@@ -1036,30 +1036,6 @@ xo_usetup(
 /* ----------------------------------------------------- */
 
 
-#define RS_TITLE        0x001   /* author/title */
-#define RS_FORWARD      0x002   /* backward */
-#define RS_RELATED      0x004
-#define RS_FIRST        0x008   /* find first article */
-#define RS_CURRENT      0x010   /* match current read article */
-#define RS_THREAD       0x020   /* search the first article */
-#define RS_SEQUENT      0x040   /* sequential read */
-#define RS_MARKED       0x080   /* marked article */
-#define RS_UNREAD       0x100   /* unread article */
-
-#define CURSOR_FIRST    (RS_RELATED | RS_TITLE | RS_FIRST)
-#define CURSOR_NEXT     (RS_RELATED | RS_TITLE | RS_FORWARD)
-#define CURSOR_PREV     (RS_RELATED | RS_TITLE)
-#define RELATE_FIRST    (RS_RELATED | RS_TITLE | RS_FIRST | RS_CURRENT)
-#define RELATE_NEXT     (RS_RELATED | RS_TITLE | RS_FORWARD | RS_CURRENT)
-#define RELATE_PREV     (RS_RELATED | RS_TITLE | RS_CURRENT)
-#define THREAD_NEXT     (RS_THREAD | RS_FORWARD)
-#define THREAD_PREV     (RS_THREAD)
-
-/* Thor: 前後找mark文章, 方便知道有什麼問題未處理 */
-
-#define MARK_NEXT       (RS_MARKED | RS_FORWARD | RS_CURRENT)
-#define MARK_PREV       (RS_MARKED | RS_CURRENT)
-
 typedef PAIR_T(int /* key stroke */, int /* the mapped threading op-code */) KeyMap;
 
 #if defined __cplusplus
@@ -1077,53 +1053,53 @@ static const KeyMapList keymap =
 {
     /* search title / author */
 
-    {'"', RS_TITLE | RS_FORWARD},
-    {'?', RS_TITLE},
-    {'a', RS_FORWARD},
-    {'A', 0},
+    {'"', XO_RS + (RS_TITLE | RS_FORWARD)},
+    {'?', XO_RS + RS_TITLE},
+    {'a', XO_RS + RS_FORWARD},
+    {'A', XO_RS},
 
     /* thread : currtitle */
 
-    {'[', RS_RELATED | RS_TITLE | RS_CURRENT},
-    {']', RS_RELATED | RS_TITLE | RS_FORWARD | RS_CURRENT},
-    {'=', RS_RELATED | RS_TITLE | RS_FIRST | RS_CURRENT},
+    {'[', XO_RS + (RS_RELATED | RS_TITLE | RS_CURRENT)},
+    {']', XO_RS + (RS_RELATED | RS_TITLE | RS_FORWARD | RS_CURRENT)},
+    {'=', XO_RS + (RS_RELATED | RS_TITLE | RS_FIRST | RS_CURRENT)},
 
     /* i.e. < > : make life easier */
 
-    {',', RS_THREAD},
-    {'.', RS_THREAD | RS_FORWARD},
+    {',', XO_RS + RS_THREAD},
+    {'.', XO_RS + (RS_THREAD | RS_FORWARD)},
 
     /* thread : cursor */
 
-    {'-', RS_RELATED | RS_TITLE},
-    {'+', RS_RELATED | RS_TITLE | RS_FORWARD},
-    {'\\', RS_RELATED | RS_TITLE | RS_FIRST},
+    {'-', XO_RS + (RS_RELATED | RS_TITLE)},
+    {'+', XO_RS + (RS_RELATED | RS_TITLE | RS_FORWARD)},
+    {'\\', XO_RS + (RS_RELATED | RS_TITLE | RS_FIRST)},
 
     /* Thor: marked : cursor */
-    {'\'', RS_MARKED | RS_FORWARD | RS_CURRENT},
-    {';', RS_MARKED | RS_CURRENT},
+    {'\'', XO_RS + (RS_MARKED | RS_FORWARD | RS_CURRENT)},
+    {';', XO_RS + (RS_MARKED | RS_CURRENT)},
 
     /* Thor: 向前找第一篇未讀的文章 */
     /* Thor.980909: 向前找首篇未讀, 或末篇已讀 */
-    {'`', RS_UNREAD /* | RS_FIRST */},
+    {'`', XO_RS + (RS_UNREAD /* | RS_FIRST */)},
 
     /* sequential */
 
-    {' ', RS_SEQUENT | RS_FORWARD},
-    {KEY_RIGHT, RS_SEQUENT | RS_FORWARD},
-    {KEY_PGDN, RS_SEQUENT | RS_FORWARD},
-    {KEY_DOWN, RS_SEQUENT | RS_FORWARD},
+    {' ', XO_RS + (RS_SEQUENT | RS_FORWARD)},
+    {KEY_RIGHT, XO_RS + (RS_SEQUENT | RS_FORWARD)},
+    {KEY_PGDN, XO_RS + (RS_SEQUENT | RS_FORWARD)},
+    {KEY_DOWN, XO_RS + (RS_SEQUENT | RS_FORWARD)},
     /* Thor.990208: 為了方便看文章過程中, 移至下篇, 雖然上層被xover吃掉了:p */
-    {'j', RS_SEQUENT | RS_FORWARD},
+    {'j', XO_RS + (RS_SEQUENT | RS_FORWARD)},
 
-    {KEY_UP, RS_SEQUENT},
-    {KEY_PGUP, RS_SEQUENT},
+    {KEY_UP, XO_RS + RS_SEQUENT},
+    {KEY_PGUP, XO_RS + RS_SEQUENT},
     /* Thor.990208: 為了方便看文章過程中, 移至上篇, 雖然上層被xover吃掉了:p */
-    {'k', RS_SEQUENT},
+    {'k', XO_RS + RS_SEQUENT},
 
     /* end of keymap */
 
-    {0, -1}
+    {KEY_NONE, XO_NONE}
 };
 
 
@@ -1136,12 +1112,12 @@ xo_keymap(
 #ifdef HAVE_HASH_KEYMAPLIST
     km = keymap.find(key);
     if (km == keymap.end())
-        return -1;
+        return XO_NONE;
 #else
     int ch;
 
     km = keymap;
-    while ((ch = km->first))
+    while ((ch = km->first) != KEY_NONE)
     {
         if (ch == key)
             break;
@@ -1210,7 +1186,6 @@ xo_thread(
     }
     else if (op & RS_UNREAD)    /* Thor: 向前找尋第一篇未讀文章, 清 near */
     {
-#define RS_BOARD        0x1000  /* 用於 RS_UNREAD，跟前面的不可重疊 */
         /* Thor.980909: 詢問 "首篇未讀" 或 "末篇已讀" */
         /* Thor.980911: 找到時, 則沒清XO_FOOT, 再看看怎麼改 */
         match |= XR_FOOT;  /* IID.20200204: Redraw footer */
@@ -1307,7 +1282,6 @@ xo_thread(
                     continue;
             }
 
-#undef  RS_BOARD
             /* Thor.980909: 末篇已讀(!RS_FIRST) */
             if (!(op & RS_FIRST))
                 goto found;
@@ -1407,7 +1381,7 @@ xo_getch(
         ch = vkey();
 
     op = xo_keymap(ch);
-    if (op >= 0)
+    if ((op & XO_POS_MASK) <= XO_NONE && (op & XO_MFLAG_MASK) == XO_RS)
     {
         ch = xo_thread(xo, pos, op);
         if ((ch & XO_POS_MASK) > XO_NONE)  /* Another thread article is found */
@@ -2093,7 +2067,7 @@ xover_key(
 
         {
             int rs_cmd = xo_keymap(cmd);
-            if (rs_cmd >= 0)
+            if ((rs_cmd & XO_POS_MASK) <= XO_NONE && (rs_cmd & XO_MFLAG_MASK) == XO_RS)
             {
                 cmd = xo_thread(xo, pos, rs_cmd);
 
