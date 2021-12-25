@@ -846,7 +846,10 @@ struct KeyFuncListRef {
     constexpr KeyFuncListRef(KeyFuncList& ref): ptr_ (&ref) { }
     CXX_CONSTEXPR_RELAXED KeyFuncList *&operator=(KeyFuncList& ref) { return ptr_ = &ref; }
     constexpr KeyFuncList *operator->(void) const { return ptr_; }
+    constexpr operator KeyFuncList *(void) const { return ptr_; }
+    constexpr bool operator==(const KeyFuncList &rhs) const { return ptr_ == &rhs; }
 };
+constexpr bool operator==(const KeyFuncList &lhs, const KeyFuncListRef &rhs) { return rhs == lhs; }
 
 #else
 
