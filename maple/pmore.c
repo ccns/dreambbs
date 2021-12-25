@@ -1307,7 +1307,7 @@ mf_parseHeaders(void)
 
     for (i = 0; i < fh.lines; i++) {
         unsigned char *p = pmf, *pb = pmf;
-        int l;
+        ptrdiff_t l;
 
         /* first, go to line-end */
         while (pmf < mf.end && *pmf != '\n')
@@ -1325,7 +1325,7 @@ mf_parseHeaders(void)
         pmf ++; // move to next line.
 
         // p is pointing at a new line. (\n)
-        l = (int)(p - pb);
+        l = p - pb;
 #ifdef CRITICAL_MEMORY
         // kcwu: dirty hack, avoid 64byte slot. use 128byte slot instead.
         if (l<100) {
