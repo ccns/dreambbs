@@ -94,7 +94,7 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
         /* RFC 822 允許 mday 是 1- 或 2- DIGIT */
         /* IID.20200108: Spaces may not present after the comma; */
         /*    Find the comma and then let `atoi()` skip the initial spaces */
-        const char *const wday_comma = memchr(buf, ',', ptr-buf);
+        const char *const wday_comma = (const char *)memchr(buf, ',', ptr-buf);
         const char *const mday_start = (wday_comma) ? wday_comma+1 : buf;
         const char *zone;
 
