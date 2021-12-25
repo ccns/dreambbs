@@ -1356,7 +1356,7 @@ mf_parseHeaders(void)
             memmove(p, pb, ustrlen(pb)+1);
         }
 
-        // kill staring and trailing spaces
+        // kill starting and trailing spaces
         pmore_str_chomp(p);
 
         // special case, floats are in line[0].
@@ -1632,7 +1632,7 @@ mf_display(void)
              * This is buggy, however we can support this
              * by using wrapping features.
              * Anyway I(piaip) don't like this. And using wrap
-             * leads to slow display (we cannt speed it up with
+             * leads to slow display (we cannot speed it up with
              * optimized scrolling.
              */
             if (bpref.separator & MFDISP_SEP_WRAP)
