@@ -1450,13 +1450,13 @@ domenu(
         .pos_prev = 0, /* previous cursor position */
         .max_prev = 0, /* previous menu max */
 
+        .cmdcur_max = cmdcur_max,
         .cmdcur = cmdcur,
         .cmdlen = cmdlen,
         .keep_cmd = false,
         .keyboard_cmd = true,
         .item_length = item_length,
         .max_item_length = 0,
-        .cmdcur_max = cmdcur_max,
         .explan_len_prev = 0,
     };
 
