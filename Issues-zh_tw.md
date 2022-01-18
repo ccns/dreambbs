@@ -88,6 +88,20 @@ while (p != NULL)
 - [x] 將 pfterm 程式碼與 PttBBS 上的同步，只保留必要的邏輯修改與格式修正。
 
 > [name=IID] [time=2019_09_30]
+
+> 又硏究了其它在 pfterm 上記錄 true color 與 256-color 色彩資料的方案，並且比較這些方案記錄彩現屬性所需的記憶體空間。\
+最佳情況：畫面中沒有使用任何需要 map 的前景及背景色彩。\
+最壞情況：畫面每一格都使用了不同的需要 map 的前景及背景色彩。\
+[![note.txt.png](https://media.discordapp.net/attachments/370600485612290060/858455250628771840/unknown.png)](https://cdn.discordapp.com/attachments/370600485612290060/858456443937095710/note.txt) [name=IID] [time=2021_07_27 (Tue) 05:14 UTC+8]
+
+> 整體看起來，`Row map true-color & 256-color + direct 8-color + 8-color only rows` 雖然最複雜，最壞情況的表現也非最好，但是考慮到 true-color 及 256-color 並沒有很常用，這個方案的效果最好。 [name=IID] [time=2021_07_27 (Tue) 05:18 UTC+8]
+
+> 這個方案限制了畫面長寬皆不能超過 256。 [name=IID] [time=2021_07_27 (Tue) 05:34]
+
+> pfterm 的 true color/256 color 的部份，應該會繼續實作了。PttChrome 的部份也要配合實作。
+- [ ] 目前想以輸出 `\x1b[<普通色碼>;<原色碼>`，並避免原色碼含有常被未支援擴充色彩的 terminal 支援的色碼的方式，來達到最佳相容效果。
+- [ ] 可以給使用者一個允許直接使用色碼 38/48 的選項。
+> [name=IID] [time=2021_12_18 (Sat) 06:52 UTC+8]
 :::
 
 ###  <input class="task-list-item-checkbox" disabled type="checkbox"> 看板列表中的 `[y]載入` 字樣需要調整
@@ -197,6 +211,12 @@ B  # 第三個簽名檔  # 結束
 
 > [name=IID] [time=2020_12_21]
 
+- [x] 我覺得可以把 thread 命令統合進 Xover 命令中。\
+DreamBBS v3.0 的 Xover 命令值域中，`XR_* + {XO_WRAP|XO_SCRL} + key` 的值域還未使用，可以用來放 thread 命令。\
+https://github.com/ccns/dreambbs/wiki/Xover-List-System-zh_tw#dreambbs-v3-%E7%9A%84-xover-callback-key-value-%E7%9A%84%E5%88%86%E9%85%8D ==[name=IID] [time=2021_01_16 (Sat) 17:07 UTC+8]==
+    - > 合了。用了 `XR_* + XO_RS + RS_*`。\
+其中 `XO_RS` = `XO_SCRL`，剛好都有 `R` 與 `S` 兩個字母。 [name=IID] [time=2021_12_16 (Thu) 08:02 UTC+8]
+
 - [x] Xover 清單系統應該改成用加在 callback key 上的 bit flag 區分有 `pos` 參數與無 `pos` 參數的 callback 函式。\
 而發現清單為空時就顯示空的訊息，並且只能執行無 `pos` 參數的 callback 函式。\
 這樣就不用再在 `*_body()` 函式中手動確認清單是否為空，然後還要用 `vget()`/`vans()` 另外處理按鍵。 ==[name=IID] [time=2021_02_22 (Mon) 19:05]==
@@ -303,6 +323,23 @@ https://pttpedia.fandom.com/zh/wiki/%E5%8D%A1%E5%8D%A1%E7%8D%B8 [name=IID] [time
 > ![](https://cdn.discordapp.com/attachments/370600485612290060/836235021685227520/Screenshot_20210426-213856_Chrome.png) [name=IID] [time=2021_04_26 21:39 UTC+8]
 :::
 
+### <input class="task-list-item-checkbox" disabled type="checkbox"> `CAN_POSTFIX` 的問題
+
+:::spoiler {state=open} 問題敘述
+> ![](https://media.discordapp.net/attachments/370600485612290060/836541130749247502/unknown.png) [name=IID] [time=2021_04_27 (Tue) 17:55 UTC+8]
+
+> CAN_POSTFIX 定義時，是不是應該要讓使用者可以選擇預設文章類別才對？ [name=IID] [time=2021_04_27 (Tue) 17:56 UTC+8]
+
+> § `CAN_POSTFIX` 這個名字害我誤以爲它與寄信有關。\
+　但看了它的相關註解，它被定義的作用應該是能夠呼叫 `select_title()` 進而允許使用者選擇文章類別標籤 (allow choosing the article category tag; _**can** choose **post** pre**fix**_?)。\
+　雖然這段程式碼在 `CAN_POSTFIX` 定義時的語法是錯誤的，會造成建置失敗。  [name=IID] [time=2022_01_15 (Sat) 23:09 UTC+8]
+
+> 要叫什麼好呢？ [name=IID] [time=2022_01_15 (Sat) 23:13 UTC+8]
+- ~~`ALLOW_CHOOSING_ARTICLE_CATEGORY_TAG`~~ (?)
+- `HAVE_SEL_POSTTAG`
+- …
+:::
+
 ### <input class="task-list-item-checkbox" disabled type="checkbox"> 支援時間精度最大 48-bit 且允許一秒多篇文章的唯一文章編號與閱讀紀錄
 
 :::spoiler {state=open} 參考資料與構想
@@ -355,6 +392,22 @@ BRC 是採用一篇文章一個紀錄的方式記錄閱讀紀錄，並且分開�
 在同一個使用者同時登入並同時發表文章時，可能會發生問題，需要把暫時檔案也引進同秒唯一編號値。
 
 > [name=IID] [time=2021_04_28 17:19 (Wed) UTC+8]
+
+> https://www.ptt.cc/bbs/PttNewhand/M.1483200003.A.415.html
+就將就著參考吧 [name=r2] [time=2021_11_24 (Wed) 00:32 UTC+8]
+
+> 雖然系統不同，不確定 Maple3 是不是還這樣 [name=r2] [time=2021_11_24 (Wed) 00:33 UTC+8]
+
+> 現在的夢大應該就是這樣的，而我沒改這部份的行爲，也就是說 Maple 3.xx 應該也是這樣的 。\
+不過因爲現在的夢大是先選簽名檔再進入編輯器，不會有送出時間與文章列表上的時間不一樣的問題，除了同一秒發文時會有 spinlock 延遲而使文章列表上的時間不同秒。\
+印出內文時間的程式碼：https://github.com/ccns/dreambbs/blob/3f19b27454d36b7650db181107d54667dd6f5b02/maple/edit.c#L1322 [name=IID] [time=2021_12_26 (Sun) 18:56 UTC+8]
+
+> 擬似 spinlock [name=IID] [time=2021_12_26 (Sun) 18:58 UTC+8]
+
+> 如果要避免延遲的話，需要在文章檔名後加上去混淆號碼。\
+但 BRH 需要文章列表照檔案編號（時間碼加去混淆碼）遞增以良好發揮。\
+我想到的是在 BRD 中加個去混淆編號資料成員，比如 `BRD::uniq`，初始化爲 `0`。\
+`hdr_stamp()` 對 `BRD::uniq` 以 compare and swap 的方式增加 `1`，成功且未發現同名檔案的話就以原値當作檔名，失敗就以新値重做；發現時間秒數大於 `BRD::blast` 時則用 compare and swap 的方式歸零。 [name=IID] [time=2021_12_26 (Sun) 19:21 UTC+8]
 :::
 
 ### <input class="task-list-item-checkbox" disabled type="checkbox"> 使用者名單的按鍵與 Xover 列表預設按鍵衝突
@@ -518,6 +571,69 @@ BRC 是採用一篇文章一個紀錄的方式記錄閱讀紀錄，並且分開�
 > 應該是中文敘述的第一個字元被切了。 [name=IID] [time=2021_11_18 (Thu) 22:15 UTC+8]
 :::
 
+### <input class="task-list-item-checkbox" disabled type="checkbox"> 看板分類列表的看板數量計算問題
+
+:::spoiler {state=open} 問題敘述
+> WindTopBBS 顯示看板分類時，會用 DFS 計算分類目錄中的看板數量，並隱藏沒有看板的目錄。\
+這有兩個缺點：
+⒈ 計算繁重
+⒉ 如果遇到分類目錄有以下狀況（注意：這種目錄配置是能直接在 MapleBBS 3 系統上製作出來的）：
+    - \@class
+        - \@a
+            - \@b
+        - \@b
+            - \@a
+    就會進入無窮迴圈。
+- [ ] 可能的解決方法之一，是在建立看板映像時，就以 BFS 求得分類目錄中的看板數量，並且不重複計算已計算過的分類目錄。
+- [ ] 而在顯示目錄中的看板數量時，僅計算此目錄的項目數量，或直接顯示看板映像中所記錄的項目數量（包含隱藏看板）。
+- [ ] 如果要直接顯示項目數量，可增加支援「隱藏分類」，與隱藏看板共同顯示爲「資料保密」（模仿精華區），以使使用者不能藉此推斷有隱藏看板的存在。
+> [name=IID] [time=2021_12_19 (Sun) 18:15 UTF+8]
+:::
+
+### <input class="task-list-item-checkbox" disabled type="checkbox"> 對動態看板系統的擴充
+
+:::spoiler {state=open} 詳細計畫
+> 看到有個 `HAVE_RAND_INCOME` 的設定，可以隨機取進站畫面。\
+但是實際看了原始碼，發現它是在 `util/camera.c` 跑的時候隨機取一篇，而不是全部載入再在進站時隨機選擇 (像 MapleBBS 3.10-itoc 那樣)。 [name=IID] [time=2022_01_15 (Sat) 23:55 UTF+8]
+
+> 如果要做到允許任意畫面包含多篇的話，應該把 `FCACHE` 的資料結構改成：
+```
+<offset-welcome> <offset-etc>… <offset-welcome-k for k in [0, n)>… (<offset-etc-k for k in [0, n)>…)… <welcome-k-data for k in [0, n)>… (<etc-k-data for k in [0, n)>…)…
+```
+> 或是用 C 表示：
+```c
+#define FLIM_INDEX_MAX FLIM_INDEX_MOVIE
+#define FILM_COUNT (FILM_INDEX_MAX + 1)
+typedef struct {
+    int32_t cate[FILM_COUNT];
+    int32_t shot[MOVIE_MAX];
+    char film[MOVIE_SIZE];
+} FCACHE;
+```
+- [ ] 我想將 `FILM_<category>` 更名爲 `FILM_INDEX_<category>`，但會不會太冗？
+    - > 雖然已經有 `XZ_INDEX_<zone>` 了，但那主要是給 Xover 系統內部使用用的。
+> [name=IID] [time=2022_01_16 (Sun) 00:19 UTF+8]
+
+- [ ] `FILM_<category>` → `MZ_INDEX_<category>` for "menu zone index".
+    - > Parallels to `XZ_INDEX_<category>`, for "Xover zone index".
+    - > ~~Mark Zuckerberg index~~
+> [name=IID] [time=2022_01_16 (Sun) 00:36 UTF+8]
+
+> 如果要像 PttBBS 一樣有隨主選單區域而變的動態看板的話…… [name=IID] [time=2022_01_16 (Sun) 01:15 UTF+8]
+1. 改成能用這個方式定義：
+```c
+INTERNAL_INIT MENU menu_mail[] =
+{
+    // ...
+    {{.menu = menu_main}, PERM_MENU + 'R', FILM_MMENU + M_MMENU,
+    "電子郵件"}
+};
+```
+-   - :huisha:
+2. 直接看 `MENU::umode`。
+    - 可是沒彈性。
+:::
+
 ## 文件上的 TODO
 
 ### <input class="task-list-item-checkbox" disabled type="checkbox"> 撰寫系統管理細節
@@ -621,6 +737,26 @@ http://man7.org/linux/man-pages/man7/epoll.7.html [name=IID] [time=2019_12_05]
 https://developers.google.com/web/fundamentals/native-hardware/fullscreen?hl=zh-tw [name=IID] [time=2021_04_08 (Thu) 21:43 UTC+8]
 :::
 
+### Xover & `mmap()` 相關議題
+
+:::spoiler {state=open} 詳細說明
+> 你覺得夢大三要繼續用 `mmap` 做 xover 列表載入嗎？ [name=IID] [time=2020_11_18 (Wed) 20:20 UTC+8]
+
+> 優點：
+- 顯而易見地是可以直接 map 整個列表，程式碼較簡單，不用考慮 buffer read
+- 有 lazy loading 的效果：只需要呼叫 `mmap` 一次，之後要存取時系統才會去讀取資料；需要寫入時才會複製資料到 user space 的記憶體中佔用記憶體空間；適合在同一列表中長時間瀏覽的狀況
+- 未來可以銜接列表資料底下的記憶體的跨 process 共用
+
+> 缺點：
+- [ ] 沒有禁止對 `mmap` 的記憶體寫入的話會使用多倍於原本實作的記憶體
+- [ ] 呼叫 `mmap` 時的 system call 的 overhead 較大，重複呼叫會造成效能不佳，不適合常常切換列表的狀況
+- [x] 有時候會遇到底下的檔案變小，而這個變更立即反映在 `mmap` 的記憶體中，造成原本取最後一項的程式存取到合法範圍以外的記憶體的問題 (partially solved by [604fba7455](https://github.com/ccns/dreambbs/commit/604fba74553b8198e1e676ed374b22bf1a80efdc))
+
+> 有種折衷的方法，就是熱門的看板用 `mmap` 載入，而其它看板就用 buffer read 載入。\
+目前分類看板的實作是用 shared memory，如果改寫成用 posix shared memory API 的話就相當於用 `mmap` 載入。\
+至於其它小且不經常使用的列表，繼續使用 `mmap` 應該即可。 [name=IID] [time=2020_11_18 (Wed) 20:37]
+:::
+
 ### MapleBBS 4 Roadmap
 
 :::spoiler {state=open} 詳細計畫
@@ -639,6 +775,27 @@ https://developers.google.com/web/fundamentals/native-hardware/fullscreen?hl=zh-
 - [ ] MapleBBS 4 釋出計畫（專案成熟後再行考慮）
     - [ ] 寫專案總覽文件，簡述與 MapleBBS 3 的主要差異、以及目前 MapleBBS 3 各分支的開發狀況
     - [ ] 與 MapleBBS 原開發群討論名稱問題
+:::
+
+### 分類看板＝精華佈告欄子區 ∧ 我的最愛＝信件精華區＝個人精華區 架構整合計畫
+:::spoiler {state=open} 詳細說明
+> ‌　　我想可以用精華區的架構，將分類看板、我的最愛、信件精華區（夢大未啟用）系統合而爲一。\
+結合後，**我的最愛** = **信件精華區** = **個人精華區**，只是多加是否開放自由新增文章的站臺設定。這樣系統應該會比較簡潔。\
+　　分類看板是精華公佈欄中的 `@Class`，只是預設進入看板而非精華區（同目前 WindTopBBS 與 MapleBBS-itoc 的設計）。只是多使用 `acpro` 將分類看板載入共用記憶體（此程式源自 WindTopBBS；DreamBBS v3.0 把 `account` 中建立分類看板的工作移到 `acpro`~~，不然根本沒用到~~）。 [name=IID] [time=2021_12_02 (Thu) 23:17 UTC+8]
+  
+> ‌　　至於使用者選單介面，我想就維持現在這樣。
+- [ ] 不過我想把 `Tab` 鍵擴充，將以下畫面循環切換（`Shift-Tab`/`z` 鍵反向切換）：
+    - [ ] 看板→精華區→文摘（列出所有 `g` 文，如果要實作的話）
+    - [ ] 分類看板/專業看板→精華公佈欄的對應頁面
+    - [ ] 使用者信箱→我的最愛
+> [name=IID] [time=2021_12_02 (Thu) 23:25 UTC+8]
+
+
+> 現在沒辦法循環的原因是，進入精華區時的 call graph：\
+`xover.c` `xover()` -> `xover_exec_cb()` -> `xover_exec_cb_pos()` -> `post.c` `post_gem()` -> `gem.c` `XoGem()` -> `xover.c` `xover()`  -> ……，\
+會消耗堆疊空間。\
+得改用類似 `gem_main()` 的設定 `xo` 後即退出函式的方式，只是設定對象是目前的 `xo`  物件。\
+而且要記錄一開始進入看板時是進入文章列表模式還是精華區模式。若左鍵退出時不在一開始進入的模式，則先回到該模式，不然才退出看板。 [name=IID] [time=2021_12_03 (Fri) 01:40 UTC+8]
 :::
 
 ## 未完成的 TODO
