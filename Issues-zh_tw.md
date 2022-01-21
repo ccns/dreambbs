@@ -50,7 +50,7 @@ a.anchor + .task-list-item-checkbox {
 }
 </style>
 
-## 近期有機會解決的 TODO
+## 短期 TODO
 
 ### <input class="task-list-item-checkbox" disabled type="checkbox" checked> `acct_save()` 有 6 個，待合併
 :::spoiler 問題敘述 (solved by [4a1da1733](https://github.com/ccns/dreambbs/commit/4a1da1733758e2b1ba3e3ecc8f1fce7479025c9f))
@@ -163,6 +163,17 @@ B  # 第三個簽名檔  # 結束
 4. [ ] 將 `taik.c` 與 `utmp-dump.c` 中的相似函數合併成 `ulist` 移到 `common/` 下。
 :::
 
+### <input class="task-list-item-checkbox" disabled type="checkbox"> 實作有橫向選項的彈出式選單
+
+> staled TODO [name=r2] [time=2021_04_07 (Wed) 00:37 UTC+8]
+
+- > *[中略...]*
+
+:::spoiler {state=open} 問題敘述
+> 新版彈出式選單的構想圖。
+  ![](https://cdn.discordapp.com/attachments/370600485612290060/689081754543194132/1584358576207.png) [name=IID] [time=2020_03_16]
+:::
+
 ### <input class="task-list-item-checkbox" disabled type="checkbox"> 預計 v3.1 推出的 Xover 系統底層的改進
 :::spoiler {state=open} 計畫說明
 > 計畫未來對 xover 系統的改動 (預計在 v3.1 推出)： [name=IID] [time=2020_12_21]
@@ -240,6 +251,48 @@ DreamBBS 從 DreamBBS-2010 的 `more.c` 就是 itoc 版本的，當不被處理�
 > 在我的最愛按下 `c` 會變更 necker 的顯示，但是沒作用。 [name=IID] [time=2021_04_03]
 
 > 要去看板清單切換，再到我的最愛才會出現變化。 [name=IID] [time=2021_04_03]
+:::
+
+### <input class="task-list-item-checkbox" disabled type="checkbox"> 支援 Xover 清單在含有超大量文章時的絕對移動
+
+> 這兩個 TODO 或 memo 也 unpinned, 理由一樣, 盡量整理在同一個地方 [name=r2] [time=2021_04_07 (Wed) 00:56 UTC+8]
+
+:::spoiler {state=open} 問題敘述
+> 如果要支援超大量文章的話，就要直接判斷移動範圍，太遠時就直接設定 `xo->pos`。 \
+> 大概是
+```cpp
+xo->pos = pos;
+return XR_BODY + XO_REL + 0;
+```
+> 這樣。 [name=IID] [time=2021_04_06]
+
+- 替代方案：
+```cpp
+return XO_DMOVE + pos;
+```
+其中 `XO_DMOVE` (Xover distant movement) 爲 `XO_DL`。
+> [name=IID] [time=2021_09_30 (Thu) 20:04 UTC+8]
+:::
+
+### <input class="task-list-item-checkbox" disabled type="checkbox"> 修正 `ulist_fromchange()` 中的 buffer 大小不同步的問題
+
+> 不確定有沒有 solved 的 [name=r2] [time=2021_04_07 (Wed) 00:30 UTC+8]
+
+:::spoiler {state=open} 問題敘述
+> 大小不同步了。
+![](https://cdn.discordapp.com/attachments/370600485612290060/827768186111262720/unknown.png) [name=IID] [time=2021_04_03]
+:::
+
+### <input class="task-list-item-checkbox" disabled type="checkbox"> 實作以 Tab 字元劃分欄位的推文的顯示
+
+> 這兩個 TODO 或 memo 也 unpinned, 理由一樣, 盡量整理在同一個地方 [name=r2] [time=2021_04_07 (Wed) 00:56 UTC+8]
+
+:::spoiler {state=open} 問題敘述
+> 我想，要讓推文有完整時間與 IP 來源的話，可以利用 Tab。 \
+因為 `vget()` 不允許輸入 Tab 字元，所以 Tab 可以拿來當作分隔字元。 \
+大概像這樣： \
+`→          ID：推文內容<tab>2001:288:7001:249::140<tab>2021/04/03 13:42:23` \
+然後實際顯示時根據畫面寬度決定要顯示多少。 [name=IID] [time=2021_04_07]
 :::
 
 ### <input class="task-list-item-checkbox" disabled type="checkbox" checked> Xover 清單翻頁時的游標清除問題
@@ -822,7 +875,7 @@ https://developers.google.com/web/fundamentals/native-hardware/fullscreen?hl=zh-
     > 我用最近挖掘的證據鬧板看看好了。 [name=IID] [time=2021_01_10]
 :::
 
-### 這學期的目標
+### 近期目標
 
 :::spoiler {state=open} 詳細計畫
 > Long term TODO (大致定為這學期的目標): [name=IID] [time=2021_01_17]
@@ -835,11 +888,7 @@ https://developers.google.com/web/fundamentals/native-hardware/fullscreen?hl=zh-
     - [ ] 程式碼導覽 (內容類似先前實驗過的 Doxygen 頁面)
 :::
 
-## [#bbs-dev](https://discord.com/channels/330361502643257345/370600485612290060/) 整理 (by @r2#7033)
-
-> Bug List, 之後應該整理到 HackMD 或在 GitHub 開 issue 追蹤 [name=r2] [time=2021_04_07 (Wed) 00:30 UTC+8]
-
-### 夢大 Bug List - 2017-10-20, by @r2#7033
+## 夢大 Bug List - 2017-10-20, by @r2#7033
 > - Updated on 2019-10-19, by IID (@Dom2112#3054)
 
 :::spoiler {state=open} 詳細內容
@@ -869,59 +918,6 @@ https://developers.google.com/web/fundamentals/native-hardware/fullscreen?hl=zh-
 - [x] 8. 點歌: `確定點歌嗎 [Y/n]：` 預設是 n，應該改成 `確定點歌嗎 [y/N]：` (done)
 - [x] 9. 遊戲: 小雞檔案缺漏，導致不正常斷線 (done)
 - [x] 10. 點歌: 點歌次數無法累積! (solved)
-:::
-
----
-
-> 不確定有沒有 solved 的 [name=r2] [time=2021_04_07 (Wed) 00:30 UTC+8]
-
-### <input class="task-list-item-checkbox" disabled type="checkbox"> 修正 `ulist_fromchange()` 中的 buffer 大小不同步的問題
-:::spoiler {state=open} 問題敘述
-> 大小不同步了。
-![](https://cdn.discordapp.com/attachments/370600485612290060/827768186111262720/unknown.png) [name=IID] [time=2021_04_03]
-:::
-
----
-
-> staled TODO [name=r2] [time=2021_04_07 (Wed) 00:37 UTC+8]
-
-- > *[中略...]*
-
-### <input class="task-list-item-checkbox" disabled type="checkbox"> 實作有橫向選項的彈出式選單
-:::spoiler {state=open} 問題敘述
-> 新版彈出式選單的構想圖。
-  ![](https://cdn.discordapp.com/attachments/370600485612290060/689081754543194132/1584358576207.png) [name=IID] [time=2020_03_16]
-:::
-
----
-
-> 這兩個 TODO 或 memo 也 unpinned, 理由一樣, 盡量整理在同一個地方 [name=r2] [time=2021_04_07 (Wed) 00:56 UTC+8]
-
-### <input class="task-list-item-checkbox" disabled type="checkbox"> 支援 Xover 清單在含有超大量文章時的絕對移動
-:::spoiler {state=open} 問題敘述
-> 如果要支援超大量文章的話，就要直接判斷移動範圍，太遠時就直接設定 `xo->pos`。 \
-> 大概是
-```cpp
-xo->pos = pos;
-return XR_BODY + XO_REL + 0;
-```
-> 這樣。 [name=IID] [time=2021_04_06]
-
-- 替代方案：
-```cpp
-return XO_DMOVE + pos;
-```
-其中 `XO_DMOVE` (Xover distant movement) 爲 `XO_DL`。
-> [name=IID] [time=2021_09_30 (Thu) 20:04 UTC+8]
-:::
-
-### <input class="task-list-item-checkbox" disabled type="checkbox"> 實作以 Tab 字元劃分欄位的推文的顯示
-:::spoiler {state=open} 問題敘述
-> 我想，要讓推文有完整時間與 IP 來源的話，可以利用 Tab。 \
-因為 `vget()` 不允許輸入 Tab 字元，所以 Tab 可以拿來當作分隔字元。 \
-大概像這樣： \
-`→          ID：推文內容<tab>2001:288:7001:249::140<tab>2021/04/03 13:42:23` \
-然後實際顯示時根據畫面寬度決定要顯示多少。 [name=IID] [time=2021_04_07]
 :::
 
 ## 其它 issue 連結
