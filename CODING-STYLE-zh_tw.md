@@ -206,6 +206,45 @@ int y = get_value();
 int x = (int)floor(y / 32.0);
 ```
 
+- 避免撰寫不必要的程式分支
+    - 避免 control hazard
+
+**Good:**
+```cpp
+x = 0;
+```
+**Bad:**
+```cpp
+if (x != 0)
+    x = 0;
+```
+
+**Good:**
+```cpp
+free(ptr);
+```
+**Bad:**
+```cpp
+if (!ptr)
+    free(ptr);
+```
+
+- 根據 ISO C 與 ISO C++ 標準，`free(NULL)` 不具有任何作用，無須手動進行空指標檢查。
+
+**Good:**
+```cpp
+flag &= (int)~FLAG_X; // 確保 `FLAG_X` 為無號整數且寬度不比 `unsigned int` 窄時，bit mask 有 sign extension
+```
+**Good:**
+```cpp
+flag &= ~((flag & 0) | FLAG_X); // 確保 bit mask 的寬度不比 `flag` 窄
+```
+**Bad:**
+```cpp
+if (flag & FLAG_X)
+    flag ^= FLAG_X;
+```
+
 - 避免 boilerplate code，以減少 code size
     - 需要增加新功能時，盡量使用或擴充既有的函式，不要複製原有函式
 
