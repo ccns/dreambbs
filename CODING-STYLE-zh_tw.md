@@ -138,28 +138,6 @@ void process(void)
 ```
 
 -   - 如未能完全避免全域變數的使用，則應將用於同一功能的全域變數以 struct 組織起來
-- 避免 boilerplate code，以減少 code size
-    - 需要增加新功能時，盡量使用或擴充既有的函式，不要複製原有函式
-
-**Good:**
-```cpp
-void func(const char *str_task)
-{
-    do_sth(str_task);
-}
-```
-**Bad:**
-```cpp
-void func(void)
-{
-    do_sth("sth");
-}
-
-void func2(void)
-{
-    do_sth("sth_else");
-}
-```
 
 ## 可讀性與可移植性
 - 程式碼不應造成 compiler 發出容易解決的 warning
@@ -226,6 +204,29 @@ int x = y >> 5;
 ```cpp
 int y = get_value();
 int x = (int)floor(y / 32.0);
+```
+
+- 避免 boilerplate code，以減少 code size
+    - 需要增加新功能時，盡量使用或擴充既有的函式，不要複製原有函式
+
+**Good:**
+```cpp
+void func(const char *str_task)
+{
+    do_sth(str_task);
+}
+```
+**Bad:**
+```cpp
+void func(void)
+{
+    do_sth("sth");
+}
+
+void func2(void)
+{
+    do_sth("sth_else");
+}
 ```
 
 ## Macro 的使用
