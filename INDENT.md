@@ -152,7 +152,7 @@ else if (sth)
 ```
 
 ## `goto` label
-- `goto` label 的 indentation 須與所在 function 的 code block 的 `{`/`}` 相同
+- `goto` label 的 indentation 須與所在 function 的 code block 的 `{`/`}` 的所在行相同
 
 **Good:**
 ```c
@@ -194,7 +194,7 @@ int func(void)
 ```
 
 ## `switch`
-- `case` label 的 indentation 須與 `switch` 的 code block 的 `{`/`}` 相同
+- `case` label 的 indentation 須與 `switch` 的 code block 的 `{`/`}` 的所在行相同
 - `case` label 內的 code 須 indent
 
 **Good:**
