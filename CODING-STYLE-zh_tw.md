@@ -45,6 +45,88 @@ Indentation style 的說明，請見 [[INDENT]]。
 - 可使用其它語言，惟使用語言非英文時，原則上應標明文件所使用的語言
     - 例外：舊有說明文件可不標明所使用的語言
 
+## 命名原則
+- 不應以底線 `_` 後接大寫字母開頭，或包含連續兩個或以上的底線 `__`，
+  因其被 ISO C 與 ISO C++ 標準保留給編譯器與標準函式庫的內部實作
+- Enumeration、object-like macro、等等編譯時期常數的名稱應為 MACRO_CASE
+- Function-like macro 的名稱應為 MACRO_CASE
+    - 若不以動詞或助動詞開頭，所包含的單字間應使用底線 `_` 隔開
+    - 若會造成與系統函式庫的 macro 名稱衝突，且為常用 macro，方可改用 PascalCase，
+      但不應包含兩個或以上的大寫字母
+    - 若其用法及作用與某普通函式相似，且要使用類似的名稱以便於記憶，方可改用函式的命名方式
+- Function-like macro 的參數名稱必須為 snake_case，且應有單個底線 `_` 的前綴
+- 資料結構的名稱應為 PascalCase，且不應為單字元，亦不應包含動詞或助動詞
+    - 若為既有資料結構，方可維持 UPPERFLATCASE，惟不應包含底線 `_`
+    - 不應使用 snake_case 接上 `_t` 後綴，因其被系統函式庫所保留
+- 函式的名稱可為 snake_case、camelCase、或 flatcase 前綴後接底線 `_` 再接 camelCase，
+  且不應以底線 `_` 開頭
+    - 若為既有資料結構，方可維持 PascalCase，惟應含有動詞或以 `Xo` 為前綴詞
+    - 若不以動詞或助動詞開頭，所包含的單字間應使用底線 `_` 隔開
+    - 若命名時所使用的前綴詞與標準函式庫中某些函式的前綴詞相同，前綴詞後須使用底線 `_`
+- 避免在 PascalCase 或 camelCase 中使用連續的大寫字母
+- 變數與資料結構成員的名稱必須為 snake_case，且不應以底線 `_` 開頭
+- 程式碼檔的去除副檔名後的檔名應為 snake_case
+- 命名長度
+    - 簡易判斷原則：名稱長度應與其作用域大小成正比，並與其常用程度成反比
+    - 應使全域變數的名稱與區域變數的名稱易於區分
+    - 禁止在標頭檔中宣告或定義單字元的 enumeration、 macro、變數、或函式
+    - 禁止程式碼檔的去除副檔名後的檔名為空或為單字元
+- 型別命名法
+    - `bool` 變數的名稱應含有形容詞
+    - 回傳 `bool` 的函式的名稱應含有助動詞
+    - N 層指標變數的名稱應有 N 個 `p` 前綴，
+      但若第 M 層指標本身被當作陣列或字串使用則應有 N - M 個 `p` 前綴
+    - 變數名稱不應包含資料大小、有號與否、或資料對齊單位的資訊
+
+### 常用的區域變數名稱列表
+- 改寫並修訂自 itoc 所撰寫的〈[文件] 一些常用參數的名稱〉
+
+名稱 | 常見型別 <br> ***粗斜體***表示限用此型別 | 意義 | 備註
+--- | ---      | --- | ---
+`fp` | ***`FILE *`*** | file pointer 檔案指標 | 不應與 `fd` 混淆
+`fd` | ***`int`***    | file descriptor 檔案描述子 | 不應與 `fp` 混淆
+`ch` | `int`          | (temporary) character (暫時) 字元 |
+`num` | `int`         | (temporary) number (暫時) 數字 | 迴圈數字變數應使用 `i`、`j`、`k`、等等名稱
+`pos` | `int`         | position 位置 <br> - 包含 ANSI escapes 後的游標原始縱排座標 (visio) <br> - 游標顯示縱排座標 (edit) | 在 visio 與在 edit 中的定義相反，不應混淆
+`col` | `int`         | column (position) 縱排 (位置) <br> - 游標顯示縱排座標 (visio) <br> - 包含 ANSI escapes 後的游標原始縱排座標 (edit) | 在 visio 與在 edit 中的定義相反，不應混淆
+`max` | `int`         | maximum 最大值 | 常用於 `x < max` (排除性上界)
+`ufo` | `unsigned int` | user favorite option <br> (= user preference 使用者偏好設定) |
+`buf` | `char []`     | (temporary) buffer (暫時) 緩衝區 |
+`msg` | `char []` <br> (for chatting, displayed message, etc.) | message 訊息 |
+`tmp` | - `char []` <br> - (any) | - temporary (buffer) 暫時 (緩衝區) <br> - temporary (variable) 暫時 (變數) |
+`cmd` | - `char []` (for chatting, etc.) <br> - `int` (for Xover, etc.) | - (text) command (文字) 命令 <br> - command (code) 命令 (代碼)
+`ans` | - `char [3]` (for `vget()`, etc.) <br> - `int` (for `vmsg()`, etc.) | answer (= response 回應) |
+`uid` | `char [IDLEN + 1]`/`const char *` | user ID 使用者 ID |
+`bid` | `char [IDLEN + 1]`/`const char *` | board ID 看板 ID | 罕用
+`fpath` | `char []`/`const char *` | file path 檔案路徑 |
+`folder` | `char []`/`const char *` | folder (path) 資料夾 (路徑) |
+`str` | ***`const char *`*** | string 字串 | 唯讀；僅用於讀取
+`ptr` | `(const) char *` | pointer 指標 |
+`dir` | `const char *` | directory 目錄 |
+`slp` | ***`screenline *`*** | `screenline` pointer <br> `screenline` 指標 |
+`slt` | ***`screenline`/`screenline []`*** | `screenline` temporary <br> 暫時 `screenline` |
+`hdr` | ***`HDR`/`(const) HDR *`*** | (generic) (file) header (通用) (檔案) 標頭 |
+`mhdr` | ***`HDR`/`(const) HDR *`*** | mail (file) header 信件 (檔) 標頭 |
+`fhdr` | ***`HDR`/`(const) HDR *`*** | file header 檔案標頭 |
+`ghdr` | ***`HDR`/`(const) HDR *`*** | gem (file) header 精華區 (檔) 標頭 |
+`brd` | ***`BRD`/`(const )BRD *`*** | board (header) 看板 (標頭) |
+`mf` | ***`MF`/`(const) MF *`*** | my favorite 我的最愛 (MapleBBS-itoc 版) | DreamBBS 未使用 <br> pmore 亦使用 `mf` 作為存放執行資訊的變數名
+`myfavorite` | ***`HDR`/`(const) HDR *`*** | my favorite 我的最愛 (DreamBBS 版) | DreamBBS 特有；罕用
+`nbrd` | ***`NBRD`/`(const) NBRD *`*** | new(ly applied) board 新 (申請) 看板 |
+`acct` | ***`ACCT`*** | (user) account (data) (temporary) (暫時) (使用者) 賬號 (資料) |
+`u` | ***`(const) ACCT *`*** | user (account data) (pointer) 使用者 (賬號資料) (指標) |
+`cuser` | ***`ACCT`*** | current user (account data) 目前使用者 (帳號資料) | 全域變數
+`utmp` | ***`UTMP`/`(const) UTMP *`*** | user (online) temporary (data) 使用者 (線上) 暫時 (資料) |
+`up` | ***`(const) UTMP *`*** | user (online temporary data) pointer 使用者 (線上暫時資料) 指標 |
+`cutmp` | ***`UTMP *`*** | current user (online) temporary (data) 目前使用者 (線上) 暫時 (資料) | 全域變數
+`pal` | ***`PAL`/`(const) pal *`*** | pal 好友 |
+`aloha` | ***`ALOHA`/`(const) ALOHA *`*** | aloha 打招呼 <br> (= element of user login notification list 使用者登入通知名單元素) |
+`bmw` | ***`BMW`/`(const) BMW *`*** | BBS message [`write`](<https://en.wikipedia.org/wiki/Write_(Unix)>) <br> (= user message 使用者訊息) | 又稱「熱訊」、「水球」、等等
+`benz` | ***`BMW`/`(const) BMW *`*** | similar to BMW 類似於 BMW <br> (= user login message 使用者登入訊息) | Maple-itoc 使用 `BENZ`
+`xo` | ***`XO`/`XO *`*** | Xover (data) Xover 資料 |
+`xt` | ***`XO *`*** | Xover (data) temporary (pointer) 暫時 Xover (資料) (指標) |
+`xz` | ***`XZ []`*** | Xover zone (data) Xover 區域 (資料) | 全域變數
+
 ## 區域變數的使用
 - 應透過限制變數的 scope 而非重用變數來節省記憶體的使用量
     - 限制變數 scope 有利於編譯器分析變數的使用狀況，利於讓編譯器重新利用不使用的變數的記憶體空間；  
