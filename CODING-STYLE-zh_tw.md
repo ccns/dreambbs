@@ -69,13 +69,14 @@ Indentation style 的說明，請見 [[INDENT]]。
 - 命名長度
     - 簡易判斷原則：名稱長度應與其作用域大小成正比，並與其常用程度成反比
     - 應使全域變數的名稱與區域變數的名稱易於區分
-    - 禁止在標頭檔中宣告或定義單字元的 enumeration、 macro、變數、或函式
+    - 禁止在標頭檔中宣告或定義單字元的 enumeration、macro、變數、或函式
     - 禁止程式碼檔的去除副檔名後的檔名為空或為單字元
 - 型別命名法
     - `bool` 變數的名稱應含有形容詞
     - 回傳 `bool` 的函式的名稱應含有助動詞
     - N 層指標變數的名稱應有 N 個 `p` 前綴，
-      但若第 M 層指標本身被當作陣列或字串使用則應有 N - M 個 `p` 前綴
+      但若解參照 M 層後的指標值本身被當作陣列或字串使用則應有 M 個 `p` 前綴，
+      而原名已由 `ptr` 開頭時則省略最後一個 `p` 前綴
     - 變數名稱不應包含資料大小、有號與否、或資料對齊單位的資訊
 
 ### 常用的區域變數名稱列表
@@ -87,13 +88,13 @@ Indentation style 的說明，請見 [[INDENT]]。
 `fd` | ***`int`***    | file descriptor 檔案描述子 | 不應與 `fp` 混淆
 `ch` | `int`          | (temporary) character (暫時) 字元 |
 `num` | `int`         | (temporary) number (暫時) 數字 | 迴圈數字變數應使用 `i`、`j`、`k`、等等名稱
-`pos` | `int`         | position 位置 <br> - 包含 ANSI escapes 後的游標原始縱排座標 (visio) <br> - 游標顯示縱排座標 (edit) | 在 visio 與在 edit 中的定義相反，不應混淆
+`pos` | `int`         | position 位置 <br> - 元素索引位置 (Xover, etc.) <br> - 包含 ANSI escapes 後的游標原始縱排座標 (visio) <br> - 游標顯示縱排座標 (edit) | 在 visio 與在 edit 中的定義相反，不應混淆
 `col` | `int`         | column (position) 縱排 (位置) <br> - 游標顯示縱排座標 (visio) <br> - 包含 ANSI escapes 後的游標原始縱排座標 (edit) | 在 visio 與在 edit 中的定義相反，不應混淆
 `max` | `int`         | maximum 最大值 | 常用於 `x < max` (排除性上界)
 `ufo` | `unsigned int` | user favorite option <br> (= user preference 使用者偏好設定) |
 `buf` | `char []`     | (temporary) buffer (暫時) 緩衝區 |
 `msg` | `char []` <br> (for chatting, displayed message, etc.) | message 訊息 |
-`tmp` | - `char []` <br> - (any) | - temporary (buffer) 暫時 (緩衝區) <br> - temporary (variable) 暫時 (變數) |
+`tmp` | - `char []` <br> - (any) | - temporary (buffer) 暫時 (緩衝區) <br> - temporary (variable) 暫時 (變數) | 應改用其它意義更明確的名稱
 `cmd` | - `char []` (for chatting, etc.) <br> - `int` (for Xover, etc.) | - (text) command (文字) 命令 <br> - command (code) 命令 (代碼)
 `ans` | - `char [3]` (for `vget()`, etc.) <br> - `int` (for `vmsg()`, etc.) | answer (= response 回應) |
 `uid` | `char [IDLEN + 1]`/`const char *` | user ID 使用者 ID |
@@ -104,17 +105,17 @@ Indentation style 的說明，請見 [[INDENT]]。
 `ptr` | `(const) char *` | pointer 指標 |
 `dir` | `const char *` | directory 目錄 |
 `slp` | ***`screenline *`*** | `screenline` pointer <br> `screenline` 指標 |
-`slt` | ***`screenline`/`screenline []`*** | `screenline` temporary <br> 暫時 `screenline` |
+`slt` | ***`screenline`/`screenline []`*** | `screenline` temporary <br> 暫時 `screenline` | 罕用
 `hdr` | ***`HDR`/`(const) HDR *`*** | (generic) (file) header (通用) (檔案) 標頭 |
 `mhdr` | ***`HDR`/`(const) HDR *`*** | mail (file) header 信件 (檔) 標頭 |
 `fhdr` | ***`HDR`/`(const) HDR *`*** | file header 檔案標頭 |
 `ghdr` | ***`HDR`/`(const) HDR *`*** | gem (file) header 精華區 (檔) 標頭 |
-`brd` | ***`BRD`/`(const )BRD *`*** | board (header) 看板 (標頭) |
-`mf` | ***`MF`/`(const) MF *`*** | my favorite 我的最愛 (MapleBBS-itoc 版) | DreamBBS 未使用 <br> pmore 亦使用 `mf` 作為存放執行資訊的變數名
-`myfavorite` | ***`HDR`/`(const) HDR *`*** | my favorite 我的最愛 (DreamBBS 版) | DreamBBS 特有；罕用
+`brd` | ***`BRD`/`(const) BRD *`*** | board (header) 看板 (標頭) |
+`mf` | ***`MF`/`(const) MF *`*** | my favorite 我的最愛 (MapleBBS-itoc 版) | DreamBBS 未使用 <br> - pmore 亦使用 `mf` 作為存放執行資訊的變數名
+`myfavorite` | ***`HDR`/`(const) HDR *`*** | my favorite 我的最愛 (DreamBBS 版) | DreamBBS 特有 <br> - 罕用，常以 `hdr` 代之
 `nbrd` | ***`NBRD`/`(const) NBRD *`*** | new(ly applied) board 新 (申請) 看板 |
-`acct` | ***`ACCT`*** | (user) account (data) (temporary) (暫時) (使用者) 賬號 (資料) |
-`u` | ***`(const) ACCT *`*** | user (account data) (pointer) 使用者 (賬號資料) (指標) |
+`acct` | ***`ACCT`/`(const) ACCT *`*** | (user) account (data) (temporary) (暫時) (使用者) 賬號 (資料) |
+`u` | ***`(const) ACCT *`*** | user (account data) (pointer) 使用者 (賬號資料) (指標) | 名稱過短，應改用 `acct`
 `cuser` | ***`ACCT`*** | current user (account data) 目前使用者 (帳號資料) | 全域變數
 `utmp` | ***`UTMP`/`(const) UTMP *`*** | user (online) temporary (data) 使用者 (線上) 暫時 (資料) |
 `up` | ***`(const) UTMP *`*** | user (online temporary data) pointer 使用者 (線上暫時資料) 指標 |
