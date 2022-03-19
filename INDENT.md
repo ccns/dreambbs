@@ -151,7 +151,36 @@ if      (sth)
 else if (sth)
 ```
 
-## `goto` label
+## Labels
+- Label 須單獨一行出現，或與多個 labels 在同一行內單獨出現
+
+***Good:***
+```c
+switch (cond)
+{
+case 1: case 2: case 3: default:
+    sth();
+    break;
+case -1:
+    sth_else();
+    break;
+case 0:
+    ;
+}
+```
+
+***Bad:***
+```c
+switch (cond)
+{
+case 1: case 2: case 3: default: sth();
+    break;
+case -1: sth_else();
+    break;
+case 0:;
+}
+```
+
 - `goto` label 的 indentation 須與所在 function 的 code block 的 `{`/`}` 的所在行相同
 
 **Good:**
@@ -193,7 +222,6 @@ int func(void)
 }
 ```
 
-## `switch`
 - `case` label 的 indentation 須與 `switch` 的 code block 的 `{`/`}` 的所在行相同
 - `case` label 內的 code 須 indent
 
