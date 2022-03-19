@@ -42,7 +42,7 @@ if (cond)
 ```
 
 ## Line continuation
-- The indentation size of continued lines should be 2, 4, or 6 spaces
+- The indentation size of continued lines should be 4 spaces
 - Argument lists and initializer-lists
     - The elements should be indented or be aligned with the start of the list
     - The end of list without elements in the same line should be indented less that the elements
@@ -141,7 +141,7 @@ else if (sth)
 ```
 
 ## `goto` label
-- `goto` label 可半 indent (2 spaces)，也可不 indent
+- `goto` label 須不 indent
 - `goto` label 可以以所在 block 或 function 為基準做 indent
 
 **Good:**
@@ -159,25 +159,7 @@ int func(void)
 {
     if (sth)
     {
-  sth:
-    }
-}
-```
-```c
-int func(void)
-{
-    if (sth)
-    {
     sth:
-    }
-}
-```
-```c
-int func(void)
-{
-    if (sth)
-    {
-      sth:
     }
 }
 ```
@@ -200,7 +182,7 @@ int func(void)
 ```
 
 ## `switch`
-- `case` label 可 indent，可半 indent (2 spaces)，也可不 indent；半個 indent 視為沒有 indent
+- `case` label 可 indent，也可不 indent
 - `case` label 內的 code 要 indent
 - `case` label 要以 `switch` 為基準做 indent
 
@@ -209,13 +191,6 @@ int func(void)
 switch (sth)
 {
 case sth:
-    code
-}
-```
-```c
-switch (sth)
-{
-  case sth:
     code
 }
 ```
@@ -244,13 +219,6 @@ switch (sth)
 {
 case sth:
 code
-}
-```
-```c
-switch (sth)
-{
-  case sth:
-        code
 }
 ```
 ```c
@@ -445,7 +413,7 @@ for (s;t;h)
 ```
 
 ## Preprocessor directives
-- The indentation size should be 1 or 2 spaces
+- The indentation size should be 2 spaces
 - The indentation should be consistent within the whole block
 - The indentation can come before or after `#`
 - The indentation can be omitted only for short blocks
