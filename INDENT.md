@@ -154,7 +154,7 @@ else if (sth)
 ## Labels
 - Label 須單獨一行出現，或與多個 labels 在同一行內單獨出現
 
-***Good:***
+**Good:**
 ```c
 switch (cond)
 {
@@ -169,7 +169,7 @@ case 0:
 }
 ```
 
-***Bad:***
+**Bad:**
 ```c
 switch (cond)
 {
@@ -181,6 +181,7 @@ case 0:;
 }
 ```
 
+### `goto` labels
 - `goto` label 的 indentation 須與所在 function 的 code block 的 `{`/`}` 的所在行相同
 
 **Good:**
@@ -222,6 +223,7 @@ int func(void)
 }
 ```
 
+### `case` labels
 - `case` label 的 indentation 須與 `switch` 的 code block 的 `{`/`}` 的所在行相同
 - `case` label 內的 code 須 indent
 
@@ -285,6 +287,40 @@ case sth:
     - 在 identifier 後，與 `{` 之間要有剛好一個 space
     - 在 identifier 前，與 `}` 之間要有 spaces
 
+- 在代表 code block 的 `{` 之後，以及 `}` 之前，要有空白字元
+
+**Good:**
+```c
+{
+    code
+}
+```
+```c
+{
+}
+```
+- One-liner
+```c
+{ code }
+```
+```c
+{ }
+```
+
+**Bad:**
+```c
+{code}
+```
+```c
+{ code}
+```
+```c
+{code }
+```
+```c
+{}
+```
+
 - 如果 `else`/`else if` 和之前的 `}` 在同一行裡，`else` 後面的 `{` 也要在這一行裡
 
 **Good:**
@@ -310,19 +346,19 @@ else
 {
 ```
 
-- `do`-`while`
+### `do`-`while`
     - 必須使用 `{` 與 `}` 作為 code block
     - `while` 必須與 `}` 在同一行中
     - `while` 後的 `;` 不得單獨一行出現
 
-***Good:***
+**Good:**
 ```c
 do {
     sth();
 } while (cond);
 ```
 
-***Bad:***
+**Bad:**
 ```c
 do {
     sth();
@@ -330,14 +366,14 @@ do {
 while (cond);
 ```
 
-***Worse:***
+**Worse:**
 ```c
 do sth();
 while (cond)
     ;
 ```
 
-- `if`/`for`/(`do`-)`while`/`switch` 的 code block
+### `if`/`for`/(`do`-)`while`/`switch` 的 code block
     - `{` 與 `}` 不得在同一行中
     - 若有 `goto`/`case` labels，則必須使用 `{` 與 `}`
     - 除了 `do`-`while`（必須使用 `{` 與 `}`）外……
@@ -381,7 +417,7 @@ while (cond) sth;
 while (cond);
 ```
 
-- Function 的 code block
+### Function 的 code block
     - 若有 `goto`/`case` labels，則 `{` 與 `}` 必須在不同行中
     - 若 code block 為空，或僅包含一句不換行的陳述式，`{`、與 `}` 可在同一行中
 
@@ -421,40 +457,6 @@ void func(int x) { if (x == 42)
 ```
 ```c
 void func(void) { loop: goto loop; }
-```
-
-- 在代表 code block 的 `{` 之後，以及 `}` 之前，要有空白字元
-
-**Good:**
-```c
-{
-    code
-}
-```
-```c
-{
-}
-```
-- One-liner
-```c
-{ code }
-```
-```c
-{ }
-```
-
-**Bad:**
-```c
-{code}
-```
-```c
-{ code}
-```
-```c
-{code }
-```
-```c
-{}
 ```
 
 ## `(` & `)`
