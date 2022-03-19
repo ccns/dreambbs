@@ -68,7 +68,19 @@ if (sth_long > (42
 ```
 
 - No line breaks between unary, prefix, and suffix operators other than `.` and `->` and their operand
-- If needed, line breaks must come after suffix operators `.` and `->`
+- If needed, line breaks must come before the suffix operators `.` and `->`
+
+**Good:**
+```c
+sth_long
+    .member++;
+```
+**Bad:**
+```c
+sth_long.
+    member++;
+```
+
 - If needed, line breaks should come before the binary operators other than assignments and comma
 
 **Good:**
