@@ -471,7 +471,9 @@ int func(void)
 #endif
 ```
 
-## Related commands
+## Auto indentation commands
+- The commands for performing auto indentation for MapleBBS-itoc
+    - Outdated for DreamBBS
 
 ```
 find . -name "*.c" -execdir sh -c "indent -st -bap -bli0 -i4 -l79 -ncs -npcs -npsl -fca -lc79 -fc1 -ts4 {} > {}.new " \;
