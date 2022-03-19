@@ -94,43 +94,42 @@ if (sth_long &&
     sth_else_long)
 ```
 
-- For the condition operator, if needed, line breaks should come before `?` or both `?` and `:`
+- For the condition operator, if needed, line breaks should come before `:` or both after `?` and before `:`
+    - This allows programmers to easily distinguish the conditions from the values
 
 **Good:**
 ```c
-cond ? sth : else_sth
+cond ? sth : sth_cond ? sth_else : else_sth
 ```
-```c
-cond
-    ? sth : else_sth
-```
-```c
-cond
-    ? sth
-    : else_sth
-```
-**Bad:**
 ```c
 cond ? sth
+    : else_cond ? sth_else
     : else_sth
-```
-```c
-cond ?
-    sth : else_sth
-```
-```c
-cond ?
-    sth : else_sth
 ```
 ```c
 cond ?
     sth
+    : else_cond ?
+    sth_else
     : else_sth
+```
+**Bad:**
+```c
+cond ?
+    sth : else_cond ?
+    sth_else : else_sth
+```
+```c
+cond
+    ? sth : else_cond
+    ? sth_else : else_sth
 ```
 **Worse:**
 ```c
 cond
     ? sth :
+    else_cond
+    ? sth_else :
     else_sth
 ```
 
