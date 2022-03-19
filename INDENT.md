@@ -152,8 +152,7 @@ else if (sth)
 ```
 
 ## `goto` label
-- `goto` label 須不 indent
-- `goto` label 可以以所在 block 或 function 為基準做 indent
+- `goto` label 的 indentation 須與所在 function 的 code block 的 `{`/`}` 相同
 
 **Good:**
 ```c
@@ -162,15 +161,6 @@ int func(void)
     if (sth)
     {
 sth:
-    }
-}
-```
-```c
-int func(void)
-{
-    if (sth)
-    {
-    sth:
     }
 }
 ```
@@ -187,15 +177,25 @@ int func(void)
 {
     if (sth)
     {
+    sth:
+    }
+}
+```
+
+**Worse:**
+```c
+int func(void)
+{
+    if (sth)
+    {
         sth:
     }
 }
 ```
 
 ## `switch`
-- `case` label 可 indent，也可不 indent
-- `case` label 內的 code 要 indent
-- `case` label 要以 `switch` 為基準做 indent
+- `case` label 的 indentation 須與 `switch` 的 code block 的 `{`/`}` 相同
+- `case` label 內的 code 須 indent
 
 **Good:**
 ```c
@@ -208,13 +208,6 @@ case sth:
 ```c
 switch (sth)
 {
-    case sth:
-        code
-}
-```
-```c
-switch (sth)
-{
 case sth:
     if (sth)
     {
@@ -225,6 +218,13 @@ case sth:
 ```
 
 **Bad:**
+```c
+switch (sth)
+{
+    case sth:
+        code
+}
+```
 ```c
 switch (sth)
 {
