@@ -251,7 +251,7 @@ case sth:
 }
 ```
 
-## `{` & `}`
+## `{`, `}`, & code blocks
 - C code
     - 在 parameter list 及 condition list 後，與 `{` 之間要有空白字元
     - 在 identifier 後，與 `{` 之間要有剛好一個 space
@@ -280,6 +280,119 @@ else
 ```c
 } else
 {
+```
+
+- `do`-`while`
+    - 必須使用 `{` 與 `}` 作為 code block
+    - `while` 必須與 `}` 在同一行中
+    - `while` 後的 `;` 不得單獨一行出現
+
+***Good:***
+```c
+do {
+    sth();
+} while (cond);
+```
+
+***Bad:***
+```c
+do {
+    sth();
+}
+while (cond);
+```
+
+***Worse:***
+```c
+do sth();
+while (cond)
+    ;
+```
+
+- `if`/`for`/(`do`-)`while`/`switch` 的 code block
+    - `{` 與 `}` 不得在同一行中
+    - 若有 `goto`/`case` labels，則必須使用 `{` 與 `}`
+    - 除了 `do`-`while`（必須使用 `{` 與 `}`）外……
+        - 若 code block 為空，應以單獨一行的 `;` 取代
+        - 若僅包含一句不換行的陳述式，可不使用 `{` 與 `}`，但該陳述式須單獨一行出現
+
+**Good:**
+```c
+while (cond) {
+label:
+    sth;
+}
+```
+```c
+while (cond)
+    sth;
+```
+```c
+while (cond)
+    ;
+```
+
+**Bad:**
+```c
+while (cond) { sth; }
+```
+```c
+while (cond) { }
+```
+```c
+while (cond)
+label:
+    ;
+```
+
+**Worse:**
+```c
+while (cond) sth;
+```
+```c
+while (cond);
+```
+
+- Function 的 code block
+    - 若有 `goto`/`case` labels，則 `{` 與 `}` 必須在不同行中
+    - 若 code block 為空，或僅包含一句不換行的陳述式，`{`、與 `}` 可在同一行中
+
+**Good:**
+```c
+int func(int x)
+{
+    return x;
+}
+```
+```c
+int func(int x) { return x; }
+```
+```c
+int func(int x)
+{ return x; }
+```
+```c
+void func(void)
+{
+}
+```
+```c
+void func(void) { }
+```
+```c
+void func(void) {
+loop:
+    goto loop;
+}
+```
+
+**Bad:**
+```c
+void func(int x) { if (x == 42)
+    ; }
+```
+```c
+void func(void) { loop: goto loop; }
 ```
 
 - 在代表 code block 的 `{` 之後，以及 `}` 之前，要有空白字元
