@@ -584,14 +584,14 @@ do_post(
           {
             sprintf(buf, "這是您的第 %d 篇文章。", ++cuser.numposts);
             pmsg2(buf);
-            brd->blast = time(0);
+            brd->blast = post.chrono;
           }
           else
           {
             mode = BMIN((time_t)keysnum, spendtime) / 10;  /* 每十字/秒 一元 */
             sprintf(buf, "這是您的第 %d 篇文章，獲得 %d 夢幣。", ++cuser.numposts, mode);
             pmsg2(buf);
-            brd->blast = time(0);
+            brd->blast = post.chrono;
             addmoney(mode, cuser.userid);
           }
         }
@@ -2539,7 +2539,7 @@ post_edit(
                 vmsg("取消修改");
             else
             {
-                brd->blast = time(0);
+                brd->blast = hdr->pushtime;
                 vmsg("修改完成");
             }
             return XO_INIT;
