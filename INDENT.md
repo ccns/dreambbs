@@ -158,7 +158,7 @@ else if (sth)
 ```c
 switch (cond)
 {
-case 1: case 2: case 3: default:
+default: case 1: case 2: case 3:
     sth();
     break;
 case -1:
@@ -173,7 +173,7 @@ case 0:
 ```c
 switch (cond)
 {
-case 1: case 2: case 3: default: sth();
+default: case 1: case 2: case 3: sth();
     break;
 case -1: sth_else();
     break;
@@ -226,6 +226,7 @@ int func(void)
 ### `case` labels
 - `case` label 的 indentation 須與 `switch` 的 code block 的 `{`/`}` 的所在行相同
 - `case` label 內的 code 須 indent
+- `default` label 與其它 labels 同在一行時，`default` 須在最前方
 
 **Good:**
 ```c
@@ -241,7 +242,7 @@ switch (sth)
 case sth:
     if (sth)
     {
-case sth:
+default: case sth_else:
         code
     }
 }
@@ -275,7 +276,7 @@ switch (sth)
 case sth:
     if (sth)
     {
-    case sth:
+    case sth_else: default:
         code
     }
 }
