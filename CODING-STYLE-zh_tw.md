@@ -498,10 +498,20 @@ void func2(void)
 - 在會被讀出／寫入 binary file 的資料結構中，不應使用 `long`, `time_t`, 以及其它會因編譯環境架構而有不同大小的資料型別
     - 參見 `include/struct.h`
     - 目前 (2022-03-19) 已無在相關資料結構中使用這些資料型別
-- 應當標註會被讀出／寫入 binary file 的資料結構
-    - 至 2020-02-24 為止，所有相關資料結構都已標註上 `DISKDATA(raw)`
 - 在會被讀出／寫入 binary file 或是 shared memory 的資料結構中，不應使用指標型別
     - 目前 (2022-03-19) 已無在相關資料結構中使用指標型別
+- 應當使用下列形式的註解以標註會被讀出／寫入硬碟或 shared memory 的資料結構
+    - `<STORAGE_TYPE>(<formatting_type>); <dependency_type>`
+    - `STORAGE_TYPE` 可為下列之一：
+        - `DISKDATA`：會直接或間接地讀出／寫入硬碟的資料；標註上比 `SHMDATA` 優先
+        - `SHMDATA`：會直接或間接地讀出／寫入 shared memory 的資料
+    - `formatting_type` 可為下列之一：
+        - `raw`：Binary data 形式
+        - `format`：已格式化之文字形式
+    - `dependency_type` 可為下列之一：
+        - `dependency(<Type>)`：由於此資料結構被包含於 `Type`，而被間接地讀出／寫入硬碟或 shared memory 的資料結構
+        - `runtime`：僅於程式執行時期需要使用，而結束執行後可捨棄的資料
+    - 至 2020-02-24 為止，所有符合 `DISKDATA(raw)` 的資料結構都已被標註
 
 ## Header 的使用
 - 不同支程式使用的 header 應該分開，以方便控制特定程式的編譯環境
