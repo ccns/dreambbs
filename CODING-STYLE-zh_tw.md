@@ -401,6 +401,7 @@ void func2(void)
     - `for (;;)`
 - 條件迴圈
     - `while (cond())`：不暫存結果
+        - 可為普通 `whlie` 迴圈或 `do`-`while` 迴圈
     - `for (Type v; (v = get_val());)`：暫存結果，並進行非零判斷
     - `for (Type v; v = get_val(), cond(v);)`：暫存結果，並進行其它判斷
 - 範圍迴圈
