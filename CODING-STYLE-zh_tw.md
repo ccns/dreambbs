@@ -391,6 +391,32 @@ void func2(void)
 }
 ```
 
+## 迴圈的使用
+- 應利用 `continue`、`break`、`return`、或 `goto` 減少 block 深度
+- 在函式定義中，無限迴圈內不應包含無限迴圈
+- 迴圈應為以下形式之一
+
+### 迴圈的形式
+- 無限迴圈
+    - `for (;;)`
+- 條件迴圈
+    - `while (cond())`：不暫存結果
+    - `for (Type v; (v = get_val());)`：暫存結果，並進行非零判斷
+    - `for (Type v; v = get_val(), cond(v);)`：暫存結果，並進行其它判斷
+- 範圍迴圈
+    - 遞增型
+        - `for (int i = get_start(); i < n; ++i)`：不暫存終點
+        - `for (int i = get_start(), n = get_end(); i < n; ++i)`：暫存終點
+    - 遞減型
+        - `for (int i = get_end() - 1; i + 1 > 0; --i)`：不暫存終點
+        - `for (int i = get_end() - 1, b = get_begin(); i + 1 > b; --i)`：暫存終點
+- 指標型 for-each 迴圈
+    - 遞增型
+        - `for (Type *p = get_start(), *const n = get_end(); p != n; ++p)`
+    - 遞減型
+        - `for (Type *p = get_end() - 1, *const b = get_start(); p != b; --p)`
+- 若需在迴圈之後使用迴圈變數的值，方可將迴圈的初始化語句搬出至迴圈之前
+
 ## `goto` 的使用
 - 如使用 `goto` 可避免暫時變數的使用或是程式碼的重複，且難以透過使用迴圈或呼叫函式達成，應使用 `goto`
 - `goto` 的目標應在 `goto` 語句之後，除非要從無限迴圈跳出並重新進入
