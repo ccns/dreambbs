@@ -274,11 +274,11 @@ return XO_DMOVE + pos;
 > [name=IID] [time=2021_09_30 (Thu) 20:04 UTC+8]
 :::
 
-### <input class="task-list-item-checkbox" disabled type="checkbox"> 修正 `ulist_fromchange()` 中的 buffer 大小不同步的問題
+### <input class="task-list-item-checkbox" disabled type="checkbox" checked> 修正 `ulist_fromchange()` 中的 buffer 大小不同步的問題
 
 > 不確定有沒有 solved 的 [name=r2] [time=2021_04_07 (Wed) 00:30 UTC+8]
 
-:::spoiler {state=open} 問題敘述
+:::spoiler 問題敘述 (solved by [f16570462e](https://github.com/ccns/dreambbs/commit/f16570462e88fcd2caa7d87b2c23f9c033ff4d5e))
 > 大小不同步了。
 ![](https://cdn.discordapp.com/attachments/370600485612290060/827768186111262720/unknown.png) [name=IID] [time=2021_04_03]
 :::
@@ -342,7 +342,7 @@ https://github.com/ccns/dreambbs/commit/4940e01306d24fb244154383e9bfaee20c3898f1
 > 要安全一點就先把 `BFLAG` 轉成 `unsigned long long`。 \
 `uintmax_t` [name=IID] [time=2021_04_12 (Mon) 13:40 UTC+8]
 
-> 是寫成 `flags &= ~((flags & 0) | BFLAG)`。 [name=IID] [time=2021_04_12 (Mon) 15:17 UTC+8]
+> 或是寫成 `flags &= ~((flags & 0) | BFLAG)`。 [name=IID] [time=2021_04_12 (Mon) 15:17 UTC+8]
 :::
 
 ### <input class="task-list-item-checkbox" disabled type="checkbox"> 修正標題列的中央標題過長的處理
@@ -687,6 +687,14 @@ INTERNAL_INIT MENU menu_mail[] =
     - 可是沒彈性。
 :::
 
+### <input class="task-list-item-checkbox" disabled type="checkbox"> BBS 使用者群組系統
+
+:::spoiler {state=open} 詳細 敘述
+> BBS 使用者群組系統：\
+使用者可以建立「使用者群組」，並邀請其他使用者加入。使用者群組 ID 固定會有特別符號的前綴或後綴。\
+由使用者群組所建立的文章，所有該群組的人都能執行該文章的作者所能執行都操作。 [name=IID] [time=2022_03_03 (Thu) 21:51 UTC+8]
+:::
+
 ## 文件上的 TODO
 
 ### <input class="task-list-item-checkbox" disabled type="checkbox"> 撰寫系統管理細節
@@ -852,7 +860,22 @@ https://developers.google.com/web/fundamentals/native-hardware/fullscreen?hl=zh-
 :::
 
 ## 未完成的 TODO
-- [ ] 修正公告未讀判斷 ==[name=IID] [time=2020_11_16]==
+- [x] 修正公告未讀判斷 ==[name=IID] [time=2020_11_16]==
+    - (partially solved by [3a73b1a423](https://github.com/ccns/dreambbs/commit/3a73b1a423ef68a34e297a7517910ddf0ce574cd))
+    :::spoiler 詳細說明
+    - > 我應該找到強制閱讀看板的判斷會失準的原因了。\
+    `force_board()` 的判斷，是檢査 `brd->blast` 的時間點值是否在閱讀紀錄中爲未讀。但是 `brd->blast` 的值並沒有與任何看板文章直接同步。\
+    當有人發表文章或編輯文章時，正確的作法是將 `hdr->blast` 更新爲 `hdr->chrono` (發表) 或 `hdr->pushtime` (編輯)，但 `do_post()` 與 `edit_post()` 卻直接呼叫 `time(0)` 將 `brd->blast` 更新爲當時的時間，可能造成 `brd->blast` 的值落在閱讀看板文章所能涵蓋的已讀時間範圍之外。（不過推文的處理 (`post_recommend()`) 反倒正確）。\
+    尤其是編輯文章時所更新的 `hdr->pushtime`，在閱讀紀錄中僅會有一秒的紀錄，只要 `hdr->pushtime` 與 `brd->blast` 的值相差一秒就會造成無法退出公告板的問題。\
+    \
+    不過單純修改程式只能解決造成錯誤的原因，無法消除既有的資料錯誤，所以需要使用其它方式修正或更新 `brd->blast`。 [name=IID] [time=2022_03_22 (Thu) 03:34 UTC+8]
+    - > 而設定已讀能退出的原因，是因爲 `brd_visit(false)` 會將閱讀紀錄內容改爲 `([0, time(0)])`，因此理論上必定能包含到 `brd->blast`。 [name=IID] [time=2022_03_22 (Thu) 03:37 UTC+8]
+    - > 若是文章的前一篇與後一篇皆未讀，或是前一篇過於久遠 (不記錄) 且後一篇未讀，`hdr->chrono` 在閱讀紀錄中也會只有一秒的紀錄 `(…, [hdr->chrono, hdr->chrono], …)`。 [name=IID] [time=2022_03_22 (Thu) 02:02 UTC+8]
+    - ... (after applying [3a73b1a423](https://github.com/ccns/dreambbs/commit/3a73b1a423ef68a34e297a7517910ddf0ce574cd))
+    - > 發文的人使用新版本即可。 [name=IID] [time=2022_03_23 (Thu) 17:05 UTC+8]
+    - > 但是應該還不能正確處理刪除文章的情況。 [name=IID] [time=2022_03_23 (Thu) 17:06 UTC+8]
+    - > 所以不要刪除最新所新增或更新的那篇文章。 [name=IID] [time=2022_03_23 (Thu) 17:10 UTC+8]
+    :::
 - [ ] 編輯 DreamBBS-202X v0 release note ==[name=IID] [time=2021_01_02]==
 
 ### 初步整理的 v3.1 的 TODO
@@ -889,35 +912,63 @@ https://developers.google.com/web/fundamentals/native-hardware/fullscreen?hl=zh-
 :::
 
 ## 夢大 Bug List - 2017-10-20, by @r2#7033
-> - Updated on 2019-10-19, by IID (@Dom2112#3054)
+> - Updated on 2021-01-21, by IID (@Dom2112#3054)
 
 :::spoiler {state=open} 詳細內容
-> 回顧二年前的已知問題，記錄現在已修了多少。
-
-- [x] 1. 簽名檔: 有三個可選，但只能編輯一個 (已經改善提示介面)
+1. 簽名檔:
+    - [x] 有三個可選，但只能編輯一個 (已經改善提示介面)
 2. 看板:
     - [ ] 如果採用(B)回文模式，在看板上的推文會與信件底下的同步
+        - IID: 預期動作是什麼？沒說明改不了。 [name=IID] [time=2021_12_06]
     - [x] 進不去看板但看板state仍會顯示該板板名，且會累積人氣… <http://cpu.tfcis.org:8080/bmore?itoc&10484>
         - > 見 <https://github.com/ccns/dreambbs/commit/347f33a66baa946ac6bdf010e3a320d865ab89b8>，我把確認可否進入看板的邏輯，往前移到了函數開頭處 [name=IID] [time=2019_10_19]
-- [x] 3.轉寄: 大 F 因為權限相關安全問題停到現在… (不太好解決orz)
-    - postfix 問題近期找時間解決
-    - 權限問題再看 code 能解決多少
-    - > 見 <https://github.com/ccns/dreambbs/commit/c2ecedc0be94c88468a8582b6f7e079940197789> 及 <https://github.com/ccns/dreambbs/commit/f3130caeae0647a94a38601dda7e6c589bd4cd78>， \
-    先前問題在於轉寄／轉貼多篇文章時，即使其中幾篇已經被權限系統擋下，界面上仍然是顯示轉寄／轉貼成功； \
-    我加了「成功計數器」解決了這個問題， \
-    順便解決了可以透過無效轉貼文章刷個人文章數的問題 <span class=inline-spoiler-group><span class=inline-spoiler>我利用這個 bug 把自己的文章數刷到超過<span class=inline-spoiler>一</span><span class=inline-spoiler>百</span><span class=inline-spoiler>萬</span>篇</span></span> [name=IID] [time=2019_10_19]
-- [x] 4. 最愛: 在我的最愛那邊時，使用者名單顯示的動態是顯示該人上一個Q的ID…
-    - > 見 <https://github.com/ccns/dreambbs/commit/39510cd5055238851b7aa80d11d4c9c46d7005d5>， \
-       問題在於沒有定義到 `M_MYFAVORITE` 的 xover zone，造成取 `XZ_MYFAVORITE` 時發生 out-of-bounds accessing；補上去就修好了) [name=IID] [time=2019_10_19]
-- [ ] 5. 好讀版: 圖片影片連結已經無法預覽。
-    - (其他細節待補)
-- [x] 6. 人氣: 記錄顯示人氣的daemon爆掉了。 (人氣自動+n*10)
-    - (重開機後觀察暫時是解決了)
-- [x] 7. 最愛: h 功能目前有 bug 未解 (solved)
-    + [x] 在那邊 s 進看板出來後，上面的指令提示選項還是 for 看板文章目錄… (solved)
-- [x] 8. 點歌: `確定點歌嗎 [Y/n]：` 預設是 n，應該改成 `確定點歌嗎 [y/N]：` (done)
-- [x] 9. 遊戲: 小雞檔案缺漏，導致不正常斷線 (done)
-- [x] 10. 點歌: 點歌次數無法累積! (solved)
+    - [x] 看板閱讀紀錄(`.BRH`)會壞掉 
+        - (solved (undefined behavior: `memcpy()` optimization) by [bc67fbb220](https://github.com/ccns/dreambbs/commit/bc67fbb220) & [2f64941529](https://github.com/ccns/dreambbs/commit/2f64941529)) [name=IID] [time=2021_12_06]
+- 3.轉寄:
+    - [x] 大 `F` 因為權限相關安全問題停到現在… (不太好解決orz)
+        - postfix 問題近期找時間解決
+       - 權限問題再看 code 能解決多少
+       - > 見 <https://github.com/ccns/dreambbs/commit/c2ecedc0be94c88468a8582b6f7e079940197789> 及 <https://github.com/ccns/dreambbs/commit/f3130caeae0647a94a38601dda7e6c589bd4cd78>， \
+        先前問題在於轉寄／轉貼多篇文章時，即使其中幾篇已經被權限系統擋下，界面上仍然是顯示轉寄／轉貼成功； \
+        我加了「成功計數器」解決了這個問題， \
+        順便解決了可以透過無效轉貼文章刷個人文章數的問題 <span class=inline-spoiler-group><span class=inline-spoiler>我利用這個 bug 把自己的文章數刷到超過<span class=inline-spoiler>一</span><span class=inline-spoiler>百</span><span class=inline-spoiler>萬</span>篇</span></span> [name=IID] [time=2019_10_19]
+        - IID: 權限檢查由 xover.c `xover_key()` -> `xo_forward()` 處理 (同 DreamBBS-2010)，但判斷的方式應該沒問題。已由 r2 重新啟用：[a89e9b604c](https://github.com/ccns/dreambbs/commit/a89e9b604c) [name=IID] [time=2021_12_06]
+4. 最愛:
+    - [x] 在我的最愛那邊時，使用者名單顯示的動態是顯示該人上一個Q的ID…
+        - 現在變成顯示主選單......@@
+        - > 見 <https://github.com/ccns/dreambbs/commit/39510cd5055238851b7aa80d11d4c9c46d7005d5>， \
+           問題在於沒有定義到 `M_MYFAVORITE` 的 xover zone，造成取 `XZ_MYFAVORITE` 時發生 out-of-bounds accessing；補上去就修好了) [name=IID] [time=2019_10_19]
+        - (solved (buffer overrun of `xz[]`) by [39510cd505](https://github.com/ccns/dreambbs/commit/39510cd505)) [name=IID] [time=2021_12_06]
+    - [x] `h` 功能目前有 bug 未解 (solved)
+        - (IID: 什麼 bug？) [name=IID] [time=2022_01_21]
+    - [x] + 在那邊 `s` 進看板出來後，上面的指令提示選項還是 for 看板文章目錄… (solved)
+5. 好讀版:
+    - [ ] 圖片影片連結已經無法預覽。
+        - (現在已經暫停服務@@)
+        - (其他細節待補)
+6. 人氣:
+    - [ ] 記錄顯示人氣的daemon爆掉了。 (人氣自動`+n*10`)
+        - (重開機後觀察暫時是解決了)
+        - IID: 並沒有這個 daemon。疑似是發生了 race condition，待修正 [name=IID] [time=2021_12_06]
+7. 點歌:
+    - [x] `確定點歌嗎 [Y/n]：` 預設是 n，應該改成 `確定點歌嗎 [y/N]：` (done)
+        - `so/song.c`: 327
+8. 遊戲:
+    - [x] 小雞檔案缺漏，導致不正常斷線 (待補) (done)
+9. 點歌:
+    - [x] 點歌次數無法累積! (solved)
+10. 精華區:
+    - [x] gopher 還沒拔乾淨
+11. terminal:
+    - [x] `#A1D3KR3E (P_r2)` 接收特定控制碼會異常斷線
+        - IID: 看不到原文，不知是什麼控制碼。 [name=IID] [time=2021_12_06]
+        - (probably solved by [29a66c8169](https://github.com/ccns/dreambbs/commit/29a66c8169) & [02dce8457e](https://github.com/ccns/dreambbs/commit/02dce8457e)) [name=IID] [time=2021_12_06]
+12. 聊天室:
+    - [x] 特定網路位置無法連線、
+    - [x] `chat.so` 傳送給 `xchatd` 相關資訊的敏感內容未經過處理
+13. `Every_Z`:
+    - [x] 進去我的最愛會造成無限迴圈最後 SegFault
+        - (solved (原因同 4.)) [name=IID] [time=2021_12_06]
 :::
 
 ## 其它 issue 連結
