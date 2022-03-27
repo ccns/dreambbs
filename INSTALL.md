@@ -331,7 +331,22 @@ v2.0 時，本專案新增了目錄 `scripts/wsproxy/`，內含 wsproxy 的說�
 
 完成後，請參考該專案主目錄下的 `sample/etc/bbs-sshd.toml` 的內容，在專案主目錄下建立 `bbs-sshd.toml`。
 
-其中 UNIX socket 的路徑，請設定成前面所設定的 socket 路徑。
+其中，`host_key` 的部份，若要使用 `bbs` 賬號專用的 SSH 伺服器公／私鑰，可藉以下命令產生：
+
+    $ mkdir /home/bbs/etc/ssh/
+    $ ssh-keygen -A -f /home/bbs/
+
+並將對應的設定改為：
+```
+# Host keys
+host_keys = [
+    "/home/bbs/etc/ssh/ssh_host_ed25519_key",
+    "/home/bbs/etc/ssh/ssh_host_ecdsa_key",
+    "/home/bbs/etc/ssh/ssh_host_rsa_key",
+]
+```
+
+而 UNIX socket 的路徑 (`logind_paths`)，請設定成前面所設定的 socket 路徑。
 
 接著使用以下命令啟動 `bbs-sshd`（假設使用了 `cargo build --release` 進行建置）。
 
