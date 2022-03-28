@@ -252,7 +252,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
     - 游標移動：`32| -- (= 0)(1) | -- = 0(1) | XO_MOVE = 1(1) | --(1) | XO_WRAP(1) | 游標位置(27) |0`
         - 正游標位置，有加 `XO_WRAP`：`30 | XO_MOVE = 1(1) | XO_MODE = 0(1) | XO_WRAP = 1(1) | 游標位置(27) |0`
         - 負游標位置，有加 `XO_WRAP`：`30 | XO_MOVE = 1(1) | XO_MODE = 0(1) | XO_WRAP = 0(1) | 游標位置的絕對值的二補數(27) |0`
-        - 正游標位置，未加 `XO_WRAP`：`30 | XO_MOVE = 1(1) | XO_MODE - 0(1) | XO_WRAP = 0(1) | 游標位置(27) |0`
+        - 正游標位置，未加 `XO_WRAP`：`30 | XO_MOVE = 1(1) | XO_MODE = 0(1) | XO_WRAP = 0(1) | 游標位置(27) |0`
         - 負游標位置，未加 `XO_WRAP`：`30 | XO_MOVE = 0(1) | XO_MODE = 1(1) | XO_WRAP = 1(1) | 游標位置的絕對值的二補數(27) |0`
     - Zone 切換：`32| -- (= 0)(1) | XO_ZONE = 1(1) | -- (= 0)(26) | Zone 索引值(4) |0`
 
@@ -392,7 +392,7 @@ Macro     | 值 (MapleBBS 3) | 值 (DreamBBS v3) | 註解
 Macro      | 值 (MapleBBS 3) | 值 (DreamBBS v3) | 說明
  :---      | ---             | ---              | ---
 `XZ_CLASS` | - `XO_ZONE + 0x0002` (MapleBBS 3.00) <br> - `XO_ZONE + 0` (MapleBBS 3.02) | `XO_ZONE + XZ_INDEX_CLASS` <br> (= `XO_ZONE + 0`) | 看板列表
-`XZ_ULIST` | - `XO_ZONE + 0x0001` (MapleBBS 3.00) <br> - `XO_ZONE + 1` (MapleBBS 3.02) | `XO_ZONE + XZ_INDEX_ULUST` <br> (= `XO_ZONE + 1`) | 線上使用者名單
+`XZ_ULIST` | - `XO_ZONE + 0x0001` (MapleBBS 3.00) <br> - `XO_ZONE + 1` (MapleBBS 3.02) | `XO_ZONE + XZ_INDEX_ULIST` <br> (= `XO_ZONE + 1`) | 線上使用者名單
 `XZ_PAL`   | - `XO_ZONE + 0x0020` (MapleBBS 3.00) <br> - `XO_ZONE + 2` (MapleBBS 3.02) | `XO_ZONE + XZ_INDEX_PAL` <br> (= `XO_ZONE + 2`) | 好友名單
 `XZ_BLIST` | - `XO_ZONE + 0x0040` (MapleBBS 3.00) <br> - (移除) (MapleBBS 3.02) | (無) | 看板名單 (moderated) <br> (未使用)
 `XZ_ALOHA` | `XO_ZONE + 3` (MapleBBS-itoc) | (無) | 上站通知名單
@@ -430,7 +430,7 @@ Macro        | 值 (MapleBBS 2.36b) | 值 (DreamBBS v3.1) | 說明
 `RS_PREV`    | - `0x80` (MapleBBS 2.39) <br> - (移除) (MapleBBS 3.00a) | `RS_READ_PREV` | - 上一篇文章
 `RS_SEQUENT` | `0x40` (MapleBBS 3.00b) | `0x0040`       | - 有：游標上下篇文章
 `RS_MARKED`  | `0x80` (MapleBBS 3.00b) | `0x0080`       | - 有：搜尋有 mark 標記的文章
-`RS_UNREAD`  | `0x100` (MapleBBS 3.00b) | `0x0100`      | - 有：搜尋未讀的文章 <br> - 無 RS_FIRST`：上一篇未讀 (MapleBBS 3.02)
+`RS_UNREAD`  | `0x100` (MapleBBS 3.00b) | `0x0100`      | - 有：搜尋未讀的文章 <br> - 無 `RS_FIRST`：上一篇未讀 (MapleBBS 3.02)
 `RS_UNUSED9` | (無)                | `0x0200`           | (未使用)
 `RS_UNUSED10` | (無)               | `0x0400`           | (未使用)
 `RS_UNUSED11` | (無)               | `0x0800`           | (未使用)
