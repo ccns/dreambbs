@@ -11,14 +11,14 @@ Window | `window.c` | - `popupmenu_ans2()` <br> - `pmsg2()` | MapleBBS-itoc | - 
 
 其中本文主要介紹的是主選單與 Popupmenu 2 種使用相同資料結構的系統。
 
-## 主選單重繪指令
+## 主選單重繪命令
 |    | 值  | 出處 | 說明
  --- | --- | --- | ---
 `MENU_LOAD` | - `1` <br> - 移除 (DreamBBS v3) | MapleBBS 3 | DreamBBS v3 中以 `XR_PART_LOAD` 取代
 `MENU_DRAW` | - `2` <br> - 移除 (DreamBBS v3) | MapleBBS 3 | DreamBBS v3 中以 `XR_PART_HEAD \| XR_BODY` 取代
 `MENU_FILM` | - `4` <br> - 移除 (DreamBBS v3) | MapleBBS 3 | DreamBBS v3 中以 `XR_PART_NECK` 取代
 
-DreamBBS v3 改用 Xover 指令指定主選單畫面的重繪。
+DreamBBS v3 改用 Xover 命令指定主選單畫面的重繪。
 
 ## 主選單所呼叫函式之 return 值
 |       | 值      | 出處 | 說明
@@ -27,9 +27,9 @@ DreamBBS v3 改用 Xover 指令指定主選單畫面的重繪。
 `QUIT`  | - `0x666` <br> - 移除 (PttBBS current & MapleBBS-itoc) <br> - `XO_QUIT` (DreamBBS v3) | Pirate BBS | 強制退出選單
 `SKIN`  | - `0x999` <br> - `XO_SKIN + {XO_WRAP\|XO_SCRL\|XO_REL} + idx` (DreamBBS v3) | WindTop BBS 3.02 | 切換 skin (未實作)
 (其它)  | - `-1` - `'\a'` (`7`)  | ---  | 回到選單後重繪整個畫面 (Deprecated in DreamBBS v3)
-(其它)  | (其它)  | ---  | - 回到選單後重繪整個畫面 <br> - 當作 Xover 指令執行 (DreamBBS v3)
+(其它)  | (其它)  | ---  | - 回到選單後重繪整個畫面 <br> - 當作 Xover 命令執行 (DreamBBS v3)
 
-DreamBBS v3 的主選單改為接受 Xover 指令。
+DreamBBS v3 的主選單改為接受 Xover 命令。
 
 ## MapleBBS 3 / WindTop 3.02 主選單系統之資料結構
 (取自 DreamBBS v3 之早期版本)
@@ -89,7 +89,7 @@ Macro (主選單) | 值 (主選單)   | Macro (Popupmenu)  | 值 (Popupmenu) | �
 `M_MASK`       | `0x0000FFFF` |                    |                | `umode` | - `umode` 的有效範圍；範圍之外為 flags <br> - DreamBBS v3 新增
 無             |              | `POPUP_MASK`       | `0x000000FF`   | `level` | - `level` 的有效範圍；範圍之外為 flags <br> - DreamBBS v3 移除
 `PERM_MENU`    | `PERM_PURGE` (`0x00800000`) | 無  | ---            | `level` | - 非選項；退出本層選單後將跳到該選單 <br> - 代表主選單系統的 `MENU` 列表的最末項
-無             | ---          | `POPUP_DO_INSTANT` | `0x01000000`   | `level` | - 非選項；透過指令配對跳到該選單某選項時，立即執行對應功能 <br> - 在 `MENU` 列表的最末項出現時才有效
+無             | ---          | `POPUP_DO_INSTANT` | `0x01000000`   | `level` | - 非選項；透過命令配對跳到該選單某選項時，立即執行對應功能 <br> - 在 `MENU` 列表的最末項出現時才有效
 
 ### DreamBBS v3 主選單系統使用的特殊值
 DreamBBS v3 將主選單系統與 Popupmenu 系統的特殊值整合為一，並使用相同條件來表示 `MENU` 列表的結束。
@@ -104,7 +104,7 @@ Macro          | 值           | 使用對象 | 說明
 `M_QUIT`       | `0x01000000` | `umode` | - 選擇後退出本層選單 <br> - 對應原 `POPUP_QUIT`
 `M_XO`         | `0x02000000` | `umode` | - 選擇後執行 Xover 函式 <br> - 對應原 `POPUP_XO`
 `M_ARG`        | `0x04000000` | `umode` | - 執行函式時，以函式物件所帶的參數呼叫函式 <br> - DreamBBS v3 新增
-`M_DOINSTANT`  | `0x00010000` | `umode` | - 非選項；透過指令配對跳到該選單某選項時，立即執行對應功能 <br> - 表示 `MENU` 列表的最末項 <br> - 對應原 `POPUP_DO_INSTANT` <br> - 注意是對 `umode` 使用
+`M_DOINSTANT`  | `0x00010000` | `umode` | - 非選項；透過命令配對跳到該選單某選項時，立即執行對應功能 <br> - 表示 `MENU` 列表的最末項 <br> - 對應原 `POPUP_DO_INSTANT` <br> - 注意是對 `umode` 使用
 `M_MENUTITLE`  | `0x00020000` | `umode` | - 非選項；指定選單標題 <br> - 表示 `MENU` 列表的最末項 <br> - 對應原 `POPUP_MENUTITLE`
 `M_TAIL_MASK`  | `0x00FF0000` | `umode` | - 可代表 `MENU` 列表的最末項的 flags <br> - DreamBBS v3 新增
 `M_MASK`       | `0x0000FFFF` | `umode` | - `umode` 的有效範圍；範圍之外為 flags <br> - DreamBBS v3 新增
