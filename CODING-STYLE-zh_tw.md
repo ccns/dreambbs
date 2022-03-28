@@ -332,6 +332,54 @@ int y = get_value();
 int x = (int)floor(y / 32.0);
 ```
 
+- 值互相相反的邏輯表達式在臨近之處出現時，其中一個應使用另一個的否定的形式
+
+**Good:**
+```cpp
+if ((a || b) && c)
+    sth();
+if (!(a || b) && d)
+    sth_else();
+```
+**Bad:**
+```cpp
+if ((a || b) && c)
+    sth();
+if (!a && !b && d)
+    sth_else();
+```
+
+- 應利用以下的邏輯閘寫法簡化邏輯表達式
+    - 邏輯互斥或 (XOR)：`x != y`
+    - 邏輯反互斥或 (XNOR)：`x == y`
+    - 邏輯蘊含 (IMPLY)：`!x || y`
+- 不應使用位元運算子代替邏輯運算子
+    - 對邏輯表達式應使用 `&&`、`||`、或 `!=`，而非 `&`、`|`、或 `^`
+
+**Good:**
+```cpp
+if ((bool)x != (bool)y)
+```
+**Bad:**
+```cpp
+if ((bool)x ^ (bool)y)
+```
+
+- 進行邏輯 XOR/XNOR 運算時，應避免連續的奇數個 `!` 的使用
+
+**Good:**
+```cpp
+if (((bool)x == (bool)y) && ((bool)y == (bool)z))
+```
+**Ok:**
+```cpp
+if ((!!x == !!y) && (!!y == !!z))
+```
+**Bad:**
+```cpp
+if ((!x != !!y) && (!y == !!!z))
+```
+
 - 避免撰寫不必要的程式分支
     - 避免 control hazard
 
