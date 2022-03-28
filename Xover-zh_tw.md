@@ -430,7 +430,7 @@ Macro        | 值 (MapleBBS 2.36b) | 值 (DreamBBS v3.1) | 說明
 `RS_PREV`    | - `0x80` (MapleBBS 2.39) <br> - (移除) (MapleBBS 3.00a) | `RS_READ_PREV` | - 上一篇文章
 `RS_SEQUENT` | `0x40` (MapleBBS 3.00b) | `0x0040`       | - 有：游標上下篇文章
 `RS_MARKED`  | `0x80` (MapleBBS 3.00b) | `0x0080`       | - 有：搜尋有 mark 標記的文章
-`RS_UNREAD`  | `0x100` (MapleBBS 3.00b) | `0x0100`      | - 有：搜尋未讀的文章 <br> - 無 `RS_FIRST`：上一篇未讀 (MapleBBS 3.02)
+`RS_UNREAD`  | `0x100` (MapleBBS 3.00b) | `0x0100`      | - 有：搜尋未讀的文章 <br> - 有 `RS_FIRST`：最上篇未讀 <br> - 無 `RS_FIRST`：上一篇**已**讀 (MapleBBS 3.02)
 `RS_UNUSED9` | (無)                | `0x0200`           | (未使用)
 `RS_UNUSED10` | (無)               | `0x0400`           | (未使用)
 `RS_UNUSED11` | (無)               | `0x0800`           | (未使用)
