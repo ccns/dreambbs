@@ -128,6 +128,11 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 
 可檢查所產生的設定是否符合需求。
 
+產生出的設定檔為純文字形式，且會由 `cmake` 讀取作為預設設定。因此，若要在不同的專案原始碼目錄套用相同的 BBS 編譯設定，複製以下檔案至對應目錄即可：
+- `dreambbs.conf`
+- `make_export.conf`
+- `maple/make_export.conf`
+
 此外，預設會使用系統之預設編譯器，並以 C 語言模式編譯。如要指定編譯器或使用 C++ 語言模式編譯，則可參考以下命令調整上述 `cmake ..` 命令（所列選項僅為範例，請自行斟酌是否合適）：
 
     $ CC=gcc USE_CXX=1 cmake ..
