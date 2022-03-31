@@ -23,10 +23,10 @@
 # include __FILE__      /* Include the declarations */
 # define MAIN_C         /* Restore `MAIN_C` */
 # define VAR
-# define INI(x)         = x
+# define INI(...)       = __VA_ARGS__
 #else
 # define VAR            extern
-# define INI(x)
+# define INI(...)
 #endif
 
 /* ----------------------------------------------------- */
