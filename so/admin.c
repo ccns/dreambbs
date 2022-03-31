@@ -114,7 +114,7 @@ XO *xo)
     if (admin_edit(&admin, DOECHO))
     {
         rec_add(xo->dir, &admin, sizeof(ADMIN));
-        xo->pos = XO_TAIL /* xo->max */ ;
+        xo->pos[xo->cur_idx] = XO_TAIL /* xo->max */ ;
         xo_load(xo, sizeof(ADMIN));
     }
     return XO_HEAD;
@@ -202,7 +202,8 @@ Admin(void)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = admin_cb;
     xo->recsiz = sizeof(ADMIN);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xover(XZ_OTHER);
     free(xo);
 

@@ -290,7 +290,7 @@ int pos)
         op = GEM_READ | GEM_FILE;
 
         xmode = xo_getch(xo, pos, xmode);
-        pos = xo->pos;
+        pos = xo->pos[xo->cur_idx];
     }
     while (xmode == XO_BODY);
 
@@ -604,7 +604,8 @@ int level)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(folder);
     xo->cb = song_cb;
     xo->recsiz = sizeof(HDR);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xo->key = XZ_OTHER;
     xo->xyz = (void *) "點歌系統";
     str = "系統管理者";

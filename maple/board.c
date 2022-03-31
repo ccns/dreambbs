@@ -1068,8 +1068,11 @@ class_load(
         qsort(cbase - bnum, bnum, sizeof(short), mantime_cmp);
 
     xo->max = max;
-    if (xo->pos >= max)
-        xo->pos = xo->top = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+    {
+        if (xo->pos[i] >= max)
+            xo->pos[i] = xo->top = 0;
+    }
 
     return max;
 }
@@ -1398,7 +1401,7 @@ static int
 class_yank2(
     XO *xo)
 {
-    int pos = xo->pos;
+    int pos = xo->pos[xo->cur_idx];
     if (xo->key >= 0)
         return XO_NONE;
 
@@ -1408,7 +1411,7 @@ class_yank2(
         zmsg("找不到可讀的秘密/好友看板");
         class_flag2 ^= 0x01;
         class_load(xo);
-        xo->pos = pos;
+        xo->pos[xo->cur_idx] = pos;
         return XO_FOOT;
     }
     return XO_HEAD;
@@ -1418,7 +1421,7 @@ static int
 class_yank(
     XO *xo)
 {
-    int pos = xo->pos;
+    int pos = xo->pos[xo->cur_idx];
     if (xo->key >= 0)
         return XO_NONE;
 
@@ -1428,7 +1431,7 @@ class_yank(
         zmsg("找不到未被 zap 掉的看板");
         class_flag |= BFO_YANK;
         class_load(xo);
-        xo->pos = pos;
+        xo->pos[xo->cur_idx] = pos;
         return XO_FOOT;
     }
     return XO_HEAD;
@@ -1585,7 +1588,7 @@ XoAuthor(
                 if (!str_ncasecmp(tail->owner, author, len))
                 {
                     XO *xt = xo_get(folder);
-                    xt->pos = tail - head;
+                    xt->pos[xt->cur_idx] = tail - head;
                     xt->cb = post_cb;
                     xt->recsiz = sizeof(HDR);
                     chp[tag++] = chn;
@@ -1606,7 +1609,10 @@ XoAuthor(
 
     xo_a.cb = class_cb;
     xo_a.recsiz = sizeof(short);
-    xo_a.pos = xo_a.top = 0;
+    for (int i = 0; i < COUNTOF(xo_a.pos); ++i)
+        xo_a.pos[i] = 0;
+    xo_a.top = 0;
+    xo_a.cur_idx = 0;
     xo_a.max = tag;
     xo_a.key = 1;                       /* all boards */
     xo_a.xyz = chp;
@@ -1719,7 +1725,10 @@ XoClass(
                     class_load內部會 initial xo.max, 其他不確定 */
     xo.cb = class_cb;
     xo.recsiz = sizeof(short);
-    xo.pos = xo.top = 0;
+    for (int i = 0; i < COUNTOF(xo.pos); ++i)
+        xo.pos[i] = 0;
+    xo.cur_idx = 0;
+    xo.top = 0;
 
     xo.key = chn;
     xo.xyz = NULL;

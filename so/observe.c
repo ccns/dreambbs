@@ -204,7 +204,7 @@ XO *xo)
         if (observe_edit(&observe, DOECHO))
         {
             rec_add(xo->dir, &observe, sizeof(OBSERVE));
-            xo->pos = XO_TAIL;
+            xo->pos[xo->cur_idx] = XO_TAIL;
             xo_load(xo, sizeof(OBSERVE));
         }
     }
@@ -289,7 +289,8 @@ Observe_list(void)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = observe_cb;
     xo->recsiz = sizeof(OBSERVE);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xover(XZ_OTHER);
     observeshm_load(oshm);
     free(xo);

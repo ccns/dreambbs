@@ -848,7 +848,7 @@ pal_add(
         strcpy(pal.userid, acct.userid);
         pal.userno = userno;
         rec_add(xo->dir, &pal, sizeof(PAL));
-        xo->pos = XO_TAIL /* xo->max */ ;
+        xo->pos[xo->cur_idx] = XO_TAIL /* xo->max */ ;
         xo_load(xo, sizeof(PAL));
     }
 
@@ -992,7 +992,8 @@ t_pal(void)
     xz[XZ_PAL - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = pal_cb;
     xo->recsiz = sizeof(PAL);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xover(XZ_PAL);
     pal_cache();
     free(xo);
@@ -1442,7 +1443,8 @@ XoBM(
         xz[XZ_PAL - XO_ZONE].xo = xt = xo_new(fpath);
         xt->cb = pal_cb;
         xt->recsiz = sizeof(PAL);
-        xt->pos = 0;
+        for (int i = 0; i < COUNTOF(xt->pos); ++i)
+            xt->pos[i] = 0;
         xover(XZ_PAL);          /* Thor: 進xover前, pal_xo 一定要 ready */
 
         /* build userno image to speed up, maybe upgrade to shm */
@@ -3386,8 +3388,11 @@ ulist_init(
 
     xo->max = max = pp - ulist_pool;
 
-    if (xo->pos >= max)
-        xo->pos = xo->top = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+    {
+        if (xo->pos[i] >= max)
+            xo->pos[i] = xo->top = 0;
+    }
 
     if ((max > 1) && (pickup_way))
     {
@@ -3813,7 +3818,8 @@ ulist_su(
     xz[XZ_BMW - XO_ZONE].xo =  xo_new(path);
     xz[XZ_BMW - XO_ZONE].xo->cb = bmw_cb;
     xz[XZ_BMW - XO_ZONE].xo->recsiz = sizeof(BMW);
-    xz[XZ_BMW - XO_ZONE].xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xz[XZ_BMW - XO_ZONE].xo->pos); ++i)
+        xz[XZ_BMW - XO_ZONE].xo->pos[i] = 0;
     free(tmp);
     pal_cache();
     return XO_INIT;
@@ -4487,7 +4493,8 @@ talk_main(void)
     xz[XZ_BMW - XO_ZONE].xo = xo_new(fpath);
     xz[XZ_BMW - XO_ZONE].xo->cb = bmw_cb;
     xz[XZ_BMW - XO_ZONE].xo->recsiz = sizeof(BMW);
-    xz[XZ_BMW - XO_ZONE].xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xz[XZ_BMW - XO_ZONE].xo->pos); ++i)
+        xz[XZ_BMW - XO_ZONE].xo->pos[i] = 0;
 }
 
 int
@@ -4779,7 +4786,7 @@ banmsg_add(
         strcpy(banmsg.userid, acct.userid);
         banmsg.userno = userno;
         rec_add(xo->dir, &banmsg, sizeof(BANMSG));
-        xo->pos = XO_TAIL;
+        xo->pos[xo->cur_idx] = XO_TAIL;
         xo_load(xo, sizeof(BANMSG));
     }
 
@@ -4912,7 +4919,8 @@ t_banmsg(void)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = banmsg_cb;
     xo->recsiz = sizeof(BANMSG);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xover(XZ_OTHER);
     banmsg_cache();
     free(xo);

@@ -1220,7 +1220,7 @@ typedef struct {
     MENU *menu, *mtail;
     MENU **table;
     int table_size;
-    int pos_prev; /* previous cursor position */
+    int pos_prev; /* previous cursor positions */
     int max_prev; /* previous menu max */
 
     /* IID.20200107: Match input sequence. */
@@ -1229,6 +1229,7 @@ typedef struct {
     int *cmdlen;  /* Command matching length (no spaces) */
     bool keep_cmd;
     bool keyboard_cmd;
+    bool default_cmd;
     int *item_length;
     int max_item_length;
     int explan_len_prev;
@@ -1370,6 +1371,7 @@ domenu_redo_reload:
             else
                 cmd_res = mlevel ^ PERM_MENU;  /* default command */
             xyz->keyboard_cmd = false;
+            xyz->default_cmd = true;
         }
         utmp_mode(xyz->mtail->umode);
     }
@@ -1563,6 +1565,7 @@ domenu(
         .cmdlen = cmdlen,
         .keep_cmd = false,
         .keyboard_cmd = true,
+        .default_cmd = false,
         .item_length = item_length,
         .max_item_length = 0,
         .explan_len_prev = 0,
@@ -1571,7 +1574,8 @@ domenu(
 
     XO xo =
     {
-        .pos = 0,
+        .pos = {0},
+        .cur_idx = 0,
         .top = 0,
         .max = 0,
         .xyz = &xyz,
@@ -1604,6 +1608,7 @@ domenu(
 
         cmd = vkey();
         xyz.keyboard_cmd = true;
+        xyz.default_cmd = false;
 
         if (cmd == I_RESIZETERM)
             cmd = XO_HEAD;
@@ -1617,21 +1622,21 @@ void domenu_cursor_show(XO *xo)
     int ycc, xcc, ycx, xcx;
     if (xyz->height > 0 && xyz->width > 0)
     {
-        ycc = xyz->y + (xo->pos % xyz->height);
-        xcc = xyz->x + (xo->pos / xyz->height * xyz->width);
+        ycc = xyz->y + (xo->pos[xo->cur_idx] % xyz->height);
+        xcc = xyz->x + (xo->pos[xo->cur_idx] / xyz->height * xyz->width);
         ycx = xyz->y + (xyz->pos_prev % xyz->height);
         xcx = xyz->x + (xyz->pos_prev / xyz->height * xyz->width);
     }
     else
     {
-        ycc = xyz->y + xo->pos;
+        ycc = xyz->y + xo->pos[xo->cur_idx];
         xcc = xyz->x;
         ycx = xyz->y + xyz->pos_prev;
         xcx = xyz->x;
     }
-    if (xo->pos != xyz->pos_prev)
+    if (xo->pos[xo->cur_idx] != xyz->pos_prev)
     {
-        const char *explan = strchr(xyz->table[xo->pos]->desc, '\n');
+        const char *explan = strchr(xyz->table[xo->pos[xo->cur_idx]]->desc, '\n');
         if (!explan)
             explan = strchr(xyz->mtail->desc, '\n');
         if (explan)
@@ -1656,7 +1661,7 @@ void domenu_cursor_show(XO *xo)
             cursor_bar_clear(ycx, xcx, xyz->width);
         }
         cursor_bar_show(ycc, xcc, xyz->width);
-        xyz->pos_prev = xo->pos;
+        xyz->pos_prev = xo->pos[xo->cur_idx];
     }
     else
     {
@@ -1713,43 +1718,43 @@ domenu_exec(
             break;
 
         case KEY_PGUP:
-            if (xyz->height > 0 && xo->pos - xyz->height >= 0)
-                xo->pos -= xyz->height;
+            if (xyz->height > 0 && xo->pos[xo->cur_idx] - xyz->height >= 0)
+                xo->pos[xo->cur_idx] -= xyz->height;
             else
-                xo->pos = (xo->pos == 0) ? xo->max - 1 : 0;
+                xo->pos[xo->cur_idx] = (xo->pos[xo->cur_idx] == 0) ? xo->max - 1 : 0;
         break;
 
         case KEY_PGDN:
-            if (xyz->height > 0 && xo->pos + xyz->height < xo->max)
-                xo->pos += xyz->height;
+            if (xyz->height > 0 && xo->pos[xo->cur_idx] + xyz->height < xo->max)
+                xo->pos[xo->cur_idx] += xyz->height;
             else
-                xo->pos = (xo->pos == xo->max - 1) ? 0 : xo->max - 1;
+                xo->pos[xo->cur_idx] = (xo->pos[xo->cur_idx] == xo->max - 1) ? 0 : xo->max - 1;
         break;
 
         case KEY_DOWN:
-            if (++xo->pos < xo->max)
+            if (++xo->pos[xo->cur_idx] < xo->max)
                 break;
             // Else falls through
             //    to wrap around cursor
 
         case KEY_HOME:
-            xo->pos = 0;
+            xo->pos[xo->cur_idx] = 0;
             break;
 
         case KEY_UP:
-            if (--xo->pos >= 0)
+            if (--xo->pos[xo->cur_idx] >= 0)
                 break;
             // Else falls through
             //    to wrap around cursor
 
         case KEY_END:
-            xo->pos = xo->max - 1;
+            xo->pos[xo->cur_idx] = xo->max - 1;
             break;
 
         case KEY_RIGHT:
-            if (xyz->height > 0 && xo->pos + xyz->height < xo->max)
+            if (xyz->height > 0 && xo->pos[xo->cur_idx] + xyz->height < xo->max)
             {
-                xo->pos += xyz->height;
+                xo->pos[xo->cur_idx] += xyz->height;
                 break;
             }
             // Else falls through
@@ -1757,7 +1762,7 @@ domenu_exec(
 
         case '\n':
             {
-                MENU *const mptr = xyz->table[xo->pos];
+                MENU *const mptr = xyz->table[xo->pos[xo->cur_idx]];
                 unsigned int mmode = mptr->umode;
                 int res;
                 /* IID.2021-12-02: Helper union for proper handling of `M_ARG` */
@@ -1889,9 +1894,9 @@ domenu_exec(
             cmd = XO_HEAD;
             continue;
         case KEY_LEFT:
-            if (xyz->height > 0 && xo->pos - xyz->height >= 0)
+            if (xyz->height > 0 && xo->pos[xo->cur_idx] - xyz->height >= 0)
             {
-                xo->pos -= xyz->height;
+                xo->pos[xo->cur_idx] -= xyz->height;
                 break;
             }
             // Else falls through
@@ -1902,7 +1907,7 @@ domenu_exec(
         case 'e':
             if (xyz->menu != menu_main || xo_stack_level > 0)
             {
-                xyz->mtail->level = PERM_MENU + xyz->table[xo->pos]->desc[0];
+                xyz->mtail->level = PERM_MENU + xyz->table[xo->pos[xo->cur_idx]]->desc[0];
                 xyz->menu = xyz->mtail->item.menu;
                 cmd = XO_INIT;
                 continue;
@@ -1947,7 +1952,15 @@ domenu_exec(
                         if (xyz->cmdlen[i] > maxlen)
                         {
                             maxlen = xyz->cmdlen[i];
-                            xo->pos = i;
+                            if (xyz->default_cmd)
+                            {
+                                for (int j = 0; j < COUNTOF(xo->pos); ++j)
+                                    xo->pos[j] = i;
+                            }
+                            else
+                            {
+                                xo->pos[xo->cur_idx] = i;
+                            }
                         }
                     }
                 }

@@ -790,7 +790,8 @@ a_innbbs(void)
     xo->cb = innbbs_cb;
     xo->recsiz = recsiz;
     xo->xyz = &xyz;
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
 
     xyz.dirty = false;
 

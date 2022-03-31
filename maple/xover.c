@@ -45,6 +45,7 @@ xo_new(
 
     xo = (XO *) malloc(SIZEOF_FLEX(XO, len));
 
+    xo->cur_idx = 0;
     memcpy(xo->dir, path, len);
     xo->cb = NULL;
     xo->recsiz = 0;
@@ -70,7 +71,8 @@ xo_get(
     xo_root = xo;
     xo->xyz = NULL;
     xo->top = 0;                /* Initialize the list top position to a multiple of `XO_TALL` */
-    xo->pos = XO_TAIL;          /* 材Ω秈盢村夹程 */
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = XO_TAIL;   /* 材Ω秈盢村夹程 */
 
     return xo;
 }
@@ -121,19 +123,20 @@ xo_load(
         max = st.st_size / recsiz;
         if (max > 0)
         {
-            pos = xo->pos;
             top = xo->top;
-            if (pos <= 0)
+            for (int i = 0; i < COUNTOF(xo->pos); ++i)
             {
-                pos = top = 0;
+                const int posi = xo->pos[i];
+                if (posi <= 0)
+                    xo->pos[i] = top = 0;
+                else
+                    xo->pos[i] = BMIN(posi, max - 1);
             }
-            else
+            pos = xo->pos[xo->cur_idx];
             {
                 bool scrl_up = (pos < top);
-                pos = BMIN(pos, max - 1);
                 top = BMAX(top + ((pos - top + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
             }
-            xo->pos = pos;
             xo->top = top;
 
             xo_pool_size = st.st_size;
@@ -468,7 +471,7 @@ xo_tag(
     if (fimage == (char *) -1)
         return XO_NONE;
 
-    head = (const HDR *) xo_pool_base + xo->pos;
+    head = (const HDR *) xo_pool_base + xo->pos[xo->cur_idx];
     if (op == Ctrl('A') || op == Meta('A'))
     {
         token = head->owner;
@@ -573,7 +576,7 @@ xo_copy(
     if (tag)
         hdr = &xhdr;
     else
-        hdr = (HDR *) xo_pool_base + xo->pos;
+        hdr = (HDR *) xo_pool_base + xo->pos[xo->cur_idx];
 
     locus = 0;
     dir = xo->dir;
@@ -1356,9 +1359,9 @@ found:
         /* A thread article is found */
         int top = xo->top;
         bool scrl_up;
-        if (pos == xo->pos)
+        if (pos == xo->pos[xo->cur_idx])
             return match + XO_CUR; /* The matched article is under the cursor */
-        xo->pos = pos;
+        xo->pos[xo->cur_idx] = pos;
         scrl_up = (pos < top);
         top = BMAX(top + ((pos - top + scrl_up) / XO_TALL - scrl_up) * XO_TALL, 0);
         if (top != xo->top)
@@ -1568,7 +1571,7 @@ xover(
             if (cmd >= XO_CUR_MIN && cmd <= XO_CUR_MAX)
             {
                 /* IID.2021-03-05: Make the destination cursor position accessible with `xo->pos` to the `XO_CUR` callback */
-                const int pos = xo->pos;
+                const int pos = xo->pos[xo->cur_idx];
                 cmd = XO_MOVE + XO_REL + cmd - XO_CUR;  /* Relative move before redraw */
                 pos_prev = -1;  /* Suppress cursor clearing; redraw cursor */
                 cmd = xover_cursor(xo, zone, cmd, &pos_prev);
@@ -1622,7 +1625,7 @@ xover(
 
         if (xo->max > 0)                /* Thor:璝琌礚狥﹁碞ぃshow */
         {
-            int pos_disp = 3 + xo->pos - xo->top;
+            int pos_disp = 3 + xo->pos[xo->cur_idx] - xo->top;
             if (pos_disp != pos_prev)
             {
                 cursor_show(pos_disp, 0);
@@ -1672,7 +1675,7 @@ static int xover_cursor(XO *xo, int zone, int cmd, int *pos_prev)
         /* fix cursor's range */
 
         max = ((zone_op) ? XZ_COUNT : xo->max) - 1;
-        cur = (zone_op) ? zone : (scrl) ? xo->top : xo->pos;
+        cur = (zone_op) ? zone : (scrl) ? xo->top : xo->pos[xo->cur_idx];
 
         if (rel)
             pos += cur;
@@ -1714,10 +1717,10 @@ static int xover_cursor(XO *xo, int zone, int cmd, int *pos_prev)
             {
                 xo->top = pos;
                 max = xo->top;
-                xo->pos = TCLAMP(xo->pos, max, max + XO_TALL - 1);
+                xo->pos[xo->cur_idx] = TCLAMP(xo->pos[xo->cur_idx], max, max + XO_TALL - 1);
                 return XR_BODY | cmd; /* IID.20200103: Redraw list; do not reload. */
             }
-            xo->pos = pos;
+            xo->pos[xo->cur_idx] = pos;
             max = xo->top;
             if ((pos < max) || (pos >= max + XO_TALL))
             {
@@ -1739,7 +1742,7 @@ static int xover_cursor(XO *xo, int zone, int cmd, int *pos_prev)
 
 int xover_exec_cb(XO *xo, int cmd)
 {
-    return xover_exec_cb_pos(xo, cmd, (xo) ? xo->pos : 0);
+    return xover_exec_cb_pos(xo, cmd, (xo) ? xo->pos[xo->cur_idx] : 0);
 }
 
 int
@@ -1853,7 +1856,7 @@ xover_key(
     int zone,
     int cmd)
 {
-    const int pos = (xo) ? xo->pos : -1;
+    const int pos = (xo) ? xo->pos[xo->cur_idx] : -1;
     int wrap_flag;
 
     if (!xo)

@@ -140,7 +140,7 @@ XO *xo)
     BMW bmw;
     PAL pal;
     ALOHA aloha;
-    pos = xo->pos;
+    pos = xo->pos[xo->cur_idx];
     max = xo->max;
     if (vans("要引入好友名單嗎(y/N)？[N] ") == 'y')
     {
@@ -158,7 +158,8 @@ XO *xo)
                     usr_fpath(path, aloha.userid, FN_FRIEND_BENZ);
                     rec_add(path, &bmw, sizeof(BMW));
                     rec_add(xo->dir, &aloha, sizeof(ALOHA));
-                    xo->pos = XO_TAIL;
+                    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+                        xo->pos[i] = XO_TAIL;
                     max++;
                 }
             }
@@ -200,7 +201,7 @@ XO *xo)
         rec_add(path, &bmw, sizeof(BMW));
         rec_add(xo->dir, &aloha, sizeof(ALOHA));
     }
-    xo->pos = XO_TAIL /* xo->max */ ;
+    xo->pos[xo->cur_idx] = XO_TAIL /* xo->max */ ;
     xo_load(xo, sizeof(ALOHA));
 
     return XO_HEAD;
@@ -326,7 +327,8 @@ t_aloha(void)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = aloha_cb;
     xo->recsiz = sizeof(ALOHA);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xover(XZ_OTHER);
     free(xo);
 

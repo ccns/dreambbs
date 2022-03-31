@@ -123,7 +123,7 @@ XO *xo)
     if (viol_edit(&viol, DOECHO))
     {
         rec_add(xo->dir, &viol, sizeof(EMAIL));
-        xo->pos = XO_TAIL;
+        xo->pos[xo->cur_idx] = XO_TAIL;
         xo_load(xo, sizeof(EMAIL));
     }
     return XO_HEAD;
@@ -189,7 +189,7 @@ int pos)
         {
             if (str_casestr(viol.email, buf))
             {
-                xo->pos = pos;
+                xo->pos[xo->cur_idx] = pos;
                 close(fd);
                 return XO_INIT;
             }
@@ -247,7 +247,8 @@ Violate(void)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = viol_cb;
     xo->recsiz = sizeof(EMAIL);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xover(XZ_OTHER);
     free(xo);
 

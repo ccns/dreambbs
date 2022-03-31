@@ -181,7 +181,7 @@ XO *xo)
     else if (memorandum_edit(&memorandum, DOECHO))
     {
         rec_add(xo->dir, &memorandum, sizeof(MEMORANDUM));
-        xo->pos = XO_TAIL /* xo->max */ ;
+        xo->pos[xo->cur_idx] = XO_TAIL /* xo->max */ ;
         return XO_INIT;
     }
     return XO_HEAD;
@@ -262,7 +262,8 @@ Memorandum(void)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = memorandum_cb;
     xo->recsiz = sizeof(MEMORANDUM);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xover(XZ_OTHER);
     free(xo);
 

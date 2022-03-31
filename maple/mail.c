@@ -2630,7 +2630,8 @@ mbox_sysop(
         xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new("usr/s/sysop/.DIR");
         xx->cb = mbox_cb;
         xx->recsiz = sizeof(HDR);
-        xx->pos = 0;
+        for (int i = 0; i < COUNTOF(xx->pos); ++i)
+            xx->pos[i] = 0;
         xover(XZ_MBOX);
         free(xx);
 
@@ -2667,7 +2668,8 @@ mbox_other(
         xz[XZ_MBOX - XO_ZONE].xo = xx = xo_new(path);
         xx->cb = mbox_cb;
         xx->recsiz = sizeof(HDR);
-        xx->pos = 0;
+        for (int i = 0; i < COUNTOF(xx->pos); ++i)
+            xx->pos[i] = 0;
         xover(XZ_MBOX);
         free(xx);
 
@@ -2683,7 +2685,9 @@ mbox_other(
 void
 mbox_main(void)
 {
-    cmbox->pos = XO_TAIL;
+    for (int i = 0; i < COUNTOF(cmbox->pos); ++i)
+        cmbox->pos[i] = XO_TAIL;
+    cmbox->cur_idx = 0;
     usr_fpath(cmbox->dir, cuser.userid, fn_dir);
     xz[XZ_MBOX - XO_ZONE].xo = cmbox;
     cmbox->cb = mbox_cb;

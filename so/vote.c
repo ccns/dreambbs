@@ -1156,7 +1156,8 @@ XO *xo)
     xz[XZ_VOTE - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = vote_cb;
     xo->recsiz = sizeof(VCH);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xover(XZ_VOTE);
     free(xo);
 
@@ -1187,7 +1188,8 @@ SystemVote(void)
     xz[XZ_VOTE - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = vote_cb;
     xo->recsiz = sizeof(VCH);
-    xo->pos = 0;
+    for (int i = 0; i < COUNTOF(xo->pos); ++i)
+        xo->pos[i] = 0;
     xover(XZ_VOTE);
     free(xo);
 
