@@ -344,7 +344,6 @@
 #define QUOTE_CHAR1     '>'
 #define QUOTE_CHAR2     ':'
 
-
 //#define STR_CURSOR      "¡´"
 //#define STR_UNCUR       "  "  // Needs to be as wide as `STR_CURSOR`
 #define STR_CURSOR      ">"

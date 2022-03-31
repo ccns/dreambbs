@@ -101,6 +101,16 @@ VAR const char *const str_post2       INI(STR_POST2);
 VAR const char *const str_host        INI(MYHOSTNAME);
 VAR const char *const str_site        INI(BOARDNAME);
 
+/* Colors for cursors not on the current cursor position */
+VAR const char *const str_cur_color[1 << XO_NCUR] INI({
+    /* 0b00 */ "", /* 0b01 */ "\x1b[0;31m", /* 0b10 */ "\x1b[0;36m", /* 0b11 */ "\x1b[0;35m",
+});
+
+/* Colors for cursors on the current cursor position */
+VAR const char *const str_cur_color_curr[1 << XO_NCUR] INI({
+    /* 0b00 */ "", /* 0b01 */ "\x1b[0;1;31m", /* 0b10 */ "\x1b[0;1;36m", /* 0b11 */ "\x1b[0;1;35m",
+});
+
 #ifdef  HAVE_RECOMMEND
 VAR int recommend_time  INI(0);
 #endif

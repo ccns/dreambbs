@@ -1656,11 +1656,31 @@ void domenu_cursor_show(XO *xo)
             }
         }
 
-        if (xyz->pos_prev >= 0)
+        if (xyz->pos_prev == -1)
         {
-            cursor_bar_clear(ycx, xcx, xyz->width);
+            for (int i = 0; i < COUNTOF(xo->pos); ++i)
+            {
+                if (i == xo->cur_idx)
+                    continue;
+                int yi, xi;
+                if (xyz->height > 0 && xyz->width > 0)
+                {
+                    yi = xyz->y + (xo->pos[i] % xyz->height);
+                    xi = xyz->x + (xo->pos[i] / xyz->height * xyz->width);
+                }
+                else
+                {
+                    yi = xyz->y + xo->pos[i];
+                    xi = xyz->x;
+                }
+                cursor_show_mark(xo, yi, xi, xo->pos[i]);
+            }
         }
-        cursor_bar_show(ycc, xcc, xyz->width);
+        else
+        {
+            cursor_bar_clear(xo, ycx, xcx, xyz->width, xo->pos[xo->cur_idx], xyz->pos_prev);
+        }
+        cursor_bar_show(xo, ycc, xcc, xyz->width, xo->pos[xo->cur_idx]);
         xyz->pos_prev = xo->pos[xo->cur_idx];
     }
     else
