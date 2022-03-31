@@ -1215,7 +1215,7 @@ main_menu(void)
 /* IID.20200331: Restructure with xover commands */
 
 typedef struct {
-    int y_ref, x_ref, height_ref, width_ref;
+    int y_ref, x_ref, y_ref_prev, x_ref_prev, height_ref, width_ref;
     int y, x, height, width;
     MENU *menu, *mtail;
     MENU **table;
@@ -1232,6 +1232,7 @@ typedef struct {
     int *item_length;
     int max_item_length;
     int explan_len_prev;
+    bool is_moving;
 } DomenuXyz;
 
 GCC_PURE static int
@@ -1254,6 +1255,33 @@ domenu_getx(
         return xyz->x + (num / xyz->height * xyz->width);
     else
         return xyz->x;
+}
+
+GCC_NONNULLS
+GCC_PURE static int domenu_geth(int max, const DomenuXyz *xyz)
+{
+    return (xyz->height) ? xyz->height : max;
+}
+
+GCC_NONNULLS
+GCC_PURE static int domenu_getw(int max, const DomenuXyz *xyz)
+{
+    return ((xyz->width) ? xyz->width : xyz->max_item_length) * ((xyz->height) ? (max - 1)/xyz->height + 1 : 1);
+}
+
+/* returns whether the menu moved successfully */
+GCC_NONNULLS
+static bool domenu_move(XO *xo, int cmd)
+{
+    DomenuXyz *const xyz = (DomenuXyz *)xo->xyz;
+    const int h = domenu_geth(xo->max, xyz);
+    const int w = domenu_getw(xo->max, xyz);
+    const int y_ref = gety_bound_move(cmd, xyz->y_ref, 1, 1 + ((B_LINES_REF - h) >> 1), B_LINES_REF - h);
+    const int x_ref = getx_bound_move(cmd, xyz->x_ref, 0, (B_COLS_REF - w) >> 1, B_COLS_REF - w);
+    const bool diff = (y_ref != xyz->y_ref) || (x_ref != xyz->x_ref);
+    xyz->y_ref = y_ref;
+    xyz->x_ref = x_ref;
+    return diff;
 }
 
 static int
@@ -1347,11 +1375,19 @@ domenu_redo_reload:
     }
     if (cmd & XR_PART_HEAD)
     {
+        /* Keep menu in bound after resizing */
+        domenu_move(xo, cmd);
+
         /* Resize */
         xyz->y = gety_ref(xyz->y_ref);
         xyz->x = getx_ref(xyz->x_ref);
         xyz->height = gety_ref(xyz->height_ref);
         xyz->width = getx_ref(xyz->width_ref);
+
+        /* Reset the previous state */
+        xyz->y_ref_prev = xyz->y_ref;
+        xyz->x_ref_prev = xyz->x_ref;
+        xyz->max_prev = xo->max;
 
         clear();
         vs_head(xyz->mtail->desc, NULL);
@@ -1364,8 +1400,17 @@ domenu_redo_reload:
     }
     if (cmd & XR_PART_BODY)
     {
-        const int h = (xyz->height) ? xyz->height : xo->max;
+        const int y_prev = gety_ref(xyz->y_ref_prev);
+        const int x_prev = getx_ref(xyz->x_ref_prev);
+        const int h_prev = domenu_geth(xyz->max_prev, xyz);
+        const int h = domenu_geth(xo->max, xyz);
 
+        /* Clear the screen area for the menu item first */
+        for (int i = 0; i < h_prev; ++i)
+        {
+            move_ansi(y_prev + i, BMAX(BMIN(x_prev, xyz->x) - 1, 0));
+            clrtoeol();
+        }
         if (xyz->y + (h - 1) >= b_lines - 1 && xyz->explan_len_prev > b_cols - xyz->x)
         {
             /* Clean the previous explanation if the explanation is overlapped in the middle */
@@ -1374,17 +1419,28 @@ domenu_redo_reload:
             xyz->explan_len_prev = 0;
         }
 
+        /* Then draw the menu item */
         xyz->max_item_length = 0;
-        for (int i = 0; i <= xyz->max_prev; i++)
+        for (int i = 0; i < xo->max; i++)
         {
             move_ansi(domenu_gety(i, xyz), domenu_getx(i, xyz) + 2);
-            if (i < xo->max)
-                domenu_item(xo, i);
-            else
-                clrtoeol();
+            domenu_item(xo, i);
         }
+        xyz->y_ref_prev = xyz->y_ref;
+        xyz->x_ref_prev = xyz->x_ref;
         xyz->pos_prev = -1;
         xyz->max_prev = xo->max;
+
+        /* Ensure that all items are inside the screen; otherwise move the screen and then redraw again */
+        const int w = domenu_getw(xo->max, xyz);
+        if (xyz->x > 1 && xyz->x + w > b_cols)
+        {
+            xyz->x_ref -= xyz->x + w - b_cols;
+            /* Clean straying text caused by auto line wrapping */
+            xyz->x_ref_prev = 0;
+            xyz->max_prev = xo->max + 1;
+            cmd_res |= XR_HEAD;
+        }
     }
     if (cmd & XR_PART_FOOT)
     {
@@ -1427,6 +1483,56 @@ KeyFuncList domenu_cb =
 
 static int domenu_exec(XO *xo, int cmd);
 
+GCC_PURE int
+gety_bound_move(
+    int cmd, int y_ref, int min_ref, int mid_ref, int max_ref)
+{
+    int y = gety_ref(y_ref);
+    int min = gety_ref(min_ref);
+    int mid = gety_ref(mid_ref);
+    int max = gety_ref(max_ref);
+
+    switch (cmd)
+    {
+    case KEY_PGUP:
+    case KEY_PGDN:
+        if ((cmd == KEY_PGUP) ? y > mid : y < mid)
+            return mid_ref;
+        else
+            return (cmd == KEY_PGUP) ? min_ref : max_ref;
+    case KEY_UP:
+    case KEY_DOWN:
+        return y_ref + TCLAMP(y + ((cmd == KEY_DOWN) ? 1 : -1), min, BMAX(min, max)) - y;
+    default:;
+        return y_ref + TCLAMP(y, min, BMAX(min, max)) - y;
+    }
+}
+
+GCC_PURE int
+getx_bound_move(
+    int cmd, int x_ref, int min_ref, int mid_ref, int max_ref)
+{
+    const int x = getx_ref(x_ref);
+    const int min = getx_ref(min_ref);
+    const int mid = getx_ref(mid_ref);
+    const int max = getx_ref(max_ref);
+
+    switch (cmd)
+    {
+    case KEY_HOME:
+    case KEY_END:
+        if ((cmd == KEY_HOME) ? x > mid : x < mid)
+            return mid_ref;
+        else
+            return (cmd == KEY_HOME) ? min_ref : max_ref;
+    case KEY_LEFT:
+    case KEY_RIGHT:
+        return x_ref + TCLAMP(x + ((cmd == KEY_RIGHT) ? 1 : -1), min, BMAX(min, max)) - x;
+    default:;
+        return x_ref + TCLAMP(x, min, BMAX(min, max)) - x;
+    }
+}
+
 void
 domenu(
     MENU *menu, int y_ref, int x_ref, int height_ref, int width_ref, int cmdcur_max)
@@ -1442,6 +1548,8 @@ domenu(
     {
         .y_ref = y_ref,
         .x_ref = x_ref,
+        .y_ref_prev = y_ref,
+        .x_ref_prev = x_ref,
         .height_ref = height_ref,
         .width_ref = width_ref,
         .menu = menu,
@@ -1458,6 +1566,7 @@ domenu(
         .item_length = item_length,
         .max_item_length = 0,
         .explan_len_prev = 0,
+        .is_moving = false,
     };
 
     XO xo =
@@ -1477,6 +1586,21 @@ domenu(
         cmd = domenu_exec(&xo, cmd);
         if ((cmd & ~XO_MOVE_MASK) == (XZ_ZONE | XZ_QUIT))
             break;
+
+        /* Redraw on movement */
+        if (xyz.y_ref != xyz.y_ref_prev || xyz.x_ref != xyz.x_ref_prev)
+        {
+            /* Update the current state */
+            xyz.x = getx_ref(xyz.x_ref);
+            xyz.y = gety_ref(xyz.y_ref);
+
+            /* Set up redraw flags */
+            cmd |= XR_BODY;
+            if (MENU_NOMOVIE_POS(xyz.y, xyz.x) != MENU_NOMOVIE_POS(gety_ref(xyz.y_ref_prev), getx_ref(xyz.x_ref_prev)))
+                cmd |= XR_PART_HEAD | XR_PART_NECK;
+
+            continue;
+        }
 
         cmd = vkey();
         xyz.keyboard_cmd = true;
@@ -1512,8 +1636,8 @@ void domenu_cursor_show(XO *xo)
             explan = strchr(xyz->mtail->desc, '\n');
         if (explan)
         {
-            const int h = (xyz->height) ? xyz->height : xo->max;
-            const int w = ((xyz->width) ? xyz->width : xyz->max_item_length) * ((xyz->height) ? (xo->max - 1)/xyz->height + 1 : 1);
+            const int h = domenu_geth(xo->max, xyz);
+            const int w = domenu_getw(xo->max, xyz);
             int explan_len = strip_ansi_len(explan + 1);
 
             /* Ensure there is room to display the explanation */
@@ -1562,9 +1686,32 @@ domenu_exec(
 
         cmd = domenu_redo(xo, cmd);
 
+        /* Menu moving hotkeys */
+        switch ((xyz->is_moving) ? cmd : KEY_NONE)
+        {
+        case KEY_PGUP:
+        case KEY_PGDN:
+        case KEY_UP:
+        case KEY_DOWN:
+        case KEY_HOME:
+        case KEY_END:
+        case KEY_LEFT:
+        case KEY_RIGHT:
+            if (domenu_move(xo, cmd))
+                goto key_handle_end;
+            xyz->is_moving = false; // exit the moving mode when the menu failed to move
+            break;
+        default:
+            ;
+        }
+
         /* Invoke hotkey functions for keyboard input only */
         switch ((xyz->keyboard_cmd) ? cmd : KEY_NONE)
         {
+        case KEY_TAB:
+            xyz->is_moving = !xyz->is_moving;
+            break;
+
         case KEY_PGUP:
             if (xyz->height > 0 && xo->pos - xyz->height >= 0)
                 xo->pos -= xyz->height;
@@ -1816,6 +1963,7 @@ domenu_exec(
                 ; /* Do nothing */
             }
         }
+key_handle_end:
 
         cmd = XO_NONE;
         domenu_cursor_show(xo);

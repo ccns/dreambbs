@@ -161,6 +161,8 @@ const char *check_info(const void *func, const char *input);
 void main_menu(void);
 void domenu(MENU *menu, int y_ref, int x_ref, int height_ref, int width_ref, int cmdcur_max);
 void domenu_cursor_show(XO *xo);
+GCC_PURE int gety_bound_move(int cmd, int y_ref, int min_ref, int mid_ref, int max_ref);
+GCC_PURE int getx_bound_move(int cmd, int x_ref, int min_ref, int mid_ref, int max_ref);
 /* more.c */
 char *mgets(int fd);
 void *mread(int fd, int len);
