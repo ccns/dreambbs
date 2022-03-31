@@ -1737,6 +1737,11 @@ domenu_exec(
             xyz->is_moving = !xyz->is_moving;
             break;
 
+        case ' ':
+            xyz->is_moving = false;
+            xo->cur_idx = (xo->cur_idx + 1) % XO_NCUR;
+            break;
+
         case KEY_PGUP:
             if (xyz->height > 0 && xo->pos[xo->cur_idx] - xyz->height >= 0)
                 xo->pos[xo->cur_idx] -= xyz->height;

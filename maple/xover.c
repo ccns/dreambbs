@@ -1963,6 +1963,14 @@ xover_key(
     {
         return cmd;
     }
+    if (cmd == ' ')
+    {
+        xo->cur_idx = (xo->cur_idx + 1) % XO_NCUR;
+        /* Re-placing the cursor to redraw the cursors */
+        const int pos_next = xo->pos[xo->cur_idx];
+        xo->pos[xo->cur_idx] = pos;
+        return XO_MOVE + pos_next;
+    }
     if (cmd == KEY_UP || cmd == 'p' || cmd == 'k')
     {
         return XO_MOVE + wrap_flag + XO_REL - 1;
@@ -1971,7 +1979,7 @@ xover_key(
     {
         return XO_MOVE + wrap_flag + XO_REL + 1;
     }
-    if (cmd == ' ' || cmd == KEY_PGDN || cmd == 'N'  /*|| cmd == Ctrl('F') */)
+    if (cmd == KEY_PGDN || cmd == 'N'  /*|| cmd == Ctrl('F') */)
     {                                   /* lkchu.990428: 給「暫時更改來源」用 */
         if (pos == xo->max - 1)
         {
