@@ -1236,6 +1236,7 @@ typedef struct {
     int max_item_length;
     int explan_len_prev;
     bool is_moving;
+    bool is_moving_prev;
 } DomenuXyz;
 
 GCC_PURE static int
@@ -1596,6 +1597,7 @@ domenu(
         .max_item_length = 0,
         .explan_len_prev = 0,
         .is_moving = false,
+        .is_moving_prev = false,
     };
 
     XO xo =
@@ -1660,7 +1662,7 @@ void domenu_cursor_show(XO *xo)
         ycx = xyz->y + xyz->pos_prev;
         xcx = xyz->x;
     }
-    if (xo->pos[xo->cur_idx] != xyz->pos_prev)
+    if (xo->pos[xo->cur_idx] != xyz->pos_prev || xyz->is_moving != xyz->is_moving_prev)
     {
         domenu_redo(xo, XR_PART_KNEE + XO_NONE);
         if (xyz->pos_prev == -1)
@@ -1687,8 +1689,17 @@ void domenu_cursor_show(XO *xo)
         {
             cursor_bar_clear(xo, ycx, xcx, xyz->width, xo->pos[xo->cur_idx], xyz->pos_prev);
         }
-        cursor_bar_show(xo, ycc, xcc, xyz->width, xo->pos[xo->cur_idx]);
+        const int cur_idx = xo->cur_idx;
+        if (xyz->is_moving) // HACK: disable highlighting
+        {
+            xo->cur_idx = XO_NCUR; // an invalid index
+            cursor_show_mark(xo, ycc, xcc, xo->pos[cur_idx]);
+            xo->cur_idx = cur_idx;
+        }
+        else
+            cursor_bar_show(xo, ycc, xcc, xyz->width, xo->pos[cur_idx]);
         xyz->pos_prev = xo->pos[xo->cur_idx];
+        xyz->is_moving_prev = xyz->is_moving;
     }
     else
     {
