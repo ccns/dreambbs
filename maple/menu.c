@@ -1421,6 +1421,7 @@ domenu_redo_reload:
             move_ansi(b_lines - 1, b_cols - xyz->explan_len_prev);
             clrtoeol();
             xyz->explan_len_prev = 0;
+            cmd |= XR_PART_KNEE;
         }
 
         /* Then draw the menu item */
@@ -1445,6 +1446,29 @@ domenu_redo_reload:
             xyz->max_prev = xo->max + 1;
             cmd_res |= XR_HEAD;
         }
+    }
+    if (cmd & XR_PART_KNEE)
+    {
+        const char *explan = strchr(xyz->table[xo->pos[xo->cur_idx]]->desc, '\n');
+        if (!explan)
+            explan = strchr(xyz->mtail->desc, '\n');
+        if (explan)
+        {
+            const int h = domenu_geth(xo->max, xyz);
+            const int w = domenu_getw(xo->max, xyz);
+            int explan_len = strip_ansi_len(explan + 1);
+
+            /* Ensure there is room to display the explanation */
+            if (xyz->y + (h - 1) < b_lines - 1 || b_cols - (xyz->x + w) > explan_len)
+            {
+                move_ansi(b_lines - 1, b_cols - xyz->explan_len_prev);
+                clrtoeol();
+                move_ansi(b_lines - 1, b_cols - explan_len);
+                outs(explan + 1);
+                xyz->explan_len_prev = explan_len;
+            }
+        }
+
     }
     if (cmd & XR_PART_FOOT)
     {
@@ -1638,26 +1662,7 @@ void domenu_cursor_show(XO *xo)
     }
     if (xo->pos[xo->cur_idx] != xyz->pos_prev)
     {
-        const char *explan = strchr(xyz->table[xo->pos[xo->cur_idx]]->desc, '\n');
-        if (!explan)
-            explan = strchr(xyz->mtail->desc, '\n');
-        if (explan)
-        {
-            const int h = domenu_geth(xo->max, xyz);
-            const int w = domenu_getw(xo->max, xyz);
-            int explan_len = strip_ansi_len(explan + 1);
-
-            /* Ensure there is room to display the explanation */
-            if (xyz->y + (h - 1) < b_lines - 1 || b_cols - (xyz->x + w) > explan_len)
-            {
-                move_ansi(b_lines - 1, b_cols - xyz->explan_len_prev);
-                clrtoeol();
-                move_ansi(b_lines - 1, b_cols - explan_len);
-                outs(explan + 1);
-                xyz->explan_len_prev = explan_len;
-            }
-        }
-
+        domenu_redo(xo, XR_PART_KNEE + XO_NONE);
         if (xyz->pos_prev == -1)
         {
             for (int i = 0; i < COUNTOF(xo->pos); ++i)
