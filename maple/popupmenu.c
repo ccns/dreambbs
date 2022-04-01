@@ -335,6 +335,30 @@ draw_menu(const MENU *const pmenu[20], int num, const char *title, int y, int x,
     return 0;
 }
 
+GCC_CONSTEXPR static int popup_geth(int num)
+{
+    return num + 2;
+}
+
+GCC_CONSTEXPR static int popup_getw(void)
+{
+    return 39;
+}
+
+/* returns whether the menu moved successfully */
+GCC_NONNULLS
+static bool popup_move(int cmd, int *py_ref, int *px_ref, int num)
+{
+    const int h = popup_geth(num);
+    const int w = popup_getw();
+    const int y_ref = gety_bound_move(cmd, *py_ref, 3, 3 + ((B_LINES_REF - h) >> 1), B_LINES_REF - h);
+    const int x_ref = getx_bound_move(cmd, *px_ref, 0, (B_COLS_REF - w) >> 1, B_COLS_REF - w);
+    const bool diff = (y_ref != *py_ref) || (x_ref != *px_ref);
+    *py_ref = y_ref;
+    *px_ref = x_ref;
+    return diff;
+}
+
 /* IID.20200204: Use screen size referencing coordinate */
 static int
 do_menu(
@@ -350,6 +374,7 @@ do_menu(
     const char *title;
     MENU *table_title;
     screen_backup_t old_screen;
+    bool is_moving = false;
 
     memset(table, 0, sizeof(table));
     /* verit. menu ≈v≠≠¿À¨d */
@@ -437,12 +462,40 @@ do_menu_redraw:
                 scr_restore_keep(&old_screen);
                 popup_old_screen = &old_screen;
             }
+
+            /* Keep menu in bound after resizing */
+            popup_move(c, &y_ref, &x_ref, num);
             goto do_menu_redraw;
         }
 
         old_cur = cur;
+
+        switch (is_moving ? c : KEY_NONE)
+        {
+            case KEY_PGUP:
+            case KEY_PGDN:
+            case KEY_UP:
+            case KEY_DOWN:
+            case KEY_HOME:
+            case KEY_END:
+            case KEY_LEFT:
+            case KEY_RIGHT:
+                if (popup_move(c, &y_ref, &x_ref, num))
+                {
+                    scr_restore_keep(&old_screen);
+                    goto do_menu_redraw;
+                }
+                is_moving = false;
+                break;
+            default:
+                ;
+        }
+
         switch (c)
         {
+            case KEY_TAB:
+                is_moving = !is_moving;
+                break;
             case KEY_LEFT:
             case KEY_ESC:
             case Meta(KEY_ESC):
@@ -571,6 +624,7 @@ popupmenu_ans(const char *const desc[], const char *title, int y_ref, int x_ref)
     char t[64];
     char hotkey;
     screen_backup_t old_screen;
+    bool is_moving = false;
 
     scr_dump(&old_screen);
     hotkey = desc[0][0];
@@ -599,17 +653,45 @@ popupmenu_ans_redraw:
     while (1)
     {
         c = vkey();
-        if (c == I_RESIZETERM)
-        {
-            /* Screen size changed and redraw is needed */
-            /* clear */
-            scr_restore_keep(&old_screen);
-            goto popupmenu_ans_redraw;
-        }
-
         old_cur = cur;
+
         switch (c)
         {
+            case KEY_PGUP:
+            case KEY_PGDN:
+            case KEY_UP:
+            case KEY_DOWN:
+            case KEY_HOME:
+            case KEY_END:
+            case KEY_LEFT:
+            case KEY_RIGHT:
+                if (is_moving)
+                {
+                    if (popup_move(c, &y_ref, &x_ref, num))
+                    {
+                        c = I_RESIZETERM;
+                        scr_restore_keep(&old_screen);
+                        goto popupmenu_ans_redraw;
+                    }
+                    is_moving = false;
+                }
+                break;
+            case I_RESIZETERM:
+                /* Screen size changed and redraw is needed */
+                /* clear */
+                scr_restore_keep(&old_screen);
+                /* Keep menu in bound after resizing */
+                popup_move(c, &y_ref, &x_ref, num);
+                goto popupmenu_ans_redraw;
+            default:
+                ;
+        }
+
+        switch (c)
+        {
+            case KEY_TAB:
+                is_moving = !is_moving;
+                break;
             case KEY_LEFT:
             case KEY_ESC:
             case Meta(KEY_ESC):

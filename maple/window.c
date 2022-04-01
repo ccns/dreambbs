@@ -313,6 +313,29 @@ find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
     return -1;
 }
 
+GCC_CONSTEXPR static int popup2_geth(int max)
+{
+    return max + 3;
+}
+
+GCC_CONSTEXPR static int popup2_getw(void)
+{
+    return 38;
+}
+
+/* returns whether the menu moved successfully */
+GCC_NONNULLS
+static int popup2_move(int cmd, int *py_ref, int *px_ref, int max)
+{
+    const int h = popup2_geth(max);
+    const int w = popup2_getw();
+    const int y_ref = gety_bound_move(cmd, *py_ref, 0, (B_LINES_REF - h) >> 1, B_LINES_REF - h);
+    const int x_ref = getx_bound_move(cmd, *px_ref, 0, (B_COLS_REF - w) >> 1, B_COLS_REF - w);
+    const bool diff = (y_ref != *py_ref) || (x_ref != *px_ref);
+    *py_ref = y_ref;
+    *px_ref = x_ref;
+    return diff;
+}
 
 /*------------------------------------------------------ */
 /* 詢問選項，可用來取代 vans()                           */
@@ -335,6 +358,7 @@ popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref
     int cur, old_cur, max;
     int ch = KEY_NONE;
     char hotkey;
+    bool is_moving = false;
 
     screen_backup_t old_screen;
     screen_backup_t old_screen_dark;
@@ -373,16 +397,43 @@ popupmenu_ans2_redraw:
         }
 
         ch = vkey();
-        if (ch == I_RESIZETERM)
+        switch (ch)
         {
+        case KEY_PGUP:
+        case KEY_PGDN:
+        case KEY_UP:
+        case KEY_DOWN:
+        case KEY_HOME:
+        case KEY_END:
+        case KEY_LEFT:
+        case KEY_RIGHT:
+            if (is_moving)
+            {
+                if (popup2_move(ch, &y_ref, &x_ref, max))
+                {
+                    ch = I_RESIZETERM;
+                    scr_restore_keep(&old_screen_dark);
+                    goto popupmenu_ans2_redraw;
+                }
+                is_moving = false;
+            }
+            break;
+        case I_RESIZETERM:
             /* Screen size changed and redraw is needed */
             /* clear */
             scr_restore_keep(&old_screen_dark);
+            /* Keep menu in bound after resizing */
+            popup2_move(ch, &y_ref, &x_ref, max);
             goto popupmenu_ans2_redraw;
+        default:
+            ;
         }
 
         switch (ch)
         {
+        case KEY_TAB:
+            is_moving = !is_moving;
+            break;
         case KEY_LEFT:
         case KEY_ESC:
         case Meta(KEY_ESC):
