@@ -1523,13 +1523,20 @@ vs_bar(
 }
 
 GCC_NONNULLS
+unsigned int cursor_get_state(int cur[XO_NCUR], int pos)
+{
+    unsigned int res = 0;
+    for (int i = 0; i < XO_NCUR; ++i)
+        if (cur[i] == pos)
+            res |= 1U << i;
+    return res;
+}
+
+GCC_NONNULLS
 void cursor_show_mark(XO *xo, int row, int column, int pos)
 {
-    unsigned int cur_st = 0;
+    const unsigned int cur_st = cursor_get_state(xo->pos, pos);
     move(row, column);
-    for (int i = 0; i < XO_NCUR; ++i)
-        if (xo->pos[i] == pos)
-            cur_st |= 1U << i;
     outs((cur_st & (1U << xo->cur_idx)) ? str_cur_color_curr[cur_st] : str_cur_color[cur_st]);
     outs(STR_CURSOR);
     outs("\x1b[m");
@@ -1539,11 +1546,8 @@ void cursor_show_mark(XO *xo, int row, int column, int pos)
 GCC_NONNULLS
 void cursor_clear_mark(XO *xo, int row, int column, int pos_prev)
 {
-    unsigned int cur_st = 0;
+    const unsigned int cur_st = cursor_get_state(xo->pos, pos_prev);
     move(row, column);
-    for (int i = 0; i < XO_NCUR; ++i)
-        if (xo->pos[i] == pos_prev)
-            cur_st |= 1U << i;
     if (cur_st)
     {
         outs(str_cur_color[cur_st]);

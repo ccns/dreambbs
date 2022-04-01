@@ -278,6 +278,7 @@ void vmsg_body(const char *msg);
 int vmsg(const char *msg);
 void zmsg(const char *msg);
 void vs_bar(const char *title);
+GCC_NONNULLS unsigned int cursor_get_state(int cur[XO_NCUR], int pos);
 GCC_NONNULLS void cursor_show_mark(XO *xo, int row, int column, int pos);
 GCC_NONNULLS void cursor_clear_mark(XO *xo, int row, int column, int pos_prev);
 GCC_NONNULLS void cursor_bar_show(XO *xo, int row, int column, int width, int pos);
