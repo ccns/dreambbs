@@ -231,6 +231,21 @@ draw_line(              /* 在 (y, x) 的位置塞入 msg，左右仍要印出原來的彩色文字 
 /* 選項繪製                                              */
 /* ----------------------------------------------------- */
 
+GCC_CONSTEXPR
+static int get_dec_attr(bool is_moving)
+{
+    return is_moving ? 7 : 44;
+}
+
+static const char *get_dec_color(int dec_attr)
+{
+    static char dec_color[32];
+    if (dec_attr >= 90)
+        sprintf(dec_color, "\x1b[1;%um", 30 + (dec_attr - 90));
+    else
+        sprintf(dec_color, "\x1b[%um", dec_attr);
+    return dec_color;
+}
 
 static void
 draw_item(
@@ -256,14 +271,15 @@ draw_menu(
     const char *title,
     const char *const desc[],
     char hotkey,
-    int *cur)   /* 回傳預設值所在位置 */
+    int *cur,   /* 回傳預設值所在位置 */
+    int dec_attr)
 {
     int i, meet;
     char buf[128];
 
     draw_line(y++, x, " ╭────────────────╮ ");
 
-    sprintf(buf, " │" COLOR4 "  %-28s  \x1b[m│ ", title);
+    sprintf(buf, " │\x1b[1m%s  %-28s  \x1b[m│ ", get_dec_color(dec_attr), title);
     draw_line(y++, x, buf);
 
     draw_line(y++, x, " ├────────────────┤ ");
@@ -378,7 +394,7 @@ popupmenu_ans2_redraw:
     x = getx_ref(x_ref);
 
     /* 畫出整個選單 */
-    max = draw_menu(y, x, title, desc, hotkey, (ch != I_RESIZETERM) ? &cur : &old_cur);
+    max = draw_menu(y, x, title, desc, hotkey, (ch != I_RESIZETERM) ? &cur : &old_cur, get_dec_attr(is_moving));
     y += 2;
 
     /* 一進入，游標停在預設值 */
@@ -416,6 +432,7 @@ popupmenu_ans2_redraw:
                     goto popupmenu_ans2_redraw;
                 }
                 is_moving = false;
+                draw_menu(y - 2, x, title, desc, hotkey, &old_cur, get_dec_attr(is_moving));
             }
             break;
         case I_RESIZETERM:
@@ -433,7 +450,8 @@ popupmenu_ans2_redraw:
         {
         case KEY_TAB:
             is_moving = !is_moving;
-            break;
+            ch = I_RESIZETERM;
+            goto popupmenu_ans2_redraw;
         case KEY_LEFT:
         case KEY_ESC:
         case Meta(KEY_ESC):
