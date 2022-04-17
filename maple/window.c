@@ -265,13 +265,13 @@ draw_item(
 }
 
 
-static int      /* 回傳總共有幾個選項 */
+static void
 draw_menu(
     int y, int x,
     const char *title,
     const char *const desc[],
     char hotkey,
-    int *cur,   /* 回傳預設值所在位置 */
+    int cur,
     int dec_attr)
 {
     int i, meet;
@@ -286,18 +286,14 @@ draw_menu(
 
     for (i = 1; desc[i]; i++)
     {
-        meet = (desc[i][0] == hotkey);
+        meet = (i == cur);
         draw_item(y++, x, desc[i], hotkey, meet);
-        if (meet)
-            *cur = i;
     }
 
     draw_line(y, x, " ╰────────────────╯ ");
 
     /* 避免在偵測左右鍵全形下，按左鍵會跳離二層選單的問題 */
     move(b_lines, 0);
-
-    return i - 1;
 }
 
 
@@ -318,6 +314,8 @@ find_cur(               /* 找 ch 這個按鍵是第幾個選項 */
 
     for (i = 1; i <= max; i++)
     {
+        if (!desc[i])
+            return i;
         cc = desc[i][0];
         if (cc >= 'A' && cc <= 'Z')
             cc |= 0x20; /* 換小寫 */
@@ -371,7 +369,7 @@ int             /* 傳回小寫字母或數字 */
 popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref)
 {
     int y, x;
-    int cur, old_cur, max;
+    int cur, old_cur, max, dflt;
     int ch = KEY_NONE;
     char hotkey;
     bool is_moving = false;
@@ -388,13 +386,17 @@ popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref
     scr_dump(&old_screen_dark);
 
     hotkey = desc[0][0];
+    max = find_cur('\0', INT_MAX, desc) - 1;
+    dflt = find_cur(hotkey, max, desc);
+
+    cur = dflt;
 
 popupmenu_ans2_redraw:
     y = gety_ref(y_ref);
     x = getx_ref(x_ref);
 
     /* 畫出整個選單 */
-    max = draw_menu(y, x, title, desc, hotkey, (ch != I_RESIZETERM) ? &cur : &old_cur, get_dec_attr(is_moving));
+    draw_menu(y, x, title, desc, hotkey, cur, get_dec_attr(is_moving));
     y += 2;
 
     /* 一進入，游標停在預設值 */
@@ -432,7 +434,7 @@ popupmenu_ans2_redraw:
                     goto popupmenu_ans2_redraw;
                 }
                 is_moving = false;
-                draw_menu(y - 2, x, title, desc, hotkey, &old_cur, get_dec_attr(is_moving));
+                draw_menu(y - 2, x, title, desc, hotkey, cur, get_dec_attr(is_moving));
             }
             break;
         case I_RESIZETERM:
