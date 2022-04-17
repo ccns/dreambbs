@@ -301,10 +301,14 @@ vs_line(
 }
 #endif //not M3_USE_PFTERM
 
+static int popup_cur_color[1 << XO_NCUR] = {
+    0, 1, 4, 5,
+};
+
 GCC_CONSTEXPR
-static int get_dec_attr(bool is_moving)
+static int get_dec_attr(int cur_idx, bool is_moving)
 {
-    return is_moving ? 36 : 90;
+    return is_moving ? 90 : (cur_idx == 0) ? 31 : 36;
 }
 
 static const char *get_dec_color(int dec_attr)
@@ -319,18 +323,20 @@ static const char *get_dec_color(int dec_attr)
 
 /* mode 代表加背景的顏色 */
 static void
-draw_item(const char *desc, int mode, int y, int x, int dec_attr)
+draw_item(const char *desc, int cur_st, int cur_idx, int y, int x, int dec_attr)
 {
     char buf[128];
+    const int color = popup_cur_color[cur_st];
+    const bool met = cur_st & (1U << cur_idx);
 
-    sprintf(buf, " \x1b[0;37m▏\x1b[4%d;37m%s(\x1b[1;36m%c\x1b[0;37;4%dm)%-25s%s\x1b[0;47;30m▉\x1b[40m%s▉\x1b[m ", mode, (mode>0)?"┤":"  ", *desc, mode, desc+1, (mode>0)?"├":"  ", get_dec_color(dec_attr));
+    sprintf(buf, " \x1b[0;37m▏\x1b[4%d;37m%s(\x1b[1;36m%c\x1b[0;37;4%dm)%-25s%s\x1b[0;47;30m▉\x1b[40m%s▉\x1b[m ", color, met?"┤":"  ", *desc, color, desc+1, met?"├":"  ", get_dec_color(dec_attr));
     vs_line(buf, y, x);
     move(b_lines, 0);
 }
 
 
 static int
-draw_menu(const MENU *const pmenu[20], int num, const char *title, int y, int x, int cur, int dec_attr)
+draw_menu(const MENU *const pmenu[20], int num, const char *title, int y, int x, int *cur, int cur_idx, int dec_attr)
 {
     char buf[128];
     int i;
@@ -345,7 +351,7 @@ draw_menu(const MENU *const pmenu[20], int num, const char *title, int y, int x,
 
     for (i=0; i<num; ++i, ++y)
     {
-        draw_item(pmenu[i]->desc, (i==cur), y, x, dec_attr);
+        draw_item(pmenu[i]->desc, cursor_get_state(cur, i), cur_idx, y, x, dec_attr);
     }
     sprintf(buf, " \x1b[0;47;30m▇%s▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\x1b[40m▉\x1b[m ", get_dec_color(dec_attr));
     vs_line(buf, y, x);
@@ -385,12 +391,13 @@ do_menu(
     int x_ref)
 {
     int y, x;
-    int cur, old_cur, num, tmp;
+    int cur[XO_NCUR], old_cur, num, tmp;
     int c;
     MENU *table[20];
     const char *title;
     MENU *table_title;
     screen_backup_t old_screen;
+    int cur_idx = 0;
     bool is_moving = false;
 
     memset(table, 0, sizeof(table));
@@ -416,14 +423,18 @@ do_menu(
     if (num < 0)
         return 1;
 
-    cur = old_cur = 0;
+    old_cur = 0;
+    for (int i = 0; i < COUNTOF(cur); ++i)
+        cur[i] = 0;
 
     /* 跳到預設選項 */
     for ( tmp=0; tmp<= num; tmp++ )
     {
         if (tolower(table[tmp]->desc[0]) == tolower(table_title->level & ~PERM_MENU))
         {
-            cur = old_cur = tmp;
+            old_cur = tmp;
+            for (int i = 0; i < COUNTOF(cur); ++i)
+                cur[i] = tmp;
             break;
         }
     }
@@ -436,7 +447,7 @@ do_menu_redraw:
     y = gety_ref(y_ref);
     x = getx_ref(x_ref);
 
-    draw_menu((const MENU *const *)table, num+1, title, y, x, cur, get_dec_attr(is_moving));
+    draw_menu((const MENU *const *)table, num+1, title, y, x, cur, cur_idx, get_dec_attr(cur_idx, is_moving));
 
     while (1)  /* verit . user 選擇 */
     {
@@ -485,7 +496,7 @@ do_menu_redraw:
             goto do_menu_redraw;
         }
 
-        old_cur = cur;
+        old_cur = cur[cur_idx];
 
         switch (is_moving ? c : KEY_NONE)
         {
@@ -503,7 +514,7 @@ do_menu_redraw:
                     goto do_menu_redraw;
                 }
                 is_moving = false;
-                draw_menu((const MENU *const *)table, num+1, title, y, x, cur, get_dec_attr(is_moving));
+                draw_menu((const MENU *const *)table, num+1, title, y, x, cur, cur_idx, get_dec_attr(cur_idx, is_moving));
                 break;
             default:
                 ;
@@ -521,26 +532,26 @@ do_menu_redraw:
                 scr_restore_free(&old_screen);
                 return 1;
             case KEY_UP:
-                cur = (cur==0)?num:cur-1;
+                cur[cur_idx] = (cur[cur_idx]==0)?num:cur[cur_idx]-1;
                 break;
             case KEY_DOWN:
-                cur = (cur==num)?0:cur+1;
+                cur[cur_idx] = (cur[cur_idx]==num)?0:cur[cur_idx]+1;
                 break;
             case KEY_HOME:
-                cur = 0;
+                cur[cur_idx] = 0;
                 break;
             case KEY_END:
-                cur = num;
+                cur[cur_idx] = num;
                 break;
             case KEY_RIGHT:
             case '\n':
-                if (table[cur]->umode & M_QUIT)
+                if (table[cur[cur_idx]]->umode & M_QUIT)
                 {
                     popup_old_screen = NULL;
                     scr_restore_free(&old_screen);
                     return 1;
                 }
-                if (do_cmd(table[cur], xo, y, x)<0)
+                if (do_cmd(table[cur[cur_idx]], xo, y, x)<0)
                 {
                     popup_old_screen = NULL;
                     scr_restore_free(&old_screen);
@@ -548,23 +559,23 @@ do_menu_redraw:
                 }
                 scr_restore_keep(&old_screen);
                 popup_old_screen = &old_screen;
-                draw_menu((const MENU *const *)table, num+1, title, y, x, cur, get_dec_attr(is_moving));
+                draw_menu((const MENU *const *)table, num+1, title, y, x, cur, cur_idx, get_dec_attr(cur_idx, is_moving));
                 break;
             default:
                 for (tmp=0; tmp<=num; tmp++)
                 {
                     if (tolower(c) == tolower(table[tmp]->desc[0]))
                     {
-                        cur = tmp;
+                        cur[cur_idx] = tmp;
                         if (table_title->umode & M_DOINSTANT)
                         {
-                            if (table[cur]->umode & M_QUIT)
+                            if (table[cur[cur_idx]]->umode & M_QUIT)
                             {
                                 popup_old_screen = NULL;
                                 scr_restore_free(&old_screen);
                                 return 1;
                             }
-                            if (do_cmd(table[cur], xo, y, x)<0)
+                            if (do_cmd(table[cur[cur_idx]], xo, y, x)<0)
                             {
                                 popup_old_screen = NULL;
                                 scr_restore_free(&old_screen);
@@ -572,17 +583,17 @@ do_menu_redraw:
                             }
                             scr_restore_keep(&old_screen);
                             popup_old_screen = &old_screen;
-                            draw_menu((const MENU *const *)table, num+1, title, y, x, cur, get_dec_attr(is_moving));
+                            draw_menu((const MENU *const *)table, num+1, title, y, x, cur, cur_idx, get_dec_attr(cur_idx, is_moving));
                         }
                         break;
                     }
                 }
                 break;
         }
-        if (old_cur != cur)
+        if (old_cur != cur[cur_idx])
         {
-            draw_item(table[old_cur]->desc, 0, y+old_cur, x, get_dec_attr(is_moving));
-            draw_item(table[cur]->desc, 1, y+cur, x, get_dec_attr(is_moving));
+            draw_item(table[old_cur]->desc, cursor_get_state(cur, old_cur), cur_idx, y+old_cur, x, get_dec_attr(cur_idx, is_moving));
+            draw_item(table[cur[cur_idx]]->desc, cursor_get_state(cur, cur[cur_idx]), cur_idx, y+cur[cur_idx], x, get_dec_attr(cur_idx, is_moving));
         }
     }
 
@@ -594,22 +605,25 @@ do_menu_redraw:
 static void
 draw_ans_item(
     const char *desc,
-    int mode,
+    int cur_st,
+    int cur_idx,
     int y,
     int x,
     char hotkey,
     int dec_attr)
 {
     char buf[128];
+    const int color = popup_cur_color[cur_st];
+    const bool met = cur_st & (1U << cur_idx);
 
-    sprintf(buf, " \x1b[0;37m▏\x1b[4%d;37m%s%c\x1b[1;36m%c\x1b[0;37;4%dm%c%-25s%s\x1b[0;47;30m▉\x1b[40m%s▉\x1b[m ", mode, (mode>0)?"┤":"  ", (hotkey==*desc)?'[':'(', *desc, mode, (hotkey==*desc)?']':')', desc+1, (mode>0)?"├":"  ", get_dec_color(dec_attr));
+    sprintf(buf, " \x1b[0;37m▏\x1b[4%d;37m%s%c\x1b[1;36m%c\x1b[0;37;4%dm%c%-25s%s\x1b[0;47;30m▉\x1b[40m%s▉\x1b[m ", color, met?"┤":"  ", (hotkey==*desc)?'[':'(', *desc, color, (hotkey==*desc)?']':')', desc+1, met?"├":"  ", get_dec_color(dec_attr));
     vs_line(buf, y, x);
     move(b_lines, 0);
 }
 
 
 static int
-draw_menu_des(const char *const desc[], const char *title, int y, int x, int cur, int dec_attr)
+draw_menu_des(const char *const desc[], const char *title, int y, int x, int *cur, int cur_idx, int dec_attr)
 {
     int num;
     char buf[128];
@@ -621,7 +635,7 @@ draw_menu_des(const char *const desc[], const char *title, int y, int x, int cur
     sprintf(buf, " \x1b[0;37;44m▏%-31s \x1b[0;47;34m▉\x1b[m   ", title);
     vs_line(buf, y-1, x);
     for (num=1; desc[num]; num++)
-        draw_ans_item(desc[num], (num==cur), y++, x, hotkey, dec_attr);
+        draw_ans_item(desc[num], cursor_get_state(cur, num), cur_idx, y++, x, hotkey, dec_attr);
     sprintf(buf, " \x1b[0;47;30m▇\x1b[30;1m▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇\x1b[40m%s▉\x1b[m ", get_dec_color(dec_attr));
     vs_line(buf, y, x);
     return num-2;
@@ -638,11 +652,12 @@ int
 popupmenu_ans(const char *const desc[], const char *title, int y_ref, int x_ref)
 {
     int y, x;
-    int cur, old_cur, num, tmp;
+    int cur[XO_NCUR], old_cur, num, tmp;
     int c = KEY_NONE;
     char t[64];
     char hotkey;
     screen_backup_t old_screen;
+    int cur_idx = 0;
     bool is_moving = false;
 
     scr_dump(&old_screen);
@@ -655,24 +670,30 @@ popupmenu_ans_redraw:
     if (c != I_RESIZETERM)
         sprintf(t, "【%s】", title);
 
-    num = draw_menu_des(desc, t, y, x, 0, get_dec_attr(is_moving));
+    num = draw_menu_des(desc, t, y, x, cur, cur_idx, get_dec_attr(cur_idx, is_moving));
 
     if (c != I_RESIZETERM)
     {
-        cur = old_cur = 0;
+        old_cur = 0;
+        for (int i = 0; i < COUNTOF(cur); ++i)
+            cur[i] = 0;
         for (tmp=0; tmp<num; tmp++)
         {
             if (desc[tmp+1][0] == hotkey)
-                cur = old_cur = tmp;
+            {
+                old_cur = tmp;
+                for (int i = 0; i < COUNTOF(cur); ++i)
+                    cur[i] = tmp;
+            }
         }
     }
 
-    draw_ans_item(desc[cur+1], 1, y+cur, x, hotkey, get_dec_attr(is_moving));
+    draw_ans_item(desc[cur[cur_idx]+1], cursor_get_state(cur, old_cur), cur_idx, y+cur[cur_idx], x, hotkey, get_dec_attr(cur_idx, is_moving));
 
     while (1)
     {
         c = vkey();
-        old_cur = cur;
+        old_cur = cur[cur_idx];
 
         switch (c)
         {
@@ -693,7 +714,7 @@ popupmenu_ans_redraw:
                         goto popupmenu_ans_redraw;
                     }
                     is_moving = false;
-                    draw_menu_des(desc, t, y, x, 0, get_dec_attr(is_moving));
+                    draw_menu_des(desc, t, y, x, cur, cur_idx, get_dec_attr(cur_idx, is_moving));
                 }
                 break;
             case I_RESIZETERM:
@@ -719,36 +740,36 @@ popupmenu_ans_redraw:
                 scr_restore_free(&old_screen);
                 return tolower(desc[0][1]);
             case KEY_UP:
-                cur = (cur==0)?num:cur-1;
+                cur[cur_idx] = (cur[cur_idx]==0)?num:cur[cur_idx]-1;
                 break;
             case KEY_DOWN:
-                cur = (cur==num)?0:cur+1;
+                cur[cur_idx] = (cur[cur_idx]==num)?0:cur[cur_idx]+1;
                 break;
             case KEY_HOME:
-                cur = 0;
+                cur[cur_idx] = 0;
                 break;
             case KEY_END:
-                cur = num;
+                cur[cur_idx] = num;
                 break;
             case KEY_RIGHT:
             case '\n':
                 scr_restore_free(&old_screen);
-                return tolower(desc[cur+1][0]);
+                return tolower(desc[cur[cur_idx]+1][0]);
             default:
                 for (tmp=0; tmp<=num; tmp++)
                 {
                     if (tolower(c) == tolower(desc[tmp+1][0]))
                     {
-                        cur = tmp;
+                        cur[cur_idx] = tmp;
                         break;
                     }
                 }
                 break;
         }
-        if (old_cur != cur)
+        if (old_cur != cur[cur_idx])
         {
-            draw_ans_item(desc[old_cur+1], 0, y+old_cur, x, hotkey, get_dec_attr(is_moving));
-            draw_ans_item(desc[cur+1], 1, y+cur, x, hotkey, get_dec_attr(is_moving));
+            draw_ans_item(desc[old_cur+1], cursor_get_state(cur, old_cur), cur_idx, y+old_cur, x, hotkey, get_dec_attr(cur_idx, is_moving));
+            draw_ans_item(desc[cur[cur_idx]+1], cursor_get_state(cur, cur[cur_idx]), cur_idx, y+cur[cur_idx], x, hotkey, get_dec_attr(cur_idx, is_moving));
         }
     }
     // return 0;

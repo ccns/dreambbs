@@ -231,10 +231,14 @@ draw_line(              /* 在 (y, x) 的位置塞入 msg，左右仍要印出原來的彩色文字 
 /* 選項繪製                                              */
 /* ----------------------------------------------------- */
 
+static int popup2_cur_color[1 << XO_NCUR] = {
+    7, 41, 44, 45,
+};
+
 GCC_CONSTEXPR
-static int get_dec_attr(bool is_moving)
+static int get_dec_attr(int cur_idx, bool is_moving)
 {
-    return is_moving ? 7 : 44;
+    return is_moving ? 7 : (cur_idx == 0) ? 41 : 44;
 }
 
 static const char *get_dec_color(int dec_attr)
@@ -252,12 +256,15 @@ draw_item(
     int y, int x,
     const char *desc,
     char hotkey,
-    int mode)           /* 0:清除光棒  1:畫上光棒 */
+    int cur_st,
+    int cur_idx)
 {
     char buf[128];
+    const int color = popup2_cur_color[cur_st];
+    const bool met = cur_st & (1U << cur_idx);
 
-    sprintf(buf, " │%s%c %c%c%c%-25s  \x1b[m│ ",
-        mode ? COLOR4 : "\x1b[30;47m", mode ? '>' : ' ',
+    sprintf(buf, " │\x1b[%um%c %c%c%c%-25s  \x1b[m│ ",
+        color, met ? '>' : ' ',
         (hotkey == *desc) ? '[' : '(', *desc,
         (hotkey == *desc) ? ']' : ')', desc + 1);
 
@@ -271,10 +278,11 @@ draw_menu(
     const char *title,
     const char *const desc[],
     char hotkey,
-    int cur,
+    int *cur,
+    int cur_idx,
     int dec_attr)
 {
-    int i, meet;
+    int i;
     char buf[128];
 
     draw_line(y++, x, " ╭────────────────╮ ");
@@ -286,8 +294,7 @@ draw_menu(
 
     for (i = 1; desc[i]; i++)
     {
-        meet = (i == cur);
-        draw_item(y++, x, desc[i], hotkey, meet);
+        draw_item(y++, x, desc[i], hotkey, cursor_get_state(cur, i), cur_idx);
     }
 
     draw_line(y, x, " ╰────────────────╯ ");
@@ -369,9 +376,10 @@ int             /* 傳回小寫字母或數字 */
 popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref)
 {
     int y, x;
-    int cur, old_cur, max, dflt;
+    int cur[XO_NCUR], old_cur, max, dflt;
     int ch = KEY_NONE;
     char hotkey;
+    int cur_idx = 0;
     bool is_moving = false;
 
     screen_backup_t old_screen;
@@ -389,27 +397,28 @@ popupmenu_ans2(const char *const desc[], const char *title, int y_ref, int x_ref
     max = find_cur('\0', INT_MAX, desc) - 1;
     dflt = find_cur(hotkey, max, desc);
 
-    cur = dflt;
+    for (int i = 0; i < COUNTOF(cur); ++i)
+        cur[i] = dflt;
 
 popupmenu_ans2_redraw:
     y = gety_ref(y_ref);
     x = getx_ref(x_ref);
 
     /* 畫出整個選單 */
-    draw_menu(y, x, title, desc, hotkey, cur, get_dec_attr(is_moving));
+    draw_menu(y, x, title, desc, hotkey, cur, cur_idx, get_dec_attr(cur_idx, is_moving));
     y += 2;
 
     /* 一進入，游標停在預設值 */
     if (ch != I_RESIZETERM)
-        old_cur = cur;
+        old_cur = cur[cur_idx];
 
     while (1)
     {
-        if (old_cur != cur)             /* 游標變動位置才需要重繪 */
+        if (old_cur != cur[cur_idx])   /* 游標變動位置才需要重繪 */
         {
-            draw_item(y + old_cur, x, desc[old_cur], hotkey, 0);
-            draw_item(y + cur, x, desc[cur], hotkey, 1);
-            old_cur = cur;
+            draw_item(y + old_cur, x, desc[old_cur], hotkey, cursor_get_state(cur, old_cur), cur_idx);
+            draw_item(y + cur[cur_idx], x, desc[cur[cur_idx]], hotkey, cursor_get_state(cur, cur[cur_idx]), cur_idx);
+            old_cur = cur[cur_idx];
             /* 避免在偵測左右鍵全形下，按左鍵會跳離二層選單的問題 */
             move(b_lines, 0);
         }
@@ -434,7 +443,7 @@ popupmenu_ans2_redraw:
                     goto popupmenu_ans2_redraw;
                 }
                 is_moving = false;
-                draw_menu(y - 2, x, title, desc, hotkey, cur, get_dec_attr(is_moving));
+                draw_menu(y - 2, x, title, desc, hotkey, cur, cur_idx, get_dec_attr(cur_idx, is_moving));
             }
             break;
         case I_RESIZETERM:
@@ -461,30 +470,30 @@ popupmenu_ans2_redraw:
         case '\n':
             scr_free(&old_screen_dark);
             scr_restore_free(&old_screen);
-            ch = (ch == KEY_RIGHT || ch == '\n') ? desc[cur][0] : desc[0][1];
+            ch = (ch == KEY_RIGHT || ch == '\n') ? desc[cur[cur_idx]][0] : desc[0][1];
             if (ch >= 'A' && ch <= 'Z')
                 ch |= 0x20;             /* 回傳小寫 */
             return ch;
 
         case KEY_UP:
-            cur = (cur == 1) ? max : cur - 1;
+            cur[cur_idx] = (cur[cur_idx] == 1) ? max : cur[cur_idx] - 1;
             break;
 
         case KEY_DOWN:
-            cur = (cur == max) ? 1 : cur + 1;
+            cur[cur_idx] = (cur[cur_idx] == max) ? 1 : cur[cur_idx] + 1;
             break;
 
         case KEY_HOME:
-            cur = 1;
+            cur[cur_idx] = 1;
             break;
 
         case KEY_END:
-            cur = max;
+            cur[cur_idx] = max;
             break;
 
         default:                /* 去找所按鍵是哪一個選項 */
             if ((ch = find_cur(ch, max, desc)) > 0)
-                cur = ch;
+                cur[cur_idx] = ch;
             break;
         }
     }
