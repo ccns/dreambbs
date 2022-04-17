@@ -525,6 +525,10 @@ do_menu_redraw:
             case KEY_TAB:
                 is_moving = !is_moving;
                 goto do_menu_redraw;
+            case ' ':
+                is_moving = false;
+                cur_idx = (cur_idx + 1) % XO_NCUR;
+                goto do_menu_redraw;
             case KEY_LEFT:
             case KEY_ESC:
             case Meta(KEY_ESC):
@@ -732,6 +736,11 @@ popupmenu_ans_redraw:
         {
             case KEY_TAB:
                 is_moving = !is_moving;
+                c = I_RESIZETERM;
+                goto popupmenu_ans_redraw;
+            case ' ':
+                is_moving = false;
+                cur_idx = (cur_idx + 1) % XO_NCUR;
                 c = I_RESIZETERM;
                 goto popupmenu_ans_redraw;
             case KEY_LEFT:

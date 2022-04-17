@@ -463,6 +463,11 @@ popupmenu_ans2_redraw:
             is_moving = !is_moving;
             ch = I_RESIZETERM;
             goto popupmenu_ans2_redraw;
+        case ' ':
+            is_moving = false;
+            cur_idx = (cur_idx + 1) % XO_NCUR;
+            ch = I_RESIZETERM;
+            goto popupmenu_ans2_redraw;
         case KEY_LEFT:
         case KEY_ESC:
         case Meta(KEY_ESC):
