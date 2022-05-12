@@ -123,7 +123,7 @@ Indentation style 的說明，請見 [[INDENT]]。
 - Commit hash 格式應為 `<完整 hash>` 或 `<Repo 擁有者>/<Repo 名>@<完整 hash>` 其一
 - 其它 repo 的檔案路徑格式應為 `<Repo 擁有者>/<Repo 名>@<完整 hash 或 branch/tag 名>/<檔案路徑>`
 - 程式物件名應為下列格式之一：
-    - `<路徑>`：物件為系統 header 檔
+    - `<`&#8203;`<路徑>`&#8203;`>` (被角括號 `<…>` 包圍)：物件為系統 header 檔
     - <code>\`<路徑>\`</code>：物件為檔案路徑，且出現於內文中
     - <code>\`<struct/union/enum/class> <型別名>\`</code>：物件為 `struct`/`union`/`enum`/`class` 型別，且非以 `typedef` 或 `using` 定義之別名
     - <code><struct/union/enum/class> \`<型別名>\`</code>：物件為其它 `struct`/`union`/`enum`/`class` 型別
@@ -140,7 +140,7 @@ Indentation style 的說明，請見 [[INDENT]]。
     - 物件或一群物件為 macro 時，其名稱前方應加上 `macro` 或 `macros`
     - 物件或一群物件為參數時，其名稱前方應加上 `param` 或 `params`
 - 直接引用 shell 命令或不只包含物件名的程式碼時，應使用 <code>\`…\`</code> 的方式呈現
-    - 以無引數的方式呼叫函式的程式碼應使用 <code>`func()`</code> 的方式呈現，而非 `func()`
+    - 以無引數的方式呼叫函式的程式碼應使用 <code>\`func()\`</code> 的方式呈現，而非 `func()`
     - 物件名可包含萬用字元
 - 單純並列 2 個事物時，應以 `A & B` 的方式呈現
 - 單純並列 ≥ 3 個事物時，應以 `A, B, …, & Z` 的方式呈現
