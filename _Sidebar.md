@@ -17,6 +17,8 @@
     - [[ANSI Escape Code Standard Format — ANSI 控制碼標準格式|ANSI-Format-zh_tw]]
 - Changelog
     - [[Unsorted Changelog|CHANGELOG]]
+    - [[BBS-Lua Changelog|BBS-Lua-Change-zh_tw]]
+    - [BBS-Ruby Changelog](https://github.com/ccns/bbs-ruby/releases) (external link — 外部鏈結)
     - [[新式密碼加密 (DLBBS v2.0+)|Passwd-v2.0-zh_TW]]
     - [[Release Notes of Version 2.0.0 Artoria|v2.0-Artoria]]
     - [[Version 2.0.0 Artoria 發行說明|v2.0-Artoria-zh_TW]]
