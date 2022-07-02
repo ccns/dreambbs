@@ -23,6 +23,10 @@
     - [[Release Notes of Version 1.0.0 Rimuru|v1.0-rimuru]]
     - [[Version 1.0.0 Rimuru 發行說明|v1.0-rimuru-zh_tw]]
 
+## External References — 外部參考資料
+- [MapleBBS 3.10-itoc 說明文件](http://processor.tfcis.org/~itoc/2_doc.html)
+- [PttBBS GitHub wiki](https://github.com/ptt/pttbbs/wiki)
+
 ## Legacy Documentations — 舊有說明文件
 
 - NoCeM-innbbsd 原始說明文件
