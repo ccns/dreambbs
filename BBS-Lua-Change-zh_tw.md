@@ -7,11 +7,11 @@
 ## BBS-Lua 0.119-DlPatch-1
 
 ### Bug Fixes
-- 修正使用 <kbd>Ctrl</kbd>-<kbd>C</kbd> 結束程式時會輸出無意義字串的問題
+- 修正使用 <kbd>Ctrl</kbd>-<kbd>C</kbd> 結束程式時會輸出無意義字串的問題 ([28626e0a14](https://github.com/ccns/dreambbs/commit/28626e0a1422f85a91eb61a3bd4d9791139533b5))
 
 ### Bug Fixes for PttBBS
-- `getdata/getstr()`: 修正 `echo` = 8 時會斷線的問題
-- `getch()`/`kball()`: 修正 <kbd>Meta</kbd>-modified 的按鍵會被當成 <kbd>Esc</kbd> 鍵的問題
+- `getdata/getstr()`: 修正 `echo` = 8 時會斷線的問題 ([90e0464c9d](https://github.com/ccns/dreambbs/commit/90e0464c9d3d6d1f3dc14fa2e696608fa9de3e34))
+- `getch()`/`kball()`: 修正 <kbd>Meta</kbd>-modified 的按鍵會被當成 <kbd>Esc</kbd> 鍵的問題 ([bf960173ea](https://github.com/ccns/dreambbs/commit/bf960173eaf42f8cfdeccd806b96556d59668907#diff-3cc4b761fdc37db96f8fc5de75e12ece404e431b5e503896976b77d3c71cb9cdR1006-R1010))
 
 ### Other Changes
 
