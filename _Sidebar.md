@@ -20,6 +20,7 @@
     - [[BBS-Lua Changelog|BBS-Lua-Change-zh_tw]]
     - [BBS-Ruby Changelog](https://github.com/ccns/bbs-ruby/releases) (external link — 外部鏈結)
     - [[新式密碼加密 (DLBBS v2.0+)|Passwd-v2.0-zh_TW]]
+    - [[[WIP] DreamBBS-202X v0-Azure 發佈說明 Release Note|v3.0-zh_tw-en_us]]
     - [[Release Notes of Version 2.0.0 Artoria|v2.0-Artoria]]
     - [[Version 2.0.0 Artoria 發行說明|v2.0-Artoria-zh_TW]]
     - [[Release Notes of Version 1.0.0 Rimuru|v1.0-rimuru]]
