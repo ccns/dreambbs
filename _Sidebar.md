@@ -13,7 +13,7 @@
     - [[TANet BBS Family Genealogy Chart — TANet BBS 家族譜系圖|TANet-BBS-Chart-zh_tw]]
     - [[與 MapleBBS 3 的按鍵差異|VS-MapleBBS-3-Keyboard-zh_tw]]
     - [[[WIP] 與 MapleBBS 3 的差異|VS-MapleBBS-3-zh_tw]]
-- References - 參考資料
+- References — 參考資料
     - [[ANSI Escape Code Standard Format — ANSI 控制碼標準格式|ANSI-Format-zh_tw]]
 - Changelog
     - [[Unsorted Changelog|CHANGELOG]]
