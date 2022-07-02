@@ -42,7 +42,7 @@
 - `getch()`/`kball()` 不支援特殊按鍵。
 
 修改參考：
-- `include/global.h` 中的 `KEY_`, `Ctrl`, `Meta`, 和 `Shift` 等 macros
+- `include/global.h` 中的 `KEY_*`, `Ctrl`, `Meta`, 和 `Shift` 等 macros
 - `maple/visio.c` 中的 `vkey()`
 
 
