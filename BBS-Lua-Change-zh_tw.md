@@ -44,3 +44,26 @@
 修改參考：
 - `include/global.h` 中的 `KEY_`, `Ctrl`, `Meta`, 和 `Shift` 等 macros
 - `maple/visio.c` 中的 `vkey()`
+
+
+## [WIP] BBS-Lua 0.119-DlPatch-2
+
+### Bug Fixes
+- 修正 BBS-Lua 的執行錯誤訊息未重設顏色而可能隱形的問題 ([6edaa29d72](https://github.com/ccns/dreambbs/commit/6edaa29d7222228433ee3d0e106c584acba1f289))
+
+### Bug Fixes for Maple3
+- (修正 DlPatch-1) 修正啟用 `BBSLUA_EXPOSED_VISIO_IDLE` 時，無法正確忽略已處理的 Telnet 命令的問題 ([44e454e363](https://github.com/ccns/dreambbs/commit/44e454e3632d6818daf475837d71cc2cf6fb00bc))
+- (修正 DlPatch-1) 修正外加欄位隱形效果的 `NOECHO` (`NOECHO | VGET_STEALTH_NOECHO`) 未忽略預設字串的問題 ([eff2749402](https://github.com/ccns/dreambbs/commit/eff27494029a2fd2485ff19e28f6451b33b47a04))
+
+### Bug Fixes for PttBBS
+- (修正 DlPatch-1) 修正 LuaJIT 被強制停用的問題 ([a822fd54ab](https://github.com/ccns/dreambbs/commit/a822fd54ab79b2e39348d193062fa6f4b694593c))
+
+### Other Changes
+
+- `bl_k2s()`: 將 `'\0'` (<kbd>Ctrl</kbd>-<kbd>Shift</kbd>-<kbd>2</kbd>) 視為合法按鍵輸入
+- 其它 coding style 上的調整
+- (針對 Maple3) 將程式檔所在目錄改成 `so/`，編成執行時期載入函式庫
+- 避免將 64-bit 數值截斷成 32-bit
+
+### 已知在 Maple3 上的問題
+- (DlPatch-1 起) 啟用 `BBSLUA_EXPOSED_VISIO_IDLE` 時，若系統採用時間戳式的閒置計算方式，更新時會錯誤歸零，使系統認為已閒置達一千多天
