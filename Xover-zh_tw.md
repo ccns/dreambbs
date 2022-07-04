@@ -4,6 +4,26 @@ Xover 列表系統是 MapleBBS 3.x 中所大量使用的列表顯示系統。
 
 不同於 Pirate BBS 原本的 `i_read` 列表系統只能用在文章與信件列表，Xover 列表系統能夠用來顯示任何的列表。
 
+## 名稱
+
+### Xover
+
+Xover (唸若 *ex(tension)-over*)，取自 [NNTP](https://zh.wikipedia.org/wiki/網路新聞傳輸協定) (網路新聞傳輸協定) 的命令 [`XOVER`](https://datatracker.ietf.org/doc/html/rfc2980#section-2.8)，使用此命令可列出 news server 上的指定範圍文章或所有文章的 metadata。
+
+MapleBBS 3.00 的原作者 opus 可能是取其「列出文章 metadata」之意，將閱讀 BBS 文章的系統取名為 Xover。
+
+NNTP 命令的 [`X` 前綴](https://datatracker.ietf.org/doc/html/rfc977#section-3) 表示尚未被正式標準化的命令。而 NNTP 命令 `XOVER` 已被標準化為 RFC 3977 的 NNTP 命令 [`OVER`](https://datatracker.ietf.org/doc/html/rfc3977.html#section-8.3)。
+
+DreamBBS v3.0 起，指稱此系統時，固定寫成僅首字母大寫的「Xover」。
+
+※ 註：NNTP 命令並不區分大小寫。
+
+### HDR
+
+`HDR` (唸若 *header*) 是 Xover 列表系統所使用的列表資料的結構名稱，取自 NNTP 命令 [`XHDR`](https://datatracker.ietf.org/doc/html/rfc2980#section-2.6)，使用此命令可取得指定範圍文章或所有文章的指定 metadata 欄位 ("header")。這也是變數名稱 `xhdr` 的最初由來。
+
+NNTP 命令 `XHDR` 也已被標準化為 RFC 3977 的 NNTP 命令 [`HDR`](https://datatracker.ietf.org/doc/html/rfc3977.html#section-8.5)。
+
 ## Pirate BBS 衍生之 BBS 的列表函式比較
 
 本文所提到的 BBS 系統間的衍生關係，可見 [[TANet BBS 家族譜系圖|TANet-BBS-Chart-zh_tw]]，其中須注意：
