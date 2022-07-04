@@ -8,7 +8,7 @@ Xover 列表系統是 MapleBBS 3.x 中所大量使用的列表顯示系統。
 
 ### Xover
 
-Xover (唸若 *ex(tension)-over*)，取自 [NNTP](https://zh.wikipedia.org/wiki/網路新聞傳輸協定) (網路新聞傳輸協定) 的命令 [`XOVER`](https://datatracker.ietf.org/doc/html/rfc2980#section-2.8)，使用此命令可列出 news server 上的指定範圍文章或所有文章的 metadata。
+Xover (唸若 *ex(tension)-over*)，取自 [NNTP](https://zh.wikipedia.org/wiki/網路新聞傳輸協定) (網路新聞傳輸協定) 的命令 [`XOVER`](https://datatracker.ietf.org/doc/html/rfc2980#section-2.8)，使用此命令可列出 news server 上的指定範圍的文章的 metadata。
 
 MapleBBS 3.00 的原作者 opus 可能是取其「列出文章 metadata」之意，將閱讀 BBS 文章的系統取名為 Xover。
 
@@ -20,7 +20,7 @@ DreamBBS v3.0 起，指稱此系統時，固定寫成僅首字母大寫的「Xov
 
 ### HDR
 
-`HDR` (唸若 *header*) 是 Xover 列表系統所使用的列表資料的結構名稱，取自 NNTP 命令 [`XHDR`](https://datatracker.ietf.org/doc/html/rfc2980#section-2.6)，使用此命令可取得指定範圍文章或所有文章的指定 metadata 欄位 ("header")。這也是變數名稱 `xhdr` 的最初由來。
+`HDR` (唸若 *header*) 是 Xover 列表系統所使用的列表資料的結構名稱，取自 NNTP 命令 [`XHDR`](https://datatracker.ietf.org/doc/html/rfc2980#section-2.6)，使用此命令可取得指定範圍的文章的指定 metadata 欄位 ("header")。這也是變數名稱 `xhdr` 的最初由來。
 
 NNTP 命令 `XHDR` 也已被標準化為 RFC 3977 的 NNTP 命令 [`HDR`](https://datatracker.ietf.org/doc/html/rfc3977.html#section-8.5)。
 
