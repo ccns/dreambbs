@@ -479,14 +479,14 @@ Macro         | 值 (MapleBBS 2.36b) | 值 (DreamBBS v3.1) | 說明
 #### 鏈鎖
 `i_read` 與 Xover 列表系統的 callback 函式都可以透過回傳值，呼叫下一個 callback，本文稱之為「鏈鎖」。
 
-例如 `'i'` 對應的 callback 回傳 `'j'`，`'j'` 對應的 callback 回傳 `'k'`，`'k'` 對應的 callback 回傳 `XO_BODY`，`XO_BODY` 對應的 callback 回傳 `XO_FOOT`，`XO_FOOT` 對應的 callback 回傳 `XO_NONE`，稱為一個鏈鎖，可以記為 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE`。
+例：假設 `'i'` 對應的 callback 回傳 `'j'`，`'j'` 對應的 callback 回傳 `'k'`，`'k'` 對應的 callback 回傳 `XO_BODY`，`XO_BODY` 對應的 callback 回傳 `XO_FOOT`，`XO_FOOT` 對應的 callback 回傳 `XO_NONE`，即可稱其為一個鏈鎖，可以記為 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE`。
 
 鏈鎖的結尾 callback 可以回傳游標移動命令、`XO_NONE` 命令、或沒有對應 callback 的命令。
 
 #### 命令鏈鎖
 透過回傳按鍵值而呼叫下一個 callback 的鏈鎖，稱為「命令鏈鎖」。
 
-例如鏈鎖 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE` 中就包含了命令鏈鎖 `'i' -> 'j' -> 'k'`。
+例：假設有一鏈鎖 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE`，其中就包含了命令鏈鎖 `'i' -> 'j' -> 'k'`。
 
 #### 組合操作 - Redo 組合操作與 zone 組合操作
 從 DreamBBS v3.0 開始，可以將畫面重繪/重新載入或列表操作，與按鍵輸入或游標移動的操作組合表示，因此需要特別的規則來處理帶有這些組合的命令鏈鎖。
@@ -520,7 +520,7 @@ MapleBBS 3 原本的 Xover 列表系統的切換列表操作，不是使用游�
 #### Redo-redo 鏈鎖 -> pure-pure-redo-simple 鏈鎖
 先後執行兩個操作的 pure 部分後，將與兩者組合的 redo-simple 操作一齊執行。
 
-例如有 2 個 callback 函式：
+例：假設有 2 個 callback 函式：
 - `'i'` 對應的 `func_info()` 會增加某項目的查詢次數，並且在列表後說明處畫東西，執行完後需要用 `XR_KNEE` 重繪
 - `Meta('i')` 對應的 `func_info_full()` 會在列表內容處畫東西，需要用 `XR_BODY` 重繪，但需要呼叫 `func_info()` 來畫出剩下的部分
 
