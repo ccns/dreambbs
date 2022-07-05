@@ -8,7 +8,7 @@
     - [[Menu Systems — 選單系統|Menu-zh_tw]]
     - [[Screen Coordinate System — 畫面座標系統|Screen-Coord-zh_tw]]
     - [[BoardReadingHistory — BRH 看板閱讀紀錄系統|BRH-zh_tw]]
-    - [[Vget Input Field — Vget 輸入框函式|Vget-zh_tw]]
+    - [[Visio I/O Library — Visio 輸出入函式庫|Visio-zh_tw]]
     - [[DENY Suspension System — DENY 停權系統|DENY-zh_tw]]
     - [[TANet BBS Family Genealogy Chart — TANet BBS 家族譜系圖|TANet-BBS-Chart-zh_tw]]
     - [[與 MapleBBS 3 的按鍵差異|VS-MapleBBS-3-Keyboard-zh_tw]]
