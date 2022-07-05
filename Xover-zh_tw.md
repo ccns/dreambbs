@@ -18,11 +18,15 @@ DreamBBS v3.0 起，指稱此系統時，固定寫成僅首字母大寫的「Xov
 
 ※ 註：NNTP 命令並不區分大小寫。
 
-### HDR
+### `HDR`
 
-`HDR` (唸若 *header*) 是 Xover 列表系統所使用的列表資料的結構名稱，取自 NNTP 命令 [`XHDR`](https://datatracker.ietf.org/doc/html/rfc2980#section-2.6)，使用此命令可取得指定範圍的文章的指定 metadata 欄位 ("header")。這也是變數名稱 `xhdr` 的最初由來。
+`HDR` (唸若 *header*) 是 Xover 列表系統所使用的列表資料的資料結構名稱，取自 NNTP 命令 [`XHDR`](https://datatracker.ietf.org/doc/html/rfc2980#section-2.6)，使用此命令可取得指定範圍的文章的指定 metadata 欄位 ("header")。這也是變數名稱 `xhdr` 的最初由來。
 
 NNTP 命令 `XHDR` 也已被標準化為 RFC 3977 的 NNTP 命令 [`HDR`](https://datatracker.ietf.org/doc/html/rfc3977.html#section-8.5)。
+
+### `struct OverView`
+
+`struct OverView` 是 Xover 列表系統所使用的列表狀態的資料結構 `XO` 的 `struct` 名稱，取自一些 NNTP server 以 [News Overview](<https://en.wikipedia.org/wiki/NOV_(computers)>) 所建立的 overview 資料庫，此資料庫能讓 NNTP 命令 `XOVER` 有效率地取得文章的 metadata。
 
 ## Pirate BBS 衍生之 BBS 的列表函式比較
 
