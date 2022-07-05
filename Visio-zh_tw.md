@@ -1,4 +1,32 @@
-# Vget 輸入框函式
+# Visio 輸出入函式庫
+
+Visio 是 MapleBBS 3 的系統輸出入函式庫，功能上包含：
+- MapleBBS 3 前：`io.c` + `screen.c` + `term.c` + 部份 `stuff.c`
+- PttBBS：`io.c` (+ `nios.c` + `vtkbd.c`) + `screen.c` (或 `pfterm.c`) + `term.c` + `vtuikit.c` + 部份 `stuff.c`
+
+MapleBBS 3 的 Visio 有以下相關但來源不同的同名函式庫，非本文主題：
+- PttBBS 中現名為 `vtuikit` 的使用者介面函式庫，曾也稱為 `visio`。
+- WD BBS 一些分支中的 `visio.c` 為 `io.c` + `term.c` + `screen.c` (不含 `stuff.c`) 的直接合併。
+    - 較早出現於 AT-BBS 1.5.1，但可追溯至 StarRiver BBS 20000619。
+
+## 名稱
+
+### MapleBBS 3.0x 官方解釋
+
+- Visio 是「***Vi***rtual ***S***creen ***I***nput ***O***utput Routines」的縮寫。
+- "***Vi***rtual ***t***erminal" 的 ***s***creen 與 ***I***/***O***。
+
+※ 註：同是 "virtual terminal" 的一部份，`mbbsd.c` 功能上包含 <code>in.z***bbsd***</code> + <code>***m***ain.c</code>，是 "virtual terminal" 的 daemon 與子處理程序的 main routines。
+
+資料來源：楓橋驛站 SysSuggest 板精華區，opus 所撰寫的〈[code] virtual terminal 的寫法 (1/3)〉與〈[code] virtual terminal 的寫法 (2/3)〉。
+
+### 沒有文獻驗證的考據
+
+- [Vīsiō](https://en.wiktionary.org/wiki/visio#Latin) 是英文 vision 的拉丁文詞源，有「視覺」、「所見」的意思。暗指 Visio 的輸出功能。
+- [Visio](https://en.wikipedia.org/wiki/Microsoft_Visio) 是在公元 1992 年初次釋出的圖表繪製軟體，由 [Shapeware](https://en.wikipedia.org/wiki/Visio_Corporation) 公司釋出。Shapeware 公司在公元 1995 年改名為 Visio 公司，在公元 2000 年被 Microsoft 收購。該軟體現名為 Microsoft Visio。同樣暗指 Visio 的輸出功能。
+- ***Vi***rtual <code>***s***creen.c</code> + <code>***io***.c</code>。
+
+## Vget 輸入框函式
 
 `vget()` 輸入框函式是 MapleBBS 3 的輸入框函式。
 
@@ -6,9 +34,9 @@
 
 PttBBS 的 `vtuikit` 函式庫有提供介面與 MapleBBS 3 相容的 `vget()`。
 
-## 函式宣告
+### 函式宣告
 
-### PirateBBS 1.9
+#### PirateBBS 1.9
 ```c
 getdata(line,col,prompt,buf,len,echo,complete)
 int line,col ;
@@ -18,7 +46,7 @@ int (*complete)() ;
 ```
 - 支援自動完成，函式 `complete()` 需另外傳入
 
-### MapleBBS 2.36
+#### MapleBBS 2.36
 ```c
 getdata(line, col, prompt, buf, len, echo)
   int line, col;
@@ -27,7 +55,7 @@ getdata(line, col, prompt, buf, len, echo)
 ```
 - 不支援自動完成
 
-### MapleBBS 3.00
+#### MapleBBS 3.00
 ```c
 int
 vget(line, col, prompt, data, max, echo)
@@ -37,14 +65,14 @@ vget(line, col, prompt, data, max, echo)
 ```
 - 支援自動完成，用 `echo` 指定使用預定義的自動完成函式
 
-### DreamBBS v3.0
+#### DreamBBS v3.0
 ```cpp
 int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo)
 ```
 - 支援自動完成，用 `echo` 指定使用預定義的自動完成函式
 - 使用了畫面大小座標，支援畫面大小改變時的自動重繪
 
-## Echo flags
+### Echo flags
 　              | 值      | 出處  | 說明
 :---            | ---     | ---  | ---
 `NOECHO`        | `0` <br> - `0x0000` (MapleBBS 3.00) <br> - `HIDEECHO` (DreamBBS v3.0) | PirateBBS | - 完全不顯示輸入框 <br> (PirateBBS, MapleBBS 2.36 (有 `dumb_term`), & PttBBS) <br> (DreamBBS v2.0 (有 `VGET_STEALTH_NOECHO`)) <br> - 將輸入字元顯示為 `*` <br> (MapleBBS 2.36 (無 `dumb_term`) & MapleBBS 3) <br> (DreamBBS v2.0 (無 `VGET_STEALTH_NOECHO`))
@@ -66,16 +94,16 @@ int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo
 - 在 DreamBBS v2.0 後，echo flags 可用 bitwise OR (`|`) 自由疊加使用
 - DreamBBS v3.0 將 `DOECHO` 改為 `0`，以表示無 flags 時為一般狀態
 
-## 特殊值
+### 特殊值
 　                  | 值   | 出處      | 說明
 :---                | ---  | ---      | ---
 `VGET_IMPLY_DOECHO` | `LCECHO \| NUMECHO \| GCARRY` | DreamBBS v2.0 | 預設附帶有 `DOECHO` 效果的 flags
 `VGET_FORCE_DOECHO` | `GET_LIST \| GET_USER \| GET_BRD` | DreamBBS v2.0 | 會強制開啟 `DOECHO` 效果的 flags
 `VGET_EXIT_BREAK`   | `-1` | DreamBBS v2.0 | 輸入框被 <kbd>Ctrl</kbd>-<kbd>C</kbd> 關閉時回傳的值
 
-## 自動完成功能所使用的 macros
+### 自動完成功能所使用的 macros
 
-### BRD bits (MapleBBS 3, WindTopBBS, & DreamBBS)
+#### BRD bits (MapleBBS 3, WindTopBBS, & DreamBBS)
 　          | 值     | 出處           | 說明
 :---        | ---    | ---           | ---
 `BRD_R_BIT` | `0x01` | MapleBBS 3.00 | 使用者可進入閱覽此看板
@@ -88,7 +116,7 @@ int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo
 
 - MapleBBS 3.10-itoc 有不同的定義 (下述)
 
-### BRD bits (MapleBBS 3.10-itoc)
+#### BRD bits (MapleBBS 3.10-itoc)
 　          | 值     | 說明
 :---        | ---    | ---
 `BRD_L_BIT` | `0x0001` | 使用者的看板清單中可出現此看板
@@ -100,7 +128,7 @@ int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo
 `BRD_H_BIT` | `0x0040` | 使用者的 `.BRH` 中有此看板的閱讀紀錄
 `BRD_Z_BIT` | `0x0080` | 被使用者 zap 的看板
 
-### Match Operations
+#### Match Operations
 　            | 值  | 出處           | 說明
 :---          | --- | ---           | ---
 `MATCH_END`   | - `1` <br> - `0x8000` (MapleBBS 3.02) | MapleBBS 3.00 | 進行自動完成並結束自動完成 <br> 限內部處理 <br> - 可疊加在 echo flags 上 (MapleBBS 3.02)
