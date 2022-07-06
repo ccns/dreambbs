@@ -25,6 +25,9 @@ MapleBBS 3 的 Visio 有以下相關但來源不同的同名函式庫，非本�
 - [Vīsiō](https://en.wiktionary.org/wiki/visio#Latin) 是英文 vision 的拉丁文詞源，有「視覺」、「所見」的意思。暗指 Visio 的輸出功能。
 - [Visio](https://en.wikipedia.org/wiki/Microsoft_Visio) 是在公元 1992 年初次釋出的圖表繪製軟體，由 [Shapeware](https://en.wikipedia.org/wiki/Visio_Corporation) 公司釋出。Shapeware 公司在公元 1995 年改名為 Visio 公司，在公元 2000 年被 Microsoft 收購。該軟體現名為 Microsoft Visio。同樣暗指 Visio 的輸出功能。
 - ***Vi***rtual <code>***s***creen.c</code> + <code>***io***.c</code>。
+- [怡申科技股份有限公司 (Essen***Visio***n Inc.)](https://web.archive.org/web/20010402004131/http://essenvision.com:80/)。在 1998-02-23 成立，2001-07-05 解散，惟至 2022-07-07 仍未清算。
+    - 資料來源：商工登記公示資料查詢服務 <https://findbiz.nat.gov.tw/fts/query/QueryBar/queryInit.do?banNo=16307857>
+    - 但 `visio.c` 在 1996-11-13 已公開發佈（見以上資料來源）。
 
 ## Vget 輸入框函式
 
