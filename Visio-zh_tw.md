@@ -9,6 +9,9 @@ MapleBBS 3 的 Visio 有以下相關但來源不同的同名函式庫，非本�
 - WD BBS 一些分支中的 `visio.c` 為 `io.c` + `term.c` + `screen.c` (不含 `stuff.c`) 的直接合併。
     - 較早出現於 AT-BBS 1.5.1，但可追溯至 StarRiver BBS 20000619。
 
+亦有同源的同名函式庫，但本文不著重論述：
+- SOB-fromzero 的 `visio.c`，為 1996 年由 MapleBBS 3.00 原作者 opus 所發佈的早期版本的 `visio.c` 加上小幅度修正而成。
+
 ## 名稱
 
 ### MapleBBS 3.0x 官方解釋
