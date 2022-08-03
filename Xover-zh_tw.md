@@ -31,9 +31,9 @@ NNTP 命令 `XHDR` 也已被標準化為 RFC 3977 的 NNTP 命令 [`HDR`](https:
 ## Pirate BBS 衍生之 BBS 的列表函式比較
 
 本文所提到的 BBS 系統間的衍生關係，可見 [[TANet BBS 家族譜系圖|TANet-BBS-Chart-zh_tw]]，其中須注意：
-- WindTop BBS 3.0x 是在 WindTop BBS 2.3x 基礎上，加入 MapleBBS 3.0x 的元素改版而來，主要架構已屬於 MapleBBS 3.x
-    - DreamBBS 2010 是 WindTop BBS 3.0x 的後代分支，因此主要架構也屬於 MapleBBS 3.x
-        - 現在的 DreamBBS v1 及更新版本是 DreamBBS 2010 的後代，架構上也屬於 MapleBBS 3.x
+- WindTop BBS 3.02 是以較早期的 MapleBBS 3.10 為基礎開發而來，主要架構屬於 MapleBBS 3.10
+    - DreamBBS 2010 是 WindTop BBS 3.02 的後代分支，因此主要架構也屬於 MapleBBS 3.10
+        - 現在的 DreamBBS v1 及更新版本是 DreamBBS 2010 的後代，架構上也屬於 MapleBBS 3.10
 
 ### 列表主函式
 　                  | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> Formosa BBS 1.1.1 | Formosa BBS 1.4.1 | MapleBBS 3
