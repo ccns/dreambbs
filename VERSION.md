@@ -68,7 +68,7 @@ The stages of the overall development workflow after v3.0, from the most unstabl
 ## Release Branch (formerly `testing`)
 This branch emphasize more on the stability, the easiness to install, and the ability to deploy on different platform and containers, than the `current` branch.
 
-Versioning Scheme: `vM.N.P`, or just `M.N.` after `4.0.0`
+Versioning Scheme: `vM.N.P`, or just `M.N.P` after `4.0.0`
   - `M`: Major version; indicates significant changes
   - `N`: Minor version; indicates introduction of new features
   - `P`: Patch version; indicates bug fixes or security improvement; based on the previous version
