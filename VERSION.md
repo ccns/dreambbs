@@ -45,22 +45,20 @@ The new development workflow has led to the two main branches seen today: Releas
 
 From v3.0 and on, no dedicated git branches for releases will be created. Instead, new releases on the release development branch are published based on git tags from the `master` branch.
 
-After v3.0, there are unstable branches for the convenience of testing as well: `develop` and `<user>/develop`.
-
 The stages of the overall development workflow after v3.0, from the most unstable to the most stable:
-- `<user>/develop`
-    - The developer's develop branch for self-review
-    - Other names can be used in place of the `develop` at the developer's intention
-    - Force-updates can be performed at any time at the developer's intention
-    - As soon as the commits themselves are checked to not have problems, these commits should be merged onto `develop` (fast-forwarding is preferred)
-- `develop`
-    - The branch for commits which need review from the maintainers
-    - Force-updates require acknowledge and agreement from all maintainers in advance
-    - As soon as the review are done, the commits should be merged onto `master` (fast-forwarding is preferred)
-    - Pull requests should target this branch
+- `<user or team>/develop` and PR branches
+    - The developer(s)'s develop branch for self-review and peer-review
+        - For PR branchs, draft PRs are in the self-review stage, while normal PRs are in the peer-review stage.
+    - Other names can be used in place of the `develop` at the developer(s)'s intention
+    - At the self-review stage, force-updates can be performed at any time at the developer's intention
+    - If the commits themselves are checked to not have problems, the peer-review stage should start
+    - As soon as the peer-review passes, these commits should be merged onto `master` (fast-forwarding is preferred)
 - `master`
-    - The stable branch where the functionality are reviewed by the maintainers
-    - Force-updates should not be performed on this branch
+    - The branch for commits which passed peer-review
+    - Force-updates require acknowledge and agreement from all maintainers in advance
+    - Pull requests should target this branch
+- `stable`
+    - The git tag on `master`, updated when the functionality of `master` is reviewed by the maintainers
 - Releases
     - The git tags added on `master` at times
     - The referenced commit should not be changed after the changelog is published
