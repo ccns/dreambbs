@@ -8,36 +8,40 @@
 - n consecutive lower case letter(s) (`m`, `nn`, ...): A n-digit corresponding field
 - `x`: A general 1-digit field
 
-## Legacy Versioning Scheme - `DreamBBS M.N.P.Q`; abbreviated as `M.N.P.Q`
+## Legacy Versioning Scheme - `MD.N.P.Q` or simply `M.N.P.Q`
 The versioning scheme originated from MapleBBS.
+
+To referring DreamBBS-specific versions, the letter `D` can be appended to the `M` part. In addition, DreamBBS versions before v4.0.0 can be collectively called `MapleBBS 3D`.
 
 For MapleBBS 3, the form `3.nn.P.Q` is used, e.g., `3.00` (not `3.0`) and `3.02` (not `3.2`).
 - It is acceptable to view these two digits as `np`: `N` is `0` and `P` is `2`, and thus the legacy versioning scheme for MapleBBS 3 is instead `3.np.Q.R`.
     However, this view is not adopted in this article.
 
-Before the introduction of the new versioning scheme, the latest version name was `WindTop 3.10 Rev.Beta 3` or `DreamBBS 3.10 Rev.Beta 3`, and the `.P` part was not actually used.
+Before the introduction of the new versioning scheme, the latest version name was `3.10 Rev.Beta 3` (inherited from WindTopBBS), and the `.P` part was not actually used.
 - However, it is acceptable to view `Rev.Beta 3` as the `.P` part (`3`).
 
-The `.Q` part is reserved for mapping version names in the current versioning scheme before `v4.0.0`.
+The `.Q` part is reserved for mapping version names in the current versioning scheme before `4D.0.0`/`v4.0.0`.
 
-## Current Versioning Scheme - `DreamBBS vM.N.P`; abbreviated as `vM.N.P` 
+## Current Versioning Scheme - `vM.N.P` 
 Note the presence of `v`.
 
 Each release using the new versioning scheme has a corresponding legacy version number as well:
-- For `M` ≤ `3`, `vM.N.P` corresponding to `3.X.N.P`, where each possible `M` maps to a unique `X`.
+- For `M` ≤ `3`, `vM.N.P` corresponding to `3D.X.N.P`, where each possible `M` maps to a unique `X`.
 
 For DreamBBS v3, the form `vM.n.P` is used, e.g., `v3.0` (not `v3.00`) and `v3.2` (not `v3.02`). The next major release after DreamBBS v3.3 will be DreamBBS v4.0, so that `N` will not be larger than `9`.
 
 It is acceptable to omit the `v` prefix for DreamBBS because using `M.N.P` along actually does not cause ambiguities:
-- DreamBBS derived from MapleBBS not before MapleBBS 2.36, so before DreamBBS v3 (i.e., `M` < `3`), `DreamBBS M.N` refers to `DreamBBS vM.N` but not `MapleBBS M.N`
-- DreamBBS v3 and MapleBBS 3 use different numbers of digits for `N`, so `DreamBBS 3.nn` refers to `MapleBBS 3.nn` but not `DreamBBS v3.nn`, while `DreamBBS 3.n` refers to `DreamBBS v3.n` but not `MapleBBS 3.n`.
+- DreamBBS derived from MapleBBS not before MapleBBS 2.36, so before DreamBBS v3 (i.e., `M` < `3`), `DreamBBS M.N` refers to `vM.N` but not `MD.N`
+- DreamBBS v3 and MapleBBS 3 use different numbers of digits for `N`, so `DreamBBS 3.nn` refers to `3D.nn` but not `v3.nn`, while `DreamBBS 3.n` refers to `v3.n` but not `3D.n`.
 
-This versioning scheme is deprecated. The version number `M.N.P` will be consistent with the legacy versioning scheme for `DreamBBS 4.0.0`/`DreamBBS v4.0.0` and on.
+However, to avoid confusions, these 2 schemes can be explicitly differentiated by using `MD.N.P` vs. `vM.N.P`.
+
+This versioning scheme is deprecated. The version number `M.N.P` will be consistent with the legacy versioning scheme for `4D.0.0`/`v4.0.0` and on.
 
 ## Branches of Development
 The new development workflow has led to the two main branches seen today: Release and `current`, which are explained in the following paragraphs.
 
-From DreamBBS v3.0 and on, no dedicated git branches for releases will be created. Instead, new releases on the release development branch are published based on git tags from the `master` branch.
+From v3.0 and on, no dedicated git branches for releases will be created. Instead, new releases on the release development branch are published based on git tags from the `master` branch.
 
 After v3.0, there are unstable branches for the convenience of testing as well: `develop` and `<user>/develop`.
 
@@ -69,7 +73,7 @@ Versioning Scheme: `vM.N.P`, or just `M.N.` after `4.0.0`
   - `v0.N` refers to the branch for `v0.N.P` versions
   - For `M` > 0, `vM.0` refers to the branch for `vM.N.P` versions
 
-### [`v0.95`](https://github.com/ccns/dreambbs/releases/tag/v0.95): Aka. `3.10 REV-BETA4` (`3.10.95`) ( **End-of-Life** )
+### [`v0.95`](https://github.com/ccns/dreambbs/releases/tag/v0.95): Aka. `3.10 REV-BETA4` (`3D.10.95`) ( **End-of-Life** )
 The new versioning scheme is introduced in this minor version.
 - [`v0.95.1`](https://github.com/ccns/dreambbs/releases/tag/v0.95.1): Aka. `3.10 REV-BETA4.1`
 - [`v0.95.2`](https://github.com/ccns/dreambbs/releases/tag/v0.95.2): Aka. `3.10 REV-BETA4.2`
@@ -78,7 +82,7 @@ The new versioning scheme is introduced in this minor version.
 
 It has become end-of-life when `v0.97.0` was released.
 
-### [`v0.96`](https://github.com/ccns/dreambbs/releases/tag/v0.96) (`3.10.96`) ( **End-of-Life** )
+### [`v0.96`](https://github.com/ccns/dreambbs/releases/tag/v0.96) (`3D.10.96`) ( **End-of-Life** )
 The `REV-BETA` part in the version name is no longer used.
 - [`v0.96.1`](https://github.com/ccns/dreambbs/releases/tag/v0.96.1)
 - [`v0.96.2`](https://github.com/ccns/dreambbs/releases/tag/v0.96.2)
@@ -91,7 +95,7 @@ Features:
 
 It has become end-of-life when `v0.97.1` was released.
 
-### `v0.97`: `stratosphere` (`3.10.97`) ( **End-of-Life** )
+### `v0.97`: `stratosphere` (`3D.10.97`) ( **End-of-Life** )
 - [`v0.97-RCx`](https://github.com/ccns/dreambbs/releases/tag/v0.97.0-RC1)-[`v0.97.0`](https://github.com/ccns/dreambbs/releases/tag/v0.97.0): Pre-release
 - [`v0.97.1`](https://github.com/ccns/dreambbs/releases/tag/v0.97.1)
 - [`v0.97.2`](https://github.com/ccns/dreambbs/releases/tag/v0.97.2)
@@ -101,7 +105,7 @@ Features:
   - Simple code test utilities.
   - Refined layout: Trailing whitespaces are removed.
 
-### `v0.98`-`v0.99` (`3.10.98`-`3.10.99`)
+### `v0.98`-`v0.99` (`3D.10.98`-`3D.10.99`)
 The plans have been dropped due to significant changes which require comprehensive tests.
 
 Pre-releases for `v1.0` were planned instead:
@@ -113,7 +117,7 @@ Pre-releases for `v1.0` were planned instead:
   - [`v1.0-RC2`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc2)
   - [`v1.0-RC3`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc3)
 
-### `v1.N`: `Tensure` series (`3.11.N`)
+### `v1.N`: `Tensure` series (`3D.11.N`)
 - [`v1.0.0`](https://github.com/ccns/dreambbs/releases/tag/v1.0.0): `rimuru`
 - [`v1.1.0`](https://github.com/ccns/dreambbs/releases/tag/v1.1.0): `milim`; backports and improvement from `current`
   - Features:
@@ -124,7 +128,7 @@ Pre-releases for `v1.0` were planned instead:
 - [`v1.2.0`](https://github.com/ccns/dreambbs/releases/tag/v1.2.0): `shizu`
 - [`v1.3.0`](https://github.com/ccns/dreambbs/releases/tag/v1.3.0): `veldora`
 
-### `v2.N`: `Fate` series (`3.12.N`) ( **Latest Release Branch** )
+### `v2.N`: `Fate` series (`3D.12.N`) ( **Latest Release Branch** )
 - [`v2.0.0`](https://github.com/ccns/dreambbs/releases/tag/v2.0.0): `artoria`
   - Features in plan:
     - [x] Option for disabling DSO.
@@ -135,7 +139,7 @@ Pre-releases for `v1.0` were planned instead:
     - Features:
       - Support building with CMake
 
-### `202X vN` (`v3.N`); `Four Symbol` series (`3.21.N`) ( Upcoming Release Branch )
+### `202X vN` (`v3.N`); `Four Symbol` series (`3D.21.N`) ( Upcoming Release Branch )
 The full name of this major version is `DreamBBS-202X vN`. `202X` refers to the 2020s decade.
 
 This will be the last major version whose version number is different from the legacy version number.
@@ -176,7 +180,7 @@ Version scheme after `v3.0`:
 
 Whenever a significant bug fix or change is made in `current`, the related commits will be merged into `testing` branch for the latest release version soon.
 
-However, from DreamBBS v3.0 and on, instead of merge the commits into the dedicated branch, a new release will be published soon.
+However, from v3.0 and on, instead of merge the commits into the dedicated branch, a new release will be published soon.
 
 - [x] `v1.0-CURRENT`
 - [x] `v2.0-CURRENT`
