@@ -17,15 +17,17 @@ For MapleBBS 3, the form `3.nn.P.Q` is used, e.g., `3.00` (not `3.0`) and `3.02`
 - It is acceptable to view these two digits as `np`: `N` is `0` and `P` is `2`, and thus the legacy versioning scheme for MapleBBS 3 is instead `3.np.Q.R`.
     However, this view is not adopted in this article.
 
-Before the introduction of the new versioning scheme, the latest version name was `3.10 Rev.Beta 3` (inherited from WindTopBBS), and the `.P` part was not actually used.
+Before the introduction of the 2018 versioning scheme, the latest version name was `3.10 Rev.Beta 3` (inherited from WindTopBBS), and the `.P` part was not actually used.
 - However, it is acceptable to view `Rev.Beta 3` as the `.P` part (`3`).
 
 The `.Q` part is reserved for mapping version names in the current versioning scheme before `4D.0.0`/`v4.0.0`.
 
-## Current Versioning Scheme - `vM.N.P` 
+## The 2018 Versioning Scheme - `vM.N.P` 
 Note the presence of `v`.
 
-Each release using the new versioning scheme has a corresponding legacy version number as well:
+The versioning scheme introduced in 2018, now deprecated.
+
+Each release using the 2018 versioning scheme has a corresponding legacy version number as well:
 - For `M` ≤ `3`, `vM.N.P` corresponding to `3D.X.N.P`, where each possible `M` maps to a unique `X`.
 
 For DreamBBS v3, the form `vM.n.P` is used, e.g., `v3.0` (not `v3.00`) and `v3.2` (not `v3.02`). The next major release after DreamBBS v3.3 will be DreamBBS v4.0, so that `N` will not be larger than `9`.
@@ -36,7 +38,7 @@ It is acceptable to omit the `v` prefix for DreamBBS because using `M.N.P` along
 
 However, to avoid confusions, these 2 schemes can be explicitly differentiated by using `MD.N.P` vs. `vM.N.P`.
 
-This versioning scheme is deprecated. The version number `M.N.P` will be consistent with the legacy versioning scheme for `4D.0.0`/`v4.0.0` and on.
+The version number `M.N.P` will be consistent with the legacy versioning scheme for `4D.0.0`/`v4.0.0` and on.
 
 ## Branches of Development
 The new development workflow has led to the two main branches seen today: Release and `current`, which are explained in the following paragraphs.
@@ -74,7 +76,7 @@ Versioning Scheme: `vM.N.P`, or just `M.N.` after `4.0.0`
   - For `M` > 0, `vM.0` refers to the branch for `vM.N.P` versions
 
 ### [`v0.95`](https://github.com/ccns/dreambbs/releases/tag/v0.95): Aka. `3.10 REV-BETA4` (`3D.10.95`) ( **End-of-Life** )
-The new versioning scheme is introduced in this minor version.
+The 2018 versioning scheme is introduced in this minor version.
 - [`v0.95.1`](https://github.com/ccns/dreambbs/releases/tag/v0.95.1): Aka. `3.10 REV-BETA4.1`
 - [`v0.95.2`](https://github.com/ccns/dreambbs/releases/tag/v0.95.2): Aka. `3.10 REV-BETA4.2`
 - [`v0.95.3`](https://github.com/ccns/dreambbs/releases/tag/v0.95.3): Aka. `3.10 REV-BETA4.3`
