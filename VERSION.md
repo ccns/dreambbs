@@ -46,7 +46,7 @@ The new development workflow has led to the two main branches seen today: Releas
 From v3.0 and on, no dedicated git branches for releases will be created. Instead, new releases on the release development branch are published based on git tags from the `master` branch.
 
 The stages of the overall development workflow after v3.0, from the most unstable to the most stable:
-- `<user or team>/develop` and PR branches
+- `<user-or-team>/develop` and PR branches
     - The developer(s)'s develop branch for self-review and peer-review
         - For PR branchs, draft PRs are in the self-review stage, while normal PRs are in the peer-review stage.
     - Other names can be used in place of the `develop` at the developer(s)'s intention
