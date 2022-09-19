@@ -148,13 +148,15 @@ This will be the last major version whose version number is different from the l
 
 Due to the shortage of development resources, from this major version and on, only the latest release version is officially maintained.
 
-- [ ] `202X v0` (`v3.0`) (**Testing**)
+- [x] [`202X v0` (`v3.0`)](https://github.com/ccns/dreambbs/releases/tag/v3.0.0)
   - [x] Hot-swapping of DSO
   - [x] Force using 32-bit int type structure member in native 64-bit environment
   - [x] Full IPv6 support
   - [x] Auto screen resizing
   - [x] Server-side DBCS character detection
-- [ ] `202X v1` (`v3.1`)
+- [x] [`202X v0.1` (`v3.0.1`)](https://github.com/ccns/dreambbs/releases/tag/v3.0.1)
+  - [x] Improved high resolution login stat chart
+- [ ] `202X v1` (`v3.1`) (**Testing**)
 - [ ] `202X v2` (`v3.2`)
 - [ ] `202X v3` (`v3.3`); planned to be the last release of `v3.X`
 
@@ -199,6 +201,9 @@ Sometimes, special versions are released on special events.
 - [x] [`v4.20-beta`](https://github.com/ccns/dreambbs/tree/v4.20-beta) (2021) (Based on `202X v0`/`v3.0`)
     - The main menu and the Xover list have 2 cursors
     - The main menu and the popup menu are movable again
+- [x] [`v4.20-rc.0`](https://github.com/ccns/dreambbs/tree/v4.20-rc.0) (Based on `202X v1-rc.1/`v3.1-rc.1`)
+    - All the previous v4.20 features are back.
+    - The popup menu also has 2 cursors.
 
 ## TODO
 - Features from PttBBS to port and test:
@@ -212,5 +217,5 @@ Sometimes, special versions are released on special events.
     - Note: (Maple3) visio = (Pirate/Ptt) term + screen/pfterm + io/(io + nios + vtkbd + vtuikit)
 - Features from other Maple3 branches to port and test
     - [x] Screen resizing
-    - [ ] BBS-Ruby (MIT; **Testing**)
+    - [x] BBS-Ruby (MIT; **Enhancing**)
 - [ ] Static Web Page Re-enabling
