@@ -1,6 +1,6 @@
 # To-Do and Version Plan
 
-## Convention of Version Number fields
+## Conventions of Version Number fields
 - `M`: Major version
 - `N`: Minor version
 - `P`: Patch version
@@ -12,11 +12,11 @@
 The versioning scheme originated from MapleBBS.
 
 For MapleBBS 3, the form `3.nn.P.Q` is used, e.g., `3.00` (not `3.0`) and `3.02` (not `3.2`).
-- It is viable to view these two digits as `np`: `N` is `0` and `P` is `2`, and thus the legacy versioning scheme for MapleBBS 3 is instead `3.np.Q.R`.
+- It is acceptable to view these two digits as `np`: `N` is `0` and `P` is `2`, and thus the legacy versioning scheme for MapleBBS 3 is instead `3.np.Q.R`.
     However, this view is not adopted in this article.
 
 Before the introduction of the new versioning scheme, the latest version name was `WindTop 3.10 Rev.Beta 3` or `DreamBBS 3.10 Rev.Beta 3`, and the `.P` part was not actually used.
-- However, it is viable to view `Rev.Beta 3` as the `.P` part (`3`).
+- However, it is acceptable to view `Rev.Beta 3` as the `.P` part (`3`).
 
 The `.Q` part is reserved for mapping version names in the current versioning scheme before `v4.0.0`.
 
