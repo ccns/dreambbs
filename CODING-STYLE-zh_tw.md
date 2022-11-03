@@ -12,7 +12,7 @@ Indentation style 的說明，請見 [[INDENT]]。
     - 至 2019-09-01 為止沒有轉移使用 C++ 的計畫，不須完全相容標準 C++ 語法
     - 不過，至 2020-02-24 為止已基本相容 C++20 語法，可通過 `g++-8` 或 `clang++-6` 編譯並正常執行
 - 可以使用 GNU C extensions；
-  但最好在不使用 GNU C extensions 時也能夠編譯
+  但若能以等效 ISO C 語法代替且不影響可讀性，就僅使用 ISO C 語法
     - 目前 (2022-03-19) 僅使用 GCC 和 Clang 編譯器，而它們都支援 GNU C extensions
 
 ## 人類語言的使用
