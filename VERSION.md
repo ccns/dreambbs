@@ -177,7 +177,7 @@ Former versioning scheme: `vM.0-CURRENT`
 
 Version scheme after `v3.0`:
   1. The name of the latest release version of its release series
-  2. Or `M.N-CURRENT` for CURRENT version of upcoming release series
+  2. Or `M.N-CURRENT` for the CURRENT version of the upcoming release series
     - Will be renamed into the real version name upon the official release
 
 Whenever a significant bug fix or change is made in CURRENT, the related commits will be merged into RELEASE for the latest release version soon.
