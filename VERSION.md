@@ -169,6 +169,30 @@ Features in plan:
   - [ ] Merge popup menu systems into main menu system
   - [ ] Merge main menu system into xover list system
 
+### `202X v4.N` (`v4.N`/`4D.N`); `Dream` series ( Planned Release Series )
+The full name of this major version is `DreamBBS-202X v4`.
+
+This major version is also named `MapleBBS 4D` by DreamBBS developers to reflect its goals.
+
+Goals:
+- Architecture
+    - [ ] Rust (allow C/C++ modules)
+    - [ ] Unicode + UTF-8 (with legacy contents unaffected)
+    - [ ] I18n & l10n
+    - [ ] 64-bit `libc::time_t`
+    - [ ] Compile once, create sites anywhere
+    - [ ] The disappearance of reinvented wheels
+    - [ ] Existent *de facto* standard BBS API
+    - [ ] Data control logics which isolated from the UI
+    - [ ] BBS-Lua 4D, for script-ized layout logics and non-resource-intensive auxiliary functionalities
+- Backward Compatibility
+    - [ ] Core functionality near-parity of both WindTopBBS and MapleBBS 3.10-itoc combined
+    - [ ] Automated upgrade of persistent data and site configuration from the fore-mentioned BBS systems
+- UI
+    - [ ] Telnet-based TUI targeting XTerm + SSH connection
+    - [ ] Resembling elements from the original MapleBBS 3.10 with enhancements
+    - [ ] Ready for time-variant terminal size
+
 ## CURRENT
 CURRENT (now consists of the `master` branch and the tag `stable`) has new features or significant changes which are being tested.
 
