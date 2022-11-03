@@ -40,10 +40,10 @@ However, to avoid confusions, these 2 schemes can be explicitly differentiated b
 
 The version number `M.N.P` will be consistent with the legacy versioning scheme for `4D.0.0`/`v4.0.0` and on.
 
-## Branches of Development
-The new development workflow has led to the two main branches seen today: Release and `current`, which are explained in the following paragraphs.
+## Branch/Tag Series
+The development workflow introduced in 2018 had led to the two branch series: RELEASE (formerly TESTING) and CURRENT, which are explained in the following paragraphs.
 
-From v3.0 and on, no dedicated git branches for releases will be created. Instead, new releases on the release development branch are published based on git tags from the `master` branch.
+From v3.0 and on, no dedicated git branches for RELEASE will be created. Instead, new releases on RELEASE are published based on git tags from the `master` branch.
 
 The stages of the overall development workflow after v3.0, from the most unstable to the most stable:
 - `<user-or-team>/develop` and PR branches
@@ -63,15 +63,15 @@ The stages of the overall development workflow after v3.0, from the most unstabl
     - The git tags added on `master` at times
     - The referenced commit should not be changed after the changelog is published
 
-## Release Branch (formerly `testing`)
-This branch emphasize more on the stability, the easiness to install, and the ability to deploy on different platform and containers, than the `current` branch.
+## RELEASE
+RELEASE emphasizes more on the stability, the easiness to install, and the ability to deploy on different platform and containers than CURRENT.
 
 Versioning Scheme: `vM.N.P`, or just `M.N.P` after `4.0.0`
   - `M`: Major version; indicates significant changes
   - `N`: Minor version; indicates introduction of new features
   - `P`: Patch version; indicates bug fixes or security improvement; based on the previous version
-  - `v0.N` refers to the branch for `v0.N.P` versions
-  - For `M` > 0, `vM.0` refers to the branch for `vM.N.P` versions
+  - `v0.N` refers to the series of `v0.N.P` versions
+  - For `M` > 0, `vM.0` refers to the series of `vM.N.P` versions
 
 ### [`v0.95`](https://github.com/ccns/dreambbs/releases/tag/v0.95): Aka. `3.10 REV-BETA4` (`3D.10.95`) ( **End-of-Life** )
 The 2018 versioning scheme is introduced in this minor version.
@@ -91,7 +91,7 @@ The `REV-BETA` part in the version name is no longer used.
 Features:
 - Sorted common library and refined structure.
 - Sample files are moved to another repository.
-- Other detailed changes from `current` version.
+- Other detailed changes from CURRENT.
 
 It has become end-of-life when `v0.97.1` was released.
 
@@ -119,7 +119,7 @@ Pre-releases for `v1.0` were planned instead:
 
 ### `v1.N`: `Tensure` series (`3D.11.N`)
 - [`v1.0.0`](https://github.com/ccns/dreambbs/releases/tag/v1.0.0): `rimuru`
-- [`v1.1.0`](https://github.com/ccns/dreambbs/releases/tag/v1.1.0): `milim`; backports and improvement from `current`
+- [`v1.1.0`](https://github.com/ccns/dreambbs/releases/tag/v1.1.0): `milim`; backports and improvement from CURRENT
   - Features:
     - [x] Screen resizing feature.
 - [`v1.1.1`](https://github.com/ccns/dreambbs/releases/tag/v1.1.1)
@@ -128,7 +128,7 @@ Pre-releases for `v1.0` were planned instead:
 - [`v1.2.0`](https://github.com/ccns/dreambbs/releases/tag/v1.2.0): `shizu`
 - [`v1.3.0`](https://github.com/ccns/dreambbs/releases/tag/v1.3.0): `veldora`
 
-### `v2.N`: `Fate` series (`3D.12.N`) ( **Latest Release Branch** )
+### `v2.N`: `Fate` series (`3D.12.N`) ( **Latest Release Series** )
 - [`v2.0.0`](https://github.com/ccns/dreambbs/releases/tag/v2.0.0): `artoria`
   - Features in plan:
     - [x] Option for disabling DSO.
@@ -139,7 +139,7 @@ Pre-releases for `v1.0` were planned instead:
     - Features:
       - Support building with CMake
 
-### `202X vN` (`v3.N`); `Four Symbol` series (`3D.21.N`) ( Upcoming Release Branch )
+### `202X vN` (`v3.N`); `Four Symbol` series (`3D.21.N`) ( Upcoming Release Series )
 The full name of this major version is `DreamBBS-202X vN`. `202X` refers to the 2020s decade.
 
 This will be the last major version whose version number is different from the legacy version number.
@@ -169,18 +169,18 @@ Features in plan:
   - [ ] Merge popup menu systems into main menu system
   - [ ] Merge main menu system into xover list system
 
-## `master` Branch (Current Branch)
-This branch has new features or significant changes which are being tested.
+## CURRENT
+CURRENT (now consists of the `master` branch and the tag `stable`) has new features or significant changes which are being tested.
 
 Former versioning scheme: `vM.0-CURRENT`
-  - The corresponding development branch for version `vM.N`
+  - The corresponding CURRENT version for `vM.N`
 
 Version scheme after `v3.0`:
-  1. The name of the latest release version for its development branch
-  2. Or `M.N-CURRENT` for the development branch of upcoming release versions
+  1. The name of the latest release version of its release series
+  2. Or `M.N-CURRENT` for CURRENT version of upcoming release series
     - Will be renamed into the real version name upon the official release
 
-Whenever a significant bug fix or change is made in `current`, the related commits will be merged into `testing` branch for the latest release version soon.
+Whenever a significant bug fix or change is made in CURRENT, the related commits will be merged into RELEASE for the latest release version soon.
 
 However, from v3.0 and on, instead of merge the commits into the dedicated branch, a new release will be published soon.
 
@@ -188,9 +188,9 @@ However, from v3.0 and on, instead of merge the commits into the dedicated branc
 - [x] `v2.0-CURRENT`
 - [x] `v3.0-CURRENT` ( **We are HERE** )
 
-## Special Release Versions
+## Special Editions
 
-Sometimes, special versions are released on special events.
+Sometimes, special editions are released on special events.
 
 ### April Fools' Day Event
 - [x] [`v4.20-alpha`](https://github.com/ccns/dreambbs/tree/v4.20-alpha) (2020) (Based on `v3.0-CURRENT`)
