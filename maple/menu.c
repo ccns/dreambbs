@@ -1076,8 +1076,10 @@ INTERNAL_INIT MENU menu_main[] =
     "2Skin     【 選擇介面區 】"},
 #endif
 
+#if 0 // DAO
     {{goodbye}, 0, M_XMODE,
     GOODBYE_EXIT},
+#endif
 
     {{NULL}, PERM_MENU + 'B', M_MMENU,
     "主功\能表"}
