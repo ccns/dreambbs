@@ -7,6 +7,8 @@
 - `Q` and so on: Additional fields
 - n consecutive lower-case letter(s) (`m`, `nn`, ...): A n-digit corresponding field
 - `x`: A general 1-digit field
+- `CODENAME`: A codename field
+- `PRERELEASE`: A pre-release field (starts with `alpha`/`beta`/`rc`)
 
 ## Legacy Versioning Scheme - `MD.N.P.Q` or simply `M.N.P.Q`
 The versioning scheme originated from MapleBBS.
@@ -70,15 +72,17 @@ Versioning Scheme: `vM.N.P`, or just `M.N.P` after `4.0.0`
   - `M`: Major version; indicates significant changes
   - `N`: Minor version; indicates introduction of new features
   - `P`: Patch version; indicates bug fixes or security improvement; based on the previous version
+  - `CODENAME` can be omitted for simplicity
+  - The present of `PRERELEASE` may indicate potential instability
   - `v0.N` refers to the series of `v0.N.P` versions
   - For `M` > 0, `vM.0` refers to the series of `vM.N.P` versions
 
-### [`v0.95`](https://github.com/ccns/dreambbs/releases/tag/v0.95): Aka. `3.10 REV-BETA4` (`3D.10.95`) ( **End-of-Life** )
+### [`v0.95`/`3.10 REV-BETA4`](https://github.com/ccns/dreambbs/releases/tag/v0.95) (`3D.10.95`) ( **End-of-Life** )
 The 2018 versioning scheme is introduced in this minor version.
-- [`v0.95.1`](https://github.com/ccns/dreambbs/releases/tag/v0.95.1): Aka. `3.10 REV-BETA4.1`
-- [`v0.95.2`](https://github.com/ccns/dreambbs/releases/tag/v0.95.2): Aka. `3.10 REV-BETA4.2`
-- [`v0.95.3`](https://github.com/ccns/dreambbs/releases/tag/v0.95.3): Aka. `3.10 REV-BETA4.3`
-- [`v0.95.4`](https://github.com/ccns/dreambbs/releases/tag/v0.95.4): Aka. `3.10 REV-BETA4.4`; planned to be the last release of `v0.95`
+- [`v0.95.1`/`3.10 REV-BETA4.1`](https://github.com/ccns/dreambbs/releases/tag/v0.95.1) 
+- [`v0.95.2`/`3.10 REV-BETA4.2`](https://github.com/ccns/dreambbs/releases/tag/v0.95.2)
+- [`v0.95.3`/`3.10 REV-BETA4.3`](https://github.com/ccns/dreambbs/releases/tag/v0.95.3)
+- [`v0.95.4`/`3.10 REV-BETA4.4`](https://github.com/ccns/dreambbs/releases/tag/v0.95.4): Planned to be the last release of `v0.95`
 
 It has become end-of-life when `v0.97.0` was released.
 
@@ -95,7 +99,7 @@ Features:
 
 It has become end-of-life when `v0.97.1` was released.
 
-### `v0.97`: `stratosphere` (`3D.10.97`) ( **End-of-Life** )
+### `v0.97-stratosphere` (`3D.10.97`) ( **End-of-Life** )
 - [`v0.97-RCx`](https://github.com/ccns/dreambbs/releases/tag/v0.97.0-RC1)-[`v0.97.0`](https://github.com/ccns/dreambbs/releases/tag/v0.97.0): Pre-release
 - [`v0.97.1`](https://github.com/ccns/dreambbs/releases/tag/v0.97.1)
 - [`v0.97.2`](https://github.com/ccns/dreambbs/releases/tag/v0.97.2)
@@ -118,24 +122,24 @@ Pre-releases for `v1.0` were planned instead:
   - [`v1.0-RC3`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc3)
 
 ### `v1.N`: `Tensure` series (`3D.11.N`)
-- [`v1.0.0`](https://github.com/ccns/dreambbs/releases/tag/v1.0.0): `rimuru`
-- [`v1.1.0`](https://github.com/ccns/dreambbs/releases/tag/v1.1.0): `milim`; backports and improvement from CURRENT
+- [`v1.0.0-rimuru`](https://github.com/ccns/dreambbs/releases/tag/v1.0.0)
+- [`v1.1.0-milim`](https://github.com/ccns/dreambbs/releases/tag/v1.1.0): Backports and improvement from CURRENT
   - Features:
     - [x] Screen resizing feature.
 - [`v1.1.1`](https://github.com/ccns/dreambbs/releases/tag/v1.1.1)
   - Features:
     - [x] `pfterm`, which was ported in this release version.
-- [`v1.2.0`](https://github.com/ccns/dreambbs/releases/tag/v1.2.0): `shizu`
-- [`v1.3.0`](https://github.com/ccns/dreambbs/releases/tag/v1.3.0): `veldora`
+- [`v1.2.0-shizu`](https://github.com/ccns/dreambbs/releases/tag/v1.2.0)
+- [`v1.3.0-veldora`](https://github.com/ccns/dreambbs/releases/tag/v1.3.0)
 
 ### `v2.N`: `Fate` series (`3D.12.N`) ( **Latest Release Series** )
-- [`v2.0.0`](https://github.com/ccns/dreambbs/releases/tag/v2.0.0): `artoria`
+- [`v2.0.0-artoria`](https://github.com/ccns/dreambbs/releases/tag/v2.0.0)
   - Features in plan:
     - [x] Option for disabling DSO.
     - [ ] BBS-Lua/BBS-Ruby.
     - [x] SHA-256-encrypted password support.
     - [x] Preliminary WebSocket support, based on relevant patches to Maple3 and PttBBS.
-- [`v2.1-rc1`](https://github.com/ccns/dreambbs/releases/tag/v2.1-rc1): `gilgamesh` (pre-release only)
+- [`v2.1-gilgamesh-rc1`](https://github.com/ccns/dreambbs/releases/tag/v2.1-rc1) (pre-release only)
     - Features:
       - Support building with CMake
 
