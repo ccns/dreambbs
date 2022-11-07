@@ -143,24 +143,24 @@ Pre-releases for `v1.0` were planned instead:
     - Features:
       - Support building with CMake
 
-### `202X vN` (`v3.N`); `Four Symbol` series (`3D.21.N`) ( Upcoming Release Series )
-The full name of this major version is `DreamBBS-202X vN`. `202X` refers to the 2020s decade.
+### `v3.N`; `Four Symbol` series (`3D.21.N`) ( Upcoming Release Series )
+This major version is also named `DreamBBS-202X vN`. `202X` refers to the 2020s decade.
 
 This will be the last major version whose version number is different from the legacy version number.
 
 Due to the shortage of development resources, from this major version and on, only the latest release version is officially maintained.
 
-- [x] [`202X v0` (`v3.0`)](https://github.com/ccns/dreambbs/releases/tag/v3.0.0)
+- [x] [`v3.0`/`202X v0`](https://github.com/ccns/dreambbs/releases/tag/v3.0.0)
   - [x] Hot-swapping of DSO
   - [x] Force using 32-bit int type structure member in native 64-bit environment
   - [x] Full IPv6 support
   - [x] Auto screen resizing
   - [x] Server-side DBCS character detection
-- [x] [`202X v0.1` (`v3.0.1`)](https://github.com/ccns/dreambbs/releases/tag/v3.0.1)
+- [x] [`v3.0.1`/`202X v0.1`](https://github.com/ccns/dreambbs/releases/tag/v3.0.1)
   - [x] Improved high resolution login stat chart
-- [ ] `202X v1` (`v3.1`) (**Testing**)
-- [ ] `202X v2` (`v3.2`)
-- [ ] `202X v3` (`v3.3`); planned to be the last release of `v3.X`
+- [ ] `v3.1` (**Testing**)
+- [ ] `v3.2`
+- [ ] `v3.3`; planned to be the last release of `v3.X`
 
 Features in plan:
   - [ ] Built-in Big5-UAO/UTF-8 conversion support.
@@ -173,9 +173,7 @@ Features in plan:
   - [ ] Merge popup menu systems into main menu system
   - [ ] Merge main menu system into xover list system
 
-### `202X v4.N` (`v4.N`/`4D.N`); `Dream` series ( Planned Release Series )
-The full name of this major version is `DreamBBS-202X v4`.
-
+### `v4.N`/`4D.N`; `Dream` series ( Planned Release Series )
 This major version is also named `MapleBBS 4D` by DreamBBS developers to reflect its goals.
 
 Goals:
@@ -224,10 +222,10 @@ Sometimes, special editions are released on special events.
 - [x] [`v4.20-alpha`](https://github.com/ccns/dreambbs/tree/v4.20-alpha) (2020) (Based on `v3.0-CURRENT`)
     - The main menu and the popup menu are movable
     - Every items in the main menu have a verbose explanation
-- [x] [`v4.20-beta`](https://github.com/ccns/dreambbs/tree/v4.20-beta) (2021) (Based on `202X v0`/`v3.0`)
+- [x] [`v4.20-beta`](https://github.com/ccns/dreambbs/tree/v4.20-beta) (2021) (Based on `v3.0`/`202X v0`)
     - The main menu and the Xover list have 2 cursors
     - The main menu and the popup menu are movable again
-- [x] [`v4.20-rc.0`](https://github.com/ccns/dreambbs/tree/v4.20-rc.0) (Based on `202X v1-rc.1/`v3.1-rc.1`)
+- [x] [`v4.20-rc.0`](https://github.com/ccns/dreambbs/tree/v4.20-rc.0) (Based on `v3.1-rc.1`/`202X v1-rc.1`)
     - All the previous v4.20 features are back.
     - The popup menu also has 2 cursors.
 
