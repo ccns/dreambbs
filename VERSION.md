@@ -5,7 +5,7 @@
 - `N`: Minor version
 - `P`: Patch version
 - `Q` and so on: Additional fields
-- n consecutive lower case letter(s) (`m`, `nn`, ...): A n-digit corresponding field
+- n consecutive lower-case letter(s) (`m`, `nn`, ...): A n-digit corresponding field
 - `x`: A general 1-digit field
 
 ## Legacy Versioning Scheme - `MD.N.P.Q` or simply `M.N.P.Q`
@@ -41,14 +41,14 @@ However, to avoid confusions, these 2 schemes can be explicitly differentiated b
 The version number `M.N.P` will be consistent with the legacy versioning scheme for `4D.0.0`/`v4.0.0` and on.
 
 ## Branch/Tag Series
-The development workflow introduced in 2018 had led to the two branch series: RELEASE (formerly TESTING) and CURRENT, which are explained in the following paragraphs.
+The development workflow introduced in 2018 had led to the two-branch series: RELEASE (formerly TESTING) and CURRENT, which are explained in the following paragraphs.
 
 From v3.0 and on, no dedicated git branches for RELEASE will be created. Instead, new releases on RELEASE are published based on git tags from the `master` branch.
 
 The stages of the overall development workflow after v3.0, from the most unstable to the most stable:
 - `<user-or-team>/develop` and PR branches
     - The developer(s)'s develop branch for self-review and peer-review
-        - For PR branchs, draft PRs are in the self-review stage, while normal PRs are in the peer-review stage.
+        - For PR branches, draft PRs are in the self-review stage, while normal PRs are in the peer-review stage.
     - Other names can be used in place of the `develop` at the developer(s)'s intention
     - At the self-review stage, force-updates can be performed at any time at the developer's intention
     - If the commits themselves are checked to not have problems, the peer-review stage should start
