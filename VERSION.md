@@ -73,6 +73,7 @@ Versioning Scheme: `vM.N.P`, or just `M.N.P` after `4.0.0`
   - `N`: Minor version; indicates introduction of new features
   - `P`: Patch version; indicates bug fixes or security improvement; based on the previous version
   - `CODENAME` can be omitted for simplicity
+    - If `CODENAME` is assigned to a minor version, one of `N` and `CODENAME` can be omitted
   - The present of `PRERELEASE` may indicate potential instability
   - `v0.N` refers to the series of `v0.N.P` versions
   - For `M` > 0, `vM.0` refers to the series of `vM.N.P` versions
