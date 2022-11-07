@@ -151,7 +151,7 @@ This will be the last major version whose version number is different from the l
 
 Due to the shortage of development resources, from this major version and on, only the latest release version is officially maintained.
 
-- [x] [`v3.0`/`202X v0`](https://github.com/ccns/dreambbs/releases/tag/v3.0.0)
+- [x] [`v3.0`/`202X v0-Azure`](https://github.com/ccns/dreambbs/releases/tag/v3.0.0)
   - [x] Hot-swapping of DSO
   - [x] Force using 32-bit int type structure member in native 64-bit environment
   - [x] Full IPv6 support
@@ -159,7 +159,9 @@ Due to the shortage of development resources, from this major version and on, on
   - [x] Server-side DBCS character detection
 - [x] [`v3.0.1`/`202X v0.1`](https://github.com/ccns/dreambbs/releases/tag/v3.0.1)
   - [x] Improved high resolution login stat chart
-- [ ] `v3.1` (**Testing**)
+- [ ] `v3.1`/`3D-AO.21.1-VRMiliO` (**Testing**)
+  - [ ] Remove logout option from the main menu
+    - This option is confirmed to be not necessary
 - [ ] `v3.2`
 - [ ] `v3.3`; planned to be the last release of `v3.X`
 
