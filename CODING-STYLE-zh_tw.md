@@ -235,6 +235,9 @@ Indentation style 的說明，請見 [[INDENT]]。
 
 名稱 | 常見型別 <br> ***粗斜體***表示限用此型別 | 意義 | 備註
 --- | ---      | --- | ---
+`rc` | `int`          | return code 回傳碼 | 應改用 `ret`
+`ret` | `int`         | return value 回傳值 | 也可回傳其它型別，只是原始 MapleBBS 3 未如此使用
+`res` | (不定)        | result value 結果值 | DreamBBS v2.0 引入
 `fp` | ***`FILE *`*** | file pointer 檔案指標 | 不應與 `fd` 混淆
 `fd` | ***`int`***    | file descriptor 檔案描述子 | 不應與 `fp` 混淆
 `ch` | `int`          | (temporary) character (暫時) 字元 |
