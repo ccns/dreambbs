@@ -1,6 +1,6 @@
-# Coding Style
+# Coding Style and Conventions
 
-本頁說明 DreamBBS 的 coding style (不含 indentation style)。
+本頁說明 DreamBBS 的 coding style 與慣例 (不含 indentation style)。
 
 Indentation style 的說明，請見 [[INDENT]]。
 
