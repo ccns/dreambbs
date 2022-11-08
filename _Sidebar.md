@@ -2,7 +2,7 @@
 - [[Install — 安裝說明|INSTALL]]
 - [[Version|VERSION]]
 - Project Documentations — 專案說明文件
-    - [[Coding style — 程式碼撰寫風格|CODING-STYLE-zh_tw]]
+    - [[Coding Style & Conventions — 程式碼撰寫風格與慣例|CODING-STYLE-zh_tw]]
     - [[Indentation|INDENT]]
     - [[Xover List System — Xover 列表系統|Xover-zh_tw]]
     - [[Menu Systems — 選單系統|Menu-zh_tw]]
