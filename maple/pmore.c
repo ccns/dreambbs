@@ -2641,12 +2641,6 @@ _pmore2(
             }
         }
 
-#ifndef PMORE_IGNORE_UNKNOWN_NAVKEYS
-#define HANDLE_UNKNOWN_NAVKEY() return ch
-#else
-#define HANDLE_UNKNOWN_NAVKEY() break
-#endif // PMORE_IGNORE_UNKNOWN_NAVKEYS
-
         // built-in navigation keys
         switch (ch) {
 
@@ -2948,8 +2942,10 @@ _pmore2(
                 break;
 #endif  /* #ifdef PMORE_USE_INTERNAL_HELP */
 
+#ifndef PMORE_IGNORE_UNKNOWN_NAVKEYS
             default:
-                HANDLE_UNKNOWN_NAVKEY();
+                return ch;
+#endif // PMORE_IGNORE_UNKNOWN_NAVKEYS
         }
         /* DO NOT DO ANYTHING HERE. NOT SAFE RIGHT NOW. */
     }
