@@ -1821,7 +1821,14 @@ vedit(
                 }
                 else
                 {
-                    prints("~%*s|", 77, "");
+                    const int pos_margin = (mode & VE_ANSI) ? 80 - 1 : 80 - 1 - margin;
+                    const int space = BMAX(0, pos_margin);
+                    const char *const mark_eof = (pos_margin > 0) ? "~" : "";
+                    const char mark_margin = (pos_margin < 0) ? '<' : '|';
+                    if (mode & VE_ANSI)
+                        prints("%-*s%c", space, mark_eof, mark_margin);
+                    else
+                        prints("\x1b[1;30m%-*s%c\x1b[m", space, mark_eof, mark_margin);
                 }
             }
 #ifdef EVERY_BIFF
