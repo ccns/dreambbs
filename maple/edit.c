@@ -1945,7 +1945,7 @@ ve_key:
                 vx_cur = tmp;
                 ve_col = (mode & VE_ANSI) ? ansi2n(tmp->len, tmp) : tmp->len;
                 if (vln == vx_top)
-                    vx_top = vln->next;
+                    vx_top = tmp;
                 join_up(tmp);
                 ve_mode = mode | VE_REDRAW;
                 break;
