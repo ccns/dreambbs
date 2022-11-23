@@ -338,6 +338,10 @@ int POP3_Check(const char *site, const char *account, const char *passwd);
 int Ext_POP3_Check(const char *site, const char *account, const char *passwd);
 #ifdef M3_USE_PMORE
 /* pmore.c */
+int expand_esc_star(char *buf, const char *src, int szbuf);
+unsigned char *mf_movieFrameHeader(const unsigned char *p, const unsigned char *end);
+int pmore2(const char *fpath, int promptend, void *ctx, int (*key_handler)(int key, void *ctx), int (*footer_handler)(int ratio, int width, void *ctx), int (*help_handler)(int y, void *ctx));
+int pmore2_inmemory(void *content, int size, int promptend, void *ctx, int (*key_handler)(int key, void *ctx), int (*footer_handler)(int ratio, int width, void *ctx), int (*help_handler)(int y, void *ctx));
 int pmore(const char *fpath, int promptend);
 #endif  /* #ifdef M3_USE_PMORE */
 /* popupmenu.c */
