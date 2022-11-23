@@ -409,6 +409,64 @@ more_slideshow(void)
 #define MAXBLOCK        256U    /* 記錄幾個 block 的 offset。可加速 MAXBLOCK*32 列以內的長文在上捲/翻時的速度 */
 #endif  /* #ifndef M3_USE_PMORE */
 
+#ifdef M3_USE_PMORE
+static int
+pmore_key_handler(int key, void *ctx)
+{
+    switch (key) {
+    /* pmore help */
+    case 'h': case 'H': case '?':
+#ifdef KEY_F1
+    case KEY_F1:
+#endif
+        /* r2.170810: For Our BBS system data... (not new patch) */
+        // help
+        film_out(FILM_MORE, -1);
+        return -2;
+
+    /* BBS-Lua */
+#ifdef USE_BBSLUA
+    case 'l': case 'L':
+        if (!HAS_PERM(PERM_BBSLUA))
+            return -1;
+        {
+            DL_HOTSWAP_SCOPE int (*func)(const char *) = NULL;
+            if (!func)
+            {
+                func = DL_NAME_GET("bbslua.so", bbslua);
+                if (!func)
+                    return -1;
+            }
+            func(*(char **)ctx);
+        }
+        return -2;
+#endif // USE_BBSLUA
+
+    /* BBS-Ruby */
+#ifdef USE_BBSRUBY
+    case '!':
+        if (!HAS_PERM(PERM_BBSRUBY))
+            return -1;
+        {
+            DL_HOTSWAP_SCOPE void (*func)(const char *) = NULL;
+            if (!func)
+            {
+                func = DL_NAME_GET("bbsruby.so", run_ruby);
+                if (!func)
+                    return -1;
+            }
+            func(*(char **)ctx);
+        }
+        return -2;
+#endif // USE_BBSRUBY
+
+    default:
+        ;
+    }
+    return 0;
+}
+#endif
+
 /* Thor.990204: 傳回值 -1 為無法show出
                         0 為全數show完
                        >0 為未全show，中斷所按的key */
@@ -436,7 +494,7 @@ more(
 #endif
 
 #ifdef M3_USE_PMORE
-    cmd = pmore(fpath, footer && footer != (char*)-1);
+    cmd = pmore2(fpath, footer && footer != (char*)-1, &fpath, pmore_key_handler, NULL, NULL);
 #else
 
     if (!(fimage = f_img(fpath, &fsize)))

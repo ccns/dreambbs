@@ -2617,6 +2617,11 @@ _pmore2(
             int r = key_handler(ch, ctx);
             switch (r)
             {
+                case -2:
+                    // Special return value for indicating 'something is displayed on the screen'
+                    MFDISP_DIRTY();
+                    continue;
+
                 case -1:
                     // common return value of 'file not exist',
                     // meaning 'bypassing this key' here.
@@ -2868,56 +2873,15 @@ _pmore2(
                 break;
 
             /* internal help */
+#ifdef PMORE_USE_INTERNAL_HELP
             case 'h': case 'H': case '?':
 #ifdef KEY_F1
             case KEY_F1:
 #endif
-#ifdef PMORE_USE_INTERNAL_HELP
                 pmore_Help(ctx, help_handler);
-#else     /* r2.170810: For Our BBS system data... (not new patch) */
-                // help
-                film_out(FILM_MORE, -1);
+                MFDISP_DIRTY();
+                break;
 #endif // PMORE_USE_INTERNAL_HELP
-                MFDISP_DIRTY();
-                break;
-
-            /* BBS-Lua */
-#ifdef USE_BBSLUA
-            case 'l': case 'L':
-                if (!HasUserPerm(PERM_BBSLUA))
-                    HANDLE_UNKNOWN_NAVKEY();
-                {
-                    DL_HOTSWAP_SCOPE int (*func)(const char *) = NULL;
-                    if (!func)
-                    {
-                        func = DL_NAME_GET("bbslua.so", bbslua);
-                        if (!func)
-                            HANDLE_UNKNOWN_NAVKEY();
-                    }
-                    func(* (char **)ahctx);
-                }
-                MFDISP_DIRTY();
-                break;
-#endif // USE_BBSLUA
-
-            /* BBS-Ruby */
-#ifdef USE_BBSRUBY
-            case '!':
-                if (!HasUserPerm(PERM_BBSRUBY))
-                    HANDLE_UNKNOWN_NAVKEY();
-                {
-                    DL_HOTSWAP_SCOPE void (*func)(const char *) = NULL;
-                    if (!func)
-                    {
-                        func = DL_NAME_GET("bbsruby.so", run_ruby);
-                        if (!func)
-                            HANDLE_UNKNOWN_NAVKEY();
-                    }
-                    func(* (char **)ahctx);
-                }
-                MFDISP_DIRTY();
-                break;
-#endif // USE_BBSRUBY
 
             /* debug system */
 #ifdef DEBUG
