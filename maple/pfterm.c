@@ -313,7 +313,7 @@ typedef struct
     int     sy, sx;   // stored cursor
     int     mi;       // map index, mi = current map and (1-mi) = old map
     int     dirty;
-    int     scroll;
+    int     scroll;   // Positive: Scrolling up (forward)
 
     // memory allocation
     int     mrows, mcols;
@@ -465,8 +465,8 @@ void    redrawwin   (void); // invalidate whole screen
 int     typeahead   (int fd);// prevent refresh if input queue is not empty
 
 // scrolling
-void    scroll      (void);     // scroll up
-void    rscroll     (void);     // scroll down
+void    scroll      (void);     // scroll up (forward)
+void    rscroll     (void);     // scroll down (backward)
 void    scrl        (int rows);
 
 // output (ncurses flavor)
@@ -1223,7 +1223,7 @@ scrl(int rows)
 void
 scroll(void)
 {
-    // scroll up
+    // scroll up (forward)
     int y;
     ftchar *c0 = FTCMAP[0], *oc0 = FTOCMAP[0];
     ftattr *a0 = FTAMAP[0], *oa0 = FTOAMAP[0];
@@ -1259,7 +1259,7 @@ scroll(void)
 void
 rscroll(void)
 {
-    // scroll down
+    // scroll down (backward)
     int y;
     ftchar *c0 = FTCMAP[ft.rows -1], *oc0 = FTOCMAP[ft.rows -1];
     ftattr *a0 = FTAMAP[ft.rows -1], *oa0 = FTOAMAP[ft.rows -1];
@@ -1784,7 +1784,7 @@ fterm_exec(void)
         break;
 
     case 'S':   // SU: CSI n S
-        // Scroll whole page up by n (default 1) lines.
+        // Scroll whole page up (forward) by n (default 1) lines.
         // New lines are added at the bottom.
         if (n < 1)
             n = 1;
@@ -1792,7 +1792,7 @@ fterm_exec(void)
         break;
 
     case 'T':   // SD: CSI n T
-        // Scroll whole page down by n (default 1) lines.
+        // Scroll whole page down (backward) by n (default 1) lines.
         // New lines are added at the top.
         if (n < 1)
             n = 1;
@@ -2396,8 +2396,8 @@ void
 fterm_rawscroll (int dy)
 {
 #ifdef FTCONF_USE_ANSI_SCROLL
-    // SU: CSI n S (up)
-    // SD: CSI n T (down)
+    // SU: CSI n S (up; forward)
+    // SD: CSI n T (down; backward)
 
     char cmd = (dy > 0) ? 'S' : 'T';
     int ady = abs(dy);
@@ -2409,8 +2409,8 @@ fterm_rawscroll (int dy)
 
 #else
     // VT100 flavor:
-    //  *  ESC D: scroll down
-    //  *  ESC M: scroll up
+    //  *  ESC D: scroll down (backward)
+    //  *  ESC M: scroll up (forward)
     //
     // Elder BBS systems works in a mixed way:
     // \n at (rows-1) as scroll()

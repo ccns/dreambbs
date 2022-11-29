@@ -55,8 +55,8 @@ void    redrawwin   (void);             // invalidate whole screen
 int     typeahead   (int fd);           // prevent refresh if input queue is not empty
 
 // scrolling
-void    scroll      (void);             // scroll up
-void    rscroll     (void);             // scroll down
+void    scroll      (void);             // scroll up (forward)
+void    rscroll     (void);             // scroll down (backward)
 void    scrl        (int rows);
 
 // output (ncurses flavor)
