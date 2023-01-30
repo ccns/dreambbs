@@ -460,6 +460,18 @@ pmore_key_handler(int key, void *ctx)
         return -2;
 #endif // USE_BBSRUBY
 
+    /* Save to temporary buffer file */
+    case 'C':
+        {
+            FILE *fp;
+            if ((fp = tbf_open(-1)))
+            {
+                f_suck(fp, *(char **)ctx);
+                fclose(fp);
+            }
+        }
+        return -2;
+
     default:
         ;
     }
