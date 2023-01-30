@@ -1890,12 +1890,12 @@ post_delete(
                     FILE *fp;
                     time_t now = time(0);
                     HDR mhdr;
-                    hdr_stamp(folder, 0, &mhdr, buf);
+                    const int fd = hdr_stamp(folder, 0, &mhdr, buf);
                     strcpy(mhdr.owner, cuser.userid);
                     strcpy(mhdr.title, "文章退回通知");
                     rec_add(folder, &mhdr, sizeof(mhdr));
 
-                    fp = fopen(buf, "w");
+                    fp = fdopen(fd, "w");
                     fprintf(fp, "作者: %s (%s)\n", cuser.userid, cuser.username);
                     fprintf(fp, "標題: %s\n時間: %s\n", "文章退回通知", ctime(&now));
                     fprintf(fp, "\n\x1b[1;31m***** 本信件由系統自動產生，如要申訴請重新上站後轉寄給站務並保留此信件 *****\x1b[m\n\n");

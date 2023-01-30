@@ -394,13 +394,13 @@ mail2usr(
     memset(&hdr, 0, sizeof(hdr));
 
     usr_fpath(folder, personal->userid, fn_dir);
-    hdr_stamp(folder, 0, &hdr, fpath);
+    const int fd = hdr_stamp(folder, 0, &hdr, fpath);
     strcpy(hdr.owner, "SYSOP");
     strcpy(hdr.nick, SYSOPNICK);
     strcpy(hdr.title, title[admin]);
     rec_add(folder, &hdr, sizeof(HDR));
 
-    if ((fp = fopen(fpath, "w")))
+    if ((fp = fdopen(fd, "w")))
     {
         fprintf(fp, "作者: SYSOP (%s)\n標題: %s\n時間: %s\n", SYSOPNICK, title[admin], ctime(&now));
         fprintf(fp, "申請人:   %s\n", personal->userid);
