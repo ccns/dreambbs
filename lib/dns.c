@@ -30,7 +30,7 @@ int dns_query(const char *name, /* domain name */
     querybuf buf;
 
     qtype =
-        res_mkquery(QUERY, name, C_IN, qtype, NULL, 0, NULL,
+        res_mkquery(ns_o_query, name, ns_c_in, qtype, NULL, 0, NULL,
                     buf.buf, sizeof(buf));
 
     if (qtype >= 0)
@@ -62,7 +62,7 @@ int dns_query(const char *name, /* domain name */
 
 ip_addr dns_addr(const char *name)
 {
-    static const int qtypes[] = {T_A, T_AAAA};
+    static const int qtypes[] = {ns_t_a, ns_t_aaaa};
     struct addrinfo hints = {0};
     struct addrinfo *hosts;
     ip_addr addr = {0};
@@ -111,14 +111,14 @@ ip_addr dns_addr(const char *name)
             int n = dn_skipname(cp, eom);
             if (n < 0)
                 return IPADDR_NONE;
-            cp += n + QFIXEDSZ;
+            cp += n + NS_QFIXEDSZ;
         }
 
         for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
         {
-            char hostbuf[MAXDNAME];
+            char hostbuf[NS_MAXDNAME];
             int type;
-            int n = dn_expand(ans.buf, eom, cp, hostbuf, MAXDNAME);
+            int n = dn_expand(ans.buf, eom, cp, hostbuf, NS_MAXDNAME);
             if (n < 0)
                 return IPADDR_NONE;
 
@@ -132,11 +132,11 @@ ip_addr dns_addr(const char *name)
                 ip_addr addr = {0};
                 switch (type)
                 {
-                case T_A:
+                case ns_t_a:
                     addr.family = AF_INET;
                     addr.v4.sin_addr = *(struct in_addr *) cp;
                     return addr;
-                case T_AAAA:
+                case ns_t_aaaa:
                     addr.family = AF_INET6;
                     addr.v6.sin6_addr = *(struct in6_addr *) cp;
                     return addr;
@@ -410,7 +410,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
 
     {
         const unsigned char *ad;
-        char qbuf[MAXDNAME];
+        char qbuf[NS_MAXDNAME];
         int n;
 
         switch (addr->family)
@@ -444,7 +444,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
             return -1;
         }
 
-        n = dns_query(qbuf, T_PTR, &ans);
+        n = dns_query(qbuf, ns_t_ptr, &ans);
         if (n < 0)
             return n;
 
@@ -459,14 +459,14 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
         int n = dn_skipname(cp, eom);
         if (n < 0)
             return n;
-        cp += n + QFIXEDSZ;
+        cp += n + NS_QFIXEDSZ;
     }
 
     for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
     {
-        char hostbuf[MAXDNAME];
+        char hostbuf[NS_MAXDNAME];
         int type;
-        int n = dn_expand(ans.buf, eom, cp, hostbuf, MAXDNAME);
+        int n = dn_expand(ans.buf, eom, cp, hostbuf, NS_MAXDNAME);
         if (n < 0)
             return n;
 
@@ -475,9 +475,9 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
         n = getshort(cp + 8);
         cp += 10;
 
-        if (type == T_PTR)
+        if (type == ns_t_ptr)
         {
-            int n = dn_expand(ans.buf, eom, cp, hostbuf, MAXDNAME);
+            int n = dn_expand(ans.buf, eom, cp, hostbuf, NS_MAXDNAME);
             if (n >= 0)
             {
                 str_scpy(name, hostbuf, name_sz);
@@ -486,7 +486,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
         }
 
 #if 0
-        if (type == T_CNAME)
+        if (type == ns_t_cname)
         {
             str_scpy(name, hostbuf, name_sz);
             return 0;
@@ -541,10 +541,10 @@ int dns_openip(const ip_addr *addr, int port)
 
 int dns_open(const char *host, int port)
 {
-    static const int qtypes[] = {T_A, T_AAAA};
+    static const int qtypes[] = {ns_t_a, ns_t_aaaa};
     querybuf ans;
     unsigned char *cp, *eom;
-    char buf[MAXDNAME];
+    char buf[NS_MAXDNAME];
 
 #if 1
     /* Thor.980707: 因gem.c呼叫時可能將host用ip放入，故作特別處理 */
@@ -592,13 +592,13 @@ int dns_open(const char *host, int port)
             int n = dn_skipname(cp, eom);
             if (n < 0)
                 return n;
-            cp += n + QFIXEDSZ;
+            cp += n + NS_QFIXEDSZ;
         }
 
         for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
         {
             int type;
-            int n = dn_expand(ans.buf, eom, cp, buf, MAXDNAME);
+            int n = dn_expand(ans.buf, eom, cp, buf, NS_MAXDNAME);
             if (n < 0)
                 return -1;
 
@@ -614,11 +614,11 @@ int dns_open(const char *host, int port)
                 int sock;
                 switch (type)
                 {
-                case T_A:
+                case ns_t_a:
                     addr.family = AF_INET;
                     addr.v4.sin_addr = *(struct in_addr *)buf;
                     break;
-                case T_AAAA:
+                case ns_t_aaaa:
                     addr.family = AF_INET6;
                     addr.v6.sin6_addr = *(struct in6_addr *)buf;
                     break;
@@ -658,7 +658,7 @@ static inline void dns_mx(const char *domain, char *mxlist, int mxlist_sz)
     *mxlist = 0;
 
     {
-        int n = dns_query(domain, T_MX, &ans);
+        int n = dns_query(domain, ns_t_mx, &ans);
 
         if (n < 0)
             return;
@@ -674,7 +674,7 @@ static inline void dns_mx(const char *domain, char *mxlist, int mxlist_sz)
         int n = dn_skipname(cp, eom);
         if (n < 0)
             return;
-        cp += n + QFIXEDSZ;
+        cp += n + NS_QFIXEDSZ;
     }
 
     for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
@@ -690,7 +690,7 @@ static inline void dns_mx(const char *domain, char *mxlist, int mxlist_sz)
         n = getshort(cp + 8);
         cp += 10;
 
-        if (type == T_MX)
+        if (type == ns_t_mx)
         {
             /* pref = getshort(cp); */
             *mxlist = '\0';

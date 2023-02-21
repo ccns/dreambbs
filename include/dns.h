@@ -41,7 +41,7 @@ typedef union
 #define IPADDR_NONE     LISTLIT(ip_addr){0}
 
 /*
- * The standard udp packet size PACKETSZ (512) is not sufficient for some
+ * The standard udp packet size NS_PACKETSZ (512) is not sufficient for some
  * nameserver answers containing very many resource records. The resolver may
  * switch to tcp and retry if it detects udp packet overflow. Also note that
  * the resolver routines res_query and res_search return the size of the
@@ -49,10 +49,10 @@ typedef union
  * to accommodate the entire answer.
  */
 
-#if     PACKETSZ > 1024
-#define MAXPACKET       PACKETSZ
+#if     NS_PACKETSZ > 1024
+#define DNS_MAXPACKET   NS_PACKETSZ
 #else
-#define MAXPACKET       1024    /* max packet size used internally by BIND */
+#define DNS_MAXPACKET   1024    /* max packet size used internally by BIND */
 #endif
 
 #define MAX_MXLIST      1024
@@ -60,7 +60,7 @@ typedef union
 typedef union
 {
     HEADER hdr;
-    unsigned char buf[MAXPACKET];
+    unsigned char buf[DNS_MAXPACKET];
 } querybuf;                     /* response of DNS query */
 
 static inline unsigned short
