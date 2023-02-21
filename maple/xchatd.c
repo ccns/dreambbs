@@ -3077,7 +3077,7 @@ servo_daemon(
             setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, (char *) &value, sizeof(value));
 
             value = 1;
-            setsockopt(fd, host->ai_protocol, TCP_NODELAY, (char *) &value, sizeof(value));
+            setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &value, sizeof(value));
 
             ld.l_onoff = ld.l_linger = 0;
             setsockopt(fd, SOL_SOCKET, SO_LINGER, (char *) &ld, sizeof(ld));

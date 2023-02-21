@@ -1562,7 +1562,7 @@ static int start_daemon(int argc, char *const argv[])
             setsockopt(fd, SOL_SOCKET, SO_KEEPALIVE, (char *) &val, sizeof(val));
 
             if (port != -2)
-                setsockopt(fd, host->ai_socktype, TCP_NODELAY, (char *) &val, sizeof(val));
+                setsockopt(fd, IPPROTO_TCP, TCP_NODELAY, (char *) &val, sizeof(val));
 #endif
 
             ld.l_onoff = ld.l_linger = 0;
