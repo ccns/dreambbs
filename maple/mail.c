@@ -331,23 +331,23 @@ bsmtp(
         while (buf[3] == '-') /* maniac.bbs@WMStar.twbbs.org 2000.04.18 */
             fgets(buf, sizeof(buf), fr);
 
-#define SMTP_TRY_SENDF(...) do { \
+#define SMTP_TRY_SENDF(expected, ...) do { \
     fprintf(fw, __VA_ARGS__); \
     fflush(fw); \
     do \
     { \
         fgets(buf, sizeof(buf), fr); \
-        if (strncmp(buf, "250", 3)) \
+        if (strncmp(buf, CPP_STR(expected), 3)) \
             goto smtp_error; \
     } while (buf[3] == '-'); \
 } while (0)
 
         /* Thor.990125: MYHOSTNAME統一放入 str_host */
-        SMTP_TRY_SENDF("HELO %s\r\n", str_host);
-        SMTP_TRY_SENDF("MAIL FROM:<%s>\r\n", from);
-        SMTP_TRY_SENDF("RCPT TO:<%s>\r\n", rcpt);
-/*      SMTP_TRY_SENDF("DATA\r\n", rcpt);*/ /* statue.000713 */
-        SMTP_TRY_SENDF("DATA\r\n");
+        SMTP_TRY_SENDF(250, "HELO %s\r\n", str_host);
+        SMTP_TRY_SENDF(250, "MAIL FROM:<%s>\r\n", from);
+        SMTP_TRY_SENDF(250, "RCPT TO:<%s>\r\n", rcpt);
+/*      SMTP_TRY_SENDF(354, "DATA\r\n", rcpt);*/ /* statue.000713 */
+        SMTP_TRY_SENDF(354, "DATA\r\n");
 
 #undef SMTP_TRY_SENDF
 
