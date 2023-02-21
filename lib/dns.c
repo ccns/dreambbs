@@ -93,7 +93,7 @@ ip_addr dns_addr(const char *name)
     hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICHOST | AI_NUMERICSERV;
     {
         int status = getaddrinfo(name, NULL, &hints, &hosts);
-        if (status)
+        if (!status)
         {
             switch (addr.family = hosts->ai_family)
             {
