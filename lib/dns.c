@@ -21,7 +21,28 @@ void dns_init(void)
     //  _res.options |= RES_USEVC;
 }
 
-
+/* IID.2023-02-21: Below is the data format of output parameter `ans` in pseudo code. See RFC 1035.
+    struct DnsMessage {
+        HEADER hdr; // defined in <arpa/nameser_compat.h>
+        struct QSection question[];
+        struct ASection answer[],
+            authority[],
+            additional[];
+    };
+    struct QSection {
+        char domain_name[];
+        uint16_t query_type;
+        uint16_t query_class;
+    };
+    struct ASection { // see the struct `ns_rr` defined in <arpa/nameser.h>
+        char domain_name[];
+        uint16_t type;
+        uint16_t class_;
+        uint32_t ttl;
+        uint16_t resource_data_length;
+        const unsigned char resource_data[];
+    };
+*/
 int dns_query(const char *name, /* domain name */
               int qtype,        /* type of query */
               querybuf * ans    /* buffer to put answer */
@@ -106,6 +127,7 @@ ip_addr dns_addr(const char *name)
             eom = ans.buf + n;
         }
 
+        /* skip question section */
         for (int qdcount = ntohs(ans.hdr.qdcount); qdcount--;)
         {
             int n = dn_skipname(cp, eom);
@@ -118,15 +140,19 @@ ip_addr dns_addr(const char *name)
         {
             char hostbuf[NS_MAXDNAME];
             int type;
+            /* cp: domain_name */
             int n = dn_expand(ans.buf, eom, cp, hostbuf, NS_MAXDNAME);
             if (n < 0)
                 return IPADDR_NONE;
 
             cp += n;
+
+            /* cp: type */
             type = getshort(cp);
-            n = getshort(cp + 8);
+            n = getshort(cp + 8); // resource_data_length
             cp += 10;
 
+            /* cp: resource_data */
             if (type == qtypes[i])
             {
                 ip_addr addr = {0};
@@ -454,6 +480,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
         eom = ans.buf + n;
     }
 
+    /* skip question section */
     for (int qdcount = ntohs(ans.hdr.qdcount); qdcount--;)
     {
         int n = dn_skipname(cp, eom);
@@ -466,15 +493,19 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
     {
         char hostbuf[NS_MAXDNAME];
         int type;
+        /* cp: domain_name */
         int n = dn_expand(ans.buf, eom, cp, hostbuf, NS_MAXDNAME);
         if (n < 0)
             return n;
 
         cp += n;
+
+        /* cp: type */
         type = getshort(cp);
-        n = getshort(cp + 8);
+        n = getshort(cp + 8); // resource_data_length
         cp += 10;
 
+        /* cp: resource_data */
         if (type == ns_t_ptr)
         {
             int n = dn_expand(ans.buf, eom, cp, hostbuf, NS_MAXDNAME);
@@ -587,6 +618,7 @@ int dns_open(const char *host, int port)
             eom = ans.buf + n;
         }
 
+        /* skip question section */
         for (int qdcount = ntohs(ans.hdr.qdcount); qdcount--;)
         {
             int n = dn_skipname(cp, eom);
@@ -598,16 +630,19 @@ int dns_open(const char *host, int port)
         for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
         {
             int type;
+            /* cp: domain_name */
             int n = dn_expand(ans.buf, eom, cp, buf, NS_MAXDNAME);
             if (n < 0)
                 return -1;
 
             cp += n;
 
+            /* cp: type */
             type = getshort(cp);
-            n = getshort(cp + 8);
+            n = getshort(cp + 8); // resource_data_length
             cp += 10;
 
+            /* cp: resource_data */
             if (type == qtypes[i])
             {
                 ip_addr addr = {0};
@@ -669,6 +704,7 @@ static inline void dns_mx(const char *domain, char *mxlist, int mxlist_sz)
         eom = ans.buf + n;
     }
 
+    /* skip question section */
     for (int qdcount = ntohs(ans.hdr.qdcount); qdcount--;)
     {
         int n = dn_skipname(cp, eom);
@@ -680,16 +716,19 @@ static inline void dns_mx(const char *domain, char *mxlist, int mxlist_sz)
     for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
     {
         int type;
+        /* cp: domain_name */
         int n = dn_expand(ans.buf, eom, cp, mxlist, mxlist_end - mxlist);
         if (n < 0)
             break;
 
         cp += n;
 
+        /* cp: type */
         type = getshort(cp);
-        n = getshort(cp + 8);
+        n = getshort(cp + 8); // resource_data_length
         cp += 10;
 
+        /* cp: resource_data */
         if (type == ns_t_mx)
         {
             /* pref = getshort(cp); */
