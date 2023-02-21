@@ -30,13 +30,13 @@ int dns_query(const char *name, /* domain name */
     querybuf buf;
 
     qtype =
-        res_mkquery(QUERY, name, C_IN, qtype, (unsigned char *)NULL, 0, NULL,
-                    (unsigned char *)&buf, sizeof(buf));
+        res_mkquery(QUERY, name, C_IN, qtype, NULL, 0, NULL,
+                    buf.buf, sizeof(buf));
 
     if (qtype >= 0)
     {
         qtype =
-            res_send((unsigned char *)&buf, qtype, (unsigned char *)ans,
+            res_send(buf.buf, qtype, ans->buf,
                      sizeof(querybuf));
 
         /* avoid problems after truncation in tcp packets */
@@ -102,8 +102,8 @@ ip_addr dns_addr(const char *name)
 
             /* find first satisfactory answer */
 
-            cp = (unsigned char *)&ans + sizeof(HEADER);
-            eom = (unsigned char *)&ans + n;
+            cp = ans.buf + sizeof(HEADER);
+            eom = ans.buf + n;
         }
 
         for (int qdcount = ntohs(ans.hdr.qdcount); qdcount--;)
@@ -118,7 +118,7 @@ ip_addr dns_addr(const char *name)
         {
             char hostbuf[MAXDNAME];
             int type;
-            int n = dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME);
+            int n = dn_expand(ans.buf, eom, cp, hostbuf, MAXDNAME);
             if (n < 0)
                 return IPADDR_NONE;
 
@@ -450,8 +450,8 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
 
         /* find first satisfactory answer */
 
-        cp = (unsigned char *)&ans + sizeof(HEADER);
-        eom = (unsigned char *)&ans + n;
+        cp = ans.buf + sizeof(HEADER);
+        eom = ans.buf + n;
     }
 
     for (int qdcount = ntohs(ans.hdr.qdcount); qdcount--;)
@@ -466,7 +466,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
     {
         char hostbuf[MAXDNAME];
         int type;
-        int n = dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME);
+        int n = dn_expand(ans.buf, eom, cp, hostbuf, MAXDNAME);
         if (n < 0)
             return n;
 
@@ -477,7 +477,7 @@ int dns_name(const ip_addr *addr, char *name, int name_sz)
 
         if (type == T_PTR)
         {
-            int n = dn_expand((unsigned char *)&ans, eom, cp, hostbuf, MAXDNAME);
+            int n = dn_expand(ans.buf, eom, cp, hostbuf, MAXDNAME);
             if (n >= 0)
             {
                 str_scpy(name, hostbuf, name_sz);
@@ -583,8 +583,8 @@ int dns_open(const char *host, int port)
 
             /* find first satisfactory answer */
 
-            cp = (unsigned char *)&ans + sizeof(HEADER);
-            eom = (unsigned char *)&ans + n;
+            cp = ans.buf + sizeof(HEADER);
+            eom = ans.buf + n;
         }
 
         for (int qdcount = ntohs(ans.hdr.qdcount); qdcount--;)
@@ -598,7 +598,7 @@ int dns_open(const char *host, int port)
         for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
         {
             int type;
-            int n = dn_expand((unsigned char *)&ans, eom, cp, buf, MAXDNAME);
+            int n = dn_expand(ans.buf, eom, cp, buf, MAXDNAME);
             if (n < 0)
                 return -1;
 
@@ -665,8 +665,8 @@ static inline void dns_mx(const char *domain, char *mxlist, int mxlist_sz)
 
         /* find first satisfactory answer */
 
-        cp = (unsigned char *)&ans + sizeof(HEADER);
-        eom = (unsigned char *)&ans + n;
+        cp = ans.buf + sizeof(HEADER);
+        eom = ans.buf + n;
     }
 
     for (int qdcount = ntohs(ans.hdr.qdcount); qdcount--;)
@@ -680,7 +680,7 @@ static inline void dns_mx(const char *domain, char *mxlist, int mxlist_sz)
     for (int ancount = ntohs(ans.hdr.ancount); --ancount >= 0 && cp < eom;)
     {
         int type;
-        int n = dn_expand((unsigned char *)&ans, eom, cp, mxlist, mxlist_end - mxlist);
+        int n = dn_expand(ans.buf, eom, cp, mxlist, mxlist_end - mxlist);
         if (n < 0)
             break;
 
@@ -694,7 +694,7 @@ static inline void dns_mx(const char *domain, char *mxlist, int mxlist_sz)
         {
             /* pref = getshort(cp); */
             *mxlist = '\0';
-            if ((dn_expand((unsigned char *)&ans, eom, cp + 2, mxlist, mxlist_end - mxlist)) < 0)
+            if ((dn_expand(ans.buf, eom, cp + 2, mxlist, mxlist_end - mxlist)) < 0)
                 break;
 
             if (!*mxlist)
