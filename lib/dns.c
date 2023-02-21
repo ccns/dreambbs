@@ -651,11 +651,11 @@ int dns_open(const char *host, int port)
                 {
                 case ns_t_a:
                     addr.family = AF_INET;
-                    addr.v4.sin_addr = *(struct in_addr *)buf;
+                    addr.v4.sin_addr = *(struct in_addr *)cp;
                     break;
                 case ns_t_aaaa:
                     addr.family = AF_INET6;
-                    addr.v6.sin6_addr = *(struct in6_addr *)buf;
+                    addr.v6.sin6_addr = *(struct in6_addr *)cp;
                     break;
                 default:
                     return -1;
