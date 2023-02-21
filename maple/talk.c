@@ -12,6 +12,7 @@
 
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <netdb.h>
 
 #undef  APRIL_FIRST
@@ -4301,6 +4302,7 @@ t_query(void)
 void
 talk_rqst(void)
 {
+    static const unsigned int sec_timeout = 1; /* IID.2023-02-21: TCP-based timeout for connect(). Unit: Seconds */
     UTMP *up;
     int mode, sock, ans, len, port;
     char buf[80];
@@ -4436,8 +4438,12 @@ over_for:
         if (sock < 0)
             continue;
 
+        setsockopt(sock, IPPROTO_TCP, TCP_USER_TIMEOUT, &TEMPLVAL(unsigned int, {1000 * sec_timeout}), sizeof(unsigned int));
+
         if (!connect(sock, h->ai_addr, h->ai_addrlen))
         {
+            setsockopt(sock, IPPROTO_TCP, TCP_USER_TIMEOUT, &TEMPLVAL(unsigned int, {0}), sizeof(unsigned int));
+
             send(sock, buf, len, 0);
 
             if (ans == 'y')

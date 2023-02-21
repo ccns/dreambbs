@@ -12,6 +12,7 @@
 
 #include <sys/socket.h>
 #include <netinet/in.h>
+#include <netinet/tcp.h>
 #include <netdb.h>
 
 
@@ -556,6 +557,7 @@ int
 t_chat(void)
 {
     DL_HOLD;
+    static const unsigned int sec_timeout = 1; /* IID.2023-02-21: TCP-based timeout for connect(). Unit: Seconds */
     int ch, cfd = -1, cmdpos, cmdcol;
     char *ptr = NULL, buf[128], chatid[9];
     struct addrinfo hints = {0};
@@ -586,6 +588,8 @@ t_chat(void)
         if (cfd < 0)
             continue;
 
+        setsockopt(cfd, IPPROTO_TCP, TCP_USER_TIMEOUT, &TEMPLVAL(unsigned int, {1000 * sec_timeout}), sizeof(unsigned int));
+
         if (connect(cfd, h->ai_addr, h->ai_addrlen))
         {
             close(cfd);
@@ -593,6 +597,8 @@ t_chat(void)
             cfd = -1;
             continue;
         }
+
+        setsockopt(cfd, IPPROTO_TCP, TCP_USER_TIMEOUT, &TEMPLVAL(unsigned int, {0}), sizeof(unsigned int));
     }
     freeaddrinfo(hs);
     if (cfd < 0)

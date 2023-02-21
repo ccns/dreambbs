@@ -12,6 +12,7 @@
 #include <signal.h>
 #include <unistd.h>
 #include <string.h>
+#include <netinet/tcp.h>
 
 void dns_init(void)
 {
@@ -201,14 +202,19 @@ ip_addr dns_addr(const char *name)
 
 
 #define RFC931_TIMEOUT            /* Thor.991215: ¬O§_´£¨Ñ timeout */
+#undef ALARM_TIMEOUT              /* IID.2023-02-21: Whether to use alarm() for timeout */
 
 #ifdef RFC931_TIMEOUT
 static const int timeout = 1;    /* ­Y 1 ¬í«á³s½u¥¼§¹¦¨¡A«h©ñ±ó */
 
+  #ifdef ALARM_TIMEOUT
 static void pseudo_handler(GCC_UNUSED int signum) /* Thor.991215: for timeout */
 {
     /* connect time out */
 }
+  #endif
+#else /* !#ifdef RFC931_TIMEOUT */
+  #undef ALARM_TIMEOUT
 #endif
 
 /* Thor.990325: ¬°¤FÅý¤Ï¬d®É¯à½T©w¬d¥X¡A¨Ó¦Û­þ­Óinterface´N±q¨º³s¦^¡A¥H¨¾¤Ï¬d¤£¨ì */
@@ -222,7 +228,7 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
     char rmt_pt[NI_MAXSERV];
     char our_pt[NI_MAXSERV];
 
-#ifdef RFC931_TIMEOUT
+#ifdef ALARM_TIMEOUT
     unsigned old_alarm;            /* Thor.991215: for timeout */
     struct sigaction oact;
 #endif
@@ -234,7 +240,7 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
     if (dns_name(from, rhost, rhost_sz))
         return;                    /* °²³]¨S¦³ FQDN ´N¨S¦³¶] identd */
 
-#ifdef RFC931_TIMEOUT
+#ifdef ALARM_TIMEOUT
     {
         struct sigaction act;
         /* Thor.991215: set for timeout */
@@ -311,6 +317,10 @@ void dns_ident(int sock,        /* Thor.990330: ­t¼Æ«O¯dµ¹, ¥ÎgetsockµLªk§ì¥X¥¿½
             if (s < 0)
                 goto cleanup_rmt;
 
+#if defined RFC931_TIMEOUT && !defined ALARM_TIMEOUT
+            setsockopt(s, IPPROTO_TCP, TCP_USER_TIMEOUT, &TEMPLVAL(unsigned int, {1000 * timeout}), sizeof(unsigned int));
+#endif
+
             /* Thor.990325: ¬°¤FÅý¤Ï¬d®É¯à½T©w¬d¥X¡A¨Ó¦Û­þ­Óinterface´N±q¨º³s¦^ */
             if ((sock < 0 || !bind(s, our_h->ai_addr, our_h->ai_addrlen))
                 && !connect(s, rmt_h->ai_addr, rmt_h->ai_addrlen))
@@ -381,7 +391,8 @@ cleanup_our:
         freeaddrinfo(our_hosts);
 
 cleanup_alarm:
-#ifdef RFC931_TIMEOUT
+    ;
+#ifdef ALARM_TIMEOUT
     /* Thor.991215: recover for timeout */
     alarm(old_alarm);
     sigaction(SIGALRM, &oact, NULL);
