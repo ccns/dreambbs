@@ -548,7 +548,7 @@ int dns_openip(const ip_addr *addr, int port)
     hints.ai_socktype = SOCK_STREAM;
     hints.ai_flags = AI_ADDRCONFIG | AI_NUMERICHOST | AI_NUMERICSERV;
 
-    getnameinfo((const struct sockaddr *)addr, sizeof(*addr), addr_str, sizeof(port_str), NULL, NI_MAXSERV, NI_NUMERICHOST);
+    getnameinfo((const struct sockaddr *)addr, sizeof(*addr), addr_str, sizeof(addr_str), NULL, NI_MAXSERV, NI_NUMERICHOST);
     sprintf(port_str, "%d", port);
 
     if (getaddrinfo(addr_str, port_str, &hints, &hosts))
