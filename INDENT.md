@@ -32,15 +32,6 @@ This page describes the indentation style for the DreamBBS project.
 
     - Both K&R and Allman style are allowed, but they should not be mixed within a file, especially within a function
 
-**Bad:**
-- Mix Allman style with K&R style
-```
-if (cond)
-{
-} else {
-}
-```
-
 ## Line continuation
 - The indentation size of continued lines should be 4 spaces
 - Argument lists and initializer-lists
@@ -57,15 +48,6 @@ if (sth_long > 42
 if (sth_long
     > (42 && sth_else_long))
 ```
-**Bad:**
-```c
-if (sth_long
-    > 42 && sth_else_long)
-```
-```c
-if (sth_long > (42
-    && sth_else_long))
-```
 
 - No line breaks between unary, prefix, and suffix operators other than `.` and `->` and their operand
 - If needed, line breaks must come before the suffix operators `.` and `->`
@@ -75,11 +57,6 @@ if (sth_long > (42
 sth_long
     .member++;
 ```
-**Bad:**
-```c
-sth_long.
-    member++;
-```
 
 - If needed, line breaks should come before the binary operators other than assignments and comma
 
@@ -87,11 +64,6 @@ sth_long.
 ```c
 if (sth_long
     && sth_else_long)
-```
-**Bad:**
-```c
-if (sth_long &&
-    sth_else_long)
 ```
 
 - For the condition operator, if needed, line breaks should come before `:` or both after `?` and before `:`
@@ -112,25 +84,6 @@ cond ?
     : else_cond ?
     sth_else
     : else_sth
-```
-**Bad:**
-```c
-cond ?
-    sth : else_cond ?
-    sth_else : else_sth
-```
-```c
-cond
-    ? sth : else_cond
-    ? sth_else : else_sth
-```
-**Worse:**
-```c
-cond
-    ? sth :
-    else_cond
-    ? sth_else :
-    else_sth
 ```
 
 ## Alignment
@@ -169,18 +122,6 @@ case 0:
 }
 ```
 
-**Bad:**
-```c
-switch (cond)
-{
-default: case 1: case 2: case 3: sth();
-    break;
-case -1: sth_else();
-    break;
-case 0:;
-}
-```
-
 ### `goto` labels
 - `goto` label 的 indentation 須與所在 function 的 code block 的 `{`/`}` 的所在行相同
 
@@ -191,34 +132,6 @@ int func(void)
     if (sth)
     {
 sth:
-    }
-}
-```
-
-**Bad:**
-```c
-int func(void)
-{
-    sth:
-}
-```
-```c
-int func(void)
-{
-    if (sth)
-    {
-    sth:
-    }
-}
-```
-
-**Worse:**
-```c
-int func(void)
-{
-    if (sth)
-    {
-        sth:
     }
 }
 ```
@@ -249,27 +162,6 @@ default: case sth_else:
 ```
 
 **Bad:**
-```c
-switch (sth)
-{
-    case sth:
-        code
-}
-```
-```c
-switch (sth)
-{
-case sth:
-code
-}
-```
-```c
-switch (sth)
-{
-    case sth:
-    code
-}
-```
 ```c
 switch (sth)
 {
@@ -308,20 +200,6 @@ case sth:
 { }
 ```
 
-**Bad:**
-```c
-{code}
-```
-```c
-{ code}
-```
-```c
-{code }
-```
-```c
-{}
-```
-
 - 如果 `else`/`else if` 和之前的 `}` 在同一行裡，`else` 後面的 `{` 也要在這一行裡
 
 **Good:**
@@ -338,12 +216,6 @@ else {
 ```c
 }
 else
-{
-```
-
-**Bad:**
-```c
-} else
 {
 ```
 
@@ -365,13 +237,6 @@ do {
     sth();
 }
 while (cond);
-```
-
-**Worse:**
-```c
-do sth();
-while (cond)
-    ;
 ```
 
 ### `if`/`for`/(`do`-)`while`/`switch` 的 code block
@@ -401,16 +266,6 @@ while (cond)
 ```c
 while (cond) { sth; }
 ```
-```c
-while (cond) { }
-```
-```c
-while (cond)
-label:
-    ;
-```
-
-**Worse:**
 ```c
 while (cond) sth;
 ```
@@ -452,10 +307,6 @@ loop:
 ```
 
 **Bad:**
-```c
-void func(int x) { if (x == 42)
-    ; }
-```
 ```c
 void func(void) { loop: goto loop; }
 ```
@@ -500,8 +351,8 @@ int (*parr)[N] = arr;
 
 **Bad:**
 ```c
-int ((*(parr))[(N)]) = (arr);
-++((*(parr))[(base) + (idx)]);
+int ((*parr)[N]) = arr;
+++((*parr)[base + idx]);
 ```
 
 - `(` 後與對應的 `)` 前的 space 的使用應該一致，要就不使用 space，要就使用剛好一個 space
@@ -521,8 +372,6 @@ int ((*(parr))[(N)]) = (arr);
     - `"(漢...sth )"`
 
 **Bad:**
-- `( sth)`
-- `(sth )`
 - `(sth...漢 )`
 - `( 漢...sth)`
 
@@ -554,23 +403,6 @@ macro(sth,, sth)
 int a[] = {sth, sth, /* sth */};
 ```
 
-**Bad:**
-```c
-sth,sth
-```
-```c
-sth , sth
-```
-```c
-macro(, ,)
-```
-```c
-macro(sth, , sth)
-```
-```c
-int a[] = {sth, sth /* , sth */};
-```
-
 ## `;`
 - C & shell code
     - `;` 前不應有 spaces，除非 `;` 前是行內註解
@@ -592,22 +424,8 @@ for (;;)
 ```c
 for (sth;; sth)
 ```
-
-**Bad:**
 ```c
-code;sth
-```
-```c
-code ; sth
-```
-```c
-for (; ;)
-```
-```c
-for (sth; ; sth)
-```
-```c
-for (s;t;h)
+for (sth; sth; sth)
 ```
 
 ## Preprocessor directives
@@ -650,20 +468,6 @@ int func(void)
   #if sth_else
         code;
   #endif
-    }
-}
-#endif
-```
-**Bad:**
-```c
-#if sth
-int func(void)
-{
-    if (sth)
-    {
-        #if sth_else
-        code;
-        #endif
     }
 }
 #endif
