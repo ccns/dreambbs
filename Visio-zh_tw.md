@@ -17,7 +17,7 @@ MapleBBS 3 的 Visio 有以下相關但來源不同的同名函式庫，非本�
 ### MapleBBS 3.0x 官方解釋
 
 - Visio 是「***Vi***rtual ***S***creen ***I***nput ***O***utput Routines」的縮寫。
-- "***Vi***rtual ***t***erminal" 的 ***s***creen 與 ***I***/***O***。
+- "***Vi***rtual terminal" 的 ***s***creen 與 ***I***/***O***。
 
 ※ 註：同是 "virtual terminal" 的一部份，`mbbsd.c` 功能上包含 <code>in.z***bbsd***</code> + <code>***m***ain.c</code>，是 "virtual terminal" 的 daemon 與子處理程序的 main routines。
 
