@@ -52,6 +52,56 @@ MapleBBS 3 的 Visio 有以下相關但來源不同的同名函式庫，非本�
 
 輸入按鍵的值可以用作 Xover 系統的回呼函式特殊值。請見 [[Xover 列表系統§MapleBBS 3 與 DreamBBS v3 的 Xover callback key value 的分配|Xover-zh_tw#maplebbs-3-與-dreambbs-v3-的-xover-callback-key-value-的分配]]。
 
+### 特殊按鍵的值
+
+與 Pirate BBS 衍生之 BBS 比較。
+
+Macro | 值 (傳統) | 值 (MapleBBS 3) | 值 (DreamBBS v3) | 意義 | 出處 | 註解
+ --- | --- | --- | --- | --- | --- | ---
+`I_TIMEOUT` | - `-2` <br> - `0x180` (NSYSU BBS 2.2.1 & Formosa BBS CE) <br> - `0x05fd` (PttBBS vtkbd) | `-31` | `0x04fd` | 按鍵逾時 | Pirate BBS | `I_` 前綴也見於 `i_getch()`/`igetch()`，表示 ***i***nput
+`I_OTHERDATA` | - `-3` (Pirate BBS, Eagles BBS, & PalmBBS) <br> - `0x181` (NSYSU BBS 2.2.1 & Formosa BBS CE) <br> - `-333` <br> - `0x05fe` (PttBBS vtkbd) | `-32` | `0x04fe` | 接收到外來輸入 | Pirate BBS | 
+`I_SIGNAL` | `-4` | (無) | (無) | 收到 UNIX signal | Eagles BBS 3.0 | 未使用 <br> 只見於該分支與衍生分支
+`I_RESIZETERM` | | | `Meta(Ctrl('L'))` (`0x200c`) | 畫面大小變更 | DreamBBS v3.0 | 可使畫面強制重繪 <br> 可用 <kbd>Esc</kbd> + <kbd>Ctrl</kbd>-<kbd>L</kbd> 手動輸入
+`KEY_INCOMPLETE` | `0x0420` | (無) | (無) | 輸入按鍵碼不完整 | PttBBS vtkbd |
+`KEY_UNKNOWN` | - `0x0fff` (PttBBS git r3492 & FormosaBBS CE) <br> - `0x0f20` (PttBBS vtkbd) | (無) | (無) | 不支援的輸入按鍵碼 | PttBBS |
+`KEY_INVALID` | | | `0x03fe`| 不支援的輸入按鍵碼 | DreamBBS v3.0 |
+`KEY_NONE` | | | - `12345` (DreamBBS v1.0) <br> - `0x4000` (DreamBBS v2.0+) | 表示未輸入按鍵 <br> - 定義：按鍵值 < `KEY_NONE` (DreamBBS v3.0) | DreamBBS v1.0 |
+`KEY_BS` | `0x08` (`'\b'`) | (無) | (無) | <kbd>Backspace</kbd> | PttBBS |
+`KEY_BS2` | - `'\x7f'` (PttBBS git r3492 & Formosa BBS CE) <br> - (移除) (PttBBS vtkbd) | (無) | (無) | <kbd>Backspace</kbd> | PttBBS | 實作 PttBBS vtkbd 後併入 `KEY_BS`
+`KEY_BKSP` | | `8` (`'\b'`) | (無) | <kbd>Backspace</kbd> | MapleBBS-itoc |
+`KEY_BACKSPACE` | | | `'\b'` (`0x08`) | <kbd>Backspace</kbd> | DreamBBS v3.1 | 依 ncurses 函式庫介面取名
+`KEY_TAB` | `9` (`'\t'`) | | `'\t'` | <kbd>Tab</kbd> | Phoenix BBS |
+`KEY_CR` | `'\r'` (`0x0d`) | (無) | (無) | <kbd>Enter</kbd> | PttBBS
+`KEY_LF` | `'\n'` (`0x0a`) | (無) | (無) | <kbd>Enter</kbd> | PttBBS | 在 PttBBS 中被忽略
+`KEY_ENTER` | - `10` (`'\n'`) (MapleBBS 3.10) <br> - `KEY_CR` (`'\r'`) (PttBBS) | | `'\n'` | <kbd>Enter</kbd> | MapleBBS 3.10 & PttBBS |
+`KEY_ESC` | `27` (`0x1b`) | | `'\x1b'` | - <kbd>Esc</kbd> + 一般按鍵 (Phoenix BBS) <br> - 單獨的 <kbd>Esc</kbd> (DreamBBS v3) | 出自 Phoenix BBS | 見 [[Visio-zh_tw#輸入按鍵的值]]
+`KEY_UP` | - `0x0101` <br> - `0x100 + 'A'` (`0x141`) (Pivot BBS) <br> - `512` (`0x0100`) (PalmBBS) | `-1` | `0x0141` | <kbd>↑</kbd> | Phoenix BBS 3.0 |
+`KEY_DOWN` | - `0x0102` <br> - `0x142` (Pivot BBS) <br> - `0x0101` (PalmBBS) | `-2` | `0x0142` | <kbd>↓</kbd> | Phoenix BBS 3.0 |
+`KEY_RIGHT` | - `0x0103` <br> - `0x143` (Pivot BBS) <br> - `0x0102` (PalmBBS) | `-3` | `0x0143` | <kbd>→</kbd> | Phoenix BBS 3.0 |
+`KEY_LEFT` | - `0x0104` <br> - `0x144` (Pivot BBS) <br> - `0x0103` (PalmBBS) | `-4` | `0x0144` | <kbd>←</kbd> | Phoenix BBS 3.0 |
+`KEY_STAB` | - `0x0105` (PttBBS git r3492 & Formosa BBS CE) <br> - `0x0109` (PttBBS vtkbd) | (無) | `KEY_BTAB` | <kbd>Shift</kbd>-<kbd>Tab</kbd> | PttBBS |
+`KEY_BTAB` | | | `0x015a` (`0x0100 + 'Z'`) | <kbd>Shift</kbd>-<kbd>Tab</kbd> | DreamBBS v3.0 | 依 ncurses 函式庫介面取名
+`KEY_HOME` | - `0x0201` <br> - `0x100 + '1'` (`0x131`) (Pivot BBS) <br> - `0x0401` (PalmBBS) | - `0x0181` (MapleBBS 3.00a 註解；未採用) <br> - `-21` | `0x0241` | <kbd>Home</kbd> | Phoenix BBS 3.0 |
+`KEY_INS` | - `0x0202` <br> - `0x0402` (PalmBBS) | `-22` | `0x0242` | <kbd>Insert</kbd> | Phoenix BBS 3.0 |
+`KEY_INSERT` | `0x132` | (無) | (無) | <kbd>Insert</kbd> | Pivot BBS 5.04 | 此名稱未見於其它分支
+`KEY_DEL` | - `0x0203` <br> - `0x133` (Pivot BBS) <br> - `0x0403` (PalmBBS) | `-23` | `0x0243` | <kbd>Delete</kbd> | Phoenix BBS 3.0 |
+`KEY_END` | - `0x0204` <br> - `0x134` (Pivot BBS) <br> - `0x0404` (PalmBBS) | `-24` | `0x0244` | <kbd>End</kbd> | Phoenix BBS 3.0 |
+`KEY_PGUP` | - `0x0205` <br> - `0x0405` (PalmBBS) | `-25` | `0x0245` | <kbd>PgUp</kbd> | Phoenix BBS 3.0 |
+`KEY_PGDN` | - `0x0206` <br> - `0x0406` (PalmBBS) | `-26` | `0x0246` | <kbd>PgDn</kbd> | Phoenix BBS 3.0 |
+`KEY_F1`&ndash;`KEY_F12` | `0x0301`&ndash;`0x030C` | (無) | `0x0251`&ndash;`0x025C` | <kbd>F1</kbd>&ndash;<kbd>F12</kbd> | PttBBS |
+`BACK` | - `0x7f` <br> - (移除) (Formosa BBS 1.0.0) | (無) | (無) | <kbd>Backspace</kbd> | NSYSU BBS 2.2.1 |
+`NL` | `0x0a` (`'\n'`) | (無) | (無) | <kbd>Enter</kbd> | NSYSU BBS 2.2.1 |
+`CR` | `0x0d` (`'\r'`) | (無) | (無) | <kbd>Enter</kbd> | NSYSU BBS 2.2.1 |
+`ENTER` | `CR` | (無) | (無) | <kbd>Enter</kbd> | NSYSU BBS 2.2.1 |
+`SP` | `0x20` | (無) | (無) | <kbd>Space</kbd> | NSYSU BBS 2.2.1 |
+`ESC` | `0x1b` | (無) | (無) | <kbd>Esc</kbd> | NSYSU BBS 2.2.1 |
+`TAB` | `0x09` | (無) | (無) | <kbd>Tab</kbd> | NSYSU BBS 2.2.1 |
+`CTRLA`&ndash;`CTRLZ` | - `0x01`&ndash;`0x1a` <br> - (移除) (Formosa BBS 1.0.0) | (無) | (無) | <kbd>Ctrl</kbd> + <kbd>A</kbd>&ndash;<kbd>Z</kbd> | NSYSU BBS 2.2.1 | 被 `CTRL()` 取代而移除
+
+「值 (MapleBBS 3)」為 MapleBBS 3.00a 起採用的新值；MapleBBS 3.00b 與之前採用「值 (傳統)」。
+
+值與「值 (傳統)」相同者省略不列。
+
 ## Vget 輸入框函式
 
 `vget()` 輸入框函式是 MapleBBS 3 的輸入框函式。
