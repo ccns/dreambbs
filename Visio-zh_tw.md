@@ -70,11 +70,11 @@ Macro | 值 (傳統) | 值 (MapleBBS 3) | 值 (DreamBBS v3) | 意義 | 出處 | 
 `KEY_BS2` | - `'\x7f'` (PttBBS git r3492 & Formosa BBS CE) <br> - (移除) (PttBBS vtkbd) | (無) | (無) | <kbd>Backspace</kbd> | PttBBS | 實作 PttBBS vtkbd 後併入 `KEY_BS`
 `KEY_BKSP` | | `8` (`'\b'`) | (無) | <kbd>Backspace</kbd> | MapleBBS-itoc |
 `KEY_BACKSPACE` | | | `'\b'` (`0x08`) | <kbd>Backspace</kbd> | DreamBBS v3.1 | 依 ncurses 函式庫介面取名
-`KEY_TAB` | `9` (`'\t'`) | | `'\t'` | <kbd>Tab</kbd> | Phoenix BBS |
+`KEY_TAB` | `9` (`'\t'`) | | `'\t'` | <kbd>Tab</kbd> | Phoenix BBS 3.0 |
 `KEY_CR` | `'\r'` (`0x0d`) | (無) | (無) | <kbd>Enter</kbd> | PttBBS
 `KEY_LF` | `'\n'` (`0x0a`) | (無) | (無) | <kbd>Enter</kbd> | PttBBS | 在 PttBBS 中被忽略
 `KEY_ENTER` | - `10` (`'\n'`) (MapleBBS 3.10) <br> - `KEY_CR` (`'\r'`) (PttBBS) | | `'\n'` | <kbd>Enter</kbd> | MapleBBS 3.10 & PttBBS |
-`KEY_ESC` | `27` (`0x1b`) | | `'\x1b'` | - <kbd>Esc</kbd> + 一般按鍵 (Phoenix BBS) <br> - 單獨的 <kbd>Esc</kbd> (DreamBBS v3) | 出自 Phoenix BBS | 見 [[Visio-zh_tw#輸入按鍵的值]]
+`KEY_ESC` | `27` (`0x1b`) | | `'\x1b'` | - <kbd>Esc</kbd> + 一般按鍵 (Phoenix BBS) <br> - 單獨的 <kbd>Esc</kbd> (DreamBBS v3) | Phoenix BBS 3.0 | 見 [[Visio-zh_tw#輸入按鍵的值]]
 `KEY_UP` | - `0x0101` <br> - `0x100 + 'A'` (`0x141`) (Pivot BBS) <br> - `512` (`0x0100`) (PalmBBS) | `-1` | `0x0141` | <kbd>↑</kbd> | Phoenix BBS 3.0 |
 `KEY_DOWN` | - `0x0102` <br> - `0x142` (Pivot BBS) <br> - `0x0101` (PalmBBS) | `-2` | `0x0142` | <kbd>↓</kbd> | Phoenix BBS 3.0 |
 `KEY_RIGHT` | - `0x0103` <br> - `0x143` (Pivot BBS) <br> - `0x0102` (PalmBBS) | `-3` | `0x0143` | <kbd>→</kbd> | Phoenix BBS 3.0 |
