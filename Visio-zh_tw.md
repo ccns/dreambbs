@@ -34,20 +34,20 @@ MapleBBS 3 的 Visio 有以下相關但來源不同的同名函式庫，非本�
 
 ## 輸入按鍵的值
 
-範圍或對應的 bit mask                | 相關 macro         | 功能                          | 註解
+範圍或對應的 bit mask                | 相關 macro         | 意義                          | 註解
  :---                               | ---                | ---                           | ---
-`0x00000000` - `0x0000001f`         | `CTRL()`/`Ctrl()`  | <kbd>Ctrl</kbd> + 一般按鍵    | - `CTRL()` 出自 Eagles BBS <br> - `Ctrl()` 出自 Phoenix BBS
-`0x00000020` - `0x000000ff`         | (無)               | 一般按鍵                      |
-`0x00000100` - `0x00001fff`         | (無)               | 傳統特殊按鍵                  | 出自 Phoenix BBS <br> MapleBBS 3 不使用 <br> DreamBBS v1.0 恢復使用
-`0x0000001f`                        | `KEY_ESC`          | - <kbd>Esc</kbd>/<kbd>Alt</kbd> + 一般按鍵 <br> - 單獨的 <kbd>Esc</kbd> (DreamBBS v3) | - 按下的一般按鍵需用 `KEY_ESC_arg` 取得 <br> - 出自 Phoenix BBS <br> - MapleBBS 3 不使用 <br> - DreamBBS v3.0 新增按鍵延時判斷機制，恢復使用
-`0x00002000` - `0x000020ff`         | `Meta()`/`Esc()`   | <kbd>Esc</kbd>/<kbd>Alt</kbd> + 一般按鍵 | - `Meta()` 出自 MapleBBS 3（未使用） <br> - `Esc()` 出自 Maple-itoc（未使用）
-`0x00002100` - `0x00003fff`         | `Meta()`           | <kbd>Esc</kbd>/<kbd>Alt</kbd> + 特殊按鍵 | DreamBBS v2.0 起支援
-`0x00000060` (mask)                 | `Shift()`/`Ctrl()` | 特殊按鍵的 <kbd>Shift</kbd>/<kbd>Ctrl</kbd> | DreamBBS v2.0 起支援
-　                                  | `Ctrl(key)`        | `0x00`: <kbd>Ctrl</kbd>       | Mask 後變 `0x00`
-　                                  | `Shift(Ctrl(key))` | `0x20`: <kbd>Shift</kbd> + <kbd>Ctrl</kbd> | Mask 後變 `0x20`
-　                                  | `key`              | `0x40`: 正常                  | Mask 後變 `0x40`
-　                                  | `Shift(key)`       | `0x60`: <kbd>Shift</kbd>      | `Shift()` 為 DreamBBS v2.0 新增 <br> Mask 後變 `0x60`
-`0x00004000` - `0x7fffffff`         | `KEY_NONE` = `0x4000`| (不使用)                    | 保留給 Xover 列表系統使用 <br> - DreamBBS v1.0 新增 <br> - DreamBBS v2.0 改為現值 <br> - DreamBBS v3.0 改為現用法
+`0x0000` - `0x001f`                 | `CTRL()`/`Ctrl()`  | <kbd>Ctrl</kbd> + 一般按鍵    | - `CTRL()` 出自 Eagles BBS <br> - `Ctrl()` 出自 Phoenix BBS
+`0x0020` - `0x00ff`                 | (無)               | 一般按鍵                      |
+`0x0100` - `0x1fff`                 | (無)               | 傳統特殊按鍵                  | 出自 Phoenix BBS <br> MapleBBS 3 不使用 <br> DreamBBS v1.0 恢復使用
+`0x001f`                            | `KEY_ESC`          | - <kbd>Esc</kbd>/<kbd>Alt</kbd> + 一般按鍵 <br> - 單獨的 <kbd>Esc</kbd> (DreamBBS v3) | - 按下的一般按鍵需用 `KEY_ESC_arg` 取得 <br> - 出自 Phoenix BBS <br> - MapleBBS 3 不使用 <br> - DreamBBS v3.0 新增按鍵延時判斷機制，恢復使用
+`0x2000` - `0x20ff`                 | `Meta()`/`Esc()`   | <kbd>Esc</kbd>/<kbd>Alt</kbd> + 一般按鍵 | - `Meta()` 出自 MapleBBS 3（未使用） <br> - `Esc()` 出自 Maple-itoc（未使用）
+`0x2100` - `0x3fff`                 | `Meta()`           | <kbd>Esc</kbd>/<kbd>Alt</kbd> + 特殊按鍵 | DreamBBS v2.0 起支援
+`0x0060` (mask)                     | `Shift()`/`Ctrl()` | 特殊按鍵的 <kbd>Shift</kbd>/<kbd>Ctrl</kbd> | DreamBBS v2.0 起支援
+`0x??0?`, `0x??1?`, `0x??8?`, & `0x??9?` | `Ctrl(key)`        | <kbd>Ctrl</kbd>-特殊按鍵 | Mask 後變 `0x00`
+`0x??2?`, `0x??3?`, `0x??a?`, & `0x??b?` | `Shift(Ctrl(key))` | <kbd>Shift</kbd>-<kbd>Ctrl</kbd>-特殊按鍵 | Mask 後變 `0x20`
+`0x??4?`, `0x??5?`, `0x??c?`, & `0x??d?` | `key`              | 正常的特殊按鍵            | Mask 後變 `0x40`
+`0x??6?`, `0x??7?`, `0x??e?`, & `0x??f?` | `Shift(key)`       | <kbd>Shift</kbd>-特殊按鍵 | `Shift()` 為 DreamBBS v2.0 新增 <br> Mask 後變 `0x60`
+`0x4000` - `0x7fffffff`             | `KEY_NONE` = `0x4000`| (不使用)                    | 保留給 Xover 列表系統使用 <br> - DreamBBS v1.0 新增 <br> - DreamBBS v2.0 改為現值 <br> - DreamBBS v3.0 改為現用法
 `0x80000000` - `0xffffffff`         | (無)               | MapleBBS 3 特殊按鍵 (負數)     | DreamBBS v1.0 起不使用，保留給 Xover 系統
 
 輸入按鍵的值可以用作 Xover 系統的回呼函式特殊值。請見 [[Xover 列表系統§MapleBBS 3 與 DreamBBS v3 的 Xover callback key value 的分配|Xover-zh_tw#maplebbs-3-與-dreambbs-v3-的-xover-callback-key-value-的分配]]。
