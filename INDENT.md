@@ -30,7 +30,9 @@ This page describes the indentation style for the DreamBBS project.
     - No trailing spaces
     - Use `\n` for line breaks
 
-    - Both K&R and Allman style are allowed, but they should not be mixed within a file, especially within a function
+-   - Both K&R and Allman style are allowed, but they should not be mixed within a file, especially within a function
+    - Allman style should be used only in existing codes indented using Allman style.
+    - From DreamBBS v4 and on, only K&R style will be allowed.
 
 ## Line continuation
 - The indentation size of continued lines should be 4 spaces
