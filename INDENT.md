@@ -42,11 +42,13 @@ This page describes the indentation style for the DreamBBS project.
 **Good:**
 ```c
 if (sth_long > 42
-    && sth_else_long)
+    && sth_else_long
+    )
 ```
 ```c
 if (sth_long
-    > (42 && sth_else_long))
+    > (42 && sth_else_long)
+    )
 ```
 
 - No line breaks between unary, prefix, and suffix operators other than `.` and `->` and their operand
@@ -63,7 +65,8 @@ sth_long
 **Good:**
 ```c
 if (sth_long
-    && sth_else_long)
+    && sth_else_long
+    )
 ```
 
 - For the condition operator, if needed, line breaks should come before `:` or both after `?` and before `:`
@@ -73,18 +76,21 @@ if (sth_long
 ```c
 cond ? sth : sth_cond ? sth_else : else_sth
 ```
+-   - Use the above form only if all the condition and result expressions contain no non-empty pairs of `(` & `)`
 ```c
-cond ? sth
-    : else_cond ? sth_else
+cond ? (sth & 1)
+    : else_cond ? (sth_else | 0x80000000)
     : else_sth
 ```
+-   - Otherwise use the above form only if the condition expressions contain no non-empty pairs of `(` & `)`
 ```c
-cond ?
+(cond_0 || cond_1) ?
     sth
-    : else_cond ?
+    : (else_cond_0 && else_cond_1) ?
     sth_else
     : else_sth
 ```
+-   - Otherwise use the above form
 
 ## Alignment
 - 如果 code 附近的相似 code 已被對齊排版，這段 code 應該對齊排版
@@ -102,6 +108,18 @@ cond ?
 if      (sth)
 ...
 else if (sth)
+```
+
+- Condition list 含有換行時，結尾的 `)` 前須換行，而縮排與 code block 內的縮排相同
+
+**Good:**
+```c
+if (1 + 1 == 2
+    && *p != '\0'
+    )
+{
+    do_sth();
+}
 ```
 
 ## Labels
@@ -241,8 +259,11 @@ while (cond);
 
 ### `if`/`for`/(`do`-)`while`/`switch` 的 code block
 - `{` 與 `}` 不得在同一行中
-- 若有 `goto`/`case` labels，則必須使用 `{` 與 `}`
-- 除了 `do`-`while`（必須使用 `{` 與 `}`）外……
+- 以下任一狀況成立則必須使用 `{` 與 `}`：
+    - 為 `do`-`while` 的 code block
+    - Condition list 含有換行
+    - Code block 內含有 `goto`/`case` labels
+- 除了必須使用 `{` 與 `}` 的狀況外……
     - 若 code block 為空，應以單獨一行的 `;` 取代
     - 若僅包含一句不換行的陳述式，可不使用 `{` 與 `}`，但該陳述式須單獨一行出現
 
@@ -275,7 +296,7 @@ while (cond);
 
 ### Function 的 code block
 - 若有 `goto`/`case` labels，則 `{` 與 `}` 必須在不同行中
-- 若 code block 為空，或僅包含一句不換行的陳述式，`{`、與 `}` 可在同一行中
+- 若函式宣告的參數清單無換行，且若 code block 為空或僅包含一句不換行的陳述式，`{` 與 `}` 可在同一行中
 
 **Good:**
 ```c
@@ -331,14 +352,18 @@ res = -x | (y & 1) | (z + 3)
 
 **Good:**
 ```c
-!x ? 2 * a : (b > 42) ? b - 1 : 2 * c + 1
+!x ? 2 * a
+    : (b > 42) ? b - 1
+    : 2 * c + 1
 ```
 
 - 條件運算子 `?`...`:` 的結果式直接包含賦值運算子時，應以 `(` 與 `)` 將其包圍
 
 **Good:**
 ```c
-!x ? (a *= 2) : (b > 42) ? (b -= 1) : (c = 2 * c + 1)
+!x ? (a *= 2)
+    : (b > 42) ? (b -= 1)
+    : (c = 2 * c + 1)
 ```
 
 - 避免非必要的 `(` 與 `)`
@@ -374,6 +399,29 @@ int ((*parr)[N]) = arr;
 **Bad:**
 - `(sth...漢 )`
 - `( 漢...sth)`
+
+- 函式宣告的參數清單與函式呼叫的引數清單，若含有換行，則開頭的 `(` 後換行，結尾的 `)` 前不換行
+
+**Good:**
+```c
+void log_level(
+    const Logger *logger,
+    enum LogLevel level,
+    const char *format,
+    ...)
+{
+   /* Codes */
+}
+```
+```c
+log_level(
+    logger,
+    LOGLV_DEBUG,
+    "Value in decimal: %d\n"
+    "Value in hexadecimal: %x\n",
+    value,
+    value);
+```
 
 ## `,`
 - C code
