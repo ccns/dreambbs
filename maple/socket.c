@@ -77,68 +77,66 @@ POP3_Check(
     const char *site, const char *account, const char *passwd)
 {
     FILE *fsock = NULL;
-    int sock=110, old_sock GCC_UNUSED = 0;
+    int sock=110;
+    int res = 5; // default error value
     char buf[512];
 
     if (Get_Socket(site, &sock))
-        sock = 1;
-    else
+        goto socket_error;
+
     if (!(fsock = fdopen(sock, "r+")))
     {
         close(sock);
-        sock = 1;
-    }
-    else
-    {
-        old_sock = sock;
-        sock = 2;
+        goto socket_error;
     }
 
-    while (sock < 6)
+    for (int step = 1;; ++step)
     {
-        switch (sock)
+        switch (step)
         {
-            case 1:             /* Open Socket Fail */
-                prints("\n傳回錯誤值 [1]，請重試幾次看看\n");
-                refresh();
-                return sock;
-
-            case 2:             /* Welcome Message */
+            case 1:             /* Welcome Message */
                 fgets(buf, 512, fsock);
                 break;
 
-            case 3:             /* Verify Account */
+            case 2:             /* Verify Account */
                 fprintf(fsock, "user %s\r\n", account);
                 fflush(fsock);
                 fgets(buf, 512, fsock);
                 break;
 
-            case 4:             /* Verify Password */
+            case 3:             /* Verify Password */
                 fprintf(fsock, "pass %s\r\n", passwd);
                 fflush(fsock);
                 fgets(buf, 512, fsock);
-                sock = -1;
                 break;
 
-            case 0:             /* Successful Verification */
-            case 5:             /* Quit */
-                fprintf(fsock, "quit\r\n");
-                fclose(fsock);
-                return sock;
+            default:
+            case 4:
+                res = 0;
+                goto quit_ok;
         }
 
-        if (strncmp(buf, "+OK", 3) || strstr(buf, ".bbs"))
+        if (strncmp(buf, "+OK", 3) != 0 || strstr(buf, ".bbs"))
         {
             prints("遠端系統傳回錯誤訊息如下：(如不明白訊息意思，請將訊息告知站長)\n");
             prints("%s\n", buf);
             refresh();
 /*          log_usies("POP3-MSG", buf, FN_VERIFY_LOG); */
-            sock = 5;
+            goto quit_error;
         }
-        else
-            sock++;
     }
-    return 1;
+    /* Unreachable */
+
+quit_ok:        /* Successful Verification */
+quit_error:     /* Quit */
+    fprintf(fsock, "quit\r\n");
+    fclose(fsock);
+    return res;
+
+socket_error:   /* Open Socket Fail */
+    prints("\n傳回錯誤值 [1]，請重試幾次看看\n");
+    refresh();
+    return sock;
 }
 
 
@@ -147,10 +145,11 @@ Ext_POP3_Check(
     const char *site, const char *account, const char *passwd)
 {
     FILE *fsock = NULL;
-    int sock=110, step=1;
+    int sock=110;
+    int res = 9; // default error value
 
+    const char *msg_step = "unknown";
     char buf[512];
-
 
     fd_set rd;
     struct timeval to;
@@ -159,233 +158,167 @@ Ext_POP3_Check(
     struct tm *p;
 
 
-    if (!Get_Socket(site, &sock))
+    if (Get_Socket(site, &sock))
+        return 1;
+
+    if (!(fsock = fdopen(sock, "r+")))
     {
-        if (!(fsock = fdopen(sock, "r+")))
-        {
-            close(sock);
-            return 1;
-        }
-        step = 1;
+        close(sock);
+        return 1;
+    }
 
-        while (step < 9)
-        {
-            FD_ZERO(&rd);
-            FD_SET(sock, &rd);
-            to.tv_sec = 0;
-            to.tv_usec = 0;
-            nfds = sock;
+    for (int step = 1;;)
+    {
+        FD_ZERO(&rd);
+        FD_SET(sock, &rd);
+        to.tv_sec = 0;
+        to.tv_usec = 0;
+        nfds = sock;
 
-            switch (step)
+#define POP3_CHECK_WAIT_SOCK() do { \
+    FD_ZERO(&rd); \
+    FD_SET(sock, &rd); \
+    nfds = select(nfds+1, &rd, NULL, NULL, &to); \
+    if (nfds == 0) \
+        break; \
+} while (0)
+
+        switch (step)
+        {
+        case 1:
+            msg_step = "stat 1";
+            for (;;)
             {
-            case 1:
-                while (1)
+                fgets(buf, 512, fsock);
+                if (strncmp(buf, "+OK", 3) != 0)
                 {
-                    fgets(buf, 512, fsock);
-                    if (!strncmp(buf, "+OK", 3))
-                    {
-                        if (step == 2)
-                        {
-                            pmsg("不受信任的 POP3 主機，請使用 Email 回信認證！");
-                            step = 8;
-                            logitfile("tmp/visor.log", site, "stat 1");
-                            break;
-                        }
-                        step = 2;
-                    }
-                    else
-                    {
-                        pmsg("不支援 POP3 主機，請使用 Email 回信認證！");
-                        step = 9;
-                        break;
-                    }
-
-                    FD_ZERO(&rd);
-                    FD_SET(sock, &rd);
-                    nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0)
-                        break;
+                    pmsg("不支援 POP3 主機，請使用 Email 回信認證！");
+                    goto quit_error;
                 }
-                break;
-            case 2:
-                fprintf(fsock, "pass !@#$%%^&*(\r\n");
-                fflush(fsock);
-                while (1)
-                {
-                    fgets(buf, 512, fsock);
-                    if (!strncmp(buf, "-ERR", 4))
-                    {
-                        step = 3;
-                    }
-                    else if (!strncmp(buf, "+OK", 3))
-                    {
-                        pmsg("不受信任的 POP3 主機，請使用 Email 回信認證！");
-                        step = 8;
-                        logitfile("tmp/visor.log", site, "stat 2");
-                        break;
-                    }
-
-                    FD_ZERO(&rd);
-                    FD_SET(sock, &rd);
-                    nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0)
-                        break;
-                }
-                break;
-            case 3:
-                fprintf(fsock, "noop\r\n");
-                fflush(fsock);
-                while (1)
-                {
-                    fgets(buf, 512, fsock);
-                    if (!strncmp(buf, "-ERR", 4))
-                    {
-                        step = 4;
-                    }
-                    else if (!strncmp(buf, "+OK", 3))
-                    {
-                        pmsg("不受信任的 POP3 主機，請使用 Email 回信認證！");
-                        step = 8;
-                        logitfile("tmp/visor.log", site, "stat 3");
-                        break;
-                    }
-
-                    FD_ZERO(&rd);
-                    FD_SET(sock, &rd);
-                    nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0)
-                        break;
-                }
-                break;
-            case 4:
-                fprintf(fsock, "user %s\r\n", account);
-                fflush(fsock);
-                while (1)
-                {
-                    fgets(buf, 512, fsock);
-                    if (!strncmp(buf, "-ERR", 4))
-                    {
-                        pmsg("無此郵件帳號，請使用 Email 回信認證！");
-                        step = 9;
-                        break;
-                    }
-                    else if (!strncmp(buf, "+OK", 3) && step == 4)
-                    {
-                        step = 5;
-                    }
-                    else
-                    {
-                        pmsg("不受信任的 POP3 主機，請使用 Email 回信認證！");
-                        step = 8;
-                        logitfile("tmp/visor.log", site, "stat 4");
-                        break;
-                    }
-
-                    FD_ZERO(&rd);
-                    FD_SET(sock, &rd);
-                    nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0)
-                        break;
-                }
-                break;
-            case 5:
-                fprintf(fsock, "pass %s\r\n", passwd);
-                fflush(fsock);
-                while (1)
-                {
-                    fgets(buf, 512, fsock);
-                    if (!strncmp(buf, "-ERR", 4))
-                    {
-                        pmsg("帳號密碼錯誤，請重新認證！");
-                        step = 9;
-                        break;
-                    }
-                    else if (!strncmp(buf, "+OK", 3) && step == 5)
-                    {
-                        step = 6;
-                    }
-                    else
-                    {
-                        pmsg("不受信任的 POP3 主機，請使用 Email 回信認證！");
-                        step = 8;
-                        logitfile("tmp/visor.log", site, "stat 5");
-                        break;
-                    }
-
-                    FD_ZERO(&rd);
-                    FD_SET(sock, &rd);
-                    nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0)
-                        break;
-                }
-                break;
-            case 6:
-                fprintf(fsock, "noop\r\n");
-                fflush(fsock);
-
-                while (1)
-                {
-                    fgets(buf, 512, fsock);
-                    if (!strncmp(buf, "+OK", 3) && step == 6)
-                    {
-                        step = 7;
-                    }
-                    else
-                    {
-                        pmsg("不受信任的 POP3 主機，請使用 Email 回信認證！");
-                        step = 8;
-                        logitfile("tmp/visor.log", site, "stat 6");
-                        break;
-                    }
-
-                    FD_ZERO(&rd);
-                    FD_SET(sock, &rd);
-                    nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0)
-                        break;
-                }
-                break;
-            case 7:
-                fprintf(fsock, "stat\r\n");
-                fflush(fsock);
-                while (1)
-                {
-                    fgets(buf, 512, fsock);
-                    if (!strncmp(buf, "+OK", 3) && step == 7)
-                    {
-                        step = 0;
-                    }
-                    else
-                    {
-                        pmsg("不受信任的 POP3 主機，請使用 Email 回信認證！");
-                        step = 8;
-                        logitfile("tmp/visor.log", site, "stat 7");
-                        break;
-                    }
-
-                    FD_ZERO(&rd);
-                    FD_SET(sock, &rd);
-                    nfds = select(nfds+1, &rd, NULL, NULL, &to);
-                    if (nfds == 0)
-                        break;
-                }
-                break;
-            case 8:
-                time(&now);
-
-                p = localtime(&now);
-                sprintf(buf, "%s # %02d/%02d/%02d %02d:%02d 不受信任的主機\n",
-                    site, p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
-                    p->tm_hour, p->tm_min);
-                f_cat(FN_ETC_UNTRUST_ACL, buf);
-                // Falls through
-            case 9:
-            case 0:
-                fprintf(fsock, "quit\r\n");
-                fclose(fsock);
-                return step;
+                if (step != 1)
+                    goto quit_untrusted;
+                step = 2;
+                POP3_CHECK_WAIT_SOCK();
             }
+            break;
+        case 2:
+            msg_step = "stat 2";
+            fprintf(fsock, "pass !@#$%%^&*(\r\n");
+            fflush(fsock);
+            for (;;)
+            {
+                fgets(buf, 512, fsock);
+                if (strncmp(buf, "+OK", 3) == 0)
+                    goto quit_untrusted;
+                if (strncmp(buf, "-ERR", 4) == 0)
+                    step = 3;
+                POP3_CHECK_WAIT_SOCK();
+            }
+            break;
+        case 3:
+            msg_step = "stat 3";
+            fprintf(fsock, "noop\r\n");
+            fflush(fsock);
+            for (;;)
+            {
+                fgets(buf, 512, fsock);
+                if (strncmp(buf, "+OK", 3) == 0)
+                    goto quit_untrusted;
+                if (strncmp(buf, "-ERR", 4) == 0)
+                    step = 4;
+                POP3_CHECK_WAIT_SOCK();
+            }
+            break;
+        case 4:
+            msg_step = "stat 4";
+            fprintf(fsock, "user %s\r\n", account);
+            fflush(fsock);
+            for (;;)
+            {
+                fgets(buf, 512, fsock);
+                if (strncmp(buf, "-ERR", 4) == 0)
+                {
+                    pmsg("無此郵件帳號，請使用 Email 回信認證！");
+                    goto quit_error;
+                }
+                if (!(strncmp(buf, "+OK", 3) == 0 && step == 4))
+                    goto quit_untrusted;
+                step = 5;
+                POP3_CHECK_WAIT_SOCK();
+            }
+            break;
+        case 5:
+            msg_step = "stat 5";
+            fprintf(fsock, "pass %s\r\n", passwd);
+            fflush(fsock);
+            for (;;)
+            {
+                fgets(buf, 512, fsock);
+                if (strncmp(buf, "-ERR", 4) == 0)
+                {
+                    pmsg("帳號密碼錯誤，請重新認證！");
+                    goto quit_error;
+                }
+                if (!(strncmp(buf, "+OK", 3) == 0 && step == 5))
+                    goto quit_untrusted;
+                step = 6;
+                POP3_CHECK_WAIT_SOCK();
+            }
+            break;
+        case 6:
+            msg_step = "stat 6";
+            fprintf(fsock, "noop\r\n");
+            fflush(fsock);
+            for (;;)
+            {
+                fgets(buf, 512, fsock);
+                if (!(strncmp(buf, "+OK", 3) == 0 && step == 6))
+                    goto quit_untrusted;
+                step = 7;
+                POP3_CHECK_WAIT_SOCK();
+            }
+            break;
+        case 7:
+            msg_step = "stat 7";
+            fprintf(fsock, "stat\r\n");
+            fflush(fsock);
+            for (;;)
+            {
+                fgets(buf, 512, fsock);
+                if (!(strncmp(buf, "+OK", 3) == 0 && step == 7))
+                    goto quit_untrusted;
+                step = 8;
+                POP3_CHECK_WAIT_SOCK();
+            }
+            break;
+
+        default:
+        case 8:
+            res = 0;
+            goto quit_ok;
         }
     }
-    return 1;
+#undef POP3_CHECK_WAIT_SOCK
+    /* Unreachable */
+
+quit_untrusted:
+    res = 8;
+
+    pmsg("不受信任的 POP3 主機，請使用 Email 回信認證！");
+    logitfile("tmp/visor.log", site, msg_step);
+
+    time(&now);
+
+    p = localtime(&now);
+    sprintf(buf, "%s # %02d/%02d/%02d %02d:%02d 不受信任的主機\n",
+            site, p->tm_year % 100, p->tm_mon + 1, p->tm_mday,
+            p->tm_hour, p->tm_min);
+    f_cat(FN_ETC_UNTRUST_ACL, buf);
+    // Falls through
+quit_ok:
+quit_error:
+    fprintf(fsock, "quit\r\n");
+    fclose(fsock);
+    return res;
+
 }
