@@ -1917,8 +1917,8 @@ igetch(void)
                     {
                         vi_size = cc;
                         vi_head = 0;
-                        iac_next = (unsigned char *)strchr((char *)vi_pool, IAC);
-                        if (iac_next > vi_pool)
+                        iac_next = (unsigned char *)memchr((char *)vi_pool, IAC, vi_size);
+                        if (iac_next != vi_pool)
                             reset_idle();
                         break;
                     }
@@ -1985,8 +1985,8 @@ igetch(void)
             int count;
             const int iac_key = iac_process(vi_pool + vi_head, vi_pool + vi_size, &count);
             vi_head += count;
-            iac_next = (unsigned char *)strchr((char *)vi_pool + vi_head, IAC);
-            if (iac_next > vi_pool + vi_head)
+            iac_next = (unsigned char *)memchr((char *)vi_pool + vi_head, IAC, vi_size - vi_head);
+            if (iac_next != vi_pool + vi_head)
                 reset_idle();
             if (iac_key == KEY_NONE)
                 continue;
