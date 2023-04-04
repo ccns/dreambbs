@@ -179,7 +179,7 @@ justify_user(void)
     int fd;
 
     sprintf(buf, "usr/%c/%s/.DIR", *myname, myname);
-    if (!hdr_stamp(buf, HDR_LINK, &mhdr, "etc/justified"))
+    if (!hdr_stamp(buf, HDR_LINK, &mhdr, FN_ETC_JUSTIFIED))
     {
         strcpy(mhdr.title, "您已經通過身分認證了！");
         strcpy(mhdr.owner, "SYSOP");

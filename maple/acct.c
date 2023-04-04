@@ -2585,7 +2585,7 @@ int u_verify(void)
             time32(&cuser.tvalid);
             acct_save(&cuser);
             usr_fpath(buf, cuser.userid, fn_dir);
-            hdr_stamp(buf, HDR_LINK, &fhdr, "etc/justified");
+            hdr_stamp(buf, HDR_LINK, &fhdr, FN_ETC_JUSTIFIED);
             strcpy(fhdr.title, "[註冊成功\] 您已經通過身分認證了！");
             strcpy(fhdr.owner, str_sysop);
             rec_add(buf, &fhdr, sizeof(fhdr));

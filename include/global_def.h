@@ -81,6 +81,7 @@
 #define FN_ETC_COUNTER          "etc/counter"           /* 歷史紀錄與成長 */
 #define FN_ETC_EMAIL            "etc/e-mail"            /* 修改 Email, 進行身分認證 */
 #define FN_ETC_EXPIRE_CONF      "etc/expire.conf"       /* 版面期限 */
+#define FN_ETC_JUSTIFIED        "etc/justified"         /* Email 通過身分認證 */
 #define FN_ETC_JUSTIFIED_POP3   "etc/justified.pop3"    /* POP3 通過身分認證 */
 #define FN_ETC_JUSTIFIED_BMTA   "etc/justified.bmta"    /* BMTA 通過身分認證 */
 #define FN_ETC_JUSTIFY          "etc/justify"           /* 身分認證的方法 */
