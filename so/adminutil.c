@@ -707,6 +707,7 @@ m_xfile(void)
         "匿名版紀錄",
         "註冊單說明",
         "擋發信軟體",
+        "註冊單通過審核",
         "Email 通過認證",
         "POP3 通過認證",
         "BMTA 通過認證",
@@ -736,6 +737,7 @@ m_xfile(void)
         FN_ETC_RFORM,
         FN_ETC_MAILER_ACL,
         FN_ETC_APPROVED,
+        FN_ETC_JUSTIFIED,
         FN_ETC_JUSTIFIED_POP3,
         FN_ETC_JUSTIFIED_BMTA
     };
