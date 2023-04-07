@@ -65,10 +65,3 @@ jobs:
     -
       name: Perform CodeQL analysis
       uses: github/codeql-action/analyze@v2
-    -
-      name: Send a notification to channel bbs-dev of CCNS Discord
-      uses: sarisia/actions-status-discord@v1
-      if: always()
-      with:
-        webhook: ${{ secrets.DISCORD_WEBHOOK }}
-        title: ${{ github.workflow }}
