@@ -2,7 +2,7 @@ name: Sending workflow dispatch to "imagedreambbs" project
 
 on:
   push:
-    branches: [master, develop]
+    branches: [master]
 
 jobs:
   sent-dispatch-job:
