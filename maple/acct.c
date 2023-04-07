@@ -1485,6 +1485,7 @@ int u_lock(void)
             }
         }
         while (check);
+        bbstate ^= STAT_LOCK;
     }
     else
     {
@@ -1492,7 +1493,6 @@ int u_lock(void)
     }
 
     strcpy(cutmp->mateid, swapmateid);
-    bbstate ^= STAT_LOCK;
     cutmp->ufo &= ~UFO_REJECT;
     return 0;
 }
