@@ -1634,7 +1634,7 @@ xover(
             if (pos_prev == -1)
             {
                 /* `-1`: redraw all without clearing */
-                for (int i = 0; i < COUNTOF(xo->pos); ++i)
+                for (int i = 0; i < xo_ncur; ++i)
                 {
                     if (i == xo->cur_idx)
                         continue;
@@ -1679,6 +1679,8 @@ xover(
 
 static int xover_cursor(XO *xo, int zone, int cmd, int *pos_prev)
 {
+    if (xo)
+        xo->cur_idx %= xo_ncur + 1;
     if ((cmd & XO_POS_MASK) > XO_NONE)
     {
         /* --------------------------------------------- */
@@ -1965,7 +1967,7 @@ xover_key(
     }
     if (cmd == ' ')
     {
-        xo->cur_idx = (xo->cur_idx + 1) % XO_NCUR;
+        xo->cur_idx = (xo->cur_idx + 1) % xo_ncur;
         const int pos_next = xo->pos[xo->cur_idx];
         /* Keep both cursors inside the screen if possible */
         if (pos_next >= xo->top + XO_TALL && pos_next < pos + XO_TALL)

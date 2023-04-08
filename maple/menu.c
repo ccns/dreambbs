@@ -1648,6 +1648,7 @@ domenu(
 void domenu_cursor_show(XO *xo)
 {
     DomenuXyz *const xyz = (DomenuXyz *)xo->xyz;
+    xo->cur_idx %= xo_ncur + 1;
 
     int ycc, xcc, ycx, xcx;
     if (xyz->height > 0 && xyz->width > 0)
@@ -1669,7 +1670,7 @@ void domenu_cursor_show(XO *xo)
         domenu_redo(xo, XR_PART_KNEE + XO_NONE);
         if (xyz->pos_prev == -1)
         {
-            for (int i = 0; i < COUNTOF(xo->pos); ++i)
+            for (int i = 0; i < xo_ncur; ++i)
             {
                 if (i == xo->cur_idx)
                     continue;
@@ -1759,7 +1760,7 @@ domenu_exec(
 
         case ' ':
             xyz->is_moving = false;
-            xo->cur_idx = (xo->cur_idx + 1) % XO_NCUR;
+            xo->cur_idx = (xo->cur_idx + 1) % xo_ncur;
             break;
 
         case KEY_PGUP:

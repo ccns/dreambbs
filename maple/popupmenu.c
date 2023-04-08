@@ -301,14 +301,20 @@ vs_line(
 }
 #endif //not M3_USE_PFTERM
 
-static int popup_cur_color[1 << XO_NCUR] = {
-    0, 1, 4, 5,
+static int popup_cur_color[XO_NCUR][1 << XO_NCUR] = {
+    {0, 1},
+    {0, 1, 4, 5},
+};
+
+static int popup_dec_color[XO_NCUR][1 << XO_NCUR] = {
+    {90, 90},
+    {90, 31, 36, 35},
 };
 
 GCC_CONSTEXPR
 static int get_dec_attr(int cur_idx, bool is_moving)
 {
-    return is_moving ? 90 : (cur_idx == 0) ? 31 : 36;
+    return is_moving ? 90 : popup_dec_color[xo_ncur - 1][1 << cur_idx];
 }
 
 static const char *get_dec_color(int dec_attr)
@@ -326,7 +332,7 @@ static void
 draw_item(const char *desc, int cur_st, int cur_idx, int y, int x, int dec_attr)
 {
     char buf[128];
-    const int color = popup_cur_color[cur_st];
+    const int color = popup_cur_color[xo_ncur - 1][cur_st];
     const bool met = cur_st & (1U << cur_idx);
 
     sprintf(buf, " \x1b[0;37m¢j\x1b[4%d;37m%s(\x1b[1;36m%c\x1b[0;37;4%dm)%-25s%s\x1b[0;47;30m¢p\x1b[40m%s¢p\x1b[m ", color, met?"¢t":"  ", *desc, color, desc+1, met?"¢u":"  ", get_dec_color(dec_attr));
@@ -527,7 +533,7 @@ do_menu_redraw:
                 goto do_menu_redraw;
             case ' ':
                 is_moving = false;
-                cur_idx = (cur_idx + 1) % XO_NCUR;
+                cur_idx = (cur_idx + 1) % xo_ncur;
                 goto do_menu_redraw;
             case KEY_LEFT:
             case KEY_ESC:
@@ -617,7 +623,7 @@ draw_ans_item(
     int dec_attr)
 {
     char buf[128];
-    const int color = popup_cur_color[cur_st];
+    const int color = popup_cur_color[xo_ncur - 1][cur_st];
     const bool met = cur_st & (1U << cur_idx);
 
     sprintf(buf, " \x1b[0;37m¢j\x1b[4%d;37m%s%c\x1b[1;36m%c\x1b[0;37;4%dm%c%-25s%s\x1b[0;47;30m¢p\x1b[40m%s¢p\x1b[m ", color, met?"¢t":"  ", (hotkey==*desc)?'[':'(', *desc, color, (hotkey==*desc)?']':')', desc+1, met?"¢u":"  ", get_dec_color(dec_attr));
@@ -740,7 +746,7 @@ popupmenu_ans_redraw:
                 goto popupmenu_ans_redraw;
             case ' ':
                 is_moving = false;
-                cur_idx = (cur_idx + 1) % XO_NCUR;
+                cur_idx = (cur_idx + 1) % xo_ncur;
                 c = I_RESIZETERM;
                 goto popupmenu_ans_redraw;
             case KEY_LEFT:

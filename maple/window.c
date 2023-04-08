@@ -231,14 +231,15 @@ draw_line(              /* 在 (y, x) 的位置塞入 msg，左右仍要印出原來的彩色文字 
 /* 選項繪製                                              */
 /* ----------------------------------------------------- */
 
-static int popup2_cur_color[1 << XO_NCUR] = {
-    7, 41, 44, 45,
+static int popup2_cur_color[XO_NCUR][1 << XO_NCUR] = {
+    {7, 44},
+    {7, 41, 44, 45},
 };
 
 GCC_CONSTEXPR
 static int get_dec_attr(int cur_idx, bool is_moving)
 {
-    return is_moving ? 7 : (cur_idx == 0) ? 41 : 44;
+    return is_moving ? 7 : popup2_cur_color[xo_ncur - 1][1 << cur_idx];
 }
 
 static const char *get_dec_color(int dec_attr)
@@ -260,7 +261,7 @@ draw_item(
     int cur_idx)
 {
     char buf[128];
-    const int color = popup2_cur_color[cur_st];
+    const int color = popup2_cur_color[xo_ncur - 1][cur_st];
     const bool met = cur_st & (1U << cur_idx);
 
     sprintf(buf, " │\x1b[%um%c %c%c%c%-25s  \x1b[m│ ",
@@ -465,7 +466,7 @@ popupmenu_ans2_redraw:
             goto popupmenu_ans2_redraw;
         case ' ':
             is_moving = false;
-            cur_idx = (cur_idx + 1) % XO_NCUR;
+            cur_idx = (cur_idx + 1) % xo_ncur;
             ch = I_RESIZETERM;
             goto popupmenu_ans2_redraw;
         case KEY_LEFT:
