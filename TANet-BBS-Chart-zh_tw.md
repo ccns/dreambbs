@@ -3,13 +3,22 @@
 ※ 本圖最新版本：https://hackmd.io/@holishing/r1pdt-59b#BBS-系統譜系圖
 
 ## BBS 系統譜系圖
+### BBS Software Genealogy Chart
 
-- 目前 (2022-07-24) 收錄的 BBS 系統節點數：141
-    - 試探性節點（需進一步考證）：8
+此段落編輯鏈結：\
+Link for editing this paragraph:\
+<https://hackmd.io/@DreamBBS/ch-lang-bbs-genealogy>
+
+* 目前收錄的 BBS 系統節點數 Number of currently recorded BBS software nodes (2023-04-08): 144
+    * 試探性節點（仍需進一步考證） Tentative nodes (need further investigation): 8
+
+若您願意分享未獲提及之系統之原始碼，或是熟悉某個系統的分支歷史，請不吝直接編輯或留言以補充此類資訊。\
+If you are willing to share the source code of a BBS software not mentioned here or if you are familiar with the branching history of a certain software, please do not hesitate to share such information by editing this article directly or by leaving a comment.
 
 ### 譜系圖凡例
+**Conventions of the Genealogy Chart**
 
-* 節點格式:
+* 節點格式 Layout format of nodes:
   ```
   (! 顯著開發事件; + 受參考系統)
   系統名稱與版本  開發年代  開發團隊隸屬機構  歷史代表站臺 (＊: 還在使用本系列系統)
@@ -20,37 +29,62 @@
   Software name & ver.  Dev. period in years  Organization of dev. team  Official site (＊: still uses the software)
       (remarks)
   ```
-  - 事件僅為舉例，會有不完整之處。
-    - <code><sup>\[ref]</sup></code>: 可直接參考的資料來源
-    - <code><sup>\[?]</sup></code>: 需補充資料來源
-  - 受參考系統可能僅表示其功能受參考，不一定代表其原始碼受參考。
-    - <code>&dagger;</code>: 暫無法考證的受參考系統
-  - 可找到原始碼者，於系統名稱與版本處附上存取鏈結。
-  - 軟體名與版本後的 <sup>\[?]</sup> 表示該節點為試探性，具體位置仍需進一步考證。 
-  - 開發年代主要參考了版權宣告之日期以及程式修改紀錄。以取時間區間之聯集為原則。
-    - `n.d.`: 年代暫無法考證
-  - 歷史代表站臺以有官方性質且為非個人站臺者優先。
-    - 最近祖節點相同的同一系統不同版本的歷史代表站臺相同時，只在其中最早版本上標出歷史代表站臺。
-    - `N.A.`: 代表站臺暫無法考證
-* 分支以每橫行最多一節點的（無環）樹狀圖表示。
-  - 同系列的不同版本與其間的事件，若無分支，則併為一緊密縱列，順序由上而下；若有分支，則所有直接子分支縮進在同一縱列。
-    - 緊密縱列內，事件內具有括起的版本或時間的話，則明確表示事件發生在上方版本之中。
-  - 分支由上而下的排列順序：較早分支→較晚分支。
-  - 分支早晚順序待考證或過於接近者，暫時以其在既有譜系圖中的位置為主，以隨意指定的順序為輔。
-  - 由原開發團隊開發或採用的直接子分支，以分支圖上的雙橫線表示。
-  - 有多個候選根節點時，以初分支時成分最大的或在譜系上最早出現的節點為實際根節點，其它候選節點則列於受參考系統。
-* 圖中列出的系統，其**未受參考的葉節點**應符合以下所有條件：
-  - 可確定其軟體名稱與譜系位置。
-    - 需有伺服器主程式原始碼或參考文獻。
-    - 僅知站名而不知軟體名者：
-      - 有原始碼者，依英文簡寫站名作為軟體名列入。
-      - 無原始碼者，不列入。
-  - 具有終端機文字介面且具有閱讀與發表文章之功能。
-    - 不可考察代表站臺，而僅能考察其伺服器主程式原始碼者，須已實作上述功能。
-  - 針對中文使用者設計。
-  - ※ 有多個子分支的節點與已受參考的葉節點不受上述條件限制。
+  * 事件僅為舉例，會有不完整之處。\
+    The listed events are not necessary comprehensive.
+    * <code><sup>\[ref]</sup></code>: 可直接參考的資料來源 A link to the reference
+    * <code><sup>\[?]</sup></code>: 需補充資料來源 References are needed
+  * 受參考系統可能僅表示其功能受參考，不一定代表其原始碼受參考。\
+    *Referenced software* only means that its functionalities are referenced but does not necessary mean that its source code is referenced.
+    * <code>&dagger;</code>: 暫無法考證的受參考系統 A referenced software which is no longer available for investigation.
+  * 可找到原始碼者，於系統名稱與版本處附上存取鏈結。\
+    Access URLs are attached to the software name and version if the source code is available.
+  * 軟體名與版本後的 <code><sup>\[?]</sup></code> 表示該節點為試探性，具體位置仍需進一步考證。\
+    Tentative nodes have <code><sup>\[?]</sup></code> after the software name and version. Their precise genealogy position still needs further investigation.
+  * 開發年代主要參考了版權宣告之日期以及程式修改紀錄。以取時間區間之聯集為原則。\
+    The development period is inferred from the copyright declaration and the modification history of the source code. The union of both period is taken if no further evidences are available.
+    * `n.d.`: 年代暫無法考證 No date available
+  * 歷史代表站臺以有官方性質且為非個人站臺者優先。\
+    If multiple sites are regarded as official, the most authoritative non-personal one is taken as the official site.
+    * 最近祖節點相同的同一系統不同版本的歷史代表站臺相同時，只在其中最早版本上標出歷史代表站臺。\
+      For multiple versions of the same software with the same most recent ancestor node, the official site is only listed on the earliest node.
+    * `N.A.`: 代表站臺暫無法考證 The official site is not available to investigate.
+* 分支以每橫行最多一節點的（無環）樹狀圖表示。\
+  Branch relation is represented by a(n) (acyclic) tree graph where every node occupies its own row.
+  * 同系列的不同版本與其間的事件，若無分支，則併為一緊密縱列，順序由上而下；若有分支，則所有直接子分支縮進在同一縱列。\
+    For multiple versions of a software series and the events in-between, their nodes are connected and have the same indentation level if there are no branches, otherwise the immediate children nodes simply have the same indentation level.
+    * 緊密縱列內，事件內具有括起的版本或時間的話，則明確表示事件發生在上方版本之中。\
+      For connected nodes with the same indentation level, an event with parenthesized version or date appended denotes that the event happened during the immediately preceding version node.
+  * 分支由上而下的排列順序：較早分支→較晚分支。\
+    Vertical layout order of branches: The one branched off earlier → the one branched off later.
+  * 分支早晚順序待考證或過於接近者，暫時以其在既有譜系圖中的位置為主，以隨意指定的順序為輔。\
+    If the dates of branching off still need investigation or is too near with each other for some nodes, their order in previous genealogy charts is taken if they even appeared, otherwise an arbitrary order is assigned.
+  * 由原開發團隊開發或採用的直接子分支，以分支圖上的雙橫線表示。\
+    Immediate children branches developed or adopted by the original development team are denoted with doubly-lined horizontal relation line.
+  * 有多個候選根節點時，以初分支時成分最大的或在譜系上最早出現的節點為實際根節點，其它候選節點則列於受參考系統。\
+    If there are multiple reasonable candidates for the root node, the one having the most significant influence when the software branched off or being listed earliest on the genealogy chart is taken as the root node and the other candidates are listed as referenced software.
+* 圖中列出的系統，其**未受參考的葉節點**應符合以下所有條件：\
+  For a listed software, a **non-referenced leaf node** of it should fulfill the following preconditions:
+  * 可確定其軟體名稱與譜系位置。\
+    Its software name and genealogy position can be determined.
+    * 需有伺服器主程式原始碼或參考文獻。\
+      Either the source code of the main program of the server or a reference is needed.
+    * 僅知站名而不知軟體名者：\
+      When only its site name but not the software name is known:
+      * 有原始碼者，依英文簡寫站名作為軟體名列入。\
+        If the source code is available, it is listed here with the English acronym of the site name taken as the software name.
+      * 無原始碼者，不列入。\
+        If no source codes are available, it is not listed here.
+  * 具有終端機文字介面且具有閱讀與發表文章之功能。\
+    It provides a text-terminal&ndash;based interface and has the functionalities of browsing and posting articles.
+    * 不可考察代表站臺，而僅能考察其伺服器主程式原始碼者，須已實作上述功能。\
+      For official sites no longer online but having the source code available, the above functionalities needed to be implemented in the code.
+  * 針對中文使用者設計。\
+    Designed for Chinese-language users.
+  * ※ 有多個子分支的節點與已受參考的葉節點不受上述條件限制。\
+    ※ Nodes with multiple descendant branches and referenced leaf nodes are excepted from the above preconditions.
 
 ### 譜系圖
+**Genealogy Chart**
 
 <big><pre>
 \* Pirate BBS 1.6  1990  Mississippi State University  The Mars Hotel
@@ -162,7 +196,7 @@
 &nbsp;         │           │   MapleBBS [2.39a](https://github.com/bbsmirror/BBSmirror/blob/master/Maple/Maple2/MapleBBS-2.39a.tgz)&ndash;[2.39b](https://github.com/bbsmirror/BBSmirror/blob/master/Maple/Maple2/MapleBBS-2.39b.tgz)  1995&ndash;1996
 &nbsp;         │           │   ├── [koalabear BBS](https://github.com/bbsmirror/BBSmirror/blob/master/SecretBBS/SecretLover_koalabear/SecretLover.tar.gz)  1995&ndash;1997  大同資工  秘密情人
 &nbsp;         │           │   ╘══(! refactored (by opus), patched (by Thor, chuan, et al.))
-&nbsp;         │           │      (+ SOB BBS)
+&nbsp;         │           │      (+ SOB BBS (gem .DIR))
 &nbsp;         │           │      (! mbbsd (TTY-free) (1996-10-12); + Formosa BBS)
 &nbsp;         │           │      (! (X)yz menu removed, GPL license file removed)
 &nbsp;         │           │       MapleBBS [3.00b](https://github.com/bbsmirror/BBSmirror/blob/master/Maple/Maple3/Old/Alpha/MapleBBS-3.00b.tgz)&ndash;[3.00a](https://github.com/bbsmirror/BBSmirror/blob/master/Maple/Maple3/Old/Alpha/MapleBBS-3.00a.tgz)  1995&ndash;1998
@@ -220,69 +254,75 @@
 &nbsp;         │           │   [Rouge BBS Ver.971011](https://github.com/bbsmirror/BBSmirror/tree/master/Maple/Maple2/branch/Rouge)  1995&ndash;1997  交通大學  冷馨居
 &nbsp;         │           │  (+ MapleBBS 3.00 (mbbsd -> main, visio))
 &nbsp;         │           │   [Rouge BBS](https://github.com/bbsmirror/BBSmirror/tree/master/Maple/Maple2/branch/Rouge)  1998
-&nbsp;         │           ├──(+ MapleBBS 2.39&ndash;3.00 1996 (gem .DIR))<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/es_EPEQTvy4/m/SOhQyEtm5iwJ)]</sup>
+&nbsp;         │           ├──(+ MapleBBS 2.39&ndash;3.00 1996)<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/es_EPEQTvy4/m/SOhQyEtm5iwJ)]</sup>
 &nbsp;         │           │   SunOfBeach BBS (SOB BBS) 0.22  1996  臺灣大學  陽光沙灘
-&nbsp;         │           │   ╞══(! Copyleft ($))
-&nbsp;         │           │   │   SOB on FreeBSD<sup>\[?]</sup>  n.d.
-&nbsp;         │           │   │   ╞══(+ MapleBBS 3.00 1996 (mbbsd, visio))<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/bDlffmTSjT8/m/1iRg6wQzLMoJ)]</sup>
-&nbsp;         │           │   │   │   ╞══ SOB mbbsd SunOS Plug&Play<sup>\[?]</sup>  1996  N.A.
-&nbsp;         │           │   │   │   ╞══(! maple/buggy.c)
-&nbsp;         │           │   │   │   │   SOB-fromzero (SOB 3.0)  n.d.  臺大電機  從零開始
-&nbsp;         │           │   │   │   │   SOB domi  n.d.  糟了！誤上賊船
-&nbsp;         │           │   │   │   │   └──(+ MapleBBS-itoc, ATS BBS)<sup>\[[ref](https://www.ptt.cc/bbs/SetupBBS/M.1058724092.A.html)]</sup>
-&nbsp;         │           │   │   │   │       [SOB-PACK](https://github.com/bbsmirror/BBSmirror/blob/master/SOB/sob_rfc2047.tar.gz)  2003  N.A.
-&nbsp;         │           │   │   │   ├── [Atlantis BBS (ATS BBS)](https://github.com/bbsmirror/BBSmirror/tree/master/Atlantis)<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/bEHu_OfxYjw)]</sup>  1996&ndash;n.d.  亞特蘭提斯＊
-&nbsp;         │           │   │   │   │   (+ MapleBBS 3.0x (DAO lib.), 3.10 (shared libs))
-&nbsp;         │           │   │   │   │   (! emulated sub-sites (1.20))<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/bEHu_OfxYjw)]</sup>
-&nbsp;         │           │   │   │   │   (+ WD BBS 2.9, PttBBS (games) (1.31))
-&nbsp;         │           │   │   │   ├── NaiveAge BBS<sup>\[[ref](http://www.ncu.edu.tw/~w3meng/train90s/900820_ArGuo-BBS/NaiveAge-BBS_Install.doc)]</sup>  n.d.  中央機械  純真年代
-&nbsp;         │           │   │   │   ├──(+ SOB-Leeym (bhttpf -> TKU-PRO BBSD))
-&nbsp;         │           │   │   │   │   PeRsOnal BBS (PRO BBS)<sup>\[[ref](https://www.ptt.cc/man/SetupBBS/D389/M.913695634.A.html)]</sup>  1997&ndash;1998  淡江大學  蛋捲個人站
-&nbsp;         │           │   │   │   └── [Purple Garden BBS](https://github.com/bbsmirror/BBSmirror/blob/master/Maple/Maple2/branch/fpgsrc.tgz) (FPG BBS)  1998&ndash;1999  臺灣法律  小魚的紫色花園
-&nbsp;         │           │   │   └── [Ptt BBS 0.001](https://www.ptt.cc/man/SetupBBS/DC13/index.html)  1996&ndash;2000  臺灣大學  批踢踢實業坊＊
-&nbsp;         │           │   │      (! 2-space Allman -> 4-space K\&R (partially); + SOB on FreeBSD (mbbsd))
-&nbsp;         │           │   │       ╞══ Ptt BBS (for Linux) [0.9.2](https://github.com/bbsmirror/BBSmirror/blob/master/Ptt/openptt/pttsrc-0.9.2.tar.gz)&ndash;[1.0.0](https://github.com/bbsmirror/BBSmirror/blob/master/Ptt/openptt/pttbbs-1.0.0.tar.gz) ([archived](https://github.com/bbsmirror/BBSmirror/blob/master/Ptt/openptt))  2000
-&nbsp;         │           │   │       │   ├── [saloon BBS](https://github.com/bbsmirror/BBSmirror/blob/master/Ptt/branch/saloon/saloonsrc.tgz)  2001  政治大學  煮酒論英雄
-&nbsp;         │           │   │       │   ╞══ [Open Ptt](https://github.com/bbsmirror/openptt) (Ptt BBS [1.0.1](https://github.com/bbsmirror/BBSmirror/blob/master/Ptt/openptt/pttbbs-1.0.1.tar.gz)&ndash;[1.0.2](https://github.com/bbsmirror/BBSmirror/blob/master/Ptt/openptt/pttbbs-1.0.2.tar.gz))  2001
-&nbsp;         │           │   │       │   ╘══(! x86_64-compat)
-&nbsp;         │           │   │       │       [Ptt BBS Current](https://github.com/ptt/pttbbs)  2003&ndash;2014<sup>\[?]</sup>
-&nbsp;         │           │   │       │       ├── [pttbbs-henry](https://github.com/alextwl/pttbbs-henry)  2006&ndash;2015  暨大資工  霞蔚山城
-&nbsp;         │           │   │       │       ╘══ [Ptt BBS Current (git-only)](https://github.com/ptt/pttbbs)  2014&ndash;2022
-&nbsp;         │           │   │       │           └── [BRsBBS](https://github.com/BunnyBBS/BRsBBS)  2018&ndash;2022  BunnyBBS
-&nbsp;         │           │   │       └── PttFreeBSD<sup>\[?]</sup>  1998  風與塵埃的對話
-&nbsp;         │           │   │          (+ MapleBBS 3.0x (DAO lib., HDR struct.), 3.10 (shared libs))
-&nbsp;         │           │   │           Wind & Dust BBS (WD BBS) 1.34  1999  風與塵埃的對話＊
-&nbsp;         │           │   │           ╞══(+ MapleBBS 2.39)
-&nbsp;         │           │   │           │   [WD BBS 2.3](https://github.com/bbsmirror/BBSmirror/tree/master/WD/tarball)  1999
-&nbsp;         │           │   │           │   ├── [WD-BBS 2.3-SSSH (PR BBS)](https://github.com/bbsmirror/BBSmirror/blob/master/WD/branches/PR_001206_SNAP.tgz)  2000  松山高中  松江水綠
-&nbsp;         │           │   │           │   │   ╘══ Athenaeum BBS<sup>\[?]</sup>  1999<sup>\[?]</sup>&ndash;n.d.  建中資訊社  雅典娜
-&nbsp;         │           │   │           │   │       ╞══ [Athena BBS (AT-BBS)](https://github.com/bbsmirror/BBSmirror/tree/master/Athena/AT) v1.1.1  1999<sup>\[?]</sup>&ndash;2002
-&nbsp;         │           │   │           │   │       │   │   建中資訊社  雅典娜
-&nbsp;         │           │   │           │   │       │   ╞══ [AT-BBS-Pure](https://github.com/bbsmirror/BBSmirror/blob/master/Athena/AT/AT-BBS-Pure-0.1.1.tgz)  2002  建中資訊社  N.A.
-&nbsp;         │           │   │           │   │       │   ╘══ AT-BBS  2002
-&nbsp;         │           │   │           │   │       │      (! rename project folders (1.5.1))
-&nbsp;         │           │   │           │   │       │      (+ MapleBBS 3.0x ("WD-visio") (1.5.1))
-&nbsp;         │           │   │           │   │       ╞══ WD BBS 2.9<sup>\[?]</sup>  2000&ndash;2010<sup>\[?]</sup>
-&nbsp;         │           │   │           │   │       │   ╞══(! renamed by original dev. team)
-&nbsp;         │           │   │           │   │       │   │  (+ WD BBS, exbbs, MapleBBS 3.10-itoc, AT-BBS)<sup>\[[ref](https://github.com/hialan/hialanBBS/blob/master/src/doc/CHANGES)]</sup>
-&nbsp;         │           │   │           │   │       │   │  (+ myth BBS&dagger;, PttBBS)<sup>\[[ref](https://www.ptt.cc/bbs/SetupBBS/M.1105470062.A.html)]</sup>
-&nbsp;         │           │   │           │   │       │   │   [WD_hialan BBS (AT3-BBS) (AT-BBS v2)](https://github.com/hialan/hialanBBS)<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/TPeEm84denQ)]</sup> ([archived](https://github.com/bbsmirror/BBSmirror/tree/master/WD/branches/hialan))<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/iFMcpSVSOZM)]</sup>  2002&ndash;2017
-&nbsp;         │           │   │           │   │       │   │       建中資訊社  威尼斯咖啡館
-&nbsp;         │           │   │           │   │       │   └── [CCUMATH-BBS](https://github.com/jcppkkk/MapleBBS-3.00)  n.d.&ndash;2013  中正大學  無數不學
-&nbsp;         │           │   │           │   │       ╘══(! refactored (C++), support Windows NT)
-&nbsp;         │           │   │           │   │           [EdenBBS v0.5](https://github.com/bbsmirror/BBSmirror/tree/master/WD/branches/Eden)  2001  建中資訊社  兩光的兩光小站
-&nbsp;         │           │   │           │   ├── [exbbs](https://github.com/bbsmirror/BBSmirror/tree/master/WD/branches/exbbs)  2001  宜蘭技院  紅樓頂尖 BBS
-&nbsp;         │           │   │           │   ╘══ [Pure WD BBS (WD-P BBS)](https://github.com/bbsmirror/BBSmirror/blob/master/WD/tarball/wd_pure_snap_linux.tgz)  2002  風與塵埃的對話-空無一物版
-&nbsp;         │           │   │           └──(+ PttBBS, FPG BBS)<sup>\[[ref](https://www.ptt.cc/man/SetupBBS/DAAD/M.939173101.A.html)]</sup>
-&nbsp;         │           │   │              (+ MapleBBS 3.0x ("WD-visio" &mdash; io+term+screen-stuff) (20000619))
-&nbsp;         │           │   │               [StarRiver BBS (Star BBS)](https://github.com/bbsmirror/BBSmirror/tree/master/StarVersion)  2000&ndash;2002  輔仁大學  星河夜話
 &nbsp;         │           │   ├──(! bhttpd (Web UI))<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/iRD0Cor13YM/m/dKh4qol8LkcJ)]</sup>
 &nbsp;         │           │   │   SOB-Leeym  n.d.  成大土木  大地雕塑家
 &nbsp;         │           │   ├── Forest BBS<sup>\[?]</sup>  n.d.  中原資管  森林站<sup>\[?]</sup>
 &nbsp;         │           │   ├──(+ FireBird BBS)<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/bp0ZpSPflHM)]</sup>
 &nbsp;         │           │   │   ForestV BBS  n.d.  政治大學  月光森林
-&nbsp;         │           │   └── Wind's Top BBS (WindTop BBS) (wind BBS) [2.2](https://github.com/bbsmirror/BBSmirror/blob/master/Maple/Maple2/branch/Wind/wind1101.tgz)&ndash;[2.4](https://github.com/bbsmirror/BBSmirror/blob/master/WindTop/old/WindTopBBS-19991229-V2.4.tgz)  1998&ndash;1999
-&nbsp;         │           │           元智大學  風之塔＊
+&nbsp;         │           │   ├── [FHLBBS](https://ftp.fhl.net/FHL/BBS/)  1996&ndash;2004  信望愛BBS站
+&nbsp;         │           │   ╘══(+ gem .DIR (1996-09-10))<sup>\[[ref](https://www.ptt.cc/man/SetupBBS/DC13/DEEE/M.908117798.A.html)]</sup>
+&nbsp;         │           │      (! Copyleft ($) (<= 1996-10-08))
+&nbsp;         │           │       SOB on FreeBSD<sup>\[?]</sup>  n.d.
+&nbsp;         │           │       ╞══(+ MapleBBS 3.00 1996 (mbbsd, visio) (1996-11-16))<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/bDlffmTSjT8/m/1iRg6wQzLMoJ)]</sup>
+&nbsp;         │           │       │   ╞══ SOB mbbsd SunOS Plug&Play<sup>\[?]</sup>  1996  N.A.
+&nbsp;         │           │       │   ╞══(! maple/buggy.c)
+&nbsp;         │           │       │   │   SOB-fromzero (SOB 3.0)  n.d.  臺大電機  從零開始
+&nbsp;         │           │       │   │   SOB domi  n.d.  糟了！誤上賊船
+&nbsp;         │           │       │   │   └──(+ MapleBBS-itoc, ATS BBS)<sup>\[[ref](https://www.ptt.cc/bbs/SetupBBS/M.1058724092.A.html)]</sup>
+&nbsp;         │           │       │   │       [SOB-PACK](https://github.com/bbsmirror/BBSmirror/blob/master/SOB/sob_rfc2047.tar.gz)  2003  N.A.
+&nbsp;         │           │       │   ├── [Atlantis BBS (ATS BBS)](https://github.com/bbsmirror/BBSmirror/tree/master/Atlantis)<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/bEHu_OfxYjw)]</sup>  1996&ndash;n.d.  亞特蘭提斯＊
+&nbsp;         │           │       │   │   (+ MapleBBS 3.0x (DAO lib.), 3.10 (shared libs))
+&nbsp;         │           │       │   │   (! emulated sub-sites (1.20))<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/bEHu_OfxYjw)]</sup>
+&nbsp;         │           │       │   │   (+ WD BBS 2.9, PttBBS (games) (1.31))
+&nbsp;         │           │       │   ├── NaiveAge BBS<sup>\[[ref](http://www.ncu.edu.tw/~w3meng/train90s/900820_ArGuo-BBS/NaiveAge-BBS_Install.doc)]</sup>  n.d.  中央機械  純真年代
+&nbsp;         │           │       │   ├──(+ SOB-Leeym (bhttpf -> TKU-PRO BBSD))
+&nbsp;         │           │       │   │   PeRsOnal BBS (PRO BBS)<sup>\[[ref](https://www.ptt.cc/man/SetupBBS/D389/M.913695634.A.html)]</sup>  1997&ndash;1998  淡江大學  蛋捲個人站
+&nbsp;         │           │       │   └──(+ MapleBBS 3.0x (DAO lib.), 3.10 (shared libs))
+&nbsp;         │           │       │       [Purple Garden BBS](https://github.com/bbsmirror/BBSmirror/blob/master/Maple/Maple2/branch/fpgsrc.tgz) (FPG BBS)  1998&ndash;1999  臺灣法律  小魚的紫色花園
+&nbsp;         │           │       ├── [sob-ptt BBS 0.00](https://www.ptt.cc/man/SetupBBS/DC13/index.html)  1996  臺灣大學  批踢踢實業坊＊
+&nbsp;         │           │       │   Ptt BBS 0.001  1996&ndash;2000  臺灣大學  批踢踢實業坊＊
+&nbsp;         │           │       │  (! 2-space Allman -> 4-space K\&R (partially); + SOB on FreeBSD (mbbsd))
+&nbsp;         │           │       │   ╞══ Ptt BBS (for Linux) [0.9.2](https://github.com/bbsmirror/BBSmirror/blob/master/Ptt/openptt/pttsrc-0.9.2.tar.gz)&ndash;[1.0.0](https://github.com/bbsmirror/BBSmirror/blob/master/Ptt/openptt/pttbbs-1.0.0.tar.gz) ([archived](https://github.com/bbsmirror/BBSmirror/blob/master/Ptt/openptt))  2000
+&nbsp;         │           │       │   │   ├── [saloon BBS](https://github.com/bbsmirror/BBSmirror/blob/master/Ptt/branch/saloon/saloonsrc.tgz)  2001  政治大學  煮酒論英雄
+&nbsp;         │           │       │   │   ╞══ [Open Ptt](https://github.com/bbsmirror/openptt)  2001
+&nbsp;         │           │       │   │   ╘══ Ptt BBS [1.0.1](https://github.com/bbsmirror/BBSmirror/blob/master/Ptt/openptt/pttbbs-1.0.1.tar.gz)&ndash;[1.0.2](https://github.com/bbsmirror/BBSmirror/blob/master/Ptt/openptt/pttbbs-1.0.2.tar.gz)  2001
+&nbsp;         │           │       │   │      (! x86_64-compat)
+&nbsp;         │           │       │   │       [Ptt BBS Current (svn)](https://github.com/lantw44m/pttbbs)  2002&ndash;2014
+&nbsp;         │           │       │   │       ├── [pttbbs-henry](https://github.com/alextwl/pttbbs-henry)  2006&ndash;2015  暨大資工  霞蔚山城
+&nbsp;         │           │       │   │       ╘══ [Ptt BBS Current (git-only)](https://github.com/ptt/pttbbs)  2014&ndash;2022
+&nbsp;         │           │       │   │           └── [BRsBBS](https://github.com/BunnyBBS/BRsBBS)  2018&ndash;2022  BunnyBBS
+&nbsp;         │           │       │   └── PttFreeBSD<sup>\[?]</sup>  1998  風與塵埃的對話
+&nbsp;         │           │       │      (+ MapleBBS 3.0x (DAO lib., HDR struct.), 3.10 (shared libs))
+&nbsp;         │           │       │       Wind & Dust BBS (WD BBS) 1.34  1999  風與塵埃的對話＊
+&nbsp;         │           │       │       ╞══(+ MapleBBS 2.39)
+&nbsp;         │           │       │       │   [WD BBS 2.3](https://github.com/bbsmirror/BBSmirror/tree/master/WD/tarball)  1999
+&nbsp;         │           │       │       │   ├── [WD-BBS 2.3-SSSH (PR BBS)](https://github.com/bbsmirror/BBSmirror/blob/master/WD/branches/PR_001206_SNAP.tgz)  2000  松山高中  松江水綠
+&nbsp;         │           │       │       │   │   ╘══ Athenaeum BBS<sup>\[?]</sup>  1999<sup>\[?]</sup>&ndash;n.d.  建中資訊社  雅典娜
+&nbsp;         │           │       │       │   │       ╞══ [Athena BBS (AT-BBS)](https://github.com/bbsmirror/BBSmirror/tree/master/Athena/AT) v1.1.1  1999<sup>\[?]</sup>&ndash;2002
+&nbsp;         │           │       │       │   │       │   │   建中資訊社  雅典娜
+&nbsp;         │           │       │       │   │       │   ╞══ [AT-BBS-Pure](https://github.com/bbsmirror/BBSmirror/blob/master/Athena/AT/AT-BBS-Pure-0.1.1.tgz)  2002  建中資訊社  N.A.
+&nbsp;         │           │       │       │   │       │   ╘══ AT-BBS  2002
+&nbsp;         │           │       │       │   │       │      (! rename project folders (1.5.1))
+&nbsp;         │           │       │       │   │       │      (+ MapleBBS 3.0x ("WD-visio") (1.5.1))
+&nbsp;         │           │       │       │   │       ╞══ WD BBS 2.9<sup>\[?]</sup>  2000&ndash;2010<sup>\[?]</sup>
+&nbsp;         │           │       │       │   │       │   ╞══(! renamed by original dev. team)
+&nbsp;         │           │       │       │   │       │   │  (+ WD BBS, exbbs, MapleBBS 3.10-itoc, AT-BBS)<sup>\[[ref](https://github.com/hialan/hialanBBS/blob/master/src/doc/CHANGES)]</sup>
+&nbsp;         │           │       │       │   │       │   │  (+ myth BBS&dagger;, PttBBS)<sup>\[[ref](https://www.ptt.cc/bbs/SetupBBS/M.1105470062.A.html)]</sup>
+&nbsp;         │           │       │       │   │       │   │   [WD_hialan BBS (AT3-BBS) (AT-BBS v2)](https://github.com/hialan/hialanBBS)<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/TPeEm84denQ)]</sup> ([archived](https://github.com/bbsmirror/BBSmirror/tree/master/WD/branches/hialan))<sup>\[[ref](https://groups.google.com/g/tw.bbs.admin.installbbs/c/iFMcpSVSOZM)]</sup>  2002&ndash;2017
+&nbsp;         │           │       │       │   │       │   │       建中資訊社  威尼斯咖啡館
+&nbsp;         │           │       │       │   │       │   └── [CCUMATH-BBS](https://github.com/jcppkkk/MapleBBS-3.00)  n.d.&ndash;2013  中正大學  無數不學
+&nbsp;         │           │       │       │   │       ╘══(! refactored (C++), support Windows NT)
+&nbsp;         │           │       │       │   │           [EdenBBS v0.5](https://github.com/bbsmirror/BBSmirror/tree/master/WD/branches/Eden)  2001  建中資訊社  兩光的兩光小站
+&nbsp;         │           │       │       │   ├── [exbbs](https://github.com/bbsmirror/BBSmirror/tree/master/WD/branches/exbbs)  2001  宜蘭技院  紅樓頂尖 BBS
+&nbsp;         │           │       │       │   ╘══ [Pure WD BBS (WD-P BBS)](https://github.com/bbsmirror/BBSmirror/blob/master/WD/tarball/wd_pure_snap_linux.tgz)  2002  風與塵埃的對話-空無一物版
+&nbsp;         │           │       │       └──(+ PttBBS, FPG BBS)<sup>\[[ref](https://www.ptt.cc/man/SetupBBS/DAAD/M.939173101.A.html)]</sup>
+&nbsp;         │           │       │          (+ MapleBBS 3.0x ("WD-visio" &mdash; io+term+screen-stuff) (20000619))
+&nbsp;         │           │       │           [StarRiver BBS (Star BBS)](https://github.com/bbsmirror/BBSmirror/tree/master/StarVersion)  2000&ndash;2002  輔仁大學  星河夜話
+&nbsp;         │           │       ├── Oldest future Object BBS (OfO)  1997&ndash;n.d.  臺灣大學  未來最舊小棧
+&nbsp;         │           │       └── Wind's Top BBS (WindTop BBS) (wind BBS) [2.2](https://github.com/bbsmirror/BBSmirror/blob/master/Maple/Maple2/branch/Wind/wind1101.tgz)&ndash;[2.4](https://github.com/bbsmirror/BBSmirror/blob/master/WindTop/old/WindTopBBS-19991229-V2.4.tgz)  1998&ndash;1999
+&nbsp;         │           │               元智大學  風之塔＊
 &nbsp;         │           ├── [EE CS BBS](https://github.com/bbsmirror/BBSmirror/blob/master/Maple/Maple2/branch/eecs.tgz)  1996  清華大學  資電整合
 &nbsp;         │           ├── [Bobule BBS](https://github.com/bbsmirror/BBSmirror/tree/master/Maple/Maple2/branch/rpg)<sup>\[?]</sup>  1996  交通大學  包包的 CPU
 &nbsp;         │           │   ╘══ [RPG BBS](https://github.com/bbsmirror/BBSmirror/tree/master/Maple/Maple2/branch/rpg)  1996&ndash;1997  交通大學  創世紀
@@ -307,38 +347,45 @@
 </pre></big>
 
 ### 譜系圖近期更動
+**Recent Changes to the Genealogy Chart**
 
-- 初步增加事件節點。「請支援考察。」
-    - 尚待確定適當的詳細程度。
-    - 暫時未將事件節點的參考鏈結放入參考資料。
-- 將連續未分支同系節點併為一縱列。
-- 顯著調整部份譜系的呈現。
-    - WindTop BBS 3 系列，根節點從 WindTop BBS 2.x 改至新節點 MapleBBS 3.05。
-    - Pivot/Feeling BBS 系列，改名前最後共同祖節點從 5.8 改至 5.9b4。
-    - WD BBS 系列，補充中間節點，並將 2.9 版分支之根節點改至新節點 Athenaeum BBS。
+* 初步增加事件節點。「請支援考察。」
+    * 尚待確定適當的詳細程度。
+    * 暫時未將事件節點的參考鏈結整理進參考資料。
+* 將連續未分支同系節點併為一縱列。
+* 顯著調整部份譜系的呈現。
+    * Ptt BBS 1.0.1&ndash;1.0.2，對 Open Ptt 專案倉庫的修改紀錄分析，提示其在 1.0.0 版後已與正式的 Open Ptt 專案分開開發，且 Ptt BBS Current (svn) 初始內容與 Ptt BBS 1.0.2 不衝突，因此視為 Ptt BBS 後繼版本與分支的祖節點。
+    * WindTop BBS 3 系列，根節點從 WindTop BBS 2.x 改至新節點 MapleBBS 3.05。
+    * Pivot/Feeling BBS 系列，改名前最後共同祖節點從 5.8 改至 5.9b4。
+    * WD BBS 系列，補充中間節點，並將 2.9 版分支之根節點改至新節點 Athenaeum BBS。
+    * 前移較早期或時代待考證的 SOB BBS 系列的位置；OfO BBS 與 WindTop BBS 2 改置於較後期的 SOB BBS 系列。
 - 試探性地加入新分支節點。需進一步驗證。
-    - Train BBS，設為 Train BBS 後繼版本與 WindTop BBS 3 系列之祖節點。內部參考關係待釐清。
-        - 與 M3-WindTop 間無直接分支關係。
-    - PttFreeBSD，設為 WD BBS 系列之祖節點。有無其它分支仍待考察。
-    - SOB on FreeBSD，暫設為較後期的 SOB BBS 的祖節點。是否獨立存在仍待驗證。或可改 SOB BBS 之某日期版本表示。
-    - Athenaeum BBS，暫設為建中資訊社之 WD BBS 衍生系統的祖節點。子節點仍待驗證。或可改以 Athena BBS 之某具體前期版本表示。
-        - AT2-BBS 非其子分支。
-    - MapleBBS 3.05，設為 WindTop BBS 3 系列與 MapleBBS 3.10 之最後共同祖節點，視為 MapleBBS 3.10 之早期版本。見於早期 WindTop BBS 3 原始碼 `include/config.h`。
-- 將機構名與站名改放到開發年代後。
-- 初步建立是否列入某軟體的準則。
+    * Train BBS，假設為 Train BBS 後繼版本與 WindTop BBS 3 系列之祖節點。內部參考關係暫未考證。
+        * 與 M3-WindTop 間無直接分支關係。
+    * PttFreeBSD，假設為 WD BBS 系列之祖節點。仍未知有無其它子分支。
+    * SOB on FreeBSD，假設為較後期的 SOB BBS 的祖節點。不排除僅為某版本別稱，或可改以 SOB BBS 之某日期版本表示。
+        * 暫以是否實作 .DIR 精華區為定位依據。
+    * Athenaeum BBS，假設為建中資訊社之 WD BBS 衍生系統的祖節點。仍未知有無其它子節點。或可改以 Athena BBS 之某具體前期版本表示。
+        * AT2-BBS 非其子分支。
+    * MapleBBS 3.05，假設為 WindTop BBS 3 系列與 MapleBBS 3.10 之最後共同祖節點，視為 MapleBBS 3.10 之早期版本。見於早期 WindTop BBS 3 原始碼 `include/config.h`，但不排除為 WindTop BBS 3 開發團隊自訂版本號。
+* 將機構名與站名改放到開發年代後。
+* 初步建立是否列入某軟體的準則。
 
 ### 譜系圖研究方法
-* 以現有譜系圖為藍本，先統整一致之處。
-* 先行考察不一致的部份的站臺與軟體並修正譜系圖。
+**Research Methodology of the Genealogy Chart**
+
+* 以現有譜系圖為藍本，並進行交叉驗證。
 * 參考軟體原始碼的版本資訊（注意有時可能有編輯錯誤，需交叉參考相關軟體）：
-    - 常位於 `install.files/`, `config/`, `bbshome/`, `example/`, `sample/bbs/`, 或 `etc/`
-    - 常名為 `Version.info`, `Version`, 或 `info`
+    * 常位於 `install.files/`, `config/`, `bbshome/`, `example/`, `sample/bbs/`, 或 `etc/`
+    * 常名為 `Version.info`, `Version`, 或 `info`
 * 整理同一系列之祖先軟體和／或其衍生軟體之具特異性的共同特徵，驗證現有譜系圖。
 * 未有版本資訊的軟體，依其軟體特徵與修改時間，佐以過去文獻，判斷其譜系位置。
 * 不一致時，參考資料來源的優先順序：原始碼 > 代表站臺之軟體功能 > 主要開發團隊與他人引用，開發時期 > 開發團隊回憶與他人引用 > 開發團隊，他人轉述 > 他人，開發時期 > 他人回憶
 * 代表站臺的確定，以文獻資料為主，以原始碼中的預設設定檔為輔。
 
 ### 譜系圖參考資料
+**References of the Genealogy Chart**
+
 * 過去的 TANet BBS 發展譜系圖及相關說明
     - Tseng, K.-F. [kftseng]. *[轉貼] 電子布告欄簡介*. 中山大學 West BBS-西子灣站. http://bbs3.nsysu.edu.tw/txtVersion/treasure/ee90-2/M.889205710.A/M.889268386.A.html
     - geniuswei. (2007, May 8). *Re: [請益] 關於BBS的定義*. 批踢踢實業坊. https://www.ptt.cc/bbs/ask/M.1178594446.A.727.html
@@ -384,9 +431,21 @@
       https://groups.google.com/g/tw.bbs.admin.installbbs
     * 水雲間資訊交流站--WebBBS介面（以關鍵字 `FB_maple` 過濾）：
       <https://web.archive.org/web/*/http://bbs.unix-like.org/show.php*>
+    * [php.twbbs.org](#) (豬頭紀公園) 的 plan 看板精華區備份
+      https://github.com/bbsmirror/BBSmirror/tree/master/php_gem
 * 現存站臺上的版權宣告及相關公告
 * 程式原始碼中的相關文件（見譜系圖中各鏈結）
 
-| 可連 <br> (不納入統計) | 站名 | 位址 | BBS 版本 | 備註 |
+### 相關非中文 BBS 站臺
+**Relevant non&ndash;Chinese-language BBS sites**
+
+* 此處可連線狀態不納入統計\
+  The connectable status below is excluded from the number of connectable sites.
+
+<div class="bbslist excluded">
+
+| 可連&nbsp;&nbsp; <br> Con. | 站名 <br> Site Name | 位址 <br> Address | BBS 版本 <br> BBS Software Version | 備註 <br> Notes |
 | - | - | - | - | - |
-| :white_check_mark: | Eagle's Nest | `ssh bbs@bbs.wq5l.net` :lock: <br> `ssh bbs@nest.wq5l.net` :lock: | [Eagles BBS 3.1.4-rc2](https://wq5l.net/ebbs/) | (1992-04-14 開站) |
+| :white_check_mark: | Eagle's Nest | `ssh bbs@bbs.wq5l.net` :lock: <br> `ssh bbs@nest.wq5l.net` :lock: | [Eagles BBS 3.1.4-rc2](https://wq5l.net/ebbs/) | (1992-04-14 開站 Est. 1992-04-14) |
+
+</div>
