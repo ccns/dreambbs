@@ -75,7 +75,7 @@ VAR char ipv6addr[INET6_ADDRSTRLEN];   /* User's IP (IPv4 or IPv6) */
 
 VAR int  chk_mailstat   INI(0);
 
-VAR int xo_ncur INI(2);         /* Number of cursors */
+VAR int xo_ncur INI(1);         /* Number of cursors */
 
 /* filename */
 VAR const char *const fn_dir          INI(FN_DIR);
