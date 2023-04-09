@@ -1079,7 +1079,7 @@ INTERNAL_INIT MENU menu_main[] =
     "2Skin     ¡i ¿ï¾Ü¤¶­±°Ï ¡j"},
 #endif
 
-#if 0 // DAO
+#ifndef MENU_NO_GOODBYE
     {{goodbye}, 0, M_XMODE,
     GOODBYE_EXIT},
 #endif
