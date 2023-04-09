@@ -1452,7 +1452,9 @@ domenu_redo_reload:
     }
     if (cmd & XR_PART_KNEE)
     {
-        const char *explan = strchr(xyz->table[xo->pos[xo->cur_idx]]->desc, '\n');
+        const MENU *const mptr = xyz->table[xo->pos[xo->cur_idx]];
+        const char *const desc = check_info((const void *)mptr->item.func, mptr->desc);
+        const char *explan = strchr(desc, '\n');
         if (!explan)
             explan = strchr(xyz->mtail->desc, '\n');
         if (!explan)
