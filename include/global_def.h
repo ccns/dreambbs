@@ -286,6 +286,9 @@
 #define KEY_F11         0x025B
 #define KEY_F12         0x025C
 
+/* Key sequence */
+#define KEY_KONAMI      0x0573
+
 /* Special key values */
 #define KEY_INVALID     0x03FE
 

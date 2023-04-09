@@ -1768,6 +1768,14 @@ domenu_exec(
         /* Invoke hotkey functions for keyboard input only */
         switch ((xyz->keyboard_cmd) ? cmd : KEY_NONE)
         {
+        case KEY_KONAMI:
+            for (int i = xo_ncur; i < XO_NCUR; ++i)
+                xo->pos[i] = xo->pos[xo_ncur - 1];
+            xo_ncur = xo_ncur % XO_NCUR + 1;
+            xo->cur_idx %= xo_ncur;
+            cmd = XO_BODY; // Cursor count changed; redraw
+            continue;
+
         case KEY_TAB:
             if (xo_ncur == 1) // Plain mode
                 break;

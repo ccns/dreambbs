@@ -1965,9 +1965,20 @@ xover_key(
     {
         return cmd;
     }
-    if (cmd == ' ')
+    if (cmd == ' ' || cmd == KEY_KONAMI)
     {
-        xo->cur_idx = (xo->cur_idx + 1) % xo_ncur;
+        switch (cmd)
+        {
+        case KEY_KONAMI:
+            for (int i = xo_ncur; i < XO_NCUR; ++i)
+                xo->pos[i] = xo->pos[xo_ncur - 1];
+            xo_ncur = xo_ncur % XO_NCUR + 1;
+            xo->cur_idx %= xo_ncur;
+            break;
+        default:
+        case ' ':
+            xo->cur_idx = (xo->cur_idx + 1) % xo_ncur;
+        }
         const int pos_next = xo->pos[xo->cur_idx];
         /* Keep both cursors inside the screen if possible */
         if (pos_next >= xo->top + XO_TALL && pos_next < pos + XO_TALL)
@@ -1980,6 +1991,8 @@ xover_key(
             xo->top = BMAX(pos_next, pos - XO_TALL + 1);
             return XR_BODY + XO_MOVE + pos_next;
         }
+        if (cmd == KEY_KONAMI) // Cursor count changed; redraw
+            return XR_BODY + XO_MOVE + pos_next;
         /* Otherwise re-placing the cursor to redraw the cursors */
         xo->pos[xo->cur_idx] = pos;
         return XO_MOVE + pos_next;

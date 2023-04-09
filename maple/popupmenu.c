@@ -528,6 +528,12 @@ do_menu_redraw:
 
         switch (c)
         {
+            case KEY_KONAMI:
+                for (int i = xo_ncur; i < XO_NCUR; ++i)
+                    cur[i] = cur[xo_ncur - 1];
+                xo_ncur = xo_ncur % XO_NCUR + 1;
+                cur_idx %= xo_ncur;
+                goto do_menu_redraw;
             case KEY_TAB:
                 if (xo_ncur == 1) // Plain mode
                     break;
@@ -742,6 +748,12 @@ popupmenu_ans_redraw:
 
         switch (c)
         {
+            case KEY_KONAMI:
+                for (int i = xo_ncur; i < XO_NCUR; ++i)
+                    cur[i] = cur[xo_ncur - 1];
+                xo_ncur = xo_ncur % XO_NCUR + 1;
+                cur_idx %= xo_ncur;
+                goto popupmenu_ans_redraw;
             case KEY_TAB:
                 if (xo_ncur == 1) // Plain mode
                     break;

@@ -2364,8 +2364,24 @@ typedef struct
     const int *seq;
 } KeySeq;
 
+static const int key_seq_konami[] =
+{
+    KEY_UP, KEY_UP, KEY_DOWN, KEY_DOWN,
+    KEY_LEFT, KEY_RIGHT, KEY_LEFT, KEY_RIGHT,
+    'B', 'A', KEY_NONE,
+};
+
+static const int key_seq_konami_lower[] =
+{
+    KEY_UP, KEY_UP, KEY_DOWN, KEY_DOWN,
+    KEY_LEFT, KEY_RIGHT, KEY_LEFT, KEY_RIGHT,
+    'b', 'a', KEY_NONE,
+};
+
 static KeySeq key_seq[] =
 {
+    {KEY_KONAMI, 0, {0, 0}, {0, 0}, key_seq_konami},
+    {KEY_KONAMI, 0, {0, 0}, {0, 0}, key_seq_konami_lower},
 };
 
 #define KEY_SEQ_TIMEOUT_MS 10000
