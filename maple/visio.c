@@ -8,6 +8,7 @@
 
 
 #include <stdarg.h>
+#include <sys/time.h>
 #include <arpa/telnet.h>
 
 #include "bbs.h"
@@ -2354,10 +2355,66 @@ int vkey_process_no_dbcs_repeat(int (*fgetch)(void))
     return key;
 }
 
+typedef struct
+{
+    int key;
+    int idx;
+    struct timeval tbeg;
+    struct timeval tlast;
+    const int *seq;
+} KeySeq;
+
+static KeySeq key_seq[] =
+{
+};
+
+#define KEY_SEQ_TIMEOUT_MS 10000
+static int key_seq_process(int key)
+{
+    int res = KEY_NONE;
+    struct timeval tnow;
+    gettimeofday(&tnow, NULL);
+    for (KeySeq *p = key_seq; p < key_seq + COUNTOF(key_seq); ++p)
+    {
+        struct timeval tdiff;
+        timersub(&tnow, &p->tlast, &tdiff);
+        if (1000 * tdiff.tv_sec + tdiff.tv_usec / 1000 > KEY_SEQ_TIMEOUT_MS)
+            p->idx = 0;
+        if (p->seq[p->idx] == key)
+        {
+            if (p->idx == 0)
+                p->tbeg = tnow;
+            p->tlast = tnow;
+            ++p->idx;
+            if (p->seq[p->idx] == KEY_NONE)
+            {
+                timersub(&tnow, &p->tbeg, &tdiff);
+                if (1000 * tdiff.tv_sec + tdiff.tv_usec / 1000 <= KEY_SEQ_TIMEOUT_MS)
+                    res = p->key;
+                p->idx = 0;
+            }
+        }
+        else
+        {
+            p->idx = 0;
+        }
+    }
+    return res;
+}
+
 int
 vkey(void)
 {
+    static int unget_key = KEY_NONE;
+    if (unget_key != KEY_NONE)
+    {
+        const int key = unget_key;
+        unget_key = KEY_NONE;
+        return key;
+    }
+
     const int key = vkey_process_no_dbcs_repeat(igetch);
+    unget_key = key_seq_process(key);
 
     switch (key)
     {
