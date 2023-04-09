@@ -1458,6 +1458,8 @@ domenu_redo_reload:
         if (!explan)
             explan = MENU_HELP;
 
+        move_ansi(b_lines - 1, b_cols - xyz->explan_len_prev);
+        clrtoeol();
         if (explan)
         {
             const int h = domenu_geth(xo->max, xyz);
@@ -1469,12 +1471,14 @@ domenu_redo_reload:
             /* Ensure there is room to display the explanation */
             if (xyz->y + (h - 1) < b_lines - 1 || b_cols - (xyz->x + w) > explan_len)
             {
-                move_ansi(b_lines - 1, b_cols - xyz->explan_len_prev);
-                clrtoeol();
                 move_ansi(b_lines - 1, b_cols - explan_len);
                 outs(explan);
                 xyz->explan_len_prev = explan_len;
             }
+        }
+        else
+        {
+            xyz->explan_len_prev = 0;
         }
 
     }
