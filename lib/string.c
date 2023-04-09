@@ -512,8 +512,8 @@ GCC_PURE size_t str_nmove_ansi(const char *str, size_t idx, ssize_t diff, size_t
 {
     const char *ptr = str + BMIN(idx, len);
 
-    /* `diff > 0`: Move afterwards; `diff < 0`: Move backwards */
-    if (diff > 0)
+    /* `diff >= 0`: Move afterwards; `diff < 0`: Move backwards */
+    if (diff >= 0)
     {
         do
         {
@@ -565,7 +565,7 @@ GCC_PURE size_t str_nmove_ansi(const char *str, size_t idx, ssize_t diff, size_t
                 ++ptr;
         }
     }
-    else if (diff < 0)
+    else // diff < 0
     {
         /* Assume `*ptr` has a value not for the param bytes of ANSI escape */
         const char *final = ptr;
