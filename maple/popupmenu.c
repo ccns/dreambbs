@@ -529,6 +529,8 @@ do_menu_redraw:
         switch (c)
         {
             case KEY_TAB:
+                if (xo_ncur == 1) // Plain mode
+                    break;
                 is_moving = !is_moving;
                 goto do_menu_redraw;
             case ' ':
@@ -741,6 +743,8 @@ popupmenu_ans_redraw:
         switch (c)
         {
             case KEY_TAB:
+                if (xo_ncur == 1) // Plain mode
+                    break;
                 is_moving = !is_moving;
                 c = I_RESIZETERM;
                 goto popupmenu_ans_redraw;

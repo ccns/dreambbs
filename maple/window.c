@@ -461,6 +461,8 @@ popupmenu_ans2_redraw:
         switch (ch)
         {
         case KEY_TAB:
+            if (xo_ncur == 1) // Plain mode
+                break;
             is_moving = !is_moving;
             ch = I_RESIZETERM;
             goto popupmenu_ans2_redraw;

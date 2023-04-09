@@ -21,7 +21,7 @@
 #define GOODBYE_EXIT    "Goodbye   【再別" BOARDNAME "】"
 #define GOODBYE_GOBACK  "GoBack    【 回上層選單 】"
 
-#define MENU_HELP       "(Tab) 開關選單移動模式"
+#define MENU_HELP       NULL
 #define MENU_HELP_NCUR  "(Tab) 開關選單移動模式；(Space) 切換使用中游標" // Multiple-cursor mode
 
 static int
@@ -1769,6 +1769,8 @@ domenu_exec(
         switch ((xyz->keyboard_cmd) ? cmd : KEY_NONE)
         {
         case KEY_TAB:
+            if (xo_ncur == 1) // Plain mode
+                break;
             xyz->is_moving = !xyz->is_moving;
             break;
 
