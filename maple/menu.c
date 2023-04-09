@@ -21,7 +21,8 @@
 #define GOODBYE_EXIT    "Goodbye   【再別" BOARDNAME "】"
 #define GOODBYE_GOBACK  "GoBack    【 回上層選單 】"
 
-#define MENU_HELP       "(Tab) 開關選單移動模式；(Space) 切換使用中游標"
+#define MENU_HELP       "(Tab) 開關選單移動模式"
+#define MENU_HELP_NCUR  "(Tab) 開關選單移動模式；(Space) 切換使用中游標" // Multiple-cursor mode
 
 static int
 system_result(void)
@@ -1457,6 +1458,8 @@ domenu_redo_reload:
         const char *explan = strchr(desc, '\n');
         if (!explan)
             explan = strchr(xyz->mtail->desc, '\n');
+        if (!explan && xo_ncur > 1)
+            explan = MENU_HELP_NCUR;
         if (!explan)
             explan = MENU_HELP;
 
