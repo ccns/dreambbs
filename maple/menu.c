@@ -21,7 +21,7 @@
 #define GOODBYE_EXIT    "Goodbye   【再別" BOARDNAME "】"
 #define GOODBYE_GOBACK  "GoBack    【 回上層選單 】"
 
-#define MENU_HELP       "\n(Tab) 開關選單移動模式；(Space) 切換使用中游標"
+#define MENU_HELP       "(Tab) 開關選單移動模式；(Space) 切換使用中游標"
 
 static int
 system_result(void)
@@ -477,7 +477,7 @@ INTERNAL_INIT MENU menu_boardadm[] =
     "Personal   個人板審核"},
 
     {{.menu = menu_admin}, PERM_MENU + 'N', M_ADMIN,
-    "看板總管" MENU_HELP}
+    "看板總管"}
 };
 
 INTERNAL_INIT MENU menu_accadm[] =
@@ -507,7 +507,7 @@ INTERNAL_INIT MENU menu_accadm[] =
 #endif
 
     {{.menu = menu_admin}, PERM_MENU + 'U', M_ADMIN,
-    "註冊總管" MENU_HELP}
+    "註冊總管"}
 };
 
 INTERNAL_INIT MENU menu_settingadm[] =
@@ -535,7 +535,7 @@ INTERNAL_INIT MENU menu_settingadm[] =
     "Database   系統資料庫更新"},
 
     {{.menu = menu_admin}, PERM_MENU + 'X', M_ADMIN,
-    "系統資料" MENU_HELP}
+    "系統資料"}
 };
 
 /* ----------------------------------------------------- */
@@ -565,7 +565,7 @@ INTERNAL_INIT MENU menu_reset[] =
     "All        全部"},
 
     {{.menu = menu_admin}, PERM_MENU + 'K', M_ADMIN,
-    "系統重置" MENU_HELP}
+    "系統重置"}
 };
 
 
@@ -603,7 +603,7 @@ INTERNAL_INIT MENU menu_admin[] =
 #endif
 
     {{.menu = menu_main}, PERM_MENU + 'A', M_ADMIN,
-    "系統維護" MENU_HELP}
+    "系統維護"}
 };
 
 #ifdef __cplusplus
@@ -670,7 +670,7 @@ INTERNAL_INIT MENU menu_mail[] =
     "Yes Sir!   寄信給站長"},
 
     {{.menu = menu_main}, PERM_MENU + 'R', M_MMENU,       /* itoc.020829: 怕 guest 沒選項 */
-    "電子郵件" MENU_HELP}
+    "電子郵件"}
 };
 #ifdef __cplusplus
 }  // namespace
@@ -729,7 +729,7 @@ INTERNAL_INIT MENU menu_talk[] =
     "Notify     設定系統網友協尋"},
 #endif
     {{.menu = menu_main}, PERM_MENU + 'U', M_UMENU,
-    "休閒聊天" MENU_HELP}
+    "休閒聊天"}
 };
 
 
@@ -762,7 +762,7 @@ INTERNAL_INIT MENU menu_information[] =
     "3Year      本年度百大熱門話題"},
 
     {{.menu = menu_xyz}, PERM_MENU + 'L', M_MMENU,
-    "統計資料" MENU_HELP}
+    "統計資料"}
 };
 
 
@@ -787,7 +787,7 @@ INTERNAL_INIT MENU menu_xyz[] =
     "History    本站歷史軌跡"},
 
     {{.menu = menu_main}, PERM_MENU + 'T', M_SMENU,
-    "系統資訊" MENU_HELP}
+    "系統資訊"}
 };
 
 /* ----------------------------------------------------- */
@@ -824,7 +824,7 @@ INTERNAL_INIT MENU menu_reg[] =
     "1List      群組名單"},
 
     {{.menu = menu_user}, PERM_MENU + 'I', M_MMENU,
-    "註冊資訊" MENU_HELP}
+    "註冊資訊"}
 };
 
 
@@ -851,7 +851,7 @@ INTERNAL_INIT MENU menu_user[] =
     "ViewLog    檢視上站紀錄"},
 
     {{.menu = menu_service}, PERM_MENU + 'C', M_UMENU,
-    "個人設定" MENU_HELP}
+    "個人設定"}
 };
 
 
@@ -883,7 +883,7 @@ INTERNAL_INIT MENU menu_game[] =
     "Pip        " NICKNAME "戰鬥雞"},
 
     {{.menu = menu_service}, PERM_MENU + 'F', M_UMENU,
-    "遊戲休閒" MENU_HELP}
+    "遊戲休閒"}
 
 };
 
@@ -912,7 +912,7 @@ INTERNAL_INIT MENU menu_special[] =
     "CameraReset  版面重設"},
 
     {{.menu = menu_service}, PERM_MENU + 'R', M_UMENU,
-    "加值服務" MENU_HELP}
+    "加值服務"}
 };
 
 
@@ -934,7 +934,7 @@ INTERNAL_INIT MENU menu_song[] =
     "Submit        投稿專區"},
 
     {{.menu = menu_special}, PERM_MENU + 'R', M_XMENU,
-    "網呼點歌" MENU_HELP}
+    "網呼點歌"}
 };
 #endif
 
@@ -984,7 +984,7 @@ INTERNAL_INIT MENU menu_service[] =
 #endif
 */
     {{.menu = menu_main}, PERM_MENU + 'U', M_UMENU,
-     NICKNAME "服務" MENU_HELP}
+     NICKNAME "服務"}
 };
 
 #ifdef __cplusplus
@@ -1013,7 +1013,7 @@ INTERNAL_INIT MENU skin_main[] =
     "DreamBBS   預設的系統"},
 
     {{.menu = menu_main}, PERM_MENU + 'W', M_MMENU,
-    "介面選單" MENU_HELP}
+    "介面選單"}
 };
 #ifdef __cplusplus
 }  // namespace
@@ -1084,7 +1084,7 @@ INTERNAL_INIT MENU menu_main[] =
 #endif
 
     {{NULL}, PERM_MENU + 'B', M_MMENU,
-    "主功\能表" MENU_HELP}
+    "主功\能表"}
 };
 
 #ifdef __cplusplus
@@ -1127,7 +1127,7 @@ INTERNAL_INIT MENU menu_treat[] =
     GOODBYE_EXIT},
 
     {{NULL}, PERM_MENU + 'G', M_MMENU,
-    "主功\能表" MENU_HELP}
+    "主功\能表"}
 };
 #ifdef __cplusplus
 }  // namespace
@@ -1455,11 +1455,16 @@ domenu_redo_reload:
         const char *explan = strchr(xyz->table[xo->pos[xo->cur_idx]]->desc, '\n');
         if (!explan)
             explan = strchr(xyz->mtail->desc, '\n');
+        if (!explan)
+            explan = MENU_HELP;
+
         if (explan)
         {
             const int h = domenu_geth(xo->max, xyz);
             const int w = domenu_getw(xo->max, xyz);
-            int explan_len = strip_ansi_len(explan + 1);
+            while (explan[0] == '\n')
+                ++explan;
+            int explan_len = strip_ansi_len(explan);
 
             /* Ensure there is room to display the explanation */
             if (xyz->y + (h - 1) < b_lines - 1 || b_cols - (xyz->x + w) > explan_len)
@@ -1467,7 +1472,7 @@ domenu_redo_reload:
                 move_ansi(b_lines - 1, b_cols - xyz->explan_len_prev);
                 clrtoeol();
                 move_ansi(b_lines - 1, b_cols - explan_len);
-                outs(explan + 1);
+                outs(explan);
                 xyz->explan_len_prev = explan_len;
             }
         }
