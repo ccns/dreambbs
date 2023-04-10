@@ -18,7 +18,6 @@
 - Changelog & TODO
     - [[Issue & TODO list — 問題與代辦事項清單|Issues-zh_tw]]
     - [[MapleBBS-itoc Porting Project — MapleBBS-itoc 移植計畫|itoc-Port-TODO]]
-    - [[Unsorted Changelog|CHANGELOG]]
     - [[BBS-Lua Changelog|BBS-Lua-Change-zh_tw]]
     - [BBS-Ruby Changelog](https://github.com/ccns/bbs-ruby/releases) (external link — 外部鏈結)
     - [[新式密碼加密 (DLBBS v2.0+)|Passwd-v2.0-zh_TW]]
