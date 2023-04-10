@@ -7,7 +7,7 @@ jobs:
   sync-with-wiki:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           repository: ${{ format('{0}.wiki', github.repository) }}
           persist-credentials: false
