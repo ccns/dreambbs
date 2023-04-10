@@ -95,7 +95,7 @@ int f_ln(const char *src, const char *dst)
     return ret;
 }
 
-static struct flock fl = {
+static const struct flock flock_default = {
     .l_whence = SEEK_SET,
     .l_start = 0,
     .l_len = 0,
@@ -107,6 +107,7 @@ int f_exlock(int fd)
     return flock(fd, LOCK_EX);
 #endif
     /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
+    struct flock fl = flock_default;
     fl.l_type = F_WRLCK;
     /* Thor.990309: with blocking */
     return fcntl(fd, F_SETLKW /*F_SETLK */, &fl);
@@ -118,6 +119,7 @@ int f_unlock(int fd)
     return flock(fd, LOCK_UN);
 #endif
     /* Thor.981205: 用 fcntl 取代flock, POSIX標準用法 */
+    struct flock fl = flock_default;
     fl.l_type = F_UNLCK;
     return fcntl(fd, F_SETLKW /*F_SETLK */, &fl);
 }
