@@ -15,7 +15,9 @@
     - [[[WIP] 與 MapleBBS 3 的差異|VS-MapleBBS-3-zh_tw]]
 - References — 參考資料
     - [[ANSI Escape Code Standard Format — ANSI 控制碼標準格式|ANSI-Format-zh_tw]]
-- Changelog
+- Changelog & TODO
+    - [[Issue & TODO list — 問題與代辦事項清單|Issues-zh_tw]]
+    - [[MapleBBS-itoc Porting Project — MapleBBS-itoc 移植計畫|itoc-Port-TODO]]
     - [[Unsorted Changelog|CHANGELOG]]
     - [[BBS-Lua Changelog|BBS-Lua-Change-zh_tw]]
     - [BBS-Ruby Changelog](https://github.com/ccns/bbs-ruby/releases) (external link — 外部鏈結)
