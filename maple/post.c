@@ -1250,7 +1250,7 @@ post_cross(
             ptime = localtime(&now);
             sprintf(tgt, "轉錄至 %s 看板", xboard);
             xfp = fopen(fpath, "a");
-            sprintf(add, "\x1b[1;33m→ %*s：\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, cuser.userid, tgt, Btime(&now)+3);
+            rmsg_sprint(add, 1, "→", cuser.userid, tgt, now);
             fprintf(xfp, "%s", add);
             fclose(xfp);
         }
@@ -3158,10 +3158,10 @@ post_recommend(
     int pos)
 {
     HDR *hdr;
-    int cur, addscore, eof, point=0;
+    int cur, addscore, point=0;
     BRD *brd;
     char fpath[80], msg[53], add[128], lastrecommend[IDLEN+1], verb[3];
-    char ans, getans, pushverb GCC_UNUSED;
+    char ans;
 
     /* 081122.cache: 推文時間限制 */
     static time_t next = 0;
@@ -3220,90 +3220,75 @@ post_recommend(
 
         /* 081121.cache: 推噓文功能 */
         /* 081122.cache: 自訂推噓文動詞 */
-        if (brd->battr & BRD_PUSHSNEER)
+        if (brd->battr & (BRD_PUSHSNEER | BRD_PUSHDEFINE))
         {
-            //addscore = 0;
-            //switch (ans = vans("◎ 評論 1)推文 2)噓文 3)留言 ？[Q] "))
-            //考量夢大已經習慣推文是箭頭符號
-            switch (ans = vans("◎ 評論 1)推文 2)噓文 ？[Q] "))
-            {
-                case '1':
-                    getans = vget(B_LINES_REF, 0, "推文：", msg, 53, DOECHO);
-                    addscore = 1;
-                    break;
-                case '2':
-                    getans = vget(B_LINES_REF, 0, "噓文：", msg, 53, DOECHO);
-                    addscore = -1;
-                    break;
-                case '3':
-                    getans = vget(B_LINES_REF, 0, "留言：", msg, 53, DOECHO);
-                    addscore = 0;
-                    break;
-                default:
-                    getans = 0;
-                    break;
-            }
+            const char *const choices = (brd->battr & BRD_PUSHDEFINE) ?
+                "◎ 評論 1)推文 2)噓文 3)留言 4)自訂推文 5)自訂噓文 ？[Q] "
+                // : "◎ 評論 1)推文 2)噓文 3)留言 ？[Q] " // 考量夢大已經習慣推文是箭頭符號
+                : "◎ 評論 1)推文 2)噓文 ？[Q] ";
+            ans = vans(choices);
+            if (ans == 0 || (ans > '3' && !(brd->battr & BRD_PUSHDEFINE)))
+                ans = 'Q'; // Invalid choice
         }
-        else if (brd->battr & BRD_PUSHDEFINE)
+        else
         {
-            //addscore = 0;
-            switch (ans = vans("◎ 評論 1)推文 2)噓文 3)留言 4)自訂推文 5)自訂噓文 ？[Q] "))
-            {
-                case '1':
-                    getans = vget(B_LINES_REF, 0, "推文：", msg, 53, DOECHO);
-                    strcpy(verb, "推");
-                    addscore = 1;
-                    break;
-                case '2':
-                    getans = vget(B_LINES_REF, 0, "噓文：", msg, 53, DOECHO);
-                    strcpy(verb, "噓");
-                    addscore = -1;
-                    break;
-                case '3':
-                    getans = vget(B_LINES_REF, 0, "留言：", msg, 53, DOECHO);
-                    addscore = 0;
-                    break;
+            ans = 0;
+        }
 
+        {
+            const char *prompt = NULL;
+            switch (ans)
+            {
+                default:
+                case 'Q':
+                    break;
+                case '1':
                 case '4':
-                    pushverb = vget(B_LINES_REF, 0, "請輸入自訂的正面動詞：", verb, 3, DOECHO);
-                    eof = strlen(verb);
-                    if (eof<2)
+                    prompt = "推文：";
+                    if (ans == '1')
                     {
-                        zmsg("動詞須為一個中文字元或者兩個英文字元");
-                        return XO_FOOT;
+                        if (brd->battr & BRD_PUSHSNEER)
+                            strcpy(verb, "→");
+                        else
+                            strcpy(verb, "推");
                     }
-                    getans = vget(B_LINES_REF, 0, "推文：", msg, 53, DOECHO);
                     addscore = 1;
                     break;
-
+                case '2':
                 case '5':
-                    pushverb = vget(B_LINES_REF, 0, "請輸入自訂的負面動詞：", verb, 3, DOECHO);
-                    eof = strlen(verb);
-                    if (eof<2)
-                    {
-                        zmsg("動詞須為一個中文字元或者兩個英文字元");
-                        return XO_FOOT;
-                    }
-                    getans = vget(B_LINES_REF, 0, "噓文：", msg, 53, DOECHO);
+                    prompt = "噓文：";
+                    if (ans == '2')
+                        strcpy(verb, "噓");
                     addscore = -1;
                     break;
-
-                default:
-                    getans = 0;
-                    break;
+                case 0:
+                case '3':
+                    prompt = (ans == 0) ? "推文：" : "留言：";
+                    if (brd->battr & BRD_PUSHSNEER)
+                        strcpy(verb, "");
+                    else
+                        strcpy(verb, "→");
+                    addscore = 0;
             }
-        }
-        else
-        {
-            getans = vget(B_LINES_REF, 0, "推文：", msg, 53, DOECHO);
-            addscore = 0;
-        }
+            if (ans == '4' || ans == '5')
+            {
+                const char *const prompt_verb = (ans == '4') ?
+                    "請輸入自訂的正面動詞："
+                    : "請輸入自訂的負面動詞：";
+                vget(B_LINES_REF, 0, prompt_verb, verb, 3, DOECHO);
+                if (strlen(verb) < 2)
+                {
+                    zmsg("動詞須為一個中文字元或者兩個英文字元");
+                    return XO_FOOT;
+                }
+            }
 
-        /* 081121.cache: 後悔的機會 */
-        if (getans)
-            ans = vans("請確定是否送出 ? [y/N]");
-        else
-            ans = 'n';
+            /* 081121.cache: 後悔的機會 */
+            if (prompt && vget(B_LINES_REF, 0, prompt, msg, 53, DOECHO))
+                ans = vans("請確定是否送出 ? [y/N]");
+            else
+                ans = 'n';
+        }
 
         //更新資料操硬碟
         pos = seek_rec(xo, pos, hdr);
@@ -3363,6 +3348,7 @@ post_recommend(
             }
             else //無噓文相容性
             {
+                addscore = 1;
                 if (hdr->recommend < 99)
                     hdr->recommend++;
             }
@@ -3374,26 +3360,7 @@ post_recommend(
 
             /* 081121.cache: 推噓文和普通推薦有不同的outs */
             /* 081122.cache: 自訂推噓文動詞 */
-            if (brd->battr & BRD_PUSHSNEER)
-            {
-                if (addscore == 1)
-                    sprintf(add, "\x1b[1;33m→ %*s：\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, cuser.userid, msg, Btime_any(&hdr->pushtime)+3);
-                else if (addscore == -1)
-                    sprintf(add, "\x1b[1;31m噓\x1b[m \x1b[1;33m%*s：\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, cuser.userid, msg, Btime_any(&hdr->pushtime)+3);
-                else
-                    sprintf(add, "\x1b[m\x1b[1;33m   %*s：\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, cuser.userid, msg, Btime_any(&hdr->pushtime)+3);
-            }
-            else if (brd->battr & BRD_PUSHDEFINE)
-            {
-                if (addscore == 1)
-                    sprintf(add, "\x1b[1;33m%2.2s %*s：\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, IDLEN, cuser.userid, msg, Btime_any(&hdr->pushtime)+3);
-                else if (addscore == -1)
-                    sprintf(add, "\x1b[1;31m%2.2s\x1b[m \x1b[1;33m%*s：\x1b[36m%-54.54s \x1b[m%5.5s\n", verb, IDLEN, cuser.userid, msg, Btime_any(&hdr->pushtime)+3);
-                else
-                    sprintf(add, "\x1b[1;33m→\x1b[m \x1b[1;33m%*s：\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, cuser.userid, msg, Btime_any(&hdr->pushtime)+3);
-            }
-            else
-                sprintf(add, "\x1b[1;33m→ %*s：\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, cuser.userid, msg, Btime_any(&hdr->pushtime)+3);
+            rmsg_sprint(add, addscore, verb, cuser.userid, msg, hdr->pushtime);
             /*
             if (dashf(fpath))
                 f_cat(fpath, add);

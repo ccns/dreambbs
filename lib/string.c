@@ -819,6 +819,36 @@ GCC_PURE bool str_pat(const char *str, const char *pat)
     return true;
 }
 
+/* Print the message for `userid` commenting `msg` with `verb` at `time`
+ * which increases/decreases/keeps the score of the main article (by at most 1 point) according to the sign of `pushscore`,
+ * into buffer `dst`
+ * If `pushscore` < -1, the ANSI escapes of the verb color is simplified.
+ * Returns the number of characters printed */
+GCC_NONNULLS
+int rmsg_sprint(char *dst, int pushscore, const char *verb, const char *userid, const char *msg, time_t time)
+{
+    const char *const date = Btime_any(&time) + 3; // skip the year
+    return rmsg_sprint_date(dst, pushscore, verb, userid, msg, date);
+}
+
+/* Similar to `rmsg_sprint()` but `date` is a "2-digit month/2-digit day" string.
+ * Returns the number of characters printed */
+GCC_NONNULLS
+int rmsg_sprint_date(char *dst, int pushscore, const char *verb, const char *userid, const char *msg, const char *date)
+{
+    char verb_color[24];
+    if (pushscore > 0)
+        sprintf(verb_color, "\x1b[1;33m%2.2s ", verb);
+    else if (pushscore == -1)
+        sprintf(verb_color, "\x1b[1;31m%2.2s\x1b[m \x1b[1;33m", verb);
+    else if (pushscore < -1) // Simplified the ANSI escapes
+        sprintf(verb_color, "\x1b[1;31m%2.2s \x1b[33m", verb);
+    else if (*verb != '\0')
+        sprintf(verb_color, "\x1b[1;33m%2.2s\x1b[m \x1b[1;33m", verb);
+    else
+        strcpy(verb_color, "\x1b[m\x1b[1;33m   ");
+    return sprintf(dst, "%s%*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", verb_color, IDLEN, userid, msg, date);
+}
 
 /* Reverse the string `src`, output the result to a buffer from the buffer end `dst`, and return the string head of `dst` (formerly `str_rev`) */
 GCC_NONNULLS

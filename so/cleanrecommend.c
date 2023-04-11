@@ -292,27 +292,6 @@ clean(
 
     if ((fp = fopen(fpath, "r")))
     {
-
-/*
-        if (brd->battr & BRD_PUSHSNEER)
-        {
-            if (addscore == 1)
-                sprintf(add,                "[[1;33m¡÷ %*s¡G[[36m%-54.54s [[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
-            else if (addscore == -1)
-                sprintf(add,      "[[1;31m¼N[[m [[1;33m%*s¡G[[36m%-54.54s [[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
-        }
-        else if (brd->battr & BRD_PUSHDEFINE)
-        {
-            if (addscore == 1)
-                sprintf(add, "[[1;33m%02.2s %*s¡G[[36m%-54.54s [[m%5.5s\n", verb, IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
-            else if (addscore == -1)
-                sprintf(add, "[[1;31m%02.2s[[m [[1;33m%*s¡G[[36m%-54.54s [[m%5.5s\n", verb, IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
-            else
-                sprintf(add,                "[[1;33m¡÷ %*s¡G[[36m%-54.54s [[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
-        }
-        else
-            sprintf(add,                  "[[1;33m¡÷ %*s¡G[[36m%-54.54s [[m%5.5s\n", IDLEN, cuser.userid, msg, Btime(&hdr->pushtime)+3);
-*/
         while (fgets(buf, 256, fp))
         {
             memset(&rmsg, 0, sizeof(RMSG));
@@ -387,20 +366,12 @@ clean(
     for (i=0; i<rec_num(recommenddb, sizeof(RMSG)); i++)
     {
         rec_get(recommenddb, &rmsg, sizeof(RMSG), i);
-        if (rmsg.pn == POSITIVE)
-        {
-            counter++;
-            sprintf(buf, "\x1b[1;33m%2s %*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", rmsg.verb, IDLEN, rmsg.userid, rmsg.msg, rmsg.rtime);
-        }
-        else if (rmsg.pn == NEGATIVE)
-        {
-            counter--;
-            sprintf(buf, "\x1b[1;31m%2s \x1b[33m%*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", rmsg.verb, IDLEN, rmsg.userid, rmsg.msg, rmsg.rtime);
-        }
-        else
-        {
-            sprintf(buf, "\x1b[m\x1b[1;33m   %*s¡G\x1b[36m%-54.54s \x1b[m%5.5s\n", IDLEN, rmsg.userid, rmsg.msg, rmsg.rtime);
-        }
+        const int pushscore = (rmsg.pn == POSITIVE) ? 1
+            : (rmsg.pn == NEGATIVE) ? -2 // Simplify the ANSI escapes
+            : 0;
+        const char *const verb = (rmsg.pn == COMMENT) ? "" : rmsg.verb;
+        counter += pushscore;
+        rmsg_sprint_date(buf, pushscore, verb, rmsg.userid, rmsg.msg, rmsg.rtime);
         f_cat(tmp, buf);
     }
 
