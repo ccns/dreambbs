@@ -65,7 +65,7 @@ cleanrecommend_item(
         pn = "\x1b[1;31m-";
     else
         pn = " ";
-    prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
+    prints("%4d%s%2s\x1b[m%*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
 
     return XO_NONE;
 }
@@ -297,11 +297,13 @@ clean(
             if (c2 < buf)
                 goto non_recommend;
             str_scpy(rmsg.msg, c2, sizeof(rmsg.msg));
+            str_rtrim(rmsg.msg);
 
             c2 -= IDLEN + 7; // Including trailing "¡G\x1b[36m"
             if (c2 < buf || strncmp(c2 + IDLEN, "¡G", 2) != 0)
                 goto non_recommend;
-            str_scpy(rmsg.userid, c2, sizeof(rmsg.userid));
+            const size_t idx_uid = strspn(c2, " "); // Skip leading spaces
+            str_scpy(rmsg.userid, c2 + idx_uid, sizeof(rmsg.userid) - idx_uid);
 
             c2 = strchr(buf, 'm');
             if (!c2)
