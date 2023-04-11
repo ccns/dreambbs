@@ -307,7 +307,8 @@ clean(
             if (!c2)
                 goto non_recommend;
             ++c2;
-            str_scpy(rmsg.verb, c2, sizeof(rmsg.verb)); // Non-empty verb or "\x1b[" for empty verbs
+            if (c2[0] != '\x1b') // Non-empty verb
+                str_scpy(rmsg.verb, c2, sizeof(rmsg.verb));
 
             if (strncmp(buf, "\x1b[1;31m", 7) == 0) // Negative color
                 rmsg.pn = NEGATIVE;
