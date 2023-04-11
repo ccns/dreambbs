@@ -4,9 +4,9 @@ Build status: `master` [![master branch build status](https://github.com/ccns/dr
 
 [![](https://i.imgur.com/0EpI7Fa.png)](https://github.com/ccns/dreambbs)
 
-The current code of the BBS server for Dream-Land BBS (夢之大地電子佈告欄系統) at NCKU — <https://ccns.cc>.
+The current code of the BBS server for Dream-Land BBS at NCKU &mdash; <https://ccns.cc>.
 
-This project was based on Wind's Top BBS — <http://windtop.yzu.edu.tw> — and has subsequently been developed by Pang-Wei Tsai ([cache](https://github.com/pwtsai)) and other volunteers from the Campus Computer & Network Society (CCNS — <https://ccns.io> ) at National Cheng Kung University (NCKU) in Taiwan.
+This project was based on Wind's Top BBS &mdash; <http://windtop.yzu.edu.tw> &mdash; and has subsequently been developed by Pang-Wei Tsai ([cache](https://github.com/pwtsai)) and other volunteers from the Campus Computer & Network Society (CCNS &mdash; <https://ccns.io> ) at National Cheng Kung University (NCKU) in Taiwan.
 
 For the copyright information of this project, please refer to `COPYRIGHT` and `VERSION`.
 
@@ -16,7 +16,7 @@ Different licenses may apply to individual modules. Please refer to their source
 
 Please refer to <https://github.com/ccns/dreambbs/wiki/INSTALL> for the instructions for setting up a BBS site using DreamBBS.
 
-Note that you would need to clone the repository *dreambbs_snap* — <https://github.com/ccns/dreambbs_snap> — for the essential files.
+Note that you would need to clone the repository *dreambbs_snap* &mdash; <https://github.com/ccns/dreambbs_snap> &mdash; for the essential files.
 
 If you have cloned this repository, you can also find the wiki contents on the branch "wiki".
 
@@ -39,19 +39,19 @@ If you have cloned this repository, you can also find the wiki contents on the b
     * *Not present after cloning*. Please refer to [To Set up a New BBS site](#to-set-up-a-new-bbs-site) for building instructions.
 
 * `sample/`: Sample configuration files and templates. Containing templates of [systemd](https://en.wikipedia.org/wiki/Systemd) service unit files.
-    * `bbs-sshd.service.in`: Template file for starting *bbs-sshd*, an SSH-to-Telnet-over-UNIX-socket proxy server, Apache License 2.0 – <https://github.com/ptt/bbs-sshd>.
+    * `bbs-sshd.service.in`: Template file for starting *bbs-sshd*, an SSH-to-Telnet-over-UNIX-socket proxy server, Apache License 2.0 &mdash; <https://github.com/ptt/bbs-sshd>.
       bbs-sshd is developed by Robert Wang (robertabcd) et al.
     * You can find the processed sample configuration files under `build/sample/`
 
 * `innbbsd/`: A [Usenet](https://en.wikipedia.org/wiki/Usenet) newsgroup client daemon.
-  First developed by Shih-Kun Huang (skhuang) et al. for Eagles BBS–derived BBSes.
+  First developed by Shih-Kun Huang (skhuang) et al. for Eagles BBS&ndash;derived BBSes.
   Later maintained by Yu-Xuan Tu (itoc) specifically for MapleBBS 3 BBSes.
 
 * `include/`: The header files. Some header files are under `innbbsd/` instead.
 
 * `lib/`: The static library *libdao* (Data Abstract Operation).
 
-* `maple/`: The BBS server `bbsd` and the chat room–managing daemon `xchatd`. Containing frequently used modules.
+* `maple/`: The BBS server `bbsd` and the chat room&ndash;managing daemon `xchatd`. Containing frequently used modules.
     * `pmore.c`: The optional module *pmore* (piaip's more), BSD-like custom license.
       Developed by Hung-Te Lin (piaip) et al.
     * `pfterm.c`: The optional module *pfterm* (piaip's flat terminal system), BSD-like custom license.
