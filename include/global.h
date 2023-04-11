@@ -56,7 +56,7 @@ VAR int b_lines;                /* bottom line */
 VAR int b_cols;                 /* bottom columns */
 VAR int d_cols;                 /* difference columns from standard */
 
-VAR char fromhost[INET6_ADDRSTRLEN];
+VAR char fromhost[64];
 
 VAR char quote_file[80];
 VAR char quote_user[80];
