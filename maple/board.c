@@ -875,7 +875,8 @@ static int class_flag;
 
 static int
 class_check(
-    int chn)
+    int chn,
+    void **ppool)
 {
     short *cbase, *chead, *ctail;
     int pos, max, val, zap;
@@ -884,7 +885,7 @@ class_check(
     BRD *brd;
     char *bits;
 
-    if (!class_img)
+    if (!ppool && !class_img)
         return 0;
 
     chn = CH_END - chn;
@@ -917,6 +918,9 @@ class_check(
     chead = (short *) ((char *) cbase + pos);
     ctail = (short *) ((char *) cbase + max);
 
+    if (ppool)
+        *ppool = cbase = (short *) realloc(*ppool, max - pos);
+
     max = 0;
     brd = bshm->bcache;
     bits = brd_bits;
@@ -958,9 +962,11 @@ class_check(
                 bnum++;
             }
         }
-        else if (!class_check(chn))
+        else if (!class_check(chn, NULL))
             continue;
         max++;
+        if (ppool)
+            *cbase++ = chn;
     } while (chead < ctail);
 
     if (class_hot && bnum > 0)
@@ -973,101 +979,7 @@ static int
 class_load(
     XO *xo)
 {
-    short *cbase, *chead, *ctail;
-    int chn;                    /* ClassHeader number */
-    int pos, max, val, zap;
-    int bnum = 0;
-    int class_hot = 0;
-    BRD *brd;
-    char *bits;
-
-    chn = CH_END - xo->key;
-
-    switch (boardmode)
-    {
-        case 0:
-            cbase = (short *) class_img;
-            break;
-#ifdef  HAVE_PROFESS
-        case 1:
-            cbase = (short *) profess_img;
-            break;
-#endif
-        default:
-            cbase = (short *) class_img;
-    }
-
-    // "HOT/" 名稱可自定，若改名也要順便改後面的長度 4
-    if (!strncmp((char *)cbase + cbase[chn], "HOT/", 4))
-    {
-        class_hot = 1;
-        chn = 0;
-    }
-
-    chead = cbase + chn;
-
-    pos = chead[0] + CH_TTSIZE;
-    max = chead[1];
-
-    chead = (short *) ((char *) cbase + pos);
-    ctail = (short *) ((char *) cbase + max);
-
-    max -= pos;
-
-    cbase = (short *) realloc(xo->xyz, max);
-    xo->xyz = cbase;
-
-    max = 0;
-    brd = bshm->bcache;
-    bits = brd_bits;
-    zap = (class_flag & BFO_YANK) ? 0 : BRD_Z_BIT;
-
-    do
-    {
-        chn = *chead++;
-        if (chn >= 0)
-        {
-            val = bits[chn];
-/* cache.081207: 處理哪些 board 要 print */
-/* thanks to gaod */
-/* cache.090503: 即時熱門看板 */
-/* cache.091225: 列出所有有閱讀權限的看板 */
-            if (brd[chn].readlevel != PERM_CHATROOM)
-            {
-                if (class_flag2 &&
-                    (!(val & BRD_R_BIT) || !(brd[chn].brdname[0]) ||
-                    !(brd[chn].readlevel) || (brd[chn].readlevel & ~(PERM_SYSOP | PERM_BOARD)) ))
-                        continue;
-
-                if ((val & BRD_F_BIT) && !(val & zap))
-                    ;
-                else
-                {
-                    if ( !(val & BRD_R_BIT) || (val & zap) || !(brd[chn].brdname[0]) )
-                        continue;
-                }
-            }
-            // 即時熱門看板臨界值自定
-            if (class_hot)
-            {
-                if (bshm->mantime[chn] < CLASS_HOT) /* 只列出人氣超過 CLASS_HOT 的看板 */
-                    continue;
-                bnum++;
-            }
-        }
-        else if (!class_check(chn))
-        {
-            continue;
-        }
-
-        max++;
-        *cbase++ = chn;
-    } while (chead < ctail);
-
-    if (class_hot && bnum > 0)
-        qsort(cbase - bnum, bnum, sizeof(short), mantime_cmp);
-
-    xo->max = max;
+    const int max = xo->max = class_check(xo->key, &xo->xyz);
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
     {
         if (xo->pos[i] >= max)
