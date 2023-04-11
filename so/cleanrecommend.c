@@ -258,7 +258,7 @@ clean(
 
     hdr = (const HDR *) xo_pool_base + pos;
 
-    if (!hdr->recommend || hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
+    if (hdr->xmode & (POST_DELETE | POST_CANCEL | POST_MDELETE | POST_LOCK | POST_CURMODIFY))
         return DL_RELEASE(XO_NONE);
 
     chrono = hdr->chrono;
