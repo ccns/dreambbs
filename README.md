@@ -1,4 +1,4 @@
-# Dreamland-BBS
+# DreamBBS
 
 Build status: `master` [![master branch build status](https://github.com/ccns/dreambbs/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/ccns/dreambbs/actions/workflows/build.yml?query=branch%3Amaster)
 
