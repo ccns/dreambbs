@@ -58,27 +58,14 @@ cleanrecommend_item(
 {
     const RMSG *const cleanrecommend = (const RMSG *) xo_pool_base + pos;
     const int num = pos + 1;
-
-    char tmp[10];
     const char *pn;
-
-    pn = tmp;
-
     if (cleanrecommend->pn == POSITIVE)
-    {
         pn = "\x1b[1;33m+";
-        prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
-    }
     else if (cleanrecommend->pn == NEGATIVE)
-    {
         pn = "\x1b[1;31m-";
-        prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
-    }
     else
-    {
         pn = " ";
-        prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
-    }
+    prints("%4d%s%2s\x1b[m%-*s %-*s%-5s\n", num, pn, cleanrecommend->verb, IDLEN, cleanrecommend->userid, d_cols + 54, cleanrecommend->msg, cleanrecommend->rtime);
 
     return XO_NONE;
 }
