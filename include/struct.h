@@ -523,7 +523,7 @@ struct UTMP  /* SHMDATA(raw) */
     char          username[24];
     char          realname[20];
     uint32_t      userlevel;
-    char          from[48];                     /* remote host */
+    char          from[64];                     /* remote host */
 #ifdef  HAVE_SHOWNUMMSG
     int32_t       num_msg;                      /* receive messages */
 #endif
