@@ -263,8 +263,6 @@ clean(
     time_t chrono;
     struct stat st;
     int total, fd;
-    const BRD *brd;
-    unsigned int battr;
 
     counter = 0;
 
@@ -285,9 +283,6 @@ clean(
     sprintf(tmp, "tmp/%s.clean", cuser.userid);
     unlink(tmp);
     unlink(recommenddb);
-
-    brd = bshm->bcache + currbno;
-    battr = brd->battr;
 
     if ((fp = fopen(fpath, "r")))
     {
@@ -324,16 +319,15 @@ clean(
             c2 = strchr(buf, 'm');
             if (!c2)
                 goto non_recommend;
-            str_scpy(rmsg.verb, c2+1, sizeof(rmsg.verb)); // Non-empty verb or "\x1b[" for empty verbs
+            ++c2;
+            str_scpy(rmsg.verb, c2, sizeof(rmsg.verb)); // Non-empty verb or "\x1b[" for empty verbs
 
-            if ((battr & BRD_PUSHDEFINE) && strncmp(rmsg.verb, "¡÷", 2) == 0)
-                rmsg.pn = COMMENT;
-            else if (strncmp(rmsg.verb, "\x1b[", 2) == 0)
-                rmsg.pn = COMMENT;
-            else if (strncmp(buf, "\x1b[1;33m", 7) == 0)
-                rmsg.pn = POSITIVE;
-            else
+            if (strncmp(buf, "\x1b[1;31m", 7) == 0) // Negative color
                 rmsg.pn = NEGATIVE;
+            else if (c2[0] == '\x1b' || c2[2] == '\x1b') // Special ANSI escape patterns for COMMENT
+                rmsg.pn = COMMENT;
+            else
+                rmsg.pn = POSITIVE;
 
             rec_add(recommenddb, &rmsg, sizeof(RMSG));
             continue;
