@@ -143,7 +143,7 @@ cleanrecommend_edit(
     RMSG *cleanrecommend,
     int echo)
 {
-    if (echo == DOECHO)
+    if (!(echo & GCARRY))
         memset(cleanrecommend, 0, sizeof(RMSG));
     if (vget(B_LINES_REF, 0, "使用者:", cleanrecommend->userid, sizeof(cleanrecommend->userid), echo)
      && vget(B_LINES_REF, 0, "動詞:", cleanrecommend->verb, sizeof(cleanrecommend->verb), echo)
