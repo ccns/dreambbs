@@ -918,8 +918,9 @@ class_check(
     chead = (short *) ((char *) cbase + pos);
     ctail = (short *) ((char *) cbase + max);
 
+    short *ccur = NULL;
     if (ppool)
-        *ppool = cbase = (short *) realloc(*ppool, max - pos);
+        *ppool = ccur = (short *) realloc(*ppool, max - pos);
 
     max = 0;
     brd = bshm->bcache;
@@ -966,11 +967,11 @@ class_check(
             continue;
         max++;
         if (ppool)
-            *cbase++ = chn;
+            *ccur++ = chn;
     } while (chead < ctail);
 
-    if (class_hot && bnum > 0)
-        qsort(cbase - bnum, bnum, sizeof(short), mantime_cmp);
+    if (ppool && class_hot && bnum > 0)
+        qsort(ccur - bnum, bnum, sizeof(short), mantime_cmp);
 
     return max;
 }
