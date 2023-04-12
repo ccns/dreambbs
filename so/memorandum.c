@@ -160,7 +160,7 @@ memorandum_edit(
 MEMORANDUM *memorandum,
 int echo)
 {
-    if (echo == DOECHO)
+    if (!(echo & GCARRY))
         memset(memorandum, 0, sizeof(MEMORANDUM));
     if (vget(B_LINES_REF, 0, "日期：", memorandum->date, sizeof(memorandum->date), echo)
         && vget(B_LINES_REF, 0, "時間:", memorandum->time, sizeof(memorandum->time), echo)

@@ -99,7 +99,7 @@ show_edit(
 LOG *show,
 int echo)
 {
-    if (echo == DOECHO)
+    if (!(echo & GCARRY))
         memset(show, 0, sizeof(LOG));
     if (vget(B_LINES_REF, 0, "E-mail¡G", show->email, sizeof(show->email), echo))
         return 1;

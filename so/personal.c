@@ -320,7 +320,7 @@ personal_edit(
     PB *personal,
     int echo)
 {
-    if (echo == DOECHO)
+    if (!(echo & GCARRY))
         memset(personal, 0, sizeof(PB));
     if (vget(B_LINES_REF, 0, "申請人:", personal->userid, sizeof(personal->userid), echo)
      && vget(B_LINES_REF, 0, "看板名:", personal->brdname, sizeof(personal->brdname), echo)

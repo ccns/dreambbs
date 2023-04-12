@@ -105,7 +105,7 @@ viol_edit(
 EMAIL *viol,
 int echo)
 {
-    if (echo == DOECHO)
+    if (!(echo & GCARRY))
         memset(viol, 0, sizeof(EMAIL));
     if (vget(B_LINES_REF, 0, "E-mail¡G", viol->email, sizeof(viol->email), echo))
         return 1;

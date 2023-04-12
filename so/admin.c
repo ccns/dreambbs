@@ -96,7 +96,7 @@ admin_edit(
 ADMIN *admin,
 int echo)
 {
-    if (echo == DOECHO)
+    if (!(echo & GCARRY))
         memset(admin, 0, sizeof(ADMIN));
     if (vget(B_LINES_REF, 0, "¶W¯Å¯¸°È¦Cªí¡G", admin->name, sizeof(admin->name), echo))
         return 1;

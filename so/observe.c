@@ -165,7 +165,7 @@ int echo)
     ACCT acct;
     int userno;
 
-    if (echo == DOECHO)
+    if (!(echo & GCARRY))
     {
         memset(observe, 0, sizeof(OBSERVE));
         userno = acct_get(msg_uid, &acct);

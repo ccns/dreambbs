@@ -120,7 +120,7 @@ chat_edit(
 ChatAction *chat,
 int echo)
 {
-    if (echo == DOECHO)
+    if (!(echo & GCARRY))
         memset(chat, 0, sizeof(ChatAction));
     if (vget(B_LINES_REF, 0, "動詞：", chat->verb, sizeof(chat->verb), echo)
         && vget(B_LINES_REF, 0, "中文解釋：", chat->brief_desc, sizeof(chat->brief_desc), echo))

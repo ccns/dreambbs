@@ -736,7 +736,7 @@ pal_edit(
     PAL *pal,
     int echo)
 {
-    if (echo == DOECHO)
+    if (!(echo & GCARRY))
         memset(pal, 0, sizeof(PAL));
     vget(B_LINES_REF, 0, "¤Í½Ë¡G", pal->ship, sizeof(pal->ship), echo);
     pal->ftype = vans("·l¤Í(y/N)¡H[N] ") == 'y' ? PAL_BAD : 0;
@@ -4750,7 +4750,7 @@ banmsg_edit(
     BANMSG *banmsg,
     int echo)
 {
-    if (echo == DOECHO)
+    if (!(echo & GCARRY))
         memset(banmsg, 0, sizeof(BANMSG));
     vget(B_LINES_REF, 0, "´y­z¡G", banmsg->ship, sizeof(banmsg->ship), echo);
 }

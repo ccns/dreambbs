@@ -96,7 +96,7 @@ contact_edit(
 CONTACT *contact,
 int echo)
 {
-    if (echo == DOECHO)
+    if (!(echo & GCARRY))
         memset(contact, 0, sizeof(CONTACT));
     if (vget(B_LINES_REF, 0, "¦WºÙ¡G", contact->name, sizeof(contact->name), echo)
         && vget(B_LINES_REF, 0, "e-mail address¡G", contact->email, sizeof(contact->email), echo))

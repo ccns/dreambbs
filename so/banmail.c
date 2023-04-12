@@ -148,7 +148,7 @@ static int banmail_edit(BANMAIL * banmail, int echo)
     int change = 0;
     char modes[8], buf[64];
 
-    if (echo == DOECHO)
+    if (!(echo & GCARRY))
         memset(banmail, 0, sizeof(BANMAIL));
 
     sprintf(modes, "%c%c%c%c%c%c", (banmail->mode & FW_OWNER) ? '1' : '0',
