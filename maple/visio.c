@@ -3193,11 +3193,17 @@ vget_redraw:
 }
 
 
+int vans(const char *prompt)
+{
+    return vans_xo(NULL, prompt);
+}
+
 int
-vans(
+vans_xo(
+    XO *xo,
     const char *prompt)
 {
     char ans[3];
 
-    return vget(B_LINES_REF, 0, prompt, ans, sizeof(ans), LCECHO);
+    return vget_xo(xo, B_LINES_REF, 0, prompt, ans, sizeof(ans), LCECHO);
 }

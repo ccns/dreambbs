@@ -303,6 +303,7 @@ BRD *ask_board(char *board, unsigned int perm, const char *msg);
 int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo);
 int vget_xo(XO *xo, int y_ref, int x_ref, const char *prompt, char *data, int max, int echo);
 int vans(const char *prompt);
+int vans_xo(XO *xo, const char *prompt);
 
 /* xover.c */
 XO *xo_new(const char *path);
