@@ -960,7 +960,6 @@ class_check(
             {
                 if (bshm->mantime[chn] < CLASS_HOT) /* 只列出人氣超過 CLASS_HOT 的看板 */
                     continue;
-                bnum++;
             }
         }
         else if (!class_check(chn, NULL))
@@ -970,8 +969,8 @@ class_check(
             *ccur++ = chn;
     } while (chead < ctail);
 
-    if (ppool && class_hot && bnum > 0)
-        qsort(ccur - bnum, bnum, sizeof(short), mantime_cmp);
+    if (ppool && class_hot && max > 0)
+        qsort(*ppool, max, sizeof(short), mantime_cmp);
 
     return max;
 }
