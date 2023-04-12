@@ -367,7 +367,7 @@ int pos)
 
         /* browse article */
 
-        if ((xmode = more(fpath, MSG_GEM)) == -2)
+        if ((xmode = more(fpath, MSG_GEM)) == XO_HEAD)
             return XO_INIT;
         if (xmode == -1)
             break;

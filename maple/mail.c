@@ -2215,14 +2215,6 @@ mbox_browse(
         *fpath = '\0';
         return XO_INIT;
     }
-    else if (mode == -2)
-    {
-        mhdr->xmode |= MAIL_READ;
-        rec_put(dir, mhdr, sizeof(HDR), pos);
-        *fpath = '\0';
-        return XO_INIT;
-        /*nmode = vkey();*/
-    }
     else if (mode > 0)
         nmode = mode;
     else

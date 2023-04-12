@@ -1534,7 +1534,7 @@ post_browse(
         if ((key = more(fpath, FOOTER_POST)) < 0)
             break;
 
-        if (key == -2)
+        if (key == 'q')
             return XO_INIT;
         key = xo_getch(xo, pos, key);
         pos = xo->pos[xo->cur_idx];

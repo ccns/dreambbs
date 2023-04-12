@@ -482,6 +482,7 @@ pmore_key_handler(int key, void *ctx)
 /* Thor.990204: 傳回值 -1 為無法show出
                         0 為全數show完
                        >0 為未全show，中斷所按的key */
+/* IID.2023-04-12:     XO_HEAD: Exiting by pressing `←` or `q` (needs redrawing) */
 int
 more(
     const char *fpath,
@@ -808,7 +809,11 @@ re_key:
         else            /* 其他鍵都是使用者中斷 */
         {
             /* itoc.041006: 使用者中斷的按鍵要 > 0 (而 KEY_LEFT 是 < 0) */
-            cmd = key > 0 ? key : 'q';
+            /* IID.2023-04-12: No keys < 0 since DreamBBS v1.0. But `KEY_LEFT` should alias 'q' here. */
+            if (key == 'q' || key == KEY_LEFT)
+                cmd = XO_HEAD; // Follow the convention of pmore 2007+
+            else
+                cmd = key;
             break;
         }
 

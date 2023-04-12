@@ -282,7 +282,7 @@ int pos)
         /* browse article */
 
         /* Thor.990204: 為考慮more 傳回值 */
-        if ((xmode = more(fpath, MSG_GEM)) == -2)
+        if ((xmode = more(fpath, MSG_GEM)) == XO_HEAD)
             return XO_INIT;
         if (xmode == -1)
             break;
