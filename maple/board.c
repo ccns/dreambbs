@@ -876,10 +876,10 @@ mantime_cmp(
     return mantime_b - mantime_a;
 }
 
-static int class_flag2 = 0;  /* 1:列出好友/秘密板，且自己又有閱讀權限的 */
 static int class_flag;
 
 #define BFO_YANK        0x01
+#define BFO_FRIEND      0x02 /* 1:列出好友/秘密板，且自己又有閱讀權限的 */
 
 static int
 class_check(
@@ -947,7 +947,7 @@ class_check(
 
             if (brd[chn].readlevel != PERM_CHATROOM)
             {
-                if (class_flag2 &&
+                if ((class_flag & BFO_FRIEND) &&
                     (!(val & BRD_R_BIT) || !(brd[chn].brdname[0]) ||
                     !(brd[chn].readlevel) || (brd[chn].readlevel & ~(PERM_SYSOP | PERM_BOARD)) ))
 
@@ -1204,9 +1204,9 @@ class_body(
     if (max <= 0)
     {
         int ret = class_load(xo);
-        if (!ret && (class_flag2 & 0x01))
+        if (!ret && (class_flag & BFO_FRIEND))
         {
-            class_flag2 ^= 0x01;
+            class_flag ^= BFO_FRIEND;
             ret = class_load(xo);
         }
         if (!ret && !(class_flag & BFO_YANK))
@@ -1323,11 +1323,11 @@ class_yank2(
     if (xo->key >= 0)
         return XO_NONE;
 
-    class_flag2 ^= 0x01;
-    if (!class_load(xo) && (class_flag2 & 0x01))
+    class_flag ^= BFO_FRIEND;
+    if (!class_load(xo) && (class_flag & BFO_FRIEND))
     {
         zmsg("找不到可讀的秘密/好友看板");
-        class_flag2 ^= 0x01;
+        class_flag ^= BFO_FRIEND;
         class_load(xo);
         xo->pos[xo->cur_idx] = pos;
         return XO_FOOT;
@@ -1653,9 +1653,9 @@ XoClass(
     if (!class_load(&xo))
     {
         int ret = 0;
-        if (!ret && (class_flag2 & 0x01))
+        if (!ret && (class_flag & BFO_FRIEND))
         {
-            class_flag2 ^= 0x01;
+            class_flag ^= BFO_FRIEND;
             ret = class_load(&xo);
         }
         if (!ret && !(class_flag & BFO_YANK))
