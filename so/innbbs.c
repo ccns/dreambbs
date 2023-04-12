@@ -641,7 +641,7 @@ innbbs_del(
     int pos)
 {
     InnbbsXyz *xyz = (InnbbsXyz *)xo->xyz;
-    if (vans(msg_del_ny) == 'y')
+    if (vans_xo(xo, msg_del_ny) == 'y')
     {
         rec_del(xo->dir, xo->recsiz, pos, NULL, NULL);
         xyz->dirty = true;

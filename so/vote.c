@@ -449,7 +449,7 @@ XO *xo)
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    if (vans("щ布よΑ1)щ布 2)厩ネщ布╰参 ") == '2')
+    if (vans_xo(xo, "щ布よΑ1)щ布 2)厩ネщ布╰参 ") == '2')
     {
         check = 1;
     }
@@ -561,7 +561,7 @@ int pos)
     /* Thor: эщ布肈 */
     vxx = *vch;
 
-    if (vans("щ布よΑ1)щ布 2)厩ネщ布╰参 ") == '2')
+    if (vans_xo(xo, "щ布よΑ1)щ布 2)厩ネщ布╰参 ") == '2')
     {
         check = 1;
         vxx.check = 1;
@@ -626,7 +626,7 @@ int pos)
     vch_edit(&vxx);
     if (memcmp(&vxx, vch, sizeof(VCH)))
     {
-        if (vans("絋﹚璶э硂兜щ布盾(y/N)[N]") == 'y')
+        if (vans_xo(xo, "絋﹚璶э硂兜щ布盾(y/N)[N]") == 'y')
         {
             *vch = vxx;
             rec_put(dir, vch, sizeof(VCH), pos);
@@ -792,7 +792,7 @@ int pos)
     *fname = 'V';
     sprintf(buf, "Τ %d 把щ布A)э戳 B) C)矗玡秨布 Q>uit ", /* Thor:┤粇穦 */
             rec_num(fpath, sizeof(int)));
-    cc = vans(buf);
+    cc = vans_xo(xo, buf);
 
     if (cc == 'c')
     {
@@ -812,7 +812,7 @@ int pos)
     }
     else if (cc == 'b')
     {
-        if (vans("絋﹚璶硂兜щ布盾") == 'y')
+        if (vans_xo(xo, "絋﹚璶硂兜щ布盾") == 'y')
         {
             const char *list = "@IOVSE";
 
@@ -1045,7 +1045,7 @@ int pos)
     {
         choice = bitset(choice, count, vch->maxblt, vch->title, slist);
         vget_xo(xo, B_LINES_REF - 1, 0, "иΤ杠璶弧", buf, 60, GCARRY);
-        fd = vans("щ布 (Y)絋﹚ (N)ㄓ (Q)[N] ");
+        fd = vans_xo(xo, "щ布 (Y)絋﹚ (N)ㄓ (Q)[N] ");
         if (fd == 'y' || fd == 'Y' || fd == 'q' || fd == 'Q')
             break;
     }

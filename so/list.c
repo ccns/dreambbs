@@ -242,7 +242,7 @@ XO *xo,
 int pos)
 {
 
-    if (vans(msg_del_ny) == 'y')
+    if (vans_xo(xo, msg_del_ny) == 'y')
     {
         if (!rec_del(xo->dir, sizeof(LIST), pos, NULL, NULL))
         {
@@ -271,7 +271,7 @@ XO *xo)
     }
 
     if ((fd = open(fpath, O_WRONLY | O_CREAT | O_TRUNC, 0600)) >= 0
-        && vans("確定嗎 [Y/n]：") != 'n')
+        && vans_xo(xo, "確定嗎 [Y/n]：") != 'n')
     {
         write(fd, &list, sizeof(LIST_TITLE));
         close(fd);

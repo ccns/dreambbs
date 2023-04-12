@@ -303,7 +303,7 @@ gem_add(
     if (level < GEM_LMANAGER)   /* [回收筒] 中不能新增 */
         return XO_NONE;
 
-    gtype = vans(level == GEM_SYSOP ?
+    gtype = vans_xo(xo, level == GEM_SYSOP ?
         "新增 A)rticle B)oard C)lass D)ata F)older P)aste Q)uit [Q] " :
         "新增 (A)文章 (F)卷宗 (P)貼複 (Q)取消？[Q] ");
 
@@ -392,7 +392,7 @@ gem_add(
         }
     }
 
-    ans = vans("存放位置 A)ppend I)nsert N)ext Q)uit [A] ");
+    ans = vans_xo(xo, "存放位置 A)ppend I)nsert N)ext Q)uit [A] ");
 
     if (ans == 'q')
     {
@@ -465,7 +465,7 @@ gem_title(
     }
 
     if (memcmp(ghdr, &xhdr, sizeof(HDR)) &&
-        vans("確定要修改嗎(y/N)？[N]") == 'y')
+        vans_xo(xo, "確定要修改嗎(y/N)？[N]") == 'y')
     {
         *ghdr = xhdr;
         num = pos;
@@ -779,7 +779,7 @@ gem_delete(
     if (tag > 0)
     {
         sprintf(buf, "確定要刪除 %d 篇標籤精華嗎(y/N)？[N] ", tag);
-        if (vans(buf) != 'y')
+        if (vans_xo(xo, buf) != 'y')
             return XO_FOOT;
     }
 
@@ -788,7 +788,7 @@ gem_delete(
     gem_buffer(dir, tag ? NULL : ghdr);
 
     if (xo->key > GEM_RECYCLE &&
-        vans("是否放進資源回收筒(y/N)？[N] ") == 'y')
+        vans_xo(xo, "是否放進資源回收筒(y/N)？[N] ") == 'y')
         gem_store();
 
     /* 只刪除 HDR 並不刪除檔案 */
@@ -933,7 +933,7 @@ gem_paste(
         return XO_FOOT;
     }
 
-    switch (ans = vans("存放位置 A)ppend I)nsert N)ext E)xtend Q)uit [A] "))
+    switch (ans = vans_xo(xo, "存放位置 A)ppend I)nsert N)ext E)xtend Q)uit [A] "))
     {
     case 'q':
         return XO_FOOT;
@@ -1021,7 +1021,7 @@ gem_recycle(
 
     if (level == GEM_RECYCLE)
     {
-        if (vans("確定要清理資源回收筒嗎[y/N]?(N) ") == 'y')
+        if (vans_xo(xo, "確定要清理資源回收筒嗎[y/N]?(N) ") == 'y')
         {
             unlink(xo->dir);
             return XO_QUIT;
@@ -1053,7 +1053,7 @@ gem_anchor(
         return XO_NONE;
     /* Thor.981020: 不開放一般user使用是為了防止版主試出另一個小bug:P */
 
-    ans = vans("精華區 A)定錨 D)拔錨 J)就位 Q)取消 [J] ");
+    ans = vans_xo(xo, "精華區 A)定錨 D)拔錨 J)就位 Q)取消 [J] ");
     if (ans != 'q')
     {
         folder = GemAnchor;
@@ -1116,7 +1116,7 @@ gem_gather(
 
     fd = fp = NULL;
 
-    if (vans("附加作者 ID [y/N] ") == 'y')
+    if (vans_xo(xo, "附加作者 ID [y/N] ") == 'y')
         mode = 1;
     else
         mode = 0;
@@ -1137,7 +1137,7 @@ gem_gather(
 
     if (tag > 0)
     {
-        switch (vans("串列文章 1)合成一篇 2)分別建檔 Q)取消 [2] "))
+        switch (vans_xo(xo, "串列文章 1)合成一篇 2)分別建檔 Q)取消 [2] "))
         {
         case 'q':
             return XO_FOOT;

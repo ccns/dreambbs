@@ -161,7 +161,7 @@ cleanrecommend_delete(
     int pos)
 {
 
-    if (vans(msg_del_ny) == 'y')
+    if (vans_xo(xo, msg_del_ny) == 'y')
     {
         const RMSG *rmsg = (const RMSG *) xo_pool_base + pos;
         const RMSG rmsg_orig = *rmsg;
@@ -202,7 +202,7 @@ static int
 cleanrecommend_cleanall(
     XO *xo)
 {
-    if (vans("確定要刪除所有的留言嗎？[y/N]") == 'y')
+    if (vans_xo(xo, "確定要刪除所有的留言嗎？[y/N]") == 'y')
     {
         unlink(xo->dir);
         cleanrecommend_log(NULL, 1);

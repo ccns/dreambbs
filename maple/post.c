@@ -990,7 +990,7 @@ post_visit(
     int ans, row, max;
     const HDR *fhdr;
 
-    ans = vans("設定所有文章 (U)未讀 (V)已讀 (Q)取消？ [Q] ");
+    ans = vans_xo(xo, "設定所有文章 (U)未讀 (V)已讀 (Q)取消？ [Q] ");
     if (ans == 'v' || ans == 'u')
     {
         brh_visit(ans = ans == 'u');
@@ -1635,7 +1635,7 @@ post_post(
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    mode = vans("發文公告 (D)刪除 (E)修改 (Q)取消？[E] ");
+    mode = vans_xo(xo, "發文公告 (D)刪除 (E)修改 (Q)取消？[E] ");
     if (mode != 'q')
     {
         brd_fpath(fpath, currboard, "post");
@@ -1670,7 +1670,7 @@ post_memo_edit(
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    mode = vans("備忘錄 (D)刪除 (E)修改 (Q)取消？[E] ");
+    mode = vans_xo(xo, "備忘錄 (D)刪除 (E)修改 (Q)取消？[E] ");
     if (mode != 'q')
     {
         brd_fpath(fpath, currboard, FN_NOTE);
@@ -1858,7 +1858,7 @@ post_delete(
         return XO_NONE;
 
     hdr_fpath(fpath, xo->dir, fhdr);
-    if (vans(msg_del_ny) == 'y')
+    if (vans_xo(xo, msg_del_ny) == 'y')
     {
         currchrono = fhdr->chrono;
 
@@ -1879,9 +1879,9 @@ post_delete(
             usr_fpath(folder, fhdr->owner, fn_dir);
             if (acct_load(&tmp, fhdr->owner) >= 0)
             {
-                if (vans("是否退回文章？[y/N]") == 'y')
+                if (vans_xo(xo, "是否退回文章？[y/N]") == 'y')
                 {
-                    if (vans("是否給予劣文？[y/N]") == 'y')
+                    if (vans_xo(xo, "是否給予劣文？[y/N]") == 'y')
                     {
                         addpoint2(1, fhdr->owner);
                         pmsg2("劣退完畢！");
@@ -1957,7 +1957,7 @@ post_clean_delete(
         return XO_NONE;
     }
 
-    if (vans("是否直接砍除文章？[y/N]") == 'y')
+    if (vans_xo(xo, "是否直接砍除文章？[y/N]") == 'y')
     {
         const HDR hdr_orig = *hdr;
         currchrono = hdr->chrono;
@@ -2053,7 +2053,7 @@ post_lock(
                 return XO_NONE;
 
             /* IID.2020-10-07: Prevent the user from accidentally locking their post */
-            if (vans("注意：非板主鎖文，不能自行解鎖。確定要鎖文嗎？[y/N] ") != 'y')
+            if (vans_xo(xo, "注意：非板主鎖文，不能自行解鎖。確定要鎖文嗎？[y/N] ") != 'y')
                 return XO_FOOT;
             redraw_flags |= XR_FOOT;
         }
@@ -2797,7 +2797,7 @@ post_title(
         vget_xo(xo, B_LINES_REF, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
     }
 
-    if (vans(msg_sure_ny) == 'y' &&
+    if (vans_xo(xo, msg_sure_ny) == 'y' &&
             memcmp(fhdr, &mhdr, sizeof(HDR)))
     {
         *fhdr = mhdr;
@@ -2830,7 +2830,7 @@ post_cross_terminator(  /* Thor.0521: 終極文章大法 */
     if (!HAS_PERM(PERM_ALLBOARD))
         return XO_NONE;
 
-    mode = vans("《拂花落楓斬》： 1)砍標題 2)砍使用者 3)其他 [1]：") - '1';
+    mode = vans_xo(xo, "《拂花落楓斬》： 1)砍標題 2)砍使用者 3)其他 [1]：") - '1';
     if (mode > 2 || mode < 0)
         mode =0;
 
@@ -2857,7 +2857,7 @@ post_cross_terminator(  /* Thor.0521: 終極文章大法 */
         sprintf(buf, "《拂花落楓斬》標題：%.40s，確定嗎？Y/[N]", title);
 
 
-    if (vans(buf) == 'y')
+    if (vans_xo(xo, buf) == 'y')
     {
         BRD *bhdr, *head, *tail;
 
@@ -3018,7 +3018,7 @@ post_brdtitle(
 
     vget_xo(xo, 23, 0, "看板名稱：", newbrd.title+3, BTLEN - 2, GCARRY);
 
-    if ((vans(msg_sure_ny) == 'y') &&
+    if ((vans_xo(xo, msg_sure_ny) == 'y') &&
             memcmp(&newbrd, oldbrd, sizeof(BRD)))
     {
         memcpy(oldbrd, &newbrd, sizeof(BRD));
@@ -3094,7 +3094,7 @@ post_resetscore(
         //}
         //else
         //{
-            switch (vans("◎評分設定 1)自訂 2)清除 [Q] "))
+            switch (vans_xo(xo, "◎評分設定 1)自訂 2)清除 [Q] "))
             {
                 case '1':
 
@@ -3108,7 +3108,7 @@ post_resetscore(
                         return XO_FOOT;
 
                     if ((brd->battr & BRD_PUSHSNEER) || (brd->battr & BRD_PUSHDEFINE))
-                        pm = vans("請選擇正負 1)正 2)負 [Q] ");
+                        pm = vans_xo(xo, "請選擇正負 1)正 2)負 [Q] ");
                     else
                         pm = '1';
 
@@ -3226,7 +3226,7 @@ post_recommend(
                 "◎ 評論 1)推文 2)噓文 3)留言 4)自訂推文 5)自訂噓文 ？[Q] "
                 // : "◎ 評論 1)推文 2)噓文 3)留言 ？[Q] " // 考量夢大已經習慣推文是箭頭符號
                 : "◎ 評論 1)推文 2)噓文 ？[Q] ";
-            ans = vans(choices);
+            ans = vans_xo(xo, choices);
             if (ans == 0 || (ans > '3' && !(brd->battr & BRD_PUSHDEFINE)))
                 ans = 'Q'; // Invalid choice
         }
@@ -3285,7 +3285,7 @@ post_recommend(
 
             /* 081121.cache: 後悔的機會 */
             if (prompt && vget_xo(xo, B_LINES_REF, 0, prompt, msg, 53, DOECHO))
-                ans = vans("請確定是否送出 ? [y/N]");
+                ans = vans_xo(xo, "請確定是否送出 ? [y/N]");
             else
                 ans = 'n';
         }
@@ -3508,7 +3508,7 @@ post_FriendSet(
     oldbrd = bshm->bcache + bno;
     memcpy(&newbrd, oldbrd, sizeof(BRD));
 
-    if (vans("確定要變更看板權限？[y/N] ") != 'y')
+    if (vans_xo(xo, "確定要變更看板權限？[y/N] ") != 'y')
         return XO_HEAD;
 
     //更改旗標
@@ -3545,10 +3545,10 @@ post_battr_score(
     oldbrd = bshm->bcache + bno;
     memcpy(&newbrd, oldbrd, sizeof(BRD));
 
-    switch (vans("◎推文設定 1)推文功\能 2)噓文 3)自訂動詞 4)同ID限制 5)時間限制 [Q] "))
+    switch (vans_xo(xo, "◎推文設定 1)推文功\能 2)噓文 3)自訂動詞 4)同ID限制 5)時間限制 [Q] "))
     {
         case '1':
-            if (vans("確定要變更推文設定？[y/N] ") != 'y')
+            if (vans_xo(xo, "確定要變更推文設定？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
             if (newbrd.battr & BRD_PRH) {
@@ -3568,7 +3568,7 @@ post_battr_score(
             return XO_HEAD;
 
         case '2':
-            if (vans("確定要變更噓文模式？[y/N] ") != 'y')
+            if (vans_xo(xo, "確定要變更噓文模式？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
             if (newbrd.battr & BRD_PUSHSNEER) {
@@ -3585,7 +3585,7 @@ post_battr_score(
             return XO_HEAD;
 
         case '3':
-            if (vans("確定要變更自訂推文動詞模式？[y/N] ") != 'y')
+            if (vans_xo(xo, "確定要變更自訂推文動詞模式？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
             if (newbrd.battr & BRD_PUSHDEFINE) {
@@ -3602,7 +3602,7 @@ post_battr_score(
             return XO_HEAD;
 
         case '4':
-            if (vans("確定要變更ID連推限制？[y/N] ") != 'y')
+            if (vans_xo(xo, "確定要變更ID連推限制？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
             if (newbrd.battr & BRD_PUSHDISCON) {
@@ -3618,7 +3618,7 @@ post_battr_score(
             return XO_HEAD;
 
         case '5':
-            if (vans("確定要變更時間連推限制？[y/N] ") != 'y')
+            if (vans_xo(xo, "確定要變更時間連推限制？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
             if (newbrd.battr & BRD_PUSHTIME) {
@@ -3657,10 +3657,10 @@ post_rule(
     oldbrd = bshm->bcache + bno;
     memcpy(&newbrd, oldbrd, sizeof(BRD));
 
-    switch (vans("◎看板設定 1)關板唯讀 2)作者修文 3)轉錄文章 4)禁注音文 5)RSS功\能 [Q] "))
+    switch (vans_xo(xo, "◎看板設定 1)關板唯讀 2)作者修文 3)轉錄文章 4)禁注音文 5)RSS功\能 [Q] "))
     {
         case '1':
-            if (vans("確定要變更看板唯讀設定？[y/N] ") != 'y')
+            if (vans_xo(xo, "確定要變更看板唯讀設定？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
             if (newbrd.battr & BRD_NOREPLY) {
@@ -3681,7 +3681,7 @@ post_rule(
             return XO_HEAD;
 
         case '2':
-            if (vans("確定要變更作者修文設定？[y/N] ") != 'y')
+            if (vans_xo(xo, "確定要變更作者修文設定？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
             if (newbrd.battr & BRD_MODIFY) {
@@ -3697,7 +3697,7 @@ post_rule(
             return XO_HEAD;
 
         case '3':
-            if (vans("確定要變更轉錄文章設定？[y/N] ") != 'y')
+            if (vans_xo(xo, "確定要變更轉錄文章設定？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
             if (newbrd.battr & BRD_NOFORWARD) {
@@ -3713,7 +3713,7 @@ post_rule(
             return XO_HEAD;
 
         case '4':
-            if (vans("確定要變更注音文限制設定？[y/N] ") != 'y')
+            if (vans_xo(xo, "確定要變更注音文限制設定？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
             if (newbrd.battr & BRD_NOPHONETIC) {
@@ -3729,7 +3729,7 @@ post_rule(
             return XO_HEAD;
 
         case '5':
-            if (vans("確定要變更看板RSS設定？[y/N] ") != 'y')
+            if (vans_xo(xo, "確定要變更看板RSS設定？[y/N] ") != 'y')
                 return XO_HEAD;
             //更改旗標
             if (newbrd.battr & BRD_RSS) {
@@ -3766,7 +3766,7 @@ post_battr_threshold(
 
     brd_fpath(fpath, newbrd.brdname, FN_THRESHOLD);
 
-    switch (ans = vans("◎ 發文門檻限制 1)不限制門檻 2)限制門檻 [Q] "))
+    switch (ans = vans_xo(xo, "◎ 發文門檻限制 1)不限制門檻 2)限制門檻 [Q] "))
     {
         case '1':
             newbrd.battr &= ~BRD_THRESHOLD;
@@ -3819,7 +3819,7 @@ post_battr_threshold(
     }
 
     if ((memcmp(&newbrd, oldbrd, sizeof(BRD)) || (ans == '2')) &&
-            vans(msg_sure_ny) == 'y')
+            vans_xo(xo, msg_sure_ny) == 'y')
     {
         memcpy(oldbrd, &newbrd, sizeof(BRD));
         rec_put(FN_BRD, &newbrd, sizeof(BRD), bno);
@@ -3843,7 +3843,7 @@ post_usies_BMlog(
     {
         brd_fpath(fpath, currboard, "usies");
         if (more(fpath, (char *) -1) >= 0 &&
-                vans("請問是否刪除這些看板閱\讀記錄(y/N)？[N] ") == 'y')
+                vans_xo(xo, "請問是否刪除這些看板閱\讀記錄(y/N)？[N] ") == 'y')
             unlink(fpath);
     }
     else
@@ -4537,7 +4537,7 @@ XoXpost(                        /* Thor: call from post_cb */
 
     /* input condition */
     /* 090928.cache: 直接進入串接模式 */
-    //  mode = vans("◎ 0)串接 1)新文章 2)LocalPost [0]：") - '0';
+    //  mode = vans_xo(xo, "◎ 0)串接 1)新文章 2)LocalPost [0]：") - '0';
     //  if (mode > 2 || mode < 0)
     mode = 0;
 

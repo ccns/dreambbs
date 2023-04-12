@@ -198,7 +198,7 @@ static int banmail_add(XO * xo)
 static int banmail_delete(XO * xo, int pos)
 {
 
-    if (vans(msg_del_ny) == 'y')
+    if (vans_xo(xo, msg_del_ny) == 'y')
     {
         if (!rec_del(xo->dir, sizeof(BANMAIL), pos, NULL, NULL))
         {

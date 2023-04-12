@@ -338,7 +338,7 @@ personal_delete(
     int pos)
 {
 
-    if (vans(msg_del_ny) == 'y')
+    if (vans_xo(xo, msg_del_ny) == 'y')
     {
         if (!rec_del(xo->dir, sizeof(PB), pos, NULL, NULL))
         {
@@ -502,7 +502,7 @@ personal_open(
         return XO_FOOT;
     }
 
-    if (vans("確定要開設此看板嗎？[y/N]") != 'y')
+    if (vans_xo(xo, "確定要開設此看板嗎？[y/N]") != 'y')
         return XO_FOOT;
 
     memset(&newboard, 0, sizeof(newboard));
@@ -587,7 +587,7 @@ personal_deny(
     if (!vget_xo(xo, B_LINES_REF, 0, "拒絕開板理由: ", msg, sizeof(msg), DOECHO))
         return XO_FOOT;
 
-    if (vans("確定拒絕此申請嗎？[y/N]") != 'y')
+    if (vans_xo(xo, "確定拒絕此申請嗎？[y/N]") != 'y')
         return XO_FOOT;
 
     mail2usr(personal, 1);

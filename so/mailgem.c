@@ -184,7 +184,7 @@ XO *xo)
 
     level = xo->key;
 
-    gtype = vans("新增 (A)文章 (F)卷宗 (P)貼複 (Q)取消？[Q] ");
+    gtype = vans_xo(xo, "新增 (A)文章 (F)卷宗 (P)貼複 (Q)取消？[Q] ");
 
     if (gtype == 'p')
         return mailgem_paste(xo);
@@ -225,7 +225,7 @@ XO *xo)
     ghdr.xmode = gtype;
     strcpy(ghdr.title, title);
 
-    ans = vans("存放位置 A)ppend I)nsert N)ext Q)uit [A] ");
+    ans = vans_xo(xo, "存放位置 A)ppend I)nsert N)ext Q)uit [A] ");
 
     if (ans == 'q')
     {
@@ -288,7 +288,7 @@ int pos)
     dir = xo->dir;
 
     if (memcmp(ghdr, &xhdr, sizeof(HDR)) &&
-        vans("確定要修改嗎(y/N)？[N]") == 'y')
+        vans_xo(xo, "確定要修改嗎(y/N)？[N]") == 'y')
     {
         *ghdr = xhdr;
         num = pos;
@@ -479,7 +479,7 @@ int pos)
     if (tag > 0)
     {
         sprintf(buf, "確定要刪除 %d 篇標籤精華嗎(y/N)？[N] ", tag);
-        if (vans(buf) != 'y')
+        if (vans_xo(xo, buf) != 'y')
             return XO_FOOT;
     }
 
@@ -608,7 +608,7 @@ XO *xo)
     }
 
     dir = xo->dir;
-    switch (ans = vans("存放位置 A)ppend I)nsert N)ext E)xtend Q)uit [A] "))
+    switch (ans = vans_xo(xo, "存放位置 A)ppend I)nsert N)ext E)xtend Q)uit [A] "))
     {
     case 'q':
         return XO_FOOT;
@@ -676,7 +676,7 @@ XO *xo)
     int ans;
     char *folder;
 
-    ans = vans("精華區 A)定錨 D)拔錨 J)就位 Q)取消 [J] ");
+    ans = vans_xo(xo, "精華區 A)定錨 D)拔錨 J)就位 Q)取消 [J] ");
     if (ans != 'q')
     {
         folder = MailGemAnchor;
@@ -751,7 +751,7 @@ int pos)
 
     if (tag > 0)
     {
-        switch (vans("串列文章 1)合成一篇 2)分別建檔 Q)取消 [2] "))
+        switch (vans_xo(xo, "串列文章 1)合成一篇 2)分別建檔 Q)取消 [2] "))
         {
         case 'q':
             return DL_RELEASE(XO_FOOT);

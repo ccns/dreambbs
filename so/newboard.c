@@ -242,7 +242,7 @@ XO *xo)
     }
 
     sprintf(path, "newboard/%s", cuser.userid);
-    mode = vans("連署模式 1)開新版 2)廢版主 3)其他 0)取消 [0] :") - '0';
+    mode = vans_xo(xo, "連署模式 1)開新版 2)廢版主 3)其他 0)取消 [0] :") - '0';
 
     if (mode == 1)
     {
@@ -563,7 +563,7 @@ int pos)
     {
         if (nbrd->mode & NBRD_NBRD)
         {
-            fd = vans("要加入連署嗎 (Y)贊成 (Q)離開 [y/Q]：");
+            fd = vans_xo(xo, "要加入連署嗎 (Y)贊成 (Q)離開 [y/Q]：");
             if (fd != 'y' && fd != 'Y')
                 fd = 'Q';
             break;
@@ -571,15 +571,15 @@ int pos)
         else
         {
             int ans;
-            fd = vans("要加入連署嗎 (1)贊成 (2)反對 (Q)離開 [Q]：");
+            fd = vans_xo(xo, "要加入連署嗎 (1)贊成 (2)反對 (Q)離開 [Q]：");
             if (fd == '1')
             {
-                ans = vans("您投的是贊成票，確定嗎？ (Y)確定 (N)取消 [y/N]：");
+                ans = vans_xo(xo, "您投的是贊成票，確定嗎？ (Y)確定 (N)取消 [y/N]：");
                 fd = 'y';
             }
             else if (fd == '2')
             {
-                ans = vans("您投的是反對票，確定嗎？ (Y)確定 (N)取消 [y/N]：");
+                ans = vans_xo(xo, "您投的是反對票，確定嗎？ (Y)確定 (N)取消 [y/N]：");
                 fd = 'n';
             }
             else
@@ -851,7 +851,7 @@ int pos)
     if (strcmp(cuser.userid, nbrd->owner) && !HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
 
-    if (vans("確定刪除嗎 [y/N] :") != 'y')
+    if (vans_xo(xo, "確定刪除嗎 [y/N] :") != 'y')
         return XO_HEAD;
     nbrd_fpath(fpath, xo->dir, nbrd);
     unlink(fpath);

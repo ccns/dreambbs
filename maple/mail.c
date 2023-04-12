@@ -2100,7 +2100,7 @@ mbox_delete(
         return XO_NONE; /* Thor.980901: mark後若被'D'起來, 則一樣可以delete,
                                         只有 MARK & no delete才會無效 */
 
-    if (vans(msg_del_ny) == 'y')
+    if (vans_xo(xo, msg_del_ny) == 'y')
     {
         dir = xo->dir;
         currchrono = hdr->chrono;
@@ -2475,7 +2475,7 @@ mbox_title(
     vget_xo(xo, B_LINES_REF, 0, "檔名：", mhdr.xname, sizeof(mhdr.date), GCARRY);
     if (mhdr.xid > 1000)
         mhdr.xid = 0;
-    if (vans(msg_sure_ny) == 'y' &&
+    if (vans_xo(xo, msg_sure_ny) == 'y' &&
         memcmp(hdr, &mhdr, sizeof(HDR)))
     {
         *hdr = mhdr;
@@ -2510,7 +2510,7 @@ static int
 mbox_clean(
     XO *xo)
 {
-    if (vans("\x1b[1;5;41;33m警告：\x1b[m清除之後不能救回。確定要清除嗎？(y/N)") == 'y')
+    if (vans_xo(xo, "\x1b[1;5;41;33m警告：\x1b[m清除之後不能救回。確定要清除嗎？(y/N)") == 'y')
     {
         hdr_prune(xo->dir, 0, 0, 3);
         return XO_INIT;

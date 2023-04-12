@@ -130,7 +130,7 @@ XO *xo)
     if (!HAS_PERM(PERM_ALLBOARD))
         return XO_NONE;
 
-    if (vans("確定清除所有紀錄嗎？[y/N]") == 'y')
+    if (vans_xo(xo, "確定清除所有紀錄嗎？[y/N]") == 'y')
     {
 
         chn = xo->key;

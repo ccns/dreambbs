@@ -334,12 +334,12 @@ int pos)
     if (!vget_xo(xo, B_LINES_REF, 0, "想說的話：", want_say, sizeof(want_say), DOECHO))
         strcpy(want_say, ".........");
 
-    if (vans("要匿名嗎 [y/N]：") == 'y')
+    if (vans_xo(xo, "要匿名嗎 [y/N]：") == 'y')
         flag = 1;
     else
         flag = 0;
 
-    if (vans("確定點歌嗎 [y/N]：") != 'y')
+    if (vans_xo(xo, "確定點歌嗎 [y/N]：") != 'y')
         return XO_HEAD;
 
     strcpy(xboard, BRD_ORDERSONGS);
@@ -552,7 +552,7 @@ int pos)
     }
 
     if (memcmp(ghdr, &xhdr, sizeof(HDR)) &&
-        vans("確定要修改嗎(y/N)？[N]") == 'y')
+        vans_xo(xo, "確定要修改嗎(y/N)？[N]") == 'y')
     {
         *ghdr = xhdr;
         num = pos;

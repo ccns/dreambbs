@@ -242,7 +242,7 @@ myfavorite_add(
         return XO_QUIT;
     }
     memset(&hdr, 0, sizeof(HDR));
-    ans = vans("新增 (B)看板捷徑 (F)資料夾 (G)精華區捷徑 (L)分隔線 (Q)離開 [Q]");
+    ans = vans_xo(xo, "新增 (B)看板捷徑 (F)資料夾 (G)精華區捷徑 (L)分隔線 (Q)離開 [Q]");
 
     if (ans == 'b')
     {
@@ -293,7 +293,7 @@ myfavorite_add(
         return XO_FOOT;
     }
 
-    ans = vans("存放位置 A)ppend I)nsert N)ext Q)uit [A] ");
+    ans = vans_xo(xo, "存放位置 A)ppend I)nsert N)ext Q)uit [A] ");
 
     if (ans == 'q')
     {
@@ -340,7 +340,7 @@ myfavorite_delete(
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
 
-    if (vans(msg_del_ny) == 'y')
+    if (vans_xo(xo, msg_del_ny) == 'y')
     {
         const HDR *hdr = (const HDR *) xo_pool_base + pos;
         const HDR hdr_orig = *hdr;

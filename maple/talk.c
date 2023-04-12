@@ -869,7 +869,7 @@ pal_delete(
     XO *xo,
     int pos)
 {
-    if (vans(msg_del_ny) == 'y')
+    if (vans_xo(xo, msg_del_ny) == 'y')
     {
         if (!rec_del(xo->dir, sizeof(PAL), pos, NULL, NULL))
         {
@@ -1148,7 +1148,7 @@ bmw_delete(
     XO *xo,
     int pos)
 {
-    if (vans(msg_del_ny) == 'y')
+    if (vans_xo(xo, msg_del_ny) == 'y')
         if (!rec_del(xo->dir, sizeof(BMW), pos, NULL, NULL))
             return XO_LOAD;
 
@@ -3684,9 +3684,9 @@ ulist_broadcast(
     admin = check_admin(cuser.userid);
     if (admin && !(cuser.ufo2 & UFO2_PAL))
     {
-        if ((ans = vans("◎ 使用 SYSOP 廣播嗎？ [y/N]")) != 'Y' && ans != 'y')
+        if ((ans = vans_xo(xo, "◎ 使用 SYSOP 廣播嗎？ [y/N]")) != 'Y' && ans != 'y')
             admin = 0;
-        if ((ans = vans("◎ 確定全站廣播嗎？ [y/N]")) != 'Y' && ans != 'y')
+        if ((ans = vans_xo(xo, "◎ 確定全站廣播嗎？ [y/N]")) != 'Y' && ans != 'y')
             return XO_INIT;
     }
     if (!(cuser.ufo2 & UFO2_PAL) && admin)
@@ -3843,7 +3843,7 @@ ulist_kick(
         up = ulist_pool[pos].utmp;
         if ((pid = up->pid))
         {
-            if (vans(msg_sure_ny) != 'y' || pid != up->pid)
+            if (vans_xo(xo, msg_sure_ny) != 'y' || pid != up->pid)
                 return XO_FOOT;
 
             sprintf(buf, "%s (%s)", up->userid, up->username);
@@ -3861,7 +3861,7 @@ ulist_kick(
         }
         else
         {
-            if (vans(msg_sure_ny) != 'y')
+            if (vans_xo(xo, msg_sure_ny) != 'y')
                 return XO_FOOT;
             memset(up, 0, sizeof(UTMP));
             return XO_INIT;
@@ -4051,7 +4051,7 @@ ulist_del(
     char fpath[64];
     PAL *pal;
 
-    ans = vans("是否刪除(y/N)：");
+    ans = vans_xo(xo, "是否刪除(y/N)：");
     if (ans == 'y' || ans == 'Y')
     {
         up = ulist_pool[pos].utmp;
@@ -4807,7 +4807,7 @@ banmsg_delete(
     XO *xo,
     int pos)
 {
-    if (vans(msg_del_ny) == 'y')
+    if (vans_xo(xo, msg_del_ny) == 'y')
     {
 
         if (!rec_del(xo->dir, sizeof(BANMSG), pos, NULL, NULL))

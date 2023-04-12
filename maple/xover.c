@@ -514,7 +514,7 @@ xo_prune(
         return XO_NONE;
 
     sprintf(buf, "確定要刪除 %d 篇標籤嗎(y/N)？[N] ", num);
-    if (vans(buf) != 'y')
+    if (vans_xo(xo, buf) != 'y')
         return XO_FOOT;
 
 #if 1
@@ -1971,7 +1971,7 @@ xover_key(
             if ((deltotal = mbox_check()))
             {
                 sprintf(fpath, "有 %d 封信件將要刪除，確定嗎？ [y/N]", deltotal);
-                if (vans(fpath) == 'y')
+                if (vans_xo(xo, fpath) == 'y')
                 {
                     usr_fpath(fpath, cuser.userid, FN_DIR);
                     hdr_prune(fpath, 0, 0, 3);

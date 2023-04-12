@@ -142,7 +142,7 @@ XO *xo)
     ALOHA aloha;
     pos = xo->pos[xo->cur_idx];
     max = xo->max;
-    if (vans("要引入好友名單嗎(y/N)？[N] ") == 'y')
+    if (vans_xo(xo, "要引入好友名單嗎(y/N)？[N] ") == 'y')
     {
         usr_fpath(fpath, cuser.userid, FN_PAL);
         for (i = 0; max < MAX_ALOHA; i++)
@@ -268,7 +268,7 @@ aloha_delete(
 XO *xo,
 int pos)
 {
-    if (vans(msg_del_ny) == 'y')
+    if (vans_xo(xo, msg_del_ny) == 'y')
     {
         char fpath[64];
         const ALOHA *aloha;
