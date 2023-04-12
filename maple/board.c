@@ -864,8 +864,16 @@ mantime_cmp(
     const void *a,
     const void *b)
 {
+    const int chn_a = *(const short *)a;
+    const int chn_b = *(const short *)b;
+    /* Ascending `-chn` order for categories */
+    if (chn_a < 0 && chn_b < 0)
+        return -chn_a - -chn_b;
+    /* Categories before boards */
+    const int mantime_a = (chn_a >= 0) ? bshm->mantime[chn_a] : INT_MAX;
+    const int mantime_b = (chn_b >= 0) ? bshm->mantime[chn_b] : INT_MAX;
     /* 由多排到少 */
-    return bshm->mantime[* (const short *)b] - bshm->mantime[* (const short *)a];
+    return mantime_b - mantime_a;
 }
 
 static int class_flag2 = 0;  /* 1:列出好友/秘密板，且自己又有閱讀權限的 */
