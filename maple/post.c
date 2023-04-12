@@ -1250,7 +1250,7 @@ post_cross(
             ptime = localtime(&now);
             sprintf(tgt, "Âà¿ý¦Ü %s ¬ÝªO", xboard);
             xfp = fopen(fpath, "a");
-            rmsg_sprint(add, 1, "¡÷", cuser.userid, tgt, now);
+            rmsg_sprint(add, 0, "¡÷", cuser.userid, tgt, now);
             fprintf(xfp, "%s", add);
             fclose(xfp);
         }
