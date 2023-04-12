@@ -298,7 +298,7 @@ xo_delete(
     if ((bbsmode == M_READA) && !(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    vget(B_LINES_REF, 0, "[設定刪除範圍] 起點：", buf, 6, DOECHO);
+    vget_xo(xo, B_LINES_REF, 0, "[設定刪除範圍] 起點：", buf, 6, DOECHO);
     head = atoi(buf);
     if (head <= 0)
     {
@@ -306,7 +306,7 @@ xo_delete(
         return XO_FOOT;
     }
 
-    vget(B_LINES_REF, 28, "終點：", buf, 6, DOECHO);
+    vget_xo(xo, B_LINES_REF, 28, "終點：", buf, 6, DOECHO);
     tail = atoi(buf);
     if (tail < head)
     {
@@ -315,7 +315,7 @@ xo_delete(
     }
 
 
-    if (vget(B_LINES_REF, 41, msg_sure_ny, buf, 3, LCECHO) == 'y')
+    if (vget_xo(xo, B_LINES_REF, 41, msg_sure_ny, buf, 3, LCECHO) == 'y')
     {
         if (bbsmode == M_READA)
             hdr_prune(xo->dir, head, tail, 0);
@@ -714,7 +714,7 @@ xo_forward(
     if (!rcpt[0])
         strcpy(rcpt, cuser.email);
 
-    if (!vget(B_LINES_REF, 0, "目的地：", rcpt, sizeof(rcpt), GCARRY))
+    if (!vget_xo(xo, B_LINES_REF, 0, "目的地：", rcpt, sizeof(rcpt), GCARRY))
         return XO_FOOT;
 
     userid = cuser.userid;
@@ -1195,7 +1195,7 @@ xo_thread(
         /* Thor.980909: 詢問 "首篇未讀" 或 "末篇已讀" */
         /* Thor.980911: 找到時, 則沒清XO_FOOT, 再看看怎麼改 */
         match |= XR_FOOT;  /* IID.20200204: Redraw footer */
-        if (!vget(B_LINES_REF, 0, "向前找尋 0)首篇未讀 1)末篇已讀 ", s_unread, sizeof(s_unread), GCARRY))
+        if (!vget_xo(xo, B_LINES_REF, 0, "向前找尋 0)首篇未讀 1)末篇已讀 ", s_unread, sizeof(s_unread), GCARRY))
             goto notfound;
 
         if (*s_unread == '0')
@@ -1230,7 +1230,7 @@ xo_thread(
             len = sizeof(s_author);
         }
         sprintf(buf, "搜尋%s(%s)：", title, (step > 0) ? "↓" : "↑");
-        if (!vget(B_LINES_REF, 0, buf, tag_query, len, GCARRY))
+        if (!vget_xo(xo, B_LINES_REF, 0, buf, tag_query, len, GCARRY))
             goto notfound;
 
         str_lower(buf, tag_query);

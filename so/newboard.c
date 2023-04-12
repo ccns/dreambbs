@@ -247,7 +247,7 @@ XO *xo)
     if (mode == 1)
     {
         more(FN_NEWBOARD_HELP, NULL);
-        if (!vget(B_LINES_REF, 0, "版名：", buf, sizeof(nbrd.brdname), DOECHO))
+        if (!vget_xo(xo, B_LINES_REF, 0, "版名：", buf, sizeof(nbrd.brdname), DOECHO))
             return XO_INIT;
         if (brd_bno(buf) >= 0)
         {
@@ -259,12 +259,12 @@ XO *xo)
             vmsg("正在連署中！");
             return XO_FOOT;
         }
-        if (!vget(B_LINES_REF, 0, "看板主題：", buf1, sizeof(nbrd.title), DOECHO))
+        if (!vget_xo(xo, B_LINES_REF, 0, "看板主題：", buf1, sizeof(nbrd.title), DOECHO))
             return XO_FOOT;
     }
     else if (mode == 2)
     {
-        if (!vget(B_LINES_REF, 0, "版名：", buf, sizeof(nbrd.brdname), DOECHO))
+        if (!vget_xo(xo, B_LINES_REF, 0, "版名：", buf, sizeof(nbrd.brdname), DOECHO))
             return XO_INIT;
         if (brd_bno(buf) < 0)
         {
@@ -280,14 +280,14 @@ XO *xo)
     }
     else if (mode == 3)
     {
-        if (!vget(B_LINES_REF, 0, "連署主題：", buf1, sizeof(nbrd.title), DOECHO))
+        if (!vget_xo(xo, B_LINES_REF, 0, "連署主題：", buf1, sizeof(nbrd.title), DOECHO))
             return XO_FOOT;
-        if (!vget(B_LINES_REF, 0, "連署天數：", tmp, 5, DOECHO))
+        if (!vget_xo(xo, B_LINES_REF, 0, "連署天數：", tmp, 5, DOECHO))
             return XO_FOOT;
         days = atoi(tmp);
         if (days > 30 || days < 1)
             return XO_FOOT;
-        if (!vget(B_LINES_REF, 0, "連署人數：", tmp, 6, DOECHO))
+        if (!vget_xo(xo, B_LINES_REF, 0, "連署人數：", tmp, 6, DOECHO))
             return XO_FOOT;
         numbers = atoi(tmp);
         if (numbers > 500 || numbers < 1)
@@ -628,7 +628,7 @@ int pos)
                 fprintf(fds, "%s", buf);
             }
             fprintf(fds, "%3u -> %-*s: %s\n", rmode == 1 ? nbrd->agree : nbrd->assist, IDLEN, cuser.userid, cuser.email);
-            if (vget(B_LINES_REF, 0, "我有話要說：", say, 65, DOECHO))
+            if (vget_xo(xo, B_LINES_REF, 0, "我有話要說：", say, 65, DOECHO))
                 fprintf(fds, "    %s : %s\n", cuser.userid, say);
 
             fprintf(fds, "%s", buf);
@@ -884,7 +884,7 @@ int pos)
         if (*xboard == 0)
             return XO_HEAD;
 
-        rc = vget(2, 0, "(S)存檔 (Q)取消？[Q] ", buf, 3, LCECHO);
+        rc = vget_xo(xo, 2, 0, "(S)存檔 (Q)取消？[Q] ", buf, 3, LCECHO);
         if (rc != 's' && rc != 'S')
             return XO_HEAD;
 

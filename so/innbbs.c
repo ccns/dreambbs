@@ -673,7 +673,7 @@ innbbs_search(
     char buf[40];
     int i, num = xo->max;
 
-    if (vget(B_LINES_REF, 0, "√ˆ¡‰¶r°G", buf, sizeof(buf), DOECHO))
+    if (vget_xo(xo, B_LINES_REF, 0, "√ˆ¡‰¶r°G", buf, sizeof(buf), DOECHO))
     {
         str_lower(buf, buf);
         for (i = pos + 1; i <= num; i++)

@@ -1108,7 +1108,7 @@ post_cross(
 
         method = 1;
         if ((HAS_PERM(PERM_ALLBOARD) || !strcmp(hdr->owner, cuser.userid)) &&
-                (vget(2, 0, "(1)原文轉載 (2)轉錄文章？[1] ", buf, 3, DOECHO) != '2'))
+                (vget_xo(xo, 2, 0, "(1)原文轉載 (2)轉錄文章？[1] ", buf, 3, DOECHO) != '2'))
         {
             method = 0;
         }
@@ -1120,11 +1120,11 @@ post_cross(
             else
                 strcpy(xtitle, hdr->title);
 
-            if (!vget(2, 0, "標題：", xtitle, TTLEN + 1, GCARRY))
+            if (!vget_xo(xo, 2, 0, "標題：", xtitle, TTLEN + 1, GCARRY))
                 return XO_HEAD;
         }
 
-        rc = vget(2, 0, "(S)存檔 (L)站內 (Q)取消？[Q] ", buf, 3, LCECHO);
+        rc = vget_xo(xo, 2, 0, "(S)存檔 (L)站內 (Q)取消？[Q] ", buf, 3, LCECHO);
         if (rc != 'l' && rc != 's')
             return XO_HEAD;
 
@@ -1319,11 +1319,11 @@ post_xcross(
 
         hdr = tag ? &xhdr : hdr;
 
-        vget(2, 0, "設定刪除嗎 ?? (Y)要 (N)不要？[Y] ", buf, 3, LCECHO);
+        vget_xo(xo, 2, 0, "設定刪除嗎 ?? (Y)要 (N)不要？[Y] ", buf, 3, LCECHO);
         if (*buf != 'n')
             do_expire = time(0) + 86400 * 7;
 
-        vget(2, 0, "(Y)確定 (Q)取消？[Q] ", buf, 3, LCECHO);
+        vget_xo(xo, 2, 0, "(Y)確定 (Q)取消？[Q] ", buf, 3, LCECHO);
         if (*buf != 'y')
             return XO_HEAD;
 
@@ -1869,7 +1869,7 @@ post_delete(
         }
 
         if (by_BM/* && (bbstate & BRD_NOTRAN) && !(fhdr->xmode & POST_BOTTOM)*/)
-            vget(B_LINES_REF, 0, "請輸入刪除理由：", delete_reason, 29, DOECHO);
+            vget_xo(xo, B_LINES_REF, 0, "請輸入刪除理由：", delete_reason, 29, DOECHO);
         //    return 0;
         if (by_BM/* && bbstate & BRD_NOTRAN*/&& (bbstate & STAT_BOARD) && !strstr(fhdr->owner, ".") && !strstr(fhdr->lastrecommend, "$") && !(fhdr->xmode & POST_BOTTOM))
         {
@@ -2787,14 +2787,14 @@ post_title(
     if (!(bbstate & STAT_BOARD))
         return XO_NONE;
 
-    vget(B_LINES_REF, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
+    vget_xo(xo, B_LINES_REF, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
 
     if (HAS_PERM(PERM_ALLBOARD))  /* 0911105.cache: 非看板總管只能改標題 */
     {
-        vget(B_LINES_REF, 0, "作者：", mhdr.owner, BMIN(80UL - 6, sizeof(mhdr.owner)), GCARRY);
+        vget_xo(xo, B_LINES_REF, 0, "作者：", mhdr.owner, BMIN(80UL - 6, sizeof(mhdr.owner)), GCARRY);
         /* Thor.980727:lkchu patch: sizeof(mhdr.owner) = 80會超過一行 */
         /* IID.2021-02-22: `sizeof(mhdr.owner)` has become 47; simply hardcoded size cannot be used */
-        vget(B_LINES_REF, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
+        vget_xo(xo, B_LINES_REF, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
     }
 
     if (vans(msg_sure_ny) == 'y' &&
@@ -2840,7 +2840,7 @@ post_cross_terminator(  /* Thor.0521: 終極文章大法 */
         title = fhdr->owner;
     else if (mode == 2)
     {
-        if (!vget(B_LINES_REF, 0, "其他：", other, sizeof(other), DOECHO))
+        if (!vget_xo(xo, B_LINES_REF, 0, "其他：", other, sizeof(other), DOECHO))
             return XO_HEAD;
         title = other;
     }
@@ -3016,7 +3016,7 @@ post_brdtitle(
 
     memcpy(&newbrd, oldbrd, sizeof(BRD));
 
-    vget(23, 0, "看板名稱：", newbrd.title+3, BTLEN - 2, GCARRY);
+    vget_xo(xo, 23, 0, "看板名稱：", newbrd.title+3, BTLEN - 2, GCARRY);
 
     if ((vans(msg_sure_ny) == 'y') &&
             memcmp(&newbrd, oldbrd, sizeof(BRD)))
@@ -3104,7 +3104,7 @@ post_resetscore(
                         return XO_FOOT;
                     }
 
-                    if (!vget(B_LINES_REF, 0, "請輸入數字：", ans, 3, DOECHO))
+                    if (!vget_xo(xo, B_LINES_REF, 0, "請輸入數字：", ans, 3, DOECHO))
                         return XO_FOOT;
 
                     if ((brd->battr & BRD_PUSHSNEER) || (brd->battr & BRD_PUSHDEFINE))
@@ -3275,7 +3275,7 @@ post_recommend(
                 const char *const prompt_verb = (ans == '4') ?
                     "請輸入自訂的正面動詞："
                     : "請輸入自訂的負面動詞：";
-                vget(B_LINES_REF, 0, prompt_verb, verb, 3, DOECHO);
+                vget_xo(xo, B_LINES_REF, 0, prompt_verb, verb, 3, DOECHO);
                 if (strlen(verb) < 2)
                 {
                     zmsg("動詞須為一個中文字元或者兩個英文字元");
@@ -3284,7 +3284,7 @@ post_recommend(
             }
 
             /* 081121.cache: 後悔的機會 */
-            if (prompt && vget(B_LINES_REF, 0, prompt, msg, 53, DOECHO))
+            if (prompt && vget_xo(xo, B_LINES_REF, 0, prompt, msg, 53, DOECHO))
                 ans = vans("請確定是否送出 ? [y/N]");
             else
                 ans = 'n';
@@ -3779,7 +3779,7 @@ post_battr_threshold(
 
             if (echo & GCARRY)
                 sprintf(buf, "%d", th.age);
-            if (!vget(B_LINES_REF, 0, "請輸入發文門檻－註冊幾天以上？", buf, 4, echo))
+            if (!vget_xo(xo, B_LINES_REF, 0, "請輸入發文門檻－註冊幾天以上？", buf, 4, echo))
                 return XO_HEAD;
             if ((num = atoi(buf)) < 0)
                 return XO_HEAD;
@@ -3787,7 +3787,7 @@ post_battr_threshold(
 
             if (echo & GCARRY)
                 sprintf(buf, "%d", th.numlogins);
-            if (!vget(B_LINES_REF, 0, "請輸入發文門檻－登入幾次以上？", buf, 4, echo))
+            if (!vget_xo(xo, B_LINES_REF, 0, "請輸入發文門檻－登入幾次以上？", buf, 4, echo))
                 return XO_HEAD;
             if ((num = atoi(buf)) < 0)
                 return XO_HEAD;
@@ -3795,7 +3795,7 @@ post_battr_threshold(
 
             if (echo & GCARRY)
                 sprintf(buf, "%d", th.numposts);
-            if (!vget(B_LINES_REF, 0, "請輸入發文門檻－發文幾篇以上？", buf, 4, echo))
+            if (!vget_xo(xo, B_LINES_REF, 0, "請輸入發文門檻－發文幾篇以上？", buf, 4, echo))
                 return XO_HEAD;
             if ((num = atoi(buf)) < 0)
                 return XO_HEAD;
@@ -3803,7 +3803,7 @@ post_battr_threshold(
 
             if (echo & GCARRY)
                 sprintf(buf, "%d", th.point2);
-            if (!vget(B_LINES_REF, 0, "請輸入發文門檻－劣文幾篇以下？", buf, 4, echo))
+            if (!vget_xo(xo, B_LINES_REF, 0, "請輸入發文門檻－劣文幾篇以下？", buf, 4, echo))
                 return XO_HEAD;
             if ((num = atoi(buf)) < 0)
                 return XO_HEAD;
@@ -3949,7 +3949,7 @@ post_aid(
         return XO_FOOT;
 
     /* 請求使用者輸入文章代碼(AID) */
-    if (!vget(B_LINES_REF, 0, "請輸入文章代碼(AID)： #", aid, sizeof(aid), DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, "請輸入文章代碼(AID)： #", aid, sizeof(aid), DOECHO))
         return XO_FOOT;
     query = aid;
 
@@ -4544,11 +4544,11 @@ XoXpost(                        /* Thor: call from post_cb */
     if (!mode)
     {
         key = xypostKeyword;
-        filter_title = vget(B_LINES_REF, 0, MSG_XYPOST, key, sizeof(xypostKeyword), GCARRY);
+        filter_title = vget_xo(xo, B_LINES_REF, 0, MSG_XYPOST, key, sizeof(xypostKeyword), GCARRY);
         str_lower(buf, key);
         key = buf;
 
-        if ((filter_author = vget(B_LINES_REF, 0, "[串接模式]作者：", author, 30, DOECHO)))
+        if ((filter_author = vget_xo(xo, B_LINES_REF, 0, "[串接模式]作者：", author, 30, DOECHO)))
         {
             filter_author = strlen(author);
             str_lower(author, author);

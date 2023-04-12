@@ -330,12 +330,12 @@ gem_add(
     }
     else
     {
-        if (!vget(B_LINES_REF, 0, "標題：", title, 64, DOECHO))
+        if (!vget_xo(xo, B_LINES_REF, 0, "標題：", title, 64, DOECHO))
             return XO_FOOT;
 
         if (gtype == 'c' || gtype == 'd')
         {
-            if (!vget(B_LINES_REF, 0, "檔名：", fpath, (gtype == 'c') ? IDLEN :IDLEN + 1, DOECHO))
+            if (!vget_xo(xo, B_LINES_REF, 0, "檔名：", fpath, (gtype == 'c') ? IDLEN :IDLEN + 1, DOECHO))
                 return XO_FOOT;
 
             if (strchr(fpath, '/'))
@@ -455,13 +455,13 @@ gem_title(
         return XO_NONE;
 
     xhdr = *ghdr;
-    vget(B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
+    vget_xo(xo, B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
 
     dir = xo->dir;
     if (HAS_PERM(PERM_ALLBOARD|PERM_GEM))
     {
-        vget(B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 1, GCARRY);
-        vget(B_LINES_REF, 0, "時間：", xhdr.date, 9, GCARRY);
+        vget_xo(xo, B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 1, GCARRY);
+        vget_xo(xo, B_LINES_REF, 0, "時間：", xhdr.date, 9, GCARRY);
     }
 
     if (memcmp(ghdr, &xhdr, sizeof(HDR)) &&
@@ -975,7 +975,7 @@ gem_move(
         return XO_NONE;
 
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
-    if (!vget(B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
 
     newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);
@@ -1143,7 +1143,7 @@ gem_gather(
             return XO_FOOT;
 
         case '1':
-            if (!vget(B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY))
+            if (!vget_xo(xo, B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY))
                 return XO_FOOT;
             fp = fdopen(hdr_stamp(folder, 'A', &ghdr, fpath), "w");
             strcpy(ghdr.owner, cuser.userid);
@@ -1311,14 +1311,14 @@ gem_cross(
                 && !((hdr->xmode & GEM_LOCK) && !HAS_PERM(PERM_SYSOP)))
             {
                 sprintf(xtitle, STR_FORWARD " %.66s", hdr->title);
-                if (!vget(2, 0, "標題:", xtitle, TTLEN + 1, GCARRY))
+                if (!vget_xo(xo, 2, 0, "標題:", xtitle, TTLEN + 1, GCARRY))
                     return XO_HEAD;
             }
             else
                 return XO_HEAD;
         }
 
-        rc = vget(2, 0, "(S)存檔 (Q)取消？[Q] ", buf, 3, LCECHO);
+        rc = vget_xo(xo, 2, 0, "(S)存檔 (Q)取消？[Q] ", buf, 3, LCECHO);
         if (*buf != 's' && *buf != 'S')
             return XO_HEAD;
 

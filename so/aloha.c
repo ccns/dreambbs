@@ -214,7 +214,7 @@ XO *xo)
     char buf[8];
     int head, tail, fd;
 
-    vget(B_LINES_REF, 0, "[設定刪除範圍] 起點：", buf, 6, DOECHO);
+    vget_xo(xo, B_LINES_REF, 0, "[設定刪除範圍] 起點：", buf, 6, DOECHO);
     head = atoi(buf);
     if (head <= 0)
     {
@@ -222,7 +222,7 @@ XO *xo)
         return XO_FOOT;
     }
 
-    vget(B_LINES_REF, 28, "終點：", buf, 6, DOECHO);
+    vget_xo(xo, B_LINES_REF, 28, "終點：", buf, 6, DOECHO);
     tail = atoi(buf);
     if (tail < head)
     {
@@ -233,7 +233,7 @@ XO *xo)
         tail = xo->max;
 
 
-    if (vget(B_LINES_REF, 41, msg_sure_ny, buf, 3, LCECHO) == 'y')
+    if (vget_xo(xo, B_LINES_REF, 41, msg_sure_ny, buf, 3, LCECHO) == 'y')
     {
         char fpath[64];
         int size;

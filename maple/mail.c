@@ -2469,10 +2469,10 @@ mbox_title(
     hdr = (HDR *) xo_pool_base + pos;
     mhdr = *hdr;
 
-    vget(B_LINES_REF, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
-    vget(B_LINES_REF, 0, "作者：", mhdr.owner, 74, GCARRY);
-    vget(B_LINES_REF, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
-    vget(B_LINES_REF, 0, "檔名：", mhdr.xname, sizeof(mhdr.date), GCARRY);
+    vget_xo(xo, B_LINES_REF, 0, "標題：", mhdr.title, sizeof(mhdr.title), GCARRY);
+    vget_xo(xo, B_LINES_REF, 0, "作者：", mhdr.owner, 74, GCARRY);
+    vget_xo(xo, B_LINES_REF, 0, "日期：", mhdr.date, sizeof(mhdr.date), GCARRY);
+    vget_xo(xo, B_LINES_REF, 0, "檔名：", mhdr.xname, sizeof(mhdr.date), GCARRY);
     if (mhdr.xid > 1000)
         mhdr.xid = 0;
     if (vans(msg_sure_ny) == 'y' &&

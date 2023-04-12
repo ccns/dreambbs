@@ -215,7 +215,7 @@ int pos)
     cur=pos;
     max=xo->max;
 
-    if (!vget(B_LINES_REF, 0, "關鍵字：", buf, sizeof(buf), DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, "關鍵字：", buf, sizeof(buf), DOECHO))
         return XO_FOOT;
 
     str_lower(buf, buf);
@@ -267,7 +267,7 @@ XO *xo)
     {
         read(fd, &list, sizeof(LIST_TITLE));
         close(fd);
-        vget(B_LINES_REF, 0, "請輸入群組名稱：", list.title[ways-1], 41, GCARRY);
+        vget_xo(xo, B_LINES_REF, 0, "請輸入群組名稱：", list.title[ways-1], 41, GCARRY);
     }
 
     if ((fd = open(fpath, O_WRONLY | O_CREAT | O_TRUNC, 0600)) >= 0

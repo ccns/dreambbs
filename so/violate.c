@@ -175,7 +175,7 @@ int pos)
     int fd;
     char buf[64];
 
-    if (!vget(B_LINES_REF, 0, "請輸入查詢字串:", buf, sizeof(buf), DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, "請輸入查詢字串:", buf, sizeof(buf), DOECHO))
         return XO_FOOT;
 
     fd = open(FN_VIOLATELAW_DB, O_RDONLY);

@@ -196,7 +196,7 @@ XO *xo)
     fd = -1;
     memset(&ghdr, 0, sizeof(HDR));
 
-    if (!vget(B_LINES_REF, 0, "標題：", title, 64, DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, "標題：", title, 64, DOECHO))
         return XO_FOOT;
 
     fd = hdr_stamp(dir, gtype, &ghdr, fpath);
@@ -283,7 +283,7 @@ int pos)
         return XO_NONE;
 
     xhdr = *ghdr;
-    vget(B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
+    vget_xo(xo, B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
 
     dir = xo->dir;
 
@@ -649,7 +649,7 @@ int pos)
         return XO_NONE;
 
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
-    if (!vget(B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
 
     newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);
@@ -758,7 +758,7 @@ int pos)
 
         case '1':
             strcpy(xhdr.title, currtitle);
-            if (!vget(B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY))
+            if (!vget_xo(xo, B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY))
                 return DL_RELEASE(XO_FOOT);
             fp = fdopen(hdr_stamp(folder, 'A', &ghdr, fpath), "w");
             strcpy(ghdr.owner, cuser.userid);
@@ -896,14 +896,14 @@ int pos)
             if (!(hdr->xmode & GEM_FOLDER))
             {
                 sprintf(xtitle, STR_FORWARD " %.66s", hdr->title);
-                if (!vget(2, 0, "標題:", xtitle, TTLEN + 1, GCARRY))
+                if (!vget_xo(xo, 2, 0, "標題:", xtitle, TTLEN + 1, GCARRY))
                     return XO_HEAD;
             }
             else
                 return XO_HEAD;
         }
 
-        rc = vget(2, 0, "(S)存檔 (Q)取消？[Q] ", buf, 3, LCECHO);
+        rc = vget_xo(xo, 2, 0, "(S)存檔 (Q)取消？[Q] ", buf, 3, LCECHO);
         if (*buf != 's' && *buf != 'S')
             return XO_HEAD;
 

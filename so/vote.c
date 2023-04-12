@@ -454,7 +454,7 @@ XO *xo)
         check = 1;
     }
 
-    if (!vget(B_LINES_REF, 0, "投票主題：", buf, sizeof(buf), DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, "投票主題：", buf, sizeof(buf), DOECHO))
         return XO_INIT;
 
     dir = xo->dir;
@@ -507,7 +507,7 @@ XO *xo)
     close(fd);
 
     sprintf(buf + 3, "請問每人最多可投幾票？([1]～%d): ", item);
-    vget(20, 0, buf + 3, buf, 3, DOECHO);
+    vget_xo(xo, 20, 0, buf + 3, buf, 3, DOECHO);
     fd = atoi(buf);
     if (fd < 1)
         fd = 1;
@@ -568,7 +568,7 @@ int pos)
     }
 
 
-    if (!vget(B_LINES_REF, 0, "投票主題：", vxx.title, TTLEN + 1 - 5 /* sizeof(vxx.title) Thor.981020: 怕超過螢幕 */, GCARRY))
+    if (!vget_xo(xo, B_LINES_REF, 0, "投票主題：", vxx.title, TTLEN + 1 - 5 /* sizeof(vxx.title) Thor.981020: 怕超過螢幕 */, GCARRY))
         return XO_FOOT;
 
     hdr_fpath(fpath, dir, (HDR *) vch);
@@ -615,7 +615,7 @@ int pos)
 
     sprintf(buf + 3, "請問每人最多可投幾票？([1]～%d): ", item);
     sprintf(buf, "%d", vxx.maxblt);
-    vget(20, 0, buf + 3, buf, 3, GCARRY);
+    vget_xo(xo, 20, 0, buf + 3, buf, 3, GCARRY);
     fd = atoi(buf);
     if (fd < 1)
         fd = 1;
@@ -802,7 +802,7 @@ int pos)
     }
     else if (cc == 'a')
     {
-        vget(B_LINES_REF, 0, "請更改開票時間(-提前/+延後/0不改)：", buf, 3, DOECHO);
+        vget_xo(xo, B_LINES_REF, 0, "請更改開票時間(-提前/+延後/0不改)：", buf, 3, DOECHO);
         if ((cc = atoi(buf)))
         {
             vch->vclose = vch->vclose + cc * 86400;
@@ -989,7 +989,7 @@ int pos)
         *fname = 'S';
         show_stud(fpath);
         account[0] = '\0';
-        if (vget(B_LINES_REF - 4, 0, "請輸入你的學號：", account, 10/*7*/, GCARRY))
+        if (vget_xo(xo, B_LINES_REF - 4, 0, "請輸入你的學號：", account, 10/*7*/, GCARRY))
         {
             if (strlen(account) < 9/*6*/)
             {
@@ -1044,7 +1044,7 @@ int pos)
     for (;;)
     {
         choice = bitset(choice, count, vch->maxblt, vch->title, slist);
-        vget(B_LINES_REF - 1, 0, "我有話要說：", buf, 60, GCARRY);
+        vget_xo(xo, B_LINES_REF - 1, 0, "我有話要說：", buf, 60, GCARRY);
         fd = vans("投票 (Y)確定 (N)重來 (Q)取消？[N] ");
         if (fd == 'y' || fd == 'Y' || fd == 'q' || fd == 'Q')
             break;

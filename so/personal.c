@@ -584,7 +584,7 @@ personal_deny(
     if (personal->state & PB_OPEN)
         return XO_NONE;
 
-    if (!vget(B_LINES_REF, 0, "拒絕開板理由: ", msg, sizeof(msg), DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, "拒絕開板理由: ", msg, sizeof(msg), DOECHO))
         return XO_FOOT;
 
     if (vans("確定拒絕此申請嗎？[y/N]") != 'y')

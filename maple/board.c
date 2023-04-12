@@ -1283,7 +1283,7 @@ class_search(
     char buf[IDLEN + 1];
 
     ptr = buf;
-    num = vget(B_LINES_REF, 0, MSG_BID, ptr, IDLEN + 1, DOECHO);
+    num = vget_xo(xo, B_LINES_REF, 0, MSG_BID, ptr, IDLEN + 1, DOECHO);
     move(b_lines, 0);
     clrtoeol();
 
@@ -1458,7 +1458,7 @@ XoAuthor(
     if (!HAS_PERM(PERM_VALID))
         return XO_NONE;
 
-    if (!vget(B_LINES_REF, 0, "請輸入作者：", author, IDLEN + 1, DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, "請輸入作者：", author, IDLEN + 1, DOECHO))
         return XO_FOOT;
 
     str_lower(author, author);

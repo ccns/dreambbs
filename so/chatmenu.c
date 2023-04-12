@@ -213,7 +213,7 @@ int pos)
     ghdr = (const ChatAction *) xo_pool_base + pos;
 
     sprintf(buf + 5, "請輸入第 %d 選項的新位置：", pos + 1);
-    if (!vget(B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, buf + 5, buf, 5, DOECHO))
         return XO_FOOT;
 
     newOrder = TCLAMP(atoi(buf) - 1, 0, xo->max - 1);

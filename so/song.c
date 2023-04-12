@@ -329,9 +329,9 @@ int pos)
     }
 
 
-    if (!vget(B_LINES_REF, 0, "點歌給誰：", idwho, sizeof(idwho), DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, "點歌給誰：", idwho, sizeof(idwho), DOECHO))
         strcpy(idwho, "大家");
-    if (!vget(B_LINES_REF, 0, "想說的話：", want_say, sizeof(want_say), DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, "想說的話：", want_say, sizeof(want_say), DOECHO))
         strcpy(want_say, ".........");
 
     if (vans("要匿名嗎 [y/N]：") == 'y')
@@ -468,7 +468,7 @@ int pos)
     sprintf(tmp, "%s 點歌給 %s", cuser.userid, acct.userid);
     log_song(tmp);
 
-    if (!vget(B_LINES_REF, 0, "想說的話：", want_say, sizeof(want_say), DOECHO))
+    if (!vget_xo(xo, B_LINES_REF, 0, "想說的話：", want_say, sizeof(want_say), DOECHO))
         strcpy(want_say, ".........");
 
     fp = fopen(fpath, "r+");
@@ -542,13 +542,13 @@ int pos)
         return XO_NONE;
 
     xhdr = *ghdr;
-    vget(B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
+    vget_xo(xo, B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
 
     dir = xo->dir;
     if (HAS_PERM(PERM_SYSOP | PERM_KTV))
     {
-        vget(B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 1, GCARRY);
-        vget(B_LINES_REF, 0, "時間：", xhdr.date, 9, GCARRY);
+        vget_xo(xo, B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 1, GCARRY);
+        vget_xo(xo, B_LINES_REF, 0, "時間：", xhdr.date, 9, GCARRY);
     }
 
     if (memcmp(ghdr, &xhdr, sizeof(HDR)) &&

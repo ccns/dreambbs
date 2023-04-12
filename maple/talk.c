@@ -755,7 +755,7 @@ pal_search(
     PAL *phead;
     char *fimage = NULL, fpath[64];
 
-    if (vget(B_LINES_REF, 0, msg_uid, buf, IDLEN + 1, GCARRY))
+    if (vget_xo(xo, B_LINES_REF, 0, msg_uid, buf, IDLEN + 1, GCARRY))
     {
         GCC_UNUSED int buflen;
         char bufl[IDLEN + 1];
@@ -3485,7 +3485,7 @@ ulist_search(
     PICKUP *pp;
     static char buf[IDLEN + 1];
 
-    if (vget(B_LINES_REF, 0, msg_uid, buf, IDLEN + 1, GCARRY))
+    if (vget_xo(xo, B_LINES_REF, 0, msg_uid, buf, IDLEN + 1, GCARRY))
     {
         GCC_UNUSED int buflen;
         char bufl[IDLEN + 1];
@@ -3560,7 +3560,7 @@ ulist_makepal(
 
             strcpy(buf, up->userid);
 
-            vget(B_LINES_REF, 0, "好友描述：", pal.ship, sizeof(pal.ship), DOECHO);
+            vget_xo(xo, B_LINES_REF, 0, "好友描述：", pal.ship, sizeof(pal.ship), DOECHO);
             pal.ftype = 0;
             pal.userno = userno;
             strcpy(pal.userid, buf);
@@ -3601,7 +3601,7 @@ ulist_makebad(
 
             strcpy(buf, up->userid);
 
-            vget(B_LINES_REF, 0, "惡行惡狀：", pal.ship, sizeof(pal.ship), DOECHO);
+            vget_xo(xo, B_LINES_REF, 0, "惡行惡狀：", pal.ship, sizeof(pal.ship), DOECHO);
             pal.ftype = PAL_BAD;
             pal.userno = userno;
             strcpy(pal.userid, buf);
@@ -3883,7 +3883,7 @@ ulist_fromchange(
         return XO_NONE;
 
     str_scpy(buf, str, sizeof(buf));
-    vget(B_LINES_REF, 0, "請輸入新的故鄉：", buf, sizeof(buf), GCARRY);
+    vget_xo(xo, B_LINES_REF, 0, "請輸入新的故鄉：", buf, sizeof(buf), GCARRY);
     if (strcmp(buf, str))
     {
         str_scpy(cutmp->from, buf, sizeof(cutmp->from));
@@ -3907,7 +3907,7 @@ ulist_nickchange(
         return XO_NONE;
 
     str_scpy(buf, str, sizeof(buf));
-    vget(B_LINES_REF, 0, "請輸入新的暱稱：", buf, sizeof(buf), GCARRY);
+    vget_xo(xo, B_LINES_REF, 0, "請輸入新的暱稱：", buf, sizeof(buf), GCARRY);
 
     if (strcmp(buf, str) && str_len_nospace(buf) > 0)
     {
@@ -4102,7 +4102,7 @@ ulist_changeship(
     strcpy(buf, "");
     copyship(buf, userno);
 
-    if (vget(B_LINES_REF, 0, check == 1 ?"友誼：":"惡行惡狀：", buf, sizeof(buf), GCARRY))
+    if (vget_xo(xo, B_LINES_REF, 0, check == 1 ?"友誼：":"惡行惡狀：", buf, sizeof(buf), GCARRY))
     {
         usr_fpath(fpath, cuser.userid, FN_PAL);
         if ((fd = open(fpath, O_RDONLY)) >= 0)
