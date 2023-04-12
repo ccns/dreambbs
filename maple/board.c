@@ -1260,7 +1260,7 @@ class_newmode(
     XO *xo)
 {
     cuser.ufo2 ^= UFO2_BRDNEW;  /* Thor.980805: 特別注意 utmp.ufo的同步問題 */
-    class_flag ^= BFO_BRDNEW;
+    class_flag = (class_flag & ~BFO_BRDNEW) | ((cuser.ufo2 & UFO2_BRDNEW) ? BFO_BRDNEW : 0);
     return XO_NECK;
 }
 
