@@ -899,6 +899,7 @@ class_check(
     chn = CH_END - chn;
     switch (boardmode)
     {
+        default:
         case 0:
             cbase = (short *) class_img;
             break;
@@ -907,8 +908,6 @@ class_check(
             cbase = (short *) profess_img;
             break;
 #endif
-        default:
-            cbase = (short *) class_img;
     }
 
     // "HOT/" 名稱可自定，若改名也要順便改後面的長度 4
@@ -1164,6 +1163,7 @@ class_item(
 
         switch (boardmode)
         {
+            default:
             case 0:
                 img = class_img;
                 break;
@@ -1172,8 +1172,6 @@ class_item(
                 img = profess_img;
                 break;
 #endif
-            default:
-                img = class_img;
         }
 
         chx = (short *) img + (CH_END - chn);

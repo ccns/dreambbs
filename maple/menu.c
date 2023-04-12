@@ -246,9 +246,8 @@ goodbye(void)
         break;
 
     case 'q':
+    default: /* 090911.cache: 不小心按錯不要趕走人家 ;( */
         return XEASY;
-    default:
-        return XEASY; /* 090911.cache: 不小心按錯不要趕走人家 ;( */
     }
 
     return QUIT;
@@ -1917,6 +1916,7 @@ domenu_exec(
 
                 switch (res)
                 {
+                default:
                 case XEASY:
                     break;
 
@@ -1932,7 +1932,6 @@ domenu_exec(
                     vmsg("1234");
                     break;
 #endif
-                default:;
                 }
 
                 if (cmd == KEY_NONE)
