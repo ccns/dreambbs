@@ -893,7 +893,7 @@ class_check(
     BRD *brd;
     char *bits;
 
-    if (!ppool && !class_img)
+    if (!class_img)
         return 0;
 
     chn = CH_END - chn;
@@ -1856,8 +1856,7 @@ board_main(void)
     board_xo.cb = class_cb;
     board_xo.recsiz = sizeof(short);
     board_xo.key = CH_END;
-    if (class_img)
-        class_load(&board_xo);
+    class_load(&board_xo);
 
     xz[XZ_CLASS - XO_ZONE].xo = &board_xo;      /* Thor: default class_xo */
 }
