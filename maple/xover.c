@@ -1881,6 +1881,34 @@ xover_exec_cb_pos(
     /* return cmd; */ /* Unreachable */
 }
 
+/* Used for redrawing a child Xover list on I_RESIZETERM */
+int xover_resize(XO *xo)
+{
+    if (!xo)
+        return XO_NONE;
+    int cmd = XO_NONE;
+    /* TODO(IID.2021-02-27): Refine Xover system to make cursor redraw logic customizable */
+    if (xo->cb == domenu_cb)
+    {
+        const int level = xo_stack_level;
+        /* XXX(IID.2021-02-27): Workaround for correcty detecting nested main menu */
+        if (xo_stack_level > 0)
+            --xo_stack_level;
+        cmd = xover_exec_cb(xo, XO_HEAD);
+        domenu_cursor_show(xo);
+        xo_stack_level = level;
+    }
+    else
+    {
+        /* IID.2021-02-27: Keep the cursor on screen when the screen is shrunk */
+        if (xo->pos[xo->cur_idx] > xo->top + XO_TALL - 1)
+            xo->top += xo->pos[xo->cur_idx] - (xo->top + XO_TALL - 1);
+        cmd = xover_exec_cb(xo, XO_HEAD);
+        cursor_show(xo, 3 + xo->pos[xo->cur_idx] - xo->top, 0, xo->pos[xo->cur_idx]);
+    }
+    return cmd;
+}
+
 int
 xover_key(
     XO *xo,

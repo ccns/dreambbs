@@ -328,6 +328,7 @@ int xo_cb_quit(XO *xo);
 void xover(int cmd);
 int xover_exec_cb(XO *xo, int cmd);
 int xover_exec_cb_pos(XO *xo, int cmd, int pos);
+int xover_resize(XO *xo);
 int xover_key(XO *xo, int zone, int cmd);
 void every_Z(XO *xo);
 void every_U(void);
