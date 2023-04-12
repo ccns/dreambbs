@@ -880,6 +880,7 @@ static int class_flag;
 
 #define BFO_YANK        0x01
 #define BFO_FRIEND      0x02 /* 1:列出好友/秘密板，且自己又有閱讀權限的 */
+#define BFO_BRDNEW      0x04
 
 static int
 class_check(
@@ -1008,7 +1009,7 @@ board_outs(
 
     brd = bshm->bcache + chn;
 
-    brdnew = class_flag & UFO2_BRDNEW;
+    brdnew = class_flag & BFO_BRDNEW;
     bits = brd_bits;
 
     {
@@ -1241,7 +1242,7 @@ class_neck(
     XO *xo)
 {
     move(1, 0);
-    prints(NECKBOARD, class_flag & UFO2_BRDNEW ? "總數" : "編號", d_cols + 33, "中   文   敘   述");
+    prints(NECKBOARD, class_flag & BFO_BRDNEW ? "總數" : "編號", d_cols + 33, "中   文   敘   述");
 
     return class_body(xo);
 }
@@ -1259,7 +1260,7 @@ class_newmode(
     XO *xo)
 {
     cuser.ufo2 ^= UFO2_BRDNEW;  /* Thor.980805: 特別注意 utmp.ufo的同步問題 */
-    class_flag ^= UFO2_BRDNEW;
+    class_flag ^= BFO_BRDNEW;
     return XO_NECK;
 }
 
@@ -1848,7 +1849,7 @@ board_main(void)
         class_flag = 0;         /* to speed up */
 #endif
 
-        class_flag = cuser.ufo2 & UFO2_BRDNEW;
+        class_flag = (cuser.ufo2 & UFO2_BRDNEW) ? BFO_BRDNEW : 0;
     }
 
     board_xo.cb = class_cb;
