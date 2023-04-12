@@ -109,21 +109,21 @@ myfavorite_body(
 
 
 static int
-myfavorite_head(
+myfavorite_neck(
     XO *xo)
 {
-    vs_head("我的最愛", str_site);
+    move(1, 0);
     prints(NECK_MYFAVORITE,
         cuser.ufo2 & UFO2_BRDNEW ? "總數" : "編號", d_cols + 33, "中   文   敘   述");
     return myfavorite_body(xo);
 }
 
 static int
-myfavorite_newmode(
+myfavorite_head(
     XO *xo)
 {
-    cuser.ufo2 ^= UFO2_BRDNEW;  /* Thor.980805: 特別注意 utmp.ufo的同步問題 */
-    return XO_HEAD;
+    vs_head("我的最愛", str_site);
+    return myfavorite_neck(xo);
 }
 
 
@@ -508,6 +508,7 @@ KeyFuncList myfavorite_cb =
     {XO_INIT, {myfavorite_init}},
     {XO_LOAD, {myfavorite_load}},
     {XO_HEAD, {myfavorite_head}},
+    {XO_NECK, {myfavorite_neck}},
     {XO_BODY, {myfavorite_body}},
     {XO_CUR | XO_POSF, {.posf = myfavorite_cur}},
 
@@ -515,7 +516,7 @@ KeyFuncList myfavorite_cb =
     {'a', {myfavorite_add}},
     {'r' | XO_POSF, {.posf = myfavorite_browse}},
     {'s', {myfavorite_switch}},
-    {'c', {myfavorite_newmode}},
+    {'c', {class_newmode}},
     {'d' | XO_POSF, {.posf = myfavorite_delete}},
     {'M' | XO_POSF, {.posf = myfavorite_mov}},
     {'E' | XO_POSF, {.posf = myfavorite_edit}},

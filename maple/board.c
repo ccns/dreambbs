@@ -1255,7 +1255,7 @@ class_head(
     return class_neck(xo);
 }
 
-static int
+int
 class_newmode(
     XO *xo)
 {

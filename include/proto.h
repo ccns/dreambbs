@@ -84,6 +84,7 @@ bool XoPostSimple(int bno);
 bool XoPost(int bno);
 void board_outs(int chn, int num);
 void class_outs(const char *title, int num);
+int class_newmode(XO *xo);
 int Select(void);
 int Class(void);
 void check_new(BRD *brd);
