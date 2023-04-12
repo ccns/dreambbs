@@ -2725,9 +2725,13 @@ vget_match(
 
 char lastcmd[MAXLASTCMD][80];
 
+int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo)
+{
+    return vget_xo(NULL, y_ref, x_ref, prompt, data, max, echo);
+}
 
 /* IID.20200202: Use screen size referencing coordinate */
-int vget(int y_ref, int x_ref, const char *prompt, char *data, int max, int echo)
+int vget_xo(XO *xo, int y_ref, int x_ref, const char *prompt, char *data, int max, int echo)
 {
     int ch = KEY_NONE;
     int len;
@@ -2823,6 +2827,7 @@ vget_redraw:
             move(y, x_prompt);
             clrtoeol();
             /* redraw */
+            xover_resize(xo);
             data[len] = '\0';
             goto vget_redraw;
         }
