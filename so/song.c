@@ -144,21 +144,20 @@ int pos)
 {
     const HDR *const ghdr = (const HDR *) xo_pool_base + pos;
     const int num = pos + 1;
-    int xmode, gtype;
+    int xmode;
+    const char *gtype;
 
     xmode = ghdr->xmode;
-    gtype = (char) 0xba;
-    if (xmode & GEM_FOLDER)
-        gtype += 1;
+    gtype = ((xmode & GEM_FOLDER) ? "¡»" : "¡º");
     if (xmode & GEM_GOPHER)
-        gtype += 2;
-    prints("%6d%c \xa1%c ", num, (xmode & GEM_RESTRICT) ? ')' : (xmode & GEM_LOCK) ? 'L' :  ' ', gtype);
+        gtype = ((xmode & GEM_FOLDER) ? "¡½" : "¡¼");
+    prints("%6d%c %s ", num, (xmode & GEM_RESTRICT) ? ')' : (xmode & GEM_LOCK) ? 'L' :  ' ', gtype);
 
-    gtype = 0;
+    const int gway = 0;
 
     if (!HAS_PERM(PERM_SYSOP) && (xmode & (GEM_RESTRICT | GEM_LOCK)))
         prints("\x1b[1;33m¸ê®Æ«O±K¡I\x1b[m\n");
-    else if ((gtype == 0) || (xmode & GEM_GOPHER))
+    else if ((gway == 0) || (xmode & GEM_GOPHER))
         prints("%-.*s\n", d_cols + 68, ghdr->title);
 
     return XO_NONE;

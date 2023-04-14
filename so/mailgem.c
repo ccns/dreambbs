@@ -39,19 +39,18 @@ int pos)
 {
     const HDR *const ghdr = (const HDR *) xo_pool_base + pos;
     const int num = pos + 1;
-    int xmode, gtype;
+    int xmode;
+    const char *gtype;
 
     xmode = ghdr->xmode;
-    gtype = (char) 0xba;
-    if (xmode & GEM_FOLDER)
-        gtype += 1;
-    prints("%6d %c\xa1%c ", num,
+    gtype = ((xmode & GEM_FOLDER) ? "¡»" : "¡º");
+    prints("%6d %c%s ", num,
            TagNum && !Tagger(ghdr->chrono, num - 1, TAG_NIN) ? '*' : ' ', gtype);
 
-    gtype = HAS_PERM(PERM_SYSOP) ? mailgem_way : 0;
+    const int gway = HAS_PERM(PERM_SYSOP) ? mailgem_way : 0;
 
     prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title,
-           IDLEN + 1, (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
+           IDLEN + 1, (gway == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
 
     return XO_NONE;
 }

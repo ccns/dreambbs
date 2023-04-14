@@ -69,22 +69,19 @@ gem_item(
     const HDR *const ghdr = (const HDR *) xo_pool_base + pos;
     const int num = pos + 1;
 
-    int xmode, gtype;
+    int xmode;
+    const char *gtype;
     char fpath[64];
 
-    /* ◎☆★◇◆□■▽▼ : A1B7 ... */
-
     xmode = ghdr->xmode;
-    gtype = (char) 0xba;
-    if (xmode & GEM_FOLDER)
-        gtype += 1;
-    prints("%6d%c%c\xa1%c ", num, (xmode & GEM_RESTRICT) ? ')' : (xmode & GEM_LOCK) ? 'L' :  ' ',
+    gtype = ((xmode & GEM_FOLDER) ? "◆" : "◇");
+    prints("%6d%c%c%s ", num, (xmode & GEM_RESTRICT) ? ')' : (xmode & GEM_LOCK) ? 'L' :  ' ',
         TagNum && !Tagger(ghdr->chrono, num - 1, TAG_NIN) ? '*' : ' ', gtype);
 
     /* Thor.0724: 連同 recno 一起比對, 因為在copy, paste後會有chrono一樣的 */
     /* tag_char(ghdr->chrono), gtype); */
 
-    gtype = gem_way;
+    const int gway = gem_way;
 
     if (!(bbstate & STAT_BOARD)&&!HAS_PERM(PERM_ADMIN|PERM_GEM)&&(xmode & GEM_RESTRICT))
         prints("\x1b[1;33m資料保密！\x1b[m\n");
@@ -95,10 +92,10 @@ gem_item(
         if (xmode & GEM_BOARD)
         {
             sprintf(fpath, "gem/brd/%s/", ghdr->xname);
-            prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title, IDLEN + 1, (gtype == 1 ? ghdr->xname : ghdr->owner), access(fpath, R_OK) ? "[deleted]" : ghdr->date);
+            prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title, IDLEN + 1, (gway == 1 ? ghdr->xname : ghdr->owner), access(fpath, R_OK) ? "[deleted]" : ghdr->date);
         }
         else
-            prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title, IDLEN + 1, (gtype == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
+            prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title, IDLEN + 1, (gway == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
     }
 
     return XO_NONE;
