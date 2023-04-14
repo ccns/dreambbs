@@ -1465,14 +1465,20 @@ vmsg_xo(
     for (;;)
     {
         vmsg_body(msg);
-        if ((res_key = vkey()) != I_RESIZETERM)
+        switch ((res_key = vkey()))
+        {
+        default:
+            return res_key;
+        case I_RESIZETERM:
             break;
+        case KEY_KONAMI:
+            xover_key(xo, 0, res_key); // invoke only general key functions
+        }
         move(b_lines_prev, 0);
         clrtoeol();
         b_lines_prev = b_lines;
         xover_resize(xo);
     }
-    return res_key;
 }
 
 static inline void
@@ -2827,9 +2833,12 @@ vget_redraw:
             move(y, x + col);
 
         ch = vkey();
-        if (ch == I_RESIZETERM)
+        if (ch == I_RESIZETERM || ch == KEY_KONAMI)
         {
-            /* Screen size changed and redraw is needed */
+            if (ch != I_RESIZETERM)
+                xover_key(xo, 0, ch); // invoke only general key functions
+            ch = I_RESIZETERM;
+            /* Redraw is needed */
             /* clear */
             move(y, x_prompt);
             clrtoeol();
