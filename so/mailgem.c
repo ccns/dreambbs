@@ -45,7 +45,7 @@ int pos)
     gtype = (char) 0xba;
     if (xmode & GEM_FOLDER)
         gtype += 1;
-    prints("%6d %c\241%c ", num,
+    prints("%6d %c\xa1%c ", num,
            TagNum && !Tagger(ghdr->chrono, num - 1, TAG_NIN) ? '*' : ' ', gtype);
 
     gtype = HAS_PERM(PERM_SYSOP) ? mailgem_way : 0;

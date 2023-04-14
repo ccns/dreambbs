@@ -152,7 +152,7 @@ int pos)
         gtype += 1;
     if (xmode & GEM_GOPHER)
         gtype += 2;
-    prints("%6d%c \241%c ", num, (xmode & GEM_RESTRICT) ? ')' : (xmode & GEM_LOCK) ? 'L' :  ' ', gtype);
+    prints("%6d%c \xa1%c ", num, (xmode & GEM_RESTRICT) ? ')' : (xmode & GEM_LOCK) ? 'L' :  ' ', gtype);
 
     gtype = 0;
 

@@ -78,7 +78,7 @@ gem_item(
     gtype = (char) 0xba;
     if (xmode & GEM_FOLDER)
         gtype += 1;
-    prints("%6d%c%c\241%c ", num, (xmode & GEM_RESTRICT) ? ')' : (xmode & GEM_LOCK) ? 'L' :  ' ',
+    prints("%6d%c%c\xa1%c ", num, (xmode & GEM_RESTRICT) ? ')' : (xmode & GEM_LOCK) ? 'L' :  ' ',
         TagNum && !Tagger(ghdr->chrono, num - 1, TAG_NIN) ? '*' : ' ', gtype);
 
     /* Thor.0724: 連同 recno 一起比對, 因為在copy, paste後會有chrono一樣的 */

@@ -464,7 +464,7 @@ VALUE brb_ansi_color RBF_P((int argc, VALUE *argv, VALUE self))
     mrb_get_args(mrb, "*", &argv, &argc);
 #endif
 
-    char buf[50] = "\033[";
+    char buf[50] = "\x1b[";
     char *p = buf + strlen(buf);
 
     for (int i=0; i<argc; i++)
@@ -481,12 +481,12 @@ VALUE brb_ansi_color RBF_P((int argc, VALUE *argv, VALUE self))
 
 VALUE brb_ansi_reset RBF_P((VALUE self))
 {
-    return RB_C(rb_str_new_cstr)("\033[m");
+    return RB_C(rb_str_new_cstr)("\x1b[m");
 }
 
 VALUE brb_esc RBF_P((VALUE self))
 {
-    return RB_C(rb_str_new_cstr)("\033");
+    return RB_C(rb_str_new_cstr)("\x1b");
 }
 
 VALUE brb_color RBF_P((int argc, VALUE *argv, VALUE self))
@@ -800,7 +800,7 @@ static void print_exception RB_PV((void))
     if (!RTEST(exception)) return;
 
     char* buffer = RSTRING_PTR(RB_C(rb_obj_as_string)(exception));
-    outs("\033[m");
+    outs("\x1b[m");
     clear();
     move(0, 0);
     outs("程式發生錯誤，無法繼續執行。請通知原作者。\n錯誤資訊：\n");
@@ -1192,25 +1192,25 @@ void run_ruby(
     move(b_lines - 1 - badxy_compat, 0);
     char msgBuf[200]="";
     if (apiver == 0 && brbver == 0)
-        sprintf(msgBuf, "\033[1;41m ● 程式未載明相容的Interface版本，可能發生不相容問題");
+        sprintf(msgBuf, "\x1b[1;41m ● 程式未載明相容的Interface版本，可能發生不相容問題");
     else if (apiver < BBSRUBY_INTERFACE_VER || (brbver && brbver < BBSRUBY_VERSION_VALUE))
-        sprintf(msgBuf, "\033[1;41m ● 程式版本過舊，可能發生不相容問題");
+        sprintf(msgBuf, "\x1b[1;41m ● 程式版本過舊，可能發生不相容問題");
     if (*msgBuf)
     {
         outs(msgBuf);
         for (int i=0; i<b_cols - (int)(unsigned)strlen(msgBuf) + 7; i++)
             outs(" ");
-        outs("\033[m");
+        outs("\x1b[m");
     }
 
     if (badxy_compat)
     {
         move(b_lines - 1, 0);
-        sprintf(msgBuf, "\033[1;41m %s 此程式%s是為舊版 BBS-Ruby (<= v3.0) 撰寫的。以座標相容模式執行？[Y/n]", (*msgBuf) ? "  " : "●", (!brbver && (!apiver || apiver == 0.111)) ? "可能" : "");
+        sprintf(msgBuf, "\x1b[1;41m %s 此程式%s是為舊版 BBS-Ruby (<= v3.0) 撰寫的。以座標相容模式執行？[Y/n]", (*msgBuf) ? "  " : "●", (!brbver && (!apiver || apiver == 0.111)) ? "可能" : "");
         outs(msgBuf);
         for (int i=0; i<b_cols - (int)(unsigned)strlen(msgBuf) + 7; i++)
             outs(" ");
-        outs("\033[m");
+        outs("\x1b[m");
     }
 
     //Before execution, prepare keyboard buffer

@@ -48,7 +48,7 @@ get_sch_time(void)
             i -= 1;
             continue;
         }
-        else if (ch == '\177')
+        else if (ch == '\x7f')
         {
             if (i)i -= 2;
             else i = -1;
