@@ -1522,7 +1522,7 @@ XoAuthor(
     if (!tag)
     {
         free(chp);
-        vmsg("空無一物");
+        vmsg_xo(xo, "空無一物");
         return XO_FOOT;
     }
 

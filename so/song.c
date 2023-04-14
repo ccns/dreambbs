@@ -324,7 +324,7 @@ int pos)
         return XO_NONE;
     if (acct.request < 1)
     {
-        vmsg("點歌次數已用完！");
+        vmsg_xo(xo, "點歌次數已用完！");
         return XO_FOOT;
     }
 
@@ -399,7 +399,7 @@ int pos)
     acct.request -= 1;
     cuser.request = acct.request;
     sprintf(buf, "剩餘點歌次數：%d 次", acct.request);
-    vmsg(buf);
+    vmsg_xo(xo, buf);
     acct_save(&acct);
 
     rec_add(xfolder, &xpost, sizeof(xpost));
@@ -414,7 +414,7 @@ XO *xo)
     char buf[80];
 
     sprintf(buf, "剩餘點歌次數：%d", cuser.request);
-    vmsg(buf);
+    vmsg_xo(xo, buf);
     return XO_HEAD;
 }
 
@@ -445,7 +445,7 @@ int pos)
 
     if (cacct.request < 1)
     {
-        vmsg("點歌次數已用完！");
+        vmsg_xo(xo, "點歌次數已用完！");
         return XO_FOOT;
     }
     method = 0;
@@ -498,7 +498,7 @@ int pos)
     if (cacct.request <= 0) cacct.request = 0;
     cuser.request = cacct.request;
     sprintf(buf, "剩餘點歌次數：%d 次", cacct.request);
-    vmsg(buf);
+    vmsg_xo(xo, buf);
     acct_save(&cacct);
     m_biff(acct.userno);
     return XO_INIT;
@@ -514,7 +514,7 @@ int pos)
 
     if (bbsothermode & OTHERSTAT_EDITING)
     {
-        vmsg("你還有檔案還沒編完哦！");
+        vmsg_xo(xo, "你還有檔案還沒編完哦！");
         return XO_FOOT;
     }
 

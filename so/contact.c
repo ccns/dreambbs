@@ -112,7 +112,7 @@ XO *xo)
 {
     CONTACT contact;
     if (xo->max >= MAX_CONTACT)
-        vmsg("你的聯絡名單已到達上限!!");
+        vmsg_xo(xo, "你的聯絡名單已到達上限!!");
     else if (contact_edit(&contact, DOECHO))
     {
         rec_add(xo->dir, &contact, sizeof(CONTACT));

@@ -370,7 +370,7 @@ gem_add(
             { /* Thor.981020: 注意被talk的問題 */
                 if (bbsothermode & OTHERSTAT_EDITING)
                 {
-                    vmsg("你還有檔案還沒編完哦！");
+                    vmsg_xo(xo, "你還有檔案還沒編完哦！");
                     return XO_FOOT;
                 }
                 else if (vedit(fpath, false))
@@ -427,7 +427,7 @@ gem_edit(
 
     if (bbsothermode & OTHERSTAT_EDITING)
     {
-        vmsg("你還有檔案還沒編完哦！");
+        vmsg_xo(xo, "你還有檔案還沒編完哦！");
         return XO_FOOT;
     }
 
@@ -582,7 +582,7 @@ gem_state(
     if (!stat(fpath, &st))
         prints("\nTime: %s\nSize: %lld", Ctime(&st.st_mtime), (long long)st.st_size);
 
-    vmsg(NULL);
+    vmsg_xo(xo, NULL);
 
     return XO_BODY;
 }
@@ -1015,7 +1015,7 @@ gem_recycle(
 
     if (level == GEM_LMANAGER)
     {
-        vmsg("小板主不能進入回收筒！");
+        vmsg_xo(xo, "小板主不能進入回收筒！");
         return XO_FOOT;
     }
 
@@ -1387,7 +1387,7 @@ gem_cross(
 
         if (success_count == 0)
         {
-            vmsg("轉錄失敗。");
+            vmsg_xo(xo, "轉錄失敗。");
         }
         else if (battr & BRD_NOCOUNT)
         {
@@ -1406,7 +1406,7 @@ gem_cross(
             else
                 sprintf(buf, "轉錄 %d 篇成功\，%d 篇失敗，你的文章增為 %d 篇",
                     success_count, ((tag == 0) ? 1 : tag) - success_count, cuser.numposts);
-            vmsg(buf);
+            vmsg_xo(xo, buf);
         }
     }
     return XO_HEAD;

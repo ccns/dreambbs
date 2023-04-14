@@ -207,7 +207,7 @@ XO *xo)
     {
         if (bbsothermode & OTHERSTAT_EDITING)
         {
-            vmsg("你還有檔案還沒編完哦！");
+            vmsg_xo(xo, "你還有檔案還沒編完哦！");
             return XO_FOOT;
         }
         else if (vedit(fpath, false))
@@ -258,7 +258,7 @@ int pos)
 
     if (bbsothermode & OTHERSTAT_EDITING)
     {
-        vmsg("你還有檔案還沒編完哦！");
+        vmsg_xo(xo, "你還有檔案還沒編完哦！");
         return XO_FOOT;
     }
 
@@ -328,7 +328,7 @@ int pos)
     if (!stat(fpath, &st))
         prints("\nTime: %s\nSize: %lld", Ctime(&st.st_mtime), (long long)st.st_size);
 
-    vmsg(NULL);
+    vmsg_xo(xo, NULL);
 
     return XO_BODY;
 }
@@ -694,7 +694,7 @@ XO *xo)
         {
             if (!*folder)
             {
-                vmsg("尚未定錨");
+                vmsg_xo(xo, "尚未定錨");
                 return  XO_FOOT;
             }
 
@@ -858,7 +858,7 @@ mailgem_help(
 XO *xo)
 {
     /*  film_out(FILM_GEM, -1);*/
-    vmsg("尚未編輯使用說明");
+    vmsg_xo(xo, "尚未編輯使用說明");
     return XO_HEAD;
 }
 
@@ -958,7 +958,7 @@ int pos)
 
         if (success_count == 0)
         {
-            vmsg("轉錄失敗。");
+            vmsg_xo(xo, "轉錄失敗。");
         }
         if (battr & BRD_NOCOUNT)
         {
@@ -977,7 +977,7 @@ int pos)
             else
                 sprintf(buf, "轉錄 %d 篇成功\，%d 篇失敗，你的文章增為 %d 篇",
                     success_count, ((tag == 0) ? 1 : tag) - success_count, cuser.numposts);
-            vmsg(buf);
+            vmsg_xo(xo, buf);
         }
     }
     return XO_HEAD;

@@ -81,7 +81,7 @@ XO *xo)
     /* Thor.990204: 為考慮more 傳回值 */
     if (more(fpath, NULL) == -1)
     {
-        vmsg("目前沒有任何開票的結果");
+        vmsg_xo(xo, "目前沒有任何開票的結果");
         return DL_RELEASE(XO_FOOT);
     }
 
@@ -441,7 +441,7 @@ XO *xo)
 
     if (bbsothermode & OTHERSTAT_EDITING)
     {
-        vmsg("你還有檔案還沒編完哦！");
+        vmsg_xo(xo, "你還有檔案還沒編完哦！");
         return XO_FOOT;
     }
 
@@ -461,18 +461,18 @@ XO *xo)
     fd = hdr_stamp(dir, 0, (HDR *) & vch, fpath);
     if (fd < 0)
     {
-        vmsg("無法建立投票說明檔");
+        vmsg_xo(xo, "無法建立投票說明檔");
         blog("VOTE", fpath);
         return XO_INIT;
     }
 
     close(fd);
-    vmsg("開始編輯 [投票說明]");
+    vmsg_xo(xo, "開始編輯 [投票說明]");
     fd = vedit(fpath, 0); /* Thor.981020: 注意被talk的問題 */
     if (fd)
     {
         unlink(fpath);
-        vmsg("取消投票");
+        vmsg_xo(xo, "取消投票");
         return XO_HEAD;
     }
 
@@ -487,7 +487,7 @@ XO *xo)
         *str = 'S';
         if (vlist_student(fpath) == 0)
         {
-            vmsg("取消投票");
+            vmsg_xo(xo, "取消投票");
             return XO_INIT;
         }
     }
@@ -499,7 +499,7 @@ XO *xo)
     fd = open(fpath, O_WRONLY | O_CREAT | O_TRUNC, 0600);
     if (fd < 0)
     {
-        vmsg("無法建立投票選項檔");
+        vmsg_xo(xo, "無法建立投票選項檔");
         blog("VOTE", fpath);
         return XO_INIT;
     }
@@ -527,7 +527,7 @@ XO *xo)
 
     rec_add(dir, &vch, sizeof(vch));
 
-    vmsg("開始投票了！");
+    vmsg_xo(xo, "開始投票了！");
     return XO_INIT;
 }
 
@@ -547,7 +547,7 @@ int pos)
 
     if (bbsothermode & OTHERSTAT_EDITING)
     {
-        vmsg("你還有檔案還沒編完哦！");
+        vmsg_xo(xo, "你還有檔案還沒編完哦！");
         return XO_FOOT;
     }
 
@@ -585,7 +585,7 @@ int pos)
         *fname = 'S';
         if (vlist_student(fpath) == 0)
         {
-            vmsg("取消投票");
+            vmsg_xo(xo, "取消投票");
             return XO_HEAD;
         }
     }
@@ -604,7 +604,7 @@ int pos)
     fd = open(fpath, O_WRONLY | O_CREAT | O_TRUNC, 0600);
     if (fd < 0)
     {
-        vmsg("無法建立投票選項檔");
+        vmsg_xo(xo, "無法建立投票選項檔");
         blog("VOTE", fpath);
         return XO_HEAD;
     }
@@ -931,7 +931,7 @@ int pos)
     vch = (VCH *) xo_pool_base + pos;
     if (time(0) > vch->vclose)
     {
-        vmsg("投票已經截止了，請靜候開票");
+        vmsg_xo(xo, "投票已經截止了，請靜候開票");
         return XO_FOOT;
     }
 
@@ -957,7 +957,7 @@ int pos)
             f_unlock(fv);
 
             close(fv);
-            vmsg("你已經投過票了！");
+            vmsg_xo(xo, "你已經投過票了！");
             return XO_FOOT;
         }
     }
@@ -980,7 +980,7 @@ int pos)
     {
         f_unlock(fv);
         close(fv);
-        vmsg("你已經投過票了！");
+        vmsg_xo(xo, "你已經投過票了！");
         return XO_INIT;
     }
 
@@ -995,21 +995,21 @@ int pos)
             {
                 f_unlock(fv);
                 close(fv);
-                vmsg("你的學號錯誤！");
+                vmsg_xo(xo, "你的學號錯誤！");
                 return XO_HEAD;
             }
             if (!check_stud(account, fpath))
             {
                 f_unlock(fv);
                 close(fv);
-                vmsg("你不在名冊裡！");
+                vmsg_xo(xo, "你不在名冊裡！");
                 return XO_HEAD;
             }
             if (!check_mail(account))
             {
                 f_unlock(fv);
                 close(fv);
-                vmsg("你的密碼不正確！");
+                vmsg_xo(xo, "你的密碼不正確！");
                 return XO_HEAD;
             }
         }
@@ -1017,7 +1017,7 @@ int pos)
         {
             f_unlock(fv);
             close(fv);
-            vmsg("你不在名冊裡！");
+            vmsg_xo(xo, "你不在名冊裡！");
             return XO_HEAD;
         }
     }
@@ -1078,7 +1078,7 @@ int pos)
             }
 
             write(fv, vch, FV_SZ);
-            vmsg("投票完成！");
+            vmsg_xo(xo, "投票完成！");
         }
         *fname = 'E';
         fd = open(fpath, O_WRONLY | O_CREAT | O_APPEND, 0600);
@@ -1147,7 +1147,7 @@ XO *xo)
     setdirpath(fpath, xo->dir, FN_VCH);
     if (!(bbstate & STAT_BOARD) && !rec_num(fpath, sizeof(VCH)))
     {
-        vmsg("目前沒有投票舉行");
+        vmsg_xo(xo, "目前沒有投票舉行");
         return DL_RELEASE(XO_FOOT);
     }
 

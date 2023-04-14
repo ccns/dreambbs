@@ -238,7 +238,7 @@ myfavorite_add(
 
     if (!HAS_PERM(PERM_VALID))
     {
-        vmsg("﹟ゼ硄筁粄靡礚猭穝糤и程稲");
+        vmsg_xo(xo, "﹟ゼ硄筁粄靡礚猭穝糤и程稲");
         return XO_QUIT;
     }
     memset(&hdr, 0, sizeof(HDR));
@@ -249,13 +249,13 @@ myfavorite_add(
         brd = ask_board(buf, BRD_R_BIT, NULL);
         if (brd == NULL)
         {
-            vmsg(ERR_BID);
+            vmsg_xo(xo, ERR_BID);
             return XO_HEAD;
         }
         brd2myfavorite(brd, &hdr);
         if (myfavorite_find_same(brd, currdir) >= 0)
         {
-            vmsg("Τ狾!");
+            vmsg_xo(xo, "Τ狾!");
             return XO_FOOT;
         }
     }
@@ -276,7 +276,7 @@ myfavorite_add(
         brd = ask_board(buf, BRD_R_BIT, NULL);
         if (brd == NULL)
         {
-            vmsg(ERR_BID);
+            vmsg_xo(xo, ERR_BID);
             return XO_HEAD;
         }
         brd2myfavorite(brd, &hdr);
@@ -479,7 +479,7 @@ myfavorite_search(
             {
                 chn = hdr->recommend;
                 brd = bshm->bcache + chn;
-                //vmsg(ptr);
+                //vmsg_xo(xo, ptr);
 
                 if (strstr(brd->brdname, ptr) || strstr(brd->title, ptr))
                     return XO_MOVE + pos;
@@ -695,7 +695,7 @@ class_add(
 
     if (myfavorite_find_same(brd, fpath) >= 0)
     {
-        vmsg("Τ狾!");
+        vmsg_xo(xo, "Τ狾!");
         return XO_FOOT;
     }
 
@@ -704,7 +704,7 @@ class_add(
 
     rec_add(fpath, &hdr, sizeof(HDR));
     logitfile(FN_FAVORITE_LOG, "< ADD >", hdr.xname);
-    vmsg("и程稲");
+    vmsg_xo(xo, "и程稲");
 
     return XO_FOOT;
 }

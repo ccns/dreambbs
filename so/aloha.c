@@ -184,12 +184,12 @@ XO *xo)
 
     if (aloha.userno == cuser.userno)
     {
-        vmsg("自己不須加入上站通知名單中");
+        vmsg_xo(xo, "自己不須加入上站通知名單中");
         return XO_HEAD;
     }
     if (xo->max >= MAX_ALOHA)
     {
-        vmsg("已超過最大上限嘍 !!");
+        vmsg_xo(xo, "已超過最大上限嘍 !!");
         return XO_HEAD;
     }
 

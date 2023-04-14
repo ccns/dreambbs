@@ -230,7 +230,7 @@ XO *xo)
 
     if (bbsothermode & OTHERSTAT_EDITING)
     {
-        vmsg("你還有檔案還沒編完哦！");
+        vmsg_xo(xo, "你還有檔案還沒編完哦！");
         return XO_FOOT;
     }
 
@@ -251,12 +251,12 @@ XO *xo)
             return XO_INIT;
         if (brd_bno(buf) >= 0)
         {
-            vmsg("已有此版！");
+            vmsg_xo(xo, "已有此版！");
             return XO_INIT;
         }
         if (nbrd_find(xo, buf, NBRD_NBRD))
         {
-            vmsg("正在連署中！");
+            vmsg_xo(xo, "正在連署中！");
             return XO_FOOT;
         }
         if (!vget_xo(xo, B_LINES_REF, 0, "看板主題：", buf1, sizeof(nbrd.title), DOECHO))
@@ -268,12 +268,12 @@ XO *xo)
             return XO_INIT;
         if (brd_bno(buf) < 0)
         {
-            vmsg("無此版！");
+            vmsg_xo(xo, "無此版！");
             return XO_INIT;
         }
         if (nbrd_find(xo, buf, NBRD_CANCEL))
         {
-            vmsg("正在連署中！");
+            vmsg_xo(xo, "正在連署中！");
             return XO_FOOT;
         }
         strcpy(buf, (bshm->bcache + brd_bno(buf))->brdname);
@@ -308,13 +308,13 @@ XO *xo)
 
     if (mode == 1)
     {
-        vmsg("開始編輯 [看板說明與版主抱負]");
+        vmsg_xo(xo, "開始編輯 [看板說明與版主抱負]");
         fd = vedit(path, 0);
         if (fd)
         {
             unlink(path);
             unlink(fpath);
-            vmsg("取消連署");
+            vmsg_xo(xo, "取消連署");
             return XO_HEAD;
         }
         nbrd.etime = nbrd.btime + NBRD_DAYS * 86400;
@@ -338,13 +338,13 @@ XO *xo)
     }
     else if (mode == 2)
     {
-        vmsg("開始編輯 [廢版主原因]");
+        vmsg_xo(xo, "開始編輯 [廢版主原因]");
         fd = vedit(path, 0);
         if (fd)
         {
             unlink(path);
             unlink(fpath);
-            vmsg("取消連署");
+            vmsg_xo(xo, "取消連署");
             return XO_HEAD;
         }
         nbrd.etime = etime = nbrd.btime + NBRD_DAYS * 86400;
@@ -366,13 +366,13 @@ XO *xo)
     }
     else
     {
-        vmsg("開始編輯 [連署原因]");
+        vmsg_xo(xo, "開始編輯 [連署原因]");
         fd = vedit(path, 0);
         if (fd)
         {
             unlink(path);
             unlink(fpath);
-            vmsg("取消連署");
+            vmsg_xo(xo, "取消連署");
             return XO_HEAD;
         }
         nbrd.etime = etime = nbrd.btime + days * 86400;
@@ -411,19 +411,19 @@ XO *xo)
     {
         nbrd.mode = NBRD_NBRD;
         nbrd.total = NBRD_MAX;
-        vmsg("送交申請了，請等候核准吧！");
+        vmsg_xo(xo, "送交申請了，請等候核准吧！");
     }
     else if (mode == 2)
     {
         nbrd.mode = NBRD_CANCEL;
         nbrd.total = NBRD_MAX_CANCEL;
-        vmsg("送交申請了，請等候核准吧！");
+        vmsg_xo(xo, "送交申請了，請等候核准吧！");
     }
     else
     {
         nbrd.mode = NBRD_OTHER | NBRD_START;
         nbrd.total = numbers;
-        vmsg("開始連署了！");
+        vmsg_xo(xo, "開始連署了！");
     }
 
 
@@ -477,34 +477,34 @@ int pos)
     nbrd = (NBRD *) xo_pool_base + pos;
     if (nbrd->mode & NBRD_REJECT)
     {
-        vmsg("拒絕申請，資料不完整！");
+        vmsg_xo(xo, "拒絕申請，資料不完整！");
         return XO_FOOT;
     }
     else if (nbrd->mode & (NBRD_CLOSE | NBRD_STOP))
     {
-        vmsg("停止連署！");
+        vmsg_xo(xo, "停止連署！");
         return XO_FOOT;
     }
     else if (nbrd->mode & NBRD_OPEN)
     {
-        vmsg("已完成開版");
+        vmsg_xo(xo, "已完成開版");
         return XO_FOOT;
     }
     else if (!(nbrd->mode & NBRD_START))
     {
-        vmsg("尚未通過申請！");
+        vmsg_xo(xo, "尚未通過申請！");
         return XO_FOOT;
     }
     else if (time(0) > nbrd->etime || nbrd->mode & NBRD_STOP)
     {
         nbrd->mode = NBRD_STOP  | (nbrd->mode & NBRD_MASK);
         rec_put(xo->dir, nbrd, sizeof(NBRD), pos);
-        vmsg("連署已經截止了，請下次再來！");
+        vmsg_xo(xo, "連署已經截止了，請下次再來！");
         return XO_FOOT;
     }
     else if (nbrd->mode & NBRD_OK)
     {
-        if (vmsg("已達到連署人數，是否繼續連署 [y/N]") != 'y')
+        if (vmsg_xo(xo, "已達到連署人數，是否繼續連署 [y/N]") != 'y')
             return XO_FOOT;
     }
 
@@ -524,7 +524,7 @@ int pos)
         {
             f_unlock(fv);
             close(fv);
-            vmsg("你已經連署過了！");
+            vmsg_xo(xo, "你已經連署過了！");
             return XO_FOOT;
         }
     }
@@ -538,7 +538,7 @@ int pos)
 
     if (nbrd_seek(logpath, cuser.email))
     {
-        vmsg("你已經連署過了！");
+        vmsg_xo(xo, "你已經連署過了！");
         return XO_FOOT;
     }
 
@@ -643,11 +643,11 @@ int pos)
             if ((nbrd->mode & NBRD_OK) ? 0 : (rmode == 1 ? (--nbrd->total > 0) : 1))
             {
                 sprintf(buf, "加入連署完成！尚需連署人數 %u 人。", nbrd->total);
-                vmsg(buf);
+                vmsg_xo(xo, buf);
             }
             else
             {
-                vmsg("已達連署標準，請靜候審理！");
+                vmsg_xo(xo, "已達連署標準，請靜候審理！");
                 nbrd->mode = NBRD_OK  | (nbrd->mode & NBRD_MASK) | NBRD_START;
             }
             strcpy(mail.email, cuser.email);
@@ -655,7 +655,7 @@ int pos)
             rec_add(logpath, &mail, sizeof(LOG));
         }
         else
-            vmsg("加入連署失敗!!");
+            vmsg_xo(xo, "加入連署失敗!!");
     }
 
 #ifdef __linux__
@@ -683,7 +683,7 @@ int pos)
 
     nbrd = (NBRD *) xo_pool_base + pos;
     if (nbrd->mode & ~(NBRD_MASK))
-        vmsg("已通過或已停止！");
+        vmsg_xo(xo, "已通過或已停止！");
     else
     {
         nbrd_fpath(fpath, xo->dir, nbrd);
@@ -703,7 +703,7 @@ int pos)
         nbrd->etime = etime;
         nbrd->mode = NBRD_START  | (nbrd->mode & NBRD_MASK);
         rec_put(xo->dir, nbrd, sizeof(NBRD), pos);
-        vmsg("申請通過");
+        vmsg_xo(xo, "申請通過");
     }
     return XO_HEAD;
 }
@@ -719,7 +719,7 @@ int pos)
     FILE *fp;
     if (bbsothermode & OTHERSTAT_EDITING)
     {
-        vmsg("你還有檔案還沒編完哦！");
+        vmsg_xo(xo, "你還有檔案還沒編完哦！");
         return XO_FOOT;
     }
 
@@ -729,17 +729,17 @@ int pos)
         return XO_NONE;
 
     if (nbrd->mode & ~(NBRD_MASK))
-        vmsg("已通過或已停止！");
+        vmsg_xo(xo, "已通過或已停止！");
     else
     {
         usr_fpath(path, cuser.userid, "newboard.note");
         nbrd_fpath(fpath, xo->dir, nbrd);
-        vmsg("請編輯拒絕連署原因");
+        vmsg_xo(xo, "請編輯拒絕連署原因");
         fd = vedit(path, 0);
         if (fd)
         {
             unlink(path);
-            vmsg(MSG_CANCEL);
+            vmsg_xo(xo, MSG_CANCEL);
             return XO_HEAD;
         }
 
@@ -751,7 +751,7 @@ int pos)
         f_cat(fpath, S_PART);
         nbrd->mode |= NBRD_REJECT  | (nbrd->mode & NBRD_MASK);
         rec_put(xo->dir, nbrd, sizeof(NBRD), pos);
-        vmsg("拒絕申請");
+        vmsg_xo(xo, "拒絕申請");
         unlink(path);
     }
     return XO_HEAD;
@@ -768,16 +768,16 @@ int pos)
     if (!HAS_PERM(PERM_SYSOP | PERM_BOARD))
         return XO_NONE;
     if (nbrd->mode & NBRD_OK)
-        vmsg("已連署完畢，不能關閉！");
+        vmsg_xo(xo, "已連署完畢，不能關閉！");
     else if (nbrd->mode & NBRD_OPEN)
-        vmsg("已完成開版！");
+        vmsg_xo(xo, "已完成開版！");
     else if (nbrd->mode & NBRD_CLOSE)
-        vmsg("已關閉連署！");
+        vmsg_xo(xo, "已關閉連署！");
     else
     {
         nbrd->mode = NBRD_CLOSE  | (nbrd->mode & NBRD_MASK);
         rec_put(xo->dir, nbrd, sizeof(NBRD), pos);
-        vmsg("關閉完成");
+        vmsg_xo(xo, "關閉完成");
     }
     return XO_HEAD;
 }
@@ -794,14 +794,14 @@ int pos)
         return XO_NONE;
 
     if (!(nbrd->mode & NBRD_OK))
-        vmsg("尚未連署完畢，不能開版！");
+        vmsg_xo(xo, "尚未連署完畢，不能開版！");
     else if (nbrd->mode & NBRD_OPEN)
-        vmsg("已完成開版！");
+        vmsg_xo(xo, "已完成開版！");
     else
     {
         nbrd->mode = NBRD_OPEN | (nbrd->mode & NBRD_MASK);
         rec_put(xo->dir, nbrd, sizeof(NBRD), pos);
-        vmsg("開版完成");
+        vmsg_xo(xo, "開版完成");
     }
     return XO_HEAD;
 }
@@ -910,7 +910,7 @@ int pos)
 
         rec_add(xfolder, &xpost, sizeof(xpost));
 
-        vmsg("轉錄完成");
+        vmsg_xo(xo, "轉錄完成");
     }
     return XO_HEAD;
 

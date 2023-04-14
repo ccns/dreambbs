@@ -1925,11 +1925,11 @@ domenu_exec(
 
 #ifdef  HAVE_CHANGE_SKIN
                 case XZ_SKIN + XO_NONE:
-                    vmsg("DEBUG:SKIN");
-                    vmsg("123");
+                    vmsg_xo(xo, "DEBUG:SKIN");
+                    vmsg_xo(xo, "123");
                     //(*s_menu)();
                     return XO_QUIT;
-                    vmsg("1234");
+                    vmsg_xo(xo, "1234");
                     break;
 #endif
                 }

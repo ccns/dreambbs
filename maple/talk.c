@@ -818,7 +818,7 @@ pal_add(
 
     if (xo->max >= PAL_MAX)
     {
-        vmsg("您的好友名單太多，請善加整理");
+        vmsg_xo(xo, "您的好友名單太多，請善加整理");
         return XO_FOOT;
     }
 
@@ -831,12 +831,12 @@ pal_add(
     if ((xo->dir[0] == 'u') && (is_pal(userno) || is_bad(userno)))
                 /* lkchu.981201: 只有在 moderator board 才可重覆加入 */
     {
-        vmsg("名單中已有此好友");
+        vmsg_xo(xo, "名單中已有此好友");
         return XO_FOOT;
     }
     else if (userno == cuser.userno)      /* lkchu.981201: 好友名單不可加自己 */
     {
-        vmsg("自己不須加入好友名單中");
+        vmsg_xo(xo, "自己不須加入好友名單中");
         return XO_FOOT;
     }
 #endif
@@ -1223,7 +1223,7 @@ bmw_write(
 #ifdef  HAVE_SHOWNUMMSG
                 if (up->num_msg > 9 && (up->ufo & UFO_MAXMSG) && !HAS_PERM(PERM_SYSOP))
                 {
-                    vmsg("對方已經被水球灌爆了!!");
+                    vmsg_xo(xo, "對方已經被水球灌爆了!!");
                     return XO_INIT;
                 }
 #endif
@@ -1234,7 +1234,7 @@ bmw_write(
 #ifdef  HAVE_BANMSG
         else if (up && !(up->ufo & UFO_MESSAGE) && can_banmsg(up))
         {
-            vmsg("對方不想聽到您的聲音!!");
+            vmsg_xo(xo, "對方不想聽到您的聲音!!");
             return XO_INIT;
         }
 #endif
@@ -3573,7 +3573,7 @@ ulist_makepal(
             }
             else
             {
-                vmsg("您的好友名單太多，請善加整理");
+                vmsg_xo(xo, "您的好友名單太多，請善加整理");
             }
         }
     }
@@ -3613,7 +3613,7 @@ ulist_makebad(
                 return XO_INIT;
             }
             else
-                vmsg("您的好友名單太多，請善加整理");
+                vmsg_xo(xo, "您的好友名單太多，請善加整理");
         }
     }
     return XO_NONE;
@@ -3640,7 +3640,7 @@ ulist_mail(
         return XO_INIT;
     }
 
-    vmsg(MSG_USR_LEFT);
+    vmsg_xo(xo, MSG_USR_LEFT);
     return XO_FOOT;
 }
 
@@ -3747,7 +3747,7 @@ ulist_write(
 #ifdef  HAVE_SHOWNUMMSG
             if (up->num_msg > 9 && (up->ufo & UFO_MAXMSG) && !HAS_PERM(PERM_SYSOP))
             {
-                vmsg("對方已經被水球灌爆了!!");
+                vmsg_xo(xo, "對方已經被水球灌爆了!!");
                 return XO_INIT;
             }
 #endif
@@ -3758,7 +3758,7 @@ ulist_write(
 #ifdef  HAVE_BANMSG
         else if (!(up->ufo & UFO_MESSAGE) && can_banmsg(up))
         {
-            vmsg("對方不想聽到您的聲音!!");
+            vmsg_xo(xo, "對方不想聽到您的聲音!!");
         }
 #endif
         return XO_INIT;
@@ -4030,7 +4030,7 @@ ulist_readmail(
     if (cuser.userlevel)
     {
         if (HAS_PERM(PERM_DENYMAIL))
-            vmsg("您的信箱被鎖了！");
+            vmsg_xo(xo, "您的信箱被鎖了！");
         else
             xover(XZ_MBOX);
         return XO_INIT;
@@ -4138,7 +4138,7 @@ ulist_state(
     if (!HAS_PERM(PERM_SYSOP))
         return XO_NONE;
     sprintf(buf, "PID : %d", ulist_pool[pos].utmp->pid);
-    vmsg(buf);
+    vmsg_xo(xo, buf);
     return XO_INIT;
 }
 #endif  /* #if 1 */
@@ -4153,7 +4153,7 @@ ulist_april1(
     sprintf(buf, "您是第 %d 個被騙的使用者 ^^y ", ushm->avgload);
     if (!aprilfirst)
         ushm->avgload++;
-    vmsg(buf);
+    vmsg_xo(xo, buf);
     aprilfirst = 1;
     return XO_INIT;
 }
@@ -4765,7 +4765,7 @@ banmsg_add(
 
     if (xo->max >= BANMSG_MAX)
     {
-        vmsg("您的拒收訊息名單太多，請善加整理");
+        vmsg_xo(xo, "您的拒收訊息名單太多，請善加整理");
         return XO_FOOT;
     }
 
@@ -4774,12 +4774,12 @@ banmsg_add(
 #if 1                           /* Thor.0709: 不重覆加入 */
     if ((xo->dir[0] == 'u') && is_banmsg(userno))
     {
-        vmsg("名單中已有此人");
+        vmsg_xo(xo, "名單中已有此人");
         return XO_FOOT;
     }
     else if (userno == cuser.userno)
     {
-        vmsg("自己不須加入拒收訊息名單中");
+        vmsg_xo(xo, "自己不須加入拒收訊息名單中");
         return XO_FOOT;
     }
 #endif

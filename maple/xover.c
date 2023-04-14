@@ -702,7 +702,7 @@ xo_forward(
 /*
     if ((hdr->xmode & POST_LOCK) && !HAS_PERM(PERM_SYSOP))
     {
-        vmsg("Access Deny!");
+        vmsg_xo(xo, "Access Deny!");
         return XO_FOOT;
     }
 */
@@ -752,7 +752,7 @@ xo_forward(
 
             if (mail_stat(CHK_MAIL_NOMSG))
             {
-                vmsg("你的信箱容量超過上限，無法使用本功\能！");
+                vmsg_xo(xo, "你的信箱容量超過上限，無法使用本功\能！");
                 chk_mailstat = 1;
                 return XO_FOOT;
             }
@@ -1492,7 +1492,7 @@ xover(
 
     if (xo_user_level >= MAX_LEVEL)
     {
-        vmsg("已經超過最大層數，有問題請通知 root ！");
+        vmsg_xo(xo, "已經超過最大層數，有問題請通知 root ！");
         return;
     }
 
@@ -1980,7 +1980,7 @@ xover_key(
 #endif
             if (mail_stat(CHK_MAIL_VALID))
             {
-                vmsg("你的信箱容量超過上限，請整理！");
+                vmsg_xo(xo, "你的信箱容量超過上限，請整理！");
                 chk_mailstat = 1;
                 return XO_FOOT;
             }
@@ -2148,7 +2148,7 @@ xover_key(
                 mgp = DL_NAME_GET("mailgem.so", mailgem_gather);
                 if (!mgp)
                 {
-                    vmsg("動態連結失敗，請聯絡系統管理員！");
+                    vmsg_xo(xo, "動態連結失敗，請聯絡系統管理員！");
                     return XO_FOOT;
                 }
             }
@@ -2378,7 +2378,7 @@ every_Z(XO *xo)
  {
     if (mail_stat(CHK_MAIL_VALID))
     {
-        vmsg("您的信箱已超出容量，無法使用本功\能，請清理您的信箱！");
+        vmsg_xo(xo, "您的信箱已超出容量，無法使用本功\能，請清理您的信箱！");
         return;
     }
     else
@@ -2393,7 +2393,7 @@ every_Z(XO *xo)
     if (xo_stack_level < XO_STACK) {
         xo_stack_level++;
     } else {
-        vmsg("已達到堆疊空間上限！");
+        vmsg_xo(xo, "已達到堆疊空間上限！");
         return;
     }
 

@@ -492,13 +492,13 @@ personal_open(
 
     if (brd_bno(personal->brdname) >= 0)
     {
-        vmsg("狾筽");
+        vmsg_xo(xo, "狾筽");
         return XO_FOOT;
     }
 
     if (bshm->number >= MAXBOARD)
     {
-        vmsg("禬筁╰参┮甧计叫秸俱╰参把计");
+        vmsg_xo(xo, "禬筁╰参┮甧计叫秸俱╰参把计");
         return XO_FOOT;
     }
 
@@ -525,7 +525,7 @@ personal_open(
     }
     else if (rec_add(FN_BRD, &newboard, sizeof(newboard)) < 0)
     {
-        vmsg("礚猭ミ穝狾");
+        vmsg_xo(xo, "礚猭ミ穝狾");
         return XO_FOOT;
     }
 
@@ -567,7 +567,7 @@ personal_open(
 
     personal_log(personal, 1);
 
-    vmsg("穝狾Θミ");
+    vmsg_xo(xo, "穝狾Θミ");
 
     return XO_FOOT;
 }

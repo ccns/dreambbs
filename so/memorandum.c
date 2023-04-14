@@ -177,7 +177,7 @@ XO *xo)
 {
     MEMORANDUM memorandum;
     if (xo->max >= MAX_MEMORANDUM)
-        vmsg("你的備忘錄已到達上限!!");
+        vmsg_xo(xo, "你的備忘錄已到達上限!!");
     else if (memorandum_edit(&memorandum, DOECHO))
     {
         rec_add(xo->dir, &memorandum, sizeof(MEMORANDUM));

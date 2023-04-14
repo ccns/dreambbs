@@ -168,7 +168,7 @@ XO *xo)
 
     if (xo->max >= PAL_MAX)
     {
-        vmsg("您的群組名單太多，請善加整理");
+        vmsg_xo(xo, "您的群組名單太多，請善加整理");
         return XO_FOOT;
     }
 
@@ -188,7 +188,7 @@ XO *xo)
 
         if (have_it(&acct, xo->dir))
         {
-            vmsg("群組名單中已有此人");
+            vmsg_xo(xo, "群組名單中已有此人");
             return XO_FOOT;
         }
     }

@@ -194,7 +194,7 @@ XO *xo)
 {
     if (xo->max >= MAXOBSERVELIST)
     {
-        vmsg("您的好友名單太多，請善加整理");
+        vmsg_xo(xo, "您的好友名單太多，請善加整理");
         return XO_FOOT;
     }
     else
