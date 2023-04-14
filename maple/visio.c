@@ -1450,8 +1450,14 @@ vmsg_body(
     }
 }
 
+int vmsg(const char *msg)
+{
+    return vmsg_xo(NULL, msg);
+}
+
 int
-vmsg(
+vmsg_xo(
+    XO *xo,
     const char *msg)             /* length <= 54 */
 {
     int b_lines_prev = b_lines;
@@ -1464,6 +1470,7 @@ vmsg(
         move(b_lines_prev, 0);
         clrtoeol();
         b_lines_prev = b_lines;
+        xover_resize(xo);
     }
     return res_key;
 }

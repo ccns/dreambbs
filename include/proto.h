@@ -277,6 +277,7 @@ void cursor_save(void);
 void cursor_restore(void);
 void vmsg_body(const char *msg);
 int vmsg(const char *msg);
+int vmsg_xo(XO *xo, const char *msg);
 void zmsg(const char *msg);
 void vs_bar(const char *title);
 GCC_NONNULLS unsigned int cursor_get_state(int cur[XO_NCUR], int pos);
