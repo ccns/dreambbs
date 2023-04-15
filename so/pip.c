@@ -5998,11 +5998,151 @@ static int pip_query(void)  /*拜訪小雞*/
     return 0;
 }
 
+enum stat_danger {
+    SD_DEATH = -1,
+    SD_CRIT = 31,
+    SD_WARN = 33,
+    SD_SAFE = 37,
+};
+
+struct stat_grade {
+    const char *msg;
+    int points;
+    enum stat_danger color;
+};
+
+static const struct stat_grade pip_stat_shit[] =
+{
+    {"\x1b[1;31m臭死了..\x1b[m",             100, SD_DEATH},
+    {"\x1b[1;34m快臭死了..\x1b[m",            80, SD_CRIT},
+    {"好臭喔..",                              60, SD_WARN},
+    {"臭臭的..",                              41, SD_SAFE},
+    {"",                                       1, SD_SAFE},
+    {"很乾淨..",                         INT_MIN, SD_SAFE},
+},
+    pip_stat_hp[] = //            hp / maxhp (%)
+{
+    {"\x1b[1;34m快撐死了..\x1b[m",           100, SD_SAFE},
+    {"嗯～肚子飽飽有體力..",                  80, SD_SAFE},
+    {"",                                      40, SD_SAFE},
+    {"體力不太夠..想吃點東西..",              20, SD_WARN},
+    {"\x1b[1;35m全身無力中.快餓死了.\x1b[m",   1, SD_CRIT},
+    {"餓死了..",                         INT_MIN, SD_DEATH},
+},
+    pip_stat_tired[] =
+{
+    {"累死了...",                            100, SD_DEATH},
+    {"\x1b[1;31m好累喔，快不行了..\x1b[m",    80, SD_CRIT},
+    {"\x1b[1;34m有點小累..\x1b[m",            60, SD_WARN},
+    {"",                                      20, SD_SAFE},
+    {"精神抖擻中..",                     INT_MIN, SD_SAFE},
+},
+    pip_stat_weight[] = //   weight - weight_std
+{
+    {"胖死了...",                             50, SD_DEATH},
+    {"太胖了..",                              30, SD_CRIT},
+    {"有點小胖..",                            10, SD_WARN},
+    {"",                                      -9, SD_SAFE},
+    {"有點小瘦..",                           -29, SD_WARN},
+    {"太瘦了..",                             -49, SD_CRIT},
+    {"瘦死了..",                         INT_MIN, SD_DEATH},
+},
+    pip_stat_sick[] =
+{
+    {"病死了.!.",                            100, SD_DEATH},
+    {"\x1b[1;31m病重!!..\x1b[m",              75, SD_CRIT},
+    {"\x1b[1;34m生病了..\x1b[m",              50, SD_WARN},
+    {"",                                 INT_MIN, SD_SAFE},
+},
+    pip_stat_happy[] =
+{
+    {"很快樂..",                              95, SD_SAFE},
+    {"快樂..",                                80, SD_SAFE},
+    {"",                                      40, SD_SAFE},
+    {"不快樂..",                              20, SD_WARN},
+    {"\x1b[1;31m很不快樂..\x1b[m",       INT_MIN, SD_CRIT},
+},
+    pip_stat_satisfy[] =
+{
+    {"很滿足..",                              95, SD_SAFE},
+    {"滿足..",                                80, SD_SAFE},
+    {"",                                      40, SD_SAFE},
+    {"",                                      20, SD_WARN},
+    {"\x1b[ck.3;1m不滿足..\x1b[m",       INT_MIN, SD_CRIT},
+};
+
+enum pip_stat {
+    STAT_SHIT,
+    STAT_HP,
+    STAT_TIRED,
+    STAT_WEIGHT,
+    STAT_SICK,
+    STAT_HAPPY,
+    STAT_SATISFY,
+
+    STAT_COUNT,
+};
+
+static const struct stat_grade *const pip_stat_list[STAT_COUNT] =
+{
+    pip_stat_shit,
+    pip_stat_hp,
+    pip_stat_tired,
+    pip_stat_weight,
+    pip_stat_sick,
+    pip_stat_happy,
+    pip_stat_satisfy,
+};
+
+GCC_NONNULLS
+static int pip_get_stat_points(const struct chicken *pc, enum pip_stat idx_stat)
+{
+    switch (idx_stat)
+    {
+    case STAT_SHIT:
+        return pc->body[BODY_SHIT];
+    case STAT_HP:
+        return pc->body[BODY_HP] * 100 / pc->body[BODY_MAXHP];
+    case STAT_TIRED:
+        return pc->body[BODY_TIRED];
+    case STAT_WEIGHT:
+        {
+            const int age = pc->bbtime / 60 / 30;
+            const int weight_std = 60 + 10 * age;
+            return pc->body[BODY_WEIGHT] - weight_std;
+        }
+    case STAT_SICK:
+        return pc->body[BODY_SICK];
+    case STAT_HAPPY:
+        return pc->state[STATE_HAPPY];
+    case STAT_SATISFY:
+        return pc->state[STATE_SATISFY];
+    default:
+        return -1; // Unreachable
+    }
+}
+
+GCC_NONNULL(2)
+static int pip_judge_stat(const char **pmsg, const struct chicken *pc, enum pip_stat idx_stat)
+{
+    const struct stat_grade *grade = pip_stat_list[idx_stat];
+    const int points = pip_get_stat_points(pc, idx_stat);
+
+    for (; grade->points != INT_MIN; ++grade)
+    {
+        if (points >= grade->points)
+            break;
+    }
+    if (pmsg)
+        *pmsg = grade->msg;
+    return grade->color;
+}
+
 static int
 pip_read(
 const char *userid)
 {
-    int pc1, age = 0;
+    int age = 0;
     struct chicken ck;
 
     if (pip_read_file(&ck, userid))
@@ -6015,6 +6155,7 @@ const char *userid)
 
         if (ck.death == 0)
         {
+            const char *msg = "";
             prints("\x1b[1;32mName：%-10s\x1b[m  生日：%2d年%2d月%2d日   年齡：%2d歲  狀態：%s  錢錢：%d\n"
                    "生命：%3d/%-3d  快樂：%-4d  滿意：%-4d  氣質：%-4d  智慧：%-4d  體重：%-4d\n"
                    "大補丸：%-4d   食物：%-4d  零食：%-4d  疲勞：%-4d  髒髒：%-4d  病氣：%-4d\n",
@@ -6026,54 +6167,12 @@ const char *userid)
             pip_show_age_pic(age, ck.body[BODY_WEIGHT]);
 
             move(b_lines - 5, 0);
-            if (ck.body[BODY_SHIT] <= 0) outs("很乾淨..");
-            else if (ck.body[BODY_SHIT] <= 40) { }
-            else if (ck.body[BODY_SHIT] < 60) outs("臭臭的..");
-            else if (ck.body[BODY_SHIT] < 80) outs("好臭喔..");
-            else if (ck.body[BODY_SHIT] < 100) outs("\x1b[1;34m快臭死了..\x1b[m");
-            else { outs("\x1b[1;31m臭死了..\x1b[m"); return -1; }
-
-            pc1 = ck.body[BODY_HP] * 100 / ck.body[BODY_MAXHP];
-            if (pc1 <= 0) { outs("餓死了.."); return -1; }
-            else if (pc1 < 20) outs("\x1b[1;35m全身無力中.快餓死了.\x1b[m");
-            else if (pc1 < 40) outs("體力不太夠..想吃點東西..");
-            else if (pc1 < 80) { }
-            else if (pc1 < 100) outs("嗯～肚子飽飽有體力..");
-            else outs("\x1b[1;34m快撐死了..\x1b[m");
-
-            pc1 = ck.body[BODY_TIRED];
-            if (pc1 < 20) outs("精神抖擻中..");
-            else if (pc1 < 60) { }
-            else if (pc1 < 80) outs("\x1b[1;34m有點小累..\x1b[m");
-            else if (pc1 < 100) { outs("\x1b[1;31m好累喔，快不行了..\x1b[m"); }
-            else { outs("累死了..."); return -1; }
-
-            pc1 = 60 + 10 * age;
-            if (ck.body[BODY_WEIGHT] < (pc1 - 50)) { outs("瘦死了.."); return -1; }
-            else if (ck.body[BODY_WEIGHT] <= (pc1 - 30)) outs("太瘦了..");
-            else if (ck.body[BODY_WEIGHT] <= (pc1 - 10)) outs("有點小瘦..");
-            else if (ck.body[BODY_WEIGHT] < (pc1 + 10)) { }
-            else if (ck.body[BODY_WEIGHT] < (pc1 + 30)) outs("有點小胖..");
-            else if (ck.body[BODY_WEIGHT] < (pc1 + 50)) outs("太胖了..");
-            else { outs("胖死了..."); return -1; }
-
-            if (ck.body[BODY_SICK] < 50) { }
-            else if (ck.body[BODY_SICK] < 75) outs("\x1b[1;34m生病了..\x1b[m");
-            else if (ck.body[BODY_SICK] < 100) { outs("\x1b[1;31m病重!!..\x1b[m"); }
-            else { outs("病死了.!."); return -1; }
-
-            pc1 = ck.state[STATE_HAPPY];
-            if (pc1 < 20) outs("\x1b[1;31m很不快樂..\x1b[m");
-            else if (pc1 < 40) outs("不快樂..");
-            else if (pc1 < 80) { }
-            else if (pc1 < 95) outs("快樂..");
-            else outs("很快樂..");
-
-            pc1 = ck.state[STATE_SATISFY];
-            if (pc1 < 40) outs("\x1b[ck.3;1m不滿足..\x1b[m");
-            else if (pc1 < 80) { }
-            else if (pc1 < 95) outs("滿足..");
-            else outs("很滿足..");
+            for (int st = 0; st < STAT_COUNT; ++st)
+            {
+                if (pip_judge_stat(&msg, &ck, st) == SD_DEATH)
+                    return -1;
+                outs(msg);
+            }
         }
         else if (ck.death == 1)
         {
