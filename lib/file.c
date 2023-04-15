@@ -43,8 +43,7 @@ int f_cp(const char *src, const char *dst, int mode    /* O_EXCL / O_APPEND / O_
                 ret = read(fsrc, pool, BLK_SIZ);
                 if (ret <= 0)
                     break;
-            }
-            while (write(fdst, pool, ret) > 0);
+            } while (write(fdst, pool, ret) > 0);
             close(fdst);
         }
         close(fsrc);

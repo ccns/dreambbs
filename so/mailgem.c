@@ -88,8 +88,7 @@ XO *xo)
     do
     {
         mailgem_item(xo, num++);
-    }
-    while (num < max);
+    } while (num < max);
     clrtobot();
 
     return mailgem_foot(xo);
@@ -373,8 +372,7 @@ int pos)
 
         xmode = xo_getch(xo, pos, xmode);
         pos = xo->pos[xo->cur_idx];
-    }
-    while (xmode == XO_BODY);
+    } while (xmode == XO_BODY);
 
     return XO_HEAD;
 }
@@ -451,8 +449,7 @@ const HDR *ghdr)                /* NULL 代表放入 TagList, 否則將傳入的放入 */
         do
         {
             EnumTagHdr(&gbuf[locus], dir, locus);
-        }
-        while (++locus < num);
+        } while (++locus < num);
     }
 
     strcpy(MailGemFolder, dir);
@@ -817,8 +814,7 @@ int pos)
             }
 
         }
-    }
-    while (++locus < tag);
+    } while (++locus < tag);
 
     if (fp)
     {
@@ -952,8 +948,7 @@ int pos)
 
                 success_count++;
             }
-        }
-        while (locus < tag);
+        } while (locus < tag);
 
         if (success_count == 0)
         {
@@ -1320,8 +1315,7 @@ const char *fgem)
             }
         }
 
-    }
-    while (++xsync < xtail);
+    } while (++xsync < xtail);
 
     /* 處理一般檔案 */
 
@@ -1342,8 +1336,7 @@ const char *fgem)
             sprintf(hdr.title, "滄海拾遺 [%s]", str);
             fwrite(&hdr, sizeof(hdr), 1, fpw);
         }
-    }
-    while (++xpool < xtail);
+    } while (++xpool < xtail);
 
     fclose(fpw);
 

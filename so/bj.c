@@ -74,8 +74,7 @@ BlackJack(void)
             money = atoi(buf);
             if (!buf[0]) return DL_RELEASE(0);
             if (money > cuser_money) return DL_RELEASE(0);
-        }
-        while ((money < 1) || (money > 250000));
+        } while ((money < 1) || (money > 250000));
         cuser_money = cuser_money - money;
         clear();
         move(2, 0); prints("(按 y 續牌，n 不續牌，d double)");
@@ -99,8 +98,7 @@ BlackJack(void)
                     cardlist[j] = i;
                     m = 1;
                 }
-            }
-            while (m == 0);
+            } while (m == 0);
         }
 #endif
 
@@ -225,8 +223,7 @@ BlackJack(void)
             {
                 if (ch == 'd')m = 0;
                 if (m != 0) ch = vkey();
-            }
-            while (ch != 'y' && ch != 'n' && ch != 'd' && m != 0); /* 抓 key */
+            } while (ch != 'y' && ch != 'n' && ch != 'd' && m != 0); /* 抓 key */
 
             if (ch == 'd' && m != 0 && guest_count == 2)
             {
@@ -242,8 +239,7 @@ BlackJack(void)
 
             if (ch == 'd' && guest_count > 2)ch = 'n';
             if (guest_point == 21)ch = 'n';
-        }
-        while (ch != 'n' && m != 0);
+        } while (ch != 'n' && m != 0);
         mov_y = 8;
 
         print_card(host_card[0], 5, 0);
@@ -278,8 +274,7 @@ BlackJack(void)
                 host_count++;
                 card_count++;
                 mov_y += 4;
-            }
-            while (host_point < guest_point);
+            } while (host_point < guest_point);
             if (!flag) pressanykey("你輸了~~~~ 金幣沒收!");
         }
     }

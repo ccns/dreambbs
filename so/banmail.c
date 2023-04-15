@@ -69,8 +69,7 @@ static int banmail_body(XO * xo)
     do
     {
         banmail_item(xo, num++);
-    }
-    while (num < max);
+    } while (num < max);
     clrtobot();
 
     return XO_NONE;

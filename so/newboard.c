@@ -167,8 +167,7 @@ XO *xo)
     do
     {
         nbrd_item(xo, num++);
-    }
-    while (num < max);
+    } while (num < max);
 
     clrtobot();
     return XO_NONE;

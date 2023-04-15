@@ -709,8 +709,7 @@ enum pipmenuidx menunum)
                 break;
             }
         }
-    }
-    while (goback == 0);
+    } while (goback == 0);
 
     return 0;
 }
@@ -1461,8 +1460,7 @@ static int pip_basic_feed(void)     /* 餵食*/
             break;
 
         }
-    }
-    while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
+    } while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
 
     return 0;
 }
@@ -1601,8 +1599,7 @@ pip_write_backup(void)
         pipkey = vkey();
 
         num = pipkey - '0';
-    }
-    while (pipkey != 'Q' && pipkey != 'q' && (num < 1 || num > COUNTOF(files)));
+    } while (pipkey != 'Q' && pipkey != 'q' && (num < 1 || num > COUNTOF(files)));
     if (pipkey == 'q' || pipkey == 'Q')
     {
         vmsg("放棄儲存遊戲進度");
@@ -1673,8 +1670,7 @@ pip_read_backup(void)
                 fclose(fs);
             }
         }
-    }
-    while (pipkey != 'Q' && pipkey != 'q' && ok != 1);
+    } while (pipkey != 'Q' && pipkey != 'q' && ok != 1);
     if (pipkey == 'q' || pipkey == 'Q')
     {
         vmsg("還是玩原本的遊戲");
@@ -2137,8 +2133,7 @@ int item_list[])
             vmsg(inbuf);
             break;
         }
-    }
-    while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
+    } while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
     return 0;
 }
 
@@ -2312,8 +2307,7 @@ int item_list[WEAPON_COUNT])
             pip_data_list(cuser.userid);
             break;
         }
-    }
-    while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
+    } while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
 
     return 0;
 }
@@ -3576,8 +3570,7 @@ static int pip_play_guess(void)   /* 猜拳程式 */
             situ();
             break;
         }
-    }
-    while ((pipkey != '1') && (pipkey != '2') && (pipkey != '3') && (pipkey != 'q') && (pipkey != 'Q'));
+    } while ((pipkey != '1') && (pipkey != '2') && (pipkey != '3') && (pipkey != 'q') && (pipkey != 'Q'));
 
     com = random() % 3;
     move(b_lines - 5, 0);
@@ -4536,8 +4529,7 @@ pip_go_palace(void)
         }
         for (int i = 0; i < COUNTOF(d.royal); i++)
             d.royal[i] = save[i];
-    }
-    while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
+    } while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
 
     vmsg("離開" NICKNAME "總司令部.....");
     return 0;
@@ -6669,8 +6661,7 @@ const char *userid)
                 page = 1;
             break;
         }
-    }
-    while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
+    } while ((pipkey != 'Q') && (pipkey != 'q') && (pipkey != KEY_LEFT));
     return 0;
 }
 
@@ -7389,8 +7380,7 @@ int mode)
             outs_centered("            \x1b[1;31m└──────────────────────┘\x1b[m\n");
             vmsg("小雞打輸了....");
         }
-    }
-    while ((pipkey != '6') && (d.death != 1) && (m.death != 1) && (mankey != 8));
+    } while ((pipkey != '6') && (d.death != 1) && (m.death != 1) && (mankey != 8));
     pip_check_level();
     return winorlose;
 }
@@ -7485,8 +7475,7 @@ const UTMP *opt)
             }
 #endif
         }
-    }
-    while ((pipkey != '1') && (pipkey != '2') && (pipkey != '3') && (pipkey != '4') && (pipkey != '5') && (pipkey != '6') && (pipkey != '7') && (pipkey != 'Q') && (pipkey != 'q') && (d.nodone == 0));
+    } while ((pipkey != '1') && (pipkey != '2') && (pipkey != '3') && (pipkey != '4') && (pipkey != '5') && (pipkey != '6') && (pipkey != '7') && (pipkey != 'Q') && (pipkey != 'q') && (d.nodone == 0));
 
     if ((pipkey == 'Q') || (pipkey == 'q'))
     {
@@ -7540,8 +7529,7 @@ const struct magicset *p)
         {
             pipkey = atoi(ans);
         }
-    }
-    while (ans[0] != 'q' && ans[0] != 'Q' && (pipkey > n || pipkey <= 0));
+    } while (ans[0] != 'q' && ans[0] != 'Q' && (pipkey > n || pipkey <= 0));
 
     if (ans[0] != 'q' && ans[0] != 'Q')
     {
@@ -7632,8 +7620,7 @@ const UTMP *opt)
         {
             pipkey = atoi(ans);
         }
-    }
-    while (ans[0] != 'q' && ans[0] != 'Q' && (pipkey > n || pipkey <= 0));
+    } while (ans[0] != 'q' && ans[0] != 'Q' && (pipkey > n || pipkey <= 0));
 
     if (ans[0] != 'q' && ans[0] != 'Q')
     {
@@ -7683,8 +7670,7 @@ pip_marriage_offer(void)
     do
     {
         who = random() % COUNTOF(name);
-    }
-    while (d.lover == (who + 3));
+    } while (d.lover == (who + 3));
 
     money = random() % 2000 + random() % 3000 + 4000;
     sprintf(buf, "%s帶來了金錢%d，要向你的小雞求婚，您願意嗎？[y/N]: ", name[who][d.sex != 1], money);
@@ -7749,8 +7735,7 @@ static int pip_results_show(void)  /*收穫季*/
     do
     {
         pipkey = vkey();
-    }
-    while (pipkey != 'q' && pipkey != 'Q' && pipkey != 'A' && pipkey != 'a' &&
+    } while (pipkey != 'q' && pipkey != 'Q' && pipkey != 'A' && pipkey != 'a' &&
            pipkey != 'B' && pipkey != 'b' && pipkey != 'C' && pipkey != 'c' &&
            pipkey != 'D' && pipkey != 'd');
     a = random() % 4 + 1;
@@ -8376,8 +8361,7 @@ case 'Q': case 'q': case KEY_LEFT:
             pipkey = '7';
             break;
         }
-    }
-    while (pipkey > '7' || pipkey < '0');
+    } while (pipkey > '7' || pipkey < '0');
 
     return 0;
 }

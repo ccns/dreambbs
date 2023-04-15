@@ -58,8 +58,7 @@ new_passwd(void)
                     Email[14] = (random() % 10) + '0';
                     Email[15] = '\0';
                     fd = open(Email, O_WRONLY | O_CREAT | O_EXCL, 0600);
-                }
-                while (fd < 0);
+                } while (fd < 0);
                 fp = fdopen(fd, "w");
                 fprintf(fp, BOARDNAME "ID : %s\n\n", acct.userid);
                 fprintf(fp, BOARDNAME "·s±K½X : %s\n", passwd);

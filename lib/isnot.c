@@ -26,8 +26,7 @@ GCC_PURE bool is_fname(const char *str)
     {
         if (!is_alnum(ch) && !strchr("-._/+@", ch))
             return false;
-    }
-    while ((ch = *++str));
+    } while ((ch = *++str));
     return true;
 }
 

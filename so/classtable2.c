@@ -280,8 +280,7 @@ int main_classtable(void)
                 add_classtable(x, y);
             break;
         }
-    }
-    while (c != 'q');
+    } while (c != 'q');
 
     fd = open(fpath_classtable, O_WRONLY | O_CREAT | O_TRUNC, 0600);
     if (fd >= 0)

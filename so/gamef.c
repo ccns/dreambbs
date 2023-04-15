@@ -46,8 +46,7 @@ pressanykey(const char *fmt, ...)
     do
     {
         ch = vkey();
-    }
-    while ((ch != ' ') && (ch != KEY_LEFT) && (ch != '\r') && (ch != '\n'));
+    } while ((ch != ' ') && (ch != KEY_LEFT) && (ch != '\r') && (ch != '\n'));
 
     move(b_lines, 0);
     clrtoeol();

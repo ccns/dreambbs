@@ -142,8 +142,7 @@ mail_to_bm(void)
             else
                 break;
         }
-    }
-    while (++head < tail);
+    } while (++head < tail);
     strcpy(ve_title, "[板主通告]");
     title = ve_title;
     vget(1, 0, "◎ 主 題：", title, 60, GCARRY);
@@ -420,8 +419,7 @@ bm_check(void)
                 break;
         }
         head->BM[0] = '\0';
-    }
-    while (++head < tail);
+    } while (++head < tail);
 
     fd = open(fpath, O_WRONLY | O_CREAT | O_TRUNC, 0600);
     ptr = bm;
@@ -445,8 +443,7 @@ bm_check(void)
         {
             write(fd, ptr, sizeof(BM));
         }
-    }
-    while (*(++ptr)->id);
+    } while (*(++ptr)->id);
 
     close(fd);
     free(bm);

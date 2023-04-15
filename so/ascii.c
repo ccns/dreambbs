@@ -71,8 +71,7 @@ input_tools(void)
         strcpy(buf + 13, msg[(ch != 'p')]);
         outz(buf);
         ch = vkey();
-    }
-    while (ch == 'p' || ch == 'n');
+    } while (ch == 'p' || ch == 'n');
 
     if (ch < '1' || ch > '6')
     {

@@ -120,8 +120,7 @@ XO *xo)
     do
     {
         memorandum_item(xo, num++);
-    }
-    while (num < max);
+    } while (num < max);
 
     return XO_NONE;
 }

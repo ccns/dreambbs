@@ -41,8 +41,7 @@ int userno)
             return;
 #endif
         }
-    }
-    while (++utmp <= uceil);
+    } while (++utmp <= uceil);
 }
 
 static void
@@ -139,8 +138,7 @@ do_pnote(const char *userid)
             return;
         }
         myitem.mode = 0;
-    }
-    while (buf[0] == 'e');
+    } while (buf[0] == 'e');
 
     utmp_mode(M_XMODE);
     strcpy(myitem.userid, cuser.userid);

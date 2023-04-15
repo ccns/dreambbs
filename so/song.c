@@ -196,8 +196,7 @@ XO *xo)
     do
     {
         song_item(xo, num++);
-    }
-    while (num < max);
+    } while (num < max);
     clrtobot();
 
     return song_foot(xo);
@@ -290,8 +289,7 @@ int pos)
 
         xmode = xo_getch(xo, pos, xmode);
         pos = xo->pos[xo->cur_idx];
-    }
-    while (xmode == XO_BODY);
+    } while (xmode == XO_BODY);
 
     if (op != GEM_READ)
         return XO_HEAD;

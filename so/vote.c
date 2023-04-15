@@ -137,8 +137,7 @@ XO *xo)
     do
     {
         vote_item(xo, num++);
-    }
-    while (num < max);
+    } while (num < max);
     clrtobot();
 
     return XO_NONE;
@@ -714,8 +713,7 @@ int pos)
                 bollt++;
             }
         }
-    }
-    while (head < tail);
+    } while (head < tail);
 
     free(list);
 

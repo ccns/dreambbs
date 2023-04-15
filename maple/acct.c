@@ -324,8 +324,7 @@ static void bm_list(            /* 顯示 userid 是哪些板的板主 */
                 outc(' ');
             }
         }
-    }
-    while (++bhdr < tail);
+    } while (++bhdr < tail);
 
     outc('\n');
 }
@@ -843,24 +842,21 @@ void acct_setup(ACCT * u, int adm)
     do
     {
         vget(i, 0, "暱    稱：", str, sizeof(x.username), GCARRY);
-    }
-    while (str_len_nospace(str) < 1);
+    } while (str_len_nospace(str) < 1);
 
     i++;
     str = x.realname;
     do
     {
         vget(i, 0, "真實姓名：", str, sizeof(x.realname), GCARRY);
-    }
-    while (str_len_nospace(str) < 4);
+    } while (str_len_nospace(str) < 4);
 
     i++;
     str = x.address;
     do
     {
         vget(i, 0, "居住地址：", str, sizeof(x.address), GCARRY);
-    }
-    while (str_len_nospace(str) < 8);
+    } while (str_len_nospace(str) < 8);
 
     if (adm)
     {
@@ -1483,8 +1479,7 @@ int u_lock(void)
                 sprintf(temp, "[%s] BBS %s\n", Ctime(&ap_start), fromhost);
                 f_cat(fpath, temp);
             }
-        }
-        while (check);
+        } while (check);
         bbstate ^= STAT_LOCK;
     }
     else
@@ -2138,8 +2133,7 @@ static int scan_register_form(int fd)
             do
             {
                 rec_add(FN_RFORM, &rform, sizeof(RFORM));
-            }
-            while (read(fd, &rform, sizeof(RFORM)) == sizeof(RFORM));
+            } while (read(fd, &rform, sizeof(RFORM)) == sizeof(RFORM));
 
         case 'd':
             break;
@@ -2293,8 +2287,7 @@ static int ans_request(void)
                 do
                 {
                     rec_add(FN_RFORM_R, &form, sizeof(RFORM_R));
-                }
-                while (read(fd, &form, sizeof(RFORM_R)) == sizeof(RFORM_R));
+                } while (read(fd, &form, sizeof(RFORM_R)) == sizeof(RFORM_R));
                 break;
             default:
                 rec_add(FN_RFORM_R, &form, sizeof(RFORM_R));
