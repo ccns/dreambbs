@@ -5038,6 +5038,17 @@ static int pip_max_worktime(int *num);
 /*  結局參數設定                                                            */
 /*--------------------------------------------------------------------------*/
 
+#define JUDGE_WORST(_x, _y) BMAX(_x, _y)
+
+static int pip_judge(int points, int pt_great, int pt_ok)
+{
+    if (points >= pt_great)
+        return 0;
+    if (points >= pt_ok)
+        return 1;
+    return 2;
+}
+
 static int /*結局畫面*/
 pip_ending_screen(void)
 {
@@ -5299,75 +5310,42 @@ int *m, int *n, int *grade)
     if (d.state[STATE_OFFENSE] >= 500 && d.tmp[TMP_MEXP] >= 500) /*魔王*/
     {
         *m = 0;
-        if (d.tmp[TMP_MEXP] >= 1000)
-            *n = 0;
-        else if (d.tmp[TMP_MEXP] < 1000 && d.tmp[TMP_MEXP] >= 800)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.tmp[TMP_MEXP], 1000, 800);
     }
 
     else if (d.tmp[TMP_HEXP] >= 600)  /*流氓*/
     {
         *m = 1;
-        if (d.learn[LEARN_WISDOM] >= 350)
-            *n = 0;
-        else if (d.learn[LEARN_WISDOM] < 350 && d.learn[LEARN_WISDOM] >= 300)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.learn[LEARN_WISDOM], 350, 300);
     }
     else if (d.learn[LEARN_SPEECH] >= 100 && d.learn[LEARN_ART] >= 80) /*SM*/
     {
         *m = 2;
-        if (d.learn[LEARN_SPEECH] > 150 && d.learn[LEARN_ART] >= 120)
-            *n = 0;
-        else if (d.learn[LEARN_SPEECH] > 120 && d.learn[LEARN_ART] >= 100)
-            *n = 1;
-        else
-            *n = 2;
+        *n = JUDGE_WORST(
+            pip_judge(d.learn[LEARN_SPEECH], 151, 121),
+            pip_judge(d.learn[LEARN_ART], 120, 100));
     }
     else if (d.tmp[TMP_HEXP] >= 320 && d.learn[LEARN_CHARACTER] > 200 && d.learn[LEARN_CHARM] < 200)       /*黑街老大*/
     {
         *m = 3;
-        if (d.tmp[TMP_HEXP] >= 400)
-            *n = 0;
-        else if (d.tmp[TMP_HEXP] < 400 && d.tmp[TMP_HEXP] >= 360)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.tmp[TMP_HEXP], 400, 360);
     }
     else if (d.learn[LEARN_CHARACTER] >= 200 && d.learn[LEARN_CHARM] >= 200 && d.learn[LEARN_SPEECH] > 70 && d.learn[LEARN_TOMAN] > 70)  /*高級娼婦*/
     {
         *m = 4;
-        if (d.learn[LEARN_CHARM] >= 300)
-            *n = 0;
-        else if (d.learn[LEARN_CHARM] < 300 && d.learn[LEARN_CHARM] >= 250)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.learn[LEARN_CHARM], 300, 250);
     }
 
     else if (d.learn[LEARN_WISDOM] >= 450)  /*詐騙師*/
     {
         *m = 5;
-        if (d.learn[LEARN_WISDOM] >= 550)
-            *n = 0;
-        else if (d.learn[LEARN_WISDOM] < 550 && d.learn[LEARN_WISDOM] >= 500)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.learn[LEARN_WISDOM], 550, 500);
     }
 
     else /*流鶯*/
     {
         *m = 6;
-        if (d.learn[LEARN_CHARM] >= 350)
-            *n = 0;
-        else if (d.learn[LEARN_CHARM] < 350 && d.learn[LEARN_CHARM] >= 300)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.learn[LEARN_CHARM], 350, 300);
     }
     if (d.sex == 1)
         strcpy(buf, endmodeblack[*m].boy);
@@ -5397,35 +5375,20 @@ int *m, int *n, int *grade)
         {
             *m = 0;
             d.lover = 10;
-            if (d.learn[LEARN_CHARACTER] >= 700)
-                *n = 0;
-            else if (d.learn[LEARN_CHARACTER] >= 500)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_CHARACTER], 700, 500);
         }
         else
         {
             *m = 1;
             d.lover = 10;
-            if (d.learn[LEARN_CHARACTER] >= 700)
-                *n = 0;
-            else if (d.learn[LEARN_CHARACTER] >= 500)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_CHARACTER], 700, 500);
         }
         break;
 
     case 1:
         *m = 0;
         d.lover = 10;
-        if (d.learn[LEARN_CHARACTER] >= 700)
-            *n = 0;
-        else if (d.learn[LEARN_CHARACTER] >= 500)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.learn[LEARN_CHARACTER], 700, 500);
         break;
 
     case 2:
@@ -5433,23 +5396,13 @@ int *m, int *n, int *grade)
         {
             *m = 2;
             d.lover = 10;
-            if (d.learn[LEARN_TOMAN] >= 250)
-                *n = 0;
-            else if (d.learn[LEARN_TOMAN] >= 200)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_TOMAN], 250, 200);
         }
         else
         {
             *m = 3;
             d.lover = 10;
-            if (d.learn[LEARN_CHARACTER] >= 400)
-                *n = 0;
-            else if (d.learn[LEARN_CHARACTER] >= 300)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_CHARACTER], 400, 300);
         }
         break;
 
@@ -5458,35 +5411,24 @@ int *m, int *n, int *grade)
         {
             *m = 4;
             d.lover = 10;
-            if (d.learn[LEARN_TOMAN] > 120 && d.learn[LEARN_COOKSKILL] > 300 && d.learn[LEARN_HOMEWORK] > 300)
-                *n = 0;
-            else if (d.learn[LEARN_TOMAN] > 100 && d.learn[LEARN_COOKSKILL] > 250 && d.learn[LEARN_HOMEWORK] > 250)
-                *n = 1;
-            else
-                *n = 2;
+            *n = JUDGE_WORST(
+                pip_judge(d.learn[LEARN_TOMAN], 121, 101),
+                JUDGE_WORST(
+                    pip_judge(d.learn[LEARN_COOKSKILL], 301, 251),
+                    pip_judge(d.learn[LEARN_HOMEWORK], 301, 251)));
         }
         else
         {
             *m = 5;
             d.lover = 10;
-            if (d.body[BODY_HP] >= 400)
-                *n = 0;
-            else if (d.body[BODY_HP] >= 300)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.body[BODY_HP], 400, 300);
         }
         break;
 
     case 4:
         *m = 6;
         d.lover = 10;
-        if (d.learn[LEARN_CHARM] >= 200)
-            *n = 0;
-        else if (d.learn[LEARN_CHARM] >= 100)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.learn[LEARN_CHARM], 200, 100);
         break;
     }
     if (d.sex == 1)
@@ -5515,32 +5457,17 @@ int *m, int *n, int *grade)
         if (d.state[STATE_AFFECT] > d.learn[LEARN_WISDOM] && d.state[STATE_AFFECT] > d.state[STATE_BELIEF] && d.learn[LEARN_ETHICS] > 100)
         {
             *m = 0;
-            if (d.learn[LEARN_ETHICS] >= 800)
-                *n = 0;
-            else if (d.learn[LEARN_ETHICS] >= 400)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_ETHICS], 800, 400);
         }
         else if (d.learn[LEARN_ETHICS] < 50)
         {
             *m = 3;
-            if (d.body[BODY_HP] >= 400)
-                *n = 0;
-            else if (d.body[BODY_HP] >= 200)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.body[BODY_HP], 400, 200);
         }
         else
         {
             *m = 1;
-            if (d.learn[LEARN_WISDOM] >= 800)
-                *n = 0;
-            else if (d.learn[LEARN_WISDOM] >= 400)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_WISDOM], 800, 400);
         }
         break;
 
@@ -5548,65 +5475,35 @@ int *m, int *n, int *grade)
         if (d.learn[LEARN_ETHICS] >= 50)
         {
             *m = 2;
-            if (d.learn[LEARN_WISDOM] >= 500)
-                *n = 0;
-            else if (d.learn[LEARN_WISDOM] >= 200)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_WISDOM], 500, 200);
         }
         else
         {
             *m = 3;
-            if (d.body[BODY_HP] >= 400)
-                *n = 0;
-            else if (d.body[BODY_HP] >= 200)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.body[BODY_HP], 400, 200);
         }
         break;
 
     case 2:
         *m = 4;
-        if (d.fight[FIGHT_MSKILL] >= 300)
-            *n = 0;
-        else if (d.fight[FIGHT_MSKILL] >= 150)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.fight[FIGHT_MSKILL], 300, 150);
         break;
 
     case 3:
         *m = 5;
-        if (d.learn[LEARN_SPEECH] >= 150)
-            *n = 0;
-        else if (d.learn[LEARN_SPEECH] >= 60)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.learn[LEARN_SPEECH], 150, 60);
         break;
 
     case 4:
         if (d.learn[LEARN_CHARACTER] >= 200)
         {
             *m = 6;
-            if (d.learn[LEARN_SPEECH] >= 150)
-                *n = 0;
-            else if (d.learn[LEARN_SPEECH] >= 60)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_SPEECH], 150, 60);
         }
         else
         {
             *m = 7;
-            if (d.learn[LEARN_SPEECH] >= 150)
-                *n = 0;
-            else if (d.learn[LEARN_SPEECH] >= 60)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_SPEECH], 150, 60);
         }
         break;
 
@@ -5637,32 +5534,17 @@ int *m, int *n, int *grade)
         if (d.state[STATE_AFFECT] > d.learn[LEARN_WISDOM] && d.state[STATE_AFFECT] > d.state[STATE_BELIEF] && d.learn[LEARN_ETHICS] > 100)
         {
             *m = 0;
-            if (d.learn[LEARN_ETHICS] >= 800)
-                *n = 0;
-            else if (d.learn[LEARN_ETHICS] >= 400)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_ETHICS], 800, 400);
         }
         else if (d.learn[LEARN_ETHICS] < 50)
         {
             *m = 3;
-            if (d.body[BODY_HP] >= 400)
-                *n = 0;
-            else if (d.body[BODY_HP] >= 200)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.body[BODY_HP], 400, 200);
         }
         else
         {
             *m = 1;
-            if (d.learn[LEARN_WISDOM] >= 800)
-                *n = 0;
-            else if (d.learn[LEARN_WISDOM] >= 400)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_WISDOM], 800, 400);
         }
         break;
 
@@ -5670,32 +5552,19 @@ int *m, int *n, int *grade)
         if (d.learn[LEARN_CHARACTER] >= 300 && d.learn[LEARN_ETHICS] > 50)
         {
             *m = 2;
-            if (d.learn[LEARN_ETHICS] >= 300 && d.learn[LEARN_CHARM] >= 300)
-                *n = 0;
-            else if (d.learn[LEARN_ETHICS] >= 250 && d.learn[LEARN_CHARM] >= 250)
-                *n = 1;
-            else
-                *n = 2;
+            *n = JUDGE_WORST(
+                pip_judge(d.learn[LEARN_ETHICS], 300, 250),
+                pip_judge(d.learn[LEARN_CHARM], 300, 250));
         }
         else if (d.learn[LEARN_ETHICS] > 50)
         {
             *m = 3;
-            if (d.learn[LEARN_SPEECH] >= 200)
-                *n = 0;
-            else if (d.learn[LEARN_SPEECH] >= 80)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_SPEECH], 200, 80);
         }
         else
         {
             *m = 6;
-            if (d.body[BODY_HP] >= 400)
-                *n = 0;
-            else if (d.body[BODY_HP] >= 200)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.body[BODY_HP], 400, 200);
         }
         break;
 
@@ -5703,32 +5572,17 @@ int *m, int *n, int *grade)
         if (d.learn[LEARN_CHARACTER] >= 400 && d.learn[LEARN_ETHICS] > 50)
         {
             *m = 4;
-            if (d.learn[LEARN_ETHICS] >= 300)
-                *n = 0;
-            else if (d.learn[LEARN_ETHICS] >= 150)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_ETHICS], 300, 150);
         }
         else if (d.learn[LEARN_ETHICS] > 50)
         {
             *m = 3;
-            if (d.learn[LEARN_SPEECH] >= 200)
-                *n = 0;
-            else if (d.learn[LEARN_SPEECH] >= 80)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_SPEECH], 200, 80);
         }
         else
         {
             *m = 6;
-            if (d.body[BODY_HP] >= 400)
-                *n = 0;
-            else if (d.body[BODY_HP] >= 200)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.body[BODY_HP], 400, 200);
         }
         break;
 
@@ -5741,12 +5595,7 @@ int *m, int *n, int *grade)
         {
             *m = 7;
         }
-        if (d.fight[FIGHT_HSKILL] >= 100)
-            *n = 0;
-        else if (d.fight[FIGHT_HSKILL] >= 80)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.fight[FIGHT_HSKILL], 100, 80);
         break;
     }
 
@@ -5765,12 +5614,7 @@ char *buf,
 int *m, int *n, int *grade)
 {
     *m = 0;
-    if (d.learn[LEARN_CHARM] >= 200)
-        *n = 0;
-    else if (d.learn[LEARN_CHARM] > 100)
-        *n = 1;
-    else
-        *n = 2;
+    *n = pip_judge(d.learn[LEARN_CHARM], 200, 101);
 
     if (d.sex == 1)
         strcpy(buf, endmodefamily[*m].boy);
@@ -5779,7 +5623,6 @@ int *m, int *n, int *grade)
     *grade = endmodefamily[*m].grade;
     return 0;
 }
-
 
 static int
 pip_endingall_purpose( /*萬能*/
@@ -5812,22 +5655,12 @@ int mode)
         if (d.learn[LEARN_CHARACTER] >= 1000)
         {
             *m = 0;
-            if (d.learn[LEARN_ETHICS] >= 900)
-                *n = 0;
-            else if (d.learn[LEARN_ETHICS] >= 600)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_ETHICS], 900, 600);
         }
         else
         {
             *m = 1;
-            if (d.learn[LEARN_ETHICS] >= 650)
-                *n = 0;
-            else if (d.learn[LEARN_ETHICS] >= 400)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_ETHICS], 650, 400);
         }
         break;
 
@@ -5835,32 +5668,17 @@ int mode)
         if (d.state[STATE_BELIEF] > d.learn[LEARN_ETHICS] && d.state[STATE_BELIEF] > d.learn[LEARN_WISDOM])
         {
             *m = 2;
-            if (d.learn[LEARN_ETHICS] >= 500)
-                *n = 0;
-            else if (d.learn[LEARN_ETHICS] >= 250)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_ETHICS], 500, 250);
         }
         else if (d.learn[LEARN_ETHICS] > d.state[STATE_BELIEF] && d.learn[LEARN_ETHICS] > d.learn[LEARN_WISDOM])
         {
             *m = 3;
-            if (d.learn[LEARN_WISDOM] >= 800)
-                *n = 0;
-            else if (d.learn[LEARN_WISDOM] >= 600)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_WISDOM], 800, 600);
         }
         else
         {
             *m = 4;
-            if (d.state[STATE_AFFECT] >= 800)
-                *n = 0;
-            else if (d.state[STATE_AFFECT] >= 400)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.state[STATE_AFFECT], 800, 400);
         }
         break;
 
@@ -5868,32 +5686,17 @@ int mode)
         if (d.state[STATE_BELIEF] > d.learn[LEARN_ETHICS] && d.state[STATE_BELIEF] > d.learn[LEARN_WISDOM])
         {
             *m = 5;
-            if (d.state[STATE_BELIEF] >= 400)
-                *n = 0;
-            else if (d.state[STATE_BELIEF] >= 150)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.state[STATE_BELIEF], 400, 150);
         }
         else if (d.learn[LEARN_ETHICS] > d.state[STATE_BELIEF] && d.learn[LEARN_ETHICS] > d.learn[LEARN_WISDOM])
         {
             *m = 6;
-            if (d.learn[LEARN_WISDOM] >= 700)
-                *n = 0;
-            else if (d.learn[LEARN_WISDOM] >= 400)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.learn[LEARN_WISDOM], 700, 400);
         }
         else
         {
             *m = 7;
-            if (d.state[STATE_AFFECT] >= 800)
-                *n = 0;
-            else if (d.state[STATE_AFFECT] >= 400)
-                *n = 1;
-            else
-                *n = 2;
+            *n = pip_judge(d.state[STATE_AFFECT], 800, 400);
         }
         break;
 
@@ -5904,76 +5707,49 @@ int mode)
         default:
             *m = 8;
         case 0:
-            if (d.learn[LEARN_ETHICS] > 400) *n = 0;
-            else if (d.learn[LEARN_ETHICS] > 200) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_ETHICS], 401, 201);
             break;
         case 1:
-            if (d.learn[LEARN_LOVE] > 100) *n = 0;
-            else if (d.learn[LEARN_LOVE] > 50) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_LOVE], 101, 51);
             break;
         case 2:
-            if (d.learn[LEARN_HOMEWORK] > 100) *n = 0;
-            else if (d.learn[LEARN_HOMEWORK] > 50) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_HOMEWORK], 101, 51);
             break;
         case 3:
-            if (d.body[BODY_HP] > 600) *n = 0;
-            else if (d.body[BODY_HP] > 300) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.body[BODY_HP], 601, 301);
             break;
         case 4:
-            if (d.learn[LEARN_COOKSKILL] > 200) *n = 0;
-            else if (d.learn[LEARN_COOKSKILL] > 100) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_COOKSKILL], 201, 101);
             break;
         case 5:
-            if ((d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS]) > 600) *n = 0;
-            else if ((d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS]) > 200) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS], 601, 201);
+
             break;
         case 6:
-            if (d.learn[LEARN_SPEECH] > 150) *n = 0;
-            else if (d.learn[LEARN_SPEECH] > 50) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_SPEECH], 151, 51);
             break;
         case 7:
-            if ((d.body[BODY_HP] + d.body[BODY_WRIST]) > 900) *n = 0;
-            else if ((d.body[BODY_HP] + d.body[BODY_WRIST]) > 600) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.body[BODY_HP] + d.body[BODY_WRIST], 901, 601);
             break;
         case 8:
         case 10:
-            if (d.learn[LEARN_ART] > 250) *n = 0;
-            else if (d.learn[LEARN_ART] > 100) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_ART], 251, 101);
             break;
         case 9:
-            if (d.fight[FIGHT_HSKILL] > 250) *n = 0;
-            else if (d.fight[FIGHT_HSKILL] > 100) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.fight[FIGHT_HSKILL], 251, 101);
             break;
         case 11:
-            if (d.state[STATE_BELIEF] > 500) *n = 0;
-            else if (d.state[STATE_BELIEF] > 200) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.state[STATE_BELIEF], 501, 201);
             break;
         case 12:
-            if (d.learn[LEARN_WISDOM] > 500) *n = 0;
-            else if (d.learn[LEARN_WISDOM] > 200) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_WISDOM], 501, 201);
             break;
         case 13:
         case 15:
-            if (d.learn[LEARN_CHARM] > 1000) *n = 0;
-            else if (d.learn[LEARN_CHARM] > 500) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_CHARM], 1001, 501);
             break;
         case 14:
-            if (d.learn[LEARN_CHARM] > 700) *n = 0;
-            else if (d.learn[LEARN_CHARM] > 300) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_CHARM], 701, 301);
             break;
         }
         break;
@@ -5984,68 +5760,44 @@ int mode)
         default:
             *m = 24;
         case 0:
-            if (d.relation > 100) *n = 0;
-            else if (d.relation > 50) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.relation, 101, 51);
             break;
         case 1:
         case 2:
-            if (d.body[BODY_HP] > 400) *n = 0;
-            else if (d.body[BODY_HP] > 150) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.body[BODY_HP], 401, 151);
             break;
         case 3:
         case 9:
         case 10:
-            if (d.body[BODY_HP] > 600) *n = 0;
-            else if (d.body[BODY_HP] > 300) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.body[BODY_HP], 601, 301);
             break;
         case 4:
-            if (d.learn[LEARN_COOKSKILL] > 150) *n = 0;
-            else if (d.learn[LEARN_COOKSKILL] > 80) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_COOKSKILL], 151, 81);
             break;
         case 5:
-            if ((d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS]) > 600) *n = 0;
-            else if ((d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS]) > 200) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.state[STATE_BELIEF] + d.learn[LEARN_ETHICS], 601, 201);
             break;
         case 6:
-            if (d.learn[LEARN_SPEECH] > 150) *n = 0;
-            else if (d.learn[LEARN_SPEECH] > 50) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_SPEECH], 151, 51);
             break;
         case 7:
-            if ((d.body[BODY_HP] + d.body[BODY_WRIST]) > 700) *n = 0;
-            else if ((d.body[BODY_HP] + d.body[BODY_WRIST]) > 300) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.body[BODY_HP] + d.body[BODY_WRIST], 701, 301);
             break;
         case 8:
-            if (d.learn[LEARN_ART] > 100) *n = 0;
-            else if (d.learn[LEARN_ART] > 50) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_ART], 101, 51);
             break;
         case 11:
-            if (d.body[BODY_HP] > 300) *n = 0;
-            else if (d.body[BODY_HP] > 150) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.body[BODY_HP], 301, 151);
             break;
         case 12:
-            if (d.learn[LEARN_SPEECH] > 100) *n = 0;
-            else if (d.learn[LEARN_SPEECH] > 40) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_SPEECH], 101, 41);
             break;
         case 13:
         case 15:
-            if (d.learn[LEARN_CHARM] > 1000) *n = 0;
-            else if (d.learn[LEARN_CHARM] > 500) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_CHARM], 1001, 501);
             break;
         case 14:
-            if (d.learn[LEARN_CHARM] > 700) *n = 0;
-            else if (d.learn[LEARN_CHARM] > 300) *n = 1;
-            else *n = 2;
+            *n = pip_judge(d.learn[LEARN_CHARM], 701, 301);
             break;
         }
         break;
@@ -6067,42 +5819,26 @@ int *m, int *n, int *grade)
     if (d.learn[LEARN_SPEECH] >= 100)
     {
         *m = 0;
-        if (d.body[BODY_HP] >= 300 && d.state[STATE_AFFECT] >= 350)
-            *n = 0;
-        else if (d.body[BODY_HP] >= 250 && d.state[STATE_AFFECT] >= 300)
-            *n = 1;
-        else
-            *n = 2;
+        *n = JUDGE_WORST(
+            pip_judge(d.body[BODY_HP], 300, 250),
+            pip_judge(d.state[STATE_AFFECT], 350, 300));
     }
     else if (d.learn[LEARN_WISDOM] >= 400)
     {
         *m = 1;
-        if (d.state[STATE_AFFECT] >= 500)
-            *n = 0;
-        else if (d.state[STATE_AFFECT] >= 450)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.state[STATE_AFFECT], 500, 450);
     }
     else if (d.class_[I] >= d.class_[J])
     {
         *m = 2;
-        if (d.state[STATE_AFFECT] >= 350)
-            *n = 0;
-        else if (d.state[STATE_AFFECT] >= 300)
-            *n = 1;
-        else
-            *n = 2;
+        *n = pip_judge(d.state[STATE_AFFECT], 350, 300);
     }
     else
     {
         *m = 3;
-        if (d.state[STATE_AFFECT] >= 200 && d.body[BODY_HP] > 150)
-            *n = 0;
-        else if (d.state[STATE_AFFECT] >= 180 && d.body[BODY_HP] > 150)
-            *n = 1;
-        else
-            *n = 2;
+        *n = JUDGE_WORST(
+            pip_judge(d.state[STATE_AFFECT], 200, 180),
+            pip_judge(d.body[BODY_HP], 151, 151));
     }
     if (d.sex == 1)
         strcpy(buf, endmodeart[*m].boy);
