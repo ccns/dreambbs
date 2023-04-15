@@ -714,7 +714,7 @@ static KeyFuncList innbbs_cb =
 
     {'/' | XO_POSF, {.posf = innbbs_search}},
 
-    {'h', {innbbs_help}}
+    {'h', {innbbs_help}},
 };
 
 int

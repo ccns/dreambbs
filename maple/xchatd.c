@@ -1441,7 +1441,7 @@ static const char *const chat_msg[] =
 
     "[/w]ho", "列出本" CHATROOMNAME "使用者",
     "[/w]hoin <room>", "列出" CHATROOMNAME "<room> 的使用者",
-    NULL
+    NULL,
 };
 
 
@@ -1454,7 +1454,7 @@ static const char *const room_msg[] =
     "[/topic] <text>", "換個話題",
     "[/mud]", "更新" CHATROOMNAME "動態詞",
     "[/w]all", "廣播 (站長專用)",
-    NULL
+    NULL,
 };
 
 
@@ -2545,7 +2545,7 @@ static const char *const dscrb[] =
     "\x1b[1;37m【 Verb：動詞 】   ↑↓：舊話重提\x1b[m",
     "\x1b[1;37m【 Verb + Nick：   動詞 + 對方名字 】\x1b[36m  例：//kick piggy\x1b[m",
     "\x1b[1;37m【 Verb：動詞 】   ↑↓：個人類動詞\x1b[m",
-    NULL
+    NULL,
 };
 
 
@@ -2718,7 +2718,7 @@ static const ChatCmd chatcmdlist[] =
     {"topic", chat_topic, 1},
     {"version", chat_version, 1},
 
-    {NULL, NULL, 0}
+    {NULL, NULL, 0},
 };
 
 

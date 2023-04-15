@@ -3877,7 +3877,7 @@ post_manage(
         "ZLevel  發文門檻設定",
         "Usies   看板閱\讀記錄",
         "Quit    離開選單",
-        NULL
+        NULL,
     };
 
     if (!(bbstate & STAT_BOARD))
@@ -4119,7 +4119,7 @@ KeyFuncList post_cb =
     {'_' | XO_POSF, {.posf = post_bottom}},
 #endif
 
-    {'h', {post_help}}
+    {'h', {post_help}},
 };
 
 
@@ -4506,7 +4506,7 @@ static KeyFuncList xpost_cb =
 #endif
     {'x' | XO_POSF, {.posf = post_cross}},
 
-    {'h', {xpost_help}}
+    {'h', {xpost_help}},
 };
 #endif  /* #ifdef XZ_XPOST */
 

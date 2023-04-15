@@ -559,7 +559,7 @@ typedef struct
 MmappedFile mf = {
     0, 0, 0, 0, 0, 0L,
     0, -1L, 0, 0, -1L, -1L, -1L, -1L,
-    NULL // detachHandler
+    NULL, // detachHandler
 };      // current file
 
 /* mf_* navigation commands return value meanings */
@@ -2382,7 +2382,7 @@ pmore2_inmemory(
 {
     struct SimpleBuffer buf = {
         .data = content,
-        .len = size
+        .len = size,
     };
 
     return _pmore2(promptend, ctx,

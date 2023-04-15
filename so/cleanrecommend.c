@@ -231,7 +231,7 @@ KeyFuncList cleanrecommend_cb =
     {'s', {xo_cb_init}},
     {'d' | XO_POSF, {.posf = cleanrecommend_delete}},
     {'D', {cleanrecommend_cleanall}},
-    {'h', {cleanrecommend_help}}
+    {'h', {cleanrecommend_help}},
 };
 
 int

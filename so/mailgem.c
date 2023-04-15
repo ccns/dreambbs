@@ -1020,7 +1020,7 @@ static KeyFuncList mailgem_cb =
 
     {'S' | XO_POSF, {.posf = mailgem_state}},
 
-    {'h', {mailgem_help}}
+    {'h', {mailgem_help}},
 };
 
 

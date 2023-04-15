@@ -1443,7 +1443,7 @@ static KeyFuncList gem_cb =
     {Meta('W'), {gem_recycle}},
 
 
-    {'h', {gem_help}}
+    {'h', {gem_help}},
 };
 
 

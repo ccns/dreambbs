@@ -245,7 +245,7 @@ KeyFuncList memorandum_cb =
     {'c' | XO_POSF, {.posf = memorandum_change}},
     {'s', {xo_cb_init}},
     {'d' | XO_POSF, {.posf = memorandum_delete}},
-    {'h', {memorandum_help}}
+    {'h', {memorandum_help}},
 };
 
 int

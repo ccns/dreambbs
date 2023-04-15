@@ -179,7 +179,7 @@ KeyFuncList admin_cb =
     {'c' | XO_POSF, {.posf = admin_change}},
     {'s', {xo_cb_init}},
     {'d' | XO_POSF, {.posf = admin_delete}},
-    {'h', {admin_help}}
+    {'h', {admin_help}},
 };
 
 

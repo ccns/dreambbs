@@ -272,7 +272,7 @@ KeyFuncList observe_cb =
     {'c' | XO_POSF, {.posf = observe_change}},
     {'s', {xo_cb_init}},
     {'d' | XO_POSF, {.posf = observe_delete}},
-    {'h', {observe_help}}
+    {'h', {observe_help}},
 };
 
 

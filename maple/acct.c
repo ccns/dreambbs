@@ -1268,7 +1268,7 @@ static const char *const UFO_FLAGS[] = {
     /* HIDDEN */ "隱藏來源",
 
     /* CLOAK */ "隱身術",
-    NULL
+    NULL,
 };
 
 static const char *const UFO2_FLAGS[] = {
@@ -1303,7 +1303,7 @@ static const char *const UFO2_FLAGS[] = {
     /* REALNAME */ "真實姓名",
     /* RESERVE */ NULL,
     /* RESERVE */ NULL,
-    /* RESERVE */ NULL
+    /* RESERVE */ NULL,
 };
 
 
@@ -1510,7 +1510,7 @@ int u_xfile(void)
         "暫存檔.3",
         "暫存檔.4",
         "暫存檔.5",
-        NULL
+        NULL,
     };
 
     static const char *const path[] = {
@@ -2050,7 +2050,7 @@ static int scan_register_form(int fd)
     static const char logfile[] = FN_RFORM_LOG;
     static const char *const reason[] = { "輸入真實姓名", "詳實填寫申請表",
         "詳填住址資料", "詳填連絡電話", "詳填服務單位、或學校系級",
-        "用中文填寫申請單", "採用 E-mail 認證", "填寫身分證號碼", NULL
+        "用中文填寫申請單", "採用 E-mail 認證", "填寫身分證號碼", NULL,
     };
 
     ACCT muser;

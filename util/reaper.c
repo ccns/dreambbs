@@ -78,7 +78,7 @@ static SCHEMA schema;
 
 REAPER_TIME reaper_time[] =
 {
-    {701, 1002}, {117, 229}, {0, 0}
+    {701, 1002}, {117, 229}, {0, 0},
 };
 
 

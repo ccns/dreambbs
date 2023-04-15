@@ -229,7 +229,7 @@ KeyFuncList viol_cb =
     {'c' | XO_POSF, {.posf = viol_change}},
     {'s', {xo_cb_init}},
     {'d' | XO_POSF, {.posf = viol_delete}},
-    {'h', {viol_help}}
+    {'h', {viol_help}},
 };
 
 

@@ -309,7 +309,7 @@ KeyFuncList aloha_cb =
 #endif
     {'s', {xo_cb_init}},
     {'d' | XO_POSF, {.posf = aloha_delete}},
-    {'h', {aloha_help}}
+    {'h', {aloha_help}},
 };
 
 

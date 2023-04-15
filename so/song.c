@@ -585,7 +585,7 @@ static KeyFuncList song_cb =
     {'T' | XO_POSF, {.posf = song_title}},
     {'q', {song_query}},
     {'m' | XO_POSF, {.posf = song_send}},
-    {'h', {song_help}}
+    {'h', {song_help}},
 };
 
 

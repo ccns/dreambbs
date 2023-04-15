@@ -944,7 +944,7 @@ KeyFuncList nbrd_cb =
     {'z' | XO_POSF, {.posf = nbrd_zero}},
 #endif
     {Ctrl('P'), {nbrd_add}},
-    {'h', {nbrd_help}}
+    {'h', {nbrd_help}},
 };
 
 int

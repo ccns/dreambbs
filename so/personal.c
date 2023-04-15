@@ -627,7 +627,7 @@ KeyFuncList personal_cb =
     {KEY_TAB, {personal_switch}},
     {'O' | XO_POSF, {.posf = personal_open}},
     {'D' | XO_POSF, {.posf = personal_deny}},
-    {'h', {personal_help}}
+    {'h', {personal_help}},
 };
 
 int

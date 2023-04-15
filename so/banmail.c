@@ -247,7 +247,7 @@ KeyFuncList banmail_cb = {
     {'c' | XO_POSF, {.posf = banmail_change}},
     {'s', {xo_cb_init}},
     {'d' | XO_POSF, {.posf = banmail_delete}},
-    {'h', {banmail_help}}
+    {'h', {banmail_help}},
 };
 
 

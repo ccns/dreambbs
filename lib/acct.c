@@ -479,7 +479,7 @@ int ban_addr(const char *addr)
 
     static const char *const invalid[] = { "@bbs", "bbs@", "root@", "gopher@",
         "guest@", "@ppp", "@slip", "@dial", "unknown@", "@anon.penet.fi",
-        "193.64.202.3", "brd@", NULL
+        "193.64.202.3", "brd@", NULL,
     };
 
     /* SoC: 保持原 email 的大小寫 */

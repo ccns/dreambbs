@@ -1102,7 +1102,7 @@ static const KeyMapList keymap =
 
     /* end of keymap */
 
-    {KEY_NONE, XO_NONE}
+    {KEY_NONE, XO_NONE},
 };
 
 
@@ -2363,7 +2363,7 @@ static MENU menu_everyz[] =
     "Quit     離開"},
 
     {{.title = "快速選單"}, 'U', POPUP_MENUTITLE | M_DOINSTANT,
-    "快速選單切換"}
+    "快速選單切換"},
 };
 
 void

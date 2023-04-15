@@ -2604,7 +2604,7 @@ static KeyFuncList mbox_cb =
     {'X' | XO_POSF, {.posf = xo_usetup}},
     {'x' | XO_POSF, {.posf = post_cross}},
 
-    {'h', {mbox_help}}
+    {'h', {mbox_help}},
 };
 
 

@@ -711,7 +711,7 @@ m_xfile(void)
         "信 Email 認證",
         "信 POP3 認證",
         "信 BMTA 認證",
-        NULL
+        NULL,
     };
 
     static const char *const path[] =
@@ -739,7 +739,7 @@ m_xfile(void)
         FN_ETC_APPROVED,
         FN_ETC_JUSTIFIED,
         FN_ETC_JUSTIFIED_POP3,
-        FN_ETC_JUSTIFIED_BMTA
+        FN_ETC_JUSTIFIED_BMTA,
     };
 
     x_file(M_XFILES, desc, path);
@@ -779,7 +779,7 @@ m_xhlp(void)
         "助 完全聊天手冊",
         "助 投票箱",
         "助 我的最愛",
-        NULL
+        NULL,
     };
 
     static const char *const path[] =

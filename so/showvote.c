@@ -181,7 +181,7 @@ KeyFuncList show_cb =
     {'c' | XO_POSF, {.posf = show_change}},
     {'s', {xo_cb_init}},
     {'d' | XO_POSF, {.posf = show_delete}},
-    {'h', {show_help}}
+    {'h', {show_help}},
 };
 
 

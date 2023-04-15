@@ -521,7 +521,7 @@ KeyFuncList myfavorite_cb =
     {'M' | XO_POSF, {.posf = myfavorite_mov}},
     {'E' | XO_POSF, {.posf = myfavorite_edit}},
     {'/' | XO_POSF, {.posf = myfavorite_search}},
-    {'h', {myfavorite_help}}
+    {'h', {myfavorite_help}},
 };
 
 static void

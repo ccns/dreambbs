@@ -977,7 +977,7 @@ KeyFuncList pal_cb =
     {'s', {pal_sort}},
     {'/' | XO_POSF, {.posf = pal_search_forward}},
     {'?' | XO_POSF, {.posf = pal_search_backward}},
-    {'h', {pal_help}}
+    {'h', {pal_help}},
 };
 
 
@@ -1275,7 +1275,7 @@ KeyFuncList bmw_cb =
     {Ctrl('Q') | XO_POSF, {.posf = bmw_query}},
     {'s', {xo_cb_init}},
     {KEY_TAB, {bmw_mode}},
-    {'h', {bmw_help}}
+    {'h', {bmw_help}},
 };
 
 
@@ -4207,7 +4207,7 @@ KeyFuncList ulist_cb =
 
     {'M' | XO_POSF, {.posf = ulist_mail}},
     {KEY_TAB, {ulist_toggle}},
-    {'h', {ulist_help}}
+    {'h', {ulist_help}},
 };
 
 
@@ -4909,7 +4909,7 @@ KeyFuncList banmsg_cb =
     {'m' | XO_POSF, {.posf = banmsg_mail}},
     {'q' | XO_POSF, {.posf = banmsg_query}},
     {'s', {banmsg_sort}},
-    {'h', {banmsg_help}}
+    {'h', {banmsg_help}},
 };
 
 

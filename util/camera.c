@@ -34,9 +34,8 @@ static const char *const list[] = {
     "memorandum.hlp",
     "aloha.hlp",
     "signup.hlp",
-//    NULL
     "myfav.hlp",    /* r2.20170727: test add back my favorite*/
-    NULL
+    NULL,
 };
 
 

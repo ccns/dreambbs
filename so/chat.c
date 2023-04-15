@@ -499,7 +499,7 @@ struct chat_command chat_cmdtbl[] =
     {"users", chat_users},
 #endif
 
-    {NULL, NULL}
+    {NULL, NULL},
 };
 
 

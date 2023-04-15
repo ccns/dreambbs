@@ -36,7 +36,7 @@ enum {  MAP_MAXY = 20,
         TILE_TAGGED = 0x10,
         TILE_EXPAND = 0x20,
 
-        TILE_NOUSE
+        TILE_NOUSE,
      };
 
 static int MAP_Y = MAP_MAXY, MAP_X = MAP_MAXX;
@@ -155,7 +155,7 @@ const char *const symTag = "\x1b[1;40;31m£Z\x1b[m";
 const char *const symWrong = "\x1b[1;41;37m¢Æ\x1b[m";
 const char *const symBlank = "¡½";
 const char *const strMines[] = {"¡@", "¢°", "¢±", "¢²", "¢³", "¢´",
-                                "¢µ", "¢¶", "¢·", NULL
+                                "¢µ", "¢¶", "¢·", NULL,
                                };
 
 enum {  MAP_START_X = 16 };             // Must be > Prompts

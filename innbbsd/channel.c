@@ -635,7 +635,7 @@ INTERNAL_INIT daemoncmd_t cmds[] =
     {"quit",     "quit",                  1, 1, 2, 0,                        NNTP_GOODBYE_ACK_VAL, CMDquit},
     {"ihave",    "ihave mid",             2, 2, 0, NNTP_HAVEIT_VAL,          NNTP_SENDIT_VAL,      CMDihave},
     {"stat",     "stat <mid>",            2, 2, 0, NNTP_NOTHING_FOLLOWS_VAL, NNTP_DONTHAVEIT_VAL,  CMDstat},
-    {NULL,       NULL,                    0, 0, 2, 0,                        0,                    NULL}
+    {NULL,       NULL,                    0, 0, 2, 0,                        0,                    NULL},
 };
 #ifdef __cplusplus
 }  // namespace

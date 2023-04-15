@@ -1630,7 +1630,7 @@ static KeyFuncList class_cb =
     //{'A', {XoAuthor}},
 #endif
 
-    {'h', {class_help}}
+    {'h', {class_help}},
 };
 
 

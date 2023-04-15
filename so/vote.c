@@ -1127,7 +1127,7 @@ static KeyFuncList vote_cb =
     {Ctrl('P'), {vote_add}},
     {Ctrl('Q') | XO_POSF, {.posf = vote_query}},
 
-    {'h', {vote_help}}
+    {'h', {vote_help}},
 };
 
 

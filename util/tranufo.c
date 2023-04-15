@@ -33,7 +33,7 @@ const TABLE table[] = {
     {UFO_NWLOG, UFO2_NWLOG},
     {UFO_NTLOG, UFO2_NTLOG},
     {UFO_ACL, UFO2_ACL},
-    {0, 0}
+    {0, 0},
 };
 
 static void

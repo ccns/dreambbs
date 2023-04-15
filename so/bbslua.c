@@ -1905,7 +1905,7 @@ static const luaL_Reg bbslualibs[] = {
   {"bit", luaopen_bit},
 #endif
 
-  {NULL, NULL}
+  {NULL, NULL},
 };
 
 
@@ -2192,7 +2192,7 @@ static const char *const bbsluaTocTags[] =
     "author",
     "version",
     "date",
-    NULL
+    NULL,
 };
 
 static const char *const bbsluaTocPrompts[] =
@@ -2206,7 +2206,7 @@ static const char *const bbsluaTocPrompts[] =
     "作者",
     "版本",
     "日期",
-    NULL
+    NULL,
 };
 
 int

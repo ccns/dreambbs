@@ -234,7 +234,7 @@ KeyFuncList contact_cb =
     {'c' | XO_POSF, {.posf = contact_change}},
     {'s', {xo_cb_init}},
     {'d' | XO_POSF, {.posf = contact_delete}},
-    {'h', {contact_help}}
+    {'h', {contact_help}},
 };
 
 int

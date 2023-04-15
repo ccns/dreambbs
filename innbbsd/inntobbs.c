@@ -34,7 +34,7 @@ enum HeaderValue        /* 所有有用到的 header */
     POSTHOST_H,
     CONTROL_H,
 
-    LASTHEADER
+    LASTHEADER,
 };
 
 

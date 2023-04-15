@@ -278,7 +278,7 @@ KeyFuncList chat_cb =
     {'M' | XO_POSF, {.posf = chat_move}},
     {KEY_TAB, {chat_kind}},
     {'d' | XO_POSF, {.posf = chat_delete}},
-    {'h', {chat_help}}
+    {'h', {chat_help}},
 };
 
 

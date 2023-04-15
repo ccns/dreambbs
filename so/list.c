@@ -320,7 +320,7 @@ KeyFuncList list_cb =
     {'d' | XO_POSF, {.posf = list_delete}},
     {KEY_TAB, {list_mode}},
     {'/' | XO_POSF, {.posf = list_search}},
-    {'h', {list_help}}
+    {'h', {list_help}},
 };
 
 

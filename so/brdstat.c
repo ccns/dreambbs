@@ -167,7 +167,7 @@ KeyFuncList bstat_cb =
     {'s', {xo_cb_init}},
     {'S', {bstat_stat}},
     {'c', {bstat_clear}},
-    {'h', {bstat_help}}
+    {'h', {bstat_help}},
 };
 
 

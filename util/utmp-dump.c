@@ -471,7 +471,7 @@ static int (*const ulist_cmp[]) (const void *i, const void *j) =
     ulist_cmp_host,
     ulist_cmp_mode,
     ulist_cmp_nick,
-    ulist_cmp_idle
+    ulist_cmp_idle,
 };
 
 

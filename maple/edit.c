@@ -2254,7 +2254,7 @@ ve_key:
 //                      "Post   PO文次數(**p)",
                         "Time   現在時間(**t)",
                         "Quit   離開選單     ",
-                        NULL
+                        NULL,
                     };
 
                     const int ans = popupmenu_ans2(menu, "控制碼選擇", (B_LINES_REF >> 1) - 4, (D_COLS_REF >> 1) + 20);
