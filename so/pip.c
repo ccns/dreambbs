@@ -5040,6 +5040,18 @@ static int pip_max_worktime(int *num);
 
 #define JUDGE_WORST(_x, _y) BMAX(_x, _y)
 
+static int pip_judge_class(int points, int pt_best, int pt1, int pt2, int pt3)
+{
+    const int pts[] = {pt_best, pt1, pt2, pt3};
+    int i = 0;
+    for (; i < COUNTOF(pts); ++i)
+    {
+        if (points >= pts[i])
+            return i;
+    }
+    return i;
+}
+
 static int pip_judge(int points, int pt_great, int pt_ok)
 {
     if (points >= pt_great)
@@ -5355,19 +5367,12 @@ int *m, int *n, int *grade)
     return 0;
 }
 
-
 static int
 pip_endingsocial( /*社交*/
 char *buf,
 int *m, int *n, int *grade)
 {
-    int class_;
-    if (d.tmp[TMP_SOCIAL] > 600) class_ = 0;
-    else if (d.tmp[TMP_SOCIAL] > 450) class_ = 1;
-    else if (d.tmp[TMP_SOCIAL] > 380) class_ = 2;
-    else if (d.tmp[TMP_SOCIAL] > 250) class_ = 3;
-    else class_ = 4;
-
+    const int class_ = pip_judge_class(d.tmp[TMP_SOCIAL], 601, 451, 381, 251);
     switch (class_)
     {
     case 0:
@@ -5444,13 +5449,7 @@ pip_endingmagic( /*魔法*/
 char *buf,
 int *m, int *n, int *grade)
 {
-    int class_;
-    if (d.tmp[TMP_MEXP] > 800) class_ = 0;
-    else if (d.tmp[TMP_MEXP] > 600) class_ = 1;
-    else if (d.tmp[TMP_MEXP] > 500) class_ = 2;
-    else if (d.tmp[TMP_MEXP] > 300) class_ = 3;
-    else class_ = 4;
-
+    const int class_ = pip_judge_class(d.tmp[TMP_MEXP], 801, 601, 501, 301);
     switch (class_)
     {
     case 0:
@@ -5522,12 +5521,7 @@ pip_endingcombat( /*戰鬥*/
 char *buf,
 int *m, int *n, int *grade)
 {
-    int class_;
-    if (d.tmp[TMP_HEXP] > 1500) class_ = 0;
-    else if (d.tmp[TMP_HEXP] > 1000) class_ = 1;
-    else if (d.tmp[TMP_HEXP] > 800) class_ = 2;
-    else class_ = 3;
-
+    const int class_ = pip_judge_class(d.tmp[TMP_HEXP], 1501, 1001, 801, INT_MIN);
     switch (class_)
     {
     case 0:
@@ -5642,11 +5636,7 @@ int mode)
         data = d.tmp[TMP_SOCIAL];
     else  // mode == 3
         data = d.tmp[TMP_FAMILY];
-    if (data > 1000) class_ = 0;
-    else if (data > 800) class_ = 1;
-    else if (data > 500) class_ = 2;
-    else if (data > 300) class_ = 3;
-    else class_ = 4;
+    class_ = pip_judge_class(data, 1001, 801, 501, 301);
 
     data = pip_max_worktime(&num);
     switch (class_)
