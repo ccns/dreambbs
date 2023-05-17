@@ -9,7 +9,14 @@
 
 ## 0. 作業系統環境
 
-本程式經測試可以安裝的環境：FreeBSD 11.1~12.0, GNU/Linux(CentOS 7/8, Debian 10, Ubuntu 20.04), Cygwin in Windows 7/10
+本程式經測試可以安裝的環境：
+
+- FreeBSD 11.1~12.0
+- GNU/Linux
+    - CentOS 7/8
+    - Debian 10
+    - Ubuntu 20.04
+- Cygwin in Windows 7/10
 
 欲安裝早於 v3.0 的版本時，Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurses` 等 32-bit 版本的相依函式庫。
 
@@ -19,11 +26,22 @@ v3.0 支援在原生 x86_64 環境中編譯與執行，不須安裝 32-bit 版�
 
 作業系統部分請見前文。
 
-套件部分，須要先安裝：`git`, `make`, `cmake`, `gcc`/`clang`, `g++`/`clang++`。
+套件部分，須要先安裝：
 
-若要使用 `bbs-sshd`，編譯 `bbs-sshd` 前須安裝：`cargo` 與 `perl`。
+- `git`
+- `make`
+- `cmake`
+- `gcc`/`clang`
+- `g++`/`clang++`
 
-也建議安裝：`vim`。若對類似編輯器介面不熟，也可用 `nano` 或其他更簡易的編輯器介面來編輯，
+若要使用 `bbs-sshd`，編譯 `bbs-sshd` 前須安裝：
+
+- `cargo`
+- `perl`
+
+也建議安裝：
+
+- `vim`。若對類似編輯器介面不熟，也可用 `nano` 或其他更簡易的編輯器介面來編輯，
 
 ## 2. 建立 BBS 帳號
 
