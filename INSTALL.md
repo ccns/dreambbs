@@ -17,6 +17,7 @@
     - Debian 10
     - Ubuntu 20.04
 - Cygwin, Windows 7/10
+- WSL2, Windows 10/11
 
 欲安裝早於 v3.0 的版本時，Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurses` 等 32-bit 版本的相依函式庫。
 
@@ -241,6 +242,13 @@ cp -r bbs /home/
 #### 方法：Systemd unit 設定檔
 
 在 CentOS 7 與 Ubuntu 18.04 以後的作業系統上，系統服務是由 Systemd 管理的，建議使用這個設定方式。
+
+若使用 WSL2，可在 `/etc/wsl.conf` 加入以下內容並完全重新啟動 WSL2 以啟用 Systemd：
+
+```ini
+[boot]
+systemd=true
+```
 
 在 v2.0 後的 `sample/` 下，提供了範例的 Systemd unit 設定檔。
 
