@@ -102,6 +102,14 @@ Macro | 值 (傳統) | 值 (MapleBBS 3) | 值 (DreamBBS v3) | 意義 | 出處 | 
 
 值與「值 (傳統)」相同者省略不列。
 
+### 按鍵組合的值
+
+DreamBBS v3.1 引進。在 10 秒內依序且連續輸入一組按鍵，最後的按鍵的值將先被正常送出，再自動送出表示該按鍵組合的值。
+
+Macro | 值 | 按鍵組合 | 用途 | 出處 | 註解
+ --- | --- | --- | --- | --- | ---
+`KEY_KONAMI` | `0x0573` | - <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>B</kbd> <kbd>A</kbd> <br> - <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>↓</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>←</kbd> <kbd>→</kbd> <kbd>b</kbd> <kbd>a</kbd> |  - 開關「雙游標操作模式」 <br> (DreamBBS 4D-AO.20) | DreamBBS 4D-AO.20 | [KONAMI 祕技](https://zh.wikipedia.org/zh-tw/科乐美秘技)
+
 ## Vget 輸入框函式
 
 `vget()` 輸入框函式是 MapleBBS 3 的輸入框函式。
