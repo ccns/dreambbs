@@ -16,7 +16,7 @@
     - CentOS 7/8
     - Debian 10
     - Ubuntu 20.04
-- Cygwin in Windows 7/10
+- Cygwin, Windows 7/10
 
 欲安裝早於 v3.0 的版本時，Arch Linux 請先開啟 `[multilib]` 套件庫，並從 AUR 安裝 `lib32-ncurses` 等 32-bit 版本的相依函式庫。
 
