@@ -37,8 +37,7 @@ This page describes the indentation style for the DreamBBS project.
 ## Line continuation
 - The indentation size of continued lines should be 4 spaces
 - Argument lists and initializer-lists
-    - The elements should be indented or be aligned with the start of the list
-    - The end of list without elements in the same line should be indented less that the elements
+    - The elements should either be indented or be aligned with the start of the list
 - No wrapping at operators with higher grouping precedence without wrapping at operators with lower grouping precedence
 
 **Good:**
@@ -54,7 +53,7 @@ if (sth_long
 ```
 
 - No line breaks between unary, prefix, and suffix operators other than `.` and `->` and their (indexed/called/*etc.*) operand
-- If needed, line breaks must come before the suffix operators `.` and `->`
+- If needed, line breaks must come before but not after the suffix operators `.` and `->`
 
 **Good:**
 ```c
@@ -62,7 +61,7 @@ sth_long
     .member++;
 ```
 
-- If needed, line breaks should come before the binary operators other than assignments and comma
+- If needed, line breaks should come before but not after the binary operators other than assignments and comma
 
 **Good:**
 ```c
@@ -94,10 +93,11 @@ cond ? (sth & 1)
 ```
 -   - Otherwise use the above form
 
-## Space
+## Space around operators
 
-- Binary operators and the `?`-`:` operator should have a space between the operator and the operands (if on the same line).
-- Unary, prefix, and suffix operators should have no whitespaces between the operator and their (indexed/called/*etc.*) operand.
+- Binary operators and the `?`-`:` operator other than `,` should have a space between the operator and the operands (if on the same line).
+- No spaces between unary, prefix, and suffix operators other than `.` and `->` and their (indexed/called/*etc.*) operand
+- No spaces between `.` and `->` and their field operand.
 
 ## Alignment
 - 如果 code 附近的相似 code 已被對齊排版，這段 code 應該對齊排版
