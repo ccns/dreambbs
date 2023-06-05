@@ -96,7 +96,7 @@ y 軸           | y 為 row；+y 方向向下    | y 為 column；+y 方向向�
 ## 座標特殊值
 　                | 值                 | 類型                      | 出處            | 說明
 :---              | ---                | ---                       | ---            | ---
-`LINELEN`         | - `80` <br> - `80` (Eagles BBS 3.1) <br> - `120` (Phoenix BBS) <br> - `200` (SecretBBS) <br> - `256` (FireBird BBS 3.1) | 原始字元座標與顯示座標之 x   | Pirate BBS    | 單行最大字元數，也是顯示範圍最大寬度 <br> (Pirate BBS 並未處理控制碼)
+`LINELEN`         | - `80` <br> - `80` (Eagles BBS 3.1) <br> - `120` (Phoenix BBS 4.0) <br> - `256` (FireBird BBS 3.1) <br> - `200` (SecretBBS 4.0B) <br> - (更名為 `ANSILINELEN`) (MapleBBS 2.0.5) | 原始字元座標與顯示座標之 x   | Pirate BBS    | 單行最大字元數，也是顯示範圍最大寬度 <br> (Pirate BBS 並未處理控制碼)
 `ANSILINELEN`     | `160` (MapleBBS 2.0.5) <br> - `511` (PttBBS) <br> - `500` (MapleBBS 3) <br> - `ANSILINESIZE` (DreamBBS v3.0) | 原始字元座標之 x           | MapleBBS 2        | 單行最大字元數
 `ANSILINESIZE`     | `4000` (DreamBBS v3.0) | 原始字元座標之 x | DreamBBS v3.0 | 單行最大字元數 <br> 緩衝區位元組大小 <br> `ANSILINELEN` 為其別名
 `scr_lns`         | - (變數，預設 `24`) <br> - (移除) (MapleBBS 2.39a & PttBBS) | 顯示座標之 y | Pirate BBS | 顯示範圍高度
