@@ -7,7 +7,7 @@
 :---           | ---                     | ---
 表示法         | `(y, x)`                 | `(x, y)`
 類型           | 二維的左手直角座標系，向上為 -y <br> 電腦繪圖領域常用    | 二維的右手直角座標系，向上為 -x
-顯示座標範圍    | 最左上角為 `(0, 0)` <br> 最右下角為 `(b_lines, b_cols)` | 最左上角為 `(0, 0)` <br> 最右下角為 `(b_lines, b_cols)`
+顯示座標範圍    | 最左上角為 `(0, 0)` <br> 最右下角為 `(scr_lns - 1, scr_cols - 1)` <br> 或 `(b_lines, ANSILINELEN - 1)` (MapleBBS 2 系列) <br> 或 `(b_lines, t_columns - 1)` (MapleBBS 3 & PttBBS) | 最左上角為 `(0, 0)` <br> 最右下角為 `(b_lines, b_cols)`
 x 軸           | x 為 column；+x 方向向右 | x 為 row；+x 方向向下
 y 軸           | y 為 row；+y 方向向下    | y 為 column；+y 方向向右
 右手定則之 z 軸 | 入螢幕面                | 出螢幕面
