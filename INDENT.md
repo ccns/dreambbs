@@ -98,32 +98,6 @@ cond ? (sth & 1)
 - 如果 code 附近的相似 code 已被對齊排版，這段 code 應該對齊排版
 - 新的 code 不應該對齊排版，除非附近相似的 code 已被對齊排版
 
-## Condition lists
-- `if`/`for`/`while`/`switch` 與 condition list 之間應有剛好一個 space
-- _例外_：用來對齊 `else if` 後的 condition list 時，`if` 後可以有 6 個 spaces
-
-**Good:**
-```c
-[if/for/while/switch] (sth)
-```
-```c
-if      (sth)
-...
-else if (sth)
-```
-
-- Condition list 含有換行時，結尾的 `)` 前須換行，而縮排與 code block 內的縮排相同
-
-**Good:**
-```c
-if (1 + 1 == 2
-    && *p != '\0'
-    )
-{
-    do_sth();
-}
-```
-
 ## Labels
 - Label 須單獨一行出現，或與多個 labels 在同一行內單獨出現
 
@@ -335,6 +309,32 @@ void func(void) { loop: goto loop; }
 ```
 
 ## `(` & `)`
+
+### Condition lists
+- `if`/`for`/`while`/`switch` 與 condition list 之間應有剛好一個 space
+- _例外_：用來對齊 `else if` 後的 condition list 時，`if` 後可以有 6 個 spaces
+
+**Good:**
+```c
+[if/for/while/switch] (sth)
+```
+```c
+if      (sth)
+...
+else if (sth)
+```
+
+- Condition list 含有換行時，結尾的 `)` 前須換行，而縮排與 code block 內的縮排相同
+
+**Good:**
+```c
+if (1 + 1 == 2
+    && *p != '\0'
+    )
+{
+    do_sth();
+}
+```
 
 - 二元非賦值位元運算子，其運算元若直接包含與其不同的二元運算子，應以 `(` 與 `)` 將此運算元包圍
 - 二元非賦值運算子，其運算元若直接包含二元位元運算子，應以 `(` 與 `)` 將此運算元包圍
