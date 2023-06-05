@@ -53,7 +53,7 @@ if (sth_long
     )
 ```
 
-- No line breaks between unary, prefix, and suffix operators other than `.` and `->` and their operand
+- No line breaks between unary, prefix, and suffix operators other than `.` and `->` and their (indexed/called/*etc.*) operand
 - If needed, line breaks must come before the suffix operators `.` and `->`
 
 **Good:**
@@ -93,6 +93,11 @@ cond ? (sth & 1)
     : else_sth
 ```
 -   - Otherwise use the above form
+
+## Space
+
+- Binary operators and the `?`-`:` operator should have a space between the operator and the operands (if on the same line).
+- Unary, prefix, and suffix operators should have no whitespaces between the operator and their (indexed/called/*etc.*) operand.
 
 ## Alignment
 - 如果 code 附近的相似 code 已被對齊排版，這段 code 應該對齊排版
