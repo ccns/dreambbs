@@ -125,3 +125,4 @@ y 軸           | y 為 row；+y 方向向下    | y 為 column；+y 方向向�
 - MapleBBS 3 及更舊的直系分支，不支援 telnet 協定的畫面大小改變命令，僅有 shell 模式下的畫面大小改變機制
 - MapleBBS 3 取消了 shell 模式，因此沒有改變畫面大小的機制
 - PttBBS 與 MapleBBS-itoc 分別增加了 telnet 協定的畫面大小改變命令的支援；DreamBBS v1 從 MapleBBS-itoc 將其引入
+- MapleBBS 3 visio 與 PttBBS screen 的 `t_lines` 與 `t_columns` 或其等價變數，數值有範圍限制，未必符合實際終端機畫面大小。不符合時，對向下捲動與頁緣游標位置的處理將不正確
