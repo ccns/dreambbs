@@ -308,6 +308,22 @@ loop:
 void func(void) { loop: goto loop; }
 ```
 
+### `{`-`}`&ndash;enclosed Initializer-list
+
+- If there are any _non-enclosed_ line wraps within the initializer-list, there should be a line wrap immediately after the `{` and another immediately before the `}`. The `}` should have the same indentation level as the line containing the `{` and should have a following line wrap after immediately following closing brackets and punctuations.
+- Otherwise, there should not be any spaces immediately after the `{` or immediately before the `}`.
+
+**Good:**
+```c
+Conf opts[] = {
+    {.type = CONFTYPE_STR, LISTLIT(Option, {
+        .name = "sample_configuration",
+        {.val_s = "sample text"},
+    })},
+    {.type = CONFTYPE_INT, LISTLIT(Option, {.name = "answer", {.val_i = 42}})},
+};
+```
+
 ## `(` & `)`
 
 ### Condition lists
@@ -334,6 +350,21 @@ if (1 + 1 == 2
 {
     do_sth();
 }
+```
+
+- Otherwise, if there are any _non-enclosed_ line wraps within a `(`-`)`&ndash;enclosed complete expression, there should be a line wrap immediately after the `(` and another immediately before the `)`. The `)` should have the same indentation level as the line containing the `(` and should have a following line wrap after immediately following closing brackets and punctuations.
+
+**Good:**
+```c
+z = (
+    2 * f((x != 0) ? get_y() / x : get_y(),
+        true)
+    + g((y != 0) ? get_z() / y : get_z(), &TEMPLVAL(Point2d, {
+        .x = get_x(),
+        .y = get_y(),
+    }))
+    + 1
+);
 ```
 
 - 二元非賦值位元運算子，其運算元若直接包含與其不同的二元運算子，應以 `(` 與 `)` 將此運算元包圍
@@ -402,7 +433,13 @@ int ((*parr)[N]) = arr;
 - `(sth...漢 )`
 - `( 漢...sth)`
 
-- 函式宣告的參數清單與函式呼叫的引數清單，若含有換行，則開頭的 `(` 後換行，結尾的 `)` 前不換行
+<br/>
+
+- 函式宣告的參數清單與函式呼叫的引數清單，若含有換行：
+    - 每個參數／引數後皆須換行
+    - 開頭的 `(` 後換行，結尾的 `)` 前不換行。
+    - 結尾的 `)` 後緊接的閉括號與標點之後須換行。
+- _例外_：函式呼叫的引數清單，僅有最後一個引數含有換行時，無須另外加入換行。
 
 **Good:**
 ```c
@@ -424,10 +461,28 @@ log_level(
     value,
     value);
 ```
+```c
+get_configure(CONFTYPE_INT, &TEMPLVAL(ConfOptionInt, {
+    .name = "timeout",
+    .value_default = 5,
+}));
+```
+
+## `[` & `]`
+
+The same rules for the function argument list apply.
+
+```c
+return arr[(x >= 0 && x < COUNTOF(arr)) ?
+    x
+    : 0];
+```
 
 ## `,`
-- C code
-    - 在 initializer-list 中，`,` 不能在被註解掉的 element list 之首，應從註解移出到前一個 element 後
+- C code, in a `{`-`}`&ndash;enclosed initializer-list
+    - `,` 不能在被註解掉的 element list 之首，應從註解移出到前一個 element 後
+    - If there is a line wrap after the last element, there should be a `,` right before the line wrap.
+    - There should not be an optional trailing `,` immediately before the closing `}` without any line wraps in between.
 - Code
     - `,` 前不能有額外的 spaces
     - `,` 後和 expression 之間要有至少一個 space
@@ -451,6 +506,13 @@ macro(sth,, sth)
 ```
 ```c
 int a[] = {sth, sth, /* sth */};
+```
+```c
+int a[] = {
+    sth,
+    sth,
+    /* sth, */
+};
 ```
 
 ## `;`
