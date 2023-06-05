@@ -22,7 +22,7 @@ y 軸           | y 為 row；+y 方向向下    | y 為 column；+y 方向向�
 目的            | - 處理要輸出畫面之原始字元資料 (screen & visio) <br> - (不存在) (pfterm) | - 計算輸出畫面後的顯示位置 <br> - 處理要輸出畫面之字元資料 (pfterm) | 處理顯示範圍改變時的顯示位置變化
 作為原始座標     | - screen <br> - visio      | pfterm              | (無)
 最小有效座標     | `(0, 0)`                   | `(0, 0)`            | - (理論上無限制) <br> - `(0, 0)` (目前之簡化實作)
-最大有效座標     | `(b_lines, ANSILINELEN-1)` | - `(b_lines, t_columns - 1)` (screen) <br> - `(b_lines, b_cols)` (visio) <br> - `(ft.rows - 1, ft.cols - 1)` (pfterm) | - (理論上無限制) <br> - `(B_LINES_REF, B_COLS_REF)` (目前之簡化實作)
+最大有效座標     | `(b_lines, ANSILINELEN-1)` | - `(b_lines, t_columns - 1)` (screen & visio) <br> - `(b_lines, b_cols)` (MapleBBS-itoc visio) <br> - `(ft.rows - 1, ft.cols - 1)` (pfterm) | - (理論上無限制) <br> - `(B_LINES_REF, B_COLS_REF)` (目前之簡化實作)
 實際終端機畫面大小 | --                        | - (無) (screen & visio) <br> - `(ft.rows_full, ft.cols_full)` (pfterm v1.2) | --
 實際終端機畫面上的游標座標 | (無)                     | - `(tc_line, tc_col)` (screen) <br> - `(tc_row, tc_col)` (visio) <br> - `(ft.ry, ft.rx)` (pfterm) | (無)
 內部使用的游標座標 | - `(cur_ln, cur_pos)` (screen) <br> - `(cur_row, cur_pos)` (visio) <br> - `(cur_ln, cur_col)` (PttBBS screen) | - `(cur_ln, cur_col)` (screen) <br> - `(cur_row, cur_col)` (visio) <br> (visio 中 `move()` 後 `cur_col` 不同步而無效) <br> - `(cur_ln, <動態算出>)` (PttBBS screen) <br> - `(ft.y, ft.x)` (pfterm) | (無)
