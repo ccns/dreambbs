@@ -244,9 +244,10 @@ while (cond);
     - 為 `do`-`while` 的 code block
     - Condition list 含有換行
     - Code block 內含有 `goto`/`case` labels
+    - K&R style is used and the code block is not empty.
 - 除了必須使用 `{` 與 `}` 的狀況外……
     - 若 code block 為空，應以單獨一行的 `;` 取代
-    - 若僅包含一句不換行的陳述式，可不使用 `{` 與 `}`，但該陳述式須單獨一行出現
+    - 若使用 Allman style 且僅包含一句不換行的陳述式，可不使用 `{` 與 `}`，但該陳述式須單獨一行出現
 
 **Good:**
 ```c
