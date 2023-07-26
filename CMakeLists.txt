@@ -291,13 +291,14 @@ endif()
 
 ## Generate configure file
 function(EXPORT_CONF export_file)
-    execute_process(COMMAND printf "\\033[1;36mGenerating '${export_file}'...\\033[0m\n")
+    string(ASCII 27 esc)
+    message("${esc}[1;36mGenerating '${export_file}'...${esc}[m")
     configure_file(
         ${export_file}.in ${export_file}
         NEWLINE_STYLE LF
     )
     file(READ ${export_file} EXPORT_FILE_CONTENT)
-    execute_process(COMMAND printf "\\033[1;33m${EXPORT_FILE_CONTENT}\\033[0m")
+    message("${esc}[1;33m${EXPORT_FILE_CONTENT}${esc}[m")
 endfunction()
 
 EXPORT_CONF(${CMAKE_CURRENT_SOURCE_DIR}/make_export.conf)
