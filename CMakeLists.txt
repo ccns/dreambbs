@@ -24,13 +24,34 @@ include(FindPkgConfig)
 
 ## Toolchain settings
 
+function(MACROVALUE compiler conf default output)
+    set(valueif "#ifdef ${conf}\n${conf}\n#else\n${default}\n#endif")
+    execute_process(
+        COMMAND echo ${valueif}
+        COMMAND ${compiler} -E -P -
+        COMMAND sed [[s/^"\(.*\)"$/\1/g]] # unquote
+        COMMAND head -c -1 # strip the trailing newline
+        OUTPUT_VARIABLE res
+        ERROR_QUIET
+    )
+    set("${output}" "${res}" PARENT_SCOPE)
+endfunction(MACROVALUE)
+
 if(NOT USE_CXX)
     # specify the C standard
-    add_compile_options(-x c --std=gnu99)
+    add_compile_options(-x c)
+    MACROVALUE("${CMAKE_C_COMPILER};-x;c" "__STDC_VERSION__" "" CSTD)
+    if(CSTD STRLESS "199901L")
+        add_compile_options(--std=gnu99)
+    endif()
     set(USE_CXX OFF CACHE BOOL "Compile C code using C++ mode")
 else()
     # specify the C++ standard
     add_compile_options(-x c++ --std=gnu++14)
+    MACROVALUE("${CMAKE_CXX_COMPILER};-x;c++" "__cplusplus" "" CXXSTD)
+    if(CXXSTD STRLESS "201402L")
+        add_compile_options(--std=gnu++14)
+    endif()
     link_libraries(stdc++)
     set(USE_CXX ON CACHE BOOL "Compile C code using C++ mode")
 endif()
@@ -74,15 +95,7 @@ function(ESCAPE_QUOTES str output)
 endfunction(ESCAPE_QUOTES)
 
 function(GETVALUE conf default hdr output)
-    set(valueif "#ifdef ${conf}\n${conf}\n#else\n${default}\n#endif")
-    execute_process(
-        COMMAND echo ${valueif}
-        COMMAND ${CMAKE_C_COMPILER} -x c -E -P -imacros "${hdr}" -
-        COMMAND sed [[s/^"\(.*\)"$/\1/g]] # unquote
-        COMMAND head -c -1 # strip the trailing newline
-        OUTPUT_VARIABLE res
-        ERROR_QUIET
-    )
+    MACROVALUE("${CMAKE_C_COMPILER};-x;c;-imacros;${hdr}" "${conf}" "${default}" res)
     set("${output}" "${res}" PARENT_SCOPE)
 endfunction(GETVALUE)
 
