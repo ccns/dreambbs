@@ -63,22 +63,22 @@ function(GETVALUE conf default hdr output)
         COMMAND echo ${valueif}
         COMMAND ${CMAKE_C_COMPILER} -x c -E -P -imacros "${hdr}" -
         COMMAND xargs
-        OUTPUT_VARIABLE "${output}"
+        OUTPUT_VARIABLE res
         OUTPUT_STRIP_TRAILING_WHITESPACE
         ERROR_QUIET
     )
-    set("${output}" "${${output}}" PARENT_SCOPE)
+    set("${output}" "${res}" PARENT_SCOPE)
 endfunction(GETVALUE)
 
 function(LOADVALUE conf default hdr output)
     if(DEFINED ENV{${conf}})
-        set("${output}" "$ENV{${conf}}")
+        set(res "$ENV{${conf}}")
     elseif(DEFINED "${conf}")
-        set("${output}" "${${conf}}")
+        set(res "${${conf}}")
     else()
-        GETVALUE("${conf}" "${default}" "${hdr}" "${output}")
+        GETVALUE("${conf}" "${default}" "${hdr}" res)
     endif()
-    set("${output}" "${${output}}" PARENT_SCOPE)
+    set("${output}" "${res}" PARENT_SCOPE)
 endfunction(LOADVALUE)
 
 set(ID_DEFAULT 9999)
@@ -86,33 +86,33 @@ set(ID_DEFAULT 9999)
 function(GETUID name output)
     execute_process(
         COMMAND sh -c "id -u ${name} || echo ${ID_DEFAULT}"
-        OUTPUT_VARIABLE "${output}"
+        OUTPUT_VARIABLE res
         OUTPUT_STRIP_TRAILING_WHITESPACE
         ERROR_QUIET
     )
-    set("${output}" "${${output}}" PARENT_SCOPE)
+    set("${output}" "${res}" PARENT_SCOPE)
 endfunction(GETUID)
 
 function(GETGID name output)
     execute_process(
         COMMAND getent group ${name}
         COMMAND cut -d: -f3 -
-        OUTPUT_VARIABLE "${output}"
+        OUTPUT_VARIABLE res
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
-    if ("${${output}}" STREQUAL "")
+    if ("${res}" STREQUAL "")
         set("${output}" ${ID_DEFAULT})
     endif()
-    set("${output}" "${${output}}" PARENT_SCOPE)
+    set("${output}" "${res}" PARENT_SCOPE)
 endfunction(GETGID)
 
 function(DEF_TEST conf hdr output)
     if("${hdr}" IS_NEWER_THAN ${CMAKE_CACHEFILE_DIR}/CMakeCache.txt)
         set(MARK_CACHE_UPDATED ON)
         unset("${output}" CACHE)
-        check_symbol_exists("${conf}" "${hdr}" "${output}")
+        check_symbol_exists("${conf}" "${hdr}" res)
     endif()
-    set("${output}" "${${output}}" PARENT_SCOPE)
+    set("${output}" "${res}" PARENT_SCOPE)
 endfunction(DEF_TEST)
 
 ## Read variables from the configuration C files
