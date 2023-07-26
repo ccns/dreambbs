@@ -57,14 +57,30 @@ link_libraries(-L${PROJECT_BINARY_DIR}/lib dao crypt)
 
 ## Tool functions
 
+function(SED str command output)
+    execute_process(
+        COMMAND echo ${str}
+        COMMAND sed "${command}"
+        COMMAND head -c -1 # strip the trailing newline
+        OUTPUT_VARIABLE res
+        ERROR_QUIET
+    )
+    set("${output}" "${res}" PARENT_SCOPE)
+endfunction(SED)
+
+function(ESCAPE_QUOTES str output)
+    SED("${str}" [[s/\([^\\]\)"/\1\\"/g;s/^"/\\"/g]] res)
+    set("${output}" "${res}" PARENT_SCOPE)
+endfunction(ESCAPE_QUOTES)
+
 function(GETVALUE conf default hdr output)
     set(valueif "#ifdef ${conf}\n${conf}\n#else\n${default}\n#endif")
     execute_process(
         COMMAND echo ${valueif}
         COMMAND ${CMAKE_C_COMPILER} -x c -E -P -imacros "${hdr}" -
-        COMMAND xargs
+        COMMAND sed [[s/^"\(.*\)"$/\1/g]] # unquote
+        COMMAND head -c -1 # strip the trailing newline
         OUTPUT_VARIABLE res
-        OUTPUT_STRIP_TRAILING_WHITESPACE
         ERROR_QUIET
     )
     set("${output}" "${res}" PARENT_SCOPE)
@@ -78,6 +94,7 @@ function(LOADVALUE conf default hdr output)
     else()
         GETVALUE("${conf}" "${default}" "${hdr}" res)
     endif()
+    ESCAPE_QUOTES("${res}" res)
     set("${output}" "${res}" PARENT_SCOPE)
 endfunction(LOADVALUE)
 
