@@ -95,6 +95,7 @@ function(LOADVALUE conf default hdr output)
         GETVALUE("${conf}" "${default}" "${hdr}" res)
     endif()
     ESCAPE_QUOTES("${res}" res)
+    unset("${output}" CACHE)
     set("${output}" "${res}" PARENT_SCOPE)
 endfunction(LOADVALUE)
 
