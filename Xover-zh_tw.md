@@ -361,7 +361,7 @@ Macro             | 值 (省略最外層括號)        | 功能                 
 `XO_DL`           | `0x80000000` <br> `0x00000000` (DreamBBS v2.0; 不使用動態載入時) | 指定回呼函式需要動態載入 | MapleBBS 3.10 新增
 `XO_POSF`         | `XO_MOVE`                 | 指定回呼函式具有 `pos` 參數            | DreamBBS v3.0 新增
 `XO_MODE`         | `0x10000000`              | 表示畫面重繪、資料載入、離開列表等操作  | DreamBBS v3.0 中已移除
-`XO_NONE`         | - `0x10000000` <br> - `0x00004000` (DreamBBS v3)      | - 什麼都不作 <br> - 最小的 Xover opcode |
+`XO_NONE`         | - `0x10000000` <br> - `0x00004000` (DreamBBS v3)      | - 什麼都不作 <br> - 最小的不被視爲單純按鍵的 Xover opcode |
 `XR_<redo>`       | (多個)                    | 預先定義的畫面重繪及資料載入的組合動作  | DreamBBS v3.0 新增
 `XR_PART_<redo>`  | (多個)                    | 畫面重繪及資料載入中的某部分            | DreamBBS v3.0 新增
 `XO_MOVE`         | - `0x20000000` <br> - `0x00100000` (DreamBBS v3)      | - 表示游標移動 <br> - 游標移動的 bias (DreamBBS v3)
