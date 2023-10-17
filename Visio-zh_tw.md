@@ -50,7 +50,7 @@ MapleBBS 3 的 Visio 有以下相關但來源不同的同名函式庫，非本�
 `0x4000` - `0x7fffffff`             | `KEY_NONE` = `0x4000`| (不使用)                    | 保留給 Xover 列表系統使用 <br> - DreamBBS v1.0 新增 <br> - DreamBBS v2.0 改為現值 <br> - DreamBBS v3.0 改為現用法
 `0x80000000` - `0xffffffff`         | (無)               | MapleBBS 3 特殊按鍵 (負數)     | DreamBBS v1.0 起不使用，保留給 Xover 系統
 
-輸入按鍵的值可以用作 Xover 系統的回呼函式特殊值。請見 [[Xover 列表系統§MapleBBS 3 與 DreamBBS v3 的 Xover callback key value 的分配|Xover-zh_tw#maplebbs-3-與-dreambbs-v3-的-xover-callback-key-value-的分配]]。
+輸入按鍵的值可以用作 Xover 系統的回呼函式特殊值。請見 [[MapleBBS 3 與 DreamBBS v3 的 Xover opcode 的分配|Xover-zh_tw#maplebbs-3-與-dreambbs-v3-的-xover-opcode-的分配]]。
 
 ### 特殊按鍵的值
 
