@@ -194,7 +194,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 
 Xover 指令碼 (Xover opcode) 是 Xover 系統中用以表示各種操作與指定 callback 函式的一系列數值。通常不直接使用單一數字表示，而是利用 `XO_*`、`XZ_*`、`XR_*`、`RS_*` 等 macros 組成較易記憶的表達式來表示。
 
-DreamBBS 專案先前以 Xover callback key value 稱呼；DreamBBS v3.1 起命名爲現名。
+DreamBBS 專案先前以 Xover 系統的回呼函式特殊值 (Xover callback key value) 稱呼；DreamBBS v3.1 起命名爲現名。
 
 ### 輸入按鍵的值
 
