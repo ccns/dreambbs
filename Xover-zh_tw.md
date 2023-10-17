@@ -157,7 +157,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 列表資料取得             | - `get_records()` <br> - `get_records_and_bottom()` (PttBBS) | - `get_list()` (1.1.1) <br> - `*_get()` (1.4.1) | 通常為 `xo_load()`
 列表資料取得方法         | `lseek()` + `read()` 載入部分列表 | `lseek()` + `read()` 載入部分列表 <br> - 或用 `memcpy()` 取得已載入資料的一部分 (1.4.1) | - 通常為 `lseek()` + `read()` 載入部分列表 <br> - 通常為 `mmap()` 映射整個列表 (DreamBBS v3)
 
-### 重新載入與重繪的相關 macros (括號：無直接對應，替代的處理方式)
+### 重新載入與重繪的指令 (括號：無對應指令，但有替代的處理方式)
 使用場合                  | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 | Formosa BBS | MapleBBS 2.39 <br> WD BBS | MapleBBS 3
  :---                    | ---                | ---           | ---           | ---
 什麼都不做                | `DONOTHING`        | - `R_NO`/`B_NO`/`M_NO` <br> (定義一致) (1.1.1) <br> - `C_NONE` (1.4.1) | `RC_NONE`     | `XO_NONE`
@@ -175,7 +175,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 重繪畫面頂部              | - (`FULLUPDATE`) <br> - `TITLE_REDRAW` (PttBBS) | - (`R_FULL`) (1.1.1) <br> - (`C_FULL`) (1.4.1) | (`RC_FULL`) | - (`XO_HEAD`) <br> - `XR_PART_HEAD + key` (DreamBBS v3)
 重新載入資料但不重繪      | - (`PARTUPDATE`) <br> - `HEADERS_RELOAD` (PttBBS) | (操作資料結構重新載入) | (操作資料結構重新載入) | - (操作資料結構重新載入) <br> - `XR_PART_LOAD + key` (DreamBBS v3)
 
-### 列表操作的相關 macros (括號：無直接對應，替代的處理方式)
+### 列表操作的指令 (括號：無對應指令，但有替代的處理方式)
 使用場合                 | Pirate BBS <br> MapleBBS 2.36 <br> PttBBS <br> FireBird BBS 2.51 <br> MapleBBS 2.39 <br> WD BBS | Formosa BBS | MapleBBS 3
  :---                    | ---                  | ---                  | ---
 指定某功能需要動態載入    | (無)                  | (無)                 | `cmd \| XO_DL` (MapleBBS 3.10)
@@ -190,13 +190,17 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 回到上層列表             | (無)                  | (無)                  | (無；有 `XO_LAST`，但未實作)
 離開列表函式             | - `DOQUIT` <br> - `QUIT` (MapleBBS 2.39 & WD BBS) | - (直接操作) (1.1.1) <br> -`C_REDO` (1.4.1) | `XO_QUIT` <br> - `QUIT` 重新定義為 `XO_QUIT` (DreamBBS v3.0)
 
-## MapleBBS 3 與 DreamBBS v3 的 Xover callback key value 的分配
+## MapleBBS 3 與 DreamBBS v3 的 Xover opcode 的分配
+
+Xover 指令碼 (Xover opcode) 是 Xover 系統中用以表示各種操作與指定 callback 函式的一系列數值，通常使用以包含 `XO_` 開頭的 macros 的表達式表示。
+
+DreamBBS 專案先前以 Xover callback key value 稱呼；DreamBBS v3.1 起命名爲現名。
 
 ### 輸入按鍵的值
 
 → [[Visio 輸出入函式庫§輸入按鍵的值|Visio-zh_tw#輸入按鍵的值]]
 
-### MapleBBS 3 的 Xover callback key value 的分配
+### MapleBBS 3 的 Xover opcode 的分配
 範圍或對應的 bit mask                | 相關 macro         | 功能                         | 註解
  :---                               | ---                | ---                          | ---
 `0x00000000` - `0x00003fff`         | (無)               | 按鍵輸入                     |
@@ -210,7 +214,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 `0x40000000` - `0x7fffffff`         | `XO_ZONE + zone` (`zone >= 0`)         | 列表切換                    | Maple-itoc 只使用 14 個
 `0x80000000` - `0xffffffff`         | - `key` (`key < 0`) <br> - `key \| XO_DL` (MapleBBS 3.10) | 特殊按鍵 (負數) <br> - 或動態載入功能 (MapleBBS 3.10) | MapleBBS 3.10 後不能以特殊按鍵做為 callback 列表的 key <br> - DreamBBS v1.0 將特殊按鍵值恢復為傳統的正數，可做為 callback 列表的 key
 
-### DreamBBS v3 的 Xover callback key value 的分配
+### DreamBBS v3 的 Xover opcode 的分配
 範圍或對應的 bit mask                | 相關 macro         | 功能                         | 註解
  :---                               | ---                | ---                          | ---
 `0x00000000` - `0x00003fff`         | `key`              | 按鍵輸入                      |
@@ -220,7 +224,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 　                                  | - `XR_* + key` <br> - `XZ_ZONE + XZ_* + key` | - 執行按鍵功能後進行畫面重繪及資料載入 <br> - 執行按鍵功能後進行列表相關操作 | 經過 `XO_MOVE_MASK` mask 後為 `0x00000000` - `0x00004000`
 　                                  | - `XR_* + {XO_WRAP\|XO_SCRL\|XO_REL} + key` <br> - `XZ_ZONE + XZ_* + {XO_WRAP\|XO_SCRL\|XO_REL} + key` | - `XO_CUR` (`XO_REL + XO_CUR_BIAS`) <br> - `XO_RS` (`XO_SCRL`) (v3.1) <br> - (未使用) (其它) | 經過 `XO_MOVE_MASK` mask 後不為 `0x00000000` - `0x00004000`，而經過 `XO_POS_MASK` mask 後為 `0x00000000` - `0x00004000` <br> - 不需要操作游標的雜項功能放這一區
 　                         　       | - `XR_* + XO_CUR + diff` <br> - `XZ_ZONE + XZ_* + XO_CUR + diff` | 重繪游標所在行，並移動游標到指定的相對位置 | 經過 `XO_MOVE_MASK` mask 後為 `0x00200000` - `0x00204000` <br> - 移動範圍為 `-0x2000` (`-8192`) - `0x2000` (`8192`)
-　                         　       | - `XR_* + XO_RS + RS_*` <br> - `XZ_ZONE + XZ_* + XO_RS + RS_*` | 主題式閱讀命令 | 經過 `XO_MOVE_MASK` mask 後為 `0x00400000` - `0x00404000` <br> - v3.1 新增
+　                         　       | - `XR_* + XO_RS + RS_*` <br> - `XZ_ZONE + XZ_* + XO_RS + RS_*` | 主題式閱讀指令 | 經過 `XO_MOVE_MASK` mask 後為 `0x00400000` - `0x00404000` <br> - v3.1 新增
 　                                  | - `XR_* + XO_MOVE + move` <br> - `XZ_ZONE + XZ_* + XO_MOVE + move` | - 設定列表游標位置後進行畫面重繪及資料載入 <br> - 設定 zone 游標位置後進行列表相關操作 | 經過 `XO_POS_MASK` mask 後為 `0x00004001` - `0x001fffff` <br> - 這限制了游標的移動範圍為 `-0x000fbfff` (-1032191‬) - `0x000fffff` (1048575‬)
 `0x00e00000` (mask)                 | `XO_MFLAG_MASK`    | 游標移動方式相關             | 把 `XO_WRAP`, `XO_SCRL`, & `XO_REL` `or` 起來的值 <br> - v3.1 新增
 `0x00200000` (mask)                 | `XO_REL`           | 將游標位置解釋為相對位置      |
@@ -246,20 +250,20 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 `0x00100000` (mask)                 | `key \| XO_POSF` <br> (= `XO_MOVE`) | 指定回呼函式具有 `pos` 參數   | DreamBBS v3.0 新增
 `0x7fefffff` (mask)                 | `XO_FUNC_MASK` <br> (= `~XO_FSPEC_MASK`) | 用以取得忽略函式類別指定 flags 後的實際對應按鍵值 | DreamBBS v3.0 新增
 
-### Xover callback key value 的位元分配比較
+### Xover opcode 的位元分配比較
 
 圖例：`欄位名(所佔位元數)`、`欄位名 = 此欄定值(所佔位元數)`、`欄位名 (= 此欄通常值)(所佔位元數)`
 
 (`--` 表示未使用或須為定值的位元)
 
 #### MapleBBS 3
-- Xover 命令與回呼函式指定：
-    -   - MapleBBS 3.10 後，若在 _命令_ 中加了 `XO_DL`（**不應使用**），會造成需動態載入的按鍵功能載入後仍有 `XO_DL`，再次嘗試載入時會造成程式崩潰。
+- Xover 指令與回呼函式指定：
+    -   - MapleBBS 3.10 後，若在 _指令碼_ 中加了 `XO_DL`（**不應使用**），會造成需動態載入的按鍵功能載入後仍有 `XO_DL`，再次嘗試載入時會造成程式崩潰。
     - 一般按鍵：`32| XO_DL(1) | -- = 0(3) | -- (= 0)(20) | 按鍵值(8) |0`
     - 特殊按鍵（**不應使用**）：`32| XO_DL = 1(1) | -- (= 0x7fffff)(23) | 按鍵值的絕對值的二補數(8) |0`
         - MapleBBS 3.10 後，若用來 _指定回呼函式_，會被解析成有 `XO_DL` 而強制使用動態載入的方式載入按鍵功能，會造成程式崩潰。
     - 畫面重繪：`32| XO_DL(1) | -- = 0(2) | XO_MODE = 1(1) | -- (= 0)(24) | 重繪索引值(4) |0`
-- 限 Xover 命令：
+- 限 Xover 指令：
     - 游標移動：`32| -- (= 0)(1) | -- = 0(1) | XO_MOVE = 1(1) | --(1) | XO_WRAP(1) | 游標位置(27) |0`
         - 正游標位置，有加 `XO_WRAP`：`30 | XO_MOVE = 1(1) | XO_MODE = 0(1) | XO_WRAP = 1(1) | 游標位置(27) |0`
         - 負游標位置，有加 `XO_WRAP`：`30 | XO_MOVE = 1(1) | XO_MODE = 0(1) | XO_WRAP = 0(1) | 游標位置的絕對值的二補數(27) |0`
@@ -268,9 +272,9 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
     - Zone 切換：`32| -- (= 0)(1) | XO_ZONE = 1(1) | -- (= 0)(26) | Zone 索引值(4) |0`
 
 #### DreamBBS v3.0
-- Xover 命令：`32| -- (= 0)(1) | XZ_ZONE(1) | XR_PART_*/XZ_* flags(6) | XO_WRAP(1) | XO_SCRL(1) | XO_REL(1) | 游標位置值或按鍵(21) |0`
+- Xover 指令：`32| -- (= 0)(1) | XZ_ZONE(1) | XR_PART_*/XZ_* flags(6) | XO_WRAP(1) | XO_SCRL(1) | XO_REL(1) | 游標位置值或按鍵(21) |0`
     - 若加上 `XO_DL`（**不建議**），會找不到對應的回呼函式 (C)，或僅嘗試呼叫需動態載入的版本 (C++)。
-    - 無法在 Xover _命令_ 直接加上 `XO_POSF`（會被解釋為 `XO_MOVE`），不過可透過 `xover_exec_cb()` 直接呼叫對應的回呼函式（行為見後述）。
+    - 無法在 Xover _指令碼_ 直接加上 `XO_POSF`（會被解釋為 `XO_MOVE`），不過可透過 `xover_exec_cb()` 直接呼叫對應的回呼函式（行為見後述）。
     - 其中 `21| 游標位置值或按鍵(21) |0` 的部份為：
         - 正游標位置：`21 | XO_MOVE = 1(1) | 游標位置(20) |0`
         - 負游標位置：`21 | XO_MOVE = 0(1) | 游標位置的絕對值的二補數(20) |0` (游標位置的絕對值的二補數 > `XO_NONE`/`0x4000`)
@@ -284,7 +288,7 @@ Callback 取得方法　   　| - Loop/O(n) <br> - Direct indexing/O(1) (PttBBS)
 - 無 `XZ_ZONE` 時：`31| XZ_ZONE = 0(1) | XR_PART_FOOT(1) | XR_PART_KNEE(1) | XR_PART_BODY(1) | XR_PART_NECK(1) | XR_PART_HEAD(1) | XR_PART_LOAD(1) |24`
 - 有 `XZ_ZONE` 時：`31| XZ_ZONE = 1(1) | XZ_UNUSED5(1) | XZ_SKIN(1) | XZ_QUIT(1) | XZ_BACK(1) | XZ_FINI(1) | XZ_INIT(1) |24`
 
-### DreamBBS v3.0 的新的 key value 分配的特點
+### DreamBBS v3.0 的新的 Xover opcode 分配的特點
 - 除了頭尾循環邏輯改變，舊的 macro 使用方法仍然有效
 - 將 `XO_MOVE` 重新定義為游標位置的 bias，避免游標位置為負時 flag bits 的改變
 - 重繪畫面的各個 `XO_*` macros 之間的相對大小不變
@@ -302,7 +306,7 @@ Member 名稱 | 型別           | 出處          | 說明
 `xo`        | `XO *`        | MapleBBS 3.02 | 用以存放此區域的游標資料
 `cb` <br> - 移入 `XO` (DreamBBS v3) | - `KeyFunc *` <br> - `KeyFuncListRef` (後移入 `XO`) <br> (DreamBBS v3) | MapleBBS 3.02 | 此區域的回呼函式清單
 `mode`      | `int`         | MapleBBS 3.02 | 此區域對應的使用者狀態
-`feeter`    | `char *`      | MapleBBS-itoc | 存放執行 `XO_FOOT` 命令時要畫出的 footer <br> - DreamBBS 未引入此成員 <br> (DreamBBS v3.0 執行 `XO_FOOT` 命令時會呼叫回呼函式清單中的對應函式)
+`feeter`    | `char *`      | MapleBBS-itoc | 存放執行 `XO_FOOT` 指令時要畫出的 footer <br> - DreamBBS 未引入此成員 <br> (DreamBBS v3.0 執行 `XO_FOOT` 指令時會呼叫回呼函式清單中的對應函式)
 
 ### 游標資料結構 `XO`
 又名 `struct OverView`。
@@ -351,13 +355,13 @@ Member 名稱 | 型別               | 出處          | `key`/`first` 指定方
 `dlfunc`    | - `const char *` (使用動態載入) <br> - `int (*)(XO *xo)` (不使用動態載入) | DreamBBS v2.1 | `key \| XO_DL` | 需動態載入的普通 Xover 回呼函式
 `dlposf`    | - `const char *` (使用動態載入) <br> - `int (*)(XO *xo, int pos)` (不使用動態載入) | DreamBBS v3.0 | `key \| XO_POSF \| XO_DL` | 需動態載入的帶 `pos` 參數的 Xover 回呼函式
 
-## MapleBBS 3 與 DreamBBS v3 的 Xover 特殊值
+## MapleBBS 3 與 DreamBBS v3 的 Xover opcode 相關特殊值
 Macro             | 值 (省略最外層括號)        | 功能                                  | 註解
  :---             | ---                       | ---                                   | ---
 `XO_DL`           | `0x80000000` <br> `0x00000000` (DreamBBS v2.0; 不使用動態載入時) | 指定回呼函式需要動態載入 | MapleBBS 3.10 新增
 `XO_POSF`         | `XO_MOVE`                 | 指定回呼函式具有 `pos` 參數            | DreamBBS v3.0 新增
 `XO_MODE`         | `0x10000000`              | 表示畫面重繪、資料載入、離開列表等操作  | DreamBBS v3.0 中已移除
-`XO_NONE`         | - `0x10000000` <br> - `0x00004000` (DreamBBS v3)      | - 什麼都不作 <br> - 最小的被當作命令的 Xover key value |
+`XO_NONE`         | - `0x10000000` <br> - `0x00004000` (DreamBBS v3)      | - 什麼都不作 <br> - 最小的 Xover opcode |
 `XR_<redo>`       | (多個)                    | 預先定義的畫面重繪及資料載入的組合動作  | DreamBBS v3.0 新增
 `XR_PART_<redo>`  | (多個)                    | 畫面重繪及資料載入中的某部分            | DreamBBS v3.0 新增
 `XO_MOVE`         | - `0x20000000` <br> - `0x00100000` (DreamBBS v3)      | - 表示游標移動 <br> - 游標移動的 bias (DreamBBS v3)
@@ -365,7 +369,7 @@ Macro             | 值 (省略最外層括號)        | 功能                 
 `XO_CUR_BIAS`     | `0x2000`                  | `XO_CUR` 內部處理相對位置時的 bias      | DreamBBS v3.0 新增
 `XO_CUR_MIN`      | `XO_REL + 0 - XO_CUR`     | `XO_CUR` 可指定的相對位置的最小值       | DreamBBS v3.0 新增
 `XO_CUR_MAX`      | `XO_REL + KEY_NONE - XO_CUR` | `XO_CUR` 可指定的相對位置的最大值  | DreamBBS v3.0 新增
-`XO_RS`           | `XO_SCRL`                 | 將操作解釋為主題式閱讀命令              | DreamBBS v3.1 新增
+`XO_RS`           | `XO_SCRL`                 | 將操作解釋為主題式閱讀指令              | DreamBBS v3.1 新增
 `XO_RSIZ`         | `256`                     | 列表資料的資料結構大小限制              | DreamBBS v3.0 起不使用
 `XO_TALL`         | `b_lines - 3`             | 翻頁所跳行數                           | 非常數
 `XO_MOVE_MAX`     | `XO_POS_MASK - XO_MOVE`   | 可加在 `XO_MOVE` 上的最大值            | DreamBBS v3.0 新增
@@ -381,7 +385,7 @@ Macro             | 值 (省略最外層括號)        | 功能                 
 `XO_SKIN`         | `(XZ_ZONE \| XZ_SKIN) + XO_MOVE` | 套用某個使用者介面 skin (未實作) | DreamBBS v3.0 新增
 `XZ_SKIN`         | `0x10000000`              | 將操作解讀為使用者介面 skin 切換 (未實作) | DreamBBS v3.0 新增
 
-### MapleBBS 3 的 `XO_MODE + <mode>` (含 `XO_MODE`) 與 DreamBBS v3 Xover 特殊值的對應
+### MapleBBS 3 的 `XO_MODE + <mode>` (含 `XO_MODE`) 與 DreamBBS v3 Xover opcode 的對應
 
 Macro     | 值 (MapleBBS 3) | 值 (DreamBBS v3) | 註解
  :---     | ---             | ---              | ---
@@ -425,9 +429,9 @@ Macro      | 值 (MapleBBS 3) | 值 (DreamBBS v3) | 說明
 `XZ_MYFAVORITE` | `XO_ZONE + 12` (DreamBBS-2010) | `XO_ZONE + XZ_INDEX_MYFAVORITE` <br> (= `XO_ZONE + 12`) | 我的最愛
 `XZ_BACK`  | `0x100` (MapleBBS 3.00) | `0x04000000` | 回到上次進入的 zone <br> - (未實作)
 
-## MapleBBS 2.36b 與 DreamBBS v3 的主題式閱讀命令
+## MapleBBS 2.36b 與 DreamBBS v3 的主題式閱讀指令
 
-### MapleBBS 2.36b 與 DreamBBS v3 的主題式閱讀特殊值
+### MapleBBS 2.36b 與 DreamBBS v3 的主題式閱讀指令碼
 
 Macro        | 值 (MapleBBS 2.36b) | 值 (DreamBBS v3.1) | 說明
  :---        | ---                 | ---                | ---
@@ -448,7 +452,7 @@ Macro        | 值 (MapleBBS 2.36b) | 值 (DreamBBS v3.1) | 說明
 `RS_BOARD`   | `0x1000` (MapleBBS 3.00a) | `0x1000`     | - 有：搜尋看板文章 <br> - 無：搜尋信箱文章 <br> - 限內部處理，配合 `RS_UNREAD`。
 `RS_UNUSED13` | (無)               | `0x2000`           | (未使用)
 
-### MapleBBS 2.36b 的主題式閱讀命令與 DreamBBS v3 Xover 特殊值的對應
+### MapleBBS 2.36b 的主題式閱讀指令與 DreamBBS v3 Xover 指令碼的對應
 
 Macro         | 值 (MapleBBS 2.36b) | 值 (DreamBBS v3.1) | 說明
  :---         | ---             | ---              | ---
@@ -465,22 +469,22 @@ Macro         | 值 (MapleBBS 2.36b) | 值 (DreamBBS v3.1) | 說明
 `MARK_NEXT`   | `RS_MARKED \| RS_FORWARD \| RS_CURRENT` (MapleBBS 3.00b) | `XO_RS + RS_MARK_NEXT` <br> (= `XO_RS + (RS_MARKED \| RS_FORWARD \| RS_CURRENT)`) | 下一篇有 mark 標記的文章
 `MARK_PREV`   | `RS_MARKED \| RS_CURRENT` (MapleBBS 3.00b) | `XO_RS + RS_MARK_PREV` <br> (= `XO_RS + (RS_MARKED \| RS_CURRENT)`) | 上一篇有 mark 標記的文章
 
-## DreamBBS v3 的 Xover callback 命令鏈鎖機制
+## DreamBBS v3 的 Xover 指令鏈鎖機制
 ### 名詞說明
 #### 鏈鎖
 `i_read` 與 Xover 列表系統的 callback 函式都可以透過回傳值，呼叫下一個 callback，本文稱之為「鏈鎖」。
 
 例：假設 `'i'` 對應的 callback 回傳 `'j'`，`'j'` 對應的 callback 回傳 `'k'`，`'k'` 對應的 callback 回傳 `XO_BODY`，`XO_BODY` 對應的 callback 回傳 `XO_FOOT`，`XO_FOOT` 對應的 callback 回傳 `XO_NONE`，即可稱其為一個鏈鎖，可以記為 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE`。
 
-鏈鎖的結尾 callback 可以回傳游標移動命令、`XO_NONE` 命令、或沒有對應 callback 的命令。
+鏈鎖的結尾 callback 可以回傳游標移動指令、`XO_NONE` 指令、或沒有對應 callback 的指令。
 
-#### 命令鏈鎖
-透過回傳按鍵值而呼叫下一個 callback 的鏈鎖，稱為「命令鏈鎖」。
+#### 指令鏈鎖
+透過回傳按鍵值而呼叫下一個 callback 的鏈鎖，稱為「指令鏈鎖」。
 
-例：假設有一鏈鎖 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE`，其中就包含了命令鏈鎖 `'i' -> 'j' -> 'k'`。
+例：假設有一鏈鎖 `'i' -> 'j' -> 'k' -> XO_BODY -> XO_FOOT -> XO_NONE`，其中就包含了指令鏈鎖 `'i' -> 'j' -> 'k'`。
 
 #### 組合操作 - Redo 組合操作與 zone 組合操作
-從 DreamBBS v3.0 開始，可以將畫面重繪/重新載入或列表操作，與按鍵輸入或游標移動的操作組合表示，因此需要特別的規則來處理帶有這些組合的命令鏈鎖。
+從 DreamBBS v3.0 開始，可以將畫面重繪/重新載入或列表操作，與按鍵輸入或游標移動的操作組合表示，因此需要特別的規則來處理帶有這些組合的指令鏈鎖。
 
 其中畫面重繪/重新載入 (`XR_*`) 等操作，本文稱之為「redo-simple 操作」，與其組合的操作則稱為「redo 組合操作」；\
 列表操作 (`XZ_ZONE + XZ_*`) 等操作，本文稱之為「zone-simple 操作」，與其組合的操作則稱為「zone 組合操作」。
@@ -498,9 +502,9 @@ Null 操作是 pure 操作的特例，是導致鏈鎖終止的單純操作，包
 此外，DreamBBS v3 的切換列表操作 (`XZ_<zone>`)，是用游標移動達成的，本文將其歸類為 pure 操作中的 null 操作，而非 zone 組合操作；\
 MapleBBS 3 原本的 Xover 列表系統的切換列表操作，不是使用游標移動達到的，但本文也將其看作游標操作。
 
-### 組合命令鏈鎖規則
+### 組合指令鏈鎖規則
 #### 通則
-組合操作中的 redo-simple 部分及 zone-simple 部分，會累積起來，在命令鏈鎖結束時再執行。
+組合操作中的 redo-simple 部分及 zone-simple 部分，會累積起來，在指令鏈鎖結束時再執行。
 
 其中，如果同時累積有 redo-simple 及 zone-simple 部分，則會先執行 zone-simple 部分，再執行 redo-simple 部分。
 
@@ -526,12 +530,12 @@ MapleBBS 3 原本的 Xover 列表系統的切換列表操作，不是使用游�
 
 `return XR_BODY | func_info(xo)` 寫法的優缺點：
 - 適合用在按鍵的對應功能的函式已知的情況
-- 限制是 `func_info(xo)` 不能回傳 `XZ_*` 命令
+- 限制是 `func_info(xo)` 不能回傳 `XZ_*` 指令
 
 `return XR_BODY + 'i'`  寫法的優缺點：
 - 適合用在按鍵的對應功能的函式未知的情況，尤其是在按鍵本身的值未知時
-- 可以正確處理按鍵的對應功能的函式回傳 `XZ_*` 命令的狀況
-- 限制是按鍵本身不能是 `XZ_*` 命令
+- 可以正確處理按鍵的對應功能的函式回傳 `XZ_*` 指令的狀況
+- 限制是按鍵本身不能是 `XZ_*` 指令
 
 #### Zone-zone 鏈鎖 -> pure-pure-zone-simple 鏈鎖
 先後執行兩個操作的 pure 部分後，將與兩者組合的 zone-simple 操作一齊執行。
