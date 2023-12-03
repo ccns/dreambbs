@@ -598,13 +598,13 @@ void func2(void)
         - `for (int i = get_start(); i < n; ++i)`：不暫存終點
         - `for (int i = get_start(), n = get_end(); i < n; ++i)`：暫存終點
     - 遞減型
-        - `for (int i = get_end() - 1; i + 1 > 0; --i)`：不暫存終點
-        - `for (int i = get_end() - 1, b = get_begin(); i + 1 > b; --i)`：暫存終點
+        - `for (int i = get_end(); i-- > 0;)`：不暫存終點
+        - `for (int i = get_end(), b = get_begin(); i-- > b;)`：暫存終點
 - 指標型 for-each 迴圈
     - 遞增型
         - `for (Type *p = get_start(), *const n = get_end(); p != n; ++p)`
     - 遞減型
-        - `for (Type *p = get_end() - 1, *const b = get_start(); p != b; --p)`
+        - `for (Type *p = get_end(), *const b = get_start(); p-- != b;)`
 - 若需在迴圈之後使用迴圈變數的值，方可將迴圈的初始化語句搬出至迴圈之前
 
 ## `goto` 的使用
