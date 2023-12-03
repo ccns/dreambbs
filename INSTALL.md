@@ -122,6 +122,12 @@ groupadd --gid 99 bbs && useradd -m -g bbs -s /bin/bash --uid 9999 bbs
 
     $ cd /home/bbs; git clone https://github.com/ccns/dreambbs; cd dreambbs
 
+預設將使用 `master` 版本。
+
+若要使用 `stable` 版本，可使用以下命令更新版本資訊並切換至該版本：
+
+    $ git fetch --tags origin stable; git checkout stable
+
 接著進去 dreambbs 主目錄。
 
 ## 4. 設定編譯相關檔案
