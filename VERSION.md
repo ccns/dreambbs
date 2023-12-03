@@ -10,19 +10,18 @@
 - `CODENAME`: A codename field
 - `PRERELEASE`: A pre-release field (starts with `alpha`/`beta`/`rc`)
 
-## Legacy Versioning Scheme - `MD.N.P.Q` or simply `M.N.P.Q`
+## Legacy Versioning Scheme - `MD.N.P.Q.R` or simply `M.N.P.Q.R`
 The versioning scheme originated from MapleBBS.
 
 To referring DreamBBS-specific versions, the letter `D` can be appended to the `M` part. In addition, DreamBBS versions before v4.0.0 can be collectively called `MapleBBS 3D`.
 
-For MapleBBS 3, the form `3.nn.P.Q` is used, e.g., `3.00` (not `3.0`) and `3.02` (not `3.2`).
-- It is acceptable to view these two digits as `np`: `N` is `0` and `P` is `2`, and thus the legacy versioning scheme for MapleBBS 3 is instead `3.np.Q.R`.
-    However, this view is not adopted in this article.
+For `M` = `3` and certain cases of `M` = `2`, the abbreviated form `M.np.Q.R` is used, e.g., `3.00` (not `3.0.0`) and `3.02` (not `3.0.2`).
 
-Before the introduction of the 2018 versioning scheme, the latest version name was `3.10 Rev.Beta 3` (inherited from WindTopBBS), and the `.P` part was not actually used.
-- However, it is acceptable to view `Rev.Beta 3` as the `.P` part (`3`).
+Before the introduction of the 2018 versioning scheme, the latest version name was `3.10 Rev.Beta 3` (inherited from WindTopBBS), *i.e.*:
+- `M` = `3`, `N` = `1`, & `P` = `0`.
+- `Q` was not actually used but can be viewed as `3`.
 
-The `.Q` part is reserved for mapping version names in the current versioning scheme before `4D.0.0`/`v4.0.0`.
+Otherwise, `Q` & `R` are reserved for mapping version names in the 2018 versioning scheme before `4D.0.0`/`v4.0.0`.
 
 ## The 2018 Versioning Scheme - `vM.N.P` 
 Note the presence of `v`.
@@ -30,13 +29,13 @@ Note the presence of `v`.
 The versioning scheme introduced in 2018, now deprecated.
 
 Each release using the 2018 versioning scheme has a corresponding legacy version number as well:
-- For `M` ≤ `3`, `vM.N.P` corresponding to `3D.X.N.P`, where each possible `M` maps to a unique `X`.
+- For `M` ≤ `3`, `vM.N.P` corresponding to `3D.xy.N.P`, where each possible `M` maps to a unique `xy`.
 
 For DreamBBS v3, the form `vM.n.P` is used, e.g., `v3.0` (not `v3.00`) and `v3.2` (not `v3.02`). The next major release after DreamBBS v3.3 will be DreamBBS v4.0, so that `N` will not be larger than `9`.
 
 It is acceptable to omit the `v` prefix for DreamBBS because using `M.N.P` along actually does not cause ambiguities:
 - DreamBBS derived from MapleBBS not before MapleBBS 2.36, so before DreamBBS v3 (i.e., `M` < `3`), `DreamBBS M.N` refers to `vM.N` but not `MD.N`
-- DreamBBS v3 and MapleBBS 3 use different numbers of digits for `N`, so `DreamBBS 3.nn` refers to `3D.nn` but not `v3.nn`, while `DreamBBS 3.n` refers to `v3.n` but not `3D.n`.
+- For the 2nd field, DreamBBS v3 allows only 1 digit while MapleBBS 3 allows only 2 digits, so `DreamBBS 3.nn` refers to `3D.nn` but not `v3.nn`, while `DreamBBS 3.n` refers to `v3.n` but not `3D.n`.
 
 However, to avoid confusions, these 2 schemes can be explicitly differentiated by using `MD.N.P` vs. `vM.N.P`.
 
