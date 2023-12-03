@@ -432,18 +432,20 @@ int y = get_value();
 int x = (y << 5) - y;
 ```
 
--   - 例外：可以用 arithmetic right shift 實作除數為 2 的冪次的 integer floored division/modulo
--   -   - `lhs >> rhs` 的 `lhs` 為負時，依據 C99 及 C++11 標準會產生 implementation-defined 的結果；依據 C++20 標準則會產生 arithmetic right shift 的結果
+-   - 例外：若除數 n 為 2 的 m 次方，且 m 為非負整數，則 x 的 integer floored division 與 modulo 應分別用 `x >> m` 與 `x % (unsigned)n`（或 `x & ((1U << m) - 1)`）實作
+-   -   - `lhs >> rhs` 的 `lhs` 為負時，依據 C99 及 C++11 標準會產生 implementation-defined 的結果；依據 C++20 標準則會產生 arithmetic right shift 的結果（同 2 的幂次的 integer floored division）
 
 **Good:**
 ```cpp
 int y = get_value();
-int x = y >> 5;
+int q = y >> 5;
+unsigned int r = y % 32U; // or `y & ((1U << 5) - 1)`
 ```
-**OK:**
+**Bad:**
 ```cpp
 int y = get_value();
-int x = (int)floor(y / 32.0);
+int q = (y - ((y < 0) ? 32 - 1 : 0)) / 32;
+int r = y % 32 + ((y < 0) ? 32 : 0);
 ```
 
 - 值互相相反的邏輯表達式在臨近之處出現時，其中一個應使用另一個的否定的形式
