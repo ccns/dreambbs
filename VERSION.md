@@ -66,7 +66,9 @@ The stages of the overall development workflow after v3.0, from the most unstabl
     - The referenced commit should not be changed after the changelog is published
 
 ## RELEASE
-RELEASE emphasizes more on the stability, the easiness to install, and the ability to deploy on different platform and containers than CURRENT.
+Before v3.0, RELEASE branches had emphasized more on the stability, the easiness to install, and the ability to deploy on different platform and containers than CURRENT.
+
+These goals have now been transferred to the CURRENT tag `stable`, which is the recommended version for other BBS sites to use.
 
 Versioning Scheme: `vM.N.P`, or just `M.N.P` after `4.0.0`
   - `M`: Major version; indicates significant changes
@@ -78,8 +80,9 @@ Versioning Scheme: `vM.N.P`, or just `M.N.P` after `4.0.0`
   - `v0.N` refers to the series of `v0.N.P` versions
   - For `M` > 0, `vM.0` refers to the series of `vM.N.P` versions
 
-### [`v0.95`/`3.10 REV-BETA4`](https://github.com/ccns/dreambbs/releases/tag/v0.95) (`3D.10.95`) ( **End-of-Life** )
+### [`v0.95`/`3.10 REV-BETA4`](https://github.com/ccns/dreambbs/tree/v0.95-testing) (`3D.10.95`)
 The 2018 versioning scheme is introduced in this minor version.
+- [`v0.95.0`/`3.10 REV-BETA4.0`](https://github.com/ccns/dreambbs/releases/tag/v0.95)
 - [`v0.95.1`/`3.10 REV-BETA4.1`](https://github.com/ccns/dreambbs/releases/tag/v0.95.1) 
 - [`v0.95.2`/`3.10 REV-BETA4.2`](https://github.com/ccns/dreambbs/releases/tag/v0.95.2)
 - [`v0.95.3`/`3.10 REV-BETA4.3`](https://github.com/ccns/dreambbs/releases/tag/v0.95.3)
@@ -87,8 +90,9 @@ The 2018 versioning scheme is introduced in this minor version.
 
 It has become end-of-life when `v0.97.0` was released.
 
-### [`v0.96`](https://github.com/ccns/dreambbs/releases/tag/v0.96) (`3D.10.96`) ( **End-of-Life** )
+### [`v0.96`](https://github.com/ccns/dreambbs/tree/v0.96-testing) (`3D.10.96`)
 The `REV-BETA` part in the version name is no longer used.
+- [`v0.96.0`](https://github.com/ccns/dreambbs/releases/tag/v0.96)
 - [`v0.96.1`](https://github.com/ccns/dreambbs/releases/tag/v0.96.1)
 - [`v0.96.2`](https://github.com/ccns/dreambbs/releases/tag/v0.96.2)
 - [`v0.96.3`](https://github.com/ccns/dreambbs/releases/tag/v0.96.3)
@@ -100,7 +104,7 @@ Features:
 
 It has become end-of-life when `v0.97.1` was released.
 
-### `v0.97-stratosphere` (`3D.10.97`) ( **End-of-Life** )
+### [`v0.97-stratosphere`](https://github.com/ccns/dreambbs/tree/v0.97-stratosphere) (`3D.10.97`)
 - [`v0.97-RCx`](https://github.com/ccns/dreambbs/releases/tag/v0.97.0-RC1)-[`v0.97.0`](https://github.com/ccns/dreambbs/releases/tag/v0.97.0): Pre-release
 - [`v0.97.1`](https://github.com/ccns/dreambbs/releases/tag/v0.97.1)
 - [`v0.97.2`](https://github.com/ccns/dreambbs/releases/tag/v0.97.2)
@@ -111,7 +115,7 @@ Features:
   - Refined layout: Trailing whitespaces are removed.
 
 ### `v0.98`-`v0.99` (`3D.10.98`-`3D.10.99`)
-The plans have been dropped due to significant changes which require comprehensive tests.
+The plans have been dropped and no dedicated branches were created due to significant changes which require comprehensive tests.
 
 Pre-releases for `v1.0` were planned instead:
   - [`v1.0-alpha1`](https://github.com/ccns/dreambbs/releases/tag/v1.0-alpha1)
@@ -122,7 +126,7 @@ Pre-releases for `v1.0` were planned instead:
   - [`v1.0-RC2`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc2)
   - [`v1.0-RC3`](https://github.com/ccns/dreambbs/releases/tag/v1.0-rc3)
 
-### `v1.N`: `Tensure` series (`3D.11.N`)
+### [`v1.N`](https://github.com/ccns/dreambbs/tree/v1.0-rimuru): `Tensure` series (`3D.11.N`)
 - [`v1.0.0-rimuru`](https://github.com/ccns/dreambbs/releases/tag/v1.0.0)
 - [`v1.1.0-milim`](https://github.com/ccns/dreambbs/releases/tag/v1.1.0): Backports and improvement from CURRENT
   - Features:
@@ -133,23 +137,28 @@ Pre-releases for `v1.0` were planned instead:
 - [`v1.2.0-shizu`](https://github.com/ccns/dreambbs/releases/tag/v1.2.0)
 - [`v1.3.0-veldora`](https://github.com/ccns/dreambbs/releases/tag/v1.3.0)
 
-### `v2.N`: `Fate` series (`3D.12.N`) ( **Latest Release Series** )
-- [`v2.0.0-artoria`](https://github.com/ccns/dreambbs/releases/tag/v2.0.0)
-  - Features in plan:
-    - [x] Option for disabling DSO.
-    - [ ] BBS-Lua/BBS-Ruby.
-    - [x] SHA-256-encrypted password support.
-    - [x] Preliminary WebSocket support, based on relevant patches to Maple3 and PttBBS.
-- [`v2.1-gilgamesh-rc1`](https://github.com/ccns/dreambbs/releases/tag/v2.1-rc1) (pre-release only)
-    - Features:
-      - Support building with CMake
+### `v2.N`: `Fate` series (`3D.12.N`)
+Unlike previous releases, dedicated branches are created per minor version for this major version.
+- [`v2.0`](https://github.com/ccns/dreambbs/tree/v2.0-artoria)
+  - [`v2.0.0-artoria`](https://github.com/ccns/dreambbs/releases/tag/v2.0.0)
+    - Features in plan:
+      - [x] Option for disabling DSO.
+      - [ ] BBS-Lua/BBS-Ruby.
+      - [x] SHA-256-encrypted password support.
+      - [x] Preliminary WebSocket support, based on relevant patches to Maple3 and PttBBS.
+- [`v2.1`](https://github.com/ccns/dreambbs/tree/v2.1-gilgamesh) (never diverged from CURRENT)
+  - [`v2.1-gilgamesh-rc1`](https://github.com/ccns/dreambbs/releases/tag/v2.1-rc1) (pre-release only)
+      - Features:
+        - Support building with CMake
 
-### `v3.N`; `Four Symbol` series (`3D.21.N`) ( Upcoming Release Series )
+### `v3.N`; `Four Symbol` series (`3D.21.N`) ( Latest Release Series )
 This major version is also named `DreamBBS-202X vN`. `202X` refers to the 2020s decade.
 
 This will be the last major version whose version number is different from the legacy version number.
 
 Due to the shortage of development resources, from this major version and on, only the latest release version is officially maintained.
+
+All the previous branches have become end-of-life when `v3.0` was released.
 
 - [x] [`v3.0`/`202X v0-Azure`](https://github.com/ccns/dreambbs/releases/tag/v3.0.0)
   - [x] Hot-swapping of DSO
@@ -199,7 +208,9 @@ Goals:
     - [ ] Ready for time-variant terminal size
 
 ## CURRENT
-CURRENT (now consists of the `master` branch and the tag `stable`) has new features or significant changes which are being tested.
+Before v3.0, CURRENT had had new features or significant changes which were being tested.
+
+CURRENT now consists of the `master` branch and the tag `stable`. The above goals have now been transferred to the branch `master`.
 
 Former versioning scheme: `vM.0-CURRENT`
   - The corresponding CURRENT version for `vM.N`
@@ -209,13 +220,9 @@ Version scheme after `v3.0`:
   2. Or `M.N-CURRENT` for the CURRENT version of the upcoming release series
     - Will be renamed into the real version name upon the official release
 
-Whenever a significant bug fix or change is made in CURRENT, the related commits will be merged into RELEASE for the latest release version soon.
+Before v3.0, whenever a significant bug fix or change was made in CURRENT, the related commits would have been soon merged into the dedicated RELEASE branch for the latest release version.
 
-However, from v3.0 and on, instead of merge the commits into the dedicated branch, a new release will be published soon.
-
-- [x] `v1.0-CURRENT`
-- [x] `v2.0-CURRENT`
-- [x] `v3.0-CURRENT` ( **We are HERE** )
+From v3.0 and on, a new release will be published soon instead. For less significant fixes or changes, the tag `stable` will be updated soon instead.
 
 ## Special Editions
 
