@@ -432,21 +432,57 @@ int y = get_value();
 int x = (y << 5) - y;
 ```
 
--   - 例外：若除數 n 為 2 的 m 次方，且 m 為非負整數，則 x 的 integer floored division 與 modulo 應分別用 `x >> m` 與 `x % (unsigned)n`（或 `x & ((1U << m) - 1)`）實作
--   -   - `lhs >> rhs` 的 `lhs` 為負時，依據 C99 及 C++11 標準會產生 implementation-defined 的結果；依據 C++20 標準則會產生 arithmetic right shift 的結果（同 2 的幂次的 integer floored division）
+- 避免撰寫不必要的程式分支
+    - 避免 control hazard
 
 **Good:**
 ```cpp
-int y = get_value();
-int q = y >> 5;
-unsigned int r = y % 32U; // or `y & ((1U << 5) - 1)`
+x = 0;
 ```
 **Bad:**
 ```cpp
-int y = get_value();
-int q = (y - ((y < 0) ? 32 - 1 : 0)) / 32;
-int r = y % 32 + ((y < 0) ? 32 : 0);
+if (x != 0)
+    x = 0;
 ```
+
+**Good:**
+```cpp
+free(ptr);
+```
+**Bad:**
+```cpp
+if (!ptr)
+    free(ptr);
+```
+
+- 根據 ISO C 與 ISO C++ 標準，`free(NULL)` 不具有任何作用，無須手動進行空指標檢查。
+
+- 避免 boilerplate code，以減少 code size
+    - 需要增加新功能時，盡量使用或擴充既有的函式，不要複製原有函式
+
+**Good:**
+```cpp
+void func(const char *str_task)
+{
+    do_sth(str_task);
+}
+```
+**Bad:**
+```cpp
+void func(void)
+{
+    do_sth("sth");
+}
+
+void func2(void)
+{
+    do_sth("sth_else");
+}
+```
+
+## 運算式的使用
+
+### 位元與邏輯運算
 
 - 值互相相反的邏輯表達式在臨近之處出現時，其中一個應使用另一個的否定的形式
 
@@ -497,6 +533,40 @@ if ((!!x == !!y) && (!!y == !!z))
 if ((!x != !!y) && (!y == !z))
 ```
 
+**Good:**
+```cpp
+flag &= (int)~FLAG_X; // 確保 `FLAG_X` 為無號整數且寬度不比 `unsigned int` 窄時，bit mask 有 sign extension
+```
+**Good:**
+```cpp
+flag &= ~((flag & 0) | FLAG_X); // 確保 bit mask 的寬度不比 `flag` 窄
+```
+**Bad:**
+```cpp
+if (flag & FLAG_X)
+    flag ^= FLAG_X;
+```
+
+### 𣒧法、除法、與取餘運算
+
+- 若除數 n 為 2 的 m 次方，且 m 為非負整數，則 x 的 integer floored division 與 modulo 應分別用 `x >> m` 與 `x % (unsigned)n`（或 `x & ((1U << m) - 1)`）實作
+    - `lhs >> rhs` 的 `lhs` 為負時，依據 C99 及 C++11 標準會產生 implementation-defined 的結果；依據 C++20 標準則會產生 arithmetic right shift 的結果（同 2 的幂次的 integer floored division）
+
+**Good:**
+```cpp
+int y = get_value();
+int q = y >> 5;
+unsigned int r = y % 32U; // or `y & ((1U << 5) - 1)`
+```
+**Bad:**
+```cpp
+int y = get_value();
+int q = (y - ((y < 0) ? 32 - 1 : 0)) / 32;
+int r = y % 32 + ((y < 0) ? 32 : 0);
+```
+
+### 遞增、遞減、與複合運算式
+
 - 禁止連續使用前綴運算子 `++`、`--`、`+`、`-`、`~`、或 `!`、以及後綴運算子 `++` 或 `--`
     - 例外：`!!` 等效於將運算元轉型爲 `bool`，故可使用，惟此時不應再使用前綴運算子 `!`
     - 連用兩次的前綴運算子 `-` 或 `~` 等效於單個前綴運算子 `+`
@@ -515,70 +585,11 @@ i += 2;
 !~~+ +- -i++;
 ```
 
+### 其它運算式
+
 - 禁止對內建的以下運算子的運算結果使用前綴運算子 `+`：前綴運算子 `+`、`-`、`~`、與 `!`、後綴運算子 `++` 與 `--`、以及二元運算子 `*`、`/`、`%`、`+`、`-`、`>>`、`<<`、`&`、`^`、與 `|`
     - 由於這些運算子的運算結果會被提昇爲至少與 `int` 同寬，因此前綴運算子 `+` 對其無作用
     - 前綴運算子 `++` 與 `--` 以及 (複合) 賦值運算子的運算結果，在 C 中亦會被提昇爲至少與 `int` 同寬，但在 C++ 中則不會，因此仍可直接對其結果使用前綴運算子 `+`
-- 避免撰寫不必要的程式分支
-    - 避免 control hazard
-
-**Good:**
-```cpp
-x = 0;
-```
-**Bad:**
-```cpp
-if (x != 0)
-    x = 0;
-```
-
-**Good:**
-```cpp
-free(ptr);
-```
-**Bad:**
-```cpp
-if (!ptr)
-    free(ptr);
-```
-
-- 根據 ISO C 與 ISO C++ 標準，`free(NULL)` 不具有任何作用，無須手動進行空指標檢查。
-
-**Good:**
-```cpp
-flag &= (int)~FLAG_X; // 確保 `FLAG_X` 為無號整數且寬度不比 `unsigned int` 窄時，bit mask 有 sign extension
-```
-**Good:**
-```cpp
-flag &= ~((flag & 0) | FLAG_X); // 確保 bit mask 的寬度不比 `flag` 窄
-```
-**Bad:**
-```cpp
-if (flag & FLAG_X)
-    flag ^= FLAG_X;
-```
-
-- 避免 boilerplate code，以減少 code size
-    - 需要增加新功能時，盡量使用或擴充既有的函式，不要複製原有函式
-
-**Good:**
-```cpp
-void func(const char *str_task)
-{
-    do_sth(str_task);
-}
-```
-**Bad:**
-```cpp
-void func(void)
-{
-    do_sth("sth");
-}
-
-void func2(void)
-{
-    do_sth("sth_else");
-}
-```
 
 ## 迴圈的使用
 - 應利用 `continue`、`break`、`return`、或 `goto` 減少 block 深度
