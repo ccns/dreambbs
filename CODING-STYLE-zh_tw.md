@@ -549,8 +549,24 @@ if (!a && !b && d)
 
 ### 𣒧法、除法、與取餘運算
 
-- 若除數 n 為 2 的 m 次方，且 m 為非負整數，則 x 的 integer floored division 與 modulo 應分別用 `x >> m` 與 `x % (unsigned)n`（或 `x & ((1U << m) - 1)`）實作
-    - `lhs >> rhs` 的 `lhs` 為負時，依據 C99 及 C++11 標準會產生 implementation-defined 的結果；依據 C++20 標準則會產生 arithmetic right shift 的結果（同 2 的幂次的 integer floored division）
+- 常用的除法與取餘運算的參考形式：
+
+除法定義 | 取商 | 餘數範圍 | 取餘
+--- | --- | --- | ---
+floored (toward -∞) | `floor((double)x / y)` <br> `(x - (((x < 0) != (y < 0)) ? ((y < 0) ? -1 : 1) * (abs(y) - 1) : 0)) / y` | (y > 0) → `[0, abs(y))` <br> (y < 0) → `(-abs(y), 0]` | `x % y + (((x % y) && ((x < 0) != (y < 0))) ? y : 0)`
+truncated <br> floored toward 0 | `trunc((double)x / y)` <br> `x / y` | (x ≥ 0) → `[0, abs(y))` <br> (x ≤ 0) → `(-abs(y), 0]` | `x % y`
+Euclidean | `copysign(1, y) * floor((double)x / abs(y))` <br> `(x - ((x < 0) ? abs(y) - 1 : 0)) / y` | `[0, abs(y))` | `x % y + ((x % y < 0) ? abs(y) : 0)`
+ceiling (away from 0) | `copysign(ceil(fabs((double)x / y)), x * copysign(1, y))` <br> `(x + (((x < 0)) ? -1 : 1) * (abs(y) - 1)) / y` | (x ≥ 0) → `(-abs(y), 0]` <br> (x ≤ 0) → `[0, -abs(y))` | `x % y - ((x % y) ? ((x < 0) ? -1 : 1) * abs(y) : 0)`
+ceiling (toward +∞) | `ceil((double)x / y)` <br> `(x + (((x < 0) == (y < 0)) ? ((x < 0) ? -1 : 1) * (abs(y) - 1) : 0)) / y` | (y > 0) → `(-abs(y), 0]` <br> (y < 0) → `[0, abs(y))` | `x % y - (((x % y) && ((x < 0) == (y < 0))) ? y : 0)`
+rounded (.5 toward -∞) | `round((double)x / y) - (fmod((double)x / y, 1) == 0.5)` <br> `(x + (((x < 0)) ? -1 : 1) * ((abs(y) - ((x < 0) == (y < 0))) >> 1)) / y` | (y > 0) → `(-abs(y) / 2.0, abs(y) / 2.0]` <br> (y < 0) → `[-abs(y) / 2.0, abs(y) / 2.0)` | `x % y - ((abs(x % y) > ((abs(y) - ((x < 0) != (y < 0))) >> 1)) ? ((x < 0) ? -1 : 1) * abs(y) : 0)`
+rounded (.5 toward 0) | `copysign(round(fabs((double)x / y)) - (fmod(fabs((double)x / y), 1) == 0.5), x * copysign(1, y))` <br> `(x + (((x < 0)) ? -1 : 1) * ((abs(y) - 1) >> 1)) / y` | (x ≥ 0) → `(-abs(y) / 2.0, abs(y) / 2.0]` <br> (x ≤ 0) → `[-abs(y) / 2.0, abs(y) / 2.0)` | `x % y - ((abs(x % y) > (abs(y) >> 1)) ? ((x < 0) ? -1 : 1) * abs(y) : 0)`
+rounded (.5 to even) | `round((double)x / y) - (fmod((double)x / y, 2) == 0.5) + (fmod((double)x / y, 2) == -0.5)` <br> `(x + (((x < 0)) ? -1 : 1) * ((abs(y) - !((x / y) % 2U)) >> 1)) / y` | (q ≡ 0 (mod 2)) → `[-abs(y) / 2.0, abs(y) / 2.0]` <br> else → `(-abs(y) / 2.0, abs(y) / 2.0)` | `x % y - ((abs(x % y) > ((abs(y) - !!((x / y) % 2U)) >> 1)) ? ((x < 0) ? -1 : 1) * abs(y) : 0)`
+rounded (.5 away from 0) | `round((double)x / y)` <br> `(x + (((x < 0)) ? -1 : 1) * (abs(y) >> 1)) / y` | (x ≥ 0) → `[-abs(y) / 2.0, abs(y) / 2.0)` <br> (x ≤ 0) → `(-abs(y) / 2.0, abs(y) / 2.0]` | `x % y - ((abs(x % y) > ((abs(y) - 1) >> 1)) ? ((x < 0) ? -1 : 1) * abs(y) : 0)`
+rounded (.5 toward +∞) | `round((double)x / y) + (fmod((double)x / y, 1) == -0.5)` <br> `(x + (((x < 0)) ? -1 : 1) * ((abs(y) - ((x < 0) != (y < 0))) >> 1)) / y` | (y > 0) → `[-abs(y) / 2.0, abs(y) / 2.0)` <br> (y < 0) → `(-abs(y) / 2.0, abs(y) / 2.0]` | `x % y - ((abs(x % y) > ((abs(y) - ((x < 0) == (y < 0))) >> 1)) ? ((x < 0) ? -1 : 1) * abs(y) : 0)`
+
+-   - 實際使用時應依已知除數範圍簡化。
+    - 特例：若除數 n 為 2 的 m 次方，且 m 為非負整數，則 x 的 integer floored division 與 modulo 應分別用 `x >> m` 與 `x % (unsigned)n`（或 `x & ((1U << m) - 1)`）實作
+        - `lhs >> rhs` 的 `lhs` 為負時，依據 C99 及 C++11 標準會產生 implementation-defined 的結果；依據 C++20 標準則會產生 arithmetic right shift 的結果（同 2 的幂次的 integer floored division）
 
 **Good:**
 ```cpp
