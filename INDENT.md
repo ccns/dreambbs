@@ -30,6 +30,8 @@ This page describes the indentation style for the DreamBBS project.
     - No trailing spaces
     - Use `\n` for line breaks
 
+<p/>
+
 -   - Both K&R and Allman style are allowed, but they should not be mixed within a file, especially within a function
     - Allman style should be used only in existing codes indented using Allman style.
     - From DreamBBS v4 and on, only K&R style will be allowed.
@@ -178,6 +180,8 @@ case sth:
     - 在 parameter list 及 condition list 後，與 `{` 之間要有空白字元
     - 在 identifier 後，與 `{` 之間要有剛好一個 space
     - 在 identifier 前，與 `}` 之間要有 spaces
+
+<p/>
 
 - 在代表 code block 的 `{` 之後，以及 `}` 之前，要有空白字元
 
