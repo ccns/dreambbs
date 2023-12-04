@@ -486,40 +486,35 @@ void func2(void)
 
 ### 位元與邏輯運算
 
-- 值互相相反的邏輯表達式在臨近之處出現時，其中一個應使用另一個的否定的形式
+- 常用的位元與邏輯運算的形式：
+
+運算 | 邏輯運算 | 位元運算 | 位元賦值
+--- | --- | --- | ---
+BUF 緩衡 | `!!x` <br> `(bool)x` | `x` | (no-op)
+NOT 反相 | `!x` | `~x` | `x = ~x` <br> `x ^= ~(0 ? x : 0)`
+AND 及 | `x && y` | `x & y` | `x &= y` (bit mask)
+NAND 反及 | `!x \|\| !y` | `~(x & y)` | 
+OR 或 | `x \|\| y` | `x \| y` | `x \|= y` (bit set)
+NOR 反或 | `!x && !y` | `~(x \| y)` |
+XOR 互斥或 | `!!x != !!y` <br> `(bool)x != (bool)y` | `x ^ y` | `x ^= y` (bit toggle)
+XNOR 反互斥或 | `!!x == !!y` <br> `(bool)x == (bool)y` | `~(x ^ y)` |
+IMPLY 蘊含 | **`y \|\| !x`** <br> `!x \|\| y` <br> **`(bool)y >= (bool)x`** <br> `(bool)x <= (bool)y` | `~((x \| y) ^ y)` <br> `~(x & ~(0 ? x : y))` |
+NIMPLY 反蘊含 | `x && !y` <br> **`!y && x`** <br> `(bool)x > (bool)y` <br> **`(bool)y < (bool)x`** | `(x \| y) ^ y` <br> `x & ~(0 ? x : y)` | `x &= ~(0 ? x : y)` (bit clear)
+
+- 避免對二元位元運算的運算元直接使用 `~`，以使該運算元為無號整數且寬度至少為 `int` 但窄於另一運算元時（*e.g.*, `~(unsigned int)x & (long long)y`）的結果正確。
+    - 若需使用 `~`，應先將該運算元轉型成至少與另一運算元同寬的型別，再對其結果取反相。
 
 **Good:**
 ```cpp
-if ((a || b) && c)
-    sth();
-if (!(a || b) && d)
-    sth_else();
+flag &= ~(0 ? flag : FLAG_X); // 確保 bit mask 的寬度不比 `flag` 窄
 ```
 **Bad:**
 ```cpp
-if ((a || b) && c)
-    sth();
-if (!a && !b && d)
-    sth_else();
+if (flag & FLAG_X)
+    flag ^= FLAG_X;
 ```
 
-- 應利用以下的邏輯閘寫法簡化邏輯表達式
-    - 邏輯互斥或 (XOR)：`(bool)x != (bool)y` 或 `!!x != !!y`
-    - 邏輯反互斥或 (XNOR)：`(bool)x == (bool)y` 或 `!!x == !!y`
-    - 邏輯蘊含 (IMPLY)：`!x || y`
-- 不應使用位元運算子代替邏輯運算子
-    - 對邏輯表達式應使用 `&&`、`||`、或 `!=`，而非 `&`、`|`、或 `^`
-
-**Good:**
-```cpp
-if ((bool)x != (bool)y)
-```
-**Bad:**
-```cpp
-if ((bool)x ^ (bool)y)
-```
-
-- 進行邏輯 XOR/XNOR 運算時，應避免 `!` 的使用
+- 避免不必要的 `!` 與 `~` 的使用
     - 例外：`!!` 等效於轉型爲 `bool`，故可使用
 
 **Good:**
@@ -535,18 +530,21 @@ if ((!!x == !!y) && (!!y == !!z))
 if ((!x != !!y) && (!y == !z))
 ```
 
+- 值互相反相的邏輯或位元表達式在臨近之處出現時，其中一個應使用另一個的結果的反相的形式
+
 **Good:**
 ```cpp
-flag &= (int)~FLAG_X; // 確保 `FLAG_X` 為無號整數且寬度不比 `unsigned int` 窄時，bit mask 有 sign extension
-```
-**Good:**
-```cpp
-flag &= ~((flag & 0) | FLAG_X); // 確保 bit mask 的寬度不比 `flag` 窄
+if ((a || b) && c)
+    sth();
+if (!(a || b) && d)
+    sth_else();
 ```
 **Bad:**
 ```cpp
-if (flag & FLAG_X)
-    flag ^= FLAG_X;
+if ((a || b) && c)
+    sth();
+if (!a && !b && d)
+    sth_else();
 ```
 
 ### 𣒧法、除法、與取餘運算
