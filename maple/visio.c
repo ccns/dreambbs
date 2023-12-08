@@ -1843,7 +1843,7 @@ iac_process(
 
 iac_process_end:
     if (pcount)
-        *pcount = look - current;
+        *pcount = BMIN(look, end) - current;
     return res_key;
 }
 
