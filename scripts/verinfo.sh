@@ -68,6 +68,7 @@ iconv -t big5 -o "${export_file}" <<EOF
 #define BUILD_DATE "${build_date}"
 #define BUILD_TIME ${build_time}L
 EOF
+touch -d "@0" "${export_file}"
 printf "\033[1;33m"
 iconv -f big5 "${export_file}"
 printf "\033[0m"
