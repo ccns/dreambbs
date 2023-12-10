@@ -549,7 +549,7 @@ if (!a && !b && d)
 
 ### 乘法、除法、與取餘運算
 
-- 常用的除法與取餘運算的參考形式：
+- 常用的整數除法與取餘運算的參考形式：
 
 除法定義 | 取商 | 餘數範圍 | 取餘
 --- | --- | --- | ---
@@ -567,7 +567,7 @@ rounded (.5 toward +∞) | `round(x / (double)y) + (fmod(x / (double)y, 1) == -0
 
 -   - MIN 與 MAX 為運算元之值域；假設 `unsigned` 為運算元的型別所對應的無號型別。
     - 實際使用時應依已知除數範圍簡化。
-    - 特例：若除數 n 為 2 的 m 次方，且 m 為非負整數，則 x 的 integer floored division 與 modulo 應分別用 `x >> m` 與 `x % (unsigned)n`（或 `x & ((1U << m) - 1)`）實作
+    - 若除數 y 為 2 的 n 次方，且 n 為非負整數，則 y 的 integer floored division 與 modulo 應分別用 `x >> n` 與 `x % (unsigned)y`（或 `x & ((1U << n) - 1)`）實作
         - `lhs >> rhs` 的 `lhs` 為負時，依據 C99 及 C++11 標準會產生 implementation-defined 的結果；依據 C++20 標準則會產生 arithmetic right shift 的結果（同 2 的幂次的 integer floored division）
 
 **Good:**
@@ -579,8 +579,8 @@ unsigned int r = y % 32U; // or `y & ((1U << 5) - 1)`
 **Bad:**
 ```cpp
 int y = get_value();
-int q = (y - ((y < 0) ? 32 - 1 : 0)) / 32;
-int r = y % 32 + ((y < 0) ? 32 : 0);
+int q = y / 32 - (y % 32 && y < 0);
+int r = x % 32 + ((x % 32 < 0) ? 32 : 0);
 ```
 
 ### 遞增、遞減、與複合運算式
