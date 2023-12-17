@@ -14,8 +14,8 @@
 - FreeBSD 11.1~12.0
 - GNU/Linux
     - CentOS 7/8
-    - Debian 10
-    - Ubuntu 20.04
+    - Debian 10~12
+    - Ubuntu 20.04~22.04
 - Cygwin, Windows 7/10
 - WSL2, Windows 10/11
 
