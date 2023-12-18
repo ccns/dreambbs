@@ -117,10 +117,8 @@ parse_date(void)        /* 把符合 "dd mmm yyyy hh:mm:ss" 的格式，轉成 time_t */
         ptime.tm_mday = atoi(mday_start);
         ptime.tm_mon = i;
         ptime.tm_isdst = 0;
-#ifndef __CYGWIN__
         ptime.tm_zone = "GMT";
         ptime.tm_gmtoff = 0;
-#endif
 
         datevalue = mktime(&ptime);
         /* 如果有 +0100 或 -1000 等註明時區，先調回 GMT 時區 */

@@ -128,10 +128,6 @@ LDFLAGS_ARCHI	+= -lresolv -ldl -rdynamic
 LDFLAGS_ARCHI	+= -Wl,-export-dynamic
 .endif
 
-.if $(OPSYS) == "Cygwin"
-NO_SO		 = YES
-.endif
-
 .if $(NO_SO)
 CFLAGS_MAPLE	+= -DNO_SO
 CFLAGS_SO	+= -DNO_SO

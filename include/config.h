@@ -367,8 +367,7 @@
 /* 其他系統上限參數                                      */
 /* ----------------------------------------------------- */
 
-//#define RLIMIT                  /* r2.20180430: Cygwin does not accept rlimit related functions */
-                                  /* r2.20180430: please define it on your own if needed */
+#define RLIMIT
 
 #ifdef  HAVE_PIP_FIGHT1
 #define PIP_MAX         16
