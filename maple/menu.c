@@ -739,7 +739,7 @@ INTERNAL_INIT MENU menu_information[] =
 {
 
     {{FUNCARG(menumore, "gem/@/@pop")}, 0, M_READA | M_ARG,
-    "Login      上站次數排行榜"},
+    "Users      使用者五十大排行榜"},
 
     {{FUNCARG(menumore, "gem/@/@-act")}, 0, M_READA | M_ARG,
     "Today      今日上線人次統計"},
