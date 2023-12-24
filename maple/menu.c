@@ -43,7 +43,11 @@ view_login_log(void)
 static int
 menumore(const void *arg)
 {
+#ifdef M3_USE_PMORE
+    more((const char *)arg, FOOTER_POST);
+#else
     more((const char *)arg, 0);
+#endif
     return 0;
 }
 
