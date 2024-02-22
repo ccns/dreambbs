@@ -531,7 +531,7 @@ gem_state(
     int bno;
 
     /* Thor.990107: Ernie patch:
-      gem.c gem_browse() 在進入 路)的 folder 時一律 op = GEM_VISIT
+      gem.c gem_browse() 在進入 gopher(絲路)的 folder 時一律 op = GEM_VISIT
       使得板主只能在 gopher 最外層觀看檔案屬性及 update proxy，進入 gopher
       便失效。
 
@@ -544,6 +544,7 @@ gem_state(
     if (!(ghdr = gem_check(xo, pos, fpath, GEM_READ)))
         return XO_NONE;
     /* Thor.980216: 注意! 有可能傳回 NULL導致踢人 */
+    /* Thor.990415: 此情況為,連不到對方,url_fpath回傳-1,則gem_check會回傳NULL */
 
     if (!(HAS_PERM(PERM_ALLBOARD)))
     {
