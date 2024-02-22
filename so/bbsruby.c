@@ -655,7 +655,8 @@ ruby_script_attach(const char *fpath, size_t *plen)
 
     *plen = 0;
 
-    if (fd < 0) return buf;
+    if (fd < 0)
+        return buf;
     if (fstat(fd, &st) || ((*plen = st.st_size) < 1) || S_ISDIR(st.st_mode))
     {
         close(fd);
@@ -696,7 +697,8 @@ static int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
             break;
 
         // Skip to next line
-        while (cStart + lenSignature < cEnd && *cStart++ != '\n');
+        while (cStart + lenSignature < cEnd && *cStart++ != '\n')
+            ;
         line++;
     }
     *lineshift = line;
@@ -714,7 +716,8 @@ static int ruby_script_range_detect(char **pStart, char **pEnd, int *lineshift)
             break;
 
         // Skip to next line
-        while (cEnd + lenSignature < *pEnd && *cEnd++ != '\n');
+        while (cEnd + lenSignature < *pEnd && *cEnd++ != '\n')
+            ;
     }
 
     if (cEnd + lenSignature >= *pEnd)
@@ -755,10 +758,12 @@ static void bbsruby_load_TOC RB_P((const char *cStart, const char *cEnd))
             if (tStart[0] == '#')
                 tStart++;
 
-            while (*tStart == ' ') tStart++;
+            while (*tStart == ' ')
+                tStart++;
 
             tEnd = tStart;
-            while (*tEnd != '\n') tEnd++;
+            while (*tEnd != '\n')
+                tEnd++;
 
             // Possible TOC item, check patterns
             for (int i=0; i<BBSRUBY_TOC_HEADERS; i++)
@@ -767,11 +772,14 @@ static void bbsruby_load_TOC RB_P((const char *cStart, const char *cEnd))
                 if (strncasecmp(tStart, TOCs_HEADER[i], lenBuf) == 0)
                 {
                     tStart+=lenBuf;
-                    while (*tStart == ' ') tStart++;
-                    if (*tStart != ':') break;
+                    while (*tStart == ' ')
+                        tStart++;
+                    if (*tStart != ':')
+                        break;
                     tStart++;
 
-                    while (*tStart == ' ') tStart++;
+                    while (*tStart == ' ')
+                        tStart++;
                     CMRB_C(rb_hash_aset, mrb_hash_set)(hashTOC, RB_C(rb_str_new_cstr)(TOCs_HEADER[i]), RB_C(rb_str_new)(tStart, tEnd - tStart));
                     CMRB_C(rb_hash_aset, mrb_hash_set)(hashTOC, CMRB_C(rb_funcallv, mrb_funcall_argv)(RB_C(rb_str_new_cstr)(TOCs_HEADER[i]), CMRB_C(rb_intern, mrb_intern_cstr)("capitalize!"), 0, NULL), RB_C(rb_str_new)(tStart, tEnd - tStart));
                     TOCfound = 1;
@@ -797,7 +805,8 @@ static void print_exception RB_PV((void))
     VALUE exception = rb_errinfo();
     rb_set_errinfo(Qnil);
 #endif
-    if (!RTEST(exception)) return;
+    if (!RTEST(exception))
+        return;
 
     char* buffer = RSTRING_PTR(RB_C(rb_obj_as_string)(exception));
     outs("\x1b[m");

@@ -67,8 +67,10 @@ static void initMap(void)
     for (i = 0; i < TotalMines;)
     {
         x = random(MAP_X) + 1;
-        if (rand() % 5 > 2)x = random(MAP_X) + 1;
-        if (rand() % 5 > 2)y = random(MAP_Y) + 1;
+        if (rand() % 5 > 2)
+            x = random(MAP_X) + 1;
+        if (rand() % 5 > 2)
+            y = random(MAP_Y) + 1;
         y = random(MAP_Y) + 1;
         if (MineMap[y][x] == TILE_BLANK)
         {
@@ -139,15 +141,24 @@ change_fasttime(int n, int t)
 GCC_PURE static int countNeighbor(int y, int x, int bitmask)
 {
     int sum = 0;
-    if (MineMap[y-1][x+1] & bitmask) ++sum;
-    if (MineMap[y-1][x  ] & bitmask) ++sum;
-    if (MineMap[y-1][x-1] & bitmask) ++sum;
-    if (MineMap[y  ][x+1] & bitmask) ++sum;
-    if (MineMap[y  ][x  ] & bitmask) ++sum;
-    if (MineMap[y  ][x-1] & bitmask) ++sum;
-    if (MineMap[y+1][x+1] & bitmask) ++sum;
-    if (MineMap[y+1][x  ] & bitmask) ++sum;
-    if (MineMap[y+1][x-1] & bitmask) ++sum;
+    if (MineMap[y-1][x+1] & bitmask)
+        ++sum;
+    if (MineMap[y-1][x  ] & bitmask)
+        ++sum;
+    if (MineMap[y-1][x-1] & bitmask)
+        ++sum;
+    if (MineMap[y  ][x+1] & bitmask)
+        ++sum;
+    if (MineMap[y  ][x  ] & bitmask)
+        ++sum;
+    if (MineMap[y  ][x-1] & bitmask)
+        ++sum;
+    if (MineMap[y+1][x+1] & bitmask)
+        ++sum;
+    if (MineMap[y+1][x  ] & bitmask)
+        ++sum;
+    if (MineMap[y+1][x-1] & bitmask)
+        ++sum;
     return sum;
 }
 
@@ -202,21 +213,25 @@ static void drawMapLine(int y, int flShow)
     for (x = 1; x <= MAP_X; x++)
     {
 
-        if (x == currx && y == curry) outs("\x1b[44;31m");
+        if (x == currx && y == curry)
+            outs("\x1b[44;31m");
 
         if (MineMap[y][x] & TILE_TAGGED)
         {
             if (flShow && (MineMap[y][x] & TILE_MINE) == 0)
                 outs(symWrong);
-            else outs(symTag);
+            else
+                outs(symTag);
         }
         else if (MineMap[y][x] & TILE_EXPAND)
             outs(strMines[countNeighbor(y, x, TILE_MINE)]);
         else if (flShow && (MineMap[y][x] & TILE_MINE))
             outs(symTag);
-        else outs(symBlank);
+        else
+            outs(symBlank);
 
-        if (x == currx && y == curry) outs("\x1b[m");
+        if (x == currx && y == curry)
+            outs("\x1b[m");
     }
     clrtoeol();
 
@@ -249,7 +264,8 @@ static void ExpandMap(int y, int x, int flTrace)
 {
     if (!flTrace)
     {
-        if (MineMap[y][x] & TILE_TAGGED || MineMap[y][x] & TILE_EXPAND) return;
+        if (MineMap[y][x] & TILE_TAGGED || MineMap[y][x] & TILE_EXPAND)
+            return;
         if ((MineMap[y][x] & TILE_MINE) && (!(MineMap[y][x] & TILE_TAGGED)))
             { loseMine(0); return; }
         MineMap[y][x] |= TILE_EXPAND;
@@ -278,7 +294,8 @@ static void ExpandMap(int y, int x, int flTrace)
 
 static void TraceMap(int y, int x)
 {
-    if (!(MineMap[y][x] & TILE_EXPAND)) return;
+    if (!(MineMap[y][x] & TILE_EXPAND))
+        return;
     if (countNeighbor(y, x, TILE_MINE) == countNeighbor(y, x, TILE_TAGGED))
     {
         ExpandMap(y, x, 1);
@@ -318,11 +335,13 @@ static void playMine(void)
             break;
 
         case KEY_LEFT:
-            if (currx > 1) currx--;
+            if (currx > 1)
+                currx--;
             break;
 
         case KEY_RIGHT:
-            if (currx < MAP_X) currx++;
+            if (currx < MAP_X)
+                currx++;
             break;
 
         case Ctrl('P'):
@@ -360,7 +379,8 @@ static void playMine(void)
             }
 
             MineMap[curry][currx] ^= TILE_TAGGED;
-            if (TaggedMines == TotalMines) return;
+            if (TaggedMines == TotalMines)
+                return;
             break;
 
         default:
@@ -410,7 +430,8 @@ start:
     default:
         return DL_RELEASE(0);
     }
-    if (atoi(ans) == 5) goto start;
+    if (atoi(ans) == 5)
+        goto start;
     load_fasttime();
     TotalMines += (MAP_X / 10) * (MAP_Y);
     TaggedMines = 0;
@@ -433,7 +454,8 @@ start:
             outs("\x1b[1;37;44m你贏了!  ");
             prints("所花時間: %d 秒\x1b[m\n", ti);
             game_log(1, "\x1b[32;1m在 %s 花了 %d 秒清除地雷!!!", buf, ti);
-            if (ti < fasttime[atoi(ans)-1]) change_fasttime(atoi(ans) - 1, ti);
+            if (ti < fasttime[atoi(ans)-1])
+                change_fasttime(atoi(ans) - 1, ti);
             vmsg(NULL);
         }
     }

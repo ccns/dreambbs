@@ -656,8 +656,10 @@ resizeterm(int rows, int cols)
         }
 
         // do mrows/mcols assignment here, because we had 2 maps running loop above.
-        if (cols > ft.mcols) ft.mcols = cols;
-        if (rows > ft.mrows) ft.mrows = rows;
+        if (cols > ft.mcols)
+            ft.mcols = cols;
+        if (rows > ft.mrows)
+            ft.mrows = rows;
         dirty = 1;
     }
 
@@ -936,10 +938,14 @@ doupdate(void)
             WORD xAttr = FTAMAP[y][x], xxAttr;
             // w32 attribute: bit swap (0, 2) and (4, 6)
             xxAttr = xAttr & 0xAA;
-            if (xAttr & 0x01) xxAttr |= 0x04;
-            if (xAttr & 0x04) xxAttr |= 0x01;
-            if (xAttr & 0x10) xxAttr |= 0x40;
-            if (xAttr & 0x40) xxAttr |= 0x10;
+            if (xAttr & 0x01)
+                xxAttr |= 0x04;
+            if (xAttr & 0x04)
+                xxAttr |= 0x01;
+            if (xAttr & 0x10)
+                xxAttr |= 0x40;
+            if (xAttr & 0x40)
+                xxAttr |= 0x10;
 
             winbuf[y*ft.cols + x].Attributes= xxAttr;
             winbuf[y*ft.cols + x].Char.AsciiChar = FTCMAP[y][x];
@@ -1359,9 +1365,12 @@ outstr(const char *str)
         int isdbcs = 0;
         while (*str)
         {
-            if (isdbcs == 1) isdbcs = 2;
-            else if (FTDBCS_ISLEAD(*str)) isdbcs = 1;
-            else isdbcs = 0;
+            if (isdbcs == 1)
+                isdbcs = 2;
+            else if (FTDBCS_ISLEAD(*str))
+                isdbcs = 1;
+            else
+                isdbcs = 0;
             str++;
         }
 
@@ -1485,7 +1494,8 @@ instr       (char *str)
     // determine stopping location
     while (x >= ft.x && FTCROW[x] == FTCHAR_ERASE)
         x--;
-    if (x < ft.x) return 0;
+    if (x < ft.x)
+        return 0;
     x = x - ft.x + 1;
     memcpy(str, FTCROW+ft.x, x);
     str[x] = 0;
@@ -1505,9 +1515,11 @@ innstr      (char *str, int n)
     // determine stopping location
     while (x >= ft.x && FTCROW[x] == FTCHAR_ERASE)
         x--;
-    if (x < ft.x) return 0;
+    if (x < ft.x)
+        return 0;
     n = x - ft.x + 1;
-    if (n >= on) n = on-1;
+    if (n >= on)
+        n = on-1;
     memcpy(str, FTCROW+ft.x, n);
     str[n] = 0;
     return n;
@@ -1534,7 +1546,8 @@ inansistr   (char *str, int n)
         x--;
 
     // retrieve [rt.x, x]
-    if (x < ft.x) return 0;
+    if (x < ft.x)
+        return 0;
 
     // preserve some bytes if last attribute is not FTATTR_DEFAULT
     for (i = ft.x; n > szTrail && i <= x; i++)
@@ -1645,7 +1658,8 @@ fterm_prepare_str(int len)
             dbcs = 1; // LEAD
         else
             dbcs = 0;
-        if (x == ft.x) sdbcs = dbcs;
+        if (x == ft.x)
+            sdbcs = dbcs;
     }
 
     x = ft.x;
@@ -1656,7 +1670,8 @@ fterm_prepare_str(int len)
         len ++;
     len = ranged(len, 0, ft.cols);
     len -= x;
-    if (len < 0) len = 0;
+    if (len < 0)
+        len = 0;
 
     memset(FTCROW + x, FTCHAR_ERASE, len);
     memset(FTAROW + x, ft.attr, len);
@@ -1738,8 +1753,10 @@ fterm_exec(void)
         y = n;
         if (isdigit(*p))  // `p` points to the second param or letter `H`/`f`
             x = atoi((char*)p);
-        if (y < 0) y = 1;
-        if (x < 0) x = 1;
+        if (y < 0)
+            y = 1;
+        if (x < 0)
+            x = 1;
         move(y-1, x-1);
         break;
 
@@ -2056,7 +2073,10 @@ fterm_chattr(char *s, ftattr oattr, ftattr nattr)
         // lead must be 1 since this is the first check.
         // We have dead code (else *s++) here but that's simply to ease moving
         // code around.
-        if (lead) lead = 0; else *s++ = ';';
+        if (lead)
+            lead = 0;
+        else
+            *s++ = ';';
         *s++ = '0';
 
         ofg = FTATTR_DEFAULT_FG;
@@ -2066,7 +2086,10 @@ fterm_chattr(char *s, ftattr oattr, ftattr nattr)
 
     if (bold && !obold)
     {
-        if (lead) lead = 0; else *s++ = ';';
+        if (lead)
+            lead = 0;
+        else
+            *s++ = ';';
         *s++ = '1';
 
 #ifdef FTCONF_WORKAROUND_BOLD
@@ -2081,18 +2104,27 @@ fterm_chattr(char *s, ftattr oattr, ftattr nattr)
     }
     if (blink && !oblink)
     {
-        if (lead) lead = 0; else *s++ = ';';
+        if (lead)
+            lead = 0;
+        else
+            *s++ = ';';
         *s++ = '5'; // XXX 5(slow) or 6(fast)?
     }
     if (ofg != fg)
     {
-        if (lead) lead = 0; else *s++ = ';';
+        if (lead)
+            lead = 0;
+        else
+            *s++ = ';';
         *s++ = '3';
         *s++ = '0' + fg;
     }
     if (obg != bg)
     {
-        if (lead) lead = 0; else *s++ = ';';
+        if (lead)
+            lead = 0;
+        else
+            *s++ = ';';
         *s++ = '4';
         *s++ = '0' + bg;
     }
@@ -2124,7 +2156,8 @@ fterm_strdlen(const char *s)
                     break;
 
                 case '\b':
-                    if (sz) sz--;
+                    if (sz)
+                        sz--;
                     break;
 
                 case '\t':
@@ -2403,7 +2436,8 @@ fterm_rawscroll (int dy)
     int ady = abs(dy);
     if (ady == 0)
         return;
-    if (ady >= ft.rows) ady = ft.rows;
+    if (ady >= ft.rows)
+        ady = ft.rows;
     fterm_rawcmd(ady, 1, cmd);
     ft.scroll -= dy;
 
@@ -2426,7 +2460,8 @@ fterm_rawscroll (int dy)
     int ady = abs(dy);
     if (ady == 0)
         return;
-    if (ady >= ft.rows) ady = ft.rows;
+    if (ady >= ft.rows)
+        ady = ft.rows;
 
     // we are not going to preserve (rx, ry)
     // so don't use fterm_move*.
@@ -2704,7 +2739,9 @@ void
 fterm_rawc(int c)
 {
 #ifdef PFTERM_TEST_MAIN
-    // if (c == ESC_CHR) putchar('*'); else
+    // if (c == ESC_CHR)
+    //     putchar('*');
+    // else
     putchar(c);
 #else
     ochar(c);

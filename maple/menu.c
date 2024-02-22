@@ -1149,7 +1149,8 @@ int strip_ansi_n_len(
         ptr = strstr(ptr, "\x1b");
         if (ptr)
         {
-            for (tmp=ptr; *tmp!='m'; tmp++);
+            for (tmp=ptr; *tmp!='m'; tmp++)
+                ;
             len -= (tmp-ptr+1);
             ptr = tmp+1;
         }
@@ -1547,7 +1548,7 @@ gety_bound_move(
     case KEY_UP:
     case KEY_DOWN:
         return y_ref + TCLAMP(y + ((cmd == KEY_DOWN) ? 1 : -1), min, BMAX(min, max)) - y;
-    default:;
+    default:
         return y_ref + TCLAMP(y, min, BMAX(min, max)) - y;
     }
 }
@@ -1572,7 +1573,7 @@ getx_bound_move(
     case KEY_LEFT:
     case KEY_RIGHT:
         return x_ref + TCLAMP(x + ((cmd == KEY_RIGHT) ? 1 : -1), min, BMAX(min, max)) - x;
-    default:;
+    default:
         return x_ref + TCLAMP(x, min, BMAX(min, max)) - x;
     }
 }
@@ -1850,7 +1851,8 @@ domenu_exec(
                     if (mmode & M_ARG)
                     {
                         m.funcarg.func = (int (*)(const void *)) DL_GET(m.dlfuncarg.func);
-                        if (!m.funcarg.func) break;
+                        if (!m.funcarg.func)
+                            break;
   #ifndef DL_HOTSWAP
                         /* Update the `FuncArg` object */
                         mptr->item.funcarg->func = m.funcarg.func;
@@ -1859,7 +1861,8 @@ domenu_exec(
                     else
                     {
                         m.item.func = (int (*)(void)) DL_GET(m.item.dl.func);
-                        if (!m.item.func) break;
+                        if (!m.item.func)
+                            break;
   #ifndef DL_HOTSWAP
                         mptr->item.func = m.item.func;
   #endif

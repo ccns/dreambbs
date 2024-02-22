@@ -288,7 +288,8 @@ XO *xo)
     char fpath[80];
 
     kind++;
-    if (kind > 4) kind = 0;
+    if (kind > 4)
+        kind = 0;
     switch (kind)
     {
     case 0:

@@ -128,7 +128,8 @@ int mainNum(int fighting /* Thor.990317: 對戰模式 */)
             char tmp[50];
             vget(B_LINES_REF - 3, 0, "您猜我的數字是[????]:", tmp, 5, DOECHO);
             /* Thor.990317: 為簡化, 不作checking */
-            if (!tmp[0]) goto abort_game;
+            if (!tmp[0])
+                goto abort_game;
 
             for (i = 0; i < 4; i++)
                 yourGuess[i] = tmp[i] - '0';

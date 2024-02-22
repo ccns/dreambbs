@@ -191,10 +191,12 @@ argify(
     str_scpy(p, line, sizeof(argifybuffer));
     for (*argvp = argv, i = 0; *p && i < MAX_ARG;)
     {
-        for (*argv++ = p; *p && !strchr("\t\r\n ", *p); p++);
+        for (*argv++ = p; *p && !strchr("\t\r\n ", *p); p++)
+            ;
         if (*p == '\0')
             break;
-        for (*p++ = '\0'; strchr("\t\r\n ", *p) && *p; p++);
+        for (*p++ = '\0'; strchr("\t\r\n ", *p) && *p; p++)
+            ;
     }
     *argv = NULL;
     return argv - *argvp;

@@ -739,7 +739,8 @@ t_chat(void)
                     /* insert */
                     int i;
 
-                    for (i = cmdcol; ptr[i] && i < 68; i++);
+                    for (i = cmdcol; ptr[i] && i < 68; i++)
+                        ;
                     ptr[i + 1] = '\0';
                     for (; i > cmdcol; i--)
                         ptr[i] = ptr[i - 1];

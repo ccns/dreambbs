@@ -236,25 +236,29 @@ int main_classtable(void)
         case KEY_DOWN :
             show_icon_classtable(x, y, 0);
             x++;
-            if (x == 14) x = 1;
+            if (x == 14)
+                x = 1;
             show_icon_classtable(x, y, 1);
             break;
         case KEY_UP:
             show_icon_classtable(x, y, 0);
             x--;
-            if (x == 0) x = 13;
+            if (x == 0)
+                x = 13;
             show_icon_classtable(x, y, 1);
             break;
         case KEY_LEFT:
             show_icon_classtable(x, y, 0);
             y--;
-            if (y == 0) y = 6;
+            if (y == 0)
+                y = 6;
             show_icon_classtable(x, y, 1);
             break;
         case KEY_RIGHT :
             show_icon_classtable(x, y, 0);
             y++;
-            if (y == 7) y = 1;
+            if (y == 7)
+                y = 1;
             show_icon_classtable(x, y, 1);
             break;
         case 'a' :

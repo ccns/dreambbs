@@ -344,7 +344,8 @@ void mmdecode_str(char *str)
                     {
                         /* IID.2020-12-14: Skip over the decoded string, which is never longer than the source string */
                         tmp += 3 + i;   /* Thor: decode's src */
-                        while (*tmp && *tmp++ != '?');      /* Thor: no ? end, mmdecode_header -1 */
+                        while (*tmp && *tmp++ != '?')       /* Thor: no ? end, mmdecode_header -1 */
+                            ;
                         /* Thor.980901: 0 ¤]ºâ decode µ²§ô */
                         if (*tmp == '=')
                             tmp++;

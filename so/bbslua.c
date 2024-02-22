@@ -1332,7 +1332,8 @@ bl_getstr(lua_State* L)
 
     // TODO process Ctrl-C here
     getyx(&y, &x);
-    if (!pmsg) pmsg = "";
+    if (!pmsg)
+        pmsg = "";
     len = getdata_str(y, x, NULL, buf, len, echo, pmsg);
     if (len <= 0)
     {
@@ -1373,8 +1374,10 @@ bl_kbhit(lua_State *L)
     if (n > 0)
         f = (double)lua_tonumber(L, 1);
 
-    if (f < BLCONF_KBHIT_TMIN) f = BLCONF_KBHIT_TMIN;
-    if (f > BLCONF_KBHIT_TMAX) f = BLCONF_KBHIT_TMAX;
+    if (f < BLCONF_KBHIT_TMIN)
+        f = BLCONF_KBHIT_TMIN;
+    if (f > BLCONF_KBHIT_TMAX)
+        f = BLCONF_KBHIT_TMAX;
 
     if (vkey_is_ready() || vkey_poll(f * MILLISECONDS))
         lua_pushboolean(L, 1);
@@ -1415,8 +1418,10 @@ bl_sleep(lua_State *L)
 
     if (n > 0)
         us = lua_tonumber(L, 1);
-    if (us < BLCONF_SLEEP_TMIN) us = BLCONF_SLEEP_TMIN;
-    if (us > BLCONF_SLEEP_TMAX) us = BLCONF_SLEEP_TMAX;
+    if (us < BLCONF_SLEEP_TMIN)
+        us = BLCONF_SLEEP_TMIN;
+    if (us > BLCONF_SLEEP_TMAX)
+        us = BLCONF_SLEEP_TMAX;
     nus = us;
 
 #ifdef _WIN32
@@ -1546,10 +1551,12 @@ bl_ansi_color(lua_State *L)
     char *p = buf + strlen(buf);
     int i = 1;
     int n = lua_gettop(L);
-    if (n >= 10) n = 10;
+    if (n >= 10)
+        n = 10;
     for (i = 1; i <= n; i++)
     {
-        if (i > 1) *p++ = ';';
+        if (i > 1)
+            *p++ = ';';
         sprintf(p, "%d", (int)lua_tointeger(L, i));
         p += strlen(p);
     }
@@ -1792,7 +1799,11 @@ bls_save(lua_State *L)
         return 1;
     }
 
-    if (n != 2) { lua_pushboolean(L, 0); return 1; }
+    if (n != 2)
+    {
+        lua_pushboolean(L, 0);
+        return 1;
+    }
 
     cat = lua_tostring(L, 1); // category
     s   = lua_tostring(L, 2); // data
@@ -1805,7 +1816,8 @@ bls_save(lua_State *L)
     }
 
     slen = lua_objlen(L, 2);
-    if (slen >= limit) slen = limit;
+    if (slen >= limit)
+        slen = limit;
 
     blrt.iocounter++;
     // write file!
@@ -2058,7 +2070,8 @@ bbslua_attach(const char *fpath, size_t *plen)
 
     *plen = 0;
 
-    if (fd < 0) return buf;
+    if (fd < 0)
+        return buf;
     if (fstat(fd, &st) || ((*plen = st.st_size) < 1) || S_ISDIR(st.st_mode))
     {
         close(fd);
@@ -2135,7 +2148,8 @@ bbslua_detect_range(char **pbs, char **pbe, int *lineshift)
         if (strncmp(ps, BBSLUA_SIGNATURE, szsig) == 0)
             break;
         // else, skip to next line
-        while (ps + szsig < pe && *ps++ != '\n');
+        while (ps + szsig < pe && *ps++ != '\n')
+            ;
         line++;
     }
     *lineshift = line;
@@ -2153,7 +2167,8 @@ bbslua_detect_range(char **pbs, char **pbe, int *lineshift)
         if (strncmp(pe, BBSLUA_SIGNATURE, szsig) == 0)
             break;
         // else, skip to next line
-        while (pe + szsig < be && *pe++ != '\n');
+        while (pe + szsig < be && *pe++ != '\n')
+            ;
     }
 
     if (pe + szsig < be)
@@ -2225,14 +2240,17 @@ bbslua_load_TOC(lua_State *L, const char *bs, const char *be, char **ppc)
         while (pe < (const unsigned char*)be && *pe != '\n' && *pe != '\r')
             pe ++;
         bs = (const char*)pe+1;
-        while (ps < pe && *ps <= ' ') ps++;
-        while (pe > ps && *(pe-1) <= ' ') pe--;
+        while (ps < pe && *ps <= ' ')
+            ps++;
+        while (pe > ps && *(pe-1) <= ' ')
+            pe--;
         // at least "--"
         if (pe < ps+2)
             break;
         if (*ps++ != '-' || *ps++ != '-')
             break;
-        while (ps < pe && *ps <= ' ') ps++;
+        while (ps < pe && *ps <= ' ')
+            ps++;
         // empty entry?
         if (ps >= pe)
             continue;
@@ -2246,10 +2264,12 @@ bbslua_load_TOC(lua_State *L, const char *bs, const char *be, char **ppc)
                 continue;
             ps += l;
             // found matching pattern, now find value
-            while (ps < pe && *ps <= ' ') ps++;
+            while (ps < pe && *ps <= ' ')
+                ps++;
             if (ps >= pe || *ps++ != ':')
                 break;
-            while (ps < pe && *ps <= ' ') ps++;
+            while (ps < pe && *ps <= ' ')
+                ps++;
             // finally, (ps, pe) is the value!
             if (ps >= pe)
                 break;
@@ -2418,7 +2438,8 @@ static const char* bbslua_reader(lua_State *L, void *ud, size_t *size)
 {
     LoadS *ls = (LoadS *)ud;
     (void)L;
-    if (ls->size == 0) return NULL;
+    if (ls->size == 0)
+        return NULL;
     if (ls->lineshift > 0) {
         const char *const linefeed = "\n";
         *size = 1;
@@ -2577,15 +2598,21 @@ void bbslua_loadLatest(lua_State *L,
             aidu_t aidu = 0;
             unsigned char *p = (unsigned char*)bn;
 
-            if (*lastref == '#') lastref++;
+            if (*lastref == '#')
+                lastref++;
             aidu = aidc2aidu((char*)lastref);
-            if (aidu <= 0) break;
+            if (aidu <= 0)
+                break;
 
-            while (*lastref > ' ') lastref ++;              // lastref points to zero of space
-            while (*lastref && *lastref <= ' ') lastref++;  // lastref points to zero or board name
-            if (*lastref == '(') lastref ++;
+            while (*lastref > ' ')
+                lastref ++;              // lastref points to zero of space
+            while (*lastref && *lastref <= ' ')
+                lastref++;  // lastref points to zero or board name
+            if (*lastref == '(')
+                lastref ++;
 
-            if (!*lastref) break;
+            if (!*lastref)
+                break;
             strlcpy(bn, lastref, sizeof(bn));
             // truncate board name
             // (not_alnum(ch) && ch != '_' && ch != '-' && ch != '.')
@@ -2604,7 +2631,8 @@ void bbslua_loadLatest(lua_State *L,
         }
         lua_pop(L, 2);
 
-        if (loadnext) continue;
+        if (loadnext)
+            continue;
 #endif // AID_DISPLAYNAME
         break;
 
@@ -2772,7 +2800,8 @@ bbslua(const char *fpath)
         outs(ANSI_RESET);
         move(b_lines-3, 0); clrtobot();
         outs("\n");
-        if (errmsg) outs(errmsg);
+        if (errmsg)
+            outs(errmsg);
     }
 
     lua_close(L);

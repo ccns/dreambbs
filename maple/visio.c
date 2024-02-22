@@ -1838,7 +1838,8 @@ iac_process(
     case IAC:  /* `IAC` `IAC` => `'\xff'` */
         res_key = '\xff';
         goto iac_process_end;
-    default:;
+    default:
+        ;
     }
 
 iac_process_end:
@@ -2169,7 +2170,8 @@ int vkey_process(int (*fgetch)(void))
             case 'F':
                 ch = mod_key(mod, KEY_END);
                 goto vkey_end;
-            default:;
+            default:
+                ;
             }
             if (last == 'O' || mod)   /* "<Esc> O `ch`" | "<Esc> [ 1 ; <2-9> `ch`" | "<Esc> [ 1 ; 1 <0-6> `ch`" */
             {
@@ -2309,7 +2311,8 @@ int vkey_process(int (*fgetch)(void))
                     case '2':               /* "<Esc> [ 2 `last` <~$^@>" */ /* F9 - F12 */
                         ch = mod_key(mod, KEY_F9 + (last - '0') - (last > '2'));
                         goto vkey_end;
-                    default:;
+                    default:
+                        ;
                     }
                 }
                 ch = char_opt(ch, KEY_INVALID, KEY_INVALID);

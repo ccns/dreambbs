@@ -67,8 +67,12 @@ game_log(int file, const char *fmt, ...)
 
     switch (file)
     {
-    case 1: strcpy(ff, FN_MINE_LOG); break;
-    case 2: strcpy(ff, "run/bj.log"); break;
+    case 1:
+        strcpy(ff, FN_MINE_LOG);
+        break;
+    case 2:
+        strcpy(ff, "run/bj.log");
+        break;
     }
     fs = fopen(ff, "a+");
     now = time(0);

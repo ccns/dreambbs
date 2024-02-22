@@ -1,6 +1,10 @@
 #include "bbs.h"
 #include "gamef.c"
-#define SWAP(x, y) do { int temp=(x); (x)=(y); (y)=temp; } while (0)
+#define SWAP(x, y) do { \
+    int temp=(x); \
+    (x)=(y); \
+    (y)=temp; \
+} while (0)
 
 /* 黑傑克遊戲 */
 
@@ -57,7 +61,8 @@ BlackJack(void)
     time_t now = time(0);
     time(&now);
     srand(time(NULL));
-    if (cuser_money <= 0) cuser_money = 1000;
+    if (cuser_money <= 0)
+        cuser_money = 1000;
     while (-1)
     {
         memset(cardlist, 0, sizeof(cardlist));
@@ -72,8 +77,10 @@ BlackJack(void)
             show_money(money = 0);
             getdata(21, 0, "要下注多少呢(上限250000)? 按 Enter 離開>", buf, 7, DOECHO, 0);
             money = atoi(buf);
-            if (!buf[0]) return DL_RELEASE(0);
-            if (money > cuser_money) return DL_RELEASE(0);
+            if (!buf[0])
+                return DL_RELEASE(0);
+            if (money > cuser_money)
+                return DL_RELEASE(0);
         } while ((money < 1) || (money > 250000));
         cuser_money = cuser_money - money;
         clear();
@@ -102,7 +109,8 @@ BlackJack(void)
         }
 #endif
 
-    /*  if (money>=20000) CHEAT=1;
+    /*  if (money>=20000)
+            CHEAT=1;
         if (CHEAT==1) {
             if (cardlist[1]<=3) {
                 SWAP(cardlist[50], cardlist[1]);
@@ -110,12 +118,15 @@ BlackJack(void)
         } */                            /* 作弊碼 */
 
         host_card[0] = cardlist[0];
-        if (host_card[0] < 4)AA_count++;
+        if (host_card[0] < 4)
+            AA_count++;
         guest_card[0] = cardlist[1];
 
-        if (guest_card[0] < 4)A_count++;
+        if (guest_card[0] < 4)
+            A_count++;
         host_card[1] = cardlist[2];
-        if (host_card[1] < 4)AA_count++; /* 發前三張牌 */
+        if (host_card[1] < 4)
+            AA_count++; /* 發前三張牌 */
 
         move(5, 0);  prints("╭───╮");
         move(6, 0);  prints("│      │");
@@ -134,7 +145,8 @@ BlackJack(void)
         {
             m = 1;
             guest_card[guest_count] = cardlist[card_count];
-            if (guest_card[guest_count] < 4)A_count++;
+            if (guest_card[guest_count] < 4)
+                A_count++;
             print_card(guest_card[guest_count], 15, mov_y);
             guest_point += num[guest_card[guest_count]];
 
@@ -161,7 +173,8 @@ BlackJack(void)
                 flag = 1; m = 0;
             }
 
-            if ((guest_card[0] <= 3 && guest_card[0] >= 0) && (guest_card[1] <= 43 && guest_card[1] >= 40))tmp = 1;
+            if ((guest_card[0] <= 3 && guest_card[0] >= 0) && (guest_card[1] <= 43 && guest_card[1] >= 40))
+                tmp = 1;
 
             if ((tmp == 1) || ((guest_card[1] <= 3 && guest_card[1] >= 0) && (guest_card[0] <= 43 && guest_card[0] >= 40)))
             {
@@ -192,7 +205,11 @@ BlackJack(void)
 
             if (guest_point > 21)
             {
-                if (A_count > 0) { guest_point -= 10; A_count--; }
+                if (A_count > 0)
+                {
+                    guest_point -= 10;
+                    A_count--;
+                }
             }
             move(12, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", host_point);
             move(14, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", guest_point);
@@ -221,8 +238,10 @@ BlackJack(void)
 
             do
             {
-                if (ch == 'd')m = 0;
-                if (m != 0) ch = vkey();
+                if (ch == 'd')
+                    m = 0;
+                if (m != 0)
+                    ch = vkey();
             } while (ch != 'y' && ch != 'n' && ch != 'd' && m != 0); /* 抓 key */
 
             if (ch == 'd' && m != 0 && guest_count == 2)
@@ -233,12 +252,15 @@ BlackJack(void)
 //                  demoney(money);
                     money *= 2;
                 }
-                else ch = 'n';
+                else
+                    ch = 'n';
                 move(0, 0); clrtoeol(); prints("您還有 \x1b[1;44;33m%d\x1b[m 金幣", cuser_money);
             }                                      /* double */
 
-            if (ch == 'd' && guest_count > 2)ch = 'n';
-            if (guest_point == 21)ch = 'n';
+            if (ch == 'd' && guest_count > 2)
+                ch = 'n';
+            if (guest_point == 21)
+                ch = 'n';
         } while (ch != 'n' && m != 0);
         mov_y = 8;
 
@@ -253,12 +275,17 @@ BlackJack(void)
                 {
                     host_card[host_count] = cardlist[card_count];
                     print_card(host_card[host_count], 5, mov_y);
-                    if (host_card[host_count] < 4)AA_count++;
+                    if (host_card[host_count] < 4)
+                        AA_count++;
                     host_point += num[host_card[host_count]];
                 }
                 if (host_point > 21)
                 {
-                    if (AA_count > 0) { host_point -= 10; AA_count--; }
+                    if (AA_count > 0)
+                    {
+                        host_point -= 10;
+                        AA_count--;
+                    }
                 }
                 move(12, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", host_point);
                 move(14, 0); clrtoeol(); prints("\x1b[1;32m點數: \x1b[33m%d\x1b[m", guest_point);
@@ -275,7 +302,8 @@ BlackJack(void)
                 card_count++;
                 mov_y += 4;
             } while (host_point < guest_point);
-            if (!flag) pressanykey("你輸了~~~~ 金幣沒收!");
+            if (!flag)
+                pressanykey("你輸了~~~~ 金幣沒收!");
         }
     }
 }

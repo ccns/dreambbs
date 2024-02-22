@@ -42,7 +42,8 @@ get_sch_time(void)
     {
         move(23, 23 + i / 2*4 + i % 2);
         ch = vkey();
-        if (ch == 'q' || ch == 'Q') return 0;
+        if (ch == 'q' || ch == 'Q')
+            return 0;
         else if (ch == '\r')
         {
             i -= 1;
@@ -50,8 +51,10 @@ get_sch_time(void)
         }
         else if (ch == '\x7f')
         {
-            if (i)i -= 2;
-            else i = -1;
+            if (i)
+                i -= 2;
+            else
+                i = -1;
             continue;
         }
         if (ch >= '0' && ch <= t_max[i])

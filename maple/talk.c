@@ -549,7 +549,8 @@ aloha_sync(void)
                     continue;
                 }
                 ptail--;
-                if (phead >= ptail) break;
+                if (phead >= ptail)
+                    break;
                 memcpy(phead, ptail, sizeof(BMW));
             }
 
@@ -4524,7 +4525,8 @@ check_personal_note(
         {
             if (newflag)
             {
-                if (myitem.mode == 0) total++;
+                if (myitem.mode == 0)
+                    total++;
             }
             else
                 total++;

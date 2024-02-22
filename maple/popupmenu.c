@@ -143,7 +143,8 @@ count_len(
         ptr = strstr(ptr, "\x1b");
         if (ptr)
         {
-            for (tmp=ptr; *tmp!='m'; tmp++);
+            for (tmp=ptr; *tmp!='m'; tmp++)
+                ;
             len -= (tmp-ptr+1);
             ptr = tmp+1;
         }

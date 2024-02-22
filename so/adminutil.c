@@ -193,7 +193,8 @@ const char *title)
     {
         return;
     }
-    for (str = fpath; *str; str++);
+    for (str = fpath; *str; str++)
+        ;
     *str++ = '/';
 
     while ((de = readdir(dirp)))

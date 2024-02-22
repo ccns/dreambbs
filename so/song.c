@@ -379,9 +379,12 @@ int pos)
         if (strstr(tmp, SONG_END))
             break;
 
-        while (song_swap(tmp, SONG_SRC, flag ? "某人" : cuser.userid));
-        while (song_swap(tmp, SONG_DES, idwho));
-        while (song_swap(tmp, SONG_SAY, want_say));
+        while (song_swap(tmp, SONG_SRC, flag ? "某人" : cuser.userid))
+            ;
+        while (song_swap(tmp, SONG_DES, idwho))
+            ;
+        while (song_swap(tmp, SONG_SAY, want_say))
+            ;
 
         fputs(tmp, xfp);
     }
@@ -475,9 +478,12 @@ int pos)
         if (strstr(tmp, SONG_END))
             break;
 
-        while (song_swap(tmp, SONG_SRC, cuser.userid));
-        while (song_swap(tmp, SONG_DES, acct.userid));
-        while (song_swap(tmp, SONG_SAY, want_say));
+        while (song_swap(tmp, SONG_SRC, cuser.userid))
+            ;
+        while (song_swap(tmp, SONG_DES, acct.userid))
+            ;
+        while (song_swap(tmp, SONG_SAY, want_say))
+            ;
 
         fputs(tmp, xfp);
     }
@@ -492,7 +498,8 @@ int pos)
 
     fclose(xfp);
     cacct.request -= 1;
-    if (cacct.request <= 0) cacct.request = 0;
+    if (cacct.request <= 0)
+        cacct.request = 0;
     cuser.request = cacct.request;
     sprintf(buf, "剩餘點歌次數：%d 次", cacct.request);
     vmsg_xo(xo, buf);

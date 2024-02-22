@@ -392,7 +392,8 @@ void mak_dirs(char *fpath)
         return;
 
     fname = fpath;
-    while (*++fname);
+    while (*++fname)
+        ;
     *fname++ = '/';
     fname[1] = '\0';
 
