@@ -751,7 +751,106 @@ struct stat_grade {
     enum stat_danger color;
 };
 
-static const struct stat_grade pip_stat_shit[] =
+static const struct stat_grade pip_stat_m_shit[] =
+{
+    {"\x1b[1;31m哇～臭死了\x1b[m  ",         100, SD_DEATH},
+    {"\x1b[1;35m快臭死了\x1b[m  ",            80, SD_CRIT},
+    {"\x1b[1;33m很臭了說\x1b[m  ",            60, SD_WARN},
+    {"有點臭臭  ",                            41, SD_SAFE},
+    {"",                                       1, SD_SAFE},
+    {"乾淨小雞  ",                       INT_MIN, SD_SAFE},
+},
+    pip_stat_m_hp[] = //          hp / maxhp (%)
+{
+    {"\x1b[1;33m撐撐的說\x1b[m  ",           101, SD_SAFE},
+    {"肚子飽飽  ",                            90, SD_SAFE},
+    {"",                                      40, SD_SAFE},
+    {"\x1b[1;33m想吃東西\x1b[m  ",            20, SD_WARN},
+    {"\x1b[1;35m快餓昏了\x1b[m  ",             1, SD_CRIT},
+    {"\x1b[1;31m嗚～餓死了\x1b[m  ",     INT_MIN, SD_DEATH},
+},
+    pip_stat_m_tired[] =
+{
+    {"\x1b[1;31mㄚ～累死了\x1b[m  ",         100, SD_DEATH},
+    {"\x1b[1;35m真的很累\x1b[m  ",            80, SD_CRIT},
+    {"\x1b[1;33m有點小累\x1b[m  ",            60, SD_WARN},
+    {"",                                      20, SD_SAFE},
+    {"精神很好  ",                       INT_MIN, SD_SAFE},
+},
+    pip_stat_m_weight[] = // weight - weight_std
+{
+    {"\x1b[1;31m嗚～肥死了\x1b[m  ",          50, SD_DEATH},
+    {"\x1b[1;35m太胖了啦\x1b[m  ",            30, SD_CRIT},
+    {"\x1b[1;33m有點小胖\x1b[m  ",            10, SD_WARN},
+    {"",                                      -9, SD_SAFE},
+    {"\x1b[1;33m有點小瘦\x1b[m  ",           -29, SD_WARN},
+    {"\x1b[1;35m太瘦了喔\x1b[m ",            -50, SD_WARN}, // No penalties
+    {"\x1b[1;31m:~~ 瘦死了\x1b[m  ",     INT_MIN, SD_DEATH},
+},
+    pip_stat_m_sick[] =
+{
+    {"\x1b[1;31m病死了啦 :~~\x1b[m  ",       100, SD_DEATH},
+    {"\x1b[1;35m正病重中\x1b[m  ",            75, SD_CRIT},
+    {"\x1b[1;33m生病了啦\x1b[m  ",            50, SD_WARN},
+    {"",                                 INT_MIN, SD_SAFE},
+},
+    pip_stat_m_happy[] =
+{
+    {"很快樂..  ",                            95, SD_SAFE},
+    {"快樂啦..  ",                            80, SD_SAFE},
+    {"",                                      41, SD_SAFE},
+    {"",                                      40, SD_WARN},
+    {"\x1b[1;33m不太快樂\x1b[m  ",            21, SD_WARN},
+    {"\x1b[1;33m不太快樂\x1b[m  ",            20, SD_CRIT},
+    {"\x1b[1;35m很不快樂\x1b[m  ",       INT_MIN, SD_CRIT},
+},
+    pip_stat_m_satisfy[] =
+{
+    {"很滿足..  ",                            95, SD_SAFE},
+    {"滿足啦..  ",                            80, SD_SAFE},
+    {"",                                      41, SD_SAFE},
+    {"",                                      40, SD_WARN},
+    {"\x1b[1;33m不太滿足\x1b[m  ",            21, SD_WARN},
+    {"\x1b[1;33m不太滿足\x1b[m  ",            20, SD_CRIT},
+    {"\x1b[1;35m很不滿足..\x1b[m  ",     INT_MIN, SD_CRIT},
+},
+    pip_stat_m_money[] =
+{
+    {"",     501, SD_SAFE},
+    {"",     101, SD_WARN},
+    {"", INT_MIN, SD_CRIT},
+},
+    pip_stat_m_mp[] = // mp / maxmp (%)
+{
+    {"",      41, SD_SAFE},
+    {"",      21, SD_WARN},
+    {"", INT_MIN, SD_CRIT},
+},
+    pip_stat_m_food[] =
+{
+    {"",       6, SD_SAFE},
+    {"",       1, SD_WARN},
+    {"", INT_MIN, SD_CRIT},
+},
+    pip_stat_m_cookie[] =
+{
+    {"",       6, SD_SAFE},
+    {"",       1, SD_WARN},
+    {"", INT_MIN, SD_CRIT},
+},
+    pip_stat_m_bighp[] =
+{
+    {"",       3, SD_SAFE},
+    {"",       1, SD_WARN},
+    {"", INT_MIN, SD_CRIT},
+},
+    pip_stat_m_medicine[] =
+{
+    {"",       6, SD_SAFE},
+    {"",       1, SD_WARN},
+    {"", INT_MIN, SD_CRIT},
+},
+    pip_stat_r_shit[] =
 {
     {"\x1b[1;31m臭死了..\x1b[m",             100, SD_DEATH},
     {"\x1b[1;34m快臭死了..\x1b[m",            80, SD_CRIT},
@@ -760,7 +859,7 @@ static const struct stat_grade pip_stat_shit[] =
     {"",                                       1, SD_SAFE},
     {"很乾淨..",                         INT_MIN, SD_SAFE},
 },
-    pip_stat_hp[] = //            hp / maxhp (%)
+    pip_stat_r_hp[] = //          hp / maxhp (%)
 {
     {"\x1b[1;34m快撐死了..\x1b[m",           100, SD_SAFE},
     {"嗯～肚子飽飽有體力..",                  80, SD_SAFE},
@@ -769,7 +868,7 @@ static const struct stat_grade pip_stat_shit[] =
     {"\x1b[1;35m全身無力中.快餓死了.\x1b[m",   1, SD_CRIT},
     {"餓死了..",                         INT_MIN, SD_DEATH},
 },
-    pip_stat_tired[] =
+    pip_stat_r_tired[] =
 {
     {"累死了...",                            100, SD_DEATH},
     {"\x1b[1;31m好累喔，快不行了..\x1b[m",    80, SD_CRIT},
@@ -777,7 +876,7 @@ static const struct stat_grade pip_stat_shit[] =
     {"",                                      20, SD_SAFE},
     {"精神抖擻中..",                     INT_MIN, SD_SAFE},
 },
-    pip_stat_weight[] = //   weight - weight_std
+    pip_stat_r_weight[] = // weight - weight_std
 {
     {"胖死了...",                             50, SD_DEATH},
     {"太胖了..",                              30, SD_CRIT},
@@ -787,14 +886,14 @@ static const struct stat_grade pip_stat_shit[] =
     {"太瘦了..",                             -49, SD_CRIT},
     {"瘦死了..",                         INT_MIN, SD_DEATH},
 },
-    pip_stat_sick[] =
+    pip_stat_r_sick[] =
 {
     {"病死了.!.",                            100, SD_DEATH},
     {"\x1b[1;31m病重!!..\x1b[m",              75, SD_CRIT},
     {"\x1b[1;34m生病了..\x1b[m",              50, SD_WARN},
     {"",                                 INT_MIN, SD_SAFE},
 },
-    pip_stat_happy[] =
+    pip_stat_r_happy[] =
 {
     {"很快樂..",                              95, SD_SAFE},
     {"快樂..",                                80, SD_SAFE},
@@ -802,7 +901,7 @@ static const struct stat_grade pip_stat_shit[] =
     {"不快樂..",                              20, SD_WARN},
     {"\x1b[1;31m很不快樂..\x1b[m",       INT_MIN, SD_CRIT},
 },
-    pip_stat_satisfy[] =
+    pip_stat_r_satisfy[] =
 {
     {"很滿足..",                              95, SD_SAFE},
     {"滿足..",                                80, SD_SAFE},
@@ -812,61 +911,122 @@ static const struct stat_grade pip_stat_shit[] =
 };
 
 enum pip_stat {
-    STAT_SHIT,
-    STAT_HP,
-    STAT_TIRED,
-    STAT_WEIGHT,
-    STAT_SICK,
-    STAT_HAPPY,
-    STAT_SATISFY,
+    STAT_M_MSG_BEGIN,
+    STAT_M_SHIT = STAT_M_MSG_BEGIN,
+    STAT_M_HP,
+    STAT_M_TIRED,
+    STAT_M_WEIGHT,
+    STAT_M_SICK,
+    STAT_M_HAPPY,
+    STAT_M_SATISFY,
 
-    STAT_COUNT,
+    STAT_M_MSG_END,
+    STAT_M_MONEY = STAT_M_MSG_END,
+    STAT_M_MP,
+    STAT_M_FOOD,
+    STAT_M_COOKIE,
+    STAT_M_BIGHP,
+    STAT_M_MEDICINE,
+
+    STAT_M_END,
+
+    STAT_R_BEGIN = STAT_M_END,
+    STAT_R_SHIT = STAT_R_BEGIN,
+    STAT_R_HP,
+    STAT_R_TIRED,
+    STAT_R_WEIGHT,
+    STAT_R_SICK,
+    STAT_R_HAPPY,
+    STAT_R_SATISFY,
+
+    STAT_R_END,
+    STAT_COUNT = STAT_R_END,
 };
 
 static const struct stat_grade *const pip_stat_list[STAT_COUNT] =
 {
-    pip_stat_shit,
-    pip_stat_hp,
-    pip_stat_tired,
-    pip_stat_weight,
-    pip_stat_sick,
-    pip_stat_happy,
-    pip_stat_satisfy,
+    pip_stat_m_shit,
+    pip_stat_m_hp,
+    pip_stat_m_tired,
+    pip_stat_m_weight,
+    pip_stat_m_sick,
+    pip_stat_m_happy,
+    pip_stat_m_satisfy,
+
+    pip_stat_m_money,
+    pip_stat_m_mp,
+    pip_stat_m_food,
+    pip_stat_m_cookie,
+    pip_stat_m_bighp,
+    pip_stat_m_medicine,
+
+    pip_stat_r_shit,
+    pip_stat_r_hp,
+    pip_stat_r_tired,
+    pip_stat_r_weight,
+    pip_stat_r_sick,
+    pip_stat_r_happy,
+    pip_stat_r_satisfy,
 };
 
 GCC_NONNULLS
-static int pip_get_stat_points(const struct chicken *pc, enum pip_stat idx_stat)
+static int pip_get_stat_points(const struct chicken *pc, enum pip_stat idx_stat, int age)
 {
     switch (idx_stat)
     {
-    case STAT_SHIT:
+    case STAT_M_SHIT:
+    case STAT_R_SHIT:
         return pc->body[BODY_SHIT];
-    case STAT_HP:
+    case STAT_M_HP:
+        if (pc->body[BODY_HP] <= 0)
+            return 0;
+        /* Falls through */
+    case STAT_R_HP:
         return pc->body[BODY_HP] * 100 / pc->body[BODY_MAXHP];
-    case STAT_TIRED:
+    case STAT_M_TIRED:
+    case STAT_R_TIRED:
         return pc->body[BODY_TIRED];
-    case STAT_WEIGHT:
+    case STAT_M_WEIGHT:
+    case STAT_R_WEIGHT:
         {
-            const int age = pc->bbtime / 60 / 30;
             const int weight_std = 60 + 10 * age;
             return pc->body[BODY_WEIGHT] - weight_std;
         }
-    case STAT_SICK:
+    case STAT_M_SICK:
+    case STAT_R_SICK:
         return pc->body[BODY_SICK];
-    case STAT_HAPPY:
+    case STAT_M_HAPPY:
+    case STAT_R_HAPPY:
         return pc->state[STATE_HAPPY];
-    case STAT_SATISFY:
+    case STAT_M_SATISFY:
+    case STAT_R_SATISFY:
         return pc->state[STATE_SATISFY];
+
+    case STAT_M_MONEY:
+        return pc->thing[THING_MONEY];
+    case STAT_M_MP:
+        if (pc->fight[FIGHT_MAXMP] <= 0)
+            return 100;
+        return pc->fight[FIGHT_MP] * 100 / pc->fight[FIGHT_MAXMP];
+    case STAT_M_FOOD:
+        return pc->eat[EAT_FOOD];
+    case STAT_M_COOKIE:
+        return pc->eat[EAT_COOKIE];
+    case STAT_M_BIGHP:
+        return pc->eat[EAT_BIGHP];
+    case STAT_M_MEDICINE:
+        return pc->eat[EAT_MEDICINE];
+
     default:
         return -1; // Unreachable
     }
 }
 
 GCC_NONNULL(2)
-static int pip_judge_stat(const char **pmsg, const struct chicken *pc, enum pip_stat idx_stat)
+static int pip_judge_stat(const char **pmsg, const struct chicken *pc, enum pip_stat idx_stat, int age)
 {
     const struct stat_grade *grade = pip_stat_list[idx_stat];
-    const int points = pip_get_stat_points(pc, idx_stat);
+    const int points = pip_get_stat_points(pc, idx_stat, age);
 
     for (; grade->points != INT_MIN; ++grade)
     {
@@ -943,6 +1103,20 @@ static void pip_show_age_pic(int age, int weight)
     }
 }
 
+static int pip_mainmenu_color(const enum pip_stat stat, const struct chicken *pc, int age)
+{
+    const int color = pip_judge_stat(NULL, pc, stat, age);
+    return (color == SD_DEATH) ? SD_CRIT : color;
+}
+
+static void pip_mainmenu_colors(int *colors, const enum pip_stat *stats, size_t nstat, const struct chicken *pc, int age)
+{
+    for (size_t i = 0; i < nstat; ++i)
+    {
+        colors[i] = pip_mainmenu_color(stats[i], pc, age);
+    }
+}
+
 static int
 pip_mainmenu(
 enum pipmenumode mode)
@@ -951,11 +1125,9 @@ enum pipmenumode mode)
     time_t now;
 
     int tm, m, color, tm1 GCC_UNUSED, m1 GCC_UNUSED;
-    int color1, color2, color3, color4;
+    int colors[4] = {37, 37, 37, 37};
     int anynum;
-    float pc;
 
-    color1 = color2 = color3 = color4 = 37;
     move(1, 0);
     tm = (time(0) - start_time + d.bbtime) / 60 / 30; /* 一歲 */
     tm1 = (time(0) - start_time + d.bbtime) / 60;
@@ -1024,70 +1196,25 @@ enum pipmenumode mode)
         prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ [%s代雞] \x1b[34m？ \x1b[37m%-15s      %*s\x1b[m", d.chickenmode ? "二" : "一", d.name, 40 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
 
     move(1, 0);
-    if (d.thing[THING_MONEY] <= 100)
-        color1 = 31;
-    else if (d.thing[THING_MONEY] <= 500)
-        color1 = 33;
-    else
-        color1 = 37;
+    static const enum pip_stat stats0[] = {STAT_M_MONEY};
+    pip_mainmenu_colors(colors, stats0, COUNTOF(stats0), &d, m);
+
     prints_centered(" \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %02d/%02d/%02d  \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m",
-            pip_age_name(m), (d.year - 11) % 100, d.month, d.day, tm, color1, d.thing[THING_MONEY]);
+            pip_age_name(m), (d.year - 11) % 100, d.month, d.day, tm, colors[0], d.thing[THING_MONEY]);
 
     move(2, 0);
-
-    if ((d.body[BODY_HP]*100 / d.body[BODY_MAXHP]) <= 20)
-        color1 = 31;
-    else if ((d.body[BODY_HP]*100 / d.body[BODY_MAXHP]) <= 40)
-        color1 = 33;
-    else
-        color1 = 37;
-
-    if (d.fight[FIGHT_MAXMP] <= 0)
-        color2 = 37;
-    else if ((d.fight[FIGHT_MP]*100 / d.fight[FIGHT_MAXMP]) <= 20)
-        color2 = 31;
-    else if ((d.fight[FIGHT_MP]*100 / d.fight[FIGHT_MAXMP]) <= 40)
-        color2 = 33;
-    else
-        color2 = 37;
-
-    if (d.body[BODY_TIRED] >= 80)
-        color3 = 31;
-    else if (d.body[BODY_TIRED] >= 60)
-        color3 = 33;
-    else
-        color3 = 37;
+    static const enum pip_stat stats1[] = {STAT_M_HP, STAT_M_MP, STAT_M_TIRED};
+    pip_mainmenu_colors(colors, stats1, COUNTOF(stats1), &d, m);
 
     prints_centered(" \x1b[1;32m[生  命]\x1b[%dm %-10d\x1b[32m[法  力]\x1b[%dm %-10d\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m ",
-            color1, d.body[BODY_HP], color2, d.fight[FIGHT_MP], d.body[BODY_WEIGHT], color3, d.body[BODY_TIRED]);
+            colors[0], d.body[BODY_HP], colors[1], d.fight[FIGHT_MP], d.body[BODY_WEIGHT], colors[2], d.body[BODY_TIRED]);
 
     move(3, 0);
-    if (d.body[BODY_SHIT] >= 80)
-        color1 = 31;
-    else if (d.body[BODY_SHIT] >= 60)
-        color1 = 33;
-    else
-        color1 = 37;
-    if (d.body[BODY_SICK] >= 75)
-        color2 = 31;
-    else if (d.body[BODY_SICK] >= 50)
-        color2 = 33;
-    else
-        color2 = 37;
-    if (d.state[STATE_HAPPY] <= 20)
-        color3 = 31;
-    else if (d.state[STATE_HAPPY] <= 40)
-        color3 = 33;
-    else
-        color3 = 37;
-    if (d.state[STATE_SATISFY] <= 20)
-        color4 = 31;
-    else if (d.state[STATE_SATISFY] <= 40)
-        color4 = 33;
-    else
-        color4 = 37;
+    static const enum pip_stat stats2[] = {STAT_M_SHIT, STAT_M_SICK, STAT_M_HAPPY, STAT_M_SATISFY};
+    pip_mainmenu_colors(colors, stats2, COUNTOF(stats2), &d, m);
+
     prints_centered(" \x1b[1;32m[命 MAX]\x1b[37m %-10d\x1b[32m[法 MAX]\x1b[37m %-10d\x1b[32m[髒／病]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d \x1b[32m[快／滿]\x1b[%dm %-4d\x1b[37m/\x1b[%dm%-4d\x1b[m",
-            d.body[BODY_MAXHP], d.fight[FIGHT_MAXMP], color1, d.body[BODY_SHIT], color2, d.body[BODY_SICK], color3, d.state[STATE_HAPPY], color4, d.state[STATE_SATISFY]);
+            d.body[BODY_MAXHP], d.fight[FIGHT_MAXMP], colors[0], d.body[BODY_SHIT], colors[1], d.body[BODY_SICK], colors[2], d.state[STATE_HAPPY], colors[3], d.state[STATE_SATISFY]);
     switch (mode)
     {
     case MODE_MAIN:
@@ -1105,32 +1232,12 @@ enum pipmenumode mode)
 
     case MODE_FEED:
         move(4, 0);
-        if (d.eat[EAT_FOOD] <= 0)
-            color1 = 31;
-        else if (d.eat[EAT_FOOD] <= 5)
-            color1 = 33;
-        else
-            color1 = 37;
-        if (d.eat[EAT_COOKIE] <= 0)
-            color2 = 31;
-        else if (d.eat[EAT_COOKIE] <= 5)
-            color2 = 33;
-        else
-            color2 = 37;
-        if (d.eat[EAT_BIGHP] <= 0)
-            color3 = 31;
-        else if (d.eat[EAT_BIGHP] <= 2)
-            color3 = 33;
-        else
-            color3 = 37;
-        if (d.eat[EAT_MEDICINE] <= 0)
-            color4 = 31;
-        else if (d.eat[EAT_MEDICINE] <= 5)
-            color4 = 33;
-        else
-            color4 = 37;
+        {
+            static const enum pip_stat stats_f[] = {STAT_M_FOOD, STAT_M_COOKIE, STAT_M_BIGHP, STAT_M_MEDICINE};
+            pip_mainmenu_colors(colors, stats_f, COUNTOF(stats_f), &d, m);
+        }
         prints_centered(" \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m",
-                color1, d.eat[EAT_FOOD], color2, d.eat[EAT_COOKIE], color3, d.eat[EAT_BIGHP], color4, d.eat[EAT_MEDICINE], d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS]);
+                colors[0], d.eat[EAT_FOOD], colors[1], d.eat[EAT_COOKIE], colors[2], d.eat[EAT_BIGHP], colors[3], d.eat[EAT_MEDICINE], d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS]);
         break;
 
     case MODE_WORK:
@@ -1159,147 +1266,55 @@ enum pipmenumode mode)
     move(b_lines - 3, 0);
     outs_centered(" ");
 
-    if (d.body[BODY_SHIT] <= 0)
-        outs("乾淨小雞  ");
-    else if (d.body[BODY_SHIT] <= 40)
-        ;
-    else if (d.body[BODY_SHIT] < 60)
-        outs("有點臭臭  ");
-    else if (d.body[BODY_SHIT] < 80)
-        outs("\x1b[1;33m很臭了說\x1b[m  ");
-    else if (d.body[BODY_SHIT] < 100)
+    /* TODO: apply all stat changes before displaying any of the value to avoid inconsistency */
+    for (int st = STAT_M_MSG_BEGIN; st < STAT_M_MSG_END; ++st)
     {
-        outs("\x1b[1;35m快臭死了\x1b[m  ");
-        d.body[BODY_SICK] += 4;
-        d.learn[LEARN_CHARACTER] -= (random() % 3 + 3);
+        const char *msg = NULL;
+        switch (pip_judge_stat(&msg, &d, st, m))
+        {
+        case SD_DEATH:
+            d.death = 1;
+            pipdie(msg, 1);
+            return -1;
+        case SD_CRIT:
+            switch (st)
+            {
+            case STAT_M_SHIT:
+                d.body[BODY_SICK] += 4;
+                d.learn[LEARN_CHARACTER] -= (random() % 3 + 3);
+                break;
+            case STAT_M_HP:
+                d.body[BODY_SICK] += 3;
+                d.state[STATE_HAPPY] -= 5;
+                d.state[STATE_SATISFY] -= 3;
+                break;
+            case STAT_M_TIRED:
+                d.body[BODY_SICK] += 5;
+                break;
+            case STAT_M_WEIGHT: // For the too-heavy case
+                d.body[BODY_SICK] += 3;
+                if (d.fight[FIGHT_SPEED] >= 2)
+                    d.fight[FIGHT_SPEED] -= 2;
+                else
+                    d.fight[FIGHT_SPEED] = 0;
+                break;
+            case STAT_M_SICK:
+                d.body[BODY_SICK] += 5;
+                count_tired(1, 15, true, 100, 1);
+                break;
+            default:
+                ;
+            }
+            break;
+        case SD_WARN:
+            if (st == STAT_M_SICK)
+                count_tired(1, 8, true, 100, 1);
+            break;
+        default:
+            ;
+        }
+        outs(msg);
     }
-    else
-    {
-        d.death = 1;
-        pipdie("\x1b[1;31m哇～臭死了\x1b[m  ", 1);
-        return -1;
-    }
-
-    if (d.body[BODY_HP] <= 0)
-        pc = 0;
-    else
-        pc = d.body[BODY_HP] * 100 / d.body[BODY_MAXHP];
-    if (pc <= 0)
-    {
-        d.death = 1;
-        pipdie("\x1b[1;31m嗚～餓死了\x1b[m  ", 1);
-        return -1;
-    }
-    else if (pc < 20)
-    {
-        outs("\x1b[1;35m快餓昏了\x1b[m  ");
-        d.body[BODY_SICK] += 3;
-        d.state[STATE_HAPPY] -= 5;
-        d.state[STATE_SATISFY] -= 3;
-    }
-    else if (pc < 40)
-        outs("\x1b[1;33m想吃東西\x1b[m  ");
-    else if (pc < 90)
-        ;
-    else if (pc <= 100)
-        outs("肚子飽飽  ");
-    else
-        outs("\x1b[1;33m撐撐的說\x1b[m  ");
-
-    pc = d.body[BODY_TIRED];
-    if (pc < 20)
-        outs("精神很好  ");
-    else if (pc < 60)
-        ;
-    else if (pc < 80)
-        outs("\x1b[1;33m有點小累\x1b[m  ");
-    else if (pc < 100)
-    {
-        outs("\x1b[1;35m真的很累\x1b[m  ");
-        d.body[BODY_SICK] += 5;
-    }
-    else
-    {
-        d.death = 1;
-        pipdie("\x1b[1;31mㄚ～累死了\x1b[m  ", 1);
-        return -1;
-    }
-
-    pc = 60 + 10 * tm;
-    if (d.body[BODY_WEIGHT] < (pc - 50))
-    {
-        d.death = 1;
-        pipdie("\x1b[1;31m:~~ 瘦死了\x1b[m  ", 1);
-        return -1;
-    }
-    else if (d.body[BODY_WEIGHT] <= (pc - 30))
-        outs("\x1b[1;35m太瘦了喔\x1b[m ");
-    else if (d.body[BODY_WEIGHT] <= (pc - 10))
-        outs("\x1b[1;33m有點小瘦\x1b[m  ");
-    else if (d.body[BODY_WEIGHT] < (pc + 10))
-        ;
-    else if (d.body[BODY_WEIGHT] < (pc + 30))
-        outs("\x1b[1;33m有點小胖\x1b[m  ");
-    else if (d.body[BODY_WEIGHT] < (pc + 50))
-    {
-        outs("\x1b[1;35m太胖了啦\x1b[m  ");
-        d.body[BODY_SICK] += 3;
-        if (d.fight[FIGHT_SPEED] >= 2)
-            d.fight[FIGHT_SPEED] -= 2;
-        else
-            d.fight[FIGHT_SPEED] = 0;
-
-    }
-    else
-    {
-        d.death = 1;
-        pipdie("\x1b[1;31m嗚～肥死了\x1b[m  ", 1);
-        return -1;
-    }
-
-    if (d.body[BODY_SICK] < 50)
-        ;
-    else if (d.body[BODY_SICK] < 75)
-    {
-        outs("\x1b[1;33m生病了啦\x1b[m  ");
-        count_tired(1, 8, true, 100, 1);
-    }
-    else if (d.body[BODY_SICK] < 100)
-    {
-        outs("\x1b[1;35m正病重中\x1b[m  ");
-        d.body[BODY_SICK] += 5;
-        count_tired(1, 15, true, 100, 1);
-    }
-    else
-    {
-        d.death = 1;
-        pipdie("\x1b[1;31m病死了啦 :~~\x1b[m  ", 1);
-        return -1;
-    }
-
-    pc = d.state[STATE_HAPPY];
-    if (pc < 20)
-        outs("\x1b[1;35m很不快樂\x1b[m  ");
-    else if (pc < 40)
-        outs("\x1b[1;33m不太快樂\x1b[m  ");
-    else if (pc < 80)
-        ;
-    else if (pc < 95)
-        outs("快樂啦..  ");
-    else
-        outs("很快樂..  ");
-
-    pc = d.state[STATE_SATISFY];
-    if (pc < 20)
-        outs("\x1b[1;35m很不滿足..\x1b[m  ");
-    else if (pc < 40)
-        outs("\x1b[1;33m不太滿足\x1b[m  ");
-    else if (pc < 80)
-        ;
-    else if (pc < 95)
-        outs("滿足啦..  ");
-    else
-        outs("很滿足..  ");
 
     outs("\n");
 
@@ -6167,9 +6182,9 @@ const char *userid)
             pip_show_age_pic(age, ck.body[BODY_WEIGHT]);
 
             move(b_lines - 5, 0);
-            for (int st = 0; st < STAT_COUNT; ++st)
+            for (int st = STAT_R_BEGIN; st < STAT_R_END; ++st)
             {
-                if (pip_judge_stat(&msg, &ck, st) == SD_DEATH)
+                if (pip_judge_stat(&msg, &ck, st, age) == SD_DEATH)
                     return -1;
                 outs(msg);
             }
@@ -6729,18 +6744,11 @@ int mode)
         move(1, 0);
         prints_centered("\x1b[1;31m┌─────────────────────────────────────┐\x1b[m");
         move(2, 0);
-        /* lucky拿來當color用*/
-        if (d.body[BODY_TIRED] >= 80)
-            lucky = 31;
-        else if (d.body[BODY_TIRED] >= 60 && d.body[BODY_TIRED] < 80)
-            lucky = 33;
-        else
-            lucky = 37;
         sprintf(inbuf1, "%d%s/%d%s", d.body[BODY_HP] > 1000 ? d.body[BODY_HP] / 1000 : d.body[BODY_HP], d.body[BODY_HP] > 1000 ? "K" : "", d.body[BODY_MAXHP] > 1000 ? d.body[BODY_MAXHP] / 1000 : d.body[BODY_MAXHP], d.body[BODY_MAXHP] > 1000 ? "K" : "");
         sprintf(inbuf2, "%d%s/%d%s", d.fight[FIGHT_MP] > 1000 ? d.fight[FIGHT_MP] / 1000 : d.fight[FIGHT_MP], d.fight[FIGHT_MP] > 1000 ? "K" : "", d.fight[FIGHT_MAXMP] > 1000 ? d.fight[FIGHT_MAXMP] / 1000 : d.fight[FIGHT_MAXMP], d.fight[FIGHT_MAXMP] > 1000 ? "K" : "");
 
         prints_centered("\x1b[1;31m│\x1b[33m生  命:\x1b[37m%-12s\x1b[33m法  力:\x1b[37m%-12s\x1b[33m疲  勞:\x1b[%dm%-12d\x1b[33m金  錢:\x1b[37m%-10d\x1b[31m│\x1b[m",
-                inbuf1, inbuf2, lucky, d.body[BODY_TIRED], d.thing[THING_MONEY]);
+                inbuf1, inbuf2, pip_mainmenu_color(STAT_M_TIRED, &d, 0), d.body[BODY_TIRED], d.thing[THING_MONEY]);
         move(3, 0);
         prints_centered("\x1b[1;31m│\x1b[33m攻  擊:\x1b[37m%-10d  \x1b[33m防  禦:\x1b[37m%-10d  \x1b[33m速  度:\x1b[37m%-10d  \x1b[33m經  驗:\x1b[37m%-10d\x1b[31m│\x1b[m",
                 d.fight[FIGHT_ATTACK], d.fight[FIGHT_RESIST], d.fight[FIGHT_SPEED], d.exp);
@@ -6959,19 +6967,11 @@ int mode)
         move(1, 0);
         prints_centered("\x1b[1;31m┌─────────────────────────────────────┐\x1b[m");
         move(2, 0);
-        /* lucky拿來當color用*/
-        if (d.body[BODY_TIRED] >= 80)
-            lucky = 31;
-        else if (d.body[BODY_TIRED] >= 60 && d.body[BODY_TIRED] < 80)
-            lucky = 33;
-        else
-            lucky = 37;
-
         sprintf(inbuf1, "%d%s/%d%s", d.body[BODY_HP] > 1000 ? d.body[BODY_HP] / 1000 : d.body[BODY_HP], d.body[BODY_HP] > 1000 ? "K" : "", d.body[BODY_MAXHP] > 1000 ? d.body[BODY_MAXHP] / 1000 : d.body[BODY_MAXHP], d.body[BODY_MAXHP] > 1000 ? "K" : "");
         sprintf(inbuf2, "%d%s/%d%s", d.fight[FIGHT_MP] > 1000 ? d.fight[FIGHT_MP] / 1000 : d.fight[FIGHT_MP], d.fight[FIGHT_MP] > 1000 ? "K" : "", d.fight[FIGHT_MAXMP] > 1000 ? d.fight[FIGHT_MAXMP] / 1000 : d.fight[FIGHT_MAXMP], d.fight[FIGHT_MAXMP] > 1000 ? "K" : "");
 
         prints_centered("\x1b[1;31m│\x1b[33m生  命:\x1b[37m%-12s\x1b[33m法  力:\x1b[37m%-12s\x1b[33m疲  勞:\x1b[%dm%-12d\x1b[33m金  錢:\x1b[37m%-10d\x1b[31m│\x1b[m",
-                inbuf1, inbuf2, lucky, d.body[BODY_TIRED], d.thing[THING_MONEY]);
+                inbuf1, inbuf2, pip_mainmenu_color(STAT_M_TIRED, &d, 0), d.body[BODY_TIRED], d.thing[THING_MONEY]);
 
         move(3, 0);
         prints_centered("\x1b[1;31m│\x1b[33m攻  擊:\x1b[37m%-10d  \x1b[33m防  禦:\x1b[37m%-10d  \x1b[33m速  度:\x1b[37m%-10d  \x1b[33m經  驗:\x1b[37m%-10d\x1b[31m│\x1b[m",
@@ -7905,9 +7905,8 @@ int mode)
     char buf[256];
 
     int m, color;
-    int color1, color2, color3, color4;
+    int colors[4] = {37, 37, 37, 37};
 
-    color1 = color2 = color3 = color4 = 37;
     move(1, 0);
     m = (time(0) - start_time + d.bbtime) / 60 / 30; /* 一歲 */
     /*長大一歲時的增加改變值*/
@@ -7923,101 +7922,36 @@ int mode)
         prints("\x1b[1;41m  " NICKNAME PIPNAME " ～ \x1b[34m？ \x1b[37m%-15s     %*s\x1b[0m", d.name, 55 + d_cols - STRLITLEN_INT(NICKNAME PIPNAME), "");
 
     move(1, 0);
-    if (d.thing[THING_MONEY] <= 100)
-        color1 = 31;
-    else if (d.thing[THING_MONEY] <= 500)
-        color1 = 33;
-    else
-        color1 = 37;
+    static const enum pip_stat stats0[] = {STAT_M_MONEY};
+    pip_mainmenu_colors(colors, stats0, COUNTOF(stats0), &d, m);
     sprintf(inbuf1, "%02d/%02d/%02d", (d.year - 11) % 100, d.month, d.day);
     prints_centered(" \x1b[1;32m[狀  態]\x1b[37m %-5s     \x1b[32m[生  日]\x1b[37m %-9s \x1b[32m[年  齡]\x1b[37m %-5d     \x1b[32m[金  錢]\x1b[%dm %-8d \x1b[m",
-            pip_age_name(m), inbuf1, m, color1, d.thing[THING_MONEY]);
+            pip_age_name(m), inbuf1, m, colors[0], d.thing[THING_MONEY]);
 
     move(2, 0);
 
-    if ((d.body[BODY_HP]*100 / d.body[BODY_MAXHP]) <= 20)
-        color1 = 31;
-    else if ((d.body[BODY_HP]*100 / d.body[BODY_MAXHP]) <= 40)
-        color1 = 33;
-    else
-        color1 = 37;
-    if (d.fight[FIGHT_MAXMP] == 0)
-        color2 = 37;
-    else if ((d.fight[FIGHT_MP]*100 / d.fight[FIGHT_MAXMP]) <= 20)
-        color2 = 31;
-    else if ((d.fight[FIGHT_MP]*100 / d.fight[FIGHT_MAXMP]) <= 40)
-        color2 = 33;
-    else
-        color2 = 37;
-
-    if (d.body[BODY_TIRED] >= 80)
-        color3 = 31;
-    else if (d.body[BODY_TIRED] >= 60)
-        color3 = 33;
-    else
-        color3 = 37;
+    static const enum pip_stat stats1[] = {STAT_M_HP, STAT_M_MP, STAT_M_TIRED};
+    pip_mainmenu_colors(colors, stats1, COUNTOF(stats1), &d, m);
 
     sprintf(inbuf1, "%d/%d", d.body[BODY_HP], d.body[BODY_MAXHP]);
     sprintf(inbuf2, "%d/%d", d.fight[FIGHT_MP], d.fight[FIGHT_MAXMP]);
     prints_centered(" \x1b[1;32m[生  命]\x1b[%dm %-10s\x1b[32m[法  力]\x1b[%dm %-10s\x1b[32m[體  重]\x1b[37m %-5d     \x1b[32m[疲  勞]\x1b[%dm %-4d\x1b[0m ",
-            color1, inbuf1, color2, inbuf2, d.body[BODY_WEIGHT], color3, d.body[BODY_TIRED]);
+            colors[0], inbuf1, colors[1], inbuf2, d.body[BODY_WEIGHT], colors[2], d.body[BODY_TIRED]);
 
     move(3, 0);
-    if (d.body[BODY_SHIT] >= 80)
-        color1 = 31;
-    else if (d.body[BODY_SHIT] >= 60)
-        color1 = 33;
-    else
-        color1 = 37;
-    if (d.body[BODY_SICK] >= 75)
-        color2 = 31;
-    else if (d.body[BODY_SICK] >= 50)
-        color2 = 33;
-    else
-        color2 = 37;
-    if (d.state[STATE_HAPPY] <= 20)
-        color3 = 31;
-    else if (d.state[STATE_HAPPY] <= 40)
-        color3 = 33;
-    else
-        color3 = 37;
-    if (d.state[STATE_SATISFY] <= 20)
-        color4 = 31;
-    else if (d.state[STATE_SATISFY] <= 40)
-        color4 = 33;
-    else
-        color4 = 37;
+    static const enum pip_stat stats2[] = {STAT_M_SHIT, STAT_M_SICK, STAT_M_HAPPY, STAT_M_SATISFY};
+    pip_mainmenu_colors(colors, stats2, COUNTOF(stats2), &d, m);
     prints_centered(" \x1b[1;32m[髒  髒]\x1b[%dm %-4d      \x1b[32m[病  氣]\x1b[%dm %-4d      \x1b[32m[快樂度]\x1b[%dm %-4d      \x1b[32m[滿意度]\x1b[%dm %-4d\x1b[0m",
-            color1, d.body[BODY_SHIT], color2, d.body[BODY_SICK], color3, d.state[STATE_HAPPY], color4, d.state[STATE_SATISFY]);
+            colors[0], d.body[BODY_SHIT], colors[1], d.body[BODY_SICK], colors[2], d.state[STATE_HAPPY], colors[3], d.state[STATE_SATISFY]);
     if (mode == 1)/*餵食*/
     {
         move(4, 0);
-        if (d.eat[EAT_FOOD] <= 0)
-            color1 = 31;
-        else if (d.eat[EAT_FOOD] <= 5)
-            color1 = 33;
-        else
-            color1 = 37;
-        if (d.eat[EAT_COOKIE] <= 0)
-            color2 = 31;
-        else if (d.eat[EAT_COOKIE] <= 5)
-            color2 = 33;
-        else
-            color2 = 37;
-        if (d.eat[EAT_BIGHP] <= 0)
-            color3 = 31;
-        else if (d.eat[EAT_BIGHP] <= 2)
-            color3 = 33;
-        else
-            color3 = 37;
-        if (d.eat[EAT_MEDICINE] <= 0)
-            color4 = 31;
-        else if (d.eat[EAT_MEDICINE] <= 5)
-            color4 = 33;
-        else
-            color4 = 37;
+        {
+            static const enum pip_stat stats_f[] = {STAT_M_FOOD, STAT_M_COOKIE, STAT_M_BIGHP, STAT_M_MEDICINE};
+            pip_mainmenu_colors(colors, stats_f, COUNTOF(stats_f), &d, m);
+        }
         prints_centered(" \x1b[1;36m[食物]\x1b[%dm%-7d\x1b[36m[零食]\x1b[%dm%-7d\x1b[36m[補丸]\x1b[%dm%-7d\x1b[36m[靈芝]\x1b[%dm%-7d\x1b[36m[人參]\x1b[37m%-7d\x1b[36m[雪蓮]\x1b[37m%-7d\x1b[0m",
-                color1, d.eat[EAT_FOOD], color2, d.eat[EAT_COOKIE], color3, d.eat[EAT_BIGHP], color4, d.eat[EAT_MEDICINE], d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS]);
+                colors[0], d.eat[EAT_FOOD], colors[1], d.eat[EAT_COOKIE], colors[2], d.eat[EAT_BIGHP], colors[3], d.eat[EAT_MEDICINE], d.eat[EAT_GINSENG], d.eat[EAT_SNOWGRASS]);
 
     }
     move(5, 0);
