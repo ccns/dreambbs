@@ -398,6 +398,8 @@ gem_add(
         return (gtype ? XO_FOOT : XO_HEAD);
     }
 
+    strcpy(ghdr.owner, cuser.userid);
+
     if (ans == 'i' || ans == 'n')
         rec_ins(dir, &ghdr, sizeof(HDR), xo->pos[xo->cur_idx] + (ans == 'n'), 1);
     else
