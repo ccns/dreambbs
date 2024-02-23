@@ -148,12 +148,11 @@ gem_body(
 
 
 static int
-gem_head(
+gem_neck(
     XO *xo)
 {
+    static const char *const neckgem2[GEM_WAY] = {NECKGEM2_WAY0, NECKGEM2_WAY1, NECKGEM2_WAY2};
     char buf[20];
-
-    vs_head("精華文章", (const char *) xo->xyz);
 
     if (xo->key > GEM_USER && GemBufferNum > 0)
     {
@@ -165,10 +164,20 @@ gem_head(
         buf[1] = '\0';
     }
 
+    move(1, 0);
     outs(NECKGEM1);
     outs(buf);
-    prints(NECKGEM2, d_cols, "");
+    prints(neckgem2[gem_way], d_cols, "");
     return gem_body(xo);
+}
+
+
+static int
+gem_head(
+    XO *xo)
+{
+    vs_head("精華文章", (const char *) xo->xyz);
+    return gem_neck(xo);
 }
 
 
@@ -179,7 +188,7 @@ gem_toggle(
     gem_way = (gem_way + 1) % GEM_WAY;
     if (!HAS_PERM(PERM_SYSOP) && (gem_way ==1))
         gem_way = 2;
-    return XO_BODY;
+    return XO_NECK;
 }
 
 
@@ -1758,6 +1767,7 @@ static KeyFuncList gem_cb =
     {XO_INIT, {gem_init}},
     {XO_LOAD, {gem_load}},
     {XO_HEAD, {gem_head}},
+    {XO_NECK, {gem_neck}},
     {XO_BODY, {gem_body}},
     {XO_FOOT, {gem_foot}},
     {XO_CUR | XO_POSF, {.posf = gem_cur}},

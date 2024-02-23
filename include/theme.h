@@ -73,7 +73,13 @@
                    "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明 "
                    /*r2.20170802: disable some tips in case of confusion*/
 
-#define NECKGEM2 \
+#define NECKGEM2_WAY0 \
+            COLOR0 "  編號     主              題%*s                                                  \x1b[m"
+
+#define NECKGEM2_WAY1 \
+            COLOR0 "  編號     主              題%*s                             [檔      名] [日  期]\x1b[m"
+
+#define NECKGEM2_WAY2 \
             COLOR0 "  編號     主              題%*s                             [編      選] [日  期]\x1b[m"
 
 #define NECKPOST \
@@ -164,8 +170,11 @@
                    "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明 "
                    /*r2.20170802: disable "Z" option in case of confusion*/
 
-#define NECK_MAILGEM2 \
+#define NECK_MAILGEM2_WAY0 \
             COLOR0 "  編號     主              題%*s                             [編      選] [日  期]\x1b[m"
+
+#define NECK_MAILGEM2_WAY1 \
+            COLOR0 "  編號     主              題%*s                             [檔      名] [日  期]\x1b[m"
 
 #define NECK_MEMORANDUM \
                    "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 [h]elp\n" \

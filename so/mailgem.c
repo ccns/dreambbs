@@ -96,19 +96,28 @@ XO *xo)
 
 
 static int
-mailgem_head(
-XO *xo)
+mailgem_neck(
+    XO *xo)
 {
+    static const char *const neck_mailgem2[GEM_WAY] = {NECK_MAILGEM2_WAY0, NECK_MAILGEM2_WAY1};
     char buf[20];
-
-    vs_head("精華文章", (const char *) xo->xyz);
 
     sprintf(buf, "(剪貼版 %d 篇)\n", MailGemBufferNum);
 
+    move(1, 0);
     outs(NECK_MAILGEM1);
     outs(buf);
-    prints(NECK_MAILGEM2, d_cols, "");
+    prints(neck_mailgem2[mailgem_way], d_cols, "");
     return mailgem_body(xo);
+}
+
+
+static int
+mailgem_head(
+XO *xo)
+{
+    vs_head("精華文章", (const char *) xo->xyz);
+    return mailgem_neck(xo);
 }
 
 
@@ -117,7 +126,7 @@ mailgem_toggle(
 XO *xo)
 {
     mailgem_way = (mailgem_way + 1) % GEM_WAY;
-    return XO_BODY;
+    return XO_NECK;
 }
 
 
@@ -992,6 +1001,7 @@ static KeyFuncList mailgem_cb =
     {XO_INIT, {mailgem_init}},
     {XO_LOAD, {mailgem_load}},
     {XO_HEAD, {mailgem_head}},
+    {XO_NECK, {mailgem_neck}},
     {XO_BODY, {mailgem_body}},
     {XO_FOOT, {mailgem_foot}},
     {XO_CUR | XO_POSF, {.posf = mailgem_cur}},
