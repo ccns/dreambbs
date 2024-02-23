@@ -915,7 +915,7 @@ gem_state(
         outs(path);
         prints("\nPort: %d", ghdr->xid);
 
-        if (vans_xo(xo, "是否清理 proxy，重抓資料(Y/N)？[N]") == 'y')
+        if (vans_xo(xo, "是否清理 proxy 資料？警告：將無法重抓資料。(y/N)？[N]") == 'y')
             unlink(fpath);
     }
     else
