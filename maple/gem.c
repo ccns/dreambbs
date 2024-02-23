@@ -491,7 +491,7 @@ gem_check(
 /* ----------------------------------------------------- */
 
 /* Thor.981218: ¨¾¤î´c·N§@¶Ã */
-static inline int
+static int
 site_fake(
     const char *s)
 {
