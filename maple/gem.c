@@ -187,7 +187,7 @@ gem_toggle(
 {
     gem_way = (gem_way + 1) % GEM_WAY;
     if (!HAS_PERM(PERM_SYSOP) && (gem_way ==1))
-        gem_way = 2;
+        gem_way = (gem_way + 1) % GEM_WAY;
     return XO_NECK;
 }
 

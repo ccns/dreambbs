@@ -13,7 +13,7 @@
 /* definitions of MailGem Mode */
 
 
-#define GEM_WAY         2
+#define GEM_WAY         3
 static int mailgem_way;
 
 static int MailGemBufferNum;
@@ -47,9 +47,12 @@ int pos)
     prints("%6d %c%s ", num,
            TagNum && !Tagger(ghdr->chrono, num - 1, TAG_NIN) ? '*' : ' ', gtype);
 
-    const int gway = HAS_PERM(PERM_SYSOP) ? mailgem_way : 0;
+    const int gway = mailgem_way;
 
-    prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title,
+    if (gway == 0)
+        prints("%-.*s\n", d_cols + 64, ghdr->title);
+    else
+        prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title,
            IDLEN + 1, (gway == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
 
     return XO_NONE;
@@ -99,7 +102,7 @@ static int
 mailgem_neck(
     XO *xo)
 {
-    static const char *const neck_mailgem2[GEM_WAY] = {NECK_MAILGEM2_WAY0, NECK_MAILGEM2_WAY1};
+    static const char *const neckgem2[GEM_WAY] = {NECKGEM2_WAY0, NECKGEM2_WAY1, NECKGEM2_WAY2};
     char buf[20];
 
     sprintf(buf, "(°Å¶Kª© %d ½g)\n", MailGemBufferNum);
@@ -107,7 +110,7 @@ mailgem_neck(
     move(1, 0);
     outs(NECK_MAILGEM1);
     outs(buf);
-    prints(neck_mailgem2[mailgem_way], d_cols, "");
+    prints(neckgem2[mailgem_way], d_cols, "");
     return mailgem_body(xo);
 }
 
@@ -126,6 +129,8 @@ mailgem_toggle(
 XO *xo)
 {
     mailgem_way = (mailgem_way + 1) % GEM_WAY;
+    if (!HAS_PERM(PERM_SYSOP) && (mailgem_way ==1))
+        mailgem_way = (mailgem_way + 1) % GEM_WAY;
     return XO_NECK;
 }
 
