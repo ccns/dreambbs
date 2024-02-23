@@ -117,6 +117,7 @@ void ve_header(FILE *fp);
 int ve_subject(int row, const char *topic, const char *dft);
 int vedit(char *fpath, int ve_op);
 /* gem.c */
+int url_fpath(char *fpath, char *folder, HDR *hdr);
 void brd2gem(const BRD *brd, HDR *gem);
 int gem_gather(XO *xo, int pos);
 void XoGem(const char *folder, const char *title, int level);

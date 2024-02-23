@@ -74,7 +74,9 @@ gem_item(
     char fpath[64];
 
     xmode = ghdr->xmode;
-    gtype = ((xmode & GEM_FOLDER) ? "◆" : "◇");
+    gtype = (xmode & GEM_GOPHER) ? "□"
+        : (xmode & GEM_FOLDER) ? "◆"
+        : "◇";
     prints("%6d%c%c%s ", num, (xmode & GEM_RESTRICT) ? ')' : (xmode & GEM_LOCK) ? 'L' :  ' ',
         TagNum && !Tagger(ghdr->chrono, num - 1, TAG_NIN) ? '*' : ' ', gtype);
 
@@ -87,6 +89,8 @@ gem_item(
         prints("\x1b[1;33m資料保密！\x1b[m\n");
     else if (!HAS_PERM(PERM_SYSOP) && (xmode & GEM_LOCK))
         prints("\x1b[1;33m資料保密！\x1b[m\n");
+    else if ((gtype == 0) || (xmode & GEM_GOPHER))
+        prints("%-.64s\n", ghdr->title);
     else
     {
         if (xmode & GEM_BOARD)
@@ -196,6 +200,226 @@ gem_load(
     return gem_body(xo);
 }
 
+
+/* ----------------------------------------------------- */
+/* URL processing routines                               */
+/* ----------------------------------------------------- */
+
+
+#define URL_MAX_LEN     1024
+#define PROXY_HOME      "net/"
+#define PROXY_EXPIRE    (30 * 86400)
+
+
+static void
+url_parse(
+    char *folder,
+    HDR *hdr,
+    char *site,
+    char *path)
+{
+    char *str;
+    int cc;
+
+    str = hdr->xname;
+
+    /* parse URL's site host */
+
+    for (;;)
+    {
+        cc = *str++;
+        if (cc == '/')
+        {
+            *site = '\0';
+            break;
+        }
+        *site++ = cc;
+    }
+
+    /* parse URL's file path */
+
+    while ((cc = *str++))
+    {
+        *path++ = cc;
+    }
+
+    if (hdr->xmode & GEM_EXTEND)
+    {
+        char buf[128];
+
+        hdr_fpath(str = buf, folder, hdr);
+        cc = readlink(path, str, URL_MAX_LEN);
+        path += cc;
+    }
+
+    *path = '\0';
+}
+
+
+static int
+url_stamp(
+    char *folder,
+    HDR *hdr,
+    int utype,
+    char *host,
+    char *path,
+    int port,
+    int chrono)
+{
+    int ch;
+    char *head, *tail;
+
+    /* Thor: 保留 title, 原本可能有值 (from gem_title()) */
+
+    memset(hdr, 0, sizeof(HDR) - sizeof(hdr->title));
+
+    head = hdr->xname;
+    tail = head + GEM_URLEN;
+
+    while ((ch = *host++))
+    {
+        if (ch >= 'A' && ch <= 'Z') /* lower case 'host' */
+            ch |= 0x20;
+        else if (ch == '.' && !*host)       /* remove trailing . */
+            break;
+        *head++ = ch;
+    }
+    *head++ = '/';
+
+    if (!chrono)
+        chrono = time(NULL);
+
+    for (;;)
+    {
+        *head++ = ch = *path++;
+        if (!ch)
+            break;
+
+        if (head >= tail)           /* extend URL format */
+        {
+            *head = '\0';
+            head = folder = str_dup(folder, 10);
+            while ((ch = *head++))
+            {
+                if (ch == '/')
+                    tail = head;
+            }
+
+            /* hierarchy */
+
+            if (*tail == '.')
+            {
+                head = tail++;
+                *tail++ = '/';
+            }
+            else
+            {
+                head = tail - 2;
+            }
+
+            *tail++ = 'X';
+
+            for (;;)
+            {
+                *head = radix32[chrono & 31];
+                archiv32(chrono, tail);
+                if (!symlink(path, folder))
+                {
+                    utype |= GEM_EXTEND;
+                    break;
+                }
+
+                if (errno != EEXIST)
+                    return 0;
+
+                chrono++;
+            }
+
+            free(folder);
+            break;
+        }
+    }
+
+    hdr->chrono = chrono;
+    hdr->xmode = utype;
+    hdr->xid = port;
+
+    return ++chrono;
+}
+
+
+/*-------------------------------------------------------*/
+/* GOPHER (URL) routines                                 */
+/*-------------------------------------------------------*/
+
+int
+url_fpath(
+    char *fpath,
+    char *folder,
+    HDR *hdr)
+{
+    int fd, gtype;
+    char *xsite, *xpath, *ptr, *str, site[64], path[URL_MAX_LEN];
+    struct stat st;
+
+    /* --------------------------------------------------- */
+    /* parse the URL                                       */
+    /* --------------------------------------------------- */
+
+    url_parse(folder, hdr, xsite = site, xpath = path);
+    gtype = (*xpath == '0') ? 'A' : 'F';
+
+    strcpy(fpath, PROXY_HOME);
+    str = fpath + sizeof(PROXY_HOME) - 2;
+
+    /* --------------------------------------------------- */
+    /* host : make directory hierarchy                     */
+    /* --------------------------------------------------- */
+
+    ptr = xsite;
+    do
+    {
+        fd = *ptr++;
+
+        /* remove trailing [.edu.tw] */
+
+        if (fd == '.' && !str_casecmp(ptr, "edu.tw"))
+            fd = 0;
+
+        *++str = fd;
+    } while (fd);
+
+    /* mak_dirs(fpath); */ // IID.2024-02-23: read-only
+
+    /* --------------------------------------------------- */
+    /* path : generate (unique ?) filename by hashing      */
+    /* --------------------------------------------------- */
+
+    *str++ = '/';
+    folder = str;
+    *++str = '/';
+    *++str = gtype;
+    archiv32(hash32(xpath), ++str);
+    *folder = str[6];
+
+    /* --------------------------------------------------- */
+    /* check proxy cache first                             */
+    /* --------------------------------------------------- */
+
+    /* IID.2024-02-23: provide only cache accesses */
+
+    if (!stat(fpath, &st))
+    {
+        if (S_ISREG(st.st_mode) /* && (st.st_mtime > now - PROXY_EXPIRE) */)
+            return 0;
+        /* unlink(fpath); */ // IID.2024-02-23: read-only
+    }
+
+    zmsg("★ 不再提供 proxy 資料連線。若仍有疑問請洽 SYSOP。");
+    return -1;
+}
+
+
 /* ----------------------------------------------------- */
 /* gem_check : attribute / permission check out          */
 /* ----------------------------------------------------- */
@@ -245,7 +469,15 @@ gem_check(
         else
         {
             folder = xo->dir;
-            hdr_fpath(fpath, folder, ghdr);
+            if (gtype & GEM_GOPHER)
+            {
+                if (url_fpath(fpath, folder, ghdr))
+                    return NULL;
+            }
+            else
+            {
+                hdr_fpath(fpath, folder, ghdr);
+            }
         }
     }
     return ghdr;
@@ -255,6 +487,83 @@ gem_check(
 /* ----------------------------------------------------- */
 /* 資料之新增：append / insert                           */
 /* ----------------------------------------------------- */
+
+/* Thor.981218: 防止惡意作亂 */
+static inline int
+site_fake(
+    char *s)
+{
+    if (*s == '.')
+        return -1;
+    while (*s)
+    {
+        if (*s == '/')
+            return -1;
+        s++;
+    }
+    return 0;
+}
+
+static int
+url_edit(
+    char *folder,
+    HDR *hdr)
+{
+    char site[64], path[128], port[5];
+    int chrono, mode, num;
+
+    if ((chrono = hdr->chrono))
+    {
+        url_parse(folder, hdr, site, path);
+        num = hdr->xid;
+        mode = GCARRY;
+    }
+    else
+    {
+        num = 70;
+        mode = DOECHO;
+    }
+    sprintf(port, "%d", num);
+
+    if (!vget(B_LINES_REF, 0, "Host：", site, sizeof(site), mode))
+        return -1;
+
+    /* Thor.981218: 防止惡意作亂 */
+    if (site_fake(site))
+        return -1;
+
+    switch (vget(B_LINES_REF, 0, "Path：", path, sizeof(path), mode))
+    {
+    case '0':
+        mode = GEM_GOPHER;
+        break;
+
+    case '1':
+        mode = GEM_GOPHER | GEM_FOLDER;
+        break;
+
+    default:
+        return -1;
+    }
+
+    vget(B_LINES_REF, 0, "Port：", port, sizeof(port), GCARRY);
+    num = atoi(port);
+    if (num <= 0 || num >= 10000)
+        return -1;
+
+    /* 假設人為指定的 URL 長度不會超過系統預定值 */
+
+#if 0
+    if (chrono)
+    {
+        /* 刪除舊的 symbolic link  ... */
+    }
+#endif
+
+    url_stamp(folder, hdr, mode, site, path, num, chrono);
+
+    return 0;
+}
 
 
 void
@@ -301,13 +610,13 @@ gem_add(
         return XO_NONE;
 
     gtype = vans_xo(xo, level == GEM_SYSOP ?
-        "新增 A)rticle B)oard C)lass D)ata F)older P)aste Q)uit [Q] " :
-        "新增 (A)文章 (F)卷宗 (P)貼複 (Q)取消？[Q] ");
+        "新增 A)rticle B)oard C)lass D)ata F)older G)opher P)aste Q)uit [Q] " :
+        "新增 (A)文章 (F)卷宗 (G)絲路 (P)貼複 (Q)取消？[Q] ");
 
     if (gtype == 'p')
         return gem_paste(xo);
 
-    if (gtype != 'a' && gtype != 'f' &&
+    if (gtype != 'a' && gtype != 'f' && gtype != 'g' &&
         (level != GEM_SYSOP || (gtype != 'b' && gtype != 'c' && gtype != 'd')))
         return XO_FOOT;
 
@@ -356,6 +665,12 @@ gem_add(
             }
             gtype = 1;
         }
+        else if (gtype == 'g')
+        {
+            gtype = GEM_GOPHER;
+            if (url_edit(dir, &ghdr))
+                return XO_FOOT;
+        }
         else
         {
             fd = hdr_stamp(dir, gtype, &ghdr, fpath);
@@ -398,7 +713,8 @@ gem_add(
         return (gtype ? XO_FOOT : XO_HEAD);
     }
 
-    strcpy(ghdr.owner, cuser.userid);
+    if (!(gtype & GEM_GOPHER))
+        strcpy(ghdr.owner, cuser.userid);
 
     if (ans == 'i' || ans == 'n')
         rec_ins(dir, &ghdr, sizeof(HDR), xo->pos[xo->cur_idx] + (ans == 'n'), 1);
@@ -457,10 +773,18 @@ gem_title(
     vget_xo(xo, B_LINES_REF, 0, "標題：", xhdr.title, TTLEN + 1, GCARRY);
 
     dir = xo->dir;
-    if (HAS_PERM(PERM_ALLBOARD|PERM_GEM))
+    if (xhdr.xmode & GEM_GOPHER)
     {
-        vget_xo(xo, B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 1, GCARRY);
-        vget_xo(xo, B_LINES_REF, 0, "時間：", xhdr.date, 9, GCARRY);
+        if (url_edit(dir, &xhdr))
+            return XO_FOOT;
+    }
+    else
+    {
+        if (HAS_PERM(PERM_ALLBOARD|PERM_GEM))
+        {
+            vget_xo(xo, B_LINES_REF, 0, "編者：", xhdr.owner, IDLEN + 1, GCARRY);
+            vget_xo(xo, B_LINES_REF, 0, "時間：", xhdr.date, 9, GCARRY);
+        }
     }
 
     if (memcmp(ghdr, &xhdr, sizeof(HDR)) &&
@@ -582,7 +906,22 @@ gem_state(
     if (!stat(fpath, &st))
         prints("\nTime: %s\nSize: %lld", Ctime(&st.st_mtime), (long long)st.st_size);
 
-    vmsg_xo(xo, NULL);
+    if (ghdr->xmode & GEM_GOPHER)
+    {
+        url_parse(dir, ghdr, site, path);
+        outs("\n\nHost: ");
+        outs(site);
+        outs("\nPath: ");
+        outs(path);
+        prints("\nPort: %d", ghdr->xid);
+
+        if (vans_xo(xo, "是否清理 proxy，重抓資料(Y/N)？[N]") == 'y')
+            unlink(fpath);
+    }
+    else
+    {
+        vmsg_xo(xo, NULL);
+    }
 
     return XO_BODY;
 }
@@ -1178,7 +1517,10 @@ gem_gather(
                         不同區就只好一篇篇收錄 */
         if (!(xmode & (GEM_FOLDER|POST_DELETE)))        /* 查 hdr 是否 plain text */
         {
-            hdr_fpath(fpath, dir, hdr);
+            if (xmode & HDR_URL)
+                url_fpath(fpath, dir, hdr);
+            else
+                hdr_fpath(fpath, dir, hdr);
 
             if (fp)
             {

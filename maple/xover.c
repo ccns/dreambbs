@@ -162,7 +162,10 @@ xo_fpath(
     const char *dir,
     HDR *hdr)
 {
-    hdr_fpath(fpath, dir, hdr);
+    if (hdr->xmode & HDR_URL)
+        url_fpath(fpath, dir, hdr);
+    else
+        hdr_fpath(fpath, dir, hdr);
 }
 
 
