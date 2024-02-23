@@ -1517,10 +1517,7 @@ gem_gather(
                         不同區就只好一篇篇收錄 */
         if (!(xmode & (GEM_FOLDER|POST_DELETE)))        /* 查 hdr 是否 plain text */
         {
-            if (xmode & HDR_URL)
-                url_fpath(fpath, dir, hdr);
-            else
-                hdr_fpath(fpath, dir, hdr);
+            xo_fpath(fpath, dir, hdr);
 
             if (fp)
             {
