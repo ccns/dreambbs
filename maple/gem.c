@@ -974,8 +974,6 @@ gem_browse(
                     op = GEM_SYSOP;
                 else if ((op >= 0) && (brd_bits[op] & BRD_X_BIT))
                     op = GEM_MANAGER;
-                else if ( ( ptr = strrchr(ghdr->title, '[') ) )
-                    op = GEM_MANAGER;
                 else
                     op = GEM_USER;
             }
