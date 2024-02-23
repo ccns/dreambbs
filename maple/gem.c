@@ -89,8 +89,8 @@ gem_item(
         prints("\x1b[1;33m資料保密！\x1b[m\n");
     else if (!HAS_PERM(PERM_SYSOP) && (xmode & GEM_LOCK))
         prints("\x1b[1;33m資料保密！\x1b[m\n");
-    else if ((gtype == 0) || (xmode & GEM_GOPHER))
-        prints("%-.64s\n", ghdr->title);
+    else if ((gway == 0) || (xmode & GEM_GOPHER))
+        prints("%-.*s\n", d_cols + 64, ghdr->title);
     else
     {
         if (xmode & GEM_BOARD)
