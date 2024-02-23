@@ -271,7 +271,7 @@ url_stamp(
 
     /* Thor: 保留 title, 原本可能有值 (from gem_title()) */
 
-    memset(hdr, 0, sizeof(HDR) - sizeof(hdr->title));
+    memset(hdr, 0, offsetof(HDR, title));
 
     head = hdr->xname;
     tail = head + GEM_URLEN;
