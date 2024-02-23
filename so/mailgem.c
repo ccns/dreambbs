@@ -890,6 +890,8 @@ static KeyFuncList mailgem_cb =
     {'d' | XO_POSF, {.posf = mailgem_delete}},
     {'c' | XO_POSF, {.posf = mailgem_copy}},
     {'W', {mailgem_recycle}},
+    {Ctrl('W'), {mailgem_recycle}},
+    {Meta('W'), {mailgem_recycle}},
 
     {Ctrl('G'), {mailgem_anchor}},
     {Ctrl('V'), {mailgem_paste}},
