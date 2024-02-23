@@ -471,7 +471,7 @@ gem_check(
             folder = xo->dir;
             if (gtype & GEM_GOPHER)
             {
-                if (url_fpath(fpath, folder, ghdr))
+                if (url_fpath(fpath, folder, ghdr) && (op & GEM_FILE))
                     return NULL;
             }
             else
