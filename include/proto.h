@@ -117,7 +117,7 @@ void ve_header(FILE *fp);
 int ve_subject(int row, const char *topic, const char *dft);
 int vedit(char *fpath, int ve_op);
 /* gem.c */
-int url_fpath(char *fpath, char *folder, HDR *hdr);
+int url_fpath(char *fpath, const char *folder, const HDR *hdr);
 void brd2gem(const BRD *brd, HDR *gem);
 int gem_gather(XO *xo, int pos);
 void XoGem(const char *folder, const char *title, int level);
@@ -311,7 +311,7 @@ int vans_xo(XO *xo, const char *prompt);
 XO *xo_new(const char *path);
 XO *xo_get(const char *path);
 void xo_load(XO *xo, int recsiz);
-void xo_fpath(char *fpath, const char *dir, HDR *hdr);
+void xo_fpath(char *fpath, const char *dir, const HDR *hdr);
 int hdr_prune(const char *folder, int nhead, int ntail, int post);
 int xo_delete(XO *xo);
 int Tagger(time_t chrono, int recno, int op);

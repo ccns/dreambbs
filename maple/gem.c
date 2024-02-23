@@ -213,12 +213,12 @@ gem_load(
 
 static void
 url_parse(
-    char *folder,
-    HDR *hdr,
+    const char *folder,
+    const HDR *hdr,
     char *site,
     char *path)
 {
-    char *str;
+    const char *str;
     int cc;
 
     str = hdr->xname;
@@ -247,8 +247,8 @@ url_parse(
     {
         char buf[128];
 
-        hdr_fpath(str = buf, folder, hdr);
-        cc = readlink(path, str, sizeof(buf));
+        hdr_fpath(buf, folder, hdr);
+        cc = readlink(path, buf, sizeof(buf));
         path += cc;
     }
 
@@ -258,11 +258,11 @@ url_parse(
 
 static int
 url_stamp(
-    char *folder,
+    const char *folder,
     HDR *hdr,
     int utype,
-    char *host,
-    char *path,
+    const char *host,
+    const char *path,
     int port,
     int chrono)
 {
@@ -297,8 +297,9 @@ url_stamp(
 
         if (head >= tail)           /* extend URL format */
         {
+            char *dir;
             *head = '\0';
-            head = folder = str_dup(folder, 10);
+            head = dir = str_dup(folder, 10);
             while ((ch = *head++))
             {
                 if (ch == '/')
@@ -323,7 +324,7 @@ url_stamp(
             {
                 *head = radix32[chrono & 31];
                 archiv32(chrono, tail);
-                if (!symlink(path, folder))
+                if (!symlink(path, dir))
                 {
                     utype |= GEM_EXTEND;
                     break;
@@ -335,7 +336,7 @@ url_stamp(
                 chrono++;
             }
 
-            free(folder);
+            free(dir);
             break;
         }
     }
@@ -355,19 +356,21 @@ url_stamp(
 int
 url_fpath(
     char *fpath,
-    char *folder,
-    HDR *hdr)
+    const char *folder,
+    const HDR *hdr)
 {
     int fd, gtype;
-    char *xsite, *xpath, *ptr, *str, site[64], path[URL_MAX_LEN];
+    const char *ptr;
+    char *str;
+    char site[64], path[URL_MAX_LEN];
     struct stat st;
 
     /* --------------------------------------------------- */
     /* parse the URL                                       */
     /* --------------------------------------------------- */
 
-    url_parse(folder, hdr, xsite = site, xpath = path);
-    gtype = (*xpath == '0') ? 'A' : 'F';
+    url_parse(folder, hdr, site, path);
+    gtype = (*path == '0') ? 'A' : 'F';
 
     strcpy(fpath, PROXY_HOME);
     str = fpath + sizeof(PROXY_HOME) - 2;
@@ -376,7 +379,7 @@ url_fpath(
     /* host : make directory hierarchy                     */
     /* --------------------------------------------------- */
 
-    ptr = xsite;
+    ptr = site;
     do
     {
         fd = *ptr++;
@@ -396,11 +399,10 @@ url_fpath(
     /* --------------------------------------------------- */
 
     *str++ = '/';
-    folder = str;
-    *++str = '/';
-    *++str = gtype;
-    archiv32(hash32(xpath), ++str);
-    *folder = str[6];
+    str[1] = '/';
+    str[2] = gtype;
+    archiv32(hash32(path), &str[3]);
+    *str = str[3 + 6];
 
     /* --------------------------------------------------- */
     /* check proxy cache first                             */
@@ -491,7 +493,7 @@ gem_check(
 /* Thor.981218: ¨¾¤î´c·N§@¶Ã */
 static inline int
 site_fake(
-    char *s)
+    const char *s)
 {
     if (*s == '.')
         return -1;
@@ -506,7 +508,7 @@ site_fake(
 
 static int
 url_edit(
-    char *folder,
+    const char *folder,
     HDR *hdr)
 {
     char site[64], path[128], port[5];
