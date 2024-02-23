@@ -248,7 +248,7 @@ url_parse(
         char buf[128];
 
         hdr_fpath(str = buf, folder, hdr);
-        cc = readlink(path, str, URL_MAX_LEN);
+        cc = readlink(path, str, sizeof(buf));
         path += cc;
     }
 
