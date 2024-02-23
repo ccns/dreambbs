@@ -1330,8 +1330,7 @@ class_yank2(
         zmsg("找不到可讀的秘密/好友看板");
         class_flag ^= BFO_FRIEND;
         class_load(xo);
-        xo->pos[xo->cur_idx] = pos;
-        return XO_FOOT;
+        return XR_FOOT + XO_MOVE + pos;
     }
     return XO_HEAD;
 }
@@ -1350,8 +1349,7 @@ class_yank(
         zmsg("找不到未被 zap 掉的看板");
         class_flag |= BFO_YANK;
         class_load(xo);
-        xo->pos[xo->cur_idx] = pos;
-        return XO_FOOT;
+        return XR_FOOT + XO_MOVE + pos;
     }
     return XO_HEAD;
 }

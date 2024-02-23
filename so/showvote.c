@@ -116,8 +116,7 @@ XO *xo)
     if (show_edit(&show, DOECHO))
     {
         rec_add(xo->dir, &show, sizeof(LOG));
-        xo->pos[xo->cur_idx] = XO_TAIL;
-        xo_load(xo, sizeof(LOG));
+        return XR_INIT + XO_MOVE + XO_TAIL;
     }
     return XO_HEAD;
 }

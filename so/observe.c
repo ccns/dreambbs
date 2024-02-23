@@ -203,8 +203,7 @@ XO *xo)
         if (observe_edit(&observe, DOECHO))
         {
             rec_add(xo->dir, &observe, sizeof(OBSERVE));
-            xo->pos[xo->cur_idx] = XO_TAIL;
-            xo_load(xo, sizeof(OBSERVE));
+            return XR_INIT + XO_MOVE + XO_TAIL;
         }
     }
     return XO_HEAD;

@@ -200,10 +200,7 @@ XO *xo)
         rec_add(path, &bmw, sizeof(BMW));
         rec_add(xo->dir, &aloha, sizeof(ALOHA));
     }
-    xo->pos[xo->cur_idx] = XO_TAIL /* xo->max */ ;
-    xo_load(xo, sizeof(ALOHA));
-
-    return XO_HEAD;
+    return XR_HEAD + XO_MOVE + XO_TAIL /* xo->max */ ;
 }
 
 static int

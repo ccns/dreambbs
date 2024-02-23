@@ -196,8 +196,7 @@ XO *xo)
     {
         strcpy(list.userid, mode ? brd->brdname : acct.userid);
         rec_add(xo->dir, &list, sizeof(LIST));
-        xo->pos[xo->cur_idx] = XO_TAIL;
-        xo_load(xo, sizeof(LIST));
+        return XR_INIT + XO_MOVE + XO_TAIL;
     }
     return XO_HEAD;
 }

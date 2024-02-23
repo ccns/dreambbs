@@ -850,15 +850,14 @@ pal_add(
         strcpy(pal.userid, acct.userid);
         pal.userno = userno;
         rec_add(xo->dir, &pal, sizeof(PAL));
-        xo->pos[xo->cur_idx] = XO_TAIL /* xo->max */ ;
-        xo_load(xo, sizeof(PAL));
     }
 
 #if 1                           /* Thor.0709: 好友名單同步 */
     pal_cache();
 #endif
 
-    return XO_HEAD;
+    return (userno > 0) ? XR_INIT + XO_MOVE + XO_TAIL /* xo->max */
+        : XO_HEAD;
 }
 
 
@@ -4794,13 +4793,12 @@ banmsg_add(
         strcpy(banmsg.userid, acct.userid);
         banmsg.userno = userno;
         rec_add(xo->dir, &banmsg, sizeof(BANMSG));
-        xo->pos[xo->cur_idx] = XO_TAIL;
-        xo_load(xo, sizeof(BANMSG));
     }
 
     banmsg_cache();
 
-    return XO_HEAD;
+    return (userno > 0) ? XR_INIT + XO_MOVE + XO_TAIL /* xo->max */
+        : XO_HEAD;
 }
 
 

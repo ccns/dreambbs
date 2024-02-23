@@ -122,8 +122,7 @@ XO *xo)
     if (viol_edit(&viol, DOECHO))
     {
         rec_add(xo->dir, &viol, sizeof(EMAIL));
-        xo->pos[xo->cur_idx] = XO_TAIL;
-        xo_load(xo, sizeof(EMAIL));
+        return XR_INIT + XO_MOVE + XO_TAIL;
     }
     return XO_HEAD;
 }
@@ -188,9 +187,8 @@ int pos)
         {
             if (str_casestr(viol.email, buf))
             {
-                xo->pos[xo->cur_idx] = pos;
                 close(fd);
-                return XO_INIT;
+                return XR_INIT + XO_MOVE + pos;
             }
             pos++;
         }

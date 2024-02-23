@@ -113,8 +113,7 @@ XO *xo)
     if (admin_edit(&admin, DOECHO))
     {
         rec_add(xo->dir, &admin, sizeof(ADMIN));
-        xo->pos[xo->cur_idx] = XO_TAIL /* xo->max */ ;
-        xo_load(xo, sizeof(ADMIN));
+        return XR_INIT + XO_MOVE + XO_TAIL /* xo->max */ ;
     }
     return XO_HEAD;
 }

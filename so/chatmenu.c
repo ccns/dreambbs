@@ -142,8 +142,7 @@ XO *xo)
     if (chat_edit(&chat, DOECHO))
     {
         rec_add(xo->dir, &chat, sizeof(ChatAction));
-        xo->pos[xo->cur_idx] = XO_TAIL;
-        xo_load(xo, sizeof(ChatAction));
+        return XR_INIT + XO_MOVE + XO_TAIL;
     }
     return XO_HEAD;
 }
@@ -223,8 +222,7 @@ int pos)
         if (!rec_del(dir, sizeof(ChatAction), pos, NULL, NULL))
         {
             rec_ins(dir, &ghdr_orig, sizeof(ChatAction), newOrder, 1);
-            xo->pos[xo->cur_idx] = newOrder;
-            return XO_LOAD;
+            return XR_LOAD + XO_MOVE + newOrder;
         }
     }
     return XO_FOOT;

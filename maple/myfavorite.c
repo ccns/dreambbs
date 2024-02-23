@@ -389,9 +389,8 @@ myfavorite_mov(
         if (!rec_del(currdir, sizeof(HDR), pos, NULL, NULL))
         {
             rec_ins(currdir, &ghdr_orig, sizeof(HDR), newOrder, 1);
-            xo->pos[xo->cur_idx] = newOrder;
             logitfile(FN_FAVORITE_LOG, "< MOV >", ghdr_orig.xname);
-            return XO_LOAD;
+            return XR_LOAD + XO_MOVE + newOrder;
         }
     }
     return XO_FOOT;

@@ -183,8 +183,7 @@ XO *xo)
     else if (memorandum_edit(&memorandum, DOECHO))
     {
         rec_add(xo->dir, &memorandum, sizeof(MEMORANDUM));
-        xo->pos[xo->cur_idx] = XO_TAIL /* xo->max */ ;
-        return XO_INIT;
+        return XR_INIT + XO_MOVE + XO_TAIL /* xo->max */ ;
     }
     return XO_HEAD;
 }

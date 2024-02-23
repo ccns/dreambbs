@@ -188,8 +188,7 @@ static int banmail_add(XO * xo)
     {
         banmail.time = time(0);
         rec_add(xo->dir, &banmail, sizeof(BANMAIL));
-        xo->pos[xo->cur_idx] = XO_TAIL /* xo->max */ ;
-        xo_load(xo, sizeof(BANMAIL));
+        return XR_INIT + XO_MOVE + XO_TAIL /* xo->max */ ;
     }
     return XO_HEAD;
 }

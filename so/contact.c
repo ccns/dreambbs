@@ -115,8 +115,7 @@ XO *xo)
     else if (contact_edit(&contact, DOECHO))
     {
         rec_add(xo->dir, &contact, sizeof(CONTACT));
-        xo->pos[xo->cur_idx] = XO_TAIL /* xo->max */ ;
-        return XO_INIT;
+        return XR_INIT + XO_MOVE + XO_TAIL /* xo->max */ ;
     }
     return XO_HEAD;
 }
