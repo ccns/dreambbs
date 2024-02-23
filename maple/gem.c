@@ -53,7 +53,7 @@ gem_manage(
     return str_has(buf, cuser.userid);
 }
 
-static int
+int
 gem_foot(
     XO *xo)
 {
@@ -61,7 +61,7 @@ gem_foot(
     return XO_NONE;
 }
 
-static int
+int
 gem_item(
     XO *xo,
     int pos)
@@ -105,7 +105,7 @@ gem_item(
     return XO_NONE;
 }
 
-static int
+int
 gem_cur(
     XO *xo,
     int pos)
@@ -115,7 +115,7 @@ gem_cur(
 }
 
 
-static int
+int
 gem_body(
     XO *xo)
 {
@@ -147,7 +147,7 @@ gem_body(
 }
 
 
-static int
+int
 gem_neck(
     XO *xo)
 {
@@ -172,7 +172,7 @@ gem_neck(
 }
 
 
-static int
+int
 gem_head(
     XO *xo)
 {
@@ -181,7 +181,7 @@ gem_head(
 }
 
 
-static int
+int
 gem_toggle(
     XO *xo)
 {
@@ -192,7 +192,7 @@ gem_toggle(
 }
 
 
-static int
+int
 gem_init(
     XO *xo)
 {
@@ -201,7 +201,7 @@ gem_init(
 }
 
 
-static int
+int
 gem_load(
     XO *xo)
 {

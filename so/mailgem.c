@@ -13,9 +13,6 @@
 /* definitions of MailGem Mode */
 
 
-#define GEM_WAY         3
-static int mailgem_way;
-
 static int MailGemBufferNum;
 
 static int mailgem_add(XO *xo);
@@ -23,134 +20,6 @@ static int mailgem_paste(XO *xo);
 static int mailgem_anchor(XO *xo);
 static int mailgem_recycle(XO *xo);
 static void XoMailGem(const char *folder, const char *title);
-
-static int
-mailgem_foot(
-    XO *xo)
-{
-    outf(MSG_GEM);
-    return XO_NONE;
-}
-
-static int
-mailgem_item(
-XO *xo,
-int pos)
-{
-    const HDR *const ghdr = (const HDR *) xo_pool_base + pos;
-    const int num = pos + 1;
-    int xmode;
-    const char *gtype;
-
-    xmode = ghdr->xmode;
-    gtype = ((xmode & GEM_FOLDER) ? "◆" : "◇");
-    prints("%6d %c%s ", num,
-           TagNum && !Tagger(ghdr->chrono, num - 1, TAG_NIN) ? '*' : ' ', gtype);
-
-    const int gway = mailgem_way;
-
-    if (gway == 0)
-        prints("%-.*s\n", d_cols + 64, ghdr->title);
-    else
-        prints("%-*.*s%-*s%s\n", d_cols + 47, d_cols + 46, ghdr->title,
-           IDLEN + 1, (gway == 1 ? ghdr->xname : ghdr->owner), ghdr->date);
-
-    return XO_NONE;
-}
-
-static int
-mailgem_cur(
-XO *xo,
-int pos)
-{
-    move(3 + pos - xo->top, 0);
-    return mailgem_item(xo, pos);
-}
-
-static int
-mailgem_body(
-XO *xo)
-{
-    int num, max, tail;
-
-    move(3, 0);
-
-    max = xo->max;
-    if (max <= 0)
-    {
-        outs("\n《精華區》尚在吸取天地間的日精月華 :)\n");
-        outs("\n  (^P)新增資料 (^G)海錨功\能 (W)資源回收筒\n");
-        clrtobot();
-        return mailgem_foot(xo);
-    }
-
-    num = xo->top;
-    tail = num + XO_TALL;
-    max = BMIN(max, tail);
-
-    do
-    {
-        mailgem_item(xo, num++);
-    } while (num < max);
-    clrtobot();
-
-    return mailgem_foot(xo);
-}
-
-
-static int
-mailgem_neck(
-    XO *xo)
-{
-    static const char *const neckgem2[GEM_WAY] = {NECKGEM2_WAY0, NECKGEM2_WAY1, NECKGEM2_WAY2};
-    char buf[20];
-
-    sprintf(buf, "(剪貼版 %d 篇)\n", MailGemBufferNum);
-
-    move(1, 0);
-    outs(NECK_MAILGEM1);
-    outs(buf);
-    prints(neckgem2[mailgem_way], d_cols, "");
-    return mailgem_body(xo);
-}
-
-
-static int
-mailgem_head(
-XO *xo)
-{
-    vs_head("精華文章", (const char *) xo->xyz);
-    return mailgem_neck(xo);
-}
-
-
-static int
-mailgem_toggle(
-XO *xo)
-{
-    mailgem_way = (mailgem_way + 1) % GEM_WAY;
-    if (!HAS_PERM(PERM_SYSOP) && (mailgem_way ==1))
-        mailgem_way = (mailgem_way + 1) % GEM_WAY;
-    return XO_NECK;
-}
-
-
-static int
-mailgem_init(
-XO *xo)
-{
-    xo_load(xo, sizeof(HDR));
-    return mailgem_head(xo);
-}
-
-
-static int
-mailgem_load(
-XO *xo)
-{
-    xo_load(xo, sizeof(HDR));
-    return mailgem_body(xo);
-}
 
 
 /* ----------------------------------------------------- */
@@ -1003,13 +872,13 @@ XO *xo)
 
 static KeyFuncList mailgem_cb =
 {
-    {XO_INIT, {mailgem_init}},
-    {XO_LOAD, {mailgem_load}},
-    {XO_HEAD, {mailgem_head}},
-    {XO_NECK, {mailgem_neck}},
-    {XO_BODY, {mailgem_body}},
-    {XO_FOOT, {mailgem_foot}},
-    {XO_CUR | XO_POSF, {.posf = mailgem_cur}},
+    {XO_INIT, {gem_init}},
+    {XO_LOAD, {gem_load}},
+    {XO_HEAD, {gem_head}},
+    {XO_NECK, {gem_neck}},
+    {XO_BODY, {gem_body}},
+    {XO_FOOT, {gem_foot}},
+    {XO_CUR | XO_POSF, {.posf = gem_cur}},
 
     {'r' | XO_POSF, {.posf = mailgem_browse}},
 
@@ -1026,7 +895,7 @@ static KeyFuncList mailgem_cb =
     {Ctrl('V'), {mailgem_paste}},
 
     {'t' | XO_POSF, {.posf = mailgem_tag}},
-    {'f', {mailgem_toggle}},
+    {'f', {gem_toggle}},
 
     {'S' | XO_POSF, {.posf = mailgem_state}},
 
@@ -1048,7 +917,7 @@ const char *title)
     xo->recsiz = sizeof(HDR);
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;
-    xo->key = 0;
+    xo->key = HAS_PERM(PERM_SYSOP|PERM_BOARD|PERM_GEM) ? GEM_SYSOP : GEM_MANAGER;
     xo->xyz = (void *)title;
 
     xover(XZ_MAILGEM);
@@ -1079,7 +948,7 @@ mailgem_main(void)
     xo->recsiz = sizeof(HDR);
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;
-    xo->key = 0;
+    xo->key = HAS_PERM(PERM_SYSOP|PERM_BOARD|PERM_GEM) ? GEM_SYSOP : GEM_MANAGER;
     xo->xyz = (void *)"我的精華區";
     xover(XZ_MAILGEM);
     free(xo);

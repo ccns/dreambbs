@@ -163,13 +163,6 @@
                    "  [←]離開 a)新增 d)刪除 s)重整 TAB)切換名單 T)更改群組名稱 /)搜尋\n" \
             COLOR3 "  編號     使用者 ID%*s                                                           \x1b[m"
 
-/*#define NECK_MAILGEM1 \
-                   "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [F]轉寄 [Z]下載 [h]說明 "
-*/
-#define NECK_MAILGEM1 \
-                   "  [←]離開 [→]瀏覽 [f]模式 [C]暫存 [h]說明 "
-                   /*r2.20170802: disable "Z" option in case of confusion*/
-
 #define NECK_MEMORANDUM \
                    "  [←]離開 ^P)新增 c)修改 d)刪除 s)重整 [h]elp\n" \
             COLOR3 "  編號  日期      時間      工作或行程%*s                                         \x1b[m"
