@@ -313,7 +313,8 @@ Member 名稱 | 型別           | 出處          | 說明
 
 Member 名稱 | 型別           | 出處          | 說明
  ---        | ---           | ---           | ---
-`pos`       | `int`         | MapleBBS 3.00 | 目前游標在列表中的絕對位置
+`pos`       | - `int` <br> - `int [XO_NCUR]` (DreamBBS v4.20-beta, v3.1) | MapleBBS 3.00 | 目前游標在列表中的絕對位置
+`cur_idx`   | `int`         | DreamBBS v4.20-beta | 目前使用中的游標
 `top`       | `int`         | MapleBBS 3.00 | 畫面中列表第一項在列表中的絕對位置
 `max`       | `int`         | MapleBBS 3.00 | 列表項目數量 <br> `0` 代表列表為空
 `key`       | `int`         | MapleBBS 3.00 | 內部使用值 <br> 意義隨回呼函式而定
@@ -321,6 +322,7 @@ Member 名稱 | 型別           | 出處          | 說明
 `nxt`       | `XO *`        | MapleBBS 3.00 | 指向游標紀錄串列中的下一筆資料 <br> 游標資料紀錄用
 `cb`        | `KeyFuncListRef` | DreamBBS v3.0 | 回呼函式清單 <br> 原 `XZ::cb`
 `recsiz`    | `int`         | DreamBBS v3.0 | 列表資料項目的資料位元組大小 <br> `0` 代表未設定完成
+`xz_idx`    | `int`         | DreamBBS v3.1 | 列表所屬的 Xover zone <br> `-1` 代表未設定完成或不屬任一 zone
 `dir`       | - `char [0]` <br> - `char [FLEX_SIZE]` (DreamBBS v2.0) | MapleBBS 3.00 | 列表資料檔的系統路徑字串
 
 ### Xover 回呼函式資料結構 `KeyFunc`
@@ -384,6 +386,7 @@ Macro             | 值 (省略最外層括號)        | 功能                 
 `XZ_COUNT`        | `XZ_INDEX_MAX + 1`        | Xover zone 的數量                     | DreamBBS v3.0 新增
 `XO_SKIN`         | `(XZ_ZONE \| XZ_SKIN) + XO_MOVE` | 套用某個使用者介面 skin (未實作) | DreamBBS v3.0 新增
 `XZ_SKIN`         | `0x10000000`              | 將操作解讀為使用者介面 skin 切換 (未實作) | DreamBBS v3.0 新增
+`XO_NCUR`         | `2`                       | - 游標數量 (DreamBBS v4.20-beta) <br> - 游標數量上限 (DreamBBS v4.20-rc.0, v3.1) | DreamBBS v4.20-beta 新增
 
 ### MapleBBS 3 的 `XO_MODE + <mode>` (含 `XO_MODE`) 與 DreamBBS v3 Xover opcode 的對應
 
