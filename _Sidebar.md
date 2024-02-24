@@ -9,7 +9,7 @@
     - [[Screen Coordinate System — 畫面座標系統|Screen-Coord-zh_tw]]
     - [[BoardReadingHistory — BRH 看板閱讀紀錄系統|BRH-zh_tw]]
     - [[Visio I/O Library — Visio 輸出入函式庫|Visio-zh_tw]]
-    - [[DENY Suspension System — DENY 停權系統|DENY-zh_tw]]
+    - [[Permission System — 權限系統|PERM-zh_tw]]
     - [[TANet BBS Family Genealogy Chart — TANet BBS 家族譜系圖|TANet-BBS-Chart-zh_tw]]
     - [[與 MapleBBS 3 的按鍵差異|VS-MapleBBS-3-Keyboard-zh_tw]]
     - [[[WIP] 與 MapleBBS 3 的差異|VS-MapleBBS-3-zh_tw]]
