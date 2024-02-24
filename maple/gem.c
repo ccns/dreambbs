@@ -1458,6 +1458,7 @@ gem_gather(
 
     if (!anchor)
     {
+        *folder++ = '\0';
         sprintf(folder, "gem/brd/%s/%s", currboard, FN_GEM);
     }
 
