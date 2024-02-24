@@ -1700,8 +1700,10 @@ gem_cross(
 
                 strcpy(currboard, buf);
 
-                strcat(buf, "] 精華區");
-                fprintf(xfp, "※ 本文轉錄自 [%s\n\n", buf);
+                if (str_ncasecmp(fpath, "gem/brd/", 8) == 0)
+                    fprintf(xfp, "※ 本文轉錄自 [%.*s] 精華區\n\n", INT(strcspn(fpath + 8, "/")), fpath + 8);
+                else
+                    fprintf(xfp, "※ 本文轉錄自精華佈告欄\n\n");
 
                 f_suck(xfp, fpath);
                 fclose(xfp);
