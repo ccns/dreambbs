@@ -910,23 +910,8 @@ XoMailGem(
 const char *folder,
 const char *title)
 {
-    XO *xo, *last;
-
-    last = xz[XZ_MAILGEM - XO_ZONE].xo; /* record */
-
-    xz[XZ_MAILGEM - XO_ZONE].xo = xo = xo_new(folder);
-    xo->cb = mailgem_cb;
-    xo->recsiz = sizeof(HDR);
-    for (int i = 0; i < COUNTOF(xo->pos); ++i)
-        xo->pos[i] = 0;
-    xo->key = HAS_PERM(PERM_SYSOP|PERM_BOARD|PERM_GEM) ? GEM_SYSOP : GEM_MANAGER;
-    xo->xyz = (void *)title;
-
-    xover(XZ_MAILGEM);
-
-    free(xo);
-
-    xz[XZ_MAILGEM - XO_ZONE].xo = last; /* restore */
+    const int level = HAS_PERM(PERM_SYSOP|PERM_BOARD|PERM_GEM) ? GEM_SYSOP : GEM_MANAGER;
+    XoXGem(folder, title, level, XZ_INDEX_MAILGEM, mailgem_cb);
 }
 
 
@@ -934,28 +919,16 @@ void
 mailgem_main(void)
 {
     DL_HOLD;
-    XO *xo, *last;
     char fpath[128];
-
-    last = xz[XZ_MAILGEM - XO_ZONE].xo;  /* record */
-
     usr_fpath(fpath, cuser.userid, "gem");
 
     if (access(fpath, 0))
         mak_dirs(fpath);
 
     usr_fpath(fpath, cuser.userid, "gem/.DIR");
-    xz[XZ_MAILGEM - XO_ZONE].xo = xo = xo_new(fpath);
-    xo->cb = mailgem_cb;
-    xo->recsiz = sizeof(HDR);
-    for (int i = 0; i < COUNTOF(xo->pos); ++i)
-        xo->pos[i] = 0;
-    xo->key = HAS_PERM(PERM_SYSOP|PERM_BOARD|PERM_GEM) ? GEM_SYSOP : GEM_MANAGER;
-    xo->xyz = (void *)"我的精華區";
-    xover(XZ_MAILGEM);
-    free(xo);
 
-    xz[XZ_MAILGEM - XO_ZONE].xo = last;  /* restore */
+    const int level = HAS_PERM(PERM_SYSOP|PERM_BOARD|PERM_GEM) ? GEM_SYSOP : GEM_MANAGER;
+    XoXGem(fpath, "我的精華區", level, XZ_INDEX_MAILGEM, mailgem_cb);
 
     DL_RELEASE_VOID();
 }

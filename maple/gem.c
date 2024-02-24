@@ -1799,28 +1799,43 @@ static KeyFuncList gem_cb =
 
 
 void
-XoGem(
+XoXGem(
     const char *folder,
     const char *title,
-    int level)
+    int level,
+    int xz_idx,
+    KeyFuncListRef cb)
 {
     XO *xo, *last;
 
-    last = xz[XZ_GEM - XO_ZONE].xo;     /* record */
+    if (!(xz_idx >= 0 && xz_idx < XZ_INDEX_MAX)) // Invalid Xover zone index
+        xz_idx = XZ_INDEX_OTHER;
 
-    xz[XZ_GEM - XO_ZONE].xo = xo = xo_new(folder);
-    xo->cb = gem_cb;
+    last = xz[xz_idx].xo; /* record */
+
+    xz[xz_idx].xo = xo = xo_new(folder);
+    xo->cb = cb;
     xo->recsiz = sizeof(HDR);
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;
     xo->key = level;
     xo->xyz = (void *)title;
 
-    xover(XZ_GEM);
+    xover(XO_ZONE + xz_idx);
 
     free(xo);
 
-    xz[XZ_GEM - XO_ZONE].xo = last;     /* restore */
+    xz[xz_idx].xo = last; /* restore */
+}
+
+
+void
+XoGem(
+    const char *folder,
+    const char *title,
+    int level)
+{
+    XoXGem(folder, title, level, XZ_INDEX_GEM, gem_cb);
 }
 
 

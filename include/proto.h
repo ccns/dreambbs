@@ -129,6 +129,7 @@ int gem_load(XO *xo);
 int url_fpath(char *fpath, const char *folder, const HDR *hdr);
 void brd2gem(const BRD *brd, HDR *gem);
 int gem_gather(XO *xo, int pos);
+void XoXGem(const char *folder, const char *title, int level, int xz_idx, KeyFuncListRef cb);
 void XoGem(const char *folder, const char *title, int level);
 void gem_main(void);
 /* mail.c */
