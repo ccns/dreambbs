@@ -249,6 +249,7 @@ Contact(void)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = contact_cb;
     xo->recsiz = sizeof(CONTACT);
+    xo->xz_idx = XZ_INDEX_OTHER;
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;
     xover(XZ_OTHER);

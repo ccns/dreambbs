@@ -608,6 +608,7 @@ int level)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(folder);
     xo->cb = song_cb;
     xo->recsiz = sizeof(HDR);
+    xo->xz_idx = XZ_INDEX_OTHER;
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;
     xo->key = XZ_OTHER;

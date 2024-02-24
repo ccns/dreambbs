@@ -261,6 +261,7 @@ int BanMail(void)
     xz[XZ_BANMAIL - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = banmail_cb;
     xo->recsiz = sizeof(BANMAIL);
+    xo->xz_idx = XZ_INDEX_BANMAIL;
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;
     xover(XZ_BANMAIL);
@@ -284,6 +285,7 @@ void post_mail(void)
     xz[XZ_BANMAIL - XO_ZONE].xo = xx = xo_new(fpath);
     xx->cb = banmail_cb;
     xx->recsiz = sizeof(BANMAIL);
+    xx->xz_idx = XZ_INDEX_BANMAIL;
     for (int i = 0; i < COUNTOF(xx->pos); ++i)
         xx->pos[i] = 0;
     xover(XZ_BANMAIL);

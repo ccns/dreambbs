@@ -310,6 +310,7 @@ XO *xo)
     xz[XZ_OTHER - XO_ZONE].xo = xo_new(fpath);
     xz[XZ_OTHER - XO_ZONE].xo->cb = chat_cb;
     xz[XZ_OTHER - XO_ZONE].xo->recsiz = sizeof(ChatAction);
+    xz[XZ_OTHER - XO_ZONE].xo->xz_idx = XZ_INDEX_OTHER;
     for (int i = 0; i < COUNTOF(xz[XZ_OTHER - XO_ZONE].xo->pos); ++i)
         xz[XZ_OTHER - XO_ZONE].xo->pos[i] = 0;
     return XO_INIT;
@@ -330,6 +331,7 @@ Chatmenu(void)
     xz[XZ_OTHER - XO_ZONE].xo = xx = xo_new(fpath);
     xx->cb = chat_cb;
     xx->recsiz = sizeof(ChatAction);
+    xx->xz_idx = XZ_INDEX_OTHER;
     for (int i = 0; i < COUNTOF(xx->pos); ++i)
         xx->pos[i] = 0;
     xover(XZ_OTHER);

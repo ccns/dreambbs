@@ -815,6 +815,7 @@ XoPostSimple(
     xz[XZ_POST - XO_ZONE].xo = xo = xo_get(fpath);
     xo->cb = post_cb;
     xo->recsiz = sizeof(HDR);
+    xo->xz_idx = XZ_INDEX_POST;
     xo->key = XZ_POST;
     xo->xyz = (void *) (brd->bvote > 0 ? (char *) "本看板進行投票中" : brd->title + 3);
     str = brd->BM;
@@ -1508,6 +1509,7 @@ XoAuthor(
                     xt->pos[xt->cur_idx] = tail - head;
                     xt->cb = post_cb;
                     xt->recsiz = sizeof(HDR);
+                    xt->xz_idx = XZ_INDEX_POST;
                     chp[tag++] = chn;
                     break;
                 }
@@ -1526,6 +1528,7 @@ XoAuthor(
 
     xo_a.cb = class_cb;
     xo_a.recsiz = sizeof(short);
+    xo_a.xz_idx = XZ_INDEX_CLASS;
     for (int i = 0; i < COUNTOF(xo_a.pos); ++i)
         xo_a.pos[i] = 0;
     xo_a.top = 0;
@@ -1642,6 +1645,7 @@ XoClass(
                     class_load內部會 initial xo.max, 其他不確定 */
     xo.cb = class_cb;
     xo.recsiz = sizeof(short);
+    xo.xz_idx = XZ_INDEX_CLASS;
     for (int i = 0; i < COUNTOF(xo.pos); ++i)
         xo.pos[i] = 0;
     xo.cur_idx = 0;
@@ -1852,6 +1856,7 @@ board_main(void)
 
     board_xo.cb = class_cb;
     board_xo.recsiz = sizeof(short);
+    board_xo.xz_idx = XZ_INDEX_CLASS;
     board_xo.key = CH_END;
     class_load(&board_xo);
 

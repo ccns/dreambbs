@@ -1816,6 +1816,7 @@ XoXGem(
     xz[xz_idx].xo = xo = xo_new(folder);
     xo->cb = cb;
     xo->recsiz = sizeof(HDR);
+    xo->xz_idx = xz_idx;
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;
     xo->key = level;
@@ -1848,6 +1849,7 @@ gem_main(void)
     xz[XZ_GEM - XO_ZONE].xo = xo = xo_new("gem/.DIR");
     xo->cb = gem_cb;
     xo->recsiz = sizeof(HDR);
+    xo->xz_idx = XZ_INDEX_GEM;
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;
     xo->key = ((HAS_PERM(PERM_SYSOP|PERM_BOARD|PERM_GEM)) ? GEM_SYSOP : GEM_USER);

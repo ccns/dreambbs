@@ -541,6 +541,7 @@ XoFavorite(
     xz[XZ_MYFAVORITE - XO_ZONE].xo = xo = xo_new(folder);
     xo->cb = myfavorite_cb;
     xo->recsiz = sizeof(HDR);
+    xo->xz_idx = XZ_INDEX_MYFAVORITE;
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;
     xo->key = XZ_MYFAVORITE;

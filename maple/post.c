@@ -4703,6 +4703,7 @@ XoXpost(                        /* Thor: call from post_cb */
     xz[XZ_XPOST - XO_ZONE].xo = xt = xo_new(xo->dir);
     xt->cb = xpost_cb;
     xt->recsiz = sizeof(HDR);
+    xt->xz_idx = XZ_INDEX_XPOST;
     for (int i = 0; i < COUNTOF(xt->pos); ++i)
         xt->pos[i] = 0;
     xt->max = sum;

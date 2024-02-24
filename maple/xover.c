@@ -49,6 +49,7 @@ xo_new(
     memcpy(xo->dir, path, len);
     xo->cb = NULL;
     xo->recsiz = 0;
+    xo->xz_idx = -1;
 
     return (xo);
 }

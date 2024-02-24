@@ -878,6 +878,7 @@ typedef struct OverView
     struct OverView *nxt;       /* next */
     KeyFuncListRef cb;          /* Callback functions */
     int recsiz;                 /* Record size */
+    int xz_idx;                 /* Xover zone index */
     char dir[FLEX_SIZE];        /* data path */
 } XO;
 #define OverView_FLEX_MEMBER    dir

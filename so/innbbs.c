@@ -789,6 +789,7 @@ a_innbbs(void)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = innbbs_cb;
     xo->recsiz = recsiz;
+    xo->xz_idx = XZ_INDEX_OTHER;
     xo->xyz = &xyz;
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;

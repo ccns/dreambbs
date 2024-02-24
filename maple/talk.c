@@ -993,6 +993,7 @@ t_pal(void)
     xz[XZ_PAL - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = pal_cb;
     xo->recsiz = sizeof(PAL);
+    xo->xz_idx = XZ_INDEX_PAL;
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;
     xover(XZ_PAL);
@@ -1444,6 +1445,7 @@ XoBM(
         xz[XZ_PAL - XO_ZONE].xo = xt = xo_new(fpath);
         xt->cb = pal_cb;
         xt->recsiz = sizeof(PAL);
+        xt->xz_idx = XZ_INDEX_PAL;
         for (int i = 0; i < COUNTOF(xt->pos); ++i)
             xt->pos[i] = 0;
         xover(XZ_PAL);          /* Thor: 進xover前, pal_xo 一定要 ready */
@@ -3809,6 +3811,7 @@ ulist_su(
     xz[XZ_MBOX - XO_ZONE].xo =  xo_new(path);
     xz[XZ_MBOX - XO_ZONE].xo->cb = mbox_cb;
     xz[XZ_MBOX - XO_ZONE].xo->recsiz = sizeof(HDR);
+    xz[XZ_MBOX - XO_ZONE].xo->xz_idx = XZ_INDEX_MBOX;
     xz[XZ_MBOX - XO_ZONE].xo->pos = 0;
     free(tmp);
 */
@@ -3819,6 +3822,7 @@ ulist_su(
     xz[XZ_BMW - XO_ZONE].xo =  xo_new(path);
     xz[XZ_BMW - XO_ZONE].xo->cb = bmw_cb;
     xz[XZ_BMW - XO_ZONE].xo->recsiz = sizeof(BMW);
+    xz[XZ_BMW - XO_ZONE].xo->xz_idx = XZ_INDEX_BMW;
     for (int i = 0; i < COUNTOF(xz[XZ_BMW - XO_ZONE].xo->pos); ++i)
         xz[XZ_BMW - XO_ZONE].xo->pos[i] = 0;
     free(tmp);
@@ -4492,6 +4496,7 @@ talk_main(void)
     xz[XZ_ULIST - XO_ZONE].xo = &ulist_xo;
     ulist_xo.cb = ulist_cb;
     ulist_xo.recsiz = sizeof(UTMP);
+    ulist_xo.xz_idx = XZ_INDEX_ULIST;
 
     /* lkchu.981230: 利用 xover 整合 bmw */
     usr_fpath(fpath, cuser.userid, FN_BMW);
@@ -4499,6 +4504,7 @@ talk_main(void)
     xz[XZ_BMW - XO_ZONE].xo = xo_new(fpath);
     xz[XZ_BMW - XO_ZONE].xo->cb = bmw_cb;
     xz[XZ_BMW - XO_ZONE].xo->recsiz = sizeof(BMW);
+    xz[XZ_BMW - XO_ZONE].xo->xz_idx = XZ_INDEX_BMW;
     for (int i = 0; i < COUNTOF(xz[XZ_BMW - XO_ZONE].xo->pos); ++i)
         xz[XZ_BMW - XO_ZONE].xo->pos[i] = 0;
 }
@@ -4925,6 +4931,7 @@ t_banmsg(void)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(fpath);
     xo->cb = banmsg_cb;
     xo->recsiz = sizeof(BANMSG);
+    xo->xz_idx = XZ_INDEX_OTHER;
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;
     xover(XZ_OTHER);

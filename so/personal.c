@@ -642,6 +642,7 @@ personal_admin(void)
     xz[XZ_OTHER - XO_ZONE].xo = xo = xo_new(FN_ETC_PERSONAL);
     xo->cb = personal_cb;
     xo->recsiz = sizeof(PB);
+    xo->xz_idx = XZ_INDEX_OTHER;
     for (int i = 0; i < COUNTOF(xo->pos); ++i)
         xo->pos[i] = 0;
     xover(XZ_OTHER);

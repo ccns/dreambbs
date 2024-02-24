@@ -1625,6 +1625,7 @@ domenu(
         .xyz = &xyz,
         .cb = domenu_cb,
         .recsiz = sizeof(MENU),
+        .xz_idx = -1,
     };
 
     int cmd = XO_INIT;

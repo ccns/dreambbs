@@ -332,6 +332,7 @@ non_recommend:
     xz[XZ_OTHER - XO_ZONE].xo = xoo = xo_new(recommenddb);
     xoo->cb = cleanrecommend_cb;
     xoo->recsiz = sizeof(RMSG);
+    xoo->xz_idx = XZ_INDEX_OTHER;
     for (int i = 0; i < COUNTOF(xoo->pos); ++i)
         xoo->pos[i] = 0;
     xover(XZ_OTHER);

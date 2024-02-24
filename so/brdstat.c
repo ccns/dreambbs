@@ -196,6 +196,7 @@ int pos)
         xz[XZ_OTHER - XO_ZONE].xo = xx = xo_new(fpath);
         xx->cb = bstat_cb;
         xx->recsiz = sizeof(BSTAT);
+        xx->xz_idx = XZ_INDEX_OTHER;
         xx->pos = 0;
         xx->key = chn;
         xover(XZ_OTHER);

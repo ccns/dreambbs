@@ -286,6 +286,7 @@ static void acct_su(const ACCT * u)
     xz[XZ_MBOX - XO_ZONE].xo =  xo_new(path);
     xz[XZ_MBOX - XO_ZONE].xo->cb = mbox_cb;
     xz[XZ_MBOX - XO_ZONE].xo->recsiz = sizeof(HDR);
+    xz[XZ_MBOX - XO_ZONE].xo->xz_idx = XZ_INDEX_MBOX;
     xz[XZ_MBOX - XO_ZONE].xo->pos = 0;
     free(xo);
 */
@@ -296,6 +297,7 @@ static void acct_su(const ACCT * u)
     xz[XZ_BMW - XO_ZONE].xo =  xo_new(path);
     xz[XZ_BMW - XO_ZONE].xo->cb = bmw_cb;
     xz[XZ_BMW - XO_ZONE].xo->recsiz = sizeof(BMW);
+    xz[XZ_BMW - XO_ZONE].xo->xz_idx = XZ_INDEX_BMW;
     for (int i = 0; i < COUNTOF(xz[XZ_BMW - XO_ZONE].xo->pos); ++i)
         xz[XZ_BMW - XO_ZONE].xo->pos[i] = 0;
     free(xo);
